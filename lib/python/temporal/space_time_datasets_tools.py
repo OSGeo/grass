@@ -26,7 +26,9 @@ from space_time_datasets import *
 
 ###############################################################################
 
-def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=None, end=None, unit=None, increment=None, dbif = None, interval=False, fs="|"):
+def register_maps_in_space_time_dataset(type, name, maps=None, layer=None, file=None, start=None, \
+                                        end=None, unit=None, increment=None, dbif = None, \
+                                        interval=False, fs="|"):
     """Use this method to register maps in space time datasets. This function is generic and
 
        Additionally a start time string and an increment string can be specified
@@ -50,6 +52,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
     start_time_in_file = False
     end_time_in_file = False
+    layer_in_file = False
 
     if maps and file:
         core.fatal(_("%s= and %s= are mutually exclusive") % ("input","file"))
@@ -63,6 +66,9 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
     if not maps and not file:
         core.fatal(_("Please specify %s= or %s=") % ("input","file"))
 
+    if layer and layer == "file":
+        layer_in_file = True
+        
     if start and start == "file":
         start_time_in_file = True
 
@@ -94,15 +100,39 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
         dbif.close()
         core.fatal(_("Space time %s dataset <%s> no found") % (sp.get_new_map_instance(None).get_type(), name))
 
+    dummy = sp.get_new_map_instance(None)
+        
     maplist = []
-
+    layerlist = []
+    
     # Map names as comma separated string
     if maps:
-        if maps.find(",") == -1:
-            maplist = (maps,)
+        if maps.find(",") < 0:
+            maplist = [maps,]
         else:
-            maplist = tuple(maps.split(","))
+            maplist = maps.split(",")
 
+	# Layer as comma separated string
+	if layer:
+	    if layer.find(",") < 0:
+		layerlist = (layer,)
+	    else:
+		layerlist = layer.split(",")
+		
+	    if len(maplist) != len(layerlist):
+		core.fatal(_("Number of %s= and %s= must be equal") % ("maps","layer"))
+	    
+	# Build the maplist again with the ids
+	for count in range(len(maplist)):
+	    row = {}
+	    if layer:
+		mapid = dummy.build_id(maplist[count], mapset, layerlist[count])
+            else:
+		mapid = dummy.build_id(maplist[count], mapset, None)
+		
+	    row["id"] = mapid
+            maplist[count] = row
+            
     # Read the map list from file
     if file:
         fd = open(file, "r")
@@ -117,66 +147,73 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
             mapname = line_list[0].strip()
 
-            if mapname.find("@") < 0:
-                mapid = mapname + "@" + mapset
-            else:
-                mapid = mapname
-
             row = {}
-            row["id"] = mapid
+            
+	    if layer_in_file:
+		row["layer"] = line_list[1].strip()
+		if start_time_in_file and  end_time_in_file:
+		    row["start"] = line_list[2].strip()
+		    row["end"] = line_list[3].strip()
 
-            if start_time_in_file and  end_time_in_file:
-                row["start"] = line_list[1].strip()
-                row["end"] = line_list[2].strip()
+		if start_time_in_file and  not end_time_in_file:
+		    row["start"] = line_list[2].strip()
+		    
+		row["id"] = dummy.build_id(mapname, mapset, row["layer"])
+	    else:
+		if start_time_in_file and  end_time_in_file:
+		    row["start"] = line_list[1].strip()
+		    row["end"] = line_list[2].strip()
 
-            if start_time_in_file and  not end_time_in_file:
-                row["start"] = line_list[1].strip()
+		if start_time_in_file and  not end_time_in_file:
+		    row["start"] = line_list[1].strip()
+		
+		row["id"] = dummy.build_id(mapname, mapset)
 
             maplist.append(row)
     
     num_maps = len(maplist)
-    count = 0
-    for entry in maplist:
+    for count in range(len(maplist)):
 	core.percent(count, num_maps, 1)
 
         # Get a new instance of the space time dataset map type
-        if file:
-            map = sp.get_new_map_instance(entry["id"])
-        else:
-            if entry.find("@") < 0:
-                mapid = entry + "@" + mapset
-            else:
-                mapid = entry
-
-            map = sp.get_new_map_instance(mapid)
+        map = sp.get_new_map_instance(maplist[count]["id"])
 
         # Use the time data from file
         if start_time_in_file:
-            start = entry["start"]
+            start = maplist[count]["start"]
         if end_time_in_file:
-            end = entry["end"]
+            end = maplist[count]["end"]
 
         # Put the map into the database
         if map.is_in_db(dbif) == False:
             # Break in case no valid time is provided
             if start == "" or start == None:
                 dbif.close()
-                core.fatal(_("Unable to register %s map <%s>. The map has no valid time and the start time is not set.") % \
-                            (map.get_type(), map.get_id() ))
+                if map.get_layer():
+		    core.fatal(_("Unable to register %s map <%s> with layer %s. The map has no valid time and the start time is not set.") % \
+				(map.get_type(), map.get_map_id(), map.get_layer() ))
+		else:
+		    core.fatal(_("Unable to register %s map <%s>. The map has no valid time and the start time is not set.") % \
+				(map.get_type(), map.get_map_id() ))
             # Load the data from the grass file database
             map.load()
-
+	    
             if sp.get_temporal_type() == "absolute":
                 map.set_time_to_absolute()
             else:
                 map.set_time_to_relative()
+                
             #  Put it into the temporal database
             map.insert(dbif)
         else:
             map.select(dbif)
             if map.get_temporal_type() != sp.get_temporal_type():
                 dbif.close()
-                core.fatal(_("Unable to register %s map <%s>. The temporal types are different.") %  (map.get_type(), map.get_id()))
+                if map.get_layer():
+		    core.fatal(_("Unable to register %s map <%s> with layer. The temporal types are different.") %  \
+		                 (map.get_type(), map.get_map_id(), map.get_layer()))
+		    core.fatal(_("Unable to register %s map <%s>. The temporal types are different.") %  \
+		                 (map.get_type(), map.get_map_id()))
 
         # In case the time is in the input file we ignore the increment counter
         if start_time_in_file:
@@ -188,7 +225,6 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
         # Finally Register map in the space time dataset
         sp.register_map(map, dbif)
-        count += 1
 
     # Update the space time tables
     sp.update_from_registered_maps(dbif)
@@ -200,7 +236,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
         
 ###############################################################################
 
-def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif = None):
+def unregister_maps_from_space_time_datasets(type, name, maps, layer=None, file=None, dbif=None):
     """Unregister maps from a single space time dataset or, in case no dataset name is provided,
        unregister from all datasets within the maps are registered.
 
@@ -220,6 +256,11 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
         dbif.connect()
         connect = True
 
+    layer_in_file = False
+    
+    if layer and layer == "file":
+        layer_in_file = True
+        
     # In case a space time dataset is specified
     if name:
         # Check if the dataset name contains the mapset as well
@@ -240,14 +281,38 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
             core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
 
     maplist = []
+    layerlist = []
+
+    dummy = raster_dataset(None)
 
     # Map names as comma separated string
-    if maps:
-        if maps.find(",") == -1:
-            maplist = (maps,)
-        else:
-            maplist = tuple(maps.split(","))
-
+    if maps != None:
+	if maps.find(",") == -1:
+	    maplist = [maps,]
+	else:
+	    maplist = maps.split(",")
+	    
+	if layer:
+	    if layer.find(",") < 0:
+		layerlist = (layer,)
+	    else:
+		layerlist = layer.split(",")
+		
+	    if len(maplist) != len(layerlist):
+		core.fatal(_("Number of %s= and %s= must be equal") % ("maps","layer"))
+		
+	# Build the maplist
+	for count in range(len(maplist)):
+	    mapname = maplist[count]
+	    
+	    if layer:
+		mylayer = layerlist[count]
+		mapid = dummy.build_id(mapname, mapset, mylayer)
+	    else:
+		mapid = dummy.build_id(mapname, mapset)
+		
+            maplist[count] = mapid
+            
     # Read the map list from file
     if file:
         fd = open(file, "r")
@@ -260,19 +325,21 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
 
             line_list = line.split(fs)
             mapname = line_list[0].strip()
-            maplist.append(mapname)
     
+	    if layer_in_file:
+		mylayer = line_list[1].strip()
+		mapid = dummy.build_id(mapname, mapset, mylayer)
+	    else:
+		mapid = dummy.build_id(mapname, mapset)
+
+            maplist.append(mapid)
+            
     num_maps = len(maplist)
     count = 0
-    for mapname in maplist:
+    for mapid in maplist:
 	core.percent(count, num_maps, 1)
-        mapname = mapname.strip()
-        # Check if the map name contains the mapset as well
-        if mapname.find("@") < 0:
-            mapid = mapname + "@" + mapset
-        else:
-            mapid = mapname
             
+        print mapid
         map = dataset_factory(type, mapid)
 
         # Unregister map if in database
@@ -497,8 +564,11 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
             start_time = increment_datetime_by_string(start_time, increment, mult)
             if interval:
                 end_time = increment_datetime_by_string(start_time, increment, 1)
-
-        core.verbose(_("Set absolute valid time for map <%s> to %s - %s") % (map.get_id(), str(start_time), str(end_time)))
+	if map.get_layer():
+	    core.verbose(_("Set absolute valid time for map <%s> with layer %s to %s - %s") % (map.get_map_id(), map.get_layer(), str(start_time), str(end_time)))
+        else:
+	    core.verbose(_("Set absolute valid time for map <%s> to %s - %s") % (map.get_map_id(), str(start_time), str(end_time)))
+        
         map.update_absolute_time(start_time, end_time, None, dbif)
     else:
         start_time = int(start)
@@ -512,7 +582,11 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
             if interval:
                 end_time = start_time + int(increment)
 
-        core.verbose(_("Set relative valid time for map <%s> to %i - %s with unit %s") % (map.get_id(), start_time,  str(end_time), unit))
+	if map.get_layer():
+	    core.verbose(_("Set relative valid time for map <%s> with layer %s to %i - %s with unit %s") % (map.get_map_id(), map.get_layer(), start_time,  str(end_time), unit))
+        else:
+	    core.verbose(_("Set relative valid time for map <%s> to %i - %s with unit %s") % (map.get_map_id(), start_time,  str(end_time), unit))
+	    
         map.update_relative_time(start_time, end_time, unit, dbif)
 
     if connect == True:
@@ -552,14 +626,14 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         @param type: The type of the maps raster, raster3d or vector
         @param input: Name of a space time raster dataset
         @param columns: A comma separated list of columns to be printed to stdout 
-        @param order: A comma seoarated list of columns to order the space time dataset by category 
+        @param order: A comma separated list of columns to order the space time dataset by category 
         @param where: A where statement for selected listing without "WHERE" e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
         @param separator: The field separator character between the columns
         @param method: String identifier to select a method out of cols,comma,delta or deltagaps
             * "cols": Print preselected columns specified by columns
             * "comma": Print the map ids (name@mapset) as comma separated string
             * "delta": Print the map ids (name@mapset) with start time, end time, relative length of intervals and the relative distance to the begin
-            * "deltagaps": Same as "delta" with addtitionakl listing of gaps. Gaps can be simply identified as the id is "None"
+            * "deltagaps": Same as "delta" with additional listing of gaps. Gaps can be simply identified as the id is "None"
             * "gran": List map using the granularity of the space time dataset, columns are identical to deltagaps 
         @param header: Set True to print column names 
     """
@@ -582,7 +656,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
            
     # This method expects a list of objects for gap detection
     if method == "delta" or method == "deltagaps" or method == "gran":
-        columns = "id,start_time,end_time"
+	if type == "stvds":
+	    columns = "id,name,layer,mapset,start_time,end_time"
+	else:
+	    columns = "id,name,mapset,start_time,end_time"
         if method == "deltagaps":
             maps = sp.get_registered_maps_as_objects_with_gaps(where, None)
         elif method == "delta":
@@ -592,7 +669,11 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 
         if header:
             string = ""
-            string += "%s%s" % ("id", separator)
+	    string += "%s%s" % ("id", separator)
+	    string += "%s%s" % ("name", separator)
+            if type == "stvds":
+		string += "%s%s" % ("layer", separator)
+	    string += "%s%s" % ("mapset", separator)
             string += "%s%s" % ("start_time", separator)
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
@@ -627,6 +708,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 
                 string = ""
                 string += "%s%s" % (map.get_id(), separator)
+                string += "%s%s" % (map.get_name(), separator)
+		if type == "stvds":
+		    string += "%s%s" % (map.get_layer(), separator)
+                string += "%s%s" % (map.get_mapset(), separator)
                 string += "%s%s" % (start, separator)
                 string += "%s%s" % (end, separator)
                 string += "%s%s" % (delta, separator)
@@ -686,6 +771,8 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
     """ Sample the input space time dataset with a sample space time dataset and print the result to stdout
 
         In case multiple maps are located in the current granule, the map names are separated by comma.
+        
+        In case a layer is present, the names map ids are extended in this form: name:layer@mapset 
 
         Attention: Do not use the comma as separator
 

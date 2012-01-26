@@ -42,7 +42,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
     use_contain = False
     use_equal = False
 
-    # Inititalize the methods
+    # Initialize the methods
     if sampling:
         for name in sampling.split(","):
             if name == "start":

@@ -28,7 +28,7 @@ from datetime_math import *
 def compute_relative_time_granularity(maps):            
     """ Compute the relative granularity"""
 
-    # The intervaltime must be scaled to days resoltuion
+    # The interval time must be scaled to days resolution
     granularity = None
 
     delta = []

@@ -58,6 +58,41 @@ class abstract_map_dataset(abstract_dataset):
         """Load the content of this object from map files"""
         raise IOError("This method must be implemented in the subclasses")
  
+    def get_map_id(self):
+	"""Return the map id. The map id is the unique map identifier in grass and must not be equal to the 
+	   primary key identifier (id) of the map in the database. Since vector maps may have layer information,
+	   the unique id is a combination of name, layer and mapset.
+	   
+	   Use get_map_id() every time your need to access the grass map in the file system but not to identify
+	   map information in the temporal database.
+	
+	"""
+        return self.base.get_map_id()
+
+    def build_id(self, name, mapset, layer=None):
+	"""Convenient method to build the unique identifier
+	
+	    Existing layer and mapset definitions in the name string will be reused
+
+           @param return the id of the vector map as name(:layer)@mapset while layer is optional
+        """
+        
+        # Check if the name includes any mapset
+	if name.find("@") >= 0:
+	    name, mapset = name.split("@")[0]
+
+	if name.find(":") >= 0:
+	    name, layer = name.split(":")[0]
+	    
+        if layer:	    
+	    return "%s:%s@%s"%(name, layer, mapset)
+	else:
+	    return "%s@%s"%(name, mapset)
+	    
+    def get_layer(self):
+	"""Return the layer of the map or None in case no layer is defined"""
+	return self.base.get_layer()
+        
     def print_info(self):
         """Print information about this class in human readable style"""
         
@@ -128,14 +163,23 @@ class abstract_map_dataset(abstract_dataset):
         
         """
         if start_time and not isinstance(start_time, datetime) :
-            core.fatal(_("Start time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_id()))
+	    if self.get_layer():
+		core.fatal(_("Start time must be of type datetime for %s map <%s> with layer: %s") % (self.get_type(), self.get_map_id(), self.get_layer()))
+	    else:
+		core.fatal(_("Start time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_map_id()))
 
         if end_time and not isinstance(end_time, datetime) :
-            core.fatal(_("End time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_id()))
+	    if self.get_layer():
+		core.fatal(_("End time must be of type datetime for %s map <%s> with layer: %s") % (self.get_type(), self.get_map_id(), self.get_layer()))
+	    else:
+		core.fatal(_("End time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_map_id()))
 
         if start_time and end_time:
             if start_time > end_time:
-                core.fatal(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
+		if self.get_layer():
+		    core.fatal(_("End time must be greater than start time for %s map <%s> with layer: %s") % (self.get_type(), self.get_map_id(), self.get_layer()))
+		else:
+		    core.fatal(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_map_id()))
             else:
                 # Do not create an interval in case start and end time are equal
                 if start_time == end_time:
@@ -182,27 +226,33 @@ class abstract_map_dataset(abstract_dataset):
             end = datetime_to_grass_datetime_string(end_time)
             start += " / %s"%(end)
 
-        core.run_command(self.get_timestamp_module_name(), map=self.get_id(), date=start)
+        core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date=start)
 
     def set_relative_time(self, start_time, end_time, unit):
         """Set the relative time interval 
         
            @param start_time: A double value 
            @param end_time: A double value 
-           @param unit: The unit of the relative time. Supported uits: years, months, days, hours, minutes, seconds
+           @param unit: The unit of the relative time. Supported units: years, months, days, hours, minutes, seconds
 
            Return True for success and False otherwise
 
         """
 
         if not self.check_relative_time_unit(unit):
-            core.error(_("Unsupported relative time unit type for %s map <%s>: %s") % (self.get_type(), self.get_id(), unit))
+	    if self.get_layer():
+		core.error(_("Unsupported relative time unit type for %s map <%s> with layer %s: %s") % (self.get_type(), self.get_id(), self.get_layer(), unit))
+	    else:
+		core.error(_("Unsupported relative time unit type for %s map <%s>: %s") % (self.get_type(), self.get_id(), unit))
             return False
         
 
         if start_time != None and end_time != None:
             if int(start_time) > int(end_time):
-                core.error(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
+		if self.get_layer():
+		    core.error(_("End time must be greater than start time for %s map <%s> with layer %s") % (self.get_type(), self.get_id(), self.get_layer()))
+		else:
+		    core.error(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
                 return False
             else:
                 # Do not create an interval in case start and end time are equal
@@ -255,7 +305,7 @@ class abstract_map_dataset(abstract_dataset):
         if end_time:
             end = "%i %s"%(int(end_time), unit)
             start += " / %s"%(end)
-        core.run_command(self.get_timestamp_module_name(), map=self.get_id(), date=start)
+        core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date=start)
 
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
         """Set the spatial extent of the map
@@ -265,7 +315,7 @@ class abstract_map_dataset(abstract_dataset):
            @param east: The eastern edge
            @param west: The western edge
            @param top: The top edge
-           @param bottom: The bottom ege
+           @param bottom: The bottom edge
         """
         self.spatial_extent.set_spatial_extent(north, south, east, west, top, bottom)
         
@@ -279,10 +329,13 @@ class abstract_map_dataset(abstract_dataset):
         if start != None:
             if end != None:
                 if start >= end:
-                    core.error(_("Map <%s> has incorrect time interval, start time is greater than end time") % (self.get_id()))
+		    if self.get_layer():
+			core.error(_("Map <%s> with layer %s has incorrect time interval, start time is greater than end time") % (self.get_map_id(), self.get_layer()))
+		    else:
+			core.error(_("Map <%s> has incorrect time interval, start time is greater than end time") % (self.get_map_id()))
                     return False
         else:
-            core.error(_("Map <%s> has incorrect start time") % (self.get_id()))
+            core.error(_("Map <%s> has incorrect start time") % (self.get_map_id()))
             return False
 
         return True
@@ -327,7 +380,7 @@ class abstract_map_dataset(abstract_dataset):
             self.base.delete(dbif)
 
         # Remove the timestamp from the file system
-        core.run_command(self.get_timestamp_module_name(), map=self.get_id(), date="none")
+        core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
 
         self.reset(None)
         dbif.connection.commit()
@@ -339,11 +392,15 @@ class abstract_map_dataset(abstract_dataset):
 	""" Remove the map entry in each space time dataset in which this map is registered
 
            @param dbif: The database interface to be used
-           @param update: Call for each unregister statement the update_from_registered_maps 
-                          of the space time dataset. This can slow down the unregistration process significantly.
+           @param update: Call for each unregister statement the update from registered maps 
+                          of the space time dataset. This can slow down the un-registration process significantly.
         """
 
-        core.verbose(_("Unregister %s dataset <%s> from space time datasets") % (self.get_type(), self.get_id()))
+	if self.get_layer():
+	    core.verbose(_("Unregister %s map <%s> with layer %s from space time datasets") % \
+	                   (self.get_type(), self.get_map_id(), self.get_layer()))
+	else:
+	    core.verbose(_("Unregister %s map <%s> from space time datasets") % (self.get_type(), self.get_map_id()))
         
         connect = False
 
@@ -368,7 +425,7 @@ class abstract_map_dataset(abstract_dataset):
                 stds.select(dbif)
                 stds.unregister_map(self, dbif)
                 # Take care to update the space time dataset after
-                # the map has been unregistred
+                # the map has been unregistered
                 if update == True:
                     stds.update_from_registered_maps(dbif)
 

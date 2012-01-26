@@ -183,7 +183,7 @@ class abstract_space_time_dataset(abstract_dataset):
             self.relative_time.set_unit(unit)
 
     def get_map_time(self):
-        """Return the type of the map time, interval, point, maixed or invalid"""
+        """Return the type of the map time, interval, point, mixed or invalid"""
         
         temporal_type = self.get_temporal_type()
 
@@ -197,7 +197,7 @@ class abstract_space_time_dataset(abstract_dataset):
     def print_temporal_relation_matrix(self, maps):
         """Print the temporal relation matrix of all registered maps to stdout
 
-           The temproal relation matrix includes the temporal relations between
+           The temporal relation matrix includes the temporal relations between
            all registered maps. The relations are strings stored in a list of lists.
            
            @param dbif: The database interface to be used
@@ -227,11 +227,11 @@ class abstract_space_time_dataset(abstract_dataset):
                 print maps[i].base.get_name()
 
     def get_temporal_relation_matrix(self, maps):
-        """Return the temporal relation matrix of all registered maps as listof lists
+        """Return the temporal relation matrix of all registered maps as list of lists
 
            The map list must be ordered by start time
 
-           The temproal relation matrix includes the temporal relations between
+           The temporal relation matrix includes the temporal relations between
            all registered maps. The relations are strings stored in a list of lists.
            
            @param maps: a ordered by start_time list of map objects
@@ -293,10 +293,10 @@ class abstract_space_time_dataset(abstract_dataset):
         return tcount
 
     def count_gaps(self, maps):
-        """Count the number of gaps between temporal neighbours
+        """Count the number of gaps between temporal neighbors
         
            @param maps: A sorted (start_time) list of abstract_dataset objects
-           @return The numbers of gaps between temporal neighbours
+           @return The numbers of gaps between temporal neighbors
         """
 
         gaps = 0
@@ -473,7 +473,7 @@ class abstract_space_time_dataset(abstract_dataset):
         use_contain = False
         use_equal = False
 
-        # Inititalize the methods
+        # Initialize the methods
         if method:
             for name in method:
                 if name == "start":
@@ -731,7 +731,7 @@ class abstract_space_time_dataset(abstract_dataset):
     def get_registered_maps(self, columns=None, where = None, order = None, dbif=None):
         """Return sqlite rows of all registered maps.
         
-           In case columsn are not specified, each row includes all columns specified in the datatype specific view
+           In case columns are not specified, each row includes all columns specified in the datatype specific view
 
            @param columns: Columns to be selected as SQL compliant string
            @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
@@ -856,14 +856,19 @@ class abstract_space_time_dataset(abstract_dataset):
         if map.is_in_db(dbif) == False:
             dbif.close()
             core.fatal(_("Only maps with absolute or relative valid time can be registered"))
-
-        core.verbose(_("Register %s map <%s> in space time %s dataset <%s>") %  (map.get_type(), map.get_id(), map.get_type(), self.get_id()))
+	if map.get_layer():
+	    core.verbose(_("Register %s map <%s> with layer %s in space time %s dataset <%s>") %  (map.get_type(), map.get_map_id(), map.get_layer(), map.get_type(), self.get_id()))
+	else:
+	    core.verbose(_("Register %s map <%s> in space time %s dataset <%s>") %  (map.get_type(), map.get_map_id(), map.get_type(), self.get_id()))
 
         # First select all data from the database
         map.select(dbif)
 
         if not map.check_valid_time():
-            core.fatal(_("Map <%s> has invalid time") % map.get_id())
+	    if map.get_layer():
+		core.fatal(_("Map <%s> with layer %s has invalid time") % map.get_map_id(), map.get_layer())
+	    else:
+		core.fatal(_("Map <%s> has invalid time") % map.get_map_id())
 
         map_id = map.base.get_id()
         map_name = map.base.get_name()
@@ -882,7 +887,10 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Check temporal types
         if stds_ttype != map_ttype:
-            core.fatal(_("Temporal type of space time dataset <%s> and map <%s> are different") % (self.get_id(), map.get_id()))
+	    if map.get_layer():
+		core.fatal(_("Temporal type of space time dataset <%s> and map <%s> with layer %s are different") % (self.get_id(), map.get_map_id(), map.get_layer()))
+	    else:
+		core.fatal(_("Temporal type of space time dataset <%s> and map <%s> are different") % (self.get_id(), map.get_map_id()))
 
         # In case no map has been registered yet, set the relative time unit from the first map
         if self.metadata.get_number_of_maps() == None and self.map_counter == 0 and self.is_time_relative():
@@ -894,7 +902,10 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Check the relative time unit
         if self.is_time_relative() and (stds_rel_time_unit != map_rel_time_unit):
-            core.fatal(_("Relative time units of space time dataset <%s> and map <%s> are different") % (self.get_id(), map.get_id()))
+	    if map.get_layer():
+		core.fatal(_("Relative time units of space time dataset <%s> and map <%s> with layer %s are different") % (self.get_id(), map.get_map_id(), map.get_layer()))
+	    else:
+		core.fatal(_("Relative time units of space time dataset <%s> and map <%s> are different") % (self.get_id(), map.get_map_id()))
 
         #print "STDS register table", stds_register_table
 
@@ -902,7 +913,7 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif.close()
             core.fatal(_("Only maps from the same mapset can be registered"))
 
-        # Check if map is already registred
+        # Check if map is already registered
         if stds_register_table:
 	    if dbmi.paramstyle == "qmark":
 		sql = "SELECT id FROM " + stds_register_table + " WHERE id = (?)"
@@ -914,13 +925,17 @@ class abstract_space_time_dataset(abstract_dataset):
             if row and row[0] == map_id:
                 if connect == True:
                     dbif.close()
-                core.warning(_("Map <%s> is already registered.") % (map_id))
+                    
+		if map.get_layer():
+		    core.warning(_("Map <%s> with layer %s is already registered.") % (map.get_map_id(), map.get_layer()))
+		else:
+		    core.warning(_("Map <%s> is already registered.") % (map.get_map_id()))
                 return False
 
         # Create tables
         sql_path = get_sql_template_path()
 
-        # We need to create the map raster register table bevor we can register the map
+        # We need to create the map raster register table before we can register the map
         if map_register_table == None:
             # Create a unique id
             uuid_rand = "map_" + str(uuid.uuid4()).replace("-", "")
@@ -943,16 +958,24 @@ class abstract_space_time_dataset(abstract_dataset):
             except:
                 if connect == True:
                     dbif.close()
-                core.error(_("Unable to create the space time %s dataset register table for <%s>") % \
-                            (map.get_type(), map.get_id()))
+		if map.get_layer():
+		    core.error(_("Unable to create the space time %s dataset register table for map <%s> with layer %s") % \
+                            (map.get_type(), map.get_map_id(), map.get_layer()))
+                else:
+		    core.error(_("Unable to create the space time %s dataset register table for <%s>") % \
+                            (map.get_type(), map.get_map_id()))
                 raise
 
             # Set the stds register table name and put it into the DB
             map.set_stds_register(map_register_table)
             map.metadata.update(dbif)
             
-            core.verbose(_("Created register table <%s> for %s map <%s>") % \
-                          (map_register_table, map.get_type(), map.get_id()))
+            if map.get_layer():
+		core.verbose(_("Created register table <%s> for %s map <%s> with layer %s") % \
+				(map_register_table, map.get_type(), map.get_map_id(), map.get_layer()))
+	    else:
+		core.verbose(_("Created register table <%s> for %s map <%s>") % \
+				(map_register_table, map.get_type(), map.get_map_id()))
 
         # We need to create the table and register it
         if stds_register_table == None:
@@ -980,8 +1003,12 @@ class abstract_space_time_dataset(abstract_dataset):
             except:
                 if connect == True:
                     dbif.close()
-                core.error(_("Unable to create the space time %s dataset register table for <%s>") % \
-                            (map.get_type(), map.get_id()))
+		if map.get_layer():
+		    core.error(_("Unable to create the space time %s dataset register table for map <%s> with layer %s") % \
+                            (map.get_type(), map.get_map_id(), map.get_layer()))
+                else:
+		    core.error(_("Unable to create the space time %s dataset register table for <%s>") % \
+                            (map.get_type(), map.get_map_id()))
                 raise
 
             # Set the map register table name and put it into the DB
@@ -1028,7 +1055,7 @@ class abstract_space_time_dataset(abstract_dataset):
     def unregister_map(self, map, dbif = None):
         """Unregister a map from the space time dataset.
 
-           This method takes care of the unregistration of a map
+           This method takes care of the un-registration of a map
            from a space time dataset.
 
            @param map: The map object to unregister
@@ -1043,13 +1070,20 @@ class abstract_space_time_dataset(abstract_dataset):
 
         if map.is_in_db(dbif) == False:
             dbif.close()
-            core.fatal(_("Unable to find map <%s> in temporal database") % (map.get_id()))
+            
+	    if map.get_layer():
+		core.fatal(_("Unable to find map <%s> with layer %s in temporal database") % (map.get_map_id(), map.get_layer()))
+	    else:
+		core.fatal(_("Unable to find map <%s> in temporal database") % (map.get_map_id()))
 
-        core.verbose(_("Unregister %s map <%s>") % (map.get_type(), map.get_id()))
+	if map.get_layer():
+	    core.verbose(_("Unregister %s map <%s> with layer %s") % (map.get_type(), map.get_map_id(), map.get_layer()))
+	else:
+	    core.verbose(_("Unregister %s map <%s>") % (map.get_type(), map.get_map_id()))
 
         # First select all data from the database
         map.select(dbif)
-        map_id = map.base.get_id()
+        map_id = map.get_id()
         map_register_table = map.get_stds_register()
         stds_register_table = self.get_map_register()
 
@@ -1063,7 +1097,10 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Break if the map is not registered
         if row == None:
-            core.warning(_("Map <%s> is not registered in space time dataset") %(map_id, self.base.get_id()))
+	    if map.get_layer():
+		core.warning(_("Map <%s> with layer %s is not registered in space time dataset <%s>") %(map.get_map_id(), map.get_layer(), self.base.get_id()))
+	    else:
+		core.warning(_("Map <%s> is not registered in space time dataset <%s>") %(map.get_map_id(), self.base.get_id()))
             if connect == True:
                 dbif.close()
             return False
@@ -1100,9 +1137,9 @@ class abstract_space_time_dataset(abstract_dataset):
            will be used. If the end time is earlier than the maximum start time, it will
            be replaced by the maximum start time.
 
-           An other solution to automate this is to use the diactivated trigger
+           An other solution to automate this is to use the deactivated trigger
            in the SQL files. But this will result in a huge performance issue
-           in case many maps are registred (>1000).
+           in case many maps are registered (>1000).
            
            @param dbif: The database interface to be used
         """
@@ -1286,7 +1323,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
 def create_temporal_relation_sql_where_statement(start, end, use_start=True, use_during=False, 
                                         use_overlap=False, use_contain=False, use_equal=False):
-    """ Create a SQL WHERE statement for temporal relation selection of maps in space time datastes
+    """ Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
 
         @param start: The start time
         @param end: The end time
