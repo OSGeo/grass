@@ -33,16 +33,16 @@
 
 #%option
 #% key: start
-#% type: integer
-#% description: The valid integer start value for all maps, or file in case the start time is located in the input file 
+#% type: string
+#% description: The valid integer start value for all maps, or the identifier "file" in case the start time is located in the input file 
 #% required: no
 #% multiple: no
 #%end
 
 #%option
 #% key: end
-#% type: integer
-#% description: The valid integer end value for all maps, or file in case the start time is located in the input file 
+#% type: string
+#% description: The valid integer end value for all maps, or the identifier "file" in case the start time is located in the input file 
 #% required: no
 #% multiple: no
 #%end

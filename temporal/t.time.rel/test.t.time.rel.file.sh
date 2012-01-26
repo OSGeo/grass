@@ -53,24 +53,29 @@ t.create --o type=strds temporaltype=relative output=precip_rel title="A test wi
 
 # Test with input files
 # File 1
+echo "Test 1"
 t.time.rel -i file="${n1}" start=20 increment=5 unit=months
 
 tr.register input=precip_rel file="${n1}"
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
 
+echo "Test 2"
 # File 1
 t.time.rel file="${n1}" start=20 unit=months
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
+echo "Test 3"
 # File 2
 t.time.rel file="${n2}" start=file unit=months
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
+echo "Test 4"
 # File 2
 t.time.rel -i file="${n2}" start=file increment=5 unit=months
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
+echo "Test 5"
 # File 3
 t.time.rel file="${n3}" start=file end=file unit=months
 t.info type=strds input=precip_rel
