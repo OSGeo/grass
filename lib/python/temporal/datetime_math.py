@@ -2,7 +2,7 @@
 
 @brief GRASS Python scripting module (temporal GIS functions)
 
-Temporal GIS datetime math functions to be used in Python sripts.
+Temporal GIS datetime math functions to be used in Python scripts.
 
 Usage:
 
@@ -51,7 +51,7 @@ def time_delta_to_relative_time(delta):
 
 def increment_datetime_by_string(mydate, increment, mult = 1):
     """Return a new datetime object incremented with the provided relative dates specified as string.
-       Additional a multiplier can be specified to multiply the increment bevor adding to the provided datetime object.
+       Additional a multiplier can be specified to multiply the increment before adding to the provided datetime object.
 
        @param mydate A datetime object to incremented
        @param increment A string providing increment information:
@@ -126,7 +126,7 @@ def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, minu
         # Make a deep copy of the datetime object
         dt1 = copy.copy(mydate)
 
-        # Make sure the montha starts with a 1
+        # Make sure the month starts with a 1
         if residual_months == 0:
             residual_months = 1
 
@@ -321,7 +321,7 @@ def compute_datetime_delta(start, end):
 def string_to_datetime(time_string):
     """Convert a string into a datetime object using the dateutil parser. Return None in case of failure"""
 
-    # BC is not suported
+    # BC is not supported
     if time_string.find("bc") > 0:
         core.error("Dates Before Christ are not supported in the temporal database")
         return None
@@ -340,7 +340,7 @@ def datetime_to_grass_datetime_string(dt):
     # GRASS datetime month names
     month_names  = ["", "jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
-    # Check for time zone infor in the datetime object
+    # Check for time zone info in the datetime object
     if dt.tzinfo != None:
         string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i"%(dt.day, month_names[dt.month], dt.year, \
                  dt.hour, dt.minute, dt.second, dt.tzinfo._offset.seconds/60)

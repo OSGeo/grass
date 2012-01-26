@@ -66,7 +66,40 @@ class abstract_dataset(object):
 	self.metadata.print_self()
 
     def get_id(self):
+	"""Return the unique identifier of the dataset"""
         return self.base.get_id()
+
+    def get_name(self):
+	"""Return the name"""
+        return self.base.get_name()
+
+    def get_mapset(self):
+	"""Return the mapset"""
+        return self.base.get_mapset()
+
+    def build_id(name, mapset, layer=None):
+	"""Build and return the id (primary key) based on name, mapset and layer of a dataset.
+	
+	   @param name: The name of the map
+	   @param mapset: The name of the mapset
+	   @param layer: The name of the layer (optional)
+	
+	   Return None in case the name can not be build (name or mapset are None)
+	"""
+	
+	if not name or not mapset:
+	    return None
+	    
+	# Make sure to extract the pure mapname
+	pure_name = name.split("@")[0].split(":")[0]
+	
+	if layer:
+	    return "%s:%s@%s"%(name, layer, mapset)
+	else:
+	    return "%s@%s"%(name, mapset)
+	
+	return None
+	
 
     def get_valid_time(self):
         """Returns a tuple of the start, the end valid time, this can be either datetime or double values

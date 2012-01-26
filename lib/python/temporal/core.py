@@ -2,7 +2,7 @@
 
 @brief GRASS Python scripting module (temporal GIS functions)
 
-Temporal GIS core functions to be used in Python sripts.
+Temporal GIS core functions to be used in Python scripts.
 
 Usage:
 
@@ -27,7 +27,7 @@ import grass.script.core as core
 
 ###############################################################################
 
-# The chosen DBMI backend can be defined on runtime
+# The chosen DBMI back-end can be defined on runtime
 # Check the grass environment before import
 core.run_command("t.connect", flags="c")
 kv = core.parse_command("t.connect", flags="pg")
@@ -79,7 +79,7 @@ def create_temporal_database():
     """This function creates the grass location database structure for raster, vector and raster3d maps
        as well as for the space-time datasets strds, str3ds and stvds
 
-       This functions must be called befor any spatio-temporal processing is started
+       This functions must be called before any spatio-temporal processing is started
     """
     
     database = get_temporal_dbmi_init_string()

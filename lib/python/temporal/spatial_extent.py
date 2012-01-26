@@ -122,7 +122,7 @@ class spatial_extent(sql_database_interface):
 	self.D["north"] = north
 
     def set_south(self, sourth):
-	"""Set the sourthern edge of the map"""
+	"""Set the southern edge of the map"""
 	self.D["south"] = sourth
 
     def set_west(self, west):

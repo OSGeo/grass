@@ -78,7 +78,7 @@ class raster_dataset(abstract_map_dataset):
         """Load all info from an existing raster map into the internal structure"""
 
         # Get the data from an existing raster map
-        kvp = raster.raster_info(self.ident)
+        kvp = raster.raster_info(self.get_map_id())
 
         # Fill base information
 
@@ -156,7 +156,7 @@ class raster3d_dataset(abstract_map_dataset):
         """Load all info from an existing raster3d map into the internal structure"""
 
         # Get the data from an existing raster map
-        kvp = raster3d.raster3d_info(self.ident)
+        kvp = raster3d.raster3d_info(self.get_map_id())
 
         # Fill base information
 
@@ -224,6 +224,10 @@ class vector_dataset(abstract_map_dataset):
         """Return the name of the C-module to set the time stamp in the file system"""
         return "v.timestamp"
 
+    def get_layer(self):
+        """Return the layer"""
+        return self.base.get_layer()
+
     def reset(self, ident):
 	"""Reset the internal structure and set the identifier"""
 	self.ident = ident
@@ -238,11 +242,14 @@ class vector_dataset(abstract_map_dataset):
         """Load all info from an existing vector map into the internal structure"""
 
         # Get the data from an existing raster map
-        kvp = vector.vector_info(self.ident)
+        kvp = vector.vector_info(self.get_map_id())
 
         # Fill base information
-
-        self.base.set_name(self.ident.split("@")[0])
+	if self.ident.find(":") >= 0:
+	    self.base.set_name(self.ident.split("@")[0].split(":")[0])
+	    self.base.set_layer(self.ident.split("@")[0].split(":")[1])
+	else:
+	    self.base.set_name(self.ident.split("@")[0])
         self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
 

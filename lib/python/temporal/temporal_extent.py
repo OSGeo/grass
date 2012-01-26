@@ -103,7 +103,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def before(self, map):
-	"""Return True if this time object is temporal located bevor the provided time object
+	"""Return True if this time object is temporal located before the provided time object
 	   A  |---------|
 	   B             |---------|
 	"""
@@ -235,7 +235,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def overlapped(self, map):
-	"""Return True if this time object is temporal overlaped by the provided time object
+	"""Return True if this time object is temporal overlapped by the provided time object
 	   A    |---------|
            B  |---------|
 	"""
@@ -250,7 +250,7 @@ class abstract_temporal_extent(sql_database_interface):
 
     def temporal_relation(self, map):
 	"""Returns the temporal relation between temporal objects
-	   Temporal relationsships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
+	   Temporal relationships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 	"""
         
         # First check for correct time
@@ -505,7 +505,7 @@ class relative_temporal_extent(abstract_temporal_extent):
 
     def temporal_relation(self, map):
 	"""Returns the temporal relation between temporal objects
-	   Temporal relationsships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
+	   Temporal relationships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 	"""
         
         # Check units for relative time
