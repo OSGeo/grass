@@ -15,9 +15,10 @@
 --PRAGMA foreign_keys = ON;
 
 CREATE TABLE  GRASS_MAP_base (
-  id VARCHAR NOT NULL,                  -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary key
+  id VARCHAR NOT NULL,                  -- The id (PK) is the unique identifier for all tables, it is based on name (layer) and mapset (name(:layer)@mapset) and is used as primary key
   name VARCHAR NOT NULL,                -- name of the grass map
   mapset VARCHAR NOT NULL,              -- mapset of the grass map
+  layer VARCHAR,                        -- The layer id of the map, this is currently only in use by vector maps
   creator VARCHAR NOT NULL,
   temporal_type VARCHAR,                -- The temporal type of the grass map "absolute" or "relative" or NULL in case no time stamp is available
   creation_time TIMESTAMP NOT NULL,      -- The time of creation of the grass map
