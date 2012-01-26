@@ -36,7 +36,7 @@
 #% description: Order the space time dataset by category. 
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
+#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
 #% answer: start_time
 #%end
 
@@ -46,8 +46,8 @@
 #% description: Select columns to be printed to stdout 
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
-#% answer: name,mapset,start_time,end_time
+#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
+#% answer: id,name,layer,mapset,start_time,end_time
 #%end
 
 #%option

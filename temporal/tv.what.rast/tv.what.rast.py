@@ -139,7 +139,8 @@ def main():
         dbif.close()
         grass.fatal(_("All registered maps of the space time vector dataset must have time intervals"))
 
-    rows = sp.get_registered_maps("id,name,start_time,end_time", tempwhere, "start_time", dbif)
+    rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time", tempwhere, "start_time", dbif)
+    dummy = tgis.vector_dataset(None)
 
     if not rows:
         dbif.close()
@@ -149,7 +150,8 @@ def main():
     for row in rows:
         start = row["start_time"]
         end = row["end_time"]
-        vectmap = row["id"]
+        vectmap = row["name"] + "@" + row["mapset"]
+        layer = row["layer"]
 
         raster_maps = tgis.collect_map_names(strds_sp, dbif, start, end, sampling)
 
@@ -168,14 +170,21 @@ def main():
                 rasterinfo = raster.raster_info(rastermap)
                 if rasterinfo["datatype"] == "CELL":
                     coltype = "INT"
-
-                ret = grass.run_command("v.db.addcolumn", map=vectmap, column="%s %s" % (col_name, coltype), overwrite=grass.overwrite())
+		
+		if layer:
+		    ret = grass.run_command("v.db.addcolumn", map=vectmap, layer=layer, column="%s %s" % (col_name, coltype), overwrite=grass.overwrite())
+		else:
+		    ret = grass.run_command("v.db.addcolumn", map=vectmap, column="%s %s" % (col_name, coltype), overwrite=grass.overwrite())
+		    
                 if ret != 0:
                     dbif.close()
                     grass.fatal(_("Unable to add column %s to vector map <%s>")%(col_name, vectmap))
 
                 # Call v.what.rast
-                ret = grass.run_command("v.what.rast", map=vectmap, raster=rastermap, column=col_name, where=where)
+                if layer:
+		    ret = grass.run_command("v.what.rast", map=vectmap, layer=layer, raster=rastermap, column=col_name, where=where)
+		else:
+		    ret = grass.run_command("v.what.rast", map=vectmap, raster=rastermap, column=col_name, where=where)
                 if ret != 0:
                     dbif.close()
                     grass.fatal(_("Unable to run v.what.rast for vector map <%s> and raster map <%s>")%(vectmap, rastermap))

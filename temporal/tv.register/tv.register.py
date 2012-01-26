@@ -37,9 +37,17 @@
 #%end
 
 #%option
+#% key: layer
+#% type: string
+#% description: Id(s)/Name(s) of existing vector map layer or the identifier "file" in case the layer definition is in the input file
+#% required: no
+#% multiple: yes
+#%end
+
+#%option
 #% key: file
 #% type: string
-#% description: Input file with vector map names, one per line. Additionally the start time and the end time can be specified per line
+#% description: Input file with vector map names, one per line. Additionally the layer, the start time and the end time can be specified per line
 #% required: no
 #% multiple: no
 #%end
@@ -101,6 +109,7 @@ def main():
     # Get the options
     name = options["input"]
     maps = options["maps"]
+    layer = options["layer"]
     file = options["file"]
     fs = options["fs"]
     start = options["start"]
@@ -112,7 +121,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Register maps
-    tgis.register_maps_in_space_time_dataset(type="stvds", name=name, maps=maps, file=file, start=start, end=end, \
+    tgis.register_maps_in_space_time_dataset(type="stvds", name=name, maps=maps, layer=layer, file=file, start=start, end=end, \
                                              unit=unit, increment=increment, dbif=None, interval=interval, fs=fs)
     
 if __name__ == "__main__":
