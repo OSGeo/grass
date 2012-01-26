@@ -257,7 +257,7 @@ int Rast_is_f_null_value(const FCELL * fcellVal)
    \return TRUE if DCELL raster value is NULL
    \return FALSE otherwise
  */
-#ifndef Rast_is_f_null_value
+#ifndef Rast_is_d_null_value
 int Rast_is_d_null_value(const DCELL * dcellVal)
 {
     return *dcellVal != *dcellVal;
