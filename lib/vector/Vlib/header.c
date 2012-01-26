@@ -96,6 +96,8 @@ int Vect__write_head(const struct Map_info *Map)
     fprintf(head_fp, "MAP DATE:     %s\n", Vect_get_map_date(Map));
     fprintf(head_fp, "MAP SCALE:    %d\n", Vect_get_scale(Map));
     fprintf(head_fp, "OTHER INFO:   %s\n", Vect_get_comment(Map));
+    if (Vect_get_proj(Map) > 0)
+	fprintf(head_fp, "PROJ:         %d\n", Vect_get_proj(Map));
     fprintf(head_fp, "ZONE:         %d\n", Vect_get_zone(Map));
     fprintf(head_fp, "MAP THRESH:   %f\n", Vect_get_thresh(Map));
 
@@ -615,18 +617,18 @@ const char *Vect_get_proj_name(const struct Map_info *Map)
     case PROJECTION_LL:
     case PROJECTION_SP:
 	return G__projection_name(n);
+    case PROJECTION_OTHER:
+	/* this won't protect against differing "other" projections, so
+	   better to just include P_OTHER in the above list so we return the
+	   strictly more correct, but less nice, string: "Other projection" ? */
+	return G_database_projection_name();
     default:
 	G_debug(1, "Vect_get_proj_name(): "
 		   "Vect_get_proj() returned an invalid result (%d)", n);
 	break;
     }
 
-    /* Vect_get_proj() didn't return a useful result,
-       fallback to G_database_projection_name() */
-    /* (is this behavior desirable?) */
-    if (!lookup(PROJECTION_FILE, "name", name, sizeof(name)))
-	strcpy(name, _("Unknown projection"));
-
+    strcpy(name, _("Unknown projection"));
     return G_store(name);
 }
 
