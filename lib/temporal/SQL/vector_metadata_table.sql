@@ -20,7 +20,7 @@ CREATE TABLE  vector_metadata (
 
 CREATE VIEW vector_view_abs_time AS SELECT 
             A1.id, A1.mapset,
-            A1.name, A1.temporal_type,
+            A1.name, A1.layer, A1.temporal_type,
             A1.creation_time, 
 -- Uncommented due to performance issues
 --            A1.modification_time, A1.revision, 
@@ -34,7 +34,7 @@ CREATE VIEW vector_view_abs_time AS SELECT
 
 CREATE VIEW vector_view_rel_time AS SELECT 
             A1.id, A1.mapset,
-            A1.name, A1.temporal_type,
+            A1.name, A1.layer, A1.temporal_type,
             A1.creation_time, 
 -- Uncommented due to performance issues
 --            A1.modification_time, A1.revision, 
