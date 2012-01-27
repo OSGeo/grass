@@ -164,6 +164,8 @@ int Vect__read_head(struct Map_info *Map)
 	    Vect_set_scale(Map, atoi(ptr));
 	else if (strncmp(buff, "OTHER INFO:", sizeof(char) * 11) == 0)
 	    Vect_set_comment(Map, ptr);
+	else if (strncmp(buff, "PROJ:", sizeof(char) * 5) == 0)
+	    Vect_set_proj(Map, atoi(ptr));
 	else if (strncmp(buff, "ZONE:", sizeof(char) * 5) == 0 ||
 		 strncmp(buff, "UTM ZONE:", sizeof(char) * 9) == 0)
 	    Vect_set_zone(Map, atoi(ptr));
