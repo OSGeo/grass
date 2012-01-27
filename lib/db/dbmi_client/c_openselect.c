@@ -1,15 +1,16 @@
 /*!
- * \file db/dbmi_client/c_openselect.c
- * 
- * \brief DBMI Library (client) - open select cursor
- *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
- *
- * \author Joel Jones (CERL/UIUC), Radim Blazek
+  \file db/dbmi_client/c_openselect.c
+  
+  \brief DBMI Library (client) - open select cursor
+  
+  (C) 1999-2008, 2012 by the GRASS Development Team
+ 
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Joel Jones (CERL/UIUC)
+  \author Radim Blazek
  */
 
 #include <grass/dbmi.h>
@@ -21,9 +22,13 @@
   Open modes:
    - DB_SEQUENTIAL
 
-  \param driver db driver
-  \param select SQL select statement
-  \param cursor db cursor to be opened
+  Data can be fetched by db_fetch().
+  
+  Cursor should be closed by db_close_cursor().
+  
+  \param driver pointer to dbDriver
+  \param select SQL select statement (pointer to dbString)
+  \param cursor pointer to dbCursor to be opened
   \param mode open mode
 
   \return DB_OK on success

@@ -31,7 +31,7 @@ dbDriver *db_start_driver_open_database(const char *drvname,
     dbHandle handle;
     dbDriver *driver;
 
-    G_debug(3, "db_start_driver_open_database():\n  drvname = %s, dbname = %s",
+    G_debug(3, "db_start_driver_open_database(): drvname='%s', dbname='%s'",
 	    drvname, dbname);
 
     db_init_handle(&handle);
