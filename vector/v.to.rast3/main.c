@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->required = YES;
-    col_opt->description = _("Name of attrbitute column (data type must be numeric)");
+    col_opt->description = _("Name of attribute column (data type must be numeric)");
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
