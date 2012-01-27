@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 				 "del;delete category (-1 to delete all categories of given layer);"
 				 "chlayer;change layer number (e.g. layer=3,1 changes layer 3 to layer 1);"
 				 "sum;add the value specified by cat option to the current category value;"
-				 "transfer;copy values from one layer to another (e.g. layer=1,2 copies values from layer 1 to layer 2);"
+				 "transfer;copy values from one layer to another (e.g. layer=1,2,3 copies values from layer 1 to layer 2 and 3);"
 				 "report;print report (statistics), in shell style: layer type count min max;"
 				 "print;print category values, more cats in the same layer are separated by '/'");
     
@@ -233,10 +233,12 @@ int main(int argc, char *argv[])
     }
 
     if (option == O_TRANS && open_level > 1) {
-	/* check if field[1] already exists */
+	/* check if field[>0] already exists */
 	if (nfields > 1) {
-	    if (Vect_cidx_get_field_index(&In, fields[1]) != -1)
-		G_warning(_("Categories already exist in layer %d"), fields[1]);
+	    for(i = 1; i < nfields; i++) {
+		if (Vect_cidx_get_field_index(&In, fields[i]) != -1)
+		    G_warning(_("Categories already exist in layer %d"), fields[i]);
+	    }
 	}
 	/* find next free layer number */
 	else if (nfields == 1) {
@@ -339,11 +341,15 @@ int main(int argc, char *argv[])
 		for (i = 0; i < n; i++) {
 		    if (Cats->field[i] == fields[0]) {
 			scat = Cats->cat[i];
-			if (Vect_cat_set(Cats, fields[1], scat) > 0) {
-			    nmodified++;
-			}
+			break;
 		    }
 		}
+		for (i = 1; i < nfields; i++) {
+		    if (Vect_cat_set(Cats, fields[i], scat) > 0) {
+			G_debug(4, "Copy cat %i of field %i to into field %i", scat, fields[0], fields[i]);
+		    }
+		}
+		nmodified++;
 	    }
 	    Vect_write_line(&Out, type, Points, Cats);
 	}
@@ -703,8 +709,9 @@ int main(int argc, char *argv[])
 	Vect_close(&Out);
 
 	if (option == O_TRANS && nmodified > 0)
-	    G_important_message(_("Categories copied from layer %d to layer %d"),
-				fields[0], fields[1]);
+	    for(i = 0; i < nfields; i++)
+		G_important_message(_("Categories copied from layer %d to layer %d"),
+				fields[0], fields[i]);
 	G_done_msg(_("%d features modified."), nmodified);
     }
     Vect_close(&In);

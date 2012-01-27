@@ -102,6 +102,12 @@ v.category input=wkt output=wktnew option=add
 Results can be tested
 using <em><a href="d.what.vect.html">d.what.vect</a></em>.
 
+<h3>Copy categories from layer 1 to layer 2,3,4,5,6,7 and 8</h3>
+Existing layer will be overwritten, non-existing will be created.
+<div class="code"><pre>
+v.category input=observer output=observer_new option=transfer layer=1,2,3,4,5,6,7,8
+</pre></div>
+
 <h3>Print vector categories of given layer</h3>
 
 Print vector categories from the first layer, only for feature ids 1-50.
