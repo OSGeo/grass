@@ -380,7 +380,13 @@ class abstract_map_dataset(abstract_dataset):
             self.base.delete(dbif)
 
         # Remove the timestamp from the file system
-        core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
+        if self.get_type() == "vect":
+	    if self.get_layer():
+		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), layer=self.get_layer(), date="none")
+	    else:
+		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
+	else:
+	    core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
 
         self.reset(None)
         dbif.connection.commit()
