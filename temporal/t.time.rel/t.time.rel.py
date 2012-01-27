@@ -32,6 +32,22 @@
 #%end
 
 #%option
+#% key: layer
+#% type: string
+#% description: Id(s)/Name(s) of existing vector map layer or the identifier "file" in case the layer definition is in the input file
+#% required: no
+#% multiple: yes
+#%end
+
+#%option
+#% key: file
+#% type: string
+#% description: Input file with vector map names, one per line. Additionally the layer, the start time and the end time can be specified per line
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: start
 #% type: string
 #% description: The valid integer start value for all maps, or the identifier "file" in case the start time is located in the input file 
@@ -61,14 +77,6 @@
 #% key: increment
 #% type: integer
 #% description: Increment between maps for valid time interval creation 
-#% required: no
-#% multiple: no
-#%end
-
-#%option
-#% key: file
-#% type: string
-#% description: Input file with map names, one per line
 #% required: no
 #% multiple: no
 #%end
@@ -104,6 +112,7 @@ def main():
 
     # Get the options
     maps = options["input"]
+    layer = options["layer"]
     file = options["file"]
     start = options["start"]
     end = options["end"]
@@ -116,7 +125,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Set valid absolute time to maps
-    tgis.assign_valid_time_to_maps(type=type, maps=maps, ttype="relative", \
+    tgis.assign_valid_time_to_maps(type=type, maps=maps, layer=layer, ttype="relative", \
                                    start=start, end=end, unit=unit, file=file, increment=increment, \
                                    dbif=None, interval=interval, fs=fs)
     

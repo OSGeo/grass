@@ -376,12 +376,12 @@ class absolute_temporal_extent(abstract_temporal_extent):
         #      0123456789012345678901234567890
         print " +-------------------- Absolute time -----------------------------------------+"
         abstract_temporal_extent.print_info(self)
-        print " | Timezone:................... " + str(self.get_timezone())
+        #print " | Timezone:................... " + str(self.get_timezone())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         abstract_temporal_extent.print_shell_info(self)
-        print "timezone=" + str(self.get_timezone())
+        #print "timezone=" + str(self.get_timezone())
 
 ###############################################################################
 
