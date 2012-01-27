@@ -53,7 +53,7 @@ int db__recv_procnum(int *n)
 {
     int stat = DB_OK;
 
-    if (!db__recv(n, sizeof(*n)))
+    if (db__recv(n, sizeof(*n)) < sizeof(*n))
 	stat = DB_EOF;
 
     return stat;
