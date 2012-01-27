@@ -269,6 +269,11 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	{
 	    int is_fp = Rast_map_is_fp(rast_name, G_mapset());
 
+	    if (!label_column) {
+		G_verbose_message(_("Label column was not specified, no labels will be written"));
+		break;
+	    }
+
 	    Rast_set_cats_title("Labels", &rast_cats);
 
 	    /* open vector map and database driver */
@@ -303,16 +308,10 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		G_malloc(sizeof(struct My_labels_rule) * nrec);
 
 	    /* get column type */
-	    if (!label_column) {
-		G_verbose_message(_("Label column was not specified, no labels will be written"));
-		break;
-	    }
-	    else {
-		if ((col_type =
-		     db_column_Ctype(Driver, Fi->table,
-				     label_column)) == -1) {
-		    G_fatal_error(_("Column <%s> not found"), label_column);
-		}
+	    if ((col_type =
+		 db_column_Ctype(Driver, Fi->table,
+				 label_column)) == -1) {
+		G_fatal_error(_("Column <%s> not found"), label_column);
 	    }
 
 	    /* for each attribute */
