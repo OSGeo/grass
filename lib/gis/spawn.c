@@ -433,8 +433,10 @@ static void do_redirects(struct redirect *redirects, int num_redirects, HANDLE h
 	else if (r->src_fd >= 0) {
 	    handles[r->dst_fd] = get_handle(r->src_fd);
 	}
-	else
+	else {
 	    handles[r->dst_fd] = INVALID_HANDLE_VALUE;
+	    close(r->dst_fd);
+	}
     }
 }
 
