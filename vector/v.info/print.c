@@ -226,7 +226,7 @@ void print_shell(const struct Map_info *Map)
 
 void print_info(const struct Map_info *Map)
 {
-    int i;
+    int i, map_type;
     char line[100];
     char tmp1[100], tmp2[100];
     char timebuff[256];
@@ -235,6 +235,8 @@ void print_info(const struct Map_info *Map)
     struct bound_box box;
     int utm_zone = -1;
    
+    map_type = Vect_maptype(Map);
+    
     /* Check the Timestamp */
     time_ok = G_read_vector_timestamp(Vect_get_name(Map), NULL, "", &ts);
 
@@ -247,7 +249,8 @@ void print_info(const struct Map_info *Map)
     }
 
     divider('+');
-    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
+    if (map_type == GV_FORMAT_OGR ||
+	map_type == GV_FORMAT_OGR_DIRECT) {
 	/* for OGR format print also datasource and layer */
 	sprintf(line, "%-17s%s", _("OGR layer:"),
 		Vect_get_ogr_layer_name(Map));
@@ -278,7 +281,8 @@ void print_info(const struct Map_info *Map)
 	    Vect_get_scale(Map));
     printline(line);
 
-    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
+    if (map_type == GV_FORMAT_OGR ||
+	map_type == GV_FORMAT_OGR_DIRECT) {
 	sprintf(line, "%-17s%s (%s)", _("Map format:"),
 		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
     }
