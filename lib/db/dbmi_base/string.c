@@ -22,10 +22,9 @@
   
   \param[out] x pointer to dbString
  */
-void db_init_string(dbString * x)
+void db_init_string(dbString *x)
 {
-    x->string = NULL;
-    x->nalloc = 0;
+    G_zero(x, sizeof(dbString));
 }
 
 static int set_string(dbString * x, char *s, int copy);
@@ -144,11 +143,11 @@ char *db_get_string(const dbString * x)
 }
 
 /*!
-  \brief Free allocated space
+  \brief Free allocated space for dbString
 
-  \param x poiter to dbString
+  \param x pointer to dbString
 */
-void db_free_string(dbString * x)
+void db_free_string(dbString *x)
 {
     if (x->nalloc > 0)
 	db_free(x->string);

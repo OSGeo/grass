@@ -16,18 +16,14 @@
 #include <grass/dbmi.h>
 
 /*!
-  \brief Initialize cursor
+  \brief Initialize dbCursor
   
   \param cursor pointer to dbCursor to be initialized
 */
 void db_init_cursor(dbCursor *cursor)
 {
-    cursor->driver = NULL;
+    G_zero(cursor, sizeof(dbCursor));
     cursor->token = -1;
-    cursor->type = 0;
-    cursor->mode = 0;
-    cursor->table = NULL;
-    cursor->column_flags = NULL;
 }
 
 /*!

@@ -16,11 +16,11 @@
 #include "macros.h"
 
 /*!
-  \brief Fetch data
+  \brief Fetch data from open cursor
 
-  \param cursor db cursor
+  \param cursor pointer to dbCursor
   \param position cursor position
-  \param[out] more get more?
+  \param[out] more get more (0 for no data to be fetched)
 
   \return DB_OK on success
   \return DB_FAILED on failure
