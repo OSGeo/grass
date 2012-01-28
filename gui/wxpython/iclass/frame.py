@@ -53,7 +53,7 @@ from iclass.toolbars    import IClassMapToolbar, IClassMiscToolbar,\
                                IClassToolbar, IClassMapManagerToolbar
 from iclass.statistics  import Statistics, BandStatistics
 from iclass.dialogs     import CategoryListCtrl, IClassCategoryManagerDialog,\
-                               IClassGroupDialog, IClassMapDialog, IClassSignatureFileDialog
+                               IClassGroupDialog, IClassSignatureFileDialog
 from iclass.plots       import PlotPanel
         
 class IClassMapFrame(DoubleMapFrame):
@@ -352,7 +352,7 @@ class IClassMapFrame(DoubleMapFrame):
         """
         mapTb = self.GetMapToolbar()
         # optionally disable tool zoomback tool
-        mapTb.Enable('zoomback', enable = (len(self.MapWindow.zoomhistory) > 1))
+        mapTb.Enable('zoomBack', enable = (len(self.MapWindow.zoomhistory) > 1))
 
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
             mapTb.SetActiveMap((win == self.secondMapWindow))

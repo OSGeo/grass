@@ -72,7 +72,7 @@ class IClassMapToolbar(BaseToolbar):
         
         self.OnTool(None)
         
-        self.EnableTool(self.zoomback, False)
+        self.EnableTool(self.zoomBack, False)
         
     def GetActiveMapTool(self):
         """!Return widget for selecting active maps"""
@@ -99,18 +99,18 @@ class IClassMapToolbar(BaseToolbar):
                                      ("pan", icons["pan"],
                                       self.parent.OnPan,
                                       wx.ITEM_CHECK),
-                                     ("zoomin", icons["zoomIn"],
+                                     ("zoomIn", icons["zoomIn"],
                                       self.parent.OnZoomIn,
                                       wx.ITEM_CHECK),
-                                     ("zoomout", icons["zoomOut"],
+                                     ("zoomOut", icons["zoomOut"],
                                       self.parent.OnZoomOut,
                                       wx.ITEM_CHECK),
-                                     ("zoommenu", icons["zoomMenu"],
+                                     ("zoomMenu", icons["zoomMenu"],
                                       self.parent.OnZoomMenu),
                                      (None, ),
-                                     ("zoomback", icons["zoomBack"],
+                                     ("zoomBack", icons["zoomBack"],
                                       self.parent.OnZoomBack),
-                                     ("zoomtomap", icons["zoomExtent"],
+                                     ("zoomToMap", icons["zoomExtent"],
                                       self.parent.OnZoomToMap),
                                     ))
 class IClassToolbar(BaseToolbar):

@@ -1,5 +1,5 @@
 """!
-@package iclass::toolbars
+@package iclass::dialogs
 
 @brief wxIClass dialogs
 
@@ -93,13 +93,6 @@ class IClassMapDialog(ElementDialog):
         
         self.element = gselect.Select(parent = self.panel, type = 'raster',
                                       size = globalvar.DIALOG_GSELECT_SIZE)
-        #self.firstMapCheck = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
-                                         #label = _("Add raster map to Training display"))
-        #self.secondMapCheck = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
-                                         #label = _("Add raster map to Preview display"))
-        # in user settings
-        #self.firstMapCheck.SetValue(True)
-        #self.secondMapCheck.SetValue(True)
         
         self.PostInit()
         
@@ -110,22 +103,13 @@ class IClassMapDialog(ElementDialog):
         """!Do layout"""
         self.dataSizer.Add(self.element, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 5)
-        #self.dataSizer.Add(self.firstMapCheck, proportion = 0,
-                      #flag = wx.ALL, border = 5)
-        #self.dataSizer.Add(self.secondMapCheck, proportion = 0,
-                      #flag = wx.ALL, border = 5)
+        
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
     def GetRasterMap(self):
         """!Returns selected raster map"""
         return self.GetElement()
-        
-    #def IfAddToFirstMap(self):
-        #return self.firstMapCheck.IsChecked()
-        
-    #def IfAddToSecondMap(self):
-        #return self.secondMapCheck.IsChecked()
         
         
 class IClassCategoryManagerDialog(wx.Dialog):
