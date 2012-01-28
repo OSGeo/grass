@@ -167,7 +167,12 @@ void print_columns(const struct Map_info *Map, const char *input_opt, const char
 
 void print_shell(const struct Map_info *Map)
 {
-    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
+    int map_type;
+
+    map_type = Vect_maptype(Map);
+    
+    if (map_type == GV_FORMAT_OGR ||
+	map_type == GV_FORMAT_OGR_DIRECT) {
 	fprintf(stdout, "ogr_layer=%s\n",
 		Vect_get_ogr_layer_name(Map));
 	fprintf(stdout, "ogr_dsn=%s\n",
@@ -189,7 +194,8 @@ void print_shell(const struct Map_info *Map)
     fprintf(stdout, "scale=1:%d\n",
 	    Vect_get_scale(Map));
     
-    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {	
+    if (map_type == GV_FORMAT_OGR ||
+	map_type == GV_FORMAT_OGR_DIRECT) {
 	fprintf(stdout, "format=%s,%s\n",
 		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
     }
