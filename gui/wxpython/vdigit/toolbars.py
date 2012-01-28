@@ -764,8 +764,9 @@ class VDigitToolbar(BaseToolbar):
                 self.EnableTool(tool, False)
         elif fType:
             GError(parent = self,
-                   message = _("Unsupported feature type '%s'. Unable to edit "
-                               "OGR layer <%s>.") % (fType, mapLayer.GetName()))
+                   message = _("Unsupported feature type '%(type)s'. Unable to edit "
+                               "OGR layer <%(layer)s>.") % { 'type' : fType,
+                                                             'layer' : mapLayer.GetName() })
             self.digit.CloseMap()
             self.mapLayer = None
             self.StopEditing()

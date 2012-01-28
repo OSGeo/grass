@@ -763,35 +763,30 @@ class GMConsole(wx.SplitterWindow):
         """!Command done (or aborted)"""
         if self.parent.GetName() == 'Modeler':
             self.parent.OnCmdDone(event)
+            
+        # Process results here
+        try:
+            ctime = time.time() - event.time
+            if ctime < 60:
+                stime = _("%d sec") % int(ctime)
+            else:
+                mtime = int(ctime / 60)
+                stime = _("%(min)d min %(sec)d sec") %  { 'min' : mtime, 
+                                                          'sec' : int(ctime - (mtime * 60)) }
+        except KeyError:
+            # stopped deamon
+            stime = _("unknown")
         
         if event.aborted:
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in inconsistent state '
                             'and may be corrupted'), self.cmdOutput.StyleWarning)
-            self.WriteCmdLog('(%s) %s (%d sec)' % (str(time.ctime()),
-                                                   _('Command aborted'),
-                                                   (time.time() - event.time)))
-            # pid=self.cmdThread.requestId)
-            self.btnCmdAbort.Enable(False)
+            msg = _('Command aborted')
         else:
-            try:
-                # Process results here
-                ctime = time.time() - event.time
-                if ctime < 60:
-                    stime = _("%d sec") % int(ctime)
-                else:
-                    mtime = int(ctime / 60)
-                    stime = _("%d min %d sec") % (mtime, 
-                                                  int(ctime - (mtime * 60)))
-                
-                self.WriteCmdLog('(%s) %s (%s)' % (str(time.ctime()),
-                                                   _('Command finished'),
-                                                   (stime)))
-            except KeyError:
-                # stopped deamon
-                pass
-
-            self.btnCmdAbort.Enable(False)
+            msg = _('Command finished')
+            
+        self.WriteCmdLog('(%s) %s (%s)' % (str(time.ctime()), msg, stime))
+        self.btnCmdAbort.Enable(False)
         
         if event.onDone:
             event.onDone(cmd = event.cmd, returncode = event.returncode)

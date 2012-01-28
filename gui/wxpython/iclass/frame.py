@@ -665,8 +665,10 @@ class IClassMapFrame(DoubleMapFrame):
         nLayers = len(groupLayers)
         if nLayers <= 1:
             GMessage(parent = self,
-                     message = _("Group <%s> does not have enough files "
-                                 "(it has %d files). Operation canceled.") % (group, nLayers))
+                     message = _("Group <%(group)s> does not have enough files "
+                                 "(it has %(files)d files). Operation canceled.") % \
+                         { 'group' : group,
+                           'files' : nLayers })
             return False
         
         #check if vector has any areas

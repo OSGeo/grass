@@ -253,12 +253,14 @@ class ScatterFrame(BasePlotFrame):
                                       map2 = rast2, 
                                       flags = 'g', quiet = True,
                                       parse = (grass.parse_key_val, { 'sep' : '=' }))
-            eqtitle = _('Regression equation for %s vs. %s:\n\n')  % (rast1, rast2)
-            eq = _('   %s = %s + %s(%s)\n\n') % (rast2, ret['a'], ret['b'], rast1)
-            num = _('N = %s\n') % ret['N']
-            rval = _('R = %s\n') % ret['R']
-            rsq = _('R-squared = %f\n') % pow(float(ret['R']), 2)
-            ftest = _('F = %s\n') % ret['F']
+            eqtitle = _('Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n\n') % \
+                { 'rast1' : rast1,
+                  'rast2' : rast2 }
+            eq = '   %s = %s + %s(%s)\n\n' % (rast2, ret['a'], ret['b'], rast1)
+            num = 'N = %s\n' % ret['N']
+            rval = 'R = %s\n' % ret['R']
+            rsq = 'R-squared = %f\n' % pow(float(ret['R']), 2)
+            ftest = 'F = %s\n' % ret['F']
             str = eqtitle + eq + num + rval + rsq + ftest
             message.append(str)
             

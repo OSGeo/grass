@@ -1106,7 +1106,9 @@ class Image(InstructionObject):
                 GError(_("Failed to read instruction %s") % instruction)
                 return False
         if not os.path.exists(instr['epsfile']):
-            GError(_("Failed to read instruction %s: file %s not found.") % instruction, instr['epsfile'])
+            GError(_("Failed to read instruction %(inst)s: "
+                     "file %(file)s not found.") % { 'inst' : instruction,
+                                                     'file' : instr['epsfile'] })
             return False
         
         instr['epsfile'] = os.path.abspath(instr['epsfile'])
@@ -6013,7 +6015,9 @@ class ImageDialog(PsmapDialog):
             
     def SetSizeInfoLabel(self, image):
         """!Update image size label"""
-        self.imagePanel.image['sizeInfo'].SetLabel(_("size: %s x %s pts") % (image.GetWidth(), image.GetHeight()))
+        self.imagePanel.image['sizeInfo'].SetLabel(_("size: %(width)s x %(height)s pts") % \
+                                                       { 'width'  : image.GetWidth(),
+                                                         'height' : image.GetHeight() })
         self.imagePanel.image['sizeInfo'].GetContainingSizer().Layout()
         
     def ClearPreview(self):

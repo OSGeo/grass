@@ -396,8 +396,8 @@ class BasePlotFrame(wx.Frame):
         self.client.SaveFile()
 
     def OnMouseLeftDown(self,event):
-        self.SetStatusText(_("Left Mouse Down at Point: (%.4f, %.4f)") % \
-                               self.client._getXY(event))
+        self.SetStatusText(_("Left Mouse Down at Point:") + \
+                               " (%.4f, %.4f)" % self.client._getXY(event))
         event.Skip() # allows plotCanvas OnMouseLeftDown to be called
 
     def OnMotion(self, event):
