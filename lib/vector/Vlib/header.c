@@ -259,6 +259,15 @@ const char *Vect_get_full_name(const struct Map_info *Map)
  */
 const char *Vect_get_ogr_dsn_name(const struct Map_info *Map)
 {
+#ifndef HAVE_OGR
+    G_warning(_("GRASS is not compiled with OGR support"));
+#else
+    if (Map->format != GV_FORMAT_OGR &&
+	Map->format != GV_FORMAT_OGR_DIRECT)
+	G_warning(_("Format of vector map <%s> is not OGR"),
+		  Vect_get_full_name(Map));
+#endif
+    
     return Map->fInfo.ogr.dsn;
 }
 
@@ -271,6 +280,15 @@ const char *Vect_get_ogr_dsn_name(const struct Map_info *Map)
  */
 const char *Vect_get_ogr_layer_name(const struct Map_info *Map)
 {
+#ifndef HAVE_OGR
+    G_warning(_("GRASS is not compiled with OGR support"));
+#else
+    if (Map->format != GV_FORMAT_OGR &&
+	Map->format != GV_FORMAT_OGR_DIRECT)
+	G_warning(_("Format of vector map <%s> is not OGR"),
+		  Vect_get_full_name(Map));
+#endif
+    
     return Map->fInfo.ogr.layer_name;
 }
 
@@ -286,12 +304,20 @@ const char *Vect_get_ogr_layer_name(const struct Map_info *Map)
 */
 const char *Vect_get_ogr_format_info(const struct Map_info *Map)
 {
-#ifdef HAVE_OGR
+#ifndef HAVE_OGR
+    G_warning(_("GRASS is not compiled with OGR support"));
+#else
+    if (Map->format != GV_FORMAT_OGR &&
+	Map->format != GV_FORMAT_OGR_DIRECT)
+	G_warning(_("Format of vector map <%s> is not OGR"),
+		  Vect_get_full_name(Map));
+    
     if (!Map->fInfo.ogr.ds)
 	return NULL;
     
     return G_store(OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds)));
 #endif
+    
     return NULL;
 }
 
@@ -305,9 +331,16 @@ const char *Vect_get_ogr_format_info(const struct Map_info *Map)
 */
 const char *Vect_get_ogr_geometry_type(const struct Map_info *Map)
 {
-#ifdef HAVE_OGR
+#ifndef HAVE_OGR
+    G_warning(_("GRASS is not compiled with OGR support"));
+#else
     OGRwkbGeometryType Ogr_geom_type;
     OGRFeatureDefnH    Ogr_feature_defn;
+    
+    if (Map->format != GV_FORMAT_OGR &&
+	Map->format != GV_FORMAT_OGR_DIRECT)
+	G_warning(_("Format of vector map <%s> is not OGR"),
+		  Vect_get_full_name(Map));
     
     if (!Map->fInfo.ogr.layer)
 	return NULL;
@@ -317,6 +350,7 @@ const char *Vect_get_ogr_geometry_type(const struct Map_info *Map)
     
     return OGRGeometryTypeToName(Ogr_geom_type);
 #endif
+    
     return NULL;
 }
 
