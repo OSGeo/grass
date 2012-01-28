@@ -406,6 +406,14 @@ class SingleMapFrame(MapFrameBase):
         """!Returns map window"""
         return self.MapWindow
         
+    def OnRender(self, event):
+        """!Re-render map composition (each map layer)
+        """
+        self.GetWindow().UpdateMap(render = True, renderVector = True)
+        
+        # update statusbar
+        self.StatusbarUpdate()
+        
 
 class DoubleMapFrame(MapFrameBase):
     """! Frame with two map windows.
