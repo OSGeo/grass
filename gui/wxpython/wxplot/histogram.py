@@ -214,12 +214,11 @@ class Histogram2Frame(BasePlotFrame):
         message = []
         title = _('Statistics for Map(s) Histogrammed')
 
-        for r in self.rasterList:
-            rast = r.split('@')[0] 
+        for rast in self.rasterList:
             ret = grass.read_command('r.univar', map = r, flags = 'e', quiet = True)
-            stats = _('Statistics for %s\n\n%s\n') % (rast, ret)
+            stats = _('Statistics for raster map <%s>') % rast + ':\n%s\n' % ret
             message.append(stats)
-            
+        
         stats = PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
                                title = title)
 

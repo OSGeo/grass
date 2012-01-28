@@ -385,7 +385,7 @@ class Model(object):
                                 report = False
                                 break
                         if report:
-                            errList.append(_("%s: undefined variable '%s'") % (cmd[0], var))
+                            errList.append(cmd[0] + ": " + _("undefined variable '%s'") % var)
             ### TODO: check variables in file only optionally
             ### errList += self._substituteFile(action, checkOnly = True)
         
@@ -447,7 +447,7 @@ class Model(object):
             if sval:
                 var = sval.group(2).strip()[1:] # ignore '%'
                 cmd = item.GetLog(string = False)[0]
-                errList.append(_("%s: undefined variable '%s'") % (cmd, var))
+                errList.append(cmd + ": " + _("undefined variable '%s'") % var)
             
             if not checkOnly:
                 if write:
