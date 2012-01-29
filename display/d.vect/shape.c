@@ -180,7 +180,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
     }
 
     stat = 0;
-    if (type & GV_AREA)
+    if (type & GV_AREA && Vect_get_num_primitives(Map, GV_CENTROID | GV_BOUNDARY) > 0)
 	stat += display_area(Map, Clist, window, 
 			     bcolor, fcolor, chcat,
 			     id_flag, cats_colors_flag,
