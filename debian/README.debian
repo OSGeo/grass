@@ -1,36 +1,54 @@
-# For preparing GRASS Debian package run
+# For preparing GRASS Debian package you should download the packaging
+# rules from DebianGIS's git repository, then use the Debian build scripts
+# to construct the .deb files.
 
-svn co svn://svn.debian.org/pkg-grass/packages/grass/trunk/debian debiangis
-mv debiangis/* .
+# Make sure git and the debian build scripts are installed:
+  sudo apt-get install git-core devscripts
 
-# in this directory. It will download latest debian configuration files
-# from debian Subversion server (http://svn.debian.org).
-# The grass debian/ dir is under SVN control so you can't just checkout over
-# the top of it from another repo. 
-# You may need to adapt it to work with GRASS 7 (it's for the latest stable)
+
+# From the grass source dir download the packaging rules (the contents
+#  of debiangis/grass/ can be ignored, only the debian/ dir is needed):
+  git clone git://git.debian.org/git/pkg-grass/grass.git debiangis
+  ln -s debiangis/grass/debian debian
+
+
+# If you haven't built GRASS from source on this machine before, you'll
+# have to install a bunch of -dev packages. Look at the debian/control
+# file and install the packages on the "Build-depends" lines.
+
+  apt-get install flex bison libreadline-dev libncurses5-dev # ... etc.
+
+
+# In your favorite text editor open debian/changelog and adjust the
+# version number on the top line to reflect the GRASS SVN checkout number.
+# e.g. for r50538: grass (7.0+svn50539-0) unstable; urgency=low
+
+  nano debian/changelog
+
 
 # After that, you can build current version of GRASS with
 
-dpkg-buildpackage -rfakeroot
-#  or
-debuild binary
-#  or
-debuild -i -uc -us -b -j2
+  debuild -i -uc -us -b
 
 # in main GRASS source directory. After the packages are generated, you can
 # install them with
 
-dpkg -i ../*grass*deb
+  dpkg -i ../grass*.deb
+
+
+# to try again, first clean out the old build by running:
+#  (from the main source dir)
+
+  debuild clean
+
+# then repeat the build process
 
 
 
-=====
+FIXME: how to download just the grass/debian/ directory from git
+       and not the whole thing?
 
-fixme: DebianGIS has moved to git,
 
- sudo apt-get install git-core
- mkdir git && cd git
- git clone git://git.debian.org/git/pkg-grass/grass.git
- ln -s grass/debian debiangis
-
-how to download just the grass/debian/ directory from that?
+--
+H.Bowman
+Last changed: $Date$
