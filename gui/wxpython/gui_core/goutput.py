@@ -459,7 +459,7 @@ class GMConsole(wx.SplitterWindow):
         """
         if len(command) == 0:
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
-            return 0
+            return
         
         # update history file
         env = grass.gisenv()
@@ -509,7 +509,7 @@ class GMConsole(wx.SplitterWindow):
                     GMessage(parent = self.parent,
                              message = _("Command '%s' not yet implemented in the WxGUI. "
                                          "Try adding it as a command layer instead.") % command[0])
-                    return 1
+                    return
                 
                 if layertype == 'barscale':
                     self.parent.curr_page.maptree.GetMapDisplay().OnAddBarscale(None)
@@ -551,7 +551,7 @@ class GMConsole(wx.SplitterWindow):
                                                "Option <%(opt)s>: read from standard input is not "
                                                "supported by wxGUI") % { 'cmd': ' '.join(command),
                                                                          'opt': p.get('name', '') })
-                            return 1
+                            return
                 
                 if len(command) == 1 and hasParams and \
                         command[0] != 'v.krige':
@@ -560,7 +560,7 @@ class GMConsole(wx.SplitterWindow):
                         GUI(parent = self).ParseCommand(command)
                     except GException, e:
                         print >> sys.stderr, e
-                    return 0
+                    return
                 
                 # switch to 'Command output' if required
                 if switchPage:
@@ -603,8 +603,6 @@ class GMConsole(wx.SplitterWindow):
                                       onDone = onDone, onPrepare = onPrepare, userData = userData)
             self.cmdOutputTimer.Start(50)
         
-        return 0
-
     def ClearHistory(self, event):
         """!Clear history of commands"""
         self.cmdOutput.SetReadOnly(False)
