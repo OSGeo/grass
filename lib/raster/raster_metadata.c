@@ -90,7 +90,6 @@ void Rast_write_vdatum(const char *name, const char *str)
  * \param element  metadata component filename
  * \param name
  * \param mapset
- * \param *str  string to be populated with data
  * \return dynamically-allocated string on success
  * \return NULL on error
  */
