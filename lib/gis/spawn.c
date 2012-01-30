@@ -343,6 +343,7 @@ static int win_spawn(const char *cmd, const char **argv, const char **envp,
     PROCESS_INFORMATION pi;
     BOOL result;
     DWORD exitcode;
+    int i;
 
     if (!shell) {
 	G_debug(3, "win_spawn: program = %s", program);
@@ -387,6 +388,10 @@ static int win_spawn(const char *cmd, const char **argv, const char **envp,
     }
 
     CloseHandle(pi.hThread);
+
+    for (i = 0; i < 3; i++)
+	if (handles[i] != INVALID_HANDLE_VALUE)
+	    CloseHandle(handles[i]);
 
     if (!background) {
 	WaitForSingleObject(pi.hProcess, INFINITE);
@@ -434,7 +439,10 @@ static void do_redirects(struct redirect *redirects, int num_redirects, HANDLE h
 	    handles[r->dst_fd] = get_handle(r->src_fd);
 	}
 	else {
-	    handles[r->dst_fd] = INVALID_HANDLE_VALUE;
+	    if (r->dst_fd < 3) {
+		CloseHandle(handles[r->dst_fd]);
+		handles[r->dst_fd] = INVALID_HANDLE_VALUE;
+	    }
 	    close(r->dst_fd);
 	}
     }
