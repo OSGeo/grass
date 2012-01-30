@@ -1,5 +1,5 @@
 """!
-@package iclass::statistics
+@package iclass.statistics
 
 @brief wxIClass classes for storing statistics about cells in training areas.
 
