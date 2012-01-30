@@ -528,7 +528,13 @@ class GMConsole(wx.SplitterWindow):
             
             else:
                 # other GRASS commands (r|v|g|...)
-                task = GUI(show = None).ParseCommand(command)
+                try:
+                    task = GUI(show = None).ParseCommand(command)
+                except GException, e:
+                    GError(parent = self,
+                           message = unicode(e),
+                           showTraceback = False)
+                    return
                 
                 hasParams = False
                 if task:

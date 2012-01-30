@@ -2010,8 +2010,8 @@ class GUI:
             global _blackList
             self.grass_task = gtask.parse_interface(gcmd.GetRealCmd(cmd[0]),
                                                     blackList = _blackList)
-        except (grass.ScriptError, ValueError), e: 
-            raise gcmd.GException(e.value)
+        except (grass.ScriptError, ValueError), e:
+            raise gcmd.GException(e)
         
         # if layer parameters previously set, re-insert them into dialog
         if completed is not None:

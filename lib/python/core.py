@@ -61,9 +61,9 @@ STDOUT = subprocess.STDOUT
 class ScriptError(Exception):
     def __init__(self, msg):
         self.value = msg
-    
+        
     def __str__(self):
-        return repr(self.value)
+        return self.value
         
 raise_on_error = False # raise exception instead of calling fatal()
 debug_level = 0        # DEBUG level
