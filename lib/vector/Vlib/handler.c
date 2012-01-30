@@ -25,7 +25,7 @@ static struct handler_data_io *handler_io;
 
 static void error_handler_io(void *p)
 {
-    const char *name;
+    char *name;
     struct Map_info *In, *Out;
     
     In  = handler_io->In;
@@ -38,6 +38,7 @@ static void error_handler_io(void *p)
 	name = G_store(Out->name);
 	Vect_close(Out);
 	Vect_delete(name);
+	G_free(name);
     }
 }
 
