@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 			M_get_list(n)->element[0]);
 		G_debug(3, "lister CMD: %s", lister);
 	    }
-	    if (n > -1 && access(lister, 1) == 0) /* execute permission? */
+	    if (n > -1 && access(lister, X_OK) == 0) /* execute permission */
 		G_spawn(lister, lister, mapset, NULL);
 	    else
 		M_do_list(n, mapset);
