@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     if (!mapset)
 	mapset = "";
 
-    if (G_strcasecmp(mapset, ".") == 0)
+    if (strcmp(mapset, ".") == 0)
 	mapset = G_mapset();
 
     i = 0;
@@ -74,11 +74,13 @@ int main(int argc, char *argv[])
 
 	if (full->answer) {
 	    char lister[GPATH_MAX];
-
-	    sprintf(lister, "%s/etc/lister/%s", G_gisbase(),
-		    M_get_list(n)->element[0]);
-	    G_debug(3, "lister CMD: %s", lister);
-	    if (access(lister, 1) == 0)	/* execute permission? */
+	    
+	    if (n > -1) {
+		sprintf(lister, "%s/etc/lister/%s", G_gisbase(),
+			M_get_list(n)->element[0]);
+		G_debug(3, "lister CMD: %s", lister);
+	    }
+	    if (n > -1 && access(lister, 1) == 0) /* execute permission? */
 		G_spawn(lister, lister, mapset, NULL);
 	    else
 		M_do_list(n, mapset);
