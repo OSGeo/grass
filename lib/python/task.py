@@ -433,6 +433,7 @@ def get_interface_description(cmd):
     try:
         cmdout, cmderr = Popen([cmd, '--interface-description'], stdout = PIPE,
                                stderr = PIPE).communicate()
+        
         # TODO: replace ugly hack bellow
         if not cmdout and sys.platform == 'win32':
             if os.path.splitext(cmd)[1] == '':
@@ -441,6 +442,11 @@ def get_interface_description(cmd):
             os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
             cmdout, cmderr = Popen([sys.executable, cmd, '--interface-description'], stdout = PIPE,
                                    stderr = PIPE).communicate()
+        
+        if cmderr:
+            raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
+                                 "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : decode(cmderr) }
+    
     except OSError, e:
         raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
                              "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : e }
