@@ -2,14 +2,14 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-MANPAGES = $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTMLDIR)/*.html))
+MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTMLDIR)/*.html))
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
 	$(HTMLDIR)/grass_logo.png \
 	$(HTMLDIR)/grass_icon.png \
 	$(HTMLDIR)/nviz/grassdocs.css \
-	$(HTMLDIR)/nviz/grass_logo.png \
+	$(HTMLDIR)/nviz/grass_logo.png
 
 categories = \
 	d:display \
@@ -28,6 +28,8 @@ IDXSRC = full_index index $(IDXCATS)
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
+ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
+
 default: $(DSTFILES)
 	@echo "Generating HTML manual pages index (help system)..."
 	$(MAKE) $(INDICES)
@@ -42,19 +44,21 @@ manpages:
 .PHONY: manpages
 
 define build
-GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	$(PYTHON) ./build_$(1).py $(2)
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_$(1).py $(2)
 endef
 
-$(HTMLDIR)/full_index.html: $(wildcard $(HTMLDIR)/*.*.html)
+$(HTMLDIR)/full_index.html: $(ALL_HTML)
 	$(call build,full_index)
+	touch $@
 
 $(HTMLDIR)/index.html:
 	$(call build,index)
+	touch $@
 
 define category_rule
 $$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html)
 	$$(call build,class,$(1) $(2))
+	touch $$@
 endef
 
 $(foreach cat,$(categories),$(eval $(call category_rule,$(firstword $(subst :, ,$(cat))),$(lastword $(subst :, ,$(cat))))))
