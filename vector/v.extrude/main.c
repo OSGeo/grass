@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     struct cat_list *Clist;
 
     int field;
-    int i, only_type, cat, ctype, fdrast = -1, areanum = 0;
+    int i, only_type, cat, ctype = -1, fdrast = -1, areanum = 0;
     int nelements;
     int line, type;
     int area, trace, centroid;
@@ -171,6 +171,13 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
 
+	ctype = db_column_Ctype(driver, Fi->table, hcolumn->answer);
+
+	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_STRING &&
+	    ctype != DB_C_TYPE_DOUBLE) {
+	    G_fatal_error(_("Column <%s>: invalid data type"),
+			  hcolumn->answer);
+	}
     }
 
     /* do we work with elevation raster? */
@@ -295,17 +302,6 @@ int main(int argc, char *argv[])
 
 		/* objheight value */
 		value = db_get_column_value(column);
-		/* host_type -> ctype ? 
-		   objheight = 
-		   db_get_value_as_double(value,
-		   db_get_column_host_type(column));
-		 */
-		ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
-		if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_STRING &&
-		    ctype != DB_C_TYPE_DOUBLE) {
-		    G_fatal_error(_("Column <%s>: invalid data type"),
-				  db_get_column_name(column));
-		}
 		objheight = db_get_value_as_double(value, ctype);
 
 		/* only draw if hcolumn was defined */
