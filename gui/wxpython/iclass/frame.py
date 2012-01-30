@@ -1,5 +1,5 @@
 """!
-@package iclass::frame
+@package iclass.frame
 
 @brief wxIClass frame with toolbar for digitizing training areas and
 for spectral signature analysis.

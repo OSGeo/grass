@@ -1,5 +1,5 @@
 """!
-@package iclass::plots
+@package iclass.plots
 
 @brief wxIClass plots (histograms, coincidence plots).
 

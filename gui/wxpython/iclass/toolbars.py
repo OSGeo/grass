@@ -1,5 +1,5 @@
 """!
-@package iclass::toolbars
+@package iclass.toolbars
 
 @brief wxIClass toolbars and icons.
 

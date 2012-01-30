@@ -1,5 +1,5 @@
 """!
-@package iclass::digit
+@package iclass.digit
 
 @brief wxIClass digitizer classes
 

@@ -1,5 +1,5 @@
 """!
-@package iclass::dialogs
+@package iclass.dialogs
 
 @brief wxIClass dialogs
 
