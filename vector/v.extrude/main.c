@@ -171,6 +171,12 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
 
+	if (db_get_column(driver, Fi->table, hcolumn->answer, &column) != DB_OK)
+	    G_fatal_error(_("Column <%s> does not exist"),
+			  hcolumn->answer);
+	else
+	    db_free_column(column);
+
 	ctype = db_column_Ctype(driver, Fi->table, hcolumn->answer);
 
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_STRING &&
