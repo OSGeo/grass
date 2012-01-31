@@ -16,6 +16,9 @@ default: $(IMGDST) $(SYMDST)
 define symbols_rule
 $(ETCDIR)/symbols/$(1)/%.png: symbols/$(1)/%.png | $(ETCDIR)/symbols/$(1)
 	$(INSTALL_DATA) $$< $$@
+
+$(ETCDIR)/symbols/$(1): | $(ETCDIR)/symbols
+	$(MKDIR) $$@
 endef
 
 $(foreach category,$(CATEGORIES),$(eval $(call symbols_rule,$(category))))
@@ -27,7 +30,4 @@ $(ETCDIR):
 	$(MKDIR) $@
 
 $(ETCDIR)/symbols: $(ETCDIR)
-	$(MKDIR) $@
-
-$(ETCDIR)/symbols/%: | $(ETCDIR)/symbols
 	$(MKDIR) $@
