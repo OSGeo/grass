@@ -164,10 +164,8 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
 	    popts[opt] = val
 	else:
 	    options[opt] = val
+
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
-    if sys.platform == 'win32' and os.path.splitext(prog)[1] == '.py':
-        os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
-        args.insert(0, sys.executable)
     
     global debug_level
     if debug_level > 0:
