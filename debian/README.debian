@@ -26,14 +26,16 @@
   nano debian/changelog
 
 
-# After that, you can build current version of GRASS with
+# After that, you can build the current version of GRASS with
 
   debuild -i -uc -us -b
 
 # in main GRASS source directory. After the packages are generated, you can
-# install them with
+# install them with:
 
   dpkg -i ../grass*.deb
+
+# (make sure to remove older grass*.deb files first)
 
 
 # to try again, first clean out the old build by running:
