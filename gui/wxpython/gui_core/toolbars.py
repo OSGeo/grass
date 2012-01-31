@@ -78,7 +78,23 @@ BaseIcons = {
     }
     
 class BaseToolbar(wx.ToolBar):
-    """!Abstract toolbar class"""
+    """!Abstract toolbar class.
+    
+    Following code shows how to create new basic toolbar:
+
+    @code
+	class MyToolbar(BaseToolbar):
+	    def __init__(self, parent):
+	        BaseToolbar.__init__(self, parent)
+	        self.InitToolbar(self._toolbarData())
+	        self.Realize()
+        
+	    def _toolbarData(self):
+	        return self._getToolbarData((("help", Icons["help"],
+	                                      self.parent.OnHelp),
+	                                    ))
+    @endcode
+    """
     def __init__(self, parent):
         self.parent = parent
         wx.ToolBar.__init__(self, parent = self.parent, id = wx.ID_ANY)
