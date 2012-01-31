@@ -426,6 +426,9 @@ end
         "custom_gradient":	(startcolor,	endcolor)
         }
 
+    # open file for psmap instructions
+    f_psmap = file(tmp_psmap, 'w')
+
     # graduated color thematic mapping
     if themetype == "graduated_colors":
         if colorscheme in colorschemes:
@@ -728,7 +731,6 @@ end
                               where = sqlwhere,
                               color = linecolor, fcolor = themecolor, icon = icon, size = ptsize)
 
-            f_psmap = file(tmp_psmap, 'w')
             if type in ["line", "boundary"]:
                 out(f_psmap, locals(), """\
 vlines $map
@@ -914,7 +916,7 @@ end
                 lineht = 4
 
             if i < xlower or i >= xupper:
-                if themetype == graduated_lines:
+                if themetype == "graduated_lines":
                     out(f_graph, locals(), """\
 color $linecolor
 """)
