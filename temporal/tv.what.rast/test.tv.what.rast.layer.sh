@@ -13,15 +13,9 @@ r.mapcalc --o expr="sand_frac_4 = 55.0"
 r.mapcalc --o expr="sand_frac_5 = 65.0"
 r.mapcalc --o expr="sand_frac_6 = 75.0"
 # The vector map
-v.random --o -z seed=1 output=soil_orig n=5 zmin=0 zmax=100 column=sand
+v.random --o -z seed=1 output=soil_orig n=100 zmin=0 zmax=100 column=sand
 # Adding new layer with categories
-v.category input=soil_orig out=soils option=transfer layer=1,1 --o
-v.category input=soils out=soil_orig option=transfer layer=1,2 --o
-v.category input=soil_orig out=soils option=transfer layer=1,3 --o
-v.category input=soils out=soil_orig option=transfer layer=1,4 --o
-v.category input=soil_orig out=soils option=transfer layer=1,5 --o
-v.category input=soils out=soil_orig option=transfer layer=1,6 --o
-g.copy --o vect=soil_orig,soils
+v.category input=soil_orig out=soils option=transfer layer=1,2,3,4,5,6 --o
 # Creating new tables for each layer
 db.copy from_table=soil_orig to_table=soils_2
 db.copy from_table=soil_orig to_table=soils_3
