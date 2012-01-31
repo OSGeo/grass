@@ -16606,7 +16606,7 @@ msgstr "Nessun record per la categoria [%d]"
 #: ../ps/ps.map/ps_vpoints.c:182
 #, c-format
 msgid "Attribute is of invalid size [%.3f] for category [%d]"
-msgstr "L'attributo della categoria [%d] ha una dimensione errata [%.3f]"
+msgstr "L'attributo della categoria [%.3f] ha una dimensione errata [%d]"
 
 #: ../ps/ps.map/ps_vpoints.c:206 ../ps/ps.map/ps_vareas.c:108
 #: ../ps/ps.map/ps_vlines.c:125
@@ -19754,7 +19754,7 @@ msgstr "Nome della nuova locazione da creare"
 #: ../general/g.proj/main.c:204
 #, c-format
 msgid "Only one of '%s', '%s', '%s' or '%s' options may be specified"
-msgstr "Solo una delle seguenti opzioni: '%s', '%s' o '%s' può essere specificata"
+msgstr "Solo una delle seguenti opzioni: '%s', '%s', '%s' o '%s' può essere specificata"
 
 #: ../general/g.proj/main.c:233
 msgid "Projection files missing"
