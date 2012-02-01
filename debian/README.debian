@@ -3,8 +3,12 @@
 # to construct the .deb files.
 
 # Make sure git and the debian build scripts are installed:
-  sudo apt-get install git-core devscripts
+  sudo apt-get install git-core devscripts subversion
 
+
+# and download the latest svn copy of GRASS:
+  cd src/grass/
+  svn checkout https://svn.osgeo.org/grass/grass/trunk g7_trunk
 
 # From the grass source dir download the packaging rules (the contents
 #  of debiangis/grass/ can be ignored, only the debian/ dir is needed):
@@ -27,15 +31,19 @@
 
 
 # After that, you can build the current version of GRASS with
+  cd g7_trunk
+  ln -s ../debian .
+
+  svn up
 
   debuild -i -uc -us -b
 
-# in main GRASS source directory. After the packages are generated, you can
-# install them with:
+# run from the main GRASS source directory. After the packages are
+# generated, you can install them with:
 
   sudo dpkg -i ../grass*.deb
 
-# (make sure to remove older grass*.deb files first)
+# (make sure to move away older grass*.deb files first)
 
 
 # to try again, first clean out the old build by running:
