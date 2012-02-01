@@ -46,8 +46,8 @@
    \param[out] perimeters list of perimeters
    \param band_region region which determines perimeter cells
 
-   \return 1 on success
-   \return 0 on error
+   \return number of areas of given cat
+   \return -1 on error
  */
 int vector2perimeters(struct Map_info *Map, const char *layer_name,
 		      int category, IClass_perimeter_list * perimeters,
@@ -82,7 +82,6 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 	    nareas_cat++;
 	}
     }
-
     if (nareas_cat == 0)
 	return 0;
 
@@ -108,14 +107,14 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 		Vect_destroy_line_struct(points);
 		free_perimeters(perimeters);
 		G_warning(_("Get area %d failed"), i);
-		return 0;
+		return -1;
 	    }
 	    if (make_perimeter
 		(points, &perimeters->perimeters[j - 1], band_region) <= 0) {
 		Vect_destroy_line_struct(points);
 		free_perimeters(perimeters);
 		G_warning(_("Perimeter computation failed"));
-		return 0;
+		return -1;
 	    }
 	    Vect_destroy_line_struct(points);
 	}
@@ -124,7 +123,7 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 
     //Vect_close(&Map);
 
-    return 1;
+    return nareas_cat;
 }
 
 /*!

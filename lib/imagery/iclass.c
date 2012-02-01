@@ -44,13 +44,14 @@
    \param group name of imagery group
    \param raster_name name of temporary raster map (to be created)
 
-   \return 1 on success
-   \return 0 on failure
+   \return number of processed training areas
+   \return -1 on failure
  */
 int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
 		      struct Map_info *map_info, const char *layer_name,
 		      const char *group, const char *raster_name)
 {
+    int ret;
 
     int category;
 
@@ -72,8 +73,14 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
     Rast_get_cellhd(refer->file[0].name, refer->file[0].mapset, &band_region);
 
     /* find perimeter points from vector map */
-    if (!vector2perimeters
-	(map_info, layer_name, category, &perimeters, &band_region)) {
+    ret =
+	vector2perimeters(map_info, layer_name, category, &perimeters,
+			  &band_region);
+    if (ret < 0) {
+	return -1;
+    }
+    else if (ret == 0) {
+	G_warning(_("No areas in category %d"), category);
 	return 0;
     }
 
@@ -84,7 +91,7 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
     close_band_files(refer, band_buffer, band_fd);
 
     free_perimeters(&perimeters);
-    return 1;
+    return ret;
 }
 
 
