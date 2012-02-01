@@ -60,7 +60,7 @@ int Vect_get_area_points(const struct Map_info *Map,
 	G_debug(3, "  append line(%d) = %d", i, line);
 
 	if (0 > Vect_read_line(Map, Points, NULL, aline)) {
-	    G_fatal_error(_("Unable to read read line %d"), aline);
+	    G_fatal_error(_("Unable to read line %d"), aline);
 	}
 
 	G_debug(3, "  line n_points = %d", Points->n_points);
