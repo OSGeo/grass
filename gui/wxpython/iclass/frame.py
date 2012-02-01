@@ -562,8 +562,9 @@ class IClassMapFrame(DoubleMapFrame):
                                      stats.color,
                                      stats.nstd)
                                      
-            if I_iclass_analysis(statistics, self.refer, self.poMapInfo, "1",
-                                 self.group, stats.rasterName):
+            ret = I_iclass_analysis(statistics, self.refer, self.poMapInfo, "1",
+                                 self.group, stats.rasterName)
+            if ret > 0:
                 # tests
                 self.cStatisticsDict[i] = statistics
                 
@@ -576,9 +577,12 @@ class IClassMapFrame(DoubleMapFrame):
                                                 alias = stats.name, resultsLayer = True)
                 # write statistics
                 I_iclass_add_signature(self.signatures, statistics)
+                
+            elif ret == 0:
+                GMessage(parent = self, message = _("No area in category %s. Category skipped.") % stats.category)
+                I_iclass_free_statistics(statistics)
             else:
-                GMessage(parent = self, message = _("Analysis failed. "
-                                                    "Check training areas and their categories."))
+                GMessage(parent = self, message = _("Analysis failed."))
                 I_iclass_free_statistics(statistics)
         
         self.UpdateChangeState(changes = False)
