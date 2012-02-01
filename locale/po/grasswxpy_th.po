@@ -81,7 +81,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:300
 #, fuzzy
 msgid "center"
-msgstr "เพิ่มจุดศูนย์ถ่วง"
+msgstr "ตัวแปร"
 
 #: ../gui/wxpython/nviz/tools.py:306
 msgid "top"
@@ -106,9 +106,7 @@ msgid "Background color:"
 msgstr "สีพื้นหลัง:"
 
 #: ../gui/wxpython/nviz/tools.py:376
-msgid ""
-"Press 'Record' button and start changing the view. It is recommended to use "
-"fly-through mode (Map Display toolbar) to achieve smooth motion."
+msgid "Press 'Record' button and start changing the view. It is recommended to use fly-through mode (Map Display toolbar) to achieve smooth motion."
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:387
@@ -178,8 +176,7 @@ msgid "File prefix:"
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:474
-msgid ""
-"Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
+msgid "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:475
@@ -420,9 +417,8 @@ msgid "Fine resolution:"
 msgstr "ความละเอียดแนว เหนือ-ใต้"
 
 #: ../gui/wxpython/nviz/tools.py:1103
-#, fuzzy
 msgid "Value:"
-msgstr "columns"
+msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1115 ../gui/wxpython/nviz/tools.py:2494
 #, fuzzy
@@ -459,7 +455,6 @@ msgid "Line:"
 msgstr "เส้น"
 
 #: ../gui/wxpython/nviz/tools.py:1201
-#, fuzzy
 msgid "width:"
 msgstr "กว้าง:"
 
@@ -789,8 +784,9 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:4862 ../gui/wxpython/nviz/tools.py:4871
 #: ../gui/wxpython/nviz/tools.py:4881
+#, fuzzy
 msgid "Height (Z):"
-msgstr ""
+msgstr "เน้น"
 
 #: ../gui/wxpython/nviz/tools.py:4863 ../gui/wxpython/nviz/tools.py:4870
 #: ../gui/wxpython/nviz/tools.py:4879
@@ -818,14 +814,12 @@ msgstr ""
 #: ../gui/wxpython/nviz/preferences.py:71
 #: ../gui/wxpython/nviz/preferences.py:134
 #: ../gui/wxpython/nviz/preferences.py:152
-#, fuzzy
 msgid "value:"
-msgstr "columns"
+msgstr ""
 
 #: ../gui/wxpython/nviz/preferences.py:83
-#, fuzzy
 msgid "step:"
-msgstr "Steiner tree"
+msgstr ""
 
 #: ../gui/wxpython/nviz/preferences.py:98
 #: ../gui/wxpython/nviz/preferences.py:265
@@ -859,7 +853,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/preferences.py:257
 #, fuzzy
 msgid "Light"
-msgstr "รายการ"
+msgstr "เน้น"
 
 #: ../gui/wxpython/nviz/preferences.py:292
 #, fuzzy
@@ -894,11 +888,7 @@ msgid "3D view settings saved to file <%s>."
 msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:32 ../gui/wxpython/wxplot/profile.py:30
-msgid ""
-"This module requires the NumPy module, which could not be imported. It "
-"probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
-"information on downloading source or binaries."
+msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
 msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:50
@@ -924,9 +914,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:504
 #, python-format
-msgid ""
-"Image is too large, your OpenGL implementation supports maximum texture size "
-"%d px."
+msgid "Image is too large, your OpenGL implementation supports maximum texture size %d px."
 msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:1011
@@ -1173,9 +1161,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:605
 #, python-format
-msgid ""
-"Script <%s> is not executable. Do you want to set the permissions that "
-"allows you to run this script (note that you must be the owner of the file)?"
+msgid "Script <%s> is not executable. Do you want to set the permissions that allows you to run this script (note that you must be the owner of the file)?"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:610
@@ -1188,9 +1174,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:630
 #, python-format
-msgid ""
-"Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this "
-"directory to GRASS_ADDON_PATH?"
+msgid "Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this directory to GRASS_ADDON_PATH?"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:633
@@ -1230,9 +1214,7 @@ msgid "Choose a working directory"
 msgstr "ไดเรคโทรี GIS Data ใหม่ "
 
 #: ../gui/wxpython/lmgr/frame.py:790
-msgid ""
-"Current workspace is not empty. Do you want to store current settings to "
-"workspace file?"
+msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:793
@@ -1454,7 +1436,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/toolbars.py:136
 #, fuzzy
 msgid "Raster Map Calculator"
-msgstr "แรสเตอร์ เป็น เวคเตอร์"
+msgstr "ตัวคำนวนแผนที่"
 
 #: ../gui/wxpython/lmgr/toolbars.py:138
 msgid "Graphical Modeler"
@@ -1489,14 +1471,12 @@ msgid "Show attribute table"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:230
-#, fuzzy
 msgid "Generate command for m.nviz.image"
-msgstr "สร้างเซลล์สุ่ม"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:231
-#, fuzzy
 msgid "Generate command for m.nviz.image based on current state"
-msgstr "สร้างเซลล์สุ่ม"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:233
 #, fuzzy
@@ -2032,8 +2012,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:498
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location <"
-"%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location <%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
@@ -2074,8 +2053,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:698
 #, python-format
 msgid ""
-"Mapset <%s> is reserved for direct read access to OGR layers. Please "
-"consider to use another name for your mapset.\n"
+"Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
 "\n"
 "Are you really sure that you want to create this mapset?"
 msgstr ""
@@ -2098,8 +2076,7 @@ msgid ""
 "\n"
 "Concurrent use not allowed.\n"
 "\n"
-"Do you want to try to remove .gislock (note that you need permission for "
-"this operation) and continue?"
+"Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:743 ../gui/wxpython/gis_set.py:755
@@ -2110,8 +2087,7 @@ msgstr ""
 msgid ""
 "ARE YOU REALLY SURE?\n"
 "\n"
-"If you really are running another GRASS session doing this could corrupt "
-"your data. Have another look in the processor manager just to be sure..."
+"If you really are running another GRASS session doing this could corrupt your data. Have another look in the processor manager just to be sure..."
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:766
@@ -2131,10 +2107,7 @@ msgid "Starting GRASS for the first time"
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:868
-msgid ""
-"GRASS needs a directory in which to store its data. Create one now if you "
-"have not already done so. A popular choice is \"grassdata\", located in your "
-"home directory."
+msgid "GRASS needs a directory in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:145
@@ -2144,9 +2117,7 @@ msgstr "กำลังอ่านข้อมูล ..."
 
 #: ../gui/wxpython/dbmgr/manager.py:152
 #, python-format
-msgid ""
-"Attribute table <%s> not found. For creating the table switch to 'Manage "
-"layers' tab."
+msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:163
@@ -2180,8 +2151,7 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/manager.py:306
 #, python-format
 msgid ""
-"Error loading attribute data. Record number: %(rec)d. Unable to convert "
-"value '%(val)s' in key column (%(key)s) to integer.\n"
+"Error loading attribute data. Record number: %(rec)d. Unable to convert value '%(val)s' in key column (%(key)s) to integer.\n"
 "\n"
 "Details: %(detail)s"
 msgstr ""
@@ -2242,9 +2212,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:595
 #, python-format
-msgid ""
-"Database connection for vector map <%s> is not defined in DB file. You can "
-"define new connection in 'Manage layers' tab."
+msgid "Database connection for vector map <%s> is not defined in DB file. You can define new connection in 'Manage layers' tab."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:621
@@ -2414,9 +2382,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1181
 #, python-format
-msgid ""
-"Selected data records (%d) will be permanently deleted from table. Do you "
-"want to delete them?"
+msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1184 ../gui/wxpython/dbmgr/manager.py:1230
@@ -2426,9 +2392,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1227
 #, python-format
-msgid ""
-"All data records (%d) will be permanently deleted from table. Do you want to "
-"delete them?"
+msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1378
@@ -2470,16 +2434,12 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1618
 #, python-format
-msgid ""
-"Unable to rename column <%(column)s> to <%(columnTo)s>. Column already "
-"exists in the table <%(table)s>."
+msgid "Unable to rename column <%(column)s> to <%(columnTo)s>. Column already exists in the table <%(table)s>."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1634
 #, python-format
-msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
-"%(table)s>."
+msgid "Unable to rename column. Column <%(column)s> doesn't exist in the table <%(table)s>."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1661
@@ -2492,9 +2452,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1679
 #, python-format
-msgid ""
-"Selected column '%s' will PERMANENTLY removed from table. Do you want to "
-"drop the column?"
+msgid "Selected column '%s' will PERMANENTLY removed from table. Do you want to drop the column?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1682 ../gui/wxpython/dbmgr/manager.py:1719
@@ -2587,9 +2545,7 @@ msgid "Key"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:2376
-msgid ""
-"Unknown default DB connection. Please define DB connection using db.connect "
-"module."
+msgid "Unknown default DB connection. Please define DB connection using db.connect module."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:2395
@@ -2672,9 +2628,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:2917
 #, python-format
-msgid ""
-"Unable to add new layer to vector map <%(vector)s>. Layer %(layer)d already "
-"exists."
+msgid "Unable to add new layer to vector map <%(vector)s>. Layer %(layer)d already exists."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:68
@@ -2763,8 +2717,7 @@ msgstr ""
 msgid ""
 "No attribute table found.\n"
 "\n"
-"Do you want to create a new attribute table and defined a link to vector map "
-"<%s>?"
+"Do you want to create a new attribute table and defined a link to vector map <%s>?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/dialogs.py:74
@@ -2856,8 +2809,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:88
 #: ../gui/wxpython/wxplot/dialogs.py:671
 #: ../gui/wxpython/wxplot/dialogs.py:1113 ../gui/wxpython/gcp/manager.py:2369
-msgid ""
-"Apply and save changes to user settings file (default for next sessions)"
+msgid "Apply and save changes to user settings file (default for next sessions)"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:91
@@ -2917,7 +2869,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:330
 #, fuzzy
 msgid "Workspace settings"
-msgstr "เปลี่ยนค่าติดตั้ง"
+msgstr "สร้างข้อกำหนด"
 
 #: ../gui/wxpython/gui_core/preferences.py:338
 msgid "Suppress positioning Map Display Window(s)"
@@ -2932,9 +2884,7 @@ msgid "Save current window layout as default"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:364
-msgid ""
-"Save current position and size of Layer Manager window and opened Map "
-"Display window(s) and use as default for next sessions."
+msgid "Save current position and size of Layer Manager window and opened Map Display window(s) and use as default for next sessions."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:391
@@ -3149,9 +3099,7 @@ msgid "EPSG file:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1096
-msgid ""
-"Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string "
-"directly."
+msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1104
@@ -3486,7 +3434,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/toolbars.py:75
 #, fuzzy
 msgid "Create histogram with d.histogram"
-msgstr "Rescale โดย histogram"
+msgstr "สร้าง 3D เวคเตอร์บนแรสเตอร์"
 
 #: ../gui/wxpython/gui_core/ghelp.py:55 ../gui/wxpython/gui_core/ghelp.py:63
 #, fuzzy
@@ -3678,9 +3626,7 @@ msgid "Close dialog on finish"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:551
-msgid ""
-"Close dialog when command is successfully finished. Change this settings in "
-"Preferences dialog ('Command' tab)."
+msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:730
@@ -3813,9 +3759,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:510
 #, python-format
-msgid ""
-"Command '%s' not yet implemented in the WxGUI. Try adding it as a command "
-"layer instead."
+msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:544
@@ -3832,8 +3776,7 @@ msgid "Save file as..."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:769
-msgid ""
-"Please note that the data are left in inconsistent state and may be corrupted"
+msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:772
@@ -3910,9 +3853,7 @@ msgstr "ซ้อนทับ แผนที่เชิงเส้น 2 แ�
 
 #: ../gui/wxpython/gui_core/dialogs.py:431
 #, python-format
-msgid ""
-"Vector map <%s> already exists in the current mapset. Do you want to "
-"overwrite it?"
+msgid "Vector map <%s> already exists in the current mapset. Do you want to overwrite it?"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:434
@@ -3938,9 +3879,7 @@ msgid "Set size and position"
 msgstr "Slope และ aspect"
 
 #: ../gui/wxpython/gui_core/dialogs.py:587
-msgid ""
-"Click and drag on the map display to set legend size and position and then "
-"press OK"
+msgid "Click and drag on the map display to set legend size and position and then press OK"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:598
@@ -4370,11 +4309,8 @@ msgid "ASCII x,y,z point import and gridding"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:33
-msgid ""
-"Create a raster map from an assemblage of many coordinates using univariate "
-"statistics."
-msgstr ""
-"สร้าง แผนที่เชิงภาพ จาก การรวบรวม ของ ค่าพิกัดจำนวนมาก โดยใช้ Univariate Statistics"
+msgid "Create a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr "สร้าง แผนที่เชิงภาพ จาก การรวบรวม ของ ค่าพิกัดจำนวนมาก โดยใช้ Univariate Statistics"
 
 #: ../gui/wxpython/menustrings.py:34
 msgid "ASCII grid import"
@@ -4405,8 +4341,7 @@ msgid "ESRI ASCII grid import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:41
-msgid ""
-"Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map."
+msgid "Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:42
@@ -4454,9 +4389,7 @@ msgid "Terra ASTER HDF import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:53
-msgid ""
-"Georeference, rectify, and import Terra-ASTER imagery and relative DEMs "
-"using gdalwarp."
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:54 ../gui/wxpython/menustrings.py:85
@@ -4466,8 +4399,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:55
 #, fuzzy
 msgid "Create a raster map from LAS LiDAR points using univariate statistics."
-msgstr ""
-"สร้าง แผนที่เชิงภาพ จาก การรวบรวม ของ ค่าพิกัดจำนวนมาก โดยใช้ Univariate Statistics"
+msgstr "สร้าง แผนที่เชิงภาพ จาก การรวบรวม ของ ค่าพิกัดจำนวนมาก โดยใช้ Univariate Statistics"
 
 #: ../gui/wxpython/menustrings.py:56
 msgid "WMS import"
@@ -4527,9 +4459,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:70
 #, fuzzy
-msgid ""
-"Converts all older versions of GRASS vector maps in current mapset to "
-"current format."
+msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
 msgstr "นำเข้า แผนที่เชิงเส้น รุ่นเก่า ของ GRASS"
 
 #: ../gui/wxpython/menustrings.py:71
@@ -4563,9 +4493,7 @@ msgid "GPS data import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:78
-msgid ""
-"Import waypoints, routes, and tracks from a GPS receiver or many common GPS "
-"file formats."
+msgid "Import waypoints, routes, and tracks from a GPS receiver or many common GPS file formats."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:79
@@ -4575,21 +4503,15 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:80
 #, fuzzy
 msgid "Imports geonames.org country files into a vector points map."
-msgstr ""
-"นำเข้า US-NGA GEOnet Names Server (GNS)  country files ไปที่ แผนที่เชิงเส้นแบบจุดของ "
-"GRASS"
+msgstr "นำเข้า US-NGA GEOnet Names Server (GNS)  country files ไปที่ แผนที่เชิงเส้นแบบจุดของ GRASS"
 
 #: ../gui/wxpython/menustrings.py:81
 msgid "GEOnet import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:82
-msgid ""
-"Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector "
-"points map."
-msgstr ""
-"นำเข้า US-NGA GEOnet Names Server (GNS)  country files ไปที่ แผนที่เชิงเส้นแบบจุดของ "
-"GRASS"
+msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
+msgstr "นำเข้า US-NGA GEOnet Names Server (GNS)  country files ไปที่ แผนที่เชิงเส้นแบบจุดของ GRASS"
 
 #: ../gui/wxpython/menustrings.py:83
 msgid "Matlab array or Mapgen format import"
@@ -4664,8 +4586,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:101
 #, fuzzy
-msgid ""
-"Exports a raster map to a text file as x,y,z values based on cell centers."
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
 msgstr "ส่งออกแผนที่เชิงภาพ ไปที่ ไฟล์  text แบบ x,y,z ค่าอ้างอิงกับจุดกลาง cell"
 
 #: ../gui/wxpython/menustrings.py:102
@@ -4804,8 +4725,7 @@ msgid "Multiple GPS export formats using GPSBabel"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:136
-msgid ""
-"Exports a vector map to a GPS receiver or file format supported by GPSBabel."
+msgid "Exports a vector map to a GPS receiver or file format supported by GPSBabel."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:138
@@ -4843,11 +4763,12 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:147
 #, fuzzy
 msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
-msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น  binary MAT-File"
+msgstr "ส่งออก แผนที่เชิงภาพ 3 มิติ  GRASS ไปเป็น ไฟล์ แผนที่ 3 มิติ Vis5D"
 
 #: ../gui/wxpython/menustrings.py:149
+#, fuzzy
 msgid "Converts 3D raster maps into the VTK-ASCII format."
-msgstr ""
+msgstr "แปลง แผนที่เชิงภาพ ไปเป็น แบบ  VTK-Ascii"
 
 #: ../gui/wxpython/menustrings.py:150
 msgid "Export database table"
@@ -4904,12 +4825,8 @@ msgstr "คัดลอก"
 
 #: ../gui/wxpython/menustrings.py:164
 #, fuzzy
-msgid ""
-"Copies available data files in the current mapset search path to the user's "
-"current mapset."
-msgstr ""
-"คัดลอกไฟล์ข้อมูลใน ชุดแผนที่ของผู้ใช้ ค้นหา path และ ตำแหน่ง ของชิ้นส่วนที่เกี่ยวข้อง ภายใต้ "
-"ชุดแผนที่ของผู้ใช้"
+msgid "Copies available data files in the current mapset search path to the user's current mapset."
+msgstr "คัดลอกไฟล์ข้อมูลใน ชุดแผนที่ของผู้ใช้ ค้นหา path และ ตำแหน่ง ของชิ้นส่วนที่เกี่ยวข้อง ภายใต้ ชุดแผนที่ของผู้ใช้"
 
 #: ../gui/wxpython/menustrings.py:165
 msgid "List"
@@ -4926,9 +4843,7 @@ msgstr "ลิสต์ filtered"
 
 #: ../gui/wxpython/menustrings.py:168
 #, fuzzy
-msgid ""
-"Lists available GRASS data base files of the user-specified data type "
-"optionally using the search pattern."
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
 msgstr "แสดงรายการไฟล์ข้อมูลฐาน ของ GRASS ที่ผู้ใช้ระบุชนิดไปที่ standard output."
 
 #: ../gui/wxpython/menustrings.py:170
@@ -4945,9 +4860,7 @@ msgstr "ลบ filtered"
 
 #: ../gui/wxpython/menustrings.py:174
 #, fuzzy
-msgid ""
-"Removes data base element files from the user's current mapset using regular "
-"expressions."
+msgid "Removes data base element files from the user's current mapset using regular expressions."
 msgstr "เอาไฟล์ชิ้นส่วนข้อมูลฐานออกจาก ชุดแผนที่ของผู้ใช้"
 
 #: ../gui/wxpython/menustrings.py:175
@@ -5067,9 +4980,7 @@ msgid "Bearing/distance to coordinates"
 msgstr "มุม/ระยะทาง ไปเป็น ค่าพิกัด"
 
 #: ../gui/wxpython/menustrings.py:203
-msgid ""
-"A simple utility for converting bearing and distance measurements to "
-"coordinates and vice versa."
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa."
 msgstr "เครื่องมืออย่างง่ายสำหรับแปลงค่า  ทิศทาง และ ระยะทาง ไปเป็นค่าพิกัด หรือ อื่นๆ"
 
 #: ../gui/wxpython/menustrings.py:205
@@ -5211,21 +5122,15 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:241
 #, fuzzy
-msgid ""
-"Converts co-ordinate system descriptions (i.e. projection information) "
-"between various formats (including GRASS format)."
-msgstr ""
-"คำอธิบายการแปลงระบบค่าพิกัด (i.e. projection information) ระหว่างรูปแบบตัวแปร  "
-"(including GRASS format). สามารถใช้สร้าง  GRASS locations."
+msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr "คำอธิบายการแปลงระบบค่าพิกัด (i.e. projection information) ระหว่างรูปแบบตัวแปร  (including GRASS format). สามารถใช้สร้าง  GRASS locations."
 
 #: ../gui/wxpython/menustrings.py:242
 msgid "Manage projections"
 msgstr "จัดการ projections"
 
 #: ../gui/wxpython/menustrings.py:243
-msgid ""
-"Prints and manipulates GRASS projection information files (in various co-"
-"ordinate system descriptions)."
+msgid "Prints and manipulates GRASS projection information files (in various co-ordinate system descriptions)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:244
@@ -5354,14 +5259,8 @@ msgstr "Resample ใช้ วิธ๊ Spline Tension"
 
 #: ../gui/wxpython/menustrings.py:273
 #, fuzzy
-msgid ""
-"Reinterpolates and optionally computes topographic analysis from input "
-"raster map to a new raster map (possibly with different resolution) using "
-"regularized spline with tension and smoothing."
-msgstr ""
-"Reinterpolates และ คำนวน topographic analysis จาก แผนที่เชิงภาพที่จะนำเข้า "
-"ไปเป็นแผนที่เชิงภาพใหม่ (เป็นไปได้ที่จะใช้ความละเอียดแตกต่างกัน) ใช้ regularized spline กับ "
-"tension และ smoothing."
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr "Reinterpolates และ คำนวน topographic analysis จาก แผนที่เชิงภาพที่จะนำเข้า ไปเป็นแผนที่เชิงภาพใหม่ (เป็นไปได้ที่จะใช้ความละเอียดแตกต่างกัน) ใช้ regularized spline กับ tension และ smoothing."
 
 #: ../gui/wxpython/menustrings.py:274
 msgid "Resample using bspline"
@@ -5412,9 +5311,7 @@ msgid "Tiling"
 msgstr "Tiling"
 
 #: ../gui/wxpython/menustrings.py:285
-msgid ""
-"Produces tilings of the source projection for use in the destination region "
-"and projection."
+msgid "Produces tilings of the source projection for use in the destination region and projection."
 msgstr "สร้าง tiling ของ  projection เดิม เพื่อใช้กับขอบเขตและ projection ปลายทาง"
 
 #: ../gui/wxpython/menustrings.py:286 ../gui/wxpython/menustrings.py:567
@@ -5472,8 +5369,7 @@ msgstr "สร้าง RGB"
 
 #: ../gui/wxpython/menustrings.py:298
 #, fuzzy
-msgid ""
-"Combines red, green and blue raster maps into a single composite raster map."
+msgid "Combines red, green and blue raster maps into a single composite raster map."
 msgstr "รวม ชั้นข้อมูลแผนที่ แดง, เขียว และน้ำเงิน ลงใน ชั้นข้อมูล composite"
 
 #: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:706
@@ -5481,12 +5377,8 @@ msgid "RGB to HIS"
 msgstr "RGB ถึง HIS"
 
 #: ../gui/wxpython/menustrings.py:300
-msgid ""
-"Generates red, green and blue raster map layers combining hue, intensity and "
-"saturation (HIS) values from user-specified input raster map layers."
-msgstr ""
-"สร้าง ชั้นข้อมูลแผนที่เชิงภาพ แดง, เขียว และน้ำเงิน ที่มีค่า hue, intensity และ saturation "
-"(HIS) จากที่ผู้ใช้ระบุ ใน ชั้นข้อมูลแผนที่เชิงภาพ"
+msgid "Generates red, green and blue raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr "สร้าง ชั้นข้อมูลแผนที่เชิงภาพ แดง, เขียว และน้ำเงิน ที่มีค่า hue, intensity และ saturation (HIS) จากที่ผู้ใช้ระบุ ใน ชั้นข้อมูลแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:301
 msgid "Query raster maps"
@@ -5513,9 +5405,7 @@ msgid "Buffer rasters"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:307
-msgid ""
-"Creates a raster map showing buffer zones surrounding cells that contain non-"
-"NULL category values."
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:308
@@ -5547,12 +5437,8 @@ msgid "Moving window"
 msgstr "ย้ายหน้าต่าง"
 
 #: ../gui/wxpython/menustrings.py:316
-msgid ""
-"Makes each cell category value a function of the category values assigned to "
-"the cells around it, and stores new cell values in an output raster map "
-"layer."
-msgstr ""
-"สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr "สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:317
 msgid "Neighborhood points"
@@ -5571,9 +5457,7 @@ msgid "Cross product"
 msgstr "Cross product"
 
 #: ../gui/wxpython/menustrings.py:321
-msgid ""
-"Creates a cross product of the category values from multiple raster map "
-"layers."
+msgid "Creates a cross product of the category values from multiple raster map layers."
 msgstr "สร้าง cross product ของหมวดหมู่ จากหลายชั้นข้อมูลแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:322
@@ -5581,9 +5465,7 @@ msgid "Raster series"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:323
-msgid ""
-"Makes each output cell value a function of the values assigned to the "
-"corresponding cells in the input raster map layers."
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
 msgstr "ทำคำสั่ง ของแต่ละค่า cell ผลลัพธ์ จากค่าที่ให้  ในชั้นข้อมูลแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:324
@@ -5591,21 +5473,15 @@ msgid "Patch raster maps"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:325
-msgid ""
-"Creates a composite raster map layer by using known category values from one "
-"(or more) map layer(s) to fill in areas of \"no data\" in another map layer."
-msgstr ""
-"สร้าง ชั้นข้อมูลแผนที่เชิงภาพ composite โดยใช้ ค่าหมวดหมู่ที่รู้จัก จาก หนึ่ง(หรือ มากกว่า) "
-"ชั้นแผนที่ เพื่อที่จะเติมในพื้นที่ของ \"no data\" ในชั้นแผนที่อื่น"
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr "สร้าง ชั้นข้อมูลแผนที่เชิงภาพ composite โดยใช้ ค่าหมวดหมู่ที่รู้จัก จาก หนึ่ง(หรือ มากกว่า) ชั้นแผนที่ เพื่อที่จะเติมในพื้นที่ของ \"no data\" ในชั้นแผนที่อื่น"
 
 #: ../gui/wxpython/menustrings.py:326
 msgid "Statistical overlay"
 msgstr "Statistical ของการซ้อนทับ"
 
 #: ../gui/wxpython/menustrings.py:327
-msgid ""
-"Calculates category or object oriented statistics (accumulator-based "
-"statistics)."
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:328
@@ -5634,8 +5510,7 @@ msgstr "แผนที่ Shadow"
 
 #: ../gui/wxpython/menustrings.py:334
 #, fuzzy
-msgid ""
-"Calculates cast shadow areas from sun position and elevation raster map."
+msgid "Calculates cast shadow areas from sun position and elevation raster map."
 msgstr "คำนวน ดัชนี contrast weighted edge density บนแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:335
@@ -5647,15 +5522,8 @@ msgid "Cumulative movement costs"
 msgstr "Cumulative movement costs"
 
 #: ../gui/wxpython/menustrings.py:337
-msgid ""
-"Outputs a raster map layer showing the anisotropic cumulative cost of moving "
-"between different geographic locations on an input elevation raster map "
-"layer whose cell category values represent elevation combined with an input "
-"raster map layer whose cell values represent friction cost."
-msgstr ""
-"ส่งออก ชั้นข้อมูลแผนที่เชิงภาพ ที่แสดง anisotropic cumulative cost ของ การเคลื่อนที่ "
-"ระหว่าง ตำแหน่งภูมิศาสตร์ที่ต่างกัน บนชั้นข้อมูลแผนที่ความสูง เชิงภาพ ที่ ค่า หมวดหมู่ cell แทน "
-"ความสูงที่รวมด้วย ชั้นข้อมูลแผนที่เชิงภาพ ที่ค่า cell แทน friction cost."
+msgid "Outputs a raster map layer showing the anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map layer whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost."
+msgstr "ส่งออก ชั้นข้อมูลแผนที่เชิงภาพ ที่แสดง anisotropic cumulative cost ของ การเคลื่อนที่ ระหว่าง ตำแหน่งภูมิศาสตร์ที่ต่างกัน บนชั้นข้อมูลแผนที่ความสูง เชิงภาพ ที่ ค่า หมวดหมู่ cell แทน ความสูงที่รวมด้วย ชั้นข้อมูลแผนที่เชิงภาพ ที่ค่า cell แทน friction cost."
 
 #: ../gui/wxpython/menustrings.py:338
 msgid "Cost surface"
@@ -5663,13 +5531,8 @@ msgstr "Cost surface"
 
 #: ../gui/wxpython/menustrings.py:339
 #, fuzzy
-msgid ""
-"Creates a raster map showing the cumulative cost of moving between different "
-"geographic locations on an input raster map whose cell category values "
-"represent cost."
-msgstr ""
-"ชั้นข้อมูลเชิงภาพ ผลลัพธ์ แสดง cumulative cost ของการย้ายระหว่าง geographic locations "
-"ที่แตกต่างบน ชั้นข้อมูลแผนที่เชิงเส้น ใช้ ค่าหมวดหมู่ cell แทน cost."
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr "ชั้นข้อมูลเชิงภาพ ผลลัพธ์ แสดง cumulative cost ของการย้ายระหว่าง geographic locations ที่แตกต่างบน ชั้นข้อมูลแผนที่เชิงเส้น ใช้ ค่าหมวดหมู่ cell แทน cost."
 
 #: ../gui/wxpython/menustrings.py:340
 msgid "Least cost route or flow"
@@ -5694,12 +5557,8 @@ msgstr "Slope และ aspect"
 
 #: ../gui/wxpython/menustrings.py:345
 #, fuzzy
-msgid ""
-"Generates raster maps of slope, aspect, curvatures and partial derivatives "
-"from a elevation raster map."
-msgstr ""
-"สร้างชั้นข้อมูลแผนที่เชิงภาพ ของ  slope, aspect, curvatures และ partial derivatives "
-"จาก ชั้นข้อมูลแผนที่เชิงภาพ ของค่าความสูงจริง  Aspect คำนวนตามเข็มนาฬิกา จาก ทิศตะวันออก"
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from a elevation raster map."
+msgstr "สร้างชั้นข้อมูลแผนที่เชิงภาพ ของ  slope, aspect, curvatures และ partial derivatives จาก ชั้นข้อมูลแผนที่เชิงภาพ ของค่าความสูงจริง  Aspect คำนวนตามเข็มนาฬิกา จาก ทิศตะวันออก"
 
 #: ../gui/wxpython/menustrings.py:346
 msgid "Terrain parameters"
@@ -5740,8 +5599,9 @@ msgid "Distance to features"
 msgstr "แก้ไขข้อมูล"
 
 #: ../gui/wxpython/menustrings.py:355
+#, fuzzy
 msgid "Generates a raster map of distance to features in input raster map."
-msgstr ""
+msgstr "สร้าง ชั้นแผนที่เชิงภาพ ด้วย  contiguous areas grown ด้วย 1 cell"
 
 #: ../gui/wxpython/menustrings.py:356
 msgid "Horizon angle"
@@ -5761,11 +5621,8 @@ msgstr "Clump"
 
 #: ../gui/wxpython/menustrings.py:360
 #, fuzzy
-msgid ""
-"Recategorizes data in a raster map by grouping cells that form physically "
-"discrete areas into unique categories."
-msgstr ""
-"ทำหมวดหมู่ข้อมูลใหม่ สำหรับชั้นข้อมูลเชิงภาพ โดยจัดกลุ่ม cell จากการแยกพื้นที่ ไปเป็นหมวดหมู่ที่ไม่ซ้ำ"
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr "ทำหมวดหมู่ข้อมูลใหม่ สำหรับชั้นข้อมูลเชิงภาพ โดยจัดกลุ่ม cell จากการแยกพื้นที่ ไปเป็นหมวดหมู่ที่ไม่ซ้ำ"
 
 #: ../gui/wxpython/menustrings.py:361
 msgid "Grow"
@@ -5811,12 +5668,8 @@ msgstr "แผนที่ Depressionless และ  flowlines"
 
 #: ../gui/wxpython/menustrings.py:371
 #, fuzzy
-msgid ""
-"Filters and generates a depressionless elevation map and a flow direction "
-"map from a given elevation raster map."
-msgstr ""
-"กรอง และ สร้างแผนที่ depressionless elevation และ flow direction จาก ชั้นข้อมูล "
-"elevation"
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr "กรอง และ สร้างแผนที่ depressionless elevation และ flow direction จาก ชั้นข้อมูล elevation"
 
 #: ../gui/wxpython/menustrings.py:372
 msgid "Flow accumulation"
@@ -5841,9 +5694,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:377
 #, fuzzy
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
-msgstr ""
-"แบบจำลอง Overland flow hydrologic ขึ้นอยู่กับ  duality particle-field concept "
-"(SIMWE)"
+msgstr "แบบจำลอง Overland flow hydrologic ขึ้นอยู่กับ  duality particle-field concept (SIMWE)"
 
 #: ../gui/wxpython/menustrings.py:378
 msgid "SIMWE Sediment flux modeling"
@@ -5851,12 +5702,8 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:379
 #, fuzzy
-msgid ""
-"Sediment transport and erosion/deposition simulation using path sampling "
-"method (SIMWE)."
-msgstr ""
-"แบบจำลอง Overland flow hydrologic ขึ้นอยู่กับ  duality particle-field concept "
-"(SIMWE)"
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr "แบบจำลอง Overland flow hydrologic ขึ้นอยู่กับ  duality particle-field concept (SIMWE)"
 
 #: ../gui/wxpython/menustrings.py:380
 msgid "Topographic index map"
@@ -5926,21 +5773,15 @@ msgid "Groundwater flow"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:396
-msgid ""
-"Numerical calculation program for transient, confined and unconfined "
-"groundwater flow in two dimensions."
-msgstr ""
-"โปรแกรมตัวเลข สำหรับคำนวน Transient, Confined และ Unconfined groundwater flow "
-"แบบ 2 มิติ"
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr "โปรแกรมตัวเลข สำหรับคำนวน Transient, Confined และ Unconfined groundwater flow แบบ 2 มิติ"
 
 #: ../gui/wxpython/menustrings.py:397
 msgid "Groundwater solute transport"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:398
-msgid ""
-"Numerical calculation program for transient, confined and unconfined solute "
-"transport in two dimensions"
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:399
@@ -5952,37 +5793,24 @@ msgid "Analyze landscape"
 msgstr "การวิเคราะห์ Landscape"
 
 #: ../gui/wxpython/menustrings.py:401
-msgid ""
-"Contains a set of measures for attributes, diversity, texture, "
-"juxtaposition, and edge."
-msgstr ""
-"มีชุดข้อมูลของการวัด สำหรับ attributes, diversity, texture, juxtaposition, และ "
-"edge."
+msgid "Contains a set of measures for attributes, diversity, texture, juxtaposition, and edge."
+msgstr "มีชุดข้อมูลของการวัด สำหรับ attributes, diversity, texture, juxtaposition, และ edge."
 
 #: ../gui/wxpython/menustrings.py:402
 msgid "Analyze patches"
 msgstr "การวิเคราะห์  Patch"
 
 #: ../gui/wxpython/menustrings.py:403
-msgid ""
-"Calculates attribute, patch size, core (interior) size, shape, fractal "
-"dimension, and perimeter measures for sets of patches in a landscape."
-msgstr ""
-"คำนวน  attribute, patch size, core (interior) size, shape, fractal "
-"dimension, และ perimeter measures สำหรับ กำหนด patches ใน landscape."
+msgid "Calculates attribute, patch size, core (interior) size, shape, fractal dimension, and perimeter measures for sets of patches in a landscape."
+msgstr "คำนวน  attribute, patch size, core (interior) size, shape, fractal dimension, และ perimeter measures สำหรับ กำหนด patches ใน landscape."
 
 #: ../gui/wxpython/menustrings.py:404 ../gui/wxpython/scripts/vkrige.py:114
 msgid "Output"
 msgstr "ส่งออก"
 
 #: ../gui/wxpython/menustrings.py:405
-msgid ""
-"Displays the boundary of each r.le patch and shows how the boundary is "
-"traced, displays the attribute, size, perimeter and shape indices for each "
-"patch and saves the data in an output file."
-msgstr ""
-"แสดงขอบเขตของแต่ละ  r.le patch และ แสดง การติดตามขอบเขต, แสดง attribute, size, "
-"perimeter และ shape indices สำหรับ แต่ละ patch และบันทึกข้อมูลลงใน ไฟล์ ผลลัพธ์"
+msgid "Displays the boundary of each r.le patch and shows how the boundary is traced, displays the attribute, size, perimeter and shape indices for each patch and saves the data in an output file."
+msgstr "แสดงขอบเขตของแต่ละ  r.le patch และ แสดง การติดตามขอบเขต, แสดง attribute, size, perimeter และ shape indices สำหรับ แต่ละ patch และบันทึกข้อมูลลงใน ไฟล์ ผลลัพธ์"
 
 #: ../gui/wxpython/menustrings.py:406
 msgid "Landscape patch analysis"
@@ -6001,8 +5829,7 @@ msgid "Edge density"
 msgstr "ความหนาแน่นของขอบ"
 
 #: ../gui/wxpython/menustrings.py:410
-msgid ""
-"Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
 msgstr "คำนวน ดัชนี edge density บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
 
 #: ../gui/wxpython/menustrings.py:411
@@ -6018,9 +5845,7 @@ msgid "Patch area mean"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:414
-msgid ""
-"Calculates mean patch size index on a raster map, using a 4 neighbour "
-"algorithm"
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
 msgstr "คำนวน ดัชนี mean patch size บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
 
 #: ../gui/wxpython/menustrings.py:415
@@ -6052,8 +5877,7 @@ msgid "Patch density"
 msgstr "ความหนาแน่นของ Patch"
 
 #: ../gui/wxpython/menustrings.py:422
-msgid ""
-"Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
 msgstr "คำนวน ดัชนี patch density บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
 
 #: ../gui/wxpython/menustrings.py:423
@@ -6061,8 +5885,7 @@ msgid "Patch number"
 msgstr "จำนวนของ Patch"
 
 #: ../gui/wxpython/menustrings.py:424
-msgid ""
-"Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
 msgstr "คำนวน ดัชนี patch number บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
 
 #: ../gui/wxpython/menustrings.py:425
@@ -6118,26 +5941,16 @@ msgid "Least-cost spread paths"
 msgstr "Least-cost เส้นทางการกระจาย"
 
 #: ../gui/wxpython/menustrings.py:439
-msgid ""
-"Recursively traces the least cost path backwards to cells from which the "
-"cumulative cost was determined."
-msgstr ""
-"Recursively traces น้อยที่สุดของ cost path backwards ที่ cells จาก ที่กำหนด  "
-"cumulative cost"
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr "Recursively traces น้อยที่สุดของ cost path backwards ที่ cells จาก ที่กำหนด  cumulative cost"
 
 #: ../gui/wxpython/menustrings.py:440
 msgid "Anisotropic spread simulation"
 msgstr "แบบจำลองการกระจาย Anisotropic"
 
 #: ../gui/wxpython/menustrings.py:441
-msgid ""
-"Simulates elliptically anisotropic spread on a graphics window and generates "
-"a raster map of the cumulative time of spread, given raster maps containing "
-"the rates of spread (ROS), the ROS directions and the spread origins."
-msgstr ""
-"การจำลอง elliptically anisotropic spread บนหน้าต่างภาพ และสร้าง แผนที่เชิงภาพของ "
-"cumulative time of spread, โดยให้ แผนที่เชิงภาพ ที่มี rates of spread (ROS), the "
-"ROS directions และ the spread origins."
+msgid "Simulates elliptically anisotropic spread on a graphics window and generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins."
+msgstr "การจำลอง elliptically anisotropic spread บนหน้าต่างภาพ และสร้าง แผนที่เชิงภาพของ cumulative time of spread, โดยให้ แผนที่เชิงภาพ ที่มี rates of spread (ROS), the ROS directions และ the spread origins."
 
 #: ../gui/wxpython/menustrings.py:442
 msgid "Change category values and labels"
@@ -6158,9 +5971,7 @@ msgstr "Reclassify โดย ขนาด"
 
 #: ../gui/wxpython/menustrings.py:446
 #, fuzzy
-msgid ""
-"Reclasses a raster map greater or less than user specified area size (in "
-"hectares)."
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
 msgstr "จัดกลุ่ม แผนที่เชิงภาพ ใหม่  ใหญ่หรือเล็ก กว่า ขนาดที่ผู้ใช้ระบุ  (หน่วย  hectares)"
 
 #: ../gui/wxpython/menustrings.py:447 ../gui/wxpython/menustrings.py:639
@@ -6195,9 +6006,7 @@ msgid "Rescale with histogram"
 msgstr "Rescale โดย histogram"
 
 #: ../gui/wxpython/menustrings.py:454
-msgid ""
-"Rescales histogram equalized the range of category values in a raster map "
-"layer."
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
 msgstr "Rescales histogram equalized ค่าช่วงของหมวดหมู่  ในชั้นข้อมูลแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:455
@@ -6226,9 +6035,7 @@ msgstr "เซลล์สุ่มและจุดเวคเตอร์"
 
 #: ../gui/wxpython/menustrings.py:461
 #, fuzzy
-msgid ""
-"Creates a raster map layer and vector point map containing randomly located "
-"points."
+msgid "Creates a raster map layer and vector point map containing randomly located points."
 msgstr "สร้าง ชั้นข้อมูลแผนที่เชิงภาพ และ แผนที่เชิงเส้น แบบจุด มี randomly located sites."
 
 #: ../gui/wxpython/menustrings.py:462
@@ -6249,30 +6056,19 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:466
 #, fuzzy
-msgid ""
-"Generates a raster density map from vector point data using a moving kernel "
-"or optionally generates a vector density map on a vector network."
-msgstr ""
-"สร้างแผนที่ความหนาแน่น เชิงภาพ จาก แผนที่เชิงเส้น จุด ใช้ moving 2D isotropic Gaussian "
-"kernel หรือ จะเลือกใช้ การสร้าง แผนที่ความหนาแน่น เชิงเส้น บน  network ด้วย 1D kernel."
+msgid "Generates a raster density map from vector point data using a moving kernel or optionally generates a vector density map on a vector network."
+msgstr "สร้างแผนที่ความหนาแน่น เชิงภาพ จาก แผนที่เชิงเส้น จุด ใช้ moving 2D isotropic Gaussian kernel หรือ จะเลือกใช้ การสร้าง แผนที่ความหนาแน่น เชิงเส้น บน  network ด้วย 1D kernel."
 
 #: ../gui/wxpython/menustrings.py:467
 msgid "Gaussian deviates surface"
 msgstr "พื้นผิว Gaussian deviates"
 
 #: ../gui/wxpython/menustrings.py:468
-msgid ""
-"GRASS module to produce a raster map layer of gaussian deviates whose mean "
-"and standard deviation can be expressed by the user. It uses a gaussian "
-"random number generator."
-msgstr ""
-"คำสั่ง GRASS ที่จะผลิต ชั้นข้อมูลแผนที่เชิงภาพ ของ ค่าเบี่ยงเบน gaussian ที่ mean และ "
-"standard deviation สามารถกำหนดโดยผู้ใช้. ใช้ตัวสร้าง gaussian random number."
+msgid "GRASS module to produce a raster map layer of gaussian deviates whose mean and standard deviation can be expressed by the user. It uses a gaussian random number generator."
+msgstr "คำสั่ง GRASS ที่จะผลิต ชั้นข้อมูลแผนที่เชิงภาพ ของ ค่าเบี่ยงเบน gaussian ที่ mean และ standard deviation สามารถกำหนดโดยผู้ใช้. ใช้ตัวสร้าง gaussian random number."
 
 #: ../gui/wxpython/menustrings.py:470
-msgid ""
-"Creates raster plane map given dip (inclination), aspect (azimuth) and one "
-"point."
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
 msgstr "สร้าง แผนที่เชิงภาพ ระนาบ มี dip (inclination), aspect (azimuth) และ 1 จุด"
 
 #: ../gui/wxpython/menustrings.py:471
@@ -6281,11 +6077,8 @@ msgstr "Random deviates surface"
 
 #: ../gui/wxpython/menustrings.py:472
 #, fuzzy
-msgid ""
-"Produces a raster map of uniform random deviates whose range can be "
-"expressed by the user."
-msgstr ""
-"สร้าง ชั้นข้อมูลแผนที่เชิงภาพ ของ uniform random deviates ที่ช่วงของมัน สามารถกำหนดโดยผู้ใช้"
+msgid "Produces a raster map of uniform random deviates whose range can be expressed by the user."
+msgstr "สร้าง ชั้นข้อมูลแผนที่เชิงภาพ ของ uniform random deviates ที่ช่วงของมัน สามารถกำหนดโดยผู้ใช้"
 
 #: ../gui/wxpython/menustrings.py:473
 msgid "Random surface with spatial dependence"
@@ -6334,9 +6127,7 @@ msgid "IDW from vector points"
 msgstr "IDW จากจุดเวคเตอร์"
 
 #: ../gui/wxpython/menustrings.py:485
-msgid ""
-"Surface interpolation from vector point data by Inverse Distance Squared "
-"Weighting."
+msgid "Surface interpolation from vector point data by Inverse Distance Squared Weighting."
 msgstr "Surface interpolation จาก ข้อมูลจุด โดย สลับ Distance Squared Weighting."
 
 #: ../gui/wxpython/menustrings.py:486
@@ -6352,13 +6143,8 @@ msgid "Regularized spline tension"
 msgstr "Regularized spline tension"
 
 #: ../gui/wxpython/menustrings.py:489
-msgid ""
-"Spatial approximation and topographic analysis from given point or isoline "
-"data in vector format to floating point raster format using regularized "
-"spline with tension."
-msgstr ""
-"Spatial approximation และ topographic analysis จากจุดที่กำหนด หรือ ข้อมูล isoline "
-"ในแบบเชิงเส้น ไปเป็น แบบจุด floating เชิงภาพ โดยใช้ regularized spline กับ tension."
+msgid "Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr "Spatial approximation และ topographic analysis จากจุดที่กำหนด หรือ ข้อมูล isoline ในแบบเชิงเส้น ไปเป็น แบบจุด floating เชิงภาพ โดยใช้ regularized spline กับ tension."
 
 #: ../gui/wxpython/menustrings.py:490
 msgid "Ordinary or block kriging"
@@ -6396,9 +6182,7 @@ msgid "Manage category information"
 msgstr "ข้อมูล รายงานหมวดหมู่"
 
 #: ../gui/wxpython/menustrings.py:498
-msgid ""
-"Manages category values and labels associated with user-specified raster map "
-"layers."
+msgid "Manages category values and labels associated with user-specified raster map layers."
 msgstr "จัดการ ค่าหมวดและแถบข้อความ ที่เกี่ยวข้องกับ ชั้นข้อมูลแผนที่ที่ผู้ใช้กำหนด"
 
 #: ../gui/wxpython/menustrings.py:499
@@ -6439,12 +6223,8 @@ msgid "Statistics for clumped cells"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:508
-msgid ""
-"Calculates the volume of data \"clumps\", and (optionally) produces a GRASS "
-"vector points map containing the calculated centroids of these clumps."
-msgstr ""
-"คำนวนค่าของข้อมูล  \"clumps\", และ (optionally) สร้างแผนทีเชิงเส้นแบบจุดของ GRASS "
-"ที่มีจดศูนย์ถ่วงของ clumps."
+msgid "Calculates the volume of data \"clumps\", and (optionally) produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr "คำนวนค่าของข้อมูล  \"clumps\", และ (optionally) สร้างแผนทีเชิงเส้นแบบจุดของ GRASS ที่มีจดศูนย์ถ่วงของ clumps."
 
 #: ../gui/wxpython/menustrings.py:509
 msgid "Total corrected area"
@@ -6456,8 +6236,7 @@ msgid "Prints estimation of surface area for raster map."
 msgstr "คำนวน  standard deviation ของ patch บนแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:512
-msgid ""
-"Calculates univariate statistics from the non-null cells of a raster map."
+msgid "Calculates univariate statistics from the non-null cells of a raster map."
 msgstr "คำนวน univariate statistics จาก non-null cells ของแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:513
@@ -6473,8 +6252,7 @@ msgid "Sample transects (bearing/distance)"
 msgstr "Sample transects (ทิศทาง/ระยะทาง)"
 
 #: ../gui/wxpython/menustrings.py:516
-msgid ""
-"Outputs raster map layer values lying along user defined transect line(s)."
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
 msgstr "ค่าส่งออก ของชั้นข้อมูลแผนที่เชิงภาพ วางตัวตาม transect line(s) ที่ผู้ใช้กำหนด"
 
 #: ../gui/wxpython/menustrings.py:517
@@ -6482,9 +6260,7 @@ msgid "Covariance/correlation"
 msgstr "Covariance/correlation"
 
 #: ../gui/wxpython/menustrings.py:518
-msgid ""
-"Outputs a covariance/correlation matrix for user-specified raster map layer"
-"(s)."
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
 msgstr "ผลลัพธ์ของ covariance/correlation matrix สำหรับชั้นข้อมูลแผนที่เชิงภาพที่ผู้ใช้กำหนด"
 
 #: ../gui/wxpython/menustrings.py:519
@@ -6501,9 +6277,7 @@ msgid "Mutual category occurrences"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:522
-msgid ""
-"Tabulates the mutual occurrence (coincidence) of categories for two raster "
-"map layers."
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
 msgstr "ตารางมีความสัมพันธ์กัน ของหมวดหมู่ สำหรับ 2 ชั้นข้อมูลแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:523
@@ -6524,9 +6298,7 @@ msgid "Edit vector map (non-interactively)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:528
-msgid ""
-"Edits a vector map, allows adding, deleting and modifying selected vector "
-"features."
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
 msgstr "แก้ไข แผนที่เชิงเส้น, ยอมให้เพิ่ม,ลบ และ แก้ไข ข้อมูลที่เลือก."
 
 #: ../gui/wxpython/menustrings.py:529
@@ -6617,9 +6389,7 @@ msgid "Dissolve boundaries"
 msgstr "ละลาย ขอบเขต"
 
 #: ../gui/wxpython/menustrings.py:550
-msgid ""
-"Dissolves boundaries between adjacent areas sharing a common category number "
-"or attribute."
+msgid "Dissolves boundaries between adjacent areas sharing a common category number or attribute."
 msgstr "Dissolves เขต ระหว่าง พื้นที่ที่อยู่ติดกันและมี ข้อมูลเหมือนกัน"
 
 #: ../gui/wxpython/menustrings.py:551
@@ -6629,9 +6399,7 @@ msgstr "สร้าง 3D เวคเตอร์บนแรสเตอร�
 #: ../gui/wxpython/menustrings.py:552
 #, fuzzy
 msgid "Converts vector map to 3D by sampling of elevation raster map."
-msgstr ""
-"แปลงข้อมูลเชิงเส้น จาก  2มิติ ไปเป็น 3 มิติ โดย sampling ของ แผนที่ความสูงเชิงภาพ. ค่าตั้งต้น "
-"โดยใช้ค่าที่ใกล้ที่สุด."
+msgstr "แปลงข้อมูลเชิงเส้น จาก  2มิติ ไปเป็น 3 มิติ โดย sampling ของ แผนที่ความสูงเชิงภาพ. ค่าตั้งต้น โดยใช้ค่าที่ใกล้ที่สุด."
 
 #: ../gui/wxpython/menustrings.py:553
 msgid "Extrude 3D vector map"
@@ -6662,11 +6430,8 @@ msgid "Reposition vector map"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:560
-msgid ""
-"Performs an affine transformation (shift, scale and rotate, or GPCs) on "
-"vector map."
-msgstr ""
-"สร้าง Affine transformation (เลื่อน, มาตราส่วน และ หมุน, หรือ GPCs) บนแผนที่เชิงภาพ."
+msgid "Performs an affine transformation (shift, scale and rotate, or GPCs) on vector map."
+msgstr "สร้าง Affine transformation (เลื่อน, มาตราส่วน และ หมุน, หรือ GPCs) บนแผนที่เชิงภาพ."
 
 #: ../gui/wxpython/menustrings.py:561
 #, fuzzy
@@ -6675,11 +6440,8 @@ msgstr "ส่งออกแผนที่เวคเตอร์"
 
 #: ../gui/wxpython/menustrings.py:562
 #, fuzzy
-msgid ""
-"Rectifies a vector by computing a coordinate transformation for each object "
-"in the vector based on the control points."
-msgstr ""
-"Rectifies ภาพ โดยการคำนวนค่าพิกัดการแปลง สำหรับแต่ละ  pixel ในภาพ โดยใช้ จุดควบคุม"
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr "Rectifies ภาพ โดยการคำนวนค่าพิกัดการแปลง สำหรับแต่ละ  pixel ในภาพ โดยใช้ จุดควบคุม"
 
 #: ../gui/wxpython/menustrings.py:563
 msgid "Reproject vector map"
@@ -6715,20 +6477,17 @@ msgstr "คัดลอกรายละเอียด"
 
 #: ../gui/wxpython/menustrings.py:575
 #, fuzzy
-msgid ""
-"Selects vector features from an existing vector map and creates a new vector "
-"map containing only the selected features."
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
 msgstr "เลือกข้อมูลเชิงเส้นจาก แผนที่เชิงเส้น และสร้าง แผนที่ใหม่ ที่มีเฉพาะข้อมูลที่เลือก"
 
 #: ../gui/wxpython/menustrings.py:576
 #, fuzzy
 msgid "Spatial query"
-msgstr "การค้นหาแบบ SQL"
+msgstr "Statistical ของการซ้อนทับ"
 
 #: ../gui/wxpython/menustrings.py:577
 #, fuzzy
-msgid ""
-"Selects features from vector map (A) by features from other vector map (B)."
+msgid "Selects features from vector map (A) by features from other vector map (B)."
 msgstr "เลือกข้อมูลจาก ainput โดยได้ข้อมูลจาก binput"
 
 #: ../gui/wxpython/menustrings.py:578
@@ -6756,24 +6515,16 @@ msgid "Detect interiors"
 msgstr "ตรวจจับ ภายใน"
 
 #: ../gui/wxpython/menustrings.py:584
-msgid ""
-"Building contour determination and Region Growing algorithm for determining "
-"the building inside"
-msgstr ""
-"กำลังสร้าง contour determination และ Region Growing algorithm สำหรับ "
-"determining the building inside"
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr "กำลังสร้าง contour determination และ Region Growing algorithm สำหรับ determining the building inside"
 
 #: ../gui/wxpython/menustrings.py:585
 msgid "Correct and reclassify objects"
 msgstr "แก้ไข และ  reclassify วัตถุ"
 
 #: ../gui/wxpython/menustrings.py:586
-msgid ""
-"Correction of the v.lidar.growing output. It is the last of the three "
-"algorithms for LIDAR filtering."
-msgstr ""
-"Correction ของผลลัพธ์จาก v.lidar.growing . มันเป็นอันสุดท้าย ของ 3 algorithms สำหรับ "
-"LIDAR filtering."
+msgid "Correction of the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr "Correction ของผลลัพธ์จาก v.lidar.growing . มันเป็นอันสุดท้าย ของ 3 algorithms สำหรับ LIDAR filtering."
 
 #: ../gui/wxpython/menustrings.py:587
 msgid "Linear referencing"
@@ -6800,32 +6551,23 @@ msgid "Create points/segments"
 msgstr "สร้าง จุด/ชิ้นส่วน"
 
 #: ../gui/wxpython/menustrings.py:593
-msgid ""
-"Creates points/segments from input lines, linear reference system and "
-"positions read from stdin or a file."
-msgstr ""
-"สร้าง  จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงเชิงเส้น และ ตำแหน่ง อ่านจาก stdin หรือ ไฟล์."
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr "สร้าง  จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงเชิงเส้น และ ตำแหน่ง อ่านจาก stdin หรือ ไฟล์."
 
 #: ../gui/wxpython/menustrings.py:594
 msgid "Find line id and offset"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:595
-msgid ""
-"Finds line id and real km+offset for given points in vector map using linear "
-"reference system."
-msgstr ""
-"ค้นหา เส้น  id และ real km+offset สำหรับ จุดที่ให้ ในแผนที่เชิงเส้น โดยใช้ "
-"ระบบอ้างอิงตำแหน่งเชิงเส้น."
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr "ค้นหา เส้น  id และ real km+offset สำหรับ จุดที่ให้ ในแผนที่เชิงเส้น โดยใช้ ระบบอ้างอิงตำแหน่งเชิงเส้น."
 
 #: ../gui/wxpython/menustrings.py:596
 msgid "Nearest features"
 msgstr "ข้อมูลที่ใกล้ที่สุด"
 
 #: ../gui/wxpython/menustrings.py:597
-msgid ""
-"Finds the nearest element in vector map 'to' for elements in vector map "
-"'from'."
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:598
@@ -6874,9 +6616,7 @@ msgid "Shortest path for sets of features"
 msgstr "หา shortest path บน vector network."
 
 #: ../gui/wxpython/menustrings.py:608
-msgid ""
-"Computes shortest distance via the network between the given sets of "
-"features."
+msgid "Computes shortest distance via the network between the given sets of features."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:609
@@ -6945,9 +6685,7 @@ msgid "Centrality"
 msgstr "ทดสอบ"
 
 #: ../gui/wxpython/menustrings.py:624
-msgid ""
-"Computes degree, centrality, betweeness, closeness and eigenvector "
-"centrality measures in the network."
+msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:625
@@ -7003,9 +6741,7 @@ msgid "Attaches, deletes or reports vector categories to map geometry."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:640
-msgid ""
-"Changes vector category values for an existing vector map according to "
-"results of SQL queries or a value in attribute table column."
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:641
@@ -7033,9 +6769,7 @@ msgid "Delaunay triangles"
 msgstr "Delaunay triangles"
 
 #: ../gui/wxpython/menustrings.py:647
-msgid ""
-"Creates a Delaunay triangulation from an input vector map containing points "
-"or centroids."
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
 msgstr "สร้าง Delaunay triangulation จาก แผนที่เชิงเส้นนำเข้า ที่มี จุด หรือ จุดศูนย์ถ่วง."
 
 #: ../gui/wxpython/menustrings.py:648
@@ -7044,9 +6778,7 @@ msgstr "Voronoi diagram/Thiessen polygons"
 
 #: ../gui/wxpython/menustrings.py:649
 #, fuzzy
-msgid ""
-"Creates a Voronoi diagram in current region from an input vector map "
-"containing points or centroids."
+msgid "Creates a Voronoi diagram in current region from an input vector map containing points or centroids."
 msgstr "สร้าง Voronoi diagram จากแผนที่นำเข้าเชิงเส้น ที่มี จุด หรือ จุด ศูนย์ถ่วง."
 
 #: ../gui/wxpython/menustrings.py:650
@@ -7066,8 +6798,7 @@ msgid "Generate from database"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:654
-msgid ""
-"Creates new vector (points) map from database table containing coordinates."
+msgid "Creates new vector (points) map from database table containing coordinates."
 msgstr "สร้าง แผนที่เชิงเส้นจุดใหม่ จาก ตาราง ฐานข้อมูล ที่มี ค่าพิกัด"
 
 #: ../gui/wxpython/menustrings.py:655
@@ -7116,9 +6847,7 @@ msgstr "ปรับปรุง รายละเอียด Area จาก�
 
 #: ../gui/wxpython/menustrings.py:666
 #, fuzzy
-msgid ""
-"Calculates univariate statistics from a raster map based on vector polygon "
-"map and uploads statistics to new attribute columns."
+msgid "Calculates univariate statistics from a raster map based on vector polygon map and uploads statistics to new attribute columns."
 msgstr "คำนวน univariate statistics จาก non-null cells ของแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:667
@@ -7209,11 +6938,8 @@ msgid "Univariate statistics for attribute columns"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:688
-msgid ""
-"Calculates univariate statistics on selected table column for a GRASS vector "
-"map."
-msgstr ""
-"คำนวน univariate statistics บน column ของตารางที่เลือก สำหรับแผนที่เชิงเส้นของ GRASS"
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr "คำนวน univariate statistics บน column ของตารางที่เลือก สำหรับแผนที่เชิงเส้นของ GRASS"
 
 #: ../gui/wxpython/menustrings.py:689
 msgid "Quadrat indices"
@@ -7282,15 +7008,11 @@ msgid "HIS to RGB"
 msgstr "HIS ไปเป็น RGB"
 
 #: ../gui/wxpython/menustrings.py:705
-msgid ""
-"Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
-"RGB (Red-Green-Blue) color space."
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:707
-msgid ""
-"Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-"
-"Intensity-Saturation) color space."
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:708
@@ -7299,11 +7021,8 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:709
 #, fuzzy
-msgid ""
-"Rectifies an image by computing a coordinate transformation for each pixel "
-"in the image based on the control points."
-msgstr ""
-"Rectifies ภาพ โดยการคำนวนค่าพิกัดการแปลง สำหรับแต่ละ  pixel ในภาพ โดยใช้ จุดควบคุม"
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr "Rectifies ภาพ โดยการคำนวนค่าพิกัดการแปลง สำหรับแต่ละ  pixel ในภาพ โดยใช้ จุดควบคุม"
 
 #: ../gui/wxpython/menustrings.py:711
 msgid "Generate histogram of image"
@@ -7315,8 +7034,7 @@ msgstr "Spectral ที่ตอบสนอง"
 
 #: ../gui/wxpython/menustrings.py:713
 #, fuzzy
-msgid ""
-"Displays spectral response at user specified locations in group or images."
+msgid "Displays spectral response at user specified locations in group or images."
 msgstr "แสดง spectral response ที่ผู้ใช้กำหนด ตำแหน่งใน กลุ่ม หรือ ภาพ"
 
 #: ../gui/wxpython/menustrings.py:714
@@ -7324,8 +7042,7 @@ msgid "Brovey sharpening"
 msgstr "Brovey sharpening"
 
 #: ../gui/wxpython/menustrings.py:715
-msgid ""
-"Brovey transform to merge multispectral and high-res panchromatic channels"
+msgid "Brovey transform to merge multispectral and high-res panchromatic channels"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:716
@@ -7337,11 +7054,8 @@ msgid "Clustering input for unsupervised classification"
 msgstr "Clustering input สำหรับ unsupervised classification"
 
 #: ../gui/wxpython/menustrings.py:718
-msgid ""
-"Generates spectral signatures for land cover types in an image using a "
-"clustering algorithm."
-msgstr ""
-"สร้าง spectral signatures สำหรับชนิด  land cover ในภาพโดยใช้ clustering algorithm"
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm."
+msgstr "สร้าง spectral signatures สำหรับชนิด  land cover ในภาพโดยใช้ clustering algorithm"
 
 #: ../gui/wxpython/menustrings.py:719
 #, fuzzy
@@ -7350,10 +7064,8 @@ msgstr "Clustering input สำหรับ unsupervised classification"
 
 #: ../gui/wxpython/menustrings.py:720
 #, fuzzy
-msgid ""
-"Generates spectral signatures by allowing the user to outline training areas."
-msgstr ""
-"สร้าง spectral signatures สำหรับชนิด  land cover ในภาพโดยใช้ clustering algorithm"
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr "สร้าง spectral signatures สำหรับชนิด  land cover ในภาพโดยใช้ clustering algorithm"
 
 #: ../gui/wxpython/menustrings.py:721
 msgid "Input for supervised MLC"
@@ -7387,12 +7099,8 @@ msgid "Sequential maximum a posteriori classification (SMAP)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:728
-msgid ""
-"Performs contextual image classification using sequential maximum a "
-"posteriori (SMAP) estimation."
-msgstr ""
-"สร้าง contextual image classification ใช้การประมาณ sequential maximum a "
-"posteriori (SMAP)"
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr "สร้าง contextual image classification ใช้การประมาณ sequential maximum a posteriori (SMAP)"
 
 #: ../gui/wxpython/menustrings.py:729
 msgid "Filter image"
@@ -7461,9 +7169,7 @@ msgid "Aster DN to radiance/reflectance"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:745
-msgid ""
-"Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature "
-"from ASTER DN."
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:746
@@ -7471,9 +7177,7 @@ msgid "Landsat DN to radiance/reflectance"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:747
-msgid ""
-"Calculates top-of-atmosphere radiance or reflectance and temperature for "
-"Landsat MSS/TM/ETM+."
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:748
@@ -7535,8 +7239,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:762
 #, fuzzy
-msgid ""
-"Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data."
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data."
 msgstr "Tasseled Cap (Kauth Thomas) การแปลงสำหรับข้อมูล LANDSAT-TM"
 
 #: ../gui/wxpython/menustrings.py:763
@@ -7596,9 +7299,7 @@ msgid "Evaporative fraction"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:777
-msgid ""
-"Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil "
-"moisture (Makin, Molden and Bastiaanssen, 2001)."
+msgid "Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:778
@@ -7614,9 +7315,7 @@ msgid "Temporal integration of ETa"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:781
-msgid ""
-"Computes temporal integration of satellite ET actual (ETa) following the "
-"daily ET reference (ETo) from meteorological station(s)."
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:782
@@ -7624,9 +7323,7 @@ msgid "Hargreaves methods Evapotranspiration"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:783
-msgid ""
-"Computes evapotranspiration calculation modified or original Hargreaves "
-"formulation, 2001."
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:784
@@ -7634,9 +7331,7 @@ msgid "Penman-Monteith Evapotranspiration"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:785
-msgid ""
-"Computes potential evapotranspiration calculation with hourly Penman-"
-"Monteith."
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:786
@@ -7644,9 +7339,7 @@ msgid "Priestley-Taylor Evapotranspiration"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:787
-msgid ""
-"Computes evapotranspiration calculation Prestley and Taylor formulation, "
-"1972."
+msgid "Computes evapotranspiration calculation Prestley and Taylor formulation, 1972."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:789
@@ -7662,12 +7355,8 @@ msgid "Kappa analysis"
 msgstr "การวิเคราะห์ Kappa"
 
 #: ../gui/wxpython/menustrings.py:792
-msgid ""
-"Calculate error matrix and kappa parameter for accuracy assessment of "
-"classification result."
-msgstr ""
-"คำนวน  error matrix และ ตัวแปร kappa สำหรับ accuracy assessment ของ ผลลัพธ์ "
-"classification."
+msgid "Calculate error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr "คำนวน  error matrix และ ตัวแปร kappa สำหรับ accuracy assessment ของ ผลลัพธ์ classification."
 
 #: ../gui/wxpython/menustrings.py:793
 msgid "OIF for LandSat TM"
@@ -7740,30 +7429,20 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:810
 #, fuzzy
-msgid ""
-"Creates cross section 2D raster map from 3D raster map based on 2D elevation "
-"map"
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
 msgstr "สร้าง แผนที่ความสูง 2 มิติ สำหรับ แผนที่ความสูง 3 มิติ ขึ้นอยู่กับ แผนที่ความสูง 2 มิติ"
 
 #: ../gui/wxpython/menustrings.py:812
-msgid ""
-"Numerical calculation program for transient, confined groundwater flow in "
-"three dimensions"
-msgstr ""
-"โปรแกรมคำนวนตัวเลข สำหรับ  transient, confined groundwater flow ในแบบ 3 มิติ"
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions"
+msgstr "โปรแกรมคำนวนตัวเลข สำหรับ  transient, confined groundwater flow ในแบบ 3 มิติ"
 
 #: ../gui/wxpython/menustrings.py:813
 msgid "Interpolate volume from points"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:814
-#, fuzzy
-msgid ""
-"Interpolates point data to a 3D raster map using regularized spline with "
-"tension (RST) algorithm."
-msgstr ""
-"ข้อมูลจุดไม่เหมาะสม กับค่า RASTER3D กริด ใช้ regularized spline กับ tension (RST) "
-"algorithm."
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr "ข้อมูลจุดไม่เหมาะสม กับค่า G3D กริด ใช้ regularized spline กับ tension (RST) algorithm."
 
 #: ../gui/wxpython/menustrings.py:815
 msgid "Report and Statistics"
@@ -7791,9 +7470,7 @@ msgid "Univariate statistics for volumes"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:821
-msgid ""
-"Calculates univariate statistics from the non-null 3d cells of a raster3d "
-"map."
+msgid "Calculates univariate statistics from the non-null 3d cells of a raster3d map."
 msgstr "คำนวน univariate statistics จาก non-null 3d cells ของแผนที่เชิงภาพ3d"
 
 #: ../gui/wxpython/menustrings.py:822
@@ -7951,9 +7628,7 @@ msgstr "ตารางใหม่"
 
 #: ../gui/wxpython/menustrings.py:860
 #, fuzzy
-msgid ""
-"Creates and connects a new attribute table to a given layer of an existing "
-"vector map."
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
 msgstr "สร้างและเพิ่ม ตารางใหม่ ให้กับชั้นข้อมูลของแผนที่เชิงเส้น"
 
 #: ../gui/wxpython/menustrings.py:861
@@ -7977,20 +7652,16 @@ msgid "Add columns"
 msgstr "เพิ่มตาราง"
 
 #: ../gui/wxpython/menustrings.py:866
-msgid ""
-"Adds one or more columns to the attribute table connected to a given vector "
-"map."
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
 msgstr "เพิ่ม 1 column หรือมากกว่า ไปที่ตารางที่เชื่อมกับ แผนที่เชิงเส้นที่ระบุ"
 
 #: ../gui/wxpython/menustrings.py:868
-msgid ""
-"Drops a column from the attribute table connected to a given vector map."
+msgid "Drops a column from the attribute table connected to a given vector map."
 msgstr "ลบ  column จาก ตารางรายละเอียด ที่เชื่อมกับ แผนที่เชิงเส้น"
 
 #: ../gui/wxpython/menustrings.py:870
 #, fuzzy
-msgid ""
-"Renames a column in the attribute table connected to a given vector map."
+msgid "Renames a column in the attribute table connected to a given vector map."
 msgstr "เปลี่ยนชื่อ  column ในตาราง ที่เชื่อมกับแผนที่เชิงเส้น"
 
 #: ../gui/wxpython/menustrings.py:871
@@ -7998,8 +7669,7 @@ msgid "Change values"
 msgstr "เปลี่ยนค่า"
 
 #: ../gui/wxpython/menustrings.py:872
-msgid ""
-"Allows to update a column in the attribute table connected to a vector map."
+msgid "Allows to update a column in the attribute table connected to a vector map."
 msgstr "ยอมให้ปรับปรุง column ในตาราง ที่เชื่อมต่อกับแผนที่เชิงเส้น"
 
 #: ../gui/wxpython/menustrings.py:873
@@ -8287,9 +7957,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:920 ../gui/wxpython/gmodeler/frame.py:724
-msgid ""
-"This program is free software under the GNU General Public License(>=v2). "
-"Read the file COPYING that comes with GRASS for details."
+msgid "This program is free software under the GNU General Public License(>=v2). Read the file COPYING that comes with GRASS for details."
 msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:1163
@@ -8389,7 +8057,7 @@ msgstr "จุด"
 #: ../gui/wxpython/psmap/dialogs.py:97
 #, fuzzy
 msgid "centimeter"
-msgstr "เพิ่มจุดศูนย์ถ่วง"
+msgstr "ตัวแปร"
 
 #: ../gui/wxpython/psmap/dialogs.py:98
 #, fuzzy
@@ -8427,7 +8095,7 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:106
 #, fuzzy
 msgid "meter"
-msgstr "เพิ่มจุดศูนย์ถ่วง"
+msgstr "ตัวแปร"
 
 #: ../gui/wxpython/psmap/dialogs.py:108
 msgid "degree"
@@ -8502,15 +8170,11 @@ msgstr "Visibility graph construction."
 
 #: ../gui/wxpython/psmap/dialogs.py:983 ../gui/wxpython/psmap/dialogs.py:1696
 #, python-format
-msgid ""
-"Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding "
-"which is required by module ps.map."
+msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:987 ../gui/wxpython/psmap/dialogs.py:1700
-msgid ""
-"Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is "
-"required by module ps.map."
+msgid "Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1109
@@ -8529,14 +8193,12 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1849
-#, fuzzy
 msgid "X:"
 msgstr "X:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1850
-#, fuzzy
 msgid "Y:"
-msgstr "X:"
+msgstr "Y:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1862
 #, fuzzy
@@ -8597,16 +8259,15 @@ msgstr "กว้าง:"
 #: ../gui/wxpython/psmap/dialogs.py:2025
 #, fuzzy
 msgid "Height"
-msgstr "รายการ"
+msgstr "เน้น"
 
 #: ../gui/wxpython/psmap/dialogs.py:2026
 msgid "Left"
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2026
-#, fuzzy
 msgid "Right"
-msgstr "รายการ"
+msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2026
 #: ../gui/wxpython/location_wizard/dialogs.py:231
@@ -8677,9 +8338,8 @@ msgid "fit frame to match saved region"
 msgstr "ย่อ/ขยาย ไปที่ขอบเขตที่บันทึกไว้"
 
 #: ../gui/wxpython/psmap/dialogs.py:2324
-#, fuzzy
 msgid "fit frame to match current computational region"
-msgstr "ย่อ/ขยาย ไปที่ขอบเขตหลัก"
+msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2325
 msgid "fixed scale and map center"
@@ -8713,9 +8373,8 @@ msgid "E:"
 msgstr "X:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2367
-#, fuzzy
 msgid "N:"
-msgstr "X:"
+msgstr "N:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2370 ../gui/wxpython/psmap/dialogs.py:5808
 #, fuzzy
@@ -8885,7 +8544,7 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:3318
 #, fuzzy
 msgid "Select layer:"
-msgstr "เลือกทั้งหมด"
+msgstr "ลบชั้นข้อมูล"
 
 #: ../gui/wxpython/psmap/dialogs.py:3341
 msgid "list of categories (e.g. 1,3,5-7)"
@@ -9717,7 +9376,7 @@ msgstr ""
 #: ../gui/wxpython/modules/colorrules.py:930
 #, fuzzy
 msgid "Create new color rules for vector map"
-msgstr "สร้าง การวางแถบข้อความ ที่เหมาะสม สำหรับแผนที่เชิงเส้น"
+msgstr "สร้าง topology สำหรับ แผนที่เชิงเส้น GRASS."
 
 #: ../gui/wxpython/modules/colorrules.py:941
 #: ../gui/wxpython/modules/colorrules.py:1464
@@ -9787,9 +9446,7 @@ msgstr "ตารางสี"
 
 #: ../gui/wxpython/modules/colorrules.py:1100
 #, python-format
-msgid ""
-"Database connection for vector map <%s> is not defined in DB file.  Do you "
-"want to create and connect new attribute table?"
+msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1103
@@ -9798,9 +9455,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1175
 #, python-format
-msgid ""
-"Selected map <%s> is not in current mapset <%s>. Attribute table cannot be "
-"edited."
+msgid "Selected map <%s> is not in current mapset <%s>. Attribute table cannot be edited."
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1322
@@ -9809,15 +9464,12 @@ msgid "%s column already exists."
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1354
-#, fuzzy
 msgid "Please wait, loading data from attribute table..."
-msgstr "กำลังอ่านข้อมูล ..."
+msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1415
 #, python-format
-msgid ""
-"Number of loaded records reached %d, displaying all the records will be time-"
-"consuming and may lead to computer freezing, do you still want to continue?"
+msgid "Number of loaded records reached %d, displaying all the records will be time-consuming and may lead to computer freezing, do you still want to continue?"
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1419
@@ -10158,9 +9810,7 @@ msgid "Unable to create location"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:192
-msgid ""
-"Title of the location is limited only to one line and 256 characters. The "
-"rest of the text will be ignored."
+msgid "Title of the location is limited only to one line and 256 characters. The rest of the text will be ignored."
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:199
@@ -10406,9 +10056,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1948
 #, python-format
-msgid ""
-"Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will "
-"need to change the default GIS data directory in the GRASS startup screen."
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1953
@@ -10589,9 +10237,7 @@ msgid "No imagery group selected."
 msgstr "ไม่มีชั้นข้อมูลถูกเลือก"
 
 #: ../gui/wxpython/iclass/frame.py:595
-msgid ""
-"Due to recent changes in classes, signatures can be outdated and should be "
-"recalculated. Do you still want to continue?"
+msgid "Due to recent changes in classes, signatures can be outdated and should be recalculated. Do you still want to continue?"
 msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:598
@@ -10616,8 +10262,7 @@ msgstr "ไม่มีชั้นข้อมูลถูกเลือก"
 
 #: ../gui/wxpython/iclass/frame.py:668
 #, python-format
-msgid ""
-"Group <%s> does not have enough files (it has %d files). Operation canceled."
+msgid "Group <%s> does not have enough files (it has %d files). Operation canceled."
 msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:678
@@ -10719,9 +10364,7 @@ msgstr ""
 
 #: ../gui/wxpython/scripts/r.li.setup.py:357
 #, python-format
-msgid ""
-"Location <%(loc)s> will be created in GIS data directory <%(dir)s>.You will "
-"need to change the default GIS data directory in the GRASS startup screen."
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>.You will need to change the default GIS data directory in the GRASS startup screen."
 msgstr ""
 
 #: ../gui/wxpython/scripts/r.li.setup.py:547
@@ -10976,7 +10619,7 @@ msgstr ""
 #: ../gui/wxpython/wxplot/base.py:39
 #, fuzzy
 msgid "Plot options"
-msgstr "สร้างข้อกำหนด"
+msgstr "ตำแหน่ง"
 
 #: ../gui/wxpython/wxplot/base.py:41
 #, fuzzy
@@ -11356,8 +10999,7 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1365
 msgid ""
-"Insufficient points defined and active (checked) for selected rectification "
-"method.\n"
+"Insufficient points defined and active (checked) for selected rectification method.\n"
 "3+ points needed for 1st order,\n"
 "6+ points for 2nd order, and\n"
 "10+ points for 3rd order."
@@ -11686,9 +11328,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:921
 #, python-format
-msgid ""
-"Click and drag with left mouse button to measure.%sDouble click with left "
-"button to clear."
+msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:927
@@ -11754,9 +11394,8 @@ msgid "Zoom to computational region"
 msgstr "ย่อ/ขยาย ไปที่ขอบเขตหลัก"
 
 #: ../gui/wxpython/mapdisp/frame.py:1278
-#, fuzzy
 msgid "Set computational region from display extent"
-msgstr "ย่อ/ขยาย ไปที่ขอบเขตหลัก"
+msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:28
 msgid "Query raster/vector map(s)"
@@ -11793,7 +11432,7 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/toolbars.py:44
 #, fuzzy
 msgid "Create bivariate scatterplot of raster maps"
-msgstr "เปรียบเทียบ bit patterns ด้วย แผนที่เชิงภาพ"
+msgstr "สร้าง 3D เวคเตอร์บนแรสเตอร์"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:48
 #, fuzzy
@@ -11810,8 +11449,7 @@ msgid "Drag with mouse to rotate 3D scene"
 msgstr "ลาก เม้าส์ เพิ่อเลื่อน"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:57
-msgid ""
-"Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
+msgid "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:59
@@ -11835,10 +11473,7 @@ msgid "Reason: %s"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:90
-msgid ""
-"Note that the wxGUI's 3D view mode is currently disabled on MS Windows "
-"(hopefully this will be fixed soon). Please keep an eye out for updated "
-"versions of GRASS. In the meantime you can use \"NVIZ\" from the File menu."
+msgid "Note that the wxGUI's 3D view mode is currently disabled on MS Windows (hopefully this will be fixed soon). Please keep an eye out for updated versions of GRASS. In the meantime you can use \"NVIZ\" from the File menu."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:98
@@ -11851,10 +11486,7 @@ msgid "Vector digitizer not available"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:107
-msgid ""
-"Note that the wxGUI's vector digitizer is currently disabled (hopefully this "
-"will be fixed soon). Please keep an eye out for updated versions of GRASS. "
-"In the meantime you can use \"v.digit\" from the Develop Vector menu."
+msgid "Note that the wxGUI's vector digitizer is currently disabled (hopefully this will be fixed soon). Please keep an eye out for updated versions of GRASS. In the meantime you can use \"v.digit\" from the Develop Vector menu."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:357
@@ -11874,10 +11506,7 @@ msgid "Show computational extent"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:392
-msgid ""
-"Show/hide computational region extent (set with g.region). Display region "
-"drawn as a blue box inside the computational region, computational region "
-"inside a display region as a red box)."
+msgid "Show/hide computational region extent (set with g.region). Display region drawn as a blue box inside the computational region, computational region inside a display region as a red box)."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:432
@@ -11885,9 +11514,7 @@ msgid "Display mode"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:439
-msgid ""
-"Align region extent based on display size from center point. Default value "
-"for new map displays can be set up in 'User GUI settings' dialog."
+msgid "Align region extent based on display size from center point. Default value for new map displays can be set up in 'User GUI settings' dialog."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:452
@@ -11896,9 +11523,7 @@ msgid "Display resolution"
 msgstr "ความละเอียดแนว เหนือ-ใต้"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:459
-msgid ""
-"Constrain display resolution to computational region settings. Default value "
-"for new map displays can be set up in 'User GUI settings' dialog."
+msgid "Constrain display resolution to computational region settings. Default value for new map displays can be set up in 'User GUI settings' dialog."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:483
@@ -11906,9 +11531,7 @@ msgid "Map scale"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:497
-msgid ""
-"As everyone's monitors and resolutions are set differently these values are "
-"not true map scales, but should get you into the right neighborhood."
+msgid "As everyone's monitors and resolutions are set differently these values are not true map scales, but should get you into the right neighborhood."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:550
@@ -11934,9 +11557,7 @@ msgid "Use defined projection"
 msgstr "จัดการ projections"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:695
-msgid ""
-"Reproject coordinates displayed in the statusbar. Projection can be defined "
-"in GUI preferences dialog (tab 'Projection')"
+msgid "Reproject coordinates displayed in the statusbar. Projection can be defined in GUI preferences dialog (tab 'Projection')"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:720
@@ -12016,10 +11637,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdisplay.py:884
 #, python-format
-msgid ""
-"Topology for vector map <%s> is not available. Topology is required by "
-"digitizer. Do you want to rebuild topology (takes some time) and open the "
-"vector map for editing?"
+msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdisplay.py:888
@@ -12075,8 +11693,7 @@ msgid "Select only features inside of selection bounding box"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:219
-msgid ""
-"By default are selected all features overlapping selection bounding box "
+msgid "By default are selected all features overlapping selection bounding box "
 msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:222
@@ -12190,9 +11807,7 @@ msgid "perimeter"
 msgstr "ตัวแปร"
 
 #: ../gui/wxpython/vdigit/preferences.py:483
-msgid ""
-"Note: These settings are stored in the workspace not in the vector digitizer "
-"preferences."
+msgid "Note: These settings are stored in the workspace not in the vector digitizer preferences."
 msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:512
@@ -12307,8 +11922,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdigit.py:98
 #, python-format
-msgid ""
-"Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
+msgid "Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
 msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdigit.py:106
@@ -12364,9 +11978,7 @@ msgid "Digitize new centroid"
 msgstr "ดิจิไทซ์จุดกึ่งกลางใหม่"
 
 #: ../gui/wxpython/vdigit/toolbars.py:103
-msgid ""
-"Digitize new area (composition of boundaries without category and one "
-"centroid with category)"
+msgid "Digitize new area (composition of boundaries without category and one centroid with category)"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:106
@@ -12691,9 +12303,7 @@ msgid "%d maps deleted from current mapset"
 msgstr "เอาไฟล์ชิ้นส่วนข้อมูลฐานออกจาก ชุดแผนที่ของผู้ใช้"
 
 #: ../gui/wxpython/gmodeler/frame.py:315 ../gui/wxpython/gmodeler/frame.py:430
-msgid ""
-"Current model is not empty. Do you want to store current settings to model "
-"file?"
+msgid "Current model is not empty. Do you want to store current settings to model file?"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:318 ../gui/wxpython/gmodeler/frame.py:433
@@ -13155,9 +12765,7 @@ msgstr "ลบทั้งหมด"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:848
 #, python-format
-msgid ""
-"Selected data records (%d) will permanently deleted from table. Do you want "
-"to delete them?"
+msgid "Selected data records (%d) will permanently deleted from table. Do you want to delete them?"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:905
@@ -13214,9 +12822,7 @@ msgid "Unable to zoom to vector map <%s>."
 msgstr "ซ้อนทับ แผนที่เชิงเส้น 2 แผนที่"
 
 #: ../gui/wxpython/core/render.py:665
-msgid ""
-"Unable to get current geographic extent. Force quiting wxGUI. Please "
-"manually run g.region to fix the problem."
+msgid "Unable to get current geographic extent. Force quiting wxGUI. Please manually run g.region to fix the problem."
 msgstr ""
 
 #: ../gui/wxpython/core/render.py:924 ../gui/wxpython/core/render.py:953
@@ -13424,6 +13030,26 @@ msgid "Unable to exectute command: '%s'"
 msgstr ""
 
 #, fuzzy
+msgid "GSoC testing"
+msgstr "หยุดการแก้ไข"
+
+#, fuzzy
+msgid "Calculates points in polygons and univariate statistics from points based on vector polygon map and uploads statistics to new attribute columns."
+msgstr "คำนวน univariate statistics จาก non-null cells ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "On display"
+msgstr "แสดง"
+
+#, fuzzy
+msgid "GRASS GIS Hardcopy Map Output Utility"
+msgstr "เครื่องมือสร้างแผนที่ ผลลัพธ์ แบบ Hardcopy PostScript"
+
+#, fuzzy
+msgid "Exports the color table associated with a raster3d map layer."
+msgstr "สร้าง/ปรับปรุง ตารางสี ที่เกี่ยวข้องกับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
 #~ msgid "Show GUI settings"
 #~ msgstr "แสดงค่าติดตั้ง"
 
@@ -13492,29 +13118,11 @@ msgstr ""
 #~ msgstr "เครื่องมือสร้างแผนที่ ผลลัพธ์ แบบ Hardcopy PostScript"
 
 #, fuzzy
-#~ msgid "GSoC testing"
-#~ msgstr "หยุดการแก้ไข"
-
-#, fuzzy
-#~ msgid ""
-#~ "Calculates points in polygons and univariate statistics from points based "
-#~ "on vector polygon map and uploads statistics to new attribute columns."
-#~ msgstr "คำนวน univariate statistics จาก non-null cells ของแผนที่เชิงภาพ"
-
-#, fuzzy
-#~ msgid "On display"
-#~ msgstr "แสดง"
-
-#, fuzzy
 #~ msgid "Source"
 #~ msgstr "Cost surface"
 
 #~ msgid "Database:"
 #~ msgstr "ฐานข้อมูล:"
-
-#, fuzzy
-#~ msgid "GRASS GIS Hardcopy Map Output Utility"
-#~ msgstr "เครื่องมือสร้างแผนที่ ผลลัพธ์ แบบ Hardcopy PostScript"
 
 #, fuzzy
 #~ msgid "wxGUI Hardcopy Map Utility"
@@ -13537,10 +13145,6 @@ msgstr ""
 
 #~ msgid "Query with coordinate(s)"
 #~ msgstr "ค้นหาด้วยค่าพิกัด"
-
-#, fuzzy
-#~ msgid "Exports the color table associated with a raster3d map layer."
-#~ msgstr "สร้าง/ปรับปรุง ตารางสี ที่เกี่ยวข้องกับ ชั้นข้อมูลแผนที่เชิงภาพ"
 
 #, fuzzy
 #~ msgid "Vector digitizer"
@@ -13575,3 +13179,477 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show help page"
 #~ msgstr "ช่วยเหลือ"
+
+#, fuzzy
+#~ msgid "Select output font"
+#~ msgstr "เลือกแบบอักษร"
+
+#, fuzzy
+#~ msgid "Settings named '%s' not found"
+#~ msgstr "แผนที่เชิงภาพไม่ใช่ 3มิติ"
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr "แปลงไฟล์ แผนที่เชิงภาพแบบ ASCII ไปเป็น ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Import a binary raster file into a GRASS raster map."
+#~ msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+#~ msgid "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster map layer."
+#~ msgstr "แปลง  ESRI ARC/INFO ascii ไฟล์เชิงภาพ (GRID) ไปเป็น (binary) ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "นำเข้าไฟล์ SPOT VGT NDVI ไปที่ แผนที่เชิงภาพ"
+
+#~ msgid "Import SRTM HGT files into GRASS"
+#~ msgstr "นำเข้าไฟล์ SRTM HGT ไปที่ GRASS"
+
+#~ msgid "Georeference, rectify and import Terra-ASTER imagery and relative DEM's using gdalwarp."
+#~ msgstr "Georeference, rectify และนำเข้า ภาพ Terra-ASTER และ relative DEM's ใช้ gdalwarp."
+
+#, fuzzy
+#~ msgid "Downloads and imports data from WMS servers"
+#~ msgstr "ดาวน์โหลด และนำเข้า ข้อมูลจาก เครื่องแม่ข่าย WMS"
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr "สร้างแผนที่เชิงเส้น จาก ไฟล์จุด ASCII  หรือ ไฟล์แผนที่เชิงเส้น ASCII."
+
+#, fuzzy
+#~ msgid "Import GetFeature from WFS"
+#~ msgstr "ดาวน์โหลด และนำเข้า ข้อมูลจาก เครื่องแม่ข่าย WMS"
+
+#~ msgid "Import E00 file into a vector map."
+#~ msgstr "การนำเข้า  E00 ไปที่แผนที่เชิงเส้น"
+
+#~ msgid "Download waypoints, routes, and tracks from a Garmin GPS receiver into a vector map."
+#~ msgstr "ดาวน์โหลด waypoints, routes, และ tracks จากเครื่องรับ  Garmin GPS ไปที่แผนที่เชิงเส้น"
+
+#~ msgid "Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map."
+#~ msgstr "นำเข้า waypoints, routes, และ tracks จากเครื่องรับ GPS หรือดาวน์โหลดไฟล์ GPS ไปที่แผนที่เชิงเส้น"
+
+#, fuzzy
+#~ msgid "Imports geonames.org country files into a GRASS vector points map."
+#~ msgstr "นำเข้า US-NGA GEOnet Names Server (GNS)  country files ไปที่ แผนที่เชิงเส้นแบบจุดของ GRASS"
+
+#, fuzzy
+#~ msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map layer."
+#~ msgstr "แปลง แผนที่เชิงภาพ 3 มิติแบบ ASCII ไปเป็น  ชั้นข้อมูลแผนที่เชิงภาพ 3 มิติ แบบ binary"
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "แปลง ชั้นข้อมูลแผนที่เชิงภาพ ไปเป็น  ASCII text ไฟล์"
+
+#~ msgid "Export a raster map to a text file as x,y,z values based on cell centers."
+#~ msgstr "ส่งออกแผนที่เชิงภาพ ไปที่ ไฟล์  text แบบ x,y,z ค่าอ้างอิงกับจุดกลาง cell"
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น ไฟล์แผนที่ GRIDATB.FOR (TOPMODEL)"
+
+#, fuzzy
+#~ msgid "Exports a GRASS raster map to a binary array."
+#~ msgstr "ส่งออก แผนที่ภาพ GRASS แบบ binary"
+
+#, fuzzy
+#~ msgid "Raster File Series to MPEG Conversion."
+#~ msgstr "Series ไฟล์แผนที่เชิงภาพ ที่จะส่งไปให้ โปรแกรม MPEG Conversion"
+
+#, fuzzy
+#~ msgid "Export GRASS raster as non-georeferenced PNG image."
+#~ msgstr "ส่งออก แผนที่เชิงภาพ GRASS แบบที่ GDAL รองรับ"
+
+#~ msgid "Converts a GRASS raster map to a PPM image file at the pixel resolution of the currently defined region."
+#~ msgstr "แปลง ชั้นข้อมูลแผนที่เชิงภาพ GRASS ไปเป็น ไฟล์ภาพ PPM ที่ความละเอียดเป็น pixel ของ ขอบเขตที่กำหนด"
+
+#~ msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr "แปลง 3 ชั้นข้อมูลเชิงภาพ GRASS (R,G,B) ไปเป็น ไฟล์ภาพ PPM ที่ความละเอียด pixel ของ ชอบเขตที่ระบุ"
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr "แปลง ชั้นข้อมูลแผนที่เชิงภาพ ไปเป็น  ไฟล์ height-field สำหรับ POVRAY."
+
+#~ msgid "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel resolution of the currently defined region."
+#~ msgstr "ส่งออก แผนที่เชิงภาพ GRASS ที่ 8/24bit ไฟล์ภาพ TIFF ที่ความละเอียด pixel ของ ชอบเขตที่ระบุ"
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr "ส่งออกแผนที่เชิงภาพ ไปที่  Virtual Reality Modeling Language (VRML)"
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "แปลง แผนที่เชิงภาพ ไปเป็น แบบ  VTK-Ascii"
+
+#, fuzzy
+#~ msgid "Converts to one of the supported OGR vector formats."
+#~ msgstr "แปลงไปเป็น แผนที่เชิงภาพ ที่ OGR รองรับ"
+
+#~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
+#~ msgstr "แปลง แผนที่เชิงเส้น binary GRASS ไปเป็น แผนที่เชิงเส้น ASCII GRASS"
+
+#~ msgid "Exports GRASS vector map layers to DXF file format."
+#~ msgstr "ส่งออก ชั้นข้อมูลแผนที่เชิงภาพ GRASS ไปที่  DXF ไฟล์"
+
+#~ msgid "Exports a GRASS vector map to SVG."
+#~ msgstr "ส่งออก แผนที่เชิงเส้น GRASS เป็น SVG."
+
+#~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
+#~ msgstr "แปลง แผนที่เชิงเส้น  binary GRASS ไปเป็น VTK ASCII ผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Converts a 3D raster map layer into an ASCII text file."
+#~ msgstr "แปลง ชั้นข้อมูล แผนที่เชิงภาพ 3 มิติ ไปเป็น ไฟล์  ASCII"
+
+#, fuzzy
+#~ msgid "Copies available data files in the user's current mapset search path and location to the appropriate element directories under the user's current mapset."
+#~ msgstr "คัดลอกไฟล์ข้อมูลใน ชุดแผนที่ของผู้ใช้ ค้นหา path และ ตำแหน่ง ของชิ้นส่วนที่เกี่ยวข้อง ภายใต้ ชุดแผนที่ของผู้ใช้"
+
+#~ msgid "Converts a binary GRASS vector map (only points) layer into a 3D GRASS raster map layer."
+#~ msgstr "แปลง ชั้นข้อมูลแผนที่เชิงเส้น GRASS binary (เฉพาะจุด) ไปเป็น  ชั้นข้อมูลแผนที่เชิงภาพ GRASS 3มิตื."
+
+#, fuzzy
+#~ msgid "Changes current mapset."
+#~ msgstr "เปลี่ยนชุดแผนที่"
+
+#~ msgid "Interactively reset the location's projection settings."
+#~ msgstr "การกำหนดค่า  location's projection"
+
+#~ msgid "Convert coordinates from one projection to another (cs2cs frontend)."
+#~ msgstr "แปลงค่าพิกัดจาก projection หนึ่ง ไปอีก projection หนึ่ง (cs2cs frontend)"
+
+#~ msgid "Interactive tool used to draw and save vector features on a graphics monitor using a pointing device (mouse) and save to a raster map."
+#~ msgstr "เครื่องมือแบบโต้ตอบ ใช้วาดและบันทึกข้อมูลเชิงเส้น บนหน้าจอแสดงผล ใช้ เม้าส์ และบันทึกไปที่ แผนที่เชิงภาพ"
+
+#~ msgid "Re-projects a raster map from one location to the current location."
+#~ msgstr "Re-projects แผนที่เชิงภาพ จาก ตำแหน่งที่เลือก ไปที่ ตำแหน่งปัจจุบัน"
+
+#~ msgid "Creates/modifies the color table associated with a raster map layer."
+#~ msgstr "สร้าง/ปรับปรุง ตารางสี ที่เกี่ยวข้องกับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Exports the color table associated with a raster map layer."
+#~ msgstr "สร้าง/ปรับปรุง ตารางสี ที่เกี่ยวข้องกับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#~ msgid "Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values."
+#~ msgstr "สร้างชั้นข้อมูลแผนที่เชิงภาพแสดง  buffer zones รอบๆ cellsที่มีค่าเป็น non-NULL"
+
+#~ msgid "Calculates category or object oriented statistics."
+#~ msgstr "คำนวนหมวดหมู่ หรือ  object oriented statistics"
+
+#, fuzzy
+#~ msgid "Thins non-zero cells that denote linear features in a raster map."
+#~ msgstr "การ Thins non-zero cells แสดงให้เห็นถึงข้อมูลเชิงเส้น ใน ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#~ msgid "Interactive tool used to setup the sampling and analysis framework that will be used by the other r.le programs."
+#~ msgstr "เครื่องมือแบบโต้ตอบ ใช้เพื่อ กำหนด sampling และ analysis framework ที่จะใช้โดยโปรแกรมอื่นของ r.le"
+
+#~ msgid "Generates three, or four raster map layers showing 1) the base (perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, 3) the direction of the maximum ROS, and optionally 4) the maximum potential spotting distance."
+#~ msgstr "แสดง 3 หรือ 4 ชั้นข้อมูลแผนที่เชิงภาพ 1) the base (perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, 3) the direction of the maximum ROS, and optionally 4) the maximum potential spotting distance."
+
+#~ msgid "Interactively edit cell values in a raster map."
+#~ msgstr "ทำการแก้ไขค่า cell ของแผนที่เชิงภาพ"
+
+#~ msgid "Bilinear from raster points"
+#~ msgstr "Bilinear จากจุดแผนที่เชิงภาพ"
+
+#~ msgid "Bilinear interpolation utility for raster map layers."
+#~ msgstr "เครื่องมือ Bilinear interpolation สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#~ msgid "Surface generation program from rasterized contours."
+#~ msgstr "โปรแกรมสร้าง Surface จาก แผนที่เส้นชั้นความสูงที่ได้ จาก  rasterized"
+
+#, fuzzy
+#~ msgid "Fills no-data areas in raster maps using v.surf.rst splines interpolation."
+#~ msgstr "การเติม no-data areas ใน แผนที่เชิงภาพ ใช้ v.surf.rst splines interpolation"
+
+#~ msgid "Output basic information about a raster map layer."
+#~ msgstr "แสดง ข้อมูลพื้นฐานของ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#~ msgid "Interactive editing and digitization of vector maps."
+#~ msgstr "การแก้ไขแบบ โต้ตอบ และ การลอกลายของแผนที่เชิงเส้น"
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "สร้าง topology สำหรับ แผนที่เชิงเส้น GRASS."
+
+#~ msgid "Vector based generalization."
+#~ msgstr "สร้างแผนที่เชิงเส้นฐาน"
+
+#~ msgid "Change the type of geometry elements."
+#~ msgstr "เปลี่ยนชนิดของ ส่วนประกอบ geometry"
+
+#, fuzzy
+#~ msgid "Create parallel line to input lines"
+#~ msgstr "สร้างเส้นขนาน ไปที่ เส้นผลลัพธ์"
+
+#~ msgid "Extrudes flat vector object to 3D with defined height."
+#~ msgstr "ทำข้อมูล 2มิติ ให้เป็น 3มิติ ด้วย ความสูงที่กำหนด"
+
+#~ msgid "Selects vector objects from an existing vector map and creates a new map containing only the selected objects."
+#~ msgstr "เลือกข้อมูลเชิงเส้นจาก แผนที่เชิงเส้น และสร้าง แผนที่ใหม่ ที่มีเฉพาะข้อมูลที่เลือก"
+
+#~ msgid "Creates a buffer around features of given type (areas must contain centroid)."
+#~ msgstr "สร้าง  buffer รอบๆ ข้อมูล ตามชนิดที่กำหนด (areas must จะต้องมีจุดศูนย์ถ่วง)."
+
+#~ msgid "Allocate subnets for nearest centres (direction from centre)."
+#~ msgstr "กำหนด subnets สำหรับศูนย์กลางที่ใกล้ที่สุด (ทิศทางจาก ศูนย์กลาง)."
+
+#~ msgid "Create a new vector map layer by combining other vector map layers."
+#~ msgstr "สร้างชั้นข้อมูลแผนที่เชิงเส้นใหม่ โดย รวมชั้นข้อมูลอื่น"
+
+#~ msgid "Attach, delete or report vector categories to map geometry."
+#~ msgstr "แนบ, ลบ หรือ รายงาน หมวดหมู่ ของ แผนที่เชิงเส้น  ไปที่  map geometry."
+
+#~ msgid "Creates a Voronoi diagram from an input vector map containing points or centroids."
+#~ msgstr "สร้าง Voronoi diagram จากแผนที่นำเข้าเชิงเส้น ที่มี จุด หรือ จุด ศูนย์ถ่วง."
+
+#~ msgid "Creates a GRASS vector map of a user-defined grid."
+#~ msgstr "สร้างแผนที่เชิงเส้น GRASS ของ กริด ที่ผู้ใช้กำหนด"
+
+#~ msgid "Create points along input lines in new vector with 2 layers."
+#~ msgstr "สร้างจุดตามเส้นใน แผนที่เชิงภาพใหม่ด้วย 2 ชั้นข้อมูล"
+
+#~ msgid "Randomly generate a 2D/3D vector points map."
+#~ msgstr "สร้าง แผนที่เชิงเส้น 2มิติ/3มิติ แบบสุ่ม."
+
+#~ msgid "Random location perturbations of GRASS vector points"
+#~ msgstr "ตำแหน่งแบบสุ่มที่ตั้งฉากกับ จุดของ GRASS"
+
+#, fuzzy
+#~ msgid "Calculates univariate statistics from a raster map based on vector polygons and uploads statistics to new attribute columns."
+#~ msgstr "คำนวน univariate statistics จาก non-null cells ของแผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Outputs basic information about a user-specified vector map."
+#~ msgstr "แสดง ข้อมูลพื้นฐาน เกี่ยวกับ การกำหนด ชั้นข้อมูลแผนที่เชิงเส้น ที่ผู้ใช้กำหนด"
+
+#~ msgid "Reports geometry statistics for vectors."
+#~ msgstr "รายงาน geometry statistics สำหรับ vectors."
+
+#~ msgid "Calculates univariate statistics for attribute. Variance and standard deviation is calculated only for points if specified."
+#~ msgstr "คำนวน univariate statistics สำหรับ รายละเอียด. ค่าการแปรปรวน และ ค่าเบี่ยงเบนมาตราฐาน คำนวนเฉพาะจุดถ้ามีการระบุ."
+
+#~ msgid "Tests for normality for points."
+#~ msgstr "ทดสอบ  normality สำหรับ จุด."
+
+#, fuzzy
+#~ msgid "Mosaics up to four images, extending the color table."
+#~ msgstr "ต่อภาพตั้งแต่ 4 ภาพ และ ขยาย colormap; สร้าง map *.mosaic"
+
+#~ msgid "Generates spectral signatures for an image by allowing the user to outline regions of interest."
+#~ msgstr "สร้าง  spectral signatures สำหรับ ภาพ โดยยอมให้ผู้ใช้กำหนดขอบเขตที่สนใจ"
+
+#, fuzzy
+#~ msgid "Extract quality control parameters from Modis QC layers"
+#~ msgstr "ตัวแปร Extracts terrain  สำหรับ  DEM"
+
+#, fuzzy
+#~ msgid "Topographic correction"
+#~ msgstr "แผนที่ดัชนี Topographic"
+
+#~ msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
+#~ msgstr "Tasseled Cap (Kauth Thomas) การแปลงสำหรับข้อมูล LANDSAT-TM"
+
+#, fuzzy
+#~ msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
+#~ msgstr "สร้าง แผนที่ความสูง 2 มิติ สำหรับ แผนที่ความสูง 3 มิติ ขึ้นอยู่กับ แผนที่ความสูง 2 มิติ"
+
+#, fuzzy
+#~ msgid "Calculates numerically transient, confined groundwater flow in three dimensions."
+#~ msgstr "โปรแกรมคำนวนตัวเลข สำหรับ  transient, confined groundwater flow ในแบบ 3 มิติ"
+
+#~ msgid "Prints/sets general DB connection for current mapset and exits."
+#~ msgstr "แสดง/กำหนด general DB connection สำหรับชุดแผนที่ และ ออก."
+
+#~ msgid "Display the HTML man pages of GRASS"
+#~ msgstr "แสดงคู่มือ GRASS แบบ HTML"
+
+#, fuzzy
+#~ msgid "GRASS GIS Cartographic Composer (experimental prototype)"
+#~ msgstr "เครื่องมือสร้างแผนที่ ผลลัพธ์ แบบ Hardcopy PostScript"
+
+#, fuzzy
+#~ msgid "you will need to copy any attribute tables"
+#~ msgstr "คัดลอก ตารางรายละเอียดด้วย"
+
+#, fuzzy
+#~ msgid "Profile plot settings"
+#~ msgstr "สร้างข้อกำหนด"
+
+#~ msgid "Open existing workspace file"
+#~ msgstr "เปิดพื้นที่ทำงานที่มีอยู่"
+
+#~ msgid "Downloads and imports data from WMS servers."
+#~ msgstr "ดาวน์โหลด และนำเข้า ข้อมูลจาก เครื่องแม่ข่าย WMS"
+
+#, fuzzy
+#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+#~ msgstr "นำเข้าแผนที่เชิงเส้น Mapgen หรือ Matlab ไปที่ GRASS."
+
+#~ msgid "Generates raster map layers of slope, aspect, curvatures and partial derivatives from a raster map layer of true elevation values. Aspect is calculated counterclockwise from east."
+#~ msgstr "สร้างชั้นข้อมูลแผนที่เชิงภาพ ของ  slope, aspect, curvatures และ partial derivatives จาก ชั้นข้อมูลแผนที่เชิงภาพ ของค่าความสูงจริง  Aspect คำนวนตามเข็มนาฬิกา จาก ทิศตะวันออก"
+
+#~ msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
+#~ msgstr "กรอง และ สร้างแผนที่ depressionless elevation และ flow direction จาก ชั้นข้อมูล elevation"
+
+#~ msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)"
+#~ msgstr "สร้าง slope curves (flowlines), flowpath lengths, และ flowline densities (upslope areas) จากแบบจำลองความสูงเชิงภาพ (DEM)"
+
+#, fuzzy
+#~ msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)"
+#~ msgstr "แบบจำลอง Overland flow hydrologic ขึ้นอยู่กับ  duality particle-field concept (SIMWE)"
+
+#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+#~ msgstr "สร้าง ดัชนี topographic [ln(a/tan(beta))] แผนที่สำหรับ แผนที่ความสูง"
+
+#~ msgid "Create mapset"
+#~ msgstr "สร้างชุดแผนที่"
+
+#, fuzzy
+#~ msgid "Calculates linear regression from two raster maps: y = a + b*x"
+#~ msgstr "คำนวน  linear regression จาก แผนที่เชิงภาพ 2 แผนที่: y = a + b*x"
+
+#~ msgid "Upload or report topology"
+#~ msgstr "อัพโหลด หรือ รายงาน topology"
+
+#~ msgid "Menu driver for the photo imagery programs."
+#~ msgstr "เมนู ตัวขับ สำหรับโปรแกรม  photo imagery"
+
+#, fuzzy
+#~ msgid "Georectification Toolbar"
+#~ msgstr "เลือกวิธี rectification สำหรับแผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Query vector map"
+#~ msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#, fuzzy
+#~ msgid "display"
+#~ msgstr "แสดง"
+
+#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
+#~ msgstr "แปลง แผนที่เชิงภาพ 3 มิติ  (G3D) ไปเป็น แบบ VTK-Ascii"
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "ค้นหาชั้นข้อมูลแผนที่เชิงเส้น ที่ตำแหน่งที่กำหนด."
+
+#~ msgid "Zoom to map"
+#~ msgstr "ขยายไปที่แผนที่"
+
+#~ msgid "Override projection (use location's projection)"
+#~ msgstr "เขียนทับ Projection (ใช้ location's projection)"
+
+#~ msgid "Reclassify interactively"
+#~ msgstr "Reclassify แบบโต้ตอบ"
+
+#~ msgid "Creates a new map layer whose category values are based upon a reclassification of the categories in an existing raster map layer."
+#~ msgstr "สร้างชั้นแผนที่ ที่ ค่าหมวดหมู่ ขึ้นอยู่กับ reclassification ของ หมวดหมู่ ใน ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#~ msgid "Reclassify using rules file"
+#~ msgstr "Reclassify แบบ ไฟล์กฎเกณท์"
+
+#~ msgid "Recode using rules file"
+#~ msgstr "Recode แบบ ไฟล์กฎเกณท์"
+
+#~ msgid "Allows projection conversion of vector maps."
+#~ msgstr "ยอมให้การแปลง projection ของ แผนที่เชิงเส้น"
+
+#~ msgid "Reclassify objects interactively"
+#~ msgstr "Reclassify วัตถุ แบบโต้ตอบ"
+
+#, fuzzy
+#~ msgid "Converts a raster map into a vector map layer."
+#~ msgstr "แปลงแผนที่เชิงภาพ ไปเป็น ชั้นข้อูลแผนที่เชิงเส้น"
+
+#~ msgid "E&xit"
+#~ msgstr "&ออก"
+
+#~ msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask itself."
+#~ msgstr "คำนวนพื้นที่ cast shadow จาก ตำแหน่ง  Sun และ DEM. ใช้ A: ระบุตำแหน่ง Sun ที่แน่นอน, หรือ B: วัน/เวลา เพื่อคำนวนตำแหน่ง  Sun โดยคำสั่ง r.sunmask ."
+
+#~ msgid "Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+#~ msgstr "นำข้อมูล vector stream มาแปลงเป็นภาพ และเอา ความสูงออกจาก  DEM ผลลัพธ์"
+
+#~ msgid "Generates a raster map layer showing watershed subbasins."
+#~ msgstr "สร้าง ชั้นข้อมูลแผนที่เชิงภาพ แสดง watershed subbasins."
+
+#, fuzzy
+#~ msgid "Watershed basin analysis program."
+#~ msgstr "โปรแกรมสำหรับ วิเคราะห์ basin"
+
+#~ msgid "Watershed basin creation program."
+#~ msgstr "โปรแกรมที่ใช้สร้าง Watershed basin"
+
+#~ msgid "Uses a GRASS vector points map to produce a convex hull vector map."
+#~ msgstr "ใช้ ข้อมูลแผนที่เชิงเส้น จุด ของ GRASS เพื่อสร้าง แผนที่เชิงเส้น convex hull."
+
+#~ msgid "Selects data from table."
+#~ msgstr "เลือกข้อมูลจากตาราง"
+
+#, fuzzy
+#~ msgid "Converts GRASS vector map to one of the supported OGR vector formats."
+#~ msgstr "แปลงไปเป็น แผนที่เชิงภาพ ที่ OGR รองรับ"
+
+#, fuzzy
+#~ msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)."
+#~ msgstr "สร้าง slope curves (flowlines), flowpath lengths, และ flowline densities (upslope areas) จากแบบจำลองความสูงเชิงภาพ (DEM)"
+
+#, fuzzy
+#~ msgid "Digitize new area"
+#~ msgstr "ดิจิไทซ์เส้นใหม่"
+
+#, fuzzy
+#~ msgid "Show Help"
+#~ msgstr "ช่วยเหลือ"
+
+#~ msgid "Import GDAL supported raster file into a binary raster map layer."
+#~ msgstr "นำเข้า ไฟล์แผนที่เชิงภาพที่ GDAL รองรับ ไปเป็น ชั้นข้อมูลแผนที่เชิงภาพแบบ binary"
+
+#, fuzzy
+#~ msgid "GRASS GIS Histogram of raster map"
+#~ msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+#~ msgid "wire color"
+#~ msgstr "สีเส้น"
+
+#, fuzzy
+#~ msgid "color"
+#~ msgstr "สี"
+
+#, fuzzy
+#~ msgid "symbol"
+#~ msgstr "สัญลักษณ์"
+
+#, fuzzy
+#~ msgid "Save color table to file"
+#~ msgstr "บันทึก GCPs เป็นแฟ้มข้อมูลจุด"
+
+#, fuzzy
+#~ msgid "Generates a raster map layer of distance to features in input layer."
+#~ msgstr "สร้าง ชั้นแผนที่เชิงภาพ ด้วย  contiguous areas grown ด้วย 1 cell"
+
+#~ msgid "Fills no-data areas in raster maps using v.surf.rst splines interpolation"
+#~ msgstr "การเติม no-data areas ใน แผนที่เชิงภาพ ใช้ v.surf.rst splines interpolation"
+
+#~ msgid "Reports statistics for raster map layers."
+#~ msgstr "รายงาน สถิติ สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Topology maintenance"
+#~ msgstr "การบำรุงรักษา Support ไฟล์"
+
+#, fuzzy
+#~ msgid "Feature selection"
+#~ msgstr "ค้นหาขอบมุม"
+
+#~ msgid "Creates, edits, and lists groups and subgroups of imagery files."
+#~ msgstr "สร้าง, แก้ไข,และแสดง กลุ่ม และ กลุ่มย่อย ของไฟล์ภาพ"
+
+#~ msgid "Mosaics up to 4 images and extends colormap; creates map *.mosaic"
+#~ msgstr "ต่อภาพตั้งแต่ 4 ภาพ และ ขยาย colormap; สร้าง map *.mosaic"
+
+#, fuzzy
+#~ msgid "Add vector map"
+#~ msgstr "เวคเตอร์"
+
+#, fuzzy
+#~ msgid "Add map info"
+#~ msgstr "เพิ่มตาราง"
+
+#, fuzzy
+#~ msgid "Close all"
+#~ msgstr "หุบทั้หมด"

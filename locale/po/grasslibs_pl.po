@@ -2283,12 +2283,16 @@ msgid ""
 "\n"
 "++ Running blas level 2 benchmark ++"
 msgstr ""
+"\n"
+"++ Trwa test wydajności blas poziomu 2 ++"
 
 #: ../lib/gmath/test/bench_blas3.c:34
 msgid ""
 "\n"
 "++ Running blas level 3 benchmark ++"
 msgstr ""
+"\n"
+"++ Trwa test wydajności blas poziomu 3 ++"
 
 #: ../lib/gmath/test/test_solvers.c:37
 msgid ""
@@ -2338,103 +2342,131 @@ msgid ""
 "\n"
 "++ Running direct solver benchmark ++"
 msgstr ""
+"\n"
+"++ Trwa test wydajności metody bezpośredniej ++"
 
 #: ../lib/gmath/test/test_blas1.c:40
 #, fuzzy
 msgid ""
 "\n"
 "++ Running blas level 1 unit tests ++"
-msgstr "Przeprowadź wszystkie testy "
+msgstr ""
+"\n"
+"++ Trwają testy jednostkowe blas poziomu 1 ++"
 
 #: ../lib/gmath/test/test_blas1.c:47
 msgid ""
 "\n"
 "-- blas level 1 unit tests failure --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 1 nie powiodły się --"
 
 #: ../lib/gmath/test/test_blas1.c:49
 msgid ""
 "\n"
 "-- blas level 1 unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 1 powiodły się --"
 
 #: ../lib/gmath/test/test_main.c:61
 msgid "The size of the matrices and vectors for benchmarking"
-msgstr ""
+msgstr "Rozmiar macierzy i wektorów do testu wydajności"
 
 #: ../lib/gmath/test/test_main.c:68
 msgid "Choose solver benchmark"
-msgstr ""
+msgstr "Wybierz test wydajności metody"
 
 #: ../lib/gmath/test/test_main.c:75
 msgid "Choose blas benchmark"
-msgstr ""
+msgstr "Wybierz test wydajności blas"
 
 #: ../lib/gmath/test/test_main.c:106
 msgid "Performs benchmarks, unit and integration tests for the gmath library"
-msgstr ""
+msgstr "Wykonuje testy wydajności, jednostkowe i integracji dla biblioteki gmath"
 
 #: ../lib/gmath/test/test_ccmath_wrapper.c:37
 msgid ""
 "\n"
 "++ Running ccmath wrapper unit tests ++"
 msgstr ""
+"\n"
+"++ Trwają testy jednostkowe wrappera ccmath ++"
 
 #: ../lib/gmath/test/test_ccmath_wrapper.c:42
 msgid ""
 "\n"
 "-- ccmath wrapper unit tests failure --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe wrappera ccmath nie powiodły się --"
 
 #: ../lib/gmath/test/test_ccmath_wrapper.c:44
 msgid ""
 "\n"
 "-- ccmath wrapper unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe wrappera ccmath powiodły się --"
 
 #: ../lib/gmath/test/bench_solver_krylov.c:34
 msgid ""
 "\n"
 "++ Running krylov solver benchmark ++"
 msgstr ""
+"\n"
+"++ Trwają testy wydajności metody Krylowa ++"
 
 #: ../lib/gmath/test/test_blas3.c:38
 #, fuzzy
 msgid ""
 "\n"
 "++ Running blas level 3 unit tests ++"
-msgstr "Przeprowadź wszystkie testy "
+msgstr ""
+"\n"
+"++ Trwają testy jednostkowe blas poziomu 3 ++"
 
 #: ../lib/gmath/test/test_blas3.c:44
 msgid ""
 "\n"
 "-- blas level 3 unit tests failure --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 3 nie powiodły się --"
 
 #: ../lib/gmath/test/test_blas3.c:46
 msgid ""
 "\n"
 "-- blas level 3 unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 3 powiodły się --"
 
 #: ../lib/gmath/test/test_blas2.c:38
 #, fuzzy
 msgid ""
 "\n"
 "++ Running blas level 2 unit tests ++"
-msgstr "Przeprowadź wszystkie testy "
+msgstr ""
+"\n"
+"++ Trwają testy jednostkowe blas poziomu 2 ++"
 
 #: ../lib/gmath/test/test_blas2.c:44
 msgid ""
 "\n"
 "-- blas level 2 unit tests failure --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 2 nie powiodły się --"
 
 #: ../lib/gmath/test/test_blas2.c:46
 msgid ""
 "\n"
 "-- blas level 2 unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 2 powiodły się --"
 
 #: ../lib/gmath/solvers_direct.c:45
 msgid "Starting direct gauss elimination solver"
@@ -4037,25 +4069,25 @@ msgstr "%d nowych granic"
 
 #: ../lib/vector/Vlib/snap.c:133
 msgid "Snap vertices Pass 1: select points"
-msgstr ""
+msgstr "Dociąganie wierzchołków - etap 1: wybór punktów"
 
 #: ../lib/vector/Vlib/snap.c:187
 msgid "Snap vertices Pass 2: assign anchor vertices"
-msgstr ""
+msgstr "Dociąganie wierzchołków - etap 2: przydzielenie wierzchołków przyłączenia"
 
 #: ../lib/vector/Vlib/snap.c:256
 msgid "Snap vertices Pass 3: snap to assigned points"
-msgstr ""
+msgstr "Dociąganie wierzchołków - etap 3: dociąganie do wybranych punktów"
 
 #: ../lib/vector/Vlib/snap.c:438
 #, c-format
 msgid "Snapped vertices: %d"
-msgstr ""
+msgstr "Ilość dociągniętych wierzchołków: %d"
 
 #: ../lib/vector/Vlib/snap.c:439
 #, fuzzy, c-format
 msgid "New vertices: %d"
-msgstr "Nadpisz istniejący"
+msgstr "Ilość nowych wierzchołków: %d"
 
 #: ../lib/vector/Vlib/build.c:28 ../lib/vector/Vlib/close.c:34
 #: ../lib/vector/Vlib/rewind.c:32 ../lib/vector/Vlib/read.c:29
@@ -4893,11 +4925,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/break_polygons.c:150
 msgid "Break polygons Pass 1: select break points"
-msgstr ""
+msgstr "Łamanie wieloboków - etap 1: wybór punktów łamania"
 
 #: ../lib/vector/Vlib/break_polygons.c:280
 msgid "Break polygons Pass 2: break at selected points"
-msgstr ""
+msgstr "Łamanie wieloboków - etap 2: łamanie w wybranych punktach"
 
 #: ../lib/vector/Vlib/break_polygons.c:392
 #: ../lib/vector/Vlib/break_polygons.c:644
@@ -6390,17 +6422,17 @@ msgstr "Inne odwzorowanie"
 #: ../lib/gis/alloc.c:41
 #, c-format
 msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_malloc: nie można przydzielić %lu bajtów pamięci w %s:%d"
 
 #: ../lib/gis/alloc.c:76
 #, c-format
 msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_calloc: nie można przydzielić %lu * %lu bajtów pamięci w %s:%d"
 
 #: ../lib/gis/alloc.c:115
 #, c-format
 msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_realloc: nie można przydzielić %lu bajtów pamięci w %s:%d"
 
 #: ../lib/gis/open_misc.c:45
 #, c-format
@@ -8090,3 +8122,83 @@ msgstr "Typ kolumny 's' nie jest obsługiwany (musi być liczbowy)"
 #~ msgstr ""
 #~ "\n"
 #~ "Podaj nazwę datum\n"
+
+#, fuzzy
+#~ msgid "Unable to delete file '%s'. Reason: %s"
+#~ msgstr "Nie można usunąć pliku '%s'"
+
+#, fuzzy
+#~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
+#~ msgstr "Nie można zmienić nazwy katalogu z '%s' na '%s'"
+
+#, fuzzy
+#~ msgid "Unable to remove directory '%s'. Reason: %s"
+#~ msgstr "Nie można usunąć katalogu '%s'"
+
+#, fuzzy
+#~ msgid "Unable to delete prior null-cells file"
+#~ msgstr "Nie można usunąć pliku '%s'"
+
+#, fuzzy
+#~ msgid "Unable to close the null-cells file"
+#~ msgstr "Nie można zapisać nagłówka do pliku plus"
+
+#, fuzzy
+#~ msgid "closecell: can't move [%s] to null-cells file [%s]"
+#~ msgstr ""
+#~ "closecell: nie można przenieść %s\n"
+#~ "do pliku null %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the temporary null-cells file"
+#~ msgstr "nie można znaleźć tymczasowego pliku null %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the empty temporary null-cells file"
+#~ msgstr "nie można znaleźć tymczasowego pliku null %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior null-cells file"
+#~ msgstr "Nie można zapisać nagłówka do pliku plus"
+
+#, fuzzy
+#~ msgid "Unable to close the 'cell' file"
+#~ msgstr "Nie można odczytać pliku nagłówkowego"
+
+#, fuzzy
+#~ msgid "Unable to delete prior 'fcell' file"
+#~ msgstr "Nie można usunąć pliku '%s'"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior %s file"
+#~ msgstr "Nie można usunąć tabeli <%s>"
+
+#, fuzzy
+#~ msgid "Unable to close file"
+#~ msgstr "Nie można otworzyć pliku %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior 'cell' file"
+#~ msgstr "Nie można zapisać nagłówka do pliku plus"
+
+#, fuzzy
+#~ msgid "closecell: can't move [%s] to cell file [%s]"
+#~ msgstr ""
+#~ "closecell: nie można przenieść %s\n"
+#~ "do pliku cell %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the temporary 'cell' file"
+#~ msgstr "Nie można otworzyć pliku tymczasowego"
+
+#, fuzzy
+#~ msgid "Unable to write quant file!"
+#~ msgstr "nie można zapisać pliku kwantyzacji!"
+
+#, fuzzy
+#~ msgid "Unable to delete the %s file"
+#~ msgstr "Nie można usunąć tabeli <%s>"
+
+#, fuzzy
+#~ msgid "Unable to write f_format file for CELL maps"
+#~ msgstr "nie można zapisać pliku f_format dla map CELL"

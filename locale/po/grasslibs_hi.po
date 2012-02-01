@@ -78,8 +78,7 @@ msgstr ""
 
 #: ../lib/symbol/read.c:260
 #, c-format
-msgid ""
-"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
 msgstr ""
 
 #: ../lib/symbol/read.c:284
@@ -127,9 +126,7 @@ msgid "Illegal TimeStamp string"
 msgstr ""
 
 #: ../lib/sites/sites.c:255 ../lib/sites/sites.c:385
-msgid ""
-"Dev note: Adapted sites library used for vector points. (module should be "
-"updated to GRASS 6 vector library)"
+msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
 msgstr ""
 
 #: ../lib/sites/sites.c:279 ../lib/ogsf/Gv3.c:342 ../lib/ogsf/Gp3.c:206
@@ -161,8 +158,7 @@ msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr ""
 
 #: ../lib/sites/sites.c:668
-msgid ""
-"G_oldsite_describe() must be called immediately after G_fopen_sites_old()."
+msgid "G_oldsite_describe() must be called immediately after G_fopen_sites_old()."
 msgstr ""
 
 #: ../lib/ogsf/gsd_label.c:58
@@ -270,9 +266,7 @@ msgstr ""
 
 #: ../lib/ogsf/Gv3.c:406
 #, c-format
-msgid ""
-"%d features without category. Unable to determine color rules for features "
-"without category."
+msgid "%d features without category. Unable to determine color rules for features without category."
 msgstr ""
 
 #: ../lib/ogsf/Gp3.c:92 ../lib/vector/Vlib/map.c:87
@@ -298,9 +292,7 @@ msgstr "है"
 
 #: ../lib/ogsf/Gp3.c:286
 #, c-format
-msgid ""
-"%d points without category. Unable to determine color rules for features "
-"without category."
+msgid "%d points without category. Unable to determine color rules for features without category."
 msgstr ""
 
 #: ../lib/ogsf/gsd_prim.c:146
@@ -310,9 +302,7 @@ msgstr ""
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
-msgid ""
-"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
-"advise GRASS developers of this error"
+msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/GK2.c:216
@@ -561,8 +551,7 @@ msgstr ""
 
 #: ../lib/proj/convert.c:139
 #, c-format
-msgid ""
-"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
 
 #: ../lib/proj/convert.c:146
@@ -581,16 +570,12 @@ msgstr ""
 
 #: ../lib/proj/convert.c:458
 #, c-format
-msgid ""
-"Datum <%s> apparently recognised by GRASS but no parameters found. You may "
-"want to look into this."
+msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
 msgstr ""
 
 #: ../lib/proj/convert.c:462
 #, c-format
-msgid ""
-"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
-"transform parameters unspecified."
+msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
 msgstr ""
 
 #: ../lib/proj/datum.c:270 ../lib/proj/datum.c:350
@@ -1099,8 +1084,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:591
 msgid ""
-"Error in GUI startup. If necessary, please report this error to the GRASS "
-"developers.\n"
+"Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
@@ -1136,9 +1120,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:653
 #, python-format
-msgid ""
-"%(user)s is currently running GRASS in selected mapset (file %(file)s "
-"found). Concurrent use not allowed."
+msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
 msgstr ""
 
 #: ../lib/init/grass.py:657
@@ -1161,8 +1143,7 @@ msgstr "चर नहीं सेट"
 #: ../lib/init/grass.py:710
 #, python-format
 msgid ""
-"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
-"found. Exiting.\n"
+"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
@@ -1254,8 +1235,7 @@ msgid ""
 "Unable to start GRASS. You can:\n"
 " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
 " - Create manually GISRC file (%s)\n"
-" - Launch GRASS with path to the location/mapset as an argument (`grass70 /"
-"path/to/location/mapset`)"
+" - Launch GRASS with path to the location/mapset as an argument (`grass70 /path/to/location/mapset`)"
 msgstr ""
 
 #: ../lib/init/grass.py:1080
@@ -1411,9 +1391,7 @@ msgstr "का"
 
 #: ../lib/raster/gdal.c:492
 #, c-format
-msgid ""
-"Driver <%s> does not support direct writing. Using MEM driver for "
-"intermediate dataset."
+msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:498
@@ -1457,21 +1435,15 @@ msgid "Unable to create output file <%s> using driver <%s>"
 msgstr "का"
 
 #: ../lib/raster/window.c:18
-msgid ""
-"Internal error: Rast_get_window() called with split window.Use "
-"Rast_get_input_window() or Rast_get_output_window() instead."
+msgid "Internal error: Rast_get_window() called with split window.Use Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:77
-msgid ""
-"Internal error: Rast_window_rows() called with split window.Use "
-"Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid "Internal error: Rast_window_rows() called with split window.Use Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:112
-msgid ""
-"Internal error: Rast_window_cols() called with split window.Use "
-"Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid "Internal error: Rast_window_cols() called with split window.Use Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/color_rules.c:125
@@ -1516,9 +1488,7 @@ msgstr ""
 
 #: ../lib/raster/set_window.c:131
 #, fuzzy
-msgid ""
-"Rast_set_read_window(): projection/zone differs from that of currently open "
-"raster maps"
+msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
 msgstr "जी सेट का"
 
 #: ../lib/raster/set_window.c:158
@@ -1601,9 +1571,7 @@ msgstr "त्रुटि"
 
 #: ../lib/raster/open.c:190
 #, fuzzy, c-format
-msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
-"%s> which does not exist"
+msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
 msgstr "है a का नहीं"
 
 #: ../lib/raster/open.c:195
@@ -1623,9 +1591,7 @@ msgstr "फील्ड अवैध"
 
 #: ../lib/raster/open.c:219
 #, fuzzy, c-format
-msgid ""
-"Raster map <%s> is in different projection than current region. Found <%s>, "
-"should be <%s>."
+msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
 msgstr "है नहीं."
 
 #: ../lib/raster/open.c:226
@@ -1640,8 +1606,7 @@ msgstr "बाइट्स बड़ा"
 
 #: ../lib/raster/open.c:256
 #, c-format
-msgid ""
-"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
 #: ../lib/raster/open.c:264
@@ -1709,8 +1674,7 @@ msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "नहीं"
 
 #: ../lib/raster/open.c:933
-msgid ""
-"Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
 #: ../lib/raster/null_val.c:64
@@ -1911,9 +1875,7 @@ msgstr "के लिए"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
-msgid ""
-"Unable to read header file for raster map <%s@%s>.It is a reclass of raster "
-"map <%s@%s> %s"
+msgid "Unable to read header file for raster map <%s@%s>.It is a reclass of raster map <%s@%s> %s"
 msgstr "है a का नहीं"
 
 #: ../lib/raster/get_cellhd.c:70
@@ -2025,9 +1987,7 @@ msgstr ""
 
 #: ../lib/imagery/sigsetfile.c:41
 #, fuzzy, c-format
-msgid ""
-"Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
-"is not current mapset"
+msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> is not current mapset"
 msgstr "के लिए"
 
 #: ../lib/imagery/sigsetfile.c:57
@@ -2759,8 +2719,7 @@ msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
-msgid ""
-"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/cairodriver/Draw_bitmap.c:47
@@ -2779,9 +2738,7 @@ msgstr ""
 
 #: ../lib/python/raster.py:46
 #, fuzzy, python-format
-msgid ""
-"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
-"current mapset."
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
 msgstr "है नहीं"
 
 #: ../lib/python/raster.py:101
@@ -2799,15 +2756,11 @@ msgid "Unable to list mapsets"
 msgstr "n"
 
 #: ../lib/python/temporal/core.py:42
-msgid ""
-"Unable to initialize the temporal DBMI interface. Use t.connect to specify "
-"the driver and the database string"
+msgid "Unable to initialize the temporal DBMI interface. Use t.connect to specify the driver and the database string"
 msgstr ""
 
 #: ../lib/python/temporal/core.py:60 ../lib/python/temporal/core.py:66
-msgid ""
-"Unable to initialize the temporal GIS DBMI interface. Use t.connect to "
-"specify the driver and the database string"
+msgid "Unable to initialize the temporal GIS DBMI interface. Use t.connect to specify the driver and the database string"
 msgstr ""
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:57
@@ -2845,22 +2798,17 @@ msgstr ""
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:194
 #, python-format
-msgid ""
-"Unable to register %s map <%s> with layer %s. The map has no valid time and "
-"the start time is not set."
+msgid "Unable to register %s map <%s> with layer %s. The map has no valid time and the start time is not set."
 msgstr ""
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:197
 #, python-format
-msgid ""
-"Unable to register %s map <%s>. The map has no valid time and the start time "
-"is not set."
+msgid "Unable to register %s map <%s>. The map has no valid time and the start time is not set."
 msgstr ""
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:214
 #, python-format
-msgid ""
-"Unable to register %s map <%s> with layer. The temporal types are different."
+msgid "Unable to register %s map <%s> with layer. The temporal types are different."
 msgstr ""
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:216
@@ -2890,8 +2838,7 @@ msgstr ""
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:618
 #, fuzzy, python-format
-msgid ""
-"Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
+msgid "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr "नक़ल"
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:620
@@ -2918,9 +2865,7 @@ msgstr "का"
 
 #: ../lib/python/temporal/aggregation.py:113
 #, fuzzy, python-format
-msgid ""
-"Raster map <%s> is already in temporal database, use overwrite flag to "
-"overwrite"
+msgid "Raster map <%s> is already in temporal database, use overwrite flag to overwrite"
 msgstr "का"
 
 #: ../lib/python/temporal/aggregation.py:116
@@ -2980,15 +2925,12 @@ msgstr "पूर्व पश्चिम"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:333
 #, python-format
-msgid ""
-"Map <%s> with layer %s has incorrect time interval, start time is greater "
-"than end time"
+msgid "Map <%s> with layer %s has incorrect time interval, start time is greater than end time"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:335
 #, python-format
-msgid ""
-"Map <%s> has incorrect time interval, start time is greater than end time"
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:338
@@ -3027,8 +2969,7 @@ msgid "Object <%s> not found in the temporal database"
 msgstr "नक़ल"
 
 #: ../lib/python/temporal/spatial_extent.py:38
-msgid ""
-"Projections are different. Unable to compute overlap_2d for spatial extents"
+msgid "Projections are different. Unable to compute overlap_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:161
@@ -3074,10 +3015,7 @@ msgid "The temporal map type of the sample dataset must be interval"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:611
-msgid ""
-"More than one map found in a granule. Temporal granularity seems to be "
-"invalid or the chosen granularity is not a greatest common divider of all "
-"intervals and gaps in the dataset."
+msgid "More than one map found in a granule. Temporal granularity seems to be invalid or the chosen granularity is not a greatest common divider of all intervals and gaps in the dataset."
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:776
@@ -3126,9 +3064,7 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:891
 #, python-format
-msgid ""
-"Temporal type of space time dataset <%s> and map <%s> with layer %s are "
-"different"
+msgid "Temporal type of space time dataset <%s> and map <%s> with layer %s are different"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:893
@@ -3143,15 +3079,12 @@ msgstr "नहीं"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:906
 #, python-format
-msgid ""
-"Relative time units of space time dataset <%s> and map <%s> with layer %s "
-"are different"
+msgid "Relative time units of space time dataset <%s> and map <%s> with layer %s are different"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:908
 #, python-format
-msgid ""
-"Relative time units of space time dataset <%s> and map <%s> are different"
+msgid "Relative time units of space time dataset <%s> and map <%s> are different"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:914
@@ -3171,9 +3104,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:962
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1007
 #, fuzzy, python-format
-msgid ""
-"Unable to create the space time %s dataset register table for map <%s> with "
-"layer %s"
+msgid "Unable to create the space time %s dataset register table for map <%s> with layer %s"
 msgstr "के लिए"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:965
@@ -3229,8 +3160,7 @@ msgstr "है नहीं."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1146
 #, python-format
-msgid ""
-"Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
 msgstr ""
 
 #: ../lib/python/raster3d.py:86
@@ -3710,9 +3640,7 @@ msgstr ""
 
 #: ../lib/arraystats/class.c:221
 #, c-format
-msgid ""
-"There are classbreaks outside the range min-max. Number of classes reduced "
-"to %i, but using probabilities for %i classes."
+msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
 msgstr ""
 
 #: ../lib/vector/neta/utils.c:222 ../lib/vector/neta/utils.c:235
@@ -3755,9 +3683,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus_node.c:217
 #, c-format
-msgid ""
-"Attempt to read line angle for the line which is not connected to the node: "
-"node %d, line %d"
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
 msgstr ""
 
 #: ../lib/vector/diglib/file.c:159
@@ -3775,23 +3701,17 @@ msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:277
 #, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
+msgid "Spatial index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:284
 #, c-format
-msgid ""
-"Your GRASS version does not fully support spatial index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:293
 #, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Please "
-"rebuild topology."
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:824
@@ -3948,28 +3868,22 @@ msgstr "का"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
-msgid ""
-"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
-"%.16e3E"
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid ""
-"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
-"%.8e3E"
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
-msgid ""
-"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
-msgid ""
-"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:134
@@ -3979,8 +3893,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:150
 #, c-format
-msgid ""
-"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:165
@@ -3990,23 +3903,17 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:520
 #, c-format
-msgid ""
-"Topology format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
+msgid "Topology format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:526
 #, c-format
-msgid ""
-"Your GRASS version does not fully support topology format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
+msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:536
 #, c-format
-msgid ""
-"Old topology format version %d.%d is not supported by this release. Try to "
-"rebuild topology."
+msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology."
 msgstr ""
 
 #: ../lib/vector/Vlib/write_nat.c:52 ../lib/vector/Vlib/write_nat.c:86
@@ -4046,8 +3953,7 @@ msgstr "नहीं n"
 
 #: ../lib/vector/Vlib/legal_vname.c:65
 #, fuzzy, c-format
-msgid ""
-"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
 msgstr "नहीं n"
 
 #: ../lib/vector/Vlib/legal_vname.c:97 ../lib/vector/Vlib/legal_vname.c:101
@@ -4253,9 +4159,7 @@ msgstr "त्रुटि n"
 
 #: ../lib/vector/Vlib/build.c:1027
 #, fuzzy
-msgid ""
-"Unable to build spatial index from topology, vector map is not opened at "
-"topology level 2"
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
 msgstr "है नहीं चालू"
 
 #: ../lib/vector/Vlib/build.c:1050
@@ -4429,9 +4333,7 @@ msgstr "नहीं"
 
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
-msgid ""
-"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
-"vector map <%s>: %d)"
+msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
 msgstr ""
 
 #: ../lib/vector/Vlib/geos.c:60
@@ -4476,9 +4378,7 @@ msgstr "नहीं"
 
 #: ../lib/vector/Vlib/read.c:132
 #, c-format
-msgid ""
-"Vect_read_line(): feature id %d is not reasonable (max features in vector "
-"map <%s>: %d)"
+msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:290
@@ -4497,8 +4397,7 @@ msgid "Empty OGR layer, nothing to build"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:387
-msgid ""
-"Random read is not supported by OGR for this layer, unable to build topology"
+msgid "Random read is not supported by OGR for this layer, unable to build topology"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:392
@@ -4552,16 +4451,12 @@ msgstr ""
 
 #: ../lib/vector/Vlib/net.c:250
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, forward/both direction(s)) not found "
-"(forward/both direction(s) of line skipped)"
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net.c:269
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, backword direction) not found"
-"(direction of line skipped)"
+msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net.c:318
@@ -4713,16 +4608,12 @@ msgstr "के लिए"
 
 #: ../lib/vector/Vlib/open_ogr.c:175
 #, c-format
-msgid ""
-"Feature index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
+msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:180
 #, c-format
-msgid ""
-"Your GRASS version does not fully support feature index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
+msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:250
@@ -4788,15 +4679,12 @@ msgstr "के लिए"
 
 #: ../lib/vector/Vlib/open_nat.c:152
 #, c-format
-msgid ""
-"Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
-"excess)"
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
 msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:156
 #, c-format
-msgid ""
-"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:111
@@ -4811,8 +4699,7 @@ msgstr "है नहीं."
 
 #: ../lib/vector/Vlib/open.c:213
 #, fuzzy
-msgid ""
-"Vector map which is not in the current mapset cannot be opened for update"
+msgid "Vector map which is not in the current mapset cannot be opened for update"
 msgstr "है नहीं के लिए."
 
 #: ../lib/vector/Vlib/open.c:250
@@ -4837,9 +4724,7 @@ msgstr "के लिए"
 
 #: ../lib/vector/Vlib/open.c:334 ../lib/vector/Vlib/open.c:353
 #, fuzzy, c-format
-msgid ""
-"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
-"by v.build."
+msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology by v.build."
 msgstr "चालू"
 
 #: ../lib/vector/Vlib/open.c:362
@@ -4903,9 +4788,7 @@ msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr "का."
 
 #: ../lib/vector/Vlib/dgraph.c:430
-msgid ""
-"Trying to add more edges to the planar_graph than the initial allocation "
-"size allows"
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr ""
 
 #: ../lib/vector/Vlib/area.c:47
@@ -5018,13 +4901,11 @@ msgid "Unexpected result of line_intersection() res = %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:589
-msgid ""
-"Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:600
-msgid ""
-"Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:648
@@ -5091,14 +4972,12 @@ msgstr "का"
 
 #: ../lib/vector/Vlib/write.c:232
 #, fuzzy, c-format
-msgid ""
-"Unable to delete feature %d, vector map <%s> is not opened on topology level"
+msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
 msgstr "है नहीं चालू"
 
 #: ../lib/vector/Vlib/write.c:238
 #, fuzzy, c-format
-msgid ""
-"Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
+msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
 msgstr "है नहीं"
 
 #: ../lib/vector/Vlib/write.c:250
@@ -5108,14 +4987,12 @@ msgstr "के लिए"
 
 #: ../lib/vector/Vlib/write.c:276
 #, fuzzy, c-format
-msgid ""
-"Unable to restore feature %d, vector map <%s> is not opened on topology level"
+msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
 msgstr "है नहीं चालू"
 
 #: ../lib/vector/Vlib/write.c:282
 #, fuzzy, c-format
-msgid ""
-"Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
+msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
 msgstr "है नहीं"
 
 #: ../lib/vector/Vlib/write.c:294
@@ -5196,9 +5073,7 @@ msgid "Database connection not defined. Skipping."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:181
-msgid ""
-"More DB links defined for input vector map. Using only first DB link for "
-"output."
+msgid "More DB links defined for input vector map. Using only first DB link for output."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:256
@@ -5232,9 +5107,7 @@ msgid "Unable to open OGR DBMI driver"
 msgstr "के लिए"
 
 #: ../lib/vector/Vlib/field.c:679
-msgid ""
-"All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
-"available in OGR DB table"
+msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:735
@@ -5529,16 +5402,12 @@ msgstr ""
 
 #: ../lib/rst/interp_float/segmen2d.c:118
 #, fuzzy
-msgid ""
-"Taking too long to find points for interpolation - please change the region "
-"to area where your points are. Continuing calculations..."
+msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
 msgstr "के लिए."
 
 #: ../lib/rst/interp_float/interp2d.c:214
 #, c-format
-msgid ""
-"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
-"cell. Z-value %f, zmin %f, zmax %f."
+msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 
 #: ../lib/rst/interp_float/input2d.c:48
@@ -5618,9 +5487,7 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:256
 #, fuzzy, c-format
-msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN="
-"%d"
+msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
 msgstr "के लिए है कम"
 
 #: ../lib/rst/interp_float/vinput2d.c:261
@@ -5629,16 +5496,12 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:266
 #, c-format
-msgid ""
-"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
-"smooth connection of segments, npmin > segmax (see manual)"
+msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:272
 #, fuzzy, c-format
-msgid ""
-"There are less than %d points for interpolation. No segmentation is "
-"necessary, to run the program faster set segmax=%d (see manual)"
+msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
 msgstr "कम के लिए नहीं है प्रोग्राम सेट"
 
 #: ../lib/rst/interp_float/vinput2d.c:276
@@ -5933,9 +5796,7 @@ msgid "Variable '%s' not set"
 msgstr "चर नहीं सेट"
 
 #: ../lib/gis/gisinit.c:50 ../lib/gis/gisinit.c:82
-msgid ""
-"Incompatible library version for module. You need to rebuild GRASS or "
-"untangle multiple installations."
+msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."
 msgstr ""
 
 #: ../lib/gis/gisinit.c:60
@@ -6570,8 +6431,7 @@ msgid "Database schema"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:148
-msgid ""
-"Do not use this option if schemas are not supported by driver/database server"
+msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:157
@@ -6679,9 +6539,7 @@ msgid "Data type used in the output raster3d map"
 msgstr "का"
 
 #: ../lib/gis/parser_standard_options.c:335
-msgid ""
-"Number of digits used as mantissa in the internal map storage, 0 -23 for "
-"float, 0 - 52 for double, max or default"
+msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:345
@@ -6689,9 +6547,7 @@ msgid "The compression method used in the output raster3d map"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:355
-msgid ""
-"The dimensions of the tiles used in the output raster3d map (XxYxZ or "
-"default: 16x16x8)"
+msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:365
@@ -6740,10 +6596,7 @@ msgstr "संख्या"
 
 #: ../lib/gis/parser_standard_options.c:429
 #: ../lib/gis/parser_standard_options.c:441
-msgid ""
-"A single vector map can be connected to multiple database tables. This "
-"number determines which table to use. When used with direct OGR access this "
-"is the layer name."
+msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:439
@@ -6869,8 +6722,7 @@ msgstr "है का."
 
 #: ../lib/gis/view.c:549
 #, fuzzy, c-format
-msgid ""
-" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr "का."
 
 #: ../lib/gis/parser_html.c:40
@@ -7111,32 +6963,80 @@ msgid "send data: invalid C-type"
 msgstr ""
 
 #, fuzzy
-#~ msgid "Unable to open null device"
-#~ msgstr "के लिए"
+msgid "Unable to open null device"
+msgstr "के लिए"
 
 #, fuzzy
-#~ msgid "The support for OGR vector maps wasn't compiled in"
-#~ msgstr "के लिए"
+msgid "The support for OGR vector maps wasn't compiled in"
+msgstr "के लिए"
 
 #, fuzzy
-#~ msgid "End time must be later than start time"
-#~ msgstr "पूर्व पश्चिम"
+msgid "End time must be later than start time"
+msgstr "पूर्व पश्चिम"
+
+#, fuzzy
+msgid "Unknown"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Could not find line box"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Uknown column <%s>"
+msgstr "का"
+
+#, fuzzy
+msgid "       valid options: %s\n"
+msgstr "n"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "है नहीं"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "a"
+
+#, fuzzy
+msgid "Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr "के लिए जी"
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "डिफ़ॉल्ट है नहीं सेट"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "का"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "का"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "का"
 
 #, fuzzy
 #~ msgid "Cannot open database %s by driver %s"
 #~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Unknown"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Could not find line box"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Uknown column <%s>"
-#~ msgstr "का"
 
 #, fuzzy
 #~ msgid "projection field missing"
@@ -7195,58 +7095,7 @@ msgstr ""
 #~ msgstr "के लिए"
 
 #, fuzzy
-#~ msgid "       valid options: %s\n"
-#~ msgstr "n"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "नहीं"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "है नहीं"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr "के लिए जी"
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "डिफ़ॉल्ट है नहीं सेट"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid ""
-#~ "taking too long to find points for interpolation--please change the "
-#~ "region to area where your points are. Continuing calculations..."
+#~ msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
 #~ msgstr "के लिए."
 
 #, fuzzy
@@ -7420,8 +7269,7 @@ msgstr ""
 #~ msgstr "अनुकृति पूर्व फील्ड"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to write embedded null values for raster map open for random access"
+#~ msgid "Unable to write embedded null values for raster map open for random access"
 #~ msgstr "के लिए के लिए"
 
 #, fuzzy
@@ -7926,9 +7774,7 @@ msgstr ""
 #~ msgstr "फील्ड i नहीं वर्तमान"
 
 #, fuzzy
-#~ msgid ""
-#~ "I'm finding records that do not have a floating point attributes (fields "
-#~ "prefixed with '%')."
+#~ msgid "I'm finding records that do not have a floating point attributes (fields prefixed with '%')."
 #~ msgstr "मी नहीं a बिन्दु."
 
 #, fuzzy
@@ -7976,9 +7822,7 @@ msgstr ""
 #~ msgstr "है"
 
 #, fuzzy
-#~ msgid ""
-#~ "G_set_window(): projection/zone differs from that of currently open "
-#~ "raster maps"
+#~ msgid "G_set_window(): projection/zone differs from that of currently open raster maps"
 #~ msgstr "जी सेट का"
 
 #, fuzzy
@@ -8143,13 +7987,11 @@ msgstr ""
 #~ msgstr "के लिए n"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgid "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
 #~ msgstr "है नहीं चालू"
 
 #, fuzzy
-#~ msgid ""
-#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgid "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
 #~ msgstr "है नहीं"
 
 #, fuzzy
@@ -8231,3 +8073,237 @@ msgstr ""
 #, fuzzy
 #~ msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
 #~ msgstr "नहीं n"
+
+#, fuzzy
+#~ msgid "Unable to allocate memory for a null buffer"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Could not get raster row"
+#~ msgstr "नहीं"
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Unable to delete file '%s'. Reason: %s"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Unable to remove directory '%s'. Reason: %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Vector map <%s> is not open on level >= 2"
+#~ msgstr "नहीं"
+
+#, fuzzy
+#~ msgid "%s is not in the current mapset (%s)"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "duplicate projection field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate zone field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "zone field missing"
+#~ msgstr "फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate north field"
+#~ msgstr "अनुकृति उत्तर फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate south field"
+#~ msgstr "अनुकृति दक्षिण फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate east field"
+#~ msgstr "अनुकृति पूर्व फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate west field"
+#~ msgstr "अनुकृति पश्चिम फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate top field"
+#~ msgstr "अनुकृति शीर्ष फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate bottom field"
+#~ msgstr "अनुकृति तल फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate e-w resolution field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate 3D e-w resolution field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate n-s resolution field"
+#~ msgstr "अनुकृति n फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate 3D n-s resolution field"
+#~ msgstr "अनुकृति n फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate t-b resolution field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate rows field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate 3D rows field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate cols field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate 3D cols field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate depths field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate format field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "duplicate compressed field"
+#~ msgstr "अनुकृति फील्ड"
+
+#, fuzzy
+#~ msgid "G_getenv(): Variable %s not set"
+#~ msgstr "चर नहीं सेट"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "Please specify ellipsoid name\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "Name for output raster3d map"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "  format: %s\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "required: %s\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "%s not found"
+#~ msgstr "नहीं"
+
+#, fuzzy
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "नहीं के लिए n"
+
+#, fuzzy
+#~ msgid "Can't create timestamp file for %s map %s in mapset %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Cannot write quant rules for map %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "**<%s> illegal name **\n"
+#~ msgstr "n n"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "Please specify datum name\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "Unable to delete prior null-cells file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to close the null-cells file"
+#~ msgstr "के लिए n"
+
+#, fuzzy
+#~ msgid "Unable to delete the temporary null-cells file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to delete the empty temporary null-cells file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior null-cells file"
+#~ msgstr "के लिए n"
+
+#, fuzzy
+#~ msgid "Unable to close the 'cell' file"
+#~ msgstr "के लिए n"
+
+#, fuzzy
+#~ msgid "Unable to delete prior 'fcell' file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior %s file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to close file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior 'cell' file"
+#~ msgstr "के लिए n"
+
+#, fuzzy
+#~ msgid "Unable to delete the temporary 'cell' file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to write quant file!"
+#~ msgstr "a"
+
+#, fuzzy
+#~ msgid "Unable to delete the %s file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to write f_format file for CELL maps"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Could not stat file '%s'"
+#~ msgstr "नहीं"
