@@ -4070,7 +4070,7 @@ msgstr ""
 #: ../lib/vector/Vlib/snap.c:439
 #, fuzzy, c-format
 msgid "New vertices: %d"
-msgstr "Permettere sovrascrivere"
+msgstr "Numero di primitive:%d"
 
 #: ../lib/vector/Vlib/build.c:28 ../lib/vector/Vlib/close.c:34
 #: ../lib/vector/Vlib/rewind.c:32 ../lib/vector/Vlib/read.c:29
@@ -8036,3 +8036,83 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "Per piacere specifica il nome del datum\n"
+
+#, fuzzy
+#~ msgid "Unable to delete file '%s'. Reason: %s"
+#~ msgstr "Impossibile eliminare il file '%s'"
+
+#, fuzzy
+#~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
+#~ msgstr "Impossibile rinominare la directory '%s' a '%s'"
+
+#, fuzzy
+#~ msgid "Unable to remove directory '%s'. Reason: %s"
+#~ msgstr "Impossibile rimuovere la directory '%s'"
+
+#, fuzzy
+#~ msgid "Unable to delete prior null-cells file"
+#~ msgstr "Impossibile eliminare il file '%s'"
+
+#, fuzzy
+#~ msgid "Unable to close the null-cells file"
+#~ msgstr "Impossibile scrivere head nel file plus"
+
+#, fuzzy
+#~ msgid "closecell: can't move [%s] to null-cells file [%s]"
+#~ msgstr ""
+#~ "closecell: impossibile spostare %s\n"
+#~ "a file senza valore %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the temporary null-cells file"
+#~ msgstr "impossibile trovare un file %s temporaneo nullo"
+
+#, fuzzy
+#~ msgid "Unable to delete the empty temporary null-cells file"
+#~ msgstr "impossibile trovare un file %s temporaneo nullo"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior null-cells file"
+#~ msgstr "Impossibile scrivere head nel file plus"
+
+#, fuzzy
+#~ msgid "Unable to close the 'cell' file"
+#~ msgstr "Impossibile leggere il file dell'intestazione"
+
+#, fuzzy
+#~ msgid "Unable to delete prior 'fcell' file"
+#~ msgstr "Impossibile eliminare il file '%s'"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior %s file"
+#~ msgstr "Impossibile eliminare la tabella <%s>"
+
+#, fuzzy
+#~ msgid "Unable to close file"
+#~ msgstr "Impossibile aprire il file %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the prior 'cell' file"
+#~ msgstr "Impossibile scrivere head nel file plus"
+
+#, fuzzy
+#~ msgid "closecell: can't move [%s] to cell file [%s]"
+#~ msgstr ""
+#~ "closecell: impossilbile spostare %s\n"
+#~ " a file di cellula %s"
+
+#, fuzzy
+#~ msgid "Unable to delete the temporary 'cell' file"
+#~ msgstr "Impossibile aprire il file temporaneo"
+
+#, fuzzy
+#~ msgid "Unable to write quant file!"
+#~ msgstr "Impossibile scrivere il quant file!"
+
+#, fuzzy
+#~ msgid "Unable to delete the %s file"
+#~ msgstr "Impossibile eliminare la tabella <%s>"
+
+#, fuzzy
+#~ msgid "Unable to write f_format file for CELL maps"
+#~ msgstr "Impossibile scrivere file f_format per mappe CELL"
