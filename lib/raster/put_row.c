@@ -118,7 +118,7 @@ static void write_data(int fd, int row, unsigned char *buf, int n)
 
     if (write(fcb->data_fd, buf, nwrite) != nwrite)
 	G_fatal_error(_("Error writing uncompressed FP data for row %d of <%s>"),
-		      fcb->name, row);
+		      row, fcb->name);
 }
 
 static void write_data_compressed(int fd, int row, unsigned char *buf, int n)
@@ -128,7 +128,7 @@ static void write_data_compressed(int fd, int row, unsigned char *buf, int n)
 
     if (G_zlib_write(fcb->data_fd, buf, nwrite) < 0)
 	G_fatal_error(_("Error writing compressed FP data for row %d of <%s>"),
-		      fcb->name, row);
+		      row, fcb->name);
 }
 
 static void set_file_pointer(int fd, int row)
