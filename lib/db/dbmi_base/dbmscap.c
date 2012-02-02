@@ -178,16 +178,18 @@ dbDbmscap *db_read_dbmscap(void)
     while ((ent = readdir(dir))) {
 	char *name;
 
-	if ((strcmp(ent->d_name, ".") == 0) ||
-	    (strcmp(ent->d_name, "..") == 0))
+	if ((strcmp(ent->d_name, ".") == 0)
+	    || (strcmp(ent->d_name, "..") == 0))
 	    continue;
 
 #ifdef __MINGW32__
-	/* remove '.exe' from name (windows extension) */
-	name = G_str_replace(ent->d_name, ".exe", "");
-#else
-	name = G_store(ent->d_name);
+	/* skip manifest files on Windows */
+	if (G_strstr(ent->d_name, ".manifest"))
+	    continue;
 #endif
+
+	/* Remove '.exe' from name (windows extension) */
+	name = G_str_replace(ent->d_name, ".exe", "");
 
 #ifdef __MINGW32__
 	dirpath = G_malloc(strlen("\\driver\\db\\")
@@ -197,9 +199,6 @@ dbDbmscap *db_read_dbmscap(void)
 #else
 	G_asprintf(&dirpath, "%s/driver/db/%s", G_gisbase(), ent->d_name);
 #endif
-	if (access(dirpath, X_OK) != 0)
-	    continue;
-	
 	add_entry(&list, name, dirpath, "");
 	G_free(name);
 	G_free(dirpath);
