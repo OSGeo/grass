@@ -5,7 +5,7 @@
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
  *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>, Stephan Holl
  * PURPOSE:      lists all database drivers
- * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2006, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -36,8 +36,7 @@ int main(int argc, char **argv)
 
     list = db_read_dbmscap();
     if (list == NULL) {
-	G_message(_("Error trying to read dbmscap file\n"));
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Unable to read dbmscap file"));
     }
 
     for (p = list; p; p = p->next) {
@@ -65,13 +64,13 @@ static void parse_command_line(int argc, char **argv)
 
     print = G_define_flag();
     print->key = 'p';
-    print->description = _("print drivers and exit");
+    print->description = _("Print drivers and exit");
 
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
-    G_add_keyword(_("attribute table"));
-    module->description = _("List all database drivers.");
+    G_add_keyword(_("drivers"));
+    module->description = _("Lists all database drivers.");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
