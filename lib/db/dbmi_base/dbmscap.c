@@ -182,6 +182,12 @@ dbDbmscap *db_read_dbmscap(void)
 	    || (strcmp(ent->d_name, "..") == 0))
 	    continue;
 
+#ifdef __MINGW32__
+	/* skip manifest files on Windows */
+	if (G_strstr(ent->d_name, ".manifest"))
+	    continue;
+#endif
+
 	/* Remove '.exe' from name (windows extension) */
 	name = G_str_replace(ent->d_name, ".exe", "");
 
