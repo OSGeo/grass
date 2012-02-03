@@ -2449,6 +2449,54 @@
 	    </menuitem>
 	  </items>
 	</menu>
+	<menu>
+	  <label>Update attributes</label>
+	  <items>
+	    <menuitem>
+	      <label>Update area attributes from raster</label>
+	      <help>Calculates univariate statistics from a raster map based on vector polygon map and uploads statistics to new attribute columns.</help>
+	      <keywords>vector,raster,statistics</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.rast.stats</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Update area attributes from vector</label>
+	      <help>Count points in areas, calculate statistics from point attributes.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.vect.stats</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Update point attributes from areas</label>
+	      <help>Uploads vector values at positions of vector points to the table.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.what.vect</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Update database values from vector</label>
+	      <help>Populates database values from vector features.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.to.db</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Sample raster maps at point locations</label>
+	      <help>Uploads raster values at positions of vector points to the table.</help>
+	      <keywords>vector,raster,position,querying,attribute table</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.what.rast</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Sample raster neighborhood around points</label>
+	      <help>Samples a raster map at vector point locations.</help>
+	      <keywords>vector,raster,resample</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.sample</command>
+	    </menuitem>
+	  </items>
+	</menu>
 	<separator />
 	<menuitem>
 	  <label>Generate area for current region</label>
@@ -2521,68 +2569,20 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>v.perturb</command>
 	    </menuitem>
-	  </items>
-	</menu>
-	<separator />
-	<menuitem>
-	  <label>Remove outliers in point sets</label>
-	  <help>Removes outliers from vector point data.</help>
-	  <keywords>vector,statistics</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>v.outlier</command>
-	</menuitem>
-	<menuitem>
-	  <label>Test/training point sets</label>
-	  <help>Randomly partition points into test/train sets.</help>
-	  <keywords>vector,statistics,points</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>v.kcv</command>
-	</menuitem>
-	<separator />
-	<menuitem>
-	  <label>Update area attributes from raster</label>
-	  <help>Calculates univariate statistics from a raster map based on vector polygon map and uploads statistics to new attribute columns.</help>
-	  <keywords>vector,raster,statistics</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>v.rast.stats</command>
-	</menuitem>
-	<menuitem>
-	  <label>Update area attributes from vector</label>
-	  <help>Count points in areas, calculate statistics from point attributes.</help>
-	  <keywords>vector,database,attribute table</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>v.vect.stats</command>
-	</menuitem>
-	<menuitem>
-	  <label>Update point attributes from areas</label>
-	  <help>Uploads vector values at positions of vector points to the table.</help>
-	  <keywords>vector,database,attribute table</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>v.what.vect</command>
-	</menuitem>
-	<menuitem>
-	  <label>Update database values from vector</label>
-	  <help>Populates database values from vector features.</help>
-	  <keywords>vector,database,attribute table</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>v.to.db</command>
-	</menuitem>
-	<menu>
-	  <label>Update point attributes from raster</label>
-	  <items>
+	    <separator />
 	    <menuitem>
-	      <label>Sample raster maps at point locations</label>
-	      <help>Uploads raster values at positions of vector points to the table.</help>
-	      <keywords>vector,raster,position,querying,attribute table</keywords>
+	      <label>Remove outliers in point sets</label>
+	      <help>Removes outliers from vector point data.</help>
+	      <keywords>vector,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>v.what.rast</command>
+	      <command>v.outlier</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Sample raster neighborhood around points</label>
-	      <help>Samples a raster map at vector point locations.</help>
-	      <keywords>vector,raster,resample</keywords>
+	      <label>Test/training point sets</label>
+	      <help>Randomly partition points into test/train sets.</help>
+	      <keywords>vector,statistics,points</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>v.sample</command>
+	      <command>v.kcv</command>
 	    </menuitem>
 	  </items>
 	</menu>
