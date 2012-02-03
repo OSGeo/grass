@@ -8,6 +8,14 @@ map with a transformed coordinate system (i.e., a different coordinate
 system than before it was rectified).
 
 <p>
+Great care should be taken with the placement of Ground Control Points. 
+For 2D transformation, the control points must not lie on a line, instead 
+3 of the control points must form a triangle. For 3D transformation, the 
+control points must not lie on a plane, instead 4 of the control points 
+must form a triangular pyramid. It is recommended to investigate RMS 
+errors and deviations of the Ground Control Points prior to transformation.
+
+<p>
 2D Ground Control Points can be identified in 
 <em><a href="i.points.html">i.points</a></em>
 or
