@@ -244,6 +244,7 @@ int main(int argc, char *argv[])
     if (!no_topo->answer)
 	Vect_build(&Out);
     /* Copy tables */
+    G_message(_("Copying attribute table(s)..."));
     if (Vect_copy_tables(&In, &Out, 0))
         G_warning(_("Failed to copy attribute table to output map"));
     Vect_close(&Out);
