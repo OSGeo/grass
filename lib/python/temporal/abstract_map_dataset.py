@@ -302,7 +302,7 @@ class abstract_map_dataset(abstract_dataset):
 
         start_time, end_time, unit = self.get_relative_time()
         start = "%i %s"%(int(start_time), unit)
-        if end_time:
+        if end_time != None:
             end = "%i %s"%(int(end_time), unit)
             start += " / %s"%(end)
         core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date=start)
