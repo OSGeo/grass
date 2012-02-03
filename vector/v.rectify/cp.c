@@ -278,6 +278,8 @@ int get_control_points(char *group, char *pfile, int order, int use3d, int rms, 
     struct Control_Points_3D cp3;
     int ret = 0;
     int order_pnts[2][3] = {{ 3, 6, 10 }, { 4, 10, 20 }};
+    
+    msg[0] = '\0';
 
     if (use3d) {
 	/* read 3D GCPs from points file */
