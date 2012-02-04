@@ -1503,7 +1503,7 @@ msgstr "Mostra/nascondi la finestra delle impostazioni della visualizzazione 3D"
 #: ../gui/wxpython/lmgr/layertree.py:51
 #: ../gui/wxpython/gui_core/dialogs.py:1718 ../gui/wxpython/menustrings.py:29
 msgid "Import raster data"
-msgstr "Importa raster"
+msgstr "Importa mappa raster"
 
 #: ../gui/wxpython/lmgr/layertree.py:53
 #: ../gui/wxpython/gui_core/dialogs.py:1716 ../gui/wxpython/menustrings.py:154
@@ -1518,7 +1518,7 @@ msgstr "Seleziona font di output"
 #: ../gui/wxpython/lmgr/layertree.py:57
 #: ../gui/wxpython/gui_core/dialogs.py:1712 ../gui/wxpython/menustrings.py:60
 msgid "Import vector data"
-msgstr "Importa mappa vettore"
+msgstr "Importa mappa vettoriale"
 
 #: ../gui/wxpython/lmgr/layertree.py:59
 #: ../gui/wxpython/gui_core/dialogs.py:1710 ../gui/wxpython/menustrings.py:156
@@ -4908,7 +4908,7 @@ msgstr "Rimuove i file degli elementi nel corrente mapset  nel database"
 
 #: ../gui/wxpython/menustrings.py:175
 msgid "Map type conversions"
-msgstr "Conversioni tipo Mappa"
+msgstr "Conversioni tipo di mappa"
 
 #: ../gui/wxpython/menustrings.py:176
 msgid "Raster to vector"
@@ -6396,7 +6396,7 @@ msgstr "Dissolve i confini tra aree adiacenti che condividono categorie o attrib
 
 #: ../gui/wxpython/menustrings.py:551
 msgid "Create 3D vector over raster"
-msgstr "Crea vettore 3D sopra il raster"
+msgstr "Crea vettore 3D sopra un raster"
 
 #: ../gui/wxpython/menustrings.py:552
 msgid "Converts vector map to 3D by sampling of elevation raster map."
@@ -6428,7 +6428,7 @@ msgstr "Crea label posizionate ottimalmente per vettori"
 
 #: ../gui/wxpython/menustrings.py:559
 msgid "Reposition vector map"
-msgstr "Riposizione vettoriale"
+msgstr "Riposizione vettori"
 
 #: ../gui/wxpython/menustrings.py:560
 msgid "Performs an affine transformation (shift, scale and rotate, or GPCs) on vector map."
@@ -8472,9 +8472,9 @@ msgid "Vector maps settings"
 msgstr "Impostazioni vettoriali"
 
 #: ../gui/wxpython/psmap/dialogs.py:3231
-#, fuzzy, python-format
+#, python-format
 msgid "%s properties"
-msgstr "proprietà"
+msgstr "%s proprietà"
 
 #: ../gui/wxpython/psmap/dialogs.py:3282
 msgid "Data selection"
@@ -13041,6 +13041,92 @@ msgstr "Impossibile ottenere l'estensione geografica attuale. Forza uscite wxGUI
 msgid "GRASS GIS Layer Manager (Experimental Prototype)"
 msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 
+msgid "Install new extension from GRASS AddOns SVN repository."
+msgstr "Installa nuova estensione da GRASS AddOns SVN repository."
+
+msgid ""
+"No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
+"You can disable this message from digitization settings. Or you can create and link attribute table to the vector map using Attribute Table Manager."
+msgstr ""
+"Nessuna tabella degli attributi linkata al vettore <%(vector)s> trovata. %(msg)s\n"
+"Puoi disabilitare questo messaggio dalle impostazioni per la digitalizzazione. O puoi creare e linkare la tabella degli attributi al vettore usando Attribute Table Manager."
+
+msgid "Fetch full info including description and keywords (takes time)"
+msgstr "Trova tutto includendo descrizione e parole chiave (richiede più tempo)"
+
+#, fuzzy
+msgid "&Abort"
+msgstr "&Interrompi comando"
+
+#, fuzzy
+msgid ""
+"Unable to zoom to vector map <%s>.\n"
+"\n"
+"Details: %s"
+msgstr "Impossibile zoomare al vettore <%s>."
+
+msgid ""
+"GRASS is already running in selected mapset <%(mapset)s>\n"
+"(File %(lock)s found).\n"
+"\n"
+"Concurrent use not allowed."
+msgstr ""
+"GRASS è già in esecuzione nel mapset <%(mapset)s> selezionato\n"
+"(File %(lock)s trovato).\n"
+"\n"
+"Uso concorrente non è permesso"
+
+msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+msgstr "Converte un file testuale raster ASCII 3D in un layer raster 3D (binario)"
+
+msgid "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)"
+msgstr "Importa file Vis5D tridimensionale (es file v5d con una variabile e un time step)"
+
+msgid "Converts a 3D raster map layer into an ASCII text file"
+msgstr "Converte un raster 3D in un file di testo ASCII"
+
+msgid "Lists available GRASS data base files of the user-specified data type to standard output."
+msgstr "Lista dei file del database di GRASS disponibili secondo il tipo specificato dall'utente."
+
+msgid "Manage add-ons extensions"
+msgstr "Gestisci estensioni"
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x"
+msgstr "Calcola la regressione lineare per due raster: y = a + b*x"
+
+msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "Esporta raster GRASS 3D in un file Vis5D tridimensionale"
+
+msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
+msgstr "Crea una sezione trasversale  2D da un raster 3D e una mappa dell'elevazione 2D"
+
+msgid "Generates volume statistics for raster3d maps."
+msgstr "Genera statistiche volumetriche per raster 3D."
+
+#, fuzzy
+msgid "Fills no-data areas in raster maps using v.surf.rst splines interpolation."
+msgstr "Riempi aree senza dati di un raster usando interpolazione spline v.surf.rst "
+
+#, fuzzy
+msgid "Create parallel line to input lines"
+msgstr "Crea linee parallele di un vettore lineare di input."
+
+#, fuzzy
+msgid "Mosaics up to four images, extending the color table."
+msgstr "Mosaica 4 immagini ed estende la tabella dei colori; crea una mappa con suffisso *.mosaic"
+
+#, fuzzy
+msgid "Selected map <%s> is not in current mapset <%s>. Color rules cannot be edited."
+msgstr "Il vettore <%s> esiste già nel corrente mapset. Vuoi sovrascriverlo?"
+
+#, fuzzy
+msgid "Import raster or vector data"
+msgstr "Importa mappe raster"
+
+#, fuzzy
+msgid "Profile plot settings"
+msgstr "Impostazione del profilo"
+
 #~ msgid "Unable to switch to location <%(loc)s> mapset <%(mapset)s>."
 #~ msgstr "Impossare combiare la location <%(loc)s> mapset <%(mapset)s>"
 
@@ -13116,9 +13202,6 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 #~ msgid "Add scale bar"
 #~ msgstr "Aggiungi barra della scala"
 
-#~ msgid "Install new extension from GRASS AddOns SVN repository."
-#~ msgstr "Installa nuova estensione da GRASS AddOns SVN repository."
-
 #~ msgid "Sum category values"
 #~ msgstr "Somma valori della categoria"
 
@@ -13137,13 +13220,6 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 #~ msgid "Cl&ear"
 #~ msgstr "Pu&lisci"
 
-#~ msgid ""
-#~ "No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
-#~ "You can disable this message from digitization settings. Or you can create and link attribute table to the vector map using Attribute Table Manager."
-#~ msgstr ""
-#~ "Nessuna tabella degli attributi linkata al vettore <%(vector)s> trovata. %(msg)s\n"
-#~ "Puoi disabilitare questo messaggio dalle impostazioni per la digitalizzazione. O puoi creare e linkare la tabella degli attributi al vettore usando Attribute Table Manager."
-
 #~ msgid "Vector map <%s> already exists. Change extension name and georectify again."
 #~ msgstr "Vettore <%s> esiste già. Cambia nome dell'estensione e georettifica di nuovo."
 
@@ -13152,9 +13228,6 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 
 #~ msgid "you will need to copy any attribute tables"
 #~ msgstr "Bisognerà copiare ogni tabella degli attributi"
-
-#~ msgid "Fetch full info including description and keywords (takes time)"
-#~ msgstr "Trova tutto includendo descrizione e parole chiave (richiede più tempo)"
 
 #~ msgid "set up vector cleaning tools"
 #~ msgstr "imposta gli strumenti di pulizia vettoriale"
@@ -13170,10 +13243,6 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 
 #~ msgid "Validity"
 #~ msgstr "Validità"
-
-#, fuzzy
-#~ msgid "&Abort"
-#~ msgstr "&Interrompi comando"
 
 #~ msgid "Set map canvas for "
 #~ msgstr "Imposta l'area di mappa per"
@@ -13201,51 +13270,6 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 
 #~ msgid "3d raster"
 #~ msgstr "raster 3d"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to zoom to vector map <%s>.\n"
-#~ "\n"
-#~ "Details: %s"
-#~ msgstr "Impossibile zoomare al vettore <%s>."
-
-#~ msgid ""
-#~ "GRASS is already running in selected mapset <%(mapset)s>\n"
-#~ "(File %(lock)s found).\n"
-#~ "\n"
-#~ "Concurrent use not allowed."
-#~ msgstr ""
-#~ "GRASS è già in esecuzione nel mapset <%(mapset)s> selezionato\n"
-#~ "(File %(lock)s trovato).\n"
-#~ "\n"
-#~ "Uso concorrente non è permesso"
-
-#~ msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
-#~ msgstr "Converte un file testuale raster ASCII 3D in un layer raster 3D (binario)"
-
-#~ msgid "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)"
-#~ msgstr "Importa file Vis5D tridimensionale (es file v5d con una variabile e un time step)"
-
-#~ msgid "Converts a 3D raster map layer into an ASCII text file"
-#~ msgstr "Converte un raster 3D in un file di testo ASCII"
-
-#~ msgid "Lists available GRASS data base files of the user-specified data type to standard output."
-#~ msgstr "Lista dei file del database di GRASS disponibili secondo il tipo specificato dall'utente."
-
-#~ msgid "Manage add-ons extensions"
-#~ msgstr "Gestisci estensioni"
-
-#~ msgid "Calculates linear regression from two raster maps: y = a + b*x"
-#~ msgstr "Calcola la regressione lineare per due raster: y = a + b*x"
-
-#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
-#~ msgstr "Esporta raster GRASS 3D in un file Vis5D tridimensionale"
-
-#~ msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
-#~ msgstr "Crea una sezione trasversale  2D da un raster 3D e una mappa dell'elevazione 2D"
-
-#~ msgid "Generates volume statistics for raster3d maps."
-#~ msgstr "Genera statistiche volumetriche per raster 3D."
 
 #~ msgid "Unable to switch to mapset <%s>."
 #~ msgstr "Impossibile spostarsi al mapset <%s>."
@@ -14655,30 +14679,14 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 #~ msgid "Binary file import"
 #~ msgstr "Importa file binario"
 
-#, fuzzy
-#~ msgid "Fills no-data areas in raster maps using v.surf.rst splines interpolation."
-#~ msgstr "Riempi aree senza dati di un raster usando interpolazione spline v.surf.rst "
-
 #~ msgid "Output basic information about a raster map layer."
 #~ msgstr "Stampa informazioni basi di un raster."
-
-#, fuzzy
-#~ msgid "Create parallel line to input lines"
-#~ msgstr "Crea linee parallele di un vettore lineare di input."
 
 #~ msgid "Creates a Voronoi diagram from an input vector map containing points or centroids."
 #~ msgstr "Crea un diagramma di Voronoi da un vettoriale contenente punti o centroidi."
 
-#, fuzzy
-#~ msgid "Mosaics up to four images, extending the color table."
-#~ msgstr "Mosaica 4 immagini ed estende la tabella dei colori; crea una mappa con suffisso *.mosaic"
-
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
 #~ msgstr "Input interattivo per classificazione controllata (richiede Xterm)"
-
-#, fuzzy
-#~ msgid "Selected map <%s> is not in current mapset <%s>. Color rules cannot be edited."
-#~ msgstr "Il vettore <%s> esiste già nel corrente mapset. Vuoi sovrascriverlo?"
 
 #~ msgid "Unable to load icon theme. Reason: %s"
 #~ msgstr "Impossibile caricare i temi delle icone. Motivo: %s"
@@ -14689,14 +14697,6 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 #~ msgid "Writing new feature failed. Operation cancelled."
 #~ msgstr "VScritture del nuovo elemento fallita. Operazione cancellata."
 
-#, fuzzy
-#~ msgid "Import raster or vector data"
-#~ msgstr "Importa mappe raster"
-
-#, fuzzy
-#~ msgid "Profile plot settings"
-#~ msgstr "Impostazione del profilo"
-
 #~ msgid "Georectification Toolbar"
 #~ msgstr "Barra degli strumenti del georettificatore"
 
@@ -14706,11 +14706,12 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 #~ msgid "Map layer type:"
 #~ msgstr "Tipologia del layer:"
 
-#, fuzzy
 #~ msgid ""
 #~ "No layers marked for import.\n"
 #~ "Operation canceled."
-#~ msgstr "Nessuna estensione selezionata da rimuove. Operazione cancellata"
+#~ msgstr ""
+#~ "Nessuna estensione selezionata da rimuove.\n"
+#~ "Operazione cancellata."
 
 #~ msgid "Emission"
 #~ msgstr "Emissione"
@@ -14788,13 +14789,11 @@ msgstr "GRASS GIS Manager dei layer (Prototipo esperimentale)"
 #~ msgid "Reports statistics for raster map layers."
 #~ msgstr "Statistiche per raster"
 
-#, fuzzy
 #~ msgid "Topology maintenance"
-#~ msgstr "Gestione metadati"
+#~ msgstr "Gestione topologia"
 
-#, fuzzy
 #~ msgid "Feature selection"
-#~ msgstr "Selezione dati"
+#~ msgstr "Selezione feature"
 
 #~ msgid "Creates, edits, and lists groups and subgroups of imagery files."
 #~ msgstr "Crea, modifica e visualizza gruppi e sottogruppi di file di immagini."
