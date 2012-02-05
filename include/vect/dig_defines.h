@@ -31,14 +31,6 @@
 /*! \brief Name of the timestamp file */
 #define GV_TIMESTAMP_ELEMENT "timestamp"
 
-/*! \brief Endian check
-
-  \todo To be moved to gislib?
-*/
-#define ENDIAN_LITTLE 0
-#define ENDIAN_BIG    1
-#define ENDIAN_OTHER  2
-
 /*! \brief Sizes of types used in portable format (different names used in
   Vlib/ and diglib/ for the same thing)
 
@@ -93,6 +85,8 @@
 #define GV_FORMAT_OGR        1
 /*! \brief OGR format (direct access) */
 #define GV_FORMAT_OGR_DIRECT 2
+/*! \brief PostGIS format (for layers linked via v.external) */
+#define GV_FORMAT_POSTGIS    3
 
 /*! \brief One table linked to vector map */
 #define GV_1TABLE  0
@@ -224,11 +218,33 @@ typedef enum overlay_operator OVERLAY_OPERATOR;
 #define GV_ASCII_FORMAT_STD   1
 #define GV_ASCII_FORMAT_WKT   2
 
-/*! \brief Simple feature types */
-#define SF_POINT      0x01
-#define SF_LINE	      0x02
-#define SF_LINESTRING 0x04
-#define SF_LINEARRING 0x08
-#define SF_POLYGON    0x10
+/*! \brief Simple feature types
+  
+  Taken from GDAL/OGR library (ogr/ogr_core.h)
+*/
+typedef enum
+{
+    SF_UNKNOWN = 0,                       /* unknown type, non-standard */
+    SF_POINT = 1,                         /* 0-dimensional geometric object */
+    SF_LINESTRING = 2,                    /* 1-dimensional geometric object with linear
+					     interpolation between Points */
+    SF_POLYGON = 3,                       /* planar 2-dimensional geometric object defined
+					     by 1 exterior boundary and 0 or more interior
+					     boundaries */
+    SF_MULTIPOINT = 4,                    /* GeometryCollection of Points */
+    SF_MULTILINESTRING = 5,               /* GeometryCollection of LineStrings */
+    SF_MULTIPOLYGON = 6,                  /* GeometryCollection of Polygons */
+    SF_GEOMETRYCOLLECTION = 7,            /* geometric object that is a collection of 1
+					     or more geometric objects  */
+    SF_NONE = 100,                        /* non-standard, for pure attribute records */
+    SF_LINEARRING = 101,                  /* non-standard */
+    SF_POINT25D = 0x80000001,             /* 2.5D extension as per 99-402 */
+    SF_LINESTRING25D = 0x80000002,        /* 2.5D extension as per 99-402 */
+    SF_POLYGON25D = 0x80000003,           /* 2.5D extension as per 99-402 */
+    SF_MULTIPOINT25D = 0x80000004,        /* 2.5D extension as per 99-402 */
+    SF_MULTILINESTRING25D = 0x80000005,   /* 2.5D extension as per 99-402 */
+    SF_MULTIPOLYGON25D = 0x80000006,      /* 2.5D extension as per 99-402 */
+    SF_GEOMETRYCOLLECTION25D = 0x80000007 /* 2.5D extension as per 99-402 */
+} SF_FeatureType;
 
 #define HEADSTR	50

@@ -51,14 +51,14 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile * fp)
     int cnt, n_edges;
     struct P_node *ptr;
 
-    G_debug(3, "dig_Rd_P_node()");
+    G_debug(4, "dig_Rd_P_node()");
 
 
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
 	return (-1);
 
     if (cnt == 0) {		/* dead */
-	G_debug(3, "    node is dead");
+	G_debug(4, "    node is dead");
 	Plus->Node[n] = NULL;
 	return 0;
     }
@@ -105,12 +105,12 @@ int dig_Wr_P_node(struct Plus_head *Plus, int n, struct gvfile * fp)
     int i, n_edges = 0;
     struct P_node *ptr;
 
-    G_debug(3, "dig_Wr_P_node()");
+    G_debug(4, "dig_Wr_P_node()");
     ptr = Plus->Node[n];
 
     /* If NULL i.e. dead write just 0 instead of number of lines */
     if (ptr == NULL) {
-	G_debug(3, "    node is dead -> write 0 only");
+	G_debug(4, "    node is dead -> write 0 only");
 	i = 0;
 	if (0 >= dig__fwrite_port_P(&i, 1, fp))
 	    return (-1);
@@ -151,13 +151,13 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
     char tp;
     struct P_line *ptr;
 
-    G_debug(3, "dig_Rd_P_line()");
+    G_debug(4, "dig_Rd_P_line()");
 
     if (0 >= dig__fread_port_C(&tp, 1, fp))
 	return (-1);
 
     if (tp == 0) {		/* dead */
-	G_debug(3, "    line is dead");
+	G_debug(4, "    line is dead");
 	Plus->Line[n] = NULL;
 	return 0;
     }
@@ -248,7 +248,7 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 
     /* if NULL i.e. dead write just 0 instead of type */
     if (ptr == NULL) {
-	G_debug(3, "    line is dead -> write 0 only");
+	G_debug(4, "    line is dead -> write 0 only");
 	ch = 0;
 	if (0 >= dig__fwrite_port_C(&ch, 1, fp))
 	    return (-1);
@@ -331,7 +331,7 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
     int cnt;
     struct P_area *ptr;
 
-    G_debug(3, "dig_Rd_P_area(): n = %d", n);
+    G_debug(4, "dig_Rd_P_area(): n = %d", n);
 
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
 	return (-1);
@@ -561,7 +561,7 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 	return (-1);
     }
 
-    G_debug(1, "topo off_t size = %d", ptr->off_t_size);
+    G_debug(2, "topo off_t size = %d", ptr->off_t_size);
 
     /* byte 10 : dimension 2D or 3D */
     if (0 >= dig__fread_port_C((char *)buf, 1, fp))

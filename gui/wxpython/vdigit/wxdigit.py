@@ -1635,5 +1635,5 @@ class IVDigit:
         @return feature type as string (Point, Line String, Polygon)
         @return None for native format
         """
-        return Vect_get_ogr_geometry_type(self.poMapInfo)
+        return Vect_get_finfo_geometry_type(self.poMapInfo)
         

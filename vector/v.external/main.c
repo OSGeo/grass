@@ -49,14 +49,22 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword(_("input"));
     G_add_keyword(_("external")); 
-    module->description = _("Creates a new pseudo-vector map as a link to an OGR-supported layer.");
     
+    module->description = _("Creates a new pseudo-vector map as a link to an OGR-supported layer "
+			    "or a PostGIS feature table.");
     parse_args(argc, argv,
 	       &options, &flags);
     
-    OGRRegisterAll();
-    
+#ifdef HAVE_OGR
+    if (!flags.postgis->answer)
+	OGRRegisterAll();
+#endif
+
     if (flags.format->answer) {
+	if (flags.postgis->answer) {
+	    G_fatal_error(_("Flags -%c and -%c are mutually exclusive"),
+			  flags.format->key, flags.postgis->key);
+	}
 	list_formats(stdout);
 	exit(EXIT_SUCCESS);
     }
@@ -66,6 +74,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Required parameter <%s> not set"), options.dsn->key);
 	list_layers(stdout, options.dsn->answer, NULL,
 		    flags.tlist->answer ? TRUE : FALSE,
+		    flags.postgis->answer,
 		    NULL);
 	exit(EXIT_SUCCESS);
     }
@@ -76,7 +85,7 @@ int main(int argc, char *argv[])
 	output = options.output->answer;
     
     ilayer = list_layers(NULL, options.dsn->answer, options.layer->answer,
-			 FALSE, &is3D);
+			 FALSE, flags.postgis->answer, &is3D);
     if (ilayer == -1) {
 	G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
     }
@@ -110,19 +119,25 @@ int main(int argc, char *argv[])
 	G_fatal_error("Unable to create file '%s'", buf);
     }
     
-    fprintf(fd, "FORMAT: ogr\n");
-    fprintf(fd, "DSN: %s\n", options.dsn->answer);
-    fprintf(fd, "LAYER: %s\n", options.layer->answer);
-    
+    if (flags.postgis->answer) {
+	fprintf(fd, "FORMAT: postgis\n");
+	fprintf(fd, "CONNINFO: %s\n", options.dsn->answer);
+	fprintf(fd, "TABLE: %s\n", options.layer->answer);
+    }
+    else {
+	fprintf(fd, "FORMAT: ogr\n");
+	fprintf(fd, "DSN: %s\n", options.dsn->answer);
+	fprintf(fd, "LAYER: %s\n", options.layer->answer);
+    }
     fclose(fd);
     
     if (!flags.topo->answer) {
-      Vect_open_old(&Map, output, G_mapset());
-      Vect_build(&Map);
-      Vect_close(&Map);
+	Vect_open_old(&Map, output, G_mapset());
+	Vect_build(&Map);
+	Vect_close(&Map);
     }
-
+    
     G_done_msg(_("Link to vector map <%s> created."), output);
-
+    
     exit(EXIT_SUCCESS);
 }

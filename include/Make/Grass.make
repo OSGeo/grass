@@ -31,7 +31,7 @@ ERRORLOG        = $(GRASS_HOME)/error.log
 ARCH_INCDIR     = $(ARCH_DISTDIR)/include/grass
 
 INC		= -I$(ARCH_DISTDIR)/include -I$(GISBASE)/include
-VECT_INC        = 
+VECT_INC        = $(PQINCPATH)
 
 # libraries
 ARCH_LIBDIR     = $(ARCH_DISTDIR)/lib
@@ -78,7 +78,7 @@ ifdef USE_LARGEFILES
 LFS_CFLAGS = -D_FILE_OFFSET_BITS=64
 endif
 
-LDFLAGS     =  $(LIBPATH) $(LINK_FLAGS) $(LD_SEARCH_FLAGS) $(PQLIBPATH)
+LDFLAGS     =  $(LIBPATH) $(LINK_FLAGS) $(LD_SEARCH_FLAGS) $(PQLIBPATH) $(PQLIB)
 VECT_CFLAGS =  $(GDALCFLAGS) $(GEOSCFLAGS)
 
 # Object with _fmode which must be linked to each executable on Windows

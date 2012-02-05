@@ -1,14 +1,14 @@
 /*!
-   \file lib/vector/Vlib/rewind.c
+   \file lib/vector/Vlib/rewind_ogr.c
 
-   \brief Vector library - rewind data (native format)
+   \brief Vector library - rewind data (OGR)
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek, Piero Cavalieri 
 */
@@ -21,7 +21,7 @@
 #endif
 
 /*!
-  \brief Rewind vector data file to cause reads to start at
+  \brief Rewind vector map (OGR layer) to cause reads to start at
   beginning (level 1)
 
   \param Map pointer to Map_info structure
@@ -33,10 +33,14 @@ int V1_rewind_ogr(struct Map_info *Map)
 {
     G_debug(2, "V1_rewind_ogr(): name = %s", Map->name);
 #ifdef HAVE_OGR
-    Map->fInfo.ogr.lines_num = 0;
-    Map->fInfo.ogr.lines_next = 0;
+    struct Format_info_ogr *ogr_info;
 
-    OGR_L_ResetReading(Map->fInfo.ogr.layer);
+    ogr_info = &(Map->fInfo.ogr);
+    
+    ogr_info->cache.lines_num = 0;
+    ogr_info->cache.lines_next = 0;
+
+    OGR_L_ResetReading(ogr_info->layer);
 
     return 0;
 #else
@@ -46,9 +50,9 @@ int V1_rewind_ogr(struct Map_info *Map)
 }
 
 /*!
-  \brief Rewind vector data file to cause reads to start at
-  beginning (level 2)
-
+  \brief Rewind vector map (OGR layer) to cause reads to start at
+  beginning on topological level (level 2)
+  
   \param Map pointer to Map_info structure
 
   \return 0 on success

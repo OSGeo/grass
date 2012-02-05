@@ -160,10 +160,10 @@ int Vect_write_header(const struct Map_info *);
 const char *Vect_get_name(const struct Map_info *);
 const char *Vect_get_mapset(const struct Map_info *);
 const char *Vect_get_full_name(const struct Map_info *);
-const char *Vect_get_ogr_dsn_name(const struct Map_info *);
-const char *Vect_get_ogr_layer_name(const struct Map_info *);
-const char *Vect_get_ogr_format_info(const struct Map_info *);
-const char *Vect_get_ogr_geometry_type(const struct Map_info *);
+const char *Vect_get_finfo_dsn_name(const struct Map_info *);
+const char *Vect_get_finfo_layer_name(const struct Map_info *);
+const char *Vect_get_finfo_format_info(const struct Map_info *);
+const char *Vect_get_finfo_geometry_type(const struct Map_info *);
 int Vect_is_3d(const struct Map_info *);
 int Vect_set_organization(struct Map_info *, const char *);
 const char *Vect_get_organization(const struct Map_info *);
@@ -436,8 +436,9 @@ int Vect_write_ascii(FILE *, FILE *, struct Map_info *, int,
 void Vect_write_ascii_head(FILE *, struct Map_info *);
 
 /* Simple Features */
-int Vect_sfa_get_line_type(const struct line_pnts *, int, int);
-int Vect_sfa_check_line_type(const struct line_pnts *, int, int, int);
+SF_FeatureType Vect_sfa_get_line_type(const struct line_pnts *, int, int);
+int Vect_sfa_get_type(SF_FeatureType);
+int Vect_sfa_check_line_type(const struct line_pnts *, int, SF_FeatureType, int);
 int Vect_sfa_line_dimension(int);
 char *Vect_sfa_line_geometry_type(const struct line_pnts *, int);
 int Vect_sfa_line_astext(const struct line_pnts *, int, int, int, FILE *);
@@ -461,22 +462,31 @@ int Vect_save_sidx(struct Map_info *);
 int Vect_sidx_dump(struct Map_info *, FILE *);
 int Vect_build_sidx_from_topo(struct Map_info *);
 int Vect_build_sidx(struct Map_info *);
+int Vect_open_fidx(struct Map_info *, struct Format_info_offset *);
+int Vect_save_fidx(struct Map_info *, struct Format_info_offset *);
 
 int Vect__write_head(const struct Map_info *);
 int Vect__read_head(struct Map_info *);
 int V1_open_old_nat(struct Map_info *, int);
 int V1_open_old_ogr(struct Map_info *, int);
+int V1_open_old_pg(struct Map_info *, int);
 int V2_open_old_ogr(struct Map_info *);
+int V2_open_old_pg(struct Map_info *);
 int V1_open_new_nat(struct Map_info *, const char *, int);
 int V1_open_new_ogr(struct Map_info *, const char *, int);
+int V1_open_new_pg(struct Map_info *, const char *, int);
 int V2_open_new_ogr(struct Map_info *, int);
 int V1_rewind_nat(struct Map_info *);
 int V1_rewind_ogr(struct Map_info *);
+int V1_rewind_pg(struct Map_info *);
 int V2_rewind_nat(struct Map_info *);
 int V2_rewind_ogr(struct Map_info *);
+int V2_rewind_pg(struct Map_info *);
 int V1_close_nat(struct Map_info *);
 int V1_close_ogr(struct Map_info *);
+int V1_close_pg(struct Map_info *);
 int V2_close_ogr(struct Map_info *);
+int V2_close_pg(struct Map_info *);
 
 /* Read/write lines */
 int V1_read_line_nat(struct Map_info *, struct line_pnts *,
@@ -487,14 +497,20 @@ int V1_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V1_read_next_line_ogr(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
+int V1_read_next_line_pg(struct Map_info *, struct line_pnts *,
+			 struct line_cats *);
 int V2_read_line_nat(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, int);
 int V2_read_line_ogr(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, int);
+int V2_read_line_pg(struct Map_info *, struct line_pnts *,
+		    struct line_cats *, int);
 int V2_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
+int V2_read_next_line_pg(struct Map_info *, struct line_pnts *,
+			 struct line_cats *);
 int V1_delete_line_nat(struct Map_info *, off_t);
 int V2_delete_line_nat(struct Map_info *, int);
 int V1_delete_line_ogr(struct Map_info *, off_t);
@@ -520,7 +536,9 @@ off_t V2_rewrite_line_ogr(struct Map_info *, int, int, off_t,
 
     /* Build topology */
 int Vect_build_nat(struct Map_info *, int);
+int Vect__build_sfa(struct Map_info *, int);
 int Vect_build_ogr(struct Map_info *, int);
+int Vect_build_pg(struct Map_info *, int);
 int Vect_build_line_area(struct Map_info *, int, int);
 int Vect_isle_find_area(struct Map_info *, int);
 int Vect_attach_isle(struct Map_info *, int);

@@ -5,10 +5,10 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2010 by the GRASS Development Team
+   (C) 2001-2010, 2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -22,7 +22,13 @@
 
 #define SEP "-----------------------------------\n"
 
-#ifndef HAVE_OGR
+static int build_dummy()
+{
+    G_warning(_("Not implemented"));
+    return -1;
+}
+
+#if !defined HAVE_OGR || !defined HAVE_POSTGRES
 static int format()
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -33,11 +39,16 @@ static int format()
 static int (*Build_array[]) () = {
     Vect_build_nat
 #ifdef HAVE_OGR
-	, Vect_build_ogr
-	, Vect_build_ogr
+    , Vect_build_ogr
+    , Vect_build_ogr
 #else
-	, format
-        , format
+    , format
+    , format
+#endif
+#ifdef HAVE_POSTGRES
+    , Vect_build_pg
+#else
+    , format
 #endif
 };
 
@@ -699,7 +710,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
     if (Map->format != GV_FORMAT_OGR_DIRECT)
 	Map->support_updated = 1;
 
-    if (Map->plus.Spidx_built == 0)
+    if (Map->plus.Spidx_built == FALSE)
 	Vect_open_sidx(Map, 2);
 
     plus = &(Map->plus);

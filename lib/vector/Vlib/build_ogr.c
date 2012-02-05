@@ -4,15 +4,11 @@
    \brief Vector library - Building topology for OGR
 
    Higher level functions for reading/writing/manipulating vectors.
-
-   Line offset is
-    - centroids   : FID
-    - other types : index of the first record (which is FID) in offset array.
- 
+   
    Category: FID, not all layer have FID, OGRNullFID is defined
    (5/2004) as -1, so FID should be only >= 0
 
-   (C) 2001-2010 by the GRASS Development Team
+   (C) 2001-2010, 2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -29,312 +25,10 @@
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
-
-/*! 
-  \brief This structure keeps info about geometry parts above
-  current geometry, path to curent geometry in the * feature. First
-  'part' number however is feature Id
-*/
-typedef struct
-{
-    int *part;
-    int a_parts;
-    int n_parts;
-} GEOM_PARTS;
-
-/*!
-  \brief Init parts
-*/
-static void init_parts(GEOM_PARTS * parts)
-{
-    parts->part = NULL;
-    parts->a_parts = parts->n_parts = 0;
-}
-
-/*!
-  \brief Reset parts
-*/
-static void reset_parts(GEOM_PARTS * parts)
-{
-    parts->n_parts = 0;
-}
-
-/*!
-  \brief Free parts
-*/
-static void free_parts(GEOM_PARTS * parts)
-{
-    G_free(parts->part);
-    parts->a_parts = parts->n_parts = 0;
-}
-
-/*!
-  \brief Add new part number to parts
-*/
-static void add_part(GEOM_PARTS * parts, int part)
-{
-    if (parts->a_parts == parts->n_parts) {
-	parts->a_parts += 10;
-	parts->part =
-	    (int *)G_realloc((void *)parts->part,
-			     parts->a_parts * sizeof(int));
-    }
-    parts->part[parts->n_parts] = part;
-    parts->n_parts++;
-}
-
-/*!
-  \brief Remove last part
-*/
-static void del_part(GEOM_PARTS * parts)
-{
-    parts->n_parts--;
-}
-
-/*!
-  \brief Add parts to offset
-*/
-static void add_parts_to_offset(struct Map_info *Map, GEOM_PARTS * parts)
-{
-    int i, j;
-
-    if (Map->fInfo.ogr.offset_num + parts->n_parts >=
-	Map->fInfo.ogr.offset_alloc) {
-	Map->fInfo.ogr.offset_alloc += parts->n_parts + 1000;
-	Map->fInfo.ogr.offset = (int *)G_realloc(Map->fInfo.ogr.offset,
-						 Map->fInfo.ogr.offset_alloc *
-						 sizeof(int));
-    }
-    j = Map->fInfo.ogr.offset_num;
-    for (i = 0; i < parts->n_parts; i++) {
-	G_debug(4, "add offset %d", parts->part[i]);
-	Map->fInfo.ogr.offset[j] = parts->part[i];
-	j++;
-    }
-    Map->fInfo.ogr.offset_num += parts->n_parts;
-}
-
-/*!
-  \brief Add line to support structures
-*/
-static int add_line(struct Map_info *Map, int type, struct line_pnts *Points,
-		    int FID, GEOM_PARTS * parts)
-{
-    int line;
-    struct Plus_head *plus;
-    long offset;
-    struct bound_box box;
-
-    plus = &(Map->plus);
-
-    if (type != GV_CENTROID) {
-	/* beginning in the offset array */
-	offset = Map->fInfo.ogr.offset_num;
-    }
-    else {
-	/* TODO : could be used to statore category ? */
-	/* because centroids are read from topology, not from layer */
-	offset = FID; 
-    }
-    G_debug(4, "Register line: FID = %d offset = %ld", FID, offset);
-    dig_line_box(Points, &box);
-    line = dig_add_line(plus, type, Points, &box, offset);
-    G_debug(4, "Line registered with line = %d", line);
-
-    /* Set box */
-    if (line == 1)
-	Vect_box_copy(&(plus->box), &box);
-    else
-	Vect_box_extend(&(plus->box), &box);
-
-    if (type != GV_BOUNDARY) {
-	dig_cidx_add_cat(plus, 1, (int)FID, line, type);
-    }
-    else {
-	dig_cidx_add_cat(plus, 0, 0, line, type);
-    }
-
-    if (type != GV_CENTROID)	/* because centroids are read from topology, not from layer */
-	add_parts_to_offset(Map, parts);
-
-    return line;
-}
-
-/*!
-  \brief Recursively add geometry to topology
-*/
-static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID, int build,
-			GEOM_PARTS * parts)
-{
-    struct Plus_head *plus;
-    int i, ret;
-    int line;
-    int area, isle, outer_area = 0;
-    int lines[1];
-    static struct line_pnts **Points = NULL;
-    static int alloc_points = 0;
-    struct bound_box box;
-    struct P_line *Line;
-    double area_size, x, y;
-    int eType, nRings, iPart, nParts, nPoints;
-    OGRGeometryH hGeom2, hRing;
-
-    G_debug(4, "add_geometry() FID = %d", FID);
-    plus = &(Map->plus);
-
-    if (!Points) {
-	alloc_points = 1;
-	Points = (struct line_pnts **)G_malloc(sizeof(struct line_pnts *));
-	Points[0] = Vect_new_line_struct();
-    }
-    Vect_reset_line(Points[0]);
-
-    eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
-    G_debug(4, "OGR type = %d", eType);
-
-    switch (eType) {
-    case wkbPoint:
-	G_debug(4, "Point");
-	Vect_append_point(Points[0], OGR_G_GetX(hGeom, 0),
-			  OGR_G_GetY(hGeom, 0), OGR_G_GetZ(hGeom, 0));
-	add_line(Map, GV_POINT, Points[0], FID, parts);
-	break;
-
-    case wkbLineString:
-	G_debug(4, "LineString");
-	nPoints = OGR_G_GetPointCount(hGeom);
-	for (i = 0; i < nPoints; i++) {
-	    Vect_append_point(Points[0],
-			      OGR_G_GetX(hGeom, i), OGR_G_GetY(hGeom, i),
-			      OGR_G_GetZ(hGeom, i));
-	}
-	add_line(Map, GV_LINE, Points[0], FID, parts);
-	break;
-
-    case wkbPolygon:
-	G_debug(4, "Polygon");
-
-	nRings = OGR_G_GetGeometryCount(hGeom);
-	G_debug(4, "Number of rings: %d", nRings);
-
-	/* Alloc space for islands */
-	if (nRings >= alloc_points) {
-	    Points = (struct line_pnts **)G_realloc((void *)Points,
-						    nRings *
-						    sizeof(struct line_pnts
-							   *));
-	    for (i = alloc_points; i < nRings; i++) {
-		Points[i] = Vect_new_line_struct();
-	    }
-	}
-
-	for (iPart = 0; iPart < nRings; iPart++) {
-	    hRing = OGR_G_GetGeometryRef(hGeom, iPart);
-	    nPoints = OGR_G_GetPointCount(hRing);
-	    G_debug(4, "  ring %d : nPoints = %d", iPart, nPoints);
-
-
-	    Vect_reset_line(Points[iPart]);
-	    for (i = 0; i < nPoints; i++) {
-		Vect_append_point(Points[iPart],
-				  OGR_G_GetX(hRing, i), OGR_G_GetY(hRing, i),
-				  OGR_G_GetZ(hRing, i));
-	    }
-
-	    /* register boundary */
-	    add_part(parts, iPart);
-	    line = add_line(Map, GV_BOUNDARY, Points[iPart], FID, parts);
-	    del_part(parts);
-
-	    if (build < GV_BUILD_AREAS)
-		continue;
-	    
-	    /* add area (each inner ring is also area) */
-	    dig_line_box(Points[iPart], &box);
-	    dig_find_area_poly(Points[iPart], &area_size);
-
-	    if (area_size > 0)	        /* area clockwise */
-		lines[0] = line;
-	    else
-		lines[0] = -line;
-
-	    area = dig_add_area(plus, 1, lines, &box);
-
-	    /* Each area is also isle */
-	    lines[0] = -lines[0];	/* island is counter clockwise */
-
-	    isle = dig_add_isle(plus, 1, lines, &box);
-
-	    if (build < GV_BUILD_ATTACH_ISLES)
-		continue;
-	    
-	    if (iPart == 0) {	/* outer ring */
-		outer_area = area;
-	    }
-	    else {		/* inner ring */
-		struct P_isle *Isle;
-
-		Isle = plus->Isle[isle];
-		Isle->area = outer_area;
-
-		dig_area_add_isle(plus, outer_area, isle);
-	    }
-	}
-	
-	if (build >= GV_BUILD_CENTROIDS) {
-	    /* create virtual centroid */
-	    ret = Vect_get_point_in_poly_isl((const struct line_pnts *) Points[0],
-					     (const struct line_pnts **) Points + 1,
-					     nRings - 1, &x, &y);
-	    if (ret < -1) {
-		G_warning(_("Unable to calculate centroid for area %d"),
-			  outer_area);
-	    }
-	    else {
-		struct P_area *Area;
-		struct P_topo_c *topo;
-		
-		G_debug(4, "  Centroid: %f, %f", x, y);
-		Vect_reset_line(Points[0]);
-		Vect_append_point(Points[0], x, y, 0.0);
-		line = add_line(Map, GV_CENTROID, Points[0], FID, parts);
-		
-		Line = plus->Line[line];
-		topo = (struct P_topo_c *)Line->topo;
-		topo->area = outer_area;
-		
-		/* register centroid to area */
-		Area = plus->Area[outer_area];
-		Area->centroid = line;
-	    }
-	}
-	break;
-
-    case wkbMultiPoint:
-    case wkbMultiLineString:
-    case wkbMultiPolygon:
-    case wkbGeometryCollection:
-	nParts = OGR_G_GetGeometryCount(hGeom);
-	G_debug(4, "%d geoms -> next level", nParts);
-	for (i = 0; i < nParts; i++) {
-	    add_part(parts, i);
-	    hGeom2 = OGR_G_GetGeometryRef(hGeom, i);
-	    add_geometry(Map, hGeom2, FID, build, parts);
-	    del_part(parts);
-	}
-	break;
-
-    default:
-	G_warning(_("OGR feature type %d not supported"), eType);
-	break;
-    }
-
-    return 0;
-}
 #endif
 
 /*!
-   \brief Build pseudo-topology for OGR layer
+   \brief Build pseudo-topology (simple features) for OGR layer
 
    Build levels:
     - GV_BUILD_NONE
@@ -352,137 +46,120 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID, int b
 int Vect_build_ogr(struct Map_info *Map, int build)
 {
 #ifdef HAVE_OGR
-    int iFeature, FID, line;
     struct Plus_head *plus;
-    struct P_line *Line;
-    
-    GEOM_PARTS parts;
-    OGRFeatureH hFeature;
-    OGRGeometryH hGeom;
+    struct Format_info_ogr *ogr_info;
 
-    G_debug(1, "Vect_build_ogr(): dsn=%s layer=%s, build=%d",
-	    Map->fInfo.ogr.dsn, Map->fInfo.ogr.layer_name, build);
+    plus     = &(Map->plus);
+    ogr_info = &(Map->fInfo.ogr);
     
-    plus = &(Map->plus);
+    G_debug(1, "Vect_build_ogr(): dsn='%s' layer='%s', build=%d",
+	    ogr_info->dsn, ogr_info->layer_name, build);
+    
     if (build == plus->built)
 	return 1;		/* do nothing */
     
-    /* TODO move this init to better place (Vect_open_ ?), because in theory build may be reused on level2 */
+    /* TODO move this init to better place (Vect_open_ ?), because in
+       theory build may be reused on level2 */
     if (build >= plus->built && build > GV_BUILD_BASE) {
-	G_free((void *) Map->fInfo.ogr.offset);
-	Map->fInfo.ogr.offset = NULL;
-	Map->fInfo.ogr.offset_num = 0;
-	Map->fInfo.ogr.offset_alloc = 0;
+	G_free((void *) ogr_info->offset.array);
+	G_zero(&(ogr_info->offset), sizeof(struct Format_info_offset));
     }
-    if (!Map->fInfo.ogr.layer) {
+
+    if (!ogr_info->layer) {
 	G_warning(_("Empty OGR layer, nothing to build"));
 	return 0;
     }
     
-    if (OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCTransactions))
-	OGR_L_CommitTransaction(Map->fInfo.ogr.layer);
+    if (OGR_L_TestCapability(ogr_info->layer, OLCTransactions))
+	OGR_L_CommitTransaction(ogr_info->layer);
 
     /* test layer capabilities */
-    if (!OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCRandomRead)) {
+    if (!OGR_L_TestCapability(ogr_info->layer, OLCRandomRead)) {
 	G_warning(_("Random read is not supported by OGR for this layer, "
 		    "unable to build topology"));
 	return 0;
     }
 
     G_message(_("Using external data format '%s' (feature type '%s')"),
-	      Vect_get_ogr_format_info(Map),
-	      Vect_get_ogr_geometry_type(Map));
+	      Vect_get_finfo_format_info(Map),
+	      Vect_get_finfo_geometry_type(Map));
     
-    /* initialize data structures */
-    init_parts(&parts);
+    return Vect__build_sfa(Map, build);
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return 0;
+#endif
+}
 
-    /* Check if upgrade or downgrade */
-    if (build < plus->built) {	/* lower level request, currently only GV_BUILD_NONE */
-	if (plus->built >= GV_BUILD_CENTROIDS && build < GV_BUILD_CENTROIDS) {
-	    /* reset info about areas stored for centroids */
-	    int nlines = Vect_get_num_lines(Map);
-	    
-	    for (line = 1; line <= nlines; line++) {
-		Line = plus->Line[line];
-		if (Line && Line->type == GV_CENTROID) {
-		    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
-		    topo->area = 0;
-		}
-	    }
-	    dig_free_plus_areas(plus);
-	    dig_spidx_free_areas(plus);
-	    dig_free_plus_isles(plus);
-	    dig_spidx_free_isles(plus);
-	}
-	
-	if (plus->built >= GV_BUILD_AREAS && build < GV_BUILD_AREAS) {
-	    /* reset info about areas stored for lines */
-	    int nlines = Vect_get_num_lines(Map);
+/*!
+   \brief Save feature index file for vector map
 
-	    for (line = 1; line <= nlines; line++) {
-		Line = plus->Line[line];
-		if (Line && Line->type == GV_BOUNDARY) {
-		    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
-		    topo->left = 0;
-		    topo->right = 0;
-		}
-	    }
-	    dig_free_plus_areas(plus);
-	    dig_spidx_free_areas(plus);
-	    dig_free_plus_isles(plus);
-	    dig_spidx_free_isles(plus);
-	}
+   \param Map pointer to Map_info structure
+   \param offset pointer to Format_info_offset struct
+   (see Format_info_ogr and Format_info_pg struct for implementation issues)
 
-	if (plus->built >= GV_BUILD_BASE && build < GV_BUILD_BASE) {
-	    dig_free_plus_nodes(plus);
-	    dig_spidx_free_nodes(plus);
-	    dig_free_plus_lines(plus);
-	    dig_spidx_free_lines(plus);
-	}
+   \return 1 on success
+   \return 0 on error
+ */
+int Vect_save_fidx(struct Map_info *Map,
+		   struct Format_info_offset *offset)
+{
+#ifdef HAVE_OGR
+    char fname[GPATH_MAX], elem[GPATH_MAX];
+    char buf[5];
+    long length;
+    struct gvfile fp;
+    struct Port_info port;
+
+    if (strcmp(Map->mapset, G_mapset()) != 0 ||
+	Map->support_updated == FALSE ||
+	Map->plus.built != GV_BUILD_ALL)
+	return 1;
+    
+    length = 9;
+
+    sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
+    G_file_name(fname, elem, GV_FIDX_ELEMENT, Map->mapset);
+    G_debug(4, "Open fidx: %s", fname);
+    dig_file_init(&fp);
+    fp.file = fopen(fname, "w");
+    if (fp.file == NULL) {
+	G_warning(_("Unable to open fidx file for write <%s>"), fname);
+	return 0;
     }
-    else {
-	if (plus->built < GV_BUILD_BASE) {
-	    /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
-	    OGR_L_ResetReading(Map->fInfo.ogr.layer);
-	    iFeature = 0;
-	    while ((hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer)) != NULL) {
-		iFeature++;
-		
-		G_debug(3, "   Feature %d", iFeature);
-		
-		hGeom = OGR_F_GetGeometryRef(hFeature);
-		if (hGeom == NULL) {
-		    G_warning(_("Feature %d without geometry ignored"), iFeature);
-		    OGR_F_Destroy(hFeature);
-		    continue;
-		}
-		
-		FID = (int)OGR_F_GetFID(hFeature);
-		if (FID == OGRNullFID) {
-		    G_warning(_("OGR feature %d without ID ignored"), iFeature);
-		    OGR_F_Destroy(hFeature);
-		    continue;
-		}
-		G_debug(4, "    FID = %d", FID);
-		
-		reset_parts(&parts);
-		add_part(&parts, FID);
-		add_geometry(Map, hGeom, FID, build, &parts);
-		
-		OGR_F_Destroy(hFeature);
-	    } /* while */
-	    
-	    plus->built = GV_BUILD_BASE;
-	}
-    }
+    
+    dig_init_portable(&port, dig__byte_order_out());
+    dig_set_cur_port(&port);
+    
+    /* Header */
+    /* bytes 1 - 5 */
+    buf[0] = 5;
+    buf[1] = 0;
+    buf[2] = 5;
+    buf[3] = 0;
+    buf[4] = (char)dig__byte_order_out();
+    if (0 >= dig__fwrite_port_C(buf, 5, &fp))
+	return 0;
+    
+    /* bytes 6 - 9 : header size */
+    if (0 >= dig__fwrite_port_L(&length, 1, &fp))
+	return 0;
+    
+    /* Body */
+    /* number of records  */
+    if (0 >= dig__fwrite_port_I(&(offset->array_num), 1, &fp))
+	return 0;
+    
+    /* offsets */
+    if (0 >= dig__fwrite_port_I(offset->array,
+				offset->array_num, &fp))
+	return 0;
+    
+    fclose(fp.file);
 
-    free_parts(&parts);
-    
-    plus->built = build;
-    
     return 1;
 #else
     G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
+    return 0;
 #endif
 }

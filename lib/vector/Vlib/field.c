@@ -9,7 +9,7 @@
   OGR_L_GetFIDColumn() is working or solution found if FID not
   available
   
-  (C) 2001-2009, 2011 by the GRASS Development Team
+  (C) 2001-2009, 2011-2012 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
@@ -38,6 +39,7 @@
   \brief Create and init new dblinks structure
   
   \return pointer to new dblinks structure
+  \return NULL on failure
  */
 struct dblinks *Vect_new_dblinks_struct(void)
 {
@@ -46,15 +48,15 @@ struct dblinks *Vect_new_dblinks_struct(void)
     p = (struct dblinks *)G_malloc(sizeof(struct dblinks));
 
     if (p) {
-	p->alloc_fields = p->n_fields = 0;
-	p->field = NULL;
+	/* initialize members */
+	G_zero(p, sizeof(struct dblinks));
     }
 
     return p;
 }
 
 /*!
-  \brief Reset dblinks structure
+  \brief Reset dblinks structure (number of fields)
 
   \param p pointer to existing dblinks structure
 */
@@ -549,17 +551,7 @@ int Vect_get_field_number(const struct Map_info *Map, const char *field)
     return atoi(field);
 }
 
-/*!
-  \brief Read dblinks to existing structure.
-  
-  Variables are not substituted by values.
-  
-  \param Map pointer to Map_info structure
-
-  \return number of links read
-  \return -1 on error
- */
-int Vect_read_dblinks(struct Map_info *Map)
+static int read_dblinks_nat(struct Map_info *Map)
 {
     FILE *fd;
     char file[1024], buf[2001];
@@ -571,58 +563,141 @@ int Vect_read_dblinks(struct Map_info *Map)
     char **tokens;
     int ntok, i;
 
-    G_debug(1, "Vect_read_dblinks(): map = %s, mapset = %s", Map->name,
-	    Map->mapset);
-
     dbl = Map->dblnk;
-    Vect_reset_dblinks(dbl);
 
-    G_debug(3, "Searching for FID column in OGR DB");
-    if (Map->format & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
+    /* Read dblink for native format */
+    sprintf(file, "%s/%s/%s/%s/%s/%s", Map->gisdbase, Map->location,
+	    Map->mapset, GV_DIRECTORY, Map->name,
+	    GV_DBLN_ELEMENT);
+    G_debug(1, "dbln file: %s", file);
 
-#ifndef HAVE_OGR
-	G_warning(_("GRASS is not compiled with OGR support"));
+    fd = fopen(file, "r");
+    if (fd == NULL) {		/* This may be correct, no tables defined */
+	G_debug(1, "Cannot open vector database definition file");
+	return (-1);
+    }
+
+    row = 0;
+    rule = 0;
+    while (G_getl2(buf, 2000, fd)) {
+	row++;
+	G_chop(buf);
+	G_debug(1, "dbln: %s", buf);
+
+	c = (char *)strchr(buf, '#');
+	if (c != NULL)
+	    *c = '\0';
+
+	if (strlen(buf) == 0)
+	    continue;
+
+#ifdef NOT_ABLE_TO_READ_GRASS_6
+	int ndef;
+	ndef = sscanf(buf, "%s|%s|%s|%s|%s", fldstr, tab, col, db, drv);
+
+        if (ndef < 2 || (ndef < 5 && rule < 1)) {
+            G_warning(_("Error in rule on row %d in <%s>"), row, file);
+            continue;
+        }
 #else
-#if GDAL_VERSION_NUM > 1320 && HAVE_OGR /* seems to be fixed after 1320 release */
-	int nLayers;
-	char *ogr_fid_col;
+	tokens = G_tokenize(buf, " |");
+	ntok = G_number_of_tokens(tokens);
 
-	G_debug(3, "GDAL_VERSION_NUM: %d", GDAL_VERSION_NUM);
-
-	if (Map->fInfo.ogr.ds == NULL) {
-	    /* open the connection to fetch the FID column name */
-	    OGRRegisterAll();
-
-	    /* data source handle */
-	    Map->fInfo.ogr.ds = OGROpen(Map->fInfo.ogr.dsn, FALSE, NULL);
-	    if (Map->fInfo.ogr.ds == NULL)
-		G_fatal_error(_("Unable to open OGR data source '%s'"),
-			      Map->fInfo.ogr.dsn);
+	if (ntok < 2 || (ntok < 5 && rule < 1)) {
+	    G_warning(_("Error in rule on row %d in <%s>"), row, file);
+	    continue;
 	}
-	if (Map->fInfo.ogr.layer == NULL) {
-	    /* get layer number */
-	    nLayers = OGR_DS_GetLayerCount(Map->fInfo.ogr.ds);	/* Layers = Maps in OGR DB */
-	    
-	    G_debug(3, "%d layers (maps) found in data source", nLayers);
-	    
-	    G_debug(3, "Trying to open OGR layer: %s", Map->fInfo.ogr.layer_name);
-	    if (Map->fInfo.ogr.layer_name) {
-		Map->fInfo.ogr.layer = OGR_DS_GetLayerByName(Map->fInfo.ogr.ds, Map->fInfo.ogr.layer_name);
-		if (Map->fInfo.ogr.layer == NULL) {
-		    OGR_DS_Destroy(Map->fInfo.ogr.ds);
-		    Map->fInfo.ogr.ds = NULL;
-		    G_fatal_error(_("Unable to open OGR layer <%s>"),
-				  Map->fInfo.ogr.layer_name);
+
+	strcpy(fldstr, tokens[0]);
+	strcpy(tab, tokens[1]);
+	if (ntok > 2) {
+	    strcpy(col, tokens[2]);
+	    if (ntok > 3) {
+		strcpy(db, tokens[3]);
+		/* allow for spaces in path names */
+		for (i=4; i < ntok-1; i++) {
+		    strcat(db, " ");
+		    strcat(db, tokens[i]);
 		}
+
+		strcpy(drv, tokens[ntok-1]);
 	    }
 	}
+	G_free_tokens(tokens);
+#endif
 
-	/* get fid column */
-	ogr_fid_col = G_store(OGR_L_GetFIDColumn(Map->fInfo.ogr.layer));
-	G_debug(3, "Using FID column <%s> in OGR DB", ogr_fid_col);
-	Vect_add_dblink(dbl, 1,  Map->fInfo.ogr.layer_name,
-			Map->fInfo.ogr.layer_name, ogr_fid_col,
-			Map->fInfo.ogr.dsn, "ogr");
+	/* get field and field name */
+	fldname = strchr(fldstr, '/');
+	if (fldname != NULL) {	/* field has name */
+	    fldname[0] = 0;
+	    fldname++;
+	}
+	fld = atoi(fldstr);
+
+	Vect_add_dblink(dbl, fld, fldname, tab, col, db, drv);
+
+	G_debug(1,
+		"field = %d name = %s, table = %s, key = %s, database = %s, driver = %s",
+		fld, fldname, tab, col, db, drv);
+
+	rule++;
+    }
+    fclose(fd);
+
+    G_debug(1, "Dblinks read");
+    
+    return rule;
+}
+
+static int read_dblinks_ogr(struct Map_info *Map)
+{
+    struct dblinks *dbl;
+    
+    dbl = Map->dblnk;
+    G_debug(3, "Searching for FID column in OGR DB");
+#ifndef HAVE_OGR
+    G_warning(_("GRASS is not compiled with OGR support"));
+#else
+#if GDAL_VERSION_NUM > 1320 && HAVE_OGR /* seems to be fixed after 1320 release */
+    int nLayers;
+    char *ogr_fid_col;
+    
+    G_debug(3, "GDAL_VERSION_NUM: %d", GDAL_VERSION_NUM);
+    
+    if (Map->fInfo.ogr.ds == NULL) {
+	/* open the connection to fetch the FID column name */
+	OGRRegisterAll();
+	
+	/* data source handle */
+	Map->fInfo.ogr.ds = OGROpen(Map->fInfo.ogr.dsn, FALSE, NULL);
+	if (Map->fInfo.ogr.ds == NULL)
+	    G_fatal_error(_("Unable to open OGR data source '%s'"),
+			  Map->fInfo.ogr.dsn);
+    }
+    if (Map->fInfo.ogr.layer == NULL) {
+	/* get layer number */
+	nLayers = OGR_DS_GetLayerCount(Map->fInfo.ogr.ds);	/* Layers = Maps in OGR DB */
+	
+	G_debug(3, "%d layers (maps) found in data source", nLayers);
+	
+	G_debug(3, "Trying to open OGR layer: %s", Map->fInfo.ogr.layer_name);
+	if (Map->fInfo.ogr.layer_name) {
+	    Map->fInfo.ogr.layer = OGR_DS_GetLayerByName(Map->fInfo.ogr.ds, Map->fInfo.ogr.layer_name);
+	    if (Map->fInfo.ogr.layer == NULL) {
+		OGR_DS_Destroy(Map->fInfo.ogr.ds);
+		Map->fInfo.ogr.ds = NULL;
+		G_fatal_error(_("Unable to open OGR layer <%s>"),
+			      Map->fInfo.ogr.layer_name);
+	    }
+	}
+    }
+    
+    /* get fid column */
+    ogr_fid_col = G_store(OGR_L_GetFIDColumn(Map->fInfo.ogr.layer));
+    G_debug(3, "Using FID column <%s> in OGR DB", ogr_fid_col);
+    Vect_add_dblink(dbl, 1,  Map->fInfo.ogr.layer_name,
+		    Map->fInfo.ogr.layer_name, ogr_fid_col,
+		    Map->fInfo.ogr.dsn, "ogr");
 #else
 	dbDriver *driver;
 	dbCursor cursor;
@@ -728,94 +803,65 @@ int Vect_read_dblinks(struct Map_info *Map)
 	    }
 	}
 #endif /* GDAL_VERSION_NUM > 1320 && HAVE_OGR */
-	return (1);
+	return 1;
 #endif	/* HAVE_GDAL */
+}
+
+static int read_dblinks_pg(struct Map_info *Map)
+{
+#ifdef HAVE_POSTGRES
+    struct dblinks *dbl;
+    struct Format_info_pg *pg_info;
+    
+    dbl = Map->dblnk;
+    pg_info = &(Map->fInfo.pg);
+    
+    if (!pg_info->fid_column) {
+	G_warning(_("No FID column defined"));
+	return -1;
     }
-    else if (Map->format != GV_FORMAT_NATIVE) {
-	G_fatal_error(_("Don't know how to read links for format %d"),
-		      Map->format);
-    }
-
-    sprintf(file, "%s/%s/%s/%s/%s/%s", Map->gisdbase, Map->location,
-	    Map->mapset, GV_DIRECTORY, Map->name,
-	    GV_DBLN_ELEMENT);
-    G_debug(1, "dbln file: %s", file);
-
-    fd = fopen(file, "r");
-    if (fd == NULL) {		/* This may be correct, no tables defined */
-	G_debug(1, "Cannot open vector database definition file");
-	return (-1);
-    }
-
-    row = 0;
-    rule = 0;
-    while (G_getl2(buf, 2000, fd)) {
-	row++;
-	G_chop(buf);
-	G_debug(1, "dbln: %s", buf);
-
-	c = (char *)strchr(buf, '#');
-	if (c != NULL)
-	    *c = '\0';
-
-	if (strlen(buf) == 0)
-	    continue;
-
-#ifdef NOT_ABLE_TO_READ_GRASS_6
-	int ndef;
-	ndef = sscanf(buf, "%s|%s|%s|%s|%s", fldstr, tab, col, db, drv);
-
-        if (ndef < 2 || (ndef < 5 && rule < 1)) {
-            G_warning(_("Error in rule on row %d in <%s>"), row, file);
-            continue;
-        }
+    G_debug(3, "Using FID column <%s>", pg_info->fid_column);
+    Vect_add_dblink(dbl, 1, pg_info->table_name,
+		    pg_info->table_name, pg_info->fid_column,
+		    pg_info->db_name, "pg");
+    return 1;
 #else
-	tokens = G_tokenize(buf, " |");
-	ntok = G_number_of_tokens(tokens);
-
-	if (ntok < 2 || (ntok < 5 && rule < 1)) {
-	    G_warning(_("Error in rule on row %d in <%s>"), row, file);
-	    continue;
-	}
-
-	strcpy(fldstr, tokens[0]);
-	strcpy(tab, tokens[1]);
-	if (ntok > 2) {
-	    strcpy(col, tokens[2]);
-	    if (ntok > 3) {
-		strcpy(db, tokens[3]);
-		/* allow for spaces in path names */
-		for (i=4; i < ntok-1; i++) {
-		    strcat(db, " ");
-		    strcat(db, tokens[i]);
-		}
-
-		strcpy(drv, tokens[ntok-1]);
-	    }
-	}
-	G_free_tokens(tokens);
+    G_warning(_("GRASS not compiled with PostgreSQL support"));
+    return -1;
 #endif
+}
 
-	/* get field and field name */
-	fldname = strchr(fldstr, '/');
-	if (fldname != NULL) {	/* field has name */
-	    fldname[0] = 0;
-	    fldname++;
-	}
-	fld = atoi(fldstr);
+/*!
+  \brief Read dblinks to existing structure.
+  
+  Variables are not substituted by values.
+  
+  \param Map pointer to Map_info structure
 
-	Vect_add_dblink(dbl, fld, fldname, tab, col, db, drv);
+  \return number of links read
+  \return -1 on error
+ */
+int Vect_read_dblinks(struct Map_info *Map)
+{
+    G_debug(1, "Vect_read_dblinks(): map = %s, mapset = %s", Map->name,
+	    Map->mapset);
+    
+    Vect_reset_dblinks(Map->dblnk);
 
-	G_debug(1,
-		"field = %d name = %s, table = %s, key = %s, database = %s, driver = %s",
-		fld, fldname, tab, col, db, drv);
-
-	rule++;
+    if (Map->format == GV_FORMAT_NATIVE) {
+	return read_dblinks_nat(Map);
     }
-    fclose(fd);
+    else if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
+	return read_dblinks_ogr(Map);
+    }
+    else if (Map->format == GV_FORMAT_POSTGIS) {
+	return read_dblinks_pg(Map);
+    }
+    else {
+	G_fatal_error(_("Unknown vector map format"));
+    }
 
-    G_debug(1, "Dblinks read");
-    return (rule);
+    return -1;
 }
 
 /*!
