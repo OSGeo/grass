@@ -504,8 +504,10 @@ class AboutWindow(wx.Frame):
         sizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALL | wx.ALIGN_RIGHT, border = 1)
         panel.SetSizer(sizer)
+        
         self.Layout()
-    
+        self.SetMinSize((500, 400))
+        
     def _pageCopyright(self):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
