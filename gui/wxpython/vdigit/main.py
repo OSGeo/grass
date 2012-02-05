@@ -15,7 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 try:
-    from vdigit.wxdigit import IVDigit, GV_LINES
+    from vdigit.wxdigit import IVDigit, GV_LINES, CFUNCTYPE
     haveVDigit = True
     errorMsg   = ''
 except (ImportError, NameError), err:

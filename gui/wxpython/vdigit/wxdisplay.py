@@ -67,11 +67,14 @@ def GetLastError():
     
     return ret
 
-errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
-errfunc = errtype(print_error)
-pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
-perfunc = pertype(print_progress)
-
+try:
+    errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
+    errfunc = errtype(print_error)
+    pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
+    perfunc = pertype(print_progress)
+except NameError:
+    pass
+    
 class DisplayDriver:
     def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
         """!Display driver used by vector digitizer

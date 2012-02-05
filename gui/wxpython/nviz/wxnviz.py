@@ -75,10 +75,13 @@ def print_progress(value):
     
     return 0
 
-errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
-errfunc = errtype(print_error)
-pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
-perfunc = pertype(print_progress)
+try:
+    errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
+    errfunc = errtype(print_error)
+    pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
+    perfunc = pertype(print_progress)
+except NameError:
+    pass
 
 class Nviz(object):
     def __init__(self, glog, gprogress):
