@@ -128,6 +128,9 @@ GRASS_VERSION_SVN=
 AC_PATH_PROG(SVN_VERSION, svnversion, no)
 if test "$SVN_VERSION" != "no" ; then
    GRASS_VERSION_SVN=`$SVN_VERSION -c | cut -f2 -d:`
+   if test "$GRASS_VERSION_SVN" = "exported" ; then
+      GRASS_VERSION_SVN=
+   fi
 fi
 
 AC_SUBST(GRASS_VERSION_FILE)
