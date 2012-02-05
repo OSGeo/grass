@@ -35,8 +35,6 @@ void dig_line_reset_updated(struct Plus_head *Plus)
  */
 void dig_line_add_updated(struct Plus_head *Plus, int line)
 {
-    int i;
-
     G_debug(3, "dig_line_add_updated(): line = %d", line);
 
     /* Check if already in list

@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -23,9 +23,9 @@
 #endif
 
 /*!
-  \brief Close vector map (OGR dsn & layer)
+  \brief Close vector map (OGR dsn & layer) on level 1
 
-  \param Map pointer to Map_info
+  \param Map pointer to Map_info structure
 
   \return 0 on success
   \return non-zero on error
@@ -35,35 +35,39 @@ int V1_close_ogr(struct Map_info *Map)
 #ifdef HAVE_OGR
     int i;
 
-    struct Format_info_ogr *fInfo;
+    struct Format_info_ogr *ogr_info;
+    
+    G_debug(3, "V1_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
     
     if (!VECT_OPEN(Map))
 	return -1;
-
-    fInfo = &(Map->fInfo.ogr);
+    
+    ogr_info = &(Map->fInfo.ogr);
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
 	(Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW))
 	Vect__write_head(Map);
 
-    if (fInfo->feature_cache)
-	OGR_F_Destroy(fInfo->feature_cache);
+    if (ogr_info->feature_cache)
+	OGR_F_Destroy(ogr_info->feature_cache);
 
-    OGR_DS_Destroy(fInfo->ds);
+    /* destroy OGR datasource */
+    OGR_DS_Destroy(ogr_info->ds);
     
-    for (i = 0; i < fInfo->lines_alloc; i++) {
-	Vect_destroy_line_struct(fInfo->lines[i]);
+    /* destroy lines in cache */
+    for (i = 0; i < ogr_info->cache.lines_alloc; i++) {
+	Vect_destroy_line_struct(ogr_info->cache.lines[i]);
     }
-
-    if (fInfo->dbdriver) {
-	db_close_database_shutdown_driver(fInfo->dbdriver);
+    G_free(ogr_info->cache.lines);
+    G_free(ogr_info->cache.lines_types);
+    
+    /* close DB connection (for atgtributes) */
+    if (ogr_info->dbdriver) {
+	db_close_database_shutdown_driver(ogr_info->dbdriver);
     }
-
-    G_free(fInfo->lines);
-    G_free(fInfo->lines_types);
-
-    G_free(fInfo->driver_name);
-    G_free(fInfo->dsn);
-    G_free(fInfo->layer_name);
+    
+    G_free(ogr_info->driver_name);
+    G_free(ogr_info->dsn);
+    G_free(ogr_info->layer_name);
 
     return 0;
 #else
@@ -73,9 +77,9 @@ int V1_close_ogr(struct Map_info *Map)
 }
 
 /*!
-  \brief Write OGR specific files (fidx)
+  \brief Close vector map on topological level (write out fidx file)
 
-  \param Map vector map
+  \param Map pointer to Map_info structure
   
   \return 0 on success
   \return non-zero on error
@@ -83,62 +87,22 @@ int V1_close_ogr(struct Map_info *Map)
 int V2_close_ogr(struct Map_info *Map)
 {
 #ifdef HAVE_OGR
-    char fname[1000], elem[1000];
-    char buf[5];
-    long length = 9;
-    struct gvfile fp;
-    struct Port_info port;
-
-    G_debug(3, "V2_close_ogr()");
+    struct Format_info_ogr *ogr_info;
+  
+    G_debug(3, "V2_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
 
     if (!VECT_OPEN(Map))
 	return -1;
 
-    if (strcmp(Map->mapset, G_mapset()) == 0 && Map->support_updated &&
-	Map->plus.built == GV_BUILD_ALL) {
-	sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
-	G_file_name(fname, elem, "fidx", Map->mapset);
-	G_debug(4, "Open fidx: %s", fname);
-	dig_file_init(&fp);
-	fp.file = fopen(fname, "w");
-	if (fp.file == NULL) {
-	    G_warning(_("Unable to open fidx file for write <%s>"), fname);
-	    return 1;
-	}
-
-	dig_init_portable(&port, dig__byte_order_out());
-	dig_set_cur_port(&port);
-
-	/* Header */
-	/* bytes 1 - 5 */
-	buf[0] = 5;
-	buf[1] = 0;
-	buf[2] = 5;
-	buf[3] = 0;
-	buf[4] = (char)dig__byte_order_out();
-	if (0 >= dig__fwrite_port_C(buf, 5, &fp))
-	    return (1);
-
-	/* bytes 6 - 9 : header size */
-	if (0 >= dig__fwrite_port_L(&length, 1, &fp))
-	    return (1);
-
-	/* Body */
-	/* number of records  */
-	if (0 >= dig__fwrite_port_I(&(Map->fInfo.ogr.offset_num), 1, &fp))
-	    return (1);
-
-	/* offsets */
-	if (0 >= dig__fwrite_port_I(Map->fInfo.ogr.offset,
-				    Map->fInfo.ogr.offset_num, &fp))
-	    return (1);
-
-	fclose(fp.file);
-
-    }
-
-    G_free(Map->fInfo.ogr.offset);
-
+    ogr_info = &(Map->fInfo.ogr);
+    
+    /* write fidx for maps in the current mapset */
+    if (Vect_save_fidx(Map, &(ogr_info->offset)) != 1)
+	G_warning(_("Unable to save feature index file for vector map <%s>"),
+		  Map->name);
+    
+    G_free(ogr_info->offset.array);
+    
     return 0;
 #else
     G_fatal_error(_("GRASS is not compiled with OGR support"));

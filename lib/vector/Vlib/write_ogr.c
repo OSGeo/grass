@@ -43,7 +43,8 @@ static void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
     
     struct bound_box box, abox;
     
-    G_debug(3, "V2__add_line_to_topo_ogr(): line = %d", line);
+    G_debug(3, "V2__add_line_to_topo_ogr(): line = %d npoints = %d", line,
+	    points->n_points);
 
     plus = &(Map->plus);
     Line = plus->Line[line];
@@ -245,19 +246,19 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     ret = OGR_L_CreateFeature(fInfo->layer, Ogr_feature);
 
     /* update offset array */
-    if (fInfo->offset_num >= fInfo->offset_alloc) {
-	fInfo->offset_alloc += 1000;
-	fInfo->offset = (int *) G_realloc(fInfo->offset,
-					  fInfo->offset_alloc *
-					  sizeof(int));
+    if (fInfo->offset.array_num >= fInfo->offset.array_alloc) {
+	fInfo->offset.array_alloc += 1000;
+	fInfo->offset.array = (int *) G_realloc(fInfo->offset.array,
+						fInfo->offset.array_alloc *
+						sizeof(int));
     }
 
-    offset = fInfo->offset_num;
+    offset = fInfo->offset.array_num;
     
-    fInfo->offset[fInfo->offset_num++] = (int) OGR_F_GetFID(Ogr_feature);
+    fInfo->offset.array[fInfo->offset.array_num++] = (int) OGR_F_GetFID(Ogr_feature);
     if (Ogr_geom_type == wkbPolygon || Ogr_geom_type == wkbPolygon25D) {
 	/* register exterior ring in offset array */
-	fInfo->offset[fInfo->offset_num++] = 0; 
+	fInfo->offset.array[fInfo->offset.array_num++] = 0; 
     }
       
     /* destroy */
@@ -329,7 +330,7 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
 		CPoints = Vect_new_line_struct();
 		Vect_append_point(CPoints, x, y, 0.0);
 		
-		FID = Map->fInfo.ogr.offset[offset];
+		FID = Map->fInfo.ogr.offset.array[offset];
 
 		dig_line_box(CPoints, &box);
 		cline = dig_add_line(plus, GV_CENTROID,
@@ -380,6 +381,8 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 			  off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
+    G_debug(3, "V1_rewrite_line_ogr(): line=%d type=%d offset=%llu",
+	    line, type, offset);
 #ifdef HAVE_OGR
     if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
@@ -412,6 +415,9 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
+    G_debug(3, "V2_rewrite_line_ogr(): line=%d type=%d offset=%llu",
+	    line, type, offset);
+
 #ifdef HAVE_OGR
     if (type != V2_read_line_ogr(Map, NULL, NULL, line)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
@@ -446,10 +452,11 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 	return -1;
     }
     
-    if (offset >= Map->fInfo.ogr.offset_num)
+    if (offset >= Map->fInfo.ogr.offset.array_num)
 	return -1;
     
-    if (OGR_L_DeleteFeature(Map->fInfo.ogr.layer, Map->fInfo.ogr.offset[offset]) != OGRERR_NONE)
+    if (OGR_L_DeleteFeature(Map->fInfo.ogr.layer,
+			    Map->fInfo.ogr.offset.array[offset]) != OGRERR_NONE)
 	return -1;
     
     return 0;

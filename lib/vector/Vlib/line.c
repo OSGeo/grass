@@ -136,6 +136,8 @@ void Vect_reset_line(struct line_pnts *Points)
   If you are re-using a line struct, be sure to clear out old data
   first by calling Vect_reset_line().
   
+  Calls G_fatal_error() when out of memory.
+  
   \param Points pointer to line_pnts structure
   \param x,y,z point coordinates to be added
 
@@ -146,9 +148,11 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
 {
     register int n;
 
-    if (0 > dig_alloc_points(Points, Points->n_points + 1))
-	return (-1);
-
+    if (0 > dig_alloc_points(Points, Points->n_points + 1)) {
+	G_fatal_error(_("Out of memory"));
+	return -1;
+    }
+    
     n = Points->n_points;
     Points->x[n] = x;
     Points->y[n] = y;

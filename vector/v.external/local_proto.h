@@ -6,7 +6,7 @@ struct _options {
 };
 
 struct _flags {
-    struct Flag *format, *list, *tlist, *topo;
+    struct Flag *format, *layer, *tlist, *topo, *postgis, *list;
 };
 
 /* args.c */
@@ -15,6 +15,6 @@ void parse_args(int, char **,
 
 /* list.c */
 void list_formats(FILE *);
-int list_layers(FILE *, const char *, const char *, int, int *);
+int list_layers(FILE *, const char *, const char *, int, int, int *);
 
 #endif

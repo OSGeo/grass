@@ -1,19 +1,19 @@
 /*!
- * \file lib/vector/Vlib/open.c
- *
- * \brief Vector library - Open vector map (native or OGR format)
- *
- * Higher level functions for reading/writing/manipulating vectors.
- *
- * (C) 2001-2009, 2012 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2).  Read the file COPYING that comes with GRASS for details.
- *
- * \author Original author CERL, probably Dave Gerdes or Mike
- * Higgins.
- * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
- */
+  \file lib/vector/Vlib/open.c
+  
+  \brief Vector library - Open vector map (native or OGR/PostGIS format)
+  
+  Higher level functions for reading/writing/manipulating vectors.
+  
+  (C) 2001-2009, 2012 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL, probably Dave Gerdes or Mike Higgins.
+  \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+  \author Update to GRASS 7 Martin Landa <landa.martin gmail.com> (better OGR support and native PostGIS access)
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,7 +40,7 @@ static int open_new_dummy()
     return 0;
 }
 
-#ifndef HAVE_OGR
+#if !defined HAVE_OGR || !defined HAVE_POSTGRES
 static int format()
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -64,6 +64,13 @@ static int (*Open_old_array[][2]) () = {
     , {
     open_old_dummy, format}
 #endif
+#ifdef HAVE_POSTGRES
+    , {
+    open_old_dummy, V1_open_old_pg}
+#else
+    , {
+    open_old_dummy, format}
+#endif
 };
 
 static int (*Open_new_array[][2]) () = {
@@ -80,30 +87,37 @@ static int (*Open_new_array[][2]) () = {
     , {
     open_new_dummy, format}
 #endif
+#ifdef HAVE_POSTGRES
+    , {
+    open_old_dummy, V1_open_new_pg}
+#else
+    , {
+    open_old_dummy, format}
+#endif
 };
 
-/*!
- * \brief Predetermine level at which a vector map will be opened for
- * reading.
- *
- * If it can't open that level, the open will fail. The specified
- * level must be set before any call to open. The default is to try to
- * open the highest level possible, and keep stepping down until
- * success.
- *
- * NOTE: This should only be used to set when you wish to force a
- * lower level open. If you require a higher level, then just check
- * the return to verify the level instead of forcing it. This is
- * because future releases will have higher levels which will be
- * downward compatible and which your programs should support by
- * default.
- *
- * \param level vector access level
- *
- * \return 0 on success
- * \return 1 on error
- */
+static int open_old(struct Map_info *, const char *, const char *,
+		    const char *, int, int);
 
+/*!
+  \brief Predetermine level at which a vector map will be opened for
+  reading.
+  
+  If it can't open that level, the open will fail. The specified level
+  must be set before any call to open. The default is to try to open
+  the highest level possible, and keep stepping down until success.
+  
+  NOTE: This should only be used to set when you wish to force a lower
+  level open. If you require a higher level, then just check the
+  return to verify the level instead of forcing it. This is because
+  future releases will have higher levels which will be downward
+  compatible and which your programs should support by default.
+ 
+  \param level vector access level
+  
+  \return 0 on success
+  \return 1 on error (invalid access level)
+*/
 int Vect_set_open_level(int level)
 {
     Open_level = level;
@@ -118,21 +132,21 @@ int Vect_set_open_level(int level)
 }
 
 /*! 
- * \brief Open existing vector map for reading (internal use only)
- *
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to open
- * \param mapset mapset name ("" for search path)
- * \param layer layer name (OGR format only)
- * \param update non-zero to open for update otherwise read-only mode
- * \param head_only read only header info from 'head', 'dbln', 'topo',
- * 'cidx' is not opened. The header may be opened on level 2 only.
- *
- * \return level of openness (1, 2)
- * \return -1 in error
- */
-int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, const char *layer,
-		   int update, int head_only)
+ \brief Open existing vector map for reading (internal use only)
+ 
+ \param[out] Map pointer to Map_info structure
+ \param name name of vector map to open
+ \param mapset mapset name ("" for search path)
+ \param layer layer name (OGR format only)
+ \param update non-zero to open for update otherwise read-only mode
+ \param head_only read only header info from 'head', 'dbln', 'topo',
+ 'cidx' is not opened. The header may be opened on level 2 only.
+ 
+ \return level of openness (1, 2)
+ \return -1 in error
+*/
+int open_old(struct Map_info *Map, const char *name, const char *mapset,
+	     const char *layer, int update, int head_only)
 {
     char buf[GNAME_MAX + 10], buf2[GMAPSET_MAX + 10], xname[GNAME_MAX],
 	xmapset[GMAPSET_MAX];
@@ -142,8 +156,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     int ogr_mapset;
     const char *fmapset;
 
-    G_debug(1, "Vect__open_old(): name = %s mapset = %s layer= %s update = %d", name,
-	    mapset, layer, update);
+    G_debug(1, "Vect__open_old(): name='%s' mapset='%s' layer='%s' update=%d",
+	    name, mapset, layer, update);
 
     /* zero Map_info structure */
     G_zero(Map, sizeof(struct Map_info));
@@ -155,10 +169,10 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 
     /* initialize Map->head */
     Vect__init_head(Map);
-    /* initialize support structures for 2D, update to 3D when reading support files */
+    /* initialize support structures for 2D, update to 3D when reading
+       support files */
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = WITHOUT_Z;
     /* initialize Map->plus */
-    Map->plus.Spidx_file = 0;
     dig_init_plus(&(Map->plus));
 
     /* check OGR mapset */
@@ -318,9 +332,20 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	    }
 	}
 #ifdef HAVE_OGR
-	/* Open OGR specific support files */
+	/* open OGR specific support files */
 	if (level == 2 && Map->format == GV_FORMAT_OGR) {
 	    if (V2_open_old_ogr(Map) < 0) {
+		dig_free_plus(&(Map->plus));
+		dig_spidx_free(&(Map->plus));
+		dig_cidx_free(&(Map->plus));
+		level = 1;
+	    }
+	}
+#endif
+#ifdef HAVE_POSTGRES
+	/* open OGR specific support files */
+	if (level == 2 && Map->format == GV_FORMAT_POSTGIS) {
+	    if (V2_open_old_pg(Map) < 0) {
 		dig_free_plus(&(Map->plus));
 		dig_spidx_free(&(Map->plus));
 		dig_cidx_free(&(Map->plus));
@@ -350,9 +375,13 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 		dig_spidx_free(&(Map->plus));
 		dig_cidx_free(&(Map->plus));
 	    }
-	    G_warning(_("Unable to open vector map <%s> on level %d. "
-			"Try to rebuild vector topology by v.build."),
-		      Vect_get_full_name(Map), level_request);
+	    if (level_request == 0)
+		G_fatal_error(_("Unable to open vector map <%s>"),
+			      Vect_get_full_name(Map));
+	    else
+		G_fatal_error(_("Unable to open vector map <%s> on level %d. "
+				"Try to rebuild vector topology by v.build."),
+			      Vect_get_full_name(Map), level_request);
 	    return -1;
 	}
 	if (ogr_mapset && !head_only && level_request != 1) {
@@ -379,7 +408,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     Map->open = VECT_OPEN_CODE;
     Map->level = level;
     Map->head_only = head_only;
-    Map->support_updated = 0;
+    Map->support_updated = FALSE;
     if (update) {
 	Map->mode = GV_MODE_RW;
 	Map->plus.mode = GV_MODE_RW;
@@ -389,10 +418,10 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	Map->plus.mode = GV_MODE_READ;
     }
     if (head_only) {
-	Map->head_only = 1;
+	Map->head_only = TRUE;
     }
     else {
-	Map->head_only = 0;
+	Map->head_only = FALSE;
     }
 
     G_debug(1, "Vect_open_old(): vector opened on level %d", level);
@@ -425,9 +454,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 
     }
     else {
-	if (Map->format == GV_FORMAT_NATIVE || Map->format == GV_FORMAT_OGR) {
-	    Map->hist_fp =
-		G_fopen_old(buf, GV_HIST_ELEMENT, Map->mapset);
+	if (Map->format == GV_FORMAT_NATIVE || Map->format == GV_FORMAT_OGR ||
+	    Map->format == GV_FORMAT_POSTGIS) {
+	    Map->hist_fp = G_fopen_old(buf, GV_HIST_ELEMENT, Map->mapset);
 	    /* If NULL (does not exist) then Vect_hist_read() handle that */
 	}
 	else {
@@ -462,153 +491,172 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 }
 
 /*!
- * \brief Open existing vector map for reading (native or OGR format
- * via v.external)
- *
- * This function is replaced by Vect_open_old2() to handle also direct
- * OGR support.
- * 
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to open
- * \param mapset mapset name
- *
- * \return level of openness [1, 2, (3)]
- * \return -1 on error
- */
+  \brief Open existing vector map for reading
+  
+  This function is replaced by Vect_open_old2() to handle also direct
+  OGR support.
+  
+  Calls G_fatal_error() on failure.
+  
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to open
+  \param mapset mapset name ("" for search path)
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error
+*/
 int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
 {
-    return (Vect__open_old(Map, name, mapset, NULL, 0, 0));
+    return open_old(Map, name, mapset, NULL, 0, 0);
 }
 
 /*!
- * \brief Open existing vector map for reading (native and OGR format)
- *
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to open
- * \param mapset mapset name
- * \param layer layer name (OGR format)
- *
- * \return level of openness [1, 2, (3)]
- * \return -1 on error
- */
-int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset, const char *layer)
+  \brief Open existing vector map for reading
+  
+  Calls G_fatal_error() on failure.
+
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to open (datasource for direct OGR access)
+  \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
+  \param layer layer name (OGR layer for direct OGR access)
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error
+*/
+int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset,
+		   const char *layer)
 {
-    return (Vect__open_old(Map, name, mapset, layer, 0, 0));
+    return open_old(Map, name, mapset, layer, 0, 0);
 }
 
 /*!
- * \brief Open existing vector map for reading/writing (native or OGR
- * format via v.external)
- *
- * This function is replaced by Vect_open_update2() to handle also
- * direct OGR support.
- *
- * By default list of updated features is not maintained, see
- * Vect_set_updated() for details.
- *
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to update
- * \param mapset mapset name
- *
- * \return level of openness [1, 2, (3)]
- * \return -1 on error
- */
+  \brief Open existing vector map for reading/writing
+  
+  This function is replaced by Vect_open_update2() to handle also
+  direct OGR support.
+  
+  By default list of updated features is not maintained, see
+  Vect_set_updated() for details.
+  
+  Calls G_fatal_error() on failure.
+
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to update
+  \param mapset mapset name
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error
+*/
 int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 {
-    return Vect__open_old(Map, name, mapset, NULL, 1, 0);
+    return open_old(Map, name, mapset, NULL, 1, 0);
 }
 
 /*!
- * \brief Open existing vector map for reading/writing (native or OGR
- * format)
- *
- * By default list of updated features is not maintained, see
- * Vect_set_updated() for details.
- *
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to update
- * \param mapset mapset name
- * \param layer layer name (OGR format)
- *
- * \return level of openness [1, 2, (3)]
- * \return -1 on error
- */
+  \brief Open existing vector map for reading/writing
+  
+  By default list of updated features is not maintained, see
+  Vect_set_updated() for details.
+  
+  Calls G_fatal_error() on failure.
+    
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to open (datasource for direct OGR access)
+  \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
+  \param layer layer name (OGR layer for direct OGR access)
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error 
+*/
 int Vect_open_update2(struct Map_info *Map, const char *name, const char *mapset, const char *layer)
 {
-    return Vect__open_old(Map, name, mapset, layer, 1, 0);
+    return open_old(Map, name, mapset, layer, 1, 0);
 }
 
 /*! 
- * \brief Reads only info about vector map from headers of 'head',
- * 'dbln', 'topo' and 'cidx' file (native or OGR format via
- * v.external)
- *
- * This function is replaced by Vect_open_old_head2() to handle also
- * direct OGR support.
- *
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to read (dsn for OGR)
- * \param mapset mapset name ("" for search path)
- *
- * \return level of openness [1, 2, (3)]
- * \return -1 on error
- */
+  \brief Reads only info about vector map (headers)
+
+  Reads from headers of 'head', 'dbln', 'topo' and 'cidx' file.
+  
+  This function is replaced by Vect_open_old_head2() to handle also
+  direct OGR support.
+  
+  Calls G_fatal_error() on failure.
+   
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to read
+  \param mapset mapset name ("" for search path)
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error 
+*/
 int Vect_open_old_head(struct Map_info *Map, const char *name, const char *mapset)
 {
-    return (Vect__open_old(Map, name, mapset, NULL, 0, 1));
+    return open_old(Map, name, mapset, NULL, 0, 1);
 }
 
 /*! 
- * \brief Reads only info about vector map from headers of 'head',
- * 'dbln', 'topo' and 'cidx' file (native or OGR format)
- *
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to read (dsn for OGR)
- * \param mapset mapset name ("" for search path)
- * \param layer layer name (OGR format)
- *
- * \return level of openness [1, 2, (3)]
- * \return -1 on error
- */
-int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *mapset, const char *layer)
+  \brief Reads only info about vector map (headers)
+  
+  Reads from headers of 'head', 'dbln', 'topo' and 'cidx' file.
+  
+  Calls G_fatal_error() on failure.
+   
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to read (dsn for OGR)
+  \param mapset mapset name ("" for search path)
+  \param layer layer name (OGR format)
+  
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to open (datasource for direct OGR access)
+  \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
+  \param layer layer name (OGR layer for direct OGR access)
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error 
+*/
+int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *mapset,
+			const char *layer)
 {
-    return (Vect__open_old(Map, name, mapset, layer, 0, 1));
+    return open_old(Map, name, mapset, layer, 0, 1);
 }
 
-/*!
- * \brief Open header file of existing vector map for updating (mostly
- * for database link updates)
- *
- * \param[out] Map pointer to Map_info structure
- * \param name name of vector map to update
- * \param mapset mapset name
- *
- * \return level of openness [1, 2, (3)]
- * \return -1 on error
- */
+/*!  \brief Open header file of existing vector map for updating
+  (mostly for database link updates)
+  
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to update
+  \param mapset mapset name
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error 
+*/
 int Vect_open_update_head(struct Map_info *Map, const char *name,
 			  const char *mapset)
 {
-    int ret;
-
-    ret = Vect__open_old(Map, name, mapset, NULL, 1, 1);
-    
-    return ret;
+    return open_old(Map, name, mapset, NULL, 1, 1);
 }
 
 /*!
- * \brief Create new vector map for reading/writing
- *
- * By default list of updated features is not maintained, see
- * Vect_set_updated() for details.
- *
- * \param[in,out] Map pointer to Map_info structure
- * \param name name of vector map
- * \param with_z non-zero value for 3D vector data
- *
- * \return 1 on success
- * \return -1 on error
- */
+  \brief Create new vector map for reading/writing
+ 
+  By default list of updated features is not maintained, see
+  Vect_set_updated() for details.
+  
+  \param[in,out] Map pointer to Map_info structure
+  \param name name of vector map
+  \param with_z non-zero value for 3D vector data
+  
+  \return 1 on success
+  \return -1 on error
+*/
 int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 {
     int ret;
@@ -731,17 +779,17 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 }
 
 /*!
- * \brief Update Coor_info structure
- *
- * \param Map pointer to Map_info structure
- * \param[out] Info pointer to Coor_info structure
- *
- * \return 1 on success
- * \return 0 on error
- */
+  \brief Update Coor_info structure
+  
+  \param Map pointer to Map_info structure
+  \param[out] Info pointer to Coor_info structure
+  
+  \return 1 on success
+  \return 0 on error
+*/
 int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 {
-    char buf[2000], path[2000];
+    char buf[GPATH_MAX], path[GPATH_MAX];
     STRUCT_STAT stat_buf;
     
     switch (Map->format) {
@@ -756,7 +804,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 	}
 	else {
 	    Info->size = (off_t)stat_buf.st_size;      /* file size */
-	    Info->mtime = (long)stat_buf.st_mtime;      /* last modified time */
+	    Info->mtime = (long)stat_buf.st_mtime;     /* last modified time */
 	}
 	
         /* stat does not give correct size on MINGW
@@ -771,6 +819,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 	break;
     case GV_FORMAT_OGR:
     case GV_FORMAT_OGR_DIRECT:
+    case GV_FORMAT_POSTGIS:
 	Info->size = 0L;
 	Info->mtime = 0L;
 	break;
@@ -782,20 +831,21 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 }
 
 /*!
- * \brief Gets vector map format (as string)
- *
- * Note: string is allocated by G_store(). Free allocated memory with
- * G_free().
- *
- * Currently are implemeted:
- *  - Native format (native)
- *  - OGR format    (ogr)
- *
- * \param Map pointer to Map_info structure
- *
- * \return maptype string on success
- * \return error message on error
- */
+  \brief Gets vector map format (as string)
+  
+  Note: string is allocated by G_store(). Free allocated memory with
+  G_free().
+  
+  Currently are implemeted:
+   - Native format  (native)
+   - OGR format     (ogr)
+   - PostGIS format (postgis)
+   
+   \param Map pointer to Map_info structure
+   
+   \return maptype string on success (allocated by G_store())
+   \return error message on error
+*/
 const char *Vect_maptype_info(const struct Map_info *Map)
 {
     char maptype[1000];
@@ -806,7 +856,10 @@ const char *Vect_maptype_info(const struct Map_info *Map)
 	break;
     case GV_FORMAT_OGR:
     case GV_FORMAT_OGR_DIRECT:
-	sprintf(maptype, "ogr");
+	sprintf(maptype, "OGR");
+	break;
+    case GV_FORMAT_POSTGIS:
+	sprintf(maptype, "PostGIS");
 	break;
     default:
 	sprintf(maptype, _("unknown %d (update Vect_maptype_info)"),
@@ -822,8 +875,9 @@ const char *Vect_maptype_info(const struct Map_info *Map)
   Currently are implemeted:
    - Native format                    (GV_FORMAT_NATIVE)
    - OGR format linked via v.external (GV_FORMAT_OGR)
-   - OGR format                       (GV_FORMAT_DIRECT)
-
+   - OGR format                       (GV_FORMAT_OGR_DIRECT)
+   - PostGIS fomat                    (GV_FORMAT_POSTGIS)
+   
   \param Map pointer to Map_info structure
   
   \return maptype code
@@ -834,19 +888,19 @@ int Vect_maptype(const struct Map_info *Map)
 }
 
 /*!
- * \brief Open topology file ('topo')
- *
- * \param[in,out] Map pointer to Map_info structure
- * \param head_only TRUE to read only header
- *
- * \return 0 on success
- * \return 1 file does not exist
- * \return -1 on error
- */
+  \brief Open topology file ('topo')
+  
+  \param[in,out] Map pointer to Map_info structure
+  \param head_only TRUE to read only header
+  
+  \return 0 on success
+  \return 1 file does not exist
+  \return -1 on error
+*/
 int Vect_open_topo(struct Map_info *Map, int head_only)
 {
     int err, ret;
-    char buf[500], file_path[2000];
+    char buf[GPATH_MAX], file_path[GPATH_MAX];
     struct gvfile fp;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
@@ -917,14 +971,14 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
 }
 
 /*!
- * \brief Open spatial index file ('sidx')
- *
- * \param[in,out] Map pointer to Map_info
- * \param mode 0 old, 1 update, 2 new
- *
- * \return 0 on success
- * \return -1 on error
- */
+  \brief Open spatial index file ('sidx')
+  
+  \param[in,out] Map pointer to Map_info
+  \param mode 0 old, 1 update, 2 new
+  
+  \return 0 on success
+  \return -1 on error
+*/
 int Vect_open_sidx(struct Map_info *Map, int mode)
 {
     char buf[500], file_path[2000];

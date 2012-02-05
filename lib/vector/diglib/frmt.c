@@ -7,16 +7,18 @@
  *
  * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001, 2012 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 #include <string.h>
 #include <stdio.h>
+
 #include <grass/vector.h>
+#include <grass/glocale.h>
 
 /*!
   \brief Read external vector format file
@@ -57,17 +59,35 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
 		frmt = GV_FORMAT_OGR;
 	    }
 #endif
+#ifdef HAVE_POSTGRES
+	    if (G_strcasecmp(ptr, "postgis") == 0) {
+		frmt = GV_FORMAT_POSTGIS;
+	    }
+#endif
 	}
     }
     if (frmt == -1) {
 	G_warning("Vector format not recognized: %s", buff);
-	return (-1);
+	return -1;
     }
 
     /* init format info values */
 #ifdef HAVE_OGR
-    finfo->ogr.dsn = NULL;
-    finfo->ogr.layer_name = NULL;
+    G_zero(&(finfo->ogr), sizeof(struct Format_info_ogr));
+#else
+    if (frmt == GV_FORMAT_OGR) {
+	G_warning(_("Vector format '%s' not supported"), ptr);
+	return -1;
+    }
+#endif
+
+#ifdef HAVE_POSTGRES
+    G_zero(&(finfo->pg), sizeof(struct Format_info_pg));
+#else
+    if (frmt == GV_FORMAT_POSTGIS) {
+	G_warning(_("Vector format '%s' not supported"), ptr);
+	return -1;
+    }
 #endif
 
     while (G_getl2(buff, 2000, dascii)) {
@@ -86,10 +106,20 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
 	    ptr++;
 
 #ifdef HAVE_OGR
-	if (strcmp(buf1, "DSN") == 0)
-	    finfo->ogr.dsn = G_store(ptr);
-	if (strcmp(buf1, "LAYER") == 0)
-	    finfo->ogr.layer_name = G_store(ptr);
+	if (frmt == GV_FORMAT_OGR) {
+	    if (strcmp(buf1, "DSN") == 0)
+		finfo->ogr.dsn = G_store(ptr);
+	    if (strcmp(buf1, "LAYER") == 0)
+		finfo->ogr.layer_name = G_store(ptr);
+	}
+#endif
+#ifdef HAVE_POSTGRES
+	if (frmt == GV_FORMAT_POSTGIS) {
+	    if (strcmp(buf1, "CONNINFO") == 0)
+		finfo->pg.conninfo = G_store(ptr);
+	    if (strcmp(buf1, "TABLE") == 0)
+		finfo->pg.table_name = G_store(ptr);
+	}
 #endif
     }
 

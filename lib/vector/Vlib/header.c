@@ -251,96 +251,131 @@ const char *Vect_get_full_name(const struct Map_info *Map)
 }
 
 /*!
-   \brief Get OGR datasource name (relevant only for OGR format)
+   \brief Get datasource name (relevant only for non-native formats)
 
+   Returns:
+    - datasource name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
+    - database name for PostGIS format (GV_FORMAT_POSTGIS)
+   
    \param Map pointer to Map_info structure
 
-   \return string containing OGR datasource name
+   \return string containing OGR/PostGIS datasource name
+   \return NULL on error (map format is native)
  */
-const char *Vect_get_ogr_dsn_name(const struct Map_info *Map)
+const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
 {
+    if (Map->format == GV_FORMAT_OGR ||
+	Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
-    G_warning(_("GRASS is not compiled with OGR support"));
-#else
-    if (Map->format != GV_FORMAT_OGR &&
-	Map->format != GV_FORMAT_OGR_DIRECT)
-	G_warning(_("Format of vector map <%s> is not OGR"),
-		  Vect_get_full_name(Map));
+	G_warning(_("GRASS is not compiled with OGR support"));
 #endif
-    
-    return Map->fInfo.ogr.dsn;
-}
-
-/*!
-   \brief Get OGR layer name (relevant only for OGR format)
-
-   \param Map pointer to Map_info structure
-
-   \return string containing OGR layer name
- */
-const char *Vect_get_ogr_layer_name(const struct Map_info *Map)
-{
-#ifndef HAVE_OGR
-    G_warning(_("GRASS is not compiled with OGR support"));
-#else
-    if (Map->format != GV_FORMAT_OGR &&
-	Map->format != GV_FORMAT_OGR_DIRECT)
-	G_warning(_("Format of vector map <%s> is not OGR"),
-		  Vect_get_full_name(Map));
+        return Map->fInfo.ogr.dsn;
+    }
+    else if (Map->format == GV_FORMAT_POSTGIS) {
+#ifndef HAVE_POSTGRES
+	G_warning(_("GRASS is not compiled with PostgreSQL support"));
 #endif
+        return Map->fInfo.pg.db_name;
+    }
     
-    return Map->fInfo.ogr.layer_name;
-}
-
-/*!
-  \brief Get OGR format info (relevant only for OGR format)
-
-  Allocated space should be freed by G_free().
-
-  \param Map pointer to Map_info structure
-  
-  \return string containing name of OGR format (allocated by G_store())
-  \return NULL on error (or on missing OGR support)
-*/
-const char *Vect_get_ogr_format_info(const struct Map_info *Map)
-{
-#ifndef HAVE_OGR
-    G_warning(_("GRASS is not compiled with OGR support"));
-#else
-    if (Map->format != GV_FORMAT_OGR &&
-	Map->format != GV_FORMAT_OGR_DIRECT)
-	G_warning(_("Format of vector map <%s> is not OGR"),
-		  Vect_get_full_name(Map));
-    
-    if (!Map->fInfo.ogr.ds)
-	return NULL;
-    
-    return G_store(OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds)));
-#endif
+    G_warning(_("Native vector format detected for <%s>"),
+	      Vect_get_full_name(Map));
     
     return NULL;
 }
 
 /*!
-  \brief Get OGR geometry type (relevant only for OGR format)
+   \brief Get layer name (relevant only for non-native formats)
+
+   Returns:
+    - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
+    - table name for PostGIS format (GV_FORMAT_POSTGIS)
+
+   \param Map pointer to Map_info structure
+
+   \return string containing layer name
+   \return NULL on error (map format is native)
+ */
+const char *Vect_get_finfo_layer_name(const struct Map_info *Map)
+{
+    if (Map->format == GV_FORMAT_OGR ||
+	Map->format == GV_FORMAT_OGR_DIRECT) {
+#ifndef HAVE_OGR
+	G_warning(_("GRASS is not compiled with OGR support"));
+#endif
+	return Map->fInfo.ogr.layer_name;
+    }
+    else if (Map->format == GV_FORMAT_POSTGIS) {
+#ifndef HAVE_POSTGRES
+	G_warning(_("GRASS is not compiled with PostgreSQL support"));
+#endif
+        return Map->fInfo.pg.table_name;
+    }
+
+    G_warning(_("Native vector format detected for <%s>"),
+	      Vect_get_full_name(Map));
+    
+    return NULL;
+}
+
+/*!
+  \brief Get format info (relevant only for non-native formats)
+
+  Allocated space should be freed by G_free().
+
+   Returns:
+    - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
+    
+  \param Map pointer to Map_info structure
+  
+  \return string containing name of OGR format (allocated by G_store())
+  \return NULL on error (or on missing OGR support)
+*/
+const char *Vect_get_finfo_format_info(const struct Map_info *Map)
+{
+    char format[GPATH_MAX];
+
+    if (Map->format == GV_FORMAT_OGR ||
+	Map->format == GV_FORMAT_OGR_DIRECT) {
+#ifndef HAVE_OGR
+	G_warning(_("GRASS is not compiled with OGR support"));
+#else
+	if (!Map->fInfo.ogr.ds)
+	    return NULL;
+
+	sprintf(format, "%s/%s", "OGR",
+		OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds)));
+	return G_store(format);
+#endif
+    }
+    else if (Map->format == GV_FORMAT_POSTGIS) {
+#ifndef HAVE_OGR
+	G_warning(_("GRASS is not compiled with PostgreSQL support"));
+#else
+	return G_store("PostGIS");
+#endif
+    }
+    
+    return NULL;
+}
+
+/*!
+  \brief Get geometry type (relevant only for non-native formats)
 
   \param Map pointer to Map_info structure
 
   \return allocated string containing geometry type info
-  \return NULL on error (or on missing OGR support)
+  \return NULL on error (map format is native)
 */
-const char *Vect_get_ogr_geometry_type(const struct Map_info *Map)
+const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 {
+    if (Map->format == GV_FORMAT_OGR ||
+	Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
     G_warning(_("GRASS is not compiled with OGR support"));
 #else
     OGRwkbGeometryType Ogr_geom_type;
     OGRFeatureDefnH    Ogr_feature_defn;
-    
-    if (Map->format != GV_FORMAT_OGR &&
-	Map->format != GV_FORMAT_OGR_DIRECT)
-	G_warning(_("Format of vector map <%s> is not OGR"),
-		  Vect_get_full_name(Map));
     
     if (!Map->fInfo.ogr.layer)
 	return NULL;
@@ -350,6 +385,34 @@ const char *Vect_get_ogr_geometry_type(const struct Map_info *Map)
     
     return OGRGeometryTypeToName(Ogr_geom_type);
 #endif
+    }
+    else if (Map->format == GV_FORMAT_POSTGIS) {
+#ifndef HAVE_POSTGRES
+	G_warning(_("GRASS is not compiled with PostgreSQL support"));
+#else
+	char stmt[DB_SQL_MAX], *ftype;
+	
+	const struct Format_info_pg *pg_info;
+	
+	PGresult *res;
+		
+	pg_info = &(Map->fInfo.pg);
+	sprintf(stmt, "SELECT type FROM geometry_columns "
+		"WHERE f_table_name = '%s'", pg_info->table_name);
+	G_debug(2, "SQL: %s", stmt);
+	
+	res = PQexec(pg_info->conn, stmt);
+	if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+	    PQntuples(res) != 1)
+	    G_warning("%s\n%s", _("Unable to get feature type."),
+		      PQresultErrorMessage(res));
+	
+	ftype = G_store(PQgetvalue(res, 0, 0));
+	PQclear(res);
+
+	return ftype;
+#endif
+    }
     
     return NULL;
 }

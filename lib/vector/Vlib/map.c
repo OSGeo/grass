@@ -524,7 +524,7 @@ int Vect_rename(const char *in, const char *out)
 /*!
    \brief Delete vector map including attribute tables
 
-   \param map vector map name
+   \param map pointer to Map_info structure
 
    \return -1 error
    \return 0 success

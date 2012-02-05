@@ -251,6 +251,11 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define G_FATAL_PRINT   1
 #define G_FATAL_RETURN  2
 
+/*! \brief Endian check */
+#define ENDIAN_LITTLE 0
+#define ENDIAN_BIG    1
+#define ENDIAN_OTHER  2
+
 /* for vector maps */
 /*!
   \brief Name of default key column

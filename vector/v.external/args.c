@@ -12,11 +12,12 @@ void parse_args(int argc, char **argv,
     options->dsn->key = "dsn";
     options->dsn->type = TYPE_STRING;
     options->dsn->gisprompt = "old_file,file,dsn";
-    options->dsn->label = _("Name of input OGR data source");
+    options->dsn->label = _("Name of input OGR/PostGIS data source");
     options->dsn->description = _("Examples:\n"
 				  "\t\tESRI Shapefile: directory containing a shapefile\n"
 				  "\t\tMapInfo File: directory containing a mapinfo file\n"
-				  "\t\tPostGIS database: PG:dbname=<database>");
+				  "\t\tPostGIS database accessed by OGR: PG:dbname=<database> user=grass\n"
+				  "\t\tPostGIS database accessed directly: dbname=<database> user=grass");
     options->dsn->required = YES;
 
     options->layer = G_define_option();
@@ -24,7 +25,7 @@ void parse_args(int argc, char **argv,
     options->layer->type = TYPE_STRING;
     options->layer->required = NO;
     options->layer->multiple = NO;
-    options->layer->label = _("Name of input OGR layer");
+    options->layer->label = _("Name of OGR layer or PostGIS feature table to be linked");
     options->layer->description = _("Examples:\n"
 				    "\t\tESRI Shapefile: shapefile name\n"
 				    "\t\tMapInfo File: mapinfo file name\n"
@@ -34,7 +35,7 @@ void parse_args(int argc, char **argv,
     
     options->output = G_define_standard_option(G_OPT_V_OUTPUT);
     options->output->required = NO;
-    options->output->description = _("Name for output GRASS vector map");
+    options->output->description = _("Name for output GRASS vector map (default: input layer)");
 
     flags->format = G_define_flag();
     flags->format->key = 'f';
@@ -58,6 +59,10 @@ void parse_args(int argc, char **argv,
     flags->topo = G_define_flag();
     flags->topo->key = 'b';
     flags->topo->description = _("Do not build topology");
+    
+    flags->postgis = G_define_flag();
+    flags->postgis->key = 'p';
+    flags->postgis->description = _("Link PostGIS tables directly instead of using OGR");
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

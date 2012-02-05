@@ -1,0 +1,1028 @@
+/*!
+  \file lib/vector/Vlib/read_pg.c
+  
+  \brief Vector library - reading features (PostGIS format)
+  
+  Higher level functions for reading/writing/manipulating vectors.
+  
+  \todo Currently only points, linestrings and polygons are supported,
+  implement also other types
+  
+  (C) 2011-2012 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Martin Landa <landa.martin gmail.com>
+*/
+
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+
+#include <grass/vector.h>
+#include <grass/dbmi.h>
+#include <grass/glocale.h>
+
+#ifdef HAVE_POSTGRES
+#include "pg_local_proto.h"
+
+#define CURSOR_PAGE 500
+
+#define SWAP32(x) \
+        ((unsigned int)( \
+            (((unsigned int)(x) & (unsigned int)0x000000ffUL) << 24) | \
+            (((unsigned int)(x) & (unsigned int)0x0000ff00UL) <<  8) | \
+            (((unsigned int)(x) & (unsigned int)0x00ff0000UL) >>  8) | \
+            (((unsigned int)(x) & (unsigned int)0xff000000UL) >> 24) ))
+
+#define SWAPDOUBLE(x) \
+{                                                                 \
+    unsigned char temp, *data = (unsigned char *) (x);            \
+                                                                  \
+    temp = data[0];                                               \
+    data[0] = data[7];                                            \
+    data[7] = temp;                                               \
+    temp = data[1];                                               \
+    data[1] = data[6];                                            \
+    data[6] = temp;                                               \
+    temp = data[2];                                               \
+    data[2] = data[5];                                            \
+    data[5] = temp;                                               \
+    temp = data[3];                                               \
+    data[3] = data[4];                                            \
+    data[4] = temp;                                               \
+}                                                                    
+
+static int read_next_line_pg(struct Map_info *,
+		      struct line_pnts *, struct line_cats *, int);
+SF_FeatureType get_feature(struct Format_info_pg *, int);
+static unsigned char *hex_to_wkb(const char *, int *);
+static int point_from_wkb(const unsigned char *, int, int, int,
+			  struct line_pnts *);
+static int line_from_wkb(const unsigned char *, int, int, int,
+			 struct line_pnts *, int);
+static int polygon_from_wkb(const unsigned char *, int, int, int,
+			    struct Format_info_pg *);
+static int error_corrupted_data(const char *);
+static int set_initial_query();
+#endif
+
+/*!
+  \brief Read next feature from PostGIS layer. Skip
+  empty features (level 1 without topology).
+  t
+  This function implements sequential access.
+    
+  The action of this routine can be modified by:
+   - Vect_read_constraint_region()
+   - Vect_read_constraint_type()
+   - Vect_remove_constraints()
+ 
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  (pointer to line_pnts struct)
+  \param[out] line_c container used to store line categories within
+  (pointer line_cats struct)
+  
+  \return feature type
+  \return -2 no more features (EOF)
+  \return -1 out of memory
+*/
+int V1_read_next_line_pg(struct Map_info *Map,
+			 struct line_pnts *line_p,
+			 struct line_cats *line_c)
+{
+#ifdef HAVE_POSTGRES
+    G_debug(3, "V1_read_next_line_pg()");
+
+    /* constraints not ignored */ 
+    return read_next_line_pg(Map, line_p, line_c, FALSE);
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
+  \brief Read next feature from PostGIS layer on topological level.
+
+  This function implements sequential access.
+
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  (pointer to line_pnts struct)
+  \param[out] line_c container used to store line categories within
+  (pointer to line_cats struct)
+  
+  \return feature type
+  \return -2 no more features (EOF)
+  \return -1 on failure
+*/
+int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
+			 struct line_cats *line_c)
+{
+#ifdef HAVE_POSTGRES
+    int line, ret;
+    struct P_line *Line;
+    struct bound_box lbox, mbox;
+    
+    G_debug(3, "V2_read_next_line_pg()");
+    
+    if (Map->constraint.region_flag)
+	Vect_get_constraint_box(Map, &mbox);
+    
+    ret = -1;
+    while(TRUE) {
+	line = Map->next_line;
+
+	if (Map->next_line > Map->plus.n_lines)
+	    return -2;
+
+	Line = Map->plus.Line[line];
+	if (Line == NULL) {	/* skip dead features */
+	    Map->next_line++;
+	    continue;
+	}
+
+	if (Map->constraint.type_flag) {
+	    /* skip by type */
+	    if (!(Line->type & Map->constraint.type)) {
+		Map->next_line++;
+		continue;
+	    }
+	}
+
+	if (Line->type == GV_CENTROID) {
+	    G_debug(4, "Centroid");
+	    
+	    Map->next_line++;
+	    
+	    if (line_p != NULL) {
+		int i, found;
+		struct bound_box box;
+		struct boxlist list;
+		struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+		
+		/* get area bbox */
+		Vect_get_area_box(Map, topo->area, &box);
+		/* search in spatial index for centroid with area bbox */
+		dig_init_boxlist(&list, TRUE);
+		Vect_select_lines_by_box(Map, &box, Line->type, &list);
+		
+		found = 0;
+		for (i = 0; i < list.n_values; i++) {
+		    if (list.id[i] == line) {
+			found = i;
+			break;
+		    }
+		}
+		
+		Vect_reset_line(line_p);
+		Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+	    }
+	    if (line_c != NULL) {
+		/* cat = FID and offset = FID for centroid */
+		Vect_reset_cats(line_c);
+		Vect_cat_set(line_c, 1, (int) Line->offset);
+	    }
+
+	    ret = GV_CENTROID;
+	}
+	else {
+	    /* ignore constraints, Map->next_line incremented */
+	    ret = read_next_line_pg(Map, line_p, line_c, TRUE);
+	}
+
+	if (Map->constraint.region_flag) {
+	    /* skip by region */
+	    Vect_line_box(line_p, &lbox);
+	    if (!Vect_box_overlap(&lbox, &mbox)) {
+		continue;
+	    }
+	}
+	
+	/* skip by field ignored */
+	
+	return ret;
+    }
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+#endif
+
+    return -1; /* not reached */
+}
+
+/*!
+  \brief Read feature from PostGIS layer at given offset (level 1 without topology)
+  
+  This function implements random access on level 1.
+
+  \param Map pointer to Map_info structure 
+  \param[out] line_p container used to store line points within
+  (pointer line_pnts struct)
+  \param[out] line_c container used to store line categories within
+  (pointer line_cats struct)
+  \param offset given offset 
+  
+  \return line type
+  \return 0 dead line
+  \return -2 no more features
+  \return -1 out of memory
+*/
+int V1_read_line_pg(struct Map_info *Map,
+		    struct line_pnts *line_p, struct line_cats *line_c, off_t offset)
+{
+#ifdef HAVE_POSTGRES
+    long fid;
+    int i, type;
+    SF_FeatureType sf_type;
+    
+    struct line_pnts      *line_i;
+    struct Format_info_pg *pg_info;
+    
+    pg_info = &(Map->fInfo.pg);
+    G_debug(3, "V1_read_line_pg(): offset = %lu offset_num = %lu",
+	    (long) offset, (long) pg_info->offset.array_num);
+    
+    if (offset >= pg_info->offset.array_num)
+	return -2;
+    
+    if (line_p != NULL)
+	Vect_reset_line(line_p);
+    if (line_c != NULL)
+	Vect_reset_cats(line_c);
+
+    fid = pg_info->offset.array[offset];
+    G_debug(4, "  fid = %ld", fid);
+    
+    /* coordinates */
+    if (line_p != NULL) {
+	/* read feature to cache if necessary */
+	if (pg_info->cache.fid != fid) {
+	    G_debug(4, "read feature (fid = %ld) to cache", fid);
+	    sf_type = (int) get_feature(pg_info, fid);
+	    
+	    if ((int) sf_type < 0)
+		return (int) sf_type;
+	}
+	
+	/* get data from cache */
+	type  = pg_info->cache.lines_types[pg_info->cache.lines_next];
+	line_i = pg_info->cache.lines[pg_info->cache.lines_next];
+	for (i = 0; i < line_i->n_points; i++) {
+	    Vect_append_point(line_p,
+			      line_i->x[i], line_i->y[i], line_i->z[i]);
+	}
+    }
+
+    if (line_c != NULL) {
+	Vect_cat_set(line_c, 1, (int) fid);
+    }
+
+    return type;
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
+  \brief Reads feature from PostGIS layer on topological level.
+ 
+  This function implements random access on level 2.
+  
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  (pointer to line_pnts struct)
+  \param[out] line_c container used to store line categories within
+  (pointer to line_cats struct)
+  \param line feature id (starts at 1)
+  
+  \return feature type
+  \return -2 no more features
+  \return -1 on failure
+*/
+int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
+		    struct line_cats *line_c, int line)
+{
+#ifdef HAVE_POSTGRES
+    struct P_line *Line;
+    
+    G_debug(3, "V2_read_line_pg() line = %d", line);
+    
+    Line = Map->plus.Line[line];
+    if (Line == NULL) {
+	G_warning(_("Attempt to read dead feature %d"), line);
+	return -1;
+    }
+
+    if (Line->type == GV_CENTROID) {
+	if (line_p != NULL) {
+	    int i, found;
+	    struct bound_box box;
+	    struct boxlist list;
+	    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+
+	    G_debug(4, "Centroid: area = %d", topo->area);
+	    Vect_reset_line(line_p);
+	    
+	    if (topo->area > 0 && topo->area <= Map->plus.n_areas) {
+		/* get area bbox */
+		Vect_get_area_box(Map, topo->area, &box);
+		/* search in spatial index for centroid with area bbox */
+		dig_init_boxlist(&list, 1);
+		Vect_select_lines_by_box(Map, &box, Line->type, &list);
+		
+		found = 0;
+		for (i = 0; i < list.n_values; i++) {
+		    if (list.id[i] == line) {
+			found = i;
+			break;
+		    }
+		}
+		
+		Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+	    }
+	}
+
+	if (line_c != NULL) {
+	  /* cat = FID and offset = FID for centroid */
+	  Vect_reset_cats(line_c);
+	  Vect_cat_set(line_c, 1, (int) Line->offset);
+	}
+
+	return GV_CENTROID;
+    }
+    
+    return V1_read_line_pg(Map, line_p, line_c, Line->offset);
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+#ifdef HAVE_POSTGRES
+/*!
+  \brief Read next feature from PostGIS layer. 
+ 
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  (pointer to line_pnts struct)
+  \param[out] line_c container used to store line categories within
+  (pointer line_cats struct)
+  \param ignore_constraints TRUE to ignore constraints (type, region)
+  
+  \return feature type
+  \return -2 no more features (EOF)
+  \return -1 out of memory
+*/
+int read_next_line_pg(struct Map_info *Map,
+		      struct line_pnts *line_p, struct line_cats *line_c,
+		      int ignore_constraints)
+{
+    int i, ltype;
+    SF_FeatureType sf_type;
+    
+    struct Format_info_pg *pg_info;
+    struct bound_box mbox, lbox;
+    struct line_pnts *line_i;
+
+    pg_info = &(Map->fInfo.pg);
+
+    if (Map->constraint.region_flag && !ignore_constraints)
+	Vect_get_constraint_box(Map, &mbox);
+    
+    while (TRUE) {
+	Map->next_line++; /* level 2 only */
+	
+	/* reset data structures */
+	if (line_p != NULL)
+	    Vect_reset_line(line_p);
+	if (line_c != NULL)
+	    Vect_reset_cats(line_c);
+
+	/* read feature to cache if necessary */
+	while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
+	    pg_info->cache.lines_next = pg_info->cache.lines_num = 0;
+	    /* cache feature -> line_p & line_c */
+	    sf_type = get_feature(pg_info, -1);
+	    
+	    if ((int) sf_type < 0) /* -1 || - 2 */
+		return (int) sf_type;
+
+	    if (sf_type & (SF_UNKNOWN | SF_NONE)) {
+		G_warning(_("Feature without geometry. Skipped."));
+		continue;
+	    }
+	    
+	    G_debug(4, "%d lines read to cache", pg_info->cache.lines_num);
+	}
+	
+	/* get data from cache */
+	ltype  = pg_info->cache.lines_types[pg_info->cache.lines_next];
+	if (line_p) {
+	    line_i = pg_info->cache.lines[pg_info->cache.lines_next];
+	    for (i = 0; i < line_i->n_points; i++) {
+		Vect_append_point(line_p,
+				  line_i->x[i], line_i->y[i], line_i->z[i]);
+	    }
+	}
+	if (line_c) {
+	    Vect_cat_set(line_c, 1, (int) pg_info->cache.fid);
+	}
+	pg_info->cache.lines_next++;
+	
+	/* apply constraints */
+	if (Map->constraint.type_flag && !ignore_constraints) {
+	    /* skip feature by type */
+	    if (!(ltype & Map->constraint.type))
+		continue;
+	}
+
+	if (line_p && Map->constraint.region_flag &&
+	    !ignore_constraints) {
+	    /* skip feature by region */
+	    Vect_line_box(line_p, &lbox);
+	    
+	    if (!Vect_box_overlap(&lbox, &mbox))
+		continue;
+	}
+	
+	/* skip feature by field ignored */
+	
+	return ltype;
+    }
+
+    return -1; /* not reached */
+}
+
+/*!
+  \brief Read feature geometry
+
+  Geometry is stored in lines cache.
+  
+  \param[in,out] pg_info pointer to Format_info_pg struct
+  \param fid feature id to be read (-1 for next)
+  \param[out] line_c pointer to line_cats structure (or NULL)
+
+  \return simple feature type (SF_POINT, SF_LINESTRING, ...)
+  \return -1 on error
+*/
+SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
+{
+    char *data;
+    char stmt[DB_SQL_MAX];
+    SF_FeatureType ftype;
+
+    if (!pg_info->geom_column) {
+	G_warning(_("No geometry column defined"));
+	return -1;
+    }
+    if (fid < 1) {
+	/* next (read n features) */
+	if (!pg_info->res) {
+	    if (set_initial_query(pg_info) == -1)
+		return -1;
+	}
+    }
+    else {
+	if (!pg_info->fid_column) {
+	    G_warning(_("Random access not supported. "
+			"Primary key not defined."));
+	    return -1;
+	}
+	
+	if (execute(pg_info->conn, "BEGIN") == -1)
+	    return -1;
+	
+	sprintf(stmt, "DECLARE %s%p CURSOR FOR SELECT %s FROM %s "
+		"WHERE %s = %d",
+		pg_info->table_name, pg_info->conn, 
+		pg_info->geom_column, 
+		pg_info->table_name, pg_info->fid_column, fid);
+
+	if (execute(pg_info->conn, stmt) == -1)
+	    return -1;
+    
+	sprintf(stmt, "FETCH ALL in %s%p", 
+		pg_info->table_name, pg_info->conn);
+	pg_info->res = PQexec(pg_info->conn, stmt);
+	pg_info->next_line = 0;
+    }
+
+    if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
+	PQclear(pg_info->res);
+	pg_info->res = NULL;
+	return -1; /* reading failed */
+    }
+        
+    /* do we need to fetch more records ? */
+    if (PQntuples(pg_info->res) == CURSOR_PAGE &&
+        PQntuples(pg_info->res) == pg_info->next_line) {
+	char stmt[DB_SQL_MAX];
+	PQclear(pg_info->res);
+
+	sprintf(stmt, "FETCH %d in %s%p", CURSOR_PAGE,
+		pg_info->table_name, pg_info->conn);
+	pg_info->res = PQexec(pg_info->conn, stmt);
+	pg_info->next_line = 0;
+    }
+
+    /* out of results ? */
+    if (PQntuples(pg_info->res) == pg_info->next_line) {
+	if (pg_info->res) {
+	    PQclear(pg_info->res);
+	    pg_info->res = NULL;
+	    
+	    sprintf(stmt, "CLOSE %s%p",
+		    pg_info->table_name, pg_info->conn);
+	    if (execute(pg_info->conn, stmt) == -1) {
+		G_warning(_("Unable to close cursor"));
+		return -1;
+	    }
+	    execute(pg_info->conn, "COMMIT");
+	}
+	return -2;
+    }
+    data = (char *)PQgetvalue(pg_info->res, pg_info->next_line, 0);
+    
+    ftype = cache_feature(data, FALSE, pg_info);
+    if (fid < 0) {
+	pg_info->cache.fid = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
+	pg_info->next_line++;
+    }
+    else {
+	pg_info->cache.fid = fid;
+
+	PQclear(pg_info->res);
+	pg_info->res = NULL;
+	
+	sprintf(stmt, "CLOSE %s%p",
+		pg_info->table_name, pg_info->conn);
+	if (execute(pg_info->conn, stmt) == -1) {
+	    G_warning(_("Unable to close cursor"));
+	    return -1;
+	}
+
+	if (execute(pg_info->conn, "COMMIT") == -1)
+	    return -1;
+    }
+    
+    return ftype;
+}
+
+/*!
+  \brief Convert HEX to WKB data
+
+  This function is based on CPLHexToBinary() from GDAL/OGR library
+
+  \param hex_data HEX data
+  \param[out] nbytes number of bytes in output buffer
+
+  \return pointer to WKB data buffer
+*/
+static unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
+{
+    unsigned char *wkb_data;
+    unsigned int length, i_src, i_dst;
+
+    i_src = i_dst = 0;
+    length = strlen(hex_data);
+    wkb_data = G_malloc(length / 2 + 2);
+    
+    while (hex_data[i_src] != '\0' ) {
+        if (hex_data[i_src] >= '0' && hex_data[i_src] <= '9')
+            wkb_data[i_dst] = hex_data[i_src] - '0';
+        else if (hex_data[i_src] >= 'A' && hex_data[i_src] <= 'F')
+            wkb_data[i_dst] = hex_data[i_src] - 'A' + 10;
+        else if (hex_data[i_src] >= 'a' && hex_data[i_src] <= 'f')
+            wkb_data[i_dst] = hex_data[i_src] - 'a' + 10;
+        else 
+            break;
+	
+        wkb_data[i_dst] *= 16;
+
+        i_src++;
+
+        if (hex_data[i_src] >= '0' && hex_data[i_src] <= '9')
+            wkb_data[i_dst] += hex_data[i_src] - '0';
+        else if(hex_data[i_src] >= 'A' && hex_data[i_src] <= 'F')
+            wkb_data[i_dst] += hex_data[i_src] - 'A' + 10;
+        else if(hex_data[i_src] >= 'a' && hex_data[i_src] <= 'f')
+            wkb_data[i_dst] += hex_data[i_src] - 'a' + 10;
+        else
+            break;
+	
+        i_src++;
+        i_dst++;
+    }
+    
+    wkb_data[i_dst] = 0;
+    *nbytes = i_dst;
+
+    return wkb_data;
+}
+
+/*!
+  \brief Read geometry from HEX data
+
+  This code is inspired by OGRGeometryFactory::createFromWkb() from
+  GDAL/OGR library.
+
+  \param data HEX data
+  \param skip_polygon skip polygons (level 1)
+  \param[in,out] pg_info pointer to Format_info_pg struct
+  (geometry is stored in lines cache)
+  
+  \return 0 on success
+  \return -1 on error
+*/
+int cache_feature(const char *data, int skip_polygon,
+		  struct Format_info_pg *pg_info)
+{
+    int ret, byte_order, nbytes, is3D;
+    unsigned char *wkb_data;
+    unsigned int wkb_flags;
+    SF_FeatureType ftype;
+    
+    wkb_flags = 0;
+    wkb_data  = hex_to_wkb(data, &nbytes);
+    
+    if (nbytes < 5) {
+	G_warning(_("Invalid WKB content: %d bytes"), nbytes);
+	G_free(wkb_data);
+	return -1;
+    }
+    
+    /* parsing M coordinate not supported */
+    memcpy(&wkb_flags, wkb_data + 1, 4);
+    byte_order = (wkb_data[0] == 0 ? ENDIAN_BIG : ENDIAN_LITTLE);
+    if (byte_order == ENDIAN_BIG)
+	wkb_flags = SWAP32(wkb_flags);
+    
+    if (wkb_flags & 0x40000000) {
+        G_warning(_("Reading EWKB with 4-dimensional coordinates (XYZM) "
+		    "is not supported"));
+	G_free(wkb_data);
+	return -1;
+    }
+
+    /* PostGIS EWKB format includes an  SRID, but this won't be       
+       understood by OGR, so if the SRID flag is set, we remove the    
+       SRID (bytes at offset 5 to 8).                                 
+    */
+    if (nbytes > 9 &&
+        ((byte_order == ENDIAN_BIG && (wkb_data[1] & 0x20)) ||
+	 (byte_order == ENDIAN_LITTLE && (wkb_data[4] & 0x20)))) {
+        memmove(wkb_data + 5, wkb_data + 9, nbytes -9);
+        nbytes -= 4;
+        if(byte_order == ENDIAN_BIG)
+            wkb_data[1] &= (~0x20);
+        else
+            wkb_data[4] &= (~0x20);
+    }
+    
+    if (nbytes < 9 && nbytes != -1) {
+	G_free(wkb_data);
+	return -1;
+    }
+    
+   /* Get the geometry feature type. For now we assume that geometry
+      type is between 0 and 255 so we only have to fetch one byte.
+   */
+    if (byte_order == ENDIAN_LITTLE) {
+        ftype = (SF_FeatureType) wkb_data[1];
+	is3D = wkb_data[4] & 0x80 || wkb_data[2] & 0x80;
+    }
+    else {
+        ftype = (SF_FeatureType) wkb_data[4];
+	is3D = wkb_data[1] & 0x80 || wkb_data[3] & 0x80;
+    }
+    
+    /* allocate space in lines cache - be minimalistic
+       
+       more lines require eg. polygon with more rings, multi-features
+       or geometry collections
+    */
+    if (!pg_info->cache.lines) {
+	pg_info->cache.lines_alloc = 1;
+	pg_info->cache.lines = (struct line_pnts **) G_malloc(sizeof(struct line_pnts *));
+	
+	pg_info->cache.lines_types = (int *) G_malloc(sizeof(int));
+	pg_info->cache.lines[0] = Vect_new_line_struct();
+	pg_info->cache.lines_types[0] = -1;
+    }
+    pg_info->cache.lines_num = 0;
+    
+    ret = -1;
+    if (ftype == SF_POINT) {
+	pg_info->cache.lines_num = 1;
+	pg_info->cache.lines_types[0] = GV_POINT;
+	ret = point_from_wkb(wkb_data, nbytes, byte_order,
+			     is3D, pg_info->cache.lines[0]);
+    }
+    else if (ftype == SF_LINESTRING) {
+	pg_info->cache.lines_num = 1;
+	pg_info->cache.lines_types[0] = GV_LINE;
+	ret = line_from_wkb(wkb_data, nbytes, byte_order,
+			    is3D, pg_info->cache.lines[0], FALSE);
+    }
+    else if (ftype == SF_POLYGON && !skip_polygon)
+	ret = polygon_from_wkb(wkb_data, nbytes, byte_order,
+			       is3D, pg_info) > 0 ? 0 : -1;
+    else  {
+	G_warning(_("Unsupported geometry type %d"), ftype);
+    }
+    
+    G_free(wkb_data);
+    
+    return ret;
+}
+
+/*!
+  \brief Read point for WKB data
+
+  See OGRPoint::importFromWkb() from GDAL/OGR library
+
+  \param wkb_data WKB data
+  \param nbytes number of bytes (WKB data buffer)
+  \param byte_order byte order (ENDIAN_LITTLE, ENDIAN_BIG)
+  \param with_z WITH_Z for 3D data
+  \param[out] line_p point geometry (pointer to line_pnts struct)
+
+  \return 0 on success
+  \return -1 on error
+*/
+int point_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
+		    int with_z, struct line_pnts *line_p)
+{
+    double x, y, z;
+    if (nbytes < 21 && nbytes != -1 )
+	return -1;
+
+    /* get vertex */
+    memcpy(&x, wkb_data + 5, 8);
+    memcpy(&y, wkb_data + 5 + 8, 8);
+    
+    if (byte_order == ENDIAN_BIG) {
+        SWAPDOUBLE(&x);
+        SWAPDOUBLE(&y);
+    }
+
+    if (with_z) {
+        if (nbytes < 29 && nbytes != -1 )
+            return -1;
+	
+        memcpy(&z, wkb_data + 5 + 16, 8);
+	if (byte_order == ENDIAN_BIG) {
+	    SWAPDOUBLE(&z);
+	}
+    }
+    else {
+        z = 0.0;
+    }
+    
+    if (line_p) {
+	Vect_reset_line(line_p);
+	Vect_append_point(line_p, x, y, z);
+    }
+    
+    return 0;
+}
+
+/*!
+  \brief Read line for WKB data
+
+  See OGRLineString::importFromWkb() from GDAL/OGR library
+
+  \param wkb_data WKB data
+  \param nbytes number of bytes (WKB data buffer)
+  \param byte_order byte order (ENDIAN_LITTLE, ENDIAN_BIG)
+  \param with_z WITH_Z for 3D data
+  \param[out] line_p line geometry (pointer to line_pnts struct)
+
+  \return 0 on success
+  \return -1 on error
+*/
+int line_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
+		  int with_z, struct line_pnts *line_p, int is_ring)
+{
+    int npoints, point_size, buff_min_size, offset;
+    int i;
+    double x, y, z;
+
+    if (is_ring)
+	offset = 5;
+    else
+	offset = 0;
+    
+    if (is_ring && nbytes < 4 && nbytes != -1)
+        return error_corrupted_data(NULL);
+    
+    /* get the vertex count */
+    memcpy(&npoints, wkb_data + (5 - offset), 4);
+    
+    if (byte_order == ENDIAN_BIG) {
+       npoints = SWAP32(npoints);
+    }
+    
+    /* check if the wkb stream buffer is big enough to store fetched
+       number of points.  16 or 24 - size of point structure
+    */
+    point_size = with_z ? 24 : 16;
+    if (npoints < 0 || npoints > INT_MAX / point_size)
+        return error_corrupted_data(NULL);
+    
+    buff_min_size = point_size * npoints;
+    
+    if (nbytes != -1 && buff_min_size > nbytes - (9 - offset))
+        return error_corrupted_data(_("Length of input WKB is too small"));
+    
+    if (line_p)
+	Vect_reset_line(line_p);
+    
+    /* get the vertex */
+    for (i = 0; i < npoints; i++) {
+	memcpy(&x, wkb_data + (9 - offset) + i * point_size, 8);
+	memcpy(&y, wkb_data + (9 - offset) + 8 + i * point_size, 8);
+	if (with_z)
+            memcpy(&z, wkb_data + (9 - offset) + 16 + i * point_size, 8);
+        else
+	    z = 0.0;
+
+	if (byte_order == ENDIAN_BIG) {
+	    SWAPDOUBLE(&x);
+	    SWAPDOUBLE(&y);
+	    if (with_z)
+		SWAPDOUBLE(&z);
+	}
+	
+	if (line_p)
+	    Vect_append_point(line_p, x, y, z);
+    }
+    
+    return 0;
+}
+
+/*!
+  \brief Read polygon for WKB data
+
+  See OGRPolygon::importFromWkb() from GDAL/OGR library
+
+  \param wkb_data WKB data
+  \param nbytes number of bytes (WKB data buffer)
+  \param byte_order byte order (ENDIAN_LITTLE, ENDIAN_BIG)
+  \param with_z WITH_Z for 3D data
+  \param[out] line_p array of rings (pointer to line_pnts struct)
+
+  \return number of rings
+  \return -1 on error
+*/
+int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
+		     int with_z, struct Format_info_pg *pg_info)
+{
+    int nrings, data_offset, i, nsize;
+    struct line_pnts *line_i;
+    
+    if (nbytes < 9 && nbytes != -1)
+	return -1;
+    
+    /* get the ring count */
+    memcpy(&nrings, wkb_data + 5, 4);
+    if (byte_order == ENDIAN_BIG) {
+        nrings = SWAP32(nrings);
+    }
+    if (nrings < 0) {
+        return -1;
+    }
+    
+    /* reallocate space for islands if needed */
+    if (nrings > pg_info->cache.lines_alloc) {
+	pg_info->cache.lines_alloc += 20;
+	pg_info->cache.lines = (struct line_pnts **) G_realloc(pg_info->cache.lines,
+							       pg_info->cache.lines_alloc *
+							       sizeof(struct line_pnts *));
+	pg_info->cache.lines_types = (int *) G_realloc(pg_info->cache.lines_types,
+						       pg_info->cache.lines_alloc *
+						       sizeof(int));
+	
+	for (i = pg_info->cache.lines_alloc - 20; i < pg_info->cache.lines_alloc; i++) {
+	    pg_info->cache.lines[i] = Vect_new_line_struct();
+	    pg_info->cache.lines_types[i] = -1;
+	}
+    }
+    pg_info->cache.lines_num = nrings;
+    
+    /* each ring has a minimum of 4 bytes (point count) */
+    if (nbytes != -1 && nbytes - 9 < nrings * 4) {
+        return error_corrupted_data(_("Length of input WKB is too small"));
+    }
+
+    data_offset = 9;
+    if (nbytes != -1)
+        nbytes -= data_offset;
+    
+    /* get the rings */
+    nsize = 0;
+    for (i = 0; i < nrings; i++ ) {
+	line_i = pg_info->cache.lines[i];
+	pg_info->cache.lines_types[i] = GV_BOUNDARY;
+	
+	line_from_wkb(wkb_data + data_offset, nbytes, byte_order,
+		      with_z, line_i, TRUE);
+	
+        if (nbytes != -1) {
+	    if (with_z)
+		nsize = 4 + 24 * line_i->n_points;
+	    else
+		nsize = 4 + 16 * line_i->n_points;
+	    
+	    nbytes -= nsize;
+	}
+	
+        data_offset += nsize;
+    }
+    
+    return nrings;
+}
+
+/*!
+  \brief Report error message
+
+  \param msg message (NULL)
+
+  \return -1
+*/
+int error_corrupted_data(const char *msg)
+{
+    if (msg)
+	G_warning(_("Corrupted data. %s."), msg);
+    else
+	G_warning(_("Corrupted data"));
+    
+    return -1;
+}
+
+/*!
+  \brief Set initial SQL query for sequential access
+
+  \param pg_info pointer to Format_info_pg struct
+
+  \return 0 on success
+  \return -1 on error
+*/
+int set_initial_query(struct Format_info_pg *pg_info)
+{
+    char stmt[DB_SQL_MAX];
+    
+    if (execute(pg_info->conn, "BEGIN") == -1)
+	return -1;
+    
+    sprintf(stmt, "DECLARE %s%p CURSOR FOR SELECT %s,%s FROM %s",
+	    pg_info->table_name, pg_info->conn, 
+	    pg_info->geom_column, pg_info->fid_column,
+	    pg_info->table_name);
+
+    if (execute(pg_info->conn, stmt) == -1)
+	return -1;
+    
+    sprintf(stmt, "FETCH %d in %s%p", CURSOR_PAGE,
+	    pg_info->table_name, pg_info->conn);
+    pg_info->res = PQexec(pg_info->conn, stmt);
+    pg_info->next_line = 0;
+    
+    return 0;
+}
+
+/*!
+  \brief Execute SQL statement
+
+  See pg_local_proto.h
+
+  \param conn pointer to PGconn
+  \param stmt query
+
+  \return 0 on success
+  \return -1 on error
+*/
+int execute(PGconn *conn, const char *stmt)
+{
+    PGresult *result;
+
+    result = NULL;
+
+    G_debug(3, "execute(): %s", stmt);
+    result = PQexec(conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_COMMAND_OK) {
+	PQclear(result);
+
+	G_warning(_("Execution failed: %s"), PQerrorMessage(conn));
+	return -1;
+    }
+
+    PQclear(result);
+    return 0;
+}
+
+#endif

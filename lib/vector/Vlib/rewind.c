@@ -17,16 +17,12 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-
-/*  Rewind vector data file to cause reads to start at beginning */
-/* returns 0 on success, -1 on error */
 static int rew_dummy()
 {
     return -1;
 }
 
-
-#ifndef HAVE_OGR
+#if !defined HAVE_OGR || !defined HAVE_POSTGRES
 static int format()
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -37,23 +33,29 @@ static int format()
 
 static int (*Rewind_array[][3]) () = {
     {
-    rew_dummy, V1_rewind_nat, V2_rewind_nat}
+	rew_dummy, V1_rewind_nat, V2_rewind_nat}
 #ifdef HAVE_OGR
     , {
-    rew_dummy, V1_rewind_ogr, V2_rewind_ogr}
+	rew_dummy, V1_rewind_ogr, V2_rewind_ogr}
     , {
-    rew_dummy, V1_rewind_ogr, V2_rewind_ogr}
+	rew_dummy, V1_rewind_ogr, V2_rewind_ogr}
 #else
     , {
-    rew_dummy, format, format}
+	rew_dummy, format, format}
     , {
-    rew_dummy, format, format}
+	rew_dummy, format, format}
+#endif
+#ifdef HAVE_POSTGRES
+    , {
+	rew_dummy, V1_rewind_pg, V2_rewind_pg}
+#else
+    , {
+	rew_dummy, format, format}
 #endif
 };
 
-
 /*!
-   \brief Rewind vector data file to cause reads to start at beginning
+   \brief Rewind vector map to cause reads to start at beginning
 
    \param Map pointer to Map_info structure
 

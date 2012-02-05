@@ -19,7 +19,7 @@
 
   Reference: http://www.opengeospatial.org/standards/sfa
 
-  (C) 2009 by the GRASS Development Team
+  (C) 2009, 2011 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -32,7 +32,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int check_sftype(const struct line_pnts *, int, int, int);
+static int check_sftype(const struct line_pnts *, int, SF_FeatureType, int);
 static int get_sftype(const struct line_pnts *, int, int);
 static void print_point(const struct line_pnts *, int, int, int, FILE *);
 
@@ -41,7 +41,7 @@ static void print_point(const struct line_pnts *, int, int, int, FILE *);
 
   List of supported feature types:
    - GV_POINT    -> SF_POINT
-   - GV_LINE     -> SF_LINE / SF_LINESTRING / SF_LINEARRING
+   - GV_LINE     -> SF_LINESTRING / SF_LINEARRING
    - GV_AREA     -> SF_POLYGON
 
   \param Points  pointer to line_pnts structure
@@ -51,9 +51,38 @@ static void print_point(const struct line_pnts *, int, int, int, FILE *);
   \return SF type identificator (see list of supported types)
   \return -1 on error
 */
-int Vect_sfa_get_line_type(const struct line_pnts *Points, int type, int with_z)
+SF_FeatureType Vect_sfa_get_line_type(const struct line_pnts *Points, int type, int with_z)
 {
     return get_sftype(Points, type, with_z);
+}
+
+/*!
+  \brief Get relevant GV type
+
+  \param Map pointer to Map_info structure
+  \param type SF geometry type (SF_POINT, SF_LINESTRING, ...)
+
+  \return GV type
+  \return -1 on error
+ */
+int Vect_sfa_get_type(SF_FeatureType sftype)
+{
+    switch(sftype) {
+    case SF_POINT:
+    case SF_POINT25D:
+	return GV_POINT;
+    case SF_LINESTRING:
+    case SF_LINESTRING25D:
+    case SF_LINEARRING:
+	return GV_LINE;
+    case SF_POLYGON:
+    case SF_POLYGON25D:
+	return GV_AREA;
+    default:
+	break;
+    }
+    
+    return -1;
 }
 
 /*!
@@ -71,7 +100,8 @@ int Vect_sfa_get_line_type(const struct line_pnts *Points, int type, int with_z)
   \return 1 if type is sftype
   \return 0 type differs from sftype
 */
-int Vect_sfa_check_line_type(const struct line_pnts *Points, int type, int sftype, int with_z)
+int Vect_sfa_check_line_type(const struct line_pnts *Points, int type,
+			     SF_FeatureType sftype, int with_z)
 {
     return check_sftype(Points, type, sftype, with_z);
 }
@@ -110,14 +140,12 @@ int Vect_sfa_line_dimension(int type)
 */
 char *Vect_sfa_line_geometry_type(const struct line_pnts *Points, int type)
 {
-    int sftype = Vect_sfa_get_line_type(Points, type, 0);
+    SF_FeatureType sftype = Vect_sfa_get_line_type(Points, type, 0);
 
     if (sftype == SF_POINT)
 	return G_store("POINT");
     if (sftype == SF_LINESTRING)
 	return G_store("LINESTRING");
-    if (sftype == SF_LINE)
-	return G_store("LINE");
     if (sftype == SF_LINEARRING)
 	return G_store("LINEARRING");
 
@@ -149,11 +177,9 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z, i
 	fprintf(file, ")\n");
 	break;
     }
-    case SF_LINESTRING: case SF_LINE: case SF_LINEARRING: /* line */ {
+    case SF_LINESTRING: case SF_LINEARRING: /* line */ {
 	if (sftype == SF_LINESTRING)
 	    fprintf(file, "LINESTRING(");
-	else if (sftype ==  SF_LINE)
-	    fprintf(file, "LINE(");
 	else
 	    fprintf(file, "LINEARRING(");
 	for (i = 0; i < Points->n_points; i++) {
@@ -197,7 +223,7 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z, i
 */
 int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type, int with_z)
 {
-    int sftype;
+    SF_FeatureType sftype;
     
     sftype = Vect_sfa_get_line_type(Points, type, with_z);
 
@@ -234,7 +260,8 @@ int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type, int with_z
     return -1;
 }
 
-int check_sftype(const struct line_pnts *points, int type, int sftype, int with_z)
+int check_sftype(const struct line_pnts *points, int type,
+		 SF_FeatureType sftype, int with_z)
 {
     if (type == GV_POINT && sftype == SF_POINT) {
 	return 1;
@@ -242,9 +269,6 @@ int check_sftype(const struct line_pnts *points, int type, int sftype, int with_
 
     if (type == GV_LINE) {
 	if (sftype == SF_LINESTRING) {
-	    return 1;
-	}
-	if (sftype == SF_LINE && Vect_get_num_line_points(points) == 2) {
 	    return 1;
 	}
 	if (sftype == SF_LINEARRING) {
@@ -266,9 +290,6 @@ int get_sftype(const struct line_pnts *points, int type, int with_z)
 {
     if (check_sftype(points, type, SF_POINT, with_z))
 	return SF_POINT;
-
-    if (check_sftype(points, type, SF_LINE, with_z))
-	return SF_LINE;
 
     if (check_sftype(points, type, SF_LINEARRING, with_z))
 	return SF_LINEARRING;

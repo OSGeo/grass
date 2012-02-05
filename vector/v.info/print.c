@@ -170,7 +170,7 @@ void print_shell(const struct Map_info *Map)
     int map_type;
 
     map_type = Vect_maptype(Map);
-
+    
     fprintf(stdout, "name=%s\n",
 	    Vect_get_name(Map));
     fprintf(stdout, "mapset=%s\n",
@@ -187,11 +187,19 @@ void print_shell(const struct Map_info *Map)
     if (map_type == GV_FORMAT_OGR ||
 	map_type == GV_FORMAT_OGR_DIRECT) {
 	fprintf(stdout, "format=%s,%s\n",
-		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
+		Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
 	fprintf(stdout, "ogr_layer=%s\n",
-		Vect_get_ogr_layer_name(Map));
+		Vect_get_finfo_layer_name(Map));
 	fprintf(stdout, "ogr_dsn=%s\n",
-		Vect_get_ogr_dsn_name(Map));
+		Vect_get_finfo_dsn_name(Map));
+    }
+    else if (map_type == GV_FORMAT_POSTGIS) {
+	fprintf(stdout, "format=%s\n",
+		Vect_maptype_info(Map));
+	fprintf(stdout, "pg_table=%s\n",
+		Vect_get_finfo_layer_name(Map));
+	fprintf(stdout, "pg_dbname=%s\n",
+		Vect_get_finfo_dsn_name(Map));
     }
     else {
 	fprintf(stdout, "format=%s\n",
@@ -255,7 +263,7 @@ void print_info(const struct Map_info *Map)
     sprintf(line, "%-17s%s", _("Mapset:"),
 	    Vect_get_mapset(Map));
     printline(line);
-
+    
     sprintf(line, "%-17s%s", _("Location:"),
 	    G_location());
     printline(line);
@@ -273,15 +281,28 @@ void print_info(const struct Map_info *Map)
     if (map_type == GV_FORMAT_OGR ||
 	map_type == GV_FORMAT_OGR_DIRECT) {
 	sprintf(line, "%-17s%s (%s)", _("Map format:"),
-		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
+		Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
 	printline(line);
 	
 	/* for OGR format print also datasource and layer */
 	sprintf(line, "%-17s%s", _("OGR layer:"),
-		Vect_get_ogr_layer_name(Map));
+		Vect_get_finfo_layer_name(Map));
 	printline(line);
 	sprintf(line, "%-17s%s", _("OGR datasource:"),
-		Vect_get_ogr_dsn_name(Map));
+		Vect_get_finfo_dsn_name(Map));
+	printline(line);
+    }
+    else if (map_type == GV_FORMAT_POSTGIS) {
+	sprintf(line, "%-17s%s", _("Map format:"),
+		Vect_maptype_info(Map));
+	printline(line);
+	
+	/* for OGR format print also datasource and layer */
+	sprintf(line, "%-17s%s", _("PostGIS table:"),
+		Vect_get_finfo_layer_name(Map));
+	printline(line);
+	sprintf(line, "%-17s%s", _("PostGIS database:"),
+		Vect_get_finfo_dsn_name(Map));
 	printline(line);
     }
     else {
