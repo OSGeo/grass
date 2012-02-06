@@ -5,15 +5,15 @@
 # Markus Neteler <neteler itc.it>, 2004.
 # Stephan Holl <holl gdf-hannover.de>, 2004, 2005, 2006.
 # Robert Nuske <rnuske gwdg.de>, 2006, 2007, 2008, 2009, 2010.
-# Robert Nuske <robert.nuske nw-fva.de>, 2011.
+# Robert Nuske <robert.nuske nw-fva.de>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2011-10-08 19:43+0200\n"
+"PO-Revision-Date: 2012-02-04 14:42+0100\n"
 "Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
-"Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
+"Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
@@ -2544,15 +2544,13 @@ msgstr ""
 
 #: ../raster/r.external/window.c:93 ../raster/r.in.gdal/main.c:635
 #: ../vector/v.in.ogr/main.c:1257
-#, fuzzy
 msgid "Default region for this location updated"
-msgstr "Projektionsinformationen aktualisiert!"
+msgstr " Standard-Region für die Location aktualisiert."
 
 #: ../raster/r.external/window.c:96 ../raster/r.in.gdal/main.c:638
 #: ../vector/v.in.ogr/main.c:1260
-#, fuzzy
 msgid "Region for the current mapset updated"
-msgstr "<%s> ist bereits das aktuelle Mapset."
+msgstr "Region des aktuellen Mapsets aktualisiert."
 
 #: ../raster/r.external/list.c:22
 #, fuzzy
@@ -2675,14 +2673,13 @@ msgstr "Übersteuere die Projektion (verwende Projektion der Location)."
 
 #: ../raster/r.external/main.c:105 ../raster/r.in.gdal/main.c:144
 #: ../vector/v.in.ogr/main.c:259 ../vector/v.in.lidar/main.c:213
-#, fuzzy
 msgid "Extend region extents based on new dataset"
-msgstr "Vergrößere die Location basierend auf dem neuen Datensatz."
+msgstr "Vergrößere die Ausdehnung der Region basierend auf neuem Datensatz."
 
 #: ../raster/r.external/main.c:106 ../raster/r.in.gdal/main.c:146
 #: ../vector/v.in.ogr/main.c:261
 msgid "Also updates the default region if in the PERMANENT mapset"
-msgstr ""
+msgstr "Aktualisiere die Standard-Region auch wenn im Mapset PERMANENT."
 
 #: ../raster/r.external/main.c:110
 msgid "Require exact range"
@@ -25014,9 +25011,8 @@ msgid "Values describing the relation between two nearest features"
 msgstr "Werte, die die Verbindung zwischen zwei nächstgelegenen Featuren beschreiben. "
 
 #: ../vector/v.distance/main.c:152
-#, fuzzy
 msgid "cat;category of the nearest feature;dist;minimum distance to nearest feature;to_x;x coordinate of the nearest point on the 'to' feature;to_y;y coordinate of the nearest point on the 'to' feature;to_along;distance to the nearest point on the 'to' feature along that linear feature;to_angle;angle along the nearest linear feature in the 'to' map, measured CCW from the +x axis, in radians, between -Pi and Pi inclusive;to_attr;attribute of nearest feature given by to_column option"
-msgstr "cat;Kategorie des nächsten Features;dist;Minimumdistanz zum nächsten Feature;to_x;X Koordinate des nächsten Features von 'to' Feature;to_y;Y Koordinate des nächsten Features von 'to' Feature;to_along;Distanz zwischen Punkten/Zentroiden der 'from' Karte und des Startpunktes des linearen Features der 'to' Karte, entlang diese linearen Features;to_angle;Winkel zwischen dem linearen Feature der 'to' Karte und der positiven X-Achse, an der Position des Punktes/Zentroids der 'from' Karte, gegen den Uhrzeigersinn, im Bogenmaß (zwischen -PI und PI);to_attr;Attribut des nächsten Features gegeben durch die Option to_column"
+msgstr "cat;Kategorie des nächsten Features;dist;Minimumdistanz zum nächsten Feature;to_x;X Koordinate des nächsten Punkts des 'to'-Features;to_y;Y Koordinate des nächsten Punktes des 'to'-Feature;to_along;Distanz zum nächsten Punkt des 'to'-Features entlang des linearen Features;to_angle;Winkel entlang des nächsten linearen Features der 'to'-Karte, gemessen gegen den Uhrzeigersinn von der positiven X-Achse im Bogenmaß (zwischen -Pi und Pi);to_attr;Attribut des nächsten Features gegeben durch die Option to_column"
 
 #: ../vector/v.distance/main.c:173
 msgid "Column name(s) where values specified by 'upload' option will be uploaded"
@@ -25048,9 +25044,8 @@ msgid "Calculate distances to all features within the threshold"
 msgstr "Berechne Distanzen zu allen Features innerhalb des Schwellwertes."
 
 #: ../vector/v.distance/main.c:199
-#, fuzzy
 msgid "Output is written to stdout but may be uploaded to a new table created by this module; multiple 'upload' options may be used."
-msgstr "Die Ausgabe wird nach stdout geschrieben und kann ebenfalls in eine neue Tabelle geschrieben werden, die von diesem Modul erzeugt wird. Es kann mehrere 'from' Kategorien geben."
+msgstr "Die Ausgabe wird nach stdout geschrieben und kann auch in eine neue Tabelle geschrieben werden, die von diesem Modul erzeugt wird. Es können mehrere 'upload' Optionen verwendet werden."
 
 #: ../vector/v.distance/main.c:254
 msgid "to_column option missing"
@@ -33919,6 +33914,479 @@ msgstr ""
 msgid "also import quality map (SM status map layer) and filter NDVI map"
 msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI-Karte."
 
+#, fuzzy
+msgid "Name for output flowline density raster map"
+msgstr "Ausgabe-Rasterkarte der Fließdichte."
+
+#, fuzzy
+msgid "vector, interpolation, kriging"
+msgstr "Vektor, Interpolation"
+
+#, fuzzy
+msgid "Raster map to use as mask"
+msgstr "Rasterkarte, die als Maske (MASK) verwendet werden soll."
+
+msgid "Calculate the groundwater distance velocity vector field and write the x, y, and z components to maps named name_[xyz]. Name is basename for the new raster3d maps"
+msgstr "Berechne das Vektorfeld der Grundwassergeschwindigkeit und schreibe die X, Y und Z Komponenten in die Karten name_[xyz]. Name ist der gemeinsame Bestandteil der neuen raster3d Karten."
+
+msgid "Checking GDAl data type and nodata value"
+msgstr "Prüfe GDAL Datentyp und NoData-Wert."
+
+msgid "douglas;Douglas-Peucker Algorithm;douglas_reduction;Douglas-Peucker Algorithm with reduction parameter;lang;Lang Simplification Algorithm;reduction;Vertex Reduction Algorithm eliminates points close to each other;reumann;Reumann-Witkam Algorithm;remove_small;Removes lines shorter than threshold and areas of area less than threshold;boyle;Boyle's Forward-Looking Algorithm;sliding_averaging;McMaster's Sliding Averaging Algorithm;distance_weighting;McMaster's Distance-Weighting Algorithm;chaiken;Chaiken's Algorithm;hermite;Interpolation by Cubic Hermite Splines;snakes;Snakes method for line smoothing;network;Network generalization;displacement;Displacement of lines close to each other;"
+msgstr "douglas;Douglas-Peucker Algorithmus;douglas_reduction;Douglas-Peucker Algorithmus mit Reduktionsparameter;lang;Lang's Vereinfachungsalgorithmus;reduction;Vertex Reduktionsalgorithmus eliminiert Punkte, die dicht beieinander liegen;reumann;Reumann-Witkam Algorithmus;remove_small;Entfernt Linien, die kürzer als der Schwellwert sind und Flächen, die kleiner als der Schwellwert sind;boyle;Boyle's Vorausschauender-Algorithmus;sliding_averaging;McMaster's Gleitender Mittelwert- Algorithmus;distance_weighting;McMaster's Distanzgewichtetungs-Algorithmus;chaiken;Chaiken's Algorithmus;hermite;Interpolation mit kubischen Hermite-Splines;snakes;Snake-Methoden zum glätten von Linien;network;Netzwerk Generalisierung;displacement;Verschieben von Linien, die dicht beieinander liegen;"
+
+msgid "Number of vertices was reduced from %d to %d [%d%%]"
+msgstr "Anzahl der Vertices wurden von %d auf %d [%d%%] reduziert."
+
+msgid ""
+"\n"
+"ERROR: Required parameter <%s> not set:\n"
+"    (%s).\n"
+msgstr ""
+"\n"
+"FEHLER: Benötigter Parameter <%s> wurde nicht angegeben:\n"
+"    (%s).\n"
+
+msgid "Band to select"
+msgstr "Zu selektierender Kanal"
+
+#, fuzzy
+msgid "Watershed basin analysis program"
+msgstr "Modul zur Analyse von Wassereinzugsgebieten."
+
+#, fuzzy
+msgid "Name of input raster map with real depressions"
+msgstr "Name der Eingabe-Rasterkarte, die umprojeziert werden soll."
+
+#, fuzzy
+msgid "Name of input raster map blocking overland surface flow"
+msgstr "Eingabekarte mit Gelände, dass den Oberflächenabfluss blockiert, für USLE."
+
+#, fuzzy
+msgid "Name for output raster map useful for visual display of results (DEPRECATED)"
+msgstr "Ausgabekarte die hilfreich für die visuelle Darstellung der Ergebnisse ist. VERALTET."
+
+#, fuzzy
+msgid "Name for output direction map for depressionless elevation raster map"
+msgstr "(o)   Richtungskarte für abflusslose Höhenkarte."
+
+#, fuzzy
+msgid "raster, export, animation"
+msgstr "Raster, Höhenwerte"
+
+#, fuzzy
+msgid "(requires r.out.ppm with stdout option)"
+msgstr ""
+"Konvertiere direkt, benutze wenig Festplattenplatz\n"
+"\t(benötigt r.out.ppm mit stdout-Option)"
+
+#, fuzzy
+msgid "Calculation of unconfined groundwater flow: loop %i\n"
+msgstr "Berechnung der unbeschränkten Grundwasserfluss Schleife %i\n"
+
+#, fuzzy
+msgid "Name for output elevation raster map after filling"
+msgstr "Ausgabehöhenkarte nach dem Füllen"
+
+#, fuzzy
+msgid "Name for output direction raster map"
+msgstr "Name der Ausgabe-Expositions-Rasterkarte."
+
+#, fuzzy
+msgid "Reading input data..."
+msgstr "Lese Eingaben..."
+
+#, fuzzy
+msgid "Writing output data..."
+msgstr "Schreibe Ausgabe..."
+
+#, fuzzy
+msgid "raster, reclassification"
+msgstr "Raster, Höhenwerte"
+
+#, fuzzy
+msgid "Name of input raster map with seed (at least 1 cell > 0)"
+msgstr "Name der Rasterkarte mit Startpunkten (mindestens eine Zelle > 0)."
+
+#, fuzzy
+msgid "Constructs flow lines."
+msgstr "Kosten für Isolinien."
+
+#, fuzzy
+msgid "Name for flowpath length raster map"
+msgstr "Ausgabe-Rasterkarte, der Hanglänge."
+
+#, fuzzy
+msgid "imagery, landsat, acca"
+msgstr "Bildverarbeitung, Klassifikation, MLC"
+
+#, fuzzy
+msgid "Cannot write to raster map <%s>"
+msgstr "Kann Rasterkarten nicht schreiben."
+
+#, fuzzy
+msgid "Creates, edits, and lists groups and subgroups of imagery data."
+msgstr "Erzeugt, editiert und listet Gruppen und Untergruppen von Bilddateien."
+
+#, fuzzy
+msgid "Extract quality control parameters from Modis QC layers"
+msgstr "Extrahiert Terrainparameter aus einem DGM."
+
+#, fuzzy
+msgid "Name of the surface reflectance QC layer [bit array]"
+msgstr "Name Referenzsystemtabelle."
+
+#, fuzzy
+msgid "The output cell map <%s.%d> has values outside the 0-255 range. Min: %d Max: %d"
+msgstr "Die Ausgabe-Rasterkarte <%s.%d> hat Werte außerhalb der Spanne 0-255."
+
+#, fuzzy
+msgid "Computing means and standard deviations..."
+msgstr "Berechne Mittelwerte für Kanal %d..."
+
+#, fuzzy
+msgid "Computing means..."
+msgstr "Berechne Gleichungen..."
+
+#, fuzzy
+msgid "wxpython;wxPython based next generation GUI;tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);text;command line interface only"
+msgstr "tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der nächsten Generation;text;Nur Kommandozeile"
+
+#, fuzzy
+msgid "Other"
+msgstr "Dither"
+
+#, fuzzy
+msgid "Offset in map units."
+msgstr "Bufferdistanz in Karteneinheiten"
+
+#, fuzzy
+msgid "db connection was not set by form"
+msgstr "db Verbindung wurde nicht von Formular gesetzt\n"
+
+#, fuzzy
+msgid "Cannot describe table"
+msgstr "Kann Tabelle nicht beschreiben\n"
+
+#, fuzzy
+msgid "DEPRECATED Buffer distance in map units"
+msgstr "Bufferdistanz in Karteneinheiten"
+
+#, fuzzy
+msgid "Line buffers... "
+msgstr "Linien-Buffer... "
+
+#, fuzzy
+msgid "Zero area size, please clean input vector first."
+msgstr "Erzeugt Linien parallel zu den Eingabevektorlinien."
+
+#, fuzzy
+msgid "Could not get outside buffer for line id %d"
+msgstr "Konnte die Süd-Bufferzonengröße nicht lesen. Breche ab."
+
+#, fuzzy
+msgid "Area buffers... "
+msgstr "Flächen-Buffer ..."
+
+#, fuzzy
+msgid "Selecting areas..."
+msgstr "Selektiere Feature..."
+
+msgid "Converts to one of the supported OGR vector formats."
+msgstr "Konvertiert in ein OGR unterstütztes Vektorformat."
+
+#, fuzzy
+msgid "Cannot allocate %u bytes of memory"
+msgstr "Kann nicht %d Byte Speicher belegen."
+
+#, fuzzy
+msgid "Skip the join column in other table"
+msgstr "Spalte in der anderen Tabelle, die für den Join verwendet werden soll."
+
+#, fuzzy
+msgid "Copy all the columns from other table to map"
+msgstr "Spalte in der anderen Tabelle, die für den Join verwendet werden soll."
+
+#, fuzzy
+msgid "Name of input raster map in which to fill nulls"
+msgstr "Rasterkarte, in der die NULL-Zellen gefüllt werden sollen"
+
+#, fuzzy
+msgid "Name for output raster map with nulls filled by interpolation"
+msgstr "Gibt eine Rasterkarte aus, in der NULL-Gebiete durch Interpolation der umgebenden Werte gefüllt wurden"
+
+#, fuzzy
+msgid "Mosaics up to four images, extending the color table."
+msgstr "Mosaikiert bis zu 4 Bilder und erweitert die Farbtabelle. Erzeugt *.mosaic-Karten."
+
+#, fuzzy
+msgid "creates map *.mosaic"
+msgstr "3. Bild für das Mosaik."
+
+#, fuzzy
+msgid "1st map for mosaic (top of image stack)"
+msgstr "1. Karte für das Mosaik (Spitze des Bildstapels)."
+
+#, fuzzy
+msgid "2nd map for mosaic"
+msgstr "2. Bild für das Mosaik."
+
+#, fuzzy
+msgid "3rd map for mosaic"
+msgstr "3. Bild für das Mosaik."
+
+#, fuzzy
+msgid "4th map for mosaic"
+msgstr "4. Bild für das Mosaik."
+
+#, fuzzy
+msgid "writing edges..."
+msgstr "Schreibe Vertices..."
+
+msgid "raster3d, statistics"
+msgstr "3D-Raster, Statistik"
+
+msgid "raster, png"
+msgstr "Raster, PNG"
+
+msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)"
+msgstr "Erzeugt Hangkurven (flowlines), Fließlängen und Flussdichte (upslope areas) aus einem angegebenen digitalen Höhenmodell (DEM)."
+
+msgid "Convert all old GRASS < Ver5.7 vector maps in current mapset to current format"
+msgstr "Konvertiert alle alten GRASS < Ver5.7 Vektorkarten im aktuellen Mapset in das aktuelle Format."
+
+#, fuzzy
+msgid "Creates a mask for limiting raster operation."
+msgstr "Erzeuge eine Maske (MASK) um Rasteroperationen zu begrenzen."
+
+msgid "Import Mapgen or Matlab vector maps into GRASS."
+msgstr "Importiert Mapgen oder Matlab Vektorkarten nach GRASS."
+
+msgid "Ascii file containing spectral signatures"
+msgstr "ASCII-Datei mit den spektralen Signaturen."
+
+#, fuzzy
+msgid "Unhandled vector feature type <%s>"
+msgstr "Kann die Tabelle <%s> nicht erzeugen."
+
+#, fuzzy
+msgid "No areas found, skipping type=area"
+msgstr "Keine Flächen gefunden, überspringe den Typ poly."
+
+#, fuzzy
+msgid "No points found, skipping%s%s"
+msgstr "Keine Punkte gefunden, überspringe den Typ point."
+
+#, fuzzy
+msgid "No lines found, skipping%s%s"
+msgstr "Keine Linien gefunden, überspringe den Typ Linie."
+
+msgid "The given nodata value is present in rasterband <%s> and would lead to data loss. Please specify a different nodata value with the %s parameter."
+msgstr "Der gewählte NoData-Wert ist im Rasterkanal <%s> vorhanden und würde zu Datenverlust führen. Bitte geben Sie einen anderen NoData-Wert mit dem Parameter %s an."
+
+msgid "Output long/lat in decimal degrees or other projections with many decimal places"
+msgstr "Gebe long/lat in Dezimalgrad oder einer anderen Projektion mit vielen Dezimalstellen aus."
+
+msgid "Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns."
+msgstr "Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
+
+#, fuzzy
+msgid "GDAL datatype: %s, range: %f - %f"
+msgstr "Rasterkarte <%s> erzeugt."
+
+#, fuzzy
+msgid "The hight of the river bed in [m]"
+msgstr "Höhe des Flussbetts [m]."
+
+#, fuzzy
+msgid "The hight of the drainage bed in [m]"
+msgstr "Höhe der Drainage [m]."
+
+#, fuzzy
+msgid "Pass %d:"
+msgstr "Durchgang %d..."
+
+#, fuzzy
+msgid "The '-q' flag is superseded and will be removed "
+msgstr "Der Schalter '-q' wurde überflüssig gemacht und wird in der Zukunft entfernt-- Bitte verwenden Sie '--quiet' stattdessen ."
+
+#, fuzzy
+msgid "Unable to create table <%s_edge_Interpolation>"
+msgstr "Kann die Datenbank <%s> nicht öffnen."
+
+#, fuzzy
+msgid "Rescale output raster map [0,255]"
+msgstr "Name der Ausgabe-Rasterkarte."
+
+#, fuzzy
+msgid "Input raster map contains cells with NULL-value (no-data). The value %g was used to represent no-data values in the input map. You can specify a nodata value with the %s option."
+msgstr "Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert %g wurde verwendet um Nodata-Werte in der Eingabekarte zu kennzeichnen. Sie können Nodata-Wert mit dem Parameter %s bestimmen."
+
+msgid "Allocation memory for bilinear interpolation"
+msgstr "Allokiere Speicher für die bilineare Interpolation."
+
+msgid "Allocation memory for bicubic interpolation"
+msgstr "Allokiere Speicher für die bikubische Interpolation."
+
+msgid ""
+"Sorry, if any of the following options are set:\n"
+"    basin, stream, half.basin, slope, or lS\n"
+"    you MUST provide a value for the basin threshold parameter."
+msgstr ""
+"Wenn eine der folgenden Optionen gesetzt wurde:\n"
+"    basin, stream, half.basin, slope oder lS\n"
+"    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
+
+msgid "Do not export long colortable"
+msgstr "Exportiere keine langen Farbtabellen."
+
+msgid "Input raster map contains cells with NULL-value (no-data). The value %d was used to represent no-data values in the input map. You can specify nodata value by %s parameter."
+msgstr "Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert %d wurde verwendet um Nodata-Werte in der Eingabekarte zu kennzeichnen. Sie können Nodata-Wert mit dem Parameter %s bestimmen."
+
+msgid "Default value: GRASS_GUI if defined otherwise tcltk"
+msgstr "Standardwert: GRASS_GUI wenn definiert, ansonsten tcltk"
+
+msgid "tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);wxpython;wxPython based next generation GUI;text;command line interface only"
+msgstr "tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der nächsten Generation;text;Nur Kommandozeile"
+
+msgid "CHILD[pid = %i]: unable to open %s mask ... continue without!!!"
+msgstr "CHILD[pid = %i]: kann %s Maske nicht öffnen ... mache ohne weiter !!!"
+
+msgid "r.li.worker (pid %i) exited with abnormal status %i"
+msgstr "r.li.worker (pid %i) abgebrochen mit unnormalen Status %i"
+
+msgid "r.li.worker (pid %i) terminated"
+msgstr "r.li.worker (pid %i) beendet."
+
+msgid "Cannot make stat of %s configuration file"
+msgstr "Kann stat von %s Konfigurationsdatei nicht erzeugen."
+
+msgid "Illegal configuration file"
+msgstr "Ungültige Konfigurationsdatei."
+
+msgid "Seed [%d] larger than maximum [%d]"
+msgstr "Startwert [%d] größer als das Maximum [%d]."
+
+msgid "Seed [%d] smaller than minimum [%d]"
+msgstr "Startwert [%d] kleiner als das Minimum [%d]."
+
+msgid "Show the category label in the grid cell(s)"
+msgstr "Zeige die Kategorielabel der Rasterzelle(n)."
+
+msgid "Unable to read symbol, unable todisplay points"
+msgstr "Kann das Symbol nicht lesen; kann die Punkte nicht darstellen."
+
+msgid "vector, query"
+msgstr "Vektor, Abfrage"
+
+msgid "point;simple x,y[,z] list;standard;GRASS's vector ASCII format"
+msgstr "Punkt; einfache x,y[,z] Liste;Standard;GRASSs Vektor-ASCII-Format"
+
+msgid "Number of column used as y coordinate (first column is 1) for points mode"
+msgstr "Nummer der Spalte, die als Y-Koordinate (erste Spalte ist 1)  für den Punkt-Modus genutzt wird."
+
+msgid "Number of column used as z coordinate (first column is 1) for points mode"
+msgstr "Nummer der Spalte, die als Z-Koordinate (erste Spalte ist 1)  für den Punkt-Modus genutzt wird."
+
+msgid "If 0, z coordinate is not used"
+msgstr "Wenn 0, dann wird die Z-Koordinate nicht verwendet."
+
+msgid "Number of column used as category (first column is 1) for points mode"
+msgstr "Nummer der Spalte, die als Kategorie (erste Spalte ist 1)  für den Punkt-Modus genutzt wird."
+
+msgid "If 0, unique category is assigned to each row and written to new column 'cat'"
+msgstr "Wenn 0, dann wird in die neue Spalte 'cat' in jede Zeile eine eindeutige Kategorie geschrieben."
+
+msgid "Create a new empty vector map and exit. Nothing is read from input"
+msgstr "Erstellt eine neue, leere Vektorkarte und beendet sich. Nichts wird eingelesen."
+
+msgid "Computing row %d of covariance matrix..."
+msgstr "Berechne Zeile %d der Kovarianz-Matrix..."
+
+msgid "Converting %s..."
+msgstr "Konvertiere %s..."
+
+msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask itself."
+msgstr "Berechnet Schlagschattenbereiche zwischen Sonnenstand und DEM. Es können entweder A: exakte Sonnenposition, oder B: Datum/Uhrzeit zur selbständigen Berechnung durch r.sunmask, angegeben werden."
+
+msgid "A: altitude of the sun above horizon, degrees"
+msgstr "A: Höhe der Sonne über dem Horizont (in Grad)."
+
+msgid "A: azimuth of the sun from the north, degrees"
+msgstr "A: Winkel der Sonne, gemessen von der Nordrichtung (in Grad)."
+
+msgid "B: minutes (0..60)"
+msgstr "B: Minuten (0..60)"
+
+msgid "B: seconds (0..60)"
+msgstr "B: Sekunden (0..60)"
+
+msgid "B: timezone (east positive, offset from GMT, also use to adjust daylight savings)"
+msgstr "B: Zeitzone (Ost positiv, Abstand von GMT; wird auch zur Anpassung an die Winterzeit genutzt)."
+
+msgid "Name for output file (do not add extension)"
+msgstr "Name der Ausgabedatei (Fügen Sie keine Dateiendung an)."
+
+msgid "Surface"
+msgstr "Oberfläche"
+
+msgid "Volume"
+msgstr "Volumen"
+
+msgid "New LOCATION name (not location path)"
+msgstr "Neuer LOCATION Name (nicht der Pfad zur Location)."
+
+msgid "New GISDBASE (full path to the directory where the new location is)"
+msgstr "Neue GISDBASE (vollständiger Pfad zu dem Verzeichnis, in dem sich die neue L0cation befindet)."
+
+msgid "Width and height of output image"
+msgstr "Breite und Höhe des Ausgabe-Bildes."
+
+msgid "Vector map for which to edit attribute table"
+msgstr "Vektorkarte deren Attributtabelle editiert werden soll."
+
+msgid "Layer where to add column"
+msgstr "Layer, in dem eine Spalte hinzugefügt werden soll."
+
+msgid "Raster value"
+msgstr "Rasterwert"
+
+msgid "Slower but accurate (applies to FP maps only)"
+msgstr "Langsamer aber genau (gilt nur für Fließkomma-Karten)."
+
+msgid "Feature type. Combination of types is not supported by all formats."
+msgstr "Feature-Typ: Kombinationen der Typen wird nicht von allen Formaten unterstützt."
+
+msgid "%d faces found, but not requested to be exported. Verify 'type' parameter."
+msgstr "%d 3D-Fläche(n) gefunden, die allerdings nicht exportiert werden sollen. Überprüfen Sie bitte den 'type'-Parameter."
+
+msgid "Exporting %i points/lines..."
+msgstr "Exportiere %i Punkte/Linien..."
+
+msgid "Create a MASK for limiting raster operation"
+msgstr "Erzeuge eine Maske (MASK) um Rasteroperationen zu begrenzen."
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)"
+msgstr "Sedimenttransport und Erosions/Depositions Simulation unter Verwendung der \"path sampling method\" (SIMWE)."
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)"
+msgstr "Hydrologische Simulation des Oberflächenabfluß mittels der 'path sampling'-Methode (SIMWE)."
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
+msgstr "Filtere und generiere ein depressionsloses Höhenmodell und eine Fließrichtungskarte auf Basis eines gegebenen Höhenmodells."
+
+msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+msgstr "Erstellt Karte mit topographischem Index [(ln(a/tan(beta)))] auf Basis einer Karte mit Höhenwerten."
+
+msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr "Importiert Mapgen oder Matlab-ASCII Vektorkarten nach GRASS."
+
+msgid "Raster File Series to MPEG Conversion Program."
+msgstr "Konvertiert Folgen von Rasterkarten zu einem MPEG-Film."
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x"
+msgstr "Berechnet eine lineare Regression von zwei Rasterkarten: y = a + b*x"
+
 #~ msgid "Input grid3 filename"
 #~ msgstr "Eingabe-grid3D-Datei"
 
@@ -34032,42 +34500,6 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 
 #~ msgid "Transforming <%s>..."
 #~ msgstr "Transformiere <%s>..."
-
-#, fuzzy
-#~ msgid "Name for output flowline density raster map"
-#~ msgstr "Ausgabe-Rasterkarte der Fließdichte."
-
-#, fuzzy
-#~ msgid "vector, interpolation, kriging"
-#~ msgstr "Vektor, Interpolation"
-
-#, fuzzy
-#~ msgid "Raster map to use as mask"
-#~ msgstr "Rasterkarte, die als Maske (MASK) verwendet werden soll."
-
-#~ msgid "Calculate the groundwater distance velocity vector field and write the x, y, and z components to maps named name_[xyz]. Name is basename for the new raster3d maps"
-#~ msgstr "Berechne das Vektorfeld der Grundwassergeschwindigkeit und schreibe die X, Y und Z Komponenten in die Karten name_[xyz]. Name ist der gemeinsame Bestandteil der neuen raster3d Karten."
-
-#~ msgid "Checking GDAl data type and nodata value"
-#~ msgstr "Prüfe GDAL Datentyp und NoData-Wert."
-
-#~ msgid "douglas;Douglas-Peucker Algorithm;douglas_reduction;Douglas-Peucker Algorithm with reduction parameter;lang;Lang Simplification Algorithm;reduction;Vertex Reduction Algorithm eliminates points close to each other;reumann;Reumann-Witkam Algorithm;remove_small;Removes lines shorter than threshold and areas of area less than threshold;boyle;Boyle's Forward-Looking Algorithm;sliding_averaging;McMaster's Sliding Averaging Algorithm;distance_weighting;McMaster's Distance-Weighting Algorithm;chaiken;Chaiken's Algorithm;hermite;Interpolation by Cubic Hermite Splines;snakes;Snakes method for line smoothing;network;Network generalization;displacement;Displacement of lines close to each other;"
-#~ msgstr "douglas;Douglas-Peucker Algorithmus;douglas_reduction;Douglas-Peucker Algorithmus mit Reduktionsparameter;lang;Lang's Vereinfachungsalgorithmus;reduction;Vertex Reduktionsalgorithmus eliminiert Punkte, die dicht beieinander liegen;reumann;Reumann-Witkam Algorithmus;remove_small;Entfernt Linien, die kürzer als der Schwellwert sind und Flächen, die kleiner als der Schwellwert sind;boyle;Boyle's Vorausschauender-Algorithmus;sliding_averaging;McMaster's Gleitender Mittelwert- Algorithmus;distance_weighting;McMaster's Distanzgewichtetungs-Algorithmus;chaiken;Chaiken's Algorithmus;hermite;Interpolation mit kubischen Hermite-Splines;snakes;Snake-Methoden zum glätten von Linien;network;Netzwerk Generalisierung;displacement;Verschieben von Linien, die dicht beieinander liegen;"
-
-#~ msgid "Number of vertices was reduced from %d to %d [%d%%]"
-#~ msgstr "Anzahl der Vertices wurden von %d auf %d [%d%%] reduziert."
-
-#~ msgid ""
-#~ "\n"
-#~ "ERROR: Required parameter <%s> not set:\n"
-#~ "    (%s).\n"
-#~ msgstr ""
-#~ "\n"
-#~ "FEHLER: Benötigter Parameter <%s> wurde nicht angegeben:\n"
-#~ "    (%s).\n"
-
-#~ msgid "Band to select"
-#~ msgstr "Zu selektierender Kanal"
 
 #~ msgid "Surface area estimation for rasters."
 #~ msgstr "Abschätzung der Größe der Rasteroberflächen."
@@ -40295,121 +40727,23 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 #~ msgid "%s: base raster map not found"
 #~ msgstr "%s: Basis-Rasterkarte nicht gefunden."
 
-#, fuzzy
-#~ msgid "Watershed basin analysis program"
-#~ msgstr "Modul zur Analyse von Wassereinzugsgebieten."
-
-#, fuzzy
-#~ msgid "Name of input raster map with real depressions"
-#~ msgstr "Name der Eingabe-Rasterkarte, die umprojeziert werden soll."
-
-#, fuzzy
-#~ msgid "Name of input raster map blocking overland surface flow"
-#~ msgstr "Eingabekarte mit Gelände, dass den Oberflächenabfluss blockiert, für USLE."
-
-#, fuzzy
-#~ msgid "Name for output raster map useful for visual display of results (DEPRECATED)"
-#~ msgstr "Ausgabekarte die hilfreich für die visuelle Darstellung der Ergebnisse ist. VERALTET."
-
-#, fuzzy
-#~ msgid "Name for output direction map for depressionless elevation raster map"
-#~ msgstr "(o)   Richtungskarte für abflusslose Höhenkarte."
-
-#, fuzzy
-#~ msgid "raster, export, animation"
-#~ msgstr "Raster, Höhenwerte"
-
-#, fuzzy
-#~ msgid "(requires r.out.ppm with stdout option)"
-#~ msgstr ""
-#~ "Konvertiere direkt, benutze wenig Festplattenplatz\n"
-#~ "\t(benötigt r.out.ppm mit stdout-Option)"
-
 #~ msgid "The height of the river bed in [m]"
 #~ msgstr "Höhe des Flussbetts [m]."
-
-#, fuzzy
-#~ msgid "Calculation of unconfined groundwater flow: loop %i\n"
-#~ msgstr "Berechnung der unbeschränkten Grundwasserfluss Schleife %i\n"
-
-#, fuzzy
-#~ msgid "Name for output elevation raster map after filling"
-#~ msgstr "Ausgabehöhenkarte nach dem Füllen"
-
-#, fuzzy
-#~ msgid "Name for output direction raster map"
-#~ msgstr "Name der Ausgabe-Expositions-Rasterkarte."
-
-#, fuzzy
-#~ msgid "Reading input data..."
-#~ msgstr "Lese Eingaben..."
-
-#, fuzzy
-#~ msgid "Writing output data..."
-#~ msgstr "Schreibe Ausgabe..."
 
 #~ msgid "Output basic information about a raster map layer."
 #~ msgstr "Gibt grundlegende Informationen über eine Rasterkarte aus."
 
-#, fuzzy
-#~ msgid "raster, reclassification"
-#~ msgstr "Raster, Höhenwerte"
-
-#, fuzzy
-#~ msgid "Name of input raster map with seed (at least 1 cell > 0)"
-#~ msgstr "Name der Rasterkarte mit Startpunkten (mindestens eine Zelle > 0)."
-
 #~ msgid "Input map"
 #~ msgstr "Eingabekarte"
-
-#, fuzzy
-#~ msgid "Constructs flow lines."
-#~ msgstr "Kosten für Isolinien."
-
-#, fuzzy
-#~ msgid "Name for flowpath length raster map"
-#~ msgstr "Ausgabe-Rasterkarte, der Hanglänge."
 
 #~ msgid "Unable to get header for %s"
 #~ msgstr "Kann den Header von %s nicht lesen."
 
-#, fuzzy
-#~ msgid "imagery, landsat, acca"
-#~ msgstr "Bildverarbeitung, Klassifikation, MLC"
-
-#, fuzzy
-#~ msgid "Cannot write to raster map <%s>"
-#~ msgstr "Kann Rasterkarten nicht schreiben."
-
-#, fuzzy
-#~ msgid "Creates, edits, and lists groups and subgroups of imagery data."
-#~ msgstr "Erzeugt, editiert und listet Gruppen und Untergruppen von Bilddateien."
-
-#, fuzzy
-#~ msgid "Extract quality control parameters from Modis QC layers"
-#~ msgstr "Extrahiert Terrainparameter aus einem DGM."
-
-#, fuzzy
-#~ msgid "Name of the surface reflectance QC layer [bit array]"
-#~ msgstr "Name Referenzsystemtabelle."
-
 #~ msgid "Subsignature %d only contains %f pixels"
 #~ msgstr "Unter-Signatur %d enthält nur %f Pixel."
 
-#, fuzzy
-#~ msgid "The output cell map <%s.%d> has values outside the 0-255 range. Min: %d Max: %d"
-#~ msgstr "Die Ausgabe-Rasterkarte <%s.%d> hat Werte außerhalb der Spanne 0-255."
-
 #~ msgid "Calculating covariance matrix..."
 #~ msgstr "Berechne die Kovarianz-Matrix..."
-
-#, fuzzy
-#~ msgid "Computing means and standard deviations..."
-#~ msgstr "Berechne Mittelwerte für Kanal %d..."
-
-#, fuzzy
-#~ msgid "Computing means..."
-#~ msgstr "Berechne Gleichungen..."
 
 #~ msgid "Rescaling <%s> to range %d,%d..."
 #~ msgstr "Skaliere die Daten <%s> auf den Bereich %d,%d..."
@@ -40429,10 +40763,6 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 #~ msgid "Unable to set size"
 #~ msgstr "Kann die Größe nicht setzen."
 
-#, fuzzy
-#~ msgid "wxpython;wxPython based next generation GUI;tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);text;command line interface only"
-#~ msgstr "tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der nächsten Generation;text;Nur Kommandozeile"
-
 #~ msgid "Launching '%s' GUI in the background, please wait ..."
 #~ msgstr "Starte '%s' GUI im Hintergrund. Bitte warten Sie ..."
 
@@ -40444,10 +40774,6 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 
 #~ msgid "The mapset does not exist. Use -c flag to create it."
 #~ msgstr "Das Mapset existiert nicht.Verwenden Sie den Schalter -c um es zu erzeugen."
-
-#, fuzzy
-#~ msgid "Other"
-#~ msgstr "Dither"
 
 #~ msgid "Unrecognized 'ask' value in proj-parms.table: %s"
 #~ msgstr "Unbekannter Wert für 'ask' in proj-parms.table: %s"
@@ -40470,53 +40796,14 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 #~ msgid "Merge boundaries:"
 #~ msgstr "Verbinde Grenzen:"
 
-#, fuzzy
-#~ msgid "Offset in map units."
-#~ msgstr "Bufferdistanz in Karteneinheiten"
-
-#, fuzzy
-#~ msgid "db connection was not set by form"
-#~ msgstr "db Verbindung wurde nicht von Formular gesetzt\n"
-
-#, fuzzy
-#~ msgid "Cannot describe table"
-#~ msgstr "Kann Tabelle nicht beschreiben\n"
-
 #~ msgid "Delete line and exit"
 #~ msgstr "Lösche Linie und beenden"
 
 #~ msgid "Key column name"
 #~ msgstr "Name der Schlüsselspalte."
 
-#, fuzzy
-#~ msgid "DEPRECATED Buffer distance in map units"
-#~ msgstr "Bufferdistanz in Karteneinheiten"
-
-#, fuzzy
-#~ msgid "Line buffers... "
-#~ msgstr "Linien-Buffer... "
-
-#, fuzzy
-#~ msgid "Zero area size, please clean input vector first."
-#~ msgstr "Erzeugt Linien parallel zu den Eingabevektorlinien."
-
-#, fuzzy
-#~ msgid "Could not get outside buffer for line id %d"
-#~ msgstr "Konnte die Süd-Bufferzonengröße nicht lesen. Breche ab."
-
-#, fuzzy
-#~ msgid "Area buffers... "
-#~ msgstr "Flächen-Buffer ..."
-
-#, fuzzy
-#~ msgid "Selecting areas..."
-#~ msgstr "Selektiere Feature..."
-
 #~ msgid "vector, transformation"
 #~ msgstr "Vektor, Transformation"
-
-#~ msgid "Converts to one of the supported OGR vector formats."
-#~ msgstr "Konvertiert in ein OGR unterstütztes Vektorformat."
 
 #~ msgid "Unknown operator"
 #~ msgstr "Unbekannte Operater"
@@ -40529,10 +40816,6 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 
 #~ msgid "Name of input vector points map for which to edit attribute table"
 #~ msgstr "Name der Vektorpunktekarte, dessen Attributtabelle editiert werden soll. "
-
-#, fuzzy
-#~ msgid "Cannot allocate %u bytes of memory"
-#~ msgstr "Kann nicht %d Byte Speicher belegen."
 
 #~ msgid "Cannot parse MySQL embedded database name"
 #~ msgstr "Kann den Name der eingebetteten MySQL-Datenbank nicht interpretieren."
@@ -40555,46 +40838,6 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 #~ msgid "Cannot recognize boolean value"
 #~ msgstr "Kann den Boolean-Wert nicht erkennen."
 
-#, fuzzy
-#~ msgid "Skip the join column in other table"
-#~ msgstr "Spalte in der anderen Tabelle, die für den Join verwendet werden soll."
-
-#, fuzzy
-#~ msgid "Copy all the columns from other table to map"
-#~ msgstr "Spalte in der anderen Tabelle, die für den Join verwendet werden soll."
-
-#, fuzzy
-#~ msgid "Name of input raster map in which to fill nulls"
-#~ msgstr "Rasterkarte, in der die NULL-Zellen gefüllt werden sollen"
-
-#, fuzzy
-#~ msgid "Name for output raster map with nulls filled by interpolation"
-#~ msgstr "Gibt eine Rasterkarte aus, in der NULL-Gebiete durch Interpolation der umgebenden Werte gefüllt wurden"
-
-#, fuzzy
-#~ msgid "Mosaics up to four images, extending the color table."
-#~ msgstr "Mosaikiert bis zu 4 Bilder und erweitert die Farbtabelle. Erzeugt *.mosaic-Karten."
-
-#, fuzzy
-#~ msgid "creates map *.mosaic"
-#~ msgstr "3. Bild für das Mosaik."
-
-#, fuzzy
-#~ msgid "1st map for mosaic (top of image stack)"
-#~ msgstr "1. Karte für das Mosaik (Spitze des Bildstapels)."
-
-#, fuzzy
-#~ msgid "2nd map for mosaic"
-#~ msgstr "2. Bild für das Mosaik."
-
-#, fuzzy
-#~ msgid "3rd map for mosaic"
-#~ msgstr "3. Bild für das Mosaik."
-
-#, fuzzy
-#~ msgid "4th map for mosaic"
-#~ msgstr "4. Bild für das Mosaik."
-
 #~ msgid "Tool to maintain GRASS extensions in local GRASS installation."
 #~ msgstr "Werkzeug um GRASS-Erweiterungen in lokaler GRASS-Installation zu verwalten."
 
@@ -40603,254 +40846,6 @@ msgstr "Importiere auch die Qualitätskarte (SM-Statuskarte) und filtere die NDVI
 
 #~ msgid "List available modules in the GRASS Addons SVN repository"
 #~ msgstr "Zeige die im GRASS Addons Repository vorhandenen Module"
-
-#, fuzzy
-#~ msgid "writing edges..."
-#~ msgstr "Schreibe Vertices..."
-
-#~ msgid "raster3d, statistics"
-#~ msgstr "3D-Raster, Statistik"
-
-#~ msgid "raster, png"
-#~ msgstr "Raster, PNG"
-
-#~ msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)"
-#~ msgstr "Erzeugt Hangkurven (flowlines), Fließlängen und Flussdichte (upslope areas) aus einem angegebenen digitalen Höhenmodell (DEM)."
-
-#~ msgid "Convert all old GRASS < Ver5.7 vector maps in current mapset to current format"
-#~ msgstr "Konvertiert alle alten GRASS < Ver5.7 Vektorkarten im aktuellen Mapset in das aktuelle Format."
-
-#, fuzzy
-#~ msgid "Creates a mask for limiting raster operation."
-#~ msgstr "Erzeuge eine Maske (MASK) um Rasteroperationen zu begrenzen."
-
-#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
-#~ msgstr "Importiert Mapgen oder Matlab Vektorkarten nach GRASS."
-
-#~ msgid "Ascii file containing spectral signatures"
-#~ msgstr "ASCII-Datei mit den spektralen Signaturen."
-
-#, fuzzy
-#~ msgid "Unhandled vector feature type <%s>"
-#~ msgstr "Kann die Tabelle <%s> nicht erzeugen."
-
-#, fuzzy
-#~ msgid "No areas found, skipping type=area"
-#~ msgstr "Keine Flächen gefunden, überspringe den Typ poly."
-
-#, fuzzy
-#~ msgid "No points found, skipping%s%s"
-#~ msgstr "Keine Punkte gefunden, überspringe den Typ point."
-
-#, fuzzy
-#~ msgid "No lines found, skipping%s%s"
-#~ msgstr "Keine Linien gefunden, überspringe den Typ Linie."
-
-#~ msgid "The given nodata value is present in rasterband <%s> and would lead to data loss. Please specify a different nodata value with the %s parameter."
-#~ msgstr "Der gewählte NoData-Wert ist im Rasterkanal <%s> vorhanden und würde zu Datenverlust führen. Bitte geben Sie einen anderen NoData-Wert mit dem Parameter %s an."
-
-#~ msgid "Output long/lat in decimal degrees or other projections with many decimal places"
-#~ msgstr "Gebe long/lat in Dezimalgrad oder einer anderen Projektion mit vielen Dezimalstellen aus."
-
-#~ msgid "Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns."
-#~ msgstr "Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
-
-#, fuzzy
-#~ msgid "GDAL datatype: %s, range: %f - %f"
-#~ msgstr "Rasterkarte <%s> erzeugt."
-
-#, fuzzy
-#~ msgid "The hight of the river bed in [m]"
-#~ msgstr "Höhe des Flussbetts [m]."
-
-#, fuzzy
-#~ msgid "The hight of the drainage bed in [m]"
-#~ msgstr "Höhe der Drainage [m]."
-
-#, fuzzy
-#~ msgid "Pass %d:"
-#~ msgstr "Durchgang %d..."
-
-#, fuzzy
-#~ msgid "The '-q' flag is superseded and will be removed "
-#~ msgstr "Der Schalter '-q' wurde überflüssig gemacht und wird in der Zukunft entfernt-- Bitte verwenden Sie '--quiet' stattdessen ."
-
-#, fuzzy
-#~ msgid "Unable to create table <%s_edge_Interpolation>"
-#~ msgstr "Kann die Datenbank <%s> nicht öffnen."
-
-#, fuzzy
-#~ msgid "Rescale output raster map [0,255]"
-#~ msgstr "Name der Ausgabe-Rasterkarte."
-
-#, fuzzy
-#~ msgid "Input raster map contains cells with NULL-value (no-data). The value %g was used to represent no-data values in the input map. You can specify a nodata value with the %s option."
-#~ msgstr "Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert %g wurde verwendet um Nodata-Werte in der Eingabekarte zu kennzeichnen. Sie können Nodata-Wert mit dem Parameter %s bestimmen."
-
-#~ msgid "Allocation memory for bilinear interpolation"
-#~ msgstr "Allokiere Speicher für die bilineare Interpolation."
-
-#~ msgid "Allocation memory for bicubic interpolation"
-#~ msgstr "Allokiere Speicher für die bikubische Interpolation."
-
-#~ msgid ""
-#~ "Sorry, if any of the following options are set:\n"
-#~ "    basin, stream, half.basin, slope, or lS\n"
-#~ "    you MUST provide a value for the basin threshold parameter."
-#~ msgstr ""
-#~ "Wenn eine der folgenden Optionen gesetzt wurde:\n"
-#~ "    basin, stream, half.basin, slope oder lS\n"
-#~ "    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
-
-#~ msgid "Do not export long colortable"
-#~ msgstr "Exportiere keine langen Farbtabellen."
-
-#~ msgid "Input raster map contains cells with NULL-value (no-data). The value %d was used to represent no-data values in the input map. You can specify nodata value by %s parameter."
-#~ msgstr "Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert %d wurde verwendet um Nodata-Werte in der Eingabekarte zu kennzeichnen. Sie können Nodata-Wert mit dem Parameter %s bestimmen."
-
-#~ msgid "Default value: GRASS_GUI if defined otherwise tcltk"
-#~ msgstr "Standardwert: GRASS_GUI wenn definiert, ansonsten tcltk"
-
-#~ msgid "tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);wxpython;wxPython based next generation GUI;text;command line interface only"
-#~ msgstr "tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der nächsten Generation;text;Nur Kommandozeile"
-
-#~ msgid "CHILD[pid = %i]: unable to open %s mask ... continue without!!!"
-#~ msgstr "CHILD[pid = %i]: kann %s Maske nicht öffnen ... mache ohne weiter !!!"
-
-#~ msgid "r.li.worker (pid %i) exited with abnormal status %i"
-#~ msgstr "r.li.worker (pid %i) abgebrochen mit unnormalen Status %i"
-
-#~ msgid "r.li.worker (pid %i) terminated"
-#~ msgstr "r.li.worker (pid %i) beendet."
-
-#~ msgid "Cannot make stat of %s configuration file"
-#~ msgstr "Kann stat von %s Konfigurationsdatei nicht erzeugen."
-
-#~ msgid "Illegal configuration file"
-#~ msgstr "Ungültige Konfigurationsdatei."
-
-#~ msgid "Seed [%d] larger than maximum [%d]"
-#~ msgstr "Startwert [%d] größer als das Maximum [%d]."
-
-#~ msgid "Seed [%d] smaller than minimum [%d]"
-#~ msgstr "Startwert [%d] kleiner als das Minimum [%d]."
-
-#~ msgid "Show the category label in the grid cell(s)"
-#~ msgstr "Zeige die Kategorielabel der Rasterzelle(n)."
-
-#~ msgid "Unable to read symbol, unable todisplay points"
-#~ msgstr "Kann das Symbol nicht lesen; kann die Punkte nicht darstellen."
-
-#~ msgid "vector, query"
-#~ msgstr "Vektor, Abfrage"
-
-#~ msgid "point;simple x,y[,z] list;standard;GRASS's vector ASCII format"
-#~ msgstr "Punkt; einfache x,y[,z] Liste;Standard;GRASSs Vektor-ASCII-Format"
-
-#~ msgid "Number of column used as y coordinate (first column is 1) for points mode"
-#~ msgstr "Nummer der Spalte, die als Y-Koordinate (erste Spalte ist 1)  für den Punkt-Modus genutzt wird."
-
-#~ msgid "Number of column used as z coordinate (first column is 1) for points mode"
-#~ msgstr "Nummer der Spalte, die als Z-Koordinate (erste Spalte ist 1)  für den Punkt-Modus genutzt wird."
-
-#~ msgid "If 0, z coordinate is not used"
-#~ msgstr "Wenn 0, dann wird die Z-Koordinate nicht verwendet."
-
-#~ msgid "Number of column used as category (first column is 1) for points mode"
-#~ msgstr "Nummer der Spalte, die als Kategorie (erste Spalte ist 1)  für den Punkt-Modus genutzt wird."
-
-#~ msgid "If 0, unique category is assigned to each row and written to new column 'cat'"
-#~ msgstr "Wenn 0, dann wird in die neue Spalte 'cat' in jede Zeile eine eindeutige Kategorie geschrieben."
-
-#~ msgid "Create a new empty vector map and exit. Nothing is read from input"
-#~ msgstr "Erstellt eine neue, leere Vektorkarte und beendet sich. Nichts wird eingelesen."
-
-#~ msgid "Computing row %d of covariance matrix..."
-#~ msgstr "Berechne Zeile %d der Kovarianz-Matrix..."
-
-#~ msgid "Converting %s..."
-#~ msgstr "Konvertiere %s..."
-
-#~ msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask itself."
-#~ msgstr "Berechnet Schlagschattenbereiche zwischen Sonnenstand und DEM. Es können entweder A: exakte Sonnenposition, oder B: Datum/Uhrzeit zur selbständigen Berechnung durch r.sunmask, angegeben werden."
-
-#~ msgid "A: altitude of the sun above horizon, degrees"
-#~ msgstr "A: Höhe der Sonne über dem Horizont (in Grad)."
-
-#~ msgid "A: azimuth of the sun from the north, degrees"
-#~ msgstr "A: Winkel der Sonne, gemessen von der Nordrichtung (in Grad)."
-
-#~ msgid "B: minutes (0..60)"
-#~ msgstr "B: Minuten (0..60)"
-
-#~ msgid "B: seconds (0..60)"
-#~ msgstr "B: Sekunden (0..60)"
-
-#~ msgid "B: timezone (east positive, offset from GMT, also use to adjust daylight savings)"
-#~ msgstr "B: Zeitzone (Ost positiv, Abstand von GMT; wird auch zur Anpassung an die Winterzeit genutzt)."
-
-#~ msgid "Name for output file (do not add extension)"
-#~ msgstr "Name der Ausgabedatei (Fügen Sie keine Dateiendung an)."
-
-#~ msgid "Surface"
-#~ msgstr "Oberfläche"
-
-#~ msgid "Volume"
-#~ msgstr "Volumen"
-
-#~ msgid "New LOCATION name (not location path)"
-#~ msgstr "Neuer LOCATION Name (nicht der Pfad zur Location)."
-
-#~ msgid "New GISDBASE (full path to the directory where the new location is)"
-#~ msgstr "Neue GISDBASE (vollständiger Pfad zu dem Verzeichnis, in dem sich die neue L0cation befindet)."
-
-#~ msgid "Width and height of output image"
-#~ msgstr "Breite und Höhe des Ausgabe-Bildes."
-
-#~ msgid "Vector map for which to edit attribute table"
-#~ msgstr "Vektorkarte deren Attributtabelle editiert werden soll."
-
-#~ msgid "Layer where to add column"
-#~ msgstr "Layer, in dem eine Spalte hinzugefügt werden soll."
-
-#~ msgid "Raster value"
-#~ msgstr "Rasterwert"
-
-#~ msgid "Slower but accurate (applies to FP maps only)"
-#~ msgstr "Langsamer aber genau (gilt nur für Fließkomma-Karten)."
-
-#~ msgid "Feature type. Combination of types is not supported by all formats."
-#~ msgstr "Feature-Typ: Kombinationen der Typen wird nicht von allen Formaten unterstützt."
-
-#~ msgid "%d faces found, but not requested to be exported. Verify 'type' parameter."
-#~ msgstr "%d 3D-Fläche(n) gefunden, die allerdings nicht exportiert werden sollen. Überprüfen Sie bitte den 'type'-Parameter."
-
-#~ msgid "Exporting %i points/lines..."
-#~ msgstr "Exportiere %i Punkte/Linien..."
-
-#~ msgid "Create a MASK for limiting raster operation"
-#~ msgstr "Erzeuge eine Maske (MASK) um Rasteroperationen zu begrenzen."
-
-#~ msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)"
-#~ msgstr "Sedimenttransport und Erosions/Depositions Simulation unter Verwendung der \"path sampling method\" (SIMWE)."
-
-#~ msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)"
-#~ msgstr "Hydrologische Simulation des Oberflächenabfluß mittels der 'path sampling'-Methode (SIMWE)."
-
-#~ msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
-#~ msgstr "Filtere und generiere ein depressionsloses Höhenmodell und eine Fließrichtungskarte auf Basis eines gegebenen Höhenmodells."
-
-#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
-#~ msgstr "Erstellt Karte mit topographischem Index [(ln(a/tan(beta)))] auf Basis einer Karte mit Höhenwerten."
-
-#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "Importiert Mapgen oder Matlab-ASCII Vektorkarten nach GRASS."
-
-#~ msgid "Raster File Series to MPEG Conversion Program."
-#~ msgstr "Konvertiert Folgen von Rasterkarten zu einem MPEG-Film."
-
-#~ msgid "Calculates linear regression from two raster maps: y = a + b*x"
-#~ msgstr "Berechnet eine lineare Regression von zwei Rasterkarten: y = a + b*x"
 
 #~ msgid "Reading raster map <%s in %s> ..."
 #~ msgstr "Lese Rasterkarte <%s in %s> ..."

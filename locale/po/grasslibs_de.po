@@ -14,15 +14,14 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2012-01-24 21:54+0100\n"
-"Last-Translator: Robert Nuske <robert.nuske@nw-fva.de>\n"
+"PO-Revision-Date: 2012-02-06 10:37+0100\n"
+"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
 "Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
 
 #: ../lib/nviz/render.c:104
 msgid "Bad server connection"
@@ -7096,11 +7095,116 @@ msgstr "nicht bekannt"
 msgid "Uknown column <%s>"
 msgstr "Unbekannter Spaltentyp (Spalte <%s>)"
 
+#, fuzzy
+msgid "test, gmath"
+msgstr "test, gpde"
+
+#, fuzzy
+msgid "Unable to delete file '%s'. Reason: %s"
+msgstr "Kann Datei '%s' nicht löschen."
+
+#, fuzzy
+msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
+msgstr "Kann das Verzeichnis '%s' nicht in '%s' umbenennen."
+
+#, fuzzy
+msgid "Unable to remove directory '%s'. Reason: %s"
+msgstr "Kann das Verzeichnis '%s' nicht löschen."
+
+#, fuzzy
+msgid "Unable to delete prior null-cells file"
+msgstr "Kann Datei '%s' nicht löschen."
+
+#, fuzzy
+msgid "Unable to close the null-cells file"
+msgstr "Kann head nicht in die plus-Datei schreiben."
+
+#, fuzzy
+msgid "closecell: can't move [%s] to null-cells file [%s]"
+msgstr ""
+"closecell: Kann  %s\n"
+"nicht in die NULL-Datei %s verschieben."
+
+#, fuzzy
+msgid "Unable to delete the temporary null-cells file"
+msgstr "Kann keine temporäre NULL-Datei %s finden."
+
+#, fuzzy
+msgid "Unable to delete the empty temporary null-cells file"
+msgstr "Kann keine temporäre NULL-Datei %s finden."
+
+#, fuzzy
+msgid "Unable to delete the prior null-cells file"
+msgstr "Kann head nicht in die plus-Datei schreiben."
+
+#, fuzzy
+msgid "Unable to close the 'cell' file"
+msgstr "Kann Header-Datei nicht lesen."
+
+#, fuzzy
+msgid "Unable to delete prior 'fcell' file"
+msgstr "Kann Datei '%s' nicht löschen."
+
+#, fuzzy
+msgid "Unable to delete the prior %s file"
+msgstr "Kann Tabelle <%s> nicht löschen."
+
+#, fuzzy
+msgid "Unable to close file"
+msgstr "Kann Datei %s nicht öffnen."
+
+#, fuzzy
+msgid "Unable to delete the prior 'cell' file"
+msgstr "Kann head nicht in die plus-Datei schreiben."
+
+#, fuzzy
+msgid "closecell: can't move [%s] to cell file [%s]"
+msgstr ""
+"closecell: Kann %s\n"
+"nicht in die cell-Datei %s verschieben."
+
+#, fuzzy
+msgid "Unable to delete the temporary 'cell' file"
+msgstr "Kann temporäre Datei nicht öffnen."
+
+#, fuzzy
+msgid "Unable to write quant file!"
+msgstr "Kann quant-Datei nicht schreiben!"
+
+#, fuzzy
+msgid "Unable to delete the %s file"
+msgstr "Kann Tabelle <%s> nicht löschen."
+
+#, fuzzy
+msgid "Unable to write f_format file for CELL maps"
+msgstr "Kann f_format Datei für cell-Karten nicht schreiben."
+
+msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
+msgstr "Es dauert zu lange, um Punkte für die Interpolation zu finden -- bitte ändern Sie die Region auf den Bereich, in dem ihre Punkte sind. Fahre mit der Berechnung fort..."
+
+msgid "Reading lines from vector map ... "
+msgstr "Lese Linien der Vektorkarte ... "
+
+msgid "Reading nodes from vector map ... "
+msgstr "Lese Knoten der Vektorkarte ... "
+
+msgid "strip exists with insufficient data"
+msgstr "Es gibt einen Streifen mit unzureichend Daten."
+
+msgid "there are points outside specified 2D/3D region--ignored %d points"
+msgstr "Es sind Punkte außerhalb der angegebenen 2D/3D-Region gefunden worden - ignoriere %d Punkte."
+
+msgid "ignoring %d points -- too dense"
+msgstr "Ignoriere %d Punkte -- sie liegen zu dicht beieinander."
+
+msgid "some points outside of region -- will ignore..."
+msgstr "einige Punkte sind außerhalb der Region -- ignoriere dies..."
+
 #~ msgid "Partial build for OGR is not supported"
 #~ msgstr "Teilbauten werden für OGR nicht unterstützt."
 
 #~ msgid "Memory error in allocating timestamp"
-#~ msgstr "Speicherfehler beim Allokieren des Zeitstempel."
+#~ msgstr "Speicherfehler beim reservieren des Zeitstempel."
 
 #~ msgid "Cannot open database %s by driver %s"
 #~ msgstr "Kann Datenbank %s nicht mit Treiber %s öffnen."
@@ -7561,7 +7665,7 @@ msgstr "Unbekannter Spaltentyp (Spalte <%s>)"
 #~ msgstr "Fehler beim Lesen der Karte <%s@%s>, Zeile %d."
 
 #~ msgid "Unable to realloc buffer"
-#~ msgstr "Kann Buffer nicht wieder belegen."
+#~ msgstr "Kann Buffer nicht wieder reservieren."
 
 #~ msgid "unable to determine user's home directory"
 #~ msgstr "Kann das Home-Verzeichnis des Benutzers nicht finden."
@@ -7995,7 +8099,7 @@ msgstr "Unbekannter Spaltentyp (Spalte <%s>)"
 #~ msgstr "G_getenv(): Variable %s nicht gesetzt."
 
 #~ msgid "No help available for command [%s]\n"
-#~ msgstr "Leider keine Hilfe für den Befehl [%s] verfügbar.\n"
+#~ msgstr "Keine Hilfe für den Befehl [%s] verfügbar.\n"
 
 #~ msgid "duplicate projection field"
 #~ msgstr "Doppeltes Projektionsfeld."
@@ -8172,108 +8276,3 @@ msgstr "Unbekannter Spaltentyp (Spalte <%s>)"
 #~ msgstr ""
 #~ "\n"
 #~ "Bitte geben Sie ein Datum an.\n"
-
-#, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "test, gpde"
-
-#, fuzzy
-#~ msgid "Unable to delete file '%s'. Reason: %s"
-#~ msgstr "Kann Datei '%s' nicht löschen."
-
-#, fuzzy
-#~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
-#~ msgstr "Kann das Verzeichnis '%s' nicht in '%s' umbenennen."
-
-#, fuzzy
-#~ msgid "Unable to remove directory '%s'. Reason: %s"
-#~ msgstr "Kann das Verzeichnis '%s' nicht löschen."
-
-#, fuzzy
-#~ msgid "Unable to delete prior null-cells file"
-#~ msgstr "Kann Datei '%s' nicht löschen."
-
-#, fuzzy
-#~ msgid "Unable to close the null-cells file"
-#~ msgstr "Kann head nicht in die plus-Datei schreiben."
-
-#, fuzzy
-#~ msgid "closecell: can't move [%s] to null-cells file [%s]"
-#~ msgstr ""
-#~ "closecell: Kann  %s\n"
-#~ "nicht in die NULL-Datei %s verschieben."
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary null-cells file"
-#~ msgstr "Kann keine temporäre NULL-Datei %s finden."
-
-#, fuzzy
-#~ msgid "Unable to delete the empty temporary null-cells file"
-#~ msgstr "Kann keine temporäre NULL-Datei %s finden."
-
-#, fuzzy
-#~ msgid "Unable to delete the prior null-cells file"
-#~ msgstr "Kann head nicht in die plus-Datei schreiben."
-
-#, fuzzy
-#~ msgid "Unable to close the 'cell' file"
-#~ msgstr "Kann Header-Datei nicht lesen."
-
-#, fuzzy
-#~ msgid "Unable to delete prior 'fcell' file"
-#~ msgstr "Kann Datei '%s' nicht löschen."
-
-#, fuzzy
-#~ msgid "Unable to delete the prior %s file"
-#~ msgstr "Kann Tabelle <%s> nicht löschen."
-
-#, fuzzy
-#~ msgid "Unable to close file"
-#~ msgstr "Kann Datei %s nicht öffnen."
-
-#, fuzzy
-#~ msgid "Unable to delete the prior 'cell' file"
-#~ msgstr "Kann head nicht in die plus-Datei schreiben."
-
-#, fuzzy
-#~ msgid "closecell: can't move [%s] to cell file [%s]"
-#~ msgstr ""
-#~ "closecell: Kann %s\n"
-#~ "nicht in die cell-Datei %s verschieben."
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary 'cell' file"
-#~ msgstr "Kann temporäre Datei nicht öffnen."
-
-#, fuzzy
-#~ msgid "Unable to write quant file!"
-#~ msgstr "Kann quant-Datei nicht schreiben!"
-
-#, fuzzy
-#~ msgid "Unable to delete the %s file"
-#~ msgstr "Kann Tabelle <%s> nicht löschen."
-
-#, fuzzy
-#~ msgid "Unable to write f_format file for CELL maps"
-#~ msgstr "Kann f_format Datei für cell-Karten nicht schreiben."
-
-#~ msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
-#~ msgstr "Es dauert zu lange, um Punkte für die Interpolation zu finden -- bitte ändern Sie die Region auf den Bereich, in dem ihre Punkte sind. Fahre mit der Berechnung fort..."
-
-#~ msgid "Reading lines from vector map ... "
-#~ msgstr "Lese Linien der Vektorkarte ... "
-
-#~ msgid "Reading nodes from vector map ... "
-#~ msgstr "Lese Knoten der Vektorkarte ... "
-
-#~ msgid "strip exists with insufficient data"
-#~ msgstr "Es gibt einen Streifen mit unzureichend Daten."
-
-#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
-#~ msgstr "Es sind Punkte außerhalb der angegebenen 2D/3D-Region gefunden worden - ignoriere %d Punkte."
-
-#~ msgid "ignoring %d points -- too dense"
-#~ msgstr "Ignoriere %d Punkte -- sie liegen zu dicht beieinander."
-
-#~ msgid "some points outside of region -- will ignore..."
-#~ msgstr "einige Punkte sind außerhalb der Region -- ignoriere dies..."
