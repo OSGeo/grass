@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
     parm.from->key_desc = "min,max";
     parm.from->type = TYPE_INTEGER;
     parm.from->required = NO;
-    parm.from->multiple = YES;
     parm.from->description =
 	_("The input data range to be rescaled (default: full range of input map)");
 
@@ -80,7 +79,6 @@ int main(int argc, char *argv[])
     parm.to->key_desc = "min,max";
     parm.to->type = TYPE_INTEGER;
     parm.to->required = YES;
-    parm.to->multiple = YES;
     parm.to->description = _("The output data range");
 
     parm.title = G_define_option();
