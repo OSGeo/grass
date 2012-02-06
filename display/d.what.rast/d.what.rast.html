@@ -20,7 +20,39 @@ mouse button over desired location(s) within the current
 geographic region in the active display frame on the
 graphic monitor.
 
-<h2>EXAMPLE</h2>
+
+<h2>NOTES</h2>
+
+Mouse button return values are as follows: 0 indicates no
+button was pressed, 1 indicates that the left mouse button
+was pressed, 2 indicates the middle button was pressed, and
+3 indicates that the right mouse button was pressed.
+
+<p>
+<em>d.what.rast</em> will always print its output to the
+terminal screen.  <em>d.what.rast</em> output can be
+redirected into a file; however, if it is, the output will
+go both to the screen and to the file.  For example:
+
+<p>
+<dl>
+<dt><b>d.what.rast map=</b><em>soils,aspect</em><b> &gt; what.out</b> 
+<p><dd>will both send <em>d.what.rast</em> output to the screen
+and capture its output in the file named
+<em>what.out</em>.</dd>
+</dl>
+
+<p>
+The maximum number of raster map layers that can be queried at one time is 15.
+
+<p>
+<em><a href="d.what.vect.html">d.what.vect</a></em>
+allows the user to interactively query the category
+contents of multiple vector map layers at user-specified
+locations.
+
+
+<h2>EXAMPLES</h2>
 
 It is helpful, but not necessary, to first display a map to
 be used for reference in the active display frame before
@@ -98,41 +130,16 @@ button depressed.  Users can choose an option to run
 category value found and the number of the mouse button
 depressed.
 
-<h2>NOTES</h2></a>
-
-Mouse button return values are as follows: 0 indicates no
-button was pressed, 1 indicates that the left mouse button
-was pressed, 2 indicates the middle button was pressed, and
-3 indicates that the right mouse button was pressed.
-
-<p>
-<em>d.what.rast</em> will always print its output to the
-terminal screen.  <em>d.what.rast</em> output can be
-redirected into a file; however, if it is, the output will
-go both to the screen and to the file.  For example:
-
-<p>
-<dl>
-<dt><b>d.what.rast map=</b><em>soils,aspect</em><b> &gt; what.out</b> 
-<p><dd>will both send <em>d.what.rast</em> output to the screen
-and capture its output in the file named
-<em>what.out</em>.</dd>
-</dl>
-
-<p>
-The maximum number of raster map layers that can be queried at one time is 15.
-
-<p>
-<em><a href="d.what.vect.html">d.what.vect</a></em>
-allows the user to interactively query the category
-contents of multiple vector map layers at user-specified
-locations.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.rast.html">d.rast</a></em><br>
-<em><a href="d.what.vect.html">d.what.vect</a></em><br>
-<em><a href="g.region.html">g.region</a></em><br>
+<em>
+<a href="d.rast.html">d.rast</a><br>
+<a href="d.what.vect.html">d.what.vect</a><br>
+<a href="g.region.html">g.region</a>
+</em>
+<br>
+
 
 <h2>AUTHOR</h2>
 
@@ -140,4 +147,5 @@ Michael Shapiro,
 U.S. Army Construction Engineering 
 Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
