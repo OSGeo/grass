@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     int i;
     FILE *out;
     RASTER3D_Region cellhd;
-    void *g3map;
+    RASTER3D_Map *g3map;
     struct Categories cats;
     struct History hist;
     struct TimeStamp ts;
@@ -62,11 +62,7 @@ int main(int argc, char *argv[])
     int time_ok = 0, first_time_ok = 0, second_time_ok = 0;
     struct Option *opt1;
     struct Flag *rflag;
-    struct Flag *sflag;
-    struct Flag *tflag;
-    struct Flag *timestampflag;
     struct Flag *gflag;
-    struct Flag *iflag;
     struct Flag *hflag;
     int data_type;
 
@@ -81,42 +77,19 @@ int main(int argc, char *argv[])
     module->description =
 	_("Outputs basic information about a user-specified 3D raster map layer.");
 
-    opt1 = G_define_option();
-    opt1->key = "map";
-    opt1->type = TYPE_STRING;
-    opt1->required = YES;
-    opt1->gisprompt = "old,grid3,3d raster";
-    opt1->description = _("Name of input 3D raster map");
-
-    rflag = G_define_flag();
-    rflag->key = 'r';
-    rflag->description = _("Print range only");
-
-    sflag = G_define_flag();
-    sflag->key = 's';
-    sflag->description =
-	_("Print 3D raster map resolution (NS-res, EW-res, TB-res) only");
-
-    tflag = G_define_flag();
-    tflag->key = 't';
-    tflag->description = _("Print 3D raster map type (float/double) only");
+    opt1 = G_define_standard_option(G_OPT_R3_MAP);
 
     gflag = G_define_flag();
     gflag->key = 'g';
-    gflag->description = _("Print 3D raster map region only");
+    gflag->description = _("Print raster3d information in shell style");
 
-    iflag = G_define_flag();
-    iflag->key = 'i';
-    iflag->description = _("Print 3D raster tile number and size information only");
-    
+    rflag = G_define_flag();
+    rflag->key = 'r';
+    rflag->description = _("Print range in shell style only");
+
     hflag = G_define_flag();
     hflag->key = 'h';
-    hflag->description = _("Print 3D raster history instead of info");
-
-    timestampflag = G_define_flag();
-    timestampflag->key = 'p';
-    timestampflag->description =
-	_("Print 3D raster map timestamp (day.month.year hour:minute:seconds) only");
+    hflag->description = _("Print raster history instead of info");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -153,8 +126,7 @@ int main(int argc, char *argv[])
     out = stdout;
 
     /*Show the info if no flag is set */
-    if (!rflag->answer && !sflag->answer && !tflag->answer && !gflag->answer
-	&& !timestampflag->answer && !hflag->answer && !iflag->answer) {
+    if (!rflag->answer && !gflag->answer && !hflag->answer) {
 	divider('+');
 
 	if (G_asprintf(&line, "Layer:    %-29.29s  Date: %s", name,
@@ -181,8 +153,18 @@ int main(int argc, char *argv[])
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
 
-	if (G_asprintf(&line, "Title:    %s ( %s )", cats_ok ? cats.title : "??",
-	     hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??") > 0)
+	if (G_asprintf(&line, "Title:    %s", 
+                hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??") > 0)
+	    printline(line);
+	else
+	    G_fatal_error(_("Cannot allocate memory for string"));
+
+	if (G_asprintf(&line, "Units:    %s", Rast3d_get_unit(g3map)))
+	    printline(line);
+	else
+	    G_fatal_error(_("Cannot allocate memory for string"));
+
+	if (G_asprintf(&line, "Vertical unit: %s", Rast3d_get_vertical_unit(g3map)))
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
@@ -251,8 +233,8 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot allocate memory for string"));
 
             double totalSize = 0;
-            for(i = 0; i < ((RASTER3D_Map* )g3map)->nTiles; i++)
-                totalSize += ((RASTER3D_Map* )g3map)->tileLength[i];
+            for(i = 0; i < g3map->nTiles; i++)
+                totalSize += g3map->tileLength[i];
 
 	    if (G_asprintf(&line, "  Total size:           %ld Bytes",
                 (long)(totalSize)) > 0)
@@ -261,13 +243,13 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Number of tiles:      %d",
-                ((RASTER3D_Map* )g3map)->nTiles) > 0)
+                g3map->nTiles) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Mean tile size:       %ld Bytes",
-                (long)(totalSize/((RASTER3D_Map* )g3map)->nTiles)) > 0)
+                (long)(totalSize/g3map->nTiles)) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -275,12 +257,12 @@ int main(int argc, char *argv[])
             int tileSize = 0;
 
             if(data_type == FCELL_TYPE)
-                tileSize = sizeof(FCELL) * ((RASTER3D_Map* )g3map)->tileX * ((RASTER3D_Map* )g3map)->tileY *
+                tileSize = sizeof(FCELL) * g3map->tileX * g3map->tileY *
                         ((RASTER3D_Map* )g3map)->tileZ;
 
             if(data_type == DCELL_TYPE)
-                tileSize = sizeof(DCELL) * ((RASTER3D_Map* )g3map)->tileX * ((RASTER3D_Map* )g3map)->tileY *
-                        ((RASTER3D_Map* )g3map)->tileZ;
+                tileSize = sizeof(DCELL) * g3map->tileX * g3map->tileY *
+                        g3map->tileZ;
 
 	    if (G_asprintf(&line, "  Tile size in memory:  %ld Bytes",
                 (long)(tileSize)) > 0)
@@ -289,15 +271,15 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Number of tiles in x, y and  z:   %d, %d, %d",
-                                  ((RASTER3D_Map* )g3map)->nx, ((RASTER3D_Map* )g3map)->ny,
-                                  ((RASTER3D_Map* )g3map)->nz) > 0)
+                                  g3map->nx, g3map->ny,
+                                  g3map->nz) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Dimension of a tile in x, y, z:   %d, %d, %d",
-                                  ((RASTER3D_Map* )g3map)->tileX, ((RASTER3D_Map* )g3map)->tileY,
-                                  ((RASTER3D_Map* )g3map)->tileZ) > 0)
+                                  g3map->tileX, g3map->tileY,
+                                  g3map->tileZ) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -407,22 +389,7 @@ int main(int argc, char *argv[])
 
 	fprintf(out, "\n");
     }
-    else {			/* Range */
-	if (rflag->answer) {
-	    if (0 == Rast3d_range_load(g3map))
-		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
-
-	    Rast3d_range_min_max(g3map, &dmin, &dmax);
-            if(dmin != dmin)
-	        fprintf(out, "min=NULL\n");
-            else
-	        fprintf(out, "min=%f\n", dmin);
-            if(dmax != dmax)
-	        fprintf(out, "max=NULL\n");
-            else
-	        fprintf(out, "max=%f\n", dmax);
-
-	}			/*Region */
+    else {/* Print information in shell style*/
 	if (gflag->answer) {
 	    sprintf(tmp1, "%f", cellhd.north);
 	    sprintf(tmp2, "%f", cellhd.south);
@@ -440,8 +407,7 @@ int main(int argc, char *argv[])
 
 	    fprintf(out, "bottom=%g\n", cellhd.bottom);
 	    fprintf(out, "top=%g\n", cellhd.top);
-	}			/*Resolution */
-	if (sflag->answer) {
+
 	    G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
 	    fprintf(out, "nsres=%s\n", tmp3);
 
@@ -449,24 +415,46 @@ int main(int argc, char *argv[])
 	    fprintf(out, "ewres=%s\n", tmp3);
 
 	    fprintf(out, "tbres=%g\n", cellhd.tb_res);
-	}			/*Datatype */
-	if (tflag->answer) {
+
 	    fprintf(out, "datatype=\"%s\"\n",
 		    data_type == FCELL_TYPE ? "FCELL" :
 		    data_type == DCELL_TYPE ? "DCELL" :
-		    "??");
+		    "??");	   
+            
+            if (time_ok && (first_time_ok || second_time_ok)) {
+		G_format_timestamp(&ts, timebuff);
+		fprintf(out, "timestamp=\"%s\"", timebuff);
+	    }
+	    else {
+		fprintf(out, "timestamp=\"none\"\n");
+	    }
+	    fprintf(out, "units=\"%s\"\n", Rast3d_get_unit(g3map));
+	    fprintf(out, "vertical_units=\"%s\"\n", Rast3d_get_vertical_unit(g3map));
+	    fprintf(out, "tilenumx=%d\n", g3map->nx);
+	    fprintf(out, "tilenumy=%d\n", g3map->ny);
+	    fprintf(out, "tilenumz=%d\n", g3map->nz);
+	    fprintf(out, "tiledimx=%d\n", g3map->tileX);
+	    fprintf(out, "tiledimy=%d\n", g3map->tileY);
+	    fprintf(out, "tiledimz=%d\n", g3map->tileZ);
+	}
+	if (rflag->answer) {
+	    if (0 == Rast3d_range_load(g3map))
+		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
 
-	}			/*Resolution */
-	if (iflag->answer) {
-	    fprintf(out, "tilenumx=%d\n", ((RASTER3D_Map* )g3map)->nx);
-	    fprintf(out, "tilenumy=%d\n", ((RASTER3D_Map* )g3map)->ny);
-	    fprintf(out, "tilenumz=%d\n", ((RASTER3D_Map* )g3map)->nz);
-	    fprintf(out, "tiledimx=%d\n", ((RASTER3D_Map* )g3map)->tileX);
-	    fprintf(out, "tiledimy=%d\n", ((RASTER3D_Map* )g3map)->tileY);
-	    fprintf(out, "tiledimz=%d\n", ((RASTER3D_Map* )g3map)->tileZ);
-	}			/*History output */
+	    Rast3d_range_min_max(g3map, &dmin, &dmax);
+            if(dmin != dmin)
+	        fprintf(out, "min=NULL\n");
+            else
+	        fprintf(out, "min=%f\n", dmin);
+            if(dmax != dmax)
+	        fprintf(out, "max=NULL\n");
+            else
+	        fprintf(out, "max=%f\n", dmax);
+	}
 	if (hflag->answer) {
 	    if (hist_ok) {
+		fprintf(out, "Title:\n");
+		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_TITLE));
 		fprintf(out, "Data Source:\n");
 		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
 		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
@@ -481,21 +469,7 @@ int main(int argc, char *argv[])
 	    else {
 		G_fatal_error(_("Error while reading history file"));
 	    }
-	}			/*Timestamp */
-	if (timestampflag->answer) {
-	    if (time_ok && (first_time_ok || second_time_ok)) {
-
-		G_format_timestamp(&ts, timebuff);
-
-		/*Create the r.info timestamp string */
-		fprintf(out, "Timestamp=\"%s\"", timebuff);
-
-	    }
-	    else {
-		fprintf(out, "Timestamp=\"none\"\n");
-	    }
 	}
-
     }
 
     /*Close the opened map */
