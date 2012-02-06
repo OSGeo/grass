@@ -14,6 +14,7 @@ SUBDIRS = \
 	r3.out.vtk \
 	r3.retile \
 	r3.stats \
+	r3.support \
 	r3.timestamp \
 	r3.to.rast \
 
