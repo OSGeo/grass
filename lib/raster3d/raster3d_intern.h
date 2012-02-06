@@ -55,7 +55,8 @@ extern int g3d_cache_max;	/* in bytes */
 extern int g3d_file_type;	/* FCELL_TYPE or DCELL_TYPE */
 extern int g3d_tile_dimension[3];
 extern void (*g3d_error_fun) (const char *);
-extern char *g3d_unit_default;
+extern char *g3d_unit_default;   /* The unit description of the map data */
+extern int g3d_vertical_unit_default; /* spatial or temporal units from gis.h, U_METERS; ..., U_YEARS, ... */
 
 extern RASTER3D_Region g3d_window;
 

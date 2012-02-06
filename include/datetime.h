@@ -4,13 +4,15 @@
 #define DATETIME_ABSOLUTE 1
 #define DATETIME_RELATIVE 2
 
-/* ranges - the values must start at 1 and increase */
-#define DATETIME_YEAR   1
-#define DATETIME_MONTH  2
-#define DATETIME_DAY    3
-#define DATETIME_HOUR   4
-#define DATETIME_MINUTE 5
-#define DATETIME_SECOND 6
+/* ranges - the values must start at 101 and increase 
+ * to make sure they do not interfere with the spatial
+ * units in gis.h */
+#define DATETIME_YEAR   101
+#define DATETIME_MONTH  102
+#define DATETIME_DAY    103
+#define DATETIME_HOUR   104
+#define DATETIME_MINUTE 105
+#define DATETIME_SECOND 106
 
 typedef struct DateTime
 {

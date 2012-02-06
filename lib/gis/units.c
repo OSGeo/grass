@@ -10,6 +10,7 @@
   
   \author Original author CERL
   \author Adopted for libgis by Martin Landa <landa.martin gmail.com> (2010)
+  \author Temporal units and unit type check from Soeren gebbert <soerengebbert googlemail.com> (2012)
  */
 
 #include <string.h>
@@ -113,6 +114,62 @@ double G_units_to_meters_factor_sq(int units)
     return 1.0;
 }
 
+/** \brief Check if the unit is of spatial type
+  
+  \param units units code from gis.h
+ 
+  \return 1 if True, 0 otherwise 
+ */
+
+int G_is_units_type_spatial(int units)
+{
+    switch (units) {
+    case U_METERS:
+        return 1;
+    case U_KILOMETERS:
+        return 1;
+    case U_HECTARES:
+        return 1;
+    case U_ACRES:
+        return 1;
+    case U_MILES:
+        return 1;
+    case U_FEET:
+        return 1;
+    case U_RADIANS:
+        return 1;
+    case U_DEGREES:
+        return 1;
+    }
+    return 0;    
+}
+
+/** \brief Check if the unit is of temporal type
+  
+  \param units units code from gis.h
+ 
+  \return 1 if True, 0 otherwise 
+ */
+
+int G_is_units_type_temporal(int units)
+{
+    switch (units) {
+    case U_YEARS:
+        return 1;
+    case U_MONTHS:
+        return 1;
+    case U_DAYS:
+        return 1;
+    case U_HOURS:
+        return 1;
+    case U_MINUTES:
+        return 1;
+    case U_SECONDS:
+        return 1;
+    }
+    return 0;    
+}
+
 /*!
   \brief Get localized units name
 
@@ -190,8 +247,31 @@ const char *G_get_units_name(int units, int plural, int square)
 	    return plural ? _("square degrees") : _("square degree");
 	else
 	    return plural ? _("degrees") : _("degree");
+	break;  
+        
+    case U_YEARS:
+	return plural ? _("year") : _("years");
 	break;
-
+	
+    case U_MONTHS:
+	return plural ? _("month") : _("months");
+	break;
+	
+    case U_DAYS:
+	return plural ? _("day") : _("days");
+	break;
+	
+    case U_HOURS:
+	return plural ? _("hour") : _("hours");
+	break;
+	
+    case U_MINUTES:
+	return plural ? _("minute") : _("minutes");
+	break;
+	
+    case U_SECONDS:
+	return plural ? _("second") : _("seconds");
+	break;
     }
     
     return NULL;
@@ -207,6 +287,9 @@ const char *G_get_units_name(int units, int plural, int square)
    - U_HECTARES
    - U_MILES
    - U_FEET
+   - ...
+   - U_YEARS
+   - ...
 
   \param units_name units name (singular or plural form)
 
@@ -240,6 +323,24 @@ int G_units(const char *units_name)
     else if (strcasecmp(units_name, "degree") == 0 ||
 	     strcasecmp(units_name, "degrees") == 0)
 	return U_DEGREES;
+    else if (strcasecmp(units_name, "year") == 0 ||
+	strcasecmp(units_name, "years") == 0)
+	return U_YEARS;
+    else if (strcasecmp(units_name, "month") == 0 ||
+	     strcasecmp(units_name, "months") == 0)
+	return U_MONTHS;
+    else if (strcasecmp(units_name, "day") == 0 ||
+	     strcasecmp(units_name, "days") == 0)
+	return U_DAYS;
+    else if (strcasecmp(units_name, "hour") == 0 ||
+	     strcasecmp(units_name, "hours") == 0)
+	return U_HOURS;
+    else if (strcasecmp(units_name, "minute") == 0 ||
+	     strcasecmp(units_name, "minutes") == 0)
+	return U_MINUTES;
+    else if (strcasecmp(units_name, "secons") == 0 ||
+	     strcasecmp(units_name, "seconds") == 0)
+	return U_SECONDS;
 
     return U_UNKNOWN;
 }

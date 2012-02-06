@@ -647,6 +647,8 @@ double G_units_to_meters_factor(int);
 double G_units_to_meters_factor_sq(int);
 const char *G_get_units_name(int, int, int);
 int G_units(const char *);
+int G_is_units_type_spatial(int);
+int G_is_units_type_temporal(int);
 
 /* user_config.c */
 #ifndef __MINGW32__
