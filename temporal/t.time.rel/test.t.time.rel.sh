@@ -47,3 +47,24 @@ t.info type=rast input=prec_6
 
 t.remove --v type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove --v type=strds input=precip_rel1,precip_rel2,precip_rel3
+
+t.time.rel --v -i input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start=-4000 increment=1000 unit=years
+t.info type=rast input=prec_1
+t.info type=rast input=prec_2
+t.info type=rast input=prec_3
+t.info type=rast input=prec_4
+t.info type=rast input=prec_5
+t.info type=rast input=prec_6
+
+t.create --v --o type=strds temporaltype=relative output=precip_rel1 title="A test" descr="A test" 
+tr.register --v input=precip_rel1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.info type=strds input=precip_rel1
+r.timestamp prec_1
+r.timestamp prec_2
+r.timestamp prec_3
+r.timestamp prec_4
+r.timestamp prec_5
+r.timestamp prec_6
+
+t.remove --v type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.remove --v type=strds input=precip_rel1
