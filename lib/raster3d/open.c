@@ -84,6 +84,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
     double ew_res, ns_res, tb_res;
     int nofHeaderBytes, dataOffset, useXdr, hasIndex;
     char *ltmp, *unit;
+    int vertical_unit;
     double north, south, east, west, top, bottom;
 
     map = Rast3d_open_cell_old_no_header(name, mapset);
@@ -104,7 +105,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 			&ew_res, &ns_res, &tb_res,
 			&tileX, &tileY, &tileZ,
 			&type, &compression, &useRle, &useLzw,
-			&precision, &dataOffset, &useXdr, &hasIndex, &unit)) {
+			&precision, &dataOffset, &useXdr, &hasIndex, &unit, &vertical_unit)) {
 	Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_read_header"));
 	return 0;
     }
@@ -164,7 +165,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 			nofHeaderBytes, tileX, tileY, tileZ,
 			proj, zone,
 			north, south, east, west, top, bottom,
-			rows, cols, depths, ew_res, ns_res, tb_res, unit)) {
+			rows, cols, depths, ew_res, ns_res, tb_res, unit, vertical_unit)) {
 	Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_fill_header"));
 	return (void *)NULL;
     }
@@ -308,7 +309,7 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 			region->west, region->top, region->bottom,
 			region->rows, region->cols, region->depths,
 			region->ew_res, region->ns_res, region->tb_res,
-			g3d_unit_default)) {
+			g3d_unit_default, g3d_vertical_unit_default)) {
 	Rast3d_error(_("Rast3d_open_cell_new: error in Rast3d_fill_header"));
 	return (void *)NULL;
     }

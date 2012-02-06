@@ -5,6 +5,7 @@
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 #include <grass/raster3d.h>
+#include <grass/glocale.h>
 #include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -28,6 +29,7 @@ int xdrLength;
 #define RASTER3D_HEADER_USEXDR "useXdr"
 #define RASTER3D_HEADER_HASINDEX "hasIndex"
 #define RASTER3D_HEADER_UNIT "Units"
+#define RASTER3D_HEADER_VERTICAL_UNIT "VerticalUnits"
 
 /*---------------------------------------------------------------------------*/
 
@@ -39,7 +41,7 @@ Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
 		    double *tb_res, int *tileX, int *tileY, int *tileZ,
 		    int *type, int *compression, int *useRle, int *useLzw,
 		    int *precision, int *dataOffset, int *useXdr,
-		    int *hasIndex, char **unit)
+		    int *hasIndex, char **unit, int *vertical_unit)
 {
     int returnVal;
     int (*headerInt) (), (*headerDouble) (), (*headerValue) ();
@@ -98,11 +100,16 @@ Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
     returnVal &= headerValue(headerKeys, RASTER3D_HEADER_HASINDEX,
 			     "0", "1", 0, 1, hasIndex);
     returnVal &= headerString(headerKeys, RASTER3D_HEADER_UNIT, unit);
+    /* New format and API changes */
+    if(!headerInt(headerKeys, RASTER3D_HEADER_VERTICAL_UNIT, vertical_unit))
+        G_warning("You are using an old raster3d data format, the vertical unit is undefined. "
+                  "Please use r3.support to define the vertical unit to avoid this warning.");
+
 
     if (returnVal)
 	return 1;
 
-    Rast3d_error("Rast3d_readWriteHeader: error writing header");
+    Rast3d_error("Rast3d_readWriteHeader: error reading/writing header");
     return 0;
 }
 
@@ -115,7 +122,7 @@ Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
 	       double *ew_res, double *ns_res, double *tb_res, int *tileX,
 	       int *tileY, int *tileZ, int *type, int *compression,
 	       int *useRle, int *useLzw, int *precision, int *dataOffset,
-	       int *useXdr, int *hasIndex, char **unit)
+	       int *useXdr, int *hasIndex, char **unit, int *vertical_unit)
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
@@ -135,7 +142,7 @@ Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
 			     ew_res, ns_res, tb_res,
 			     tileX, tileY, tileZ,
 			     type, compression, useRle, useLzw, precision,
-			     dataOffset, useXdr, hasIndex, unit)) {
+			     dataOffset, useXdr, hasIndex, unit, vertical_unit)) {
 	Rast3d_error("Rast3d_read_header: error extracting header key(s) of file %s",
 		  path);
 	return 0;
@@ -153,7 +160,7 @@ Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north, double
 		int cols, int depths, double ew_res, double ns_res,
 		double tb_res, int tileX, int tileY, int tileZ, int type,
 		int compression, int useRle, int useLzw, int precision,
-		int dataOffset, int useXdr, int hasIndex, char *unit)
+		int dataOffset, int useXdr, int hasIndex, char *unit, int vertical_unit)
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
@@ -168,7 +175,7 @@ Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north, double
 			     &tileX, &tileY, &tileZ,
 			     &type, &compression, &useRle, &useLzw,
 			     &precision, &dataOffset, &useXdr, &hasIndex,
-			     &unit)) {
+			     &unit, &vertical_unit)) {
 	Rast3d_error("Rast3d_write_header: error adding header key(s) for file %s",
 		  path);
 	return 0;
@@ -180,6 +187,30 @@ Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north, double
 
     G_free_key_value(headerKeys);
 
+    return 1;
+}
+/*---------------------------------------------------------------------------*/
+
+int
+Rast3d_rewrite_header(RASTER3D_Map * map)
+{
+    if (!Rast3d_write_header(map,
+                         map->region.proj, map->region.zone,
+                         map->region.north, map->region.south,
+                         map->region.east, map->region.west,
+                         map->region.top, map->region.bottom,
+                         map->region.rows, map->region.cols,
+                         map->region.depths,
+                         map->region.ew_res, map->region.ns_res,
+                         map->region.tb_res,
+                         map->tileX, map->tileY, map->tileZ,
+                         map->type,
+                         map->compression, map->useRle, map->useLzw,
+                         map->precision, map->offset, map->useXdr,
+                         map->hasIndex, map->unit, map->vertical_unit)) {
+        G_warning(_("Unable to write header for 3D raster map <%s>"), map->fileName);
+        return 0;
+    }
     return 1;
 }
 
@@ -272,7 +303,7 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression, int useRl
 	       int tileY, int tileZ, int proj, int zone, double north,
 	       double south, double east, double west, double top,
 	       double bottom, int rows, int cols, int depths, double ew_res,
-	       double ns_res, double tb_res, char *unit)
+	       double ns_res, double tb_res, char *unit, int vertical_unit)
 {
     if (!RASTER3D_VALID_OPERATION(operation))
 	Rast3d_fatal_error("Rast3d_fill_header: operation not valid\n");
@@ -280,6 +311,7 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression, int useRl
     map->operation = operation;
 
     map->unit = G_store(unit);
+    map->vertical_unit = vertical_unit;
 
     map->region.proj = proj;
     map->region.zone = zone;

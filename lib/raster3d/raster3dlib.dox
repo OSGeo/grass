@@ -232,6 +232,7 @@ nofHeaderBytes: 12
 useXdr: 1
 hasIndex: 1
 Units: none
+VerticalUnits: 1
 \endverbatim
 
 <P>
@@ -600,16 +601,24 @@ See functions
 
 \section Setting_the_Units Setting the Units
 
-<P>
-Default <TT>"none"</TT>.
+The data untis of a map can be described using a string.
+The vertical units are defined in gis.h and can be spatial or temporal.
 
 <P>
 No environment variable.
 
 <P>
-void Rast3d_setUnit (unit)
-        char *unit;
-
+void Rast3d_set_unit (map, unit)
+        RASTER3d_Map; /* the map */
+        char *unit; /* The data unit description */ 
+<P>
+void Rast3d_set_vertical_unit (map, unit)
+        RASTER3d_Map; /* the map */
+        char *unit;  /* Use the standard from units.c in lib/gis */
+<P>
+void Rast3d_set_vertical_unit2 (map, unit)
+        RASTER3d_Map; /* the map */
+        int unit; /* defined in gis.h */
 <P>
 
 \section Error_Handling Error Handling: Setting the error function

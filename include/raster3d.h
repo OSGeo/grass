@@ -90,7 +90,8 @@ typedef struct RASTER3D_Map
     resample_fn *resampleFun;
 
     /* units */
-    char *unit;
+    char* unit;          /* space (U_METER, ...) */
+    int vertical_unit; /* space or time (U_METER, ..., U_YEAR, ...) */
 
     /* dimension of a single tile in "cells" */
     int tileX, tileY, tileZ;

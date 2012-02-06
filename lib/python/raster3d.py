@@ -54,7 +54,7 @@ def raster3d_info(map):
         else:
             return float(s)
 
-    s = read_command('r3.info', flags = 'rstgip', map = map)
+    s = read_command('r3.info', flags='rg', map=map)
     kv = parse_key_val(s)
     for k in ['min', 'max']:
 	kv[k] = float_or_null(kv[k])

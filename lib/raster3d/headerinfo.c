@@ -165,6 +165,109 @@ int Rast3d_tile_type_map(RASTER3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
+/*!
+ * \brief 
+ *
+ *  Set the data unit defintiong
+ *
+ *  \param map
+ *  \param unit
+ *  \return void
+ */
+
+void Rast3d_set_unit(RASTER3D_Map * map, const char *unit)
+{
+    map->unit = G_store(unit);
+}
+
+/*---------------------------------------------------------------------------*/
+
+/*!
+ * \brief 
+ *
+ *  set Vertical unit from integer value defined in gis.h (U_METERS, ...)
+ *
+ *  \param map
+ *  \param unit
+ *  \return void
+ */
+
+void Rast3d_set_vertical_unit2(RASTER3D_Map * map, int vertical_unit)
+{
+    map->vertical_unit = vertical_unit;
+}
+
+/*---------------------------------------------------------------------------*/
+
+/*!
+ * \brief 
+ *
+ *  set Vertical unit from string
+ *
+ *  \param map
+ *  \param unit
+ *  \return void
+ */
+
+void Rast3d_set_vertical_unit(RASTER3D_Map * map, const char *vertical_unit)
+{
+    map->vertical_unit = G_units(vertical_unit);
+}
+
+/*---------------------------------------------------------------------------*/
+
+/*!
+ * \brief 
+ *
+ * Return the data unit definition of <em>map</em>.
+ *
+ *  \param map
+ *  \return int
+ */
+
+const char* Rast3d_get_unit(RASTER3D_Map * map)
+{
+    return map->unit;
+}
+
+/*---------------------------------------------------------------------------*/
+
+/*!
+ * \brief 
+ *
+ * Returns the vertical unit of <em>map</em> as integer. Units are defined in gis.h.
+ * 
+ * Vertical units may have temporal type
+ *
+ *  \param map
+ *  \return int
+ */
+
+int Rast3d_get_vertical_unit2(RASTER3D_Map * map)
+{
+    return map->vertical_unit;
+}
+
+/*---------------------------------------------------------------------------*/
+
+/*!
+ * \brief 
+ *
+ * Return the name of the unit of <em>map</em>. Units are defined in gis.h.
+ *
+ * Vertical units may have temporal type
+ * 
+ *  \param map
+ *  \return int
+ */
+
+const char* Rast3d_get_vertical_unit(RASTER3D_Map * map)
+{
+    return G_get_units_name(map->vertical_unit, 1, 0);
+}
+
+/*---------------------------------------------------------------------------*/
+
 
 /*!
  * \brief 
@@ -232,8 +335,8 @@ void Rast3d_print_header(RASTER3D_Map * map)
     printf("File %s open for %sing:\n", map->fileName,
 	   (map->operation == RASTER3D_WRITE_DATA ? "writ" :
 	    (map->operation == RASTER3D_READ_DATA ? "read" : "unknown")));
-    printf("  Fd = %d, Unit %s, Type: %s, ", map->data_fd,
-	   map->unit,
+    printf("  Fd = %d, Unit %s, Vertical Unit %s, Type: %s, ", map->data_fd,
+	   map->unit, G_get_units_name(map->vertical_unit, 1, 0),
 	   (map->type == FCELL_TYPE ? "float" :
 	    (map->type == DCELL_TYPE ? "double" : "unknown")));
     printf("Type intern: %s\n",

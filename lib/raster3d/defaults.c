@@ -19,6 +19,7 @@
 #define RASTER3D_TILE_Z_DEFAULT 8
 #define RASTER3D_ERROR_FUN_DEFAULT Rast3d_skip_error
 #define RASTER3D_UNIT_DEFAULT "none"
+#define RASTER3D_VERTICAL_UNIT_DEFAULT U_UNKNOWN
 
 /*---------------------------------------------------------------------------*/
 
@@ -62,6 +63,7 @@ int g3d_tile_dimension[3] =
     { RASTER3D_NO_DEFAULT, RASTER3D_NO_DEFAULT, RASTER3D_NO_DEFAULT };
 void (*g3d_error_fun) (const char *) = NULL;
 char *g3d_unit_default = NULL;
+int g3d_vertical_unit_default = U_UNDEFINED;
 
 /*---------------------------------------------------------------------------*/
 
@@ -318,25 +320,7 @@ void Rast3d_set_error_fun(void (*fun) (const char *))
 /*!
  * \brief 
  *
- *  set G3d unit
- *
- *  \param unit
- *  \return void
- */
-
-void Rast3d_set_unit(const char *unit)
-{
-    Rast3d_free(g3d_unit_default);
-    g3d_unit_default = G_store(unit);
-}
-
-/*---------------------------------------------------------------------------*/
-
-
-/*!
- * \brief 
- *
- *  Initializes the default values described
+ * Initializes the default values described
  * in RASTER3D Defaults.  Applications have to use this function only if they need to
  * query the default values before the first file (either old or new) has been
  * opened.
@@ -538,8 +522,10 @@ void Rast3d_init_defaults(void)
 	}
     }
 
-    if (g3d_unit_default == NULL)
-	g3d_unit_default = G_store(RASTER3D_UNIT_DEFAULT);
+    if(g3d_unit_default == NULL)
+        g3d_unit_default = G_store(RASTER3D_UNIT_DEFAULT);
+    if(g3d_vertical_unit_default == U_UNDEFINED)
+        g3d_vertical_unit_default = RASTER3D_VERTICAL_UNIT_DEFAULT;
 
     windowName = Rast3d_get_window_params();
     if (windowName == NULL) {

@@ -187,12 +187,11 @@ int Rast3d_close(RASTER3D_Map * map)
 			     map->type,
 			     map->compression, map->useRle, map->useLzw,
 			     map->precision, map->offset, map->useXdr,
-			     map->hasIndex, map->unit)) {
+			     map->hasIndex, map->unit, map->vertical_unit)) {
 	    G_warning(_("Unable to write header for 3D raster map <%s>"), map->fileName);
 	    return 0;
 	}
 
-    Rast3d_free(map->unit);
     Rast3d_free(map);
     
     return 1;
