@@ -25,6 +25,7 @@ import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
 
 from core               import globalvar
+from core.settings      import UserSettings
 from gui_core.dialogs   import ElementDialog, GroupDialog
 from gui_core           import gselect
 from iclass.statistics  import Statistics, BandStatistics
@@ -80,25 +81,29 @@ class IClassGroupDialog(ElementDialog):
         dlg.Destroy()
         
 class IClassMapDialog(ElementDialog):
-    """!Dialog for adding raster map"""
-    def __init__(self, parent, title = _("Add raster map"), id = wx.ID_ANY):
+    """!Dialog for adding raster/vector map"""
+    def __init__(self, parent, title, element):
         """!
         Does post init and layout.
         
         @param gui parent
-        @param title dialog window title
-        @param id wx id
+        @param element element type ('raster', 'vector')
         """
-        ElementDialog.__init__(self, parent, title, label = _("Name of raster map:"))
+        if element == 'raster':
+            label = _("Name of raster map:")
+        elif element == 'vector':
+            label = _("Name of vector map:")
         
-        self.element = gselect.Select(parent = self.panel, type = 'raster',
+        ElementDialog.__init__(self, parent, title = title, label = label)
+            
+        self.element = gselect.Select(parent = self.panel, type = element,
                                       size = globalvar.DIALOG_GSELECT_SIZE)
         
         self.PostInit()
         
         self.__Layout()
         self.SetMinSize(self.GetSize())
-
+        
     def __Layout(self):
         """!Do layout"""
         self.dataSizer.Add(self.element, proportion = 0,
@@ -107,8 +112,8 @@ class IClassMapDialog(ElementDialog):
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
-    def GetRasterMap(self):
-        """!Returns selected raster map"""
+    def GetMap(self):
+        """!Returns selected raster/vector map"""
         return self.GetElement()
         
         
@@ -127,6 +132,7 @@ class IClassCategoryManagerDialog(wx.Dialog):
         """
         wx.Dialog.__init__(self, parent = parent, title = title, id = id)
         
+        self.parent = parent
         panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -168,7 +174,13 @@ class IClassCategoryManagerDialog(wx.Dialog):
         self.Layout()
 
     def OnAddCategory(self, event):
-        self.catList.AddCategory()
+        if self.parent.statisticsList:
+            cat = max(self.parent.statisticsList) + 1
+        else:
+            cat = 1
+        defaultName = 'class' + '_' + str(cat) # intentionally not translatable
+        defaultColor = '0:0:0'
+        self.catList.AddCategory(cat = cat, name = defaultName, color = defaultColor)
         
     def OnDeleteCategory(self, event):
         self.catList.DeleteCategory()
@@ -177,10 +189,15 @@ class IClassCategoryManagerDialog(wx.Dialog):
         self.catList.DeselectAll()
         
         self.catList.UpdateChoice()
-        if not isinstance(event, wx.CloseEvent):
-            self.Destroy()
+        self.Hide()
+        #if not isinstance(event, wx.CloseEvent):
+            #self.Destroy()
             
-        event.Skip()
+        #event.Skip()
+        
+    def GetListCtrl(self):
+        """!Returns list widget"""
+        return self.catList
         
 class CategoryListCtrl(wx.ListCtrl,
                        listmix.ListCtrlAutoWidthMixin,
@@ -246,15 +263,10 @@ class CategoryListCtrl(wx.ListCtrl,
         self.SetColumnWidth(0, 100)
         self.SetColumnWidth(1, 100)
         
-    def AddCategory(self):
+    def AddCategory(self, cat, name, color):
+        """!Add category record (used when importing areas)"""
         st = Statistics()
-        if self.statisticsList:
-            cat = max(self.statisticsList) + 1
-        else:
-            cat = 1
-        defaultName = 'class' + '_' + str(cat) # intentionally not translatable
-        defaultColor = '0:0:0'
-        st.SetBaseStatistics(cat = cat, name = defaultName, color = defaultColor)
+        st.SetBaseStatistics(cat = cat, name = name, color = color)
         self.statisticsDict[cat] = st
         self.statisticsList.append(cat)
         self.SetItemCount(len(self.statisticsList))
@@ -485,3 +497,106 @@ class IClassSignatureFileDialog(wx.Dialog):
             return os.path.join(self.baseFilePath, self.fileNameCtrl.GetValue())
             
         return self.fileNameCtrl.GetValue()
+        
+class IClassExportAreasDialog(wx.Dialog):
+    def __init__(self, parent, vectorName = None, title = _("Export training areas"), id = wx.ID_ANY,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                 **kwargs):
+        """!Dialog for export of training areas to vector layer
+        
+        @param parent window
+        @param vectorName name of vector layer for export
+        @param title window title
+        """
+        wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
+        
+        self.vectorName = vectorName
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        self.btnOK     = wx.Button(parent = self.panel, id = wx.ID_OK)
+        self.btnOK.SetDefault()
+        self.btnOK.Enable(False)
+        self.btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
+        
+        self.__layout()
+        
+        self.vectorNameCtrl.Bind(wx.EVT_TEXT, self.OnTextChanged)
+        self.OnTextChanged(None)
+        
+    def OnTextChanged(self, event):
+        """!Name of new vector map given.
+        
+        Enable/diable OK button.
+        """
+        file = self.vectorNameCtrl.GetValue()
+        if len(file) > 0:
+            self.btnOK.Enable(True)
+        else:
+            self.btnOK.Enable(False)
+        
+    def __layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        dataSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                           label = _("Enter name of new vector map:")),
+                      proportion = 0, flag = wx.ALL, border = 3)
+        self.vectorNameCtrl = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY, size = (400, -1))
+        if self.vectorName:
+            self.vectorNameCtrl.SetValue(self.vectorName)
+        dataSizer.Add(item = self.vectorNameCtrl,
+                      proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
+        self.withTableCtrl = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
+                                       label = _("Export attribute table"))
+        self.withTableCtrl.SetValue(True)
+        self.withTableCtrl.SetToolTipString(_("Export attribute table containing" 
+                                              " computed statistical data"))
+        
+        dataSizer.Add(item = self.withTableCtrl,
+                      proportion = 0, flag = wx.ALL, border = 3)
+                      
+        # buttons
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnOK)
+        btnSizer.Realize()
+        
+        sizer.Add(item = dataSizer, proportion = 1,
+                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        
+        sizer.Add(item = btnSizer, proportion = 0,
+                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self)
+        
+        self.SetMinSize(self.GetSize())
+        
+    def GetVectorName(self):
+        """!Returns vector name"""
+        return self.vectorNameCtrl.GetValue()
+        
+    def WithTable(self):
+        """!Returns true if attribute table should be exported too"""
+        return self.withTableCtrl.IsChecked()
+        
+    def OnOK(self, event):
+        """!Checks if map exists and can be overwritten."""
+        overwrite = UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled')
+        vName = self.GetVectorName()
+        res = grass.find_file(vName, element = 'vector')
+        if res['fullname'] and overwrite is False:
+            qdlg = wx.MessageDialog(parent = self,
+                                        message = _("Vector map <%s> already exists."
+                                                    " Do you want to overwrite it?" % vName) ,
+                                        caption = _("Vector <%s> exists" % vName),
+                                        style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+            if qdlg.ShowModal() == wx.ID_YES:
+                event.Skip()
+            qdlg.Destroy()
+        else:
+            event.Skip()
+            

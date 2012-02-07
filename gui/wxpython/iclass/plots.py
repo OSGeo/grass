@@ -93,6 +93,12 @@ class PlotPanel(scrolled.ScrolledPanel):
         for bandIdx in range(len(self.bandList)):
             self.canvasList[bandIdx].Clear()
             
+    def Reset(self):
+        """!Reset plots (when new map imported)"""
+        self.currentCat = None
+        self.ClearPlots()
+        # bands are still the same
+        
     def CreatePlotCanvases(self):
         """!Create plot canvases according to the number of bands"""
         for band in self.bandList:
