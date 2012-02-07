@@ -1,25 +1,28 @@
-# translation of grassmods_fr.po to Françai
+# translation of grassmods_fr.po to Français
 # French translation of grassmods.pot
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2004 GRASS Development Team
+# Copyright (C) 2005, 2012 GRASS Development Team
 # Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>, 2004.
 # Laurent Courty, 2005.
 # Daniel Calvelo Aros <dca@users.sf.net>, 2005
 # Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2005, 2006
+# Vicnent Bain <bain toraval.fr>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2008-07-19 23:20+0100\n"
-"Last-Translator: Pascal Obstétar <pascal.obstetar@wanadoo.fr>\n"
+"PO-Revision-Date: 2012-02-07 10:50+0100\n"
+"Last-Translator: Vincent Bain <bain@toraval.fr>\n"
 "Language-Team: Français <grass-translations@lists.osgeo.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
 
 #: ../visualization/nviz/src/nvizMain.c:71
 #: ../visualization/ximgview/main.c:293 ../misc/m.nviz.script/main.c:73
@@ -309,7 +312,7 @@ msgstr "Afficher"
 
 #: ../visualization/nviz/src/nvizMain.c:77
 msgid "nviz - Visualization and animation tool for GRASS data."
-msgstr ""
+msgstr "nviz - Outil de visualisation et d'animation des données GRASS."
 
 #: ../visualization/nviz/src/nvizMain.c:82
 #, fuzzy
@@ -336,7 +339,7 @@ msgstr "Nom des couches raster existantes"
 #: ../visualization/nviz/src/nvizMain.c:101
 #: ../visualization/nviz/src/nvizMain.c:110
 msgid "Vector"
-msgstr ""
+msgstr "Vecteur"
 
 #: ../visualization/nviz/src/nvizMain.c:109
 #, fuzzy
@@ -349,15 +352,15 @@ msgstr "Nom de la couche raster 3D existante"
 
 #: ../visualization/nviz/src/nvizMain.c:123
 msgid "Quickstart - Do not load any data"
-msgstr ""
+msgstr "Démarrage rapide - ne charger aucune donnée"
 
 #: ../visualization/nviz/src/nvizMain.c:128
 msgid "Exit after completing script launched from the command line"
-msgstr ""
+msgstr "Sortir à la fin du script lancé à la ligne de commande"
 
 #: ../visualization/nviz/src/nvizMain.c:133
 msgid "Start in Demo mode (skip the \"please wait\" message)"
-msgstr ""
+msgstr "Démarrer en mode Démo (sauter le message  \"merci de patienter\")"
 
 #: ../visualization/nviz/src/nvizMain.c:139
 msgid "Set alternative panel path"
@@ -365,11 +368,11 @@ msgstr ""
 
 #: ../visualization/nviz/src/nvizMain.c:145
 msgid "Execute script file at startup"
-msgstr ""
+msgstr "Exécuter un script au démarrage"
 
 #: ../visualization/nviz/src/nvizMain.c:151
 msgid "Load previously saved state file"
-msgstr ""
+msgstr "Charger le fichier d'état enregistré précédemment"
 
 #: ../visualization/nviz/src/nviz_init.c:148
 #, fuzzy
@@ -414,7 +417,7 @@ msgstr "Impossible d'ouvrir le fichier de sortie"
 
 #: ../visualization/ximgview/main.c:294
 msgid "View BMP images from the PNG driver."
-msgstr ""
+msgstr "Visionner des images BMP depuis le pilote PNG."
 
 #: ../visualization/ximgview/main.c:302
 #, fuzzy
@@ -424,7 +427,7 @@ msgstr "Groupe de fichiers image"
 #: ../visualization/ximgview/main.c:309
 #: ../locale/scriptstrings/wxpyimgview_to_translate.c:5
 msgid "Percentage of CPU time to use"
-msgstr ""
+msgstr "Pourcentage du temps CPU à utiliser"
 
 #: ../visualization/ximgview/color.c:90 ../visualization/ximgview/color.c:288
 #, c-format
@@ -1323,7 +1326,7 @@ msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:270 ../raster3d/r3.out.vtk/main.c:450
 msgid "The 2D and 3D region settings are different. Using the 2D window settings to adjust the 2D part of the 3D region."
-msgstr ""
+msgstr "Les réglages de région 2D et 3D sont différents. Utilisation des réglages de la fenêtre 2D pour ajuster la partie 2D de la région 3D."
 
 #: ../raster3d/r3.to.rast/main.c:294 ../raster/r.gwflow/main.c:366
 #: ../raster/r.to.rast3/main.c:244 ../raster/r.li/r.li.daemon/list.c:49
@@ -1395,7 +1398,7 @@ msgstr "Crée une couche raster de coupe 2D à partir du raster volumique RASTER
 
 #: ../raster3d/r3.cross.rast/main.c:258
 msgid "The 2D and 3D region settings are different. Using the 3D raster map settings to adjust the 2D region."
-msgstr ""
+msgstr "Les réglages de région 2D et 3D sont différents. Utilisation des réglages de carte 3D pour ajuster la région 2D."
 
 #: ../raster3d/r3.cross.rast/main.c:301
 #, fuzzy
@@ -1494,7 +1497,7 @@ msgstr "Le facteur d'échelle affecte l'origine"
 #: ../raster/r.out.vtk/parameters.c:138 ../vector/v.out.vtk/main.c:90
 #: ../locale/scriptstrings/tr.out.vtk_to_translate.c:13
 msgid "Correct the coordinates to fit the VTK-OpenGL precision"
-msgstr ""
+msgstr "Corriger les coordonnés pour correspondre à la précision VTK-OpenGL"
 
 #: ../raster3d/r3.out.vtk/parameters.c:133
 msgid "Do not convert the top-bottom resolution in case of lat long projection to meters"
@@ -1606,11 +1609,11 @@ msgstr "Type de colonne inconnu"
 #: ../raster3d/r3.in.ascii/main.c:231
 #, c-format
 msgid "Loading data ...  (%dx%dx%d)"
-msgstr ""
+msgstr "Chargement des données... (%dx%dx%d)"
 
 #: ../raster3d/r3.in.ascii/main.c:264
 msgid "End of file reached while still loading data."
-msgstr ""
+msgstr "Fin de fichier atteinte en cours de chargement de la donnée."
 
 #: ../raster3d/r3.in.ascii/main.c:276
 #, fuzzy
@@ -1620,7 +1623,7 @@ msgstr "Valeur invalide de theta"
 #: ../raster3d/r3.in.ascii/main.c:293
 #, c-format
 msgid "Data exists in input file after fully importing expected data.  [%.4f ...]"
-msgstr ""
+msgstr "Des données subsistent dans le fichier en entrée après l'importation complète des données attendues.  [%.4f ...]"
 
 #: ../raster3d/r3.in.ascii/main.c:327 ../raster/r.external/main.c:56
 #: ../raster/r.in.gridatb/main.c:46 ../raster/r.in.png/main.c:520
@@ -1801,7 +1804,7 @@ msgstr "Ce point est ignoré, il est en dehors de la région. Peut-être que la 
 
 #: ../misc/m.nviz.image/args.c:51
 msgid "Use draw mode for all loaded surfaces"
-msgstr ""
+msgstr "Utiliser le mode dessin pour toutes les surfaces chargées"
 
 #: ../misc/m.nviz.image/args.c:52 ../misc/m.nviz.image/args.c:130
 #: ../misc/m.nviz.image/args.c:139 ../misc/m.nviz.image/args.c:146
@@ -1865,7 +1868,7 @@ msgstr "Nom de la couche raster d'aspect à afficher"
 
 #: ../misc/m.nviz.image/args.c:178
 msgid "Transparency value(s)"
-msgstr ""
+msgstr "Valeur(s) de transparence"
 
 #: ../misc/m.nviz.image/args.c:186
 #, fuzzy
@@ -1874,7 +1877,7 @@ msgstr "Nom de la couche raster qui contiendra les résultats"
 
 #: ../misc/m.nviz.image/args.c:196
 msgid "Shininess value(s)"
-msgstr ""
+msgstr "Valeur(s) de luminosité"
 
 #: ../misc/m.nviz.image/args.c:204
 #, fuzzy
@@ -1897,7 +1900,7 @@ msgstr "Mode Pan"
 #: ../misc/m.nviz.image/args.c:296 ../misc/m.nviz.image/args.c:584
 #: ../misc/m.nviz.image/args.c:596
 msgid "Draw"
-msgstr ""
+msgstr "Dessiner"
 
 #: ../misc/m.nviz.image/args.c:240
 #, fuzzy
@@ -1916,7 +1919,7 @@ msgstr "Type de données"
 
 #: ../misc/m.nviz.image/args.c:274
 msgid "Shading"
-msgstr ""
+msgstr "Ombrage"
 
 #: ../misc/m.nviz.image/args.c:283
 #, fuzzy
@@ -1974,7 +1977,7 @@ msgstr "Ouvrir le formulaire en mode édition"
 
 #: ../misc/m.nviz.image/args.c:373
 msgid "Vector line height"
-msgstr ""
+msgstr "Hauteur de ligne vecteur"
 
 #: ../misc/m.nviz.image/args.c:385
 #, fuzzy
@@ -2039,7 +2042,7 @@ msgstr "Coordonnées du point germe"
 #: ../misc/m.nviz.image/args.c:529 ../misc/m.nviz.image/args.c:541
 #: ../misc/m.nviz.image/args.c:562
 msgid "Viewpoint"
-msgstr ""
+msgstr "Point de vue"
 
 #: ../misc/m.nviz.image/args.c:518
 #, fuzzy
@@ -2048,7 +2051,7 @@ msgstr "Ecart type minimum en unités carte"
 
 #: ../misc/m.nviz.image/args.c:528
 msgid "Viewpoint field of view (in degrees)"
-msgstr ""
+msgstr "Champ de vision du point de vue (en degrés)"
 
 #: ../misc/m.nviz.image/args.c:540
 #, fuzzy
@@ -2078,11 +2081,11 @@ msgstr "colonne(s)"
 
 #: ../misc/m.nviz.image/args.c:581
 msgid "Volume draw mode"
-msgstr ""
+msgstr "Mode dessin de volume"
 
 #: ../misc/m.nviz.image/args.c:593
 msgid "Volume shading"
-msgstr ""
+msgstr "Ombrage de volume"
 
 #: ../misc/m.nviz.image/args.c:605
 #, fuzzy
@@ -2159,7 +2162,7 @@ msgstr "Couleur de mise en valeur du texte"
 
 #: ../misc/m.nviz.image/args.c:745
 msgid "Light brightness"
-msgstr ""
+msgstr "Luminosité"
 
 #: ../misc/m.nviz.image/args.c:755
 msgid "Light ambient"
@@ -2196,7 +2199,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:822
 msgid "nw;North-West edge;ne;North-East edge;sw;South-West edge;se;South-East edge"
-msgstr ""
+msgstr "no ; bordure Nord-Ouest ; ne ; bordure Nord-Est ; so ; bordure Sud-Ouest ; se ; bordure Sud-Est"
 
 #: ../misc/m.nviz.image/args.c:826
 #, fuzzy
@@ -2242,19 +2245,19 @@ msgstr "Afficher seulement une flêche Nord"
 #: ../misc/m.nviz.image/args.c:921
 #, c-format
 msgid "At least one <%s> or <%s> required"
-msgstr ""
+msgstr "Au moins <%s> ou <%s> requis"
 
 #: ../misc/m.nviz.image/args.c:935 ../misc/m.nviz.image/args.c:965
 #: ../misc/m.nviz.image/args.c:977 ../misc/m.nviz.image/args.c:983
 #: ../misc/m.nviz.image/args.c:989 ../misc/m.nviz.image/args.c:995
 #, c-format
 msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"
-msgstr ""
+msgstr "Nombre d'attributs incohérent (<%s/%s> %d: <%s> %d)"
 
 #: ../misc/m.nviz.image/args.c:971
 #, c-format
 msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d"
-msgstr ""
+msgstr "Nombre d'attributs incohérent (<%s/%s> %d: <%s> %d"
 
 #: ../misc/m.nviz.image/args.c:1005
 #, c-format
@@ -2267,12 +2270,12 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:1093
 #, c-format
 msgid "Inconsistent number of attributes (<%s> %d: <%s> %d)"
-msgstr ""
+msgstr "Nombre d'attributs incohérent (<%s> %d: <%s> %d)"
 
 #: ../misc/m.nviz.image/args.c:1033
 #, c-format
 msgid "Inconsistent number of attributes (<%s> %d: <%s> %d"
-msgstr ""
+msgstr "Nombre d'attributs incohérent (<%s> %d: <%s> %d"
 
 #: ../misc/m.nviz.image/args.c:1077 ../misc/m.nviz.image/args.c:1086
 #, c-format
@@ -2287,7 +2290,7 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:1110
 #, c-format
 msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"
-msgstr ""
+msgstr "Nombre d'attributs incohérent (<%s/%s> %d: <%s> %d, <%s> %d"
 
 #: ../misc/m.nviz.image/volume.c:92 ../misc/m.nviz.image/volume.c:231
 #, fuzzy, c-format
@@ -2350,17 +2353,17 @@ msgstr "Créer de nouveaux objets vecteurs (points) à partir de la table de la 
 
 #: ../misc/m.nviz.image/main.c:55
 msgid "Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
-msgstr ""
+msgstr "Restitue en 3D des surfaces (données raster), des données vecteur 2D/3D, et des volumes (données raster 3D)."
 
 #: ../misc/m.nviz.image/main.c:138
 #, c-format
 msgid "Vertical exaggeration not given, using calculated value %.0f"
-msgstr ""
+msgstr "Exagération verticale non fournie, utilisation de la valeur calculée %.0f"
 
 #: ../misc/m.nviz.image/main.c:150
 #, c-format
 msgid "Viewpoint height not given, using calculated value %.0f"
-msgstr ""
+msgstr "Hauteur de point de vue non fournie, utilisation de la valeur calculée %.0f"
 
 #: ../misc/m.nviz.image/main.c:232
 #, fuzzy
@@ -2376,7 +2379,7 @@ msgstr "Secteur %s créé!"
 #: ../misc/m.nviz.image/surface.c:67
 #, c-format
 msgid "Missing topography attribute for surface %d"
-msgstr ""
+msgstr "Attribut topographique manquant pour la surface %d"
 
 # c-format
 #: ../misc/m.nviz.image/surface.c:133
@@ -2437,15 +2440,15 @@ msgstr "Zone(s) de distance"
 
 #: ../misc/m.cogo/main.c:227
 msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa."
-msgstr ""
+msgstr "Un utilitaire simple pour convertir des mesures de gisement et distance en coordonnées et vice versa."
 
 #: ../misc/m.cogo/main.c:229
 msgid "It assumes a cartesian coordinate system"
-msgstr ""
+msgstr "Cela suppose un système de coordonnées cartésiennes"
 
 #: ../misc/m.cogo/main.c:233
 msgid "Lines are labelled"
-msgstr ""
+msgstr "Les lignes sont étiquetées"
 
 #: ../misc/m.cogo/main.c:237
 #, fuzzy
@@ -2454,7 +2457,7 @@ msgstr "Supprimer les en-têtes de page"
 
 #: ../misc/m.cogo/main.c:242
 msgid "Convert from coordinates to bearing and distance"
-msgstr ""
+msgstr "Convertir des coordonnées en gisement et distance"
 
 #: ../misc/m.cogo/main.c:257
 #, fuzzy
@@ -2480,7 +2483,7 @@ msgstr "Utiliser les coordonnées du centre de la couche\n"
 #: ../misc/m.cogo/main.c:325
 #, c-format
 msgid "Input parse error on line %d"
-msgstr ""
+msgstr "Erreur d'analyse de l'entrée à la ligne %d"
 
 #: ../misc/m.transform/main.c:92
 #, fuzzy, c-format
@@ -2610,7 +2613,7 @@ msgstr "Facteur d'échelle pour les coordonnées x"
 
 #: ../misc/m.measure/main.c:58 ../raster/r.report/parse.c:45
 msgid "Units"
-msgstr ""
+msgstr "Unités"
 
 #: ../misc/m.measure/main.c:59
 #, fuzzy
@@ -2663,7 +2666,7 @@ msgstr "Secteur : %s\n"
 
 #: ../raster/r.external/proj.c:58 ../raster/r.in.gdal/main.c:398
 msgid "Dataset PROJ_INFO is:\n"
-msgstr ""
+msgstr "Le PROJ_INFO du jeu de données est : \n"
 
 # c-format
 #: ../raster/r.external/proj.c:85 ../raster/r.in.lidar/main.c:322
@@ -2698,8 +2701,9 @@ msgstr ""
 "Poursuite de la procédure d'importation...\n"
 
 #: ../raster/r.external/window.c:23
+#, fuzzy
 msgid "Input raster map is rotated - cannot import. You may use 'gdalwarp' to transform the map to North-up."
-msgstr ""
+msgstr "La carte raster en entrée est pivotée - importation impossible. Vous pouvez utiliser 'gdalwarp' pour transformer la carte en \"North up\""
 
 #: ../raster/r.external/window.c:26
 msgid "Applying horizontal flip"
@@ -2789,7 +2793,7 @@ msgstr "Titre de la couche raster créée"
 #: ../imagery/i.landsat.toar/main.c:127 ../imagery/i.landsat.toar/main.c:135
 #: ../imagery/i.landsat.toar/main.c:144 ../imagery/i.landsat.toar/main.c:200
 msgid "Metadata"
-msgstr ""
+msgstr "Métadonnées"
 
 #: ../raster/r.external/main.c:94 ../raster/r.external.out/main.c:250
 #: ../raster/r.in.gdal/main.c:150 ../vector/v.in.ogr/main.c:226
@@ -3112,7 +3116,7 @@ msgstr ""
 
 #: ../raster/r.profile/main.c:160
 msgid " [RGB Color]"
-msgstr ""
+msgstr "[couleur RVB]"
 
 # c-format
 #: ../raster/r.profile/main.c:170
@@ -3123,7 +3127,7 @@ msgstr "Coordonnées invalides : %s %s"
 #: ../raster/r.profile/main.c:238
 #, c-format
 msgid "Approx. transect length [%f] m"
-msgstr ""
+msgstr "Longueur approx. du transect [%f] m"
 
 # c-format
 #: ../raster/r.profile/main.c:241
@@ -3253,9 +3257,10 @@ msgstr ""
 msgid "SECTION 2: A* Search."
 msgstr ""
 
+# Bloc de mémoire (java ?) ; semble ne guère se prêter à une traduction littérale en français
 #: ../raster/r.watershed/ram/do_astar.c:220
 msgid "heapsize too large"
-msgstr ""
+msgstr "heapsize trop élevée"
 
 #: ../raster/r.watershed/ram/do_cum.c:16 ../raster/r.watershed/seg/do_cum.c:20
 #, fuzzy
@@ -4157,7 +4162,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:190
 msgid "Maximum memory to be used with -m flag (in MB)"
-msgstr ""
+msgstr "Mémoire maximale à allouer avec le drapeau -m (en MB)"
 
 #: ../raster/r.watershed/front/main.c:194
 msgid "SFD (D8) flow (default is MFD)"
@@ -4177,15 +4182,15 @@ msgstr "Activer l'option de mémoire étendue : le calcul est lent"
 
 #: ../raster/r.watershed/front/main.c:208
 msgid "Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements"
-msgstr ""
+msgstr "Seulement nécessaire si les besoins de mémoire excèdent la RAM disponible ; voir le manuel pour calculer les besoins mémoire"
 
 #: ../raster/r.watershed/front/main.c:213
 msgid "Use positive flow accumulation even for likely underestimates"
-msgstr ""
+msgstr "Utiliser une accumulation d'écoulement positive même pour les sous-estimations manifestes"
 
 #: ../raster/r.watershed/front/main.c:215
 msgid "See manual for a detailed description of flow accumulation output"
-msgstr ""
+msgstr "Voir le manuel pour une description détaillée de la sortie d'accumulation d'écoulement"
 
 #: ../raster/r.watershed/front/main.c:220
 msgid "Beautify flat areas"
@@ -4222,7 +4227,7 @@ msgstr "Type de colonne non géré"
 #: ../raster/r.watershed/front/main.c:307
 #, c-format
 msgid "Subprocess failed with exit code %d"
-msgstr ""
+msgstr "Le sous-processus a échoué avec le code de sortie %d"
 
 #: ../raster/r.colors.out/raster_main.c:46
 #: ../raster/r.colors.out/raster3d_main.c:47
@@ -4308,7 +4313,7 @@ msgstr "Les coordonnées XY du/des foyer(s) initial(aux)"
 #: ../raster/r.cost/main.c:172 ../raster/r.cost/main.c:184
 #: ../raster/r.cost/main.c:193 ../raster/r.cost/main.c:243
 msgid "Start"
-msgstr ""
+msgstr "Démarrer"
 
 #: ../raster/r.drain/main.c:144
 #, fuzzy
@@ -4422,7 +4427,7 @@ msgstr ""
 
 #: ../raster/r.param.scale/process.c:74
 msgid "E-W and N-S grid resolutions are different. Taking average."
-msgstr ""
+msgstr "Les résolutions E-O et N-S diffèrent. Utilisation de la moyenne."
 
 #: ../raster/r.param.scale/main.c:42
 #, fuzzy
@@ -4485,7 +4490,7 @@ msgstr "Paramètre morphométrique de la 'taille' de la fenêtre à traiter"
 
 #: ../raster/r.param.scale/interface.c:172
 msgid "Inappropriate window size (too big or even)"
-msgstr ""
+msgstr "Taille de fenêtre inappropriée (trop élevée ou valeur paire)"
 
 #: ../raster/r.in.gridatb/main.c:48
 msgid "Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map"
@@ -4517,11 +4522,11 @@ msgstr "couche vecteur des points de départ"
 
 #: ../raster/r.in.gridatb/file_io.c:38
 msgid "Rows changed"
-msgstr ""
+msgstr "Les lignes ont changé"
 
 #: ../raster/r.in.gridatb/file_io.c:41
 msgid "Cols changed"
-msgstr ""
+msgstr "Les colonnes ont changé"
 
 #: ../raster/r.support/check.c:26
 #, c-format
@@ -4584,7 +4589,7 @@ msgstr "Texte à utiliser pour le nouveau titre de la couche"
 
 #: ../raster/r.support/main.c:109
 msgid "Text to use for data description or keyword(s)"
-msgstr ""
+msgstr "Texte à utiliser pour la description des données ou mot(s)-clé"
 
 #: ../raster/r.support/main.c:121
 msgid "Text file from which to load history"
@@ -4862,7 +4867,7 @@ msgstr "Jeu(x) de données à lister (par défaut le jeu de données courant)"
 #: ../raster/r.cross/cross.c:53
 #, c-format
 msgid "%s: STEP 1 ... "
-msgstr ""
+msgstr "%s : ÉTAPE 1..."
 
 #: ../raster/r.cross/main.c:76
 msgid "Creates a cross product of the category values from multiple raster map layers."
@@ -4889,7 +4894,7 @@ msgstr "Vous devez spécifiez deux couches sources ou plus"
 #: ../raster/r.cross/main.c:140
 #, c-format
 msgid "%s: STEP 2 ..."
-msgstr ""
+msgstr "%s : ÉTAPE 2..."
 
 #: ../raster/r.cross/main.c:173 ../raster/r.in.png/main.c:485
 #: ../raster/r.basins.fill/main.c:145 ../raster/r.resample/main.c:125
@@ -4905,7 +4910,7 @@ msgstr "%-5d catégories de la ligne lues\n"
 #: ../raster/r.cross/renumber.c:33
 #, c-format
 msgid "%s: STEP 3 ... "
-msgstr ""
+msgstr "%s : ÉTAPE 3..."
 
 #: ../raster/r.usler/main.c:53
 msgid "rainfall"
@@ -4953,7 +4958,7 @@ msgstr "Inclure les étiquettes de catégorie dans la sortie"
 
 #: ../raster/r.distance/parse.c:56
 msgid "Report zero distance if rasters are overlapping"
-msgstr ""
+msgstr "Rapporter la distance zéro si les rasters se chevauchent"
 
 #: ../raster/r.distance/report.c:43
 #, fuzzy
@@ -5823,7 +5828,7 @@ msgstr ""
 
 #: ../raster/r.recode/read_rules.c:91
 msgid "When finished type \"end\"."
-msgstr ""
+msgstr "Pour terminer taper \"end\"."
 
 #: ../raster/r.statistics/o_skew.c:91
 msgid "o_skew: No data in array"
@@ -5856,14 +5861,14 @@ msgstr "Valeurs de la couche de couverture extraites des étiquettes de catégor
 
 #: ../raster/r.statistics/main.c:92 ../raster/r.statistics/main.c:95
 msgid "This module currently only works for integer (CELL) maps"
-msgstr ""
+msgstr "Pour le moment ce module ne fonctionne qu'avec des cartes de valeurs(CELL) entières"
 
 #: ../raster/r.statistics/main.c:106 ../raster/r.statistics2/main.c:164
 #: ../raster/r.neighbors/main.c:233 ../raster/r.proj/main.c:244
 #: ../imagery/i.rectify/main.c:163 ../vector/v.vect.stats/main.c:278
 #, c-format
 msgid "<%s=%s> unknown %s"
-msgstr ""
+msgstr "<%s=%s> inconnu %s"
 
 #: ../raster/r.statistics/read_stats.c:20
 #, fuzzy
@@ -5992,7 +5997,7 @@ msgstr "couche raster binaire"
 
 #: ../raster/r.los/main.c:121
 msgid "Viewing position height above the ground"
-msgstr ""
+msgstr "Hauteur du point de vue au-dessus du sol"
 
 #: ../raster/r.los/main.c:129
 #, fuzzy
@@ -6005,7 +6010,7 @@ msgstr ""
 
 #: ../raster/r.los/main.c:162
 msgid "Lat/Long support is not (yet) implemented for this module."
-msgstr ""
+msgstr "Le support Lat/Lon n'est pas (encore) pris en charge par ce module."
 
 # c-format
 #: ../raster/r.los/main.c:167
@@ -6019,7 +6024,7 @@ msgstr ""
 
 #: ../raster/r.los/main.c:245
 msgid "Problem to obtain current ellipsoid parameters, using sphere (6370997.0)"
-msgstr ""
+msgstr "Problème pour obtenir les paramètres de l'ellipsoïde courant, utilisation d'une sphère (6370997.0)"
 
 #: ../raster/r.los/main.c:250
 #, fuzzy, c-format
@@ -6399,7 +6404,7 @@ msgstr "Montre l'étiquette de catégorie dans la(les) cellule(s) de grille"
 
 #: ../raster/r.what/main.c:141
 msgid "Output color values as RRR:GGG:BBB"
-msgstr ""
+msgstr "Valeur de couleur en sortie au format RRR:VVV:BBB"
 
 #: ../raster/r.what/main.c:145
 msgid "Output integer category values, not cell values"
@@ -6579,7 +6584,7 @@ msgstr ""
 
 #: ../raster/r.series/main.c:177
 msgid "Ignore values outside this range"
-msgstr ""
+msgstr "Ignorer les valeurs en dehors de cet intervalle"
 
 # c-format
 #: ../raster/r.series/main.c:185
@@ -6619,7 +6624,7 @@ msgstr ""
 
 #: ../raster/r.series/main.c:307
 msgid "output= and method= must have the same number of values"
-msgstr ""
+msgstr "output= and method= doivent avoir le même nombre de valeurs"
 
 #: ../raster/r.random.surface/init.c:73
 #, fuzzy, c-format
@@ -6734,7 +6739,7 @@ msgstr "Nombre maximum d'itération"
 
 #: ../raster/r.random.surface/main.c:113
 msgid "Uniformly distributed cell values"
-msgstr ""
+msgstr "Valeurs de cellules uniformément distribuées"
 
 #: ../raster/r.random.surface/main.c:128 ../raster/r.random.cells/init.c:89
 #, fuzzy, c-format
@@ -6880,7 +6885,7 @@ msgstr "Statistique de couches raster."
 #: ../raster/r.in.xyz/main.c:257 ../raster/r.in.lidar/main.c:181
 #: ../raster/r.in.lidar/main.c:221 ../raster/r.in.lidar/main.c:230
 msgid "Statistic"
-msgstr ""
+msgstr "Statistique"
 
 #: ../raster/r.in.xyz/main.c:188 ../raster/r.in.arc/main.c:81
 #: ../raster/r.in.lidar/main.c:189
@@ -6894,11 +6899,11 @@ msgstr "Nombre de colonnes utilisées comme coordonnées x (la première colonne
 
 #: ../raster/r.in.xyz/main.c:207
 msgid "Column number of y coordinates in input file"
-msgstr ""
+msgstr "Numéro de colonne pour les ordonnées dans le fichier en entrée"
 
 #: ../raster/r.in.xyz/main.c:215
 msgid "Column number of data values in input file"
-msgstr ""
+msgstr "Numéro de colonne pour les valeurs dans le fichier en entrée"
 
 #: ../raster/r.in.xyz/main.c:223 ../raster/r.in.lidar/main.c:196
 #, fuzzy
@@ -6907,7 +6912,7 @@ msgstr "Rang des valeurs entières: min,max"
 
 #: ../raster/r.in.xyz/main.c:230 ../raster/r.in.lidar/main.c:203
 msgid "Scale to apply to z data"
-msgstr ""
+msgstr "Échelle à appliquer aux données z"
 
 #: ../raster/r.in.xyz/main.c:247 ../raster/r.in.lidar/main.c:220
 #, fuzzy
@@ -6929,7 +6934,7 @@ msgstr "Produit les statistiques à la façon d'un script shell"
 
 #: ../raster/r.in.xyz/main.c:270
 msgid "Ignore broken lines"
-msgstr ""
+msgstr "Ignorer les lignes cassées"
 
 #: ../raster/r.in.xyz/main.c:296
 #, fuzzy
@@ -6952,7 +6957,7 @@ msgstr ""
 
 #: ../raster/r.in.xyz/main.c:482
 msgid "If input is not from a file it is only possible to perform a single pass."
-msgstr ""
+msgstr "Si l'entrée ne provient pas d'un fichier, il n'est possible de réaliser qu'une seule passe."
 
 #: ../raster/r.in.xyz/main.c:488 ../raster/r.in.lidar/main.c:561
 msgid "zrange will not be taken into account during scan"
@@ -6976,6 +6981,8 @@ msgid ""
 "Not enough data columns. Incorrect delimiter or column number? Found the following character(s) in row %lu:\n"
 "[%s]"
 msgstr ""
+"Pas assez de colonnes de données. Séparateur ou nombre de colonne incorrect ? trouvé les caractères suivants dans la ligne %lu:\n"
+"[%s]"
 
 #: ../raster/r.in.xyz/main.c:606 ../raster/r.in.xyz/main.c:1105
 msgid "Line ignored as requested"
@@ -7016,7 +7023,7 @@ msgstr "Rotation des données ... "
 #: ../raster/r.in.xyz/main.c:1174 ../raster/r.in.lidar/main.c:1179
 #, c-format
 msgid "Range:     min         max\n"
-msgstr ""
+msgstr "Intervalle :    min         max\n"
 
 #: ../raster/r.composite/main.c:73
 #, fuzzy
@@ -7039,7 +7046,7 @@ msgstr "Nombre de niveaux utilisés pour chaque composant"
 
 #: ../raster/r.composite/main.c:102 ../raster/r.composite/main.c:120
 msgid "Levels"
-msgstr ""
+msgstr "Niveaux"
 
 #: ../raster/r.composite/main.c:117
 #, c-format
@@ -7286,7 +7293,7 @@ msgstr ""
 
 #: ../raster/r.gwflow/main.c:86
 msgid "Recharge"
-msgstr ""
+msgstr "Recharger"
 
 # c-format
 #: ../raster/r.gwflow/main.c:88
@@ -7906,7 +7913,7 @@ msgstr "Suppression des centroïdes en doublons..."
 
 #: ../raster/r.colors/edit_colors.c:104 ../vector/v.colors/main.c:114
 msgid "Only write new color table if one doesn't already exist"
-msgstr ""
+msgstr "N'écrire une nouvelle table de couleur que s'il n'en existe pas déjà une"
 
 #: ../raster/r.colors/edit_colors.c:108 ../vector/v.colors/main.c:118
 #, fuzzy
@@ -8242,7 +8249,7 @@ msgstr "Les informations de projection ne seront pas mises à jour."
 
 #: ../raster/r.sun/main.c:374 ../raster/r.horizon/main.c:213
 msgid "Angle step size for multidirectional horizon [degrees]"
-msgstr ""
+msgstr "Pas angulaire pour l'horizon multidirectionnel [degrés]"
 
 #: ../raster/r.sun/main.c:383
 msgid "Output incidence angle raster map (mode 1 only)"
@@ -8315,7 +8322,7 @@ msgstr "Intègre les effets d'ombres portées du relief"
 
 #: ../raster/r.sun/main.c:508
 msgid "Use the low-memory version of the program"
-msgstr ""
+msgstr "Utiliser la version basse-mémoire du programme"
 
 #: ../raster/r.sun/main.c:555
 msgid "You must give the longitude raster if you use civil time"
@@ -8358,7 +8365,7 @@ msgstr "%s = %s -- doit être supérieur à zéro"
 
 #: ../raster/r.sun/main.c:604
 msgid "If you use the horizon option you must also set the 'horizonstep' parameter."
-msgstr ""
+msgstr "Si vous utilisez l'option horizon vous devez aussi fournir le paramètre 'horizonstep'"
 
 #: ../raster/r.sun/main.c:610
 #, fuzzy
@@ -8384,7 +8391,7 @@ msgstr ""
 
 #: ../raster/r.sun/main.c:678
 msgid "If you want to save memory and to use shadows, you must use pre-calculated horizons."
-msgstr ""
+msgstr "Si vous souhaitez économiser de la mémoire et utiliser les ombres, vous devez utiliser des horizons pré-calculés."
 
 #: ../raster/r.sun/main.c:723 ../imagery/i.latlong/main.c:102
 #: ../display/d.where/main.c:106 ../general/g.region/printwindow.c:247
@@ -8601,7 +8608,7 @@ msgstr ""
 #: ../vector/v.surf.bspline/main.c:168 ../vector/v.surf.bspline/main.c:172
 #: ../vector/v.surf.bspline/main.c:179
 msgid "Settings"
-msgstr ""
+msgstr "Réglages"
 
 #: ../raster/r.in.bin/main.c:257
 msgid "Byte Swap the Data During Import"
@@ -8678,16 +8685,16 @@ msgstr "les drapeaux -B & - C sont mutuellement exclusifs. Veuillez n'en choisir
 #: ../raster/r.in.bin/main.c:387
 #, c-format
 msgid "-f incompatible with bytes=%d; must be 4 or 8"
-msgstr ""
+msgstr "-f incompatible avec bytes=%d ; doit être 4 ou 8"
 
 #: ../raster/r.in.bin/main.c:395
 #, c-format
 msgid "-d incompatible with bytes=%d; must be 8"
-msgstr ""
+msgstr "-d incompatible avec bytes=%d ; doit être 8"
 
 #: ../raster/r.in.bin/main.c:402
 msgid "bytes= required for integer data"
-msgstr ""
+msgstr "bytes= requis pour des données entières"
 
 #: ../raster/r.in.bin/main.c:406
 msgid "Integer input doesn't support size=8 in this build"
@@ -9741,20 +9748,20 @@ msgstr "Nom de la couche raster 3D où modifier les valeurs null"
 #: ../raster/r.null/main.c:73 ../raster/r.null/main.c:81
 #: ../general/g.proj/main.c:178
 msgid "Modify"
-msgstr ""
+msgstr "Modifier"
 
 #: ../raster/r.null/main.c:85
 msgid "Only do the work if the map is floating-point"
-msgstr ""
+msgstr "NE faire le travail que si la carte est en virgule flottante"
 
 #: ../raster/r.null/main.c:86 ../raster/r.null/main.c:91
 #: ../raster/r.null/main.c:97
 msgid "Check"
-msgstr ""
+msgstr "Vérifier"
 
 #: ../raster/r.null/main.c:90
 msgid "Only do the work if the map is integer"
-msgstr ""
+msgstr "Ne faire le travail que si la carte est en valeurs entières"
 
 #: ../raster/r.null/main.c:96
 #, fuzzy
@@ -10185,22 +10192,22 @@ msgstr "Valeur de la limite sud"
 #: ../raster/r.out.mat/main.c:178 ../raster/r.in.mat/main.c:399
 #, c-format
 msgid "eastern edge=%f"
-msgstr ""
+msgstr "bordure orientale=%f"
 
 #: ../raster/r.out.mat/main.c:179 ../raster/r.in.mat/main.c:400
 #, c-format
 msgid "western edge=%f"
-msgstr ""
+msgstr "bordure occidentale=%f"
 
 #: ../raster/r.out.mat/main.c:180 ../raster/r.in.mat/main.c:401
 #, c-format
 msgid "nsres=%f"
-msgstr ""
+msgstr "nsres=%f"
 
 #: ../raster/r.out.mat/main.c:181 ../raster/r.in.mat/main.c:402
 #, c-format
 msgid "ewres=%f"
-msgstr ""
+msgstr "ewres=%f"
 
 # c-format
 #: ../raster/r.out.mat/main.c:182 ../raster/r.in.mat/main.c:403
@@ -10302,12 +10309,12 @@ msgstr "Impossible d'ouvrir le fichier ascii : [%s]"
 
 #: ../raster/r.sunmask/g_solposition.c:66
 msgid "Unable to calculate sun position in un-projected locations. Specify sunposition directly."
-msgstr ""
+msgstr "Impossible de calculer la position du soleil sur des secteur non projetés. Spécifier directement la position du soleil."
 
 #: ../raster/r.sunmask/g_solposition.c:88
 #, c-format
 msgid "Specified point %f, %f outside of current region, is that intended? Anyway, it will be used."
-msgstr ""
+msgstr "Le point spécifié %f, %f est en dehors de la région courante, est-ce intentionnel ? Quoi qu'il en soit il sera utilisé."
 
 #: ../raster/r.sunmask/g_solposition.c:98
 #, fuzzy
@@ -10368,7 +10375,7 @@ msgstr "A : angle du soleil par rapport au nord, en degrés"
 
 #: ../raster/r.sunmask/main.c:149
 msgid "Year (B)"
-msgstr ""
+msgstr "Année (B)"
 
 #: ../raster/r.sunmask/main.c:151 ../raster/r.sunmask/main.c:159
 #: ../raster/r.sunmask/main.c:167 ../raster/r.sunmask/main.c:175
@@ -10379,15 +10386,15 @@ msgstr ""
 
 #: ../raster/r.sunmask/main.c:157
 msgid "Month (B)"
-msgstr ""
+msgstr "Mois (B)"
 
 #: ../raster/r.sunmask/main.c:165
 msgid "Day (B)"
-msgstr ""
+msgstr "Jour (B)"
 
 #: ../raster/r.sunmask/main.c:173
 msgid "Hour (B)"
-msgstr ""
+msgstr "Heure (B)"
 
 #: ../raster/r.sunmask/main.c:181
 #, fuzzy
@@ -10401,7 +10408,7 @@ msgstr "B : secondes (0..60)"
 
 #: ../raster/r.sunmask/main.c:198
 msgid "Timezone"
-msgstr ""
+msgstr "Fuseau horaire"
 
 #: ../raster/r.sunmask/main.c:199
 #, fuzzy
@@ -10415,7 +10422,7 @@ msgstr "Coordonnée X d'un point sur le plan."
 
 #: ../raster/r.sunmask/main.c:209 ../raster/r.sunmask/main.c:219
 msgid "Default: map center"
-msgstr ""
+msgstr "Défaut : centre de la carte"
 
 #: ../raster/r.sunmask/main.c:218
 #, fuzzy
@@ -10424,7 +10431,7 @@ msgstr "Coordonnée Y d'un point sur le plan."
 
 #: ../raster/r.sunmask/main.c:224
 msgid "Don't ignore zero elevation"
-msgstr ""
+msgstr "Ne pas ignorer les altitudes zéro"
 
 #: ../raster/r.sunmask/main.c:228
 #, fuzzy
@@ -10523,92 +10530,92 @@ msgstr "Calcul des ombres depuis le MNT..."
 #: ../raster/r.sunmask/solpos00.c:949
 #, c-format
 msgid "S_decode ==> Please fix the year: %d [1950-2050]"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer l'année : %d [1950-2050]"
 
 #: ../raster/r.sunmask/solpos00.c:952
 #, c-format
 msgid "S_decode ==> Please fix the month: %d"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer le mois : %d"
 
 #: ../raster/r.sunmask/solpos00.c:954
 #, c-format
 msgid "S_decode ==> Please fix the day-of-month: %d"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer le jour du mois : %d"
 
 #: ../raster/r.sunmask/solpos00.c:957
 #, c-format
 msgid "S_decode ==> Please fix the day-of-year: %d"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer le jour de l'année : %d"
 
 #: ../raster/r.sunmask/solpos00.c:960
 #, c-format
 msgid "S_decode ==> Please fix the hour: %d"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer l'heure : %d"
 
 #: ../raster/r.sunmask/solpos00.c:962
 #, c-format
 msgid "S_decode ==> Please fix the minute: %d"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer la minute : %d"
 
 #: ../raster/r.sunmask/solpos00.c:964
 #, c-format
 msgid "S_decode ==> Please fix the second: %d"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer la seconde = %d "
 
 #: ../raster/r.sunmask/solpos00.c:966
 #, c-format
 msgid "S_decode ==> Please fix the time zone: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer le fuseau horaire : %f"
 
 #: ../raster/r.sunmask/solpos00.c:969
 #, c-format
 msgid "S_decode ==> Please fix the interval: %d"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer l'intervalle : %d"
 
 #: ../raster/r.sunmask/solpos00.c:972
 #, c-format
 msgid "S_decode ==> Please fix the latitude: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer  la latitude : %f"
 
 #: ../raster/r.sunmask/solpos00.c:975
 #, c-format
 msgid "S_decode ==> Please fix the longitude: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer la longitude : %f "
 
 #: ../raster/r.sunmask/solpos00.c:978
 #, c-format
 msgid "S_decode ==> Please fix the temperature: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer la température : %f"
 
 #: ../raster/r.sunmask/solpos00.c:981
 #, c-format
 msgid "S_decode ==> Please fix the pressure: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer la pression : %f"
 
 #: ../raster/r.sunmask/solpos00.c:983
 #, c-format
 msgid "S_decode ==> Please fix the tilt: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer l'inclinaison :%f"
 
 #: ../raster/r.sunmask/solpos00.c:985
 #, c-format
 msgid "S_decode ==> Please fix the aspect: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer l'exposition : %f"
 
 #: ../raster/r.sunmask/solpos00.c:987
-#, c-format
+#, fuzzy, c-format
 msgid "S_decode ==> Please fix the shadowband width: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer la largeur de bande d'ombre : %f"
 
 #: ../raster/r.sunmask/solpos00.c:990
-#, c-format
+#, fuzzy, c-format
 msgid "S_decode ==> Please fix the shadowband radius: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer le rayon de bande d'ombre : %f"
 
 #: ../raster/r.sunmask/solpos00.c:993
-#, c-format
+#, fuzzy, c-format
 msgid "S_decode ==> Please fix the shadowband sky factor: %f"
-msgstr ""
+msgstr "S_decode ==> Merci de fixer le facteur de ciel de bande d'ombre : %f"
 
 #: ../raster/r.regression.line/main.c:49
 #, fuzzy
@@ -11404,7 +11411,7 @@ msgstr "%s = %s -- doit être supérieur à zéro"
 #: ../raster/r.slope.aspect/main.c:334
 #, c-format
 msgid "You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s> or <%s>"
-msgstr ""
+msgstr "Vous devez spécifier au moins un des paramètres : <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s> or <%s>"
 
 # c-format
 #: ../raster/r.slope.aspect/main.c:358
@@ -11415,7 +11422,7 @@ msgstr "Type erroné: %s"
 #: ../raster/r.slope.aspect/main.c:388
 #, c-format
 msgid "Converting units to meters, factor=%.6f"
-msgstr ""
+msgstr "Conversion d'unités en mètres, facteur=%.6f"
 
 #: ../raster/r.slope.aspect/main.c:968
 #, fuzzy, c-format
@@ -11501,14 +11508,14 @@ msgstr "Silencieux"
 
 #: ../raster/r.to.vect/lines_io.c:76
 msgid "write_line:  found half a loop!"
-msgstr ""
+msgstr "write_line : trouvé une demie boucle !"
 
 #: ../raster/r.to.vect/lines_io.c:128
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "write_line: line terminated unexpectedly\n"
 "  previous (%d) point %p (%d,%d,%d) %p %p"
-msgstr ""
+msgstr "write_line : fin de ligne inattendue\n"
 
 #: ../raster/r.to.vect/lines.c:70
 #, fuzzy
@@ -11520,6 +11527,8 @@ msgid ""
 "Raster map is not thinned properly.\n"
 "Please run r.thin."
 msgstr ""
+"La carte raster n'est pas affinée correctement.\n"
+"Merci d'exécuter r.thin."
 
 #: ../raster/r.to.vect/lines.c:568
 msgid "join_lines: p front pointer not NULL!"
@@ -12402,7 +12411,7 @@ msgstr "groupe [%s] ciblé dans le Secteur [%s], jeu de données [%s]\n"
 #: ../raster/r.proj/main.c:286 ../raster/r.in.gdal/main.c:691
 #: ../imagery/i.rectify/target.c:33 ../vector/v.rectify/target.c:38
 msgid "permission denied"
-msgstr ""
+msgstr "permission refusée"
 
 # c-format
 #: ../raster/r.proj/main.c:287 ../raster/r.in.gdal/main.c:692
@@ -12448,7 +12457,7 @@ msgstr "Impossible d'obtenir les valeurs clefs de projection pour le Secteur (lo
 
 #: ../raster/r.proj/main.c:337
 msgid "Unable to work with unprojected data (xy location)"
-msgstr ""
+msgstr "Impossible de travailler sur des données non projetées (secteur xy)"
 
 #: ../raster/r.proj/main.c:356
 #, fuzzy, c-format
@@ -12479,7 +12488,7 @@ msgstr "Noeud %d: %f %f\n"
 #: ../raster/r.proj/main.c:449 ../raster/r.proj/main.c:460
 #, c-format
 msgid "South: %f (%f)"
-msgstr ""
+msgstr "Sud : %f (%f)"
 
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:461
 #, fuzzy, c-format
@@ -12494,12 +12503,12 @@ msgstr "Noeud %d: %f %f\n"
 #: ../raster/r.proj/main.c:452 ../raster/r.proj/main.c:463
 #, c-format
 msgid "EW-res: %f"
-msgstr ""
+msgstr "EO-res : %f"
 
 #: ../raster/r.proj/main.c:453 ../raster/r.proj/main.c:464
 #, c-format
 msgid "NS-res: %f"
-msgstr ""
+msgstr "NS-res : %f"
 
 #: ../raster/r.proj/main.c:456
 #, fuzzy
@@ -18666,7 +18675,7 @@ msgstr "Couleur de ligne"
 #: ../vector/v.label.sa/main.c:140 ../vector/v.label.sa/main.c:150
 #: ../vector/v.label.sa/main.c:157
 msgid "Colors"
-msgstr ""
+msgstr "Couleurs"
 
 #: ../display/d.vect/main.c:116 ../display/d.vect/main.c:126
 #: ../display/d.vect/main.c:227 ../display/d.vect/main.c:237
@@ -29417,7 +29426,7 @@ msgstr "SYSTEM_ERROR: NEW_T_OLD Mauvais code de type %x"
 #: ../vector/v.in.sites/main.c:59
 #: ../locale/scriptstrings/v.in.sites.all_to_translate.c:2
 msgid "sites"
-msgstr ""
+msgstr "sites"
 
 #: ../vector/v.in.sites/main.c:61
 #, fuzzy
@@ -36685,6 +36694,529 @@ msgid "also import quality map (SM status map layer) and filter NDVI map"
 msgstr "importer aussi la couche de qualité (couche du statut SM) et couche filtre NDVI"
 
 #, fuzzy
+msgid "Name for output flowline density raster map"
+msgstr "Fichier raster en sortie pour la densité des courants"
+
+#, fuzzy
+msgid "vector, interpolation, kriging"
+msgstr "Nombre de points d'interpolation"
+
+#, fuzzy
+msgid "Raster map to use as mask"
+msgstr "couche raster à utiliser comme MASK"
+
+#, fuzzy
+msgid "Creates a mask for limiting raster operation."
+msgstr "Créer un MASKER pour limiter l'opération sur le raster"
+
+msgid "Raster value"
+msgstr "Valeur raster"
+
+#, fuzzy
+msgid "Pass %d:"
+msgstr "Masque: %s\n"
+
+msgid "Use db.select for SELECT SQL statements"
+msgstr "Utiliser db.select pour les déclarations SELECT SQL"
+
+#, fuzzy
+msgid "raster3d, statistics"
+msgstr "Statistiques de transition de classe."
+
+#, fuzzy
+msgid "vector, query"
+msgstr "Couche vecteur à supprimer"
+
+msgid "Feature type. Combination of types is not supported by all formats."
+msgstr "Type d'objet. Le mélange de types n'est pas géré par tous les format."
+
+msgid "Illegal configuration file"
+msgstr "Nom du fichier de configuration illégal"
+
+# c-format
+#, fuzzy
+msgid "Could not find input map <%s> in current mapset."
+msgstr "couche d'entrée introuvable <%s>"
+
+msgid "Print the current region (shell script style)"
+msgstr "Affiche les paramètres de la région courante (à la façon d'un script shell)"
+
+# c-format
+#, fuzzy
+msgid "Converting %s..."
+msgstr "Écriture [%s]..."
+
+#, fuzzy
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
+msgstr "Filtrer et générer une couche d'altitude sans dépressions et une couche de direction d'écoulement depuis une couche d'altitude donnée"
+
+msgid "CHILD[pid = %i]: unable to open %s mask ... continue without!!!"
+msgstr "CHILD[pid = %i] : impossible d'ouvrir le mask %s... continuer sans!!!"
+
+msgid "r.li.worker (pid %i) exited with abnormal status %i"
+msgstr "r.li.worker (pid %i) interrompu avec un statut anormal %i"
+
+#, fuzzy
+msgid "r.li.worker (pid %i) terminated"
+msgstr "r.li.worker (pid %i) achevé\n"
+
+#, fuzzy
+msgid "Cannot make stat of %s configuration file"
+msgstr "Impossible de faire les stats du fichier de configuration %s"
+
+msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask itself."
+msgstr "Calculer des zones d'ombre portée à partir de la position du soleil et d'un MNT. A : la position exacte du soleil est donnée. B : date/heure pour calculer la position du soleil grâce à r.sunmask."
+
+msgid "A: altitude of the sun above horizon, degrees"
+msgstr "A : altitude du soleil au dessus de l'horizon, en degrés"
+
+msgid "B: minutes (0..60)"
+msgstr "B : minutes (0..60)"
+
+msgid "B: seconds (0..60)"
+msgstr "B : secondes (0..60)"
+
+msgid "B: timezone (east positive, offset from GMT, also use to adjust daylight savings)"
+msgstr "B : fuseau horaire (positif vers l'est, différence par rapport à GMT)"
+
+msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)"
+msgstr "Constructon de courbes de terrain (lignes du courant), longueur des courants, et densité de lignes de courants (zones amont) à partir d'un modèle numérique de terrain (MNT) raster"
+
+msgid "Show the category label in the grid cell(s)"
+msgstr "Montre l'étiquette de catégorie dans la(les) cellule(s) de grille"
+
+#, fuzzy
+msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+msgstr "Crée une couche d'indice topographique ln(a/tan(beta)) à partir d'une couche d'altitude."
+
+#, fuzzy
+msgid "Unable to read symbol, unable todisplay points"
+msgstr "Impossible de lire le symbole, impossible d'afficher les points"
+
+#, fuzzy
+msgid "Converts to one of the supported OGR vector formats."
+msgstr "Convertir vers un des formats vecteurs gérés par OGR"
+
+#, fuzzy
+msgid "Exporting %i points/lines..."
+msgstr "Importation des objets de la couche %d..."
+
+msgid "Number of column used as y coordinate (first column is 1) for points mode"
+msgstr "Nombre de colonnes utilisées comme coordonnées y (la première colonne est 1) en mode points"
+
+#, fuzzy
+msgid "Number of column used as z coordinate (first column is 1) for points mode"
+msgstr "Nombre de colonnes utilisées comme coordonnées x (la première colonne est 1) en mode points"
+
+#, fuzzy
+msgid "Number of column used as category (first column is 1) for points mode"
+msgstr "Nombre de colonnes utilisées comme coordonnées x (la première colonne est 1) en mode points"
+
+#, fuzzy
+msgid "If 0, unique category is assigned to each row and written to new column 'cat'"
+msgstr "Nombre de colonne utilisé comme catégorie (la première colonne est 1) en mode pointsSi la valeur est 0, une catégorie unique est assignée à chaque ligne et écrit dans la nouvelle colonne 'cat'."
+
+#, fuzzy
+msgid "Create a new empty vector map and exit. Nothing is read from input"
+msgstr "Crée une nouvelle couche vide et quitte. Rien n'est lu en entrée."
+
+#, fuzzy
+msgid "Name for output file (do not add extension)"
+msgstr "Nom du fichier en sortie (ne PAS ajouter l'extension)"
+
+#, fuzzy
+msgid "Width and height of output image"
+msgstr "Largeur de la couleur de mise en valeur"
+
+#, fuzzy
+msgid "Surface"
+msgstr "Variance de la somme"
+
+#, fuzzy
+msgid "Volume"
+msgstr "colonne(s)"
+
+#, fuzzy
+msgid "Convert all old GRASS < Ver5.7 vector maps in current mapset to current format"
+msgstr "convertit toutes les anciennes couches vectorielles GRASS (versions antérieures à 5.7) du jeu de données courant au format récent"
+
+#, fuzzy
+msgid "Vector map for which to edit attribute table"
+msgstr "Nom de la couche de points vecteurs en entrée pour laquelle éditer la table attributaire"
+
+msgid "Layer where to add column"
+msgstr "Couche à laquelle ajouter la colonne"
+
+#, fuzzy
+msgid "Computing row %d of covariance matrix..."
+msgstr "Calcul de la matrice de covariance de classe"
+
+#, fuzzy
+msgid "ID values"
+msgstr "Valeur de la chaîne de bit"
+
+#, fuzzy
+msgid "Type of elements"
+msgstr "Nom d'un élément"
+
+msgid "Writing data to file..."
+msgstr "Écriture des données dans le fichier..."
+
+#, fuzzy
+msgid "Output hue raster map"
+msgstr "couche raster en sortie"
+
+#, fuzzy
+msgid "display, legend"
+msgstr "Faire pivoter le cartouche de légende"
+
+# c-format
+#, fuzzy
+msgid "Database record for cat %d not found"
+msgstr "Aucun enregistrement pour la catégorie (cat = %d)"
+
+# c-format
+msgid "Could not find input vector map %s"
+msgstr "Couche d'entrée vecteur introuvable %s"
+
+msgid "Number of column used as z coordinate (first column is 1) for points mode. If 0, z coordinate is not used."
+msgstr "Nombre de colonnes utilisées comme coordonnées x (la première colonne est 1) en mode pointsSi la valeur est 0, les coordonnées z ne sont pas utilisées."
+
+msgid "Name of the column with tree height"
+msgstr "Nom de la colonne contenant la hauteur de l'arbre"
+
+msgid "Name of the column with tree species"
+msgstr "Nom de la colonne contenant les essences d'arbres"
+
+#, fuzzy
+msgid "Column name (will be updated by qvector values)"
+msgstr "Nom de la colonne (qui sera mise à jour par les valeurs rasters)"
+
+#, fuzzy
+msgid ""
+"\n"
+"ERROR: Required parameter <%s> not set:\n"
+"    (%s).\n"
+msgstr "incidout demande de fixer le paramètre d'heure"
+
+#, fuzzy
+msgid "Band to select"
+msgstr "Pas de moniteur sélectionné"
+
+#, fuzzy
+msgid "Select type"
+msgstr "Type de donnée vectorielle"
+
+#, fuzzy
+msgid "Cannot select records from database"
+msgstr "Impossible de sélectionner des données dans la table"
+
+#, fuzzy
+msgid "Removed vertices"
+msgstr "Suppression des centroïdes en doublons..."
+
+msgid "Database connection not defined\n"
+msgstr "La connexion à la base de données n'a pas été définie\n"
+
+# c-format
+msgid "Cannot find file %s"
+msgstr "Impossible de trouver le fichier %s"
+
+# c-format
+msgid "Cannot get header for %s"
+msgstr "Impossible de trouver l'en-tête de fichier %s"
+
+msgid "Cannot describe table"
+msgstr "Impossible de décrire la table"
+
+#, fuzzy
+msgid "Out of memory!"
+msgstr "Mémoire insuffisante"
+
+# c-format
+#, fuzzy
+msgid "Cannot open driver <%s>"
+msgstr "Impossible d'utiliser le pilote %s"
+
+msgid "New vector composite"
+msgstr "Nom du fichier vecoriel composite"
+
+#, fuzzy
+msgid "No database updates."
+msgstr "nom de la base de donnée"
+
+# c-format
+#, fuzzy
+msgid "%s Pan\n"
+msgstr "%s\n"
+
+#, fuzzy
+msgid "Watershed basin analysis program"
+msgstr "Programme d'analyse de bassin versant."
+
+#, fuzzy
+msgid "Name of input raster map with real depressions"
+msgstr "Nom de la couche raster source"
+
+#, fuzzy
+msgid "Name of input raster map blocking overland surface flow"
+msgstr "couche d'entrée : terrain bloquant l'écoulement de surface, pour USLE"
+
+#, fuzzy
+msgid "Name for output raster map useful for visual display of results (DEPRECATED)"
+msgstr "Couche de sortie : pratique pour visualiser les résultats"
+
+# c-format
+#, fuzzy
+msgid "Direction raster found <%s>"
+msgstr "Couche raster %i créée \n"
+
+#, fuzzy
+msgid "Name for output direction map for depressionless elevation raster map"
+msgstr "(o) Couche de gradient à partir d'une couche d'altitudes positives"
+
+#, fuzzy
+msgid "raster, export, animation"
+msgstr "Tracer le relief"
+
+#, fuzzy
+msgid "(requires r.out.ppm with stdout option)"
+msgstr ""
+"Convertir à la volée, en économisant l'espace disque\n"
+"\t(nécessite r.out.ppm avec l'option stdout)"
+
+#, fuzzy
+msgid "Name for output elevation raster map after filling"
+msgstr "couche raster d'altitude après remplissage"
+
+#, fuzzy
+msgid "Name for output direction raster map"
+msgstr ""
+"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
+"Nom de la couche raster cible\n"
+"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
+"Nom de la couche raster de sortie"
+
+# c-format
+#, fuzzy
+msgid "Reading input data..."
+msgstr "Lecture du fichier %s..."
+
+# c-format
+#, fuzzy
+msgid "Writing output data..."
+msgstr "Écriture %s..."
+
+#, fuzzy
+msgid "raster, reclassification"
+msgstr "Tracer le relief"
+
+#, fuzzy
+msgid "Name of input raster map with seed (at least 1 cell > 0)"
+msgstr "Couche raster avec le germe (au moins 1 cellule > 0)"
+
+#, fuzzy
+msgid "Name for flowpath length raster map"
+msgstr "Fichier raster en sortie pour la longueur des courants"
+
+#, fuzzy
+msgid "imagery, landsat, acca"
+msgstr "Nom de fichier de signatures à utiliser pour la classification"
+
+# c-format
+#, fuzzy
+msgid "Cannot write to raster map <%s>"
+msgstr "Impossible d'écrire la couche raster lac <%s>!"
+
+#, fuzzy
+msgid "Creates, edits, and lists groups and subgroups of imagery data."
+msgstr "Crée et édite des groupes et sous-groupes de fichiers images"
+
+# c-format
+#, fuzzy
+msgid "Extract quality control parameters from Modis QC layers"
+msgstr "Couche raster de terrain (MNT)"
+
+#, fuzzy
+msgid "Name of the surface reflectance QC layer [bit array]"
+msgstr "Nom de la couche qui contiendra la surface fractale"
+
+#, fuzzy
+msgid "The output cell map <%s.%d> has values outside the 0-255 range. Min: %d Max: %d"
+msgstr "La couche de sortie <%s.%d> possède des valeurs en dehors de l'intervalle 0-255.\n"
+
+#, fuzzy
+msgid "Computing means and standard deviations..."
+msgstr "La copie de table a échoué"
+
+#, fuzzy
+msgid "Computing means..."
+msgstr "Recherche des classes d'apprentissage..."
+
+#, fuzzy
+msgid "Other"
+msgstr "Confirmation?"
+
+#, fuzzy
+msgid "Offset in map units."
+msgstr "Distance de zone-tampon en unités carte."
+
+#, fuzzy
+msgid "db connection was not set by form"
+msgstr "La connexion à la base de données n'a pas été définie\n"
+
+#, fuzzy
+msgid "DEPRECATED Buffer distance in map units"
+msgstr "Distance de zone-tampon en unités carte."
+
+#, fuzzy
+msgid "Line buffers... "
+msgstr "Recherche des classes d'apprentissage..."
+
+#, fuzzy
+msgid "Zero area size, please clean input vector first."
+msgstr "Créer des points le long des lignes en entrée."
+
+#, fuzzy
+msgid "Could not get outside buffer for line id %d"
+msgstr "Impossible de lire le fichier d'intervalle"
+
+#, fuzzy
+msgid "Area buffers... "
+msgstr "couche raster source"
+
+#, fuzzy
+msgid "Selecting areas..."
+msgstr "Calcul des moyennes de classes..."
+
+#, fuzzy
+msgid "Cannot allocate %u bytes of memory"
+msgstr "Impossible d'allouer le curseur"
+
+#, fuzzy
+msgid "Skip the join column in other table"
+msgstr "Type de colonne inconnu"
+
+#, fuzzy
+msgid "Copy all the columns from other table to map"
+msgstr "Type de colonne inconnu"
+
+#, fuzzy
+msgid "Name of input raster map in which to fill nulls"
+msgstr "couche raster où remplacer les valeurs null"
+
+#, fuzzy
+msgid "Name for output raster map with nulls filled by interpolation"
+msgstr "Couche raster de sortie où remplacer les nulls par interpolation des valeurs voisines"
+
+#, fuzzy
+msgid "Mosaics up to four images, extending the color table."
+msgstr "Faire une mosaïque comprenant jusqu'à 4 images et étendre la table de couleurs; créer une couche *.mosaic"
+
+#, fuzzy
+msgid "creates map *.mosaic"
+msgstr "3ème couche pour la mosaïque."
+
+#, fuzzy
+msgid "1st map for mosaic (top of image stack)"
+msgstr "1ère couche pour la mosaïque (au somment de la pile d'images)"
+
+#, fuzzy
+msgid "2nd map for mosaic"
+msgstr "2nde couche pour la mosaïque."
+
+#, fuzzy
+msgid "3rd map for mosaic"
+msgstr "3ème couche pour la mosaïque."
+
+#, fuzzy
+msgid "4th map for mosaic"
+msgstr "4ème couche pour la mosaïque."
+
+#, fuzzy
+msgid "writing edges..."
+msgstr "Écrire les sommets de lignes."
+
+#, fuzzy
+msgid "raster, png"
+msgstr "Statistiques de transition de classe."
+
+msgid "Import Mapgen or Matlab vector maps into GRASS."
+msgstr "Importer les couches vectorielles Mapgen ou Matlab dans GRASS"
+
+msgid "Ascii file containing spectral signatures"
+msgstr "Fichier ascii contenant les signatures spectrales"
+
+# c-format
+#, fuzzy
+msgid "Unhandled vector feature type <%s>"
+msgstr "impossible de créer la sortie <%s>"
+
+# c-format
+#, fuzzy
+msgid "No areas found, skipping type=area"
+msgstr "%d points en dehors de la région courante"
+
+# c-format
+#, fuzzy
+msgid "No points found, skipping%s%s"
+msgstr "%d points en dehors de la région courante"
+
+# c-format
+#, fuzzy
+msgid "No lines found, skipping%s%s"
+msgstr "%d points en dehors de la région courante"
+
+#, fuzzy
+msgid "GDAL datatype: %s, range: %f - %f"
+msgstr "couche raster <%s> non trouvée"
+
+#, fuzzy
+msgid "The '-q' flag is superseded and will be removed "
+msgstr "Couche raster %i le nom de fichier %s existe déjà. Ce fichier va être écrasé!\n"
+
+# c-format
+#, fuzzy
+msgid "Unable to create table <%s_edge_Interpolation>"
+msgstr "Impossible d'ouvrir la couche raster <%s>"
+
+#, fuzzy
+msgid "Rescale output raster map [0,255]"
+msgstr ""
+"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
+"Nom de la couche raster cible\n"
+"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
+"Nom de la couche raster de sortie"
+
+# c-format
+msgid "** Can't open seed singature file <%s> **"
+msgstr "impossible d'ouvrir le fichier signature germe <%s>"
+
+msgid "A: azimuth of the sun from the north, degrees"
+msgstr "A : angle du soleil par rapport au nord, en degrés"
+
+#, fuzzy
+msgid "%d faces found, but not requested to be exported. Verify 'type' parameter."
+msgstr "%d Entités surfacique(s) trouvée(s), mais impossible de les exporter. Vérifiez le paramètre 'type'"
+
+msgid "Create a MASK for limiting raster operation"
+msgstr "Créer un MASKER pour limiter l'opération sur le raster"
+
+#, fuzzy
+msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr "Importer les couches vectorielles Mapgen ou Matlab dans GRASS"
+
+msgid "Name of the new raster map"
+msgstr "Nom du nouveau fichier raster"
+
+#, fuzzy
+msgid "Line: %d\n"
+msgstr "Hauteur de la ligne: %f\n"
+
+msgid "database location"
+msgstr "Secteur (location) de la base de données"
+
+#, fuzzy
 #~ msgid "Input grid3 filename"
 #~ msgstr "Nom du fichier 3D de sortie"
 
@@ -37116,10 +37648,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgstr "Erreur au cours de l'écriture de la grille 3D. Espace mémoire insuffisant?"
 
 #, fuzzy
-#~ msgid "Name for output flowline density raster map"
-#~ msgstr "Fichier raster en sortie pour la densité des courants"
-
-#, fuzzy
 #~ msgid "Create/Edit"
 #~ msgstr "Corrélation"
 
@@ -37198,10 +37726,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Azimuth of the plane. Value must be between 0 and 360 degrees"
 #~ msgstr "Azimut du plan. La valeur doit être comprise entre 0 et 360 degrés."
 
-#, fuzzy
-#~ msgid "vector, interpolation, kriging"
-#~ msgstr "Nombre de points d'interpolation"
-
 #~ msgid "Verbosity level"
 #~ msgstr "Niveau de détail"
 
@@ -37258,10 +37782,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "WHERE conditions for update, without 'where' keyword (e.g. cat=1 or col1/col2>1)"
 #~ msgstr "Conditions WHERE de la requête SQL sans le mot clef 'where'"
-
-#, fuzzy
-#~ msgid "Raster map to use as mask"
-#~ msgstr "couche raster à utiliser comme MASK"
 
 #~ msgid "Old schema"
 #~ msgstr "Ancien schéma"
@@ -37387,193 +37907,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Cannot allocate memory for auxiliar matrix.Consider changing region resolution"
 #~ msgstr "Impossible d'allouer de la mémoire"
 
-#, fuzzy
-#~ msgid "Creates a mask for limiting raster operation."
-#~ msgstr "Créer un MASKER pour limiter l'opération sur le raster"
-
-#~ msgid "Raster value"
-#~ msgstr "Valeur raster"
-
-#, fuzzy
-#~ msgid "Pass %d:"
-#~ msgstr "Masque: %s\n"
-
-#~ msgid "Use db.select for SELECT SQL statements"
-#~ msgstr "Utiliser db.select pour les déclarations SELECT SQL"
-
-#, fuzzy
-#~ msgid "raster3d, statistics"
-#~ msgstr "Statistiques de transition de classe."
-
-#, fuzzy
-#~ msgid "vector, query"
-#~ msgstr "Couche vecteur à supprimer"
-
-#~ msgid "Feature type. Combination of types is not supported by all formats."
-#~ msgstr "Type d'objet. Le mélange de types n'est pas géré par tous les format."
-
-#~ msgid "Illegal configuration file"
-#~ msgstr "Nom du fichier de configuration illégal"
-
-# c-format
-#, fuzzy
-#~ msgid "Could not find input map <%s> in current mapset."
-#~ msgstr "couche d'entrée introuvable <%s>"
-
-#~ msgid "Print the current region (shell script style)"
-#~ msgstr "Affiche les paramètres de la région courante (à la façon d'un script shell)"
-
-# c-format
-#, fuzzy
-#~ msgid "Converting %s..."
-#~ msgstr "Écriture [%s]..."
-
-#, fuzzy
-#~ msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
-#~ msgstr "Filtrer et générer une couche d'altitude sans dépressions et une couche de direction d'écoulement depuis une couche d'altitude donnée"
-
-#~ msgid "CHILD[pid = %i]: unable to open %s mask ... continue without!!!"
-#~ msgstr "CHILD[pid = %i] : impossible d'ouvrir le mask %s... continuer sans!!!"
-
-#~ msgid "r.li.worker (pid %i) exited with abnormal status %i"
-#~ msgstr "r.li.worker (pid %i) interrompu avec un statut anormal %i"
-
-#, fuzzy
-#~ msgid "r.li.worker (pid %i) terminated"
-#~ msgstr "r.li.worker (pid %i) achevé\n"
-
-#, fuzzy
-#~ msgid "Cannot make stat of %s configuration file"
-#~ msgstr "Impossible de faire les stats du fichier de configuration %s"
-
-#~ msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask itself."
-#~ msgstr "Calculer des zones d'ombre portée à partir de la position du soleil et d'un MNT. A : la position exacte du soleil est donnée. B : date/heure pour calculer la position du soleil grâce à r.sunmask."
-
-#~ msgid "A: altitude of the sun above horizon, degrees"
-#~ msgstr "A : altitude du soleil au dessus de l'horizon, en degrés"
-
-#~ msgid "B: minutes (0..60)"
-#~ msgstr "B : minutes (0..60)"
-
-#~ msgid "B: seconds (0..60)"
-#~ msgstr "B : secondes (0..60)"
-
-#~ msgid "B: timezone (east positive, offset from GMT, also use to adjust daylight savings)"
-#~ msgstr "B : fuseau horaire (positif vers l'est, différence par rapport à GMT)"
-
-#~ msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)"
-#~ msgstr "Constructon de courbes de terrain (lignes du courant), longueur des courants, et densité de lignes de courants (zones amont) à partir d'un modèle numérique de terrain (MNT) raster"
-
-#~ msgid "Show the category label in the grid cell(s)"
-#~ msgstr "Montre l'étiquette de catégorie dans la(les) cellule(s) de grille"
-
-#, fuzzy
-#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
-#~ msgstr "Crée une couche d'indice topographique ln(a/tan(beta)) à partir d'une couche d'altitude."
-
-#, fuzzy
-#~ msgid "Unable to read symbol, unable todisplay points"
-#~ msgstr "Impossible de lire le symbole, impossible d'afficher les points"
-
-#, fuzzy
-#~ msgid "Converts to one of the supported OGR vector formats."
-#~ msgstr "Convertir vers un des formats vecteurs gérés par OGR"
-
-#, fuzzy
-#~ msgid "Exporting %i points/lines..."
-#~ msgstr "Importation des objets de la couche %d..."
-
-#~ msgid "Number of column used as y coordinate (first column is 1) for points mode"
-#~ msgstr "Nombre de colonnes utilisées comme coordonnées y (la première colonne est 1) en mode points"
-
-#, fuzzy
-#~ msgid "Number of column used as z coordinate (first column is 1) for points mode"
-#~ msgstr "Nombre de colonnes utilisées comme coordonnées x (la première colonne est 1) en mode points"
-
-#, fuzzy
-#~ msgid "Number of column used as category (first column is 1) for points mode"
-#~ msgstr "Nombre de colonnes utilisées comme coordonnées x (la première colonne est 1) en mode points"
-
-#, fuzzy
-#~ msgid "If 0, unique category is assigned to each row and written to new column 'cat'"
-#~ msgstr "Nombre de colonne utilisé comme catégorie (la première colonne est 1) en mode pointsSi la valeur est 0, une catégorie unique est assignée à chaque ligne et écrit dans la nouvelle colonne 'cat'."
-
-#, fuzzy
-#~ msgid "Create a new empty vector map and exit. Nothing is read from input"
-#~ msgstr "Crée une nouvelle couche vide et quitte. Rien n'est lu en entrée."
-
-#, fuzzy
-#~ msgid "Name for output file (do not add extension)"
-#~ msgstr "Nom du fichier en sortie (ne PAS ajouter l'extension)"
-
-#, fuzzy
-#~ msgid "Width and height of output image"
-#~ msgstr "Largeur de la couleur de mise en valeur"
-
-#, fuzzy
-#~ msgid "Surface"
-#~ msgstr "Variance de la somme"
-
-#, fuzzy
-#~ msgid "Volume"
-#~ msgstr "colonne(s)"
-
-#, fuzzy
-#~ msgid "Convert all old GRASS < Ver5.7 vector maps in current mapset to current format"
-#~ msgstr "convertit toutes les anciennes couches vectorielles GRASS (versions antérieures à 5.7) du jeu de données courant au format récent"
-
-#, fuzzy
-#~ msgid "Vector map for which to edit attribute table"
-#~ msgstr "Nom de la couche de points vecteurs en entrée pour laquelle éditer la table attributaire"
-
-#~ msgid "Layer where to add column"
-#~ msgstr "Couche à laquelle ajouter la colonne"
-
-#, fuzzy
-#~ msgid "Computing row %d of covariance matrix..."
-#~ msgstr "Calcul de la matrice de covariance de classe"
-
-#, fuzzy
-#~ msgid "ID values"
-#~ msgstr "Valeur de la chaîne de bit"
-
-#, fuzzy
-#~ msgid "Type of elements"
-#~ msgstr "Nom d'un élément"
-
-#~ msgid "Writing data to file..."
-#~ msgstr "Écriture des données dans le fichier..."
-
-#, fuzzy
-#~ msgid "Output hue raster map"
-#~ msgstr "couche raster en sortie"
-
-#, fuzzy
-#~ msgid "display, legend"
-#~ msgstr "Faire pivoter le cartouche de légende"
-
-# c-format
-#, fuzzy
-#~ msgid "Database record for cat %d not found"
-#~ msgstr "Aucun enregistrement pour la catégorie (cat = %d)"
-
-# c-format
-#~ msgid "Could not find input vector map %s"
-#~ msgstr "Couche d'entrée vecteur introuvable %s"
-
-#~ msgid "Number of column used as z coordinate (first column is 1) for points mode. If 0, z coordinate is not used."
-#~ msgstr "Nombre de colonnes utilisées comme coordonnées x (la première colonne est 1) en mode pointsSi la valeur est 0, les coordonnées z ne sont pas utilisées."
-
-#~ msgid "Name of the column with tree height"
-#~ msgstr "Nom de la colonne contenant la hauteur de l'arbre"
-
-#~ msgid "Name of the column with tree species"
-#~ msgstr "Nom de la colonne contenant les essences d'arbres"
-
-#, fuzzy
-#~ msgid "Column name (will be updated by qvector values)"
-#~ msgstr "Nom de la colonne (qui sera mise à jour par les valeurs rasters)"
-
 #~ msgid "Raster file(s) for View%d"
 #~ msgstr "Fichier(s) raster pour la Vue%d"
 
@@ -37626,13 +37959,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "Using <%s> from the command line is depreciated. Please use the <%s> mapping instruction instead. The parameter <%s> will be removed in future versions of GRASS."
 #~ msgstr "Utiliser \"scale\" à partir de la console est obsolète. Veuillez utilisez l'instruction de mise en page cartographique \"scale\" à la place."
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "ERROR: Required parameter <%s> not set:\n"
-#~ "    (%s).\n"
-#~ msgstr "incidout demande de fixer le paramètre d'heure"
 
 #, fuzzy
 #~ msgid "Cannot set GRASS_VERBOSE variable."
@@ -38003,10 +38329,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 
 #~ msgid "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel resolution of the currently defined region."
 #~ msgstr "Exporte une couche Raster GRASS en un fichier TIFF 8/24 bits à la résolution de la région actuelle."
-
-#, fuzzy
-#~ msgid "Band to select"
-#~ msgstr "Pas de moniteur sélectionné"
 
 #~ msgid "If set to 0, z coordinates are used. (3D vector only)"
 #~ msgstr "Si fixée à 0, les coordonnées z sont utilisées (vecteur 3D seulement)"
@@ -40153,14 +40475,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "From layer"
 #~ msgstr "Requêter la couche"
 
-#, fuzzy
-#~ msgid "Select type"
-#~ msgstr "Type de donnée vectorielle"
-
-#, fuzzy
-#~ msgid "Cannot select records from database"
-#~ msgstr "Impossible de sélectionner des données dans la table"
-
 #~ msgid "Cannot fetch data"
 #~ msgstr "Impossible de rapatrier les données"
 
@@ -40208,10 +40522,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "%s: No font definition file"
 #~ msgstr "%s : pas de fichier de définition FreeType"
-
-#, fuzzy
-#~ msgid "Removed vertices"
-#~ msgstr "Suppression des centroïdes en doublons..."
 
 #, fuzzy
 #~ msgid "Arc layer (network)"
@@ -41810,9 +42120,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Unkown item type in pad: %s"
 #~ msgstr "Type d'objet inconnu: %s"
 
-#~ msgid "Database connection not defined\n"
-#~ msgstr "La connexion à la base de données n'a pas été définie\n"
-
 #, fuzzy
 #~ msgid "Can't read header for <%s> in <%s>"
 #~ msgstr "impossible de trouver les en-tête pour <%s> dans <%s>"
@@ -41929,14 +42236,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "Cannot read category file of raster map <%s> in <%s>"
 #~ msgstr "Editer le fichier de catégorie de [%s]?"
-
-# c-format
-#~ msgid "Cannot find file %s"
-#~ msgstr "Impossible de trouver le fichier %s"
-
-# c-format
-#~ msgid "Cannot get header for %s"
-#~ msgstr "Impossible de trouver l'en-tête de fichier %s"
 
 # c-format
 #~ msgid "Cannot create raster map %s"
@@ -42377,9 +42676,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Cannot start driver '%s'."
 #~ msgstr "Impossible de lancer le pilote '%s'."
 
-#~ msgid "Cannot describe table"
-#~ msgstr "Impossible de décrire la table"
-
 # c-format
 #~ msgid "Cannot start driver <%s>."
 #~ msgstr "Impossible de lancer le pilote '%s'."
@@ -42573,10 +42869,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Normalized"
 #~ msgstr "Normalisé"
 
-#, fuzzy
-#~ msgid "Out of memory!"
-#~ msgstr "Mémoire insuffisante"
-
 # c-format
 #, fuzzy
 #~ msgid "Cell file [%s] not found"
@@ -42634,11 +42926,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 
 #~ msgid "Cannot open table <%s>"
 #~ msgstr "Impossible d'ouvrir la table <%s>"
-
-# c-format
-#, fuzzy
-#~ msgid "Cannot open driver <%s>"
-#~ msgstr "Impossible d'utiliser le pilote %s"
 
 #~ msgid ""
 #~ "OGR layer name. If not given, all available layers are imported. Examples:\n"
@@ -43422,15 +43709,8 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Vector map(s) -- source for composite"
 #~ msgstr "Couche(s) vectorielles -- source pour la composite"
 
-#~ msgid "New vector composite"
-#~ msgstr "Nom du fichier vecoriel composite"
-
 #~ msgid "Append files to existing file"
 #~ msgstr "Modifie les fichier par rapport à un fichier existant"
-
-#, fuzzy
-#~ msgid "No database updates."
-#~ msgstr "nom de la base de donnée"
 
 # c-format
 #~ msgid "Vector map '%s' not found"
@@ -43727,11 +44007,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "Right: "
 #~ msgstr " Droite: quitter\n"
-
-# c-format
-#, fuzzy
-#~ msgid "%s Pan\n"
-#~ msgstr "%s\n"
 
 #, fuzzy
 #~ msgid "%s Quit\n"
@@ -45976,48 +46251,13 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgstr "Impossible de paramétrer la taille"
 
 #, fuzzy
-#~ msgid "Watershed basin analysis program"
-#~ msgstr "Programme d'analyse de bassin versant."
-
-#, fuzzy
-#~ msgid "Name of input raster map with real depressions"
-#~ msgstr "Nom de la couche raster source"
-
-#, fuzzy
-#~ msgid "Name of input raster map blocking overland surface flow"
-#~ msgstr "couche d'entrée : terrain bloquant l'écoulement de surface, pour USLE"
-
-#, fuzzy
-#~ msgid "Name for output raster map useful for visual display of results (DEPRECATED)"
-#~ msgstr "Couche de sortie : pratique pour visualiser les résultats"
-
-#, fuzzy
 #~ msgid "Exports the color table associated with a raster map layer."
 #~ msgstr "Creer/Modifier la table de couleurs associée à une couche raster."
 
 # c-format
 #, fuzzy
-#~ msgid "Direction raster found <%s>"
-#~ msgstr "Couche raster %i créée \n"
-
-#, fuzzy
-#~ msgid "Name for output direction map for depressionless elevation raster map"
-#~ msgstr "(o) Couche de gradient à partir d'une couche d'altitudes positives"
-
-# c-format
-#, fuzzy
 #~ msgid "Reading file"
 #~ msgstr "\rLecture du fichier '%s'"
-
-#, fuzzy
-#~ msgid "raster, export, animation"
-#~ msgstr "Tracer le relief"
-
-#, fuzzy
-#~ msgid "(requires r.out.ppm with stdout option)"
-#~ msgstr ""
-#~ "Convertir à la volée, en économisant l'espace disque\n"
-#~ "\t(nécessite r.out.ppm avec l'option stdout)"
 
 # c-format
 #, fuzzy
@@ -46028,18 +46268,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "Unable to read %s"
 #~ msgstr "impossible de créer %s"
-
-#, fuzzy
-#~ msgid "Name for output elevation raster map after filling"
-#~ msgstr "couche raster d'altitude après remplissage"
-
-#, fuzzy
-#~ msgid "Name for output direction raster map"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-#~ "Nom de la couche raster cible\n"
-#~ "#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-#~ "Nom de la couche raster de sortie"
 
 #, fuzzy
 #~ msgid "No raster map specified"
@@ -46099,16 +46327,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Unable to load 3D raster range"
 #~ msgstr "Impossible de lire la ligne raster."
 
-# c-format
-#, fuzzy
-#~ msgid "Reading input data..."
-#~ msgstr "Lecture du fichier %s..."
-
-# c-format
-#, fuzzy
-#~ msgid "Writing output data..."
-#~ msgstr "Écriture %s..."
-
 #, fuzzy
 #~ msgid "Name of raster map for which to edit null file"
 #~ msgstr "couche raster où remplacer les valeurs null"
@@ -46130,20 +46348,12 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgstr "Obtenir des informations basiques à propos d'une couche raster donnée."
 
 #, fuzzy
-#~ msgid "raster, reclassification"
-#~ msgstr "Tracer le relief"
-
-#, fuzzy
 #~ msgid "The size of sliding window (odd and >= 3)"
 #~ msgstr "Taille de la fenêtre glissante (impair et >=3)"
 
 #, fuzzy
 #~ msgid "Nothing to compute. Use at least one of the flags."
 #~ msgstr "Rien à calculer. Veuillez vérifier les paramètres."
-
-#, fuzzy
-#~ msgid "Name of input raster map with seed (at least 1 cell > 0)"
-#~ msgstr "Couche raster avec le germe (au moins 1 cellule > 0)"
 
 #~ msgid "Input map"
 #~ msgstr "couche source"
@@ -46155,27 +46365,10 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Error writing G3D double data"
 #~ msgstr "Erreur de lecture des cellules de données"
 
-#, fuzzy
-#~ msgid "Name for flowpath length raster map"
-#~ msgstr "Fichier raster en sortie pour la longueur des courants"
-
 # c-format
 #, fuzzy
 #~ msgid "Unable to get header for %s"
 #~ msgstr "Impossible d'écrire l'en-tête de [%s]"
-
-#, fuzzy
-#~ msgid "imagery, landsat, acca"
-#~ msgstr "Nom de fichier de signatures à utiliser pour la classification"
-
-# c-format
-#, fuzzy
-#~ msgid "Cannot write to raster map <%s>"
-#~ msgstr "Impossible d'écrire la couche raster lac <%s>!"
-
-#, fuzzy
-#~ msgid "Creates, edits, and lists groups and subgroups of imagery data."
-#~ msgstr "Crée et édite des groupes et sous-groupes de fichiers images"
 
 #, fuzzy
 #~ msgid "Computes topographic correction of reflectance."
@@ -46206,30 +46399,9 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Reflectance of raster map <%s> is not of DCELL type - ignored"
 #~ msgstr "fichier de cellules albedo <%s> non trouvé"
 
-# c-format
-#, fuzzy
-#~ msgid "Extract quality control parameters from Modis QC layers"
-#~ msgstr "Couche raster de terrain (MNT)"
-
-#, fuzzy
-#~ msgid "Name of the surface reflectance QC layer [bit array]"
-#~ msgstr "Nom de la couche qui contiendra la surface fractale"
-
-#, fuzzy
-#~ msgid "The output cell map <%s.%d> has values outside the 0-255 range. Min: %d Max: %d"
-#~ msgstr "La couche de sortie <%s.%d> possède des valeurs en dehors de l'intervalle 0-255.\n"
-
 #, fuzzy
 #~ msgid "Calculating covariance matrix..."
 #~ msgstr "Calcul de la matrice de covariance de classe"
-
-#, fuzzy
-#~ msgid "Computing means and standard deviations..."
-#~ msgstr "La copie de table a échoué"
-
-#, fuzzy
-#~ msgid "Computing means..."
-#~ msgstr "Recherche des classes d'apprentissage..."
 
 #, fuzzy
 #~ msgid "Rescaling <%s> to range %d,%d..."
@@ -46367,10 +46539,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgstr "La couche n'existe pas. Ajouter le drapeau -n pour créer la nouvelle couche."
 
 #, fuzzy
-#~ msgid "Other"
-#~ msgstr "Confirmation?"
-
-#, fuzzy
 #~ msgid "Names of mask files"
 #~ msgstr "Nom du fichier d'étiquettes"
 
@@ -46430,16 +46598,8 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgstr "Chemin vers le fichier ASCII résultat ou nom du fichier vecteur ASCII si '-o' est défini"
 
 #, fuzzy
-#~ msgid "Offset in map units."
-#~ msgstr "Distance de zone-tampon en unités carte."
-
-#, fuzzy
 #~ msgid "End of ascii file reached before end of categories"
 #~ msgstr "Fichier ASCII conservant les coordonnées de transformation"
-
-#, fuzzy
-#~ msgid "db connection was not set by form"
-#~ msgstr "La connexion à la base de données n'a pas été définie\n"
 
 # c-format
 #, fuzzy
@@ -46703,30 +46863,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgstr "%d catégories chargées depuis la table"
 
 #, fuzzy
-#~ msgid "DEPRECATED Buffer distance in map units"
-#~ msgstr "Distance de zone-tampon en unités carte."
-
-#, fuzzy
-#~ msgid "Line buffers... "
-#~ msgstr "Recherche des classes d'apprentissage..."
-
-#, fuzzy
-#~ msgid "Zero area size, please clean input vector first."
-#~ msgstr "Créer des points le long des lignes en entrée."
-
-#, fuzzy
-#~ msgid "Could not get outside buffer for line id %d"
-#~ msgstr "Impossible de lire le fichier d'intervalle"
-
-#, fuzzy
-#~ msgid "Area buffers... "
-#~ msgstr "couche raster source"
-
-#, fuzzy
-#~ msgid "Selecting areas..."
-#~ msgstr "Calcul des moyennes de classes..."
-
-#, fuzzy
 #~ msgid "vector, transformation"
 #~ msgstr "Nombre de points d'interpolation"
 
@@ -46776,10 +46912,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "If not given reads from standard input"
 #~ msgstr "Fichier ASCII à convertir en fichier vecteur binaire, si rien n'est indiqué prendreles paramètres saisis en ligne de commande"
-
-#, fuzzy
-#~ msgid "Cannot allocate %u bytes of memory"
-#~ msgstr "Impossible d'allouer le curseur"
 
 #, fuzzy
 #~ msgid "No attribute table found"
@@ -46852,14 +46984,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgstr "Nom du fichier vecteur de sortie"
 
 #, fuzzy
-#~ msgid "Skip the join column in other table"
-#~ msgstr "Type de colonne inconnu"
-
-#, fuzzy
-#~ msgid "Copy all the columns from other table to map"
-#~ msgstr "Type de colonne inconnu"
-
-#, fuzzy
 #~ msgid "Join column in map table"
 #~ msgstr "Type de colonne inconnu"
 
@@ -46907,14 +47031,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #~ msgid "Manually set range (min,max)"
 #~ msgstr "Rang des valeurs entières: min,max"
 
-#, fuzzy
-#~ msgid "Name of input raster map in which to fill nulls"
-#~ msgstr "couche raster où remplacer les valeurs null"
-
-#, fuzzy
-#~ msgid "Name for output raster map with nulls filled by interpolation"
-#~ msgstr "Couche raster de sortie où remplacer les nulls par interpolation des valeurs voisines"
-
 #~ msgid "Layer where to add new attribute table"
 #~ msgstr "Couche où ajouter la nouvelle table attributaire"
 
@@ -46936,30 +47052,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "Prints a graph of the correlation between data layers (in pairs)."
 #~ msgstr "Affiche un graphe de corrélation entre les couches de données (par paires)"
-
-#, fuzzy
-#~ msgid "Mosaics up to four images, extending the color table."
-#~ msgstr "Faire une mosaïque comprenant jusqu'à 4 images et étendre la table de couleurs; créer une couche *.mosaic"
-
-#, fuzzy
-#~ msgid "creates map *.mosaic"
-#~ msgstr "3ème couche pour la mosaïque."
-
-#, fuzzy
-#~ msgid "1st map for mosaic (top of image stack)"
-#~ msgstr "1ère couche pour la mosaïque (au somment de la pile d'images)"
-
-#, fuzzy
-#~ msgid "2nd map for mosaic"
-#~ msgstr "2nde couche pour la mosaïque."
-
-#, fuzzy
-#~ msgid "3rd map for mosaic"
-#~ msgstr "3ème couche pour la mosaïque."
-
-#, fuzzy
-#~ msgid "4th map for mosaic"
-#~ msgstr "4ème couche pour la mosaïque."
 
 #~ msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
 #~ msgstr "Tranformation Tasseled Cap (Kauth Thomas) pour les données LANDSAT-TM"
@@ -47010,89 +47102,6 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "Name of raster to drape over relief map"
 #~ msgstr "Nom de la couche raster d'angle"
-
-#, fuzzy
-#~ msgid "writing edges..."
-#~ msgstr "Écrire les sommets de lignes."
-
-#, fuzzy
-#~ msgid "raster, png"
-#~ msgstr "Statistiques de transition de classe."
-
-#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
-#~ msgstr "Importer les couches vectorielles Mapgen ou Matlab dans GRASS"
-
-#~ msgid "Ascii file containing spectral signatures"
-#~ msgstr "Fichier ascii contenant les signatures spectrales"
-
-# c-format
-#, fuzzy
-#~ msgid "Unhandled vector feature type <%s>"
-#~ msgstr "impossible de créer la sortie <%s>"
-
-# c-format
-#, fuzzy
-#~ msgid "No areas found, skipping type=area"
-#~ msgstr "%d points en dehors de la région courante"
-
-# c-format
-#, fuzzy
-#~ msgid "No points found, skipping%s%s"
-#~ msgstr "%d points en dehors de la région courante"
-
-# c-format
-#, fuzzy
-#~ msgid "No lines found, skipping%s%s"
-#~ msgstr "%d points en dehors de la région courante"
-
-#, fuzzy
-#~ msgid "GDAL datatype: %s, range: %f - %f"
-#~ msgstr "couche raster <%s> non trouvée"
-
-#, fuzzy
-#~ msgid "The '-q' flag is superseded and will be removed "
-#~ msgstr "Couche raster %i le nom de fichier %s existe déjà. Ce fichier va être écrasé!\n"
-
-# c-format
-#, fuzzy
-#~ msgid "Unable to create table <%s_edge_Interpolation>"
-#~ msgstr "Impossible d'ouvrir la couche raster <%s>"
-
-#, fuzzy
-#~ msgid "Rescale output raster map [0,255]"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-#~ "Nom de la couche raster cible\n"
-#~ "#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-#~ "Nom de la couche raster de sortie"
-
-# c-format
-#~ msgid "** Can't open seed singature file <%s> **"
-#~ msgstr "impossible d'ouvrir le fichier signature germe <%s>"
-
-#~ msgid "A: azimuth of the sun from the north, degrees"
-#~ msgstr "A : angle du soleil par rapport au nord, en degrés"
-
-#, fuzzy
-#~ msgid "%d faces found, but not requested to be exported. Verify 'type' parameter."
-#~ msgstr "%d Entités surfacique(s) trouvée(s), mais impossible de les exporter. Vérifiez le paramètre 'type'"
-
-#~ msgid "Create a MASK for limiting raster operation"
-#~ msgstr "Créer un MASKER pour limiter l'opération sur le raster"
-
-#, fuzzy
-#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "Importer les couches vectorielles Mapgen ou Matlab dans GRASS"
-
-#~ msgid "Name of the new raster map"
-#~ msgstr "Nom du nouveau fichier raster"
-
-#, fuzzy
-#~ msgid "Line: %d\n"
-#~ msgstr "Hauteur de la ligne: %f\n"
-
-#~ msgid "database location"
-#~ msgstr "Secteur (location) de la base de données"
 
 # c-format
 #, fuzzy
@@ -47316,3 +47325,62 @@ msgstr "importer aussi la couche de qualité (couche du statut SM) et couche fil
 #, fuzzy
 #~ msgid "Adding new features to vector file ..."
 #~ msgstr "Écriture du nouveau fichier cats..."
+
+#~ msgid "visualization, raster, vector, raster3d"
+#~ msgstr "visualisation, raster, vecteur, raster 3D"
+
+#~ msgid "The '-v' flag is superseded and will be removed in future. Please use '--verbose' instead."
+#~ msgstr "Le drapeau '-v' est caduque et sera supprimé à l'avenir. Merci d'utiliser '--verbose' à la place."
+
+#~ msgid "Entering script mode ..."
+#~ msgstr "Entrant dans le mode script..."
+
+#~ msgid "Imports 3-dimensional Vis5D files (i.e. the V5D file with 1 variable and 1 time step)."
+#~ msgstr "Importe des fichiers 3D Vis5D (c.-à-d. des fichiers V5D avec une variable et un pas de temps)."
+
+#~ msgid "Adding rule: %lf - %lf"
+#~ msgstr "Ajout de la règle : %lf - %lf"
+
+#~ msgid "Use the same resolution as the input 3D raster map for the 2D outputmaps, independent of the current region settings"
+#~ msgstr "Utiliser la même résolution que la carte raster 3D en entrée pour les cartes 2D en sortie, indépendamment des réglages de la région courante"
+
+#~ msgid ""
+#~ "Right:  Finish profile and exit\n"
+#~ "\n"
+#~ msgstr "Droit : finir le profil et sortir\n"
+
+#~ msgid "This does nothing. It is retained for backwards compatibility"
+#~ msgstr "Ceci ne fait rien. C'est maintenu pour la rétrocompatibilité "
+
+#~ msgid "Unused"
+#~ msgstr "Inutilisé"
+
+#~ msgid "Maximum memory to be used was smaller than 3 MB, set to default = 300 MB."
+#~ msgstr "La mémoire maximale allouée était inférieure à 3 MB, fixée par défaut à 300 MB."
+
+#~ msgid "The '-q' flag is superseded and will be removed in future. Please use '--quiet' instead."
+#~ msgstr "Le drapeau '-q' est caduque et sera supprimé à l'avenir. Merci d'utiliser '--quiet' à la place."
+
+#~ msgid "raster, export"
+#~ msgstr "raster, exportation"
+
+#~ msgid "NULL value computed (row %d, col %d)"
+#~ msgstr "valeurs NULL calculées (ligne%d,  col %d)"
+
+#~ msgid "Illegal delete request"
+#~ msgstr "Requête de suppression illégale"
+
+#~ msgid "Bad start cell"
+#~ msgstr "Mauvaise cellule de départ"
+
+#~ msgid "Not yet implemented!"
+#~ msgstr "Pas encore implanté !"
+
+#~ msgid "An output raster map needs to be defined with method '%s'"
+#~ msgstr "Une carte raster de sortie doit être définie avec la méthode '%s'"
+
+#~ msgid "Stream width (in meters). Default is raster cell width"
+#~ msgstr "Largeur du courant (en mètres). Largeur de cellule raster par défaut"
+
+#~ msgid "Do not build vector topology (use with care for massive point export)"
+#~ msgstr "Ne pas construire la topologie de vecteur (à utiliser avec précaution pour l'export massif de points)"
