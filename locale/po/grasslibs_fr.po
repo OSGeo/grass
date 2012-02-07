@@ -1,17 +1,18 @@
 # French translation of grasslibs_fr.po
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2004 GRASS Development Team
+# Copyright (C) 2005, 2012 GRASS Development Team
 # Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>, 2004
 # Daniel Calvelo <dca@users.sf.net>, 2005
 # Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2005
 # ->just re-reading/editing to harmonize terminology with the GRASS6 french documentation project
+# Vincent Bain <bain toraval.fr>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2012-01-18 17:30+0100\n"
-"Last-Translator: Vincent BAIN <bain@toraval.fr>\n"
+"PO-Revision-Date: 2012-02-07 10:49+0100\n"
+"Last-Translator: Vincent Bain <bain@toraval.fr>\n"
 "Language-Team: French <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -3818,7 +3819,7 @@ msgstr ""
 
 #: ../lib/vector/neta/utils.c:224
 msgid "'where' and 'cats' parameters were supplied, cat will be ignored"
-msgstr ""
+msgstr "les paramètres 'where' et 'cats' ont été fournis, cat sera ignoré"
 
 #: ../lib/vector/neta/utils.c:228
 #, fuzzy
@@ -3843,7 +3844,7 @@ msgstr "Impossible d'ouvrir le répertoire '%s'"
 
 #: ../lib/vector/neta/allpairs.c:53
 msgid "Computing all pairs shortest paths..."
-msgstr ""
+msgstr "Calcul des plus courts chemins pour toutes les paires..."
 
 #: ../lib/vector/neta/spanningtree.c:104
 msgid "Computing minimum spanning tree..."
@@ -3856,7 +3857,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/file.c:159
 msgid "Writing to file loaded to memory not supported"
-msgstr ""
+msgstr "L'écriture dans un fichier chargé en mémoire n'est pas prise en charge"
 
 #: ../lib/vector/diglib/file.c:203
 #, fuzzy
@@ -4087,7 +4088,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_nat.c:52 ../lib/vector/Vlib/write_nat.c:86
 #, c-format
 msgid "%s: Area %d does not exist"
-msgstr ""
+msgstr "%s: la surface %d n'existe pas"
 
 #: ../lib/vector/Vlib/write_nat.c:678 ../lib/vector/Vlib/write_ogr.c:490
 #, fuzzy
@@ -4137,12 +4138,12 @@ msgstr "La couche vectorielle de sortie <%s> est utilisée en entrée"
 #: ../lib/vector/Vlib/merge_lines.c:246
 #, c-format
 msgid "%d boundaries merged"
-msgstr ""
+msgstr "%d contours fusionnés"
 
 #: ../lib/vector/Vlib/merge_lines.c:247
 #, c-format
 msgid "%d new boundaries"
-msgstr ""
+msgstr "%d nouveaux contours"
 
 #: ../lib/vector/Vlib/snap.c:133
 msgid "Snap vertices Pass 1: select points"
@@ -4359,7 +4360,7 @@ msgstr "La structure de carte n'a jamais été initialisée"
 
 #: ../lib/vector/Vlib/level.c:36
 msgid "Map structure has been closed"
-msgstr ""
+msgstr "La structure de carte a été fermée"
 
 #: ../lib/vector/Vlib/line.c:178 ../lib/vector/Vlib/line.c:211
 #: ../lib/vector/Vlib/line.c:244
@@ -4369,7 +4370,7 @@ msgstr "Index de couche en dehors des limites"
 
 #: ../lib/vector/Vlib/line.c:544
 msgid "Segment outside line, no segment created"
-msgstr ""
+msgstr "Segment en dehors de la ligne, non créé"
 
 #: ../lib/vector/Vlib/close.c:138
 #, c-format
@@ -4493,7 +4494,7 @@ msgstr "La carte vecteur n'est pas ouverte"
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
 msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr ""
+msgstr "Vect_read_line_geos(): l'id d'objet %d n'est pas raisonnable (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
 
 #: ../lib/vector/Vlib/geos.c:60
 msgid "only native format supported"
@@ -4502,7 +4503,7 @@ msgstr "Seul le format natif est pris en charge"
 #: ../lib/vector/Vlib/geos.c:90
 #, c-format
 msgid "Vect_read_area_geos(): unable to read area id %d"
-msgstr ""
+msgstr "Vect_read_area_geos(): impossible de lire l'id de surface %d"
 
 #: ../lib/vector/Vlib/geos.c:104
 #, c-format
@@ -4537,7 +4538,7 @@ msgstr "Impossible d'obtenir la ligne matricielle"
 #: ../lib/vector/Vlib/read.c:132
 #, c-format
 msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr ""
+msgstr "Vect_read_line(): l'id d'objet %d n'est pas raisonnable (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
 
 #: ../lib/vector/Vlib/build_ogr.c:290
 #, fuzzy, c-format
@@ -5012,7 +5013,7 @@ msgstr "Vect_segment_intersection() ERREUR (segments verticaux non colinéaires)
 #: ../lib/vector/Vlib/intersect.c:1163 ../lib/vector/Vlib/intersect.c:1184
 #: ../lib/vector/Vlib/intersect.c:1201
 msgid "Error while adding point to array. Out of memory"
-msgstr ""
+msgstr "Erreur lors de l'ajout du point au tableau. Dépassement de mémoire"
 
 #: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
@@ -5096,7 +5097,7 @@ msgstr ""
 #: ../lib/vector/Vlib/array.c:152 ../lib/vector/Vlib/array.c:175
 #: ../lib/vector/Vlib/array.c:304 ../lib/vector/Vlib/array.c:336
 msgid "Not enough space in vector array"
-msgstr ""
+msgstr "Espace insuffisant dans le tableau vecteur"
 
 #: ../lib/vector/Vlib/array.c:292
 #, fuzzy, c-format
@@ -5288,7 +5289,7 @@ msgstr "Bug : tentative de mise à jour d'une couche qui n'est pas dans le jeu d
 
 #: ../lib/vector/Vlib/remove_areas.c:89
 msgid "Area is composed of dead boundary"
-msgstr ""
+msgstr "La surface comporte des contours morts"
 
 #: ../lib/vector/Vlib/remove_areas.c:176
 #, c-format
@@ -5575,7 +5576,7 @@ msgstr "la couche matricielle demandée <%s> n'a pas été trouvée"
 
 #: ../lib/rst/interp_float/input2d.c:70
 msgid "Bitmap mask created"
-msgstr ""
+msgstr "Masque bitmat créé"
 
 #: ../lib/rst/interp_float/write2d.c:40 ../lib/rst/interp_float/write2d.c:51
 #: ../lib/rst/interp_float/write2d.c:66 ../lib/rst/interp_float/write2d.c:75
@@ -5651,7 +5652,7 @@ msgstr "%d points donnés pour l'interpolation (après squelettisation) est moin
 
 #: ../lib/rst/interp_float/vinput2d.c:261
 msgid "Zero points in the given region"
-msgstr ""
+msgstr "Zéro point dans la région donnée"
 
 #: ../lib/rst/interp_float/vinput2d.c:266
 #, c-format
@@ -6107,15 +6108,15 @@ msgstr "ne peut pas fabriquer l'élément %s (%s) du jeu de données (mapset)"
 #: ../lib/gis/parser.c:376
 #, c-format
 msgid "BUG in descriptions, option '%s' in <%s> does not exist"
-msgstr ""
+msgstr "BUG dans les descriptions, l'option '%s' dans  <%s> n'existe pas"
 
 #: ../lib/gis/parser.c:484
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
-msgstr ""
+msgstr "Utiliser le drapeau soit --quiet soit --verbose, pas les deux ; --verbose supposé."
 
 #: ../lib/gis/parser.c:498
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
-msgstr ""
+msgstr "Utiliser le drapeau soit --quiet soit --verbose, pas les deux ; --quiet supposé."
 
 #: ../lib/gis/parser.c:529
 #, fuzzy, c-format
@@ -6526,7 +6527,7 @@ msgstr "Secteur (LOCATION)  << %s >>  indisponible"
 
 #: ../lib/gis/myname.c:46
 msgid "This location has no description."
-msgstr ""
+msgstr "Ce secteur n'a pas de description."
 
 #: ../lib/gis/proj2.c:64
 msgid "State Plane"
@@ -6986,11 +6987,11 @@ msgstr "Impossible de lire le type de colonne de la colonne de lissage"
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:220
 #: ../lib/db/dbmi_client/select.c:286
 msgid "Missing column name"
-msgstr ""
+msgstr "Nom de colonne manquant"
 
 #: ../lib/db/dbmi_client/select.c:215 ../lib/db/dbmi_client/select.c:281
 msgid "Missing key column name"
-msgstr ""
+msgstr "Nom de colonne clé manquant"
 
 #: ../lib/db/dbmi_client/select.c:314
 #, fuzzy, c-format
@@ -7017,7 +7018,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/login.c:111
 msgid "Login file corrupted"
-msgstr ""
+msgstr "Fichier de connexion corrompu"
 
 #: ../lib/db/dbmi_base/error.c:72
 #, fuzzy
@@ -7231,6 +7232,115 @@ msgstr "Impossible de copier la table <%s>"
 msgid "Failed to initialize Xlib surface"
 msgstr "Impossible d'initialiser pj cause : %s"
 
+#, fuzzy
+msgid "test, gmath"
+msgstr "test, gpde"
+
+msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
+msgstr "la recherche de points pour l'interpolation prend trop de temps -- veuillez changer la régionpour la zone où se trouvent vos points. Les calculs se poursuivent..."
+
+msgid "Reading lines from vector map ... "
+msgstr "Lignes de lecture de la carte vectorielle..."
+
+#, fuzzy
+msgid "Reading nodes from vector map ... "
+msgstr "Lignes de lecture de la carte vectorielle..."
+
+msgid "strip exists with insufficient data"
+msgstr "la bande existe avec des données insuffisantes"
+
+msgid "there are points outside specified 2D/3D region--ignored %d points"
+msgstr "il y a des points en-dehors de la région 2D/3D spécifiée -- %d points ignorés"
+
+msgid "ignoring %d points -- too dense"
+msgstr "%d points ignorés -- trop dense"
+
+msgid "some points outside of region -- will ignore..."
+msgstr "certains points sont en dehors de la région -- ignorés..."
+
+msgid "Column type not supported"
+msgstr "Le type de colonne n'est pas supporté"
+
+#, fuzzy
+msgid "Unable to delete file '%s'. Reason: %s"
+msgstr "Impossible de supprimer le fichier <%s>"
+
+#, fuzzy
+msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
+msgstr "Impossible de renommer le répertoire '%s' en '%s'"
+
+#, fuzzy
+msgid "Unable to remove directory '%s'. Reason: %s"
+msgstr "Impossible de supprimer le répertoire '%s'"
+
+#, fuzzy
+msgid "Unable to delete prior null-cells file"
+msgstr "Impossible de supprimer le fichier <%s>"
+
+#, fuzzy
+msgid "Unable to close the null-cells file"
+msgstr "Impossible de lire le fichier d'en-tête"
+
+#, fuzzy
+msgid "closecell: can't move [%s] to null-cells file [%s]"
+msgstr ""
+"closecell : impossible de se déplacer %s\n"
+"jusqu'au fichier nul %s"
+
+#, fuzzy
+msgid "Unable to delete the temporary null-cells file"
+msgstr "impossible de trouver un fichier temporaire null %s"
+
+#, fuzzy
+msgid "Unable to delete the empty temporary null-cells file"
+msgstr "impossible de trouver un fichier temporaire null %s"
+
+#, fuzzy
+msgid "Unable to delete the prior null-cells file"
+msgstr "Impossible de lire le fichier d'en-tête"
+
+#, fuzzy
+msgid "Unable to close the 'cell' file"
+msgstr "Impossible de lire le fichier d'en-tête"
+
+#, fuzzy
+msgid "Unable to delete prior 'fcell' file"
+msgstr "Impossible de supprimer le fichier <%s>"
+
+#, fuzzy
+msgid "Unable to delete the prior %s file"
+msgstr "Impossible de supprimer la table <%s>"
+
+#, fuzzy
+msgid "Unable to close file"
+msgstr "Impossible d'ouvrir le fichier %s"
+
+#, fuzzy
+msgid "Unable to delete the prior 'cell' file"
+msgstr "Impossible de lire le fichier d'en-tête"
+
+#, fuzzy
+msgid "closecell: can't move [%s] to cell file [%s]"
+msgstr ""
+"closecell : impossible de se déplacer %s\n"
+"à la cellule du fichier %s"
+
+#, fuzzy
+msgid "Unable to delete the temporary 'cell' file"
+msgstr "Impossible d'ouvrir le fichier %s"
+
+#, fuzzy
+msgid "Unable to write quant file!"
+msgstr "pas en mesure d'écrire le fichier!"
+
+#, fuzzy
+msgid "Unable to delete the %s file"
+msgstr "Impossible de supprimer la table <%s>"
+
+#, fuzzy
+msgid "Unable to write f_format file for CELL maps"
+msgstr "pas en mesure d'écrire des fichiers f_format pour des couches de cellules"
+
 #~ msgid "Memory error in allocating timestamp"
 #~ msgstr "Erreur de mémoire dans l'attribution d'horodatage"
 
@@ -7239,35 +7349,6 @@ msgstr "Impossible d'initialiser pj cause : %s"
 
 #~ msgid "Cannot select attributes"
 #~ msgstr "Impossible de sélectionner les attributs"
-
-#, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "test, gpde"
-
-#~ msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
-#~ msgstr "la recherche de points pour l'interpolation prend trop de temps -- veuillez changer la régionpour la zone où se trouvent vos points. Les calculs se poursuivent..."
-
-#~ msgid "Reading lines from vector map ... "
-#~ msgstr "Lignes de lecture de la carte vectorielle..."
-
-#, fuzzy
-#~ msgid "Reading nodes from vector map ... "
-#~ msgstr "Lignes de lecture de la carte vectorielle..."
-
-#~ msgid "strip exists with insufficient data"
-#~ msgstr "la bande existe avec des données insuffisantes"
-
-#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
-#~ msgstr "il y a des points en-dehors de la région 2D/3D spécifiée -- %d points ignorés"
-
-#~ msgid "ignoring %d points -- too dense"
-#~ msgstr "%d points ignorés -- trop dense"
-
-#~ msgid "some points outside of region -- will ignore..."
-#~ msgstr "certains points sont en dehors de la région -- ignorés..."
-
-#~ msgid "Column type not supported"
-#~ msgstr "Le type de colonne n'est pas supporté"
 
 #~ msgid "projection field missing"
 #~ msgstr "le champ de projection est manquant"
@@ -8664,18 +8745,6 @@ msgstr "Impossible d'initialiser pj cause : %s"
 #~ msgstr "Allocation mémoire impossible\n"
 
 #, fuzzy
-#~ msgid "Unable to delete file '%s'. Reason: %s"
-#~ msgstr "Impossible de supprimer le fichier <%s>"
-
-#, fuzzy
-#~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
-#~ msgstr "Impossible de renommer le répertoire '%s' en '%s'"
-
-#, fuzzy
-#~ msgid "Unable to remove directory '%s'. Reason: %s"
-#~ msgstr "Impossible de supprimer le répertoire '%s'"
-
-#, fuzzy
 #~ msgid "Vector map <%s> is not open on level >= 2"
 #~ msgstr "La couche vectorielle <%s> n'a pas été trouvée"
 
@@ -8703,73 +8772,35 @@ msgstr "Impossible d'initialiser pj cause : %s"
 #~ "\n"
 #~ "Veuillez spécifier un nom de datum\n"
 
-#, fuzzy
-#~ msgid "Unable to delete prior null-cells file"
-#~ msgstr "Impossible de supprimer le fichier <%s>"
-
-#, fuzzy
-#~ msgid "Unable to close the null-cells file"
-#~ msgstr "Impossible de lire le fichier d'en-tête"
-
-#, fuzzy
-#~ msgid "closecell: can't move [%s] to null-cells file [%s]"
-#~ msgstr ""
-#~ "closecell : impossible de se déplacer %s\n"
-#~ "jusqu'au fichier nul %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary null-cells file"
-#~ msgstr "impossible de trouver un fichier temporaire null %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the empty temporary null-cells file"
-#~ msgstr "impossible de trouver un fichier temporaire null %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior null-cells file"
-#~ msgstr "Impossible de lire le fichier d'en-tête"
-
-#, fuzzy
-#~ msgid "Unable to close the 'cell' file"
-#~ msgstr "Impossible de lire le fichier d'en-tête"
-
-#, fuzzy
-#~ msgid "Unable to delete prior 'fcell' file"
-#~ msgstr "Impossible de supprimer le fichier <%s>"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior %s file"
-#~ msgstr "Impossible de supprimer la table <%s>"
-
-#, fuzzy
-#~ msgid "Unable to close file"
-#~ msgstr "Impossible d'ouvrir le fichier %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior 'cell' file"
-#~ msgstr "Impossible de lire le fichier d'en-tête"
-
-#, fuzzy
-#~ msgid "closecell: can't move [%s] to cell file [%s]"
-#~ msgstr ""
-#~ "closecell : impossible de se déplacer %s\n"
-#~ "à la cellule du fichier %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary 'cell' file"
-#~ msgstr "Impossible d'ouvrir le fichier %s"
-
-#, fuzzy
-#~ msgid "Unable to write quant file!"
-#~ msgstr "pas en mesure d'écrire le fichier!"
-
-#, fuzzy
-#~ msgid "Unable to delete the %s file"
-#~ msgstr "Impossible de supprimer la table <%s>"
-
-#, fuzzy
-#~ msgid "Unable to write f_format file for CELL maps"
-#~ msgstr "pas en mesure d'écrire des fichiers f_format pour des couches de cellules"
-
 #~ msgid "Failed to convert string attribute."
 #~ msgstr "Echec lors de la conversion de l'attribut."
+
+#~ msgid "Unable to build spatial index from topology, vector map is not opened at topo level 2"
+#~ msgstr "Impossible de construire l'index spatial à partir de la topologie, la carte vecteur n'est pas ouverte au niveau topo 2"
+
+#~ msgid "BUG (Vect_build_sidx_from_topo): node does not exist"
+#~ msgstr "BUG (Vect_build_sidx_from_topo) : le nœud n'existe pas"
+
+#~ msgid "BUG (Vect_build_sidx_from_topo): line does not exist"
+#~ msgstr "BUG (Vect_build_sidx_from_topo) : la ligne n'existe pas"
+
+#~ msgid "BUG (Vect_build_sidx_from_topo): area does not exist"
+#~ msgstr "BUG (Vect_build_sidx_from_topo) : la surface n'existe pas"
+
+#~ msgid "BUG (Vect_build_sidx_from_topo): isle does not exist"
+#~ msgstr "BUG (Vect_build_sidx_from_topo) : l'île n'existe pas"
+
+#~ msgid "Partial build for OGR is not supported"
+#~ msgstr "La construction partielle pour OGR n'est pas prise en charge"
+
+#~ msgid "OGR format cannot be updated"
+#~ msgstr "Le format OGR ne peut pas être mis à jour"
+
+#~ msgid "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+#~ msgstr "Le fichier de coordonnées de la carte vecteur <%s@%s> est plus long qu'il ne devrait être (excès de %ld bytes)"
+
+#~ msgid "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+#~ msgstr "Le fichier de coordonnées de la carte vecteur <%s@%s> est plus court qu'il ne devrait être (excès de %ld bytes)"
+
+#~ msgid "Option <%s> does not accept multiple answers\n"
+#~ msgstr "L'option <%s> n'accepte pas de réponses multiples\n"
