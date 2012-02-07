@@ -212,6 +212,9 @@ class UpdateThread(Thread):
                 continue
             
             name = win.GetName()
+            pBind = self.task.get_param(uid, element = 'wxId', raiseError = False)
+            if pBind:
+                pBind['value'] = ''
             
             map = layer = None
             driver = db = table = None
@@ -302,9 +305,7 @@ class UpdateThread(Thread):
                         self.data[win.InsertTableColumns] = { 'table'  : pTable.get('value') }
             
             elif name == 'SubGroupSelect':
-                pGroup = self.task.get_param('group', element = 'element', raiseError = False)
-                if pGroup:
-                    self.data[win.Insert] = { 'group' : pGroup.get('value', '')}
+                self.data[win.Insert] = { 'group' : p.get('value', '')}
             
             elif name == 'LocationSelect':
                 pDbase = self.task.get_param('dbase', element = 'element', raiseError = False)
@@ -1860,7 +1861,7 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
         me = wx.FindWindowById(myId)
         name = me.GetName()
-
+        
         found = False
         for porf in self.task.params + self.task.flags:
             if 'wxId' not in porf:
@@ -1878,7 +1879,7 @@ class CmdPanel(wx.Panel):
             porf['parameterized'] = me.IsChecked()
         else:
             porf['value'] = me.GetValue()
-
+        
         self.OnUpdateValues(event)
         
         event.Skip()
