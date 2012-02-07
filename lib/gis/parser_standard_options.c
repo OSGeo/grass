@@ -117,7 +117,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->multiple = NO;
-	Opt->description = _("Table name");
+	Opt->description = _("Name of attribute table");
 	Opt->gisprompt = "old,dbtable,dbtable";
 	break;
     case G_OPT_DB_DRIVER:
@@ -126,7 +126,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->multiple = NO;
-	Opt->description = _("Driver name");
+	Opt->description = _("Name of database driver");
 	Opt->gisprompt = "old,dbdriver,dbdriver";
 	break;
     case G_OPT_DB_DATABASE:
@@ -135,7 +135,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->multiple = NO;
-	Opt->description = _("Database name");
+	Opt->description = _("Name of database");
 	Opt->gisprompt = "old,dbname,dbname";
 	break;
     case G_OPT_DB_SCHEMA:
