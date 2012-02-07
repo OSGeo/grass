@@ -5,27 +5,26 @@
 # MODULE:       db.dropcolumn
 # AUTHOR(S):   	Markus Neteler
 #               Converted to Python by Glynn Clements
-# PURPOSE:      interface to db.execute to drop a column from an 
+# PURPOSE:      Interface to db.execute to drop a column from an 
 #               attribute table
 #               - with special trick for SQLite
-# COPYRIGHT:    (C) 2007 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007, 2012 by Markus Neteler and the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+#               This program is free software under the GNU General
+#               Public License (>=v2). Read the file COPYING that
+#               comes with GRASS for details.
 #
 #############################################################################
 
-
-#%Module
-#%  description: Drops a column from selected attribute table
-#%  keywords: database
-#%  keywords: attribute table
+#%module
+#% description: Drops a column from selected attribute table.
+#% keywords: database
+#% keywords: attribute table
 #%End
 
 #%flag
-#%  key: f
-#%  description: Force removal (required for actual deletion of files)
+#% key: f
+#% description: Force removal (required for actual deletion of files)
 #%end
 
 #%option G_OPT_DB_TABLE
@@ -67,8 +66,8 @@ def main():
     if not force:
 	grass.message(_("Column <%s> would be deleted.") % column)
 	grass.message("")
-	grass.message(_("You must use the force flag to actually remove it. Exiting."))
-	sys.exit(0)
+	grass.message(_("You must use the force flag (-f) to actually remove it. Exiting."))
+	return 0
 
     if driver == "sqlite":
 	#echo "Using special trick for SQLite"
@@ -101,8 +100,10 @@ def main():
 
     if grass.write_command('db.execute', input = '-', database = database, driver = driver,
 			   stdin = sql) != 0:
-	grass.fatal(_("Cannot continue (problem deleting column)."))
+	grass.fatal(_("Cannot continue (problem deleting column)"))
+
+    return 0
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+    sys.exit(main())
