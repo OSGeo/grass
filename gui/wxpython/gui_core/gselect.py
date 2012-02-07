@@ -979,7 +979,7 @@ class SubGroupSelect(wx.ComboBox):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
                  **kwargs):
         super(SubGroupSelect, self).__init__(parent, id, size = size, 
-                                             style = wx.CB_READONLY, **kwargs)
+                                             **kwargs)
         self.SetName("SubGroupSelect")
 
     def Insert(self, group):

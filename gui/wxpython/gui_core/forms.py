@@ -1228,6 +1228,7 @@ class CmdPanel(wx.Panel):
                     selection = gselect.SubGroupSelect(parent = which_panel)
                     p['wxId'] = [ selection.GetId() ]
                     selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    selection.Bind(wx.EVT_TEXT,     self.OnSetValue)
                     which_sizer.Add(item = selection, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                     border = 5)
