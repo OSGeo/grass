@@ -39,6 +39,10 @@ iClassIcons = {
                              label = _('Save signature file')),
         'delCmd' : MetaIcon(img = 'layer-remove',
                             label = _('Delete selected map layer')),
+        'exportAreas' : MetaIcon(img = 'layer-export',
+                            label = _('Export training areas')),
+        'importAreas' : MetaIcon(img = 'layer-import',
+                            label = _('Import training areas')),
         }
         
 class IClassMapToolbar(BaseToolbar):
@@ -154,9 +158,15 @@ class IClassToolbar(BaseToolbar):
                                       (None, ),
                                       ("runAnalysis", icons['run'],
                                       self.parent.OnRunAnalysis),
+                                      (None, ),
+                                      ("importAreas", icons['importAreas'],
+                                      self.parent.OnImportAreas),
+                                      ("exportAreas", icons['exportAreas'],
+                                      self.parent.OnExportAreas),
                                       ("sigFile", icons['sigFile'],
                                       self.parent.OnSaveSigFile),
                                     ))
+                                    
     def OnSelectCategory(self, event):
         idx = self.choice.GetSelection()
         cat = self.choice.GetClientData(idx)
@@ -251,9 +261,9 @@ class IClassMapManagerToolbar(BaseToolbar):
         self.mapManager.SelectLayer(name = layer)
         
     def OnAddRast(self, event):
-        dlg = IClassMapDialog(self)
+        dlg = IClassMapDialog(self, title = _("Add raster map"), element = 'raster')
         if dlg.ShowModal() == wx.ID_OK:
-            raster = grass.find_file(name = dlg.GetRasterMap(), element = 'cell')
+            raster = grass.find_file(name = dlg.GetMap(), element = 'cell')
             if raster['fullname']:
                 self.mapManager.AddLayer(name = raster['fullname'])
                 

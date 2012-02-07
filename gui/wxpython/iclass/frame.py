@@ -20,6 +20,7 @@ for details.
 import os
 import sys
 import copy
+import tempfile
 
 if __name__ == "__main__":
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
@@ -46,6 +47,7 @@ from gui_core.mapdisp   import DoubleMapFrame
 from core.render        import Map, MapLayer
 from core.gcmd          import RunCommand, GMessage
 from gui_core.dialogs   import SetOpacityDialog
+from dbmgr.vinfo        import VectorDBInfo
 import grass.script as grass
 
 from iclass.digit       import IClassVDigitWindow, IClassVDigit
@@ -53,7 +55,8 @@ from iclass.toolbars    import IClassMapToolbar, IClassMiscToolbar,\
                                IClassToolbar, IClassMapManagerToolbar
 from iclass.statistics  import Statistics, BandStatistics
 from iclass.dialogs     import CategoryListCtrl, IClassCategoryManagerDialog,\
-                               IClassGroupDialog, IClassSignatureFileDialog
+                               IClassGroupDialog, IClassSignatureFileDialog,\
+                               IClassExportAreasDialog, IClassMapDialog
 from iclass.plots       import PlotPanel
         
 class IClassMapFrame(DoubleMapFrame):
@@ -68,7 +71,7 @@ class IClassMapFrame(DoubleMapFrame):
     """
     def __init__(self, parent = None, title = _("Supervised Classification Tool"),
                  toolbars = ["iClassMisc", "iClassMap", "vdigit", "iClass"],
-                 size = (800, 600), name = 'IClassWindow', **kwargs):
+                 size = (875, 600), name = 'IClassWindow', **kwargs):
         """!
         @param parent (no parent is expected)
         @param title window title
@@ -118,12 +121,6 @@ class IClassMapFrame(DoubleMapFrame):
                                sb.SbMapScale,
                                sb.SbGoTo,
                                sb.SbProjection]
-                            
-        self.statusbarItemsHiddenInNviz = (sb.SbAlignExtent,
-                                           sb.SbDisplayGeometry,
-                                           sb.SbShowRegion,
-                                           sb.SbResolution,
-                                           sb.SbMapScale)
         
         # create statusbar and its manager
         statusbar = self.CreateStatusBar(number = 4, style = 0)
@@ -145,6 +142,15 @@ class IClassMapFrame(DoubleMapFrame):
         self.InitStatistics()
         
         self.changes = False
+        self.exportVector = None
+        
+        # dialogs
+        self.dialogs = dict()
+        self.dialogs['classManager'] = None
+        # just to make digitizer happy
+        self.dialogs['attributes'] = None
+        self.dialogs['category'] = None
+        
         
         # PyPlot init
         self.plotPanel = PlotPanel(self, statDict = self.statisticsDict,
@@ -198,7 +204,7 @@ class IClassMapFrame(DoubleMapFrame):
                          **cmd[1])
         if ret != 0:
             return False
-            
+        
         return vectorName
         
     def RemoveTempVector(self):
@@ -212,6 +218,8 @@ class IClassMapFrame(DoubleMapFrame):
         
     def RemoveTempRaster(self, raster):
         """!Removes temporary raster maps"""
+        self.trainingMapManager.RemoveTemporaryLayer(raster)
+        self.previewMapManager.RemoveTemporaryLayer(raster)
         ret = RunCommand(prog = 'g.remove',
                          parent = self,
                          rast = raster)
@@ -416,10 +424,283 @@ class IClassMapFrame(DoubleMapFrame):
                 
         dlg.Destroy()
         
+    def OnImportAreas(self, event):
+        """!Import training areas"""
+        # check if we have any changes
+        if self.GetAreasCount() or self.statisticsList:
+            qdlg = wx.MessageDialog(parent = self,
+                                    message = _("All changes will be lost. "
+                                                "Do you want to continue?") ,
+                                    style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+            if qdlg.ShowModal() == wx.ID_NO:
+                qdlg.Destroy()
+                return
+            qdlg.Destroy()
+            
+        dlg = IClassMapDialog(self, title = _("Import vector map"), element = 'vector')
+        if dlg.ShowModal() == wx.ID_OK:
+            vName = dlg.GetMap()
+            warning = self._checkImportedTopo(vName)
+            if warning:
+                GMessage(parent = self, message = warning)
+                
+            self.ImportAreas(vName)
+            
+        dlg.Destroy()
+        
+    def _checkImportedTopo(self, vector):
+        """!Check if imported vector map has areas
+        
+        @param vector vector map name
+        
+        @return warning message (empty if topology is ok)
+        """
+        topo = grass.vector_info_topo(map = vector)
+        
+        warning = ''
+        if topo['areas'] == 0:
+            warning = _("No areas in vector map <%s>.\n" % vector)
+        if topo['points'] or topo['lines']:
+            warning +=_("Vector map <%s> contains points or lines, "
+                        "these features are ignored." % vector)
+            
+        return warning
+            
+    def ImportAreas(self, vector):
+        """!Import training areas.
+        
+        If table connected, try load certain columns to class manager
+        
+        @param vector vector map name
+        """
+        wx.BeginBusyCursor()
+        wx.Yield()
+        
+        mapLayer = self.toolbars['vdigit'].mapLayer
+        # set mapLayer temporarily to None
+        # to avoid 'save changes' code in vdigit.toolbars
+        self.toolbars['vdigit'].mapLayer = None
+        
+        ret =  self.toolbars['vdigit'].StopEditing()
+        if not ret:
+            wx.EndBusyCursor()
+            return False
+            
+        ret, msg = RunCommand('g.copy',
+                              vect = [vector, self.trainingAreaVector],
+                              overwrite = True,
+                              getErrorMsg = True)
+        if ret != 0:
+            wx.EndBusyCursor()
+            return False
+            
+        ret = self.toolbars['vdigit'].StartEditing(mapLayer)
+        if not ret:
+            wx.EndBusyCursor()
+            return False
+            
+        self.poMapInfo = self.GetFirstWindow().digit.GetDisplay().poMapInfo
+        
+        # remove temporary rasters
+        for i in self.statisticsList:
+            self.RemoveTempRaster(self.statisticsDict[i].rasterName)
+        
+        # clear current statistics
+        self.statisticsDict.clear()
+        del self.statisticsList[:] # not ...=[] !
+        
+        # reset plots
+        self.plotPanel.Reset()
+        
+        self.GetFirstWindow().UpdateMap(render = False, renderVector = True)
+        
+        self.ImportClasses(vector)
+        
+        # should be saved in attribute table?
+        self.toolbars['iClass'].UpdateStddev(1.5)
+        
+        wx.EndBusyCursor()
+        
+        return True
+        
+    def ImportClasses(self, vector):
+        """!If imported map has table, try to import certain columns to class manager"""
+        # check connection
+        dbInfo = VectorDBInfo(vector)
+        connected = (len(dbInfo.layers.keys()) > 0)
+        
+        # remove attribute table of temporary vector, we don't need it
+        if connected:
+            RunCommand('v.db.droptable',
+                       flags = 'f',
+                       map = self.trainingAreaVector)
+            
+        # we use first layer with table, TODO: user should choose
+        layer = None
+        for key in dbInfo.layers.keys():
+            if dbInfo.GetTable(key):
+                layer = key
+        
+        # get columns to check if we can use them
+        # TODO: let user choose which columns mean what
+        if layer is not None: 
+            columns = dbInfo.GetColumns(table = dbInfo.GetTable(layer))
+        else:
+            columns = []
+        
+        # get class manager
+        if self.dialogs['classManager'] is None:
+            self.dialogs['classManager'] = IClassCategoryManagerDialog(self)
+                
+        listCtrl = self.dialogs['classManager'].GetListCtrl()
+        
+        # unable to load data (no connection, table, right columns)
+        if not connected or layer is None or \
+                   'class' not in columns or \
+                   'color' not in columns:
+            # no table connected
+            cats = RunCommand('v.category',
+                       input = vector,
+                       layer = 1, # set layer?
+                       # type = ['centroid', 'area'] ?
+                       option = "print",
+                       read = True)
+            cats = map(int, cats.strip().split())
+            cats = sorted(list(set(cats)))
+
+            for cat in cats:
+                listCtrl.AddCategory(cat = cat, name = 'class_%d' % cat, color = "0:0:0")
+        # connection, table and columns exists
+        else:
+            columns = ['cat', 'class', 'color']
+            ret = RunCommand('v.db.select',
+                                 quiet = True,
+                                 parent = self,
+                                 flags = 'c',
+                                 map = vector,
+                                 layer = 1,
+                                 columns = ','.join(columns),
+                                 read = True)
+            records = ret.strip().split('\n')
+            for record in records:
+                record = record.split('|')
+                listCtrl.AddCategory(cat = int(record[0]), name = record[1], color = record[2])
+            
+    def OnExportAreas(self, event):
+        """!Export training areas"""
+        if self.GetAreasCount() == 0:
+            GMessage(parent = self, message = _("No training areas to export."))
+            return
+            
+        dlg = IClassExportAreasDialog(self, vectorName = self.exportVector)
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            vName = dlg.GetVectorName()
+            self.exportVector = vName
+            withTable = dlg.WithTable()
+            
+            self.ExportAreas(vectorName = vName, withTable = withTable)
+            
+        dlg.Destroy()
+        
+    def ExportAreas(self, vectorName, withTable):
+        """!Export training areas to new vector map (with attribute table).
+        
+        @param vectorName name of exported vector map
+        @param withTable true if attribute table is required
+        """
+        wx.BeginBusyCursor()
+        wx.Yield()
+        
+        # build the temporary or the new one?
+        RunCommand('v.build',
+                   map = self.trainingAreaVector,
+                   quiet = True)
+        # copy temp vector with no table
+        ret, msg = RunCommand('g.copy',
+                              vect = [self.trainingAreaVector, vectorName],
+                              overwrite = True,
+                              getErrorMsg = True)
+        if ret != 0:
+            wx.EndBusyCursor()
+            GMessage(parent = self, message = _("Failed to copy vector map. "
+                                                "Details:\n%s" % msg))
+            return
+            
+        if not withTable:
+            wx.EndBusyCursor()
+            return
+            
+        # add table
+        columns = ["class varchar(30)",
+                   "color varchar(11)",
+                   "n_cells integer",]
+                   
+        nbands = len(self.GetGroupLayers(self.group))
+        for statistic, format in (("min", "integer"), ("mean", "double precision"), ("max", "integer")):
+            for i in range(nbands):
+                # 10 characters limit?
+                columns.append("band%(band)d_%(stat)s %(format)s" % {'band' : i + 1,
+                                                                    'stat' : statistic,
+                                                                    'format' : format})
+        
+        ret, msg = RunCommand('v.db.addtable',
+                         map = vectorName,
+                         columns = columns,
+                         getErrorMsg = True)
+        if ret != 0:
+            wx.EndBusyCursor()
+            GMessage(parent = self, message = _("Failed to add attribute table. "
+                                                "Details:\n%s" % msg))
+            return
+            
+        # populate table
+        for cat in self.statisticsList:
+            stat = self.statisticsDict[cat]
+            
+            self._runDBUpdate(map = vectorName, column = "class", value = stat.name, cat = cat)
+            self._runDBUpdate(map = vectorName, column = "color", value = stat.color, cat = cat)
+            
+            if not stat.IsReady():
+                continue
+                
+            self._runDBUpdate(map = vectorName, column = "n_cells",value = stat.ncells, cat = cat)
+            
+            for i in range(nbands):
+                self._runDBUpdate(map = vectorName, column = "band%d_min" % (i + 1), value = stat.bands[i].min, cat = cat)
+                self._runDBUpdate(map = vectorName, column = "band%d_mean" % (i + 1), value = stat.bands[i].mean, cat = cat)
+                self._runDBUpdate(map = vectorName, column = "band%d_max" % (i + 1), value = stat.bands[i].max, cat = cat)
+        
+        wx.EndBusyCursor()
+        
+    def _runDBUpdate(self, map, column, value, cat):
+        """!Helper function for calling v.db.update.
+        
+        @param map vector map name
+        @param column name of updated column
+        @param value new value
+        @param cat which category to update
+        
+        @return returncode (0 is OK)
+        """
+        ret = RunCommand('v.db.update',
+                        map = map,
+                        layer = 1,
+                        column = column,
+                        value = value,
+                        where = "cat = %d" % cat)
+                            
+        return ret
+        
     def OnCategoryManager(self, event):
         """!Show category management dialog"""
-        dlg = IClassCategoryManagerDialog(self)
-        dlg.Show()
+        if self.dialogs['classManager'] is None:
+            dlg = IClassCategoryManagerDialog(self)
+            dlg.Show()
+            self.dialogs['classManager'] = dlg
+        else:
+            if not self.dialogs['classManager'].IsShown():
+                self.dialogs['classManager'].Show()
         
     def CategoryChanged(self, currentCat):
         """!Updates everything which depends on current category.
@@ -485,7 +766,7 @@ class IClassMapFrame(DoubleMapFrame):
         
     def UpdateChangeState(self, changes):
         """!Informs if any important changes happened
-        since last analysis computaiton.
+        since last analysis computation.
         """
         self.changes = changes
         
@@ -516,6 +797,7 @@ class IClassMapFrame(DoubleMapFrame):
                                                name = vname, l_active = False)
         
         self.toolbars['vdigit'].StartEditing(mapLayer)
+        self.poMapInfo = self.GetFirstWindow().digit.GetDisplay().poMapInfo
         self.Render(self.GetFirstWindow())
         
     def OnRunAnalysis(self, event):
@@ -532,8 +814,6 @@ class IClassMapFrame(DoubleMapFrame):
         Calls C functions to compute all statistics and creates raster maps.
         Signatures are created but signature file is not.
         """
-        #self.firstMapWindow.digit.CloseMap()
-        self.poMapInfo = self.firstMapWindow.digit.GetDisplay().poMapInfo
         if not self.CheckInput(group = self.group, vector = self.trainingAreaVector):
             return
             
@@ -676,28 +956,37 @@ class IClassMapFrame(DoubleMapFrame):
             return False
         
         #check if vector has any areas
-        vectorInfo = grass.vector_info(vector)
-        numAreas = Vect_get_num_areas(self.poMapInfo)
-        
-        if numAreas <= 0:
+        if self.GetAreasCount() == 0:
             GMessage(parent = self,
             message = _("No areas given. "
                         "Operation canceled."))
             return False
             
         # check if vector is inside raster
+        regionBox = bound_box()
+        Vect_get_map_box(self.poMapInfo, byref(regionBox))
+        
         rasterInfo = grass.raster_info(groupLayers[0])
         
-        if vectorInfo['north'] > rasterInfo['north'] or \
-           vectorInfo['south'] < rasterInfo['south'] or \
-           vectorInfo['east'] > rasterInfo['east'] or \
-           vectorInfo['west'] < rasterInfo['west']:
+        if regionBox.N > rasterInfo['north'] or \
+           regionBox.S < rasterInfo['south'] or \
+           regionBox.E > rasterInfo['east'] or \
+           regionBox.W < rasterInfo['west']:
            GMessage(parent = self,
                     message = _("Vector features are outside raster layers. "
                                 "Operation canceled."))
            return False
             
         return True
+        
+    def GetAreasCount(self):
+        """!Returns number of not dead areas"""
+        count = 0
+        numAreas = Vect_get_num_areas(self.poMapInfo)
+        for i in range(numAreas):
+            if Vect_area_alive(self.poMapInfo, i + 1):
+                count += 1
+        return count
         
     def GetGroupLayers(self, group):
         """! Get layers in group
@@ -740,7 +1029,6 @@ class IClassMapFrame(DoubleMapFrame):
         super(IClassMapFrame, self).OnPan(event)
         self.plotPanel.EnablePan()
         
-
 class MapManager:
     """! Class for managing map renderer.
     
@@ -792,9 +1080,40 @@ class MapManager:
         self.toolbar.choice.Insert(name, 0)
         self.toolbar.choice.SetSelection(0)
         
+    def RemoveTemporaryLayer(self, name):
+        """!Removes temporary layer (if exists) from Map and and updates toolbar.
+        
+        @param name real name of layer
+        """
+        # check if layer is loaded
+        layers = self.map.GetListOfLayers(l_type = 'raster')
+        idx = None
+        for i, layer in enumerate(layers):
+            if name == layer.GetName():
+                idx = i
+                break
+        if idx is None:
+            return
+        # remove it from Map
+        self.map.RemoveLayer(name = name)
+        
+        # update inner list of layers
+        alias = self.GetAlias(name)
+        if alias not in self.layerName:
+            return
+            
+        del self.layerName[alias]
+        # update choice
+        idx = self.toolbar.choice.FindString(alias)
+        if idx != wx.NOT_FOUND:
+            self.toolbar.choice.Delete(idx)
+            if not self.toolbar.choice.IsEmpty():
+                self.toolbar.choice.SetSelection(0)
+        
+        self.frame.Render(self.mapWindow)
+        
     def RemoveLayer(self, name, idx):
         """!Removes layer from Map and update toolbar"""
-        self.map.GetListOfLayers(l_type = 'raster')
         name = self.layerName[name]
         self.map.RemoveLayer(name = name)
         del self.layerName[name]
