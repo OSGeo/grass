@@ -442,7 +442,34 @@ class BufferedWindow(MapWindow, wx.Window):
         ibuffer = wx.EmptyBitmap(max(1, width), max(1, height))
         self.Map.Render(force = True, windres = True)
         img = self.GetImage()
+        self.pdc.RemoveAll()
         self.Draw(self.pdc, img, drawid = 99)
+        
+        # compute size ratio to move overlay accordingly
+        cSize = self.GetClientSizeTuple()
+        ratio = float(width) / cSize[0], float(height) / cSize[1]
+        
+        # redraw lagend, scalebar
+        for img in self.GetOverlay():
+            # draw any active and defined overlays
+            if self.imagedict[img]['layer'].IsActive():
+                id = self.imagedict[img]['id']
+                coords = int(ratio[0] * self.overlays[id]['coords'][0]),\
+                         int(ratio[1] * self.overlays[id]['coords'][1])
+                self.Draw(self.pdc, img = img, drawid = id,
+                          pdctype = self.overlays[id]['pdcType'], coords = coords)
+                          
+        # redraw text labels
+        for id in self.textdict.keys():
+            textinfo = self.textdict[id]
+            oldCoords = textinfo['coords']
+            textinfo['coords'] = ratio[0] * textinfo['coords'][0],\
+                                 ratio[1] * textinfo['coords'][1]
+            self.Draw(self.pdc, img = self.textdict[id], drawid = id,
+                      pdctype = 'text')
+            # set back old coordinates
+            textinfo['coords'] = oldCoords
+            
         dc = wx.BufferedPaintDC(self, ibuffer)
         dc.Clear()
         self.PrepareDC(dc)
