@@ -997,7 +997,7 @@ class GroupDialog(wx.Dialog):
         
         self.addLayer = wx.Button(self, id = wx.ID_ADD)
         self.addLayer.SetToolTipString(_("Select map layers and add them to the list."))
-        gridSizer.Add(item = self.addLayer, pos = (0, 1))
+        gridSizer.Add(item = self.addLayer, pos = (0, 1), flag = wx.EXPAND)
         
         self.removeLayer = wx.Button(self, id = wx.ID_REMOVE)
         self.removeLayer.SetToolTipString(_("Remove selected layer(s) from list."))
@@ -1219,6 +1219,11 @@ class MapLayersDialog(wx.Dialog):
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """!Dialog for selecting map layers (raster, vector)
         
+        Valid mapType values:
+         - raster
+         - raster3d
+         - vector
+        
         @param mapType type of map (if None: raster, vector, 3d raster, if one only: selects it and disables selection)
         @param selectAll all/none maps should be selected by default
         @param fullyQualified True if dialog should return full map names by default
@@ -1292,7 +1297,12 @@ class MapLayersDialog(wx.Dialog):
                                    choices = [_('raster'), _('3D raster'), _('vector')], size = (100,-1))
         
         if self.mapType:
-            self.layerType.SetStringSelection(self.mapType)
+            if self.mapType == 'raster':
+                self.layerType.SetSelection(0)
+            elif self.mapType == 'raster3d':
+                self.layerType.SetSelection(1)
+            elif self.mapType == 'vector':
+                self.layerType.SetSelection(2)
             self.layerType.Disable()
         else:
             self.layerType.SetSelection(0)
