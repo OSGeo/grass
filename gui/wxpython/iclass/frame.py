@@ -172,6 +172,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         
     def OnCloseWindow(self, event):
+        self.GetFirstWindow().digit.GetDisplay().CloseMap()
         self.Destroy()
         
     def __del__(self):
@@ -612,20 +613,14 @@ class IClassMapFrame(DoubleMapFrame):
         wx.BeginBusyCursor()
         wx.Yield()
         
-        # build the temporary or the new one?
-        RunCommand('v.build',
-                   map = self.trainingAreaVector,
-                   quiet = True)
-        # copy temp vector with no table
-        ret, msg = RunCommand('g.copy',
-                              vect = [self.trainingAreaVector, vectorName],
-                              overwrite = True,
-                              getErrorMsg = True)
-        if ret != 0:
-            wx.EndBusyCursor()
-            GMessage(parent = self, message = _("Failed to copy vector map. "
-                                                "Details:\n%s" % msg))
-            return
+        # close, build, copy and open again the temporary vector
+        displayDriver = self.GetFirstWindow().digit.GetDisplay()
+        displayDriver.CloseMap()
+        RunCommand('g.copy',
+                    vect = ','.join([self.trainingAreaVector, vectorName]),
+                    overwrite = True)
+        mapset = grass.gisenv()['MAPSET']
+        self.poMapInfo = displayDriver.OpenMap(name = self.trainingAreaVector, mapset = mapset)
             
         if not withTable:
             wx.EndBusyCursor()
