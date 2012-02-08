@@ -18,6 +18,7 @@
  ************************************************************/
 
 #include <grass/config.h>
+#include <grass/glocale.h>
 #include "r.le.trace.h"
 
 extern struct CHOICE *choice;
@@ -31,23 +32,17 @@ void user_input(int argc, char **argv)
 
     bound = G_define_flag();
     bound->key = 'p';
-    bound->description = "Include sampling area boundary as perimeter";
+    bound->description = _("Include sampling area boundary as perimeter");
 
     trace = G_define_flag();
     trace->key = 't';
-    trace->description = "Use 4 neighbor tracing instead of 8 neighbor";
+    trace->description = _("Use 4 neighbor tracing instead of 8 neighbor");
 
-    name = G_define_option();
-    name->key = "map";
-    name->description = "Raster map to be analyzed";
-    name->type = TYPE_STRING;
-    name->gisprompt = "old,cell,raster";
-    name->required = YES;
+    name = G_define_standard_option(G_OPT_R_MAP);
+    name->description = _("Raster map to be analyzed");
 
-    out = G_define_option();
-    out->key = "out";
-    out->description = "Name of output file to store patch data";
-    out->type = TYPE_STRING;
+    out = G_define_standard_option(G_OPT_F_OUTPUT);
+    out->description = _("Name of output file to store patch data");
     out->required = NO;
 
     if (G_parser(argc, argv))
