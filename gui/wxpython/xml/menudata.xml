@@ -1514,13 +1514,7 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>r.le.patch</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Output</label>
-	      <help>Displays the boundary of each r.le patch and shows how the boundary is traced, displays the attribute, size, perimeter and shape indices for each patch and saves the data in an output file.</help>
-	      <keywords>raster</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>r.le.trace</command>
-	    </menuitem>
+
 	  </items>
 	</menu>
 	<menu>
