@@ -184,7 +184,7 @@ dbDbmscap *db_read_dbmscap(void)
 
 #ifdef __MINGW32__
 	/* skip manifest files on Windows */
-	if (G_strstr(ent->d_name, ".manifest"))
+	if (strstr(ent->d_name, ".manifest"))
 	    continue;
 #endif
 
