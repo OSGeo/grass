@@ -184,9 +184,6 @@ if [ -n "$PACKAGE" ]; then
 	apps/grass/grass-$VERSION \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
 	bin/${GRASS_EXECUTABLE}.tmpl \
-	bin/libintl3.dll \
-	bin/libiconv2.dll \
-	bin/regex2.dll \
 	etc/postinstall/${GRASS_EXECUTABLE}.bat \
 	etc/preremove/${GRASS_EXECUTABLE}.bat
     
