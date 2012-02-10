@@ -124,7 +124,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
 		--with-tcltk \
 		--with-sqlite \
-		--without-postgres \
+		--with-postgres \
 		--with-curses \
 		--with-regex \
 		--with-nls \
