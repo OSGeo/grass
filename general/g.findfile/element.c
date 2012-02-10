@@ -11,5 +11,5 @@ void list_elements()
 
 int check_element(const char *element)
 {
-    M_read_list(FALSE, NULL);
+    return M_read_list(FALSE, NULL);
 }
