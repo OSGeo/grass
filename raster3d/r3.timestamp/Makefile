@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM=r3.timestamp
 
-LIBES = $(RASTER3DLIB) $(GISLIB)
-DEPENDENCIES = $(RASTER3DDEP) $(GISDEP)
+LIBES = $(GISLIB)
+DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
