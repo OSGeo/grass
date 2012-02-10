@@ -13,7 +13,7 @@ MODULES = date gis raster gmath proj imagery vector display stats \
 	dbmi raster3d arraystats cluster vedit ogsf nviz
 
 date_LIBS       = $(DATETIMELIB)
-gis_LIBS      = $(GISLIB)
+gis_LIBS        = $(GISLIB)
 raster_LIBS     = $(RASTERLIB)
 gmath_LIBS      = $(GMATHLIB)
 proj_LIBS       = $(GPROJLIB)
@@ -69,10 +69,13 @@ PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypes_preamble ctyp
 PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypes_preamble ctypes_loader)
 LPYFILES := $(patsubst %,$(OBJDIR)/%.py,$(MODULES))
 
-ifneq ($(strip $(CTYPESGEN)),)
+ifeq ($(strip $(GRASS_LIBRARY_TYPE)),shlib)
 default:
 	$(MAKE) $(DSTDIR)
 	$(MAKE) $(LPYFILES) $(PYFILES) $(PYCFILES)
+else
+default:
+	@echo "Cannot build Python wrappers for static libraries" >&2
 endif
 
 $(DSTDIR)/__init__.py: __init__.py | $(DSTDIR)
