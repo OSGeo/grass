@@ -3,7 +3,7 @@
 # Copyright (C) 2010, 2011, 2012 GRASS Development Team
 #
 # Susumu Nonogaki <nonogaki@sci.osaka-cu.ac.jp>, 2009
-# Naoki Ueda <nao@locapoint.com>, 2010, 2012
+# Naoki Ueda <nao@locapoint.com>, 2010
 # Akira Taniguchi <taniguti@apptec.co.jp>, 2010
 # Hirotoshi Toyoda <toyoda@ex.media.osaka-cu.ac.jp>, 2010
 #
@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2012-02-01 16:17+0900\n"
-"Last-Translator: Naoki Ueda <nao@locapoint.com>\n"
+"PO-Revision-Date: 2012-02-08 19:40+0900\n"
+"Last-Translator: taniguchi <taniguti@apptec.co.jp>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1056,11 +1056,11 @@ msgstr "GRASS GIS レイヤーマネージャー "
 
 #: ../gui/wxpython/lmgr/frame.py:115
 msgid "Workspace Toolbar"
-msgstr "ワークスペース "
+msgstr "ワークスペース ツールバー"
 
 #: ../gui/wxpython/lmgr/frame.py:118
 msgid "Data Toolbar"
-msgstr "マップツールバー "
+msgstr "データツールバー "
 
 #: ../gui/wxpython/lmgr/frame.py:121
 msgid "Misc Toolbar"
@@ -1072,7 +1072,7 @@ msgstr "マップツールバー "
 
 #: ../gui/wxpython/lmgr/frame.py:127
 msgid "Vector Toolbar"
-msgstr "ベクトルデジタイザーツールバー "
+msgstr "ベクトルツールバー "
 
 #: ../gui/wxpython/lmgr/frame.py:130
 #, fuzzy
@@ -2937,7 +2937,7 @@ msgstr "選択したテキストを自動的にクリップボードへコピー
 
 #: ../gui/wxpython/gui_core/preferences.py:330
 msgid "Workspace settings"
-msgstr "一般設定"
+msgstr "ワークスペース設定"
 
 #: ../gui/wxpython/gui_core/preferences.py:338
 msgid "Suppress positioning Map Display Window(s)"
@@ -4104,7 +4104,7 @@ msgstr "%s レイヤ一覧"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1515
 msgid "Layer id"
-msgstr "レイヤー"
+msgstr "レイヤーID"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1516
 msgid "Layer name"
@@ -9188,23 +9188,23 @@ msgstr "条件"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:205
 msgid "Name for new 3D raster map to create"
-msgstr "新しいベクトルマップ名："
+msgstr "新しい３Dラスターマップ名："
 
 #: ../gui/wxpython/modules/mcalc_builder.py:207
 msgid "Name for new raster map to create"
-msgstr "新しいベクトルマップ名："
+msgstr "新しいラスターマップ名："
 
 #: ../gui/wxpython/modules/mcalc_builder.py:211
 msgid "Insert existing 3D raster map"
-msgstr "既存のファイルを上書き"
+msgstr "挿入する既存３Dラスターマップ名"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:213
 msgid "Insert existing raster map"
-msgstr "既存のファイルを上書き"
+msgstr "挿入する既存ラスターマップ名"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:217
 msgid "Insert mapcalc function"
-msgstr "演算関数の挿入"
+msgstr "挿入する演算関数"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:228
 msgid "Add created raster map into layer tree"
@@ -13205,6 +13205,868 @@ msgstr "マップツールバー "
 msgid "Loading workspace"
 msgstr "ワークスペースのロード"
 
+msgid "Unable to render overlay <%s>"
+msgstr "<%s> をレンダーオーバーレイできません"
+
+#, fuzzy
+msgid ""
+"No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
+"\n"
+"New attribute table can be created by Attribute Table Manager."
+msgstr ""
+"ベクトルマップ <%(vector)s>とリンクした属性テーブルが見つかりません%(msg)s\n"
+"このメッセージはデジタイザ設定か属性テーブルマネージャー機能を利用してベクトルマップと属性テーブルのリンク付けをする事で消すことができます"
+
+#, fuzzy
+msgid ""
+"No layers marked for import.\n"
+"Operation canceled."
+msgstr "マップレイヤーが選択されていません 処理はキャンセルされました "
+
+#, fuzzy
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map layer."
+msgstr "3D ASCII ラスターテキストファイルを 3Dラスターマップレイヤーへインポート "
+
+#, fuzzy
+msgid "Imports 3-dimensional Vis5D files (i.e. the V5D file with 1 variable and 1 time step)."
+msgstr "3D Vis5Dファイルのインポート (つまり1変数と1タイムステップを使用したv5dファイル) "
+
+#, fuzzy
+msgid "Converts a 3D raster map layer into an ASCII text file."
+msgstr "3D ラスターマップをASCIIテキストファイルに変換"
+
+#, fuzzy
+msgid "Topographic correction"
+msgstr "大気補正 "
+
+#, fuzzy
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
+msgstr "2D標高マップに基づいた3Dラスターから2Dのラスター断面マップを作成"
+
+#, fuzzy
+msgid "Calculates numerically transient, confined groundwater flow in three dimensions."
+msgstr "3次元の地下水の流れに限定した一時的な数値解析プログラム "
+
+#, fuzzy
+msgid "Converts to one of the supported OGR vector formats."
+msgstr "OGRでサポートされるフォーマットへ変換"
+
+#, fuzzy
+msgid "Watershed basin analysis program"
+msgstr "分水界の解析を行います "
+
+#, fuzzy
+msgid "Fills no-data areas in raster maps using v.surf.rst splines interpolation."
+msgstr " v.surf.rstスプライン補間を利用し、ラスターマップに値を埋める"
+
+#, fuzzy
+msgid "Create parallel line to input lines"
+msgstr "入力された線分から平行線を作成"
+
+#, fuzzy
+msgid "Mosaics up to four images, extending the color table."
+msgstr "最大４つの画像と拡張カラーマップからモザイクを作成; マップ作成 *.mosaic  "
+
+#, fuzzy
+msgid "Extract quality control parameters from Modis QC layers"
+msgstr "DEMから地形パラメータを抽出 "
+
+#, fuzzy
+msgid "Selected map <%s> is not in current mapset <%s>. Color rules cannot be edited."
+msgstr "ベクトルマップ <%s> は既に存在します。上書きしますか？"
+
+#, fuzzy
+msgid "Import raster or vector data"
+msgstr "ラスターマップのインポート "
+
+#, fuzzy
+msgid "Profile plot settings"
+msgstr "断面図設定 "
+
+#, fuzzy
+msgid "GRASS GIS Hardcopy Map Output Utility (experimental prototype)"
+msgstr "ポストスクリプト出力ユーティリティ "
+
+msgid "No map layer selected"
+msgstr "マップレイヤーが選択されていません "
+
+msgid "Import Mapgen or Matlab vector maps into GRASS."
+msgstr "Mapgen または Matlab のベクトルマップをGRASSへインポート "
+
+#, fuzzy
+msgid "Creates a mask for limiting raster operation."
+msgstr ""
+"マップセットの新規作成\n"
+"(選択したロケーション内)"
+
+msgid "Uknown settings file location."
+msgstr "設定ファイルの場所が不明です"
+
+msgid "Place where to store settings:"
+msgstr "設定を保存する場所："
+
+#, fuzzy
+msgid "Quit GRASS GIS"
+msgstr "終了"
+
+#, fuzzy
+msgid "GRASS GIS Map Calculator (3D raster)"
+msgstr "GRASS %s マップカリキュレータ"
+
+msgid "Import raster map"
+msgstr "ラスターマップのインポート "
+
+msgid "Import vector map"
+msgstr "ベクトルマップのインポート "
+
+#, fuzzy
+msgid "C&onfig"
+msgstr "設定"
+
+#, fuzzy
+msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask it"
+msgstr "太陽の位置とDEMから陰影を付加する A:太陽の位置は既知 B：r.sunmaskを使用し日時から太陽の位置を算出 "
+
+#, fuzzy
+msgid "3D Raster map"
+msgstr "ラスターマップ"
+
+msgid "Error in command execution '%s'"
+msgstr "ファイル"
+
+#, fuzzy
+msgid "module"
+msgstr "コード "
+
+#, fuzzy
+msgid "Select GRASS module"
+msgstr "プロジェクトのロケーションとマップセットを選択"
+
+#, fuzzy
+msgid "Unable to get list of available mapsets."
+msgstr "マップセットを削除できません "
+
+#, fuzzy
+msgid "Unable to get list of accessible mapsets."
+msgstr "マップセットを削除できません "
+
+#, fuzzy
+msgid "Menu tree window"
+msgstr "ズーム"
+
+#, fuzzy
+msgid "help"
+msgstr "ヘルプ"
+
+#, fuzzy
+msgid "Run"
+msgstr "実行"
+
+#, fuzzy
+msgid "Saved NVIZ Settings"
+msgstr "テキスト"
+
+#, fuzzy
+msgid "Load and apply settings from user settings file"
+msgstr "ユーザー設定ファイルを変更し、ダイアログを閉じる"
+
+#, fuzzy
+msgid "Creates a lines vector map from an ASCII x,y points file."
+msgstr "ベクトル ベクトル."
+
+#, fuzzy
+msgid "Output vector map name"
+msgstr "ベクトル"
+
+#, fuzzy
+msgid "Digitize raster map"
+msgstr "デジタイズ"
+
+#, fuzzy
+msgid "Reclassify vector objects interactively by entering SQL rules"
+msgstr "ベクトル"
+
+#, fuzzy
+msgid "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color transformation function."
+msgstr "色."
+
+#, fuzzy
+msgid "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color transformation function"
+msgstr "色"
+
+#, fuzzy
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr "コピー."
+
+msgid "Matlab and MapGen import"
+msgstr "Matlab とMapGenのインポート "
+
+msgid "Creates and adds a new attribute table to a given layer of an existing vector map."
+msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
+
+msgid "Creates a new vectors as a read-only link to OGR layers"
+msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
+
+msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)"
+msgstr "ラスターDEMからの流曲線、流線長、流線密度（流域密度）の作図 "
+
+msgid "Run the command"
+msgstr "コマンド実行"
+
+msgid "Open existing workspace file"
+msgstr "ワークスペースを開く "
+
+msgid "Save current workspace to file"
+msgstr "現在のワークスペースをファイルに保存"
+
+msgid "COPYING file missing"
+msgstr "コピーするファイルがありません "
+
+msgid "Create new workspace file"
+msgstr "新規ワークスペースを作成"
+
+msgid "Load map layers into workspace"
+msgstr "ワークスペースにレイヤーをロード "
+
+msgid "Downloads and imports data from WMS servers."
+msgstr "WMSサーバーからダウンロード＆インポート "
+
+msgid "Create a MASK for limiting raster operation"
+msgstr "ラスター操作制限用マスクの作成 "
+
+msgid "r.recode.rules - Use ascii rules file to recode categories in raster map"
+msgstr "r.recode.rules - ラスターマップを分類するための記録をASCIIルールファイルを使用"
+
+msgid "Close this window without executing the command"
+msgstr "コマンドを実行せずに画面を閉じる"
+
+msgid "Show manual page of the command"
+msgstr "コマンドマニュアルを表示"
+
+msgid "coarse:"
+msgstr "粗さ:"
+
+msgid "fine:"
+msgstr "細かさ:  "
+
+msgid "Reading workspace file <%s> failed. Invalid file, unable to parse XML document."
+msgstr "ワークスペースファイル読み込みエラー <%s> XMLのパースができません "
+
+msgid "Writing current settings to workspace file failed (%s)."
+msgstr "現在の設定をワークスペースに出力出来ません (%s).  "
+
+msgid "Add various vector-based map layer"
+msgstr "ベクターマップレイヤーの追加 "
+
+msgid "Official GRASS site: http://grass.osgeo.org"
+msgstr "公式 GRASS サイト: http://grass.osgeo.org  "
+
+msgid "GIS Library"
+msgstr "GIS ライブラリ  "
+
+msgid "Force re-rendering of all layers"
+msgstr "全レイヤ－のレンダリング "
+
+msgid "Add layer group"
+msgstr "レイヤーグループ追加 "
+
+msgid "Delete selected layer"
+msgstr "選択レイヤーの削除 "
+
+msgid "Add RGB layer"
+msgstr "RGBレイヤー追加 "
+
+msgid "Add HIS layer"
+msgstr "HISレイヤー追加 "
+
+msgid "Reload GCPs from selected POINTS file"
+msgstr "POINTSファイルからGCPをリロード "
+
+msgid "Show Nviz settings dialog"
+msgstr "Nviz設定ダイアログの表示 "
+
+#, fuzzy
+msgid "Matlab-ASCII or Mapgen import"
+msgstr "Matlab とMapGenのインポート "
+
+#, fuzzy
+msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr "Mapgen または Matlab のベクトルマップをGRASSへインポート "
+
+msgid "Export GRASS raster as non-georeferenced PNG image format."
+msgstr "PNG画像フォーマットへエクスポート "
+
+msgid "Raster"
+msgstr "ラスター "
+
+msgid "Generates raster map layers of slope, aspect, curvatures and partial derivatives from a raster map layer of true elevation values. Aspect is calculated counterclockwise from east."
+msgstr "標高ラスターマップレイヤーから傾斜、方位、曲率と偏微分のラスターマップレイヤーを作成（方位は反時計回りに東から計算） "
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
+msgstr "標高レイヤーから 凹地のない標高マップと流方向マップを作成 "
+
+msgid "Flow computation for massive grids (Float version)."
+msgstr "大規模なグリッドの流量計算(実数バージョン)"
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)"
+msgstr "経路サンプリング法(SIMWE)を使用した流水門シミュレーション"
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)"
+msgstr "経路サンプリング法(SIMWE)を使用した土砂流送 侵食/沈着 シミュレーション"
+
+msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+msgstr "標高マップから地形的インデックス指標 [ln(a/tan(beta))]マップ作成"
+
+msgid "Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns."
+msgstr "ベクトルポリゴンを基にしたGRASSのラスターマップから単変量統計を解析し、新しい属性の列にアップロードする"
+
+msgid "Volumes"
+msgstr "ボリューム"
+
+msgid "GRASS GIS help"
+msgstr "GRASSのヘルプ "
+
+msgid "Nviz properties"
+msgstr "Nvizプロパティ "
+
+msgid "Nviz toolbar"
+msgstr "Nviz ツールバー "
+
+#, fuzzy
+msgid "3D View Tools"
+msgstr "3Dビューツール"
+
+msgid "Icon size:"
+msgstr "アイコンサイズ："
+
+msgid "Layer properties"
+msgstr "レイヤープロパティ"
+
+msgid "%(primitives)d primitives (%(points)d points)"
+msgstr "%(primitives)d プリミティブ (%(points)d points)  "
+
+msgid "Vector digitizer error"
+msgstr "ベクトルデジタイザエラー"
+
+msgid ""
+"Unable to initialize display driver of vector digitizer. See 'Command output' for details.\n"
+"\n"
+"Details:"
+msgstr ""
+"デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
+"\n"
+"詳細：  "
+
+msgid "Command '%s' not yet implemented in the GUI. Try adding it as a command layer instead."
+msgstr "コマンド '%s' はまだGUIで実装されていません. コマンドラインより実行してください."
+
+msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
+msgstr "<%(name)s>: レイヤータイプ <%(type)s> はまだサポートしていません"
+
+msgid "Parameter not found: %s"
+msgstr "パラメータがありません： %s"
+
+msgid "Parameter %(name)s (%(desc)s) is missing.\n"
+msgstr "パラメータ %(name)s (%(desc)s) が有りません\n"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "クリップボードに現在のコマンド文をコピー"
+
+msgid "Vector point layer not found (id=%d)"
+msgstr "ベクトルポイントレイヤーが見つかりません (ID=%d)  "
+
+msgid "Unable to set data layer properties (id=%d)"
+msgstr "データレイヤーの属性をセット出来ません (ID=%d)  "
+
+msgid "User GUI settings"
+msgstr "ユーザーGUI設定"
+
+#, fuzzy
+msgid "Check a mapset to make it accessible, uncheck it to hide it.%sNote: The current mapset is always accessible."
+msgstr "アクセスするマップセットをチェック（アクセスしない場合はチェックをはずす）%s 備考: PERMANENT と 現在のマップセットは常にアクセスできます "
+
+msgid "Create mapset"
+msgstr "マップセットの作成"
+
+msgid "Select file extension:"
+msgstr "ファイル拡張子選択："
+
+msgid "Attribute management is available only for vector maps."
+msgstr "属性管理はベクトルマップのみ有効です "
+
+msgid "Display zoom management"
+msgstr "ズームマネージャーを表示 "
+
+msgid "Add thematic layer"
+msgstr "主題レイヤー追加 "
+
+msgid "Settings dialog for digitization tool"
+msgstr "デジタイザの設定ダイアログ "
+
+msgid "Select color"
+msgstr "カラーの選択 "
+
+msgid "Aggregate ASCII xyz import"
+msgstr "ASCII xyz統計のインポート "
+
+msgid "Multiple export formats using OGR"
+msgstr "OGRを使用した複数フォーマットのエクスポート "
+
+msgid "Add attributes"
+msgstr "属性追加"
+
+#, fuzzy
+msgid ""
+"Unable to initialize display driver of vector digitizer. See 'Command output' for details.\n"
+"\n"
+"Details: "
+msgstr ""
+"デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
+"\n"
+"詳細：  "
+
+msgid ""
+"Unable to open vector map <%s> for editing.\n"
+"\n"
+"Data are probably corrupted, try to run v.build to rebuild the topology (Vector->Develop vector map->Create/rebuild topology)."
+msgstr ""
+"修正用ベクトルマップ <%s> をオープン出来ません\n"
+"\n"
+"おそらくデータが破損しています,トポロジーの再構築する v.build を実行してください (ベクトル->ベクトルマップ作成 ->トポロジー作成/再構築)"
+
+msgid "Undo failed, data corrupted."
+msgstr "元に戻すことができません データが破損しています"
+
+#, fuzzy
+msgid "Digitize new area"
+msgstr "フィーチャをデジタイズ"
+
+msgid "Unable to encode text. Please set encoding in GUI preferences."
+msgstr "テキストをエンコードすることができません GUIの設定でエンコーディングを設定してください"
+
+msgid "Zoom to map"
+msgstr "マップのズーム"
+
+msgid "Zoom to displayed map"
+msgstr "表示されているマップをズーム"
+
+#, fuzzy
+msgid "Show Help"
+msgstr "ラインを表示"
+
+msgid "&Delete layer"
+msgstr "レイヤー削除(&D)"
+
+#, fuzzy
+msgid "Override projection (use location's projection)"
+msgstr "対話形式での位置を投影法の情報をセット "
+
+#, fuzzy
+msgid "Unable to initialize display driver of vector digitizer"
+msgstr ""
+"デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
+"\n"
+"詳細：  "
+
+msgid "Import GDAL supported raster file into a binary raster map layer."
+msgstr "GDALファイルをラスターマップとしてインポート "
+
+#, fuzzy
+msgid "Bulk import of raster data"
+msgstr "ラスターマップのインポート "
+
+#, fuzzy
+msgid "Converts multiple GDAL supported layers to GRASS raster maps."
+msgstr " r.in.gdalで使用できる GDALレイヤーの変換"
+
+#, fuzzy
+msgid "Link GDAL supported raster file to a binary raster map layer."
+msgstr "GDALファイルをラスターマップとしてインポート "
+
+#, fuzzy
+msgid "Bulk link of raster data"
+msgstr "基本的なラスターメタデータ"
+
+#, fuzzy
+msgid "Link multiple GDAL supported raster maps as pseudo GRASS raster map layers."
+msgstr "GDALファイルをラスターマップとしてリンク "
+
+#, fuzzy
+msgid "Bulk import of vector data"
+msgstr "ベクトルマップのインポート "
+
+msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
+msgstr "v.in.ogrを使用してOGRレイヤーからGRASSベクトルマップへ変換"
+
+#, fuzzy
+msgid "Creates a new vector as a read-only link to OGR layer."
+msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
+
+#, fuzzy
+msgid "Bulk link of vector data"
+msgstr "基本ベクトルメタデータ"
+
+#, fuzzy
+msgid "Creates multiple new pseduo-vector maps as a read-only links using OGR."
+msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
+
+#, fuzzy
+msgid "Converts multiple DXF layers to GRASS vector maps."
+msgstr "v.in.dxfを利用してDXFレイヤーからGRASSベクトルマップへ変換"
+
+msgid "Georectify raster and vector maps"
+msgstr "ラスターマップとベクトルマップの幾何補正 "
+
+msgid "Reclassify interactively"
+msgstr "対話形式による再分類"
+
+msgid "Reclassify using rules file"
+msgstr "定義ファイルを利用した再分類"
+
+msgid "Recode using rules file"
+msgstr "定義ファイルを利用した記録"
+
+msgid "Allows projection conversion of vector maps."
+msgstr "ベクトルマップの投影変換を許可"
+
+msgid "Set colors interactively by entering color rules"
+msgstr "カラールールを対話型入力で設定"
+
+msgid "Reclassify objects interactively"
+msgstr "対話形式でオブジェクトを再分類"
+
+msgid "Reclassify objects using rules file"
+msgstr "ルールファイルによってオブジェクトを再分類"
+
+msgid "Location wizard"
+msgstr "ロケーションウィザード"
+
+msgid "Enter rules"
+msgstr "ルール入力： "
+
+msgid "Create new color table using color rules"
+msgstr "カラールールを使用して新しいカラーテーブルを作成"
+
+msgid "Raster map:"
+msgstr "ラスターマップ："
+
+msgid "Enter color rules"
+msgstr "カラールール入力"
+
+msgid "Raster map to reclassify:"
+msgstr "再分類するラスターマップ："
+
+msgid "Reclassified raster map:"
+msgstr "再分類されたラスターマップ："
+
+msgid "Enter reclassification rules"
+msgstr "再分類用のルール入力"
+
+msgid "Recode raster map using rules"
+msgstr "ルールを使用してラスターマップを記録"
+
+msgid "Raster map to recode:"
+msgstr "記録するラスターマップ："
+
+msgid "Recoded raster map:"
+msgstr "記録されたラスターマップ："
+
+msgid "Enter recoding rules"
+msgstr "記録するルールの入力"
+
+msgid "Reclassify vector map using SQL rules"
+msgstr "SQLルールを使用してベクトルマップを再分類"
+
+msgid "Vector map to reclassify:"
+msgstr "再分類するベクトルマップ："
+
+msgid "Reclassified vector map:"
+msgstr "再分類されたベクトルマップ："
+
+msgid "overwrite existing file"
+msgstr "既存のファイルを上書き"
+
+msgid "Set/unset access to mapsets in current location"
+msgstr "現在のロケーションがアクセスするマップセットを設定/解除"
+
+#, fuzzy
+msgid "GRASS GIS Map Display: 1"
+msgstr "GRASS GIS マップ ディスプレイ："
+
+msgid "Select display image/map:"
+msgstr "画像/マップ 表示選択："
+
+#, fuzzy
+msgid "Define/manage ground control points"
+msgstr "GCP（地上基準点）の作成と管理"
+
+msgid "POINTS file <%s> saved"
+msgstr "ポイントファイル <%s> が保存されました"
+
+msgid "Georectifier settings"
+msgstr "幾何補正の設定 "
+
+msgid "RMS error for selected points forward: %(fwd)s backward: %(bkw)s"
+msgstr "選択されたポイントのRMSエラー前面： %(fwd)s背面： %(bkw)s  "
+
+msgid "use| X coord"
+msgstr "使用| X 座標 "
+
+msgid "Y coord"
+msgstr "Y 座標 "
+
+msgid "E coord"
+msgstr "E 座標 "
+
+msgid "N coord"
+msgstr "N 座標 "
+
+msgid "Georectifier settings saved to file '%s'."
+msgstr "幾何補正設定をファイルに保存しました '%s'."
+
+msgid "Unable to open workspace file <%s> for writing."
+msgstr "ワークスペースファイル <%s> を出力できません "
+
+msgid "Redraw GCP markers in map displays"
+msgstr "GCPマーカのを再描画 "
+
+msgid "Multiple raster data import using GDAL"
+msgstr "GDALでの複数ラスターデータのインポート "
+
+msgid "Link to GDAL"
+msgstr "GDALのリンク "
+
+msgid "Multiple link to GDAL"
+msgstr "GDALへ複数のリンク "
+
+msgid "Import vector data using OGR"
+msgstr "OGRを使用したベクトルデータのインポート "
+
+msgid "Multiple vector data import using OGR"
+msgstr "OGRを使用した複数ベクトルデータのインポート "
+
+msgid "Link to OGR"
+msgstr "OGRのリンク "
+
+msgid "Multiple link to OGR"
+msgstr "OGRレイヤーへ複数のリンク "
+
+msgid "Multiple DXF layers import"
+msgstr "複数DXFレイヤーのインポート "
+
+msgid "Import grid 3D volume"
+msgstr "3Dグリッドのインポート "
+
+msgid "Multiple export formats using GDAL"
+msgstr "GDAL用複数エクスポートフォーマット "
+
+msgid "Export grid 3D volume"
+msgstr "3Dグリッドのエクスポート "
+
+msgid "Generates a raster map layer showing watershed subbasins."
+msgstr "集水域を示すラスターマップを作成します "
+
+msgid "Display shortest route (requires XTerm)"
+msgstr "最短経路表示 （XTerm必要)  "
+
+#, fuzzy
+msgid "Find shortest path for selected starting and ending node"
+msgstr "始点と終点を指定した最短経路探査"
+
+msgid "Uses a GRASS vector points map to produce a convex hull vector map."
+msgstr "ベクトルポイントから凸包ベクトルマップを作成する"
+
+msgid "Map calculator for volumetric map algebra"
+msgstr "ボリューム代数のマップカリキュレータ"
+
+msgid ""
+"Unable to start vector digitizer.\n"
+"The VDigit python extension was not found or loaded properly.\n"
+"Switching back to 2D display mode.\n"
+"\n"
+"Details: %s"
+msgstr ""
+"ベクトルのデジタイズを開始できません\n"
+" VDigit python extensionが見つからないかロードできていません\n"
+"2Dディスプレイモードに切り替えます\n"
+"\n"
+"詳細: %s "
+
+msgid ""
+"Unable to switch to 3D display mode.\n"
+"The GLCanvas class has not been included with this build of wxPython!\n"
+"Switching back to 2D display mode.\n"
+"\n"
+"Details: %s"
+msgstr ""
+"3Dディスプレイモードに変更できません\n"
+" wxPythonビルド時に GLCanvas クラス をインクルードしていません\n"
+"2Dディスプレイモードに切り替えます\n"
+"\n"
+"詳細: %s "
+
+msgid "Preferences error"
+msgstr "設定エラー"
+
+msgid "Attribute table manager error"
+msgstr "属性テーブル設定エラー "
+
+msgid "Nviz error"
+msgstr "Nvizエラー"
+
+msgid "Input DXF file"
+msgstr "DXFファイルをインポート"
+
+msgid "Input directory"
+msgstr "入力ディレクトリ "
+
+msgid "Restore default settings"
+msgstr "デフォルト設定に戻す"
+
+msgid "wxGUI closed."
+msgstr "wxGUI クローズ"
+
+msgid "Map layers for each display"
+msgstr "画面のマップレイヤー "
+
+msgid "Import GDAL layers"
+msgstr "GDALレイヤーのインポート "
+
+msgid "Link GDAL layers"
+msgstr "GDALレイヤーのリンク "
+
+msgid "Import OGR layers"
+msgstr "OGRレイヤーのインポート "
+
+msgid "Link OGR layers"
+msgstr "OGRレイヤーのリンク "
+
+msgid "Twist"
+msgstr "ツイスト"
+
+msgid "Z-exag"
+msgstr "Z-鉛直"
+
+msgid "Command '%s' not yet implemented."
+msgstr "コマンド '%s' はまだ実装されていません"
+
+msgid "&Close"
+msgstr "閉じる(&C)"
+
+msgid "&Apply"
+msgstr "適用(&A)"
+
+msgid "Save workspace to open file"
+msgstr "ワークスペースの保存 "
+
+msgid "Error in command execution %s"
+msgstr "コマンド実行エラー %s"
+
+msgid "Config"
+msgstr "設定 "
+
+msgid "Unable to read workspace file"
+msgstr "ワークスペースが読み込めません "
+
+msgid "Requires an xterm and could not find an xterm to launch"
+msgstr "Xtermを実行出来ません "
+
+msgid "Command %s could not be run"
+msgstr "コマンド %s は実行出来ません "
+
+msgid "GPL.TXT file missing"
+msgstr "GPL.TXT ファイル がありません "
+
+msgid "AUTHORS file missing"
+msgstr "AUTHORS ファイル がありません "
+
+msgid "Close loaded workspace"
+msgstr "現在のワークスペースを閉じる "
+
+msgid "MAT-File (v.4) import"
+msgstr "MAT-ファイル (v.4) インポート "
+
+msgid "MAT-File (v.4) export"
+msgstr "MAT-ファイル (v.4)のエクスポート "
+
+msgid "Interactive editing and digitization of vector maps"
+msgstr "ベクトルマップの対話型編集とデジタイズ"
+
+msgid "Selects data from table."
+msgstr "テーブルからデータを選択"
+
+msgid "GRASS GIS GUI help"
+msgstr "GRASS GIS GUIのヘルプ "
+
+msgid "Extents set incorrectly"
+msgstr "領域が正しくありません"
+
+msgid ""
+"File <%(file)s>: Unable to get list of DXF layers.\n"
+"\n"
+"%(details)s"
+msgstr ""
+"ファイル <%(file)s>：DXFレイヤ－一覧を取得できません.\n"
+"\n"
+"%(details)s "
+
+msgid "Change the type of geometry elements"
+msgstr "ジオメトリエレメントのタイプ変更"
+
+#, fuzzy
+msgid "GRASS GIS Raster Map Calculator (3D raster)"
+msgstr "GRASS %s マップカリキュレータ"
+
+msgid "E&xit"
+msgstr "終了(&x) "
+
+msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask itself."
+msgstr "太陽の位置とDEMから陰影を付加する A:太陽の位置は既知 B：r.sunmaskを使用し日時から太陽の位置を算出 "
+
+msgid "Map calculator"
+msgstr "マップカリキュレータ"
+
+#, fuzzy
+msgid "DXF file:"
+msgstr "DXFファイル選択："
+
+#, fuzzy
+msgid "Unable to initialize display driver of vector digitizer. See 'Command output' for details."
+msgstr ""
+"デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
+"\n"
+"詳細：  "
+
+#, fuzzy
+msgid "r.recode.file - Use ascii rules file to recode categories in raster map"
+msgstr "r.recode.rules - ラスターマップを分類するための記録をASCIIルールファイルを使用"
+
+msgid "Select image/map to display for ground control point (GCP) creation"
+msgstr "画像/マップを表示するための 測量基準点 (GCP) 作成方法の選択"
+
+msgid "You must select a valid image/map in order to continue"
+msgstr "有効な画像/マップを選択する必要があります"
+
+msgid "Ground Control Points"
+msgstr "GCP（地上基準点）"
+
+msgid "POINTS file saved"
+msgstr "ポイントファイルが保存されました"
+
+msgid "Ground Control Point"
+msgstr "GCP（地上基準点）の定義 "
+
+msgid "Set ground control points (GCPs)"
+msgstr "GCP（地上基準点）の定義"
+
+#, fuzzy
+msgid "Topology maintenance"
+msgstr "サポートファイルの保守 "
+
+#, fuzzy
+msgid "Feature selection"
+msgstr "断面図"
+
 #~ msgid "Unable to switch to location <%(loc)s> mapset <%(mapset)s>."
 #~ msgstr "ロケーション <%(loc)s> マップセット <%(mapset)s> へ変更できません."
 
@@ -13322,9 +14184,6 @@ msgstr "ワークスペースのロード"
 
 #~ msgid " / Zoom to map"
 #~ msgstr " / マップのズーム"
-
-#~ msgid "Unable to render overlay <%s>"
-#~ msgstr "<%s> をレンダーオーバーレイできません"
 
 #~ msgid "Attribute Table Manager"
 #~ msgstr "属性テーブルマネージャー"
@@ -13942,7 +14801,7 @@ msgstr "ワークスペースのロード"
 #~ msgstr "断面図テキスト設定"
 
 #~ msgid "Select raster map to profile"
-#~ msgstr "ラスターマップの断面を作成できません "
+#~ msgstr "断面図作成対象ラスターマップ"
 
 #~ msgid "Select raster map 2 (optional):"
 #~ msgstr "ラスターマップ2 選択（オプション）："
@@ -13965,15 +14824,6 @@ msgstr "ワークスペースのロード"
 #~ msgid "GRASS GIS Histogram of raster map"
 #~ msgstr "画像/ラスタ－ファイルのヒストグラム作成 "
 
-#, fuzzy
-#~ msgid ""
-#~ "No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
-#~ "\n"
-#~ "New attribute table can be created by Attribute Table Manager."
-#~ msgstr ""
-#~ "ベクトルマップ <%(vector)s>とリンクした属性テーブルが見つかりません%(msg)s\n"
-#~ "このメッセージはデジタイザ設定か属性テーブルマネージャー機能を利用してベクトルマップと属性テーブルのリンク付けをする事で消すことができます"
-
 #~ msgid "Module r.mapcalc cannot be used in the model. Use r.mapcalculator instead."
 #~ msgstr "モジュールr.mapcalcはこのモデルでは使用できません. 代わりにr.mapcalculatorを使用してください"
 
@@ -13982,12 +14832,6 @@ msgstr "ワークスペースのロード"
 
 #~ msgid "Map layer type:"
 #~ msgstr "マップレイヤータイプ："
-
-#, fuzzy
-#~ msgid ""
-#~ "No layers marked for import.\n"
-#~ "Operation canceled."
-#~ msgstr "マップレイヤーが選択されていません 処理はキャンセルされました "
 
 #~ msgid "Emission"
 #~ msgstr "発光度"
@@ -14096,18 +14940,6 @@ msgstr "ワークスペースのロード"
 #~ msgid "Binary file import"
 #~ msgstr "バイナリーファイルのインポート "
 
-#, fuzzy
-#~ msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map layer."
-#~ msgstr "3D ASCII ラスターテキストファイルを 3Dラスターマップレイヤーへインポート "
-
-#, fuzzy
-#~ msgid "Imports 3-dimensional Vis5D files (i.e. the V5D file with 1 variable and 1 time step)."
-#~ msgstr "3D Vis5Dファイルのインポート (つまり1変数と1タイムステップを使用したv5dファイル) "
-
-#, fuzzy
-#~ msgid "Converts a 3D raster map layer into an ASCII text file."
-#~ msgstr "3D ラスターマップをASCIIテキストファイルに変換"
-
 #~ msgid "Output basic information about a raster map layer."
 #~ msgstr "ラスターマップの基礎情報を出力"
 
@@ -14125,18 +14957,6 @@ msgstr "ワークスペースのロード"
 
 #~ msgid "Generates spectral signatures for an image by allowing the user to outline regions of interest."
 #~ msgstr "ユーザーが指定した輪郭線をもとにスペクトル特性を作成"
-
-#, fuzzy
-#~ msgid "Topographic correction"
-#~ msgstr "大気補正 "
-
-#, fuzzy
-#~ msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
-#~ msgstr "2D標高マップに基づいた3Dラスターから2Dのラスター断面マップを作成"
-
-#, fuzzy
-#~ msgid "Calculates numerically transient, confined groundwater flow in three dimensions."
-#~ msgstr "3次元の地下水の流れに限定した一時的な数値解析プログラム "
 
 #~ msgid "Add action (GRASS module) to model"
 #~ msgstr "モデルにアクション(GRASSモジュール)を追加"
@@ -14185,823 +15005,3 @@ msgstr "ワークスペースのロード"
 
 #~ msgid "All data records (%d) will permanently deleted from table. Do you want to delete them?"
 #~ msgstr "全てのレコード (%d) は、テーブルから完全に消去されます  削除してよろしいですか?"
-
-#, fuzzy
-#~ msgid "Converts to one of the supported OGR vector formats."
-#~ msgstr "OGRでサポートされるフォーマットへ変換"
-
-#, fuzzy
-#~ msgid "Watershed basin analysis program"
-#~ msgstr "分水界の解析を行います "
-
-#, fuzzy
-#~ msgid "Fills no-data areas in raster maps using v.surf.rst splines interpolation."
-#~ msgstr " v.surf.rstスプライン補間を利用し、ラスターマップに値を埋める"
-
-#, fuzzy
-#~ msgid "Create parallel line to input lines"
-#~ msgstr "入力された線分から平行線を作成"
-
-#, fuzzy
-#~ msgid "Mosaics up to four images, extending the color table."
-#~ msgstr "最大４つの画像と拡張カラーマップからモザイクを作成; マップ作成 *.mosaic  "
-
-#, fuzzy
-#~ msgid "Extract quality control parameters from Modis QC layers"
-#~ msgstr "DEMから地形パラメータを抽出 "
-
-#, fuzzy
-#~ msgid "Selected map <%s> is not in current mapset <%s>. Color rules cannot be edited."
-#~ msgstr "ベクトルマップ <%s> は既に存在します。上書きしますか？"
-
-#, fuzzy
-#~ msgid "Import raster or vector data"
-#~ msgstr "ラスターマップのインポート "
-
-#, fuzzy
-#~ msgid "Profile plot settings"
-#~ msgstr "断面図設定 "
-
-#, fuzzy
-#~ msgid "GRASS GIS Hardcopy Map Output Utility (experimental prototype)"
-#~ msgstr "ポストスクリプト出力ユーティリティ "
-
-#~ msgid "No map layer selected"
-#~ msgstr "マップレイヤーが選択されていません "
-
-#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
-#~ msgstr "Mapgen または Matlab のベクトルマップをGRASSへインポート "
-
-#, fuzzy
-#~ msgid "Creates a mask for limiting raster operation."
-#~ msgstr ""
-#~ "マップセットの新規作成\n"
-#~ "(選択したロケーション内)"
-
-#~ msgid "Uknown settings file location."
-#~ msgstr "設定ファイルの場所が不明です"
-
-#~ msgid "Place where to store settings:"
-#~ msgstr "設定を保存する場所："
-
-#, fuzzy
-#~ msgid "Quit GRASS GIS"
-#~ msgstr "終了"
-
-#, fuzzy
-#~ msgid "GRASS GIS Map Calculator (3D raster)"
-#~ msgstr "GRASS %s マップカリキュレータ"
-
-#~ msgid "Import raster map"
-#~ msgstr "ラスターマップのインポート "
-
-#~ msgid "Import vector map"
-#~ msgstr "ベクトルマップのインポート "
-
-#, fuzzy
-#~ msgid "C&onfig"
-#~ msgstr "設定"
-
-#, fuzzy
-#~ msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask it"
-#~ msgstr "太陽の位置とDEMから陰影を付加する A:太陽の位置は既知 B：r.sunmaskを使用し日時から太陽の位置を算出 "
-
-#, fuzzy
-#~ msgid "3D Raster map"
-#~ msgstr "ラスターマップ"
-
-#~ msgid "Error in command execution '%s'"
-#~ msgstr "ファイル"
-
-#, fuzzy
-#~ msgid "module"
-#~ msgstr "コード "
-
-#, fuzzy
-#~ msgid "Select GRASS module"
-#~ msgstr "プロジェクトのロケーションとマップセットを選択"
-
-#, fuzzy
-#~ msgid "Unable to get list of available mapsets."
-#~ msgstr "マップセットを削除できません "
-
-#, fuzzy
-#~ msgid "Unable to get list of accessible mapsets."
-#~ msgstr "マップセットを削除できません "
-
-#, fuzzy
-#~ msgid "Menu tree window"
-#~ msgstr "ズーム"
-
-#, fuzzy
-#~ msgid "help"
-#~ msgstr "ヘルプ"
-
-#, fuzzy
-#~ msgid "Run"
-#~ msgstr "実行"
-
-#, fuzzy
-#~ msgid "Saved NVIZ Settings"
-#~ msgstr "テキスト"
-
-#, fuzzy
-#~ msgid "Load and apply settings from user settings file"
-#~ msgstr "ユーザー設定ファイルを変更し、ダイアログを閉じる"
-
-#, fuzzy
-#~ msgid "Creates a lines vector map from an ASCII x,y points file."
-#~ msgstr "ベクトル ベクトル."
-
-#, fuzzy
-#~ msgid "Output vector map name"
-#~ msgstr "ベクトル"
-
-#, fuzzy
-#~ msgid "Digitize raster map"
-#~ msgstr "デジタイズ"
-
-#, fuzzy
-#~ msgid "Reclassify vector objects interactively by entering SQL rules"
-#~ msgstr "ベクトル"
-
-#, fuzzy
-#~ msgid "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color transformation function."
-#~ msgstr "色."
-
-#, fuzzy
-#~ msgid "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color transformation function"
-#~ msgstr "色"
-
-#, fuzzy
-#~ msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
-#~ msgstr "コピー."
-
-#~ msgid "Matlab and MapGen import"
-#~ msgstr "Matlab とMapGenのインポート "
-
-#~ msgid "Creates and adds a new attribute table to a given layer of an existing vector map."
-#~ msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
-
-#~ msgid "Creates a new vectors as a read-only link to OGR layers"
-#~ msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
-
-#~ msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)"
-#~ msgstr "ラスターDEMからの流曲線、流線長、流線密度（流域密度）の作図 "
-
-#~ msgid "Run the command"
-#~ msgstr "コマンド実行"
-
-#~ msgid "Open existing workspace file"
-#~ msgstr "ワークスペースを開く "
-
-#~ msgid "Save current workspace to file"
-#~ msgstr "現在のワークスペースをファイルに保存"
-
-#~ msgid "COPYING file missing"
-#~ msgstr "コピーするファイルがありません "
-
-#~ msgid "Create new workspace file"
-#~ msgstr "新規ワークスペースを作成"
-
-#~ msgid "Load map layers into workspace"
-#~ msgstr "ワークスペースにレイヤーをロード "
-
-#~ msgid "Downloads and imports data from WMS servers."
-#~ msgstr "WMSサーバーからダウンロード＆インポート "
-
-#~ msgid "Create a MASK for limiting raster operation"
-#~ msgstr "ラスター操作制限用マスクの作成 "
-
-#~ msgid "r.recode.rules - Use ascii rules file to recode categories in raster map"
-#~ msgstr "r.recode.rules - ラスターマップを分類するための記録をASCIIルールファイルを使用"
-
-#~ msgid "Close this window without executing the command"
-#~ msgstr "コマンドを実行せずに画面を閉じる"
-
-#~ msgid "Show manual page of the command"
-#~ msgstr "コマンドマニュアルを表示"
-
-#~ msgid "coarse:"
-#~ msgstr "粗さ:"
-
-#~ msgid "fine:"
-#~ msgstr "細かさ:  "
-
-#~ msgid "Reading workspace file <%s> failed. Invalid file, unable to parse XML document."
-#~ msgstr "ワークスペースファイル読み込みエラー <%s> XMLのパースができません "
-
-#~ msgid "Writing current settings to workspace file failed (%s)."
-#~ msgstr "現在の設定をワークスペースに出力出来ません (%s).  "
-
-#~ msgid "Add various vector-based map layer"
-#~ msgstr "ベクターマップレイヤーの追加 "
-
-#~ msgid "Official GRASS site: http://grass.osgeo.org"
-#~ msgstr "公式 GRASS サイト: http://grass.osgeo.org  "
-
-#~ msgid "GIS Library"
-#~ msgstr "GIS ライブラリ  "
-
-#~ msgid "Force re-rendering of all layers"
-#~ msgstr "全レイヤ－のレンダリング "
-
-#~ msgid "Add layer group"
-#~ msgstr "レイヤーグループ追加 "
-
-#~ msgid "Delete selected layer"
-#~ msgstr "選択レイヤーの削除 "
-
-#~ msgid "Add RGB layer"
-#~ msgstr "RGBレイヤー追加 "
-
-#~ msgid "Add HIS layer"
-#~ msgstr "HISレイヤー追加 "
-
-#~ msgid "Reload GCPs from selected POINTS file"
-#~ msgstr "POINTSファイルからGCPをリロード "
-
-#~ msgid "Show Nviz settings dialog"
-#~ msgstr "Nviz設定ダイアログの表示 "
-
-#, fuzzy
-#~ msgid "Matlab-ASCII or Mapgen import"
-#~ msgstr "Matlab とMapGenのインポート "
-
-#, fuzzy
-#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "Mapgen または Matlab のベクトルマップをGRASSへインポート "
-
-#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
-#~ msgstr "PNG画像フォーマットへエクスポート "
-
-#~ msgid "Raster"
-#~ msgstr "ラスター "
-
-#~ msgid "Generates raster map layers of slope, aspect, curvatures and partial derivatives from a raster map layer of true elevation values. Aspect is calculated counterclockwise from east."
-#~ msgstr "標高ラスターマップレイヤーから傾斜、方位、曲率と偏微分のラスターマップレイヤーを作成（方位は反時計回りに東から計算） "
-
-#~ msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
-#~ msgstr "標高レイヤーから 凹地のない標高マップと流方向マップを作成 "
-
-#~ msgid "Flow computation for massive grids (Float version)."
-#~ msgstr "大規模なグリッドの流量計算(実数バージョン)"
-
-#~ msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)"
-#~ msgstr "経路サンプリング法(SIMWE)を使用した流水門シミュレーション"
-
-#~ msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)"
-#~ msgstr "経路サンプリング法(SIMWE)を使用した土砂流送 侵食/沈着 シミュレーション"
-
-#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
-#~ msgstr "標高マップから地形的インデックス指標 [ln(a/tan(beta))]マップ作成"
-
-#~ msgid "Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns."
-#~ msgstr "ベクトルポリゴンを基にしたGRASSのラスターマップから単変量統計を解析し、新しい属性の列にアップロードする"
-
-#~ msgid "Volumes"
-#~ msgstr "ボリューム"
-
-#~ msgid "GRASS GIS help"
-#~ msgstr "GRASSのヘルプ "
-
-#~ msgid "Nviz properties"
-#~ msgstr "Nvizプロパティ "
-
-#~ msgid "Nviz toolbar"
-#~ msgstr "Nviz ツールバー "
-
-#, fuzzy
-#~ msgid "3D View Tools"
-#~ msgstr "3Dビューツール"
-
-#~ msgid "Icon size:"
-#~ msgstr "アイコンサイズ："
-
-#~ msgid "Layer properties"
-#~ msgstr "レイヤープロパティ"
-
-#~ msgid "%(primitives)d primitives (%(points)d points)"
-#~ msgstr "%(primitives)d プリミティブ (%(points)d points)  "
-
-#~ msgid "Vector digitizer error"
-#~ msgstr "ベクトルデジタイザエラー"
-
-#~ msgid ""
-#~ "Unable to initialize display driver of vector digitizer. See 'Command output' for details.\n"
-#~ "\n"
-#~ "Details:"
-#~ msgstr ""
-#~ "デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
-#~ "\n"
-#~ "詳細：  "
-
-#~ msgid "Command '%s' not yet implemented in the GUI. Try adding it as a command layer instead."
-#~ msgstr "コマンド '%s' はまだGUIで実装されていません. コマンドラインより実行してください."
-
-#~ msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
-#~ msgstr "<%(name)s>: レイヤータイプ <%(type)s> はまだサポートしていません"
-
-#~ msgid "Parameter not found: %s"
-#~ msgstr "パラメータがありません： %s"
-
-#~ msgid "Parameter %(name)s (%(desc)s) is missing.\n"
-#~ msgstr "パラメータ %(name)s (%(desc)s) が有りません\n"
-
-#~ msgid "Copy the current command string to the clipboard"
-#~ msgstr "クリップボードに現在のコマンド文をコピー"
-
-#~ msgid "Vector point layer not found (id=%d)"
-#~ msgstr "ベクトルポイントレイヤーが見つかりません (ID=%d)  "
-
-#~ msgid "Unable to set data layer properties (id=%d)"
-#~ msgstr "データレイヤーの属性をセット出来ません (ID=%d)  "
-
-#~ msgid "User GUI settings"
-#~ msgstr "ユーザーGUI設定"
-
-#, fuzzy
-#~ msgid "Check a mapset to make it accessible, uncheck it to hide it.%sNote: The current mapset is always accessible."
-#~ msgstr "アクセスするマップセットをチェック（アクセスしない場合はチェックをはずす）%s 備考: PERMANENT と 現在のマップセットは常にアクセスできます "
-
-#~ msgid "Create mapset"
-#~ msgstr "マップセットの作成"
-
-#~ msgid "Select file extension:"
-#~ msgstr "ファイル拡張子選択："
-
-#~ msgid "Attribute management is available only for vector maps."
-#~ msgstr "属性管理はベクトルマップのみ有効です "
-
-#~ msgid "Display zoom management"
-#~ msgstr "ズームマネージャーを表示 "
-
-#~ msgid "Add thematic layer"
-#~ msgstr "主題レイヤー追加 "
-
-#~ msgid "Settings dialog for digitization tool"
-#~ msgstr "デジタイザの設定ダイアログ "
-
-#~ msgid "Select color"
-#~ msgstr "カラーの選択 "
-
-#~ msgid "Aggregate ASCII xyz import"
-#~ msgstr "ASCII xyz統計のインポート "
-
-#~ msgid "Multiple export formats using OGR"
-#~ msgstr "OGRを使用した複数フォーマットのエクスポート "
-
-#~ msgid "Add attributes"
-#~ msgstr "属性追加"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to initialize display driver of vector digitizer. See 'Command output' for details.\n"
-#~ "\n"
-#~ "Details: "
-#~ msgstr ""
-#~ "デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
-#~ "\n"
-#~ "詳細：  "
-
-#~ msgid ""
-#~ "Unable to open vector map <%s> for editing.\n"
-#~ "\n"
-#~ "Data are probably corrupted, try to run v.build to rebuild the topology (Vector->Develop vector map->Create/rebuild topology)."
-#~ msgstr ""
-#~ "修正用ベクトルマップ <%s> をオープン出来ません\n"
-#~ "\n"
-#~ "おそらくデータが破損しています,トポロジーの再構築する v.build を実行してください (ベクトル->ベクトルマップ作成 ->トポロジー作成/再構築)"
-
-#~ msgid "Undo failed, data corrupted."
-#~ msgstr "元に戻すことができません データが破損しています"
-
-#, fuzzy
-#~ msgid "Digitize new area"
-#~ msgstr "フィーチャをデジタイズ"
-
-#~ msgid "Unable to encode text. Please set encoding in GUI preferences."
-#~ msgstr "テキストをエンコードすることができません GUIの設定でエンコーディングを設定してください"
-
-#~ msgid "Zoom to map"
-#~ msgstr "マップのズーム"
-
-#~ msgid "Zoom to displayed map"
-#~ msgstr "表示されているマップをズーム"
-
-#, fuzzy
-#~ msgid "Show Help"
-#~ msgstr "ラインを表示"
-
-#~ msgid "&Delete layer"
-#~ msgstr "レイヤー削除(&D)"
-
-#, fuzzy
-#~ msgid "Override projection (use location's projection)"
-#~ msgstr "対話形式での位置を投影法の情報をセット "
-
-#, fuzzy
-#~ msgid "Unable to initialize display driver of vector digitizer"
-#~ msgstr ""
-#~ "デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
-#~ "\n"
-#~ "詳細：  "
-
-#~ msgid "Import GDAL supported raster file into a binary raster map layer."
-#~ msgstr "GDALファイルをラスターマップとしてインポート "
-
-#, fuzzy
-#~ msgid "Bulk import of raster data"
-#~ msgstr "ラスターマップのインポート "
-
-#, fuzzy
-#~ msgid "Converts multiple GDAL supported layers to GRASS raster maps."
-#~ msgstr " r.in.gdalで使用できる GDALレイヤーの変換"
-
-#, fuzzy
-#~ msgid "Link GDAL supported raster file to a binary raster map layer."
-#~ msgstr "GDALファイルをラスターマップとしてインポート "
-
-#, fuzzy
-#~ msgid "Bulk link of raster data"
-#~ msgstr "基本的なラスターメタデータ"
-
-#, fuzzy
-#~ msgid "Link multiple GDAL supported raster maps as pseudo GRASS raster map layers."
-#~ msgstr "GDALファイルをラスターマップとしてリンク "
-
-#, fuzzy
-#~ msgid "Bulk import of vector data"
-#~ msgstr "ベクトルマップのインポート "
-
-#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
-#~ msgstr "v.in.ogrを使用してOGRレイヤーからGRASSベクトルマップへ変換"
-
-#, fuzzy
-#~ msgid "Creates a new vector as a read-only link to OGR layer."
-#~ msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
-
-#, fuzzy
-#~ msgid "Bulk link of vector data"
-#~ msgstr "基本ベクトルメタデータ"
-
-#, fuzzy
-#~ msgid "Creates multiple new pseduo-vector maps as a read-only links using OGR."
-#~ msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
-
-#, fuzzy
-#~ msgid "Converts multiple DXF layers to GRASS vector maps."
-#~ msgstr "v.in.dxfを利用してDXFレイヤーからGRASSベクトルマップへ変換"
-
-#~ msgid "Georectify raster and vector maps"
-#~ msgstr "ラスターマップとベクトルマップの幾何補正 "
-
-#~ msgid "Reclassify interactively"
-#~ msgstr "対話形式による再分類"
-
-#~ msgid "Reclassify using rules file"
-#~ msgstr "定義ファイルを利用した再分類"
-
-#~ msgid "Recode using rules file"
-#~ msgstr "定義ファイルを利用した記録"
-
-#~ msgid "Allows projection conversion of vector maps."
-#~ msgstr "ベクトルマップの投影変換を許可"
-
-#~ msgid "Set colors interactively by entering color rules"
-#~ msgstr "カラールールを対話型入力で設定"
-
-#~ msgid "Reclassify objects interactively"
-#~ msgstr "対話形式でオブジェクトを再分類"
-
-#~ msgid "Reclassify objects using rules file"
-#~ msgstr "ルールファイルによってオブジェクトを再分類"
-
-#~ msgid "Location wizard"
-#~ msgstr "ロケーションウィザード"
-
-#~ msgid "Enter rules"
-#~ msgstr "ルール入力： "
-
-#~ msgid "Create new color table using color rules"
-#~ msgstr "カラールールを使用して新しいカラーテーブルを作成"
-
-#~ msgid "Raster map:"
-#~ msgstr "ラスターマップ："
-
-#~ msgid "Enter color rules"
-#~ msgstr "カラールール入力"
-
-#~ msgid "Raster map to reclassify:"
-#~ msgstr "再分類するラスターマップ："
-
-#~ msgid "Reclassified raster map:"
-#~ msgstr "再分類されたラスターマップ："
-
-#~ msgid "Enter reclassification rules"
-#~ msgstr "再分類用のルール入力"
-
-#~ msgid "Recode raster map using rules"
-#~ msgstr "ルールを使用してラスターマップを記録"
-
-#~ msgid "Raster map to recode:"
-#~ msgstr "記録するラスターマップ："
-
-#~ msgid "Recoded raster map:"
-#~ msgstr "記録されたラスターマップ："
-
-#~ msgid "Enter recoding rules"
-#~ msgstr "記録するルールの入力"
-
-#~ msgid "Reclassify vector map using SQL rules"
-#~ msgstr "SQLルールを使用してベクトルマップを再分類"
-
-#~ msgid "Vector map to reclassify:"
-#~ msgstr "再分類するベクトルマップ："
-
-#~ msgid "Reclassified vector map:"
-#~ msgstr "再分類されたベクトルマップ："
-
-#~ msgid "overwrite existing file"
-#~ msgstr "既存のファイルを上書き"
-
-#~ msgid "Set/unset access to mapsets in current location"
-#~ msgstr "現在のロケーションがアクセスするマップセットを設定/解除"
-
-#, fuzzy
-#~ msgid "GRASS GIS Map Display: 1"
-#~ msgstr "GRASS GIS マップ ディスプレイ："
-
-#~ msgid "Select display image/map:"
-#~ msgstr "画像/マップ 表示選択："
-
-#, fuzzy
-#~ msgid "Define/manage ground control points"
-#~ msgstr "GCP（地上基準点）の作成と管理"
-
-#~ msgid "POINTS file <%s> saved"
-#~ msgstr "ポイントファイル <%s> が保存されました"
-
-#~ msgid "Georectifier settings"
-#~ msgstr "幾何補正の設定 "
-
-#~ msgid "RMS error for selected points forward: %(fwd)s backward: %(bkw)s"
-#~ msgstr "選択されたポイントのRMSエラー前面： %(fwd)s背面： %(bkw)s  "
-
-#~ msgid "use| X coord"
-#~ msgstr "使用| X 座標 "
-
-#~ msgid "Y coord"
-#~ msgstr "Y 座標 "
-
-#~ msgid "E coord"
-#~ msgstr "E 座標 "
-
-#~ msgid "N coord"
-#~ msgstr "N 座標 "
-
-#~ msgid "Georectifier settings saved to file '%s'."
-#~ msgstr "幾何補正設定をファイルに保存しました '%s'."
-
-#~ msgid "Unable to open workspace file <%s> for writing."
-#~ msgstr "ワークスペースファイル <%s> を出力できません "
-
-#~ msgid "Redraw GCP markers in map displays"
-#~ msgstr "GCPマーカのを再描画 "
-
-#~ msgid "Multiple raster data import using GDAL"
-#~ msgstr "GDALでの複数ラスターデータのインポート "
-
-#~ msgid "Link to GDAL"
-#~ msgstr "GDALのリンク "
-
-#~ msgid "Multiple link to GDAL"
-#~ msgstr "GDALへ複数のリンク "
-
-#~ msgid "Import vector data using OGR"
-#~ msgstr "OGRを使用したベクトルデータのインポート "
-
-#~ msgid "Multiple vector data import using OGR"
-#~ msgstr "OGRを使用した複数ベクトルデータのインポート "
-
-#~ msgid "Link to OGR"
-#~ msgstr "OGRのリンク "
-
-#~ msgid "Multiple link to OGR"
-#~ msgstr "OGRレイヤーへ複数のリンク "
-
-#~ msgid "Multiple DXF layers import"
-#~ msgstr "複数DXFレイヤーのインポート "
-
-#~ msgid "Import grid 3D volume"
-#~ msgstr "3Dグリッドのインポート "
-
-#~ msgid "Multiple export formats using GDAL"
-#~ msgstr "GDAL用複数エクスポートフォーマット "
-
-#~ msgid "Export grid 3D volume"
-#~ msgstr "3Dグリッドのエクスポート "
-
-#~ msgid "Generates a raster map layer showing watershed subbasins."
-#~ msgstr "集水域を示すラスターマップを作成します "
-
-#~ msgid "Display shortest route (requires XTerm)"
-#~ msgstr "最短経路表示 （XTerm必要)  "
-
-#, fuzzy
-#~ msgid "Find shortest path for selected starting and ending node"
-#~ msgstr "始点と終点を指定した最短経路探査"
-
-#~ msgid "Uses a GRASS vector points map to produce a convex hull vector map."
-#~ msgstr "ベクトルポイントから凸包ベクトルマップを作成する"
-
-#~ msgid "Map calculator for volumetric map algebra"
-#~ msgstr "ボリューム代数のマップカリキュレータ"
-
-#~ msgid ""
-#~ "Unable to start vector digitizer.\n"
-#~ "The VDigit python extension was not found or loaded properly.\n"
-#~ "Switching back to 2D display mode.\n"
-#~ "\n"
-#~ "Details: %s"
-#~ msgstr ""
-#~ "ベクトルのデジタイズを開始できません\n"
-#~ " VDigit python extensionが見つからないかロードできていません\n"
-#~ "2Dディスプレイモードに切り替えます\n"
-#~ "\n"
-#~ "詳細: %s "
-
-#~ msgid ""
-#~ "Unable to switch to 3D display mode.\n"
-#~ "The GLCanvas class has not been included with this build of wxPython!\n"
-#~ "Switching back to 2D display mode.\n"
-#~ "\n"
-#~ "Details: %s"
-#~ msgstr ""
-#~ "3Dディスプレイモードに変更できません\n"
-#~ " wxPythonビルド時に GLCanvas クラス をインクルードしていません\n"
-#~ "2Dディスプレイモードに切り替えます\n"
-#~ "\n"
-#~ "詳細: %s "
-
-#~ msgid "Preferences error"
-#~ msgstr "設定エラー"
-
-#~ msgid "Attribute table manager error"
-#~ msgstr "属性テーブル設定エラー "
-
-#~ msgid "Nviz error"
-#~ msgstr "Nvizエラー"
-
-#~ msgid "Input DXF file"
-#~ msgstr "DXFファイルをインポート"
-
-#~ msgid "Input directory"
-#~ msgstr "入力ディレクトリ "
-
-#~ msgid "Restore default settings"
-#~ msgstr "デフォルト設定に戻す"
-
-#~ msgid "wxGUI closed."
-#~ msgstr "wxGUI クローズ"
-
-#~ msgid "Map layers for each display"
-#~ msgstr "画面のマップレイヤー "
-
-#~ msgid "Import GDAL layers"
-#~ msgstr "GDALレイヤーのインポート "
-
-#~ msgid "Link GDAL layers"
-#~ msgstr "GDALレイヤーのリンク "
-
-#~ msgid "Import OGR layers"
-#~ msgstr "OGRレイヤーのインポート "
-
-#~ msgid "Link OGR layers"
-#~ msgstr "OGRレイヤーのリンク "
-
-#~ msgid "Twist"
-#~ msgstr "ツイスト"
-
-#~ msgid "Z-exag"
-#~ msgstr "Z-鉛直"
-
-#~ msgid "Command '%s' not yet implemented."
-#~ msgstr "コマンド '%s' はまだ実装されていません"
-
-#~ msgid "&Close"
-#~ msgstr "閉じる(&C)"
-
-#~ msgid "&Apply"
-#~ msgstr "適用(&A)"
-
-#~ msgid "Save workspace to open file"
-#~ msgstr "ワークスペースの保存 "
-
-#~ msgid "Error in command execution %s"
-#~ msgstr "コマンド実行エラー %s"
-
-#~ msgid "Config"
-#~ msgstr "設定 "
-
-#~ msgid "Unable to read workspace file"
-#~ msgstr "ワークスペースが読み込めません "
-
-#~ msgid "Requires an xterm and could not find an xterm to launch"
-#~ msgstr "Xtermを実行出来ません "
-
-#~ msgid "Command %s could not be run"
-#~ msgstr "コマンド %s は実行出来ません "
-
-#~ msgid "GPL.TXT file missing"
-#~ msgstr "GPL.TXT ファイル がありません "
-
-#~ msgid "AUTHORS file missing"
-#~ msgstr "AUTHORS ファイル がありません "
-
-#~ msgid "Close loaded workspace"
-#~ msgstr "現在のワークスペースを閉じる "
-
-#~ msgid "MAT-File (v.4) import"
-#~ msgstr "MAT-ファイル (v.4) インポート "
-
-#~ msgid "MAT-File (v.4) export"
-#~ msgstr "MAT-ファイル (v.4)のエクスポート "
-
-#~ msgid "Interactive editing and digitization of vector maps"
-#~ msgstr "ベクトルマップの対話型編集とデジタイズ"
-
-#~ msgid "Selects data from table."
-#~ msgstr "テーブルからデータを選択"
-
-#~ msgid "GRASS GIS GUI help"
-#~ msgstr "GRASS GIS GUIのヘルプ "
-
-#~ msgid "Extents set incorrectly"
-#~ msgstr "領域が正しくありません"
-
-#~ msgid ""
-#~ "File <%(file)s>: Unable to get list of DXF layers.\n"
-#~ "\n"
-#~ "%(details)s"
-#~ msgstr ""
-#~ "ファイル <%(file)s>：DXFレイヤ－一覧を取得できません.\n"
-#~ "\n"
-#~ "%(details)s "
-
-#~ msgid "Change the type of geometry elements"
-#~ msgstr "ジオメトリエレメントのタイプ変更"
-
-#, fuzzy
-#~ msgid "GRASS GIS Raster Map Calculator (3D raster)"
-#~ msgstr "GRASS %s マップカリキュレータ"
-
-#~ msgid "E&xit"
-#~ msgstr "終了(&x) "
-
-#~ msgid "Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask itself."
-#~ msgstr "太陽の位置とDEMから陰影を付加する A:太陽の位置は既知 B：r.sunmaskを使用し日時から太陽の位置を算出 "
-
-#~ msgid "Map calculator"
-#~ msgstr "マップカリキュレータ"
-
-#, fuzzy
-#~ msgid "DXF file:"
-#~ msgstr "DXFファイル選択："
-
-#, fuzzy
-#~ msgid "Unable to initialize display driver of vector digitizer. See 'Command output' for details."
-#~ msgstr ""
-#~ "デジタイザ用のディスプレイドライバを初期化できません 詳細は「コマンド出力」を見てください\n"
-#~ "\n"
-#~ "詳細：  "
-
-#, fuzzy
-#~ msgid "r.recode.file - Use ascii rules file to recode categories in raster map"
-#~ msgstr "r.recode.rules - ラスターマップを分類するための記録をASCIIルールファイルを使用"
-
-#~ msgid "Select image/map to display for ground control point (GCP) creation"
-#~ msgstr "画像/マップを表示するための 測量基準点 (GCP) 作成方法の選択"
-
-#~ msgid "You must select a valid image/map in order to continue"
-#~ msgstr "有効な画像/マップを選択する必要があります"
-
-#~ msgid "Ground Control Points"
-#~ msgstr "GCP（地上基準点）"
-
-#~ msgid "POINTS file saved"
-#~ msgstr "ポイントファイルが保存されました"
-
-#~ msgid "Ground Control Point"
-#~ msgstr "GCP（地上基準点）の定義 "
-
-#~ msgid "Set ground control points (GCPs)"
-#~ msgstr "GCP（地上基準点）の定義"
-
-#, fuzzy
-#~ msgid "Topology maintenance"
-#~ msgstr "サポートファイルの保守 "
-
-#, fuzzy
-#~ msgid "Feature selection"
-#~ msgstr "断面図"
