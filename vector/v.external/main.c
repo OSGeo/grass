@@ -98,6 +98,8 @@ int main(int argc, char *argv[])
     }
     
     Vect_open_new(&Map, output, is3D);
+    Vect_set_error_handler_io(NULL, &Map);
+    
     Vect_hist_command(&Map);
     Vect_close(&Map);
     
