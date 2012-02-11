@@ -75,6 +75,10 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 
     /* test layer capabilities */
     if (!OGR_L_TestCapability(ogr_info->layer, OLCRandomRead)) {
+	if (strcmp(OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds)),
+		   "PostgreSQL") == 0)
+	    G_warning(_("Feature table <%s> has no primary key defined"),
+		      ogr_info->layer_name);
 	G_warning(_("Random read is not supported by OGR for this layer, "
 		    "unable to build topology"));
 	return 0;
