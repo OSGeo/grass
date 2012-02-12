@@ -2161,14 +2161,14 @@
 	  <label>Feature selection</label>
 	  <items>
 	    <menuitem>
-	      <label>Attribute query</label>
+	      <label>Select by attributes</label>
 	      <help>Selects vector features from an existing vector map and creates a new map containing only the selected objects.</help>
 	      <keywords>vector,extract</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.extract</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Spatial query</label>
+	      <label>Select by another map</label>
 	      <help>Selects features from vector map (A) by features from other vector map (B).</help>
 	      <keywords>vector,spatial query</keywords>
 	      <handler>OnMenuCmd</handler>
