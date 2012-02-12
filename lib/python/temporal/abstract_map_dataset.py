@@ -81,6 +81,7 @@ class abstract_map_dataset(abstract_dataset):
 	if name.find("@") >= 0:
 	    name, mapset = name.split("@")[0]
 
+        # Check for layer number in map name
 	if name.find(":") >= 0:
 	    name, layer = name.split(":")[0]
 	    
