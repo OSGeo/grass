@@ -3,6 +3,7 @@ Type=Application
 Encoding=UTF-8
 Name=GRASS GIS
 Comment=Geographic Information System
+Comment[cs]=Geografický Informační Systém
 Comment[de]=Geographisches Informationssystem
 Comment[fr]=Système d'Information Géographique
 Categories=Education;Science;Geoscience;Geography;
