@@ -893,7 +893,9 @@ class abstract_space_time_dataset(abstract_dataset):
 		core.fatal(_("Temporal type of space time dataset <%s> and map <%s> are different") % (self.get_id(), map.get_map_id()))
 
         # In case no map has been registered yet, set the relative time unit from the first map
-        if self.metadata.get_number_of_maps() == None and self.map_counter == 0 and self.is_time_relative():
+        if (self.metadata.get_number_of_maps() == None or  self.metadata.get_number_of_maps() == 0) and \
+            self.map_counter == 0 and self.is_time_relative():
+
             self.set_relative_time_unit(map_rel_time_unit)
             self.relative_time.update()
             core.verbose(_("Set temporal unit for space time %s dataset <%s> to %s") %  (map.get_type(), self.get_id(), map_rel_time_unit))
