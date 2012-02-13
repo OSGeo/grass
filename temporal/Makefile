@@ -8,28 +8,23 @@ SUBDIRS = \
 	t.info \
 	t.remove \
 	t.sample \
-	t.time.abs \
-	t.time.rel \
+	t.register \
+	t.unregister \
 	tr.aggregate \
 	tr.aggregate.ds \
-	tr.register \
 	tr.to.rast3 \
 	tr.univar \
 	tr.list \
-	tv.list \
-	tr3.list \
 	tr.series \
 	tr.export \
 	tr.out.vtk \
 	tr.import \
 	tr.extract \
+	tr3.list \
 	tr3.extract \
-	tr3.register \
-	tv.register \
-	tr.unregister \
-	tr3.unregister \
-	tv.unregister \
-	tv.what.rast 
+	tv.list \
+	tv.what.rast \
+	tv.oberve.rast 
 
 PGM = tgisintro
 

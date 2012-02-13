@@ -41,10 +41,10 @@
 #%option
 #% key: type
 #% type: string
-#% description: Input space time dataset type
+#% description: Type of the input map(s)
 #% required: no
-#% options: strds, stvds, str3ds
-#% answer: strds
+#% options: rast, vect, rast3d
+#% answer: rast
 #%end
 
 #%option
@@ -139,7 +139,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       @param type: The type of the maps raster, raster3d or vector
+       @param type: The type of the maps rast, rast3d or vect
        @param name: The name of the space time dataset
        @param maps: A comma separated list of map names
        @param file: Input file one map with start and optional end time, one per line
@@ -175,7 +175,12 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
     else:
         id = name
 
-    sp = tgis.dataset_factory(type, id)
+    if type == "rast":
+        sp = tgis.dataset_factory("strds", id)
+    if type == "rast3d":
+        sp = tgis.dataset_factory("str3ds", id)
+    if type == "vect":
+        sp = tgis.dataset_factory("stvds", id)
 
     connect = False
 
@@ -315,106 +320,6 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
     grass.percent(num_maps, num_maps, 1)
         
 ###############################################################################
-
-def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=None):
-    """Unregister maps from a single space time dataset or, in case no dataset name is provided,
-       unregister from all datasets within the maps are registered.
-
-       @param type: The type of the maps raster, vector or raster3d
-       @param name: Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
-       @param maps: A comma separated list of map names
-       @param file: Input file one map per line
-       @param dbif: The database interface to be used
-    """
-
-    if maps and file:
-        grass.fatal(_("%s= and %s= are mutually exclusive") % ("input","file"))
-
-    mapset =  grass.gisenv()["MAPSET"]
-
-    if dbif == None:
-        dbif = sql_database_interface()
-        dbif.connect()
-        connect = True
-
-    # In case a space time dataset is specified
-    if name:
-        # Check if the dataset name contains the mapset as well
-        if name.find("@") < 0:
-            id = name + "@" + mapset
-        else:
-            id = name
-
-        if type == "rast":
-            sp = dataset_factory("strds", id)
-        if type == "rast3d":
-            sp = dataset_factory("str3ds", id)
-        if type == "vect":
-            sp = dataset_factory("stvds", id)
-
-        if sp.is_in_db(dbif) == False:
-            dbif.close()
-            grass.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
-
-    maplist = []
-
-    dummy = raster_dataset(None)
-
-    # Map names as comma separated string
-    if maps != None:
-	if maps.find(",") == -1:
-	    maplist = [maps,]
-	else:
-	    maplist = maps.split(",")
-	    
-	# Build the maplist
-	for count in range(len(maplist)):
-	    mapname = maplist[count]
-	    mapid = dummy.build_id(mapname, mapset)
-            maplist[count] = mapid
-            
-    # Read the map list from file
-    if file:
-        fd = open(file, "r")
-
-        line = True
-        while True:
-            line = fd.readline()
-            if not line:
-                break
-
-            line_list = line.split(fs)
-            mapname = line_list[0].strip()
-	    mapid = dummy.build_id(mapname, mapset)
-            maplist.append(mapid)
-            
-    num_maps = len(maplist)
-    count = 0
-    for mapid in maplist:
-	grass.percent(count, num_maps, 1)
-            
-        print mapid
-        map = dataset_factory(type, mapid)
-
-        # Unregister map if in database
-        if map.is_in_db(dbif) == True:
-            if name:
-                sp.select(dbif)
-                sp.unregister_map(map, dbif)
-            else:
-                map.select(dbif)
-                map.unregister(dbif)
-		
-	count += 1
-
-    if name:
-        sp.update_from_registered_maps(dbif)
-
-    if connect == True:
-        dbif.close()
-	
-    grass.percent(num_maps, num_maps, 1)
-
 
 if __name__ == "__main__":
     options, flags = grass.parser()
