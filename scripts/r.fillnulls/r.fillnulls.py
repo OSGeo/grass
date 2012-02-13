@@ -101,6 +101,9 @@ def main():
 
     #make a mask of NULL cells
     tmp1 = "r_fillnulls_" + unique
+    
+    # save original region
+    reg_org = grass.region()
 
     #check if method is rst to use v.surf.rst
     if method == 'rst':
@@ -167,7 +170,7 @@ def main():
         grass.use_temp_region()
         grass.run_command('g.region', vect = vecttmp, align = input)
 
-        # set the max number before segmantation
+        # set the max number before segmentation
         segmax = 600
         if pointsnumber > segmax:
             grass.message(_("Using segmentation for interpolation..."))
@@ -207,6 +210,10 @@ def main():
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Restoring user mask (MASK)..."))
 	grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'))
+
+    # set region to original extents, align to input
+    grass.run_command('g.region', n = reg_org['n'], s = reg_org['s'], 
+		      e = reg_org['e'], w = reg_org['w'], align = input)
 
     # patch orig and fill map
     grass.message(_("Patching fill data into NULL areas..."))
