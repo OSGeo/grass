@@ -125,17 +125,20 @@ def main():
     #if grass.run_command('r.buffer', input = tmp1, distances = res, out = tmp1 + '.buf') != 0:
 
     # much easier way: use r.grow with radius=3.01
-    if grass.run_command('r.grow', input = tmp1, radius = 3.01, old = 1, new = 2, out = tmp1 + '.buf') != 0:
+    if grass.run_command('r.grow', input = tmp1, radius = 3.01,
+                         old = 1, new = 2, out = tmp1 + '.buf') != 0:
 	grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
 
-    grass.mapcalc("MASK=if($tmp1.buf==2,1,null())", tmp1 = tmp1)
+    grass.mapcalc("MASK = if($tmp1.buf == 2, 1, null())", tmp1 = tmp1)
 
     # now we only see the outlines of the NULL areas if looking at INPUT.
     # Use this outline (raster border) for interpolating the fill data:
     vecttmp = "vecttmp_fillnulls_" + unique
     grass.message(_("Creating interpolation points..."))
     ## use the -b flag to avoid topology building on big jobs? 
-    if grass.run_command('r.to.vect', input = input, output = vecttmp, type = 'point'):
+    ## no, can't, 'g.region vect=' currently wants to see level 2
+    if grass.run_command('r.to.vect', flags = 'z', input = input,
+                         output = vecttmp, type = 'point'):
 	grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
 
     # count number of points to control segmax parameter for interpolation:
@@ -177,7 +180,7 @@ def main():
 	grass.message(_("Using RST interpolation..."))
 	grass.run_command('v.surf.rst', input = vecttmp, elev = tmp1 + '_filled',
 			zcol = 'value', tension = tension, smooth = smooth,
-			maskmap = maskmap, segmax = segmax)
+			maskmap = maskmap, segmax = segmax, flags = 'z')
 
 	grass.message(_("Note: Above warnings may be ignored."))
 
@@ -199,7 +202,7 @@ def main():
 	# launch v.surf.bspline
 	grass.run_command('v.surf.bspline', input = vecttmp, layer = 1,
 			raster = tmp1 + '_filled', method = method,
-			column = 'value', lambda_i = 0.005,
+			column = 'value', lambda_i = 0.005, flags = 'z',
 			sie = reg['ewres'] * 3.0, sin = reg['nsres'] * 3.0)
 
     # patch orig and fill map
