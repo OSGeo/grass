@@ -24,7 +24,7 @@ SUBDIRS = \
 	tr3.extract \
 	tv.list \
 	tv.what.rast \
-	tv.oberve.rast 
+	tv.observe.rast 
 
 PGM = tgisintro
 
