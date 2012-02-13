@@ -576,7 +576,7 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
 	G_debug(4, "\t->more geoms -> part %d", ogr_info->offset.array[offset]);
 	hGeom2 = OGR_G_GetGeometryRef(hGeom, ogr_info->offset.array[offset]);
 	line = read_line(Map, hGeom2, offset + 1, Points);
-	if (eType == wkbPolygon || wkbMultiPolygon)
+	if (eType == wkbPolygon || eType == wkbMultiPolygon)
 	    return GV_BOUNDARY;
 	if (eType == wkbMultiPoint)
 	    return GV_POINT;
