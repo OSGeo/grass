@@ -7,7 +7,7 @@ Classes:
  - frame::PsMapFrame
  - frame::PsMapBufferedWindow
 
-(C) 2011 by Anna Kratochvilova, and the GRASS Development Team
+(C) 2011-2012 by Anna Kratochvilova, and the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -20,11 +20,6 @@ import sys
 import textwrap
 import Queue
 from math import sin, cos, pi, sqrt
-try:
-    import Image as PILImage
-    havePILImage = True
-except ImportError:
-    havePILImage = False
 
 if __name__ == "__main__":
     sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
@@ -38,16 +33,17 @@ except ImportError:
 
 import grass.script as grass
 
-from gui_core.menu    import Menu
-from gui_core.goutput import CmdThread, EVT_CMD_DONE
-from psmap.toolbars   import PsMapToolbar
-from core.gcmd        import RunCommand, GError, GMessage
-from core.settings    import UserSettings
-from gui_core.forms   import GUI
-from psmap.menudata   import PsMapData
+from gui_core.menu      import Menu
+from gui_core.goutput   import CmdThread, EVT_CMD_DONE
+from psmap.toolbars     import PsMapToolbar
+from core.gcmd          import RunCommand, GError, GMessage
+from core.settings      import UserSettings
+from gui_core.forms     import GUI
+from psmap.menudata     import PsMapData
 
-from psmap.dialogs    import *
-from psmap.utils      import *
+from psmap.dialogs      import *
+from psmap.instructions import *
+from psmap.utils        import *
 
 class PsMapFrame(wx.Frame):
     def __init__(self, parent = None, id = wx.ID_ANY,
