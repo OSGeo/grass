@@ -31,24 +31,24 @@ v.db.addtable map=soils table=soils_6 layer=6
 n1=`g.tempfile pid=1 -d` 
 
 cat > "${n1}" << EOF
-soils|1
-soils|2
-soils|3
-soils|4
-soils|5
-soils|6
+soils:1
+soils:2
+soils:3
+soils:4
+soils:5
+soils:6
 EOF
 
 t.create --o type=stvds temporaltype=absolute output=soil_abs title="A test" descr="A test"
-tv.register -i input=soil_abs file="${n1}" layer=file start="2001-03-01 00:00:00" increment="1 months"
+t.register -i type=vect input=soil_abs file="${n1}" start="2001-03-01 00:00:00" increment="1 months"
 tv.list input=soil_abs columns=name,layer,start_time,end_time
 
 t.create --o type=strds temporaltype=absolute output=sand_frac_abs_1 title="A test" descr="A test"
-tr.register -i input=sand_frac_abs_1 maps=sand_frac start="2001-01-01 00:00:00" increment="12 months"
+t.register -i type=rast input=sand_frac_abs_1 maps=sand_frac start="2001-01-01 00:00:00" increment="12 months"
 tr.list input=sand_frac_abs_1 columns=name,start_time,end_time
 
 t.create --o type=strds temporaltype=absolute output=sand_frac_abs_2 title="A test" descr="A test"
-tr.register -i input=sand_frac_abs_2 maps=sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6 \
+t.register -i type=rast input=sand_frac_abs_2 maps=sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6 \
             start="2001-03-01 00:00:00" increment="1 months"
 tr.list input=sand_frac_abs_2 columns=name,start_time,end_time
 
@@ -70,10 +70,10 @@ v.db.select map=soils layer=5
 v.db.select map=soils layer=6
 
 # @postprocess
-t.remove type=vect input=soils:1,soils:2,soils:3,soils:4,soils:5,soils:6
+t.unregister type=vect maps=soils:1,soils:2,soils:3,soils:4,soils:5,soils:6
 t.remove type=stvds input=soil_abs
 
-t.remove type=rast input=sand_frac,sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6
+t.unregister type=rast maps=sand_frac,sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6
 t.remove type=strds input=sand_frac_abs_1,sand_frac_abs_2
 
 g.remove rast=sand_frac,sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6
