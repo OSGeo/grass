@@ -203,9 +203,6 @@ def main():
 			    se = 3 * reg['ewres'], sn = 3 * reg['nsres'], 
 			    flags = 'n')
 
-    # restore the real region
-    grass.del_temp_region()
-
     # restoring user's mask, if present:
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Restoring user mask (MASK)..."))
@@ -215,6 +212,9 @@ def main():
     grass.message(_("Patching fill data into NULL areas..."))
     # we can use --o here as g.parser already checks on startup
     grass.run_command('r.patch', input = (input,tmp1 + '_filled'), output = output, overwrite = True)
+
+    # restore the real region
+    grass.del_temp_region()
 
     grass.message(_("Filled raster map is: %s") % output)
 
