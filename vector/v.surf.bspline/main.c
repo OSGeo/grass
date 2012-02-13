@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
     lambda_f_opt->type = TYPE_DOUBLE;
     lambda_f_opt->required = NO;
     lambda_f_opt->description = _("Tykhonov regularization parameter (affects smoothing)");
-    lambda_f_opt->answer = "1";
+    lambda_f_opt->answer = "0.01";
     lambda_f_opt->guisection = _("Settings");
 
     dfield_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -443,6 +443,7 @@ int main(int argc, char *argv[])
 	}
 	seg_size = (seg_size * SEGSIZE * SEGSIZE) / (1 << 20);
 	segments_in_memory = seg_mb / seg_size + 0.5;
+	G_debug(1, "%d %dx%d segments held in memory", segments_in_memory, SEGSIZE, SEGSIZE);
 
 	out_file = G_tempfile();
 	out_fd = creat(out_file, 0666);
@@ -586,6 +587,10 @@ int main(int argc, char *argv[])
 	last_column = FALSE;
 	subregion_col = 0;
 
+	/* TODO: process each subregion using its own thread (via OpenMP or pthreads) */
+	/*     I'm not sure about pthreads, but you can tell OpenMP to start all at the
+		same time and it will keep num_workers supplied with the next job as free
+		cpus become available */
 	while (last_column == FALSE) {	/* For each subregion column */
 	    int npoints = 0;
 	    /* needed for sparse points interpolation */
