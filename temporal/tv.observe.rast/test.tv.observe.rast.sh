@@ -14,7 +14,7 @@ r.mapcalc --o expr="prec_6 = 600.0"
 v.random --o -z output=prec n=5 seed=1
 
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-tr.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"
+t.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"
 
 # The @test
 tv.observe.rast input=prec strds=precip_abs1 output=prec_observer 
@@ -22,10 +22,10 @@ v.info prec_observer
 t.info type=stvds input=prec_observer
 
 # @postprocess
-t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
-t.remove type=vect input=prec_observer:1,prec_observer:2,prec_observer:3,prec_observer:4,prec_observer:5,prec_observer:6
+t.unregister type=vect maps=prec_observer:1,prec_observer:2,prec_observer:3,prec_observer:4,prec_observer:5,prec_observer:6
 
 g.remove vect=prec_observer
 g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
