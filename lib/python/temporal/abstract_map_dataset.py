@@ -58,6 +58,15 @@ class abstract_map_dataset(abstract_dataset):
         """Load the content of this object from map files"""
         raise IOError("This method must be implemented in the subclasses")
  
+    def check_resolution_with_current_region(self):
+        """Check if the raster or voxel resolution is finer than the current resolution
+           Return "finer" in case the raster/voxel resolution is finer than the current region
+           Return "coarser" in case the raster/voxel resolution is coarser than the current region
+
+           Vector maps are alwyas finer than the current region
+        """
+        raise IOError("This method must be implemented in the subclasses")
+
     def get_map_id(self):
 	"""Return the map id. The map id is the unique map identifier in grass and must not be equal to the 
 	   primary key identifier (id) of the map in the database. Since vector maps may have layer information,
@@ -341,7 +350,7 @@ class abstract_map_dataset(abstract_dataset):
 
         return True
 
-    def delete(self, dbif=None):
+    def delete(self, dbif=None, update=True):
 	"""Delete a map entry from database if it exists
         
             Remove dependent entries:
@@ -349,6 +358,8 @@ class abstract_map_dataset(abstract_dataset):
             * Remove the space time dataset register table
             
            @param dbif: The database interface to be used
+           @param update: Call for each unregister statement the update from registered maps 
+                          of the space time dataset. This can slow down the un-registration process significantly.
         """
 
         connect = False
@@ -364,7 +375,7 @@ class abstract_map_dataset(abstract_dataset):
             self.select(dbif)
            
             # First we unregister from all dependent space time datasets
-            self.unregister(dbif)
+            self.unregister(dbif, update)
 
             # Remove the strds register table
             if self.get_stds_register():
