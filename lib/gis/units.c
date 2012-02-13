@@ -250,27 +250,27 @@ const char *G_get_units_name(int units, int plural, int square)
 	break;  
         
     case U_YEARS:
-	return plural ? _("year") : _("years");
+	return plural ? _("years") : _("year");
 	break;
 	
     case U_MONTHS:
-	return plural ? _("month") : _("months");
+	return plural ? _("months") : _("month");
 	break;
 	
     case U_DAYS:
-	return plural ? _("day") : _("days");
+	return plural ? _("days") : _("day");
 	break;
 	
     case U_HOURS:
-	return plural ? _("hour") : _("hours");
+	return plural ? _("hours") : _("hour");
 	break;
 	
     case U_MINUTES:
-	return plural ? _("minute") : _("minutes");
+	return plural ? _("minutes") : _("minute");
 	break;
 	
     case U_SECONDS:
-	return plural ? _("second") : _("seconds");
+	return plural ? _("seconds") : _("second");
 	break;
     }
     
