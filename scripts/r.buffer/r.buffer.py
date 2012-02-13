@@ -82,17 +82,16 @@ def main():
 
     distances  = distances.split(',')
     distances1 = [scale * float(d) for d in distances]
-    distances2 = [d * d for d in distances1]
 
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] == 'longlat':
 	metric = 'geodesic'
     else:
-	metric = 'squared'
+	metric = 'euclidean'
 
     grass.run_command('r.grow.distance',  input = input, metric = metric,
-		      distance = temp_dist)
+		      distance = temp_dist, flags = 'm')
 
     if zero:
 	exp = "$temp_src = if($input == 0,null(),1)"
@@ -103,7 +102,7 @@ def main():
     grass.mapcalc(exp, temp_src = temp_src, input = input)
 
     exp = "$output = if(!isnull($input),$input,%s)"
-    for n, dist2 in enumerate(distances2):
+    for n, dist2 in enumerate(distances1):
 	exp %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
     exp %= "null()"
 
