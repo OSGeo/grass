@@ -357,25 +357,9 @@ available in GRASS 5 and GRASS 6.
 \subsection psmap Cartograpic Composer
 
 - psmap::dialogs
- - dialogs::UnitConversion
  - dialogs::TCValidator
  - dialogs::PenStyleComboBox
  - dialogs::CheckListCtrl
- - dialogs::Instruction
- - dialogs::InstructionObject
- - dialogs::InitMap
- - dialogs::MapFrame
- - dialogs::PageSetup
- - dialogs::Mapinfo
- - dialogs::Text
- - dialogs::Image
- - dialogs::NorthArrow
- - dialogs::Scalebar
- - dialogs::RasterLegend
- - dialogs::VectorLegend
- - dialogs::Raster
- - dialogs::Vector
- - dialogs::VProperties
  - dialogs::PsmapDialog
  - dialogs::PageSetupDialog
  - dialogs::MapDialog
@@ -391,6 +375,30 @@ available in GRASS 5 and GRASS 6.
  - dialogs::TextDialog
  - dialogs::ImageDialog
  - dialogs::NorthArrowDialog
+- psmap::instructions
+ - dialogs::Instruction
+ - dialogs::InstructionObject
+ - dialogs::InitMap
+ - dialogs::MapFrame
+ - dialogs::PageSetup
+ - dialogs::Mapinfo
+ - dialogs::Text
+ - dialogs::Image
+ - dialogs::NorthArrow
+ - dialogs::Point
+ - dialogs::Line
+ - dialogs::Rectangle
+ - dialogs::Scalebar
+ - dialogs::RasterLegend
+ - dialogs::VectorLegend
+ - dialogs::Raster
+ - dialogs::Vector
+ - dialogs::VProperties
+- psmap::utils
+ - utils::Rect2D
+ - utils::Rect2DPP
+ - utils::Rect2DPS
+ - utils::UnitConversion
 - psmap::frame
  - frame::PsMapFrame
  - frame::PsMapBufferedWindow
