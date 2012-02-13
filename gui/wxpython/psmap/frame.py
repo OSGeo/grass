@@ -19,7 +19,7 @@ import os
 import sys
 import textwrap
 import Queue
-from math import sin, cos, pi
+from math import sin, cos, pi, sqrt
 try:
     import Image as PILImage
     havePILImage = True
@@ -47,6 +47,7 @@ from gui_core.forms   import GUI
 from psmap.menudata   import PsMapData
 
 from psmap.dialogs    import *
+from psmap.utils      import *
 
 class PsMapFrame(wx.Frame):
     def __init__(self, parent = None, id = wx.ID_ANY,
@@ -101,6 +102,8 @@ class PsMapFrame(wx.Frame):
             'scalebar': wx.Pen(colour = wx.Color(150, 150, 150), width = 2),
             'image': wx.Pen(colour = wx.Color(255, 150, 50), width = 2),
             'northArrow': wx.Pen(colour = wx.Color(200, 200, 200), width = 2),
+            'point': wx.Pen(colour = wx.Color(100, 100, 100), width = 2),
+            'line': wx.Pen(colour = wx.Color(0, 0, 0), width = 2),
             'box': wx.Pen(colour = 'RED', width = 2, style = wx.SHORT_DASH),
             'select': wx.Pen(colour = 'BLACK', width = 1, style = wx.SHORT_DASH),
             'resize': wx.Pen(colour = 'BLACK', width = 1)
@@ -115,6 +118,8 @@ class PsMapFrame(wx.Frame):
             'scalebar': wx.Brush(wx.Color(200, 200, 200)),
             'image': wx.Brush(wx.Color(255, 200, 50)),
             'northArrow': wx.Brush(wx.Color(255, 255, 255)),
+            'point': wx.Brush(wx.Color(200, 200, 200)),
+            'line': wx.TRANSPARENT_BRUSH,
             'box': wx.TRANSPARENT_BRUSH,
             'select':wx.TRANSPARENT_BRUSH,
             'resize': wx.BLACK_BRUSH
@@ -657,7 +662,81 @@ class PsMapFrame(wx.Frame):
             dlg.SetPosition(position)
         dlg.Show()
         
+    def OnAddPoint(self, event):
+        """!Add point action selected"""
+        self.mouse["use"] = "addPoint"
+        self.canvas.SetCursor(self.cursors["cross"])
         
+    def AddPoint(self, id = None, coordinates = None):
+        """!Add point and open property dialog.
+
+        @param id id point id (None if creating new point)
+        @param coordinates coordinates of new point
+        """
+        position = None
+        if 'point' in self.openDialogs:
+            position = self.openDialogs['point'].GetPosition()
+            self.openDialogs['point'].OnApply(event = None)
+            self.openDialogs['point'].Destroy()
+        dlg = PointDialog(self, id = id, settings = self.instruction,
+                          coordinates = coordinates)
+        self.openDialogs['point'] = dlg
+        if position: 
+            dlg.SetPosition(position)
+        if coordinates:
+            dlg.OnApply(event = None)
+        dlg.Show()
+        
+    def OnAddLine(self, event):
+        """!Add line action selected"""
+        self.mouse["use"] = "addLine"
+        self.canvas.SetCursor(self.cursors["cross"])
+
+    def AddLine(self, id = None, coordinates = None):
+        """!Add line and open property dialog.
+        
+        @param id id line id (None if creating new line)
+        @param coordinates coordinates of new line
+        """
+        position = None
+        if 'line' in self.openDialogs:
+            position = self.openDialogs['line'].GetPosition()
+            self.openDialogs['line'].OnApply(event = None)
+            self.openDialogs['line'].Destroy()
+        dlg = RectangleDialog(self, id = id, settings = self.instruction,
+                              type = 'line', coordinates = coordinates)
+        self.openDialogs['line'] = dlg
+        if position: 
+            dlg.SetPosition(position)
+        if coordinates:
+            dlg.OnApply(event = None)
+        dlg.Show()
+
+    def OnAddRectangle(self, event):
+        """!Add rectangle action selected"""
+        self.mouse["use"] = "addRectangle"
+        self.canvas.SetCursor(self.cursors["cross"])
+
+    def AddRectangle(self, id = None, coordinates = None):
+        """!Add rectangle and open property dialog.
+        
+        @param id id rectangle id (None if creating new rectangle)
+        @param coordinates coordinates of new rectangle
+        """
+        position = None
+        if 'rectangle' in self.openDialogs:
+            position = self.openDialogs['rectangle'].GetPosition()
+            self.openDialogs['rectangle'].OnApply(event = None)
+            self.openDialogs['rectangle'].Destroy()
+        dlg = RectangleDialog(self, id = id, settings = self.instruction,
+                              type = 'rectangle', coordinates = coordinates)
+        self.openDialogs['rectangle'] = dlg
+        if position: 
+            dlg.SetPosition(position)
+        if coordinates:
+            dlg.OnApply(event = None)
+        dlg.Show()
+
     def getModifiedTextBounds(self, x, y, textExtent, rotation):
         """!computes bounding box of rotated text, not very precisely"""
         w, h = textExtent
@@ -804,6 +883,32 @@ class PsMapFrame(wx.Frame):
                 self.canvas.Draw(pen = self.pen[itype], brush = self.brush[itype],
                                  pdc = self.canvas.pdcObj, drawid = id, pdctype = 'bitmap', bb = drawRectangle)
                 self.canvas.RedrawSelectBox(id)
+
+            if itype in ('point', 'line', 'rectangle'):
+                drawRectangle = self.canvas.CanvasPaperCoordinates(rect = self.instruction[id]['rect'], canvasToPaper = False)
+                # coords only for line
+                coords = None
+                if itype == 'line':
+                    point1 = self.instruction[id]['where'][0]
+                    point2 = self.instruction[id]['where'][1]
+                    point1Coords = self.canvas.CanvasPaperCoordinates(rect = Rect2DPS(point1, (0, 0)), canvasToPaper = False)[:2]
+                    point2Coords = self.canvas.CanvasPaperCoordinates(rect = Rect2DPS(point2, (0, 0)), canvasToPaper = False)[:2]
+                    coords = (point1Coords, point2Coords)
+
+                # fill color is not in line
+                fcolor = None
+                if 'fcolor' in self.instruction[id].GetInstruction():
+                    fcolor = self.instruction[id]['fcolor']
+                # width is not in point
+                width = None
+                if 'width' in self.instruction[id].GetInstruction():
+                    width = self.instruction[id]['width']
+
+                self.canvas.DrawGraphics(drawid = id, color = self.instruction[id]['color'], shape = itype,
+                                       fcolor = fcolor, width = width, bb = drawRectangle, lineCoords = coords)
+
+                self.canvas.RedrawSelectBox(id)
+
             if itype == 'text':
                 
                 if self.instruction[id]['rotate']:
@@ -812,7 +917,7 @@ class PsMapFrame(wx.Frame):
                     rot = 0
 
                 extent = self.getTextExtent(textDict = self.instruction[id].GetInstruction())
-                rect = wx.Rect2D(self.instruction[id]['where'][0], self.instruction[id]['where'][1], 0, 0)
+                rect = Rect2DPS(self.instruction[id]['where'], (0, 0))
                 self.instruction[id]['coords'] = list(self.canvas.CanvasPaperCoordinates(rect = rect, canvasToPaper = False)[:2])
                 
                 #computes text coordinates according to reference point, not precisely
@@ -993,6 +1098,9 @@ class PsMapBufferedWindow(wx.Window):
         self.idBoxTmp = wx.NewId()
         self.idZoomBoxTmp = wx.NewId()
         self.idResizeBoxTmp = wx.NewId()
+        self.idLinePointsTmp = (wx.NewId(), wx.NewId()) # ids of marks for moving line vertices
+
+        self.resizeBoxSize = wx.Size(8, 8)
         
         
 
@@ -1051,12 +1159,12 @@ class PsMapBufferedWindow(wx.Window):
             scale = self.currScale
             pRectx = units.convert(value =  - pRect.x, fromUnit = 'pixel', toUnit = 'inch' ) /scale #inch, real, negative
             pRecty = units.convert(value =  - pRect.y, fromUnit = 'pixel', toUnit = 'inch' ) /scale 
-        Width = units.convert(value = rect.width, fromUnit = fromU, toUnit = toU) * scale
-        Height = units.convert(value = rect.height, fromUnit = fromU, toUnit = toU) * scale
-        X = units.convert(value = (rect.x - pRectx), fromUnit = fromU, toUnit = toU) * scale
-        Y = units.convert(value = (rect.y - pRecty), fromUnit = fromU, toUnit = toU) * scale
+        Width = units.convert(value = rect.GetWidth(), fromUnit = fromU, toUnit = toU) * scale
+        Height = units.convert(value = rect.GetHeight(), fromUnit = fromU, toUnit = toU) * scale
+        X = units.convert(value = (rect.GetX() - pRectx), fromUnit = fromU, toUnit = toU) * scale
+        Y = units.convert(value = (rect.GetY() - pRecty), fromUnit = fromU, toUnit = toU) * scale
 
-        return wx.Rect2D(X, Y, Width, Height)
+        return Rect2D(X, Y, Width, Height)
 
     
     
@@ -1099,12 +1207,29 @@ class PsMapBufferedWindow(wx.Window):
         except AttributeError:
             mapId = self.instruction.FindInstructionByType('initMap').id
         
-        for itemType in ('text', 'image', 'northArrow'):
+        for itemType in ('text', 'image', 'northArrow', 'point', 'line', 'rectangle'):
             items = self.instruction.FindInstructionByType(itemType, list = True)
             for item in items:
-                e, n = PaperMapCoordinates(map = self.instruction[mapId], x = self.instruction[item.id]['where'][0],
-                                           y = self.instruction[item.id]['where'][1], paperToMap = True)
-                self.instruction[item.id]['east'], self.instruction[item.id]['north'] = e, n
+                instr = self.instruction[item.id]
+                if itemType in ('line', 'rectangle'):
+                    if itemType == 'line':
+                        e1, n1 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['where'][0][0],
+                                                     y = instr['where'][0][1], paperToMap = True)
+                        e2, n2 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['where'][1][0],
+                                                     y = instr['where'][1][1], paperToMap = True)
+                    else: 
+                        e1, n1 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['rect'].GetLeft(),
+                                                     y = instr['rect'].GetTop(), paperToMap = True)
+                        e2, n2 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['rect'].GetRight(),
+                                                     y = instr['rect'].GetBottom(), paperToMap = True)
+                    instr['east1'] = e1
+                    instr['north1'] = n1
+                    instr['east2'] = e2
+                    instr['north2'] = n2
+                else:
+                    e, n = PaperMapCoordinates(map = self.instruction[mapId], x = instr['where'][0],
+                                               y = instr['where'][1], paperToMap = True)
+                    instr['east'], instr['north'] = e, n
                 
     def OnPaint(self, event):
         """!Draw pseudo DC to buffer
@@ -1158,7 +1283,7 @@ class PsMapBufferedWindow(wx.Window):
             if self.mouse['use'] in ('pointer', 'resize'):
                 pos = event.GetPosition()
                 foundResize = self.pdcTmp.FindObjects(pos[0], pos[1])
-                if foundResize and foundResize[0] == self.idResizeBoxTmp:
+                if foundResize and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp:
                     self.SetCursor(self.cursors["sizenwse"])
                     self.parent.SetStatusText(_('Click and drag to resize object'), 0)
                 else:
@@ -1179,7 +1304,7 @@ class PsMapBufferedWindow(wx.Window):
                 found = self.pdcObj.FindObjects(self.mouse['begin'][0], self.mouse['begin'][1])
                 foundResize = self.pdcTmp.FindObjects(self.mouse['begin'][0], self.mouse['begin'][1])
 
-                if foundResize and foundResize[0] == self.idResizeBoxTmp:
+                if foundResize and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp:
                     self.mouse['use'] = 'resize'
                     
                     # when resizing, proportions match region
@@ -1189,18 +1314,27 @@ class PsMapBufferedWindow(wx.Window):
                         if self.instruction[self.dragId]['scaleType'] in (0, 1, 2):
                             self.constraint = True
                             self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
+
+                    if self.instruction[self.dragId].type == 'line':
+                        self.currentLinePoint = self.idLinePointsTmp.index(foundResize[0])
                     
                 elif found:
                     self.dragId = found[0]  
                     self.RedrawSelectBox(self.dragId)
-                    if self.instruction[self.dragId].type != 'map':
+                    if self.instruction[self.dragId].type not in ('map', 'rectangle'):
                         self.pdcTmp.RemoveId(self.idResizeBoxTmp)
+                        self.Refresh()
+                    if self.instruction[self.dragId].type != 'line':
+                        for id in self.idLinePointsTmp:
+                            self.pdcTmp.RemoveId(id)
                         self.Refresh()
                         
                 else:
                     self.dragId = -1
                     self.pdcTmp.RemoveId(self.idBoxTmp)
                     self.pdcTmp.RemoveId(self.idResizeBoxTmp)
+                    for id in self.idLinePointsTmp:
+                        self.pdcTmp.RemoveId(id)
                     self.Refresh()           
                     
         elif event.Dragging() and event.MiddleIsDown():
@@ -1210,14 +1344,32 @@ class PsMapBufferedWindow(wx.Window):
             
         elif event.Dragging() and event.LeftIsDown():
             #draw box when zooming, creating map 
-            if self.mouse['use'] in ('zoomin', 'zoomout', 'addMap'):
+            if self.mouse['use'] in ('zoomin', 'zoomout', 'addMap', 'addLine', 'addRectangle'):
                 self.mouse['end'] = event.GetPosition()
                 r = wx.Rect(self.mouse['begin'][0], self.mouse['begin'][1],
                             self.mouse['end'][0]-self.mouse['begin'][0], self.mouse['end'][1]-self.mouse['begin'][1])
                 r = self.modifyRectangle(r)
-                self.Draw(pen = self.pen['box'], brush = self.brush['box'], pdc = self.pdcTmp, drawid = self.idZoomBoxTmp,
-                          pdctype = 'rect', bb = r)
                 
+                if self.mouse['use'] in ('addLine', 'addRectangle'):
+                    if self.mouse['use'] == 'addLine':
+                        pdcType = 'line'
+                        lineCoords = (self.mouse['begin'], self.mouse['end'])
+                    else:
+                        pdcType = 'rect'
+                        lineCoords = None
+                        if r[2] < 2 or r[3] < 2:
+                            # to avoid strange behavoiur
+                            return
+
+                    self.Draw(pen = self.pen['line'], brush = self.brush['line'],
+                              pdc = self.pdcTmp, drawid = self.idZoomBoxTmp,
+                              pdctype = pdcType, bb = r, lineCoords = lineCoords)
+
+                else:
+                    self.Draw(pen = self.pen['box'], brush = self.brush['box'],
+                              pdc = self.pdcTmp, drawid = self.idZoomBoxTmp,
+                              pdctype = 'rect', bb = r)
+
             # panning
             if self.mouse["use"] == 'pan':
                 self.mouse['end'] = event.GetPosition()
@@ -1232,6 +1384,8 @@ class PsMapBufferedWindow(wx.Window):
                 self.pdcObj.TranslateId(self.dragId, dx, dy)
                 self.pdcTmp.TranslateId(self.idBoxTmp, dx, dy)
                 self.pdcTmp.TranslateId(self.idResizeBoxTmp, dx, dy)
+                for id in self.idLinePointsTmp:
+                    self.pdcTmp.TranslateId(id, dx, dy)
                 if self.instruction[self.dragId].type == 'text': 
                     self.instruction[self.dragId]['coords'] = self.instruction[self.dragId]['coords'][0] + dx,\
                         self.instruction[self.dragId]['coords'][1] + dy
@@ -1240,32 +1394,63 @@ class PsMapBufferedWindow(wx.Window):
                 
             # resize object
             if self.mouse['use'] == 'resize':
-                type = self.instruction[self.dragId].type
                 pos = event.GetPosition()
-                x, y = self.mapBounds.GetX(), self.mapBounds.GetY()
-                width, height = self.mapBounds.GetWidth(), self.mapBounds.GetHeight()
                 diffX = pos[0] - self.mouse['begin'][0]
                 diffY = pos[1] - self.mouse['begin'][1]
-                # match given region
-                if self.constraint:
-                    if width > height:
-                        newWidth = width + diffX
-                        newHeight = height + diffX * (float(height) / width)
+                if self.instruction[self.dragId].type == 'map':
+                    x, y = self.mapBounds.GetX(), self.mapBounds.GetY()
+                    width, height = self.mapBounds.GetWidth(), self.mapBounds.GetHeight()
+                    # match given region
+                    if self.constraint:
+                        if width > height:
+                            newWidth = width + diffX
+                            newHeight = height + diffX * (float(height) / width)
+                        else:
+                            newWidth = width + diffY * (float(width) / height)
+                            newHeight = height + diffY
                     else:
-                        newWidth = width + diffY * (float(width) / height)
+                        newWidth = width + diffX
                         newHeight = height + diffY
-                else:
-                    newWidth = width + diffX
-                    newHeight = height + diffY
+                        
+                    if newWidth < 10 or newHeight < 10:
+                        return
                     
-                if newWidth < 10 or newHeight < 10:
-                    return
-                
-                bounds = wx.Rect(x, y, newWidth, newHeight)    
-                self.Draw(pen = self.pen[type], brush = self.brush[type], pdc = self.pdcObj, drawid = self.dragId,
-                          pdctype = 'rectText', bb = bounds)
+                    bounds = wx.Rect(x, y, newWidth, newHeight)
+                    self.Draw(pen = self.pen['map'], brush = self.brush['map'], pdc = self.pdcObj, drawid = self.dragId,
+                              pdctype = 'rectText', bb = bounds)
+
+                elif self.instruction[self.dragId].type == 'rectangle':
+                    instr = self.instruction[self.dragId]
+                    rect = self.CanvasPaperCoordinates(rect = instr['rect'], canvasToPaper = False)
+                    rect.SetWidth(rect.GetWidth() + diffX)
+                    rect.SetHeight(rect.GetHeight() + diffY)
+
+                    if rect.GetWidth() < 5 or rect.GetHeight() < 5:
+                        return
+
+                    self.DrawGraphics(drawid = self.dragId, shape = 'rectangle', color = instr['color'],
+                                    fcolor = instr['fcolor'], width = instr['width'], bb = rect)
+
+                elif self.instruction[self.dragId].type == 'line':
+                    instr = self.instruction[self.dragId]
+                    points = instr['where']
+                    # moving point
+                    if self.currentLinePoint == 0:
+                        pPaper = points[1]
+                    else:
+                        pPaper = points[0]
+                    pCanvas = self.CanvasPaperCoordinates(rect = Rect2DPS(pPaper, (0, 0)),
+                                                          canvasToPaper = False)[:2]
+                    bounds = wx.RectPP(pCanvas, pos)
+                    self.DrawGraphics(drawid = self.dragId, shape = 'line', color = instr['color'],
+                                    width = instr['width'], bb = bounds, lineCoords = (pos, pCanvas))
+
+                    # update paper coordinates
+                    points[self.currentLinePoint] = self.CanvasPaperCoordinates(rect = wx.RectPS(pos, (0, 0)),
+                                                                                canvasToPaper = True)[:2]
+                                                                                
                 self.RedrawSelectBox(self.dragId)
-                
+
         elif event.LeftUp():
             # zoom in, zoom out
             if self.mouse['use'] in ('zoomin','zoomout'):
@@ -1291,19 +1476,21 @@ class PsMapBufferedWindow(wx.Window):
                 self.openDialogs['map'] = dlg
                 self.openDialogs['map'].Show()
                 
-                
                 self.mouse['use'] = self.parent.mouseOld
 
                 self.SetCursor(self.parent.cursorOld)
                 self.parent.toolbar.ToggleTool(self.parent.actionOld, True)
                 self.parent.toolbar.ToggleTool(self.parent.toolbar.action['id'], False)
                 self.parent.toolbar.action['id'] = self.parent.actionOld
-                
+                return
 
 
-            # resize resizable objects (only map sofar)
+            # resize resizable objects (map, line, rectangle)
             if self.mouse['use'] == 'resize':
-                mapId = self.instruction.FindInstructionByType('map').id
+                mapObj = self.instruction.FindInstructionByType('map')
+                if not mapObj:
+                    mapObj = self.instruction.FindInstructionByType('initMap')
+                mapId = mapObj.id
                 
                 if self.dragId == mapId:
                     # necessary to change either map frame (scaleType 0,1,2) or region (scaletype 3)
@@ -1342,6 +1529,15 @@ class PsMapBufferedWindow(wx.Window):
                     
                     self.RedrawSelectBox(mapId)
                     self.Zoom(zoomFactor = 1, view = (0, 0))
+
+                elif self.instruction[self.dragId].type == 'line':
+                    points = self.instruction[self.dragId]['where']
+                    self.instruction[self.dragId]['rect'] = Rect2DPP(points[0], points[1])
+                    self.RecalculatePosition(ids = [self.dragId])
+
+                elif self.instruction[self.dragId].type == 'rectangle':
+                    self.RecalculatePosition(ids = [self.dragId])
+
                 self.mouse['use'] = 'pointer'
                 
             # recalculate the position of objects after dragging    
@@ -1351,20 +1547,60 @@ class PsMapBufferedWindow(wx.Window):
                     self.RecalculatePosition(ids = [self.dragId])
                     if self.instruction[self.dragId].type in self.openDialogs:
                         self.openDialogs[self.instruction[self.dragId].type].updateDialog()
+            
+            elif self.mouse['use'] in ('addPoint', 'addLine', 'addRectangle'):
+                endCoordinates = self.CanvasPaperCoordinates(rect = wx.Rect(event.GetX(), event.GetY(), 0, 0),
+                                                          canvasToPaper = True)[:2]
 
+                diffX = event.GetX() - self.mouse['begin'][0]
+                diffY = event.GetY() - self.mouse['begin'][1]
+
+                if self.mouse['use'] == 'addPoint':
+                    self.parent.AddPoint(coordinates = endCoordinates)
+                elif self.mouse['use'] in ('addLine', 'addRectangle'):
+                    # not too small lines/rectangles
+                    if sqrt(diffX * diffX + diffY * diffY) < 5:
+                        self.pdcTmp.RemoveId(self.idZoomBoxTmp)
+                        self.Refresh()
+                        return
+
+                    beginCoordinates = self.CanvasPaperCoordinates(rect = wx.Rect(self.mouse['begin'][0],
+                                                                                  self.mouse['begin'][1], 0, 0),
+                                                                   canvasToPaper = True)[:2]
+                    if self.mouse['use'] == 'addLine':
+                        self.parent.AddLine(coordinates = [beginCoordinates, endCoordinates])
+                    else:
+                        self.parent.AddRectangle(coordinates = [beginCoordinates, endCoordinates])
+                    self.pdcTmp.RemoveId(self.idZoomBoxTmp)
+                    self.Refresh()
+                
         # double click launches dialogs
         elif event.LeftDClick():
             if self.mouse['use'] == 'pointer' and self.dragId != -1:
-                itemCall = {    'text':self.parent.OnAddText, 'mapinfo': self.parent.OnAddMapinfo,
-                                'scalebar': self.parent.OnAddScalebar, 'image': self.parent.OnAddImage,
-                                'northArrow' : self.parent.OnAddNorthArrow,
-                                'rasterLegend': self.parent.OnAddLegend, 'vectorLegend': self.parent.OnAddLegend,  
-                                'map': self.parent.OnAddMap}
-                itemArg = { 'text': dict(event = None, id = self.dragId), 'mapinfo': dict(event = None),
-                            'scalebar': dict(event = None), 'image': dict(event = None, id = self.dragId),
+                itemCall = {'text':self.parent.OnAddText,
+                            'mapinfo': self.parent.OnAddMapinfo,
+                            'scalebar': self.parent.OnAddScalebar,
+                            'image': self.parent.OnAddImage,
+                            'northArrow' : self.parent.OnAddNorthArrow,
+                            'point': self.parent.AddPoint,
+                            'line': self.parent.AddLine,
+                            'rectangle': self.parent.AddRectangle,
+                            'rasterLegend': self.parent.OnAddLegend,
+                            'vectorLegend': self.parent.OnAddLegend,
+                            'map': self.parent.OnAddMap}
+
+                itemArg = { 'text': dict(event = None, id = self.dragId),
+                            'mapinfo': dict(event = None),
+                            'scalebar': dict(event = None),
+                            'image': dict(event = None, id = self.dragId),
                             'northArrow': dict(event = None, id = self.dragId),
-                            'rasterLegend': dict(event = None), 'vectorLegend': dict(event = None, page = 1),
+                            'point': dict(id = self.dragId),
+                            'line': dict(id = self.dragId),
+                            'rectangle': dict(id = self.dragId),
+                            'rasterLegend': dict(event = None),
+                            'vectorLegend': dict(event = None, page = 1),
                             'map': dict(event = None, notebook = True)}
+
                 type = self.instruction[self.dragId].type
                 itemCall[type](**itemArg[type])
 
@@ -1381,7 +1617,7 @@ class PsMapBufferedWindow(wx.Window):
     def RecalculatePosition(self, ids):
         for id in ids:
             itype = self.instruction[id].type
-            if itype == 'map':
+            if itype in ('map', 'rectangle'):
                 self.instruction[id]['rect'] = self.CanvasPaperCoordinates(rect = self.pdcObj.GetIdBounds(id),
                                                                            canvasToPaper = True)
                 self.RecalculateEN()
@@ -1393,6 +1629,30 @@ class PsMapBufferedWindow(wx.Window):
                                                                             canvasToPaper = True)[:2] 
                 if itype in ('image', 'northArrow'):
                     self.RecalculateEN()
+
+            elif itype == 'point':
+                rect = self.pdcObj.GetIdBounds(id)
+                self.instruction[id]['rect'] = self.CanvasPaperCoordinates(rect = rect,
+                                                                           canvasToPaper = True)
+                rect.OffsetXY(rect.GetWidth()/2, rect.GetHeight()/2)
+                self.instruction[id]['where'] = self.CanvasPaperCoordinates(rect = rect,
+                                                                            canvasToPaper = True)[:2]
+                self.RecalculateEN()
+
+            elif itype == 'line':
+                rect = self.pdcObj.GetIdBounds(id)
+                oldRect = self.instruction[id]['rect']
+                newRect = self.CanvasPaperCoordinates(rect = rect, canvasToPaper = True)
+                xDiff = newRect[0] - oldRect[0]
+                yDiff = newRect[1] - oldRect[1]
+                self.instruction[id]['rect'] = newRect
+
+                point1 = wx.Point2D(xDiff, yDiff) + self.instruction[id]['where'][0]
+                point2 = wx.Point2D(xDiff, yDiff) + self.instruction[id]['where'][1]
+                self.instruction[id]['where'] = [point1, point2]
+                
+                self.RecalculateEN()
+
             elif  itype == 'scalebar':
                 self.instruction[id]['rect'] = self.CanvasPaperCoordinates(rect = self.pdcObj.GetIdBounds(id),
                                                                            canvasToPaper = True)
@@ -1420,7 +1680,7 @@ class PsMapBufferedWindow(wx.Window):
                     x += extent[0]/2 * cos(rot)
                     y -= extent[0]/2 * sin(rot)
                 
-                self.instruction[id]['where'] = self.CanvasPaperCoordinates(rect = wx.Rect2D(x, y, 0, 0),
+                self.instruction[id]['where'] = self.CanvasPaperCoordinates(rect = Rect2D(x, y, 0, 0),
                                                                             canvasToPaper = True)[:2]
                 self.RecalculateEN()
         
@@ -1510,6 +1770,27 @@ class PsMapBufferedWindow(wx.Window):
                 elif type == 'northArrow':
                     self.Draw(pen = self.pen[type], brush = self.brush[type], pdc = self.pdcObj,
                               drawid = id, pdctype = 'bitmap', bb = oRect)
+
+                elif type in ('point', 'line', 'rectangle'):
+                    instr = self.instruction[id]
+                    color = self.instruction[id]['color']
+                    width = fcolor = coords = None
+
+                    if type in ('point', 'rectangle'):
+                        fcolor = self.instruction[id]['fcolor']
+                    if type in ('line', 'rectangle'):
+                        width = self.instruction[id]['width']
+                    if type in ('line'):
+                        point1, point2 = instr['where'][0], instr['where'][1]
+                        point1 = self.CanvasPaperCoordinates(rect = Rect2DPS(point1, (0, 0)),
+                                                             canvasToPaper = False)[:2]
+                        point2 = self.CanvasPaperCoordinates(rect = Rect2DPS(point2, (0, 0)),
+                                                             canvasToPaper = False)[:2]
+                        coords = (point1, point2)
+
+                    self.DrawGraphics(drawid = id, shape = type, bb = oRect, lineCoords = coords,
+                                    color = color, fcolor = fcolor, width = width)
+
                 else:
                     self.Draw(pen = self.pen[type], brush = self.brush[type], pdc = self.pdcObj,
                               drawid = id, pdctype = 'rectText', bb = oRect)
@@ -1534,8 +1815,14 @@ class PsMapBufferedWindow(wx.Window):
         zoomFactor, view = self.ComputeZoom(zoomP)
         self.Zoom(zoomFactor, view)
         
-    def Draw(self, pen, brush, pdc, drawid = None, pdctype = 'rect', bb = wx.Rect(0,0,0,0)): 
-        """! Draw object"""    
+    def Draw(self, pen, brush, pdc, drawid = None, pdctype = 'rect', bb = wx.Rect(0,0,0,0), lineCoords = None): 
+        """! Draw object with given pen and brush.
+
+        @param pdc PseudoDC
+        @param pdctype 'bitmap'/'rectText'/'rect'/'point'/'line'
+        @param bb bounding box
+        @param lineCoords coordinates of line start, end points (wx.Point, wx.Point)
+        """    
         if drawid is None:
             drawid = wx.NewId()
         bb = bb.Get()
@@ -1580,12 +1867,53 @@ class PsMapBufferedWindow(wx.Window):
             pdc.SetBackgroundMode(wx.TRANSPARENT)
             pdc.DrawText(text = text, x = textRect.x, y = textRect.y)
                 
+        elif pdctype == 'point':
+            pdc.DrawCircle(x = bb[0] + bb[2] / 2,
+                           y = bb[1] + bb[3] / 2,
+                           radius = bb[2] / 2)
+                           
+        elif pdctype == 'line':
+            pdc.DrawLinePoint(lineCoords[0], lineCoords[1])
+
         pdc.SetIdBounds(drawid, bb)
         pdc.EndDrawing()
         self.Refresh()
 
         return drawid
     
+    def DrawGraphics(self, drawid, shape, color, bb, width = None, fcolor = None, lineCoords = None):
+        """!Draw point/line/rectangle with given color and width
+
+        @param drawid id of drawn object
+        @param shape drawn shape: 'point'/'line'/'rectangle'
+        @param color pen outline color ('RRR:GGG:BBB')
+        @param fcolor brush fill color, if meaningful ('RRR:GGG:BBB')
+        @param width pen width
+        @param bb bounding box
+        @param lineCoords line coordinates (for line only)
+        """
+        pdctype = {'point'     : 'point',
+                   'line'      : 'line',
+                   'rectangle' : 'rect'}
+
+        if color == 'none':
+            pen = wx.TRANSPARENT_PEN
+        else:
+            if width is not None:
+                units = UnitConversion(self)
+                width = int(units.convert(value = width, fromUnit = 'point', toUnit = 'pixel') * self.currScale)
+            else:
+                width = 2
+            pen = wx.Pen(colour = convertRGB(color), width = width)
+            pen.SetCap(wx.CAP_BUTT) # this is how ps.map draws
+
+        brush = wx.TRANSPARENT_BRUSH
+        if fcolor and fcolor != 'none':
+            brush = wx.Brush(colour = convertRGB(fcolor))
+        
+        self.Draw(pen = pen, brush = brush, pdc = self.pdcObj, pdctype = pdctype[shape],
+                  drawid = drawid, bb = bb, lineCoords = lineCoords)
+
     def DrawBitmap(self, pdc, filePath, rotation, bbox):
         """!Draw bitmap using PIL"""
         pImg = PILImage.open(filePath)
@@ -1702,17 +2030,32 @@ class PsMapBufferedWindow(wx.Window):
     def RedrawSelectBox(self, id):
         """!Redraws select box when selected object changes its size"""
         if self.dragId == id:
-            rect = [self.pdcObj.GetIdBounds(id).Inflate(3,3)]
-            type = ['select']
-            ids = [self.idBoxTmp]
-            if self.instruction[id].type == 'map':
+            rect = self.pdcObj.GetIdBounds(id)
+            if self.instruction[id].type != 'line':
+                rect = rect.Inflate(3,3)
+            # draw select box around object
+            self.Draw(pen = self.pen['select'], brush = self.brush['select'], pdc = self.pdcTmp,
+                      drawid = self.idBoxTmp, pdctype = 'rect', bb = rect)
+            
+            # draw small marks signalizing resizing
+            if self.instruction[id].type in ('map', 'rectangle'):
                 controlP = self.pdcObj.GetIdBounds(id).GetBottomRight()
-                rect.append(wx.Rect(controlP.x, controlP.y, 10,10))
-                type.append('resize')
-                ids.append(self.idResizeBoxTmp)
-            for id, type, rect in zip(ids, type, rect):
-                self.Draw(pen = self.pen[type], brush = self.brush[type], pdc = self.pdcTmp,
-                          drawid = id, pdctype = 'rect', bb = rect)
+                rect  = wx.RectPS(controlP, self.resizeBoxSize)
+                self.Draw(pen = self.pen['resize'], brush = self.brush['resize'], pdc = self.pdcTmp,
+                          drawid = self.idResizeBoxTmp, pdctype = 'rect', bb = rect)
+
+            elif self.instruction[id].type == 'line':
+                p1Paper = self.instruction[id]['where'][0]
+                p2Paper = self.instruction[id]['where'][1]
+                p1Canvas = self.CanvasPaperCoordinates(rect = Rect2DPS(p1Paper, (0, 0)), canvasToPaper = False)[:2]
+                p2Canvas = self.CanvasPaperCoordinates(rect = Rect2DPS(p2Paper, (0, 0)), canvasToPaper = False)[:2]
+                rect = []
+                box = wx.RectS(self.resizeBoxSize)
+                rect.append(box.CenterIn(wx.RectPS(p1Canvas, wx.Size())))
+                rect.append(box.CenterIn(wx.RectPS(p2Canvas, wx.Size())))
+                for i, point in enumerate((p1Canvas, p2Canvas)):
+                    self.Draw(pen = self.pen['resize'], brush = self.brush['resize'], pdc = self.pdcTmp,
+                              drawid = self.idLinePointsTmp[i], pdctype = 'rect', bb = rect[i])
         
     def UpdateMapLabel(self):
         """!Updates map frame label"""
