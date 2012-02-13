@@ -13,10 +13,10 @@ r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-tr.register --v -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-15 12:05:45" increment="14 days"
+t.register type=rast --v -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-15 12:05:45" increment="14 days"
 
 # The first @test
 tr.univar -he input=precip_abs1 
 
-t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1

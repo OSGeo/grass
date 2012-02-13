@@ -33,48 +33,48 @@ n4=`g.tempfile pid=4 -d`
 n5=`g.tempfile pid=5 -d`
 
 cat > "${n1}" << EOF
-soils|1
-soils|2
-soils|3
-soils|4
-soils|5
-soils|6
+soils:1
+soils:2
+soils:3
+soils:4
+soils:5
+soils:6
 EOF
 
 cat > "${n2}" << EOF
-soils|1|2001-01-01
-soils|2|2001-02-01
-soils|3|2001-03-01
-soils|4|2001-04-01
-soils|5|2001-05-01
-soils|6|2001-06-01
+soils:1|2001-01-01
+soils:2|2001-02-01
+soils:3|2001-03-01
+soils:4|2001-04-01
+soils:5|2001-05-01
+soils:6|2001-06-01
 EOF
 
 cat > "${n3}" << EOF
-soils|1|2001-01-01|2001-04-01
-soils|2|2001-05-01|2001-07-01
-soils|3|2001-08-01|2001-10-01
-soils|4|2001-11-01|2002-01-01
-soils|5|2002-02-01|2002-04-01
-soils|6|2002-05-01|2002-07-01
+soils:1|2001-01-01|2001-04-01
+soils:2|2001-05-01|2001-07-01
+soils:3|2001-08-01|2001-10-01
+soils:4|2001-11-01|2002-01-01
+soils:5|2002-02-01|2002-04-01
+soils:6|2002-05-01|2002-07-01
 EOF
 
 cat > "${n4}" << EOF
-soils|1|2001-01-01|2001-07-01
-soils|2|2001-02-01|2001-04-01
-soils|3|2001-03-01|2001-04-01
-soils|4|2001-04-01|2001-06-01
-soils|5|2001-05-01|2001-06-01
-soils|6|2001-06-01|2001-07-01
+soils:1|2001-01-01|2001-07-01
+soils:2|2001-02-01|2001-04-01
+soils:3|2001-03-01|2001-04-01
+soils:4|2001-04-01|2001-06-01
+soils:5|2001-05-01|2001-06-01
+soils:6|2001-06-01|2001-07-01
 EOF
 
 cat > "${n5}" << EOF
-soils|1|2001-01-01|2001-03-11
-soils|2|2001-02-01|2001-04-01
-soils|3|2001-03-01|2001-06-02
-soils|4|2001-04-01|2001-04-01
-soils|5|2001-05-01|2001-05-01
-soils|6|2001-06-01|2001-07-01
+soils:1|2001-01-01|2001-03-11
+soils:2|2001-02-01|2001-04-01
+soils:3|2001-03-01|2001-06-02
+soils:4|2001-04-01|2001-04-01
+soils:5|2001-05-01|2001-05-01
+soils:6|2001-06-01|2001-07-01
 EOF
 
 t.create --o type=stvds temporaltype=absolute output=soils_abs1 title="A test with input files" descr="A test with input files"
@@ -84,38 +84,38 @@ t.create --o type=stvds temporaltype=absolute output=soils_abs4 title="A test wi
 t.create --o type=stvds temporaltype=absolute output=soils_abs5 title="A test with input files" descr="A test with input files"
 
 # The first @test
-tv.register    input=soils_abs1 file="${n1}" layer=file start="2001-01-01" increment="1 months"
+t.register type=vect    input=soils_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 tv.list    fs=" | " method=comma     input=soils_abs1
 tv.list -h input=soils_abs1
 tv.list -h fs=" | " method=cols      input=soils_abs1
 tv.list -h fs=" | " method=delta     input=soils_abs1
 tv.list -h fs=" | " method=deltagaps input=soils_abs1
 
-tv.register -i input=soils_abs2 file="${n2}" layer=file start=file
+t.register type=vect -i input=soils_abs2 file="${n2}"
 tv.list    fs=" | " method=comma     input=soils_abs2
 tv.list -h input=soils_abs2
 tv.list -h fs=" | " method=cols      input=soils_abs2
 tv.list -h fs=" | " method=delta     input=soils_abs2
 tv.list -h fs=" | " method=deltagaps input=soils_abs2
 
-tv.register -i input=soils_abs3 file="${n3}" layer=file start=file end=file
+t.register type=vect -i input=soils_abs3 file="${n3}"
 tv.list    fs=" | " method=comma     input=soils_abs3
 tv.list -h fs=" | " method=delta     input=soils_abs3
 tv.list -h fs=" | " method=deltagaps input=soils_abs3
 
-tv.register -i input=soils_abs4 file="${n4}" layer=file start=file end=file
+t.register type=vect -i input=soils_abs4 file="${n4}"
 tv.list    fs=" | " method=comma     input=soils_abs4
 tv.list -h fs=" | " method=delta     input=soils_abs4
 tv.list -h fs=" | " method=deltagaps input=soils_abs4
 
-tv.register -i input=soils_abs5 file="${n5}" layer=file start=file end=file
+t.register type=vect -i input=soils_abs5 file="${n5}"
 tv.list    fs=" | " method=comma     input=soils_abs5
 tv.list -h input=soils_abs5
 tv.list -h fs=" | " method=cols      input=soils_abs5
 tv.list -h fs=" | " method=delta     input=soils_abs5
 tv.list -h fs=" | " method=deltagaps input=soils_abs5
 
-t.remove type=vect input=soils:1,soils:2,soils:3,soils:4,soils:5,soils:6
+t.unregister type=vect maps=soils:1,soils:2,soils:3,soils:4,soils:5,soils:6
 t.remove type=stvds input=soils_abs1,soils_abs2,soils_abs3,soils_abs4,soils_abs5
 
 g.remove vect=soil_orig,soils

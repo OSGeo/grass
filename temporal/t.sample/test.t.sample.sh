@@ -55,11 +55,11 @@ t.create --o type=strds temporaltype=absolute output=precip_abs0 title="A test w
 t.create --o type=stvds temporaltype=absolute output=pnts_abs0 title="A test with vector input files" descr="A test with vector input files"
 t.create --o type=stvds temporaltype=absolute output=pnts_abs1 title="A test with vector input files" descr="A test with vector input files"
 
-tr.register -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=rast -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 tr.list precip_abs0 -h
-tv.register    input=pnts_abs0 file="${n2}" start=file end=file
+t.register type=vect    input=pnts_abs0 file="${n2}" start=file end=file
 tv.list pnts_abs0 -h
-tv.register    input=pnts_abs1 file="${n3}" start=file end=file
+t.register type=vect    input=pnts_abs1 file="${n3}" start=file end=file
 tv.list pnts_abs1 -h
 
 # The @test
@@ -71,11 +71,11 @@ t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -h
 
 
 # Test with temporal point data
-tr.register    input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=rast    input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 tr.list precip_abs0 -h
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs1 -h
 
-t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs0
 t.remove type=stvds input=pnts_abs0,pnts_abs1
