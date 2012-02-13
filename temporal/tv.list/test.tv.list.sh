@@ -70,36 +70,36 @@ t.create --o type=stvds temporaltype=absolute output=lidar_abs4 title="A test wi
 t.create --o type=stvds temporaltype=absolute output=lidar_abs5 title="A test with input files" descr="A test with input files"
 
 # The first @test
-tv.register    input=lidar_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=vect  input=lidar_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 tv.list    fs=" | " method=comma     input=lidar_abs1
 tv.list -h input=lidar_abs1
 tv.list -h fs=" | " method=cols      input=lidar_abs1
 tv.list -h fs=" | " method=delta     input=lidar_abs1
 tv.list -h fs=" | " method=deltagaps input=lidar_abs1
 
-tv.register -i input=lidar_abs2 file="${n2}" start=file
+t.register type=vect -i input=lidar_abs2 file="${n2}"
 tv.list    fs=" | " method=comma     input=lidar_abs2
 tv.list -h input=lidar_abs2
 tv.list -h fs=" | " method=cols      input=lidar_abs2
 tv.list -h fs=" | " method=delta     input=lidar_abs2
 tv.list -h fs=" | " method=deltagaps input=lidar_abs2
 
-tv.register -i input=lidar_abs3 file="${n3}" start=file end=file
+t.register type=vect -i input=lidar_abs3 file="${n3}"
 tv.list    fs=" | " method=comma     input=lidar_abs3
 tv.list -h fs=" | " method=delta     input=lidar_abs3
 tv.list -h fs=" | " method=deltagaps input=lidar_abs3
 
-tv.register -i input=lidar_abs4 file="${n4}" start=file end=file
+t.register type=vect -i input=lidar_abs4 file="${n4}"
 tv.list    fs=" | " method=comma     input=lidar_abs4
 tv.list -h fs=" | " method=delta     input=lidar_abs4
 tv.list -h fs=" | " method=deltagaps input=lidar_abs4
 
-tv.register -i input=lidar_abs5 file="${n5}" start=file end=file
+t.register type=vect -i input=lidar_abs5 file="${n5}"
 tv.list    fs=" | " method=comma     input=lidar_abs5
 tv.list -h input=lidar_abs5
 tv.list -h fs=" | " method=cols      input=lidar_abs5
 tv.list -h fs=" | " method=delta     input=lidar_abs5
 tv.list -h fs=" | " method=deltagaps input=lidar_abs5
 
-t.remove type=vect input=lidar_1,lidar_2,lidar_3,lidar_4,lidar_5,lidar_6
+t.unregister type=vect maps=lidar_1,lidar_2,lidar_3,lidar_4,lidar_5,lidar_6
 t.remove type=stvds input=lidar_abs1,lidar_abs2,lidar_abs3,lidar_abs4,lidar_abs5

@@ -35,8 +35,8 @@
 #% description: The semantic type of the space time dataset
 #% required: yes
 #% multiple: no
-#% options: event, const, continuous
-#% answer: event
+#% options: min,max,sum,mean
+#% answer: mean
 #%end
 
 #%option

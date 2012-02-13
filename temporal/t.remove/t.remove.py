@@ -5,7 +5,7 @@
 # MODULE:	t.remove
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	Remove space time or map dataset
+# PURPOSE:	Remove space time datasets from the temporal database
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Remove space time or map datasets from temporal database
+#% description: Remove space time datasets from temporal database
 #% keywords: spacetime
 #% keywords: dataset
 #% keywords: remove
@@ -24,7 +24,7 @@
 #%option
 #% key: input
 #% type: string
-#% description: Name(s) of the space time or map dataset to be removed from the temporal database
+#% description: Name(s) of the space time dataset to be removed from the temporal database
 #% required: no
 #% multiple: yes
 #%end
@@ -32,7 +32,7 @@
 #%option
 #% key: file
 #% type: string
-#% description: Input file with raster map names, one per line
+#% description: Input file with dataset names, one per line
 #% required: no
 #% multiple: no
 #%end
@@ -42,7 +42,7 @@
 #% type: string
 #% description: Type of the space time dataset, default is strds
 #% required: no
-#% options: strds, str3ds, stvds, rast, rast3d, vect
+#% options: strds, str3ds, stvds
 #% answer: strds
 #%end
 

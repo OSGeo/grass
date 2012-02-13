@@ -74,31 +74,31 @@ EOF
 t.create --o type=strds temporaltype=relative output=precip_rel_d title="A test with input files of unti days" descr="A test with input files"
 t.create --o type=strds temporaltype=relative output=precip_rel_y title="A test with input files of unit years" descr="A test with input files"
 
-tr.register -i --v input=precip_rel_d file="${n1}" start=0 increment=1 unit=days
+t.register type=rast -i --v input=precip_rel_d file="${n1}" start=0 increment=1 unit=days
 cat "${n1}"
 t.topology    input=precip_rel_d
 t.topology -m input=precip_rel_d
 
-tr.register -i input=precip_rel_d file="${n2}" start=file unit=days
+t.register type=rast -i input=precip_rel_d file="${n2}" unit=days
 cat "${n2}"
 t.topology    input=precip_rel_d
 t.topology -m input=precip_rel_d
 
-tr.register -i input=precip_rel_d file="${n3}" start=file end=file unit=days
+t.register type=rast -i input=precip_rel_d file="${n3}" unit=days
 cat "${n3}"
 t.topology    input=precip_rel_d
 t.topology -m input=precip_rel_d
 
-tr.register -i input=precip_rel_y file="${n4}" start=file end=file unit=years
+t.register type=rast -i input=precip_rel_y file="${n4}" unit=years
 cat "${n4}"
 t.topology    input=precip_rel_y
 t.topology -m input=precip_rel_y
 
-tr.register -i input=precip_rel_y file="${n5}" start=file end=file unit=years
+t.register type=rast -i input=precip_rel_y file="${n5}" unit=years
 cat "${n5}"
 t.topology    input=precip_rel_y
 t.topology -m input=precip_rel_y
 
 t.remove type=strds input=precip_rel_d
 t.remove type=strds input=precip_rel_y
-t.remove type=rast file="${n1}"
+t.unregister type=rast file="${n1}"

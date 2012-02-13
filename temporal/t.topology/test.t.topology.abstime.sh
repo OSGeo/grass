@@ -87,36 +87,36 @@ EOF
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test with input files" descr="A test with input files"
 t.create --o type=strds temporaltype=absolute output=maps title="A test with maps in input files" descr="A test with maps in input files"
 
-tr.register -i input=precip_abs file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=rast -i input=precip_abs file="${n1}" start="2001-01-01" increment="1 months"
 cat "${n1}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file="${n2}" start=file
+t.register type=rast -i input=precip_abs file="${n2}"
 cat "${n2}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file="${n3}" start=file end=file
+t.register type=rast -i input=precip_abs file="${n3}"
 cat "${n3}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file="${n4}" start=file end=file
+t.register type=rast -i input=precip_abs file="${n4}"
 cat "${n4}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file="${n5}" start=file end=file
+t.register type=rast -i input=precip_abs file="${n5}"
 cat "${n5}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=maps file="${n6}" start=file end=file
+t.register type=rast -i input=maps file="${n6}"
 cat "${n6}"
 t.topology    input=maps
 t.topology -m input=maps
 
 t.remove type=strds input=precip_abs,maps
-t.remove type=rast file="${n1}"
-t.remove type=rast input=A,B,C,D
+t.unregister type=rast file="${n1}"
+t.unregister type=rast maps=A,B,C,D
