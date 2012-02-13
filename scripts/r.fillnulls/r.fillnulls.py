@@ -102,68 +102,66 @@ def main():
     #make a mask of NULL cells
     tmp1 = "r_fillnulls_" + unique
 
-    # idea: filter all NULLS and grow that area(s) by 3 pixel, then
-    # interpolate from these surrounding 3 pixel edge
-
-    grass.message(_("Locating and isolating NULL areas..."))
-    #creating 0/1 map:
-    grass.mapcalc("$tmp1 = if(isnull($input),1,null())",
-		  tmp1 = tmp1, input = input)
-
-    #generate a ring:
-    # the buffer is set to three times the map resolution so you get nominally
-    # three points around the edge. This way you interpolate into the hole with 
-    # a trained slope & curvature at the edges, otherwise you just get a flat plane.
-    # With just a single row of cells around the hole you often get gaps
-    # around the edges when distance > mean (.5 of the time? diagonals? worse 
-    # when ewres!=nsres).
-    # r.buffer broken in trunk for latlon, disabled
-
-    #reg = grass.region()
-    #res = (float(reg['nsres']) + float(reg['ewres'])) * 3 / 2
-
-    #if grass.run_command('r.buffer', input = tmp1, distances = res, out = tmp1 + '.buf') != 0:
-
-    # much easier way: use r.grow with radius=3.01
-    if grass.run_command('r.grow', input = tmp1, radius = 3.01,
-                         old = 1, new = 2, out = tmp1 + '.buf') != 0:
-	grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
-
-    grass.mapcalc("MASK = if($tmp1.buf == 2, 1, null())", tmp1 = tmp1)
-
-    # now we only see the outlines of the NULL areas if looking at INPUT.
-    # Use this outline (raster border) for interpolating the fill data:
-    vecttmp = "vecttmp_fillnulls_" + unique
-    grass.message(_("Creating interpolation points..."))
-    ## use the -b flag to avoid topology building on big jobs? 
-    ## no, can't, 'g.region vect=' currently wants to see level 2
-    if grass.run_command('r.to.vect', flags = 'z', input = input,
-                         output = vecttmp, type = 'point'):
-	grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
-
-    # count number of points to control segmax parameter for interpolation:
-    pointsnumber = grass.vector_info_topo(map = vecttmp)['points']
-
-    grass.message(_("Interpolating %d points") % pointsnumber)
-
-    if pointsnumber < 2:
-	grass.fatal(_("Not sufficient points to interpolate. Maybe no hole(s) to fill in the current map region?"))
-
-
-    # remove internal MASK first -- WHY???? MN 10/2005
-    grass.run_command('g.remove', quiet = True, rast = 'MASK')
-
-    # print message is a usermask it was present
-    if grass.find_file(usermask, mapset = mapset)['file']:
-	grass.message(_("Using user mask while interpolating"))
-	maskmap = usermask
-    else:
-	maskmap = None
-
-    grass.message(_("Note: The following 'consider changing' warnings may be ignored."))
-
     #check if method is rst to use v.surf.rst
     if method == 'rst':
+	# idea: filter all NULLS and grow that area(s) by 3 pixel, then
+	# interpolate from these surrounding 3 pixel edge
+
+	grass.message(_("Locating and isolating NULL areas..."))
+	#creating 0/1 map:
+	grass.mapcalc("$tmp1 = if(isnull($input),1,null())",
+		      tmp1 = tmp1, input = input)
+
+	#generate a ring:
+	# the buffer is set to three times the map resolution so you get nominally
+	# three points around the edge. This way you interpolate into the hole with 
+	# a trained slope & curvature at the edges, otherwise you just get a flat plane.
+	# With just a single row of cells around the hole you often get gaps
+	# around the edges when distance > mean (.5 of the time? diagonals? worse 
+	# when ewres!=nsres).
+	# r.buffer broken in trunk for latlon, disabled
+
+	#reg = grass.region()
+	#res = (float(reg['nsres']) + float(reg['ewres'])) * 3 / 2
+
+	#if grass.run_command('r.buffer', input = tmp1, distances = res, out = tmp1 + '.buf') != 0:
+
+	# much easier way: use r.grow with radius=3.01
+	if grass.run_command('r.grow', input = tmp1, radius = 3.01,
+	                     old = 1, new = 2, out = tmp1 + '.buf') != 0:
+	    grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
+
+	grass.mapcalc("MASK = if($tmp1.buf == 2, 1, null())", tmp1 = tmp1)
+
+	# now we only see the outlines of the NULL areas if looking at INPUT.
+	# Use this outline (raster border) for interpolating the fill data:
+	vecttmp = "vecttmp_fillnulls_" + unique
+	grass.message(_("Creating interpolation points..."))
+	## use the -b flag to avoid topology building on big jobs?
+	## no, can't, 'g.region vect=' currently wants to see level 2
+	if grass.run_command('r.to.vect', input = input, output = vecttmp,
+			    type = 'point', flags = 'z'):
+	    grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
+
+	# count number of points to control segmax parameter for interpolation:
+	pointsnumber = grass.vector_info_topo(map = vecttmp)['points']
+
+	grass.message(_("Interpolating %d points") % pointsnumber)
+
+	if pointsnumber < 2:
+	    grass.fatal(_("Not sufficient points to interpolate. Maybe no hole(s) to fill in the current map region?"))
+
+	# remove internal MASK first -- WHY???? MN 10/2005
+	grass.run_command('g.remove', quiet = True, rast = 'MASK')
+
+	# print message is a usermask it was present
+	if grass.find_file(usermask, mapset = mapset)['file']:
+	    grass.message(_("Using user mask while interpolating"))
+	    maskmap = usermask
+	else:
+	    maskmap = None
+
+        grass.message(_("Note: The following 'consider changing' warnings may be ignored."))
 
         # clone current region
         grass.use_temp_region()
@@ -184,26 +182,34 @@ def main():
 
 	grass.message(_("Note: Above warnings may be ignored."))
 
-        # restore the real region
-        grass.del_temp_region()
+    #check if method is different from rst to use r.resamp.bspline
+    if method != 'rst':
+	grass.message(_("Using %s bspline interpolation") % method)
 
+        # clone current region
+        grass.use_temp_region()
+        grass.run_command('g.region', align = input)
+
+	reg = grass.region()
+	# launch r.resamp.bspline
+	if grass.find_file(usermask, mapset = mapset)['file']:
+	    grass.run_command('r.resamp.bspline', input = input, mask = usermask,
+			    output = tmp1 + '_filled', method = method, 
+			    se = 3 * reg['ewres'], sn = 3 * reg['nsres'], 
+			    flags = 'n')
+	else:
+	    grass.run_command('r.resamp.bspline', input = input,
+			    output = tmp1 + '_filled', method = method, 
+			    se = 3 * reg['ewres'], sn = 3 * reg['nsres'], 
+			    flags = 'n')
+
+    # restore the real region
+    grass.del_temp_region()
 
     # restoring user's mask, if present:
-    #  (should all this MASK stuff go into the method==rst conditional?)
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Restoring user mask (MASK)..."))
 	grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'))
-
-    
-    #check if method is different from rst to use v.surf.bspline
-    if method != 'rst':
-	grass.message(_("Using %s (v.surf.bspline) interpolation") % method)
-	reg = grass.region()
-	# launch v.surf.bspline
-	grass.run_command('v.surf.bspline', input = vecttmp, layer = 1,
-			raster = tmp1 + '_filled', method = method,
-			column = 'value', lambda_i = 0.005, flags = 'z',
-			sie = reg['ewres'] * 3.0, sin = reg['nsres'] * 3.0)
 
     # patch orig and fill map
     grass.message(_("Patching fill data into NULL areas..."))
