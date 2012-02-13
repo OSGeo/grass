@@ -90,7 +90,7 @@ r.info map=prec_1
 tr.list input=precip_abs7
 t.topology input=precip_abs7
 
-t.remove type=rast input=prec_1,prec_2,prec_3
+t.unregister type=rast maps=prec_1,prec_2,prec_3
 t.remove type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_abs5,precip_abs6,precip_abs7
-t.remove type=rast input=prec_4,prec_5,prec_6
+t.unregister type=rast maps=prec_4,prec_5,prec_6
 r.info map=prec_1
