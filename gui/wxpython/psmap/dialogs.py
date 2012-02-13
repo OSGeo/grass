@@ -17,6 +17,9 @@ Classes:
  - dialogs::Text
  - dialogs::Image
  - dialogs::NorthArrow
+ - dialogs::Point
+ - dialogs::Line
+ - dialogs::Rectangle
  - dialogs::Scalebar
  - dialogs::RasterLegend
  - dialogs::VectorLegend
@@ -38,6 +41,8 @@ Classes:
  - dialogs::TextDialog
  - dialogs::ImageDialog
  - dialogs::NorthArrowDialog
+ - dialogs::PointDialog
+ - dialogs::RectangleDialog
 
 (C) 2011 by Anna Kratochvilova, and the GRASS Development Team
 
@@ -78,6 +83,7 @@ from core.utils       import CmdToTuple, GetCmdString
 from gui_core.gselect import Select
 from core.gcmd        import RunCommand, GError, GMessage, GWarning
 from gui_core.dialogs import SymbolDialog
+from psmap.utils      import *
 
 # grass.set_raise_on_error(True)
 
@@ -380,7 +386,7 @@ class Instruction:
                     kwargs = {}
                     if instruction == 'scalebar':
                         kwargs['scale'] = map['scale']
-                    elif instruction in ('text', 'eps'):
+                    elif instruction in ('text', 'eps', 'point', 'line', 'rectangle'):
                         kwargs['mapInstruction'] = map
                     elif instruction in ('vpoints', 'vlines', 'vareas'):
                         kwargs['id'] = wx.NewId()
@@ -440,6 +446,21 @@ class Instruction:
                 
             elif line.startswith('eps'):
                 instruction = 'eps'
+                isBuffer = True
+                buffer.append(line)
+
+            elif line.startswith('point'):
+                instruction = 'point'
+                isBuffer = True
+                buffer.append(line)
+
+            elif line.startswith('line'):
+                instruction = 'line'
+                isBuffer = True
+                buffer.append(line)
+
+            elif line.startswith('rectangle'):
+                instruction = 'rectangle'
                 isBuffer = True
                 buffer.append(line) 
             
@@ -512,8 +533,8 @@ class Instruction:
                                                cols = rasterLegend['cols'] , 
                                                width = rasterLegend['width'],
                                                paperInstr = page)
-            rasterLegend['rect'] = wx.Rect2D(x = float(rasterLegend['where'][0]), y = float(rasterLegend['where'][1]),
-                                             w = width, h = height)
+            rasterLegend['rect'] = Rect2D(x = float(rasterLegend['where'][0]), y = float(rasterLegend['where'][1]),
+                                          width = width, height = height)
             
         # vectors, vlegend        
         
@@ -527,8 +548,8 @@ class Instruction:
             if vectorLegend:
                 size = vectorLegend.EstimateSize(vectorInstr = vector, fontsize = vectorLegend['fontsize'],
                                                  width = vectorLegend['width'], cols = vectorLegend['cols'])                            
-                vectorLegend['rect'] = wx.Rect2D(x = float(vectorLegend['where'][0]), y = float(vectorLegend['where'][1]),
-                                                 w = size[0], h = size[1])
+                vectorLegend['rect'] = Rect2D(x = float(vectorLegend['where'][0]), y = float(vectorLegend['where'][1]),
+                                              width = size[0], height = size[1])
         
         
         page = self.FindInstructionByType('page')
@@ -552,6 +573,9 @@ class Instruction:
                               scalebar = ['scalebar'],
                               text = ['text'],
                               eps = ['image', 'northArrow'],
+                              point = ['point'],
+                              line = ['line'],
+                              rectangle = ['rectangle'],
                               vpoints = ['vector', 'vProperties'],
                               vlines = ['vector', 'vProperties'],
                               vareas = ['vector', 'vProperties'],
@@ -567,6 +591,9 @@ class Instruction:
                            text = Text,
                            image = Image,
                            northArrow = NorthArrow,
+                           point = Point,
+                           line = Line,
+                           rectangle = Rectangle,
                            rasterLegend = RasterLegend,
                            vectorLegend = VectorLegend,
                            vector = Vector,
@@ -577,7 +604,7 @@ class Instruction:
         
         for i in myInstruction:
             instr = self.FindInstructionByType(i)
-            if i in ('text', 'vProperties', 'image', 'northArrow') or not instr:
+            if i in ('text', 'vProperties', 'image', 'northArrow', 'point', 'line', 'rectangle') or not instr:
                 
                 id = wx.NewId() #!vProperties expect subtype
                 if i == 'vProperties':
@@ -682,7 +709,15 @@ class InstructionObject:
     def Read(self, instruction, text, **kwargs):
         """!Read instruction and save them"""
         pass
-    
+        
+    def PercentToReal(self, e, n):
+        """!Converts text coordinates from percent of region to map coordinates"""
+        e, n = float(e.strip('%')), float(n.strip('%'))
+        region = grass.region()
+        N = region['s'] + (region['n'] - region['s']) / 100 * n
+        E = region['w'] + (region['e'] - region['w']) / 100 * e
+        return E, N
+
 class InitMap(InstructionObject):
     """!Class representing virtual map"""
     def __init__(self, id):
@@ -702,7 +737,7 @@ class MapFrame(InstructionObject):
         self.type = 'map'
         # default values
         self.defaultInstruction = dict(map = None, mapType = None, drawMap = True, region = None,
-                                       rect = wx.Rect2D(), scaleType = 0, scale = None, center = None,
+                                       rect = Rect2D(), scaleType = 0, scale = None, center = None,
                                        resolution = 300, border = 'y', width = 1, color = '0:0:0') 
         # current values
         self.instruction = dict(self.defaultInstruction)
@@ -935,7 +970,8 @@ class Mapinfo(InstructionObject):
         h = mapinfoDict['fontsize'] * 7
         width = self.unitConv.convert(value = w, fromUnit = 'point', toUnit = 'inch')
         height = self.unitConv.convert(value = h, fromUnit = 'point', toUnit = 'inch')
-        return wx.Rect2D(x = float(mapinfoDict['where'][0]), y = float(mapinfoDict['where'][1]), w = width, h = height)
+        return Rect2D(x = float(mapinfoDict['where'][0]), y = float(mapinfoDict['where'][1]),
+                      width = width, height = height)
     
 class Text(InstructionObject):
     """!Class representing text instruction"""
@@ -975,7 +1011,6 @@ class Text(InstructionObject):
             instr = instr.encode('latin1')
         except UnicodeEncodeError, err:
             try:
-                print err
                 pos = str(err).split('position')[1].split(':')[0].strip()
             except IndexError:
                 pos = ''
@@ -1045,14 +1080,6 @@ class Text(InstructionObject):
         self.instruction.update(instr)
 
         return True 
-    
-    def PercentToReal(self, e, n):
-        """!Converts text coordinates from percent of region to map coordinates"""
-        e, n = float(e.strip('%')), float(n.strip('%'))
-        region = grass.region()
-        N = region['s'] + (region['n'] - region['s']) / 100 * n
-        E = region['w'] + (region['e'] - region['w']) / 100 * e
-        return E, N
         
 class Image(InstructionObject):
     """!Class representing eps instruction - image"""
@@ -1121,19 +1148,11 @@ class Image(InstructionObject):
                                              y = self.instruction['north'], paperToMap = False)       
         w = self.unitConv.convert(value = instr['size'][0], fromUnit = 'point', toUnit = 'inch')
         h = self.unitConv.convert(value = instr['size'][1], fromUnit = 'point', toUnit = 'inch')
-        instr['rect'] = wx.Rect2D(x = float(instr['where'][0]), y = float(instr['where'][1]),
-                                  w = w * self.instruction['scale'], h = h * self.instruction['scale'])
+        instr['rect'] = Rect2D(x = float(instr['where'][0]), y = float(instr['where'][1]),
+                               width = w * self.instruction['scale'], height = h * self.instruction['scale'])
         self.instruction.update(instr)
 
         return True 
-    
-    def PercentToReal(self, e, n):
-        """!Converts eps coordinates from percent of region to map coordinates"""
-        e, n = float(e.strip('%')), float(n.strip('%'))
-        region = grass.region()
-        N = region['s'] + (region['n'] - region['s']) / 100 * n
-        E = region['w'] + (region['e'] - region['w']) / 100 * e
-        return E, N
         
     def ChangeRefPoint(self, toCenter):
         """!Change reference point (left top x center)"""
@@ -1198,6 +1217,186 @@ class NorthArrow(Image):
         instr += "    end"
         return instr
         
+class Point(InstructionObject):
+    """!Class representing point instruction"""
+    def __init__(self, id):
+        InstructionObject.__init__(self, id = id)
+        self.type = 'point'
+        # default values
+        self.defaultInstruction = dict(symbol = os.path.join('basic', 'x'),
+                                       color = '0:0:0', fcolor = '200:200:200',
+                                       rotate = 0, size = 10,
+                                       XY = True, where = (0,0), unit = 'inch',
+                                       east = None, north = None)
+        # current values
+        self.instruction = dict(self.defaultInstruction)
+        
+    def __str__(self):
+        instr = string.Template("point $east $north\n").substitute(self.instruction)
+        instr += string.Template("    symbol $symbol\n").substitute(self.instruction)
+        instr += string.Template("    color $color\n").substitute(self.instruction)
+        instr += string.Template("    fcolor $fcolor\n").substitute(self.instruction)
+        instr += string.Template("    rotate $rotate\n").substitute(self.instruction)
+        instr += string.Template("    size $size\n").substitute(self.instruction)
+        instr += "    end"
+        return instr
+    
+    def Read(self, instruction, text, **kwargs):
+        """!Read instruction and save information"""
+        mapInstr = kwargs['mapInstruction']
+        instr = {}
+        for line in text:
+            try:
+                sub = line.split(None, 1)[0]
+                if sub == 'point':
+                    e, n = line.split(None, 3)[1:3]
+                    if '%' in e and '%' in n:
+                        instr['XY'] = True
+                        instr['east'], instr['north'] = self.PercentToReal(e, n)
+                    else:
+                        instr['XY'] = False
+                        instr['east'], instr['north'] = float(e), float(n)
+                
+                elif sub == 'symbol':
+                    instr['symbol'] = line.split(None, 1)[1]
+                elif sub == 'rotate':
+                    instr['rotate'] = float(line.split(None, 1)[1])
+                elif sub == 'size':
+                    instr['size'] = float(line.split(None, 1)[1])
+                elif sub == 'color':
+                    instr['color'] = line.split(None, 1)[1]
+                elif sub == 'fcolor':
+                    instr['fcolor'] = line.split(None, 1)[1]
+
+                        
+            except(IndexError, ValueError):
+                GError(_("Failed to read instruction %s") % instruction)
+                return False
+        
+        self.instruction.update(instr)
+        instr['where'] = PaperMapCoordinates(map = mapInstr, x = self.instruction['east'],
+                                             y = self.instruction['north'], paperToMap = False)
+        w = h = self.unitConv.convert(value = instr['size'], fromUnit = 'point', toUnit = 'inch')
+        instr['rect'] = Rect2D(x = float(instr['where'][0]) - w / 2, y = float(instr['where'][1] - h / 2),
+                               width = w, height = h)
+        self.instruction.update(instr)
+
+        return True
+
+class Line(InstructionObject):
+    """!Class representing line instruction"""
+    def __init__(self, id):
+        InstructionObject.__init__(self, id = id)
+        self.type = 'line'
+        # default values
+        self.defaultInstruction = dict(color = '0:0:0', width = 2,
+                                       where = [wx.Point2D(), wx.Point2D()],
+                                       east1 = None, north1 = None,
+                                       east2 = None, north2 = None)
+        # current values
+        self.instruction = dict(self.defaultInstruction)
+        
+    def __str__(self):
+        instr = string.Template("line $east1 $north1 $east2 $north2\n").substitute(self.instruction)
+        instr += string.Template("    color $color\n").substitute(self.instruction)
+        instr += string.Template("    width $width\n").substitute(self.instruction)
+        instr += "    end\n"
+        return instr
+    
+    def Read(self, instruction, text, **kwargs):
+        """!Read instruction and save information"""
+        mapInstr = kwargs['mapInstruction']
+        instr = {}
+        for line in text:
+            try:
+                sub = line.split(None, 1)[0]
+                if sub == 'line':
+                    e1, n1, e2, n2 = line.split(None, 5)[1:5]
+                    if '%' in e1 and '%' in n1 and '%' in e2 and '%' in n2:
+                        instr['east1'], instr['north1'] = self.PercentToReal(e1, n1)
+                        instr['east2'], instr['north2'] = self.PercentToReal(e2, n2)
+                    else:
+                        instr['east1'], instr['north1'] = float(e1), float(n1)
+                        instr['east2'], instr['north2'] = float(e2), float(n2)
+                
+                elif sub == 'width':
+                    instr['width'] = float(line.split(None, 1)[1])
+                elif sub == 'color':
+                    instr['color'] = line.split(None, 1)[1]
+                        
+            except(IndexError, ValueError):
+                GError(_("Failed to read instruction %s") % instruction)
+                return False
+        
+        self.instruction.update(instr)
+        e1, n1 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east1'],
+                                     y = self.instruction['north1'], paperToMap = False)
+        e2, n2 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east2'],
+                                     y = self.instruction['north2'], paperToMap = False)
+        instr['where'] = [wx.Point2D(e1, n1), wx.Point2D(e2, n2)]
+        instr['rect'] = Rect2DPP(instr['where'][0], instr['where'][1])
+        self.instruction.update(instr)
+
+        return True
+
+class Rectangle(InstructionObject):
+    """!Class representing rectangle instruction"""
+    def __init__(self, id):
+        InstructionObject.__init__(self, id = id)
+        self.type = 'rectangle'
+        # default values
+        self.defaultInstruction = dict(color = '0:0:0', fcolor = 'none', width = 2,
+                                       east1 = None, north1 = None,
+                                       east2 = None, north2 = None)
+        # current values
+        self.instruction = dict(self.defaultInstruction)
+        
+    def __str__(self):
+        instr = string.Template("rectangle $east1 $north1 $east2 $north2\n").substitute(self.instruction)
+        instr += string.Template("    color $color\n").substitute(self.instruction)
+        instr += string.Template("    fcolor $fcolor\n").substitute(self.instruction)
+        instr += string.Template("    width $width\n").substitute(self.instruction)
+        instr += "    end\n"
+        return instr
+    
+    def Read(self, instruction, text, **kwargs):
+        """!Read instruction and save information"""
+        mapInstr = kwargs['mapInstruction']
+        instr = {}
+        for line in text:
+            try:
+                sub = line.split(None, 1)[0]
+                if sub == 'rectangle':
+                    e1, n1, e2, n2 = line.split(None, 5)[1:5]
+                    if '%' in e1 and '%' in n1 and '%' in e2 and '%' in n2:
+                        instr['east1'], instr['north1'] = self.PercentToReal(e1, n1)
+                        instr['east2'], instr['north2'] = self.PercentToReal(e2, n2)
+                    else:
+                        instr['east1'], instr['north1'] = float(e1), float(n1)
+                        instr['east2'], instr['north2'] = float(e2), float(n2)
+                
+                elif sub == 'width':
+                    instr['width'] = float(line.split(None, 1)[1])
+                elif sub == 'color':
+                    instr['color'] = line.split(None, 1)[1]
+                elif sub == 'fcolor':
+                    instr['fcolor'] = line.split(None, 1)[1]
+
+                        
+            except(IndexError, ValueError):
+                GError(_("Failed to read instruction %s") % instruction)
+                return False
+        
+        self.instruction.update(instr)
+        e1, n1 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east1'],
+                                       y = self.instruction['north1'], paperToMap = False)
+        e2, n2 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east2'],
+                                       y = self.instruction['north2'], paperToMap = False)
+        instr['rect'] = Rect2DPP(wx.Point2D(e1, n1), wx.Point2D(e2, n2))
+        self.instruction.update(instr)
+
+        return True
+        
 class Scalebar(InstructionObject):
     """!Class representing scalebar instruction"""
     def __init__(self, id):
@@ -1261,7 +1460,7 @@ class Scalebar(InstructionObject):
         w, h = self.EstimateSize(scalebarDict = self.instruction, scale = scale)
         x = self.instruction['where'][0] - w / 2 
         y = self.instruction['where'][1] - h / 2
-        self.instruction['rect'] = wx.Rect2D(x, y, w, h)
+        self.instruction['rect'] = Rect2D(x, y, w, h)
         return True 
     
     def EstimateSize(self, scalebarDict, scale):
@@ -1690,7 +1889,6 @@ class VProperties(InstructionObject):
             vInstruction = vInstruction.encode('Latin_1')
         except UnicodeEncodeError, err:
             try:
-                print err
                 pos = str(err).split('position')[1].split(':')[0].strip()
             except IndexError:
                 pos = ''
@@ -4679,7 +4877,7 @@ class LegendDialog(PsmapDialog):
             drawWidth = self.rasterLegend.EstimateWidth(raster = self.rLegendDict['raster'], discrete = self.rLegendDict['discrete'],
                                             fontsize = self.rLegendDict['fontsize'], cols = self.rLegendDict['cols'],
                                             width = self.rLegendDict['width'], paperInstr = self.instruction[self.pageId])
-            self.rLegendDict['rect'] = wx.Rect2D(x = x, y = y, w = drawWidth, h = drawHeight)
+            self.rLegendDict['rect'] = Rect2D(x = x, y = y, width = drawWidth, height = drawHeight)
                         
             # no data
             if self.rLegendDict['discrete'] == 'y':
@@ -4782,7 +4980,7 @@ class LegendDialog(PsmapDialog):
                 w = (width + wExtent) * self.vLegendDict['cols']
                 h = len(labels) * hExtent / self.vLegendDict['cols']
                 h *= 1.1
-                self.vLegendDict['rect'] = wx.Rect2D(x, y, w, h)
+                self.vLegendDict['rect'] = Rect2D(x, y, w, h)
                 
                 #border
                 if self.borderCheck.GetValue():
@@ -4862,7 +5060,7 @@ class LegendDialog(PsmapDialog):
              
 class MapinfoDialog(PsmapDialog):
     def __init__(self, parent, id, settings):
-        PsmapDialog.__init__(self, parent = parent, id = id, title = "Mapinfo settings", settings = settings)
+        PsmapDialog.__init__(self, parent = parent, id = id, title = _("Mapinfo settings"), settings = settings)
         
         self.objectType = ('mapinfo',)
         if self.id is not None:
@@ -5290,7 +5488,7 @@ class ScalebarDialog(PsmapDialog):
          
         rectSize = self.scalebar.EstimateSize(scalebarDict = self.scalebarDict,
                                                                 scale = self.instruction[mapId]['scale'])
-        self.scalebarDict['rect'] = wx.Rect2D(x = x, y = y, w = rectSize[0], h = rectSize[1])
+        self.scalebarDict['rect'] = Rect2D(x = x, y = y, width = rectSize[0], height = rectSize[1])
         self.scalebarDict['where'] = self.scalebarDict['rect'].GetCentre() 
 
         if self.id not in self.instruction:
@@ -6037,7 +6235,7 @@ class ImageDialog(PsmapDialog):
         selected = self.imagePanel.image['list'].GetStringSelection()
         basePath = self.imagePanel.image['dir'].GetValue()
         if not selected:
-            gcmd.GMessage(parent = self, message = _("No image selected."))
+            GMessage(parent = self, message = _("No image selected."))
             return False
             
         self.imageDict['epsfile'] = os.path.join(basePath, selected)
@@ -6099,9 +6297,9 @@ class ImageDialog(PsmapDialog):
                                   fromUnit = 'point', toUnit = 'inch')
                                   
     
-        self.imageDict['rect'] = wx.Rect2D(x = x, y = y,
-                                       w = w * self.imageDict['scale'],
-                                       h = h * self.imageDict['scale'])
+        self.imageDict['rect'] = Rect2D(x = x, y = y,
+                                        width = w * self.imageDict['scale'],
+                                        height = h * self.imageDict['scale'])
         
         if self.id not in self.instruction:
             image = self._newObject()
@@ -6161,6 +6359,456 @@ class NorthArrowDialog(ImageDialog):
                 self.imagePanel.image['rotate'].SetValue(360 - convergence)
             
         
+class PointDialog(PsmapDialog):
+    """!Dialog for setting point properties."""
+    def __init__(self, parent, id, settings, coordinates = None, pointPanelName = _("Point")):
+        PsmapDialog.__init__(self, parent = parent, id = id, title = "Point settings",
+                             settings = settings)
+        
+        self.objectType = ('point',)
+        if self.id is not None:
+            self.pointObj = self.instruction[self.id]
+            self.pointDict = self.instruction[id].GetInstruction()
+        else:
+            self.id = wx.NewId()
+            self.pointObj = Point(self.id)
+            self.pointDict = self.pointObj.GetInstruction()
+            self.pointDict['where'] = coordinates 
+        self.defaultDict = self.pointObj.defaultInstruction
+                
+        mapObj = self.instruction.FindInstructionByType('map')
+        if not mapObj:
+            mapObj = self.instruction.FindInstructionByType('initMap')
+        self.mapId = mapObj.id
+        
+        self.pointDict['east'], self.pointDict['north'] = PaperMapCoordinates(map = mapObj, x = self.pointDict['where'][0], y = self.pointDict['where'][1], paperToMap = True)
+        
+        notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
+        self.pointPanelName = pointPanelName
+        self.pointPanel = self._pointPanel(notebook)
+        self.positionPanel = self._positionPanel(notebook)
+        self.OnPositionType(None)
+        
+     
+        self._layout(notebook)
+        
+    def _pointPanel(self, notebook):
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY, size = (-1, -1), style = wx.TAB_TRAVERSAL)
+        notebook.AddPage(page = panel, text = self.pointPanelName)
+        border = wx.BoxSizer(wx.VERTICAL)
+        #
+        # choose image
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Symbol"))
+        sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
+        
+        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        gridSizer.AddGrowableCol(1)
+
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Select symbol:")),
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        self.symbolLabel = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                          label = self.pointDict['symbol'])
+        gridSizer.Add(item = self.symbolLabel, pos = (0, 1),
+                      flag = wx.ALIGN_CENTER_VERTICAL )
+        bitmap = wx.Bitmap(os.path.join(globalvar.ETCSYMBOLDIR,
+                                        self.pointDict['symbol']) + '.png')
+        self.symbolButton = wx.BitmapButton(panel, id = wx.ID_ANY, bitmap = bitmap)
+        self.symbolButton.Bind(wx.EVT_BUTTON, self.OnSymbolSelection)
+
+        gridSizer.Add(self.symbolButton, pos = (0, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+        self.noteLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, 
+                                       label = _("Note: Selected symbol is not displayed\n"
+                                                 "in draft mode (only in preview mode)"))
+        gridSizer.Add(self.noteLabel, pos = (1, 0), span = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+
+        sizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        #
+        # outline/fill color
+        #
+
+        # outline
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Color"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        
+        outlineLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Outline color:"))
+        self.outlineColorCtrl = wx.ColourPickerCtrl(panel, id = wx.ID_ANY)
+        self.outlineTranspCtrl = wx.CheckBox(panel, id = wx.ID_ANY, label = _("transparent"))
+
+        if self.pointDict['color'] != 'none':
+            self.outlineTranspCtrl.SetValue(False)
+            self.outlineColorCtrl.SetColour(convertRGB(self.pointDict['color']))
+        else:
+            self.outlineTranspCtrl.SetValue(True)
+            self.outlineColorCtrl.SetColour(convertRGB(self.defaultDict['color']))
+
+        gridSizer.Add(item = outlineLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.outlineColorCtrl, pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.outlineTranspCtrl, pos = (0, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+
+        fillLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Fill color:"))
+        self.fillColorCtrl = wx.ColourPickerCtrl(panel, id = wx.ID_ANY)
+        self.fillTranspCtrl = wx.CheckBox(panel, id = wx.ID_ANY, label = _("transparent"))
+
+        if self.pointDict['fcolor'] != 'none':
+            self.fillTranspCtrl.SetValue(False)
+            self.fillColorCtrl.SetColour(convertRGB(self.pointDict['fcolor']))
+        else:
+            self.fillTranspCtrl.SetValue(True)
+            self.fillColorCtrl.SetColour(convertRGB(self.defaultDict['fcolor']))
+
+        gridSizer.Add(item = fillLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.fillColorCtrl, pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.fillTranspCtrl, pos = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        sizer.Add(item = gridSizer, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+
+        #
+        # size and rotation
+        #
+
+        # size
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Size and Rotation"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        
+        sizeLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Size (pt):"))
+        self.sizeCtrl = wx.SpinCtrl(panel, id = wx.ID_ANY, size = self.spinCtrlSize)
+        self.sizeCtrl.SetToolTipString(_("Symbol size in points"))
+        self.sizeCtrl.SetValue(self.pointDict['size'])
+        
+        gridSizer.Add(item = sizeLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.sizeCtrl, pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # rotation
+        rotLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Rotation angle (deg):"))
+        if fs:
+            self.rotCtrl = fs.FloatSpin(panel, id = wx.ID_ANY, min_val = -360, max_val = 360,
+                                          increment = 1, value = 0, style = fs.FS_RIGHT, size = self.spinCtrlSize)
+            self.rotCtrl.SetFormat("%f")
+            self.rotCtrl.SetDigits(1)
+        else:
+            self.rotCtrl = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = self.spinCtrlSize,
+                                                min = -360, max = 360, initial = 0)
+        self.rotCtrl.SetToolTipString(_("Counterclockwise rotation in degrees"))
+        self.rotCtrl.SetValue(float(self.pointDict['rotate']))
+            
+        gridSizer.Add(item = rotLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        gridSizer.Add(item = self.rotCtrl, pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        sizer.Add(item = gridSizer, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        panel.SetSizer(border)
+        panel.Fit()
+        
+        return panel
+        
+    def _positionPanel(self, notebook):
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY, size = (-1, -1), style = wx.TAB_TRAVERSAL)
+        notebook.AddPage(page = panel, text = _("Position"))
+        border = wx.BoxSizer(wx.VERTICAL)
+        #
+        # set position
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Position"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridBagSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        gridBagSizer.AddGrowableCol(0)
+        gridBagSizer.AddGrowableCol(1)
+        
+        self.AddExtendedPosition(panel, gridBagSizer, self.pointDict)
+        
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position['toPaper']) 
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position['toMap'])
+        
+        
+        sizer.Add(gridBagSizer, proportion = 1, flag = wx.ALIGN_CENTER_VERTICAL| wx.ALL, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        panel.SetSizer(border)
+        panel.Fit()
+        
+        return panel
+        
+    def OnPositionType(self, event):
+        if self.positionPanel.position['toPaper'].GetValue():
+            for widget in self.gridBagSizerP.GetChildren():
+                widget.GetWindow().Enable()
+            for widget in self.gridBagSizerM.GetChildren():
+                widget.GetWindow().Disable()
+        else:
+            for widget in self.gridBagSizerM.GetChildren():
+                widget.GetWindow().Enable()
+            for widget in self.gridBagSizerP.GetChildren():
+                widget.GetWindow().Disable()
+                
+    def OnSymbolSelection(self, event):
+        dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
+                           currentSymbol = self.symbolLabel.GetLabel())
+        if dlg.ShowModal() == wx.ID_OK:
+            img = dlg.GetSelectedSymbol(fullPath = True)
+            name = dlg.GetSelectedSymbol(fullPath = False)
+            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
+            self.symbolLabel.SetLabel(name)
+            
+        dlg.Destroy()
+        
+    def update(self): 
+        # symbol
+        self.pointDict['symbol'] = self.symbolLabel.GetLabel()
+
+        
+        #position
+        if self.positionPanel.position['toPaper'].GetValue():
+            self.pointDict['XY'] = True
+            currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
+            self.pointDict['unit'] = currUnit
+            if self.positionPanel.position['xCtrl'].GetValue():
+                x = self.positionPanel.position['xCtrl'].GetValue() 
+            else:
+                x = self.pointDict['where'][0]
+
+            if self.positionPanel.position['yCtrl'].GetValue():
+                y = self.positionPanel.position['yCtrl'].GetValue() 
+            else:
+                y = self.pointDict['where'][1]
+
+            x = self.unitConv.convert(value = float(x), fromUnit = currUnit, toUnit = 'inch')
+            y = self.unitConv.convert(value = float(y), fromUnit = currUnit, toUnit = 'inch')
+            self.pointDict['where'] = x, y
+            
+        else:
+            self.pointDict['XY'] = False
+            if self.positionPanel.position['eCtrl'].GetValue():
+                e = self.positionPanel.position['eCtrl'].GetValue() 
+            else:
+                self.pointDict['east'] = self.pointDict['east']
+
+            if self.positionPanel.position['nCtrl'].GetValue():
+                n = self.positionPanel.position['nCtrl'].GetValue() 
+            else:
+                self.pointDict['north'] = self.pointDict['north']
+
+            x, y = PaperMapCoordinates(map = self.instruction[self.mapId], x = float(self.pointDict['east']),
+                                       y = float(self.pointDict['north']), paperToMap = False)
+
+        #rotation
+        self.pointDict['rotate'] = self.rotCtrl.GetValue()
+        
+        # size
+        self.pointDict['size'] = self.sizeCtrl.GetValue()
+            
+        w = h = self.unitConv.convert(value = self.pointDict['size'],
+                                  fromUnit = 'point', toUnit = 'inch')
+                                  
+        # outline color
+        if self.outlineTranspCtrl.GetValue():
+            self.pointDict['color'] = 'none'
+        else:
+            self.pointDict['color'] = convertRGB(self.outlineColorCtrl.GetColour())
+
+        # fill color
+        if self.fillTranspCtrl.GetValue():
+            self.pointDict['fcolor'] = 'none'
+        else:
+            self.pointDict['fcolor'] = convertRGB(self.fillColorCtrl.GetColour())
+
+        self.pointDict['rect'] = Rect2D(x = x - w / 2, y = y - h / 2, width = w, height = h)
+        
+        if self.id not in self.instruction:
+            point = Point(self.id)
+            self.instruction.AddInstruction(point)
+        self.instruction[self.id].SetInstruction(self.pointDict)
+        
+        if self.id not in self.parent.objectId:
+            self.parent.objectId.append(self.id)
+
+        return True
+        
+    def updateDialog(self):
+        """!Update text coordinates, after moving"""
+        # XY coordinates
+        x, y = self.pointDict['where'][:2]
+        currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
+        x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
+        y = self.unitConv.convert(value = y, fromUnit = 'inch', toUnit = currUnit)
+        self.positionPanel.position['xCtrl'].SetValue("%5.3f" % x)
+        self.positionPanel.position['yCtrl'].SetValue("%5.3f" % y)
+        # EN coordinates
+        e, n = self.pointDict['east'], self.pointDict['north']
+        self.positionPanel.position['eCtrl'].SetValue(str(self.pointDict['east']))
+        self.positionPanel.position['nCtrl'].SetValue(str(self.pointDict['north']))
+        
+class RectangleDialog(PsmapDialog):
+    def __init__(self, parent, id, settings, type = 'rectangle', coordinates = None):
+        """!
+
+        @param coordinates begin and end point coordinate (wx.Point, wx.Point)
+        """
+        if type == 'rectangle':
+            title = _("Rectangle settings")
+        else:
+            title = _("Line settings")
+        PsmapDialog.__init__(self, parent = parent, id = id, title = title, settings = settings)
+        
+        self.objectType = (type,)
+
+        if self.id is not None:
+            self.rectObj = self.instruction[self.id]
+            self.rectDict = self.rectObj.GetInstruction()
+        else:
+            self.id = wx.NewId()
+            if type == 'rectangle':
+                self.rectObj = Rectangle(self.id)
+            else:
+                self.rectObj = Line(self.id)
+            self.rectDict = self.rectObj.GetInstruction()
+
+            self.rectDict['rect'] = Rect2DPP(coordinates[0], coordinates[1])
+            self.rectDict['where'] = coordinates
+
+        self.defaultDict = self.rectObj.defaultInstruction
+        self.panel = self._rectPanel()
+        
+        self._layout(self.panel)
+
+    def _rectPanel(self):
+        panel = wx.Panel(parent = self, id = wx.ID_ANY, style = wx.TAB_TRAVERSAL)
+        border = wx.BoxSizer(wx.VERTICAL)
+                
+        # color
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Color"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
+        
+        outlineLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Outline color:"))
+        self.outlineColorCtrl = wx.ColourPickerCtrl(panel, id = wx.ID_ANY)
+        self.outlineTranspCtrl = wx.CheckBox(panel, id = wx.ID_ANY, label = _("transparent"))
+
+        if self.rectDict['color'] != 'none':
+            self.outlineTranspCtrl.SetValue(False)
+            self.outlineColorCtrl.SetColour(convertRGB(self.rectDict['color']))
+        else:
+            self.outlineTranspCtrl.SetValue(True)
+            self.outlineColorCtrl.SetColour(convertRGB(self.defaultDict['color']))
+
+        # transparent outline makes sense only for rectangle
+        if self.objectType == ('line',):
+            self.outlineTranspCtrl.Hide()
+
+        gridSizer.Add(item = outlineLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.outlineColorCtrl, pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.outlineTranspCtrl, pos = (0, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+
+        # fill color only in rectangle
+        if self.objectType == ('rectangle',):
+            fillLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Fill color:"))
+            self.fillColorCtrl = wx.ColourPickerCtrl(panel, id = wx.ID_ANY)
+            self.fillTranspCtrl = wx.CheckBox(panel, id = wx.ID_ANY, label = _("transparent"))
+
+            if self.rectDict['fcolor'] != 'none':
+                self.fillTranspCtrl.SetValue(False)
+                self.fillColorCtrl.SetColour(convertRGB(self.rectDict['fcolor']))
+            else:
+                self.fillTranspCtrl.SetValue(True)
+                self.fillColorCtrl.SetColour(wx.WHITE)
+
+            gridSizer.Add(item = fillLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+            gridSizer.Add(item = self.fillColorCtrl, pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+            gridSizer.Add(item = self.fillTranspCtrl, pos = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+
+        sizer.Add(gridSizer, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+        gridSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
+
+        # width
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Line style"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        widthLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Line width:"))
+        if fs:
+            self.widthCtrl = fs.FloatSpin(panel, id = wx.ID_ANY, min_val = 0, max_val = 50,
+                                          increment = 1, value = 0, style = fs.FS_RIGHT, size = self.spinCtrlSize)
+            self.widthCtrl.SetFormat("%f")
+            self.widthCtrl.SetDigits(1)
+        else:
+            self.widthCtrl = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = self.spinCtrlSize,
+                                                min = -360, max = 360, initial = 0)
+        self.widthCtrl.SetToolTipString(_("Line width in points"))
+        self.widthCtrl.SetValue(float(self.rectDict['width']))
+
+        gridSizer.Add(item = widthLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = self.widthCtrl, pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+
+        sizer.Add(gridSizer, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+
+        panel.SetSizer(border)
+        
+        return panel
+        
+
+    def update(self):
+        mapInstr = self.instruction.FindInstructionByType('map')
+        if not mapInstr:
+            mapInstr = self.instruction.FindInstructionByType('initMap')
+        self.mapId = mapInstr.id
+        point1 = self.rectDict['where'][0]
+        point2 = self.rectDict['where'][1]
+        self.rectDict['east1'], self.rectDict['north1'] = PaperMapCoordinates(map = mapInstr,
+                                                                                x = point1[0],
+                                                                                y = point1[1],
+                                                                                paperToMap = True)
+        self.rectDict['east2'], self.rectDict['north2'] = PaperMapCoordinates(map = mapInstr,
+                                                                                x = point2[0],
+                                                                                y = point2[1],
+                                                                                paperToMap = True)
+        # width
+        self.rectDict['width'] = self.widthCtrl.GetValue()
+        
+        # outline color
+        if self.outlineTranspCtrl.GetValue():
+            self.rectDict['color'] = 'none'
+        else:
+            self.rectDict['color'] = convertRGB(self.outlineColorCtrl.GetColour())
+
+        # fill color
+        if self.objectType == ('rectangle',):
+            if self.fillTranspCtrl.GetValue():
+                self.rectDict['fcolor'] = 'none'
+            else:
+                self.rectDict['fcolor'] = convertRGB(self.fillColorCtrl.GetColour())
+
+        if self.id not in self.instruction:
+            if self.objectType == ('rectangle',):
+                rect = Rectangle(self.id)
+            else:
+                rect = Line(self.id)
+            self.instruction.AddInstruction(rect)
+            
+        self.instruction[self.id].SetInstruction(self.rectDict)
+
+        if self.id not in self.parent.objectId:
+            self.parent.objectId.append(self.id)
+            
+        self.updateDialog()
+
+        return True
+
+    def updateDialog(self):
+        """!Update text coordinates, after moving"""
+        pass
+
 def convertRGB(rgb):
     """!Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
             or named color/r:g:b string to wx.Colour, depending on input""" 
@@ -6288,7 +6936,7 @@ def AutoAdjust(self, scaleType,  rect, map = None, mapType = None, region = None
     # center
     cE = (currRegionDict['w'] + currRegionDict['e'])/2
     cN = (currRegionDict['n'] + currRegionDict['s'])/2
-    return scale, (cE, cN), wx.Rect2D(x, y, rWNew, rHNew) #inch
+    return scale, (cE, cN), Rect2D(x, y, rWNew, rHNew) #inch
 
 def SetResolution(dpi, width, height):
     """!If resolution is too high, lower it
@@ -6378,7 +7026,7 @@ def GetMapBounds(filename, portrait = True):
     except (grass.ScriptError, IndexError):
         GError(message = _("Unable to run `ps.map -b`"))
         return None
-    return wx.Rect2D(bb[0], bb[3], bb[2] - bb[0], bb[1] - bb[3])
+    return Rect2D(bb[0], bb[3], bb[2] - bb[0], bb[1] - bb[3])
 
 def getRasterType(map):
     """!Returns type of raster map (CELL, FCELL, DCELL)"""

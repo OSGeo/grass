@@ -83,6 +83,14 @@ class PsMapToolbar(BaseToolbar):
                                     label = _('Image')),
             'addNorthArrow': MetaIcon(img = 'north-arrow-add',
                                       label = _('North Arrow')),
+            'drawGraphics': MetaIcon(img = 'edit',
+                                     label = _('Add simple graphics')),
+            'pointAdd'    : MetaIcon(img = '',
+                                     label = _('Point')),
+            'lineAdd'     : MetaIcon(img = '',
+                                     label = _('Line')),
+            'rectangleAdd': MetaIcon(img = '',
+                                     label = _('Rectangle')),
             }
         self.icons = icons
         
@@ -113,6 +121,8 @@ class PsMapToolbar(BaseToolbar):
                                       self.parent.OnAddVect),
                                      ("dec", BaseIcons["overlay"],
                                       self.OnDecoration),
+                                     ("drawGraphics", icons["drawGraphics"],
+                                      self.OnDrawGraphics, wx.ITEM_CHECK),
                                      ("delete", icons["deleteObj"],
                                       self.parent.OnDelete),
                                      (None, ),
@@ -138,4 +148,15 @@ class PsMapToolbar(BaseToolbar):
                       (self.icons["addText"],       self.parent.OnAddText),
                       (self.icons["addImage"],      self.parent.OnAddImage),
                       (self.icons["addNorthArrow"], self.parent.OnAddNorthArrow)))
-        
+
+    def OnDrawGraphics(self, event):
+        """!Simple geometry features (point, line, rectangle) overlay menu
+        """
+        # we need the previous id
+        self.actionOld = self.action['id']
+        self.OnTool(event)
+        self.action['id'] = self.actionOld
+        self._onMenu(((self.icons["pointAdd"],      self.parent.OnAddPoint),
+                      (self.icons["lineAdd"],       self.parent.OnAddLine),
+                      (self.icons["rectangleAdd"],  self.parent.OnAddRectangle),
+                    ))
