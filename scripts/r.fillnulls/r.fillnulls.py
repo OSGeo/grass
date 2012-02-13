@@ -6,7 +6,7 @@
 # AUTHOR(S):	Markus Neteler
 #               Updated to GRASS 5.7 by Michael Barton
 #               Updated to GRASS 6.0 by Markus Neteler
-#               Ring improvements by Hamish Bowman
+#               Ring and zoom improvements by Hamish Bowman
 #               Converted to Python by Glynn Clements
 #               Add support to v.surf.bspline by Luca Delucchi
 # PURPOSE:	fills NULL (no data areas) in raster maps
@@ -134,6 +134,7 @@ def main():
     # Use this outline (raster border) for interpolating the fill data:
     vecttmp = "vecttmp_fillnulls_" + unique
     grass.message(_("Creating interpolation points..."))
+    ## use the -b flag to avoid topology building on big jobs? 
     if grass.run_command('r.to.vect', input = input, output = vecttmp, type = 'point'):
 	grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
 
@@ -145,7 +146,6 @@ def main():
     if pointsnumber < 2:
 	grass.fatal(_("Not sufficient points to interpolate. Maybe no hole(s) to fill in the current map region?"))
 
-    grass.message(_("Note: The following warnings may be ignored."))
 
     # remove internal MASK first -- WHY???? MN 10/2005
     grass.run_command('g.remove', quiet = True, rast = 'MASK')
@@ -157,8 +157,15 @@ def main():
     else:
 	maskmap = None
 
+    grass.message(_("Note: The following 'consider changing' warnings may be ignored."))
+
     #check if method is rst to use v.surf.rst
     if method == 'rst':
+
+        # clone current region
+        grass.use_temp_region()
+        grass.run_command('g.region', vect = vecttmp, align = input)
+
         # set the max number before segmantation
         segmax = 600
         if pointsnumber > segmax:
@@ -174,19 +181,26 @@ def main():
 
 	grass.message(_("Note: Above warnings may be ignored."))
 
+        # restore the real region
+        grass.del_temp_region()
+
+
     # restoring user's mask, if present:
+    #  (should all this MASK stuff go into the method==rst conditional?)
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Restoring user mask (MASK)..."))
 	grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'))
 
+    
     #check if method is different from rst to use v.surf.bspline
     if method != 'rst':
 	grass.message(_("Using %s (v.surf.bspline) interpolation") % method)
 	reg = grass.region()
 	# launch v.surf.bspline
 	grass.run_command('v.surf.bspline', input = vecttmp, layer = 1,
-			raster = tmp1 + '_filled', method = method, column = 'value',
-			sie = reg['ewres'], sin = reg['nsres'])
+			raster = tmp1 + '_filled', method = method,
+			column = 'value', lambda_i = 0.005,
+			sie = reg['ewres'] * 3.0, sin = reg['nsres'] * 3.0)
 
     # patch orig and fill map
     grass.message(_("Patching fill data into NULL areas..."))
