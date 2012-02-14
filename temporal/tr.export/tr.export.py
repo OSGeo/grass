@@ -75,6 +75,7 @@ import grass.temporal as tgis
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"
+metadata_file_name = "metadata.txt"
 read_file_name = "readme.txt"
 list_file_name = "list.txt"
 tmp_tar_file_name = "archive" 
@@ -141,15 +142,24 @@ def main():
             # Write the filename, the start_time and the end_time
             list_file.write(string)
 
+	    # Export the raster map with r.out.gdal as tif
             out_name = name + ".tif"
-
-            # Export the raster map with r.out.gdal
             ret = grass.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="GTiff")
             if ret != 0:
                 shutil.rmtree(new_cwd)
                 tar.close()
                 grass.fatal(_("Unable to export raster map <%s>" % name))
+                
+            tar.add(out_name)
 
+	    # Export the color rules 
+            out_name = name + ".color"
+            ret = grass.run_command("r.colors.out", map=name, rules=out_name)
+            if ret != 0:
+                shutil.rmtree(new_cwd)
+                tar.close()
+                grass.fatal(_("Unable to export color rules for raster map <%s>" % name))
+                
             tar.add(out_name)
 
     list_file.close()
@@ -175,10 +185,24 @@ def main():
     init_file.write(string)
     init_file.close()
 
-    read = grass.read_command("t.info", input=id)
+    metadata = grass.read_command("t.info", input=id)
+    metadata_file = open(metadata_file_name, "w")
+    metadata_file.write(metadata)
+    metadata_file.close()
+    
     read_file = open(read_file_name, "w")
     read_file.write("This space time raster dataset was exported with tr.export of GRASS GIS 7\n")
-    read_file.write(read)
+    read_file.write("\n")
+    read_file.write("Files:\n")
+                    #123456789012345678901234567890
+    read_file.write("       *.tif  -- GeoTIFF time series raster files\n")
+    read_file.write("     *.color  -- GRASS GIS raster color rules\n")
+    read_file.write("%13s -- Projection information in PROJ.4 format\n" % (proj_file_name))
+    read_file.write("%13s -- GRASS GIS space time raster dataset information\n" % (init_file_name))
+    read_file.write("%13s -- Time series file, lists all maps by name with interval\n"  % (list_file_name))
+    read_file.write("                 time stamps in ISO-Format. Field separator is |\n")
+    read_file.write("%13s -- Projection information in PROJ.4 format\n" % (metadata_file_name))
+    read_file.write("%13s -- This file\n" % (read_file_name))
     read_file.close()
 
     # Append the file list
@@ -186,6 +210,7 @@ def main():
     tar.add(proj_file_name)
     tar.add(init_file_name)
     tar.add(read_file_name)
+    tar.add(metadata_file_name)
     tar.close()
 
     os.chdir(old_cwd)
