@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     lambda_f_opt->type = TYPE_DOUBLE;
     lambda_f_opt->required = NO;
     lambda_f_opt->description = _("Tykhonov regularization parameter (affects smoothing)");
-    lambda_f_opt->answer = "0.005";
+    lambda_f_opt->answer = "0.01";
     lambda_f_opt->guisection = _("Settings");
 
     null_flag = G_define_flag();
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    DCELL dval;
 	    
-	    G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 9);
 
 	    Rast_get_d_row_nomask(inrastfd, drastbuf, row);
 
@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
 	}
 
 	for (row = 0; row < nrows; row++) {
-	    G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 9);
 	    
 	    if (mask_opt->answer)
 		Rast_get_c_row(maskfd, maskbuf, row);
@@ -474,7 +474,7 @@ int main(int argc, char *argv[])
     drastbuf = Rast_allocate_buf(DCELL_TYPE);
     Rast_set_d_null_value(drastbuf, ncols);
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
+	G_percent(row, nrows, 9);
 	segment_put_row(&out_seg, drastbuf, row);
     }
     G_percent(row, nrows, 2);
@@ -732,7 +732,7 @@ int main(int argc, char *argv[])
 	unlink(mask_file);
     }
 
-    G_verbose_message(_("Writing output..."));
+    G_message(_("Writing output..."));
     /* Writing the output raster map */
     Rast_set_fp_type(DCELL_TYPE);
     outrastfd = Rast_open_fp_new(out_opt->answer);
@@ -745,7 +745,7 @@ int main(int argc, char *argv[])
 	drastbuf = Rast_allocate_d_buf();
 
 	for (row = 0; row < dest_reg.rows; row++) {
-	    G_percent(row, dest_reg.rows, 2);
+	    G_percent(row, dest_reg.rows, 9);
 	    segment_get_row(&out_seg, drastbuf, row);
 	    for (col = 0; col < dest_reg.cols; col++) {
 		dval = drastbuf[col];
