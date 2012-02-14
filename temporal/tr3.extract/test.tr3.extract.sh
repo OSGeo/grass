@@ -15,7 +15,7 @@ r3.mapcalc --o expr="prec_5 = rand(0, 300)"
 r3.mapcalc --o expr="prec_6 = rand(0, 650)"
 
 t.create --o type=str3ds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-tr3.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
+t.register -i type=rast3d input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
 
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
@@ -24,5 +24,5 @@ tr3.extract --o input=precip_abs1 output=precip_abs2 where="start_time > '2001-0
 
 t.info type=str3ds input=precip_abs2
 
-t.remove type=rast3d input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=rast3d maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=str3ds input=precip_abs1,precip_abs2

@@ -13,7 +13,7 @@ r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
 t.create --o type=strds temporaltype=relative output=precip_abs1 title="A test" descr="A test"
-tr.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start=0 unit=days increment=3
+t.register -i type=rast input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start=0 unit=days increment=3
 
 # The first @test
 
@@ -39,5 +39,5 @@ r.info prec_sum_1
 r.info prec_sum_2
 r.info prec_sum_3
 
-t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1,precip_abs2

@@ -80,6 +80,7 @@
 
 import shutil
 import os
+import os.path
 import tarfile
 import tempfile
 import grass.script as grass
@@ -213,6 +214,14 @@ def main():
         if ret != 0:
             grass.fatal(_("Unable to import/link raster map <%s>.") % name)
     
+        # Set the color rules if present
+        filename = str(row["name"]) + ".color"
+        if os.path.isfile(filename):
+            ret = grass.run_command("r.colors", map=name, rules=filename, overwrite=grass.overwrite())
+
+            if ret != 0:
+                grass.fatal(_("Unable to set the color rules for raster map <%s>.") % name)
+
     # Create the space time raster dataset
     if sp.is_in_db() and grass.overwrite() == True:
         grass.info(_("Overwrite space time %s dataset <%s> and unregister all maps.") % (sp.get_new_map_instance(None).get_type(), name))
@@ -228,7 +237,7 @@ def main():
 
     # register the raster maps
     fs="|"
-    tgis.register_maps_in_space_time_dataset(type="strds", name=output, file=list_file_name, start="file", end="file", dbif=None, fs=fs)
+    tgis.register_maps_in_space_time_dataset(type="rast", name=output, file=list_file_name, start="file", end="file", dbif=None, fs=fs)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
