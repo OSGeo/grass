@@ -71,36 +71,36 @@ t.create --o type=str3ds temporaltype=absolute output=volume_abs4 title="A test 
 t.create --o type=str3ds temporaltype=absolute output=volume_abs5 title="A test with input files" descr="A test with input files"
 
 # The first @test
-tr3.register    input=volume_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=rast3d   input=volume_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 tr3.list    fs=" | " method=comma     input=volume_abs1
 tr3.list -h input=volume_abs1
 tr3.list -h fs=" | " method=cols      input=volume_abs1
 tr3.list -h fs=" | " method=delta     input=volume_abs1
 tr3.list -h fs=" | " method=deltagaps input=volume_abs1
 
-tr3.register -i input=volume_abs2 file="${n2}" start=file
+t.register -i type=rast3d input=volume_abs2 file="${n2}"
 tr3.list    fs=" | " method=comma     input=volume_abs2
 tr3.list -h input=volume_abs2
 tr3.list -h fs=" | " method=cols      input=volume_abs2
 tr3.list -h fs=" | " method=delta     input=volume_abs2
 tr3.list -h fs=" | " method=deltagaps input=volume_abs2
 
-tr3.register -i input=volume_abs3 file="${n3}" start=file end=file
+t.register -i type=rast3d input=volume_abs3 file="${n3}"
 tr3.list    fs=" | " method=comma     input=volume_abs3
 tr3.list -h fs=" | " method=delta     input=volume_abs3
 tr3.list -h fs=" | " method=deltagaps input=volume_abs3
 
-tr3.register -i input=volume_abs4 file="${n4}" start=file end=file
+t.register -i type=rast3d input=volume_abs4 file="${n4}"
 tr3.list    fs=" | " method=comma     input=volume_abs4
 tr3.list -h fs=" | " method=delta     input=volume_abs4
 tr3.list -h fs=" | " method=deltagaps input=volume_abs4
 
-tr3.register -i input=volume_abs5 file="${n5}" start=file end=file
+t.register -i type=rast3d input=volume_abs5 file="${n5}"
 tr3.list    fs=" | " method=comma     input=volume_abs5
 tr3.list -h input=volume_abs5
 tr3.list -h fs=" | " method=cols      input=volume_abs5
 tr3.list -h fs=" | " method=delta     input=volume_abs5
 tr3.list -h fs=" | " method=deltagaps input=volume_abs5
 
-t.remove type=rast3d input=vol_1,vol_2,vol_3,vol_4,vol_5,vol_6
+t.unregister type=rast3d maps=vol_1,vol_2,vol_3,vol_4,vol_5,vol_6
 t.remove type=str3ds input=volume_abs1,volume_abs2,volume_abs3,volume_abs4,volume_abs5
