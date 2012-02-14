@@ -64,13 +64,14 @@ def main():
 
     maps = sp.get_registered_maps_as_objects_by_granularity()
 
-    # Compute relative granularity and set bottom, top and top-bottom resolution
+    # Get the granularity and set bottom, top and top-bottom resolution
     granularity = sp.get_granularity()
 
-    # We do not convert months or years into days, we simply use
-    # The digit of the string as topo-bottom resolution
     if sp.is_time_absolute():
+        unit = granularity.split(" ")[1] 
         granularity = int(granularity.split(" ")[0])
+    else:
+        unit = sp.get_relative_time_unit()
 
     num_maps = len(maps)
     bottom = 0
@@ -81,7 +82,7 @@ def main():
     if ret != 0:
         grass.fatal(_("Unable to set 3d region"))
 
-    # Create a NULL map in case of granularity support
+    # Create a NULL map to fill the gaps
     null_map = "temporary_null_map_%i" % os.getpid()
     grass.mapcalc("%s = null()" % (null_map))
 
@@ -108,6 +109,37 @@ def main():
             grass.fatal(_("Unable to create raster3d map <%s>" % output))
 
     grass.run_command("g.remove", rast=null_map)
+
+    title = _("Space time voxel cube")
+    descr = _("This space time voxel cube was created with tr.to.rast3")
+
+    # Set the unit
+    ret = grass.run_command("r3.support", map=output, vunit=unit, title=title, description=descr, overwrite=grass.overwrite())
+
+    # Register the space time voxel cube in the temporal GIS
+    if output.find("@") >= 0:
+        id = output
+    else:
+        id = output + "@" + mapset
+
+    start, end = sp.get_valid_time()
+    r3ds = tgis.raster3d_dataset(id)
+
+    if r3ds.is_in_db():
+        r3ds.select()
+        r3ds.delete()
+        r3ds = tgis.raster3d_dataset(id)
+
+    r3ds.load()
+
+    if sp.is_time_absolute():
+        r3ds.set_absolute_time(start, end)
+        r3ds.write_absolute_time_to_file()
+    else:
+        r3ds.set_relative_time(start, end, sp.get_relative_time_unit())
+        r3ds.write_relative_time_to_file()
+
+    r3ds.insert()
 
 if __name__ == "__main__":
     options, flags = grass.parser()

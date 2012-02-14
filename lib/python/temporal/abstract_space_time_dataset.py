@@ -538,7 +538,7 @@ class abstract_space_time_dataset(abstract_dataset):
                     if self.is_time_absolute():
                         map.set_absolute_time(start, end)
                     elif self.is_time_relative():
-                        map.set_relative_time(start, end)
+                        map.set_relative_time(start, end, self.get_relative_time_unit())
 
                     maplist.append(copy.copy(map))
                 result["samples"] = maplist
@@ -549,7 +549,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 if self.is_time_absolute():
                     map.set_absolute_time(start, end)
                 elif self.is_time_relative():
-                    map.set_relative_time(start, end)
+                    map.set_relative_time(start, end, self.get_relative_time_unit())
 
                 maplist.append(copy.copy(map))
                 result["samples"] = maplist
@@ -618,7 +618,7 @@ class abstract_space_time_dataset(abstract_dataset):
                     if self.is_time_absolute():
                         map.set_absolute_time(start, next)
                     elif self.is_time_relative():
-                        map.set_relative_time(start, next)
+                        map.set_relative_time(start, next, self.get_relative_time_unit())
 
                     maplist.append(copy.copy(map))
 
@@ -677,7 +677,7 @@ class abstract_space_time_dataset(abstract_dataset):
                         if self.is_time_absolute():
                             map.set_absolute_time(start, end)
                         elif self.is_time_relative():
-                            map.set_relative_time(start, end)
+                            map.set_relative_time(start, end, self.get_relative_time_unit())
                         obj_list.append(copy.copy(map))
 
         if connect == True:
