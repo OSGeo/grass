@@ -4,14 +4,15 @@
 BIN_DIST_FILES = $(FILES) \
 	$(GRASS_NAME).tmp \
 	bin \
+	demolocation \
 	docs \
 	driver \
 	etc \
 	fonts \
 	include \
 	lib \
-	man \
 	scripts \
+	tools \
 	locale
 
 # Shell commands
@@ -210,8 +211,10 @@ srclibsdist: distclean
 	@ # needed to store code in package with grass-version path:
 	-cp -L * ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL tools ./grass-lib-$(GRASS_VERSION_NUMBER)
+	-cp -rL demolocation ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL include ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/external/shapelib ./grass-lib-$(GRASS_VERSION_NUMBER)
+	-cp -rL --parents lib/external/bwidget ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/datetime ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/db ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/gis ./grass-lib-$(GRASS_VERSION_NUMBER)
