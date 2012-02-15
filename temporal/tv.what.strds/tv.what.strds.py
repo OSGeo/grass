@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tv.what.rast
+# MODULE:	tv.what.strds
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Uploads raster map values at spatial and temporal positions of vector points to the tables. The maps are registered in space time datasets
