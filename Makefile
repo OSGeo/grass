@@ -3,13 +3,13 @@
 # MODULE:   	GRASS Compilation
 # AUTHOR(S):	Original author unknown - probably CERL
 #   	    	Justin Hickey - Thailand - jhickey AT hpcc.nectec.or.th
-#		Markus Neteler - Germany - neteler AT itc.it
-#		Andreas Lange - Germany - Andreas.Lange AT Rhein-Main.de
-#		Radim Blazek - Italy - blazek AT itc.it
+#   	    	Markus Neteler - Germany - neteler AT itc.it
+#   	    	Andreas Lange - Germany - Andreas.Lange AT Rhein-Main.de
+#   	    	Radim Blazek - Italy - blazek AT itc.it
 # PURPOSE:  	It provides the commands necessary to compile, install,
-#		clean, and uninstall GRASS
-#		See INSTALL file for explanations.
-# COPYRIGHT:    (C) 2002,2004,2010 by the GRASS Development Team
+#   	    	clean, and uninstall GRASS
+#   	    	See INSTALL file for explanations.
+# COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -44,7 +44,6 @@ DIRS = \
 	gui \
 	visualization \
 	locale \
-	man \
 	macosx
 
 SUBDIRS = $(DIRS)
