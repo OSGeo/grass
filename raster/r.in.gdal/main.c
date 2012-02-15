@@ -249,10 +249,11 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     hDS = GDALOpen(input, GA_ReadOnly);
     if (hDS == NULL)
-	return 1;
+	exit(EXIT_FAILURE);
     hDriver = GDALGetDatasetDriver(hDS);	/* needed for AVHRR data */
     /* L1B - NOAA/AVHRR data must be treated differently */
     /* for hDriver names see gdal/frmts/gdalallregister.cpp */
+    G_debug(3, "GDAL Driver: %s", GDALGetDriverShortName(hDriver));
     if (strcmp(GDALGetDriverShortName(hDriver), "L1B") != 0)
 	l1bdriver = 0;
     else {
@@ -262,9 +263,14 @@ int main(int argc, char *argv[])
 		    "thin plate spline rectification instead. (-tps)"));
     }
 
+    /* zero cell header */
+    G_zero(&cellhd, sizeof(struct Cell_head));
+    
     /* -------------------------------------------------------------------- */
     /*      Set up the window representing the data we have.                */
     /* -------------------------------------------------------------------- */
+    G_debug(3, "GDAL size: row = %d, col = %d", GDALGetRasterYSize(hDS),
+	    GDALGetRasterXSize(hDS));
     cellhd.rows = GDALGetRasterYSize(hDS);
     cellhd.rows3 = GDALGetRasterYSize(hDS);
     cellhd.cols = GDALGetRasterXSize(hDS);
@@ -504,9 +510,12 @@ int main(int argc, char *argv[])
 
 	I_init_group_ref(&ref);
 
+	colornamebuf2[0] = '\0';
 	for (nBand = 1; nBand <= GDALGetRasterCount(hDS); nBand++) {
+	    G_debug(3, "Import raster band %d", nBand);
 	    hBand = GDALGetRasterBand(hDS, nBand);
-	    hBand = GDALGetRasterBand(hDS, nBand);
+	    if (!hBand)
+		G_fatal_error(_("Unable to get raster band number %d"), nBand);
 	    if (!flag_k->answer) {
 		/* use channel color names if present: */
 		strcpy(colornamebuf,
@@ -722,7 +731,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     /*      Select a cell type for the new cell.                            */
     /* -------------------------------------------------------------------- */
     eRawGDT = GDALGetRasterDataType(hBand);
-
+    
     switch (eRawGDT) {
     case GDT_Float32:
     case GDT_Float64:
