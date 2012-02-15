@@ -69,6 +69,8 @@ int level_one_info(struct Map_info *Map)
 	    Vect_box_extend(&(plus->box), &box);
 
 	/* can't print progress, unfortunately */
+	/* what about using G_clicker() then. or, check file 
+	   size with stat.st_size and make a rough guess? */
 /*
 	if (G_verbose() > G_verbose_min() && i % 1000 == 0) {
 	    if (format == G_INFO_FORMAT_PLAIN)
