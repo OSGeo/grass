@@ -53,7 +53,7 @@ t.register -i type=rast input=sand_frac_abs_2 maps=sand_frac_1,sand_frac_2,sand_
 tr.list input=sand_frac_abs_2 columns=name,start_time,end_time
 
 # Start the @test
-tv.what.rast --v input=soil_abs strds=sand_frac_abs_1 sampling=overlap,during,contain column=sand_frac
+tv.what.strds --v input=soil_abs strds=sand_frac_abs_1 sampling=overlap,during,contain column=sand_frac
 v.db.select map=soils layer=1
 v.db.select map=soils layer=2
 v.db.select map=soils layer=3
@@ -61,7 +61,7 @@ v.db.select map=soils layer=4
 v.db.select map=soils layer=5
 v.db.select map=soils layer=6
 
-tv.what.rast --v input=soil_abs strds=sand_frac_abs_2 sampling=equal
+tv.what.strds --v input=soil_abs strds=sand_frac_abs_2 sampling=equal
 v.db.select map=soils layer=1
 v.db.select map=soils layer=2
 v.db.select map=soils layer=3

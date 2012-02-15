@@ -24,19 +24,19 @@ soil_3|2001-08-01|2001-12-01
 EOF
 
 t.create --o type=stvds temporaltype=absolute output=soil_abs1 title="A test" descr="A test"
-t.register type=vect input=soil_abs1 file="${n1}" start=file end=file
+t.register type=vect input=soil_abs1 file="${n1}" 
 
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.register -i type=rast input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"
 
 # The @test
 
-tv.what.rast --v input=soil_abs1 strds=precip_abs1 sampling=start,during column=map_vals
+tv.what.strds --v input=soil_abs1 strds=precip_abs1 sampling=start,during column=map_vals
 v.db.select map=soil_1
 v.db.select map=soil_2
 v.db.select map=soil_3
 
-tv.what.rast --v input=soil_abs1 strds=precip_abs1 sampling=start,during
+tv.what.strds --v input=soil_abs1 strds=precip_abs1 sampling=start,during
 v.db.select map=soil_1
 v.db.select map=soil_2
 v.db.select map=soil_3

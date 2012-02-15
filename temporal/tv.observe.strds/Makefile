@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../
 
-PGM = tv.what.rast
+PGM = tv.observe.strds
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
