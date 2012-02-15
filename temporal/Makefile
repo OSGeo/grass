@@ -23,8 +23,8 @@ SUBDIRS = \
 	tr3.list \
 	tr3.extract \
 	tv.list \
-	tv.what.rast \
-	tv.observe.rast 
+	tv.what.strds \
+	tv.observe.strds
 
 PGM = tgisintro
 
