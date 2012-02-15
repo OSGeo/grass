@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
             
             if (time_ok && (first_time_ok || second_time_ok)) {
 		G_format_timestamp(&ts, timebuff);
-		fprintf(out, "timestamp=\"%s\"", timebuff);
+		fprintf(out, "timestamp=\"%s\"\n", timebuff);
 	    }
 	    else {
 		fprintf(out, "timestamp=\"none\"\n");
