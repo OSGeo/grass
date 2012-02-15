@@ -546,6 +546,19 @@ def gisenv():
 
 # interface to g.region
 
+def locn_is_latlong():
+    """!Tests if location is lat/long. Value is obtained
+    by checking the "g.region -p" projection code.
+
+    @return True for a lat/long region, False otherwise
+    """
+    s = read_command("g.region", flags='p')
+    kv = parse_key_val(s, ':')
+    if kv['projection'].split(' ')[1] == '3':
+	return True
+    else:
+	return False
+
 def region():
     """!Returns the output from running "g.region -g", as a
     dictionary. Example:
