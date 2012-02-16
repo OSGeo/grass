@@ -341,6 +341,26 @@ def set_paths():
     # Set PYTHONPATH to find GRASS Python modules
     path_prepend(gfile('etc', 'python'), 'PYTHONPATH')
     
+    # set path for the GRASS man pages
+    grass_man_path = os.path.join(gisbase, 'docs', 'man')
+    man_path = os.getenv('MANPATH')
+    if man_path:
+	path_prepend(grass_man_path, 'MANPATH')
+    else:
+	try:
+	    p = Popen(['manpath'], stdout = subprocess.PIPE)
+	    s = p.stdout.read()
+	    p.wait()
+	    sys_man_path = s.strip()
+	except:
+	    pass
+
+	if sys_man_path:
+	    os.environ['MANPATH'] = sys_man_path
+	    path_prepend(grass_man_path, 'MANPATH')
+	else:
+	    os.environ['MANPATH'] = grass_man_path
+
     # Add .py (Python) to list of executable extensions to search for in MS-Windows PATH
     if windows:
 	path_append('.PY', 'PATHEXT')
