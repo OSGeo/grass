@@ -56,10 +56,34 @@ int do_plt(int after_masking)
 		set_color(&pcolor, color_R, color_G, color_B);
 		set_ps_color(&pcolor);
 		set_line_width(width);
-		start_line(e1, n1);
-		sec_draw = 0;
-		G_plot_line(e1, n1, e2, n2);
+
+		if (G_projection() == PROJECTION_LL) {
+		/* use the same method as the vlines instruction,
+		for completely out of region lines just move, don't put
+		the pen down. but the thing this method has going for it
+		is that for lat/lon (AFAIU) it draws the line twice,
+		so that at least one of them will go the desired way
+		around the sphere, and the other will be discarded.
+		(I think). But it means your self-defined lines need to
+		keep at least one little toe in the map box. --HB Feb2012 */
+		    start_line(e1, n1);
+		    sec_draw = 0;
+		    G_plot_line(e1, n1, e2, n2);
+		}
+		else {
+		    G_plot_where_xy(e1, n1, &x_int, &y_int);
+		    llx = (double)x_int / 10.;
+		    lly = (double)y_int / 10.;
+
+		    G_plot_where_xy(e2, n2, &x_int, &y_int);
+		    urx = (double)x_int / 10.;
+		    ury = (double)y_int / 10.;
+
+		    fprintf(PS.fp, " %.1f %.1f NM %.1f %.1f LN",
+			    llx, lly, urx, ury);
+		}
 		fprintf(PS.fp, " stroke\n");
+
 	    }
 	    break;
 
