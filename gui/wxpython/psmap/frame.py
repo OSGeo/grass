@@ -1210,21 +1210,21 @@ class PsMapBufferedWindow(wx.Window):
                 instr = self.instruction[item.id]
                 if itemType in ('line', 'rectangle'):
                     if itemType == 'line':
-                        e1, n1 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['where'][0][0],
+                        e1, n1 = PaperMapCoordinates(mapInstr = self.instruction[mapId], x = instr['where'][0][0],
                                                      y = instr['where'][0][1], paperToMap = True)
-                        e2, n2 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['where'][1][0],
+                        e2, n2 = PaperMapCoordinates(mapInstr = self.instruction[mapId], x = instr['where'][1][0],
                                                      y = instr['where'][1][1], paperToMap = True)
                     else: 
-                        e1, n1 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['rect'].GetLeft(),
+                        e1, n1 = PaperMapCoordinates(mapInstr = self.instruction[mapId], x = instr['rect'].GetLeft(),
                                                      y = instr['rect'].GetTop(), paperToMap = True)
-                        e2, n2 = PaperMapCoordinates(map = self.instruction[mapId], x = instr['rect'].GetRight(),
+                        e2, n2 = PaperMapCoordinates(mapInstr = self.instruction[mapId], x = instr['rect'].GetRight(),
                                                      y = instr['rect'].GetBottom(), paperToMap = True)
                     instr['east1'] = e1
                     instr['north1'] = n1
                     instr['east2'] = e2
                     instr['north2'] = n2
                 else:
-                    e, n = PaperMapCoordinates(map = self.instruction[mapId], x = instr['where'][0],
+                    e, n = PaperMapCoordinates(mapInstr = self.instruction[mapId], x = instr['where'][0],
                                                y = instr['where'][1], paperToMap = True)
                     instr['east'], instr['north'] = e, n
                 

@@ -91,7 +91,7 @@ class TCValidator(wx.PyValidator):
         if key < wx.WXK_SPACE or key == wx.WXK_DELETE or key > 255:
             event.Skip()
             return
-        if self.flag == 'DIGIT_ONLY' and chr(key) in string.digits + '.':
+        if self.flag == 'DIGIT_ONLY' and chr(key) in string.digits + '.-':
             event.Skip()
             return
 ##        if self.flag == 'SCALE' and chr(key) in string.digits + ':':
@@ -259,7 +259,7 @@ class PsmapDialog(wx.Dialog):
         northingLabel  = wx.StaticText(panel, id = wx.ID_ANY, label = "N:")
         panel.position['eCtrl'] = wx.TextCtrl(panel, id = wx.ID_ANY, value = "")
         panel.position['nCtrl'] = wx.TextCtrl(panel, id = wx.ID_ANY, value = "")
-        east, north = PaperMapCoordinates(map = self.instruction[self.mapId], x = dialogDict['where'][0], y = dialogDict['where'][1], paperToMap = True)
+        east, north = PaperMapCoordinates(mapInstr = self.instruction[self.mapId], x = dialogDict['where'][0], y = dialogDict['where'][1], paperToMap = True)
         panel.position['eCtrl'].SetValue(str(east))
         panel.position['nCtrl'].SetValue(str(north))
         
@@ -3687,7 +3687,7 @@ class TextDialog(PsmapDialog):
             map = self.instruction.FindInstructionByType('initMap')
         self.mapId = map.id
 
-        self.textDict['east'], self.textDict['north'] = PaperMapCoordinates(map = map, x = self.textDict['where'][0], y = self.textDict['where'][1], paperToMap = True)
+        self.textDict['east'], self.textDict['north'] = PaperMapCoordinates(mapInstr = map, x = self.textDict['where'][0], y = self.textDict['where'][1], paperToMap = True)
         
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)     
         self.textPanel = self._textPanel(notebook)
@@ -4015,7 +4015,7 @@ class TextDialog(PsmapDialog):
             else:
                 self.textDict['north'] = self.textDict['north']
 
-            self.textDict['where'] = PaperMapCoordinates(map = self.instruction[self.mapId], x = float(self.textDict['east']),
+            self.textDict['where'] = PaperMapCoordinates(mapInstr = self.instruction[self.mapId], x = float(self.textDict['east']),
                                                             y = float(self.textDict['north']), paperToMap = False)
         #rotation
         if self.rotCtrl.GetValue():
@@ -4078,7 +4078,7 @@ class ImageDialog(PsmapDialog):
             map = self.instruction.FindInstructionByType('initMap')
         self.mapId = map.id
 
-        self.imageDict['east'], self.imageDict['north'] = PaperMapCoordinates(map = map, x = self.imageDict['where'][0], y = self.imageDict['where'][1], paperToMap = True)
+        self.imageDict['east'], self.imageDict['north'] = PaperMapCoordinates(mapInstr = map, x = self.imageDict['where'][0], y = self.imageDict['where'][1], paperToMap = True)
         
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
         self.imagePanelName = imagePanelName
@@ -4429,7 +4429,7 @@ class ImageDialog(PsmapDialog):
             else:
                 self.imageDict['north'] = self.imageDict['north']
 
-            x, y = PaperMapCoordinates(map = self.instruction[self.mapId], x = float(self.imageDict['east']),
+            x, y = PaperMapCoordinates(mapInstr = self.instruction[self.mapId], x = float(self.imageDict['east']),
                                        y = float(self.imageDict['north']), paperToMap = False)
 
         #rotation
@@ -4539,7 +4539,7 @@ class PointDialog(PsmapDialog):
             mapObj = self.instruction.FindInstructionByType('initMap')
         self.mapId = mapObj.id
         
-        self.pointDict['east'], self.pointDict['north'] = PaperMapCoordinates(map = mapObj, x = self.pointDict['where'][0], y = self.pointDict['where'][1], paperToMap = True)
+        self.pointDict['east'], self.pointDict['north'] = PaperMapCoordinates(mapInstr = mapObj, x = self.pointDict['where'][0], y = self.pointDict['where'][1], paperToMap = True)
         
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
         self.pointPanelName = pointPanelName
@@ -4757,7 +4757,7 @@ class PointDialog(PsmapDialog):
             else:
                 self.pointDict['north'] = self.pointDict['north']
 
-            x, y = PaperMapCoordinates(map = self.instruction[self.mapId], x = float(self.pointDict['east']),
+            x, y = PaperMapCoordinates(mapInstr = self.instruction[self.mapId], x = float(self.pointDict['east']),
                                        y = float(self.pointDict['north']), paperToMap = False)
 
         #rotation
@@ -4923,11 +4923,11 @@ class RectangleDialog(PsmapDialog):
         self.mapId = mapInstr.id
         point1 = self.rectDict['where'][0]
         point2 = self.rectDict['where'][1]
-        self.rectDict['east1'], self.rectDict['north1'] = PaperMapCoordinates(map = mapInstr,
+        self.rectDict['east1'], self.rectDict['north1'] = PaperMapCoordinates(mapInstr = mapInstr,
                                                                                 x = point1[0],
                                                                                 y = point1[1],
                                                                                 paperToMap = True)
-        self.rectDict['east2'], self.rectDict['north2'] = PaperMapCoordinates(map = mapInstr,
+        self.rectDict['east2'], self.rectDict['north2'] = PaperMapCoordinates(mapInstr = mapInstr,
                                                                                 x = point2[0],
                                                                                 y = point2[1],
                                                                                 paperToMap = True)

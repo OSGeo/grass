@@ -154,50 +154,44 @@ def convertRGB(rgb):
         else:  
             return None
         
-def PaperMapCoordinates(map, x, y, paperToMap = True):
-    """!Converts paper (inch) coordinates -> map coordinates"""
-    unitConv = UnitConversion()
-    currRegionDict = grass.region()
-    cornerEasting, cornerNorthing = currRegionDict['w'], currRegionDict['n']
-    xMap = map['rect'][0]
-    yMap = map['rect'][1]
-    widthMap = map['rect'][2] * 0.0254 # to meter
-    heightMap = map['rect'][3] * 0.0254
-    xScale = widthMap / abs(currRegionDict['w'] - currRegionDict['e'])
-    yScale = heightMap / abs(currRegionDict['n'] - currRegionDict['s'])
-    currScale = (xScale + yScale) / 2
- 
-    if not paperToMap:
-        textEasting, textNorthing = x, y
-        eastingDiff = textEasting - cornerEasting 
-        if currRegionDict['w'] > currRegionDict['e']:
-            eastingDiff = - eastingDiff
-        else:
-            eastingDiff = eastingDiff
-
-        northingDiff = textNorthing - cornerNorthing
-        if currRegionDict['n'] > currRegionDict['s']:
-            northingDiff = - northingDiff 
-        else:
-            northingDiff = northingDiff
-
-        xPaper = xMap + unitConv.convert(value = eastingDiff, fromUnit = 'meter', toUnit = 'inch') * currScale
-        yPaper = yMap + unitConv.convert(value = northingDiff, fromUnit = 'meter', toUnit = 'inch') * currScale
-        return xPaper, yPaper
-    else:
-        if currRegionDict['w'] < currRegionDict['e']:
-            eastingDiff = (x - xMap) 
-        else:
-            eastingDiff = (xMap - x)
-        if currRegionDict['n'] < currRegionDict['s']:
-            northingDiff = (y - yMap) 
-        else:
-            northingDiff = (yMap - y)
-
-        textEasting = cornerEasting + unitConv.convert(value = eastingDiff, fromUnit = 'inch', toUnit = 'meter') / currScale
-        textNorthing = cornerNorthing + unitConv.convert(value = northingDiff, fromUnit = 'inch', toUnit = 'meter') / currScale
-        return int(textEasting), int(textNorthing)
         
+def PaperMapCoordinates(mapInstr, x, y, paperToMap = True):
+    """!Converts paper (inch) coordinates <-> map coordinates.
+
+    @param mapInstr map frame instruction
+    @param x,y paper coords in inches or mapcoords in map units
+    @param paperToMap specify conversion direction
+    """
+    region = grass.region()
+    mapWidthPaper = mapInstr['rect'].GetWidth()
+    mapHeightPaper = mapInstr['rect'].GetHeight()
+    mapWidthEN = region['e'] - region['w']
+    mapHeightEN = region['n'] - region['s']
+
+    if paperToMap:
+        diffX = x - mapInstr['rect'].GetX()
+        diffY = y - mapInstr['rect'].GetY()
+        diffEW = diffX * mapWidthEN / mapWidthPaper
+        diffNS = diffY * mapHeightEN / mapHeightPaper
+        e = region['w'] + diffEW
+        n = region['n'] - diffNS
+
+        if projInfo()['proj'] == 'll':
+            return e, n
+        else:
+            return int(e), int(n)
+
+    else:
+        diffEW = x - region['w']
+        diffNS = region['n'] - y
+        diffX = mapWidthPaper * diffEW / mapWidthEN
+        diffY = mapHeightPaper * diffNS / mapHeightEN
+        xPaper = mapInstr['rect'].GetX() + diffX
+        yPaper = mapInstr['rect'].GetY() + diffY
+
+        return xPaper, yPaper
+
+
 def AutoAdjust(self, scaleType,  rect, map = None, mapType = None, region = None):
     """!Computes map scale, center and map frame rectangle to fit region (scale is not fixed)"""
     currRegionDict = {}

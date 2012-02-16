@@ -869,7 +869,7 @@ class Text(InstructionObject):
             except(IndexError, ValueError):
                 GError(_("Failed to read instruction %s") % instruction)
                 return False
-        instr['where'] = PaperMapCoordinates(map = map, x = instr['east'], y = instr['north'], paperToMap = False)       
+        instr['where'] = PaperMapCoordinates(mapInstr = map, x = instr['east'], y = instr['north'], paperToMap = False)       
         self.instruction.update(instr)
 
         return True 
@@ -937,7 +937,7 @@ class Image(InstructionObject):
             instr['size'] = BBoxAfterRotation(instr['size'][0], instr['size'][1], instr['rotate'])
         self.instruction.update(instr)
         self.ChangeRefPoint(toCenter = False)
-        instr['where'] = PaperMapCoordinates(map = mapInstr, x = self.instruction['east'],
+        instr['where'] = PaperMapCoordinates(mapInstr = mapInstr, x = self.instruction['east'],
                                              y = self.instruction['north'], paperToMap = False)       
         w = self.unitConv.convert(value = instr['size'][0], fromUnit = 'point', toUnit = 'inch')
         h = self.unitConv.convert(value = instr['size'][1], fromUnit = 'point', toUnit = 'inch')
@@ -955,18 +955,18 @@ class Image(InstructionObject):
         mapId = mapInstr.id
         if toCenter:
             center = self.instruction['rect'].GetCentre()
-            ENCenter = PaperMapCoordinates(map = self.settings[mapId],
+            ENCenter = PaperMapCoordinates(mapInstr = self.settings[mapId],
                                            x = center[0], y = center[1], paperToMap = True)
                                            
             self.instruction['east'], self.instruction['north'] = ENCenter
         else:
-            x, y = PaperMapCoordinates(map = self.settings[mapId], x = self.instruction['east'],
+            x, y = PaperMapCoordinates(mapInstr = self.settings[mapId], x = self.instruction['east'],
                                        y = self.instruction['north'], paperToMap = False)
             w = self.unitConv.convert(value = self.instruction['size'][0], fromUnit = 'point', toUnit = 'inch')
             h = self.unitConv.convert(value = self.instruction['size'][1], fromUnit = 'point', toUnit = 'inch')
             x -= w * self.instruction['scale'] / 2
             y -= h * self.instruction['scale'] / 2
-            e, n = PaperMapCoordinates(map = self.settings[mapId], x = x, y = y, paperToMap = True)
+            e, n = PaperMapCoordinates(mapInstr = self.settings[mapId], x = x, y = y, paperToMap = True)
             self.instruction['east'], self.instruction['north'] = e, n
 
     def GetImageOrigSize(self, imagePath):
@@ -1067,7 +1067,7 @@ class Point(InstructionObject):
                 return False
         
         self.instruction.update(instr)
-        instr['where'] = PaperMapCoordinates(map = mapInstr, x = self.instruction['east'],
+        instr['where'] = PaperMapCoordinates(mapInstr = mapInstr, x = self.instruction['east'],
                                              y = self.instruction['north'], paperToMap = False)
         w = h = self.unitConv.convert(value = instr['size'], fromUnit = 'point', toUnit = 'inch')
         instr['rect'] = Rect2D(x = float(instr['where'][0]) - w / 2, y = float(instr['where'][1] - h / 2),
@@ -1122,9 +1122,9 @@ class Line(InstructionObject):
                 return False
         
         self.instruction.update(instr)
-        e1, n1 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east1'],
+        e1, n1 = PaperMapCoordinates(mapInstr = mapInstr, x = self.instruction['east1'],
                                      y = self.instruction['north1'], paperToMap = False)
-        e2, n2 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east2'],
+        e2, n2 = PaperMapCoordinates(mapInstr = mapInstr, x = self.instruction['east2'],
                                      y = self.instruction['north2'], paperToMap = False)
         instr['where'] = [wx.Point2D(e1, n1), wx.Point2D(e2, n2)]
         instr['rect'] = Rect2DPP(instr['where'][0], instr['where'][1])
@@ -1181,9 +1181,9 @@ class Rectangle(InstructionObject):
                 return False
         
         self.instruction.update(instr)
-        e1, n1 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east1'],
+        e1, n1 = PaperMapCoordinates(mapInstr = mapInstr, x = self.instruction['east1'],
                                        y = self.instruction['north1'], paperToMap = False)
-        e2, n2 = PaperMapCoordinates(map = mapInstr, x = self.instruction['east2'],
+        e2, n2 = PaperMapCoordinates(mapInstr = mapInstr, x = self.instruction['east2'],
                                        y = self.instruction['north2'], paperToMap = False)
         instr['rect'] = Rect2DPP(wx.Point2D(e1, n1), wx.Point2D(e2, n2))
         self.instruction.update(instr)
