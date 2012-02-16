@@ -30,6 +30,13 @@ if [ "$SYSTEMOSX" ] ; then
 	    echo "export GRASS_ADDON_PATH"
 	fi
 
+	if [ -z "$MANPATH" ] ; then
+	    echo "MANPATH=\"$GISBASE/docs/man:`manpath`\""
+	else
+	    echo "MANPATH=\"$GISBASE/docs/man:$MANPATH\""
+	fi
+	echo "export MANPATH"
+
 	# get command, ignore all other xterm flags
 	while true ; do
 	    if [ "$1" = "-e" ] ; then break ; fi
