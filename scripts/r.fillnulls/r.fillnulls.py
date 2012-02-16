@@ -199,12 +199,12 @@ def main():
 	    grass.run_command('r.resamp.bspline', input = input, mask = usermask,
 			    output = tmp1 + '_filled', method = method, 
 			    se = 3 * reg['ewres'], sn = 3 * reg['nsres'], 
-			    flags = 'n')
+			    _lambda = 0.01, flags = 'n')
 	else:
 	    grass.run_command('r.resamp.bspline', input = input,
 			    output = tmp1 + '_filled', method = method, 
 			    se = 3 * reg['ewres'], sn = 3 * reg['nsres'], 
-			    flags = 'n')
+			    _lambda = 0.01, flags = 'n')
 
     # restoring user's mask, if present:
     if grass.find_file(usermask, mapset = mapset)['file']:
