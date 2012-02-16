@@ -1118,7 +1118,8 @@ class PsMapBufferedWindow(wx.Window):
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE,  self.OnSize)
         self.Bind(wx.EVT_IDLE,  self.OnIdle)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
+        # self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
 
 
     def Clear(self):
@@ -1252,100 +1253,296 @@ class PsMapBufferedWindow(wx.Window):
             self.pdcImage.DrawToDCClipped(dc, rgn.GetBox())
         self.pdcTmp.DrawToDCClipped(dc, rgn.GetBox())
         
-    def OnMouse(self, event):
-
-        if event.GetWheelRotation() and UserSettings.Get(group = 'display',
-                                                         key = 'mouseWheelZoom',
-                                                         subkey = 'enabled'):
-            zoom = event.GetWheelRotation()
-            use = self.mouse['use']
-            self.mouse['begin'] = event.GetPosition()
+    def MouseActions(self, event):
+        """!Mouse motion and button click notifier
+        """
+        # zoom with mouse wheel
+        if event.GetWheelRotation() != 0:
+            self.OnMouseWheel(event)
             
-            if UserSettings.Get(group = 'display',
-                                key = 'mouseWheelZoom',
-                                subkey = 'selection'):
-                zoom *= -1
-                
-            if zoom > 0:
-                self.mouse['use'] = 'zoomin'
-            else:
-                self.mouse['use'] = 'zoomout'
-                
-            zoomFactor, view = self.ComputeZoom(wx.Rect(0,0,0,0))
-            self.Zoom(zoomFactor, view)
-            self.mouse['use'] = use
-            
-        if event.Moving():
-            if self.mouse['use'] in ('pointer', 'resize'):
-                pos = event.GetPosition()
-                foundResize = self.pdcTmp.FindObjects(pos[0], pos[1])
-                if foundResize and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp:
-                    self.SetCursor(self.cursors["sizenwse"])
-                    self.parent.SetStatusText(_('Click and drag to resize object'), 0)
-                else:
-                    self.parent.SetStatusText('', 0)
-                    self.SetCursor(self.cursors["default"])
-                    
-        elif event.MiddleDown():
-            self.mouse['begin'] = event.GetPosition()
-            
+        # left mouse button pressed
         elif event.LeftDown():
-            self.mouse['begin'] = event.GetPosition()
-            self.begin = self.mouse['begin']
-            if self.mouse['use'] in ('pan', 'zoomin', 'zoomout', 'addMap'):
-                pass
+            self.OnLeftDown(event)
+        
+        # left mouse button released
+        elif event.LeftUp():
+            self.OnLeftUp(event)
+        
+        # dragging
+        elif event.Dragging():
+            self.OnDragging(event)
+        
+        # double click
+        elif event.ButtonDClick():
+            self.OnButtonDClick(event)
+        
+        # middle mouse button pressed
+        elif event.MiddleDown():
+            self.OnMiddleDown(event)
+        
+        elif event.Moving():
+            self.OnMouseMoving(event)
+                
+    def OnMouseWheel(self, event):
+        """!Mouse wheel scrolled.
+
+        Changes zoom."""
+        if not UserSettings.Get(group = 'display',
+                                key = 'mouseWheelZoom',
+                                subkey = 'enabled'):
+            event.Skip()
+            return
+
+        zoom = event.GetWheelRotation()
+        oldUse = self.mouse['use']
+        self.mouse['begin'] = event.GetPosition()
+        
+        if UserSettings.Get(group = 'display',
+                            key = 'mouseWheelZoom',
+                            subkey = 'selection'):
+            zoom *= -1
             
-            #select
-            if self.mouse['use'] == 'pointer':
-                found = self.pdcObj.FindObjects(self.mouse['begin'][0], self.mouse['begin'][1])
-                foundResize = self.pdcTmp.FindObjects(self.mouse['begin'][0], self.mouse['begin'][1])
+        if zoom > 0:
+            self.mouse['use'] = 'zoomin'
+        else:
+            self.mouse['use'] = 'zoomout'
+            
+        zoomFactor, view = self.ComputeZoom(wx.Rect(0, 0, 0, 0))
+        self.Zoom(zoomFactor, view)
+        self.mouse['use'] = oldUse
 
-                if foundResize and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp:
-                    self.mouse['use'] = 'resize'
-                    
-                    # when resizing, proportions match region
-                    if self.instruction[self.dragId].type == 'map':
-                        self.constraint = False
+    def OnMouseMoving(self, event):
+        """!Mouse cursor moving.
+
+        Change cursor when moving over resize marker.
+        """
+        if self.mouse['use'] in ('pointer', 'resize'):
+            pos = event.GetPosition()
+            foundResize = self.pdcTmp.FindObjects(pos[0], pos[1])
+            if foundResize and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp:
+                self.SetCursor(self.cursors["sizenwse"])
+                self.parent.SetStatusText(_('Click and drag to resize object'), 0)
+            else:
+                self.parent.SetStatusText('', 0)
+                self.SetCursor(self.cursors["default"])
+                
+    def OnLeftDown(self, event):
+        """!Left mouse button pressed.
+
+        Select objects, redraw, prepare for moving/resizing.
+        """
+        self.mouse['begin'] = event.GetPosition()
+        self.begin = self.mouse['begin']
+        
+        # select
+        if self.mouse['use'] == 'pointer':
+            found = self.pdcObj.FindObjects(self.mouse['begin'][0], self.mouse['begin'][1])
+            foundResize = self.pdcTmp.FindObjects(self.mouse['begin'][0], self.mouse['begin'][1])
+
+            if foundResize and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp:
+                self.mouse['use'] = 'resize'
+                
+                # when resizing, proportions match region
+                if self.instruction[self.dragId].type == 'map':
+                    self.constraint = False
+                    self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
+                    if self.instruction[self.dragId]['scaleType'] in (0, 1, 2):
+                        self.constraint = True
                         self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
-                        if self.instruction[self.dragId]['scaleType'] in (0, 1, 2):
-                            self.constraint = True
-                            self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
 
-                    if self.instruction[self.dragId].type == 'line':
-                        self.currentLinePoint = self.idLinePointsTmp.index(foundResize[0])
-                    
-                elif found:
-                    self.dragId = found[0]  
-                    self.RedrawSelectBox(self.dragId)
-                    if self.instruction[self.dragId].type not in ('map', 'rectangle'):
-                        self.pdcTmp.RemoveId(self.idResizeBoxTmp)
-                        self.Refresh()
-                    if self.instruction[self.dragId].type != 'line':
-                        for id in self.idLinePointsTmp:
-                            self.pdcTmp.RemoveId(id)
-                        self.Refresh()
-                        
-                else:
-                    self.dragId = -1
-                    self.pdcTmp.RemoveId(self.idBoxTmp)
+                if self.instruction[self.dragId].type == 'line':
+                    self.currentLinePoint = self.idLinePointsTmp.index(foundResize[0])
+                
+            elif found:
+                self.dragId = found[0]
+                self.RedrawSelectBox(self.dragId)
+                if self.instruction[self.dragId].type not in ('map', 'rectangle'):
                     self.pdcTmp.RemoveId(self.idResizeBoxTmp)
+                    self.Refresh()
+                if self.instruction[self.dragId].type != 'line':
                     for id in self.idLinePointsTmp:
                         self.pdcTmp.RemoveId(id)
-                    self.Refresh()           
+                    self.Refresh()
                     
-        elif event.Dragging() and event.MiddleIsDown():
+            else:
+                self.dragId = -1
+                self.pdcTmp.RemoveId(self.idBoxTmp)
+                self.pdcTmp.RemoveId(self.idResizeBoxTmp)
+                for id in self.idLinePointsTmp:
+                    self.pdcTmp.RemoveId(id)
+                self.Refresh()
+
+    def OnLeftUp(self, event):
+        """!Left mouse button released.
+
+        Recalculate zooming/resizing/moving and redraw.
+        """
+        # zoom in, zoom out
+        if self.mouse['use'] in ('zoomin','zoomout'):
+            zoomR = self.pdcTmp.GetIdBounds(self.idZoomBoxTmp)
+            self.pdcTmp.RemoveId(self.idZoomBoxTmp)
+            self.Refresh()
+            zoomFactor, view = self.ComputeZoom(zoomR)
+            self.Zoom(zoomFactor, view)
+
+        # draw map frame
+        if self.mouse['use'] == 'addMap':
+            rectTmp = self.pdcTmp.GetIdBounds(self.idZoomBoxTmp)
+            # too small rectangle, it's usually some mistake
+            if rectTmp.GetWidth() < 20 or rectTmp.GetHeight() < 20:
+                self.pdcTmp.RemoveId(self.idZoomBoxTmp)
+                self.Refresh()
+                return
+            rectPaper = self.CanvasPaperCoordinates(rect = rectTmp, canvasToPaper = True)
+
+            dlg = MapDialog(parent = self.parent, id = [None, None, None], settings = self.instruction, 
+                            rect = rectPaper)
+            self.openDialogs['map'] = dlg
+            self.openDialogs['map'].Show()
+            
+            self.mouse['use'] = self.parent.mouseOld
+
+            self.SetCursor(self.parent.cursorOld)
+            self.parent.toolbar.ToggleTool(self.parent.actionOld, True)
+            self.parent.toolbar.ToggleTool(self.parent.toolbar.action['id'], False)
+            self.parent.toolbar.action['id'] = self.parent.actionOld
+            return
+
+        # resize resizable objects (map, line, rectangle)
+        if self.mouse['use'] == 'resize':
+            mapObj = self.instruction.FindInstructionByType('map')
+            if not mapObj:
+                mapObj = self.instruction.FindInstructionByType('initMap')
+            mapId = mapObj.id
+            
+            if self.dragId == mapId:
+                # necessary to change either map frame (scaleType 0,1,2) or region (scaletype 3)
+                newRectCanvas = self.pdcObj.GetIdBounds(mapId)
+                newRectPaper = self.CanvasPaperCoordinates(rect = newRectCanvas, canvasToPaper = True)
+                self.instruction[mapId]['rect'] = newRectPaper
+                
+                if self.instruction[mapId]['scaleType'] in (0, 1, 2):
+                    if self.instruction[mapId]['scaleType'] == 0:
+                        
+                        scale, foo, rect = AutoAdjust(self, scaleType = 0,
+                                                      map = self.instruction[mapId]['map'],
+                                                      mapType = self.instruction[mapId]['mapType'], 
+                                                      rect = self.instruction[mapId]['rect'])
+                        
+                    elif self.instruction[mapId]['scaleType'] == 1:
+                        scale, foo, rect = AutoAdjust(self, scaleType = 1,
+                                                      region = self.instruction[mapId]['region'],
+                                                      rect = self.instruction[mapId]['rect'])
+                    else:
+                        scale, foo, rect = AutoAdjust(self, scaleType = 2,
+                                                      rect = self.instruction[mapId]['rect'])
+                    self.instruction[mapId]['rect'] = rect
+                    self.instruction[mapId]['scale'] = scale
+                    
+                    rectCanvas = self.CanvasPaperCoordinates(rect = rect, canvasToPaper = False)
+                    self.Draw(pen = self.pen['map'], brush = self.brush['map'],
+                              pdc = self.pdcObj, drawid = mapId, pdctype = 'rectText', bb = rectCanvas)
+                    
+                elif self.instruction[mapId]['scaleType'] == 3:
+                    ComputeSetRegion(self, mapDict = self.instruction[mapId].GetInstruction())
+                #check resolution
+                SetResolution(dpi = self.instruction[mapId]['resolution'],
+                              width = self.instruction[mapId]['rect'].width,
+                              height = self.instruction[mapId]['rect'].height)
+                
+                self.RedrawSelectBox(mapId)
+                self.Zoom(zoomFactor = 1, view = (0, 0))
+
+            elif self.instruction[self.dragId].type == 'line':
+                points = self.instruction[self.dragId]['where']
+                self.instruction[self.dragId]['rect'] = Rect2DPP(points[0], points[1])
+                self.RecalculatePosition(ids = [self.dragId])
+
+            elif self.instruction[self.dragId].type == 'rectangle':
+                self.RecalculatePosition(ids = [self.dragId])
+
+            self.mouse['use'] = 'pointer'
+            
+        # recalculate the position of objects after dragging
+        if self.mouse['use'] in ('pointer', 'resize') and self.dragId != -1:
+            if self.mouse['begin'] != event.GetPosition(): #for double click
+                
+                self.RecalculatePosition(ids = [self.dragId])
+                if self.instruction[self.dragId].type in self.openDialogs:
+                    self.openDialogs[self.instruction[self.dragId].type].updateDialog()
+        
+        elif self.mouse['use'] in ('addPoint', 'addLine', 'addRectangle'):
+            endCoordinates = self.CanvasPaperCoordinates(rect = wx.Rect(event.GetX(), event.GetY(), 0, 0),
+                                                         canvasToPaper = True)[:2]
+
+            diffX = event.GetX() - self.mouse['begin'][0]
+            diffY = event.GetY() - self.mouse['begin'][1]
+
+            if self.mouse['use'] == 'addPoint':
+                self.parent.AddPoint(coordinates = endCoordinates)
+            elif self.mouse['use'] in ('addLine', 'addRectangle'):
+                # not too small lines/rectangles
+                if sqrt(diffX * diffX + diffY * diffY) < 5:
+                    self.pdcTmp.RemoveId(self.idZoomBoxTmp)
+                    self.Refresh()
+                    return
+
+                beginCoordinates = self.CanvasPaperCoordinates(rect = wx.Rect(self.mouse['begin'][0],
+                                                                              self.mouse['begin'][1], 0, 0),
+                                                               canvasToPaper = True)[:2]
+                if self.mouse['use'] == 'addLine':
+                    self.parent.AddLine(coordinates = [beginCoordinates, endCoordinates])
+                else:
+                    self.parent.AddRectangle(coordinates = [beginCoordinates, endCoordinates])
+                self.pdcTmp.RemoveId(self.idZoomBoxTmp)
+                self.Refresh()
+
+    def OnButtonDClick(self, event):
+        """!Open object dialog for editing."""
+        if self.mouse['use'] == 'pointer' and self.dragId != -1:
+            itemCall = {'text':self.parent.OnAddText,
+                        'mapinfo': self.parent.OnAddMapinfo,
+                        'scalebar': self.parent.OnAddScalebar,
+                        'image': self.parent.OnAddImage,
+                        'northArrow' : self.parent.OnAddNorthArrow,
+                        'point': self.parent.AddPoint,
+                        'line': self.parent.AddLine,
+                        'rectangle': self.parent.AddRectangle,
+                        'rasterLegend': self.parent.OnAddLegend,
+                        'vectorLegend': self.parent.OnAddLegend,
+                        'map': self.parent.OnAddMap}
+
+            itemArg = { 'text': dict(event = None, id = self.dragId),
+                        'mapinfo': dict(event = None),
+                        'scalebar': dict(event = None),
+                        'image': dict(event = None, id = self.dragId),
+                        'northArrow': dict(event = None, id = self.dragId),
+                        'point': dict(id = self.dragId),
+                        'line': dict(id = self.dragId),
+                        'rectangle': dict(id = self.dragId),
+                        'rasterLegend': dict(event = None),
+                        'vectorLegend': dict(event = None, page = 1),
+                        'map': dict(event = None, notebook = True)}
+
+            type = self.instruction[self.dragId].type
+            itemCall[type](**itemArg[type])
+
+    def OnDragging(self, event):
+        """!Process panning/resizing/drawing/moving."""
+        if event.MiddleIsDown():
+            # panning
             self.mouse['end'] = event.GetPosition()
             self.Pan(begin = self.mouse['begin'], end = self.mouse['end'])
             self.mouse['begin'] = event.GetPosition()
-            
-        elif event.Dragging() and event.LeftIsDown():
-            #draw box when zooming, creating map 
+
+        elif event.LeftIsDown():
+            # draw box when zooming, creating map 
             if self.mouse['use'] in ('zoomin', 'zoomout', 'addMap', 'addLine', 'addRectangle'):
                 self.mouse['end'] = event.GetPosition()
                 r = wx.Rect(self.mouse['begin'][0], self.mouse['begin'][1],
                             self.mouse['end'][0]-self.mouse['begin'][0], self.mouse['end'][1]-self.mouse['begin'][1])
                 r = self.modifyRectangle(r)
-                
+
                 if self.mouse['use'] in ('addLine', 'addRectangle'):
                     if self.mouse['use'] == 'addLine':
                         pdcType = 'line'
@@ -1371,10 +1568,9 @@ class PsMapBufferedWindow(wx.Window):
                 self.mouse['end'] = event.GetPosition()
                 self.Pan(begin = self.mouse['begin'], end = self.mouse['end'])
                 self.mouse['begin'] = event.GetPosition()
-                
-            #move object
+
+            # move object
             if self.mouse['use'] == 'pointer' and self.dragId != -1:
-                
                 self.mouse['end'] = event.GetPosition()
                 dx, dy = self.mouse['end'][0] - self.begin[0], self.mouse['end'][1] - self.begin[1]
                 self.pdcObj.TranslateId(self.dragId, dx, dy)
@@ -1387,7 +1583,7 @@ class PsMapBufferedWindow(wx.Window):
                         self.instruction[self.dragId]['coords'][1] + dy
                 self.begin = event.GetPosition()
                 self.Refresh()
-                
+
             # resize object
             if self.mouse['use'] == 'resize':
                 pos = event.GetPosition()
@@ -1410,7 +1606,7 @@ class PsMapBufferedWindow(wx.Window):
                         
                     if newWidth < 10 or newHeight < 10:
                         return
-                    
+
                     bounds = wx.Rect(x, y, newWidth, newHeight)
                     self.Draw(pen = self.pen['map'], brush = self.brush['map'], pdc = self.pdcObj, drawid = self.dragId,
                               pdctype = 'rectText', bb = bounds)
@@ -1425,7 +1621,7 @@ class PsMapBufferedWindow(wx.Window):
                         return
 
                     self.DrawGraphics(drawid = self.dragId, shape = 'rectangle', color = instr['color'],
-                                    fcolor = instr['fcolor'], width = instr['width'], bb = rect)
+                                      fcolor = instr['fcolor'], width = instr['width'], bb = rect)
 
                 elif self.instruction[self.dragId].type == 'line':
                     instr = self.instruction[self.dragId]
@@ -1439,166 +1635,17 @@ class PsMapBufferedWindow(wx.Window):
                                                           canvasToPaper = False)[:2]
                     bounds = wx.RectPP(pCanvas, pos)
                     self.DrawGraphics(drawid = self.dragId, shape = 'line', color = instr['color'],
-                                    width = instr['width'], bb = bounds, lineCoords = (pos, pCanvas))
+                                      width = instr['width'], bb = bounds, lineCoords = (pos, pCanvas))
 
                     # update paper coordinates
                     points[self.currentLinePoint] = self.CanvasPaperCoordinates(rect = wx.RectPS(pos, (0, 0)),
                                                                                 canvasToPaper = True)[:2]
-                                                                                
+
                 self.RedrawSelectBox(self.dragId)
 
-        elif event.LeftUp():
-            # zoom in, zoom out
-            if self.mouse['use'] in ('zoomin','zoomout'):
-                zoomR = self.pdcTmp.GetIdBounds(self.idZoomBoxTmp)
-                self.pdcTmp.RemoveId(self.idZoomBoxTmp)
-                self.Refresh()
-                zoomFactor, view = self.ComputeZoom(zoomR)
-                self.Zoom(zoomFactor, view)
-
-                
-            # draw map frame    
-            if self.mouse['use'] == 'addMap':
-                rectTmp = self.pdcTmp.GetIdBounds(self.idZoomBoxTmp)
-                # too small rectangle, it's usually some mistake
-                if rectTmp.GetWidth() < 20 or rectTmp.GetHeight() < 20:
-                    self.pdcTmp.RemoveId(self.idZoomBoxTmp)
-                    self.Refresh()
-                    return
-                rectPaper = self.CanvasPaperCoordinates(rect = rectTmp, canvasToPaper = True)                
-                
-                dlg = MapDialog(parent = self.parent, id = [None, None, None], settings = self.instruction, 
-                                rect = rectPaper)
-                self.openDialogs['map'] = dlg
-                self.openDialogs['map'].Show()
-                
-                self.mouse['use'] = self.parent.mouseOld
-
-                self.SetCursor(self.parent.cursorOld)
-                self.parent.toolbar.ToggleTool(self.parent.actionOld, True)
-                self.parent.toolbar.ToggleTool(self.parent.toolbar.action['id'], False)
-                self.parent.toolbar.action['id'] = self.parent.actionOld
-                return
-
-
-            # resize resizable objects (map, line, rectangle)
-            if self.mouse['use'] == 'resize':
-                mapObj = self.instruction.FindInstructionByType('map')
-                if not mapObj:
-                    mapObj = self.instruction.FindInstructionByType('initMap')
-                mapId = mapObj.id
-                
-                if self.dragId == mapId:
-                    # necessary to change either map frame (scaleType 0,1,2) or region (scaletype 3)
-                    newRectCanvas = self.pdcObj.GetIdBounds(mapId)
-                    newRectPaper = self.CanvasPaperCoordinates(rect = newRectCanvas, canvasToPaper = True)
-                    self.instruction[mapId]['rect'] = newRectPaper
-                    
-                    if self.instruction[mapId]['scaleType'] in (0, 1, 2):
-                        if self.instruction[mapId]['scaleType'] == 0:
-                            
-                            scale, foo, rect = AutoAdjust(self, scaleType = 0,
-                                                          map = self.instruction[mapId]['map'],
-                                                          mapType = self.instruction[mapId]['mapType'], 
-                                                          rect = self.instruction[mapId]['rect'])
-                            
-                        elif self.instruction[mapId]['scaleType'] == 1:
-                            scale, foo, rect = AutoAdjust(self, scaleType = 1,
-                                                          region = self.instruction[mapId]['region'],
-                                                          rect = self.instruction[mapId]['rect'])
-                        else:
-                            scale, foo, rect = AutoAdjust(self, scaleType = 2,
-                                                          rect = self.instruction[mapId]['rect'])
-                        self.instruction[mapId]['rect'] = rect
-                        self.instruction[mapId]['scale'] = scale
-                        
-                        rectCanvas = self.CanvasPaperCoordinates(rect = rect, canvasToPaper = False)
-                        self.Draw(pen = self.pen['map'], brush = self.brush['map'],
-                                  pdc = self.pdcObj, drawid = mapId, pdctype = 'rectText', bb = rectCanvas)
-                        
-                    elif self.instruction[mapId]['scaleType'] == 3:
-                        ComputeSetRegion(self, mapDict = self.instruction[mapId].GetInstruction())
-                    #check resolution
-                    SetResolution(dpi = self.instruction[mapId]['resolution'],
-                                  width = self.instruction[mapId]['rect'].width,
-                                  height = self.instruction[mapId]['rect'].height)
-                    
-                    self.RedrawSelectBox(mapId)
-                    self.Zoom(zoomFactor = 1, view = (0, 0))
-
-                elif self.instruction[self.dragId].type == 'line':
-                    points = self.instruction[self.dragId]['where']
-                    self.instruction[self.dragId]['rect'] = Rect2DPP(points[0], points[1])
-                    self.RecalculatePosition(ids = [self.dragId])
-
-                elif self.instruction[self.dragId].type == 'rectangle':
-                    self.RecalculatePosition(ids = [self.dragId])
-
-                self.mouse['use'] = 'pointer'
-                
-            # recalculate the position of objects after dragging    
-            if self.mouse['use'] in ('pointer', 'resize') and self.dragId != -1:
-                if self.mouse['begin'] != event.GetPosition(): #for double click
-                    
-                    self.RecalculatePosition(ids = [self.dragId])
-                    if self.instruction[self.dragId].type in self.openDialogs:
-                        self.openDialogs[self.instruction[self.dragId].type].updateDialog()
-            
-            elif self.mouse['use'] in ('addPoint', 'addLine', 'addRectangle'):
-                endCoordinates = self.CanvasPaperCoordinates(rect = wx.Rect(event.GetX(), event.GetY(), 0, 0),
-                                                          canvasToPaper = True)[:2]
-
-                diffX = event.GetX() - self.mouse['begin'][0]
-                diffY = event.GetY() - self.mouse['begin'][1]
-
-                if self.mouse['use'] == 'addPoint':
-                    self.parent.AddPoint(coordinates = endCoordinates)
-                elif self.mouse['use'] in ('addLine', 'addRectangle'):
-                    # not too small lines/rectangles
-                    if sqrt(diffX * diffX + diffY * diffY) < 5:
-                        self.pdcTmp.RemoveId(self.idZoomBoxTmp)
-                        self.Refresh()
-                        return
-
-                    beginCoordinates = self.CanvasPaperCoordinates(rect = wx.Rect(self.mouse['begin'][0],
-                                                                                  self.mouse['begin'][1], 0, 0),
-                                                                   canvasToPaper = True)[:2]
-                    if self.mouse['use'] == 'addLine':
-                        self.parent.AddLine(coordinates = [beginCoordinates, endCoordinates])
-                    else:
-                        self.parent.AddRectangle(coordinates = [beginCoordinates, endCoordinates])
-                    self.pdcTmp.RemoveId(self.idZoomBoxTmp)
-                    self.Refresh()
-                
-        # double click launches dialogs
-        elif event.LeftDClick():
-            if self.mouse['use'] == 'pointer' and self.dragId != -1:
-                itemCall = {'text':self.parent.OnAddText,
-                            'mapinfo': self.parent.OnAddMapinfo,
-                            'scalebar': self.parent.OnAddScalebar,
-                            'image': self.parent.OnAddImage,
-                            'northArrow' : self.parent.OnAddNorthArrow,
-                            'point': self.parent.AddPoint,
-                            'line': self.parent.AddLine,
-                            'rectangle': self.parent.AddRectangle,
-                            'rasterLegend': self.parent.OnAddLegend,
-                            'vectorLegend': self.parent.OnAddLegend,
-                            'map': self.parent.OnAddMap}
-
-                itemArg = { 'text': dict(event = None, id = self.dragId),
-                            'mapinfo': dict(event = None),
-                            'scalebar': dict(event = None),
-                            'image': dict(event = None, id = self.dragId),
-                            'northArrow': dict(event = None, id = self.dragId),
-                            'point': dict(id = self.dragId),
-                            'line': dict(id = self.dragId),
-                            'rectangle': dict(id = self.dragId),
-                            'rasterLegend': dict(event = None),
-                            'vectorLegend': dict(event = None, page = 1),
-                            'map': dict(event = None, notebook = True)}
-
-                type = self.instruction[self.dragId].type
-                itemCall[type](**itemArg[type])
+    def OnMiddleDown(self, event):
+        """!Middle mouse button pressed."""
+        self.mouse['begin'] = event.GetPosition()
 
     def Pan(self, begin, end):
         """!Move canvas while dragging.
