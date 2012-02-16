@@ -38,8 +38,8 @@ int begin_rasterization(int nrows, int f)
     if (max_rows <= 0)
 	max_rows = 512;
 
-    G_get_set_window(&region);
-    G_get_set_window(&page);
+    Rast_get_window(&region);
+    Rast_get_window(&page);
 
     pages = (region.rows + max_rows - 1) / max_rows;
 
@@ -139,7 +139,8 @@ int configure_plot(void)
     /* change the region */
     page.north = region.north - at_row * region.ns_res;
     page.south = page.north - nrows * region.ns_res;
-    Rast_set_window(&page);
+    /* Rast_set_[inpu|output]_window not working but G_set_window ??? */
+    G_set_window(&page);
 
     /* configure the plot routines */
     G_setup_plot(-0.5, page.rows - 0.5, -0.5, page.cols - 0.5, move, cont);
