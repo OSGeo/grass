@@ -30,16 +30,14 @@ SetCompressorDictSize 64
 
 ;Version variables
 
-!define SVN_REVISION "36599"
+!define SVN_REVISION "@GRASS_VERSION_SVN@"
 !define BINARY_REVISION "1"
+!define VERSION_NUMBER "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
+!define GRASS_BASE "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
 !if ${INSTALLER_TYPE} == "Release"
-	!define VERSION_NUMBER "7.0.0"
-	!define GRASS_COMMAND "grass70"
-	!define GRASS_BASE "GRASS 7.0"
+        !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
-	!define VERSION_NUMBER "7.0.svn"
-	!define GRASS_COMMAND "grass70svn"
-	!define GRASS_BASE "GRASS 7.0.svn"
+        !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@svn"
 !endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -57,15 +55,15 @@ SetCompressorDictSize 64
 
 ;Set the installer variables, depending on the selected version to build
 
-!define PACKAGE_FOLDER ".\GRASS-70-Package"
+!define PACKAGE_FOLDER ".\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package"
 !if ${INSTALLER_TYPE} == "Release"
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup.exe"
 	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-${BINARY_REVISION}"
-	!define CHECK_INSTALL_NAME "GRASS 70"
+	!define CHECK_INSTALL_NAME "GRASS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}-Setup.exe"
 	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}"
-	!define CHECK_INSTALL_NAME "GRASS 70 SVN"
+	!define CHECK_INSTALL_NAME "GRASS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ SVN"
 !endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -598,7 +596,7 @@ Section "GRASS" SecGRASS
 	
 	;HKEY_LOCAL_MACHINE Install entries
 	;Set the Name, Version and Revision of GRASS + PublisherInfo + InstallPath	
-	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "GRASS 7.0"
+	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "VersionNumber" "${VERSION_NUMBER}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "SvnRevision" "${SVN_REVISION}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "BinaryRevision" "${BINARY_REVISION}"
@@ -607,7 +605,7 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "InstallPath" "$INSTALL_DIR"
 	
 	;HKEY_LOCAL_MACHINE Uninstall entries
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS 7.0"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString" "$INSTALL_DIR\Uninstall-GRASS.exe"
 	
 	!if ${INSTALLER_TYPE} == "Release"
@@ -651,7 +649,7 @@ Section "GRASS" SecGRASS
 	"$INSTALL_DIR\etc\gui\icons\grass_web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS website"
 	
 ; FIXME: ship the WinGrass release notes .html file instead of URL
-; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass70/binary/mswindows/native/README.html?format=raw
+; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@/binary/mswindows/native/README.html?format=raw
 ; probably ship with devel versions too? ie Release Notes, not the Release Announcement press release.
 	!if ${INSTALLER_TYPE} == "Release"
 		CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Release Notes.lnk" "$INSTALL_DIR\WinGRASS-README.url" ""\
@@ -690,7 +688,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'cd "%USERPROFILE%"'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 '%GRASS_PYTHON% "%GISBASE%\etc\grass70.py" %*'
+	FileWrite $0 '%GRASS_PYTHON% "%GISBASE%\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" %*'
 	FileClose $0
 	done_create_grass_command.bat:
 	
@@ -724,7 +722,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'cd "%USERPROFILE%"'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 '%GRASS_PYTHON% "%GISBASE%\etc\grass70.py" %*'
+	FileWrite $0 '%GRASS_PYTHON% "%GISBASE%\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" %*'
 	FileClose $0
 	done_create_grass_command_msys.bat:
 	
@@ -838,7 +836,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'GEOTIFF_CSV="$INSTALL_DIR\share\epsg_csv"$\r$\n'
 	FileWrite $0 'export GEOTIFF_CSV$\r$\n'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 '"$$GRASS_PYTHON $$GISBASE/etc/grass70.py" "$$@"'
+	FileWrite $0 '"$$GRASS_PYTHON $$GISBASE/etc/grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "$$@"'
 	FileClose $0
 	done_create_grass_command:
 		
@@ -861,29 +859,29 @@ Section "GRASS" SecGRASS
 	;${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
 
 	SetShellVarContext current  
-	${If} ${FileExists} "$APPDATA\GRASS7\rc"
-	      DetailPrint "File $APPDATA\GRASS7\rc already exists. Skipping."
+	${If} ${FileExists} "$APPDATA\GRASS@GRASS_VERSION_MAJOR@\rc"
+	      DetailPrint "File $APPDATA\GRASS@GRASS_VERSION_MAJOR@\rc already exists. Skipping."
 	${Else}
-	      ;create $APPDATA\GRASS7\rc
+	      ;create $APPDATA\GRASS@GRASS_VERSION_MAJOR@\rc
 	      ClearErrors
-	      CreateDirectory	$APPDATA\GRASS7
-	      FileOpen $0 $APPDATA\GRASS7\rc w
-	      IfErrors done_create_grass7_rc
+	      CreateDirectory	$APPDATA\GRASS@GRASS_VERSION_MAJOR@
+	      FileOpen $0 $APPDATA\GRASS@GRASS_VERSION_MAJOR@\rc w
+	      IfErrors done_create_grass_rc
 	      FileWrite $0 'GISDBASE: $GIS_DATABASE$\r$\n'
 	      FileWrite $0 'LOCATION_NAME: demolocation$\r$\n'
 	      FileWrite $0 'MAPSET: PERMANENT$\r$\n'
 	      FileClose $0	
-	      done_create_grass7_rc:
+	      done_create_grass_rc:
 	${EndIf}
 
-	;replace gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn" in grass70.py with $INSTDIR
-	Push "$INSTDIR\etc\grass70.py" ; file to modify
-	Push 'gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn"' ; string that a line must begin with *WS Sensitive*
+	;replace gisbase = "/c/OSGeo4W/apps/grass/grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@" in grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py with $INSTDIR
+	Push "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" ; file to modify
+	Push 'gisbase = "/c/OSGeo4W/apps/grass/grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"' ; string that a line must begin with *WS Sensitive*
 	Push 'gisbase = "$INSTDIR"' ; string to replace whole line with
 	Call ReplaceLineStr
 	
-	;replace config_projshare = "/c/OSGeo4W/share/proj" i n grass70.py with $INSTDIR\proj
-	Push "$INSTDIR\etc\grass70.py" ; file to modify
+	;replace config_projshare = "/c/OSGeo4W/share/proj" i n grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py with $INSTDIR\proj
+	Push "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" ; file to modify
 	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
 	Push 'config_projshare = "$INSTDIR\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
@@ -994,12 +992,12 @@ Section "Uninstall"
 	SetShellVarContext all
 	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
 	
-	;remove the $APPDATA\GRASS7 folder
+	;remove the $APPDATA\GRASS@GRASS_VERSION_MAJOR@ folder
 	;disabled, don't remove user settings
 	; SetShellVarContext current
-	;RMDir /r "$APPDATA\GRASS7"	
-	;${If} ${FileExists} "$APPDATA\GRASS7\addons\*.*"
-	;      RMDir /r "$APPDATA\GRASS7\addons"
+	;RMDir /r "$APPDATA\GRASS@GRASS_VERSION_MAJOR@"	
+	;${If} ${FileExists} "$APPDATA\GRASS@GRASS_VERSION_MAJOR@\addons\*.*"
+	;      RMDir /r "$APPDATA\GRASS@GRASS_VERSION_MAJOR@\addons"
 	;${EndIf}
 	
 	;remove the Registry Entries
