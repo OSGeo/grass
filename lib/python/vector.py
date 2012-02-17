@@ -243,7 +243,7 @@ def vector_db_select(map, layer = 1, **kwargs):
     ret = read_command('v.db.select',
                        map = map,
                        layer = layer,
-                       fs = '|', **kwargs)
+                       **kwargs)
     
     if not ret:
         error(_('vector_select() failed'))
