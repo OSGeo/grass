@@ -208,8 +208,11 @@ int main(int argc, char **argv)
     else
 	G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
 
-    if (flag.m->answer)
+    if (flag.m->answer) {
 	scale = G_database_units_to_meters_factor();
+	if (strcmp(opt.met->answer, "squared") == 0)
+	    scale *= scale;
+    }
 
     in_fd = Rast_open_old(in_name, "");
 
