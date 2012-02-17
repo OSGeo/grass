@@ -4,7 +4,6 @@ include $(MODULE_TOPDIR)/include/Make/Other.make
 
 EXTRA_CLEAN_FILES = GRASS-Packager.bat GRASS-Installer.bat
 
-SUBDIRS = 
 ifneq ($(MINGW),)
 default: GRASS-Packager.bat GRASS-Installer.nsi
 endif	
