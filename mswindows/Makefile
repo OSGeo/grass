@@ -6,7 +6,7 @@ EXTRA_CLEAN_FILES = GRASS-Packager.bat GRASS-Installer.bat
 
 SUBDIRS = 
 ifneq ($(MINGW),)
-	default: GRASS-Packager.bat GRASS-Installer.nsi
+default: GRASS-Packager.bat GRASS-Installer.nsi
 endif	
 
 GRASS-Packager.bat: GRASS-Packager.bat.tmpl
@@ -16,7 +16,7 @@ GRASS-Packager.bat: GRASS-Packager.bat.tmpl
 	-e 's#@GRASS_VERSION_RELEASE@#$(GRASS_VERSION_RELEASE)#' \
 	$< > $@
 
-GRASS-Installer.bat: GRASS-Installer.bat.tmpl
+GRASS-Installer.nsi: GRASS-Installer.nsi.tmpl
 	sed \
 	-e 's#@GRASS_VERSION_SVN@#$(GRASS_VERSION_SVN)#' \
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
