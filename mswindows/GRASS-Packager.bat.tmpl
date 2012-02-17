@@ -12,11 +12,11 @@ rem ----------------------------------------------------------------------------
 rem Set the script variables
 rem --------------------------------------------------------------------------------------------------------------------------
 
-set PACKAGE_DIR=.\GRASS-70-Package
+set PACKAGE_DIR=.\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package
 
 set OSGEO4W_DIR=c:\osgeo4w
 
-set GRASS_PREFIX=%OSGEO4W_DIR%\apps\grass\grass-7.0.svn
+set GRASS_PREFIX=%OSGEO4W_DIR%\apps\grass\grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@
 set GRASS_BIN_PREFIX=%OSGEO4W_DIR%\bin
 
 set SVN_PATH=c:\Subversion
@@ -36,7 +36,7 @@ mkdir %PACKAGE_DIR%
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
-rem xcopy %GRASS_BIN_PREFIX%\grass70.py %PACKAGE_DIR% /S/V/F
+rem xcopy %GRASS_BIN_PREFIX%\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py %PACKAGE_DIR% /S/V/F
 xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F
 
 @echo.

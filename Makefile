@@ -44,7 +44,8 @@ DIRS = \
 	gui \
 	visualization \
 	locale \
-	macosx
+	macosx \
+	mswindows
 
 SUBDIRS = $(DIRS)
 
