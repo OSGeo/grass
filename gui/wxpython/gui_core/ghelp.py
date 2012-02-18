@@ -398,10 +398,10 @@ class AboutWindow(wx.Frame):
         infoGridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
         infoGridSizer.AddGrowableCol(0)
         infoGridSizer.AddGrowableCol(1)
-        logo = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass.ico")
+        logo = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass-64x64.png")
         logoBitmap = wx.StaticBitmap(parent = infoTxt, id = wx.ID_ANY,
                                      bitmap = wx.Bitmap(name = logo,
-                                                        type = wx.BITMAP_TYPE_ICO))
+                                                        type = wx.BITMAP_TYPE_PNG))
         infoSizer.Add(item = logoBitmap, proportion = 0,
                       flag = wx.ALL | wx.ALIGN_CENTER, border = 25)
         
