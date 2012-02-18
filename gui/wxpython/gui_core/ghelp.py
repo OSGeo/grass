@@ -23,6 +23,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import codecs
+import platform
 
 import wx
 from wx.html import HtmlWindow
@@ -453,7 +454,7 @@ class AboutWindow(wx.Frame):
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = sys.version.replace(os.linesep, '')),
+                                               label = platform.python_version()),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
 
@@ -464,7 +465,7 @@ class AboutWindow(wx.Frame):
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = wx.version()),
+                                               label = wx.__version__),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
         
