@@ -889,9 +889,10 @@ class Image(InstructionObject):
         
     def __str__(self):
         self.ChangeRefPoint(toCenter = True)
+        epsfile = self.instruction['epsfile'].replace(os.getenv('GISBASE'), "$GISBASE")
         
         instr = "eps %s %s\n" % (self.instruction['east'], self.instruction['north'])
-        instr += string.Template("    epsfile $epsfile\n").substitute(self.instruction)
+        instr += "    epsfile %s\n" % epsfile
         if self.instruction["rotate"]:
             instr += string.Template("    rotate $rotate\n").substitute(self.instruction)
         if self.instruction["scale"]:
@@ -916,7 +917,8 @@ class Image(InstructionObject):
                         instr['east'], instr['north'] = float(e), float(n)
                 
                 elif sub == 'epsfile':
-                    instr['epsfile'] = line.split(None, 1)[1]
+                    epsfile = line.split(None, 1)[1]
+                    instr['epsfile'] = epsfile.replace("$GISBASE", os.getenv("GISBASE"))
                 elif sub == 'rotate':
                     instr['rotate'] = float(line.split(None, 1)[1])
                 elif sub == 'scale':
@@ -999,10 +1001,11 @@ class NorthArrow(Image):
         
     def __str__(self):
         self.ChangeRefPoint(toCenter = True)
-        
+        epsfile = self.instruction['epsfile'].replace(os.getenv('GISBASE'), "$GISBASE")
+
         instr = "eps %s %s\n" % (self.instruction['east'], self.instruction['north'])
         instr += "# north arrow\n"
-        instr += string.Template("    epsfile $epsfile\n").substitute(self.instruction)
+        instr += "    epsfile %s\n" % epsfile
         if self.instruction["rotate"]:
             instr += string.Template("    rotate $rotate\n").substitute(self.instruction)
         if self.instruction["scale"]:
@@ -1663,7 +1666,8 @@ class VProperties(InstructionObject):
                     
         if self.subType == 'areas':
             if dic['pat'] is not None:
-                vInstruction += string.Template("    pat $pat\n").substitute(dic)
+                patternFile = dic['pat'].replace(os.getenv("GISBASE"), "$GISBASE")
+                vInstruction += "    pat %s\n" % patternFile
                 vInstruction += string.Template("    pwidth $pwidth\n").substitute(dic)
                 vInstruction += string.Template("    scale $scale\n").substitute(dic)
                 
@@ -1775,7 +1779,8 @@ class VProperties(InstructionObject):
                 if line.startswith('fcolor'):
                     instr['fcolor'] = line.split()[1]    
                 elif line.startswith('pat'):
-                    instr['pat'] = line.split()[1]
+                    patternFile = line.split()[1]
+                    instr['pat'] = patternFile.replace("$GISBASE", os.getenv("GISBASE"))
                 elif line.startswith('pwidth'):
                     instr['pwidth'] = float(line.split()[1])
                 elif line.startswith('scale'):
