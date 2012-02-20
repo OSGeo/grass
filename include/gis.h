@@ -230,6 +230,25 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_M_EN,                 /* coordinates */
     G_OPT_M_COLR,               /* color rules */
     G_OPT_M_DIR,                /* directory input */    
+
+    G_OPT_STDS_INPUT,           /* old input space time dataset of type strds, str3ds or stvds */
+    G_OPT_STDS_INPUTS,          /* old input space time datasets */
+    G_OPT_STRDS_INPUT,          /* old input space time raster dataset */
+    G_OPT_STRDS_INPUTS,         /* old input space time raster datasets */
+    G_OPT_STRDS_OUTPUT,         /* new output space time raster dataset */
+    G_OPT_STR3DS_INPUT,         /* old input space time raster3d dataset */
+    G_OPT_STR3DS_INPUTS,        /* old input space time raster3d datasets */
+    G_OPT_STR3DS_OUTPUT,        /* new output space time raster3d dataset */
+    G_OPT_STVDS_INPUT,          /* old input space time vector dataset */
+    G_OPT_STVDS_INPUTS,         /* old input space time vector datasets */
+    G_OPT_STVDS_OUTPUT,         /* new output space time vector dataset */
+    G_OPT_MAP_INPUT,            /* old input map of type raster, vector or raster3d  */
+    G_OPT_MAP_INPUTS,           /* old input maps of type raster, vector or raster3d  */
+    G_OPT_STDS_TYPE,            /* the type of a space time dataset: strds, str3ds, stvds */ 
+    G_OPT_MAP_TYPE,             /* The type of an input map: raster, vect, rast3d */
+    G_OPT_T_TYPE,               /* The temporal type of a space time dataset */
+    G_OPT_T_WHERE,              /* A temporal GIS framework SQL WHERE statement */
+
 } STD_OPT;
 
 /**/ typedef enum
