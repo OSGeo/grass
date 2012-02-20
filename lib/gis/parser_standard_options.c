@@ -92,6 +92,25 @@
    - G_OPT_M_COLR
    - G_OPT_M_DIR
 
+  - temporal GIS framework
+   - G_OPT_STDS_INPUT
+   - G_OPT_STDS_INPUTS
+   - G_OPT_STRDS_INPUT
+   - G_OPT_STRDS_INPUTS
+   - G_OPT_STRDS_OUTPUT
+   - G_OPT_STR3DS_INPUT
+   - G_OPT_STR3DS_INPUTS
+   - G_OPT_STR3DS_OUTPUT
+   - G_OPT_STVDS_INPUT
+   - G_OPT_STVDS_INPUTS
+   - G_OPT_STVDS_OUTPUT
+   - G_OPT_MAP_INPUT
+   - G_OPT_MAP_INPUTS
+   - G_OPT_STDS_TYPE
+   - G_OPT_MAP_TYPE
+   - G_OPT_T_TYPE
+   - G_OPT_T_WHERE
+ 
    \param opt type of Option struct to create
    
    \return pointer to an Option struct
@@ -580,6 +599,153 @@ struct Option *G_define_standard_option(int opt)
 	Opt->options = G_color_rules_options();
 	Opt->description = _("Name of color table");
 	Opt->descriptions = G_color_rules_descriptions();
+	break;
+
+    /* Spatio-temporal modules of the temporal GIS framework */
+    case G_OPT_STDS_INPUT:
+	Opt->key = "input";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "old,stds,stds";
+	Opt->description = _("Name of the input space time dataset");
+	break;
+    case G_OPT_STDS_INPUTS:
+	Opt->key = "inputs";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->gisprompt = "old,stds,stds";
+	Opt->description = _("Name of the input space time datasets");
+	break;
+    case G_OPT_STRDS_INPUT:
+	Opt->key = "input";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "old,strds,strds";
+	Opt->description = _("Name of the input space time raster dataset");
+	break;
+    case G_OPT_STRDS_INPUTS:
+	Opt->key = "inputs";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->gisprompt = "old,strds,strds";
+	Opt->description = _("Name of the input space time raster datasets");
+	break;
+    case G_OPT_STRDS_OUTPUT:
+	Opt->key = "output";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "new,strds,strds";
+	Opt->description = _("Name of the output space time raster dataset");
+	break;
+    case G_OPT_STVDS_INPUT:
+	Opt->key = "input";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "old,stvds,stvds";
+	Opt->description = _("Name of the input space time vector dataset");
+	break;
+    case G_OPT_STVDS_INPUTS:
+	Opt->key = "inputs";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->gisprompt = "old,stvds,stvds";
+	Opt->description = _("Name of the input space time vector datasets");
+	break;
+    case G_OPT_STVDS_OUTPUT:
+	Opt->key = "output";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "new,stvds,stvds";
+	Opt->description = _("Name of the output space time vector dataset");
+	break;
+    case G_OPT_STR3DS_INPUT:
+	Opt->key = "input";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "old,str3ds,str3ds";
+	Opt->description = _("Name of the input space time raster3d dataset");
+	break;
+    case G_OPT_STR3DS_INPUTS:
+	Opt->key = "inputs";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->gisprompt = "old,str3ds,str3ds";
+	Opt->description = _("Name of the input space time raster3d datasets");
+	break;
+    case G_OPT_STR3DS_OUTPUT:
+	Opt->key = "output";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "new,str3ds,str3ds";
+	Opt->description = _("Name of the output space time raster3d dataset");
+	break;
+    case G_OPT_STDS_TYPE:
+	Opt->key = "type";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = NO;
+	Opt->answer = "strds";
+	Opt->answer = "strds,stvds,str3ds";
+	Opt->description = _("Type of the input space time dataset");
+	break;
+    case G_OPT_MAP_INPUT:
+	Opt->key = "map";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "old,map,map";
+	Opt->description = _("Name of the input map");
+	break;
+    case G_OPT_MAP_INPUTS:
+	Opt->key = "map";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->gisprompt = "old,map,map";
+	Opt->description = _("Name of the input maps");
+	break;
+    case G_OPT_MAP_TYPE:
+	Opt->key = "type";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = NO;
+	Opt->answer = "rast";
+	Opt->answer = "rast,vect,rast3d";
+	Opt->description = _("Type of the input map");
+	break;
+    case G_OPT_T_TYPE:
+	Opt->key = "t_type";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = NO;
+	Opt->answer = "absolute";
+	Opt->answer = "absolute,relative";
+	Opt->description = _("The temporal type of the space time dataset");
+	break;
+    case G_OPT_T_WHERE:
+	Opt->key = "t_where";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "sql_query";
+	Opt->required = NO;
+	Opt->label = _("WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework");
+	Opt->description = _("Example: start_time > '2001-01-01 12:30:00'");
+	break;
     }
 
     return Opt;
