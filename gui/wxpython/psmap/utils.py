@@ -15,7 +15,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
-
+import os
 import wx
 from math import ceil, floor, sin, cos, pi
 
