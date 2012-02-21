@@ -7755,7 +7755,7 @@ msgstr "Impostazione del Modellizzatore"
 
 #: ../gui/wxpython/menustrings.py:908
 msgid "&Model"
-msgstr "&Modallo"
+msgstr "&Modello"
 
 #: ../gui/wxpython/menustrings.py:909
 #, fuzzy
