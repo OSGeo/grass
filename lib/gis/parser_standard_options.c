@@ -95,6 +95,7 @@
   - temporal GIS framework
    - G_OPT_STDS_INPUT
    - G_OPT_STDS_INPUTS
+   - G_OPT_STDS_OUTPUT
    - G_OPT_STRDS_INPUT
    - G_OPT_STRDS_INPUTS
    - G_OPT_STRDS_OUTPUT
@@ -618,6 +619,14 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,stds,stds";
 	Opt->description = _("Name of the input space time datasets");
+	break;
+    case G_OPT_STDS_OUTPUT:
+	Opt->key = "output";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "new,stds,stds";
+	Opt->description = _("Name of the output space time dataset");
 	break;
     case G_OPT_STRDS_INPUT:
 	Opt->key = "input";
