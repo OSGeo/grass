@@ -233,6 +233,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
     G_OPT_STDS_INPUT,           /* old input space time dataset of type strds, str3ds or stvds */
     G_OPT_STDS_INPUTS,          /* old input space time datasets */
+    G_OPT_STDS_OUTPUT,          /* new output space time dataset */
     G_OPT_STRDS_INPUT,          /* old input space time raster dataset */
     G_OPT_STRDS_INPUTS,         /* old input space time raster datasets */
     G_OPT_STRDS_OUTPUT,         /* new output space time raster dataset */

@@ -110,6 +110,42 @@ struct Option *define_standard_option(const char *name)
 	key = G_OPT_M_EN;
     else if (G_strcasecmp(name, "G_OPT_V_MAP") == 0)
 	key = G_OPT_V_MAP;
+    else if (G_strcasecmp(name, "G_OPT_STDS_INPUT") == 0)
+	key = G_OPT_STDS_INPUT;
+    else if (G_strcasecmp(name, "G_OPT_STDS_INPUTS") == 0)
+	key = G_OPT_STDS_INPUTS;
+    else if (G_strcasecmp(name, "G_OPT_STDS_OUTPUT") == 0)
+	key = G_OPT_STDS_OUTPUT;
+    else if (G_strcasecmp(name, "G_OPT_STRDS_INPUT") == 0)
+	key = G_OPT_STRDS_INPUT;
+    else if (G_strcasecmp(name, "G_OPT_STRDS_INPUTS") == 0)
+	key = G_OPT_STRDS_INPUTS;
+    else if (G_strcasecmp(name, "G_OPT_STRDS_OUTPUT") == 0)
+	key = G_OPT_STRDS_OUTPUT;
+    else if (G_strcasecmp(name, "G_OPT_STR3DS_INPUT") == 0)
+	key = G_OPT_STR3DS_INPUT;
+    else if (G_strcasecmp(name, "G_OPT_STR3DS_INPUTS") == 0)
+	key = G_OPT_STR3DS_INPUTS;
+    else if (G_strcasecmp(name, "G_OPT_STR3DS_OUTPUT") == 0)
+	key = G_OPT_STR3DS_OUTPUT;
+    else if (G_strcasecmp(name, "G_OPT_STVDS_INPUT") == 0)
+	key = G_OPT_STVDS_INPUT;
+    else if (G_strcasecmp(name, "G_OPT_STVDS_INPUTS") == 0)
+	key = G_OPT_STVDS_INPUTS;
+    else if (G_strcasecmp(name, "G_OPT_STVDS_OUTPUT") == 0)
+	key = G_OPT_STVDS_OUTPUT;
+    else if (G_strcasecmp(name, "G_OPT_MAP_INPUT") == 0)
+	key = G_OPT_MAP_INPUT;
+    else if (G_strcasecmp(name, "G_OPT_MAP_INPUTS") == 0)
+	key = G_OPT_MAP_INPUTS;
+    else if (G_strcasecmp(name, "G_OPT_STDS_TYPE") == 0)
+	key = G_OPT_STDS_TYPE;
+    else if (G_strcasecmp(name, "G_OPT_MAP_TYPE") == 0)
+	key = G_OPT_MAP_TYPE;
+    else if (G_strcasecmp(name, "G_OPT_T_TYPE") == 0)
+	key = G_OPT_T_TYPE;
+    else if (G_strcasecmp(name, "G_OPT_T_WHERE") == 0)
+	key = G_OPT_T_WHERE;
 
     if (key == G_OPT_UNDEFINED)
 	opt = G_define_option();
