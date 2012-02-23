@@ -75,11 +75,14 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
     if type == "rast":
         sp = dataset_factory("strds", id)
-    if type == "rast3d":
+    elif type == "rast3d":
         sp = dataset_factory("str3ds", id)
-    if type == "vect":
+    elif type == "vect":
         sp = dataset_factory("stvds", id)
+    else:
+        core.fatal(_("Unkown map type: %s")%(type))
 
+        
     connect = False
 
     if dbif == None:
@@ -480,6 +483,8 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
         @param method: The method to be used for sampling (start,during,contain,overlap,equal)
     """
     mapset =  core.gisenv()["MAPSET"]
+
+    print intype, sampletype
 
     if input.find("@") >= 0:
         id = input
