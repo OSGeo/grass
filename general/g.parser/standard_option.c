@@ -146,6 +146,8 @@ struct Option *define_standard_option(const char *name)
 	key = G_OPT_T_TYPE;
     else if (G_strcasecmp(name, "G_OPT_T_WHERE") == 0)
 	key = G_OPT_T_WHERE;
+    else if (G_strcasecmp(name, "G_OPT_T_SAMPLE") == 0)
+	key = G_OPT_T_SAMPLE;
 
     if (key == G_OPT_UNDEFINED)
 	opt = G_define_option();

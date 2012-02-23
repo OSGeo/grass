@@ -249,6 +249,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_MAP_TYPE,             /* The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,               /* The temporal type of a space time dataset */
     G_OPT_T_WHERE,              /* A temporal GIS framework SQL WHERE statement */
+    G_OPT_T_SAMPLE,             /* Temporal sample methods */
 
 } STD_OPT;
 

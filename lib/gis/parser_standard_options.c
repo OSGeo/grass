@@ -709,7 +709,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->answer = "strds";
-	Opt->answer = "strds,stvds,str3ds";
+	Opt->options = "strds,stvds,str3ds";
 	Opt->description = _("Type of the input space time dataset");
 	break;
     case G_OPT_MAP_INPUT:
@@ -721,7 +721,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("Name of the input map");
 	break;
     case G_OPT_MAP_INPUTS:
-	Opt->key = "map";
+	Opt->key = "maps";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = YES;
@@ -735,28 +735,38 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->answer = "rast";
-	Opt->answer = "rast,vect,rast3d";
+	Opt->options = "rast,vect,rast3d";
 	Opt->description = _("Type of the input map");
 	break;
     case G_OPT_T_TYPE:
-	Opt->key = "t_type";
+	Opt->key = "temporaltype";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->answer = "absolute";
-	Opt->answer = "absolute,relative";
+	Opt->options = "absolute,relative";
 	Opt->description = _("The temporal type of the space time dataset");
 	break;
     case G_OPT_T_WHERE:
-	Opt->key = "t_where";
+	Opt->key = "where";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "sql_query";
 	Opt->required = NO;
 	Opt->label = _("WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework");
 	Opt->description = _("Example: start_time > '2001-01-01 12:30:00'");
 	break;
+    case G_OPT_T_SAMPLE:
+	Opt->key = "sampling";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = NO;
+	Opt->multiple = YES;
+	Opt->answer = "start";
+	Opt->options = "start,during,overlap,contain,equal";
+	Opt->description = _("The method to be used for sampling the input dataset");
+	break;
     }
-
+    
     return Opt;
 }
 
