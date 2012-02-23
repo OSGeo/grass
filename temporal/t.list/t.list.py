@@ -15,9 +15,8 @@
 #############################################################################
 
 #%module
-#% description: List space time and map datasets
-#% keywords: dataset
-#% keywords: spacetime
+#% description: List space time datasets and map 
+#% keywords: temporal
 #% keywords: list
 #%end
 
@@ -50,21 +49,10 @@
 #% answer: id
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: A where statement for selected listing without "WHERE" e.g: "start_time < '2001-01-01' AND end_time > '2001-01-01'"
-#% required: no
-#% multiple: no
+#%option G_OPT_T_WHERE
 #%end
 
-#%option
-#% key: temporaltype
-#% type: string
-#% description: The temporal type of the space time dataset, default is absolute
-#% required: no
-#% options: absolute,relative
-#% answer: absolute
+#%option G_OPT_T_TYPE
 #%end
 
 #%option

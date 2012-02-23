@@ -16,26 +16,15 @@
 
 #%module
 #% description: Export space time raster dataset 
-#% keywords: dataset
-#% keywords: spacetime
-#% keywords: raster
+#% keywords: temporal
 #% keywords: export
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_INPUT
 #%end
 
-#%option
-#% key: output
-#% type: string
+#%option G_OPT_F_OUTPUT
 #% description: Name of a space time raster dataset archive
-#% required: yes
-#% multiple: no
 #%end
 
 #%option
@@ -58,12 +47,7 @@
 #% answer: bzip2
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: A where statement for selected listing e.g: start_time < '2001-01-01' and end_time > '2001-01-01"'
-#% required: no
-#% multiple: no
+#%option G_OPT_T_WHERE
 #%end
 
 import shutil

@@ -16,17 +16,11 @@
 
 #%module
 #% description: Modify the metadata of a space time dataset
-#% keywords: spacetime
-#% keywords: dataset
-#% keywords: create
+#% keywords: temporal
+#% keywords: support
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of the space time dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STDS_INPUT
 #%end
 
 #%option
@@ -39,13 +33,7 @@
 #% answer: mean
 #%end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the space time dataset, default is strds
-#% required: no
-#% options: strds, str3ds, stvds
-#% answer: strds
+#%option G_OPT_STDS_TYPE
 #%end
 
 #%option

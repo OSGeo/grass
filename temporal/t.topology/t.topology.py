@@ -16,28 +16,17 @@
 
 #%module
 #% description: List and modify temporal topology of a space time dataset
-#% keywords: spacetime dataset
-#% keywords: remove
+#% keywords: temporal
+#% keywords: topology
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of an existing space time dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STDS_INPUT
 #%end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the space time dataset, default is space time raster dataset (strds)
-#% required: no
-#% options: strds, str3ds, stvds
-#% answer: strds
+#%option G_OPT_STDS_TYPE
 #%end
 
-#%option G_OPT_DB_WHERE
+#%option G_OPT_T_WHERE
 #%end
 
 #%flag

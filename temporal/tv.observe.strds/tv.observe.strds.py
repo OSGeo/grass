@@ -16,17 +16,11 @@
 
 #%module
 #% description: Observe specific locations in a space time raster dataset over a periode of time using vector points
-#% keywords: space time raster dataset
-#% keywords: space time vector dataset
+#% keywords: temporal
 #% keywords: sampling
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a vector map
-#% required: yes
-#% multiple: no
+#%option G_OPT_STVDS_INPUT
 #%end
 
 #%option
@@ -53,20 +47,11 @@
 #% multiple: no
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: A where statement for attribute selection related to the input dataset without "WHERE" e.g: "cat < 200"
-#% required: no
-#% multiple: no
+#%option G_OPT_DB_WHERE
 #%end
 
-#%option
-#% key: tempwhere
-#% type: string
-#% description: A where statement for temporal selection related to the input dataset without "WHERE" e.g: "start_time < '2001-01-01' AND end_time > '2001-01-01'"
-#% required: no
-#% multiple: no
+#%option G_OPT_T_WHERE
+#% key: t_where
 #%end
 
 import grass.script as grass
@@ -83,7 +68,7 @@ def main():
     strds = options["strds"]
     where = options["where"]
     column = options["column"]
-    tempwhere = options["tempwhere"]
+    tempwhere = options["t_where"]
 
     if where == "" or where == " " or where == "\n":
         where = None

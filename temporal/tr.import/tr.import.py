@@ -16,26 +16,14 @@
 
 #%module
 #% description: Import space time raster dataset 
-#% keywords: dataset
-#% keywords: spacetime
-#% keywords: raster
+#% keywords: temporal
 #% keywords: import
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster dataset archive file
-#% required: yes
-#% multiple: no
+#%option G_OPT_F_INPUT
 #%end
 
-#%option
-#% key: output
-#% type: string
-#% description: Name of a space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_OUTPUT
 #%end
 
 #%option

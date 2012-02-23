@@ -16,60 +16,36 @@
 
 #%module
 #% description: Sample the input space time dataset with a sample space time dataset and print the result to stdout
-#% keywords: dataset
-#% keywords: spacetime
-#% keywords: raster
+#% keywords: temporal
 #% keywords: sample
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STDS_INPUT
 #%end
 
-#%option
+#%option G_OPT_STDS_INPUT
 #% key: sample
-#% type: string
 #% description: Name of the sample space time dataset 
-#% required: yes
-#% multiple: no
 #%end
 
-#%option
+#%option G_OPT_STDS_TYPE
 #% key: intype
-#% type: string
-#% description: Type of the input space time dataset, default is space time raster dataset (strds)
-#% required: no
-#% options: strds, str3ds, stvds
-#% answer: strds
 #%end
 
-#%option
+#%option G_OPT_STDS_TYPE
 #% key: samtype
-#% type: string
-#% description: Type of the sample space time dataset, default is space time raster dataset (strds)
-#% required: no
-#% options: strds, str3ds, stvds
-#% answer: strds
+#% description: Type of the sample space time dataset
 #%end
 
-#%option
+#%option G_OPT_T_SAMPLE
 #% key: method
-#% type: string
-#% description: The method to be used for sampling
-#% required: no
-#% multiple: yes
-#% options: start,during,overlap,contain,equal
 #% answer: during,overlap,contain,equal
 #%end
 
 #%option
 #% key: fs
 #% type: string
-#% description: The field separator character between the columns, default is tabular " | ". Do not use "," as this char is reserved to list several map ids in a sample granule
+#% description: The field separator character between the output columns, default is tabular " | ". Do not use "," as this char is reserved to list several map ids in a sample granule
 #% required: no
 #%end
 

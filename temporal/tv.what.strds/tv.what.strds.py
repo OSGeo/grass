@@ -16,25 +16,15 @@
 
 #%module
 #% description: Uploads raster map values at spatial and temporal positions of vector points to the tables. The maps are registered in space time datasets
-#% keywords: space time vector dataset
-#% keywords: space time raster dataset
+#% keywords: temporal
 #% keywords: sampling
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time vector dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STVDS_INPUT
 #%end
 
-#%option
+#%option  G_OPT_STRDS_INPUT
 #% key: strds
-#% type: string
-#% description: The space time raster dataset to use
-#% required: yes
-#% multiple: no
 #%end
 
 #%option
@@ -45,30 +35,14 @@
 #% multiple: no
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: A where statement for attribute selection related to the input dataset without "WHERE" e.g: "cat < 200"
-#% required: no
-#% multiple: no
+#%option G_OPT_DB_WHERE
 #%end
 
-#%option
-#% key: tempwhere
-#% type: string
-#% description: A where statement for temporal selection related to the input dataset without "WHERE" e.g: "start_time < '2001-01-01' AND end_time > '2001-01-01'"
-#% required: no
-#% multiple: no
+#%option G_OPT_T_WHERE
+#% key: t_where
 #%end
 
-#%option
-#% key: sampling
-#% type: string
-#% description: The method to be used for temporal sampling
-#% required: no
-#% multiple: yes
-#% options: start,during,overlap,contain,equal
-#% answer: start
+#%option G_OPT_T_SAMPLE
 #%end
 
 
@@ -85,7 +59,7 @@ def main():
     strds = options["strds"]
     where = options["where"]
     column = options["column"]
-    tempwhere = options["tempwhere"]
+    tempwhere = options["t_where"]
     sampling = options["sampling"]
 
     if where == "" or where == " " or where == "\n":

@@ -16,17 +16,12 @@
 
 #%module
 #% description: Remove space time datasets from temporal database
-#% keywords: spacetime
-#% keywords: dataset
+#% keywords: temporal
 #% keywords: remove
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name(s) of the space time dataset to be removed from the temporal database
+#%option G_OPT_STDS_INPUT
 #% required: no
-#% multiple: yes
 #%end
 
 #%option

@@ -16,34 +16,20 @@
 
 #%module
 #% description: Aggregated data of an existing space time raster dataset using the temporal topology of a second space time dataset
-#% keywords: spacetime raster dataset
-#% keywords: raster
+#% keywords: temporal
 #% keywords: aggregation
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_INPUT
 #%end
 
-#%option
+#%option G_OPT_STDS_INPUT
 #% key: sample
-#% type: string
 #% description: The time intervals from this space time dataset (raster, vector or raster3d) are used for aggregation computation. 
-#% required: yes
-#% multiple: no
 #%end
 
-#%option
-#% key: type
-#% type: string
+#%option G_OPT_STDS_TYPE
 #% description: Type of the aggregation space time dataset, default is strds
-#% required: no                                                 
-#% options: strds, str3ds, stvds
-#% answer: strds                                                
 #%end                                                           
 
 #%option
@@ -64,22 +50,10 @@
 #% answer: average
 #%end
 
-#%option
-#% key: sampling
-#% type: string
-#% description: The method to be used for sampling the input dataset
-#% required: no
-#% multiple: yes
-#% options: start,during,overlap,contain,equal
-#% answer: start
+#%option G_OPT_T_SAMPLE
 #%end
 
-#%option
-#% key: base
-#% type: string
-#% description: Base name of the new created raster maps
-#% required: yes
-#% multiple: no
+#%option G_OPT_R_BASE
 #%end
 
 #%flag

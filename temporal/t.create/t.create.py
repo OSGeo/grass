@@ -16,17 +16,17 @@
 
 #%module
 #% description: Create a space time dataset
-#% keywords: spacetime
-#% keywords: dataset
+#% keywords: temporal
 #% keywords: create
 #%end
 
-#%option
-#% key: output
-#% type: string
-#% description: Name of the new space time dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STDS_OUTPUT
+#%end
+
+#%option G_OPT_STDS_TYPE
+#%end
+
+#%option G_OPT_T_TYPE
 #%end
 
 #%option
@@ -37,24 +37,6 @@
 #% multiple: no
 #% options: min,max,sum,mean
 #% answer: mean
-#%end
-
-#%option
-#% key: type
-#% type: string
-#% description: Type of the space time dataset, default is strds
-#% required: no
-#% options: strds, str3ds, stvds
-#% answer: strds
-#%end
-
-#%option
-#% key: temporaltype
-#% type: string
-#% description: The temporal type of the space time dataset, default is absolute
-#% required: no
-#% options: absolute,relative
-#% answer: absolute
 #%end
 
 #%option

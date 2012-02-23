@@ -17,46 +17,26 @@
 #%module
 #% description: Unregister raster, vector and raster3d maps from the temporal database or a specific space time dataset
 #% keywords: temporal
-#% keywords: raster
-#% keywords: vector
-#% keywords: raster3d
-#% keywords: strds
-#% keywords: stvds
-#% keywords: str3ds
+#% keywords: unregister
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
+#%option G_OPT_STDS_INPUT
 #% required: no
-#% multiple: no
 #%end
 
-#%option
+#%option G_OPT_F_INPUT
 #% key: file
-#% type: string
 #% description: Input file with map names, one per line
 #% required: no
-#% multiple: no
 #%end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the input map(s)
-#% required: no
-#% options: rast, vect, rast3d
-#% answer: rast
+#%option G_OPT_MAP_TYPE
 #%end
 
 
-#%option
-#% key: maps
-#% type: string
+#%option G_OPT_MAP_INPUTS
 #% description: Name(s) of existing raster, vector or raster3d map(s) to unregister
 #% required: no
-#% multiple: yes
 #%end
 
 import grass.script as grass
