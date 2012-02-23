@@ -16,8 +16,8 @@
 
 #%module
 #% description: List informtion about space time and map datasets
-#% keywords: spacetime dataset
-#% keywords: remove
+#% keywords: temporal
+#% keywords: info
 #%end
 
 #%option

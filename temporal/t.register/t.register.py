@@ -16,43 +16,24 @@
 
 #%module
 #% description: Register raster, vector adn raster3d maps in a space time datasets
-#% keywords: temnporal
-#% keywords: raster
-#% keywords: vector
-#% keywords: raster3d
+#% keywords: temporal
+#% keywords: register
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of an existing space time dataset of type raster, vector or raster3d
-#% required: yes
-#% multiple: no
-#%end
-
-#%option
-#% key: maps
-#% type: string
-#% description: Name(s) of existing map(s) of type raster, vector or raster3d
+#%option G_OPT_STDS_INPUT
 #% required: no
-#% multiple: yes
 #%end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the input map(s)
+#%option G_OPT_MAP_INPUTS
 #% required: no
-#% options: rast, vect, rast3d
-#% answer: rast
 #%end
 
-#%option
+#%option G_OPT_MAP_TYPE
+#%end
+
+#%option G_OPT_FILE_INPUT
 #% key: file
-#% type: string
 #% description: Input file with map names, one per line. Additionally the start time and the end time can be specified per line
-#% required: no
-#% multiple: no
 #%end
 
 #%option

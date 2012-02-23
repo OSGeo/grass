@@ -16,17 +16,11 @@
 
 #%module
 #% description: Performe different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset
-#% keywords: spacetime raster dataset
-#% keywords: raster
-#% keywords: extract
+#% keywords: temporal
+#% keywords: series
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of an existing space time raster dataset
-#% required: no
-#% multiple: yes
+#%option G_OPT_STRDS_INPUT
 #%end
 
 #%option
@@ -49,7 +43,7 @@
 #% answer: id
 #%end
 
-#%option G_OPT_DB_WHERE
+#%option G_OPT_T_WHERE
 #%end
 
 #%option G_OPT_R_OUTPUT

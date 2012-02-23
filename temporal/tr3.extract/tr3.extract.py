@@ -16,25 +16,14 @@
 
 #%module
 #% description: Extract a subset of a space time raster3d dataset
-#% keywords: spacetime raster3d dataset
-#% keywords: raster3d
+#% keywords: temporal
 #% keywords: extract
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster3d dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STR3DS_INPUT
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: A where statement for selected listing without "WHERE" e.g: "start_time < '2001-01-01' AND end_time > '2001-01-01'"
-#% required: no
-#% multiple: no
+#%option G_OPT_T_WHERE
 #%end
 
 #%option
@@ -45,12 +34,7 @@
 #% multiple: no
 #%end
 
-#%option
-#% key: output
-#% type: string
-#% description: Name of the output space time raster3d dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STR3DS_OUTPUT
 #%end
 
 #%option

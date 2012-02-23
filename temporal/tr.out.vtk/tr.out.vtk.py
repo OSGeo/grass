@@ -23,12 +23,7 @@
 #% keywords: VTK
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_INPUT
 #%end
 
 #%option
@@ -39,20 +34,11 @@
 #% multiple: no
 #%end
 
-#%option G_OPT_R_INPUT
-#% key: elevation
-#% type: string
-#% description: Elevation raster map
+#%option G_OPT_R_ELEV
 #% required: no
-#% multiple: no
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: A where statement for selected listing e.g: (start_time < '2001-01-01' and end_time > '2001-01-01')
-#% required: no
-#% multiple: no
+#%option G_OPT_T_WHERE
 #%end
 
 #%option

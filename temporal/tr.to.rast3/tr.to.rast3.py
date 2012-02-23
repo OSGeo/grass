@@ -16,18 +16,12 @@
 
 #%module
 #% description: Convert a space time raster dataset into a rast3d map
-#% keywords: dataset
-#% keywords: spacetime
-#% keywords: raster
+#% keywords: temporal
 #% keywords: raster3d
+#% keywords: convert
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_INPUT
 #%end
 
 #%option G_OPT_R3_OUTPUT

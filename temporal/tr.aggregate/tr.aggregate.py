@@ -16,20 +16,14 @@
 
 #%module
 #% description: Create a new space time raster dataset from the aggregated data of an existing space time raster dataset
-#% keywords: spacetime raster dataset
-#% keywords: raster
+#% keywords: temporal
 #% keywords: aggregation
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_INPUT
 #%end
 
-#%option G_OPT_DB_WHERE
+#%option G_OPT_T_WHERE
 #%end
 
 #%option
@@ -58,22 +52,10 @@
 #% answer: average
 #%end
 
-#%option
-#% key: sampling
-#% type: string
-#% description: The method to be used for sampling the input dataset
-#% required: no
-#% multiple: yes
-#% options: start,during,overlap,contain,equal
-#% answer: start
+#%option G_OPT_T_SAMPLE
 #%end
 
-#%option
-#% key: base
-#% type: string
-#% description: Base name of the new created raster maps
-#% required: yes
-#% multiple: no
+#%option G_OPT_R_BASE
 #%end
 
 #%flag

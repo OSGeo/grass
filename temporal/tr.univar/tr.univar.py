@@ -21,21 +21,16 @@
 #% keywords: statistics
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_INPUT
 #%end
 
-#%option G_OPT_DB_WHERE
+#%option G_OPT_T_WHERE
 #%end
 
 #%option
 #% key: fs
 #% type: string
-#% description: The field separator character between the columns
+#% description: The field separator character between the output columns
 #% required: no
 #% answer: |
 #%end

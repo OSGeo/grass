@@ -22,12 +22,7 @@
 #% keywords: list
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% description: Name of a space time raster3d dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STR3DS_INPUT
 #%end
 
 #%option
@@ -50,12 +45,7 @@
 #% answer: name,mapset,start_time,end_time
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: A where statement for selected listing e.g: "start_time < '2001-01-01' and end_time > '2001-01-01'"
-#% required: no
-#% multiple: no
+#%option G_OPT_T_WHERE
 #%end
 
 #%option
@@ -71,7 +61,7 @@
 #%option
 #% key: fs
 #% type: string
-#% description: The field separator character between the columns, default is tabular "\t"
+#% description: The field separator character between the output columns, default is tabular "\t"
 #% required: no
 #%end
 
