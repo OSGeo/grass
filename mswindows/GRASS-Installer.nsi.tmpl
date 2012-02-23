@@ -33,7 +33,7 @@ SetCompressorDictSize 64
 !define SVN_REVISION "@GRASS_VERSION_SVN@"
 !define BINARY_REVISION "1"
 !define VERSION_NUMBER "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
-!define GRASS_BASE "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
+!define GRASS_BASE "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
 !if ${INSTALLER_TYPE} == "Release"
         !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
@@ -58,12 +58,12 @@ SetCompressorDictSize 64
 !define PACKAGE_FOLDER ".\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package"
 !if ${INSTALLER_TYPE} == "Release"
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup.exe"
-	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-${BINARY_REVISION}"
-	!define CHECK_INSTALL_NAME "GRASS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
+	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${BINARY_REVISION}"
+	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}-Setup.exe"
-	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}"
-	!define CHECK_INSTALL_NAME "GRASS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ SVN"
+	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}"
+	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ SVN"
 !endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -463,7 +463,7 @@ FunctionEnd
 
 Function LaunchGrass
 
-     ExecShell "" "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk"
+     ExecShell "" "$DESKTOP\${GRASS_BASE}.lnk"
 
 FunctionEnd
 
@@ -596,7 +596,7 @@ Section "GRASS" SecGRASS
 	
 	;HKEY_LOCAL_MACHINE Install entries
 	;Set the Name, Version and Revision of GRASS + PublisherInfo + InstallPath	
-	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
+	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "VersionNumber" "${VERSION_NUMBER}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "SvnRevision" "${SVN_REVISION}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "BinaryRevision" "${BINARY_REVISION}"
@@ -625,7 +625,7 @@ Section "GRASS" SecGRASS
 	;Create the Desktop Shortcut
 	SetShellVarContext current
 	
-	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
+	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
 	"$INSTALL_DIR\etc\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and CMD terminal"
 	
 	;Create the Windows Start Menu Shortcuts
@@ -633,15 +633,18 @@ Section "GRASS" SecGRASS
 	
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
 	"$INSTALL_DIR\etc\gui\icons\grass.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and CMD console"
-
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} GUI with MSYS.lnk" "$INSTALL_DIR\${GRASS_COMMAND}_msys.bat" "-wx"\
+	
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} GUI with MSYS.lnk" "$INSTALL_DIR\${GRASS_COMMAND}_msys.bat" "-wx"\
 	"$INSTALL_DIR\etc\gui\icons\grass_msys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and MSYS UNIX console"
-
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
+	
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
 	"$INSTALL_DIR\etc\gui\icons\grass_cmd.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} in text mode"
-
+	
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} Old TclTk GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-tcltk"\
+	"$INSTALL_DIR\etc\gui\icons\grass_tcltk.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the old TclTk GUI"
+	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\MSYS UNIX Console.lnk" "$INSTALL_DIR\msys\msys.bat" ""\
 	"$INSTALL_DIR\etc\gui\icons\msys.ico" "" SW_SHOWNORMAL "" "Open a MSYS UNIX console"
 	
@@ -652,11 +655,11 @@ Section "GRASS" SecGRASS
 ; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@/binary/mswindows/native/README.html?format=raw
 ; probably ship with devel versions too? ie Release Notes, not the Release Announcement press release.
 	!if ${INSTALLER_TYPE} == "Release"
-		CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Release Notes.lnk" "$INSTALL_DIR\WinGRASS-README.url" ""\
+		CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} Release Notes.lnk" "$INSTALL_DIR\WinGRASS-README.url" ""\
 		"$INSTALL_DIR\etc\gui\icons\wingrass.ico" "" SW_SHOWNORMAL "" "Visit the WinGRASS Project Web Page"
 	!endif
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall ${GRASS_BASE}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
 	"$INSTALL_DIR\Uninstall-GRASS.exe" "" SW_SHOWNORMAL "" "Uninstall GRASS ${VERSION_NUMBER}"
 	
 	;Create the grass_command.bat
@@ -985,8 +988,7 @@ Section "Uninstall"
 		        	
 	;remove the Desktop ShortCut
 	SetShellVarContext current
-	Delete "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk"
-	Delete "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk"
+	Delete "$DESKTOP\${GRASS_BASE}.lnk"
 	
 	;remove the Programs Start ShortCuts
 	SetShellVarContext all
