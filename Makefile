@@ -44,6 +44,7 @@ DIRS = \
 	gui \
 	visualization \
 	locale \
+	man \
 	macosx \
 	mswindows
 
