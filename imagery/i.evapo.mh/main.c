@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     DCELL d_tempkavg, d_tempkmin, d_tempkmax, d_rnet, d_p;
     DCELL d_daily_et;
 
-    /* region informations and handler */
+    /* region information and handler */
     struct Cell_head cellhd;
     int nrows, ncols;
     int row, col;

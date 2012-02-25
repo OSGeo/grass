@@ -420,7 +420,7 @@ struct GModule			/* Structure that stores module info  */
     const char **keywords;	/* Keywords describing module */
     /* further items are possible: author(s), version */
     int overwrite;		/* overwrite old files */
-    int verbose;		/* print all informations about progress and so on */
+    int verbose;		/* print all information about progress and so on */
 };
 
 struct TimeStamp

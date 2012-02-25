@@ -57,7 +57,7 @@ typedef struct
     double a1, a2;		/* angles */
     char cross;			/* 0 - do not break, 1 - break */
     char used;			/* 0 - was not used to break line, 1 - was used to break line
-				 *   this is stored because points are automaticaly marked as cross, even if not used 
+				 *   this is stored because points are automatically marked as cross, even if not used 
 				 *   later to break lines */
 } XPNT;
 
@@ -66,7 +66,7 @@ typedef struct
     double a1, a2;		/* angles */
     char cross;			/* 0 - do not break, 1 - break */
     char used;			/* 0 - was not used to break line, 1 - was used to break line
-				 *   this is stored because points are automaticaly marked as cross, even if not used 
+				 *   this is stored because points are automatically marked as cross, even if not used 
 				 *   later to break lines */
 } XPNT2;
 

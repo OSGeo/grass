@@ -1297,7 +1297,7 @@ Reads a row of raster data and converts it to red, green and blue
 components according to the colors.
 
 This provides a convenient way to treat a raster layer as a color
-image without having to explictly cater for each of CELL, FCELL and
+image without having to explicitly cater for each of CELL, FCELL and
 DCELL types.
 
 \section Upgraded_color_functions Upgraded color functions

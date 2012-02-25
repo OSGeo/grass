@@ -371,7 +371,7 @@ class abstract_map_dataset(abstract_dataset):
 
         if self.is_in_db(dbif):
  
-            # SELECT all needed informations from the database
+            # SELECT all needed information from the database
             self.select(dbif)
            
             # First we unregister from all dependent space time datasets

@@ -22,7 +22,7 @@ or (omit \n)
  G_message ( _("..."), ...);
 
 Careful:
-  G_message should be used for messages - informations about
+  G_message should be used for messages - information about
   the process for user while fprintf(stdout...) for data output.
   G_message output is not expected to be send to pipe or file.
   fprintf(stdout...) output is usually send to pipe or file.

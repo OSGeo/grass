@@ -98,7 +98,7 @@ extern void N_free_les(N_les * les);
 /* *************************************************************** */
 
 /*!
- * \brief Geometric informations about the structured grid
+ * \brief Geometric information about the structured grid
  * */
 typedef struct
 {

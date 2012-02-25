@@ -15,7 +15,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-## g.parser informations
+## g.parser information
 
 #%module
 #% description: Performs ordinary or block kriging for vector maps.

@@ -21,7 +21,7 @@ To enable parallel computing, you will need a compiler with OpenMP capabilities
 and a computer with at least two cores or cpu's.
 Most proprietary compilers support OpenMP. 
 The free gnu-C compiler supports OpenMP since version 4.2.
-More informations about OpenMP are available at http://www.openmp.org .
+More information about OpenMP are available at http://www.openmp.org .
 <br>
 <br>
 Based on the finite volume discretization for structured grids, 
@@ -517,7 +517,7 @@ To handle geometrical data a special data structure was implemented.<br>
 
 
 \verbatim
-Geometric informations about the structured grid is stored in this structure
+Geometric information about the structured grid is stored in this structure
 
 typedef struct
 {

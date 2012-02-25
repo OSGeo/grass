@@ -427,7 +427,7 @@ class abstract_space_time_dataset(abstract_dataset):
            Gaps between maps are identified as unregistered maps with id==None.
 
            The map objects are initialized with the id and the temporal extent of the granule (temporal type, start time, end time).
-           In case more map informations are needed, use the select() method for each listed object.
+           In case more map information are needed, use the select() method for each listed object.
 
            @param stds: The space time dataset to be used for temporal sampling
            @param method: This option specifies what sample method should be used. In case the registered maps are of temporal point type,
@@ -574,7 +574,7 @@ class abstract_space_time_dataset(abstract_dataset):
            Gaps between maps are identified as unregistered maps with id==None.
 
            The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
-           In case more map informations are needed, use the select() method for each listed object.
+           In case more map information are needed, use the select() method for each listed object.
 
            @param gran: The granularity to be used 
            @param dbif: The database interface to be used
@@ -638,7 +638,7 @@ class abstract_space_time_dataset(abstract_dataset):
            Gaps between maps are identified as maps with id==None
 
            The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
-           In case more map informations are needed, use the select() method for each listed object.
+           In case more map information are needed, use the select() method for each listed object.
 
            @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
            @param dbif: The database interface to be used
@@ -689,7 +689,7 @@ class abstract_space_time_dataset(abstract_dataset):
         """Return all registered maps as ordered object list for temporal topological operations
 
            The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
-           In case more map informations are needed, use the select() method for each listed object.
+           In case more map information are needed, use the select() method for each listed object.
 
            @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
            @param order: The SQL order statement to be used to order the objects in the list without "ORDER BY"
@@ -800,7 +800,7 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif.connect()
             connect = True
 
-        # SELECT all needed informations from the database
+        # SELECT all needed information from the database
         self.select(dbif)
 
         core.verbose(_("Drop map register table: %s") %  (self.get_map_register()))
