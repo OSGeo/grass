@@ -83,7 +83,7 @@ void copy_tabs(const struct Map_info *In, int field, int new_cat,
 	if (fields[i] == field && new_cat != -1)
 		continue;
 	
-	G_verbose_message(_("Writting attributes for layer %d"), fields[i]);
+	G_verbose_message(_("Writing attributes for layer %d"), fields[i]);
 	
 	/* Make a list of categories */
 	IFi = Vect_get_field(In, fields[i]);

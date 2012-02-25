@@ -7613,7 +7613,7 @@ msgstr "Ο εξαγόμενος διανυσματικός χάρτης <%s> χρησιμοποιείται για εισαγωγή δεδο
 #~ "\n"
 #~ "μη επιτρεπτό, λανθασμένο datum\n"
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "Αδυναμία λήψης GIS_LOCK τιμής περιβάλλοντος"
 
 #~ msgid "<%s>: bad mapset"

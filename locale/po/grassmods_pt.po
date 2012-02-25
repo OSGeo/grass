@@ -11825,7 +11825,7 @@ msgstr ""
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -25465,7 +25465,7 @@ msgstr "Calculando médias das classes ..."
 
 #: ../vector/v.extract/copy_tab.c:86
 #, fuzzy, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr "Escrevendo atributos ..."
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -36226,7 +36226,7 @@ msgstr "mapear status mapear mapear"
 #~ msgstr "Arquivo raster para superfície"
 
 #, fuzzy
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "Escrevendo [%s]..."
 
 #, fuzzy

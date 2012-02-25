@@ -11094,7 +11094,7 @@ msgstr ""
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -23784,7 +23784,7 @@ msgstr "Αδυναμία υπολογισμού κέντρων πολυγώνου για την επιφάνεια %d"
 
 #: ../vector/v.extract/copy_tab.c:86
 #, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr ""
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -33384,7 +33384,7 @@ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
 #~ msgstr "Αδυναμία λήψης γραμμής υψομέτρων από ράστερ"
 
 #, fuzzy
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "Εγγραφή %s από %s..."
 
 #, fuzzy

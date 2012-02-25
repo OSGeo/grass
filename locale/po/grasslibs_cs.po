@@ -7596,7 +7596,7 @@ msgstr "Nelze èíst soubor s barevnou ¹kálou pro rastrovou mapu <%s>"
 #~ "\n"
 #~ "%s neplatné; Zkuste to znova > "
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "Nelze získat hodnotu promìnné prostøedí GIS_LOCK"
 
 #~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."

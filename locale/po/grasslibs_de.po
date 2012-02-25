@@ -7821,7 +7821,7 @@ msgstr "einige Punkte sind auﬂerhalb der Region -- ignoriere dies..."
 #~ msgid "unable to write quant file!"
 #~ msgstr "Kann quant-Datei nicht schreiben!"
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "Kann den Inhalt der Umgebungsvariable GIS_LOCK nicht lesen."
 
 #~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"

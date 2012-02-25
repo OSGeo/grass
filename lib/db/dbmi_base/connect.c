@@ -18,7 +18,7 @@
 /*!
   \brief Set default DB connection settings
 
-  This function sets enviromental variables as DB_DRIVER, DB_DATABASE,
+  This function sets environmental variables as DB_DRIVER, DB_DATABASE,
   DB_SCHEMA, DB_GROUP.
 
   \param connection pointer to dbConnection with default settings

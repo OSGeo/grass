@@ -11318,7 +11318,7 @@ msgstr "Demasiadas splines (%d x %d). Considere cambiar los pasos de spline \"si
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr "Iniciando validación cruzada con lambda_i=%.4f..."
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -20134,11 +20134,11 @@ msgstr "Elimina archivos de elementos de bases de datos del directorio de mapas 
 
 #: ../general/g.mremove/main.c:71 ../general/g.mlist/main.c:102
 msgid "Use basic regular expressions instead of wildcards"
-msgstr "Usar expresiones regulares básicas en vez de comodines"
+msgstr "Usar expressiones regulares básicas en vez de comodines"
 
 #: ../general/g.mremove/main.c:76 ../general/g.mlist/main.c:108
 msgid "Use extended regular expressions instead of wildcards"
-msgstr "Usar expresiones regulares largas en vez de comodines"
+msgstr "Usar expressiones regulares largas en vez de comodines"
 
 #: ../general/g.mremove/main.c:81
 #: ../locale/scriptstrings/db.droptable_to_translate.c:4
@@ -24321,7 +24321,7 @@ msgstr "Encontrar centroides para capa: %s"
 
 #: ../vector/v.extract/copy_tab.c:86
 #, fuzzy, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr "Escribiendo atributos..."
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -34620,7 +34620,7 @@ msgstr "importar también mapa de calidad (capa de mapa de estado SM) y filtrar m
 #~ msgstr "Archivo ráster para superficie"
 
 #, fuzzy
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "Escribiendo el archivo de firma [%s] ..."
 
 #~ msgid "ASCII file to be converted to binary vector map"
@@ -37997,7 +37997,7 @@ msgstr "importar también mapa de calidad (capa de mapa de estado SM) y filtrar m
 
 #, fuzzy
 #~ msgid "Lists data files using basic regular expressions and wildcards."
-#~ msgstr "Aplicar expresiones regulares y comodines a g.list"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.list"
 
 #~ msgid "Mapset(s) to list (default: current mapset search path)"
 #~ msgstr "Directorio(s) de mapas a listar (por omisión: ruta de búsqueda en el directorio actual)"
@@ -38007,7 +38007,7 @@ msgstr "importar también mapa de calidad (capa de mapa de estado SM) y filtrar m
 
 #, fuzzy
 #~ msgid "Removes data files using basic regular expressions and wildcards."
-#~ msgstr "Aplicar expresiones regulares y comodines a g.list"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.list"
 
 #~ msgid "3d raster to remove"
 #~ msgstr "Ráster 3D a eliminar"
@@ -38052,7 +38052,7 @@ msgstr "importar también mapa de calidad (capa de mapa de estado SM) y filtrar m
 #~ msgstr "Formula (ej. A-B o A*C+B)"
 
 #~ msgid "Expert mode (enter a set of r.mapcalc expressions)"
-#~ msgstr "Modo avanzado (introducir un conjunto de expresiones de r.mapcalc)"
+#~ msgstr "Modo avanzado (introducir un conjunto de expressiones de r.mapcalc)"
 
 #~ msgid "Do not overwrite existing map"
 #~ msgstr "No sobrescribir mapas existentes"
@@ -38091,7 +38091,7 @@ msgstr "importar también mapa de calidad (capa de mapa de estado SM) y filtrar m
 #~ msgstr "Nombre para el volumen grid3D de salida"
 
 #~ msgid "Expert mode (enter a set of r3.mapcalc expressions)"
-#~ msgstr "Modo experto (introducir un conjunto de expresiones r3.mapcalc)"
+#~ msgstr "Modo experto (introducir un conjunto de expressiones r3.mapcalc)"
 
 #~ msgid "%s: [%s] not found"
 #~ msgstr "%s: [%s] no encontrado"
@@ -38896,7 +38896,7 @@ msgstr "importar también mapa de calidad (capa de mapa de estado SM) y filtrar m
 #~ msgstr "Borrando monitores..."
 
 #~ msgid "Apply regular expressions and wildcards to g.remove"
-#~ msgstr "Aplicar expresiones regulares y comodines a g.remove"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.remove"
 
 #~ msgid "Memory allocation error"
 #~ msgstr "Error de asignación de memoria"
@@ -39234,7 +39234,7 @@ msgstr "importar también mapa de calidad (capa de mapa de estado SM) y filtrar m
 
 #, fuzzy
 #~ msgid "Apply regular expressions and wildcards to g.list"
-#~ msgstr "Aplicar expresiones regulares y comodines a g.remove"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.remove"
 
 #~ msgid "Name of raster map to print in legend"
 #~ msgstr "Nombre del mapa raster a imprimir en la leyenda"

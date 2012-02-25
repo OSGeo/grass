@@ -11217,7 +11217,7 @@ msgstr ""
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -24235,7 +24235,7 @@ msgstr "Haritalar hesaplanıyor ..."
 
 #: ../vector/v.extract/copy_tab.c:86
 #, fuzzy, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr "%d alanı için öznitelik seçilemiyor"
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -33965,7 +33965,7 @@ msgstr "Bitiş noktasının D ve K grid harita koordinatları (D,K)"
 #~ msgstr "Yüzey için raster dosyası"
 
 #, fuzzy
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "[%s] doku dosyası yazılıyor..."
 
 #~ msgid "ASCII file to be converted to binary vector map"

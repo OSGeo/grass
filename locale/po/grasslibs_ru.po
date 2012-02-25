@@ -7962,7 +7962,7 @@ msgstr "Невозможно инициализировать pj причину:
 #~ msgid "Connect attempt timed out."
 #~ msgstr "Время попытки соединения истекло"
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "Невозможно получить значение переменной среды GIS_LOCK"
 
 #~ msgid "<%s>: bad mapset"

@@ -14432,10 +14432,10 @@ msgstr "Convierte una capa de mapa raster 3D en un archivo de texto ASCII."
 #~ msgstr "Exportar a archivo MAT (v.4)."
 
 #~ msgid "Apply regular expressions and wildcards to g.list"
-#~ msgstr "Aplicar expresiones regulares y comodines a g.list"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.list"
 
 #~ msgid "Apply regular expressions and wildcards to g.remove"
-#~ msgstr "Aplicar expresiones regulares y comodines a g.remove"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.remove"
 
 #~ msgid "It assumes a cartesian coordinate system"
 #~ msgstr "Asume un sistema de coordenadas cartesianas"
