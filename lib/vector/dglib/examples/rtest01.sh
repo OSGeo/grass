@@ -5,7 +5,7 @@
 # asserting that the input graph to ./unflatten be identical to its
 # output.
 # There are a number of implicit tests here:
-# - When a graph is unflattened all informations kept in the buffers
+# - When a graph is unflattened all information kept in the buffers
 #   are moved to an avl-tree using gnGrpAddLink(). Link insertions
 #   identical to those made by a user program are performed.
 #   Before returning gnGrpUnflatten() destroys the buffers.

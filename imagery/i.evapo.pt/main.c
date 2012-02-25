@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     DCELL d_tempka, d_pt_patm, d_rnet, d_g0;
     DCELL d_pt_alpha, d_pt_delta, d_pt_ghamma, d_daily_et;
 
-    /* region informations and handler */
+    /* region information and handler */
     struct Cell_head cellhd;
     int nrows, ncols;
     int row, col;

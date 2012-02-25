@@ -36,7 +36,7 @@ class raster_dataset(abstract_map_dataset):
     """Raster dataset class
 
        This class provides functions to select, update, insert or delete raster
-       map informations and valid time stamps into the SQL temporal database.
+       map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
 	self.reset(ident)
@@ -114,7 +114,7 @@ class raster3d_dataset(abstract_map_dataset):
     """Raster3d dataset class
 
        This class provides functions to select, update, insert or delete raster3d
-       map informations and valid time stamps into the SQL temporal database.
+       map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
 	self.reset(ident)
@@ -196,7 +196,7 @@ class vector_dataset(abstract_map_dataset):
     """Vector dataset class
 
        This class provides functions to select, update, insert or delete vector
-       map informations and valid time stamps into the SQL temporal database.
+       map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
 	self.reset(ident)
