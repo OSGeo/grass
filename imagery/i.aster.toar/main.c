@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
     radiance = (flag0->answer);
 
     /********************/
-    /*Prepare the ouput file names */
+    /*Prepare the output file names */
 
     /********************/
     sprintf(result0,"%s%s", result, ".1");

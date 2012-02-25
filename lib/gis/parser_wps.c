@@ -350,7 +350,7 @@ void G__wps_print_process_description(void)
 
     found_output = 0;
 
-    /*parse the ouput. only raster and vector map and stdout are supported */
+    /*parse the output. only raster and vector map and stdout are supported */
     if (st->n_opts) {
 	opt = &st->first_option;
 	while (opt != NULL) {
