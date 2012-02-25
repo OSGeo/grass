@@ -82,7 +82,7 @@ struct R__			/*  Structure of library globals */
     int window_set;		/* Flag: window set?                    */
     int split_window;           /* Separate windows for input and output */
     struct Cell_head rd_window;	/* Window used for input        */
-    struct Cell_head wr_window;	/* Window used for ouput        */
+    struct Cell_head wr_window;	/* Window used for output       */
 
     int fileinfo_count;
     struct fileinfo *fileinfo;

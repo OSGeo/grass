@@ -52,7 +52,7 @@ default: $(FILES) $(patsubst %,$(HTMLDIR)/%,$(HTMLFILES))
 ifneq ($(strip $(MINGW)),)
 $(ARCH_BINDIR)/$(START_UP): grass.sh
 	@test -d $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not found; exit 1)
-	@test -w $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not writeable; exit 1)
+	@test -w $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not writable; exit 1)
 	rm -f $@ ; true
 	sed \
 	-e 's#@BINDIR@#$(ARCH_BINDIR)#' \
