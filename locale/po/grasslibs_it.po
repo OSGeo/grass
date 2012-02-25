@@ -7662,7 +7662,7 @@ msgstr ""
 #~ msgid "unable to write quant file!"
 #~ msgstr "Impossibile scrivere il quant file!"
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "Impossibile ottenere il valore della variabile d'ambiente GIS_LOCK"
 
 #~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"

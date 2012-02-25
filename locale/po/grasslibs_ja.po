@@ -7717,7 +7717,7 @@ msgstr "東は西より大きくないといけません"
 #~ msgid "G_set_null_value: wrong data type!"
 #~ msgstr "G_set_null_value: 間違っているデータタイプです!"
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "GIS_LOCK環境変数値を取得出来ません"
 
 #~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"

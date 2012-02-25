@@ -8078,7 +8078,7 @@ msgstr "Không thể mở tập tin %s trong %s"
 #~ msgid " options: %s\n"
 #~ msgstr " tùy chọn: %s\n"
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "Không thể lấy giá trị biến môi trường GIS_LOCK"
 
 #~ msgid "or 'custom' if you wish to enter custom parameters\n"

@@ -14662,7 +14662,7 @@ msgstr "未发现区域<%s>"
 #~ msgid "Ok"
 #~ msgstr "完成"
 
-#~ msgid "WARNING: cant get enviromental variable"
+#~ msgid "WARNING: cant get environmental variable"
 #~ msgstr "警告：无法获取环境变量"
 
 #~ msgid "WARNING: epsg-codes file not found"

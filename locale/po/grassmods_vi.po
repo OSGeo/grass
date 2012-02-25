@@ -11396,7 +11396,7 @@ msgstr "Quá nhiều đường spline (%d x %d). Hãy cân nhắc việc thay đ
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr "Bắt đầu kiểm tra chéo với lambda_i=%.4f..."
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -24452,7 +24452,7 @@ msgstr "Đang tính trong tâm cho các vùng..."
 
 #: ../vector/v.extract/copy_tab.c:86
 #, fuzzy, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr "Thiếu thuộc tính tôpô cho bề mặt %d"
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -34377,7 +34377,7 @@ msgstr "Không thể cấp phát bộ nhớ cho chuỗi "
 #~ msgstr "Tập tin raster dùng làm bề mặt"
 
 #, fuzzy
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "Đang ghi các đối tượng..."
 
 #~ msgid "ASCII file to be converted to binary vector map"

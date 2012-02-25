@@ -15558,11 +15558,11 @@ msgstr "Descripción"
 
 #, fuzzy
 #~ msgid "Apply regular expressions and wildcards to g.list"
-#~ msgstr "Aplicar expresiones regulares y comodines a g.list"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.list"
 
 #, fuzzy
 #~ msgid "Apply regular expressions and wildcards to g.remove"
-#~ msgstr "Aplicar expresiones regulares y comodines a g.remove"
+#~ msgstr "Aplicar expressiones regulares y comodines a g.remove"
 
 #~ msgid "It assumes a cartesian coordinate system"
 #~ msgstr "Assume um sistema de coordenadas cartesiano"

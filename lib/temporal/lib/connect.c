@@ -17,7 +17,7 @@
 /*!
   \brief Set default Temporal GIS DB connection settings
 
-  This function sets enviromental variables as TGISDB_DRIVER, TGISDB_DATABASE.
+  This function sets environmental variables as TGISDB_DRIVER, TGISDB_DATABASE.
 
   \param connection pointer to dbConnection with default settings
   

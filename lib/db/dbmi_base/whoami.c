@@ -19,7 +19,7 @@
 /*!
   \brief Who am i?
 
-  Check enviromental variable LOGNAME
+  Check environmental variable LOGNAME
 
   \return string buffer with logname
 */

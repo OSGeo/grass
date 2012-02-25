@@ -11256,7 +11256,7 @@ msgstr "Zu viele Splines (%d x %d). Erwägen Sie die Splineschrittweite (\"sie=\"
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr "Beginne die Kreuzvalidierung mit lambda_i=%.4f..."
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -24214,7 +24214,7 @@ msgstr "Finde Zentroide der Layer: %s"
 
 #: ../vector/v.extract/copy_tab.c:86
 #, fuzzy, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr "Vermisse das Topography-Attribut der Oberfläche %d."
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -34507,7 +34507,7 @@ msgstr "Berechnet eine lineare Regression von zwei Rasterkarten: y = a + b*x"
 #~ msgid "Raster file for surface"
 #~ msgstr "Rasterkarte für die Oberfläche."
 
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "Schreibe Buffer..."
 
 #~ msgid "ASCII file to be converted to binary vector map"

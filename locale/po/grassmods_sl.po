@@ -11693,7 +11693,7 @@ msgstr ""
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -25107,7 +25107,7 @@ msgstr "Izraèunavam sence iz DMR..."
 
 #: ../vector/v.extract/copy_tab.c:86
 #, fuzzy, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr "Zapisujem novo datoteko...\n"
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -35648,7 +35648,7 @@ msgstr "Spremeni ascii rastrsko tekstovno datoteko v binarni rastrski sloj."
 #~ msgstr "Rastrski sloj za povr¹ino"
 
 #, fuzzy
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "Zapisujem novo datoteko...\n"
 
 #, fuzzy

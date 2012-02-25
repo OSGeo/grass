@@ -29,7 +29,7 @@ int I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     fprintf(fd, "elevation layer :%s\n", elev);
     fprintf(fd, "mapset elevation:%s\n", mapset_elev);
     fprintf(fd, "location        :%s\n", tl);
-    fprintf(fd, "math expresion  :%s\n", math_exp);
+    fprintf(fd, "math expression :%s\n", math_exp);
     fprintf(fd, "units           :%s\n", units);
     fprintf(fd, "no data values  :%s\n", nd);
 
@@ -72,7 +72,7 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     fgets(buf, IN_BUF, fd);
     sscanf(buf, "location        :%s\n", tl);
     fgets(buf, IN_BUF, fd);
-    sscanf(buf, "math expresion  :%s\n", math_exp);
+    sscanf(buf, "math expression :%s\n", math_exp);
     fgets(buf, IN_BUF, fd);
     sscanf(buf, "units           :%s\n", units);
     fgets(buf, IN_BUF, fd);

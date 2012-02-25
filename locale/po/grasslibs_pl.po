@@ -7607,7 +7607,7 @@ msgstr "Typ kolumny 's' nie jest obsługiwany (musi być liczbowy)"
 #~ msgid "unable to write quant file!"
 #~ msgstr "nie można zapisać pliku kwantyzacji!"
 
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgid "Unable to get GIS_LOCK environment variable value"
 #~ msgstr "Nie można pobrać wartości zmiennej środowiskowej GIS_LOCK"
 
 #~ msgid "G_malloc: unable to allocate %lu bytes at %s:%d"

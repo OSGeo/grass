@@ -11263,7 +11263,7 @@ msgstr ""
 #: ../raster/r.resamp.bspline/crosscorr.c:211
 #: ../vector/v.surf.bspline/crosscorr.c:164
 #, c-format
-msgid "Begining cross validation with lambda_i=%.4f..."
+msgid "Beginning cross validation with lambda_i=%.4f..."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/crosscorr.c:296
@@ -24456,7 +24456,7 @@ msgstr "Obliczanie centroidów dla obszarów..."
 
 #: ../vector/v.extract/copy_tab.c:86
 #, fuzzy, c-format
-msgid "Writting attributes for layer %d"
+msgid "Writing attributes for layer %d"
 msgstr "Nir można wybrać atrybutów dla pola #%d"
 
 #: ../vector/v.extract/copy_tab.c:91
@@ -34534,7 +34534,7 @@ msgstr "%d rzędy, %d kolumny"
 #~ msgstr "Plik rastra dla powierzchni"
 
 #, fuzzy
-#~ msgid "Writting buffers..."
+#~ msgid "Writing buffers..."
 #~ msgstr "Zapiywanie obiektów..."
 
 #, fuzzy

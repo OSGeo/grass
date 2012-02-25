@@ -300,7 +300,7 @@ def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     @param overwrite True to enable overwriting the output (<tt>--o</tt>)
     @param quiet True to run quietly (<tt>--q</tt>)
     @param verbose True to run verbosely (<tt>--v</tt>)
-    @param env directory with enviromental variables
+    @param env directory with environmental variables
     @param kwargs module's parameters
 
     """
