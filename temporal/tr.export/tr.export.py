@@ -99,7 +99,7 @@ def main():
 
     sp.select()
        
-    columns = "name,start_time,end_time"
+    columns = "name,start_time,end_time,min,max,datatype"
     rows = sp.get_registered_maps(columns, where, "start_time", None)
 
     if compression == "gzip":
@@ -120,6 +120,9 @@ def main():
             name = row["name"]
             start = row["start_time"]
             end = row["end_time"]
+            max_val = row["max"]
+            min_val = row["min"]
+            datatype = row["datatype"]
             if not end:
                 end = start
             string = "%s%s%s%s%s\n" % (name, fs, start, fs, end)
@@ -128,7 +131,19 @@ def main():
 
 	    # Export the raster map with r.out.gdal as tif
             out_name = name + ".tif"
-            ret = grass.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="GTiff")
+            if datatype == "CELL":
+                nodata = max_val + 1
+                if nodata < 256 and min_val >= 0:
+                    gdal_type = "Byte" 
+                elif nodata < 65536 and min_val >= 0:
+                    gdal_type = "UInt16" 
+                elif min_val >= 0:
+                    gdal_type = "UInt32" 
+                else:
+                    gdal_type = "Int32" 
+                ret = grass.run_command("r.out.gdal", flags="c", input=name, output=out_name, nodata=nodata, type=gdal_type, format="GTiff")
+            else:
+                ret = grass.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="GTiff")
             if ret != 0:
                 shutil.rmtree(new_cwd)
                 tar.close()

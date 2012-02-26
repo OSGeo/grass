@@ -6,12 +6,12 @@
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-r.mapcalc --o expr="prec_1 = rand(0, 550)"
-r.mapcalc --o expr="prec_2 = rand(0, 450)"
-r.mapcalc --o expr="prec_3 = rand(0, 320)"
-r.mapcalc --o expr="prec_4 = rand(0, 510)"
-r.mapcalc --o expr="prec_5 = rand(0, 300)"
-r.mapcalc --o expr="prec_6 = rand(0, 650)"
+r.mapcalc --o expr="prec_1 = rand(0, 550.0)"
+r.mapcalc --o expr="prec_2 = rand(0, 80000)"
+r.mapcalc --o expr="prec_3 = rand(-120, 120)"
+r.mapcalc --o expr="prec_4 = rand(0, 255)"
+r.mapcalc --o expr="prec_5 = rand(-1, 60000)"
+r.mapcalc --o expr="prec_6 = rand(0, 256)"
 
 n1=`g.tempfile pid=1 -d` 
 
