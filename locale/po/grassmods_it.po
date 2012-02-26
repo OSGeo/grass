@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2012-02-09 21:15+0100\n"
+"PO-Revision-Date: 2012-02-25 19:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -11207,7 +11207,7 @@ msgstr "Mappa raster da interrogare"
 
 #: ../raster/r.transect/main.c:116
 msgid "Transect definition"
-msgstr ""
+msgstr "Definizione del transetto"
 
 #: ../raster/r.surf.idw/main.c:108
 msgid "Surface interpolation utility for raster map."
@@ -12690,7 +12690,7 @@ msgstr "Non scrive la tavola dei colori standard di GDAL"
 
 #: ../raster/r.out.gdal/main.c:141
 msgid "Only applicable to Byte or UInt16 data types."
-msgstr ""
+msgstr "Applicabile solo ai tipi di dati Byte o UInt16"
 
 #: ../raster/r.out.gdal/main.c:142 ../raster/r.out.gdal/main.c:184
 #: ../raster/r.out.gdal/main.c:195 ../raster/r.out.gdal/main.c:206
@@ -12704,7 +12704,7 @@ msgstr "Creazione"
 
 #: ../raster/r.out.gdal/main.c:146
 msgid "Force raster export despite any warnings of data loss"
-msgstr ""
+msgstr "Forza l'esportazione del raster malgrado gli avvisi di perdita di dati"
 
 #: ../raster/r.out.gdal/main.c:147
 msgid "Overrides nodata safety check."
@@ -12716,7 +12716,7 @@ msgstr "Nome della mappa raster (o gruppo) da esportare"
 
 #: ../raster/r.out.gdal/main.c:153
 msgid "Name for output raster file"
-msgstr "Nome del file vettoriale in output"
+msgstr "Nome del file raster di output"
 
 #: ../raster/r.out.gdal/main.c:159
 msgid "Raster data format to write (case sensitive, see also -l flag)"
@@ -12737,7 +12737,7 @@ msgstr ""
 
 #: ../raster/r.out.gdal/main.c:200
 msgid "Metadata key(s) and value(s) to include"
-msgstr ""
+msgstr "Chiave/i e valore/i dei metadati da includere"
 
 #: ../raster/r.out.gdal/main.c:202
 msgid "In the form of \"META-TAG=VALUE\", separate multiple entries with a comma. Not supported by all output format drivers."
@@ -17237,7 +17237,7 @@ msgstr ""
 #: ../vector/v.to.points/main.c:184 ../vector/v.to.points/main.c:188
 #: ../vector/v.to.rast/main.c:53
 msgid "Selection"
-msgstr "Selezionee"
+msgstr "Selezione "
 
 #: ../display/d.vect/main.c:112
 msgid "Feature color"
@@ -21892,7 +21892,7 @@ msgstr "Converte vettore OGR in vettore GRASS"
 
 #: ../vector/v.in.ogr/main.c:129
 msgid "OGR datasource name"
-msgstr ""
+msgstr "Nome dell'origine dati OGR"
 
 #: ../vector/v.in.ogr/main.c:130
 msgid ""
@@ -21900,10 +21900,13 @@ msgid ""
 "\t\tESRI Shapefile: directory containing shapefiles\n"
 "\t\tMapInfo File: directory containing mapinfo files"
 msgstr ""
+"Esempi:\n"
+"\t\tESRI Shapefile: directory contenente gli shapefile\n"
+"\t\tMapInfo File: directory contenente i file mapinfo"
 
 #: ../vector/v.in.ogr/main.c:140
 msgid "OGR layer name. If not given, all available layers are imported"
-msgstr ""
+msgstr "Nome del tematismo OGR. Se non viene definito vengono importati tutti i tematismi disponibili"
 
 #: ../vector/v.in.ogr/main.c:142
 msgid ""
@@ -21911,6 +21914,9 @@ msgid ""
 "\t\tESRI Shapefile: shapefile name\n"
 "\t\tMapInfo File: mapinfo file name"
 msgstr ""
+"Esempi:\n"
+"\t\tESRI Shapefile: nome dello shapefile\n"
+"\t\tMapInfo File: nome del file mapinfo"
 
 #: ../vector/v.in.ogr/main.c:156 ../vector/v.in.lidar/main.c:169
 msgid "Import subregion only"
@@ -21918,15 +21924,15 @@ msgstr "Importa solamente la sottoregione"
 
 #: ../vector/v.in.ogr/main.c:159 ../vector/v.in.lidar/main.c:172
 msgid "Format: xmin,ymin,xmax,ymax - usually W,S,E,N"
-msgstr ""
+msgstr "Formato: xmin,ymin,xmax,ymax - di solito W,S,E,N"
 
 #: ../vector/v.in.ogr/main.c:170
 msgid "Minimum size of area to be imported (square units)"
-msgstr ""
+msgstr "Dimensione minima dell'area da importare (unità quadrate)"
 
 #: ../vector/v.in.ogr/main.c:172
 msgid "Smaller areas and islands are ignored. Should be greater than snap^2"
-msgstr ""
+msgstr "Le aree più piccole e le isole vengono ignorate. Devono essere maggiori di snap^2"
 
 #: ../vector/v.in.ogr/main.c:178
 msgid "Optionally change default input type"
@@ -21934,19 +21940,19 @@ msgstr "Opzionalmente cambia il tipo di input predefinito"
 
 #: ../vector/v.in.ogr/main.c:180
 msgid "point;import area centroids as points;line;import area boundaries as lines;boundary;import lines as area boundaries;centroid;import points as centroids"
-msgstr ""
+msgstr "point;importa centroidi come punti;line;importa confini di area come linee;boundary;importa linee come confini;centroid;importa punti come centroidi"
 
 #: ../vector/v.in.ogr/main.c:191
 msgid "Snapping threshold for boundaries"
-msgstr ""
+msgstr "Soglia di cattura (snap) per i confini"
 
 #: ../vector/v.in.ogr/main.c:192
 msgid "'-1' for no snap"
-msgstr ""
+msgstr "'-1' per nessuna cattura (snap)"
 
 #: ../vector/v.in.ogr/main.c:207
 msgid "List of column names to be used instead of original names, first is used for category column"
-msgstr ""
+msgstr "Elenco di nomi di colonna da usare al posto dei nomi originali; il primo è usato per la colonna categoria"
 
 #: ../vector/v.in.ogr/main.c:213 ../vector/v.external/args.c:47
 #, fuzzy
@@ -21960,7 +21966,7 @@ msgstr "Visualizza i formati supportati ed esci"
 
 #: ../vector/v.in.ogr/main.c:233
 msgid "Do not clean polygons (not recommended)"
-msgstr ""
+msgstr "Non esegue la pulizia (clean) dei poligoni (non raccomandato)"
 
 #: ../vector/v.in.ogr/main.c:254 ../vector/v.in.lidar/main.c:208
 msgid "Limit import to the current region"
@@ -21968,7 +21974,7 @@ msgstr "Limita l'importazione alla regione corrente"
 
 #: ../vector/v.in.ogr/main.c:266
 msgid "Change column names to lowercase characters"
-msgstr ""
+msgstr "Trasforma i nomi delle colonne in caratteri minuscoli"
 
 #: ../vector/v.in.ogr/main.c:272
 msgid "Create the location specified by the \"location\" parameter and exit. Do not import the vector data."
@@ -21976,12 +21982,12 @@ msgstr ""
 
 #: ../vector/v.in.ogr/main.c:291
 msgid "Available OGR Drivers:"
-msgstr ""
+msgstr "Driver OGR disponibili:"
 
 #: ../vector/v.in.ogr/main.c:331
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open data source <%s>"
-msgstr "Impossibile aprire la sorgente dati <%s>"
+msgstr "Impossibile aprire l'origine dati <%s>"
 
 #: ../vector/v.in.ogr/main.c:339 ../vector/v.external/list.c:43
 #, c-format
@@ -22011,11 +22017,11 @@ msgstr "La mappa vettoriale <%s> esiste già"
 
 #: ../vector/v.in.ogr/main.c:413 ../vector/v.in.lidar/main.c:284
 msgid "Select either the current region flag or the spatial option, not both"
-msgstr ""
+msgstr "Selezionare o il flag per la regione corrente o l'opzione spatial, non entrambi"
 
 #: ../vector/v.in.ogr/main.c:441 ../vector/v.in.lidar/main.c:312
 msgid "4 parameters required for 'spatial' parameter"
-msgstr ""
+msgstr "Per il parametro 'spatial' sono richiesti 4 parametri"
 
 #: ../vector/v.in.ogr/main.c:667
 #, fuzzy, c-format
@@ -22618,18 +22624,18 @@ msgstr "Crea punti/segmenti da linee, il sistema di riferimento lineare e i punt
 #: ../vector/v.lrs/v.lrs.create/main.c:128
 #: ../vector/v.lrs/v.lrs.label/main.c:109
 msgid "Input vector map containing lines"
-msgstr ""
+msgstr "Mappa vettoriale di input contenente le linee"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:82
 msgid "Output vector map where segments will be written"
-msgstr ""
+msgstr "Mappa vettoriale di output in cui verranno scritti i segmenti"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:87
 #: ../vector/v.lrs/v.lrs.where/main.c:75
 #: ../vector/v.lrs/v.lrs.create/main.c:147
 #: ../vector/v.lrs/v.lrs.label/main.c:118
 msgid "Line layer"
-msgstr ""
+msgstr "Tematismo di linee"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:93
 #: ../vector/v.lrs/v.lrs.where/main.c:86
@@ -22682,7 +22688,7 @@ msgstr "Più di un record nella tabella LR per: %s"
 #: ../vector/v.lrs/v.lrs.segment/main.c:290
 #, c-format
 msgid "Unable to find line of cat [%d]"
-msgstr ""
+msgstr "Non è possibile trovare la linea di cat [%d]"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:213
 #, c-format
@@ -22786,7 +22792,7 @@ msgstr "Inserisci la mappa vettoriale contenente i punti"
 #: ../vector/v.lrs/v.lrs.where/main.c:80
 #: ../vector/v.lrs/v.lrs.create/main.c:151
 msgid "Point layer"
-msgstr ""
+msgstr "Tematismo di punti"
 
 #: ../vector/v.lrs/v.lrs.where/main.c:108
 msgid "Maximum distance to nearest line"
@@ -23054,11 +23060,11 @@ msgstr ""
 
 #: ../vector/v.out.ascii/args.c:57
 msgid "Field separator (points mode)"
-msgstr ""
+msgstr "Separatore di campo (points mode)"
 
 #: ../vector/v.out.ascii/args.c:72
 msgid "Create old (version 4) ASCII file"
-msgstr ""
+msgstr "Crea un vecchio (versione 4) file ASCII"
 
 #: ../vector/v.out.ascii/args.c:76
 #, fuzzy
@@ -39416,3 +39422,33 @@ msgstr "Nessun monitor selezionato"
 #, fuzzy
 #~ msgid "Cannot open vector map <%s>"
 #~ msgstr "Non riesco a trovare il file raster %s"
+
+#~ msgid "Entropy"
+#~ msgstr "Entropia"
+
+#~ msgid "vector, import"
+#~ msgstr "vettoriale, importazione"
+
+#~ msgid "List available layers in data source and exit"
+#~ msgstr "Elenca i tematismi disponibili nell'origine dati ed esce"
+
+#~ msgid "Data source contains %d layers:"
+#~ msgstr "L'origine dati contiene %d tematismi"
+
+#~ msgid "Unable to convert input map projection to GRASS format; cannot create new location"
+#~ msgstr "Non è possibile convertire la proiezione della mappa di input nel formato GRASS; impossibile creare una nuova location"
+
+#~ msgid "Input data contains 3D features. Created vector is 2D only, use -z flag to import 3D vector"
+#~ msgstr "I dati di input contengono elementi 3D. Il vettoriale creato è solo 2D; usare il flag -z per importare il vettoriale 3D"
+
+#~ msgid "vector, buffer"
+#~ msgstr "vettoriale, buffer"
+
+#~ msgid "vector, export"
+#~ msgstr "vettoriale, esportazione"
+
+#~ msgid "vector, metadata"
+#~ msgstr "vettoriale, metadati"
+
+#~ msgid "vector, topology"
+#~ msgstr "vettoriale, topologia"
