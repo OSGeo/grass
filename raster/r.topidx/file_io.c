@@ -11,6 +11,7 @@ void getcells(void)
     CELL *ccell = NULL;
     FCELL *fcell = NULL;
     struct Cell_head inhead;
+    char buf_wrns[32], buf_wrew[32], buf_mrns[32], buf_mrew[32];
 
     fd = Rast_open_old(iname, "");
 
@@ -26,10 +27,19 @@ void getcells(void)
     atb = (DCELL **) G_malloc(sizeof(DCELL *) * window.rows);
     a = (DCELL **) G_malloc(sizeof(DCELL *) * window.rows);
 
-    if (window.ew_res < inhead.ew_res || window.ns_res < inhead.ns_res)
-        G_fatal_error(_("Current region resolution [%.2fx%.2f] lower than input map resolution [%.2fx%.2f]! Needs to be at least identical or the current region resolution lower than the input map resolution"), window.ew_res, window.ns_res, inhead.ew_res, inhead.ns_res);
+    if (window.ew_res < inhead.ew_res || window.ns_res < inhead.ns_res) {
+	G_format_resolution(window.ew_res, buf_wrew, G_projection());
+	G_format_resolution(window.ns_res, buf_wrns, G_projection());
+	G_format_resolution(inhead.ew_res, buf_mrew, G_projection());
+	G_format_resolution(inhead.ns_res, buf_mrns, G_projection());
+	G_fatal_error(_("The current region resolution [%s x %s] is finer "
+			"than the input map's resolution [%s x %s]. "
+			"The current region resolution must be identical "
+			"to, or coarser than, the input map's resolution."),
+		      buf_wrew, buf_wrns, buf_mrew, buf_mrns);
+    }
 
-    G_important_message(_("Reading elevation map..."));
+    G_message(_("Reading elevation map..."));
 
     for (i = 0; i < window.rows; i++) {
 	G_percent(i, window.rows, 2);
@@ -75,7 +85,7 @@ void putcells(void)
 
     fd = Rast_open_new(oname, DCELL_TYPE);
 
-    G_important_message(_("Writing topographic index map..."));
+    G_message(_("Writing topographic index map..."));
 
     for (i = 0; i < window.rows; i++) {
 	G_percent(i, window.rows, 2);
