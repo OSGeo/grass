@@ -4372,7 +4372,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:103
 #, fuzzy
-msgid "Name for output opographic index ln(a/tanB) raster map"
+msgid "Name for output topographic index ln(a/tanB) raster map"
 msgstr "Çıktı bakı raster haritasının adı"
 
 #: ../raster/r.topmodel/main.c:111
