@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     param.topidx = G_define_standard_option(G_OPT_R_OUTPUT);
     param.topidx->key = "topidx";
     param.topidx->label =
-	_("Name for output opographic index ln(a/tanB) raster map");
+	_("Name for output topographic index ln(a/tanB) raster map");
     param.topidx->description = _("MASK applied");
     param.topidx->required = NO;
     param.topidx->guisection = _("Output");
