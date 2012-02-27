@@ -4352,7 +4352,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:103
 #, fuzzy
-msgid "Name for output opographic index ln(a/tanB) raster map"
+msgid "Name for output topographic index ln(a/tanB) raster map"
 msgstr "Nome di un file vettoriale in output"
 
 #: ../raster/r.topmodel/main.c:111
