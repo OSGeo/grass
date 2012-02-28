@@ -3,7 +3,7 @@
 GRASS doesn't allow areas/islands with dangles. If an island has dangle, it is not built
 and attached to outer area and as a consequence, some functions do not work as expected.
 For example Vect_area_area() and Vect_find_area().
-Se comments in build_nat.c: Vect_attach_centroids()
+See comments in build_nat.c: Vect_attach_centroids()
 
    Category index
   ----------------
