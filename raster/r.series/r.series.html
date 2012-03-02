@@ -96,7 +96,8 @@ r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 \
          out=res_slope,res_offset,res_coeff meth=slope,offset,detcoeff
 </pre></div>
 
-<p>Example for multiple aggregates to be computed in one run (3 resulting aggregates from two input maps):
+<p>Example for multiple aggregates to be computed in one run (3 resulting aggregates
+from two input maps):
 <div class="code"><pre>
 r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
 </pre></div>
@@ -122,6 +123,14 @@ map3
 EOF
 
 r.series2 file=input.txt out=result_sum meth=sum
+</pre></div>
+
+<p>
+Example for counting the number of days above a certain temperature using 
+daily average maps ('???' as DOY wildcard):
+<div class="code"><pre>
+r.series input=`g.mlist rast pat="temp_2003_???_avg" sep=,` \
+         output=temp_2003_days_over_25deg range=25.0,100.0 method=count
 </pre></div>
 
 
