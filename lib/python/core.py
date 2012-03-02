@@ -486,6 +486,27 @@ def tempdir():
     
     return tmp
 
+class KeyValue(dict):
+    """A general-purpose key-value store.
+
+    KeyValue is a subclass of dict, but also allows entries to be read and
+    written using attribute syntax. Example:
+
+    \code
+    >>> region = grass.region()
+    >>> region['rows']
+    477
+    >>> region.rows
+    477
+    \endcode
+    """
+
+    def __getattr__(self, key):
+        return self[key]
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
 # key-value parsers
 
 def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
@@ -500,7 +521,7 @@ def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
 
     @return parsed input (dictionary of keys/values)
     """
-    result = {}
+    result = KeyValue()
 
     if not s:
         return result
