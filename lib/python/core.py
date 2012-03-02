@@ -706,7 +706,46 @@ def list_strings(type):
 
 # interface to g.mlist
 
-def mlist_grouped(type, pattern = None, check_search_path = True):
+def mlist_strings(type, pattern = None, mapset = None, flag = ''):
+    """!List of elements as strings.
+
+    Returns the output from running g.mlist, as a list of qualified
+    names.
+
+    @param type element type (rast, vect, rast3d, region, ...)
+    @param pattern pattern string
+    @param mapset mapset name (if not given use search path)
+    @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or '' (glob pattern)
+
+    @return list of elements
+    """
+    result = list()
+    for line in read_command("g.mlist",
+                             quiet = True,
+                             flags = 'm' + flag,
+                             type = type,
+                             pattern = pattern,
+                             mapset = mapset).splitlines():
+        result.append(line.strip())
+
+    return result
+
+def mlist_pairs(type, pattern = None, mapset = None, flag = ''):
+    """!List of elements as pairs
+
+    Returns the output from running g.mlist, as a list of
+    (name, mapset) pairs
+
+    @param type element type (rast, vect, rast3d, region, ...)
+    @param pattern pattern string
+    @param mapset mapset name (if not given use search path)
+    @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or '' (glob pattern)
+
+    @return list of elements
+    """
+    return [tuple(map.split('@', 1)) for map in mlist_strings(type, pattern, mapset, flag)]
+
+def mlist_grouped(type, pattern = None, check_search_path = True, flag = ''):
     """!List of elements grouped by mapsets.
 
     Returns the output from running g.mlist, as a dictionary where the
@@ -721,6 +760,7 @@ def mlist_grouped(type, pattern = None, check_search_path = True):
     @param type element type (rast, vect, rast3d, region, ...)
     @param pattern pattern string
     @param check_search_path True to add mapsets for the search path with no found elements
+    @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or '' (glob pattern)
 
     @return directory of mapsets/elements
     """
@@ -730,7 +770,7 @@ def mlist_grouped(type, pattern = None, check_search_path = True):
             result[mapset] = []
     
     mapset = None
-    for line in read_command("g.mlist", quiet = True, flags = "m",
+    for line in read_command("g.mlist", quiet = True, flags = "m" + flag,
                              type = type, pattern = pattern).splitlines():
         try:
             name, mapset = line.split('@')
