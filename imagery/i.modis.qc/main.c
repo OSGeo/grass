@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     int row, col;
     char *qcflag;		/*Switch for particular index */
     struct GModule *module;
-    struct Option *input, *input1, *input2, *input_band, *output;
+    struct Option *productname, *qcname, *input, *input_band, *output;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
@@ -121,31 +121,41 @@ int main(int argc, char *argv[])
     G_add_keyword(_("Vegetation"));
     G_add_keyword(_("Modis"));
     module->description =
-	_("Extract quality control parameters from Modis QC layers.");
+	_("Extracts quality control parameters from Modis QC layers.");
 
     /* Define the different options */ 
-    input = G_define_option();
-    input->key = "productname";
-    input->type = TYPE_STRING;
-    input->required = YES;
-    input->description = _("Name of MODIS product type");
-    input->descriptions =_("mod09Q1;surf. refl. 250m 8-days;"
-                            "mod09A1;surf. refl. 500m 8-days;"
-                            "mod09A1s;surf. refl. 500m 8-days, State QA;"
-                            "mod11A1;LST 1Km daily (Day/Night);"
-                            "mod11A2;LST 1Km 8-days (Day/Night);"
-                            "mod13A2;VI 1Km 16-days;"
-                            "mcd43B2;Brdf-Albedo Quality (Ancillary SDS) 1Km 8-days;"
-                            "mcd43B2q;Brdf-Albedo Quality (BRDF SDS) 1Km 8-days;"
-			    );
-    input->answer = "mod13A2";
+    input = G_define_standard_option(G_OPT_R_INPUT);
+    input->description =
+	_("Name of input surface reflectance QC layer [bit array]");
 
-    input1 = G_define_option();
-    input1->key = "qcname";
-    input1->type = TYPE_STRING;
-    input1->required = YES;
-    input1->description = _("Name of QC type to extract");
-    input1->descriptions =_("adjcorr;mod09: Adjacency Correction;"
+    output = G_define_standard_option(G_OPT_R_OUTPUT);
+    output->key = "output";
+    output->description =
+	_("Name for output QC type classification layer");
+
+    productname = G_define_option();
+    productname->key = "productname";
+    productname->type = TYPE_STRING;
+    productname->required = YES;
+    productname->description = _("Name of MODIS product type");
+    productname->descriptions =_("mod09Q1;surf. refl. 250m 8-days;"
+				 "mod09A1;surf. refl. 500m 8-days;"
+				 "mod09A1s;surf. refl. 500m 8-days, State QA;"
+				 "mod11A1;LST 1Km daily (Day/Night);"
+				 "mod11A2;LST 1Km 8-days (Day/Night);"
+				 "mod13A2;VI 1Km 16-days;"
+				 "mcd43B2;Brdf-Albedo Quality (Ancillary SDS) 1Km 8-days;"
+				 "mcd43B2q;Brdf-Albedo Quality (BRDF SDS) 1Km 8-days;"
+				 );
+    productname->options = "mod09Q1,mod09A1,mod09A1s,mod11A1,mod11A2,mod13A2,mcd43B2,mcd43B2q";
+    productname->answer = "mod13A2";
+    
+    qcname = G_define_option();
+    qcname->key = "qcname";
+    qcname->type = TYPE_STRING;
+    qcname->required = YES;
+    qcname->description = _("Name of QC type to extract");
+    qcname->descriptions =_("adjcorr;mod09: Adjacency Correction;"
                             "atcorr;mod09: Atmospheric Correction;"
                             "cloud;mod09: Cloud State;"
                             "data_quality;mod09: Band-Wise Data Quality Flag;"
@@ -159,44 +169,40 @@ int main(int argc, char *argv[])
                             "emis_error_11A2;mod11A2: Average Emissivity Error Classes;"
                             "mandatory_qa_11A2;mod11A2: MODIS Land General Quality Assessment;"
                             "lst_error_11A2;mod11A2: Average LST Error Classes;"
-                            "aerosol_quantity;mod09A1s: StateQA Internal Snow Mask"
-                            "brdf_correction_performed;mod09A1s: StateQA Internal Snow Mask"
-                            "cirrus_detected;mod09A1s: StateQA Internal Snow Mask"
-                            "cloud_shadow;mod09A1s: StateQA Internal Snow Mask"
-                            "cloud_state;mod09A1s: StateQA Internal Snow Mask"
-                            "internal_cloud_algorithm;mod09A1s: StateQA Internal Snow Mask"
-                            "internal_fire_algorithm;mod09A1s: StateQA Internal Snow Mask"
-                            "internal_snow_mask;mod09A1s: StateQA Internal Snow Mask"
-                            "land_water;mod09A1s: StateQA Internal Snow Mask"
-                            "mod35_snow_ice;mod09A1s: StateQA Internal Snow Mask"
-                            "pixel_adjacent_to_cloud;mod09A1s: StateQA Internal Snow Mask"
-			    "modland_qa;mod13A2: MODIS Land General Quality Assessment"
-			    "vi_usefulness;mod13A2: Quality estimation of the pixel"
-			    "aerosol_quantity;mod13A2: Quantity range of Aerosol"
-			    "pixel_adjacent_to_cloud;mod13A2: if pixel is a cloud neighbour"
-			    "brdf_correction_performed;mod13A2: if BRDF correction performed"
-			    "mixed_clouds;mod13A2: if pixel mixed with clouds"
-			    "land_water;mod13A2: separate land from various water objects"
-			    "possible_snow_ice;mod13A2: if snow/ice present in pixel"
-			    "possible_shadow;mod13A2: if shadow is present in pixel"
-			    "platform;mcd43B2: Quality of BRDF correction performed"
-			    "land_water;mcd43B2: Quality of BRDF correction performed"
-			    "sun_z_angle_at_local_noon;mcd43B2: Quality of BRDF correction performed"
+                            "aerosol_quantity;mod09A1s: StateQA Internal Snow Mask;"
+                            "brdf_correction_performed;mod09A1s: StateQA Internal Snow Mask;"
+                            "cirrus_detected;mod09A1s: StateQA Internal Snow Mask;"
+                            "cloud_shadow;mod09A1s: StateQA Internal Snow Mask;"
+                            "cloud_state;mod09A1s: StateQA Internal Snow Mask;"
+                            "internal_cloud_algorithm;mod09A1s: StateQA Internal Snow Mask;"
+                            "internal_fire_algorithm;mod09A1s: StateQA Internal Snow Mask;"
+                            "internal_snow_mask;mod09A1s: StateQA Internal Snow Mask;"
+                            "land_water;mod09A1s: StateQA Internal Snow Mask;"
+                            "mod35_snow_ice;mod09A1s: StateQA Internal Snow Mask;"
+                            "pixel_adjacent_to_cloud;mod09A1s: StateQA Internal Snow Mask;"
+			    "modland_qa;mod13A2: MODIS Land General Quality Assessment;"
+			    "vi_usefulness;mod13A2: Quality estimation of the pixel;"
+			    "aerosol_quantity;mod13A2: Quantity range of Aerosol;"
+			    "pixel_adjacent_to_cloud;mod13A2: if pixel is a cloud neighbour;"
+			    "brdf_correction_performed;mod13A2: if BRDF correction performed;"
+			    "mixed_clouds;mod13A2: if pixel mixed with clouds;"
+			    "land_water;mod13A2: separate land from various water objects;"
+			    "possible_snow_ice;mod13A2: if snow/ice present in pixel;"
+			    "possible_shadow;mod13A2: if shadow is present in pixel;"
+			    "platform;mcd43B2: Quality of BRDF correction performed;"
+			    "land_water;mcd43B2: Quality of BRDF correction performed;"
+			    "sun_z_angle_at_local_noon;mcd43B2: Quality of BRDF correction performed;"
 			    "brdf_correction_performed;mcd43B2q: Quality of BRDF correction performed"
 			    );
-    input1->answer = "modland_qa";
-
-    input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->description =
-	_("Name of the input QC layer [bit array]");
+    qcname->options = "adjcorr,atcorr,cloud,data_quality,diff_orbit_from_500m,modland_qa,mandatory_qa_11A1,data_quality_flag_11A1,emis_error_11A1,lst_error_11A1,data_quality_flag_11A2,emis_error_11A2,mandatory_qa_11A2,lst_error_11A2,aerosol_quantity,brdf_correction_performed,cirrus_detected,cloud_shadow,cloud_state,internal_cloud_algorithm,internal_fire_algorithm,internal_snow_mask,land_water,mod35_snow_ice,pixel_adjacent_to_cloud,modland_qa,vi_usefulness,aerosol_quantity,pixel_adjacent_to_cloud,brdf_correction_performed,mixed_clouds,land_water,possible_snow_ice,possible_shadow,platform,land_water,sun_z_angle_at_local_noon,brdf_correction_performed";
+    qcname->answer = "modland_qa";
 
     input_band = G_define_option();
     input_band->key = "band";
-    input_band->type = TYPE_INTEGER;
+    input_band->type = TYPE_STRING;
     input_band->required = NO;
-    input_band->gisprompt = "old,value";
     input_band->description =
-	_("Band number of Modis product mod09Q1=[1,2],mod09A1=[1-7], mcd43B2q=[1-7]");
+      _("Band number of Modis product (mod09Q1=[1,2],mod09A1=[1-7], mcd43B2q=[1-7])");
     input_band->descriptions =_("1;Band 1: Red;"
                                 "2;Band 2: NIR;"
                                 "3;Band 3: Blue;"
@@ -204,20 +210,15 @@ int main(int argc, char *argv[])
                                 "5;Band 5: SWIR 1;"
                                 "6;Band 6: SWIR 2;"
                                 "7;Band 7: SWIR 3;");
-
-    output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->key = "output";
-    output->description =
-	_("Name of the output QC type classification layer");
-    output->answer = "qc";
-
+    input_band->options = "1,2,3,4,5,6,7";
+    
     /********************/ 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    product = input->answer;
-    qcflag = input1->answer;
-    qcchan = input2->answer;
+    product = productname->answer;
+    qcflag = qcname->answer;
+    qcchan = input->answer;
     if (input_band->answer)
 	bandno = atoi(input_band->answer);
 
