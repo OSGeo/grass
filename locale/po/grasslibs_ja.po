@@ -1,6 +1,6 @@
 # translation of grasslibs_ja.po to Japanese
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2005,2010 GRASS Development Team
+# Copyright (C) 2005,2010,2012 GRASS Development Team
 #
 # Shinji Masumoto <masumoto@sci.osaka-cu.ac.jp>, 2004
 # Susumu Nonogaki <nonogaki@sci.osaka-cu.ac.jp>, 2005
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2011-11-15 15:01+0900\n"
-"Last-Translator: ueda <nao@locapoint.com>\n"
+"PO-Revision-Date: 2012-03-05 12:14+0900\n"
+"Last-Translator: Naoki Ueda <nao@locapoint.com>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -2004,19 +2004,19 @@ msgid "group <%s> references the following raster maps\n"
 msgstr "グループ <%s> は次のラスターマップを参照します\n"
 
 #: ../lib/imagery/sigsetfile.c:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> is not current mapset"
-msgstr "グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
+msgstr "署名ファイル <%s> が作成できません。 サブグループ： <%s> 、グループ： <%s> - <%s> は現在のマップセットにありません"
 
 #: ../lib/imagery/sigsetfile.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
-msgstr "グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
+msgstr "署名ファイル <%s> が作成できません。 サブグループ： <%s> 、グループ： <%s>"
 
 #: ../lib/imagery/sigsetfile.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open signature file <%s> for subgroup <%s> of group <%s@%s>"
-msgstr "グループ [%s in %s] の サブグループ [%s] のファイル [%s] を開けません"
+msgstr "署名ファイル <%s> が開けません。 サブグループ： <%s> 、グループ：<%s@%s>"
 
 #: ../lib/imagery/fopen.c:23
 #, c-format
@@ -7013,6 +7013,242 @@ msgstr "���"
 msgid "End time must be later than start time"
 msgstr "東は西より大きくないといけません"
 
+#, fuzzy
+msgid "Unable to delete file '%s'. Reason: %s"
+msgstr "ファイル '%s' を削除できません"
+
+#, fuzzy
+msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
+msgstr "ディレクトリ名を  '%s'  から  '%s' に変更できません"
+
+#, fuzzy
+msgid "Unable to remove directory '%s'. Reason: %s"
+msgstr "ディレクトリ  '%s' を削除できません"
+
+#, fuzzy
+msgid "Unable to delete prior null-cells file"
+msgstr "ファイル '%s' を削除できません"
+
+#, fuzzy
+msgid "Unable to close the null-cells file"
+msgstr "追加ファイルにヘッドを書き込めません"
+
+#, fuzzy
+msgid "closecell: can't move [%s] to null-cells file [%s]"
+msgstr ""
+"closecell:  移動できません%s\n"
+"null ファイル %s"
+
+#, fuzzy
+msgid "Unable to delete the temporary null-cells file"
+msgstr "一時NULLファイルが見つかりません %s"
+
+#, fuzzy
+msgid "Unable to delete the empty temporary null-cells file"
+msgstr "一時NULLファイルが見つかりません %s"
+
+#, fuzzy
+msgid "Unable to delete the prior null-cells file"
+msgstr "追加ファイルにヘッドを書き込めません"
+
+#, fuzzy
+msgid "Unable to close the 'cell' file"
+msgstr "ヘッドファイルを読み込めません"
+
+#, fuzzy
+msgid "Unable to delete prior 'fcell' file"
+msgstr "ファイル '%s' を削除できません"
+
+#, fuzzy
+msgid "Unable to delete the prior %s file"
+msgstr "テーブル <%s> を削除できません"
+
+#, fuzzy
+msgid "Unable to close file"
+msgstr "ファイルが開けません %s"
+
+#, fuzzy
+msgid "Unable to delete the prior 'cell' file"
+msgstr "追加ファイルにヘッドを書き込めません"
+
+#, fuzzy
+msgid "closecell: can't move [%s] to cell file [%s]"
+msgstr ""
+"closecell: 移動できません%s\n"
+"セルファイル %s"
+
+#, fuzzy
+msgid "Unable to delete the temporary 'cell' file"
+msgstr "一時ファイルが開けません"
+
+#, fuzzy
+msgid "Unable to write quant file!"
+msgstr "量子化ファイルに書き込みできません!"
+
+#, fuzzy
+msgid "Unable to delete the %s file"
+msgstr "テーブル <%s> を削除できません"
+
+#, fuzzy
+msgid "Unable to write f_format file for CELL maps"
+msgstr "セルマップにf_formatを書き込めません"
+
+msgid "Requested g3d map <%s> not found"
+msgstr "要求された3Dグリッドマップ <%s> は見つかりませんでした"
+
+#, fuzzy
+msgid "Unable to delete layer/category %d/%d line %d"
+msgstr "����� ���� ���\n"
+
+#, fuzzy
+msgid "Cannot open database %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot read topo for line [%d]"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid rast name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot get field info"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open database"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid vector name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot open existing vector map <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot delete existing vector <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open new vector %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open history file for vector '%s'"
+msgstr "���"
+
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "���"
+
+#, fuzzy
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "����������<%s> � �����.\n"
+
+#, fuzzy
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "�����\"d.mon\" ����� �����������\n"
+
+#, fuzzy
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "��� - ����<%s> ���\n"
+
+#, fuzzy
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "��� - � �� ����������(lock) ������<%s>.\n"
+
+#, fuzzy
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "��� - ����� (pipe) ������� �����.\n"
+
+#, fuzzy
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "��� - ����������<%s> � ����\n"
+
+#, fuzzy
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "���� ����������<%s>.\n"
+
+#, fuzzy
+msgid "Not connected...\n"
+msgstr "�������...\n"
+
+#, fuzzy
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "����� ����� ���� ���� ����\n"
+
+#, fuzzy
+msgid "ERROR: GISBASE not set\n"
+msgstr "���: GISBASE � �����\n"
+
+#, fuzzy
+msgid "%s/%s' was found in more mapsets (also found in <%s>)"
+msgstr "%s/%s' was found in more mapsets (also found in <%s>) "
+
+msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
+msgstr "補間のポイントを見つけるのに時間がかかりすぎています--領域をポイントのあるエリアに変更してください. 引き続き計算しています..."
+
+msgid "Reading lines from vector map ... "
+msgstr "ベクトルマップからラインを読み込んでいます ...  "
+
+msgid "Reading nodes from vector map ... "
+msgstr "ベクトルマップからノードを読み込んでいます ...  "
+
+msgid "strip exists with insufficient data"
+msgstr "stripは不十分なデータと存在します"
+
+msgid "there are points outside specified 2D/3D region--ignored %d points"
+msgstr "指定された2D/3D 領域外にポイントがあります--無視された %d ポイント"
+
+msgid "ignoring %d points -- too dense"
+msgstr "ポイント %d を無視しています -- 密集しすぎです"
+
+msgid "some points outside of region -- will ignore..."
+msgstr "いくつかのポイントは領域外です -- 無視します..."
+
+msgid "Unable to feature %d from vector map <%s>"
+msgstr "Unable to feature %d from vector map <%s>"
+
+msgid "Invalid view position coordinates, using %f,%f"
+msgstr "不正な視点位置座標,用法は %f,%f"
+
+msgid "Unknown Location"
+msgstr "不明なロケーション"
+
+msgid "Too many arguments"
+msgstr "独立変数が多すぎます"
+
+msgid "Table has no columns"
+msgstr "テーブルには列がありません"
+
+msgid "Vector is not 3D"
+msgstr "ベクトルは3Dではありません"
+
+msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
+msgstr "z 列 <%s> が見つかりません(名前を確認してください、 e.g. with v.info)"
+
+msgid "Column type of z column is not supported (must be integer or double)"
+msgstr "z列の列型はサポートされていません (整数型か倍でなければなりません)"
+
+msgid "Cannot read column type of smooth column"
+msgstr "スムース列のタイプを読み込めません"
+
+msgid "Column type of smooth column (datetime) is not supported"
+msgstr "スムース列 (日時) のタイプはサポートされていません"
+
+msgid "Column type of s column is not supported (must be integer or double)"
+msgstr " s列の列タイプはサポートされていません (整数または倍数でなければなりません)"
+
+msgid ""
+"\n"
+"%s invalid; Try again >"
+msgstr ""
+"\n"
+"%s 無効; 再試行 >  "
+
 #~ msgid "Partial build for OGR is not supported"
 #~ msgstr "OGR の差分作成はサポートされていません"
 
@@ -7201,18 +7437,6 @@ msgstr "東は西より大きくないといけません"
 
 #~ msgid "Unable to write raster row %i"
 #~ msgstr "ラスター行 %i を書き込めません"
-
-#, fuzzy
-#~ msgid "Unable to delete file '%s'. Reason: %s"
-#~ msgstr "ファイル '%s' を削除できません"
-
-#, fuzzy
-#~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
-#~ msgstr "ディレクトリ名を  '%s'  から  '%s' に変更できません"
-
-#, fuzzy
-#~ msgid "Unable to remove directory '%s'. Reason: %s"
-#~ msgstr "ディレクトリ  '%s' を削除できません"
 
 #~ msgid "not implemented"
 #~ msgstr "実行されていません"
@@ -7998,76 +8222,8 @@ msgstr "東は西より大きくないといけません"
 #~ msgid "can't create histogram for [%s in %s]"
 #~ msgstr "ヒストグラムを作成できません [%s in %s]"
 
-#, fuzzy
-#~ msgid "Unable to delete prior null-cells file"
-#~ msgstr "ファイル '%s' を削除できません"
-
-#, fuzzy
-#~ msgid "Unable to close the null-cells file"
-#~ msgstr "追加ファイルにヘッドを書き込めません"
-
-#, fuzzy
-#~ msgid "closecell: can't move [%s] to null-cells file [%s]"
-#~ msgstr ""
-#~ "closecell:  移動できません%s\n"
-#~ "null ファイル %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary null-cells file"
-#~ msgstr "一時NULLファイルが見つかりません %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the empty temporary null-cells file"
-#~ msgstr "一時NULLファイルが見つかりません %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior null-cells file"
-#~ msgstr "追加ファイルにヘッドを書き込めません"
-
 #~ msgid "Error writing floating point format file for map %s"
 #~ msgstr " マップ%sに浮動小数点のフォーマットファイルを書き込みできません"
-
-#, fuzzy
-#~ msgid "Unable to close the 'cell' file"
-#~ msgstr "ヘッドファイルを読み込めません"
-
-#, fuzzy
-#~ msgid "Unable to delete prior 'fcell' file"
-#~ msgstr "ファイル '%s' を削除できません"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior %s file"
-#~ msgstr "テーブル <%s> を削除できません"
-
-#, fuzzy
-#~ msgid "Unable to close file"
-#~ msgstr "ファイルが開けません %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior 'cell' file"
-#~ msgstr "追加ファイルにヘッドを書き込めません"
-
-#, fuzzy
-#~ msgid "closecell: can't move [%s] to cell file [%s]"
-#~ msgstr ""
-#~ "closecell: 移動できません%s\n"
-#~ "セルファイル %s"
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary 'cell' file"
-#~ msgstr "一時ファイルが開けません"
-
-#, fuzzy
-#~ msgid "Unable to write quant file!"
-#~ msgstr "量子化ファイルに書き込みできません!"
-
-#, fuzzy
-#~ msgid "Unable to delete the %s file"
-#~ msgstr "テーブル <%s> を削除できません"
-
-#, fuzzy
-#~ msgid "Unable to write f_format file for CELL maps"
-#~ msgstr "セルマップにf_formatを書き込めません"
 
 #~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
 #~ msgstr "G_distance_point_to_line_segment: 起こりえません: コード=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
@@ -8080,162 +8236,6 @@ msgstr "東は西より大きくないといけません"
 
 #~ msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
 #~ msgstr "不正なテーブルマップ名 <%s>. 文字 <%c> は許可されていません.\n"
-
-#~ msgid "Requested g3d map <%s> not found"
-#~ msgstr "要求された3Dグリッドマップ <%s> は見つかりませんでした"
-
-#, fuzzy
-#~ msgid "Unable to delete layer/category %d/%d line %d"
-#~ msgstr "����� ���� ���\n"
-
-#, fuzzy
-#~ msgid "Cannot open database %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "����������<%s> � �����.\n"
-
-#, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "�����\"d.mon\" ����� �����������\n"
-
-#, fuzzy
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "��� - ����<%s> ���\n"
-
-#, fuzzy
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "��� - � �� ����������(lock) ������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "��� - ����� (pipe) ������� �����.\n"
-
-#, fuzzy
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "��� - ����������<%s> � ����\n"
-
-#, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "���� ����������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Not connected...\n"
-#~ msgstr "�������...\n"
-
-#, fuzzy
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "����� ����� ���� ���� ����\n"
-
-#, fuzzy
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "���: GISBASE � �����\n"
-
-#, fuzzy
-#~ msgid "%s/%s' was found in more mapsets (also found in <%s>)"
-#~ msgstr "%s/%s' was found in more mapsets (also found in <%s>) "
-
-#~ msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
-#~ msgstr "補間のポイントを見つけるのに時間がかかりすぎています--領域をポイントのあるエリアに変更してください. 引き続き計算しています..."
-
-#~ msgid "Reading lines from vector map ... "
-#~ msgstr "ベクトルマップからラインを読み込んでいます ...  "
-
-#~ msgid "Reading nodes from vector map ... "
-#~ msgstr "ベクトルマップからノードを読み込んでいます ...  "
-
-#~ msgid "strip exists with insufficient data"
-#~ msgstr "stripは不十分なデータと存在します"
-
-#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
-#~ msgstr "指定された2D/3D 領域外にポイントがあります--無視された %d ポイント"
-
-#~ msgid "ignoring %d points -- too dense"
-#~ msgstr "ポイント %d を無視しています -- 密集しすぎです"
-
-#~ msgid "some points outside of region -- will ignore..."
-#~ msgstr "いくつかのポイントは領域外です -- 無視します..."
-
-#~ msgid "Unable to feature %d from vector map <%s>"
-#~ msgstr "Unable to feature %d from vector map <%s>"
-
-#~ msgid "Invalid view position coordinates, using %f,%f"
-#~ msgstr "不正な視点位置座標,用法は %f,%f"
-
-#~ msgid "Unknown Location"
-#~ msgstr "不明なロケーション"
-
-#~ msgid "Too many arguments"
-#~ msgstr "独立変数が多すぎます"
-
-#~ msgid "Table has no columns"
-#~ msgstr "テーブルには列がありません"
-
-#~ msgid "Vector is not 3D"
-#~ msgstr "ベクトルは3Dではありません"
-
-#~ msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
-#~ msgstr "z 列 <%s> が見つかりません(名前を確認してください、 e.g. with v.info)"
-
-#~ msgid "Column type of z column is not supported (must be integer or double)"
-#~ msgstr "z列の列型はサポートされていません (整数型か倍でなければなりません)"
-
-#~ msgid "Cannot read column type of smooth column"
-#~ msgstr "スムース列のタイプを読み込めません"
-
-#~ msgid "Column type of smooth column (datetime) is not supported"
-#~ msgstr "スムース列 (日時) のタイプはサポートされていません"
-
-#~ msgid "Column type of s column is not supported (must be integer or double)"
-#~ msgstr " s列の列タイプはサポートされていません (整数または倍数でなければなりません)"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again >"
-#~ msgstr ""
-#~ "\n"
-#~ "%s 無効; 再試行 >  "
 
 #~ msgid "Unable to open driver <%s>"
 #~ msgstr "ドライバー <%s> を開けません"
