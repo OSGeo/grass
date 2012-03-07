@@ -277,6 +277,14 @@ class Settings:
             'vdigit' : {
                 # symbology
                 'symbol' : {
+                    'newSegment' : {
+                        'enabled' : None,
+                        'color' : (255, 0, 0, 255)
+                        }, # red
+                    'newLine' : {
+                        'enabled' : None,
+                        'color' : (0, 86, 45, 255)
+                        }, # dark green
                     'highlight' : {
                         'enabled' : None,
                         'color' : (255, 255, 0, 255)
