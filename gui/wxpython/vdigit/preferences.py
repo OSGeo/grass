@@ -36,9 +36,9 @@ class VDigitSettingsDialog(wx.Dialog):
         
         # notebook
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
+        self._createGeneralPage(notebook)
         self._createSymbologyPage(notebook)
         self.digit.SetCategory()
-        self._createGeneralPage(notebook)
         self._createAttributesPage(notebook)
         self._createQueryPage(notebook)
 
@@ -89,7 +89,8 @@ class VDigitSettingsDialog(wx.Dialog):
             textLabel = wx.StaticText(panel, wx.ID_ANY, label)
             color = csel.ColourSelect(panel, id = wx.ID_ANY,
                                       colour = UserSettings.Get(group = 'vdigit', key = 'symbol',
-                                                              subkey = [key, 'color']), size = globalvar.DIALOG_COLOR_SIZE)
+                                                                subkey = [key, 'color']),
+                                      size = (40, 25))
             isEnabled = UserSettings.Get(group = 'vdigit', key = 'symbol',
                                          subkey = [key, 'enabled'])
             if isEnabled is not None:
@@ -508,7 +509,8 @@ class VDigitSettingsDialog(wx.Dialog):
         """
 
         return (
-            #            ("Background", "symbolBackground"),
+            (_("Digitize new line segment"), "newSegment"),
+            (_("Digitize new line/boundary"), "newLine"),
             (_("Highlight"), "highlight"),
             (_("Highlight (duplicates)"), "highlightDupl"),
             (_("Point"), "point"),

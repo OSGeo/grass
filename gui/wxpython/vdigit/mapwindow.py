@@ -520,9 +520,13 @@ class VDigitWindow(BufferedWindow):
                           "removeVertex",
                           "editLine"):
             # set pen
-            self.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
-            self.polypen = wx.Pen(colour = 'dark green', width = 2, style = wx.SOLID)
-            
+            self.pen = wx.Pen(colour = UserSettings.Get(group = 'vdigit', key = 'symbol',
+                                                        subkey = ['newSegment', 'color']),
+                              width = 2, style = wx.SHORT_DASH)
+            self.polypen = wx.Pen(colour = UserSettings.Get(group = 'vdigit', key = 'symbol',
+                                                            subkey = ['newLine', 'color']),
+                                  width = 2, style = wx.SOLID)
+        
         if action in ("addVertex",
                       "removeVertex",
                       "splitLines"):
