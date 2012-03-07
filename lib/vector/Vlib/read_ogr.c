@@ -180,61 +180,61 @@ int V1_read_line_ogr(struct Map_info *Map,
 		     struct line_pnts *line_p, struct line_cats *line_c, off_t offset)
 {
 #ifdef HAVE_OGR
-    long FID;
+    long fid;
     int type;
     OGRGeometryH hGeom;
 
     struct Format_info_ogr *ogr_info;
     
     ogr_info = &(Map->fInfo.ogr);
-    G_debug(4, "V1_read_line_ogr(): offset = %lu offset_num = %lu",
+    G_debug(3, "V1_read_line_ogr(): offset = %lu offset_num = %lu",
 	    (long) offset, (long) ogr_info->offset.array_num);
 
     if (offset >= ogr_info->offset.array_num)
-	return -2;
+	return -2; /* nothing to read */
     
     if (line_p != NULL)
 	Vect_reset_line(line_p);
     if (line_c != NULL)
 	Vect_reset_cats(line_c);
 
-    FID = ogr_info->offset.array[offset];
-    G_debug(4, "  FID = %ld", FID);
+    fid = ogr_info->offset.array[offset];
+    G_debug(4, "  fid = %ld", fid);
     
     /* coordinates */
     if (line_p != NULL) {
-	/* Read feature to cache if necessary */
-	if (ogr_info->feature_cache_id != FID) {
-	    G_debug(4, "Read feature (FID = %ld) to cache", FID);
+	/* read feature to cache if necessary */
+	if (ogr_info->feature_cache_id != fid) {
+	    G_debug(4, "Read feature (fid = %ld) to cache", fid);
 	    if (ogr_info->feature_cache) {
 		OGR_F_Destroy(ogr_info->feature_cache);
 	    }
 	    ogr_info->feature_cache =
-		OGR_L_GetFeature(ogr_info->layer, FID);
+		OGR_L_GetFeature(ogr_info->layer, fid);
 	    if (ogr_info->feature_cache == NULL) {
-		G_warning(_("Unable to get feature geometry, FID %ld"),
-			  FID);
+		G_warning(_("Unable to get feature geometry, fid %ld"),
+			  fid);
 		return -1;
 	    }
-	    ogr_info->feature_cache_id = FID;
+	    ogr_info->feature_cache_id = fid;
 	}
 	
 	hGeom = OGR_F_GetGeometryRef(ogr_info->feature_cache);
 	if (hGeom == NULL) {
-	    G_warning(_("Unable to get feature geometry, FID %ld"),
-		      FID);
+	    G_warning(_("Unable to get feature geometry, fid %ld"),
+		      fid);
 	    return -1;
 	}
 	
 	type = read_line(Map, hGeom, offset + 1, line_p);
     }
     else {
-	type = get_line_type(Map, FID);
+	type = get_line_type(Map, fid);
     }
 
     /* category */
     if (line_c != NULL) {
-	Vect_cat_set(line_c, 1, (int) FID);
+	Vect_cat_set(line_c, 1, (int) fid);
     }
 
     return type;
@@ -275,6 +275,7 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     }
     
     if (Line->type == GV_CENTROID) {
+	/* read centroid for topo */
 	if (line_p != NULL) {
 	    int i, found;
 	    struct bound_box box;
@@ -288,7 +289,7 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		/* get area bbox */
 		Vect_get_area_box(Map, topo->area, &box);
 		/* search in spatial index for centroid with area bbox */
-		dig_init_boxlist(&list, 1);
+		dig_init_boxlist(&list, TRUE);
 		Vect_select_lines_by_box(Map, &box, Line->type, &list);
 		
 		found = 0;
@@ -304,7 +305,7 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	}
 
 	if (line_c != NULL) {
-	  /* cat = FID and offset = FID for centroid */
+	  /* cat = fid and offset = fid for centroid */
 	  Vect_reset_cats(line_c);
 	  Vect_cat_set(line_c, 1, (int) Line->offset);
 	}
@@ -605,7 +606,7 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
   \return feature type
   \return -1 on error
 */
-int get_line_type(const struct Map_info *Map, long FID)
+int get_line_type(const struct Map_info *Map, long fid)
 {
     int eType;
 
@@ -614,11 +615,11 @@ int get_line_type(const struct Map_info *Map, long FID)
     OGRFeatureH hFeat;
     OGRGeometryH hGeom;
 
-    G_debug(4, "get_line_type() fid = %ld", FID);
+    G_debug(4, "get_line_type() fid = %ld", fid);
 
     ogr_info = &(Map->fInfo.ogr);
     
-    hFeat = OGR_L_GetFeature(ogr_info->layer, FID);
+    hFeat = OGR_L_GetFeature(ogr_info->layer, fid);
     if (hFeat == NULL)
 	return -1;
 

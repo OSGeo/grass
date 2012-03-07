@@ -126,8 +126,8 @@ int Vect_read_next_line(const struct Map_info *Map,
     ret = (*Read_next_line_array[Map->format][Map->level]) (Map, line_p,
 							    line_c);
     if (ret == -1)
-	G_fatal_error(_("Unable to read vector map <%s>"),
-		      Vect_get_full_name(Map));
+	G_fatal_error(_("Unable to read feature %d vector map <%s>"),
+		      Map->next_line, Vect_get_full_name(Map));
     
     return ret;
 }
@@ -168,7 +168,7 @@ int Vect_read_line(const struct Map_info *Map,
 
     ret = (*Read_line_array[Map->format]) (Map, line_p, line_c, line);
     if (ret == -1)
-	G_fatal_error(_("Unable to read feature %d vector map <%s>"),
+	G_fatal_error(_("Unable to read feature %d from vector map <%s>"),
 		      line, Vect_get_full_name(Map));
     
     return ret;

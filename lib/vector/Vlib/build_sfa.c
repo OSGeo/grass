@@ -52,8 +52,9 @@ static int add_line(struct Plus_head *, struct Format_info_offset *,
 
 static int add_geometry_pg(struct Plus_head *,
 			   struct Format_info_pg *,
-			   SF_FeatureType, int, int,
-			   struct geom_parts *);
+			   struct feat_parts *, int, 
+			   int, int,
+ struct geom_parts *);
 static void build_pg(struct Map_info *, int);
 #endif
 
@@ -176,9 +177,10 @@ int add_line(struct Plus_head *plus, struct Format_info_offset *offset,
 	dig_cidx_add_cat(plus, 0, 0, line, type);
     }
 
-    if (type != GV_CENTROID)	/* because centroids are read from topology, not from layer */
+    /* because centroids are read from topology, not from layer */
+    if (type != GV_CENTROID)
 	add_parts_to_offset(offset, parts);
-
+    
     return line;
 }
 
@@ -188,15 +190,19 @@ int add_line(struct Plus_head *plus, struct Format_info_offset *offset,
 */
 int add_geometry_pg(struct Plus_head *plus,
 		    struct Format_info_pg *pg_info,
-		    SF_FeatureType ftype, int FID, int build,
-		    struct geom_parts *parts)
+		    struct feat_parts *fparts, int ipart,
+		    int FID, int build, struct geom_parts *parts)
 {
-    int line, iPart, area, isle, outer_area, ret;
+    int line, i, idx, area, isle, outer_area, ret;
     int lines[1];
     double area_size, x, y;
+    SF_FeatureType ftype;
     struct bound_box box;
     struct Format_info_offset *offset;
-
+    struct line_pnts *line_i;
+    
+    ftype = fparts->ftype[ipart];
+    
     G_debug(4, "add_geometry_pg() FID = %d ftype = %d", FID, ftype);
     
     offset = &(pg_info->offset);
@@ -206,28 +212,34 @@ int add_geometry_pg(struct Plus_head *plus,
     switch(ftype) {	
     case SF_POINT:
 	G_debug(4, "Point");
-	add_line(plus, offset, GV_POINT, pg_info->cache.lines[0], FID, parts);
+	line_i = pg_info->cache.lines[fparts->idx[ipart]];
+	add_line(plus, offset, GV_POINT, line_i,
+		 FID, parts);
 	break;
     case SF_LINESTRING:
 	G_debug(4, "LineString");
-	add_line(plus, offset, GV_LINE, pg_info->cache.lines[0], FID, parts);
+	line_i = pg_info->cache.lines[fparts->idx[ipart]];
+	add_line(plus, offset, GV_LINE, line_i,
+		 FID, parts);
 	break;
     case SF_POLYGON:
 	G_debug(4, "Polygon");
 
 	/* register boundaries */
-	for (iPart = 0; iPart < pg_info->cache.lines_num; iPart++) {
-	    add_part(parts, iPart);
-	    line = add_line(plus, offset, GV_BOUNDARY, pg_info->cache.lines[iPart],
-			    FID, parts);
+	idx = fparts->idx[ipart];
+	for (i = 0; i < fparts->nlines[ipart]; i++) {
+	    line_i = pg_info->cache.lines[idx++];
+	    add_part(parts, i);
+	    line = add_line(plus, offset, GV_BOUNDARY,
+			    line_i, FID, parts);
 	    del_part(parts);
 
 	    if (build < GV_BUILD_AREAS)
 		continue;
 	    
 	    /* add area (each inner ring is also area) */
-	    dig_line_box(pg_info->cache.lines[iPart], &box);
-	    dig_find_area_poly(pg_info->cache.lines[iPart], &area_size);
+	    dig_line_box(line_i, &box);
+	    dig_find_area_poly(line_i, &area_size);
 
 	    if (area_size > 0)	        /* area clockwise */
 		lines[0] = line;
@@ -244,7 +256,7 @@ int add_geometry_pg(struct Plus_head *plus,
 	    if (build < GV_BUILD_ATTACH_ISLES)
 		continue;
 	    
-	    if (iPart == 0) {	/* outer ring */
+	    if (i == 0) {	/* outer ring */
 		outer_area = area;
 	    }
 	    else {		/* inner ring */
@@ -259,9 +271,9 @@ int add_geometry_pg(struct Plus_head *plus,
 
 	if (build >= GV_BUILD_CENTROIDS) {
 	    /* create virtual centroid */
-	    ret = Vect_get_point_in_poly_isl((const struct line_pnts *) pg_info->cache.lines[0],
-					     (const struct line_pnts **) pg_info->cache.lines + 1,
-					     pg_info->cache.lines_num - 1, &x, &y);
+	    ret = Vect_get_point_in_poly_isl((const struct line_pnts *) pg_info->cache.lines[fparts->idx[ipart]],
+					     (const struct line_pnts **) pg_info->cache.lines[fparts->idx[ipart]] + 1,
+					     fparts->nlines[ipart] - 1, &x, &y);
 	    if (ret < -1) {
 		G_warning(_("Unable to calculate centroid for area %d"),
 			  outer_area);
@@ -270,11 +282,12 @@ int add_geometry_pg(struct Plus_head *plus,
 		struct P_area *Area;
 		struct P_topo_c *topo;
 		struct P_line *Line;
-		
+		struct line_pnts *line_c;
+
 		G_debug(4, "  Centroid: %f, %f", x, y);
-		Vect_reset_line(pg_info->cache.lines[0]);
-		Vect_append_point(pg_info->cache.lines[0], x, y, 0.0);
-		line = add_line(plus, offset, GV_CENTROID, pg_info->cache.lines[0], FID, parts);
+		line_c = Vect_new_line_struct();
+		Vect_append_point(line_c, x, y, 0.0);
+		line = add_line(plus, offset, GV_CENTROID, line_c, FID, parts);
 		
 		Line = plus->Line[line];
 		topo = (struct P_topo_c *)Line->topo;
@@ -283,6 +296,7 @@ int add_geometry_pg(struct Plus_head *plus,
 		/* register centroid to area */
 		Area = plus->Area[outer_area];
 		Area->centroid = line;
+		Vect_destroy_line_struct(line_c);
 	    }
 	}
 	break;
@@ -299,19 +313,21 @@ int add_geometry_pg(struct Plus_head *plus,
 */
 void build_pg(struct Map_info *Map, int build)
 {
-    int iFeature, FID, nrecords;
+    int iFeature, ipart, fid, nrecords;
     char stmt[DB_SQL_MAX];
-    SF_FeatureType ftype;
+    char *wkb_data;
     
     struct Format_info_pg *pg_info;
     
+    struct feat_parts fparts;
     struct geom_parts parts;
 
     pg_info = &(Map->fInfo.pg);
 
     /* initialize data structures */
     init_parts(&parts);
-
+    G_zero(&fparts, sizeof(struct feat_parts));
+    
     /* get records */
     sprintf(stmt, "SELECT %s,%s FROM %s",
 	    pg_info->fid_column,
@@ -330,23 +346,29 @@ void build_pg(struct Map_info *Map, int build)
     G_debug(4, "build_pg(): nrecords = %d", nrecords);
     for (iFeature = 0; iFeature < nrecords; iFeature++) {
 	/* get feature id */
-	FID  = atoi(PQgetvalue(pg_info->res, iFeature, 0));
+	fid  = atoi(PQgetvalue(pg_info->res, iFeature, 0));
+	wkb_data = PQgetvalue(pg_info->res, iFeature, 1);
+	
 	/* cache feature (lines) */
-    	ftype = cache_feature(PQgetvalue(pg_info->res, iFeature, 1),
-			      FALSE, pg_info);
-	
-	if (pg_info->cache.lines_num < 1) {
-	    G_warning(_("Feature %d without geometry ignored"), iFeature);
-	    continue;
-	}
-	
-	G_debug(3, "Feature %d: cat=%d", iFeature, FID);
+	cache_feature(wkb_data,
+		      FALSE, &(pg_info->cache), &fparts);
 
 	/* register topo */
 	reset_parts(&parts);
-	add_part(&parts, FID);
-	add_geometry_pg(&(Map->plus), pg_info,
-			ftype, FID, build, &parts);
+	add_part(&parts, fid);
+	for (ipart = 0; ipart < fparts.n_parts; ipart++) {
+	    if (fparts.nlines[ipart] < 1) {
+		G_warning(_("Feature %d without geometry skipped"), fid);
+		continue;
+	    }
+	    
+	    G_debug(4, "Feature: fid = %d part = %d", fid, ipart);
+	    
+	    add_part(&parts, ipart);
+	    add_geometry_pg(&(Map->plus), pg_info, &fparts, ipart,
+			    fid, build, &parts);
+	    del_part(&parts);
+	}
     }
 
     Map->plus.built = GV_BUILD_BASE;
@@ -594,14 +616,14 @@ void build_ogr(struct Map_info *Map, int build)
 	
 	hGeom = OGR_F_GetGeometryRef(hFeature);
 	if (hGeom == NULL) {
-	    G_warning(_("Feature %d without geometry ignored"), iFeature);
+	    G_warning(_("Feature %d without geometry skipped"), iFeature);
 	    OGR_F_Destroy(hFeature);
 	    continue;
 	}
 	
 	FID = (int) OGR_F_GetFID(hFeature);
 	if (FID == OGRNullFID) {
-	    G_warning(_("OGR feature %d without ID ignored"), iFeature);
+	    G_warning(_("OGR feature %d without ID skipped"), iFeature);
 	    OGR_F_Destroy(hFeature);
 	    continue;
 	}

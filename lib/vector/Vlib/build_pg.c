@@ -70,6 +70,14 @@ int Vect_build_pg(struct Map_info *Map, int build)
 	G_warning(_("No DB connection"));
 	return 0;
     }
+
+    if (!pg_info->fid_column) {
+	G_warning(_("Feature table <%s> has no primary key defined"),
+		  pg_info->table_name);
+	G_warning(_("Random read is not supported by OGR for this layer. "
+		    "Unable to build topology."));
+	return 0;
+    }
     
     G_message(_("Using external data format '%s' (feature type '%s')"),
 	      Vect_get_finfo_format_info(Map),

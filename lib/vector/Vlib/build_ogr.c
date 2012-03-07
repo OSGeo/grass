@@ -79,8 +79,8 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 		   "PostgreSQL") == 0)
 	    G_warning(_("Feature table <%s> has no primary key defined"),
 		      ogr_info->layer_name);
-	G_warning(_("Random read is not supported by OGR for this layer, "
-		    "unable to build topology"));
+	G_warning(_("Random read is not supported by OGR for this layer. "
+		    "Unable to build topology."));
 	return 0;
     }
 
@@ -158,6 +158,8 @@ int Vect_save_fidx(struct Map_info *Map,
     if (0 >= dig__fwrite_port_I(offset->array,
 				offset->array_num, &fp))
 	return 0;
+    
+    G_debug(3, "Vect_save_fidx(): offset_num = %d", offset->array_num);
     
     fclose(fp.file);
 

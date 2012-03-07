@@ -817,7 +817,8 @@ static int read_dblinks_pg(struct Map_info *Map)
     pg_info = &(Map->fInfo.pg);
     
     if (!pg_info->fid_column) {
-	G_warning(_("No FID column defined"));
+	G_warning(_("Feature table <%s> has no primary key defined. "
+		    "Unable to define DB links."), pg_info->table_name);
 	return -1;
     }
     G_debug(3, "Using FID column <%s>", pg_info->fid_column);

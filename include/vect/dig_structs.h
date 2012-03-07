@@ -409,11 +409,42 @@ struct Format_info_offset
       GRASS. This is not used for GV_CENTROID. Because one feature may
       contain more elements (geometry collection also recursively),
       offset for one line may be stored in more records. First record
-      is FID, next records are part indexes if necessary. Example:
+      is FID, next records are part indexes if necessary.
+
+      Example 1:
+      
       5. ring in 3. polygon in 7. feature (multipolygon) of geometry
       collection which has FID = 123 123 (feature 123: geometry
       colletion) 6 (7. feature in geometry collection: multiPolygon) 2
       (3. polygon) 4 (5. ring in the polygon)
+
+      Example 2: geometry collection FID '1' containing one point, one
+      linestring and one polygon
+
+      \verbatim
+      Offset:
+
+      idx  offset note
+      ----------------
+      0	   1	  FID
+      1	   0	  first part (point)
+
+      2	   1	  FID
+      3	   1	  second part (linestring)
+
+      4	   1	  FID
+      5	   2	  third part (polygon)
+      6	   0	  first ring of polygon
+
+      Topology:
+      
+      line idx
+      -----------------
+      1    0      point
+      2    2      line
+      3    4      boundary
+      4    1      centroid read from topo (idx == FID)
+      \endverbatim
     */
     int *array;
     /*!
@@ -425,6 +456,39 @@ struct Format_info_offset
     */
     int array_alloc;
 
+};
+
+/*!
+  \brief Lines cache for reading feature (non-native formats)
+*/
+struct Format_info_cache {
+    /*!
+      \brief Lines array
+      
+      Some features requires more allocated lines (eg. polygon
+      with more rings, multipoint, or geometrycollection)
+    */
+    struct line_pnts **lines;
+    /*!
+      \brief List of line types (GV_POINT, GV_LINE, ...)
+    */
+    int *lines_types;
+    /*!
+      \brief Number of allocated lines in cache
+    */
+    int lines_alloc;
+    /*!
+      \brief Number of lines which forms current feature
+    */
+    int lines_num;
+    /*!
+      \brief Next line to be read from cache
+    */
+    int lines_next;
+    /*!
+      \brief Feature id
+    */
+    long fid;
 };
 
 /*!
@@ -484,34 +548,10 @@ struct Format_info_ogr
     char **layer_options;
     
     /*!
-      \brief Lines cache (per feature)
+      \brief Lines cache for reading feature
     */
-    struct {
-	/*!
-	  \brief Lines array
-	  
-	  Some features requires more allocated lines (eg. polygon
-	  with more rings, multipoint, or geometrycollection)
-	*/
-	struct line_pnts **lines;	
-	/*!
-	  \brief List of line types
-	*/
-	int *lines_types;
-	/*!
-	  \brief Number of allocated lines in cache
-	*/
-	int lines_alloc;
-	/*!
-	  \brief Number of lines which forms current feature
-	*/
-	int lines_num;
-	/*!
-	  \brief Next line to be read from cache
-	*/
-	int lines_next;
-    } cache;
-    
+    struct Format_info_cache cache;
+
     /*!
       \brief Cache to avoid repeated reading (level 2)
 
@@ -581,39 +621,11 @@ struct Format_info_pg
       \brief Next line to be read for sequential access
     */
     int next_line;
-    
+
     /*!
-      \brief Lines cache (per feature)
+      \brief Lines cache for reading feature
     */
-    struct {
-	/*!
-	  \brief Lines array
-	  
-	  Some features requires more allocated lines (eg. polygon
-	  with more rings, multipoint, or geometrycollection)
-	*/
-	struct line_pnts **lines;
-      	/*!
-	  \brief List of line types
-	*/
-	int *lines_types;
-	/*!
-	  \brief Number of allocated lines in cache
-	*/
-	int lines_alloc;
-	/*!
-	  \brief Number of lines which forms current feature
-	*/
-	int lines_num;
-	/*!
-	  \brief Next line to be read from cache
-	*/
-	int lines_next;
-	/*!
-	  \brief Feature id
-	*/
-	long fid;
-    } cache;
+    struct Format_info_cache cache;
     
     /*!
       \brief Offset list used for building pseudo-topology
