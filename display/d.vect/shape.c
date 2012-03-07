@@ -5,6 +5,13 @@
 
 #include "local_proto.h"
 
+static void error_handler(void *p)
+{
+    dbDriver *driver = (dbDriver *) p;
+    
+    db_close_database_shutdown_driver(driver);
+}
+
 int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const struct Cell_head *window, 
 		  const struct color_rgb *bcolor, const struct color_rgb *fcolor, int chcat,
 		  const char *icon, double size, const char *size_column, int sqrt_flag, const char *rot_column, /* lines only */
@@ -36,6 +43,9 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	if (!driver)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  fi->database, fi->driver);
+
+	/* add error handler */
+	G_add_error_handler(error_handler, driver);
     }
     
     /* fisrt search for color table */
@@ -55,12 +65,14 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	G_debug(3, "nrec_rgb (%s) = %d", rgb_column, nrec_rgb);
 	    
 	if (cvarr_rgb.ctype != DB_C_TYPE_STRING)
-	    G_warning(_("Color definition column (%s) not a string. "
-			"Column must be of form RRR:GGG:BBB where RGB values range 0-255."),
-		      rgb_column);
+	    G_warning(_("Color definition column ('%s') not a string. "
+			"Column must be of form 'RRR:GGG:BBB' where RGB values range 0-255. "
+			"You can use '%s' module to define color rules. "
+			"Unable to colorize features."),
+		      rgb_column, "v.colors");
 	else {
 	    if (nrec_rgb < 0)
-		G_fatal_error(_("Unable to select data (%s) from table"),
+		G_fatal_error(_("Unable to select data ('%s') from table"),
 			      rgb_column);
 	    
 	    G_debug(2, "\n%d records selected from table", nrec_rgb);
@@ -79,11 +91,11 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 
 	if (cvarr_width.ctype != DB_C_TYPE_INT &&
 	    cvarr_width.ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Line width column (%s) not a number"),
+	    G_fatal_error(_("Line width column ('%s') not a number"),
 			  width_column);
 
 	if (nrec_width < 0)
-	    G_fatal_error(_("Unable to select data (%s) from table"),
+	    G_fatal_error(_("Unable to select data ('%s') from table"),
 			  width_column);
 
 	G_debug(2, "\n%d records selected from table", nrec_width);
@@ -110,11 +122,11 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 
 	if (cvarr_size.ctype != DB_C_TYPE_INT &&
 	    cvarr_size.ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Symbol size column (%s) is not numeric"),
+	    G_fatal_error(_("Symbol size column ('%s') is not numeric"),
 			  size_column);
 
 	if (nrec_size < 0)
-	    G_fatal_error(_("Unable to select data (%s) from table"),
+	    G_fatal_error(_("Unable to select data ('%s') from table"),
 			  size_column);
 
 	G_debug(2, " %d records selected from table", nrec_size);
@@ -141,11 +153,11 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 
 	if (cvarr_rot.ctype != DB_C_TYPE_INT &&
 	    cvarr_rot.ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Symbol rotation column (%s) is not numeric"),
+	    G_fatal_error(_("Symbol rotation column ('%s') is not numeric"),
 			  rot_column);
 
 	if (nrec_rot < 0)
-	    G_fatal_error(_("Unable to select data (%s) from table"),
+	    G_fatal_error(_("Unable to select data ('%s') from table"),
 			  rot_column);
 
 	G_debug(2, " %d records selected from table", nrec_rot);
@@ -159,8 +171,12 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	}
     }
 
-    if (open_db)
+    if (open_db) {
+	/* remove error handler */
+	G_remove_error_handler(error_handler, driver);
+	
 	db_close_database_shutdown_driver(driver);
+    }
 
     if (z_color_flag) {
 	if (!Vect_is_3d(Map)) {
