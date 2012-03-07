@@ -55,23 +55,17 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	G_debug(3, "nrec_rgb (%s) = %d", rgb_column, nrec_rgb);
 	    
 	if (cvarr_rgb.ctype != DB_C_TYPE_STRING)
-	    G_fatal_error(_("Color definition column (%s) not a string. "
-			    "Column must be of form RRR:GGG:BBB where RGB values range 0-255."),
-			  rgb_column);
-	
-	if (nrec_rgb < 0)
-	    G_fatal_error(_("Unable to select data (%s) from table"),
-			  rgb_column);
-	
-	G_debug(2, "\n%d records selected from table", nrec_rgb);
-	/*
-	  for (i = 0; i < cvarr_rgb.n_values; i++) {
-	  G_debug(4, "cat = %d  %s = %s", cvarr_rgb.value[i].cat,
-	  rgb_column, db_get_string(cvarr_rgb.value[i].val.s));
-	  }
-	*/
+	    G_warning(_("Color definition column (%s) not a string. "
+			"Column must be of form RRR:GGG:BBB where RGB values range 0-255."),
+		      rgb_column);
+	else {
+	    if (nrec_rgb < 0)
+		G_fatal_error(_("Unable to select data (%s) from table"),
+			      rgb_column);
+	    
+	    G_debug(2, "\n%d records selected from table", nrec_rgb);
+	}
     }
-
     if (width_column) {
 	if (*width_column == '\0')
 	    G_fatal_error(_("Line width column not specified"));
