@@ -60,12 +60,17 @@ SF_FeatureType get_feature(struct Format_info_pg *, int);
 static unsigned char *hex_to_wkb(const char *, int *);
 static int point_from_wkb(const unsigned char *, int, int, int,
 			  struct line_pnts *);
-static int line_from_wkb(const unsigned char *, int, int, int,
-			 struct line_pnts *, int);
+static int linestring_from_wkb(const unsigned char *, int, int, int,
+			       struct line_pnts *, int);
 static int polygon_from_wkb(const unsigned char *, int, int, int,
-			    struct Format_info_pg *);
+			    struct Format_info_cache *);
+static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
+					struct Format_info_cache *,
+					struct feat_parts *);
 static int error_corrupted_data(const char *);
 static int set_initial_query();
+static void reallocate_cache(struct Format_info_cache *, int);
+static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
 #endif
 
 /*!
@@ -170,7 +175,7 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 		dig_init_boxlist(&list, TRUE);
 		Vect_select_lines_by_box(Map, &box, Line->type, &list);
 		
-		found = 0;
+		found = -1;
 		for (i = 0; i < list.n_values; i++) {
 		    if (list.id[i] == line) {
 			found = i;
@@ -178,8 +183,10 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 		    }
 		}
 		
-		Vect_reset_line(line_p);
-		Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+		if (found > -1) {
+		    Vect_reset_line(line_p);
+		    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+		}
 	    }
 	    if (line_c != NULL) {
 		/* cat = FID and offset = FID for centroid */
@@ -235,7 +242,7 @@ int V1_read_line_pg(struct Map_info *Map,
 {
 #ifdef HAVE_POSTGRES
     long fid;
-    int i, type;
+    int i, ipart, type;
     SF_FeatureType sf_type;
     
     struct line_pnts      *line_i;
@@ -246,7 +253,7 @@ int V1_read_line_pg(struct Map_info *Map,
 	    (long) offset, (long) pg_info->offset.array_num);
     
     if (offset >= pg_info->offset.array_num)
-	return -2;
+	return -2; /* nothing to read */
     
     if (line_p != NULL)
 	Vect_reset_line(line_p);
@@ -267,9 +274,12 @@ int V1_read_line_pg(struct Map_info *Map,
 		return (int) sf_type;
 	}
 	
+	ipart = pg_info->offset.array[offset + 1];
+	G_debug(4, "read feature part: %d", ipart);
+	
 	/* get data from cache */
-	type  = pg_info->cache.lines_types[pg_info->cache.lines_next];
-	line_i = pg_info->cache.lines[pg_info->cache.lines_next];
+	type  = pg_info->cache.lines_types[ipart];
+	line_i = pg_info->cache.lines[ipart];
 	for (i = 0; i < line_i->n_points; i++) {
 	    Vect_append_point(line_p,
 			      line_i->x[i], line_i->y[i], line_i->z[i]);
@@ -318,6 +328,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     }
 
     if (Line->type == GV_CENTROID) {
+	/* read centroid from topo */
 	if (line_p != NULL) {
 	    int i, found;
 	    struct bound_box box;
@@ -331,10 +342,10 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 		/* get area bbox */
 		Vect_get_area_box(Map, topo->area, &box);
 		/* search in spatial index for centroid with area bbox */
-		dig_init_boxlist(&list, 1);
+		dig_init_boxlist(&list, TRUE);
 		Vect_select_lines_by_box(Map, &box, Line->type, &list);
 		
-		found = 0;
+		found = -1;
 		for (i = 0; i < list.n_values; i++) {
 		    if (list.id[i] == line) {
 			found = i;
@@ -342,7 +353,16 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 		    }
 		}
 		
-		Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+		if (found > -1) {
+		    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+		}
+		else {
+		    G_warning(_("Unable to construct centroid for area %d. Skipped."),
+			      topo->area);
+		}
+	    }
+	    else {
+		G_warning(_("Centroid %d: invalid area %d"), line, topo->area);
 	    }
 	}
 
@@ -411,8 +431,9 @@ int read_next_line_pg(struct Map_info *Map,
 	    if ((int) sf_type < 0) /* -1 || - 2 */
 		return (int) sf_type;
 
-	    if (sf_type & (SF_UNKNOWN | SF_NONE)) {
+	    if (sf_type == SF_UNKNOWN || sf_type == SF_NONE) {
 		G_warning(_("Feature without geometry. Skipped."));
+		pg_info->cache.lines_next = pg_info->cache.lines_num = 0;
 		continue;
 	    }
 	    
@@ -547,7 +568,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
     }
     data = (char *)PQgetvalue(pg_info->res, pg_info->next_line, 0);
     
-    ftype = cache_feature(data, FALSE, pg_info);
+    ftype = cache_feature(data, FALSE, &(pg_info->cache), NULL);
     if (fid < 0) {
 	pg_info->cache.fid = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
 	pg_info->next_line++;
@@ -632,14 +653,15 @@ static unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
 
   \param data HEX data
   \param skip_polygon skip polygons (level 1)
-  \param[in,out] pg_info pointer to Format_info_pg struct
-  (geometry is stored in lines cache)
+  \param[out] cache lines cache
+  \param[out] fparts used for building pseudo-topology (or NULL)
   
-  \return 0 on success
-  \return -1 on error
+  \return simple feature type
+  \return SF_UNKNOWN on error
 */
-int cache_feature(const char *data, int skip_polygon,
-		  struct Format_info_pg *pg_info)
+SF_FeatureType cache_feature(const char *data, int skip_polygon,
+			     struct Format_info_cache *cache,
+			     struct feat_parts *fparts)
 {
     int ret, byte_order, nbytes, is3D;
     unsigned char *wkb_data;
@@ -652,7 +674,7 @@ int cache_feature(const char *data, int skip_polygon,
     if (nbytes < 5) {
 	G_warning(_("Invalid WKB content: %d bytes"), nbytes);
 	G_free(wkb_data);
-	return -1;
+	return SF_UNKNOWN;
     }
     
     /* parsing M coordinate not supported */
@@ -665,7 +687,7 @@ int cache_feature(const char *data, int skip_polygon,
         G_warning(_("Reading EWKB with 4-dimensional coordinates (XYZM) "
 		    "is not supported"));
 	G_free(wkb_data);
-	return -1;
+	return SF_UNKNOWN;
     }
 
     /* PostGIS EWKB format includes an  SRID, but this won't be       
@@ -685,7 +707,7 @@ int cache_feature(const char *data, int skip_polygon,
     
     if (nbytes < 9 && nbytes != -1) {
 	G_free(wkb_data);
-	return -1;
+	return SF_UNKNOWN;
     }
     
    /* Get the geometry feature type. For now we assume that geometry
@@ -699,45 +721,52 @@ int cache_feature(const char *data, int skip_polygon,
         ftype = (SF_FeatureType) wkb_data[4];
 	is3D = wkb_data[1] & 0x80 || wkb_data[3] & 0x80;
     }
-    
+    G_debug(5, "cache_feature(): sf_type = %d", ftype);
+   
     /* allocate space in lines cache - be minimalistic
        
        more lines require eg. polygon with more rings, multi-features
        or geometry collections
     */
-    if (!pg_info->cache.lines) {
-	pg_info->cache.lines_alloc = 1;
-	pg_info->cache.lines = (struct line_pnts **) G_malloc(sizeof(struct line_pnts *));
-	
-	pg_info->cache.lines_types = (int *) G_malloc(sizeof(int));
-	pg_info->cache.lines[0] = Vect_new_line_struct();
-	pg_info->cache.lines_types[0] = -1;
+    if (!cache->lines) {
+	reallocate_cache(cache, 1);
     }
-    pg_info->cache.lines_num = 0;
+    cache->lines_num = 0;
     
     ret = -1;
     if (ftype == SF_POINT) {
-	pg_info->cache.lines_num = 1;
-	pg_info->cache.lines_types[0] = GV_POINT;
+	cache->lines_num = 1;
+	cache->lines_types[0] = GV_POINT;
 	ret = point_from_wkb(wkb_data, nbytes, byte_order,
-			     is3D, pg_info->cache.lines[0]);
+			     is3D, cache->lines[0]);
+	add_fpart(fparts, ftype, 0, 1);
     }
     else if (ftype == SF_LINESTRING) {
-	pg_info->cache.lines_num = 1;
-	pg_info->cache.lines_types[0] = GV_LINE;
-	ret = line_from_wkb(wkb_data, nbytes, byte_order,
-			    is3D, pg_info->cache.lines[0], FALSE);
+	cache->lines_num = 1;
+	cache->lines_types[0] = GV_LINE;
+	ret = linestring_from_wkb(wkb_data, nbytes, byte_order,
+				  is3D, cache->lines[0], FALSE);
+	add_fpart(fparts, ftype, 0, 1);
     }
-    else if (ftype == SF_POLYGON && !skip_polygon)
+    else if (ftype == SF_POLYGON && !skip_polygon) {
 	ret = polygon_from_wkb(wkb_data, nbytes, byte_order,
-			       is3D, pg_info) > 0 ? 0 : -1;
+			       is3D, cache);
+	add_fpart(fparts, ftype, 0, 1);
+    }
+    else if (ftype == SF_MULTIPOINT ||
+	     ftype == SF_MULTILINESTRING ||
+	     ftype == SF_MULTIPOLYGON ||
+	     ftype == SF_GEOMETRYCOLLECTION) {
+	ret = geometry_collection_from_wkb(wkb_data, nbytes, byte_order,
+					   is3D, cache, fparts);
+    }
     else  {
-	G_warning(_("Unsupported geometry type %d"), ftype);
+	G_warning(_("Unsupported feature type %d"), ftype);
     }
     
     G_free(wkb_data);
     
-    return ret;
+    return ret > 0 ? ftype : SF_UNKNOWN;
 }
 
 /*!
@@ -751,7 +780,7 @@ int cache_feature(const char *data, int skip_polygon,
   \param with_z WITH_Z for 3D data
   \param[out] line_p point geometry (pointer to line_pnts struct)
 
-  \return 0 on success
+  \return wkb size
   \return -1 on error
 */
 int point_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
@@ -788,7 +817,7 @@ int point_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
 	Vect_append_point(line_p, x, y, z);
     }
     
-    return 0;
+    return 5 + 8 * (with_z == WITH_Z ? 3 : 2);
 }
 
 /*!
@@ -802,11 +831,11 @@ int point_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
   \param with_z WITH_Z for 3D data
   \param[out] line_p line geometry (pointer to line_pnts struct)
 
-  \return 0 on success
+  \return wkb size
   \return -1 on error
 */
-int line_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
-		  int with_z, struct line_pnts *line_p, int is_ring)
+int linestring_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
+			int with_z, struct line_pnts *line_p, int is_ring)
 {
     int npoints, point_size, buff_min_size, offset;
     int i;
@@ -862,7 +891,7 @@ int line_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
 	    Vect_append_point(line_p, x, y, z);
     }
     
-    return 0;
+    return (9 - offset) + (with_z == WITH_Z ? 3 : 2) * 8 * line_p->n_points;
 }
 
 /*!
@@ -876,13 +905,13 @@ int line_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
   \param with_z WITH_Z for 3D data
   \param[out] line_p array of rings (pointer to line_pnts struct)
 
-  \return number of rings
+  \return wkb size
   \return -1 on error
 */
 int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
-		     int with_z, struct Format_info_pg *pg_info)
+		     int with_z, struct Format_info_cache *cache)
 {
-    int nrings, data_offset, i, nsize;
+    int nrings, data_offset, i, nsize, isize;
     struct line_pnts *line_i;
     
     if (nbytes < 9 && nbytes != -1)
@@ -898,21 +927,8 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
     }
     
     /* reallocate space for islands if needed */
-    if (nrings > pg_info->cache.lines_alloc) {
-	pg_info->cache.lines_alloc += 20;
-	pg_info->cache.lines = (struct line_pnts **) G_realloc(pg_info->cache.lines,
-							       pg_info->cache.lines_alloc *
-							       sizeof(struct line_pnts *));
-	pg_info->cache.lines_types = (int *) G_realloc(pg_info->cache.lines_types,
-						       pg_info->cache.lines_alloc *
-						       sizeof(int));
-	
-	for (i = pg_info->cache.lines_alloc - 20; i < pg_info->cache.lines_alloc; i++) {
-	    pg_info->cache.lines[i] = Vect_new_line_struct();
-	    pg_info->cache.lines_types[i] = -1;
-	}
-    }
-    pg_info->cache.lines_num = nrings;
+    reallocate_cache(cache, nrings);
+    cache->lines_num += nrings;
     
     /* each ring has a minimum of 4 bytes (point count) */
     if (nbytes != -1 && nbytes - 9 < nrings * 4) {
@@ -924,27 +940,131 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
         nbytes -= data_offset;
     
     /* get the rings */
-    nsize = 0;
+    nsize = 9;
     for (i = 0; i < nrings; i++ ) {
-	line_i = pg_info->cache.lines[i];
-	pg_info->cache.lines_types[i] = GV_BOUNDARY;
+	line_i = cache->lines[cache->lines_next];
+	cache->lines_types[cache->lines_next++] = GV_BOUNDARY;
 	
-	line_from_wkb(wkb_data + data_offset, nbytes, byte_order,
-		      with_z, line_i, TRUE);
+	linestring_from_wkb(wkb_data + data_offset, nbytes, byte_order,
+			    with_z, line_i, TRUE);
 	
         if (nbytes != -1) {
-	    if (with_z)
-		nsize = 4 + 24 * line_i->n_points;
-	    else
-		nsize = 4 + 16 * line_i->n_points;
-	    
+	    isize = 4 + 8 * (with_z == WITH_Z ? 3 : 2) * line_i->n_points;
+	    nbytes -= isize;
+	}
+	
+	nsize += isize;
+        data_offset += isize;
+    }
+    
+    return nsize;
+}
+
+/*!
+  \brief Read geometry collection for WKB data
+
+  See OGRGeometryCollection::importFromWkbInternal() from GDAL/OGR library
+
+  \param wkb_data WKB data
+  \param nbytes number of bytes (WKB data buffer)
+  \param byte_order byte order (ENDIAN_LITTLE, ENDIAN_BIG)
+  \param with_z WITH_Z for 3D data
+  \param ipart part to cache (starts at 0)
+  \param[out] cache lines cache
+  \param[in,out] fparts feature parts (required for building pseudo-topology)
+
+  \return number of parts
+  \return -1 on error
+*/
+int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
+				 int with_z, struct Format_info_cache *cache,
+				 struct feat_parts *fparts)
+{
+    int ipart, nparts, data_offset, nsize;
+    unsigned char *wkb_subdata;
+    SF_FeatureType ftype;
+    
+    if (nbytes < 9 && nbytes != -1)
+       return error_corrupted_data(NULL);
+    
+    /* get the geometry count */
+    memcpy(&nparts, wkb_data + 5, 4 );
+    if (byte_order == ENDIAN_BIG) {
+        nparts = SWAP32(nparts);
+    }
+    if (nparts < 0 || nparts > INT_MAX / 9) {
+        return error_corrupted_data(NULL);
+    }
+    G_debug(5, "\t(geometry collections) parts: %d", nparts);
+    
+    /* each geometry has a minimum of 9 bytes */
+    if (nbytes != -1 && nbytes - 9 < nparts * 9) {
+        return error_corrupted_data(_("Length of input WKB is too small"));
+    }
+
+    data_offset = 9;
+    if (nbytes != -1)
+        nbytes -= data_offset;
+
+    /* reallocate space for parts if needed */
+    reallocate_cache(cache, nparts);
+    
+    /* get parts */
+    cache->lines_next = cache->lines_num = 0;
+    for (ipart = 0; ipart < nparts; ipart++) {
+	wkb_subdata = (unsigned char *)wkb_data + data_offset;
+	if (nbytes < 9 && nbytes != -1)
+	    return error_corrupted_data(NULL);
+	
+	if (byte_order == ENDIAN_LITTLE) {
+	    ftype = (SF_FeatureType) wkb_subdata[1];
+	}
+	else {
+	    ftype = (SF_FeatureType) wkb_subdata[4];
+	}
+	
+	if (ftype == SF_POINT) {
+	    cache->lines_types[cache->lines_next] = GV_POINT;
+	    nsize = point_from_wkb(wkb_subdata, nbytes, byte_order, with_z,
+				   cache->lines[cache->lines_next]);
+	    cache->lines_num++;
+	    add_fpart(fparts, ftype, cache->lines_next, 1);
+	    cache->lines_next++;
+	}
+	else if (ftype == SF_LINESTRING) {
+	    cache->lines_types[cache->lines_next] = GV_LINE;
+	    nsize = linestring_from_wkb(wkb_subdata, nbytes, byte_order, with_z,
+					cache->lines[cache->lines_next],
+					FALSE);
+	    cache->lines_num++;
+	    add_fpart(fparts, ftype, cache->lines_next, 1);
+	    cache->lines_next++;
+	}
+	else if (ftype == SF_POLYGON) {
+	    int idx = cache->lines_next;
+	    nsize = polygon_from_wkb(wkb_subdata, nbytes, byte_order,
+				     with_z, cache);
+	    add_fpart(fparts, ftype, idx, cache->lines_num - idx);
+	}
+	else if (ftype == SF_GEOMETRYCOLLECTION ||
+		 ftype == SF_MULTIPOLYGON ||
+		 ftype == SF_MULTILINESTRING ||
+		 ftype == SF_MULTIPOLYGON) {
+	    // geometry_collection_from_wkb();
+	}
+	else  {
+	    G_warning(_("Unsupported feature type %d"), ftype);
+	}
+
+        if (nbytes != -1) {
 	    nbytes -= nsize;
 	}
 	
         data_offset += nsize;
     }
+    cache->lines_next = 0;
     
-    return nrings;
+    return nparts;
 }
 
 /*!
@@ -1025,4 +1145,67 @@ int execute(PGconn *conn, const char *stmt)
     return 0;
 }
 
+/*!
+  \brief Reallocate lines cache
+*/
+void reallocate_cache(struct Format_info_cache *cache, int num)
+{
+    int i;
+    
+    if (cache->lines_alloc >= num)
+	return;
+
+    if (!cache->lines) {
+	/* most of features requires only one line cache */
+	cache->lines_alloc = 1; 
+    }
+    else {
+	cache->lines_alloc += 20;
+    }
+
+    cache->lines = (struct line_pnts **) G_realloc(cache->lines,
+						   cache->lines_alloc *
+						   sizeof(struct line_pnts *));
+    cache->lines_types = (int *) G_realloc(cache->lines_types,
+					   cache->lines_alloc *
+					   sizeof(int));
+    
+    if (cache->lines_alloc > 1) {
+	for (i = cache->lines_alloc - 20; i < cache->lines_alloc; i++) {
+	    cache->lines[i] = Vect_new_line_struct();
+	    cache->lines_types[i] = -1;
+	}
+    }
+    else {
+	cache->lines[0] = Vect_new_line_struct();
+	cache->lines_types[0] = -1;
+    }
+}
+
+void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype,
+	       int idx, int nlines)
+{
+    if (!fparts)
+	return;
+    
+    if (fparts->a_parts == 0 || fparts->n_parts >= fparts->a_parts) {
+	if (fparts->a_parts == 0)
+	    fparts->a_parts = 1;
+	else
+	    fparts->a_parts += 20;
+	
+	fparts->ftype  = (SF_FeatureType *) G_realloc(fparts->ftype,
+						      fparts->a_parts * sizeof(SF_FeatureType));
+	fparts->nlines = (int *) G_realloc(fparts->nlines,
+					   fparts->a_parts * sizeof(int));
+	fparts->idx    = (int *) G_realloc(fparts->idx,
+					   fparts->a_parts * sizeof(int));
+    }
+    
+    fparts->ftype[fparts->n_parts]  = ftype;
+    fparts->idx[fparts->n_parts]    = idx;
+    fparts->nlines[fparts->n_parts] = nlines;
+    
+    fparts->n_parts++;
+}
 #endif

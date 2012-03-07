@@ -398,22 +398,21 @@ Vect_find_poly_centroid(const struct line_pnts *points,
    \brief Get point inside polygon but outside the islands specifiled in IPoints.
 
    Take a line and intersect it with the polygon and any islands.
-   sort the list of X values from these intersections.  This will
-   be a list of segments alternating  IN/OUT/IN/OUt of the polygon.
-   Pick the largest IN segment and take the midpoint. 
+   sort the list of X values from these intersections. This will be a
+   list of segments alternating IN/OUT/IN/OUT of the polygon. Pick the
+   largest IN segment and take the midpoint.
 
-   \param Points polygon
-   \param IPoints isles
+   \param Points polygon (boundary)
+   \param IPoints isles (list of isle boundaries)
    \param n_isles number of isles
    \param[out] att_x,att_y point coordinates
 
    \return 0 on success
    \return -1 on error
  */
-int
-Vect_get_point_in_poly_isl(const struct line_pnts *Points,
-			   const struct line_pnts **IPoints, int n_isles,
-			   double *att_x, double *att_y)
+int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
+			       const struct line_pnts **IPoints, int n_isles,
+			       double *att_x, double *att_y)
 {
     static struct line_pnts *Intersects;
     static int first_time = 1;
@@ -771,7 +770,6 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     static struct line_pnts *Points;
     struct bound_box lbox;
     const struct Plus_head *Plus;
-    struct P_line *Line;
     struct P_isle *Isle;
 
     G_debug(3, "Vect_point_in_island(): x = %f y = %f isle = %d", X, Y, isle);
@@ -790,8 +788,6 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     n_intersects = 0;
     for (i = 0; i < Isle->n_lines; i++) {
 	line = abs(Isle->lines[i]);
-
-	Line = Plus->Line[line];
 
 	/* this is slow, but the fastest of all alternatives */
 	Vect_get_line_box(Map, line, &lbox);
