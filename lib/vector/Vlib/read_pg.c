@@ -732,7 +732,8 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
 	reallocate_cache(cache, 1);
     }
     cache->lines_num = 0;
-    fparts->n_parts = 0;
+    if (fparts)
+	fparts->n_parts = 0;
     
     ret = -1;
     if (ftype == SF_POINT) {
