@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     FILE *fd;
     
     int ilayer, is3D;
-    char buf[GPATH_MAX];
+    char buf[GPATH_MAX], *dsn;
     const char *output;
     
     G_gisinit(argv[0]);
@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 #endif
 
     if (flags.format->answer) {
+	/* list formats */
 	if (flags.postgis->answer) {
 	    G_fatal_error(_("Flags -%c and -%c are mutually exclusive"),
 			  flags.format->key, flags.postgis->key);
@@ -69,22 +70,40 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
+    /* be friendly, ignored 'PG:' prefix for PostGIS links */
+    if (flags.postgis->answer &&
+	G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
+	int i, length;
+	
+	length = strlen(options.dsn->answer);
+	dsn = (char *) G_malloc(length - 3);
+	for (i = 3; i < length; i++)
+	    dsn[i-3] = options.dsn->answer[i];
+    }
+    else {
+	dsn = G_store(options.dsn->answer);
+    }
+    
     if (flags.list->answer || flags.tlist->answer) {
-	if (!options.dsn->answer)
+	/* list layers */
+	if (!dsn)
 	    G_fatal_error(_("Required parameter <%s> not set"), options.dsn->key);
-	list_layers(stdout, options.dsn->answer, NULL,
+	list_layers(stdout, dsn, NULL,
 		    flags.tlist->answer ? TRUE : FALSE,
 		    flags.postgis->answer,
 		    NULL);
 	exit(EXIT_SUCCESS);
     }
 
+    /* define name for output */
     if (!options.output->answer)
 	output = options.layer->answer;
     else
 	output = options.output->answer;
     
-    ilayer = list_layers(NULL, options.dsn->answer, options.layer->answer,
+
+    /* get layer index */
+    ilayer = list_layers(NULL, dsn, options.layer->answer,
 			 FALSE, flags.postgis->answer, &is3D);
     if (ilayer == -1) {
 	G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
@@ -97,6 +116,7 @@ int main(int argc, char *argv[])
 		      options.output->key, output);
     }
     
+    /* create new vector map */
     Vect_open_new(&Map, output, is3D);
     Vect_set_error_handler_io(NULL, &Map);
     
@@ -113,7 +133,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to delete '%s'"), buf);
     }
 
-    /* Create frmt */
+    /* create frmt file */
     sprintf(buf, "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
@@ -123,12 +143,12 @@ int main(int argc, char *argv[])
     
     if (flags.postgis->answer) {
 	fprintf(fd, "FORMAT: postgis\n");
-	fprintf(fd, "CONNINFO: %s\n", options.dsn->answer);
+	fprintf(fd, "CONNINFO: %s\n", dsn);
 	fprintf(fd, "TABLE: %s\n", options.layer->answer);
     }
     else {
 	fprintf(fd, "FORMAT: ogr\n");
-	fprintf(fd, "DSN: %s\n", options.dsn->answer);
+	fprintf(fd, "DSN: %s\n", dsn);
 	fprintf(fd, "LAYER: %s\n", options.layer->answer);
     }
     fclose(fd);

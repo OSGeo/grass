@@ -83,7 +83,8 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
     ntables = PQntuples(res);
     G_debug(3, "   nrows = %d", ntables);
     if (fd)
-	G_message(_("Database contains %d feature table(s):"), ntables);
+	G_message(_("PostGIS database <%s> contains %d feature table(s):"),
+		  PQdb(conn), ntables);
 
     for (row = 0; row < ntables; row++) {
 	value = PQgetvalue(res, row, 0);
