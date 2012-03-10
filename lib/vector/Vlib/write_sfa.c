@@ -1,0 +1,204 @@
+/*!
+   \file lib/vector/Vlib/write_sfa.c
+
+   \brief Vector library - write vector feature - simple feature access
+
+   Higher level functions for reading/writing/manipulating vectors.
+
+   See write_ogr.c (OGR interface) and write_pg.c (PostGIS interface)
+   for imlementation issues.
+
+   \todo SFA version of V2__delete_area_cats_from_cidx_nat()
+   \todo function to delete corresponding entry in fidx
+   \todo SFA version of V2__add_area_cats_to_cidx_nat
+   \todo SFA version of V2__add_line_to_topo_nat
+
+   (C) 2011-2012 by Martin Landa, and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Martin Landa <landa.martin gmail.com>
+ */
+
+#include <grass/vector.h>
+#include <grass/glocale.h>
+
+#if defined HAVE_OGR || defined HAVE_POSTGRES
+void V2__add_line_to_topo_sfa(struct Map_info *, int, const struct line_pnts *,
+			      const struct line_cats *);
+#endif
+
+/*!
+  \brief Writes feature on level 2 (OGR/PostGIS interface)
+
+  \param Map pointer to Map_info structure
+  \param type feature type (GV_POINT, GV_LINE, ...)
+  \param points pointer to line_pnts structure (feature geometry) 
+  \param cats pointer to line_cats structure (feature categories)
+  
+  \return feature offset into file
+  \return -1 on error
+*/
+off_t V2_write_line_sfa(struct Map_info *Map, int type,
+			const struct line_pnts *points, const struct line_cats *cats)
+{
+#if defined HAVE_OGR || defined HAVE_POSTGRES
+    int line;
+    off_t offset;
+    struct Plus_head *plus;
+    struct bound_box box;
+    struct Format_info_offset *offset_info;
+    
+    line = 0;
+    plus = &(Map->plus);
+    
+    G_debug(3, "V2_write_line_sfa(): type = %d (format = %d)",
+	    type, Map->format);
+    
+    if (Map->format == GV_FORMAT_POSTGIS) {
+	offset_info = &(Map->fInfo.pg.offset);
+	offset = V1_write_line_pg(Map, type, points, cats);
+    }
+    else {
+	offset_info = &(Map->fInfo.pg.offset);
+	offset = V1_write_line_ogr(Map, type, points, cats);
+    }
+    if (offset < 0)
+	return -1;
+    
+    /* Update topology */
+    if (plus->built >= GV_BUILD_BASE) {
+	dig_line_box(points, &box);
+	line = dig_add_line(plus, type, points, &box, offset);
+	G_debug(3, "\tline added to topo with line = %d", line);
+	if (line == 1)
+	    Vect_box_copy(&(plus->box), &box);
+	else
+	    Vect_box_extend(&(plus->box), &box);
+
+	if (type == GV_BOUNDARY) {
+	    int ret, cline;
+	    long FID;
+	    double x, y;
+	    
+	    struct bound_box box;
+	    struct line_pnts *CPoints;
+
+	    /* add virtual centroid to pseudo-topology */
+	    ret = Vect_get_point_in_poly(points, &x, &y);
+	    if (ret == 0) {
+		CPoints = Vect_new_line_struct();
+		Vect_append_point(CPoints, x, y, 0.0);
+		
+		FID = offset_info->array[offset];
+
+		dig_line_box(CPoints, &box);
+		cline = dig_add_line(plus, GV_CENTROID,
+				     CPoints, &box, FID);
+		G_debug(4, "\tCentroid: x = %f, y = %f, cat = %lu, line = %d",
+			x, y, FID, cline);	  
+		dig_cidx_add_cat(plus, 1, (int) FID,
+				 cline, GV_CENTROID);
+		
+		Vect_destroy_line_struct(CPoints);
+	    }
+	    else {
+		G_warning(_("Unable to calculate centroid for area"));
+	    }
+	}
+	V2__add_line_to_topo_sfa(Map, line, points, cats);
+    }
+
+
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
+	    plus->uplist.n_upnodes);
+
+    /* returns int line, but is defined as off_t for compatibility with
+     * Write_line_array in write.c */
+    return line;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
+    return -1;
+#endif
+}
+
+#if defined HAVE_OGR || defined HAVE_POSTGRES
+/*!
+  \brief Add feature to topo file (internal use only)
+
+  \param Map pointer to Map_info structure
+  \param line feature id
+  \param points pointer to line_pnts structure (feature's geometry)
+  \param cats pointer to line_cats structure (feature's categories)
+*/
+void V2__add_line_to_topo_sfa(struct Map_info *Map, int line,
+			      const struct line_pnts *points,
+			      const struct line_cats *cats)
+{
+    int first, s, i;
+    int type, area, side;
+
+    struct Plus_head *plus;
+    struct P_line *Line;
+    
+    struct bound_box box, abox;
+    
+    G_debug(3, "V2__add_line_to_topo_ogr(): line = %d npoints = %d", line,
+	    points->n_points);
+
+    plus = &(Map->plus);
+    Line = plus->Line[line];
+    type = Line->type;
+
+    if (plus->built >= GV_BUILD_AREAS &&
+	type == GV_BOUNDARY) {	
+	struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+	
+	if (topo->N1 != topo->N2) {
+	    G_warning(_("Boundary is not closed. Skipping."));
+	    return;
+	}
+	
+	/* Build new areas/isles */
+	for (s = 0; s < 2; s++) {
+	    side = (s == 0 ? GV_LEFT : GV_RIGHT);
+	    area = Vect_build_line_area(Map, line, side);
+	    if (area > 0) {	/* area */
+		Vect_get_area_box(Map, area, &box);
+		if (first) {
+		    Vect_box_copy(&abox, &box);
+		    first = FALSE;
+		}
+		else
+		    Vect_box_extend(&abox, &box);
+	    }
+	    else if (area < 0) {
+		/* isle -> must be attached -> add to abox */
+		Vect_get_isle_box(Map, -area, &box);
+		if (first) {
+		    Vect_box_copy(&abox, &box);
+		    first = FALSE;
+		}
+		else
+		    Vect_box_extend(&abox, &box);
+	    }
+	    G_debug(4, "Vect_build_line_area(): -> area = %d", area);
+	}
+
+	/* Attach centroid/isle to the new area */
+	if (plus->built >= GV_BUILD_ATTACH_ISLES)
+	    Vect_attach_isles(Map, &abox);
+	if (plus->built >= GV_BUILD_CENTROIDS)
+	    Vect_attach_centroids(Map, &abox);
+    }
+    
+    /* Add category index */
+    for (i = 0; i < cats->n_cats; i++) {
+	dig_cidx_add_cat_sorted(plus, cats->field[i], cats->cat[i], line,
+				type);
+    }
+    
+    return;
+}
+#endif /* HAVE_OGR || HAVE_POSTGRES */

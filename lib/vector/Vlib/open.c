@@ -368,7 +368,8 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     }
 
     /* open level 1 files / sources (format specific) */
-    if (!head_only || ogr_mapset) {		/* no need to open coordinates */
+    if (!head_only || ogr_mapset || format == GV_FORMAT_POSTGIS) {
+	/* no need to open coordinates */
 	if (0 != (*Open_old_array[format][1]) (Map, update)) {	/* cannot open */
 	    if (level == 2) {	/* support files opened */
 		dig_free_plus(&(Map->plus));
@@ -470,21 +471,27 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     
     /* delete support files if native format was opened for update (not head_only) */
     if (update && !head_only) {
-	char file_path[2000];
+	char file_path[GPATH_MAX];
 
 	sprintf(buf, "%s/%s", GV_DIRECTORY, name);
 
 	G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
-	if (access(file_path, F_OK) == 0)	/* file exists? */
+	if (access(file_path, F_OK) == 0)	/* topo file exists? */
 	    unlink(file_path);
 
 	G_file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
-	if (access(file_path, F_OK) == 0)	/* file exists? */
+	if (access(file_path, F_OK) == 0)	/* sidx file exists? */
 	    unlink(file_path);
 
 	G_file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
-	if (access(file_path, F_OK) == 0)	/* file exists? */
+	if (access(file_path, F_OK) == 0)	/* cidx file exists? */
 	    unlink(file_path);
+
+	if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
+	    G_file_name(file_path, buf, GV_FIDX_ELEMENT, G_mapset());
+	    if (access(file_path, F_OK) == 0)	/* fidx file exists? */
+		unlink(file_path);
+	}
     }
 
     return level;

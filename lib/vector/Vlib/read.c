@@ -21,6 +21,8 @@
 
 static int read_dummy()
 {
+    G_warning("Vect_read_line() %s",
+	      _("for this format/level not supported"));
     return -1;
 }
 

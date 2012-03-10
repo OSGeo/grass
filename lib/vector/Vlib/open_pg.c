@@ -58,6 +58,32 @@ static char *get_key_column(struct Format_info_pg *pg_info)
 
     return key_column;
 }
+
+static SF_FeatureType ftype_from_string(const char *type)
+{
+    SF_FeatureType sf_type;
+
+    if (G_strcasecmp(type, "POINT") == 0)
+	return SF_POINT;
+    else if (G_strcasecmp(type, "LINESTRING") == 0)
+	return SF_LINESTRING;
+    else if (G_strcasecmp(type, "POLYGON") == 0)
+	return SF_POLYGON;
+    else if (G_strcasecmp(type, "MULTIPOINT") == 0)
+	return SF_MULTIPOINT;
+    else if (G_strcasecmp(type, "MULTILINESTRING") == 0)
+	return SF_MULTILINESTRING;
+    else if (G_strcasecmp(type, "MULTIPOLYGON") == 0)
+	return SF_MULTIPOLYGON;
+    else if (G_strcasecmp(type, "GEOMETRYCOLLECTION") == 0)
+	return SF_GEOMETRYCOLLECTION;
+    
+    return SF_UNKNOWN;
+    
+    G_debug(3, "ftype_from_string(): type='%s' -> %d", type, sf_type);
+    
+    return sf_type;
+}
 #endif
 
 /*!
@@ -113,7 +139,8 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     }
     
     /* get fid and geometry column */
-    db_set_string(&stmt, "SELECT f_table_name, f_geometry_column "
+    db_set_string(&stmt, "SELECT f_table_name, f_geometry_column,"
+		  "coord_dimension,srid,type "
 		  "FROM geometry_columns");
     G_debug(2, "SQL: %s", db_get_string(&stmt));
     
@@ -127,10 +154,18 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     found = FALSE;
     for (i = 0; i < ntables; i++) {
 	if (strcmp(PQgetvalue(res, i, 0), pg_info->table_name) == 0) {
+	    /* geometry column */
 	    pg_info->geom_column = G_store(PQgetvalue(res, i, 1));
 	    G_debug(3, "\t-> table = %s column = %s", pg_info->table_name,
 		    pg_info->geom_column);
+	    /* fid column */
 	    pg_info->fid_column = get_key_column(pg_info);
+	    /* coordinates dimension */
+	    pg_info->coor_dim = atoi(PQgetvalue(res, i, 2));
+	    /* SRS ID */
+	    pg_info->srid = atoi(PQgetvalue(res, i, 3));
+	    /* feature type */
+	    pg_info->feature_type = ftype_from_string(PQgetvalue(res, i, 4));
 	    found = TRUE;
 	    break;
 	}

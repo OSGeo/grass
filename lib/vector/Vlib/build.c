@@ -22,12 +22,6 @@
 
 #define SEP "-----------------------------------\n"
 
-static int build_dummy()
-{
-    G_warning(_("Not implemented"));
-    return -1;
-}
-
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
 static int format()
 {
@@ -704,11 +698,12 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     G_debug(3, "Vect_build(): build = %d", build);
 
-    /* If topology is already build (map on level2), set level to 1 so that lines will
-     *  be read by V1_read_ (all lines) */
-    Map->level = 1;		/* may be not needed, because  V1_read is used directly by Vect_build_ */
+    /* If topology is already build (map on level2), set level to 1 so
+     * that lines will be read by V1_read_ (all lines) */
+    Map->level = 1; /* may be not needed, because V1_read is used
+		       directly by Vect_build_ */
     if (Map->format != GV_FORMAT_OGR_DIRECT)
-	Map->support_updated = 1;
+	Map->support_updated = TRUE;
 
     if (Map->plus.Spidx_built == FALSE)
 	Vect_open_sidx(Map, 2);

@@ -5,13 +5,20 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2010 by the GRASS Development Team
+   Operations:
+    - Add feature
+    - Rewrite feature
+    - Delete feature
+    - Restore feature
+
+   (C) 2001-2010, 2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-   \author Updated by Martin Landa <landa.martin gmail.com> (restore lines, OGR support)
+   \author Updated by Martin Landa <landa.martin gmail.com>
+   (restore lines, OGR & PostGIS support)
  */
 
 #include <sys/types.h>
@@ -44,7 +51,7 @@ static int restore_dummy()
     return -1;
 }
 
-#ifndef HAVE_OGR
+#if !defined HAVE_OGR || !defined HAVE_POSTGRES
 static int format()
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -56,54 +63,74 @@ static off_t format_l()
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
-
 #endif
 
 static off_t (*Vect_write_line_array[][3]) () = {
     {
-    write_dummy, V1_write_line_nat, V2_write_line_nat}
+	write_dummy, V1_write_line_nat, V2_write_line_nat}
 #ifdef HAVE_OGR
     , {
-    write_dummy, V1_write_line_ogr, V2_write_line_ogr}
+	write_dummy, V1_write_line_ogr, V2_write_line_sfa}
     , {
-    write_dummy, V1_write_line_ogr, V2_write_line_ogr}
+	write_dummy, V1_write_line_ogr, V2_write_line_sfa}
 #else
     , {
-    write_dummy, format_l, format_l}
+	write_dummy, format_l, format_l}
     , {
-    write_dummy, format_l, format_l}
+	write_dummy, format_l, format_l}
+#endif
+#ifdef HAVE_POSTGRES
+    , {
+	write_dummy, V1_write_line_pg, V2_write_line_sfa}
+#else
+    , {
+	write_dummy, format_l, format_l}
 #endif
 };
 
 static off_t (*Vect_rewrite_line_array[][3]) () = {
     {
-    rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
+	rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
 #ifdef HAVE_OGR
     , {
-    rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
+	rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
     , {
-    rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
+	rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
 #else
     , {
-    rewrite_dummy, format, format}
+	rewrite_dummy, format_l, format_l}
     , {
-    rewrite_dummy, format, format}
+	rewrite_dummy, format_l, format_l}
+#endif
+#ifdef HAVE_POSTGRES
+    , {
+	rewrite_dummy, rewrite_dummy, rewrite_dummy}
+#else
+    , {
+	rewrite_dummy, format_l, format_l}
 #endif
 };
 
 static int (*Vect_delete_line_array[][3]) () = {
     {
-    delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
+	delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
 #ifdef HAVE_OGR
     , {
-    delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
+	delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
     , {
-    delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
+	delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
 #else
     , {
-    delete_dummy, format, format}
+	delete_dummy, format, format}
     , {
-    delete_dummy, format, format}
+	delete_dummy, format, format}
+#endif
+#ifdef HAVE_POSTGRES
+    , {
+	delete_dummy, delete_dummy, delete_dummy}
+#else
+    , {
+	delete_dummy, format, format}
 #endif
 };
 
@@ -112,14 +139,21 @@ static int (*Vect_restore_line_array[][3]) () = {
     restore_dummy, restore_dummy, V2_restore_line_nat}
 #ifdef HAVE_OGR
     , {
-    restore_dummy, restore_dummy, restore_dummy}
+	restore_dummy, restore_dummy, restore_dummy}
     , {
-    restore_dummy, restore_dummy, restore_dummy}
+	restore_dummy, restore_dummy, restore_dummy}
 #else
     , {
-    restore_dummy, format, format}
+	restore_dummy, format, format}
     , {
-    restore_dummy, format, format}
+	restore_dummy, format, format}
+#endif
+#ifdef HAVE_POSTGRES
+    , {
+	restore_dummy, restore_dummy, restore_dummy}
+#else
+    , {
+	restore_dummy, format, format}
 #endif
 };
 
@@ -130,8 +164,8 @@ static int (*Vect_restore_line_array[][3]) () = {
 
    The function calls G_fatal_error() on error.
 
-   \param Map pointer to vector map
-   \param type feature type
+   \param Map pointer to Map_info structure
+   \param type feature type (GV_POINT, GV_LINE, ...)
    \param points feature geometry
    \param cats feature categories
 
@@ -153,9 +187,9 @@ off_t Vect_write_line(struct Map_info *Map, int type,
 	Map->plus.cidx_up_to_date = 0;
     }
 
-    offset =
+    offset = 
 	(*Vect_write_line_array[Map->format][Map->level]) (Map, type, points,
-						      cats);
+							   cats);
 
     if (offset == -1)
 	G_fatal_error(_("Unable to write feature (negative offset)"));
@@ -174,9 +208,9 @@ off_t Vect_write_line(struct Map_info *Map, int type,
 
    This function calls G_fatal_error() on error.
 
-   \param Map pointer to vector map
+   \param Map pointer to Map_info structure
    \param line feature id
-   \param type feature type
+   \param type feature type (GV_POINT, GV_LINE, ...)
    \param points feature geometry
    \param cats feature categories
 
@@ -216,7 +250,7 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
 
    This function calls G_fatal_error() on error.
 
-   \param Map pointer to vector map
+   \param Map pointer to Map_info structure
    \param line feature id
 
    \return 0 on success
@@ -260,7 +294,7 @@ int Vect_delete_line(struct Map_info *Map, int line)
 
    This function calls G_fatal_error() on error.
 
-   \param Map pointer to vector map
+   \param Map pointer to Map_info structure
    \param line feature id to be restored
 
    \return 0 on success
