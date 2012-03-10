@@ -5,13 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   Operations:
-    - Add feature
-    - Rewrite feature
-    - Delete feature
-    - Restore feature
-
-   (C) 2001-2010 by the GRASS Development Team
+   (C) 2001-2010, 2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -29,13 +23,14 @@
 #include <grass/glocale.h>
 
 static off_t V1__rewrite_line_nat(struct Map_info *, off_t, int,
-			      const struct line_pnts *, const struct line_cats *);
-
+				  const struct line_pnts *, const struct line_cats *);
 
 /*! 
   \brief Deletes area (i.e. centroid) categories from category
   index (internal use only)
 
+  Call G_fatal_error() when area do not exits.
+  
   \param Map pointer to Map_info structure
   \param area area id
 */
@@ -70,6 +65,8 @@ static void V2__delete_area_cats_from_cidx_nat(struct Map_info *Map, int area)
   \brief Adds area (i.e. centroid) categories from category index
   (internal use only)
 
+  Call G_fatal_error() when area do not exits.
+  
   \param Map pointer to Map_info structure
   \param area area id
 */
@@ -101,7 +98,7 @@ static void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
 }
 
 /*!
-  \brief Add line to topo file (internal use only)
+  \brief Add feature (line) to topo file (internal use only)
 
   Update areas. Areas are modified if: 
    
@@ -132,7 +129,7 @@ static void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
     Note that 1) and 2) is done by the same code.
 
     \param Map pointer to Map_info structure
-    \param line line id
+    \param line feature id
     \param points pointer to line_pnts structure (feature's geometry)
     \param cats pointer to line_cats structure (feature's categories)
 */
@@ -312,7 +309,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
   \brief Writes feature to 'coor' file (level 1)
   
   \param Map pointer to Map_info structure
-  \param type feature type
+  \param type feature type (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
@@ -338,7 +335,7 @@ off_t V1_write_line_nat(struct Map_info *Map,
   \brief Writes feature to 'coor' file (topology level) - internal use only
   
   \param Map pointer to Map_info structure
-  \param type feature type
+  \param type feature type (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
@@ -346,7 +343,7 @@ off_t V1_write_line_nat(struct Map_info *Map,
   \return -1 on error
 */
 off_t V2_write_line_nat(struct Map_info *Map, int type,
-             const struct line_pnts *points, const struct line_cats *cats)
+			const struct line_pnts *points, const struct line_cats *cats)
 {
     int line;
     off_t offset;
@@ -396,7 +393,7 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
   
   \param Map pointer to Map_info structure
   \param offset feature offset
-  \param type feature type
+  \param type feature type (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
@@ -411,7 +408,8 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset
     struct line_cats *old_cats;
     off_t new_offset;
     
-    G_debug(3, "V1_rewrite_line_nat(), offset = %lu", (unsigned long) offset);
+    G_debug(3, "V1_rewrite_line_nat(): line = %d offset = %lu",
+	    line, (unsigned long) offset);
 
     /* TODO: enable points and cats == NULL  */
 
@@ -453,7 +451,7 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset
   \brief Rewrites feature to 'coor' file (topology level) - internal use only
   
   \param Map pointer to Map_info structure
-  \param type feature type
+  \param type feature type  (GV_POINT, GV_LINE, ...)
   \param line feature id
   \param points feature geometry
   \param cats feature categories
@@ -510,7 +508,7 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
   
   \param Map pointer to Map_info structure
   \param offset feature offset
-  \param type feature type
+  \param type feature type  (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
@@ -518,9 +516,8 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
   \return -1 on error
 */
 off_t V1__rewrite_line_nat(struct Map_info *Map,
-		       off_t offset,
-		       int type,
-		       const struct line_pnts *points, const struct line_cats *cats)
+			   off_t offset, int type,
+			   const struct line_pnts *points, const struct line_cats *cats)
 {
     int i, n_points;
     char rhead, nc;

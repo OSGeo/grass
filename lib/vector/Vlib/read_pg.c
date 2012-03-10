@@ -27,33 +27,6 @@
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
-#define CURSOR_PAGE 500
-
-#define SWAP32(x) \
-        ((unsigned int)( \
-            (((unsigned int)(x) & (unsigned int)0x000000ffUL) << 24) | \
-            (((unsigned int)(x) & (unsigned int)0x0000ff00UL) <<  8) | \
-            (((unsigned int)(x) & (unsigned int)0x00ff0000UL) >>  8) | \
-            (((unsigned int)(x) & (unsigned int)0xff000000UL) >> 24) ))
-
-#define SWAPDOUBLE(x) \
-{                                                                 \
-    unsigned char temp, *data = (unsigned char *) (x);            \
-                                                                  \
-    temp = data[0];                                               \
-    data[0] = data[7];                                            \
-    data[7] = temp;                                               \
-    temp = data[1];                                               \
-    data[1] = data[6];                                            \
-    data[6] = temp;                                               \
-    temp = data[2];                                               \
-    data[2] = data[5];                                            \
-    data[5] = temp;                                               \
-    temp = data[3];                                               \
-    data[3] = data[4];                                            \
-    data[4] = temp;                                               \
-}                                                                    
-
 static int read_next_line_pg(struct Map_info *,
 		      struct line_pnts *, struct line_cats *, int);
 SF_FeatureType get_feature(struct Format_info_pg *, int);

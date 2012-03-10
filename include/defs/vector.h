@@ -523,7 +523,9 @@ off_t V2_write_line_nat(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
 off_t V1_write_line_ogr(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
-off_t V2_write_line_ogr(struct Map_info *, int, const struct line_pnts *,
+off_t V1_write_line_pg(struct Map_info *, int, const struct line_pnts *,
+		       const struct line_cats *);
+off_t V2_write_line_sfa(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
 off_t V1_rewrite_line_nat(struct Map_info *, int, int, off_t,
 			  const struct line_pnts *, const struct line_cats *);
