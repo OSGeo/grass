@@ -21,6 +21,8 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <string.h>
+
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -466,7 +468,7 @@ unsigned char *polygon_to_wkb(int byte_order,
     if (byte_order == ENDIAN_BIG) {
         int ncount;
 	
-        ncount = CPL_SWAP32(nrings);
+        ncount = SWAP32(nrings);
         memcpy(wkb_data + 5, &ncount, 4);
     }
     else {
@@ -492,9 +494,8 @@ unsigned char *polygon_to_wkb(int byte_order,
         memcpy(wkb_data+5, &npoints, 4);
 
 	nitems = (with_z ? 3 : 2) * points->n_points;
-        for(i = 0; i < nitems; i++ )
-        {
-            CPL_SWAPDOUBLE(wkb_data + 9 + 4 + 8 * i);
+        for(i = 0; i < nitems; i++ ) {
+            SWAPDOUBLE(wkb_data + 9 + 4 + 8 * i);
         }
     }
 
