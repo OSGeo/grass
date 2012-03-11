@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2012-03-05 11:56+0900\n"
-"Last-Translator: Naoki Ueda <nao@locapoint.com>\n"
+"PO-Revision-Date: 2012-03-08 17:49+0900\n"
+"Last-Translator: taniguchi <taniguti@apptec.co.jp>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -14410,11 +14410,11 @@ msgstr "i.cluster'、'i.class'、および'i.gensig'で作成されました"
 
 #: ../imagery/i.maxlik/main.c:85
 msgid "Name for raster map holding classification results"
-msgstr "分類結果を保留するラスターマップ名"
+msgstr "分類結果を保存するラスターマップ名"
 
 #: ../imagery/i.maxlik/main.c:91
 msgid "Name for raster map holding reject threshold results"
-msgstr "閾値結果の拒否を保留するラスターマップ名"
+msgstr "信頼度を保存するラスターマップ名"
 
 #: ../imagery/i.maxlik/open.c:20 ../imagery/i.cluster/open_files.c:22
 #, c-format
@@ -15124,7 +15124,7 @@ msgstr "%d クラスが見つかりました"
 
 #: ../imagery/i.gensig/parse.c:14 ../imagery/i.gensigset/parse.c:13
 msgid "Ground truth training map"
-msgstr "真実性のある土地トレーニングマップ"
+msgstr "トレーニングマップ"
 
 #: ../imagery/i.gensig/parse.c:22 ../imagery/i.gensigset/parse.c:21
 #: ../imagery/i.cluster/main.c:94
