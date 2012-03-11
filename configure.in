@@ -244,7 +244,6 @@ AC_ARG_WITH(macosx-archs,
 AC_ARG_WITH(macosx-sdk,
 [  --with-macosx-sdk[=path/sdk]
                           compile with a system SDK on MacOSX. (default: no)],, with_macosx_sdk="no")
-LOC_ARG_WITH(jpeg, JPEG)
 LOC_ARG_WITH(tiff, TIFF)
 LOC_ARG_WITH(png, PNG)
 LOC_ARG_WITH(tcltk, Tcl/Tk)
@@ -302,9 +301,6 @@ LOC_ARG_WITH_LIB(zlib, zlib)
 
 LOC_ARG_WITH_INC(readline, Readline)
 LOC_ARG_WITH_LIB(readline, Readline)
-
-LOC_ARG_WITH_INC(jpeg, JPEG)
-LOC_ARG_WITH_LIB(jpeg, JPEG)
 
 LOC_ARG_WITH_INC(tiff, TIFF)
 LOC_ARG_WITH_LIB(tiff, TIFF)
@@ -724,36 +720,6 @@ AC_SUBST(HISTORYLIB)
 
 # Done checking Readline
 
-# Enable JPEG option
-
-LOC_CHECK_USE(jpeg,JPEG,USE_JPEG)
-
-JPEGINCPATH=
-JPEGLIBPATH=
-JPEGLIB=
-
-if test -n "$USE_JPEG"; then
-
-# With JPEG includes directory
-
-LOC_CHECK_INC_PATH(jpeg,JPEG,JPEGINCPATH)
-
-LOC_CHECK_INCLUDES(jpeglib.h,JPEG,$JPEGINCPATH)
-
-# With JPEG library directory
-
-LOC_CHECK_LIB_PATH(jpeg,JPEG,JPEGLIBPATH)
-
-LOC_CHECK_LIBS(jpeg,jpeg_start_compress,JPEG,$JPEGLIBPATH,JPEGLIB,,,,$ZLIB)
-
-fi # $USE_JPEG
-
-AC_SUBST(JPEGINCPATH)
-AC_SUBST(JPEGLIBPATH)
-AC_SUBST(JPEGLIB)
-
-# Done checking JPEG
-
 # GDAL option
 
 AC_MSG_CHECKING(whether to use GDAL)
@@ -922,7 +888,7 @@ LOC_CHECK_INCLUDES(tiffio.h,TIFF,$TIFF_INCLUDE_DIRS)
 
 LOC_CHECK_LIB_PATH(tiff,TIFF,TIFF_LIBRARY_DIRS)
 
-LOC_CHECK_LIBS(tiff,TIFFOpen,TIFF,$TIFF_LIBRARY_DIRS,TIFFLIB,,,,$JPEGLIBPATH $JPEGLIB,$ZLIB,$MATHLIB)
+LOC_CHECK_LIBS(tiff,TIFFOpen,TIFF,$TIFF_LIBRARY_DIRS,TIFFLIB,,,,-ljpeg,$ZLIB,$MATHLIB)
 
 fi # $USE_TIFF
 
@@ -2010,7 +1976,6 @@ LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
 LOC_MSG_USE(GDAL support,USE_GDAL)
 LOC_MSG_USE(GEOS support,USE_GEOS)
-LOC_MSG_USE(JPEG support,USE_JPEG)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
 LOC_MSG_USE(libLAS support,USE_LIBLAS)
