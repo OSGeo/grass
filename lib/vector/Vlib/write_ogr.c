@@ -258,12 +258,12 @@ off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset
 	    line, type, offset);
 
 #ifdef HAVE_OGR
-    if (type != V2_read_line_ogr(Map, NULL, NULL, line)) {
+    if (type != V2_read_line_sfa(Map, NULL, NULL, line)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
 	return -1;
     }
 
-    V2_delete_line_ogr(Map, line);
+    V2_delete_line_sfa(Map, line);
 
     return V2_write_line_sfa(Map, type, points, cats);
 #else
@@ -295,95 +295,17 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 	return -1;
     }
     
-    if (offset >= ogr_info->offset.array_num)
+    if (offset >= ogr_info->offset.array_num) {
+	G_warning(_("Invalid offset (%d)"), offset);
 	return -1;
+    }
     
     if (OGR_L_DeleteFeature(ogr_info->layer,
 			    ogr_info->offset.array[offset]) != OGRERR_NONE)
+	G_warning(_("Unable to delete feature"));
 	return -1;
     
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
-}
-
-/*!
-  \brief Deletes feature (topology level) -- internal use only
-  
-  \param pointer to Map_info structure
-  \param line feature id
-  
-  \return 0 on success
-  \return -1 on error
-*/
-int V2_delete_line_ogr(struct Map_info *Map, int line)
-{
-#ifdef HAVE_OGR
-    int ret, i, type, first;
-    struct P_line *Line;
-    struct Plus_head *plus;
-    static struct line_cats *Cats = NULL;
-    static struct line_pnts *Points = NULL;
-
-    G_debug(3, "V2_delete_line_ogr(), line = %d", line);
-
-    type = first = 0;
-    Line = NULL;
-    plus = &(Map->plus);
-
-    if (plus->built >= GV_BUILD_BASE) {
-	Line = Map->plus.Line[line];
-
-	if (Line == NULL)
-	    G_fatal_error(_("Attempt to delete dead feature"));
-	type = Line->type;
-    }
-
-    if (!Cats) {
-	Cats = Vect_new_cats_struct();
-    }
-    if (!Points) {
-	Points = Vect_new_line_struct();
-    }
-
-    type = V2_read_line_ogr(Map, Points, Cats, line);
-
-    /* Update category index */
-    if (plus->update_cidx) {
-
-	for (i = 0; i < Cats->n_cats; i++) {
-	    dig_cidx_del_cat(plus, Cats->field[i], Cats->cat[i], line, type);
-	}
-    }
-    /* Update fidx */
-
-    /* delete the line from coor */
-    ret = V1_delete_line_ogr(Map, Line->offset);
-
-    if (ret == -1) {
-	return ret;
-    }
-
-    /* Update topology */
-    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
-	/* TODO */
-	/* remove centroid together with boundary (is really an OGR polygon) */
-    }
-    /* Delete reference from area */
-    if (plus->built >= GV_BUILD_CENTROIDS && type == GV_CENTROID) {
-	/* for OGR mapsets, virtual centroid will be removed when polygon is removed */
-    }
-
-    /* delete the line from topo */
-    dig_del_line(plus, line, Points->x[0], Points->y[0], Points->z[0]);
-
-    /* Rebuild areas/isles and attach centroids and isles */
-    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
-	/* maybe not needed VERIFY */
-    }
-    return ret;
 #else
     G_fatal_error(_("GRASS is not compiled with OGR support"));
     return -1;

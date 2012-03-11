@@ -60,14 +60,14 @@ static int (*Read_next_line_array[][3]) () = {
 static int (*Read_line_array[]) () = {
     V2_read_line_nat
 #ifdef HAVE_OGR
-    , V2_read_line_ogr
-    , V2_read_line_ogr
+    , V2_read_line_sfa
+    , V2_read_line_sfa
 #else
     , format
     , format
 #endif
 #ifdef HAVE_POSTGRES
-    , V2_read_line_pg
+    , V2_read_line_sfa
 #else
     , format
 #endif

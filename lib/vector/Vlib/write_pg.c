@@ -74,6 +74,11 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
     pg_info = &(Map->fInfo.pg);
     offset_info = &(pg_info->offset);
     
+    if (!pg_info->conn || !pg_info->table_name) {
+	G_warning(_("No connection defined"));
+	return -1;
+    }
+    
     /* create PostGIS layer if doesn't exist ? */
     
     cat = -1; /* no attributes to be written */
@@ -173,6 +178,62 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
     G_debug(3, "V1_write_line_ogr(): -> offset = %lu", (unsigned long) offset);
 
     return offset;
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
+  \brief Deletes feature at the given offset (level 1)
+  
+  \param Map pointer Map_info structure
+  \param offset feature offset
+  
+  \return  0 on success
+  \return -1 on error
+*/
+int V1_delete_line_pg(struct Map_info *Map, off_t offset)
+{
+#ifdef HAVE_POSTGRES
+    long fid;
+    char stmt[DB_SQL_MAX];
+    
+    struct Format_info_pg *pg_info;
+    
+    pg_info = &(Map->fInfo.pg);
+    
+    if (!pg_info->conn || !pg_info->table_name) {
+	G_warning(_("No connection defined"));
+	return -1;
+    }
+    
+    if (offset >= pg_info->offset.array_num) {
+	G_warning(_("Invalid offset (%d)"), offset);
+	return -1;
+    }
+
+    fid = pg_info->offset.array[offset];
+    
+    G_debug(3, "V1_delete_line_pg(), offset = %lu -> fid = %ld",
+	    (unsigned long) offset, fid);
+
+    if (execute(pg_info->conn, "BEGIN") == -1)
+	return -1;
+
+    sprintf(stmt, "DELETE FROM %s WHERE %s = %ld",
+	    pg_info->table_name, pg_info->fid_column, fid);
+    G_debug(2, "SQL: %s", stmt);
+    
+    if (execute(pg_info->conn, stmt) == -1) {
+	G_warning(_("Unable to delete feature"));
+	return -1;
+    }
+    
+    if (execute(pg_info->conn, "COMMIT") == -1)
+	return -1;
+
+    return 0;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
