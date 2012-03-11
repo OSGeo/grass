@@ -72,8 +72,7 @@ int Vect_close(struct Map_info *Map)
 {
     struct Coor_info CInfo;
 
-    G_debug(1,
-	    "Vect_close(): name = %s, mapset = %s, format = %d, level = %d",
+    G_debug(1, "Vect_close(): name = %s, mapset = %s, format = %d, level = %d",
 	    Map->name, Map->mapset, Map->format, Map->level);
 
     /* Store support files for vector maps in the current mapsset if
@@ -110,12 +109,16 @@ int Vect_close(struct Map_info *Map)
 	Map->plus.coor_size = CInfo.size;
 	Map->plus.coor_mtime = CInfo.mtime;
 
+	/* write out topo file */
 	Vect_save_topo(Map);
 
+	/* write out sidx file */
+	Map->plus.Spidx_new = TRUE;
 	Vect_save_sidx(Map);
 
+	/* write out cidx file */
 	Vect_cidx_save(Map);
-
+	
 	/* write out fidx file */
 	if (Map->format == GV_FORMAT_OGR)
 	    V2_close_ogr(Map);
