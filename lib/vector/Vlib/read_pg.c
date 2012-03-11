@@ -236,119 +236,36 @@ int V1_read_line_pg(struct Map_info *Map,
     fid = pg_info->offset.array[offset];
     G_debug(4, "  fid = %ld", fid);
     
-    /* coordinates */
+    /* read feature to cache if necessary */
+    if (pg_info->cache.fid != fid) {
+	G_debug(4, "read feature (fid = %ld) to cache", fid);
+	sf_type = (int) get_feature(pg_info, fid);
+	
+	if ((int) sf_type < 0)
+	    return (int) sf_type;
+    }
+
+    /* get data from cache */
+    ipart = pg_info->offset.array[offset + 1];
+    type  = pg_info->cache.lines_types[ipart];
+    G_debug(4, "read feature part: %d -> type = %d",
+	    ipart, type);    
+	
     if (line_p != NULL) {
-	/* read feature to cache if necessary */
-	if (pg_info->cache.fid != fid) {
-	    G_debug(4, "read feature (fid = %ld) to cache", fid);
-	    sf_type = (int) get_feature(pg_info, fid);
-	    
-	    if ((int) sf_type < 0)
-		return (int) sf_type;
-	}
-	
-	ipart = pg_info->offset.array[offset + 1];
-	G_debug(4, "read feature part: %d", ipart);
-	
-	/* get data from cache */
-	type  = pg_info->cache.lines_types[ipart];
+	/* coordinates */
 	line_i = pg_info->cache.lines[ipart];
 	for (i = 0; i < line_i->n_points; i++) {
 	    Vect_append_point(line_p,
 			      line_i->x[i], line_i->y[i], line_i->z[i]);
 	}
     }
-
+    
     if (line_c != NULL) {
+	/* category */
 	Vect_cat_set(line_c, 1, (int) fid);
     }
 
     return type;
-#else
-    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
-    return -1;
-#endif
-}
-
-/*!
-  \brief Reads feature from PostGIS layer on topological level.
- 
-  This function implements random access on level 2.
-  
-  \param Map pointer to Map_info structure
-  \param[out] line_p container used to store line points within
-  (pointer to line_pnts struct)
-  \param[out] line_c container used to store line categories within
-  (pointer to line_cats struct)
-  \param line feature id (starts at 1)
-  
-  \return feature type
-  \return -2 no more features
-  \return -1 on failure
-*/
-int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-		    struct line_cats *line_c, int line)
-{
-#ifdef HAVE_POSTGRES
-    struct P_line *Line;
-    
-    G_debug(3, "V2_read_line_pg() line = %d", line);
-    
-    Line = Map->plus.Line[line];
-    if (Line == NULL) {
-	G_warning(_("Attempt to read dead feature %d"), line);
-	return -1;
-    }
-
-    if (Line->type == GV_CENTROID) {
-	/* read centroid from topo */
-	if (line_p != NULL) {
-	    int i, found;
-	    struct bound_box box;
-	    struct boxlist list;
-	    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
-
-	    G_debug(4, "Centroid: area = %d", topo->area);
-	    Vect_reset_line(line_p);
-	    
-	    if (topo->area > 0 && topo->area <= Map->plus.n_areas) {
-		/* get area bbox */
-		Vect_get_area_box(Map, topo->area, &box);
-		/* search in spatial index for centroid with area bbox */
-		dig_init_boxlist(&list, TRUE);
-		Vect_select_lines_by_box(Map, &box, Line->type, &list);
-		
-		found = -1;
-		for (i = 0; i < list.n_values; i++) {
-		    if (list.id[i] == line) {
-			found = i;
-			break;
-		    }
-		}
-		
-		if (found > -1) {
-		    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
-		}
-		else {
-		    G_warning(_("Unable to construct centroid for area %d. Skipped."),
-			      topo->area);
-		}
-	    }
-	    else {
-		G_warning(_("Centroid %d: invalid area %d"), line, topo->area);
-	    }
-	}
-
-	if (line_c != NULL) {
-	  /* cat = FID and offset = FID for centroid */
-	  Vect_reset_cats(line_c);
-	  Vect_cat_set(line_c, 1, (int) Line->offset);
-	}
-
-	return GV_CENTROID;
-    }
-    
-    return V1_read_line_pg(Map, line_p, line_c, Line->offset);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;

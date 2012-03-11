@@ -493,6 +493,8 @@ int V1_read_line_nat(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, off_t);
 int V1_read_line_ogr(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, off_t);
+int V1_read_line_pg(struct Map_info *, struct line_pnts *,
+		    struct line_cats *, off_t);
 int V1_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V1_read_next_line_ogr(struct Map_info *, struct line_pnts *,
@@ -501,10 +503,8 @@ int V1_read_next_line_pg(struct Map_info *, struct line_pnts *,
 			 struct line_cats *);
 int V2_read_line_nat(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, int);
-int V2_read_line_ogr(struct Map_info *, struct line_pnts *,
+int V2_read_line_sfa(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, int);
-int V2_read_line_pg(struct Map_info *, struct line_pnts *,
-		    struct line_cats *, int);
 int V2_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
@@ -514,7 +514,8 @@ int V2_read_next_line_pg(struct Map_info *, struct line_pnts *,
 int V1_delete_line_nat(struct Map_info *, off_t);
 int V2_delete_line_nat(struct Map_info *, int);
 int V1_delete_line_ogr(struct Map_info *, off_t);
-int V2_delete_line_ogr(struct Map_info *, int);
+int V1_delete_line_pg(struct Map_info *, off_t);
+int V2_delete_line_sfa(struct Map_info *, int);
 int V1_restore_line_nat(struct Map_info *, off_t);
 int V2_restore_line_nat(struct Map_info *, int, off_t);
 off_t V1_write_line_nat(struct Map_info *, int, const struct line_pnts *,

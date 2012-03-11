@@ -79,7 +79,7 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
 
 	if (type == GV_BOUNDARY) {
 	    int ret, cline;
-	    long FID;
+	    long fid;
 	    double x, y;
 	    
 	    struct bound_box box;
@@ -91,14 +91,14 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
 		CPoints = Vect_new_line_struct();
 		Vect_append_point(CPoints, x, y, 0.0);
 		
-		FID = offset_info->array[offset];
+		fid = offset_info->array[offset];
 
 		dig_line_box(CPoints, &box);
 		cline = dig_add_line(plus, GV_CENTROID,
-				     CPoints, &box, FID);
+				     CPoints, &box, fid);
 		G_debug(4, "\tCentroid: x = %f, y = %f, cat = %lu, line = %d",
-			x, y, FID, cline);	  
-		dig_cidx_add_cat(plus, 1, (int) FID,
+			x, y, fid, cline);	  
+		dig_cidx_add_cat(plus, 1, (int) fid,
 				 cline, GV_CENTROID);
 		
 		Vect_destroy_line_struct(CPoints);
@@ -117,6 +117,93 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
     /* returns int line, but is defined as off_t for compatibility with
      * Write_line_array in write.c */
     return line;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
+  \brief Deletes feature (topology level) -- internal use only
+  
+  \todo Update fidx
+  
+  \param pointer to Map_info structure
+  \param line feature id
+  
+  \return 0 on success
+  \return -1 on error
+*/
+int V2_delete_line_sfa(struct Map_info *Map, int line)
+{
+#if defined HAVE_OGR || defined HAVE_POSTGRES
+    int ret, i, type, first;
+    struct P_line *Line;
+    struct Plus_head *plus;
+    static struct line_cats *Cats = NULL;
+    static struct line_pnts *Points = NULL;
+
+    G_debug(3, "V2_delete_line_sfa(), line = %d", line);
+
+    type = first = 0;
+    Line = NULL;
+    plus = &(Map->plus);
+
+    if (plus->built >= GV_BUILD_BASE) {
+	Line = Map->plus.Line[line];
+
+	if (Line == NULL)
+	    G_fatal_error(_("Attempt to delete dead feature"));
+	type = Line->type;
+    }
+
+    if (!Cats) {
+	Cats = Vect_new_cats_struct();
+    }
+    if (!Points) {
+	Points = Vect_new_line_struct();
+    }
+
+    type = V2_read_line_sfa(Map, Points, Cats, line);
+
+    /* Update category index */
+    if (plus->update_cidx) {
+      for (i = 0; i < Cats->n_cats; i++) {
+	    dig_cidx_del_cat(plus, Cats->field[i], Cats->cat[i], line, type);
+	}
+    }
+    /* Update fidx */
+    /* TODO */
+    
+    /* delete the line from coor */
+    if (Map->format == GV_FORMAT_POSTGIS)
+	ret = V1_delete_line_pg(Map, Line->offset);
+    else
+	ret = V1_delete_line_ogr(Map, Line->offset);
+    
+    if (ret == -1) {
+	return ret;
+    }
+
+    /* Update topology */
+    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
+	/* TODO */
+	/* remove centroid together with boundary (is really an OGR polygon) */
+    }
+    /* Delete reference from area */
+    if (plus->built >= GV_BUILD_CENTROIDS && type == GV_CENTROID) {
+	/* for OGR mapsets, virtual centroid will be removed when
+	 * polygon is removed */
+    }
+
+    /* delete the line from topo */
+    dig_del_line(plus, line, Points->x[0], Points->y[0], Points->z[0]);
+
+    /* Rebuild areas/isles and attach centroids and isles */
+    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
+	/* maybe not needed VERIFY */
+    }
+    return ret;
 #else
     G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
     return -1;

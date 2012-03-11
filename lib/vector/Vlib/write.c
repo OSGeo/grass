@@ -116,9 +116,9 @@ static int (*Vect_delete_line_array[][3]) () = {
 	delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
 #ifdef HAVE_OGR
     , {
-	delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
+	delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa}
     , {
-	delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
+	delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa}
 #else
     , {
 	delete_dummy, format, format}
@@ -127,7 +127,7 @@ static int (*Vect_delete_line_array[][3]) () = {
 #endif
 #ifdef HAVE_POSTGRES
     , {
-	delete_dummy, delete_dummy, delete_dummy}
+	delete_dummy, V1_delete_line_pg, V2_delete_line_sfa}
 #else
     , {
 	delete_dummy, format, format}
@@ -275,7 +275,7 @@ int Vect_delete_line(struct Map_info *Map, int line)
     }
 
     if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = 0;
+	Map->plus.cidx_up_to_date = FALSE;
     }
 
     ret = (*Vect_delete_line_array[Map->format][Map->level]) (Map, line);
