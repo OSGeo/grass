@@ -239,40 +239,6 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 }
 
 /*!
-  \brief Rewrites feature to 'coor' file (topology level) - internal use only
-  
-  \param Map pointer to Map_info structure
-  \param line feature id
-  \param type feature type (GV_POINT, GV_LINE, ...)
-  \param offset unused
-  \param points feature geometry
-  \param cats feature categories
-  
-  \return offset where line was rewritten
-  \return -1 on error
-*/
-off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset,
-			  const struct line_pnts *points, const struct line_cats *cats)
-{
-    G_debug(3, "V2_rewrite_line_ogr(): line=%d type=%d offset=%llu",
-	    line, type, offset);
-
-#ifdef HAVE_OGR
-    if (type != V2_read_line_sfa(Map, NULL, NULL, line)) {
-	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
-	return -1;
-    }
-
-    V2_delete_line_sfa(Map, line);
-
-    return V2_write_line_sfa(Map, type, points, cats);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
-}
-
-/*!
   \brief Deletes feature at the given offset (level 1)
   
   \param Map pointer Map_info structure

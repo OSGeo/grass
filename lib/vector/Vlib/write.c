@@ -93,9 +93,9 @@ static off_t (*Vect_rewrite_line_array[][3]) () = {
 	rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
 #ifdef HAVE_OGR
     , {
-	rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
+	rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa}
     , {
-	rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
+	rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa}
 #else
     , {
 	rewrite_dummy, format_l, format_l}
@@ -104,7 +104,7 @@ static off_t (*Vect_rewrite_line_array[][3]) () = {
 #endif
 #ifdef HAVE_POSTGRES
     , {
-	rewrite_dummy, rewrite_dummy, rewrite_dummy}
+	rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_sfa}
 #else
     , {
 	rewrite_dummy, format_l, format_l}
@@ -222,21 +222,20 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
 {
     off_t ret, offset;
     
-    G_debug(3, "Vect_rewrite_line(): name = %s, line = %d", Map->name, line);
-    
     if (!VECT_OPEN(Map))
 	G_fatal_error(_("Unable to rewrite feature, vector map is not opened"));
 
     if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = 0;
+	Map->plus.cidx_up_to_date = FALSE;
     }
 
     offset = Map->plus.Line[line]->offset;
-    G_debug(3, "   offset=%llu", Map->plus.Line[line]->offset);
-    ret =
-	(*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type, offset,
-							     points, cats);
-
+    G_debug(3, "Vect_rewrite_line(): name = %s, line = %d offset = %llu",
+	    Map->name, line, offset);
+    ret = (*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type,
+							       offset,
+							       points, cats);
+    
     if (ret == -1)
 	G_fatal_error(_("Unable to rewrite feature %d"), line);
 
