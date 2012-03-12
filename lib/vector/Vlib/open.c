@@ -996,7 +996,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     G_debug(1, "Vect_open_sidx(): name = %s mapset= %s mode = %s", Map->name,
 	    Map->mapset, mode == 0 ? "old" : (mode == 1 ? "update" : "new"));
 
-    if (Map->plus.Spidx_built == 1) {
+    if (Map->plus.Spidx_built == TRUE) {
 	G_warning("Spatial index already opened");
 	return 0;
     }
@@ -1026,7 +1026,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 	Vect_coor_info(Map, &CInfo);
 
 	/* initialize spatial index */
-	Map->plus.Spidx_new = 0;
+	Map->plus.Spidx_new = FALSE;
 
 	/* load head */
 	if (dig_Rd_spidx_head(&(Map->plus.spidx_fp), Plus) == -1) {
@@ -1060,7 +1060,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 
     if (mode) {
 	/* open new spatial index */
-	Map->plus.Spidx_new = 1;
+	Map->plus.Spidx_new = TRUE;
 	
 	/* file based or memory based */
 	if (getenv("GRASS_VECTOR_LOWMEM")) {
@@ -1082,7 +1082,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 	}
     }
 
-    Map->plus.Spidx_built = 1;
+    Map->plus.Spidx_built = TRUE;
 
     return 0;
 }

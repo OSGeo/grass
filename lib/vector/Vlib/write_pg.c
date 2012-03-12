@@ -187,6 +187,40 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
 }
 
 /*!
+  \brief Rewrites feature at the given offset (level 1) (PostGIS interface)
+  
+  \param Map pointer to Map_info structure
+  \param offset feature offset
+  \param type feature type (GV_POINT, GV_LINE, ...)
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return feature offset (rewriten feature)
+  \return -1 on error
+*/
+off_t V1_rewrite_line_pg(struct Map_info *Map,
+			 int line, int type, off_t offset,
+			 const struct line_pnts *points, const struct line_cats *cats)
+{
+    G_debug(3, "V1_rewrite_line_pg(): line=%d type=%d offset=%llu",
+	    line, type, offset);
+#ifdef HAVE_POSTGRES
+    if (type != V1_read_line_pg(Map, NULL, NULL, offset)) {
+	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
+	return -1;
+    }
+
+    /* delete old */
+    V1_delete_line_pg(Map, offset);
+
+    return V1_write_line_pg(Map, type, points, cats);
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
   \brief Deletes feature at the given offset (level 1)
   
   \param Map pointer Map_info structure

@@ -65,9 +65,9 @@ void Vect__init_head(struct Map_info *Map)
     Vect_set_zone(Map, -1);
 
     /* support variables */
-    Map->plus.Spidx_built = 0;
-    Map->plus.release_support = 0;
-    Map->plus.update_cidx = 0;
+    Map->plus.Spidx_built = FALSE;
+    Map->plus.release_support = FALSE;
+    Map->plus.update_cidx = FALSE;
 }
 
 /*!

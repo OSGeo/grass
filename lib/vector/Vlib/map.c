@@ -842,7 +842,7 @@ Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
  */
 void Vect_set_release_support(struct Map_info *Map)
 {
-    Map->plus.release_support = 1;
+    Map->plus.release_support = TRUE;
 }
 
 /*!
@@ -858,5 +858,5 @@ void Vect_set_release_support(struct Map_info *Map)
  */
 void Vect_set_category_index_update(struct Map_info *Map)
 {
-    Map->plus.update_cidx = 1;
+    Map->plus.update_cidx = TRUE;
 }

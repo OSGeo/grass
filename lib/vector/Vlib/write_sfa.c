@@ -124,6 +124,40 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
 }
 
 /*!
+  \brief Rewrites feature to 'coor' file (topology level) - internal use only
+  
+  \param Map pointer to Map_info structure
+  \param line feature id
+  \param type feature type (GV_POINT, GV_LINE, ...)
+  \param offset unused
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return offset where line was rewritten
+  \return -1 on error
+*/
+off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type, off_t offset,
+			  const struct line_pnts *points, const struct line_cats *cats)
+{
+    G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d offset=%llu",
+	    line, type, offset);
+
+#if defined HAVE_OGR || defined HAVE_POSTGRES
+    if (type != V2_read_line_sfa(Map, NULL, NULL, line)) {
+	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
+	return -1;
+    }
+
+    V2_delete_line_sfa(Map, line);
+
+    return V2_write_line_sfa(Map, type, points, cats);
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
   \brief Deletes feature (topology level) -- internal use only
   
   \todo Update fidx

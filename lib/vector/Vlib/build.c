@@ -1075,14 +1075,13 @@ int Vect_save_sidx(struct Map_info *Map)
 
     plus = &(Map->plus);
 
-    if (plus->Spidx_built == 0) {
+    if (plus->Spidx_built == FALSE) {
 	G_warning("Spatial index not available, can not be saved");
 	return 0;
     }
 
     /* new or update mode ? */
-    if (plus->Spidx_new == 1) {
-
+    if (plus->Spidx_new == TRUE) {
 	/*  write out rtrees to sidx file  */
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 	G_file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
@@ -1103,12 +1102,12 @@ int Vect_save_sidx(struct Map_info *Map)
 	    return 0;
 	}
 	dig_spidx_free(plus);
-	Map->plus.Spidx_new = 0;
+	Map->plus.Spidx_new = FALSE;
     }
 
     fclose(Map->plus.spidx_fp.file);
 
-    Map->plus.Spidx_built = 0;
+    Map->plus.Spidx_built = FALSE;
 
     return 1;
 }
