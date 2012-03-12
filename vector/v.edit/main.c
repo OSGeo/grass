@@ -123,8 +123,9 @@ int main(int argc, char *argv[])
 	    ret = Vect_open_old2(&Map, params.map->answer, G_mapset(), params.fld->answer);
 	
 	if (ret < 2)
-	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
-			  params.map->answer, 2);
+	    G_fatal_error(_("Unable to open vector map <%s> on topological level. "
+			    "Try to rebuild vector topology by v.build."),
+			  params.map->answer);
     }
 
     G_debug(1, "Map opened");
