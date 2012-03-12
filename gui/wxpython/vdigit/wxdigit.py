@@ -1494,7 +1494,7 @@ class IVDigit:
         @param coords coordinates of point
         @param add True to add, False to remove
         
-        @return id id of the new feature
+        @return 1 on success
         @return 0 nothing changed
         @return -1 error
         """
@@ -1526,7 +1526,7 @@ class IVDigit:
         if ret > 0:
             self._addChangeset()
                 
-        return nlines + 1 # feature is write at the end of the file
+        return 1
     
     def GetLineCats(self, line):
         """!Get list of layer/category(ies) for selected feature.
