@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
     shell = G_define_flag();
     shell->key = 'g';
-    shell->description = _("Print info in shell script style");
+    shell->description = _("Print info in shell script style (including SVN revision number)");
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -70,9 +70,8 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "date=%s\n", GRASS_VERSION_DATE);
     }
     else {
-	fprintf(stdout, "GRASS %s%s (%s)\n",
-		GRASS_VERSION_NUMBER, GRASS_VERSION_SVN,
-		GRASS_VERSION_DATE);
+	fprintf(stdout, "GRASS %s (%s)\n",
+		GRASS_VERSION_NUMBER, GRASS_VERSION_DATE);
     }
     
     if (copyright->answer) {
