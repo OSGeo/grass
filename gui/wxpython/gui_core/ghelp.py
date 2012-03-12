@@ -87,7 +87,6 @@ class SearchModuleWindow(wx.Panel):
         """!Do layout"""
         sizer = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
         gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(1)
         
         gridSizer.Add(item = self.searchBy,
                       flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
@@ -103,6 +102,8 @@ class SearchModuleWindow(wx.Panel):
             gridSizer.Add(item = self.searchChoice,
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
         
+        gridSizer.AddGrowableCol(1)
+
         sizer.Add(item = gridSizer, proportion = 1)
         
         self.SetSizer(sizer)
