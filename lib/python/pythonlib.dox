@@ -156,6 +156,8 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - python::core::region()
 
+ - python::core::region_env()
+
  - python::core::use_temp_region()
 
 <b>Interface to g.findfile</b>
