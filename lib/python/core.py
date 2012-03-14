@@ -580,10 +580,12 @@ def locn_is_latlong():
     else:
 	return False
 
-def region():
+def region(region3d = False):
     """!Returns the output from running "g.region -g", as a
     dictionary. Example:
 
+    \param region3d True to get 3D region
+    
     \code
     >>> region = grass.region()
     >>> [region[key] for key in "nsew"]
@@ -594,12 +596,84 @@ def region():
 
     @return dictionary of region values
     """
-    s = read_command("g.region", flags='g')
+    flgs = 'g'
+    if region3d:
+        flgs += '3'
+    
+    s = read_command("g.region", flags = flgs)
     reg = parse_key_val(s, val_type = float)
-    for k in ['rows', 'cols']:
+    for k in ['rows',  'cols',  'cells',
+              'rows3', 'cols3', 'cells3', 'depths']:
+        if k not in reg:
+            continue
 	reg[k] = int(reg[k])
+    
     return reg
 
+def region_env(region3d = False,
+               **kwargs):
+    """!Returns region settings as a string which can used as
+    GRASS_REGION environmental variable.
+
+    If no 'kwargs' are given then the current region is used. Note
+    that this function doesn't modify the current region!
+
+    See also use_temp_region() for alternative method how to define
+    temporary region used for raster-based computation.
+
+    \param region3d True to get 3D region
+    \param kwargs g.region's parameters like 'rast', 'vect' or 'region'
+    \code
+    os.environ['GRASS_REGION'] = grass.region_env(region = 'detail')
+    grass.mapcalc('map = 1', overwrite = True)
+    os.environ.pop('GRASS_REGION')
+    \endcode
+
+    @return string with region values
+    """
+    # read proj/zone from WIND file
+    env = gisenv()
+    windfile = os.path.join (env['GISDBASE'], env['LOCATION_NAME'],
+                              env['MAPSET'], "WIND")
+    fd = open(windfile, "r")
+    grass_region = ''
+    for line in fd.readlines():
+        key, value = map(lambda x: x.strip(), line.split(":", 1))
+        if not kwargs or (kwargs and key in ('proj', 'zone')):
+            grass_region += '%s: %s;' % (key, value)
+    
+    if not kwargs: # return current region
+        return grass_region
+    
+    # read other values from `g.region -g`
+    flgs = 'ug'
+    if region3d:
+        flgs += '3'
+    
+    s = read_command('g.region', flags = flgs, **kwargs)
+    reg = parse_key_val(s)
+    
+    kwdata = [('north', 'n'),
+              ('south', 's'),
+              ('east',  'e'),
+              ('west',  'w'),
+              ('e-w resol', 'ewres'),
+              ('n-s resol', 'nsres'),
+              ('cols',  'cols'),
+              ('rows',  'rows')]
+    if region3d:
+        kwdata += [('e-w resol3', 'ewres3'),
+                   ('n-s resol3', 'nsres3'),
+                   ('t-b resol3', 'tbres'),
+                   ('cols3',      'cols3'),
+                   ('rows3',      'rows3'),
+                   ('depths',     'depths')]
+    
+    for wkey, rkey in kwdata:
+        grass_region += '%s: %s;' % (wkey, reg[rkey])
+    
+    return grass_region
+    
 def use_temp_region():
     """!Copies the current region to a temporary region with "g.region save=",
     then sets WIND_OVERRIDE to refer to that region. Installs an atexit
