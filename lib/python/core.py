@@ -630,6 +630,7 @@ def region_env(region3d = False,
     \endcode
 
     @return string with region values
+    @return empty string on error
     """
     # read proj/zone from WIND file
     env = gisenv()
@@ -639,8 +640,14 @@ def region_env(region3d = False,
     grass_region = ''
     for line in fd.readlines():
         key, value = map(lambda x: x.strip(), line.split(":", 1))
-        if not kwargs or (kwargs and key in ('proj', 'zone')):
-            grass_region += '%s: %s;' % (key, value)
+        if kwargs and key not in ('proj', 'zone'):
+            continue
+        if not kwargs and not region3d and \
+                key in ('top', 'bottom', 'cols3', 'rows3',
+                        'depths', 'e-w resol3', 'n-s resol3', 't-b resol'):
+            continue
+        
+        grass_region += '%s: %s;' % (key, value)
     
     if not kwargs: # return current region
         return grass_region
@@ -649,25 +656,29 @@ def region_env(region3d = False,
     flgs = 'ug'
     if region3d:
         flgs += '3'
-    
+        
     s = read_command('g.region', flags = flgs, **kwargs)
+    if not s:
+        return ''
     reg = parse_key_val(s)
     
-    kwdata = [('north', 'n'),
-              ('south', 's'),
-              ('east',  'e'),
-              ('west',  'w'),
+    kwdata = [('north',     'n'),
+              ('south',     's'),
+              ('east',      'e'),
+              ('west',      'w'),
+              ('cols',      'cols'),
+              ('rows',      'rows'),
               ('e-w resol', 'ewres'),
-              ('n-s resol', 'nsres'),
-              ('cols',  'cols'),
-              ('rows',  'rows')]
+              ('n-s resol', 'nsres')]
     if region3d:
-        kwdata += [('e-w resol3', 'ewres3'),
-                   ('n-s resol3', 'nsres3'),
-                   ('t-b resol3', 'tbres'),
+        kwdata += [('top',        't'),
+                   ('bottom',     'b'),
                    ('cols3',      'cols3'),
                    ('rows3',      'rows3'),
-                   ('depths',     'depths')]
+                   ('depths',     'depths'),
+                   ('e-w resol3', 'ewres3'),
+                   ('n-s resol3', 'nsres3'),
+                   ('t-b resol',  'tbres')]
     
     for wkey, rkey in kwdata:
         grass_region += '%s: %s;' % (wkey, reg[rkey])
