@@ -171,13 +171,13 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
 
     offset = offset_info->array_num;
     
-    offset_info->array[offset_info->array_num++] = (int) cat;
+    offset_info->array[offset_info->array_num++] = cat;
     if (sf_type == SF_POLYGON || sf_type == SF_POLYGON25D) {
-	/* register exterior ring in offset array */
+	/* register first part in offset array */
 	offset_info->array[offset_info->array_num++] = 0; 
     }
-    
-    G_debug(3, "V1_write_line_ogr(): -> offset = %lu", (unsigned long) offset);
+    G_debug(3, "V1_write_line_pg(): -> offset = %lu offset_num = %d cat = %d",
+	    (unsigned long) offset, offset_info->array_num, cat);
 
     return offset;
 #else

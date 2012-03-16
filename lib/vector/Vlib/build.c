@@ -1121,7 +1121,7 @@ int Vect_save_sidx(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_sidx_dump(struct Map_info *Map, FILE * out)
+int Vect_sidx_dump(const struct Map_info *Map, FILE * out)
 {
     if (!(Map->plus.Spidx_built)) {
 	Vect_build_sidx_from_topo(Map);

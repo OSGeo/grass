@@ -350,9 +350,13 @@ void build_pg(struct Map_info *Map, int build)
 	wkb_data = PQgetvalue(pg_info->res, iFeature, 1);
 	
 	/* cache feature (lines) */
-	cache_feature(wkb_data,
-		      FALSE, &(pg_info->cache), &fparts);
-
+	if (SF_NONE == cache_feature(wkb_data,
+				     FALSE, &(pg_info->cache), &fparts)) {
+	    G_warning(_("Feature %d without geometry skipped"),
+		      iFeature + 1);
+	    continue;
+	}
+	
 	/* register topo */
 	reset_parts(&parts);
 	add_part(&parts, fid);
@@ -364,10 +368,12 @@ void build_pg(struct Map_info *Map, int build)
 	    
 	    G_debug(4, "Feature: fid = %d part = %d", fid, ipart);
 	    
-	    add_part(&parts, ipart);
+	    if (fparts.n_parts > 1)
+		add_part(&parts, ipart);
 	    add_geometry_pg(&(Map->plus), pg_info, &fparts, ipart,
 			    fid, build, &parts);
-	    del_part(&parts);
+	    if (fparts.n_parts > 1)
+		del_part(&parts);
 	}
     }
 
@@ -736,5 +742,44 @@ int Vect__build_sfa(struct Map_info *Map, int build)
 
     plus->built = build;
     
+    return 1;
+}
+
+/*!
+   \brief Dump feature index to file
+
+   \param Map pointer to Map_info struct
+   \param out file for output (stdout/stderr for example)
+
+   \return 1 on success
+   \return 0 on error
+ */
+int Vect_fidx_dump(const struct Map_info *Map, FILE *out)
+{
+    int i;
+    const struct Format_info_offset *offset;
+
+    if (Map->format != GV_FORMAT_OGR &&
+	Map->format != GV_FORMAT_POSTGIS) {
+	G_warning(_("Feature index is built only for non-native formats. "
+		    "Nothing to dump."));
+	return 0;
+    }
+
+    if (Map->format == GV_FORMAT_OGR)
+	offset = &(Map->fInfo.ogr.offset);
+    else
+	offset = &(Map->fInfo.pg.offset);
+    
+    fprintf(out, "---------- FEATURE INDEX DUMP ----------\n");
+    
+    fprintf(out, "feature type: %s\n", 
+	    Vect_get_finfo_geometry_type(Map));
+    fprintf(out, "number of features: %d\n\noffset array:\n",
+	    Vect_get_num_lines(Map));
+    for (i = 0; i < offset->array_num; i++) {
+	fprintf(out, "%5d : %d\n", i, offset->array[i]);
+    }
+
     return 1;
 }

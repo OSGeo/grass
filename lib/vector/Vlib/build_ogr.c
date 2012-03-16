@@ -84,9 +84,10 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 	return 0;
     }
 
-    G_message(_("Using external data format '%s' (feature type '%s')"),
-	      Vect_get_finfo_format_info(Map),
-	      Vect_get_finfo_geometry_type(Map));
+    if (build > GV_BUILD_NONE)
+	G_message(_("Using external data format '%s' (feature type '%s')"),
+		  Vect_get_finfo_format_info(Map),
+		  Vect_get_finfo_geometry_type(Map));
     
     return Vect__build_sfa(Map, build);
 #else

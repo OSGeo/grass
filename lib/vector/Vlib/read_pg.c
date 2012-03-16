@@ -239,14 +239,22 @@ int V1_read_line_pg(struct Map_info *Map,
     /* read feature to cache if necessary */
     if (pg_info->cache.fid != fid) {
 	G_debug(4, "read feature (fid = %ld) to cache", fid);
-	sf_type = (int) get_feature(pg_info, fid);
+	sf_type = get_feature(pg_info, fid);
 	
-	if ((int) sf_type < 0)
+	if (sf_type == SF_NONE) {
+	    G_warning(_("Feature %d without geometry skipped"), fid);
+	    return -1;
+	}
+
+	if ((int) sf_type < 0) /* -1 || - 2 */
 	    return (int) sf_type;
     }
 
     /* get data from cache */
-    ipart = pg_info->offset.array[offset + 1];
+    if (sf_type == SF_POINT || sf_type == SF_LINESTRING)
+	ipart = 0;
+    else 
+	ipart = pg_info->offset.array[offset + 1];
     type  = pg_info->cache.lines_types[ipart];
     G_debug(4, "read feature part: %d -> type = %d",
 	    ipart, type);    
@@ -318,6 +326,12 @@ int read_next_line_pg(struct Map_info *Map,
 	    /* cache feature -> line_p & line_c */
 	    sf_type = get_feature(pg_info, -1);
 	    
+	    if (sf_type == SF_NONE) {
+		G_warning(_("Feature %d without geometry skipped"),
+			  Map->next_line);
+		return -1;
+	    }
+
 	    if ((int) sf_type < 0) /* -1 || - 2 */
 		return (int) sf_type;
 
@@ -562,9 +576,16 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     wkb_data  = hex_to_wkb(data, &nbytes);
     
     if (nbytes < 5) {
-	G_warning(_("Invalid WKB content: %d bytes"), nbytes);
 	G_free(wkb_data);
-	return SF_UNKNOWN;
+	if (nbytes > 0) {
+	    G_debug(3, "cache_feature(): invalid geometry");
+	    G_warning(_("Invalid WKB content: %d bytes"), nbytes);
+	    return SF_UNKNOWN;
+	}
+	else {
+	    G_debug(3, "cache_feature(): no geometry");
+	    return SF_NONE;
+	}
     }
     
     /* parsing M coordinate not supported */
@@ -611,7 +632,7 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
         ftype = (SF_FeatureType) wkb_data[4];
 	is3D = wkb_data[1] & 0x80 || wkb_data[3] & 0x80;
     }
-    G_debug(5, "cache_feature(): sf_type = %d", ftype);
+    G_debug(3, "cache_feature(): sf_type = %d", ftype);
    
     /* allocate space in lines cache - be minimalistic
        
