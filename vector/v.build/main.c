@@ -28,16 +28,17 @@ int main(int argc, char *argv[])
     struct Option *map_opt, *opt, *err_opt;
     struct Flag *chk;
     struct Map_info Map;
-    int i, build = 0, dump = 0, sdump = 0, cdump = 0;
+    int i, build, dump, sdump, cdump, fdump;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-
+    char *opt_desc;
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("topology"));
-    module->description = _("Creates topology for vector map.");
+    module->label = _("Creates topology for vector map.");
+    module->description = _("Optionaly also checks for topological errors.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
     map_opt->label = NULL;
@@ -46,22 +47,27 @@ int main(int argc, char *argv[])
     err_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     err_opt->key = "error";
     err_opt->description =
-	_("Name for vector map where erroneous vector features are written to");
+	_("Name for output vector map where erroneous vector features are written to");
     err_opt->required = NO;
 
     opt = G_define_option();
     opt->key = "option";
     opt->type = TYPE_STRING;
-    opt->options = "build,dump,sdump,cdump";
+    opt->options = "build,dump,sdump,cdump,fdump";
     opt->required = NO;
     opt->multiple = YES;
     opt->answer = "build";
     opt->description =
 	_("Build topology or dump topology or spatial index to stdout");
-    opt->descriptions =
-	_("build;build topology;" "dump;write topology to stdout;"
-	  "sdump;write spatial index to stdout;"
-	  "cdump;write category index to stdout");
+    opt_desc = NULL;
+    G_asprintf(&opt_desc,
+	       "build;%s;dump;%s;sdump;%s;cdump;%s;fdump;%s",
+	       _("build topology"),
+	       _("write topology to stdout"),
+	       _("write spatial index to stdout"),
+	       _("write category index to stdout"),
+	       _("write feature index to stdout (non-native formats only)"));
+    opt->descriptions = opt_desc;
 
     chk = G_define_flag();
     chk->key = 'e';
@@ -71,17 +77,19 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    build = dump = sdump = cdump = fdump = FALSE;
     i = 0;
     while (opt->answers[i]) {
 	if (*opt->answers[i] == 'b')
-	    build = 1;
+	    build = TRUE;
 	else if (*opt->answers[i] == 'd')
-	    dump = 1;
+	    dump = TRUE;
 	else if (*opt->answers[i] == 's')
-	    sdump = 1;
+	    sdump = TRUE;
 	else if (*opt->answers[i] == 'c')
-	    cdump = 1;
-
+	    cdump = TRUE;
+	else if (*opt->answers[i] == 'f')
+	    fdump = TRUE;
 	i++;
     }
     if (err_opt->answer) {
@@ -112,7 +120,7 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     }
     /* dump topology */
-    if (dump || sdump || cdump) {
+    if (dump || sdump || cdump || fdump) {
 	if (!build) {
 	    Vect_set_open_level(2);
 	    Vect_open_old(&Map, map_opt->answer, G_mapset());
@@ -125,6 +133,9 @@ int main(int argc, char *argv[])
 
 	if (cdump)
 	    Vect_cidx_dump(&Map, stdout);
+	
+	if (fdump)
+	    Vect_fidx_dump(&Map, stdout);
     }
 
     if (err_opt->answer) {
