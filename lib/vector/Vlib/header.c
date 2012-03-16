@@ -362,13 +362,20 @@ const char *Vect_get_finfo_format_info(const struct Map_info *Map)
 /*!
   \brief Get geometry type (relevant only for non-native formats)
 
+  Note: All inner spaces are removed, function returns feature type in
+  lowercase.
+
   \param Map pointer to Map_info structure
 
   \return allocated string containing geometry type info
+  (point, linestring, polygon, ...)
   \return NULL on error (map format is native)
 */
 const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 {
+    char *ftype, *ftype_tmp;
+    
+    ftype_tmp = ftype = NULL;
     if (Map->format == GV_FORMAT_OGR ||
 	Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
@@ -383,14 +390,14 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
     Ogr_feature_defn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
     Ogr_geom_type = wkbFlatten(OGR_FD_GetGeomType(Ogr_feature_defn));
     
-    return OGRGeometryTypeToName(Ogr_geom_type);
+    ftype_tmp = G_store(OGRGeometryTypeToName(Ogr_geom_type));
 #endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifndef HAVE_POSTGRES
 	G_warning(_("GRASS is not compiled with PostgreSQL support"));
 #else
-	char stmt[DB_SQL_MAX], *ftype;
+	char stmt[DB_SQL_MAX];
 	
 	const struct Format_info_pg *pg_info;
 	
@@ -407,14 +414,19 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 	    G_warning("%s\n%s", _("Unable to get feature type."),
 		      PQresultErrorMessage(res));
 	
-	ftype = G_store(PQgetvalue(res, 0, 0));
+	ftype_tmp = G_store(PQgetvalue(res, 0, 0));
 	PQclear(res);
-
-	return ftype;
 #endif
     }
     
-    return NULL;
+    if (!ftype_tmp)
+	return NULL;
+
+    ftype = G_str_replace(ftype_tmp, " ", "");
+    G_free(ftype_tmp);
+    G_str_to_lower(ftype);
+
+    return ftype;
 }
 
 /*!
