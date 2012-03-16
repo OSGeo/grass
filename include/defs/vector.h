@@ -459,12 +459,12 @@ int Vect_open_topo(struct Map_info *, int);
 int Vect_save_topo(struct Map_info *);
 int Vect_open_sidx(struct Map_info *, int);
 int Vect_save_sidx(struct Map_info *);
-int Vect_sidx_dump(struct Map_info *, FILE *);
+int Vect_sidx_dump(const struct Map_info *, FILE *);
 int Vect_build_sidx_from_topo(struct Map_info *);
 int Vect_build_sidx(struct Map_info *);
 int Vect_open_fidx(struct Map_info *, struct Format_info_offset *);
 int Vect_save_fidx(struct Map_info *, struct Format_info_offset *);
-int Vect_fidx_dump(struct Map_info *, FILE *);
+int Vect_fidx_dump(const struct Map_info *, FILE *);
 
 int Vect__write_head(const struct Map_info *);
 int Vect__read_head(struct Map_info *);
