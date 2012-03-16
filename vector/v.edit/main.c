@@ -253,10 +253,11 @@ int main(int argc, char *argv[])
 	num_lines = Vect_get_num_lines(&Map);
 	
 	ret = Vect_read_ascii(ascii, &Map);
-	G_message(_("%d features added"), ret);
 	if (ret > 0) {
 	    int iline;
 	    struct ilist *List_added;
+	    
+	    G_message(_("%d features added"), ret);
 	    
 	    List_added = Vect_new_list();
 	    for (iline = num_lines + 1; iline <= Vect_get_num_lines(&Map); iline++)
