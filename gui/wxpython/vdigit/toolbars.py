@@ -750,16 +750,16 @@ class VDigitToolbar(BaseToolbar):
         self.EnableUndo(False)
         self.EnableRedo(False)
         
-        if fType == 'Point':
+        if fType == 'point':
             for tool in (self.addLine, self.addBoundary, self.addCentroid,
                          self.addArea, self.moveVertex, self.addVertex,
                          self.removeVertex, self.editLine):
                 self.EnableTool(tool, False)
-        elif fType == 'Line String':
+        elif fType == 'linestring':
             for tool in (self.addPoint, self.addBoundary, self.addCentroid,
                          self.addArea):
                 self.EnableTool(tool, False)
-        elif fType == 'Polygon':
+        elif fType == 'polygon':
             for tool in (self.addPoint, self.addLine, self.addBoundary, self.addCentroid):
                 self.EnableTool(tool, False)
         elif fType:
