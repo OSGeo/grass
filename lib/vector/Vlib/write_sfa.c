@@ -265,7 +265,7 @@ void V2__add_line_to_topo_sfa(struct Map_info *Map, int line,
     
     struct bound_box box, abox;
     
-    G_debug(3, "V2__add_line_to_topo_ogr(): line = %d npoints = %d", line,
+    G_debug(3, "V2__add_line_to_topo_sfa(): line = %d npoints = %d", line,
 	    points->n_points);
 
     plus = &(Map->plus);

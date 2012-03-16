@@ -195,7 +195,8 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     if (ret != OGRERR_NONE)
 	return -1;
     
-    G_debug(3, "V1_write_line_ogr(): -> offset = %lu", (unsigned long) offset);
+    G_debug(3, "V1_write_line_ogr(): -> offset = %lu offset_num = %d cat = %d",
+	    (unsigned long) offset, offset_info->array_num, cat);
 
     return offset;
 #else
