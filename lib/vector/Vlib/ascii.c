@@ -201,7 +201,10 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 	    G_fatal_error(_("Out of memory"));
 
 	if (type > 0) {
-	    Vect_write_line(Map, type, Points, Cats);
+	    if (-1 == Vect_write_line(Map, type, Points, Cats)) {
+		G_warning(_("Unable to write new feature"));
+		return -1;
+	    }
 	    n_lines++;
 	}
 	
