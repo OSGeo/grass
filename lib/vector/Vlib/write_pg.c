@@ -638,8 +638,11 @@ int write_feature(const struct Format_info_pg *pg_info,
 	       fid, text_data);
     G_debug(2, "SQL: %s", stmt);
     
-    if (execute(pg_info->conn, stmt) == -1)
+    if (execute(pg_info->conn, stmt) == -1) {
+	/* close transaction */
+	execute(pg_info->conn, "COMMIT");
 	return -1;
+    }
 
     G_free(wkb_data);
     G_free(text_data);
