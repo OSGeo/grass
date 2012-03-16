@@ -168,6 +168,23 @@ void print_columns(const struct Map_info *Map, const char *input_opt, const char
 void print_shell(const struct Map_info *Map)
 {
     int map_type;
+    int time_ok, first_time_ok, second_time_ok;
+    char timebuff[256];
+    
+    struct TimeStamp ts;
+	
+    time_ok = first_time_ok = second_time_ok = FALSE;
+    
+    /* Check the Timestamp */
+    time_ok = G_read_vector_timestamp(Vect_get_name(Map), NULL, "", &ts);
+    
+    /* Check for valid entries, show none if no timestamp available */
+    if (time_ok == TRUE) {
+	if (ts.count > 0)
+	    first_time_ok = TRUE;
+	if (ts.count > 1)
+	    second_time_ok = TRUE;
+    }
 
     map_type = Vect_maptype(Map);
     
@@ -183,7 +200,21 @@ void print_shell(const struct Map_info *Map)
 	    Vect_get_map_name(Map));
     fprintf(stdout, "scale=1:%d\n",
 	    Vect_get_scale(Map));
-    
+    fprintf(stdout, "creator=%s\n",
+	    Vect_get_person(Map));
+    fprintf(stdout, "organization=%s\n",
+	    Vect_get_organization(Map));
+    fprintf(stdout, "source_date=%s\n",
+	    Vect_get_map_date(Map));
+    /* This shows the TimeStamp (if present) */
+    if (time_ok  == TRUE && (first_time_ok || second_time_ok)) {
+	G_format_timestamp(&ts, timebuff);
+	fprintf(stdout, "timestamp=%s\n", timebuff);
+    }
+    else {
+	fprintf(stdout, "timestamp=none\n");
+    }
+
     if (map_type == GV_FORMAT_OGR ||
 	map_type == GV_FORMAT_OGR_DIRECT) {
 	fprintf(stdout, "format=%s,%s\n",
@@ -192,6 +223,9 @@ void print_shell(const struct Map_info *Map)
 		Vect_get_finfo_layer_name(Map));
 	fprintf(stdout, "ogr_dsn=%s\n",
 		Vect_get_finfo_dsn_name(Map));
+	fprintf(stdout, "feature_type=%s\n",
+		Vect_get_finfo_geometry_type(Map));
+
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
 	fprintf(stdout, "format=%s\n",
@@ -200,18 +234,14 @@ void print_shell(const struct Map_info *Map)
 		Vect_get_finfo_layer_name(Map));
 	fprintf(stdout, "pg_dbname=%s\n",
 		Vect_get_finfo_dsn_name(Map));
+	fprintf(stdout, "feature_type=%s\n",
+		Vect_get_finfo_geometry_type(Map));
     }
     else {
 	fprintf(stdout, "format=%s\n",
 		Vect_maptype_info(Map));
     }
 
-    fprintf(stdout, "creator=%s\n",
-	    Vect_get_person(Map));
-    fprintf(stdout, "organization=%s\n",
-	    Vect_get_organization(Map));
-    fprintf(stdout, "source_date=%s\n",
-	    Vect_get_map_date(Map));
     fprintf(stdout, "level=%d\n", 
 	    Vect_level(Map));
     
@@ -239,10 +269,12 @@ void print_info(const struct Map_info *Map)
     char tmp1[100], tmp2[100];
     char timebuff[256];
     struct TimeStamp ts;
-    int time_ok = FALSE, first_time_ok = FALSE, second_time_ok = FALSE;
+    int time_ok, first_time_ok, second_time_ok;
     struct bound_box box;
-    int utm_zone = -1;
+    int utm_zone;
    
+    time_ok = first_time_ok = second_time_ok = FALSE;
+    utm_zone = -1;
     map_type = Vect_maptype(Map);
     
     /* Check the Timestamp */
@@ -278,6 +310,29 @@ void print_info(const struct Map_info *Map)
 	    Vect_get_scale(Map));
     printline(line);
 
+    sprintf(line, "%-17s%s", _("Name of creator:"),
+	    Vect_get_person(Map));
+    printline(line);
+    sprintf(line, "%-17s%s", _("Organization:"),
+	    Vect_get_organization(Map));
+    printline(line);
+    sprintf(line, "%-17s%s", _("Source date:"),
+	    Vect_get_map_date(Map));
+    printline(line);
+
+    /* This shows the TimeStamp (if present) */
+    if (time_ok  == TRUE && (first_time_ok || second_time_ok)) {
+	G_format_timestamp(&ts, timebuff);
+	sprintf(line, "%-17s%s", _("Timestamp (first layer): "), timebuff);
+	printline(line);
+    }
+    else {
+	strcpy(line, _("Timestamp (first layer): none"));
+	printline(line);
+    }
+    
+    divider('|');
+    
     if (map_type == GV_FORMAT_OGR ||
 	map_type == GV_FORMAT_OGR_DIRECT) {
 	sprintf(line, "%-17s%s (%s)", _("Map format:"),
@@ -291,18 +346,24 @@ void print_info(const struct Map_info *Map)
 	sprintf(line, "%-17s%s", _("OGR datasource:"),
 		Vect_get_finfo_dsn_name(Map));
 	printline(line);
+	sprintf(line, "%-17s%s", _("Feature type:"),
+		Vect_get_finfo_geometry_type(Map));
+	printline(line);
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
 	sprintf(line, "%-17s%s", _("Map format:"),
 		Vect_maptype_info(Map));
 	printline(line);
 	
-	/* for OGR format print also datasource and layer */
+	/* for PostGIS format print also datasource and layer */
 	sprintf(line, "%-17s%s", _("PostGIS table:"),
 		Vect_get_finfo_layer_name(Map));
 	printline(line);
 	sprintf(line, "%-17s%s", _("PostGIS database:"),
 		Vect_get_finfo_dsn_name(Map));
+	printline(line);
+	sprintf(line, "%-17s%s", _("Feature type:"),
+		Vect_get_finfo_geometry_type(Map));
 	printline(line);
     }
     else {
@@ -311,32 +372,11 @@ void print_info(const struct Map_info *Map)
 	printline(line);
     }
     
-    sprintf(line, "%-17s%s", _("Name of creator:"),
-	    Vect_get_person(Map));
-    printline(line);
-    sprintf(line, "%-17s%s", _("Organization:"),
-	    Vect_get_organization(Map));
-    printline(line);
-    sprintf(line, "%-17s%s", _("Source date:"),
-	    Vect_get_map_date(Map));
-    printline(line);
-
-
-    /* This shows the TimeStamp (if present) */
-    if (time_ok  == TRUE && (first_time_ok || second_time_ok)) {
-	G_format_timestamp(&ts, timebuff);
-	sprintf(line, "%-17s%s", _("Timestamp (first layer): "), timebuff);
-	printline(line);
-    }
-/*    else
-	strcpy(line, _("Timestamp (first layer): none"));
-    printline(line); */
 
     divider('|');
     
     sprintf(line, "  %s: %s (%s: %i)",
 	    _("Type of map"), _("vector"), _("level"), Vect_level(Map));
-    
     printline(line);
     
     if (Vect_level(Map) > 0) {
