@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     err_opt->description =
 	_("Name for output vector map where erroneous vector features are written to");
     err_opt->required = NO;
+    err_opt->guisection = _("Errors");
 
     opt = G_define_option();
     opt->key = "option";
@@ -68,12 +69,14 @@ int main(int argc, char *argv[])
 	       _("write category index to stdout"),
 	       _("write feature index to stdout (non-native formats only)"));
     opt->descriptions = opt_desc;
-
+    opt->required = YES;
+    
     chk = G_define_flag();
     chk->key = 'e';
     chk->label = _("Extensive checks for topological errors");
     chk->description = _("Perform in-depth checks for topological errors when building topology");
-
+    chk->guisection = _("Errors");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
