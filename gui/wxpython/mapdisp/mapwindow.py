@@ -470,7 +470,7 @@ class BufferedWindow(MapWindow, wx.Window):
             # set back old coordinates
             textinfo['coords'] = oldCoords
             
-        dc = wx.BufferedPaintDC(self, ibuffer)
+        dc = wx.BufferedDC(None, ibuffer)
         dc.Clear()
         self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
