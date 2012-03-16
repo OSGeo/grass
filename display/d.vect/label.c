@@ -23,7 +23,8 @@ int display_label(struct Map_info *Map, int type,
     Vect_rewind(Map);
 
     ogr_centroids = FALSE;
-    if (Vect_maptype(Map) == GV_FORMAT_OGR) {
+    if (Vect_maptype(Map) == GV_FORMAT_OGR ||
+	Vect_maptype(Map) == GV_FORMAT_POSTGIS) {
 	if (Vect_level(Map) < 2)
 	    G_warning(_("Topology level required for drawing centroids "
 			"for OGR layers"));
