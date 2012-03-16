@@ -1632,7 +1632,7 @@ class IVDigit:
     def GetFeatureType(self):
         """!Get feature type for OGR layers
 
-        @return feature type as string (Point, Line String, Polygon)
+        @return feature type as string (point, linestring, polygon)
         @return None for native format
         """
         return Vect_get_finfo_geometry_type(self.poMapInfo)
