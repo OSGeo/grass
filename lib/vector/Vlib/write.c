@@ -171,6 +171,7 @@ static int (*Vect_restore_line_array[][3]) () = {
 
    \return new feature id (level 2)
    \return offset into file where the feature starts (level 1)
+   \return -1 on error
  */
 off_t Vect_write_line(struct Map_info *Map, int type,
 		      const struct line_pnts *points, const struct line_cats *cats)
@@ -190,10 +191,11 @@ off_t Vect_write_line(struct Map_info *Map, int type,
     offset = 
 	(*Vect_write_line_array[Map->format][Map->level]) (Map, type, points,
 							   cats);
-
+    
+    /*
     if (offset == -1)
 	G_fatal_error(_("Unable to write feature (negative offset)"));
-
+    */
     /* NOTE: returns new line id on level 2 and file offset on level 1 */
     return offset;
 }
@@ -235,10 +237,10 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
     ret = (*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type,
 							       offset,
 							       points, cats);
-    
+    /*
     if (ret == -1)
 	G_fatal_error(_("Unable to rewrite feature %d"), line);
-
+    */
     return ret;
 }
 
@@ -279,10 +281,11 @@ int Vect_delete_line(struct Map_info *Map, int line)
 
     ret = (*Vect_delete_line_array[Map->format][Map->level]) (Map, line);
 
+    /*
     if (ret == -1)
 	G_fatal_error(_("Unable to delete feature id %d from vector map <%s>"),
 		      line, Vect_get_full_name(Map));
-
+    */
     return ret;
 }
 
@@ -323,9 +326,10 @@ int Vect_restore_line(struct Map_info *Map, int line, off_t offset)
 
     ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, line, offset);
 
+    /*
     if (ret == -1)
 	G_fatal_error(_("Unable to restore feature %d from vector map <%s>"),
 		      line, Map->name);
-    
+    */
     return ret;
 }
