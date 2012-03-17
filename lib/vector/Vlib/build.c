@@ -1047,7 +1047,7 @@ int Vect_build_sidx(struct Map_info *Map)
 
    \return 1
  */
-int Vect_build_sidx_from_topo(struct Map_info *Map)
+int Vect_build_sidx_from_topo(const struct Map_info *Map)
 {
 
     G_debug(3, "Vect_build_sidx_from_topo(): name=%s",
