@@ -229,6 +229,7 @@ int add_geometry_pg(struct Plus_head *plus,
 	idx = fparts->idx[ipart];
 	for (i = 0; i < fparts->nlines[ipart]; i++) {
 	    line_i = pg_info->cache.lines[idx++];
+	    G_debug(4, "part %d", i);
 	    add_part(parts, i);
 	    line = add_line(plus, offset, GV_BOUNDARY,
 			    line_i, FID, parts);
@@ -272,7 +273,7 @@ int add_geometry_pg(struct Plus_head *plus,
 	if (build >= GV_BUILD_CENTROIDS) {
 	    /* create virtual centroid */
 	    ret = Vect_get_point_in_poly_isl((const struct line_pnts *) pg_info->cache.lines[fparts->idx[ipart]],
-					     (const struct line_pnts **) pg_info->cache.lines[fparts->idx[ipart]] + 1,
+					     (const struct line_pnts **) &pg_info->cache.lines[fparts->idx[ipart]] + 1,
 					     fparts->nlines[ipart] - 1, &x, &y);
 	    if (ret < -1) {
 		G_warning(_("Unable to calculate centroid for area %d"),
@@ -357,7 +358,7 @@ void build_pg(struct Map_info *Map, int build)
 	    continue;
 	}
 	
-	/* register topo */
+	/* register all parts */
 	reset_parts(&parts);
 	add_part(&parts, fid);
 	for (ipart = 0; ipart < fparts.n_parts; ipart++) {
@@ -375,6 +376,9 @@ void build_pg(struct Map_info *Map, int build)
 	    if (fparts.n_parts > 1)
 		del_part(&parts);
 	}
+
+	/* read next feature from cache */
+	pg_info->cache.lines_next = 0;
     }
 
     Map->plus.built = GV_BUILD_BASE;
