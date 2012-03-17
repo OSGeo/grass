@@ -109,9 +109,8 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
 	/* PG types defined in globals.h (and pg_type.h) */
 	if (sqltype == DB_SQL_TYPE_UNKNOWN) {
 	    if (gpgtype == PG_TYPE_POSTGIS_GEOM) {
-		G_warning(_("PostgreSQL driver: PostGIS column '%s', type 'geometry' "
-			    "will not be converted"),
-			  fname);
+		G_debug(1, "PostgreSQL driver: PostGIS column '%s', type 'geometry' "
+			"will not be converted", fname);
 		continue;
 	    }
 	    else {
