@@ -562,11 +562,7 @@ struct Format_info_ogr
 #else
     void *feature_cache;
 #endif
-    /*!
-      \brief Feature id read in feature_cache (level 2)
-    */
-    int feature_cache_id;
-
+  
     /*!
       \brief Offset list used for building pseudo-topology
     */

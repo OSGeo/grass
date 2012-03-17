@@ -39,6 +39,7 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
 		     struct line_cats *line_c, int line)
 {
 #if defined HAVE_OGR || defined HAVE_POSTGRES
+    int type;
     struct P_line *Line;
     
     G_debug(4, "V2_read_line_sfa() line = %d", line);
@@ -101,9 +102,15 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
 	return Line->type;
     
     if (Map->format == GV_FORMAT_POSTGIS)
-	return V1_read_line_pg(Map, line_p, line_c, Line->offset);
-    
-    return V1_read_line_ogr(Map, line_p, line_c, Line->offset);
+	type = V1_read_line_pg(Map, line_p, line_c, Line->offset);
+    else
+	type = V1_read_line_ogr(Map, line_p, line_c, Line->offset);
+
+    if (type != Line->type)
+	G_fatal_error(_("Unexpected feature type (%s) - should be (%d)"),
+		      type, Line->type);
+
+    return type;
 #else
     G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
     return -1;

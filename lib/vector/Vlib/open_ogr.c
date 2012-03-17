@@ -119,7 +119,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
 	break;
     }
     
-    ogr_info->feature_cache_id = -1;	/* FID >= 0 */
+    ogr_info->cache.fid = -1;	/* FID >= 0 */
     
     return 0;
 #else
