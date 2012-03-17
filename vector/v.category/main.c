@@ -325,7 +325,8 @@ int main(int argc, char *argv[])
 		Vect_write_line(&Out, GV_CENTROID, Points, Cats);
 		new_centr++;
 	    }
-	    G_message(_("%d new centroids placed in output map"), new_centr);
+	    if (new_centr > 0) 
+		G_message(_("%d new centroids placed in output map"), new_centr);
 	}
 	break;
 
