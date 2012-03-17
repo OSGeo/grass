@@ -728,7 +728,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """!Copy selected text to clipboard and skip event.
         The same function is in GMStc class (goutput.py).
         """
-        self.Copy()
+        wx.CallAfter(self.Copy)
         event.Skip()
         
     def OnItemChanged(self, event):

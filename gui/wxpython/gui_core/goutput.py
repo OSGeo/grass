@@ -1058,7 +1058,7 @@ class GMStc(wx.stc.StyledTextCtrl):
         """!Copy selected text to clipboard and skip event.
         The same function is in TextCtrlAutoComplete class (prompt.py).
         """
-        self.Copy()
+        wx.CallAfter(self.Copy)
         event.Skip()
         
     def SetStyle(self):
