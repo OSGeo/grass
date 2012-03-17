@@ -36,7 +36,7 @@ static int point_from_wkb(const unsigned char *, int, int, int,
 static int linestring_from_wkb(const unsigned char *, int, int, int,
 			       struct line_pnts *, int);
 static int polygon_from_wkb(const unsigned char *, int, int, int,
-			    struct Format_info_cache *);
+			    struct Format_info_cache *, int *);
 static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
 					struct Format_info_cache *,
 					struct feat_parts *);
@@ -337,9 +337,6 @@ int read_next_line_pg(struct Map_info *Map,
 	    }
 	    
 	    G_debug(4, "%d lines read to cache", pg_info->cache.lines_num);
-	    
-	    /* next to be read from cache */
-	    pg_info->cache.lines_next = 0;	
 	}
 	
 	/* get data from cache */
@@ -574,6 +571,9 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     /* reset cache */
     cache->lines_num = 0;
     cache->fid       = -1;
+    /* next to be read from cache */
+    cache->lines_next = 0;
+    
     if (fparts)
 	fparts->n_parts = 0;
     
@@ -664,9 +664,11 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
 	add_fpart(fparts, ftype, 0, 1);
     }
     else if (ftype == SF_POLYGON && !skip_polygon) {
+	int nrings;
+	
 	ret = polygon_from_wkb(wkb_data, nbytes, byte_order,
-			       is3D, cache);
-	add_fpart(fparts, ftype, 0, 1);
+			       is3D, cache, &nrings);
+	add_fpart(fparts, ftype, 0, nrings);
     }
     else if (ftype == SF_MULTIPOINT ||
 	     ftype == SF_MULTILINESTRING ||
@@ -678,6 +680,9 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     else  {
 	G_warning(_("Unsupported feature type %d"), ftype);
     }
+
+    /* read next feature from cache */
+    cache->lines_next = 0;
     
     G_free(wkb_data);
     
@@ -819,34 +824,35 @@ int linestring_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_orde
   \param byte_order byte order (ENDIAN_LITTLE, ENDIAN_BIG)
   \param with_z WITH_Z for 3D data
   \param[out] line_p array of rings (pointer to line_pnts struct)
-
+  \param[out] nrings number of rings
+  
   \return wkb size
   \return -1 on error
 */
 int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
-		     int with_z, struct Format_info_cache *cache)
+		     int with_z, struct Format_info_cache *cache, int *nrings)
 {
-    int nrings, data_offset, i, nsize, isize;
+    int data_offset, i, nsize, isize;
     struct line_pnts *line_i;
     
     if (nbytes < 9 && nbytes != -1)
 	return -1;
     
     /* get the ring count */
-    memcpy(&nrings, wkb_data + 5, 4);
+    memcpy(nrings, wkb_data + 5, 4);
     if (byte_order == ENDIAN_BIG) {
-        nrings = SWAP32(nrings);
+        *nrings = SWAP32(*nrings);
     }
-    if (nrings < 0) {
+    if (*nrings < 0) {
         return -1;
     }
     
     /* reallocate space for islands if needed */
-    reallocate_cache(cache, nrings);
-    cache->lines_num += nrings;
+    reallocate_cache(cache, *nrings);
+    cache->lines_num += *nrings;
     
     /* each ring has a minimum of 4 bytes (point count) */
-    if (nbytes != -1 && nbytes - 9 < nrings * 4) {
+    if (nbytes != -1 && nbytes - 9 < (*nrings) * 4) {
         return error_corrupted_data(_("Length of input WKB is too small"));
     }
 
@@ -856,7 +862,7 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
     
     /* get the rings */
     nsize = 9;
-    for (i = 0; i < nrings; i++ ) {
+    for (i = 0; i < (*nrings); i++ ) {
 	if (cache->lines_next >= cache->lines_num)
 	    G_fatal_error(_("Invalid cache index %d (max: %d)"),
 			  cache->lines_next, cache->lines_num);
@@ -928,7 +934,6 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes, int 
     reallocate_cache(cache, nparts);
     
     /* get parts */
-    cache->lines_next = cache->lines_num = 0;
     for (ipart = 0; ipart < nparts; ipart++) {
 	wkb_subdata = (unsigned char *)wkb_data + data_offset;
 	if (nbytes < 9 && nbytes != -1)
@@ -959,16 +964,19 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes, int 
 	    cache->lines_next++;
 	}
 	else if (ftype == SF_POLYGON) {
-	    int idx = cache->lines_next;
+	    int idx, nrings;
+
+	    idx = cache->lines_next;
 	    nsize = polygon_from_wkb(wkb_subdata, nbytes, byte_order,
-				     with_z, cache);
-	    add_fpart(fparts, ftype, idx, cache->lines_num - idx);
+				     with_z, cache, &nrings);
+	    add_fpart(fparts, ftype, idx, nrings);
 	}
 	else if (ftype == SF_GEOMETRYCOLLECTION ||
 		 ftype == SF_MULTIPOLYGON ||
 		 ftype == SF_MULTILINESTRING ||
 		 ftype == SF_MULTIPOLYGON) {
-	    // geometry_collection_from_wkb();
+	    geometry_collection_from_wkb(wkb_subdata, nbytes, byte_order,
+					 with_z, cache, fparts);
 	}
 	else  {
 	    G_warning(_("Unsupported feature type %d"), ftype);
@@ -980,8 +988,7 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes, int 
 	
         data_offset += nsize;
     }
-    cache->lines_next = 0;
-    
+        
     return nparts;
 }
 
