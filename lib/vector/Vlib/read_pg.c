@@ -172,6 +172,9 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 	else {
 	    /* ignore constraints, Map->next_line incremented */
 	    ret = read_next_line_pg(Map, line_p, line_c, TRUE);
+	    if (ret != Line->type)
+		G_fatal_error(_("Unexpected feature type (%s) - should be (%d)"),
+			      ret, Line->type);
 	}
 
 	if (Map->constraint.region_flag) {
@@ -215,13 +218,13 @@ int V1_read_line_pg(struct Map_info *Map,
 {
 #ifdef HAVE_POSTGRES
     long fid;
-    int i, ipart, type;
-    SF_FeatureType sf_type;
+    int  ipart, type;
+    static SF_FeatureType sf_type;
     
-    struct line_pnts      *line_i;
-    struct Format_info_pg *pg_info;
+    struct Format_info_pg     *pg_info;
     
     pg_info = &(Map->fInfo.pg);
+    
     G_debug(3, "V1_read_line_pg(): offset = %lu offset_num = %lu",
 	    (long) offset, (long) pg_info->offset.array_num);
     
@@ -249,7 +252,7 @@ int V1_read_line_pg(struct Map_info *Map,
 	if ((int) sf_type < 0) /* -1 || - 2 */
 	    return (int) sf_type;
     }
-
+    
     /* get data from cache */
     if (sf_type == SF_POINT || sf_type == SF_LINESTRING)
 	ipart = 0;
@@ -259,20 +262,13 @@ int V1_read_line_pg(struct Map_info *Map,
     G_debug(4, "read feature part: %d -> type = %d",
 	    ipart, type);    
 	
-    if (line_p != NULL) {
-	/* coordinates */
-	line_i = pg_info->cache.lines[ipart];
-	for (i = 0; i < line_i->n_points; i++) {
-	    Vect_append_point(line_p,
-			      line_i->x[i], line_i->y[i], line_i->z[i]);
-	}
-    }
+    if (line_p)
+	Vect_append_points(line_p,
+			   pg_info->cache.lines[ipart], GV_FORWARD);
     
-    if (line_c != NULL) {
-	/* category */
+    if (line_c)
 	Vect_cat_set(line_c, 1, (int) fid);
-    }
-
+    
     return type;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -299,20 +295,20 @@ int read_next_line_pg(struct Map_info *Map,
 		      struct line_pnts *line_p, struct line_cats *line_c,
 		      int ignore_constraints)
 {
-    int i, ltype;
+    int line, itype;
     SF_FeatureType sf_type;
     
-    struct Format_info_pg *pg_info;
+    struct Format_info_pg    *pg_info;
     struct bound_box mbox, lbox;
-    struct line_pnts *line_i;
+    struct line_pnts *iline;
 
     pg_info = &(Map->fInfo.pg);
-
+    
     if (Map->constraint.region_flag && !ignore_constraints)
 	Vect_get_constraint_box(Map, &mbox);
     
     while (TRUE) {
-	Map->next_line++; /* level 2 only */
+	line = Map->next_line++; /* level 2 only */
 	
 	/* reset data structures */
 	if (line_p != NULL)
@@ -322,13 +318,12 @@ int read_next_line_pg(struct Map_info *Map,
 
 	/* read feature to cache if necessary */
 	while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
-	    pg_info->cache.lines_next = pg_info->cache.lines_num = 0;
 	    /* cache feature -> line_p & line_c */
 	    sf_type = get_feature(pg_info, -1);
 	    
 	    if (sf_type == SF_NONE) {
 		G_warning(_("Feature %d without geometry skipped"),
-			  Map->next_line);
+			  line);
 		return -1;
 	    }
 
@@ -342,33 +337,28 @@ int read_next_line_pg(struct Map_info *Map,
 	    }
 	    
 	    G_debug(4, "%d lines read to cache", pg_info->cache.lines_num);
+	    
+	    /* next to be read from cache */
+	    pg_info->cache.lines_next = 0;	
 	}
 	
 	/* get data from cache */
-	ltype  = pg_info->cache.lines_types[pg_info->cache.lines_next];
-	if (line_p) {
-	    line_i = pg_info->cache.lines[pg_info->cache.lines_next];
-	    for (i = 0; i < line_i->n_points; i++) {
-		Vect_append_point(line_p,
-				  line_i->x[i], line_i->y[i], line_i->z[i]);
-	    }
-	}
-	if (line_c) {
-	    Vect_cat_set(line_c, 1, (int) pg_info->cache.fid);
-	}
-	pg_info->cache.lines_next++;
-	
+	G_debug(4, "read next cached line %d", pg_info->cache.lines_next);
+
+	itype = pg_info->cache.lines_types[pg_info->cache.lines_next];
+	iline = pg_info->cache.lines[pg_info->cache.lines_next];
+
 	/* apply constraints */
 	if (Map->constraint.type_flag && !ignore_constraints) {
 	    /* skip feature by type */
-	    if (!(ltype & Map->constraint.type))
+	    if (!(itype & Map->constraint.type))
 		continue;
 	}
 
 	if (line_p && Map->constraint.region_flag &&
 	    !ignore_constraints) {
 	    /* skip feature by region */
-	    Vect_line_box(line_p, &lbox);
+	    Vect_line_box(iline, &lbox);
 	    
 	    if (!Vect_box_overlap(&lbox, &mbox))
 		continue;
@@ -376,7 +366,16 @@ int read_next_line_pg(struct Map_info *Map,
 	
 	/* skip feature by field ignored */
 	
-	return ltype;
+	if (line_p)
+	    Vect_append_points(line_p, iline, GV_FORWARD);
+	
+	if (line_c)
+	    Vect_cat_set(line_c, 1, (int) pg_info->cache.fid);
+	
+	pg_info->cache.lines_next++;
+	G_debug(4, "next line read, type = %d", itype);
+	
+	return itype;
     }
 
     return -1; /* not reached */
@@ -571,6 +570,12 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     unsigned char *wkb_data;
     unsigned int wkb_flags;
     SF_FeatureType ftype;
+
+    /* reset cache */
+    cache->lines_num = 0;
+    cache->fid       = -1;
+    if (fparts)
+	fparts->n_parts = 0;
     
     wkb_flags = 0;
     wkb_data  = hex_to_wkb(data, &nbytes);
@@ -642,9 +647,6 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     if (!cache->lines) {
 	reallocate_cache(cache, 1);
     }
-    cache->lines_num = 0;
-    if (fparts)
-	fparts->n_parts = 0;
     
     ret = -1;
     if (ftype == SF_POINT) {
@@ -855,6 +857,9 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
     /* get the rings */
     nsize = 9;
     for (i = 0; i < nrings; i++ ) {
+	if (cache->lines_next >= cache->lines_num)
+	    G_fatal_error(_("Invalid cache index %d (max: %d)"),
+			  cache->lines_next, cache->lines_num);
 	line_i = cache->lines[cache->lines_next];
 	cache->lines_types[cache->lines_next++] = GV_BOUNDARY;
 	

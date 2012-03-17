@@ -204,7 +204,7 @@ int V1_read_line_ogr(struct Map_info *Map,
     /* coordinates */
     if (line_p != NULL) {
 	/* read feature to cache if necessary */
-	if (ogr_info->feature_cache_id != fid) {
+	if (ogr_info->cache.fid != fid) {
 	    G_debug(4, "Read feature (fid = %ld) to cache", fid);
 	    if (ogr_info->feature_cache) {
 		OGR_F_Destroy(ogr_info->feature_cache);
@@ -216,7 +216,7 @@ int V1_read_line_ogr(struct Map_info *Map,
 			  fid);
 		return -1;
 	    }
-	    ogr_info->feature_cache_id = fid;
+	    ogr_info->cache.fid = fid;
 	}
 	
 	hGeom = OGR_F_GetGeometryRef(ogr_info->feature_cache);
@@ -385,8 +385,8 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	    }
 
 	    /* cache OGR feature */
-	    ogr_info->feature_cache_id = (int)OGR_F_GetFID(hFeature);
-	    if (ogr_info->feature_cache_id == OGRNullFID) {
+	    ogr_info->cache.fid = (int)OGR_F_GetFID(hFeature);
+	    if (ogr_info->cache.fid == OGRNullFID) {
 		G_warning(_("OGR feature without ID"));
 	    }
 
@@ -429,8 +429,8 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	    Vect_append_points(line_p,
 			       ogr_info->cache.lines[ogr_info->cache.lines_next], GV_FORWARD);
 
-	if (line_c != NULL && ogr_info->feature_cache_id != OGRNullFID)
-	    Vect_cat_set(line_c, 1, ogr_info->feature_cache_id);
+	if (line_c != NULL && ogr_info->cache.fid != OGRNullFID)
+	    Vect_cat_set(line_c, 1, ogr_info->cache.fid);
 
 	ogr_info->cache.lines_next++;
 	G_debug(4, "next line read, type = %d", itype);
