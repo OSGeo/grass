@@ -140,8 +140,8 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     }
     
     /* get fid and geometry column */
-    db_set_string(&stmt, "SELECT f_table_name, f_geometry_column,"
-		  "coord_dimension,srid,type "
+    db_set_string(&stmt, "SELECT f_table_schema, f_table_name, f_geometry_column,"
+		  "coord_dimension, srid, type "
 		  "FROM geometry_columns");
     G_debug(2, "SQL: %s", db_get_string(&stmt));
     
@@ -154,19 +154,27 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     G_debug(3, "\tnrows = %d", ntables);
     found = FALSE;
     for (i = 0; i < ntables; i++) {
-	if (strcmp(PQgetvalue(res, i, 0), pg_info->table_name) == 0) {
+	if ((pg_info->schema_name &&   /* schema defined */
+	     strcmp(PQgetvalue(res, i, 0), pg_info->schema_name) == 0 &&
+	     strcmp(PQgetvalue(res, i, 1), pg_info->table_name) == 0) ||
+	    (!pg_info->schema_name && /* schema not defined, get first match */
+	     strcmp(PQgetvalue(res, i, 1), pg_info->table_name) == 0)) {
+	    /* schema name */
+	    if (!pg_info->schema_name) {
+		pg_info->schema_name = G_store(PQgetvalue(res, i, 0));
+	    }
 	    /* geometry column */
-	    pg_info->geom_column = G_store(PQgetvalue(res, i, 1));
+	    pg_info->geom_column = G_store(PQgetvalue(res, i, 2));
 	    G_debug(3, "\t-> table = %s column = %s", pg_info->table_name,
 		    pg_info->geom_column);
 	    /* fid column */
 	    pg_info->fid_column = get_key_column(pg_info);
 	    /* coordinates dimension */
-	    pg_info->coor_dim = atoi(PQgetvalue(res, i, 2));
+	    pg_info->coor_dim = atoi(PQgetvalue(res, i, 3));
 	    /* SRS ID */
-	    pg_info->srid = atoi(PQgetvalue(res, i, 3));
+	    pg_info->srid = atoi(PQgetvalue(res, i, 4));
 	    /* feature type */
-	    pg_info->feature_type = ftype_from_string(PQgetvalue(res, i, 4));
+	    pg_info->feature_type = ftype_from_string(PQgetvalue(res, i, 5));
 	    found = TRUE;
 	    break;
 	}
@@ -180,7 +188,8 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     db_free_string(&stmt);
 
     if (!found) {
-	G_warning(_("Feature table <%s> not found in 'geometry_columns'"));
+	G_warning(_("Feature table <%s> not found in 'geometry_columns'"),
+		  pg_info->table_name);
 	return -1;
     }
     
