@@ -1727,7 +1727,8 @@ class GdalImportDialog(ImportDialog):
             else:
                 self.SetTitle(_("Import raster data"))
         
-        self.dsnInput = GdalSelect(parent = self, panel = self.panel, ogr = ogr)
+        self.dsnInput = GdalSelect(parent = self, panel = self.panel,
+                                   ogr = ogr, link = link)
         
         if link:
             self.add.SetLabel(_("Add linked layers into layer tree"))
@@ -1758,9 +1759,8 @@ class GdalImportDialog(ImportDialog):
         self.commandId = -1
         data = self.list.GetLayers()
         
-        dsn = self.dsnInput.GetDsn()
+        dsn, flags = self.dsnInput.GetDsn(flags = True)
         ext = self.dsnInput.GetFormatExt()
-            
         for layer, output in data:
             if self.importType == 'ogr':
                 if ext and layer.rfind(ext) > -1:
@@ -1796,6 +1796,9 @@ class GdalImportDialog(ImportDialog):
             for key in self.options.keys():
                 if self.options[key].IsChecked():
                     cmd.append('-%s' % key)
+            
+            for f in flags:
+                cmd.append('-%s' % f)
             
             if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'):
                 cmd.append('--overwrite')
@@ -2035,10 +2038,10 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
     def LoadData(self, data = None):
         """!Load data into list"""
+        self.DeleteAllItems()
         if data is None:
             return
         
-        self.DeleteAllItems()
         for item in data:
             index = self.InsertStringItem(sys.maxint, str(item[0]))
             for i in range(1, len(item)):
