@@ -54,8 +54,8 @@ char **G_tokenize(const char *buf, const char *delim)
   
   This fuction behaves similarly to G_tokenize().
 
-  It introduces <em>valchar<em> which defines borders of token. Within
-  token <em>delim<em> is ignored.
+  It introduces <em>valchar</em> which defines borders of token. Within
+  token <em>delim</em> is ignored.
   
   Example:
   \code
