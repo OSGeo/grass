@@ -117,6 +117,8 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
 	if (frmt == GV_FORMAT_POSTGIS) {
 	    if (strcmp(buf1, "CONNINFO") == 0)
 		finfo->pg.conninfo = G_store(ptr);
+	    if (strcmp(buf1, "SCHEMA") == 0)
+		finfo->pg.schema_name = G_store(ptr);
 	    if (strcmp(buf1, "TABLE") == 0)
 		finfo->pg.table_name = G_store(ptr);
 	}

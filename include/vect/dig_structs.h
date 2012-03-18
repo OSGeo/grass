@@ -590,6 +590,10 @@ struct Format_info_pg
     */
     char    *db_name;
     /*!
+      \brief Schema name
+    */
+    char    *schema_name;
+    /*!
       \brief Table name
     */
     char    *table_name;

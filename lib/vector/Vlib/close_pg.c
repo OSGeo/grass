@@ -69,12 +69,11 @@ int V1_close_pg(struct Map_info *Map)
     }
     if (pg_info->cache.lines)
 	G_free(pg_info->cache.lines);
-    if (pg_info->db_name)
-	G_free(pg_info->db_name);
-    if (pg_info->geom_column)
-	G_free(pg_info->geom_column);
-    if (pg_info->fid_column)
-	G_free(pg_info->fid_column);
+
+    G_free(pg_info->db_name);
+    G_free(pg_info->schema_name);
+    G_free(pg_info->geom_column);
+    G_free(pg_info->fid_column);
 
     return 0;
 #else

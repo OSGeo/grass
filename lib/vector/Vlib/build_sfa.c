@@ -330,13 +330,14 @@ void build_pg(struct Map_info *Map, int build)
     G_zero(&fparts, sizeof(struct feat_parts));
     
     /* get records */
-    sprintf(stmt, "SELECT %s,%s FROM %s",
+    sprintf(stmt, "SELECT %s,%s FROM %s.%s",
 	    pg_info->fid_column,
-	    pg_info->geom_column, pg_info->table_name);
+	    pg_info->geom_column, pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
     pg_info->res = PQexec(pg_info->conn, stmt);
     if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
 	PQclear(pg_info->res);
+	pg_info->res = NULL;
 	G_warning(_("Unable to get features:\n%s"),
 		  PQerrorMessage(pg_info->conn));
 	return; /* reading failed */
