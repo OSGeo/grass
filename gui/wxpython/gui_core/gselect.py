@@ -1097,7 +1097,7 @@ class FormatSelect(wx.Choice):
             return ''
         
 class GdalSelect(wx.Panel):
-    def __init__(self, parent, panel, ogr = False, dest = False, 
+    def __init__(self, parent, panel, ogr = False, link = False, dest = False, 
                  default = 'file', exclude = [], envHandler = None):
         """!Widget for selecting GDAL/OGR datasource, format
         
@@ -1123,31 +1123,40 @@ class GdalSelect(wx.Panel):
         
         # source type
         sources = list()
-        self.sourceMap = { 'file' : -1,
-                           'dir'  : -1,
-                           'db'   : -1,
-                           'pro'  : -1,
+        self.sourceMap = { 'file'   : -1,
+                           'dir'    : -1,
+                           'db'     : -1,
+                           'db-pg'  : -1,
+                           'pro'    : -1,
                            'native' : -1 }
         idx = 0
+        if ogr and link:
+            extraLabel = " (OGR)"
+        else:
+            extraLabel = ""
         if dest:
             sources.append(_("Native"))
             self.sourceMap['native'] = idx
             idx += 1
         if 'file' not in exclude:
-            sources.append(_("File"))
+            sources.append(_("File") + extraLabel)
             self.sourceMap['file'] = idx
             idx += 1
         if 'directory' not in exclude:
-            sources.append(_("Directory"))
+            sources.append(_("Directory") + extraLabel)
             self.sourceMap['dir'] = idx
             idx += 1
         if 'database' not in exclude:
-            sources.append(_("Database"))
+            sources.append(_("Database") + extraLabel)
             self.sourceMap['db'] = idx
             idx += 1
         if 'protocol' not in exclude:
-            sources.append(_("Protocol"))
+            sources.append(_("Protocol") + extraLabel)
             self.sourceMap['pro'] = idx
+            idx += 1
+        if 'database' not in exclude and ogr and link:
+            sources.append(_("PostGIS (PG)"))
+            self.sourceMap['db-pg'] = idx
         
         if self.ogr:
             self.settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
@@ -1250,6 +1259,9 @@ class GdalSelect(wx.Panel):
                                     'text'   : dsnDbText,
                                     'choice' : dsnDbChoice },
                        'native' : [_("Name:"), dsnDir, ''],
+                       'db-pg' : [_("Name:"),
+                                  dsnDbChoice,
+                                  ["PostgreSQL"]],
                        }
         
         if self.dest:
@@ -1486,6 +1498,8 @@ class GdalSelect(wx.Panel):
             self.dsnType = 'pro'
         elif sel == self.sourceMap['native']:
             self.dsnType = 'native'
+        elif sel == self.sourceMap['db-pg']: # PostGIS database (PG data provider)
+            self.dsnType = 'db-pg'
         
         if self.dsnType == 'db':
             self.input[self.dsnType][1] = self.input['db-win']['text']
@@ -1494,7 +1508,8 @@ class GdalSelect(wx.Panel):
         self.dsnSizer.Add(item = self.input[self.dsnType][1],
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                           pos = (1, 1), span = (1, 3))
-        win.SetValue('')
+        if self.dsnType != 'db-pg':
+            win.SetValue('')
         win.Show()
         
         if sel == self.sourceMap['native']: # native
@@ -1512,12 +1527,13 @@ class GdalSelect(wx.Panel):
             if self.parent.GetName() == 'MultiImportDialog':
                 self.parent.list.DeleteAllItems()
         
-        if sel in (self.sourceMap['file'],
-                   self.sourceMap['dir']):
+        if sel in (self.sourceMap['file'], self.sourceMap['dir']):
             if not self.ogr:
                 self.OnSetFormat(event = None, format = 'GeoTIFF')
             else:
                 self.OnSetFormat(event = None, format = 'ESRI Shapefile')
+        elif sel == self.sourceMap['db-pg']:
+            self.OnSetFormat(event = None, format = 'PostgreSQL')
         
         if sel == self.sourceMap['dir'] and not self.dest:
             if not self.extension.IsShown():
@@ -1530,12 +1546,23 @@ class GdalSelect(wx.Panel):
         
         self.dsnSizer.Layout()
         
-    def GetDsn(self):
-        """!Get datasource name"""
+    def GetDsn(self, flags = False):
+        """!Get datasource name
+
+        @param flags True to get tuple (dsn, flags)
+        """
+        flgs = []
         if self.format.GetStringSelection() == 'PostgreSQL':
-            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+            if self.source.GetSelection() == self.sourceMap['db-pg']:
+                flgs.append('p')
+            dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+        else:
+            dsn = self.input[self.dsnType][1].GetValue()
         
-        return self.input[self.dsnType][1].GetValue()
+        if flags:
+            return (dsn, flgs)
+        
+        return dsn
     
     def OnSetDsn(self, event, path = None):
         """!Input DXF file/OGR dsn defined, update list of layer
@@ -1575,12 +1602,11 @@ class GdalSelect(wx.Panel):
         layerId = 1
         
         if self.ogr:
-            ret = RunCommand('v.in.ogr',
+            ret = RunCommand('v.external',
                              quiet = True,
                              read = True,
-                             flags = 'a',
+                             flags = 't',
                              dsn = dsn)
-                
             if not ret:
                 self.parent.list.LoadData()
                 if hasattr(self, "btn_run"):
@@ -1627,7 +1653,7 @@ class GdalSelect(wx.Panel):
         
     def OnSetFormat(self, event, format = None):
         """!Format changed"""
-        if self.dsnType not in ['file', 'dir', 'db']:
+        if self.dsnType not in ['file', 'dir', 'db', 'db-pg']:
             return
         
         win = self.input[self.dsnType][1]
@@ -1708,13 +1734,6 @@ class GdalSelect(wx.Panel):
     def GetType(self):
         """!Get source type"""
         return self.dsnType
-
-    def GetDsn(self):
-        """!Get DSN"""
-        if self.format.GetStringSelection() == 'PostgreSQL':
-            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
-        
-        return self.input[self.dsnType][1].GetValue()
 
     def GetDsnWin(self):
         """!Get list of DSN windows"""
