@@ -142,9 +142,18 @@ int main(int argc, char *argv[])
     }
     
     if (flags.postgis->answer) {
+	char *table_name, *schema_name;
+	
+	get_table_name(options.layer->answer, &table_name, &schema_name);
+	
 	fprintf(fd, "FORMAT: postgis\n");
 	fprintf(fd, "CONNINFO: %s\n", dsn);
-	fprintf(fd, "TABLE: %s\n", options.layer->answer);
+	if (schema_name)
+	    fprintf(fd, "SCHEMA: %s\n", schema_name);
+	fprintf(fd, "TABLE: %s\n", table_name);
+
+	G_free(table_name);
+	G_free(schema_name);
     }
     else {
 	fprintf(fd, "FORMAT: ogr\n");

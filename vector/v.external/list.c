@@ -53,11 +53,29 @@ int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, i
     return -1;
 }
 
+void get_table_name(const char *table, char **table_name, char **schema_name)
+{
+    char **tokens;
+
+    tokens = G_tokenize(table, ".");
+
+    if (G_number_of_tokens(tokens) > 1) {
+	*schema_name = G_store(tokens[0]);
+	*table_name  = G_store(tokens[1]);
+    }
+    else {
+	*schema_name = NULL;
+	*table_name  = G_store(tokens[0]);
+    }
+    
+    G_free_tokens(tokens);
+}
+
+#ifdef HAVE_POSTGRES
 int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_types, int *is3D)
 {
-#ifdef HAVE_POSTGRES
     int row, ntables, ret, print_schema;
-    char *value;
+    char *value, *schema_name, *table_name;
     PGconn *conn;
     PGresult *res;
     
@@ -80,20 +98,27 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
     if (PQresultStatus(res) != PGRES_TUPLES_OK)
 	G_fatal_error("%s\n%s", _("No feature tables found in database."),
 		      PQresultErrorMessage(res));
+
+    /* get schema & table_name */
+    table_name = schema_name = NULL;
+    if (table)
+	get_table_name(table, &table_name, &schema_name);
     
     ntables = PQntuples(res);
     G_debug(3, "   nrows = %d", ntables);
     if (fd)
 	G_message(_("PostGIS database <%s> contains %d feature table(s):"),
 		  PQdb(conn), ntables);
-
+    
     /* report also schemas */
     print_schema = FALSE;
-    for (row = 0; row < ntables; row++) {
-	value = PQgetvalue(res, row, 0);
-	if (strcmp(value, "public") != 0) {
-	    print_schema = TRUE;
-	    break;
+    if (fd) {
+	for (row = 0; row < ntables; row++) {
+	    value = PQgetvalue(res, row, 0);
+	    if (strcmp(value, "public") != 0) {
+		print_schema = TRUE;
+		break;
+	    }
 	}
     }
     
@@ -116,21 +141,24 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 		    fprintf(fd, "%s\n", value);
 	    }
 	}
-	if (table && strcmp(value, table) == 0) {
+	if (table_name && strcmp(value, table_name) == 0) {
 	    ret = row;
 	    *is3D = WITHOUT_Z;
 	}
     }
+    
+    if (table_name)
+	G_free(table_name);
+    if (schema_name)
+	G_free(schema_name);
     
     PQclear(res);
     PQfinish(conn);
     G_debug(1, "PQfinish()");
     
     return ret;
-#else
-    G_fatal_error(_("GRASS not compiled with PostgreSQL/PostGIS support"));
-#endif
 }
+#endif /* HAVE_POSTGRES */
 
 #ifdef HAVE_OGR
 int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_types, int *is3D)
