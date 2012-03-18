@@ -25,7 +25,7 @@ void list_formats(FILE *fd) {
     int i;
     OGRSFDriverH Ogr_driver;
     
-    G_message(_("Supported OGR formats for reading:"));
+    G_message(_("List of supported OGR formats:"));
     for (i = 0; i < OGRGetDriverCount(); i++) {
 	Ogr_driver = OGRGetDriver(i);
 	fprintf(fd, "%s\n", OGR_Dr_GetName(Ogr_driver));
@@ -56,7 +56,7 @@ int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, i
 int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_types, int *is3D)
 {
 #ifdef HAVE_POSTGRES
-    int row, ntables, ret;
+    int row, ntables, ret, print_schema;
     char *value;
     PGconn *conn;
     PGresult *res;
@@ -72,8 +72,9 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 		      PQerrorMessage(conn));
     
     db_init_string(&sql);
-    db_set_string(&sql, "SELECT f_table_name, type "
-		  "FROM geometry_columns");
+    db_set_string(&sql, "SELECT f_table_schema, f_table_name, type "
+		  "FROM geometry_columns ORDER BY "
+		  "f_table_schema, f_table_name");
     G_debug(2, "SQL: %s", db_get_string(&sql));
     res = PQexec(conn, db_get_string(&sql));
     if (PQresultStatus(res) != PGRES_TUPLES_OK)
@@ -86,13 +87,34 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 	G_message(_("PostGIS database <%s> contains %d feature table(s):"),
 		  PQdb(conn), ntables);
 
+    /* report also schemas */
+    print_schema = FALSE;
     for (row = 0; row < ntables; row++) {
 	value = PQgetvalue(res, row, 0);
+	if (strcmp(value, "public") != 0) {
+	    print_schema = TRUE;
+	    break;
+	}
+    }
+    
+    /* report layers */
+    for (row = 0; row < ntables; row++) {
+	value = PQgetvalue(res, row, 1);
 	if (fd) {
-	    if (print_types)
-		fprintf(fd, "%s (%s)\n", value, PQgetvalue(res, row, 1));
-	    else
-		fprintf(fd, "%s\n", value);
+	    if (print_types) {
+		if (print_schema)
+		    fprintf(fd, "%s.%s (%s)\n",
+			    PQgetvalue(res, row, 0), value,
+			    PQgetvalue(res, row, 2));
+		else 
+		    fprintf(fd, "%s (%s)\n", value, PQgetvalue(res, row, 2));
+	    }
+	    else {
+		if (print_schema)
+		    fprintf(fd, "%s.%s\n", PQgetvalue(res, row, 0), value);
+		else
+		    fprintf(fd, "%s\n", value);
+	    }
 	}
 	if (table && strcmp(value, table) == 0) {
 	    ret = row;
