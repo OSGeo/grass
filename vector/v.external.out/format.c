@@ -1,10 +1,16 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+#ifdef HAVE_OGR
 #include "ogr_api.h"
+#endif
 
 void check_format(char *format)
 {
+    if(strcmp(format, "PostGIS") == 0)
+	return;
+    
+#ifdef HAVE_OGR
     OGRSFDriverH driver;
     
     G_strchg(format, '_', ' ');
@@ -17,4 +23,5 @@ void check_format(char *format)
 	return;
 
     G_fatal_error(_("Format <%s> does not support writing"), format);
+#endif
 }

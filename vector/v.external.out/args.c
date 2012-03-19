@@ -10,20 +10,31 @@ void parse_args(int argc, char **argv,
 {
     options->dsn = G_define_option();
     options->dsn->key = "dsn";
-    options->dsn->description = _("Name for output OGR datasource");
+    options->dsn->label = _("Name for output OGR/PostGIS data source");
+    options->dsn->description = _("Examples:\n"
+				  "\t\tESRI Shapefile: directory containing a shapefile\n"
+				  "\t\tMapInfo File: directory containing a mapinfo file\n"
+				  "\t\tPostGIS: connection string, eg. 'PG:dbname=db user=grass'");
+
     options->dsn->required = YES;
     options->dsn->type = TYPE_STRING;
 
     options->format = G_define_option();
     options->format->key = "format";
-    options->format->description = _("Format of output files");
+    options->format->label = _("Format for output vector data");
+    options->format->description = _("PostGIS is supported via PG ('format=PostGIS') or "
+				     "OGR (format=PostgreSQL) data driver");
     options->format->required = YES;
     options->format->type = TYPE_STRING;
     options->format->options = format_list();
  
     options->opts = G_define_option();
     options->opts->key = "options";
-    options->opts->description = _("Creation options");
+    options->opts->label = _("Creation options");
+    options->opts->description = _("Examples:\n"
+				  "\t\t'SHPT=POINTZ': use 3D point Shapefile data\n"
+				  "\t\t'GEOM_TYPE=geography': use geography PostGIS data\n"
+				  "\t\t'SCHEMA=grass': create new PostGIS tables in 'grass' schema");
     options->opts->required = NO;
     options->opts->multiple = YES;
     options->opts->type = TYPE_STRING;
@@ -36,7 +47,7 @@ void parse_args(int argc, char **argv,
 
     flags->r = G_define_flag();
     flags->r->key = 'r';
-    flags->r->description = _("Cease using OGR, revert to native output and exit");
+    flags->r->description = _("Cease using OGR/PostGIS, revert to native output and exit");
     flags->r->suppress_required = YES;
     flags->r->guisection = _("Native");
     
