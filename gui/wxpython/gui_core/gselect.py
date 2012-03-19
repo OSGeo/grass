@@ -1130,7 +1130,7 @@ class GdalSelect(wx.Panel):
                            'pro'    : -1,
                            'native' : -1 }
         idx = 0
-        if ogr and link:
+        if ogr and (link or dest):
             extraLabel = " (OGR)"
         else:
             extraLabel = ""
@@ -1154,7 +1154,7 @@ class GdalSelect(wx.Panel):
             sources.append(_("Protocol") + extraLabel)
             self.sourceMap['pro'] = idx
             idx += 1
-        if 'database' not in exclude and ogr and link:
+        if 'database' not in exclude and ogr and (link or dest):
             sources.append(_("PostGIS (PG)"))
             self.sourceMap['db-pg'] = idx
         
@@ -1518,10 +1518,16 @@ class GdalSelect(wx.Panel):
             self.creationOpt.Enable(False)
             self.parent.btnOk.Enable(True)
         else:
-            if not self.format.IsEnabled():
+            if not win.IsEnabled():
                 win.Enable(True)
-                self.format.Enable(True)
-                self.creationOpt.Enable(True)
+            if sel == self.sourceMap['db-pg']:
+                if self.format.IsEnabled():
+                    self.format.Enable(False)
+                    self.creationOpt.Enable(False)
+            else:
+                if not self.format.IsEnabled():
+                    self.format.Enable(True)
+                    self.creationOpt.Enable(True)
             self.dsnText.SetLabel(self.input[self.dsnType][0])
             self.format.SetItems(self.input[self.dsnType][2])
             if self.parent.GetName() == 'MultiImportDialog':
