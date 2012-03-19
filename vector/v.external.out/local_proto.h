@@ -18,7 +18,7 @@ void check_format(char *);
 
 /* link.c */
 void make_link(const char *,
-	       const char *, char **);
+	       const char *, const char *, char **);
 
 /* list.c */
 char *format_list(void);

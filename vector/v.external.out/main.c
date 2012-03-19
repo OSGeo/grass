@@ -15,11 +15,16 @@
  *
  **************************************************************/
 
+#include <stdlib.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#ifdef HAVE_OGR
 #include "ogr_api.h"
+#endif
+
 #include "local_proto.h"
 
 int main(int argc, char *argv[])
@@ -35,11 +40,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("export"));
     G_add_keyword(_("output"));
     G_add_keyword(_("external"));
-    module->description =
-	_("Defines vector output format utilizing OGR library.");
+    G_add_keyword(_("OGR"));
+    G_add_keyword(_("PostGIS"));
+    module->description = _("Defines vector output format.");
 
+#ifdef HAVE_OGR
     OGRRegisterAll();
-
+#endif
     parse_args(argc, argv, &options, &flags);
 
     if (flags.f->answer) {
@@ -48,7 +55,8 @@ int main(int argc, char *argv[])
     }
 
     if (flags.r->answer) {
-	G_remove("", "OGR");
+	if (G_remove("", "OGR") == 0)
+	    G_remove("", "PG");
 	exit(EXIT_SUCCESS);
     }
 
@@ -56,8 +64,8 @@ int main(int argc, char *argv[])
 	check_format(options.format->answer);
 
     if (options.dsn->answer)
-	make_link(options.dsn->answer,
-		  options.format->answer, options.opts->answers);
+	make_link(options.dsn->answer,  options.format->answer,
+		  options.opts->answer, options.opts->answers);
     
     if (flags.p->answer || flags.g->answer) {
 	print_status(flags.g->answer ? 1 : 0);

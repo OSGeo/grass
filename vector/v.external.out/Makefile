@@ -10,6 +10,6 @@ EXTRA_CFLAGS = $(VECT_CFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-ifneq ($(USE_OGR),)
+ifneq ($(filter 1,$(USE_OGR) $(USE_POSTGRES)),)
 default: cmd
 endif

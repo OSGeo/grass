@@ -1,21 +1,32 @@
+#include <string.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+#ifdef HAVE_OGR
 #include "ogr_api.h"
 
-static int cmp(const void *, const void *);
+int cmp(const void *a, const void *b) 
+{
+    return (strcmp(*(char **)a, *(char **)b));
+}
+#endif /* HAVE_OGR */
 
 char *format_list(void)
 {
     int i, count;
     size_t len;
-    OGRSFDriverH Ogr_driver;
-    char buf[2000];
     
     char **list, *ret;
 
     list = NULL;
     count = len = 0;
+    ret = NULL;
+
+#ifdef HAVE_OGR
+    char buf[2000];
+    
+    OGRSFDriverH Ogr_driver;
     
     /* Open OGR DSN */
     OGRRegisterAll();
@@ -39,7 +50,12 @@ char *format_list(void)
     }
 
     qsort(list, count, sizeof(char *), cmp);
-
+#endif
+#ifdef HAVE_POSTGRES
+    list = G_realloc(list, (count + 1) * sizeof(char *));
+    list[count++] = G_store("PostGIS");
+    len += strlen("PostGIS") + 1;
+#endif 
     if (len > 0) {
 	ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
 	*ret = '\0';
@@ -56,12 +72,15 @@ char *format_list(void)
     }
     
     G_debug(2, "all drivers: %s", ret);
-
+    
     return ret;
 }
 
 void list_formats(void)
 {
+    G_message(_("List of supported formats:"));
+
+#ifdef HAVE_OGR
     /* -------------------------------------------------------------------- */
     /*      List supported formats and exit.                                */
     /*         code from GDAL 1.2.5  gcore/gdal_misc.cpp                    */
@@ -70,19 +89,18 @@ void list_formats(void)
     int iDr;
     OGRSFDriverH driver;
 
-    G_message(_("Supported Formats:"));
+
     for (iDr = 0; iDr < OGRGetDriverCount(); iDr++) {
 	driver = OGRGetDriver(iDr);
 
 	if (!OGR_Dr_TestCapability(driver, ODrCCreateDataSource))
 	    continue;
 
-	fprintf(stdout, " %s\n", OGR_Dr_GetName(driver));
+	fprintf(stdout, "%s\n", OGR_Dr_GetName(driver));
     }
+#endif
+#ifdef HAVE_POSTGRES
+    fprintf(stdout, "PostGIS\n");
+#endif
     fflush(stdout);
-}
-
-int cmp(const void *a, const void *b) 
-{
-    return (strcmp(*(char **)a, *(char **)b));
 }
