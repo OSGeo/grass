@@ -312,7 +312,7 @@ char *binary_to_hex(int nbytes, const unsigned char *wkb_data)
 
   See OGRPoint::exportToWkb from GDAL/OGR library
 
-  \param byte_order byte order (LITTLE_ENDIAN or BIG_ENDIAN)
+  \param byte_order byte order (ENDIAN_LITTLE or BIG_ENDIAN)
   \param points feature geometry
   \param with_z WITH_Z for 3D data
   \param[out] nsize buffer size
@@ -338,7 +338,7 @@ unsigned char *point_to_wkb(int byte_order,
     G_debug(5, "\t->point size=%d (with_z = %d)", *nsize, with_z);
     
     /* set the byte order */
-    if (byte_order == LITTLE_ENDIAN)
+    if (byte_order == ENDIAN_LITTLE)
 	wkb_data[0] = '\001';
     else
 	wkb_data[0] = '\000';
@@ -346,7 +346,7 @@ unsigned char *point_to_wkb(int byte_order,
     /* set the geometry feature type */
     sf_type = with_z ? SF_POINT25D : SF_POINT;
     
-    if (byte_order == LITTLE_ENDIAN)
+    if (byte_order == ENDIAN_LITTLE)
 	sf_type = LSBWORD32(sf_type);
     else
         sf_type = MSBWORD32(sf_type);
@@ -377,7 +377,7 @@ unsigned char *point_to_wkb(int byte_order,
 
   See OGRLineString::exportToWkb from GDAL/OGR library
 
-  \param byte_order byte order (LITTLE_ENDIAN or BIG_ENDIAN)
+  \param byte_order byte order (ENDIAN_LITTLE or ENDIAN_BIG)
   \param points feature geometry
   \param with_z WITH_Z for 3D data
   \param[out] nsize buffer size
@@ -405,7 +405,7 @@ unsigned char *linestring_to_wkb(int byte_order,
     G_debug(5, "\t->linestring size=%d (with_z = %d)", *nsize, with_z);
 
     /* set the byte order */
-    if (byte_order == LITTLE_ENDIAN)
+    if (byte_order == ENDIAN_LITTLE)
 	wkb_data[0] = '\001';
     else
 	wkb_data[0] = '\000';
@@ -413,7 +413,7 @@ unsigned char *linestring_to_wkb(int byte_order,
     /* set the geometry feature type */
     sf_type = with_z ? SF_LINESTRING25D : SF_LINESTRING;
     
-    if (byte_order == LITTLE_ENDIAN)
+    if (byte_order == ENDIAN_LITTLE)
 	sf_type = LSBWORD32(sf_type);
     else
         sf_type = MSBWORD32(sf_type);
@@ -454,7 +454,7 @@ unsigned char *linestring_to_wkb(int byte_order,
 
   See OGRPolygon::exportToWkb from GDAL/OGR library
 
-  \param byte_order byte order (LITTLE_ENDIAN or BIG_ENDIAN)
+  \param byte_order byte order (ENDIAN_LITTLE or ENDIAN_BIG)
   \param points feature geometry
   \param with_z WITH_Z for 3D data
   \param[out] nsize buffer size
@@ -484,7 +484,7 @@ unsigned char *polygon_to_wkb(int byte_order,
     G_debug(5, "\t->polygon size=%d (with_z = %d)", *nsize, with_z);
     
     /* set the byte order */
-    if (byte_order == LITTLE_ENDIAN)
+    if (byte_order == ENDIAN_LITTLE)
 	wkb_data[0] = '\001';
     else
 	wkb_data[0] = '\000';
@@ -492,7 +492,7 @@ unsigned char *polygon_to_wkb(int byte_order,
     /* set the geometry feature type */
     sf_type = with_z ? SF_POLYGON25D : SF_POLYGON;
     
-    if (byte_order == LITTLE_ENDIAN)
+    if (byte_order == ENDIAN_LITTLE)
 	sf_type = LSBWORD32(sf_type);
     else
         sf_type = MSBWORD32(sf_type);
@@ -567,7 +567,7 @@ int write_feature(const struct Format_info_pg *pg_info,
 	return -1;
     }
     
-    byte_order = LITTLE_ENDIAN; /* ? */
+    byte_order = ENDIAN_LITTLE; /* TODO: get endianness for system from dig__byte_order_out()? */
     
     /* get wkb data */
     nbytes = -1;
