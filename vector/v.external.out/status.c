@@ -4,7 +4,8 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int print_status_file(const char *, int shell);
+static int print_status_file(const char *, int);
+static void print_key_value(const char *, const char *, int);
 
 void print_status(int shell)
 {
@@ -19,6 +20,17 @@ void print_status(int shell)
 	fprintf(stdout, "format=%s\n", "native");
     else
 	fprintf(stdout, _("format: native\n"));
+}
+
+void print_key_value(const char *key, const char *value, int shell)
+{
+    if (!value)
+	return;
+    
+    if (shell)
+	fprintf(stdout, "%s=%s\n", key, value);
+    else 
+	fprintf(stdout, "%s: %s\n", key, value);
 }
 
 int print_status_file(const char *file, int shell)
@@ -36,43 +48,40 @@ int print_status_file(const char *file, int shell)
     fclose(fp);
 
     if (strcmp(file, "OGR") == 0) {
+	/* dsn (required) */
 	p = G_find_key_value("dsn", key_val);
 	if (!p)
 	    G_fatal_error(_("OGR datasource (dsn) not defined"));
-	if (shell)
-	    fprintf(stdout, "dsn=%s\n", p);
-	else 
-	    fprintf(stdout, "dsn: %s\n", p);
+	print_key_value("dsn", p, shell);
     
+	/* format (required) */
 	p = G_find_key_value("format", key_val);
 	if (!p)
 	    G_fatal_error(_("OGR format not defined"));
-	if (shell)
-	    fprintf(stdout, "format=%s\n", p);
-	else
-	    fprintf(stdout, "format: %s\n", p);
+	print_key_value("format", p, shell);
 	
+	/* options */
 	p = G_find_key_value("options", key_val);
-	if (shell)
-	    fprintf(stdout, "options=%s\n", p ? p : "");
-	else
-	    fprintf(stdout, _("options: %s\n"), p ? p : _("<none>"));
+	print_key_value("options", p, shell);
     }
     else { /* PG */
+	/* conninfo (required) */
 	p = G_find_key_value("conninfo", key_val);
 	if (!p)
 	    G_fatal_error(_("PG connection info (conninfo) not defined"));
-	if (shell)
-	    fprintf(stdout, "conninfo=%s\n", p);
-	else 
-	    fprintf(stdout, "conninfo: %s\n", p);
+	print_key_value("conninfo", p, shell);
+
+	/* schema */
 	p = G_find_key_value("schema", key_val);
-	if (p) {
-	    if (shell)
-		fprintf(stdout, "schema=%s\n", p);
-	    else 
-		fprintf(stdout, "schema: %s\n", p);
-	}
+	print_key_value("schema", p, shell);
+
+	/* fid */
+	p = G_find_key_value("fid", key_val);
+	print_key_value("fid", p, shell);
+
+	/* geometry_name */
+	p = G_find_key_value("geometry_name", key_val);
+	print_key_value("geometry_name", p, shell);
     }
 
     G_free_key_value(key_val);
