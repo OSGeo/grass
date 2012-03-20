@@ -16,8 +16,7 @@ void parse_args(int argc, char **argv,
     options->dsn->description = _("Examples:\n"
 				  "\t\tESRI Shapefile: directory containing a shapefile\n"
 				  "\t\tMapInfo File: directory containing a mapinfo file\n"
-				  "\t\tPostGIS database accessed by OGR: PG:dbname=<database> user=grass\n"
-				  "\t\tPostGIS database accessed directly: dbname=<database> user=grass");
+				  "\t\tPostGIS database: connection string, eg. 'PG:dbname=db user=grass'");
     options->dsn->required = YES;
 
     options->layer = G_define_option();

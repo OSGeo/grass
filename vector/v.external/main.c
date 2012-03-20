@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
 	dsn = (char *) G_malloc(length - 3);
 	for (i = 3; i < length; i++)
 	    dsn[i-3] = options.dsn->answer[i];
+	dsn[length-3] = '\0';
     }
     else {
 	dsn = G_store(options.dsn->answer);
