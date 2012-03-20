@@ -4,12 +4,14 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+static char *get_option_pg(char **, const char *);
+
 void make_link(const char *dsn,
 	       const char *format,
 	       char *option_str, char **options)
 {
-    int i, use_ogr;
-    char *filename, *pg_schema;
+    int use_ogr;
+    char *filename, *pg_schema, *pg_fid, *pg_geom_name;
     FILE *fp;
     
     struct Key_Value *key_val;
@@ -28,31 +30,12 @@ void make_link(const char *dsn,
 	G_remove("", "PG");
     }
     
-    /* parse options */
-    pg_schema = NULL;
+    /* parse options for PG data format */
     if (options && *options && !use_ogr) {
-	int   opt_len;
-	char *opt_schema;
-	
-	opt_schema = NULL;
-	for (i = 0; options[i]; i++) {
-	    if (G_strncasecmp("schema=", options[i], 6) == 0)
-		opt_schema = options[i];
-	    else
-		G_warning(_("Option '%s' ignored for 'PostGIS' format"),
-			  options[i]);
-	}
-	
-	if (opt_schema) {
-	    opt_len = strlen(opt_schema);
-	    pg_schema = G_malloc(opt_len - 6);
-	    for (i = 7; i < opt_len; i++) {
-		pg_schema[i - 7] = opt_schema[i];
-	    }
-	    pg_schema[opt_len - 7] = '\0';
-	}
+	pg_schema    = get_option_pg(options, "schema");
+	pg_fid       = get_option_pg(options, "fid");
+	pg_geom_name = get_option_pg(options, "geometry_name");
     }
-    
     /* add key/value items */
     if (dsn) {
 	if (use_ogr)
@@ -67,8 +50,14 @@ void make_link(const char *dsn,
     if (use_ogr && option_str)
 	G_set_key_value("options", option_str, key_val);
     
-    if (!use_ogr && pg_schema)
-	G_set_key_value("schema", pg_schema, key_val);
+    if (!use_ogr) {
+	if (pg_schema)
+	    G_set_key_value("schema", pg_schema, key_val);
+	if (pg_fid)
+	    G_set_key_value("fid", pg_fid, key_val);
+	if (pg_geom_name)
+	    G_set_key_value("geometry_name", pg_geom_name, key_val);
+    }
     
     /* save file - OGR or PG */
     fp = G_fopen_new("", filename);
@@ -79,4 +68,31 @@ void make_link(const char *dsn,
 	G_fatal_error(_("Error writing %s file"), filename);
 
     fclose(fp);
+}
+
+char *get_option_pg(char **options, const char *key)
+{
+    int   i, opt_len, key_len;
+    char *opt, *value;
+    
+    key_len = strlen(key);
+    /* parse options for PG data provider*/
+    opt = value = NULL;
+    for (i = 0; options[i] && !opt; i++) {
+	if (G_strncasecmp(key, options[i], key_len) == 0)
+	    opt = options[i];
+    }
+	
+    if (!opt)
+	return NULL;
+    
+    opt_len = strlen(opt);
+    value = G_malloc(opt_len - key_len);
+    key_len++;
+    for (i = key_len; i < opt_len; i++) {
+	value[i - key_len] = opt[i];
+    }
+    value[opt_len - key_len] = '\0';
+
+    return value;
 }
