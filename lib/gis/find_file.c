@@ -18,10 +18,9 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static const char *find_file(
-    int misc,
-    const char *dir,
-    const char *element, const char *name, const char *mapset)
+static const char *find_file(int misc, const char *dir,
+			     const char *element, const char *name,
+			     const char *mapset)
 {
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
