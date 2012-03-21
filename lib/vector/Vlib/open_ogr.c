@@ -54,7 +54,6 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     
     OGRDataSourceH Ogr_ds;
     OGRLayerH Ogr_layer;
-    OGRFeatureDefnH Ogr_featuredefn;
     OGRwkbGeometryType Ogr_geom_type;
     
     Ogr_layer = NULL;
@@ -90,9 +89,8 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
 
     for (i = 0; i < nLayers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
-	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), ogr_info->layer_name) == 0) {
-	    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
+	if (strcmp(OGR_L_GetName(Ogr_layer), ogr_info->layer_name) == 0) {
+	    Ogr_geom_type = OGR_L_GetGeomType(Ogr_layer);
 	    layer = i;
 	    break;
 	}
@@ -180,7 +178,6 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     OGRSFDriverH    Ogr_driver;
     OGRDataSourceH  Ogr_ds;
     OGRLayerH       Ogr_layer;
-    OGRFeatureDefnH Ogr_featuredefn;
     
     OGRRegisterAll();
     
@@ -206,8 +203,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     nlayers = OGR_DS_GetLayerCount(Ogr_ds);
     for (i = 0; i < nlayers; i++) {
       	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
-	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), name) == 0) {	
+	if (strcmp(OGR_L_GetName(Ogr_layer), name) == 0) {	
 	    if (G_get_overwrite()) {
 		G_warning(_("OGR layer <%s> already exists and will be overwritten"),
 			  ogr_info->layer_name);
@@ -277,6 +273,7 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
     G_free_key_value(projinfo);
     G_free_key_value(projunits);
     
+    /* determine geometry type */
     switch(type) {
     case GV_POINT:
 	Ogr_geom_type = wkbPoint;
@@ -292,6 +289,7 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
 	return -1;
     }
     
+    /* check creation options */
     Ogr_layer_options = ogr_info->layer_options;
     if (Vect_is_3d(Map)) {
 	if (strcmp(ogr_info->driver_name, "PostgreSQL") == 0) {
@@ -303,6 +301,8 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
 	    Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "2");
 	}
     }
+
+    /* create new OGR layer */
     Ogr_layer = OGR_DS_CreateLayer(ogr_info->ds, ogr_info->layer_name,
 				   Ogr_spatial_ref, Ogr_geom_type, Ogr_layer_options);
     CSLDestroy(Ogr_layer_options);
@@ -325,8 +325,8 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
 	    G_free(Fi);
 	}
 	else
-	G_warning(_("Database connection not defined. "
-		    "Unable to write attributes."));
+	  G_warning(_("Database connection not defined. "
+		      "Unable to write attributes."));
     }
     
     if (OGR_L_TestCapability(ogr_info->layer, OLCTransactions))
