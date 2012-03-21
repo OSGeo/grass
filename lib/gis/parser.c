@@ -1311,7 +1311,9 @@ static int check_overwrite(void)
 
 	    if (strcmp(age, "new") == 0) {
 		int i;
-		char found = FALSE;
+		char found;
+		
+		found = FALSE;
 		for (i = 0; opt->answers[i]; i++) {
 		    if (strcmp(element, "file") == 0) {
 			if (access(opt->answers[i], F_OK) == 0) {
@@ -1324,7 +1326,8 @@ static int check_overwrite(void)
 		    }
 		    
 		    if (found && strcmp(element, "vector") == 0 &&
-			G_find_file("", "OGR", G_mapset()))
+			(G_find_file("", "OGR", G_mapset()) ||
+			 G_find_file("", "PG", G_mapset())))
 			found = FALSE;
 		    
 		    if (found) {	/* found */
