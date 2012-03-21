@@ -57,7 +57,9 @@ class GMApp(wx.App):
         introImagePath = os.path.join(globalvar.ETCIMGDIR, "silesia_splash.png")
         introImage     = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
         introBmp       = introImage.ConvertToBitmap()
-        if SC:
+        if SC and sys.platform != 'darwin':
+            # AdvancedSplash is buggy on the Mac as of 2.8.12.1 
+            # and raises annoying (though seemingly harmless) errors everytime the GUI is started
             splash = SC.AdvancedSplash(bitmap = introBmp, 
                                        timeout = 2000, parent = None, id = wx.ID_ANY)
             splash.SetText(_('Starting GRASS GUI...'))
