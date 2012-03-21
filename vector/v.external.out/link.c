@@ -5,6 +5,7 @@
 #include <grass/glocale.h>
 
 static char *get_option_pg(char **, const char *);
+static void check_option_on_off(const char *, char **);
 
 void make_link(const char *dsn,
 	       const char *format,
@@ -12,6 +13,7 @@ void make_link(const char *dsn,
 {
     int use_ogr;
     char *filename, *pg_schema, *pg_fid, *pg_geom_name;
+    char *pg_spatial_index, *pg_primary_key;
     FILE *fp;
     
     struct Key_Value *key_val;
@@ -32,10 +34,19 @@ void make_link(const char *dsn,
     
     /* parse options for PG data format */
     pg_schema = pg_fid = pg_geom_name = NULL;
+    pg_spatial_index = pg_primary_key = NULL;
     if (options && *options && !use_ogr) {
 	pg_schema    = get_option_pg(options, "schema");
 	pg_fid       = get_option_pg(options, "fid");
 	pg_geom_name = get_option_pg(options, "geometry_name");
+	pg_spatial_index = get_option_pg(options, "spatial_index");
+	if (pg_spatial_index) {
+	    check_option_on_off("spatial_index", &pg_spatial_index);
+	}
+	pg_primary_key = get_option_pg(options, "primary_key");
+	if (pg_primary_key) {
+	    check_option_on_off("primary_key", &pg_primary_key);
+	}
     }
     /* add key/value items */
     if (dsn) {
@@ -58,6 +69,10 @@ void make_link(const char *dsn,
 	    G_set_key_value("fid", pg_fid, key_val);
 	if (pg_geom_name)
 	    G_set_key_value("geometry_name", pg_geom_name, key_val);
+	if (pg_spatial_index)
+	    G_set_key_value("spatial_index", pg_spatial_index, key_val);
+	if (pg_primary_key)
+	    G_set_key_value("primary_key", pg_primary_key, key_val);
     }
     
     /* save file - OGR or PG */
@@ -96,4 +111,15 @@ char *get_option_pg(char **options, const char *key)
     value[opt_len - key_len] = '\0';
 
     return value;
+}
+
+void check_option_on_off(const char *key, char **value)
+{
+    if(G_strcasecmp(*value, "on") != 0 &&
+       G_strcasecmp(*value, "off") != 0) {
+	G_warning(_("Invalid option '%s=%s' ignored (allowed values: '%s', '%s')"),
+		  key, *value, "ON", "OFF");
+	G_free(*value);
+	*value = NULL;
+    }
 }
