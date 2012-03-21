@@ -84,10 +84,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Required parameter <%s> not set"), params.in->key);
     
     if (action_mode == MODE_CREATE) {
-	int overwrite;
-
+	int overwrite, map_type;
+	
 	overwrite = G_check_overwrite(argc, argv);
-	if (G_find_vector2(params.map->answer, G_mapset())) {
+	if (G_find_vector2(params.map->answer, G_mapset()) &&
+	    (!G_find_file("", "OGR", G_mapset()) &&
+	     !G_find_file("", "PG", G_mapset()))) {
 	    if (!overwrite)
 		G_fatal_error(_("Vector map <%s> already exists"),
 			      params.map->answer);
@@ -95,20 +97,26 @@ int main(int argc, char *argv[])
 
 	/* 3D vector maps? */
 	ret = Vect_open_new(&Map, params.map->answer, WITHOUT_Z);
-	if (Vect_maptype(&Map) == GV_FORMAT_OGR_DIRECT) {
+	if (ret == -1) {
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+			  params.map->answer);
+	}
+	
+	/* native or external data source ? */
+	map_type = Vect_maptype(&Map);
+	if (map_type != GV_FORMAT_NATIVE) {
 	    int type;
 	    type = Vect_option_to_types(params.type);
 	    if (type != GV_POINT && type != GV_LINE &&
 		type != GV_BOUNDARY)
 		G_fatal_error(_("Supported feature type for OGR layer: "
 				"%s, %s or %s"), "point", "line", "boundary");
-	    V2_open_new_ogr(&Map, type);
+	    if (map_type == GV_FORMAT_POSTGIS)
+		V2_open_new_pg(&Map, type);
+	    else
+		V2_open_new_ogr(&Map, type);
 	}
-	if (ret == -1) {
-	    G_fatal_error(_("Unable to create vector map <%s>"),
-			  params.map->answer);
-	}
-
+	
 	G_debug(1, "Map created");
 
 	if (ascii) {
