@@ -3371,7 +3371,6 @@
 	  <keywords>general,manual,help</keywords>
 	  <handler>RunMenuCmd</handler>
 	  <command>g.manual entry=wxGUI</command>
-	  <id>ID_HELP</id>
 	</menuitem>
 	<separator />
 	<menuitem>

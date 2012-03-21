@@ -1523,7 +1523,6 @@ class GdalSelect(wx.Panel):
             if sel == self.sourceMap['db-pg']:
                 if self.format.IsEnabled():
                     self.format.Enable(False)
-                    self.creationOpt.Enable(False)
             else:
                 if not self.format.IsEnabled():
                     self.format.Enable(True)
