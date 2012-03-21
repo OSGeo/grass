@@ -387,7 +387,7 @@ char *get_key_column(struct Format_info_pg *pg_info)
 	    "AND kcu.constraint_name = tc.constraint_name "
 	    "WHERE t.table_schema = '%s' AND t.table_name = '%s'",
 	    pg_info->schema_name, pg_info->table_name);
-    G_debug(0, "SQL: %s", stmt);
+    G_debug(2, "SQL: %s", stmt);
     
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
