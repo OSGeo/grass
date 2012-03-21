@@ -26,6 +26,7 @@
 static char *get_key_column(struct Format_info_pg *);
 static SF_FeatureType ftype_from_string(const char *);
 static int drop_table(struct Format_info_pg *);
+static int check_schema(const struct Format_info_pg*);
 static int create_table(struct Format_info_pg *, const struct field_info *);
 #endif
 
@@ -444,6 +445,45 @@ int drop_table(struct Format_info_pg *pg_info)
     return 0;
 }
 
+int check_schema(const struct Format_info_pg *pg_info)
+{
+    int i, found, nschema;
+    char stmt[DB_SQL_MAX];
+    
+    PGresult *result;
+    
+    /* add geometry column */
+    sprintf(stmt, "SELECT nspname FROM pg_namespace");
+    G_debug(2, "SQL: %s", stmt);
+    result = PQexec(pg_info->conn, stmt);
+    
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+	PQclear(result);
+	execute(pg_info->conn, "ROLLBACK");
+	return -1;
+    }
+    
+    found = FALSE;
+    nschema = PQntuples(result);
+    for (i = 0; i < nschema && !found; i++) {
+	if (strcmp(pg_info->schema_name, PQgetvalue(result, i, 0)) == 0)
+	    found = TRUE;
+    }
+    
+    PQclear(result);
+    
+    if (!found) {
+	sprintf(stmt, "CREATE SCHEMA %s", pg_info->schema_name);
+	if (execute(pg_info->conn, stmt) == -1) {
+	    execute(pg_info->conn, "ROLLBACK");
+	    return -1;
+	}
+	G_warning(_("Schema <%s> doesn't exist, created"), pg_info->schema_name);
+    }
+    
+    return 0;
+}
+
 int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 {
     int spatial_index, primary_key;
@@ -476,6 +516,12 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 	    primary_key = FALSE;
     }
 
+    /* create schema if not exists */
+    if (G_strcasecmp(pg_info->schema_name, "public") != 0) {
+	if (check_schema(pg_info) != 0)
+	    return -1;
+    }
+    
     /* prepare CREATE TABLE statement */
     sprintf(stmt, "CREATE TABLE \"%s\".\"%s\" (%s SERIAL",
 	    pg_info->schema_name, pg_info->table_name,
@@ -619,8 +665,9 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     
     /* create index ? */
     if (spatial_index) {
-	sprintf(stmt, "CREATE INDEX %s_%s_idx ON %s USING GIST (%s)",
-		pg_info->table_name, pg_info->geom_column, pg_info->table_name,
+	sprintf(stmt, "CREATE INDEX %s_%s_idx ON \"%s\".\"%s\" USING GIST (%s)",
+		pg_info->table_name, pg_info->geom_column,
+		pg_info->schema_name, pg_info->table_name,
 		pg_info->geom_column);
 	G_debug(2, "SQL: %s", stmt);
 	
