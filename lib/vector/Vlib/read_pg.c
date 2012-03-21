@@ -219,8 +219,7 @@ int V1_read_line_pg(struct Map_info *Map,
 #ifdef HAVE_POSTGRES
     long fid;
     int  ipart, type;
-    static SF_FeatureType sf_type;
-    
+        
     struct Format_info_pg     *pg_info;
     
     pg_info = &(Map->fInfo.pg);
@@ -241,25 +240,30 @@ int V1_read_line_pg(struct Map_info *Map,
     
     /* read feature to cache if necessary */
     if (pg_info->cache.fid != fid) {
-	G_debug(4, "read feature (fid = %ld) to cache", fid);
-	sf_type = get_feature(pg_info, fid);
+	int type;
 	
-	if (sf_type == SF_NONE) {
+	G_debug(3, "read (%s) feature (fid = %ld) to cache",
+		pg_info->table_name, fid);
+	get_feature(pg_info, fid);
+	
+	if (pg_info->cache.sf_type == SF_NONE) {
 	    G_warning(_("Feature %d without geometry skipped"), fid);
 	    return -1;
 	}
-
-	if ((int) sf_type < 0) /* -1 || - 2 */
-	    return (int) sf_type;
+	
+	type = (int) pg_info->cache.sf_type;
+	if (type < 0) /* -1 || - 2 */
+	    return type;
     }
     
     /* get data from cache */
-    if (sf_type == SF_POINT || sf_type == SF_LINESTRING)
+    if (pg_info->cache.sf_type == SF_POINT ||
+	pg_info->cache.sf_type == SF_LINESTRING)
 	ipart = 0;
     else 
 	ipart = pg_info->offset.array[offset + 1];
     type  = pg_info->cache.lines_types[ipart];
-    G_debug(4, "read feature part: %d -> type = %d",
+    G_debug(3, "read feature part: %d -> type = %d",
 	    ipart, type);    
 	
     if (line_p)
@@ -394,7 +398,6 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
 {
     char *data;
     char stmt[DB_SQL_MAX];
-    SF_FeatureType ftype;
 
     if (!pg_info->geom_column) {
 	G_warning(_("No geometry column defined"));
@@ -468,7 +471,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
     }
     data = (char *)PQgetvalue(pg_info->res, pg_info->next_line, 0);
     
-    ftype = cache_feature(data, FALSE, &(pg_info->cache), NULL);
+    pg_info->cache.sf_type = cache_feature(data, FALSE, &(pg_info->cache), NULL);
     if (fid < 0) {
 	pg_info->cache.fid = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
 	pg_info->next_line++;
@@ -490,7 +493,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
 	    return -1;
     }
     
-    return ftype;
+    return pg_info->cache.sf_type;
 }
 
 /*!
@@ -567,7 +570,7 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     unsigned char *wkb_data;
     unsigned int wkb_flags;
     SF_FeatureType ftype;
-
+    
     /* reset cache */
     cache->lines_num = 0;
     cache->fid       = -1;

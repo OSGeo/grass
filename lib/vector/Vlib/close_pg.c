@@ -63,6 +63,11 @@ int V1_close_pg(struct Map_info *Map)
     
     PQfinish(pg_info->conn);
     
+    /* close DB connection (for atgtributes) */
+    if (pg_info->dbdriver) {
+	db_close_database_shutdown_driver(pg_info->dbdriver);
+    }
+    
     /* free allocated space */
     for (i = 0; i < pg_info->cache.lines_alloc; i++) {
 	Vect_destroy_line_struct(pg_info->cache.lines[i]);

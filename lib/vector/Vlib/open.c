@@ -839,8 +839,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 
     Map->open = VECT_OPEN_CODE;
     Map->level = 1;
-    Map->head_only = 0;
-    Map->support_updated = 0;
+    Map->head_only = FALSE;
+    Map->support_updated = FALSE;
     Map->plus.built = GV_BUILD_NONE;
     Map->mode = GV_MODE_RW;
     Map->plus.uplist.do_uplist = FALSE;

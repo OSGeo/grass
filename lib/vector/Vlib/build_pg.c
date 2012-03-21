@@ -23,7 +23,7 @@
 #include <grass/glocale.h>
 
 #ifdef HAVE_POSTGRES
-#include <libpq-fe.h>
+#include "pg_local_proto.h"
 
 static int build_topo(struct Map_info *, int);
 #endif
@@ -78,6 +78,13 @@ int Vect_build_pg(struct Map_info *Map, int build)
 		    "Unable to build topology."));
 	return 0;
     }
+
+    /* commit transaction block (update mode only) */
+    if (pg_info->inTransaction &&
+	execute(pg_info->conn, "COMMIT") == -1)
+	return -1;
+    
+    pg_info->inTransaction = FALSE;
     
     if (build > GV_BUILD_NONE)
 	G_message(_("Using external data format '%s' (feature type '%s')"),

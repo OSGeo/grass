@@ -111,18 +111,17 @@ int V1_open_old_pg(struct Map_info *Map, int update)
 	/* feature type */
 	pg_info->feature_type = ftype_from_string(PQgetvalue(res, 0, 3));
     }
+    PQclear(res);
     
     /* no feature in cache */
     pg_info->cache.fid = -1;
-    
-    PQclear(res);
-    
+
     if (!found) {
 	G_warning(_("Feature table <%s> not found in 'geometry_columns'"),
 		  pg_info->table_name);
 	return -1;
     }
-    
+
     return 0;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -467,25 +466,107 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 	key_val = G_fread_key_value(fp);
 	fclose(fp);
 	
-	/* spatial index */
+	/* disable spatial index ? */
 	p = G_find_key_value("spatial_index", key_val);
 	if (p && G_strcasecmp(p, "off") == 0)
 	    spatial_index = FALSE;
-	/* primary key */
+	/* disable primary key ? */
 	p = G_find_key_value("primary_key", key_val);
 	if (p && G_strcasecmp(p, "off") == 0)
 	    primary_key = FALSE;
     }
 
-    /* begin transaction */
+    /* prepare CREATE TABLE statement */
+    sprintf(stmt, "CREATE TABLE \"%s\".\"%s\" (%s SERIAL",
+	    pg_info->schema_name, pg_info->table_name,
+	    pg_info->fid_column);
+    
+    if (Fi) {
+	/* append attributes */
+	int col, ncols, sqltype, length, ctype;
+	char stmt_col[DB_SQL_MAX];
+	const char *colname;
+	
+	dbString dbstmt;
+	dbHandle  handle;
+	dbDriver *driver;
+	dbCursor  cursor;
+	dbTable  *table;
+	dbColumn *column;
+	  
+	db_init_string(&dbstmt);
+	db_init_handle(&handle);
+	
+	pg_info->dbdriver = driver = db_start_driver(Fi->driver);
+	if (!driver) {
+	    G_warning(_("Unable to start driver <%s>"), Fi->driver);
+	    return -1;
+	}
+	db_set_handle(&handle, Fi->database, NULL);
+	if (db_open_database(driver, &handle) != DB_OK) {
+	    G_warning(_("Unable to open database <%s> by driver <%s>"),
+		      Fi->database, Fi->driver);
+	    db_close_database_shutdown_driver(driver);
+	    pg_info->dbdriver = NULL;
+	    return -1;
+	}
+
+	/* describe table */
+	db_set_string(&dbstmt, "select * from ");
+	db_append_string(&dbstmt, Fi->table);
+	db_append_string(&dbstmt, " where 0 = 1");	
+	
+	if (db_open_select_cursor(driver, &dbstmt,
+				  &cursor, DB_SEQUENTIAL) != DB_OK) {
+	    G_warning(_("Unable to open select cursor: '%s'"),
+		      db_get_string(&dbstmt));
+	    db_close_database_shutdown_driver(driver);
+	    pg_info->dbdriver = NULL;
+	    return -1;
+	}
+	
+	table = db_get_cursor_table(&cursor);
+	ncols = db_get_table_number_of_columns(table);
+	
+	G_debug(3, "copying attributes: driver = %s database = %s table = %s cols = %d",
+		Fi->driver, Fi->database, Fi->table, ncols);
+		
+	for (col = 0; col < ncols; col++) {
+	    column = db_get_table_column(table, col);
+	    colname = db_get_column_name(column);	
+	    sqltype = db_get_column_sqltype(column);
+	    ctype = db_sqltype_to_Ctype(sqltype);
+	    length = db_get_column_length(column);
+	    
+	    G_debug(3, "\tcolumn = %d name = %s type = %d length = %d",
+		    col, colname, sqltype, length);
+	    
+	    if (strcmp(pg_info->fid_column, colname) == 0) {
+		/* skip fid column if exists */
+		G_debug(3, "\t%s skipped", pg_info->fid_column);
+		continue;
+	    }
+	    
+	    /* append column */
+	    sprintf(stmt_col, ",%s %s", colname, db_sqltype_name(sqltype));
+	    strcat(stmt, stmt_col);
+	    if (ctype == DB_C_TYPE_STRING) {
+		/* length only for string columns */
+		sprintf(stmt_col, "(%d)", length);
+		strcat(stmt, stmt_col);
+	    }
+	}
+
+	db_free_string(&dbstmt);
+    }
+    strcat(stmt, ")"); /* close CREATE TABLE statement */
+    
+    /* begin transaction (create table) */
     if (execute(pg_info->conn, "BEGIN") == -1) {
 	return -1;
     }
     
     /* create table */
-    sprintf(stmt, "CREATE TABLE \"%s\".\"%s\" (%s SERIAL)",
-	    pg_info->schema_name, pg_info->table_name,
-	    pg_info->fid_column);
     G_debug(2, "SQL: %s", stmt);
     if (execute(pg_info->conn, stmt) == -1) {
 	execute(pg_info->conn, "ROLLBACK");
@@ -549,7 +630,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 	}
     }
     
-    /* close transaction */
+    /* close transaction (create table) */
     if (execute(pg_info->conn, "COMMIT") == -1) {
 	return -1;
     }
