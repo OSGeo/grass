@@ -74,7 +74,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
     if (!pg_info->fid_column) {
 	G_warning(_("Feature table <%s> has no primary key defined"),
 		  pg_info->table_name);
-	G_warning(_("Random read is not supported by OGR for this layer. "
+	G_warning(_("Random read is not supported for this layer. "
 		    "Unable to build topology."));
 	return 0;
     }

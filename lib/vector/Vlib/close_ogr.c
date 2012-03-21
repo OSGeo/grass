@@ -68,6 +68,8 @@ int V1_close_ogr(struct Map_info *Map)
     G_free(ogr_info->driver_name);
     G_free(ogr_info->dsn);
     G_free(ogr_info->layer_name);
+    if (ogr_info->layer_options)
+	G_free_tokens(ogr_info->layer_options);
 
     return 0;
 #else

@@ -76,12 +76,21 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
     pg_info = &(Map->fInfo.pg);
     offset_info = &(pg_info->offset);
     
-    if (!pg_info->conn || !pg_info->table_name) {
+    if (!pg_info->conn) {
 	G_warning(_("No connection defined"));
 	return -1;
     }
-    
-    /* create PostGIS layer if doesn't exist ? */
+
+    if (!pg_info->table_name) {
+	G_warning(_("PostGIS feature table not defined"));
+	return -1;
+    }
+
+    if (pg_info->feature_type == SF_UNKNOWN) {
+	/* create PostGIS table if doesn't exist */
+	if (V2_open_new_pg(Map, type) < 0)
+	    return -1;
+    }
     
     cat = -1; /* no attributes to be written */
     if (cats->n_cats > 0 && Vect_get_num_dblinks(Map) > 0) {
@@ -633,9 +642,10 @@ int write_feature(const struct Format_info_pg *pg_info,
 
     /* build INSERT statement */
     stmt = NULL;
-    G_asprintf(&stmt, "INSERT INTO %s (%s, %s) VALUES (%d, '%s'::GEOMETRY)",
-	       pg_info->table_name, pg_info->fid_column, pg_info->geom_column,
-	       fid, text_data);
+    G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES "
+	       "('%s'::GEOMETRY)",
+	       pg_info->schema_name, pg_info->table_name, 
+	       pg_info->geom_column, text_data);
     G_debug(2, "SQL: %s", stmt);
     
     if (execute(pg_info->conn, stmt) == -1) {

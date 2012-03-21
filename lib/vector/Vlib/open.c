@@ -693,29 +693,97 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     }
 
     /* determine output format native or ogr */
-    if (strcmp(G_program_name(), "v.external") != 0 &&
-	G_find_file2("", "OGR", G_mapset())) {
-	/* OGR */
-	FILE *fp;
-	struct Key_Value *key_val;
-	const char *p;
-
-	G_debug(2, " using OGR format");
-	Map->format = GV_FORMAT_OGR_DIRECT;
-	fp = G_fopen_old("", "OGR", G_mapset());
-	if (!fp) {
-	    G_warning(_("Unable to open OGR file"));
+    if (strcmp(G_program_name(), "v.external") != 0) {
+	if (G_find_file2("", "OGR", G_mapset())) {
+	    /* OGR */
+	    FILE *fp;
+	    const char *p;
+	    
+	    struct Key_Value *key_val;
+	    struct Format_info_ogr *ogr_info;
+	    
+	    G_debug(2, " using OGR format");
+	    Map->format = GV_FORMAT_OGR_DIRECT;
+	    fp = G_fopen_old("", "OGR", G_mapset());
+	    if (!fp) {
+		G_fatal_error(_("Unable to open OGR file"));
+	    }
+	    key_val = G_fread_key_value(fp);
+	    fclose(fp);
+	    
+	    ogr_info = &(Map->fInfo.ogr);
+	    /* format */
+	    p = G_find_key_value("format", key_val);
+	    if (p)
+		ogr_info->driver_name = G_store(p);
+	    /* dsn */
+	    p = G_find_key_value("dsn", key_val);
+	    if (p)
+		ogr_info->dsn = G_store(p);
+	    /* options */
+	    p = G_find_key_value("options", key_val);
+	    if (p)
+		ogr_info->layer_options = G_tokenize(p, ",");
+	    
+	    ogr_info->layer_name = G_store(name);
 	}
-	key_val = G_fread_key_value(fp);
-	fclose(fp);
-
-	p = G_find_key_value("format", key_val);
-	if (p)
-	    Map->fInfo.ogr.driver_name = G_store(p);
-       	p = G_find_key_value("dsn", key_val);
-	if (p)
-	    Map->fInfo.ogr.dsn = G_store(p);
-	Map->fInfo.ogr.layer_name = G_store(name);
+	if (G_find_file2("", "PG", G_mapset())) {
+	    /* PostGIS */
+	    if (Map->fInfo.ogr.driver_name) {
+		G_warning(_("OGR output also detected, using OGR"));
+	    }
+	    else {
+		FILE *fp;
+		const char *p;
+		
+		struct Key_Value *key_val;
+		struct Format_info_pg *pg_info;
+		
+		G_debug(2, " using PostGIS format");
+		Map->format = GV_FORMAT_POSTGIS;
+		fp = G_fopen_old("", "PG", G_mapset());
+		if (!fp) {
+		    G_fatal_error(_("Unable to open PG file"));
+		}
+		key_val = G_fread_key_value(fp);
+		fclose(fp);
+		
+		pg_info = &(Map->fInfo.pg);
+		/* conninfo */
+		p = G_find_key_value("conninfo", key_val);
+		if (p) {
+		    pg_info->conninfo = G_store(p);
+		    G_debug(1, "PG: conninfo = '%s'", pg_info->conninfo);
+		}
+		
+		/* schema (default: public) */
+		p = G_find_key_value("schema", key_val);
+		if (p)
+		    pg_info->schema_name = G_store(p);
+		else
+		    pg_info->schema_name = G_store("public");
+		G_debug(1, "PG: schema_name = '%s'", pg_info->schema_name);
+		
+		/* fid column (default: ogc_fid) */
+		p = G_find_key_value("fid", key_val);
+		if (p)
+		    pg_info->fid_column = G_store(p);
+		else
+		    pg_info->fid_column = G_store("ogc_fid");
+		G_debug(1, "PG: fid_column = '%s'", pg_info->fid_column);
+		
+		/* geometry column (default: wkb_geometry) */
+		p = G_find_key_value("geometry_name", key_val);
+		if (p)
+		    pg_info->geom_column = G_store(p);
+		else
+		    pg_info->geom_column = G_store("wkb_geometry");
+		G_debug(1, "PG: geom_column = '%s'", pg_info->geom_column);
+		
+                /* table name */
+		Map->fInfo.pg.table_name = G_store(name);
+	    }
+	}
     }
     else {
 	/* native */

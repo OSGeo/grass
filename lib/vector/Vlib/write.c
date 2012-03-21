@@ -185,7 +185,7 @@ off_t Vect_write_line(struct Map_info *Map, int type,
 	G_fatal_error(_("Unable to write feature, vector map is not opened"));
 
     if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = 0;
+	Map->plus.cidx_up_to_date = FALSE;
     }
 
     offset = 
