@@ -112,9 +112,12 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Supported feature type for OGR layer: "
 				"%s, %s or %s"), "point", "line", "boundary");
 	    if (map_type == GV_FORMAT_POSTGIS)
-		V2_open_new_pg(&Map, type);
+		ret = V2_open_new_pg(&Map, type);
 	    else
-		V2_open_new_ogr(&Map, type);
+		ret = V2_open_new_ogr(&Map, type);
+	    if (ret != 0)
+		G_fatal_error(_("Unable to create vector map <%s>"),
+			      params.map->answer);
 	}
 	
 	G_debug(1, "Map created");
