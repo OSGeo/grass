@@ -31,6 +31,7 @@ void make_link(const char *dsn,
     }
     
     /* parse options for PG data format */
+    pg_schema = pg_fid = pg_geom_name = NULL;
     if (options && *options && !use_ogr) {
 	pg_schema    = get_option_pg(options, "schema");
 	pg_fid       = get_option_pg(options, "fid");
