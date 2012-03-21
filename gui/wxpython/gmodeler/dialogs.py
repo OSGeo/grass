@@ -52,8 +52,7 @@ class ModelDataDialog(ElementDialog):
         label, etype = self._getLabel()
         ElementDialog.__init__(self, parent, title, label = label, etype = etype)
                 
-        self.element = Select(parent = self.panel,
-                              type = prompt)
+        self.element = Select(parent = self.panel)
         self.element.SetValue(shape.GetValue())
         
         self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
