@@ -38,8 +38,11 @@ static unsigned char *linestring_to_wkb(int, const struct line_pnts *,
 					int, int*);
 static unsigned char *polygon_to_wkb(int, const struct line_pnts *,
 				     int, int*);
-static int write_feature(const struct Format_info_pg *, 
-			 int, const struct line_pnts *, int, int);
+static int write_feature(struct Format_info_pg *, 
+			 int, const struct line_pnts *, int,
+			 int, const struct field_info *);
+static char *build_insert_stmt(const struct Format_info_pg *, const char *,
+			       int, const struct field_info *);
 #endif
 
 /*!
@@ -92,7 +95,8 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
 	    return -1;
     }
     
-    cat = -1; /* no attributes to be written */
+    Fi = NULL; /* no attributes to be written */
+    cat = -1;
     if (cats->n_cats > 0 && Vect_get_num_dblinks(Map) > 0) {
 	/* check for attributes */
 	Fi = Vect_get_dblink(Map, 0);
@@ -156,20 +160,14 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
 	}
     }
 
-    if (execute(pg_info->conn, "BEGIN") == -1)
-	return -1;
-    
     /* write feature's geometry and fid */
     if (-1 == write_feature(pg_info, type, points,
-			    Vect_is_3d(Map) ? WITH_Z : WITHOUT_Z, cat))
+			    Vect_is_3d(Map) ? WITH_Z : WITHOUT_Z,
+			    cat, Fi)) {
+	execute(pg_info->conn, "ROLLBACK");
 	return -1;
+    }
 
-    /* write attributes */
-    /* ? */
-    
-    if (execute(pg_info->conn, "COMMIT") == -1)
-	return -1;
-    
     /* update offset array */
     if (offset_info->array_num >= offset_info->array_alloc) {
 	offset_info->array_alloc += 1000;
@@ -263,21 +261,23 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
     G_debug(3, "V1_delete_line_pg(), offset = %lu -> fid = %ld",
 	    (unsigned long) offset, fid);
 
-    if (execute(pg_info->conn, "BEGIN") == -1)
-	return -1;
-
+    if (!pg_info->inTransaction) {
+	/* start transaction */
+	pg_info->inTransaction = TRUE;
+	if (execute(pg_info->conn, "BEGIN") == -1)
+	    return -1;
+    }
+    
     sprintf(stmt, "DELETE FROM %s WHERE %s = %ld",
 	    pg_info->table_name, pg_info->fid_column, fid);
     G_debug(2, "SQL: %s", stmt);
     
     if (execute(pg_info->conn, stmt) == -1) {
 	G_warning(_("Unable to delete feature"));
+	execute(pg_info->conn, "ROLLBACK");
 	return -1;
     }
     
-    if (execute(pg_info->conn, "COMMIT") == -1)
-	return -1;
-
     return 0;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -544,6 +544,7 @@ unsigned char *polygon_to_wkb(int byte_order,
 
     return wkb_data;
 }
+
 /*!
   \brief Insert feature into table
 
@@ -551,14 +552,15 @@ unsigned char *polygon_to_wkb(int byte_order,
   \param type feature type (GV_POINT, GV_LINE, ...)
   \param points pointer to line_pnts struct
   \param with_z WITH_Z for 3D data
-  \param fid feature id
+  \param cat category number (-1 for no category)
+  \param Fi pointer to field_info (attributes to copy, NULL for no attributes)
 
   \return -1 on error
   \retirn 0 on success
 */
-int write_feature(const struct Format_info_pg *pg_info,
+int write_feature(struct Format_info_pg *pg_info,
 		  int type, const struct line_pnts *points, int with_z,
-		  int fid)
+		  int cat, const struct field_info *Fi)
 {
     int   byte_order, nbytes, nsize;
     unsigned int sf_type;
@@ -641,16 +643,19 @@ int write_feature(const struct Format_info_pg *pg_info,
     G_free(hex_data);
 
     /* build INSERT statement */
-    stmt = NULL;
-    G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES "
-	       "('%s'::GEOMETRY)",
-	       pg_info->schema_name, pg_info->table_name, 
-	       pg_info->geom_column, text_data);
+    stmt = build_insert_stmt(pg_info, text_data, cat, Fi);
     G_debug(2, "SQL: %s", stmt);
     
+    if (!pg_info->inTransaction) {
+	/* start transaction */
+	pg_info->inTransaction = TRUE;
+	if (execute(pg_info->conn, "BEGIN") == -1)
+	    return -1;
+    }
+    
     if (execute(pg_info->conn, stmt) == -1) {
-	/* close transaction */
-	execute(pg_info->conn, "COMMIT");
+	/* rollback transaction */
+	execute(pg_info->conn, "ROLLBACK");
 	return -1;
     }
 
@@ -659,5 +664,140 @@ int write_feature(const struct Format_info_pg *pg_info,
     G_free(stmt);
     
     return 0;
+}
+
+/*!
+  \brief Build INSERT statement to insert new feature to the table
+
+  \param pg_info pointer to Format_info_pg structure
+  \param cat category number (or -1 for no category)
+  \param Fi pointer to field_info structure (NULL for no attributes)
+
+  \return allocated string with INSERT statement
+*/
+char *build_insert_stmt(const struct Format_info_pg *pg_info,
+			const char *geom_data,
+			int cat, const struct field_info *Fi)
+{
+    char *stmt, buf[DB_SQL_MAX];
+    
+    stmt = NULL;
+    if (Fi && cat > -1) {
+	int col, ncol, more;
+	int sqltype, ctype;
+	char buf_val[DB_SQL_MAX], buf_tmp[DB_SQL_MAX];
+	char *str_val;
+	
+	const char *colname;
+	
+	dbString  dbstmt;
+	dbCursor  cursor;
+	dbTable  *table;
+	dbColumn *column;
+	dbValue  *value;
+	
+	db_init_string(&dbstmt);
+	buf_val[0] = '\0';
+	
+	/* read & set attributes */
+	sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key,
+		cat);
+	G_debug(4, "SQL: %s", buf);
+	db_set_string(&dbstmt, buf);
+
+	/* prepare INSERT statement */
+	sprintf(buf, "INSERT INTO \"%s\".\"%s\" (%s",
+		pg_info->schema_name, pg_info->table_name, 
+		pg_info->geom_column);
+	
+	/* select data */
+	if (db_open_select_cursor(pg_info->dbdriver, &dbstmt,
+				  &cursor, DB_SEQUENTIAL) != DB_OK) {
+	    G_warning(_("Unable to select attributes for category %d"),
+		      cat);
+	}
+	else {
+	    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+		G_warning(_("Unable to fetch data from table <%s>"),
+			  Fi->table);
+	    }
+	 
+	    if (!more) {
+		G_warning(_("No database record for category %d, "
+			    "no attributes will be written"), cat);
+	    }
+	    else {
+		table = db_get_cursor_table(&cursor);
+		ncol = db_get_table_number_of_columns(table);
+
+		for (col = 0; col < ncol; col++) {
+		    column = db_get_table_column(table, col);
+		    colname = db_get_column_name(column);
+	
+		    /* skip fid column */
+		    if (strcmp(pg_info->fid_column, colname) == 0)
+			continue;
+		    
+		    /* -> columns */
+		    sprintf(buf_tmp, ",%s", colname);
+		    strcat(buf, buf_tmp);
+		    
+		    /* -> values */
+		    value = db_get_column_value(column);
+		    	/* for debug only */
+		    db_convert_column_value_to_string(column, &dbstmt);	
+		    G_debug(2, "col %d : val = %s", col,
+			    db_get_string(&dbstmt));
+
+		    sqltype = db_get_column_sqltype(column);
+		    ctype = db_sqltype_to_Ctype(sqltype);
+
+		    /* prevent writing NULL values */
+		    if (!db_test_value_isnull(value)) {
+			switch (ctype) {
+			case DB_C_TYPE_INT:
+			    sprintf(buf_tmp, ",%d", db_get_value_int(value));
+			    break;
+			case DB_C_TYPE_DOUBLE:
+			    sprintf(buf_tmp, ",%.14f", db_get_value_double(value));
+			    break;
+			case DB_C_TYPE_STRING:
+			    str_val = G_store(db_get_value_string(value));
+			    G_str_to_sql(str_val);
+			    sprintf(buf_tmp, ",'%s'", str_val);
+			    G_free(str_val);
+			    break;
+			case DB_C_TYPE_DATETIME:
+			    db_convert_column_value_to_string(column,
+							      &dbstmt);
+			    sprintf(buf_tmp, ",%s", db_get_string(&dbstmt));
+			    break;
+			default:
+			    G_warning(_("Unsupported column type %d"), ctype);
+			    sprintf(buf_tmp, ",NULL");
+			    break;
+			}
+		    }
+		    else {
+			sprintf(buf_tmp, ",NULL");
+		    }
+		    strcat(buf_val, buf_tmp);
+		}
+		
+		G_asprintf(&stmt, "%s) VALUES ('%s'::GEOMETRY%s)",
+			   buf, geom_data, buf_val);
+	    }
+	}
+    }
+
+    if (!stmt) {
+	/* no attributes */
+	G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES "
+		   "('%s'::GEOMETRY)",
+		   pg_info->schema_name, pg_info->table_name, 
+		   pg_info->geom_column, geom_data);
+    }
+
+    return stmt;
 }
 #endif

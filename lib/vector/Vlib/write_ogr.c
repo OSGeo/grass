@@ -383,6 +383,9 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 		OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
 				     db_get_string(&dbstring));
 		break;
+	    default:
+		G_warning(_("Unsupported column type %d"), ctype);
+		break;
 	    }
 	}
     }
