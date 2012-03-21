@@ -246,8 +246,9 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
 	    }
 	}
 	else {
-	    G_warning(_("PostGIS layer <%s> already exists in database '%s'"),
-		      pg_info->table_name, pg_info->db_name);
+	    G_fatal_error(_("PostGIS layer <%s.%s> already exists in database '%s'"),
+			  pg_info->schema_name, pg_info->table_name,
+			  pg_info->db_name);
 	    return -1;
 	}
     }
