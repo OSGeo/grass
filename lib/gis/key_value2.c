@@ -1,14 +1,12 @@
 /*!
-   \file key_value2.c
+   \file lib/gis/key_value2.c
 
    \brief Read/write Key_Value from/to file.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2008, 2012 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author CERL
  */
@@ -19,7 +17,7 @@
    \brief Write key/value pairs to file
 
    \param[in,out] fd file to write to
-   \param[in]     kv Key_Value structure
+   \param         kv pointer Key_Value structure
 
    \return 0 success
    \return -1 error writing
@@ -43,7 +41,7 @@ int G_fwrite_key_value(FILE * fd, const struct Key_Value *kv)
 
    Allocated memory must be freed G_free_key_value().
 
-   \param[in] fd file to read key/values from
+   \param fd file to read key/values from
 
    \return pointer to allocated Key_Value structure
    \return NULL on error

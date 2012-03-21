@@ -1,14 +1,12 @@
 /*!
-   \file key_value1.c
+   \file lib/gis/key_value1.c
 
-   \brief Key_Value management.
+   \brief Subroutines for Key/Value management.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2008, 2012 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author CERL
  */
@@ -25,23 +23,18 @@
 struct Key_Value *G_create_key_value(void)
 {
     struct Key_Value *kv = G_malloc(sizeof(struct Key_Value));
-
-    kv->nitems = 0;
-    kv->nalloc = 0;
-    kv->key = NULL;
-    kv->value = NULL;
-
+    G_zero(kv, sizeof(struct Key_Value));
+    
     return kv;
 }
 
 /*!
    \brief Set value for given key
 
-   \param[in] key key to be set up
-   \param[in] value value for given key
+   \param key key to be set up
+   \param value value for given key
    \param[in,out] kv Key_value structure to be modified
  */
-
 void G_set_key_value(const char *key, const char *value, struct Key_Value *kv)
 {
     int n;
@@ -80,10 +73,10 @@ void G_set_key_value(const char *key, const char *value, struct Key_Value *kv)
 }
 
 /*!
-   \brief Find given key
+   \brief Find given key (case sensitive)
 
-   \param[in] key key to be found
-   \param[in] kv Key_value structure
+   \param key key to be found
+   \param kv pointer to Key_value structure
 
    \return poiter to value of key
    \return NULL if no key found
@@ -105,9 +98,7 @@ const char *G_find_key_value(const char *key, const struct Key_Value *kv)
 /*!
    \brief Free allocated Key_Value structure
 
-   \param[in] kv Key_Value structure
-
-   \return
+   \param[in] kv Key_Value structure to be freed
  */
 void G_free_key_value(struct Key_Value *kv)
 {
