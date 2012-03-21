@@ -82,6 +82,14 @@ int print_status_file(const char *file, int shell)
 	/* geometry_name */
 	p = G_find_key_value("geometry_name", key_val);
 	print_key_value("geometry_name", p, shell);
+
+	/* spatial_index */
+	p = G_find_key_value("spatial_index", key_val);
+	print_key_value("spatial_index", p, shell);
+
+	/* primary_key */
+	p = G_find_key_value("primary_key", key_val);
+	print_key_value("primary_key", p, shell);
     }
 
     G_free_key_value(key_val);
