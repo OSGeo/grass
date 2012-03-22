@@ -18,8 +18,8 @@
 void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
 		void *obufptr,	/* ptr in output buffer          */
 		int cell_type,	/* raster map type of obufptr    */
-		double *col_idx,	/* column index          */
-		double *row_idx,	/* row index                     */
+		double col_idx,	/* column index          */
+		double row_idx,	/* row index                     */
 		struct Cell_head *cellhd	/* information of output map     */
     )
 {
@@ -31,8 +31,8 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
     FCELL c[2][2];
 
     /* cut indices to integer */
-    row = (int)floor(*row_idx - 0.5);
-    col = (int)floor(*col_idx - 0.5);
+    row = (int)floor(row_idx - 0.5);
+    col = (int)floor(col_idx - 0.5);
 
     /* check for out of bounds - if out of bounds set NULL value and return */
     if (row < 0 || row + 1 >= cellhd->rows || col < 0 || col + 1 >= cellhd->cols) {
@@ -42,17 +42,17 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
 
     for (i = 0; i < 2; i++)
 	for (j = 0; j < 2; j++) {
-	    const FCELL *cellp = CPTR(ibuffer, row + i, col + j);
-	    if (Rast_is_f_null_value(cellp)) {
+	    const FCELL cell = CVAL(ibuffer, row + i, col + j);
+	    if (Rast_is_f_null_value(&cell)) {
 		Rast_set_null_value(obufptr, 1, cell_type);
 		return;
 	    }
-	    c[i][j] = *cellp;
+	    c[i][j] = cell;
 	}
 
     /* do the interpolation  */
-    t = *col_idx - 0.5 - col;
-    u = *row_idx - 0.5 - row;
+    t = col_idx - 0.5 - col;
+    u = row_idx - 0.5 - row;
 
     result = Rast_interp_bilinear(t, u, c[0][0], c[0][1], c[1][0], c[1][1]);
 

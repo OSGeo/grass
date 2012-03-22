@@ -97,15 +97,13 @@ int main(int argc, char **argv)
       overwrite,		/* Overwrite                    */
       curr_proj;		/* output projection (see gis.h) */
 
-    void *obuffer,		/* buffer that holds one output row     */
-     *obufptr;			/* column ptr in output buffer  */
+    void *obuffer;		/* buffer that holds one output row     */
+
     struct cache *ibuffer;	/* buffer that holds the input map      */
     func interpolate;		/* interpolation routine        */
 
-    double xcoord1, xcoord2,	/* temporary x coordinates      */
-      ycoord1, ycoord2,		/* temporary y coordinates      */
-      col_idx,			/* column index in input matrix */
-      row_idx,			/* row index in input matrix    */
+    double xcoord2,		/* temporary x coordinates      */
+      ycoord2,			/* temporary y coordinates      */
       onorth, osouth,		/* save original border coords  */
       oeast, owest, inorth, isouth, ieast, iwest;
     char north_str[30], south_str[30], east_str[30], west_str[30];
@@ -487,44 +485,51 @@ int main(int argc, char **argv)
 
     cell_size = Rast_cell_size(cell_type);
 
-    xcoord1 = xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
-    /**/ ycoord1 = ycoord2 = outcellhd.north - (outcellhd.ns_res / 2);
-    /**/ G_important_message(_("Projecting..."));
+    xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
+    ycoord2 = outcellhd.north - (outcellhd.ns_res / 2);
+    G_important_message(_("Projecting..."));
     G_percent(0, outcellhd.rows, 2);
 
     for (row = 0; row < outcellhd.rows; row++) {
-	obufptr = obuffer;
+	/* obufptr = obuffer */;
+
+        #pragma omp parallel for schedule (static)
 
 	for (col = 0; col < outcellhd.cols; col++) {
+	    void *obufptr = (void *)((const unsigned char *)obuffer + col * cell_size);
+
+	    double xcoord1 = xcoord2 + (col) * outcellhd.ew_res;
+	    double ycoord1 = ycoord2;
+
 	    /* project coordinates in output matrix to       */
 	    /* coordinates in input matrix                   */
 	    if (pj_do_proj(&xcoord1, &ycoord1, &oproj, &iproj) < 0)
 		Rast_set_null_value(obufptr, 1, cell_type);
 	    else {
 		/* convert to row/column indices of input matrix */
-		col_idx = (xcoord1 - incellhd.west) / incellhd.ew_res;
-		row_idx = (incellhd.north - ycoord1) / incellhd.ns_res;
+
+		/* column index in input matrix */
+		double col_idx = (xcoord1 - incellhd.west) / incellhd.ew_res;
+		/* row index in input matrix    */
+		double row_idx = (incellhd.north - ycoord1) / incellhd.ns_res;
 
 		/* and resample data point               */
 		interpolate(ibuffer, obufptr, cell_type,
-			    &col_idx, &row_idx, &incellhd);
+			    col_idx, row_idx, &incellhd);
 	    }
 
-	    obufptr = G_incr_void_ptr(obufptr, cell_size);
-	    xcoord2 += outcellhd.ew_res;
-	    xcoord1 = xcoord2;
-	    ycoord1 = ycoord2;
+	    /* obufptr = G_incr_void_ptr(obufptr, cell_size); */
 	}
 
 	Rast_put_row(fdo, obuffer, cell_type);
 
-	xcoord1 = xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
+	xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
 	ycoord2 -= outcellhd.ns_res;
-	ycoord1 = ycoord2;
 	G_percent(row, outcellhd.rows - 1, 2);
     }
 
     Rast_close(fdo);
+    release_cache(ibuffer);
 
     if (have_colors > 0) {
 	Rast_write_colors(mapname, G_mapset(), &colr);

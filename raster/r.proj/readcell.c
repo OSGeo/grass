@@ -22,7 +22,6 @@ struct cache *readcell(int fdi, const char *size)
     int nrows;
     int ncols;
     int row;
-    char *filename;
     int nx, ny;
     int nblocks;
     int i;
@@ -46,20 +45,21 @@ struct cache *readcell(int fdi, const char *size)
     c->nblocks = nblocks;
     c->grid = (block **) G_calloc(nx * ny, sizeof(block *));
     c->blocks = (block *) G_malloc(nblocks * sizeof(block));
-    c->refs = (int *)G_malloc(nblocks * sizeof(int));
+    c->refs = (int *)G_calloc(nblocks, sizeof(int));
 
     if (nblocks < nx * ny) {
 	/* Temporary file must be created in output location */
 	G__switch_env();
-	filename = G_tempfile();
+	c->fname = G_tempfile();
 	G__switch_env();
-	c->fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	c->fd = open(c->fname, O_RDWR | O_CREAT | O_EXCL, 0600);
 	if (c->fd < 0)
 	    G_fatal_error(_("Unable to open temporary file"));
-	remove(filename);
     }
-    else
+    else {
 	c->fd = -1;
+	c->fname = NULL;
+    }
 
     G_important_message(_("Allocating memory and reading input map..."));
     G_percent(0, nrows, 5);
@@ -97,24 +97,34 @@ struct cache *readcell(int fdi, const char *size)
 
     G_free(tmpbuf);
 
-    if (c->fd < 0)
+    if (c->fd < 0) {
 	for (i = 0; i < c->nblocks; i++) {
 	    c->grid[i] = &c->blocks[i];
 	    c->refs[i] = i;
 	}
+    }
+    else {
+	close(c->fd);
+	c->fd = -1;
+    }
 
     return c;
 }
 
 block *get_block(struct cache * c, int idx)
 {
+    int fd;
     int replace = rand() % c->nblocks;
     block *p = &c->blocks[replace];
     int ref = c->refs[replace];
     off_t offset = (off_t) idx * sizeof(FCELL) << L2BSIZE;
 
-    if (c->fd < 0)
+    if (c->fname == NULL)
 	G_fatal_error(_("Internal error: cache miss on fully-cached map"));
+
+    fd = open(c->fname, O_RDONLY, 0600);
+    if (fd < 0)
+	G_fatal_error(_("Unable to open temporary file"));
 
     if (ref >= 0)
 	c->grid[ref] = NULL;
@@ -122,11 +132,22 @@ block *get_block(struct cache * c, int idx)
     c->grid[idx] = p;
     c->refs[replace] = idx;
 
-    if (lseek(c->fd, offset, SEEK_SET) < 0)
+    if (lseek(fd, offset, SEEK_SET) < 0)
 	G_fatal_error(_("Error seeking on segment file"));
 
-    if (read(c->fd, p, sizeof(block)) < 0)
-	G_fatal_error(_("Error writing segment file"));
+    if (read(fd, p, sizeof(block)) < 0)
+	G_fatal_error(_("Error reading segment file"));
+	
+    close(fd);
 
     return p;
+}
+
+void release_cache(struct cache *c)
+{
+    G_free(c->grid);
+    G_free(c->blocks);
+    G_free(c->refs);
+    remove(c->fname);
+    G_free(c);
 }

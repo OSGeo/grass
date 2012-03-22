@@ -17,6 +17,7 @@ typedef FCELL block[BDIM][BDIM];
 struct cache
 {
     int fd;
+    char *fname;
     int stride;
     int nblocks;
     block **grid;
@@ -24,7 +25,7 @@ struct cache
     int *refs;
 };
 
-typedef void (*func) (struct cache *, void *, int, double *, double *,
+typedef void (*func) (struct cache *, void *, int, double, double,
 		      struct Cell_head *);
 
 struct menu
@@ -38,27 +39,28 @@ extern void bordwalk(struct Cell_head *, struct Cell_head *, struct pj_info *,
 		     struct pj_info *);
 extern struct cache *readcell(int, const char *);
 extern block *get_block(struct cache *, int);
+extern void release_cache(struct cache *);
 
 /* declare resampling methods */
 /* bilinear.c */
-extern void p_bilinear(struct cache *, void *, int, double *, double *,
+extern void p_bilinear(struct cache *, void *, int, double, double,
 		       struct Cell_head *);
 /* cubic.c */
-extern void p_cubic(struct cache *, void *, int, double *, double *,
+extern void p_cubic(struct cache *, void *, int, double, double,
 		    struct Cell_head *);
 /* nearest.c */
-extern void p_nearest(struct cache *, void *, int, double *, double *,
+extern void p_nearest(struct cache *, void *, int, double, double,
 		      struct Cell_head *);
 /* bilinear_f.c */
-extern void p_bilinear_f(struct cache *, void *, int, double *, double *,
+extern void p_bilinear_f(struct cache *, void *, int, double, double,
 		       struct Cell_head *);
 /* cubic_f.c */
-extern void p_cubic_f(struct cache *, void *, int, double *, double *,
+extern void p_cubic_f(struct cache *, void *, int, double, double,
 		    struct Cell_head *);
 /* lanczos.c */
-extern void p_lanczos(struct cache *, void *, int, double *, double *,
+extern void p_lanczos(struct cache *, void *, int, double, double,
 		    struct Cell_head *);
-extern void p_lanczos_f(struct cache *, void *, int, double *, double *,
+extern void p_lanczos_f(struct cache *, void *, int, double, double,
 		    struct Cell_head *);
 
 #if 1
@@ -66,7 +68,7 @@ extern void p_lanczos_f(struct cache *, void *, int, double *, double *,
 #define BKIDX(c,y,x) ((y) * (c)->stride + (x))
 #define BKPTR(c,y,x) ((c)->grid[BKIDX((c),(y),(x))])
 #define BLOCK(c,y,x) (BKPTR((c),(y),(x)) ? BKPTR((c),(y),(x)) : get_block((c),BKIDX((c),(y),(x))))
-#define CPTR(c,y,x) (&(*BLOCK((c),HI((y)),HI((x))))[LO((y))][LO((x))])
+#define CVAL(c,y,x) ((*BLOCK((c),HI((y)),HI((x))))[LO((y))][LO((x))])
 
 #else
 
