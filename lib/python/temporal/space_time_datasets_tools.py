@@ -52,6 +52,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
     start_time_in_file = False
     end_time_in_file = False
+    
     if maps and file:
         core.fatal(_("%s= and %s= are mutually exclusive") % ("input","file"))
 
@@ -66,21 +67,23 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
     # We may need the mapset
     mapset =  core.gisenv()["MAPSET"]
+    
+    # The name of the space time dataset is optional
+    if name:
+	# Check if the dataset name contains the mapset as well
+	if name.find("@") < 0:
+	    id = name + "@" + mapset
+	else:
+	    id = name
 
-    # Check if the dataset name contains the mapset as well
-    if name.find("@") < 0:
-        id = name + "@" + mapset
-    else:
-        id = name
-
-    if type == "rast":
-        sp = dataset_factory("strds", id)
-    elif type == "rast3d":
-        sp = dataset_factory("str3ds", id)
-    elif type == "vect":
-        sp = dataset_factory("stvds", id)
-    else:
-        core.fatal(_("Unkown map type: %s")%(type))
+	if type == "rast":
+	    sp = dataset_factory("strds", id)
+	elif type == "rast3d":
+	    sp = dataset_factory("str3ds", id)
+	elif type == "vect":
+	    sp = dataset_factory("stvds", id)
+	else:
+	    core.fatal(_("Unkown map type: %s")%(type))
 
         
     connect = False
@@ -90,18 +93,20 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
         dbif.connect()
         connect = True
 
-    # Read content from temporal database
-    sp.select(dbif)
+    if name:
+	# Read content from temporal database
+	sp.select(dbif)
 
-    if sp.is_in_db(dbif) == False:
-        dbif.close()
-        core.fatal(_("Space time %s dataset <%s> no found") % (sp.get_new_map_instance(None).get_type(), name))
+	if sp.is_in_db(dbif) == False:
+	    dbif.close()
+	    core.fatal(_("Space time %s dataset <%s> no found") % (sp.get_new_map_instance(None).get_type(), name))
 
-    if sp.is_time_relative() and not unit:
-        dbif.close()
-        core.fatal(_("Space time %s dataset <%s> with relative time found, but no relative unit set for %s maps") % (sp.get_new_map_instance(None).get_type(), name, sp.get_new_map_instance(None).get_type()))
-
-    dummy = sp.get_new_map_instance(None)
+	if sp.is_time_relative() and not unit:
+	    dbif.close()
+	    core.fatal(_("Space time %s dataset <%s> with relative time found, but no relative unit set for %s maps") % (sp.get_new_map_instance(None).get_type(), name, sp.get_new_map_instance(None).get_type()))
+    
+    # We need a dummy map object to build the map ids
+    dummy = dataset_factory(type, None)
         
     maplist = []
     
@@ -162,7 +167,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 	core.percent(count, num_maps, 1)
 
         # Get a new instance of the space time dataset map type
-        map = sp.get_new_map_instance(maplist[count]["id"])
+        map = dataset_factory(type, maplist[count]["id"])
 
         # Use the time data from file
         if maplist[count].has_key("start"):
@@ -184,16 +189,17 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
             # Load the data from the grass file database
             map.load()
 	    
-            if sp.get_temporal_type() == "absolute":
-                map.set_time_to_absolute()
-            else:
+	    # We need to check the temporal type based on the time stamp
+	    if unit:
                 map.set_time_to_relative()
+            else:
+                map.set_time_to_absolute()
                 
             #  Put it into the temporal database
             map.insert(dbif)
         else:
             map.select(dbif)
-            if map.get_temporal_type() != sp.get_temporal_type():
+            if name and map.get_temporal_type() != sp.get_temporal_type():
                 dbif.close()
                 if map.get_layer():
 		    core.fatal(_("Unable to register %s map <%s> with layer. The temporal types are different.") %  \
@@ -207,13 +213,15 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
         # Set the valid time
         if start:
-            assign_valid_time_to_map(ttype=sp.get_temporal_type(), map=map, start=start, end=end, unit=unit, increment=increment, mult=count, dbif=dbif, interval=interval)
+            assign_valid_time_to_map(ttype=map.get_temporal_type(), map=map, start=start, end=end, unit=unit, increment=increment, mult=count, dbif=dbif, interval=interval)
 
         # Finally Register map in the space time dataset
-        sp.register_map(map, dbif)
+        if name:
+	    sp.register_map(map, dbif)
 
     # Update the space time tables
-    sp.update_from_registered_maps(dbif)
+    if name:
+	sp.update_from_registered_maps(dbif)
 
     if connect == True:
         dbif.close()
