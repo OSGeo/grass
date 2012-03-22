@@ -20,8 +20,8 @@
 void p_lanczos(struct cache *ibuffer,	/* input buffer                  */
 	     void *obufptr,	/* ptr in output buffer          */
 	     int cell_type,	/* raster map type of obufptr    */
-	     double *col_idx,	/* column index (decimal)        */
-	     double *row_idx,	/* row index (decimal)           */
+	     double col_idx,	/* column index (decimal)        */
+	     double row_idx,	/* row index (decimal)           */
 	     struct Cell_head *cellhd	/* information of output map     */
     )
 {
@@ -30,11 +30,11 @@ void p_lanczos(struct cache *ibuffer,	/* input buffer                  */
     int i, j, k;
     double t, u;			/* intermediate slope            */
     FCELL result;		/* result of interpolation       */
-    DCELL cell[25];
+    DCELL c[25];
 
     /* cut indices to integer */
-    row = (int)floor(*row_idx);
-    col = (int)floor(*col_idx);
+    row = (int)floor(row_idx);
+    col = (int)floor(col_idx);
 
     /* check for out of bounds of map - if out of bounds set NULL value     */
     if (row - 2 < 0 || row + 2 >= cellhd->rows ||
@@ -46,20 +46,20 @@ void p_lanczos(struct cache *ibuffer,	/* input buffer                  */
     k = 0;
     for (i = 0; i < 5; i++) {
 	for (j = 0; j < 5; j++) {
-	    const FCELL *cellp = CPTR(ibuffer, row - 2 + i, col - 2 + j);
-	    if (Rast_is_f_null_value(cellp)) {
+	    const FCELL cell = CVAL(ibuffer, row - 2 + i, col - 2 + j);
+	    if (Rast_is_f_null_value(&cell)) {
 		Rast_set_null_value(obufptr, 1, cell_type);
 		return;
 	    }
-	    cell[k++] = *cellp;
+	    c[k++] = cell;
 	}
     }
 
     /* do the interpolation  */
-    t = *col_idx - 0.5 - col;
-    u = *row_idx - 0.5 - row;
+    t = col_idx - 0.5 - col;
+    u = row_idx - 0.5 - row;
 
-    result = Rast_interp_lanczos(t, u, cell);
+    result = Rast_interp_lanczos(t, u, c);
 
     Rast_set_f_value(obufptr, result, cell_type);
 }
@@ -67,18 +67,18 @@ void p_lanczos(struct cache *ibuffer,	/* input buffer                  */
 void p_lanczos_f(struct cache *ibuffer,	/* input buffer                  */
 	     void *obufptr,	/* ptr in output buffer          */
 	     int cell_type,	/* raster map type of obufptr    */
-	     double *col_idx,	/* column index (decimal)        */
-	     double *row_idx,	/* row index (decimal)           */
+	     double col_idx,	/* column index (decimal)        */
+	     double row_idx,	/* row index (decimal)           */
 	     struct Cell_head *cellhd	/* information of output map     */
     )
 {
     int row;			/* row indices for interp        */
     int col;			/* column indices for interp     */
-    FCELL *cellp, cell;
+    FCELL cell;
 
     /* cut indices to integer */
-    row = (int)floor(*row_idx);
-    col = (int)floor(*col_idx);
+    row = (int)floor(row_idx);
+    col = (int)floor(col_idx);
 
     /* check for out of bounds - if out of bounds set NULL value     */
     if (row < 0 || row >= cellhd->rows || col < 0 || col >= cellhd->cols) {
@@ -86,13 +86,12 @@ void p_lanczos_f(struct cache *ibuffer,	/* input buffer                  */
         return;
     }
 
-    cellp = CPTR(ibuffer, row, col);
+    cell = CVAL(ibuffer, row, col);
     /* if nearest is null, all the other interps will be null */
-    if (Rast_is_f_null_value(cellp)) {
+    if (Rast_is_f_null_value(&cell)) {
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
-    cell = *cellp;
 
     p_lanczos(ibuffer, obufptr, cell_type, col_idx, row_idx, cellhd);
     /* fallback to bicubic if lanczos is null */
