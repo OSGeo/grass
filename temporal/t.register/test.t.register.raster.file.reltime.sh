@@ -56,6 +56,13 @@ cat "${n3}"
 t.create --o type=strds temporaltype=relative output=precip_abs8 title="A test with input files" descr="A test with input files"
 
 # Test with input files
+# File 1, and 3 without a space time raster dataset
+t.register -i file="${n1}" start=0 increment=7 unit=days
+t.unregister --v type=rast file="${n1}"
+t.register file="${n2}" unit=minutes
+t.unregister --v type=rast file="${n1}"
+t.register -i file="${n3}" unit=seconds
+t.unregister --v type=rast file="${n1}"
 # File 1
 t.register -i input=precip_abs8 file="${n1}" start=0 increment=7 unit=days
 t.info type=strds input=precip_abs8
