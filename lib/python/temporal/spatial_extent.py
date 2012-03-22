@@ -31,25 +31,28 @@ class spatial_extent(sql_database_interface):
         self.set_spatial_extent(north, south, east, west, top, bottom)
 	self.set_projection(proj)
         
-    def overlap_2d(self, extent):
-        """Return True if the 2d extents overlap. Code is lend from wind_overlap.c in lib/gis"""  
+    def overlapping_2d(self, extent):
+        """Return True if the two dimensional extents overlap. Code is lend from wind_overlap.c in lib/gis
+        
+	   Overlapping includes the spatial relations:
+	   * contain
+	   * in
+	   * cover
+	   * covered
+	   * equivalent
+	"""  
         
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute overlap_2d for spatial extents"))
+            core.error(_("Projections are different. Unable to compute overlapping_2d for spatial extents"))
+            return False
         
         N = extent.get_north()
         S = extent.get_south()
         E = extent.get_east()
         W = extent.get_west()
         
-        if(self.get_north() <= S):
-            return False
-        
-        if(self.get_south() >= N):
-            return False
-        
         # Adjust the east and west in case of LL projection
-        if self.get_proj() == "LL":
+        if self.get_projection() == "LL":
             while E < self.get_west():
                 E += 360.0
                 W += 360.0
@@ -57,6 +60,12 @@ class spatial_extent(sql_database_interface):
             while W > self.get_east():
                 E -= 360.0
                 W -= 360.0
+                
+        if(self.get_north() <= S):
+            return False
+        
+        if(self.get_south() >= N):
+            return False
             
         if self.get_east() <= W:
             return False
@@ -66,14 +75,525 @@ class spatial_extent(sql_database_interface):
         
         return True
 
-    def overlap(self, extent):
-        """Return True if the extents overlap."""  
+    def overlapping(self, extent):
+        """Return True if the three dimensional extents overlap
         
-        if self.overlap_2d(extent) == False:
+	   Overlapping includes the spatial relations:
+	   * contain
+	   * in
+	   * cover
+	   * covered
+	   * equivalent
+        """  
+        
+        if not self.overlapping_2d(extent):
             return False
             
         T = extent.get_top()
         B = extent.get_bottom()
+        
+        if self.get_top() < B:
+            return False
+        
+        if self.get_bottom() > T:
+            return False
+        
+        return True
+
+    def intersect_2d(self, extent):
+	"""Return the two dimensional intersection as spatial_extent object or None
+	   in case no intersection was found.
+	"""
+	
+	if not self.overlapping_2d(extent):
+	    return None
+	    
+	eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
+        
+	N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
+
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0	
+                
+        # Compute the extent
+        nN = N
+        nS = S
+        nE = E
+        nW = W
+        
+        if W < eW:
+	    nW = eW
+	if E > eE:
+	    nE = eE
+	if N > eN:
+	    nN = eN
+	if S < eS:
+	    nS = eS
+	
+	
+	new = spatial_extent(north=nN, south=nS, east=nE, west=nW, top=0, bottom=0, proj=self.get_projection())
+	return new
+
+    def intersect(self, extent):
+	"""Return the three dimensional intersection as spatial_extent object or None
+	   in case no intersection was found.
+	"""
+	
+	if not self.overlapping(extent):
+	    return None
+	    
+	new = self.intersect_2d(extent)
+	
+	eT = extent.get_top()
+	eB = extent.get_bottom()
+	
+	T = self.get_top()
+	B = self.get_bottom()
+	
+	nT = T
+	nB = B
+	
+	if B < eB:
+	    nB = eB
+	if T > eT:
+	    nT = eT
+	
+	new.set_top(nT)
+	new.set_bottom(nB)
+	
+	return new
+
+    def is_in_2d(self, extent):
+	"""Check two dimensional if the self is located in extent 
+	
+         _____	
+	|A _  |
+	| |_| |
+	|_____|
+	
+	"""
+        if self.get_projection() != extent.get_projection():
+            core.error(_("Projections are different. Unable to compute is_in_2d for spatial extents"))
+            return False
+            
+	eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
+        
+	N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
+
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0	
+               
+        if W <= eW:
+	    return False
+	if E >= eE:
+	    return False
+	if N >= eN:
+	    return False
+	if S <= eS:
+	    return False
+	
+	return True
+	
+    def is_in(self, extent):
+	"""Check three dimensional if the self is located in extent """
+	if not self.is_in_2d(extent):
+	    return False
+	
+	eT = extent.get_top()
+	eB = extent.get_bottom()
+	
+	T = self.get_top()
+	B = self.get_bottom()
+	
+	if B <= eB:
+	    return False
+	if T >= eT:
+	    return False
+	    
+	return True
+
+    def contain_2d(self, extent):
+	"""Check two dimensional if self contains extent """
+	return extent.is_in_2d(self)
+	
+    def contain(self, extent):
+	"""Check three dimensional if self contains extent """
+	return extent.is_in(self)
+        	
+    def equivalent_2d(self, extent):
+	"""Check two dimensional if self is equivalent to extent """
+
+        if self.get_projection() != extent.get_projection():
+            core.error(_("Projections are different. Unable to compute equivalent_2d for spatial extents"))
+            return False
+            
+	eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
+        
+	N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
+
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0	
+               
+        if W != eW:
+	    return False
+	if E != eE:
+	    return False
+	if N != eN:
+	    return False
+	if S != eS:
+	    return False
+	
+	return True
+	
+    def equivalent(self, extent):
+	"""Check three dimensional if self is equivalent to extent """
+
+	if not self.equivalent_2d(extent):
+	    return False
+	
+	eT = extent.get_top()
+	eB = extent.get_bottom()
+	
+	T = self.get_top()
+	B = self.get_bottom()
+	
+	if B != eB:
+	    return False
+	if T != eT:
+	    return False
+	    
+	return True
+
+    def cover_2d(self, extent):
+        """Return True if two dimensional self covers extent 
+            _____    _____    _____    _____
+           |A  __|  |__  A|  |A | B|  |B | A|
+           |  |B |  | B|  |  |  |__|  |__|  |
+           |__|__|  |__|__|  |_____|  |_____|
+           
+            _____    _____    _____    _____
+           |A|B| |  |A  __|  |A _  |  |__  A|
+           | |_| |  |  |__|B | |B| | B|__|  |
+           |_____|  |_____|  |_|_|_|  |_____|
+           
+            _____    _____    _____    _____
+           |A|B  |  |_____|A |A|B|A|  |_____|A
+           | |   |  |B    |  | | | |  |_____|B
+           |_|___|  |_____|  |_|_|_|  |_____|A
+                            
+           The following cases are excluded:
+	   * contain
+	   * in
+	   * equivalent
+        """    
+        
+        if self.get_projection() != extent.get_projection():
+            core.error(_("Projections are different. Unable to compute cover_2d for spatial extents"))
+            return False
+	    
+	# Exclude equivalent_2d
+        if self.equivalent_2d(extent):
+	    return False
+        
+	eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
+        
+	N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+        
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
+
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0	
+                
+	# Edges of extent located outside of self are not allowed 
+        if E < eW:
+	    return False
+	if W > eE:
+	    return False
+	if N < eS:
+	    return False
+	if S > eN:
+	    return False
+         
+        # First we check that at least one edge of extent meets an edge of self
+        if W != eW and E != eE and N != eN and S != eS:
+	    return False
+	    
+	# We check that at least one edge of extent is located in self
+	edge_count = 0
+	if W < eW and E > eW:
+	    edge_count += 1
+	if E > eE and W < eE:
+	    edge_count += 1
+	if N > eN and S < eN:
+	    edge_count += 1
+	if S < eS and N > eS:
+	    edge_count += 1
+	
+	if edge_count == 0:
+	    return False
+	
+	return True
+	
+    def cover(self, extent):
+        """Return True if three dimensional self covers extent 
+     
+           The following cases are excluded:
+	   * contain
+	   * in
+	   * equivalent
+        """ 
+        	    
+        if self.get_projection() != extent.get_projection():
+            core.error(_("Projections are different. Unable to compute cover for spatial extents"))
+            return False
+	    
+	# Exclude equivalent_2d
+        if self.equivalent_2d(extent):
+	    return False
+        
+	eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
+        
+        eT = extent.get_top()
+	eB = extent.get_bottom()
+        
+	N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+	
+	T = self.get_top()
+	B = self.get_bottom()
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
+
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0	
+                
+	# Edges of extent located outside of self are not allowed 
+        if E <= eW:
+	    return False
+	if W >= eE:
+	    return False
+	if N <= eS:
+	    return False
+	if S >= eN:
+	    return False
+	if T <= eB:
+	    return False
+	if B >= eT:
+	    return False
+         
+        # First we check that at least one edge of extent meets an edge of self
+        if W != eW and E != eE and N != eN and S != eS and B != eB and T != eT:
+	    return False
+	    
+	# We check that at least one edge of extent is located in self
+	edge_count = 0
+	if W < eW and E > eW:
+	    edge_count += 1
+	if E > eE and W < eE:
+	    edge_count += 1
+	if N > eN and S < eN:
+	    edge_count += 1
+	if S < eS and N > eS:
+	    edge_count += 1
+	if N > eN and S < eN:
+	    edge_count += 1
+	if S < eS and N > eS:
+	    edge_count += 1
+	if T > eT and B < eT:
+	    edge_count += 1
+	if B < eB and T > eB:
+	    edge_count += 1
+	
+	if edge_count == 0:
+	    return False
+	
+	return True
+        
+    def covered_2d(self, extent):
+	"""Check two dimensional if self is covered by  extent """
+
+	return extent.cover_2d(self)
+	
+    def covered(self, extent):
+	"""Check three dimensional if self is covered by extent """
+	
+	return extent.cover(self)
+        	
+    def overlap_2d(self, extent):
+        """Return True if the two dimensional extents overlap. Code is lend from wind_overlap.c in lib/gis
+            _____
+           |A  __|__
+           |  |  | B|
+           |__|__|  |
+              |_____|
+              
+           The following cases are excluded:
+	   * contain
+	   * in
+	   * cover
+	   * covered
+	   * equivalent
+        """    
+        
+        if self.contain_2d(extent):
+	    return False
+	    
+        if self.is_in_2d(extent):
+	    return False
+	    
+        if self.cover_2d(extent):
+	    return False
+	    
+        if self.covered_2d(extent):
+	    return False
+	    
+        if self.equivalent_2d(extent):
+	    return False
+        
+        N = extent.get_north()
+        S = extent.get_south()
+        E = extent.get_east()
+        W = extent.get_west()
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while E < self.get_west():
+                E += 360.0
+                W += 360.0
+
+            while W > self.get_east():
+                E -= 360.0
+                W -= 360.0
+                
+        if(self.get_north() <= S):
+            return False
+        
+        if(self.get_south() >= N):
+            return False
+        
+        if self.get_east() <= W:
+            return False
+        
+        if self.get_west() >= E:
+            return False
+        
+        return True
+
+    def overlap(self, extent):
+        """Return True if the three dimensional extents overlap
+        
+           The following cases are excluded:
+	   * contain
+	   * in
+	   * cover
+	   * covered
+	   * equivalent
+        """   
+
+        if self.is_in(extent):
+	    return False
+
+        if self.contain(extent):
+	    return False
+
+        if self.cover(extent):
+	    return False
+
+        if self.covered(extent):
+	    return False
+
+        if self.equivalent(extent):
+	    return False
+        
+        N = extent.get_north()
+        S = extent.get_south()
+        E = extent.get_east()
+        W = extent.get_west()
+        T = extent.get_top()
+        B = extent.get_bottom()
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while E < self.get_west():
+                E += 360.0
+                W += 360.0
+
+            while W > self.get_east():
+                E -= 360.0
+                W -= 360.0
+                
+        if(self.get_north() <= S):
+            return False
+        
+        if(self.get_south() >= N):
+            return False
+            
+        if self.get_east() <= W:
+            return False
+        
+        if self.get_west() >= E:
+            return False
         
         if self.get_top() <= B:
             return False
@@ -82,7 +602,238 @@ class spatial_extent(sql_database_interface):
             return False
         
         return True
+        
+    def meet_2d(self,extent):
+	""" Check if self and extent meet each other in two dimensions
+	  _____ _____    _____ _____
+	 |  A  |  B  |  |  B  |  A  |
+	 |_____|     |  |     |     |
+	       |_____|  |_____|_____|
+	       	       
+	         ___
+	        | A |
+	        |   |
+	        |___|    _____
+	       |  B  |  |  B  |
+	       |     |  |     |
+	       |_____|  |_____|_
+	                  |  A  |
+	                  |     |
+	                  |_____|
+	                  
+	"""
+	
+	eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
+        
+        eT = extent.get_top()
+	eB = extent.get_bottom()
+        
+	N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+	        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
 
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0	
+                
+        edge = None
+        edge_count = 0
+        
+        if E == eW:
+	    edge = "E"
+	    edge_count += 1
+        if W == eE:
+	    edge = "W"
+	    edge_count += 1
+        if N == eS:
+	    edge = "N"
+	    edge_count += 1
+        if S == eN:
+	    edge = "S"
+	    edge_count += 1
+	
+	# Meet a a single edge only
+	if edge_count != 1:
+	    return False
+	
+	# Check boundaries of the faces
+	if edge == "E" or edge == "W":
+	    if N < eS or S > eN:
+		return False
+		
+	if edge == "N" or edge == "S":
+	    if E < eW or W > eE:
+		return False
+	
+	return True
+
+    def meet(self,extent):
+	""" Check if self and extent touch meet other in three dimensions"""
+	eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
+        
+        eT = extent.get_top()
+	eB = extent.get_bottom()
+        
+	N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+	
+	T = self.get_top()
+	B = self.get_bottom()
+        
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
+
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0	
+                
+        edge = None
+        edge_count = 0
+        
+        if E == eW:
+	    edge = "E"
+	    edge_count += 1
+        if W == eE:
+	    edge = "W"
+	    edge_count += 1
+        if N == eS:
+	    edge = "N"
+	    edge_count += 1
+        if S == eN:
+	    edge = "S"
+	    edge_count += 1
+        if T == eB:
+	    edge = "T"
+	    edge_count += 1
+        if B == eT:
+	    edge = "B"
+	    edge_count += 1	
+	
+	# Meet a a single edge only
+	if edge_count != 1:
+	    return False
+	
+	# Check boundaries of the faces
+	if edge == "E" or edge == "W":
+	    if N < eS or S > eN:
+		return False
+	    if T < eB or B > eT:
+		return False
+		
+	if edge == "N" or edge == "S":
+	    if E < eW or W > eE:
+		return False
+	    if T < eB or B > eT:
+		return False
+		
+	if edge == "T" or edge == "B":
+	    if E < eW or W > eE:
+		return False
+	    if N < eS or S > eN:
+		return False
+	
+	return True
+
+    def disjoint_2d(self, extent):
+        """Return True if the two dimensional extents are disjoint 
+        """  
+        
+        if self.overlapping_2d(extent) or self.meet_2d(extent):
+	    return False
+	return True
+
+    def disjoint(self, extent):
+        """Return True if the three dimensional extents are disjoint 
+        """  
+        
+        if self.overlapping(extent) or self.meet(extent):
+	    return False
+	return True
+                
+    def spatial_relation_2d(self, extent):
+	"""Returns the two dimensional spatial relation between self and extent
+	
+	    Spatial relations are:
+	    * disjoint
+	    * meet
+	    * overlap
+	    * cover
+	    * covered
+	    * in
+	    * contain
+	    * equivalent
+	"""
+        
+	if self.equivalent_2d(extent):
+	    return "equivalent"
+	if self.contain_2d(extent):
+	    return "contain"
+	if self.is_in_2d(extent):
+	    return "in"
+	if self.cover_2d(extent):
+	    return "cover"
+	if self.covered_2d(extent):
+	    return "covered"
+	if self.overlap_2d(extent):
+	    return "overlap"
+	if self.meet_2d(extent):
+	    return "meet"
+	if self.disjoint_2d(extent):
+	    return "disjoint"
+	    
+        return "unknown"
+        
+    def spatial_relation(self, extent):
+	"""Returns the three dimensional spatial relation between self and extent
+	
+	    Spatial relations are:
+	    * disjoint
+	    * meet
+	    * overlap
+	    * cover
+	    * covered
+	    * in
+	    * contain
+	    * equivalent
+	"""
+        
+	if self.equivalent(extent):
+	    return "equivalent"
+	if self.contain(extent):
+	    return "contain"
+	if self.is_in(extent):
+	    return "in"
+	if self.cover(extent):
+	    return "cover"
+	if self.covered(extent):
+	    return "covered"
+	if self.overlap(extent):
+	    return "overlap"
+	if self.meet(extent):
+	    return "meet"
+	if self.disjoint(extent):
+	    return "disjoint"
+	    
+        return "unknown"
+        
     def set_spatial_extent(self, north, south, east, west, top, bottom):
         """Set the spatial extent"""
 

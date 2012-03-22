@@ -465,8 +465,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 
 ###############################################################################
 
-def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, separator, method):
-    """ Sample the input space time dataset with a sample space time dataset and print the result to stdout
+def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, separator, method, spatial=False):
+    """ Sample the input space time datasets with a sample space time dataset and print the result to stdout
 
         In case multiple maps are located in the current granule, the map names are separated by comma.
         
@@ -480,67 +480,82 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
         @param sampler: Name of a space time dataset used for temporal sampling
         @param header: Set True to print column names 
         @param separator: The field separator character between the columns
-        @param method: The method to be used for sampling (start,during,contain,overlap,equal)
+        @param method: The method to be used for temporal sampling (start,during,contain,overlap,equal)
+        @param spatial: Perform spatial overlapping check
     """
     mapset =  core.gisenv()["MAPSET"]
 
-    print intype, sampletype
+    input_list = inputs.split(",")
+    sts = []
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
+    for input in input_list:
+        if input.find("@") >= 0:
+            id = input
+        else:
+            id = input + "@" + mapset
 
-    sp = dataset_factory(intype, id)
+        st = dataset_factory(intype, id)
+        sts.append(st)
 
     if sampler.find("@") >= 0:
         sid = sampler
     else:
         sid = sampler + "@" + mapset
 
-    ssp = dataset_factory(sampletype, sid)
+    sst = dataset_factory(sampletype, sid)
 
     dbif = sql_database_interface()
     dbif.connect()
 
-    if sp.is_in_db(dbif) == False:
-        core.fatal(_("Dataset <%s> not found in temporal database") % (id))
+    for st in sts:
+        if st.is_in_db(dbif) == False:
+            core.fatal(_("Dataset <%s> not found in temporal database") % (id))
+        st.select(dbif)
 
-    if ssp.is_in_db(dbif) == False:
+    if sst.is_in_db(dbif) == False:
         core.fatal(_("Dataset <%s> not found in temporal database") % (sid))
 
-    sp.select(dbif)
-    ssp.select(dbif)
+    sst.select(dbif)
 
     if separator == None or separator == "" or separator.find(",") >= 0:
         separator = " | "
        
-    mapmatrix = sp.sample_by_dataset_topology(ssp, method, dbif)
+    mapmatrizes = []
+    for st in sts:
+        mapmatrix = st.sample_by_dataset(sst, method, spatial, dbif)
+        if mapmatrix and len(mapmatrix) > 0:
+            mapmatrizes.append(mapmatrix)
 
-    if mapmatrix and len(mapmatrix) > 0:
+    if len(mapmatrizes) > 0:
 
         if header:
             string = ""
-            string += "%s%s" % ("sample_id", separator)
-            string += "%s%s" % ("ids", separator)
+            string += "%s%s" % (sst.get_id(), separator)
+            for st in sts:
+                string += "%s%s" % (st.get_id(), separator)
             string += "%s%s" % ("start_time", separator)
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
             string += "%s"   % ("distance_from_begin")
             print string
 
-        first_time, dummy = mapmatrix[0]["granule"].get_valid_time()
+        first_time, dummy = mapmatrizes[0][0]["granule"].get_valid_time()
 
-        for entry in mapmatrix:
-            mapnames = ""
-            count = 0
-            for sample in entry["samples"]:
-                if count == 0:
-                    mapnames += str(sample.get_id())
-                else:
-                    mapnames += ",%s" % str(sample.get_id())
-                count += 1
-            
+        for i in range(len(mapmatrizes[0])):
+            mapname_list = []
+            for mapmatrix in mapmatrizes:
+                mapnames = ""
+                count = 0
+                entry = mapmatrix[i]
+                for sample in entry["samples"]:
+                    if count == 0:
+                        mapnames += str(sample.get_id())
+                    else:
+                        mapnames += ",%s" % str(sample.get_id())
+                    count += 1
+                mapname_list.append(mapnames)
+                
+            entry = mapmatrizes[0][i]
             map = entry["granule"]
 
             start, end = map.get_valid_time()
@@ -557,7 +572,8 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
 
             string = ""
             string += "%s%s" % (map.get_id(), separator)
-            string += "%s%s" % (mapnames, separator)
+            for mapnames in mapname_list:
+                string += "%s%s" % (mapnames, separator)
             string += "%s%s" % (start, separator)
             string += "%s%s" % (end, separator)
             string += "%s%s" % (delta, separator)

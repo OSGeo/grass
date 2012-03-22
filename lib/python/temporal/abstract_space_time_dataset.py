@@ -22,6 +22,7 @@ for details.
 """
 from abstract_dataset import *
 from temporal_granularity import *
+from temporal_relationships import *
 
 ###############################################################################
 
@@ -194,67 +195,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return map_time
 
-    def print_temporal_relation_matrix(self, maps):
-        """Print the temporal relation matrix of all registered maps to stdout
-
-           The temporal relation matrix includes the temporal relations between
-           all registered maps. The relations are strings stored in a list of lists.
-           
-           @param dbif: The database interface to be used
-        """
-
-        for i in range(len(maps)):
-            reltations = ""
-            count = 0
-            for j in range(i + 1, len(maps)):
-                relation = maps[j].temporal_relation(maps[i])
-
-                # print maps[j].base.get_name(), maps[i].base.get_name(), relation
-                if count == 0:
-                    relations = relation
-                else:
-                    relations += "," + str(relation)
-                count += 1
-                # Break if the the next map follows
-                if relation == "follows":
-                    break
-                # Break if the the next map is after
-                if relation == "after":
-                    break
-            if i < len(maps) - 1:    
-                print maps[i].base.get_name(), relations    
-            else:
-                print maps[i].base.get_name()
-
-    def get_temporal_relation_matrix(self, maps):
-        """Return the temporal relation matrix of all registered maps as list of lists
-
-           The map list must be ordered by start time
-
-           The temporal relation matrix includes the temporal relations between
-           all registered maps. The relations are strings stored in a list of lists.
-           
-           @param maps: a ordered by start_time list of map objects
-        """
-
-        matrix = []
-
-        # Create the temporal relation matrix
-        # Add the map names first
-        row = []
-        for map in maps:
-            row.append(map.get_id())
-        matrix.append(row)
-
-        for mapA in maps:
-            row = []
-            for mapB in maps:
-                row.append(mapA.temporal_relation(mapB))
-            matrix.append(row)
-
-        return matrix
-
-    def count_temporal_types(self, maps):
+    def count_temporal_types(self, maps=None, dbif=None):
         """Return the temporal type of the registered maps as dictionary
 
            The map list must be ordered by start time
@@ -265,8 +206,12 @@ class abstract_space_time_dataset(abstract_dataset):
            * invalid  -> No valid time point or interval found
 
            @param maps: A sorted (start_time) list of abstract_dataset objects
+           @param dbif: The database interface to be used
         """
 
+        if maps == None:
+            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+            
         time_invalid = 0
         time_point = 0
         time_interval = 0
@@ -292,13 +237,17 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return tcount
 
-    def count_gaps(self, maps):
+    def count_gaps(self, maps=None, dbif=None):
         """Count the number of gaps between temporal neighbors
         
            @param maps: A sorted (start_time) list of abstract_dataset objects
+           @param dbif: The database interface to be used
            @return The numbers of gaps between temporal neighbors
         """
 
+        if maps == None:
+            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+            
         gaps = 0
 
         # Check for gaps
@@ -309,35 +258,53 @@ class abstract_space_time_dataset(abstract_dataset):
                     gaps += 1
 
         return gaps
+        
+    def print_temporal_relation_matrix(self, maps=None, dbif=None):
+        """Print the temporal relation matrix of all registered maps to stdout
 
-    def count_temporal_relations(self, maps):
-        """Count the temporal relations between the registered maps.
+           The temporal relation matrix includes the temporal relations between
+           all registered maps. The relations are strings stored in a list of lists.
+           
+           @param maps: a ordered by start_time list of map objects
+           @param dbif: The database interface to be used
+        """
+        
+        if maps == None:
+            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+	    
+	print_temporal_relations(maps, maps)
+
+    def get_temporal_relation_matrix(self, maps=None, dbif=None):
+        """Return the temporal relation matrix of all registered maps as list of lists
 
            The map list must be ordered by start time
 
+           The temporal relation matrix includes the temporal relations between
+           all registered maps. The relations are strings stored in a list of lists.
+           
+           @param maps: a ordered by start_time list of map objects
+           @param dbif: The database interface to be used
+        """
+        if maps == None:
+            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+
+        return get_temporal_relation_matrix(maps, maps)
+
+    def count_temporal_relations(self, maps=None, dbif=None):
+        """Count the temporal relations between the registered maps.
+
+           The map list must be ordered by start time. Temporal relations are counted 
+           by analysing the sparse upper right side temporal relationships matrix.
+
            @param maps: A sorted (start_time) list of abstract_dataset objects
+           @param dbif: The database interface to be used
            @return A dictionary with counted temporal relationships
         """
+        
+        if maps == None:
+            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
 
-        tcount = {}
-        for i in range(len(maps)):
-            # Check for point and interval data
-            for j in range(i + 1, len(maps)):
-                relation = maps[j].temporal_relation(maps[i])
-
-                if tcount.has_key(relation):
-                    tcount[relation] = tcount[relation] + 1
-                else:
-                    tcount[relation] = 1
-
-                # Break if the the next map follows
-                if relation == "follows":
-                    break
-                # Break if the the next map is after
-                if relation == "after":
-                    break
-
-        return tcount
+        return count_temporal_relations(maps, maps)
 
     def check_temporal_topology(self, maps=None, dbif=None):
         """Check the temporal topology
@@ -401,10 +368,13 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return True
 
-    def sample_by_dataset_topology(self, stds, method=None, dbif=None):
+    def sample_by_dataset(self, stds, method=None, spatial=False, dbif=None):
         """Sample this space time dataset with the temporal topology of a second space time dataset
 
            The sample dataset must have "interval" as temporal map type, so all sample maps have valid interval time.
+
+           In case spatial is True, the spatial overlap between temporal related maps is performed. Only
+           temporal related and spatial overlapping maps are returned.
         
            Return all registered maps as ordered (by start_time) object list with 
            "gap" map objects (id==None). Each list entry is a list of map objects
@@ -413,7 +383,7 @@ class abstract_space_time_dataset(abstract_dataset):
            Each entry in the object list is a dict. The actual sampler map and its temporal extent (the actual granule) and
            the list of samples are stored:
 
-           list = self.sample_by_dataset_topology(stds=sampler, method=["during","overlap","contain","equal"])    
+           list = self.sample_by_dataset(stds=sampler, method=["during","overlap","contain","equal"])    
            for entry in list:
                granule = entry["granule"]
                maplist = entry["samples"]
@@ -462,6 +432,8 @@ class abstract_space_time_dataset(abstract_dataset):
                             granule:  s-----------e
 
                           All these methods can be combined. Method must be of type tuple including the identification strings.
+           @param spatial: If set True additional the spatial overlapping is used for selection -> spatio-temporal relation. 
+                           The returned map objects will have temporal and spatial extents
            @param dbif: The database interface to be used
 
            In case nothing found None is returned
@@ -519,31 +491,35 @@ class abstract_space_time_dataset(abstract_dataset):
         sample_maps = stds.get_registered_maps_as_objects_with_gaps(where=None, dbif=dbif)
         
         for granule in sample_maps:
+            # Read the spatial extent
+            if spatial == True:
+                granule.spatial_extent.select(dbif)
             start, end = granule.get_valid_time()
 
             where = create_temporal_relation_sql_where_statement(start, end, use_start, \
                     use_during, use_overlap, use_contain, use_equal)  
 
-            rows = self.get_registered_maps("id", where, "start_time", dbif)
+            maps = self.get_registered_maps_as_objects(where, "start_time", dbif)
 
             result = {}
             result["granule"] = granule
-            maplist = None
+            num_samples = 0
+            maplist = []
 
-            if rows:
-                maplist = []
-                for row in rows:
-                    map = self.get_new_map_instance(row["id"])
+            if maps:
+                for map in maps:
+                    # Read the spatial extent
+                    if spatial == True:
+                        map.spatial_extent.select(dbif)
+                        # Ignore spatial disjoint maps
+                        if not granule.spatial_overlapping(map):
+                            continue
 
-                    if self.is_time_absolute():
-                        map.set_absolute_time(start, end)
-                    elif self.is_time_relative():
-                        map.set_relative_time(start, end, self.get_relative_time_unit())
-
+                    num_samples += 1
                     maplist.append(copy.copy(map))
-                result["samples"] = maplist
-            else:
-                maplist = []
+
+            # Fill with empty map in case no spatio-temporal relations found
+            if not maps or num_samples == 0:
                 map = self.get_new_map_instance(None)
 
                 if self.is_time_absolute():
@@ -552,7 +528,8 @@ class abstract_space_time_dataset(abstract_dataset):
                     map.set_relative_time(start, end, self.get_relative_time_unit())
 
                 maplist.append(copy.copy(map))
-                result["samples"] = maplist
+
+            result["samples"] = maplist
 
             obj_list.append(copy.copy(result))
 

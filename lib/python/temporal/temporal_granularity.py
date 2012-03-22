@@ -26,7 +26,15 @@ from datetime_math import *
 ###############################################################################
 
 def compute_relative_time_granularity(maps):            
-    """ Compute the relative granularity"""
+    """ Compute the relative time granularity
+        
+        Attention: The computation of the granularity is only correct in case of not
+        overlapping intervals. Hence a correct temporal topology is required for
+        computation.
+    
+	
+        @param maps: a ordered by start_time list of map objects
+    """
 
     # The interval time must be scaled to days resolution
     granularity = None
@@ -68,7 +76,16 @@ def compute_relative_time_granularity(maps):
 
 ###############################################################################
 
-def compute_absolute_time_granularity(maps):            
+def compute_absolute_time_granularity(maps):                  
+    """ Compute the absolute time granularity
+        
+        Attention: The computation of the granularity is only correct in case of not
+        overlapping intervals. Hence a correct temporal topology is required for
+        computation.
+    
+	
+        @param maps: a ordered by start_time list of map objects
+    """     
 
     has_seconds = False
     has_minutes = False

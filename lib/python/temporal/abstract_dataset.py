@@ -47,6 +47,11 @@ class abstract_dataset(object):
         """
         raise IOError("This method must be implemented in the subclasses")
 
+    def spatial_overlapping(self, dataset):
+        """Return True if the spatial extents are overlapping"""
+
+        raise IOError("This method must be implemented in the subclasses")
+
     def print_info(self):
         """Print information about this class in human readable style"""
 	raise IOError("This method must be implemented in the subclasses")
@@ -172,11 +177,6 @@ class abstract_dataset(object):
         
         return (north, south, east, west, top, bottom)
 
-    def spatial_overlap(self, dataset):
-        """Return True if the spatial extents overlap"""
-        
-        north = self.spatial_extent.overlap(dataset.spatial_extent)
-        
     def select(self, dbif=None):
 	"""Select temporal dataset entry from database and fill up the internal structure"""
 
