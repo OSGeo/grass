@@ -63,18 +63,18 @@ t.register type=vect    input=pnts_abs1 file="${n3}" start=file end=file
 tv.list pnts_abs1 -h
 
 # The @test
-t.sample method=equal   input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
-t.sample method=during  input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
-t.sample method=overlap input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
-t.sample method=contain input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
-t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -h
+t.sample method=equal   input=precip_abs0,precip_abs0,precip_abs0,precip_abs0 samtype=stvds sample=pnts_abs0 -cs
+t.sample method=during  input=precip_abs0,precip_abs0,precip_abs0 samtype=stvds sample=pnts_abs0 -c
+t.sample method=overlap input=precip_abs0,precip_abs0 samtype=stvds sample=pnts_abs0 -cs
+t.sample method=contain input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
+t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -cs
 
 
 # Test with temporal point data
 t.register type=rast    input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 tr.list precip_abs0 -h
-t.sample input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
-t.sample input=precip_abs0 samtype=stvds sample=pnts_abs1 -h
+t.sample input=precip_abs0 samtype=stvds sample=pnts_abs0 -cs
+t.sample input=precip_abs0 samtype=stvds sample=pnts_abs1 -cs
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs0

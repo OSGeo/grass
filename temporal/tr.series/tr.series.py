@@ -5,7 +5,7 @@
 # MODULE:	tr.series
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Performe different aggregation algorithms from r.series on all or a selected subset of raster maps in a space time raster dataset
+# PURPOSE:	Perform different aggregation algorithms from r.series on all or a selected subset of raster maps in a space time raster dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Performe different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset
+#% description: Perform different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset
 #% keywords: temporal
 #% keywords: series
 #%end

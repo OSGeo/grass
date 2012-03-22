@@ -5,7 +5,7 @@
 # MODULE:	t.sample
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	Sample the input space time dataset with a sample space time dataset and print the result to stdout
+# PURPOSE:	Sample the input space time dataset(s) with a sample space time dataset and print the result to stdout
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,12 +15,12 @@
 #############################################################################
 
 #%module
-#% description: Sample the input space time dataset with a sample space time dataset and print the result to stdout
+#% description: Sample the input space time dataset(s) with a sample space time dataset and print the result to stdout
 #% keywords: temporal
 #% keywords: sample
 #%end
 
-#%option G_OPT_STDS_INPUT
+#%option G_OPT_STDS_INPUTS
 #%end
 
 #%option G_OPT_STDS_INPUT
@@ -50,9 +50,15 @@
 #%end
 
 #%flag
-#% key: h
+#% key: c
 #% description: Print column names 
 #%end
+
+#%flag
+#% key: s
+#% description: Check spatial overlap to perform spatio-temporal sampling 
+#%end
+
 
 import grass.script as grass
 import grass.temporal as tgis
@@ -62,20 +68,21 @@ import grass.temporal as tgis
 def main():
 
     # Get the options
-    input = options["input"]
+    inputs = options["inputs"]
     sampler = options["sample"]
     samtype = options["samtype"]
     intype = options["intype"]
     separator = options["fs"]
     method = options["method"]
-    header = flags["h"]
+    header = flags["c"]
+    spatial = flags["s"]
 
     method = method.split(",")
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    tgis.sample_stds_by_stds_topology(intype, samtype, input, sampler, header, separator, method)
+    tgis.sample_stds_by_stds_topology(intype, samtype, inputs, sampler, header, separator, method, spatial)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

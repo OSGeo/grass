@@ -5,7 +5,7 @@
 # MODULE:	tr.univar
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Calculates univariate statistics from the non-null cells of a space time raster dataset
+# PURPOSE:	Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Calculates univariate statistics from the non-null cells for each registred raster map of a space time raster dataset
+#% description: Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset
 #% keywords: spacetime raster dataset
 #% keywords: raster
 #% keywords: statistics
@@ -74,7 +74,7 @@ def main():
 
     sp = tgis.space_time_raster_dataset(id)
     
-    if sp.is_in_db() == False:
+    if sp.is_in_db(dbif) == False:
         dbif.close()
         grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
