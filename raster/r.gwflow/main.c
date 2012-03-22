@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
 	N_convert_array_2d_null_to_zero(data->r);
     }
 
-    /*Sources or sinks areoptional */
+    /*Sources or sinks are optional */
     if (param.q->answer) {
         N_read_rast_to_array_2d(param.q->answer, data->q);
         N_convert_array_2d_null_to_zero(data->q);
@@ -357,13 +357,11 @@ int main(int argc, char *argv[])
     N_convert_array_2d_null_to_zero(data->phead);
 
   /****************************************************/
-    /*explicite calculation of free groundwater surface */
-
+  /*explicite calculation of free groundwater surface */
   /****************************************************/
     if (data->gwtype == N_GW_UNCONFINED) {
 	/* allocate memory and copy the result into a new temporal vector */
-	if (!(tmp_vect = (double *)calloc(les->rows, sizeof(double))))
-	    G_fatal_error(_("Out of memory"));
+	tmp_vect = (double *)G_calloc(les->rows, sizeof(double));
 
 	/*copy data */
 	for (i = 0; i < les->rows; i++)
@@ -428,7 +426,7 @@ int main(int argc, char *argv[])
 	N_write_array_2d_to_rast(budget, param.budget->answer);
     }
 
-    /*Compute the the velocity field if required and write the result into three rast maps */
+    /*Compute the the velocity field if required and write the result into two raster maps */
     if (param.vector_x->answer && param.vector_y->answer) {
 	field =
 	    N_compute_gradient_field_2d(data->phead, data->hc_x, data->hc_y,
