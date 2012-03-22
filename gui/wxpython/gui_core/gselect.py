@@ -247,15 +247,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         root = self.seltree.GetRootItem()
         if not root:
             return
-        found = self.FindItem(root, value)
         winValue = self.GetCombo().GetValue().strip(',')
         self.value = []
         if winValue:
             self.value = winValue.split(',')
-        
-        if found:
-            self.value.append(found)
-            self.seltree.SelectItem(found)
         
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
         """!Reads UserSettings to get height (which was 200 in old implementation).
