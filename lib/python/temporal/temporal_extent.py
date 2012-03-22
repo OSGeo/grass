@@ -34,119 +34,119 @@ class abstract_temporal_extent(sql_database_interface):
 	self.set_start_time(start_time)
 	self.set_end_time(end_time)
 
-    def starts(self, map):
+    def starts(self, extent):
 	"""Return True if this time object starts at the start of the provided time object and finishes within it
 	   A  |-----|
 	   B  |---------|
 	"""
-        if  self.D["end_time"] == None or map.D["end_time"] == None :
+        if  self.D["end_time"] == None or extent.D["end_time"] == None :
             return False
             
-	if self.D["start_time"] == map.D["start_time"] and self.D["end_time"] < map.D["end_time"]:
+	if self.D["start_time"] == extent.D["start_time"] and self.D["end_time"] < extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def started(self, map):
+    def started(self, extent):
 	"""Return True if this time object is started at the start of the provided time object
 	   A  |---------|
 	   B  |-----|
 	"""
-        if  self.D["end_time"] == None or map.D["end_time"] == None :
+        if  self.D["end_time"] == None or extent.D["end_time"] == None :
             return False
 
-	if self.D["start_time"] == map.D["start_time"] and self.D["end_time"] > map.D["end_time"]:
+	if self.D["start_time"] == extent.D["start_time"] and self.D["end_time"] > extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def finishes(self, map):
+    def finishes(self, extent):
 	"""Return True if this time object finishes at the end and within of the provided time object
 	   A      |-----|
 	   B  |---------|
 	"""
-        if  self.D["end_time"] == None or map.D["end_time"] == None :
+        if  self.D["end_time"] == None or extent.D["end_time"] == None :
             return False
 
-	if self.D["end_time"] == map.D["end_time"] and  self.D["start_time"] > map.D["start_time"] :
+	if self.D["end_time"] == extent.D["end_time"] and  self.D["start_time"] > extent.D["start_time"] :
 	    return True
         else:
 	    return False
 
-    def finished(self, map):
+    def finished(self, extent):
 	"""Return True if this time object finished at the end of the provided time object
 	   A  |---------|
 	   B      |-----|
 	"""
-        if  self.D["end_time"] == None or map.D["end_time"] == None :
+        if  self.D["end_time"] == None or extent.D["end_time"] == None :
             return False
 
-	if self.D["end_time"] == map.D["end_time"] and  self.D["start_time"] < map.D["start_time"] :
+	if self.D["end_time"] == extent.D["end_time"] and  self.D["start_time"] < extent.D["start_time"] :
 	    return True
         else:
 	    return False
 
-    def after(self, map):
+    def after(self, extent):
 	"""Return True if this time object is temporal located after the provided time object
 	   A             |---------|
 	   B  |---------|
 	"""
-        if map.D["end_time"] == None:
-            if self.D["start_time"] > map.D["start_time"]:
+        if extent.D["end_time"] == None:
+            if self.D["start_time"] > extent.D["start_time"]:
                 return True
             else:
                 return False
 
-	if self.D["start_time"] > map.D["end_time"]:
+	if self.D["start_time"] > extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def before(self, map):
+    def before(self, extent):
 	"""Return True if this time object is temporal located before the provided time object
 	   A  |---------|
 	   B             |---------|
 	"""
         if self.D["end_time"] == None:
-            if self.D["start_time"] < map.D["start_time"]:
+            if self.D["start_time"] < extent.D["start_time"]:
                 return True
             else:
                 return False
 
-	if self.D["end_time"] < map.D["start_time"]:
+	if self.D["end_time"] < extent.D["start_time"]:
 	    return True
         else:
 	    return False
 
-    def adjacent(self, map):
+    def adjacent(self, extent):
 	"""Return True if this time object is a meeting neighbour the provided time object
 	   A            |---------|
 	   B  |---------|
 	   A  |---------|
 	   B            |---------|
 	"""
-        if  self.D["end_time"] == None and map.D["end_time"] == None :
+        if  self.D["end_time"] == None and extent.D["end_time"] == None :
             return False
         
-	if (self.D["start_time"] == map.D["end_time"]) or (self.D["end_time"] == map.D["start_time"]):
+	if (self.D["start_time"] == extent.D["end_time"]) or (self.D["end_time"] == extent.D["start_time"]):
 	    return True
         else:
 	    return False
 
-    def follows(self, map):
+    def follows(self, extent):
 	"""Return True if this time object is temporal follows the provided time object
 	   A            |---------|
 	   B  |---------|
 	"""
-        if  map.D["end_time"] == None :
+        if  extent.D["end_time"] == None :
             return False
 
-	if self.D["start_time"] == map.D["end_time"]:
+	if self.D["start_time"] == extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def precedes(self, map):
+    def precedes(self, extent):
 	"""Return True if this time object is temporal precedes the provided time object
 	   A  |---------|
 	   B            |---------|
@@ -154,33 +154,33 @@ class abstract_temporal_extent(sql_database_interface):
         if  self.D["end_time"] == None:
             return False
 
-	if self.D["end_time"] == map.D["start_time"]:
+	if self.D["end_time"] == extent.D["start_time"]:
 	    return True
         else:
 	    return False
 
-    def during(self, map):
+    def during(self, extent):
 	"""Return True if this time object is temporal located during the provided time object
 	   A   |-------|
 	   B  |---------|
 	"""
         # Check single point of time in interval
-        if  map.D["end_time"] == None:
+        if  extent.D["end_time"] == None:
                 return False
 
         # Check single point of time in interval
         if  self.D["end_time"] == None:
-            if self.D["start_time"] > map.D["start_time"] and self.D["start_time"] < map.D["end_time"]:
+            if self.D["start_time"] > extent.D["start_time"] and self.D["start_time"] < extent.D["end_time"]:
                 return True
             else:
                 return False
 
-	if self.D["start_time"] > map.D["start_time"] and self.D["end_time"] < map.D["end_time"]:
+	if self.D["start_time"] > extent.D["start_time"] and self.D["end_time"] < extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def contains(self, map):
+    def contains(self, extent):
 	"""Return True if this time object contains the provided time object
 	   A  |---------|
 	   B   |-------|
@@ -190,65 +190,65 @@ class abstract_temporal_extent(sql_database_interface):
                 return False
 
         # Check single point of time in interval
-        if  map.D["end_time"] == None:
-            if self.D["start_time"] < map.D["start_time"] and self.D["end_time"] > map.D["start_time"]:
+        if  extent.D["end_time"] == None:
+            if self.D["start_time"] < extent.D["start_time"] and self.D["end_time"] > extent.D["start_time"]:
                 return True
             else:
                 return False
 
-	if self.D["start_time"] < map.D["start_time"] and self.D["end_time"] > map.D["end_time"]:
+	if self.D["start_time"] < extent.D["start_time"] and self.D["end_time"] > extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def equivalent(self, map):
+    def equivalent(self, extent):
 	"""Return True if this time object is temporal located equivalent the provided time object
 	   A  |---------|
 	   B  |---------|
 	"""
-        if  self.D["end_time"] == None and map.D["end_time"] == None :
-            if self.D["start_time"] == map.D["start_time"]:
+        if  self.D["end_time"] == None and extent.D["end_time"] == None :
+            if self.D["start_time"] == extent.D["start_time"]:
                 return True
             else:
                 return False
 
-        if  self.D["end_time"] == None or map.D["end_time"] == None :
+        if  self.D["end_time"] == None or extent.D["end_time"] == None :
             return False
 
-	if self.D["start_time"] == map.D["start_time"] and self.D["end_time"] == map.D["end_time"]:
+	if self.D["start_time"] == extent.D["start_time"] and self.D["end_time"] == extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def overlaps(self, map):
+    def overlaps(self, extent):
 	"""Return True if this time object is temporal overlaps the provided time object
            A  |---------|
 	   B    |---------|
 	"""
-        if  self.D["end_time"] == None or map.D["end_time"] == None :
+        if  self.D["end_time"] == None or extent.D["end_time"] == None :
             return False
 
-	if self.D["start_time"] < map.D["start_time"] and self.D["end_time"] < map.D["end_time"] and\
-	   self.D["end_time"] > map.D["start_time"]:
+	if self.D["start_time"] < extent.D["start_time"] and self.D["end_time"] < extent.D["end_time"] and\
+	   self.D["end_time"] > extent.D["start_time"]:
 	    return True
         else:
 	    return False
 
-    def overlapped(self, map):
+    def overlapped(self, extent):
 	"""Return True if this time object is temporal overlapped by the provided time object
 	   A    |---------|
            B  |---------|
 	"""
-        if  self.D["end_time"] == None or map.D["end_time"] == None :
+        if  self.D["end_time"] == None or extent.D["end_time"] == None :
             return False
             
-	if self.D["start_time"] > map.D["start_time"] and self.D["end_time"] > map.D["end_time"] and\
-	   self.D["start_time"] < map.D["end_time"]:
+	if self.D["start_time"] > extent.D["start_time"] and self.D["end_time"] > extent.D["end_time"] and\
+	   self.D["start_time"] < extent.D["end_time"]:
 	    return True
         else:
 	    return False
 
-    def temporal_relation(self, map):
+    def temporal_relation(self, extent):
 	"""Returns the temporal relation between temporal objects
 	   Temporal relationships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 	"""
@@ -258,39 +258,39 @@ class abstract_temporal_extent(sql_database_interface):
             return None
         if not self.D.has_key("end_time"):
             return None
-        if not map.D.has_key("start_time"):
+        if not extent.D.has_key("start_time"):
             return None
-        if not map.D.has_key("end_time"):
-            return None
-
-        if self.D["start_time"] == None or map.D["start_time"] == None:
+        if not extent.D.has_key("end_time"):
             return None
 
-	if self.equivalent(map):
+        if self.D["start_time"] == None or extent.D["start_time"] == None:
+            return None
+
+	if self.equivalent(extent):
 	    return "equivalent"
-	if self.during(map):
+	if self.during(extent):
 	    return "during"
-	if self.contains(map):
+	if self.contains(extent):
 	    return "contains"
-	if self.overlaps(map):
+	if self.overlaps(extent):
 	    return "overlaps"
-	if self.overlapped(map):
+	if self.overlapped(extent):
 	    return "overlapped"
-	if self.after(map):
+	if self.after(extent):
 	    return "after"
-	if self.before(map):
+	if self.before(extent):
 	    return "before"
-	if self.starts(map):
+	if self.starts(extent):
 	    return "starts"
-	if self.finishes(map):
+	if self.finishes(extent):
 	    return "finishes"
-	if self.started(map):
+	if self.started(extent):
 	    return "started"
-	if self.finished(map):
+	if self.finished(extent):
 	    return "finished"
-	if self.follows(map):
+	if self.follows(extent):
 	    return "follows"
-	if self.precedes(map):
+	if self.precedes(extent):
 	    return "precedes"
         return None
 
@@ -300,11 +300,11 @@ class abstract_temporal_extent(sql_database_interface):
 	self.D["id"] = ident
 
     def set_start_time(self, start_time):
-	"""Set the valid start time of the map"""
+	"""Set the valid start time of the extent"""
 	self.D["start_time"] = start_time
 
     def set_end_time(self, end_time):
-	"""Set the valid end time of the map"""
+	"""Set the valid end time of the extent"""
 	self.D["end_time"] = end_time
 
     def get_id(self):
@@ -317,7 +317,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return None
 
     def get_start_time(self):
-	"""Get the valid start time of the map
+	"""Get the valid start time of the extent
 	   @return None if not found"""
 	if self.D.has_key("start_time"):
 	    return self.D["start_time"]
@@ -325,7 +325,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return None
 
     def get_end_time(self):
-	"""Get the valid end time of the map
+	"""Get the valid end time of the extent
 	   @return None if not found"""
 	if self.D.has_key("end_time"):
 	    return self.D["end_time"]

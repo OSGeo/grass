@@ -570,7 +570,7 @@ def test_compute_relative_time_granularity():
     for i in range(6):
         end = start * fact
         map = raster_dataset(None)
-        map.set_relative_time(start, end)
+        map.set_relative_time(start, end, "years")
         maps.append(map)
         start = end
 
@@ -587,7 +587,7 @@ def test_compute_relative_time_granularity():
     for i in range(10):
         end = start * fact
         map = raster_dataset(None)
-        map.set_relative_time(start, end)
+        map.set_relative_time(start, end, "years")
         maps.append(map)
         start = end
 
@@ -972,3 +972,452 @@ def test_compute_absolute_time_granularity():
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
         core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+
+###############################################################################
+
+def test_spatial_extent_intersection():
+    # Generate the extents
+    
+    A = spatial_extent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+    B.print_info()
+    C = A.intersect(B)
+    C.print_info()
+    
+    if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
+       C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
+       C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
+        core.error("Wrong intersection computation")
+        
+    B = spatial_extent(north=40, south=30, east=60, west=10, bottom=-50, top=50)
+    B.print_info()
+    C = A.intersect(B)
+    C.print_info()
+    
+    if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
+       C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
+       C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
+        core.error("Wrong intersection computation")
+        
+    B = spatial_extent(north=40, south=30, east=60, west=30, bottom=-50, top=50)
+    B.print_info()
+    C = A.intersect(B)
+    C.print_info()
+    
+    if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
+       C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
+       C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
+        core.error("Wrong intersection computation")
+    
+    B = spatial_extent(north=40, south=30, east=60, west=30, bottom=-30, top=50)
+    B.print_info()
+    C = A.intersect(B)
+    C.print_info()
+    
+    if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
+       C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
+       C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
+        core.error("Wrong intersection computation")
+    
+    B = spatial_extent(north=40, south=30, east=60, west=30, bottom=-30, top=30)
+    B.print_info()
+    C = A.intersect(B)
+    C.print_info()
+    
+    if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
+       C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
+       C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
+        core.error("Wrong intersection computation")
+
+###############################################################################
+
+def test_spatial_relations():
+    # Generate the extents
+    
+    A = spatial_extent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "equivalent":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    B = spatial_extent(north=70, south=20, east=60, west=10, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=70, south=30, east=60, west=10, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = B.spatial_relation_2d(A)
+    print relation
+    if relation!= "covered":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = B.spatial_relation(A)
+    print relation
+    if relation!= "covered":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=70, south=30, east=50, west=10, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = B.spatial_relation_2d(A)
+    print relation
+    if relation!= "covered":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
+    
+    relation = B.spatial_relation(A)
+    print relation
+    if relation!= "covered":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "contain":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-40, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "cover":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-40, top=40)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "contain":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = B.spatial_relation(A)
+    print relation
+    if relation!= "in":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=90, south=30, east=50, west=20, bottom=-40, top=40)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "overlap":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "overlap":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=90, south=5, east=70, west=5, bottom=-40, top=40)
+    A.print_info()
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "in":
+	core.error("Wrong spatial relation: %s"%(relation))
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "overlap":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    B = spatial_extent(north=90, south=5, east=70, west=5, bottom=-40, top=60)
+    A.print_info()
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "overlap":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+	
+    B = spatial_extent(north=90, south=5, east=70, west=5, bottom=-60, top=60)
+    A.print_info()
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "in":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    A = spatial_extent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=60, south=20, east=60, west=10, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    A = spatial_extent(north=60, south=40, east=60, west=10, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=40, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=90, south=30, east=60, west=40, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=70, south=50, east=60, west=40, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=60, south=20, east=60, west=40, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=40, south=20, east=60, west=40, bottom=-50, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation_2d(B)
+    print relation
+    if relation!= "disjoint":
+	core.error("Wrong spatial relation: %s"%(relation))
+	
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "disjoint":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=60, south=20, east=60, west=40, bottom=-60, top=60)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+    A.print_info()
+    B = spatial_extent(north=90, south=30, east=60, west=40, bottom=-40, top=40)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+    A.print_info()
+    B = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+    A.print_info()
+    B = spatial_extent(north=80, south=50, east=60, west=30, bottom=-50, top=0)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+    A.print_info()
+    B = spatial_extent(north=70, south=50, east=50, west=30, bottom=-50, top=0)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+    A.print_info()
+    B = spatial_extent(north=90, south=30, east=70, west=10, bottom=-50, top=0)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+    A.print_info()
+    B = spatial_extent(north=70, south=30, east=50, west=10, bottom=-50, top=0)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ ###
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+    A.print_info()
+    B = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+    A.print_info()
+    B = spatial_extent(north=80, south=50, east=60, west=30, bottom=0, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+    A.print_info()
+    B = spatial_extent(north=70, south=50, east=50, west=30, bottom=0, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+    A.print_info()
+    B = spatial_extent(north=90, south=30, east=70, west=10, bottom=0, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+    A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+    A.print_info()
+    B = spatial_extent(north=70, south=30, east=50, west=10, bottom=0, top=50)
+    B.print_info()
+    
+    relation = A.spatial_relation(B)
+    print relation
+    if relation!= "meet":
+	core.error("Wrong spatial relation: %s"%(relation))
+ 
+if __name__ == "__main__":
+    test_increment_datetime_by_string()
+    test_adjust_datetime_to_granularity()
+    test_spatial_extent_intersection()
+    #test_compute_relative_time_granularity()
+    test_compute_absolute_time_granularity()
+    test_compute_datetime_delta()
+    test_spatial_extent_intersection()
+    test_spatial_relations()
