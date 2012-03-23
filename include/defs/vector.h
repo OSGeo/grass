@@ -161,7 +161,7 @@ const char *Vect_get_name(const struct Map_info *);
 const char *Vect_get_mapset(const struct Map_info *);
 const char *Vect_get_full_name(const struct Map_info *);
 const char *Vect_get_finfo_dsn_name(const struct Map_info *);
-const char *Vect_get_finfo_layer_name(const struct Map_info *);
+char *Vect_get_finfo_layer_name(const struct Map_info *);
 const char *Vect_get_finfo_format_info(const struct Map_info *);
 const char *Vect_get_finfo_geometry_type(const struct Map_info *);
 int Vect_is_3d(const struct Map_info *);

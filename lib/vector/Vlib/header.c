@@ -291,31 +291,38 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
     - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
     - table name for PostGIS format (GV_FORMAT_POSTGIS)
 
+   Note: allocated string should be freed by G_free()
+
    \param Map pointer to Map_info structure
 
    \return string containing layer name
    \return NULL on error (map format is native)
  */
-const char *Vect_get_finfo_layer_name(const struct Map_info *Map)
+char *Vect_get_finfo_layer_name(const struct Map_info *Map)
 {
+    char *name;
+    
+    name = NULL;
     if (Map->format == GV_FORMAT_OGR ||
 	Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
 	G_warning(_("GRASS is not compiled with OGR support"));
 #endif
-	return Map->fInfo.ogr.layer_name;
+	name = G_store(Map->fInfo.ogr.layer_name);
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifndef HAVE_POSTGRES
 	G_warning(_("GRASS is not compiled with PostgreSQL support"));
 #endif
-        return Map->fInfo.pg.table_name;
+	G_asprintf(&name, "%s.%s", Map->fInfo.pg.schema_name,
+		   Map->fInfo.pg.table_name);
     }
-
-    G_warning(_("Native vector format detected for <%s>"),
-	      Vect_get_full_name(Map));
+    else {
+	G_warning(_("Native vector format detected for <%s>"),
+		  Vect_get_full_name(Map));
+    }
     
-    return NULL;
+    return name;
 }
 
 /*!
