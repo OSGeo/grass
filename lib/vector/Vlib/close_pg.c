@@ -52,8 +52,8 @@ int V1_close_pg(struct Map_info *Map)
 	PQclear(pg_info->res);
 	pg_info->res = NULL;
 	
-	sprintf(stmt, "CLOSE %s%p",
-		pg_info->table_name, pg_info->conn);
+	sprintf(stmt, "CLOSE %s_%s%p",
+		pg_info->schema_name, pg_info->table_name, pg_info->conn);
 	if (execute(pg_info->conn, stmt) == -1) {
 	    G_warning(_("Unable to close cursor"));
 	    return -1;

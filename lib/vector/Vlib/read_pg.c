@@ -420,17 +420,17 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
 	if (execute(pg_info->conn, "BEGIN") == -1)
 	    return -1;
 	
-	sprintf(stmt, "DECLARE %s%p CURSOR FOR SELECT %s FROM %s "
+	sprintf(stmt, "DECLARE %s_%s%p CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
 		"WHERE %s = %d",
-		pg_info->table_name, pg_info->conn, 
-		pg_info->geom_column, 
+		pg_info->schema_name, pg_info->table_name, pg_info->conn, 
+		pg_info->geom_column, pg_info->schema_name,
 		pg_info->table_name, pg_info->fid_column, fid);
 
 	if (execute(pg_info->conn, stmt) == -1)
 	    return -1;
     
-	sprintf(stmt, "FETCH ALL in %s%p", 
-		pg_info->table_name, pg_info->conn);
+	sprintf(stmt, "FETCH ALL in %s_%s%p", 
+		pg_info->schema_name, pg_info->table_name, pg_info->conn);
 	pg_info->res = PQexec(pg_info->conn, stmt);
 	pg_info->next_line = 0;
     }
@@ -447,9 +447,13 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
 	char stmt[DB_SQL_MAX];
 	PQclear(pg_info->res);
 
-	sprintf(stmt, "FETCH %d in %s%p", CURSOR_PAGE,
-		pg_info->table_name, pg_info->conn);
+	sprintf(stmt, "FETCH %d in %s_%s%p", CURSOR_PAGE,
+		pg_info->schema_name, pg_info->table_name, pg_info->conn);
 	pg_info->res = PQexec(pg_info->conn, stmt);
+	if (!pg_info->res) {
+	    execute(pg_info->conn, "ROLLBACK");
+	    return -1;
+	}
 	pg_info->next_line = 0;
     }
 
@@ -459,9 +463,10 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
 	    PQclear(pg_info->res);
 	    pg_info->res = NULL;
 	    
-	    sprintf(stmt, "CLOSE %s%p",
-		    pg_info->table_name, pg_info->conn);
+	    sprintf(stmt, "CLOSE %s_%s%p",
+		    pg_info->schema_name, pg_info->table_name, pg_info->conn);
 	    if (execute(pg_info->conn, stmt) == -1) {
+		execute(pg_info->conn, "ROLLBACK");
 		G_warning(_("Unable to close cursor"));
 		return -1;
 	    }
@@ -482,8 +487,8 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
 	PQclear(pg_info->res);
 	pg_info->res = NULL;
 	
-	sprintf(stmt, "CLOSE %s%p",
-		pg_info->table_name, pg_info->conn);
+	sprintf(stmt, "CLOSE %s_%s%p",
+		pg_info->schema_name, pg_info->table_name, pg_info->conn);
 	if (execute(pg_info->conn, stmt) == -1) {
 	    G_warning(_("Unable to close cursor"));
 	    return -1;
@@ -1027,17 +1032,24 @@ int set_initial_query(struct Format_info_pg *pg_info)
     if (execute(pg_info->conn, "BEGIN") == -1)
 	return -1;
     
-    sprintf(stmt, "DECLARE %s%p CURSOR FOR SELECT %s,%s FROM %s",
-	    pg_info->table_name, pg_info->conn, 
+    sprintf(stmt, "DECLARE %s_%s%p CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\"",
+	    pg_info->schema_name, pg_info->table_name, pg_info->conn, 
 	    pg_info->geom_column, pg_info->fid_column,
-	    pg_info->table_name);
-
-    if (execute(pg_info->conn, stmt) == -1)
-	return -1;
+	    pg_info->schema_name, pg_info->table_name);
+    G_debug(2, "SQL: %s", stmt);
     
-    sprintf(stmt, "FETCH %d in %s%p", CURSOR_PAGE,
-	    pg_info->table_name, pg_info->conn);
+    if (execute(pg_info->conn, stmt) == -1) {
+	execute(pg_info->conn, "ROLLBACK");
+	return -1;
+    }
+    
+    sprintf(stmt, "FETCH %d in %s_%s%p", CURSOR_PAGE,
+	    pg_info->schema_name, pg_info->table_name, pg_info->conn);
     pg_info->res = PQexec(pg_info->conn, stmt);
+    if (!pg_info->res) {
+	execute(pg_info->conn, "ROLLBACK");
+	return -1;
+    }
     pg_info->next_line = 0;
     
     return 0;
