@@ -314,7 +314,7 @@ int add_geometry_pg(struct Plus_head *plus,
 */
 void build_pg(struct Map_info *Map, int build)
 {
-    int iFeature, ipart, fid, nrecords;
+    int iFeature, ipart, fid, nrecords, npoints;
     char stmt[DB_SQL_MAX];
     char *wkb_data;
     
@@ -344,13 +344,17 @@ void build_pg(struct Map_info *Map, int build)
     }
 
     /* scan records */
+    npoints = 0;
     nrecords = PQntuples(pg_info->res);
     G_debug(4, "build_pg(): nrecords = %d", nrecords);
+    G_message(_("Registering primitives..."));
     for (iFeature = 0; iFeature < nrecords; iFeature++) {
 	/* get feature id */
 	fid  = atoi(PQgetvalue(pg_info->res, iFeature, 0));
 	wkb_data = PQgetvalue(pg_info->res, iFeature, 1);
 	
+	G_progress(iFeature + 1, 1e4);
+
 	/* cache feature (lines) */
 	if (SF_NONE == cache_feature(wkb_data,
 				     FALSE, &(pg_info->cache), &fparts)) {
@@ -368,6 +372,8 @@ void build_pg(struct Map_info *Map, int build)
 		continue;
 	    }
 	    
+	    npoints += pg_info->cache.lines[ipart]->n_points;
+
 	    G_debug(4, "Feature: fid = %d part = %d", fid, ipart);
 	    
 	    if (fparts.n_parts > 1)
@@ -381,6 +387,10 @@ void build_pg(struct Map_info *Map, int build)
 	/* read next feature from cache */
 	pg_info->cache.lines_next = 0;
     }
+    G_progress(1, 1);
+
+    G_message(_("%d primitives registered"), Map->plus.n_lines);
+    G_message(_("%d vertices registered"), npoints);
 
     Map->plus.built = GV_BUILD_BASE;
 
@@ -401,8 +411,7 @@ int add_geometry_ogr(struct Plus_head *plus,
 		     OGRGeometryH hGeom, int FID, int build,
 		     struct geom_parts *parts)
 {
-    int i, ret;
-    int line;
+    int i, ret, npoints, line;
     int area, isle, outer_area;
     int lines[1];
     double area_size, x, y;
@@ -428,7 +437,7 @@ int add_geometry_ogr(struct Plus_head *plus,
 	ogr_info->cache.lines_types[0] = -1;
     }
 
-    outer_area = 0;
+    npoints = outer_area = 0;
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
     G_debug(4, "OGR type = %d", eType);
 
@@ -441,6 +450,7 @@ int add_geometry_ogr(struct Plus_head *plus,
 	Vect_append_point(ogr_info->cache.lines[0], OGR_G_GetX(hGeom, 0),
 			  OGR_G_GetY(hGeom, 0), OGR_G_GetZ(hGeom, 0));
 	add_line(plus, offset, GV_POINT, ogr_info->cache.lines[0], FID, parts);
+	npoints += ogr_info->cache.lines[0]->n_points;
 	break;
 
     case wkbLineString:
@@ -454,7 +464,8 @@ int add_geometry_ogr(struct Plus_head *plus,
 			      OGR_G_GetX(hGeom, i), OGR_G_GetY(hGeom, i),
 			      OGR_G_GetZ(hGeom, i));
 	}
-	add_line(plus, offset, GV_LINE, ogr_info->cache.lines[0], FID, parts);
+	add_line(plus, offset, GV_LINE, ogr_info->cache.lines[0], FID, parts);	
+	npoints += ogr_info->cache.lines[0]->n_points;
 	break;
 
     case wkbPolygon:
@@ -491,7 +502,8 @@ int add_geometry_ogr(struct Plus_head *plus,
 				  OGR_G_GetX(hRing, i), OGR_G_GetY(hRing, i),
 				  OGR_G_GetZ(hRing, i));
 	    }
-
+	    npoints += ogr_info->cache.lines[0]->n_points;
+	    
 	    /* register boundary */
 	    add_part(parts, iPart);
 	    line = add_line(plus, offset, GV_BOUNDARY, ogr_info->cache.lines[iPart], FID, parts);
@@ -588,7 +600,8 @@ int add_geometry_ogr(struct Plus_head *plus,
 	for (i = 0; i < nParts; i++) {
 	    add_part(parts, i);
 	    hGeom2 = OGR_G_GetGeometryRef(hGeom, i);
-	    add_geometry_ogr(plus, ogr_info, hGeom2, FID, build, parts);
+	    npoints += add_geometry_ogr(plus, ogr_info, hGeom2,
+					FID, build, parts);
 	    del_part(parts);
 	}
 	break;
@@ -598,12 +611,12 @@ int add_geometry_ogr(struct Plus_head *plus,
 	break;
     }
 
-    return 0;
+    return npoints;
 }
 
 void build_ogr(struct Map_info *Map, int build)
 {
-    int iFeature, FID;
+    int iFeature, FID, npoints;
     
     struct Format_info_ogr *ogr_info;
     
@@ -619,11 +632,12 @@ void build_ogr(struct Map_info *Map, int build)
 
     /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
     OGR_L_ResetReading(ogr_info->layer);
-    iFeature = 0;
+    npoints = iFeature = 0;
+    G_message(_("Registering primitives..."));
     while ((hFeature = OGR_L_GetNextFeature(ogr_info->layer)) != NULL) {
-	iFeature++;
-	
 	G_debug(3, "   Feature %d", iFeature);
+	
+	G_progress(++iFeature, 1e4);
 	
 	hGeom = OGR_F_GetGeometryRef(hFeature);
 	if (hGeom == NULL) {
@@ -642,11 +656,15 @@ void build_ogr(struct Map_info *Map, int build)
 	
 	reset_parts(&parts);
 	add_part(&parts, FID);
-	add_geometry_ogr(&(Map->plus), ogr_info, hGeom,
-			 FID, build, &parts);
+	npoints += add_geometry_ogr(&(Map->plus), ogr_info, hGeom,
+				    FID, build, &parts);
 	
 	OGR_F_Destroy(hFeature);
     } /* while */
+    G_progress(1, 1);
+    
+    G_message(_("%d primitives registered"), Map->plus.n_lines);
+    G_message(_("%d vertices registered"), npoints);
     
     Map->plus.built = GV_BUILD_BASE;
     
