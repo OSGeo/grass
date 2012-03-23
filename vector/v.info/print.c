@@ -356,10 +356,10 @@ void print_info(const struct Map_info *Map)
 	printline(line);
 	
 	/* for PostGIS format print also datasource and layer */
-	sprintf(line, "%-17s%s", _("PostGIS table:"),
+	sprintf(line, "%-17s%s", _("DB table:"),
 		Vect_get_finfo_layer_name(Map));
 	printline(line);
-	sprintf(line, "%-17s%s", _("PostGIS database:"),
+	sprintf(line, "%-17s%s", _("DB name:"),
 		Vect_get_finfo_dsn_name(Map));
 	printline(line);
 	sprintf(line, "%-17s%s", _("Feature type:"),
