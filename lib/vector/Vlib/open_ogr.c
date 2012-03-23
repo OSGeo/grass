@@ -54,6 +54,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     
     OGRDataSourceH Ogr_ds;
     OGRLayerH Ogr_layer;
+    OGRFeatureDefnH Ogr_featuredefn;
     OGRwkbGeometryType Ogr_geom_type;
     
     Ogr_layer = NULL;
@@ -88,9 +89,10 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     G_debug(2, "%d layers found in data source", nLayers);
 
     for (i = 0; i < nLayers; i++) {
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
-	if (strcmp(OGR_L_GetName(Ogr_layer), ogr_info->layer_name) == 0) {
-	    Ogr_geom_type = OGR_L_GetGeomType(Ogr_layer);
+	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);	
+	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), ogr_info->layer_name) == 0) {
+	    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
 	    layer = i;
 	    break;
 	}
@@ -178,6 +180,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     OGRSFDriverH    Ogr_driver;
     OGRDataSourceH  Ogr_ds;
     OGRLayerH       Ogr_layer;
+    OGRFeatureDefnH Ogr_featuredefn; 
     
     OGRRegisterAll();
     
@@ -203,7 +206,8 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     nlayers = OGR_DS_GetLayerCount(Ogr_ds);
     for (i = 0; i < nlayers; i++) {
       	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
-	if (strcmp(OGR_L_GetName(Ogr_layer), name) == 0) {	
+	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), name) == 0) {	
 	    if (G_get_overwrite()) {
 		G_warning(_("OGR layer <%s> already exists and will be overwritten"),
 			  ogr_info->layer_name);
