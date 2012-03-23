@@ -120,7 +120,6 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     if (!found) {
 	G_warning(_("Feature table <%s> not found in 'geometry_columns'"),
 		  pg_info->table_name);
-	return -1;
     }
 
     return 0;
