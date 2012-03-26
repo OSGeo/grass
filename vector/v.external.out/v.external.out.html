@@ -1,24 +1,65 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.external.out</em> instructs GRASS to write vector maps as data
-files (e.g. ESRI Shapefile) using OGR library.
+<em>v.external.out</em> instructs GRASS to write vector maps in
+external data format (e.g. ESRI Shapefile) using <b>OGR
+library</b>. PostGIS data can be also written by native <b>GRASS-PostGIS
+data driver</b>.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-The module <em>v.external.out</em> can be used along with
+<h3>ESRI Shapefile</h3>
+
+<em>v.external.out</em> can be used along with
 <em><a href="v.external.html">v.external</a></em> to process external
-geodata in GRASS while writing out the results directly in ESRI
+geodata in GRASS while writing out the results directly eg. in ESRI
 Shapefile format:
 
 <div class="code"><pre>
-# register Shapefile in GRASS database:
-v.external dsn=cities.shp output=cities
+# register Shapefile in GRASS mapset:
+v.external dsn=/path/to/shapefiles layer=cities
 
 # define output directory for GRASS calculation results:
 v.external.out dsn=$HOME/gisoutput
 
 # do something (here: spatial query), write output directly as Shapefile
 v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
+</pre></div>
+
+Current settings can be printed using <tt>-p</tt> or <tt>-g</tt> flag.
+
+<div class="code"><pre>
+v.external.out -p
+
+dsn: /path/to/home/gisoutput
+format: ESRI Shapefile
+</pre></div>
+
+<h3>PostGIS</h3>
+
+PostGIS data can be accessed directly using <em>GRASS-PostGIS data
+driver</em> (it requires that GRASS is compiled with PostgreSQL
+support).
+
+<div class="code"><pre>
+# register PostGIS table in GRASS mapset:
+v.external dsn=PG:dbname=gisdb layer=cities
+
+# define output directory for GRASS calculation results:
+v.external.out dsn=PG:dbname=gisdb format=PostgreSQL
+
+# do some processing...
+</pre></div>
+
+<i>Note:</i> If the environment variable <tt>GRASS_VECTOR_OGR</tt> exists, or
+GRASS is compiled without PostgreSQL support then GRASS will use
+OGR-PostgreSQL driver for reading and writing PostGIS data.
+
+<h3>GRASS native format</h3>
+
+To restore original settings, ie. use GRASS native format, type:
+
+<div class="code"><pre>
+v.external.out -r
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -31,10 +72,18 @@ v.select ainput=cities atype=point binput=forests btype=area operator=within out
 
 <h2>REFERENCES</h2>
 
-OGR Library website: <a href="http://gdal.osgeo.org/ogr">http://gdal.osgeo.org/ogr</a>
+<a href="http://www.gdal.org/ogr/">OGR vector library</a>
+<br>
+<a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a>
+documentation
+
+<p>
+See
+also GRASS <a href="http://grass.osgeo.org/wiki/Working_with_external_data_in_GRASS_7">user wiki page</a> for more examples.
 
 <h2>AUTHOR</h2>
 
-Martin Landa, CTU in Prague, Czech Republic (based on r.external.out code)
+Martin Landa, Czech Technical University in Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

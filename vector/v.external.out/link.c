@@ -21,11 +21,39 @@ void make_link(const char *dsn,
     key_val = G_create_key_value();
 
     /* use OGR ? */
-    if (strcmp(format, "PostGIS") == 0) {
-	use_ogr  = FALSE;
-	filename = "PG";
-	G_remove("", "OGR");
-    }
+    if (strcmp(format, "PostgreSQL") == 0) {
+#if defined HAVE_OGR && defined HAVE_POSTGRES
+      if (getenv("GRASS_VECTOR_OGR")) {
+	  use_ogr  = TRUE;
+	  filename = "OGR";
+	  G_remove("", "PG");
+      }
+      else {
+	  use_ogr  = FALSE;
+	  filename = "PG";
+	  G_remove("", "OGR");
+	  
+      }
+#else
+#ifdef HAVE_POSTGRES
+      if (getenv("GRASS_VECTOR_OGR"))
+	  G_warning(_("Environment variable GRASS_VECTOR_OGR defined, "
+		      "but GRASS is compiled with OGR support. "
+		      "Using GRASS-PostGIS data driver instead."));
+      use_ogr  = FALSE;
+      filename = "PG";
+      G_remove("", "OGR");
+#else /* -> force using OGR */
+      G_warning(_("GRASS is not compiled with PostgreSQL support. "
+		  "Using OGR-PostgreSQL driver instead of native "
+		  "GRASS-PostGIS data driver."));
+      use_ogr  = TRUE;
+      filename = "OGR";
+      G_remove("", "PG");
+#endif /* HAVE_POSTRESQL */
+	
+#endif /* HAVE_OGR && HAVE_POSTGRES */
+    } /* format=PostgreSQL */
     else {
 	use_ogr  = TRUE;
 	filename = "OGR";
