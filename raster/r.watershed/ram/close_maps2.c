@@ -27,7 +27,12 @@ int close_array_seg(void)
 	max = n_basins;
 	G_debug(1, "%d basins created", max);
 	Rast_init_colors(&colors);
-	Rast_make_random_colors(&colors, 1, max);
+	if (max > 0)
+	    Rast_make_random_colors(&colors, 1, max);
+	else {
+	    G_warning(_("No basins were created. Verify threshold and region settings."));
+	    Rast_make_random_colors(&colors, 1, 2);
+	}
 
 	if (max < 1000) {
 	    Rast_set_c_color((CELL) 0, 0, 0, 0, &colors);
