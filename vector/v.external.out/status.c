@@ -24,11 +24,11 @@ void print_status(int shell)
 
 void print_key_value(const char *key, const char *value, int shell)
 {
-    if (!value)
+    if (!value && !shell)
 	return;
     
     if (shell)
-	fprintf(stdout, "%s=%s\n", key, value);
+	fprintf(stdout, "%s=%s\n", key, value ? value : "");
     else 
 	fprintf(stdout, "%s: %s\n", key, value);
 }
@@ -70,6 +70,9 @@ int print_status_file(const char *file, int shell)
 	if (!p)
 	    G_fatal_error(_("PG connection info (conninfo) not defined"));
 	print_key_value("conninfo", p, shell);
+
+	/* format (hardcoded) */
+	print_key_value("format", "PostGIS", shell);
 
 	/* schema */
 	p = G_find_key_value("schema", key_val);
