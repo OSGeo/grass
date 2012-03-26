@@ -34,7 +34,7 @@ int close_array_seg(void)
 	    Rast_make_random_colors(&colors, 1, 2);
 	}
 
-	if (max < 1000) {
+	if (max < 1000 && max > 0) {
 	    Rast_set_c_color((CELL) 0, 0, 0, 0, &colors);
 	    r = 1;
 	    incr = 0;
