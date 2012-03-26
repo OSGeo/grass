@@ -72,7 +72,7 @@ int print_status_file(const char *file, int shell)
 	print_key_value("conninfo", p, shell);
 
 	/* format (hardcoded) */
-	print_key_value("format", "PostGIS", shell);
+	print_key_value("format", "PostgreSQL", shell);
 
 	/* schema */
 	p = G_find_key_value("schema", key_val);

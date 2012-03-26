@@ -70,24 +70,7 @@ int main(int argc, char *argv[])
     }
     
     if (options.dsn->answer) {
-	char *dsn;
-	
-	/* be friendly, ignored 'PG:' prefix for PostGIS format */
-	if (strcmp(format, "PostGIS") == 0 &&
-	    G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
-	    int i, length;
-	    
-	    length = strlen(options.dsn->answer);
-	    dsn = (char *) G_malloc(length - 3);
-	    for (i = 3; i < length; i++)
-		dsn[i-3] = options.dsn->answer[i];
-	    dsn[length-3] = '\0';
-	}
-	else {
-	    dsn = G_store(options.dsn->answer);
-	}
-    
-	make_link(dsn, format,
+	make_link(options.dsn->answer, format,
 		  options.opts->answer, options.opts->answers);
     }
     
