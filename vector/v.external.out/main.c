@@ -16,6 +16,7 @@
  **************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -33,6 +34,8 @@ int main(int argc, char *argv[])
     struct _options options;
     struct _flags   flags;
 
+    char * format;
+    
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -60,14 +63,17 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (options.format->answer)
-	check_format(options.format->answer);
-
+    format = NULL;
+    if (options.format->answer) {
+	format = G_store(options.format->answer);
+	check_format(format);
+    }
+    
     if (options.dsn->answer) {
 	char *dsn;
 	
 	/* be friendly, ignored 'PG:' prefix for PostGIS format */
-	if (strcmp(options.format->answer, "PostGIS") == 0 &&
+	if (strcmp(format, "PostGIS") == 0 &&
 	    G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
 	    int i, length;
 	    
@@ -81,7 +87,7 @@ int main(int argc, char *argv[])
 	    dsn = G_store(options.dsn->answer);
 	}
     
-	make_link(dsn, options.format->answer,
+	make_link(dsn, format,
 		  options.opts->answer, options.opts->answers);
     }
     

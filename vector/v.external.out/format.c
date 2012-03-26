@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -7,7 +9,7 @@
 
 void check_format(char *format)
 {
-    if(strcmp(format, "PostGIS") == 0)
+    if(strcmp(format, "PostgreSQL") == 0)
 	return;
     
 #ifdef HAVE_OGR

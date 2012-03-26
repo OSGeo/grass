@@ -51,10 +51,10 @@ char *format_list(void)
 
     qsort(list, count, sizeof(char *), cmp);
 #endif
-#ifdef HAVE_POSTGRES
+#if defined HAVE_POSTGRES && !defined HAVE_OGR
     list = G_realloc(list, (count + 1) * sizeof(char *));
-    list[count++] = G_store("PostGIS");
-    len += strlen("PostGIS") + 1;
+    list[count++] = G_store("PostgreSQL");
+    len += strlen("PostgreSQL") + 1;
 #endif 
     if (len > 0) {
 	ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
