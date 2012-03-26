@@ -7,12 +7,12 @@
 static char *get_option_pg(char **, const char *);
 static void check_option_on_off(const char *, char **);
 
-void make_link(const char *dsn,
+void make_link(const char *dsn_opt,
 	       const char *format,
 	       char *option_str, char **options)
 {
     int use_ogr;
-    char *filename, *pg_schema, *pg_fid, *pg_geom_name;
+    char *filename, *pg_schema, *pg_fid, *pg_geom_name, *dsn;
     char *pg_spatial_index, *pg_primary_key;
     FILE *fp;
     
@@ -59,7 +59,22 @@ void make_link(const char *dsn,
 	filename = "OGR";
 	G_remove("", "PG");
     }
-    
+
+    /* be friendly, ignored 'PG:' prefix for GRASS-PostGIS data driver */
+    if (!use_ogr && strcmp(format, "PostgreSQL") == 0 &&
+	G_strncasecmp(dsn_opt, "PG:", 3) == 0) {
+	int i, length;
+	
+	length = strlen(dsn_opt);
+	dsn = (char *) G_malloc(length - 3);
+	for (i = 3; i < length; i++)
+	    dsn[i-3] = dsn_opt[i];
+	dsn[length-3] = '\0';
+    }
+    else {
+	dsn = G_store(dsn_opt);
+    }
+        
     /* parse options for PG data format */
     pg_schema = pg_fid = pg_geom_name = NULL;
     pg_spatial_index = pg_primary_key = NULL;

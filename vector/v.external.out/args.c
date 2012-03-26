@@ -24,7 +24,7 @@ void parse_args(int argc, char **argv,
     options->format->description = _("Format for output vector data");
     options->format->required = YES;
     options->format->type = TYPE_STRING;
-    options->format->options = format_list();
+    options->format->options = format_options();
 #ifdef HAVE_OGR
     options->format->answer = "ESRI_Shapefile";
 #else

@@ -21,7 +21,7 @@ void make_link(const char *,
 	       const char *, const char *, char **);
 
 /* list.c */
-char *format_list(void);
+char *format_options(void);
 void list_formats(void);
 
 /* status.c */
