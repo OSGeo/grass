@@ -1,5 +1,6 @@
 #include "Gwater.h"
 #include <unistd.h>
+#include <grass/glocale.h>
 
 int close_array_seg(void)
 {
