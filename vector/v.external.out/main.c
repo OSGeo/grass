@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("export"));
     G_add_keyword(_("output"));
     G_add_keyword(_("external"));
-    G_add_keyword(_("OGR"));
-    G_add_keyword(_("PostGIS"));
+    G_add_keyword("OGR");
+    G_add_keyword("PostGIS");
     module->description = _("Defines vector output format.");
 
 #ifdef HAVE_OGR

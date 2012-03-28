@@ -6,7 +6,7 @@ struct _options {
 };
 
 struct _flags {
-    struct Flag *format, *layer, *tlist, *topo, *postgis, *list;
+    struct Flag *format, *layer, *tlist, *topo, *list;
 };
 
 /* args.c */
@@ -14,7 +14,7 @@ void parse_args(int, char **,
 		struct _options *, struct _flags*);
 
 /* list.c */
-void list_formats(FILE *);
+void list_formats();
 int list_layers(FILE *, const char *, const char *, int, int, int *);
 void get_table_name(const char *, char **, char **);
 
