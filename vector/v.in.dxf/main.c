@@ -75,9 +75,7 @@ int main(int argc, char *argv[])
     flag.table->key = 't';
     flag.table->description = _("Do not create attribute tables");
 
-    flag.topo = G_define_flag();
-    flag.topo->key = 'b';
-    flag.topo->description = _("Do not build topology");
+    flag.topo = G_define_standard_flag(G_FLG_V_TOPO);
 
     flag.frame = G_define_flag();
     flag.frame->key = 'f';

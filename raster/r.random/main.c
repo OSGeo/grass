@@ -91,8 +91,7 @@ int main(int argc, char *argv[])
     flag.z_geometry->key = 'd';
     flag.z_geometry->description = _("Generate vector points as 3D points");
 
-    flag.notopol_flag = G_define_flag();
-    flag.notopol_flag->key = 'b';
+    flag.notopol_flag = G_define_standard_flag(G_FLG_V_TOPO);
     flag.notopol_flag->description = _("Do not build topology in points mode");
     flag.notopol_flag->guisection = _("Points");
 

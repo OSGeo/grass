@@ -145,9 +145,7 @@ int main(int argc, char *argv[])
     flag.drand48->key = 'd';
     flag.drand48->description = _("Use drand48() function instead of rand()");
 
-    flag.notopo = G_define_flag();
-    flag.notopo->key = 'b';
-    flag.notopo->description = _("Do not build topology");
+    flag.notopo = G_define_standard_flag(G_FLG_V_TOPO);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
