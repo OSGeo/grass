@@ -412,15 +412,17 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 		
 	pg_info = &(Map->fInfo.pg);
 	sprintf(stmt, "SELECT type FROM geometry_columns "
-		"WHERE f_table_name = '%s'", pg_info->table_name);
+		"WHERE f_table_schema = '%s' AND f_table_name = '%s'",
+		pg_info->schema_name, pg_info->table_name);
 	G_debug(2, "SQL: %s", stmt);
 	
 	res = PQexec(pg_info->conn, stmt);
 	if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-	    PQntuples(res) != 1)
-	    G_warning("%s\n%s", _("Unable to get feature type."),
+	    PQntuples(res) != 1) {
+	    G_warning("%s\n%s", _("Unable to get feature type"),
 		      PQresultErrorMessage(res));
-	
+	    return NULL;
+	}
 	ftype_tmp = G_store(PQgetvalue(res, 0, 0));
 	PQclear(res);
 #endif
