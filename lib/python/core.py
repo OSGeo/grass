@@ -723,6 +723,9 @@ def find_file(name, element = 'cell', mapset = None):
 
     @return parsed output of g.findfile
     """
+    if element == 'raster' or element == 'rast':
+        verbose(_('Element type should be "cell" and not "%s"') % element)
+        element = 'cell'
     s = read_command("g.findfile", flags='n', element = element, file = name, mapset = mapset)
     return parse_key_val(s)
 
@@ -745,6 +748,9 @@ def list_grouped(type, check_search_path = True):
 
     @return directory of mapsets/elements
     """
+    if type == 'raster' or type == 'cell':
+        verbose(_('Element type should be "rast" and not "%s"') % element)
+        type = 'rast'
     dashes_re = re.compile("^----+$")
     mapset_re = re.compile("<(.*)>")
     result = {}
@@ -825,6 +831,9 @@ def mlist_strings(type, pattern = None, mapset = None, flag = ''):
 
     @return list of elements
     """
+    if type == 'raster' or type == 'cell':
+        verbose(_('Element type should be "rast" and not "%s"') % element)
+        type = 'rast'
     result = list()
     for line in read_command("g.mlist",
                              quiet = True,
@@ -870,6 +879,9 @@ def mlist_grouped(type, pattern = None, check_search_path = True, flag = ''):
 
     @return directory of mapsets/elements
     """
+    if type == 'raster' or type == 'cell':
+        verbose(_('Element type should be "rast" and not "%s"') % element)
+        type = 'rast'
     result = {}
     if check_search_path:
         for mapset in mapsets(search_path = True):
