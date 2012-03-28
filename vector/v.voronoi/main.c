@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     flag.line->description =
 	_("Output tessellation as a graph (lines), not areas");
 
-    flag.table = G_define_standard_flag(G_FLG_DB_TABLE);
+    flag.table = G_define_standard_flag(G_FLG_V_TABLE);
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

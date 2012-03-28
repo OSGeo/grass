@@ -192,9 +192,7 @@ int main(int argc, char *argv[])
 	_("Print LAS file info and exit");
     print_flag->suppress_required = YES;
     
-    notab_flag = G_define_flag();
-    notab_flag->key = 't';
-    notab_flag->description = _("Do not create attribute table");
+    notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
     notab_flag->guisection = _("Attributes");
 
     over_flag = G_define_flag();

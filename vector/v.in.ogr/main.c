@@ -230,9 +230,7 @@ int main(int argc, char *argv[])
     flag.z->description = _("Create 3D output");
     flag.z->guisection = _("Output");
 
-    flag.notab = G_define_flag();
-    flag.notab->key = 't';
-    flag.notab->description = _("Do not create attribute table");
+    flag.notab = G_define_standard_flag(G_FLG_V_TABLE);
     flag.notab->guisection = _("Attributes");
 
     flag.over = G_define_flag();

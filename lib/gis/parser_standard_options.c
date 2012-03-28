@@ -781,7 +781,7 @@ struct Option *G_define_standard_option(int opt)
   If an invalid parameter was specified a empty Flag structure will be
   returned (not NULL).
 
-  - G_FLG_DB_TABLE (do not create attribute table)
+  - G_FLG_V_TABLE  (do not create attribute table)
   - G_FLG_V_TOPO   (do not build topology)
 
   \param flag type of Flag struct to create
@@ -795,7 +795,7 @@ struct Flag *G_define_standard_flag(int flag)
     Flg = G_define_flag();
 
     switch (flag) {
-    case G_FLG_DB_TABLE:
+    case G_FLG_V_TABLE:
 	Flg->key = 't';
 	Flg->description = _("Do not create attribute table");
 	break;
