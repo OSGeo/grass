@@ -210,9 +210,7 @@ int main(int argc, char **argv)
     dmax_opt->answer = "100";
     dmax_opt->description = _("Maximum distance between points in map units");
 
-    table_flag = G_define_flag();
-    table_flag->key = 't';
-    table_flag->description = _("Do not create attribute table");
+    table_flag = G_define_standard_flag(G_FLG_V_TABLE);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

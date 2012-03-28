@@ -74,9 +74,7 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
     parm->relate->description = _("Intersection Matrix Pattern used for 'relate' operator");
 #endif
 
-    flag->table = G_define_flag();
-    flag->table->key = 't';
-    flag->table->description = _("Do not create attribute table");
+    flag->table = G_define_standard_flag(G_FLG_V_TABLE);
     
     flag->cat = G_define_flag();
     flag->cat->key = 'c';

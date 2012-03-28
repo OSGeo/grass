@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
 {
     int i, input, line, nlines, operator;
     int type[2], field[2], ofield[3];
-    char *pre[2];
     struct GModule *module;
     struct Option *in_opt[2], *out_opt, *type_opt[2], *field_opt[2],
 	*ofield_opt, *operator_opt;
@@ -50,9 +49,6 @@ int main(int argc, char *argv[])
     ATTRIBUTES attr[2];
 
     G_gisinit(argv[0]);
-
-    pre[0] = "a";
-    pre[1] = "b";
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -118,9 +114,7 @@ int main(int argc, char *argv[])
     ofield_opt->description = _("If 0 or not given, "
 				"the category is not written");
 
-    table_flag = G_define_flag();
-    table_flag->key = 't';
-    table_flag->description = _("Do not create attribute table");
+    table_flag = G_define_standard_flag(G_FLG_V_TABLE);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

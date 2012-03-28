@@ -256,7 +256,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 /**/ typedef enum
 {
     G_FLG_UNDEFINED,
-    G_FLG_DB_TABLE,		/* do not create table */
+    G_FLG_V_TABLE,		/* do not create attribute table */
     G_FLG_V_TOPO,               /* do not build topology */
 } STD_FLG;
 

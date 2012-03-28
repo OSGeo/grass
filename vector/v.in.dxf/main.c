@@ -71,9 +71,7 @@ int main(int argc, char *argv[])
     flag.extent->key = 'e';
     flag.extent->description = _("Ignore the map extent of DXF file");
 
-    flag.table = G_define_flag();
-    flag.table->key = 't';
-    flag.table->description = _("Do not create attribute tables");
+    flag.table = G_define_standard_flag(G_FLG_V_TABLE);
 
     flag.topo = G_define_standard_flag(G_FLG_V_TOPO);
 
