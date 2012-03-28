@@ -102,9 +102,7 @@ int main(int argc, char *argv[])
     print_rms->label = _("Print RMS errors");
     print_rms->description = _("Print RMS errors and exit without rectifying the input map");
 
-    no_topo = G_define_flag();
-    no_topo->key = 'b';
-    no_topo->description = _("Do not build topology for output");
+    no_topo = G_define_standard_flag(G_FLG_V_TOPO);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

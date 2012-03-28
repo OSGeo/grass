@@ -198,9 +198,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->header->description = _("Do not expect header of input data");
     params->header->guisection = _("Input");
 
-    params->topo = G_define_flag();
-    params->topo->key = 'b';
-    params->topo->description = _("Do not build topology");
+    params->topo = G_define_standard_flag(G_FLG_V_TOPO);
 
     params->move_first = G_define_flag();
     params->move_first->key = '1';

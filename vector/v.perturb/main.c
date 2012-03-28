@@ -104,10 +104,7 @@ int main(int argc, char **argv)
     parm.seed->answer = "0";
     parm.seed->description = _("Seed for random number generation");
     
-    parm.no_topo = G_define_flag();
-    parm.no_topo->key = 'b';
-    parm.no_topo->description =
-	_("Do not build topology for output vector");
+    parm.no_topo = G_define_standard_flag(G_FLG_V_TOPO);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

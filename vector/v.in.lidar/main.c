@@ -219,9 +219,7 @@ int main(int argc, char *argv[])
           " Do not import the vector file.");
     no_import_flag->suppress_required = YES;
 
-    notopo_flag = G_define_flag();
-    notopo_flag->key = 'b';
-    notopo_flag->description = _("Do not build topology");
+    notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
 
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it

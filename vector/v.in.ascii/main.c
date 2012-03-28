@@ -155,8 +155,7 @@ int main(int argc, char *argv[])
     t_flag->description = _("Do not create table in points mode");
     t_flag->guisection = _("Points");
 
-    notopol_flag = G_define_flag();
-    notopol_flag->key = 'b';
+    notopol_flag = G_define_standard_flag(G_FLG_V_TOPO);
     notopol_flag->description = _("Do not build topology in points mode");
     notopol_flag->guisection = _("Points");
 
