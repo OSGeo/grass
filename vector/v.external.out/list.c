@@ -5,14 +5,17 @@
 
 #ifdef HAVE_OGR
 #include "ogr_api.h"
-
-static int cmp(const void *a, const void *b) 
-{
-    return (strcmp(*(char **)a, *(char **)b));
-}
 #endif /* HAVE_OGR */
 
-static char **format_list(int *count, size_t *len)
+static int cmp(const void *, const void *);
+static char **format_list(int *, size_t *);
+
+int cmp(const void *a, const void *b)
+{
+    return strcmp(*(char **)a, *(char **)b);
+}
+
+char **format_list(int *count, size_t *len)
 {
     int i;
     char **list;

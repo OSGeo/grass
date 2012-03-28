@@ -13,31 +13,97 @@
 #endif
 #include "local_proto.h"
 
+static int cmp(const void *, const void *);
+static char **format_list(int *, size_t *);
+static char *feature_type(const char *);
 #ifdef HAVE_OGR
 static int list_layers_ogr(FILE *, const char *, const char *, int, int *);
-#endif
+#endif /* HAVE_OGR */
 #ifdef HAVE_POSTGRES
 static int list_layers_pg(FILE *, const char *, const char *, int, int *);
-#endif
+#endif /* HAVE_POSTGRES */
 
-void list_formats(FILE *fd) {
-#ifdef HAVE_OGR
-    int i;
-    OGRSFDriverH Ogr_driver;
-    
-    G_message(_("List of supported OGR formats:"));
-    for (i = 0; i < OGRGetDriverCount(); i++) {
-	Ogr_driver = OGRGetDriver(i);
-	fprintf(fd, "%s\n", OGR_Dr_GetName(Ogr_driver));
-    }
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-#endif
+int cmp(const void *a, const void *b)
+{
+    return strcmp(*(char **)a, *(char **)b);
 }
 
-int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, int use_postgis, int *is3D)
+char **format_list(int *count, size_t *len)
 {
-    if (use_postgis) {
+    int i;
+    char **list;
+
+    list = NULL;
+    *count = 0;
+    if (len)
+	*len = 0;
+
+#ifdef HAVE_OGR
+    char buf[2000];
+    
+    OGRSFDriverH Ogr_driver;
+    
+    /* Open OGR DSN */
+    OGRRegisterAll();
+    G_debug(2, "driver count = %d", OGRGetDriverCount());
+    for (i = 0; i < OGRGetDriverCount(); i++) {
+	Ogr_driver = OGRGetDriver(i);
+	G_debug(2, "driver %d/%d : %s", i, OGRGetDriverCount(),
+		OGR_Dr_GetName(Ogr_driver));
+	
+	list = G_realloc(list, ((*count) + 1) * sizeof(char *));
+
+	/* chg white space to underscore in OGR driver names */
+	sprintf(buf, "%s", OGR_Dr_GetName(Ogr_driver));
+	G_strchg(buf, ' ', '_');
+	list[(*count)++] = G_store(buf);
+	if (len)
+	    *len += strlen(buf) + 1; /* + ',' */
+    }
+
+    /* order formats by name */
+    qsort(list, *count, sizeof(char *), cmp);
+#endif
+#if defined HAVE_POSTGRES && !defined HAVE_OGR
+    list = G_realloc(list, ((*count) + 1) * sizeof(char *));
+    list[(*count)++] = G_store("PostgreSQL");
+    if (len)
+	*len += strlen("PostgreSQL") + 1;
+#endif 
+
+    return list;
+}
+
+char *feature_type(const char *ftype)
+{
+    char *ftype_ret;
+
+    ftype_ret = G_str_replace(ftype, " ", "");
+    G_str_to_lower(ftype_ret);
+
+    /* let's OS to release the memory */
+    return ftype_ret;
+}
+
+void list_formats(void)
+{
+    int i, count;
+    char **list;
+    
+    G_message(_("List of supported formats:"));
+
+    list = format_list(&count, NULL);
+    
+    for (i = 0; i < count; i++)
+	fprintf(stdout, "%s\n", list[i]);
+    fflush(stdout);
+
+    G_free(list);
+}
+
+int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, int use_ogr, int *is3D)
+{
+    if (!use_ogr) {
 #ifdef HAVE_POSTGRES
 	return list_layers_pg(fd, dsn, layer, print_types, is3D);
 #else
@@ -74,9 +140,11 @@ void get_table_name(const char *table, char **table_name, char **schema_name)
 #ifdef HAVE_POSTGRES
 int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_types, int *is3D)
 {
-    int row, ntables, ret, print_schema;
-    char *value, *schema_name, *table_name;
-    PGconn *conn;
+    int   row, ntables, ret, print_schema;
+    char *value_schema, *value_table;
+    char *schema_name, *table_name;
+    
+    PGconn   *conn;
     PGresult *res;
     
     dbString sql;
@@ -114,8 +182,8 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
     print_schema = FALSE;
     if (fd) {
 	for (row = 0; row < ntables; row++) {
-	    value = PQgetvalue(res, row, 0);
-	    if (strcmp(value, "public") != 0) {
+	    value_schema = PQgetvalue(res, row, 0);
+	    if (G_strcasecmp(value_schema, "public") != 0) {
 		print_schema = TRUE;
 		break;
 	    }
@@ -123,25 +191,27 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
     }
     
     /* report layers */
-    for (row = 0; row < ntables; row++) {
-	value = PQgetvalue(res, row, 1);
+    for (row = 0; row < ntables; row++) {	
+	value_schema = PQgetvalue(res, row, 0);
+	value_table = PQgetvalue(res, row, 1);
 	if (fd) {
 	    if (print_types) {
-		if (print_schema)
+		if (print_schema && G_strcasecmp(value_schema, "public") != 0)
 		    fprintf(fd, "%s.%s (%s)\n",
-			    PQgetvalue(res, row, 0), value,
-			    PQgetvalue(res, row, 2));
+			    value_schema, value_table,
+			    feature_type(PQgetvalue(res, row, 2)));
 		else 
-		    fprintf(fd, "%s (%s)\n", value, PQgetvalue(res, row, 2));
+		    fprintf(fd, "%s (%s)\n", value_table,
+			    feature_type(PQgetvalue(res, row, 2)));
 	    }
 	    else {
-		if (print_schema)
-		    fprintf(fd, "%s.%s\n", PQgetvalue(res, row, 0), value);
+		if (print_schema && G_strcasecmp(value_schema, "public") != 0)
+		    fprintf(fd, "%s.%s\n", value_schema, value_table);
 		else
-		    fprintf(fd, "%s\n", value);
+		    fprintf(fd, "%s\n", value_table);
 	    }
 	}
-	if (table_name && strcmp(value, table_name) == 0) {
+	if (table_name && strcmp(value_table, table_name) == 0) {
 	    ret = row;
 	    *is3D = WITHOUT_Z;
 	}
@@ -196,7 +266,8 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 
 	if (fd) {
 	    if (print_types)
-		fprintf(fd, "%s (%s)\n", layer_name, OGRGeometryTypeToName(Ogr_geom_type));
+		fprintf(fd, "%s (%s)\n", layer_name,
+			feature_type(OGRGeometryTypeToName(Ogr_geom_type)));
 	    else
 		fprintf(fd, "%s\n", layer_name);
 	}

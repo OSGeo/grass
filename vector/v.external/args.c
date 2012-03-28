@@ -11,8 +11,7 @@ void parse_args(int argc, char **argv,
     options->dsn = G_define_option();
     options->dsn->key = "dsn";
     options->dsn->type = TYPE_STRING;
-    options->dsn->gisprompt = "old_file,file,dsn";
-    options->dsn->label = _("Name of input OGR/PostGIS data source");
+    options->dsn->label = _("Name of input OGR or PostGIS data source");
     options->dsn->description = _("Examples:\n"
 				  "\t\tESRI Shapefile: directory containing a shapefile\n"
 				  "\t\tMapInfo File: directory containing a mapinfo file\n"
@@ -38,30 +37,24 @@ void parse_args(int argc, char **argv,
 
     flags->format = G_define_flag();
     flags->format->key = 'f';
-    flags->format->description = _("List supported OGR formats and exit");
+    flags->format->description = _("List supported formats and exit");
     flags->format->guisection = _("Print");
     flags->format->suppress_required = YES;
 
     flags->list = G_define_flag();
     flags->list->key = 'l';
-    flags->list->description = _("List available OGR layers in data source and exit");
+    flags->list->description = _("List available layers in data source and exit");
     flags->list->guisection = _("Print");
     flags->list->suppress_required = YES;
 
     flags->tlist = G_define_flag();
     flags->tlist->key = 't';
-    flags->tlist->description = _("List available OGR layers including feature types "
-				  "in datatsource and exit");
+    flags->tlist->description = _("List available layers including feature type "
+				  "in data source and exit");
     flags->tlist->guisection = _("Print");
     flags->tlist->suppress_required = YES;
 
-    flags->topo = G_define_flag();
-    flags->topo->key = 'b';
-    flags->topo->description = _("Do not build topology");
-    
-    flags->postgis = G_define_flag();
-    flags->postgis->key = 'p';
-    flags->postgis->description = _("Link PostGIS tables directly instead of using OGR");
+    flags->topo = G_define_standard_flag(G_FLG_V_TOPO);
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

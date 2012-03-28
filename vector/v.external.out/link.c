@@ -50,8 +50,7 @@ void make_link(const char *dsn_opt,
       use_ogr  = TRUE;
       filename = "OGR";
       G_remove("", "PG");
-#endif /* HAVE_POSTRESQL */
-	
+#endif /* HAVE_POSTRES */
 #endif /* HAVE_OGR && HAVE_POSTGRES */
     } /* format=PostgreSQL */
     else {

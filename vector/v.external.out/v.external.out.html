@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.external.out</em> instructs GRASS to write vector maps in
-external data format (e.g. ESRI Shapefile) using <b>OGR
-library</b>. PostGIS data can be also written by native <b>GRASS-PostGIS
-data driver</b>.
+external data format (e.g. ESRI Shapefile) using <em>OGR
+library</em>. PostGIS data can be also written by
+built-in <em>GRASS-PostGIS data driver</em>.
 
 <h2>EXAMPLES</h2>
 
@@ -62,20 +62,22 @@ To restore original settings, ie. use GRASS native format, type:
 v.external.out -r
 </pre></div>
 
+<h2>REFERENCES</h2>
+
+<a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation
+
 <h2>SEE ALSO</h2>
 
 <em>
+  <a href="v.external.html">v.external</a>,
   <a href="v.in.ogr.html">v.in.ogr</a>,
-  <a href="v.out.ogr.html">v.out.ogr</a>,
-  <a href="v.external.html">v.external</a>
+  <a href="v.out.ogr.html">v.out.ogr</a>
 </em>
 
-<h2>REFERENCES</h2>
-
-<a href="http://www.gdal.org/ogr/">OGR vector library</a>
+<p>
+<a href="http://www.gdal.org/ogr/">OGR Library</a>
 <br>
-<a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a>
-documentation
+<a href="http://postgis.org/">PostGIS</a>
 
 <p>
 See

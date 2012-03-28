@@ -10,14 +10,14 @@ void parse_args(int argc, char **argv,
 {
     options->dsn = G_define_option();
     options->dsn->key = "dsn";
-    options->dsn->label = _("Name for output OGR/PostGIS data source");
+    options->dsn->type = TYPE_STRING;
+    options->dsn->label = _("Name of input OGR or PostGIS data source");
     options->dsn->description = _("Examples:\n"
 				  "\t\tESRI Shapefile: directory containing a shapefile\n"
 				  "\t\tMapInfo File: directory containing a mapinfo file\n"
-				  "\t\tPostGIS: connection string, eg. 'PG:dbname=gisdb user=grass'");
-
+				  "\t\tPostGIS database: connection string, eg. 'PG:dbname=db user=grass'");
     options->dsn->required = YES;
-    options->dsn->type = TYPE_STRING;
+
 
     options->format = G_define_option();
     options->format->key = "format";

@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     
     FILE *fd;
     
-    int ilayer, is3D;
+    int ilayer, is3D, use_ogr;
     char buf[GPATH_MAX], *dsn;
     const char *output;
     
@@ -49,40 +49,64 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword(_("input"));
     G_add_keyword(_("external")); 
-    
+    G_add_keyword("OGR");
+    G_add_keyword("PostGIS");
     module->description = _("Creates a new pseudo-vector map as a link to an OGR-supported layer "
 			    "or a PostGIS feature table.");
     parse_args(argc, argv,
 	       &options, &flags);
+
+    use_ogr = TRUE;
+    if(options.dsn->answer &&
+       G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
+	/* -> PostgreSQL */
+#if defined HAVE_OGR && defined HAVE_POSTGRES
+	if (getenv("GRASS_VECTOR_OGR"))
+	    use_ogr = TRUE;
+	else
+	    use_ogr = FALSE;
+#else
+#ifdef HAVE_POSTGRES
+	if (getenv("GRASS_VECTOR_OGR"))
+	    G_warning(_("Environment variable GRASS_VECTOR_OGR defined, "
+			"but GRASS is compiled with OGR support. "
+			"Using GRASS-PostGIS data driver instead."));
+	use_ogr = FALSE;
+#else /* -> force using OGR */
+	G_warning(_("GRASS is not compiled with PostgreSQL support. "
+		    "Using OGR-PostgreSQL driver instead of native "
+		    "GRASS-PostGIS data driver."));
+	use_ogr = TRUE;
+#endif /* HAVE_POSTRES */
+#endif /* HAVE_OGR && HAVE_POSTGRES */
+    }
     
 #ifdef HAVE_OGR
-    if (!flags.postgis->answer)
+    if (use_ogr)
 	OGRRegisterAll();
 #endif
 
     if (flags.format->answer) {
 	/* list formats */
-	if (flags.postgis->answer) {
-	    G_fatal_error(_("Flags -%c and -%c are mutually exclusive"),
-			  flags.format->key, flags.postgis->key);
-	}
 	list_formats(stdout);
 	exit(EXIT_SUCCESS);
     }
 
     /* be friendly, ignored 'PG:' prefix for PostGIS links */
-    if (flags.postgis->answer &&
-	G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
-	int i, length;
-	
-	length = strlen(options.dsn->answer);
-	dsn = (char *) G_malloc(length - 3);
-	for (i = 3; i < length; i++)
-	    dsn[i-3] = options.dsn->answer[i];
-	dsn[length-3] = '\0';
-    }
-    else {
-	dsn = G_store(options.dsn->answer);
+    dsn = NULL;
+    if (options.dsn->answer) {
+	if (!use_ogr) {
+	    int i, length;
+	    
+	    length = strlen(options.dsn->answer);
+	    dsn = (char *) G_malloc(length - 3);
+	    for (i = 3; i < length; i++)
+		dsn[i-3] = options.dsn->answer[i];
+	    dsn[length-3] = '\0';
+	}
+	else {
+	    dsn = G_store(options.dsn->answer);
+	}
     }
     
     if (flags.list->answer || flags.tlist->answer) {
@@ -91,8 +115,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Required parameter <%s> not set"), options.dsn->key);
 	list_layers(stdout, dsn, NULL,
 		    flags.tlist->answer ? TRUE : FALSE,
-		    flags.postgis->answer,
-		    NULL);
+		    use_ogr, NULL);
 	exit(EXIT_SUCCESS);
     }
 
@@ -105,7 +128,7 @@ int main(int argc, char *argv[])
 
     /* get layer index */
     ilayer = list_layers(NULL, dsn, options.layer->answer,
-			 FALSE, flags.postgis->answer, &is3D);
+			 FALSE, use_ogr, &is3D);
     if (ilayer == -1) {
 	G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
     }
@@ -142,7 +165,7 @@ int main(int argc, char *argv[])
 	G_fatal_error("Unable to create file '%s'", buf);
     }
     
-    if (flags.postgis->answer) {
+    if (!use_ogr) {
 	char *table_name, *schema_name;
 	
 	get_table_name(options.layer->answer, &table_name, &schema_name);
