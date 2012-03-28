@@ -257,6 +257,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 {
     G_FLG_UNDEFINED,
     G_FLG_DB_TABLE,		/* do not create table */
+    G_FLG_V_TOPO,               /* do not build topology */
 } STD_FLG;
 
 /* Message format */
