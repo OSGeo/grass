@@ -27,28 +27,28 @@ from spatial_extent import *
 from metadata import *
 
 class abstract_dataset(object):
-    """This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""
+    """!This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""
 
     def reset(self, ident):
-	"""Reset the internal structure and set the identifier
+	"""!Reset the internal structure and set the identifier
 
            @param ident: The identifier of the dataset
         """
 	raise IOError("This method must be implemented in the subclasses")
 
     def get_type(self):
-        """Return the type of this class"""
+        """!Return the type of this class"""
         raise IOError("This method must be implemented in the subclasses")
     
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class
+        """!Return a new instance with the type of this class
 
            @param ident: The identifier of the dataset
         """
         raise IOError("This method must be implemented in the subclasses")
 
     def spatial_overlapping(self, dataset):
-        """Return True if the spatial extents are overlapping"""
+        """!Return True if the spatial extents are overlapping"""
 
         raise IOError("This method must be implemented in the subclasses")
 
@@ -58,15 +58,15 @@ class abstract_dataset(object):
         raise IOError("This method must be implemented in the subclasses")
     
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
 	raise IOError("This method must be implemented in the subclasses")
         
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
 	raise IOError("This method must be implemented in the subclasses")
  
     def print_self(self):
-	"""Print the content of the internal structure to stdout"""
+	"""!Print the content of the internal structure to stdout"""
 	self.base.print_self()
 	if self.is_time_absolute():
 	    self.absolute_time.print_self()
@@ -76,19 +76,19 @@ class abstract_dataset(object):
 	self.metadata.print_self()
 
     def get_id(self):
-	"""Return the unique identifier of the dataset"""
+	"""!Return the unique identifier of the dataset"""
         return self.base.get_id()
 
     def get_name(self):
-	"""Return the name"""
+	"""!Return the name"""
         return self.base.get_name()
 
     def get_mapset(self):
-	"""Return the mapset"""
+	"""!Return the mapset"""
         return self.base.get_mapset()
 
     def build_id(name, mapset, layer=None):
-	"""Build and return the id (primary key) based on name, mapset and layer of a dataset.
+	"""!Build and return the id (primary key) based on name, mapset and layer of a dataset.
 	
 	   @param name: The name of the map
 	   @param mapset: The name of the mapset
@@ -112,7 +112,7 @@ class abstract_dataset(object):
 	
 
     def get_valid_time(self):
-        """Returns a tuple of the start, the end valid time, this can be either datetime or double values
+        """!Returns a tuple of the start, the end valid time, this can be either datetime or double values
            @return A tuple of (start_time, end_time)
         """
 
@@ -129,7 +129,7 @@ class abstract_dataset(object):
         return (start, end)
  
     def get_absolute_time(self):
-        """Returns a tuple of the start, the end valid time and the timezone of the map
+        """!Returns a tuple of the start, the end valid time and the timezone of the map
            @return A tuple of (start_time, end_time, timezone)
         """
                
@@ -140,7 +140,7 @@ class abstract_dataset(object):
         return (start, end, tz)
     
     def get_relative_time(self):
-        """Returns the relative time interval (start_time, end_time, unit) or None if not present"""
+        """!Returns the relative time interval (start_time, end_time, unit) or None if not present"""
 
         start = self.relative_time.get_start_time()
         end = self.relative_time.get_end_time()
@@ -149,14 +149,14 @@ class abstract_dataset(object):
         return (start, end, unit)
  
     def get_relative_time_unit(self):
-        """Returns the relative time unit or None if not present"""
+        """!Returns the relative time unit or None if not present"""
 
         unit = self.relative_time.get_unit()
 
         return unit
 
     def check_relative_time_unit(self, unit):
-        """Check if unit is of type  years, months, days, hours, minutes or seconds
+        """!Check if unit is of type  years, months, days, hours, minutes or seconds
         
            Return True if success or False otherwise 
         """
@@ -167,11 +167,11 @@ class abstract_dataset(object):
         return True
  
     def get_temporal_type(self):
-        """Return the temporal type of this dataset"""
+        """!Return the temporal type of this dataset"""
         return self.base.get_ttype()
     
     def get_spatial_extent(self):
-        """Return a tuple of spatial extent (north, south, east, west, top, bottom) """
+        """!Return a tuple of spatial extent (north, south, east, west, top, bottom) """
         
         north = self.spatial_extent.get_north()
         south = self.spatial_extent.get_south()
@@ -183,7 +183,7 @@ class abstract_dataset(object):
         return (north, south, east, west, top, bottom)
 
     def select(self, dbif=None):
-	"""Select temporal dataset entry from database and fill up the internal structure"""
+	"""!Select temporal dataset entry from database and fill up the internal structure"""
 
         connect = False
 
@@ -208,15 +208,15 @@ class abstract_dataset(object):
             dbif.close()
         
     def is_in_db(self, dbif=None):
-	"""Check if the temporal dataset entry is in the database"""
+	"""!Check if the temporal dataset entry is in the database"""
 	return self.base.is_in_db(dbif)
 
     def delete(self):
-	"""Delete temporal dataset entry from database if it exists"""
+	"""!Delete temporal dataset entry from database if it exists"""
         raise IOError("This method must be implemented in the subclasses")
 
     def insert(self, dbif=None):
-	"""Insert temporal dataset entry into database from the internal structure"""
+	"""!Insert temporal dataset entry into database from the internal structure"""
 
         connect = False
 
@@ -242,7 +242,7 @@ class abstract_dataset(object):
             dbif.close()
  
     def update(self, dbif=None):
-	"""Update temporal dataset entry of database from the internal structure
+	"""!Update temporal dataset entry of database from the internal structure
 	   excluding None variables
 	"""
 
@@ -270,7 +270,7 @@ class abstract_dataset(object):
             dbif.close()
  
     def update_all(self, dbif=None):
-	"""Update temporal dataset entry of database from the internal structure
+	"""!Update temporal dataset entry of database from the internal structure
 	   and include None varuables.
 
            @param dbif: The database interface to be used
@@ -318,7 +318,7 @@ class abstract_dataset(object):
 	    return None
 
     def temporal_relation(self, map):
-	"""Return the temporal relation of this and the provided temporal map"""
+	"""!Return the temporal relation of this and the provided temporal map"""
 	if self.is_time_absolute() and map.is_time_absolute():
 	    return self.absolute_time.temporal_relation(map.absolute_time)
         if self.is_time_relative() and map.is_time_relative():

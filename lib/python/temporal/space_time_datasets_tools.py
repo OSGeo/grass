@@ -29,7 +29,7 @@ from space_time_datasets import *
 def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=None, \
                                         end=None, unit=None, increment=None, dbif = None, \
                                         interval=False, fs="|"):
-    """Use this method to register maps in space time datasets. This function is generic and
+    """!Use this method to register maps in space time datasets. This function is generic and
 
        Additionally a start time string and an increment string can be specified
        to assign a time interval automatically to the maps.
@@ -231,7 +231,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 ###############################################################################
 
 def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=1, dbif = None, interval=False):
-    """Assign the valid time to a map dataset
+    """!Assign the valid time to a map dataset
 
        @param ttype: The temporal type which should be assigned and which the time format is of
        @param map: A map dataset object derived from abstract_map_dataset
@@ -300,7 +300,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
 ###############################################################################
 
 def dataset_factory(type, id):
-    """A factory functions to create space time or map datasets
+    """!A factory functions to create space time or map datasets
     
        @param type: the dataset type: rast, rast3d, vect, strds, str3ds, stvds
        @param id: The id of the dataset ("name@mapset")
@@ -326,7 +326,7 @@ def dataset_factory(type, id):
 ###############################################################################
 
 def list_maps_of_stds(type, input, columns, order, where, separator, method, header):
-    """ List the maps of a space time dataset using diffetent methods
+    """! List the maps of a space time dataset using diffetent methods
 
         @param type: The type of the maps raster, raster3d or vector
         @param input: Name of a space time raster dataset
@@ -472,7 +472,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 ###############################################################################
 
 def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, separator, method, spatial=False):
-    """ Sample the input space time datasets with a sample space time dataset and print the result to stdout
+    """! Sample the input space time datasets with a sample space time dataset and print the result to stdout
 
         In case multiple maps are located in the current granule, the map names are separated by comma.
         

@@ -76,7 +76,7 @@ def get_sql_template_path():
 ###############################################################################
 
 def create_temporal_database():
-    """This function creates the grass location database structure for raster, vector and raster3d maps
+    """!This function creates the grass location database structure for raster, vector and raster3d maps
        as well as for the space-time datasets strds, str3ds and stvds
 
        This functions must be called before any spatio-temporal processing is started

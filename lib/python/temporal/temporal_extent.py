@@ -25,7 +25,7 @@ from base import *
 ###############################################################################
 
 class abstract_temporal_extent(sql_database_interface):
-    """This is the abstract time base class for relative and absolute time objects"""
+    """!This is the abstract time base class for relative and absolute time objects"""
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
 	sql_database_interface.__init__(self, table, ident)
@@ -35,7 +35,7 @@ class abstract_temporal_extent(sql_database_interface):
 	self.set_end_time(end_time)
 
     def starts(self, extent):
-	"""Return True if this time object starts at the start of the provided time object and finishes within it
+	"""!Return True if this time object starts at the start of the provided time object and finishes within it
 	   A  |-----|
 	   B  |---------|
 	"""
@@ -48,7 +48,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def started(self, extent):
-	"""Return True if this time object is started at the start of the provided time object
+	"""!Return True if this time object is started at the start of the provided time object
 	   A  |---------|
 	   B  |-----|
 	"""
@@ -61,7 +61,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def finishes(self, extent):
-	"""Return True if this time object finishes at the end and within of the provided time object
+	"""!Return True if this time object finishes at the end and within of the provided time object
 	   A      |-----|
 	   B  |---------|
 	"""
@@ -74,7 +74,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def finished(self, extent):
-	"""Return True if this time object finished at the end of the provided time object
+	"""!Return True if this time object finished at the end of the provided time object
 	   A  |---------|
 	   B      |-----|
 	"""
@@ -87,7 +87,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def after(self, extent):
-	"""Return True if this time object is temporal located after the provided time object
+	"""!Return True if this time object is temporal located after the provided time object
 	   A             |---------|
 	   B  |---------|
 	"""
@@ -103,7 +103,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def before(self, extent):
-	"""Return True if this time object is temporal located before the provided time object
+	"""!Return True if this time object is temporal located before the provided time object
 	   A  |---------|
 	   B             |---------|
 	"""
@@ -119,7 +119,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def adjacent(self, extent):
-	"""Return True if this time object is a meeting neighbour the provided time object
+	"""!Return True if this time object is a meeting neighbour the provided time object
 	   A            |---------|
 	   B  |---------|
 	   A  |---------|
@@ -134,7 +134,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def follows(self, extent):
-	"""Return True if this time object is temporal follows the provided time object
+	"""!Return True if this time object is temporal follows the provided time object
 	   A            |---------|
 	   B  |---------|
 	"""
@@ -147,7 +147,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def precedes(self, extent):
-	"""Return True if this time object is temporal precedes the provided time object
+	"""!Return True if this time object is temporal precedes the provided time object
 	   A  |---------|
 	   B            |---------|
 	"""
@@ -160,7 +160,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def during(self, extent):
-	"""Return True if this time object is temporal located during the provided time object
+	"""!Return True if this time object is temporal located during the provided time object
 	   A   |-------|
 	   B  |---------|
 	"""
@@ -181,7 +181,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def contains(self, extent):
-	"""Return True if this time object contains the provided time object
+	"""!Return True if this time object contains the provided time object
 	   A  |---------|
 	   B   |-------|
 	"""
@@ -202,7 +202,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def equivalent(self, extent):
-	"""Return True if this time object is temporal located equivalent the provided time object
+	"""!Return True if this time object is temporal located equivalent the provided time object
 	   A  |---------|
 	   B  |---------|
 	"""
@@ -221,7 +221,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def overlaps(self, extent):
-	"""Return True if this time object is temporal overlaps the provided time object
+	"""!Return True if this time object is temporal overlaps the provided time object
            A  |---------|
 	   B    |---------|
 	"""
@@ -235,7 +235,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def overlapped(self, extent):
-	"""Return True if this time object is temporal overlapped by the provided time object
+	"""!Return True if this time object is temporal overlapped by the provided time object
 	   A    |---------|
            B  |---------|
 	"""
@@ -249,7 +249,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def temporal_relation(self, extent):
-	"""Returns the temporal relation between temporal objects
+	"""!Returns the temporal relation between temporal objects
 	   Temporal relationships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 	"""
         
@@ -295,20 +295,20 @@ class abstract_temporal_extent(sql_database_interface):
         return None
 
     def set_id(self, ident):
-	"""Convenient method to set the unique identifier (primary key)"""
+	"""!Convenient method to set the unique identifier (primary key)"""
 	self.ident = ident
 	self.D["id"] = ident
 
     def set_start_time(self, start_time):
-	"""Set the valid start time of the extent"""
+	"""!Set the valid start time of the extent"""
 	self.D["start_time"] = start_time
 
     def set_end_time(self, end_time):
-	"""Set the valid end time of the extent"""
+	"""!Set the valid end time of the extent"""
 	self.D["end_time"] = end_time
 
     def get_id(self):
-	"""Convenient method to get the unique identifier (primary key)
+	"""!Convenient method to get the unique identifier (primary key)
 	   @return None if not found
 	"""
 	if self.D.has_key("id"):
@@ -317,7 +317,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return None
 
     def get_start_time(self):
-	"""Get the valid start time of the extent
+	"""!Get the valid start time of the extent
 	   @return None if not found"""
 	if self.D.has_key("start_time"):
 	    return self.D["start_time"]
@@ -325,7 +325,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return None
 
     def get_end_time(self):
-	"""Get the valid end time of the extent
+	"""!Get the valid end time of the extent
 	   @return None if not found"""
 	if self.D.has_key("end_time"):
 	    return self.D["end_time"]
@@ -333,20 +333,20 @@ class abstract_temporal_extent(sql_database_interface):
 	    return None
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " | Start time:................. " + str(self.get_start_time())
         print " | End time:................... " + str(self.get_end_time())
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
         print "start_time=" + str(self.get_start_time())
         print "end_time=" + str(self.get_end_time())
 
 ###############################################################################
 
 class absolute_temporal_extent(abstract_temporal_extent):
-    """This is the absolute time class for all maps and spacetime datasets
+    """!This is the absolute time class for all maps and spacetime datasets
 
        start_time and end_time must be of type datetime
     """
@@ -357,13 +357,13 @@ class absolute_temporal_extent(abstract_temporal_extent):
 	self.set_timezone(timezone)
 
     def set_timezone(self, timezone):
-	"""Set the timezone of the map, the timezone is of type string.
+	"""!Set the timezone of the map, the timezone is of type string.
            Timezones are not supported yet, instead the timezone is set in the datetime string as offset in minutes.
         """
 	self.D["timezone"] = timezone
 
     def get_timezone(self):
-	"""Get the timezone of the map
+	"""!Get the timezone of the map
            Timezones are not supported yet, instead the timezone is set in the datetime string as offset in minutes.
 	   @return None if not found"""
 	if self.D.has_key("timezone"):
@@ -372,14 +372,14 @@ class absolute_temporal_extent(abstract_temporal_extent):
 	    return None
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Absolute time -----------------------------------------+"
         abstract_temporal_extent.print_info(self)
         #print " | Timezone:................... " + str(self.get_timezone())
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
         abstract_temporal_extent.print_shell_info(self)
         #print "timezone=" + str(self.get_timezone())
 
@@ -407,11 +407,11 @@ class stds_absolute_time(absolute_temporal_extent):
         self.set_map_time(map_time)
 
     def set_granularity(self, granularity):
-	"""Set the granularity of the space time dataset"""
+	"""!Set the granularity of the space time dataset"""
 	self.D["granularity"] = granularity
 
     def set_map_time(self, map_time):
-	"""Set the type of the map time
+	"""!Set the type of the map time
 
            Registered maps may have different types of time:
            Single point of time "point"
@@ -423,7 +423,7 @@ class stds_absolute_time(absolute_temporal_extent):
 	self.D["map_time"] = map_time
 
     def get_granularity(self):
-	"""Get the granularity of the space time dataset
+	"""!Get the granularity of the space time dataset
 	   @return None if not found"""
 	if self.D.has_key("granularity"):
 	    return self.D["granularity"]
@@ -431,7 +431,7 @@ class stds_absolute_time(absolute_temporal_extent):
 	    return None
 
     def get_map_time(self):
-	"""Get the type of the map time
+	"""!Get the type of the map time
 
            Registered maps may have different types of time:
            Single point of time "point"
@@ -446,14 +446,14 @@ class stds_absolute_time(absolute_temporal_extent):
 	    return None
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         absolute_temporal_extent.print_info(self)
         #      0123456789012345678901234567890
         print " | Granularity:................ " + str(self.get_granularity())
         print " | Temporal type of maps:...... " + str(self.get_map_time())
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
         absolute_temporal_extent.print_shell_info(self)
         print "granularity=" + str(self.get_granularity())
         print "map_time=" + str(self.get_map_time())
@@ -475,7 +475,7 @@ class stvds_absolute_time(stds_absolute_time):
 ###############################################################################
 
 class relative_temporal_extent(abstract_temporal_extent):
-    """This is the relative time class for all maps and spacetime datasets
+    """!This is the relative time class for all maps and spacetime datasets
 
        start_time and end_time must be of type integer
     """
@@ -485,7 +485,7 @@ class relative_temporal_extent(abstract_temporal_extent):
 	self.D["unit"] = unit
 
     def set_unit(self, unit):
-        """Set the unit of the relative time. Valid units are:
+        """!Set the unit of the relative time. Valid units are:
            * years
            * months
            * days
@@ -496,7 +496,7 @@ class relative_temporal_extent(abstract_temporal_extent):
 	self.D["unit"] = unit
 
     def get_unit(self):
-	"""Get the unit of the relative time
+	"""!Get the unit of the relative time
 	   @return None if not found"""
 	if self.D.has_key("unit"):
 	    return self.D["unit"]
@@ -504,7 +504,7 @@ class relative_temporal_extent(abstract_temporal_extent):
 	    return None
 
     def temporal_relation(self, map):
-	"""Returns the temporal relation between temporal objects
+	"""!Returns the temporal relation between temporal objects
 	   Temporal relationships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 	"""
         
@@ -521,14 +521,14 @@ class relative_temporal_extent(abstract_temporal_extent):
 	return abstract_temporal_extent.temporal_relation(self, map)
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Relative time -----------------------------------------+"
         abstract_temporal_extent.print_info(self)
         print " | Relative time unit:......... " + str(self.get_unit())
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
         abstract_temporal_extent.print_shell_info(self)
         print "unit=" + str(self.get_unit())
 
@@ -556,11 +556,11 @@ class stds_relative_time(relative_temporal_extent):
         self.set_map_time(map_time)
 
     def set_granularity(self, granularity):
-	"""Set the granularity of the space time dataset"""
+	"""!Set the granularity of the space time dataset"""
 	self.D["granularity"] = granularity
 
     def set_map_time(self, map_time):
-	"""Set the type of the map time
+	"""!Set the type of the map time
 
            Registered maps may have different types of time:
            Single point of time "point"
@@ -572,7 +572,7 @@ class stds_relative_time(relative_temporal_extent):
 	self.D["map_time"] = map_time
 
     def get_granularity(self):
-	"""Get the granularity of the space time dataset
+	"""!Get the granularity of the space time dataset
 	   @return None if not found"""
 	if self.D.has_key("granularity"):
 	    return self.D["granularity"]
@@ -580,7 +580,7 @@ class stds_relative_time(relative_temporal_extent):
 	    return None
 
     def get_map_time(self):
-	"""Get the type of the map time
+	"""!Get the type of the map time
 
            Registered maps may have different types of time:
            Single point of time "point"
@@ -595,14 +595,14 @@ class stds_relative_time(relative_temporal_extent):
 	    return None
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         relative_temporal_extent.print_info(self)
         #      0123456789012345678901234567890
         print " | Granularity:................ " + str(self.get_granularity())
         print " | Temporal type of maps:...... " + str(self.get_map_time())
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
         relative_temporal_extent.print_shell_info(self)
         print "granularity=" + str(self.get_granularity())
         print "map_time=" + str(self.get_map_time())

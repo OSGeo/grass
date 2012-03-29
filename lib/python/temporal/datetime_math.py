@@ -28,7 +28,7 @@ from dateutil import parser
 ###############################################################################
 
 def relative_time_to_time_delta(value):
-    """Convert the double value representing days
+    """!Convert the double value representing days
        into a timedelta object.
     """
 
@@ -41,7 +41,7 @@ def relative_time_to_time_delta(value):
 ###############################################################################
 
 def time_delta_to_relative_time(delta):
-    """Convert the time delta into a
+    """!Convert the time delta into a
        double value, representing days.
     """
 
@@ -50,7 +50,7 @@ def time_delta_to_relative_time(delta):
 ###############################################################################
 
 def increment_datetime_by_string(mydate, increment, mult = 1):
-    """Return a new datetime object incremented with the provided relative dates specified as string.
+    """!Return a new datetime object incremented with the provided relative dates specified as string.
        Additional a multiplier can be specified to multiply the increment before adding to the provided datetime object.
 
        @param mydate A datetime object to incremented
@@ -103,7 +103,7 @@ def increment_datetime_by_string(mydate, increment, mult = 1):
 ###############################################################################
 
 def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0):
-    """Return a new datetime object incremented with the provided relative dates and times"""
+    """!Return a new datetime object incremented with the provided relative dates and times"""
 
     tdelta_seconds = timedelta(seconds=seconds)
     tdelta_minutes = timedelta(minutes=minutes)
@@ -146,7 +146,7 @@ def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, minu
 ###############################################################################
 
 def adjust_datetime_to_granularity(mydate, granularity):
-    """Mofiy the datetime object to fit the given granularity    """
+    """!Mofiy the datetime object to fit the given granularity    """
 
     if granularity:
 
@@ -231,7 +231,7 @@ def adjust_datetime_to_granularity(mydate, granularity):
 ###############################################################################
 
 def compute_datetime_delta(start, end):
-    """Return a dictionary with the accumulated delta in year, month, day, hour, minute and second
+    """!Return a dictionary with the accumulated delta in year, month, day, hour, minute and second
     
        @return A dictionary with year, month, day, hour, minute and second as keys()
     """
@@ -319,7 +319,7 @@ def compute_datetime_delta(start, end):
 ###############################################################################
 
 def string_to_datetime(time_string):
-    """Convert a string into a datetime object using the dateutil parser. Return None in case of failure"""
+    """!Convert a string into a datetime object using the dateutil parser. Return None in case of failure"""
 
     # BC is not supported
     if time_string.find("bc") > 0:
@@ -335,7 +335,7 @@ def string_to_datetime(time_string):
 ###############################################################################
 
 def datetime_to_grass_datetime_string(dt):
-    """Convert a python datetime object into a GRASS datetime string"""
+    """!Convert a python datetime object into a GRASS datetime string"""
 
     # GRASS datetime month names
     month_names  = ["", "jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]

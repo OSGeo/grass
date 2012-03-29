@@ -34,7 +34,7 @@ class dict_sql_serializer(object):
     def __init__(self):
         self.D = {}
     def serialize(self, type, table, where=None):
-	"""Convert the internal dictionary into a string of semicolon separated SQL statements
+	"""!Convert the internal dictionary into a string of semicolon separated SQL statements
 	   The keys are the column names and the values are the row entries
 
 	   @type must be SELECT. INSERT, UPDATE
@@ -140,7 +140,7 @@ class dict_sql_serializer(object):
     	return sql, tuple(args)
 
     def deserialize(self, row):
-	"""Convert the content of the dbmi dictionary like row into the internal dictionary
+	"""!Convert the content of the dbmi dictionary like row into the internal dictionary
 
            @param row: The dictionary like row to store in the internal dict
         """
@@ -149,7 +149,7 @@ class dict_sql_serializer(object):
 	    self.D[key] = row[key]
 
     def clear(self):
-	"""Initialize the internal storage"""
+	"""!Initialize the internal storage"""
 	self.D = {}
 
     def print_self(self):
@@ -174,7 +174,7 @@ class dict_sql_serializer(object):
 ###############################################################################
 
 class sql_database_interface(dict_sql_serializer):
-    """This class represents the SQL database interface
+    """!This class represents the SQL database interface
 
        Functions to insert, select and update the internal structure of this class
        in the temporal database are implemented. The following DBMS are supported:
@@ -189,7 +189,7 @@ class sql_database_interface(dict_sql_serializer):
        * Metadata
     """
     def __init__(self, table=None, ident=None):
-        """Constructor of this class
+        """!Constructor of this class
 
            @param table: The name of the table
            @param ident: The identifier (primary key) of this object in the database table
@@ -200,11 +200,11 @@ class sql_database_interface(dict_sql_serializer):
         self.ident = ident
 
     def get_table_name(self):
-        """Return the name of the table in which the internal data are inserted, updated or selected"""
+        """!Return the name of the table in which the internal data are inserted, updated or selected"""
         return self.table
 
     def connect(self):
-        """Connect to the DBMI to execute SQL statements
+        """!Connect to the DBMI to execute SQL statements
 
            Supported backends are sqlite3 and postgresql
         """
@@ -223,7 +223,7 @@ class sql_database_interface(dict_sql_serializer):
 	    self.cursor = self.connection.cursor(cursor_factory=dbmi.extras.DictCursor)
 
     def close(self):
-        """Close the DBMI connection"""
+        """!Close the DBMI connection"""
         #print "Close connection to",  self.database
 	self.connection.commit()
         self.cursor.close()
@@ -232,7 +232,7 @@ class sql_database_interface(dict_sql_serializer):
 	return "DELETE FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\'"
 
     def delete(self, dbif=None):
-        """Delete the entry of this object from the temporal database"""
+        """!Delete the entry of this object from the temporal database"""
 	sql = self.get_delete_statement()
         #print sql
         
@@ -247,7 +247,7 @@ class sql_database_interface(dict_sql_serializer):
 	return "SELECT id FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\'"
 
     def is_in_db(self, dbif=None):
-        """Check if this object is present in the temporal database
+        """!Check if this object is present in the temporal database
 
            @param dbif: The database interface to be used
         """
@@ -274,7 +274,7 @@ class sql_database_interface(dict_sql_serializer):
 	return self.serialize("SELECT", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def select(self, dbif=None):
-        """Select the content from the temporal database and store it
+        """!Select the content from the temporal database and store it
            in the internal dictionary structure
 
            @param dbif: The database interface to be used
@@ -313,7 +313,7 @@ class sql_database_interface(dict_sql_serializer):
 	return self.serialize("INSERT", self.get_table_name())
 
     def insert(self, dbif=None):
-        """Serialize the content of this object and store it in the temporal
+        """!Serialize the content of this object and store it in the temporal
            database using the internal identifier
 
            @param dbif: The database interface to be used
@@ -333,7 +333,7 @@ class sql_database_interface(dict_sql_serializer):
 	return self.serialize("UPDATE", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def update(self, dbif=None):
-        """Serialize the content of this object and update it in the temporal
+        """!Serialize the content of this object and update it in the temporal
            database using the internal identifier
 
            Only object entries which are exists (not None) are updated
@@ -358,7 +358,7 @@ class sql_database_interface(dict_sql_serializer):
 	return self.serialize("UPDATE ALL", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def update_all(self, dbif=None):
-        """Serialize the content of this object, including None objects, and update it in the temporal
+        """!Serialize the content of this object, including None objects, and update it in the temporal
            database using the internal identifier
 
            @param dbif: The database interface to be used
@@ -380,7 +380,7 @@ class sql_database_interface(dict_sql_serializer):
 ###############################################################################
 
 class dataset_base(sql_database_interface):
-    """This is the base class for all maps and spacetime datasets storing basic identification information"""
+    """!This is the base class for all maps and spacetime datasets storing basic identification information"""
     def __init__(self, table=None, ident=None, name=None, mapset=None, creator=None, ctime=None,\
 		    mtime=None, ttype=None, revision=1):
 
@@ -401,7 +401,7 @@ class dataset_base(sql_database_interface):
 	#self.set_revision(revision)
 
     def set_id(self, ident):
-	"""Convenient method to set the unique identifier (primary key)
+	"""!Convenient method to set the unique identifier (primary key)
 
            @param ident: The unique identifier should be a combination of the dataset name, layer name and the mapset name@mapset
         """
@@ -409,21 +409,21 @@ class dataset_base(sql_database_interface):
 	self.D["id"] = ident
 
     def set_name(self, name):
-	"""Set the name of the dataset
+	"""!Set the name of the dataset
 
            @param name: The name of the dataset
         """
 	self.D["name"] = name
 
     def set_mapset(self, mapset):
-	"""Set the mapset of the dataset
+	"""!Set the mapset of the dataset
 
            @param mapsets: The name of the mapset in which this dataset is stored
         """
 	self.D["mapset"] = mapset
 
     def set_layer(self, layer):
-	"""Convenient method to set the layer of the map (part of primary key)
+	"""!Convenient method to set the layer of the map (part of primary key)
 	
 	   Layer are currently supported for vector maps
 
@@ -432,14 +432,14 @@ class dataset_base(sql_database_interface):
 	self.D["layer"] = layer
 
     def set_creator(self, creator):
-	"""Set the creator of the dataset
+	"""!Set the creator of the dataset
 
            @param creator: The name of the creator
         """
 	self.D["creator"] = creator
 
     def set_ctime(self, ctime=None):
-	"""Set the creation time of the dataset, if nothing set the current time is used
+	"""!Set the creation time of the dataset, if nothing set the current time is used
 
            @param ctime: The current time of type datetime
         """
@@ -449,7 +449,7 @@ class dataset_base(sql_database_interface):
             self.D["creation_time"] = ctime
 
     def set_ttype(self, ttype):
-	"""Set the temporal type of the dataset: absolute or relative, if nothing set absolute time will assumed
+	"""!Set the temporal type of the dataset: absolute or relative, if nothing set absolute time will assumed
 
            @param ttype: The temporal type of the dataset "absolute or relative"
         """
@@ -459,18 +459,18 @@ class dataset_base(sql_database_interface):
 	    self.D["temporal_type"] = ttype
 
 #    def set_mtime(self, mtime=None):
-#	"""Set the modification time of the map, if nothing set the current time is used"""
+#	"""!Set the modification time of the map, if nothing set the current time is used"""
 #	if mtime == None:
 #            self.D["modification_time"] = datetime.now()
 #	else:
 #            self.D["modification_time"] = mtime
 
 #    def set_revision(self, revision=1):
-#	"""Set the revision of the map: if nothing set revision 1 will assumed"""
+#	"""!Set the revision of the map: if nothing set revision 1 will assumed"""
 #	self.D["revision"] = revision
 
     def get_id(self):
-	"""Convenient method to get the unique identifier (primary key)
+	"""!Convenient method to get the unique identifier (primary key)
         
 	   @return None if not found
 	"""
@@ -480,7 +480,7 @@ class dataset_base(sql_database_interface):
 	    return None
 
     def get_map_id(self):
-	"""Convenient method to get the unique map identifier without layer information
+	"""!Convenient method to get the unique map identifier without layer information
 
            @param return the name of the vector map as name@mapset
         """
@@ -492,7 +492,7 @@ class dataset_base(sql_database_interface):
 	    return id
 	    
     def get_layer(self):
-	"""Convenient method to get the layer of the map (part of primary key)
+	"""!Convenient method to get the layer of the map (part of primary key)
 	
 	   Layer are currently supported for vector maps
         
@@ -504,7 +504,7 @@ class dataset_base(sql_database_interface):
 	    return None
 
     def get_name(self):
-	"""Get the name of the dataset
+	"""!Get the name of the dataset
 	   @return None if not found"""
 	if self.D.has_key("name"):
 	    return self.D["name"]
@@ -512,7 +512,7 @@ class dataset_base(sql_database_interface):
 	    return None
 
     def get_mapset(self):
-	"""Get the name of mapset of this dataset
+	"""!Get the name of mapset of this dataset
 	   @return None if not found"""
 	if self.D.has_key("mapset"):
 	    return self.D["mapset"]
@@ -520,7 +520,7 @@ class dataset_base(sql_database_interface):
 	    return None
 
     def get_creator(self):
-	"""Get the creator of the dataset
+	"""!Get the creator of the dataset
 	   @return None if not found"""
 	if self.D.has_key("creator"):
 	    return self.D["creator"]
@@ -528,7 +528,7 @@ class dataset_base(sql_database_interface):
 	    return None
 
     def get_ctime(self):
-	"""Get the creation time of the dataset, datatype is datetime
+	"""!Get the creation time of the dataset, datatype is datetime
 	   @return None if not found"""
 	if self.D.has_key("creation_time"):
 	    return self.D["creation_time"]
@@ -536,7 +536,7 @@ class dataset_base(sql_database_interface):
 	    return None
 
     def get_ttype(self):
-	"""Get the temporal type of the map
+	"""!Get the temporal type of the map
 	   @return None if not found"""
 	if self.D.has_key("temporal_type"):
 	    return self.D["temporal_type"]
@@ -544,7 +544,7 @@ class dataset_base(sql_database_interface):
 	    return None
 
 #    def get_mtime(self):
-#	"""Get the modification time of the map, datatype is datetime
+#	"""!Get the modification time of the map, datatype is datetime
 #	   @return None if not found"""
 #	if self.D.has_key("modification_time"):
 #	    return self.D["modification_time"]
@@ -552,7 +552,7 @@ class dataset_base(sql_database_interface):
 #	    return None
 
 #    def get_revision(self):
-#	"""Get the revision of the map
+#	"""!Get the revision of the map
 #	   @return None if not found"""
 #	if self.D.has_key("revision"):
 #	    return self.D["revision"]
@@ -560,7 +560,7 @@ class dataset_base(sql_database_interface):
 #	    return None
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Basic information -------------------------------------+"
         print " | Id: ........................ " + str(self.get_id())
@@ -575,7 +575,7 @@ class dataset_base(sql_database_interface):
 #        print " | Revision in database: ...... " + str(self.get_revision())
         
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
         print "id=" + str(self.get_id())
         print "name=" + str(self.get_name())
         print "mapset=" + str(self.get_mapset())
@@ -630,11 +630,11 @@ class stds_base(dataset_base):
 	self.set_semantic_type(semantic_type)
 
     def set_semantic_type(self, semantic_type):
-	"""Set the semantic type of the space time dataset"""
+	"""!Set the semantic type of the space time dataset"""
 	self.D["semantic_type"] = semantic_type
 
     def get_semantic_type(self):
-	"""Get the semantic type of the space time dataset
+	"""!Get the semantic type of the space time dataset
 	   @return None if not found"""
 	if self.D.has_key("semantic_type"):
 	    return self.D["semantic_type"]
@@ -642,13 +642,13 @@ class stds_base(dataset_base):
 	    return None
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         dataset_base.print_info(self)
         #      0123456789012345678901234567890
         print " | Semantic type:.............. " + str(self.get_semantic_type())
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
         dataset_base.print_shell_info(self)
         print "semantic_type=" + str(self.get_semantic_type())
 
