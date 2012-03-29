@@ -1,0 +1,30 @@
+/*! \page pythontemporallib GRASS Python Temporal Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+Python Temporal GIS package
+
+TODO: add some documentation
+
+List of modules:
+
+- python::temporal::abstract_dataset
+- python::temporal::abstract_map_dataset
+- python::temporal::abstract_space_time_dataset
+- python::temporal::aggregation
+- python::temporal::base
+- python::temporal::core
+- python::temporal::datetime_math
+- python::temporal::metadata
+- python::temporal::space_time_datasets
+- python::temporal::space_time_datasets_tools
+- python::temporal::spatial_extent
+- python::temporal::temporal_extent
+- python::temporal::temporal_granularity
+- python::temporal::temporal_relationships
+- python::temporal::unit_tests
+
+\section pythonTempAuthors Authors
+
+Soeren Gebbert
+*/
