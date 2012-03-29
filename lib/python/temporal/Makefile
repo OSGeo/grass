@@ -28,4 +28,4 @@ $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
 #doxygen:
-DOXNAME = python
+DOXNAME = pythontemporal
