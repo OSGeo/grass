@@ -27,7 +27,7 @@ from space_time_datasets import *
 ###############################################################################
 
 def collect_map_names(sp, dbif, start, end, sampling):
-    """Gather all maps from dataset using a specific sample method
+    """!Gather all maps from dataset using a specific sample method
 
        @param sp: The space time raster dataset to select aps from
        @param dbif: The temporal database interface to use
@@ -81,7 +81,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 ###############################################################################
 
 def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, count, method, register_null, dbif):
-    """Aggregate a list of raster input maps with r.series
+    """!Aggregate a list of raster input maps with r.series
        
        @param orig_ds: Original space time raster dataset from which the maps are selected
        @param dataset: The new space time raster dataset to insert the aggregated map

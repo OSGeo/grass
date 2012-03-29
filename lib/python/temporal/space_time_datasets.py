@@ -33,7 +33,7 @@ from abstract_space_time_dataset import *
 ###############################################################################
 
 class raster_dataset(abstract_map_dataset):
-    """Raster dataset class
+    """!Raster dataset class
 
        This class provides functions to select, update, insert or delete raster
        map information and valid time stamps into the SQL temporal database.
@@ -45,27 +45,27 @@ class raster_dataset(abstract_map_dataset):
         return "raster"
 
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+        """!Return a new instance with the type of this class"""
         return raster_dataset(ident)
 
     def get_new_stds_instance(self, ident):
-        """Return a new space time dataset instance in which maps are stored with the type of this class"""
+        """!Return a new space time dataset instance in which maps are stored with the type of this class"""
         return space_time_raster_dataset(ident)
 
     def get_stds_register(self):
-        """Return the space time dataset register table name in which stds are listed in which this map is registered"""
+        """!Return the space time dataset register table name in which stds are listed in which this map is registered"""
         return self.metadata.get_strds_register()
 
     def set_stds_register(self, name):
-        """Set the space time dataset register table name in which stds are listed in which this map is registered"""
+        """!Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_strds_register(name)
  
     def get_timestamp_module_name(self):
-        """Return the name of the C-module to set the time stamp in the file system"""
+        """!Return the name of the C-module to set the time stamp in the file system"""
         return "r.timestamp"
 
     def spatial_overlapping(self, dataset):
-        """Return True if the spatial extents 2d overlap"""
+        """!Return True if the spatial extents 2d overlap"""
         
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
@@ -75,7 +75,7 @@ class raster_dataset(abstract_map_dataset):
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 	
     def reset(self, ident):
-	"""Reset the internal structure and set the identifier"""
+	"""!Reset the internal structure and set the identifier"""
 	self.ident = ident
 
 	self.base = raster_base(ident=ident)
@@ -85,7 +85,7 @@ class raster_dataset(abstract_map_dataset):
 	self.metadata = raster_metadata(ident=ident)
 
     def load(self):
-        """Load all info from an existing raster map into the internal structure"""
+        """!Load all info from an existing raster map into the internal structure"""
 
         # Get the data from an existing raster map
         kvp = raster.raster_info(self.get_map_id())
@@ -121,7 +121,7 @@ class raster_dataset(abstract_map_dataset):
 ###############################################################################
 
 class raster3d_dataset(abstract_map_dataset):
-    """Raster3d dataset class
+    """!Raster3d dataset class
 
        This class provides functions to select, update, insert or delete raster3d
        map information and valid time stamps into the SQL temporal database.
@@ -133,27 +133,27 @@ class raster3d_dataset(abstract_map_dataset):
         return "raster3d"
 
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+        """!Return a new instance with the type of this class"""
         return raster3d_dataset(ident)
 
     def get_new_stds_instance(self, ident):
-        """Return a new space time dataset instance in which maps are stored with the type of this class"""
+        """!Return a new space time dataset instance in which maps are stored with the type of this class"""
         return space_time_raster3d_dataset(ident)
 
     def get_stds_register(self):
-        """Return the space time dataset register table name in which stds are listed in which this map is registered"""
+        """!Return the space time dataset register table name in which stds are listed in which this map is registered"""
         return self.metadata.get_str3ds_register()
 
     def set_stds_register(self, name):
-        """Set the space time dataset register table name in which stds are listed in which this map is registered"""
+        """!Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_str3ds_register(name)
  
     def get_timestamp_module_name(self):
-        """Return the name of the C-module to set the time stamp in the file system"""
+        """!Return the name of the C-module to set the time stamp in the file system"""
         return "r3.timestamp"
 
     def spatial_overlapping(self, dataset):
-        """Return True if the spatial extents overlap"""
+        """!Return True if the spatial extents overlap"""
         
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.overlapping(dataset.spatial_extent)
@@ -169,7 +169,7 @@ class raster3d_dataset(abstract_map_dataset):
             return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
         
     def reset(self, ident):
-	"""Reset the internal structure and set the identifier"""
+	"""!Reset the internal structure and set the identifier"""
 	self.ident = ident
 
 	self.base = raster3d_base(ident=ident)
@@ -179,7 +179,7 @@ class raster3d_dataset(abstract_map_dataset):
 	self.metadata = raster3d_metadata(ident=ident)
 
     def load(self):
-        """Load all info from an existing raster3d map into the internal structure"""
+        """!Load all info from an existing raster3d map into the internal structure"""
 
         # Get the data from an existing raster map
         kvp = raster3d.raster3d_info(self.get_map_id())
@@ -219,7 +219,7 @@ class raster3d_dataset(abstract_map_dataset):
 ###############################################################################
 
 class vector_dataset(abstract_map_dataset):
-    """Vector dataset class
+    """!Vector dataset class
 
        This class provides functions to select, update, insert or delete vector
        map information and valid time stamps into the SQL temporal database.
@@ -231,31 +231,31 @@ class vector_dataset(abstract_map_dataset):
         return "vector"
 
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+        """!Return a new instance with the type of this class"""
         return vector_dataset(ident)
 
     def get_new_stds_instance(self, ident):
-        """Return a new space time dataset instance in which maps are stored with the type of this class"""
+        """!Return a new space time dataset instance in which maps are stored with the type of this class"""
         return space_time_vector_dataset(ident)
 
     def get_stds_register(self):
-        """Return the space time dataset register table name in which stds are listed in which this map is registered"""
+        """!Return the space time dataset register table name in which stds are listed in which this map is registered"""
         return self.metadata.get_stvds_register()
 
     def set_stds_register(self, name):
-        """Set the space time dataset register table name in which stds are listed in which this map is registered"""
+        """!Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_stvds_register(name)
  
     def get_timestamp_module_name(self):
-        """Return the name of the C-module to set the time stamp in the file system"""
+        """!Return the name of the C-module to set the time stamp in the file system"""
         return "v.timestamp"
 
     def get_layer(self):
-        """Return the layer"""
+        """!Return the layer"""
         return self.base.get_layer()
 
     def spatial_overlapping(self, dataset):
-        """Return True if the spatial extents 2d overlap"""
+        """!Return True if the spatial extents 2d overlap"""
         
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
@@ -266,7 +266,7 @@ class vector_dataset(abstract_map_dataset):
 	
 
     def reset(self, ident):
-	"""Reset the internal structure and set the identifier"""
+	"""!Reset the internal structure and set the identifier"""
 	self.ident = ident
 
 	self.base = vector_base(ident=ident)
@@ -276,7 +276,7 @@ class vector_dataset(abstract_map_dataset):
 	self.metadata = vector_metadata(ident=ident)
 
     def load(self):
-        """Load all info from an existing vector map into the internal structure"""
+        """!Load all info from an existing vector map into the internal structure"""
 
         # Get the data from an existing raster map
         kvp = vector.vector_info(self.get_map_id())
@@ -301,7 +301,7 @@ class vector_dataset(abstract_map_dataset):
 ###############################################################################
 
 class space_time_raster_dataset(abstract_space_time_dataset):
-    """Space time raster dataset class
+    """!Space time raster dataset class
     """
     def __init__(self, ident):
         abstract_space_time_dataset.__init__(self, ident)
@@ -310,23 +310,23 @@ class space_time_raster_dataset(abstract_space_time_dataset):
         return "strds"
 
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+        """!Return a new instance with the type of this class"""
         return space_time_raster_dataset(ident)
 
     def get_new_map_instance(self, ident):
-        """Return a new instance of a map dataset which is associated with the type of this class"""
+        """!Return a new instance of a map dataset which is associated with the type of this class"""
         return raster_dataset(ident)
 
     def get_map_register(self):
-        """Return the name of the map register table"""
+        """!Return the name of the map register table"""
         return self.metadata.get_raster_register()
 
     def set_map_register(self, name):
-        """Set the name of the map register table"""
+        """!Set the name of the map register table"""
         self.metadata.set_raster_register(name)
 
     def spatial_overlapping(self, dataset):
-        """Return True if the spatial extents 2d overlap"""
+        """!Return True if the spatial extents 2d overlap"""
         
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
@@ -337,7 +337,7 @@ class space_time_raster_dataset(abstract_space_time_dataset):
 	
     def reset(self, ident):
 
-	"""Reset the internal structure and set the identifier"""
+	"""!Reset the internal structure and set the identifier"""
 	self.ident = ident
 
 	self.base = strds_base(ident=ident)
@@ -354,7 +354,7 @@ class space_time_raster_dataset(abstract_space_time_dataset):
 ###############################################################################
 
 class space_time_raster3d_dataset(abstract_space_time_dataset):
-    """Space time raster3d dataset class
+    """!Space time raster3d dataset class
     """
 
     def __init__(self, ident):
@@ -364,23 +364,23 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
         return "str3ds"
 
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+        """!Return a new instance with the type of this class"""
         return space_time_raster3d_dataset(ident)
 
     def get_new_map_instance(self, ident):
-        """Return a new instance of a map dataset which is associated with the type of this class"""
+        """!Return a new instance of a map dataset which is associated with the type of this class"""
         return raster3d_dataset(ident)
 
     def get_map_register(self):
-        """Return the name of the map register table"""
+        """!Return the name of the map register table"""
         return self.metadata.get_raster3d_register()
 
     def set_map_register(self, name):
-        """Set the name of the map register table"""
+        """!Set the name of the map register table"""
         self.metadata.set_raster3d_register(name)
 
     def spatial_overlapping(self, dataset):
-        """Return True if the spatial extents overlap"""
+        """!Return True if the spatial extents overlap"""
         
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.overlapping(dataset.spatial_extent)
@@ -397,7 +397,7 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
         
     def reset(self, ident):
 
-	"""Reset the internal structure and set the identifier"""
+	"""!Reset the internal structure and set the identifier"""
 	self.ident = ident
 
 	self.base = str3ds_base(ident=ident)
@@ -414,7 +414,7 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
 ###############################################################################
 
 class space_time_vector_dataset(abstract_space_time_dataset):
-    """Space time vector dataset class
+    """!Space time vector dataset class
     """
 
     def __init__(self, ident):
@@ -424,23 +424,23 @@ class space_time_vector_dataset(abstract_space_time_dataset):
         return "stvds"
 
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+        """!Return a new instance with the type of this class"""
         return space_time_vector_dataset(ident)
 
     def get_new_map_instance(self, ident):
-        """Return a new instance of a map dataset which is associated with the type of this class"""
+        """!Return a new instance of a map dataset which is associated with the type of this class"""
         return vector_dataset(ident)
 
     def get_map_register(self):
-        """Return the name of the map register table"""
+        """!Return the name of the map register table"""
         return self.metadata.get_vector_register()
 
     def set_map_register(self, name):
-        """Set the name of the map register table"""
+        """!Set the name of the map register table"""
         self.metadata.set_vector_register(name)
 
     def spatial_overlapping(self, dataset):
-        """Return True if the spatial extents 2d overlap"""
+        """!Return True if the spatial extents 2d overlap"""
         
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
@@ -451,7 +451,7 @@ class space_time_vector_dataset(abstract_space_time_dataset):
 
     def reset(self, ident):
 
-	"""Reset the internal structure and set the identifier"""
+	"""!Reset the internal structure and set the identifier"""
 	self.ident = ident
 
 	self.base = stvds_base(ident=ident)

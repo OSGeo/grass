@@ -25,7 +25,7 @@ from datetime_math import *
 
 
 def print_temporal_relations(maps1, maps2):
-    """Print the temporal relation matrix of the temporal ordered map lists maps1 and maps2
+    """!Print the temporal relation matrix of the temporal ordered map lists maps1 and maps2
        to stdout.
 	
 	@param maps1: a ordered by start_time list of map objects
@@ -64,7 +64,7 @@ def print_temporal_relations(maps1, maps2):
 		break
 
 def get_temporal_relation_matrix(maps1, maps2):
-    """Return the temporal relation matrix of all registered maps as list of lists
+    """!Return the temporal relation matrix of all registered maps as list of lists
 
 	The map list must be ordered by start time
 
@@ -110,7 +110,7 @@ def get_temporal_relation_matrix(maps1, maps2):
     return matrix
 
 def count_temporal_relations(maps1, maps2):
-    """Count the temporal relations between the registered maps.
+    """!Count the temporal relations between the registered maps.
 
 	The map lists must be ordered by start time. Temporal relations are counted 
 	by analyzing the sparse (upper right side in case maps1 == maps2) temporal relationships matrix.

@@ -27,7 +27,7 @@ from temporal_relationships import *
 ###############################################################################
 
 class abstract_space_time_dataset(abstract_dataset):
-    """Abstract space time dataset class
+    """!Abstract space time dataset class
 
        This class represents a space time dataset. Convenient functions
        to select, update, insert or delete objects of this type in the SQL
@@ -43,18 +43,18 @@ class abstract_space_time_dataset(abstract_dataset):
         self.map_counter = 0
 
     def get_new_map_instance(self, ident=None):
-        """Return a new instance of a map dataset which is associated with the type of this class
+        """!Return a new instance of a map dataset which is associated with the type of this class
 
            @param ident: The unique identifier of the new object
         """
         raise IOError("This method must be implemented in the subclasses")
 
     def get_map_register(self):
-        """Return the name of the map register table"""
+        """!Return the name of the map register table"""
         raise IOError("This method must be implemented in the subclasses")
 
     def set_map_register(self, name):
-        """Set the name of the map register table
+        """!Set the name of the map register table
 
         This table stores all map names which are registered in this space time dataset.
 
@@ -63,7 +63,7 @@ class abstract_space_time_dataset(abstract_dataset):
         raise IOError("This method must be implemented in the subclasses")
  
     def print_self(self):
-	"""Print the content of the internal structure to stdout"""
+	"""!Print the content of the internal structure to stdout"""
 	self.base.print_self()
 	if self.is_time_absolute():
 	    self.absolute_time.print_self()
@@ -73,7 +73,7 @@ class abstract_space_time_dataset(abstract_dataset):
 	self.metadata.print_self()
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         
         if self.get_type() == "strds":
             #                1         2         3         4         5         6         7
@@ -101,7 +101,7 @@ class abstract_space_time_dataset(abstract_dataset):
         print " +----------------------------------------------------------------------------+"
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
 	self.base.print_shell_info()
 	if self.is_time_absolute():
 	    self.absolute_time.print_shell_info()
@@ -112,7 +112,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
     def set_initial_values(self, temporal_type, semantic_type, \
                            title=None, description=None):
-        """Set the initial values of the space time dataset
+        """!Set the initial values of the space time dataset
 
            @param temporal_type: The temporal type of this space time dataset (absolute or relative)
            @param semantic_type: The semantic type of this dataset
@@ -132,11 +132,11 @@ class abstract_space_time_dataset(abstract_dataset):
         self.metadata.set_description(description)
 
     def get_semantic_type(self):
-        """Return the semantic type of this dataset"""
+        """!Return the semantic type of this dataset"""
         return self.base.get_semantic_type()
 
     def get_initial_values(self):
-        """Return the initial values: temporal_type, semantic_type, title, description"""
+        """!Return the initial values: temporal_type, semantic_type, title, description"""
         
         temporal_type = self.get_temporal_type()
         semantic_type = self.base.get_semantic_type()
@@ -146,7 +146,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return temporal_type, semantic_type, title, description
 
     def get_granularity(self):
-        """Return the granularity"""
+        """!Return the granularity"""
         
         temporal_type = self.get_temporal_type()
 
@@ -171,7 +171,7 @@ class abstract_space_time_dataset(abstract_dataset):
             core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
     def set_relative_time_unit(self, unit):
-        """Set the relative time unit which may be of type: years, months, days, hours, minutes or seconds
+        """!Set the relative time unit which may be of type: years, months, days, hours, minutes or seconds
         
            All maps registered in a (relative time) space time dataset must have the same unit
         """
@@ -184,7 +184,7 @@ class abstract_space_time_dataset(abstract_dataset):
             self.relative_time.set_unit(unit)
 
     def get_map_time(self):
-        """Return the type of the map time, interval, point, mixed or invalid"""
+        """!Return the type of the map time, interval, point, mixed or invalid"""
         
         temporal_type = self.get_temporal_type()
 
@@ -196,7 +196,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return map_time
 
     def count_temporal_types(self, maps=None, dbif=None):
-        """Return the temporal type of the registered maps as dictionary
+        """!Return the temporal type of the registered maps as dictionary
 
            The map list must be ordered by start time
 
@@ -238,7 +238,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return tcount
 
     def count_gaps(self, maps=None, dbif=None):
-        """Count the number of gaps between temporal neighbors
+        """!Count the number of gaps between temporal neighbors
         
            @param maps: A sorted (start_time) list of abstract_dataset objects
            @param dbif: The database interface to be used
@@ -260,7 +260,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return gaps
         
     def print_temporal_relation_matrix(self, maps=None, dbif=None):
-        """Print the temporal relation matrix of all registered maps to stdout
+        """!Print the temporal relation matrix of all registered maps to stdout
 
            The temporal relation matrix includes the temporal relations between
            all registered maps. The relations are strings stored in a list of lists.
@@ -275,7 +275,7 @@ class abstract_space_time_dataset(abstract_dataset):
 	print_temporal_relations(maps, maps)
 
     def get_temporal_relation_matrix(self, maps=None, dbif=None):
-        """Return the temporal relation matrix of all registered maps as list of lists
+        """!Return the temporal relation matrix of all registered maps as list of lists
 
            The map list must be ordered by start time
 
@@ -291,7 +291,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return get_temporal_relation_matrix(maps, maps)
 
     def count_temporal_relations(self, maps=None, dbif=None):
-        """Count the temporal relations between the registered maps.
+        """!Count the temporal relations between the registered maps.
 
            The map list must be ordered by start time. Temporal relations are counted 
            by analysing the sparse upper right side temporal relationships matrix.
@@ -307,7 +307,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return count_temporal_relations(maps, maps)
 
     def check_temporal_topology(self, maps=None, dbif=None):
-        """Check the temporal topology
+        """!Check the temporal topology
 
            Correct topology means, that time intervals are not overlap or
            that intervals does not contain other intervals. Equal time intervals or
@@ -369,7 +369,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return True
 
     def sample_by_dataset(self, stds, method=None, spatial=False, dbif=None):
-        """Sample this space time dataset with the temporal topology of a second space time dataset
+        """!Sample this space time dataset with the temporal topology of a second space time dataset
 
            The sample dataset must have "interval" as temporal map type, so all sample maps have valid interval time.
 
@@ -539,7 +539,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return obj_list
 
     def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
-        """Return all registered maps as ordered (by start_time) object list with 
+        """!Return all registered maps as ordered (by start_time) object list with 
            "gap" map objects (id==None) for temporal topological operations using the
            granularity of the space time dataset as increment. Each list entry is a list of map objects
            which are potentially located in the actual granule.
@@ -609,7 +609,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return obj_list
 
     def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
-        """Return all registered maps as ordered (by start_time) object list with 
+        """!Return all registered maps as ordered (by start_time) object list with 
            "gap" map objects (id==None) for temporal topological operations
 
            Gaps between maps are identified as maps with id==None
@@ -663,7 +663,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return obj_list
 
     def get_registered_maps_as_objects(self, where=None, order="start_time", dbif=None):
-        """Return all registered maps as ordered object list for temporal topological operations
+        """!Return all registered maps as ordered object list for temporal topological operations
 
            The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
            In case more map information are needed, use the select() method for each listed object.
@@ -706,7 +706,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return obj_list
 
     def get_registered_maps(self, columns=None, where = None, order = None, dbif=None):
-        """Return sqlite rows of all registered maps.
+        """!Return sqlite rows of all registered maps.
         
            In case columns are not specified, each row includes all columns specified in the datatype specific view
 
@@ -759,7 +759,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return rows
 
     def delete(self, dbif=None):
-        """Delete a space time dataset from the temporal database
+        """!Delete a space time dataset from the temporal database
 
            This method removes the space time dataset from the temporal database and drops its map register table
 
@@ -813,7 +813,7 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif.close()
             
     def register_map(self, map, dbif=None):
-        """ Register a map in the space time dataset.
+        """!Register a map in the space time dataset.
 
             This method takes care of the registration of a map
             in a space time dataset.
@@ -1032,7 +1032,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return True
 
     def unregister_map(self, map, dbif = None):
-        """Unregister a map from the space time dataset.
+        """!Unregister a map from the space time dataset.
 
            This method takes care of the un-registration of a map
            from a space time dataset.
@@ -1107,7 +1107,7 @@ class abstract_space_time_dataset(abstract_dataset):
         self.map_counter -= 1
             
     def update_from_registered_maps(self, dbif = None):
-        """This methods updates the spatial and temporal extent as well as
+        """!This methods updates the spatial and temporal extent as well as
            type specific metadata. It should always been called after maps are registered
            or unregistered/deleted from the space time dataset.
 
@@ -1302,7 +1302,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
 def create_temporal_relation_sql_where_statement(start, end, use_start=True, use_during=False, 
                                         use_overlap=False, use_contain=False, use_equal=False):
-    """ Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
+    """!Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
 
         @param start: The start time
         @param end: The end time

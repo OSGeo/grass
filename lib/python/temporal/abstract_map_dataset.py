@@ -26,23 +26,23 @@ from datetime_math import *
 ###############################################################################
 
 class abstract_map_dataset(abstract_dataset):
-    """This is the base class for all maps (raster, vector, raster3d) 
+    """!This is the base class for all maps (raster, vector, raster3d) 
        providing additional function to set the valid time and the spatial extent.
     """
       
     def get_new_stds_instance(self, ident):
-        """Return a new space time dataset instance in which maps are stored with the type of this class
+        """!Return a new space time dataset instance in which maps are stored with the type of this class
 
            @param ident: The identifier of the dataset
         """
         raise IOError("This method must be implemented in the subclasses")
     
     def get_stds_register(self):
-        """Return the space time dataset register table name in which stds are listed in which this map is registered"""
+        """!Return the space time dataset register table name in which stds are listed in which this map is registered"""
         raise IOError("This method must be implemented in the subclasses")
 
     def set_stds_register(self, name):
-        """Set the space time dataset register table name.
+        """!Set the space time dataset register table name.
         
            This table stores all space time datasets in which this map is registered.
 
@@ -51,15 +51,15 @@ class abstract_map_dataset(abstract_dataset):
         raise IOError("This method must be implemented in the subclasses")
       
     def get_timestamp_module_name(self):
-        """Return the name of the C-module to set the time stamp in the file system"""
+        """!Return the name of the C-module to set the time stamp in the file system"""
         raise IOError("This method must be implemented in the subclasses")
    
     def load(self):
-        """Load the content of this object from map files"""
+        """!Load the content of this object from map files"""
         raise IOError("This method must be implemented in the subclasses")
  
     def check_resolution_with_current_region(self):
-        """Check if the raster or voxel resolution is finer than the current resolution
+        """!Check if the raster or voxel resolution is finer than the current resolution
            Return "finer" in case the raster/voxel resolution is finer than the current region
            Return "coarser" in case the raster/voxel resolution is coarser than the current region
 
@@ -68,7 +68,7 @@ class abstract_map_dataset(abstract_dataset):
         raise IOError("This method must be implemented in the subclasses")
 
     def get_map_id(self):
-	"""Return the map id. The map id is the unique map identifier in grass and must not be equal to the 
+	"""!Return the map id. The map id is the unique map identifier in grass and must not be equal to the 
 	   primary key identifier (id) of the map in the database. Since vector maps may have layer information,
 	   the unique id is a combination of name, layer and mapset.
 	   
@@ -79,7 +79,7 @@ class abstract_map_dataset(abstract_dataset):
         return self.base.get_map_id()
 
     def build_id(self, name, mapset, layer=None):
-	"""Convenient method to build the unique identifier
+	"""!Convenient method to build the unique identifier
 	
 	    Existing layer and mapset definitions in the name string will be reused
 
@@ -100,11 +100,11 @@ class abstract_map_dataset(abstract_dataset):
 	    return "%s@%s"%(name, mapset)
 	    
     def get_layer(self):
-	"""Return the layer of the map or None in case no layer is defined"""
+	"""!Return the layer of the map or None in case no layer is defined"""
 	return self.base.get_layer()
         
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         
         if self.get_type() == "raster":
             #                1         2         3         4         5         6         7
@@ -145,7 +145,7 @@ class abstract_map_dataset(abstract_dataset):
         print " +----------------------------------------------------------------------------+"
 
     def print_shell_info(self):
-        """Print information about this class in shell style"""
+        """!Print information about this class in shell style"""
 	self.base.print_shell_info()
 	if self.is_time_absolute():
 	    self.absolute_time.print_shell_info()
@@ -165,7 +165,7 @@ class abstract_map_dataset(abstract_dataset):
         print "registered_datasets=" + string
 
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
-        """Set the absolute time interval with start time and end time
+        """!Set the absolute time interval with start time and end time
         
            @param start_time: a datetime object specifying the start time of the map
            @param end_time: a datetime object specifying the end time of the map
@@ -202,7 +202,7 @@ class abstract_map_dataset(abstract_dataset):
         self.absolute_time.set_timezone(timezone)
 
     def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif = None):
-        """Update the absolute time
+        """!Update the absolute time
 
            This method should always be used to set the absolute time. Do not use insert() or update()
            to the the time. This update functions assures that the *.timestamp commands are invoked.
@@ -228,7 +228,7 @@ class abstract_map_dataset(abstract_dataset):
         self.write_absolute_time_to_file()
 
     def write_absolute_time_to_file(self):
-        """Start the grass timestamp module to set the time in the file system"""
+        """!Start the grass timestamp module to set the time in the file system"""
 
         start_time, end_time, unit = self.get_absolute_time()
         start = datetime_to_grass_datetime_string(start_time)
@@ -239,7 +239,7 @@ class abstract_map_dataset(abstract_dataset):
         core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date=start)
 
     def set_relative_time(self, start_time, end_time, unit):
-        """Set the relative time interval 
+        """!Set the relative time interval 
         
            @param start_time: A double value 
            @param end_time: A double value 
@@ -281,7 +281,7 @@ class abstract_map_dataset(abstract_dataset):
         return True
 
     def update_relative_time(self, start_time, end_time, unit, dbif = None):
-        """Update the relative time interval
+        """!Update the relative time interval
 
            This method should always be used to set the absolute time. Do not use insert() or update()
            to the the time. This update functions assures that the *.timestamp commands are invoked.
@@ -308,7 +308,7 @@ class abstract_map_dataset(abstract_dataset):
         self.write_relative_time_to_file()
 
     def write_relative_time_to_file(self):
-        """Start the grass timestamp module to set the time in the file system"""
+        """!Start the grass timestamp module to set the time in the file system"""
 
         start_time, end_time, unit = self.get_relative_time()
         start = "%i %s"%(int(start_time), unit)
@@ -318,7 +318,7 @@ class abstract_map_dataset(abstract_dataset):
         core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date=start)
 
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
-        """Set the spatial extent of the map
+        """!Set the spatial extent of the map
 
            @param north: The northern edge
            @param south: The southern edge
@@ -330,7 +330,7 @@ class abstract_map_dataset(abstract_dataset):
         self.spatial_extent.set_spatial_extent(north, south, east, west, top, bottom)
         
     def check_valid_time(self):
-        """Check for correct valid time"""
+        """!Check for correct valid time"""
         if self.is_time_absolute():
             start, end, tz = self.get_absolute_time()
         else:
@@ -351,7 +351,7 @@ class abstract_map_dataset(abstract_dataset):
         return True
 
     def delete(self, dbif=None, update=True):
-	"""Delete a map entry from database if it exists
+	"""!Delete a map entry from database if it exists
         
             Remove dependent entries:
             * Remove the map entry in each space time dataset in which this map is registered
@@ -407,7 +407,7 @@ class abstract_map_dataset(abstract_dataset):
             dbif.close()
 
     def unregister(self, dbif=None, update=True):
-	""" Remove the map entry in each space time dataset in which this map is registered
+	"""! Remove the map entry in each space time dataset in which this map is registered
 
            @param dbif: The database interface to be used
            @param update: Call for each unregister statement the update from registered maps 
@@ -454,7 +454,7 @@ class abstract_map_dataset(abstract_dataset):
             dbif.close()
             
     def get_registered_datasets(self, dbif=None):
-        """Return all space time dataset ids in which this map is registered as
+        """!Return all space time dataset ids in which this map is registered as
            dictionary like rows with column "id" or None if this map is not registered in any
            space time dataset.
 

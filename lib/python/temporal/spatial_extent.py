@@ -23,7 +23,7 @@ for details.
 from base import *
 
 class spatial_extent(sql_database_interface):
-    """This is the spatial extent base class for all maps and spacetime datasets"""
+    """!This is the spatial extent base class for all maps and spacetime datasets"""
     def __init__(self, table=None, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None, proj="XY"):
 
 	sql_database_interface.__init__(self, table, ident)
@@ -32,7 +32,7 @@ class spatial_extent(sql_database_interface):
 	self.set_projection(proj)
         
     def overlapping_2d(self, extent):
-        """Return True if the two dimensional extents overlap. Code is lend from wind_overlap.c in lib/gis
+        """!Return True if the two dimensional extents overlap. Code is lend from wind_overlap.c in lib/gis
         
 	   Overlapping includes the spatial relations:
 	   * contain
@@ -76,7 +76,7 @@ class spatial_extent(sql_database_interface):
         return True
 
     def overlapping(self, extent):
-        """Return True if the three dimensional extents overlap
+        """!Return True if the three dimensional extents overlap
         
 	   Overlapping includes the spatial relations:
 	   * contain
@@ -101,7 +101,7 @@ class spatial_extent(sql_database_interface):
         return True
 
     def intersect_2d(self, extent):
-	"""Return the two dimensional intersection as spatial_extent object or None
+	"""!Return the two dimensional intersection as spatial_extent object or None
 	   in case no intersection was found.
 	"""
 	
@@ -148,7 +148,7 @@ class spatial_extent(sql_database_interface):
 	return new
 
     def intersect(self, extent):
-	"""Return the three dimensional intersection as spatial_extent object or None
+	"""!Return the three dimensional intersection as spatial_extent object or None
 	   in case no intersection was found.
 	"""
 	

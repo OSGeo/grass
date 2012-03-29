@@ -26,7 +26,7 @@ from datetime_math import *
 ###############################################################################
 
 def compute_relative_time_granularity(maps):            
-    """ Compute the relative time granularity
+    """!Compute the relative time granularity
         
         Attention: The computation of the granularity is only correct in case of not
         overlapping intervals. Hence a correct temporal topology is required for
@@ -77,7 +77,7 @@ def compute_relative_time_granularity(maps):
 ###############################################################################
 
 def compute_absolute_time_granularity(maps):                  
-    """ Compute the absolute time granularity
+    """!Compute the absolute time granularity
         
         Attention: The computation of the granularity is only correct in case of not
         overlapping intervals. Hence a correct temporal topology is required for
@@ -230,7 +230,7 @@ def compute_absolute_time_granularity(maps):
 # Error Codes:
 #   None
 def gcd(a,b):
-	""" The Euclidean Algorithm """
+	"""!The Euclidean Algorithm """
 	a = abs(a)
 	b = abs(b)
         while a:
@@ -240,7 +240,7 @@ def gcd(a,b):
 ###############################################################################
 
 def gcd_list(list):
-	""" Finds the GCD of numbers in a list.
+	"""!Finds the GCD of numbers in a list.
 	Input: List of numbers you want to find the GCD of
 		E.g. [8, 24, 12]
 	Returns: GCD of all numbers
