@@ -166,7 +166,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
     for count in range(len(maplist)):
 	core.percent(count, num_maps, 1)
 
-        # Get a new instance of the space time dataset map type
+        # Get a new instance of the map type
         map = dataset_factory(type, maplist[count]["id"])
 
         # Use the time data from file
@@ -189,7 +189,6 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
             # Load the data from the grass file database
             map.load()
 	    
-	    # We need to check the temporal type based on the time stamp
 	    if unit:
                 map.set_time_to_relative()
             else:
@@ -384,7 +383,6 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
             string += "%s"   % ("distance_from_begin")
-            print string
 
         if maps and len(maps) > 0:
 
@@ -545,7 +543,6 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
             string += "%s"   % ("distance_from_begin")
-            print string
 
         first_time, dummy = mapmatrizes[0][0]["granule"].get_valid_time()
 

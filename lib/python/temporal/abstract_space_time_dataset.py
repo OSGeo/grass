@@ -438,7 +438,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
            In case nothing found None is returned
         """
-
+        
         use_start = False
         use_during = False
         use_overlap = False
@@ -498,7 +498,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
             where = create_temporal_relation_sql_where_statement(start, end, use_start, \
                     use_during, use_overlap, use_contain, use_equal)  
-
+                    
             maps = self.get_registered_maps_as_objects(where, "start_time", dbif)
 
             result = {}
@@ -743,7 +743,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql += " AND %s" % (where)
             if order:
                 sql += " ORDER BY %s" % (order)
-
+                
             try:
                 dbif.cursor.execute(sql)
                 rows = dbif.cursor.fetchall()
@@ -1370,6 +1370,10 @@ def create_temporal_relation_sql_where_statement(start, end, use_start=True, use
         where += "(start_time = '%s' and end_time = '%s')" % (start, end)
 
     where += ")"
+    
+    # Catch empty where statement
+    if where == "()":
+	where = None
 
     return where
 

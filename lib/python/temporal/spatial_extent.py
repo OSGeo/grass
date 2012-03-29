@@ -61,16 +61,16 @@ class spatial_extent(sql_database_interface):
                 E -= 360.0
                 W -= 360.0
                 
-        if(self.get_north() <= S):
+        if(self.get_north() < S):
             return False
         
-        if(self.get_south() >= N):
+        if(self.get_south() > N):
             return False
             
-        if self.get_east() <= W:
+        if self.get_east() < W:
             return False
         
-        if self.get_west() >= E:
+        if self.get_west() > E:
             return False
         
         return True

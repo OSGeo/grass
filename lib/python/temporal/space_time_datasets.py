@@ -67,8 +67,13 @@ class raster_dataset(abstract_map_dataset):
     def spatial_overlapping(self, dataset):
         """Return True if the spatial extents 2d overlap"""
         
-        return self.spatial_extent.overlap_2d(dataset.spatial_extent)
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
+    def spatial_relation(self, dataset):
+        """Return the two dimensional spatial relation"""
+        
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+	
     def reset(self, ident):
 	"""Reset the internal structure and set the identifier"""
 	self.ident = ident
@@ -151,10 +156,18 @@ class raster3d_dataset(abstract_map_dataset):
         """Return True if the spatial extents overlap"""
         
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
-            return self.spatial_extent.overlap(dataset.spatial_extent)
+            return self.spatial_extent.overlapping(dataset.spatial_extent)
         else:
-            return self.spatial_extent.overlap_2d(dataset.spatial_extent)
+            return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
+    def spatial_relation(self, dataset):
+        """Return the two or three dimensional spatial relation"""
+        
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
+            return self.spatial_extent.spatial_relation(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+        
     def reset(self, ident):
 	"""Reset the internal structure and set the identifier"""
 	self.ident = ident
@@ -244,7 +257,13 @@ class vector_dataset(abstract_map_dataset):
     def spatial_overlapping(self, dataset):
         """Return True if the spatial extents 2d overlap"""
         
-        return self.spatial_extent.overlap_2d(dataset.spatial_extent)
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
+
+    def spatial_relation(self, dataset):
+        """Return the two dimensional spatial relation"""
+        
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+	
 
     def reset(self, ident):
 	"""Reset the internal structure and set the identifier"""
@@ -309,8 +328,13 @@ class space_time_raster_dataset(abstract_space_time_dataset):
     def spatial_overlapping(self, dataset):
         """Return True if the spatial extents 2d overlap"""
         
-        return self.spatial_extent.overlap_2d(dataset.spatial_extent)
- 
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
+
+    def spatial_relation(self, dataset):
+        """Return the two dimensional spatial relation"""
+        
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+	
     def reset(self, ident):
 
 	"""Reset the internal structure and set the identifier"""
@@ -358,11 +382,19 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
     def spatial_overlapping(self, dataset):
         """Return True if the spatial extents overlap"""
         
-        if self.get_type() == dataset.get_type() or dataset.get_type() == "rast3d":
-            return self.spatial_extent.overlap(dataset.spatial_extent)
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
+            return self.spatial_extent.overlapping(dataset.spatial_extent)
         else:
-            return self.spatial_extent.overlap_2d(dataset.spatial_extent)
+            return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
+    def spatial_relation(self, dataset):
+        """Return the two or three dimensional spatial relation"""
+        
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
+            return self.spatial_extent.spatial_relation(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+        
     def reset(self, ident):
 
 	"""Reset the internal structure and set the identifier"""
@@ -410,7 +442,12 @@ class space_time_vector_dataset(abstract_space_time_dataset):
     def spatial_overlapping(self, dataset):
         """Return True if the spatial extents 2d overlap"""
         
-        return self.spatial_extent.overlap_2d(dataset.spatial_extent)
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
+
+    def spatial_relation(self, dataset):
+        """Return the two dimensional spatial relation"""
+        
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
     def reset(self, ident):
 

@@ -52,6 +52,11 @@ class abstract_dataset(object):
 
         raise IOError("This method must be implemented in the subclasses")
 
+    def spatial_relation(self, dataset):
+        """Return the spatial relationship between self and dataset"""
+
+        raise IOError("This method must be implemented in the subclasses")
+    
     def print_info(self):
         """Print information about this class in human readable style"""
 	raise IOError("This method must be implemented in the subclasses")
