@@ -4,19 +4,22 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \section pythonIntro Introduction
 
-The code in <tt>lib/python/</tt> provides <b>grass.script</b> in order
-to support GRASS scripts written in Python. The <tt>scripts/</tt>
+The code in <a
+href="http://svn.osgeo.org/grass/grass/trunk/lib/python/">lib/python/</a>
+provides <b>grass.script</b> in order to support GRASS scripts written
+in Python. The <a
+href="http://svn.osgeo.org/grass/grass/trunk/scripts">scripts/</a>
 directory of GRASS contains a series of examples actually provided to
 the end users.
 
 See code in:
 
-- core.py
-- db.py
-- raster.py
-- vector.py
-- setup.py
-- array.py
+- python::core
+- python::db
+- python::raster
+- python::vector
+- python::setup
+- python::array
 
 <b>Table of content</b>
 
