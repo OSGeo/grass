@@ -118,7 +118,7 @@ def main():
 
     if not rows:
         dbif.close()
-        grass.fatal(_("Space time vector dataset <%s> is empty") % sg.get_id())
+        grass.fatal(_("Space time vector dataset <%s> is empty") % sp.get_id())
 
     # Sample the raster dataset with the vector dataset and run v.what.rast
     for row in rows:
