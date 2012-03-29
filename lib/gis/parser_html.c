@@ -6,7 +6,7 @@
 #include "parser_local_proto.h"
 
 static void print_escaped_for_html(FILE * f, const char *str);
-
+static void print_escaped_for_html_options(FILE * f, const char *str);
 
 /*!
   \brief Print module usage description in HTML format.
@@ -124,45 +124,45 @@ void G__usage_html(void)
     if (st->n_flags || new_prompt) {
 	flag = &st->first_flag;
 	fprintf(stdout, "<h3>%s:</h3>\n", _("Flags"));
-	fprintf(stdout, "<DL>\n");
+	fprintf(stdout, "<dl>\n");
 	while (st->n_flags && flag != NULL) {
-	    fprintf(stdout, "<DT><b>-%c</b></DT>\n", flag->key);
+	    fprintf(stdout, "<dt><b>-%c</b></dt>\n", flag->key);
 
 	    if (flag->label) {
-		fprintf(stdout, "<DD>");
+		fprintf(stdout, "<dd>");
 		fprintf(stdout, "%s", flag->label);
-		fprintf(stdout, "</DD>\n");
+		fprintf(stdout, "</dd>\n");
 	    }
 
 	    if (flag->description) {
-		fprintf(stdout, "<DD>");
+		fprintf(stdout, "<dd>");
 		fprintf(stdout, "%s", flag->description);
-		fprintf(stdout, "</DD>\n");
+		fprintf(stdout, "</dd>\n");
 	    }
 
 	    flag = flag->next_flag;
 	    fprintf(stdout, "\n");
 	}
 	if (new_prompt) {
-	    fprintf(stdout, "<DT><b>--overwrite</b></DT>\n");
-	    fprintf(stdout, "<DD>%s</DD>\n",
+	    fprintf(stdout, "<dt><b>--overwrite</b></dt>\n");
+	    fprintf(stdout, "<dd>%s</dd>\n",
 		    _("Allow output files to overwrite existing files"));
 	}
 
-	fprintf(stdout, "<DT><b>--verbose</b></DT>\n");
-	fprintf(stdout, "<DD>%s</DD>\n", _("Verbose module output"));
+	fprintf(stdout, "<dt><b>--verbose</b></dt>\n");
+	fprintf(stdout, "<dd>%s</dd>\n", _("Verbose module output"));
 
-	fprintf(stdout, "<DT><b>--quiet</b></DT>\n");
-	fprintf(stdout, "<DD>%s</DD>\n", _("Quiet module output"));
+	fprintf(stdout, "<dt><b>--quiet</b></dt>\n");
+	fprintf(stdout, "<dd>%s</dd>\n", _("Quiet module output"));
 
-	fprintf(stdout, "</DL>\n");
+	fprintf(stdout, "</dl>\n");
     }
 
     fprintf(stdout, "\n");
     if (st->n_opts) {
 	opt = &st->first_option;
 	fprintf(stdout, "<h3>%s:</h3>\n", _("Parameters"));
-	fprintf(stdout, "<DL>\n");
+	fprintf(stdout, "<dl>\n");
 
 	while (opt != NULL) {
 	    /* TODO: make this a enumeration type? */
@@ -183,33 +183,37 @@ void G__usage_html(void)
 		    type = "string";
 		    break;
 		}
-	    fprintf(stdout, "<DT><b>%s</b>=<em>%s", opt->key, type);
+	    fprintf(stdout, "<dt><b>%s</b>=<em>%s", opt->key, type);
 	    if (opt->multiple) {
 		fprintf(stdout, "[,<i>%s</i>,...]", type);
 	    }
-	    fprintf(stdout, "</em></DT>\n");
+	    fprintf(stdout, "</em>");
+	    if (opt->required) {
+		fprintf(stdout, "&nbsp;<b>[required]</b>");
+	    }
+	    fprintf(stdout, "</dt>\n");
 
 	    if (opt->label) {
-		fprintf(stdout, "<DD>");
+		fprintf(stdout, "<dd>");
 		print_escaped_for_html(stdout, opt->label);
-		fprintf(stdout, "</DD>\n");
+		fprintf(stdout, "</dd>\n");
 	    }
 	    if (opt->description) {
-		fprintf(stdout, "<DD>");
+		fprintf(stdout, "<dd>");
 		print_escaped_for_html(stdout, opt->description);
-		fprintf(stdout, "</DD>\n");
+		fprintf(stdout, "</dd>\n");
 	    }
 
 	    if (opt->options) {
-		fprintf(stdout, "<DD>%s: <em>", _("Options"));
-		print_escaped_for_html(stdout, opt->options);
-		fprintf(stdout, "</em></DD>\n");
+		fprintf(stdout, "<dd>%s: <em>", _("Options"));
+		print_escaped_for_html_options(stdout, opt->options);
+		fprintf(stdout, "</em></dd>\n");
 	    }
 
 	    if (opt->def) {
-		fprintf(stdout, "<DD>%s: <em>", _("Default"));
+		fprintf(stdout, "<dd>%s: <em>", _("Default"));
 		print_escaped_for_html(stdout, opt->def);
-		fprintf(stdout, "</em></DD>\n");
+		fprintf(stdout, "</em></dd>\n");
 	    }
 
 	    if (opt->descs) {
@@ -217,11 +221,11 @@ void G__usage_html(void)
 
 		while (opt->opts[i]) {
 		    if (opt->descs[i]) {
-			fprintf(stdout, "<DD><b>");
+			fprintf(stdout, "<dd><b>");
 			print_escaped_for_html(stdout, opt->opts[i]);
 			fprintf(stdout, "</b>: ");
 			print_escaped_for_html(stdout, opt->descs[i]);
-			fprintf(stdout, "</DD>\n");
+			fprintf(stdout, "</dd>\n");
 		    }
 		    i++;
 		}
@@ -230,7 +234,7 @@ void G__usage_html(void)
 	    opt = opt->next_opt;
 	    fprintf(stdout, "\n");
 	}
-	fprintf(stdout, "</DL>\n");
+	fprintf(stdout, "</dl>\n");
     }
 
     fprintf(stdout, "</body>\n</html>\n");
@@ -241,7 +245,7 @@ void G__usage_html(void)
  * \brief Format text for HTML output
  */
 #define do_escape(c,escaped) case c: fputs(escaped,f);break
-static void print_escaped_for_html(FILE * f, const char *str)
+void print_escaped_for_html(FILE * f, const char *str)
 {
     const char *s;
 
@@ -251,6 +255,25 @@ static void print_escaped_for_html(FILE * f, const char *str)
 	    do_escape('<', "&lt;");
 	    do_escape('>', "&gt;");
 	    do_escape('\n', "<br>");
+	    do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
+	default:
+	    fputc(*s, f);
+	}
+    }
+}
+
+void print_escaped_for_html_options(FILE * f, const char *str)
+{
+    const char *s;
+
+    for (s = str; *s; s++) {
+	switch (*s) {
+	    do_escape('&', "&amp;");
+	    do_escape('<', "&lt;");
+	    do_escape('>', "&gt;");
+	    do_escape('\n', "<br>");
+	    do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
+	    do_escape(',',  ", ");
 	default:
 	    fputc(*s, f);
 	}
