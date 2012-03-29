@@ -15,6 +15,7 @@ SUBDIRS = \
 	tr.to.rast3 \
 	tr.univar \
 	tr.list \
+	tr.mapcalc \
 	tr.series \
 	tr.export \
 	tr.out.vtk \

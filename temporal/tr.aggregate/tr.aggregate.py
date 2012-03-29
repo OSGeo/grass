@@ -29,7 +29,7 @@
 #%option
 #% key: granularity
 #% type: string
-#% description: The aggregation granularity, format absolue time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or a double value for relative time
+#% description: The aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or a double value for relative time
 #% required: yes
 #% multiple: no
 #%end
@@ -45,7 +45,7 @@
 #%option
 #% key: method
 #% type: string
-#% description: Aggregate operation to be peformed on the raster maps
+#% description: Aggregate operation to be performed on the raster maps
 #% required: yes
 #% multiple: no
 #% options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
@@ -58,11 +58,21 @@
 #%option G_OPT_R_BASE
 #%end
 
+#%option
+#% key: nprocs
+#% type: integer
+#% description: The number of r.mapcalc processes to run in parallel
+#% required: no
+#% multiple: no
+#% answer: 2
+#%end
+
 #%flag
 #% key: n
 #% description: Register Null maps
 #%end
 
+from multiprocessing import Process
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -79,6 +89,7 @@ def main():
     register_null = flags["n"]
     method = options["method"]
     sampling = options["sampling"]
+    nprocs = int(options["nprocs"])
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -114,7 +125,7 @@ def main():
             new_sp = tgis.space_time_raster_dataset(out_id)
         else:
             dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> is already in database, use overwrite flag to overwrite") % out_id)
+            grass.fatal(_("Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite") % out_id)
 
     temporal_type, semantic_type, title, description = sp.get_initial_values()
     new_sp.set_initial_values(temporal_type, semantic_type, title, description)
@@ -137,6 +148,8 @@ def main():
     next_start_time = first_start_time
 
     count = 0
+    proc_count = 0
+    proc_list = []
     while next_start_time <= last_start_time:
         start = next_start_time
         if sp.is_time_absolute():
@@ -149,7 +162,7 @@ def main():
 
         if input_map_names:
             tgis.aggregate_raster_maps(sp, new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
-
+	    
         count += 1
 
     # Update the spatio-temporal extent and the raster metadata table entries
