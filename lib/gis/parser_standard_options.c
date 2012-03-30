@@ -499,7 +499,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,file,input";
-	Opt->description = _("Name to input file");
+	Opt->description = _("Name of input file");
 	break;
     case G_OPT_F_OUTPUT:
 	Opt->key = "output";
