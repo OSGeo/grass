@@ -1389,6 +1389,7 @@ class CmdPanel(wx.Panel):
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
                     if p.get('age', 'new') == 'old' and \
+                            p.get('prompt', 'input') == 'input' and \
                             UserSettings.Get(group = 'cmd', key = 'interactiveInput', subkey = 'enabled'):
                         # widget for interactive input
                         ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
