@@ -328,20 +328,16 @@ char *Vect_get_finfo_layer_name(const struct Map_info *Map)
 /*!
   \brief Get format info (relevant only for non-native formats)
 
-  Allocated space should be freed by G_free().
-
    Returns:
     - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
     
   \param Map pointer to Map_info structure
   
   \return string containing name of OGR format (allocated by G_store())
-  \return NULL on error (or on missing OGR support)
+  \return NULL on error (or on missing OGR/PostgreSQL support)
 */
 const char *Vect_get_finfo_format_info(const struct Map_info *Map)
 {
-    char format[GPATH_MAX];
-
     if (Map->format == GV_FORMAT_OGR ||
 	Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
@@ -350,16 +346,14 @@ const char *Vect_get_finfo_format_info(const struct Map_info *Map)
 	if (!Map->fInfo.ogr.ds)
 	    return NULL;
 
-	sprintf(format, "%s/%s", "OGR",
-		OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds)));
-	return G_store(format);
+	return OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds));
 #endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifndef HAVE_OGR
 	G_warning(_("GRASS is not compiled with PostgreSQL support"));
 #else
-	return G_store("PostGIS");
+	return "PostgreSQL";
 #endif
     }
     
