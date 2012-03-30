@@ -30458,7 +30458,7 @@ msgstr "Rectifies ภาพ โดยการคำนวนค่าพิก�
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "ไม่มีจุดเริ่มต้น"
 
 #: ../vector/v.rectify/main.c:93

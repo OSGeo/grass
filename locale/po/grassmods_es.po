@@ -29920,7 +29920,7 @@ msgstr "Rectifica una imagen calculando una transformación de coordenadas para c
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "Nombre del mapa vectorial de puntos de entrada"
 
 #: ../vector/v.rectify/main.c:93

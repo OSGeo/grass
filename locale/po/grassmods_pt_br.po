@@ -31164,7 +31164,7 @@ msgstr "Retifica uma imagem por transformação das coordenadas de cada pixel da i
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "Não pontos"
 
 #: ../vector/v.rectify/main.c:93

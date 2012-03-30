@@ -30059,7 +30059,7 @@ msgstr "Nắn chỉnh một ảnh bằng cách tính toán phép chuyển đổi
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "Không có các điểm khống chế được kích hoạt"
 
 #: ../vector/v.rectify/main.c:93

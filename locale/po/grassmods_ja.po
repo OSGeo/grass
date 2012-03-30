@@ -29697,7 +29697,7 @@ msgstr "コントロールポイントをベースとする画像の各ピクセ
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "作動しているコントロールポイントはありません"
 
 #: ../vector/v.rectify/main.c:93
