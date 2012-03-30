@@ -6738,7 +6738,7 @@ msgstr "Id объектов"
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "Имя исходного файла"
 
 #: ../lib/gis/parser_standard_options.c:490

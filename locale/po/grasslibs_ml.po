@@ -6437,7 +6437,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
 #: ../lib/gis/parser_standard_options.c:490

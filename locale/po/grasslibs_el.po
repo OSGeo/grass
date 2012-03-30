@@ -6739,7 +6739,7 @@ msgstr "Χαρακτηριστικό: "
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "Όνομα αρχείου εισαγωγής"
 
 #: ../lib/gis/parser_standard_options.c:490

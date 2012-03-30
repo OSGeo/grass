@@ -6763,7 +6763,7 @@ msgstr "Tipo(s) de feição"
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "Nome do arquivo de entrada"
 
 #: ../lib/gis/parser_standard_options.c:490

@@ -6731,7 +6731,7 @@ msgstr "Các id đối tượng"
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "Tên của tập tin đầu vào"
 
 #: ../lib/gis/parser_standard_options.c:490
