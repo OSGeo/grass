@@ -390,7 +390,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                map = layer.GetName())
                     self.GetPyData(self.layer_selected)[0]['info'] = info
                 info = self.GetPyData(self.layer_selected)[0]['info']
-                if info and info['format'] == 'ogr,PostgreSQL':
+                if info and info['format'] != 'native' and \
+                        info['format'].split(',')[1] == 'PostgreSQL':
                     self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
                     self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
             
