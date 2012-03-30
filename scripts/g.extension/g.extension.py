@@ -738,7 +738,7 @@ def install_extension_other(name):
         sys.stderr.write(' '.join(makeCmd) + '\n')
         grass.message(_("To install run:\n\n"))
         sys.stderr.write(' '.join(installCmd) + '\n')
-        return
+        return 0
     
     os.chdir(os.path.join(tmpdir, name))
     
@@ -755,7 +755,7 @@ def install_extension_other(name):
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
 
     if flags['i'] or name in gui_list:
-        return
+        return 0
     
     grass.message(_("Installing..."))
     
