@@ -228,8 +228,8 @@ void print_shell(const struct Map_info *Map)
 
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
-	fprintf(stdout, "format=%s\n",
-		Vect_maptype_info(Map));
+	fprintf(stdout, "format=%s,%s\n",
+		Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
 	fprintf(stdout, "pg_table=%s\n",
 		Vect_get_finfo_layer_name(Map));
 	fprintf(stdout, "pg_dbname=%s\n",
@@ -351,8 +351,8 @@ void print_info(const struct Map_info *Map)
 	printline(line);
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
-	sprintf(line, "%-17s%s", _("Map format:"),
-		Vect_maptype_info(Map));
+	sprintf(line, "%-17s%s (%s)", _("Map format:"),
+		Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
 	printline(line);
 	
 	/* for PostGIS format print also datasource and layer */
