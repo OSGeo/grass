@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 
     pfile = G_define_standard_option(G_OPT_F_INPUT);
     pfile->key = "points";
-    pfile->description = _("Name to input file with control points");
+    pfile->description = _("Name of input file with control points");
     pfile->required = NO;
 
     val = G_define_option();
