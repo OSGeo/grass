@@ -69,14 +69,14 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     G_add_keyword(_("conversion"));
+    G_add_keyword("ascii");
     module->description =
 	_("Converts a GRASS ASCII raster file to binary raster map.");
 
-    parm.input = G_define_standard_option(G_OPT_R_INPUT);
-    parm.input->description =
-	_("ASCII raster file to be imported. If not given reads from standard input");
-    parm.input->gisprompt = "old_file,file,input";
-    parm.input->required = NO;
+    parm.input = G_define_standard_option(G_OPT_F_INPUT);
+    parm.input->label =
+	_("Name of input file to be imported");
+    parm.input->description = _("-' for standard input");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -90,29 +90,33 @@ int main(int argc, char *argv[])
     parm.mult = G_define_option();
     parm.mult->key = "mult";
     parm.mult->type = TYPE_DOUBLE;
-    parm.mult->answer = "1.0 or read from header";
+    parm.mult->description = _("Default: read from header");
     parm.mult->required = NO;
-    parm.mult->description = _("Multiplier for ASCII data");
+    parm.mult->label = _("Multiplier for ASCII data");
 
     parm.nv = G_define_option();
     parm.nv->key = "nv";
     parm.nv->type = TYPE_STRING;
     parm.nv->required = NO;
     parm.nv->multiple = NO;
-    parm.nv->answer = "* or read from header";
-    parm.nv->description = _("String representing NULL value data cell");
-
+    parm.nv->description = _("Default: read from header");
+    parm.nv->label = _("String representing NULL value data cell");
+    parm.nv->guisection = _("NULL data");
+    
     flag.i = G_define_flag();
     flag.i->key = 'i';
     flag.i->description = _("Integer values are imported");
-
+    flag.i->guisection = _("Data type");
+    
     flag.f = G_define_flag();
     flag.f->key = 'f';
     flag.f->description = _("Floating point values are imported");
+    flag.f->guisection = _("Data type");
 
     flag.d = G_define_flag();
     flag.d->key = 'd';
     flag.d->description = _("Double floating point values are imported");
+    flag.d->guisection = _("Data type");
 
     flag.s = G_define_flag();
     flag.s->key = 's';
@@ -132,14 +136,13 @@ int main(int argc, char *argv[])
 
     if ((title = parm.title->answer))
 	G_strip(title);
-    if (strcmp(parm.mult->answer, "1.0 or read from header") == 0)
+    
+    if (!parm.mult->answer)
 	Rast_set_d_null_value(&mult, 1);
     else if ((sscanf(parm.mult->answer, "%lf", &mult)) != 1)
 	G_fatal_error(_("Wrong entry for multiplier: %s"), parm.mult->answer);
-    if (strcmp(parm.nv->answer, "* or read from header") == 0)
-	null_val_str = NULL;
-    else
-	null_val_str = parm.nv->answer;
+    
+    null_val_str = parm.nv->answer;
 
     data_type = -1;
     if (flag.i->answer) {	/* interger data */
@@ -152,7 +155,7 @@ int main(int argc, char *argv[])
 	data_type = DCELL_TYPE;
     }
 
-    if (input == NULL || (G_strcasecmp(input, "-") == 0)) {	/* backward compatability */
+    if (strcmp(input, "-") == 0) {
 	Tmp_file = G_tempfile();
 	if (NULL == (Tmp_fd = fopen(Tmp_file, "w+")))
 	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file);
