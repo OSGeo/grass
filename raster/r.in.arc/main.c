@@ -62,14 +62,10 @@ int main(int argc, char *argv[])
     module->description =
 	_("Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map.");
     
-    parm.input = G_define_option();
-    parm.input->key = "input";
-    parm.input->type = TYPE_STRING;
-    parm.input->required = YES;
+    parm.input = G_define_standard_option(G_OPT_F_INPUT);
     parm.input->description =
-	_("ARC/INFO ASCII raster file (GRID) to be imported");
-    parm.input->gisprompt = "old_file,file,input";
-
+	_("Name of ARC/INFO ASCII raster file (GRID) to be imported");
+    
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     parm.type = G_define_option();
@@ -98,7 +94,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
     input = parm.input->answer;
     output = parm.output->answer;
-    if (title = parm.title->answer)
+    title = parm.title->answer;
+    if (title)
 	G_strip(title);
 
     sscanf(parm.mult->answer, "%lf", &mult_fact);
