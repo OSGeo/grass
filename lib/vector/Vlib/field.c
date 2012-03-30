@@ -411,7 +411,7 @@ struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
 	return NULL;
     }
 
-    fi = (struct field_info *)malloc(sizeof(struct field_info));
+    fi = (struct field_info *)G_malloc(sizeof(struct field_info));
     fi->number = Map->dblnk->field[link].number;
 
     if (Map->dblnk->field[link].name != NULL)
@@ -810,6 +810,7 @@ static int read_dblinks_ogr(struct Map_info *Map)
 static int read_dblinks_pg(struct Map_info *Map)
 {
 #ifdef HAVE_POSTGRES
+    char *name;
     struct dblinks *dbl;
     struct Format_info_pg *pg_info;
     
@@ -822,9 +823,19 @@ static int read_dblinks_pg(struct Map_info *Map)
 	return -1;
     }
     G_debug(3, "Using FID column <%s>", pg_info->fid_column);
-    Vect_add_dblink(dbl, 1, pg_info->table_name,
-		    pg_info->table_name, pg_info->fid_column,
+
+    name = NULL;
+    if (G_strcasecmp(pg_info->schema_name, "public") != 0)
+	G_asprintf(&name, "%s.%s", pg_info->schema_name,
+		   pg_info->table_name);
+    else
+	name = pg_info->table_name;
+    
+    Vect_add_dblink(dbl, 1, name, name,
+		    pg_info->fid_column,
 		    pg_info->db_name, "pg");
+    if (name != pg_info->table_name)
+	G_free(name);
     return 1;
 #else
     G_warning(_("GRASS not compiled with PostgreSQL support"));
