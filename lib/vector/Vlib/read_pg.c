@@ -27,6 +27,9 @@
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
+static unsigned char *wkb_data;
+static unsigned int   wkb_data_length;
+
 static int read_next_line_pg(struct Map_info *,
 		      struct line_pnts *, struct line_cats *, int);
 SF_FeatureType get_feature(struct Format_info_pg *, int);
@@ -344,10 +347,11 @@ int read_next_line_pg(struct Map_info *Map,
 	}
 	
 	/* get data from cache */
-	G_debug(4, "read next cached line %d", pg_info->cache.lines_next);
-
 	itype = pg_info->cache.lines_types[pg_info->cache.lines_next];
 	iline = pg_info->cache.lines[pg_info->cache.lines_next];
+	
+	G_debug(4, "read next cached line %d (type = %d)",
+		pg_info->cache.lines_next, itype);
 
 	/* apply constraints */
 	if (Map->constraint.type_flag && !ignore_constraints) {
@@ -374,7 +378,6 @@ int read_next_line_pg(struct Map_info *Map,
 	    Vect_cat_set(line_c, 1, (int) pg_info->cache.fid);
 	
 	pg_info->cache.lines_next++;
-	G_debug(4, "next line read, type = %d", itype);
 	
 	return itype;
     }
@@ -504,52 +507,34 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid)
 /*!
   \brief Convert HEX to WKB data
 
-  This function is based on CPLHexToBinary() from GDAL/OGR library
-
   \param hex_data HEX data
   \param[out] nbytes number of bytes in output buffer
 
   \return pointer to WKB data buffer
 */
-static unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
+unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
 {
-    unsigned char *wkb_data;
-    unsigned int length, i_src, i_dst;
-
-    i_src = i_dst = 0;
-    length = strlen(hex_data);
-    wkb_data = G_malloc(length / 2 + 2);
+    unsigned int length;
+    int i;
     
-    while (hex_data[i_src] != '\0' ) {
-        if (hex_data[i_src] >= '0' && hex_data[i_src] <= '9')
-            wkb_data[i_dst] = hex_data[i_src] - '0';
-        else if (hex_data[i_src] >= 'A' && hex_data[i_src] <= 'F')
-            wkb_data[i_dst] = hex_data[i_src] - 'A' + 10;
-        else if (hex_data[i_src] >= 'a' && hex_data[i_src] <= 'f')
-            wkb_data[i_dst] = hex_data[i_src] - 'a' + 10;
-        else 
-            break;
-	
-        wkb_data[i_dst] *= 16;
-
-        i_src++;
-
-        if (hex_data[i_src] >= '0' && hex_data[i_src] <= '9')
-            wkb_data[i_dst] += hex_data[i_src] - '0';
-        else if(hex_data[i_src] >= 'A' && hex_data[i_src] <= 'F')
-            wkb_data[i_dst] += hex_data[i_src] - 'A' + 10;
-        else if(hex_data[i_src] >= 'a' && hex_data[i_src] <= 'f')
-            wkb_data[i_dst] += hex_data[i_src] - 'a' + 10;
-        else
-            break;
-	
-        i_src++;
-        i_dst++;
+    length = strlen(hex_data) / 2 + 1;
+    if (length > wkb_data_length) {
+	wkb_data_length = length;
+	wkb_data = G_realloc(wkb_data, wkb_data_length);
     }
     
-    wkb_data[i_dst] = 0;
-    *nbytes = i_dst;
-
+    *nbytes = length - 1;
+    for (i = 0; i < (*nbytes); i++) {
+        wkb_data[i] = (unsigned char) ((hex_data[2 * i] > 'F' ? hex_data[2 * i] - 0x57 : 
+					hex_data[2 * i] > '9' ? hex_data[2 * i] - 0x37 : 
+					hex_data[2 * i] - 0x30) << 4);
+        wkb_data[i] |= (unsigned char) (hex_data[2 * i + 1] > 'F' ? hex_data[2 * i + 1] - 0x57 :
+					hex_data[2 * i + 1] > '9' ? hex_data[2 * i + 1] - 0x37 :
+					hex_data[2 * i + 1] - 0x30);
+    }
+    
+    wkb_data[(*nbytes)] = 0;
+    
     return wkb_data;
 }
 
@@ -589,7 +574,7 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     wkb_data  = hex_to_wkb(data, &nbytes);
     
     if (nbytes < 5) {
-	G_free(wkb_data);
+	/* G_free(wkb_data); */
 	if (nbytes > 0) {
 	    G_debug(3, "cache_feature(): invalid geometry");
 	    G_warning(_("Invalid WKB content: %d bytes"), nbytes);
@@ -610,7 +595,7 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     if (wkb_flags & 0x40000000) {
         G_warning(_("Reading EWKB with 4-dimensional coordinates (XYZM) "
 		    "is not supported"));
-	G_free(wkb_data);
+	/* G_free(wkb_data); */
 	return SF_UNKNOWN;
     }
 
@@ -630,7 +615,7 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     }
     
     if (nbytes < 9 && nbytes != -1) {
-	G_free(wkb_data);
+	/* G_free(wkb_data); */
 	return SF_UNKNOWN;
     }
     
@@ -692,7 +677,7 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     /* read next feature from cache */
     cache->lines_next = 0;
     
-    G_free(wkb_data);
+    /* G_free(wkb_data); */
     
     return ret > 0 ? ftype : SF_UNKNOWN;
 }
