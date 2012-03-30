@@ -6645,7 +6645,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "اسم الملف المفتوح %s\n"
 
 #: ../lib/gis/parser_standard_options.c:490

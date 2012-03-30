@@ -6832,7 +6832,7 @@ msgstr "要素类型"
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "打开文件的名称 %s"
 
 #: ../lib/gis/parser_standard_options.c:490

@@ -6504,7 +6504,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:482
 #, fuzzy
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "उघडलेल्या फाइलचे नाव %s\n"
 
 #: ../lib/gis/parser_standard_options.c:490

@@ -6718,7 +6718,7 @@ msgid "Feature ids"
 msgstr "Objekt-IDs"
 
 #: ../lib/gis/parser_standard_options.c:482
-msgid "Name to input file"
+msgid "Name of input file"
 msgstr "Name der  Eingabedatei"
 
 #: ../lib/gis/parser_standard_options.c:490
