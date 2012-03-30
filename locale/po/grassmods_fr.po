@@ -31910,7 +31910,7 @@ msgstr "Recale une image en calculer la transformation de coordonnées pour chaq
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "Nom de la couche vecteur 2D source"
 
 #: ../vector/v.rectify/main.c:93

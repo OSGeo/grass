@@ -29797,7 +29797,7 @@ msgstr ""
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../vector/v.rectify/main.c:93

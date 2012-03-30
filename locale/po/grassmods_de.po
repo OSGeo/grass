@@ -29782,7 +29782,7 @@ msgstr "Rektifiziert ein Bild indem eine Koordinatentransformation für jedes Pix
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "Name der Eingabe-Vektorkarte mit Punkten."
 
 #: ../vector/v.rectify/main.c:93

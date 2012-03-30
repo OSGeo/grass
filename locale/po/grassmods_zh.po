@@ -30885,7 +30885,7 @@ msgstr ""
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "没有起始点"
 
 #: ../vector/v.rectify/main.c:93

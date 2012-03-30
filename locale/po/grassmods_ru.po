@@ -30090,7 +30090,7 @@ msgstr "Трансформированить изображение путем �
 
 #: ../vector/v.rectify/main.c:81
 #, fuzzy
-msgid "Name to input file with control points"
+msgid "Name of input file with control points"
 msgstr "Нет активных контрольных точек"
 
 #: ../vector/v.rectify/main.c:93
