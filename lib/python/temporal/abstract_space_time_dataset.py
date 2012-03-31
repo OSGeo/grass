@@ -758,18 +758,22 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return rows
 
-    def delete(self, dbif=None):
+    def delete(self, dbif=None, execute=True):
         """!Delete a space time dataset from the temporal database
 
            This method removes the space time dataset from the temporal database and drops its map register table
 
            @param dbif: The database interface to be used
+           @param execute: If ture the DELETE statements are executed
+
+           @return The DELETE SQL statements 
         """
         # First we need to check if maps are registered in this dataset and
         # unregister them
 
         core.verbose(_("Delete space time %s  dataset <%s> from temporal database") % (self.get_new_map_instance(ident=None).get_type(), self.get_id()))
 
+        statement = ""
         connect = False
 
         if dbif == None:
@@ -778,7 +782,7 @@ class abstract_space_time_dataset(abstract_dataset):
             connect = True
 
         # SELECT all needed information from the database
-        self.select(dbif)
+        self.metadata.select(dbif)
 
         core.verbose(_("Drop map register table: %s") %  (self.get_map_register()))
         if self.get_map_register():
@@ -791,26 +795,40 @@ class abstract_space_time_dataset(abstract_dataset):
 	            core.percent(count, num_maps, 1)
                     # Unregister map
                     map = self.get_new_map_instance(row["id"])
-                    self.unregister_map(map, dbif)
+                    statement += self.unregister_map(map, dbif, False)
                     count += 1
 	        core.percent(1, 1, 1)
+                # Safe the DROP table statement
+                statement += "DROP TABLE " + self.get_map_register() + ";\n"
+
+        # Remove the primary key, the foreign keys will be removed by trigger
+        statement += self.base.get_delete_statement() + ";\n"
+        if execute == True:
+            sql_script = ""
+            sql_script += "BEGIN TRANSACTION;\n"
+            sql_script += statement
+            sql_script += "END TRANSACTION;"
+            print sql_script
             try:
-                # Drop the map register table
-                sql = "DROP TABLE " + self.get_map_register()
-                dbif.cursor.execute(sql)
-                dbif.connection.commit()
+		if dbmi.__name__ == "sqlite3":
+		    dbif.cursor.executescript(statement)
+		else:
+		    dbif.cursor.execute(statement)
             except:
                 if connect == True:
                     dbif.close()
-                core.error(_("Unable to drop table <%s>") % (self.get_map_register()))
+                core.error(_("Unable to correctly delete %s <%s>") % (self.get_type(), self.get_id()))
                 raise
 
-        # Remove the primary key, the foreign keys will be removed by trigger
-        self.base.delete(dbif)
         self.reset(None)
 
         if connect == True:
             dbif.close()
+    
+        if execute:
+            return ""
+
+        return statement
             
     def register_map(self, map, dbif=None):
         """!Register a map in the space time dataset.
@@ -1031,7 +1049,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return True
 
-    def unregister_map(self, map, dbif = None):
+    def unregister_map(self, map, dbif = None, execute=True):
         """!Unregister a map from the space time dataset.
 
            This method takes care of the un-registration of a map
@@ -1039,7 +1057,13 @@ class abstract_space_time_dataset(abstract_dataset):
 
            @param map: The map object to unregister
            @param dbif: The database interface to be used
+           @param execute: If ture the DELETE statements are executed
+
+           @return The DELETE SQL statements 
         """
+
+        statement = ""
+
         connect = False
 
         if dbif == None:
@@ -1047,24 +1071,17 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif.connect()
             connect = True
 
-        if map.is_in_db(dbif) == False:
-            dbif.close()
-            
-	    if map.get_layer():
-		core.fatal(_("Unable to find map <%s> with layer %s in temporal database") % (map.get_map_id(), map.get_layer()))
-	    else:
-		core.fatal(_("Unable to find map <%s> in temporal database") % (map.get_map_id()))
+        # First select needed data from the database
+        map.metadata.select(dbif)
+
+        map_id = map.get_id()
+        map_register_table = map.get_stds_register()
+        stds_register_table = self.get_map_register()
 
 	if map.get_layer():
 	    core.verbose(_("Unregister %s map <%s> with layer %s") % (map.get_type(), map.get_map_id(), map.get_layer()))
 	else:
 	    core.verbose(_("Unregister %s map <%s>") % (map.get_type(), map.get_map_id()))
-
-        # First select all data from the database
-        map.select(dbif)
-        map_id = map.get_id()
-        map_register_table = map.get_stds_register()
-        stds_register_table = self.get_map_register()
 
         # Check if the map is registered in the space time raster dataset
 	if dbmi.paramstyle == "qmark":
@@ -1082,29 +1099,44 @@ class abstract_space_time_dataset(abstract_dataset):
 		core.warning(_("Map <%s> is not registered in space time dataset <%s>") %(map.get_map_id(), self.base.get_id()))
             if connect == True:
                 dbif.close()
-            return False
+            return None
 
         # Remove the space time raster dataset from the raster dataset register
         if map_register_table != None:
-	    if dbmi.paramstyle == "qmark":
-		sql = "DELETE FROM " + map_register_table + " WHERE id = ?"
-	    else:
-		sql = "DELETE FROM " + map_register_table + " WHERE id = %s"
-            dbif.cursor.execute(sql, (self.base.get_id(),))
+
+            statement += "DELETE FROM " + map_register_table + " WHERE id = \'%s\';\n"%(self.base.get_id())
+
+            if execute == True:
+                if dbmi.paramstyle == "qmark":
+		    sql = "DELETE FROM " + map_register_table + " WHERE id = ?"
+	        else:
+		    sql = "DELETE FROM " + map_register_table + " WHERE id = %s"
+
+                dbif.cursor.execute(sql, (self.base.get_id(),))
 
         # Remove the raster map from the space time raster dataset register
         if stds_register_table != None:
-	    if dbmi.paramstyle == "qmark":
-		sql = "DELETE FROM " + stds_register_table + " WHERE id = ?"
-	    else:
-		sql = "DELETE FROM " + stds_register_table + " WHERE id = %s"
-            dbif.cursor.execute(sql, (map_id,))
+
+            statement += "DELETE FROM " + stds_register_table + " WHERE id = \'%s\';\n"%(map_id)
+
+            if execute == True:
+	        if dbmi.paramstyle == "qmark":
+		    sql = "DELETE FROM " + stds_register_table + " WHERE id = ?"
+	        else:
+		    sql = "DELETE FROM " + stds_register_table + " WHERE id = %s"
+
+                dbif.cursor.execute(sql, (map_id,))
 
         if connect == True:
             dbif.close()
 
         # decrease the counter
         self.map_counter -= 1
+
+        if execute:
+            return ""
+
+        return statement
             
     def update_from_registered_maps(self, dbif = None):
         """!This methods updates the spatial and temporal extent as well as

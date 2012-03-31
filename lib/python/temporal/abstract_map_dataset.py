@@ -350,7 +350,7 @@ class abstract_map_dataset(abstract_dataset):
 
         return True
 
-    def delete(self, dbif=None, update=True):
+    def delete(self, dbif=None, update=True, execute = True):
 	"""!Delete a map entry from database if it exists
         
             Remove dependent entries:
@@ -363,6 +363,7 @@ class abstract_map_dataset(abstract_dataset):
         """
 
         connect = False
+        statement = ""
 
         if dbif == None:
             dbif = sql_database_interface()
@@ -372,24 +373,19 @@ class abstract_map_dataset(abstract_dataset):
         if self.is_in_db(dbif):
  
             # SELECT all needed information from the database
-            self.select(dbif)
+            self.metadata.select(dbif)
            
             # First we unregister from all dependent space time datasets
-            self.unregister(dbif, update)
+            statement += self.unregister(dbif, update, False)
 
             # Remove the strds register table
             if self.get_stds_register():
-                sql = "DROP TABLE " + self.get_stds_register()
-                #print sql
-                try:
-                    dbif.cursor.execute(sql)
-                except:
-                    core.error(_("Unable to remove space time dataset register table <%s>") % (self.get_stds_register()))
+                statement += "DROP TABLE " + self.get_stds_register() + ";\n"
 
             core.verbose(_("Delete %s dataset <%s> from temporal database") % (self.get_type(), self.get_id()))
 
             # Delete yourself from the database, trigger functions will take care of dependencies
-            self.base.delete(dbif)
+            statement += self.base.get_delete_statement() + ";\n"
 
         # Remove the timestamp from the file system
         if self.get_type() == "vect":
@@ -400,13 +396,37 @@ class abstract_map_dataset(abstract_dataset):
 	else:
 	    core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
 
+        if execute == True:
+            sql_script = ""
+            sql_script += "BEGIN TRANSACTION;\n"
+            sql_script += statement
+            sql_script += "END TRANSACTION;"
+            print sql_script
+            try:
+		if dbmi.__name__ == "sqlite3":
+		    dbif.cursor.executescript(statement)
+		else:
+		    dbif.cursor.execute(statement)
+            except:
+                if connect == True:
+                    dbif.close()
+                core.error(_("Unable to correctly delete %s map <%s>") % (self.get_type(), self.get_id()))
+                raise
+
+            dbif.connection.commit()
+
         self.reset(None)
-        dbif.connection.commit()
 
         if connect == True:
             dbif.close()
+ 
+        if execute:
+            return ""
 
-    def unregister(self, dbif=None, update=True):
+        return statement
+            
+
+    def unregister(self, dbif=None, update=True, execute=True):
 	"""! Remove the map entry in each space time dataset in which this map is registered
 
            @param dbif: The database interface to be used
@@ -420,6 +440,7 @@ class abstract_map_dataset(abstract_dataset):
 	else:
 	    core.verbose(_("Unregister %s map <%s> from space time datasets") % (self.get_type(), self.get_map_id()))
         
+        statement = ""
         connect = False
 
         if dbif == None:
@@ -440,18 +461,40 @@ class abstract_map_dataset(abstract_dataset):
                 # Create a space time dataset object to remove the map
                 # from its register
                 stds = self.get_new_stds_instance(row["id"])
-                stds.select(dbif)
-                stds.unregister_map(self, dbif)
+                stds.metadata.select(dbif)
+                statement += stds.unregister_map(self, dbif, False)
                 # Take care to update the space time dataset after
                 # the map has been unregistered
-                if update == True:
+                if update == True and execute == True:
                     stds.update_from_registered_maps(dbif)
 
             core.percent(1, 1, 1)
-        dbif.connection.commit()
+        if execute == True:
+            sql_script = ""
+            sql_script += "BEGIN TRANSACTION;\n"
+            sql_script += statement
+            sql_script += "END TRANSACTION;"
+            print sql_script
+            try:
+		if dbmi.__name__ == "sqlite3":
+		    dbif.cursor.executescript(statement)
+		else:
+		    dbif.cursor.execute(statement)
+            except:
+                if connect == True:
+                    dbif.close()
+                core.error(_("Unable to correctly unregister %s <%s>") % (self.get_type(), self.get_id()))
+                raise
+
+            dbif.connection.commit()
 
         if connect == True:
             dbif.close()
+
+        if execute:
+            return ""
+
+        return statement
             
     def get_registered_datasets(self, dbif=None):
         """!Return all space time dataset ids in which this map is registered as
