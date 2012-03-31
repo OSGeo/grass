@@ -360,6 +360,10 @@ class abstract_map_dataset(abstract_dataset):
            @param dbif: The database interface to be used
            @param update: Call for each unregister statement the update from registered maps 
                           of the space time dataset. This can slow down the un-registration process significantly.
+           @param execute: If True the SQL DELETE and DROP table statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
+
+           @return The SQL statements if execute == False, else an empty string, None in case of a failure
         """
 
         connect = False
@@ -374,9 +378,9 @@ class abstract_map_dataset(abstract_dataset):
  
             # SELECT all needed information from the database
             self.metadata.select(dbif)
-           
+
             # First we unregister from all dependent space time datasets
-            statement += self.unregister(dbif, update, False)
+            statement += self.unregister(dbif=dbif, update=update, execute=False)
 
             # Remove the strds register table
             if self.get_stds_register():
@@ -387,21 +391,12 @@ class abstract_map_dataset(abstract_dataset):
             # Delete yourself from the database, trigger functions will take care of dependencies
             statement += self.base.get_delete_statement() + ";\n"
 
-        # Remove the timestamp from the file system
-        if self.get_type() == "vect":
-	    if self.get_layer():
-		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), layer=self.get_layer(), date="none")
-	    else:
-		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
-	else:
-	    core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
-
         if execute == True:
             sql_script = ""
             sql_script += "BEGIN TRANSACTION;\n"
             sql_script += statement
             sql_script += "END TRANSACTION;"
-            print sql_script
+            # print sql_script
             try:
 		if dbmi.__name__ == "sqlite3":
 		    dbif.cursor.executescript(statement)
@@ -414,6 +409,15 @@ class abstract_map_dataset(abstract_dataset):
                 raise
 
             dbif.connection.commit()
+
+        # Remove the timestamp from the file system
+        if self.get_type() == "vect":
+	    if self.get_layer():
+		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), layer=self.get_layer(), date="none")
+	    else:
+		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
+	else:
+	    core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
 
         self.reset(None)
 
@@ -432,6 +436,10 @@ class abstract_map_dataset(abstract_dataset):
            @param dbif: The database interface to be used
            @param update: Call for each unregister statement the update from registered maps 
                           of the space time dataset. This can slow down the un-registration process significantly.
+           @param execute: If True the SQL DELETE and DROP table statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
+
+           @return The SQL statements if execute == False, else an empty string
         """
 
 	if self.get_layer():
@@ -474,7 +482,7 @@ class abstract_map_dataset(abstract_dataset):
             sql_script += "BEGIN TRANSACTION;\n"
             sql_script += statement
             sql_script += "END TRANSACTION;"
-            print sql_script
+            # print sql_script
             try:
 		if dbmi.__name__ == "sqlite3":
 		    dbif.cursor.executescript(statement)
