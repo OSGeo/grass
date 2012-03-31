@@ -764,9 +764,10 @@ class abstract_space_time_dataset(abstract_dataset):
            This method removes the space time dataset from the temporal database and drops its map register table
 
            @param dbif: The database interface to be used
-           @param execute: If ture the DELETE statements are executed
+           @param execute: If True the SQL DELETE and DROP table statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
 
-           @return The DELETE SQL statements 
+           @return The SQL statements if execute == False, else an empty string
         """
         # First we need to check if maps are registered in this dataset and
         # unregister them
@@ -785,6 +786,7 @@ class abstract_space_time_dataset(abstract_dataset):
         self.metadata.select(dbif)
 
         core.verbose(_("Drop map register table: %s") %  (self.get_map_register()))
+        
         if self.get_map_register():
             rows = self.get_registered_maps("id", None, None, dbif)
             # Unregister each registered map in the table
@@ -795,7 +797,7 @@ class abstract_space_time_dataset(abstract_dataset):
 	            core.percent(count, num_maps, 1)
                     # Unregister map
                     map = self.get_new_map_instance(row["id"])
-                    statement += self.unregister_map(map, dbif, False)
+                    statement += self.unregister_map(map=map, dbif=dbif, execute=False)
                     count += 1
 	        core.percent(1, 1, 1)
                 # Safe the DROP table statement
@@ -803,6 +805,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Remove the primary key, the foreign keys will be removed by trigger
         statement += self.base.get_delete_statement() + ";\n"
+        
         if execute == True:
             sql_script = ""
             sql_script += "BEGIN TRANSACTION;\n"
@@ -1057,9 +1060,10 @@ class abstract_space_time_dataset(abstract_dataset):
 
            @param map: The map object to unregister
            @param dbif: The database interface to be used
-           @param execute: If ture the DELETE statements are executed
+           @param execute: If True the SQL DELETE and DROP table statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
 
-           @return The DELETE SQL statements 
+           @return The SQL statements if execute == False, else an empty string, None in case of a failure
         """
 
         statement = ""
