@@ -53,11 +53,11 @@ import grass.temporal as tgis
 def main():
     
     # Get the options
-    maps = options["input"]
+    datasets = options["input"]
     file = options["file"]
     type = options["type"]
 
-    if maps and file:
+    if datasets and file:
         core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
 
     # Make sure the temporal database exists
@@ -66,16 +66,16 @@ def main():
     dbif = tgis.sql_database_interface()
     dbif.connect()
 
-    maplist = []
+    dataset_list = []
 
-    # Map names as comma separated string
-    if maps:
-        if maps.find(",") == -1:
-            maplist = (maps,)
+    # Dataset names as comma separated string
+    if datasets:
+        if datasets.find(",") == -1:
+            dataset_list = (datasets,)
         else:
-            maplist = tuple(maps.split(","))
+            dataset_list = tuple(datasets.split(","))
 
-    # Read the map list from file
+    # Read the dataset list from file
     if file:
         fd = open(file, "r")
 
@@ -86,12 +86,14 @@ def main():
                 break
 
             line_list = line.split("\n")
-            mapname = line_list[0]
-            maplist.append(mapname)
+            dataset_name = line_list[0]
+            dataset_list.append(dataset_name)
     
     mapset =  grass.gisenv()["MAPSET"]
+    
+    statement = ""
 
-    for name in maplist:
+    for name in dataset_list:
         name = name.strip()
         # Check for the mapset in name
         if name.find("@") < 0:
@@ -105,7 +107,19 @@ def main():
             dbif.close()
             grass.fatal(_("%s dataset <%s> not found in temporal database") % (sp.get_type(), name))
 
-        sp.delete(dbif)
+        statement += sp.delete(dbif=dbif, execute=False)
+
+    # Execute the collected SQL statenents
+    sql_script = ""
+    sql_script += "BEGIN TRANSACTION;\n"
+    sql_script += statement
+    sql_script += "END TRANSACTION;"
+    # print sql_script
+
+    if tgis.dbmi.__name__ == "sqlite3":
+            dbif.cursor.executescript(statement)
+    else:
+            dbif.cursor.execute(statement)
 
     dbif.close()
 

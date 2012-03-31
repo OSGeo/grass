@@ -137,30 +137,48 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=N
     num_maps = len(maplist)
     update_dict = {}
     count = 0
+
+    statement = ""
+
+    # Unregister already registered maps
     for mapid in maplist:
 	grass.percent(count, num_maps, 1)
             
-        print mapid
         map = tgis.dataset_factory(type, mapid)
 
         # Unregister map if in database
         if map.is_in_db(dbif) == True:
             # Unregister from a single dataset
             if name:
-                sp.select(dbif)
-                sp.unregister_map(map, dbif)
+                sp.metadata.select(dbif)
+                # Collect SQL statements
+                statement += sp.unregister_map(map=map, dbif=dbif, execute=False)
+ 
             # Unregister from temporal database
             else:
                 # We need to update all datasets after the removement of maps
-                map.select(dbif)
+                map.metadata.select(dbif)
                 datasets = map.get_registered_datasets(dbif)
                 # Store all unique dataset ids in a dictionary
                 if datasets:
                     for dataset in datasets:
                         update_dict[dataset["id"]] = dataset["id"]
-                map.delete(dbif, update=False)
+                # Collect SQL statements
+                statement += map.delete(dbif=dbif, update=False, execute=False)
 		
 	count += 1
+
+    # Execute the collected SQL statenents
+    sql_script = ""
+    sql_script += "BEGIN TRANSACTION;\n"
+    sql_script += statement
+    sql_script += "END TRANSACTION;"
+    # print sql_script
+
+    if tgis.dbmi.__name__ == "sqlite3":
+            dbif.cursor.executescript(statement)
+    else:
+            dbif.cursor.execute(statement)
 
     # Update space time datasets
     if name:
@@ -177,7 +195,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=N
             else:
                 break
 
-            sp.select(dbif)
+            sp.metadata.select(dbif)
             sp.update_from_registered_maps(dbif)
 
     if connect == True:
