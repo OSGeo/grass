@@ -1,5 +1,11 @@
 <!-- meta page description: 3D raster data (voxel) processing in GRASS GIS -->
 <!-- meta page index: raster3D -->
+GRASS GIS is one of the few GIS software packages with volume data support.
+Here data are stored as a 3D raster with a unit volume called a voxel
+(volume pixel). Voxels are designed to support representations of
+trivariate continuous fields.
+<p>
+
 GRASS GIS 3D raster maps use the same coordinate system as
 2D raster maps (row count from north to south) with an additional z dimension (depth)
 counting from bottom to top. The upper left corner (NW) is the origin of the voxel. 
@@ -38,6 +44,8 @@ Masks can be set (<a href="r3.mask.html">r3.mask</a>).
 <h3>Volume operations</h3>
 
 Powerful 3D map algebra is implemented in <a href="r3.mapcalc.html">r3.mapcalc</a>.
+
+A 3D groundwater flow model is implemented in <a href="r3.gwflow.html">r3.gwflow</a>.
 
 <h3>3D raster conversion to vector or 2D raster maps</h3>
 
