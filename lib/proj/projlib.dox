@@ -71,7 +71,7 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 default: cmd
 \endverbatim
 
-\section Function
+\section Functions
 
  - GPJ_ask_datum_params()
  
