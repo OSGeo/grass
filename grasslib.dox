@@ -23,7 +23,7 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2011 by the GRASS Development Team
+&copy; 2000-2012 by the GRASS Development Team
 
 Published under <a href="http://www.fsf.org/copyleft/fdl.html">GNU
 Free Documentation License</a> (GFDL).
@@ -53,11 +53,9 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - \subpage vectmodules_oper
 -->
 
-<i>Note: Missing entries below are either not yet uploaded to SVN
-(need to be migrated from GRASS 5 Programmer's manual) or are simply
-undocumented.</i>
+<i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
-<i>Note: PLEASE UPDATE FOR GRASS 7</i>
+<i>Note: Diagram below needs to be updated for GRASS 7</i>
 
 <!-- original:
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
