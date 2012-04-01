@@ -9,6 +9,6 @@ default: lib
 
 $(OBJDIR)/sqlp.yy.o: sqlp.tab.h
 
-.INTERMEDIATE: sqlp.tab.c sqlp.tab.h sqlp.output
+.SECONDARY: sqlp.tab.c sqlp.tab.h sqlp.output
 
-.INTERMEDIATE: sqlp.yy.c
+.SECONDARY: sqlp.yy.c
