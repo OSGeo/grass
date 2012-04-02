@@ -32,6 +32,7 @@ SUBDIRS = \
 	i.smap \
 	i.sunhours \
 	i.target \
+	i.topo.corr \
 	i.pca \
 	i.vi \
 	i.fft \
