@@ -181,18 +181,11 @@ class abstract_dataset(object):
         bottom = self.spatial_extent.get_bottom()
         
         return (north, south, east, west, top, bottom)
-
+    
     def select(self, dbif=None):
 	"""!Select temporal dataset entry from database and fill up the internal structure"""
 
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
-        dbif.cursor.execute("BEGIN TRANSACTION")
+        dbif, connect = init_dbif(dbif)
 
 	self.base.select(dbif)
 	if self.is_time_absolute():
@@ -202,102 +195,88 @@ class abstract_dataset(object):
 	self.spatial_extent.select(dbif)
 	self.metadata.select(dbif)
 
-        dbif.cursor.execute("COMMIT TRANSACTION")
-
         if connect:
             dbif.close()
-        
+
     def is_in_db(self, dbif=None):
-	"""!Check if the temporal dataset entry is in the database"""
-	return self.base.is_in_db(dbif)
+        """!Check if the temporal dataset entry is in the database"""
+        return self.base.is_in_db(dbif)
 
     def delete(self):
 	"""!Delete temporal dataset entry from database if it exists"""
         raise IOError("This method must be implemented in the subclasses")
 
-    def insert(self, dbif=None):
-	"""!Insert temporal dataset entry into database from the internal structure"""
-
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
-        dbif.cursor.execute("BEGIN TRANSACTION")
+    def insert(self, dbif=None, execute=True):
+        """!Insert temporal dataset entry into database from the internal structure
 
 
-	self.base.insert(dbif)
-	if self.is_time_absolute():
-	    self.absolute_time.insert(dbif)
+           @param dbif: The database interface to be used
+           @param execute: If True the SQL statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
+        """
+
+        # Build the INSERT SQL statement
+        statement = self.base.get_insert_statement_mogrified(dbif)
+        if self.is_time_absolute():
+            statement += self.absolute_time.get_insert_statement_mogrified(dbif)
         if self.is_time_relative():
-	    self.relative_time.insert(dbif)
-	self.spatial_extent.insert(dbif)
-	self.metadata.insert(dbif)
+            statement += self.relative_time.get_insert_statement_mogrified(dbif)
+        statement += self.spatial_extent.get_insert_statement_mogrified(dbif)
+        statement += self.metadata.get_insert_statement_mogrified(dbif)
 
-        dbif.cursor.execute("COMMIT TRANSACTION")
+        if execute == True:
+            execute_transaction(statement, dbif)
+            return ""
 
-        if connect:
-            dbif.close()
- 
-    def update(self, dbif=None):
+        return statement
+
+    def update(self, dbif=None, execute=True):
 	"""!Update temporal dataset entry of database from the internal structure
 	   excluding None variables
+
+           @param dbif: The database interface to be used
+           @param execute: If True the SQL statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
 	"""
 
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
-        dbif.cursor.execute("BEGIN TRANSACTION")
-
-
-	self.base.update(dbif)
+        # Build the UPDATE SQL statement
+        statement = self.base.get_update_statement_mogrified(dbif)
 	if self.is_time_absolute():
-	    self.absolute_time.update(dbif)
+            statement += self.absolute_time.get_update_statement_mogrified(dbif)
         if self.is_time_relative():
-	    self.relative_time.update(dbif)
-	self.spatial_extent.update(dbif)
-	self.metadata.update(dbif)
+            statement += self.relative_time.get_update_statement_mogrified(dbif)
+        statement += self.spatial_extent.get_update_statement_mogrified(dbif)
+        statement += self.metadata.get_update_statement_mogrified(dbif)
 
-        dbif.cursor.execute("COMMIT TRANSACTION")
-
-        if connect:
-            dbif.close()
+        if execute == True:
+            execute_transaction(statement, dbif)
+            return ""
  
-    def update_all(self, dbif=None):
+        return statement
+ 
+    def update_all(self, dbif=None, execute=True):
 	"""!Update temporal dataset entry of database from the internal structure
 	   and include None varuables.
 
            @param dbif: The database interface to be used
+           @param execute: If True the SQL statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
 	"""
 
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
-        dbif.cursor.execute("BEGIN TRANSACTION")
-
-
-	self.base.update_all(dbif)
+        # Build the UPDATE SQL statement
+        statement = self.base.get_update_all_statement_mogrified(dbif)
 	if self.is_time_absolute():
-	    self.absolute_time.update_all(dbif)
+            statement += self.absolute_time.get_update_all_statement_mogrified(dbif)
         if self.is_time_relative():
-	    self.relative_time.update_all(dbif)
-	self.spatial_extent.update_all(dbif)
-	self.metadata.update_all(dbif)
+            statement += self.relative_time.get_update_all_statement_mogrified(dbif)
+        statement += self.spatial_extent.get_update_all_statement_mogrified(dbif)
+        statement += self.metadata.get_update_all_statement_mogrified(dbif)
 
-        dbif.cursor.execute("COMMIT TRANSACTION")
+        if execute == True:
+            execute_transaction(statement, dbif)
+            return ""
 
-        if connect:
-            dbif.close()
+        return statement
 
     def set_time_to_absolute(self):
 	self.base.set_ttype("absolute")

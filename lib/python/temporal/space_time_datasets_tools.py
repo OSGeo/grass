@@ -86,12 +86,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 	    core.fatal(_("Unkown map type: %s")%(type))
 
         
-    connect = False
-
-    if dbif == None:
-        dbif = sql_database_interface()
-        dbif.connect()
-        connect = True
+    dbif, connect = init_dbif(None)
 
     if name:
 	# Read content from temporal database
@@ -163,6 +158,11 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
             maplist.append(row)
     
     num_maps = len(maplist)
+    map_object_list = []
+    statement = ""
+    
+    core.message(_("Gathering map informations"))
+    
     for count in range(len(maplist)):
 	core.percent(count, num_maps, 1)
 
@@ -174,9 +174,12 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
             start = maplist[count]["start"]
         if maplist[count].has_key("end"):
             end = maplist[count]["end"]
+            
+        is_in_db = False
 
         # Put the map into the database
         if map.is_in_db(dbif) == False:
+            is_in_db = False
             # Break in case no valid time is provided
             if start == "" or start == None:
                 dbif.close()
@@ -186,17 +189,14 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 		else:
 		    core.fatal(_("Unable to register %s map <%s>. The map has no valid time and the start time is not set.") % \
 				(map.get_type(), map.get_map_id() ))
-            # Load the data from the grass file database
-            map.load()
 	    
 	    if unit:
                 map.set_time_to_relative()
             else:
                 map.set_time_to_absolute()
-                
-            #  Put it into the temporal database
-            map.insert(dbif)
+ 
         else:
+            is_in_db = True
             map.select(dbif)
             if name and map.get_temporal_type() != sp.get_temporal_type():
                 dbif.close()
@@ -206,20 +206,55 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 		    core.fatal(_("Unable to register %s map <%s>. The temporal types are different.") %  \
 		                 (map.get_type(), map.get_map_id()))
 
-        # In case the time is in the input file we ignore the increment counter
-        if start_time_in_file:
-            count = 1
+        # Load the data from the grass file database
+        map.load()
 
         # Set the valid time
         if start:
-            assign_valid_time_to_map(ttype=map.get_temporal_type(), map=map, start=start, end=end, unit=unit, increment=increment, mult=count, dbif=dbif, interval=interval)
+            # In case the time is in the input file we ignore the increment counter
+            if start_time_in_file:
+                count = 1
+            assign_valid_time_to_map(ttype=map.get_temporal_type(), map=map, start=start, end=end, unit=unit, increment=increment, mult=count, interval=interval)
 
-        # Finally Register map in the space time dataset
+        if is_in_db:
+           #  Gather the SQL update statement
+           statement += map.update_all(dbif=dbif, execute=True)
+        else:
+           #  Gather the SQL insert statement
+           statement += map.insert(dbif=dbif, execute=False)
+
+        # Sqlite3 performace better for huge datasets when committing in small chunks
+        if dbmi.__name__ == "sqlite3":
+            if count % 100 == 0:
+                if statement != None and statement != "":
+                    core.message(_("Registering 100 maps in the temporal database"))
+                    execute_transaction(statement, dbif)
+                    statement = ""
+
+        # Store the maps in a list to register in a space time dataset
         if name:
-	    sp.register_map(map, dbif)
+            map_object_list.append(map)
 
+    core.percent(num_maps, num_maps, 1)
+
+    if statement != None and statement != "":
+        core.message(_("Register maps in the temporal database"))
+        execute_transaction(statement, dbif)
+
+    # Finally Register the maps in the space time dataset
+    if name:
+        statement = ""
+        count = 0
+        num_maps = len(map_object_list)
+        core.message(_("Register maps in the space time raster dataset"))
+        for map in map_object_list:
+	    core.percent(count, num_maps, 1)
+	    sp.register_map(map=map, dbif=dbif)
+            count += 1
+        
     # Update the space time tables
     if name:
+        core.message(_("Update space time raster dataset"))
 	sp.update_from_registered_maps(dbif)
 
     if connect == True:
@@ -230,7 +265,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
 ###############################################################################
 
-def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=1, dbif = None, interval=False):
+def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=1, interval=False):
     """!Assign the valid time to a map dataset
 
        @param ttype: The temporal type which should be assigned and which the time format is of
@@ -240,16 +275,8 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
        @param unit: The unit of the relative time: years, months, days, hours, minutes, seconds
        @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative is integer 1)
        @param multi: A multiplier for the increment
-       @param dbif: The database interface to use for sql queries
        @param interval: If True, time intervals are created in case the start time and an increment is provided
     """
-    
-    connect = False
-
-    if dbif == None:
-        dbif = sql_database_interface()
-        dbif.connect()
-        connect = True
 
     if ttype == "absolute":
         start_time = string_to_datetime(start)
@@ -257,7 +284,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
             dbif.close()
             core.fatal(_("Unable to convert string \"%s\"into a datetime object")%(start))
         end_time = None
-        
+
         if end:
             end_time = string_to_datetime(end)
             if end_time == None:
@@ -274,7 +301,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
         else:
 	    core.verbose(_("Set absolute valid time for map <%s> to %s - %s") % (map.get_map_id(), str(start_time), str(end_time)))
         
-        map.update_absolute_time(start_time, end_time, None, dbif)
+        map.set_absolute_time(start_time, end_time, None)
     else:
         start_time = int(start)
         end_time = None
@@ -292,10 +319,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
         else:
 	    core.verbose(_("Set relative valid time for map <%s> to %i - %s with unit %s") % (map.get_map_id(), start_time,  str(end_time), unit))
 	    
-        map.update_relative_time(start_time, end_time, unit, dbif)
-
-    if connect == True:
-        dbif.close()
+        map.set_relative_time(start_time, end_time, unit)
 
 ###############################################################################
 

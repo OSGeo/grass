@@ -211,12 +211,7 @@ class abstract_map_dataset(abstract_dataset):
            @param end_time: a datetime object specifying the end time of the map
            @param timezone: Thee timezone of the map
         """
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
+        dbif, connect = init_dbif(dbif)
 
         self.set_absolute_time(start_time, end_time, timezone)
         self.absolute_time.update_all(dbif)
@@ -290,12 +285,7 @@ class abstract_map_dataset(abstract_dataset):
            @param end_time: A double value 
            @param dbif: The database interface to be used
         """
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
+        dbif, connect = init_dbif(dbif)
 
         if self.set_relative_time(start_time, end_time, unit):
             self.relative_time.update_all(dbif)
@@ -366,13 +356,8 @@ class abstract_map_dataset(abstract_dataset):
            @return The SQL statements if execute == False, else an empty string, None in case of a failure
         """
 
-        connect = False
+        dbif, connect = init_dbif(dbif)
         statement = ""
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
 
         if self.is_in_db(dbif):
  
@@ -389,26 +374,10 @@ class abstract_map_dataset(abstract_dataset):
             core.verbose(_("Delete %s dataset <%s> from temporal database") % (self.get_type(), self.get_id()))
 
             # Delete yourself from the database, trigger functions will take care of dependencies
-            statement += self.base.get_delete_statement() + ";\n"
+            statement += self.base.get_delete_statement()
 
         if execute == True:
-            sql_script = ""
-            sql_script += "BEGIN TRANSACTION;\n"
-            sql_script += statement
-            sql_script += "END TRANSACTION;"
-            # print sql_script
-            try:
-		if dbmi.__name__ == "sqlite3":
-		    dbif.cursor.executescript(statement)
-		else:
-		    dbif.cursor.execute(statement)
-            except:
-                if connect == True:
-                    dbif.close()
-                core.error(_("Unable to correctly delete %s map <%s>") % (self.get_type(), self.get_id()))
-                raise
-
-            dbif.connection.commit()
+            execute_transaction(statement, dbif)
 
         # Remove the timestamp from the file system
         if self.get_type() == "vect":
@@ -428,7 +397,6 @@ class abstract_map_dataset(abstract_dataset):
             return ""
 
         return statement
-            
 
     def unregister(self, dbif=None, update=True, execute=True):
 	"""! Remove the map entry in each space time dataset in which this map is registered
@@ -449,13 +417,8 @@ class abstract_map_dataset(abstract_dataset):
 	    core.verbose(_("Unregister %s map <%s> from space time datasets") % (self.get_type(), self.get_map_id()))
         
         statement = ""
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
+        dbif, connect = init_dbif(dbif)
+        
         # Get all datasets in which this map is registered
         rows = self.get_registered_datasets(dbif)
 
@@ -477,24 +440,9 @@ class abstract_map_dataset(abstract_dataset):
                     stds.update_from_registered_maps(dbif)
 
             core.percent(1, 1, 1)
+            
         if execute == True:
-            sql_script = ""
-            sql_script += "BEGIN TRANSACTION;\n"
-            sql_script += statement
-            sql_script += "END TRANSACTION;"
-            # print sql_script
-            try:
-		if dbmi.__name__ == "sqlite3":
-		    dbif.cursor.executescript(statement)
-		else:
-		    dbif.cursor.execute(statement)
-            except:
-                if connect == True:
-                    dbif.close()
-                core.error(_("Unable to correctly unregister %s <%s>") % (self.get_type(), self.get_id()))
-                raise
-
-            dbif.connection.commit()
+            execute_transaction(statement, dbif)
 
         if connect == True:
             dbif.close()
@@ -511,12 +459,7 @@ class abstract_map_dataset(abstract_dataset):
 
            @param dbif: The database interface to be used
         """
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
+        dbif, connect = init_dbif(dbif)
 
         rows = None
 
