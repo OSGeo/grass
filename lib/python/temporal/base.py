@@ -59,6 +59,7 @@ class dict_sql_serializer(object):
             sql += ' FROM ' + table + ' '
 	    if where:
 	        sql += where
+            sql += ";\n"
 
 	# Create insert statement
 	if type =="INSERT":
@@ -90,6 +91,7 @@ class dict_sql_serializer(object):
 
 	    if where:
 	        sql += where
+            sql += ";\n"
 
 	# Create update statement for existing entries
 	if type =="UPDATE":
@@ -114,6 +116,7 @@ class dict_sql_serializer(object):
 	            args.append(self.D[key])
 	    if where:
 	        sql += where
+            sql += ";\n"
 
 	# Create update statement for all entries
 	if type =="UPDATE ALL":
@@ -136,6 +139,7 @@ class dict_sql_serializer(object):
                 args.append(self.D[key])
 	    if where:
 	        sql += where
+            sql += ";\n"
 
     	return sql, tuple(args)
 
@@ -219,7 +223,7 @@ class sql_database_interface(dict_sql_serializer):
             self.cursor.execute("PRAGMA journal_mode = MEMORY")
         elif dbmi.__name__ == "psycopg2":
 	    self.connection = dbmi.connect(init)
-	    self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+	    #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 	    self.cursor = self.connection.cursor(cursor_factory=dbmi.extras.DictCursor)
 
     def close(self):
@@ -228,8 +232,65 @@ class sql_database_interface(dict_sql_serializer):
 	self.connection.commit()
         self.cursor.close()
 
+
+    def _mogrify_sql_statement(self, content, dbif=None):
+        """!Return the SQL statement and arguments as executable SQL string
+        """
+        sql = content[0]
+        args = content[1]
+
+        if dbmi.__name__ == "psycopg2":
+            if len(args) == 0:
+                return sql
+            else:
+                if dbif:
+                    try:
+                        return dbif.cursor.mogrify(sql, args)
+                    except:
+                        print sql, args
+                        raise
+                else:
+                    self.connect()
+                    statement = self.cursor.mogrify(sql, args)
+                    self.close()
+                    return statement
+                    
+        elif dbmi.__name__ == "sqlite3":
+            if len(args) == 0:
+                return sql
+            else:
+                # Unfortunately as sqlite does not support 
+                # the transformation of sql strings and qmarked or
+                # named arguments we must make our hands dirty
+                # and do it by ourself. :(
+                # Doors are open for SQL injection because of the 
+                # limited python sqlite3 implementation!!!
+                pos = 0
+                count = 0
+                maxcount = 100
+                statement = sql
+
+                while count < maxcount:
+                    pos = statement.find("?", pos + 1)
+                    if pos == -1:
+                        break
+                    
+                    if args[count] == None:
+                        statement = "%sNULL%s"%(statement[0:pos], statement[pos+1:])
+                    elif isinstance(args[count], (int, long)):
+                        statement = "%s%d%s"%(statement[0:pos], args[count],statement[pos+1:])
+                    elif isinstance(args[count], float):
+                        statement = "%s%f%s"%(statement[0:pos], args[count],statement[pos+1:])
+                    else:
+                        # Default is a string, this works for datetime objects too
+                        statement = "%s\'%s\'%s"%(statement[0:pos], str(args[count]),statement[pos+1:])
+                    count += 1
+
+                return statement
+
     def get_delete_statement(self):
-	return "DELETE FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\'"
+        """!Return the delete string"""
+	return "DELETE FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\';\n"
 
     def delete(self, dbif=None):
         """!Delete the entry of this object from the temporal database"""
@@ -244,7 +305,8 @@ class sql_database_interface(dict_sql_serializer):
             self.close()
 
     def get_is_in_db_statement(self):
-	return "SELECT id FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\'"
+        """Return the selection string"""
+	return "SELECT id FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\';\n"
 
     def is_in_db(self, dbif=None):
         """!Check if this object is present in the temporal database
@@ -271,8 +333,13 @@ class sql_database_interface(dict_sql_serializer):
 	return True
 
     def get_select_statement(self):
+        """!Return the sql statement and the argument list in database specific style"""
 	return self.serialize("SELECT", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
-
+    
+    def get_select_statement_mogrified(self, dbif=None):
+        """!Return the select statement as mogrified string"""
+        return self._mogrify_sql_statement(self.get_select_statement(), dbif)
+                
     def select(self, dbif=None):
         """!Select the content from the temporal database and store it
            in the internal dictionary structure
@@ -310,7 +377,12 @@ class sql_database_interface(dict_sql_serializer):
 	return True
 
     def get_insert_statement(self):
+        """!Return the sql statement and the argument list in database specific style"""
 	return self.serialize("INSERT", self.get_table_name())
+    
+    def get_insert_statement_mogrified(self, dbif=None):
+        """!Return the insert statement as mogrified string"""
+        return self._mogrify_sql_statement(self.get_insert_statement(), dbif)
 
     def insert(self, dbif=None):
         """!Serialize the content of this object and store it in the temporal
@@ -330,7 +402,12 @@ class sql_database_interface(dict_sql_serializer):
             self.close()
 
     def get_update_statement(self):
+        """!Return the sql statement and the argument list in database specific style"""
 	return self.serialize("UPDATE", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
+
+    def get_update_statement_mogrified(self,dbif=None):
+        """!Return the update statement as mogrified string"""
+        return self._mogrify_sql_statement(self.get_update_statement(), dbif)
 
     def update(self, dbif=None):
         """!Serialize the content of this object and update it in the temporal
@@ -355,7 +432,12 @@ class sql_database_interface(dict_sql_serializer):
             self.close()
 
     def get_update_all_statement(self):
+        """!Return the sql statement and the argument list in database specific style"""
 	return self.serialize("UPDATE ALL", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
+
+    def get_update_all_statement_mogrified(self, dbif=None):
+        """!Return the update all statement as mogrified string"""
+        return self._mogrify_sql_statement(self.get_update_all_statement(), dbif)
 
     def update_all(self, dbif=None):
         """!Serialize the content of this object, including None objects, and update it in the temporal
@@ -672,3 +754,52 @@ class stvds_base(stds_base):
         stds_base.__init__(self, "stvds_base", ident, name, mapset, semantic_type, creator, creation_time,\
 	            modification_time, temporal_type, revision)
 
+###############################################################################
+
+def init_dbif(dbif):
+    """!This method checks if the database interface exists, if not a new one 
+        will be created and True will be returned
+
+        Usage code sample:
+        dbif, connect = self._init_dbif(dbif)
+        if connect:
+            dbif.close()
+    """
+    if dbif == None:
+        dbif = sql_database_interface()
+        dbif.connect()
+        return dbif, True
+
+    return dbif, False
+
+###############################################################################
+
+def execute_transaction(statement, dbif=None):
+    """!Execute a transactional SQL statement
+
+        The BEGIN and END TRANSACTION statements will be added automatically
+        to the sql statement
+
+        @param statement The executable SQL statement or SQL script
+        @param dbif The database interface, if None a new db interface will be created temporary
+    """
+    dbif, connect = init_dbif(dbif)
+
+    sql_script = ""
+    sql_script += "BEGIN TRANSACTION;\n"
+    sql_script += statement
+    sql_script += "END TRANSACTION;"
+    try:
+        if dbmi.__name__ == "sqlite3":
+            dbif.cursor.executescript(statement)
+        else:
+            dbif.cursor.execute(statement)
+        dbif.connection.commit()
+    except:
+        if connect == True:
+            dbif.close()
+        core.error(_("Unable to execute transaction:\n %s") % (statement))
+        raise
+
+    if connect:
+        dbif.close()
