@@ -63,7 +63,8 @@ def main():
 
     mapset =  grass.gisenv()["MAPSET"]
 
-    dbif, connect = tgis.init_dbif(None)
+    dbif = tgis.sql_database_interface()
+    dbif.connect()
 
     # In case a space time dataset is specified
     if name:

@@ -88,7 +88,7 @@ def main():
     sp = tgis.space_time_raster_dataset(id)
     
     if sp.is_in_db() == False:
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
     # Save current working directory path
     old_cwd = os.getcwd()

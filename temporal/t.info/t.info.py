@@ -84,7 +84,7 @@ def main():
     sp = tgis.dataset_factory(type, id)
 
     if sp.is_in_db() == False:
-        grass.fatal(_("Dataset <%s> not found in temporal database") % name)
+        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
         
     sp.select()
 
