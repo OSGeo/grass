@@ -105,21 +105,12 @@ def main():
 
         if sp.is_in_db(dbif) == False:
             dbif.close()
-            grass.fatal(_("%s dataset <%s> not found in temporal database") % (sp.get_type(), name))
+            grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
         statement += sp.delete(dbif=dbif, execute=False)
 
     # Execute the collected SQL statenents
-    sql_script = ""
-    sql_script += "BEGIN TRANSACTION;\n"
-    sql_script += statement
-    sql_script += "END TRANSACTION;"
-    # print sql_script
-
-    if tgis.dbmi.__name__ == "sqlite3":
-            dbif.cursor.executescript(statement)
-    else:
-            dbif.cursor.execute(statement)
+    tgis.execute_transaction(statement, dbif)
 
     dbif.close()
 

@@ -108,7 +108,7 @@ def main():
     
     if sp.is_in_db() == False:
         dbif.close()
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
     sp.select(dbif)
 

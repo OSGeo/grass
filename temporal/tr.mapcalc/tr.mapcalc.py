@@ -105,7 +105,7 @@ def main():
     
     if first_input.is_in_db(dbif) == False:
 	dbif.close()
-	grass.fatal(_("Space time raster dataset <%s> not found in temporal database") % (id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
     # Fill the object with data from the temporal database
     first_input.select(dbif)
