@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr3.extract
+# MODULE:	t.rast3d.extract
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Extract a subset of a space time raster3d dataset

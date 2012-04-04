@@ -20,7 +20,7 @@ t.register -i type=rast3d input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,pre
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
 
-tr3.extract --o input=precip_abs1 output=precip_abs2 where="start_time > '2001-06-01'" expression=" if(precip_abs1 > 400, precip_abs1, null())" base=new_prec
+t.rast3d.extract --o input=precip_abs1 output=precip_abs2 where="start_time > '2001-06-01'" expression=" if(precip_abs1 > 400, precip_abs1, null())" base=new_prec
 
 t.info type=str3ds input=precip_abs2
 

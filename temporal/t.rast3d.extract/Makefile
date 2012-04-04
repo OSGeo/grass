@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../
 
-PGM = tr3.extract
+PGM = t.rast3d.extract
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
