@@ -21,11 +21,11 @@ SUBDIRS = \
 	tr.out.vtk \
 	tr.import \
 	tr.extract \
-	tr3.list \
-	tr3.extract \
-	tv.list \
-	tv.what.strds \
-	tv.observe.strds
+	t.rast3d.list \
+	t.rast3d.extract \
+	t.vect.list \
+	t.vect.what.strds \
+	t.vect.observe.strds
 
 PGM = tgisintro
 
