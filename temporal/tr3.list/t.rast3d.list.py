@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr3.list
+# MODULE:	t.rast3d.list
 # AUTHOR(S):	Soeren Gebbert
 #               
 # PURPOSE:	List registered maps of a space time raster3d dataset 
