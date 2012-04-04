@@ -54,21 +54,6 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    # Unregister maps
-    unregister_maps_from_space_time_datasets(type=type, name=name, maps=maps, file=file, dbif=None)
-
-############################################################################
-
-def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=None):
-    """Unregister maps from a single space time dataset or, in case no dataset name is provided,
-       unregister from all datasets within the maps are registered.
-
-       @param type: The type of the maps raster, vector or raster3d
-       @param name: Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
-       @param maps: A comma separated list of map names
-       @param file: Input file one map per line
-       @param dbif: The database interface to be used
-    """
 
     if maps and file:
         grass.fatal(_("%s= and %s= are mutually exclusive") % ("input","file"))
@@ -76,13 +61,9 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=N
     if not maps and not file:
         grass.fatal(_("%s= or %s= must be specified") % ("input","file"))
 
-
     mapset =  grass.gisenv()["MAPSET"]
 
-    if dbif == None:
-        dbif = tgis.sql_database_interface()
-        dbif.connect()
-        connect = True
+    dbif, connect = tgis.init_dbif(None)
 
     # In case a space time dataset is specified
     if name:
@@ -101,7 +82,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=N
 
         if sp.is_in_db(dbif) == False:
             dbif.close()
-            grass.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
+            grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
     maplist = []
 
@@ -141,6 +122,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=N
     statement = ""
 
     # Unregister already registered maps
+    grass.message(_("Unregistered maps"))
     for mapid in maplist:
 	grass.percent(count, num_maps, 1)
             
@@ -169,21 +151,17 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=N
 	count += 1
 
     # Execute the collected SQL statenents
-    sql_script = ""
-    sql_script += "BEGIN TRANSACTION;\n"
-    sql_script += statement
-    sql_script += "END TRANSACTION;"
-    # print sql_script
-
-    if tgis.dbmi.__name__ == "sqlite3":
-            dbif.cursor.executescript(statement)
-    else:
-            dbif.cursor.execute(statement)
+    tgis.execute_transaction(statement, dbif)
+	
+    grass.percent(num_maps, num_maps, 1)
 
     # Update space time datasets
+    
+    grass.message(_("Unregistered maps from space time dataset(s)"))
     if name:
         sp.update_from_registered_maps(dbif)
     elif len(update_dict) > 0:
+        count = 0
         for key in update_dict.keys():
             id = update_dict[key]
             if type == "rast":
@@ -197,11 +175,10 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif=N
 
             sp.metadata.select(dbif)
             sp.update_from_registered_maps(dbif)
+            grass.percent(count, len(update_dict), 1)
+	    count += 1
 
-    if connect == True:
-        dbif.close()
-	
-    grass.percent(num_maps, num_maps, 1)
+    dbif.close()
 
 ###############################################################################
 
