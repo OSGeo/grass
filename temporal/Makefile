@@ -10,17 +10,17 @@ SUBDIRS = \
 	t.sample \
 	t.register \
 	t.unregister \
-	tr.aggregate \
-	tr.aggregate.ds \
-	tr.to.rast3 \
-	tr.univar \
-	tr.list \
-	tr.mapcalc \
-	tr.series \
-	tr.export \
-	tr.out.vtk \
-	tr.import \
-	tr.extract \
+	t.rast.aggregate \
+	t.rast.aggregate.ds \
+	t.rast.to.rast3 \
+	t.rast.univar \
+	t.rast.list \
+	t.rast.mapcalc \
+	t.rast.series \
+	t.rast.export \
+	t.rast.out.vtk \
+	t.rast.import \
+	t.rast.extract \
 	t.rast3d.list \
 	t.rast3d.extract \
 	t.vect.list \
