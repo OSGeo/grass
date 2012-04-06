@@ -2425,10 +2425,10 @@
 	</menu>
 	<separator />
 	<menu>
-	  <label>Change attributes</label>
+	  <label>Manage categories</label>
 	  <items>
 	    <menuitem>
-	      <label>Manage or report categories</label>
+	      <label>Change or report categories</label>
 	      <help>Attaches, deletes or reports vector categories to map geometry.</help>
 	      <keywords>vector,category</keywords>
 	      <handler>OnMenuCmd</handler>
