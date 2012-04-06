@@ -21,6 +21,7 @@
 #%end
 #%option G_OPT_F_INPUT
 #% description: Name of input pack file
+#% gisprompt: old,file,bin_input
 #%end
 #%option G_OPT_R_OUTPUT
 #% description: Name for output raster map (default: taken from input file internals)
