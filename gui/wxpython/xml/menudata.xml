@@ -109,7 +109,7 @@
 	    <menuitem>
 	      <label>ASCII grid import</label>
 	      <help>Converts a GRASS ASCII raster file to binary raster map.</help>
-	      <keywords>raster,import,conversion</keywords>
+	      <keywords>raster,import,conversion,ascii</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.ascii</command>
 	    </menuitem>
@@ -152,7 +152,7 @@
 	    <menuitem>
 	      <label>PNG import</label>
 	      <help>Imports non-georeferenced PNG format image.</help>
-	      <keywords>raster,import</keywords>
+	      <keywords>raster,import,png</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.png</command>
 	    </menuitem>
@@ -184,11 +184,11 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.lidar</command>
 	    </menuitem>
-	    <separator />
 	    <menuitem>
 	      <label>WMS import</label>
 	      <help>Download and import data from WMS servers.</help>
-	      <handler>OnImportWMS</handler>
+	      <keywords>raster,import,wms</keywords><handler>OnImportWMS</handler>
+	      <command>r.in.wms</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -397,7 +397,7 @@
 	    <menuitem>
 	      <label>PNG export</label>
 	      <help>Export a GRASS raster map as a non-georeferenced PNG image.</help>
-	      <keywords>raster,export,PNG</keywords>
+	      <keywords>raster,export,png</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.png</command>
 	    </menuitem>
@@ -559,7 +559,7 @@
 	    <menuitem>
 	      <label>Link external vector data</label>
 	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
-	      <keywords>vector,import,input,external</keywords>
+	      <keywords>vector,import,input,external,OGR,PostGIS</keywords>
               <handler>OnLinkOgrLayers</handler>
 	      <command>v.external</command>
 	    </menuitem>
@@ -574,7 +574,7 @@
 	    <menuitem>
 	      <label>Output format for vector data</label>
 	      <help>Defines vector output format utilizing OGR library.</help>
-	      <keywords>vector,export,output,external</keywords>
+	      <keywords>vector,export,output,external,OGR,PostGIS</keywords>
               <handler>OnVectorOutputFormat</handler>
 	      <command>v.external.out</command>
 	    </menuitem>
@@ -1114,7 +1114,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Raster to vector</label>
-	      <help>Converts a raster map into a vector map layer.</help>
+	      <help>Converts a raster map into a vector map.</help>
 	      <keywords>raster,conversion,geometry,vectorization</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.to.vect</command>
@@ -1829,7 +1829,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Fill NULL cells</label>
-	      <help>Fills no-data areas in raster maps using splines interpolation.</help>
+	      <help>Fills no-data areas in raster maps using spline interpolation.</help>
 	      <keywords>raster,elevation,interpolation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.fillnulls</command>
@@ -2062,7 +2062,7 @@
 	    <menuitem>
 	      <label>Rebuild topology on all vector maps</label>
 	      <help>Rebuilds topology on all vector maps in the current mapset.</help>
-	      <keywords>vector,geometry,topology</keywords>
+	      <keywords>vector,topology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.build.all</command>
 	    </menuitem>
@@ -2143,8 +2143,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Query with coordinate(s)</label>
-	      <help>Queries a vector map layer at given locations.</help>
-	      <keywords>vector,querying</keywords>
+	      <help>Queries a vector map at given locations.</help>
+	      <keywords>vector,position,querying</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.what</command>
 	    </menuitem>
@@ -2162,7 +2162,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Select by attributes</label>
-	      <help>Selects vector features from an existing vector map and creates a new map containing only the selected objects.</help>
+	      <help>Selects vector features from an existing vector map and creates a new vector map containing only the selected features.</help>
 	      <keywords>vector,extract</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.extract</command>
@@ -2551,7 +2551,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Generate random points</label>
-	      <help>Generates random 2D/3D vector points.</help>
+	      <help>Generates randomly 2D/3D vector points map.</help>
 	      <keywords>vector,statistics,random</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.random</command>
@@ -2853,7 +2853,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Modis quality control</label>
-	      <help>Extract quality control parameters from Modis QC layers.</help>
+	      <help>Extracts quality control parameters from Modis QC layers.</help>
 	      <keywords>QC,Quality Control,Surface Reflectance,Land Surface Temperature,Vegetation,Modis</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.modis.qc</command>
@@ -3153,8 +3153,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>List drivers</label>
-	      <help>List all database drivers.</help>
-	      <keywords>database,attribute table</keywords>
+	      <help>Lists all database drivers.</help>
+	      <keywords>database,drivers</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>db.drivers</command>
 	    </menuitem>
@@ -3232,7 +3232,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Drop column</label>
-	      <help>Drops a column from selected attribute table</help>
+	      <help>Drops a column from selected attribute table.</help>
 	      <keywords>database,attribute table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>db.dropcolumn</command>
