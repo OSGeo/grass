@@ -223,7 +223,7 @@ v.edit tool=delete map=roads cats=1,2 coords=600952.625,4926107
 
 Remove all features with category 1 and 2 covered by two bounding boxes
 (center coordinates 592542.892,4924766.996 and 603389.062,4918292.187, 
-size 2000 map units):
+size 1000 map units):
 
 <div class="code"><pre>
 v.edit map=roads tool=delete \
@@ -392,7 +392,7 @@ v.edit map=roads tool=select query=length thresh=-1,0,-10
 Select from given bounding box all lines longer then 200 map units:
 
 <div class="code"><pre>
-v.edit map=roads tool=select bbox=598260,4919730,605100,4926240 query=length thresh=-1,0,1000
+v.edit map=roads tool=select bbox=598260,4919730,605100,4926240 query=length thresh=-1,0,200
 </pre></div>
 
 <h3>Fix height of contours</h3>
