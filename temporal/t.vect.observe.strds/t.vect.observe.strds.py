@@ -76,7 +76,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # We need a database interface
-    dbif = tgis.sql_database_interface()
+    dbif = tgis.sql_database_interface_connection()
     dbif.connect()
    
     mapset =  grass.gisenv()["MAPSET"]
@@ -107,8 +107,8 @@ def main():
 
     # Overwrite existing stvds
     if out_sp.is_in_db(dbif) == True and grass.overwrite() == True:
-        out_sp.select()
-        out_sp.delete()
+        out_sp.select(dbif)
+        out_sp.delete(dbif)
         out_sp = tgis.space_time_vector_dataset(id)
 
     # Select the raster maps
@@ -122,8 +122,8 @@ def main():
 
     out_sp.set_initial_values(strds_sp.get_temporal_type(), \
                               strds_sp.get_semantic_type(),\
-                              _("Observation of space time raster dataset <%s>")%(strds_id),\
-                              _("Observattion of space time raster dataset <%s> with vector map <%s>")%(strds_id, input))
+                              _("Observaion of space time raster dataset <%s>")%(strds_id),\
+                              _("Observation of space time raster dataset <%s> with vector map <%s>")%(strds_id, input))
 
     out_sp.insert(dbif)
 
@@ -192,7 +192,7 @@ def main():
         else:
             vect.set_relative_time(start, end, strds_ds.get_relative_time_unit())
        
-        if vect.is_in_db():
+        if vect.is_in_db(dbif):
             vect.update(dbif)
         else:
             vect.insert(dbif)

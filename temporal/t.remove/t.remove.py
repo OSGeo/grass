@@ -46,10 +46,6 @@ import grass.temporal as tgis
 
 ############################################################################
 
-#
-# TODO: Add recursive and physical removement of maps and datasets
-#
-
 def main():
     
     # Get the options
@@ -63,7 +59,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    dbif = tgis.sql_database_interface()
+    dbif = tgis.sql_database_interface_connection()
     dbif.connect()
 
     dataset_list = []
@@ -110,7 +106,7 @@ def main():
         statement += sp.delete(dbif=dbif, execute=False)
 
     # Execute the collected SQL statenents
-    tgis.execute_transaction(statement, dbif)
+    dbif.execute_transaction(statement)
 
     dbif.close()
 

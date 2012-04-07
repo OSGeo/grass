@@ -83,7 +83,7 @@ def main():
     if sp.is_in_db() == False:
         grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
-    dbif = tgis.sql_database_interface()
+    dbif = tgis.sql_database_interface_connection()
     dbif.connect()
 
     sp.select(dbif)

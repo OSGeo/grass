@@ -25,6 +25,11 @@ import getpass
 import grass.script.raster as raster
 import grass.script.vector as vector
 import grass.script.raster3d as raster3d
+
+from ctypes import *
+import grass.lib.gis as libgis
+import grass.lib.raster as libraster
+
 from datetime_math import *
 from abstract_map_dataset import *
 from abstract_space_time_dataset import *
@@ -59,10 +64,6 @@ class raster_dataset(abstract_map_dataset):
     def set_stds_register(self, name):
         """!Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_strds_register(name)
- 
-    def get_timestamp_module_name(self):
-        """!Return the name of the C-module to set the time stamp in the file system"""
-        return "r.timestamp"
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents 2d overlap"""
@@ -83,12 +84,119 @@ class raster_dataset(abstract_map_dataset):
 	self.relative_time = raster_relative_time(ident=ident)
 	self.spatial_extent = raster_spatial_extent(ident=ident)
 	self.metadata = raster_metadata(ident=ident)
+		
+    def has_grass_timestamp(self):
+        """!Check if a grass file bsased time stamp exists for this map. 
+        """
+        if G_has_raster_timestamp(self.get_name(), self.get_mapset()):
+	    return True
+	else:
+	    return False
+ 
+    def write_timestamp_to_grass(self):
+        """!Write the timestamp of this map into the map metadata in the grass file system based spatial
+           database. 
+           
+           Internally the libgis API functions are used for writing
+        """
+        
+	ts = libgis.TimeStamp()
+
+	libgis.G_scan_timestamp(byref(ts), self._convert_timestamp())
+	check = libgis.G_write_raster_timestamp(self.get_name(), byref(ts))
+	
+	if check == -1:
+		core.error(_("Unable to create timestamp file for raster map <%s>"%(self.get_map_id())))
+		
+	if check == -2:
+		core.error(_("Invalid datetime in timestamp for raster map <%s>"%(self.get_map_id())))
+			
+    
+    def remove_timestamp_from_grass(self):
+        """!Remove the timestamp from the grass file system based spatial database
+        
+           Internally the libgis API functions are used for removal
+        """
+        check = libgis.G_remove_raster_timestamp(self.get_name())
+        
+        if check == -1:
+            core.error(_("Unable to remove timestamp for raster map <%s>"%(self.get_name())))
+	
+    def map_exists(self):
+        """!Return True in case the map exists in the grass spatial database
+        
+           @return True if map exists, False otherwise
+        """        
+        mapset = libgis.G_find_raster(self.get_name(), self.get_mapset())
+        
+        if not mapset:
+            return False
+	
+	return True
+        
+    def read_info(self):
+        """!Read the raster map info from the file system and store the content 
+           into a dictionary
+           
+           This method uses the ctypes interface to the gis and raster libraries
+           to read the map metadata information
+        """
+        
+        kvp = {}
+        
+        name = self.get_name()
+        mapset = self.get_mapset()
+        
+        if not self.map_exists():
+	  core.fatal(_("Raster map <%s> not found" % name))
+        
+        # Read the region information
+        region = libgis.Cell_head()
+	libraster.Rast_get_cellhd(name, mapset, byref(region))
+	
+	kvp["north"] = region.north
+	kvp["south"] = region.south
+	kvp["east"] = region.east
+	kvp["west"] = region.west
+	kvp["nsres"] = region.ns_res
+	kvp["ewres"] = region.ew_res
+	kvp["rows"] = region.cols
+	kvp["cols"] = region.rows
+	
+	maptype = libraster.Rast_map_type(name, mapset)
+  
+	if maptype == libraster.DCELL_TYPE:
+	    kvp["datatype"] = "DCELL"
+        elif maptype == libraster.FCELL_TYPE:
+	    kvp["datatype"] = "FCELL"
+        elif maptype == libraster.CELL_TYPE:
+	    kvp["datatype"] = "CELL"
+	    
+	# Read range
+	if libraster.Rast_map_is_fp(name, mapset):
+	    range = libraster.FPRange()
+	    libraster.Rast_init_fp_range (byref(range))
+	    libraster.Rast_read_fp_range(name, mapset, byref(range))
+	    min = libgis.DCELL()
+	    max = libgis.DCELL()
+	    libraster.Rast_get_fp_range_min_max(byref(range), byref(min), byref(max))
+	    kvp["min"] = float(min.value)
+	    kvp["max"] = float(max.value)
+	else:
+	    range = libraster.Range()
+	    libraster.Rast_init_range (byref(range))
+	    libraster.Rast_read_range(name, mapset, byref(range))
+	    min = libgis.CELL()
+	    max = libgis.CELL()
+	    libraster.Rast_get_fp_range_min_max(byref(range), byref(min), byref(max))
+	    kvp["min"] = int(min.value)
+	    kvp["max"] = int(max.value)
+	
+	return kvp
 
     def load(self):
         """!Load all info from an existing raster map into the internal structure"""
 
-        # Get the data from an existing raster map
-        kvp = raster.raster_info(self.get_map_id())
 
         # Fill base information
 
@@ -96,6 +204,9 @@ class raster_dataset(abstract_map_dataset):
         self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
 
+        # Get the data from an existing raster map
+        kvp = self.read_info()
+        
         # Fill spatial extent
 
         self.set_spatial_extent(north=kvp["north"], south=kvp["south"], \
@@ -109,8 +220,8 @@ class raster_dataset(abstract_map_dataset):
         self.metadata.set_min(kvp["min"])
         self.metadata.set_max(kvp["max"])
 
-        rows = int((kvp["north"] - kvp["south"])/kvp["nsres"] + 0.5)
-        cols = int((kvp["east"] - kvp["west"])/kvp["ewres"] + 0.5)
+        rows = kvp["rows"]
+        cols = kvp["cols"]
 
         ncells = cols * rows
 
@@ -147,10 +258,6 @@ class raster3d_dataset(abstract_map_dataset):
     def set_stds_register(self, name):
         """!Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_str3ds_register(name)
- 
-    def get_timestamp_module_name(self):
-        """!Return the name of the C-module to set the time stamp in the file system"""
-        return "r3.timestamp"
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents overlap"""
@@ -178,6 +285,55 @@ class raster3d_dataset(abstract_map_dataset):
 	self.spatial_extent = raster3d_spatial_extent(ident=ident)
 	self.metadata = raster3d_metadata(ident=ident)
 
+    def has_grass_timestamp(self):
+        """!Check if a grass file bsased time stamp exists for this map. 
+        """
+        if G_has_raster3d_timestamp(self.get_name(), self.get_mapset()):
+	    return True
+	else:
+	    return False
+ 
+    def write_timestamp_to_grass(self):
+        """!Write the timestamp of this map into the map metadata in the grass file system based spatial
+           database. 
+           
+           Internally the libgis API functions are used for writing
+        """
+        
+	ts = libgis.TimeStamp()
+
+	libgis.G_scan_timestamp(byref(ts), self._convert_timestamp())
+	check = libgis.G_write_raster3d_timestamp(self.get_name(), byref(ts))
+	
+	if check == -1:
+		core.error(_("Unable to create timestamp file for raster3d map <%s>"%(self.get_map_id())))
+		
+	if check == -2:
+		core.error(_("Invalid datetime in timestamp for raster3d map <%s>"%(self.get_map_id())))
+			
+    
+    def remove_timestamp_from_grass(self):
+        """!Remove the timestamp from the grass file system based spatial database
+        
+           Internally the libgis API functions are used for removal
+        """
+        check = libgis.G_remove_raster3d_timestamp(self.get_name())
+        
+        if check == -1:
+            core.error(_("Unable to remove timestamp for raster3d map <%s>"%(self.get_name())))
+	
+    def map_exists(self):
+        """!Return True in case the map exists in the grass spatial database
+        
+           @return True if map exists, False otherwise
+        """        
+        mapset = libgis.G_find_raster3d(self.get_name(), self.get_mapset())
+        
+        if not mapset:
+            return False
+	
+	return True
+        
     def load(self):
         """!Load all info from an existing raster3d map into the internal structure"""
 
@@ -245,10 +401,6 @@ class vector_dataset(abstract_map_dataset):
     def set_stds_register(self, name):
         """!Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_stvds_register(name)
- 
-    def get_timestamp_module_name(self):
-        """!Return the name of the C-module to set the time stamp in the file system"""
-        return "v.timestamp"
 
     def get_layer(self):
         """!Return the layer"""
@@ -264,7 +416,6 @@ class vector_dataset(abstract_map_dataset):
         
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 	
-
     def reset(self, ident):
 	"""!Reset the internal structure and set the identifier"""
 	self.ident = ident
@@ -275,6 +426,55 @@ class vector_dataset(abstract_map_dataset):
 	self.spatial_extent = vector_spatial_extent(ident=ident)
 	self.metadata = vector_metadata(ident=ident)
 
+    def has_grass_timestamp(self):
+        """!Check if a grass file bsased time stamp exists for this map. 
+        """
+        if G_has_raster_timestamp(self.get_name(), self.get_layer(), self.get_mapset()):
+	    return True
+	else:
+	    return False
+ 
+    def write_timestamp_to_grass(self):
+        """!Write the timestamp of this map into the map metadata in the grass file system based spatial
+           database. 
+           
+           Internally the libgis API functions are used for writing
+        """
+        
+	ts = libgis.TimeStamp()
+
+	libgis.G_scan_timestamp(byref(ts), self._convert_timestamp())
+	check = libgis.G_write_vector_timestamp(self.get_name(), self.get_layer(), byref(ts))
+	
+	if check == -1:
+		core.error(_("Unable to create timestamp file for vector map <%s>"%(self.get_map_id())))
+		
+	if check == -2:
+		core.error(_("Invalid datetime in timestamp for vector map <%s>"%(self.get_map_id())))
+			
+    
+    def remove_timestamp_from_grass(self):
+        """!Remove the timestamp from the grass file system based spatial database
+        
+           Internally the libgis API functions are used for removal
+        """
+        check = libgis.G_remove_vector_timestamp(self.get_name(), self.get_layer())
+        
+        if check == -1:
+            core.error(_("Unable to remove timestamp for vector map <%s>"%(self.get_name())))
+	
+    def map_exists(self):
+        """!Return True in case the map exists in the grass spatial database
+        
+           @return True if map exists, False otherwise
+        """        
+        mapset = libgis.G_find_vector(self.get_name(), self.get_mapset())
+        
+        if not mapset:
+            return False
+	
+	return True
+        
     def load(self):
         """!Load all info from an existing vector map into the internal structure"""
 

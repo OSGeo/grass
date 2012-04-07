@@ -199,7 +199,10 @@ class abstract_dataset(object):
             dbif.close()
 
     def is_in_db(self, dbif=None):
-        """!Check if the temporal dataset entry is in the database"""
+        """!Check if the temporal dataset entry is in the database
+        
+           @param dbif: The database interface to be used
+        """
         return self.base.is_in_db(dbif)
 
     def delete(self):
@@ -215,6 +218,8 @@ class abstract_dataset(object):
                            If False the prepared SQL statements are returned and must be executed by the caller.
         """
 
+        dbif, connect = init_dbif(dbif)
+        
         # Build the INSERT SQL statement
         statement = self.base.get_insert_statement_mogrified(dbif)
         if self.is_time_absolute():
@@ -225,9 +230,13 @@ class abstract_dataset(object):
         statement += self.metadata.get_insert_statement_mogrified(dbif)
 
         if execute == True:
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
+	    if connect:
+		dbif.close()
             return ""
 
+        if connect:
+            dbif.close()
         return statement
 
     def update(self, dbif=None, execute=True):
@@ -239,6 +248,8 @@ class abstract_dataset(object):
                            If False the prepared SQL statements are returned and must be executed by the caller.
 	"""
 
+        dbif, connect = init_dbif(dbif)
+        
         # Build the UPDATE SQL statement
         statement = self.base.get_update_statement_mogrified(dbif)
 	if self.is_time_absolute():
@@ -249,9 +260,13 @@ class abstract_dataset(object):
         statement += self.metadata.get_update_statement_mogrified(dbif)
 
         if execute == True:
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
+	    if connect:
+		dbif.close()
             return ""
- 
+
+        if connect:
+            dbif.close()
         return statement
  
     def update_all(self, dbif=None, execute=True):
@@ -263,6 +278,8 @@ class abstract_dataset(object):
                            If False the prepared SQL statements are returned and must be executed by the caller.
 	"""
 
+        dbif, connect = init_dbif(dbif)
+        
         # Build the UPDATE SQL statement
         statement = self.base.get_update_all_statement_mogrified(dbif)
 	if self.is_time_absolute():
@@ -273,9 +290,13 @@ class abstract_dataset(object):
         statement += self.metadata.get_update_all_statement_mogrified(dbif)
 
         if execute == True:
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
+	    if connect:
+		dbif.close()
             return ""
 
+        if connect:
+            dbif.close()
         return statement
 
     def set_time_to_absolute(self):

@@ -167,3 +167,148 @@ def create_temporal_database():
 
     connection.commit()
     cursor.close()
+
+###############################################################################
+
+class sql_database_interface_connection():
+    """!This class represents the database interface connection
+    
+       The following DBMS are supported:
+       * sqlite via the sqlite3 standard library
+       * postgresql via psycopg2
+
+    """
+    def __init__(self):
+	self.connected = False
+	
+    def connect(self):
+        """!Connect to the DBMI to execute SQL statements
+
+           Supported backends are sqlite3 and postgresql
+        """
+        init = get_temporal_dbmi_init_string()
+        #print "Connect to",  self.database
+        if dbmi.__name__ == "sqlite3":
+	    self.connection = dbmi.connect(init, detect_types=dbmi.PARSE_DECLTYPES|dbmi.PARSE_COLNAMES)
+	    self.connection.row_factory = dbmi.Row
+            self.connection.isolation_level = None
+	    self.cursor = self.connection.cursor()
+            self.cursor.execute("PRAGMA synchronous = OFF")
+            self.cursor.execute("PRAGMA journal_mode = MEMORY")
+        elif dbmi.__name__ == "psycopg2":
+	    self.connection = dbmi.connect(init)
+	    #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+	    self.cursor = self.connection.cursor(cursor_factory=dbmi.extras.DictCursor)
+	self.connected = True
+	
+    def close(self):
+        """!Close the DBMI connection"""
+        #print "Close connection to",  self.database
+	self.connection.commit()
+        self.cursor.close()
+	self.connected = False
+
+    def mogrify_sql_statement(self, content):
+        """!Return the SQL statement and arguments as executable SQL string
+        """
+        sql = content[0]
+        args = content[1]
+
+        if dbmi.__name__ == "psycopg2":
+            if len(args) == 0:
+                return sql
+            else:
+                if self.connected:
+                    try:
+                        return self.cursor.mogrify(sql, args)
+                    except:
+                        print sql, args
+                        raise
+                else:
+                    self.connect()
+                    statement = self.cursor.mogrify(sql, args)
+                    self.close()
+                    return statement
+                    
+        elif dbmi.__name__ == "sqlite3":
+            if len(args) == 0:
+                return sql
+            else:
+                # Unfortunately as sqlite does not support 
+                # the transformation of sql strings and qmarked or
+                # named arguments we must make our hands dirty
+                # and do it by ourself. :(
+                # Doors are open for SQL injection because of the 
+                # limited python sqlite3 implementation!!!
+                pos = 0
+                count = 0
+                maxcount = 100
+                statement = sql
+
+                while count < maxcount:
+                    pos = statement.find("?", pos + 1)
+                    if pos == -1:
+                        break
+                    
+                    if args[count] == None:
+                        statement = "%sNULL%s"%(statement[0:pos], statement[pos+1:])
+                    elif isinstance(args[count], (int, long)):
+                        statement = "%s%d%s"%(statement[0:pos], args[count],statement[pos+1:])
+                    elif isinstance(args[count], float):
+                        statement = "%s%f%s"%(statement[0:pos], args[count],statement[pos+1:])
+                    else:
+                        # Default is a string, this works for datetime objects too
+                        statement = "%s\'%s\'%s"%(statement[0:pos], str(args[count]),statement[pos+1:])
+                    count += 1
+
+                return statement
+                
+    def execute_transaction(self, statement):
+	"""!Execute a transactional SQL statement
+
+	    The BEGIN and END TRANSACTION statements will be added automatically
+	    to the sql statement
+
+	    @param statement The executable SQL statement or SQL script
+	"""
+	connect = False
+	if self.connected == False:
+	    self.connect()
+	    connect = True
+
+	sql_script = ""
+	sql_script += "BEGIN TRANSACTION;\n"
+	sql_script += statement
+	sql_script += "END TRANSACTION;"
+	try:
+	    if dbmi.__name__ == "sqlite3":
+		self.cursor.executescript(statement)
+	    else:
+		self.cursor.execute(statement)
+	    self.connection.commit()
+	except:
+	    if connect == True:
+		self.close()
+	    core.error(_("Unable to execute transaction:\n %s") % (statement))
+	    raise
+
+	if connect:
+	    self.close()
+	    
+###############################################################################
+
+def init_dbif(dbif):
+    """!This method checks if the database interface connection exists, if not a new one 
+        will be created, connected and True will be returned
+
+        Usage code sample:
+        dbif, connect = tgis.init_dbif(dbif)
+        if connect:
+            dbif.close()
+    """
+    if dbif == None:
+        dbif = sql_database_interface_connection()
+        dbif.connect()
+        return dbif, True
+
+    return dbif, False

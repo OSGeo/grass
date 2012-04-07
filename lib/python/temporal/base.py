@@ -181,10 +181,7 @@ class sql_database_interface(dict_sql_serializer):
     """!This class represents the SQL database interface
 
        Functions to insert, select and update the internal structure of this class
-       in the temporal database are implemented. The following DBMS are supported:
-       * sqlite via the sqlite3 standard library
-       * postgresql via psycopg2
-
+       in the temporal database are implemented. 
        This is the base class for raster, raster3d, vector and space time datasets
        data management classes:
        * Identification information (base)
@@ -207,102 +204,25 @@ class sql_database_interface(dict_sql_serializer):
         """!Return the name of the table in which the internal data are inserted, updated or selected"""
         return self.table
 
-    def connect(self):
-        """!Connect to the DBMI to execute SQL statements
-
-           Supported backends are sqlite3 and postgresql
-        """
-        init = get_temporal_dbmi_init_string()
-        #print "Connect to",  self.database
-        if dbmi.__name__ == "sqlite3":
-	    self.connection = dbmi.connect(init, detect_types=dbmi.PARSE_DECLTYPES|dbmi.PARSE_COLNAMES)
-	    self.connection.row_factory = dbmi.Row
-            self.connection.isolation_level = None
-	    self.cursor = self.connection.cursor()
-            self.cursor.execute("PRAGMA synchronous = OFF")
-            self.cursor.execute("PRAGMA journal_mode = MEMORY")
-        elif dbmi.__name__ == "psycopg2":
-	    self.connection = dbmi.connect(init)
-	    #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
-	    self.cursor = self.connection.cursor(cursor_factory=dbmi.extras.DictCursor)
-
-    def close(self):
-        """!Close the DBMI connection"""
-        #print "Close connection to",  self.database
-	self.connection.commit()
-        self.cursor.close()
-
-
-    def _mogrify_sql_statement(self, content, dbif=None):
-        """!Return the SQL statement and arguments as executable SQL string
-        """
-        sql = content[0]
-        args = content[1]
-
-        if dbmi.__name__ == "psycopg2":
-            if len(args) == 0:
-                return sql
-            else:
-                if dbif:
-                    try:
-                        return dbif.cursor.mogrify(sql, args)
-                    except:
-                        print sql, args
-                        raise
-                else:
-                    self.connect()
-                    statement = self.cursor.mogrify(sql, args)
-                    self.close()
-                    return statement
-                    
-        elif dbmi.__name__ == "sqlite3":
-            if len(args) == 0:
-                return sql
-            else:
-                # Unfortunately as sqlite does not support 
-                # the transformation of sql strings and qmarked or
-                # named arguments we must make our hands dirty
-                # and do it by ourself. :(
-                # Doors are open for SQL injection because of the 
-                # limited python sqlite3 implementation!!!
-                pos = 0
-                count = 0
-                maxcount = 100
-                statement = sql
-
-                while count < maxcount:
-                    pos = statement.find("?", pos + 1)
-                    if pos == -1:
-                        break
-                    
-                    if args[count] == None:
-                        statement = "%sNULL%s"%(statement[0:pos], statement[pos+1:])
-                    elif isinstance(args[count], (int, long)):
-                        statement = "%s%d%s"%(statement[0:pos], args[count],statement[pos+1:])
-                    elif isinstance(args[count], float):
-                        statement = "%s%f%s"%(statement[0:pos], args[count],statement[pos+1:])
-                    else:
-                        # Default is a string, this works for datetime objects too
-                        statement = "%s\'%s\'%s"%(statement[0:pos], str(args[count]),statement[pos+1:])
-                    count += 1
-
-                return statement
-
     def get_delete_statement(self):
         """!Return the delete string"""
 	return "DELETE FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\';\n"
 
     def delete(self, dbif=None):
-        """!Delete the entry of this object from the temporal database"""
+        """!Delete the entry of this object from the temporal database
+
+           @param dbif: The database interface to be used, if None a temporary connection will be established
+        """
 	sql = self.get_delete_statement()
         #print sql
         
-        if dbif:
-            dbif.cursor.execute(sql)
-        else:
-            self.connect()
-            self.cursor.execute(sql)
-            self.close()
+	if dbif:
+	    dbif.cursor.execute(sql)
+	else:
+	    dbif = sql_database_interface_connection()
+	    dbif.connect()
+	    dbif.cursor.execute(sql)
+	    dbif.close()
 
     def get_is_in_db_statement(self):
         """Return the selection string"""
@@ -311,20 +231,21 @@ class sql_database_interface(dict_sql_serializer):
     def is_in_db(self, dbif=None):
         """!Check if this object is present in the temporal database
 
-           @param dbif: The database interface to be used
+           @param dbif: The database interface to be used, if None a temporary connection will be established
         """
 
 	sql = self.get_is_in_db_statement()
         #print sql
 
-        if dbif:
-            dbif.cursor.execute(sql)
-            row = dbif.cursor.fetchone()
-        else:
-            self.connect()
-            self.cursor.execute(sql)
-            row = self.cursor.fetchone()
-            self.close()
+	if dbif:
+	    dbif.cursor.execute(sql)
+	    row = dbif.cursor.fetchone()
+	else:
+	    dbif = sql_database_interface_connection()
+	    dbif.connect()
+	    dbif.cursor.execute(sql)
+	    row = dbif.cursor.fetchone()
+	    dbif.close()
 
 	# Nothing found
 	if row == None:
@@ -337,14 +258,20 @@ class sql_database_interface(dict_sql_serializer):
 	return self.serialize("SELECT", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
     
     def get_select_statement_mogrified(self, dbif=None):
-        """!Return the select statement as mogrified string"""
-        return self._mogrify_sql_statement(self.get_select_statement(), dbif)
+        """!Return the select statement as mogrified string
+
+           @param dbif: The database interface to be used, if None a temporary connection will be established
+        """
+        if not dbif:
+	    dbif = sql_database_interface_connection()
+	    
+        return dbif.mogrify_sql_statement(self.get_select_statement())
                 
     def select(self, dbif=None):
         """!Select the content from the temporal database and store it
            in the internal dictionary structure
 
-           @param dbif: The database interface to be used
+           @param dbif: The database interface to be used, if None a temporary connection will be established
         """
 	sql, args = self.get_select_statement()
 	#print sql
@@ -357,13 +284,14 @@ class sql_database_interface(dict_sql_serializer):
                 dbif.cursor.execute(sql, args)
             row = dbif.cursor.fetchone()
         else:
-            self.connect()
-            if len(args) == 0:
-                self.cursor.execute(sql)
-            else:
-                self.cursor.execute(sql, args)
-            row = self.cursor.fetchone()
-            self.close()
+	    dbif = sql_database_interface_connection()
+	    dbif.connect()
+	    if len(args) == 0:
+		dbif.cursor.execute(sql)
+	    else:
+		dbif.cursor.execute(sql, args)
+	    row = dbif.cursor.fetchone()
+	    dbif.close()
 
 	# Nothing found
 	if row == None:
@@ -381,33 +309,46 @@ class sql_database_interface(dict_sql_serializer):
 	return self.serialize("INSERT", self.get_table_name())
     
     def get_insert_statement_mogrified(self, dbif=None):
-        """!Return the insert statement as mogrified string"""
-        return self._mogrify_sql_statement(self.get_insert_statement(), dbif)
+        """!Return the insert statement as mogrified string
+
+           @param dbif: The database interface to be used, if None a temporary connection will be established
+        """
+        if not dbif:
+	    dbif = sql_database_interface_connection()
+	    
+        return dbif.mogrify_sql_statement(self.get_insert_statement())
 
     def insert(self, dbif=None):
         """!Serialize the content of this object and store it in the temporal
            database using the internal identifier
 
-           @param dbif: The database interface to be used
+           @param dbif: The database interface to be used, if None a temporary connection will be established
         """
 	sql, args = self.get_insert_statement()
 	#print sql
 	#print args
 
-        if dbif:
-            dbif.cursor.execute(sql, args)
-        else:
-            self.connect()
-            self.cursor.execute(sql, args)
-            self.close()
+	if dbif:
+	    dbif.cursor.execute(sql, args)
+	else:
+	    dbif = sql_database_interface_connection()
+	    dbif.connect()
+	    dbif.cursor.execute(sql, args)
+	    dbif.close()
 
     def get_update_statement(self):
         """!Return the sql statement and the argument list in database specific style"""
 	return self.serialize("UPDATE", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def get_update_statement_mogrified(self,dbif=None):
-        """!Return the update statement as mogrified string"""
-        return self._mogrify_sql_statement(self.get_update_statement(), dbif)
+        """!Return the update statement as mogrified string
+
+           @param dbif: The database interface to be used, if None a temporary connection will be established
+        """
+        if not dbif:
+	    dbif = sql_database_interface_connection()
+	    
+        return dbif.mogrify_sql_statement(self.get_update_statement())
 
     def update(self, dbif=None):
         """!Serialize the content of this object and update it in the temporal
@@ -415,7 +356,7 @@ class sql_database_interface(dict_sql_serializer):
 
            Only object entries which are exists (not None) are updated
 
-           @param dbif: The database interface to be used
+           @param dbif: The database interface to be used, if None a temporary connection will be established
         """
 	if self.ident == None:
 	    raise IOError("Missing identifer");
@@ -424,26 +365,33 @@ class sql_database_interface(dict_sql_serializer):
 	#print sql
 	#print args
 
-        if dbif:
-            dbif.cursor.execute(sql, args)
-        else:
-            self.connect()
-            self.cursor.execute(sql, args)
-            self.close()
+	if dbif:
+	    dbif.cursor.execute(sql, args)
+	else:
+	    dbif = sql_database_interface_connection()
+	    dbif.connect()
+	    dbif.cursor.execute(sql, args)
+	    dbif.close()
 
     def get_update_all_statement(self):
         """!Return the sql statement and the argument list in database specific style"""
 	return self.serialize("UPDATE ALL", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def get_update_all_statement_mogrified(self, dbif=None):
-        """!Return the update all statement as mogrified string"""
-        return self._mogrify_sql_statement(self.get_update_all_statement(), dbif)
+        """!Return the update all statement as mogrified string
+
+           @param dbif: The database interface to be used, if None a temporary connection will be established
+        """
+        if not dbif:
+	    dbif = sql_database_interface_connection()
+	    
+        return dbif.mogrify_sql_statement(self.get_update_all_statement())
 
     def update_all(self, dbif=None):
         """!Serialize the content of this object, including None objects, and update it in the temporal
            database using the internal identifier
 
-           @param dbif: The database interface to be used
+           @param dbif: The database interface to be used, if None a temporary connection will be established
         """
 	if self.ident == None:
 	    raise IOError("Missing identifer");
@@ -452,12 +400,13 @@ class sql_database_interface(dict_sql_serializer):
 	#print sql
 	#print args
 
-        if dbif:
-            dbif.cursor.execute(sql, args)
-        else:
-            self.connect()
-            self.cursor.execute(sql, args)
-            self.close()
+	if dbif:
+	    dbif.cursor.execute(sql, args)
+	else:
+	    dbif = sql_database_interface_connection()
+	    dbif.connect()
+	    dbif.cursor.execute(sql, args)
+	    dbif.close()
 
 ###############################################################################
 
@@ -754,52 +703,4 @@ class stvds_base(stds_base):
         stds_base.__init__(self, "stvds_base", ident, name, mapset, semantic_type, creator, creation_time,\
 	            modification_time, temporal_type, revision)
 
-###############################################################################
 
-def init_dbif(dbif):
-    """!This method checks if the database interface exists, if not a new one 
-        will be created and True will be returned
-
-        Usage code sample:
-        dbif, connect = self._init_dbif(dbif)
-        if connect:
-            dbif.close()
-    """
-    if dbif == None:
-        dbif = sql_database_interface()
-        dbif.connect()
-        return dbif, True
-
-    return dbif, False
-
-###############################################################################
-
-def execute_transaction(statement, dbif=None):
-    """!Execute a transactional SQL statement
-
-        The BEGIN and END TRANSACTION statements will be added automatically
-        to the sql statement
-
-        @param statement The executable SQL statement or SQL script
-        @param dbif The database interface, if None a new db interface will be created temporary
-    """
-    dbif, connect = init_dbif(dbif)
-
-    sql_script = ""
-    sql_script += "BEGIN TRANSACTION;\n"
-    sql_script += statement
-    sql_script += "END TRANSACTION;"
-    try:
-        if dbmi.__name__ == "sqlite3":
-            dbif.cursor.executescript(statement)
-        else:
-            dbif.cursor.execute(statement)
-        dbif.connection.commit()
-    except:
-        if connect == True:
-            dbif.close()
-        core.error(_("Unable to execute transaction:\n %s") % (statement))
-        raise
-
-    if connect:
-        dbif.close()

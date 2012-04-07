@@ -777,7 +777,7 @@ class abstract_space_time_dataset(abstract_dataset):
         statement += self.base.get_delete_statement()
 
         if execute == True:
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
 
         self.reset(None)
 
@@ -945,7 +945,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # We need to execute the statement at this time
         if statement != "":
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
 
         statement = ""
 
@@ -968,7 +968,7 @@ class abstract_space_time_dataset(abstract_dataset):
 	    else:
 		sql = "INSERT INTO " + map_register_table + " (id) " + "VALUES (%s);\n"
 
-            statement += dbif._mogrify_sql_statement((sql, (self.base.get_id(),)), dbif)
+            statement += dbif.mogrify_sql_statement((sql, (self.base.get_id(),)))
 
         # Now put the raster name in the stds map register table
 	if dbmi.paramstyle == "qmark":
@@ -976,10 +976,10 @@ class abstract_space_time_dataset(abstract_dataset):
 	else:
 	    sql = "INSERT INTO " + stds_register_table + " (id) " + "VALUES (%s);\n"
 
-        statement += dbif._mogrify_sql_statement((sql, (map_id,)), dbif)
+        statement += dbif.mogrify_sql_statement((sql, (map_id,)))
 
         # Now execute the insert transaction
-        execute_transaction(statement, dbif)
+        dbif.execute_transaction(statement)
 
         if connect == True:
             dbif.close()
@@ -1045,7 +1045,7 @@ class abstract_space_time_dataset(abstract_dataset):
             else:
                 sql = "DELETE FROM " + map_register_table + " WHERE id = %s;\n"
 
-            statement += dbif._mogrify_sql_statement((sql, (self.base.get_id(),)), dbif)
+            statement += dbif.mogrify_sql_statement((sql, (self.base.get_id(),)))
 
         # Remove the raster map from the space time raster dataset register
         if stds_register_table != None:
@@ -1054,10 +1054,10 @@ class abstract_space_time_dataset(abstract_dataset):
             else:
                 sql = "DELETE FROM " + stds_register_table + " WHERE id = %s;\n"
 
-            statement += dbif._mogrify_sql_statement((sql, (map_id,)), dbif)
+            statement += dbif.mogrify_sql_statement((sql, (map_id,)))
 
         if execute == True:
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
             
         if connect == True:
             dbif.close()
@@ -1127,7 +1127,7 @@ class abstract_space_time_dataset(abstract_dataset):
         sql_script += sql
         sql_script += "\n"
 
-	execute_transaction(sql_script, dbif)
+        dbif.execute_transaction(sql_script)
 	    
         # Read and validate the selected end time
         self.select()
@@ -1197,7 +1197,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
                 sql = sql.replace("STDS", self.get_type())
 
-	    execute_transaction(sql, dbif)
+            dbif.execute_transaction(sql)
 
         # Count the temporal map types
         maps = self.get_registered_maps_as_objects(dbif=dbif)

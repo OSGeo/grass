@@ -218,7 +218,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
         if is_in_db:
            #  Gather the SQL update statement
-           statement += map.update_all(dbif=dbif, execute=True)
+           statement += map.update_all(dbif=dbif, execute=False)
         else:
            #  Gather the SQL insert statement
            statement += map.insert(dbif=dbif, execute=False)
@@ -227,8 +227,8 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
         if dbmi.__name__ == "sqlite3":
             if count % 100 == 0:
                 if statement != None and statement != "":
-                    core.message(_("Registering 100 maps in the temporal database"))
-                    execute_transaction(statement, dbif)
+                    core.message(_("Registering maps in the temporal database"))
+		    dbif.execute_transaction(statement)
                     statement = ""
 
         # Store the maps in a list to register in a space time dataset
@@ -239,7 +239,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
     if statement != None and statement != "":
         core.message(_("Register maps in the temporal database"))
-        execute_transaction(statement, dbif)
+        dbif.execute_transaction(statement)
 
     # Finally Register the maps in the space time dataset
     if name:
@@ -534,7 +534,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
 
     sst = dataset_factory(sampletype, sid)
 
-    dbif = sql_database_interface()
+    dbif = sql_database_interface_connection()
     dbif.connect()
 
     for st in sts:
