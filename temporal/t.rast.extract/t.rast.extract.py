@@ -83,14 +83,16 @@ def main():
 
     sp = tgis.space_time_raster_dataset(id)
     
-    if sp.is_in_db() == False:
+    dbif = tgis.sql_database_interface_connection()
+    dbif.connect()
+    
+    if sp.is_in_db(dbif) == False:
+	dbif.close()
         grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
     if expression and not base:
+	dbif.close()
         grass.fatal(_("Please specify base="))
-
-    dbif = tgis.sql_database_interface()
-    dbif.connect()
 
     sp.select(dbif)
 
@@ -103,6 +105,7 @@ def main():
     new_sp = tgis.space_time_raster_dataset(out_id)
     if new_sp.is_in_db():
         if grass.overwrite() == False:
+	    dbif.close()
             grass.fatal(_("Space time raster dataset <%s> is already in database, use overwrite flag to overwrite") % out_id)
             
     rows = sp.get_registered_maps("id", where, "start_time", dbif)
@@ -156,6 +159,7 @@ def main():
 			exitcodes += proc.exitcode
 			
 		    if exitcodes != 0:
+			dbif.close()
 			grass.fatal(_("Error while r.mapcalc computation"))
 			
 		    # Empty proc list

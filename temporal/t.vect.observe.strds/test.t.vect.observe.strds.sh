@@ -17,7 +17,7 @@ t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" 
 t.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"
 
 # The @test
-tv.observe.strds input=prec strds=precip_abs1 output=prec_observer 
+t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer 
 v.info prec_observer
 t.info type=stvds input=prec_observer
 

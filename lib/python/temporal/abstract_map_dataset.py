@@ -49,14 +49,6 @@ class abstract_map_dataset(abstract_dataset):
            @param ident: The name of the register table
         """
         raise IOError("This method must be implemented in the subclasses")
-      
-    def get_timestamp_module_name(self):
-        """!Return the name of the C-module to set the time stamp in the file system"""
-        raise IOError("This method must be implemented in the subclasses")
-   
-    def load(self):
-        """!Load the content of this object from map files"""
-        raise IOError("This method must be implemented in the subclasses")
  
     def check_resolution_with_current_region(self):
         """!Check if the raster or voxel resolution is finer than the current resolution
@@ -66,7 +58,64 @@ class abstract_map_dataset(abstract_dataset):
            Vector maps are alwyas finer than the current region
         """
         raise IOError("This method must be implemented in the subclasses")
+	
+    def has_grass_timestamp(self):
+        """!Check if a grass file bsased time stamp exists for this map. 
+        """
+        raise IOError("This method must be implemented in the subclasses")
+    
+    def write_timestamp_to_grass(self):
+        """!Write the timestamp of this map into the map metadata in the grass file system based spatial
+           database. 
+        """
+        raise IOError("This method must be implemented in the subclasses")
+    
+    def remove_timestamp_from_grass(self):
+        """!Remove the timestamp from the grass file system based spatial database
+        """
+        raise IOError("This method must be implemented in the subclasses")
+	
+    def map_exists(self):
+        """!Return True in case the map exists in the grass spatial database
+        
+           @return True if map exists, False otherwise
+        """        
+        raise IOError("This method must be implemented in the subclasses")
+	        
+    def read_info(self):
+        """!Read the map info from the grass file system based database and store the content 
+           into a dictionary
+        """
+        raise IOError("This method must be implemented in the subclasses")
 
+    def load(self):
+        """!Load the content of this object from the grass file system based database"""
+        raise IOError("This method must be implemented in the subclasses")
+	
+    def _convert_timestamp(self):
+	"""!Convert the valid time into a grass datetime library compatible timestamp string
+	    
+	    This methods works for reltaive and absolute time
+	    
+	    @return the grass timestamp string
+	"""
+	start = ""
+        
+        if self.is_time_absolute():
+	    start_time, end_time, tz = self.get_absolute_time()
+	    start = datetime_to_grass_datetime_string(start_time)
+	    if end_time:
+		end = datetime_to_grass_datetime_string(end_time)
+		start += " / %s"%(end)
+	else:
+	    start_time, end_time, unit = self.get_relative_time()
+	    start = "%i %s"%(int(start_time), unit)
+	    if end_time != None:
+		end = "%i %s"%(int(end_time), unit)
+		start += " / %s"%(end)
+
+	return start
+		        
     def get_map_id(self):
 	"""!Return the map id. The map id is the unique map identifier in grass and must not be equal to the 
 	   primary key identifier (id) of the map in the database. Since vector maps may have layer information,
@@ -134,13 +183,14 @@ class abstract_map_dataset(abstract_dataset):
         string = ""
         if datasets:
             for ds in datasets:
+                if count > 0 and count % 3 == 0:
+                    string += "\n | ............................ "
+                    count = 0
                 if count == 0:
                     string += ds["id"]
                 else:
                     string += ",%s" % ds["id"]
                 count += 1
-                if count > 2:
-                    string += " | ............................ "
         print " | Registered datasets ........ " + string
         print " +----------------------------------------------------------------------------+"
 
@@ -164,6 +214,44 @@ class abstract_map_dataset(abstract_dataset):
             count += 1
         print "registered_datasets=" + string
 
+    def insert(self, dbif=None, execute=True):
+        """!Insert temporal dataset entry into database from the internal structure
+
+	   This functions assures that the timetsamp is written to the grass file system based database
+	    
+           @param dbif: The database interface to be used
+           @param execute: If True the SQL statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
+        """
+        self.write_timestamp_to_grass()
+        return abstract_dataset.insert(self, dbif, execute)
+
+    def update(self, dbif=None, execute=True):
+	"""!Update temporal dataset entry of database from the internal structure
+	   excluding None variables
+	   
+	   This functions assures that the timetsamp is written to the grass file system based database
+
+           @param dbif: The database interface to be used
+           @param execute: If True the SQL statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
+	"""
+        self.write_timestamp_to_grass()
+        return abstract_dataset.update(self, dbif, execute)
+
+    def update_all(self, dbif=None, execute=True):
+	"""!Update temporal dataset entry of database from the internal structure
+	   and include None varuables.
+	   
+	   This functions assures that the timetsamp is written to the grass file system based database
+
+           @param dbif: The database interface to be used
+           @param execute: If True the SQL statements will be executed.
+                           If False the prepared SQL statements are returned and must be executed by the caller.
+	"""
+        self.write_timestamp_to_grass()
+        return abstract_dataset.update_all(self, dbif, execute)
+        
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
         """!Set the absolute time interval with start time and end time
         
@@ -204,8 +292,7 @@ class abstract_map_dataset(abstract_dataset):
     def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif = None):
         """!Update the absolute time
 
-           This method should always be used to set the absolute time. Do not use insert() or update()
-           to the the time. This update functions assures that the *.timestamp commands are invoked.
+	   This functions assures that the timetsamp is written to the grass file system based database
 
            @param start_time: a datetime object specifying the start time of the map
            @param end_time: a datetime object specifying the end time of the map
@@ -220,19 +307,8 @@ class abstract_map_dataset(abstract_dataset):
         if connect == True:
             dbif.close()
 
-        self.write_absolute_time_to_file()
-
-    def write_absolute_time_to_file(self):
-        """!Start the grass timestamp module to set the time in the file system"""
-
-        start_time, end_time, unit = self.get_absolute_time()
-        start = datetime_to_grass_datetime_string(start_time)
-        if end_time:
-            end = datetime_to_grass_datetime_string(end_time)
-            start += " / %s"%(end)
-
-        core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date=start)
-
+        self.write_timestamp_to_grass()
+        
     def set_relative_time(self, start_time, end_time, unit):
         """!Set the relative time interval 
         
@@ -278,9 +354,8 @@ class abstract_map_dataset(abstract_dataset):
     def update_relative_time(self, start_time, end_time, unit, dbif = None):
         """!Update the relative time interval
 
-           This method should always be used to set the absolute time. Do not use insert() or update()
-           to the the time. This update functions assures that the *.timestamp commands are invoked.
-
+	   This functions assures that the timetsamp is written to the grass file system based database
+	    
            @param start_time: A double value 
            @param end_time: A double value 
            @param dbif: The database interface to be used
@@ -290,22 +365,11 @@ class abstract_map_dataset(abstract_dataset):
         if self.set_relative_time(start_time, end_time, unit):
             self.relative_time.update_all(dbif)
             self.base.update(dbif)
-            dbif.connection.commit()
 
         if connect == True:
             dbif.close()
 
-        self.write_relative_time_to_file()
-
-    def write_relative_time_to_file(self):
-        """!Start the grass timestamp module to set the time in the file system"""
-
-        start_time, end_time, unit = self.get_relative_time()
-        start = "%i %s"%(int(start_time), unit)
-        if end_time != None:
-            end = "%i %s"%(int(end_time), unit)
-            start += " / %s"%(end)
-        core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date=start)
+        self.write_timestamp_to_grass()
 
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
         """!Set the spatial extent of the map
@@ -377,17 +441,11 @@ class abstract_map_dataset(abstract_dataset):
             statement += self.base.get_delete_statement()
 
         if execute == True:
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
 
         # Remove the timestamp from the file system
-        if self.get_type() == "vect":
-	    if self.get_layer():
-		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), layer=self.get_layer(), date="none")
-	    else:
-		core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
-	else:
-	    core.run_command(self.get_timestamp_module_name(), map=self.get_map_id(), date="none")
-
+        self.remove_timestamp_from_grass()
+        
         self.reset(None)
 
         if connect == True:
@@ -442,7 +500,7 @@ class abstract_map_dataset(abstract_dataset):
             core.percent(1, 1, 1)
             
         if execute == True:
-            execute_transaction(statement, dbif)
+            dbif.execute_transaction(statement)
 
         if connect == True:
             dbif.close()

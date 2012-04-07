@@ -88,7 +88,7 @@ def main():
     tgis.create_temporal_database()
     
     # We need a database interface for fast computation
-    dbif = tgis.sql_database_interface()
+    dbif = tgis.sql_database_interface_connection()
     dbif.connect()
 
     mapset =  grass.gisenv()["MAPSET"]

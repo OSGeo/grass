@@ -89,7 +89,7 @@ def main():
     else:
         id = name + "@" + mapset
         
-    dbif = tgis.sql_database_interface()
+    dbif = tgis.sql_database_interface_connection()
     dbif.connect()
 
     sp = tgis.dataset_factory(type, id)

@@ -63,7 +63,7 @@ def main():
 
     mapset =  grass.gisenv()["MAPSET"]
 
-    dbif = tgis.sql_database_interface()
+    dbif = tgis.sql_database_interface_connection()
     dbif.connect()
 
     # In case a space time dataset is specified
@@ -152,7 +152,7 @@ def main():
 	count += 1
 
     # Execute the collected SQL statenents
-    tgis.execute_transaction(statement, dbif)
+    dbif.execute_transaction(statement)
 	
     grass.percent(num_maps, num_maps, 1)
 
