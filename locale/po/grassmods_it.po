@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 11:12+0100\n"
-"PO-Revision-Date: 2012-03-18 23:57+0100\n"
+"PO-Revision-Date: 2012-04-05 21:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -12036,7 +12036,7 @@ msgstr "Errore in pj_do_proj (non è possibile riproiettare GCP %i)"
 
 #: ../raster/r.in.gdal/main.c:666
 msgid "Unable to translate projection key values of input GCPs"
-msgstr ""
+msgstr "Non è possibile tradurre i valori chiave di proiezione dei GCP di input"
 
 # target: ?
 #: ../raster/r.in.gdal/main.c:682
@@ -12708,7 +12708,7 @@ msgstr "Forza l'esportazione del raster malgrado gli avvisi di perdita di dati"
 
 #: ../raster/r.out.gdal/main.c:147
 msgid "Overrides nodata safety check."
-msgstr ""
+msgstr "Ignora i controlli sui dati mancanti."
 
 #: ../raster/r.out.gdal/main.c:150
 msgid "Name of raster map (or group) to export"
@@ -22569,7 +22569,7 @@ msgstr ""
 
 #: ../vector/v.net.distance/main.c:88
 msgid "From category values"
-msgstr "Valori di categoria from"
+msgstr "Valori di categoria 'from'"
 
 #: ../vector/v.net.distance/main.c:89 ../vector/v.net.distance/main.c:95
 #: ../vector/v.distance/main.c:92 ../vector/v.distance/main.c:97
@@ -22583,7 +22583,7 @@ msgstr "Condizioni WHERE (from) di un'istruzione SQL senza la parola chiave 'whe
 
 #: ../vector/v.net.distance/main.c:99
 msgid "To category values"
-msgstr "Valori di categoria to"
+msgstr "Valori di categoria 'to'"
 
 #: ../vector/v.net.distance/main.c:100 ../vector/v.net.distance/main.c:106
 #: ../vector/v.net.distance/main.c:113 ../vector/v.distance/main.c:109
@@ -22598,7 +22598,7 @@ msgstr "Condizioni WHERE (to) di un'istruzione SQL senza la parola chiave 'where
 
 #: ../vector/v.net.distance/main.c:112
 msgid "To feature type"
-msgstr "Tipo di elemento to"
+msgstr "Tipo di elemento 'to'"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:71
 #: ../vector/v.lrs/v.lrs.where/main.c:58
@@ -23030,7 +23030,7 @@ msgstr "Nessun record nella tabella LR"
 
 #: ../vector/v.lrs/v.lrs.label/main.c:433
 msgid "More than one record in LR table"
-msgstr ""
+msgstr "Più di un record nella tabella LR"
 
 #: ../vector/v.out.ascii/args.c:28
 #, fuzzy
@@ -23044,7 +23044,7 @@ msgstr "File raster ascii da importare"
 
 #: ../vector/v.out.ascii/args.c:35
 msgid "Name of attribute column(s) to be exported (point mode)"
-msgstr ""
+msgstr "Nome della colonna/e degli attributi da esportare (modalità punti)"
 
 #: ../vector/v.out.ascii/args.c:52
 msgid "point;Simple point format (point per row);standard;GRASS ASCII vector format;wkt;OGC well-known text;"
@@ -23052,7 +23052,7 @@ msgstr ""
 
 #: ../vector/v.out.ascii/args.c:57
 msgid "Field separator (points mode)"
-msgstr "Separatore di campo (points mode)"
+msgstr "Separatore di campo (modalità punti)"
 
 #: ../vector/v.out.ascii/args.c:72
 msgid "Create old (version 4) ASCII file"
@@ -23065,11 +23065,12 @@ msgstr "Non include i nomi delle colonne nell'output"
 
 #: ../vector/v.out.ascii/args.c:82
 msgid "Only export points falling within current 3D region (points mode)"
-msgstr ""
+msgstr "Esporta solo i punti che ricadono all'interno della regione 3D corrente (modalità punti)"
 
+# FINIRE
 #: ../vector/v.out.ascii/args.c:97 ../vector/v.out.vtk/main.c:177
 msgid "Failed to interpret 'dp' parameter as an integer"
-msgstr ""
+msgstr "Insucesso nell'interpretare il parametro 'dp' come numero intero"
 
 #: ../vector/v.out.ascii/main.c:47
 msgid "ascii"
@@ -23087,11 +23088,11 @@ msgstr "raster <%s> non trovato"
 
 #: ../vector/v.out.ascii/main.c:65
 msgid "Format 'point' is not supported for old version"
-msgstr ""
+msgstr "Il formato 'point' non è supportato per la vecchia versione"
 
 #: ../vector/v.out.ascii/main.c:69
 msgid "'output' must be given for old version"
-msgstr ""
+msgstr "Per la vecchia versione dev'essere definito 'output'"
 
 #: ../vector/v.out.ascii/main.c:76
 #, fuzzy, c-format
@@ -23100,12 +23101,12 @@ msgstr "Impossibile aprire la mappa vettoriale <%s> al livello topologico %d"
 
 #: ../vector/v.out.ascii/main.c:116
 msgid "dig_att file already exist"
-msgstr ""
+msgstr "Il file dig_att esiste già"
 
 #: ../vector/v.out.ascii/main.c:119
 #, c-format
 msgid "Unable to open dig_att file <%s>"
-msgstr ""
+msgstr "Non è possibile aprire il file dig_att <%s>"
 
 #: ../vector/v.out.ascii/main.c:124
 #, fuzzy
@@ -23168,7 +23169,7 @@ msgstr ""
 
 #: ../vector/v.support/main.c:61
 msgid "Date of vector map digitization (e.g., \"15 Mar 2007\")"
-msgstr ""
+msgstr "Data della digitalizzazione della mapa vettoriale (p.es.  \"15 Mar 2007\")"
 
 #: ../vector/v.support/main.c:68
 msgid "Person who created vector map"
@@ -24255,9 +24256,8 @@ msgid "Missing column <%s> in table <%s>"
 msgstr "Manca la colonna <%s> nella tabella <%s>"
 
 #: ../vector/v.db.connect/main.c:293 ../vector/v.in.db/main.c:144
-#, fuzzy
 msgid "Data type of key column must be integer"
-msgstr "Il tipo di dati della colonna chiave dev'essere integer"
+msgstr "Il tipo di dati della colonna chiave dev'essere intero"
 
 #: ../vector/v.db.connect/main.c:300 ../vector/v.db.connect/main.c:318
 #, c-format
@@ -24289,7 +24289,7 @@ msgstr "Il file raster da importare"
 
 #: ../vector/v.in.ascii/main.c:66
 msgid "point;simple x,y[,z] list;standard;GRASS vector ASCII format"
-msgstr ""
+msgstr "point;semplice lista x,y[,z];standard;formato vettoriale GRASS ASCII"
 
 #: ../vector/v.in.ascii/main.c:69
 msgid "Input file format"
@@ -24302,70 +24302,67 @@ msgstr "Formato di input"
 
 #: ../vector/v.in.ascii/main.c:82
 msgid "Number of header lines to skip at top of input file (points mode)"
-msgstr ""
+msgstr "Numero di righe di intestazione da tralasciare all'inizio del file di input (modalità punti)"
 
 #: ../vector/v.in.ascii/main.c:91
 msgid "Column definition in SQL style (points mode)"
-msgstr ""
+msgstr "Definizione di colonna in stile SQL (modalità punti)"
 
 #: ../vector/v.in.ascii/main.c:92
 msgid "For example: 'x double precision, y double precision, cat int, name varchar(10)'"
-msgstr ""
+msgstr "Per esempio:  'x double precision, y double precision, cat int, name varchar(10)'"
 
 #: ../vector/v.in.ascii/main.c:104 ../vector/v.in.ascii/main.c:114
 msgid "First column is 1"
-msgstr ""
+msgstr "La prima colonna è 1"
 
 #: ../vector/v.in.ascii/main.c:113
-#, fuzzy
 msgid "Number of column used as y coordinate (points mode)"
-msgstr "Numero di colonna utilizzata come coordinata y (points mode)"
+msgstr "Numero della colonna utilizzata come coordinata y (modalità punti)"
 
 #: ../vector/v.in.ascii/main.c:123
-#, fuzzy
 msgid "Number of column used as z coordinate (points mode)"
-msgstr "Numero di colonna utilizzata come coordinata z (points mode)"
+msgstr "Numero della colonna utilizzata come coordinata z (modalità punti)"
 
 #: ../vector/v.in.ascii/main.c:124
 msgid "First column is 1. If 0, z coordinate is not used"
-msgstr ""
+msgstr "La prima colonna è 1. Se viene indicato 0 la coordinata z non viene utilizzata"
 
 #: ../vector/v.in.ascii/main.c:134
-#, fuzzy
 msgid "Number of column used as category (points mode)"
-msgstr "Nome della colonna usata come categoria (points mode)"
+msgstr "Nome della colonna utilizzata come categoria (modalità punti)"
 
 #: ../vector/v.in.ascii/main.c:136
 msgid "First column is 1. If 0, unique category is assigned to each row and written to new column 'cat'"
-msgstr ""
+msgstr "La prima colonna è 1. Se viene indicato 0, ad ogni riga viene assegnata una categoria univoca che viene scritta in una nuova colonna 'cat'"
 
 #: ../vector/v.in.ascii/main.c:145
 msgid "Create a new empty vector map and exit. Nothing is read from input."
-msgstr ""
+msgstr "Crea una nuova mappa vettoriale vuota ed esci. Non viene letto nulla dall'input."
 
 #: ../vector/v.in.ascii/main.c:150
 msgid "Don't expect a header when reading in standard format"
-msgstr ""
+msgstr "Non richiedere un'intestazione per il formato standard"
 
 #: ../vector/v.in.ascii/main.c:155
 msgid "Do not create table in points mode"
-msgstr ""
+msgstr "Non creare la tabella per i punti"
 
 #: ../vector/v.in.ascii/main.c:166
 msgid "Only import points falling within current region (points mode)"
-msgstr ""
+msgstr "Importa solo i punti che ricadono all'interno della regione corrente (modalità punti)"
 
 #: ../vector/v.in.ascii/main.c:180
 msgid "Please specify reasonable number of lines to skip"
-msgstr ""
+msgstr "Specificare un numero plausibile di linee da tralasciare"
 
 #: ../vector/v.in.ascii/main.c:183
 msgid "Please specify z column"
-msgstr "Per piacere specificare la colonna delle z"
+msgstr "Specificare la colonna delle z"
 
 #: ../vector/v.in.ascii/main.c:194
 msgid "Please specify reasonable z column"
-msgstr ""
+msgstr "Specificare una colonna delle z attendibile"
 
 #: ../vector/v.in.ascii/main.c:199
 msgid "Column numbers must not be negative"
@@ -24379,7 +24376,7 @@ msgstr "impossibile aprire il file ASCII <%s>"
 #: ../vector/v.in.ascii/main.c:255
 #, c-format
 msgid "Maximum input row length: %d"
-msgstr ""
+msgstr "Lunghezza massima della riga in input: %d"
 
 #: ../vector/v.in.ascii/main.c:256
 #, c-format
@@ -24396,111 +24393,119 @@ msgid ""
 "x column number > minimum last column number\n"
 "(incorrect field separator?)"
 msgstr ""
+"numero della colonna x > numero minimo dell'ultima colonna\n"
+"(separatore di campo non corretto?)"
 
 #: ../vector/v.in.ascii/main.c:266
 msgid ""
 "y column number > minimum last column number\n"
 "(incorrect field separator?)"
 msgstr ""
+"numero della colonna y > numero minimo dell'ultima colonna\n"
+"(separatore di campo non corretto?)"
 
 #: ../vector/v.in.ascii/main.c:270
 msgid "z column number > minimum last column number (incorrect field separator?)"
 msgstr ""
+"numero della colonna z > numero minimo dell'ultima colonna\n"
+"(separatore di campo non corretto?)"
 
 #: ../vector/v.in.ascii/main.c:275
 msgid "cat column number > minimum last column number (incorrect field separator?)"
 msgstr ""
+"numero della colonna cat > numero minimo dell'ultima colonna\n"
+"(separatore di campo non corretto?)"
 
 #: ../vector/v.in.ascii/main.c:281
 msgid "x column is not of number type"
-msgstr ""
+msgstr "la colonna x non è di tipo numerico"
 
 #: ../vector/v.in.ascii/main.c:285
 msgid "y column is not of number type"
-msgstr ""
+msgstr "la colonna y non è di tipo numerico"
 
 #: ../vector/v.in.ascii/main.c:289
 msgid "z column is not of number type"
-msgstr ""
+msgstr "la colonna z non è di tipo numerico"
 
 #: ../vector/v.in.ascii/main.c:293
 msgid "cat column is not of number type"
-msgstr ""
+msgstr "la colonna cat non è di tipo numerico"
 
 #: ../vector/v.in.ascii/main.c:335
 msgid "Category column is not of integer type"
-msgstr ""
+msgstr "La colonna delle categorie non è di tipo integer"
 
 #: ../vector/v.in.ascii/main.c:416
 #, c-format
 msgid "Number of columns defined (%d) does not match number of columns (%d) in input"
-msgstr ""
+msgstr "Il numero delle colonne definite (%d) non corrisponde al numero di colonne (%d) nell'input"
 
 #: ../vector/v.in.ascii/main.c:444
 #, c-format
 msgid "Column number %d <%s> defined as double has only integer values"
-msgstr ""
+msgstr "Il numero di colonna %d <%s> definito come precisione doppia ha solo valori interi"
 
 #: ../vector/v.in.ascii/main.c:449
 #, c-format
 msgid "Column number %d <%s> defined as string has only integer values"
-msgstr ""
+msgstr "Il numero di colonna %d <%s> definito come stringa ha solo valori interi"
 
 #: ../vector/v.in.ascii/main.c:457
 #, c-format
 msgid "Column number %d <%s> defined as integer has double values"
-msgstr ""
+msgstr "Il numero di colonna %d <%s> definito come intero ha solo valori a precisione doppia"
 
 #: ../vector/v.in.ascii/main.c:462
 #, c-format
 msgid "Column number %d <%s> defined as string has double values"
-msgstr ""
+msgstr "Il numero di colonna %d <%s> definito come stringa ha solo valori a precisione doppia"
 
 #: ../vector/v.in.ascii/main.c:470
 #, c-format
 msgid "Column number %d <%s> defined as integer has string values"
-msgstr ""
+msgstr "Il numero di colonna %d <%s> definito come intero ha solo valori di stringa"
 
 #: ../vector/v.in.ascii/main.c:476
 #, c-format
 msgid "Column number %d <%s> defined as double has string values"
-msgstr ""
+msgstr "Il numero di colonna %d <%s> definito come precisione doppia ha solo valori di stringa"
 
 #: ../vector/v.in.ascii/main.c:482
 #, c-format
 msgid "Length of column %d <%s> (%d) is less than maximum value length (%d)"
-msgstr ""
+msgstr "La dimensione della colonna %d <%s> (%d) è inferiore alla dimensione massima del valore (%d)"
 
 #: ../vector/v.in.ascii/main.c:522
 msgid "Populating table..."
-msgstr ""
+msgstr "Riempimento della tabella in corso..."
 
 #: ../vector/v.in.ascii/main.c:528
 msgid "Could not close attribute table. The DBMI driver did not accept all attributes"
-msgstr ""
+msgstr "Non è possibile chiudere la tabella degli attributi. Il DBMI non accetta tutti gli attributi"
 
 #: ../vector/v.in.ascii/points.c:83
 msgid "Scanning input for column types..."
-msgstr ""
+msgstr "Controllo dell'input per i tipi di colonna in corso..."
 
 #: ../vector/v.in.ascii/points.c:165
 #, c-format
 msgid "Unparsable longitude value in column <%d>: %s"
-msgstr ""
+msgstr "Valore di longitudine non analizzabile:nella colonna <%d>: %s"
 
 #: ../vector/v.in.ascii/points.c:184
 #, c-format
 msgid "Unparsable latitude value in column <%d>: %s"
-msgstr ""
+msgstr "Valore di latitudine non analizzabile:nella colonna <%d>: %s"
 
 #: ../vector/v.in.ascii/points.c:265
 #, c-format
 msgid "Skipping %d of %d rows falling outside of current region"
-msgstr ""
+msgstr "Si tralasciano %d di %d righe ricadenti al di fuori della regione corrente"
 
 #: ../vector/v.in.ascii/points.c:293
 msgid "Importing points..."
-msgstr "Importando punti ..."
+msgstr "Importazione dei punti in corso ..."
 
 #: ../vector/v.in.ascii/points.c:405 ../vector/v.mkgrid/main.c:297
 #: ../vector/v.in.sites/main.c:242 ../vector/v.in.dxf/write_vect.c:70
@@ -24847,11 +24852,11 @@ msgstr "Ricerca delle aree più vicine in corso ..."
 #: ../vector/v.distance/main.c:837
 #, c-format
 msgid "More cats found in to_layer (area=%d)"
-msgstr ""
+msgstr "Trovate più categorie in to_layer (area=%d)"
 
 #: ../vector/v.distance/main.c:992
 msgid "DATETIME type not yet supported, no attributes will be uploaded"
-msgstr ""
+msgstr "Il tipo DATETIME  non è ancora supportato, non verrà aggiornato nessun attributo"
 
 #: ../vector/v.distance/main.c:1248
 #, c-format
@@ -24917,7 +24922,7 @@ msgstr "Connessione al database non definita per il layer %d. Usare prima v.db.c
 
 #: ../vector/v.to.db/query.c:93
 msgid "Querying database... "
-msgstr "Interrogaizone del database in corso..."
+msgstr "Interrogazione del database in corso..."
 
 #: ../vector/v.to.db/query.c:108
 #, c-format
@@ -24939,7 +24944,7 @@ msgstr "Popola i valori del database da elementi vettoriali"
 
 #: ../vector/v.to.db/update.c:82
 msgid "Updating database..."
-msgstr "Sto aggiornando il database"
+msgstr "Aggiornamento del database in corso..."
 
 #: ../vector/v.to.db/update.c:115
 #, c-format
@@ -24991,7 +24996,7 @@ msgstr "Nome colonna degli attributi da usare per l'opzione 'query'"
 
 #: ../vector/v.to.db/parse.c:87
 msgid "E.g. 'cat', 'count(*)', 'sum(val)'"
-msgstr ""
+msgstr "P.es. 'cat', 'count(*)', 'sum(val)'"
 
 #: ../vector/v.to.db/parse.c:93
 msgid "Print only"
@@ -25203,7 +25208,7 @@ msgstr "nessun punto da triangolare"
 
 #: ../vector/v.delaunay/main.c:149
 msgid "Delaunay triangulation..."
-msgstr ""
+msgstr "Triangolazione di Delaunay in corso..."
 
 #: ../vector/v.delaunay/main.c:161
 #, fuzzy
@@ -26418,19 +26423,19 @@ msgstr ""
 
 #: ../vector/v.out.ogr/args.c:28
 msgid "OGR output datasource name"
-msgstr ""
+msgstr "Nome dell'origine dati OGR di output"
 
 #: ../vector/v.out.ogr/args.c:30
 msgid "For example: ESRI Shapefile: filename or directory for storage"
-msgstr ""
+msgstr "Per esempio: nome del file ESRI Shapefile o directory dove memorizzare i file"
 
 #: ../vector/v.out.ogr/args.c:37
 msgid "OGR layer name. If not specified, input name is used."
-msgstr ""
+msgstr "Nome del tematismo OGR. Se non specificato verrà usato il nome di input."
 
 #: ../vector/v.out.ogr/args.c:39
 msgid "For example: ESRI Shapefile: shapefile name"
-msgstr ""
+msgstr "Per esempio: ESRI Shapefile: nome dello shapefile"
 
 #: ../vector/v.out.ogr/args.c:49
 #, fuzzy
@@ -26439,15 +26444,15 @@ msgstr "Titolo della mappa vettoriale"
 
 #: ../vector/v.out.ogr/args.c:58
 msgid "OGR dataset creation option (format specific, NAME=VALUE)"
-msgstr ""
+msgstr "Opzione di creazione del dataset OGR (specifica per il formato, NOME=VALORE)"
 
 #: ../vector/v.out.ogr/args.c:68
 msgid "OGR layer creation option (format specific, NAME=VALUE)"
-msgstr ""
+msgstr "Opzione di creazione del tematismo OGR (specifica per il formato, NOME=VALORE)"
 
 #: ../vector/v.out.ogr/args.c:73
 msgid "Open an existing datasource for update"
-msgstr ""
+msgstr "Apre un'origine dati esistente per l'aggiornamento"
 
 #: ../vector/v.out.ogr/args.c:77
 msgid "Append to existing layer instead of creating new if it exists"
@@ -26455,7 +26460,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/args.c:82
 msgid "Skip export of GRASS category ID ('cat') attribute"
-msgstr ""
+msgstr "Evita l'esportazione dell'attributo ID della categoria ('cat')"
 
 #: ../vector/v.out.ogr/args.c:88
 msgid "Also export features without category (not labeled). Otherwise only features with category are exported."
@@ -26463,16 +26468,15 @@ msgstr ""
 
 #: ../vector/v.out.ogr/args.c:94
 msgid "Use ESRI-style .prj file format (applies to Shapefile output only)"
-msgstr "Usa il file .prj in formato ESRI-style  (applicato solo all'output Shapefile)"
+msgstr "Usa il formato del file .prj nello stile ESRI  (applicato solo all'output Shapefile)"
 
 #: ../vector/v.out.ogr/args.c:100
-#, fuzzy
 msgid "Create 3D output if input is 3D (applies to Shapefile output only)"
-msgstr "Usa il file .prj in formato ESRI-style  (applicato solo all'output Shapefile)"
+msgstr "Crea un output 3D se l'input è 3D  (applicato solo all'output Shapefile)"
 
 #: ../vector/v.out.ogr/args.c:106
 msgid "Export lines as polygons"
-msgstr ""
+msgstr "Esporta le linee come poligoni"
 
 #: ../vector/v.out.ogr/args.c:112
 msgid "Create a new empty OGR layer in defined OGR datasource and exit. Nothing is read from input."
@@ -26514,7 +26518,7 @@ msgstr "Nome del raster map esistente"
 
 #: ../vector/v.out.ogr/main.c:221
 msgid "The combination of types is not supported by all formats."
-msgstr ""
+msgstr "La combinazione di tipi non è supportata da tutti i formati."
 
 #: ../vector/v.out.ogr/main.c:250
 #, c-format
@@ -26528,22 +26532,22 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:271
 #, c-format
 msgid "%d point(s) found, but not requested to be exported. Verify 'type' parameter."
-msgstr ""
+msgstr "Trovati %d punti, ma non ne è stata chiesta l'esportazione. Verificare il parametro 'type'."
 
 #: ../vector/v.out.ogr/main.c:276
 #, c-format
 msgid "%d line(s) found, but not requested to be exported. Verify 'type' parameter."
-msgstr ""
+msgstr "Trovate %d linee, ma non ne è stata chiesta l'esportazione. Verificare il parametro 'type'."
 
 #: ../vector/v.out.ogr/main.c:282
 #, c-format
 msgid "%d boundary(ies) found, but not requested to be exported. Verify 'type' parameter."
-msgstr ""
+msgstr "Trovati %d confini, ma non ne è stata chiesta l'esportazione. Verificare il parametro 'type'."
 
 #: ../vector/v.out.ogr/main.c:288
 #, c-format
 msgid "%d centroid(s) found, but not requested to be exported. Verify 'type' parameter."
-msgstr ""
+msgstr "Trovati %d centroidi, ma non ne è stata chiesta l'esportazione. Verificare il parametro 'type'."
 
 #: ../vector/v.out.ogr/main.c:293
 #, c-format
@@ -26553,12 +26557,12 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:297
 #, c-format
 msgid "%d face(s) found, but not requested to be exported. Verify 'type' parameter."
-msgstr ""
+msgstr "Trovati %d facce, ma non ne è stata richiesta l'esportazione. Verificare il parametro 'type'."
 
 #: ../vector/v.out.ogr/main.c:302
 #, c-format
 msgid "%d volume(s) found, but not requested to be exported. Verify 'type' parameter."
-msgstr ""
+msgstr "Trovati %d volumi, ma non ne è stata richiesta l'esportazione. Verificare il parametro 'type'."
 
 #: ../vector/v.out.ogr/main.c:308
 msgid "No points found, but requested to be exported. Will skip this feature type."
@@ -26609,23 +26613,24 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:426
 #, c-format
 msgid "Unable to open OGR data source '%s'"
-msgstr ""
+msgstr "Non è possibile aprire l'origine dati OGR '%s'"
 
 #: ../vector/v.out.ogr/main.c:440
-#, fuzzy, c-format
+#, c-format
 msgid "Layer <%s> already exists in OGR data source '%s'"
-msgstr "<%s> esiste già nel mapset <%s>"
+msgstr "Il tematismo <%s> esiste già nell'origine dati OGR '%s'"
 
 #: ../vector/v.out.ogr/main.c:444
-#, fuzzy, c-format
+#, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
-msgstr "Mappa raster <%s> già esistente. Sarà sovrascritta"
+msgstr "Il tematismo OGR <%s> è già esistente e verrà sovrascritto"
 
 #: ../vector/v.out.ogr/main.c:451
 #, fuzzy, c-format
 msgid "OGR layer <%s> doesn't exists, creating new OGR layer instead"
 msgstr "Mappa in uscita già esistente. Sarà sovrascritta!\n"
 
+# FINIRE
 #: ../vector/v.out.ogr/main.c:478
 msgid "Overriding existing user-defined 'SHPT=' LCO."
 msgstr ""
@@ -26652,12 +26657,13 @@ msgstr "raster <%s> non trovato"
 
 #: ../vector/v.out.ogr/main.c:531
 msgid "Unable to create OGR layer"
-msgstr "Non è possibile creare il layer OGR"
+msgstr "Non è possibile creare il tematismo OGR"
 
 #: ../vector/v.out.ogr/main.c:543
 msgid "No attribute table found -> using only category numbers as attributes"
-msgstr ""
+msgstr "Nessuna tabella degli attributi trovata -> verranno usati come attributi solo i numeri di categoria"
 
+# FINIRE
 #: ../vector/v.out.ogr/main.c:547
 msgid "Exporting 'cat' anyway, as it is the only attribute table field"
 msgstr ""
@@ -26680,7 +26686,7 @@ msgstr "Sto disegnando ..."
 #: ../vector/v.out.ogr/main.c:732
 #, c-format
 msgid "Exporting %i areas (may take some time)..."
-msgstr ""
+msgstr "Esportazione di %i aree in corso (può richiedere del tempo)..."
 
 #: ../vector/v.out.ogr/main.c:807
 #, fuzzy, c-format
@@ -26690,7 +26696,7 @@ msgstr "Esportando %i punti/linee..."
 #: ../vector/v.out.ogr/main.c:869
 #, c-format
 msgid "Exporting %i kernels..."
-msgstr ""
+msgstr "Esportazione di %i kernel in corso..."
 
 #: ../vector/v.out.ogr/main.c:928
 #, c-format
@@ -26699,7 +26705,7 @@ msgstr "Esportazione di %i volumi in corso..."
 
 #: ../vector/v.out.ogr/main.c:929
 msgid "Export of volumes not implemented yet. Skipping."
-msgstr ""
+msgstr "L'esportazione di volumi non è ancora implementata. Verrà tralasciata."
 
 #: ../vector/v.out.ogr/main.c:946
 #, c-format
@@ -26724,12 +26730,12 @@ msgstr "%d elementi scritti in '<%s> (%s)."
 #: ../vector/v.out.ogr/attrb.c:41
 #, c-format
 msgid "Cannot select attributes for cat = %d"
-msgstr ""
+msgstr "Impossibile selezionare gli attributi per cat = %d"
 
 #: ../vector/v.out.ogr/attrb.c:58
 #, c-format
 msgid "No database record for cat = %d and export of 'cat' disabled"
-msgstr ""
+msgstr "Nessun record di database per cat = %d ed esportazione di 'cat' disabilitata"
 
 #: ../vector/v.patch/main.c:70
 #, fuzzy
@@ -26797,12 +26803,12 @@ msgstr "Sto disegnando ..."
 #: ../vector/v.patch/main.c:329
 #, c-format
 msgid "Error reading vector map <%s> - some data may not be correct"
-msgstr ""
+msgstr "Errore nella lettura della mappa vettoriale <%s> - alcuni dati possono non essere corretti"
 
 #: ../vector/v.patch/main.c:372
 #, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr "MSto creando la topologia per la mappa vettoriale <%s>..."
+msgstr "Creazione della topologia per la mappa vettoriale <%s> in corso..."
 
 #: ../vector/v.patch/main.c:378
 msgid "Intersections at borders will have to be snapped"
@@ -26978,9 +26984,10 @@ msgstr ""
 msgid "Unable to read area id %d from vector map <%s>"
 msgstr ""
 
+# FINIRE
 #: ../vector/v.convert/att.c:37
 msgid "No category labels (dig_cats) found, no table created"
-msgstr ""
+msgstr "Nessuna etichetta di categoria trovata (dig_cats), non è stata creata nessuna tabella"
 
 #: ../vector/v.convert/att.c:42
 msgid "Unable to open dig_cats file"
@@ -36182,10 +36189,10 @@ msgstr "Nessun monitor selezionato"
 #~ msgstr "Nome della colonna dei costi per gli archi"
 
 #~ msgid "From layer number or name"
-#~ msgstr "Numero o nome del layer from"
+#~ msgstr "Numero o nome del layer 'from'"
 
 #~ msgid "To layer number or name"
-#~ msgstr "Numero o nome del layer (from)"
+#~ msgstr "Numero o nome del layer 'to'"
 
 #, fuzzy
 #~ msgid "Name of node capacity column"
@@ -37879,7 +37886,7 @@ msgstr "Nessun monitor selezionato"
 #~ msgstr "Impossibile leggere MASK"
 
 #~ msgid "Converts GRASS vector map to one of the supported OGR vector formats."
-#~ msgstr "Converte in uno dei formati vettoriali supportati da OGR"
+#~ msgstr "Converte una mappa vettoriale GRASS in uno dei formati vettoriali supportati da OGR"
 
 #~ msgid "OGR format"
 #~ msgstr "Formato OGR"
@@ -37898,7 +37905,7 @@ msgstr "Nessun monitor selezionato"
 #~ msgstr "N"
 
 #~ msgid "Create a new vector map layer by combining other vector map layers."
-#~ msgstr "Crea un nuovo vettoriale contenendo altri vettoriali."
+#~ msgstr "Crea un nuovo tematismo vettoriale combinando altri tematismi vettoriali."
 
 #~ msgid "Cannot alter table: %s"
 #~ msgstr "Non posso modificare la tabella: %s"
@@ -37957,9 +37964,8 @@ msgstr "Nessun monitor selezionato"
 #~ msgid "%d points written to output vector map"
 #~ msgstr "Scritti %d punti nella mappa vettoriale di output"
 
-#, fuzzy
 #~ msgid "Error reading ASCII file: (bad type) [%s]"
-#~ msgstr "Errore nella lettura del file ASCII: (bad type) [%s]"
+#~ msgstr "Errore nella lettura del file ASCII: (tipo non corretto) [%s]"
 
 #~ msgid "Error reading ASCII file: (unknown type) [%s]"
 #~ msgstr "Errore nella lettura del file ASCII: (tipo sconosciuto) [%s]"
@@ -37968,7 +37974,7 @@ msgstr "Nessun monitor selezionato"
 #~ msgstr "Errore nella lettura delle categorie : [%s]"
 
 #~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
-#~ msgstr "Crea un vettore da file ASCI points o ASCII vector"
+#~ msgstr "Crea una mappa vettoriale da un file ASCII di punti o da un file ASCII vettoriale."
 
 #~ msgid "ASCII file to be imported, if not given reads from standard input"
 #~ msgstr "File ASCII da importare, se non viene fornito legge dallo standard input"
@@ -38095,7 +38101,7 @@ msgstr "Nessun monitor selezionato"
 
 #, fuzzy
 #~ msgid "Select tool"
-#~ msgstr "Selezionee"
+#~ msgstr "Selezione"
 
 #~ msgid "Cannot open driver %s"
 #~ msgstr "Impossibile aprire il driver %s"
@@ -38142,17 +38148,15 @@ msgstr "Nessun monitor selezionato"
 #~ msgid "No database record"
 #~ msgstr "Driver del database:"
 
-#, fuzzy
 #~ msgid "Select"
-#~ msgstr "Selezionee"
+#~ msgstr "Seleziona"
 
 #, fuzzy
 #~ msgid "Quit tool"
 #~ msgstr "Strumento interrogazione"
 
-#, fuzzy
 #~ msgid "Unselect"
-#~ msgstr "Nessun monitor selezionato"
+#~ msgstr "Deseleziona"
 
 #~ msgid "Cannot open driver\n"
 #~ msgstr "Impossibile aprire il driver\n"
@@ -38163,9 +38167,8 @@ msgstr "Nessun monitor selezionato"
 #~ msgid "Cannot describe table\n"
 #~ msgstr "Impossibile descrivere la tabella\n"
 
-#, fuzzy
 #~ msgid "Cannot find column type"
-#~ msgstr "Tipo di colonna sconosciuto"
+#~ msgstr "Impossibile trovare il tipo di colonna"
 
 #~ msgid "Cannot update table"
 #~ msgstr "Impossibile aggiornare la tabella"
@@ -38177,16 +38180,14 @@ msgstr "Nessun monitor selezionato"
 #~ msgid "New record was created.<BR>"
 #~ msgstr "È stato creato un nuovo record.<BR>"
 
-#, fuzzy
 #~ msgid "Record for this category already existed.<BR>"
-#~ msgstr "Nessun record per la categoria %d nella tabella <%s>"
+#~ msgstr "Record per questa categoria già esistente .<BR>"
 
 #~ msgid "New point"
 #~ msgstr "Nuovo punto"
 
-#, fuzzy
 #~ msgid "Undo last point"
-#~ msgstr "Nessun punto di partenza"
+#~ msgstr "Annulla l'ultimo punto"
 
 #, fuzzy
 #~ msgid "Close line"
@@ -38195,9 +38196,8 @@ msgstr "Nessun monitor selezionato"
 #~ msgid "New Point"
 #~ msgstr "Nuovo Punto"
 
-#, fuzzy
 #~ msgid "Undo Last Point"
-#~ msgstr "Nessun punto di partenza"
+#~ msgstr "Annulla ultimo punto"
 
 #~ msgid "Cannot create new record."
 #~ msgstr "Impossibile creare un nuovo record"
@@ -38212,9 +38212,8 @@ msgstr "Nessun monitor selezionato"
 #~ msgid "Display categories:"
 #~ msgstr "Mostra le categorie:"
 
-#, fuzzy
 #~ msgid "Select line"
-#~ msgstr "Selezione"
+#~ msgstr "Seleziona linea"
 
 #~ msgid "Copy attributes:"
 #~ msgstr "Copia gli attributi:"
@@ -39473,3 +39472,102 @@ msgstr "Nessun monitor selezionato"
 
 #~ msgid "vector, path, visibility"
 #~ msgstr "vettoriale, percorso, visibilità"
+
+# FINIRE
+#, fuzzy
+#~ msgid "got type %d"
+#~ msgstr "ottenuto il tipo %d"
+
+#~ msgid "Feature has more categories. Only first category (%d) is exported."
+#~ msgstr "L'elemento ha più categorie. Viene esportata solo la prima categoria (%d)."
+
+#~ msgid "Unable to select record from table <%s> (key %s, column %s)"
+#~ msgstr "Non è possibile selezionare il record dalla tabella <%s> (chiave %s, colonna %s)"
+
+#~ msgid "Path to resulting ASCII file or ASCII vector name if '-o' is defined"
+#~ msgstr "Percorso del file ASCII risultante o, se è definito '-o', il nome del vettoriale ASCII"
+
+#~ msgid "Create parallel line to input lines"
+#~ msgstr "Crea un linea parallela alle linee in input"
+
+#~ msgid "New vertex"
+#~ msgstr "Nuovo vertice"
+
+#~ msgid ""
+#~ "Unexpected data in vector head:\n"
+#~ "[%s]"
+#~ msgstr ""
+#~ "Dati inattesi nell'intestazione del vettoriale:\n"
+#~ "[%s]"
+
+#~ msgid "Unknown keyword <%s> in vector head"
+#~ msgstr "Parola chiave <%s> sconosciuta nell'intestazione del vettoriale"
+
+#~ msgid "Error reading ASCII file: (bad point) [%s]"
+#~ msgstr "Errore nella lettura del file ASCII: (punto non corretto) [%s]"
+
+#~ msgid "Unparsable longitude value: [%s]"
+#~ msgstr "Valore di longitudine non analizzabile: [%s]"
+
+#~ msgid "Unparsable latitude value: [%s]"
+#~ msgstr "Valore di latitudine non analizzabile: [%s]"
+
+#~ msgid "End of ASCII file reached before end of categories"
+#~ msgstr "Raggiunta la fine del file ASCII prima della fine delle categorie"
+
+#~ msgid "Feature type(s). Combinations not supported by all output formats. Default: first type found in input."
+#~ msgstr "Tipo/i di elemento. Le combinazioni non sono supportate da tutti i formati di output. Predefinito: il primo tipo trovato nell'input."
+
+#~ msgid "Export features with category (labeled) only. Otherwise all features are exported"
+#~ msgstr "Esporta solo gli elementi con categoria (etichettati). Altrimenti verranno esportati tutti gli elementi"
+
+#~ msgid "Skipping all boundaries that are not part of an area."
+#~ msgstr "Si stannno tralasciando tutti i confini che non fanno parte di un'area."
+
+#~ msgid "Volumes will be exported as sets of faces."
+#~ msgstr "I volumi verranno esportati come insiemi di facce"
+
+#~ msgid "Could not determine input map's feature type(s)."
+#~ msgstr "Non è possibile determinare il tipo/i di elemento della mappa di input."
+
+#~ msgid "The map contains islands. To preserve them in the output map, use the -c flag"
+#~ msgstr "La mappa contiene isole. Per preservarle nella mapa di output usare il flag -c"
+
+#~ msgid "%d areas found, but not requested to be exported. Verify 'type' parameter."
+#~ msgstr "Trovate %d aree, ma non ne è stata chiesta l'esportazione. Verificare il parametro 'type'."
+
+#~ msgid "%d kernel(s) found, but not requested to be exported. Verify 'type' parameter."
+#~ msgstr "Trovati %d kernel, ma non ne è stata richiesta l'esportazione. Verificare il parametro 'type'."
+
+#~ msgid "No points found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessun punto trovato, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "No lines found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessuna linea trovata, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "No boundaries found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessun confine trovato, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "No areas found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessun'area trovata, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "No centroids found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessun centroide trovato, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "No faces found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessuna faccia trovata, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "No kernels found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessun kernel trovato, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "No volumes found, but requested to be exported. Will skip this geometry type."
+#~ msgstr "Nessun volume trovato, anche se ne è stata chiesta l'esportazione. Questo tipo di geometria verrà ignorato."
+
+#~ msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') or '-z' flag to export in 3D rather than 2D (default)"
+#~ msgstr "La mappa vettoriale <%s> è 3D. Usare le opzioni di creazione del tematismo specifiche per il formato (parametro 'lco') o il flag -z per esportare in 3D anziché in 2D (predefinito)"
+
+#~ msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)"
+#~ msgstr "La mappa vettoriale <%s> è 3D. Usare le opzioni di creazione del tematismo specifiche per il formato (parametro 'lco') per esportare in 3D anziché in 2D (predefinito)"
+
+#~ msgid "Exporting %i faces (may take some time) ..."
+#~ msgstr "Esportazione di %i facce in corso (può richiedere del tempo)..."
