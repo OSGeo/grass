@@ -23,5 +23,8 @@ install:
 	$(INSTALL) $(SCRIPT) $(INST_DIR)/scripts/
 	$(INSTALL_DATA) $(HTMLDIR)/$(PGM).html $(INST_DIR)/docs/html/
 	$(INSTALL_DATA) $(ARCH_DISTDIR)/man/man1/$(PGM).1 $(INST_DIR)/man/man1/
+	if [ -d "$(ETC)/$(PGM)" ] ; then \
+		cp -rL $(ETC)/$(PGM) $(INST_DIR)/etc/ ; \
+	fi
 
 .PHONY: script scriptstrings
