@@ -708,20 +708,19 @@ def install_extension_other(name):
                    url], stdout = outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
     
-    dirs = { 'bin' : os.path.join(tmpdir, name, 'bin'),
-             'docs' : os.path.join(tmpdir, name, 'docs'),
-             'html' : os.path.join(tmpdir, name, 'docs', 'html'),
-             'man' : os.path.join(tmpdir, name, 'man'),
-             'man1' : os.path.join(tmpdir, name, 'man', 'man1'),
+    dirs = { 'bin'     : os.path.join(tmpdir, name, 'bin'),
+             'docs'    : os.path.join(tmpdir, name, 'docs'),
+             'html'    : os.path.join(tmpdir, name, 'docs', 'html'),
+             'man'     : os.path.join(tmpdir, name, 'docs', 'man', 'man1'),
              'scripts' : os.path.join(tmpdir, name, 'scripts'),
-             'etc' : os.path.join(tmpdir, name, 'etc'),
+             'etc'     : os.path.join(tmpdir, name, 'etc'),
              }
     
     makeCmd = ['make',
                'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
                'BIN=%s' % dirs['bin'],
                'HTMLDIR=%s' % dirs['html'],
-               'MANDIR=%s' % dirs['man1'],
+               'MANDIR=%s' % dirs['man'],
                'SCRIPTDIR=%s' % dirs['scripts'],
                'ETC=%s' % os.path.join(dirs['etc'],name)
                ]
@@ -841,7 +840,7 @@ def remove_extension_std(name, force = False):
     for fpath in [os.path.join(options['prefix'], 'bin', name),
                   os.path.join(options['prefix'], 'scripts', name),
                   os.path.join(options['prefix'], 'docs', 'html', name + '.html'),
-                  os.path.join(options['prefix'], 'man', 'man1', name + '.1')]:
+                  os.path.join(options['prefix'], 'docs', 'man', 'man1', name + '.1')]:
         if os.path.isfile(fpath):
             if force:
                 grass.verbose(fpath)
@@ -919,7 +918,7 @@ def check_dirs():
     check_style_files('grass_logo.png')
     check_style_files('grassdocs.css')
     create_dir(os.path.join(options['prefix'], 'etc'))
-    create_dir(os.path.join(options['prefix'], 'man', 'man1'))
+    create_dir(os.path.join(options['prefix'], 'docs', 'man', 'man1'))
     create_dir(os.path.join(options['prefix'], 'scripts'))
 
 def main():
