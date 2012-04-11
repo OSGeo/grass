@@ -23,6 +23,7 @@ SUBDIRS = \
 	t.rast.extract \
 	t.rast3d.list \
 	t.rast3d.extract \
+	t.rast3d.mapcalc \
 	t.vect.list \
 	t.vect.what.strds \
 	t.vect.observe.strds
