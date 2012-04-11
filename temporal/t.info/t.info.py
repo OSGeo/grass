@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: List informtion about space time and map datasets
+#% description: List information about space time datasets and maps
 #% keywords: temporal
 #% keywords: info
 #%end

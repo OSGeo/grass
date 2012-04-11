@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.rast.extract
+# MODULE:	t.rast3d.mapcalc
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Extract a subset of a space time raster dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# PURPOSE:	Perform r3.mapcalc expressions on maps of sampled space time raster3d datasets
+# COPYRIGHT:	(C) 2012 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -15,35 +15,40 @@
 #############################################################################
 
 #%module
-#% description: Extract a subset of a space time raster dataset
+#% description: Perform r3.mapcalc expressions on maps of sampled space time raster3d datasets
 #% keywords: temporal
-#% keywords: extract
+#% keywords: mapcalc
 #%end
 
-#%option G_OPT_STRDS_INPUT
-#%end
-
-#%option G_OPT_T_WHERE
+#%option G_OPT_STR3DS_INPUTS
 #%end
 
 #%option
 #% key: expression
 #% type: string
-#% description: The r.mapcalc expression assigned to all extracted raster maps
-#% required: no
+#% description: The r3.mapcalc expression applied to each time step of the sampled data
+#% required: yes
 #% multiple: no
 #%end
 
-#%option G_OPT_STRDS_OUTPUT
+#%option G_OPT_T_SAMPLE
+#% key: method
+#% answer: during,overlap,contain,equal
+#%end
+
+#%option G_OPT_STR3DS_OUTPUT
 #%end
 
 #%option G_OPT_R_BASE
+#% required: yes
+#% description: Name of the base raster3d map
+#% gisprompt: old,grid3,3d-raster
 #%end
 
 #%option
 #% key: nprocs
 #% type: integer
-#% description: The number of r.mapcalc processes to run in parallel
+#% description: The number of r3.mapcalc processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1
@@ -54,27 +59,37 @@
 #% description: Register Null maps
 #%end
 
+#%flag
+#% key: s
+#% description: Check spatial overlap
+#%end
+
+from multiprocessing import Process
+import copy
 import grass.script as grass
 import grass.temporal as tgis
-from multiprocessing import Process
 
 ############################################################################
 
 def main():
 
     # Get the options
-    input = options["input"]
+    inputs = options["inputs"]
     output = options["output"]
-    where = options["where"]
     expression = options["expression"]
     base = options["base"]
+    method = options["method"]
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
-
+    spatial = flags["s"]
+    
+    # Create the method list
+    method = method.split(",")
+        
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     
-    tgis.extract_dataset(input, output, "raster", where, expression, base, nprocs, register_null)
+    tgis.dataset_mapcalculator(inputs, output, "raster3d", expression, base, method, nprocs, register_null, spatial)
     
 ###############################################################################
 
