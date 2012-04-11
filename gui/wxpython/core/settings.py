@@ -54,13 +54,20 @@ class Settings:
     def _generateLocale(self):
         """!Generate locales
         """
-        loc = list(locale.getdefaultlocale())
-        if loc[1] == 'UTF8':
-            loc[1] = 'UTF-8'
-        code_loc = "%s.%s" % (loc[0],loc[1])
+        # collect available locales
         self.locs = list(set(locale.locale_alias.values()))
         self.locs.append('en_GB.UTF-8')
         self.locs.sort()
+        
+        try:
+            loc = list(locale.getdefaultlocale())
+        except ValueError, e:
+            sys.stderr.write(_('ERROR: %s\n') % str(e))
+            return 'C'
+        
+        if loc[1] == 'UTF8':
+            loc[1] = 'UTF-8'
+        code_loc = "%s.%s" % (loc[0], loc[1])
         if code_loc in self.locs:
             return code_loc
         

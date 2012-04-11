@@ -67,8 +67,13 @@ def DecodeString(string):
     """
     if not string:
         return string
+
+    try:
+        enc = locale.getdefaultlocale()[1]
+    except ValueError, e:
+        sys.stderr.write(_("ERROR: %s\n") % str(e))
+        return string
     
-    enc = locale.getdefaultlocale()[1]
     if enc:
         Debug.msg(5, "DecodeString(): enc=%s" % enc)
         return string.decode(enc)
