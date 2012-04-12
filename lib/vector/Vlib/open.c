@@ -693,6 +693,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     }
 
     /* determine output format native or ogr */
+    Map->format = GV_FORMAT_NATIVE;
     if (strcmp(G_program_name(), "v.external") != 0) {
 	if (G_find_file2("", "OGR", G_mapset())) {
 	    /* OGR */
@@ -785,10 +786,9 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 	    }
 	}
     }
-    else {
+    if (Map->format == GV_FORMAT_NATIVE) {
 	/* native */
 	G_debug(2, " using native format");
-	Map->format = GV_FORMAT_NATIVE;
 
 	/* check if map already exists */
 	if (G_find_vector2(name, G_mapset()) != NULL) {
