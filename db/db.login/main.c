@@ -3,9 +3,10 @@
  *
  * MODULE:       db.login
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>
+ *               Markus Neteler <neteler itc.it>
  * PURPOSE:      Store db login settings
- * COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2009, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -37,7 +38,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("database"));
     G_add_keyword(_("connection settings"));
-    module->description = _("Sets user/password for driver/database.");
+    module->description = _("Sets user/password for DB driver/database.");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
@@ -54,24 +55,26 @@ int main(int argc, char *argv[])
     user->required = NO;
     user->multiple = NO;
     user->description = _("Username");
-
+    user->guisection = _("Settings");
+    
     password = G_define_option();
     password->key = "password";
     password->type = TYPE_STRING;
     password->required = NO;
     password->multiple = NO;
     password->description = _("Password");
+    password->guisection = _("Settings");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (db_set_login(driver->answer, database->answer, user->answer,
-		     password->answer) == DB_FAILED) {
-	G_fatal_error(_("Unable to set user/password"));
+                     password->answer) == DB_FAILED) {
+        G_fatal_error(_("Unable to set user/password"));
     }
     
     if (password->answer)
-	G_important_message(_("The password was stored in file (%s/dblogin)"), CONFIG_DIR);
+        G_important_message(_("The password was stored in file (%s/dblogin)"), CONFIG_DIR);
     
     exit(EXIT_SUCCESS);
 }
