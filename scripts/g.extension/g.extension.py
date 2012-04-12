@@ -3,7 +3,7 @@
 ############################################################################
 #
 # MODULE:       g.extension
-# AUTHOR(S):   	Markus Neteler
+# AUTHOR(S):    Markus Neteler
 #               Pythonized & upgraded for GRASS 7 by Martin Landa
 # PURPOSE:      Tool to download and install extensions from GRASS Addons SVN into 
 #               local GRASS installation
@@ -894,26 +894,26 @@ def check_style_files(fil):
     addons_file = os.path.join(options['prefix'], 'docs', 'html', fil)
 
     if os.path.isfile(addons_file):
-	return
+        return
 
     try:
         shutil.copyfile(dist_file,addons_file)
     except OSError, e:
         grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
     
-def create_dir(path):  	
-    if os.path.isdir(path):  	  	 
-        return  	  	 
+def create_dir(path):   
+    if os.path.isdir(path):              
+        return                   
     
-    try:  	  	 
-        os.makedirs(path)  	  	 
-    except OSError, e:  	  	 
-        grass.fatal(_("Unable to create '%s': %s") % (path, e))  	  	 
+    try:                 
+        os.makedirs(path)                
+    except OSError, e:                   
+        grass.fatal(_("Unable to create '%s': %s") % (path, e))                  
         
     grass.debug("'%s' created" % path)
 
 def check_dirs():
-    create_dir(os.path.join(options['prefix'], 'bin'))	 	 
+    create_dir(os.path.join(options['prefix'], 'bin'))           
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
     check_style_files('grass_logo.png')
     check_style_files('grassdocs.css')
