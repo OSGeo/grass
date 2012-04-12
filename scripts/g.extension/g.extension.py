@@ -4,10 +4,10 @@
 #
 # MODULE:       g.extension
 # AUTHOR(S):    Markus Neteler
-#               Pythonized & upgraded for GRASS 7 by Martin Landa
+#               Pythonized & upgraded for GRASS 7 by Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Tool to download and install extensions from GRASS Addons SVN into 
 #               local GRASS installation
-# COPYRIGHT:    (C) 2009-2011 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2012 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -455,6 +455,8 @@ def install_extension():
             ret += install_extension_other(module)
         if len(mlist) > 1:
             print '-' * 60
+        grass.verbose(_("Updating manual page for <%s>...") % module)
+        update_manual_page(module)
     
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
@@ -921,6 +923,48 @@ def check_dirs():
     create_dir(os.path.join(options['prefix'], 'docs', 'man', 'man1'))
     create_dir(os.path.join(options['prefix'], 'scripts'))
 
+# fix file URI in manual page
+def update_manual_page(module):
+    # read original html file
+    htmlfile = os.path.join(options['prefix'], 'docs', 'html', module + '.html')
+    try:
+        f = open(htmlfile)
+        shtml = f.read()
+    except IOError, e:
+        grass.fatal(_("Unable to read manual page: %s") % e)
+    else:
+        f.close()
+    
+    # find URIs
+    pattern = r'''<a href="([^"]+)">([^>]+)</a>'''
+    addons = get_installed_extensions(force = True)
+    pos = []
+    for match in re.finditer(pattern, shtml):
+        if match.group(1)[:7] == 'http://':
+            continue
+        if match.group(1).replace('.html', '') in addons:
+            continue
+        pos.append(match.start(1))
+    
+    if not pos:
+        return # no match
+    
+    # replace file URIs
+    prefix = 'file://' + os.path.join(os.getenv('GISBASE'), 'docs', 'html')
+    ohtml = shtml[:pos[0]]
+    for i in range(1, len(pos)):
+        ohtml += prefix + '/' + shtml[pos[i-1]:pos[i]]
+    ohtml += prefix + '/' + shtml[pos[-1]:]
+    
+    # write updated html file
+    try:
+        f = open(htmlfile, 'w')
+        f.write(ohtml)
+    except IOError, e:
+        grass.fatal(_("Unable for write manual page: %s") % e)
+    else:
+        f.close()
+    
 def main():
     # check dependecies
     if sys.platform != "win32":
