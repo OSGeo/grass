@@ -1759,7 +1759,7 @@ class GdalImportDialog(ImportDialog):
         self.commandId = -1
         data = self.list.GetLayers()
         
-        dsn, flags = self.dsnInput.GetDsn(flags = True)
+        dsn = self.dsnInput.GetDsn()
         ext = self.dsnInput.GetFormatExt()
         for layer, output in data:
             if self.importType == 'ogr':
@@ -1796,9 +1796,6 @@ class GdalImportDialog(ImportDialog):
             for key in self.options.keys():
                 if self.options[key].IsChecked():
                     cmd.append('-%s' % key)
-            
-            for f in flags:
-                cmd.append('-%s' % f)
             
             if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'):
                 cmd.append('--overwrite')
