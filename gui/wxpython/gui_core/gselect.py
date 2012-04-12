@@ -1552,21 +1552,13 @@ class GdalSelect(wx.Panel):
         
         self.dsnSizer.Layout()
         
-    def GetDsn(self, flags = False):
+    def GetDsn(self):
         """!Get datasource name
-
-        @param flags True to get tuple (dsn, flags)
         """
-        flgs = []
         if self.format.GetStringSelection() == 'PostgreSQL':
-            if self.source.GetSelection() == self.sourceMap['db-pg']:
-                flgs.append('p')
             dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
         else:
             dsn = self.input[self.dsnType][1].GetValue()
-        
-        if flags:
-            return (dsn, flgs)
         
         return dsn
     
