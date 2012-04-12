@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
     chcat =
 	(NetA_initialise_varray
-	 (&In, afield, GV_POINT, where_opt->answer, cat_opt->answer,
+	 (&In, nfield, GV_POINT, where_opt->answer, cat_opt->answer,
 	  &varray) == 1);
 
     /* Create table */
@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
 
 	    /* Vect_get_line_nodes(&In, i, &node, NULL); */
 	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
-	    Vect_cat_get(Cats, afield, &cats[node]);
+	    Vect_cat_get(Cats, nfield, &cats[node]);
 	    if (cats[node] != -1) {
 		Vect_write_line(&Out, GV_POINT, Points, Cats);
 		if (!chcat || varray->c[i])
