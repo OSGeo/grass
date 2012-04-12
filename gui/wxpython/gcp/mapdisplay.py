@@ -133,9 +133,7 @@ class MapFrame(SingleMapFrame):
         #
         # Bind various events
         #
-        self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(EVT_UPDATE_PRGBAR, self.OnUpdateProgress)
-        self.Bind(wx.EVT_SIZE,     self.OnDispResize)
         self.activemap.Bind(wx.EVT_CHOICE, self.OnUpdateActive)
         
         #

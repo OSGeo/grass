@@ -28,6 +28,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import shutil
+import time
 
 import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin
@@ -795,6 +796,9 @@ class GCP(MapFrame, ColumnSorterMixin):
         #
         self.parent = parent # GMFrame
         self.parent.gcpmanagement = self
+        
+        # window resized
+        self.resize = False
 
         self.grassdatabase = self.grwiz.grassdatabase
 
@@ -925,7 +929,9 @@ class GCP(MapFrame, ColumnSorterMixin):
         # bindings
         #
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
-        self.Bind(wx.EVT_CLOSE, self.OnQuit)
+        self.Bind(wx.EVT_SIZE,     self.OnSize)
+        self.Bind(wx.EVT_IDLE,     self.OnIdle)
+        self.Bind(wx.EVT_CLOSE,    self.OnQuit)
 
     def __del__(self):
         """!Disable GCP manager mode"""
@@ -1867,20 +1873,31 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
         
-    def OnDispResize(self, event):
+    def OnSize(self, event):
+        """!Adjust Map Windows after GCP Map Display has been resized
+        """
+        # re-render image on idle
+        self.resize = time.clock()
+
+    def OnIdle(self, event):
         """!GCP Map Display resized, adjust Map Windows
         """
         if self.GetMapToolbar():
-            srcwidth, srcheight = self.SrcMapWindow.GetSize()
-            tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
-            srcwidth = (srcwidth + tgtwidth) / 2
-            self._mgr.GetPane("target").Hide()
-            self._mgr.Update()
-            self._mgr.GetPane("source").BestSize((srcwidth, srcheight))
-            self._mgr.GetPane("target").BestSize((srcwidth, tgtheight))
-            if self.show_target:
-                self._mgr.GetPane("target").Show()
-            self._mgr.Update()
+            if self.resize and self.resize + 0.2 < time.clock():
+                srcwidth, srcheight = self.SrcMapWindow.GetSize()
+                tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
+                srcwidth = (srcwidth + tgtwidth) / 2
+                if self.show_target:
+                    self._mgr.GetPane("target").Hide()
+                    self._mgr.Update()
+                self._mgr.GetPane("source").BestSize((srcwidth, srcheight))
+                self._mgr.GetPane("target").BestSize((srcwidth, tgtheight))
+                if self.show_target:
+                    self._mgr.GetPane("target").Show()
+                self._mgr.Update()
+                self.resize = False
+            elif self.resize:
+                event.RequestMore()
         pass
 
 class GCPList(wx.ListCtrl,
