@@ -58,8 +58,8 @@ def start_browser(entry):
     
 def start_man(entry):
     path = os.path.join(gisbase, 'docs', 'man', 'man1', entry + '.1')
-    if not os.path.exists(path) and os.getenv('GRASS_ADDON_PATH'):
-        path = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'man', 'man1', entry + '.1')
+    if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
+        path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'man', 'man1', entry + '.1')
     
     for ext in ['', '.gz', '.bz2']:
 	if os.path.exists(path + ext):
