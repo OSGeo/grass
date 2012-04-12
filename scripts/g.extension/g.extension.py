@@ -950,7 +950,7 @@ def update_manual_page(module):
         return # no match
     
     # replace file URIs
-    prefix = 'file://' + os.path.join(os.getenv('GISBASE'), 'docs', 'html')
+    prefix = 'file://' + '/'.join([os.getenv('GISBASE'), 'docs', 'html'])
     ohtml = shtml[:pos[0]]
     for i in range(1, len(pos)):
         ohtml += prefix + '/' + shtml[pos[i-1]:pos[i]]
