@@ -733,31 +733,25 @@ class DriverSelect(wx.ComboBox):
 class DatabaseSelect(wx.TextCtrl):
     """!Creates combo box for selecting database driver.
     """
-    def __init__(self, parent, value='',
-                 id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=globalvar.DIALOG_TEXTCTRL_SIZE, **kargs):
-        
-        super(DatabaseSelect, self).__init__(parent, id, value, pos, size)
-                               
+    def __init__(self, parent, value = '', id = wx.ID_ANY, 
+                 size = globalvar.DIALOG_TEXTCTRL_SIZE, **kargs):
+        super(DatabaseSelect, self).__init__(parent, id, value, size = size, **kargs)
         self.SetName("DatabaseSelect")
-
+    
 class TableSelect(wx.ComboBox):
     """!Creates combo box for selecting attribute tables from the database
     """
     def __init__(self, parent,
-                 id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
-                 size=globalvar.DIALOG_COMBOBOX_SIZE,
-                 choices=[]):
-
-        super(TableSelect, self).__init__(parent, id, value, pos, size, choices,
-                                          style=wx.CB_READONLY)
-
+                 id = wx.ID_ANY, value = '', 
+                 size = globalvar.DIALOG_COMBOBOX_SIZE, choices = [], **kargs):
+        super(TableSelect, self).__init__(parent, id, value, size = size, choices = choices,
+                                          style = wx.CB_READONLY, **kargs)
         self.SetName("TableSelect")
-
+        
         if not choices:
             self.InsertTables()
                 
-    def InsertTables(self, driver=None, database=None):
+    def InsertTables(self, driver = None, database = None):
         """!Insert attribute tables into combobox"""
         items = []
 
@@ -776,7 +770,7 @@ class TableSelect(wx.ComboBox):
         if ret:
             for table in ret.splitlines():
                 items.append(table)
-            
+        
         self.SetItems(items)
         self.SetValue('')
         
@@ -794,7 +788,7 @@ class ColumnSelect(wx.ComboBox):
     @param **kwags wx.ComboBox parameters
     """
     def __init__(self, parent, id = wx.ID_ANY, value = '', 
-                 size=globalvar.DIALOG_COMBOBOX_SIZE,
+                 size = globalvar.DIALOG_COMBOBOX_SIZE,
                  vector = None, layer = 1, param = None, **kwargs):
         self.defaultValue = value
         self.param = param
@@ -1404,12 +1398,23 @@ class GdalSelect(wx.Panel):
             return
         
         name = dlg.GetValue()
+        
+        # check if settings item already exists
+        if name in self._settings:
+            dlgOwt = wx.MessageDialog(self, message = _("Settings <%s> already exists. "
+                                                     "Do you want to overwrite the settings?") % name,
+                                   caption = _("Save settings"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlgOwt.ShowModal() != wx.ID_YES:
+                dlgOwt.Destroy()
+                return
+
+        self._settings[name] = (self.dsnType, self.GetDsn(),
+                                self.format.GetStringSelection(),
+                                self.creationOpt.GetValue())
         try:
-            fd = open(self.settingsFile, 'a')
-            fd.write(name + ';' + self.dsnType + ';' +
-                     self.GetDsn() + ';' +
-                     self.format.GetStringSelection())
-            fd.write('\n')
+            fd = open(self.settingsFile, 'w')
+            for name, value in self._settings.iteritems():
+                fd.write('%s;%s;%s;%s\n' % (name, value[0], value[1], value[2]))
         except IOError:
             GError(parent = self,
                    message = _("Unable to save settings"))
@@ -1518,6 +1523,7 @@ class GdalSelect(wx.Panel):
             if sel == self.sourceMap['db-pg']:
                 if self.format.IsEnabled():
                     self.format.Enable(False)
+                self.creationOpt.Enable(True)
             else:
                 if not self.format.IsEnabled():
                     self.format.Enable(True)
