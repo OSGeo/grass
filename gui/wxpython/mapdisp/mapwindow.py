@@ -102,7 +102,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.redrawAll = True
         
         # will store an off screen empty bitmap for saving to file
-        self._buffer = None
+        self._buffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
         
@@ -315,7 +315,7 @@ class BufferedWindow(MapWindow, wx.Window):
         If self.redrawAll is False on self.pdcTmp content is re-drawn
         """
         Debug.msg(4, "BufferedWindow.OnPaint(): redrawAll=%s" % self.redrawAll)
-        dc = wx.BufferedPaintDC(self, self.buffer)
+        dc = wx.BufferedPaintDC(self, self._buffer)
         dc.Clear()
         
         # use PrepareDC to set position correctly
@@ -385,43 +385,50 @@ class BufferedWindow(MapWindow, wx.Window):
     def OnSize(self, event):
         """!Scale map image so that it is the same size as the Window
         """
-        Debug.msg(3, "BufferedWindow.OnSize():")
-        
-        # set size of the input image
-        self.Map.ChangeMapSize(self.GetClientSize())
-        # align extent based on center point and display resolution
-        # this causes that image is not resized when display windows is resized
-        ### self.Map.AlignExtentFromDisplay()
-        
-        # Make new off screen bitmap: this bitmap will always have the
-        # current drawing in it, so it can be used to save the image to
-        # a file, or whatever.
-        self.buffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
-        
-        # get the image to be rendered
-        self.img = self.GetImage()
-        
-        # update map display
-        if self.img and self.Map.width + self.Map.height > 0: # scale image during resize
-            self.img = self.img.Scale(self.Map.width, self.Map.height)
-            if len(self.Map.GetListOfLayers()) > 0:
-                self.UpdateMap()
-        
         # re-render image on idle
-        self.resize = True
+        self.resize = time.clock()
 
-        # reposition checkbox in statusbar
-        self.parent.StatusbarReposition()
-        
-        # update statusbar
-        self.parent.StatusbarUpdate()
-        
     def OnIdle(self, event):
         """!Only re-render a composite map image from GRASS during
         idle time instead of multiple times during resizing.
         """
-        if self.resize:
-            self.UpdateMap(render = True)
+        
+        # use OnInternalIdle() instead ?
+
+        if self.resize and self.resize + 0.2 < time.clock():
+            Debug.msg(3, "BufferedWindow.OnSize():")
+            
+            # set size of the input image
+            self.Map.ChangeMapSize(self.GetClientSize())
+
+            # Make new off screen bitmap: this bitmap will always have the
+            # current drawing in it, so it can be used to save the image to
+            # a file, or whatever.
+            self._buffer.Destroy()
+            self._buffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
+            
+            # get the image to be rendered
+            self.img = self.GetImage()
+            
+            # update map display
+            updatemap = True
+            if self.img and self.Map.width + self.Map.height > 0: # scale image after resize
+                self.img = self.img.Scale(self.Map.width, self.Map.height)
+                if len(self.Map.GetListOfLayers()) > 0:
+                    self.UpdateMap()
+                    updatemap = False
+
+            # reposition checkbox in statusbar
+            self.parent.StatusbarReposition()
+            
+            # update statusbar
+            self.parent.StatusbarUpdate()
+
+            if updatemap:
+                self.UpdateMap(render = True)
+            self.resize = False
+        elif self.resize:
+            event.RequestMore()
         
         event.Skip()
 
@@ -440,7 +447,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.Map.ChangeMapSize((width, height))
         ibuffer = wx.EmptyBitmap(max(1, width), max(1, height))
-        self.Map.Render(force = True, windres = True)
+        self.Map.Render(force = True, windres = False)
         img = self.GetImage()
         self.pdc.RemoveAll()
         self.Draw(self.pdc, img, drawid = 99)
@@ -449,7 +456,7 @@ class BufferedWindow(MapWindow, wx.Window):
         cSize = self.GetClientSizeTuple()
         ratio = float(width) / cSize[0], float(height) / cSize[1]
         
-        # redraw lagend, scalebar
+        # redraw legend, scalebar
         for img in self.GetOverlay():
             # draw any active and defined overlays
             if self.imagedict[img]['layer'].IsActive():
@@ -728,7 +735,7 @@ class BufferedWindow(MapWindow, wx.Window):
         dc.SetBackground(wx.Brush("White"))
         dc.Clear()
         
-        self.dragimg = wx.DragImage(self.buffer)
+        self.dragimg = wx.DragImage(self._buffer)
         self.dragimg.BeginDrag((0, 0), self)
         self.dragimg.GetImageRect(moveto)
         self.dragimg.Move(moveto)
