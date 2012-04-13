@@ -1684,15 +1684,16 @@ class ImportDialog(wx.Dialog):
                    'map=%s' % name]
             if UserSettings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'):
                 cmd.append('-n')
-                
+            
             item = maptree.AddLayer(ltype = 'raster',
                                     lname = name, lchecked = False,
-                                    lcmd = cmd)
+                                    lcmd = cmd, multiple = False)
         else:
             item = maptree.AddLayer(ltype = 'vector',
                                     lname = name, lchecked = False,
                                     lcmd = ['d.vect',
-                                            'map=%s' % name])
+                                            'map=%s' % name],
+                                    multiple = False)
         
         maptree.mapdisplay.MapWindow.ZoomToMap()
         
