@@ -26,6 +26,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 import string
 
 import wx
@@ -195,7 +196,8 @@ class SymbolButton(BitmapTextButton):
         elif usage == 'pause':
             self.DrawPause(dc, size)
 
-        buffer.SetMaskColour(maskColor)
+        if sys.platform != "win32":
+            buffer.SetMaskColour(maskColor)
         self.SetBitmapLabel(buffer)
         dc.SelectObject(wx.NullBitmap)
         
