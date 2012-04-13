@@ -1759,6 +1759,11 @@ class GdalImportDialog(ImportDialog):
         """!Import/Link data (each layes as separate vector map)"""
         self.commandId = -1
         data = self.list.GetLayers()
+        if not data:
+            GMessage(_("No layers selected. Operation canceled."),
+                     parent = self)
+            return
+        
         dsn  = self.dsnInput.GetDsn()
         ext  = self.dsnInput.GetFormatExt()
         
