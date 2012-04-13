@@ -155,7 +155,6 @@ int main(int argc, char *argv[])
             GV_DIRECTORY, output);
     G_debug(2, "Delete '%s'", buf);
     if (unlink(buf) == -1) {
-        Vect_delete(output);
         G_fatal_error(_("Unable to delete '%s'"), buf);
     }
 
@@ -163,7 +162,6 @@ int main(int argc, char *argv[])
     sprintf(buf, "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
-        Vect_delete(output);
         G_fatal_error("Unable to create file '%s'", buf);
     }
     
