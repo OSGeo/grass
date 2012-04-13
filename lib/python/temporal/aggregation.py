@@ -143,10 +143,8 @@ def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, co
     # Set the time stamp and write it to the raster map
     if dataset.is_time_absolute():
         new_map.set_absolute_time(start, end, None)
-    	new_map.write_absolute_time_to_file()
     else:
         new_map.set_relative_time(start, end, orig_ds.get_relative_time_unit())
-    	new_map.write_relative_time_to_file()
 
     # Insert map in temporal database
     new_map.insert(dbif)

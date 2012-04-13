@@ -66,33 +66,33 @@ t.unregister --v type=rast file="${n1}"
 # File 1
 t.register -i input=precip_abs8 file="${n1}" start=0 increment=7 unit=days
 t.info type=strds input=precip_abs8
-tr.list input=precip_abs8
+t.rast.list input=precip_abs8
 # File 1
 t.unregister --v type=rast file="${n1}"
 t.register input=precip_abs8 file="${n1}" start=20 unit=years
 t.info type=strds input=precip_abs8
-tr.list input=precip_abs8
+t.rast.list input=precip_abs8
 # File 2
 t.unregister --v type=rast file="${n1}"
 t.register input=precip_abs8 file="${n2}" unit=minutes
 t.info type=strds input=precip_abs8
-tr.list input=precip_abs8
+t.rast.list input=precip_abs8
 # File 2 ERROR ERROR -- Increment computation needs to be fixed
 t.unregister --v type=rast file="${n1}"
 t.register input=precip_abs8 file="${n2}" increment=14 unit=days
 t.info type=strds input=precip_abs8
-tr.list input=precip_abs8
+t.rast.list input=precip_abs8
 # File 2 ERROR ERROR -- Increment computation needs to be fixed
 t.unregister --v type=rast file="${n1}"
 t.register -i input=precip_abs8 file="${n2}" increment=14 unit=days
 t.info type=strds input=precip_abs8
-tr.list input=precip_abs8
+t.rast.list input=precip_abs8
 
 # File 3
 t.unregister --v type=rast file="${n1}"
 t.register -i input=precip_abs8 file="${n3}" unit=seconds
 t.info type=strds input=precip_abs8
-tr.list input=precip_abs8
+t.rast.list input=precip_abs8
 
 t.unregister --v type=rast file="${n1}"
 

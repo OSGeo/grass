@@ -276,12 +276,27 @@ class raster3d_metadata(raster_metadata_base):
 
 class vector_metadata(sql_database_interface):
     """!This is the vector metadata class"""
-    def __init__(self, ident=None, stvds_register=None):
+    def __init__(self, ident=None, stvds_register=None, is_3d=False, points=None, lines=None, boundaries=None,\
+                 centroids=None, faces=None, kernels=None, primitives=None, nodes=None, areas=None, \
+                 islands=None, holes=None, volumes=None):
 
 	sql_database_interface.__init__(self, "vector_metadata", ident)
 
 	self.set_id(ident)
 	self.set_stvds_register(stvds_register)
+	self.set_3d_info(is_3d)
+	self.set_points(points)
+	self.set_lines(lines)
+	self.set_boundaries(boundaries)
+	self.set_centroids(centroids)
+	self.set_faces(faces)
+	self.set_kernels(kernels)
+	self.set_primitives(primitives)
+	self.set_nodes(nodes)
+	self.set_areas(areas)
+	self.set_islands(islands)
+	self.set_holes(holes)
+	self.set_volumes(volumes)
 
     def set_id(self, ident):
 	"""!Convenient method to set the unique identifier (primary key)"""
@@ -291,6 +306,58 @@ class vector_metadata(sql_database_interface):
     def set_stvds_register(self, stvds_register):
 	"""!Set the space time vector dataset register table name"""
 	self.D["stvds_register"] = stvds_register
+
+    def set_3d_info(self, is_3d):
+	"""!Set True if the vector map is three dimensional"""
+	self.D["is_3d"] = is_3d
+
+    def set_points(self, points):
+	"""!Set the number of points of the vector map"""
+	self.D["points"] = points
+
+    def set_lines(self, lines):
+	"""!Set the number of lines of the vector map"""
+	self.D["lines"] = lines
+
+    def set_boundaries(self, boundaries):
+	"""!Set the number of boundaries of the vector map"""
+	self.D["boundaries"] = boundaries
+
+    def set_centroids(self, centroids):
+	"""!Set the number of centroids of the vector map"""
+	self.D["centroids"] = centroids
+
+    def set_faces(self, faces):
+	"""!Set the number of faces of the vector map"""
+	self.D["faces"] = faces
+
+    def set_kernels(self, kernels):
+	"""!Set the number of kernels of the vector map"""
+	self.D["kernels"] = kernels
+
+    def set_primitives(self, primitives):
+	"""!Set the number of primitives of the vector map"""
+	self.D["primitives"] = primitives
+
+    def set_nodes(self, nodes):
+	"""!Set the number of nodes of the vector map"""
+	self.D["nodes"] = nodes
+
+    def set_areas(self, areas):
+	"""!Set the number of areas of the vector map"""
+	self.D["areas"] = areas
+	
+    def set_islands(self, islands):
+	"""!Set the number of islands of the vector map"""
+	self.D["islands"] = islands
+	
+    def set_holes(self, holes):
+	"""!Set the number of holes of the vector map"""
+	self.D["holes"] = holes
+	
+    def set_volumes(self, volumes):
+	"""!Set the number of volumes of the vector map"""
+	self.D["volumes"] = volumes
 
     def get_id(self):
 	"""!Convenient method to get the unique identifier (primary key)
@@ -308,17 +375,145 @@ class vector_metadata(sql_database_interface):
 	    return self.D["stvds_register"]
         else:
 	    return None
+    
+    def get_3d_info(self):
+	"""!Return True if the map is three dimensional, False if not and None if not info was found"""
+	if self.D.has_key("is_3d"):
+	    return self.D["is_3d"]
+        else:
+	    return None
 
+    def get_points(self):
+	"""!Get the number of points of the vector map
+	   @return None if not found"""
+	if self.D.has_key("points"):
+	    return self.D["points"]
+        else:
+	    return None
+	    
+    def get_lines(self):
+	"""!Get the number of lines of the vector map
+	   @return None if not found"""
+	if self.D.has_key("lines"):
+	    return self.D["lines"]
+        else:
+	    return None
+	    
+    def get_boundaries(self):
+	"""!Get the number of boundaries of the vector map
+	   @return None if not found"""
+	if self.D.has_key("boundaries"):
+	    return self.D["boundaries"]
+        else:
+	    return None
+	    
+    def get_centroids(self):
+	"""!Get the number of centroids of the vector map
+	   @return None if not found"""
+	if self.D.has_key("centroids"):
+	    return self.D["centroids"]
+        else:
+	    return None
+	    
+    def get_faces(self):
+	"""!Get the number of faces of the vector map
+	   @return None if not found"""
+	if self.D.has_key("faces"):
+	    return self.D["faces"]
+        else:
+	    return None
+	    
+    def get_kernels(self):
+	"""!Get the number of kernels of the vector map
+	   @return None if not found"""
+	if self.D.has_key("kernels"):
+	    return self.D["kernels"]
+        else:
+	    return None
+	    
+    def get_primitives(self):
+	"""!Get the number of primitives of the vector map
+	   @return None if not found"""
+	if self.D.has_key("primitives"):
+	    return self.D["primitives"]
+        else:
+	    return None
+	    
+    def get_nodes(self):
+	"""!Get the number of nodes of the vector map
+	   @return None if not found"""
+	if self.D.has_key("nodes"):
+	    return self.D["nodes"]
+        else:
+	    return None
+	    
+    def get_areas(self):
+	"""!Get the number of areas of the vector map
+	   @return None if not found"""
+	if self.D.has_key("areas"):
+	    return self.D["areas"]
+        else:
+	    return None
+	    
+    def get_islands(self):
+	"""!Get the number of islands of the vector map
+	   @return None if not found"""
+	if self.D.has_key("islands"):
+	    return self.D["islands"]
+        else:
+	    return None
+	    
+    def get_holes(self):
+	"""!Get the number of holes of the vector map
+	   @return None if not found"""
+	if self.D.has_key("holes"):
+	    return self.D["holes"]
+        else:
+	    return None
+	    
+    def get_volumes(self):
+	"""!Get the number of volumes of the vector map
+	   @return None if not found"""
+	if self.D.has_key("volumes"):
+	    return self.D["volumes"]
+        else:
+	    return None
 
     def print_info(self):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Metadata information ----------------------------------+"
         print " | STVDS register table ....... " + str(self.get_stvds_register())
+        print " | Is map 3d .................. " + str(self.get_3d_info())
+        print " | Number of points ........... " + str(self.get_points())
+        print " | Number of lines ............ " + str(self.get_lines())
+        print " | Number of boundaries ....... " + str(self.get_boundaries())
+        print " | Number of centroids ........ " + str(self.get_centroids())
+        print " | Number of faces ............ " + str(self.get_faces())
+        print " | Number of kernels .......... " + str(self.get_kernels())
+        print " | Number of primitives ....... " + str(self.get_primitives())
+        print " | Number of nodes ............ " + str(self.get_nodes())
+        print " | Number of areas ............ " + str(self.get_areas())
+        print " | Number of islands .......... " + str(self.get_islands())
+        print " | Number of holes ............ " + str(self.get_holes())
+        print " | Number of volumes .......... " + str(self.get_volumes())
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""
         print "stvds_register=" + str(self.get_stvds_register())
+        print "is_3d=" + str(self.get_3d_info())
+        print "points=" + str(self.get_points())
+        print "lines=" + str(self.get_lines())
+        print "boundaries=" + str(self.get_boundaries())
+        print "centroids=" + str(self.get_centroids())
+        print "faces=" + str(self.get_faces())
+        print "kernels=" + str(self.get_kernels())
+        print "primitives=" + str(self.get_primitives())
+        print "nodes=" + str(self.get_nodes())
+        print "areas=" + str(self.get_areas())
+        print "islands=" + str(self.get_islands())
+        print "holes=" + str(self.get_holes())
+        print "volumes=" + str(self.get_volumes())
 
 ###############################################################################
 
@@ -614,15 +809,78 @@ class str3ds_metadata(stds_raster_metadata_base):
 
 class stvds_metadata(stds_metadata_base):
     """!This is the raster metadata class"""
-    def __init__(self, ident=None, vector_register=None,  title=None, description=None):
+    def __init__(self, ident=None, vector_register=None,  title=None, description=None, \
+                 points=None, lines=None, boundaries=None,\
+                 centroids=None, faces=None, kernels=None, primitives=None, nodes=None, areas=None, \
+                 islands=None, holes=None, volumes=None):
 
 	stds_metadata_base.__init__(self, "stvds_metadata", ident, title, description)
 
 	self.set_vector_register(vector_register)
+	self.set_points(points)
+	self.set_lines(lines)
+	self.set_boundaries(boundaries)
+	self.set_centroids(centroids)
+	self.set_faces(faces)
+	self.set_kernels(kernels)
+	self.set_primitives(primitives)
+	self.set_nodes(nodes)
+	self.set_areas(areas)
+	self.set_islands(islands)
+	self.set_holes(holes)
+	self.set_volumes(volumes)
 
     def set_vector_register(self, vector_register):
 	"""!Set the vector map register table name"""
 	self.D["vector_register"] = vector_register
+
+    def set_points(self, points):
+	"""!Set the number of points of the vector map"""
+	self.D["points"] = points
+
+    def set_lines(self, lines):
+	"""!Set the number of lines of the vector map"""
+	self.D["lines"] = lines
+
+    def set_boundaries(self, boundaries):
+	"""!Set the number of boundaries of the vector map"""
+	self.D["boundaries"] = boundaries
+
+    def set_centroids(self, centroids):
+	"""!Set the number of centroids of the vector map"""
+	self.D["centroids"] = centroids
+
+    def set_faces(self, faces):
+	"""!Set the number of faces of the vector map"""
+	self.D["faces"] = faces
+
+    def set_kernels(self, kernels):
+	"""!Set the number of kernels of the vector map"""
+	self.D["kernels"] = kernels
+
+    def set_primitives(self, primitives):
+	"""!Set the number of primitives of the vector map"""
+	self.D["primitives"] = primitives
+
+    def set_nodes(self, nodes):
+	"""!Set the number of nodes of the vector map"""
+	self.D["nodes"] = nodes
+
+    def set_areas(self, areas):
+	"""!Set the number of areas of the vector map"""
+	self.D["areas"] = areas
+	
+    def set_islands(self, islands):
+	"""!Set the number of islands of the vector map"""
+	self.D["islands"] = islands
+	
+    def set_holes(self, holes):
+	"""!Set the number of holes of the vector map"""
+	self.D["holes"] = holes
+	
+    def set_volumes(self, volumes):
+	"""!Set the number of volumes of the vector map"""
+	self.D["volumes"] = volumes
 
     def get_vector_register(self):
 	"""!Get the vector map register table name
@@ -632,16 +890,136 @@ class stvds_metadata(stds_metadata_base):
         else:
 	    return None
 
+    def get_points(self):
+	"""!Get the number of points of the vector map
+	   @return None if not found"""
+	if self.D.has_key("points"):
+	    return self.D["points"]
+        else:
+	    return None
+	    
+    def get_lines(self):
+	"""!Get the number of lines of the vector map
+	   @return None if not found"""
+	if self.D.has_key("lines"):
+	    return self.D["lines"]
+        else:
+	    return None
+	    
+    def get_boundaries(self):
+	"""!Get the number of boundaries of the vector map
+	   @return None if not found"""
+	if self.D.has_key("boundaries"):
+	    return self.D["boundaries"]
+        else:
+	    return None
+	    
+    def get_centroids(self):
+	"""!Get the number of centroids of the vector map
+	   @return None if not found"""
+	if self.D.has_key("centroids"):
+	    return self.D["centroids"]
+        else:
+	    return None
+	    
+    def get_faces(self):
+	"""!Get the number of faces of the vector map
+	   @return None if not found"""
+	if self.D.has_key("faces"):
+	    return self.D["faces"]
+        else:
+	    return None
+	    
+    def get_kernels(self):
+	"""!Get the number of kernels of the vector map
+	   @return None if not found"""
+	if self.D.has_key("kernels"):
+	    return self.D["kernels"]
+        else:
+	    return None
+	    
+    def get_primitives(self):
+	"""!Get the number of primitives of the vector map
+	   @return None if not found"""
+	if self.D.has_key("primitives"):
+	    return self.D["primitives"]
+        else:
+	    return None
+	    
+    def get_nodes(self):
+	"""!Get the number of nodes of the vector map
+	   @return None if not found"""
+	if self.D.has_key("nodes"):
+	    return self.D["nodes"]
+        else:
+	    return None
+	    
+    def get_areas(self):
+	"""!Get the number of areas of the vector map
+	   @return None if not found"""
+	if self.D.has_key("areas"):
+	    return self.D["areas"]
+        else:
+	    return None
+	    
+    def get_islands(self):
+	"""!Get the number of islands of the vector map
+	   @return None if not found"""
+	if self.D.has_key("islands"):
+	    return self.D["islands"]
+        else:
+	    return None
+	    
+    def get_holes(self):
+	"""!Get the number of holes of the vector map
+	   @return None if not found"""
+	if self.D.has_key("holes"):
+	    return self.D["holes"]
+        else:
+	    return None
+	    
+    def get_volumes(self):
+	"""!Get the number of volumes of the vector map
+	   @return None if not found"""
+	if self.D.has_key("volumes"):
+	    return self.D["volumes"]
+        else:
+	    return None
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
         #      0123456789012345678901234567890
         stds_metadata_base.print_info(self)
         print " | Vector register table:...... " + str(self.get_vector_register())
-
+        print " | Number of points ........... " + str(self.get_points())
+        print " | Number of lines ............ " + str(self.get_lines())
+        print " | Number of boundaries ....... " + str(self.get_boundaries())
+        print " | Number of centroids ........ " + str(self.get_centroids())
+        print " | Number of faces ............ " + str(self.get_faces())
+        print " | Number of kernels .......... " + str(self.get_kernels())
+        print " | Number of primitives ....... " + str(self.get_primitives())
+        print " | Number of nodes ............ " + str(self.get_nodes())
+        print " | Number of areas ............ " + str(self.get_areas())
+        print " | Number of islands .......... " + str(self.get_islands())
+        print " | Number of holes ............ " + str(self.get_holes())
+        print " | Number of volumes .......... " + str(self.get_volumes())
+        
     def print_shell_info(self):
         """!Print information about this class in shell style"""
         stds_metadata_base.print_shell_info(self)
         print "vector_register=" + str(self.get_vector_register())
+        print "points=" + str(self.get_points())
+        print "lines=" + str(self.get_lines())
+        print "boundaries=" + str(self.get_boundaries())
+        print "centroids=" + str(self.get_centroids())
+        print "faces=" + str(self.get_faces())
+        print "kernels=" + str(self.get_kernels())
+        print "primitives=" + str(self.get_primitives())
+        print "nodes=" + str(self.get_nodes())
+        print "areas=" + str(self.get_areas())
+        print "islands=" + str(self.get_islands())
+        print "holes=" + str(self.get_holes())
+        print "volumes=" + str(self.get_volumes())
 
 

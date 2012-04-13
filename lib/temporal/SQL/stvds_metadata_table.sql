@@ -13,6 +13,18 @@ CREATE TABLE  stvds_metadata (
   number_of_maps INTEGER,          -- The number of registered vector maps
   title VARCHAR,                              -- Title of the space-time vector dataset
   description VARCHAR,                        -- Detailed description of the space-time vector dataset
+  points INTEGER,         -- The number of points accumulated from all registered maps
+  lines INTEGER,          -- The number of lines accumulated from all registered maps
+  boundaries INTEGER,     -- The number of boundaries accumulated from all registered maps
+  centroids INTEGER,      -- The number of centroids accumulated from all registered maps
+  faces INTEGER,          -- The number of faces accumulated from all registered maps
+  kernels INTEGER,        -- The number of kernels accumulated from all registered maps
+  primitives INTEGER,     -- All primitives accumulated (points, lines,boundaries,centroids,faces,kernels)
+  nodes INTEGER,          -- Number of nodes accumulated from all registered maps (topological information) 
+  areas INTEGER,          -- The number of areas accumulated from all registered maps (topological information)
+  islands INTEGER,        -- The number of islands accumulated from all registered maps (topological information)
+  holes INTEGER,          -- The number of holes accumulated from all registered maps (topological information)
+  volumes INTEGER,        -- The number of volumes accumulated from all registered maps (topological information)
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  stvds_base (id) ON DELETE CASCADE
 );
@@ -30,7 +42,10 @@ CREATE VIEW stvds_view_abs_time AS SELECT
 	    A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.vector_register,
 	    A4.number_of_maps, 
-            A4.title, A4.description	
+            A4.title, A4.description, A4.points, A4.lines,
+            A4.boundaries, A4.centroids, A4.faces, A4.kernels,
+            A4.primitives, A4.nodes, A4.areas, A4.islands,
+            A4.holes, A4.volumes
 	    FROM stvds_base A1, stvds_absolute_time A2,  
             stvds_spatial_extent A3, stvds_metadata A4 WHERE A1.id = A2.id AND 
 	    A1.id = A3.id AND A1.id = A4.id;
@@ -46,7 +61,10 @@ CREATE VIEW stvds_view_rel_time AS SELECT
 	    A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.vector_register,
 	    A4.number_of_maps, 
-            A4.title, A4.description	
+            A4.title, A4.description, A4.points, A4.lines,
+            A4.boundaries, A4.centroids, A4.faces, A4.kernels,
+            A4.primitives, A4.nodes, A4.areas, A4.islands,
+            A4.holes, A4.volumes
 	    FROM stvds_base A1, stvds_relative_time A2,  
             stvds_spatial_extent A3, stvds_metadata A4 WHERE A1.id = A2.id AND 
 	    A1.id = A3.id AND A1.id = A4.id;

@@ -22,13 +22,11 @@ for details.
 @author Soeren Gebbert
 """
 import getpass
-import grass.script.raster as raster
-import grass.script.vector as vector
-import grass.script.raster3d as raster3d
-
 from ctypes import *
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
+import grass.lib.vector as libvector
+import grass.lib.raster3d as libraster3d
 
 from datetime_math import *
 from abstract_map_dataset import *
@@ -176,21 +174,33 @@ class raster_dataset(abstract_map_dataset):
 	if libraster.Rast_map_is_fp(name, mapset):
 	    range = libraster.FPRange()
 	    libraster.Rast_init_fp_range (byref(range))
-	    libraster.Rast_read_fp_range(name, mapset, byref(range))
-	    min = libgis.DCELL()
-	    max = libgis.DCELL()
-	    libraster.Rast_get_fp_range_min_max(byref(range), byref(min), byref(max))
-	    kvp["min"] = float(min.value)
-	    kvp["max"] = float(max.value)
+	    ret = libraster.Rast_read_fp_range(name, mapset, byref(range))
+	    if ret < 0:
+		core.fatal(_("Unable to read range file"))
+	    if ret == 2:
+		kvp["min"] = None
+		kvp["max"] = None
+	    else:
+		min = libgis.DCELL()
+		max = libgis.DCELL()
+		libraster.Rast_get_fp_range_min_max(byref(range), byref(min), byref(max))
+		kvp["min"] = min.value
+		kvp["max"] = max.value
 	else:
 	    range = libraster.Range()
 	    libraster.Rast_init_range (byref(range))
-	    libraster.Rast_read_range(name, mapset, byref(range))
-	    min = libgis.CELL()
-	    max = libgis.CELL()
-	    libraster.Rast_get_fp_range_min_max(byref(range), byref(min), byref(max))
-	    kvp["min"] = int(min.value)
-	    kvp["max"] = int(max.value)
+	    ret = libraster.Rast_read_range(name, mapset, byref(range))
+	    if ret < 0:
+		core.fatal(_("Unable to read range file"))
+	    if ret == 2:
+		kvp["min"] = None
+		kvp["max"] = None
+	    else:
+		min = libgis.CELL()
+		max = libgis.CELL()
+		libraster.Rast_get_range_min_max(byref(range), byref(min), byref(max))
+		kvp["min"] = min.value
+		kvp["max"] = max.value
 	
 	return kvp
 
@@ -268,7 +278,7 @@ class raster3d_dataset(abstract_map_dataset):
             return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
-        """Return the two or three dimensional spatial relation"""
+        """!Return the two or three dimensional spatial relation"""
         
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.spatial_relation(dataset.spatial_extent)
@@ -334,26 +344,95 @@ class raster3d_dataset(abstract_map_dataset):
 	
 	return True
         
+    def read_info(self):
+        """!Read the raster3d map info from the file system and store the content 
+           into a dictionary
+           
+           This method uses the ctypes interface to the gis and raster3d libraries
+           to read the map metadata information
+        """
+        
+        kvp = {}
+        
+        name = self.get_name()
+        mapset = self.get_mapset()
+        
+        if not self.map_exists():
+	  core.fatal(_("Raster3d map <%s> not found" % name))
+        
+        # Read the region information
+        region = libraster3d.RASTER3D_Region()
+	libraster3d.Rast3d_read_region_map(name, mapset, byref(region))
+	
+	kvp["north"] = region.north
+	kvp["south"] = region.south
+	kvp["east"] = region.east
+	kvp["west"] = region.west
+	kvp["nsres"] = region.ns_res
+	kvp["ewres"] = region.ew_res
+	kvp["tbres"] = region.tb_res
+	kvp["rows"] = region.cols
+	kvp["cols"] = region.rows
+	kvp["depths"] = region.depths
+	kvp["top"] = region.top
+	kvp["bottom"] = region.bottom
+	
+	# We need to open the map, this function returns a void pointer
+	# but we may need the correct type which is RASTER3D_Map, hence the casting
+	g3map = cast(libraster3d.Rast3d_open_cell_old(name, mapset, \
+	        libraster3d.RASTER3D_DEFAULT_WINDOW, libraster3d.RASTER3D_TILE_SAME_AS_FILE, \
+	        libraster3d.RASTER3D_NO_CACHE), POINTER(libraster3d.RASTER3D_Map))
+	        
+	if not g3map:
+	    core.fatal(_("Unable to open 3D raster map <%s>"%(name)));
+
+	maptype = libraster3d.Rast3d_file_type_map(g3map)
+  
+	if maptype == libraster.DCELL_TYPE:
+	    kvp["datatype"] = "DCELL"
+        elif maptype == libraster.FCELL_TYPE:
+	    kvp["datatype"] = "FCELL"
+	
+	# Read range
+	min = libgis.DCELL()
+	max = libgis.DCELL()
+	ret = libraster3d.Rast3d_range_load(g3map)
+	if not ret:
+	    core.fatal(_("Unable to load range of 3D raster map <%s>"%(name)));
+	libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
+	
+	if min.value != min.value:
+	    kvp["min"] = None
+	else:
+	    kvp["min"] = float(min.value)
+	if max.value != max.value:
+	    kvp["max"] = None
+	else:
+	    kvp["max"] = float(max.value)
+	
+	if not libraster3d.Rast3d_close(g3map):
+	    G_fatal_error(_("Unable to close 3D raster map <%s>"%(name)))
+	
+	return kvp
+        
     def load(self):
         """!Load all info from an existing raster3d map into the internal structure"""
 
-        # Get the data from an existing raster map
-        kvp = raster3d.raster3d_info(self.get_map_id())
-
         # Fill base information
-
         self.base.set_name(self.ident.split("@")[0])
         self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
 
         # Fill spatial extent
 
+        # Get the data from an existing raster map
+        kvp = self.read_info()
+        
         self.set_spatial_extent(north=kvp["north"], south=kvp["south"], \
                                 east=kvp["east"],   west=kvp["west"],\
                                 top=kvp["top"], bottom=kvp["bottom"])
 
         # Fill metadata
-
         self.metadata.set_nsres(kvp["nsres"])
         self.metadata.set_ewres(kvp["ewres"])
         self.metadata.set_tbres(kvp["tbres"])
@@ -361,9 +440,11 @@ class raster3d_dataset(abstract_map_dataset):
         self.metadata.set_min(kvp["min"])
         self.metadata.set_max(kvp["max"])
 
-        rows = int((kvp["north"] - kvp["south"])/kvp["nsres"] + 0.5)
-        cols = int((kvp["east"] - kvp["west"])/kvp["ewres"] + 0.5)
-        depths = int((kvp["top"] - kvp["bottom"])/kvp["tbres"] + 0.5)
+        rows = kvp["rows"]
+        cols = kvp["cols"]
+        depths = kvp["depths"]
+
+        ncells = cols * rows
 
         ncells = cols * rows * depths
 
@@ -412,7 +493,7 @@ class vector_dataset(abstract_map_dataset):
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
-        """Return the two dimensional spatial relation"""
+        """!Return the two dimensional spatial relation"""
         
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 	
@@ -475,11 +556,86 @@ class vector_dataset(abstract_map_dataset):
 	
 	return True
         
+    def read_info(self):
+        """!Read the vector map info from the file system and store the content 
+           into a dictionary
+           
+           This method uses the ctypes interface to the vector libraries
+           to read the map metadata information
+        """
+        
+        kvp = {}
+        
+        name = self.get_name()
+        mapset = self.get_mapset()
+        
+        if not self.map_exists():
+	  core.fatal(_("Vector map <%s> not found" % name))
+	
+	# The vector map structure
+	Map = libvector.Map_info()
+	
+        # We open the maps always in topology mode first
+        libvector.Vect_set_open_level(2)
+        with_topo = True
+        
+        # Code lend from v.info main.c
+        if libvector.Vect_open_old_head2(byref(Map), name, mapset, "1") < 2:
+	    # force level 1, open fully
+	    # NOTE: number of points, lines, boundaries, centroids, faces, kernels is still available
+	    libvector.Vect_close(byref(Map))
+	    libvector.Vect_set_open_level(1) # no topology
+	    with_topo = False
+	    if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
+		core.fatal(_("Unable to open vector map <%s>"%(libvector.Vect_get_full_name(byref(Map)))))
+
+        # Read the extent information
+        bbox = libvector.bound_box()
+        libvector.Vect_get_map_box(byref(Map), byref(bbox));
+	
+	kvp["north"] = bbox.N
+	kvp["south"] = bbox.S
+	kvp["east"] = bbox.E
+	kvp["west"] = bbox.W
+	kvp["top"] = bbox.T
+	kvp["bottom"] = bbox.B
+	
+	kvp["is_3d"] = bool(libvector.Vect_is_3d(byref(Map)))
+	
+	# Read number of features
+	kvp["points"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_POINT)
+	kvp["lines"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_LINE)
+	kvp["boundaries"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_BOUNDARY)
+	kvp["centroids"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_CENTROID)
+	kvp["faces"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_FACE)
+	kvp["kernels"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_KERNEL)
+	
+	# Summarize the primitives
+	kvp["primitives"] = kvp["points"] + kvp["lines"] + kvp["boundaries"] + kvp["centroids"]
+	if kvp["is_3d"]:
+	    kvp["primitives"] += kvp["faces"] + kvp["kernels"]
+	
+	# Read topology information
+	if with_topo:
+	    kvp["nodes"] = libvector.Vect_get_num_nodes(byref(Map))
+	    kvp["areas"] = libvector.Vect_get_num_areas(byref(Map))
+	    kvp["islands"] = libvector.Vect_get_num_islands(byref(Map))
+	    kvp["holes"] = libvector.Vect_get_num_holes(byref(Map))
+	    kvp["volumes"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_VOLUME)
+	else:
+	    kvp["nodes"] = None
+	    kvp["areas"] = None
+	    kvp["islands"] = None
+	    kvp["holes"] = None
+	    kvp["volumes"] = None
+	
+	libvector.Vect_close(byref(Map))
+	
+	return kvp
+	
     def load(self):
         """!Load all info from an existing vector map into the internal structure"""
 
-        # Get the data from an existing raster map
-        kvp = vector.vector_info(self.get_map_id())
 
         # Fill base information
 	if self.ident.find(":") >= 0:
@@ -490,13 +646,28 @@ class vector_dataset(abstract_map_dataset):
         self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
 
+        # Get the data from an existing raster map
+        kvp = self.read_info()
+        
         # Fill spatial extent
-
         self.set_spatial_extent(north=kvp["north"], south=kvp["south"], \
                                 east=kvp["east"],   west=kvp["west"],\
                                 top=kvp["top"], bottom=kvp["bottom"])
 
-        # Fill metadata .. no metadata yet
+	# Fill metadata
+	self.metadata.set_3d_info(kvp["is_3d"])
+        self.metadata.set_points(kvp["points"])
+        self.metadata.set_lines(kvp["lines"])
+        self.metadata.set_boundaries(kvp["boundaries"])
+        self.metadata.set_centroids(kvp["centroids"])
+        self.metadata.set_faces(kvp["faces"])
+        self.metadata.set_kernels(kvp["kernels"])
+        self.metadata.set_primitives(kvp["primitives"])
+        self.metadata.set_nodes(kvp["nodes"])
+        self.metadata.set_areas(kvp["areas"])
+        self.metadata.set_islands(kvp["islands"])
+        self.metadata.set_holes(kvp["holes"])
+        self.metadata.set_volumes(kvp["volumes"])
 
 ###############################################################################
 
@@ -531,7 +702,7 @@ class space_time_raster_dataset(abstract_space_time_dataset):
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
-        """Return the two dimensional spatial relation"""
+        """!Return the two dimensional spatial relation"""
         
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 	
@@ -588,7 +759,7 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
             return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
-        """Return the two or three dimensional spatial relation"""
+        """!Return the two or three dimensional spatial relation"""
         
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.spatial_relation(dataset.spatial_extent)
@@ -645,7 +816,7 @@ class space_time_vector_dataset(abstract_space_time_dataset):
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
-        """Return the two dimensional spatial relation"""
+        """!Return the two dimensional spatial relation"""
         
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 

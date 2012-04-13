@@ -30,7 +30,7 @@ t.create --v --o type=str3ds temporaltype=absolute output=volume_abs7 title="A t
 
 t.register type=rast3d --v -i input=volume_abs1 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="1 seconds"
 t.info type=str3ds input=volume_abs1
-tr3.unregister --v input=volume_abs1 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6
+t.unregister --v type=rast3d input=volume_abs1 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6
 t.info type=str3ds input=volume_abs1
 
 t.register type=rast3d --v -i input=volume_abs2 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="20 seconds, 5 minutes"

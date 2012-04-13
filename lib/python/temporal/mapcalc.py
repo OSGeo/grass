@@ -176,7 +176,6 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method, nprocs
 	
 	# Attach the map names
 	map_matrix.append(copy.copy(map_name_list))
-    
    
     # Needed for map registration
     map_list = []
@@ -283,6 +282,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method, nprocs
     
 	count = 0
 	
+	# collect empty maps to remove them
+	empty_maps = []
+	
 	# Insert maps in the temporal database and in the new space time dataset
 	for new_map in map_list:
 
@@ -295,6 +297,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method, nprocs
 	    # In case of a null map continue, do not register null maps
 	    if new_map.metadata.get_min() == None and new_map.metadata.get_max() == None:
 		if not register_null:
+		    empty_maps.append(new_map)
 		    continue
 
 	    # Insert map in temporal database
@@ -304,8 +307,23 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method, nprocs
 
         # Update the spatio-temporal extent and the metadata table entries
         new_sp.update_from_registered_maps(dbif)
-	
+		
 	core.percent(1, 1, 1)
+
+	# Remove empty maps
+	if len(empty_maps) > 0:
+	    names = ""
+	    count = 0
+	    for map in empty_maps:
+		if count == 0:
+		    names += "%s"%(map.get_name())
+		else:
+		    names += ",%s"%(map.get_name())
+		count += 1
+	    if type == "raster":
+		core.run_command("g.remove", rast=names, quiet=True)
+	    elif type == "raster3d":
+		core.run_command("g.remove", rast3d=names, quiet=True)
         
     dbif.close()
 
