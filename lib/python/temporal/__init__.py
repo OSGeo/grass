@@ -15,3 +15,4 @@ from unit_tests import *
 from aggregation import *
 from extract import *
 from mapcalc import *
+from univar_statistics import *
