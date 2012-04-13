@@ -23,7 +23,7 @@ Classes:
  - gselect::ElementSelect
  - gselect::OgrTypeSelect
 
-(C) 2007-2011 by the GRASS Development Team 
+(C) 2007-2012 by the GRASS Development Team 
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1151,13 +1151,16 @@ class GdalSelect(wx.Panel):
             self.settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
         else:
             self.settingsFile = os.path.join(GetSettingsPath(), 'wxGDAL')
-        
-        self._settings = self._loadSettings()
+
         self.settingsChoice = wx.Choice(parent = self, id = wx.ID_ANY)
         self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsLoad)
-        self.settingsChoice.SetItems(self._settings.keys())
-        self.btnSettings = wx.Button(parent = self, id = wx.ID_SAVE)
-        self.btnSettings.Bind(wx.EVT_BUTTON, self.OnSettingsSave)
+        self._settings = self._loadSettings() # -> self.settingsChoice.SetItems()
+        self.btnSettingsSave = wx.Button(parent = self, id = wx.ID_SAVE)
+        self.btnSettingsSave.Bind(wx.EVT_BUTTON, self.OnSettingsSave)
+        self.btnSettingsSave.SetToolTipString(_("Save current settings"))
+        self.btnSettingsDel = wx.Button(parent = self, id = wx.ID_REMOVE)
+        self.btnSettingsDel.Bind(wx.EVT_BUTTON, self.OnSettingsDelete)
+        self.btnSettingsSave.SetToolTipString(_("Delete currently selected settings"))
         
         self.source = wx.RadioBox(parent = self, id = wx.ID_ANY,
                                   style = wx.RA_SPECIFY_COLS,
@@ -1305,8 +1308,11 @@ class GdalSelect(wx.Panel):
         settingsSizer.Add(item = self.settingsChoice,
                           proportion = 1,
                           flag = wx.EXPAND)
-        settingsSizer.Add(item = self.btnSettings,
-                          flag = wx.LEFT,
+        settingsSizer.Add(item = self.btnSettingsSave,
+                          flag = wx.LEFT | wx.RIGHT,
+                          border = 5)
+        settingsSizer.Add(item = self.btnSettingsDel,
+                          flag = wx.RIGHT,
                           border = 5)
         
         inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
@@ -1392,9 +1398,15 @@ class GdalSelect(wx.Panel):
         if dlg.ShowModal() != wx.ID_OK:
             return
         
+        # check required params
         if not dlg.GetValue():
             GMessage(parent = self,
                      message = _("Name not given, settings is not saved."))
+            return
+        
+        if not self.GetDsn():
+            GMessage(parent = self,
+                     message = _("No data source defined, settings is not saved."))
             return
         
         name = dlg.GetValue()
@@ -1402,31 +1414,53 @@ class GdalSelect(wx.Panel):
         # check if settings item already exists
         if name in self._settings:
             dlgOwt = wx.MessageDialog(self, message = _("Settings <%s> already exists. "
-                                                     "Do you want to overwrite the settings?") % name,
-                                   caption = _("Save settings"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                                                        "Do you want to overwrite the settings?") % name,
+                                      caption = _("Save settings"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlgOwt.ShowModal() != wx.ID_YES:
                 dlgOwt.Destroy()
                 return
-
+        
         self._settings[name] = (self.dsnType, self.GetDsn(),
                                 self.format.GetStringSelection(),
                                 self.creationOpt.GetValue())
+        
+        if self._saveSettings() == 0:
+            self._settings = self._loadSettings()
+            self.settingsChoice.SetStringSelection(name)
+        
+        dlg.Destroy()
+ 
+    def OnSettingsDelete(self, event):
+        """!Save settings"""
+        name = self.settingsChoice.GetStringSelection()
+        if not name:
+            GMessage(parent = self,
+                     message = _("No settings is defined. Operation canceled."))
+            return
+        
+        self._settings.pop(name)
+        if self._saveSettings() == 0:
+            self._settings = self._loadSettings()
+        
+    def _saveSettings(self):
+        """!Save settings into the file
+
+        @return 0 on success
+        @return -1 on failure
+        """
         try:
             fd = open(self.settingsFile, 'w')
-            for name, value in self._settings.iteritems():
-                fd.write('%s;%s;%s;%s\n' % (name, value[0], value[1], value[2]))
+            for key, value in self._settings.iteritems():
+                fd.write('%s;%s;%s;%s\n' % (key, value[0], value[1], value[2]))
         except IOError:
             GError(parent = self,
                    message = _("Unable to save settings"))
-            return
-        fd.close()
+            return -1
+        else:
+            fd.close()
         
-        self._settings = self._loadSettings()
-        self.settingsChoice.Append(name)
-        self.settingsChoice.SetStringSelection(name)
-        
-        dlg.Destroy()
-                
+        return 0
+
     def _loadSettings(self):
         """!Load settings from the file
 
@@ -1453,8 +1487,10 @@ class GdalSelect(wx.Panel):
                     pass
         except IOError:
             return data
+        else:
+            fd.close()
         
-        fd.close()
+        self.settingsChoice.SetItems(sorted(data.keys()))
         
         return data
 
@@ -1572,7 +1608,9 @@ class GdalSelect(wx.Panel):
                 for item in path.split(':', 1)[1].split(','):
                     key, value = item.split('=', 1)
                     if key == 'dbname':
-                        self.input[self.dsnType][1].SetStringSelection(value)
+                        if not self.input[self.dsnType][1].SetStringSelection(value):
+                            GMessage(_("Database <%s> not accessible.") % value,
+                                     parent = self)
                         break
             else:
                 self.input[self.dsnType][1].SetValue(path)
