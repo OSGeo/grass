@@ -135,15 +135,16 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <li><a href="grass7.html">GRASS startup manual page</a></li>
       <li><a href="general.html">General commands manual</a></li>
       </ul></td>
-      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous</h3>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous&nbsp;&amp;&nbsp;Variables</h3>
        <ul>
-        <li><a href="misc.html">Misc. commands manual</a></li>
+        <li><a href="misc.html">Miscellaneous commands manual</a></li>
+        <li><a href="variables.html">GRASS variables and environment variables</a></li>
        </ul></td>
     </tr>
     <tr>
-      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Variables</h3>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Temporal processing</h3>
        <ul>
-        <li><a href="variables.html">GRASS variables and environment variables</a></li>
+        <li><a href="temporal.html">Temporal commands manual</a></li>
        </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Printing</h3>
        <ul>
@@ -195,6 +196,7 @@ r""" ]
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#ps">ps.*</a> </td><td>postscript commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#r">r.*</a> </td><td>raster commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#r3">r3.*</a> </td><td>raster3D commands</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="full_index.html#t">t.*</a> </td><td>temporal commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#v">v.*</a> </td><td>vector commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="nviz.html">nviz</a> </td><td>visualization suite</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="wxGUI.html">wxGUI</a> </td><td>wxPython-based GUI frontend</td></tr>
@@ -249,39 +251,39 @@ def write_file(name, contents):
 
 def try_mkdir(path):
     try:
-	os.mkdir(path)
+        os.mkdir(path)
     except OSError, e:
-	pass
+        pass
 
 def replace_file(name):
     temp = name + ".tmp"
     if os.path.exists(name) and os.path.exists(temp) and read_file(name) == read_file(temp):
-	os.remove(temp)
+        os.remove(temp)
     else:
-	try:
-	    os.remove(name)
-	except OSError, e:
-	    pass
-	os.rename(temp, name)
+        try:
+            os.remove(name)
+        except OSError, e:
+            pass
+        os.rename(temp, name)
 
 def copy_file(src, dst):
     write_file(dst, read_file(src))
 
 def html_files(cls = None):
     for cmd in sorted(os.listdir(html_dir)):
-	if cmd.endswith(".html") and \
-	   (cls in [None, '*'] or cmd.startswith(cls + ".")) and \
-	   (cls != '*' or len(cmd.split('.')) >= 3) and \
-	   cmd not in ["full_index.html", "index.html"] and \
-	   cmd not in exclude_mods and \
-	   not cmd.startswith("wxGUI."):
-	    yield cmd
+        if cmd.endswith(".html") and \
+           (cls in [None, '*'] or cmd.startswith(cls + ".")) and \
+           (cls != '*' or len(cmd.split('.')) >= 3) and \
+           cmd not in ["full_index.html", "index.html"] and \
+           cmd not in exclude_mods and \
+           not cmd.startswith("wxGUI."):
+            yield cmd
 
 def write_html_header(f, title, ismain = False):
     f.write(header1_tmpl.substitute(title = title))
     if ismain and macosx:
-	f.write(macosx_tmpl.substitute(grass_version = grass_version,
-				       grass_mmver = grass_mmver))
+        f.write(macosx_tmpl.substitute(grass_version = grass_version,
+                                       grass_mmver = grass_mmver))
     f.write(header2_tmpl.substitute(grass_version = grass_version))
 
 def write_html_cmd_overview(f):
@@ -294,24 +296,24 @@ def write_html_footer(f, index_url):
 def get_desc(cmd):
     f = open(cmd, 'r')
     while True:
-	line = f.readline()
-	if not line:
-	    return ""
-	if "NAME" in line:
-	    break
+        line = f.readline()
+        if not line:
+            return ""
+        if "NAME" in line:
+            break
 
     while True:
-	line = f.readline()
-	if not line:
-	    return ""
-	if "SYNOPSIS" in line:
-	    break
-	if "<em>" in line:
-	    sp = line.split('-',1)
-	    if len(sp) > 1:
-		return sp[1].strip()
-	    else:
-		return None
+        line = f.readline()
+        if not line:
+            return ""
+        if "SYNOPSIS" in line:
+            break
+        if "<em>" in line:
+            sp = line.split('-',1)
+            if len(sp) > 1:
+                return sp[1].strip()
+            else:
+                return None
 
     return ""
 
@@ -329,4 +331,3 @@ grass_mmver = '.'.join(ver.split('.')[0:2])
 macosx = "darwin" in os.environ['ARCH'].lower()
 
 ############################################################################
-

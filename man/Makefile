@@ -20,6 +20,7 @@ categories = \
 	ps:postscript \
 	r:raster \
 	r3:raster3D \
+	t:temporal \
 	v:vector
 
 IDXCATS := $(foreach cat,$(categories),$(lastword $(subst :, ,$(cat))))
