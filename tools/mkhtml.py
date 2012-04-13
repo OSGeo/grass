@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007, 2009, 2011 by Glynn Clements
+# COPYRIGHT:    (C) 2007, 2009, 2011-2012 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -20,12 +20,13 @@ import sys
 import os
 import string
 import re
+from datetime import datetime
 
 pgm = sys.argv[1]
 if len(sys.argv) > 1:
     year = sys.argv[2]
 else:
-    year = "2011"
+    year = str(datetime.now().year)
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
@@ -50,7 +51,7 @@ header_pgm = """<h2>NAME</h2>
 
 footer_index = string.Template(\
 """<hr>
-<p><a href="index.html">Main index</a> - <a href="${INDEXNAME}.html">${INDEXNAME} index</a> - <a href="full_index.html">Full index</a></p>
+<p><a href="index.html">Main index</a> - <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> - <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 </body>
 </html>
@@ -66,12 +67,12 @@ footer_noindex = string.Template(\
 
 def read_file(name):
     try:
-	f = open(name, 'rb')
-	s = f.read()
-	f.close()
-	return s
+        f = open(name, 'rb')
+        s = f.read()
+        f.close()
+        return s
     except IOError:
-	return ""
+        return ""
 
 src_data = read_file(src_file)
 
@@ -88,11 +89,11 @@ else:
 if not re.search('<html>', src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
     if not re.search('<html>', tmp_data, re.IGNORECASE):
-	sys.stdout.write(header_tmpl.substitute(PGM = pgm))
+        sys.stdout.write(header_tmpl.substitute(PGM = pgm))
     if tmp_data:
-	for line in tmp_data.splitlines(True):
-	    if not re.search('</body>|</html>', line, re.IGNORECASE):
-		sys.stdout.write(line)
+        for line in tmp_data.splitlines(True):
+            if not re.search('</body>|</html>', line, re.IGNORECASE):
+                sys.stdout.write(line)
 
 sys.stdout.write(src_data)
 
@@ -102,17 +103,18 @@ if re.search('</html>', src_data, re.IGNORECASE):
     sys.exit()
 
 index_names = {
-    'd': 'display',
+    'd' : 'display',
     'db': 'database',
-    'g': 'general',
-    'i': 'imagery',
-    'm': 'misc',
+    'g' : 'general',
+    'i' : 'imagery',
+    'm' : 'misc',
     'ps': 'postscript',
-    'p': 'paint',
-    'r': 'raster',
+    'p' : 'paint',
+    'r' : 'raster',
     'r3': 'raster3D',
-    's': 'sites',
-    'v': 'vector'
+    's' : 'sites',
+    't' : 'temporal',
+    'v' : 'vector'
     }
 
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
@@ -123,6 +125,7 @@ else:
     index_name = index_names.get(mod_class, '')
 
 if index_name:
-    sys.stdout.write(footer_index.substitute(INDEXNAME = index_name, YEAR = year))
+    sys.stdout.write(footer_index.substitute(INDEXNAME = index_name, INDEXNAMECAP = index_name.title(),
+                                             YEAR = year))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR = year))
