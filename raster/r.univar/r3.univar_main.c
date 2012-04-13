@@ -28,7 +28,7 @@ zone_type zone_info;
 /* ************************************************************************* */
 void set_params()
 {
-    param.inputfile = G_define_standard_option(G_OPT_R3_INPUT);
+    param.inputfile = G_define_standard_option(G_OPT_R3_MAP);
 
     param.zonefile = G_define_standard_option(G_OPT_R3_INPUT);
     param.zonefile->key = "zones";
