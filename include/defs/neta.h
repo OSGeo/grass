@@ -13,9 +13,6 @@ int NetA_strongly_connected_components(dglGraph_s * graph, int *component);
 /*spanningtree.c */
 int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list);
 
-/*allpairs.c */
-int NetA_allpairs(dglGraph_s * graph, dglInt32_t ** dist);
-
 /*neta_flow.c */
 int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 	      struct ilist *sink_list, int *flow);
