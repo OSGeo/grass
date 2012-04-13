@@ -128,10 +128,8 @@ def main():
 
     if sp.is_time_absolute():
         r3ds.set_absolute_time(start, end)
-        r3ds.write_absolute_time_to_file()
     else:
         r3ds.set_relative_time(start, end, sp.get_relative_time_unit())
-        r3ds.write_relative_time_to_file()
 
     r3ds.insert()
 

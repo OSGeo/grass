@@ -32,3 +32,4 @@ t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 wo
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
+rm strds_export.tar.bz2

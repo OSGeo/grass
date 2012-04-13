@@ -29,7 +29,7 @@
 #% description: Order the space time dataset by category. 
 #% required: no
 #% multiple: yes
-#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
+#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
 #% answer: start_time
 #%end
 
@@ -39,7 +39,7 @@
 #% description: Select columns to be printed to stdout 
 #% required: no
 #% multiple: yes
-#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
+#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
 #% answer: id,name,layer,mapset,start_time,end_time
 #%end
 

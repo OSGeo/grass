@@ -81,17 +81,17 @@ def main():
         mapset =  grass.gisenv()["MAPSET"]
         id = name + "@" + mapset
 
-    sp = tgis.dataset_factory(type, id)
+    ds = tgis.dataset_factory(type, id)
 
-    if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
+    if ds.is_in_db() == False:
+        grass.fatal(_("Dataset <%s> not found") % (id))
         
-    sp.select()
+    ds.select()
 
     if shellstyle == True:
-        sp.print_shell_info()
+        ds.print_shell_info()
     else:
-        sp.print_info()
+        ds.print_info()
 
 if __name__ == "__main__":
     options, flags = grass.parser()

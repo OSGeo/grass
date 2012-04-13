@@ -24,14 +24,25 @@ t.info precip_abs2
 # The first @test
 t.rast.mapcalc --o --v -n inputs=precip_abs1,precip_abs2 output=precip_abs3 \
            expression=" precip_abs1 + precip_abs2" base=new_prec \
-           method=equal nprocs=6
+           method=equal nprocs=5
 t.info type=strds input=precip_abs3
 
 t.rast.mapcalc --o --v -s inputs=precip_abs1,precip_abs2,precip_abs3 output=precip_abs4 \
            expression=" (precip_abs1 + precip_abs2) / precip_abs3@PERMANENT " base=new_prec \
-           method=equal nprocs=6
+           method=equal nprocs=5
 t.info type=strds input=precip_abs4
 
+t.rast.mapcalc --o --v -s inputs=precip_abs1,precip_abs2 output=precip_abs4 \
+           expression=" (precip_abs1 + precip_abs2) * null() " base=new_prec \
+           method=equal nprocs=5
+t.info type=strds input=precip_abs4
+
+t.rast.mapcalc --o --v -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
+           expression=" (precip_abs1 + precip_abs2) * null() " base=new_prec \
+           method=equal nprocs=5
+t.info type=strds input=precip_abs4
+
+# @postprocess
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.unregister type=rast maps=new_prec_1,new_prec_2,new_prec_3,new_prec_4,new_prec_5,new_prec_6
 t.remove type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4

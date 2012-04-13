@@ -119,7 +119,7 @@ def main():
 	    count += 1
 
         # Execute the collected SQL statenents
-        tgis.execute_transaction(statement, dbif)
+        dbif.execute_transaction(statement)
 
     if map_update or update:
         sp.update_from_registered_maps(dbif=dbif)

@@ -45,12 +45,12 @@ t.vect.list input=soil_abs columns=name,layer,start_time,end_time
 
 t.create --o type=strds temporaltype=absolute output=sand_frac_abs_1 title="A test" descr="A test"
 t.register -i type=rast input=sand_frac_abs_1 maps=sand_frac start="2001-01-01 00:00:00" increment="12 months"
-tr.list input=sand_frac_abs_1 columns=name,start_time,end_time
+t.rast.list input=sand_frac_abs_1 columns=name,start_time,end_time
 
 t.create --o type=strds temporaltype=absolute output=sand_frac_abs_2 title="A test" descr="A test"
 t.register -i type=rast input=sand_frac_abs_2 maps=sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6 \
             start="2001-03-01 00:00:00" increment="1 months"
-tr.list input=sand_frac_abs_2 columns=name,start_time,end_time
+t.rast.list input=sand_frac_abs_2 columns=name,start_time,end_time
 
 # Start the @test
 t.vect.what.strds --v input=soil_abs strds=sand_frac_abs_1 sampling=overlap,during,contain column=sand_frac

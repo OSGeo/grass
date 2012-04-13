@@ -1018,25 +1018,26 @@ class abstract_space_time_dataset(abstract_dataset):
 	    core.verbose(_("Unregister %s map <%s>") % (map.get_type(), map.get_map_id()))
 
         # Check if the map is registered in the space time raster dataset
-	if dbmi.paramstyle == "qmark":
-	    sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
-	else:
-	    sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
-        try:
-            dbif.cursor.execute(sql, (self.base.get_id(),))
-            row = dbif.cursor.fetchone()
-        except:
-            row = None
-
-        # Break if the map is not registered
-        if row == None:
-	    if map.get_layer():
-		core.warning(_("Map <%s> with layer %s is not registered in space time dataset <%s>") %(map.get_map_id(), map.get_layer(), self.base.get_id()))
+        if map_register_table != None:
+	    if dbmi.paramstyle == "qmark":
+		sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
 	    else:
-		core.warning(_("Map <%s> is not registered in space time dataset <%s>") %(map.get_map_id(), self.base.get_id()))
-            if connect == True:
-                dbif.close()
-            return ""
+		sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
+	    try:
+		dbif.cursor.execute(sql, (self.base.get_id(),))
+		row = dbif.cursor.fetchone()
+	    except:
+		row = None
+
+	    # Break if the map is not registered
+	    if row == None:
+		if map.get_layer():
+		    core.warning(_("Map <%s> with layer %s is not registered in space time dataset <%s>") %(map.get_map_id(), map.get_layer(), self.base.get_id()))
+		else:
+		    core.warning(_("Map <%s> is not registered in space time dataset <%s>") %(map.get_map_id(), self.base.get_id()))
+		if connect == True:
+		    dbif.close()
+		return ""
 
         # Remove the space time raster dataset from the raster dataset register
         if map_register_table != None:
