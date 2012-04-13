@@ -1758,9 +1758,18 @@ class GdalImportDialog(ImportDialog):
         """!Import/Link data (each layes as separate vector map)"""
         self.commandId = -1
         data = self.list.GetLayers()
+        dsn  = self.dsnInput.GetDsn()
+        ext  = self.dsnInput.GetFormatExt()
         
-        dsn = self.dsnInput.GetDsn()
-        ext = self.dsnInput.GetFormatExt()
+        # determine data driver for PostGIS links
+        popOGR = False
+        if self.importType == 'ogr' and \
+                self.dsnInput.GetType() == 'db' and \
+                self.dsnInput.GetFormat() == 'PostgreSQL' and \
+                'GRASS_VECTOR_OGR' not in os.environ:
+            popOGR = True
+            os.environ['GRASS_VECTOR_OGR'] = '1'
+        
         for layer, output in data:
             if self.importType == 'ogr':
                 if ext and layer.rfind(ext) > -1:
@@ -1797,12 +1806,16 @@ class GdalImportDialog(ImportDialog):
                 if self.options[key].IsChecked():
                     cmd.append('-%s' % key)
             
-            if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'):
+            if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
+                    '--overwrite' not in cmd:
                 cmd.append('--overwrite')
             
             # run in Layer Manager
             self.parent.goutput.RunCmd(cmd, switchPage = True,
                                        onDone = self.AddLayers)
+        
+        if popOGR:
+            os.environ.pop('GRASS_VECTOR_OGR')
         
     def _getCommand(self):
         """!Get command"""

@@ -474,10 +474,11 @@ class Command:
 class CommandThread(Thread):
     """!Create separate thread for command. Used for commands launched
     on the background."""
-    def __init__ (self, cmd, stdin = None,
+    def __init__ (self, cmd, env = None, stdin = None,
                   stdout = sys.stdout, stderr = sys.stderr):
         """
         @param cmd command (given as list)
+        @param env environmental variables
         @param stdin standard input stream 
         @param stdout redirect standard output or None
         @param stderr redirect standard error output or None
@@ -488,6 +489,7 @@ class CommandThread(Thread):
         self.stdin  = stdin
         self.stdout = stdout
         self.stderr = stderr
+        self.env    = env
         
         self.module = None
         self.error  = ''
@@ -532,7 +534,8 @@ class CommandThread(Thread):
                                 stdin = subprocess.PIPE,
                                 stdout = subprocess.PIPE,
                                 stderr = subprocess.PIPE,
-                                shell = sys.platform == "win32")
+                                shell = sys.platform == "win32",
+                                env = self.env)
             
         except OSError, e:
             self.error = str(e)

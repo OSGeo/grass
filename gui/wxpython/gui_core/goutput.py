@@ -52,9 +52,9 @@ wxCmdDone,     EVT_CMD_DONE     = NewEvent()
 wxCmdAbort,    EVT_CMD_ABORT    = NewEvent()
 wxCmdPrepare,  EVT_CMD_PREPARE  = NewEvent()
 
-def GrassCmd(cmd, stdout = None, stderr = None):
+def GrassCmd(cmd, env = None, stdout = None, stderr = None):
     """!Return GRASS command thread"""
-    return CommandThread(cmd,
+    return CommandThread(cmd, env = env,
                          stdout = stdout, stderr = stderr)
 
 class CmdThread(threading.Thread):
@@ -70,7 +70,7 @@ class CmdThread(threading.Thread):
         
         self.requestQ = requestQ
         self.resultQ = resultQ
-
+        
         self.start()
 
     def RunCmd(self, *args, **kwds):
@@ -578,7 +578,8 @@ class GMConsole(wx.SplitterWindow):
                 
                 # process GRASS command with argument
                 self.cmdThread.RunCmd(command, stdout = self.cmdStdOut, stderr = self.cmdStdErr,
-                                      onDone = onDone, onPrepare = onPrepare, userData = userData)
+                                      onDone = onDone, onPrepare = onPrepare, userData = userData,
+                                      env = os.environ.copy())
                 self.cmdOutputTimer.Start(50)
                 
                 # deactivate computational region and return to display settings
