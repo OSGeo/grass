@@ -99,7 +99,7 @@ int db__driver_open_database(dbHandle * handle)
 		 "'float4', 'float8', 'numeric', "
 		 "'char', 'bpchar', 'varchar', 'text', "
 		 "'time', 'date', 'timestamp', "
-		 "'bool', 'geometry' ) order by oid");
+		 "'bool', 'geometry', 'topogeometry') order by oid");
     
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
 	db_d_append_error(_("Unable to select data types"));
@@ -118,6 +118,7 @@ int db__driver_open_database(dbHandle * handle)
 
 	pg_types[row][0] = pgtype;
 
+        G_debug(3, "row = %d value = %s", row, PQgetvalue(res, row, 1));
 	if (strcmp(PQgetvalue(res, row, 1), "bit") == 0)
 	    type = PG_TYPE_BIT;
 	else if (strcmp(PQgetvalue(res, row, 1), "int2") == 0)
@@ -154,6 +155,8 @@ int db__driver_open_database(dbHandle * handle)
 	    type = PG_TYPE_BOOL;
 	else if (strcmp(PQgetvalue(res, row, 1), "geometry") == 0)
 	    type = PG_TYPE_POSTGIS_GEOM;
+	else if (strcmp(PQgetvalue(res, row, 1), "topogeometry") == 0)
+	    type = PG_TYPE_POSTGIS_TOPOGEOM;
 	else
 	    type = PG_TYPE_UNKNOWN;
 

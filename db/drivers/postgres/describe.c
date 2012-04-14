@@ -113,6 +113,11 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
 			"will not be converted", fname);
 		continue;
 	    }
+	    else if (gpgtype == PG_TYPE_POSTGIS_TOPOGEOM) {
+		G_debug(1, "PostgreSQL driver: PostGIS column '%s', type 'topogeometry' "
+			"will not be converted", fname);
+		continue;
+	    }
 	    else {
 		/* Warn, ignore and continue */
 		G_warning(_("PostgreSQL driver: column '%s', type %d is not supported"),
