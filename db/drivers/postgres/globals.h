@@ -18,7 +18,7 @@ typedef struct
 } PGCONN;
 
 /* PostgreSQL data types defined in GRASS
-   (see also: /usr/include/pgsql/server/catalog/pg_type.h)
+   (see also: /usr/include/postgresql/<version>/server/catalog/pg_type.h)
    PostGIS types are encoded as 17xxx.
    Types/OIDs are fetched in db.c from server.
  */
@@ -48,7 +48,8 @@ typedef enum
 
     PG_TYPE_BOOL,		/* bool, boolean */
 
-    PG_TYPE_POSTGIS_GEOM	/* geometry column of PostGIS, GRASS internal type */
+    PG_TYPE_POSTGIS_GEOM,	/* geometry column of PostGIS, GRASS internal type */
+    PG_TYPE_POSTGIS_TOPOGEOM	/* topogeometry column of PostGIS, GRASS internal type */
 } PG_TYPES;
 
 
