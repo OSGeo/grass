@@ -236,7 +236,7 @@ memory_bytes = rows*cols*(IR*4 + horizonsteps + OR*4)
 memory_bytes = rows*cols*((IR*4+horizonsteps)/numpartitions  + OR*4)
 </pre></div>
 
-<h3>Example</h3>
+<h2>EXAMPLES</h2>
 
 Spearfish example (considering also cast shadows):
 <div class="code"><pre>
@@ -253,6 +253,28 @@ r.slope.aspect elevation=elevation.dem aspect=aspect.dem slope=slope.dem
 r.sun -s elevation.dem horizon=horangle horizonstep=30 aspin=aspect.dem \
           slopein=slope.dem glob_rad=global_rad day=180 time=14
 </pre></div>
+
+<p>
+
+Calculation of the integrated daily irradiation for a region in North-Carolina
+for a given day of the year at 30m resolution. Here day 172 (i.e., 21 June
+in non-leap years):
+
+<div class="code"><pre>
+g.region rast=elev_ned_30m -p
+
+# considering cast shadows (-s)
+r.sun -s elev_ned_30m lin=2.5 alb=0.2 day=172 \
+      beam_rad=b172 diff_rad=d172 \
+      refl_rad=r172 insol_time=it172
+
+d.mon x0
+# show irradiation raster map [Wh.m-2.day-1]
+d.rast.leg b172
+# show insolation time raster map [h]
+d.rast.leg it172
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
