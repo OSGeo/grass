@@ -2248,8 +2248,9 @@ class TableListCtrl(wx.ListCtrl,
             i = 0
             for h in headings:
                 self.InsertColumn(col = i, heading = h)
-                self.SetColumnWidth(col = i, width = 150)
                 i += 1
+            self.SetColumnWidth(col = 0, width = 350)
+            self.SetColumnWidth(col = 1, width = 175)
         else:
             self.DeleteAllItems()
 
