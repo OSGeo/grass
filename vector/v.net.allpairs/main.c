@@ -4,6 +4,7 @@
  * MODULE:     v.net.allpairs
  *
  * AUTHOR(S):  Daniel Bundala
+ *             Markus Metz
  *
  * PURPOSE:    Shortest paths between all nodes
  *
@@ -222,7 +223,7 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
-    /* check for duplicate cats */
+    /* check for duplicate cats ? */
 
     G_message(_("Writing data into the table..."));
     G_percent_reset();

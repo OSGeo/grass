@@ -1,24 +1,17 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.allpairs</em> computes the shortest path between each select 
-node and all other nodes. 
+<em>v.net.allpairs</em> computes the shortest path between each selected 
+node and all other selected nodes. 
 
 <h2>NOTES</h2>
 
-An attribute table is created and linked to <b>layer</b>. The table 
+An attribute table is created and linked to layer 1. The table 
 contains three columns: <em>cat</em>, <em>to_cat</em>, <em>cost</em>. 
 Each entry denotes the cost of the shortest path from <em>cat</em> to 
 <em>to_cat</em>. If the cost is negative then no path exists. If points 
 are specified by <b>cats, layer</b> or <b>where</b> parameters then the 
-table is filled only for the selected points. In other words, <em>cat</em> 
-columns contains only selected points but the distances are computed and 
-updated for <em>all</em> other nodes.<br>
-If flag <b>-a</b> is set then new points are added on nodes without points. 
-These points have the largest category. Precisely, the category of each new 
-point is larger than any of the old categories. If the flag is not set 
-then no new points are created and hence the attribute table stores the 
-costs only between the points already present in the input. Output consists 
-of all points mentioned in either of the columns.<br>
+table is filled only for the selected points.
+<br>
 If <b>abcolumn</b> is not given then then the same costs are used for 
 forward and backward arcs.
 
@@ -62,6 +55,7 @@ from\to	1		3		4		5
 <h2>AUTHORS</h2>
 
 Daniel Bundala, Google Summer of Code 2009, Student<br>
-Wolf Bergenheim, Mentor
+Wolf Bergenheim, Mentor<br>
+Markus Metz
 
 <p><i>Last changed: $Date$</i>
