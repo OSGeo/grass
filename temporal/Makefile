@@ -29,6 +29,7 @@ SUBDIRS = \
 	t.vect.extract \
 	t.vect.what.strds \
 	t.vect.observe.strds
+	t.vect.univar \
 
 PGM = tgisintro
 
