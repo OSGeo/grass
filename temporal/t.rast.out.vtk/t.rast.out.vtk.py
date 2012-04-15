@@ -65,8 +65,6 @@
 #% description: Export files using the space time dataset granularity for equidistant time between maps, where statement will be ignored
 #%end
 
-
-
 import os
 import grass.script as grass
 import grass.temporal as tgis
