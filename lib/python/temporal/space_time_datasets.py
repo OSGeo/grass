@@ -583,9 +583,9 @@ class vector_dataset(abstract_map_dataset):
         if libvector.Vect_open_old_head2(byref(Map), name, mapset, "1") < 2:
 	    # force level 1, open fully
 	    # NOTE: number of points, lines, boundaries, centroids, faces, kernels is still available
-	    libvector.Vect_close(byref(Map))
 	    libvector.Vect_set_open_level(1) # no topology
 	    with_topo = False
+	    core.message(_("Open map without topology support"))
 	    if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
 		core.fatal(_("Unable to open vector map <%s>"%(libvector.Vect_get_full_name(byref(Map)))))
 
@@ -603,26 +603,33 @@ class vector_dataset(abstract_map_dataset):
 	kvp["is_3d"] = bool(libvector.Vect_is_3d(byref(Map)))
 	
 	# Read number of features
-	kvp["points"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_POINT)
-	kvp["lines"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_LINE)
-	kvp["boundaries"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_BOUNDARY)
-	kvp["centroids"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_CENTROID)
-	kvp["faces"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_FACE)
-	kvp["kernels"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_KERNEL)
-	
-	# Summarize the primitives
-	kvp["primitives"] = kvp["points"] + kvp["lines"] + kvp["boundaries"] + kvp["centroids"]
-	if kvp["is_3d"]:
-	    kvp["primitives"] += kvp["faces"] + kvp["kernels"]
-	
-	# Read topology information
 	if with_topo:
+	    kvp["points"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_POINT)
+	    kvp["lines"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_LINE)
+	    kvp["boundaries"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_BOUNDARY)
+	    kvp["centroids"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_CENTROID)
+	    kvp["faces"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_FACE)
+	    kvp["kernels"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_KERNEL)
+	
+	    # Summarize the primitives
+	    kvp["primitives"] = kvp["points"] + kvp["lines"] + kvp["boundaries"] + kvp["centroids"]
+	    if kvp["is_3d"]:
+	        kvp["primitives"] += kvp["faces"] + kvp["kernels"]
+
+	    # Read topology information
 	    kvp["nodes"] = libvector.Vect_get_num_nodes(byref(Map))
 	    kvp["areas"] = libvector.Vect_get_num_areas(byref(Map))
 	    kvp["islands"] = libvector.Vect_get_num_islands(byref(Map))
 	    kvp["holes"] = libvector.Vect_get_num_holes(byref(Map))
 	    kvp["volumes"] = libvector.Vect_get_num_primitives(byref(Map), libvector.GV_VOLUME)
 	else:
+	    kvp["points"] = None
+	    kvp["lines"] = None
+	    kvp["boundaries"] = None
+	    kvp["centroids"] = None
+	    kvp["faces"] = None
+	    kvp["kernels"] = None
+	    kvp["primitives"] = None
 	    kvp["nodes"] = None
 	    kvp["areas"] = None
 	    kvp["islands"] = None
