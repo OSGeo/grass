@@ -554,12 +554,14 @@ int G_parser(int argc, char **argv)
 	check_required();
     
     if (st->n_errors > 0) {
-	if (G_verbose() > G_verbose_min())
-	    G_usage();
-	fprintf(stderr, "\n");
-	for (i = 0; i < st->n_errors; i++) {
-	    fprintf(stderr, "%s: %s\n", _("ERROR"), st->error[i]);
-	}
+        if (G_verbose() > -1) {
+            if (G_verbose() > G_verbose_min())
+                G_usage();
+            fprintf(stderr, "\n");
+            for (i = 0; i < st->n_errors; i++) {
+                fprintf(stderr, "%s: %s\n", _("ERROR"), st->error[i]);
+            }
+        }
 	return -1;
     }
 
@@ -1330,19 +1332,20 @@ static int check_overwrite(void)
 		    
 		    if (found) {	/* found */
 			if (!st->overwrite && !over) {
-			    if (G_info_format() != G_INFO_FORMAT_GUI) {
-				fprintf(stderr,
-					_("ERROR: option <%s>: <%s> exists.\n"),
-					opt->key, opt->answers[i]);
-			    }
-			    else {
-				fprintf(stderr,
-					"GRASS_INFO_ERROR(%d,1): option <%s>: <%s> exists.\n",
-					getpid(), opt->key, opt->answers[i]);
-				fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
-					getpid());
-			    }
-
+                            if (G_verbose() > -1) {
+                                if (G_info_format() != G_INFO_FORMAT_GUI) {
+                                    fprintf(stderr,
+                                            _("ERROR: option <%s>: <%s> exists.\n"),
+                                            opt->key, opt->answers[i]);
+                                }
+                                else {
+                                    fprintf(stderr,
+                                            "GRASS_INFO_ERROR(%d,1): option <%s>: <%s> exists.\n",
+                                            getpid(), opt->key, opt->answers[i]);
+                                    fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
+                                            getpid());
+                                }
+                            }
 			    error = 1;
 			}
 		    }

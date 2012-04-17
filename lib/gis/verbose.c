@@ -1,114 +1,118 @@
-
-/**
- * \file verbose.c
+/*!
+ * \file lib/gis/verbose.c
  *
- * \brief GIS Library - Functions to check for GRASS_VERBOSE environment variable.
+ * \brief GIS Library - Subroutines to manage verbosity level
+ * (GRASS_VERBOSE environment variable)
  *
- * see also:
+ * See also:
  *  - G_percent()
+ *  - G_important_message()
  *  - G_message()
+ *  - G_verbose_message()
  *  - G_warning()
+ *  - G_fatal_error()
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2008, 2012 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Jachym Cepicky - jachym.cepicky at gmail.com
- *
- * \date 2006-2008
  */
 
 #include <stdlib.h>
 #include <grass/config.h>
 #include <grass/gis.h>
 
-#define MAXLEVEL 3
+#define MAXLEVEL 3 /* verbose */
 #define STDLEVEL 2
-#define MINLEVEL 0
+#define MINLEVEL 0 /* quiet */
 
-static int initialized;
-static int verbose;	/* current verbosity level */
+static struct state {
+    int initialized;
+    int verbose;       /* current verbosity level */
+} state;
 
+static struct state *st = &state;
 
-/**
+/*!
  * \brief Get current verbosity level.
  *
- * Currently, there are 4 levels of verbosity.
+ * Currently, there are 5 levels of verbosity (see return codes)
  *
- * \return 0 - module should print nothing but errors and warnings
- *		(G_fatal_error, G_warning). Triggered by "--q" or "--quiet".
- * \return 1 - module will print progress information (G_percent)
- * \return 2 - module will print all messages (G_message)
- * \return 3 - module will be very verbose. Triggered by "--v" or "--verbose".
+ * \return -1 - nothing will be printed (also errors and warnings will be also discarded)
+ * \return  0 - nothing will be printed except of errors and warnings
+ *              (G_fatal_error(), G_warning()). Triggered by "--q" or "--quiet".
+ * \return  1 - only progress information (G_percent()) and important messages (G_important_message()) will be printed
+ * \return  2 - all messages (G_message() and G_important_message()) will be printed
+ * \return  3 - also verbose messages (G_verbose_message()) will be printed. Triggered by "--v" or "--verbose".
  */
-
 int G_verbose(void)
 {
-    const char *verstr;		/* string for GRASS_VERBOSE content */
+    const char *verstr;         /* string for GRASS_VERBOSE content */
 
-    if (G_is_initialized(&initialized))
-	return verbose;
+    if (G_is_initialized(&(st->initialized)))
+        return st->verbose;
 
     /* verbose not defined -> get it from env. */
     verstr = getenv("GRASS_VERBOSE");
-    verbose = verstr ? atoi(verstr) : STDLEVEL;
+    st->verbose = verstr ? atoi(verstr) : STDLEVEL;
 
-    G_initialize_done(&initialized);
+    G_initialize_done(&(st->initialized));
 
-    return verbose;
+    return st->verbose;
 }
 
-
-/**
+/*!
  * \brief Get max verbosity level.
  *
  * \return max verbosity level
  */
-
 int G_verbose_max(void)
 {
     return MAXLEVEL;
 }
 
-
-/**
+/*!
  * \brief Get standard verbosity level.
  *
  * \return standard verbosity level
  */
-
 int G_verbose_std(void)
 {
     return STDLEVEL;
 }
 
-
-/**
+/*!
  * \brief Get min verbosity level.
  *
  * \return min verbosity level
  */
-
 int G_verbose_min(void)
 {
     return MINLEVEL;
 }
 
-/**
+/*!
  * \brief Set verbosity level.
  *
- * \param level: new verbosity level
+ * - -1 - nothing will be printed (also errors and warnings will be also discarded)
+ * -  0 - nothing will be printed except of errors and warnings
+ *              (G_fatal_error(), G_warning()). Triggered by "--q" or "--quiet".
+ * -  1 - only progress information (G_percent()) and important messages (G_important_message()) will be printed
+ * -  2 - all messages (G_message() and G_important_message()) will be printed
+ * -  3 - also verbose messages (G_verbose_message()) will be printed. Triggered by "--v" or "--verbose".
  *
- * \return 0 - failed (verbosity level untouched)
- * \return 1 - success
+ * \param level new verbosity level (-1,0,1,2,3)
+ *
+ * \return 0 on invalid verbosity level (verbosity level untouched)
+ * \return 1 on success
  */
-
 int G_set_verbose(int level)
 {
-    if (level >= MINLEVEL && level <= MAXLEVEL) {
-	verbose = level;
-	return 1;
+    if (level == -1 || (level >= MINLEVEL && level <= MAXLEVEL)) {
+        st->verbose = level;
+        return 1;
     }
 
     return 0;
