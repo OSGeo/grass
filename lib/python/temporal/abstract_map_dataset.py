@@ -137,7 +137,8 @@ class abstract_map_dataset(abstract_dataset):
         
         # Check if the name includes any mapset
 	if name.find("@") >= 0:
-	    name, mapset = name.split("@")[0]
+	    print name
+	    name, mapset = name.split("@")
 
         # Check for layer number in map name
 	if name.find(":") >= 0:
