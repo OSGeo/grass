@@ -12,7 +12,7 @@
 CREATE TABLE  vector_metadata (
   id VARCHAR NOT NULL,    -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
   stvds_register VARCHAR, -- The name of the table storing all space-time vector datasets in which this map is registered
-  is_3d INTEGER,          -- This is 1 if the vector map is 3d and 0 otherwise 
+  is_3d BOOLEAN,          -- This is 1 if the vector map is 3d and 0 otherwise 
   points INTEGER,         -- The number of points
   lines INTEGER,          -- The number of lines
   boundaries INTEGER,     -- The number of boundaries
