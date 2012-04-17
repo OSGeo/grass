@@ -38,6 +38,8 @@ CREATE TABLE  GRASS_MAP_relative_time (
   FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
 );
 
+CREATE INDEX GRASS_MAP_relative_time_index ON GRASS_MAP_relative_time (start_time, end_time);
+
 CREATE TABLE  GRASS_MAP_absolute_time (
   id VARCHAR NOT NULL,   -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
   start_time TIMESTAMP,  --  Start of the valid time, can be NULL if no time information is available
@@ -46,6 +48,8 @@ CREATE TABLE  GRASS_MAP_absolute_time (
   PRIMARY KEY (id),
   FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
 );
+
+CREATE INDEX GRASS_MAP_absolute_time_index ON GRASS_MAP_absolute_time (start_time, end_time);
 
 -- The spatial extent of a raster map
 
