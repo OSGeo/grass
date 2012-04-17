@@ -32,11 +32,12 @@ int main(int argc, char *argv[])
 
     int i;
     struct Option *base, *output, *input, *zeni, *azim, *metho;
-    struct Flag *ilum;
+    struct Flag *ilum, *scl;
 
     Gfile dem, out, band;
     double zenith, azimuth;
     int method = COSINE;
+    int do_scale;
 
     /* initialize GIS environment */
     G_gisinit(argv[0]);
@@ -88,6 +89,10 @@ int main(int argc, char *argv[])
     ilum->key = 'i';
     ilum->description = _("Output sun illumination terrain model");
     
+    scl = G_define_flag();
+    scl->key = 's';
+    scl->description = _("Scale output to input and copy color rules");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -100,6 +105,7 @@ int main(int argc, char *argv[])
 
     zenith = atof(zeni->answer);
     out.type = DCELL_TYPE;
+    do_scale = scl->answer;
 
     /* Evaluate only cos_i raster file */
     /* i.topo.corr -i out=cosi.on07 base=SRTM_v2 zenith=33.3631 azimuth=59.8897 */
@@ -180,7 +186,7 @@ int main(int argc, char *argv[])
 	    band.rast = Rast_allocate_buf(band.type);
 	    dem.rast = Rast_allocate_buf(dem.type);
 	    /* ----- */
-	    eval_tcor(method, &out, &dem, &band, zenith);
+	    eval_tcor(method, &out, &dem, &band, zenith, do_scale);
 	    /* ----- */
 	    G_free(dem.rast);
 	    Rast_close(dem.fd);
@@ -196,10 +202,18 @@ int main(int argc, char *argv[])
 		struct FPRange range;
 		DCELL min, max;
 		struct Colors grey;
+		int make_colors = 1;
 
-		Rast_read_fp_range(out.name, G_mapset(), &range);
-		Rast_get_fp_range_min_max(&range, &min, &max);
-		Rast_make_grey_scale_colors(&grey, min, max);
+		if (do_scale) {
+		    if (Rast_read_colors(band.name, "", &grey) >= 0)
+			make_colors = 0;
+		}
+		
+		if (make_colors) {
+		    Rast_read_fp_range(out.name, G_mapset(), &range);
+		    Rast_get_fp_range_min_max(&range, &min, &max);
+		    Rast_make_grey_scale_colors(&grey, min, max);
+		}
 		Rast_write_colors(out.name, G_mapset(), &grey);
 	    }
 	}

@@ -23,6 +23,6 @@ typedef struct
 #define C_CORRECT			12
 
 void eval_cosi(Gfile *, Gfile *, double, double);
-void eval_tcor(int, Gfile *, Gfile *, Gfile *, double);
+void eval_tcor(int, Gfile *, Gfile *, Gfile *, double, int);
 
 #endif
