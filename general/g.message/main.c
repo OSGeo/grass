@@ -8,7 +8,7 @@
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
  *               new projection information files.
- * COPYRIGHT:    (C) 2007,2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2007,2010,2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -60,19 +60,22 @@ int main(int argc, char *argv[])
     important = G_define_flag();
     important->key = 'i';
     important->guisection = _("Level");
-    important->description = _("Print message in all but full quiet mode");
-
+    important->label = _("Print message in all modes except of quiet mode");
+    important->description = _("Message is printed on GRASS_VERBOSE>=1");
+    
     verbose = G_define_flag();
     verbose->key = 'v';
     verbose->guisection = _("Level");
-    verbose->description = _("Print message only in verbose mode");
+    verbose->label = _("Print message only in verbose mode");
+    verbose->description = _("Message is printed only on GRASS_VERBOSE>=3");
 
     message = G_define_option();
     message->key = "message";
     message->type = TYPE_STRING;
     message->key_desc = "string";
     message->required = YES;
-    message->description = _("Text of the message to be printed");
+    message->label = _("Text of the message to be printed");
+    message->description = _("Message is printed on GRASS_VERBOSE>=2");
 
     debug_opt = G_define_option();
     debug_opt->key = "debug";
