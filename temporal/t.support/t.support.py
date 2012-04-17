@@ -54,7 +54,7 @@
 
 #%flag
 #% key: m
-#% description: Update the metadata information and spatial extent of registered maps from the grass spatial database
+#% description: Update the metadata information and spatial extent of registered maps from the grass spatial database. Check for removed maps and delete them from the temporal database and all effected space time datasets.
 #%end
 
 #%flag
@@ -73,7 +73,7 @@ def main():
     name = options["input"]
     type = options["type"]
     title = options["title"]
-    descr = options["description"]
+    description = options["description"]
     semantic = options["semantictype"]
     update = flags["u"]
     map_update = flags["m"]
@@ -92,37 +92,74 @@ def main():
     dbif = tgis.sql_database_interface_connection()
     dbif.connect()
 
-    sp = tgis.dataset_factory(type, id)
+    stds = tgis.dataset_factory(type, id)
 
-    if sp.is_in_db(dbif=dbif) == False:
+    if stds.is_in_db(dbif=dbif) == False:
         dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (stds.get_new_map_instance(None).get_type(), id))
 
-    sp.select(dbif=dbif)
-    # Temporal type can not be changed
-    ttype= sp.get_temporal_type()
-    sp.set_initial_values(temporal_type=ttype, semantic_type=semantic, title=title, description=descr)
-    # Update only non-null entries
-    sp.update(dbif=dbif)
+    stds.select(dbif=dbif)
+    
+    update = False
+    if title:
+	stds.metadata.set_title(title=title)
+	update = True
+	# Update only non-null entries
+    if description:
+	stds.metadata.set_description(description=description)
+	update = True
+    if semantic:
+	stds.base.set_semantic_type(semantic_type=semantic)
+	update = True
+
+    if update:
+	stds.update(dbif=dbif)
 
     if map_update:
         #Update the registered maps from the grass spatial database
         statement = ""
+        # This dict stores the datasets that must be updated
+        dataset_dict = {}
 
         count = 0
-        maps = sp.get_registered_maps_as_objects(dbif=dbif)
+        maps = stds.get_registered_maps_as_objects(dbif=dbif)
+        
+        # We collect the delete and update statements
         for map in maps:
-            map.select(dbif=dbif)
-            map.load()
-            statement += map.update(dbif=dbif, execute=False)
-            grass.percent(count, len(maps), 1)
+	    
+	    grass.percent(count, len(maps), 1)
 	    count += 1
+	    
+	    map.select(dbif=dbif)
+	    
+	    # Check if the map is present in the grass spatial database
+	    # Update if present, delete if not present
+	    if map.map_exists():
+		# Read new metadata from the spatial database
+		map.load()
+		statement += map.update(dbif=dbif, execute=False)
+	    else:
+		# Delete the map from the temporal database
+		# We need to update all effected space time datasets
+		rows = map.get_registered_datasets(dbif)
+		if rows: 
+		    for row in rows:
+			dataset_dict[row["id"]] = row["id"]
+		# Collect the delete statements
+		statement += map.delete(dbif=dbif, update=False, execute=False)
+	
 
         # Execute the collected SQL statenents
         dbif.execute_transaction(statement)
-
+        
+	# Update the effected space time datasets
+        for id in dataset_dict:
+	    stds_new = stds.get_new_instance(id)
+	    stds_new.select(dbif=dbif)
+            stds_new.update_from_registered_maps(dbif=dbif)
+        
     if map_update or update:
-        sp.update_from_registered_maps(dbif=dbif)
+        stds.update_from_registered_maps(dbif=dbif)
 
     dbif.close()
 
