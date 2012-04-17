@@ -43,8 +43,8 @@
 
 /* static int (*error)() = 0; */
 static int (*ext_error) (const char *, int);	/* Roger Bivand 17 June 2000 */
-static int no_warn = 0;
-static int no_sleep = 1;
+static int no_warn  = FALSE;
+static int no_sleep = TRUE;
 
 static int grass_info_format;
 static char *logfile;
@@ -153,9 +153,11 @@ void G_fatal_error(const char *msg, ...)
 	exit(EXIT_FAILURE);
     busy = 1;
 
-    va_start(ap, msg);
-    vfprint_error(ERR, msg, ap);
-    va_end(ap);
+    if (G_verbose() > -1) {
+        va_start(ap, msg);
+        vfprint_error(ERR, msg, ap);
+        va_end(ap);
+    }
 
     G__call_error_handlers();
 
@@ -185,7 +187,7 @@ void G_warning(const char *msg, ...)
 {
     va_list ap;
 
-    if (no_warn)
+    if (no_warn || G_verbose() < 0)
 	return;
 
     va_start(ap, msg);
