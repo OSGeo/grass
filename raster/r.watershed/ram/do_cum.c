@@ -7,7 +7,8 @@
 int do_cum(void)
 {
     int r, c, dr, dc;
-    CELL is_swale, value, valued, aspect;
+    CELL is_swale, aspect;
+    DCELL value, valued;
     int killer, threshold, count;
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
