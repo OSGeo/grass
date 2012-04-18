@@ -25,7 +25,8 @@ void parse_args(int, char **,
 
 /* attributes.c */
 int mk_att(int cat, struct field_info *Fi, dbDriver *Driver,
-	   int ncol, int doatt, int nocat, OGRFeatureH Ogr_feature, int *, int *);
+	   int ncol, int *colctype, const char **colname, int doatt, int nocat,
+	   OGRFeatureH Ogr_feature, int *, int *);
 
 /* list.c */
 char *OGR_list_write_drivers();
