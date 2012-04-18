@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
 {
     FILE *ascii;
     struct Option *input, *output, *type_opt, *dp_opt, *layer_opt, *scale;
-    struct Flag *coorcorr;
-    int *types = NULL, typenum = 0, dp, i;
+    struct Flag *coorcorr, *numatts, *labels;
+    int itype, *types = NULL, typenum = 0, dp, i;
     struct Map_info Map;
+    struct bound_box box;
     struct GModule *module;
-    int layer;
-    struct Cell_head region;
+    int layer, level;
     double zscale = 1.0, llscale = 1.0;
 
 
@@ -84,11 +84,23 @@ int main(int argc, char *argv[])
     layer_opt->answer = "1";
     layer_opt->description = _("Layer number");
 
-    coorcorr = G_define_flag();
-    coorcorr->key = 'c';
-    coorcorr->description =
-	_("Correct the coordinates to fit the VTK-OpenGL precision");
+    coorcorr = G_define_flag();                                            
+    coorcorr->key = 'c';                                                   
+    coorcorr->description = 
+    	_("Correct the coordinates to fit the VTK-OpenGL precision");
+    
+    numatts = G_define_flag();
+    numatts->key = 'n';
+    numatts->description = 
+    	_("Export numeric attribute table fields as VTK scalar variables");
 
+    labels = NULL; /* to avoid compiler warning about "unused variable"*/
+    /* not yet supported
+    labels = G_define_flag();
+    labels->key = 'l';
+    labels->description = _("Export text attribute table fields as VTK labels");
+    */
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -130,45 +142,15 @@ int main(int argc, char *argv[])
 	}
 	i++;
     }
-
-    G_get_set_window(&region);
-
-    /*Correct the coordinates, so the precision of VTK is not hurt :( */
-    if (coorcorr->answer) {
-	/*Get the default region for coordiante correction */
-	G_get_default_window(&region);
-
-	/*Use the center of the current region as extent */
-	y_extent = (region.north + region.south) / 2;
-	x_extent = (region.west + region.east) / 2;
-    }
-    else {
-	x_extent = 0;
-	y_extent = 0;
-    }
-
+    itype = Vect_option_to_types(type_opt);
 
     /* read and compute the scale factor */
     sscanf(scale->answer, "%lf", &zscale);
     /*if LL projection, convert the elevation values to degrees */
-    if (region.proj == PROJECTION_LL) {
+    if (G_projection() == PROJECTION_LL) {
 	llscale = M_PI / (180) * 6378137;
 	zscale /= llscale;
 	printf("Scale %g\n", zscale);
-    }
-
-    /*We need level 2 functions */
-    Vect_set_open_level(2);
-    Vect_open_old(&Map, input->answer, "");
-
-    if (output->answer) {
-	ascii = fopen(output->answer, "w");
-	if (ascii == NULL) {
-	    G_fatal_error(_("Unable to open file <%s>"), output->answer);
-	}
-    }
-    else {
-	ascii = stdout;
     }
 
     /*The precision of the output */
@@ -191,10 +173,77 @@ int main(int argc, char *argv[])
 	layer = 1;
     }
 
+    if (output->answer) {
+	ascii = fopen(output->answer, "w");
+	if (ascii == NULL) {
+	    G_fatal_error(_("Unable to open file <%s>"), output->answer);
+	}
+    }
+    else {
+	ascii = stdout;
+    }
+
+    /* Open input vector */
+    level = Vect_open_old(&Map, input->answer, "");
+    if (level < 2 && (itype & GV_AREA))
+	G_fatal_error(_("Export of areas requires topology. "
+	                "Please adjust '%s' option or rebuild topology."),
+			type_opt->key);
+
+    if (level == 2)
+	Vect_get_map_box(&Map, &box);
+    else {
+	int i, type, first = TRUE;
+	struct line_pnts *Points = Vect_new_line_struct();
+
+	Vect_rewind(&Map);
+	while ((type = Vect_read_next_line(&Map, Points, NULL)) > 0) {
+
+	    if (first) {
+		box.E = box.W = Points->x[0];
+		box.N = box.S = Points->y[0];
+		box.B = box.T = Points->z[0];
+		first = FALSE;
+	    }
+	    for (i = 1; i < Points->n_points; i++) {
+		if (Points->x[i] > box.E)
+		    box.E = Points->x[i];
+		else if (Points->x[i] < box.W)
+		    box.W = Points->x[i];
+
+		if (Points->y[i] > box.N)
+		    box.N = Points->y[i];
+		else if (Points->y[i] < box.S)
+		    box.S = Points->y[i];
+
+		if (Points->z[i] > box.T)
+		    box.T = Points->z[i];
+		else if (Points->z[i] < box.B)
+		    box.B = Points->z[i];
+	    }
+	}
+	Vect_destroy_line_struct(Points);
+    }
+
+    /*Correct the coordinates, so the precision of VTK is not hurt :( */
+    if (coorcorr->answer) {
+
+	/*Use the center of the vector's bbox as extent */
+	y_extent = (box.N + box.S) / 2;
+	x_extent = (box.W + box.E) / 2;
+    }
+    else {
+	x_extent = 0;
+	y_extent = 0;
+    }
+
     /*Write the header */
     write_vtk_head(ascii, &Map);
     /*Write the geometry and data */
-    write_vtk(ascii, &Map, layer, types, typenum, dp, zscale);
+    write_vtk(ascii, &Map, layer, types, typenum, dp, zscale, numatts->answer, 0 );
+    /* change to this, when labels get supported:
+    write_vtk(ascii, &Map, layer, types, typenum, dp, zscale, numatts->answer, labels->answer );
+    */
 
     if (ascii != NULL)
 	fclose(ascii);
