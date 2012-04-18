@@ -3,21 +3,28 @@
 #include "local_proto.h"
 
 int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
-	   int doatt, int nocat, OGRFeatureH Ogr_feature, int *noatt,
-	   int *fout)
+	   int *colctype, const char **colname, int doatt, int nocat,
+	   OGRFeatureH Ogr_feature, int *noatt, int *fout)
 {
     int j, ogrfieldnum;
-    int colsqltype, colctype, more;
+    int more;
     dbTable *Table;
-    dbString dbstring;
+    static int first = 1;
+    static dbString dbstring;
     dbColumn *Column;
     dbValue *Value;
     char buf[SQL_BUFFER_SIZE];
     dbCursor cursor;
 
+
     G_debug(2, "mk_att() cat = %d, doatt = %d", cat, doatt);
-    db_init_string(&dbstring);
-    
+
+    /* init constants */
+    if (first) {
+	db_init_string(&dbstring);
+	first = 0;
+    }
+
     /* Attributes */
     /* Reset */
     if (!doatt) {
@@ -68,37 +75,34 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 		    G_debug(2, "col %d : val = %s", j,
 			    db_get_string(&dbstring));
 
-		    colsqltype = db_get_column_sqltype(Column);
-		    colctype = db_sqltype_to_Ctype(colsqltype);
-		    G_debug(2, "  colctype = %d", colctype);
+		    G_debug(2, "  colctype = %d", colctype[j]);
 
-		    if (nocat && strcmp(Fi->key, db_get_column_name(Column)) == 0)
+		    if (nocat && strcmp(Fi->key, colname[j]) == 0)
 			continue;
 
 		    ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature,
-						      db_get_column_name
-						      (Column));
+						      colname[j]);
 		    G_debug(2, "  column = %s -> fieldnum = %d",
-			    db_get_column_name(Column), ogrfieldnum);
+			    colname[j], ogrfieldnum);
 
 		    if (ogrfieldnum < 0) {
 			G_debug(4, "Could not get OGR field number for column %s",
-				                         db_get_column_name(Column));
+				                         colname[j]);
 			continue;
 		    }
 
 		    /* Reset */
-		    if ((nocat && strcmp(Fi->key, db_get_column_name(Column)) == 0) == 0) {
+		    if ((nocat && strcmp(Fi->key, colname[j]) == 0) == 0) {
 			/* if this is 'cat', then execute the following only if the '-s' flag was NOT given*/
 			OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
 		    }
 
 		    /* prevent writing NULL values */
 		    if (!db_test_value_isnull(Value)) {
-			if ((nocat && strcmp(Fi->key, db_get_column_name(Column)) == 0) == 0) {
+			if ((nocat && strcmp(Fi->key, colname[j]) == 0) == 0) {
 			/* if this is 'cat', then execute the following only if the '-s' flag was NOT given*/
 
-			    switch (colctype) {
+			    switch (colctype[j]) {
 			    case DB_C_TYPE_INT:
 				OGR_F_SetFieldInteger(Ogr_feature,
 						      ogrfieldnum,
@@ -140,7 +144,9 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
     }
     (*fout)++;
 
+    /*
     db_free_string(&dbstring);
+    */
 
     return 1;
 }

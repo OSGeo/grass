@@ -50,8 +50,9 @@ int main(int argc, char *argv[])
     int type, cat;
 
     /* Attributes */
-    int doatt = 0, ncol = 0, colsqltype, colctype, colwidth, keycol = -1;
-    const char *colname;
+    int doatt = 0, ncol = 0, colsqltype, colwidth, keycol = -1;
+    int *colctype = NULL;
+    const char **colname = NULL;
     struct field_info *Fi = NULL;
     dbDriver *Driver = NULL;
     dbTable *Table;
@@ -577,17 +578,19 @@ int main(int argc, char *argv[])
 
 	     ncol = db_get_table_number_of_columns(Table);
 	     G_debug(2, "ncol = %d", ncol);
+	     colctype = G_malloc(ncol * sizeof(int));
+	     colname = G_malloc(ncol * sizeof(char *));
 	     keycol = -1;
 	     for (i = 0; i < ncol; i++) {
 		 Column = db_get_table_column(Table, i);
-		 colname =  db_get_column_name(Column);
+		 colname[i] =  G_store(db_get_column_name(Column));
 		 colsqltype = db_get_column_sqltype(Column);
-		 colctype = db_sqltype_to_Ctype(colsqltype);
+		 colctype[i] = db_sqltype_to_Ctype(colsqltype);
 		 colwidth = db_get_column_length(Column);
 		 G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
-			 i, colname, colsqltype, colctype, colwidth);
+			 i, colname[i], colsqltype, colctype[i], colwidth);
 		 
-		 switch (colctype) {
+		 switch (colctype[i]) {
 		 case DB_C_TYPE_INT:
 		     ogr_ftype = OFTInteger;
 		     break;
@@ -605,29 +608,29 @@ int main(int argc, char *argv[])
 
 		 strcpy(key1, Fi->key);
 		 G_tolcase(key1);
-		 strcpy(key2, colname);
+		 strcpy(key2, colname[i]);
 		 G_tolcase(key2);
 		 if (strcmp(key1, key2) == 0)
 		     keycol = i;
 		 G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
-			 colname, key1, key2, keycol);
+			 colname[i], key1, key2, keycol);
 
 		 if (flags.nocat->answer &&
-		     strcmp(Fi->key, colname) == 0)
+		     strcmp(Fi->key, colname[i]) == 0)
 		     /* skip export of 'cat' field */
 		     continue;
 
 		 if (flags.append->answer) {
 		     Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-		     if (OGR_FD_GetFieldIndex(Ogr_field, colname) > -1)
+		     if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
 			 /* skip existing fields */
 			 continue;
 		     else
 			 G_warning(_("New attribute column <%s> added to the table"),
-				   colname);
+				   colname[i]);
 		 }
 		 
-		 Ogr_field = OGR_Fld_Create(colname, ogr_ftype);
+		 Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
 		 if (ogr_ftype == OFTString && colwidth > 0)
 		     OGR_Fld_SetWidth(Ogr_field, colwidth);
 		 OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
@@ -718,7 +721,7 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
-		mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
+		mk_att(cat, Fi, Driver, ncol, colctype, colname, doatt, flags.nocat->answer,
 		       Ogr_feature, &noatt, &fout);
 		OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 	    }
@@ -793,7 +796,7 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
-		mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
+		mk_att(cat, Fi, Driver, ncol, colctype, colname, doatt, flags.nocat->answer,
 		       Ogr_feature, &noatt, &fout);
 		OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 	    }
@@ -853,7 +856,7 @@ int main(int argc, char *argv[])
 			    continue;
 		    }
 
-		    mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
+		    mk_att(cat, Fi, Driver, ncol, colctype, colname, doatt, flags.nocat->answer,
 			   Ogr_feature, &noatt, &fout);
 		    OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 		}
@@ -908,7 +911,7 @@ int main(int argc, char *argv[])
 			    continue;
 		    }
 
-		    mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
+		    mk_att(cat, Fi, Driver, ncol, colctype, colname, doatt, flags.nocat->answer,
 			   Ogr_feature, &noatt, &fout);
 		    OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 		}
