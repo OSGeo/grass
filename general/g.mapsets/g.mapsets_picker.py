@@ -20,18 +20,18 @@ class MapsetsFrame(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         # list of mapsets
-        self.mapsetlb = CheckListMapset(parent=self)
+        self.mapsetlb = CheckListMapset(parent = self)
         self.mapsetlb.LoadData()
         
-        sizer.Add(item=self.mapsetlb, proportion=1,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(item = self.mapsetlb, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
 
         
         # dialog buttons
-        line = wx.StaticLine(parent=self, id=wx.ID_ANY,
-                             style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, border=5)
+        line = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                             style = wx.LI_HORIZONTAL)
+        sizer.Add(item = line, proportion = 0,
+                  flag = wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, border = 5)
         
         btnsizer = wx.StdDialogButtonSizer()
         btnOK = wx.Button(self, wx.ID_OK)
@@ -46,8 +46,8 @@ class MapsetsFrame(wx.Frame):
         btnsizer.AddButton(btnCancel)
         btnsizer.Realize()
         
-        sizer.Add(item=btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+        sizer.Add(item = btnsizer, proportion = 0,
+                  flag = wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border = 5)
         
         # do layout
         self.Layout()
@@ -75,18 +75,19 @@ class MapsetsFrame(wx.Frame):
 
         grass.run_command('g.mapsets',
                           quiet = True,
-                          mapset = mapsets)
+                          mapset = mapsets,
+                          operation = 'set')
         
         self.Close()
         
 class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
     """List of mapset/owner/group"""
-    def __init__(self, parent, pos=wx.DefaultPosition,
-                 log=None):
+    def __init__(self, parent, pos = wx.DefaultPosition,
+                 log = None):
         self.parent = parent
         
         wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
-                             style=wx.LC_REPORT)
+                             style = wx.LC_REPORT)
         listmix.CheckListCtrlMixin.__init__(self)
         self.log = log
         
@@ -125,11 +126,11 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
             mapsetPath = os.path.join(locationPath,
                                       mapset)
             stat_info = os.stat(mapsetPath)
-	    if os.name in ('posix', 'mac'):
+            if os.name in ('posix', 'mac'):
                 self.SetStringItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
                 # FIXME: get group name
                 ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid) 
-	    else:
+            else:
                 # FIXME: no pwd under MS Windows (owner: 0, group: 0)
                 self.SetStringItem(index, 1, "%-8s" % stat_info.st_uid)
                 ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
@@ -137,8 +138,8 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
             if mapset in mapsets_access:
                 self.CheckItem(self.mapsets.index(mapset), True)
             
-        self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE)
-        self.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(col = 0, width = wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""
