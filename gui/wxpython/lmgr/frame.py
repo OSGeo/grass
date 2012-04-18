@@ -413,7 +413,8 @@ class GMFrame(wx.Frame):
             ms = dlg.GetMapsets()
             RunCommand('g.mapsets',
                        parent = self,
-                       mapset = '%s' % ','.join(ms))
+                       mapset = '%s' % ','.join(ms),
+                       operation = 'set')
         
     def OnCBPageChanged(self, event):
         """!Page in notebook (display) changed"""
