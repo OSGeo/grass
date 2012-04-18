@@ -613,7 +613,6 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 		      int layer, int *types, int typenum, int dp)
 {
     int type, cat, i, k, centroid;
-    struct line_pnts *Points;
     struct line_cats *Cats;
 
     /*The keywords may only be written once! */
@@ -676,7 +675,6 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 	return 1;
     }
 
-    Points = Vect_new_line_struct();	/* init line_pnts struct */
     Cats = Vect_new_cats_struct();
 
     G_message("Writing %i scalar variables as cell data ...", num_atts);
