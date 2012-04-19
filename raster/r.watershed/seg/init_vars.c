@@ -325,13 +325,13 @@ int init_vars(int argc, char *argv[])
 		    }
 		    else {
 			if (wat_map_type == CELL_TYPE) {
-			    wat_value = *((CELL *)ptr);
+			    wat_value = *((CELL *)watptr);
 			}
 			else if (wat_map_type == FCELL_TYPE) {
-			    wat_value = *((FCELL *)ptr);
+			    wat_value = *((FCELL *)watptr);
 			}
 			else if (wat_map_type == DCELL_TYPE) {
-			    wat_value = *((DCELL *)ptr);
+			    wat_value = *((DCELL *)watptr);
 			}
 		    }
 		}
@@ -426,7 +426,7 @@ int init_vars(int argc, char *argv[])
     G_debug(1, "heap memory %.2f MB", heap_mem);
     /* columns per segment */
     /* larger is faster */
-    seg_cols = seg_rows * seg_rows * seg_rows;
+    seg_cols = seg_rows * seg_rows;
     num_cseg_total = do_points / seg_cols;
     if (do_points % seg_cols > 0)
 	num_cseg_total++;
