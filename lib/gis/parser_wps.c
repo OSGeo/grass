@@ -25,6 +25,7 @@
 #define TYPE_PLAIN_TEXT 2
 #define TYPE_RANGE 3
 #define TYPE_LIST 4
+#define TYPE_STDS 5 /* Space time datasets of type raster, raster3d and vector */
 #define WPS_INPUT 0
 #define WPS_OUTPUT 1
 
@@ -49,6 +50,10 @@ static void wps_print_mimetype_vector_shape(void);
 static void wps_print_mimetype_vector_zipped_shape(void);
 static void wps_print_mimetype_vector_grass_ascii(void);
 static void wps_print_mimetype_vector_grass_binary(void);
+static void wps_print_mimetype_space_time_datasets(void);
+static void wps_print_mimetype_space_time_datasets_tar(void);
+static void wps_print_mimetype_space_time_datasets_tar_gz(void);
+static void wps_print_mimetype_space_time_datasets_tar_bz2(void);
 
 static void wps_print_process_descriptions_begin(void);
 static void wps_print_process_descriptions_end(void);
@@ -101,10 +106,12 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
  * Flags are supported as boolean values.
  *
  * The mime types for vector maps are GML, KML, dgn, shape and zipped shape. 
-*
+ *
  * The mime types for raster maps are tiff, geotiff, hfa, netcdf, gif, jpeg and png.
  *
- * The mime types are reflecting the capabilities of gdal and may be extended.
+ * Mime types for space time datasets are tar archives with gz, bzip or without compression
+ *
+ * The mime types are reflecting the capabilities of grass and gdal and may be extended.
  *
  * BoundignBox support is currently not available for inputs and outputs.
  * Literal data output (string, float or integer)  is currently not supported.
@@ -141,9 +148,13 @@ void G__wps_print_process_description(void)
     const char **keywords = NULL;
     int data_type, is_input, is_output;
     int num_raster_inputs = 0, num_raster_outputs = 0;
+    int num_strds_inputs = 0, num_strds_outputs = 0;
     int min = 0, max = 0;
     int num_keywords = 0;
     int found_output = 0;
+    int is_tuple; /* Checks the key_descr for comma separated values */
+    int num_tuples; /* Counts the "," in key_descr */
+
     new_prompt = G__uses_new_gisprompt();
 
     /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
@@ -203,8 +214,11 @@ void G__wps_print_process_description(void)
             value = NULL;
             is_input = 1;
             is_output = 0;
+	    is_tuple = 0;
+	    num_tuples = 0;
             data_type = TYPE_OTHER;
 
+	    /* Check the gisprompt */
 	    if (opt->gisprompt) {
 		const char *atts[] = { "age", "element", "prompt", NULL };
 		top = G_calloc(strlen(opt->gisprompt) + 1, 1);
@@ -232,6 +246,16 @@ void G__wps_print_process_description(void)
                     {
                         data_type = TYPE_VECTOR;
                     }
+                    if(strcmp(token, "stds") == 0 || strcmp(token, "strds") == 0 || strcmp(token, "stvds") == 0 || strcmp(token, "str3ds") == 0)
+                    {
+                        if(strcmp(token, "strds") == 0) {
+                            if(is_input == 1)
+                                num_strds_inputs++;
+                            if(is_output == 1)
+                                num_strds_outputs++;
+                        }
+                        data_type = TYPE_STDS;
+                    }
                     if(strcmp(token, "file") == 0)
                     {
                         data_type = TYPE_PLAIN_TEXT;
@@ -239,6 +263,22 @@ void G__wps_print_process_description(void)
                     s = strtok(NULL, ",");
                     G_free(token);
 		}
+		G_free(top);
+	    }
+
+	    /* Check the key description */
+	    if (opt->key_desc) {
+		top = G_calloc(strlen(opt->key_desc) + 1, 1);
+		strcpy(top, opt->key_desc);
+		s = strtok(top, ",");
+		/* Count comma's */
+                for (i = 0; s != NULL; i++) {
+                    num_tuples++;
+                    s = strtok(NULL, ",");
+		}
+                if(num_tuples > 1)
+                    is_tuple = 1;
+                
 		G_free(top);
 	    }
             /* We have an input option */
@@ -260,15 +300,24 @@ void G__wps_print_process_description(void)
                 }
 
                 identifier = opt->key;
-                if(opt->required == YES)
-                    min = 1;
-                else
-                    min = 0;
 
-                if(opt->multiple == YES)
+                if(opt->required == YES) {
+                    if(is_tuple)
+                        min = num_tuples;
+                    else
+                        min = 1;
+                } else {
+                    min = 0;
+                }
+
+                if(opt->multiple == YES) {
                     max = 1024;
-                else
-                    max = 1;
+                } else {
+                    if(is_tuple)
+                        max = num_tuples;
+                    else
+                        max = 1;
+                }
 
                 if (opt->description) {
                     title = opt->description;
@@ -289,8 +338,7 @@ void G__wps_print_process_description(void)
                     keywords = opt->opts;
                     num_keywords = i;
                 }
-
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || data_type == TYPE_PLAIN_TEXT)
+                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || data_type == TYPE_STDS || data_type == TYPE_PLAIN_TEXT)
                 {
                     /* 2048 is the maximum size of the map in mega bytes */
                     wps_print_complex_input(min, max, identifier, title, NULL, 2048, data_type);
@@ -329,7 +377,7 @@ void G__wps_print_process_description(void)
     }
 
     /* We have two default options, which define the resolution of the created mapset */
-    if(num_raster_inputs > 0 || num_raster_outputs > 0) {
+    if(num_raster_inputs > 0 || num_raster_outputs > 0 || num_strds_inputs > 0 || num_strds_outputs > 0) {
         wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ns", "Resolution of the mapset in north-south direction in meters or degrees",
             "This parameter defines the north-south resolution of the mapset in meter or degrees, which should be used to process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
             "float", 1, NULL, 0, NULL, TYPE_OTHER);
@@ -350,7 +398,7 @@ void G__wps_print_process_description(void)
 
     found_output = 0;
 
-    /*parse the output. only raster and vector map and stdout are supported */
+    /*parse the output. only raster, strds and vector map and stdout are supported */
     if (st->n_opts) {
 	opt = &st->first_option;
 	while (opt != NULL) {
@@ -382,6 +430,10 @@ void G__wps_print_process_description(void)
                     {
                         data_type = TYPE_VECTOR;
                     }
+                    if(strcmp(token, "stds") == 0 || strcmp(token, "strds") == 0 || strcmp(token, "stvds") == 0 || strcmp(token, "str3ds") == 0)
+                    {
+                        data_type = TYPE_STDS;
+                    }
                     if(strcmp(token, "file") == 0)
                     {
                         data_type = TYPE_PLAIN_TEXT;
@@ -401,7 +453,7 @@ void G__wps_print_process_description(void)
                 }
 
                 /* Only file, raster and vector output is supported by option */
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR  || data_type == TYPE_PLAIN_TEXT)
+                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || data_type == TYPE_STDS || data_type == TYPE_PLAIN_TEXT)
                 {
                     wps_print_complex_output(identifier, title, NULL, data_type);
                     found_output = 1;
@@ -564,6 +616,10 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
     {
             wps_print_mimetype_vector_gml311();
     }
+    else if(type == TYPE_STDS)
+    {
+            wps_print_mimetype_space_time_datasets_tar_gz();
+    }
     else if(type == TYPE_PLAIN_TEXT)
     {
             wps_print_mimetype_text_plain();
@@ -608,6 +664,10 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
                 wps_print_mimetype_vector_gml212_appl();
             	wps_print_mimetype_vector_kml22();
 	    }
+    }
+    else if(type == TYPE_STDS)
+    {
+            wps_print_mimetype_space_time_datasets();
     }
     else if(type == TYPE_PLAIN_TEXT)
     {
@@ -851,6 +911,37 @@ static void wps_print_mimetype_vector_grass_binary(void)
     fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/grass-vector-binary</MimeType>\n");
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
+
+/* *** Space time dataset format using tar, tar.gz and tar.bz2 methods for packaging */
+
+static void wps_print_mimetype_space_time_datasets(void)
+{
+    wps_print_mimetype_space_time_datasets_tar();
+    wps_print_mimetype_space_time_datasets_tar_gz();
+    wps_print_mimetype_space_time_datasets_tar_bz2();
+}
+
+static void wps_print_mimetype_space_time_datasets_tar(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-tar</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+static void wps_print_mimetype_space_time_datasets_tar_gz(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-tar-gz</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+static void wps_print_mimetype_space_time_datasets_tar_bz2(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-tar-bzip</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
 
 /* ************************************************************************** */
 static void wps_print_mimetype_raster_gif(void)
