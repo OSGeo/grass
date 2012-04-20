@@ -83,7 +83,7 @@ def create_temporal_database():
     """
     
     database = get_temporal_dbmi_init_string()
-
+    
     db_exists = False
 
     # Check if the database already exists
@@ -103,6 +103,8 @@ def create_temporal_database():
 
     if db_exists == True:
 	return
+    
+    core.message(_("Create temporal database: %s"%(database)))
     
     # Read all SQL scripts and templates
     map_tables_template_sql = open(os.path.join(get_sql_template_path(), "map_tables_template.sql"), 'r').read()

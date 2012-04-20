@@ -149,7 +149,7 @@ def main():
 		statement += map.delete(dbif=dbif, update=False, execute=False)
 	
 
-        # Execute the collected SQL statenents
+        # Execute the collected SQL statements
         dbif.execute_transaction(statement)
         
 	# Update the effected space time datasets

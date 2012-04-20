@@ -148,8 +148,7 @@ def main():
     next_start_time = first_start_time
 
     count = 0
-    proc_count = 0
-    proc_list = []
+    
     while next_start_time <= last_start_time:
         start = next_start_time
         if sp.is_time_absolute():
