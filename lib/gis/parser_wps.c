@@ -26,6 +26,8 @@
 #define TYPE_RANGE 3
 #define TYPE_LIST 4
 #define TYPE_STDS 5 /* Space time datasets of type raster, raster3d and vector */
+#define TYPE_STRDS 6 /* Space time raster datasets */
+#define TYPE_STVDS 7 /* Space time vector datasets */
 #define WPS_INPUT 0
 #define WPS_OUTPUT 1
 
@@ -51,9 +53,14 @@ static void wps_print_mimetype_vector_zipped_shape(void);
 static void wps_print_mimetype_vector_grass_ascii(void);
 static void wps_print_mimetype_vector_grass_binary(void);
 static void wps_print_mimetype_space_time_datasets(void);
-static void wps_print_mimetype_space_time_datasets_tar(void);
-static void wps_print_mimetype_space_time_datasets_tar_gz(void);
-static void wps_print_mimetype_space_time_datasets_tar_bz2(void);
+static void wps_print_mimetype_space_time_raster_datasets(void);
+static void wps_print_mimetype_space_time_vector_datasets(void);
+static void wps_print_mimetype_space_time_vector_datasets_tar(void);
+static void wps_print_mimetype_space_time_raster_datasets_tar(void);
+static void wps_print_mimetype_space_time_vector_datasets_tar_gz(void);
+static void wps_print_mimetype_space_time_raster_datasets_tar_gz(void);
+static void wps_print_mimetype_space_time_vector_datasets_tar_bz2(void);
+static void wps_print_mimetype_space_time_raster_datasets_tar_bz2(void);
 
 static void wps_print_process_descriptions_begin(void);
 static void wps_print_process_descriptions_end(void);
@@ -148,7 +155,9 @@ void G__wps_print_process_description(void)
     const char **keywords = NULL;
     int data_type, is_input, is_output;
     int num_raster_inputs = 0, num_raster_outputs = 0;
+    int num_vector_inputs = 0, num_vector_outputs = 0;
     int num_strds_inputs = 0, num_strds_outputs = 0;
+    int num_stvds_inputs = 0, num_stvds_outputs = 0;
     int min = 0, max = 0;
     int num_keywords = 0;
     int found_output = 0;
@@ -245,16 +254,31 @@ void G__wps_print_process_description(void)
                     if(strcmp(token, "vector") == 0)
                     {
                         data_type = TYPE_VECTOR;
+			if(is_input == 1)
+                            num_vector_inputs++;
+                        if(is_output == 1)
+                            num_vector_outputs++;
                     }
-                    if(strcmp(token, "stds") == 0 || strcmp(token, "strds") == 0 || strcmp(token, "stvds") == 0 || strcmp(token, "str3ds") == 0)
+		    /* Modules may have different types of space time datasets as inputs */
+                    if(strcmp(token, "stds") == 0)
                     {
-                        if(strcmp(token, "strds") == 0) {
-                            if(is_input == 1)
-                                num_strds_inputs++;
-                            if(is_output == 1)
-                                num_strds_outputs++;
-                        }
                         data_type = TYPE_STDS;
+                    }
+                    if(strcmp(token, "strds") == 0)
+                    {
+                        data_type = TYPE_STRDS;
+                        if(is_input == 1)
+                            num_strds_inputs++;
+                        if(is_output == 1)
+                            num_strds_outputs++;
+                    }
+                    if(strcmp(token, "stvds") == 0)
+                    {
+                        data_type = TYPE_STVDS;
+                        if(is_input == 1)
+                            num_stvds_inputs++;
+                        if(is_output == 1)
+                            num_stvds_outputs++;
                     }
                     if(strcmp(token, "file") == 0)
                     {
@@ -338,7 +362,9 @@ void G__wps_print_process_description(void)
                     keywords = opt->opts;
                     num_keywords = i;
                 }
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || data_type == TYPE_STDS || data_type == TYPE_PLAIN_TEXT)
+                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || 
+		   data_type == TYPE_STRDS  || data_type == TYPE_STVDS  || 
+		   data_type == TYPE_STDS || data_type == TYPE_PLAIN_TEXT)
                 {
                     /* 2048 is the maximum size of the map in mega bytes */
                     wps_print_complex_input(min, max, identifier, title, NULL, 2048, data_type);
@@ -398,7 +424,7 @@ void G__wps_print_process_description(void)
 
     found_output = 0;
 
-    /*parse the output. only raster, strds and vector map and stdout are supported */
+    /*parse the output. only raster maps, vector maps, space time raster and vector datasets plus stdout are supported */
     if (st->n_opts) {
 	opt = &st->first_option;
 	while (opt != NULL) {
@@ -430,9 +456,17 @@ void G__wps_print_process_description(void)
                     {
                         data_type = TYPE_VECTOR;
                     }
-                    if(strcmp(token, "stds") == 0 || strcmp(token, "strds") == 0 || strcmp(token, "stvds") == 0 || strcmp(token, "str3ds") == 0)
+                    if(strcmp(token, "stds") == 0)
                     {
                         data_type = TYPE_STDS;
+                    }
+                    if(strcmp(token, "strds") == 0)
+                    {
+                        data_type = TYPE_STRDS;
+                    }
+                    if(strcmp(token, "stvds") == 0)
+                    {
+                        data_type = TYPE_STVDS;
                     }
                     if(strcmp(token, "file") == 0)
                     {
@@ -451,10 +485,9 @@ void G__wps_print_process_description(void)
                     title = opt->description;
                     abstract = opt->description;
                 }
-
-                /* Only file, raster and vector output is supported by option */
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || data_type == TYPE_STDS || data_type == TYPE_PLAIN_TEXT)
-                {
+                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || 
+		   data_type == TYPE_STRDS  || data_type == TYPE_STVDS || 
+		   data_type == TYPE_STDS  || data_type == TYPE_PLAIN_TEXT) {
                     wps_print_complex_output(identifier, title, NULL, data_type);
                     found_output = 1;
                 }
@@ -618,7 +651,16 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
     }
     else if(type == TYPE_STDS)
     {
-            wps_print_mimetype_space_time_datasets_tar_gz();
+	    /* A space time raster dataset is the default an any modules with multiple dataset options */
+            wps_print_mimetype_space_time_raster_datasets_tar_gz();
+    }
+    else if(type == TYPE_STRDS)
+    {
+            wps_print_mimetype_space_time_raster_datasets_tar_gz();
+    }
+    else if(type == TYPE_STVDS)
+    {
+            wps_print_mimetype_space_time_vector_datasets_tar_gz();
     }
     else if(type == TYPE_PLAIN_TEXT)
     {
@@ -668,6 +710,14 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
     else if(type == TYPE_STDS)
     {
             wps_print_mimetype_space_time_datasets();
+    }
+    else if(type == TYPE_STRDS)
+    {
+            wps_print_mimetype_space_time_raster_datasets();
+    }
+    else if(type == TYPE_STVDS)
+    {
+            wps_print_mimetype_space_time_vector_datasets();
     }
     else if(type == TYPE_PLAIN_TEXT)
     {
@@ -916,32 +966,70 @@ static void wps_print_mimetype_vector_grass_binary(void)
 
 static void wps_print_mimetype_space_time_datasets(void)
 {
-    wps_print_mimetype_space_time_datasets_tar();
-    wps_print_mimetype_space_time_datasets_tar_gz();
-    wps_print_mimetype_space_time_datasets_tar_bz2();
+    wps_print_mimetype_space_time_raster_datasets();
+    wps_print_mimetype_space_time_vector_datasets();
 }
 
-static void wps_print_mimetype_space_time_datasets_tar(void)
+/* *** Space time raster dataset format using tar, tar.gz and tar.bz2 methods for packaging */
+
+static void wps_print_mimetype_space_time_raster_datasets(void)
+{
+    wps_print_mimetype_space_time_raster_datasets_tar();
+    wps_print_mimetype_space_time_raster_datasets_tar_gz();
+    wps_print_mimetype_space_time_raster_datasets_tar_bz2();
+}
+
+static void wps_print_mimetype_space_time_raster_datasets_tar(void)
 {
     fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-tar</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-grass-strds-tar</MimeType>\n");
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
 
-static void wps_print_mimetype_space_time_datasets_tar_gz(void)
+static void wps_print_mimetype_space_time_raster_datasets_tar_gz(void)
 {
     fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-tar-gz</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-grass-strds-tar-gz</MimeType>\n");
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
 
-static void wps_print_mimetype_space_time_datasets_tar_bz2(void)
+static void wps_print_mimetype_space_time_raster_datasets_tar_bz2(void)
 {
     fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-tar-bzip</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-grass-strds-tar-bzip</MimeType>\n");
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
 
+
+/* *** Space time vector dataset format using tar, tar.gz and tar.bz2 methods for packaging */
+
+static void wps_print_mimetype_space_time_vector_datasets(void)
+{
+    wps_print_mimetype_space_time_vector_datasets_tar();
+    wps_print_mimetype_space_time_vector_datasets_tar_gz();
+    wps_print_mimetype_space_time_vector_datasets_tar_bz2();
+}
+
+static void wps_print_mimetype_space_time_vector_datasets_tar(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-grass-stvds-tar</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+static void wps_print_mimetype_space_time_vector_datasets_tar_gz(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-grass-stvds-tar-gz</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+static void wps_print_mimetype_space_time_vector_datasets_tar_bz2(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/x-grass-stvds-tar-bzip</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
 
 /* ************************************************************************** */
 static void wps_print_mimetype_raster_gif(void)
