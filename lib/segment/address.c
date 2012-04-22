@@ -14,20 +14,47 @@
 
 #include <grass/segment.h>
 
-int segment_address_fast(const SEGMENT * SEG, int row, int col, int *n,
+#define SEG_N_ROW_NONZERO(SEG, row, col) \
+    (((row) >> (SEG)->srowbits) * (SEG)->spr + ((col) >> (SEG)->scolbits))
+
+#define SEG_INDEX_ROW_NONZERO(SEG, row, col) \
+    ((((row) & ((SEG)->srows - 1)) << (SEG)->scolbits) + ((col) & ((SEG)->scols - 1)))
+
+#define SEG_N_ROW_ZERO(SEG, col)	((col) >> (SEG)->scolbits)
+
+#define SEG_INDEX_ROW_ZERO(SEG, col) ((col) & ((SEG)->scols - 1))
+
+#define INDEX_ADJ(SEG, i) \
+    ((SEG)->fast_seek ? ((i) << (SEG)->lenbits) : ((i) * (SEG)->len))
+
+int segment_address_fast(const SEGMENT * SEG, off_t row, off_t col, int *n,
 			 int *index)
 {
+
+#if 1
     if (row) {
-	int seg_r = row >> SEG->srowbits;
-	int seg_c = col >> SEG->scolbits;
-
-	*n = seg_r * SEG->spr + seg_c;
-	*index = ((row - (seg_r << SEG->srowbits)) << SEG->scolbits) +
-	         col - (seg_c << SEG->scolbits);
-
-	/*
+	*n = SEG_N_ROW_NONZERO(SEG, row, col);
+	*index = INDEX_ADJ(SEG, SEG_INDEX_ROW_NONZERO(SEG, row, col));
+    }
+    /* for simple arrays */
+    else {
+	*n = SEG_N_ROW_ZERO(SEG, col);
+	*index = INDEX_ADJ(SEG, SEG_INDEX_ROW_ZERO(SEG, col));
+    }
+#else
+    if (row) {
 	*n = (row >> SEG->srowbits) * SEG->spr + (col >> SEG->scolbits);
 	*index = ((row & (SEG->srows - 1)) << SEG->scolbits) + (col & (SEG->scols - 1));
+
+	/* slower version for testing */
+	/*
+	off_t seg_r = row >> SEG->srowbits;
+	off_t seg_c = col >> SEG->scolbits;
+
+	*n = seg_r * SEG->spr + seg_c;
+	
+	*index = ((row - (seg_r << SEG->srowbits)) << SEG->scolbits) +
+	         col - (seg_c << SEG->scolbits);
 	*/
     }
     /* for simple arrays */
@@ -35,20 +62,20 @@ int segment_address_fast(const SEGMENT * SEG, int row, int col, int *n,
 	*n = col >> SEG->scolbits;
 	*index = col - ((*n) << SEG->scolbits);
     }
-    if (!SEG->slow_seek)
-	*index = *index << SEG->lenbits;
-    else
-	*index *= SEG->len;
+
+    *index = SEG->fast_seek ? (*index << SEG->lenbits) : (*index * SEG->len);
+
+#endif
 
     return 0;
 }
 
-int segment_address_slow(const SEGMENT * SEG, int row, int col, int *n,
+int segment_address_slow(const SEGMENT * SEG, off_t row, off_t col, int *n,
 			 int *index)
 {
     if (row) {
-	int seg_r = row / SEG->srows;
-	int seg_c = col / SEG->scols;
+	off_t seg_r = row / SEG->srows;
+	off_t seg_c = col / SEG->scols;
 
 	*n = seg_r * SEG->spr + seg_c;
 	*index = (row - seg_r * SEG->srows) * SEG->scols + col -
@@ -77,7 +104,7 @@ int segment_address_slow(const SEGMENT * SEG, int row, int col, int *n,
  * \return always returns 0
  */
 
-int segment_address(const SEGMENT * SEG, int row, int col, int *n, int *index)
+int segment_address(const SEGMENT * SEG, off_t row, off_t col, int *n, int *index)
 {
     /* old code
      *n = row / SEG->srows * SEG->spr + col / SEG->scols;

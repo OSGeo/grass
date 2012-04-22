@@ -43,13 +43,14 @@
  * \return -1 if unable to seek or write segment file
  */
 
-int segment_put_row(const SEGMENT * SEG, const void *buf, int row)
+int segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
 {
     int size;
-    int ncols;
+    off_t ncols;
     int scols;
-    int n, index, col;
+    int n, index;
     int result;
+    off_t col;
 
     ncols = SEG->ncols - SEG->spill;
     scols = SEG->scols;
@@ -58,12 +59,7 @@ int segment_put_row(const SEGMENT * SEG, const void *buf, int row)
 
     for (col = 0; col < ncols; col += scols) {
 	SEG->segment_address(SEG, row, col, &n, &index);
-	if (SEG->segment_seek(SEG, n, index) < 0) {
-	    G_warning
-		("Failed seek in segment file for index = %d n = %d at col:row %d:%d",
-		 index, n, col, row);
-	    return -1;
-	}
+	SEG->segment_seek(SEG, n, index);
 
 	if ((result = write(SEG->fd, buf, size)) != size) {
 	    G_warning("segment_put_row write error %s", strerror(errno));
@@ -81,12 +77,8 @@ int segment_put_row(const SEGMENT * SEG, const void *buf, int row)
 
     if ((size = SEG->spill * SEG->len)) {
 	SEG->segment_address(SEG, row, col, &n, &index);
-	if (SEG->segment_seek(SEG, n, index) < 0) {
-	    G_warning
-		("Failed seek in segment file for index = %d n = %d at col:row %d:%d",
-		 index, n, col, row);
-	    return -1;
-	}
+	SEG->segment_seek(SEG, n, index);
+
 	if (write(SEG->fd, buf, size) != size) {
 	    G_warning("segment_put_row final write error: %s",
 		      strerror(errno));
