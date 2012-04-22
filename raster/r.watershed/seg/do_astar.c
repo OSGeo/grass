@@ -4,18 +4,18 @@
 #include "do_astar.h"
 
 HEAP_PNT drop_pt(void);
-int sift_up(int, HEAP_PNT);
+int sift_up(GW_LARGE_INT, HEAP_PNT);
 int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b);
 double get_slope2(CELL, CELL, double);
 
 int do_astar(void)
 {
-    int doer, count;
+    GW_LARGE_INT doer, count;
     int upr, upc, r = -1, c = -1, ct_dir;
     CELL alt_val, alt_nbr[8];
     WAT_ALT wa;
-    char asp_val;
-    char flag_value, is_in_list, is_worked;
+    ASP_FLAG af;
+    char is_in_list, is_worked;
     HEAP_PNT heap_p;
 
     /* sides
@@ -28,7 +28,6 @@ int do_astar(void)
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
     int skip_diag;
-    int count_edge = 0, count_diag = 0, count_edge_sink = 0, count_diag_sink = 0;
 
     G_message(_("SECTION 2: A* Search."));
 
@@ -50,7 +49,7 @@ int do_astar(void)
     if (heap_size == 0)
 	G_fatal_error(_("No seeds for A* Search"));
 
-    G_debug(1, "heap size %d, points %d", heap_size, do_points);
+    G_debug(1, "heap size %"PRI_OFF_T", points %"PRI_OFF_T, heap_size, do_points);
 
     count = 0;
 
@@ -64,7 +63,7 @@ int do_astar(void)
 
 	r = heap_p.pnt.r;
 	c = heap_p.pnt.c;
-	G_debug(3, "heap size %d, r %d, c %d", heap_size, r, c);
+	G_debug(3, "heap size %"PRI_OFF_T", r %d, c %d", heap_size, r, c);
 
 	alt_val = heap_p.ele;
 
@@ -76,9 +75,9 @@ int do_astar(void)
 	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
 	    /* check if upr, upc are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
-		bseg_get(&bitflags, &flag_value, upr, upc);
-		is_in_list = FLAG_GET(flag_value, INLISTFLAG);
-		is_worked = FLAG_GET(flag_value, WORKEDFLAG);
+		seg_get(&aspflag, (char *)&af, upr, upc);
+		is_in_list = FLAG_GET(af.flag, INLISTFLAG);
+		is_worked = FLAG_GET(af.flag, WORKEDFLAG);
 		skip_diag = 0;
 		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
@@ -110,34 +109,18 @@ int do_astar(void)
 		/* add neighbour as new point if not in the list */
 		if (is_in_list == 0 && skip_diag == 0) {
 		    /* set flow direction */
-		    asp_val = drain[upr - r + 1][upc - c + 1];
+		    af.asp = drain[upr - r + 1][upc - c + 1];
 		    add_pt(upr, upc, alt_nbr[ct_dir]);
-		    bseg_put(&asp, &asp_val, upr, upc);
-		    FLAG_SET(flag_value, INLISTFLAG);
-		    bseg_put(&bitflags, &flag_value, upr, upc);
-
-		    if (alt_nbr[ct_dir] < alt_val) {
-			if (ct_dir < 4)
-			    count_edge_sink++;
-			else
-			    count_diag_sink++;
-		    }
-		    /* includes flat areas */
-		    else {
-			if (ct_dir < 4)
-			    count_edge++;
-			else
-			    count_diag++;
-		    }
+		    FLAG_SET(af.flag, INLISTFLAG);
+		    seg_put(&aspflag, (char *)&af, upr, upc);
 		}
 		else if (is_in_list && is_worked == 0 &&
-			 FLAG_GET(flag_value, EDGEFLAG)) {
+			 FLAG_GET(af.flag, EDGEFLAG)) {
 		    /* neighbour is edge in list, not yet worked */
-		    bseg_get(&asp, &asp_val, upr, upc);
-		    if (asp_val < 0) {
+		    if (af.asp < 0) {
 			/* adjust flow direction for edge cell */
-			asp_val = drain[upr - r + 1][upc - c + 1];
-			bseg_put(&asp, &asp_val, upr, upc);
+			af.asp = drain[upr - r + 1][upc - c + 1];
+			seg_put(&aspflag, (char *)&af, upr, upc);
 			seg_get(&watalt, (char *)&wa, r, c);
 			if (wa.wat > 0) {
 			    wa.wat = -wa.wat;
@@ -145,9 +128,9 @@ int do_astar(void)
 			}
 		    }
 		    /* neighbour is inside real depression, not yet worked */
-		    else if (asp_val == 0) {
-			asp_val = drain[upr - r + 1][upc - c + 1];
-			bseg_put(&asp, &asp_val, upr, upc);
+		    else if (af.asp == 0) {
+			af.asp = drain[upr - r + 1][upc - c + 1];
+			seg_put(&aspflag, (char *)&af, upr, upc);
 		    }
 		}
 	    }
@@ -155,22 +138,17 @@ int do_astar(void)
 	/* add astar points to sorted list for flow accumulation */
 	seg_put(&astar_pts, (char *)&heap_p.pnt, 0, doer);
 	doer--;
-	bseg_get(&bitflags, &flag_value, r, c);
-	FLAG_SET(flag_value, WORKEDFLAG);
-	bseg_put(&bitflags, &flag_value, r, c);
+	seg_get(&aspflag, (char *)&af, r, c);
+	FLAG_SET(af.flag, WORKEDFLAG);
+	seg_put(&aspflag, (char *)&af, r, c);
     }
     if (doer != -1)
-	G_fatal_error(_("bug in A* Search: doer %d heap size %d count %d"),
+	G_fatal_error(_("bug in A* Search: doer %"PRI_OFF_T" heap size %"PRI_OFF_T" count %"PRI_OFF_T),
 		      doer, heap_size, count);
 
     seg_close(&search_heap);
 
     G_percent(count, do_points, 1);	/* finish it */
-
-    G_debug(1, "edge direction: %d (%.2f%%)", count_edge, (double) 100. * count_edge / (count_edge + count_diag));
-    G_debug(1, "diag direction: %d (%.2f%%)", count_diag, (double) 100. * count_diag / (count_edge + count_diag));
-    G_debug(1, "edge out of depression: %d (%.2f%%)", count_edge_sink, (double) 100. * count_edge_sink / (count_edge_sink + count_diag_sink));
-    G_debug(1, "diag out of depression: %d (%.2f%%)", count_diag_sink, (double) 100. * count_diag_sink / (count_edge_sink + count_diag_sink));
 
     return 0;
 }
@@ -258,9 +236,9 @@ HEAP_PNT drop_pt(void)
 }
 
 /* standard sift-up routine for d-ary min heap */
-int sift_up(int start, HEAP_PNT child_p)
+int sift_up(GW_LARGE_INT start, HEAP_PNT child_p)
 {
-    int parent, child;
+    GW_LARGE_INT parent, child;
     HEAP_PNT heap_p;
 
     child = start;

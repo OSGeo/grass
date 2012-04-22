@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <unistd.h>
 #include <grass/segment.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 int cseg_close(CSEG * cseg)
 {

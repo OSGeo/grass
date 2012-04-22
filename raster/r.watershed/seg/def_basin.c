@@ -6,8 +6,9 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 {
     int r, rr, c, cc, ct, new_r[9], new_c[9];
     CELL value, new_elev;
-    char downdir, direction, asp_value, cvalue;
+    char downdir, direction, asp_value;
     int oldupdir, riteflag, leftflag, thisdir;
+    ASP_FLAG af;
 
     for (;;) {
 	cseg_put(&bas, &basin_num, row, col);
@@ -17,12 +18,12 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
 		    if (r == row && c == col)
 			continue;
-		    bseg_get(&asp, &asp_value, r, c);
+		    seg_get(&aspflag, (char *)&af, r, c);
+		    asp_value = af.asp;
 		    if (asp_value < -1)
 			asp_value = -asp_value;
 		    if (asp_value == drain[rr][cc]) {
-			bseg_get(&bitflags, &cvalue, r, c);
-			if (FLAG_GET(cvalue, SWALEFLAG)) {
+			if (FLAG_GET(af.flag, SWALEFLAG)) {
 			    new_r[++ct] = r;
 			    new_c[ct] = c;
 			}
@@ -40,7 +41,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 	    return (basin_num);
 	}
 	oldupdir = drain[row - new_r[1] + 1][col - new_c[1] + 1];
-	bseg_get(&asp, &downdir, row, col);
+	seg_get(&aspflag, (char *)&af, row, col);
+	downdir = af.asp;
 	if (downdir < 0)
 	    downdir = -downdir;
 	riteflag = leftflag = 0;
@@ -49,7 +51,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
 		    if (r == row && c == col)
 			continue;
-		    bseg_get(&asp, &direction, r, c);
+		    seg_get(&aspflag, (char *)&af, r, c);
+		    direction = af.asp;
 		    if (direction == drain[rr][cc]) {
 			thisdir = updrain[rr][cc];
 			switch (haf_basin_side
@@ -87,7 +90,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 	    }
 	    else {			/* sides == 4 */
 
-		bseg_get(&asp, &asp_value, row, col);
+		seg_get(&aspflag, (char *)&af, row, col);
+		asp_value = af.asp;
 		if (asp_value < 0)
 		    asp_value = -asp_value;
 		if (asp_value == 2 || asp_value == 6) {

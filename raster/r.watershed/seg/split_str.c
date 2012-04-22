@@ -7,6 +7,7 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
     CELL old_basin, new_elev;
     char downdir, aspect;
     WAT_ALT wa;
+    ASP_FLAG af;
     double slope, easting, northing;
     int doit, ctr, updir, splitdir[9];
     int thisdir, leftflag, riteflag;
@@ -17,7 +18,8 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
     for (ctr = 1; ctr <= ct; ctr++)
 	splitdir[ctr] = drain[row - new_r[ctr] + 1][col - new_c[ctr] + 1];
     updir = splitdir[1];
-    bseg_get(&asp, &downdir, row, col);
+    seg_get(&aspflag, (char *)&af, row, col);
+    downdir = af.asp;
     if (downdir < 0)
 	downdir = -downdir;
     riteflag = leftflag = 0;
@@ -26,7 +28,8 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
 	    if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
 		if (r == row && c == col)
 		    continue;
-		bseg_get(&asp, &aspect, r, c);
+		seg_get(&aspflag, (char *)&af, r, c);
+		aspect = af.asp;
 		if (aspect == drain[rr][cc]) {
 		    doit = 1;
 		    thisdir = updrain[rr][cc];

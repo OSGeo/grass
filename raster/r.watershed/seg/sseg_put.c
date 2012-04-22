@@ -1,8 +1,8 @@
 #include <grass/gis.h>
 #include <grass/segment.h>
-#include "cseg.h"
+#include "Gwater.h"
 
-int seg_put(SSEG * sseg, char *value, int row, int col)
+int seg_put(SSEG * sseg, char *value, GW_LARGE_INT row, GW_LARGE_INT col)
 {
     if (segment_put(&(sseg->seg), value, row, col) < 0) {
 	G_warning("seg_put(): could not write segment file");
@@ -11,7 +11,7 @@ int seg_put(SSEG * sseg, char *value, int row, int col)
     return 0;
 }
 
-int seg_put_row(SSEG * sseg, char *value, int row)
+int seg_put_row(SSEG * sseg, char *value, GW_LARGE_INT row)
 {
     if (segment_put_row(&(sseg->seg), value, row) < 0) {
 	G_warning("seg_put(): could not write segment file");

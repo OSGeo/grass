@@ -8,14 +8,15 @@
 int do_cum(void)
 {
     int r, c, dr, dc;
-    char asp_val, asp_val_down;
-    char is_swale, this_flag_value, flag_value;
+    char is_swale;
     DCELL value, valued;
     POINT point;
-    int killer, threshold;
+    GW_LARGE_INT killer;
+    int threshold;
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     WAT_ALT wa, wadown;
+    ASP_FLAG af, afdown;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
 
@@ -28,26 +29,25 @@ int do_cum(void)
 	seg_get(&astar_pts, (char *)&point, 0, killer);
 	r = point.r;
 	c = point.c;
-	bseg_get(&asp, &asp_val, r, c);
-	if (asp_val) {
-	    dr = r + asp_r[ABS(asp_val)];
-	    dc = c + asp_c[ABS(asp_val)];
+	seg_get(&aspflag, (char *)&af, r, c);
+	if (af.asp) {
+	    dr = r + asp_r[ABS(af.asp)];
+	    dc = c + asp_c[ABS(af.asp)];
 	}
 	/* skip user-defined depressions */
 	else
 	    dr = dc = -1;
 
-	bseg_get(&bitflags, &this_flag_value, r, c);
-	FLAG_UNSET(this_flag_value, WORKEDFLAG);
+	FLAG_UNSET(af.flag, WORKEDFLAG);
 
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
 	    /* TODO: do not distribute flow along edges, this causes artifacts */
 	    seg_get(&watalt, (char *)&wa, r, c);
 	    value = wa.wat;
-	    is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
+	    is_swale = FLAG_GET(af.flag, SWALEFLAG);
 	    if (fabs(value) >= threshold && !is_swale) {
 		is_swale = 1;
-		FLAG_SET(this_flag_value, SWALEFLAG);
+		FLAG_SET(af.flag, SWALEFLAG);
 	    }
 	    seg_get(&watalt, (char *)&wadown, dr, dc);
 	    valued = wadown.wat;
@@ -67,17 +67,17 @@ int do_cum(void)
 	    seg_put(&watalt, (char *)&wadown, dr, dc);
 	    /* update asp for depression */
 	    if (is_swale || fabs(valued) >= threshold) {
-		bseg_get(&bitflags, &flag_value, dr, dc);
-		FLAG_SET(flag_value, SWALEFLAG);
-		bseg_put(&bitflags, &flag_value, dr, dc);
+		seg_get(&aspflag, (char *)&afdown, dr, dc);
+		FLAG_SET(afdown.flag, SWALEFLAG);
+		seg_put(&aspflag, (char *)&afdown, dr, dc);
 		is_swale = 1;
 	    }
 	    else {
-		if (er_flag && !is_swale && !FLAG_GET(this_flag_value, RUSLEBLOCKFLAG))
+		if (er_flag && !is_swale && !FLAG_GET(afdown.flag, RUSLEBLOCKFLAG))
 		    slope_length(r, c, dr, dc);
 	    }
 	}
-	bseg_put(&bitflags, &this_flag_value, r, c);
+	seg_put(&aspflag, (char *)&af, r, c);
     }
     G_percent(do_points, do_points, 1);	/* finish it */
 
@@ -114,7 +114,9 @@ int do_cum_mfd(void)
     DCELL value, valued, *wat_nbr;
     POINT point;
     WAT_ALT wa;
-    int killer, threshold;
+    ASP_FLAG af, afdown;
+    GW_LARGE_INT killer;
+    int threshold;
 
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
@@ -122,10 +124,9 @@ int do_cum_mfd(void)
     int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side, max_side;
     double dx, dy;
     CELL ele, *ele_nbr;
-    char asp_val, asp_val_down;
     double prop, max_acc;
     int workedon, edge, is_swale, flat;
-    char *flag_nbr, this_flag_value, flag_value;
+    char *flag_nbr;
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
@@ -165,10 +166,10 @@ int do_cum_mfd(void)
 	seg_get(&astar_pts, (char *)&point, 0, killer);
 	r = point.r;
 	c = point.c;
-	bseg_get(&asp, &asp_val, r, c);
-	if (asp_val) {
-	    dr = r + asp_r[ABS(asp_val)];
-	    dc = c + asp_c[ABS(asp_val)];
+	seg_get(&aspflag, (char *)&af, r, c);
+	if (af.asp) {
+	    dr = r + asp_r[ABS(af.asp)];
+	    dc = c + asp_c[ABS(af.asp)];
 	}
 	/* skip user-defined depressions */
 	else
@@ -176,8 +177,7 @@ int do_cum_mfd(void)
 
 	/* WORKEDFLAG has been set during A* Search
 	 * reversed meaning here: 0 = done, 1 = not yet done */
-	bseg_get(&bitflags, &this_flag_value, r, c);
-	FLAG_UNSET(this_flag_value, WORKEDFLAG);
+	FLAG_UNSET(af.flag, WORKEDFLAG);
 	
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
 	    r_max = dr;
@@ -207,6 +207,7 @@ int do_cum_mfd(void)
 
 		wat_nbr[ct_dir] = 0;
 		ele_nbr[ct_dir] = 0;
+		flag_nbr[ct_dir] = 0;
 
 		/* check if neighbour is within region */
 		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
@@ -215,7 +216,8 @@ int do_cum_mfd(void)
 		    if (dr == r_nbr && dc == c_nbr)
 			np_side = ct_dir;
 
-		    bseg_get(&bitflags, &flag_nbr[ct_dir], r_nbr, c_nbr);
+		    seg_get(&aspflag, (char *)&afdown, r_nbr, c_nbr);
+		    flag_nbr[ct_dir] = afdown.flag;
 		    seg_get(&watalt, (char *)&wa, r_nbr, c_nbr);
 		    wat_nbr[ct_dir] = wa.wat;
 		    ele_nbr[ct_dir] = wa.ele;
@@ -266,12 +268,11 @@ int do_cum_mfd(void)
 	    }
 	    /* do not continue streams along edges, this causes artifacts */
 	    if (edge) {
-		is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
-		if (is_swale && asp_val > 0) {
-		    asp_val = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
-		    bseg_put(&asp, &asp_val, r, c);
+		is_swale = FLAG_GET(af.flag, SWALEFLAG);
+		if (is_swale && af.asp > 0) {
+		    af.asp = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
 		}
-		bseg_put(&bitflags, &this_flag_value, r, c);
+		seg_put(&aspflag, (char *)&af, r, c);
 		continue;
 	    }
 
@@ -327,7 +328,7 @@ int do_cum_mfd(void)
 			    seg_put(&watalt, (char *)&wa, r_nbr, c_nbr);
 
 			    /* get main drainage direction */
-			    if (ABS(wat_nbr[ct_dir]) >= max_acc) {
+			    if (fabs(wat_nbr[ct_dir]) >= max_acc) {
 				max_acc = ABS(wat_nbr[ct_dir]);
 				r_max = r_nbr;
 				c_max = c_nbr;
@@ -348,7 +349,7 @@ int do_cum_mfd(void)
 		    c_max = dc;
 		} */
 
-		if (ABS(prop - 1.0) > 5E-6f) {
+		if (fabs(prop - 1.0) > 5E-6f) {
 		    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
 			      prop);
 		}
@@ -375,39 +376,36 @@ int do_cum_mfd(void)
 
 	    /* update asp */
 	    if (dr != r_max || dc != c_max) {
-		if (asp_val < 0) {
-		    asp_val = -1 * drain[r - r_max + 1][c - c_max + 1];
+		if (af.asp < 0) {
+		    af.asp = -1 * drain[r - r_max + 1][c - c_max + 1];
 		}
 		else
-		    asp_val = drain[r - r_max + 1][c - c_max + 1];
-		    
-		bseg_put(&asp, &asp_val, r, c);
+		    af.asp = drain[r - r_max + 1][c - c_max + 1];
 	    }
-	    is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
+	    is_swale = FLAG_GET(af.flag, SWALEFLAG);
 	    /* start new stream */
-	    value = ABS(value) + 0.5;
-	    if (!is_swale && (int)value >= threshold && stream_cells < 1 &&
+	    if (!is_swale && fabs(value) >= threshold && stream_cells < 1 &&
 		swale_cells < 1 && !flat) {
-		FLAG_SET(this_flag_value, SWALEFLAG);
+		FLAG_SET(af.flag, SWALEFLAG);
 		is_swale = 1;
 	    }
 	    /* continue stream */
 	    if (is_swale) {
-		flag_value = flag_nbr[max_side];
-		FLAG_SET(flag_value, SWALEFLAG);
-		bseg_put(&bitflags, &flag_value, r_max, c_max);
+		seg_get(&aspflag, (char *)&afdown, r_max, c_max);
+		FLAG_SET(afdown.flag, SWALEFLAG);
+		seg_put(&aspflag, (char *)&afdown, r_max, c_max);
 	    }
 	    else {
-		if (er_flag && !is_swale && !FLAG_GET(this_flag_value, RUSLEBLOCKFLAG))
+		if (er_flag && !is_swale && !FLAG_GET(af.flag, RUSLEBLOCKFLAG))
 		    slope_length(r, c, r_max, c_max);
 	    }
 	}
-	bseg_put(&bitflags, &this_flag_value, r, c);
+	seg_put(&aspflag, (char *)&af, r, c);
     }
     G_percent(do_points, do_points, 1);	/* finish it */
     
     if (workedon)
-	G_warning(_("MFD: A * path already processed when distributing flow: %d of %d cells"),
+	G_warning(_("MFD: A * path already processed when distributing flow: %d of %"PRI_OFF_T" cells"),
 		  workedon, do_points);
 
     seg_close(&astar_pts);

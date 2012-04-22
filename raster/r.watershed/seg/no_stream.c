@@ -11,6 +11,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
     DCELL dvalue, max_drain;	/* flow acc is now DCELL */
     int updir, riteflag, leftflag, thisdir;
     WAT_ALT wa;
+    ASP_FLAG af;
 
     while (1) {
 	cseg_put(&bas, &basin_num, row, col);
@@ -19,7 +20,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	    for (c = col - 1, cc = 0; c <= col + 1; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
 
-		    bseg_get(&asp, &aspect, r, c);
+		    seg_get(&aspflag, (char *)&af, r, c);
+		    aspect = af.asp;
 		    if (aspect == drain[rr][cc]) {
 			seg_get(&watalt, (char *)&wa, r, c);
 			dvalue = wa.wat;
@@ -36,7 +38,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	}
 	if (max_drain > -1) {
 	    updir = drain[row - uprow + 1][col - upcol + 1];
-	    bseg_get(&asp, &downdir, row, col);
+	    seg_get(&aspflag, (char *)&af, row, col);
+	    downdir = af.asp;
 	    if (downdir < 0)
 		downdir = -downdir;
 	    if (arm_flag) {
@@ -49,8 +52,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 			stream_length += window.ew_res;
 		}
 		else {		/* sides == 4 */
-
-		    bseg_get(&asp, &asp_value, uprow, upcol);
+		    seg_get(&aspflag, (char *)&af, uprow, upcol);
+		    asp_value = af.asp;
 		    if (downdir == 2 || downdir == 6) {
 			if (asp_value == 2 || asp_value == 6)
 			    stream_length += window.ns_res;
@@ -70,7 +73,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	    for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 		for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 		    if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
-			bseg_get(&asp, &aspect, r, c);
+			seg_get(&aspflag, (char *)&af, r, c);
+			aspect = af.asp;
 			if (aspect == drain[rr][cc]) {
 			    thisdir = updrain[rr][cc];
 			    switch (haf_basin_side(updir,

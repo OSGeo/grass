@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <grass/segment.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 
 int dseg_open(DSEG * dseg, int srows, int scols, int nsegs_in_memory)

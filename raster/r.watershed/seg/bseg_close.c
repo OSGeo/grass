@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 #include <unistd.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 int bseg_close(BSEG * bseg)
 {
