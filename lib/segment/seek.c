@@ -33,13 +33,17 @@
  * \return -1 if unable to seek
  */
 
+#define SEG_SEEK_FAST(SEG, n, index) \
+    ((((off_t) (n)) << (SEG)->sizebits) + (index) + (SEG)->offset)
+
+#define SEG_SEEK_SLOW(SEG, n, index) \
+    ((off_t) (n) * (SEG)->size + (index) + (SEG)->offset)
+
 int segment_seek_fast(const SEGMENT * SEG, int n, int index)
 {
-    off_t offset = (((off_t) n) << SEG->sizebits) + index + SEG->offset;
-
-    if (lseek(SEG->fd, offset, SEEK_SET) == (off_t) - 1) {
-	G_warning("segment_seek: %s", strerror(errno));
-	return -1;
+    if (lseek((SEG)->fd, SEG_SEEK_FAST(SEG, n, index), 
+        SEEK_SET) == (off_t) -1) {
+	G_fatal_error("segment_seek: %s", strerror(errno));
     }
 
     return 0;
@@ -47,11 +51,9 @@ int segment_seek_fast(const SEGMENT * SEG, int n, int index)
 
 int segment_seek_slow(const SEGMENT * SEG, int n, int index)
 {
-    off_t offset = (off_t) n * SEG->size + index + SEG->offset;
-
-    if (lseek(SEG->fd, offset, SEEK_SET) == (off_t) - 1) {
-	G_warning("segment_seek: %s", strerror(errno));
-	return -1;
+    if (lseek((SEG)->fd, SEG_SEEK_SLOW(SEG, n, index), 
+        SEEK_SET) == (off_t) -1) {
+	G_fatal_error("segment_seek: %s", strerror(errno));
     }
 
     return 0;

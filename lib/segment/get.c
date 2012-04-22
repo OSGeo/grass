@@ -38,7 +38,7 @@
  * \return -1 if unable to seek or read segment file
  */
 
-int segment_get(SEGMENT * SEG, void *buf, int row, int col)
+int segment_get(SEGMENT * SEG, void *buf, off_t row, off_t col)
 {
     int index, n, i;
 

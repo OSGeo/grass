@@ -40,12 +40,12 @@
  * \return -1 if unable to seek or read segment file
  */
 
-int segment_get_row(const SEGMENT * SEG, void *buf, int row)
+int segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
 {
     int size;
-    int ncols;
+    off_t ncols, col;
     int scols;
-    int n, index, col;
+    int n, index;
 
     ncols = SEG->ncols - SEG->spill;
     scols = SEG->scols;
@@ -53,8 +53,7 @@ int segment_get_row(const SEGMENT * SEG, void *buf, int row)
 
     for (col = 0; col < ncols; col += scols) {
 	SEG->segment_address(SEG, row, col, &n, &index);
-	if (SEG->segment_seek(SEG, n, index) < 0)
-	    return -1;
+	SEG->segment_seek(SEG, n, index);
 
 	if (read(SEG->fd, buf, size) != size) {
 	    G_warning("segment_get_row: %s", strerror(errno));
@@ -70,8 +69,7 @@ int segment_get_row(const SEGMENT * SEG, void *buf, int row)
     }
     if ((size = SEG->spill * SEG->len)) {
 	SEG->segment_address(SEG, row, col, &n, &index);
-	if (SEG->segment_seek(SEG, n, index) < 0)
-	    return -1;
+	SEG->segment_seek(SEG, n, index);
 
 	if (read(SEG->fd, buf, size) != size) {
 	    G_warning("segment_get_row: %s", strerror(errno));
