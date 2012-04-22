@@ -19,8 +19,8 @@ struct aq {			/* age queue */
 typedef struct
 {
     int open;			/* open flag */
-    int nrows;			/* rows in original data */
-    int ncols;			/* cols in original data */
+    off_t nrows;		/* rows in original data */
+    off_t ncols;		/* cols in original data */
     int len;			/* bytes per data value */
     int srows;			/* rows in segments */
     int scols;			/* cols in segments */
@@ -30,11 +30,11 @@ typedef struct
     int spill;			/* cols in last segment in row */
 
     /* fast mode */
-    int slow_adrs;      	/* toggles fast address mode */
-    int scolbits;       	/* column bitshift */
-    int srowbits;       	/* row bitshift */
-    int segbits;        	/* segment bitshift */
-    int slow_seek;      	/* toggles fast seek mode */
+    int fast_adrs;      	/* toggles fast address mode */
+    off_t scolbits;       	/* column bitshift */
+    off_t srowbits;       	/* row bitshift */
+    off_t segbits;        	/* segment bitshift */
+    int fast_seek;      	/* toggles fast seek mode */
     int lenbits;        	/* data size bitshift */
     int sizebits;       	/* segment size bitshift */
     int (*segment_address)();
