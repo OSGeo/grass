@@ -1,12 +1,12 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/segment.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 int dseg_write_cellfile(DSEG * dseg, char *map_name)
 {
     int map_fd;
-    int row, nrows, ncols;
+    GW_LARGE_INT row, nrows, ncols;
     double *dbuffer;
 
     map_fd = Rast_open_new(map_name, DCELL_TYPE);

@@ -8,15 +8,15 @@ int sg_factor(void)
     int r, c;
     CELL low_elev, hih_elev;
     double height, length, S, sin_theta;
-    char flag_value;
     WAT_ALT wa;
+    ASP_FLAG af;
 
     G_message(_("SECTION 5: RUSLE LS and/or S factor determination."));
     for (r = nrows - 1; r >= 0; r--) {
 	G_percent(nrows - r, nrows, 3);
 	for (c = ncols - 1; c >= 0; c--) {
-	    bseg_get(&bitflags, &flag_value, r, c);
-	    if (FLAG_GET(flag_value, NULLFLAG))
+	    seg_get(&aspflag, (char *)&af, r, c);
+	    if (FLAG_GET(af.flag, NULLFLAG))
 		continue;
 	    
 	    seg_get(&watalt, (char *) &wa, r, c);

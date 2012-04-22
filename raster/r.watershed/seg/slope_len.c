@@ -6,6 +6,7 @@ int slope_length(int r, int c, int dr, int dc)
     char asp_value;
     double res, top_ls, bot_ls;
     WAT_ALT wa;
+    ASP_FLAG af;
 
     if (sides == 8) {
 	if (r == dr)
@@ -17,7 +18,8 @@ int slope_length(int r, int c, int dr, int dc)
     }
     else {			/* sides == 4 */
 
-	bseg_get(&asp, &asp_value, dr, dc);
+	seg_get(&aspflag, (char *)&af, dr, dc);
+	asp_value = af.asp;
 	if (r == dr) {
 	    if (asp_value == 2 || asp_value == 6)
 		res = window.ns_res;

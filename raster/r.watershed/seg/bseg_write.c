@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 int bseg_write_cellfile(BSEG * bseg, char *map_name)
 {

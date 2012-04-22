@@ -10,6 +10,9 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+
+#define GW_LARGE_INT off_t
+
 #include "cseg.h"
 #include "flag.h"
 
@@ -49,7 +52,7 @@ POINT {
 
 #define HEAP_PNT    struct heap_point
 HEAP_PNT {
-   int added;
+   GW_LARGE_INT added;
    CELL ele;
    POINT pnt;
 };
@@ -58,6 +61,12 @@ HEAP_PNT {
 WAT_ALT {
    CELL ele;
    DCELL wat;
+};
+
+#define ASP_FLAG    struct aspect_flag
+ASP_FLAG {
+   char asp;
+   char flag;
 };
 
 #define OC_STACK struct overland_cells_stack
@@ -69,18 +78,18 @@ extern struct Cell_head window;
 
 extern int mfd, c_fac, abs_acc, ele_scale;
 extern SSEG search_heap;
-extern int heap_size;
-extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+extern int nrows, ncols;
+extern GW_LARGE_INT heap_size;
+extern GW_LARGE_INT first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 extern CELL n_basins;
 extern OC_STACK *ocs;
 extern int ocs_alloced;
-extern int nrows, ncols;
 extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
 extern SSEG astar_pts;
-extern BSEG bitflags, s_b, asp;
+extern BSEG s_b;
 extern CSEG dis, bas, haf, r_h, dep;
-extern SSEG watalt;
+extern SSEG watalt, aspflag;
 extern DSEG slp, s_l, s_g, l_s, ril;
 extern double segs_mb;
 extern char zero, one;

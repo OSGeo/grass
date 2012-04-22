@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 
 int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)

@@ -7,15 +7,15 @@ int close_maps(void)
     struct Colors colors;
     int r, c;
     DCELL *dbuf = NULL;
+    CELL *cbuf = NULL;
     int fd;
     struct FPRange accRange;
     DCELL min, max;
     DCELL clr_min, clr_max;
     DCELL sum, sum_sqr, stddev, lstddev, dvalue;
     WAT_ALT *wabuf;
+    ASP_FLAG *afbuf;
 
-    /* bseg_close(&swale); */
-    bseg_close(&bitflags);
     if (wat_flag) {
 	G_message(_("Closing accumulation map"));
 	sum = sum_sqr = stddev = 0.0;
@@ -126,12 +126,28 @@ int close_maps(void)
     seg_close(&watalt);
     if (asp_flag) {
 	G_message(_("Closing flow direction map"));
-	bseg_write_cellfile(&asp, asp_name);
+	cbuf = Rast_allocate_c_buf();
+	afbuf = G_malloc(ncols * sizeof(ASP_FLAG));
+	seg_flush(&aspflag);
+
+	fd = Rast_open_new(wat_name, DCELL_TYPE);
+
+	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
+	    Rast_set_c_null_value(cbuf, ncols);	/* reset row to all NULL */
+	    seg_get_row(&aspflag, (char *)afbuf, r);
+	    for (c = 0; c < ncols; c++) {
+		if (!FLAG_GET(afbuf[c].flag, NULLFLAG)) {
+		    cbuf[c] = afbuf[c].asp;
+		}
+	    }
+	    Rast_put_row(fd, cbuf, CELL_TYPE);
+	}
 	Rast_init_colors(&colors);
 	Rast_make_grey_scale_colors(&colors, 1, 8);
 	Rast_write_colors(asp_name, this_mapset, &colors);
     }
-    bseg_close(&asp);
+    seg_close(&aspflag);
     if (ls_flag) {
 	G_message(_("Closing LS map"));
 	dseg_write_cellfile(&l_s, ls_name);

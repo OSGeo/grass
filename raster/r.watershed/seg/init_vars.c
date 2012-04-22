@@ -10,18 +10,18 @@ int ele_round(double);
 int init_vars(int argc, char *argv[])
 {
     int r, c;
-    int ele_fd, fd, wat_fd;
+    int ele_fd, wat_fd, fd = -1;
     int seg_rows, seg_cols, num_cseg_total, num_open_segs, num_open_array_segs;
     double memory_divisor, heap_mem, seg_factor, disk_space;
 
     /* int page_block, num_cseg; */
     int max_bytes;
     CELL *buf, alt_value, *alt_value_buf, block_value;
-    char asp_value, *asp_buf;
-    char worked_value, flag_value, *flag_value_buf;
+    char asp_value;
     DCELL wat_value;
     DCELL dvalue;
     WAT_ALT wa, *wabuf;
+    ASP_FLAG af, af_nbr, *afbuf;
     char MASK_flag;
     void *elebuf, *ptr, *watbuf, *watptr;
     int ele_map_type, wat_map_type;
@@ -163,12 +163,9 @@ int init_vars(int argc, char *argv[])
     /* elevation + accumulation: * 2 */
     memory_divisor = sizeof(WAT_ALT) * 2;
     disk_space = sizeof(WAT_ALT);
-    /* aspect: as is */
-    memory_divisor += 1;
-    disk_space += 1;
-    /* flags: * 4 */
-    memory_divisor += 4;
-    disk_space += 1;
+    /* aspect and flags: * 4 */
+    memory_divisor += sizeof(ASP_FLAG) * 4;
+    disk_space += sizeof(ASP_FLAG);
     /* astar_points: / 16 */
     /* ideally only a few but large segments */
     memory_divisor += sizeof(POINT) / 16.;
@@ -244,8 +241,7 @@ int init_vars(int argc, char *argv[])
 
     /* scattered access: alt, watalt, bitflags, asp */
     seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs * 2, sizeof(WAT_ALT));
-    bseg_open(&bitflags, seg_rows, seg_cols, num_open_segs * 4);
-    bseg_open(&asp, seg_rows, seg_cols, num_open_segs);
+    seg_open(&aspflag, nrows, ncols, seg_rows, seg_cols, num_open_segs * 4, sizeof(ASP_FLAG));
 
     /* open elevation input */
     ele_fd = Rast_open_old(ele_name, "");
@@ -253,7 +249,7 @@ int init_vars(int argc, char *argv[])
     ele_map_type = Rast_get_map_type(ele_fd);
     ele_size = Rast_cell_size(ele_map_type);
     elebuf = Rast_allocate_buf(ele_map_type);
-    asp_buf = G_malloc(ncols * sizeof(char));
+    afbuf = G_malloc(ncols * sizeof(ASP_FLAG));
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 1000; 	/* should be enough to do the trick */
@@ -271,13 +267,13 @@ int init_vars(int argc, char *argv[])
 	wat_fd = wat_size = wat_map_type = -1;
     }
     wabuf = G_malloc(ncols * sizeof(WAT_ALT));
-    flag_value_buf = G_malloc(ncols * sizeof(char));
     alt_value_buf = Rast_allocate_buf(CELL_TYPE);
 
     /* read elevation input and mark NULL/masked cells */
+    G_message("New version");
     G_message("SECTION 1a: Mark masked and NULL cells");
     MASK_flag = 0;
-    do_points = nrows * ncols;
+    do_points = (GW_LARGE_INT) nrows * ncols;
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 1);
 	Rast_get_row(ele_fd, elebuf, r, ele_map_type);
@@ -290,14 +286,14 @@ int init_vars(int argc, char *argv[])
 	
 	for (c = 0; c < ncols; c++) {
 
-	    flag_value_buf[c] = 0;
-	    asp_buf[c] = 0;
+	    afbuf[c].flag = 0;
+	    afbuf[c].asp = 0;
 
 	    /* check for masked and NULL cells */
 	    if (Rast_is_null_value(ptr, ele_map_type)) {
-		FLAG_SET(flag_value_buf[c], NULLFLAG);
-		FLAG_SET(flag_value_buf[c], INLISTFLAG);
-		FLAG_SET(flag_value_buf[c], WORKEDFLAG);
+		FLAG_SET(afbuf[c].flag, NULLFLAG);
+		FLAG_SET(afbuf[c].flag, INLISTFLAG);
+		FLAG_SET(afbuf[c].flag, WORKEDFLAG);
 		Rast_set_c_null_value(&alt_value, 1);
 		/* flow accumulation */
 		Rast_set_d_null_value(&wat_value, 1);
@@ -338,7 +334,6 @@ int init_vars(int argc, char *argv[])
 		else {
 		    wat_value = 1;
 		}
-
 	    }
 	    wabuf[c].wat = wat_value;
 	    wabuf[c].ele = alt_value;
@@ -349,8 +344,7 @@ int init_vars(int argc, char *argv[])
 	    }
 	}
 	seg_put_row(&watalt, (char *) wabuf, r);
-	bseg_put_row(&bitflags, flag_value_buf, r);
-	bseg_put_row(&asp, asp_buf, r);
+	seg_put_row(&aspflag, (char *)afbuf, r);
 	
 	if (er_flag) {
 	    cseg_put_row(&r_h, alt_value_buf, r);
@@ -359,8 +353,7 @@ int init_vars(int argc, char *argv[])
     G_percent(nrows, nrows, 1);    /* finish it */
     Rast_close(ele_fd);
     G_free(wabuf);
-    G_free(flag_value_buf);
-    G_free(asp_buf);
+    G_free(afbuf);
     
     if (run_flag) {
 	Rast_close(wat_fd);
@@ -380,9 +373,9 @@ int init_vars(int argc, char *argv[])
 		for (c = 0; c < ncols; c++) {
 		    block_value = buf[c];
 		    if (!Rast_is_c_null_value(&block_value) && block_value) {
-			bseg_get(&bitflags, &flag_value, r, c);
-			FLAG_SET(flag_value, RUSLEBLOCKFLAG);
-			bseg_put(&bitflags, &flag_value, r, c);
+			seg_get(&aspflag, (char *)&af, r, c);
+			FLAG_SET(af.flag, RUSLEBLOCKFLAG);
+			seg_put(&aspflag, (char *)&af, r, c);
 		    }
 		}
 	    }
@@ -462,11 +455,11 @@ int init_vars(int argc, char *argv[])
 	if (pit_flag)
 	    Rast_get_c_row(fd, buf, r);
 	for (c = 0; c < ncols; c++) {
-	    bseg_get(&bitflags, &flag_value, r, c);
-	    if (!FLAG_GET(flag_value, NULLFLAG)) {
+	    seg_get(&aspflag, (char *)&af, r, c);
+	    if (!FLAG_GET(af.flag, NULLFLAG)) {
 		if (er_flag)
 		    dseg_put(&s_l, &half_res, r, c);
-		bseg_get(&asp, &asp_value, r, c);
+		asp_value = af.asp;
 		if (r == 0 || c == 0 || r == nrows - 1 ||
 		    c == ncols - 1) {
 		    /* dseg_get(&wat, &wat_value, r, c); */
@@ -486,14 +479,13 @@ int init_vars(int argc, char *argv[])
 			asp_value = -6;
 		    else if (c == ncols - 1)
 			asp_value = -8;
-		    if (-1 == bseg_put(&asp, &asp_value, r, c))
-			exit(EXIT_FAILURE);
 		    /* cseg_get(&alt, &alt_value, r, c); */
 		    alt_value = wa.ele;
 		    add_pt(r, c, alt_value);
-		    FLAG_SET(flag_value, INLISTFLAG);
-		    FLAG_SET(flag_value, EDGEFLAG);
-		    bseg_put(&bitflags, &flag_value, r, c);
+		    FLAG_SET(af.flag, INLISTFLAG);
+		    FLAG_SET(af.flag, EDGEFLAG);
+		    af.asp = asp_value;
+		    seg_put(&aspflag, (char *)&af, r, c);
 		}
 		else {
 		    seg_get(&watalt, (char *)&wa, r, c);
@@ -502,14 +494,13 @@ int init_vars(int argc, char *argv[])
 			r_nbr = r + nextdr[ct_dir];
 			c_nbr = c + nextdc[ct_dir];
 
-			bseg_get(&bitflags, &worked_value, r_nbr, c_nbr);
-			if (FLAG_GET(worked_value, NULLFLAG)) {
-			    asp_value = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+			seg_get(&aspflag, (char *)&af_nbr, r_nbr, c_nbr);
+			if (FLAG_GET(af_nbr.flag, NULLFLAG)) {
+			    af.asp = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
 			    add_pt(r, c, wa.ele);
-			    FLAG_SET(flag_value, INLISTFLAG);
-			    FLAG_SET(flag_value, EDGEFLAG);
-			    bseg_put(&bitflags, &flag_value, r, c);
-			    bseg_put(&asp, &asp_value, r, c);
+			    FLAG_SET(af.flag, INLISTFLAG);
+			    FLAG_SET(af.flag, EDGEFLAG);
+			    seg_put(&aspflag, (char *)&af, r, c);
 			    wat_value = wa.wat;
 			    if (wat_value > 0) {
 				wa.wat = -wat_value;
@@ -526,9 +517,9 @@ int init_vars(int argc, char *argv[])
 			seg_get(&watalt, (char *)&wa, r, c);
 			add_pt(r, c, wa.ele);
 
-			FLAG_SET(flag_value, INLISTFLAG);
-			FLAG_SET(flag_value, EDGEFLAG);
-			bseg_put(&bitflags, &flag_value, r, c);
+			FLAG_SET(af.flag, INLISTFLAG);
+			FLAG_SET(af.flag, EDGEFLAG);
+			seg_put(&aspflag, (char *)&af, r, c);
 			wat_value = wa.wat;
 			if (wat_value > 0) {
 			    wa.wat = -wat_value;

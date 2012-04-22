@@ -9,9 +9,8 @@ int close_array_seg(void)
     int incr, max, red, green, blue, rd, gr, bl, flag;
     int c, r, map_fd;
     CELL *cellrow;
-    /* CELL value; */
-    char cvalue;
     CSEG *theseg;
+    ASP_FLAG af;
 
     if (seg_flag || bas_flag || haf_flag) {
 	if (seg_flag)
@@ -93,8 +92,8 @@ int close_array_seg(void)
 	    for (c = 0; c < ncols; c++) {
 		/* bseg_get(&swale, &cvalue, r, c); */
 		/* if (cvalue) */
-		bseg_get(&bitflags, &cvalue, r, c);
-		if (FLAG_GET(cvalue, SWALEFLAG))
+		seg_get(&aspflag, (char *)&af, r, c);
+		if (FLAG_GET(af.flag, SWALEFLAG))
 		    cseg_get(&bas, &(cellrow[c]), r, c);
 	    }
 	    Rast_put_row(map_fd, cellrow, CELL_TYPE);

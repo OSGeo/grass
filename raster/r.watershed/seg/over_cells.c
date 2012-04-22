@@ -7,6 +7,7 @@ overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num, CELL * 
     int r, rr, c, cc;
     CELL new_ele, new_max_ele;
     char aspect;
+    ASP_FLAG af;
 
     cseg_put(&bas, &basin_num, row, col);
     cseg_put(&haf, &haf_num, row, col);
@@ -16,7 +17,8 @@ overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num, CELL * 
 	    if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
 		if (r == row && c == col)
 		    continue;
-		bseg_get(&asp, &aspect, r, c);
+		seg_get(&aspflag, (char *)&af, r, c);
+		aspect = af.asp;
 		if (aspect == drain[rr][cc]) {
 		    overland_cells(r, c, basin_num, haf_num, &new_ele);
 		}
@@ -44,6 +46,7 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
     int r, rr, c, cc, next_r, next_c;
     char aspect;
     int top = 0;
+    ASP_FLAG af;
 
     /* put root on stack */
     ocs[top].row = row;
@@ -64,7 +67,8 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
 		    if (r == row && c == col)
 			continue;
-		    bseg_get(&asp, &aspect, r, c);
+		    seg_get(&aspflag, (char *)&af, r, c);
+		    aspect = af.asp;
 		    if (aspect == drain[rr][cc]) {
 			if (top >= ocs_alloced) {
 			    ocs_alloced += bas_thres;

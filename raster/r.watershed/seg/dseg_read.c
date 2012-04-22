@@ -1,13 +1,13 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/segment.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 static char *me = "dseg_read_cell";
 
 int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
 {
-    int row, nrows, ncols;
+    GW_LARGE_INT row, nrows, ncols;
     int map_fd;
     double *dbuffer;
 

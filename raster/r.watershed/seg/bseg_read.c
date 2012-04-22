@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <unistd.h>
-#include "cseg.h"
+#include "Gwater.h"
 
 int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
 {
