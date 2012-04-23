@@ -163,7 +163,7 @@ int do_astar(void)
 			asp[index_up] = drain[upr - r + 1][upc - c + 1];
 
 			if (wat[index_doer] > 0)
-			    wat[index_doer] = -wat[index_doer];
+			    wat[index_doer] = -1.0 * wat[index_doer];
 		    }
 		    /* neighbour is inside real depression, not yet worked */
 		    else if (asp[index_up] == 0) {
@@ -246,7 +246,7 @@ int drop_pt(void)
 
     /* sift down: move hole back towards bottom of heap */
 
-    while ((child = GET_CHILD(parent)) <= heap_size) {
+    while (GET_CHILD(child, parent) <= heap_size) {
 	/* select child with lower ele, if both are equal, older child
 	 * older child is older startpoint for flow path, important */
 	ele = alt[astar_pts[child]];
@@ -298,7 +298,7 @@ int sift_up(int start, CELL ele)
     child_idx = astar_pts[child];
 
     while (child > 1) {
-	parent = GET_PARENT(child);
+	GET_PARENT(parent, child);
 
 	elep = alt[astar_pts[parent]];
 	/* child smaller */

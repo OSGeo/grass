@@ -3,20 +3,95 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+int get_dist(double *dist_to_nbr, double *contour)
+{
+    int ct_dir, r_nbr, c_nbr;
+    double dx, dy;
+    double ns_res, ew_res;
+
+    if (G_projection() == PROJECTION_LL) {
+	double ew_dist1, ew_dist2, ew_dist3;
+	double ns_dist1, ns_dist2, ns_dist3;
+
+	G_begin_distance_calculations();
+
+	/* EW Dist at North edge */
+	ew_dist1 = G_distance(window.east, window.north,
+	                      window.west, window.north);
+	/* EW Dist at Center */
+	ew_dist2 = G_distance(window.east, (window.north + window.south) / 2.,
+	                      window.west, (window.north + window.south) / 2.);
+	/* EW Dist at South Edge */
+	ew_dist3 = G_distance(window.east, window.south,
+	                      window.west, window.south);
+	/* NS Dist at East edge */
+	ns_dist1 = G_distance(window.east, window.north,
+	                      window.east, window.south);
+	/* NS Dist at Center */
+	ns_dist2 = G_distance((window.west + window.east) / 2., window.north,
+	                      (window.west + window.east) / 2., window.south);
+	/* NS Dist at West edge */
+	ns_dist3 = G_distance(window.west, window.north,
+	                      window.west, window.south);
+
+	ew_res = (ew_dist1 + ew_dist2 + ew_dist3) / (3 * window.cols);
+	ns_res = (ns_dist1 + ns_dist2 + ns_dist3) / (3 * window.rows);
+    }
+    else {
+	ns_res = window.ns_res;
+	ew_res = window.ew_res;
+    }
+    
+    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+	/* get r, c (r_nbr, c_nbr) for neighbours */
+	r_nbr = nextdr[ct_dir];
+	c_nbr = nextdc[ct_dir];
+	/* account for rare cases when ns_res != ew_res */
+	dy = ABS(r_nbr) * ns_res;
+	dx = ABS(c_nbr) * ew_res;
+	if (ct_dir < 4)
+	    dist_to_nbr[ct_dir] = dx + dy;
+	else
+	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
+    }
+    contour[0] = contour[1] = ew_res;
+    contour[2] = contour[3] = ns_res;
+    if (sides == 8) {
+	contour[4] = contour[5] = contour[6] = contour[7] = (ew_res + ns_res) / 2.;
+    }
+    
+    return 1;
+}
+
+double get_slope_tci(CELL ele, CELL down_ele, double dist)
+{
+    if (down_ele >= ele)
+	return 0.5 / dist;
+    else
+	return (double)(ele - down_ele) / dist;
+}
 
 int do_cum(void)
 {
     int r, c, dr, dc;
-    CELL is_swale, aspect;
+    int r_nbr, c_nbr, ct_dir, np_side, edge;
+    CELL is_swale, aspect, ele_nbr;
     DCELL value, valued;
-    int killer, threshold, count;
+    int killer, threshold;
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
-    int this_index, down_index;
+    int this_index, down_index, nbr_index;
+    double *dist_to_nbr, *contour;
+    double tci_div;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
 
-    count = 0;
+    /* distances to neighbours, contour lengths */
+    dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
+    contour = (double *)G_malloc(sides * sizeof(double));
+
+    get_dist(dist_to_nbr, contour);
+
     if (bas_thres <= 0)
 	threshold = 60;
     else
@@ -36,9 +111,44 @@ int do_cum(void)
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) { /* if ((dr = astar_pts[killer].downr) > -1) { */
 	    down_index = SEG_INDEX(wat_seg, dr, dc);
 	    value = wat[this_index];
-	    if ((int)(ABS(value) + 0.5) >= threshold)
+	    if (fabs(value) >= threshold)
 		FLAG_SET(swale, r, c);
 	    valued = wat[down_index];
+
+	    edge = 0;
+	    np_side = -1;
+	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+		/* get r, c (r_nbr, c_nbr) for neighbours */
+		r_nbr = r + nextdr[ct_dir];
+		c_nbr = c + nextdc[ct_dir];
+
+		if (dr == r_nbr && dc == c_nbr)
+		    np_side = ct_dir;
+
+		/* check that neighbour is within region */
+		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
+		    c_nbr < ncols) {
+
+		    nbr_index = SEG_INDEX(wat_seg, r_nbr, c_nbr);
+		    ele_nbr = alt[nbr_index];
+		    if (Rast_is_c_null_value(&ele_nbr))
+			edge = 1;
+		}
+		else
+		    edge = 1;
+		if (edge)
+		    break;
+	    }
+	    /* do not distribute flow along edges, this causes artifacts */
+	    if (edge) {
+		is_swale = FLAG_GET(swale, r, c);
+		if (is_swale && aspect > 0) {
+		    aspect = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+		    asp[this_index] = aspect;
+		}
+		continue;
+	    }
+
 	    if (value > 0) {
 		if (valued > 0)
 		    valued += value;
@@ -52,9 +162,17 @@ int do_cum(void)
 		    valued = value - valued;
 	    }
 	    wat[down_index] = valued;
-	    valued = ABS(valued) + 0.5;
+
+	    /* topographic wetness index ln(a / tan(beta)) */
+	    if (tci_flag) {
+		tci_div = contour[np_side] * 
+		       get_slope_tci(alt[this_index], alt[down_index],
+				     dist_to_nbr[np_side]);
+		tci[this_index] = log(fabs(wat[this_index]) / tci_div);
+	    }
+
 	    is_swale = FLAG_GET(swale, r, c);
-	    if (is_swale || ((int)valued) >= threshold) {
+	    if (is_swale || fabs(valued) >= threshold) {
 		FLAG_SET(swale, dr, dc);
 	    }
 	    else {
@@ -88,46 +206,42 @@ int do_cum(void)
  * before depressions/obstacles and gracefull flow divergence after 
  * depressions/obstacles
  * 
+ * Topograohic Wetness Index (TCI)
+ * TCI = SUM( (A / L_i) * weight / (tanb_i * weight))
+ * TCI = A / SUM (L_i / tanb_i)
+ * A: total catchment area
+ * L_i: contour length towards i-th neighbor
+ * tanb_i: slope = tan(b) towards i-th neighbor
+ *
  * ************************************/
 
 int do_cum_mfd(void)
 {
     int r, c, dr, dc;
     CELL is_swale;
-    DCELL value, valued;
+    DCELL value, valued, tci_div;
     int killer, threshold, count;
 
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
-    double *dist_to_nbr, *weight, sum_weight, max_weight;
+    double *dist_to_nbr, *contour, *weight, sum_weight, max_weight;
     int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side;
-    double dx, dy;
     CELL ele, ele_nbr, aspect, is_worked;
     double prop, max_acc;
     int workedon, edge, flat;
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int this_index, down_index, nbr_index;
-
+    
     G_message(_("SECTION 3: Accumulating Surface Flow with MFD."));
     G_debug(1, "MFD convergence factor set to %d.", c_fac);
 
-    /* distances to neighbours */
+    /* distances to neighbours, weights, contour lengths */
     dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
     weight = (double *)G_malloc(sides * sizeof(double));
-
-    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-	/* get r, c (r_nbr, c_nbr) for neighbours */
-	r_nbr = nextdr[ct_dir];
-	c_nbr = nextdc[ct_dir];
-	/* account for rare cases when ns_res != ew_res */
-	dy = ABS(r_nbr) * window.ns_res;
-	dx = ABS(c_nbr) * window.ew_res;
-	if (ct_dir < 4)
-	    dist_to_nbr[ct_dir] = dx + dy;
-	else
-	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
-    }
+    contour = (double *)G_malloc(sides * sizeof(double));
+    
+    get_dist(dist_to_nbr, contour);
 
     flag_clear_all(worked);
     workedon = 0;
@@ -153,7 +267,6 @@ int do_cum_mfd(void)
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) { /* if ((dr = astar_pts[killer].downr) > -1) { */
 	    value = wat[this_index];
 	    down_index = SEG_INDEX(wat_seg, dr, dc);
-	    valued = wat[down_index];
 
 	    r_max = dr;
 	    c_max = dc;
@@ -176,12 +289,13 @@ int do_cum_mfd(void)
 		r_nbr = r + nextdr[ct_dir];
 		c_nbr = c + nextdc[ct_dir];
 		weight[ct_dir] = -1;
+
+		if (dr == r_nbr && dc == c_nbr)
+		    np_side = ct_dir;
+
 		/* check that neighbour is within region */
 		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
 		    c_nbr < ncols) {
-
-		    if (dr == r_nbr && dc == c_nbr)
-			np_side = ct_dir;
 
 		    nbr_index = SEG_INDEX(wat_seg, r_nbr, c_nbr);
 
@@ -256,6 +370,7 @@ int do_cum_mfd(void)
 
 	    /* set flow accumulation for neighbours */
 	    max_acc = -1;
+	    tci_div = 0.;
 
 	    if (mfd_cells > 1) {
 		prop = 0.0;
@@ -289,6 +404,11 @@ int do_cum_mfd(void)
 				    valued = value * weight[ct_dir] - valued;
 			    }
 			    wat[nbr_index] = valued;
+			    
+			    if (tci_flag)
+				tci_div += contour[ct_dir] * 
+				           get_slope_tci(ele, alt[nbr_index],
+				                         dist_to_nbr[ct_dir]);
 
 			    /* get main drainage direction */
 			    if (ABS(valued) >= max_acc) {
@@ -324,6 +444,15 @@ int do_cum_mfd(void)
 			valued = value - valued;
 		}
 		wat[down_index] = valued;
+
+		if (tci_flag)
+		    tci_div = contour[np_side] * 
+			      get_slope_tci(ele, alt[down_index],
+				            dist_to_nbr[np_side]);
+	    }
+	    /* topographic wetness index ln(a / tan(beta)) */
+	    if (tci_flag) {
+		tci[this_index] = log(fabs(wat[this_index]) / tci_div);
 	    }
 
 	    /* update asp */
