@@ -8,7 +8,7 @@
 int close_maps(void)
 {
     struct Colors colors;
-    int value, r, c, fd;
+    int r, c, fd;
     CELL *buf = NULL;
     DCELL *dbuf = NULL;
     struct FPRange accRange;
@@ -127,6 +127,69 @@ int close_maps(void)
 				      0, &colors);
 	}
 	Rast_write_colors(wat_name, this_mapset, &colors);
+    }
+
+    /* TCI */
+    if (tci_flag) {
+	DCELL watvalue;
+
+	sum = sum_sqr = stddev = 0.0;
+	fd = Rast_open_new(tci_name, DCELL_TYPE);
+	for (r = 0; r < nrows; r++) {
+	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+	    for (c = 0; c < ncols; c++) {
+		dvalue = tci[SEG_INDEX(wat_seg, r, c)];
+		watvalue = wat[SEG_INDEX(wat_seg, r, c)];
+		if (!Rast_is_d_null_value(&watvalue)) {
+		    dbuf[c] = dvalue;
+		    sum += dvalue;
+		    sum_sqr += dvalue * dvalue;
+		}
+	    }
+	    Rast_put_row(fd, dbuf, DCELL_TYPE);
+	}
+	Rast_close(fd);
+
+	stddev =
+	    sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	G_debug(1, "stddev: %f", stddev);
+
+	/* set nice color rules: yellow, green, cyan, blue, black */
+
+	lstddev = log(stddev);
+
+	Rast_read_fp_range(tci_name, this_mapset, &accRange);
+	min = max = 0;
+	Rast_get_fp_range_min_max(&accRange, &min, &max);
+
+	Rast_init_colors(&colors);
+
+	clr_min = min - 1;
+	clr_max = min + (max - min) * 0.3;
+	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+				  255, 0, &colors);
+	clr_min = clr_max;
+	clr_max = min + (max - min) * 0.5;
+	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+				  255, 0, &colors);
+	clr_min = clr_max;
+	clr_max = min + (max - min) * 0.6;
+	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
+				  255, 255, &colors);
+	clr_min = clr_max;
+	clr_max = min + (max - min) * 0.7;
+	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+				  0, 255, &colors);
+	clr_min = clr_max;
+	clr_max = max + 1.;
+	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
+				  0, &colors);
+
+	clr_min = clr_max;
+	clr_max = max + 1;
+	Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
+				  0, &colors);
+	Rast_write_colors(tci_name, this_mapset, &colors);
     }
 
     /* TODO: elevation == NULL -> drainage direction == NULL (wat == 0 where ele == NULL) */
