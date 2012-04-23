@@ -81,6 +81,7 @@ int dseg_close(DSEG *);
 
 /* dseg_get.c */
 int dseg_get(DSEG *, double *, GW_LARGE_INT, GW_LARGE_INT);
+int dseg_flush(DSEG *);
 
 /* dseg_open.c */
 int dseg_open(DSEG *, int, int, int);

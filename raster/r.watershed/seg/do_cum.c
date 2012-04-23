@@ -4,10 +4,78 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+int get_dist(double *dist_to_nbr, double *contour)
+{
+    int ct_dir, r_nbr, c_nbr;
+    double dx, dy;
+    double ns_res, ew_res;
+
+    if (G_projection() == PROJECTION_LL) {
+	double ew_dist1, ew_dist2, ew_dist3;
+	double ns_dist1, ns_dist2, ns_dist3;
+
+	G_begin_distance_calculations();
+
+	/* EW Dist at North edge */
+	ew_dist1 = G_distance(window.east, window.north,
+	                      window.west, window.north);
+	/* EW Dist at Center */
+	ew_dist2 = G_distance(window.east, (window.north + window.south) / 2.,
+	                      window.west, (window.north + window.south) / 2.);
+	/* EW Dist at South Edge */
+	ew_dist3 = G_distance(window.east, window.south,
+	                      window.west, window.south);
+	/* NS Dist at East edge */
+	ns_dist1 = G_distance(window.east, window.north,
+	                      window.east, window.south);
+	/* NS Dist at Center */
+	ns_dist2 = G_distance((window.west + window.east) / 2., window.north,
+	                      (window.west + window.east) / 2., window.south);
+	/* NS Dist at West edge */
+	ns_dist3 = G_distance(window.west, window.north,
+	                      window.west, window.south);
+
+	ew_res = (ew_dist1 + ew_dist2 + ew_dist3) / (3 * window.cols);
+	ns_res = (ns_dist1 + ns_dist2 + ns_dist3) / (3 * window.rows);
+    }
+    else {
+	ns_res = window.ns_res;
+	ew_res = window.ew_res;
+    }
+    
+    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+	/* get r, c (r_nbr, c_nbr) for neighbours */
+	r_nbr = nextdr[ct_dir];
+	c_nbr = nextdc[ct_dir];
+	/* account for rare cases when ns_res != ew_res */
+	dy = ABS(r_nbr) * ns_res;
+	dx = ABS(c_nbr) * ew_res;
+	if (ct_dir < 4)
+	    dist_to_nbr[ct_dir] = dx + dy;
+	else
+	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
+    }
+    contour[0] = contour[1] = ew_res;
+    contour[2] = contour[3] = ns_res;
+    if (sides == 8) {
+	contour[4] = contour[5] = contour[6] = contour[7] = (ew_res + ns_res) / 2.;
+    }
+    
+    return 1;
+}
+
+double get_slope_tci(CELL ele, CELL down_ele, double dist)
+{
+    if (down_ele >= ele)
+	return 0.5 / dist;
+    else
+	return (double)(ele - down_ele) / dist;
+}
 
 int do_cum(void)
 {
     int r, c, dr, dc;
+    int r_nbr, c_nbr, ct_dir, np_side;
     char is_swale;
     DCELL value, valued;
     POINT point;
@@ -17,8 +85,16 @@ int do_cum(void)
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     WAT_ALT wa, wadown;
     ASP_FLAG af, afdown;
+    double *dist_to_nbr, *contour;
+    double tci_val, tci_div; 
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
+
+    /* distances to neighbours, contour lengths */
+    dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
+    contour = (double *)G_malloc(sides * sizeof(double));
+
+    get_dist(dist_to_nbr, contour);
 
     if (bas_thres <= 0)
 	threshold = 60;
@@ -41,7 +117,35 @@ int do_cum(void)
 	FLAG_UNSET(af.flag, WORKEDFLAG);
 
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
-	    /* TODO: do not distribute flow along edges, this causes artifacts */
+	    np_side = -1;
+	    r_nbr = dr;
+	    c_nbr = dc;
+	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+		/* get r, c (r_nbr, c_nbr) for neighbours */
+		r_nbr = r + nextdr[ct_dir];
+		c_nbr = c + nextdc[ct_dir];
+
+		if (dr == r_nbr && dc == c_nbr)
+		    np_side = ct_dir;
+
+		/* check that neighbour is within region */
+		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
+		    c_nbr < ncols) {
+
+		    seg_get(&aspflag, (char *)&afdown, r_nbr, c_nbr);
+		    if (FLAG_GET(afdown.flag, NULLFLAG))
+			break;
+		}
+	    }
+	    /* do not distribute flow along edges, this causes artifacts */
+	    if (FLAG_GET(af.flag, EDGEFLAG)) {
+		if (FLAG_GET(af.flag, SWALEFLAG) && af.asp > 0) {
+		    af.asp = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+		}
+		seg_put(&aspflag, (char *)&af, r, c);
+		continue;
+	    }
+
 	    seg_get(&watalt, (char *)&wa, r, c);
 	    value = wa.wat;
 	    is_swale = FLAG_GET(af.flag, SWALEFLAG);
@@ -65,6 +169,16 @@ int do_cum(void)
 	    }
 	    wadown.wat = valued;
 	    seg_put(&watalt, (char *)&wadown, dr, dc);
+
+	    /* topographic wetness index ln(a / tan(beta)) */
+	    if (tci_flag) {
+		tci_div = contour[np_side] * 
+		       get_slope_tci(wa.ele, wadown.ele,
+				     dist_to_nbr[np_side]);
+		tci_val = log(fabs(wa.wat) / tci_div);
+		dseg_put(&tci, &tci_val, r, c);
+	    }
+
 	    /* update asp for depression */
 	    if (is_swale || fabs(valued) >= threshold) {
 		seg_get(&aspflag, (char *)&afdown, dr, dc);
@@ -112,6 +226,7 @@ int do_cum_mfd(void)
 {
     int r, c, dr, dc;
     DCELL value, valued, *wat_nbr;
+    double tci_val, tci_div;
     POINT point;
     WAT_ALT wa;
     ASP_FLAG af, afdown;
@@ -120,9 +235,8 @@ int do_cum_mfd(void)
 
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
-    double *dist_to_nbr, *weight, sum_weight, max_weight;
-    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side, max_side;
-    double dx, dy;
+    double *dist_to_nbr, *contour, *weight, sum_weight, max_weight;
+    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side;
     CELL ele, *ele_nbr;
     double prop, max_acc;
     int workedon, edge, is_swale, flat;
@@ -136,19 +250,9 @@ int do_cum_mfd(void)
     /* distances to neighbours */
     dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
     weight = (double *)G_malloc(sides * sizeof(double));
-
-    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-	/* get r, c (r_nbr, c_nbr) for neighbours */
-	r_nbr = nextdr[ct_dir];
-	c_nbr = nextdc[ct_dir];
-	/* account for rare cases when ns_res != ew_res */
-	dy = ABS(r_nbr) * window.ns_res;
-	dx = ABS(c_nbr) * window.ew_res;
-	if (ct_dir < 4)
-	    dist_to_nbr[ct_dir] = dx + dy;
-	else
-	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
-    }
+    contour = (double *)G_malloc(sides * sizeof(double));
+    
+    get_dist(dist_to_nbr, contour);
 
     flag_nbr = (char *)G_malloc(sides * sizeof(char));
     wat_nbr = (DCELL *)G_malloc(sides * sizeof(DCELL));
@@ -287,12 +391,12 @@ int do_cum_mfd(void)
 		mfd_cells++;
 		sum_weight += max_weight;
 		weight[np_side] = max_weight;
-		max_side = np_side;
 	    }
 
 	    /* set flow accumulation for neighbours */
 	    max_acc = -1;
-	    max_side = np_side;
+	    tci_div = 0.;
+
 
 	    if (mfd_cells > 1) {
 		prop = 0.0;
@@ -327,12 +431,16 @@ int do_cum_mfd(void)
 			    wa.ele = ele_nbr[ct_dir];
 			    seg_put(&watalt, (char *)&wa, r_nbr, c_nbr);
 
+			    if (tci_flag)
+				tci_div += contour[ct_dir] * 
+				           get_slope_tci(ele, ele_nbr[ct_dir],
+				                         dist_to_nbr[ct_dir]);
+
 			    /* get main drainage direction */
 			    if (fabs(wat_nbr[ct_dir]) >= max_acc) {
 				max_acc = ABS(wat_nbr[ct_dir]);
 				r_max = r_nbr;
 				c_max = c_nbr;
-				max_side = ct_dir;
 			    }
 			}
 			else if (ct_dir == np_side) {
@@ -372,6 +480,17 @@ int do_cum_mfd(void)
 		wa.wat = valued;
 		wa.ele = ele_nbr[np_side];
 		seg_put(&watalt, (char *)&wa, dr, dc);
+
+		if (tci_flag)
+		    tci_div = contour[np_side] * 
+			      get_slope_tci(ele, ele_nbr[np_side],
+				            dist_to_nbr[np_side]);
+	    }
+
+	    /* topographic wetness index ln(a / tan(beta)) */
+	    if (tci_flag) {
+		tci_val = log(fabs(value) / tci_div);
+		dseg_put(&tci, &tci_val, r, c);
 	    }
 
 	    /* update asp */

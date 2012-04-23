@@ -29,9 +29,15 @@ int init_vars(int argc, char *argv[])
     int ct_dir, r_nbr, c_nbr;
 
     G_gisinit(argv[0]);
-    ele_flag = wat_flag = asp_flag = pit_flag = run_flag = ril_flag = 0;
-    st_flag = bas_flag = seg_flag = haf_flag = arm_flag = dis_flag = 0;
-    ob_flag = sl_flag = sg_flag = ls_flag = er_flag = bas_thres = 0;
+    /* input */
+    ele_flag = pit_flag = run_flag = ril_flag = 0;
+    /* output */
+    wat_flag = asp_flag = bas_flag = seg_flag = haf_flag = tci_flag = 0;
+    bas_thres = 0;
+    /* shed, unused */
+    arm_flag = dis_flag = 0;
+    /* RUSLE */
+    ob_flag = st_flag = sl_flag = sg_flag = ls_flag = er_flag = 0;
     nxt_avail_pt = 0;
     /* dep_flag = 0; */
     max_length = d_zero = 0.0;
@@ -51,6 +57,8 @@ int init_vars(int argc, char *argv[])
 	    ele_flag++;
 	else if (sscanf(argv[r], "accumulation=%s", wat_name) == 1)
 	    wat_flag++;
+	else if (sscanf(argv[r], "tci=%s", tci_name) == 1)
+	    tci_flag++;
 	else if (sscanf(argv[r], "drainage=%s", asp_name) == 1)
 	    asp_flag++;
 	else if (sscanf(argv[r], "depression=%s", pit_name) == 1)
@@ -173,6 +181,11 @@ int init_vars(int argc, char *argv[])
     /* heap points: / 4 */
     memory_divisor += sizeof(HEAP_PNT) / 4.;
     disk_space += sizeof(HEAP_PNT);
+    /* TCI: as is */
+    if (tci_flag) {
+	memory_divisor += sizeof(double);
+	disk_space += sizeof(double);
+    }
     /* RUSLE */
     if (er_flag) {
 	/* r_h */
@@ -242,6 +255,9 @@ int init_vars(int argc, char *argv[])
     /* scattered access: alt, watalt, bitflags, asp */
     seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs * 2, sizeof(WAT_ALT));
     seg_open(&aspflag, nrows, ncols, seg_rows, seg_cols, num_open_segs * 4, sizeof(ASP_FLAG));
+
+    if (tci_flag)
+	dseg_open(&tci, seg_rows, seg_cols, num_open_segs);
 
     /* open elevation input */
     ele_fd = Rast_open_old(ele_name, "");
@@ -385,7 +401,7 @@ int init_vars(int argc, char *argv[])
 	}
 
 	if (ril_flag) {
-	    dseg_open(&ril, 1, seg_rows * seg_cols, num_open_segs);
+	    dseg_open(&ril, seg_rows, seg_cols, num_open_segs);
 	    dseg_read_cell(&ril, ril_name, "");
 	}
 	
@@ -393,9 +409,9 @@ int init_vars(int argc, char *argv[])
 
 	dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
 	if (sg_flag)
-	    dseg_open(&s_g, 1, seg_rows * seg_cols, num_open_segs);
+	    dseg_open(&s_g, seg_rows, seg_cols, num_open_segs);
 	if (ls_flag)
-	    dseg_open(&l_s, 1, seg_rows * seg_cols, num_open_segs);
+	    dseg_open(&l_s, seg_rows, seg_cols, num_open_segs);
     }
 
     G_debug(1, "open segments for A* points");

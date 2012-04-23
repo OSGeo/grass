@@ -10,3 +10,9 @@ int dseg_get(DSEG * dseg, double *value, GW_LARGE_INT row, GW_LARGE_INT col)
     }
     return 0;
 }
+
+int dseg_flush(DSEG * dseg)
+{
+    segment_flush(&(dseg->seg));
+    return 0;
+}
