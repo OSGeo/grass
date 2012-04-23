@@ -123,6 +123,16 @@ from outside of the current geographic region. Thus, any cells with
 negative values cannot have their surface runoff and sedimentation yields
 calculated accurately.
 
+<dt><em>tci</em> 
+
+<dd>Output map: The topographic index TCI is computed as 
+<em>ln(&alpha; / tan(&beta;))</em> where &alpha; a is the cumulative 
+uplsope area draining through a point per unit contour length and 
+tan(&beta;) is the local slope angle. The TCI reflects the tendency of 
+water to accumulate at any point in the catchment and the tendency for 
+gravitaional forces to move that water downslope (Quinn et al. 1991). 
+This value will be negative if &alpha; / tan(&beta;) &lt; 1.
+
 <dt><em>drainage</em> 
 
 <dd>Output map: drainage direction.  Provides the "aspect" for each
@@ -247,6 +257,9 @@ space requirements of <em>r.terraflow</em> are several times higher than
 of <em>seg</em>.
 
 <h3>Large regions with many cells</h3>
+The upper limit of the <em>ram</em> version is 2 billion 
+(2<sup>31</sup> - 1) cells, whereas the upper limit for the <em>seg</em> 
+version is 9 billion billion (2<sup>63</sup> - 1) cells.<br>
 In some situations, the region size (number of cells) may be too large for
 the amount of time or memory available. Running <em>r.watershed</em> may
 then require use of a coarser resolution. To make the results more closely
@@ -431,7 +444,7 @@ Display output in a nice way
 <h2>REFERENCES</h2>
 
 
-Ehlschlaeger, C. (1989). <i>Using the A<sup>T</sup> Search Algorithm
+Ehlschlaeger C. (1989). <i>Using the A<sup>T</sup> Search Algorithm
 to Develop Hydrologic Models from Digital Elevation Data</i>,
 <b>Proceedings of International Geographic Information Systems (IGIS)
 Symposium '89</b>, pp 275-281 (Baltimore, MD, 18-19 March 1989).<br>
@@ -439,13 +452,13 @@ URL: <a href="http://chuck.ehlschlaeger.info/older/IGIS/paper.html">
 http://chuck.ehlschlaeger.info/older/IGIS/paper.html</a>
 
 <p>
-Holmgren, P. (1994). <i>Multiple flow direction algorithms for runoff 
+Holmgren P. (1994). <i>Multiple flow direction algorithms for runoff 
 modelling in grid based elevation models: An empirical evaluation.</i>
-<b>Hydrological Processes</b> Vol 8(4), p.327-334.<br>
+<b>Hydrological Processes</b> Vol 8(4), 327-334.<br>
 DOI: <a href="http://dx.doi.org/10.1002/hyp.3360080405">10.1002/hyp.3360080405</a>
 
 <p>
-Kinner D., H. Mitasova, R. Harmon, L. Toma, R., Stallard. (2005).
+Kinner D., Mitasova H., Harmon R., Toma L., Stallard R. (2005).
 <i>GIS-based Stream Network Analysis for The Chagres River Basin,
 Republic of Panama</i>. <b>The Rio Chagres: A Multidisciplinary Profile of
 a Tropical Watershed</b>, R. Harmon (Ed.), Springer/Kluwer, p.83-95.<br>
@@ -457,7 +470,20 @@ McCool et al. (1987). <i>Revised Slope Steepness Factor for the Universal
 Soil Loss Equation</i>, <b>Transactions of the ASAE</b> Vol 30(5).
 
 <p>
-Weltz M. A., K. G. Renard, J. R. Simanton (1987). <i>Revised Universal Soil
+Metz M., Mitasova H., Harmon R. (2011). <i>Efficient extraction of 
+drainage networks from massive, radar-based elevation models with least 
+cost path search</i>, <b>Hydrol. Earth Syst. Sci.</b> Vol 15, 667-678.<br>
+DOI: <a href="http://dx.doi.org/10.5194/hess-15-667-2011">10.5194/hess-15-667-2011</a>
+
+<p>
+Quinn P., K. Beven K., Chevallier P., Planchon O. (1991). <i>The 
+prediction of hillslope flow paths for distributed hydrological modelling 
+using Digital Elevation Models</i>, <b>Hydrological Processes</b> Vol 5(1), 
+p.59-79.<br>
+DOI: <a href="http://dx.doi.org/10.1002/hyp.3360050106">10.1002/hyp.3360050106</a>
+
+<p>
+Weltz M. A., Renard K.G., Simanton J. R. (1987). <i>Revised Universal Soil
 Loss Equation for Western Rangelands</i>, <b>U.S.A./Mexico Symposium of
 Strategies for Classification and Management of Native Vegetation for
 Food Production In Arid Zones</b> (Tucson, AZ, 12-16 Oct. 1987).

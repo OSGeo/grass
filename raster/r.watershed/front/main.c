@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     struct Option *opt14;
     struct Option *opt15;
     struct Option *opt16;
+    struct Option *opt17;
     struct Flag *flag_sfd;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
@@ -129,6 +130,13 @@ int main(int argc, char *argv[])
     _("Number of cells that drain through each cell");
     opt8->required = NO;
     opt8->guisection = _("Outputs");
+
+    opt17 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt17->key = "tci";
+    opt17->label =
+	_("Topographic index ln(a / tan(b))");
+    opt17->required = NO;
+    opt17->guisection = _("Outputs");
 
     opt9 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt9->key = "drainage";
@@ -288,6 +296,7 @@ int main(int argc, char *argv[])
     do_opt(opt6);
     do_opt(opt7);
     do_opt(opt8);
+    do_opt(opt17);
     do_opt(opt9);
     do_opt(opt10);
     do_opt(opt11);
@@ -310,6 +319,10 @@ int main(int argc, char *argv[])
     if (opt8->answer)
 	write_hist(opt8->answer,
 		   "Watershed accumulation: overland flow that traverses each cell",
+		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+    if (opt17->answer)
+	write_hist(opt8->answer,
+		   "Watershed accumulation: topographic index ln(a / tan b)",
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt9->answer)
 	write_hist(opt9->answer,
