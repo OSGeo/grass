@@ -27172,7 +27172,7 @@ msgstr "Ein Feature wird in die Ausgabe geschrieben, wenn das Ergebnis der Opera
 
 #: ../vector/v.select/args.c:52
 msgid "overlap;features partially or completely overlap"
-msgstr "Überlappung; Feature überlappen sich teilweise oder vollständig"
+msgstr "overlap; Feature überlappen sich teilweise oder vollständig"
 
 #: ../vector/v.select/args.c:57
 msgid "overlap;features partially or completely overlap;equals;features are spatially equals (using GEOS);disjoint;features do not spatially intersect (using GEOS);intersects;features spatially intersect (using GEOS);touches;features spatially touches (using GEOS);crosses;features spatially crosses (using GEOS);within;feature A is completely inside feature B (using GEOS);contains;feature B is completely inside feature A (using GEOS);overlaps;features spatially overlap (using GEOS);relate;feature A is spatially related to feature B (using GEOS, requires 'relate' option);"
