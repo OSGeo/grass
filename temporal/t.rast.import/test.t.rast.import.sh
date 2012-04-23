@@ -26,6 +26,8 @@ prec_5|2001-05-01|2001-06-01
 prec_6|2001-06-01|2001-07-01
 EOF
 
+eval `g.gisenv`
+
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
 # The first @test
@@ -35,10 +37,15 @@ t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 wo
 # Import the data into a new location
 t.rast.import --o location=new_test_1 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
               title="A test" description="Description of a test"
+ls -la $GISDBASE/new_test_1/PERMANENT
 
 t.rast.import --o location=new_test_2 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
           -l  title="A test" description="Description of a test"
+ls -la $GISDBASE/new_test_2/PERMANENT
 
+t.rast.import --o location=new_test_3 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+          -c  title="A test" description="Description of a test"
+ls -la $GISDBASE/new_test_3/PERMANENT
 
 t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
           -oe title="A test" description="Description of a test"
@@ -56,6 +63,6 @@ g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 rm -rf test
 rm strds_export.tar.bz2
 # Remove the newly created locations
-eval `g.gisenv`
 rm -rf $GISDBASE/new_test_1
 rm -rf $GISDBASE/new_test_2
+rm -rf $GISDBASE/new_test_3

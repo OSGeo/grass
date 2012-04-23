@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr.import
+# MODULE:	t.rast.import
 # AUTHOR(S):	Soeren Gebbert
 #               
 # PURPOSE:	Import a space time raster dataset
@@ -26,12 +26,9 @@
 #%option G_OPT_STRDS_OUTPUT
 #%end
 
-#%option
+#%option G_OPT_M_DIR
 #% key: extrdir
-#% type: string
 #% description: Path to the extraction directory
-#% required: yes
-#% multiple: no
 #%end
 
 #%option
@@ -73,6 +70,12 @@
 #% description: override projection (use location's projection)
 #%end
 
+#%flag
+#% key: c
+#% description: Create the location specified by the "location" parameter and exit. Do not import the space time raster datasets.
+#%end
+
+
 
 import shutil
 import os
@@ -101,6 +104,7 @@ def main():
     link = flags["l"]
     exp = flags["e"]
     overr = flags["o"]
+    create = flags["c"]
 
     grass.set_raise_on_error(True)
     
@@ -139,8 +143,12 @@ def main():
 	    grass.create_location(dbase=old_env["GISDBASE"], 
 	                          location=location, 
 	                          proj4=proj4_string)
-	except:
-	    grass.fatal(_("Unable to create location %s") % location)
+	    # Just create a new location and return
+	    if create:
+		os.chdir(old_cwd)
+		return 
+	except Exception as e:
+		grass.fatal(_("Unable to create location %s. Reason: %s") % (location, str(e)))
 	# Switch to the new created location
 	ret = grass.run_command("g.mapset", mapset="PERMANENT", 
 	                                    location=location, 
