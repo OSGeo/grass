@@ -82,11 +82,17 @@ int main(int argc, char *argv[])
     else
 	G_fatal_error(_("Unknown operator '%s'"), parm.operator->answer);
     
+#ifdef HAVE_GEOS
     if (operator == OP_RELATE && !parm.relate->answer) {
 	G_fatal_error(_("Required parameter <%s> not set"),
 		      parm.relate->key);
     }
-    
+#else
+    if (operator != OP_OVERLAP) {
+	G_warning(_("Operator can only be 'overlap'"));
+	operator = OP_OVERLAP;
+    }
+#endif    
     for (iopt = 0; iopt < 2; iopt++) {
 	itype[iopt] = Vect_option_to_types(parm.type[iopt]);
 
@@ -113,11 +119,19 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Out);
     
     /* Select features */
+#ifdef HAVE_GEOS
     nskipped = select_lines(&(In[0]), itype[0], ifield[0],
 			    &(In[1]), itype[1], ifield[1],
 			    flag.cat->answer ? 1 : 0, operator,
 			    parm.relate->answer,
 			    ALines);
+#else
+    nskipped = select_lines(&(In[0]), itype[0], ifield[0],
+			    &(In[1]), itype[1], ifield[1],
+			    flag.cat->answer ? 1 : 0, operator,
+			    NULL,
+			    ALines);
+#endif
     
     Vect_close(&(In[1]));
 
