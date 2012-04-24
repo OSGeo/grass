@@ -198,11 +198,11 @@ def adjust_datetime_to_granularity(mydate, granularity):
         elif has_hours: # Start at 0 minutes and seconds
             seconds = 0
             minutes = 0
-        elif has_days: # Start at 0 hours, minuts and seconds
+        elif has_days: # Start at 0 hours, minutes and seconds
             seconds = 0
             minutes = 0
             hours = 0
-        elif has_weeks: # Start at the first day of the week (monday) at 00:00:00
+        elif has_weeks: # Start at the first day of the week (Monday) at 00:00:00
             seconds = 0
             minutes = 0
             hours = 0

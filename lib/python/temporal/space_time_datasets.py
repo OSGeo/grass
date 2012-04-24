@@ -42,6 +42,7 @@ class raster_dataset(abstract_map_dataset):
        map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
+	abstract_map_dataset.__init__(self)
 	self.reset(ident)
 
     def get_type(self):
@@ -248,6 +249,7 @@ class raster3d_dataset(abstract_map_dataset):
        map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
+	abstract_map_dataset.__init__(self)
 	self.reset(ident)
 
     def get_type(self):
@@ -462,6 +464,7 @@ class vector_dataset(abstract_map_dataset):
        map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
+	abstract_map_dataset.__init__(self)
 	self.reset(ident)
 
     def get_type(self):

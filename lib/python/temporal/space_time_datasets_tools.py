@@ -112,7 +112,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
         else:
             maplist = maps.split(",")
 
-	# Build the maplist again with the ids
+	# Build the map list again with the ids
 	for count in range(len(maplist)):
 	    row = {}
 	    mapid = dummy.build_id(maplist[count], mapset, None)
@@ -203,6 +203,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
                 if map.get_layer():
 		    core.fatal(_("Unable to register %s map <%s> with layer. The temporal types are different.") %  \
 		                 (map.get_type(), map.get_map_id(), map.get_layer()))
+		else:
 		    core.fatal(_("Unable to register %s map <%s>. The temporal types are different.") %  \
 		                 (map.get_type(), map.get_map_id()))
 
