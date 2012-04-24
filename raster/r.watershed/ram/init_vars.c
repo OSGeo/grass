@@ -314,10 +314,7 @@ int init_vars(int argc, char *argv[])
 	    Rast_get_c_row(fd, buf, r);
 	for (c = 0; c < ncols; c++) {
 	    seg_idx = SEG_INDEX(wat_seg, r, c);
-	    if (FLAG_GET(worked, r, c)) {
-		wat[seg_idx] = 0;
-	    }
-	    else {
+	    if (!(FLAG_GET(worked, r, c))) {
 		asp_value = asp[seg_idx];
 		if (er_flag)
 		    s_l[seg_idx] = half_res;
