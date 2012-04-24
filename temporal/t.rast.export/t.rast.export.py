@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Export space time raster dataset 
+#% description: Exports space time raster dataset.
 #% keywords: temporal
 #% keywords: export
 #%end

@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Uploads raster map values at spatial and temporal positions of vector points to the tables. The maps are registered in space time datasets
+#% description: Uploads raster map values at spatial and temporal positions of vector points to the tables. The maps are registered in space time datasets.
 #% keywords: temporal
 #% keywords: sampling
 #%end
@@ -30,7 +30,7 @@
 #%option
 #% key: column
 #% type: string
-#% description: Name of the vector column to be created and to store sampled raster values. The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names.
+#% description: Name of the vector column to be created and to store sampled raster values. The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names
 #% required: no
 #% multiple: no
 #%end

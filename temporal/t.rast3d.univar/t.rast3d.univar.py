@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset
+#% description: Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset.
 #% keywords: temporal
 #% keywords: statistics
 #% keywords: raster

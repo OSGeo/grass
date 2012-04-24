@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Convert a space time raster dataset into a rast3d map
+#% description: Converts a space time raster dataset into a raster3d map.
 #% keywords: temporal
 #% keywords: raster3d
 #% keywords: convert

@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Unregister raster, vector and raster3d maps from the temporal database or a specific space time dataset
+#% description: Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset.
 #% keywords: temporal
 #% keywords: unregister
 #%end

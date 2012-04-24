@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Modify the metadata of a space time dataset
+#% description: Modifies the metadata of a space time dataset.
 #% keywords: temporal
 #% keywords: support
 #%end

@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Register raster, vector adn raster3d maps in a space time datasets
+#% description: Registers raster, vector adn raster3d maps in a space time datasets.
 #% keywords: temporal
 #% keywords: register
 #%end

@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Perform different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset
+#% description: Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset.
 #% keywords: temporal
 #% keywords: series
 #%end

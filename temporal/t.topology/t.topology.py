@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: List and modify temporal topology of a space time dataset
+#% description: Lists and modifies temporal topology of a space time dataset.
 #% keywords: temporal
 #% keywords: topology
 #%end

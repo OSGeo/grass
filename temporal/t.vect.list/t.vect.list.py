@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: List registered maps of a space time vector dataset 
+#% description: Lists registered maps of a space time vector dataset.
 #% keywords: temporal
 #% keywords: list
 #%end
