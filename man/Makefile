@@ -48,16 +48,16 @@ define build
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_$(1).py $(2)
 endef
 
-$(HTMLDIR)/full_index.html: $(ALL_HTML)
+$(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
-$(HTMLDIR)/index.html:
+$(HTMLDIR)/index.html: build_index.py build_html.py
 	$(call build,index)
 	touch $@
 
 define category_rule
-$$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html)
+$$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html) build_class.py build_html.py
 	$$(call build,class,$(1) $(2))
 	touch $$@
 endef
