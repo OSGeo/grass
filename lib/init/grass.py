@@ -363,7 +363,7 @@ def set_paths():
             path_prepend(grass_man_path, 'MANPATH')
         else:
             os.environ['MANPATH'] = addons_man_path
-            path_prepend(os.path.join(grass_man_path, 'MANPATH'))
+            path_prepend(grass_man_path, 'MANPATH')
     
     # Add .py (Python) to list of executable extensions to search for
     # in MS-Windows PATH
