@@ -1757,7 +1757,7 @@ msgstr "Échec de la numérisation de vecteur"
 
 #: ../gui/wxpython/lmgr/layertree.py:678
 #, python-format
-msgid "Set opacity <%s>"
+msgid "Set opacity of <%s>"
 msgstr "Régler l'opacité <%s>"
 
 #: ../gui/wxpython/lmgr/layertree.py:774

@@ -1623,7 +1623,7 @@ msgstr "Umbenennen"
 
 #: ../gui/wxpython/lmgr/layertree.py:322
 msgid "Change opacity level"
-msgstr "Deckkraft ändern"
+msgstr "Transparenz ändern"
 
 #: ../gui/wxpython/lmgr/layertree.py:324
 #: ../gui/wxpython/gmodeler/frame.py:1225
@@ -1758,8 +1758,8 @@ msgstr "Vektordigitalisierer abgebrochen"
 
 #: ../gui/wxpython/lmgr/layertree.py:678
 #, python-format
-msgid "Set opacity <%s>"
-msgstr "Deckkraft bestimmen <%s>"
+msgid "Set opacity of <%s>"
+msgstr "Transparenz von <%s> festlegen"
 
 #: ../gui/wxpython/lmgr/layertree.py:774
 msgid "Layer group:"
@@ -1847,7 +1847,7 @@ msgstr "Bitte warten Sie, ich aktualisiere Daten..."
 
 #: ../gui/wxpython/lmgr/layertree.py:1436
 msgid "opacity:"
-msgstr "Deckkraft"
+msgstr "Transparenz:"
 
 #: ../gui/wxpython/lmgr/layertree.py:1454
 #, python-format
@@ -4217,7 +4217,7 @@ msgstr "Wählen Sie zu importierende DXF-Datei"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2123
 msgid "Set Map Layer Opacity"
-msgstr "Bestimme die Deckkraft der Kartenebene"
+msgstr "Bestimme die Transparenz der Kartenebene"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2147
 msgid "transparent"

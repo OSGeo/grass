@@ -1804,7 +1804,7 @@ msgstr "Trình số hóa vec-tơ thất bại"
 
 #: ../gui/wxpython/lmgr/layertree.py:678
 #, python-format
-msgid "Set opacity <%s>"
+msgid "Set opacity of <%s>"
 msgstr "Đặt độ mờ <%s>"
 
 #: ../gui/wxpython/lmgr/layertree.py:774
