@@ -22,6 +22,8 @@ filename = modclass + ".html"
 f = open(filename + ".tmp", 'wb')
 
 write_html_header(f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass))
+if modclass.lower() not in ['general', 'misc', 'postscript']:
+    f.write(modclass_intro_tmpl.substitute(modclass = modclass, modclass_lower = modclass.lower()))
 f.write(modclass_tmpl.substitute(modclass = modclass))
 
 #for all modules:

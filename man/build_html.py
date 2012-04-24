@@ -205,6 +205,11 @@ r""" ]
 """
 #"
 
+modclass_intro_tmpl = string.Template(\
+r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a><p>
+""")
+#"
+
 modclass_tmpl = string.Template(\
 r"""Go <a href="index.html">back to help overview</a><BR><BR><BR>
 <b>${modclass} commands:</b>
