@@ -1411,13 +1411,83 @@ def test_spatial_relations():
     print relation
     if relation!= "meet":
 	core.error("Wrong spatial relation: %s"%(relation))
+	
+def test_temporal_topology_builder():
+    map_list = []
+    count = 0
+    for year in xrange(0,1):
+	for month in xrange(1,6):
+	    start = datetime(2001 + year, month, 01)
+	    end = datetime(2001 + year, month + 1, 01)
+	    _map = raster_dataset("%d@A"%(count))
+	    _map.set_absolute_time(start, end)
+	    map_list.append(_map)
+	    count += 1
+
+    tb = temporal_topology_builder()
+    tb.build(map_list, True)
+
+    for _map in tb:
+	_map.print_info()
  
+    map_list = []
+    for year in xrange(0,1):
+	for month in xrange(1,6):
+	    start = datetime(2001 + year, month, 01)
+	    end = datetime(2001 + year, month + 1, 01)
+	    _map = raster_dataset("%d@A"%(count))
+	    _map.set_absolute_time(start, end)
+	    map_list.append(_map)
+	    count += 1
+	    
+	    start = datetime(2001 + year, month, 14)
+	    end = datetime(2001 + year, month + 1, 14)
+	    _map = raster_dataset("%d@A"%(count))
+	    _map.set_absolute_time(start, end)
+	    map_list.append(_map)
+	    count += 1
+	    
+	    start = datetime(2001 + year, month, 8)
+	    end = datetime(2001 + year, month + 1, 21)
+	    _map = raster_dataset("%d@A"%(count))
+	    _map.set_absolute_time(start, end)
+	    map_list.append(_map)
+	    count += 1
+
+    tb = temporal_topology_builder()
+    tb.build(map_list, False)
+    for _map in tb:
+	
+	print _map.get_id()
+	_map.absolute_time.print_info()
+	_map.print_temporal_topology_info()
+	
+    # Test the performance of many overlapping maps
+    count = 0
+    for year in xrange(0,200):
+	for month in xrange(1,12):
+	    start = datetime(1901 + year, month, 01)
+	    end = datetime(1904 + year, month + 1, 01)
+	    _map = raster_dataset("%d@A"%(count))
+	    _map.set_absolute_time(start, end)
+	    map_list.append(_map)
+	    count += 1
+	    
+    print "Build temporal topology with sorting for %i maps"%count
+    tb = temporal_topology_builder()
+    tb.build(map_list, True)
+	
+    print "Build temporal topology without sorting for %i maps"%count
+    tb = temporal_topology_builder()
+    tb.build(map_list, False)
+    
 if __name__ == "__main__":
     test_increment_datetime_by_string()
     test_adjust_datetime_to_granularity()
     test_spatial_extent_intersection()
-    #test_compute_relative_time_granularity()
+    ##test_compute_relative_time_granularity()
     test_compute_absolute_time_granularity()
     test_compute_datetime_delta()
     test_spatial_extent_intersection()
     test_spatial_relations()
+    test_temporal_topology_builder()

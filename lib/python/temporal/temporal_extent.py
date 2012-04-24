@@ -134,7 +134,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def follows(self, extent):
-	"""!Return True if this time object is temporal follows the provided time object
+	"""!Return True if this time object temporally follows the provided time object
 	   A            |---------|
 	   B  |---------|
 	"""
@@ -220,8 +220,8 @@ class abstract_temporal_extent(sql_database_interface):
         else:
 	    return False
 
-    def overlaps(self, extent):
-	"""!Return True if this time object is temporal overlaps the provided time object
+    def overlapped(self, extent):
+	"""!Return True if this time object temporally overlapped the provided time object
            A  |---------|
 	   B    |---------|
 	"""
@@ -234,8 +234,8 @@ class abstract_temporal_extent(sql_database_interface):
         else:
 	    return False
 
-    def overlapped(self, extent):
-	"""!Return True if this time object is temporal overlapped by the provided time object
+    def overlaps(self, extent):
+	"""!Return True if this time object temporally overlaps the provided time object
 	   A    |---------|
            B  |---------|
 	"""
