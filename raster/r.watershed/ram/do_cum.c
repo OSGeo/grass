@@ -3,11 +3,10 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-int get_dist(double *dist_to_nbr, double *contour)
+double get_dist(double *dist_to_nbr, double *contour)
 {
     int ct_dir, r_nbr, c_nbr;
-    double dx, dy;
-    double ns_res, ew_res;
+    double dx, dy, ns_res, ew_res;
 
     if (G_projection() == PROJECTION_LL) {
 	double ew_dist1, ew_dist2, ew_dist3;
@@ -50,17 +49,17 @@ int get_dist(double *dist_to_nbr, double *contour)
 	dy = ABS(r_nbr) * ns_res;
 	dx = ABS(c_nbr) * ew_res;
 	if (ct_dir < 4)
-	    dist_to_nbr[ct_dir] = dx + dy;
+	    dist_to_nbr[ct_dir] = (dx + dy) * ele_scale;
 	else
-	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
+	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy) * ele_scale;
     }
-    contour[0] = contour[1] = ew_res;
-    contour[2] = contour[3] = ns_res;
+    contour[0] = contour[1] = ew_res / 2.;
+    contour[2] = contour[3] = ns_res / 2.;
     if (sides == 8) {
-	contour[4] = contour[5] = contour[6] = contour[7] = (ew_res + ns_res) / 2.;
+	contour[4] = contour[5] = contour[6] = contour[7] = sqrt(ew_res * ns_res) / 2.;
     }
     
-    return 1;
+    return ew_res * ns_res;
 }
 
 double get_slope_tci(CELL ele, CELL down_ele, double dist)
@@ -82,7 +81,7 @@ int do_cum(void)
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int this_index, down_index, nbr_index;
     double *dist_to_nbr, *contour;
-    double tci_div;
+    double tci_div, cell_size;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
 
@@ -90,7 +89,7 @@ int do_cum(void)
     dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
     contour = (double *)G_malloc(sides * sizeof(double));
 
-    get_dist(dist_to_nbr, contour);
+    cell_size = get_dist(dist_to_nbr, contour);
 
     if (bas_thres <= 0)
 	threshold = 60;
@@ -168,7 +167,7 @@ int do_cum(void)
 		tci_div = contour[np_side] * 
 		       get_slope_tci(alt[this_index], alt[down_index],
 				     dist_to_nbr[np_side]);
-		tci[this_index] = log(fabs(wat[this_index]) / tci_div);
+		tci[this_index] = log((fabs(wat[this_index]) * cell_size) / tci_div);
 	    }
 
 	    is_swale = FLAG_GET(swale, r, c);
@@ -206,12 +205,18 @@ int do_cum(void)
  * before depressions/obstacles and gracefull flow divergence after 
  * depressions/obstacles
  * 
- * Topograohic Wetness Index (TCI)
- * TCI = SUM( (A / L_i) * weight / (tanb_i * weight))
- * TCI = A / SUM (L_i / tanb_i)
+ * Topographic Convergence Index (TCI)
+ * after Quinn et al. (1991), modified and adapted for the modified 
+ * Holmgren MFD algorithm
+ * TCI: specific catchment area divided by tangens of slope
+ * specific catchment area: total catchment area divided by contour line
+ * TCI for D8:     A / (L * tanb)
+ * TCI for MFD:    A / (SUM(L_i) * (SUM(tanb_i * weight_i) / SUM(weight_i))
+ * 
  * A: total catchment area
- * L_i: contour length towards i-th neighbor
- * tanb_i: slope = tan(b) towards i-th neighbor
+ * L_i: contour length towards i_th cell
+ * tanb_i: slope = tan(b) towards i_th cell
+ * weight_i: weight for flow distribution towards i_th cell
  *
  * ************************************/
 
@@ -219,7 +224,7 @@ int do_cum_mfd(void)
 {
     int r, c, dr, dc;
     CELL is_swale;
-    DCELL value, valued, tci_div;
+    DCELL value, valued, tci_div, sum_contour, cell_size;
     int killer, threshold, count;
 
     /* MFD */
@@ -241,7 +246,7 @@ int do_cum_mfd(void)
     weight = (double *)G_malloc(sides * sizeof(double));
     contour = (double *)G_malloc(sides * sizeof(double));
     
-    get_dist(dist_to_nbr, contour);
+    cell_size = get_dist(dist_to_nbr, contour);
 
     flag_clear_all(worked);
     workedon = 0;
@@ -370,7 +375,7 @@ int do_cum_mfd(void)
 
 	    /* set flow accumulation for neighbours */
 	    max_acc = -1;
-	    tci_div = 0.;
+	    tci_div = sum_contour = 0.;
 
 	    if (mfd_cells > 1) {
 		prop = 0.0;
@@ -385,6 +390,13 @@ int do_cum_mfd(void)
 			if (is_worked == 0) {
 
 			    nbr_index = SEG_INDEX(wat_seg, r_nbr, c_nbr);
+
+			    if (tci_flag) {
+				sum_contour += contour[ct_dir];
+				tci_div += get_slope_tci(ele, alt[nbr_index],
+				                         dist_to_nbr[ct_dir]) *
+					   weight[ct_dir];
+			    }
 
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
 			    /* check everything adds up to 1.0 */
@@ -405,11 +417,6 @@ int do_cum_mfd(void)
 			    }
 			    wat[nbr_index] = valued;
 			    
-			    if (tci_flag)
-				tci_div += contour[ct_dir] * 
-				           get_slope_tci(ele, alt[nbr_index],
-				                         dist_to_nbr[ct_dir]);
-
 			    /* get main drainage direction */
 			    if (ABS(valued) >= max_acc) {
 				max_acc = ABS(valued);
@@ -427,6 +434,8 @@ int do_cum_mfd(void)
 		    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
 			      prop);
 		}
+		if (tci_flag)
+		    tci_div /= sum_weight;
 	    }
 
 	    if (mfd_cells < 2) {
@@ -445,14 +454,16 @@ int do_cum_mfd(void)
 		}
 		wat[down_index] = valued;
 
-		if (tci_flag)
-		    tci_div = contour[np_side] * 
-			      get_slope_tci(ele, alt[down_index],
+		if (tci_flag) {
+		    sum_contour = contour[np_side];
+		    tci_div = get_slope_tci(ele, alt[down_index],
 				            dist_to_nbr[np_side]);
+		}
 	    }
 	    /* topographic wetness index ln(a / tan(beta)) */
 	    if (tci_flag) {
-		tci[this_index] = log(fabs(wat[this_index]) / tci_div);
+		tci[this_index] = log((fabs(wat[this_index]) * cell_size) /
+		                      (sum_contour * tci_div));
 	    }
 
 	    /* update asp */
