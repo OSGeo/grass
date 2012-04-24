@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Export space time raster dataset as VTK time series
+#% description: Exports space time raster dataset as VTK time series.
 #% keywords: dataset
 #% keywords: spacetime
 #% keywords: raster

@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Extract a subset of a space time raster3d dataset
+#% description: Extracts a subset of a space time raster3d dataset.
 #% keywords: temporal
 #% keywords: extract
 #%end

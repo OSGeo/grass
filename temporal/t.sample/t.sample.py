@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Sample the input space time dataset(s) with a sample space time dataset and print the result to stdout
+#% description: Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout.
 #% keywords: temporal
 #% keywords: sample
 #%end

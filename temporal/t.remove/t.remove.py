@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Remove space time datasets from temporal database
+#% description: Removes space time datasets from temporal database.
 #% keywords: temporal
 #% keywords: remove
 #%end

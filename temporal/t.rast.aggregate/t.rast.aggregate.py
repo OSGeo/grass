@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Create a new space time raster dataset from the aggregated data of an existing space time raster dataset
+#% description: Create a new space time raster dataset from the aggregated data of an existing space time raster dataset.
 #% keywords: temporal
 #% keywords: aggregation
 #%end

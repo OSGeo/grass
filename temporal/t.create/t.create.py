@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Create a space time dataset
+#% description: Creates a space time dataset.
 #% keywords: temporal
 #% keywords: create
 #%end

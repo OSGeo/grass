@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Calculates univariate statistics from the non-null cells for each registered vector map of a space time vector dataset
+#% description: Calculates univariate statistics from the non-null cells for each registered vector map of a space time vector dataset.
 #% keywords: temporal
 #% keywords: statistics
 #% keywords: vector

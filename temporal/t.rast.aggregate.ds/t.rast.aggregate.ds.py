@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Aggregated data of an existing space time raster dataset using the temporal topology of a second space time dataset
+#% description: Aggregated data of an existing space time raster dataset using the temporal topology of a second space time dataset.
 #% keywords: temporal
 #% keywords: aggregation
 #%end

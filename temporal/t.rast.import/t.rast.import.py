@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Import space time raster dataset 
+#% description: Imports space time raster dataset.
 #% keywords: temporal
 #% keywords: import
 #%end

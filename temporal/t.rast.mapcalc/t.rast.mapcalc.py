@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Perform r.mapcalc expressions on maps of sampled space time raster datasets
+#% description: Performs r.mapcalc expressions on maps of sampled space time raster datasets.
 #% keywords: temporal
 #% keywords: mapcalc
 #%end
