@@ -25683,8 +25683,8 @@ msgid "Writing the output..."
 msgstr "Schreibe Ausgabe..."
 
 #: ../vector/v.in.region/main.c:40
-msgid "Create a new vector from the current region."
-msgstr "Erzeuge einen neuen Vektor aus der aktuellen Region."
+msgid "Creates a vector polygon from the current region extent."
+msgstr "Erzeuge ein Vektorpolygon aus der aktuellen Region."
 
 #: ../vector/v.in.region/main.c:48
 msgid "Select type: line or area"
