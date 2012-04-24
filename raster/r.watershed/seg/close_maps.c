@@ -127,8 +127,9 @@ int close_maps(void)
     /* TCI */
     if (tci_flag) {
 	DCELL watvalue;
+	double mean;
 
-	G_message(_("Closing tci map"));
+	G_message(_("Closing TCI map"));
 	sum = sum_sqr = stddev = 0.0;
 	dbuf = Rast_allocate_d_buf();
 	wabuf = G_malloc(ncols * sizeof(WAT_ALT));
@@ -160,6 +161,7 @@ int close_maps(void)
 	G_free(dbuf);
 	dseg_close(&tci);
 
+	mean = sum / do_points;
 	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
 	G_debug(1, "stddev: %f", stddev);
 
@@ -174,31 +176,36 @@ int close_maps(void)
 
 	Rast_init_colors(&colors);
 
-	clr_min = min - 1;
-	clr_max = min + (max - min) * 0.3;
-	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
-				  255, 0, &colors);
-	clr_min = clr_max;
-	clr_max = min + (max - min) * 0.5;
+	if (min - 1 < mean - 0.5 * stddev) {
+	    clr_min = min - 1;
+	    clr_max = mean - 0.5 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+					  255, 0, &colors);
+	}
+
+	clr_min = mean - 0.5 * stddev;
+	clr_max = mean - 0.2 * stddev;
 	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
 				  255, 0, &colors);
 	clr_min = clr_max;
-	clr_max = min + (max - min) * 0.6;
+	clr_max = mean + 0.2 * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
 				  255, 255, &colors);
 	clr_min = clr_max;
-	clr_max = min + (max - min) * 0.7;
+	clr_max = mean + 0.6 * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
 				  0, 255, &colors);
 	clr_min = clr_max;
-	clr_max = max + 1.;
+	clr_max = mean + 1. * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
 				  0, &colors);
 
-	clr_min = clr_max;
-	clr_max = max + 1;
-	Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
-				  0, &colors);
+	if (max > 0 && max > clr_max) {
+	    clr_min = clr_max;
+	    clr_max = max + 1;
+	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
+				      0, &colors);
+	}
 	Rast_write_colors(tci_name, this_mapset, &colors);
     }
 
