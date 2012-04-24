@@ -1809,7 +1809,7 @@ msgstr "Ошибка векторизации"
 
 #: ../gui/wxpython/lmgr/layertree.py:678
 #, python-format
-msgid "Set opacity <%s>"
+msgid "Set opacity of <%s>"
 msgstr "Установить непрозрачность <%s>"
 
 #: ../gui/wxpython/lmgr/layertree.py:774

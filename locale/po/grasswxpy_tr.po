@@ -1810,7 +1810,7 @@ msgstr "Vektör sayısallaştırma hatası"
 
 #: ../gui/wxpython/lmgr/layertree.py:678
 #, python-format
-msgid "Set opacity <%s>"
+msgid "Set opacity of <%s>"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:774
