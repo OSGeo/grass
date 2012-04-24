@@ -31,7 +31,7 @@ SUBDIRS = \
 	t.vect.observe.strds \
 	t.vect.univar
 
-PGM = tgisintro
+PGM = temporalintro
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
