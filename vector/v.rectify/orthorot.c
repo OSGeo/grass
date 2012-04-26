@@ -41,7 +41,7 @@ static int calccoef(struct Control_Points_3D *, double *, int);
 static int calcscale(struct Control_Points_3D *, double *);
 
 void transpose_matrix(int, int, double **, double **);
-void matmult(int, int, double **, double **, double **);
+void matmult(int, int, int, double **, double **, double **);
 void copy_matrix(int, int, double **, double **);
 void init_matrix(int, int, double **);
 void scale_matrix(int, int, double, double **, double **);
@@ -293,6 +293,7 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
     double **src_mat_T = NULL;
     double **dest_mat = NULL;
     double **dest_mat_T = NULL;
+    double **src_dest_mat = NULL;
     double *S_vec = NULL;
     double **R_mat = NULL;
     double **R_mat_T = NULL;
@@ -301,10 +302,8 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
     double **mat_nm1 = NULL;
     double **mat_nm2 = NULL;
     double **mat_nn1 = NULL;
-    double **mat_nn2 = NULL;
     double **E_mat = NULL;
     double **P_mat = NULL;
-    double **P_mat_T = NULL;
     double **Q_mat = NULL;
     double *D_vec = NULL;
     double *one_vec = NULL;
@@ -344,6 +343,7 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
 
     src_mat_T = G_alloc_matrix(n, m);
     dest_mat_T = G_alloc_matrix(n, m);
+    src_dest_mat = G_alloc_matrix(n, n);
     R_mat = G_alloc_matrix(n, n);
     R_mat_T = G_alloc_matrix(n, n);
 
@@ -352,11 +352,9 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
     mat_nm1 = G_alloc_matrix(n, m);
     mat_nm2 = G_alloc_matrix(n, m);
     mat_nn1 = G_alloc_matrix(n, n);
-    mat_nn2 = G_alloc_matrix(n, n);
 
     E_mat = G_alloc_matrix(m, m);
     P_mat = G_alloc_matrix(ndims, ndims);
-    P_mat_T = G_alloc_matrix(ndims, ndims);
     Q_mat = G_alloc_matrix(ndims, ndims);
 
     transpose_matrix(m, n, dest_mat, dest_mat_T);
@@ -372,35 +370,35 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
 	}
     }
 
-    matmult(n, m, dest_mat_T, E_mat, mat_nm1);
-    matmult(n, m, mat_nm1, src_mat, mat_nm2);
-    copy_matrix(ndims, ndims, mat_nm2, P_mat);
-    copy_matrix(ndims, ndims, mat_nm2, mat_nn1);
+    matmult(n, m, m, dest_mat_T, E_mat, mat_nm1);
+    matmult(n, m, n, mat_nm1, src_mat, src_dest_mat);
+    copy_matrix(n, n, src_dest_mat, P_mat);
+    copy_matrix(n, n, src_dest_mat, mat_nn1);
 
-    status = G_math_svduv(D_vec, mat_nn1, P_mat, ndims, Q_mat, ndims);
+    status = G_math_svduv(D_vec, mat_nn1, P_mat, n, Q_mat, n);
 
     if (status == 0)
 	status = MSUCCESS;
 
-    transpose_matrix(n, n, P_mat, P_mat_T);
+    transpose_matrix(n, n, P_mat, mat_nn1);
 
     /* rotation matrix */
-    matmult(n, n, Q_mat, P_mat_T, R_mat_T);
+    matmult(n, n, n, Q_mat, mat_nn1, R_mat_T);
     transpose_matrix(n, n, R_mat_T, R_mat);
 
     /* scale */
-    matmult(n, n, mat_nm2, R_mat_T, mat_nn2);
-    trace1 = trace(n, n, mat_nn2);
+    matmult(n, n, n, src_dest_mat, R_mat_T, mat_nn1);
+    trace1 = trace(n, n, mat_nn1);
 
     transpose_matrix(m, n, src_mat, src_mat_T);
-    matmult(n, m, src_mat_T, E_mat, mat_nm1);
-    matmult(n, m, mat_nm1, src_mat, mat_nm2);
-    trace2 = trace(n, n, mat_nm2);
+    matmult(n, m, m, src_mat_T, E_mat, mat_nm1);
+    matmult(n, m, n, mat_nm1, src_mat, mat_nn1);
+    trace2 = trace(n, n, mat_nn1);
 
     OR[14] = trace1 / trace2;
 
     /* shifts */
-    matmult(m, n, src_mat, R_mat_T, mat_mn1);
+    matmult(m, n, n, src_mat, R_mat_T, mat_mn1);
     scale_matrix(m, n, OR[14], mat_mn1, mat_mn2);
     subtract_matrix(m, n, dest_mat, mat_mn2, mat_mn1);
     scale_matrix(m, n, 1.0 / m, mat_mn1, mat_mn2);
@@ -426,10 +424,10 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
     G_free_matrix(src_mat_T);
     G_free_matrix(dest_mat);
     G_free_matrix(dest_mat_T);
+    G_free_matrix(src_dest_mat);
     G_free_vector(D_vec);
     G_free_matrix(E_mat);
     G_free_matrix(P_mat);
-    G_free_matrix(P_mat_T);
     G_free_matrix(Q_mat);
     G_free_matrix(R_mat);
     G_free_matrix(R_mat_T);
@@ -438,7 +436,6 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
     G_free_matrix(mat_nm1);
     G_free_matrix(mat_nm2);
     G_free_matrix(mat_nn1);
-    G_free_matrix(mat_nn2);
     G_free_vector(S_vec);
     G_free_vector(one_vec);
 
@@ -518,13 +515,16 @@ void transpose_matrix(int m, int n, double **src_matrix, double **dest_matrix)
     }
 }
 
-void matmult(int m, int n, double **mat1, double **mat2, double **mat3)
+void matmult(int m, int n, int p, double **mat1, double **mat2, double **mat3)
 {
     int i, j, k;
     double sum;
 
+    /* input   mat1: m x n */
+    /* input   mat2: n x p */
+    /* output  mat3: m x p */
     for (i = 0; i < m; i++) {
-	for (j = 0; j < n; j++) {
+	for (j = 0; j < p; j++) {
 	    sum = 0.0;
 	    for (k = 0; k < n; k++) {
 		sum += mat1[i][k] * mat2[k][j];
