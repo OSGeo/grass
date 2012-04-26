@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
@@ -36,7 +37,7 @@ static void diagonal(double *dg, double *d2, double dx, double dy, double *dz)
 
 
 static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3,
-                        int order, int use3d, char *sep)
+                        int order, int use3d, int orthorot, char *sep, FILE *fp)
 {
     int n;
     int count, npoints;
@@ -52,13 +53,13 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
     /* print index, forward difference, backward difference, 
      * forward rms, backward rms */
     if (use3d)
-	printf("index%sfwd_dx%sfwd_dy%sfwd_dz%sback_dx%sback_dy%sback_dz%sfwd_RMS%sback_RMS",
+	fprintf(fp, "index%sfwd_dx%sfwd_dy%sfwd_dz%sback_dx%sback_dy%sback_dz%sfwd_RMS%sback_RMS",
                sep, sep, sep, sep, sep, sep, sep, sep);
     else
-	printf("index%sfwd_dx%sfwd_dy%sback_dx%sback_dy%sfwd_RMS%sback_RMS",
+	fprintf(fp, "index%sfwd_dx%sfwd_dy%sback_dx%sback_dy%sfwd_RMS%sback_RMS",
 	       sep, sep, sep, sep, sep, sep);
 
-    printf("\n");
+    fprintf(fp, "\n");
     
     if (use3d)
 	npoints = cp3->count;
@@ -70,7 +71,7 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
 	double fx, fy, fz, fd, fd2;
 	double rx, ry, rz, rd, rd2;
 
-	if (use3d) {
+	if (use3d || orthorot) {
 	    if (cp3->status[n] <= 0)
 		continue;
 	}
@@ -83,10 +84,14 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
 
 	/* forward: source -> target */
 	if (use3d) {
-	    CRS_georef_3d(cp3->e1[n], cp3->n1[n], cp3->z1[n],
-			  &e2, &n2, &z2, 
-			  E12, N12, Z12, 
-			  order);
+	    if (orthorot)
+		CRS_georef_or(cp3->e1[n], cp3->n1[n], cp3->z1[n],
+			      &e2, &n2, &z2, OR12);
+	    else
+		CRS_georef_3d(cp3->e1[n], cp3->n1[n], cp3->z1[n],
+			      &e2, &n2, &z2, 
+			      E12, N12, Z12, 
+			      order);
 
 	    fx = fabs(e2 - cp3->e2[n]);
 	    fy = fabs(n2 - cp3->n2[n]);
@@ -109,10 +114,14 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
 
 	/* backward: target -> source */
 	if (use3d) {
-	    CRS_georef_3d(cp3->e2[n], cp3->n2[n], cp3->z2[n],
-			  &e1, &n1, &z1,
-			  E21, N21, Z21,
-			  order);
+	    if (orthorot)
+		CRS_georef_or(cp3->e2[n], cp3->n2[n], cp3->z2[n],
+			      &e1, &n1, &z1, OR21);
+	    else
+		CRS_georef_3d(cp3->e2[n], cp3->n2[n], cp3->z2[n],
+			      &e1, &n1, &z1,
+			      E21, N21, Z21,
+			      order);
 
 	    rx = fabs(e1 - cp3->e1[n]);
 	    ry = fabs(n1 - cp3->n1[n]);
@@ -135,17 +144,17 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
 
 	/* print index, forward difference, backward difference, 
 	 * forward rms, backward rms */
-	printf("%d", n + 1);
-	printf("%s%f%s%f", sep, fx, sep, fy);
+	fprintf(fp, "%d", n + 1);
+	fprintf(fp, "%s%f%s%f", sep, fx, sep, fy);
 	if (use3d)
-	    printf("%s%f", sep, fz);
-	printf("%s%f%s%f", sep, rx, sep, ry);
+	    fprintf(fp, "%s%f", sep, fz);
+	fprintf(fp, "%s%f%s%f", sep, rx, sep, ry);
 	if (use3d)
-	    printf("%s%f", sep, rz);
-	printf("%s%.4f", sep, fd);
-	printf("%s%.4f", sep, rd);
+	    fprintf(fp, "%s%f", sep, rz);
+	fprintf(fp, "%s%.4f", sep, fd);
+	fprintf(fp, "%s%.4f", sep, rd);
 
-	printf("\n");
+	fprintf(fp, "\n");
     }
 
     if (count > 0) {
@@ -162,17 +171,17 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
 	fwd.rms = sqrt(fwd.sum2 / count);
 	rev.rms = sqrt(rev.sum2 / count);
     }
-    printf("%d", count);
-    printf("%s%f%s%f", sep, fwd.x, sep, fwd.y);
+    fprintf(fp, "%d", count);
+    fprintf(fp, "%s%f%s%f", sep, fwd.x, sep, fwd.y);
     if (use3d)
-	printf("%s%f", sep, fwd.z);
-    printf("%s%f%s%f", sep, rev.x, sep, rev.y);
+	fprintf(fp, "%s%f", sep, fwd.z);
+    fprintf(fp, "%s%f%s%f", sep, rev.x, sep, rev.y);
     if (use3d)
-	printf("%s%f", sep, rev.z);
-    printf("%s%.4f", sep, fwd.rms);
-    printf("%s%.4f", sep, rev.rms);
+	fprintf(fp, "%s%f", sep, rev.z);
+    fprintf(fp, "%s%.4f", sep, fwd.rms);
+    fprintf(fp, "%s%.4f", sep, rev.rms);
 
-    printf("\n");
+    fprintf(fp, "\n");
 }
 
 
@@ -186,6 +195,7 @@ int new_control_point_3d(struct Control_Points_3D *cp,
 
     if (status < 0)
 	return 1;
+
     i = (cp->count)++;
     size = cp->count * sizeof(double);
     cp->e1 = (double *)G_realloc(cp->e1, size);
@@ -271,13 +281,20 @@ static int read_control_points_3d(FILE * fd, struct Control_Points_3D *cp)
 }
 
 
-int get_control_points(char *group, char *pfile, int order, int use3d, int rms, char *sep)
+int get_control_points(char *group, char *pfile, int order, int use3d, 
+                       int orthorot, int rms, char *sep, FILE *fpr)
 {
     char msg[200];
     struct Control_Points cp;
     struct Control_Points_3D cp3;
     int ret = 0;
     int order_pnts[2][3] = {{ 3, 6, 10 }, { 4, 10, 20 }};
+    
+    cp.count = cp3.count = 0;
+    cp.e1 = cp.e2 = cp3.e1 = cp3.e2 = NULL;
+    cp.n1 = cp.n2 = cp3.n1 = cp3.n2 = NULL;
+    cp3.z1 = cp3.z2 = NULL;
+    cp.status = cp3.status = NULL;
     
     msg[0] = '\0';
 
@@ -299,7 +316,11 @@ int get_control_points(char *group, char *pfile, int order, int use3d, int rms, 
 	    return 0;
 	}
 
-	ret = CRS_compute_georef_equations_3d(&cp3, E12, N12, Z12, E21, N21, Z21, order);
+	if (orthorot)
+	    ret = CRS_compute_georef_equations_or(&cp3, OR12, OR21);
+	else
+	    ret = CRS_compute_georef_equations_3d(&cp3, E12, N12, Z12,
+	                                          E21, N21, Z21, order);
     }
     else if (pfile) {
 	/* read 2D GCPs from points file */
@@ -336,7 +357,7 @@ int get_control_points(char *group, char *pfile, int order, int use3d, int rms, 
     case 0:
 	sprintf(&msg[strlen(msg)],
 		_("Not enough active control points for current order, %d are required."),
-		order_pnts[use3d != 0][order]);
+		(orthorot ? 3 : order_pnts[use3d != 0][order - 1]));
 	break;
     case -1:
 	strcat(msg, _("Poorly placed control points."));
@@ -355,9 +376,8 @@ int get_control_points(char *group, char *pfile, int order, int use3d, int rms, 
 	G_fatal_error(msg);
 	
     if (rms) {
-	compute_rms(&cp, &cp3, order, use3d, sep);
+	compute_rms(&cp, &cp3, order, use3d, orthorot, sep, fpr);
     }
-	
-
+    
     return 1;
 }

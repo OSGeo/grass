@@ -1,5 +1,8 @@
 #include <string.h>
+#include <stdio.h>
 #include <unistd.h>
+#include <grass/gis.h>
+#include <grass/imagery.h>
 #include <grass/glocale.h>
 #include "global.h"
 

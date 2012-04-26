@@ -18,8 +18,11 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
+#include <grass/gis.h>
+#include <grass/imagery.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -31,12 +34,14 @@
 
 double E12[20], N12[20], Z12[20];
 double E21[20], N21[20], Z21[20];
+double HG12[20], HG21[20], HQ12[20], HQ21[20];
+double OR12[20], OR21[20];
 
 
 int main(int argc, char *argv[])
 {
     char group[INAME_LEN];
-    int order;			/* ADDED WITH CRS MODIFICATIONS */
+    int order, orthorot;
     int n, i, nlines, type;
     int target_overwrite = 0;
     char *points_file, *overstr, *rms_sep;
@@ -45,15 +50,17 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     double x, y, z;
     int use3d;
+    FILE *fp;
 
     struct Option *grp,         /* imagery group */
      *val,                      /* transformation order */
      *in_opt,			/* input vector name */
      *out_opt,			/* output vector name */
      *pfile,			/* text file with GCPs */
+     *rfile,			/* text file to hold RMS errors */
      *sep;			/* field separator for RMS report */
 
-    struct Flag *flag_use3d, *no_topo, *print_rms;
+    struct Flag *flag_use3d, *no_topo, *print_rms, *ortho;
 
     struct GModule *module;
 
@@ -81,6 +88,11 @@ int main(int argc, char *argv[])
     pfile->description = _("Name of input file with control points");
     pfile->required = NO;
 
+    rfile = G_define_standard_option(G_OPT_F_INPUT);
+    rfile->key = "rmsfile";
+    rfile->description = _("Name of output file with RMS errors (if omitted or '-' output to stdout");
+    rfile->required = NO;
+
     val = G_define_option();
     val->key = "order";
     val->type = TYPE_INTEGER;
@@ -96,6 +108,10 @@ int main(int argc, char *argv[])
     flag_use3d = G_define_flag();
     flag_use3d->key = '3';
     flag_use3d->description = _("Perform 3D transformation");
+
+    ortho = G_define_flag();
+    ortho->key = 'o';
+    ortho->description = _("Perform orthogonal 3D transformation");
 
     print_rms = G_define_flag();
     print_rms->key = 'r';
@@ -131,10 +147,16 @@ int main(int argc, char *argv[])
     Vect_set_open_level(1);
     Vect_open_old2(&In, in_opt->answer, "", "");
     
-    use3d = (Vect_is_3d(&In) && flag_use3d->answer);
+    use3d = (Vect_is_3d(&In) &&
+             (flag_use3d->answer || ortho->answer));
     
+    if (!use3d && (flag_use3d->answer || ortho->answer))
+	G_fatal_error(_("3D transformation requires a 3D vector"));
+
     if (use3d && !points_file)
-	G_fatal_error(_("A file with 3D control points is needed for 3d transformation"));
+	G_fatal_error(_("A file with 3D control points is needed for 3D transformation"));
+	
+    orthorot = ortho->answer;
 
     if (print_rms->answer) {
 	if (sep->answer) {
@@ -154,9 +176,22 @@ int main(int argc, char *argv[])
     else
 	rms_sep = NULL;
 
+    if (rfile->answer) {
+	if (strcmp(rfile->answer, "-")) {
+	    fp = fopen(rfile->answer, "w");
+	    if (!fp)
+		G_fatal_error(_("Unable to open file '%s' for writing"),
+		              rfile->answer);
+	}
+	else
+	    fp = stdout;
+    }
+    else
+	fp = stdout;
+
     /* read the control points for the group */
-    get_control_points(group, points_file, order, use3d,
-                       print_rms->answer, rms_sep);
+    get_control_points(group, points_file, order, use3d, orthorot,
+                       print_rms->answer, rms_sep, fp);
     
     if (print_rms->answer) {
 	Vect_close(&In);
@@ -222,8 +257,12 @@ int main(int argc, char *argv[])
 	Vect_reset_line(OPoints);
 	for (n = 0; n < Vect_get_num_line_points(Points); n++) {
 	    if (use3d) {
-		CRS_georef_3d(Points->x[n], Points->y[n], Points->z[n],
-			      &x, &y, &z, E12, N12, Z12, order);
+		if (orthorot)
+		    CRS_georef_or(Points->x[n], Points->y[n], Points->z[n],
+				  &x, &y, &z, OR12);
+		else
+		    CRS_georef_3d(Points->x[n], Points->y[n], Points->z[n],
+				  &x, &y, &z, E12, N12, Z12, order);
 	    }
 	    else {
 		I_georef(Points->x[n], Points->y[n],

@@ -157,10 +157,8 @@ int CRS_compute_georef_equations_3d(struct Control_Points_3D *cp,
     double *tempptr;
     int status;
 
-    /*
     if (order < 1 || order > MAXORDER)
 	return MPARMERR;
-    */
 
     /* CALCULATE THE FORWARD TRANSFORMATION COEFFICIENTS */
 
@@ -234,6 +232,8 @@ static int calccoef(struct Control_Points_3D *cp,
        2nd order:    6    10
        3rd order:   10	  20
     */
+
+    m.n = numactive + 1;
 
     if (order == 1)
 	m.n = 4;
@@ -477,7 +477,7 @@ static int solvemat(struct MATRIX *m, double a[], double b[], double c[],
 	/* co-linear points result in an undefined matrix, and nearly */
 	/* co-linear points results in a solution with rounding error */
 
-	if (pivot == 0.0)
+	if (fabs(pivot) < GRASS_EPSILON)
 	    return MUNSOLVABLE;
 
 	/* if row with highest pivot is not the current row, switch them */
