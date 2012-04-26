@@ -27,6 +27,7 @@ import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.vector as libvector
 import grass.lib.raster3d as libraster3d
+import grass.script.array as garray
 
 from datetime_math import *
 from abstract_map_dataset import *
@@ -73,11 +74,30 @@ class raster_dataset(abstract_map_dataset):
         """Return the two dimensional spatial relation"""
         
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+        
+    def get_np_array(self):
+	"""Return this raster map as memmap numpy style array to access the raster
+	   values in numpy style without loading the whole map in the RAM. 
+	   
+	   In case this raster map does exists in the grass spatial database, the map
+	   will be exported using r.out.bin to a temporary location and assigned to the
+	   memmap object that is returned by this function.
+	   
+	   In case the raster map does not exists, an empty temporary binary file will be created
+	   and assigned to the memap object.
+	   
+	   You need to call the write function to write the memmap array back into grass.
+	"""
+	
+	a = garray.array()
+	
+	if self.map_exists():
+	    a.read(self.get_map_id())
+	
+	return a
 	
     def reset(self, ident):
 	"""!Reset the internal structure and set the identifier"""
-	self.ident = ident
-
 	self.base = raster_base(ident=ident)
 	self.absolute_time = raster_absolute_time(ident=ident)
 	self.relative_time = raster_relative_time(ident=ident)
@@ -210,9 +230,6 @@ class raster_dataset(abstract_map_dataset):
 
 
         # Fill base information
-
-        self.base.set_name(self.ident.split("@")[0])
-        self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
 
         # Get the data from an existing raster map
@@ -289,8 +306,6 @@ class raster3d_dataset(abstract_map_dataset):
         
     def reset(self, ident):
 	"""!Reset the internal structure and set the identifier"""
-	self.ident = ident
-
 	self.base = raster3d_base(ident=ident)
 	self.absolute_time = raster3d_absolute_time(ident=ident)
 	self.relative_time = raster3d_relative_time(ident=ident)
@@ -421,8 +436,6 @@ class raster3d_dataset(abstract_map_dataset):
         """!Load all info from an existing raster3d map into the internal structure"""
 
         # Fill base information
-        self.base.set_name(self.ident.split("@")[0])
-        self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
 
         # Fill spatial extent
@@ -502,8 +515,6 @@ class vector_dataset(abstract_map_dataset):
 	
     def reset(self, ident):
 	"""!Reset the internal structure and set the identifier"""
-	self.ident = ident
-
 	self.base = vector_base(ident=ident)
 	self.absolute_time = vector_absolute_time(ident=ident)
 	self.relative_time = vector_relative_time(ident=ident)
@@ -648,12 +659,6 @@ class vector_dataset(abstract_map_dataset):
 
 
         # Fill base information
-	if self.ident.find(":") >= 0:
-	    self.base.set_name(self.ident.split("@")[0].split(":")[0])
-	    self.base.set_layer(self.ident.split("@")[0].split(":")[1])
-	else:
-	    self.base.set_name(self.ident.split("@")[0])
-        self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
 
         # Get the data from an existing raster map
@@ -719,13 +724,7 @@ class space_time_raster_dataset(abstract_space_time_dataset):
     def reset(self, ident):
 
 	"""!Reset the internal structure and set the identifier"""
-	self.ident = ident
-
 	self.base = strds_base(ident=ident)
-
-        if ident != None:
-            self.base.set_name(self.ident.split("@")[0])
-            self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
         self.absolute_time = strds_absolute_time(ident=ident)
         self.relative_time = strds_relative_time(ident=ident)
@@ -779,13 +778,7 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
     def reset(self, ident):
 
 	"""!Reset the internal structure and set the identifier"""
-	self.ident = ident
-
 	self.base = str3ds_base(ident=ident)
-
-        if ident != None:
-            self.base.set_name(self.ident.split("@")[0])
-            self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
         self.absolute_time = str3ds_absolute_time(ident=ident)
         self.relative_time = str3ds_relative_time(ident=ident)
@@ -833,13 +826,7 @@ class space_time_vector_dataset(abstract_space_time_dataset):
     def reset(self, ident):
 
 	"""!Reset the internal structure and set the identifier"""
-	self.ident = ident
-
 	self.base = stvds_base(ident=ident)
-
-        if ident != None:
-            self.base.set_name(self.ident.split("@")[0])
-            self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
         self.absolute_time = stvds_absolute_time(ident=ident)
         self.relative_time = stvds_relative_time(ident=ident)

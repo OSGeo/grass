@@ -86,6 +86,7 @@ SUBDIRS = \
 	r.rescale.eq \
 	r.ros \
 	r.series \
+	r.series.interp \
 	r.slope.aspect \
 	r.solute.transport \
 	r.spread \

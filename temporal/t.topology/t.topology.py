@@ -69,7 +69,7 @@ def main():
     maps = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=None)
 
     if tmatrix:
-        matrix = sp.print_temporal_relation_matrix(maps)
+        sp.print_temporal_relationships(maps)
         return
 
     sp.base.print_info()

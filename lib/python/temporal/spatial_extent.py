@@ -23,7 +23,7 @@ for details.
 from base import *
 
 class spatial_extent(sql_database_interface):
-    """!This is the spatial extent base class for all maps and spacetime datasets"""
+    """!This is the spatial extent base class for all maps and space time datasets"""
     def __init__(self, table=None, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None, proj="XY"):
 
 	sql_database_interface.__init__(self, table, ident)
@@ -61,16 +61,16 @@ class spatial_extent(sql_database_interface):
                 E -= 360.0
                 W -= 360.0
                 
-        if(self.get_north() < S):
+        if(self.get_north() <= S):
             return False
         
-        if(self.get_south() > N):
+        if(self.get_south() >= N):
             return False
             
-        if self.get_east() < W:
+        if self.get_east() <= W:
             return False
         
-        if self.get_west() > E:
+        if self.get_west() >= E:
             return False
         
         return True
@@ -92,10 +92,10 @@ class spatial_extent(sql_database_interface):
         T = extent.get_top()
         B = extent.get_bottom()
         
-        if self.get_top() < B:
+        if self.get_top() <= B:
             return False
         
-        if self.get_bottom() > T:
+        if self.get_bottom() >= T:
             return False
         
         return True
@@ -678,7 +678,7 @@ class spatial_extent(sql_database_interface):
 	return True
 
     def meet(self,extent):
-	""" Check if self and extent touch meet other in three dimensions"""
+	""" Check if self and extent meet other in three dimensions"""
 	eN = extent.get_north()
         eS = extent.get_south()
         eE = extent.get_east()
@@ -727,7 +727,7 @@ class spatial_extent(sql_database_interface):
 	    edge = "B"
 	    edge_count += 1	
 	
-	# Meet a a single edge only
+	# Meet a single edge only
 	if edge_count != 1:
 	    return False
 	

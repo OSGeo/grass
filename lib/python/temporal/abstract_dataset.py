@@ -74,6 +74,15 @@ class abstract_dataset(object):
 	    self.relative_time.print_self()
 	self.spatial_extent.print_self()
 	self.metadata.print_self()
+	
+    def set_id(self, ident):
+	self.base.set_id(ident)
+	if self.is_time_absolute():
+	    self.absolute_time.set_id(ident)
+        if self.is_time_relative():
+	    self.relative_time.set_id(ident)
+	self.spatial_extent.set_id(ident)
+	self.metadata.set_id(ident)
 
     def get_id(self):
 	"""!Return the unique identifier of the dataset"""
@@ -325,3 +334,82 @@ class abstract_dataset(object):
 	    return self.relative_time.temporal_relation(map.relative_time)
     	return None
 
+###############################################################################
+	
+class abstract_dataset_comparison_key_start_time(object):
+    """!This comparison key can be used to sort lists of abstract datasets by start time
+    
+        Example:
+        
+        # Return all maps in a space time raster dataset as map objects
+	map_list = strds.get_registered_maps_as_objects()
+	
+	# Sort the maps in the list by start time
+	sorted_map_list = sorted(map_list, key=abstract_dataset_comparison_key_start_time)
+    """
+    def __init__(self, obj, *args):
+	self.obj = obj
+    def __lt__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return startA < startB
+    def __gt__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return startA > startB
+    def __eq__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return startA == startB
+    def __le__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return startA <= startB
+    def __ge__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return startA >= startB
+    def __ne__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return startA != startB
+	
+###############################################################################
+	
+class abstract_dataset_comparison_key_end_time(object):
+    """!This comparison key can be used to sort lists of abstract datasets by end time
+    
+        Example:
+        
+        # Return all maps in a space time raster dataset as map objects
+	map_list = strds.get_registered_maps_as_objects()
+	
+	# Sort the maps in the list by end time
+	sorted_map_list = sorted(map_list, key=abstract_dataset_comparison_key_end_time)
+    """
+    def __init__(self, obj, *args):
+	self.obj = obj
+    def __lt__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return endA < endB
+    def __gt__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return endA > endB
+    def __eq__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return endA == endB
+    def __le__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return endA <= endB
+    def __ge__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return endA >= endB
+    def __ne__(self, other):
+	startA, endA = self.obj.get_valid_time()
+	startB, endB = other.obj.get_valid_time()
+	return endA != endB
