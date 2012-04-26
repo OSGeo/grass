@@ -27,20 +27,6 @@ int CRS_georef_3d(double, double, double,
 		  double *, double *, double *,
 		  int);
 
-/* helmertg.c */
-int CRS_compute_georef_equations_hg(struct Control_Points_3D *,
-                                    double *, double *);
-int CRS_georef_hg(double, double, double,
-                  double *, double *, double *,
-		  double *);
-
-/* helmertq.c */
-int CRS_compute_georef_equations_hq(struct Control_Points_3D *,
-                                    double *, double *);
-int CRS_georef_hq(double, double, double,
-                  double *, double *, double *,
-		  double *);
-
 /* orthorot.c */
 int CRS_compute_georef_equations_or(struct Control_Points_3D *,
                                     double *, double *);
