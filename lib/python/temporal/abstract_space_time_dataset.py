@@ -246,7 +246,7 @@ class abstract_space_time_dataset(abstract_dataset):
         """
 
         if maps == None:
-            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+            maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
             
         gaps = 0
 
@@ -259,7 +259,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return gaps
         
-    def print_temporal_relation_matrix(self, maps=None, dbif=None):
+    def print_temporal_relationships(self, maps=None, dbif=None):
         """!Print the temporal relation matrix of all registered maps to stdout
 
            The temporal relation matrix includes the temporal relations between
@@ -270,25 +270,9 @@ class abstract_space_time_dataset(abstract_dataset):
         """
         
         if maps == None:
-            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+            maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
 	    
-	print_temporal_relations(maps, maps)
-
-    def get_temporal_relation_matrix(self, maps=None, dbif=None):
-        """!Return the temporal relation matrix of all registered maps as list of lists
-
-           The map list must be ordered by start time
-
-           The temporal relation matrix includes the temporal relations between
-           all registered maps. The relations are strings stored in a list of lists.
-           
-           @param maps: a ordered by start_time list of map objects
-           @param dbif: The database interface to be used
-        """
-        if maps == None:
-            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
-
-        return get_temporal_relation_matrix(maps, maps)
+	print_temporal_topology_relationships(maps, maps)
 
     def count_temporal_relations(self, maps=None, dbif=None):
         """!Count the temporal relations between the registered maps.
@@ -302,9 +286,9 @@ class abstract_space_time_dataset(abstract_dataset):
         """
         
         if maps == None:
-            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+            maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
 
-        return count_temporal_relations(maps, maps)
+        return count_temporal_topology_relationships(maps, maps)
 
     def check_temporal_topology(self, maps=None, dbif=None):
         """!Check the temporal topology
@@ -335,9 +319,9 @@ class abstract_space_time_dataset(abstract_dataset):
            @return True if topology is correct
         """
         if maps == None:
-            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+            maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
 
-        relations = self.count_temporal_relations(maps)
+        relations = count_temporal_topology_relationships(maps, maps)
 
         map_time = self.get_map_time()
 

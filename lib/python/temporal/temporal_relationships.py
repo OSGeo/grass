@@ -23,8 +23,10 @@ for details.
 from abstract_map_dataset import *
 from datetime_math import *
 
+###############################################################################
+
 class temporal_topology_builder(object):
-    """!This class is designed to build the temporal topology based on a list of maps
+    """!This class is designed to build the temporal topology based on a lists of maps
     
 	Example:
 	
@@ -34,7 +36,7 @@ class temporal_topology_builder(object):
 	
 	# Now lets build the temporal topology of the maps in the list
 	tb = temporal_topology_builder()
-	tb.build(maps, True)
+	tb.build(maps)
 	
 	for _map in tb:
 	    _map.print_temporal_topology_info()
@@ -63,6 +65,7 @@ class temporal_topology_builder(object):
     def _reset(self):
         self._store = {}
         self._first = None
+        self._temporal_iteratable = False
 
     def _set_first(self, first):
         self._first = first
@@ -84,8 +87,117 @@ class temporal_topology_builder(object):
 	   @return The map with the earliest start time
 	"""
 	return self._first
+
+    def _build_internal_iteratable(self, maps):
+	"""!Build an iteratable temporal topology structure for all maps in the list and store the maps internally
 	
-    def build(self, maps, is_sorted = False):
+	   Basically the "next" and "prev" relations will be set in the temporal topology structure of each map
+	   The maps will be added to the object, so they can be accessed using the iterator of this class
+	   
+	   @param maps: A sorted (by start_time)list of abstract_dataset objects with initiated temporal extent
+	"""
+	self._build_iteratable(maps)
+
+	for _map in maps:
+	    self._insert(_map)
+	
+	# Detect the first map
+	self._detect_first()
+	
+    def _build_iteratable(self, maps):
+	"""!Build an iteratable temporal topology structure for all maps in the list
+	
+	   Basically the "next" and "prev" relations will be set in the temporal topology structure of each map.
+	   
+	   @param maps: A sorted (by start_time)list of abstract_dataset objects with initiated temporal extent
+	"""
+	for i in xrange(len(maps)):
+	    offset = i + 1
+	    for j in xrange(offset, len(maps)):		
+		# Get the temporal relationship
+		relation = maps[j].temporal_relation(maps[i])
+		
+		# Build the next reference
+		if relation != "equivalent" and relation != "started":
+		    maps[i].set_next(maps[j])
+		    break
+		
+	for _map in maps:
+	    _next = _map.next()
+	    if _next:
+		_next.set_prev(_map)
+	    _map.set_temporal_topology_build_true()
+	
+    def build2(self, mapsA, mapsB):
+	"""!Build the temporal topology structure between two ordered lists of maps
+	
+	   This method builds the temporal topology from mapsA to mapsB and vice verse.
+	   The temporal topology structure of each map, defined in class temporal_map_relations,
+	   will be reseted and rebuild for mapsA and mapsB. 
+	   
+	   After building the temporal topology the modified map objects of mapsA can be accessed 
+	   in the same way as a dictionary using there id. The implemented iterator assures 
+	   the chronological iteration over the mapsA.	    
+	   
+	   @param mapsA: A sorted list (by start_time) of abstract_dataset objects with initiated temporal extent
+	   @param mapsB: A sorted list (by start_time) of abstract_dataset objects with initiated temporal extent
+	"""
+	
+	if mapsA == mapsB:
+	    self.build(mapsA, True)
+	    return
+	
+	for _map in mapsA:
+	    _map.reset_temporal_topology()
+	    
+	for _map in mapsB:
+	    _map.reset_temporal_topology()
+	
+	for i in xrange(len(mapsA)):
+	    for j in xrange(len(mapsB)):
+		
+		# Get the temporal relationship
+		relation = mapsB[j].temporal_relation(mapsA[i])
+		
+		if relation == "before":
+		    continue
+			    
+		if relation == "equivalent":
+		    mapsB[j].append_equivalent(mapsA[i])
+		    mapsA[i].append_equivalent(mapsB[j])
+		elif relation == "follows":
+		    mapsB[j].append_follows(mapsA[i])
+		    mapsA[i].append_precedes(mapsB[j])
+		elif relation == "precedes":
+		    mapsB[j].append_precedes(mapsA[i])
+		    mapsA[i].append_follows(mapsB[j])
+		elif relation == "during" or relation == "starts" or relation == "finishes":
+		    mapsB[j].append_during(mapsA[i])
+		    mapsA[i].append_contains(mapsB[j])
+		elif relation == "contains" or relation == "started" or relation == "finished":
+		    mapsB[j].append_contains(mapsA[i])
+		    mapsA[i].append_during(mapsB[j])
+		elif relation == "overlaps":
+		    mapsB[j].append_overlaps(mapsA[i])
+		    mapsA[i].append_overlapped(mapsB[j])
+		elif relation == "overlapped":
+		    mapsB[j].append_overlapped(mapsA[i])
+		    mapsA[i].append_overlaps(mapsB[j])
+
+		# Break if the next map follows and the over-next maps is after
+		if relation == "follows":
+		    if j < len(mapsB) - 1:
+			relation = mapsB[j + 1].temporal_relation(mapsA[i])
+			if relation == "after":
+			    break
+		# Break if the the next map is after
+		if relation == "after":
+		    break 
+	
+	self._build_internal_iteratable(mapsA)
+	self._build_iteratable(mapsB)
+			    
+    def build(self, maps):
 	"""!Build the temporal topology structure
 	
 	   This method builds the temporal topology based on all maps in the provided map list.
@@ -94,58 +206,19 @@ class temporal_topology_builder(object):
 	   
 	   After building the temporal topology the modified map objects can be accessed 
 	   in the same way as a dictionary using there id. The implemented iterator assures 
-	   the chronological iteration over the maps.
+	   the chronological iteration over the maps.	   
 	   
-	   
-	   @param maps: A list of abstract_dataset objects with initiated temporal extent
-	   @param is_sorted Set to True if the map list is sorted by start time, sorting will dramatically reduce computation time
+	   @param maps: A sorted list (by start_time) of abstract_dataset objects with initiated temporal extent
 	"""
 	for _map in maps:
 	    _map.reset_temporal_topology()
 	
 	for i in xrange(len(maps)):
-	    if is_sorted:
-		offset = i + 1
-		found_next = False
-	    else:
-		offset = 0
-		# Needed for "next" computation 
-		start0, end0 = maps[i].get_valid_time()
-	    
+	    offset = i + 1
 	    for j in xrange(offset, len(maps)):
-		
-		# Do not build topology of the same maps
-		if maps[i] == maps[j]:
-		    continue
 		
 		# Get the temporal relationship
 		relation = maps[j].temporal_relation(maps[i])
-		
-		# We can skip several relationships if not sorted
-		if not is_sorted:
-		    if relation == "before":
-			continue
-		    if relation == "precedes":
-			continue
-		    if relation == "overlapped":
-			continue
-		    if relation == "finished":
-			continue
-		
-		# Build the next reference
-		if is_sorted:
-		    if not found_next and relation != "equivalent" and relation != "started":
-			maps[i].set_next(maps[j])
-			found_next = True
-		else: 
-		    start2, end2 = maps[j].get_valid_time()
-		    if maps[i].next():
-			start1, end1 = maps[i].next().get_valid_time()
-			if start2 > start0 and start2 < start1:
-			    maps[i].set_next(maps[j])
-		    else:
-			if start2 > start0:
-			    maps[i].set_next(maps[j])
 			    
 		# The start time of map j is equal or later than map i
 		if relation == "equivalent":
@@ -174,23 +247,14 @@ class temporal_topology_builder(object):
 		# Break if the the next map is after
 		if relation == "after":
 		    break 
-	
-	# Build the previous pointer and store the map internally
-	for _map in maps:
-	    _next = _map.next()
-	    if _next:
-		_next.set_prev(_map)
-	    _map.set_temporal_topology_build_true()
-	    self._insert(_map)
-	
-	# Detect the first map
-	self._detect_first()
+		    
+	self._build_internal_iteratable(maps)
 	
     def __iter__(self):
-        _start = self._first
-        while _start != None:
-            yield _start
-            _start = _start.next()
+	_start = self._first
+	while _start != None:
+	    yield _start
+	    _start = _start.next()
 
     def __getitem__(self, index):
         return self._store[index.get_id()]
@@ -202,12 +266,14 @@ class temporal_topology_builder(object):
         return _map in self._store.values()
 
 
-def print_temporal_relations(maps1, maps2):
+###############################################################################
+
+def print_temporal_topology_relationships(maps1, maps2):
     """!Print the temporal relation matrix of the temporal ordered map lists maps1 and maps2
        to stdout.
 	
-	@param maps1: a ordered by start_time list of map objects with initiated temporal extent
-	@param maps2: a ordered by start_time list of map objects with initiated temporal extent
+	@param maps1: A sorted (by start_time) list of abstract_dataset objects with initiated temporal extent
+	@param maps2: A sorted (by start_time) list of abstract_dataset objects with initiated temporal extent
     """
     
     identical = False
@@ -240,60 +306,16 @@ def print_temporal_relations(maps1, maps2):
 	    if relation == "after":
 		break
 
-def get_temporal_relation_matrix(maps1, maps2):
-    """!Return the temporal relation matrix of two map lists
+###############################################################################
 
-	Booth map lists must be ordered by start time
-
-	The temporal relationship matrix includes the temporal relations between
-	the two map lists. Returned is a nested dict representing 
-	a sparse (upper right side in case maps1 == maps2) relationship matrix.
-	
-	@param maps1: A sorted (start_time) list of abstract_dataset objects with initiated temporal extent
-	@param maps2: A sorted (start_time) list of abstract_dataset objects with initiated temporal extent
-    """
-
-    matrix = {}
-    identical = False
-    
-    if maps1 == maps2:
-	identical = True
-
-    for i in range(len(maps1)):
-	if identical == True:
-	    start = i + 1
-	else:
-	    start = 0
-	    
-	row = {}
-	    
-	for j in range(start, len(maps2)):
-	    relation = maps1[j].temporal_relation(maps2[i])
-
-	    row[maps2[j].base.get_id()] = relation 
-
-	    # Break if the last map follows
-	    if relation == "follows":
-		if j < len(maps1) - 1:
-		    relation = maps1[j + 1].temporal_relation(maps2[i])
-		    if relation == "after":
-			break
-	    # Break if the the next map is after
-	    if relation == "after":
-		break
-
-	matrix[maps1[i].base.get_id()] = row
-
-    return matrix
-
-def count_temporal_relations(maps1, maps2):
+def count_temporal_topology_relationships(maps1, maps2):
     """!Count the temporal relations between the two lists of maps
 
 	The map lists must be ordered by start time. Temporal relations are counted 
 	by analyzing the sparse (upper right side in case maps1 == maps2) temporal relationships matrix.
 
-	@param maps1: A sorted (start_time) list of abstract_dataset objects with initiated temporal extent
-	@param maps2: A sorted (start_time) list of abstract_dataset objects with initiated temporal extent
+	@param maps1: A sorted (by start_time) list of abstract_dataset objects with initiated temporal extent
+	@param maps2: A sorted (by start_time) list of abstract_dataset objects with initiated temporal extent
 	@return A dictionary with counted temporal relationships
     """
     
@@ -330,4 +352,3 @@ def count_temporal_relations(maps1, maps2):
 		break  
 
     return tcount
-

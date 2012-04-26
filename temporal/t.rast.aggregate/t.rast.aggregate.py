@@ -58,15 +58,6 @@
 #%option G_OPT_R_BASE
 #%end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: The number of r.mapcalc processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 2
-#%end
-
 #%flag
 #% key: n
 #% description: Register Null maps
@@ -89,7 +80,6 @@ def main():
     register_null = flags["n"]
     method = options["method"]
     sampling = options["sampling"]
-    nprocs = int(options["nprocs"])
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()

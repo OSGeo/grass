@@ -28,7 +28,7 @@ class temporal_map_relations(abstract_dataset):
     
        This object will be set up by temporal topology creation methods.
        
-       If correctly initialize the calls get_next() and get_prev() let the user walk temporally forward
+       If correctly initialize the calls next() and prev() let the user walk temporally forward
        and backward in time.
        
        The following temporal relations with access methods are supported:
@@ -51,7 +51,7 @@ class temporal_map_relations(abstract_dataset):
            for _map in dlist:
                _map.print_info()
                
-           start = start.get_next()       
+           start = start.next()       
     """
 
     def __init__(self):
@@ -81,7 +81,7 @@ class temporal_map_relations(abstract_dataset):
 	   temporally located AFTER the start time of this map, but temporally 
 	   near than other maps of the same dataset.
 	   
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	"""
         self._temporal_topology["NEXT"] = _map
 
@@ -92,7 +92,7 @@ class temporal_map_relations(abstract_dataset):
 	   temporally located BEFORE the start time of this map, but temporally 
 	   near than other maps of the same dataset.
 	   
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	"""
         self._temporal_topology["PREV"] = _map
 
@@ -119,7 +119,7 @@ class temporal_map_relations(abstract_dataset):
     def append_equivalent(self, _map): 
 	"""!Append a map with equivalent temporal extent as this map
 	
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	"""
         if not self._temporal_topology.has_key("EQUAL"):
             self._temporal_topology["EQUAL"] = []
@@ -137,7 +137,7 @@ class temporal_map_relations(abstract_dataset):
     def append_overlaps(self, _map): 
 	"""!Append a map that this map temporally overlaps
 	
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	"""
         if not self._temporal_topology.has_key("OVERLAPS"):
             self._temporal_topology["OVERLAPS"] = []
@@ -155,7 +155,7 @@ class temporal_map_relations(abstract_dataset):
     def append_overlapped(self, _map): 
 	"""!Append a map that this map temporally overlapped
 	
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	""" 
         if not self._temporal_topology.has_key("OVERLAPPED"):
             self._temporal_topology["OVERLAPPED"] = []
@@ -173,7 +173,7 @@ class temporal_map_relations(abstract_dataset):
     def append_follows(self, _map): 
 	"""!Append a map that this map temporally follows
 	
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	""" 
         if not self._temporal_topology.has_key("FOLLOWS"):
             self._temporal_topology["FOLLOWS"] = []
@@ -191,7 +191,7 @@ class temporal_map_relations(abstract_dataset):
     def append_precedes(self, _map): 
 	"""!Append a map that this map temporally precedes
 	
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	""" 
         if not self._temporal_topology.has_key("PRECEDES"):
             self._temporal_topology["PRECEDES"] = []
@@ -210,7 +210,7 @@ class temporal_map_relations(abstract_dataset):
 	"""!Append a map that this map is temporally located during
 	   This includes temporal relationships starts and finishes
 	
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	""" 
         if not self._temporal_topology.has_key("DURING"):
             self._temporal_topology["DURING"] = []
@@ -230,7 +230,7 @@ class temporal_map_relations(abstract_dataset):
 	"""!Append a map that this map temporally contains
 	   This includes temporal relationships started and finished
 	
-	   @param _map This object should be of type abstract_map_dataset or derived classes
+	   @param _map: This object should be of type abstract_map_dataset or derived classes
 	""" 
         if not self._temporal_topology.has_key("CONTAINS"):
             self._temporal_topology["CONTAINS"] = []

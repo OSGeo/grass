@@ -7,6 +7,8 @@ Functions to use GRASS rasters with NumPy.
 Usage:
 
 @code
+from grass.script import array as garray
+
     map = 'elevation'
     x = garray.array()
     x.read(map)

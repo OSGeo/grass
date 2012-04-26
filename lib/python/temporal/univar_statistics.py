@@ -101,7 +101,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended, header
 ###############################################################################
     
 def print_vector_dataset_univar_statistics(input, twhere, layer, type, column, where, extended, header, fs):
-    """!Print univariate statistics for a space time raster or raster3d dataset
+    """!Print univariate statistics for a space time vector dataset
     
        @param input The name of the space time dataset
        @param twhere A temporal database where statement

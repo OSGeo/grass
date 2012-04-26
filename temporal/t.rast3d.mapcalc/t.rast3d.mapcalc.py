@@ -39,10 +39,12 @@
 #%option G_OPT_STR3DS_OUTPUT
 #%end
 
-#%option G_OPT_R_BASE
+#%option
+#% key: base
+#% type: string
+#% description: The base name of the new created 3d raster maps. This name will be extended with a numerical prefix
 #% required: yes
-#% description: Name of the base raster3d map
-#% gisprompt: old,grid3,3d-raster
+#% multiple: no
 #%end
 
 #%option

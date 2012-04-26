@@ -20,11 +20,15 @@ for details.
 
 @author Soeren Gebbert
 """
+import copy
 from datetime import datetime, date, time, timedelta
 import grass.script.core as core
 from temporal_granularity import *
 from datetime_math import *
 from space_time_datasets import *
+
+# Uncomment this to detect the error
+#core.set_raise_on_error(True)
 
 ###############################################################################
 
@@ -44,7 +48,7 @@ def test_increment_datetime_by_string():
     delta = dt1 -dt2
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
+        core.fatal("increment computation is wrong %s" % (delta))
 
     # Second test
     print "# Test 2"
@@ -60,7 +64,7 @@ def test_increment_datetime_by_string():
     delta = dt1 -dt2
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
+        core.fatal("increment computation is wrong %s" % (delta))
 
     # Third test
     print "# Test 3"
@@ -76,7 +80,7 @@ def test_increment_datetime_by_string():
     delta = dt1 -dt2
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
+        core.fatal("increment computation is wrong %s" % (delta))
 
     # 4. test
     print "# Test 4"
@@ -92,7 +96,7 @@ def test_increment_datetime_by_string():
     delta = dt1 -dt2
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
+        core.fatal("increment computation is wrong %s" % (delta))
 
 ###############################################################################
 
@@ -107,7 +111,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # Second test
     print "Test 2"
@@ -117,7 +121,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # Third test
     print "Test 2"
@@ -127,7 +131,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 4. test
     print "Test 4"
@@ -137,7 +141,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 5. test
     print "Test 5"
@@ -147,7 +151,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 6. test
     print "Test 6"
@@ -157,7 +161,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 7. test
     print "Test 7"
@@ -167,7 +171,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 8. test
     print "Test 8"
@@ -177,7 +181,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 9. test
     print "Test 9"
@@ -187,7 +191,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 10. test
     print "Test 10"
@@ -197,7 +201,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 11. test
     print "Test 11"
@@ -207,7 +211,7 @@ def test_adjust_datetime_to_granularity():
     delta = correct - result 
 
     if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+        core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
 ###############################################################################
 
@@ -225,7 +229,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 2"
     start = datetime(2001, 1, 1, 00,00,14)
@@ -239,7 +243,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 3"
     start = datetime(2001, 1, 1, 00,00,44)
@@ -253,7 +257,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 4"
     start = datetime(2001, 1, 1, 00,00,30)
@@ -267,7 +271,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 5"
     start = datetime(2001, 1, 1, 00,00,00)
@@ -281,7 +285,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 6"
     start = datetime(2011,10,31, 00,45,00)
@@ -295,7 +299,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 7"
     start = datetime(2011,10,31, 00,45,00)
@@ -309,7 +313,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 8"
     start = datetime(2011,10,31, 00,45,00)
@@ -323,7 +327,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 9"
     start = datetime(2011,10,31, 00,00,00)
@@ -337,7 +341,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 10"
     start = datetime(2011,10,31, 00,00,00)
@@ -351,7 +355,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 11"
     start = datetime(2011,10,31, 12,00,00)
@@ -365,7 +369,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 12"
     start = datetime(2011,11,01, 00,00,00)
@@ -379,7 +383,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
 
     print "Test 13"
@@ -394,7 +398,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 14"
     start = datetime(2011,10,06, 00,00,00)
@@ -408,7 +412,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 15"
     start = datetime(2011,12,02, 00,00,00)
@@ -422,7 +426,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 16"
     start = datetime(2011,01,01, 00,00,00)
@@ -436,7 +440,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 17"
     start = datetime(2011,12,01, 00,00,00)
@@ -450,7 +454,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 18"
     start = datetime(2011,12,01, 00,00,00)
@@ -464,7 +468,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 19"
     start = datetime(2011,06,01, 00,00,00)
@@ -478,7 +482,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 20"
     start = datetime(2011,06,01, 00,00,00)
@@ -493,7 +497,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 21"
     start = datetime(2011,06,01, 00,00,00)
@@ -508,7 +512,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 22"
     start = datetime(2011,06,01, 00,00,00)
@@ -523,7 +527,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 23"
     start = datetime(2011,06,01, 00,00,00)
@@ -538,7 +542,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print "Test 24"
     start = datetime(2011,06,01, 00,00,00)
@@ -553,7 +557,7 @@ def test_compute_datetime_delta():
     delta = correct - result 
 
     if delta != 0:
-        core.error("Compute datetime delta is wrong %s" % (delta))
+        core.fatal("Compute datetime delta is wrong %s" % (delta))
 
 ###############################################################################
 
@@ -577,7 +581,7 @@ def test_compute_relative_time_granularity():
     fact = fact - 1
     gran = round(compute_relative_time_granularity(maps))
     if fact - gran != 0:
-        core.error("Wrong granularity reference %i != gran %i" % (fact, gran))
+        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
  
     print "Test 2"
     maps = []
@@ -594,7 +598,7 @@ def test_compute_relative_time_granularity():
     fact = fact - 1
     gran = round(compute_relative_time_granularity(maps) * 86400)
     if fact - gran != 0:
-        core.error("Wrong granularity reference %i != gran %i" % (fact, gran))
+        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
 
     print "Test 3 with gaps"
     maps = []
@@ -612,7 +616,7 @@ def test_compute_relative_time_granularity():
 
     gran = round(compute_relative_time_granularity(maps))
     if fact - gran != 0:
-        core.error("Wrong granularity reference %i != gran %i" % (fact, gran))
+        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
 
     # Second we test intervals and points mixed
 
@@ -636,7 +640,7 @@ def test_compute_relative_time_granularity():
     fact = fact - 1
     gran = round(compute_relative_time_granularity(maps))
     if fact - gran != 0:
-        core.error("Wrong granularity reference %i != gran %i" % (fact, gran))
+        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
  
     # Second we test points only
  
@@ -652,7 +656,7 @@ def test_compute_relative_time_granularity():
 
     gran = round(compute_relative_time_granularity(maps) * 86400)
     if fact - gran != 0:
-        core.error("Wrong granularity reference %i != gran %i" % (fact, gran))
+        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
 
 ###############################################################################
 
@@ -674,7 +678,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 2"
     maps = []
@@ -689,7 +693,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 3"
     maps = []
@@ -704,7 +708,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 4"
     maps = []
@@ -719,7 +723,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 3"
     maps = []
@@ -734,7 +738,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 4"
     maps = []
@@ -749,7 +753,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 5"
     maps = []
@@ -765,7 +769,7 @@ def test_compute_absolute_time_granularity():
     increment = "1 days"
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 6"
     maps = []
@@ -781,7 +785,7 @@ def test_compute_absolute_time_granularity():
     increment = "25 hours"
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 7"
     maps = []
@@ -796,7 +800,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 8"
     maps = []
@@ -811,7 +815,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 9"
     maps = []
@@ -827,7 +831,7 @@ def test_compute_absolute_time_granularity():
     increment = "325 minutes"
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 10"
     maps = []
@@ -843,7 +847,7 @@ def test_compute_absolute_time_granularity():
     increment = "330 seconds"
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 11"
     maps = []
@@ -859,7 +863,7 @@ def test_compute_absolute_time_granularity():
     increment = "3630 seconds"
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 12"
     maps = []
@@ -874,7 +878,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     # Test absolute time points    
 
@@ -891,7 +895,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 14"
     maps = []
@@ -906,7 +910,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 15"
     maps = []
@@ -921,7 +925,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     # Test absolute time interval and points    
 
@@ -947,7 +951,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
     print "Test 17"
     maps = []
@@ -971,7 +975,7 @@ def test_compute_absolute_time_granularity():
 
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
-        core.error("Wrong granularity reference %s != gran %s" % (increment, gran))
+        core.fatal("Wrong granularity reference %s != gran %s" % (increment, gran))
 
 ###############################################################################
 
@@ -988,7 +992,7 @@ def test_spatial_extent_intersection():
     if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
        C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
        C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
-        core.error("Wrong intersection computation")
+        core.fatal("Wrong intersection computation")
         
     B = spatial_extent(north=40, south=30, east=60, west=10, bottom=-50, top=50)
     B.print_info()
@@ -998,7 +1002,7 @@ def test_spatial_extent_intersection():
     if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
        C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
        C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
-        core.error("Wrong intersection computation")
+        core.fatal("Wrong intersection computation")
         
     B = spatial_extent(north=40, south=30, east=60, west=30, bottom=-50, top=50)
     B.print_info()
@@ -1008,7 +1012,7 @@ def test_spatial_extent_intersection():
     if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
        C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
        C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
-        core.error("Wrong intersection computation")
+        core.fatal("Wrong intersection computation")
     
     B = spatial_extent(north=40, south=30, east=60, west=30, bottom=-30, top=50)
     B.print_info()
@@ -1018,7 +1022,7 @@ def test_spatial_extent_intersection():
     if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
        C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
        C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
-        core.error("Wrong intersection computation")
+        core.fatal("Wrong intersection computation")
     
     B = spatial_extent(north=40, south=30, east=60, west=30, bottom=-30, top=30)
     B.print_info()
@@ -1028,7 +1032,7 @@ def test_spatial_extent_intersection():
     if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
        C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
        C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
-        core.error("Wrong intersection computation")
+        core.fatal("Wrong intersection computation")
 
 ###############################################################################
 
@@ -1043,7 +1047,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "equivalent":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     B = spatial_extent(north=70, south=20, east=60, west=10, bottom=-50, top=50)
     B.print_info()
@@ -1051,12 +1055,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=70, south=30, east=60, west=10, bottom=-50, top=50)
     B.print_info()
@@ -1064,22 +1068,22 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = B.spatial_relation_2d(A)
     print relation
     if relation!= "covered":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = B.spatial_relation(A)
     print relation
     if relation!= "covered":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=70, south=30, east=50, west=10, bottom=-50, top=50)
     B.print_info()
@@ -1087,24 +1091,24 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = B.spatial_relation_2d(A)
     print relation
     if relation!= "covered":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
     
     relation = B.spatial_relation(A)
     print relation
     if relation!= "covered":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
     B.print_info()
@@ -1112,12 +1116,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "contain":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-40, top=50)
     B.print_info()
@@ -1125,7 +1129,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "cover":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=70, south=30, east=50, west=20, bottom=-40, top=40)
     B.print_info()
@@ -1133,12 +1137,12 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "contain":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = B.spatial_relation(A)
     print relation
     if relation!= "in":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=90, south=30, east=50, west=20, bottom=-40, top=40)
     B.print_info()
@@ -1146,12 +1150,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "overlap":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "overlap":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=90, south=5, east=70, west=5, bottom=-40, top=40)
     A.print_info()
@@ -1160,12 +1164,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "in":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
     
     relation = A.spatial_relation(B)
     print relation
     if relation!= "overlap":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     B = spatial_extent(north=90, south=5, east=70, west=5, bottom=-40, top=60)
     A.print_info()
@@ -1174,7 +1178,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "overlap":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
 	
     B = spatial_extent(north=90, south=5, east=70, west=5, bottom=-60, top=60)
@@ -1184,7 +1188,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "in":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     A = spatial_extent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
     A.print_info()
@@ -1194,12 +1198,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     A = spatial_extent(north=60, south=40, east=60, west=10, bottom=-50, top=50)
     A.print_info()
@@ -1209,12 +1213,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=40, bottom=-50, top=50)
     A.print_info()
@@ -1224,12 +1228,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
     A.print_info()
@@ -1239,12 +1243,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
     A.print_info()
@@ -1254,12 +1258,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
     A.print_info()
@@ -1269,12 +1273,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
     A.print_info()
@@ -1284,12 +1288,12 @@ def test_spatial_relations():
     relation = A.spatial_relation_2d(B)
     print relation
     if relation!= "disjoint":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
 	
     relation = A.spatial_relation(B)
     print relation
     if relation!= "disjoint":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
     A.print_info()
@@ -1299,7 +1303,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
     A.print_info()
@@ -1309,7 +1313,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
     A.print_info()
@@ -1319,7 +1323,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
     A.print_info()
@@ -1329,7 +1333,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
     A.print_info()
@@ -1339,7 +1343,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
     A.print_info()
@@ -1349,7 +1353,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=0, top=50)
     A.print_info()
@@ -1359,7 +1363,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  ###
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
@@ -1370,7 +1374,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
     A.print_info()
@@ -1380,7 +1384,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
     A.print_info()
@@ -1390,7 +1394,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
     A.print_info()
@@ -1400,7 +1404,7 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
+	core.fatal("Wrong spatial relation: %s"%(relation))
  
     A = spatial_extent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
     A.print_info()
@@ -1410,77 +1414,159 @@ def test_spatial_relations():
     relation = A.spatial_relation(B)
     print relation
     if relation!= "meet":
-	core.error("Wrong spatial relation: %s"%(relation))
-	
+	core.fatal("Wrong spatial relation: %s"%(relation))
+
+###############################################################################
+
 def test_temporal_topology_builder():
-    map_list = []
-    count = 0
-    for year in xrange(0,1):
-	for month in xrange(1,6):
-	    start = datetime(2001 + year, month, 01)
-	    end = datetime(2001 + year, month + 1, 01)
-	    _map = raster_dataset("%d@A"%(count))
-	    _map.set_absolute_time(start, end)
-	    map_list.append(_map)
-	    count += 1
-
-    tb = temporal_topology_builder()
-    tb.build(map_list, True)
-
-    for _map in tb:
-	_map.print_info()
- 
-    map_list = []
-    for year in xrange(0,1):
-	for month in xrange(1,6):
-	    start = datetime(2001 + year, month, 01)
-	    end = datetime(2001 + year, month + 1, 01)
-	    _map = raster_dataset("%d@A"%(count))
-	    _map.set_absolute_time(start, end)
-	    map_list.append(_map)
-	    count += 1
-	    
-	    start = datetime(2001 + year, month, 14)
-	    end = datetime(2001 + year, month + 1, 14)
-	    _map = raster_dataset("%d@A"%(count))
-	    _map.set_absolute_time(start, end)
-	    map_list.append(_map)
-	    count += 1
-	    
-	    start = datetime(2001 + year, month, 8)
-	    end = datetime(2001 + year, month + 1, 21)
-	    _map = raster_dataset("%d@A"%(count))
-	    _map.set_absolute_time(start, end)
-	    map_list.append(_map)
-	    count += 1
-
-    tb = temporal_topology_builder()
-    tb.build(map_list, False)
-    for _map in tb:
-	
-	print _map.get_id()
-	_map.absolute_time.print_info()
-	_map.print_temporal_topology_info()
-	
-    # Test the performance of many overlapping maps
-    count = 0
-    for year in xrange(0,200):
-	for month in xrange(1,12):
-	    start = datetime(1901 + year, month, 01)
-	    end = datetime(1904 + year, month + 1, 01)
-	    _map = raster_dataset("%d@A"%(count))
-	    _map.set_absolute_time(start, end)
-	    map_list.append(_map)
-	    count += 1
-	    
-    print "Build temporal topology with sorting for %i maps"%count
-    tb = temporal_topology_builder()
-    tb.build(map_list, True)
-	
-    print "Build temporal topology without sorting for %i maps"%count
-    tb = temporal_topology_builder()
-    tb.build(map_list, False)
+    map_listA = []
     
+    _map = raster_dataset(ident = "1@a")
+    _map.set_absolute_time(datetime(2001, 01, 01), datetime(2001, 02, 01))
+    map_listA.append(copy.copy(_map))
+    _map = raster_dataset(ident = "2@a")
+    _map.set_absolute_time(datetime(2001, 02, 01), datetime(2001, 03, 01))
+    map_listA.append(copy.copy(_map))
+    _map = raster_dataset(ident = "3@a")
+    _map.set_absolute_time(datetime(2001, 03, 01), datetime(2001, 04, 01))
+    map_listA.append(copy.copy(_map))
+    _map = raster_dataset(ident = "4@a")
+    _map.set_absolute_time(datetime(2001, 04, 01), datetime(2001, 05, 01))
+    map_listA.append(copy.copy(_map))
+    _map = raster_dataset(ident = "5@a")
+    _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 06, 01))
+    map_listA.append(copy.copy(_map))
+
+    tb = temporal_topology_builder()
+    tb.build(map_listA)
+
+    count = 0
+    for _map in tb:
+	print "[%s]"%(_map.get_name())
+	_map.print_temporal_topology_info()
+	if _map.get_id() != map_listA[count].get_id():
+	    core.fatal("Error building temporal topology <%s> != <%s>"%( _map.get_id(), map_listA[count].get_id()))
+	count += 1
+	
+    map_listB = []
+        
+    _map = raster_dataset(ident = "1@b")
+    _map.set_absolute_time(datetime(2001, 01, 14), datetime(2001, 03, 14))
+    map_listB.append(copy.copy(_map))
+    _map = raster_dataset(ident = "2@b")
+    _map.set_absolute_time(datetime(2001, 02, 01), datetime(2001, 04, 01))
+    map_listB.append(copy.copy(_map))
+    _map = raster_dataset(ident = "3@b")
+    _map.set_absolute_time(datetime(2001, 02, 14), datetime(2001, 04, 30))
+    map_listB.append(copy.copy(_map))
+    _map = raster_dataset(ident = "4@b")
+    _map.set_absolute_time(datetime(2001, 04, 02), datetime(2001, 04, 30))
+    map_listB.append(copy.copy(_map))
+    _map = raster_dataset(ident = "5@b")
+    _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 05, 14))
+    map_listB.append(copy.copy(_map))
+    
+    tb = temporal_topology_builder()
+    tb.build(map_listB)
+
+    # Probing some relations
+    if map_listB[0].get_overlapped()[0] != map_listB[1]:
+	    core.fatal("Error building temporal topology")
+    if map_listB[0].get_overlapped()[1] != map_listB[2]:
+	    core.fatal("Error building temporal topology")
+    if map_listB[2].get_contains()[0] != map_listB[3]:
+	    core.fatal("Error building temporal topology")
+    if map_listB[3].get_during()[0] != map_listB[2]:
+	    core.fatal("Error building temporal topology")
+    
+    count = 0
+    for _map in tb:
+	print "[%s]"%(_map.get_map_id
+	())
+	_map.print_temporal_topology_shell_info()
+	if _map.get_id() != map_listB[count].get_id():
+	    core.fatal("Error building temporal topology <%s> != <%s>"%( _map.get_id(), map_listB[count].get_id()))
+	count += 1
+	
+    tb = temporal_topology_builder()
+    tb.build2(map_listA, map_listB)
+    
+    count = 0
+    for _map in tb:
+	print "[%s]"%(_map.get_map_id())
+	_map.print_temporal_topology_shell_info()
+	if _map.get_id() != map_listA[count].get_id():
+	    core.fatal("Error building temporal topology <%s> != <%s>"%( _map.get_id(), map_listA[count].get_id()))
+	count += 1
+
+    count = 0
+    for _map in map_listB:
+	print "[%s]"%(_map.get_map_id())
+	_map.print_temporal_topology_shell_info()
+
+    # Probing some relations
+    if map_listA[3].get_follows()[0] != map_listB[1]:
+	    core.fatal("Error building temporal topology")   
+    if map_listA[3].get_precedes()[0] != map_listB[4]:
+	    core.fatal("Error building temporal topology")
+    if map_listA[3].get_overlaps()[0] != map_listB[2]:
+	    core.fatal("Error building temporal topology")
+    if map_listA[3].get_contains()[0] != map_listB[3]:
+	    core.fatal("Error building temporal topology")
+	    
+    if map_listA[2].get_during()[0] != map_listB[1]:
+	    core.fatal("Error building temporal topology")
+    if map_listA[2].get_during()[1] != map_listB[2]:
+	    core.fatal("Error building temporal topology")
+
+
+###############################################################################
+
+def test_map_list_sorting():
+    
+    map_list = []
+    
+    _map = raster_dataset(ident = "1@a")
+    _map.set_absolute_time(datetime(2001, 02, 01), datetime(2001, 03, 01))
+    map_list.append(copy.copy(_map))
+    _map = raster_dataset(ident = "2@a")
+    _map.set_absolute_time(datetime(2001, 01, 01), datetime(2001, 02, 01))
+    map_list.append(copy.copy(_map))
+    _map = raster_dataset(ident = "3@a")
+    _map.set_absolute_time(datetime(2001, 03, 01), datetime(2001, 04, 01))
+    map_list.append(copy.copy(_map))
+	    
+    print "Original"
+    for _map in map_list:
+	print _map.get_valid_time()[0],  _map.get_valid_time()[1]
+    print "Sorted by start time"
+    new_list = sorted(map_list, key=abstract_dataset_comparison_key_start_time)
+    for _map in new_list:
+	print _map.get_valid_time()[0],  _map.get_valid_time()[1]
+	
+    
+    if new_list[0] != map_list[1]:
+	core.fatal("Sorting by start time failed")
+    if new_list[1] != map_list[0]:
+	core.fatal("Sorting by start time failed")
+    if new_list[2] != map_list[2]:
+	core.fatal("Sorting by start time failed")
+	
+    print "Sorted by end time"
+    new_list = sorted(map_list, key=abstract_dataset_comparison_key_end_time)
+    for _map in new_list:
+	print _map.get_valid_time()[0],  _map.get_valid_time()[1]
+	
+
+    if new_list[0] != map_list[1]:
+	core.fatal("Sorting by end time failed")
+    if new_list[1] != map_list[0]:
+	core.fatal("Sorting by end time failed")
+    if new_list[2] != map_list[2]:
+	core.fatal("Sorting by end time failed")
+
+###############################################################################
+
 if __name__ == "__main__":
     test_increment_datetime_by_string()
     test_adjust_datetime_to_granularity()
@@ -1491,3 +1577,5 @@ if __name__ == "__main__":
     test_spatial_extent_intersection()
     test_spatial_relations()
     test_temporal_topology_builder()
+    test_map_list_sorting()
+    

@@ -438,6 +438,16 @@ class dataset_base(sql_database_interface):
         """
 	self.ident = ident
 	self.D["id"] = ident
+	
+        if ident != None:
+            if ident.find("@") >= 0:
+                name, mapset = ident.split("@")
+		self.set_mapset(mapset)
+            if name.find(":") >= 0:
+                name, layer = ident.split(":")
+		self.set_layer(layer)
+	    
+	    self.set_name(name)
 
     def set_name(self, name):
 	"""!Set the name of the dataset

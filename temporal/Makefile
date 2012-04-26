@@ -20,6 +20,7 @@ SUBDIRS = \
 	t.rast.export \
 	t.rast.out.vtk \
 	t.rast.import \
+	t.rast.gapfill \
 	t.rast.extract \
 	t.rast3d.list \
 	t.rast3d.extract \
