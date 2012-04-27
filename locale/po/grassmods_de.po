@@ -1380,7 +1380,7 @@ msgstr "Float-Wert, der NODATA Zellen/Punkte repräsentiert."
 
 #: ../raster3d/r3.out.vtk/parameters.c:47
 msgid "Create VTK pointdata instead of VTK celldata (celldata is default)"
-msgstr "Erzeugt VTK Punktedaten anstelle von VTK Zelldaten (Standaed ist Zelldaten)."
+msgstr "Erzeugt VTK Punktedaten anstelle von VTK Zelldaten (Standard ist Zelldaten)."
 
 #: ../raster3d/r3.out.vtk/parameters.c:56
 msgid "top surface 2D raster map"
