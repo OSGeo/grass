@@ -136,7 +136,7 @@ attribute(s) to each category. Each vector object can have zero, one or
 several categories. Category numbers do not have to be unique for
 each vector object, several vector objects can share the same category.
 <br>Category numbers are stored both within the geometry file for each
-vector object and within the attribute table(s) (usually the "cat"
+vector object and within the (optional) attribute table(s) (usually the "cat"
 column). It is not required that attribute table(s) hold an entry for
 each category, and attribute table(s) can hold
 information about categories not present in the vector geometry file.
@@ -147,27 +147,51 @@ printed or maintained.
 <br><br></li>
 
 <li><b>Layers</b><br>
-It is possible to link the geographic objects in
-a vector map to one or more tables. Each link to a distinct
-attribute table is called a layer. A link defines which database
-driver, database and table is to be used. Each category number in a
-geometry file is associated with a layer and corresponds to a row in the
-attribute table for this layer (the linking column is usually the "cat"
-key column). Using <a href="v.db.connect.html">v.db.connect</a> layers
-can be listed or maintained.<br>
-Vector objects are not organized in layers. All vector
-objects are kept in one geometry file, and topology is maintained for
-all vector objects together. GRASS layers only consist of links to
-different attribute tables in which vector objects can have zero, one or
-more categories. If a vector object has zero categories in a layer, then
-it does not appear in that layer. In this fashion some vector objects
-may appear in some layers but not in others. The practical benefit of
-this system is that it allows placement of thematically distinct but
-topologically related objects into a single map (e.g. forests and lakes).
-These virtual layers are also useful for linking time series attribute
-data to a series of locations that did not change over time. By default
-the first layer is active, i.e. the first table corresponds to the first
-layer. Further tables are linked to subsequent layers.
+Layers are a characteristic of the vector feature (geometries) file. 
+As mentioned above, categories allow the user to give either a 
+unique id to each feature or to group similar features by giving 
+them all the same id. Layers allow several parallel, but different 
+groupings of features in a same map. The practical benefit of this 
+system is that it allows placement of thematically distinct but 
+topologically related objects into a single map, or for linking time 
+series attribute data to a series of locations that did not change 
+over time.
+<br>
+For example, one can have roads with one layer 
+containing the unique id of each road and another layer with ids for 
+specific routes that one might take, combining several roads by 
+assigning the same id. While this example can also be dealt with in 
+an attribute table, another example of the use of layers that shows
+their specific advantage is the possibility to identify the same geometrical 
+features as representing different thematic objects. For example, 
+in a map with a series of polygons representing fields in 
+which at the same time the boundaries of these fields have a meaning 
+as linear features, e.g. as paths, one can give a unique id to each 
+field as area in layer 1, and a unique id in layer 2 to those 
+boundary lines that are paths. If the paths will always depend on 
+the field boundaries (and might change if these boundaries 
+change) then keeping them in the same map can be helpful. Trying 
+to reproduce the same functionality through attributes is much more 
+complicated.
+<br>
+If a vector object has zero categories in a layer, then it does not 
+appear in that layer. In this fashion some vector objects may appear 
+in some layers but not in others. Taking the example of the fields 
+and paths, only some boundaries, but not all, might have a category 
+value in layer 2. With <em>option=report</em>, <a href=
+    +"v.category.html">v.category</a> lists available categories in each 
+layer.
+<br>
+Optionally, each layer can (but does not have 
+to) be linked to an attribute table. The link is made by the 
+category values of the features in that layer which have to have 
+corresponding entries in the specified key column of the table. 
+Using <a href="v.db.connect.html">v.db.connect</a> connections 
+between layers and attribute tables can be listed or maintained.
+<br>
+In most modules, the first layer (<em>layer=1</em>) is active by 
+default. Using <em>layer=-1</em> one can access all layers.
+</li>
 <br><br></li>
 
 <li><b>SQL support</b><br>
