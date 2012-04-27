@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     struct Option *vold, *vnew, *xshift, *yshift, *zshift,
 	*xscale, *yscale, *zscale, *zrot, *columns, *table, *field;
-    struct Flag *tozero_flag, *print_mat_flag, *swap_flag;
+    struct Flag *tozero_flag, *print_mat_flag, *swap_flag, *no_topo;
 
     char mon[4], date[40], buf[1000];
     struct Map_info Old, New;
@@ -86,6 +86,10 @@ int main(int argc, char *argv[])
     swap_flag->description =
 	_("Swap coordinates x, y and then apply other parameters");
     
+    no_topo = G_define_flag();
+    no_topo->key = 'b';
+    no_topo->description = _("Do not build topology for output");
+
     vold = G_define_standard_option(G_OPT_V_INPUT);
 
     field = G_define_standard_option(G_OPT_V_FIELD_ALL);
@@ -278,7 +282,8 @@ int main(int argc, char *argv[])
     if (Vect_copy_tables(&Old, &New, 0))
         G_warning(_("Failed to copy attribute table to output map"));
     Vect_close(&Old);
-    Vect_build(&New);
+    if (!no_topo->answer)
+	Vect_build(&New);
 
     Vect_get_map_box(&New, &box);
     G_verbose_message(_("New vector map <%s> boundary coordinates:"),
