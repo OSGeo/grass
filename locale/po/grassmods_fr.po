@@ -823,7 +823,7 @@ msgstr "Liste de valeurs de cellules auxquelles assigner la valeur NULL"
 
 #: ../raster3d/r3.null/main.c:69 ../raster/r.null/main.c:80
 msgid "The value to replace the null value by"
-msgstr "Valeur à remplacer par la valeur null"
+msgstr "Valeur pour remplacer la valeur null"
 
 #: ../raster3d/r3.null/main.c:84
 #, fuzzy
