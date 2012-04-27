@@ -97,10 +97,10 @@ def main():
 
     # rename ID col if requested from cat to new name
     if key:
-	grass.run_command('db.execute', quiet = True, flags = 'f',
+	grass.write_command('db.execute', quiet = True,
                           input = '-', 
 			  stdin = "ALTER TABLE %s ADD COLUMN %s integer" % (output, key) )
-	grass.run_command('db.execute', quiet = True, flags = 'f',
+	grass.write_command('db.execute', quiet = True,
                           input = '-', 
 			  stdin = "UPDATE %s SET %s=cat" % (output, key) )
 
