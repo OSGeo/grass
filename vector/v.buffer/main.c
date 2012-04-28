@@ -34,6 +34,11 @@
 #define MAX(X,Y) ((X>Y)?X:Y)
 #endif
 
+#ifdef HAVE_GEOS
+int geos_buffer(struct Map_info *, int, int, double,
+                GEOSBufferParams *, struct line_pnts **,
+		struct line_pnts ***, int *);
+#endif
 
 /* returns 1 if unit_tolerance is adjusted, 0 otherwise */
 int adjust_tolerance(double *tolerance)
@@ -200,10 +205,14 @@ int main(int argc, char *argv[])
 
     /* Attributes if sizecol is used */
     int nrec, ctype;
-    struct field_info *Fi;
+    struct field_info *Fi = NULL;
     dbDriver *Driver;
     dbCatValArray cvarr;
     double size_val, scale;
+
+#ifdef HAVE_GEOS
+    GEOSBufferParams *buffer_params = NULL;
+#endif
 
 
     module = G_define_module();
@@ -323,7 +332,7 @@ int main(int argc, char *argv[])
     if (scale <= 0.0)
 	G_fatal_error("Illegal scale value");
 
-    da = db = dalpha = 0;
+    da = db = dalpha = unit_tolerance = 0;
     if (dista_opt->answer) {
 	da = atof(dista_opt->answer);
 
@@ -409,7 +418,7 @@ int main(int argc, char *argv[])
     /* Create buffers' boundaries */
     nlines = nareas = 0;
     if ((type & GV_POINTS) || (type & GV_LINES))
-	nlines += Vect_get_num_primitives(&In, type);
+	nlines = Vect_get_num_primitives(&In, type);
     if (type & GV_AREA)
 	nareas = Vect_get_num_areas(&In);
     
@@ -424,12 +433,20 @@ int main(int argc, char *argv[])
 
     Vect_spatial_index_init(&si, 0);
 
+#ifdef HAVE_GEOS
+    initGEOS(G_message, G_fatal_error);
+    buffer_params = GEOSBufferParams_create();
+    GEOSBufferParams_setEndCapStyle(buffer_params, GEOSBUF_CAP_ROUND);
+    GEOSBufferParams_setJoinStyle(buffer_params, GEOSBUF_JOIN_ROUND);
+#endif
+
     /* Lines (and Points) */
-    if ((type & GV_POINTS) || (type & GV_LINES)) {
+    if (nlines > 0) {
 	int ltype;
 
-	if (nlines > 0)
-	    G_message(_("Buffering lines..."));
+	G_message(_("Buffering lines..."));
+
+	nlines = Vect_get_num_lines(&In);
 	for (line = 1; line <= nlines; line++) {
 	    int cat;
 
@@ -492,12 +509,19 @@ int main(int argc, char *argv[])
 
 	    }
 	    else {
+
+#ifdef HAVE_GEOS
+		GEOSBufferParams_setMitreLimit(buffer_params, unit_tolerance);
+		geos_buffer(&In, line, type, da, buffer_params, &(arr_bc_pts.oPoints),
+			    &(arr_bc_pts.iPoints), &(arr_bc_pts.inner_count));
+#else
 		Vect_line_buffer2(Points, da, db, dalpha,
 				  !(straight_flag->answer),
 				  !(nocaps_flag->answer), unit_tolerance,
 				  &(arr_bc_pts.oPoints),
 				  &(arr_bc_pts.iPoints),
 				  &(arr_bc_pts.inner_count));
+#endif
 
 		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
 		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
@@ -527,11 +551,10 @@ int main(int argc, char *argv[])
     }
 
     /* Areas */
-    if (type & GV_AREA) {
+    if (nareas > 0) {
 	int centroid;
 
-	if (nareas > 0) 
-	    G_message(_("Buffering areas..."));
+	G_message(_("Buffering areas..."));
 	for (area = 1; area <= nareas; area++) {
 	    int cat;
 
@@ -575,12 +598,19 @@ int main(int argc, char *argv[])
 			unit_tolerance);
 	    }
 
+#ifdef HAVE_GEOS
+	    GEOSBufferParams_setSingleSided(buffer_params, 1);
+	    GEOSBufferParams_setMitreLimit(buffer_params, unit_tolerance);
+	    geos_buffer(&In, area, GV_AREA, da, buffer_params, &(arr_bc_pts.oPoints),
+			&(arr_bc_pts.iPoints), &(arr_bc_pts.inner_count));
+#else
 	    Vect_area_buffer2(&In, area, da, db, dalpha,
 			      !(straight_flag->answer),
 			      !(nocaps_flag->answer), unit_tolerance,
 			      &(arr_bc_pts.oPoints),
 			      &(arr_bc_pts.iPoints),
 			      &(arr_bc_pts.inner_count));
+#endif
 
 	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
 	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
@@ -607,6 +637,11 @@ int main(int argc, char *argv[])
 	    buffers_count++;
 	}
     }
+
+#ifdef HAVE_GEOS
+    GEOSBufferParams_destroy(buffer_params);
+    finishGEOS();
+#endif
 
     verbose = G_verbose();
 
