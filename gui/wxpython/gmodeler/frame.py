@@ -110,7 +110,7 @@ class ModelFrame(wx.Frame):
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
         self.notebook.AddPage(page = self.variablePanel, text=_('Variables'), name = 'variables')
-        self.notebook.AddPage(page = self.pythonPanel, text=_('Python script'), name = 'python')
+        self.notebook.AddPage(page = self.pythonPanel, text=_('Python editor'), name = 'python')
         self.notebook.AddPage(page = self.goutput, text=_('Command output'), name = 'output')
         wx.CallAfter(self.notebook.SetSelectionByName, 'model')
         wx.CallAfter(self.ModelChanged, False)
@@ -1449,7 +1449,7 @@ class PythonPanel(wx.Panel):
         
         self.bodyBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                     label = " %s " % _("Python script"))
-        self.body = PyStc(parent = self)
+        self.body = PyStc(parent = self, statusbar = self.parent.GetStatusBar())
 
         self.btnRun = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Run"))
         self.btnRun.SetToolTipString(_("Run python script"))
@@ -1458,7 +1458,8 @@ class PythonPanel(wx.Panel):
         self.btnSaveAs.SetToolTipString(_("Save python script to file"))
         self.Bind(wx.EVT_BUTTON, self.OnSaveAs, self.btnSaveAs)
         self.btnRefresh = wx.Button(parent = self, id = wx.ID_REFRESH)
-        self.btnRefresh.SetToolTipString(_("Refresh python script based on the model. It will discards local changes."))
+        self.btnRefresh.SetToolTipString(_("Refresh python script based on the model.\n"
+                                           "It will discards all local changes."))
         self.Bind(wx.EVT_BUTTON, self.OnRefresh, self.btnRefresh)
         
         self._layout()
@@ -1566,7 +1567,11 @@ class PythonPanel(wx.Panel):
         event.Skip()
         
     def RefreshScript(self):
-        """!Refresh Python script"""
+        """!Refresh Python script
+
+        @return True on refresh
+        @return False script hasn't been updated
+        """
         if self.body.modified:
             dlg = wx.MessageDialog(self,
                                    message = _("Python script is locally modificated. "
@@ -1578,7 +1583,7 @@ class PythonPanel(wx.Panel):
             ret = dlg.ShowModal()
             dlg.Destroy()
             if ret == wx.ID_NO:
-                return
+                return False
         
         fd = tempfile.TemporaryFile()
         WritePythonFile(fd, self.parent.GetModel())
@@ -1587,10 +1592,13 @@ class PythonPanel(wx.Panel):
         fd.close()
         
         self.body.modified = False
- 
+        
+        return True
+    
     def OnRefresh(self, event):
         """!Refresh Python script"""
-        self.RefreshScript()
+        if self.RefreshScript():
+            self.parent.SetStatusText(_('Python script is up-to-date'), 0)
         event.Skip()
         
     def IsModified(self):
