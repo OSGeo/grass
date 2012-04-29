@@ -134,9 +134,9 @@ if __name__ == "__main__":
     for key in env.keys():
         if key.find(env_name) == 0:
             RunCommand('g.gisenv',
-                       set = '%s=' % key)
+                       unset = '%s' % key)
         if key == 'MONITOR' and env[key] == monName:
             RunCommand('g.gisenv',
-                       set = '%s=' % key)
+                       unset = '%s' % key)
     
     sys.exit(0)
