@@ -53,12 +53,40 @@ double get_dist(double *dist_to_nbr, double *contour)
 	else
 	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy) * ele_scale;
     }
-    contour[0] = contour[1] = ew_res / 2.;
-    contour[2] = contour[3] = ns_res / 2.;
+    /* Quinn et al. 1991:
+     * ns contour: ew_res / 2
+     * ew contour: ns_res / 2
+     * diag contour: sqrt(ns_res * nsres / 4 + ew_res * ew_res / 4) / 2
+     *             = sqrt(ns_res * nsres + ew_res * ew_res) / 4
+     * if ns_res == ew_res:
+     *             sqrt(2 * (res * res) / 4 = res * 0.354
+     *
+     * contour lengths "have been subjectively chosen", 
+     * no justification why the diagonal contour is shorter
+     * BUT: if the diag contour is a bit shorter than the cardinal contour,
+     * this is further enhancing the correction for diagonal flow bias
+     * diagonal slope is already corrected for longer distance
+     * smaller slope and shorter contour length have the same effect:
+     * higher TCI
+     */
     if (sides == 8) {
-	contour[4] = contour[5] = contour[6] = contour[7] = sqrt(ew_res * ns_res) / 2.;
+	/* contours are sides of an octagon, irregular if ns_res != ew_res
+	 * ideally: arc lengths of an ellipse */
+	contour[0] = contour[1] = tan(atan(ew_res / ns_res) / 2.) * ns_res;
+	contour[2] = contour[3] = tan(atan(ns_res / ew_res) / 2.) * ew_res;
+	G_debug(1, "ns contour: %.4f", contour[0]);
+	G_debug(1, "ew contour: %.4f", contour[2]);
+	contour[4] = (ew_res - contour[0]);
+	contour[5] = (ns_res - contour[2]);
+	contour[7] = sqrt(contour[4] * contour[4] + contour[5] * contour[5]) / 2.;
+	G_debug(1, "diag contour: %.4f", contour[7]);
+	contour[4] = contour[5] = contour[6] = contour[7];
     }
-    
+    else {
+	/* contours are sides of a rectangle */
+	contour[0] = contour[1] = ew_res;
+	contour[2] = contour[3] = ns_res;
+    }
     return ew_res * ns_res;
 }
 
@@ -206,6 +234,10 @@ int do_cum(void)
  * depressions/obstacles
  * 
  * Topographic Convergence Index (TCI)
+ * tendency of water to accumulate at a given point considering 
+ * the gravitational forces to move the water accumulated at that 
+ * point further downstream
+ *
  * after Quinn et al. (1991), modified and adapted for the modified 
  * Holmgren MFD algorithm
  * TCI: specific catchment area divided by tangens of slope
@@ -217,7 +249,6 @@ int do_cum(void)
  * L_i: contour length towards i_th cell
  * tanb_i: slope = tan(b) towards i_th cell
  * weight_i: weight for flow distribution towards i_th cell
- *
  * ************************************/
 
 int do_cum_mfd(void)
