@@ -9,8 +9,9 @@ Classes:
  - frame::ModelEvtHandler
  - frame::VariablePanel
  - frame::ItemPanel
+ - frame::PythonPanel
 
-(C) 2010-2011 by the GRASS Development Team
+(C) 2010-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -35,7 +36,7 @@ from wx.lib import ogl
 import wx.lib.flatnotebook    as FN
 
 from gui_core.widgets     import GNotebook
-from gui_core.goutput     import GMConsole
+from gui_core.goutput     import GMConsole, PyStc
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
@@ -102,17 +103,21 @@ class ModelFrame(wx.Frame):
         
         self.itemPanel = ItemPanel(parent = self)
         
+        self.pythonPanel = PythonPanel(parent = self)
+        
         self.goutput = GMConsole(parent = self, notebook = self.notebook)
         
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
         self.notebook.AddPage(page = self.variablePanel, text=_('Variables'), name = 'variables')
+        self.notebook.AddPage(page = self.pythonPanel, text=_('Python script'), name = 'python')
         self.notebook.AddPage(page = self.goutput, text=_('Command output'), name = 'output')
         wx.CallAfter(self.notebook.SetSelectionByName, 'model')
         wx.CallAfter(self.ModelChanged, False)
 
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         
         self._layout()
         self.SetMinSize((475, 300))
@@ -162,7 +167,21 @@ class ModelFrame(wx.Frame):
                 self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
         else:
             self.SetTitle(self.baseTitle)
+
+    def OnPageChanged(self, event):
+        """!Page in notebook changed"""
+        page = event.GetSelection()
+        if page == self.notebook.GetPageIndexByName('python'):
+            if self.pythonPanel.IsEmpty():
+                self.pythonPanel.RefreshScript()
+            
+            if self.pythonPanel.IsModified():
+                self.SetStatusText(_('Python script contains local modifications'), 0)
+            else:
+                self.SetStatusText(_('Python script is up-to-date'), 0)
         
+        event.Skip()
+
     def OnVariables(self, event):
         """!Switch to variables page"""
         self.notebook.SetSelectionByName('variables')
@@ -553,45 +572,9 @@ class ModelFrame(wx.Frame):
         
         dlg.Destroy()
         
-    def OnExportPython(self, event):
+    def OnExportPython(self, event = None, text = None):
         """!Export model to Python script"""
-        filename = ''
-        dlg = wx.FileDialog(parent = self,
-                            message = _("Choose file to save"),
-                            defaultDir = os.getcwd(),
-                            wildcard=_("Python script (*.py)|*.py"),
-                            style=wx.FD_SAVE)
-        
-        if dlg.ShowModal() == wx.ID_OK:
-            filename = dlg.GetPath()
-        
-        if not filename:
-            return
-        
-        # check for extension
-        if filename[-3:] != ".py":
-            filename += ".py"
-        
-        if os.path.exists(filename):
-            dlg = wx.MessageDialog(self, message=_("File <%s> already exists. "
-                                                   "Do you want to overwrite this file?") % filename,
-                                   caption=_("Save file"),
-                                   style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-            if dlg.ShowModal() == wx.ID_NO:
-                dlg.Destroy()
-                return
-            
-            dlg.Destroy()
-        
-        fd = open(filename, "w")
-        try:
-            WritePythonFile(fd, self.model)
-        finally:
-            fd.close()
-        
-        # executable file
-        os.chmod(filename, stat.S_IRWXU | stat.S_IWUSR)
-        
+        filename = self.pythonPanel.SaveAs(force = True)
         self.SetStatusText(_("Model exported to <%s>") % filename)
 
     def OnDefineRelation(self, event):
@@ -1452,6 +1435,171 @@ class ItemPanel(wx.Panel):
     def Update(self):
         """!Reload list of variables"""
         self.list.OnReload(None)
+
+class PythonPanel(wx.Panel):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 **kwargs):
+        """!Model as python script
+        """
+        self.parent = parent
+        
+        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
+
+        self.filename = None # temp file to run
+        
+        self.bodyBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                    label = " %s " % _("Python script"))
+        self.body = PyStc(parent = self)
+
+        self.btnRun = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Run"))
+        self.btnRun.SetToolTipString(_("Run python script"))
+        self.Bind(wx.EVT_BUTTON, self.OnRun, self.btnRun)
+        self.btnSaveAs = wx.Button(parent = self, id = wx.ID_SAVEAS)
+        self.btnSaveAs.SetToolTipString(_("Save python script to file"))
+        self.Bind(wx.EVT_BUTTON, self.OnSaveAs, self.btnSaveAs)
+        self.btnRefresh = wx.Button(parent = self, id = wx.ID_REFRESH)
+        self.btnRefresh.SetToolTipString(_("Refresh python script based on the model. It will discards local changes."))
+        self.Bind(wx.EVT_BUTTON, self.OnRefresh, self.btnRefresh)
+        
+        self._layout()
+        
+    def _layout(self):
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        bodySizer = wx.StaticBoxSizer(self.bodyBox, wx.HORIZONTAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        bodySizer.Add(item = self.body, proportion = 1,
+                      flag = wx.EXPAND | wx.ALL, border = 3)
+        
+        btnSizer.Add(item = self.btnRefresh, proportion = 0,
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        btnSizer.AddStretchSpacer()
+        btnSizer.Add(item = self.btnSaveAs, proportion = 0,
+                     flag = wx.RIGHT | wx.ALIGN_RIGHT, border = 5)
+        btnSizer.Add(item = self.btnRun, proportion = 0,
+                     flag = wx.RIGHT | wx.ALIGN_RIGHT, border = 5)
+        
+        sizer.Add(item = bodySizer, proportion = 1,
+                  flag = wx.EXPAND | wx.ALL, border = 3)
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.EXPAND | wx.ALL, border = 3)
+        
+        sizer.Fit(self)
+        sizer.SetSizeHints(self)
+        self.SetSizer(sizer)
+
+    def OnRun(self, event):
+        """!Run Python script"""
+        self.filename = grass.tempfile()
+        try:
+            fd = open(self.filename, "w")
+            fd.write(self.body.GetText())
+        except IOError, e:
+            GError(_("Unable to launch Python script. %s") % e,
+                   parent = self)
+            return
+        finally:
+            fd.close()
+            mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
+            os.chmod(self.filename, mode | stat.S_IXUSR)
+        
+        self.parent.goutput.RunCmd([fd.name], switchPage = True,
+                                   skipInterface = True, onDone = self.OnDone)
+        
+        event.Skip()
+
+    def OnDone(self, cmd, returncode):
+        """!Python script finished"""
+        grass.try_remove(self.filename)
+        self.filename = None
+        
+    def SaveAs(self, force = False):
+        """!Save python script to file
+
+        @return filename
+        """
+        filename = ''
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Choose file to save"),
+                            defaultDir = os.getcwd(),
+                            wildcard = _("Python script (*.py)|*.py"),
+                            style = wx.FD_SAVE)
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            filename = dlg.GetPath()
+        
+        if not filename:
+            return ''
+        
+        # check for extension
+        if filename[-3:] != ".py":
+            filename += ".py"
+        
+        if os.path.exists(filename):
+            dlg = wx.MessageDialog(self, message=_("File <%s> already exists. "
+                                                   "Do you want to overwrite this file?") % filename,
+                                   caption=_("Save file"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_NO:
+                dlg.Destroy()
+                return ''
+            
+            dlg.Destroy()
+        
+        fd = open(filename, "w")
+        try:
+            if force:
+                WritePythonFile(fd, self.parent.GetModel())
+            else:
+                fd.write(self.body.GetText())
+        finally:
+            fd.close()
+        
+        # executable file
+        os.chmod(filename, stat.S_IRWXU | stat.S_IWUSR)
+        
+        return filename
+    
+    def OnSaveAs(self, event):
+        """!Save python script to file"""
+        self.SaveAs(force = False)
+        event.Skip()
+        
+    def RefreshScript(self):
+        """!Refresh Python script"""
+        if self.body.modified:
+            dlg = wx.MessageDialog(self,
+                                   message = _("Python script is locally modificated. "
+                                               "Refresh will discard all changes. "
+                                               "Do you really want to continue?"),
+                                   caption=_("Update"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_QUESTION | wx.CENTRE)
+            ret = dlg.ShowModal()
+            dlg.Destroy()
+            if ret == wx.ID_NO:
+                return
+        
+        fd = tempfile.TemporaryFile()
+        WritePythonFile(fd, self.parent.GetModel())
+        fd.seek(0)
+        self.body.SetText(fd.read())
+        fd.close()
+        
+        self.body.modified = False
+ 
+    def OnRefresh(self, event):
+        """!Refresh Python script"""
+        self.RefreshScript()
+        event.Skip()
+        
+    def IsModified(self):
+        """!Check if python script has been modified"""
+        return self.body.modified
+    
+    def IsEmpty(self):
+        """!Check if python script is empty"""
+        return len(self.body.GetText()) == 0
         
 def main():
     import gettext

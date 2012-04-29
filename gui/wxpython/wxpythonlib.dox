@@ -123,6 +123,7 @@ available in GRASS 5 and GRASS 6.
  - goutput::GMStc
  - goutput::GMStdout
  - goutput::GMStderr
+ - goutput::PyStc
 - gui_core::gselect
  - gselect::Select
  - gselect::VectorSelect
@@ -290,6 +291,7 @@ available in GRASS 5 and GRASS 6.
  - frame::ModelEvtHandler
  - frame::VariablePanel
  - frame::ItemPanel
+ - frame::PythonPanel
 - gmodeler::menudata
  - menudata::ModelerData
 - gmodeler::model
