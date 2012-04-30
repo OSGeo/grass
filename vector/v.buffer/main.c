@@ -26,6 +26,7 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+#include "local_proto.h"
 
 #define PI M_PI
 #ifndef MIN
@@ -33,12 +34,6 @@
 #endif
 #ifndef MAX
 #define MAX(X,Y) ((X>Y)?X:Y)
-#endif
-
-#ifdef HAVE_GEOS
-int geos_buffer(struct Map_info *, int, int, double,
-                GEOSBufferParams *, struct line_pnts **,
-		struct line_pnts ***, int *);
 #endif
 
 /* returns 1 if unit_tolerance is adjusted, 0 otherwise */
@@ -75,20 +70,6 @@ int db_CatValArray_get_value_di(dbCatValArray * cvarr, int cat, double *value)
 
     return DB_FAILED;
 }
-
-struct buf_contours
-{
-    int inner_count;
-    int outer;
-    int *inner;
-};
-
-struct buf_contours_pts
-{
-    int inner_count;
-    struct line_pnts *oPoints;
-    struct line_pnts **iPoints;
-};
 
 int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
 		    struct Map_info *Buf, double x, double y)
@@ -199,8 +180,9 @@ int main(int argc, char *argv[])
     char *Areas, *Lines;
     int field;
     struct buf_contours *arr_bc;
+    int arr_bc_alloc;
     struct buf_contours_pts arr_bc_pts;
-    int buffers_count = 0, line_id;
+    int line_id, buffers_count = 0;
     struct spatial_index si;
     struct bound_box bbox;
 
@@ -214,7 +196,6 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
     GEOSBufferParams *buffer_params = NULL;
 #endif
-
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -429,8 +410,10 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
+    /* init arr_bc */
     buffers_count = 1;
-    arr_bc = G_malloc((nlines + nareas + 1) * sizeof(struct buf_contours));
+    arr_bc_alloc = nlines + nareas + 1;
+    arr_bc = G_calloc(arr_bc_alloc, sizeof(struct buf_contours));
 
     Vect_spatial_index_init(&si, 0);
 
@@ -523,8 +506,8 @@ int main(int argc, char *argv[])
 
 #ifdef HAVE_GEOS
 		GEOSBufferParams_setMitreLimit(buffer_params, unit_tolerance);
-		geos_buffer(&In, line, type, da, buffer_params, &(arr_bc_pts.oPoints),
-			    &(arr_bc_pts.iPoints), &(arr_bc_pts.inner_count));
+		geos_buffer(&In, &Out, &Buf, line, type, da, buffer_params,
+			    &si, Cats, BCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #else
 		Vect_line_buffer2(Points, da, db, dalpha,
 				  !(straight_flag->answer),
@@ -532,7 +515,6 @@ int main(int argc, char *argv[])
 				  &(arr_bc_pts.oPoints),
 				  &(arr_bc_pts.iPoints),
 				  &(arr_bc_pts.inner_count));
-#endif
 
 		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
 		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
@@ -549,14 +531,12 @@ int main(int argc, char *argv[])
 			Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
 			line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], Cats);
 			Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
-			/* add buffer to spatial index */
-			Vect_get_line_box(&Buf, line_id, &bbox);
-			Vect_spatial_index_add_item(&si, buffers_count, &bbox);
 			arr_bc[buffers_count].inner[i] = line_id;
 		    }
 		    G_free(arr_bc_pts.iPoints);
 		}
 		buffers_count++;
+#endif
 	    }
 	}
     }
@@ -612,8 +592,8 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
 	    GEOSBufferParams_setSingleSided(buffer_params, 1);
 	    GEOSBufferParams_setMitreLimit(buffer_params, unit_tolerance);
-	    geos_buffer(&In, area, GV_AREA, da, buffer_params, &(arr_bc_pts.oPoints),
-			&(arr_bc_pts.iPoints), &(arr_bc_pts.inner_count));
+	    geos_buffer(&In, &Out, &Buf, area, GV_AREA, da, buffer_params,
+	                &si, Cats, BCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #else
 	    Vect_area_buffer2(&In, area, da, db, dalpha,
 			      !(straight_flag->answer),
@@ -621,7 +601,6 @@ int main(int argc, char *argv[])
 			      &(arr_bc_pts.oPoints),
 			      &(arr_bc_pts.iPoints),
 			      &(arr_bc_pts.inner_count));
-#endif
 
 	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
 	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
@@ -638,20 +617,34 @@ int main(int argc, char *argv[])
 		    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
 		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], Cats);
 		    Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
-		    /* add buffer to spatial index */
-		    Vect_get_line_box(&Buf, line_id, &bbox);
-		    Vect_spatial_index_add_item(&si, buffers_count, &bbox);
 		    arr_bc[buffers_count].inner[i] = line_id;
 		}
 		G_free(arr_bc_pts.iPoints);
 	    }
 	    buffers_count++;
+#endif
 	}
     }
 
 #ifdef HAVE_GEOS
     GEOSBufferParams_destroy(buffer_params);
     finishGEOS();
+#endif
+
+#if 0
+    Vect_spatial_index_destroy(&si);
+    Vect_close(&Buf);
+    Vect_delete(bufname);
+
+    G_set_verbose(verbose);
+
+    Vect_close(&In);
+
+    Vect_build_partial(&Out, GV_BUILD_NONE);
+    Vect_build(&Out);
+    Vect_close(&Out);
+
+    exit(EXIT_SUCCESS);
 #endif
 
     verbose = G_verbose();
