@@ -1,6 +1,8 @@
+#include <float.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+#include "local_proto.h"
 
 #ifdef HAVE_GEOS
 
@@ -12,80 +14,118 @@ static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 
     G_debug(3, "ring2pts()");
 
+    Vect_reset_line(Points);
+    if (!geom) {
+	G_warning(_("Invalid GEOS geometry!"));
+	return 0;
+    }
     z = 0.0;
     ncoords = GEOSGetNumCoordinates(geom);
-    if (!ncoords)
-	G_warning(_("No coordinates in GEOS geometry!"));
+    if (!ncoords) {
+	G_warning(_("No coordinates in GEOS geometry (can be ok for negative distance)!"));
+	return 0;
+    }
     seq = GEOSGeom_getCoordSeq(geom);
     for (i = 0; i < ncoords; i++) {
 	GEOSCoordSeq_getX(seq, i, &x);
 	GEOSCoordSeq_getY(seq, i, &y);
+	if (x != x || x > DBL_MAX || x < -DBL_MAX)
+	    G_fatal_error(_("Invalid x coordinate %f"), x);
+	if (y != y || y > DBL_MAX || y < -DBL_MAX)
+	    G_fatal_error(_("Invalid y coordinate %f"), y);
 	Vect_append_point(Points, x, y, z);
     }
 
     return 1;
 }
 
-static int geom2ring(GEOSGeometry *geom, struct line_pnts **oPoints,
-		       struct line_pnts ***iPoints, int *inner_count)
+static int geom2ring(GEOSGeometry *geom, struct Map_info *Out,
+                     struct Map_info *Buf,
+                     struct spatial_index *si,
+		     struct line_cats *Cats, struct line_cats *BCats,
+		     struct buf_contours **arr_bc,
+		     int *buffers_count, int *arr_bc_alloc)
 {
-    int i, nrings, ngeoms, count;
+    int i, nrings, ngeoms, line_id;
     const GEOSGeometry *geom2;
-    struct line_pnts *Points, **arrPoints = *iPoints;
+    struct bound_box bbox;
+    static struct line_pnts *Points = NULL;
+    struct buf_contours *p = *arr_bc;
+
+    G_debug(3, "geom2ring(): GEOS %s", GEOSGeomType(geom));
+
+    if (!Points)
+	Points = Vect_new_line_struct();
 
     if (GEOSGeomTypeId(geom) == GEOS_LINESTRING ||
         GEOSGeomTypeId(geom) == GEOS_LINEARRING) {
 
-	Points = *oPoints;
-	if (Points->n_points == 0)
-	    ring2pts(geom, Points);
-	else {
-	    count = *inner_count + 1;
-	    arrPoints = G_realloc(arrPoints, count * sizeof(struct line_pnts *));
-	    arrPoints[*inner_count] = Vect_new_line_struct();
-	    ring2pts(geom, arrPoints[*inner_count]);
-	    *inner_count = count;
-	    *iPoints = arrPoints;
+	if (!ring2pts(geom, Points))
+	    return 0;
+
+	Vect_write_line(Out, GV_BOUNDARY, Points, BCats);
+	line_id = Vect_write_line(Buf, GV_BOUNDARY, Points, Cats);
+	/* add buffer to spatial index */
+	Vect_get_line_box(Buf, line_id, &bbox);
+	Vect_spatial_index_add_item(si, *buffers_count, &bbox);
+	p[*buffers_count].outer = line_id;
+
+	p[*buffers_count].inner_count = 0;
+	*buffers_count += 1;
+	if (*buffers_count >= *arr_bc_alloc) {
+	    *arr_bc_alloc += 100;
+	    p = G_realloc(p, *arr_bc_alloc * sizeof(struct buf_contours));
+	    *arr_bc = p;
 	}
     }
     else if (GEOSGeomTypeId(geom) == GEOS_POLYGON) {
 	geom2 = GEOSGetExteriorRing(geom);
-	Points = *oPoints;
-	if (Points->n_points == 0)
-	    ring2pts(geom2, Points);
-	else {
-	    count = *inner_count + 1;
-	    arrPoints = G_realloc(arrPoints, count * sizeof(struct line_pnts *));
-	    arrPoints[*inner_count] = Vect_new_line_struct();
-	    ring2pts(geom2, arrPoints[*inner_count]);
-	    *inner_count = count;
-	    *iPoints = arrPoints;
-	}
+	if (!ring2pts(geom2, Points))
+	    return 0;
+
+	Vect_write_line(Out, GV_BOUNDARY, Points, BCats);
+	line_id = Vect_write_line(Buf, GV_BOUNDARY, Points, Cats);
+	/* add buffer to spatial index */
+	Vect_get_line_box(Buf, line_id, &bbox);
+	Vect_spatial_index_add_item(si, *buffers_count, &bbox);
+	p[*buffers_count].outer = line_id;
+	p[*buffers_count].inner_count = 0;
 
 	nrings = GEOSGetNumInteriorRings(geom);
 	
 	if (nrings > 0) {
 
-	    count = *inner_count + nrings;
-	    arrPoints = G_realloc(arrPoints, count * sizeof(struct line_pnts *));
+	    p[*buffers_count].inner_count = nrings;
+	    p[*buffers_count].inner = G_malloc(nrings * sizeof(int));
 
 	    for (i = 0; i < nrings; i++) {
 		geom2 = GEOSGetInteriorRingN(geom, i);
-		arrPoints[*inner_count + i] = Vect_new_line_struct();
-		ring2pts(geom2, arrPoints[*inner_count + i]);
+		if (!ring2pts(geom2, Points)) {
+		    G_fatal_error(_("Corrupt GEOS geometry"));
+		}
+		Vect_write_line(Out, GV_BOUNDARY, Points, BCats);
+		line_id = Vect_write_line(Buf, GV_BOUNDARY, Points, Cats);
+		p[*buffers_count].inner[i] = line_id;
 	    }
-	    *inner_count = count;
-	    *iPoints = arrPoints;
+	}
+	*buffers_count += 1;
+	if (*buffers_count >= *arr_bc_alloc) {
+	    *arr_bc_alloc += 100;
+	    p = G_realloc(p, *arr_bc_alloc * sizeof(struct buf_contours));
+	    *arr_bc = p;
 	}
     }
     else if (GEOSGeomTypeId(geom) == GEOS_MULTILINESTRING ||
              GEOSGeomTypeId(geom) == GEOS_MULTIPOLYGON ||
 	     GEOSGeomTypeId(geom) == GEOS_GEOMETRYCOLLECTION) {
 
+	G_debug(3, "GEOS %s", GEOSGeomType(geom));
+
 	ngeoms = GEOSGetNumGeometries(geom);
 	for (i = 0; i < ngeoms; i++) {
 	    geom2 = GEOSGetGeometryN(geom, i);
-	    geom2ring((GEOSGeometry *)geom2, oPoints, iPoints, inner_count);
+	    geom2ring((GEOSGeometry *)geom2, Out, Buf, si, Cats, BCats,
+	              arr_bc, buffers_count, arr_bc_alloc);
 	}
     }
     else
@@ -94,16 +134,18 @@ static int geom2ring(GEOSGeometry *geom, struct line_pnts **oPoints,
     return 1;
 }
 
-int geos_buffer(struct Map_info *In, int id, int type, double da,
-                GEOSBufferParams *buffer_params, struct line_pnts **oPoints,
-		struct line_pnts ***iPoints, int *inner_count)
+int geos_buffer(struct Map_info *In, struct Map_info *Out,
+                struct Map_info *Buf, int id, int type, double da,
+                GEOSBufferParams *buffer_params,
+		struct spatial_index *si,
+		struct line_cats *Cats, struct line_cats *BCats,
+		struct buf_contours **arr_bc,
+		int *buffers_count, int *arr_bc_alloc)
 {
     GEOSGeometry *IGeom = NULL;
     GEOSGeometry *OGeom = NULL;
     
-    *oPoints = Vect_new_line_struct();
-    *iPoints = NULL;
-    *inner_count = 0;
+    G_debug(3, "geos_buffer()");
 
     if (type == GV_AREA)
 	IGeom = Vect_read_area_geos(In, id);
@@ -115,7 +157,7 @@ int geos_buffer(struct Map_info *In, int id, int type, double da,
     if (!OGeom)
 	G_warning(_("Buffering failed"));
     
-    geom2ring(OGeom, oPoints, iPoints, inner_count);
+    geom2ring(OGeom, Out, Buf, si, Cats, BCats, arr_bc, buffers_count, arr_bc_alloc);
 
     if (IGeom)
 	GEOSGeom_destroy(IGeom);
