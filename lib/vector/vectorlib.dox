@@ -697,30 +697,30 @@ areas, isles, volumes and holes</td></tr>
 
 <b>Nodes</b>
 
-For each node (n_nodes):
+For each node (plus->n_nodes):
 
 <table border="1" style="border-collapse: collapse" cellpadding="5">
 <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
 <tr><td>n_lines</td><td>I</td><td>1</td><td>Number of lines (0 for dead node)</td></tr>
-<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids (negative id for line which ends at the node)</td></tr>
 <tr><td>angles</td><td>D</td><td>n_lines</td><td>Angle value</td></tr>
-<tr><td>n_edges</td><td>I</td><td>1</td><td>Reserved for edges (only for with_z)</td></tr>
-<tr><td>x,y</td><td>D</td><td>2</td><td>Coordinate pair</td></tr>
-<tr><td>z</td><td>D</td><td>1</td><td>Only for with_z</td></tr>
+<tr><td>n_edges</td><td>I</td><td>1</td><td>Reserved for edges (only for <tt>with_z</tt>)</td></tr>
+<tr><td>x,y</td><td>D</td><td>2</td><td>Coordinate pair (2D)</td></tr>
+<tr><td>z</td><td>D</td><td>1</td><td>Only for <tt>with_z</tt> (3D)</td></tr>
 </table>
 
 See \ref P_node data structure.
 
 <b>Lines</b>
 
-For each line (n_lines):
+For each line (plus->n_lines):
 
 <table border="1" style="border-collapse: collapse" cellpadding="5">
 <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
-<tr><td>feature type</td><td>C</td><td>1</td><td>0 for dead</td></tr>
+<tr><td>feature type</td><td>C</td><td>1</td><td>0 for dead line</td></tr>
 <tr><td>offset</td><td>L</td><td>1</td><td>Line offset</td></tr>
-<tr><td>N1</td><td>I</td><td>1</td><td>First node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
-<tr><td>N2</td><td>I</td><td>1</td><td>Second node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
+<tr><td>N1</td><td>I</td><td>1</td><td>Start node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
+<tr><td>N2</td><td>I</td><td>1</td><td>End node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
 <tr><td>left</td><td>I</td><td>1</td><td>Left area id for feature type GV_BOUNDARY / Area id for feature type GV_CENTROID</td></tr>
 <tr><td>right</td><td>I</td><td>1</td><td>Right area id (for feature type GV_BOUNDARY)</td></tr>
 <tr><td>vol</td><td>I</td><td>1</td><td>Reserved for kernel (volume number, for feature type GV_KERNEL)</td></tr>
@@ -730,12 +730,12 @@ See \ref P_line data structure.
 
 <b>Areas</b>
 
-For each area (n_areas):
+For each area (plus->n_areas):
 
 <table border="1" style="border-collapse: collapse" cellpadding="5">
 <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
 <tr><td>n_lines</td><td>I</td><td>1</td><td>number of boundaries</td></tr>
-<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids forming exterior boundary (clockwise order, negative id for backward direction)</td></tr>
 <tr><td>n_isles</td><td>I</td><td>1</td><td>Number of isles</td></tr>
 <tr><td>isles</td><td>I</td><td>n_isles</td><td>Isle ids</td></tr>
 <tr><td>centroid</td><td>I</td><td>1</td><td>Centroid id</td></tr>
@@ -745,12 +745,12 @@ See \ref P_area data structure.
 
 <b>Isles</b>
 
-For each isle (n_isle):
+For each isle (plus->n_isle):
 
 <table border="1" style="border-collapse: collapse" cellpadding="5">
 <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
 <tr><td>n_lines</td><td>I</td><td>1</td><td>number of boundaries</td></tr>
-<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids forming exterior boundary (counter-clockwise order, negative id for backward direction)</td></tr>
 <tr><td>area</td><td>I</td><td>1</td><td>Outer area id</td></tr>
 </table>
 
@@ -776,22 +776,15 @@ areas. The geometry type GV_LINE cannot form an area.
 <b>Points</b>
 
 \verbatim
-One point (nodes: 1, lines: 1, areas: 0, isles: 0)
+One point (nodes: 0, lines: 1, areas: 0, isles: 0)
 
     + N1/L1
 \endverbatim
 
-%Node N1 (see \ref P_Node)
+Line L1 (see \ref P_line)
 
 \verbatim
-node = 1, n_lines = 1, xyz = 631286.707172, 225105.223577, 0.000000
-  line =   1, type = 1, angle = -9.000000
-\endverbatim
-
-Line L1 (see \ref P_Line)
-
-\verbatim
-line = 1, type = 1, offset = 18 n1 = 1, n2 = 1, left/area = 0, right = 0
+line = 1, type = 1 (GV_POINT)
 \endverbatim
 
 <b>Lines</b>
@@ -804,24 +797,24 @@ One line (nodes: 2, lines: 1, areas: 0, isles: 0)
    N1         N2
 \endverbatim
 
-%Node N1 (see \ref P_Node)
+%Node N1 (see \ref P_node)
 
 \verbatim
 node = 1, n_lines = 1, xyz = 634624.746450, 223557.302231, 0.000000
-  line =   1, type = 2, angle = -0.436257
+  line =   1, type = 2 (GV_LINE), angle = -0.436257
 \endverbatim
 
-%Node N2 (see \ref P_Node)
+%Node N2 (see \ref P_node)
 
 \verbatim
 node = 2, n_lines = 1, xyz = 638677.484787, 221667.849899, 0.000000
-  line =  -1, type = 2, angle = 2.705335
+  line =  -1, type = 2 (GV_LINE), angle = 2.705335
 \endverbatim
 
-Line L1 (see \ref P_Line)
+Line L1 (see \ref P_line)
 
 \verbatim
-line = 1, type = 2, offset = 18 n1 = 1, n2 = 2, left/area = 0, right = 0
+line = 1, type = 2 (GV_LINE), n1 = 1, n2 = 2
 \endverbatim
 
 <b>Areas without holes</b>
@@ -838,34 +831,34 @@ Two lines (nodes: 1, lines: 2, areas: 1, isles: 1)
     -------L1------
 \endverbatim
 
-%Node N1 (see \ref P_Node)
+%Node N1 (see \ref P_node)
 
 \verbatim
 node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
-  line =   1, type = 4, angle = -2.245537
-  line =  -1, type = 4, angle = -0.842926
+  line =   1, type = 4 (GV_BOUNDARY), angle = -2.245537
+  line =  -1, type = 4 (GV_BOUNDARY), angle = -0.842926
 \endverbatim
 
-Line L1 (see \ref P_Line)
+Line L1 (see \ref P_line)
 
 \verbatim
-line = 1, type = 4, offset = 18 n1 = 1, n2 = 1, left/area = 1, right = -1
+line = 1, type = 4 (GV_BOUNDARY), n1 = 1, n2 = 1, left = 1, right = -1
 \endverbatim
 
-Line L2 (see \ref P_Line)
+Line L2 (see \ref P_line)
 
 \verbatim
-line = 2, type = 8, offset = 87 n1 = 2, n2 = 2, left/area = 1, right = 0
+line = 2, type = 8 (GV_CENTROID), area = 1
 \endverbatim
 
-Area A1 (see \ref P_Area)
+Area A1 (see \ref P_area)
 
 \verbatim
 area = 1, n_lines = 1, n_isles = 0 centroid = 2
   line =  -1
 \endverbatim
 
-Isle I1 (see \ref P_Isle)
+Isle I1 (see \ref P_isle)
 
 \verbatim
 isle = 1, n_lines = 1 area = 0
@@ -893,41 +886,41 @@ Three lines (nodes: 2, lines: 3, areas: 2, isles: 2)
 ------------L1-------------
 \endverbatim
 
-%Node N1 (see \ref P_Node)
+%Node N1 (see \ref P_node)
 
 \verbatim
 node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
-  line =   1, type = 4, angle = -2.245537
-  line =  -1, type = 4, angle = -0.842926
+  line =   1, type = 4 (GV_BOUNDARY), angle = -2.245537
+  line =  -1, type = 4 (GV_BOUNDARY), angle = -0.842926
 \endverbatim
 
-%Node N2 (see \ref P_Node)
+%Node N2 (see \ref P_node)
 
 \verbatim
-node = 3, n_lines = 2, xyz = 636788.032454, 223173.935091, 0.000000
-  line =   3, type = 4, angle = -2.245537
-  line =  -3, type = 4, angle = -0.866302
+node = 2, n_lines = 2, xyz = 636788.032454, 223173.935091, 0.000000
+  line =   3, type = 4 (GV_BOUNDARY), angle = -2.245537
+  line =  -3, type = 4 (GV_BOUNDARY), angle = -0.866302
 \endverbatim
 
-Line L1 (see \ref P_Line)
+Line L1 (see \ref P_line)
 
 \verbatim
-line = 1, type = 4, offset = 18 n1 = 1, n2 = 1, left/area = 1, right = -1
+line = 1, type = 4 (GV_BOUNDARY), n1 = 1, n2 = 1, left = 1, right = -1
 \endverbatim
 
-Line L2 (see \ref P_Line)
+Line L2 (see \ref P_line)
 
 \verbatim
-line = 2, type = 8, offset = 87 n1 = 2, n2 = 2, left/area = 1, right = 0
+line = 2, type = 8 (GV_CENTROID), area = 1
 \endverbatim
 
-Line L3 (see \ref P_Line)
+Line L3 (see \ref P_line)
 
 \verbatim
-line = 3, type = 4, offset = 197 n1 = 3, n2 = 3, left/area = 2, right = -2
+line = 3, type = 4 (GV_BOUNDARY), n1 = 3, n2 = 3, left = 2, right = -2
 \endverbatim
 
-Area A1 (see \ref P_Area)
+Area A1 (see \ref P_area)
 
 \verbatim
 area = 1, n_lines = 1, n_isles = 1 centroid = 2
@@ -935,21 +928,21 @@ area = 1, n_lines = 1, n_isles = 1 centroid = 2
   isle =   2
 \endverbatim
 
-Area A2 (see \ref P_Area)
+Area A2 (see \ref P_area)
 
 \verbatim
 area = 2, n_lines = 1, n_isles = 0 centroid = 0
   line =  -3
 \endverbatim
 
-Isle I1 (see \ref P_Isle)
+Isle I1 (see \ref P_isle)
 
 \verbatim
 isle = 1, n_lines = 1 area = 0
   line =   1
 \endverbatim
 
-Isle I2 (see \ref P_Isle)
+Isle I2 (see \ref P_isle)
 
 \verbatim
 isle = 2, n_lines = 1 area = 1
