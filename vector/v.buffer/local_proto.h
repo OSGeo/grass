@@ -18,7 +18,7 @@ int geos_buffer(struct Map_info *, struct Map_info *,
                 struct Map_info *, int, int, double,
                 GEOSBufferParams *,
 		struct spatial_index *,
-		struct line_cats *, struct line_cats *,
+		struct line_cats *,
 		struct buf_contours **,
 		int *, int *);
 #endif
