@@ -1,44 +1,47 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.buffer</em> creates a buffer around features of given <b>type</b>, which
-have a category in the given <b>layer</b>. The <b>tolerance</b> controls
-the number of vector segments being generated (the smaller the value, the more
-vector segments are generated).
-
+<em>v.buffer</em> creates a buffer around features of given <b>type
+</b>, which have a category in the given <b>layer</b>. The <b>
+tolerance</b> controls the number of vector segments being generated 
+(the smaller the value, the more vector segments are generated).
 
 <h2>NOTES</h2>
 
-Attributes are not transferred due to potential buffer overlap, which
-cannot be resolved automatically.
+Internal buffers for areas can be generated with negative distiance 
+values (GRASS must be compiled with GEOS).
+<p>
+Categories and attributes can be transferred with the <em>t</em> flag. 
+The resulting buffer areas can have multiple categories, and multiple 
+buffer areas can have the same category. The buffer for the input 
+feature with category X can thus be retrieved by selecting all buffer 
+areas with category X (see example below).
 
 
 <h2>EXAMPLES</h2>
 
+All examples are based on the North Carolina sample dataset.
+
 <h3>Buffer around input lines</h3>
 
 <div class="code"><pre>
-v.buffer input=map output=buffer type=line distance=100
+v.buffer input=roadsmajor output=roadsmajor_buffer type=line distance=100
 </pre></div>
 
 <h3>Circles around input points</h3>
 
 <div class="code"><pre>
-v.buffer input=pointsmap output=circles type=point distance=1000 
+v.buffer input=hospitals output=hospitals_circled type=point distance=1000 
 </pre></div>
 
-<h3>Non-overlapping circles around input points with attribute transfer</h3>
+<h3>Circles around input points with attribute transfer</h3>
 
 <div class="code"><pre>
-v.buffer input=archsites output=circles type=point distance=200 
-# change original points to centroids: 
-v.type in=archsites out=archcentroids type=point,centroid 
-# patch circles and centroids: 
-v.patch in=archcentroids,circles out=circles_db 
-# attach attributes, either use 
-# db.copy ... 
-# or link to the original table: 
-v.db.connect map=circles_db table=archsites field=1 key=cat driver=dbf \
-database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf'
+v.buffer input=hospitals output=hospitals_circled type=point distance=1000 -t
+# display buffer around hospital with category 36,
+# this buffer is composed of several areas:
+d.vect map=hospitals_circled type=area layer=1 cats=36
+# extract this buffer, dissolving boundaries
+v.extract in=hospitals_circled out=hospital_36_circled layer=1 cats=36 -d
 </pre></div>
 
 
@@ -57,5 +60,6 @@ database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf'
 
 Radim Blazek<br>
 Rewritten by Rosen Matev (with support through the
- Google Summer of Code program 2008)
+ Google Summer of Code program 2008)<br>
+Rewritten by Markus Metz (2011, 2012)
 <p><i>Last changed: $Date$</i>

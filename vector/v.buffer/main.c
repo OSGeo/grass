@@ -78,11 +78,14 @@ int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
     struct bound_box bbox;
     static struct ilist *List = NULL;
     static struct line_pnts *Points = NULL;
+    static struct line_cats *BCats = NULL;
 
     if (List == NULL)
 	List = Vect_new_list();
     if (Points == NULL)
 	Points = Vect_new_line_struct();
+    if (BCats == NULL)
+	BCats = Vect_new_cats_struct();
 
     /* select outer contours overlapping with centroid (x, y) */
     bbox.W = bbox.E = x;
@@ -91,9 +94,9 @@ int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
     bbox.B = -PORT_DOUBLE_MAX;
 
     Vect_spatial_index_select(si, &bbox, List);
-
+    
     for (i = 0; i < List->n_values; i++) {
-	Vect_read_line(Buf, Points, NULL, arr_bc[List->value[i]].outer);
+	Vect_read_line(Buf, Points, BCats, arr_bc[List->value[i]].outer);
 	ret = Vect_point_in_poly(x, y, Points);
 	if (ret == 0)
 	    continue;
@@ -120,57 +123,73 @@ int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
     return 0;
 }
 
-int get_line_box(const struct line_pnts *Points, struct bound_box *Box)
+int buffer_cats(struct buf_contours *arr_bc, struct spatial_index *si,
+		    struct Map_info *Buf, double x, double y, struct line_cats *Cats)
 {
-    int i;
+    int i, j, ret, flag, inside;
+    struct bound_box bbox;
+    static struct ilist *List = NULL;
+    static struct line_pnts *Points = NULL;
+    static struct line_cats *BCats = NULL;
 
-    if (Points->n_points <= 0) {
-	Box->N = 0;
-	Box->S = 0;
-	Box->E = 0;
-	Box->W = 0;
-	Box->T = 0;
-	Box->B = 0;
-	return 0;
+    if (List == NULL)
+	List = Vect_new_list();
+    if (Points == NULL)
+	Points = Vect_new_line_struct();
+    if (BCats == NULL)
+	BCats = Vect_new_cats_struct();
+
+    /* select outer contours overlapping with centroid (x, y) */
+    bbox.W = bbox.E = x;
+    bbox.N = bbox.S = y;
+    bbox.T = PORT_DOUBLE_MAX;
+    bbox.B = -PORT_DOUBLE_MAX;
+
+    Vect_spatial_index_select(si, &bbox, List);
+    
+    Vect_reset_cats(Cats);
+    
+    inside = 0;
+    for (i = 0; i < List->n_values; i++) {
+	Vect_read_line(Buf, Points, BCats, arr_bc[List->value[i]].outer);
+	ret = Vect_point_in_poly(x, y, Points);
+	if (ret == 0)
+	    continue;
+
+	flag = 1;
+	for (j = 0; j < arr_bc[List->value[i]].inner_count; j++) {
+	    if (arr_bc[List->value[i]].inner[j] < 1)
+		continue;
+
+	    Vect_read_line(Buf, Points, NULL, arr_bc[List->value[i]].inner[j]);
+	    ret = Vect_point_in_poly(x, y, Points);
+	    if (ret != 0) {	/* inside inner contour */
+		flag = 0;
+		break;
+	    }
+	}
+
+	if (flag) {
+	    /* (x,y) is inside outer contour and outside inner contours of arr_bc[i] */
+	    inside = 1;
+	    for (j = 0; j < BCats->n_cats; j++)
+		Vect_cat_set(Cats, BCats->field[j], BCats->cat[j]);
+	}
     }
 
-    Box->E = Points->x[0];
-    Box->W = Points->x[0];
-    Box->N = Points->y[0];
-    Box->S = Points->y[0];
-    Box->T = Points->z[0];
-    Box->B = Points->z[0];
-
-    for (i = 1; i < Points->n_points; i++) {
-	if (Points->x[i] > Box->E)
-	    Box->E = Points->x[i];
-	else if (Points->x[i] < Box->W)
-	    Box->W = Points->x[i];
-
-	if (Points->y[i] > Box->N)
-	    Box->N = Points->y[i];
-	else if (Points->y[i] < Box->S)
-	    Box->S = Points->y[i];
-
-	if (Points->z[i] > Box->T)
-	    Box->T = Points->z[i];
-	else if (Points->z[i] < Box->B)
-	    Box->B = Points->z[i];
-    }
-
-    return 1;
+    return inside;
 }
 
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out, Buf;
     struct line_pnts *Points;
-    struct line_cats *Cats, *BCats;
+    struct line_cats *Cats, *BCats, *CCats;
     char bufname[GNAME_MAX];
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *dista_opt, *distb_opt,
 	*angle_opt;
-    struct Flag *straight_flag, *nocaps_flag;
+    struct Flag *straight_flag, *nocaps_flag, *cats_flag;
     struct Option *tol_opt, *bufcol_opt, *scale_opt, *field_opt;
 
     int verbose;
@@ -271,6 +290,10 @@ int main(int argc, char *argv[])
     nocaps_flag->key = 'c';
     nocaps_flag->description = _("Don't make caps at the ends of polylines");
 
+    cats_flag = G_define_flag();
+    cats_flag->key = 't';
+    cats_flag->description = _("Transfer categories and attributes");
+
     G_gisinit(argv[0]);
     
     if (G_parser(argc, argv))
@@ -282,12 +305,6 @@ int main(int argc, char *argv[])
 	(!(dista_opt->answer || bufcol_opt->answer)))
 	G_fatal_error(_("Select a buffer distance/minordistance/angle "
 			"or column, but not both."));
-
-    if (bufcol_opt->answer)
-	G_warning(_("The bufcol option may contain bugs during the cleaning "
-		    "step. If you encounter problems, use the debug "
-		    "option or clean manually with v.clean tool=break; "
-		    "v.category step=0; v.extract -d type=area"));
 
     Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
@@ -337,6 +354,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
+    CCats = Vect_new_cats_struct();
     
     /* open tmp vector for buffers, needed for cleaning */
     sprintf(bufname, "%s_tmp_%d", out_opt->answer, getpid());
@@ -422,6 +440,13 @@ int main(int argc, char *argv[])
     buffer_params = GEOSBufferParams_create();
     GEOSBufferParams_setEndCapStyle(buffer_params, GEOSBUF_CAP_ROUND);
     GEOSBufferParams_setJoinStyle(buffer_params, GEOSBUF_JOIN_ROUND);
+#else
+    if (da < 0. || db < 0.) {
+	G_warning(_("Negative distances for internal buffers are not supported "
+	            "and converted to positive values."));
+	da = fabs(da);
+	db = fabs(db);
+    }
 #endif
 
     /* Lines (and Points) */
@@ -452,6 +477,13 @@ int main(int argc, char *argv[])
 
 	    if (field > 0 && !Vect_cat_get(Cats, field, &cat))
 		continue;
+
+	    Vect_reset_cats(CCats);
+	    for (i = 0; i < Cats->n_cats; i++) {
+		if (field < 0 || Cats->field[i] == field) {
+		    Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		}
+	    }
 
 	    if (bufcol_opt->answer) {
 		ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
@@ -491,7 +523,7 @@ int main(int argc, char *argv[])
 				   &(arr_bc_pts.oPoints));
 
 		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
+		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
 		Vect_destroy_line_struct(arr_bc_pts.oPoints);
 		/* add buffer to spatial index */
 		Vect_get_line_box(&Buf, line_id, &bbox);
@@ -507,7 +539,7 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
 		GEOSBufferParams_setMitreLimit(buffer_params, unit_tolerance);
 		geos_buffer(&In, &Out, &Buf, line, type, da, buffer_params,
-			    &si, Cats, BCats, &arr_bc, &buffers_count, &arr_bc_alloc);
+			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #else
 		Vect_line_buffer2(Points, da, db, dalpha,
 				  !(straight_flag->answer),
@@ -517,7 +549,7 @@ int main(int argc, char *argv[])
 				  &(arr_bc_pts.inner_count));
 
 		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
+		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
 		Vect_destroy_line_struct(arr_bc_pts.oPoints);
 		/* add buffer to spatial index */
 		Vect_get_line_box(&Buf, line_id, &bbox);
@@ -529,7 +561,7 @@ int main(int argc, char *argv[])
 		    arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
 		    for (i = 0; i < arr_bc_pts.inner_count; i++) {
 			Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-			line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], Cats);
+			line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
 			Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
 			arr_bc[buffers_count].inner[i] = line_id;
 		    }
@@ -562,6 +594,13 @@ int main(int argc, char *argv[])
 	    if (field > 0 && !Vect_cat_get(Cats, field, &cat))
 		continue;
 
+	    Vect_reset_cats(CCats);
+	    for (i = 0; i < Cats->n_cats; i++) {
+		if (field < 0 || Cats->field[i] == field) {
+		    Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		}
+	    }
+
 	    if (bufcol_opt->answer) {
 		ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
 		if (ret != DB_OK) {
@@ -591,10 +630,16 @@ int main(int argc, char *argv[])
 
 #ifdef HAVE_GEOS
 	    GEOSBufferParams_setSingleSided(buffer_params, 1);
-	    GEOSBufferParams_setMitreLimit(buffer_params, unit_tolerance);
+	    GEOSBufferParams_setMitreLimit(buffer_params, fabs(unit_tolerance));
 	    geos_buffer(&In, &Out, &Buf, area, GV_AREA, da, buffer_params,
-	                &si, Cats, BCats, &arr_bc, &buffers_count, &arr_bc_alloc);
+	                &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #else
+	    if (da < 0. || db < 0.) {
+		G_warning(_("Negative distances for internal buffers are not supported "
+			    "and converted to positive values."));
+		da = fabs(da);
+		db = fabs(db);
+	    }
 	    Vect_area_buffer2(&In, area, da, db, dalpha,
 			      !(straight_flag->answer),
 			      !(nocaps_flag->answer), unit_tolerance,
@@ -603,7 +648,7 @@ int main(int argc, char *argv[])
 			      &(arr_bc_pts.inner_count));
 
 	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
+	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
 	    Vect_destroy_line_struct(arr_bc_pts.oPoints);
 	    /* add buffer to spatial index */
 	    Vect_get_line_box(&Buf, line_id, &bbox);
@@ -615,7 +660,7 @@ int main(int argc, char *argv[])
 		arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
 		for (i = 0; i < arr_bc_pts.inner_count; i++) {
 		    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], Cats);
+		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
 		    Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
 		    arr_bc[buffers_count].inner[i] = line_id;
 		}
@@ -631,22 +676,6 @@ int main(int argc, char *argv[])
     finishGEOS();
 #endif
 
-#if 0
-    Vect_spatial_index_destroy(&si);
-    Vect_close(&Buf);
-    Vect_delete(bufname);
-
-    G_set_verbose(verbose);
-
-    Vect_close(&In);
-
-    Vect_build_partial(&Out, GV_BUILD_NONE);
-    Vect_build(&Out);
-    Vect_close(&Out);
-
-    exit(EXIT_SUCCESS);
-#endif
-
     verbose = G_verbose();
 
     G_message(_("Cleaning buffers..."));
@@ -655,6 +684,17 @@ int main(int argc, char *argv[])
     G_message(_("Building parts of topology..."));
     Vect_build_partial(&Out, GV_BUILD_BASE);
 
+    /* Warning: snapping must be done, otherwise colinear boundaries are not broken and 
+     * topology cannot be built (the same angle). But snapping distance must be very, very 
+     * small, otherwise counterclockwise boundaries can appear in areas outside the buffer.
+     * I have done some tests on real data (projected) and threshold 1e-8 was not enough,
+     * Snapping threshold 1e-7 seems to work. Don't increase until we find example 
+     * where it is not sufficient. RB */
+
+    /* TODO: look at snapping threshold better, calculate some theoretical value to avoid
+     * the same angles of lines at nodes, don't forget about LongLat data, probably
+     * calculate different threshold for each map, depending on map's bounding box 
+     * and/or distance and tolerance */
     G_message(_("Snapping boundaries..."));
     Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
 
@@ -689,96 +729,98 @@ int main(int argc, char *argv[])
     G_message(_("Attaching islands..."));
     Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
 
-    /* Calculate new centroids for all areas */
-    nareas = Vect_get_num_areas(&Out);
-    Areas = (char *)G_calloc(nareas + 1, sizeof(char));
-    G_message(_("Calculating centroids for areas..."));
-    G_percent(0, nareas, 2);
-    for (area = 1; area <= nareas; area++) {
-	double x, y;
+    if (!cats_flag->answer) {
+	/* Calculate new centroids for all areas */
+	nareas = Vect_get_num_areas(&Out);
+	Areas = (char *)G_calloc(nareas + 1, sizeof(char));
+	G_message(_("Calculating centroids for all areas..."));
+	G_percent(0, nareas, 2);
+	for (area = 1; area <= nareas; area++) {
+	    double x, y;
 
-	G_percent(area, nareas, 2);
+	    G_percent(area, nareas, 2);
 
-	G_debug(3, "area = %d", area);
+	    G_debug(3, "area = %d", area);
 
-	if (!Vect_area_alive(&Out, area))
-	    continue;
+	    if (!Vect_area_alive(&Out, area))
+		continue;
 
-	ret = Vect_get_point_in_area(&Out, area, &x, &y);
-	if (ret < 0) {
-	    G_warning(_("Cannot calculate area centroid"));
-	    continue;
-	}
-
-	ret = point_in_buffer(arr_bc, &si, &Buf, x, y);
-
-	if (ret) {
-	    G_debug(3, "  -> in buffer");
-	    Areas[area] = 1;
-	}
-    }
-
-    /* Make a list of boundaries to be deleted (both sides inside) */
-    nlines = Vect_get_num_lines(&Out);
-    G_debug(3, "nlines = %d", nlines);
-    Lines = (char *)G_calloc(nlines + 1, sizeof(char));
-
-    G_message(_("Generating list of boundaries to be deleted..."));
-    for (line = 1; line <= nlines; line++) {
-	int j, side[2], areas[2];
-
-	G_percent(line, nlines, 2);
-
-	G_debug(3, "line = %d", line);
-
-	if (!Vect_line_alive(&Out, line))
-	    continue;
-
-	Vect_get_line_areas(&Out, line, &side[0], &side[1]);
-
-	for (j = 0; j < 2; j++) {
-	    if (side[j] == 0) {	/* area/isle not build */
-		areas[j] = 0;
+	    ret = Vect_get_point_in_area(&Out, area, &x, &y);
+	    if (ret < 0) {
+		G_warning(_("Cannot calculate area centroid"));
+		continue;
 	    }
-	    else if (side[j] > 0) {	/* area */
-		areas[j] = side[j];
-	    }
-	    else {		/* < 0 -> island */
-		areas[j] = Vect_get_isle_area(&Out, abs(side[j]));
+
+	    ret = point_in_buffer(arr_bc, &si, &Buf, x, y);
+
+	    if (ret) {
+		G_debug(3, "  -> in buffer");
+		Areas[area] = 1;
 	    }
 	}
 
-	G_debug(3, " areas = %d , %d -> Areas = %d, %d", areas[0], areas[1],
-		Areas[areas[0]], Areas[areas[1]]);
-	if (Areas[areas[0]] && Areas[areas[1]])
-	    Lines[line] = 1;
-    }
-    G_free(Areas);
+	/* Make a list of boundaries to be deleted (both sides inside) */
+	nlines = Vect_get_num_lines(&Out);
+	G_debug(3, "nlines = %d", nlines);
+	Lines = (char *)G_calloc(nlines + 1, sizeof(char));
 
-    /* Delete boundaries */
-    G_message(_("Deleting boundaries..."));
-    for (line = 1; line <= nlines; line++) {
-	G_percent(line, nlines, 2);
-	
-	if (!Vect_line_alive(&Out, line))
-	    continue;
+	G_message(_("Generating list of boundaries to be deleted..."));
+	for (line = 1; line <= nlines; line++) {
+	    int j, side[2], areas[2];
 
-	if (Lines[line]) {
-	    G_debug(3, " delete line %d", line);
-	    Vect_delete_line(&Out, line);
-	}
-	else {
-	    /* delete incorrect boundaries */
-	    int side[2];
+	    G_percent(line, nlines, 2);
+
+	    G_debug(3, "line = %d", line);
+
+	    if (!Vect_line_alive(&Out, line))
+		continue;
 
 	    Vect_get_line_areas(&Out, line, &side[0], &side[1]);
-	    
-	    if (!side[0] && !side[1])
-		Vect_delete_line(&Out, line);
-	}
-    }
 
-    G_free(Lines);
+	    for (j = 0; j < 2; j++) {
+		if (side[j] == 0) {	/* area/isle not build */
+		    areas[j] = 0;
+		}
+		else if (side[j] > 0) {	/* area */
+		    areas[j] = side[j];
+		}
+		else {		/* < 0 -> island */
+		    areas[j] = Vect_get_isle_area(&Out, abs(side[j]));
+		}
+	    }
+
+	    G_debug(3, " areas = %d , %d -> Areas = %d, %d", areas[0], areas[1],
+		    Areas[areas[0]], Areas[areas[1]]);
+	    if (Areas[areas[0]] && Areas[areas[1]])
+		Lines[line] = 1;
+	}
+	G_free(Areas);
+
+	/* Delete boundaries */
+	G_message(_("Deleting boundaries..."));
+	for (line = 1; line <= nlines; line++) {
+	    G_percent(line, nlines, 2);
+	    
+	    if (!Vect_line_alive(&Out, line))
+		continue;
+
+	    if (Lines[line]) {
+		G_debug(3, " delete line %d", line);
+		Vect_delete_line(&Out, line);
+	    }
+	    else {
+		/* delete incorrect boundaries */
+		int side[2];
+
+		Vect_get_line_areas(&Out, line, &side[0], &side[1]);
+		
+		if (!side[0] && !side[1])
+		    Vect_delete_line(&Out, line);
+	    }
+	}
+
+	G_free(Lines);
+    }
 
     /* Create new centroids */
     Vect_reset_cats(Cats);
@@ -802,7 +844,10 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
-	ret = point_in_buffer(arr_bc, &si, &Buf, x, y);
+	if (cats_flag->answer)
+	    ret = buffer_cats(arr_bc, &si, &Buf, x, y, Cats);
+	else
+	    ret = point_in_buffer(arr_bc, &si, &Buf, x, y);
 
 	if (ret) {
 	    Vect_reset_line(Points);
@@ -811,20 +856,14 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /* free arr_bc[] */
-    /* will only slow down the module
-       for (i = 0; i < buffers_count; i++) {
-       Vect_destroy_line_struct(arr_bc[i].oPoints);
-       for (j = 0; j < arr_bc[i].inner_count; j++)
-       Vect_destroy_line_struct(arr_bc[i].iPoints[j]);
-       G_free(arr_bc[i].iPoints);
-       } */
-
     Vect_spatial_index_destroy(&si);
     Vect_close(&Buf);
     Vect_delete(bufname);
 
     G_set_verbose(verbose);
+
+    if (cats_flag->answer)
+	Vect_copy_tables(&In, &Out, field);
 
     Vect_close(&In);
 

@@ -42,7 +42,7 @@ static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 static int geom2ring(GEOSGeometry *geom, struct Map_info *Out,
                      struct Map_info *Buf,
                      struct spatial_index *si,
-		     struct line_cats *Cats, struct line_cats *BCats,
+		     struct line_cats *Cats,
 		     struct buf_contours **arr_bc,
 		     int *buffers_count, int *arr_bc_alloc)
 {
@@ -50,12 +50,15 @@ static int geom2ring(GEOSGeometry *geom, struct Map_info *Out,
     const GEOSGeometry *geom2;
     struct bound_box bbox;
     static struct line_pnts *Points = NULL;
+    static struct line_cats *BCats = NULL;
     struct buf_contours *p = *arr_bc;
 
     G_debug(3, "geom2ring(): GEOS %s", GEOSGeomType(geom));
 
     if (!Points)
 	Points = Vect_new_line_struct();
+    if (!BCats)
+	BCats = Vect_new_cats_struct();
 
     if (GEOSGeomTypeId(geom) == GEOS_LINESTRING ||
         GEOSGeomTypeId(geom) == GEOS_LINEARRING) {
@@ -104,7 +107,7 @@ static int geom2ring(GEOSGeometry *geom, struct Map_info *Out,
 		    G_fatal_error(_("Corrupt GEOS geometry"));
 		}
 		Vect_write_line(Out, GV_BOUNDARY, Points, BCats);
-		line_id = Vect_write_line(Buf, GV_BOUNDARY, Points, Cats);
+		line_id = Vect_write_line(Buf, GV_BOUNDARY, Points, BCats);
 		p[*buffers_count].inner[i] = line_id;
 	    }
 	}
@@ -124,7 +127,7 @@ static int geom2ring(GEOSGeometry *geom, struct Map_info *Out,
 	ngeoms = GEOSGetNumGeometries(geom);
 	for (i = 0; i < ngeoms; i++) {
 	    geom2 = GEOSGetGeometryN(geom, i);
-	    geom2ring((GEOSGeometry *)geom2, Out, Buf, si, Cats, BCats,
+	    geom2ring((GEOSGeometry *)geom2, Out, Buf, si, Cats,
 	              arr_bc, buffers_count, arr_bc_alloc);
 	}
     }
@@ -138,7 +141,7 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
                 struct Map_info *Buf, int id, int type, double da,
                 GEOSBufferParams *buffer_params,
 		struct spatial_index *si,
-		struct line_cats *Cats, struct line_cats *BCats,
+		struct line_cats *Cats,
 		struct buf_contours **arr_bc,
 		int *buffers_count, int *arr_bc_alloc)
 {
@@ -157,7 +160,7 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
     if (!OGeom)
 	G_warning(_("Buffering failed"));
     
-    geom2ring(OGeom, Out, Buf, si, Cats, BCats, arr_bc, buffers_count, arr_bc_alloc);
+    geom2ring(OGeom, Out, Buf, si, Cats, arr_bc, buffers_count, arr_bc_alloc);
 
     if (IGeom)
 	GEOSGeom_destroy(IGeom);
