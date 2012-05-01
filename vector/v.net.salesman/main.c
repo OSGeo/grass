@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     int node, node1, node2, line;
     double **cost_cache;			/* pointer to array of pointers to arrays of cached costs */
     struct Option *map, *output, *afield_opt, *tfield_opt, *afcol, *abcol,
-	*type_opt, *term_opt;
+	*seq, *type_opt, *term_opt;
     struct Flag *geo_f;
     struct GModule *module;
     struct Map_info Map, Out;
@@ -96,6 +96,7 @@ int main(int argc, char **argv)
     struct line_pnts *Points;
     const char *dstr;
     char buf[2000], buf2[2000];
+    FILE *fp;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -139,6 +140,12 @@ int main(int argc, char **argv)
     abcol->type = TYPE_STRING;
     abcol->required = NO;
     abcol->description = _("EXPERIMENTAL: Arc backward direction cost column (number)");
+
+    seq = G_define_standard_option(G_OPT_F_OUTPUT);
+    seq->key = "sequence";
+    seq->type = TYPE_STRING;
+    seq->required = NO;
+    seq->description = _("Name for output file holding node sequence (\"-\" for stdout)");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
     term_opt->key = "ccats";
@@ -255,7 +262,9 @@ int main(int argc, char **argv)
 
     /* Create sorted lists of costs */
     /* for a large number of cities this will become very slow, can not be fixed */
+    G_message(_("Creating cost cache..."));
     for (i = 0; i < ncities; i++) {
+	G_percent(i, ncities, 2);
 	k = 0;
 	for (j = 0; j < ncities; j++) {
 	    if (i == j)
@@ -268,7 +277,7 @@ int main(int argc, char **argv)
 		G_fatal_error(_("Destination node [%d] is unreachable "
 				"from node [%d]"), cities[i], cities[j]);
 
-	    /* TODO: add to directional cost cache: from, to, cost */
+	    /* add to directional cost cache: from, to, cost */
 	    costs[i][k].city = j;
 	    costs[i][k].cost = cost;
 	    cost_cache[i][j] = cost;
@@ -277,9 +286,11 @@ int main(int argc, char **argv)
 	}
 	qsort((void *)costs[i], k, sizeof(COST), cmp);
     }
+    G_percent(1, 1, 2);
     
     if (bcosts) {
 	for (i = 0; i < ncities; i++) {
+	    /* this should be fast, no need for G_percent() */
 	    k = 0;
 	    for (j = 0; j < ncities; j++) {
 		if (i == j)
@@ -305,6 +316,7 @@ int main(int argc, char **argv)
 	}
     }
 
+    G_message(_("Searching for the shortest cycle..."));
     /* find 2 cities with largest distance */
     cost = city = -1;
     for (i = 0; i < ncities; i++) {
@@ -393,9 +405,7 @@ int main(int argc, char **argv)
 		cost = tmpcost;
 	    }
 	}
-
 	add_city(city, city1);
-
     }
 
     if (debug_level >= 2) {
@@ -408,29 +418,32 @@ int main(int argc, char **argv)
 
     /* Create list of arcs */
     cycle[ncities] = cycle[0];  /* close the cycle */
+    cost = 0.0;
     for (i = 0; i < ncities; i++) {
 	node1 = cities[cycle[i]];
 	node2 = cities[cycle[i + 1]];
 	G_debug(2, " %d -> %d", node1, node2);
-	ret = Vect_net_shortest_path(&Map, node1, node2, List, NULL);
+	ret = Vect_net_shortest_path(&Map, node1, node2, List, &tmpcost);
+	cost += tmpcost;
 	for (j = 0; j < List->n_values; j++) {
 	    line = abs(List->value[j]);
 	    Vect_list_append(StArcs, line);
 	    Vect_get_line_nodes(&Map, line, &node1, &node2);
+	    /* Vect_list_append() appends only if value not yet present !!! 
+	     * this breaks the correct sequence */
 	    Vect_list_append(StNodes, node1);
 	    Vect_list_append(StNodes, node2);
 	}
     }
 
-
-
     /* Write arcs to new map */
     Vect_open_new(&Out, output->answer, Vect_is_3d(&Map));
     Vect_hist_command(&Out);
 
-    G_verbose_message(_("Cycle:"));
+    G_verbose_message(_("Cycle with total cost %f:"), cost);
     G_verbose_message(_("Arcs' categories (layer %d, %d arcs):"), afield,
 	    StArcs->n_values);
+
     for (i = 0; i < StArcs->n_values; i++) {
 	line = StArcs->value[i];
 	ltype = Vect_read_line(&Map, Points, Cats, line);
@@ -443,15 +456,30 @@ int main(int argc, char **argv)
 	else
 	    sprintf(buf, "%d", cat);
     }
+    /* buffer overflow in buf for many cities */
     G_verbose_message("%s\n\n", buf);
+    
+    if (seq->answer) {
+	if (strcmp(seq->answer, "-")) {
+	    fp = fopen(seq->answer, "w");
+	    if (!fp)
+		G_fatal_error(_("Unable to open file '%s' for writing"),
+		              seq->answer);
+	}
+	else
+	    fp = stdout;
 
-    G_verbose_message(_("Nodes' categories (layer %d, %d nodes):"), tfield,
-	    StNodes->n_values);
+	fprintf(fp, "sequence;category\n");
+    }
+    else
+	fp = NULL;
+
     k = 0;
-    for (i = 0; i < TList->n_values; i++) {
+    /* this writes out only user-selected nodes, not all visited nodes */
+    for (i = 0; i < ncities; i++) {
 	double coor_x, coor_y, coor_z;
 	
-	node = TList->value[i];
+	node = cities[cycle[i]];
 	Vect_get_node_coor(&Map, node, &coor_x, &coor_y, &coor_z);
 	line = Vect_find_line(&Map, coor_x, coor_y, coor_z, GV_POINT, 0, 0, 0);
 	
@@ -471,8 +499,16 @@ int main(int argc, char **argv)
 	else
 	    sprintf(buf, "%d", cat);
 	k++;
+	if (fp)
+	    fprintf(fp, "%d;%d\n", k, cat);
     }
+    G_verbose_message(_("Nodes' categories (layer %d, %d nodes):"), tfield,
+	    ncities);
+    /* buffer overflow in buf for many cities */
     G_verbose_message("%s\n\n", buf);
+    
+    if (fp && fp != stdout)
+	fclose(fp);
 
     Vect_build(&Out);
 
