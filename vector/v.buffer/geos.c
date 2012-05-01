@@ -139,7 +139,6 @@ static int geom2ring(GEOSGeometry *geom, struct Map_info *Out,
 
 int geos_buffer(struct Map_info *In, struct Map_info *Out,
                 struct Map_info *Buf, int id, int type, double da,
-                GEOSBufferParams *buffer_params,
 		struct spatial_index *si,
 		struct line_cats *Cats,
 		struct buf_contours **arr_bc,
@@ -155,8 +154,12 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
     else
 	IGeom = Vect_read_line_geos(In, id, &type);
 
-    OGeom = GEOSBufferWithParams(IGeom, buffer_params, da);
-    
+    /* GEOS code comment on the number of quadrant segments:
+     * A value of 8 gives less than 2% max error in the buffer distance.
+     * For a max error of < 1%, use QS = 12.
+     * For a max error of < 0.1%, use QS = 18. */
+    OGeom = GEOSBuffer(IGeom, da, 12);
+
     if (!OGeom)
 	G_warning(_("Buffering failed"));
     

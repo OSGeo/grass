@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
     double size_val, scale;
 
 #ifdef HAVE_GEOS
-    GEOSBufferParams *buffer_params = NULL;
+    /* TODO: use GEOSBufferParams * */
 #endif
 
     module = G_define_module();
@@ -437,9 +437,6 @@ int main(int argc, char *argv[])
 
 #ifdef HAVE_GEOS
     initGEOS(G_message, G_fatal_error);
-    buffer_params = GEOSBufferParams_create();
-    GEOSBufferParams_setEndCapStyle(buffer_params, GEOSBUF_CAP_ROUND);
-    GEOSBufferParams_setJoinStyle(buffer_params, GEOSBUF_JOIN_ROUND);
 #else
     if (da < 0. || db < 0.) {
 	G_warning(_("Negative distances for internal buffers are not supported "
@@ -537,8 +534,7 @@ int main(int argc, char *argv[])
 	    else {
 
 #ifdef HAVE_GEOS
-		GEOSBufferParams_setMitreLimit(buffer_params, unit_tolerance);
-		geos_buffer(&In, &Out, &Buf, line, type, da, buffer_params,
+		geos_buffer(&In, &Out, &Buf, line, type, da,
 			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #else
 		Vect_line_buffer2(Points, da, db, dalpha,
@@ -629,9 +625,7 @@ int main(int argc, char *argv[])
 	    }
 
 #ifdef HAVE_GEOS
-	    GEOSBufferParams_setSingleSided(buffer_params, 1);
-	    GEOSBufferParams_setMitreLimit(buffer_params, fabs(unit_tolerance));
-	    geos_buffer(&In, &Out, &Buf, area, GV_AREA, da, buffer_params,
+	    geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
 	                &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #else
 	    if (da < 0. || db < 0.) {
@@ -672,7 +666,6 @@ int main(int argc, char *argv[])
     }
 
 #ifdef HAVE_GEOS
-    GEOSBufferParams_destroy(buffer_params);
     finishGEOS();
 #endif
 
