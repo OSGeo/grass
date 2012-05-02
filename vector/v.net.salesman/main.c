@@ -74,6 +74,26 @@ void add_city(int city, int after)
 
 }
 
+/* like Vect_list_append(), but allows duplicates */
+int tsp_list_append(struct ilist *list, int val)
+{
+    size_t size;
+
+    if (list == NULL)
+	return 1;
+
+    if (list->n_values == list->alloc_values) {
+	size = (list->n_values + 1000) * sizeof(int);
+	list->value = (int *)G_realloc((void *)list->value, size);
+	list->alloc_values = list->n_values + 1000;
+    }
+
+    list->value[list->n_values] = val;
+    list->n_values++;
+
+    return 0;
+}
+
 
 int main(int argc, char **argv)
 {
@@ -95,7 +115,7 @@ int main(int argc, char **argv)
     struct line_cats *Cats;
     struct line_pnts *Points;
     const char *dstr;
-    char buf[2000], buf2[2000];
+/*    char buf[2000], buf2[2000]; */
     FILE *fp;
 
     /* Initialize the GIS calls */
@@ -218,7 +238,7 @@ int main(int argc, char **argv)
 	if (!(Vect_cat_get(Cats, tfield, &cat)))
 	    continue;
 	if (Vect_cat_in_cat_list(cat, Clist)) {
-	    Vect_list_append(TList, node);
+	    tsp_list_append(TList, node);
 	}
 	
     }
@@ -267,8 +287,10 @@ int main(int argc, char **argv)
 	G_percent(i, ncities, 2);
 	k = 0;
 	for (j = 0; j < ncities; j++) {
+	    cost_cache[i][j] = 0.0;
 	    if (i == j)
 		continue;
+
 	    ret =
 		Vect_net_shortest_path(&Map, cities[i], cities[j], NULL,
 				       &cost);
@@ -407,6 +429,8 @@ int main(int argc, char **argv)
 	}
 	add_city(city, city1);
     }
+    
+    /* TODO: optimize tour (some Lin–Kernighan method) */
 
     if (debug_level >= 2) {
 	/* debug print */
@@ -423,16 +447,16 @@ int main(int argc, char **argv)
 	node1 = cities[cycle[i]];
 	node2 = cities[cycle[i + 1]];
 	G_debug(2, " %d -> %d", node1, node2);
-	ret = Vect_net_shortest_path(&Map, node1, node2, List, &tmpcost);
-	cost += tmpcost;
+	ret = Vect_net_shortest_path(&Map, node1, node2, List, NULL);
+	cost += cost_cache[cycle[i]][cycle[i + 1]];
 	for (j = 0; j < List->n_values; j++) {
 	    line = abs(List->value[j]);
-	    Vect_list_append(StArcs, line);
-	    Vect_get_line_nodes(&Map, line, &node1, &node2);
 	    /* Vect_list_append() appends only if value not yet present !!! 
 	     * this breaks the correct sequence */
-	    Vect_list_append(StNodes, node1);
-	    Vect_list_append(StNodes, node2);
+	    tsp_list_append(StArcs, line);
+	    Vect_get_line_nodes(&Map, line, &node1, &node2);
+	    tsp_list_append(StNodes, node1);
+	    tsp_list_append(StNodes, node2);
 	}
     }
 
@@ -440,8 +464,8 @@ int main(int argc, char **argv)
     Vect_open_new(&Out, output->answer, Vect_is_3d(&Map));
     Vect_hist_command(&Out);
 
-    G_verbose_message(_("Cycle with total cost %f:"), cost);
-    G_verbose_message(_("Arcs' categories (layer %d, %d arcs):"), afield,
+    G_verbose_message(_("Cycle with total cost %.3f"), cost);
+    G_debug(2, "Arcs' categories (layer %d, %d arcs):", afield,
 	    StArcs->n_values);
 
     for (i = 0; i < StArcs->n_values; i++) {
@@ -449,15 +473,8 @@ int main(int argc, char **argv)
 	ltype = Vect_read_line(&Map, Points, Cats, line);
 	Vect_write_line(&Out, ltype, Points, Cats);
 	Vect_cat_get(Cats, afield, &cat);
-	if (i > 0) {
-	    sprintf(buf2, ", %d", cat);
-	    strcat(buf, buf2);
-	}
-	else
-	    sprintf(buf, "%d", cat);
+	G_debug(2, "%d. arc: cat %d", i + 1, cat);
     }
-    /* buffer overflow in buf for many cities */
-    G_verbose_message("%s\n\n", buf);
     
     if (seq->answer) {
 	if (strcmp(seq->answer, "-")) {
@@ -469,13 +486,15 @@ int main(int argc, char **argv)
 	else
 	    fp = stdout;
 
-	fprintf(fp, "sequence;category\n");
+	fprintf(fp, "sequence;category;cost_to_next\n");
     }
     else
 	fp = NULL;
 
     k = 0;
     /* this writes out only user-selected nodes, not all visited nodes */
+    G_debug(2, "Nodes' categories (layer %d, %d nodes):", tfield,
+	    ncities);
     for (i = 0; i < ncities; i++) {
 	double coor_x, coor_y, coor_z;
 	
@@ -492,20 +511,13 @@ int main(int argc, char **argv)
 	if (!(Vect_cat_get(Cats, tfield, &cat)))
 	    continue;
 	Vect_write_line(&Out, ltype, Points, Cats);
-	if (k > 0) {
-	    sprintf(buf2, ", %d", cat);
-	    strcat(buf, buf2);
-	}
-	else
-	    sprintf(buf, "%d", cat);
 	k++;
-	if (fp)
-	    fprintf(fp, "%d;%d\n", k, cat);
+	if (fp) {
+	    fprintf(fp, "%d;%d;%.3f\n", k, cat, cost_cache[cycle[i]][cycle[i + 1]]);
+	}
+
+	G_debug(2, "%d. node: cat %d", k, cat);
     }
-    G_verbose_message(_("Nodes' categories (layer %d, %d nodes):"), tfield,
-	    ncities);
-    /* buffer overflow in buf for many cities */
-    G_verbose_message("%s\n\n", buf);
     
     if (fp && fp != stdout)
 	fclose(fp);
