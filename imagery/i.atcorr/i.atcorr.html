@@ -642,7 +642,6 @@ we need to define decimal hours:<br>
 10:42:07 NC local time = 10.70 decimal hours (decimal minutes: 42 * 100 / 60) which is 15.70 GMT:
 
 <div class="code"><pre>
-#--------- start of control file -----
 8                            - geometrical conditions=Landsat ETM+
 5 24 15.70 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is in GMT decimal hours)
 2                            - atmospheric mode=midlatitude summer
@@ -651,7 +650,6 @@ we need to define decimal hours:<br>
 -0.110                       - mean target elevation above sea level [km]
 -1000                        - sensor on board a satellite
 64                           - 4th band of ETM+ Landsat 7
-#--------- end of control file -------
 </pre></div>
 
 Finally, run the atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
