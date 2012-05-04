@@ -21,7 +21,7 @@ Io         "Jupiter's satellite Io"       a=1824350.0 b=1815700.0
 # Jupiter's satellite Europa, IAU2000 definition (a is averaged)
 Europa     "Jupiter's satellite Europa"   a=1562680.0 b=1560930.0
 # Jupiter's satellite Ganymede, IAU2000 definition (a is averaged)
-Ganymede   "Jupiter's satellite Ganymede" a=2632345.0 b=2632350.0
+Ganymede   "Jupiter's satellite Ganymede" a=2632345.0 b=2632345.0
 # Jupiter's satellite Callisto, IAU2000 definition (a is averaged)
 Callisto   "Jupiter's satellite Callisto" a=2409300.0 b=2409300.0
 # Jupiter's satellite Amalthea, IAU2000 definition (a is averaged)
