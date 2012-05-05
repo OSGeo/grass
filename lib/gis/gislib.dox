@@ -332,21 +332,24 @@ The following example shows how an interactive version of <tt>d.rast</tt>
 interfaces with the command-line version of <tt>d.rast</tt>:
 
 \code
+#include <stdlib.h>
 #include <grass/gis.h>
-int main(char *argc, char **argv)
+
+int main(int argc, char *argv[])
 {
- char name[GNAME_MAX], *mapset, *fqn;
- char command[1024];
+    char name[GNAME_MAX], *mapset, *fqn;
+    char command[1024];
 
- G_gisinit(argv[0]);
- mapset = G_ask_cell_old("", name, "");
+    G_gisinit(argv[0]);
+    mapset = G_ask_cell_old("", name);
 
- if (mapset == NULL)
+    if (mapset == NULL)
+        exit(EXIT_SUCCESS);
+
+    fqn = G_fully_qualified_name(name, mapset);
+    sprintf(command, "d.rast map='%s'", fqn);
+    G_spawn(command, "d.rast", NULL);
     exit(EXIT_SUCCESS);
-
- fqn = G_fully_qualified_name(name, mapset);
- sprintf(command, "d.rast map='%s'", fqn);
- G_spawn(command, "d.rast", NULL);
 }
 \endcode
 
