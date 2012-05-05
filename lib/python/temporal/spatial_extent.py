@@ -678,7 +678,7 @@ class spatial_extent(sql_database_interface):
 	return True
 
     def meet(self,extent):
-	""" Check if self and extent meet other in three dimensions"""
+	""" Check if self and extent meet each other in three dimensions"""
 	eN = extent.get_north()
         eS = extent.get_south()
         eE = extent.get_east()
