@@ -27,6 +27,9 @@ from temporal_granularity import *
 from datetime_math import *
 from space_time_datasets import *
 
+import grass.lib.vector as vector
+from ctypes import *
+
 # Uncomment this to detect the error
 #core.set_raise_on_error(True)
 
@@ -1565,17 +1568,59 @@ def test_map_list_sorting():
     if new_list[2] != map_list[2]:
 	core.fatal("Sorting by end time failed")
 
+def test_rtree():
+    """Testing the rtree ctypes wrapper"""
+
+    tree = vector.RTreeNewIndex(-1, 0, 1)
+
+    for i in xrange(50):
+        rect = vector.RTree_Rect()
+        vector.RTreeInitRect(byref(rect))
+
+        rect.boundary[0] = i - 3.75
+        rect.boundary[1] = 0
+        rect.boundary[2] = 0
+        rect.boundary[3] = i + 3.75
+        rect.boundary[4] = 0
+        rect.boundary[5] = 0
+
+        # vector.RTreePrintRect(byref(rect), 0)
+
+        vector.RTreeInsertRect(byref(rect), i + 1, tree)
+
+    rect = vector.RTree_Rect()
+    vector.RTreeInitRect(byref(rect))
+
+    i = 25
+    rect.boundary[0] = i - 3.75
+    rect.boundary[1] = 0
+    rect.boundary[2] = 0
+    rect.boundary[3] = i + 3.75
+    rect.boundary[4] = 0
+    rect.boundary[5] = 0
+
+    _list = vector.ilist()
+
+    num = vector.RTreeSearch2(tree, byref(rect), byref(_list))
+
+    # print rectanlge ids
+    print "Number of overlapping rectangles", num
+    for i in xrange(_list.n_values):
+        print "id", _list.value[i]
+
+
 ###############################################################################
 
 if __name__ == "__main__":
     test_increment_datetime_by_string()
     test_adjust_datetime_to_granularity()
     test_spatial_extent_intersection()
-    ##test_compute_relative_time_granularity()
+    #test_compute_relative_time_granularity()
     test_compute_absolute_time_granularity()
     test_compute_datetime_delta()
     test_spatial_extent_intersection()
     test_spatial_relations()
     test_temporal_topology_builder()
     test_map_list_sorting()
+    test_rtree()
     

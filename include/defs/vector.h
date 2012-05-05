@@ -566,4 +566,7 @@ int Vect_read_colors(const char *, const char *, struct Colors *);
 int Vect_remove_colors(const char *, const char *);
 void Vect_write_colors(const char *, const char *, struct Colors *);
 
+/* Simplified RTree search using an ilist to store rectangle ids */
+int RTreeSearch2(struct RTree *, struct RTree_Rect *, struct ilist *);
+
 #endif /* GRASS_VECTORDEFS_H */
