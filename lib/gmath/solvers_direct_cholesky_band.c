@@ -23,7 +23,7 @@ void G_math_cholesky_sband_decomposition(double **A, double **T, int rows, int b
     G_debug(2, "G_math_cholesky_sband_decomposition(): n=%d  bandwidth=%d", rows, bandwidth);
 
     for (i = 0; i < rows; i++) {
-	G_percent(i, rows, 2);
+	G_percent(i, rows, 9);
         /* For j = 0 */
 	sum = A[i][0];
 	end = ((bandwidth - 0) < (i + 1) ? (bandwidth - 0) : (i + 1));
