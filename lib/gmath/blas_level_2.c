@@ -126,7 +126,7 @@ void G_math_d_x_dyad_y(double *x, double *y, double **A, int rows, int cols)
 }
 
 /*!
- * \brief Compute the dyadic product of twMo vectors. 
+ * \brief Compute the dyadic product of two vectors. 
  * The result is stored in the matrix A.
  *
  * This function is multi-threaded with OpenMP and can be called within a parallel OpenMP region.

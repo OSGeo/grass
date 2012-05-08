@@ -157,7 +157,7 @@ void G_math_f_aA_B(float **A, float **B, float a, float **C, int rows,
  *
  * A must be of size rows_A * cols_A
  * B must be of size rows_B * cols_B with rows_B == cols_A
- * C must be of size rows_A * rows_B
+ * C must be of size rows_A * cols_B
  *
  *
  * This function is multi-threaded with OpenMP and can be called within a parallel OpenMP region.
@@ -167,18 +167,18 @@ void G_math_f_aA_B(float **A, float **B, float a, float **C, int rows,
  * \param C (double **)
  * \param rows_A (int)
  * \param cols_A (int)
- * \param rows_B (int)
+ * \param cols_B (int)
  * \return (void)
  *
  * */
 void G_math_d_AB(double **A, double **B, double **C, int rows_A,
-		 int cols_A, int rows_B)
+		 int cols_A, int cols_B)
 {
     int i, j, k;
 
 #pragma omp for schedule (static) private(i, j, k)
     for (i = 0; i < rows_A; i++) {
-	for (j = 0; j < rows_B; j++) {
+	for (j = 0; j < cols_B; j++) {
 	    C[i][j] = 0.0;
 	    for (k = cols_A - 1; k >= 0; k--) {
 		C[i][j] += A[i][k] * B[k][j];
@@ -198,7 +198,7 @@ void G_math_d_AB(double **A, double **B, double **C, int rows_A,
  *
  * A must be of size rows_A * cols_A
  * B must be of size rows_B * cols_B with rows_B == cols_A
- * C must be of size rows_A * rows_B
+ * C must be of size rows_A * cols_B
  *
  *
  * This function is multi-threaded with OpenMP and can be called within a parallel OpenMP region.
@@ -208,18 +208,18 @@ void G_math_d_AB(double **A, double **B, double **C, int rows_A,
  * \param C (float **)
  * \param rows_A (int)
  * \param cols_A (int)
- * \param rows_B (int)
+ * \param cols_B (int)
  * \return (void)
  *
  * */
 void G_math_f_AB(float **A, float **B, float **C, int rows_A,
-		 int cols_A, int rows_B)
+		 int cols_A, int cols_B)
 {
     int i, j, k;
 
 #pragma omp for schedule (static) private(i, j, k)
     for (i = 0; i < rows_A; i++) {
-	for (j = 0; j < rows_B; j++) {
+	for (j = 0; j < cols_B; j++) {
 	    C[i][j] = 0.0;
 	    for (k = cols_A - 1; k >= 0; k--) {
 		C[i][j] += A[i][k] * B[k][j];
