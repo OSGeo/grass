@@ -115,7 +115,8 @@ int main(int argc, char **argv)
     struct line_cats *Cats;
     struct line_pnts *Points;
     const char *dstr;
-/*    char buf[2000], buf2[2000]; */
+    const char *seqname;
+    int seq2stdout;
     FILE *fp;
 
     /* Initialize the GIS calls */
@@ -476,15 +477,21 @@ int main(int argc, char **argv)
 	G_debug(2, "%d. arc: cat %d", i + 1, cat);
     }
     
+    seq2stdout = 0;
+    seqname = NULL;
     if (seq->answer) {
 	if (strcmp(seq->answer, "-")) {
-	    fp = fopen(seq->answer, "w");
-	    if (!fp)
-		G_fatal_error(_("Unable to open file '%s' for writing"),
-		              seq->answer);
+	    seqname = seq->answer;
 	}
-	else
-	    fp = stdout;
+	else {
+	    seqname = G_tempfile();
+	    seq2stdout = 1;
+	}
+
+	fp = fopen(seqname, "w");
+	if (!fp)
+	    G_fatal_error(_("Unable to open file '%s' for writing"),
+			  seqname);
 
 	fprintf(fp, "sequence;category;cost_to_next\n");
     }
@@ -518,9 +525,6 @@ int main(int argc, char **argv)
 
 	G_debug(2, "%d. node: cat %d", k, cat);
     }
-    
-    if (fp && fp != stdout)
-	fclose(fp);
 
     Vect_build(&Out);
 
@@ -529,6 +533,23 @@ int main(int argc, char **argv)
     Vect_destroy_list(StNodes);
     Vect_close(&Map);
     Vect_close(&Out);
+
+    if (fp) {
+	fclose(fp);
+	if (seq2stdout) {
+	    char buf[2000];
+
+	    /* spacer to previous output to stderr */
+	    G_message(" ");
+
+	    fp = fopen(seqname, "r");
+	    while (G_getl2(buf, 2000, fp) != 0)
+		fprintf(stdout, "%s\n", buf);
+
+	    fclose(fp);
+	    remove(seqname);
+	}
+    }
 
     exit(EXIT_SUCCESS);
 }
