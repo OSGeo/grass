@@ -20,7 +20,7 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 			continue;
 		    seg_get(&aspflag, (char *)&af, r, c);
 		    asp_value = af.asp;
-		    if (asp_value < -1)
+		    if (asp_value < 0)
 			asp_value = -asp_value;
 		    if (asp_value == drain[rr][cc]) {
 			if (FLAG_GET(af.flag, SWALEFLAG)) {
