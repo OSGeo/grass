@@ -399,7 +399,7 @@ struct Option			/* Structure that stores option info */
     const char *guidependency;  /* GUI dependency, list of options
 				   (separated by commas) to be updated
 				   if the value is chanched */
-    int (*checker) ();		/* Routine to check answer or NULL  */
+    int (*checker)(const char *);/* Routine to check answer or NULL  */
     int count;
 };
 
