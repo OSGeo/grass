@@ -287,7 +287,7 @@ int do_cum_mfd(void)
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
-    G_message(_("SECTION 3: Accumulating Surface Flow with MFD."));
+    G_message(_("SECTION 3a: Accumulating Surface Flow with MFD."));
     G_debug(1, "MFD convergence factor set to %d.", c_fac);
 
     /* distances to neighbours */
@@ -338,13 +338,10 @@ int do_cum_mfd(void)
 	    sum_weight = 0;
 	    np_side = -1;
 	    mfd_cells = 0;
-	    stream_cells = 0;
-	    swale_cells = 0;
 	    astar_not_set = 1;
 	    ele = wa.ele;
 	    is_null = 0;
 	    edge = 0;
-	    flat = 1;
 	    /* this loop is needed to get the sum of weights */
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
@@ -369,18 +366,7 @@ int do_cum_mfd(void)
 		    wat_nbr[ct_dir] = wa.wat;
 		    ele_nbr[ct_dir] = wa.ele;
 
-		    /* check for swale or stream cells */
-		    is_swale = FLAG_GET(flag_nbr[ct_dir], SWALEFLAG);
-		    if (is_swale)
-			swale_cells++;
-		    if ((ABS(wat_nbr[ct_dir]) + 0.5) >= threshold &&
-		        ct_dir != np_side && ele_nbr[ct_dir] > ele)
-			stream_cells++;
-
 		    if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
-
-			if (ele_nbr[ct_dir] != ele)
-			    flat = 0;
 
 			edge = is_null = FLAG_GET(flag_nbr[ct_dir], NULLFLAG);
 			if (!is_null && ele_nbr[ct_dir] <= ele) {
@@ -415,10 +401,6 @@ int do_cum_mfd(void)
 	    }
 	    /* do not continue streams along edges, this causes artifacts */
 	    if (edge) {
-		is_swale = FLAG_GET(af.flag, SWALEFLAG);
-		if (is_swale && af.asp > 0) {
-		    af.asp = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
-		}
 		seg_put(&aspflag, (char *)&af, r, c);
 		continue;
 	    }
@@ -457,13 +439,6 @@ int do_cum_mfd(void)
 				tci_div += get_slope_tci(ele, ele_nbr[ct_dir],
 				                         dist_to_nbr[ct_dir]) *
 					   weight[ct_dir];
-			    }
-
-			    /* get main drainage direction */
-			    if (weight[ct_dir] > max_val) {
-				max_val = weight[ct_dir];
-				r_max = r_nbr;
-				c_max = c_nbr;
 			    }
 
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
@@ -540,7 +515,105 @@ int do_cum_mfd(void)
 		              (sum_contour * tci_div));
 		dseg_put(&tci, &tci_val, r, c);
 	    }
+	}
+	seg_put(&aspflag, (char *)&af, r, c);
+    }
+    G_percent(do_points, do_points, 1);	/* finish it */
+    
+    if (workedon)
+	G_warning(_("MFD: A * path already processed when distributing flow: %d of %"PRI_OFF_T" cells"),
+		  workedon, do_points);
 
+
+    G_message(_("SECTION 3b: Adjusting drainage directions."));
+
+    for (killer = 0; killer < do_points; killer++) {
+	G_percent(killer, do_points, 1);
+	seg_get(&astar_pts, (char *)&point, 0, killer);
+	r = point.r;
+	c = point.c;
+	seg_get(&aspflag, (char *)&af, r, c);
+	if (af.asp) {
+	    dr = r + asp_r[ABS(af.asp)];
+	    dc = c + asp_c[ABS(af.asp)];
+	}
+	/* skip user-defined depressions */
+	else
+	    dr = dc = -1;
+
+	FLAG_SET(af.flag, WORKEDFLAG);
+	
+	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
+	    r_max = dr;
+	    c_max = dc;
+
+	    seg_get(&watalt, (char *)&wa, r, c);
+	    value = wa.wat;
+
+	    /* get max flow accumulation */
+	    max_val = -1;
+	    stream_cells = 0;
+	    swale_cells = 0;
+	    ele = wa.ele;
+	    is_null = 0;
+	    edge = 0;
+	    flat = 1;
+
+	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+		/* get r, c (r_nbr, c_nbr) for neighbours */
+		r_nbr = r + nextdr[ct_dir];
+		c_nbr = c + nextdc[ct_dir];
+		weight[ct_dir] = -1;
+
+		wat_nbr[ct_dir] = 0;
+		ele_nbr[ct_dir] = 0;
+		flag_nbr[ct_dir] = 0;
+
+		/* check if neighbour is within region */
+		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
+		    c_nbr < ncols) {
+
+		    seg_get(&aspflag, (char *)&afdown, r_nbr, c_nbr);
+		    flag_nbr[ct_dir] = afdown.flag;
+		    seg_get(&watalt, (char *)&wa, r_nbr, c_nbr);
+		    wat_nbr[ct_dir] = wa.wat;
+		    ele_nbr[ct_dir] = wa.ele;
+
+		    /* check for swale or stream cells */
+		    is_swale = FLAG_GET(flag_nbr[ct_dir], SWALEFLAG);
+		    if (is_swale)
+			swale_cells++;
+		    if ((ABS(wat_nbr[ct_dir]) + 0.5) >= threshold &&
+		        ele_nbr[ct_dir] > ele)
+			stream_cells++;
+
+		    if (!(FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG))) {
+
+			if (ele_nbr[ct_dir] != ele)
+			    flat = 0;
+
+			edge = is_null = FLAG_GET(flag_nbr[ct_dir], NULLFLAG);
+			if (!is_null && ABS(wa.wat) > max_val) {
+			    max_val = ABS(wa.wat);
+			    r_max = r_nbr;
+			    c_max = c_nbr;
+			}
+		    }
+		}
+		else
+		    edge = 1;
+		if (edge)
+		    break;
+	    }
+	    /* do not continue streams along edges, this causes artifacts */
+	    if (edge) {
+		is_swale = FLAG_GET(af.flag, SWALEFLAG);
+		if (is_swale && af.asp > 0) {
+		    af.asp = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+		}
+		seg_put(&aspflag, (char *)&af, r, c);
+		continue;
+	    }
 	    /* update asp */
 	    if (dr != r_max || dc != c_max) {
 		if (af.asp < 0) {
@@ -569,11 +642,6 @@ int do_cum_mfd(void)
 	}
 	seg_put(&aspflag, (char *)&af, r, c);
     }
-    G_percent(do_points, do_points, 1);	/* finish it */
-    
-    if (workedon)
-	G_warning(_("MFD: A * path already processed when distributing flow: %d of %"PRI_OFF_T" cells"),
-		  workedon, do_points);
 
     seg_close(&astar_pts);
     
