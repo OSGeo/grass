@@ -50,7 +50,6 @@ from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWor
 from gui_core.goutput      import GMConsole
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
-from modules.ogc_services  import WMSDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
 from gui_core.menu         import Menu
 from gmodeler.model        import Model
@@ -1271,6 +1270,7 @@ class GMFrame(wx.Frame):
         
     def OnImportWMS(self, event):
         """!Import data from OGC WMS server"""
+        from ogc_services.wms import WMSDialog
         dlg = WMSDialog(parent = self, service = 'wms')
         dlg.CenterOnScreen()
         

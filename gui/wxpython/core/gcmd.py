@@ -98,6 +98,13 @@ def EncodeString(string):
 
 class GError:
     def __init__(self, message, parent = None, caption = None, showTraceback = True):
+        """!Show error message window
+
+        @param message error message
+        @param parent centre window on parent if given
+        @param caption window caption (if not given "Error")
+        @showTraceback True to show also Python traceback
+        """
         if not caption:
             caption = _('Error')
         style = wx.OK | wx.ICON_ERROR | wx.CENTRE
