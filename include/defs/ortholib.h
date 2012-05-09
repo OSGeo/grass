@@ -35,7 +35,6 @@ int I_find_initial(char *);
 FILE *I_fopen_cam_file_new(char *);
 FILE *I_fopen_cam_file_append(char *);
 FILE *I_fopen_cam_file_old(char *);
-int I_georef(double, double, double *, double *, double[3], double[3]);
 
 /* group_elev.c */
 FILE *I_fopen_group_elev_new(char *);
