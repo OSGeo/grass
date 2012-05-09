@@ -281,7 +281,7 @@ int do_cum_mfd(void)
     double *dist_to_nbr, *contour, *weight, sum_weight, max_weight;
     int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side;
     CELL ele, *ele_nbr;
-    double prop, max_acc;
+    double prop, max_val;
     int workedon, edge, is_swale, flat;
     char *flag_nbr;
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
@@ -437,7 +437,7 @@ int do_cum_mfd(void)
 	    }
 
 	    /* set flow accumulation for neighbours */
-	    max_acc = -1;
+	    max_val = -1;
 	    tci_div = sum_contour = 0.;
 
 	    if (mfd_cells > 1) {
@@ -457,6 +457,13 @@ int do_cum_mfd(void)
 				tci_div += get_slope_tci(ele, ele_nbr[ct_dir],
 				                         dist_to_nbr[ct_dir]) *
 					   weight[ct_dir];
+			    }
+
+			    /* get main drainage direction */
+			    if (weight[ct_dir] > max_val) {
+				max_val = weight[ct_dir];
+				r_max = r_nbr;
+				c_max = c_nbr;
 			    }
 
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
@@ -479,13 +486,6 @@ int do_cum_mfd(void)
 			    wa.wat = valued;
 			    wa.ele = ele_nbr[ct_dir];
 			    seg_put(&watalt, (char *)&wa, r_nbr, c_nbr);
-
-			    /* get main drainage direction */
-			    if (fabs(wat_nbr[ct_dir]) >= max_acc) {
-				max_acc = ABS(wat_nbr[ct_dir]);
-				r_max = r_nbr;
-				c_max = c_nbr;
-			    }
 			}
 			else if (ct_dir == np_side) {
 			    /* check for consistency with A * path */
