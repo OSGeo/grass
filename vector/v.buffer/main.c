@@ -446,6 +446,102 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    /* Areas */
+    if (nareas > 0) {
+	int centroid;
+
+	G_message(_("Buffering areas..."));
+	for (area = 1; area <= nareas; area++) {
+	    int cat;
+
+	    G_percent(area, nareas, 2);
+	    
+	    if (!Vect_area_alive(&In, area))
+		continue;
+	    
+	    centroid = Vect_get_area_centroid(&In, area);
+	    if (centroid == 0)
+		continue;
+
+	    Vect_read_line(&In, NULL, Cats, centroid);
+	    if (field > 0 && !Vect_cat_get(Cats, field, &cat))
+		continue;
+
+	    Vect_reset_cats(CCats);
+	    for (i = 0; i < Cats->n_cats; i++) {
+		if (field < 0 || Cats->field[i] == field) {
+		    Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		}
+	    }
+
+	    if (bufcol_opt->answer) {
+		ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
+		if (ret != DB_OK) {
+		    G_warning(_("No record for category %d in table <%s>"),
+			      cat, Fi->table);
+		    continue;
+		}
+
+		if (size_val < 0.0) {
+		    G_warning(_("Attribute is of invalid size (%.3f) for category %d"),
+			      size_val, cat);
+		    continue;
+		}
+
+		if (size_val == 0.0)
+		    continue;
+
+		da = size_val * scale;
+		db = da;
+		dalpha = 0;
+		unit_tolerance = fabs(tolerance * MIN(da, db));
+
+		G_debug(2, "    dynamic buffer size = %.2f", da);
+		G_debug(2, _("The tolerance in map units: %g"),
+			unit_tolerance);
+	    }
+
+#ifdef HAVE_GEOS
+	    geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
+	                &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
+#else
+	    if (da < 0. || db < 0.) {
+		G_warning(_("Negative distances for internal buffers are not supported "
+			    "and converted to positive values."));
+		da = fabs(da);
+		db = fabs(db);
+	    }
+	    Vect_area_buffer2(&In, area, da, db, dalpha,
+			      !(straight_flag->answer),
+			      !(nocaps_flag->answer), unit_tolerance,
+			      &(arr_bc_pts.oPoints),
+			      &(arr_bc_pts.iPoints),
+			      &(arr_bc_pts.inner_count));
+
+	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
+	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
+	    Vect_destroy_line_struct(arr_bc_pts.oPoints);
+	    /* add buffer to spatial index */
+	    Vect_get_line_box(&Buf, line_id, &bbox);
+	    Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+	    arr_bc[buffers_count].outer = line_id;
+
+	    arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
+	    if (arr_bc_pts.inner_count > 0) {
+		arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
+		for (i = 0; i < arr_bc_pts.inner_count; i++) {
+		    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+		    Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
+		    arr_bc[buffers_count].inner[i] = line_id;
+		}
+		G_free(arr_bc_pts.iPoints);
+	    }
+	    buffers_count++;
+#endif
+	}
+    }
+
     /* Lines (and Points) */
     if (nlines > 0) {
 	int ltype;
@@ -566,102 +662,6 @@ int main(int argc, char *argv[])
 		buffers_count++;
 #endif
 	    }
-	}
-    }
-
-    /* Areas */
-    if (nareas > 0) {
-	int centroid;
-
-	G_message(_("Buffering areas..."));
-	for (area = 1; area <= nareas; area++) {
-	    int cat;
-
-	    G_percent(area, nareas, 2);
-	    
-	    if (!Vect_area_alive(&In, area))
-		continue;
-	    
-	    centroid = Vect_get_area_centroid(&In, area);
-	    if (centroid == 0)
-		continue;
-
-	    Vect_read_line(&In, NULL, Cats, centroid);
-	    if (field > 0 && !Vect_cat_get(Cats, field, &cat))
-		continue;
-
-	    Vect_reset_cats(CCats);
-	    for (i = 0; i < Cats->n_cats; i++) {
-		if (field < 0 || Cats->field[i] == field) {
-		    Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
-		}
-	    }
-
-	    if (bufcol_opt->answer) {
-		ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
-		if (ret != DB_OK) {
-		    G_warning(_("No record for category %d in table <%s>"),
-			      cat, Fi->table);
-		    continue;
-		}
-
-		if (size_val < 0.0) {
-		    G_warning(_("Attribute is of invalid size (%.3f) for category %d"),
-			      size_val, cat);
-		    continue;
-		}
-
-		if (size_val == 0.0)
-		    continue;
-
-		da = size_val * scale;
-		db = da;
-		dalpha = 0;
-		unit_tolerance = tolerance * MIN(da, db);
-
-		G_debug(2, "    dynamic buffer size = %.2f", da);
-		G_debug(2, _("The tolerance in map units: %g"),
-			unit_tolerance);
-	    }
-
-#ifdef HAVE_GEOS
-	    geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
-	                &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
-#else
-	    if (da < 0. || db < 0.) {
-		G_warning(_("Negative distances for internal buffers are not supported "
-			    "and converted to positive values."));
-		da = fabs(da);
-		db = fabs(db);
-	    }
-	    Vect_area_buffer2(&In, area, da, db, dalpha,
-			      !(straight_flag->answer),
-			      !(nocaps_flag->answer), unit_tolerance,
-			      &(arr_bc_pts.oPoints),
-			      &(arr_bc_pts.iPoints),
-			      &(arr_bc_pts.inner_count));
-
-	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
-	    Vect_destroy_line_struct(arr_bc_pts.oPoints);
-	    /* add buffer to spatial index */
-	    Vect_get_line_box(&Buf, line_id, &bbox);
-	    Vect_spatial_index_add_item(&si, buffers_count, &bbox);
-	    arr_bc[buffers_count].outer = line_id;
-
-	    arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
-	    if (arr_bc_pts.inner_count > 0) {
-		arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
-		for (i = 0; i < arr_bc_pts.inner_count; i++) {
-		    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-		    Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
-		    arr_bc[buffers_count].inner[i] = line_id;
-		}
-		G_free(arr_bc_pts.iPoints);
-	    }
-	    buffers_count++;
-#endif
 	}
     }
 
