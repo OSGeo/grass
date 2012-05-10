@@ -132,6 +132,8 @@ class LMToolsToolbar(BaseToolbar):
         icons = {
             'import'  : MetaIcon(img = 'layer-import',
                                  label = _('Import/link raster or vector data')),
+            'wms'     : MetaIcon(img = 'layer-wms-add',
+                                 label = _("Import data from WMS server")),
             'mapcalc' : MetaIcon(img = 'calculator',
                                  label = _('Raster Map Calculator')),
             'modeler' : MetaIcon(img = 'modeler-main',
@@ -144,6 +146,8 @@ class LMToolsToolbar(BaseToolbar):
         
         return self._getToolbarData((('importMap', icons["import"],
                                       self.parent.OnImportMenu),
+                                     ('importWMS', icons["wms"],
+                                      self.parent.OnImportWMS),
                                      (None, ),
                                      ('mapCalc', icons["mapcalc"],
                                       self.parent.OnMapCalculator),
