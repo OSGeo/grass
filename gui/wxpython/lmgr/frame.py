@@ -1271,7 +1271,7 @@ class GMFrame(wx.Frame):
     def OnImportWMS(self, event):
         """!Import data from OGC WMS server"""
         from ogc_services.wms import WMSDialog
-        dlg = WMSDialog(parent = self, service = 'wms')
+        dlg = WMSDialog(parent = self)
         dlg.CenterOnScreen()
         
         if dlg.ShowModal() == wx.ID_OK: # -> import layers
