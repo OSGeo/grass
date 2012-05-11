@@ -152,11 +152,15 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else {			/* yes, lat/long */
-	    fprintf(fp, "xllcorner %f\n", region.west);
-	    fprintf(fp, "yllcorner %f\n", region.south);
+	    G_format_easting(region.west, buf, -1);
+	    fprintf(fp, "xllcorner %s\n", buf);
+
+	    G_format_northing(region.south, buf, -1);
+	    fprintf(fp, "yllcorner %s\n", buf);
 	}
 
-	fprintf(fp, "cellsize %f\n", cellsize);
+	G_format_resolution(cellsize, buf, -1);
+	fprintf(fp, "cellsize %s\n", buf);
 	fprintf(fp, "NODATA_value %s\n", null_str);
     }
 
