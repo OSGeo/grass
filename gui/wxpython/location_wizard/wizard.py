@@ -990,7 +990,15 @@ class EllipsePage(TitledPage):
         # search box
         self.searchb = wx.SearchCtrl(self, size = (200,-1),
                                      style = wx.TE_PROCESS_ENTER)
-
+        """
+#todo: support for swapping ellipse.table list with ellipse.table.solar.system
+        # radio buttons
+        self.radio1 = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                        label = _("Earth based"),
+                        style  =  wx.RB_GROUP)
+        self.radio2 = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                        label = _("Planetary bodies"))
+        """
         # create list control for ellipse list
         data = []
         # extract code, desc
@@ -1003,6 +1011,7 @@ class EllipsePage(TitledPage):
 
         # layout
         self.sizer.AddGrowableCol(4)
+
         self.sizer.Add(item = self.MakeLabel(_("Ellipsoid code:")),
                        flag = wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -1011,6 +1020,11 @@ class EllipsePage(TitledPage):
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5, pos = (1, 2))
+        """
+        self.sizer.Add(item = self.radio1,
+                       flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 
+                       border = 25, pos = (1, 3))
+        """
         self.sizer.Add(item = self.MakeLabel(_("Search in description:")),
                        flag = wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -1019,7 +1033,11 @@ class EllipsePage(TitledPage):
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5, pos = (2, 2))
-
+        """
+        self.sizer.Add(item = self.radio2,
+                       flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+                       border = 25, pos = (2, 3))
+        """
         self.sizer.AddGrowableRow(3)
         self.sizer.Add(item = self.ellipselist,
                        flag = wx.EXPAND |
@@ -1027,10 +1045,14 @@ class EllipsePage(TitledPage):
                        wx.ALL, border = 5, pos = (3, 1), span = (1, 4))
 
         # events
-        self.ellipselist.Bind(wx.EVT_LIST_ITEM_SELECTED,    self.OnItemSelected)
+        self.ellipselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.tellipse.Bind(wx.EVT_TEXT, self.OnText)
         self.tellipse.Bind(wx.EVT_TEXT_ENTER, self.OnText)
-        self.searchb.Bind(wx.EVT_TEXT_ENTER,    self.OnSearch)
+        self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
+        """
+        self.radio1.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio1.GetId())
+        self.radio2.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio2.GetId())
+        """
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
 
@@ -1040,7 +1062,9 @@ class EllipsePage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-
+        """
+        self.scope = 'earth'
+        """
         event.Skip()
 
     def OnPageChanging(self, event):
@@ -1086,6 +1110,20 @@ class EllipsePage(TitledPage):
         self.tellipse.SetValue(self.ellipse)
         
         event.Skip()
+    """ FIXME: how best to swap them out?
+    def SetVal(self, event):
+        #Choose table to use
+        if event.GetId() == self.radio1.GetId():
+            self.scope = 'earth'
+            data = []
+            for key in self.parent.ellipsoids.keys():
+                data.append([key, self.parent.ellipsoids[key][0]])
+        elif event.GetId() == self.radio2.GetId():
+            self.scope = 'planetary'
+            data = []
+            for key in self.parent.planetary_ellipsoids.keys():
+                data.append([key, self.parent.planetary_ellipsoids[key][0]])
+     """
 
 class GeoreferencedFilePage(TitledPage):
     """!Wizard page for selecting georeferenced file to use
@@ -1885,7 +1923,7 @@ class LocationWizard(wx.Object):
             self.datums[datum] = (ellipsoid, datumdesc.replace('_', ' '), paramlist)
         f.close()
 
-        # read ellipsiod definitions
+        # read Earth-based ellipsiod definitions
         f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
         self.ellipsoids = {}
         for line in f.readlines():
@@ -1900,7 +1938,23 @@ class LocationWizard(wx.Object):
             paramslist = params.split()
             self.ellipsoids[ellipse] = (desc, paramslist)
         f.close()
-        
+        """
+        # read Planetary ellipsiod definitions
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r")
+        self.planetary_ellipsoids = {}
+        for line in f.readlines():
+            line = line.expandtabs(1)
+            line = line.strip()
+            if line == '' or line[0] == "#":
+                continue
+            ellipse, rest = line.split(" ", 1)
+            rest = rest.strip('" ')
+            desc, params = rest.split('"', 1)
+            desc = desc.strip('" ')
+            paramslist = params.split()
+            self.planetary_ellipsoids[ellipse] = (desc, paramslist)
+        f.close()
+        """
         # read projection parameter description and parsing table
         f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
         self.paramdesc = {}
