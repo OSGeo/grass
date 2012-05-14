@@ -990,15 +990,13 @@ class EllipsePage(TitledPage):
         # search box
         self.searchb = wx.SearchCtrl(self, size = (200,-1),
                                      style = wx.TE_PROCESS_ENTER)
-        """
-#todo: support for swapping ellipse.table list with ellipse.table.solar.system
         # radio buttons
         self.radio1 = wx.RadioButton(parent = self, id = wx.ID_ANY,
                         label = _("Earth based"),
                         style  =  wx.RB_GROUP)
         self.radio2 = wx.RadioButton(parent = self, id = wx.ID_ANY,
                         label = _("Planetary bodies"))
-        """
+
         # create list control for ellipse list
         data = []
         # extract code, desc
@@ -1020,11 +1018,10 @@ class EllipsePage(TitledPage):
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5, pos = (1, 2))
-        """
         self.sizer.Add(item = self.radio1,
                        flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 
                        border = 25, pos = (1, 3))
-        """
+
         self.sizer.Add(item = self.MakeLabel(_("Search in description:")),
                        flag = wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -1033,11 +1030,10 @@ class EllipsePage(TitledPage):
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5, pos = (2, 2))
-        """
         self.sizer.Add(item = self.radio2,
                        flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                        border = 25, pos = (2, 3))
-        """
+
         self.sizer.AddGrowableRow(3)
         self.sizer.Add(item = self.ellipselist,
                        flag = wx.EXPAND |
@@ -1049,10 +1045,10 @@ class EllipsePage(TitledPage):
         self.tellipse.Bind(wx.EVT_TEXT, self.OnText)
         self.tellipse.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
-        """
+
         self.radio1.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio1.GetId())
         self.radio2.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio2.GetId())
-        """
+
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
 
@@ -1062,13 +1058,13 @@ class EllipsePage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-        """
         self.scope = 'earth'
-        """
         event.Skip()
 
     def OnPageChanging(self, event):
-        if event.GetDirection() and self.ellipse not in self.parent.ellipsoids:
+        if event.GetDirection() \
+          and self.ellipse not in self.parent.ellipsoids \
+          and self.ellipse not in self.parent.planetary_ellipsoids:
             event.Veto()
 
         self.proj4params = ''
@@ -1076,11 +1072,14 @@ class EllipsePage(TitledPage):
         self.parent.datumpage.datumparams = ''
         # self.GetNext().SetPrev(self) (???)
 
+    #FIXME: index number doesn't translate when you've given a valid name from the other list
     def OnText(self, event):
         """!Ellipspoid code changed"""
         self.ellipse = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-        if len(self.ellipse) == 0 or self.ellipse not in self.parent.ellipsoids:
+        if len(self.ellipse) == 0 or \
+          (self.ellipse not in self.parent.ellipsoids and \
+           self.ellipse not in self.parent.planetary_ellipsoids):
             nextButton.Enable(False)
             self.ellipsedesc = ''
             self.ellipseparams = ''
@@ -1089,13 +1088,20 @@ class EllipsePage(TitledPage):
             self.ellipsedesc = self.parent.ellipsoids[self.ellipse][0]
             self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
             nextButton.Enable(True)
+        elif self.ellipse in self.parent.planetary_ellipsoids:
+            self.ellipsedesc = self.parent.planetary_ellipsoids[self.ellipse][0]
+            self.ellipseparams = self.parent.planetary_ellipsoids[self.ellipse][1]
+            nextButton.Enable(True)
 
     def OnSearch(self, event):
         """!Search ellipsoid by desc"""
         try:
             self.ellipse, self.ellipsedesc = \
                 self.ellipselist.Search(index=[0,1], pattern=event.GetString())
-            self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
+            if self.scope is 'earth':
+                self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
+            else:
+                self.ellipseparams = self.parent.planetary_ellipsoids[self.ellipse][1]
         except:
             self.ellipse = self.ellipsedesc = self.ellipseparams = ''
 
@@ -1110,20 +1116,22 @@ class EllipsePage(TitledPage):
         self.tellipse.SetValue(self.ellipse)
         
         event.Skip()
-    """ FIXME: how best to swap them out?
+
     def SetVal(self, event):
-        #Choose table to use
+        """!Choose table to use"""
+        self.ellipselist.DeleteAllItems()
+        data = []
         if event.GetId() == self.radio1.GetId():
             self.scope = 'earth'
-            data = []
             for key in self.parent.ellipsoids.keys():
                 data.append([key, self.parent.ellipsoids[key][0]])
         elif event.GetId() == self.radio2.GetId():
             self.scope = 'planetary'
-            data = []
             for key in self.parent.planetary_ellipsoids.keys():
                 data.append([key, self.parent.planetary_ellipsoids[key][0]])
-     """
+
+        self.ellipselist.Populate(data = data, update = True)
+
 
 class GeoreferencedFilePage(TitledPage):
     """!Wizard page for selecting georeferenced file to use
@@ -1938,7 +1946,7 @@ class LocationWizard(wx.Object):
             paramslist = params.split()
             self.ellipsoids[ellipse] = (desc, paramslist)
         f.close()
-        """
+
         # read Planetary ellipsiod definitions
         f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r")
         self.planetary_ellipsoids = {}
@@ -1954,7 +1962,7 @@ class LocationWizard(wx.Object):
             paramslist = params.split()
             self.planetary_ellipsoids[ellipse] = (desc, paramslist)
         f.close()
-        """
+
         # read projection parameter description and parsing table
         f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
         self.paramdesc = {}
