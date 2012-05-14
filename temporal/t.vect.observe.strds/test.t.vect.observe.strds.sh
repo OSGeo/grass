@@ -20,6 +20,8 @@ t.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 s
 t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer 
 v.info prec_observer
 t.info type=stvds input=prec_observer
+t.vect.list input=prec_observer
+t.vect.extract input=prec_observer where="start_time >= '2001-05-01'" expr="prec > 400" output=test_extract base=test_
 
 # @postprocess
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
@@ -27,5 +29,5 @@ t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 t.unregister type=vect maps=prec_observer:1,prec_observer:2,prec_observer:3,prec_observer:4,prec_observer:5,prec_observer:6
 
-g.remove vect=prec_observer
+g.remove vect=prec_observer,test_extract
 g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6

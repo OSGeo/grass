@@ -464,15 +464,15 @@ int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double t
         G_message("Error in Rast3d_get_region_value");
         sum++;
     }
-    if(value != col + row + depth) {
+    if(value_win != col + row + depth) {
         G_message("Error in Rast3d_get_window_value");
         sum++;
     }
-    if(value != col + row + depth) {
+    if(value_ref != col + row + depth) {
         G_message("Error in Rast3d_get_value");
         sum++;
     }
-    if(value != col + row + depth) {
+    if(value_reg != col + row + depth) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
