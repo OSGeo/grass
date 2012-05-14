@@ -90,6 +90,7 @@ SUBDIRS = \
 	v.voronoi \
 	v.what \
 	v.what.rast \
+	v.what.rast3 \
 	v.vect.stats \
 	v.vol.rst \
 	v.out.ogr \
