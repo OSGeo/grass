@@ -1,0 +1,14 @@
+
+MODULE_TOPDIR = ../..
+
+PGM=v.what.rast3
+
+LIBES = $(VECTORLIB) $(DBMILIB) $(RASTER3DLIB) $(GISLIB)
+DEPENDENCIES = $(VECTORDEP) $(DBMIDEP) $(RASTER3DDEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+ 
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd	
+
