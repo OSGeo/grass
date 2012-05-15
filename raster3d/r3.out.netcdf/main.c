@@ -38,14 +38,18 @@
 #define LON_LONG_NAME "Longitude values"
 #define TIME_NAME "time"
 #define X_NAME "x"
-#define X_LONG_NAME "x-axsis coordinates"
+#define X_STANDARD_NAME "projection_x_coordinate"
+#define X_LONG_NAME "x coordinate of projection"
 #define Y_NAME "y"
-#define Y_LONG_NAME "y-axsis coordinates"
+#define Y_LONG_NAME "y coordinate of projection"
+#define Y_STANDARD_NAME "projection_y_coordinate"
 #define Z_NAME "z"
-#define Z_LONG_NAME "z-axsis coordinates"
+#define Z_LONG_NAME "z coordinate of projection"
 #define UNITS "units"
 #define DEGREES_EAST "degrees_east"
 #define DEGREES_NORTH "degrees_north"
+#define HISTORY_TEXT "GRASS GIS 7 NetCDF export of r3.out.netcdf"
+#define CF_SUPPORT "CF-1.5"
 
 #define ERR(e) {fatalError(nc_strerror(e));}
 
@@ -98,12 +102,55 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid)
     float c;
     int lat_dimid = 0, lon_dimid = 0, time_dimid = 0;
     int lat_varid = 0, lon_varid = 0, time_varid = 0;
-    struct Key_Value *pkv, *ukv;
     int dimids[NDIMS];
     struct Cell_head window;
-    
+
+    /* global attributes */
+    if ((retval = nc_put_att_text(ncid, NC_GLOBAL, "Conventions", strlen(CF_SUPPORT), CF_SUPPORT))) ERR(retval);
+    if ((retval = nc_put_att_text(ncid, NC_GLOBAL, "history", strlen(HISTORY_TEXT), HISTORY_TEXT))) ERR(retval);
+
     G_get_window(&window);
-    
+     
+    /* Projection parameter */
+    if(window.proj != PROJECTION_XY) {
+        struct Key_Value *pkv, *ukv;
+        struct pj_info pjinfo;
+        char *proj4, *proj4mod;
+        const char *unfact;
+	int crs_dimid = 0, crs_varid;
+
+        if ((retval = nc_def_var(ncid, "crs", NC_CHAR, 0, &crs_dimid, &crs_varid))) ERR(retval);
+
+     	pkv = G_get_projinfo();
+        ukv = G_get_projunits();
+ 
+        pj_get_kv(&pjinfo, pkv, ukv);
+        proj4 = pj_get_def(pjinfo.pj, 0);
+        pj_free(pjinfo.pj);
+
+#ifdef HAVE_OGR
+	/* We support the CF suggestion crs_wkt and the gdal spatil_ref attribute */
+        if ((retval = nc_put_att_text(ncid, crs_varid, "crs_wkt", strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)), GPJ_grass_to_wkt(pkv, ukv, 0, 0)))) ERR(retval);
+        if ((retval = nc_put_att_text(ncid, crs_varid, "spatial_ref", strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)), GPJ_grass_to_wkt(pkv, ukv, 0, 0)))) ERR(retval);
+#endif
+        /* Code from g.proj:
+         * GRASS-style PROJ.4 strings don't include a unit factor as this is
+         * handled separately in GRASS - must include it here though */
+        unfact = G_find_key_value("meters", ukv);
+        if (unfact != NULL && (strcmp(pjinfo.proj, "ll") != 0))
+            G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
+        else
+            proj4mod = G_store(proj4);
+        pj_dalloc(proj4); 
+
+        if ((retval = nc_put_att_text(ncid, crs_varid, "crs_proj4", strlen(proj4mod), proj4mod))) ERR(retval);
+
+        if(pkv)
+            G_free_key_value(pkv);
+        if(ukv)
+            G_free_key_value(ukv);
+    }
+
     typeIntern = Rast3d_tile_type_map(map);
     
     if (window.proj == PROJECTION_LL) {
@@ -128,10 +175,10 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid)
 
         if ((retval = nc_put_att_text(ncid, lon_varid, UNITS, strlen("meter"), "meter"))) ERR(retval);
         if ((retval = nc_put_att_text(ncid, lon_varid, LONG_NAME, strlen(X_LONG_NAME), X_LONG_NAME))) ERR(retval);
-        if ((retval = nc_put_att_text(ncid, lon_varid, STANDARD_NAME, strlen(X_NAME), X_NAME))) ERR(retval);
+        if ((retval = nc_put_att_text(ncid, lon_varid, STANDARD_NAME, strlen(X_STANDARD_NAME), X_STANDARD_NAME))) ERR(retval);
         if ((retval = nc_put_att_text(ncid, lat_varid, UNITS, strlen("meter"), "meter"))) ERR(retval);
         if ((retval = nc_put_att_text(ncid, lat_varid, LONG_NAME, strlen(Y_LONG_NAME), Y_LONG_NAME))) ERR(retval);
-        if ((retval = nc_put_att_text(ncid, lat_varid, STANDARD_NAME, strlen(Y_NAME), Y_NAME))) ERR(retval);
+        if ((retval = nc_put_att_text(ncid, lat_varid, STANDARD_NAME, strlen(Y_STANDARD_NAME), Y_STANDARD_NAME))) ERR(retval);
     }
         
     is_time = 0;
@@ -175,9 +222,18 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid)
         if ((retval = nc_put_att_text(ncid, time_varid, UNITS, strlen("meter"), "meter"))) ERR(retval);
         if ((retval = nc_put_att_text(ncid, time_varid, LONG_NAME, strlen(Z_LONG_NAME), Z_LONG_NAME))) ERR(retval);
     }
-    /* z - axsis orientation */
+    /* z - axis orientation */
     if ((retval = nc_put_att_text(ncid, time_varid, "positive", strlen("up"), "up"))) ERR(retval);
     
+    /* Axis identifier attributes */
+    if ((retval = nc_put_att_text(ncid, lon_varid, "axis", 1, "X"))) ERR(retval);
+    if ((retval = nc_put_att_text(ncid, lat_varid, "axis", 1, "Y"))) ERR(retval);
+    if(is_time) {
+        if ((retval = nc_put_att_text(ncid, time_varid, "axis", 1, "T"))) ERR(retval);
+    } else {
+        if ((retval = nc_put_att_text(ncid, time_varid, "axis", 1, "Z"))) ERR(retval);
+    }
+
     dimids[0] = time_dimid;
     dimids[1] = lat_dimid;
     dimids[2] = lon_dimid;
@@ -187,11 +243,17 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid)
     } else {
         if ((retval = nc_def_var(ncid, param.input->answer, NC_DOUBLE, NDIMS, dimids, varid))) ERR(retval); 
     }
+    if(window.proj != PROJECTION_XY) {
+        if ((retval = nc_put_att_text(ncid, *varid, "grid_mapping", strlen("crs"), "crs"))) ERR(retval);
+    }
     
    /* End define mode. */
    if ((retval = nc_enddef(ncid))) ERR(retval);  
     
-    /* Build coordinates, we need to use the cell center in case of spatial dimensions */
+    /* 
+     * Build coordinates, we need to use the cell center in case of spatial dimensions 
+     * */
+
     for(i = 0; i < region->cols; i++) {
         c = region->west + i*region->ew_res + 0.5*region->ew_res;
         nc_put_var1_float(ncid, lon_varid, &i, &c);     
@@ -203,35 +265,15 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid)
     }
     
     for(i = 0; i < region->depths; i++) {
-        if(is_time)
+        if(is_time) {
             c = region->bottom + i*region->tb_res;
-        else
-            c = region->bottom + i*region->tb_res + 0.5*region->tb_res;
-        time = (int)c;
-        if(is_time)
+            time = (int)c;
             nc_put_var1_int(ncid, time_varid, &i, &time);  
-        else
+	} else {
+            c = region->bottom + i*region->tb_res + 0.5*region->tb_res;
             nc_put_var1_float(ncid, time_varid, &i, &c);     
+	}
     }
-    
-    /* Lets try to specify the projection information */
-    pkv = G_get_projinfo();
-    ukv = G_get_projunits();
-    
-    if(pkv && ukv) {
-        for(i = 0; i < pkv->nitems; i++)
-            fprintf(stderr, "%s : %s\n", pkv->key[i], pkv->value[i]);
-        for(i = 0; i < ukv->nitems; i++)
-            fprintf(stderr, "%s : %s\n", ukv->key[i], ukv->value[i]);  
-    }
-    
-    if(window.proj != PROJECTION_XY)
-        ; // Do projection
-    
-    if(pkv)
-        G_free_key_value(pkv);
-    if(ukv)
-        G_free_key_value(ukv);
 }
 
 /*---------------------------------------------------------------------------*/
