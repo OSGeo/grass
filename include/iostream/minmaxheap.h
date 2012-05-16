@@ -762,7 +762,7 @@ HeapIndex MinMaxHeap<T>::fill(T* arr, HeapIndex n) {
   //heap must be empty
   assert(this->size()==0);
   for (i = 0; !full() && i<n; i++) {
-    insert(arr[i]);
+    this->insert(arr[i]);
   }
   if (i < n) {
     assert(i == this->maxsize);
@@ -795,13 +795,13 @@ void UnboundedMinMaxHeap<T>::grow() {
 
   if(old) {
 	HeapIndex n = this->size();
-	this->A = allocateHeap(this->maxsize);	/* allocate a new array */
+	this->A = this->allocateHeap(this->maxsize);  /* allocate a new array */
 	/* copy over the old values */
 	assert(this->maxsize > n);
 	for(HeapIndex i=0; i<=n; i++) {	/* why extra value? -RW */
 	  this->A[i] = old[i];
 	}	
-	freeHeap(old);				/* free up old storage */
+	this->freeHeap(old);			/* free up old storage */
   }
 
 }
