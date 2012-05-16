@@ -282,6 +282,12 @@ AC_ARG_WITH(wxwidgets,
                           e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
                           default: no)],, with_wxwidgets="no")
 
+AC_ARG_WITH(netcdf,
+[  --with-netcdf[=path/nc-config]
+                          enable NetCDF support (nc-config with path,
+                          e.g. '--with-nc=/usr/local/bin/nc-config',
+                          default: no)],, with_netcdf="no")
+
 # With includes and libs options
 
 AC_ARG_WITH(geos,
@@ -826,12 +832,60 @@ AC_SUBST(LIBLAS_CFLAGS)
 AC_SUBST(LIBLAS_INC)
 AC_SUBST(USE_LIBLAS)
 
+# NetCDF option
+
+AC_MSG_CHECKING(whether to use NetCDF)
+
+NETCDF_LIBS=
+NETCDF_CFLAGS=
+USE_NETCDF=
+
+if test "`basename xx/$with_netcdf`" = "nc-config" ; then
+  NETCDF_CONFIG="$with_netcdf"
+fi
+
+if test "$with_netcdf" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_PATH_PROG(NETCDF_CONFIG, nc-config, no)
+
+  if test "$NETCDF_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find nc-config])
+  fi
+
+  if test "$NETCDF_CONFIG" != "" ; then
+    NETCDF_LIBS=`"$NETCDF_CONFIG" --libs`
+    NETCDF_CFLAGS=`"$NETCDF_CONFIG" --cflags`
+    USE_NETCDF=1
+  fi
+
+  NETCDF=
+  ac_save_libs="$LIBS"
+  ac_save_cflags="$CFLAGS"
+  LIBS="$LIBS $NETCDF_LIBS"
+  CFLAGS="$CFLAGS $NETCDF_CFLAGS"
+  AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],,[
+  AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
+  AC_MSG_ERROR([*** Unable to locate NetCDF library.])
+  ])
+  ])
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+
+  AC_DEFINE(HAVE_NETCDF)
+fi
+
+AC_SUBST(NETCDF_LIBS)
+AC_SUBST(NETCDF_CFLAGS)
+AC_SUBST(USE_NETCDF)
+
 # GEOS option
 
 AC_MSG_CHECKING(whether to use GEOS)
 
 GEOS_LIBS=
-GGEOS_CFLAGS=
+GEOS_CFLAGS=
 USE_GEOS=
 
 # FIXME: "quote" $with_geos ?
@@ -1975,6 +2029,7 @@ LOC_MSG_USE(FFMPEG support,USE_FFMPEG)
 LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
 LOC_MSG_USE(GDAL support,USE_GDAL)
+LOC_MSG_USE(NETCDF support,USE_NETCDF)
 LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
