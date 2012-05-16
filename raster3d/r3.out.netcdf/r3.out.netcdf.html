@@ -1,15 +1,235 @@
 <h2>DESCRIPTION</h2>
 
-EXport a 3D raster map as netcdf file.
+The module <em>r3.out.netcdf</em> exports a 3D raster map as NetCDF file.
+Maps are valid 3D raster maps in the current mapset search path. The
+<em>output</em> parameter is the name of a NetCDF file that will be
+written in the current working directory. The module is sensitive
+to mapset region settings (set with <em>g.region</em>) and the vertical unit settings
+of the 3D raster map. The vertical unit can be set with <a href="r3.support.html">r3.support</a>.
+
+<h2>Note</h2>
+
+The resulting NetCDF file will have time as third dimension in case a temporal 
+vertical unit is specified for the input map, otherwise the third dimension is assumed as spatial.
+If the 3D raster map has a time stamp with absolute time, the start time will be 
+used as starting point for the NetCDF time series. If the absolute time stamp is missing
+the date "Jan. 01. 1900 00:00:00" will be used as default. In case of relative time stamp no start time
+is set in the NetCDF file. The number of depths of the 3D raster map are the number of time slices
+in the NetCDF file. You can use <em>t.rast.to.rast3</em> to convert a 
+space time raster dataset into a 3D raster map representing a space time voxel 
+cube, then export the raster time series as NetCDF file.
+<p>
+Spatial coordinates are exported as cell centered coordinates. The projection is stored
+in the metadata as <em>crs</em> attributes using a WKT parameter string. 
+The export of projection parameters is suppressed when the XY-projection is set. 
+The NetCDF projection metadata storage follows the spatial_ref GDAL/NetCDF suggestion
+<a href="http://www.gdal.org/frmt_netcdf.html">here</a> 
+and the NetCDF CF 1.6 convention 
+<a href="http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system">here</a>  
+using WKT projection information. Additional a PROJ.4 string is
+stored in the <em>crs</em> attribute section. 
+<p>
+The NetCDF library must be installed on the system and activated at configuration time to compile this module.
+
+<h2>Examples</h2> 
+
+<h3>Using lat/lon projection without vertical unit specification</h3>
+
+<p>Lets create a 3D raster map without the specification of a vertical unit</p>
+
+<div class="code"><pre>
+g.region s=-90 n=90 w=-180 e=180 b=0 t=50 res=10 res3=2 -p3
+r3.mapcalc expr="volume_double = double(col() + row() + depth())"
+r3.info
+
+ +----------------------------------------------------------------------------+
+ | Layer:    volume_double                  Date: Wed May 16 20:08:22 2012    |
+ | Mapset:   PERMANENT                      Login of Creator: soeren          |
+ | Location: TestLL                                                           |
+ | DataBase: /1/soeren/grassdata                                              |
+ | Title:    volume_double                                                    |
+ | Units:    none                                                             |
+ | Vertical unit: units                                                       |
+ | Timestamp: none                                                            |
+ |----------------------------------------------------------------------------|
+ |                                                                            |
+ |   Type of Map:  3d cell              Number of Categories: 0               |
+ |   Data Type:    DCELL                                                      |
+ |   Rows:         90                                                         |
+ |   Columns:      180                                                        |
+ |   Depths:       25                                                         |
+ |   Total Cells:  405000                                                     |
+ |   Total size:           2835864 Bytes                                      |
+ |   Number of tiles:      108                                                |
+ |   Mean tile size:       26258 Bytes                                        |
+ |   Tile size in memory:  32400 Bytes                                        |
+ |   Number of tiles in x, y and  z:   6, 6, 3                                |
+ |   Dimension of a tile in x, y, z:   30, 15, 9                              |
+ |                                                                            |
+ |        Projection: Latitude-Longitude (zone 0)                             |
+ |            N:        90N    S:        90S   Res:     2                     |
+ |            E:       180E    W:       180W   Res:     2                     |
+ |            T:         50    B:          0   Res:     2                     |
+ |   Range of data:   min =          3 max =        295                       |
+ |                                                                            |
+ |   Data Source:                                                             |
+ |                                                                            |
+ |                                                                            |
+ |                                                                            |
+ |   Data Description:                                                        |
+ |    generated by r3.mapcalc                                                 |
+ |                                                                            |
+ |   Comments:                                                                |
+ |    r3.mapcalc expression="volume_double = double(col() + row() + depth(\   |
+ |    ))"                                                                     |
+ |                                                                            |
+ +----------------------------------------------------------------------------+
+
+</pre></div>
+<p>Export the map and show the NetCDF header</P>
+
+<div class="code"><pre>
+r3.out.netcdf input=volume_double output=test_double.nc
+ncdump -h test_double.nc
+
+netcdf test_double {
+dimensions:
+	longitude = 180 ;
+	latitude = 90 ;
+	z = 25 ;
+variables:
+	char crs ;
+		crs:crs_wkt = "GEOGCS[\"wgs84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433]]" ;
+		crs:spatial_ref = "GEOGCS[\"wgs84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433]]" ;
+		crs:crs_proj4 = " +proj=longlat +no_defs +a=6378137 +rf=298.257223563 +towgs84=0.000,0.000,0.000" ;
+	float longitude(longitude) ;
+		longitude:units = "degrees_east" ;
+		longitude:long_name = "Longitude values" ;
+		longitude:standard_name = "longitude" ;
+		longitude:axis = "X" ;
+	float latitude(latitude) ;
+		latitude:units = "degrees_north" ;
+		latitude:long_name = "Latitude values" ;
+		latitude:standard_name = "latitude" ;
+		latitude:axis = "Y" ;
+	float z(z) ;
+		z:units = "meter" ;
+		z:long_name = "z coordinate of projection" ;
+		z:standard_name = "projection_z_coordinate" ;
+		z:positive = "up" ;
+		z:axis = "Z" ;
+	double volume_double(z, latitude, longitude) ;
+		volume_double:grid_mapping = "crs" ;
+
+// global attributes:
+		:Conventions = "CF-1.5" ;
+		:history = "GRASS GIS 7 NetCDF export of r3.out.netcdf" ;
+}
+</pre></div>
+
+<p>Now we create a 3D raster map with a temporal vertical unit</p>
+
+<div class="code"><pre>
+g.region s=-90 n=90 w=-180 e=180 b=0 t=50 res=10 res3=2 -p3
+r3.mapcalc expr="volume_double = double(col() + row() + depth())"
+r3.timestamp map=volume_time_double date='1 Jan 2001'
+r3.support map=volume_time_double vunit="days"
+r3.info
+
+ +----------------------------------------------------------------------------+
+ | Layer:    volume_time_double             Date: Wed May 16 20:26:28 2012    |
+ | Mapset:   PERMANENT                      Login of Creator: soeren          |
+ | Location: TestLL                                                           |
+ | DataBase: /1/soeren/grassdata                                              |
+ | Title:    volume_time_double                                               |
+ | Units:    none                                                             |
+ | Vertical unit: days                                                        |
+ | Timestamp: 1 Jan 2001                                         |
+ |----------------------------------------------------------------------------|
+ |                                                                            |
+ |   Type of Map:  3d cell              Number of Categories: 0               |
+ |   Data Type:    DCELL                                                      |
+ |   Rows:         90                                                         |
+ |   Columns:      180                                                        |
+ |   Depths:       25                                                         |
+ |   Total Cells:  405000                                                     |
+ |   Total size:           2835864 Bytes                                      |
+ |   Number of tiles:      108                                                |
+ |   Mean tile size:       26258 Bytes                                        |
+ |   Tile size in memory:  32400 Bytes                                        |
+ |   Number of tiles in x, y and  z:   6, 6, 3                                |
+ |   Dimension of a tile in x, y, z:   30, 15, 9                              |
+ |                                                                            |
+ |        Projection: Latitude-Longitude (zone 0)                             |
+ |            N:        90N    S:        90S   Res:     2                     |
+ |            E:       180E    W:       180W   Res:     2                     |
+ |            T:         50    B:          0   Res:     2                     |
+ |   Range of data:   min =          3 max =        295                       |
+ |                                                                            |
+ |   Data Source:                                                             |
+ |                                                                            |
+ |                                                                            |
+ |                                                                            |
+ |   Data Description:                                                        |
+ |    generated by r3.mapcalc                                                 |
+ |                                                                            |
+ |   Comments:                                                                |
+ |    r3.mapcalc expression="volume_time_double = double(col() + row() + d\   |
+ |    epth())"                                                                |
+ |                                                                            |
+ +----------------------------------------------------------------------------+
+
+</pre></div>
+<p>Export the map and show the NetCDF header</P>
+
+<p>NetCDF header of an exported 3D raster map with vertical temporal unit in a Lat/Lon projection:</P>
+
+<div class="code"><pre>
+r3.out.netcdf --o input=volume_time_double output=test_time_double.nc
+ncdump -h test_time_double.nc
+
+netcdf test_time_double {
+dimensions:
+	longitude = 180 ;
+	latitude = 90 ;
+	time = 25 ;
+variables:
+	char crs ;
+		crs:crs_wkt = "GEOGCS[\"wgs84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433]]" ;
+		crs:spatial_ref = "GEOGCS[\"wgs84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433]]" ;
+		crs:crs_proj4 = " +proj=longlat +no_defs +a=6378137 +rf=298.257223563 +towgs84=0.000,0.000,0.000" ;
+	float longitude(longitude) ;
+		longitude:units = "degrees_east" ;
+		longitude:long_name = "Longitude values" ;
+		longitude:standard_name = "longitude" ;
+		longitude:axis = "X" ;
+	float latitude(latitude) ;
+		latitude:units = "degrees_north" ;
+		latitude:long_name = "Latitude values" ;
+		latitude:standard_name = "latitude" ;
+		latitude:axis = "Y" ;
+	int time(time) ;
+		time:units = "days since 2001-01-01 00:00:00" ;
+		time:long_name = "Time in days" ;
+		time:calendar = "gregorian" ;
+		time:positive = "up" ;
+		time:axis = "T" ;
+	double volume_time_double(time, latitude, longitude) ;
+		volume_time_double:grid_mapping = "crs" ;
+
+// global attributes:
+		:Conventions = "CF-1.5" ;
+		:history = "GRASS GIS 7 NetCDF export of r3.out.netcdf" ;
+}
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="t.rast.to.rast3.html">t.rast.to.rast3</a>,
 <a href="r3.out.ascii.html">r3.in.ascii</a>,
 <a href="g.region.html">g.region</a>
 </em>
 
 <h2>AUTHORS</h2>
 S&ouml;ren Gebbert
-
-<p><i>Last changed: $Date: 2011-11-08 22:24:20 +0100 (Di, 08 Nov 2011) $</i>
