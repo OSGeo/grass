@@ -459,14 +459,19 @@ following rules:
     */
 
 
-31. Tell the other developers about the new code using the following e-mail:
+31. If you need to add support for a different library in the 'configure' script,
+    you should first seek consent in the grass-dev mailing list (see below), then
+    you need to expand 'configure.in' and run subsequently autoconf-2.13 (later
+    versions will not work) to re-generate 'configure'.
+
+32. Tell the other developers about the new code using the following e-mail:
     grass-dev@lists.osgeo.org
  
     To subscribe to this mailing list, see
     http://lists.osgeo.org/mailman/listinfo/grass-dev
 
 
-32. In case of questions feel free to contact the developers at the above
+33. In case of questions feel free to contact the developers at the above
     mailing list.
     http://grass.osgeo.org/devel/index.php#submission
 
