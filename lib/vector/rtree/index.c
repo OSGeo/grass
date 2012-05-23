@@ -43,6 +43,11 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
     new_rtree->rootpos = rootpos;
     new_rtree->ndims = ndims;
     new_rtree->nsides = 2 * ndims;
+    /* hack to keep compatibility */
+    if (ndims < 3)
+	new_rtree->nsides_alloc = 6;
+    else
+	new_rtree->nsides_alloc = 2 * ndims;
     
     new_rtree->rectsize = sizeof(struct RTree_Rect);
 

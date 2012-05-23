@@ -73,7 +73,7 @@ static void RTreeGetBranches(struct RTree_Node *n, struct RTree_Branch *b,
 	CoverSplitArea = RTreeRectSphericalVolume(&CoverSplit, t);
     }
 
-    RTreeInitNode(n, NODETYPE(n->level, t->fd));
+    RTreeInitNode(t, n, NODETYPE(n->level, t->fd));
 }
 
 /*----------------------------------------------------------------------

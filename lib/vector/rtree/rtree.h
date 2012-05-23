@@ -24,6 +24,7 @@
 
 
 #define NUMDIMS	3		/* maximum number of dimensions */
+#define NUMSIDES 2*NUMDIMS
 
 typedef double RectReal;
 
@@ -37,8 +38,6 @@ typedef double RectReal;
 #ifndef FALSE
 #define FALSE 0
 #endif
-
-#define NUMSIDES 2*NUMDIMS
 
 /* max branching factor of a node */
 /* was (PGSIZE-(2 * sizeof(int))) / sizeof(struct Branch)
@@ -100,12 +99,13 @@ typedef int rt_valid_child_fn(union RTree_Child *);
 struct RTree
 {
     /* RTree setup info */
-    int fd;                 /* file descriptor */
-    unsigned char ndims;    /* number of dimensions */
-    unsigned char nsides;   /* number of sides = 2 * ndims */
-    int nodesize;           /* node size in bytes */
-    int branchsize;         /* branch size in bytes */
-    int rectsize;           /* rectangle size in bytes */
+    int fd;                 	  /* file descriptor */
+    unsigned char ndims;    	  /* number of dimensions */
+    unsigned char nsides;   	  /* number of sides = 2 * ndims */
+    unsigned char nsides_alloc;   /* number of sides = 2 * ndims */
+    int nodesize;           	  /* node size in bytes */
+    int branchsize;         	  /* branch size in bytes */
+    int rectsize;           	  /* rectangle size in bytes */
 
     /* RTree info, useful to calculate space requirements */
     int n_nodes;            /* number of nodes */
@@ -159,10 +159,11 @@ int RTreeInsertRect(struct RTree_Rect *, int, struct RTree *);
 int RTreeDeleteRect(struct RTree_Rect *, int, struct RTree *);
 struct RTree *RTreeNewIndex(int, off_t, int);
 void RTreeFreeIndex(struct RTree *);
+int RTreeOverlap(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 
 /* RTree node management */
 struct RTree_Node *RTreeNewNode(struct RTree *, int);
-void RTreeInitNode(struct RTree_Node *, int);
+void RTreeInitNode(struct RTree *, struct RTree_Node *, int);
 void RTreeFreeNode(struct RTree_Node *);
 void RTreeDestroyNode(struct RTree_Node *, int);
 

@@ -32,15 +32,27 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 
+#if 0
+/*-----------------------------------------------------------------------------
+| Create a new rectangle for a given tree
+-----------------------------------------------------------------------------*/
+void RTreeNewRect(struct RTree_Rect *r, struct RTree *t)
+{
+    r->boundary = (struct RTree_Rect *)malloc((size_t) t->nsides_alloc);
+    assert(r->boundary);
+
+    RTreeInitRect(r, t);
+}
+#endif
+
 /*-----------------------------------------------------------------------------
 | Initialize a rectangle to have all 0 coordinates.
 -----------------------------------------------------------------------------*/
-void RTreeInitRect(struct RTree_Rect *R)
+void RTreeInitRect(struct RTree_Rect *r, struct RTree *t)
 {
-    register struct RTree_Rect *r = R;
     register int i;
 
-    for (i = 0; i < NUMSIDES; i++)
+    for (i = 0; i < t->nsides; i++)
 	r->boundary[i] = (RectReal) 0;
 }
 
