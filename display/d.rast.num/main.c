@@ -4,7 +4,7 @@
  * MODULE:       d.rast.num
  * AUTHOR(S):    Raghavan Srinivasan, Agricultural Engineering, Purdue University
  * PURPOSE:      Print numbers of category for raster cells
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -59,8 +59,12 @@ int main(int argc, char **argv)
     struct Cell_head window;
     struct Colors colors;
     struct GModule *module;
-    struct Option *opt1, *opt2, *opt3, *prec;
-    struct Flag *text_color, *align;
+    struct _opt {
+	struct Option *map, *grid_color, *text_color, *prec;
+    } opt;
+    struct _flg {
+	struct Flag *text_color, *align;
+    } flg;
     RASTER_MAP_TYPE map_type, inmap_type;
     double t, b, l, r;
 
@@ -71,58 +75,52 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("raster"));
     module->description =
-	_("Overlays cell category values on a raster map layer "
-	  "displayed to the graphics monitor.");
+	_("Overlays cell category values on a raster map "
+	  "displayed in the active graphics frame.");
 
-    opt1 = G_define_standard_option(G_OPT_R_MAP);
+    opt.map = G_define_standard_option(G_OPT_R_MAP);
 
-    opt2 = G_define_option();
-    opt2->key = "grid_color";
-    opt2->type = TYPE_STRING;
-    opt2->required = NO;
-    opt2->answer = "gray";
-    opt2->gisprompt = "old_color,color,color_none";
-    opt2->key_desc = "color";
-    opt2->description = _("Color for drawing grid, or \"none\"");
+    opt.grid_color = G_define_standard_option(G_OPT_C_BG);
+    opt.grid_color->key = "grid_color";
+    opt.grid_color->answer = "gray";
+    opt.grid_color->description = _("Color for drawing grid, or \"none\"");
+    opt.grid_color->guisection = _("Colors");
 
-    opt3 = G_define_option();
-    opt3->key = "text_color";
-    opt3->type = TYPE_STRING;
-    opt3->required = NO;
-    opt3->answer = DEFAULT_FG_COLOR;
-    opt3->gisprompt = "old_color,color,color";
-    opt3->key_desc = "color";
-    opt3->description = _("Color for drawing text");
-
-    prec = G_define_option();
-    prec->key = "dp";
-    prec->type = TYPE_INTEGER;
-    prec->required = NO;
-    prec->answer = "1";
-    prec->options = "0,1,2,3,4,5,6,7,8,9";
-    prec->description =
+    opt.text_color = G_define_standard_option(G_OPT_C_FG);
+    opt.text_color->key = "text_color";
+    opt.text_color->description = _("Color for drawing text");
+    opt.text_color->guisection = _("Colors");
+    
+    opt.prec = G_define_option();
+    opt.prec->key = "dp";
+    opt.prec->type = TYPE_INTEGER;
+    opt.prec->required = NO;
+    opt.prec->answer = "1";
+    opt.prec->options = "0,1,2,3,4,5,6,7,8,9";
+    opt.prec->description =
 	_("Number of significant digits (floating point only)");
 
-    align = G_define_flag();
-    align->key = 'a';
-    align->description = _("Align grids with raster cells");
+    flg.align = G_define_flag();
+    flg.align->key = 'a';
+    flg.align->description = _("Align grids with raster cells");
 
-    text_color = G_define_flag();
-    text_color->key = 'f';
-    text_color->description = _("Get text color from cell color value");
-
+    flg.text_color = G_define_flag();
+    flg.text_color->key = 'f';
+    flg.text_color->description = _("Get text color from cell color value");
+    flg.text_color->guisection = _("Colors");
+    
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    map_name = opt1->answer;
+    map_name = opt.map->answer;
 
-    if (strcmp("none", opt2->answer) == 0)
+    if (strcmp("none", opt.grid_color->answer) == 0)
 	grid_color = -1;
     else
-	grid_color = D_translate_color(opt2->answer);
+	grid_color = D_translate_color(opt.grid_color->answer);
 
-    if (text_color->answer)
+    if (flg.text_color->answer)
 	fixed_color = 0;
     else
 	fixed_color = 1;
@@ -131,7 +129,7 @@ int main(int argc, char **argv)
 
     G_get_window(&window);
 
-    if (align->answer) {
+    if (flg.align->answer) {
 	struct Cell_head wind;
 
 	Rast_get_cellhd(map_name, "", &wind);
@@ -173,18 +171,14 @@ int main(int argc, char **argv)
     /* number of rows and cols in window */
 
     if ((nrows > 75) || (ncols > 75)) {
-	G_warning("!!!");
-	G_message(_("Current window size:"));
-	G_message(_("rows:    %d"), nrows);
-	G_message(_("columns: %d"), ncols);
-
-	G_message(_("\nYour current window setting may be too large."
-		    " Cells displayed on your graphics window may be too"
-		    " small for cell category number to be visible."));
-	G_message(" ");
+	G_warning(_("Current window size: %dx%d\n"
+		    "Your current window setting may be too large. "
+		    "Cells displayed on your graphics window may be too "
+		    "small for cell category number to be visible."),
+		  nrows, ncols);
     }
     if ((nrows > 200) || (ncols > 200)) {
-	G_fatal_error(_("Aborting."));
+	G_fatal_error(_("Aborting (windows larger then 200x200 is not allowed)"));
     }
 
     /* Setup driver and check important information */
@@ -199,7 +193,7 @@ int main(int argc, char **argv)
     D_ew = fabs(D_get_u_to_d_xconv());
 
     /*set the number of significant digits */
-    sscanf(prec->answer, "%i", &digits);
+    sscanf(opt.prec->answer, "%i", &digits);
 
     if (grid_color > 0) {	/* ie not "none" */
 	/* Set grid color */
@@ -223,7 +217,7 @@ int main(int argc, char **argv)
 
     /* fixed text color */
     if (fixed_color == 1)
-	D_use_color(D_translate_color(opt3->answer));
+	D_use_color(D_translate_color(opt.text_color->answer));
 
     /* loop through cells, find value, and draw text for value */
     for (row = 0; row < nrows; row++) {
