@@ -252,7 +252,7 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
 	RTreeGetNode(&oldroot, t->rootpos, t->rootlevel, t);
 	/* grow a new root, & tree taller */
 	t->rootlevel++;
-	RTreeInitNode(&newroot, NODETYPE(t->rootlevel, t->fd));
+	RTreeInitNode(t, &newroot, NODETYPE(t->rootlevel, t->fd));
 	newroot.level = t->rootlevel;
 	/* branch for old root */
 	b.rect = RTreeNodeCover(&oldroot, t);
@@ -284,7 +284,7 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
 		RTreeGetNode(&oldroot, t->rootpos, t->rootlevel, t);
 		/* grow a new root, & tree taller */
 		t->rootlevel++;
-		RTreeInitNode(&newroot, NODETYPE(t->rootlevel, t->fd));
+		RTreeInitNode(t, &newroot, NODETYPE(t->rootlevel, t->fd));
 		newroot.level = t->rootlevel;
 		/* branch for old root */
 		b.rect = RTreeNodeCover(&oldroot, t);

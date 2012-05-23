@@ -80,7 +80,8 @@ void RTreePrintNode(struct RTree_Node *, int, struct RTree *);
 void RTreeTabIn(int);
 
 /* rect.c */
-void RTreeInitRect(struct RTree_Rect *);
+void RTreeNewRect(struct RTree_Rect *, struct RTree *);
+void RTreeInitRect(struct RTree_Rect *, struct RTree *);
 struct RTree_Rect RTreeNullRect(void);
 RectReal RTreeRectArea(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectSphericalVolume(struct RTree_Rect *, struct RTree *);
@@ -88,7 +89,6 @@ RectReal RTreeRectVolume(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectMargin(struct RTree_Rect *, struct RTree *);
 struct RTree_Rect RTreeCombineRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 int RTreeCompareRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
-int RTreeOverlap(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 void RTreePrintRect(struct RTree_Rect *, int);
 
 /* split.c */

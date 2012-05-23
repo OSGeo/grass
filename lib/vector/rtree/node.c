@@ -31,23 +31,23 @@ struct dist
 };
 
 /* Initialize one branch cell in an internal node. */
-static void RTreeInitNodeBranchM(struct RTree_Branch *b)
+static void RTreeInitNodeBranchM(struct RTree *t, struct RTree_Branch *b)
 {
-    RTreeInitRect(&(b->rect));
+    RTreeInitRect(&(b->rect), t);
     b->child.ptr = NULL;
 }
 
 /* Initialize one branch cell in an internal node. */
-static void RTreeInitNodeBranchF(struct RTree_Branch *b)
+static void RTreeInitNodeBranchF(struct RTree *t, struct RTree_Branch *b)
 {
-    RTreeInitRect(&(b->rect));
+    RTreeInitRect(&(b->rect), t);
     b->child.pos = -1;
 }
 
 /* Initialize one branch cell in a leaf node. */
-static void RTreeInitLeafBranch(struct RTree_Branch *b)
+static void RTreeInitLeafBranch(struct RTree *t, struct RTree_Branch *b)
 {
-    RTreeInitRect(&(b->rect));
+    RTreeInitRect(&(b->rect), t);
     b->child.id = 0;
 }
 
@@ -57,7 +57,7 @@ static void (*RTreeInitBranch[3]) () = {
 
 /* Initialize a Node structure. */
 /* type = 1: leaf, type = 2: internal, memory, type = 3: internal, file */
-void RTreeInitNode(struct RTree_Node *n, int type)
+void RTreeInitNode(struct RTree *t, struct RTree_Node *n, int type)
 {
     int i;
 
@@ -65,7 +65,7 @@ void RTreeInitNode(struct RTree_Node *n, int type)
     n->level = -1;
 
     for (i = 0; i < MAXCARD; i++)
-	RTreeInitBranch[type](&(n->branch[i]));
+	RTreeInitBranch[type](&(n->branch[i]), t);
 }
 
 /* Make a new node and initialize to have all branch cells empty. */
@@ -75,7 +75,7 @@ struct RTree_Node *RTreeNewNode(struct RTree *t, int level)
 
     n = (struct RTree_Node *)malloc((size_t) t->nodesize);
     assert(n);
-    RTreeInitNode(n, NODETYPE(level, t->fd));
+    RTreeInitNode(t, n, NODETYPE(level, t->fd));
     return n;
 }
 
@@ -94,7 +94,7 @@ struct RTree_Rect RTreeNodeCover(struct RTree_Node *n, struct RTree *t)
     int i, first_time = 1;
     struct RTree_Rect r;
 
-    RTreeInitRect(&r);
+    RTreeInitRect(&r, t);
     if ((n)->level > 0) { /* internal node */
 	for (i = 0; i < t->nodecard; i++) {
 	    if (t->valid_child(&(n->branch[i].child))) {
@@ -234,14 +234,14 @@ void RTreeDisconnectBranch(struct RTree_Node *n, int i, struct RTree *t)
 	assert(n && i >= 0 && i < t->nodecard);
 	assert(t->valid_child(&(n->branch[i].child)));
 	if (t->fd < 0)
-	    RTreeInitNodeBranchM(&(n->branch[i]));
+	    RTreeInitNodeBranchM(t, &(n->branch[i]));
 	else
-	    RTreeInitNodeBranchF(&(n->branch[i]));
+	    RTreeInitNodeBranchF(t, &(n->branch[i]));
     }
     else {
 	assert(n && i >= 0 && i < t->leafcard);
 	assert(n->branch[i].child.id);
-	RTreeInitLeafBranch(&(n->branch[i]));
+	RTreeInitLeafBranch(t, &(n->branch[i]));
     }
 
     n->count--;
@@ -536,7 +536,7 @@ int RTreeAddBranch(struct RTree_Branch *b, struct RTree_Node *n,
 	}
 	else {
 	    if (t->fd > -1)
-		RTreeInitNode(*newnode, NODETYPE(n->level, t->fd));
+		RTreeInitNode(t, *newnode, NODETYPE(n->level, t->fd));
 	    else
 		*newnode = RTreeNewNode(t, (n)->level);
 	    RTreeSplitNode(n, b, *newnode, t);
