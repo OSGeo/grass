@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # This scripts runs all tests available in the temporal module directory
 # Logs a written to "run.log" 
 
@@ -6,14 +6,14 @@ LOG_FILE="/tmp/run.log"
 echo "Logfile\n\n" > $LOG_FILE
 
 # For each directory
-for dir in `ls -d t*` ; do
-    if [ -d $dir ] ; then
-        echo $dir
-        cd $dir
-        for file in `ls test.* | grep -v '~'` ; do
-            bash $file >> $LOG_FILE 2>&1
+for mydir in `ls -d t*` ; do
+    if [ -d $mydir ] ; then
+        echo $mydir
+        cd $mydir
+        for myfile in `ls test.* | grep -v '~'` ; do
+            sh $myfile >> $LOG_FILE 2>&1
         done
-        cd -
+        cd ..
     fi
 done
-cp $LOG_FILE .
+mv $LOG_FILE .

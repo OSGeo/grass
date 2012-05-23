@@ -1,7 +1,8 @@
-# Test the extraction of a subset of a space time raster input
+#!/bin/sh
+# Test the extraction of a subset of a space time vector input
 
 # We need to set a specific region in the
-# @preprocess step of this test. We generate
+# @preprocess step of this test.
 
 v.random --o -z output=soil_1 n=100 zmin=0 zmax=100 column=height  seed=1
 v.random --o -z output=soil_2 n=100 zmin=0 zmax=100 column=height seed=2

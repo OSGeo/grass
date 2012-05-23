@@ -1,3 +1,4 @@
+#!/bin/sh
 # Univariate statitsics for space time raster3d datasets
 
 # We need to set a specific region in the

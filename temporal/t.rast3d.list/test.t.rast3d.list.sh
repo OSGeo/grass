@@ -1,8 +1,8 @@
-# This is a test to list raster maps of a space time raster dataset
+#!/bin/sh
+# This is a test to list 3draster maps of a space time raster3d dataset
 
 # We need to set a specific region in the
-# @preprocess step of this test. We generate
-# raster with r.mapcalc and create a space time raster datasets
+# @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 

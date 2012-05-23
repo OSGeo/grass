@@ -1,7 +1,11 @@
-# This is a test to absolute time for vector maps with layer support
+#!/bin/sh
+# This is a test to register and unregister vector maps with layer support in
+# space time vector input.
+
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
-# vector with v.random.
+# vector with v.random and create several space time vector inputs
+# with absolute time
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 

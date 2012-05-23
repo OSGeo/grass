@@ -1,7 +1,6 @@
+#!/bin/sh
 # This is a test to register and unregister vector maps in
 # space time vector input.
-# The vector maps will be registered in different space time vector
-# inputs
 
 # We need to set a specific region in the
 # @preprocess step of this test. We generate

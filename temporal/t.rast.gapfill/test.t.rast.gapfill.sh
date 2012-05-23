@@ -1,3 +1,5 @@
+#!/bin/sh
+# Fill the gaps in a space time raster dataset
 # We need to set a specific region in the
 # @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations

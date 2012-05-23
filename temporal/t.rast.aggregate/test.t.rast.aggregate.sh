@@ -1,5 +1,5 @@
-# Test the extraction of a subset of a space time raster input
-
+#!/bin/sh
+# Space time raster dataset aggregation
 # We need to set a specific region in the
 # @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations

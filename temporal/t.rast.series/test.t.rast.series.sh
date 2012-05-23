@@ -1,3 +1,5 @@
+#!/bin/sh
+# Simple r.series wrapper
 # We need to set a specific region in the
 # @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations

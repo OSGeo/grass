@@ -1,3 +1,4 @@
+#!/bin/sh
 # This is a test to list raster maps of a space time raster dataset
 
 # We need to set a specific region in the

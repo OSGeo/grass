@@ -1,3 +1,4 @@
+#!/bin/sh
 # Test the univar statistics of space time vector datasets
 
 # We need to set a specific region in the
