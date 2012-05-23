@@ -1,7 +1,9 @@
-# Test the temporal and spatial sampling of raster maps by vector point maps
+#!/bin/sh
+# Test the extraction of a subset of a space time vector input with
+# time stamped layer
+
 # We need to set a specific region in the
-# @preprocess step of this test. 
-# The region setting should work for UTM and LL test locations
+# @preprocess step of this test.
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 r.mapcalc --o expr="prec_1 = 100.0"

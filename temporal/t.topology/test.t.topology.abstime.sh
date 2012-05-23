@@ -1,12 +1,8 @@
-# This is a test to register and unregister raster maps in
-# space time raster input.
-# The raster maps will be registered in different space time raster
-# inputs
+#!/bin/sh
+# Tests the temporaly topology module of space time datasets 
 
 # We need to set a specific region in the
-# @preprocess step of this test. We generate
-# raster with r.mapcalc and create two space time raster inputs
-# with relative and absolute time
+# @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 

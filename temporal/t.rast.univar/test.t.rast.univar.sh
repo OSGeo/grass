@@ -1,4 +1,5 @@
-# Test the extraction of a subset of a space time raster input
+#!/bin/sh
+# Test univariate statistics for space time raster datasets
 
 # We need to set a specific region in the
 # @preprocess step of this test. 

@@ -1,3 +1,4 @@
+#!/bin/sh
 # Test for t.rast.mapcalc 
 
 # We need to set a specific region in the

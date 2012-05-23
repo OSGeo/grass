@@ -1,3 +1,4 @@
+#!/bin/sh
 # This is a test to list vecter maps of a space time vecter dataset
 
 # We need to set a specific region in the

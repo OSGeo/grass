@@ -1,4 +1,5 @@
-# This is a test to list raster maps of a space time raster dataset
+#!/bin/sh
+# Test the import of space time raster datasets
 
 # We need to set a specific region in the
 # @preprocess step of this test. We generate

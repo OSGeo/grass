@@ -1,9 +1,8 @@
-# Test the extraction of a subset of a space time raster input
+#!/bin/sh
+# Aggregate a dataset by a second one
 
 # We need to set a specific region in the
-# @preprocess step of this test. We generate
-# raster with r.mapcalc and create two space time raster inputs
-# with relative and absolute time
+# @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 

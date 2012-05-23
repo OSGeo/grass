@@ -1,3 +1,4 @@
+#!/bin/sh
 # Test the info output
 
 # We need to set a specific region in the

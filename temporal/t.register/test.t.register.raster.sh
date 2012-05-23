@@ -1,3 +1,4 @@
+#!/bin/sh
 # This is a test to register and unregister raster maps in
 # space time raster input.
 # The raster maps will be registered in different space time raster

@@ -1,3 +1,4 @@
+#!/bin/sh
 # Test the extraction of a subset of a space time raster input
 
 # We need to set a specific region in the

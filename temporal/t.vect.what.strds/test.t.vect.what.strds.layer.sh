@@ -1,3 +1,4 @@
+#!/bin/sh
 # Test the temporal and spatial sampling of raster maps by vector point maps
 # using timetamped vector tables
 # We need to set a specific region in the

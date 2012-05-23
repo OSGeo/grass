@@ -1,3 +1,4 @@
+#!/bin/sh
 # This is a test to export space time raster datasets as VTK time series data
 
 # We need to set a specific region in the
