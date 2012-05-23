@@ -83,7 +83,7 @@ fi
 
 case $1 in 
   --libs) 
-    echo $LIBS
+    echo $OSGEO4W_ROOT_MSYS/lib/liblas_c.lib
     ;;
 
   --prefix)
