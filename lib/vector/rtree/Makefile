@@ -4,9 +4,7 @@ LIB = RTREE
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-RTLINC = $(ARCH_INCDIR)/rtree
-HEADERS := $(RTLINC)/card.h $(RTLINC)/index.h $(RTLINC)/split.h \
-	$(ARCH_INCDIR)/rtree.h
+HEADERS := $(ARCH_INCDIR)/rtree.h
 
 default: headers
 	$(MAKE) lib

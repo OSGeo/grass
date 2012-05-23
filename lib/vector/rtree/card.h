@@ -19,9 +19,6 @@
 #ifndef __CARD__
 #define __CARD__
 
-extern int NODECARD;
-extern int LEAFCARD;
-
 /* balance criteria for node splitting */
 /* NOTE: can be changed if needed but
  * must be >= 2 and <= (t)->[nodecard|leafcard] / 2 */
