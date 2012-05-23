@@ -65,7 +65,7 @@ void RTreeInitNode(struct RTree *t, struct RTree_Node *n, int type)
     n->level = -1;
 
     for (i = 0; i < MAXCARD; i++)
-	RTreeInitBranch[type](&(n->branch[i]), t);
+	RTreeInitBranch[type](t, &(n->branch[i]));
 }
 
 /* Make a new node and initialize to have all branch cells empty. */
@@ -461,7 +461,7 @@ static void RTreeRemoveBranches(struct RTree_Node *n, struct RTree_Branch *b,
 	    rdist[i].distance += delta * delta;
 	}
 
-	RTreeInitBranch[type](&(n->branch[i]));
+	RTreeInitBranch[type](t, &(n->branch[i]));
     }
 
     /* new branch */
