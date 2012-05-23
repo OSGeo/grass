@@ -23,12 +23,8 @@
 #%option G_OPT_STVDS_INPUT
 #%end
 
-#%option
+#%option G_OPT_STRDS_INPUT
 #% key: strds
-#% type: string
-#% description: The space time raster dataset to use
-#% required: yes
-#% multiple: no
 #%end
 
 #%option

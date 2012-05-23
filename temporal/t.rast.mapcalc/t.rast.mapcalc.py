@@ -43,6 +43,7 @@
 #% key: base
 #% type: string
 #% description: The base name of the new created raster maps. This name will be extended with a numerical prefix
+#% gisprompt: NULL
 #% required: yes
 #% multiple: no
 #%end

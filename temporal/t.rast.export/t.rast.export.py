@@ -27,12 +27,10 @@
 #% description: Name of a space time raster dataset archive
 #%end
 
-#%option
+#%option G_OPT_M_DIR
 #% key: workdir
-#% type: string
 #% description: Path to the work directory, default is /tmp
 #% required: no
-#% multiple: no
 #% answer: /tmp
 #%end
 

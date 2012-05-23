@@ -17,16 +17,29 @@ t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" 
 t.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"
 
 # The @test
-t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer 
+t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer column=prec
 v.info prec_observer
 t.info type=stvds input=prec_observer
 t.vect.list input=prec_observer
 
+t.vect.extract --o input=prec_observer output=test_extract_1 base=test_1
+t.info type=stvds input=test_extract_1
+t.vect.univar input=test_extract_1 column=prec 
+t.vect.extract --o input=prec_observer expr="prec > 400" output=test_extract_2 base=test_2
+t.info type=stvds input=test_extract_2
+t.vect.univar input=test_extract_2 column=prec 
+t.vect.extract --o input=prec_observer where="start_time >= '2001-05-01'" expr="prec > 400" output=test_extract_3 base=test_3
+t.info type=stvds input=test_extract_3
+t.vect.univar input=test_extract_3 column=prec 
+
+
+
 # @postprocess
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
-t.remove type=stvds input=prec_observer
+t.remove type=stvds input=prec_observer,test_extract_1,test_extract_2,test_extract_3
 t.unregister type=vect maps=prec_observer:1,prec_observer:2,prec_observer:3,prec_observer:4,prec_observer:5,prec_observer:6
 
-g.remove vect=prec_observer,test_extract
+g.remove vect=prec_observer
+g.mremove -f vect=test_*
 g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
