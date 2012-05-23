@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 		  nrows, ncols);
     }
     if ((nrows > 200) || (ncols > 200)) {
-	G_fatal_error(_("Aborting (windows larger then 200x200 is not allowed)"));
+	G_fatal_error(_("Aborting (window larger then 200x200 is not allowed)"));
     }
 
     /* Setup driver and check important information */
