@@ -713,7 +713,7 @@ def install_extension_other(name):
     dirs = { 'bin'     : os.path.join(tmpdir, name, 'bin'),
              'docs'    : os.path.join(tmpdir, name, 'docs'),
              'html'    : os.path.join(tmpdir, name, 'docs', 'html'),
-             'man'     : os.path.join(tmpdir, name, 'man', 'man1'),
+             'man'     : os.path.join(tmpdir, name, 'docs', 'man', 'man1'),
              'scripts' : os.path.join(tmpdir, name, 'scripts'),
              'etc'     : os.path.join(tmpdir, name, 'etc'),
              }
@@ -842,7 +842,7 @@ def remove_extension_std(name, force = False):
     for fpath in [os.path.join(options['prefix'], 'bin', name),
                   os.path.join(options['prefix'], 'scripts', name),
                   os.path.join(options['prefix'], 'docs', 'html', name + '.html'),
-                  os.path.join(options['prefix'], 'man', 'man1', name + '.1')]:
+                  os.path.join(options['prefix'], 'docs', 'man', 'man1', name + '.1')]:
         if os.path.isfile(fpath):
             if force:
                 grass.verbose(fpath)
@@ -920,7 +920,7 @@ def check_dirs():
     check_style_files('grass_logo.png')
     check_style_files('grassdocs.css')
     create_dir(os.path.join(options['prefix'], 'etc'))
-    create_dir(os.path.join(options['prefix'], 'man', 'man1'))
+    create_dir(os.path.join(options['prefix'], 'docs', 'man', 'man1'))
     create_dir(os.path.join(options['prefix'], 'scripts'))
 
 # fix file URI in manual page
