@@ -83,7 +83,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1, regi
 	    dbif.close()
             core.fatal(_("Space time %s dataset <%s> is already in database, use overwrite flag to overwrite") % (type, out_id))
     if type == "vector":
-	rows = sp.get_registered_maps("id,layer", where, "start_time", dbif)
+	rows = sp.get_registered_maps("id,name,mapset,layer", where, "start_time", dbif)
     else:
 	rows = sp.get_registered_maps("id", where, "start_time", dbif)
 
@@ -140,9 +140,9 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1, regi
 		elif type == "vector":
 		    core.verbose(_("Apply v.extract where statement: \"%s\"") % expression)
 		    if row["layer"]:
-			proc_list.append(Process(target=run_vector_extraction, args=(row["id"], map_name, row["layer"], vtype, expression)))
+			proc_list.append(Process(target=run_vector_extraction, args=(row["name"] + "@" + row["mapset"], map_name, row["layer"], vtype, expression)))
 		    else:
-			proc_list.append(Process(target=run_vector_extraction, args=(row["id"], map_name, layer, vtype, expression)))
+			proc_list.append(Process(target=run_vector_extraction, args=(row["name"] + "@" + row["mapset"], map_name, layer, vtype, expression)))
 		
 		proc_list[proc_count].start()
 		proc_count += 1
