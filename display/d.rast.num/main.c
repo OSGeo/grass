@@ -171,14 +171,14 @@ int main(int argc, char **argv)
     /* number of rows and cols in window */
 
     if ((nrows > 75) || (ncols > 75)) {
-	G_warning(_("Current window size: %dx%d\n"
-		    "Your current window setting may be too large. "
+	G_warning(_("Current region size: %d rows X %d cols\n"
+		    "Your current region setting may be too large. "
 		    "Cells displayed on your graphics window may be too "
 		    "small for cell category number to be visible."),
 		  nrows, ncols);
     }
     if ((nrows > 200) || (ncols > 200)) {
-	G_fatal_error(_("Aborting (window larger then 200x200 is not allowed)"));
+	G_fatal_error(_("Aborting (region larger then 200 rows X 200 cols is not allowed)"));
     }
 
     /* Setup driver and check important information */
