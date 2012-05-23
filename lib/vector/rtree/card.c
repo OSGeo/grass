@@ -19,9 +19,6 @@
 #include "index.h"
 #include "card.h"
 
-int NODECARD = MAXCARD;
-int LEAFCARD = MAXCARD;
-
 static int set_max(int *which, int new_max)
 {
     if (2 > new_max || new_max > MAXCARD)
