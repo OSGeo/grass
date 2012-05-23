@@ -33,10 +33,6 @@ struct RTree_PartitionVars {
     RectReal area[2];
 };
 
-extern struct RTree_Branch BranchBuf[MAXCARD + 1];
-extern int BranchCount;
-extern struct RTree_Rect CoverSplit;
-extern RectReal CoverSplitArea;
 
 /* variables for finding a partition */
 extern struct RTree_PartitionVars Partitions[1];

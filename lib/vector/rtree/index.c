@@ -37,6 +37,7 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
     struct RTree_Node *n;
     int i;
     
+    assert(ndims > 0);
     new_rtree = (struct RTree *)malloc(sizeof(struct RTree));
 
     new_rtree->fd = fd;
