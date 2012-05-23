@@ -38,6 +38,7 @@
 #%end
 
 #%option G_OPT_R_BASE
+#% gisprompt: 
 #%end
 
 #%option
