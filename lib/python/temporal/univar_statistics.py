@@ -60,7 +60,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended, header
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> is empty") % (sp.get_new_map_instance(None).get_type(), out_id))
+        core.fatal(_("Space time %s dataset <%s> is empty") % (sp.get_new_map_instance(None).get_type(), id))
 
     if header == True:
         print "id" + fs + "start" + fs + "end" + fs + "mean" + fs + "min" + fs + "max" + fs,
@@ -133,11 +133,11 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column, w
 
     sp.select(dbif)
 
-    rows = sp.get_registered_maps("id,start_time,end_time,layer", twhere, "start_time", dbif)
+    rows = sp.get_registered_maps("id,name,mapset,start_time,end_time,layer", twhere, "start_time", dbif)
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> is empty") % (sp.get_new_map_instance(None).get_type(), out_id))
+        core.fatal(_("Space time %s dataset <%s> is empty") % (sp.get_new_map_instance(None).get_type(), id))
 
     string = ""
     if header == True:
@@ -153,7 +153,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column, w
 	print string
 
     for row in rows:
-        id = row["id"]
+        id = row["name"] + "@" + row["mapset"]
         start = row["start_time"]
         end = row["end_time"]
 	mylayer = row["layer"]
