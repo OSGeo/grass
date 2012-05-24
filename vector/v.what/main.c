@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
     opt.field->multiple = YES;
     
-    opt.coords = G_define_standard_option(G_OPT_M_EN);
+    opt.coords = G_define_standard_option(G_OPT_M_COORDS);
     opt.coords->required = YES;
     opt.coords->label = _("Coordinates for query");
     opt.coords->description = _("\"-\" to read from standard input");

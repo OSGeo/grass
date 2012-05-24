@@ -88,7 +88,7 @@
    - G_OPT_M_UNITS
    - G_OPT_M_DATATYPE
    - G_OPT_M_MAPSET
-   - G_OPT_M_EN
+   - G_OPT_M_COORDS
    - G_OPT_M_COLR
    - G_OPT_M_DIR
 
@@ -583,12 +583,13 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("'.' for current mapset");
 	break;
 
-    case G_OPT_M_EN:
-	Opt->key = "east_north";
+    case G_OPT_M_COORDS:
+	Opt->key = "coordinates";
 	Opt->type = TYPE_DOUBLE;
 	Opt->required = NO;
-	Opt->multiple = YES;
+	Opt->multiple = NO;
 	Opt->key_desc = "east,north";
+	Opt->gisprompt = "old,coords,coords";
 	Opt->description = _("Coordinates");
 	break;
 

@@ -482,7 +482,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     /* viewpoint coordinates */
     struct Option *viewLocOpt;
 
-    viewLocOpt = G_define_standard_option(G_OPT_M_EN);
+    viewLocOpt = G_define_standard_option(G_OPT_M_COORDS);
     viewLocOpt->key = "coordinate";
     viewLocOpt->required = YES;
     viewLocOpt->description = _("Coordinates of viewing position");
