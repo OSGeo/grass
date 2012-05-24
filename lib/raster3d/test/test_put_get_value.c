@@ -593,6 +593,7 @@ int test_large_file(void)
     Rast3d_set_window_map(map, &region);
     
     for(z = 0; z < region.depths; z++) {
+	G_percent(z, region.depths, 1);
         for(y = 0; y < region.rows; y++) {
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
@@ -601,6 +602,7 @@ int test_large_file(void)
             }
         }
     }
+    G_percent(1, 1, 1);
     /* Write everything to the disk */
     Rast3d_flush_all_tiles(map);
     Rast3d_close(map);
