@@ -2440,7 +2440,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         subcmd += "height=%d " % (self.iview['height']['value'])
         subcmd += "perspective=%d " % (self.view['persp']['value'])
         subcmd += "twist=%d " % (self.view['twist']['value'])
-        subcmd += "zexag=%d " % (self.view['z-exag']['value'] * self.iview['z-exag']['original'])
+        subcmd += "zexag=%f " % (self.view['z-exag']['value'] / self.iview['z-exag']['llRatio'])
         subcmd += "focus=%d,%d,%d " % (self.iview['focus']['x'],self.iview['focus']['y'],self.iview['focus']['z'])
         cmd += subcmd
         

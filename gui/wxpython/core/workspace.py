@@ -495,7 +495,7 @@ class ProcessWorkspaceFile:
         view['z-exag']['value'] = self.__processLayerNvizNode(node_zexag, 'value', float)
         view['z-exag']['min'] = self.__processLayerNvizNode(node_zexag, 'min', int)
         view['z-exag']['max'] = self.__processLayerNvizNode(node_zexag, 'max', int)
-        iview['z-exag']['original'] = self.__processLayerNvizNode(node_zexag, 'original', float)
+        iview['z-exag']['llRatio'] = self.__processLayerNvizNode(node_zexag, 'llRatio', float)
         node_focus = node_view.find('focus')
         iview['focus'] = {}
         iview['focus']['x'] = self.__processLayerNvizNode(node_focus, 'x', int)
@@ -933,7 +933,7 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<value>%.2f</value>\n' % (' ' * self.indent, view['z-exag']['value']))
         self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, view['z-exag']['min']))
         self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, view['z-exag']['max']))
-        self.file.write('%s<original>%.2f</original>\n' % (' ' * self.indent, iview['z-exag']['original']))
+        self.file.write('%s<llRatio>%.2f</llRatio>\n' % (' ' * self.indent, iview['z-exag']['llRatio']))
         self.indent -= 4
         self.file.write('%s</z-exag>\n' % (' ' * self.indent))
         # focus (look here)
