@@ -2455,6 +2455,12 @@ class LayerBook(wx.Notebook):
         # tooltips
         self.addLayerWidgets['addCat'][0].SetToolTipString(_("You need to add categories "
                                                              "by v.category module."))
+
+        # table description
+        tableBox = wx.StaticBox (parent = self.addPanel, id = wx.ID_ANY,
+                                 label = " %s " % (_("Table description")))
+        tableSizer = wx.StaticBoxSizer(tableBox, wx.VERTICAL)
+
         #
         # list of table widgets
         #
@@ -2543,11 +2549,6 @@ class LayerBook(wx.Notebook):
                        flag = wx.ALL | wx.EXPAND,
                        border = 0)
                 
-        # table description
-        tableBox = wx.StaticBox (parent = self.addPanel, id = wx.ID_ANY,
-                                 label = " %s " % (_("Table description")))
-        tableSizer = wx.StaticBoxSizer(tableBox, wx.VERTICAL)
-        
         # data area
         dataSizer = wx.FlexGridSizer(cols = 2, hgap = 5, vgap = 5)
         dataSizer.AddGrowableCol(1)
