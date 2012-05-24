@@ -687,7 +687,7 @@ class MapFrame(SingleMapFrame):
             rcmd.append('-f')
             rcmd.append('-n')
             rcmd.append('input=%s' % ','.join(rast))
-            rcmd.append('east_north=%f,%f' % (float(east), float(north)))
+            rcmd.append('coordinates=%f,%f' % (float(east), float(north)))
         
         if vect:
             # check for vector maps open to be edited
