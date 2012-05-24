@@ -2507,7 +2507,7 @@ class LayerBook(wx.Notebook):
                 row += 1
                 continue
 
-            if label.GetLabel() == _("Layer:"):
+            if key == 'layer':
                 style = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT
             else:
                 style = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND
@@ -2742,7 +2742,7 @@ class LayerBook(wx.Notebook):
             label, value = self.modifyLayerWidgets[key]
             dataSizer.Add(item = label,
                           flag = wx.ALIGN_CENTER_VERTICAL)
-            if label.GetLabel() == "Layer:":
+            if key == 'layer':
                 dataSizer.Add(item = value,
                               flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
             else:
