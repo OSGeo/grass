@@ -98,7 +98,7 @@ class GNotebook(FN.FlatNotebook):
 
 class ScrolledPanel(SP.ScrolledPanel):
     """!Custom ScrolledPanel to avoid strange behaviour concerning focus"""
-    def __init__(self, parent, style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER):
+    def __init__(self, parent, style = wx.TAB_TRAVERSAL):
         SP.ScrolledPanel.__init__(self, parent = parent, id = wx.ID_ANY, style = style)
 
     def OnChildFocus(self, event):
