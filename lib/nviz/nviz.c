@@ -347,7 +347,7 @@ struct scalebar_data *Nviz_new_scalebar(nv_data *data,
     s->where[2] = coords[2];
 
     data->scalebar = (struct scalebar_data **) G_realloc(data->scalebar,
-		      data->num_scalebars + 1 * sizeof(struct scalebar_data *));
+		      (data->num_scalebars + 1) * sizeof(struct scalebar_data *));
     data->scalebar[data->num_scalebars++] = s;
 
     return s;
@@ -385,16 +385,18 @@ struct scalebar_data *Nviz_set_scalebar(nv_data *data, int bar_id,
 	GS_set_Narrow(pt, id, coords); /* the same like arrow */
 
 	for (i = 0; i < data->num_scalebars; i++) {
-	    s = data->scalebar[i];
-	    if (s->id == bar_id) {
-		s->color = color;
-		s->size = size;
-		s->where[0] = coords[0];
-		s->where[1] = coords[1];
-		s->where[2] = coords[2];
+        if (data->scalebar[i]) {
+            s = data->scalebar[i];
+            if (s->id == bar_id) {
+                s->color = color;
+                s->size = size;
+                s->where[0] = coords[0];
+                s->where[1] = coords[1];
+                s->where[2] = coords[2];
 
-		return s;
-	    }
+            return s;
+            }
+        }
 	}
 	
 	s = Nviz_new_scalebar(data, bar_id, coords, size, color);
@@ -415,22 +417,26 @@ void Nviz_draw_scalebar(nv_data *data)
     GLuint FontBase = 0; /* don't know how to get fontbase*/
 
     for (i = 0; i < data->num_scalebars; i++) {
-	struct scalebar_data *s = data->scalebar[i];
+        if (data->scalebar[i]) {
+            struct scalebar_data *s = data->scalebar[i];
 
-	gsd_scalebar_v2(s->where, s->size, FontBase, s->color, s->color);
+            gsd_scalebar_v2(s->where, s->size, FontBase, s->color, s->color);
+        }
     }
 }
 
 /*!
    \brief Deletes scale bar
+   
+   When scalebar is freed, array then contains NULL,
+   which must be tested during drawing.
 
    \param data nviz data
  */
 void Nviz_delete_scalebar(nv_data *data, int bar_id)
 {
-    if (bar_id < data->num_scalebars) {
+    if (bar_id < data->num_scalebars && data->scalebar[bar_id] != NULL) {
 	G_free(data->scalebar[bar_id]);
 	data->scalebar[bar_id] = NULL;
-	data->num_scalebars--;
     }
 }
