@@ -154,7 +154,7 @@ class ProfileFrame(BasePlotFrame):
                                  parent = self,
                                  read = True,
                                  input = self.rasterList[0],
-                                 east_north = '%d,%d' % (point[0],point[1]))
+                                 coordinates = '%d,%d' % (point[0],point[1]))
                 
                 val = ret.splitlines()[0].split('|')[3]
                 if val == None or val == '*': continue
