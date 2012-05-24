@@ -1932,15 +1932,18 @@ class NvizToolWindow(FN.FlatNotebook):
         toggle.SetName('placeArrow')
 
         delete = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Delete"))
+        self.win['decoration']['arrow']['delete'] = delete.GetId()
         gridSizer.Add(item = delete, pos = (2, 1))
         delete.Bind(wx.EVT_BUTTON, self.OnArrowDelete)
+        shown = self.mapWindow.decoration['arrow']['show']
+        delete.Enable(shown)
         naboxSizer.Add(item = gridSizer, proportion = 0, flag = wx.EXPAND, border = 3)
         pageSizer.Add(item = naboxSizer, proportion = 0,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border = 3)
         
         
-        # north arrow
+        # scale bars
         self.win['decoration']['scalebar'] = {}
         nabox = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                              label = " %s " % (_("Scale bar")))
@@ -1967,19 +1970,26 @@ class NvizToolWindow(FN.FlatNotebook):
         color.Bind(csel.EVT_COLOURSELECT, self.OnDecorationProp)
         
         # control
-        toggle = wx.ToggleButton(parent = panel, id = wx.ID_ANY, label = _("Place scalebar"))
+        toggle = wx.ToggleButton(parent = panel, id = wx.ID_ANY, label = _("Place new scale bar"))
         gridSizer.Add(item = toggle, pos = (2, 0))
         toggle.Bind(wx.EVT_TOGGLEBUTTON, self.OnDecorationPlacement)
         self.win['decoration']['scalebar']['place'] = toggle.GetId()
         toggle.SetName('placeScalebar')
 
-        delete = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Delete last"))
-        gridSizer.Add(item = delete, pos = (2, 1))
+        scalebarChoice = wx.Choice(parent = panel, id = wx.ID_ANY, choices = [])
+        self.win['decoration']['scalebar']['choice'] = scalebarChoice.GetId()
+        gridSizer.Add(item = scalebarChoice, pos = (3, 0), flag = wx.EXPAND)
+        delete = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Delete"))
+        self.win['decoration']['scalebar']['delete'] = delete.GetId()
+        gridSizer.Add(item = delete, pos = (3, 1))
         delete.Bind(wx.EVT_BUTTON, self.OnScalebarDelete)
         naboxSizer.Add(item = gridSizer, proportion = 0, flag = wx.EXPAND, border = 3)
         pageSizer.Add(item = naboxSizer, proportion = 0,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border = 3)      
+
+        self.DisableScalebarControls()
+
         panel.SetSizer(pageSizer)
         panel.Layout()
         panel.Fit()
@@ -4295,19 +4305,39 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Delete arrow"""
         self._display.DeleteArrow()
         self.mapWindow.decoration['arrow']['show'] = False
+        self.FindWindowById( self.win['decoration']['arrow']['delete']).Disable()
         self.mapWindow.Refresh(False)
     
     def OnScalebarDelete(self, event):
         """!Delete scalebar"""
-        try:
-            id = self.mapWindow.decoration['scalebar'][-1]['id']
-        except IndexError:
+        choice = self.FindWindowById(self.win['decoration']['scalebar']['choice'])
+        choiceIndex = choice.GetSelection()
+        index = choice.GetClientData(choiceIndex)
+        if index == wx.NOT_FOUND:
             return
-        self._display.DeleteScalebar(id = id)
-        del self.mapWindow.decoration['scalebar'][-1]
+        self._display.DeleteScalebar(id = index)
         
-        self.mapWindow.Refresh(False)   
+        self.FindWindowById(self.win['decoration']['scalebar']['choice']).Delete(choiceIndex)
+        if not choice.IsEmpty():
+            choice.SetSelection(choice.GetCount() - 1)
+        self.DisableScalebarControls()
+
+        self.mapWindow.Refresh(False)
          
+    def AddScalebar(self, scalebarNum):
+        choice = self.FindWindowById(self.win['decoration']['scalebar']['choice'])
+        choice.Append(_("Scalebar %d") % (scalebarNum + 1), scalebarNum)
+        choice.SetSelection(choice.GetCount() - 1)
+        self.DisableScalebarControls()
+
+    def AddArrow(self):
+        self.FindWindowById( self.win['decoration']['arrow']['delete']).Enable()
+
+    def DisableScalebarControls(self):
+        choice = self.FindWindowById(self.win['decoration']['scalebar']['choice'])
+        self.FindWindowById(self.win['decoration']['scalebar']['delete']).Enable(not choice.IsEmpty())
+        self.FindWindowById(self.win['decoration']['scalebar']['choice']).Enable(not choice.IsEmpty())
+
     def OnDecorationProp(self, event):
         """!Set arrow/scalebar properties"""
         if event.GetId() in self.win['decoration']['arrow'].values():
@@ -4322,8 +4352,9 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.decoration[type]['color'] = self._getColorString(color)
             self.mapWindow.decoration[type]['size'] = size
         elif type == 'scalebar'and self.mapWindow.decoration['scalebar']:
-            self.mapWindow.decoration[type][-1]['color'] = self._getColorString(color)
-            self.mapWindow.decoration[type][-1]['size'] = size
+            for scalebar in self.mapWindow.decoration[type]:
+                scalebar['color'] = self._getColorString(color)
+                scalebar['size'] = size
         
         if type == 'arrow' and self.mapWindow.decoration['arrow']['show']:
             self._display.SetArrow(self.mapWindow.decoration['arrow']['position']['x'],
@@ -4332,11 +4363,17 @@ class NvizToolWindow(FN.FlatNotebook):
                                    self.mapWindow.decoration['arrow']['color'])
             self._display.DrawArrow()
         elif type == 'scalebar' and self.mapWindow.decoration['scalebar']:
-            self._display.SetScalebar(self.mapWindow.decoration['scalebar'][-1]['id'],
-                                      self.mapWindow.decoration['scalebar'][-1]['position']['x'],
-                                      self.mapWindow.decoration['scalebar'][-1]['position']['y'],
-                                      self.mapWindow.decoration['scalebar'][-1]['size'],
-                                      self.mapWindow.decoration['scalebar'][-1]['color'])
+            ids = []
+            choice = self.FindWindowById(self.win['decoration']['scalebar']['choice'])
+            for index in range(choice.GetCount()):
+                ids.append(choice.GetClientData(index))
+            for scalebar in self.mapWindow.decoration[type]:
+                if scalebar['id'] in ids:
+                    self._display.SetScalebar(scalebar['id'],
+                                              scalebar['position']['x'],
+                                              scalebar['position']['y'],
+                                              scalebar['size'],
+                                              scalebar['color'])
             self._display.DrawScalebar()
             self.mapWindow.Refresh(False)
         

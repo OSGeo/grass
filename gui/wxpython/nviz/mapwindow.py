@@ -779,8 +779,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         elif self.mouse["use"] in ('arrow', 'scalebar'):
             self.lmgr.nviz.FindWindowById(
                     self.lmgr.nviz.win['decoration'][self.mouse["use"]]['place']).SetValue(False)
+            if self.mouse["use"] == 'scalebar':
+                scalebarNum = len(self.decoration['scalebar'])
+                self.lmgr.nviz.AddScalebar(scalebarNum - 1)
+            else:
+                self.lmgr.nviz.AddArrow()
             self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
+            
+
         elif self.mouse['use'] == 'pointer':
             if self.dragid > 0:
                 dx = self.mouse['end'][0] - self.mouse['begin'][0]
