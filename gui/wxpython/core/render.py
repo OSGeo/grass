@@ -9,7 +9,7 @@ Classes:
  - render::Overlay
  - render::Map
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -861,6 +861,14 @@ class Map(object):
         return selected
 
     def _renderLayers(self, force = False, mapWindow = None, overlaysOnly = False):
+        """!Render all map layers into files
+
+        @param force True to force rendering
+        @param mapWindow GUI window or None (statusbar/progress bar)
+        @param overlaysOnly True to render only overlays
+
+        @return list of maps, masks and opacities
+        """
         maps = list()
         masks = list()
         opacities = list()
@@ -886,6 +894,10 @@ class Map(object):
                 ### wx.SafeYield(mapWindow)
                 event = wxUpdateProgressBar(value = ilayer)
                 wx.PostEvent(mapWindow, event)
+            
+            # skip map layers when rendering fails
+            if not os.path.exists(layer.mapfile):
+                continue
             
             # add image to compositing list
             if layer.type != "overlay":
