@@ -807,7 +807,7 @@ class Settings:
         self.internalSettings['nviz']['view']['height'] = {}
         self.internalSettings['nviz']['view']['height']['value'] = -1
         self.internalSettings['nviz']['view']['z-exag'] = {}
-        self.internalSettings['nviz']['view']['z-exag']['original'] = 1
+        self.internalSettings['nviz']['view']['z-exag']['llRatio'] = 1
         self.internalSettings['nviz']['view']['rotation'] = None
         self.internalSettings['nviz']['view']['focus'] = {}
         self.internalSettings['nviz']['view']['focus']['x'] = -1
