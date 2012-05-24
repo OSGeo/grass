@@ -19,9 +19,11 @@
 #include "test_g3d_lib.h"
 #include "grass/interpf.h"
 
+static int test_large_file(void);
 static int test_put_get_value_dcell(void);
 static int test_put_get_value_fcell(void);
 static int test_put_get_value_resampling(void);
+static int test_get_value_region(RASTER3D_Map *map, int cols, int rows, int depths);
 static int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double 
                                  top, int col, int row, int depth, int fact);
 static int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double 
@@ -39,6 +41,7 @@ int unit_test_put_get_value(void)
     sum += test_put_get_value_dcell();
     sum += test_put_get_value_fcell();
     sum += test_put_get_value_resampling();
+    sum += test_large_file();
 
 
     if (sum > 0)
@@ -552,3 +555,59 @@ int test_get_value_region(RASTER3D_Map *map, int cols, int rows, int depths)
     
     return sum;
 }
+
+
+/* *************************************************************** */
+
+int test_large_file(void)
+{
+     int sum = 0; 
+    int x, y, z;
+    FCELL value;
+    FCELL value_ref;
+    
+    G_message("Testing FCELL put function for large files");
+    
+    RASTER3D_Region region;
+    RASTER3D_Map *map = NULL;
+    
+    /* We need to set up a specific region for the new g3d map.
+     * First we safe the default region. */
+    Rast3d_get_window(&region);
+    
+    region.bottom = 0.0;
+    region.top = 1000;
+    region.south = 1000;
+    region.north = 8500;
+    region.west = 5000;
+    region.east = 10000;
+    region.rows = 100;
+    region.cols = 100;
+    region.depths = 100;
+        
+    Rast3d_adjust_region(&region);
+        
+    map = Rast3d_open_new_opt_tile_size("test_put_get_value_fcell_large", RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 1);
+    
+    /* The window is the same as the map region ... of course */
+    Rast3d_set_window_map(map, &region);
+    
+    for(z = 0; z < region.depths; z++) {
+        for(y = 0; y < region.rows; y++) {
+            for(x = 0; x < region.cols; x++) {
+                /* Add cols, rows and depths and put this in the map */
+                value = x + y + z;
+                Rast3d_put_value(map, x, y, z, &value, FCELL_TYPE);
+            }
+        }
+    }
+    /* Write everything to the disk */
+    Rast3d_flush_all_tiles(map);
+    Rast3d_close(map);
+    
+    //G_remove("grid3", "test_put_get_value_dcell_large");
+    
+    return sum;
+}
+
+
