@@ -55,6 +55,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
         self.dragimg = None # initialize variable for map panning
+        self.alwaysRender = False # if it always sets render to True in self.UpdateMap()
         
         # variables for drawing on DC
         self.pen = None      # pen for drawing zoom boxes, etc.
@@ -525,6 +526,12 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return img
 
+    def SetAlwaysRenderEnabled(self, alwaysRender = True):
+        self.alwaysRender = alwaysRender
+        
+    def IsAlwaysRenderEnabled(self):
+        return self.alwaysRender
+
     def UpdateMap(self, render = True, renderVector = True):
         """!Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
@@ -536,8 +543,9 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.resize = False
         
-        if not self.Map.cmdfile and self.img is None:
-            render = True
+        # was if self.Map.cmdfile and ...
+        if self.IsAlwaysRenderEnabled() and self.img is None:
+                render = True
         
         #
         # initialize process bar (only on 'render')
