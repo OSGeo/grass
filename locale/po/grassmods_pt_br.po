@@ -13524,7 +13524,7 @@ msgid "GDAL datatype: %s, valid range: %g - %g"
 msgstr ""
 
 #: ../raster/r.lake/main.c:152
-msgid "Fills lake from seed at given level."
+msgid "Fills lake at given point to given level."
 msgstr "Preenche lago a partir da origem num dado nível."
 
 #: ../raster/r.lake/main.c:158
@@ -13537,7 +13537,7 @@ msgid "Seed point coordinates"
 msgstr "Coordenadas do ponto de origem"
 
 #: ../raster/r.lake/main.c:177
-msgid "Name of raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "Nome do mapa raster com origem (pelo menos uma célula > 0)"
 
 #: ../raster/r.lake/main.c:183

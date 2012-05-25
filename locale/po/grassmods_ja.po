@@ -12973,7 +12973,7 @@ msgid "GDAL datatype: %s, valid range: %g - %g"
 msgstr "GDALデータタイプ: %s, 有効な領域: %g - %g"
 
 #: ../raster/r.lake/main.c:152
-msgid "Fills lake from seed at given level."
+msgid "Fills lake at given point to given level."
 msgstr "指定レベルの面識別点から湖水までを満たす "
 
 #: ../raster/r.lake/main.c:158
@@ -12985,7 +12985,7 @@ msgid "Seed point coordinates"
 msgstr "シードポイント座標"
 
 #: ../raster/r.lake/main.c:177
-msgid "Name of raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "シード付きラスターマップ名 (少なくとも 1セル>0)"
 
 #: ../raster/r.lake/main.c:183
@@ -33913,7 +33913,7 @@ msgid "raster, reclassification"
 msgstr "ラスター、標高"
 
 #, fuzzy
-msgid "Name of input raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "シード付きラスターマップ名 (少なくとも 1セル>0)"
 
 #, fuzzy
