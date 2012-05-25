@@ -813,7 +813,7 @@ class CmdPanel(wx.Panel):
         panelsizer = wx.BoxSizer(orient = wx.VERTICAL)
 
         # Build notebook
-        self.notebook = GNotebook(self, style = globalvar.FNPageStyle)
+        self.notebook = GNotebook(self, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON )
         self.notebook.SetTabAreaColour(globalvar.FNPageColor)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
 
