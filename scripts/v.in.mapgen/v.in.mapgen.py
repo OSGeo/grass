@@ -69,20 +69,20 @@ def main():
     opts = ""
 
     if not os.path.isfile(infile):
-	grass.fatal(_("Input file <%s> not found") % infile)
+        grass.fatal(_("Input file <%s> not found") % infile)
 
     if output:
-	name = output
+        name = output
     else:
-	name = ''
+        name = ''
 
     if threeD:
-	matlab = True
+        matlab = True
 
     if threeD:
-	do3D = 'z'
+        do3D = 'z'
     else:
-	do3D = ''
+        do3D = ''
 
     tmp = grass.tempfile()
 
@@ -91,6 +91,7 @@ def main():
     outf = file(tmp, 'w')
 
     grass.message(_("Importing data..."))
+    cat = 1   
     if matlab:
 	## HB:  OLD v.in.mapgen.sh Matlab import command follows.
 	##    I have no idea what it's all about, so "new" matlab format will be
@@ -102,45 +103,53 @@ def main():
 	#    $1~/END/   { }' | tac > "$TMP"
 
 	## matlab format.
-	points = []
-	for line in inf:
-	    f = line.split()
-	    if f[0].lower() == 'nan':
-		if points != []:
-		    outf.write("L %d\n" % len(points))
-		    for point in points:
-			outf.write(" %.15g %.15g %.15g\n" % tuple(map(float,point)))
-		points = []
-	    else:
-		if len(f) == 2:
-		    f.append('0')
-		points.append(f)
+        points = []
+ 
+        for line in inf:
+            f = line.split()
+            if f[0].lower() == 'nan':
+                if points != []:
+                    outf.write("L %d 1\n" % len(points))
+                    for point in points:
+                        outf.write(" %.15g %.15g %.15g\n" % tuple(map(float,point)))
+                    outf.write(" 1 %d\n" % cat)
+                    cat += 1
+                points = []
+            else:
+                if len(f) == 2:
+                    f.append('0')
+                points.append(f)
         
-	if points != []:
-	    outf.write("L %d\n" % len(points))
-	    for point in points:
+        if points != []:
+            outf.write("L %d 1\n" % len(points))
+            for point in points:
                 try:
                     outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
                 except ValueError:
                     grass.fatal(_("An error occured on line '%s', exiting.") % line.strip())
+            outf.write(" 1 %d\n" % cat)
+            cat += 1       
     else:
         ## mapgen format.
-	points = []
-	for line in inf:
-	    if line[0] == '#':
-		if points != []:
-		    outf.write("L %d\n" % len(points))
-		    for point in points:
-			outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
-		points = []
-	    else:
-		points.append(line.rstrip('\r\n').split('\t'))
+        points = []
+        for line in inf:
+            if line[0] == '#':
+                if points != []:
+                    outf.write("L %d 1\n" % len(points))
+                    for point in points:
+                        outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
+                    outf.write(" 1 %d\n" % cat)
+                    cat += 1
+                points = []
+            else:
+                points.append(line.rstrip('\r\n').split('\t'))
         
-	if points != []:
-	    outf.write("L %d\n" % len(points))
-	    for point in points:
-		outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
-
+        if points != []:
+            outf.write("L %d 1\n" % len(points))
+            for point in points:
+                outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
+            outf.write(" 1 %d\n" % cat)
+            cat += 1
     outf.close()
     inf.close()
 
@@ -177,15 +186,15 @@ VERTI:
 
     if not name:
         #### if no name for vector file given, cat to stdout
-	inf = file(digfile)
-	shutil.copyfileobj(inf, sys.stdout)
-	inf.close()
+        inf = file(digfile)
+        shutil.copyfileobj(inf, sys.stdout)
+        inf.close()
     else:
         #### import to binary vector file
-	grass.message(_("Importing with v.in.ascii...")) 
-	if grass.run_command('v.in.ascii', flags = do3D, input = digfile,
+        grass.message(_("Importing with v.in.ascii...")) 
+        if grass.run_command('v.in.ascii', flags = do3D, input = digfile,
 			     output = name, format = 'standard') != 0:
-	    grass.fatal(_('An error occured on creating "%s", please check') % name)
+            grass.fatal(_('An error occured on creating "%s", please check') % name)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
