@@ -25,7 +25,7 @@
 
 #%option G_OPT_STDS_INPUT
 #% key: sample
-#% description: The time intervals from this space time dataset (raster, vector or raster3d) are used for aggregation computation. 
+#% description: Time intervals from this space time dataset (raster, vector or raster3d) are used for aggregation computation
 #%end
 
 #%option G_OPT_STDS_TYPE

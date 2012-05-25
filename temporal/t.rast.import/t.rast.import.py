@@ -67,7 +67,7 @@
 
 #%flag
 #% key: o
-#% description: override projection (use location's projection)
+#% description: Override projection (use location's projection)
 #%end
 
 #%flag

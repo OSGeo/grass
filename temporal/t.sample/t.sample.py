@@ -45,7 +45,7 @@
 #%option
 #% key: fs
 #% type: string
-#% description: The field separator character between the output columns, default is tabular " | ". Do not use "," as this char is reserved to list several map ids in a sample granule
+#% description: Field separator character between the output columns, default is tabular " | ". Do not use "," as this char is reserved to list several map ids in a sample granule
 #% required: no
 #%end
 

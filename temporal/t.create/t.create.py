@@ -32,7 +32,7 @@
 #%option
 #% key: semantictype
 #% type: string
-#% description: The semantic type of the space time dataset
+#% description: Semantic type of the space time dataset
 #% required: yes
 #% multiple: no
 #% options: min,max,sum,mean

@@ -38,7 +38,7 @@
 #%option
 #% key: compression
 #% type: string
-#% description: Chose the compression of the tar archive
+#% description: Compression method of the tar archive
 #% required: no
 #% multiple: no
 #% options: no,gzip,bzip2

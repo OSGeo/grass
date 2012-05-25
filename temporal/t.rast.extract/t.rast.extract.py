@@ -29,7 +29,7 @@
 #%option
 #% key: expression
 #% type: string
-#% description: The r.mapcalc expression assigned to all extracted raster maps
+#% description: r.mapcalc expression assigned to all extracted raster maps
 #% required: no
 #% multiple: no
 #%end
@@ -44,7 +44,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: The number of r.mapcalc processes to run in parallel
+#% description: Number of r.mapcalc processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1

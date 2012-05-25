@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Create a new space time raster dataset from the aggregated data of an existing space time raster dataset.
+#% description: Creates a new space time raster dataset from the aggregated data of an existing space time raster dataset.
 #% keywords: temporal
 #% keywords: aggregation
 #%end
@@ -29,7 +29,7 @@
 #%option
 #% key: granularity
 #% type: string
-#% description: The aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or a double value for relative time
+#% description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or a double value for relative time
 #% required: yes
 #% multiple: no
 #%end

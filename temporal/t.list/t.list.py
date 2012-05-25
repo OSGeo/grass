@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Lists space time datasets and map.
+#% description: Lists space time datasets and maps.
 #% keywords: temporal
 #% keywords: list
 #%end
@@ -42,7 +42,7 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Which columns should be printed to stdout. Columns number_of_maps and granularity only available for space time datasets
+#% description: Columns to be printed to stdout. Columns number_of_maps and granularity only available for space time datasets
 #% required: no
 #% multiple: yes
 #% options: id, name, creator, mapset, number_of_maps, creation_time, start_time, end_time, north, south, west, east, granularity, all
