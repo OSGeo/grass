@@ -26,7 +26,7 @@
 #%option
 #% key: order
 #% type: string
-#% description: Order the space time dataset by category. 
+#% description: Order the space time dataset by category
 #% required: no
 #% multiple: yes
 #% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
@@ -49,7 +49,7 @@
 #%option
 #% key: method
 #% type: string
-#% description: Which method should be used for data listing
+#% description: Method used for data listing
 #% required: no
 #% multiple: no
 #% options: cols,comma,delta,deltagaps,gran
@@ -59,7 +59,7 @@
 #%option
 #% key: fs
 #% type: string
-#% description: The field separator character between the columns, default is tabular "\t"
+#% description: Field separator character between the columns, default is tabular "\t"
 #% required: no
 #%end
 

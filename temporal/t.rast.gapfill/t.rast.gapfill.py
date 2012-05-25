@@ -29,7 +29,7 @@
 #%option
 #% key: base
 #% type: string
-#% description: The base name of the interpolated raster maps. This name will be extended with a numerical prefix
+#% description: Base name of the interpolated raster maps. This name will be extended with a numerical prefix
 #% required: yes
 #% multiple: no
 #%end
@@ -37,7 +37,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: The number of interpolation processes to run in parallel
+#% description: Number of interpolation processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1

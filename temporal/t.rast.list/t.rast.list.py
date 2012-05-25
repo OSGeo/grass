@@ -27,7 +27,7 @@
 #%option
 #% key: order
 #% type: string
-#% description: Order the space time dataset by category. 
+#% description: Order the space time dataset by category
 #% required: no
 #% multiple: yes
 #% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
@@ -37,7 +37,7 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Select columns to be printed to stdout 
+#% description: Select columns to be printed to stdout
 #% required: no
 #% multiple: yes
 #% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
@@ -50,7 +50,7 @@
 #%option
 #% key: method
 #% type: string
-#% description: Which method should be used for data listing
+#% description: Method used for data listing
 #% required: no
 #% multiple: no
 #% options: cols,comma,delta,deltagaps,gran
@@ -60,7 +60,7 @@
 #%option
 #% key: fs
 #% type: string
-#% description: The field separator character between the columns, default is tabular "\t"
+#% description: Field separator character between the columns, default is tabular "\t"
 #% required: no
 #%end
 

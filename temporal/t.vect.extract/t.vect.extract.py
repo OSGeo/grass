@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Extracts a subset of a space time raster dataset.
+#% description: Extracts a subset of a space time vector dataset.
 #% keywords: temporal
 #% keywords: extract
 #%end
@@ -50,7 +50,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: The number of v.extract processes to run in parallel. Use only if you have a database backend which supports concurrent writing.
+#% description: The number of v.extract processes to run in parallel. Use only if database backend is used which supports concurrent writing
 #% required: no
 #% multiple: no
 #% answer: 1

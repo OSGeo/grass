@@ -36,7 +36,7 @@
 #%option
 #% key: order
 #% type: string
-#% description: Sort the maps by category.
+#% description: Sort the maps by category
 #% required: no
 #% multiple: yes
 #% options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max

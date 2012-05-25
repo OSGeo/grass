@@ -26,7 +26,7 @@
 #%option
 #% key: expression
 #% type: string
-#% description: The r.mapcalc expression applied to each time step of the sampled data
+#% description: r.mapcalc expression applied to each time step of the sampled data
 #% required: yes
 #% multiple: no
 #%end
@@ -42,7 +42,7 @@
 #%option
 #% key: base
 #% type: string
-#% description: The base name of the new created raster maps. This name will be extended with a numerical prefix
+#% description: Base name of the new created raster maps. This name will be extended with a numerical prefix
 #% gisprompt: NULL
 #% required: yes
 #% multiple: no
@@ -51,7 +51,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: The number of r.mapcalc processes to run in parallel
+#% description: Number of r.mapcalc processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1

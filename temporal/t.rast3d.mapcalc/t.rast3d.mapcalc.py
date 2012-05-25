@@ -26,7 +26,7 @@
 #%option
 #% key: expression
 #% type: string
-#% description: The r3.mapcalc expression applied to each time step of the sampled data
+#% description: r3.mapcalc expression applied to each time step of the sampled data
 #% required: yes
 #% multiple: no
 #%end
@@ -42,7 +42,7 @@
 #%option
 #% key: base
 #% type: string
-#% description: The base name of the new created 3d raster maps. This name will be extended with a numerical prefix
+#% description: Base name of the new created 3d raster maps. This name will be extended with a numerical prefix
 #% required: yes
 #% multiple: no
 #%end
@@ -50,7 +50,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: The number of r3.mapcalc processes to run in parallel
+#% description: Number of r3.mapcalc processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1

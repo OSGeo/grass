@@ -39,7 +39,7 @@
 #%option
 #% key: start
 #% type: string
-#% description: The valid start date and time of the first map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
+#% description: Valid start date and time of the first map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
 #% required: no
 #% multiple: no
 #%end
@@ -47,7 +47,7 @@
 #%option
 #% key: end
 #% type: string
-#% description: The valid end date and time of all map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
+#% description: Valid end date and time of all map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
 #% required: no
 #% multiple: no
 #%end
@@ -55,7 +55,7 @@
 #%option
 #% key: unit
 #% type: string
-#% description: This unit must be set in case of relative time stamps
+#% description: Unit must be set in case of relative time stamps
 #% required: no
 #% multiple: no
 #% options: years,months,days,hours,minutes,seconds
@@ -72,7 +72,7 @@
 #%option
 #% key: fs
 #% type: string
-#% description: The field separator character of the input file
+#% description: Field separator character of the input file
 #% required: no
 #% answer: |
 #%end

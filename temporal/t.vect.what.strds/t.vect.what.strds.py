@@ -30,7 +30,8 @@
 #%option
 #% key: column
 #% type: string
-#% description: Name of the vector column to be created and to store sampled raster values. The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names
+#% label: Name of the vector column to be created and to store sampled raster values
+#% description: The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names
 #% required: no
 #% multiple: no
 #%end
