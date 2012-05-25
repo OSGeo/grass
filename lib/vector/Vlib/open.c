@@ -400,9 +400,19 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
 	      G_fatal_error(_("Unable to open vector map <%s> on level %d"),
 			    Map->fInfo.ogr.layer_name, level_request);
 	}
+	if (level < 2 && Map->head.with_z) {
+	    /* topo has been initialized as 2D, update to 3D */
+	    dig_free_plus(&(Map->plus));
+	    dig_spidx_free(&(Map->plus));
+	    dig_cidx_free(&(Map->plus));
+	    
+	    Map->plus.with_z = Map->head.with_z;
+	    dig_init_plus(&(Map->plus));
+	}
     }
-    else {
-	Map->head.with_z = Map->plus.with_z;	/* take dimension from topo */
+    else if (level > 1) {
+	/* take dimension from topo if topo is available */
+	Map->head.with_z = Map->plus.with_z;
     }
 
     /* set status */
