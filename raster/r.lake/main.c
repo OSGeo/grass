@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 {
     char *terrainmap, *seedmap, *lakemap;
     int rows, cols, in_terran_fd, out_fd, lake_fd, row, col, pases, pass;
-    int lastcount, curcount, start_col, start_row;
+    int lastcount, curcount, start_col = 0, start_row = 0;
     double east, north, area = 0, volume = 0;
     FCELL **in_terran, **out_water, water_level, max_depth = 0, min_depth = 0;
     FCELL water_window[3][3];
