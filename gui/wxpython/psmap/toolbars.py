@@ -85,11 +85,11 @@ class PsMapToolbar(BaseToolbar):
                                       label = _('North Arrow')),
             'drawGraphics': MetaIcon(img = 'edit',
                                      label = _('Add simple graphics')),
-            'pointAdd'    : MetaIcon(img = '',
+            'pointAdd'    : MetaIcon(img = 'point-add',
                                      label = _('Point')),
-            'lineAdd'     : MetaIcon(img = '',
+            'lineAdd'     : MetaIcon(img = 'line-add',
                                      label = _('Line')),
-            'rectangleAdd': MetaIcon(img = '',
+            'rectangleAdd': MetaIcon(img = 'rectangle-add',
                                      label = _('Rectangle')),
             }
         self.icons = icons
