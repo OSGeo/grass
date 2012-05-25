@@ -12903,7 +12903,7 @@ msgid "GDAL datatype: %s, valid range: %g - %g"
 msgstr "Tipo di dati GDAL: %s, intervallo valido: %g - %g"
 
 #: ../raster/r.lake/main.c:152
-msgid "Fills lake from seed at given level."
+msgid "Fills lake at given point to given level."
 msgstr "Riempie un lago a parire da un punto seed ad un dato livello"
 
 #: ../raster/r.lake/main.c:158
@@ -12915,7 +12915,7 @@ msgid "Seed point coordinates"
 msgstr "Coordinate del punto seed"
 
 #: ../raster/r.lake/main.c:177
-msgid "Name of raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "Nome della mappa raster con seed (almeno 1 cella > 0)"
 
 #: ../raster/r.lake/main.c:183
@@ -33610,7 +33610,7 @@ msgid "raster, reclassification"
 msgstr "Mappa(e) raster da leggere"
 
 #, fuzzy
-msgid "Name of input raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "Nome della mappa raster da utilizzare per <%s>"
 
 #, fuzzy

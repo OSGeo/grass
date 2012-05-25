@@ -13169,7 +13169,7 @@ msgid "GDAL datatype: %s, valid range: %g - %g"
 msgstr "Kiểu dữ liệu GDAL: %s, miền hợp lệ: %g - %g"
 
 #: ../raster/r.lake/main.c:152
-msgid "Fills lake from seed at given level."
+msgid "Fills lake at given point to given level."
 msgstr "Lấp đầy hồ từ 'hạt gieo' tại mức cho trước."
 
 #: ../raster/r.lake/main.c:158
@@ -13181,7 +13181,7 @@ msgid "Seed point coordinates"
 msgstr "Tọa độ điểm 'gieo'"
 
 #: ../raster/r.lake/main.c:177
-msgid "Name of raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "Bản đồ raster với 'hạt gieo' (ít nhất là 1 ô > 0)"
 
 #: ../raster/r.lake/main.c:183

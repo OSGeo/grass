@@ -13266,7 +13266,7 @@ msgstr ""
 
 #: ../raster/r.lake/main.c:152
 #, fuzzy
-msgid "Fills lake from seed at given level."
+msgid "Fills lake at given point to given level."
 msgstr "Piepilda ezeru no viena punkta līdz norādītajam līmenim"
 
 #: ../raster/r.lake/main.c:158
@@ -13279,7 +13279,7 @@ msgstr "Sākuma punkta koordinātes"
 
 #: ../raster/r.lake/main.c:177
 #, fuzzy
-msgid "Name of raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "Rastra karte ar sākuma punktu (vismaz 1 šūnu > 0)"
 
 #: ../raster/r.lake/main.c:183

@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
-    module->description = _("Fills lake from seed at given level.");
+    module->description = _("Fills lake at given point to given level.");
 
     tmap_opt = G_define_standard_option(G_OPT_R_ELEV);
 
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     smap_opt = G_define_standard_option(G_OPT_R_MAP);
     smap_opt->key = "seed";
     smap_opt->description =
-	_("Name of raster map with seed (at least 1 cell > 0)");
+	_("Name of input raster map with given starting point(s) (at least 1 cell > 0)");
     smap_opt->required = NO;
 
     negative_flag = G_define_flag();

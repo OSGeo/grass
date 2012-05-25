@@ -13058,7 +13058,7 @@ msgid "GDAL datatype: %s, valid range: %g - %g"
 msgstr ""
 
 #: ../raster/r.lake/main.c:152
-msgid "Fills lake from seed at given level."
+msgid "Fills lake at given point to given level."
 msgstr "Wypełnia jeziora z wartości próbki na zadanym poziomie."
 
 #: ../raster/r.lake/main.c:158
@@ -13070,7 +13070,7 @@ msgid "Seed point coordinates"
 msgstr "Podaj współrzędne punktu"
 
 #: ../raster/r.lake/main.c:177
-msgid "Name of raster map with seed (at least 1 cell > 0)"
+msgid "Name of input raster map with given starting point(s) (at least 1 cell > 0)"
 msgstr "Nazwa mapy rastrowej która ma być użyta jako maska (co najmniej 1 komórka >0)"
 
 #: ../raster/r.lake/main.c:183
