@@ -30,6 +30,7 @@
 import os
 import grass.script as grass
 import grass.temporal as tgis
+from datetime import datetime
 
 ############################################################################
 
@@ -55,22 +56,59 @@ def main():
         grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
     sp.select()
+    
+    grass.use_temp_region()
 
     maps = sp.get_registered_maps_as_objects_by_granularity()
-
+    num_maps = len(maps)
+    
     # Get the granularity and set bottom, top and top-bottom resolution
     granularity = sp.get_granularity()
+    
+    # This is the reference time to scale the z coordinate
+    reftime = datetime(1900, 1, 1)
 
+    # We set top and bottom according to the start time in relation to the date 1900-01-01 00:00:00
+    # In case of days, hours, minutes and seconds, a double number is used to represent days and fracs of a day
+    
+    # Space time voxel cubes with montly or yearly granularity can not be mixed with other temporal units
+    
+    # Compatible temporal units are : days, hours, minutes and seconds
+    # Incompatible are years and moths
+    start, end = sp.get_valid_time()
+        
     if sp.is_time_absolute():
         unit = granularity.split(" ")[1] 
         granularity = int(granularity.split(" ")[0])
+        
+        if unit == "years":
+	    bottom = start.year - 1900
+	    top = granularity * num_maps
+	elif unit == "months":
+	    bottom = (start.year - 1900) * 12 + start.month
+	    top = granularity * num_maps
+	else:
+	    bottom = tgis.time_delta_to_relative_time(start - reftime)
+	    days = 0
+	    hours = 0
+	    minutes = 0
+	    seconds = 0
+	    if unit == "days":
+		days = granularity
+	    if unit == "hours":
+		hours = granularity
+	    if unit == "minutes":
+		minutes = granularity
+	    if unit == "seconds":
+		seconds = granularity
+		
+	    granularity = days + hours/24.0 + minutes/1440.0 + seconds/86400.0 
     else:
         unit = sp.get_relative_time_unit()
+	bottom = start
 
-    num_maps = len(maps)
-    bottom = 0
-    top = granularity * num_maps
-
+    top = bottom + granularity * num_maps
+    
     ret = grass.run_command("g.region", t=top, b=bottom, tbres=granularity)
     
     if ret != 0:
