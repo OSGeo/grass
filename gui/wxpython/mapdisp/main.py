@@ -51,42 +51,31 @@ class DMonMap(Map):
     def __init__(self, gisrc = None, cmdfile = None, mapfile = None, envfile = None, monitor = None):
         """!Map composition (stack of map layers and overlays)
 
-        
         @param cmdline full path to the cmd file (defined by d.mon)
         @param mapfile full path to the map file (defined by d.mon)
         @param envfile full path to the env file (defined by d.mon)
         @param monitor name of monitor (defined by d.mon)
         """
-        
+
         Map.__init__(self)
-        
+
         # environment settings
         self.env   = dict()
-        
+
         self.cmdfile = cmdfile
         self.envfile = envfile
         self.monitor = monitor
-        
+
         if mapfile:
             self.mapfileCmd = mapfile
             self.maskfileCmd = os.path.splitext(mapfile)[0] + '.pgm'
-        
+
         # generated file for g.pnmcomp output for rendering the map
         self.mapfile = grass.tempfile(create = False) + '.ppm'
-        
-        # GRASS environment variable (for rendering)
-        env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
-               "GRASS_COMPRESSION"     : "0",
-               "GRASS_TRUECOLOR"       : "TRUE",
-               "GRASS_TRANSPARENT"     : "TRUE",
-               "GRASS_PNG_READ"        : "FALSE",
-               }
-        
-        self._writeEnvFile(env)
+
+        self._writeEnvFile(self.env) # self.env is expected to be defined in parent class
         self._writeEnvFile({"GRASS_PNG_READ" : "TRUE"})
-        for k, v in env.iteritems():
-            os.environ[k] = v
-    
+
     def GetLayersFromCmdFile(self):
         """!Get list of map layers from cmdfile
         """
