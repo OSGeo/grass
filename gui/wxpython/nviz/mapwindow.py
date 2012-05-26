@@ -1300,10 +1300,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     #             vecType.append(v)
                     layer = self.tree.GetPyData(item)[0]['maplayer']
                     npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(layer)
-                    if npoints > 0:
+                    if npoints > 0 or mapIs3D:
                         self.LoadVector(item, points = True)
-                    if nlines > 0:
+                    if nlines > 0 or mapIs3D:
                         self.LoadVector(item, points = False)
+                    
             except GException, e:
                 GError(parent = self,
                        message = e.value)
