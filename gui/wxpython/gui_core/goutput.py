@@ -663,7 +663,7 @@ class GMConsole(wx.SplitterWindow):
                 GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e))
             finally:
                 output.close()
-            self.parent.SetStatusText(_("Commands output saved as '%s'") % path)
+            self.parent.SetStatusText(_("Commands output saved into '%s'") % path)
         
         dlg.Destroy()
 
@@ -778,7 +778,7 @@ class GMConsole(wx.SplitterWindow):
                 finally:
                     output.close()
             
-                self.parent.SetStatusText(_("List of commands saved as '%s'") % self.cmdFileProtocol)
+                self.parent.SetStatusText(_("Commands protocol saved into '%s'") % self.cmdFileProtocol)
                 del self.cmdFileProtocol
         else:
             # start capturing commands
