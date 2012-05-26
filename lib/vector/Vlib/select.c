@@ -62,7 +62,13 @@ void Vect_spatial_index_destroy(struct spatial_index * si)
 void Vect_spatial_index_add_item(struct spatial_index * si, int id,
 				 const struct bound_box * box)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	rect.boundary = G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
+	rect_init = si->si_tree->nsides_alloc;
+    }
 
     G_debug(3, "Vect_spatial_index_add_item(): id = %d", id);
 
@@ -87,7 +93,13 @@ void Vect_spatial_index_del_item(struct spatial_index * si, int id,
 				 const struct bound_box * box)
 {
     int ret;
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	rect.boundary = G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
+	rect_init = si->si_tree->nsides_alloc;
+    }
 
     G_debug(3, "Vect_spatial_index_del_item(): id = %d", id);
 
@@ -125,7 +137,13 @@ int
 Vect_spatial_index_select(const struct spatial_index * si, const struct bound_box * box,
 			  struct ilist *list)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	rect.boundary = G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
+	rect_init = si->si_tree->nsides_alloc;
+    }
 
     G_debug(3, "Vect_spatial_index_select()");
 
