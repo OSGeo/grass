@@ -486,7 +486,7 @@ class GPrompt(object):
             else:
                 self.moduleDesc = parent.parent.menubar.GetData().GetModules()
             self.moduleList = self._getListOfModules()
-            self.mapList = self._getListOfMaps()
+            self.mapList    = self._getListOfMaps()
             self.mapsetList = utils.ListOfMapsets()
         else:
             self.moduleDesc = self.moduleList = self.mapList = None
@@ -496,9 +496,12 @@ class GPrompt(object):
         self.autoCompFilter = None
         
         # command description (gtask.grassTask)
-        self.cmdDesc = None
+        self.cmdDesc   = None
         self.cmdbuffer = self._readHistory()
-        self.cmdindex = len(self.cmdbuffer)
+        self.cmdindex  = len(self.cmdbuffer)
+        
+        # list of traced commands
+        self.commands = list()
         
     def _readHistory(self):
         """!Get list of commands from history file"""
@@ -588,24 +591,41 @@ class GPrompt(object):
         result['vector'] = grass.list_strings('vect')
         
         return result
-
-    def OnRunCmd(self, event):
-        """!Run command"""
-        cmdString = event.GetString()
+    
+    def _runCmd(self, cmdString):
+        """!Run command
         
-        if self.standAlone:
+        @param cmdString command to run (given as a string)
+        """
+        if self.parent.GetName() == "ModelerDialog":
+            self.parent.OnOk(None)
+            return
+        
+        if not cmdString or self.standAlone:
             return
         
         if cmdString[:2] == 'd.' and not self.parent.curr_page:
-            self.parent.NewDisplay(show=True)
+            self.parent.NewDisplay(show = True)
+                
+        self.commands.append(cmdString) # trace commands
+
+        # parse command into list
+        try:
+            cmd = utils.split(str(cmdString))
+        except UnicodeError:
+            cmd = utils.split(EncodeString((cmdString)))
+        cmd = map(DecodeString, cmd)
         
-        cmd = utils.split(cmdString)
-        if len(cmd) > 1:
-            self.parent.RunCmd(cmd, switchPage = True)
+        # send the command list to the processor 
+        if cmd[0] in ('r.mapcalc', 'r3.mapcalc') and len(cmd) == 1:
+            self.parent.parent.OnMapCalculator(event = None, cmd = cmd)
         else:
-            self.parent.RunCmd(cmd, switchPage = False)
-        
-        self.OnUpdateStatusBar(None)
+            self.parent.RunCmd(cmd)
+            
+        # add command to history & clean prompt
+        self.UpdateCmdHistory(cmd)
+        self.OnCmdErase(None)
+        self.parent.parent.statusbar.SetStatusText('')
         
     def OnUpdateStatusBar(self, event):
         """!Update Layer Manager status bar"""
@@ -643,6 +663,14 @@ class GPrompt(object):
             else:
                 self.dataList = self._getListOfMaps()
         
+    def GetCommands(self):
+        """!Get list of launched commands"""
+        return self.commands
+    
+    def ClearCommands(self):
+        """!Clear list of commands"""
+        del self.commands[:]
+        
 class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
     """!Interactive wxGUI prompt - popup version"""
     def __init__(self, parent):
@@ -678,6 +706,10 @@ class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
         """!Erase command prompt"""
         self.input.SetValue('')
 
+    def OnRunCmd(self, event):
+        """!Run command"""
+        self._runCmd(event.GetString())
+        
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     """!Styled wxGUI prompt with autocomplete and calltips"""    
     def __init__(self, parent, id = wx.ID_ANY, margin = False):
@@ -1080,34 +1112,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         elif event.GetKeyCode() == wx.WXK_RETURN and \
                 self.AutoCompActive() == False:
             # run command on line when <return> is pressed
-            
-            if self.parent.GetName() == "ModelerDialog":
-                self.parent.OnOk(None)
-                return
-            
-            # find the command to run
-            line = self.GetCurLine()[0].strip()
-            if len(line) == 0:
-                return
-            
-            # parse command into list
-            try:
-                cmd = utils.split(str(line))
-            except UnicodeError:
-                cmd = utils.split(EncodeString((line)))
-            cmd = map(DecodeString, cmd)
-            
-            #  send the command list to the processor 
-            if cmd[0] in ('r.mapcalc', 'r3.mapcalc') and len(cmd) == 1:
-                self.parent.parent.OnMapCalculator(event = None, cmd = cmd)
-            else:
-                self.parent.RunCmd(cmd)
-            
-            # add command to history & clean prompt
-            self.UpdateCmdHistory(cmd)
-            self.OnCmdErase(None)
-            self.parent.parent.statusbar.SetStatusText('')
-            
+            self._runCmd(self.GetCurLine()[0].strip())
+                        
         elif event.GetKeyCode() == wx.WXK_SPACE:
             items = self.GetTextLeft().split()
             if len(items) == 1:
