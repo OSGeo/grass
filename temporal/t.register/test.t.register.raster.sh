@@ -1,8 +1,8 @@
 #!/bin/sh
 # This is a test to register and unregister raster maps in
-# space time raster input.
+# space time raster datasets.
 # The raster maps will be registered in different space time raster
-# inputs
+# datasets.
 
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
