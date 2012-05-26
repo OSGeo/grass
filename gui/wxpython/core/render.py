@@ -361,10 +361,21 @@ class Map(object):
         # setting some initial env. variables
         self._initGisEnv() # g.gisenv
         self.GetWindow()
-        
+
+        # GRASS environment variable (for rendering)
+        self.env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
+               "GRASS_COMPRESSION"     : "0",
+               "GRASS_TRUECOLOR"       : "TRUE",
+               "GRASS_TRANSPARENT"     : "TRUE",
+               "GRASS_PNG_READ"        : "FALSE",
+               }
+
+        for k, v in self.env.iteritems():
+            os.environ[k] = v
+
         # projection info
         self.projinfo = self._projInfo()
-        
+
     def _runCommand(self, cmd, **kwargs):
         """!Run command in environment defined by self.gisrc if
         defined"""
