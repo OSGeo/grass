@@ -21,7 +21,7 @@
 
 /*- Parameters and global variables -----------------------------------------*/
 typedef struct {
-    struct Option *unit, *integration;
+    struct Option *unit, *integration, *depths, *rows, *cols;
     struct Flag *full, *testunit, *testint;
 } paramType;
 
@@ -39,7 +39,7 @@ void set_params(void) {
     param.unit->key = "unit";
     param.unit->type = TYPE_STRING;
     param.unit->required = NO;
-    param.unit->options = "coord,putget";
+    param.unit->options = "coord,putget,large";
     param.unit->description = _("Choose the unit tests to run");
 
     param.integration = G_define_option();
@@ -48,6 +48,27 @@ void set_params(void) {
     param.integration->required = NO;
     param.integration->options = "";
     param.integration->description = _("Choose the integration tests to run");
+
+    param.depths = G_define_option();
+    param.depths->key = "depths";
+    param.depths->type = TYPE_INTEGER;
+    param.depths->required = NO;
+    param.depths->answer = "20";
+    param.depths->description = _("The number of depths to be used for the large file put value test");
+
+    param.rows = G_define_option();
+    param.rows->key = "rows";
+    param.rows->type = TYPE_INTEGER;
+    param.rows->required = NO;
+    param.rows->answer = "5400";
+    param.rows->description = _("The number of rows to be used for the large file put value test");
+
+    param.cols = G_define_option();
+    param.cols->key = "cols";
+    param.cols->type = TYPE_INTEGER;
+    param.cols->required = NO;
+    param.cols->answer = "10800";
+    param.cols->description = _("The number of columns to be used for the large file put value test");
 
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
@@ -70,6 +91,7 @@ void set_params(void) {
 int main(int argc, char *argv[]) {
     struct GModule *module;
     int returnstat = 0, i;
+    int depths, rows, cols;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -83,7 +105,11 @@ int main(int argc, char *argv[]) {
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-    
+ 
+    depths = atoi(param.depths->answer);
+    rows   = atoi(param.rows->answer);
+    cols   = atoi(param.cols->answer);
+   
     /* Initiate the defaults for testing */
     Rast3d_init_defaults();
 
@@ -91,6 +117,7 @@ int main(int argc, char *argv[]) {
     if (param.testunit->answer || param.full->answer) {
         returnstat += unit_test_coordinate_transform();
         returnstat += unit_test_put_get_value();
+        returnstat += unit_test_put_get_value_large_file(depths, rows, cols);
     }
 
     /*Run the integration tests */
@@ -109,6 +136,8 @@ int main(int argc, char *argv[]) {
                         returnstat += unit_test_coordinate_transform();
                     if (strcmp(param.unit->answers[i], "putget") == 0)
                         returnstat += unit_test_put_get_value();
+                    if (strcmp(param.unit->answers[i], "large") == 0)
+                        returnstat += unit_test_put_get_value_large_file(depths, rows, cols);
                     
                     i++;
                 }
@@ -123,7 +152,6 @@ int main(int argc, char *argv[]) {
 
         }
     }
-
     
     if (returnstat != 0)
         G_warning("Errors detected while testing the g3d lib");
