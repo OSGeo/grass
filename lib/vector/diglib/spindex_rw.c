@@ -22,6 +22,26 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+/* TODO: only write out actually used sides */
+#ifndef NUMSIDES
+#define NUMSIDES 6
+#endif
+
+/* TODO: merge these two */
+struct spidxstack
+{
+    off_t pos[MAXCARD];		/* file position of child node, object ID on level 0 */
+    struct RTree_Node sn;	/* stack node */
+    int branch_id;		/* branch no to follow down */
+};
+
+struct spidxpstack
+{
+    off_t pos[MAXCARD];		/* file position of child node, object ID on level 0 */
+    struct RTree_Node *sn;	/* stack node pointer */
+    int branch_id;		/* branch no to follow down */
+};
+
 /*!
    \brief Write spatial index header to file
 
@@ -590,7 +610,13 @@ static int rtree_dump_branch_file(FILE * fp, struct RTree_Branch *b, int with_z,
 int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
 {
     int i;
-    struct RTree_Node n;
+    static struct RTree_Node n;
+    static int node_init = 0;
+    
+    if (!node_init) {
+	for (i = 0; i < MAXCARD; i++)
+	    RTreeNewRect(&(n.branch[i].rect), t);
+    }
 
     /* recursive nearly-but-a-bit-messy depth-first pre-order traversal
      * potentially filling up memory */
@@ -660,12 +686,7 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
     int sidx_nodesize, sidx_leafsize;
     struct RTree_Node *n;
     int i, j, writeout, maxcard;
-    struct spidxstack
-    {
-	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct RTree_Node *sn;	/* stack node */
-	int branch_id;		/* branch no to follow down */
-    } s[50];
+    struct spidxpstack s[MAXLEVEL];
     int top = 0;
 
     /* should be foolproof */
@@ -765,14 +786,21 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
     int sidx_nodesize, sidx_leafsize;
     struct RTree_Node *n;
     int i, j, writeout, maxcard;
-    struct spidxstack
-    {
-	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct RTree_Node sn;	/* stack node */
-	int branch_id;		/* branch no to follow down */
-    } s[MAXLEVEL];
+    static struct spidxstack s[MAXLEVEL];
+    static int stack_init = 0;
     int top = 0;
     
+    if (!stack_init) {
+	for (i = 0; i < MAXLEVEL; i++) {
+	    for (j = 0; j < MAXCARD; j++) {
+		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
+	    }
+	}
+	stack_init = 1;
+    }
+
+
+
     /* write pending changes to file */
     RTreeFlushBuffer(t);
 
@@ -879,13 +907,19 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 {
     struct RTree_Node *newnode = NULL;
     int i, j, loadnode, maxcard;
-    struct spidxstack
-    {
-	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct RTree_Node sn;	/* stack node */
-	int branch_id;		/* branch no to follow down */
-    } s[50], *last;
+    struct spidxstack *last;
+    static struct spidxstack s[MAXLEVEL];
+    static int stack_init = 0;
     int top = 0;
+
+    if (!stack_init) {
+	for (i = 0; i < MAXLEVEL; i++) {
+	    for (j = 0; j < MAXCARD; j++) {
+		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
+	    }
+	}
+	stack_init = 1;
+    }
 
     /* stack size of t->rootlevel + 1 would be enough because of
      * depth-first postorder traversal:
@@ -1005,14 +1039,20 @@ static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
     struct RTree_Node newnode;
     off_t newnode_pos = -1;
     int i, j, loadnode, maxcard;
-    struct spidxstack
-    {
-	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct RTree_Node sn;	/* stack node */
-	int branch_id;		/* branch no to follow down */
-    } s[MAXLEVEL], *last;
+    struct spidxstack *last;
+    static struct spidxstack s[MAXLEVEL];
+    static int stack_init = 0;
     int top = 0;
 
+    if (!stack_init) {
+	for (i = 0; i < MAXLEVEL; i++) {
+	    for (j = 0; j < MAXCARD; j++) {
+		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
+	    }
+	}
+	stack_init = 1;
+    }
+	
     /* stack size of t->rootlevel + 1 would be enough because of
      * depth-first postorder traversal:
      * only one node per level on stack at any given time */
@@ -1284,16 +1324,24 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r, SearchHitCallback shcb,
 {
     int hitCount = 0, found, maxcard;
     int i, j;
-    struct spidxstack
-    {
-	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct RTree_Node sn;	        /* stack node */
-	int branch_id;		/* branch no to follow down */
-    } s[50], *last;
+    struct spidxstack *last;
+    static struct spidxstack s[MAXLEVEL];
+    static int stack_init = 0;
     int top = 0;
 
     assert(r);
     assert(t);
+
+    if (!stack_init) {
+	struct Rect_Real *r;
+
+	for (i = 0; i < MAXLEVEL; i++) {
+	    for (j = 0; j < MAXCARD; j++) {
+		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
+	    }
+	}
+	stack_init = 1;
+    }
 
     /* stack size of t->rootlevel + 1 is enough because of depth first search */
     /* only one node per level on stack at any given time */
