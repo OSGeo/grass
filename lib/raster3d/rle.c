@@ -64,7 +64,11 @@ static char *rle_length2code(int length, char *dst)
 	return dst;
     }
 
-    /* length = 254 ^ c + 254 * b + a; b, a < 254 */
+    /* TODO implement a corrected version for larger strings */
+    /* This code is simply wrong, it works only for c == 2, critical number for wrong computation is 254*254*2 = 129032 */
+    /* CORRECT: length = 254 ^ 2 + 254 * b + a; b, a < 254 */
+
+    /* WRONG: length = 254 ^ c + 254 * b + a; b, a < 254 */
 
     lPrime = length;
     while ((lPrime = lPrime / 254) != 0)
@@ -74,6 +78,8 @@ static char *rle_length2code(int length, char *dst)
 
     G_RLE_OUTPUT_CODE(length / 254);
     G_RLE_OUTPUT_CODE(length % 254);
+
+    /* Next should be: length = 254 ^ 3 + 254 ^ 2 * c + 254 * b + a; c, b, a < 254 */
 
     return dst;
 }
@@ -105,7 +111,11 @@ static char *rle_code2length(char *src, int *length)
 	return src;
     }
 
-    /* length = 254 ^ c + 254 * b + a; b, a < 254 */
+    /* TODO implement a corrected version for larger strings */
+    /* This code is simply wrong, it works only for c == 2, critical number for wrong computation is 254*254*2 = 129032 */
+    /* CORRECT: length = 254 ^ 2 + 254 * b + a; b, a < 254 */
+
+    /* WRONG: length = 254 ^ c + 254 * b + a; b, a < 254 */
 
     *length = G_254_SQUARE;
     while (G_RLE_INPUT_CODE(&code) == 254)
@@ -114,6 +124,8 @@ static char *rle_code2length(char *src, int *length)
     *length += 254 * code;
     G_RLE_INPUT_CODE(&code);
     *length += code;
+
+    /* Next should be: length = 254 ^ 3 + 254 ^ 2 * c + 254 * b + a; c, b, a < 254 */
 
     return src;
 }
