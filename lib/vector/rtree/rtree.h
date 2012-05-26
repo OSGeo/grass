@@ -19,12 +19,10 @@
 #define _R_TREE_H_
 
 #include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <grass/config.h> /* needed for LFS */
 
-
-#define NUMDIMS	3		/* maximum number of dimensions */
-#define NUMSIDES 2*NUMDIMS
 
 typedef double RectReal;
 
@@ -54,7 +52,7 @@ typedef double RectReal;
 
 struct RTree_Rect
 {
-    RectReal boundary[NUMSIDES];	/* xmin,ymin,...,xmax,ymax,... */
+    RectReal *boundary;	/* xmin,ymin,...,xmax,ymax,... */
 };
 
 struct RTree_Node;               /* node for spatial index */
@@ -72,7 +70,7 @@ struct RTree_Branch              /* branch for spatial index */
     union RTree_Child child;
 };
 
-struct RTree_Node             /* node for spatial index */
+struct RTree_Node       /* node for spatial index */
 {
     int count;          /* number of branches */
     int level;		/* 0 is leaf, others positive */
@@ -96,16 +94,42 @@ typedef int rt_insert_fn(struct RTree_Rect *, union RTree_Child, int, struct RTr
 typedef int rt_delete_fn(struct RTree_Rect *, union RTree_Child, struct RTree *);
 typedef int rt_valid_child_fn(union RTree_Child *);
 
+/* temp vars for each tree */
+/* stacks used for non-recursive insertion/deletion */
+/* stack for file-based index */
+struct fstack
+{
+    struct RTree_Node sn;	/* stack node */
+    int branch_id;		/* branch number to follow down */
+    off_t pos;			/* file position of stack node */
+};
+/* stack for memory-based index */
+struct mstack
+{
+    struct RTree_Node *sn;	/* stack node pointer */
+    int branch_id;		/* branch number to follow down */
+};
+
+/* temp vars for node splitting */
+struct RTree_PartitionVars {
+    int partition[MAXCARD + 1];
+    int total, minfill;
+    int taken[MAXCARD + 1];
+    int count[2];
+    struct RTree_Rect cover[2];
+    RectReal area[2];
+};
+
 struct RTree
 {
     /* RTree setup info */
     int fd;                 	  /* file descriptor */
     unsigned char ndims;    	  /* number of dimensions */
     unsigned char nsides;   	  /* number of sides = 2 * ndims */
-    unsigned char nsides_alloc;   /* number of sides = 2 * ndims */
+    unsigned char ndims_alloc;    	  /* number of dimensions allocated */
+    unsigned char nsides_alloc;   /* number of sides allocated = 2 * ndims allocated */
     int nodesize;           	  /* node size in bytes */
     int branchsize;         	  /* branch size in bytes */
-    int rectsize;           	  /* rectangle size in bytes */
 
     /* RTree info, useful to calculate space requirements */
     int n_nodes;            /* number of nodes */
@@ -149,6 +173,22 @@ struct RTree
     
     struct RTree_Node *root;     /* pointer to root node */
 
+    /* internal variables, specific for each tree,
+     * allocated with tree initialization */
+    /* stacks for tree traversal */
+    struct mstack ms[MAXLEVEL];
+    struct fstack fs[MAXLEVEL];
+    
+    /* variables for splitting / forced reinsertion */
+    struct RTree_PartitionVars p;
+    struct RTree_Branch BranchBuf[MAXCARD + 1];
+
+    struct RTree_Branch tmpb1, tmpb2, c;
+    int BranchCount;
+
+    struct RTree_Rect rect_0, rect_1, upperrect, orect;
+    RectReal *center_n;
+
     off_t rootpos;         /* root node position in file */
 };
 
@@ -166,6 +206,8 @@ struct RTree_Node *RTreeNewNode(struct RTree *, int);
 void RTreeInitNode(struct RTree *, struct RTree_Node *, int);
 void RTreeFreeNode(struct RTree_Node *);
 void RTreeDestroyNode(struct RTree_Node *, int);
+
+void RTreeNewRect(struct RTree_Rect *, struct RTree *);
 
 /* RTree IO */
 size_t RTreeReadNode(struct RTree_Node *, off_t, struct RTree *);

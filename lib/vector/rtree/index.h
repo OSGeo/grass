@@ -50,6 +50,8 @@ struct RTree_ListBranch
     int level;
 };
 
+/* functions */
+
 /* index.c */
 struct RTree_ListNode *RTreeNewListNode(void);
 void RTreeFreeListNode(struct RTree_ListNode *);
@@ -68,28 +70,36 @@ int RTreeSearchF(struct RTree *, struct RTree_Rect *, SearchHitCallback *,
 		       void *);
 int RTreeInsertRectF(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
 int RTreeDeleteRectF(struct RTree_Rect *, union RTree_Child, struct RTree *);
-int RTreeValidChildF(union RTree_Child *child);
+int RTreeValidChildF(union RTree_Child *);
 
 /* node.c */
-struct RTree_Rect RTreeNodeCover(struct RTree_Node *, struct RTree *);
+void RTreeNodeCover(struct RTree_Node *, struct RTree_Rect *, struct RTree *);
 int RTreeAddBranch(struct RTree_Branch *, struct RTree_Node *, struct RTree_Node **, 
             struct RTree_ListBranch **, struct RTree_Rect *, int *, struct RTree *);
 int RTreePickBranch(struct RTree_Rect *, struct RTree_Node *, struct RTree *);
 void RTreeDisconnectBranch(struct RTree_Node *, int, struct RTree *);
 void RTreePrintNode(struct RTree_Node *, int, struct RTree *);
 void RTreeTabIn(int);
+void RTreeCopyNode(struct RTree_Node *, struct RTree_Node *, struct RTree *);
+void RTreeCopyBranch(struct RTree_Branch *, struct RTree_Branch *, struct RTree *);
 
 /* rect.c */
-void RTreeNewRect(struct RTree_Rect *, struct RTree *);
 void RTreeInitRect(struct RTree_Rect *, struct RTree *);
-struct RTree_Rect RTreeNullRect(void);
+void RTreeNullRect(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectArea(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectSphericalVolume(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectVolume(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectMargin(struct RTree_Rect *, struct RTree *);
-struct RTree_Rect RTreeCombineRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+void RTreeCombineRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+void RTreeExpandRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 int RTreeCompareRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
-void RTreePrintRect(struct RTree_Rect *, int);
+void RTreePrintRect(struct RTree_Rect *, int, struct RTree *);
+
+/*-----------------------------------------------------------------------------
+| Copy second rectangle to first rectangle.
+-----------------------------------------------------------------------------*/
+#define RTreeCopyRect(r1, r2, t) memcpy((r1)->boundary, (r2)->boundary, (t)->nsides_alloc * sizeof(RectReal))
+
 
 /* split.c */
 void RTreeSplitNode(struct RTree_Node *, struct RTree_Branch *, struct RTree_Node *, struct RTree *);

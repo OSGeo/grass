@@ -67,11 +67,32 @@ off_t RTreeGetNodePos(struct RTree *t)
     }
 }
 
+/* read branch from file */
+size_t RTreeReadBranch(struct RTree_Branch *b, struct RTree *t)
+{
+    size_t size = 0;
+
+    size += read(t->fd, b->rect.boundary, t->nsides * sizeof(RectReal));
+    size += read(t->fd, &(b->child), sizeof(union RTree_Child));
+
+    return size;
+}
+
 /* read node from file */
 size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
+    int i;
+    size_t size = 0;
+
     lseek(t->fd, nodepos, SEEK_SET);
-    return read(t->fd, n, t->nodesize);
+    size += read(t->fd, &(n->count), sizeof(int));
+    size += read(t->fd, &(n->level), sizeof(int));
+
+    for (i = 0; i < MAXCARD; i++) {
+	size += RTreeReadBranch(&(n->branch[i]), t);
+    }
+
+    return size;
 }
 
 /* get node from buffer or file */
@@ -100,14 +121,36 @@ void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *
 	t->used[level][1] = t->used[level][0];
 	t->used[level][0] = which; 
     }
-    *n = t->nb[level][which].n;
+    /* copy node */
+    RTreeCopyNode(n, &(t->nb[level][which].n), t);
+}
+
+/* write branch to file */
+size_t RTreeWriteBranch(struct RTree_Branch *b, struct RTree *t)
+{
+    size_t size = 0;
+
+    size += write(t->fd, b->rect.boundary, t->nsides * sizeof(RectReal));
+    size += write(t->fd, &(b->child), sizeof(union RTree_Child));
+
+    return size;
 }
 
 /* write new node to file */
 size_t RTreeWriteNode(struct RTree_Node *n, struct RTree *t)
 {
+    int i;
+    size_t size = 0;
+
     /* file position must be set first with RTreeGetFNodePos() */
-    return write(t->fd, n, t->nodesize);
+    size += write(t->fd, &(n->count), sizeof(int));
+    size += write(t->fd, &(n->level), sizeof(int));
+
+    for (i = 0; i < MAXCARD; i++) {
+	size += RTreeWriteBranch(&(n->branch[i]), t);
+    }
+
+    return size;
 }
 
 /* rewrite updated node to file */
@@ -122,7 +165,8 @@ void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
     int which = (nodepos == t->nb[n->level][2].pos ? 2 : nodepos == t->nb[n->level][1].pos);
     
-    t->nb[n->level][which].n = *n;
+    /* copy node */
+    RTreeCopyNode(&(t->nb[n->level][which].n), n, t);
     t->nb[n->level][which].dirty = 1;
 
     /* make it mru */
@@ -140,9 +184,15 @@ void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 /* update rectangle */
 void RTreeUpdateRect(struct RTree_Rect *r, struct RTree_Node *n, off_t nodepos, int b, struct RTree *t)
 {
-    int which = (nodepos == t->nb[n->level][2].pos ? 2 : nodepos == t->nb[n->level][1].pos);
+    int i;
+    int which = (nodepos == t->nb[n->level][2].pos ?
+		 2 : nodepos == t->nb[n->level][1].pos);
     
-    t->nb[n->level][which].n.branch[b].rect = n->branch[b].rect = *r;
+    for (i = 0; i < t->nsides; i++) {
+	t->nb[n->level][which].n.branch[b].rect.boundary[i] =
+	                  n->branch[b].rect.boundary[i] = r->boundary[i];
+    }
+
     t->nb[n->level][which].dirty = 1;
 
     /* make it mru */
