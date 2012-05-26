@@ -38,7 +38,9 @@ int dig_spidx_init(struct Plus_head *Plus)
 
     ndims = (Plus->with_z != 0) ? 3 : 2;
     Plus->spidx_with_z = (Plus->with_z != 0);
-    
+
+    G_debug(1, "dig_spidx_init(), %d dims", ndims);
+
     if (Plus->Spidx_file) {
 	int fd;
 	char *filename;
@@ -253,7 +255,14 @@ int
 dig_spidx_add_node(struct Plus_head *Plus, int node,
 		   double x, double y, double z)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_add_node(): node = %d, x,y,z = %f, %f, %f", node, x,
 	    y, z);
@@ -280,7 +289,14 @@ dig_spidx_add_node(struct Plus_head *Plus, int node,
  */
 int dig_spidx_add_line(struct Plus_head *Plus, int line, struct bound_box * box)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_add_line(): line = %d", line);
 
@@ -306,7 +322,14 @@ int dig_spidx_add_line(struct Plus_head *Plus, int line, struct bound_box * box)
  */
 int dig_spidx_add_area(struct Plus_head *Plus, int area, struct bound_box * box)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_add_area(): area = %d", area);
 
@@ -333,7 +356,14 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area, struct bound_box * box)
 
 int dig_spidx_add_isle(struct Plus_head *Plus, int isle, struct bound_box * box)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_add_isle(): isle = %d", isle);
 
@@ -362,7 +392,14 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
 {
     int ret;
     struct P_node *Node;
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_del_node(): node = %d", node);
 
@@ -395,9 +432,16 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
  */
 int dig_spidx_del_line(struct Plus_head *Plus, int line, double x, double y, double z)
 {
-    struct P_line *Line;
-    struct RTree_Rect rect;
     int ret;
+    struct P_line *Line;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_del_line(): line = %d", line);
 
@@ -437,7 +481,14 @@ int dig_spidx_del_area(struct Plus_head *Plus, int area)
     struct P_line *Line;
     struct P_node *Node;
     struct P_topo_b *topo;
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_del_area(): area = %d", area);
 
@@ -483,7 +534,14 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
     struct P_line *Line;
     struct P_node *Node;
     struct P_topo_b *topo;
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_spidx_del_isle(): isle = %d", isle);
 
@@ -565,7 +623,14 @@ int
 dig_select_nodes(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_select_nodes()");
 
@@ -604,8 +669,15 @@ static int _add_node(int id, struct RTree_Rect rect, int *node)
  */
 int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
 {
-    struct RTree_Rect rect;
     int node;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_find_node()");
 
@@ -638,7 +710,14 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
 int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box,
 		      struct boxlist *list)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_select_lines_with_box()");
 
@@ -670,8 +749,15 @@ int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box,
  */
 int dig_find_line_box(struct Plus_head *Plus, struct boxlist *list)
 {
-    struct RTree_Rect rect;
     int ret;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_find_line_box()");
 
@@ -706,7 +792,14 @@ int
 dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
 		 struct boxlist *list)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_select_areas_with_box()");
 
@@ -738,8 +831,15 @@ dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
  */
 int dig_find_area_box(struct Plus_head *Plus, struct boxlist *list)
 {
-    struct RTree_Rect rect;
     int ret;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_find_line_box()");
 
@@ -774,7 +874,14 @@ int
 dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
 		 struct boxlist *list)
 {
-    struct RTree_Rect rect;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_select_areas_with_box()");
 
@@ -806,8 +913,15 @@ dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
  */
 int dig_find_isle_box(struct Plus_head *Plus, struct boxlist *list)
 {
-    struct RTree_Rect rect;
     int ret;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	/* always 6 sides for 3D */
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     G_debug(3, "dig_find_line_box()");
 
