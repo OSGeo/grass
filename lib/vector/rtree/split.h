@@ -24,17 +24,4 @@
 /* METHOD 1: R*-Tree split */
 #define METHOD 1
 
-struct RTree_PartitionVars {
-    int partition[MAXCARD + 1];
-    int total, minfill;
-    int taken[MAXCARD + 1];
-    int count[2];
-    struct RTree_Rect cover[2];
-    RectReal area[2];
-};
-
-
-/* variables for finding a partition */
-extern struct RTree_PartitionVars Partitions[1];
-
-extern void RTreeInitPVars(struct RTree_PartitionVars *, int, int);
+void RTreeInitPVars(struct RTree_PartitionVars *, int, int, struct RTree *);

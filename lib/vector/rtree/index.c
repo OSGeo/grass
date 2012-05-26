@@ -22,7 +22,7 @@
 #include <assert.h>
 #include <grass/gis.h>
 #include "index.h"
-#include "card.h"
+//#include "card.h"
 
 /* 
  * Make a new index, empty.
@@ -35,9 +35,8 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
 {
     struct RTree *new_rtree;
     struct RTree_Node *n;
-    int i;
+    int i, j;
     
-    assert(ndims > 0);
     new_rtree = (struct RTree *)malloc(sizeof(struct RTree));
 
     new_rtree->fd = fd;
@@ -46,19 +45,24 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
     new_rtree->nsides = 2 * ndims;
     /* hack to keep compatibility */
     if (ndims < 3)
-	new_rtree->nsides_alloc = 6;
+	new_rtree->ndims_alloc = 3;
     else
-	new_rtree->nsides_alloc = 2 * ndims;
-    
-    new_rtree->rectsize = sizeof(struct RTree_Rect);
+	new_rtree->ndims_alloc = ndims;
+
+    new_rtree->nsides_alloc = 2 * new_rtree->ndims_alloc;
 
     /* init free nodes */
     new_rtree->free_nodes.avail = 0;
     new_rtree->free_nodes.alloc = 0;
     new_rtree->free_nodes.pos = NULL;
 
-    new_rtree->nodesize = sizeof(struct RTree_Node);
-    new_rtree->branchsize = sizeof(struct RTree_Branch);
+    new_rtree->nodesize = sizeof(struct RTree_Node) -
+                          MAXCARD * sizeof(RectReal *) +
+			  MAXCARD * new_rtree->nsides_alloc * sizeof(RectReal);
+
+    new_rtree->branchsize = sizeof(struct RTree_Branch) -
+                            sizeof(RectReal *) +
+			    new_rtree->nsides_alloc * sizeof(RectReal);
     
     /* create empty root node */
     n = RTreeNewNode(new_rtree, 0);
@@ -82,6 +86,15 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
 	    new_rtree->used[i][0] = 2;
 	    new_rtree->used[i][1] = 1;
 	    new_rtree->used[i][2] = 0;
+
+	    /* alloc memory for rectangles */
+	    for (j = 0; j < MAXCARD; j++) {
+		RTreeNewRect(&(new_rtree->nb[i][0].n.branch[j].rect), new_rtree);
+		RTreeNewRect(&(new_rtree->nb[i][1].n.branch[j].rect), new_rtree);
+		RTreeNewRect(&(new_rtree->nb[i][2].n.branch[j].rect), new_rtree);
+
+		RTreeNewRect(&(new_rtree->fs[i].sn.branch[j].rect), new_rtree);
+	    }
 	}
 
 	/* write empty root node */
@@ -97,7 +110,6 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
 	new_rtree->delete_rect = RTreeDeleteRectF;
 	new_rtree->search_rect = RTreeSearchF;
 	new_rtree->valid_child = RTreeValidChildF;
-	
     }
     else {    /* memory based */
 	new_rtree->nodecard = MAXCARD;
@@ -123,11 +135,29 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
     new_rtree->n_nodes = 1;
     new_rtree->n_leafs = 0;
 
+    /* initialize temp variables */
+    RTreeNewRect(&(new_rtree->p.cover[0]), new_rtree);
+    RTreeNewRect(&(new_rtree->p.cover[1]), new_rtree);
+    
+    RTreeNewRect(&(new_rtree->tmpb1.rect), new_rtree);
+    RTreeNewRect(&(new_rtree->tmpb2.rect), new_rtree);
+    RTreeNewRect(&(new_rtree->c.rect), new_rtree);
+    for (i = 0; i <= MAXCARD; i++) {
+	RTreeNewRect(&(new_rtree->BranchBuf[i].rect), new_rtree);
+    }
+    RTreeNewRect(&(new_rtree->rect_0), new_rtree);
+    RTreeNewRect(&(new_rtree->rect_1), new_rtree);
+    RTreeNewRect(&(new_rtree->upperrect), new_rtree);
+    RTreeNewRect(&(new_rtree->orect), new_rtree);
+    new_rtree->center_n = (RectReal *)malloc(new_rtree->ndims_alloc * sizeof(RectReal));
+
     return new_rtree;
 }
 
 void RTreeFreeIndex(struct RTree *t)
 {
+    int i, j;
+
     assert(t);
 
     if (t->fd > -1) {
@@ -137,6 +167,37 @@ void RTreeFreeIndex(struct RTree *t)
     else if (t->root)
 	RTreeDestroyNode(t->root, t->root->level ? t->nodecard : t->leafcard);
 
+    if (t->fd > -1) {  /* file based */
+	/* free node buffer */
+	for (i = 0; i < MAXLEVEL; i++) {
+
+	    /* free memory for rectangles */
+	    for (j = 0; j < MAXCARD; j++) {
+		free(t->nb[i][0].n.branch[j].rect.boundary);
+		free(t->nb[i][1].n.branch[j].rect.boundary);
+		free(t->nb[i][2].n.branch[j].rect.boundary);
+
+		free(t->fs[i].sn.branch[j].rect.boundary);
+	    }
+	}
+    }
+
+    /* free temp variables */
+    free(t->p.cover[0].boundary);
+    free(t->p.cover[1].boundary);
+    
+    free(t->tmpb1.rect.boundary);
+    free(t->tmpb2.rect.boundary);
+    free(t->c.rect.boundary);
+    for (i = 0; i <= MAXCARD; i++) {
+	free(t->BranchBuf[i].rect.boundary);
+    }
+    free(t->rect_0.boundary);
+    free(t->rect_1.boundary);
+    free(t->upperrect.boundary);
+    free(t->orect.boundary);
+    free(t->center_n);
+
     free(t);
     
     return;
@@ -144,7 +205,7 @@ void RTreeFreeIndex(struct RTree *t)
 
 /*
  * Search in an index tree for all data retangles that
- * overlap the argument rectangle.
+ * overlap or touch the argument rectangle.
  * Return the number of qualifying data rects.
  */
 int RTreeSearch(struct RTree *t, struct RTree_Rect *r, SearchHitCallback *shcb,
@@ -228,6 +289,7 @@ void RTreeReInsertNode(struct RTree_Node *n, struct RTree_ListNode **ee)
  */
 void RTreeFreeListBranch(struct RTree_ListBranch *p)
 {
+    free(p->b.rect.boundary);
     free(p);
 }
 
