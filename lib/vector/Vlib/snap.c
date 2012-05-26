@@ -43,7 +43,7 @@ typedef struct
 /* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
 int add_item(int id, struct RTree_Rect rect, struct ilist *list)
 {
-    dig_list_add(list, id);
+    G_ilist_add(list, id);
     return 1;
 }
 
@@ -488,8 +488,8 @@ Vect_snap_lines(struct Map_info *Map, int type, double thresh,
 	    continue;
 
 	/* no need to check for duplicates:
-	 * use dig_list_add() instead of Vect_list_append() */
-	dig_list_add(List, line);
+	 * use G_ilist_add() instead of Vect_list_append() */
+	G_ilist_add(List, line);
     }
 
     Vect_snap_lines_list(Map, List, thresh, Err);

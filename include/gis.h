@@ -506,6 +506,25 @@ struct Colors
     int organizing;
 };
 
+/*!
+  \brief List of integers
+*/
+struct ilist
+{
+    /*!
+      \brief Array of values
+    */
+    int *value;
+    /*!
+      \brief Number of values in the list
+    */
+    int n_values;
+    /*!
+      \brief Allocated space for values
+    */
+    int alloc_values;
+};
+
 /*============================== Prototypes ================================*/
 
 /* Since there are so many prototypes for the gis library they are stored */

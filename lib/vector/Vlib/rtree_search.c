@@ -22,7 +22,7 @@
 static int add_id_to_list(int id, struct RTree_Rect rect, void *list)
 {
     struct ilist *l = (struct ilist*)list;
-    dig_list_add(l, id);
+    G_ilist_add(l, id);
     return 1;
 }
 
@@ -39,7 +39,7 @@ int RTreeSearch2(struct RTree *t, struct RTree_Rect *r, struct ilist *list)
 {
     assert(r && t);
 
-    dig_init_list(list);
+    G_init_ilist(list);
 
     return t->search_rect(t, r, add_id_to_list, (void*)list);
 }

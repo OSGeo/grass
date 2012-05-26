@@ -1705,27 +1705,6 @@ struct cat_list
 };
 
 /*!
-  \brief List of integers
-  
-  \todo To be moved to gislib?
-*/
-struct ilist
-{
-    /*!
-      \brief Array of values
-    */
-    int *value;
-    /*!
-      \brief Number of values in the list
-    */
-    int n_values;
-    /*!
-      \brief Allocated space for values
-    */
-    int alloc_values;
-};
-
-/*!
    \brief List of bounding boxes with id
 */
 struct boxlist
