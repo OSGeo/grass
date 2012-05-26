@@ -85,8 +85,8 @@ void G__write_Cell_head3(FILE * fd,
 
     G__write_Cell_head(fd, cellhd, is_cellhd);
 
-    fprintf(fd, "top:        %g\n", cellhd->top);
-    fprintf(fd, "bottom:     %g\n", cellhd->bottom);
+    fprintf(fd, "top:        %.15f\n", cellhd->top);
+    fprintf(fd, "bottom:     %.15f\n", cellhd->bottom);
 
     fprintf(fd, "cols3:      %d\n", cellhd->cols3);
     fprintf(fd, "rows3:      %d\n", cellhd->rows3);
