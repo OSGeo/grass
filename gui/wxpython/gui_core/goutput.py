@@ -264,16 +264,20 @@ class GMConsole(wx.SplitterWindow):
             self.btnCmdClear.Hide()
         self.btnOutputSave  = wx.Button(parent = self.panelOutput, id = wx.ID_SAVE)
         self.btnOutputSave.SetToolTipString(_("Save output window content to the file"))
-        # abort
         self.btnCmdAbort = wx.Button(parent = self.panelOutput, id = wx.ID_STOP)
         self.btnCmdAbort.SetToolTipString(_("Abort running command"))
         self.btnCmdAbort.Enable(False)
+        self.btnCmdProtocol = wx.ToggleButton(parent = self.panelOutput, id = wx.ID_ANY,
+                                              label = _("&Protocol"))
+        self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into file; "
+                                               "content saved when switching off."))
         
         self.btnCmdClear.Bind(wx.EVT_BUTTON,     self.cmdPrompt.OnCmdErase)
-        self.btnOutputClear.Bind(wx.EVT_BUTTON,  self.ClearHistory)
-        self.btnOutputSave.Bind(wx.EVT_BUTTON,   self.SaveHistory)
+        self.btnOutputClear.Bind(wx.EVT_BUTTON,  self.OnOutputClear)
+        self.btnOutputSave.Bind(wx.EVT_BUTTON,   self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON,     self.OnCmdAbort)
         self.btnCmdAbort.Bind(EVT_CMD_ABORT,     self.OnCmdAbort)
+        self.btnCmdProtocol.Bind(wx.EVT_TOGGLEBUTTON, self.OnCmdProtocol)
         
         self._layout()
         
@@ -301,14 +305,16 @@ class GMConsole(wx.SplitterWindow):
         outBtnSizer.Add(item = self.btnOutputSave, proportion = 1,
                         flag = wx.ALIGN_RIGHT | wx.RIGHT, border = 5)
         
+        cmdBtnSizer.Add(item = self.btnCmdProtocol, proportion = 1,
+                        flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border = 5)
         cmdBtnSizer.Add(item = self.btnCmdClear, proportion = 1,
-                        flag = wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, border = 5)
+                        flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
         cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
         
-        btnSizer.Add(item = outBtnSizer, proportion = 1,
+        btnSizer.Add(item = outBtnSizer, proportion = 2,
                      flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
-        btnSizer.Add(item = cmdBtnSizer, proportion = 1,
+        btnSizer.Add(item = cmdBtnSizer, proportion = 3,
                      flag = wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
         outputSizer.Add(item = btnSizer, proportion = 0,
                         flag = wx.EXPAND)
@@ -474,7 +480,8 @@ class GMConsole(wx.SplitterWindow):
                                                    '.bash_history'),
                                       encoding = 'utf-8', mode = 'a')
         except IOError, e:
-            self.WriteError(e)
+            GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e),
+                   parent = self.parent)
             fileHistory = None
         
         if fileHistory:
@@ -608,8 +615,8 @@ class GMConsole(wx.SplitterWindow):
                                       onDone = onDone, onPrepare = onPrepare, userData = userData)
             self.cmdOutputTimer.Start(50)
         
-    def ClearHistory(self, event):
-        """!Clear history of commands"""
+    def OnOutputClear(self, event):
+        """!Clear content of output window"""
         self.cmdOutput.SetReadOnly(False)
         self.cmdOutput.ClearAll()
         self.cmdOutput.SetReadOnly(True)
@@ -629,30 +636,35 @@ class GMConsole(wx.SplitterWindow):
         
         return self.cmdStdOut
     
-    def SaveHistory(self, event):
-        """!Save history of commands"""
-        self.history = self.cmdOutput.GetSelectedText()
-        if self.history == '':
-            self.history = self.cmdOutput.GetText()
-
+    def OnOutputSave(self, event):
+        """!Save (selected) text from output window to the file"""
+        text = self.cmdOutput.GetSelectedText()
+        if not text:
+            text = self.cmdOutput.GetText()
+        
         # add newline if needed
-        if len(self.history) > 0 and self.history[-1] != '\n':
-            self.history += '\n'
-
-        wildcard = "Text file (*.txt)|*.txt"
-        dlg = wx.FileDialog(self, message = _("Save file as..."), defaultDir = os.getcwd(),
-                            defaultFile = "grass_cmd_history.txt", wildcard = wildcard,
+        if len(text) > 0 and text[-1] != '\n':
+            text += '\n'
+        
+        dlg = wx.FileDialog(self, message = _("Save file as..."),
+                            defaultFile = "grass_cmd_output.txt",
+                            wildcard = _("%s (*.txt)|*.txt|%s (*)|*") % (_("Text files"), _("Files")),
                             style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
-
+        
         # Show the dialog and retrieve the user response. If it is the OK response,
         # process the data.
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-
-            output = open(path, "w")
-            output.write(self.history)
-            output.close()
-
+            
+            try:
+                output = open(path, "w")
+                output.write(text)
+            except IOError, e:
+                GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e))
+            finally:
+                output.close()
+            self.parent.SetStatusText(_("Commands output saved as '%s'") % path)
+        
         dlg.Destroy()
 
     def GetCmd(self):
@@ -749,6 +761,37 @@ class GMConsole(wx.SplitterWindow):
         """!Update progress message info"""
         self.progressbar.SetValue(event.value)
 
+    def OnCmdProtocol(self, event):
+        """!Save commands into file"""
+        if not self.btnCmdProtocol.GetValue():
+            # stop capturing commands, save list of commands to the
+            # protocol file
+            if hasattr(self, 'cmdFileProtocol'):
+                try:
+                    output = open(self.cmdFileProtocol, "w")
+                    cmds = self.cmdPrompt.GetCommands()
+                    output.write('\n'.join(cmds))
+                    if len(cmds) > 0:
+                        output.write('\n')
+                except IOError, e:
+                    GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e))
+                finally:
+                    output.close()
+            
+                self.parent.SetStatusText(_("List of commands saved as '%s'") % self.cmdFileProtocol)
+                del self.cmdFileProtocol
+        else:
+            # start capturing commands
+            self.cmdPrompt.ClearCommands()
+            # ask for the file
+            dlg = wx.FileDialog(self, message = _("Save file as..."),
+                                defaultFile = "grass_cmd_protocol.txt",
+                                wildcard = _("%s (*.txt)|*.txt|%s (*)|*") % (_("Text files"), _("Files")),
+                                style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+            if dlg.ShowModal() == wx.ID_OK:
+                self.cmdFileProtocol = dlg.GetPath()
+            dlg.Destroy()
+            
     def OnCmdAbort(self, event):
         """!Abort running command"""
         self.cmdThread.abort()
