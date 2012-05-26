@@ -1,3 +1,9 @@
+#include <grass/gis.h>
+
+#ifndef  DIG___EXTERNS___
+#define DIG___EXTERNS___
+
+
 /*!
   \file include/vect/dig_externs.h
 
@@ -83,8 +89,6 @@ double dig_distance2_point_to_line(double, double, double, double, double,
 int dig_set_distance_to_line_tolerance(double);
 
 /* list.c */
-int dig_init_list(struct ilist *);
-int dig_list_add(struct ilist *, int);
 int dig_init_boxlist(struct boxlist *, int);
 int dig_boxlist_add(struct boxlist *, int, struct bound_box);
 
@@ -324,3 +328,4 @@ int dig_read_head_ascii(FILE *, struct dig_head *);
 int dig_struct_copy(void *, void *, int);
 int dig_rmcr(char *);
 
+#endif /* DIG__EXTERNS__ */

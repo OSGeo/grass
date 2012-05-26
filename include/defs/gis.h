@@ -307,6 +307,10 @@ void G__call_error_handlers(void);
 const char *G_home(void);
 const char *G__home(void);
 
+/* ilist.c */
+void G_init_ilist(struct ilist *);
+void G_ilist_add(struct ilist *, int);
+
 /* intersect.c */
 int G_intersect_line_segments(double, double, double, double, double, double,
 			      double, double, double *, double *, double *,

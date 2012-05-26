@@ -240,14 +240,14 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
 	    }
 	}
 	if (intersect) {
-	    dig_list_add(List, line);
+	    G_ilist_add(List, line);
 	    continue;
 	}
 
 	/* Check intersections of the line with area/isles boundary */
 	/* Outer boundary */
 	if (Vect_line_check_intersection(LPoints, Polygon, 0)) {
-	    dig_list_add(List, line);
+	    G_ilist_add(List, line);
 	    continue;
 	}
 
@@ -259,7 +259,7 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
 	    }
 	}
 	if (intersect) {
-	    dig_list_add(List, line);
+	    G_ilist_add(List, line);
 	}
     }
 
@@ -313,23 +313,23 @@ Vect_select_areas_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
 	G_debug(4, "boundary = %d left = %d right = %d", line, left, right);
 
 	if (left > 0) {
-	    dig_list_add(List, left);
+	    G_ilist_add(List, left);
 	}
 	else if (left < 0) {	/* island */
 	    area = Vect_get_isle_area(Map, abs(left));
 	    G_debug(4, "  left island -> area = %d", area);
 	    if (area > 0)
-		dig_list_add(List, area);
+		G_ilist_add(List, area);
 	}
 
 	if (right > 0) {
-	    dig_list_add(List, right);
+	    G_ilist_add(List, right);
 	}
 	else if (right < 0) {	/* island */
 	    area = Vect_get_isle_area(Map, abs(right));
 	    G_debug(4, "  right island -> area = %d", area);
 	    if (area > 0)
-		dig_list_add(List, area);
+		G_ilist_add(List, area);
 	}
     }
 
@@ -337,7 +337,7 @@ Vect_select_areas_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
      * we find the area by one polygon point and add it to the list */
     area = Vect_find_area(Map, Polygon->x[0], Polygon->y[0]);
     if (area > 0)
-	dig_list_add(List, area);
+	G_ilist_add(List, area);
 
     G_debug(3, "  %d areas selected by polygon", List->n_values);
 

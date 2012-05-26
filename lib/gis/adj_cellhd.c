@@ -295,9 +295,9 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
     }
     if (cellhd->east <= cellhd->west)
 	G_fatal_error(_("East must be larger than West"));
+
     if (cellhd->top <= cellhd->bottom)
 	G_fatal_error(_("Top must be larger than Bottom"));
-
 
     /* compute rows and columns, if not set */
     if (!row_flag) {

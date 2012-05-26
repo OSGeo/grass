@@ -141,7 +141,7 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
 	    if (Vect_val_in_list(CycleList, abs(next_line)))	/* other side -> bridge chain */
 		Vect_list_append(BridgeList, abs(next_line));
 	    else
-		dig_list_add(CycleList, abs(next_line)); /* not in list, can add new line fast */
+		G_ilist_add(CycleList, abs(next_line)); /* not in list, can add new line fast */
 
 	    if (abs(next_line) == abs(current_line)) {
 		G_debug(4, "  dangle -> no bridge");
