@@ -307,7 +307,6 @@ class MapFrame(SingleMapFrame):
                               CloseButton(False).DestroyOnClose(True).
                               Layer(0))
             
-            self.MapWindow3D.OnPaint(None) # -> LoadData
             self.MapWindow3D.Show()
             self.MapWindow3D.ResetViewHistory()            
             self.MapWindow3D.UpdateView(None)
