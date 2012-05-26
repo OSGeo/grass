@@ -2,6 +2,11 @@
 # This scripts runs all tests available in the temporal module directory
 # Logs a written to "run.log" 
 
+if [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
+
 LOG_FILE="/tmp/run.log"
 echo "Logfile\n\n" > $LOG_FILE
 
