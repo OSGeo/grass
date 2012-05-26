@@ -761,25 +761,31 @@ class GMConsole(wx.SplitterWindow):
         """!Update progress message info"""
         self.progressbar.SetValue(event.value)
 
-    def OnCmdProtocol(self, event):
+    def CmdProtocolSave(self):
+        """Save commands protocol into the file"""
+        if not hasattr(self, 'cmdFileProtocol'):
+            return # it should not happen
+        
+        try:
+            output = open(self.cmdFileProtocol, "w")
+            cmds = self.cmdPrompt.GetCommands()
+            output.write('\n'.join(cmds))
+            if len(cmds) > 0:
+                output.write('\n')
+        except IOError, e:
+            GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e))
+        finally:
+            output.close()
+            
+        self.parent.SetStatusText(_("Commands protocol saved into '%s'") % self.cmdFileProtocol)
+        del self.cmdFileProtocol
+        
+    def OnCmdProtocol(self, event = None):
         """!Save commands into file"""
-        if not self.btnCmdProtocol.GetValue():
+        if not event.IsChecked():
             # stop capturing commands, save list of commands to the
             # protocol file
-            if hasattr(self, 'cmdFileProtocol'):
-                try:
-                    output = open(self.cmdFileProtocol, "w")
-                    cmds = self.cmdPrompt.GetCommands()
-                    output.write('\n'.join(cmds))
-                    if len(cmds) > 0:
-                        output.write('\n')
-                except IOError, e:
-                    GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e))
-                finally:
-                    output.close()
-            
-                self.parent.SetStatusText(_("Commands protocol saved into '%s'") % self.cmdFileProtocol)
-                del self.cmdFileProtocol
+            self.CmdProtocolSave()
         else:
             # start capturing commands
             self.cmdPrompt.ClearCommands()

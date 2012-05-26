@@ -7,7 +7,7 @@ control for display management and access to command console.
 Classes:
  - frame::GMFrame
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1674,11 +1674,16 @@ class GMFrame(wx.Frame):
 
     def OnCloseWindow(self, event):
         """!Cleanup when wxGUI is quitted"""
+        # save command protocol if actived
+        if self.goutput.btnCmdProtocol.GetValue():
+            self.goutput.CmdProtocolSave()
+        
         if not self.curr_page:
             self._auimgr.UnInit()
             self.Destroy()
             return
         
+        # save changes in the workspace
         maptree = self.curr_page.maptree
         if self.workspaceChanged and \
                 UserSettings.Get(group = 'manager', key = 'askOnQuit', subkey = 'enabled'):
