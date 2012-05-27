@@ -2164,7 +2164,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:1110
 #, c-format
-msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"
+msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d)"
 msgstr ""
 
 #: ../misc/m.nviz.image/volume.c:92 ../misc/m.nviz.image/volume.c:231
@@ -2187,7 +2187,7 @@ msgstr "Nie mozna otworzyć pliku wejściowego <%s@%s>."
 #: ../misc/m.nviz.image/volume.c:162 ../misc/m.nviz.image/volume.c:173
 #: ../misc/m.nviz.image/volume.c:180
 #, fuzzy, c-format
-msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
+msgid "Unable to set isosurface (%d) attribute (%d) of volume %d)"
 msgstr "Nie mozna otworzyć pliku wejściowego <%s@%s>."
 
 #: ../misc/m.nviz.image/volume.c:144 ../misc/m.nviz.image/surface.c:128
