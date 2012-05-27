@@ -383,7 +383,7 @@ class AboutWindow(wx.Frame):
 
     @todo improve styling
     """
-    def __init__(self, parent, size = (750, 450), 
+    def __init__(self, parent, size = (750, 460), 
                  title = _('About GRASS GIS'), **kwargs):
         wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, title = title, size = size, **kwargs)
         
@@ -473,6 +473,26 @@ class AboutWindow(wx.Frame):
         infoSizer.Add(item = infoGridSizer,
                       proportion = 1,
                       flag = wx.EXPAND | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
+        
+        row += 2
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = _('Language:')),
+                          pos = (row, 0),
+                          flag = wx.ALIGN_RIGHT)
+        rcfile = open(os.path.join(utils.GetSettingsPath(), 'rc'))
+        lines = rcfile.readlines()
+        rcfile.close()
+        lang = None
+        for line in lines:
+            if 'LANG' in line:
+                lang = line.split(':')[1].strip()
+        if not lang:
+            import locale
+            lang = '.'.join(locale.getdefaultlocale())
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = lang),
+                          pos = (row, 1),
+                          flag = wx.ALIGN_LEFT)        
         
         # create a flat notebook for displaying information about GRASS
         aboutNotebook = GNotebook(panel, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON) 
