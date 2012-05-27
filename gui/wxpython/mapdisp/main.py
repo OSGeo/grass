@@ -222,6 +222,11 @@ class DMonMap(Map):
         """
         return self._renderCmdFile(force, windres)
 
+class DMonFrame(MapFrame):
+    def OnZoomToMap(self, event):
+        layers = self.MapWindow.GetMap().GetListOfLayers()
+        self.MapWindow.ZoomToMap(layers = layers)
+        
 
 class MapApp(wx.App):
     def OnInit(self):
@@ -233,7 +238,7 @@ class MapApp(wx.App):
         else:
             self.Map = None
 
-        self.mapFrm = MapFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
+        self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
                                size = monSize)
         # self.SetTopWindow(Map)
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
@@ -270,12 +275,17 @@ class MapApp(wx.App):
             return
         
         # todo: events
-        if os.path.getmtime(monFile['cmd']) > self.cmdTimeStamp:
+        try:
+            currentCmdFileTime = os.path.getmtime(monFile['cmd'])
+            if currentCmdFileTime > self.cmdTimeStamp:
+                self.timer.Stop()
+                self.cmdTimeStamp = currentCmdFileTime
+                self.mapFrm.OnDraw(None)
+                self.mapFrm.GetMap().GetLayersFromCmdFile()
+                self.timer.Start(mtime)
+        except OSError, e:
+            grass.warning("%s" % e)
             self.timer.Stop()
-            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            self.mapFrm.OnDraw(None)
-            self.mapFrm.GetMap().GetLayersFromCmdFile()
-            self.timer.Start(mtime)
 
 if __name__ == "__main__":
     # set command variable
