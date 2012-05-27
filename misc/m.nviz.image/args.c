@@ -872,6 +872,7 @@ void args_arrow(struct GParams *params)
     params->north_arrow_color->guisection = _("Decoration");
     params->north_arrow_color->answer = "black";
 }
+
 /*!
    \brief Get number of answers of given option
 
@@ -968,7 +969,7 @@ void check_parameters(const struct GParams *params)
 
 	nconsts = opt_get_num_answers(params->res_fine);
 	if (nconsts > 0 && nconsts != nelevs)
-	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->res_fine->key, nconsts);
 
@@ -996,6 +997,7 @@ void check_parameters(const struct GParams *params)
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->wire_color->key, nconsts);
     }
+    
     /* 
      * Cutting planes
      */
@@ -1014,7 +1016,7 @@ void check_parameters(const struct GParams *params)
     if (ncplanes > 0 && ncplanes != nconsts)
         G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
           params->cplane->key, ncplanes, params->cplane_tilt->key, nconsts);
-          
+
     /*
      * vector lines
      */
@@ -1074,7 +1076,7 @@ void check_parameters(const struct GParams *params)
     nconsts = opt_get_num_answers(params->isosurf_transp_const);
 
     if ((nmaps + nconsts > 0) && (nisosurf != nmaps + nconsts))
-	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d)"),
 		      params->isosurf_level->key, nisosurf, params->isosurf_transp_map->key, nmaps,
 		      params->isosurf_transp_const->key, nconsts);
 
@@ -1083,7 +1085,7 @@ void check_parameters(const struct GParams *params)
     nconsts = opt_get_num_answers(params->isosurf_shine_const);
 
     if ((nmaps + nconsts > 0) && (nisosurf != nmaps + nconsts))
-	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d)"),
 			params->isosurf_level->key, nisosurf, params->isosurf_shine_map->key, nmaps,
 			params->isosurf_shine_const->key, nconsts);
 
@@ -1107,7 +1109,7 @@ void print_error(int nmaps, int nconsts, int nelevs,
 		 const char *map_name, const char *const_name)
 {
     if ((nmaps + nconsts > 0) && (nelevs != nmaps + nconsts))
-	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d)"),
 		      elev_map, elev_const, nelevs, map_name, nmaps,
 		      const_name, nconsts);
 

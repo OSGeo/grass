@@ -2153,7 +2153,7 @@ msgstr "属性数の不一致 (<%s> %d: <%s> %d)  "
 
 #: ../misc/m.nviz.image/args.c:1110
 #, c-format
-msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"
+msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d)"
 msgstr "属性数が一致していません (<%s/%s> %d: <%s> %d, <%s> %d  "
 
 #: ../misc/m.nviz.image/volume.c:92 ../misc/m.nviz.image/volume.c:231
@@ -2176,7 +2176,7 @@ msgstr "異性曲面を追加できません（ボリュームセット %d）"
 #: ../misc/m.nviz.image/volume.c:162 ../misc/m.nviz.image/volume.c:173
 #: ../misc/m.nviz.image/volume.c:180
 #, c-format
-msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
+msgid "Unable to set isosurface (%d) attribute (%d) of volume %d)"
 msgstr "異性曲面 (%d) 属性 (%d) （ボリューム %d の） を設定できません"
 
 #: ../misc/m.nviz.image/volume.c:144 ../misc/m.nviz.image/surface.c:128
