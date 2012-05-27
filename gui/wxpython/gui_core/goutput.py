@@ -260,8 +260,6 @@ class GMConsole(wx.SplitterWindow):
         self.btnOutputClear.SetToolTipString(_("Clear output window content"))
         self.btnCmdClear = wx.Button(parent = self.panelOutput, id = wx.ID_CLEAR)
         self.btnCmdClear.SetToolTipString(_("Clear command prompt content"))
-        if self.parent.GetName() != 'LayerManager':
-            self.btnCmdClear.Hide()
         self.btnOutputSave  = wx.Button(parent = self.panelOutput, id = wx.ID_SAVE)
         self.btnOutputSave.SetToolTipString(_("Save output window content to the file"))
         self.btnCmdAbort = wx.Button(parent = self.panelOutput, id = wx.ID_STOP)
@@ -271,6 +269,10 @@ class GMConsole(wx.SplitterWindow):
                                               label = _("&Protocol"))
         self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into file; "
                                                "content saved when switching off."))
+        
+        if self.parent.GetName() != 'LayerManager':
+            self.btnCmdClear.Hide()
+            self.btnCmdProtocol.Hide()
         
         self.btnCmdClear.Bind(wx.EVT_BUTTON,     self.cmdPrompt.OnCmdErase)
         self.btnOutputClear.Bind(wx.EVT_BUTTON,  self.OnOutputClear)
@@ -312,9 +314,14 @@ class GMConsole(wx.SplitterWindow):
         cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
         
-        btnSizer.Add(item = outBtnSizer, proportion = 2,
+        if self.parent.GetName() != 'LayerManager':
+            proportion = (1, 1)
+        else:
+            proportion = (2, 3)
+        
+        btnSizer.Add(item = outBtnSizer, proportion = proportion[0],
                      flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
-        btnSizer.Add(item = cmdBtnSizer, proportion = 3,
+        btnSizer.Add(item = cmdBtnSizer, proportion = proportion[1],
                      flag = wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
         outputSizer.Add(item = btnSizer, proportion = 0,
                         flag = wx.EXPAND)
