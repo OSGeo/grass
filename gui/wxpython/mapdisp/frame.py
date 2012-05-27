@@ -690,7 +690,7 @@ class MapFrame(SingleMapFrame):
         
         if vect:
             # check for vector maps open to be edited
-            digitToolbar = self.toolbars['vdigit']
+            digitToolbar = self.GetToolbar('vdigit')
             if digitToolbar:
                 lmap = digitToolbar.GetLayer().GetName()
                 for name in vect:
@@ -706,7 +706,7 @@ class MapFrame(SingleMapFrame):
             vcmd.append('-a')
             vcmd.append('map=%s' % ','.join(vect))
             vcmd.append('layer=%s' % ','.join(['-1'] * len(vect)))
-            vcmd.append('east_north=%f,%f' % (float(east), float(north)))
+            vcmd.append('coordinates=%f,%f' % (float(east), float(north)))
             vcmd.append('distance=%f' % float(qdist))
         
         Debug.msg(1, "QueryMap(): raster=%s vector=%s" % (','.join(rast),
