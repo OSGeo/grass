@@ -328,7 +328,7 @@ def vector_what(map, coord, distance = 0.0):
                        flags      = 'ag',
                        map        = ','.join(map_list),
                        layer      = ','.join(layer_list),
-                       east_north = ','.join(coord_list),
+                       coordinates = ','.join(coord_list),
                        distance   = float(distance))
     
     if "LC_ALL" in os.environ:
