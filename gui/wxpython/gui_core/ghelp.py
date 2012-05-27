@@ -380,10 +380,8 @@ class MenuTree(ItemTree):
         
 class AboutWindow(wx.Frame):
     """!Create custom About Window
-
-    @todo improve styling
     """
-    def __init__(self, parent, size = (750, 460), 
+    def __init__(self, parent, size = (650, 460), 
                  title = _('About GRASS GIS'), **kwargs):
         wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, title = title, size = size, **kwargs)
         
@@ -395,7 +393,8 @@ class AboutWindow(wx.Frame):
         # get version and web site
         vInfo = grass.version()
         
-        infoTxt = wx.Panel(parent = panel, id = wx.ID_ANY)
+        infoTxt = ScrolledPanel(parent = panel)
+        infoTxt.SetupScrolling()
         infoSizer = wx.BoxSizer(wx.VERTICAL)
         infoGridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
         infoGridSizer.AddGrowableCol(0)
@@ -405,14 +404,14 @@ class AboutWindow(wx.Frame):
                                      bitmap = wx.Bitmap(name = logo,
                                                         type = wx.BITMAP_TYPE_PNG))
         infoSizer.Add(item = logoBitmap, proportion = 0,
-                      flag = wx.ALL | wx.ALIGN_CENTER, border = 25)
+                      flag = wx.ALL | wx.ALIGN_CENTER, border = 20)
         
         info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                              label = 'GRASS GIS ' + vInfo['version'] + '\n\n')
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         info.SetForegroundColour(wx.Colour(35, 142, 35))
         infoSizer.Add(item = info, proportion = 0,
-                      flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 15)
+                      flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 1)
         
         row = 0
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
@@ -479,13 +478,7 @@ class AboutWindow(wx.Frame):
                                                label = _('Language:')),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
-        rcfile = open(os.path.join(utils.GetSettingsPath(), 'rc'))
-        lines = rcfile.readlines()
-        rcfile.close()
-        lang = None
-        for line in lines:
-            if 'LANG' in line:
-                lang = line.split(':')[1].strip()
+        lang = grass.gisenv().get('LANG', None)
         if not lang:
             import locale
             lang = '.'.join(locale.getdefaultlocale())
@@ -528,7 +521,7 @@ class AboutWindow(wx.Frame):
         panel.SetSizer(sizer)
         
         self.Layout()
-        self.SetMinSize((500, 400))
+        self.SetMinSize((400, 400))
         
     def _pageCopyright(self):
         """Copyright information"""
