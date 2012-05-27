@@ -687,11 +687,14 @@ def _parseFormats(output, writableOnly = False):
         if name in ('PostgreSQL', 'SQLite',
                     'ODBC', 'ESRI Personal GeoDatabase',
                     'Rasterlite',
-                    'PostGIS WKT Raster driver'):
+                    'PostGIS WKT Raster driver',
+                    'CouchDB'):
             formats['database'].append(name)
         elif name in ('GeoJSON',
                       'OGC Web Coverage Service',
                       'OGC Web Map Service',
+                      'WFS',
+                      'GeoRSS',
                       'HTTP Fetching Wrapper'):
             formats['protocol'].append(name)
         else:
