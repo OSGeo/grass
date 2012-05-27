@@ -1451,14 +1451,6 @@ class GMFrame(wx.Frame):
         self.notebook.SetSelectionByName('layers')
         self.curr_page.maptree.AddLayer('raster')
         
-    def OnAddRaster3D(self, event):
-        """!Add 3D raster map layer"""
-        # start new map display if no display is available
-        if not self.curr_page:
-            self.NewDisplay(show = True)
-        
-        self.AddRaster3D(event)
-        
     def OnAddRasterMisc(self, event):
         """!Create misc raster popup-menu"""
         # start new map display if no display is available
