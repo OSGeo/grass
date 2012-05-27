@@ -1548,11 +1548,32 @@ class GMFrame(wx.Frame):
     def OnAddRasterArrow(self, event):
         """!Add flow arrows raster map to the current layer tree"""
         self.notebook.SetSelectionByName('layers')
+        tree = self.curr_page.maptree
+        resolution = tree.GetMapDisplay().GetProperty('resolution')
+        if not resolution:
+            dlg = self.MsgDisplayResolution()
+            if dlg.ShowModal() == wx.ID_YES:
+                tree.GetMapDisplay().SetProperty('resolution', True)
+            dlg.Destroy()
+
         self.curr_page.maptree.AddLayer('rastarrow')
 
     def OnAddRasterNum(self, event):
         """!Add cell number raster map to the current layer tree"""
         self.notebook.SetSelectionByName('layers')
+        tree = self.curr_page.maptree
+        resolution = tree.GetMapDisplay().GetProperty('resolution')
+        if not resolution:
+            limitText = _("Note that cell values can only be displayed for "
+                          "regions of less than 10,000 cells.")
+            dlg = self.MsgDisplayResolution(limitText)
+            if dlg.ShowModal() == wx.ID_YES:
+                tree.GetMapDisplay().SetProperty('resolution', True)
+            dlg.Destroy()
+
+        # region = tree.GetMap().GetCurrentRegion()
+        # if region['cells'] > 10000:
+        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
         self.curr_page.maptree.AddLayer('rastnum')
 
     def OnAddCommand(self, event):
@@ -1729,3 +1750,22 @@ class GMFrame(wx.Frame):
                       message = _("No map layer selected. Operation canceled."),
                       caption = _("Message"),
                       style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+                      
+    def MsgDisplayResolution(self, limitText = None):
+        """!Returns dialog for d.rast.num, d.rast.arrow
+            when display resolution is not constrained
+            
+        @param limitText adds a note about cell limit
+        """
+        message = _("Display resolution is currently not constrained to "
+                    "computational settings. "
+                    "It's suggested to constrain map to region geometry. "
+                    "Do you want to constrain "
+                    "the resolution?")
+        if limitText:
+            message += "\n\n%s" % _(limitText)
+        dlg = wx.MessageDialog(parent = self,
+                               message = message,
+                               caption = _("Constrain map to region geometry?"),
+                               style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+        return dlg
