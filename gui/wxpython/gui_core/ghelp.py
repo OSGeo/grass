@@ -44,15 +44,6 @@ from core.gcmd        import GError, DecodeString
 from gui_core.widgets import GNotebook, StaticWrapText, ItemTree, ScrolledPanel
 from core.debug       import Debug
 
-# add for folderpanel in languages status
-try:
-    from agw import foldpanelbar as fpb
-except ImportError: # if it's not there locally, try the wxPython lib.
-    try:
-        import wx.lib.agw.foldpanelbar as fpb
-    except ImportError:
-        import wx.lib.foldpanelbar as fpb # versions <=2.5.5.1
-
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
     def __init__(self, parent, id = wx.ID_ANY, cmdPrompt = None,
@@ -758,28 +749,72 @@ class AboutWindow(wx.Frame):
         except:
             pass
         return allStr
+ 
+    def _langBox(self, par, k, v):
+        """Return box"""
+        langBox = wx.FlexGridSizer(cols = 4, vgap = 5, hgap = 5)
+        tkey = wx.StaticText(parent = par, id = wx.ID_ANY,
+                            label = k.upper())
+        langBox.Add(item = tkey)
+        try:
+            tgood = wx.StaticText(parent = par, id = wx.ID_ANY,
+                                label = _("%d translated" % v['good']))
+            tgood.SetForegroundColour(wx.Colour(35, 142, 35))
+            langBox.Add(item = tgood)           
+        except:
+            tgood = wx.StaticText(parent = par, id = wx.ID_ANY,
+                                label = "")
+            langBox.Add(item = tgood)
+        try:
+            tfuzzy = wx.StaticText(parent = par, id = wx.ID_ANY,
+                                label = _("   %d fuzzy" % v['fuzzy']))
+            tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))                    
+            langBox.Add(item = tfuzzy)
+        except:
+            tfuzzy = wx.StaticText(parent = par, id = wx.ID_ANY,
+                                label = "")
+            langBox.Add(item = tfuzzy)
+        try:
+            tbad = wx.StaticText(parent = par, id = wx.ID_ANY,
+                                label = _("   %d untranslated" % v['bad']))
+            tbad.SetForegroundColour(wx.Colour(255, 0, 0))
+            langBox.Add(item = tbad)
+        except:
+            tbad = wx.StaticText(parent = par, id = wx.ID_ANY,
+                                label = "")
+            langBox.Add(item = tbad)                           
+        return langBox
         
-    def _langPanel(self, parent, js):
+    def _langPanel(self, lang, js):
         """Create panel for each languages"""
-        panel = wx.Panel(parent = parent, id = wx.ID_ANY)
+        text = self._langString(lang, js['total'])
+        panel = wx.CollapsiblePane(self.statswin, -1, label=text, style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
+        panel.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnPaneChanged)
+        win = panel.GetPane()
+        # TODO IT DOESN'T WORK
+        # TO ADD ONLY WHEN TAB IS OPENED
+        #if lang == self.langUsed.split('_')[0]:
+            #panel.Collapse(False)
+        #else:
+            #panel.Collapse(True)        
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         for k,v in js.iteritems():
             if k != 'total':
-                text = self._langString(k,v)
-                statstext = wx.StaticText(panel, id = wx.ID_ANY,
-                                        label = text)
-                pageSizer.Add(item = statstext, proportion = 1,
+                box = self._langBox(win, k,v)
+                pageSizer.Add(item = box, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
-        panel.SetSizer(pageSizer)
-        panel.Layout()
-        panel.Fit()
+
+        win.SetSizer(pageSizer)
+        pageSizer.SetSizeHints(win)
+
         return panel
 
-    def OnPressCaption(self, event):
-        """!When foldpanel item collapsed/expanded, update scrollbars"""
-        foldpanel = event.GetBar().GetGrandParent().GetParent()
-        wx.CallAfter(self.UpdateScrolling, (foldpanel,))
-        event.Skip()
+    def OnPaneChanged(self, evt):
+        """Redo the layout"""
+        # TODO FIX THE REDO
+        self.Fit()
+        self.statswin.Refresh()
+        self.statswin.Layout()
 
     def _pageStats(self):
         """Translation statistics info"""
@@ -791,57 +826,31 @@ class AboutWindow(wx.Frame):
             jsStats = json.load(statsFile)
         else:
             jsStats = None
-        statswin = ScrolledPanel(self, style = wx.TAB_TRAVERSAL|wx.VSCROLL)
-        statswin.SetAutoLayout(True)
-        
-        try:# wxpython <= 2.8.10
-            foldpanelAppear = fpb.FoldPanelBar(parent = statswin, id = wx.ID_ANY,
-                                                  style = fpb.FPB_DEFAULT_STYLE,
-                                                  extraStyle = fpb.FPB_SINGLE_FOLD)
-        except:
-            try:# wxpython >= 2.8.11
-                foldpanelAppear = fpb.FoldPanelBar(parent = statswin, id = wx.ID_ANY,                               
-                                                      agwStyle = fpb.FPB_SINGLE_FOLD)
-            except: # to be sure
-                foldpanelAppear = fpb.FoldPanelBar(parent = statswin, id = wx.ID_ANY,                               
-                                                      style = fpb.FPB_SINGLE_FOLD)
-        statswin.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
+        self.statswin = ScrolledPanel(self)
+        self.statswin.SetAutoLayout(True)
+
         if not jsStats:
             Debug.msg(5, _("File <%s> not found") % fname)
-            sizer = wx.BoxSizer(wx.VERTICAL)
-            statstext = wx.StaticText(statswin, id = wx.ID_ANY,
+            self.statsSizer = wx.BoxSizer(wx.VERTICAL)
+            statstext = wx.StaticText(self.statswin, id = wx.ID_ANY,
                                            label = _('%s file missing') % fname)
             sizer.Add(item = statstext, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
         else:
             languages = jsStats['langs'].keys()
             languages.sort()
-            captStyle = fpb.CaptionBarStyle()
-            captStyle.SetCaptionColour('BLACK')
-            captStyle.SetCaptionStyle(fpb.CAPTIONBAR_FILLED_RECTANGLE)
-            captStyle.SetFirstColour(wx.Colour(255,255,255, 255))
+            
+            self.statsSizer = wx.BoxSizer(wx.VERTICAL)
             for lang in languages:
                 v = jsStats['langs'][lang]
-                text = self._langString(lang, v['total'])
-                if lang == self.langUsed.split('_')[0]:
-                    panel = foldpanelAppear.AddFoldPanel(text, collapsed = False, 
-                                                cbstyle = captStyle)
-                else:
-                    panel = foldpanelAppear.AddFoldPanel(text, collapsed = True, 
-                                                cbstyle = captStyle)
-                foldpanelAppear.AddFoldPanelWindow(panel,
-                    window = self._langPanel(parent = panel, js = v), 
-                    flags = fpb.FPB_ALIGN_WIDTH)
-
-	        sizer = wx.BoxSizer(wx.VERTICAL)
-	        sizer.Add(foldpanelAppear, proportion = 1, flag = wx.EXPAND)
+                panel = self._langPanel(lang, v)
+                self.statsSizer.Add(panel)
         
-        statswin.SetSizer(sizer)
-        statswin.SetupScrolling(scroll_x = False, scroll_y = True)
-        statswin.Layout()
-        statswin.Fit()
-        
-        return statswin
+        self.statswin.SetSizer(self.statsSizer)
+        self.statswin.SetupScrolling(scroll_x = False, scroll_y = True)
+        self.statswin.Layout()
+        self.statswin.Fit()
+        return self.statswin
     
     def OnCloseWindow(self, event):
         """!Close window"""
