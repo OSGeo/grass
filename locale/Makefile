@@ -9,6 +9,8 @@ default:
 	@if [ "$(HAVE_NLS)" != "" ] ; then \
 		echo "Creating translations (= 'make mo')" >&2 ; \
 		$(MAKE) mo ; \
+		echo "Creating translation statistics (= 'make statistics')" >&2 ; \
+		$(MAKE) statistics ; \
 	else \
 		echo "NLS disabled." ; \
 	fi
