@@ -376,6 +376,36 @@ class GMFrame(wx.Frame):
         
         win.Show()
 
+    def OnRLiSetup(self, event):
+        """!Launch r.li.setup
+        """
+        #try:
+        from scripts.rlisetup import RLiSetupFrame
+        #except:
+            #gcmd.GError(parent = self.parent, message = _("r.li.setup is not available."))
+            #return      
+            
+        win = RLiSetupFrame(parent = self)
+        win.CentreOnScreen()
+        
+        win.Show()
+
+    def OnRStream(self, event):
+        """!GSoC's r.stream.* interface for testing
+        """
+        try:
+            from gui_modules import rstream
+        except:
+            gcmd.GError(parent = self.parent,
+                        message = _("RStream Utility is not available. You can install it by %s") % \
+                            'g.extension -s extension=wx.stream')
+            return
+        
+        win = rstream.RStreamFrame(parent = self)
+        win.CentreOnScreen()
+        
+        win.Show()
+        
     def OnDone(self, cmd, returncode):
         """Command execution finised"""
         if hasattr(self, "model"):

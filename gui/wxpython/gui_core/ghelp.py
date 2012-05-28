@@ -44,6 +44,15 @@ from core.gcmd        import GError, DecodeString
 from gui_core.widgets import GNotebook, StaticWrapText, ItemTree, ScrolledPanel
 from core.debug       import Debug
 
+# add for folderpanel in languages status
+try:
+    from agw import foldpanelbar as fpb
+except ImportError: # if it's not there locally, try the wxPython lib.
+    try:
+        import wx.lib.agw.foldpanelbar as fpb
+    except ImportError:
+        import wx.lib.foldpanelbar as fpb # versions <=2.5.5.1
+
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
     def __init__(self, parent, id = wx.ID_ANY, cmdPrompt = None,
@@ -725,6 +734,45 @@ class AboutWindow(wx.Frame):
         
         return translatorswin
 
+    def _langString(self, k, v):
+        """Return string for the status of translation"""
+        allStr = "%s :" % k.upper()
+        try:
+            allStr += _("   %d translated" % v['good'])
+        except:
+            pass
+        try:
+            allStr += _("   %d fuzzy" % v['fuzzy'])
+        except:
+            pass
+        try:
+            allStr += _("   %d untranslated" % v['bad'])
+        except:
+            pass
+        return allStr
+        
+    def _langPanel(self, parent, js):
+        """Create panel for each languages"""
+        panel = wx.Panel(parent = parent, id = wx.ID_ANY)
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        for k,v in js.iteritems():
+            if k != 'total':
+                text = self._langString(k,v)
+                statstext = wx.StaticText(panel, id = wx.ID_ANY,
+                                        label = text)
+                pageSizer.Add(item = statstext, proportion = 1,
+                                 flag = wx.EXPAND | wx.ALL, border = 3)
+        panel.SetSizer(pageSizer)
+        panel.Layout()
+        panel.Fit()
+        return panel
+
+    def OnPressCaption(self, event):
+        """!When foldpanel item collapsed/expanded, update scrollbars"""
+        foldpanel = event.GetBar().GetGrandParent().GetParent()
+        wx.CallAfter(self.UpdateScrolling, (foldpanel,))
+        event.Skip()
+
     def _pageStats(self):
         """Translation statistics info"""
         fname = "translation_status.json"
@@ -738,45 +786,43 @@ class AboutWindow(wx.Frame):
         statswin = ScrolledPanel(self)
         statswin.SetAutoLayout(True)
         statswin.SetupScrolling()
-        statswin.sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        try:# wxpython <= 2.8.10
+            foldpanelAppear = fpb.FoldPanelBar(parent = statswin, id = wx.ID_ANY,
+                                                  style = fpb.FPB_DEFAULT_STYLE,
+                                                  extraStyle = fpb.FPB_SINGLE_FOLD)
+        except:
+            try:# wxpython >= 2.8.11
+                foldpanelAppear = fpb.FoldPanelBar(parent = statswin, id = wx.ID_ANY,                               
+                                                      agwStyle = fpb.FPB_SINGLE_FOLD)
+            except: # to be sure
+                foldpanelAppear = fpb.FoldPanelBar(parent = statswin, id = wx.ID_ANY,                               
+                                                      style = fpb.FPB_SINGLE_FOLD)
+        statswin.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         if not jsStats:
             Debug.msg(5, _("File <%s> not found") % fname)
+            sizer = wx.BoxSizer(wx.VERTICAL)
             statstext = wx.StaticText(statswin, id = wx.ID_ANY,
                                            label = _('%s file missing') % fname)
-            statswin.sizer.Add(item = statstext, proportion = 1,
+            sizer.Add(item = statstext, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
+            #statswin.SetSizer(statswin.sizer)
         else:
-            statsBox = wx.FlexGridSizer(cols = 4, vgap = 5, hgap = 5)
-            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    label = _('Language')))
-            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    label = _('Translated')))
-            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    label = _('Fuzzy')))
-            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    label = _('Untranslated')))
-
             languages = jsStats['langs'].keys()
             languages.sort()
             for lang in languages:
-                    v = jsStats['langs'][lang]
-                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    style =  wx.ALIGN_CENTRE, 
-                                                    label =  lang.upper()))
-                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    style =  wx.ALIGN_CENTRE, 
-                                                    label = str(v['total']['good'])))
-                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    style =  wx.ALIGN_CENTRE,
-                                                    label = str(v['total']['fuzzy'])))
-                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
-                                                    style =  wx.ALIGN_CENTRE,
-                                                    label = str(v['total']['bad'])))
+                v = jsStats['langs'][lang]
+                
+                text = self._langString(lang, v['total'])
+                panel = foldpanelAppear.AddFoldPanel(text, collapsed = True)
+                foldpanelAppear.AddFoldPanelWindow(panel,
+                    window = self._langPanel(parent = panel, js = v), 
+                    flags = fpb.FPB_ALIGN_WIDTH)
 
-            statswin.sizer.Add(item = statsBox, proportion = 1,
-                                 flag = wx.EXPAND | wx.ALL, border = 2)    
+	        sizer = wx.BoxSizer(wx.VERTICAL)
+	        sizer.Add(foldpanelAppear, proportion = 1, flag = wx.EXPAND)
         
-        statswin.SetSizer(statswin.sizer)
+        statswin.SetSizer(sizer)
         statswin.Layout()      
         
         return statswin
