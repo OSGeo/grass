@@ -42,6 +42,7 @@ from core             import utils
 from lmgr.menudata    import ManagerData
 from core.gcmd        import GError, DecodeString
 from gui_core.widgets import GNotebook, StaticWrapText, ItemTree, ScrolledPanel
+from core.debug       import Debug
 
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
@@ -497,7 +498,8 @@ class AboutWindow(wx.Frame):
                            (_("Authors"), self._pageCredit()),
                            (_("Contributors"), self._pageContributors()),
                            (_("Extra contributors"), self._pageContributors(extra = True)),
-                           (_("Translators"), self._pageTranslators())):
+                           (_("Translators"), self._pageTranslators()),
+                           (_("Translation status"), self._pageStats())):
             aboutNotebook.AddPage(page = win, text = title)
         wx.CallAfter(aboutNotebook.SetSelection, 0)
         
@@ -722,6 +724,62 @@ class AboutWindow(wx.Frame):
         translatorswin.Layout()      
         
         return translatorswin
+
+    def _pageStats(self):
+        """Translation statistics info"""
+        fname = "translation_status.json"
+        statsfile = os.path.join(os.getenv("GISBASE"), fname)
+        if os.path.exists(statsfile):
+            statsFile = open(statsfile)
+            import json
+            jsStats = json.load(statsFile)
+        else:
+            jsStats = None
+        statswin = ScrolledPanel(self)
+        statswin.SetAutoLayout(True)
+        statswin.SetupScrolling()
+        statswin.sizer = wx.BoxSizer(wx.VERTICAL)
+        if not jsStats:
+            Debug.msg(5, _("File <%s> not found") % fname)
+            statstext = wx.StaticText(statswin, id = wx.ID_ANY,
+                                           label = _('%s file missing') % fname)
+            statswin.sizer.Add(item = statstext, proportion = 1,
+                                 flag = wx.EXPAND | wx.ALL, border = 3)
+        else:
+            statsBox = wx.FlexGridSizer(cols = 4, vgap = 5, hgap = 5)
+            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    label = _('Language')))
+            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    label = _('Translated')))
+            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    label = _('Fuzzy')))
+            statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    label = _('Untranslated')))
+
+            languages = jsStats['langs'].keys()
+            languages.sort()
+            for lang in languages:
+                    v = jsStats['langs'][lang]
+                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    style =  wx.ALIGN_CENTRE, 
+                                                    label =  lang.upper()))
+                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    style =  wx.ALIGN_CENTRE, 
+                                                    label = str(v['total']['good'])))
+                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    style =  wx.ALIGN_CENTRE,
+                                                    label = str(v['total']['fuzzy'])))
+                    statsBox.Add(item = wx.StaticText(parent = statswin, id = wx.ID_ANY,
+                                                    style =  wx.ALIGN_CENTRE,
+                                                    label = str(v['total']['bad'])))
+
+            statswin.sizer.Add(item = statsBox, proportion = 1,
+                                 flag = wx.EXPAND | wx.ALL, border = 2)    
+        
+        statswin.SetSizer(statswin.sizer)
+        statswin.Layout()      
+        
+        return statswin
     
     def OnCloseWindow(self, event):
         """!Close window"""
