@@ -1032,7 +1032,7 @@ void check_parameters(const struct GParams *params)
     /* color */
     nconsts = opt_get_num_answers(params->vline_color);
     if (nvlines > 0 && nconsts != nvlines)
-	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
 		      params->vlines->key, nvlines, params->vline_color->key,
 		      nconsts);
 
