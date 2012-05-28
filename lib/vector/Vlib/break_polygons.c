@@ -113,12 +113,18 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
     struct RTree *RTree;
     int npoints, nallpoints, nmarks;
     XPNT2 XPnt;
-    struct RTree_Rect rect;
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point;
     char cross;
     int fd, xpntfd;
     char *filename;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
     
     G_debug(1, "File-based version of Vect_break_polygons()");
 
