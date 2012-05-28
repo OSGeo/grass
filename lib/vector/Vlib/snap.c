@@ -93,9 +93,6 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     int line, ltype, line_idx;
     double thresh2;
 
-    struct RTree *RTree;
-    int rtreefd = -1;
-    struct RTree_Rect rect;
     int point;			/* index in points array */
     int nanchors, ntosnap;	/* number of anchors and number of points to be snapped */
     int nsnapped, ncreated;	/* number of snapped verices, number of new vertices (on segments) */
@@ -106,6 +103,16 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     struct ilist *List;
     int *Index = NULL;		/* indexes of anchors for vertices */
     int aindex = 0;		/* allocated Index */
+
+    struct RTree *RTree;
+    int rtreefd = -1;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     if (List_lines->n_values < 1)
 	return;
@@ -469,7 +476,6 @@ Vect_snap_lines(struct Map_info *Map, int type, double thresh,
 		struct Map_info *Err)
 {
     int line, nlines, ltype;
-
     struct ilist *List;
 
     List = Vect_new_list();
