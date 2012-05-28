@@ -244,7 +244,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	    return 1;		/* endpoints only */
 	}
 
-	/* heneral overlap */
+	/* general overlap */
 	G_debug(3, "   -> vertical overlap");
 	/* a contains b */
 	if (ay1 <= by1 && ay2 >= by2) {
@@ -608,9 +608,15 @@ Vect_line_intersection(struct line_pnts *APoints,
     double x, y, rethresh;
     struct line_pnts **XLines, *Points;
     struct RTree *MyRTree;
-    struct RTree_Rect rect;
     struct line_pnts *Points1, *Points2;	/* first, second points */
     int seg1, seg2, vert1, vert2;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     n_cross = 0;
     rethresh = 0.000001;	/* TODO */
@@ -1132,8 +1138,14 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 {
     int i;
     double dist, rethresh;
-    struct RTree_Rect rect;
     struct RTree *MyRTree;
+    static struct RTree_Rect rect;
+    static int rect_init = 0;
+
+    if (!rect_init) {
+	rect.boundary = G_malloc(6 * sizeof(RectReal));
+	rect_init = 6;
+    }
 
     rethresh = 0.000001;	/* TODO */
     APnts = APoints;
