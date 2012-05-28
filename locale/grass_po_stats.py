@@ -19,12 +19,9 @@ import json
 
 def main():
     directory = 'po/'
-    # TO DO CHANGE WITH GISBASE
-    outdirectory = 'po/'
-    outfilename = 'translation_status.json'
-    # TODO CHECK IF grass.try_remove CAN WORK
+    outfile = os.path.join(os.environ['GISBASE'],'locale','translation_status.json')
     try:
-        os.remove(os.path.join(directory,outfilename))
+        os.remove(outfile)
     except:
         pass
     # dictionary contaning languages and file name
@@ -73,7 +70,7 @@ def main():
             # check if some errors occurs 
             if out.find('error') != -1:
                 # TODO CHECK IF grass.warning()
-                print "WARNING: file <%s> has some problems" % flang
+                print "WARNING: file <%s> has some problems: <%s>" % (flang, out)
                 continue
             # split the output
             out = out.split(',')
@@ -81,7 +78,7 @@ def main():
             # check for each answer
             for o in out:
                 o = o.strip()
-                # each answer it's written into dictionare and
+                # each answer is written into dictionary and
                 # the value add to variable for the sum
                 if 'untranslated' in o:
                     val = int(o.split(' ')[0])
@@ -103,11 +100,16 @@ def main():
     # load dictionary into json format    
     fjson = json.dumps(output, sort_keys=True, indent=4)
     # write a string with pretty style
-    outjson = '\n'.join([l.rstrip() for l in  fjson.splitlines()])
-    # write to file!
-    fout = open(os.path.join(directory,outfilename),'w')
+    outjson = os.linesep.join([l.rstrip() for l in  fjson.splitlines()])
+    # write out file
+    fout = open(outfile,'w')
     fout.write(outjson)
+    fout.write(os.linesep)
     fout.close()
+    try:
+        os.remove("messages.mo")
+    except:
+	pass
     
 if __name__ == "__main__":
     sys.exit(main())
