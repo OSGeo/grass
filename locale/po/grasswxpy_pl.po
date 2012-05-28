@@ -3724,9 +3724,8 @@ msgid "&Load"
 msgstr "&Wczytaj"
 
 #: ../gui/wxpython/gui_core/forms.py:1408
-#, fuzzy
 msgid "or enter values interactively"
-msgstr "Przekoduj interaktywnie"
+msgstr "lub wprowadź wartości interaktywnie"
 
 #: ../gui/wxpython/gui_core/forms.py:1623
 #, fuzzy
@@ -7255,7 +7254,7 @@ msgstr "Stwórz nową mapę wektorową"
 
 #: ../gui/wxpython/menustrings.py:758
 msgid "Satellite images products"
-msgstr ""
+msgstr "Pochodne zobrazowań satelitarnych"
 
 #: ../gui/wxpython/menustrings.py:759
 #, fuzzy
@@ -7506,8 +7505,9 @@ msgid "Univariate statistics for volumes"
 msgstr "Statystyki"
 
 #: ../gui/wxpython/menustrings.py:821
+#, fuzzy
 msgid "Calculates univariate statistics from the non-null 3d cells of a raster3d map."
-msgstr ""
+msgstr "Oblicza statystyki z niezerowych komurek 3D mapy rastrowej 3D."
 
 #: ../gui/wxpython/menustrings.py:822
 msgid "&Database"
@@ -10385,7 +10385,7 @@ msgstr "Dopasowanie histogramu"
 
 #: ../gui/wxpython/scripts/vkrige.py:305
 msgid "Plot/refresh variogram"
-msgstr ""
+msgstr "Rysuj/odśwież wariogram"
 
 #: ../gui/wxpython/scripts/vkrige.py:316
 msgid ":"
@@ -10916,6 +10916,8 @@ msgid ""
 "No maps in selected group <%s>.\n"
 "Please edit group or select another group."
 msgstr ""
+"Brak map w wybranej grupie <%s>.\n"
+"Edytuj grupę lub wybierz inną."
 
 #: ../gui/wxpython/gcp/manager.py:779
 msgid "Manage Ground Control Points"
@@ -10928,7 +10930,7 @@ msgstr "Co najmniej jeden %d punkt GCP jest niezbędzny. Operacja przerwana."
 
 #: ../gui/wxpython/gcp/manager.py:1097
 msgid "mapwin not defined for "
-msgstr ""
+msgstr "nie zdefiniowano mapwin dla "
 
 #: ../gui/wxpython/gcp/manager.py:1167
 msgid "source"
@@ -10962,11 +10964,11 @@ msgstr "Zbiór POINTS został zapisany dla grupy <%s>"
 
 #: ../gui/wxpython/gcp/manager.py:1261
 msgid "source mapwin not defined"
-msgstr ""
+msgstr "nie zdefiniowano źródłowego mapwin"
 
 #: ../gui/wxpython/gcp/manager.py:1266
 msgid "target mapwin not defined"
-msgstr ""
+msgstr "nie zdefiniowano docelowego mapwin"
 
 #: ../gui/wxpython/gcp/manager.py:1294
 msgid "Reading POINTS file failed"
@@ -13033,6 +13035,395 @@ msgstr "(x)"
 msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
 msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
+#, fuzzy
+msgid "Report or upload vector features to DB"
+msgstr "Transformuje obiekty wektorowe 2D do obiektów 3D."
+
+#, fuzzy
+msgid "Removes a table from database."
+msgstr "Utwórz z bazy danych"
+
+#, fuzzy
+msgid "&Abort"
+msgstr "&Przerwij polecenie"
+
+#, fuzzy
+msgid "Converts a 3D raster map into a 3-dimensional Vis5D file."
+msgstr "Eksportuje raster 3D GRASS-a do trójwymiarowego pliku Vis5D."
+
+#, fuzzy
+msgid "Queries a vector map at given locations."
+msgstr "Odpytuje mapę wektorowych w zadanych lokalizacjach."
+
+#, fuzzy
+msgid "Direct OGR"
+msgstr "Kierunek"
+
+msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+msgstr "Konwertuje tekstowy plik rastrowy 3D ASCII na binarną mapę rastrową 3D."
+
+msgid "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)"
+msgstr "Importuje trójwymiarowe pliki Vis5D (np. plik v5d z 1 zmienną i 1 znacznikiem czasu)"
+
+msgid "Converts a 3D raster map layer into an ASCII text file"
+msgstr "Konwertuje warstwę mapy rastrowej 3D na plik tekstowy ASCII."
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x"
+msgstr "Oblicza regresję linearną dla dwóch map rastrowych: y = a + b*x"
+
+msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "Eksportuje raster 3D GRASS-a do trójwymiarowego pliku Vis5D."
+
+msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
+msgstr "Tworzy mapę rastrową przekroju (2D) mapy rastrowej 3D i mapy rastrowej wysokości (2D)"
+
+msgid "Generates volume statistics for raster3d maps."
+msgstr "Oblicza statystyki map rastrowych 3D."
+
+#, fuzzy
+msgid "Converts to one of the supported OGR vector formats."
+msgstr "Konwertuje do jednego z dostępnych formatów wektorowych OGR."
+
+#, fuzzy
+msgid "Watershed basin analysis program"
+msgstr "Program do analiz działów wodnych zlewni."
+
+#, fuzzy
+msgid "Create parallel line to input lines"
+msgstr "Utworzy linie równoległe do podanych linii wektorowych."
+
+#, fuzzy
+msgid "Mosaics up to four images, extending the color table."
+msgstr "Mozaikuje do 4 obrazów i rozciąga colormap; tworzy mapę *.mosaic."
+
+#, fuzzy
+msgid "Extract quality control parameters from Modis QC layers"
+msgstr "Wpisz parametry dla"
+
+#, fuzzy
+msgid "Selected map <%s> is not in current mapset <%s>. Color rules cannot be edited."
+msgstr "Mapa wektorowa <%s> już istnieje w bieżącym mapsecie. Chcesz ją nadpisać?"
+
+#, fuzzy
+msgid "Import raster or vector data"
+msgstr "Import danych rastrowych"
+
+#, fuzzy
+msgid "Profile plot settings"
+msgstr "Ustawienia profilu"
+
+msgid "Matlab array and MapGen import"
+msgstr "Matlab i MapGen   (v.in.mapgen)"
+
+msgid "Import Mapgen or Matlab vector maps into GRASS."
+msgstr "Importuje mapy wektorowe Mapgen i Matlab do GRASS-a."
+
+#, fuzzy
+msgid "Creates a mask for limiting raster operation."
+msgstr "Tworzy MASKĘ do zawężenia operacji na rastrze"
+
+#, fuzzy
+msgid "Quit GRASS GIS"
+msgstr "Wyjdź z GRASS GIS"
+
+#, fuzzy
+msgid ""
+"Reading workspace file <%(file)s> failed.\n"
+"Invalid file, unable to parse XML document.\n"
+"\n"
+"%(err)s"
+msgstr "Odczyt pliku pola pracy <%s> nie powiódł się. Plik uszkodzony, nie można przeanalizować dokumentu XML."
+
+#, fuzzy
+msgid "C&onfig"
+msgstr "Konfiguracja"
+
+#, fuzzy
+msgid "3D Raster map"
+msgstr "Mapa rastrowa"
+
+#, fuzzy
+msgid "module"
+msgstr "Kod"
+
+#, fuzzy
+msgid "Select GRASS module"
+msgstr "Wybierz lokację i mapset projektu"
+
+#, fuzzy
+msgid "Unable to get list of available mapsets."
+msgstr "Nie można usunąć mapsetu"
+
+#, fuzzy
+msgid "Unable to get list of accessible mapsets."
+msgstr "Nie można usunąć mapsetu"
+
+#, fuzzy
+msgid "Menu tree window"
+msgstr "Pływające okno"
+
+#, fuzzy
+msgid "help"
+msgstr "Pomoc"
+
+#, fuzzy
+msgid "Run"
+msgstr "&Uruchom"
+
+#, fuzzy
+msgid "Saved NVIZ Settings"
+msgstr "Zapisać bieżące ustawienia?"
+
+#, fuzzy
+msgid "Creates a lines vector map from an ASCII x,y points file."
+msgstr "Tworzy mapę wektorową z pliku punktów lub wektorów ASCII."
+
+#, fuzzy
+msgid "Quit GUI"
+msgstr "Zakończ GUI"
+
+#, fuzzy
+msgid "GRASS SQL Builder: %s"
+msgstr "GRASS SQL Builder: %s"
+
+#, fuzzy
+msgid "GRASS SQL Builder (%s): vector map <%s>"
+msgstr "GRASS SQL Builder: %s"
+
+msgid "Matlab and MapGen import"
+msgstr "Import Matlab i MapGen"
+
+msgid "Creates and adds a new attribute table to a given layer of an existing vector map."
+msgstr "Tworzy i dodaje nową tabelę atrybutów do zadanej warstwy istniejącej mapy wektorowej."
+
+msgid "Reconnect vector to database"
+msgstr "Ponownie łączy wektor z bazą danych"
+
+msgid "Creates a new vectors as a read-only link to OGR layers"
+msgstr "Tworzy nową warstwę wektorową jako link do warstwy OGR tylko do odczytu."
+
+msgid "Vector digitizer error"
+msgstr "Błąd digitizera"
+
+msgid "Close this window without executing the command"
+msgstr "Zamknij okno bez wykonywania komendy"
+
+msgid "Show manual page of the command"
+msgstr "Wyświetl pomoc dla tej komendy"
+
+msgid "Run the command"
+msgstr "Uruchom komendę"
+
+msgid "Add various vector-based map layer"
+msgstr "Dodaj warstwę tematyczną"
+
+msgid "Official GRASS site: http://grass.osgeo.org"
+msgstr "Oficjalna strona GRASS GIS: http://grass.osgeo.org"
+
+msgid "GIS Library"
+msgstr "Biblioteka GIS"
+
+msgid "COPYING file missing"
+msgstr "Brak pliku COPYING"
+
+msgid "Force re-rendering of all layers"
+msgstr "Wymuś odświeżanie wszystkich warstw"
+
+msgid "Create new workspace file"
+msgstr "Stwórz nowy plik projektu"
+
+msgid "Load map layers into workspace"
+msgstr "Wczytaj warstwy mapy do projektu"
+
+msgid "Open existing workspace file"
+msgstr "Otwórz projekt"
+
+msgid "Save current workspace to file"
+msgstr "Zapisz projekt"
+
+msgid "Show Nviz settings dialog"
+msgstr "Pokaż okno ustawień Nviz"
+
+msgid "Nviz properties"
+msgstr "Właściwości Nviz"
+
+msgid "coarse:"
+msgstr "niskiej jakości"
+
+msgid "fine:"
+msgstr "wysokiej jakości"
+
+msgid "Layer properties"
+msgstr "Właściwości warstwy"
+
+msgid "Parameter not found: %s"
+msgstr "Nie znaleziono paramentru: %s"
+
+msgid "Parameter %(name)s (%(desc)s) is missing.\n"
+msgstr "Brakuje parametru %(name)s (%(desc)s).\n"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopiuj bieżącą komendę do schowka"
+
+msgid "Vector point layer not found (id=%d)"
+msgstr "Nie znaleziono wektorowej warstwy punktowej (id=%d)"
+
+msgid "Unable to set data layer properties (id=%d)"
+msgstr "Nie można ustawić parametrów warstwy (id=%d)"
+
+msgid "User GUI settings"
+msgstr "Ustawienia użytkownika GUI"
+
+msgid "Downloads and imports data from WMS servers."
+msgstr "Pobiera i importuje dane z serwerów WMS."
+
+msgid "Export GRASS raster as non-georeferenced PNG image format."
+msgstr "Eksportuje raster GRASS-a do formatu PNG bez georeferencji."
+
+msgid "Raster"
+msgstr "Raster"
+
+msgid "Volumes"
+msgstr "Raster 3D"
+
+msgid "GRASS GIS help"
+msgstr "Pomoc GRASS GIS"
+
+msgid "Reading workspace file <%s> failed. Invalid file, unable to parse XML document."
+msgstr "Odczyt pliku projektu <%s> nie powiódł się. Plik uszkodzony, nie można przeanalizować dokumentu XML."
+
+msgid "Writing current settings to workspace file failed (%s)."
+msgstr "Zapis bieżących ustawień do pliku projektu nie powiódł się (%s)."
+
+msgid "Add layer group"
+msgstr "Dodaj grupę warstw"
+
+msgid "Delete selected layer"
+msgstr "Usuń zaznaczoną warstwę"
+
+msgid "Add RGB layer"
+msgstr "Dodaj warstwę RGB"
+
+msgid "Add HIS layer"
+msgstr "Dodaj warstwę HIS"
+
+msgid "Reload GCPs from selected POINTS file"
+msgstr "Wczytaj punkty GCP z wybranego pliku POINTS"
+
+msgid "Matlab-ASCII or Mapgen import"
+msgstr "Matlab i MapGen   (v.in.mapgen)"
+
+msgid "Generates raster map layers of slope, aspect, curvatures and partial derivatives from a raster map layer of true elevation values. Aspect is calculated counterclockwise from east."
+msgstr "Tworzy rastrowe warstwy spadków, ekspozycji, krzywizn i częściowych pochodnych z rastrowej mapy rzeczywistych wysokości. Ekspozycja jest obliczana w kierunku przeciwnym do ruchu wskazówek zegara od wschodu."
+
+msgid "Icon size:"
+msgstr "Rozmiar ikon:"
+
+msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
+msgstr "<%(name)s>: warstwa typu <%(type)s> nie jest jeszcze obsługiwany."
+
+msgid "Create mapset"
+msgstr "Utwórz mapset"
+
+msgid "3d view tools"
+msgstr "Narzędzia widoku 3d"
+
+msgid "Not implemented yet"
+msgstr "Jeszcze nie zaimplementowano"
+
+msgid "ariate raster statistics"
+msgstr "statystyki mapy rastrowej"
+
+msgid "Bit pattern comparison"
+msgstr "Porównanie wypełnień bitowych    (r.bitpattern)"
+
+msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr "Importuje mapy wektorowe MapGen i Matlab do GRASS-a."
+
+msgid "Raster File Series to MPEG Conversion Program."
+msgstr "Program Konwersji Serii Plików Rastrowych do formatu MPG."
+
+msgid "Create a MASK for limiting raster operation"
+msgstr "Tworzy MASKĘ do zawężenia operacji na rastrze."
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
+msgstr "Filtruje rastrową mapę modelu terenu i generuje mapę powierzchni pozbawionej depresji oraz mapę linii spływu."
+
+#, fuzzy
+msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+msgstr "Tworzy mapę cieniowanego reliefu z mapy wysokości (DEM)."
+
+msgid "Attribute management is available only for vector maps."
+msgstr "Zarządzanie atrybutami jest dostępne tylko dla map wektorowych."
+
+msgid "Display zoom management"
+msgstr "Wyświetl menadżera zoom"
+
+msgid "Add thematic layer"
+msgstr "Dodaj warstwę tematyczną"
+
+msgid "Settings dialog for digitization tool"
+msgstr "Okno ustawień narzędzia wektoryzacji"
+
+msgid "Select color"
+msgstr "Wybierz kolor"
+
+msgid "Display Graphical Modeler manual page"
+msgstr "Wyświetl pomoc Graficznego Modelera"
+
+msgid "Aggregate ASCII xyz import"
+msgstr "ASCII xyz   (r.in.xyz)"
+
+msgid "Multiple export formats using OGR"
+msgstr "do różnych formatów OGR   (db.out.ogr)"
+
+msgid "Add attributes"
+msgstr "Dodaj atrybuty"
+
+msgid "Undo failed, data corrupted."
+msgstr "Cofnięcie ni powiodło się, dane uszkodzone."
+
+msgid "Digitize new area"
+msgstr "Wektoryzuj nowy obszar"
+
+msgid "Unable to encode text. Please set encoding in GUI preferences."
+msgstr "Nie można zakodować tekstu. Proszę ustawić kodowanie w preferencjach GUI."
+
+msgid "Adjust display zoom"
+msgstr "Dostosuj poziom wyświetlania"
+
+msgid "Zoom to map"
+msgstr "Powiększ do zasięgu mapy"
+
+msgid "Zoom to displayed map"
+msgstr "Powiększ do wyświetlonej mapy"
+
+msgid "Show Help"
+msgstr "Pokaż pomoc"
+
+msgid "Show Help for GCP Manager"
+msgstr "Pokaż pomoc menadżera GCP"
+
+msgid "Unable to initialize display driver of vector digitizer. See 'Command output' for details."
+msgstr "Nie można uruchomić sterownika wyświetlania dla digitizera. Szczegóły w zakładce 'Wynik polecenia'."
+
+msgid "&Delete layer"
+msgstr "&Usuń warstwę"
+
+msgid "Override projection (use location's projection)"
+msgstr "Forsuj odwzorowanie (użyj odwzorowania z lokacji)"
+
+msgid "Selects data from table."
+msgstr "Wybiera dane z tabeli przy pomocy zapytań SQL."
+
+#, fuzzy
+msgid "Import GetFeature from WFS."
+msgstr "Ściąga i importuje dane z serwerów WMS."
+
+#, fuzzy
+msgid "Generates stream channels"
+msgstr "Zapisz zmiany"
+
 #~ msgid "Unable to switch to location <%(loc)s> mapset <%(mapset)s>."
 #~ msgstr "Nie można przełączyć do lokacji <%(loc)s> mapsetu <%(mapset)s>."
 
@@ -13114,14 +13505,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 #~ msgid "Surface area estimation for rasters."
 #~ msgstr "Oszacowanie powierzchni obszaru dla map rastrowych."
 
-#, fuzzy
-#~ msgid "Report or upload vector features to DB"
-#~ msgstr "Transformuje obiekty wektorowe 2D do obiektów 3D."
-
-#, fuzzy
-#~ msgid "Removes a table from database."
-#~ msgstr "Utwórz z bazy danych"
-
 #~ msgid "Add action"
 #~ msgstr "Dodaj akcję"
 
@@ -13132,7 +13515,7 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 #~ msgstr "Mapa wektorowa <%s> już istnieje. Zmień nazwę rozszerzenia i spróbuj jeszcze raz."
 
 #~ msgid "you will need to copy any attribute tables"
-#~ msgstr "należy skopiowac wszystkie tabele atrybutów."
+#~ msgstr "należy skopiować wszystkie tabele atrybutów "
 
 #~ msgid "and reconnect them to the georectified vectors"
 #~ msgstr "i połączyć je ponownie do zgeorektyfikowanych wektorów"
@@ -13146,10 +13529,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "Change ID"
 #~ msgstr "Zmień ID"
-
-#, fuzzy
-#~ msgid "&Abort"
-#~ msgstr "&Przerwij polecenie"
 
 #~ msgid "Set map canvas for "
 #~ msgstr "Ustaw obszar mapy dla "
@@ -13178,18 +13557,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "3d raster"
 #~ msgstr "Raster 3D"
-
-#, fuzzy
-#~ msgid "Converts a 3D raster map into a 3-dimensional Vis5D file."
-#~ msgstr "Eksportuje raster 3D GRASS-a do trójwymiarowego pliku Vis5D."
-
-#, fuzzy
-#~ msgid "Queries a vector map at given locations."
-#~ msgstr "Odpytuje mapę wektorowych w zadanych lokalizacjach."
-
-#, fuzzy
-#~ msgid "Direct OGR"
-#~ msgstr "Kierunek"
 
 #~ msgid "Unable to switch to mapset <%s>."
 #~ msgstr "Nie można przełączyć na mapset <%s>."
@@ -13514,12 +13881,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 #~ msgid "Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map."
 #~ msgstr "Wczytuje punkty nawigacyjne, trasy i ślady z pliku dobiornika GPS do mapy wektorowej."
 
-#~ msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
-#~ msgstr "Konwertuje tekstowy plik rastrowy 3D ASCII na binarną mapę rastrową 3D."
-
-#~ msgid "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)"
-#~ msgstr "Importuje trójwymiarowe pliki Vis5D (np. plik v5d z 1 zmienną i 1 znacznikiem czasu)"
-
 #~ msgid "Converts a raster map layer into an ASCII text file."
 #~ msgstr "Konwertuje warstwę mapy rastrowej na plik tekstowy ASCII."
 
@@ -13567,9 +13928,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
 #~ msgstr "Konwertuje binarną mapę wektorową GRASS-a do VTK ASCII."
-
-#~ msgid "Converts a 3D raster map layer into an ASCII text file"
-#~ msgstr "Konwertuje warstwę mapy rastrowej 3D na plik tekstowy ASCII."
 
 #~ msgid "Converts a raster map into a vector map layer."
 #~ msgstr "Konwertuje mapę rastrową do warstwy wektorowej."
@@ -13642,9 +14000,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "Surface generation program from rasterized contours."
 #~ msgstr "Oszacowanie powierzchni obszaru dla map rastrowych."
-
-#~ msgid "Calculates linear regression from two raster maps: y = a + b*x"
-#~ msgstr "Oblicza regresję linearną dla dwóch map rastrowych: y = a + b*x"
 
 #~ msgid "Digitize vector map using Tcl/Tk digitizer"
 #~ msgstr "Wektoryzuj za pomocą Tcl/Tk"
@@ -13730,9 +14085,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 #~ msgid "Exports a vector map to a GPS receiver or file format supported by GpsBabel."
 #~ msgstr "Eksportuje mapę wektorową do odbiornika GPS lub pliku obsługiwanego przez bibliotekę GPSBabel."
 
-#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
-#~ msgstr "Eksportuje raster 3D GRASS-a do trójwymiarowego pliku Vis5D."
-
 #~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
 #~ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
@@ -13750,12 +14102,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
 #~ msgstr "Transformacja Cap (Kauth Thomas) dla danych LANDSAT-TM"
-
-#~ msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
-#~ msgstr "Tworzy mapę rastrową przekroju (2D) mapy rastrowej 3D i mapy rastrowej wysokości (2D)"
-
-#~ msgid "Generates volume statistics for raster3d maps."
-#~ msgstr "Oblicza statystyki map rastrowych 3D."
 
 #~ msgid "Create new color table for vector map"
 #~ msgstr "Utwórz nową tabelę kolorów dla mapy wektorowej"
@@ -13884,50 +14230,24 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 #~ msgstr "Importuje trójwymiarowe pliki Vis5D (np. plik v5d z 1 zmienną i 1 znacznikiem czasu)"
 
 #, fuzzy
-#~ msgid "Converts to one of the supported OGR vector formats."
-#~ msgstr "Konwertuje do jednego z dostępnych formatów wektorowych OGR."
-
-#, fuzzy
 #~ msgid "Converts a 3D raster map layer into an ASCII text file."
 #~ msgstr "Konwertuje warstwę mapy rastrowej 3D na plik tekstowy ASCII."
 
-#, fuzzy
-#~ msgid "Watershed basin analysis program"
-#~ msgstr "Program do analiz działów wodnych zlewni."
-
 #~ msgid "Output basic information about a raster map layer."
 #~ msgstr "Narzędzie interpolacji powierzchni dla warstw map rastrowych."
-
-#, fuzzy
-#~ msgid "Create parallel line to input lines"
-#~ msgstr "Utworzy linie równoległe do podanych linii wektorowych."
-
-#, fuzzy
-#~ msgid "Mosaics up to four images, extending the color table."
-#~ msgstr "Mozaikuje do 4 obrazów i rozciąga colormap; tworzy mapę *.mosaic."
 
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
 #~ msgstr "Interaktywny input dla klasifikacji nadzorowanej (wymaga Xterm)"
 
 #, fuzzy
-#~ msgid "Extract quality control parameters from Modis QC layers"
-#~ msgstr "Wpisz parametry dla"
-
-#, fuzzy
 #~ msgid "Topographic correction"
 #~ msgstr "Korekcja atmosferyczna"
 
-#, fuzzy
 #~ msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
-#~ msgstr "Tworzy mapę rastrową przekroju (2D) mapy rastrowej 3D i mapy rastrowej wysokości (2D)"
+#~ msgstr "Tworzy mapę rastrową przekroju (2D) mapy rastrowej 3D i mapy rastrowej wysokości (2D)."
 
-#, fuzzy
 #~ msgid "Calculates numerically transient, confined groundwater flow in three dimensions."
-#~ msgstr "Vis5D pozwala na %d kolumn. Próba użycia %d kolumn"
-
-#, fuzzy
-#~ msgid "Selected map <%s> is not in current mapset <%s>. Color rules cannot be edited."
-#~ msgstr "Mapa wektorowa <%s> już istnieje w bieżącym mapsecie. Chcesz ją nadpisać?"
+#~ msgstr "Oblicza chwilowy przepływ wód podziemnych w reżimie ciśnieniowym w trzech wymiarach."
 
 #~ msgid "Unable to load icon theme. Reason: %s"
 #~ msgstr "Wystąpił problem z wczytaniem motywu ikon. Powód: %s"
@@ -13937,326 +14257,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "Writing new feature failed. Operation cancelled."
 #~ msgstr "Zapisanie nowego obiektu nie powiodło się. Operacja przerwana."
-
-#, fuzzy
-#~ msgid "Import raster or vector data"
-#~ msgstr "Import danych rastrowych"
-
-#, fuzzy
-#~ msgid "Profile plot settings"
-#~ msgstr "Ustawienia profilu"
-
-#~ msgid "Matlab array and MapGen import"
-#~ msgstr "Matlab i MapGen   (v.in.mapgen)"
-
-#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
-#~ msgstr "Importuje mapy wektorowe Mapgen i Matlab do GRASS-a."
-
-#, fuzzy
-#~ msgid "Creates a mask for limiting raster operation."
-#~ msgstr "Tworzy MASKĘ do zawężenia operacji na rastrze"
-
-#, fuzzy
-#~ msgid "Quit GRASS GIS"
-#~ msgstr "Wyjdź z GRASS GIS"
-
-#, fuzzy
-#~ msgid ""
-#~ "Reading workspace file <%(file)s> failed.\n"
-#~ "Invalid file, unable to parse XML document.\n"
-#~ "\n"
-#~ "%(err)s"
-#~ msgstr "Odczyt pliku pola pracy <%s> nie powiódł się. Plik uszkodzony, nie można przeanalizować dokumentu XML."
-
-#, fuzzy
-#~ msgid "C&onfig"
-#~ msgstr "Konfiguracja"
-
-#, fuzzy
-#~ msgid "3D Raster map"
-#~ msgstr "Mapa rastrowa"
-
-#, fuzzy
-#~ msgid "module"
-#~ msgstr "Kod"
-
-#, fuzzy
-#~ msgid "Select GRASS module"
-#~ msgstr "Wybierz lokację i mapset projektu"
-
-#, fuzzy
-#~ msgid "Unable to get list of available mapsets."
-#~ msgstr "Nie można usunąć mapsetu"
-
-#, fuzzy
-#~ msgid "Unable to get list of accessible mapsets."
-#~ msgstr "Nie można usunąć mapsetu"
-
-#, fuzzy
-#~ msgid "Menu tree window"
-#~ msgstr "Pływające okno"
-
-#, fuzzy
-#~ msgid "help"
-#~ msgstr "Pomoc"
-
-#, fuzzy
-#~ msgid "Run"
-#~ msgstr "&Uruchom"
-
-#, fuzzy
-#~ msgid "Saved NVIZ Settings"
-#~ msgstr "Zapisać bieżące ustawienia?"
-
-#, fuzzy
-#~ msgid "Creates a lines vector map from an ASCII x,y points file."
-#~ msgstr "Tworzy mapę wektorową z pliku punktów lub wektorów ASCII."
-
-#, fuzzy
-#~ msgid "Quit GUI"
-#~ msgstr "Zakończ GUI"
-
-#, fuzzy
-#~ msgid "GRASS SQL Builder: %s"
-#~ msgstr "GRASS SQL Builder: %s"
-
-#, fuzzy
-#~ msgid "GRASS SQL Builder (%s): vector map <%s>"
-#~ msgstr "GRASS SQL Builder: %s"
-
-#~ msgid "Matlab and MapGen import"
-#~ msgstr "Import Matlab i MapGen"
-
-#~ msgid "Creates and adds a new attribute table to a given layer of an existing vector map."
-#~ msgstr "Tworzy i dodaje nową tabelę atrybutów do zadanej warstwy istniejącej mapy wektorowej."
-
-#~ msgid "Reconnect vector to database"
-#~ msgstr "Ponownie łączy wektor z bazą danych"
-
-#~ msgid "Creates a new vectors as a read-only link to OGR layers"
-#~ msgstr "Tworzy nową warstwę wektorową jako link do warstwy OGR tylko do odczytu."
-
-#~ msgid "Vector digitizer error"
-#~ msgstr "Błąd digitizera"
-
-#~ msgid "Close this window without executing the command"
-#~ msgstr "Zamknij okno bez wykonywania komendy"
-
-#~ msgid "Show manual page of the command"
-#~ msgstr "Wyświetl pomoc dla tej komendy"
-
-#~ msgid "Run the command"
-#~ msgstr "Uruchom komendę"
-
-#~ msgid "Add various vector-based map layer"
-#~ msgstr "Dodaj warstwę tematyczną"
-
-#~ msgid "Official GRASS site: http://grass.osgeo.org"
-#~ msgstr "Oficjalna strona GRASS GIS: http://grass.osgeo.org"
-
-#~ msgid "GIS Library"
-#~ msgstr "Biblioteka GIS"
-
-#~ msgid "COPYING file missing"
-#~ msgstr "Brak pliku COPYING"
-
-#~ msgid "Force re-rendering of all layers"
-#~ msgstr "Wymuś odświeżanie wszystkich warstw"
-
-#~ msgid "Create new workspace file"
-#~ msgstr "Stwórz nowy plik projektu"
-
-#~ msgid "Load map layers into workspace"
-#~ msgstr "Wczytaj warstwy mapy do projektu"
-
-#~ msgid "Open existing workspace file"
-#~ msgstr "Otwórz projekt"
-
-#~ msgid "Save current workspace to file"
-#~ msgstr "Zapisz projekt"
-
-#~ msgid "Show Nviz settings dialog"
-#~ msgstr "Pokaż okno ustawień Nviz"
-
-#~ msgid "Nviz properties"
-#~ msgstr "Właściwości Nviz"
-
-#~ msgid "coarse:"
-#~ msgstr "niskiej jakości"
-
-#~ msgid "fine:"
-#~ msgstr "wysokiej jakości"
-
-#~ msgid "Layer properties"
-#~ msgstr "Właściwości warstwy"
-
-#~ msgid "Parameter not found: %s"
-#~ msgstr "Nie znaleziono paramentru: %s"
-
-#~ msgid "Parameter %(name)s (%(desc)s) is missing.\n"
-#~ msgstr "Brakuje parametru %(name)s (%(desc)s).\n"
-
-#~ msgid "Copy the current command string to the clipboard"
-#~ msgstr "Kopiuj bieżącą komendę do schowka"
-
-#~ msgid "Vector point layer not found (id=%d)"
-#~ msgstr "Nie znaleziono wektorowej warstwy punktowej (id=%d)"
-
-#~ msgid "Unable to set data layer properties (id=%d)"
-#~ msgstr "Nie można ustawić parametrów warstwy (id=%d)"
-
-#~ msgid "User GUI settings"
-#~ msgstr "Ustawienia użytkownika GUI"
-
-#~ msgid "Downloads and imports data from WMS servers."
-#~ msgstr "Pobiera i importuje dane z serwerów WMS."
-
-#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
-#~ msgstr "Eksportuje raster GRASS-a do formatu PNG bez georeferencji."
-
-#~ msgid "Raster"
-#~ msgstr "Raster"
-
-#~ msgid "Volumes"
-#~ msgstr "Raster 3D"
-
-#~ msgid "GRASS GIS help"
-#~ msgstr "Pomoc GRASS GIS"
-
-#~ msgid "Reading workspace file <%s> failed. Invalid file, unable to parse XML document."
-#~ msgstr "Odczyt pliku projektu <%s> nie powiódł się. Plik uszkodzony, nie można przeanalizować dokumentu XML."
-
-#~ msgid "Writing current settings to workspace file failed (%s)."
-#~ msgstr "Zapis bieżących ustawień do pliku projektu nie powiódł się (%s)."
-
-#~ msgid "Add layer group"
-#~ msgstr "Dodaj grupę warstw"
-
-#~ msgid "Delete selected layer"
-#~ msgstr "Usuń zaznaczoną warstwę"
-
-#~ msgid "Add RGB layer"
-#~ msgstr "Dodaj warstwę RGB"
-
-#~ msgid "Add HIS layer"
-#~ msgstr "Dodaj warstwę HIS"
-
-#~ msgid "Reload GCPs from selected POINTS file"
-#~ msgstr "Wczytaj punkty GCP z wybranego pliku POINTS"
-
-#~ msgid "Matlab-ASCII or Mapgen import"
-#~ msgstr "Matlab i MapGen   (v.in.mapgen)"
-
-#~ msgid "Generates raster map layers of slope, aspect, curvatures and partial derivatives from a raster map layer of true elevation values. Aspect is calculated counterclockwise from east."
-#~ msgstr "Tworzy rastrowe warstwy spadków, ekspozycji, krzywizn i częściowych pochodnych z rastrowej mapy rzeczywistych wysokości. Ekspozycja jest obliczana w kierunku przeciwnym do ruchu wskazówek zegara od wschodu."
-
-#~ msgid "Icon size:"
-#~ msgstr "Rozmiar ikon:"
-
-#~ msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
-#~ msgstr "<%(name)s>: warstwa typu <%(type)s> nie jest jeszcze obsługiwany."
-
-#~ msgid "Create mapset"
-#~ msgstr "Utwórz mapset"
-
-#~ msgid "3d view tools"
-#~ msgstr "Narzędzia widoku 3d"
-
-#~ msgid "Not implemented yet"
-#~ msgstr "Jeszcze nie zaimplementowano"
-
-#~ msgid "ariate raster statistics"
-#~ msgstr "statystyki mapy rastrowej"
-
-#~ msgid "Bit pattern comparison"
-#~ msgstr "Porównanie wypełnień bitowych    (r.bitpattern)"
-
-#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "Importuje mapy wektorowe MapGen i Matlab do GRASS-a."
-
-#~ msgid "Raster File Series to MPEG Conversion Program."
-#~ msgstr "Program Konwersji Serii Plików Rastrowych do formatu MPG."
-
-#~ msgid "Create a MASK for limiting raster operation"
-#~ msgstr "Tworzy MASKĘ do zawężenia operacji na rastrze."
-
-#~ msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer."
-#~ msgstr "Filtruje rastrową mapę modelu terenu i generuje mapę powierzchni pozbawionej depresji oraz mapę linii spływu."
-
-#, fuzzy
-#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
-#~ msgstr "Tworzy mapę cieniowanego reliefu z mapy wysokości (DEM)."
-
-#~ msgid "Attribute management is available only for vector maps."
-#~ msgstr "Zarządzanie atrybutami jest dostępne tylko dla map wektorowych."
-
-#~ msgid "Display zoom management"
-#~ msgstr "Wyświetl menadżera zoom"
-
-#~ msgid "Add thematic layer"
-#~ msgstr "Dodaj warstwę tematyczną"
-
-#~ msgid "Settings dialog for digitization tool"
-#~ msgstr "Okno ustawień narzędzia wektoryzacji"
-
-#~ msgid "Select color"
-#~ msgstr "Wybierz kolor"
-
-#~ msgid "Display Graphical Modeler manual page"
-#~ msgstr "Wyświetl pomoc Graficznego Modelera"
-
-#~ msgid "Aggregate ASCII xyz import"
-#~ msgstr "ASCII xyz   (r.in.xyz)"
-
-#~ msgid "Multiple export formats using OGR"
-#~ msgstr "do różnych formatów OGR   (db.out.ogr)"
-
-#~ msgid "Add attributes"
-#~ msgstr "Dodaj atrybuty"
-
-#~ msgid "Undo failed, data corrupted."
-#~ msgstr "Cofnięcie ni powiodło się, dane uszkodzone."
-
-#~ msgid "Digitize new area"
-#~ msgstr "Wektoryzuj nowy obszar"
-
-#~ msgid "Unable to encode text. Please set encoding in GUI preferences."
-#~ msgstr "Nie można zakodować tekstu. Proszę ustawić kodowanie w preferencjach GUI."
-
-#~ msgid "Adjust display zoom"
-#~ msgstr "Dostosuj poziom wyświetlania"
-
-#~ msgid "Zoom to map"
-#~ msgstr "Powiększ do zasięgu mapy"
-
-#~ msgid "Zoom to displayed map"
-#~ msgstr "Powiększ do wyświetlonej mapy"
-
-#~ msgid "Show Help"
-#~ msgstr "Pokaż pomoc"
-
-#~ msgid "Show Help for GCP Manager"
-#~ msgstr "Pokaż pomoc menadżera GCP"
-
-#~ msgid "Unable to initialize display driver of vector digitizer. See 'Command output' for details."
-#~ msgstr "Nie można uruchomić sterownika wyświetlania dla digitizera. Szczegóły w zakładce 'Wynik polecenia'."
-
-#~ msgid "&Delete layer"
-#~ msgstr "&Usuń warstwę"
-
-#~ msgid "Override projection (use location's projection)"
-#~ msgstr "Forsuj odwzorowanie (użyj odwzorowania z lokacji)"
-
-#~ msgid "Selects data from table."
-#~ msgstr "Wybiera dane z tabeli przy pomocy zapytań SQL."
-
-#, fuzzy
-#~ msgid "Import GetFeature from WFS."
-#~ msgstr "Ściąga i importuje dane z serwerów WMS."
-
-#, fuzzy
-#~ msgid "Generates stream channels"
-#~ msgstr "Zapisz zmiany"
 
 #~ msgid "Add vector map"
 #~ msgstr "Dodaj mapę wektorową"
@@ -14362,9 +14362,8 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 #~ msgid "Topology maintenance"
 #~ msgstr "Tworzenie plików dodatkowych"
 
-#, fuzzy
 #~ msgid "Feature selection"
-#~ msgstr "Wybór danych"
+#~ msgstr "Wybór obiektów"
 
 #~ msgid "Add action (GRASS module) to model"
 #~ msgstr "Dodaj akcję (moduł GRASS) do modelu"
@@ -14380,3 +14379,24 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "Add map info"
 #~ msgstr "Dodaj informację o mapie"
+
+#~ msgid "For all vector maps georectified successfully,"
+#~ msgstr "Dla wszystkich map wektorowych po nadaniu georeferencji "
+
+#~ msgid ""
+#~ "Could not calculate RMS Error.\n"
+#~ "Possible error with g.transform."
+#~ msgstr ""
+#~ "Nie można obliczyć błędu RMS.\n"
+#~ "Prawdopodobnie błąd modułu g.transform."
+
+#~ msgid ""
+#~ "Could not calculate new extends.\n"
+#~ "Possible error with g.transform."
+#~ msgstr ""
+#~ "Nie można obliczyć nowych zasięgów.\n"
+#~ "Prawdopodobnie błąd modułu g.transform."
+
+#, fuzzy
+#~ msgid "Computes topographic correction of reflectance."
+#~ msgstr "Oblicza korekcję topograficzną"
