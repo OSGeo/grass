@@ -19,7 +19,7 @@ import json
 
 def main():
     directory = 'po/'
-    outfile = os.path.join(os.environ['GISBASE'],'locale','translation_status.json')
+    outfile = os.path.join(os.environ['GISBASE'],'translation_status.json')
     try:
         os.remove(outfile)
     except:
