@@ -488,12 +488,12 @@ class AboutWindow(wx.Frame):
                                                label = _('Language:')),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
-        lang = grass.gisenv().get('LANG', None)
-        if not lang:
+        self.langUsed = grass.gisenv().get('LANG', None)
+        if not self.langUsed:
             import locale
-            lang = '.'.join(locale.getdefaultlocale())
+            self.langUsed = '.'.join(locale.getdefaultlocale())
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = lang),
+                                               label = self.langUsed),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)        
         
@@ -654,8 +654,10 @@ class AboutWindow(wx.Frame):
                 items = (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID'))
             contribBox = wx.FlexGridSizer(cols = len(items), vgap = 5, hgap = 5)
             for item in items:
-                contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
-                                                    label = item))
+                text = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
+                                        label = item)
+                text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+                contribBox.Add(item = text)
             for vals in sorted(contribs, key = lambda x: x[0]):
                 for item in vals:
                     contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
@@ -710,12 +712,18 @@ class AboutWindow(wx.Frame):
             translatorsBox = wx.FlexGridSizer(cols = 3, vgap = 5, hgap = 5)
             languages = translators.keys()
             languages.sort()
-            translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
-                                                    label = _('Name')))
-            translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
-                                                    label = _('E-mail')))
-            translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
-                                                    label = _('Language')))
+            tname = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                label = _('Name'))
+            tname.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+            translatorsBox.Add(item = tname)
+            temail = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                label = _('E-mail'))
+            temail.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+            translatorsBox.Add(item = temail)
+            tlang = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                label = _('Language'))
+            tlang.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+            translatorsBox.Add(item = tlang)
             for lang in languages:
                 for translator in translators[lang]:
                     name, email = translator
@@ -783,9 +791,8 @@ class AboutWindow(wx.Frame):
             jsStats = json.load(statsFile)
         else:
             jsStats = None
-        statswin = ScrolledPanel(self)
+        statswin = ScrolledPanel(self, style = wx.TAB_TRAVERSAL|wx.VSCROLL)
         statswin.SetAutoLayout(True)
-        statswin.SetupScrolling()
         
         try:# wxpython <= 2.8.10
             foldpanelAppear = fpb.FoldPanelBar(parent = statswin, id = wx.ID_ANY,
@@ -806,15 +813,22 @@ class AboutWindow(wx.Frame):
                                            label = _('%s file missing') % fname)
             sizer.Add(item = statstext, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
-            #statswin.SetSizer(statswin.sizer)
         else:
             languages = jsStats['langs'].keys()
             languages.sort()
+            captStyle = fpb.CaptionBarStyle()
+            captStyle.SetCaptionColour('BLACK')
+            captStyle.SetCaptionStyle(fpb.CAPTIONBAR_FILLED_RECTANGLE)
+            captStyle.SetFirstColour(wx.Colour(255,255,255, 255))
             for lang in languages:
                 v = jsStats['langs'][lang]
-                
                 text = self._langString(lang, v['total'])
-                panel = foldpanelAppear.AddFoldPanel(text, collapsed = True)
+                if lang == self.langUsed.split('_')[0]:
+                    panel = foldpanelAppear.AddFoldPanel(text, collapsed = False, 
+                                                cbstyle = captStyle)
+                else:
+                    panel = foldpanelAppear.AddFoldPanel(text, collapsed = True, 
+                                                cbstyle = captStyle)
                 foldpanelAppear.AddFoldPanelWindow(panel,
                     window = self._langPanel(parent = panel, js = v), 
                     flags = fpb.FPB_ALIGN_WIDTH)
@@ -823,7 +837,9 @@ class AboutWindow(wx.Frame):
 	        sizer.Add(foldpanelAppear, proportion = 1, flag = wx.EXPAND)
         
         statswin.SetSizer(sizer)
-        statswin.Layout()      
+        statswin.SetupScrolling(scroll_x = False, scroll_y = True)
+        statswin.Layout()
+        statswin.Fit()
         
         return statswin
     
