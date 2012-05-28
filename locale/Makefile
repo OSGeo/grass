@@ -33,6 +33,10 @@ LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(
 MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\""
 WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\""
 
+define po_stats
+GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
+endef
+
 #The xgettext utility is used to automate the creation of
 #portable message files (.po)
 pot:
@@ -75,6 +79,9 @@ verify:
 		echo "----- $$po:" ; \
 		msgfmt -c $$po; \
 	done
+
+statistics:
+	$(call po_stats)
 
 define dom_rule
 $(1)_FILES := $$(patsubst po/grass$(1)_%.po,$$(MO_DIR)/%/LC_MESSAGES/grass$(1).mo,$$(wildcard po/grass$(1)_*.po))
