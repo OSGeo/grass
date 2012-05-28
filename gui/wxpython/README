@@ -10,44 +10,6 @@ $Date$
  	Python ElementTree (only for Python 2.4)
  wxPython  >= 2.8.1.1
  NumPy     >= 1.0.4
- 
- Get wxPython 2.8.x packages from:
- * Source: http://www.wxpython.org/download.php
- * Debian GNU/Linux: http://wiki.wxpython.org/InstallingOnUbuntuOrDebian
- * Fedora: http://www.wxpython.org/download.php
- * Mandriva: included in main distribution
- * OpenSuSe: http://download.opensuse.org/repositories/Application:/Geo/
- * Ubuntu: deb http://wxpython.wxcommunity.com/apt/ubuntu/dapper /
-           deb http://wxpython.wxcommunity.com/apt/ubuntu/feisty /
-
- * MacOSX: http://www.wxpython.org/download.php
- * MS-Windows: http://www.wxpython.org/download.php
-
- Get Python from:
- * Python.org for Source, MS-Windows, OS X: http://www.python.org/download/
- * ActiveStates for AIX, HP-UX, Linux (x86), Linux 64-bit (x86_64 AMD64), Mac OS X,
-     Solaris (SPARC), Windows:
-     http://www.activestate.com/store/download.aspx?prdGUID=b08b04e0-6872-4d9d-a722-7a0c2dea2758
-     
- E.g. On Debian GNU/Linux install these packages:
- apt-get install libwxbase2.8-0 libwxbase2.8-dbg libwxbase2.8-dev \
- 	 libwxgtk2.8-0 libwxgtk2.8-dbg libwxgtk2.8-dev \
-	 python-wxgtk2.8 wx2.8-doc wx2.8-examples \
-	 wx2.8-headers wx2.8-i18n python-numpy
-
- On Mandriva 2009 GNU/Linux, install these packages:
- urpmi lib64wxgtk2.8 lib64wxgtk2.8-devel lib64wxgtkgl2.8 wxgtk2.8 \
-	lib64wxPythonGTK2.8 lib64wxPythonGTK2.8-devel wxPythonGTK wxPythonGTK-wxversion
-
-	 
- MS-WINDOWS ONLY REQUIREMENTS
- 
- Python Extensions for MS-Windows >= Build 210
- 
- Get Python Extensions for MS-Windows from:
-  http://sourceforge.net/project/platformdownload.php?group_id=78018 
- Get NumPy from:
-  http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103  
 
 
 2 - STARTUP WITH GRASS INITIALIZATION
@@ -79,49 +41,38 @@ variable, e.g.
 $ g.gisenv set="WX_DEBUG=3"
 
 
-5 - CLI Display scripts
+5 - CLI BASED DISPLAY USAGE
 
-Note: This section is out-dated!
-
-This is going to be replacement for command line tools like d.rast and
-d.vect.
-
-Now add directory "scripts" in gui directory to your $PATH. These
-little programs should later go to GRASS Scripts directory or became
-Python scripts or C programs. Now they are only small BASH wrappers
-which can be easily and fast customized.
-
-$~ export PATH=scripts/:$PATH
-
-Start GRASS:
-
-$~ grass70 ~/grassdata/spearfish60/user1
-
-Use command p.mon (shell script in gui/scripts directory) to start map
+Use command d.mon (shell script in gui/scripts directory) to start map
 display:
 
-GRASS> p.mon anything
+GRASS> d.mon wx[0-6]
 
 After a while, new window should appear.  If this is your case, add some
 raster layer to the map display:
 
-GRASS> p.rast aspect
-
-What about a bit transparency?
-
-GRASS> p.rast elevation.dem opacity=0.5
+GRASS> d.rast aspect
 
 And try the vector layer too
 
-GRASS> p.vect roads
-
-NOTE: only map name is currently supported. No other option will influence
-      the map layout
-
-Alternatively you can use more universal p.cmd:
-
-GRASS> p.cmd "d.rast map=elevation.dem@PERMANENT catlist=1300-1400 -i"
+GRASS> d.vect roads
 
 You should be able to zoom && pan through the map, once the layers are
 displayed. You should be also able to store the display content as well as
 clear the display and start from scratch.
+
+
+6 TRANSLATION HANDLING
+
+Notes:
+- Help part of menu entries is coming from the module descriptions
+- The menu is maintained manually in xml/menudata.xml
+
+Update of module description strings in xml/menudata.xml:
+- in a GRASS session, run tools/update_menudata.py
+
+From this (updated) xml/menudata.xml, the gettext strings are generated
+via Makefile and stored into the file "menustrings.py".
+
+When generating the po files in locale/po/ but locale/Makefile, all
+.py files are parsed and the strings are stored in locale/po/grasswxpy_XX.po
