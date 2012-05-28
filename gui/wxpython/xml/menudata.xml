@@ -1095,7 +1095,7 @@
 	  <items>
         <menuitem>
           <label>Query values by coordinates</label>
-          <help>Queries raster map layers on their category values and category labels.</help>
+          <help>Queries raster maps on their category values and category labels.</help>
           <keywords>raster,position,querying</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.what</command>
@@ -1382,7 +1382,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Fill lake</label>
-	      <help>Fills lake from seed at given level.</help>
+	      <help>Fills lake at given point to given level.</help>
 	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.lake</command>
@@ -2494,7 +2494,7 @@
 	<separator />
 	<menuitem>
 	  <label>Generate area for current region</label>
-	  <help>Create a new vector from the current region.</help>
+	  <help>Creates a vector polygon from the current region extent.</help>
 	  <keywords>vector,geometry</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.in.region</command>
@@ -3194,7 +3194,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Login</label>
-	      <help>Sets user/password for driver/database.</help>
+	      <help>Sets user/password for DB driver/database.</help>
 	      <keywords>database,connection settings</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>db.login</command>
