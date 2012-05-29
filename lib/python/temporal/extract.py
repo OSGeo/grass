@@ -40,6 +40,11 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1, regi
        @param layer The vector layer number to be used when no timestamped layer is present, default is 1
        @param vtype The feature type to be extracted for vector maps, default is point,line,boundary,centroid,area and face
     """
+
+    # Check the parameters
+
+    if expression and not base:
+        core.fatal(_("You need to specify the base name of new created maps"))
     
     mapset =  core.gisenv()["MAPSET"]
 
