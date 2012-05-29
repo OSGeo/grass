@@ -811,10 +811,8 @@ class AboutWindow(wx.Frame):
 
     def OnPaneChanged(self, evt):
         """Redo the layout"""
-        # TODO FIX THE REDO
-        self.Fit()
-        self.statswin.Refresh()
-        self.statswin.Layout()
+        # TODO better to test on Windows
+        self.statswin.SetupScrolling(scrollToTop = False)
 
     def _pageStats(self):
         """Translation statistics info"""
