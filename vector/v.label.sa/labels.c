@@ -58,13 +58,13 @@ label_t *labels_init(struct params *p, int *n_labels)
 
     label_sz = Vect_get_num_primitives(&Map, legal_types);
 
-    G_debug(1, "Need to allocate %d bytes of memory",
+    G_debug(1, "Need to allocate %lu bytes of memory",
 	    sizeof(label_t) * label_sz);
     labels = (label_t *) G_malloc(sizeof(label_t) * label_sz);
     G_debug(1, "labels=%p", labels);
 
     if (labels == NULL)
-	G_fatal_error(_("Cannot allocate %d bytes of memory"),
+	G_fatal_error(_("Cannot allocate %lu bytes of memory"),
 		      sizeof(label_t) * label_sz);
 
     /* open database */
@@ -119,7 +119,7 @@ label_t *labels_init(struct params *p, int *n_labels)
 
 	if (i == label_sz) {	/* we need more memory */
 	    label_sz += 100;
-	    G_debug(1, "Need to resize %p to %d bytes of memory",
+	    G_debug(1, "Need to resize %p to %lu bytes of memory",
 		    (void *)labels, sizeof(label_t) * label_sz);
 	    labels = G_realloc(labels, sizeof(label_t) * label_sz);
 	    if (labels == NULL) {
