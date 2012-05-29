@@ -37,7 +37,12 @@
 #%option G_OPT_STRDS_OUTPUT
 #%end
 
-#%option G_OPT_R_BASE
+#%option
+#% key: base
+#% type: string
+#% description: The base name of the new created raster maps. This name will be extended with a numerical prefix
+#% required: no
+#% multiple: no
 #% gisprompt: 
 #%end
 
