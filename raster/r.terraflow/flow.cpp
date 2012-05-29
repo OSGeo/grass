@@ -54,8 +54,10 @@ computeFlowAccumulation(AMI_STREAM<waterWindowBaseType>* fillStream,
 
   rt_start(rtTotal);
   assert(fillStream && outstr == NULL);
-  stats->comment("------------------------------");
-  stats->comment("COMPUTING FLOW ACCUMULATION");
+  if (stats) {
+      stats->comment("------------------------------");
+      stats->comment("COMPUTING FLOW ACCUMULATION");
+  }
   
   { /* timestamp stats file and print memory */
     time_t t = time(NULL);
@@ -70,12 +72,15 @@ computeFlowAccumulation(AMI_STREAM<waterWindowBaseType>* fillStream,
     ctime_r(&t, buf);
     buf[24] = '\0';
 #endif
-    stats->timestamp(buf);
-    *stats << endl;  
+    if (stats) {
+	stats->timestamp(buf);
+	*stats << endl;  
+    }
     
     size_t mm_size = (opt->mem  << 20); /* (in bytes) */
     formatNumber(buf, mm_size);
-    *stats << "memory size: " << buf << " bytes\n";
+    if (stats)
+	*stats << "memory size: " << buf << " bytes\n";
   }
 
   /* create sweepstream using info from  fillStream  */
@@ -89,15 +94,20 @@ computeFlowAccumulation(AMI_STREAM<waterWindowBaseType>* fillStream,
 
   /* sort output stream into a grid */
   rt_start(rt);
-  stats->comment( "sorting sweep output stream");
-  stats->recordLength("output stream", outstr);
+  if (stats) {
+      stats->comment( "sorting sweep output stream");
+      stats->recordLength("output stream", outstr);
+  }
   sort(&outstr, ijCmpSweepOutput());
   rt_stop(rt);
-  stats->recordLength("output stream", outstr);
-  stats->recordTime("sorting output stream", rt);
+  if (stats) {
+      stats->recordLength("output stream", outstr);
+      stats->recordTime("sorting output stream", rt);
+  }
 
   rt_stop(rtTotal);
-  stats->recordTime("compute flow accumulation", rtTotal);
+  if (stats)
+    stats->recordTime("compute flow accumulation", rtTotal);
 
 #ifdef SAVE_ASCII
   printStream2Grid(outstr, nrows, ncols, "flowaccumulation.asc", 
@@ -197,7 +207,8 @@ fillstr2sweepstr(AMI_STREAM<waterWindowBaseType>* fillStream) {
 
   rt_start(rt);
   
-  stats->comment("creating sweep stream from fill output stream");
+  if (stats)
+    stats->comment("creating sweep stream from fill output stream");
   
   assert(fillStream->stream_len() == nrows * ncols);
   
@@ -213,20 +224,24 @@ fillstr2sweepstr(AMI_STREAM<waterWindowBaseType>* fillStream) {
     fprintf(stderr,  " (%d items, item size=%d B\n ", 
 			(int)sweepstr->stream_len(), sizeof(sweepItem));;
   }
-  stats->recordLength("sweep stream", sweepstr);
+  if (stats)
+    stats->recordLength("sweep stream", sweepstr);
   
   /* sort sweep stream by (increasing) priority */
   if (opt->verbose) {
     fprintf(stderr, "sorting sweep stream (%.2fMB) in priority order\n", 
 	    (double)sweepstr->stream_len()*sizeof(sweepItem)/(1<<20));
   }
-  stats->comment("sorting sweep stream");
+  if (stats)
+    stats->comment("sorting sweep stream");
   sort(&sweepstr, PrioCmpSweepItem());
 
   rt_stop(rt);
   
-  stats->recordTime("create sweep stream", rt);
-  stats->recordLength("(sorted) sweep stream", sweepstr);
+  if (stats) {
+      stats->recordTime("create sweep stream", rt);
+      stats->recordLength("(sorted) sweep stream", sweepstr);
+  }
 
   return sweepstr;
 }

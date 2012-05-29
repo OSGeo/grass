@@ -170,12 +170,14 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   
   rt_start(rtTotal);
   assert(elstr && filledstr == NULL && dirstr == NULL && labeledWater == NULL);
-  stats->comment("------------------------------");
-  stats->comment("COMPUTING FLOW DIRECTIONS");
+  if (stats) {
+      stats->comment("------------------------------");
+      stats->comment("COMPUTING FLOW DIRECTIONS");
   
-  /* adjust nodata -- boundary nodata distinguished from inner
-     nodata */ 
-  stats->comment("classifying nodata (inner & boundary)");
+      /* adjust nodata -- boundary nodata distinguished from inner
+	 nodata */ 
+      stats->comment("classifying nodata (inner & boundary)");
+  }
   
   elstr_reclass = classifyNodata(elstr);
   delete elstr;
@@ -185,8 +187,10 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   /* ---------------------------------------------------------------------- */
   /* find the plateaus. */
   /* ---------------------------------------------------------------------- */
-  stats->comment("----------",  opt->verbose);
-  stats->comment("assigning preliminary directions");
+  if (stats) {
+      stats->comment("----------",  opt->verbose);
+      stats->comment("assigning preliminary directions");
+  }
   
   rt_start(rt);
   dirstr = new AMI_STREAM<direction_type>;
@@ -199,9 +203,11 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   delete winstr; /* not used; not made */
   rt_stop(rt);
   
-  stats->recordTime("findingPlateaus", rt);
-  stats->recordLength("plateaus", platstr);
-  stats->recordLength("plateau stats", statstr);
+  if (stats) {
+      stats->recordTime("findingPlateaus", rt);
+      stats->recordLength("plateaus", platstr);
+      stats->recordLength("plateau stats", statstr);
+  }
   FILL_SAVEALL {
     /* printStream(*stats, statstr); */
     FILL_DEBUG cout << "sort plateauStr (by ij): ";
@@ -223,34 +229,39 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   delete platstr;
   delete statstr;
   rt_stop(rt);
-  stats->recordTime("assigning directions", rt);
-  *stats << "maxWatershedCount=" << labelFactory::getLabelCount() << endl;
-
+  if (stats) {
+      stats->recordTime("assigning directions", rt);
+      *stats << "maxWatershedCount=" << labelFactory::getLabelCount() << endl;
+  }
   
   rt_start(rt);
   mergedWaterStr = merge2waterGrid(waterstr, dirstr, elstr);
   delete dirstr;
   delete waterstr;
   rt_stop(rt);
-  stats->recordTime("merging", rt);
-  stats->recordLength("mergedWaterStr", mergedWaterStr);
-
+  if (stats) {
+      stats->recordTime("merging", rt);
+      stats->recordLength("mergedWaterStr", mergedWaterStr);
+  }
 
  /* ---------------------------------------------------------------------- */
   /* watershed analysis */
   /* IN: mergedWaterStr, labelFactory::... */
   /* ---------------------------------------------------------------------- */
-  stats->comment("--------------", opt->verbose);
-  stats->comment("generating watersheds and watershed graph");
+  if (stats) {
+      stats->comment("--------------", opt->verbose);
+      stats->comment("generating watersheds and watershed graph");
+  }
 
   rt_start(rt);
   waterWindows = new AMI_STREAM<waterWindowType>();
   createWaterWindows(mergedWaterStr, nrows, ncols, waterWindows);
   delete mergedWaterStr;
   rt_stop(rt);
-  stats->recordTime("creating windows", rt);
-  stats->recordLength("waterWindows", waterWindows);
-
+  if (stats) {
+      stats->recordTime("creating windows", rt);
+      stats->recordLength("waterWindows", waterWindows);
+  }
 
   /* ---------------------------------------------------------------------- */
   rt_start(rt);
@@ -266,7 +277,8 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   
   assert(labeledWater->stream_len() == nrows * ncols);
   rt_stop(rt);
-  stats->recordTime("generating watersheds", rt);
+  if (stats)
+    stats->recordTime("generating watersheds", rt);
   
   /* ---------------------------------------------------------------------- */
   /* find boundaries */
@@ -296,7 +308,8 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   raise = fill_depression(boundaryStr, labelFactory::getLabelCount());
   delete boundaryStr;
   rt_stop(rt);
-  stats->recordTime("filling depressions", rt);
+  if (stats)
+    stats->recordTime("filling depressions", rt);
   
   /*fill the terrain*/
   rt_start(rt);
@@ -305,16 +318,17 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   assert(filledstr->stream_len() == nrows * ncols);
   delete [] raise;
   rt_stop(rt);
-  stats->recordTime("updating filled grid", rt);
-  stats->recordLength("filledstr", filledstr);
-  
+  if (stats) {
+      stats->recordTime("updating filled grid", rt);
+      stats->recordLength("filledstr", filledstr);
 
-  /* ---------------------------------------------------------------------- */
-  /* find plateaus again and reassign directions */
-  /* ---------------------------------------------------------------------- */
+      /* ---------------------------------------------------------------------- */
+      /* find plateaus again and reassign directions */
+      /* ---------------------------------------------------------------------- */
 
-  stats->comment("------------------------------");
-  stats->comment("REASSIGNING DIRECTIONS");
+      stats->comment("------------------------------");
+      stats->comment("REASSIGNING DIRECTIONS");
+  }
 
   rt_start(rt);
   winstr = NULL;
@@ -323,9 +337,11 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   platstr = findPlateaus(filledstr, nrows, ncols, nodataType::ELEVATION_NODATA,
 			 winstr, dirstr, statstr);
   rt_stop(rt);
-  stats->recordTime("findingPlateaus2", rt);
-  stats->recordLength("final plateaus", platstr);
-  stats->recordLength("final plateau stats", statstr);
+  if (stats) {
+      stats->recordTime("findingPlateaus2", rt);
+      stats->recordLength("final plateaus", platstr);
+      stats->recordLength("final plateau stats", statstr);
+  }
   FILL_SAVEALL {
     FILL_DEBUG cout << "sort plateauStr (by ij): "; 
     AMI_STREAM<plateauType> *tmp = sort(platstr, ijCmpPlateauType());
@@ -338,13 +354,14 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   rt_start(rt);
   waterstr = new AMI_STREAM<waterType>();
   long dc = assignDirections(statstr, platstr, waterstr);
-  if(dc) {
+  if(dc && stats) {
     *stats << "WARNING: " << dc << " depressions (islands) detected\n";
   }
   delete platstr;
   delete statstr;
   rt_stop(rt);
-  stats->recordTime("final directions", rt);
+  if (stats)
+    stats->recordTime("final directions", rt);
   
   /* merge */
   rt_start(rt);
@@ -356,12 +373,14 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   sprintf(path, "%s/flowStream", base_dir);
   flowStream = new AMI_STREAM<waterWindowBaseType>(path);
   /*flowStream->persist(PERSIST_PERSISTENT); */
-  stats->comment("creating flowStream: ", flowStream->sprint());
+  if (stats)
+    stats->comment("creating flowStream: ", flowStream->sprint());
 
   merge2waterBase(waterstr, dirstr, filledstr, flowStream);
   delete waterstr;
   rt_stop(rt);
-  stats->recordTime("merge water,dir,elev to flow", rt);
+  if (stats)
+    stats->recordTime("merge water,dir,elev to flow", rt);
   rt_stop(rtTotal);
   
 #ifdef SAVE_ASCII
@@ -372,8 +391,10 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
 		  "direction.asc", printDirection());
 #endif
   
-  stats->recordTime("Total compute flow direction running time", rtTotal);
-  stats->comment("compute flow directions done.");
+  if (stats) {
+      stats->recordTime("Total compute flow direction running time", rtTotal);
+      stats->comment("compute flow directions done.");
+  }
    
   return flowStream;
 }
@@ -386,7 +407,8 @@ recordWatersheds(AMI_STREAM<labelElevType> *labeledWater) {
   long labelCount = 0;
   AMI_STREAM<labelElevType> *tmp;
 
-  *stats << "--- watershed stats" << endl;
+  if (stats)
+    *stats << "--- watershed stats" << endl;
   FILL_DEBUG cout << "sort labeledWater (by wat label): ";
   tmp = sort(labeledWater, labelCmpLabelElevType());
 
@@ -401,9 +423,11 @@ recordWatersheds(AMI_STREAM<labelElevType> *labeledWater) {
   }
   assert(ae == AMI_ERROR_END_OF_STREAM);
 
-  *stats << "watershed count = " << labelCount << endl;
-  *stats << "---" << endl;
-  stats->flush();
+  if (stats) {
+      *stats << "watershed count = " << labelCount << endl;
+      *stats << "---" << endl;
+      stats->flush();
+  }
 
   delete tmp;
 }
@@ -424,8 +448,10 @@ assignDirections(AMI_STREAM<plateauStats> *statstr,
   AMI_err ae;
   plateauStats *ps;
 
-  stats->comment("----------",  opt->verbose);
-  stats->comment("assigning directions on plateaus");
+  if (stats) {
+      stats->comment("----------",  opt->verbose);
+      stats->comment("assigning directions on plateaus");
+  }
   
   labelFactory::reset();		/* we are relabeling now */
   
@@ -461,8 +487,11 @@ assignDirections(AMI_STREAM<plateauStats> *statstr,
       }
     }
   }
-  *stats << "depression count = " << depressionCount << endl;
-  *stats << "spill count = " << spillCount << endl;
+  if (stats) {
+      *stats << "depression count = " << depressionCount << endl;
+      *stats << "spill count = " << spillCount << endl;
+  }
+
   return depressionCount;
 }
 
@@ -480,7 +509,8 @@ assignFinalDirections(AMI_STREAM<plateauStats> *statstr,
   AMI_err ae;
   plateauStats *ps;
 
-  stats->comment("assigning final directions");
+  if (stats)
+    stats->comment("assigning final directions");
 
   statstr->seek(0);
   platstr->seek(0);
@@ -644,7 +674,8 @@ findBoundariesMain(AMI_STREAM<labelElevType> *labeledWater) {
 			       verbosedir("labels.asc"), printLabel());
   
   findBoundaries(labeledWater, nrows, ncols, boundaryStr);
-  stats->recordLength("all boundaries", boundaryStr);
+  if (stats)
+    stats->recordLength("all boundaries", boundaryStr);
   
   FILL_SAVEALL {
     FILL_DEBUG cout << "sort boundaryStr (by ij): ";
@@ -658,8 +689,10 @@ findBoundariesMain(AMI_STREAM<labelElevType> *labeledWater) {
   removeDuplicatesEx(&boundaryStr, boundaryCmpBoundaryType());
   
   rt_stop(rt);
-  stats->recordTime("generating boundaries", rt);
-  stats->recordLength("boundary stream", boundaryStr);
+  if (stats) {
+      stats->recordTime("generating boundaries", rt);
+      stats->recordLength("boundary stream", boundaryStr);
+  }
   
   /*if(GETOPT("veryfillverbose")) printStream(cout, boundaryStr);
 	SAVE_ON_OPTION(boundaryStr, "saveBoundaryStream");

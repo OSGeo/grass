@@ -49,7 +49,8 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
   { 
     char * foo;
     str->name(&foo); 
-    *stats << "Reading raster map <" << cellname 
+    if (stats)
+      *stats << "Reading raster map <" << cellname 
 		   << "> to stream <" << foo << ">." << endl;
     G_verbose_message(_("Reading data from <%s> to stream <%s>"), cellname, foo);
   }
@@ -144,7 +145,8 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
 		str->stream_len());  
   assert((off_t) nrows * ncols == str->stream_len());
   rt_stop(rt);
-  stats->recordTime("reading raster map", rt);
+  if (stats)
+    stats->recordTime("reading raster map", rt);
 
   return str;
 }
@@ -169,7 +171,8 @@ stream2_CELL(AMI_STREAM<T>* str, dimension_type nrows, dimension_type ncols,
   {
     char * foo;
     str->name(&foo); 
-    *stats << "Writing stream <" << foo << "> to raster map <" << cellname << ">.\n";
+    if (stats)
+      *stats << "Writing stream <" << foo << "> to raster map <" << cellname << ">.\n";
     G_verbose_message(_("Writing stream <%s> to raster map <%s>"), foo, cellname);
   }
 
@@ -221,7 +224,8 @@ stream2_CELL(AMI_STREAM<T>* str, dimension_type nrows, dimension_type ncols,
   Rast_close (outfd);
 
   rt_stop(rt);
-  stats->recordTime("writing raster map", rt);
+  if (stats)
+    stats->recordTime("writing raster map", rt);
 
   str->seek(0);
 
@@ -252,7 +256,8 @@ stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   {
     char * foo;
     str->name(&foo); 
-    *stats << "Writing stream <" << foo << "> to raster map <" << cellname << ">." << endl;
+    if (stats)
+      *stats << "Writing stream <" << foo << "> to raster map <" << cellname << ">." << endl;
     G_verbose_message(_("Writing stream <%s> to raster map <%s>"), foo, cellname);
   }
   
@@ -299,7 +304,8 @@ stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   Rast_close (outfd);
 
   rt_stop(rt);
-  stats->recordTime("writing raster map", rt);
+  if (stats)
+    stats->recordTime("writing raster map", rt);
 
   str->seek(0);
   return;
@@ -325,7 +331,8 @@ stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   {
     char * foo;
     str->name(&foo); 
-    *stats << "Writing stream <" << foo << "> to raster map <" << cellname << ">." << endl;
+    if (stats)
+      *stats << "Writing stream <" << foo << "> to raster map <" << cellname << ">." << endl;
     G_verbose_message(_("Writing stream <%s> to raster map <%s>"), foo, cellname);
   }
   
@@ -372,7 +379,8 @@ stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows, dimension_type ncols,
   Rast_close (outfd);
 
   rt_stop(rt);
-  stats->recordTime("writing raster map", rt);
+  if (stats)
+    stats->recordTime("writing raster map", rt);
 
   str->seek(0);
   return;
@@ -414,7 +422,8 @@ stream2_FCELL(AMI_STREAM<T>* str,  dimension_type nrows, dimension_type ncols,
   {
     char * foo;
     str->name(&foo); 
-    *stats << "Writing stream <" << foo << "> to raster maps <"
+    if (stats)
+      *stats << "Writing stream <" << foo << "> to raster maps <"
 	   << cellname1 << "> and <" << cellname2 << ">." << endl;
     G_verbose_message(_("Writing stream <%s> to raster maps <%s> and <%s>"), 
 		foo, cellname1, cellname2);
@@ -485,7 +494,8 @@ stream2_FCELL(AMI_STREAM<T>* str,  dimension_type nrows, dimension_type ncols,
 
   
   rt_stop(rt);
-  stats->recordTime("writing stream to raster maps", rt);
+  if (stats)
+    stats->recordTime("writing stream to raster maps", rt);
 
   str->seek(0);
   return;

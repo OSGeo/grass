@@ -136,23 +136,27 @@ sweepOutput::compute(elevation_type elev,
 FLOW_DATASTR* 
 initializePQ() {
    
-  stats->comment("sweep:initialize flow data structure", opt->verbose);
+  if (stats)
+    stats->comment("sweep:initialize flow data structure", opt->verbose);
   
   FLOW_DATASTR *flowpq;
 #ifdef IM_PQUEUE
-  stats->comment("FLOW_DATASTRUCTURE: in-memory pqueue");
+  if (stats)
+    stats->comment("FLOW_DATASTRUCTURE: in-memory pqueue");
   flowpq = new FLOW_DATASTR(PQ_SIZE);
   char buf[1024]; 
   sprintf(buf, "initialized to %.2fMB\n", (float)PQ_SIZE / (1<<20));
-  *stats << buf; 
+  if (stats)
+    *stats << buf; 
 
 #endif
 #ifdef EM_PQUEUE
-  stats->comment("FLOW_DATASTRUCTURE: ext-memory pqueue");
+  if (stats)
+    stats->comment("FLOW_DATASTRUCTURE: ext-memory pqueue");
   flowpq = new FLOW_DATASTR(nrows * ncols);  
 #endif
 #ifdef EMPQ_ADAPTIVE
-  if (opt->verbose) stats->comment("FLOW_DATASTRUCTURE: adaptive pqueue");
+  if (opt->verbose && stats) stats->comment("FLOW_DATASTRUCTURE: adaptive pqueue");
   flowpq = new FLOW_DATASTR(); 
 #endif
   return flowpq;
@@ -209,7 +213,8 @@ sweep(AMI_STREAM<sweepItem> *sweepstr, const flowaccumulation_type D8CUT,
 
   assert(sweepstr);
 
-  *stats << "sweeping\n";
+  if (stats)
+    *stats << "sweeping\n";
   fprintf(stderr,  "sweeping: ");
   /* create and initialize flow data structure */
   FLOW_DATASTR *flowpq;
@@ -308,17 +313,21 @@ sweep(AMI_STREAM<sweepItem> *sweepstr, const flowaccumulation_type D8CUT,
   
   G_percent(1, 1, 2); /* finish it */
 
-  *stats << "sweeping done\n";
+  if (stats)
+    *stats << "sweeping done\n";
   char buf[1024];
   sprintf(buf, "pqsize = %ld \n", (long)flowpq->size());
-  *stats << buf;
+  if (stats)
+    *stats << buf;
   
   assert(outstr->stream_len() == nitems);
   delete flowpq; 
 
   rt_stop(rt);
-  stats->recordTime("sweeping", rt);
-  stats->recordLength("sweep output stream", outstr);
+  if (stats) {
+      stats->recordTime("sweeping", rt);
+      stats->recordLength("sweep output stream", outstr);
+  }
 
   return outstr;
 }
