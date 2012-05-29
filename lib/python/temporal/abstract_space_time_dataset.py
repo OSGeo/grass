@@ -699,9 +699,9 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (map_view, map_view, self.get_map_register())
 
             if where:
-                sql += " AND %s" % (where)
+                sql += " AND (%s)" % (where.split(";")[0])
             if order:
-                sql += " ORDER BY %s" % (order)
+                sql += " ORDER BY %s" % (order.split(";")[0])
                 
             try:
                 dbif.cursor.execute(sql)
