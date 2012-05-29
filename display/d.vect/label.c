@@ -41,7 +41,7 @@ int display_label(struct Map_info *Map, int type,
 	else if (ltype == -2) /* EOF */
 	    break;
 	
-	if (!(type & ltype))
+        if (!(type & ltype) && !((type & GV_AREA) && (ltype & GV_CENTROID)))
 	    continue;		/* used for both lines and labels */
 	
 	if (ogr_centroids && ltype == GV_BOUNDARY)
