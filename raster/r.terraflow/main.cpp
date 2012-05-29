@@ -142,7 +142,6 @@ parse_args(int argc, char *argv[]) {
   stats_opt->type       = TYPE_STRING;
   stats_opt->required   = NO;
   stats_opt->description= _("Name of file containing runtime statistics");
-  stats_opt->answer     = G_store("stats.out");
 
 
   if (G_parser(argc, argv)) {
@@ -497,16 +496,18 @@ main(int argc, char *argv[]) {
 	fprintf(stderr, "(THESE INTERMEDIATE STREAMS WILL NOT BE DELETED IN CASE OF ABNORMAL TERMINATION OF THE PROGRAM. TO SAVE SPACE PLEASE DELETE THESE FILES MANUALLY!)\n");
   }
   
-  /* open the stats file */
-  stats = new statsRecorder(opt->stats);
-  record_args(argc, argv);
-  {
-    char buf[BUFSIZ];
-    long grid_size = nrows * ncols;
-    *stats << "region size = " <<  formatNumber(buf, grid_size) << " elts "
-	   << "(" << nrows << " rows x " << ncols << " cols)\n";
+  if (opt->stats) {
+      /* open the stats file */
+      stats = new statsRecorder(opt->stats);
+      record_args(argc, argv);
+      {
+	char buf[BUFSIZ];
+	long grid_size = nrows * ncols;
+	*stats << "region size = " <<  formatNumber(buf, grid_size) << " elts "
+	       << "(" << nrows << " rows x " << ncols << " cols)\n";
 
-    stats->flush();
+	stats->flush();
+      }
   }
 
   /* set up STREAM memory manager */
@@ -522,7 +523,8 @@ main(int argc, char *argv[]) {
 
   /* initialize nodata */
   nodataType::init();
-  *stats << "internal nodata value: " << nodataType::ELEVATION_NODATA << endl;
+  if (stats)
+    *stats << "internal nodata value: " << nodataType::ELEVATION_NODATA << endl;
    
   /* start timing -- after parse_args, which are interactive */
   rt_start(rtTotal);
@@ -593,15 +595,18 @@ main(int argc, char *argv[]) {
   delete outstr;
   
   rt_stop(rtTotal);
-  stats->recordTime("Total running time: ", rtTotal);
-  stats->timestamp("end");
+  if (stats) {
+      stats->recordTime("Total running time: ", rtTotal);
+      stats->timestamp("end");
+  }
 
   G_done_msg(" ");
   
   /* free the globals */
   free(region);
   free(opt);
-  delete stats;
+  if (stats)
+    delete stats;
 
   return 0;
 }

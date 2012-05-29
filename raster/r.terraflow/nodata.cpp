@@ -266,7 +266,8 @@ detectEdgeNodata::relabelNodata() {
   nodataType *pt;
 
   /* sort by label */
-  NODATA_DEBUG *stats << "sort nodataStream (by nodata label): ";
+  if (stats)
+    NODATA_DEBUG *stats << "sort nodataStream (by nodata label): ";
   AMI_STREAM<nodataType> *sortedInStream;
   sortedInStream = sort(nodataStream, labelCmpNodataType());
   delete nodataStream;
@@ -289,7 +290,8 @@ detectEdgeNodata::relabelNodata() {
 AMI_STREAM<elevation_type> *
 detectEdgeNodata::merge() {
  
-  NODATA_DEBUG *stats << "sort  nodataStream (by ij): ";
+  if (stats)
+    NODATA_DEBUG *stats << "sort  nodataStream (by ij): ";
   /*
     AMI_STREAM<nodataType> *sortedNodataStream;
     sortedNodataStream = sort(nodataStream, ijCmpNodataType());
@@ -317,30 +319,38 @@ classifyNodata(AMI_STREAM<elevation_type> *elstr) {
   Rtimer rt;
 
   rt_start(rt);
-  stats->comment("finding nodata", opt->verbose);
+  if (stats)
+    stats->comment("finding nodata", opt->verbose);
   detectEdgeNodata md(nrows, ncols, nodataType::ELEVATION_NODATA);
   md.generateNodata(*elstr);
-  *stats << "nodata stream length = " << md.getNodata()->stream_len() << endl;
+  if (stats)
+    *stats << "nodata stream length = " << md.getNodata()->stream_len() << endl;
   {
     char * foo;
     md.getNodata()->name(&foo); 
-    *stats << "nodata stream name: " << foo << endl;
+    if (stats)
+      *stats << "nodata stream name: " << foo << endl;
   }
   rt_stop(rt);
-  stats->recordTime("classifyNodata::generate nodata", rt);
+  if (stats)
+    stats->recordTime("classifyNodata::generate nodata", rt);
 
   rt_start(rt);
-  stats->comment("relabeling nodata",  opt->verbose);
+  if (stats)
+    stats->comment("relabeling nodata",  opt->verbose);
   md.relabelNodata();  /* re-assign labels (combine connected plateaus) */
   rt_stop(rt);
-  stats->recordTime("classifyNodata::relabeling",  rt);
+  if (stats)
+    stats->recordTime("classifyNodata::relabeling",  rt);
   
   rt_start(rt);
-  stats->comment("merging relabeled grid",  opt->verbose);
+  if (stats)
+    stats->comment("merging relabeled grid",  opt->verbose);
   AMI_STREAM<elevation_type> *mergeStr;
   mergeStr = md.merge();
   rt_stop(rt);
-  stats->recordTime("classifyNodata::merge",  rt);
+  if (stats)
+    stats->recordTime("classifyNodata::merge",  rt);
 
   mergeStr->seek(0);
   return mergeStr;

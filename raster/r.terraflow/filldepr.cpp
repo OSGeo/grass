@@ -52,8 +52,10 @@ elevation_type*
 fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
 		cclabel_type maxWatersheds) {
 
-  stats->comment("----------",  opt->verbose);  
-  stats->comment("flooding depressions");
+  if (stats) {
+      stats->comment("----------",  opt->verbose);  
+      stats->comment("flooding depressions");
+  }
   
   /* find available memory */
    size_t mem_avail = getAvailableMemory();

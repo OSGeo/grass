@@ -422,20 +422,27 @@ findPlateaus(AMI_STREAM<elevation_type> *elstr,
   
   /* find plateaus */
   rt_start(rt);
-  stats->comment("----------",  opt->verbose);
-  stats->comment("finding flat areas (plateaus and depressions)");
+  if (stats) {
+      stats->comment("----------",  opt->verbose);
+      stats->comment("finding flat areas (plateaus and depressions)");
+  }
   detectPlateaus md(nrows, ncols,nodata_value, dirStr, winstr);
   md.generatePlateaus(*elstr);
   rt_stop(rt);
-  stats->recordTime("findPlateaus::generate plateaus", rt);
-  stats->recordLength("plateaus", md.getPlateaus());
+  if (stats) {
+      stats->recordTime("findPlateaus::generate plateaus", rt);
+      stats->recordLength("plateaus", md.getPlateaus());
+  }
 
   rt_start(rt);
-  stats->comment("removing duplicate plateaus",  opt->verbose);
+  if (stats)
+    stats->comment("removing duplicate plateaus",  opt->verbose);
   md.removeDuplicates(); /* get rid of duplicates of same plateau point */
   rt_stop(rt);
-  stats->recordTime("findPlateaus::removing duplicates",  rt);
-  stats->recordLength("plateaus", md.getPlateaus());
+  if (stats) {
+      stats->recordTime("findPlateaus::removing duplicates",  rt);
+      stats->recordLength("plateaus", md.getPlateaus());
+  }
   
 #if(0)
   { /* XXX */
@@ -447,19 +454,24 @@ findPlateaus(AMI_STREAM<elevation_type> *elstr,
 #endif
 
   rt_start(rt);
-  stats->comment("relabeling plateaus",  opt->verbose);
+  if (stats)
+    stats->comment("relabeling plateaus",  opt->verbose);
   md.relabelPlateaus();  /* re-assign labels (combine connected plateaus) */
   rt_stop(rt);
-  stats->recordTime("findPlateaus::relabeling",  rt);
-  stats->recordLength("plateaus", md.getPlateaus());
+  if (stats) {
+      stats->recordTime("findPlateaus::relabeling",  rt);
+      stats->recordLength("plateaus", md.getPlateaus());
+  }
   
   rt_start(rt);
-  stats->comment("generating plateau statistics",  opt->verbose);
+  if (stats)
+    stats->comment("generating plateau statistics",  opt->verbose);
   md.generateStats(statStr);
   rt_stop(rt);
-  stats->recordTime("findPlateaus::generating stats",  rt);
-  stats->recordLength("plateaus", md.getPlateaus());
-
+  if (stats) {
+      stats->recordTime("findPlateaus::generating stats",  rt);
+      stats->recordLength("plateaus", md.getPlateaus());
+  }
   dirStr->seek(0);
   return md.getPlateaus();
 }

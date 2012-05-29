@@ -37,7 +37,8 @@ sort(AMI_STREAM<T> **str, FUN fo) {
   Rtimer rt;
   AMI_STREAM<T> *sortedStr;
 
-  stats->recordLength("pre-sort", *str);
+  if (stats)
+    stats->recordLength("pre-sort", *str);
   rt_start(rt);
 
   /* let AMI_sort create its output stream and delete the inout stream */
@@ -45,8 +46,10 @@ sort(AMI_STREAM<T> **str, FUN fo) {
   AMI_sort(*str,&sortedStr, &fo, eraseInputStream);
   rt_stop(rt);
 
-  stats->recordLength("sort", sortedStr);
-  stats->recordTime("sort", rt);
+  if (stats) {
+      stats->recordLength("sort", sortedStr);
+      stats->recordTime("sort", rt);
+  }
 
   sortedStr->seek(0);
   *str = sortedStr;
@@ -66,15 +69,18 @@ sort(AMI_STREAM<T> *strIn, FUN fo) {
   Rtimer rt;
   AMI_STREAM<T> *strOut;
 
-  stats->recordLength("pre-sort", strIn);
+  if (stats)
+    stats->recordLength("pre-sort", strIn);
   rt_start(rt);
 
   AMI_sort(strIn, &strOut, &fo);
   assert(strOut);
 
   rt_stop(rt);
-  stats->recordLength("sort", strOut);
-  stats->recordTime("sort", rt);
+  if (stats) {
+      stats->recordLength("sort", strOut);
+      stats->recordTime("sort", rt);
+  }
 
   strOut->seek(0);
   return strOut;

@@ -226,11 +226,13 @@ void
 createWaterWindows(AMI_STREAM<waterGridType> *mergedWaterStr, 
 		   const dimension_type nrows, const dimension_type ncols,
 		   AMI_STREAM<waterWindowType> *waterWindows) {
-  stats->comment("creating windows", opt->verbose);
+  if (stats)
+    stats->comment("creating windows", opt->verbose);
   waterWindower winfo(waterWindows);
   waterWindowBaseType nodata;
   assert(mergedWaterStr->stream_len() > 0);
-  stats->comment("warning: using slower scan", opt->verbose);
+  if (stats)
+    stats->comment("warning: using slower scan", opt->verbose);
   scan3(*mergedWaterStr, nrows, ncols, nodata, winfo);
 }
 
@@ -252,7 +254,8 @@ generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
   assert(prevWin.getDepth() == DEPTH_INITIAL);
   EMPQueueAdaptive<fillPLabel, fillPriority> *pq;
 
-  stats->comment("generateWatersheds", opt->verbose);
+  if (stats)
+    stats->comment("generateWatersheds", opt->verbose);
 
   assert((*waterWindows)->stream_len() == (nrows * ncols));
 
@@ -268,7 +271,8 @@ generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
 /*      pq->makeExternalDebug(); */
 /*    } */
   
-  stats->comment("starting generate watersheds main loop", opt->verbose);
+  if (stats)
+    stats->comment("starting generate watersheds main loop", opt->verbose);
   
   assert((*waterWindows)->stream_len() == (nrows * ncols));
   /* not really in a grid, so row, col are not valid (but count correct) */
@@ -376,7 +380,8 @@ generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
   assert(pq->is_empty());
   delete pq;
   
-  stats->comment("done with generate watersheds", opt->verbose);
+  if (stats)
+    stats->comment("done with generate watersheds", opt->verbose);
 }
 
 
@@ -452,7 +457,8 @@ void
 findBoundaries(AMI_STREAM<labelElevType> *labeledWater,
 	       const dimension_type nrows, const dimension_type ncols,	 
 	       AMI_STREAM<boundaryType> *boundaryStr) {
-  stats->comment("creating windows", opt->verbose);
+  if (stats)
+    stats->comment("creating windows", opt->verbose);
   boundaryDetector det(boundaryStr, nrows, ncols);
   /* cerr << "WARNING: using scan3 instead of scan2" << endl; */
   scan3(*labeledWater, nrows, ncols, labelElevType(), det);
