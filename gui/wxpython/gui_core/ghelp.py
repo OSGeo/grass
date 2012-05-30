@@ -700,7 +700,7 @@ class AboutWindow(wx.Frame):
             translatorswin.sizer.Add(item = translatorstxt, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
         else:
-            translatorsBox = wx.FlexGridSizer(cols = 3, vgap = 5, hgap = 5)
+            translatorsBox = wx.FlexGridSizer(cols = 4, vgap = 5, hgap = 5)
             languages = translators.keys()
             languages.sort()
             tname = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
@@ -715,6 +715,10 @@ class AboutWindow(wx.Frame):
                                 label = _('Language'))
             tlang.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
             translatorsBox.Add(item = tlang)
+            tnat = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                label = _('Nation'))
+            tnat.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+            translatorsBox.Add(item = tnat)           
             for lang in languages:
                 for translator in translators[lang]:
                     name, email = translator
@@ -723,7 +727,17 @@ class AboutWindow(wx.Frame):
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
                                                             label = email))
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
-                                                            label = lang))
+                                                            label = lang))                                                            
+                    flag = os.path.join(os.getenv("GISBASE"), "etc", "gui", 
+                            "icons", "flags", "%s.png" % lang.lower())
+                    if os.path.exists(flag):
+                        flagBitmap = wx.StaticBitmap(parent = translatorswin, id = wx.ID_ANY,
+                                     bitmap = wx.Bitmap(name = flag,
+                                                        type = wx.BITMAP_TYPE_PNG))
+                        translatorsBox.Add(item = flagBitmap)
+                    else:
+                        translatorsBox.Add(item = wx.StaticText(parent = translatorswin, 
+                                        id = wx.ID_ANY, label = lang))
             
             translatorswin.sizer.Add(item = translatorsBox, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
@@ -799,7 +813,7 @@ class AboutWindow(wx.Frame):
             #panel.Collapse(True)        
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         for k,v in js.iteritems():
-            if k != 'total':
+            if k != 'total' and k!= 'name':
                 box = self._langBox(win, k,v)
                 pageSizer.Add(item = box, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
@@ -829,22 +843,22 @@ class AboutWindow(wx.Frame):
 
         if not jsStats:
             Debug.msg(5, _("File <%s> not found") % fname)
-            self.statsSizer = wx.BoxSizer(wx.VERTICAL)
+            statsSizer = wx.BoxSizer(wx.VERTICAL)
             statstext = wx.StaticText(self.statswin, id = wx.ID_ANY,
                                            label = _('%s file missing') % fname)
-            sizer.Add(item = statstext, proportion = 1,
+            statsSizer.Add(item = statstext, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
         else:
             languages = jsStats['langs'].keys()
             languages.sort()
             
-            self.statsSizer = wx.BoxSizer(wx.VERTICAL)
+            statsSizer = wx.BoxSizer(wx.VERTICAL)
             for lang in languages:
                 v = jsStats['langs'][lang]
                 panel = self._langPanel(lang, v)
-                self.statsSizer.Add(panel)
+                statsSizer.Add(panel)
         
-        self.statswin.SetSizer(self.statsSizer)
+        self.statswin.SetSizer(statsSizer)
         self.statswin.SetupScrolling(scroll_x = False, scroll_y = True)
         self.statswin.Layout()
         self.statswin.Fit()

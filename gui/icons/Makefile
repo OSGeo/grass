@@ -4,13 +4,15 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 SRCICO := $(wildcard *.ico *.png)
 SRCICONS := $(wildcard grass/*.png)
-ETCICONS := $(patsubst %,$(ETC)/gui/icons/%,$(SRCICONS) $(SRCICO))
+SRCFLAGS := $(wildcard flags/*.png)
+ETCICONS := $(patsubst %,$(ETC)/gui/icons/%,$(SRCICONS) $(SRCICO) $(SRCFLAGS))
 HTMLICONS := $(patsubst grass/%,$(HTMLDIR)/icons/%,$(SRCICONS))
 
 ETCDIRS = \
 	$(ETC)/gui \
 	$(ETC)/gui/icons \
-	$(ETC)/gui/icons/grass
+	$(ETC)/gui/icons/grass \
+	$(ETC)/gui/icons/flags
 
 HTMLDIRS = \
 	$(HTMLDIR)/icons
