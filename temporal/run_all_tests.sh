@@ -12,13 +12,14 @@ echo "Logfile\n\n" > $LOG_FILE
 
 # For each directory
 for mydir in `ls -d t*` ; do
-    if [ -d $mydir ] ; then
-        echo $mydir
-        cd $mydir
+    if [ -d "${mydir}" ] ; then
+        echo "${mydir}"
+        cd "${mydir}"
         for myfile in `ls test.* | grep -v '~'` ; do
-            sh $myfile >> $LOG_FILE 2>&1
+	    echo "####### TEST ####### ${myfile}" >> "${LOG_FILE}" 2>&1
+            sh "${myfile}" >> "${LOG_FILE}" 2>&1
         done
         cd ..
     fi
 done
-mv $LOG_FILE .
+mv "${LOG_FILE}" .
