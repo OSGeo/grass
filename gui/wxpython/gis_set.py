@@ -11,7 +11,7 @@ Classes:
  - gis_set::GListBox
  - gis_set::StartUp
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -666,15 +666,19 @@ class GRASSStartup(wx.Frame):
 
     def OnBrowse(self, event):
         """'Browse' button clicked"""
-        grassdata = None
-
-        dlg = wx.DirDialog(self, _("Choose GIS Data Directory:"),
-                           style = wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
+        if not event:
+            defaultPath = os.getenv('HOME')
+        else:
+            defaultPath = ""
+        
+        dlg = wx.DirDialog(parent = self, message = _("Choose GIS Data Directory"),
+                           defaultPath = defaultPath, style = wx.DD_DEFAULT_STYLE)
+        
         if dlg.ShowModal() ==  wx.ID_OK:
             self.gisdbase = dlg.GetPath()
             self.tgisdbase.SetValue(self.gisdbase)
             self.OnSetDatabase(event)
-
+        
         dlg.Destroy()
 
     def OnCreateMapset(self,event):
