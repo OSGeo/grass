@@ -91,6 +91,11 @@ r.info map=prec_1
 t.rast.list input=precip_abs7
 t.topology input=precip_abs7
 
+# Check for correct errors
+# Increment format error
+t.register -i input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="months"
+
+
 t.unregister type=rast maps=prec_1,prec_2,prec_3
 # Test the warning message
 t.unregister type=rast maps=prec_1,prec_2,prec_3
