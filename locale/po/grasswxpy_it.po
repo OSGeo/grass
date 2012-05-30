@@ -2,8 +2,9 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2009, 2010, 2011 GRASS Development Team
 #
-# Luca Delucchi <lucadeluge@gmail.com>, 2009, 2010, 2011.
+# Luca Delucchi <lucadeluge gmail.com>, 2009, 2010, 2011.
 # Andrea Giacomelli <pibinko gmail.com>, 2010.
+# Silvia Franceschi <silvia.franceschi gmail.com> 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
