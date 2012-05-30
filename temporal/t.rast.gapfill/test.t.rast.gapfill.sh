@@ -18,7 +18,7 @@ prec_3|2001-05-01|2001-06-01
 EOF
 
 t.create --v --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
-t.register --v type=rast input=precip_abs file=${n1}
+t.register --v type=rast input=precip_abs file="${n1}"
 
 # @test
 t.rast.gapfill input=precip_abs base="prec" nprocs=2
