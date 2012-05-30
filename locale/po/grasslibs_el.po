@@ -1,6 +1,6 @@
-# translation of grasslibs_el.po to Bασίλειος Αντωνίου
+# translation of grasslibs_el.po to Greek
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2007 GRASS Development Team
+# Copyright (C) 2007, 2012 GRASS Development Team
 #
 # Carlos Davila <carluti@users.sourceforge.net>, 2007.
 # Vasilios Antoniou <antoniou_v@yahoo.gr>, 2008.
@@ -12,7 +12,7 @@ msgstr ""
 "PO-Revision-Date: 2008-10-16 11:25+0300\n"
 "Last-Translator: Vasilios Antoniou <antoniou_v@yahoo.gr>\n"
 "Language-Team: Greek <grass-translations@lists.osgeo.org>\n"
-"Language: \n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-7\n"
 "Content-Transfer-Encoding: 8bit\n"
