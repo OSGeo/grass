@@ -148,6 +148,8 @@ def main():
                         update_dict[dataset["id"]] = dataset["id"]
                 # Collect SQL statements
                 statement += map.delete(dbif=dbif, update=False, execute=False)
+        else:
+            grass.warning(_("Unable to find %s map <%s> in temporal database"%(map.get_type(), map.get_id())))
 		
 	count += 1
 
