@@ -395,6 +395,7 @@ class AboutWindow(wx.Frame):
         vInfo = grass.version()
         
         infoTxt = ScrolledPanel(parent = panel)
+        infoTxt.SetBackgroundColour('WHITE')
         infoTxt.SetupScrolling()
         infoSizer = wx.BoxSizer(wx.VERTICAL)
         infoGridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
@@ -537,7 +538,7 @@ class AboutWindow(wx.Frame):
         
         # put text into a scrolling panel
         copyrightwin = ScrolledPanel(self)
-                                     
+        copyrightwin.SetBackgroundColour('WHITE')
         copyrighttxt = wx.StaticText(copyrightwin, id = wx.ID_ANY, label = copytext)
         copyrightwin.SetAutoLayout(True)
         copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -560,6 +561,7 @@ class AboutWindow(wx.Frame):
             license = _('%s file missing') % 'GPL.TXT'
         # put text into a scrolling panel
         licensewin = ScrolledPanel(self)
+        licensewin.SetBackgroundColour('WHITE')
         licensetxt = wx.StaticText(licensewin, id = wx.ID_ANY, label = license)
         licensewin.SetAutoLayout(True)
         licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -582,6 +584,7 @@ class AboutWindow(wx.Frame):
         else:
             authors = _('%s file missing') % 'AUTHORS'
         authorwin = ScrolledPanel(self)
+        authorwin.SetBackgroundColour('WHITE')
         authortxt = wx.StaticText(authorwin, id = wx.ID_ANY, label = authors)
         authorwin.SetAutoLayout(True)
         authorwin.SetupScrolling()
@@ -629,6 +632,7 @@ class AboutWindow(wx.Frame):
             contribs = None
         
         contribwin = ScrolledPanel(self)
+        contribwin.SetBackgroundColour('WHITE')
         contribwin.SetAutoLayout(True)
         contribwin.SetupScrolling()
         contribwin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -690,6 +694,7 @@ class AboutWindow(wx.Frame):
             translators = None
         
         translatorswin = ScrolledPanel(self)
+        translatorswin.SetBackgroundColour('WHITE')
         translatorswin.SetAutoLayout(True)
         translatorswin.SetupScrolling()
         translatorswin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -839,6 +844,7 @@ class AboutWindow(wx.Frame):
         else:
             jsStats = None
         self.statswin = ScrolledPanel(self)
+        self.statswin.SetBackgroundColour('WHITE')
         self.statswin.SetAutoLayout(True)
 
         if not jsStats:
