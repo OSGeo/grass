@@ -442,7 +442,6 @@ class abstract_map_dataset(temporal_map_relations):
         
         # Check if the name includes any mapset
 	if name.find("@") >= 0:
-	    print name
 	    name, mapset = name.split("@")
 
         # Check for layer number in map name
