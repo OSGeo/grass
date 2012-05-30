@@ -79,8 +79,12 @@ def increment_datetime_by_string(mydate, increment, mult = 1):
         incparts = increment.split(",")
         for incpart in incparts:
             inclist.append(incpart.strip().split(" "))
+            
 
         for inc in inclist:
+	    if len(inc) < 2:
+		core.error(_("Wrong increment format: %s") % (increment))
+		return None
             if inc[1].find("seconds") >= 0:
                 seconds = mult * int(inc[0])
             elif inc[1].find("minutes") >= 0:

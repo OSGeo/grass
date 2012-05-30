@@ -295,8 +295,12 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
         # Add the increment
         if increment:
             start_time = increment_datetime_by_string(start_time, increment, mult)
+            if start_time == None:
+		core.fatal(_("Error in increment computation"))
             if interval:
                 end_time = increment_datetime_by_string(start_time, increment, 1)
+		if end_time == None:
+		    core.fatal(_("Error in increment computation"))
 	if map.get_layer():
 	    core.verbose(_("Set absolute valid time for map <%s> with layer %s to %s - %s") % (map.get_map_id(), map.get_layer(), str(start_time), str(end_time)))
         else:
