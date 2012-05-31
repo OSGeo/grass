@@ -488,6 +488,8 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* ptr->Hole_spidx->rootpos = ptr->Hole_spidx_offset; */
 
     /* coor file size : bytes 110 - 113 (117) (LFS: 138 - 145) */
+    if (ptr->off_t_size == -1)
+        ptr->off_t_size = ptr->spidx_port.off_t_size;
     if (0 >= dig__fread_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
 	return (-1);
     G_debug(2, "  coor size %lu", (long unsigned)ptr->coor_size);

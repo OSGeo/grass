@@ -34,42 +34,49 @@ static int format()
 }
 #endif
 
-static int (*Read_next_line_array[][3]) () = {
+static int (*Read_next_line_array[][4]) () = {
     {
-	read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
+	read_dummy, V1_read_next_line_nat, V2_read_next_line_nat, read_dummy}
 #ifdef HAVE_OGR
     , {
-	read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
+	read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr, read_dummy}
     , {
-	read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
+	read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr, read_dummy}
 #else
     , {
-	read_dummy, format, format}
+	read_dummy, format, format, format}
     , {
-	read_dummy, format, format}
+	read_dummy, format, format, format}
 #endif
 #ifdef HAVE_POSTGRES
     , {
-	read_dummy, V1_read_next_line_pg, V2_read_next_line_pg}
+	read_dummy, V1_read_next_line_pg, V2_read_next_line_pg, V2_read_next_line_pg}
 #else
     , {
-	read_dummy, format, format}
+	read_dummy, format, format, format}
 #endif
 };
 
-static int (*Read_line_array[]) () = {
-    V2_read_line_nat
+static int (*Read_line_array[][2]) () = {
+    {
+        V2_read_line_nat, read_dummy}
 #ifdef HAVE_OGR
-    , V2_read_line_sfa
-    , V2_read_line_sfa
+    , {
+        V2_read_line_sfa, read_dummy}
+    , {
+        V2_read_line_sfa, read_dummy}
 #else
-    , format
-    , format
+    , {
+        format, format}
+    , {
+        format, format}
 #endif
 #ifdef HAVE_POSTGRES
-    , V2_read_line_sfa
+    , {
+        V2_read_line_sfa, V3_read_line_pg}
 #else
-    , format
+    , {
+        format, format}
 #endif
 };
 
@@ -169,7 +176,7 @@ int Vect_read_line(const struct Map_info *Map,
 			"(max features in vector map <%s>: %d)"),
 		      line, Vect_get_full_name(Map), Map->plus.n_lines);
 
-    ret = (*Read_line_array[Map->format]) (Map, line_p, line_c, line);
+    ret = (*Read_line_array[Map->format][Map->level == 3 ? 1 : 0]) (Map, line_p, line_c, line);
 
     /*
     if (ret == -1)

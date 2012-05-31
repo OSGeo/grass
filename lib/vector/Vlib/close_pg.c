@@ -80,6 +80,12 @@ int V1_close_pg(struct Map_info *Map)
     G_free(pg_info->geom_column);
     G_free(pg_info->fid_column);
 
+    if (pg_info->toposchema_name)
+        G_free(pg_info->toposchema_name);
+
+    if (pg_info->topogeom_column)
+        G_free(pg_info->topogeom_column);
+
     return 0;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
