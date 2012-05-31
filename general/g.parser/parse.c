@@ -84,6 +84,11 @@ void parse_module(struct context *ctx, const char *cmd, const char *arg)
 	return;
     }
 
+    if (G_strcasecmp(cmd, "overwrite") == 0) {
+        ctx->module->overwrite = parse_boolean(ctx, arg);
+        return;
+    }
+
     if (G_strcasecmp(cmd, "end") == 0) {
 	ctx->state = S_TOPLEVEL;
 	return;
