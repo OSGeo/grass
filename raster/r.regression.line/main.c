@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     sdY = sqrt(varY);
 
     A = meanY - B * meanX;
-    F = R * R / (1 - R * R / count - 2);
+    F = R * R / ((1 - R * R) / (count - 2));
 
     if (shell_style->answer) {
 	fprintf(stdout, "a=%f\n", A);
