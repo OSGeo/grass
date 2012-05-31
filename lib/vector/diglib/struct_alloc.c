@@ -1,41 +1,32 @@
-/*
- ****************************************************************************
- *
- * MODULE:       Vector library 
- *              
- * AUTHOR(S):    Dave Gerdes, CERL.
- *               Update to GRASS 5.7 Radim Blazek.
- *
- * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
- *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
- *
- *****************************************************************************/
+/*!
+  \file lib/vector/diglib/plus_node.c
+ 
+  \brief Vector library - update topo for nodes (lower level functions)
+  
+  Lower level functions for reading/writing/manipulating vectors.
+
+  These routines all eventually call calloc() to allocate and zero the
+  new space. BUT It is not neccessarily safe to assume that the memory
+  will be zero. The next memory location asked for could have been
+  previously used and not zeroed. (e.g. compress()).
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author CERL (probably Dave Gerdes)
+  \author Radim Blazek
+*/
 
 #include <stdlib.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 
-/*  These routines all eventually call calloc() to allocate and zero
- **  the new space.  BUT It is not neccessarily safe to assume that
- **  the memory will be zero.  The next memory location asked for could
- **  have been previously used and not zeroed.  (e.g. compress())
- */
+/*!
+  \brief Allocate new node structure 
 
-/* alloc_node (map, add)
- ** alloc_line (map, add)
- ** alloc_area (map, add)
- ** alloc_points (map, num)
- ** node_alloc_line (node, add)
- ** area_alloc_line (node, add)
- **
- ** Allocate array space to add 'add' elements
- */
-
-/* allocate new node structure */
+  \return pointer to allocated P_node struct
+  \return NULL on error
+*/
 struct P_node *dig_alloc_node()
 {
     struct P_node *Node;
@@ -43,16 +34,17 @@ struct P_node *dig_alloc_node()
     Node = (struct P_node *) G_malloc(sizeof(struct P_node));
     if (Node == NULL)
         return NULL;
-
-    Node->n_lines = 0;
-    Node->alloc_lines = 0;
-    Node->lines = NULL;
-    Node->angles = NULL;
-
-    return (Node);
+    
+    G_zero(Node, sizeof(struct P_node));
+    
+    return Node;
 }
 
-/* free node structure */
+/*!
+  \brief Free node structure
+
+  \param pointer to P_node struct to be freed
+*/
 void dig_free_node(struct P_node *Node)
 {
     if (Node->alloc_lines > 0) {
@@ -63,13 +55,17 @@ void dig_free_node(struct P_node *Node)
     G_free(Node);
 }
 
-/* dig_node_alloc_line (node, add)
- **     allocate space in  P_node,  lines and angles arrays to add 'add' more
- **     lines
- **
- **  Returns   0 ok    or    -1 on error
- */
+/*!
+  \brief Allocate space in P_node struct
 
+  Lines and angles arrays to add 'add' more lines
+ 
+  \param node pointer to P_node struct
+  \param add number lines to be added
+
+  \return 0 on success
+  \return -1 on error
+*/
 int dig_node_alloc_line(struct P_node * node, int add)
 {
     int num;
@@ -90,16 +86,19 @@ int dig_node_alloc_line(struct P_node * node, int add)
     node->angles = (float *)p;
 
     node->alloc_lines = num;
-    return (0);
+    
+    return 0;
 }
 
+/*!
+  \brief Reallocate array of pointers to nodes
+  
+  \param Plus pointer to Plus_head structure
+  \param add number of nodes to be added
 
-/* Reallocate array of pointers to nodes.
- *  Space for 'add' number of nodes is added.
- * 
- *  Returns: 0 success
- *          -1 error
- */
+  \return 0 on success
+  \return -1 on error
+*/
 int dig_alloc_nodes(struct Plus_head *Plus, int add)
 {
     int size;
@@ -113,10 +112,15 @@ int dig_alloc_nodes(struct Plus_head *Plus, int add)
     Plus->Node = (struct P_node **) p;
     Plus->alloc_nodes = size - 1;
 
-    return (0);
+    return 0;
 }
 
-/* allocate new line structure */
+/*!
+  \brief Allocate new line structure
+
+  \return pointer to allocated P_node struct
+  \return NULL on error
+*/
 struct P_line *dig_alloc_line()
 {
     struct P_line *Line;
@@ -124,54 +128,64 @@ struct P_line *dig_alloc_line()
     Line = (struct P_line *) G_malloc(sizeof(struct P_line));
     if (Line == NULL)
         return NULL;
-	
-    Line->topo = NULL;
-
-    return (Line);
+    
+    G_zero(Line, sizeof(struct P_line));
+    
+    return Line;
 }
 
-/* allocate new topo structure */
+/*!
+  \brief Allocate new topo struct
+
+  \param type to of struct to allocate
+*/
 void *dig_alloc_topo(char type)
 {
     void *Topo = NULL;
 
     switch (type) {
-	case GV_LINE:
-	Topo = G_malloc(sizeof(struct P_topo_l));
-	break;
+        case GV_LINE:
+        Topo = G_malloc(sizeof(struct P_topo_l));
+        break;
     case GV_BOUNDARY:
-	Topo = G_malloc(sizeof(struct P_topo_b));
-	break;
+        Topo = G_malloc(sizeof(struct P_topo_b));
+        break;
     case GV_CENTROID:
-	Topo = G_malloc(sizeof(struct P_topo_c));
-	break;
+        Topo = G_malloc(sizeof(struct P_topo_c));
+        break;
     case GV_FACE:
-	Topo = G_malloc(sizeof(struct P_topo_f));
-	break;
+        Topo = G_malloc(sizeof(struct P_topo_f));
+        break;
     case GV_KERNEL:
-	Topo = G_malloc(sizeof(struct P_topo_k));
-	break;
+        Topo = G_malloc(sizeof(struct P_topo_k));
+        break;
     default:
-	return NULL;
+        return NULL;
     }
 
-    return (Topo);
+    return Topo;
 }
 
-/* free line structure */
+/*!
+  \brief Free line structure
+
+  \param pointer to P_line struct to be freed
+*/
 void dig_free_line(struct P_line *Line)
 {
     if (Line->topo)
-	G_free(Line->topo);
+        G_free(Line->topo);
     G_free(Line);
 }
 
-/* Reallocate array of pointers to lines.
- *  Space for 'add' number of lines is added.
- * 
- *  Returns: 0 success
- *          -1 error
- */
+/*!
+  \brief Reallocate array of pointers to lines.
+  
+ \param add space for 'add' number of lines is added.
+ 
+ \return 0 on success
+ \return -1 on error
+*/
 int dig_alloc_lines(struct Plus_head *Plus, int add)
 {
     int size;
@@ -185,15 +199,17 @@ int dig_alloc_lines(struct Plus_head *Plus, int add)
     Plus->Line = (struct P_line **) p;
     Plus->alloc_lines = size - 1;
 
-    return (0);
+    return 0;
 }
 
-/* Reallocate array of pointers to areas.
- *  Space for 'add' number of areas is added.
- * 
- *  Returns: 0 success
- *          -1 error
- */
+/*!
+  \brief Reallocate array of pointers to areas.
+
+  \param add space for 'add' number of areas is added
+ 
+  \return 0 on success
+  \return -1 on error
+*/
 int dig_alloc_areas(struct Plus_head *Plus, int add)
 {
     int size;
@@ -207,15 +223,17 @@ int dig_alloc_areas(struct Plus_head *Plus, int add)
     Plus->Area = (struct P_area **) p;
     Plus->alloc_areas = size - 1;
 
-    return (0);
+    return 0;
 }
 
-/* Reallocate array of pointers to isles.
- *  Space for 'add' number of isles is added.
- * 
- *  Returns: 0 success
- *          -1 error
- */
+/*!
+  \brief Reallocate array of pointers to isles
+
+  \param add space for 'add' number of isles is added.
+ 
+  \return 0 on success
+  \return -1 on error
+*/
 int dig_alloc_isles(struct Plus_head *Plus, int add)
 {
     int size;
@@ -230,10 +248,15 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
     Plus->Isle = (struct P_isle **) p;
     Plus->alloc_isles = size - 1;
 
-    return (0);
+    return 0;
 }
 
-/* allocate new area structure */
+/*!
+  \brief Allocate new area structure 
+
+  \return pointer to allocated P_area struct
+  \return NULL on error
+*/
 struct P_area *dig_alloc_area()
 {
     struct P_area *Area;
@@ -242,20 +265,16 @@ struct P_area *dig_alloc_area()
     if (Area == NULL)
         return NULL;
 
-    Area->n_lines = 0;
-    Area->alloc_lines = 0;
-    Area->lines = NULL;
+    G_zero(Area, sizeof(struct P_area));
 
-    Area->alloc_isles = 0;
-    Area->n_isles = 0;
-    Area->isles = NULL;
-
-    Area->centroid = 0;
-
-    return (Area);
+    return Area;
 }
 
-/* free area structure */
+/*!
+  \brief Free area structure
+
+  \param pointer to P_area struct to be freed
+*/
 void dig_free_area(struct P_area *Area)
 {
     if (Area->alloc_lines > 0)
@@ -267,7 +286,12 @@ void dig_free_area(struct P_area *Area)
     G_free(Area);
 }
 
-/* alloc new isle structure */
+/*!
+  \brief Allocate new isle structure 
+
+  \return pointer to allocated P_isle struct
+  \return NULL on error
+*/
 struct P_isle *dig_alloc_isle()
 {
     struct P_isle *Isle;
@@ -276,16 +300,16 @@ struct P_isle *dig_alloc_isle()
     if (Isle == NULL)
         return NULL;
 
-    Isle->n_lines = 0;
-    Isle->alloc_lines = 0;
-    Isle->lines = NULL;
+    G_zero(Isle, sizeof(struct P_isle));
 
-    Isle->area = 0;
-
-    return (Isle);
+    return Isle;
 }
 
-/* free isle structure */
+/*!
+  \brief Free isle structure
+
+  \param pointer to P_isle struct to be freed
+*/
 void dig_free_isle(struct P_isle *Isle)
 {
     if (Isle->alloc_lines > 0)
@@ -294,9 +318,15 @@ void dig_free_isle(struct P_isle *Isle)
     G_free(Isle);
 }
 
-/* allocate room for  'num'   X and Y  arrays in struct line_pnts 
- **   returns -1 on out of memory 
- */
+/*!
+  \brief allocate room for 'num' X and Y  arrays in struct line_pnts 
+  
+  \param points pointer to line_pnts struct
+  \param num number of points
+  
+  \return 0 on success
+  \return returns -1 on out of memory 
+*/
 int dig_alloc_points(struct line_pnts *points, int num)
 {
     int alloced;
@@ -305,8 +335,8 @@ int dig_alloc_points(struct line_pnts *points, int num)
     alloced = points->alloc_points;
     /* alloc_space will just return if no space is needed */
     if (!(p =
-	  dig__alloc_space(num, &alloced, 50, (char *)points->x,
-			   sizeof(double)))) {
+          dig__alloc_space(num, &alloced, 50, (char *)points->x,
+                           sizeof(double)))) {
         return (dig_out_of_memory());
     }
     points->x = (double *)p;
@@ -314,8 +344,8 @@ int dig_alloc_points(struct line_pnts *points, int num)
     alloced = points->alloc_points;
     /* alloc_space will just return if no space is needed */
     if (!(p =
-	  dig__alloc_space(num, &alloced, 50, (char *)points->y,
-			   sizeof(double)))) {
+          dig__alloc_space(num, &alloced, 50, (char *)points->y,
+                           sizeof(double)))) {
         return (dig_out_of_memory());
     }
     points->y = (double *)p;
@@ -323,20 +353,27 @@ int dig_alloc_points(struct line_pnts *points, int num)
     alloced = points->alloc_points;
     /* alloc_space will just return if no space is needed */
     if (!(p =
-	  dig__alloc_space(num, &alloced, 50, (char *)points->z,
-			   sizeof(double)))) {
+          dig__alloc_space(num, &alloced, 50, (char *)points->z,
+                           sizeof(double)))) {
         return (dig_out_of_memory());
     }
     points->z = (double *)p;
 
     points->alloc_points = alloced;
-    return (0);
+    
+    return 0;
 }
 
-/* allocate room for  'num'  fields and category arrays 
- ** in struct line_cats 
- **   returns -1 on out of memory 
- */
+/*!
+  \brief Allocate room for 'num' fields and category arrays 
+  in struct line_cats 
+
+  \param points pointer to line_cats struct
+  \param num number of cats
+ 
+  \return 0 on success
+  \return returns -1 on out of memory 
+*/
 int dig_alloc_cats(struct line_cats *cats, int num)
 {
     int alloced;
@@ -345,28 +382,33 @@ int dig_alloc_cats(struct line_cats *cats, int num)
     /* alloc_space will just return if no space is needed */
     alloced = cats->alloc_cats;
     if (!(p =
-	  dig__alloc_space(num, &alloced, 1, (int *)cats->field,
-			   sizeof(int)))) {
-        return (dig_out_of_memory());
+          dig__alloc_space(num, &alloced, 1, (int *)cats->field,
+                           sizeof(int)))) {
+        return dig_out_of_memory();
     }
     cats->field = (int *)p;
 
     alloced = cats->alloc_cats;
     if (!(p =
-	  dig__alloc_space(num, &alloced, 1, (int *)cats->cat,
-			   sizeof(int)))) {
-        return (dig_out_of_memory());
+          dig__alloc_space(num, &alloced, 1, (int *)cats->cat,
+                           sizeof(int)))) {
+        return dig_out_of_memory();
     }
     cats->cat = (int *)p;
 
     cats->alloc_cats = alloced;
-    return (0);
+    
+    return 0;
 }
 
-/* area_alloc_line (area, add)
- **     allocate space in  P_area for add new lines
- **
- **  Returns   0 ok    or    -1 on error
+/*!
+  \brief allocate space in  P_area for add new lines
+ 
+  \param area pointer to P_area struct
+  \param add number of lines to be added
+
+  \return 0 on success
+  \return -1 on error
  */
 int dig_area_alloc_line(struct P_area * area, int add)
 {
@@ -385,11 +427,15 @@ int dig_area_alloc_line(struct P_area * area, int add)
     return (0);
 }
 
-/* area_alloc_isle (area, add)
- **     allocate space in  P_area for add new isles
- **
- **  Returns   0 ok    or    -1 on error
- */
+/*!
+  \brief Allocate space in  P_area for add new isles
+
+  \param area pointer to P_area struct
+  \param add number of isle to be added
+
+  \return 0 on success
+  \return -1 on error
+*/
 int dig_area_alloc_isle(struct P_area * area, int add)
 {
     int num;
@@ -407,12 +453,15 @@ int dig_area_alloc_isle(struct P_area * area, int add)
     return (0);
 }
 
-/* dig_isle_alloc_line (isle, add)
- **     allocate space in  P_isle for add new lines
- **
- **  Returns   0 ok    or    -1 on error
- */
+/*!
+  \brief Allocate space in  P_isle for add new lines
 
+  \param area pointer to P_area struct
+  \param add number of isle to be added
+
+  \return 0 on success
+  \return -1 on error
+*/
 int dig_isle_alloc_line(struct P_isle * isle, int add)
 {
     int num;
@@ -431,11 +480,11 @@ int dig_isle_alloc_line(struct P_isle * isle, int add)
     return (0);
 }
 
-
-
-/* for now just print message and return error code */
+/*!
+  \brief For now just print message and return error code
+*/
 int dig_out_of_memory()
 {
-    fprintf(stderr, "OUT OF MEMORY!\n");
-    return (-1);
+    G_warning(_("Out of memmory"));
+    return -1;
 }

@@ -53,7 +53,6 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile * fp)
 
     G_debug(4, "dig_Rd_P_node()");
 
-
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
 	return (-1);
 
