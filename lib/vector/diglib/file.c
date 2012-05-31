@@ -169,13 +169,7 @@ size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb, struct gvfile *fil
 */
 void dig_file_init(struct gvfile *file)
 {
-    file->file = NULL;
-    file->start = NULL;
-    file->current = NULL;
-    file->end = NULL;
-    file->size = 0;
-    file->alloc = 0;
-    file->loaded = 0;
+    G_zero(file, sizeof(struct gvfile));
 }
 
 /*!
