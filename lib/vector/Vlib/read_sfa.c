@@ -36,7 +36,7 @@
   \return -1 on failure 
 */
 int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
-		     struct line_cats *line_c, int line)
+                     struct line_cats *line_c, int line)
 {
 #if defined HAVE_OGR || defined HAVE_POSTGRES
     int type;
@@ -46,69 +46,69 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
     
     Line = Map->plus.Line[line];
     if (Line == NULL) {
-	G_warning(_("Attempt to read dead feature %d"), line);
-	return -1;
+        G_warning(_("Attempt to read dead feature %d"), line);
+        return -1;
     }
     
     if (Line->type == GV_CENTROID) {
-	/* read centroid for topo */
-	if (line_p != NULL) {
-	    int i, found;
-	    struct bound_box box;
-	    struct boxlist list;
-	    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+        /* read centroid for topo */
+        if (line_p != NULL) {
+            int i, found;
+            struct bound_box box;
+            struct boxlist list;
+            struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
 
-	    G_debug(4, "Centroid: area = %d", topo->area);
-	    Vect_reset_line(line_p);
-	    
-	    if (topo->area > 0 && topo->area <= Map->plus.n_areas) {
-		/* get area bbox */
-		Vect_get_area_box(Map, topo->area, &box);
-		/* search in spatial index for centroid with area bbox */
-		dig_init_boxlist(&list, TRUE);
-		Vect_select_lines_by_box(Map, &box, Line->type, &list);
-		
-		found = -1;
-		for (i = 0; i < list.n_values; i++) {
-		    if (list.id[i] == line) {
-			found = i;
-			break;
-		    }
-		}
-		
-		if (found > -1) {
-		    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
-		}
-		else {
-		    G_warning(_("Unable to construct centroid for area %d. Skipped."),
-			      topo->area);
-		}
-	    }
-	    else {
-		G_warning(_("Centroid %d: invalid area %d"), line, topo->area);
-	    }
-	}
+            G_debug(4, "Centroid: area = %d", topo->area);
+            Vect_reset_line(line_p);
+            
+            if (topo->area > 0 && topo->area <= Map->plus.n_areas) {
+                /* get area bbox */
+                Vect_get_area_box(Map, topo->area, &box);
+                /* search in spatial index for centroid with area bbox */
+                dig_init_boxlist(&list, TRUE);
+                Vect_select_lines_by_box(Map, &box, Line->type, &list);
+                
+                found = -1;
+                for (i = 0; i < list.n_values; i++) {
+                    if (list.id[i] == line) {
+                        found = i;
+                        break;
+                    }
+                }
+                
+                if (found > -1) {
+                    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+                }
+                else {
+                    G_warning(_("Unable to construct centroid for area %d. Skipped."),
+                              topo->area);
+                }
+            }
+            else {
+                G_warning(_("Centroid %d: invalid area %d"), line, topo->area);
+            }
+        }
 
-	if (line_c != NULL) {
-	  /* cat = fid and offset = fid for centroid */
-	  Vect_reset_cats(line_c);
-	  Vect_cat_set(line_c, 1, (int) Line->offset);
-	}
-	
-	return GV_CENTROID;
+        if (line_c != NULL) {
+          /* cat = fid and offset = fid for centroid */
+          Vect_reset_cats(line_c);
+          Vect_cat_set(line_c, 1, (int) Line->offset);
+        }
+        
+        return GV_CENTROID;
     }
     
     if (!line_p && !line_c)
-	return Line->type;
+        return Line->type;
     
     if (Map->format == GV_FORMAT_POSTGIS)
-	type = V1_read_line_pg(Map, line_p, line_c, Line->offset);
+        type = V1_read_line_pg(Map, line_p, line_c, Line->offset);
     else
-	type = V1_read_line_ogr(Map, line_p, line_c, Line->offset);
+        type = V1_read_line_ogr(Map, line_p, line_c, Line->offset);
 
     if (type != Line->type)
-	G_fatal_error(_("Unexpected feature type (%s) - should be (%d)"),
-		      type, Line->type);
+        G_fatal_error(_("Unexpected feature type (%s) - should be (%d)"),
+                      type, Line->type);
 
     return type;
 #else

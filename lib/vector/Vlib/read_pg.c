@@ -32,7 +32,7 @@ static unsigned int wkb_data_length;
 
 static int read_next_line_pg(struct Map_info *,
                              struct line_pnts *, struct line_cats *, int);
-SF_FeatureType get_feature(struct Format_info_pg *, int);
+SF_FeatureType get_feature(struct Format_info_pg *, int, const char *);
 static unsigned char *hex_to_wkb(const char *, int *);
 static int point_from_wkb(const unsigned char *, int, int, int,
                           struct line_pnts *);
@@ -47,6 +47,7 @@ static int error_corrupted_data(const char *);
 static int set_initial_query();
 static void reallocate_cache(struct Format_info_cache *, int);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
+static int read_centroid_pg(struct Format_info_pg *, int, struct line_pnts *);
 #endif
 
 /*!
@@ -248,7 +249,7 @@ int V1_read_line_pg(struct Map_info *Map,
 
         G_debug(3, "read (%s) feature (fid = %ld) to cache",
                 pg_info->table_name, fid);
-        get_feature(pg_info, fid);
+        get_feature(pg_info, fid, NULL);
 
         if (pg_info->cache.sf_type == SF_NONE) {
             G_warning(_("Feature %d without geometry skipped"), fid);
@@ -280,6 +281,76 @@ int V1_read_line_pg(struct Map_info *Map,
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
 #endif
+}
+
+int V3_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
+                    struct line_cats *line_c, int line)
+{
+#ifdef HAVE_POSTGRES
+    int type;
+    char *topotable_name;
+    
+    struct Format_info_pg *pg_info;
+    struct P_line *Line;
+
+    pg_info = &(Map->fInfo.pg);
+    Line = Map->plus.Line[line];
+    if (Line == NULL) {
+        G_warning(_("Attempt to read dead feature %d"), line);
+        return -1;
+    }
+    
+    G_debug(4, "V3_read_line_pg() line = %d type = %d offset = %llu",
+            line, Line->type, Line->offset);
+    
+    if (!line_p && !line_c)
+        return Line->type;
+
+    if (line_p != NULL)
+        Vect_reset_line(line_p);
+    if (line_c != NULL)
+        Vect_reset_cats(line_c);
+
+    if (line_c)
+        Vect_cat_set(line_c, 1, (int) Line->offset);
+    
+    if (Line->type == GV_POINT)
+        topotable_name = "node";
+    else if (Line->type & GV_LINES)
+        topotable_name = "edge";
+    else if (Line->type == GV_CENTROID) {
+        return read_centroid_pg(pg_info, (int) Line->offset, line_p);
+    }
+    else {
+        G_warning(_("Unsupported feature type %d"), Line->type);
+        return -1;
+    }
+    
+    get_feature(pg_info, Line->offset, topotable_name);
+    
+    if (pg_info->cache.sf_type == SF_NONE) {
+        G_warning(_("Feature %d without geometry skipped"), Line->offset);
+        return -1;
+    }
+    
+    type = (int)pg_info->cache.sf_type;
+    if (type < 0)           /* -1 || - 2 */
+        return type;
+    
+    if (Line->type == GV_BOUNDARY && type == GV_LINE)
+        type = GV_BOUNDARY;
+    
+    if (line_p)
+        Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
+    
+    return type;
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+
+
+
 }
 
 #ifdef HAVE_POSTGRES
@@ -325,7 +396,7 @@ int read_next_line_pg(struct Map_info *Map,
         /* read feature to cache if necessary */
         while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
             /* cache feature -> line_p & line_c */
-            sf_type = get_feature(pg_info, -1);
+            sf_type = get_feature(pg_info, -1, NULL);
 
             if (sf_type == SF_NONE) {
                 G_warning(_("Feature %d without geometry skipped"), line);
@@ -389,17 +460,18 @@ int read_next_line_pg(struct Map_info *Map,
 
    \param[in,out] pg_info pointer to Format_info_pg struct
    \param fid feature id to be read (-1 for next)
-   \param[out] line_c pointer to line_cats structure (or NULL)
+   \param topotable_name table name for topological access (NULL for pseudo-topological access) - "node" or "edge"
 
    \return simple feature type (SF_POINT, SF_LINESTRING, ...)
    \return -1 on error
  */
-SF_FeatureType get_feature(struct Format_info_pg * pg_info, int fid)
+SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid,
+                           const char *topotable_name)
 {
     char *data;
     char stmt[DB_SQL_MAX];
 
-    if (!pg_info->geom_column) {
+    if (!topotable_name && !pg_info->geom_column) {
         G_warning(_("No geometry column defined"));
         return -1;
     }
@@ -411,7 +483,7 @@ SF_FeatureType get_feature(struct Format_info_pg * pg_info, int fid)
         }
     }
     else {
-        if (!pg_info->fid_column) {
+        if (!topotable_name && !pg_info->fid_column) {
             G_warning(_("Random access not supported. "
                         "Primary key not defined."));
             return -1;
@@ -420,11 +492,22 @@ SF_FeatureType get_feature(struct Format_info_pg * pg_info, int fid)
         if (execute(pg_info->conn, "BEGIN") == -1)
             return -1;
 
-        sprintf(stmt,
-                "DECLARE %s_%s%p CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
-                "WHERE %s = %d", pg_info->schema_name, pg_info->table_name,
-                pg_info->conn, pg_info->geom_column, pg_info->schema_name,
-                pg_info->table_name, pg_info->fid_column, fid);
+        if (!topotable_name) {
+            /* simple feature access */
+            sprintf(stmt,
+                    "DECLARE %s_%s%p CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
+                    "WHERE %s = %d", pg_info->schema_name, pg_info->table_name,
+                    pg_info->conn, pg_info->geom_column, pg_info->schema_name,
+                    pg_info->table_name, pg_info->fid_column, fid);
+        }
+        else {
+            /* topological access */
+            sprintf(stmt,
+                    "DECLARE %s_%s%p CURSOR FOR SELECT geom FROM \"%s\".\"%s\" "
+                    "WHERE %s_id = %d", pg_info->schema_name, pg_info->table_name,
+                    pg_info->conn, pg_info->toposchema_name,
+                    topotable_name, topotable_name, fid);
+        }
 
         if (execute(pg_info->conn, stmt) == -1)
             return -1;
@@ -437,6 +520,7 @@ SF_FeatureType get_feature(struct Format_info_pg * pg_info, int fid)
 
     if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
         PQclear(pg_info->res);
+        G_warning(_("Reading failed: %s"), PQerrorMessage(pg_info->conn));
         pg_info->res = NULL;
         return -1;              /* reading failed */
     }
@@ -1141,5 +1225,38 @@ void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype,
     fparts->nlines[fparts->n_parts] = nlines;
 
     fparts->n_parts++;
+}
+
+int read_centroid_pg(struct Format_info_pg *pg_info,
+                     int centroid, struct line_pnts *line_p)
+{
+    char stmt[DB_SQL_MAX];
+    char *data;
+
+    PGresult *res;
+    
+    sprintf(stmt,
+            "SELECT ST_PointOnSurface(geom) AS geom FROM "
+            "ST_GetFaceGeometry('%s', %d) as geom",
+            pg_info->toposchema_name, centroid);
+    res = PQexec(pg_info->conn, stmt);
+    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+        PQntuples(res) != 1) {
+        G_warning(_("Unable to read centroid %d: %s"),
+                  centroid, PQerrorMessage(pg_info->conn));
+        if (res)
+            PQclear(res);
+        return -1;
+    }
+    
+    data = (char *)PQgetvalue(res, 0, 0);
+    PQclear(res);
+    
+    if (GV_POINT != cache_feature(data, FALSE, &(pg_info->cache), NULL))
+        return -1;
+    
+    Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
+    
+    return GV_CENTROID;
 }
 #endif

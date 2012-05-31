@@ -13,12 +13,15 @@
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
-#include <grass/glocale.h>
+#include <math.h>
+
 #include <grass/vector.h>
+#include <grass/glocale.h>
 
 #define SEP "-----------------------------------\n"
 
@@ -884,6 +887,7 @@ int Vect_save_topo(struct Map_info *Map)
 int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 {
     int i, j, line, isle;
+    float angle_deg;
     struct P_node *Node;
     struct P_line *Line;
     struct P_area *Area;
@@ -914,8 +918,11 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 	for (j = 0; j < Node->n_lines; j++) {
 	    line = Node->lines[j];
 	    Line = plus->Line[abs(line)];
-	    fprintf(out, "  line = %3d, type = %d, angle = %f\n", line,
-		    Line->type, Node->angles[j]);
+            angle_deg = (Node->angles[j] * 180) / M_PI;
+            if (angle_deg < 0)
+                angle_deg += 360;
+	    fprintf(out, "  line = %3d, type = %d, angle = %f (%.4f)\n", line,
+		    Line->type, Node->angles[j], angle_deg);
 	}
     }
 

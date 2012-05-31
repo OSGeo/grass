@@ -660,6 +660,16 @@ struct Format_info_pg
       \brief Offset list used for building pseudo-topology
     */
     struct Format_info_offset offset;
+
+    /* Full-topology support */
+    /*!
+      \brief TopoGeometry column
+    */
+    char    *topogeom_column;
+    /*!
+      \brief Topology schema name
+    */
+    char    *toposchema_name;
 };
 
 /*!
@@ -1434,11 +1444,14 @@ struct P_node
       \brief Number of attached lines (size of
       lines, angle)
 
-      If 0, then is degenerate node, for snappingi ???
+      If 0, then is degenerate node, for snapping ???
     */
     plus_t n_lines;
     /*!
       \brief List of connected lines
+
+      Line id can be positive (for lines which starts at the node) or
+      negative (for lines which ends at the node).
     */
     plus_t *lines;
     /*!
@@ -1446,7 +1459,8 @@ struct P_node
 
       Angles for lines/boundaries are in radians between -PI and
       PI. Value for points or lines with identical points
-      (degenerated) is set to -9.
+      (degenerated) is set to -9. See dig_calc_begin_angle() and
+      dig_calc_end_angle() for details.
     */
     float *angles;
 };
@@ -1551,12 +1565,17 @@ struct P_line
     char type;
     /*!
       \brief Offset in coor file for line
+
+      OGR-links: offset array index
+      PG-links: node/edge id
     */
-    off_t offset;		
+    off_t offset;
     /*!
       \brief Topology info
+
+      NULL for points
     */
-    void *topo;		
+    void *topo;
 };
 
 /*!
