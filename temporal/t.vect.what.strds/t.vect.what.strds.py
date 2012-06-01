@@ -5,7 +5,7 @@
 # MODULE:	t.vect.what.strds
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Uploads raster map values at spatial and temporal positions of vector points to the tables. The maps are registered in space time datasets
+# PURPOSE:	Uploads raster map values at spatial and temporal positions of vector points to the tables.
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Uploads raster map values at spatial and temporal positions of vector points to the tables. The maps are registered in space time datasets.
+#% description: Uploads raster map values at spatial and temporal positions of vector points to the tables.
 #% keywords: temporal
 #% keywords: sampling
 #%end
@@ -36,6 +36,16 @@
 #% multiple: no
 #%end
 
+#%option
+#% key: method
+#% type: string
+#% description: Aggregate operation to be performed on the raster maps
+#% required: yes
+#% multiple: no
+#% options: disabled,average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
+#% answer: disabled
+#%end
+
 #%option G_OPT_DB_WHERE
 #%end
 
@@ -46,7 +56,7 @@
 #%option G_OPT_T_SAMPLE
 #%end
 
-
+import os
 import grass.script as grass
 import grass.temporal as tgis
 import grass.script.raster as raster
@@ -60,6 +70,7 @@ def main():
     strds = options["strds"]
     where = options["where"]
     column = options["column"]
+    method = options["method"]
     tempwhere = options["t_where"]
     sampling = options["sampling"]
 
@@ -127,11 +138,24 @@ def main():
         end = row["end_time"]
         vectmap = row["name"] + "@" + row["mapset"]
         layer = row["layer"]
+        count = 0
 
         raster_maps = tgis.collect_map_names(strds_sp, dbif, start, end, sampling)
-
+        
+        aggreagated_map_name = None
+                
         if raster_maps:
-            # Collect the names of the raster maps
+	    # Aggregation
+	    if method != "disabled" and len(raster_maps) > 1:
+	      # Generate the temporary map name
+	      aggreagated_map_name = "aggreagated_map_name_"+ str(os.getpid()) 
+	      new_map = tgis.aggregate_raster_maps(raster_maps, aggreagated_map_name, start, end, 0, method, False, dbif)
+	      aggreagated_map_name = aggreagated_map_name + "_0" 
+	      if new_map == None:
+		  continue
+	      # We overwrite the raster_maps list
+	      raster_maps = (new_map.get_id(), )
+	      
             for rastermap in raster_maps:
                 
                 if column:
@@ -164,6 +188,12 @@ def main():
                     dbif.close()
                     grass.fatal(_("Unable to run v.what.rast for vector map <%s> and raster map <%s>")%(vectmap, rastermap))
 
+                if aggreagated_map_name:
+		    ret = grass.run_command("g.remove", rast=aggreagated_map_name)
+		    if ret != 0:
+			dbif.close()
+			grass.fatal(_("Unable to remove raster map <%s>")%(aggreagated_map_name))
+                    
                 # Use the first map in case a column names was provided
                 if column:
                     break

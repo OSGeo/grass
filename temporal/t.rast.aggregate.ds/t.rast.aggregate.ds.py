@@ -161,8 +161,19 @@ def main():
         input_map_names = tgis.collect_map_names(sp, dbif, start, end, sampling)
 
         if input_map_names:
-            tgis.aggregate_raster_maps(sp, new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
+            new_map = tgis.aggregate_raster_maps(input_map_names, base, start, end, count, method, register_null, dbif)
 
+            if new_map:
+                # Set the time stamp and write it to the raster map
+                if sp.is_time_absolute():
+                    new_map.set_absolute_time(start, end, None)
+                else:
+                    new_map.set_relative_time(start, end, sp.get_relative_time_unit())
+
+                # Insert map in temporal database
+                new_map.insert(dbif)
+                new_sp.register_map(new_map, dbif)
+                
     # Update the spatio-temporal extent and the raster metadata table entries
     new_sp.update_from_registered_maps(dbif)
         
