@@ -70,9 +70,6 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    # We need a database interface
-    dbif = tgis.sql_database_interface_connection()
-    dbif.connect()
    
     mapset =  grass.gisenv()["MAPSET"]
 
@@ -84,12 +81,11 @@ def main():
     sp = tgis.space_time_vector_dataset(id)
     
     if sp.is_in_db() == False:
-        dbif.close()
         grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
 
-    sp.select(dbif)
+    sp.select()
     
-    rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time", tempwhere, "start_time", dbif)
+    rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time", tempwhere, "start_time", None)
 
     col_names = ""
     if rows:
@@ -102,7 +98,6 @@ def main():
 	    select = grass.read_command("v.db.select", map=vector_name, layer=layer, columns=columns, fs="%s"%(fs), where=where)
 	    
 	    if not select:
-		dbif.close()
 		grass.fatal(_("Unable to run v.db.select for vector map <%s> with layer %s")%(vector_name, layer))
 	    # The first line are the column names
 	    list = select.split("\n")
@@ -121,8 +116,6 @@ def main():
 			else:
 			    print "%s%s%s%s"%(row["start_time"], fs, fs, entry)
 		    count += 1
-	    
-    dbif.close()
 
 if __name__ == "__main__":
     options, flags = grass.parser()
