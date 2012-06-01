@@ -23,6 +23,7 @@ for details.
 """
 
 from space_time_datasets import *
+import grass.lib.gis as libgis
 
 ###############################################################################
 
@@ -80,12 +81,9 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 ###############################################################################
 
-def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, count, method, register_null, dbif):
+def aggregate_raster_maps(inputs, base, start, end, count, method, register_null, dbif):
     """!Aggregate a list of raster input maps with r.series
        
-       @param orig_ds: Original space time raster dataset from which the maps are selected
-       @param dataset: The new space time raster dataset to insert the aggregated map
-       @param mapset: The current mapset
        @param inputs: The names of the raster maps to be aggregated
        @param base: The basename of the new created raster maps
        @param start: The start time of the sample interval, may be relative or absolute
@@ -98,17 +96,19 @@ def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, co
 
     core.verbose(_("Aggregate %s raster maps") %(len(inputs)))
     output = "%s_%i" % (base, count)
+    
+    mapset = libgis.G_mapset()
 
     map_id = output + "@" + mapset
 
-    new_map = dataset.get_new_map_instance(map_id)
+    new_map = raster_dataset(map_id)
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):
         if core.overwrite() == True:
             # Remove the existing temporal database entry
             new_map.delete(dbif)
-            new_map = dataset.get_new_map_instance(map_id)
+            new_map = raster_dataset(map_id)
         else:
             core.error(_("Raster map <%s> is already in temporal database, use overwrite flag to overwrite"))
             return
@@ -130,6 +130,7 @@ def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, co
     if ret != 0:
         dbif.close()
         core.fatal(_("Error while r.series computation"))
+        
 
     # Read the raster map data
     new_map.load()
@@ -138,15 +139,6 @@ def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, co
     if new_map.metadata.get_min() == None and new_map.metadata.get_max() == None:
         if not register_null:
             core.run_command("g.remove", rast=output)
-            return
-
-    # Set the time stamp and write it to the raster map
-    if dataset.is_time_absolute():
-        new_map.set_absolute_time(start, end, None)
-    else:
-        new_map.set_relative_time(start, end, orig_ds.get_relative_time_unit())
-
-    # Insert map in temporal database
-    new_map.insert(dbif)
-
-    dataset.register_map(new_map, dbif)
+            return None
+    
+    return new_map

@@ -37,6 +37,11 @@ v.db.select map=soil_1
 v.db.select map=soil_2
 v.db.select map=soil_3
 
+t.vect.what.strds --v input=soil_abs1 strds=precip_abs1 sampling=during column=map_vals method=average
+v.db.select map=soil_1
+v.db.select map=soil_2
+v.db.select map=soil_3
+
 t.vect.what.strds --v input=soil_abs1 strds=precip_abs1 sampling=start,during
 v.db.select map=soil_1
 v.db.select map=soil_2
