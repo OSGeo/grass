@@ -197,6 +197,8 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
  
         else:
             is_in_db = True
+            if core.overwrite == False:
+		continue
             map.select(dbif)
             if name and map.get_temporal_type() != sp.get_temporal_type():
                 dbif.close()
