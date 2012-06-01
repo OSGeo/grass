@@ -799,9 +799,9 @@ class abstract_space_time_dataset(abstract_dataset):
 
         if not map.check_valid_time():
 	    if map.get_layer():
-		core.fatal(_("Map <%s> with layer %s has invalid time") % map.get_map_id(), map.get_layer())
+		core.fatal(_("Map <%s> with layer %s has invalid time") % (map.get_map_id(), map.get_layer()))
 	    else:
-		core.fatal(_("Map <%s> has invalid time") % map.get_map_id())
+		core.fatal(_("Map <%s> has invalid time") % (map.get_map_id()))
 
         map_id = map.base.get_id()
         map_name = map.base.get_name()

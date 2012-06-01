@@ -51,7 +51,7 @@
 
 #%flag
 #% key: t
-#% description: Assign the space time raster dataset start and end time to the output map
+#% description: Do not assign the space time raster dataset start and end time to the output map
 #%end
 
 import grass.script as grass
@@ -100,7 +100,7 @@ def main():
 
         ret = grass.run_command("r.series", flags="z", file=filename, output=output, overwrite=grass.overwrite(), method=method)
 
-        if ret == 0 and add_time:
+        if ret == 0 and not add_time:
             if sp.is_time_absolute():
                 start_time, end_time, tz = sp.get_absolute_time()
             else:
@@ -123,7 +123,7 @@ def main():
 
             # Register the map in the temporal database
             if map.is_in_db():
-                map.update()
+                map.update_all()
             else:
                 map.insert()
 

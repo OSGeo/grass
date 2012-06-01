@@ -189,7 +189,7 @@ def main():
             vect.set_relative_time(start, end, strds_ds.get_relative_time_unit())
        
         if vect.is_in_db(dbif):
-            vect.update(dbif)
+            vect.update_all(dbif)
         else:
             vect.insert(dbif)
 
