@@ -2037,7 +2037,7 @@ class AttributeManager(wx.Frame):
             self.builder = SQLFrame(parent = self, id = wx.ID_ANY,
                                     title = _("SQL Builder"),
                                     vectmap = self.vectorName,
-                                    evtheader = self.OnBuilderEvt)
+                                    evtHandler = self.OnBuilderEvt)
             self.builder.Show()
         else:
             self.builder.Raise()
@@ -2046,6 +2046,10 @@ class AttributeManager(wx.Frame):
         if event == 'apply':
             sqlstr = self.builder.GetSQLStatement()
             self.FindWindowById(self.layerPage[self.layer]['statement']).SetValue(sqlstr)
+            # apply query
+            self.listOfSQLStatements.append(sqlstr)
+            self.OnApplySqlStatement(None)
+            # close builder on apply
             if self.builder.CloseOnApply():
                 self.builder = None
         elif event == 'close':
