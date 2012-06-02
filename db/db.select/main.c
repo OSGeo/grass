@@ -196,22 +196,24 @@ static void parse_command_line(int argc, char **argv)
 
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->required = NO;
-    input->description = _("Name of file with SQL select statement(s)");
+    input->label = _("Name of file containing SQL select statement(s)");
+    input->description = _("One SQL statement per line");
     input->guisection = _("Query");
     
     table = G_define_standard_option(G_OPT_DB_TABLE);
+    table->description = _("Name of table to query");
     table->guisection = _("Query");
-
-    database = G_define_standard_option(G_OPT_DB_DATABASE);
-    if ((db = db_get_default_database_name()))
-	database->answer = (char *) db;
-    database->guisection = _("Connection");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
 	driver->answer = (char *) drv;
     driver->guisection = _("Connection");
+
+    database = G_define_standard_option(G_OPT_DB_DATABASE);
+    if ((db = db_get_default_database_name()))
+	database->answer = (char *) db;
+    database->guisection = _("Connection");
     
     fs = G_define_standard_option(G_OPT_F_SEP);
     fs->description = _("Output field separator");
