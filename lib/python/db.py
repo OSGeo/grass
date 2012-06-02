@@ -13,7 +13,7 @@ grass.db_describe(table)
 ...
 @endcode
 
-(C) 2008-2009 by the GRASS Development Team
+(C) 2008-2009, 2012 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -45,21 +45,21 @@ def db_describe(table, **args):
     """
     s = read_command('db.describe', flags = 'c', table = table, **args)
     if not s:
-	fatal(_("Unable to describe table <%s>") % table)
+        fatal(_("Unable to describe table <%s>") % table)
     
     cols = []
     result = {}
     for l in s.splitlines():
-	f = l.split(':')
-	key = f[0]
-	f[1] = f[1].lstrip(' ')
-	if key.startswith('Column '):
-	    n = int(key.split(' ')[1])
-	    cols.insert(n, f[1:])
-	elif key in ['ncols', 'nrows']:
-	    result[key] = int(f[1])
-	else:
-	    result[key] = f[1:]
+        f = l.split(':')
+        key = f[0]
+        f[1] = f[1].lstrip(' ')
+        if key.startswith('Column '):
+            n = int(key.split(' ')[1])
+            cols.insert(n, f[1:])
+        elif key in ['ncols', 'nrows']:
+            result[key] = int(f[1])
+        else:
+            result[key] = f[1:]
     result['cols'] = cols
     
     return result
@@ -76,9 +76,9 @@ def db_table_exist(table, **args):
     """
     result = run_command('db.describe', flags = 'c', table = table, **args)
     if result == 0:
-	    return True
+            return True
     else:
-	    return False
+            return False
 
 def db_connection():
     """!Return the current database connection parameters
@@ -94,33 +94,41 @@ def db_connection():
     s = read_command('db.connect', flags = 'p')
     return parse_key_val(s, sep = ':')
 
-def db_select(table, sql, file = False, **args):
+def db_select(sql = None, filename = None, table = None, **args):
     """!Perform SQL select statement
 
-    @param table table name
-    @param sql   SQL select statement (string or file)
-    @param file  True if sql is filename
+    Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
+    must be provided.
+
+    SQL statements:
+
+    \code
+    \endcode
+    
+    @param sql SQL statement to perform (or None)
+    @param filename name of file with SQL statements (or None)
+    @param table name of table to query (or None)
     @param args  see db.select arguments
     """
     fname = tempfile(create = False)
-    if not file:
-        ret = run_command('db.select', quiet = True,
-                          flags = 'c',
-                          table = table,
-                          sql = sql,
-                          output = fname,
-			  **args)
-    else: # -> sql is file
-        ret = run_command('db.select', quiet = True,
-                          flags = 'c',
-                          table = table,
-                          input = sql,
-                          output = fname,
-			  **args)
+    if sql:
+        args['sql'] = sql
+    elif filename:
+        args['input'] = filename
+    elif table:
+        args['table'] = table
+    else:
+        fatal(_("Programmer error: '%s', '%s', or '%s' must be provided") %
+              'sql', 'filename', 'table')
+        
+    ret = run_command('db.select', quiet = True,
+                      flags = 'c',
+                      output = fname,
+                      **args)
     
     if ret != 0:
-        fatal(_("Fetching data from table <%s> failed") % table)
-
+        fatal(_("Fetching data failed"))
+    
     ofile = open(fname)
     result = map(lambda x: x.rstrip(os.linesep), ofile.readlines())
     ofile.close()

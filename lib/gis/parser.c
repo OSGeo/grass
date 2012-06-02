@@ -1317,14 +1317,14 @@ static int check_overwrite(void)
 		
 		for (i = 0; opt->answers[i]; i++) {
 		    found = FALSE;
-		    if (strcmp(element, "file") == 0 &&
-			access(opt->answers[i], F_OK) == 0) {
+		    if (strcmp(element, "file") == 0) {
+                        if (access(opt->answers[i], F_OK) == 0)
+                            found = TRUE;
+		    }
+                    else if (G_find_file(element, opt->answers[i], G_mapset())) {
 			found = TRUE;
 		    }
-		    if (G_find_file(element, opt->answers[i], G_mapset())) {
-			found = TRUE;
-		    }
-		    
+                    
 		    if (found && strcmp(element, "vector") == 0 &&
 			(G_find_file("", "OGR", G_mapset()) ||
 			 G_find_file("", "PG", G_mapset())))
