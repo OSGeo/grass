@@ -133,7 +133,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("For example: 'select * from rybniky where kapri = 'hodne'\n"
               "\t\t('-' for standard input)");
-      break;
+        break;
     case G_OPT_DB_WHERE:
 	Opt->key = "where";
 	Opt->type = TYPE_STRING;
