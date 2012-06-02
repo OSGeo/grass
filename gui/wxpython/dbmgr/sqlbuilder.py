@@ -282,26 +282,22 @@ class SQLFrame(wx.Frame):
         
         self.list_values.Clear()
         
-        querystring = "SELECT %s FROM %s" % (column, self.tablename)
-        
-        data = grass.db_select(table = self.tablename,
-                               sql = querystring,
+        data = grass.db_select(sql = "SELECT %s FROM %s" % (column, self.tablename),
                                database = self.database,
                                driver = self.driver)
         if not data:
             return
-
+        
         desc = self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column]
         
         i = 0
-        for item in sorted(map(desc['ctype'], data)):
-            if justsample and i < 256 or \
-               not justsample:
-                if desc['type'] != 'character':
-                    item = str(item)
-                self.list_values.Append(item)
-            else:
+        for item in sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
+            if justsample and i > 255:
                 break
+            
+            if desc['type'] != 'character':
+                item = str(item)
+            self.list_values.Append(item)
             i += 1
         
     def OnSampleValues(self, event):
