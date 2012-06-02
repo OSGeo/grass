@@ -9,7 +9,7 @@
  *               Markus Neteler <neteler itc.it>
  *               Stephan Holl
  * PURPOSE:      Process one sql select statement
- * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2010, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include <grass/gis.h>
 #include <grass/dbmi.h>
@@ -49,11 +50,12 @@ int main(int argc, char **argv)
 
     parse_command_line(argc, argv);
 
+    errno = 0;
     if (parms.input) {
 	fd = fopen(parms.input, "r");
 	if (fd == NULL) {
-	    perror(parms.input);
-	    exit(ERROR);
+	    G_fatal_error(_("Unable to open file <%s>: %s"),
+                          parms.input, strerror(errno));
 	}
     }
     else
@@ -72,20 +74,23 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to open database <%s>"), parms.database);
 
     if (parms.sql) {
-	db_set_string(&stmt, parms.sql);
-	stat = sel(driver, &stmt);
+        if (strcmp(parms.sql, "-") == 0) {
+            /* read stdin */
+            stat = OK;
+            while (stat == OK && get_stmt(fd, &stmt)) {
+                if (!stmt_is_empty(&stmt))
+                    stat = sel(driver, &stmt);
+            }
+        }
+        else {
+            db_set_string(&stmt, parms.sql);
+            stat = sel(driver, &stmt);
+        }
     }
     else if (parms.table) {
 	db_set_string(&stmt, "select * from ");
 	db_append_string(&stmt, parms.table);
 	stat = sel(driver, &stmt);
-    }
-    else {			/* read stdin */
-	stat = OK;
-	while (stat == OK && get_stmt(fd, &stmt)) {
-	    if (!stmt_is_empty(&stmt))
-		stat = sel(driver, &stmt);
-	}
     }
 
     if(parms.test_only)
@@ -190,7 +195,7 @@ static void parse_command_line(int argc, char **argv)
     sql->key = "sql";
     sql->type = TYPE_STRING;
     sql->required = NO;
-    sql->label = _("SQL select statement");
+    sql->label = _("SQL select statement ('-' for standard input)");
     sql->description =
 	_("For example: 'select * from rybniky where kapri = 'hodne'");
     sql->guisection = _("Query");
@@ -201,7 +206,7 @@ static void parse_command_line(int argc, char **argv)
     input->guisection = _("Query");
     
     table = G_define_standard_option(G_OPT_DB_TABLE);
-    table->guisection = _("Connection");
+    table->guisection = _("Query");
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
@@ -290,10 +295,15 @@ static void parse_command_line(int argc, char **argv)
 
     if (!parms.fs)
 	parms.fs = "";
+    
     if (parms.input && *parms.input == 0) {
 	G_usage();
 	exit(EXIT_FAILURE);
     }
+    
+    if (!parms.input && !parms.sql && !parms.table)
+        G_fatal_error(_("You must provide one of these options: <%s>, <%s>, or <%s>"),
+                      sql->key, input->key, table->key);
 }
 
 
