@@ -191,13 +191,7 @@ static void parse_command_line(int argc, char **argv)
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
-    sql = G_define_option();
-    sql->key = "sql";
-    sql->type = TYPE_STRING;
-    sql->required = NO;
-    sql->label = _("SQL select statement ('-' for standard input)");
-    sql->description =
-	_("For example: 'select * from rybniky where kapri = 'hodne'");
+    sql = G_define_standard_option(G_OPT_DB_SQL);
     sql->guisection = _("Query");
 
     input = G_define_standard_option(G_OPT_F_INPUT);

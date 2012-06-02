@@ -30,6 +30,7 @@
   be returned (not NULL).
   
   - database:
+   - G_OPT_DB_SQL
    - G_OPT_DB_WHERE
    - G_OPT_DB_TABLE
    - G_OPT_DB_DRIVER
@@ -123,6 +124,16 @@ struct Option *G_define_standard_option(int opt)
     Opt = G_define_option();
 
     switch (opt) {
+    case G_OPT_DB_SQL:
+        Opt->key = "sql";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "sql_query";
+        Opt->required = NO;
+        Opt->label = _("SQL select statement");
+        Opt->description =
+            _("For example: 'select * from rybniky where kapri = 'hodne'\n"
+              "\t\t('-' for standard input)");
+      break;
     case G_OPT_DB_WHERE:
 	Opt->key = "where";
 	Opt->type = TYPE_STRING;
