@@ -37,7 +37,7 @@ import grass.script as grass
 class SQLFrame(wx.Frame):
     """!SQL Frame class"""
     def __init__(self, parent, title, vectmap, id = wx.ID_ANY,
-                 layer = 1, qtype = "select", evtheader = None):
+                 layer = 1, qtype = "select", evtHandler = None):
         
         wx.Frame.__init__(self, parent, id, title)
         
@@ -45,7 +45,7 @@ class SQLFrame(wx.Frame):
                              wx.BITMAP_TYPE_ICO))
         
         self.parent = parent
-        self.evtHeader = evtheader
+        self.evtHandler = evtHandler
 
         #
         # variables
@@ -401,9 +401,9 @@ class SQLFrame(wx.Frame):
         
     def OnApply(self, event):
         """Apply button pressed"""
-        if self.evtHeader:
-            self.evtHeader(event = 'apply')
-
+        if self.evtHandler:
+            self.evtHandler(event = 'apply')
+        
         if self.close_onapply.IsChecked():
             self.Destroy()
             
@@ -435,8 +435,8 @@ class SQLFrame(wx.Frame):
     
     def OnClose(self, event):
         """!Close button pressed"""
-        if self.evtHeader:
-            self.evtHeader(event = 'close')
+        if self.evtHandler:
+            self.evtHandler(event = 'close')
         
         self.Destroy()
         
