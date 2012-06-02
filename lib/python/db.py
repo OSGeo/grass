@@ -99,12 +99,27 @@ def db_select(sql = None, filename = None, table = None, **args):
 
     Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
     must be provided.
-
-    SQL statements:
-
+    
+    Examples:
+    
     \code
+    grass.db_select(sql = 'SELECT cat,CAMPUS FROM busstopsall WHERE cat < 4')
+
+    (('1', 'Vet School'), ('2', 'West'), ('3', 'North'))
     \endcode
     
+    \code
+     grass.db_select(filename = '/path/to/sql/file')
+    \endcode
+
+    Simplyfied usage 
+    
+    \code
+    grass.db_select(table = 'busstopsall')
+    \endcode
+
+    performs <tt>SELECT cat,CAMPUS FROM busstopsall</tt>.
+
     @param sql SQL statement to perform (or None)
     @param filename name of file with SQL statements (or None)
     @param table name of table to query (or None)
@@ -120,7 +135,10 @@ def db_select(sql = None, filename = None, table = None, **args):
     else:
         fatal(_("Programmer error: '%s', '%s', or '%s' must be provided") %
               'sql', 'filename', 'table')
-        
+    
+    if 'fs' not in args:
+        args['fs'] = '|'
+    
     ret = run_command('db.select', quiet = True,
                       flags = 'c',
                       output = fname,
@@ -130,8 +148,9 @@ def db_select(sql = None, filename = None, table = None, **args):
         fatal(_("Fetching data failed"))
     
     ofile = open(fname)
-    result = map(lambda x: x.rstrip(os.linesep), ofile.readlines())
+    result = map(lambda x: tuple(x.rstrip(os.linesep).split(args['fs'])),
+                 ofile.readlines())
     ofile.close()
     try_remove(fname)
         
-    return result
+    return tuple(result)
