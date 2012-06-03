@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "proto.h"
 
@@ -12,6 +13,10 @@ char *translate(const char *arg)
 
     if (arg == NULL)
 	return arg;
+
+    if (strlen(arg) == 0)
+        return NULL; /* unset */
+    
     if (*arg && translate_output) {
 	fputs(arg, stdout);
 	fputs("\n", stdout);
