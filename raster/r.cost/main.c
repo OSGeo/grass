@@ -90,7 +90,6 @@ int main(int argc, char *argv[])
     const char *cost_mapset, *search_mapset;
     void *cell, *cell2, *dir_cell, *nearest_cell;
     SEGMENT cost_seg, dir_seg;
-    const char *in_file, *dir_out_file;
     double *value;
     extern struct Cell_head window;
     double NS_fac, EW_fac, DIAG_fac, H_DIAG_fac, V_DIAG_fac;
@@ -106,7 +105,6 @@ int main(int argc, char *argv[])
     int segments_in_memory;
     int cost_fd, cum_fd, dir_fd, nearest_fd;
     int have_stop_points = 0, dir = 0;
-    int in_fd, dir_out_fd;
     double my_cost, nearest;
     double null_cost, dnullval;
     int srows, scols;
@@ -253,11 +251,6 @@ int main(int argc, char *argv[])
     /* If no outdir is specified, set flag to skip all dir */
     if (opt11->answer != NULL)
 	dir = 1;
-
-    /* Initalize access to database and create temporary files */
-    in_file = G_tempfile();
-    if (dir == 1)
-	dir_out_file = G_tempfile();
 
     /* Get database window parameters */
     G_get_window(&window);
@@ -429,31 +422,17 @@ int main(int argc, char *argv[])
     /* Create segmented format files for cost layer and output layer */
     G_verbose_message(_("Creating some temporary files..."));
 
-    in_fd = creat(in_file, 0666);
-    if (segment_format(in_fd, nrows, ncols, srows, scols, sizeof(struct cc)) != 1)
-	G_fatal_error("can not create temporary file");
-    close(in_fd);
+    if (segment_open(&cost_seg, G_tempfile(), nrows, ncols, srows, scols,
+		     sizeof(struct cc), segments_in_memory) != 1)
+	G_fatal_error(_("Can not create temporary file"));
 
     if (dir == 1) {
-	dir_out_fd = creat(dir_out_file, 0600);
-	if (segment_format(dir_out_fd, nrows, ncols, srows, scols,
-		       sizeof(double)) != 1)
-	    G_fatal_error("can not create temporary file");
+	if (segment_open(&dir_seg, G_tempfile(), nrows, ncols, srows, scols,
+		         sizeof(double), segments_in_memory) != 1)
+	    G_fatal_error(_("Can not create temporary file"));
 
-	close(dir_out_fd);
     }
-    
-    /* Open and initialize all segment files */
-    in_fd = open(in_file, 2);
-    if (segment_init(&cost_seg, in_fd, segments_in_memory) != 1)
-    	G_fatal_error("can not initialize temporary file");
 
-    if (dir == 1) {
-	dir_out_fd = open(dir_out_file, 2);
-	if (segment_init(&dir_seg, dir_out_fd, segments_in_memory) != 1)
-	    G_fatal_error("can not initialize temporary file");
-    }
-    
     /* Write the cost layer in the segmented file */
     G_message(_("Reading raster map <%s>, initializing output..."),
 	      G_fully_qualified_name(cost_layer, cost_mapset));
@@ -1139,9 +1118,9 @@ int main(int argc, char *argv[])
 	G_free(dir_cell);
     }
 
-    segment_release(&cost_seg);	/* release memory  */
+    segment_close(&cost_seg);	/* release memory  */
     if (dir == 1) {
-	segment_release(&dir_seg);
+	segment_close(&dir_seg);
     }
     Rast_close(cost_fd);
     Rast_close(cum_fd);
@@ -1150,14 +1129,6 @@ int main(int argc, char *argv[])
     }
     if (nearest_layer) {
 	Rast_close(nearest_fd);
-    }
-    close(in_fd);		/* close all files */
-    if (dir == 1) {
-	close(dir_out_fd);
-    }
-    unlink(in_file);		/* remove submatrix files  */
-    if (dir == 1) {
-	unlink(dir_out_file);
     }
 
     /* writing history file */
