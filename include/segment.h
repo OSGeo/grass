@@ -40,6 +40,7 @@ typedef struct
     int (*segment_address)();
     int (*segment_seek)();
     
+    char *fname;		/* segment file name */
     int fd;			/* file descriptor to read/write segment */
     struct SEGMENT_SCB		/* control blocks */
     {
