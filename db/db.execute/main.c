@@ -27,7 +27,7 @@
 
 struct
 {
-    const char *driver, *database, *schema, *input;
+    const char *driver, *database, *schema, *sql, *input;
     int i;
 } parms;
 
@@ -35,6 +35,7 @@ struct
 static void parse_command_line(int, char **);
 static int get_stmt(FILE *, dbString *);
 static int stmt_is_empty(dbString *);
+static void error_handler(void *);
 
 int main(int argc, char **argv)
 {
@@ -49,16 +50,20 @@ int main(int argc, char **argv)
 
     parse_command_line(argc, argv);
 
-    if (strcmp(parms.input, "-")) {
+    /* read from file or stdin ? */
+    if (parms.input && strcmp(parms.input, "-") != 0) {
 	fd = fopen(parms.input, "r");
 	if (fd == NULL) {
-	    G_fatal_error(_("Unable to open file <%s> for reading.\n"
-			    "Details: %s"), parms.input, strerror(errno));
+	    G_fatal_error(_("Unable to open file <%s>: %s"),
+                          parms.input, strerror(errno));
 	}
     }
     else {
 	fd = stdin;
     }
+    
+    /* open DB connection */
+    db_init_string(&stmt);
     
     driver = db_start_driver(parms.driver);
     if (driver == NULL) {
@@ -69,29 +74,35 @@ int main(int argc, char **argv)
     db_set_handle(&handle, parms.database, parms.schema);
     if (db_open_database(driver, &handle) != DB_OK)
 	G_fatal_error(_("Unable to open database <%s>"), parms.database);
-
-    while (get_stmt(fd, &stmt)) {
-	if (!stmt_is_empty(&stmt)) {
-	    G_debug(3, "sql: %s", db_get_string(&stmt));
-
-	    ret = db_execute_immediate(driver, &stmt);
-
-	    if (ret != DB_OK) {
-		if (parms.i) {	/* ignore SQL errors */
-		    G_warning(_("Error while executing: '%s'"),
-			      db_get_string(&stmt));
-		    error++;
-		}
-		else {
-		    db_close_database(driver);
-		    db_shutdown_driver(driver);
-		    G_fatal_error(_("Error while executing: '%s'"),
-				  db_get_string(&stmt));
-		}
-	    }
-	}
+    G_add_error_handler(error_handler, driver);
+    
+    if (parms.sql) {
+        /* parms.sql */
+        db_set_string(&stmt, parms.sql);
+        ret = db_execute_immediate(driver, &stmt);
     }
-
+    else { /* parms.input */
+        while (get_stmt(fd, &stmt)) {
+            if (stmt_is_empty(&stmt))
+                continue;
+            G_debug(3, "sql: %s", db_get_string(&stmt));
+                
+            ret = db_execute_immediate(driver, &stmt);
+            
+            if (ret != DB_OK) {
+                if (parms.i) {	/* ignore SQL errors */
+                    G_warning(_("Error while executing: '%s'"),
+                              db_get_string(&stmt));
+                    error++;
+                }
+                else {
+                    G_fatal_error(_("Error while executing: '%s'"),
+                                  db_get_string(&stmt));
+                }
+            }
+        }
+    }
+    
     db_close_database(driver);
     db_shutdown_driver(driver);
 
@@ -101,7 +112,7 @@ int main(int argc, char **argv)
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *schema, *input;
+    struct Option *driver, *database, *schema, *sql, *input;
     struct Flag *i;
     struct GModule *module;
     const char *drv, *db, *schema_name;
@@ -117,9 +128,16 @@ static void parse_command_line(int argc, char **argv)
     module->label = _("Executes any SQL statement.");
     module->description = _("For SELECT statements use 'db.select'.");
 
+    sql = G_define_standard_option(G_OPT_DB_SQL);
+    sql->label = _("SQL statement");
+    sql->description = _("Example: update rybniky set kapri = 'hodne' where kapri = 'malo'");
+    sql->guisection = _("SQL");
+    
     input = G_define_standard_option(G_OPT_F_INPUT);
-    input->label = _("Name of file containing SQL statements");
-    input->description = _("'-' to read from standard input");
+    input->required = NO;
+    input->label = _("Name of file containing SQL statement(s)");
+    input->description = _("'-' for standard input");
+    input->guisection = _("SQL");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
@@ -145,49 +163,53 @@ static void parse_command_line(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_SUCCESS);
 
+    if (!sql->answer && !input->answer) {
+        G_fatal_error(_("You must provide <%s> or <%s> option"),
+                      sql->key, input->key);
+    }
+    
     parms.driver = driver->answer;
     parms.database = database->answer;
     parms.schema = schema->answer;
+    parms.sql = sql->answer;
     parms.input = input->answer;
-    parms.i = i->answer;
+    parms.i = i->answer ? TRUE : FALSE;
 }
 
-
-static int get_stmt(FILE * fd, dbString * stmt)
+int get_stmt(FILE * fd, dbString * stmt)
 {
-    char buf[4000], buf2[4000];
-    int len, row = 0;
+    char buf[DB_SQL_MAX], buf2[DB_SQL_MAX];
+    size_t len;
 
-    db_init_string(stmt);
+    db_zero_string(stmt);
 
-    while (fgets(buf, 4000, fd) != NULL) {
-	strcpy(buf2, buf);
-	G_chop(buf2);
-	len = strlen(buf2);
-
-	if (buf2[len - 1] == ';') {	/* end of statement */
-	    buf2[len - 1] = 0;	        /* truncate ';' */
-	    /* append truncated */
-	    db_append_string(stmt, buf2);	
-	    return 1;
-	}
-	else {
-	    /* append not truncated string (\n may be part of value) */
-	    db_append_string(stmt, buf);	
-	}
-	row++;
+    if (G_getl2(buf, sizeof(buf), fd) == 0)
+        return 0;
+    
+    strcpy(buf2, buf);
+    G_chop(buf2);
+    len = strlen(buf2);
+        
+    if (buf2[len - 1] == ';') { /* end of statement */
+        buf2[len - 1] = 0;      /* truncate ';' */
     }
+    
+    db_set_string(stmt, buf2);
 
-    if (row > 0)
-	return 1;
-
-    return 0;
+    return 1;
 }
 
-
-static int stmt_is_empty(dbString * stmt)
+int stmt_is_empty(dbString * stmt)
 {
     char dummy[2];
 
     return (sscanf(db_get_string(stmt), "%1s", dummy) != 1);
+}
+
+void error_handler(void *p)
+{
+    dbDriver *driver = (dbDriver *) p;
+    
+    db_close_database(driver);
+    db_shutdown_driver(driver);
 }
