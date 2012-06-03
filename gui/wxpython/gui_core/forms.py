@@ -32,7 +32,7 @@ pythonw on a Mac.
 @todo
  - verify option value types
 
-Copyright(C) 2000-2011 by the GRASS Development Team
+Copyright(C) 2000-2012 by the GRASS Development Team
 
 This program is free software under the GPL(>=v2) Read the file
 COPYING coming with GRASS for details.
@@ -73,7 +73,6 @@ except ImportError:
     import wx.lib.flatnotebook as FN
 import wx.lib.colourselect     as csel
 import wx.lib.filebrowsebutton as filebrowse
-import wx.lib.scrolledpanel    as scrolled
 from wx.lib.newevent import NewEvent
 
 try:
@@ -84,7 +83,7 @@ except ImportError:
 from grass.script import core as grass
 from grass.script import task as gtask
 
-from gui_core.widgets import StaticWrapText
+from gui_core.widgets import StaticWrapText, ScrolledPanel
 from gui_core.ghelp   import HelpPanel
 from gui_core         import gselect
 from core             import gcmd
@@ -820,7 +819,7 @@ class CmdPanel(wx.Panel):
         tab = {}
         tabsizer = {}
         for section in sections:
-            tab[section] = scrolled.ScrolledPanel(parent = self.notebook)
+            tab[section] = ScrolledPanel(parent = self.notebook)
             tab[section].SetScrollRate(10, 10)
             tabsizer[section] = wx.BoxSizer(orient = wx.VERTICAL)
             self.notebook.AddPage(page = tab[section], text = section)
