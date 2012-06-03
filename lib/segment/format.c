@@ -19,7 +19,7 @@
 #include <limits.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/segment.h>
+#include "local_proto.h"
 
 
 static int _segment_format(int, off_t, off_t, int, int, int, int);

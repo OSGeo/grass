@@ -12,7 +12,7 @@
  * \date 2005-2009
  */
 
-#include <grass/segment.h>
+#include "local_proto.h"
 
 
 /**
