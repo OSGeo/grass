@@ -18,6 +18,14 @@
 #include "globals.h"
 #include "proto.h"
 
+static void notice_processor(void *arg, const char *message)
+{
+    /* print notice messages only on verbose level */
+    if (G_verbose() > G_verbose_std()) {
+        fprintf(stderr, "%s", message);
+    }
+}
+
 int db__driver_open_database(dbHandle * handle)
 {
     char buf[500];
@@ -64,10 +72,11 @@ int db__driver_open_database(dbHandle * handle)
 	return DB_FAILED;
     }
 
-    /* Set schema */
+    /* set schema */
     schema = db_get_handle_dbschema(handle);
 
-    /* Cannot use default schema because link to table can point to different database */
+    /* Cannot use default schema because link to table can point to
+       different database */
     /*
        if ( schema ) 
        schema = connection.schemaName;
@@ -92,7 +101,7 @@ int db__driver_open_database(dbHandle * handle)
 	}
     }
 
-    /* Read internal codes */
+    /* read internal codes */
     res = PQexec(pg_conn,
 		 "select oid, typname from pg_type where typname in ( "
 		 "'bit', 'int2', 'int4', 'int8', 'serial', 'oid', "
@@ -164,7 +173,10 @@ int db__driver_open_database(dbHandle * handle)
 		PQgetvalue(res, row, 1), type);
 	pg_types[row][1] = type;
     }
-
+    
+    /* print notice messages only on verbose level */
+    PQsetNoticeProcessor(pg_conn, notice_processor, NULL);
+    
     PQclear(res);
 
     return DB_OK;
