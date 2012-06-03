@@ -87,6 +87,7 @@ SUBDIRS = \
 	r.ros \
 	r.series \
 	r.series.interp \
+	r.shaded.relief2 \
 	r.slope.aspect \
 	r.solute.transport \
 	r.spread \
