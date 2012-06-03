@@ -131,8 +131,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = NO;
         Opt->label = _("SQL select statement");
         Opt->description =
-            _("For example: 'select * from rybniky where kapri = 'hodne'\n"
-              "\t\t('-' for standard input)");
+            _("For example: 'select * from rybniky where kapri = 'hodne'");
         break;
     case G_OPT_DB_WHERE:
 	Opt->key = "where";
