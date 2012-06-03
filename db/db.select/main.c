@@ -304,12 +304,21 @@ void parse_command_line(int argc, char **argv)
 
 int get_stmt(FILE * fd, dbString * stmt)
 {
-    char buf[DB_SQL_MAX];
+    char buf[DB_SQL_MAX], buf2[DB_SQL_MAX];
+    size_t len;
     
     db_zero_string(stmt);
     
     if (G_getl2(buf, sizeof(buf), fd) == 0)
         return 0;
+        
+    strcpy(buf2, buf);
+    G_chop(buf2);
+    len = strlen(buf2);
+        
+    if (buf2[len - 1] == ';') { /* end of statement */
+        buf2[len - 1] = 0;      /* truncate ';' */
+    }
     
     db_set_string(stmt, buf);
     
