@@ -234,6 +234,8 @@ void print_shell(const struct Map_info *Map)
 		Vect_get_finfo_layer_name(Map));
 	fprintf(stdout, "pg_dbname=%s\n",
 		Vect_get_finfo_dsn_name(Map));
+	fprintf(stdout, "geometry_column=%s\n",
+		Vect_get_finfo_geometry_column(Map));
 	fprintf(stdout, "feature_type=%s\n",
 		Vect_get_finfo_geometry_type(Map));
     }
@@ -362,6 +364,10 @@ void print_info(const struct Map_info *Map)
 	sprintf(line, "%-17s%s", _("DB name:"),
 		Vect_get_finfo_dsn_name(Map));
 	printline(line);
+	sprintf(line, "%-17s%s", _("Geometry column:"),
+		Vect_get_finfo_geometry_column(Map));
+	printline(line);
+
 	sprintf(line, "%-17s%s", _("Feature type:"),
 		Vect_get_finfo_geometry_type(Map));
 	printline(line);
