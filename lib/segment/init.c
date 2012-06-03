@@ -22,7 +22,7 @@
 #include <string.h>
 #include <errno.h>
 #include <grass/gis.h>
-#include <grass/segment.h>
+#include "local_proto.h"
 
 
 static int read_int(int, int *);
@@ -50,13 +50,13 @@ static int read_off_t(int, off_t *);
  *
  * \param[in,out] seg segment
  * \param[in] fd file descriptor
- * \param[in] nsegs number of segments to remain in memory
+ * \param[in] nseg number of segments to remain in memory
  * \return 1 if successful
  * \return -1 if unable to seek or read segment file
  * \return -2 if out of memory
  */
 
-int segment_init(SEGMENT * SEG, int fd, int nseg)
+int segment_init(SEGMENT *SEG, int fd, int nseg)
 {
     SEG->open = 0;
     SEG->fd = fd;

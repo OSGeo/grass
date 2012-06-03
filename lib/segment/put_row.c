@@ -17,7 +17,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/segment.h>
+#include "local_proto.h"
 
 
 /*      buf is CELL *   WRAT code       */

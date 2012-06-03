@@ -13,7 +13,7 @@
  */
 
 #include <string.h>
-#include <grass/segment.h>
+#include "local_proto.h"
 
 
 /*bugfix: buf: char* vs int* -> wrong pointer arithmetics!!!. Pierre de Mouveaux - 09 april 2000 */

@@ -12,7 +12,7 @@
  * \date 2005-2009
  */
 
-#include <grass/segment.h>
+#include "local_proto.h"
 
 #define SEG_N_ROW_NONZERO(SEG, row, col) \
     (((row) >> (SEG)->srowbits) * (SEG)->spr + ((col) >> (SEG)->scolbits))

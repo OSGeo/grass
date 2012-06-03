@@ -14,7 +14,7 @@
 
 #include <stdlib.h>
 #include <grass/gis.h>
-#include <grass/segment.h>
+#include "local_proto.h"
 
 
 /**
