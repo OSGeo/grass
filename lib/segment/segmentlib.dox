@@ -82,12 +82,32 @@ routines: [footnote]
 \endverbatim 
 
 <P>
-The first step is to create a file which is properly formatted for use by 
-the <I>Segment Library</I> routines:
-
+A temporary file needs to be prepared and a SEGMENT structure needs to 
+be initialized before any data can be transferred to the segment file. 
+This can be done with the <I>Segment Library</I> routine:
 
 <P>
-<I>int segment_format (int fd, int nrows, int ncols, int srows, int scols,
+<I>int segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
+  int srows, int scols, int len, int nseg), open a new segment structure.
+<P>
+  A new file with full path name <B>fname</B> will be created and 
+  formatted. The original nonsegmented data matrix consists of 
+  <B>nrows</B> and <B>ncols. The segments consist of <B>srows</B> by 
+  <B>scols</B>. The data items have length <B>len</B> bytes. The number 
+  of segments to be retained in memory is given by <B>nseg</B>. This 
+  routine calls segment_format() and segment_init(), see below. If 
+  segment_open() is used, the routines segment_format() and segment_init()
+  must not be used.
+<P>
+Return codes are: 1 ok; else a negative number between -1 and -6 encoding
+  the error type.
+
+<P>
+Alternatively, the first step is to create a file which is properly 
+formatted for use by the <I>Segment Library</I> routines:
+
+<P>
+<I>int segment_format (int fd, int nrows, off_t ncols,off_t srows, int scols,
   int len)</I>, format a segment file
 <P>
   The segmentation routines require a disk file to be used for paging
@@ -101,9 +121,9 @@ the <I>Segment Library</I> routines:
 <P>
 The corresponding nonsegmented data matrix, which is to be transferred to the
   segment file, is <B>nrows</B> by <B>ncols.</B> The segment file is to be
-  formed of segments which are <B>srows</B> by <B>scols.</B> The data items
-  have length <B>len</B> bytes. For example, if the <I>data type is int</I>,
-  <B><I>len</I> </B><I>is sizeof(int) .</I>
+  formed of segments which are <B>srows</B> by <B>scols</B>. The data items
+  have length <B>len</B> bytes. For example, if the data type is <I>int</I>,
+  <B><I>len</I></B> is <I>sizeof(int)</I>.
 
 <P>
 Return codes are: 1 ok; else -1 could not seek or write <I>fd</I>, or -3
@@ -220,13 +240,35 @@ Finally, memory allocated in the SEGMENT structure is freed:
 
 <P>
 
+The following routine both deletes the segment file and releases allocated 
+memory:
+
+<P>
+<I>int segment_close (SEGMENT *seg)</I>, close segment structure
+<P>
+  Deletes the segment file and uses segment_release() to release the 
+  allocated memory. No further cleaing up is required.
+
+<P>
+
 \section How_to_Use_the_Library_Routines How to Use the Library Routines
 
 
 The following should provide the programmer with a good idea of how to use the
 <I>Segment Library</I> routines. The examples assume that the data is integer.
-The first step is the creation and formatting of a segment file. A file is
-created, formatted and then closed:
+Creation of a segment file and initialization of the segment structure 
+at once:
+
+\verbatim 
+
+SEGMENT seg;
+
+segment_open (&seg, G_tempfile(), nrows, ncols, srows, scols, sizeof(int), nseg);
+
+\endverbatim
+
+Alternatively, the first step is the creation and formatting of a segment 
+file. A file is created, formatted and then closed:
 
 
 \verbatim 
@@ -239,20 +281,25 @@ close(fd);
 
 <P>
 The next step is the conversion of the nonsegmented matrix data into segment
-file format. The segment file is reopened for read and write, initialized, and
-then data read row by row from the original data file and put into the segment
-file:
+file format. The segment file is reopened for read and write and initialized:
 
 
 \verbatim
 #include <fcntl.h>
 
-int buf[NCOLS];
-
 SEGMENT seg;
 
 fd = open (file, O_RDWR);
 segment_init (&seg, fd, nseg);
+
+\endverbatim
+
+<P>
+Both the segment file and the segment structure are now ready to use, and
+data can be read row by row from the original data file and put into the 
+segment file:
+
+\verbatim
 
 for (row = 0; row < nrows; row++)
 {
