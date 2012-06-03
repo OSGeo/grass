@@ -1,15 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.select</em> prints result of selection from database 
-based on SQL statement read from input file or from standard input 
-to standard output.
+<em>db.select</em> prints result of selection from database based on
+SQL statement read from input file or from standard input to standard
+output.
 
 <h2>NOTE</h2>
 
 If parameters for database connection are already set with
 <em><a href="db.connect.html">db.connect</a></em>, they are taken as
 default values and do not need to be specified each time. Output will
-be displayed to standard output or can be directed to a file (option <b>output</b>).
+be displayed to standard output or can be directed to a file
+(option <b>output</b>).
 
 <h2>EXAMPLES</h2>
 
@@ -19,21 +20,21 @@ db.select sql="select * from roads"
 </pre></div>
 or
 <div class="code"><pre>
-echo "select * from roads" | db.select 
-</pre></div>
-or
-<div class="code"><pre>
-cat file.sql | db.select 
+echo "select * from roads" | db.select input=-
 </pre></div>
 or
 <div class="code"><pre>
 db.select input=file.sql
 </pre></div>
+or
+<div class="code"><pre>
+cat file.sql | db.select input=-
+</pre></div>
 
 <p>
 Select all from table roads:
 <div class="code"><pre>
-db.select -c driver=odbc database=g51test table=roads input=file.sql > result.csv
+db.select -c driver=odbc database=g51test table=roads input=file.sql output=result.csv
 </pre></div>
 
 <p>
@@ -52,6 +53,16 @@ db.select sql="SELECT * FROM archsites WHERE str1 IS NULL"
 Select coordinates from PostGIS table:
 <div class="code"><pre>
 db.select sql="SELECT x(geo),y(geo) FROM localizzazione"
+</pre></div>
+
+<p>Execute multiple SQL statements:
+
+<div class="code"><pre>
+cat file.sql
+SELECT * FROM busstopsall WHERE cat = 1
+SELECT cat FROM busstopsall WHERE cat > 4 AND cat < 8
+
+db.select input=file.sql
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -73,8 +84,9 @@ db.select sql="SELECT x(geo),y(geo) FROM localizzazione"
 
 <h2>AUTHOR</h2>
 
-Original author unknown<br>
-Modifications: Radim Blazek, ITC-Irst, Trento, Italy
+Original author unknown (probably CERL)<br>
+Modifications by Radim Blazek, ITC-Irst, Trento, Italy<br>
+Support for multiple statements by Martin Landa, Czech Technical University in Prague
 
 <p>
 <i>Last changed: $Date$</i>
