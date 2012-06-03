@@ -88,7 +88,7 @@ segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
 	G_warning(_("Unable to re-open segment file"));
 	return -4;
     }
-    if (0 > (ret = segment_init(SEG, fd, nseg))) {
+    if (0 > (ret = segment_init(SEG, SEG->fd, nseg))) {
 	close(SEG->fd);
 	unlink(SEG->fname);
 	if (ret == -1) {
