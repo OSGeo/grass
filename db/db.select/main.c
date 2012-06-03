@@ -26,8 +26,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-struct
-{
+struct {
     char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
     int c, d, h, test_only;
 } parms;
@@ -39,7 +38,6 @@ static int sel(dbDriver *, dbString *);
 static int get_stmt(FILE *, dbString *);
 static int stmt_is_empty(dbString *);
 
-
 int main(int argc, char **argv)
 {
     dbString stmt;
@@ -50,8 +48,8 @@ int main(int argc, char **argv)
 
     parse_command_line(argc, argv);
 
-    errno = 0;
-    if (parms.input) {
+    /* read from file or stdin ? */
+    if (parms.input && strcmp(parms.input, "-") != 0) {
 	fd = fopen(parms.input, "r");
 	if (fd == NULL) {
 	    G_fatal_error(_("Unable to open file <%s>: %s"),
@@ -61,6 +59,7 @@ int main(int argc, char **argv)
     else
 	fd = stdin;
 
+    /* open DB connection */
     db_init_string(&stmt);
 
     driver = db_start_driver(parms.driver);
@@ -73,24 +72,24 @@ int main(int argc, char **argv)
     if (db_open_database(driver, &handle) != DB_OK)
 	G_fatal_error(_("Unable to open database <%s>"), parms.database);
 
+    /* check for sql, table, and input */
     if (parms.sql) {
-        if (strcmp(parms.sql, "-") == 0) {
-            /* read stdin */
-            stat = OK;
-            while (stat == OK && get_stmt(fd, &stmt)) {
-                if (!stmt_is_empty(&stmt))
-                    stat = sel(driver, &stmt);
-            }
-        }
-        else {
-            db_set_string(&stmt, parms.sql);
-            stat = sel(driver, &stmt);
-        }
+        /* parms.sql */
+        db_set_string(&stmt, parms.sql);
+        stat = sel(driver, &stmt);
     }
     else if (parms.table) {
-	db_set_string(&stmt, "select * from ");
+        /* parms.table */
+	db_set_string(&stmt, "SELECT * FROM ");
 	db_append_string(&stmt, parms.table);
 	stat = sel(driver, &stmt);
+    }
+    else { /* -> parms.input */
+        stat = OK;
+        while (stat == OK && get_stmt(fd, &stmt)) {
+            if (!stmt_is_empty(&stmt))
+                stat = sel(driver, &stmt);
+        }
     }
 
     if(parms.test_only)
@@ -99,11 +98,11 @@ int main(int argc, char **argv)
     db_close_database(driver);
     db_shutdown_driver(driver);
 
-    exit(stat);
+    exit(stat == OK ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 
-static int sel(dbDriver * driver, dbString * stmt)
+int sel(dbDriver * driver, dbString * stmt)
 {
     dbCursor cursor;
     dbTable *table;
@@ -149,7 +148,7 @@ static int sel(dbDriver * driver, dbString * stmt)
     }
 
     /* fetch the data */
-    while (1) {
+    while (TRUE) {
 	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
 	    return ERROR;
 	if (!more)
@@ -180,7 +179,7 @@ static int sel(dbDriver * driver, dbString * stmt)
 }
 
 
-static void parse_command_line(int argc, char **argv)
+void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database, *table, *sql,
       *fs, *vs, *nv, *input, *output;
@@ -197,7 +196,7 @@ static void parse_command_line(int argc, char **argv)
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->required = NO;
     input->label = _("Name of file containing SQL select statement(s)");
-    input->description = _("One SQL statement per line");
+    input->description = _("'-' for standard input");
     input->guisection = _("Query");
     
     table = G_define_standard_option(G_OPT_DB_TABLE);
@@ -262,10 +261,11 @@ static void parse_command_line(int argc, char **argv)
     G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("SQL"));
-    module->description = _("Selects data from attribute table (performs SQL query statement(s)).");
+    module->label = _("Selects data from attribute table.");
+    module->description = _("Performs SQL query statement(s).");
 
     if (G_parser(argc, argv))
-	exit(EXIT_SUCCESS);
+	exit(EXIT_FAILURE);
 
     parms.driver = driver->answer;
     parms.database = database->answer;
@@ -278,14 +278,14 @@ static void parse_command_line(int argc, char **argv)
     parms.output = output->answer;
 
     if (!c->answer)
-	parms.c = 1;
+	parms.c = TRUE;
     else
-	parms.c = 0;
+	parms.c = FALSE;
     parms.d = d->answer;
     if (!v->answer)
-	parms.h = 1;
+	parms.h = TRUE;
     else
-	parms.h = 0;
+	parms.h = FALSE;
 
     parms.test_only = flag_test->answer;
 
@@ -302,30 +302,22 @@ static void parse_command_line(int argc, char **argv)
                       sql->key, input->key, table->key);
 }
 
-
-static int get_stmt(FILE * fd, dbString * stmt)
+int get_stmt(FILE * fd, dbString * stmt)
 {
-    char buf[1024];
-    int n;
-    static int first = 1;
-
+    char buf[DB_SQL_MAX];
+    
     db_zero_string(stmt);
-
-    /* this is until get_stmt is smart enough to handle multiple stmts */
-    if (!first)
-	return 0;
-    first = 0;
-
-    while ((n = fread(buf, 1, sizeof(buf) - 1, fd)) > 0) {
-	buf[n] = 0;
-	db_append_string(stmt, buf);
-    }
-
+    
+    if (G_getl2(buf, sizeof(buf), fd) == 0)
+        return 0;
+    
+    db_set_string(stmt, buf);
+    
     return 1;
 }
 
 
-static int stmt_is_empty(dbString * stmt)
+int stmt_is_empty(dbString * stmt)
 {
     char dummy[2];
 
