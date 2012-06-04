@@ -317,13 +317,23 @@ int Vect_write_ascii(FILE *ascii,
     int count;
 
     /* where || columns */
-    struct field_info *Fi;
-    dbDriver *driver;
-    dbValue value = {0};
+    struct field_info *Fi = NULL;
+    dbDriver *driver = NULL;
+    dbValue value;
     dbHandle handle;
-    int *cats, ncats;
+    int *cats, ncats, more;
+    dbTable *Table;
+    dbString dbstring;
+    dbColumn *Column;
+    dbValue *Value;
+    char buf[2000];
+    dbCursor cursor;
     int *coltypes = NULL;
+    char *all_columns = NULL;
     
+    G_zero(&value, sizeof(dbValue));
+    db_init_string(&dbstring);
+
     /* TODO: free memory allocated by G_asprintf(),
      * this is a bad memory leak */
     xstring = NULL;
@@ -367,15 +377,32 @@ int Vect_write_ascii(FILE *ascii,
 	    db_shutdown_driver(driver);
 	}
 	else {
-	    i = 0;
-	    while (columns[i++]);
-	    
-	    coltypes = G_malloc(i * sizeof(int));
+	    int len_all = 0;
 
 	    i = 0;
+	    while (columns[i])
+		len_all += strlen(columns[i++]);
+	    
+	    coltypes = G_malloc(i * sizeof(int));
+	    
+	    all_columns = G_malloc(len_all + i + 2);
+
+	    i = 0;
+	    strcpy(all_columns, columns[0]);
 	    while (columns[i]) {
 		/* get column types */
 		coltypes[i] = db_column_Ctype(driver, Fi->table, columns[i]);
+		if (coltypes[i] < 0) {
+		    db_close_database(driver);
+		    db_shutdown_driver(driver);
+		    G_warning(_("Unknown type of column <%s>, export cancelled"),
+		              columns[i]);
+		    return -1;
+		}
+		if (i > 0) {
+		    strcat(all_columns, ",");
+		    strcat(all_columns, columns[i]);
+		}
 		i++;
 	    }
 	}
@@ -399,6 +426,9 @@ int Vect_write_ascii(FILE *ascii,
 	    if (columns) {
 		db_close_database(driver);
 		db_shutdown_driver(driver);
+
+		G_free(coltypes);
+		G_free(all_columns);
 	    }
 	    
 	    return -1;
@@ -408,6 +438,9 @@ int Vect_write_ascii(FILE *ascii,
 	    if (columns) {
 		db_close_database(driver);
 		db_shutdown_driver(driver);
+
+		G_free(coltypes);
+		G_free(all_columns);
 	    }
 	    break;
 	}
@@ -554,28 +587,48 @@ int Vect_write_ascii(FILE *ascii,
 		
 		/* print attributes */
 		if (columns) {
+
+		    sprintf(buf, "SELECT %s FROM %s WHERE %s = %d",
+			    all_columns, Fi->table, Fi->key, fcats->value[0]);
+		    G_debug(2, "SQL: %s", buf);
+		    db_set_string(&dbstring, buf);
+
+		    if (db_open_select_cursor
+				    (driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
+			db_close_database(driver);
+			db_shutdown_driver(driver);
+			G_fatal_error(_("Cannot select attributes for cat = %d"),
+			  fcats->value[0]);
+		    }
+		    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+			db_close_database(driver);
+			db_shutdown_driver(driver);
+			G_fatal_error(_("Unable to fetch data from table"));
+		    }
+
+		    Table = db_get_cursor_table(&cursor);
+
+
 		    for(i = 0; columns[i]; i++) {
-			if (db_select_value(driver, Fi->table, Fi->key, fcats->value[0],
-					    columns[i], &value) < 0)
-			    G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
-					  Fi->table, Fi->key, columns[i]);
-			
-			if (db_test_value_isnull(&value)) {
+			Column = db_get_table_column(Table, i);
+			Value = db_get_column_value(Column);
+
+			if (db_test_value_isnull(Value)) {
 			    fprintf(ascii, "%s", fs);
 			}
 			else {
 			    switch(coltypes[i])
 			    {
 			    case DB_C_TYPE_INT: {
-				fprintf(ascii, "%s%d", fs, db_get_value_int(&value));
+				fprintf(ascii, "%s%d", fs, db_get_value_int(Value));
 				break;
 			    }
 			    case DB_C_TYPE_DOUBLE: {
-				fprintf(ascii, "%s%.*f", fs, dp, db_get_value_double(&value));
+				fprintf(ascii, "%s%.*f", fs, dp, db_get_value_double(Value));
 				break;
 			    }
 			    case DB_C_TYPE_STRING: {
-				fprintf(ascii, "%s%s", fs, db_get_value_string(&value));
+				fprintf(ascii, "%s%s", fs, db_get_value_string(Value));
 				break;
 			    }
 			    case DB_C_TYPE_DATETIME: {
@@ -589,6 +642,7 @@ int Vect_write_ascii(FILE *ascii,
 			    }
 			}
 		    }
+		    db_close_cursor(&cursor);
 		}
 	    }
 
