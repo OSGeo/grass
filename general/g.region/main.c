@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     parm.raster->key = "rast";
     parm.raster->required = NO;
     parm.raster->multiple = YES;
-    parm.raster->description = _("Set region to match this raster map");
+    parm.raster->description = _("Set region to match raster map(s)");
     parm.raster->guisection = _("Existing");
 
     parm.raster3d = G_define_standard_option(G_OPT_R3_MAP);
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     parm.raster3d->required = NO;
     parm.raster3d->multiple = NO;
     parm.raster3d->description =
-	_("Set region to match this 3D raster map (both 2D and 3D "
+	_("Set region to match 3D raster map(s) (both 2D and 3D "
 	  "values)");
     parm.raster3d->guisection = _("Existing");
 
@@ -185,7 +185,8 @@ int main(int argc, char *argv[])
     parm.vect->key = "vect";
     parm.vect->required = NO;
     parm.vect->multiple = YES;
-    parm.vect->description = _("Set region to match this vector map");
+    parm.vect->label = _("Set region to match vector map(s)");
+    parm.vect->description = NULL;
     parm.vect->guisection = _("Existing");
 
     parm.view = G_define_option();
@@ -277,7 +278,7 @@ int main(int argc, char *argv[])
     parm.res->multiple = NO;
     parm.res->type = TYPE_STRING;
     parm.res->description =
-	_("Grid resolution 2D (both north-south and east-west)");
+	_("2D grid resolution (north-south and east-west)");
     parm.res->guisection = _("Resolution");
 
     parm.res3 = G_define_option();
@@ -296,7 +297,7 @@ int main(int argc, char *argv[])
     parm.nsres->required = NO;
     parm.nsres->multiple = NO;
     parm.nsres->type = TYPE_STRING;
-    parm.nsres->description = _("North-south grid resolution 2D");
+    parm.nsres->description = _("North-south 2D grid resolution");
     parm.nsres->guisection = _("Resolution");
 
     parm.ewres = G_define_option();
@@ -305,7 +306,7 @@ int main(int argc, char *argv[])
     parm.ewres->required = NO;
     parm.ewres->multiple = NO;
     parm.ewres->type = TYPE_STRING;
-    parm.ewres->description = _("East-west grid resolution 2D");
+    parm.ewres->description = _("East-west 2D grid resolution");
     parm.ewres->guisection = _("Resolution");
 
     parm.tbres = G_define_option();
@@ -314,7 +315,7 @@ int main(int argc, char *argv[])
     parm.tbres->required = NO;
     parm.tbres->multiple = NO;
     parm.tbres->type = TYPE_STRING;
-    parm.tbres->description = _("Top-bottom grid resolution 3D");
+    parm.tbres->description = _("Top-bottom 3D grid resolution");
     parm.tbres->guisection = _("Resolution");
 
     parm.zoom = G_define_option();
@@ -514,10 +515,10 @@ int main(int argc, char *argv[])
 	    temp_window = window;
 
 	    Vect_set_open_level(2);
-	    if (2 != Vect_open_old(&Map, vect_name, mapset))
-		G_fatal_error(_("Unable to open vector map <%s@%s>"),
+	    if (2 > Vect_open_old(&Map, vect_name, mapset))
+		G_fatal_error(_("Unable to open vector map <%s> on topological level"),
 			      vect_name, mapset);
-
+            
 	    Vect_get_map_box(&Map, &box);
 	    map_window = window;
 	    map_window.north = box.N;
