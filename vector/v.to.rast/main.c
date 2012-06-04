@@ -145,6 +145,6 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
     }
 
-    G_done_msg("");
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }

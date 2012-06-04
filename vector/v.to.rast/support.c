@@ -277,12 +277,15 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    Rast_set_cats_title("Labels", &rast_cats);
 
 	    /* open vector map and database driver */
+	    Vect_set_open_level(1);
 	    Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
 
 	    db_CatValArray_init(&cvarr);
 	    if (!(Fi = Vect_get_field(&Map, field)))
 		G_fatal_error(_("Database connection not defined for layer %d"),
 			      field);
+
+	    Vect_close(&Map);
 
 	    if (!
 		(Driver =
@@ -418,33 +421,119 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    RASTER_MAP_TYPE map_type;
 	    long count;
 
-	    fd = Rast_open_old(rast_name, G_mapset());
+	    if (label_column) {
 
-	    map_type = Rast_map_type(rast_name, G_mapset());
+		Rast_set_cats_title("Labels", &rast_cats);
 
-	    rowbuf = Rast_allocate_buf(map_type);
+		/* open vector map and database driver */
+		Vect_set_open_level(1);
+		Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
 
-	    Rast_init_cell_stats(&stats);
-	    Rast_set_cats_title("Categories", &rast_cats);
+		db_CatValArray_init(&cvarr);
+		if (!(Fi = Vect_get_field(&Map, field)))
+		    G_fatal_error(_("Database connection not defined for layer %d"),
+				  field);
 
-	    rows = Rast_window_rows();
+		Vect_close(&Map);
 
-	    for (row = 0; row < rows; row++) {
-		Rast_get_row(fd, rowbuf, row, map_type);
-		Rast_update_cell_stats(rowbuf, Rast_window_cols(), &stats);
+		if (!
+		    (Driver =
+		     db_start_driver_open_database(Fi->driver, Fi->database)))
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+				  Fi->database, Fi->driver);
+
+		/* get number of records in label_column */
+		if ((nrec =
+		     db_select_CatValArray(Driver, Fi->table, Fi->key,
+					   label_column, NULL, &cvarr)) == -1)
+		    G_fatal_error(_("Unknown column <%s> in table <%s>"),
+				  label_column, Fi->table);
+
+		if (nrec < 0)
+		    G_fatal_error(_("No records selected from table <%s>"),
+				  Fi->table);
+
+		G_debug(3, "nrec = %d", nrec);
+
+		my_labels_rules =
+		    (struct My_labels_rule *)
+		    G_malloc(sizeof(struct My_labels_rule) * nrec);
+
+		/* get column type */
+		if ((col_type =
+		     db_column_Ctype(Driver, Fi->table,
+				     label_column)) == -1) {
+		    G_fatal_error(_("Column <%s> not found"), label_column);
+		}
+
+		/* close the database driver */
+		db_close_database_shutdown_driver(Driver);
+
+		/* for each attribute */
+		for (i = 0; i < cvarr.n_values; i++) {
+		    char tmp[2000];
+		    int cat = cvarr.value[i].cat;
+		    labels_n_values++;
+
+		    db_init_string(&my_labels_rules[i].label);
+
+		    /* switch the column type */
+		    switch (col_type) {
+		    case DB_C_TYPE_DOUBLE:
+			sprintf(tmp, "%lf", cvarr.value[i].val.d);
+			db_set_string(&my_labels_rules[i].label, tmp);
+			break;
+		    case DB_C_TYPE_INT:
+			sprintf(tmp, "%d", cvarr.value[i].val.i);
+			db_set_string(&my_labels_rules[i].label, tmp);
+			break;
+		    case DB_C_TYPE_STRING:
+			db_set_string(&my_labels_rules[i].label,
+				      db_get_string(cvarr.value[i].val.s));
+			break;
+		    default:
+			G_warning(_("Column type (%s) not supported"),
+				  db_sqltype_name(col_type));
+		    }
+
+		    /* add the raster category to label */
+		    my_labels_rules[i].i = cat;
+
+		    Rast_set_c_cat(&(my_labels_rules[i].i),
+				 &(my_labels_rules[i].i),
+				 db_get_string(&my_labels_rules[i].label),
+				 &rast_cats);
+		}			/* for each value in database */
 	    }
+	    else  {
+		fd = Rast_open_old(rast_name, G_mapset());
 
-	    Rast_rewind_cell_stats(&stats);
+		map_type = Rast_map_type(rast_name, G_mapset());
 
-	    while (Rast_next_cell_stat(&n, &count, &stats)) {
-		char msg[80];
+		rowbuf = Rast_allocate_buf(map_type);
 
-		sprintf(msg, "Category %d", n);
-		Rast_set_cat(&n, &n, msg, &rast_cats, map_type);
+		Rast_init_cell_stats(&stats);
+		Rast_set_cats_title("Categories", &rast_cats);
+
+		rows = Rast_window_rows();
+
+		for (row = 0; row < rows; row++) {
+		    Rast_get_row(fd, rowbuf, row, map_type);
+		    Rast_update_cell_stats(rowbuf, Rast_window_cols(), &stats);
+		}
+
+		Rast_rewind_cell_stats(&stats);
+
+		while (Rast_next_cell_stat(&n, &count, &stats)) {
+		    char msg[80];
+
+		    sprintf(msg, "Category %d", n);
+		    Rast_set_cat(&n, &n, msg, &rast_cats, map_type);
+		}
+
+		Rast_close(fd);
+		G_free(rowbuf);
 	    }
-
-	    Rast_close(fd);
-	    G_free(rowbuf);
 	}
 	break;
     case USE_D:
