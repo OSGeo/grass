@@ -152,7 +152,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
 	if ((use != USE_Z && use != USE_D) && nareas) {
 	    if (do_areas
-		(&Map, Points, &cvarr, ctype, field, use, value,
+		(&Map, Points, &cvarr, ctype, use, value,
 		 value_type) < 0) {
 		G_warning(_("Problem processing areas from vector map <%s>, continuing..."),
 			  vector_map);

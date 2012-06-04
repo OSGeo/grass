@@ -21,7 +21,7 @@ static int compare(const void *, const void *);
 
 
 int do_areas(struct Map_info *Map, struct line_pnts *Points,
-	     dbCatValArray * Cvarr, int ctype, int field, int use,
+	     dbCatValArray * Cvarr, int ctype, int use,
 	     double value, int value_type)
 {
     int i;
