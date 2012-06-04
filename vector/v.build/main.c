@@ -111,14 +111,12 @@ int main(int argc, char *argv[])
 	    if (0 != strcmp(xmapset, G_mapset())) {
 		G_fatal_error(_("Vector map <%s> is not in current mapset"),
 			      map_opt->answer);
-		exit(EXIT_FAILURE);
 	    }
 	}
 	Vect_set_open_level(1);
 	if (Vect_open_old(&Map, map_opt->answer, G_mapset()) < 0) {
 	    G_fatal_error(_("Unable to build topology for <%s>"),
 			  map_opt->answer);
-	    exit(EXIT_FAILURE);
 	}
 	Vect_build(&Map);
     }
