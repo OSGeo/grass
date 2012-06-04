@@ -187,6 +187,7 @@ int main(int argc, char *argv[])
     fclose(fd);
     
     if (!flags.topo->answer) {
+        Vect_set_open_level(1);
         Vect_open_old(&Map, output, G_mapset());
         Vect_build(&Map);
         Vect_close(&Map);
