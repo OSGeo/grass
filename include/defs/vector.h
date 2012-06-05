@@ -517,6 +517,8 @@ int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
                           struct line_cats *);
 int V2_read_next_line_pg(struct Map_info *, struct line_pnts *,
                          struct line_cats *);
+int V3_read_next_line_pg(struct Map_info *, struct line_pnts *,
+                         struct line_cats *);
 int V1_delete_line_nat(struct Map_info *, off_t);
 int V1_delete_line_ogr(struct Map_info *, off_t);
 int V1_delete_line_pg(struct Map_info *, off_t);
@@ -547,6 +549,7 @@ off_t V2_rewrite_line_sfa(struct Map_info *, int, int, off_t,
 
     /* Build topology */
 int Vect_build_nat(struct Map_info *, int);
+void Vect__build_downgrade(struct Map_info *, int);
 int Vect__build_sfa(struct Map_info *, int);
 int Vect_build_ogr(struct Map_info *, int);
 int Vect_build_pg(struct Map_info *, int);

@@ -50,55 +50,13 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	return 1;		/* Do nothing */
 
     /* Check if upgrade or downgrade */
-    if (build < plus->built) {	/* lower level request */
-
-	/* release old sources (this also initializes structures and numbers of elements) */
-	if (plus->built >= GV_BUILD_CENTROIDS && build < GV_BUILD_CENTROIDS) {
-	    /* reset info about areas stored for centroids */
-	    int nlines = Vect_get_num_lines(Map);
-
-	    for (line = 1; line <= nlines; line++) {
-		Line = plus->Line[line];
-		if (Line && Line->type == GV_CENTROID) {
-		    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
-		    topo->area = 0;
-		}
-	    }
-	    dig_free_plus_areas(plus);
-	    dig_spidx_free_areas(plus);
-	    dig_free_plus_isles(plus);
-	    dig_spidx_free_isles(plus);
-	}
-
-
-	if (plus->built >= GV_BUILD_AREAS && build < GV_BUILD_AREAS) {
-	    /* reset info about areas stored for lines */
-	    int nlines = Vect_get_num_lines(Map);
-
-	    for (line = 1; line <= nlines; line++) {
-		Line = plus->Line[line];
-		if (Line && Line->type == GV_BOUNDARY) {
-		    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
-		    topo->left = 0;
-		    topo->right = 0;
-		}
-	    }
-	    dig_free_plus_areas(plus);
-	    dig_spidx_free_areas(plus);
-	    dig_free_plus_isles(plus);
-	    dig_spidx_free_isles(plus);
-	}
-	if (plus->built >= GV_BUILD_BASE && build < GV_BUILD_BASE) {
-	    dig_free_plus_nodes(plus);
-	    dig_spidx_free_nodes(plus);
-	    dig_free_plus_lines(plus);
-	    dig_spidx_free_lines(plus);
-	}
-
-	plus->built = build;
-	return 1;
+    if (build < plus->built) {
+        /* -> downgrade */
+	Vect__build_downgrade(Map, build);
+        return 1;
     }
 
+    /* -> upgrade */
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     
@@ -106,9 +64,9 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	register int npoints, c;
 
 	/* 
-	 *  We shall go through all primitives in coor file and 
-	 *  add new node for each end point to nodes structure
-	 *  if the node with the same coordinates doesn't exist yet.
+	 *  We shall go through all primitives in coor file and add
+	 *  new node for each end point to nodes structure if the node
+	 *  with the same coordinates doesn't exist yet.
 	 */
 
 	/* register lines, create nodes */

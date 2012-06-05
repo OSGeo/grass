@@ -50,7 +50,7 @@ static int (*Read_next_line_array[][4]) () = {
 #endif
 #ifdef HAVE_POSTGRES
     , {
-	read_dummy, V1_read_next_line_pg, V2_read_next_line_pg, V2_read_next_line_pg}
+	read_dummy, V1_read_next_line_pg, V2_read_next_line_pg, V3_read_next_line_pg}
 #else
     , {
 	read_dummy, format, format, format}

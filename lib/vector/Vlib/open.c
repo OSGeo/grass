@@ -26,9 +26,20 @@
 #include <grass/glocale.h>
 
 /*
-  \brief Number of levels - without and with topology
+  \brief Number of levels
+
+  Native format:
+   - 1 without topology
+   - 2 with topology
+  OGR-links:
+   - 1 without topology
+   - 2 with pseudo-topology (simple features access)
+  PG-links:
+   - 1 without topology
+   - 2 with pseudo-topology (simple features access)
+   - 3 with topology (PostGIS Topology access)
 */
-#define MAX_OPEN_LEVEL 2
+#define MAX_OPEN_LEVEL 3
 
 static int open_old_dummy()
 {
@@ -231,7 +242,7 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     G_debug(1, "Map name: %s", Map->name);
     G_debug(1, "Map mapset: %s", Map->mapset);
 
-    /* Read vector format information */
+    /* read vector format information */
     if (ogr_mapset) {
         format = GV_FORMAT_OGR_DIRECT;
     }
@@ -273,19 +284,19 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     G_debug(1, "Level request = %d", level_request);
 
     /* There are only 2 possible open levels, 1 and 2. Try first to
-     * open 'support' files (topo,sidx,cidx), these files are the same
-     * for all formats.  If it is not possible and requested level is
-     * 2, return error, otherwise call Open_old_array[format][1], to
-     * open remaining files/sources (level 1)
-     */
+       open 'support' files (topo, sidx, cidx), these files are the same
+       for all formats.  If it is not possible and requested level is
+       2, return error, otherwise call Open_old_array[format][1], to
+       open remaining files/sources (level 1)
+    */
 
-    /* Try to open support files if level was not requested or
+    /* try to open support files if level was not requested or
      * requested level is 2 (format independent) */
-    if (level_request == 0 || level_request == 2) {
+    if (level_request == 0 || level_request > 1) {
         level = 2;              /* we expect success */
+        
         /* open topo */
         ret = -1;
-        
         if (Map->format == GV_FORMAT_POSTGIS)
             /* try to read full-topology for PostGIS links */
             ret = Vect_open_topo_pg(Map, head_only);
@@ -513,7 +524,8 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
         if (access(file_path, F_OK) == 0)       /* cidx file exists? */
             unlink(file_path);
 
-        if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
+        if (format == GV_FORMAT_OGR ||
+            (format == GV_FORMAT_POSTGIS && level == 2)) {
             G_file_name(file_path, buf, GV_FIDX_ELEMENT, G_mapset());
             if (access(file_path, F_OK) == 0)   /* fidx file exists? */
                 unlink(file_path);
@@ -1063,12 +1075,9 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     ret = dig_load_plus(Plus, &fp, head_only);
 
     fclose(fp.file);
-    /* dig_file_free ( &fp); */
-
-    if (ret == 0)
-        return -1;
-
-    return 0;
+    /* dig_file_free(&fp); */
+    
+    return ret == 0 ? -1 : 0;
 }
 
 /*!
@@ -1082,7 +1091,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
 */
 int Vect_open_sidx(struct Map_info *Map, int mode)
 {
-    char buf[500], file_path[2000];
+    char buf[GPATH_MAX], file_path[GPATH_MAX];
     int err;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
@@ -1090,14 +1099,14 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     G_debug(1, "Vect_open_sidx(): name = %s mapset= %s mode = %s", Map->name,
             Map->mapset, mode == 0 ? "old" : (mode == 1 ? "update" : "new"));
 
-    if (Map->plus.Spidx_built == TRUE) {
-        G_warning("Spatial index already opened");
+    Plus = &(Map->plus);
+
+    if (Plus->Spidx_built) {
+        G_debug(1, "Spatial index already opened");
         return 0;
     }
 
-    Plus = &(Map->plus);
-
-    dig_file_init(&(Map->plus.spidx_fp));
+    dig_file_init(&(Plus->spidx_fp));
 
     if (mode < 2) {
         sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
@@ -1106,10 +1115,10 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
         if (access(file_path, F_OK) != 0)       /* does not exist */
             return 1;
 
-        Map->plus.spidx_fp.file =
+        Plus->spidx_fp.file =
             G_fopen_old(buf, GV_SIDX_ELEMENT, Map->mapset);
 
-        if (Map->plus.spidx_fp.file == NULL) {  /* sidx file is not available */
+        if (Plus->spidx_fp.file == NULL) {  /* sidx file is not available */
             G_debug(1, "Cannot open spatial index file for vector '%s@%s'.",
                     Map->name, Map->mapset);
             return -1;
@@ -1120,11 +1129,11 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
         Vect_coor_info(Map, &CInfo);
 
         /* initialize spatial index */
-        Map->plus.Spidx_new = FALSE;
+        Plus->Spidx_new = FALSE;
 
         /* load head */
-        if (dig_Rd_spidx_head(&(Map->plus.spidx_fp), Plus) == -1) {
-            fclose(Map->plus.spidx_fp.file);
+        if (dig_Rd_spidx_head(&(Plus->spidx_fp), Plus) == -1) {
+            fclose(Plus->spidx_fp.file);
             return -1;
         }
 
@@ -1147,36 +1156,36 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
         if (err) {
             G_warning(_("Please rebuild topology for vector map <%s@%s>"),
                       Map->name, Map->mapset);
-            fclose(Map->plus.spidx_fp.file);
+            fclose(Plus->spidx_fp.file);
             return -1;
         }
     }
 
     if (mode) {
         /* open new spatial index */
-        Map->plus.Spidx_new = TRUE;
+        Plus->Spidx_new = TRUE;
         
         /* file based or memory based */
         if (getenv("GRASS_VECTOR_LOWMEM")) {
             /* free old indices */
             dig_spidx_free(Plus);
             /* initialize file based indices */
-            Map->plus.Spidx_file = 1;
+            Plus->Spidx_file = 1;
             dig_spidx_init(Plus);
         }
         G_debug(1, "%s based spatial index",
-                   Map->plus.Spidx_file == 0 ? "Memory" : "File");
+                   Plus->Spidx_file == 0 ? "Memory" : "File");
 
         if (mode == 1) {
             /* load spatial index for update */
-            if (dig_Rd_spidx(&(Map->plus.spidx_fp), Plus) == -1) {
-                fclose(Map->plus.spidx_fp.file);
+            if (dig_Rd_spidx(&(Plus->spidx_fp), Plus) == -1) {
+                fclose(Plus->spidx_fp.file);
                 return -1;
             }
         }
     }
 
-    Map->plus.Spidx_built = TRUE;
+    Plus->Spidx_built = TRUE;
 
     return 0;
 }
