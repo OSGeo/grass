@@ -109,13 +109,13 @@ int main(int argc, char *argv[])
     if (print->answer) {
 	/* get and print connection */
 	if (db_get_connection(&conn) == DB_OK) {
-	    fprintf(stdout, "driver:%s\n",
+	    fprintf(stdout, "driver: %s\n",
 		    conn.driverName ? conn.driverName : "");
-	    fprintf(stdout, "database:%s\n",
+	    fprintf(stdout, "database: %s\n",
 		    conn.databaseName ? conn.databaseName : "");
-	    fprintf(stdout, "schema:%s\n",
+	    fprintf(stdout, "schema: %s\n",
 		    conn.schemaName ? conn.schemaName : "");
-	    fprintf(stdout, "group:%s\n", conn.group ? conn.group : "");
+	    fprintf(stdout, "group: %s\n", conn.group ? conn.group : "");
 	}
 	else
 	    G_fatal_error(_("Database connection not defined. "
