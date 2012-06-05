@@ -302,23 +302,16 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
     Area = Plus->Area[area];
 
     if (Area == NULL) {		/* dead */
-	Box->N = 0;
-	Box->S = 0;
-	Box->E = 0;
-	Box->W = 0;
-	Box->T = 0;
-	Box->B = 0;
-
+        G_zero(Box, sizeof(struct bound_box));
 	return 0;
     }
     else {
-
 	Line = Plus->Line[abs(Area->lines[0])];
 	topo = (struct P_topo_b *)Line->topo;
 	Node = Plus->Node[topo->N1];
 
 	if (list == NULL) {
-	    list = Vect_new_boxlist(1);
+	    list = Vect_new_boxlist(TRUE);
 	}
 	Vect_reset_boxlist(list);
 	
@@ -332,7 +325,7 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
 	dig_boxlist_add(list, area, bbox);
 	
 	if (dig_find_area_box(Plus, list) == 0)
-	    G_fatal_error(_("Could not find area box"));
+	    G_fatal_error(_("Unable to get bounding box for area %d"), area);
 
 	Box->N = list->box[0].N;
 	Box->S = list->box[0].S;

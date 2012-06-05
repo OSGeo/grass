@@ -75,15 +75,15 @@ int Vect_close(struct Map_info *Map)
     G_debug(1, "Vect_close(): name = %s, mapset = %s, format = %d, level = %d",
 	    Map->name, Map->mapset, Map->format, Map->level);
 
-    /* Store support files for vector maps in the current mapsset if
-       in write mode on level 2 */
+    /* store support files for vector maps in the current mapset if in
+       write mode on level 2 */
     if (strcmp(Map->mapset, G_mapset()) == 0 &&
 	Map->support_updated &&
 	Map->plus.built == GV_BUILD_ALL) {
 	char buf[GPATH_MAX];
 	char file_path[GPATH_MAX];
 
-	/* Delete old support files if available */
+	/* delete old support files if available */
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 
 	G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
@@ -110,8 +110,8 @@ int Vect_close(struct Map_info *Map)
 	Map->plus.coor_mtime = CInfo.mtime;
 
 	/* write out topo file */
-	Vect_save_topo(Map);
-
+        Vect_save_topo(Map);
+        
 	/* write out sidx file */
 	Map->plus.Spidx_new = TRUE;
 	Vect_save_sidx(Map);
@@ -122,7 +122,7 @@ int Vect_close(struct Map_info *Map)
 	/* write out fidx file */
 	if (Map->format == GV_FORMAT_OGR)
 	    V2_close_ogr(Map);
-	else if (Map->format == GV_FORMAT_POSTGIS)
+	else if (Map->format == GV_FORMAT_POSTGIS && Map->level == 2)
 	    V2_close_pg(Map);
     }
     else {
@@ -135,7 +135,7 @@ int Vect_close(struct Map_info *Map)
 	    fclose(Map->plus.spidx_fp.file);
     }
 
-    if (Map->level == 2 && Map->plus.release_support) {
+    if (Map->level > 1 && Map->plus.release_support) {
 	G_debug(1, "free topology");
 	dig_free_plus(&(Map->plus));
 
@@ -153,7 +153,7 @@ int Vect_close(struct Map_info *Map)
 	    fclose(Map->hist_fp);
     }
 
-    /* Close level 1 files / data sources if not head_only */
+    /* close level 1 files / data sources if not head_only */
     if (!Map->head_only) {
 	if (((*Close_array[Map->format][1]) (Map)) != 0) {
 	    G_warning(_("Unable to close vector <%s>"),

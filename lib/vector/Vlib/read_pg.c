@@ -44,7 +44,6 @@ static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
                                         struct Format_info_cache *,
                                         struct feat_parts *);
 static int error_corrupted_data(const char *);
-static int set_initial_query();
 static void reallocate_cache(struct Format_info_cache *, int);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
 static int read_centroid_pg(struct Format_info_pg *, int, struct line_pnts *);
@@ -86,7 +85,8 @@ int V1_read_next_line_pg(struct Map_info *Map,
 }
 
 /*!
-   \brief Read next feature from PostGIS layer on topological level.
+   \brief Read next feature from PostGIS layer on topological level
+   (simple feature access).
 
    This function implements sequential access.
 
@@ -201,6 +201,28 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 }
 
 /*!
+   \brief Read next feature from PostGIS layer on topological level
+   (PostGIS topology access).
+
+   This function implements sequential access.
+
+   \param Map pointer to Map_info structure
+   \param[out] line_p container used to store line points within
+   (pointer to line_pnts struct)
+   \param[out] line_c container used to store line categories within
+   (pointer to line_cats struct)
+
+   \return feature type
+   \return -2 no more features (EOF)
+   \return -1 on failure
+ */
+int V3_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
+                         struct line_cats *line_c)
+{
+    return V2_read_next_line_pg(Map, line_p, line_c);
+}
+
+/*!
    \brief Read feature from PostGIS layer at given offset (level 1 without topology)
 
    This function implements random access on level 1.
@@ -300,7 +322,7 @@ int V3_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         return -1;
     }
     
-    G_debug(4, "V3_read_line_pg() line = %d type = %d offset = %llu",
+    G_debug(4, "V3_read_line_pg() line = %d type = %d offset = %lu",
             line, Line->type, Line->offset);
     
     if (!line_p && !line_c)
@@ -348,9 +370,6 @@ int V3_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
 #endif
-
-
-
 }
 
 #ifdef HAVE_POSTGRES
@@ -478,7 +497,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid,
     if (fid < 1) {
         /* next (read n features) */
         if (!pg_info->res) {
-            if (set_initial_query(pg_info) == -1)
+            if (set_initial_query(pg_info, FALSE) == -1)
                 return -1;
         }
     }
@@ -1102,30 +1121,53 @@ int error_corrupted_data(const char *msg)
    \return 0 on success
    \return -1 on error
  */
-int set_initial_query(struct Format_info_pg *pg_info)
+int set_initial_query(struct Format_info_pg *pg_info, int fetch_all)
 {
     char stmt[DB_SQL_MAX];
 
     if (execute(pg_info->conn, "BEGIN") == -1)
         return -1;
 
-    sprintf(stmt,
-            "DECLARE %s_%s%p CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\"",
-            pg_info->schema_name, pg_info->table_name, pg_info->conn,
-            pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
-            pg_info->table_name);
+    if (!pg_info->toposchema_name) {
+        /* simple feature access */
+        sprintf(stmt,
+                "DECLARE %s_%s%p CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\"",
+                pg_info->schema_name, pg_info->table_name, pg_info->conn,
+                pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
+                pg_info->table_name);
+    }
+    else {
+        /* topology access */
+        sprintf(stmt,
+                "DECLARE %s_%s%p CURSOR FOR "
+                "SELECT geom,row_number() OVER "
+                "(ORDER BY ST_GeometryType(geom) DESC) AS fid FROM ("
+                "SELECT geom FROM \"%s\".node WHERE node_id NOT IN "
+                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+                "\"%s\".edge GROUP BY end_node) AS foo) "
+                "UNION ALL SELECT geom FROM \"%s\".edge) AS foo",
+                pg_info->schema_name, pg_info->table_name, pg_info->conn,
+                pg_info->toposchema_name, pg_info->toposchema_name,
+                pg_info->toposchema_name, pg_info->toposchema_name); 
+    }
     G_debug(2, "SQL: %s", stmt);
-
+    
     if (execute(pg_info->conn, stmt) == -1) {
         execute(pg_info->conn, "ROLLBACK");
         return -1;
     }
 
-    sprintf(stmt, "FETCH %d in %s_%s%p", CURSOR_PAGE,
-            pg_info->schema_name, pg_info->table_name, pg_info->conn);
+    if (fetch_all)
+        sprintf(stmt, "FETCH ALL in %s_%s%p",
+                pg_info->schema_name, pg_info->table_name, pg_info->conn);
+    else
+        sprintf(stmt, "FETCH %d in %s_%s%p", CURSOR_PAGE,
+                pg_info->schema_name, pg_info->table_name, pg_info->conn);
     pg_info->res = PQexec(pg_info->conn, stmt);
     if (!pg_info->res) {
         execute(pg_info->conn, "ROLLBACK");
+        G_warning(_("Unable to get features"));
         return -1;
     }
     pg_info->next_line = 0;

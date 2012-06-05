@@ -23,7 +23,7 @@
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
-static struct edge_data {
+struct edge_data {
     int id;
     int start_node;
     int end_node;
@@ -37,17 +37,17 @@ static int drop_table(struct Format_info_pg *);
 static int check_schema(const struct Format_info_pg *);
 static int create_table(struct Format_info_pg *, const struct field_info *);
 static void connect_db(struct Format_info_pg *);
+static int check_topo(struct Format_info_pg *, struct Plus_head *);
 static int parse_bbox(const char *, struct bound_box *, int);
 static int num_of_records(const struct Format_info_pg *, const char *);
 static int read_p_node(struct Plus_head *, int, int, struct Format_info_pg *);
-static int read_p_line(struct Plus_head *, int, const struct edge_data *, struct Format_info_pg *);
+static int read_p_line(struct Plus_head *, int, const struct edge_data *);
 static int read_p_area(struct Plus_head *, int, int, struct Format_info_pg *);
-static int load_plus_head(struct Format_info_pg *, PGresult *, struct Plus_head *);
-static int load_plus(struct Format_info_pg *, PGresult *, struct Plus_head *);
+static int load_plus_head(struct Format_info_pg *, struct Plus_head *);
 #endif
 
 /*!
-   \brief Open existing PostGIS feature table (level 1 - without topology)
+   \brief Open vector map - PostGIS feature table (level 1 - without topology)
 
    \todo Check database instead of geometry_columns
 
@@ -127,8 +127,12 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     if (!found) {
         G_warning(_("Feature table <%s> not found in 'geometry_columns'"),
                   pg_info->table_name);
+        return -1;
     }
 
+    /* check for topo schema */
+    check_topo(pg_info, &(Map->plus));
+    
     return 0;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -137,7 +141,7 @@ int V1_open_old_pg(struct Map_info *Map, int update)
 }
 
 /*!
-   \brief Open existing PostGIS layer (level 2 - feature index)
+   \brief Open vector map - PostGIS feature table (level 2 - feature index)
 
    \param[in,out] Map pointer to Map_info structure
 
@@ -387,51 +391,20 @@ int V2_open_new_pg(struct Map_info *Map, int type)
 int Vect_open_topo_pg(struct Map_info *Map, int head_only)
 {
 #ifdef HAVE_POSTGRES
-    char stmt[DB_SQL_MAX];
-
     struct Plus_head *plus;
     struct Format_info_pg *pg_info;
     
-    PGresult *res;
-
     plus = &(Map->plus);
     pg_info = &(Map->fInfo.pg);
     
-    /* connect database */
-    if (!pg_info->conn)
-        connect_db(pg_info);
-    
-    /* check if topology layer/schema exists */
-    sprintf(stmt,
-            "SELECT t.name,t.hasz,l.feature_column FROM topology.layer "
-            "AS l JOIN topology.topology AS t ON l.topology_id = t.id "
-            "WHERE schema_name = '%s' AND table_name = '%s'",
-            pg_info->schema_name, pg_info->table_name);
-    G_debug(2, "SQL: %s", stmt);
-    
-    res = PQexec(pg_info->conn, stmt);
-    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-        PQntuples(res) != 1) {
-        G_debug(1, "Topology layers for '%s.%s' not found (%s)",
-                pg_info->schema_name, pg_info->table_name,
-                PQerrorMessage(pg_info->conn));
-        if (res)
-            PQclear(res);
+    /* check for topo schema */
+    if (check_topo(pg_info, plus) != 0)
         return 1;
-    }
-
-    pg_info->toposchema_name = G_store(PQgetvalue(res, 0, 0));
-    pg_info->topogeom_column = G_store(PQgetvalue(res, 0, 2));
-
+    
     /* free and init plus structure */
     dig_init_plus(plus);
-    if (load_plus_head(pg_info, res, plus) != 0)
-        return -1;
     
-    if (head_only)
-        return 0;
-    
-    return load_plus(pg_info, res, plus);
+    return load_plus(pg_info, plus, head_only);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -439,6 +412,14 @@ int Vect_open_topo_pg(struct Map_info *Map, int head_only)
 }
 
 #ifdef HAVE_POSTGRES
+/*!
+  \brief Get key column for feature table
+
+  \param pg_info pointer to Format_info_pg
+   
+  \return string buffer with key column name
+  \return NULL on missing key column
+*/
 char *get_key_column(struct Format_info_pg *pg_info)
 {
     char *key_column;
@@ -478,10 +459,17 @@ char *get_key_column(struct Format_info_pg *pg_info)
     return key_column;
 }
 
+/*!
+  \brief Get simple feature type from string
+
+  \param type string
+
+  \return SF type
+*/
 SF_FeatureType ftype_from_string(const char *type)
 {
     SF_FeatureType sf_type;
-
+    
     if (G_strcasecmp(type, "POINT") == 0)
         return SF_POINT;
     else if (G_strcasecmp(type, "LINESTRING") == 0)
@@ -496,14 +484,22 @@ SF_FeatureType ftype_from_string(const char *type)
         return SF_MULTIPOLYGON;
     else if (G_strcasecmp(type, "GEOMETRYCOLLECTION") == 0)
         return SF_GEOMETRYCOLLECTION;
-
-    return SF_UNKNOWN;
-
+    else
+        return SF_UNKNOWN;
+    
     G_debug(3, "ftype_from_string(): type='%s' -> %d", type, sf_type);
-
+    
     return sf_type;
 }
 
+/*!
+  \brief Drop feature table
+
+  \param pg_info pointer to Format_info_pg
+
+  \return -1 on error
+  \return 0 on success
+*/
 int drop_table(struct Format_info_pg *pg_info)
 {
     char stmt[DB_SQL_MAX];
@@ -518,6 +514,14 @@ int drop_table(struct Format_info_pg *pg_info)
     return 0;
 }
 
+/*!
+  \brief Creates new schema for feature table if not exists
+
+  \param pg_info pointer to Format_info_pg
+
+  \return -1 on error
+  \return 0 on success
+*/
 int check_schema(const struct Format_info_pg *pg_info)
 {
     int i, found, nschema;
@@ -558,6 +562,15 @@ int check_schema(const struct Format_info_pg *pg_info)
     return 0;
 }
 
+/*!
+  \brief Create new feature table
+
+  \param pg_info pointer to Format_info_pg
+  \param Fi pointer to field_info
+
+  \return -1 on error
+  \return 0 on success
+*/
 int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 {
     int spatial_index, primary_key;
@@ -760,6 +773,11 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     return 0;
 }
 
+/*!
+  \brief Establish PG connection (pg_info->conninfo)
+
+  \param pg_info pointer to Format_info_pg
+*/
 void connect_db(struct Format_info_pg *pg_info)
 {
     pg_info->conn = PQconnectdb(pg_info->conninfo);
@@ -768,6 +786,60 @@ void connect_db(struct Format_info_pg *pg_info)
         G_fatal_error("%s\n%s",
                       _("Connection ton PostgreSQL database failed."),
                       PQerrorMessage(pg_info->conn));
+}
+
+/*!
+  \brief Check for topology schema (pg_info->toposchema_name)
+
+  \param pg_info pointer to Format_info_pg
+
+  \return 0 schema exists
+  \return 1 schema doesn't exists
+ */
+int check_topo(struct Format_info_pg *pg_info, struct Plus_head *plus)
+{
+    char stmt[DB_SQL_MAX];
+    
+    PGresult *res;
+    
+    /* connect database */
+    if (!pg_info->conn)
+        connect_db(pg_info);
+    
+    if (pg_info->toposchema_name)
+        return 0;
+    
+    /* check if topology layer/schema exists */
+    sprintf(stmt,
+            "SELECT t.name,t.hasz,l.feature_column FROM topology.layer "
+            "AS l JOIN topology.topology AS t ON l.topology_id = t.id "
+            "WHERE schema_name = '%s' AND table_name = '%s'",
+            pg_info->schema_name, pg_info->table_name);
+    G_debug(2, "SQL: %s", stmt);
+    
+    res = PQexec(pg_info->conn, stmt);
+    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+        PQntuples(res) != 1) {
+        G_debug(1, "Topology layers for '%s.%s' not found (%s)",
+                pg_info->schema_name, pg_info->table_name,
+                PQerrorMessage(pg_info->conn));
+        if (res)
+            PQclear(res);
+        return 1;
+    }
+
+    pg_info->toposchema_name = G_store(PQgetvalue(res, 0, 0));
+    pg_info->topogeom_column = G_store(PQgetvalue(res, 0, 2));
+
+    G_debug(1, "PostGIS topology detected: schema = %s column = %s",
+            pg_info->toposchema_name, pg_info->topogeom_column);
+    
+    /* check for 3D */
+    if (strcmp(PQgetvalue(res, 0, 1), "t") == 0)
+        plus->with_z = WITH_Z;
+    PQclear(res);
+    
+    return 0;
 }
 
 /*!
@@ -986,8 +1058,7 @@ int read_p_node(struct Plus_head *plus, int n, int id,
   \return -1 on failure
 */
 int read_p_line(struct Plus_head *plus, int n,
-                const struct edge_data *data,
-                struct Format_info_pg *pg_info)
+                const struct edge_data *data)
 {
     int tp;
     struct P_line *line;
@@ -1120,23 +1191,20 @@ int read_p_area(struct Plus_head *plus, int n, int face_id, struct Format_info_p
 }
 
 /*!
-  \brief Read topo header info only
+  \brief Read topo (from PostGIS topology schema) header info only
 
   \param[in,out] plus pointer to Plus_head struct
 
   \return 0 on success
   \return -1 on error
 */
-int load_plus_head(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *plus)
+int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
 {
     char stmt[DB_SQL_MAX];
     
-    plus->off_t_size = -1;
+    PGresult *res;
     
-    /* check for 3D */
-    if (strcmp(PQgetvalue(res, 0, 1), "t") == 0)
-        plus->with_z = WITH_Z;
-    PQclear(res);
+    plus->off_t_size = -1;
     
     /* get map bounding box */
     sprintf(stmt,
@@ -1213,7 +1281,6 @@ int load_plus_head(struct Format_info_pg *pg_info, PGresult *res, struct Plus_he
             "SELECT COUNT(*) FROM \"%s\".face WHERE mbr IS NOT NULL",
             pg_info->toposchema_name);
     plus->n_clines = num_of_records(pg_info, stmt);
-    plus->n_lines += plus->n_plines; /* register isolated nodes as points */
     G_debug(3, "Vect_open_topo_pg(): n_clines=%d", plus->n_clines);
     /* TODO: nflines | n_klines */
 
@@ -1225,18 +1292,29 @@ int load_plus_head(struct Format_info_pg *pg_info, PGresult *res, struct Plus_he
 }
 
 /*!
-  \brief Read topo info
+  \brief Read topo info (from PostGIS topology schema)
 
+  \param pg_info pointer to Format_info_pg
   \param[in,out] plus pointer to Plus_head struct
-
+  \param head_only TRUE to read only header info
+  
   \return 0 on success
   \return -1 on error
 */
-int load_plus(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *plus)
+int load_plus(struct Format_info_pg *pg_info, struct Plus_head *plus,
+              int head_only)
 {
     int i, id, ntuples;
     char stmt[DB_SQL_MAX];
     struct edge_data line_data;
+    
+    PGresult *res;
+  
+    if (load_plus_head(pg_info, plus) != 0)
+        return -1;
+
+    if (head_only)
+        return 0;
     
     /* read nodes (GRASS Topo)
        note: standalone nodes are ignored
@@ -1258,6 +1336,7 @@ int load_plus(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *p
         return -1;
     }
 
+    G_debug(3, "load_plus(): n_nodes = %d", plus->n_nodes);
     dig_alloc_nodes(plus, plus->n_nodes);
     for (i = 1; i <= plus->n_nodes; i++) {
         id = atoi(PQgetvalue(res, i - 1, 0));
@@ -1267,8 +1346,9 @@ int load_plus(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *p
 
     /* read lines (GRASS Topo)
        - standalone nodes -> points
-       - edges -> lines/bouindaries
+       - edges -> lines/boundaries
     */
+    G_debug(3, "load_plus(): n_lines = %d", plus->n_lines);
     dig_alloc_lines(plus, plus->n_lines); 
     
     /* read PostGIS Topo standalone nodes */
@@ -1282,7 +1362,7 @@ int load_plus(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *p
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-        PQntuples(res) > plus->n_lines) {
+        PQntuples(res) > plus->n_plines) {
         G_warning(_("Unable to read lines"));
         if (res)
             PQclear(res);
@@ -1294,7 +1374,7 @@ int load_plus(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *p
     for (i = 0; i < ntuples; i++) {
         /* process standalone nodes (PostGIS Topo) */
         line_data.id = atoi(PQgetvalue(res, i, 0));
-        read_p_line(plus, i + 1, &line_data, pg_info);
+        read_p_line(plus, i + 1, &line_data);
     }
     PQclear(res);
     
@@ -1321,7 +1401,7 @@ int load_plus(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *p
         line_data.end_node   = atoi(PQgetvalue(res, i, 2));
         line_data.left_face  = atoi(PQgetvalue(res, i, 3));
         line_data.right_face = atoi(PQgetvalue(res, i, 4));
-        read_p_line(plus, plus->n_plines + i + 1, &line_data, pg_info);
+        read_p_line(plus, plus->n_plines + i + 1, &line_data);
     }
     PQclear(res);
     
@@ -1339,14 +1419,14 @@ int load_plus(struct Format_info_pg *pg_info, PGresult *res, struct Plus_head *p
         return -1;
     }
     
+    G_debug(3, "load_plus(): n_areas = %d", plus->n_areas);
     dig_alloc_areas(plus, plus->n_areas);
     G_zero(&line_data, sizeof(struct edge_data));
     for (i = 1; i <= plus->n_areas; i++) {
         line_data.id = line_data.left_face = atoi(PQgetvalue(res, i - 1, 0));
         read_p_area(plus, i, line_data.id, pg_info);
         /* add centroids */
-        read_p_line(plus, plus->n_lines - plus->n_clines + i,
-                    &line_data, pg_info);
+        read_p_line(plus, plus->n_lines - plus->n_clines + i, &line_data);
     }
     PQclear(res);
     

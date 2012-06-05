@@ -655,7 +655,66 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
  */
 int Vect_get_built(const struct Map_info *Map)
 {
-    return (Map->plus.built);
+    return Map->plus.built;
+}
+
+/*!
+  \brief Downgrade build level (for internal use only)
+
+  See Vect_build_nat(), Vect__build_sfa(), and Vect_build_pg() for
+  implementation issues.
+
+  \param Map pointer to Map_info
+*/
+void Vect__build_downgrade(struct Map_info *Map, int build)
+{
+    int line;
+    struct Plus_head *plus;
+    struct P_line *Line;
+    
+    plus = &(Map->plus);
+    
+    /* lower level request - release old sources (this also
+       initializes structures and numbers of elements) */
+    if (plus->built >= GV_BUILD_CENTROIDS && build < GV_BUILD_CENTROIDS) {
+        /* reset info about areas stored for centroids */
+        for (line = 1; line <= plus->n_lines; line++) {
+            Line = plus->Line[line];
+            if (Line && Line->type == GV_CENTROID) {
+                struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+                topo->area = 0;
+            }
+        }
+        dig_free_plus_areas(plus);
+        dig_spidx_free_areas(plus);
+        dig_free_plus_isles(plus);
+        dig_spidx_free_isles(plus);
+    }
+    
+    if (plus->built >= GV_BUILD_AREAS && build < GV_BUILD_AREAS) {
+        /* reset info about areas stored for lines */
+        for (line = 1; line <= plus->n_lines; line++) {
+            Line = plus->Line[line];
+            if (Line && Line->type == GV_BOUNDARY) {
+                struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+                topo->left = 0;
+                topo->right = 0;
+            }
+        }
+        dig_free_plus_areas(plus);
+        dig_spidx_free_areas(plus);
+        dig_free_plus_isles(plus);
+        dig_spidx_free_isles(plus);
+    }
+    
+    if (plus->built >= GV_BUILD_BASE && build < GV_BUILD_BASE) {
+        dig_free_plus_nodes(plus);
+        dig_spidx_free_nodes(plus);
+        dig_free_plus_lines(plus);
+        dig_spidx_free_lines(plus);
+    }
+
+    plus->built = build;
 }
 
 /*!
@@ -701,14 +760,14 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     G_debug(3, "Vect_build(): build = %d", build);
 
-    /* If topology is already build (map on level2), set level to 1 so
-     * that lines will be read by V1_read_ (all lines) */
+    /* If topology is already build (map on > level 2), set level to 1
+     * so that lines will be read by V1_read_ (all lines) */
     Map->level = 1; /* may be not needed, because V1_read is used
 		       directly by Vect_build_ */
     if (Map->format != GV_FORMAT_OGR_DIRECT)
 	Map->support_updated = TRUE;
 
-    if (Map->plus.Spidx_built == FALSE)
+    if (!Map->plus.Spidx_built)
 	Vect_open_sidx(Map, 2);
 
     plus = &(Map->plus);
@@ -734,11 +793,12 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	G_verbose_message(_("Topology was built"));
     }
 
-    Map->level = LEVEL_2;
+    if (Map->level == 1)
+        Map->level = LEVEL_2;
     plus->mode = GV_MODE_WRITE;
 
     if (build == GV_BUILD_ALL) {
-	plus->cidx_up_to_date = 1;	/* category index was build */
+	plus->cidx_up_to_date = TRUE;	/* category index was build */
 	dig_cidx_sort(plus);
     }
 
@@ -1040,8 +1100,8 @@ int Vect_build_sidx(struct Map_info *Map)
 	G_fatal_error(_("Unable to build spatial index from topology, "
 			"vector map is not opened at topology level 2"));
     }
-    if (!(Map->plus.Spidx_built)) {
-	return (Vect_build_sidx_from_topo(Map));
+    if (!Map->plus.Spidx_built) {
+	return Vect_build_sidx_from_topo(Map);
     }
     return 0;
 }
@@ -1082,8 +1142,8 @@ int Vect_save_sidx(struct Map_info *Map)
 
     plus = &(Map->plus);
 
-    if (plus->Spidx_built == FALSE) {
-	G_warning("Spatial index not available, can not be saved");
+    if (!plus->Spidx_built) {
+	G_warning(_("Spatial index not available, can not be saved"));
 	return 0;
     }
 

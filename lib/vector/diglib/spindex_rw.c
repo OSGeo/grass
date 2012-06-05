@@ -93,7 +93,7 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 	else if (ptr->off_t_size == 8)
 	    length = 117;
 	else
-	    G_fatal_error("topo must be written before sidx");
+            G_fatal_error(_("Topology file must be written before spatial index file"));
     }
     else if (ptr->spidx_port.off_t_size == 8) {
 	if (ptr->off_t_size == 4)
@@ -101,7 +101,7 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 	else if (ptr->off_t_size == 8)
 	    length = 145;
 	else
-	    G_fatal_error("topo must be written before sidx");
+            G_fatal_error(_("Topology file must be written before spatial index file"));
     }
 
     /* bytes 7 - 10 : header size */
@@ -1335,8 +1335,6 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r, SearchHitCallback shcb,
     assert(t);
 
     if (!stack_init) {
-	struct Rect_Real *r;
-
 	for (i = 0; i < MAXLEVEL; i++) {
 	    for (j = 0; j < MAXCARD; j++) {
 		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));

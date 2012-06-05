@@ -315,7 +315,6 @@ int add_geometry_pg(struct Plus_head *plus,
 void build_pg(struct Map_info *Map, int build)
 {
     int iFeature, ipart, fid, nrecords, npoints;
-    char stmt[DB_SQL_MAX];
     char *wkb_data;
     
     struct Format_info_pg *pg_info;
@@ -329,20 +328,10 @@ void build_pg(struct Map_info *Map, int build)
     init_parts(&parts);
     G_zero(&fparts, sizeof(struct feat_parts));
     
-    /* get records */
-    sprintf(stmt, "SELECT %s,%s FROM %s.%s",
-	    pg_info->fid_column,
-	    pg_info->geom_column, pg_info->schema_name, pg_info->table_name);
-    G_debug(2, "SQL: %s", stmt);
-    pg_info->res = PQexec(pg_info->conn, stmt);
-    if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
-	PQclear(pg_info->res);
-	pg_info->res = NULL;
-	G_warning(_("Unable to get features:\n%s"),
-		  PQerrorMessage(pg_info->conn));
-	return; /* reading failed */
-    }
-
+    /* get all features */
+    if (set_initial_query(pg_info, TRUE) != 0)
+        return;
+    
     /* scan records */
     npoints = 0;
     nrecords = PQntuples(pg_info->res);
@@ -350,8 +339,8 @@ void build_pg(struct Map_info *Map, int build)
     G_message(_("Registering primitives..."));
     for (iFeature = 0; iFeature < nrecords; iFeature++) {
 	/* get feature id */
-	fid  = atoi(PQgetvalue(pg_info->res, iFeature, 0));
-	wkb_data = PQgetvalue(pg_info->res, iFeature, 1);
+	fid  = atoi(PQgetvalue(pg_info->res, iFeature, 1));
+	wkb_data = PQgetvalue(pg_info->res, iFeature, 0);
 	
 	G_progress(iFeature + 1, 1e4);
 
@@ -699,70 +688,35 @@ int Vect__build_sfa(struct Map_info *Map, int build)
     plus = &(Map->plus);
     
     /* check if upgrade or downgrade */
-    if (build < plus->built) { 
-	/* lower level request, currently only GV_BUILD_NONE */
-	if (plus->built >= GV_BUILD_CENTROIDS && build < GV_BUILD_CENTROIDS) {
-	    /* reset info about areas stored for centroids */
-	    for (line = 1; line <= plus->n_lines; line++) {
-		Line = plus->Line[line];
-		if (Line && Line->type == GV_CENTROID) {
-		    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
-		    topo->area = 0;
-		}
-	    }
-	    dig_free_plus_areas(plus);
-	    dig_spidx_free_areas(plus);
-	    dig_free_plus_isles(plus);
-	    dig_spidx_free_isles(plus);
-	}
-	
-	if (plus->built >= GV_BUILD_AREAS && build < GV_BUILD_AREAS) {
-	    /* reset info about areas stored for lines */
-	    for (line = 1; line <= plus->n_lines; line++) {
-		Line = plus->Line[line];
-		if (Line && Line->type == GV_BOUNDARY) {
-		    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
-		    topo->left = 0;
-		    topo->right = 0;
-		}
-	    }
-	    dig_free_plus_areas(plus);
-	    dig_spidx_free_areas(plus);
-	    dig_free_plus_isles(plus);
-	    dig_spidx_free_isles(plus);
-	}
-
-	if (plus->built >= GV_BUILD_BASE && build < GV_BUILD_BASE) {
-	    dig_free_plus_nodes(plus);
-	    dig_spidx_free_nodes(plus);
-	    dig_free_plus_lines(plus);
-	    dig_spidx_free_lines(plus);
-	}
+    if (build < plus->built) {
+        /* -> downgrade */
+        Vect__build_downgrade(Map, build);
+        return 1;
     }
-    else {
-	if (plus->built < GV_BUILD_BASE) {
-	    if (Map->format == GV_FORMAT_OGR ||
-		Map->format == GV_FORMAT_OGR_DIRECT) {
+    
+    /* -> upgrade */
+    if (plus->built < GV_BUILD_BASE) {
+        if (Map->format == GV_FORMAT_OGR ||
+            Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifdef HAVE_OGR
-		build_ogr(Map, build);
+            build_ogr(Map, build);
 #else
-		G_fatal_error(_("GRASS is not compiled with OGR support"));
+            G_fatal_error(_("GRASS is not compiled with OGR support"));
 #endif
-	    }
- 	    else if (Map->format == GV_FORMAT_POSTGIS) {
+        }
+        else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifdef HAVE_POSTGRES
-		build_pg(Map, build);
+            build_pg(Map, build);
 #else
-		G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+            G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
 #endif
-	    }
-	    else {
-		G_fatal_error(_("%s: Native format unsupported"),
-			      "Vect__build_sfa()");
-	    }
-	}
+        }
+        else {
+            G_fatal_error(_("%s: Native format unsupported"),
+                          "Vect__build_sfa()");
+        }
     }
-
+    
     plus->built = build;
     
     return 1;

@@ -821,7 +821,7 @@ dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
 }
 
 /*!
-   \brief Find box for area
+   \brief Find bounding box for given area
 
    \param Plus pointer to Plus_head structure
    \param[in,out] list list with area id and search box (in)/area box (out)
@@ -844,7 +844,7 @@ int dig_find_area_box(struct Plus_head *Plus, struct boxlist *list)
     G_debug(3, "dig_find_line_box()");
 
     if (list->n_values < 1)
-	G_fatal_error(_("No line id given"));
+	G_fatal_error(_("Unable to get area bounding box. No feature id given."));
 
     rect.boundary[0] = list->box[0].W;
     rect.boundary[1] = list->box[0].S;
@@ -858,7 +858,7 @@ int dig_find_area_box(struct Plus_head *Plus, struct boxlist *list)
     else
 	ret = rtree_search(Plus->Area_spidx, &rect, (void *)_set_item_box, list, Plus);
 
-    return (ret);
+    return ret;
 }
 
 /*! 
