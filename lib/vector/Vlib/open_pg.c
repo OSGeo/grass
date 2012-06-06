@@ -38,7 +38,7 @@ static int check_schema(const struct Format_info_pg *);
 static int create_table(struct Format_info_pg *, const struct field_info *);
 static void connect_db(struct Format_info_pg *);
 static int check_topo(struct Format_info_pg *, struct Plus_head *);
-static int parse_bbox(const char *, struct bound_box *, int);
+static int parse_bbox(const char *, struct bound_box *);
 static int num_of_records(const struct Format_info_pg *, const char *);
 static int read_p_node(struct Plus_head *, int, int, struct Format_info_pg *);
 static int read_p_line(struct Plus_head *, int, const struct edge_data *);
@@ -68,6 +68,8 @@ int V1_open_old_pg(struct Map_info *Map, int update)
 
     struct Format_info_pg *pg_info;
 
+    G_debug(2, "V1_open_old_pg(): update = %d", update);
+    
     pg_info = &(Map->fInfo.pg);
     if (!pg_info->conninfo) {
         G_warning(_("Connection string not defined"));
@@ -151,14 +153,21 @@ int V1_open_old_pg(struct Map_info *Map, int update)
 int V2_open_old_pg(struct Map_info *Map)
 {
 #ifdef HAVE_POSTGRES
-
+    struct Format_info_pg *pg_info;
+    
     G_debug(3, "V2_open_old_pg(): name = %s mapset = %s", Map->name,
             Map->mapset);
 
-    if (Vect_open_fidx(Map, &(Map->fInfo.pg.offset)) != 0) {
+    pg_info = &(Map->fInfo.pg);
+    
+    if (pg_info->toposchema_name)
+        /* no fidx file needed for PostGIS topology access */
+        return 0;
+    
+    if (Vect_open_fidx(Map, &(pg_info->offset)) != 0) {
         G_warning(_("Unable to open feature index file for vector map <%s>"),
                   Vect_get_full_name(Map));
-        G_zero(&(Map->fInfo.pg.offset), sizeof(struct Format_info_offset));
+        G_zero(&(pg_info->offset), sizeof(struct Format_info_offset));
     }
 
     return 0;
@@ -189,6 +198,8 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
     struct Format_info_pg *pg_info;
 
     PGresult *res;
+
+    G_debug(2, "V1_open_new_pg(): name = %s with_z = %d", name, with_z);
 
     pg_info = &(Map->fInfo.pg);
     if (!pg_info->conninfo) {
@@ -851,7 +862,7 @@ int check_topo(struct Format_info_pg *pg_info, struct Plus_head *plus)
   \return 0 on success
   \return -1 on error
 */
-int parse_bbox(const char *value, struct bound_box *bbox, int with_z)
+int parse_bbox(const char *value, struct bound_box *bbox)
 {
     unsigned int i;
     size_t length, prefix_length;
@@ -1219,7 +1230,7 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
             PQclear(res);
         return -1;
     }
-    if (parse_bbox(PQgetvalue(res, 0, 0), &(plus->box), plus->with_z) != 0) {
+    if (parse_bbox(PQgetvalue(res, 0, 0), &(plus->box)) != 0) {
         G_warning(_("Unable to parse map bounding box:\n%s"),
                   PQgetvalue(res, 0, 0));
         return -1;
