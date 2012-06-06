@@ -7,12 +7,11 @@
  *               
  * PURPOSE:      Build topology
  *               
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001, 2012 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 
@@ -114,17 +113,15 @@ int main(int argc, char *argv[])
 	    }
 	}
 	Vect_set_open_level(1);
-	if (Vect_open_old(&Map, map_opt->answer, G_mapset()) < 0) {
-	    G_fatal_error(_("Unable to build topology for <%s>"),
-			  map_opt->answer);
-	}
+	Vect_open_old(&Map, map_opt->answer, G_mapset());
+        
 	Vect_build(&Map);
     }
     /* dump topology */
     if (dump || sdump || cdump || fdump) {
 	if (!build) {
 	    Vect_set_open_level(2);
-	    Vect_open_old(&Map, map_opt->answer, G_mapset());
+	    Vect_open_old(&Map, map_opt->answer, "");
 	}
 	if (dump)
 	    Vect_topo_dump(&Map, stdout);
