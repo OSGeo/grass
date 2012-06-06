@@ -25,6 +25,10 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+/* PG-related defines */
+#define FID_COLUMN "fid"
+#define GEOMETRY_COLUMN "geom"
+
 /*
   \brief Number of levels
 
@@ -808,7 +812,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
                 if (p)
                     pg_info->fid_column = G_store(p);
                 else
-                    pg_info->fid_column = G_store("ogc_fid");
+                    pg_info->fid_column = G_store(FID_COLUMN);
                 G_debug(1, "PG: fid_column = '%s'", pg_info->fid_column);
                 
                 /* geometry column (default: wkb_geometry) */
@@ -816,7 +820,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
                 if (p)
                     pg_info->geom_column = G_store(p);
                 else
-                    pg_info->geom_column = G_store("wkb_geometry");
+                    pg_info->geom_column = G_store(GEOMETRY_COLUMN);
                 G_debug(1, "PG: geom_column = '%s'", pg_info->geom_column);
                 
                 /* table name */
