@@ -1,9 +1,52 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.external.out</em> instructs GRASS to write vector maps in
-external data format (e.g. ESRI Shapefile) using <em>OGR
-library</em>. PostGIS data can be also written by
-built-in <em>GRASS-PostGIS data driver</em>.
+external data format (e.g. ESRI Shapefile, Mapinfo, and others)
+using <a href="http://gdal.org/ogr">OGR library</a>. PostGIS data can
+be also written by built-in <em>GRASS-PostGIS data driver</em>.
+
+<h2>NOTES</h2>
+
+Number of available output formats (<tt>v.external.out -f</tt>)
+depends on OGR installation, 'PostgreSQL' format is presented also
+when GRASS comes with PostgreSQL support. For 'PostgreSQL' format
+GRASS uses native GRASS-PostGIS data driver to store geometry and
+attribute data directly in the database without using OGR
+library. This can be changed by <tt>GRASS_VECTOR_OGR</tt>
+environmental variable which forces GRASS to use PostgreSQL driver
+from OGR library. GRASS-OGR data driver is used for writing PostGIS
+data also when GRASS installation comes with no PostgreSQL support
+(check for '--with-postgres' in <tt>g.version -b</tt>).
+
+<p>
+Creation <b>options</b> refer to the given output format selected
+by <b>format</b> option. See list of available creation options
+at <a href="http://www.gdal.org/ogr/ogr_formats.html">OGR formats
+specification page</a>, example
+for <a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI
+Shapefile</a>
+or <a href="http://www.gdal.org/ogr/drv_pg.html">PostgreSQL/PostGIS</a>
+format (section &quot;Layer Creation Options&quot;).
+
+<p>
+Note that built-in <em>GRASS-PostGIS data driver</em> supports a limited
+number of creation <b>options</b> compared to PostgreSQL/PostGIS
+driver in OGR library:
+<ul>
+  <li><tt>SCHEMA=&lt;name&gt;</tt> - name of schema where to create
+  feature tables. If schema doesn't exists, it's automatically created
+  when writting PostGIS data.</li>
+  <li><tt>FID=&lt;column&gt;</tt> - name of column which will be used as
+  primary key (feature id), default: <tt>fid</tt></li>
+  <li><tt>GEOMETRY_NAME=&lt;column&gt;</tt> name of column which will
+  be used for storing geometry data in feature table, default: <tt>geom</tt></li>
+  <li><tt>SPATIAL_INDEX=ON|OFF</tt> - enable/disable spatial index on geometry column, default: ON</li>
+  <li><tt>PRIMARY_KEY=ON|OFF</tt> - enable/disable primary key on FID column, default: ON</li>    
+</ul>
+
+<p>
+Creation <b>options</b> are comma-separated pairs
+(<tt>key=value</tt>), the options are case-insensitive.
 
 <h2>EXAMPLES</h2>
 
@@ -25,7 +68,7 @@ v.external.out dsn=$HOME/gisoutput
 v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
 </pre></div>
 
-Current settings can be printed using <tt>-p</tt> or <tt>-g</tt> flag.
+Current settings can be printed using <b>-p</b> or <b>-g</b> flag.
 
 <div class="code"><pre>
 v.external.out -p
@@ -37,14 +80,13 @@ format: ESRI Shapefile
 <h3>PostGIS</h3>
 
 PostGIS data can be accessed directly using <em>GRASS-PostGIS data
-driver</em> (it requires that GRASS is compiled with PostgreSQL
-support).
+driver</em> (GRASS must be compiled with PostgreSQL support).
 
 <div class="code"><pre>
 # register PostGIS table in GRASS mapset:
 v.external dsn=PG:dbname=gisdb layer=cities
 
-# define output directory for GRASS calculation results:
+# define output PostGIS database for GRASS calculation results:
 v.external.out dsn=PG:dbname=gisdb format=PostgreSQL
 
 # do some processing...
@@ -64,7 +106,10 @@ v.external.out -r
 
 <h2>REFERENCES</h2>
 
-<a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation
+<ul>
+  <li><a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation</li>
+  <li><a href="http://www.postgresql.org/docs/9.1/static/libpq.html">libpq - C Library</a></li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
