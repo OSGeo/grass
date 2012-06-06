@@ -793,8 +793,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	G_verbose_message(_("Topology was built"));
     }
 
-    if (Map->level == 1)
-        Map->level = LEVEL_2;
+    Map->level = LEVEL_2;
     plus->mode = GV_MODE_WRITE;
 
     if (build == GV_BUILD_ALL) {

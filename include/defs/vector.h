@@ -503,7 +503,7 @@ int V2_read_line_nat(struct Map_info *, struct line_pnts *,
                      struct line_cats *, int);
 int V2_read_line_sfa(struct Map_info *, struct line_pnts *,
                      struct line_cats *, int);
-int V3_read_line_pg(struct Map_info *, struct line_pnts *,
+int V2_read_line_pg(struct Map_info *, struct line_pnts *,
                     struct line_cats *, int);
 int V1_read_next_line_nat(struct Map_info *, struct line_pnts *,
                           struct line_cats *);
@@ -516,8 +516,6 @@ int V2_read_next_line_nat(struct Map_info *, struct line_pnts *,
 int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
                           struct line_cats *);
 int V2_read_next_line_pg(struct Map_info *, struct line_pnts *,
-                         struct line_cats *);
-int V3_read_next_line_pg(struct Map_info *, struct line_pnts *,
                          struct line_cats *);
 int V1_delete_line_nat(struct Map_info *, off_t);
 int V1_delete_line_ogr(struct Map_info *, off_t);

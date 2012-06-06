@@ -32,18 +32,13 @@
 /*
   \brief Number of levels
 
-  Native format:
    - 1 without topology
-   - 2 with topology
-  OGR-links:
-   - 1 without topology
-   - 2 with pseudo-topology (simple features access)
-  PG-links:
-   - 1 without topology
-   - 2 with pseudo-topology (simple features access)
-   - 3 with topology (PostGIS Topology access)
+   - 2 with 2D topology
+
+   \todo Implement
+   - 3 with 3D topology
 */
-#define MAX_OPEN_LEVEL 3
+#define MAX_OPEN_LEVEL 2
 
 static int open_old_dummy()
 {
@@ -320,9 +315,6 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
                               Vect_get_full_name(Map));
             }
         }
-        else {
-            level = 3; /* PostGIS topology available */
-        }
 
         /* open spatial index */
         if (level >= 2) {
@@ -528,8 +520,7 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
         if (access(file_path, F_OK) == 0)       /* cidx file exists? */
             unlink(file_path);
 
-        if (format == GV_FORMAT_OGR ||
-            (format == GV_FORMAT_POSTGIS && level == 2)) {
+        if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
             G_file_name(file_path, buf, GV_FIDX_ELEMENT, G_mapset());
             if (access(file_path, F_OK) == 0)   /* fidx file exists? */
                 unlink(file_path);
