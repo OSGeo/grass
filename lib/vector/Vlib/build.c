@@ -957,6 +957,13 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
     plus = &(Map->plus);
     
     fprintf(out, "---------- TOPOLOGY DUMP ----------\n");
+    if (Map->format == GV_FORMAT_NATIVE)
+        fprintf(out, "-------------- NATIVE -------------\n");
+    else if (Map->format == GV_FORMAT_POSTGIS &&
+             Map->fInfo.pg.toposchema_name)
+        fprintf(out, "------------- POSTGIS -------------\n");
+    else
+        fprintf(out, "-------------- PSEUDO -------------\n");
     
     /* box */
     Vect_box_copy(&box, &(plus->box));
