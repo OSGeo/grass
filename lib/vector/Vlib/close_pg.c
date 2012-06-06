@@ -14,6 +14,7 @@
  */
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
@@ -109,9 +110,24 @@ int V2_close_pg(struct Map_info *Map)
     if (!VECT_OPEN(Map))
         return -1;
 
-    if (Map->fInfo.pg.toposchema_name) /* no fidx file for PostGIS topology */
+    if (Map->fInfo.pg.toposchema_name) {
+        /* no fidx file for PostGIS topology
+           
+           remove topo file (which was required for saving sidx file)
+        */
+        char buf[GPATH_MAX];
+        char file_path[GPATH_MAX];
+        
+        /* delete old support files if available */
+        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+        
+        G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
+        if (access(file_path, F_OK) == 0) /* file exists? */
+            unlink(file_path);
+        
         return 0;
-
+    }
+    
     /* write fidx for maps in the current mapset */
     if (Vect_save_fidx(Map, &(Map->fInfo.pg.offset)) != 1)
         G_warning(_("Unable to save feature index file for vector map <%s>"),
