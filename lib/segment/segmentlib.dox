@@ -393,9 +393,11 @@ Performance of the <I>Segment Library</I> routines can be improved by
 about 10% if <B>srows, scols</B> are each powers of 2; in this case a
 faster alternative is used to access the segment file. An additional
 improvement can be achieved if <B>len</B> is also a power of 2. For
-highly random and scattered access to a large dataset, smaller segments,
-i.e. values for <B>srows, scols</B> of 32, 64, or 128 seem to provide
-better performance than e.g. srows = nrows / 4 + 1.
+scattered access to a large dataset, smaller segments, i.e. values 
+for <B>srows, scols</B> of 32, 64, or 128 seem to provide
+the best performance. Calculating segment size as a fraction of the 
+data matrix size, e.g. srows = nrows / 4 + 1, will result in very poor 
+performance, particularly for larger datasets.
 
 \section Loading_the_Segment_Library Loading the Segment Library
 
