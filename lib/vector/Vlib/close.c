@@ -60,6 +60,8 @@ static int (*Close_array[][2]) () = {
 #endif
 };
 
+static void unlink_file(const struct Map_info *, const char *);
+
 /*!
    \brief Close vector map
 
@@ -80,29 +82,15 @@ int Vect_close(struct Map_info *Map)
     if (strcmp(Map->mapset, G_mapset()) == 0 &&
 	Map->support_updated &&
 	Map->plus.built == GV_BUILD_ALL) {
-	char buf[GPATH_MAX];
-	char file_path[GPATH_MAX];
 
-	/* delete old support files if available */
-	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+        unlink_file(Map, GV_TOPO_ELEMENT); /* topo */
 
-	G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
-	if (access(file_path, F_OK) == 0)	/* file exists? */
-	    unlink(file_path);
+	unlink_file(Map, GV_SIDX_ELEMENT); /* sidx */
 
-	G_file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
-	if (access(file_path, F_OK) == 0)	/* file exists? */
-	    unlink(file_path);
+	unlink_file(Map, GV_CIDX_ELEMENT); /* cidx */
 
-	G_file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
-	if (access(file_path, F_OK) == 0)	/* file exists? */
-	    unlink(file_path);
-
-	if (Map->format == GV_FORMAT_OGR ||
-	    Map->format == GV_FORMAT_POSTGIS) {
-	    G_file_name(file_path, buf, GV_FIDX_ELEMENT, G_mapset());
-	    if (access(file_path, F_OK) == 0)	/* file exists? */
-		unlink(file_path);
+	if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_POSTGIS) {
+	    unlink_file(Map, GV_FIDX_ELEMENT); /* fidx */
 	}
 	
 	Vect_coor_info(Map, &CInfo);
@@ -113,7 +101,7 @@ int Vect_close(struct Map_info *Map)
         Vect_save_topo(Map);
         
 	/* write out sidx file */
-	Map->plus.Spidx_new = TRUE;
+	Map->plus.Spidx_new = TRUE; /* force writing */
 	Vect_save_sidx(Map);
 
 	/* write out cidx file */
@@ -170,4 +158,17 @@ int Vect_close(struct Map_info *Map)
     Map->open = VECT_CLOSED_CODE;
 
     return 0;
+}
+
+void unlink_file(const struct Map_info *Map, const char *name)
+{
+    char buf[GPATH_MAX];
+    char file_path[GPATH_MAX];
+
+    /* delete old support files if available */
+    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+
+    G_file_name(file_path, buf, name, G_mapset());
+    if (access(file_path, F_OK) == 0) /* file exists? */
+        unlink(file_path);
 }
