@@ -122,8 +122,8 @@ int Vect_close(struct Map_info *Map)
 	/* write out fidx file */
 	if (Map->format == GV_FORMAT_OGR)
 	    V2_close_ogr(Map);
-	else if (Map->format == GV_FORMAT_POSTGIS && Map->level == 2)
-	    V2_close_pg(Map);
+	else if (Map->format == GV_FORMAT_POSTGIS)
+            V2_close_pg(Map);
     }
     else {
 	/* spatial index must also be closed when opened with topo but

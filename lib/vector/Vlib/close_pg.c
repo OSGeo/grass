@@ -109,6 +109,9 @@ int V2_close_pg(struct Map_info *Map)
     if (!VECT_OPEN(Map))
         return -1;
 
+    if (Map->fInfo.pg.toposchema_name) /* no fidx file for PostGIS topology */
+        return 0;
+
     /* write fidx for maps in the current mapset */
     if (Vect_save_fidx(Map, &(Map->fInfo.pg.offset)) != 1)
         G_warning(_("Unable to save feature index file for vector map <%s>"),

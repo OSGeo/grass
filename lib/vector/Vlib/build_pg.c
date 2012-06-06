@@ -145,7 +145,6 @@ int build_topo(struct Map_info *Map, int build)
     }
     
     plus->built = build;
-    Map->level = 3;
     
     return 1;
 }

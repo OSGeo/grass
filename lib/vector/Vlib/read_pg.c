@@ -201,28 +201,6 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 }
 
 /*!
-   \brief Read next feature from PostGIS layer on topological level
-   (PostGIS topology access).
-
-   This function implements sequential access.
-
-   \param Map pointer to Map_info structure
-   \param[out] line_p container used to store line points within
-   (pointer to line_pnts struct)
-   \param[out] line_c container used to store line categories within
-   (pointer to line_cats struct)
-
-   \return feature type
-   \return -2 no more features (EOF)
-   \return -1 on failure
- */
-int V3_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-                         struct line_cats *line_c)
-{
-    return V2_read_next_line_pg(Map, line_p, line_c);
-}
-
-/*!
    \brief Read feature from PostGIS layer at given offset (level 1 without topology)
 
    This function implements random access on level 1.
@@ -305,7 +283,7 @@ int V1_read_line_pg(struct Map_info *Map,
 #endif
 }
 
-int V3_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
+int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
                     struct line_cats *line_c, int line)
 {
 #ifdef HAVE_POSTGRES
@@ -322,7 +300,7 @@ int V3_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         return -1;
     }
     
-    G_debug(4, "V3_read_line_pg() line = %d type = %d offset = %lu",
+    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %lu",
             line, Line->type, Line->offset);
     
     if (!line_p && !line_c)
