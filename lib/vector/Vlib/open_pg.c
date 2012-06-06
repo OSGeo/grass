@@ -44,6 +44,7 @@ static int read_p_node(struct Plus_head *, int, int, struct Format_info_pg *);
 static int read_p_line(struct Plus_head *, int, const struct edge_data *);
 static int read_p_area(struct Plus_head *, int, int, struct Format_info_pg *);
 static int load_plus_head(struct Format_info_pg *, struct Plus_head *);
+static void notice_processor(void *, const char *);
 #endif
 
 /*!
@@ -216,13 +217,8 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
             pg_info->conninfo, pg_info->table_name);
 
     /* connect database */
-    pg_info->conn = PQconnectdb(pg_info->conninfo);
-    G_debug(2, "   PQconnectdb(): %s", pg_info->conninfo);
-    if (PQstatus(pg_info->conn) == CONNECTION_BAD)
-        G_fatal_error("%s\n%s",
-                      _("Connection ton PostgreSQL database failed."),
-                      PQerrorMessage(pg_info->conn));
-
+    connect_db(pg_info);
+    
     /* get DB name */
     pg_info->db_name = G_store(PQdb(pg_info->conn));
     if (!pg_info->db_name) {
@@ -763,6 +759,8 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 
     /* create index ? */
     if (spatial_index) {
+        G_verbose_message(_("Building spatial index on <%s>..."),
+                          pg_info->geom_column);
         sprintf(stmt,
                 "CREATE INDEX %s_%s_idx ON \"%s\".\"%s\" USING GIST (%s)",
                 pg_info->table_name, pg_info->geom_column,
@@ -797,6 +795,10 @@ void connect_db(struct Format_info_pg *pg_info)
         G_fatal_error("%s\n%s",
                       _("Connection ton PostgreSQL database failed."),
                       PQerrorMessage(pg_info->conn));
+    
+    /* print notice messages only on verbose level */
+    PQsetNoticeProcessor(pg_info->conn, notice_processor, NULL);
+
 }
 
 /*!
@@ -1444,5 +1446,17 @@ int load_plus(struct Format_info_pg *pg_info, struct Plus_head *plus,
     /* read isle (GRASS Topo) */
 
     return 0;
+}
+
+/*
+  \brief PostgreSQL notice processor
+
+  Print out NOTICE message only on verbose level
+*/
+void notice_processor(void *arg, const char *message)
+{
+    if (G_verbose() > G_verbose_std()) {
+        fprintf(stderr, "%s", message);
+    }
 }
 #endif
