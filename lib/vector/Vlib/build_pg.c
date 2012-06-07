@@ -5,8 +5,6 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   \todo Implement build_topo()
-
    Line offset is
    - centroids   : FID
    - other types : index of the first record (which is FID) in offset array.
@@ -108,7 +106,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
 
 #ifdef HAVE_POSTGRES
 /*!
-  \brief Build based on PostGIS topology
+  \brief Build from PostGIS topology schema
 
   Currently only GV_BUILD_ALL is supported
 
@@ -120,10 +118,8 @@ int Vect_build_pg(struct Map_info *Map, int build)
 */
 int build_topo(struct Map_info *Map, int build)
 {
-    struct Format_info_pg *pg_info;
     struct Plus_head *plus;
     
-    pg_info = &(Map->fInfo.pg);
     plus = &(Map->plus);
     
     /* check if upgrade or downgrade */
@@ -140,7 +136,7 @@ int build_topo(struct Map_info *Map, int build)
     }
     
     if (plus->built < GV_BUILD_BASE) {
-        if (load_plus(pg_info, plus, FALSE) != 0)
+        if (load_plus(Map, FALSE) != 0)
             return 0;
     }
     

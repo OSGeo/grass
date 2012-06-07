@@ -56,15 +56,14 @@ static int (*Build_array[]) () = {
    \param iline line id
    \param side side (GV_LEFT or GV_RIGHT)
 
-   \return > 0 number of area
-   \return < 0 number of isle
+   \return > 0 area id
+   \return < 0 isle id
    \return 0 not created (may also already exist)
  */
 int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 {
     int j, area, isle, n_lines, line, direction;
-    static int first = 1;
-    off_t offset;
+    static int first = TRUE;
     struct Plus_head *plus;
     struct P_line *BLine;
     static struct line_pnts *Points, *APoints;
@@ -79,15 +78,15 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     if (first) {
 	Points = Vect_new_line_struct();
 	APoints = Vect_new_line_struct();
-	first = 0;
+	first = FALSE;
     }
 
     area = dig_line_get_area(plus, iline, side);
     if (area != 0) {
-	G_debug(3, "  area/isle = %d -> skip", area);
-	return 0;
+        G_debug(3, "  area/isle = %d -> skip", area);
+        return 0;
     }
-
+    
     n_lines = dig_build_area_with_line(plus, iline, side, &lines);
     G_debug(3, "  n_lines = %d", n_lines);
     if (n_lines < 1) {
@@ -99,9 +98,8 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     for (j = 0; j < n_lines; j++) {
 	line = abs(lines[j]);
 	BLine = plus->Line[line];
-	offset = BLine->offset;
 	G_debug(3, "  line[%d] = %d, offset = %lu", j, line,
-		(unsigned long)offset);
+		(unsigned long) BLine->offset);
 	Vect_read_line(Map, Points, NULL, line);
 	if (lines[j] > 0)
 	    direction = GV_FORWARD;
