@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 	mon = G__getenv("MONITOR");
 	if (mon) {
 	    if (selected_flag->answer) {
-		G_message(_("Currently selected monitor:"));
+		G_verbose_message(_("Currently selected monitor:"));
 		fprintf(stdout, "%s\n", mon);
 	    }
 	    else if (cmd_flag->answer) {
