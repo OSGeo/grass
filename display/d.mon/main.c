@@ -4,7 +4,7 @@
  * MODULE:       d.mon
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Controls graphics monitors for CLI
- * COPYRIGHT:    (C) 2011 by Martin Landa, and the GRASS Development Team
+ * COPYRIGHT:    (C) 2011-2012 by Martin Landa, and the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("graphics"));
     G_add_keyword(_("monitors"));
     G_add_keyword(_("CLI"));
-    module->description = _("Controls graphics display monitors which can be controlled from the command line.");
+    module->description = _("Controls graphics display monitors from the command line.");
     
     start_opt = G_define_option();
     start_opt->key = "start";
