@@ -1261,7 +1261,8 @@ int load_plus(struct Map_info *Map, int head_only)
     
     struct Format_info_pg *pg_info;
     struct Plus_head *plus;
-    struct P_line *Line;
+    struct P_line *line;
+    struct P_area *area;
     
     PGresult *res;
   
@@ -1366,9 +1367,9 @@ int load_plus(struct Map_info *Map, int head_only)
         line_data.right_face = atoi(PQgetvalue(res, i, 4));
         
         id = plus->n_plines + i + 1; /* points already registered */
-        Line = read_p_line(plus, id, &line_data);
+        line = read_p_line(plus, id, &line_data);
         if (line_data.left_face != 0 || line_data.right_face != 0) {
-            /* boundary detected -> build area on left and right*/
+            /* boundary detected -> build area/isle on left and right*/
             
             int s, side;
             for (s = 0; s < 2; s++) {
@@ -1382,7 +1383,7 @@ int load_plus(struct Map_info *Map, int head_only)
                 Vect_build_line_area(Map, id, side);
             }
         }
-        if (Line->type == GV_BOUNDARY) {
+        if (line->type == GV_BOUNDARY) {
             struct P_topo_b *topo;
 
             if (line_data.left_face == 0)
@@ -1390,7 +1391,7 @@ int load_plus(struct Map_info *Map, int head_only)
             if (line_data.right_face == 0)
                 line_data.right_face = -1;
             
-            topo = (struct P_topo_b *)Line->topo;
+            topo = (struct P_topo_b *)line->topo;
             if (topo->left != line_data.left_face)
                 G_warning(_("Left area detected as %d (should be %d"),
                           topo->left, line_data.left_face);
@@ -1401,6 +1402,16 @@ int load_plus(struct Map_info *Map, int head_only)
     }
     PQclear(res);
     
+    /* attach centroids */
+    G_zero(&line_data, sizeof(struct edge_data));
+    for (i = 1; i <= plus->n_areas; i++) {
+        area = plus->Area[i];
+        
+        line_data.id = plus->n_lines - plus->n_clines + i;
+        line_data.left_face = i;
+        read_p_line(plus, line_data.id, &line_data);
+        area->centroid = line_data.id;
+    }
     return 0;
 }
 
