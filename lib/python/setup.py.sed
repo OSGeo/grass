@@ -13,7 +13,7 @@ grass.init()
 ...
 @endcode
 
-(C) 2010-2011 by the GRASS Development Team
+(C) 2010-2012 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -22,6 +22,7 @@ for details.
 """
 
 import os
+import sys
 import tempfile as tmpfile
 
 def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
@@ -36,11 +37,16 @@ def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
     @param mapset   mapset within given location (default: 'PERMANENT')
     @return path to gisrc file
     """
-    os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'bin') + \
-        os.pathsep + os.path.join(gisbase, 'scripts')
+    # define PATH
+    os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'bin')
+    os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'scripts')
+    if sys.platform.startswith('win'): # added for winGRASS
+         os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'extralib')
+         os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'msys', 'bin')
+    # define LD_LIBRARY_PATH
     if '@LD_LIBRARY_PATH_VAR@' not in os.environ:
         os.environ['@LD_LIBRARY_PATH_VAR@'] = ''
-    os.environ['@LD_LIBRARY_PATH_VAR@'] += os.path.join(gisbase, 'lib')
+    os.environ['@LD_LIBRARY_PATH_VAR@'] += os.pathsep + os.path.join(gisbase, 'lib')
     
     os.environ['GIS_LOCK'] = str(os.getpid())
     
@@ -48,9 +54,9 @@ def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
     path = os.getenv('PYTHONPATH')
     dir  = os.path.join(gisbase, 'etc', 'python')
     if path:
-	path = dir + os.pathsep + path
+        path = dir + os.pathsep + path
     else:
-	path = dir
+        path = dir
     os.environ['PYTHONPATH'] = path
     
     if not dbase:
