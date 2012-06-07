@@ -40,9 +40,8 @@ static void connect_db(struct Format_info_pg *);
 static int check_topo(struct Format_info_pg *, struct Plus_head *);
 static int parse_bbox(const char *, struct bound_box *);
 static int num_of_records(const struct Format_info_pg *, const char *);
-static int read_p_node(struct Plus_head *, int, int, struct Format_info_pg *);
-static int read_p_line(struct Plus_head *, int, const struct edge_data *);
-static int read_p_area(struct Plus_head *, int, int, struct Format_info_pg *);
+static struct P_node *read_p_node(struct Plus_head *, int, int, struct Format_info_pg *);
+static struct P_line *read_p_line(struct Plus_head *, int, const struct edge_data *);
 static int load_plus_head(struct Format_info_pg *, struct Plus_head *);
 static void notice_processor(void *, const char *);
 #endif
@@ -401,6 +400,8 @@ int Vect_open_topo_pg(struct Map_info *Map, int head_only)
     struct Plus_head *plus;
     struct Format_info_pg *pg_info;
     
+    Map->open = VECT_OPEN_CODE; /* needed by load_plus */
+
     plus = &(Map->plus);
     pg_info = &(Map->fInfo.pg);
     
@@ -411,7 +412,7 @@ int Vect_open_topo_pg(struct Map_info *Map, int head_only)
     /* free and init plus structure */
     dig_init_plus(plus);
     
-    return load_plus(pg_info, plus, head_only);
+    return load_plus(Map, head_only);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -956,11 +957,11 @@ int num_of_records(const struct Format_info_pg *pg_info,
   \param id node id (table "node")
   \param pg_info pointer to Format_info_pg sttucture
 
-  \return 0 on success
-  \return -1 on failure
+  \return pointer to new P_node struct
+  \return NULL on error
 */
-int read_p_node(struct Plus_head *plus, int n, int id,
-                struct Format_info_pg *pg_info)
+struct P_node *read_p_node(struct Plus_head *plus, int n, int id,
+                           struct Format_info_pg *pg_info)
 {
     int i, cnt;
     char stmt[DB_SQL_MAX];
@@ -986,13 +987,13 @@ int read_p_node(struct Plus_head *plus, int n, int id,
         G_warning(_("Unable to read node %d"), id);
         if (res)
             PQclear(res);
-        return -1;
+        return NULL;
     }
     cnt = PQntuples(res);
     
     if (cnt == 0) { /* dead ??? */
         plus->Node[n] = NULL;
-        return 0;
+        return NULL;
     }
 
     node = dig_alloc_node();
@@ -1000,7 +1001,7 @@ int read_p_node(struct Plus_head *plus, int n, int id,
     G_debug(4, "read_p_node(): id = %d, n_lines = %d", id, cnt);
     
     if (dig_node_alloc_line(node, node->n_lines) == -1)
-        return -1;
+        return NULL;
 
     /* lines / angles */
     for (i = 0; i < node->n_lines; i++) {
@@ -1037,7 +1038,7 @@ int read_p_node(struct Plus_head *plus, int n, int id,
         G_warning(_("Unable to read node %d"), id);
         if (res)
             PQclear(res);
-        return -1;
+        return NULL;
     }
     node->x = atof(PQgetvalue(res, 0, 0));
     node->y = atof(PQgetvalue(res, 0, 1));
@@ -1049,7 +1050,7 @@ int read_p_node(struct Plus_head *plus, int n, int id,
 
     plus->Node[n] = node;
     
-    return 0;
+    return node;
 }
 
 /*!
@@ -1067,11 +1068,11 @@ int read_p_node(struct Plus_head *plus, int n, int id,
   \param data edge data (id, start/end node, left/right face, ...)
   \param pg_info pointer to Format_info_pg sttucture
 
-  \return 0 on success
-  \return -1 on failure
+  \return pointer to P_line struct
+  \return NULL on error
 */
-int read_p_line(struct Plus_head *plus, int n,
-                const struct edge_data *data)
+struct P_line *read_p_line(struct Plus_head *plus, int n,
+                           const struct edge_data *data)
 {
     int tp;
     struct P_line *line;
@@ -1091,7 +1092,7 @@ int read_p_line(struct Plus_head *plus, int n,
     
     if (tp == 0) { /* dead ??? */
         plus->Line[n] = NULL;
-        return 0;
+        return NULL;
     }
 
     line = dig_alloc_line();
@@ -1121,8 +1122,10 @@ int read_p_line(struct Plus_head *plus, int n,
             
             topo->N1    = data->start_node;
             topo->N2    = data->end_node;
-            topo->left  = data->left_face == 0 ? -1 : data->left_face;
-            topo->right = data->right_face == 0 ? -1 : data->right_face;
+
+            /* skip left/right area - will be detected when building
+               areas/isles */
+            topo->left = topo->right = 0;
         }
         /* centroids */
         else if (line->type == GV_CENTROID) {
@@ -1135,72 +1138,7 @@ int read_p_line(struct Plus_head *plus, int n,
 
     plus->Line[n] = line;
     
-    return 0;
-}
-
-/*!
-  \brief Read P_area structure
-  
-  See dig_Rd_P_area() for reference.
-  
-  \param plus pointer to Plus_head structure
-  \param n index (starts at 1)
-  \param face_id face id (see 'face' table)
-  \param pg_info pointer to Format_info_pg sttucture
-
-  \return 0 on success
-  \return -1 on failure
-*/
-int read_p_area(struct Plus_head *plus, int n, int face_id, struct Format_info_pg *pg_info)
-{
-    int i, cnt;
-    char stmt[DB_SQL_MAX];
-
-    PGresult *res;
-    struct P_area *area;
-
-    sprintf(stmt,
-            "SELECT edge from ST_GetFaceEdges('%s', %d)",
-            pg_info->toposchema_name, face_id);
-    G_debug(2, "SQL: %s", stmt);
-    res = PQexec(pg_info->conn, stmt);
-    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-        G_warning(_("Unable to read face %d"), face_id);
-        if (res)
-            PQclear(res);
-        return -1;
-    }
-    
-    cnt = PQntuples(res);
-    if (cnt == 0) { /* dead */
-        plus->Area[n] = NULL;
-        return 0;
-    }
-    
-    area = dig_alloc_area();
-
-    /* boundaries */
-    area->n_lines = cnt;
-    if (dig_area_alloc_line(area, area->n_lines) == -1)
-        return -1;
-    area->lines = (plus_t *)G_realloc(area->lines, sizeof(plus_t) * area->n_lines);
-    for (i = 0; i < area->n_lines; i++) {
-        /* GRASS   Topo model: lines in clockwise order
-           PosTGIS Topo model: lines in counter clockwise order */
-        area->lines[i] = -1 * atoi(PQgetvalue(res, i, 0));
-    }
-
-    /* isles */
-    /* TODO */
-
-    /* centroid */
-    area->centroid = plus->n_lines - plus->n_clines + i;
-    
-    plus->Area[n] = area;
-    
-    PQclear(res);
-    
-    return 0;
+    return line;
 }
 
 /*!
@@ -1256,12 +1194,13 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
     /* + isolated nodes as points
        + centroids */
     plus->n_lines = num_of_records(pg_info, stmt); 
-    /* areas (faces in PostGIS Topology model) */
+    /* areas (faces in PostGIS Topology model)
     sprintf(stmt,
             "SELECT COUNT(*) FROM \"%s\".face WHERE mbr IS NOT NULL",
             pg_info->toposchema_name);
     plus->n_areas = num_of_records(pg_info, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_areas=%d", plus->n_areas);
+    */
     /* TODO: n_isles | n_volumes | n_holes */
     
     /* number of features group by type */
@@ -1314,15 +1253,21 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
   \return 0 on success
   \return -1 on error
 */
-int load_plus(struct Format_info_pg *pg_info, struct Plus_head *plus,
-              int head_only)
+int load_plus(struct Map_info *Map, int head_only)
 {
     int i, id, ntuples;
     char stmt[DB_SQL_MAX];
     struct edge_data line_data;
     
+    struct Format_info_pg *pg_info;
+    struct Plus_head *plus;
+    struct P_line *Line;
+    
     PGresult *res;
   
+    pg_info = &(Map->fInfo.pg);
+    plus = &(Map->plus);
+
     if (load_plus_head(pg_info, plus) != 0)
         return -1;
 
@@ -1364,7 +1309,9 @@ int load_plus(struct Format_info_pg *pg_info, struct Plus_head *plus,
     G_debug(3, "load_plus(): n_lines = %d", plus->n_lines);
     dig_alloc_lines(plus, plus->n_lines); 
     
-    /* read PostGIS Topo standalone nodes */
+    /* read PostGIS Topo standalone nodes
+       -> points
+    */
     sprintf(stmt,
             "SELECT node_id FROM \"%s\".node WHERE node_id NOT IN "
             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
@@ -1391,7 +1338,10 @@ int load_plus(struct Format_info_pg *pg_info, struct Plus_head *plus,
     }
     PQclear(res);
     
-    /* read PostGIS Topo edges */
+    /* read PostGIS Topo edges
+       -> lines
+       -> boundaries
+    */
     sprintf(stmt,
             "SELECT edge_id,start_node,end_node,left_face,right_face "
             "FROM \"%s\".edge",
@@ -1414,37 +1364,43 @@ int load_plus(struct Format_info_pg *pg_info, struct Plus_head *plus,
         line_data.end_node   = atoi(PQgetvalue(res, i, 2));
         line_data.left_face  = atoi(PQgetvalue(res, i, 3));
         line_data.right_face = atoi(PQgetvalue(res, i, 4));
-        read_p_line(plus, plus->n_plines + i + 1, &line_data);
-    }
-    PQclear(res);
-    
-    /* read areas (GRASS Topo) */
-    sprintf(stmt,
-            "SELECT face_id from \"%s\".face WHERE mbr IS NOT NULL",
-            pg_info->toposchema_name);
-    G_debug(2, "SQL: %s", stmt);
-    res = PQexec(pg_info->conn, stmt);
-    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-        PQntuples(res) != plus->n_areas) {
-        G_warning(_("Unable to read areas"));
-        if (res)
-            PQclear(res);
-        return -1;
-    }
-    
-    G_debug(3, "load_plus(): n_areas = %d", plus->n_areas);
-    dig_alloc_areas(plus, plus->n_areas);
-    G_zero(&line_data, sizeof(struct edge_data));
-    for (i = 1; i <= plus->n_areas; i++) {
-        line_data.id = line_data.left_face = atoi(PQgetvalue(res, i - 1, 0));
-        read_p_area(plus, i, line_data.id, pg_info);
-        /* add centroids */
-        read_p_line(plus, plus->n_lines - plus->n_clines + i, &line_data);
-    }
-    PQclear(res);
-    
-    /* read isle (GRASS Topo) */
+        
+        id = plus->n_plines + i + 1; /* points already registered */
+        Line = read_p_line(plus, id, &line_data);
+        if (line_data.left_face != 0 || line_data.right_face != 0) {
+            /* boundary detected -> build area on left and right*/
+            
+            int s, side;
+            for (s = 0; s < 2; s++) {
+                if (s == 0)
+                    side = GV_LEFT;
+                else
+                    side = GV_RIGHT;
+                
+                G_debug(3, "Build area for line = %d, side = %d",
+                        id, side);
+                Vect_build_line_area(Map, id, side);
+            }
+        }
+        if (Line->type == GV_BOUNDARY) {
+            struct P_topo_b *topo;
 
+            if (line_data.left_face == 0)
+                line_data.left_face = -1;
+            if (line_data.right_face == 0)
+                line_data.right_face = -1;
+            
+            topo = (struct P_topo_b *)Line->topo;
+            if (topo->left != line_data.left_face)
+                G_warning(_("Left area detected as %d (should be %d"),
+                          topo->left, line_data.left_face);
+            if (topo->right != line_data.right_face)
+                G_warning(_("Right area detected as %d (should be %d"),
+                          topo->right, line_data.right_face);
+        }
+    }
+    PQclear(res);
+    
     return 0;
 }
 

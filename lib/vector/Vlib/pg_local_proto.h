@@ -53,7 +53,7 @@ SF_FeatureType cache_feature(const char *, int,
 			     struct Format_info_cache *,
 			     struct feat_parts *);
 int set_initial_query(struct Format_info_pg *, int);
-int load_plus(struct Format_info_pg *, struct Plus_head *, int);
+int load_plus(struct Map_info *, int);
 
 #endif /* HAVE_POSTGRES */
 
