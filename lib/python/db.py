@@ -98,7 +98,7 @@ def db_select(sql = None, filename = None, table = None, **args):
     """!Perform SQL select statement
 
     Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
-    must be provided.
+    arguments must be provided.
     
     Examples:
     
@@ -118,7 +118,7 @@ def db_select(sql = None, filename = None, table = None, **args):
     grass.db_select(table = 'busstopsall')
     \endcode
 
-    performs <tt>SELECT cat,CAMPUS FROM busstopsall</tt>.
+    performs <tt>SELECT * FROM busstopsall</tt>.
 
     @param sql SQL statement to perform (or None)
     @param filename name of file with SQL statements (or None)
