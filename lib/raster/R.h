@@ -1,7 +1,6 @@
 #include <grass/config.h>
 #include <grass/gis.h>
 #include <rpc/types.h>
-#include <rpc/xdr.h>
 #ifdef HAVE_GDAL
 #include <gdal.h>
 #endif
@@ -65,7 +64,6 @@ struct fileinfo			/* Information for opened cell files */
     char *name;			/* Name of open file            */
     char *mapset;		/* Mapset of open file          */
     int io_error;		/* io error warning given       */
-    XDR xdrstream;		/* xdr stream for reading fp    */
     struct Quant quant;
     struct GDAL_link *gdal;
     int data_fd;		/* Raster data fd               */
@@ -73,6 +71,7 @@ struct fileinfo			/* Information for opened cell files */
 
 struct R__			/*  Structure of library globals */
 {
+    int little_endian;          /* Flag denoting little-endian architecture */
     RASTER_MAP_TYPE fp_type;	/* type for writing floating maps */
     int mask_fd;		/* File descriptor for automatic mask   */
     int auto_mask;		/* Flag denoting automatic masking      */

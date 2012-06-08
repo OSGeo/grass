@@ -138,8 +138,8 @@ static void set_file_pointer(int fd, int row)
     fcb->row_ptr[row] = lseek(fcb->data_fd, 0L, SEEK_CUR);
 }
 
-static void convert_float(XDR * xdrs, char *null_buf, const FCELL * rast,
-			  int row, int n)
+static void convert_float(float *work_buf, int size, char *null_buf,
+			  const FCELL *rast, int row, int n)
 {
     int i;
 
@@ -154,13 +154,12 @@ static void convert_float(XDR * xdrs, char *null_buf, const FCELL * rast,
 	else
 	    f = rast[i];
 
-	if (!xdr_float(xdrs, &f))
-	    G_fatal_error(_("xdr_float failed for index %d of row %d"), i, row);
+	Rast_xdr_put_float(&work_buf[i], &f);
     }
 }
 
-static void convert_double(XDR * xdrs, char *null_buf, const DCELL * rast,
-			   int row, int n)
+static void convert_double(double *work_buf, int size, char *null_buf,
+			   const DCELL *rast, int row, int n)
 {
     int i;
 
@@ -175,8 +174,7 @@ static void convert_double(XDR * xdrs, char *null_buf, const DCELL * rast,
 	else
 	    d = rast[i];
 
-	if (!xdr_double(xdrs, &d))
-	    G_fatal_error(_("xdr_double failed for index %d of row %d"), i, row);
+	Rast_xdr_put_double(&work_buf[i], &d);
     }
 }
 
@@ -186,7 +184,7 @@ static void put_fp_data(int fd, char *null_buf, const void *rast,
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int compressed = (fcb->open_mode == OPEN_NEW_COMPRESSED);
-    XDR *xdrs = &fcb->xdrstream;
+    int size = fcb->nbytes * fcb->cellhd.cols;
     void *work_buf;
 
     if (row < 0 || row >= fcb->cellhd.rows)
@@ -195,21 +193,15 @@ static void put_fp_data(int fd, char *null_buf, const void *rast,
     if (n <= 0)
 	return;
 
-    work_buf = G__alloca(fcb->cellhd.cols * fcb->nbytes + 1);
+    work_buf = G__alloca(size + 1);
 
     if (compressed)
 	set_file_pointer(fd, row);
 
-    xdrmem_create(xdrs, work_buf,
-		  (unsigned int)fcb->nbytes * fcb->cellhd.cols, XDR_ENCODE);
-    xdr_setpos(xdrs, 0);
-
     if (data_type == FCELL_TYPE)
-	convert_float(xdrs, null_buf, rast, row, n);
+	convert_float(work_buf, size, null_buf, rast, row, n);
     else
-	convert_double(xdrs, null_buf, rast, row, n);
-
-    xdr_destroy(&fcb->xdrstream);
+	convert_double(work_buf, size, null_buf, rast, row, n);
 
     if (compressed)
 	write_data_compressed(fd, row, work_buf, n);

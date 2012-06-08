@@ -168,7 +168,6 @@ static int close_old(int fd)
 
     if (fcb->map_type != CELL_TYPE) {
 	Rast_quant_free(&fcb->quant);
-	xdr_destroy(&fcb->xdrstream);
     }
     close(fcb->data_fd);
 
