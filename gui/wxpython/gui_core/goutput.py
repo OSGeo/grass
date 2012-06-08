@@ -266,7 +266,8 @@ class GMConsole(wx.SplitterWindow):
         self.btnCmdAbort.SetToolTipString(_("Abort running command"))
         self.btnCmdAbort.Enable(False)
         self.btnCmdProtocol = wx.ToggleButton(parent = self.panelOutput, id = wx.ID_ANY,
-                                              label = _("&Protocol"))
+                                              label = _("&Protocol"),
+                                              size = self.btnCmdClear.GetSize())
         self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into file; "
                                                "content saved when switching off."))
         
