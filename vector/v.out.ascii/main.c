@@ -70,8 +70,8 @@ int main(int argc, char *argv[])
     }
 
     /* open with topology only if needed */
-    if (format == GV_ASCII_FORMAT_WKT || (format == GV_ASCII_FORMAT_STD && 
-	(where || clist))) {
+    if (format == GV_ASCII_FORMAT_WKT ||
+        (format == GV_ASCII_FORMAT_STD && (where || clist))) {
 	if (Vect_open_old2(&Map, input, "", field_name) < 2) /* topology required for areas */
 	    G_warning(_("Unable to open vector map <%s> at topology level. "
 			"Areas will not be processed."),
@@ -81,8 +81,16 @@ int main(int argc, char *argv[])
 	Vect_set_open_level(1); /* topology not needed */ 
 	if (Vect_open_old2(&Map, input, "", field_name) < 0) 
 	    G_fatal_error(_("Unable to open vector map <%s>"), input); 
+        if (Vect_maptype(&Map) != GV_FORMAT_NATIVE) {
+            /* require topological level for external formats
+               centroids are read from topo */
+            Vect_close(&Map);
+            Vect_set_open_level(2);
+            if (Vect_open_old2(&Map, input, "", field_name) < 0) 
+                G_fatal_error(_("Unable to open vector map <%s>"), input); 
+        }
     }
-    
+
     field = Vect_get_field_number(&Map, field_name);
     
     if (strcmp(output, "-") != 0) {
