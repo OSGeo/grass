@@ -340,10 +340,6 @@ int Rast__open_old(const char *name, const char *mapset)
 	}
     }
 
-    if (fcb->map_type != CELL_TYPE)
-	xdrmem_create(&fcb->xdrstream, (caddr_t) fcb->data,
-		      (u_int) (fcb->nbytes * fcb->cellhd.cols), XDR_DECODE);
-
     return fd;
 }
 

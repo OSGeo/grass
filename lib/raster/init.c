@@ -80,6 +80,9 @@ static int init(void)
 {
     Rast__init_window();
 
+    /* byte order */
+    R__.little_endian = G_is_little_endian();
+
     /* no histograms */
     R__.want_histogram = 0;
 

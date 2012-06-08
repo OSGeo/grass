@@ -13,7 +13,6 @@
 
 #include <unistd.h>
 #include <rpc/types.h>		/* need this for sgi */
-#include <rpc/xdr.h>
 
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -73,10 +72,10 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 {
     struct Range range;
     int fd;
-    char xdr_buf[100];
+    char xdr_buf[2][XDR_DOUBLE_NBYTES];
     DCELL dcell1, dcell2;
-    XDR xdr_str;
 
+    Rast_init();
     Rast_init_fp_range(drange);
 
     if (Rast_map_type(name, mapset) == CELL_TYPE) {
@@ -105,20 +104,16 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 	    return -1;
 	}
 
-	if (read(fd, xdr_buf, 2 * XDR_DOUBLE_NBYTES) != 2 * XDR_DOUBLE_NBYTES)
-	    return 2;
-
-	xdrmem_create(&xdr_str, xdr_buf, (u_int) XDR_DOUBLE_NBYTES * 2,
-		      XDR_DECODE);
-
-	/* if the f_range file exists, but empty */
-	if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2)) {
-	    if (fd)
-		close(fd);
+	if (read(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
+	    /* if the f_range file exists, but empty */
+	    close(fd);
 	    G_warning(_("Unable to read fp range file for <%s>"),
 		      G_fully_qualified_name(name, mapset));
-	    return -1;
+	    return 2;
 	}
+
+	Rast_xdr_get_double(&dcell1, xdr_buf[0]);
+	Rast_xdr_get_double(&dcell2, xdr_buf[1]);
 
 	Rast_update_fp_range(dcell1, drange);
 	Rast_update_fp_range(dcell2, drange);
@@ -292,8 +287,9 @@ void Rast_write_range(const char *name, const struct Range *range)
 void Rast_write_fp_range(const char *name, const struct FPRange *range)
 {
     int fd;
-    char xdr_buf[100];
-    XDR xdr_str;
+    char xdr_buf[2][XDR_DOUBLE_NBYTES];
+
+    Rast_init();
 
     fd = G_open_new_misc("cell_misc", "f_range", name);
     if (fd < 0) {
@@ -307,20 +303,14 @@ void Rast_write_fp_range(const char *name, const struct FPRange *range)
 	return;
     }
 
-    xdrmem_create(&xdr_str, xdr_buf, (u_int) XDR_DOUBLE_NBYTES * 2,
-		  XDR_ENCODE);
+    Rast_xdr_put_double(xdr_buf[0], &range->min);
+    Rast_xdr_put_double(xdr_buf[1], &range->max);
 
-    if (!xdr_double(&xdr_str, (double *)&(range->min))) {
+    if (write(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
 	G_remove_misc("cell_misc", "f_range", name);
 	G_fatal_error(_("Unable to write range file for <%s>"), name);
     }
 
-    if (!xdr_double(&xdr_str, (double *)&(range->max))) {
-	G_remove_misc("cell_misc", "f_range", name);
-	G_fatal_error(_("Unable to write range file for <%s>"), name);
-    }
-
-    write(fd, xdr_buf, XDR_DOUBLE_NBYTES * 2);
     close(fd);
 }
 

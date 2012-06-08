@@ -16,7 +16,6 @@
 #include <sys/types.h>
 
 #include <rpc/types.h>		/* need this for sgi */
-#include <rpc/xdr.h>
 
 #include <grass/config.h>
 #include <grass/raster.h>
@@ -283,14 +282,9 @@ static void cell_values_float(int fd, const unsigned char *data,
 			      void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
+    const float *work_buf = (const float *) fcb->data;
     FCELL *c = cell;
-    COLUMN_MAPPING cmapold = 0;
-    XDR *xdrs = &fcb->xdrstream;
     int i;
-
-    /* xdr stream is initialized to read from */
-    /* fcb->data in 'opencell.c' */
-    xdr_setpos(xdrs, 0);
 
     for (i = 0; i < n; i++) {
 	if (!cmap[i]) {
@@ -298,22 +292,7 @@ static void cell_values_float(int fd, const unsigned char *data,
 	    continue;
 	}
 
-	if (cmap[i] == cmapold) {
-	    c[i] = c[i - 1];
-	    continue;
-	}
-
-	if (cmap[i] < cmapold) {
-	    xdr_setpos(xdrs, 0);
-	    cmapold = 0;
-	}
-
-	while (cmapold++ != cmap[i])	/* skip */
-	    if (!xdr_float(xdrs, &c[i]))
-		G_fatal_error(_("cell_values_float: xdr_float failed for index %d"),
-			      i);
-
-	cmapold--;
+	Rast_xdr_get_float(&c[i], &work_buf[cmap[i]-1]);
     }
 }
 
@@ -322,14 +301,9 @@ static void cell_values_double(int fd, const unsigned char *data,
 			       void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
+    const double *work_buf = (const double *) fcb->data;
     DCELL *c = cell;
-    COLUMN_MAPPING cmapold = 0;
-    XDR *xdrs = &fcb->xdrstream;
     int i;
-
-    /* xdr stream is initialized to read from */
-    /* fcb->data in 'opencell.c' */
-    xdr_setpos(xdrs, 0);
 
     for (i = 0; i < n; i++) {
 	if (!cmap[i]) {
@@ -337,22 +311,7 @@ static void cell_values_double(int fd, const unsigned char *data,
 	    continue;
 	}
 
-	if (cmap[i] == cmapold) {
-	    c[i] = c[i - 1];
-	    continue;
-	}
-
-	if (cmap[i] < cmapold) {
-	    xdr_setpos(xdrs, 0);
-	    cmapold = 0;
-	}
-
-	while (cmapold++ != cmap[i])	/* skip */
-	    if (!xdr_double(xdrs, &c[i]))
-		G_fatal_error(_("cell_values_double: xdr_double failed for index %d"),
-			      i);
-
-	cmapold--;
+	Rast_xdr_get_double(&c[i], &work_buf[cmap[i]-1]);
     }
 }
 
