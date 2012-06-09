@@ -287,7 +287,7 @@ dig_spidx_add_node(struct Plus_head *Plus, int node,
 
    \return 0
  */
-int dig_spidx_add_line(struct Plus_head *Plus, int line, struct bound_box * box)
+int dig_spidx_add_line(struct Plus_head *Plus, int line, const struct bound_box * box)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -320,7 +320,7 @@ int dig_spidx_add_line(struct Plus_head *Plus, int line, struct bound_box * box)
 
    \return 0
  */
-int dig_spidx_add_area(struct Plus_head *Plus, int area, struct bound_box * box)
+int dig_spidx_add_area(struct Plus_head *Plus, int area, const struct bound_box * box)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -354,7 +354,7 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area, struct bound_box * box)
    \return 0
  */
 
-int dig_spidx_add_isle(struct Plus_head *Plus, int isle, struct bound_box * box)
+int dig_spidx_add_isle(struct Plus_head *Plus, int isle, const struct bound_box * box)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -433,7 +433,6 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
 int dig_spidx_del_line(struct Plus_head *Plus, int line, double x, double y, double z)
 {
     int ret;
-    struct P_line *Line;
     static struct RTree_Rect rect;
     static int rect_init = 0;
 
@@ -444,8 +443,6 @@ int dig_spidx_del_line(struct Plus_head *Plus, int line, double x, double y, dou
     }
 
     G_debug(3, "dig_spidx_del_line(): line = %d", line);
-
-    Line = Plus->Line[line];
 
     rect.boundary[0] = x;
     rect.boundary[1] = y;

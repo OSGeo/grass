@@ -49,7 +49,7 @@ struct feat_parts
 
 /* functions used in *_pg.c files */
 int execute(PGconn *, const char *);
-SF_FeatureType cache_feature(const char *, int,
+SF_FeatureType cache_feature(const char *, int, int,
 			     struct Format_info_cache *,
 			     struct feat_parts *);
 int set_initial_query(struct Format_info_pg *, int);
