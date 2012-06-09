@@ -193,9 +193,9 @@ void dig_spidx_free_isles(struct Plus_head *);
 void dig_spidx_free(struct Plus_head *);
 
 int dig_spidx_add_node(struct Plus_head *, int, double, double, double);
-int dig_spidx_add_line(struct Plus_head *, int, struct bound_box *);
-int dig_spidx_add_area(struct Plus_head *, int, struct bound_box *);
-int dig_spidx_add_isle(struct Plus_head *, int, struct bound_box *);
+int dig_spidx_add_line(struct Plus_head *, int, const struct bound_box *);
+int dig_spidx_add_area(struct Plus_head *, int, const struct bound_box *);
+int dig_spidx_add_isle(struct Plus_head *, int, const struct bound_box *);
 
 int dig_spidx_del_node(struct Plus_head *, int);
 int dig_spidx_del_line(struct Plus_head *, int, double, double, double);
