@@ -29,6 +29,7 @@ struct edge_data {
     int end_node;
     int left_face;
     int right_face;
+    char *wkb_geom;
 };
 
 static char *get_key_column(struct Format_info_pg *);
@@ -40,8 +41,11 @@ static void connect_db(struct Format_info_pg *);
 static int check_topo(struct Format_info_pg *, struct Plus_head *);
 static int parse_bbox(const char *, struct bound_box *);
 static int num_of_records(const struct Format_info_pg *, const char *);
-static struct P_node *read_p_node(struct Plus_head *, int, int, struct Format_info_pg *);
-static struct P_line *read_p_line(struct Plus_head *, int, const struct edge_data *);
+static struct P_node *read_p_node(struct Plus_head *, int, int,
+                                  const char *, struct Format_info_pg *);
+static struct P_line *read_p_line(struct Plus_head *, int,
+                                  const struct edge_data *,
+                                  struct Format_info_cache *);
 static int load_plus_head(struct Format_info_pg *, struct Plus_head *);
 static void notice_processor(void *, const char *);
 #endif
@@ -955,18 +959,21 @@ int num_of_records(const struct Format_info_pg *pg_info,
   \param plus pointer to Plus_head structure
   \param n index (starts at 1)
   \param id node id (table "node")
+  \param wkb_data geometry data (wkb)
   \param pg_info pointer to Format_info_pg sttucture
 
   \return pointer to new P_node struct
   \return NULL on error
 */
-struct P_node *read_p_node(struct Plus_head *plus, int n, int id,
+struct P_node *read_p_node(struct Plus_head *plus, int n,
+                           int id, const char *wkb_data,
                            struct Format_info_pg *pg_info)
 {
     int i, cnt;
     char stmt[DB_SQL_MAX];
     
     struct P_node *node;
+    struct line_pnts *points;
     
     PGresult *res;
     
@@ -1021,33 +1028,23 @@ struct P_node *read_p_node(struct Plus_head *plus, int n, int id,
     }
     PQclear(res);
     
-    /* ???
-    if (plus->with_z)
-    if (0 >= dig__fread_port_P(&n_edges, 1, fp))
-    */
-    
     /* get node coordinates */
-    sprintf(stmt,
-            "SELECT ST_X(geom),ST_Y(geom),ST_Z(geom) FROM \"%s\".node "
-            "WHERE node_id = %d",
-            pg_info->toposchema_name, id);
-    G_debug(2, "SQL: %s", stmt);
-    res = PQexec(pg_info->conn, stmt);
-    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-        PQntuples(res) != 1) {
-        G_warning(_("Unable to read node %d"), id);
-        if (res)
-            PQclear(res);
-        return NULL;
-    }
-    node->x = atof(PQgetvalue(res, 0, 0));
-    node->y = atof(PQgetvalue(res, 0, 1));
+    if (SF_POINT != cache_feature(wkb_data, FALSE, FALSE,
+                                  &(pg_info->cache), NULL))
+        G_warning(_("Node %d: unexpected feature type %d"),
+                  n, pg_info->cache.sf_type);
+    
+    points = pg_info->cache.lines[0];
+    node->x = points->x[0];
+    node->y = points->y[0];
     if (plus->with_z)
-        node->z = atof(PQgetvalue(res, 0, 2));
+        node->z = points->z[0];
     else
-        node->z = 0;
-    PQclear(res);
-
+        node->z = 0.0;
+    
+    /* update spatial index */
+    dig_spidx_add_node(plus, n, node->x, node->y, node->z);
+    
     plus->Node[n] = node;
     
     return node;
@@ -1072,10 +1069,14 @@ struct P_node *read_p_node(struct Plus_head *plus, int n, int id,
   \return NULL on error
 */
 struct P_line *read_p_line(struct Plus_head *plus, int n,
-                           const struct edge_data *data)
+                           const struct edge_data *data,
+                           struct Format_info_cache *cache)
 {
-    int tp;
+    int tp, itype;
     struct P_line *line;
+    
+    struct line_pnts *points;
+    struct bound_box box;
     
     if (data->start_node == 0 && data->end_node == 0) {
         if (data->left_face == 0)
@@ -1131,11 +1132,22 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
         else if (line->type == GV_CENTROID) {
             struct P_topo_c *topo = (struct P_topo_c *)line->topo;
             
-            topo->area  = data->left_face;
+            topo->area = data->left_face;
         }
         /* TODO: faces | kernels */
     }
 
+    /* update spatial index */
+    cache_feature(data->wkb_geom, FALSE, FALSE, cache, NULL);
+    itype = cache->lines_types[0];
+    if ((line->type & GV_POINTS && itype != GV_POINT) ||
+        (line->type & GV_LINES  && itype != GV_LINE))
+        G_warning(_("Line %d: unexpected feature type"), n);
+    
+    points = cache->lines[0];
+    dig_line_box(points, &box);
+    dig_spidx_add_line(plus, n, &box);
+    
     plus->Line[n] = line;
     
     return line;
@@ -1279,7 +1291,7 @@ int load_plus(struct Map_info *Map, int head_only)
        note: standalone nodes are ignored
     */
     sprintf(stmt,
-            "SELECT node_id FROM \"%s\".node WHERE node_id IN "
+            "SELECT node_id,geom FROM \"%s\".node WHERE node_id IN "
             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
             "\"%s\".edge GROUP BY end_node) AS foo)",
@@ -1297,9 +1309,10 @@ int load_plus(struct Map_info *Map, int head_only)
 
     G_debug(3, "load_plus(): n_nodes = %d", plus->n_nodes);
     dig_alloc_nodes(plus, plus->n_nodes);
-    for (i = 1; i <= plus->n_nodes; i++) {
-        id = atoi(PQgetvalue(res, i - 1, 0));
-        read_p_node(plus, i, id, pg_info);
+    for (i = 0; i < plus->n_nodes; i++) {
+        id = atoi(PQgetvalue(res, i, 0));
+        read_p_node(plus, i + 1, /* node index starts at 1 */
+                    id, (const char *) PQgetvalue(res, i, 1), pg_info);
     }
     PQclear(res);
 
@@ -1314,7 +1327,7 @@ int load_plus(struct Map_info *Map, int head_only)
        -> points
     */
     sprintf(stmt,
-            "SELECT node_id FROM \"%s\".node WHERE node_id NOT IN "
+            "SELECT node_id,geom FROM \"%s\".node WHERE node_id NOT IN "
             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
             "\"%s\".edge GROUP BY end_node) AS foo)",
@@ -1335,7 +1348,8 @@ int load_plus(struct Map_info *Map, int head_only)
     for (i = 0; i < ntuples; i++) {
         /* process standalone nodes (PostGIS Topo) */
         line_data.id = atoi(PQgetvalue(res, i, 0));
-        read_p_line(plus, i + 1, &line_data);
+        line_data.wkb_geom = (char *) PQgetvalue(res, i, 1);
+        read_p_line(plus, i + 1, &line_data, &(pg_info->cache));
     }
     PQclear(res);
     
@@ -1344,7 +1358,7 @@ int load_plus(struct Map_info *Map, int head_only)
        -> boundaries
     */
     sprintf(stmt,
-            "SELECT edge_id,start_node,end_node,left_face,right_face "
+            "SELECT edge_id,start_node,end_node,left_face,right_face,geom "
             "FROM \"%s\".edge",
             pg_info->toposchema_name);
     G_debug(2, "SQL: %s", stmt);
@@ -1365,9 +1379,10 @@ int load_plus(struct Map_info *Map, int head_only)
         line_data.end_node   = atoi(PQgetvalue(res, i, 2));
         line_data.left_face  = atoi(PQgetvalue(res, i, 3));
         line_data.right_face = atoi(PQgetvalue(res, i, 4));
+        line_data.wkb_geom   = (char *) PQgetvalue(res, i, 5);
         
         id = plus->n_plines + i + 1; /* points already registered */
-        line = read_p_line(plus, id, &line_data);
+        line = read_p_line(plus, id, &line_data, &(pg_info->cache));
         if (line_data.left_face != 0 || line_data.right_face != 0) {
             /* boundary detected -> build area/isle on left and right*/
             
@@ -1391,6 +1406,7 @@ int load_plus(struct Map_info *Map, int head_only)
             if (line_data.right_face == 0)
                 line_data.right_face = -1;
             
+            /* check topo - left / right areas */
             topo = (struct P_topo_b *)line->topo;
             if (topo->left != line_data.left_face)
                 G_warning(_("Left area detected as %d (should be %d"),
@@ -1403,15 +1419,36 @@ int load_plus(struct Map_info *Map, int head_only)
     PQclear(res);
     
     /* attach centroids */
-    G_zero(&line_data, sizeof(struct edge_data));
-    for (i = 1; i <= plus->n_areas; i++) {
-        area = plus->Area[i];
+    if (plus->n_areas > 0) {
+        sprintf(stmt,
+                "SELECT ST_PointOnSurface(geom) AS geom FROM "
+                "ST_GetFaceGeometry('%s',"
+                "(SELECT face_id FROM \"%s\".face WHERE face_id > 0)) "
+                "AS geom",
+                pg_info->toposchema_name, pg_info->toposchema_name);
+        G_debug(2, "SQL: %s", stmt);
+        res = PQexec(pg_info->conn, stmt);
+        if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+            PQntuples(res) > plus->n_areas) {
+            G_warning(_("Unable to attach centroids"));
+            if (res)
+                PQclear(res);
+            return -1;
+        }
         
-        line_data.id = plus->n_lines - plus->n_clines + i;
-        line_data.left_face = i;
-        read_p_line(plus, line_data.id, &line_data);
-        area->centroid = line_data.id;
+        G_zero(&line_data, sizeof(struct edge_data));
+        for (i = 1; i <= plus->n_areas; i++) {
+            area = plus->Area[i];
+            
+            id = plus->n_lines - plus->n_clines + i;
+            line_data.id = line_data.left_face = i;
+            line_data.wkb_geom = (char *)PQgetvalue(res, 0, 0);
+            
+            read_p_line(plus, id, &line_data, &(pg_info->cache));
+            area->centroid = line_data.id;
+        }
     }
+
     return 0;
 }
 

@@ -467,7 +467,8 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid,
 {
     char *data;
     char stmt[DB_SQL_MAX];
-
+    int left_face, right_face;
+    
     if (!topotable_name && !pg_info->geom_column) {
         G_warning(_("No geometry column defined"));
         return -1;
@@ -500,7 +501,8 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid,
         else {
             /* topological access */
             sprintf(stmt,
-                    "DECLARE %s_%s%p CURSOR FOR SELECT geom FROM \"%s\".\"%s\" "
+                    "DECLARE %s_%s%p CURSOR FOR SELECT geom,left_face,right_face "
+                    " FROM \"%s\".\"%s\" "
                     "WHERE %s_id = %d", pg_info->schema_name, pg_info->table_name,
                     pg_info->conn, pg_info->toposchema_name,
                     topotable_name, topotable_name, fid);
@@ -557,9 +559,21 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid,
         return -2;
     }
     data = (char *)PQgetvalue(pg_info->res, pg_info->next_line, 0);
-
+    left_face = right_face = 0;
+    if (pg_info->toposchema_name) { /* -> PostGIS topology access */
+        if (fid < 0) { /* sequential access */
+            left_face  = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
+            right_face = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 3));
+        }
+        else {         /* random access */
+            left_face  = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
+            right_face = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
+        }
+    }
     pg_info->cache.sf_type =
-        cache_feature(data, FALSE, &(pg_info->cache), NULL);
+        cache_feature(data, FALSE,
+                      left_face != 0 || right_face != 0 ? TRUE : FALSE,
+                      &(pg_info->cache), NULL);
     if (fid < 0) {
         pg_info->cache.fid =
             atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
@@ -633,6 +647,7 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
 
    \param data HEX data
    \param skip_polygon skip polygons (level 1)
+   \param force_boundary force GV_BOUNDARY feature type (for PostGIS topology)
    \param[out] cache lines cache
    \param[out] fparts used for building pseudo-topology (or NULL)
 
@@ -640,7 +655,8 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
    \return SF_UNKNOWN on error
  */
 SF_FeatureType cache_feature(const char *data, int skip_polygon,
-                             struct Format_info_cache * cache,
+                             int force_boundary,
+                             struct Format_info_cache *cache,
                              struct feat_parts * fparts)
 {
     int ret, byte_order, nbytes, is3D;
@@ -738,7 +754,10 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     }
     else if (ftype == SF_LINESTRING) {
         cache->lines_num = 1;
-        cache->lines_types[0] = GV_LINE;
+        if (force_boundary)
+            cache->lines_types[0] = GV_BOUNDARY;
+        else
+            cache->lines_types[0] = GV_LINE;
         ret = linestring_from_wkb(wkb_data, nbytes, byte_order,
                                   is3D, cache->lines[0], FALSE);
         add_fpart(fparts, ftype, 0, 1);
@@ -1119,12 +1138,14 @@ int set_initial_query(struct Format_info_pg *pg_info, int fetch_all)
         sprintf(stmt,
                 "DECLARE %s_%s%p CURSOR FOR "
                 "SELECT geom,row_number() OVER "
-                "(ORDER BY ST_GeometryType(geom) DESC) AS fid FROM ("
-                "SELECT geom FROM \"%s\".node WHERE node_id NOT IN "
+                "(ORDER BY ST_GeometryType(geom) DESC) AS fid,"
+                "left_face,right_face FROM ("
+                "SELECT geom,0 AS left_face, 0 AS right_face FROM "
+                "\"%s\".node WHERE node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"%s\".edge GROUP BY end_node) AS foo) "
-                "UNION ALL SELECT geom FROM \"%s\".edge) AS foo",
+                "UNION ALL SELECT geom,left_face,right_face FROM \"%s\".edge) AS foo",
                 pg_info->schema_name, pg_info->table_name, pg_info->conn,
                 pg_info->toposchema_name, pg_info->toposchema_name,
                 pg_info->toposchema_name, pg_info->toposchema_name); 
@@ -1257,7 +1278,7 @@ int read_centroid_pg(struct Format_info_pg *pg_info,
     
     sprintf(stmt,
             "SELECT ST_PointOnSurface(geom) AS geom FROM "
-            "ST_GetFaceGeometry('%s', %d) as geom",
+            "ST_GetFaceGeometry('%s', %d) AS geom",
             pg_info->toposchema_name, centroid);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
@@ -1272,7 +1293,7 @@ int read_centroid_pg(struct Format_info_pg *pg_info,
     data = (char *)PQgetvalue(res, 0, 0);
     PQclear(res);
     
-    if (GV_POINT != cache_feature(data, FALSE, &(pg_info->cache), NULL))
+    if (GV_POINT != cache_feature(data, FALSE, FALSE, &(pg_info->cache), NULL))
         return -1;
     
     Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);

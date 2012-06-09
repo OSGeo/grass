@@ -345,8 +345,8 @@ void build_pg(struct Map_info *Map, int build)
 	G_progress(iFeature + 1, 1e4);
 
 	/* cache feature (lines) */
-	if (SF_NONE == cache_feature(wkb_data,
-				     FALSE, &(pg_info->cache), &fparts)) {
+	if (SF_NONE == cache_feature(wkb_data, FALSE, FALSE,
+                                     &(pg_info->cache), &fparts)) {
 	    G_warning(_("Feature %d without geometry skipped"),
 		      iFeature + 1);
 	    continue;
@@ -681,9 +681,7 @@ void build_ogr(struct Map_info *Map, int build)
 */
 int Vect__build_sfa(struct Map_info *Map, int build)
 {
-    int line;
     struct Plus_head *plus;
-    struct P_line *Line;
     
     plus = &(Map->plus);
     
