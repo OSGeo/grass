@@ -165,7 +165,7 @@ Contents
                        http://lists.osgeo.org/mailman/listinfo/wingrass
                          <wingrass@lists.osgeo.org>
 
-   DebianGIS:          <pkg-grass-general@lists.alioth.debian.org>
+   DebianGIS:          <debian-gis@lists.debian.org>
    FreeGIS:            <freegis-list@intevation.de>
    Geowanking:         <geowanking@lists.burri.to>
    OSGeo.org:          <news_item@osgeo.org>
