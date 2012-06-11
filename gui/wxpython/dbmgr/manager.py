@@ -1299,10 +1299,19 @@ class AttributeManager(wx.Frame):
                 for line in select.splitlines():
                     key, value = line.split('=')
                     region[key.strip()] = float(value.strip())
-                
-                self.mapdisplay.Map.GetRegion(n = region['n'], s = region['s'],
-                                              w = region['w'], e = region['e'],
-                                              update = True)
+
+                nsdist = ewdist = 0
+                renderer = self.mapdisplay.GetMap()
+                nsdist = 10 * ((renderer.GetCurrentRegion()['n'] - renderer.GetCurrentRegion()['s']) /
+                        renderer.height)
+                ewdist = 10 * ((renderer.GetCurrentRegion()['e'] - renderer.GetCurrentRegion()['w']) /
+                        renderer.width)
+                north = region['n'] + nsdist
+                south = region['s'] - nsdist
+                west = region['w'] - ewdist
+                east = region['e'] + ewdist
+                renderer.GetRegion(n = north, s = south, w = west, e = east, update = True)
+                self.mapdisplay.GetMapWindow().ZoomHistory(n = north, s = south, w = west, e = east)
         
         if zoom:
             self.mapdisplay.Map.AdjustRegion()           # adjust resolution
