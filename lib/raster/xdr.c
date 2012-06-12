@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include <grass/raster.h>
 
 #include "R.h"
@@ -13,7 +14,7 @@ static void swap_float(void *dstp, const void *srcp) {
 	dst[3] = src[0];
     }
     else
-	*dst = *src;
+	memcpy(dst, src, 4);
 }
 
 static void swap_double(void *dstp, const void *srcp) {
@@ -30,7 +31,7 @@ static void swap_double(void *dstp, const void *srcp) {
 	dst[7] = src[0];
     }
     else
-	*dst = *src;
+	memcpy(dst, src, 8);
 }
 
 void Rast_xdr_get_float(float *dst, const void *src)
