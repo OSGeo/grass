@@ -30,7 +30,7 @@
 int main(int argc, char *argv[])
 {
     dbConnection conn;
-    struct Flag *print, *check_set_default, *def;
+    struct Flag *print, *shell, *check_set_default, *def;
 
     /*    struct Option *driver, *database, *user, *password, *keycol; */
     struct Option *driver, *database, *schema, *group;
@@ -51,6 +51,11 @@ int main(int argc, char *argv[])
     print->key = 'p';
     print->description = _("Print current connection parameters and exit");
     print->guisection = _("Print");
+
+    shell = G_define_flag();
+    shell->key = 'g';
+    shell->description = _("Print current connection parameters using shell style and exit");
+    shell->guisection = _("Print");
 
     check_set_default = G_define_flag();
     check_set_default->key = 'c';
@@ -105,6 +110,24 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (shell->answer) {
+	/* get and print connection in shell style */
+	if (db_get_connection(&conn) == DB_OK) {
+	    fprintf(stdout, "driver=%s\n",
+		    conn.driverName ? conn.driverName : "");
+	    fprintf(stdout, "database=%s\n",
+		    conn.databaseName ? conn.databaseName : "");
+	    fprintf(stdout, "schema=%s\n",
+		    conn.schemaName ? conn.schemaName : "");
+	    fprintf(stdout, "group=%s\n", conn.group ? conn.group : "");
+	}
+	else
+	    G_fatal_error(_("Database connection not defined. "
+			    "Run db.connect."));
+
+	exit(EXIT_SUCCESS);
+    }
 
     if (print->answer) {
 	/* get and print connection */

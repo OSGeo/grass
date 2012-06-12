@@ -64,7 +64,7 @@ def db_describe(table, **args):
     
     return result
 
-# run "db.connect -p" and parse output
+# run "db.connect -g" and parse output
 
 def db_table_exist(table, **args):
     """!Return True if database table exists, False otherwise
@@ -82,7 +82,7 @@ def db_table_exist(table, **args):
 
 def db_connection():
     """!Return the current database connection parameters
-    (interface to `db.connect -p'). Example:
+    (interface to `db.connect -g'). Example:
 
     \code
     >>> grass.db_connection()
@@ -91,8 +91,7 @@ def db_connection():
 
     @return parsed output of db.connect
     """
-    s = read_command('db.connect', flags = 'p')
-    return parse_key_val(s, sep = ':')
+    return parse_command('db.connect', flags = 'g')
 
 def db_select(sql = None, filename = None, table = None, **args):
     """!Perform SQL select statement

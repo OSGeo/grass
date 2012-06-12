@@ -1,14 +1,10 @@
 
 /****************************************************************************
  *
- * MODULE:       db.connect
- * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Alex Shevlakov <sixote yahoo.com>, 
- *               Glynn Clements <glynn gclements.plus.com>,
- *               Markus Neteler <neteler itc.it>,
- *               Hamish Bowman <hamish_b yahoo com>
- *               Martin Landa <landa.martin gmail.com> ('d' flag)
- * PURPOSE:      set parameters for connection to database
+ * MODULE:       t.connect
+ * AUTHOR(S):    Soeren Gebbert, based on db.connect
+ *
+ * PURPOSE:      Prints/sets general temporal GIS database connection for current mapset.
  * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -39,7 +35,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("connection settings"));
     module->description =
-	_("Prints/sets general TGIS DB connection for current mapset.");
+	_("Prints/sets general temporal GIS database connection for current mapset.");
 
     print = G_define_flag();
     print->key = 'p';
