@@ -557,6 +557,7 @@ int Vect_line_segment(const struct line_pnts *InPoints, double start, double end
     };
 
     Vect_append_point(OutPoints, x2, y2, z2);
+    Vect_line_prune(OutPoints);
 
     return 1;
 }
