@@ -269,13 +269,13 @@ int BM_get_sparse(struct BM *map, int x, int y)
  *  \return int
  */
 
-int BM_get_map_size_sparse(struct BM *map)
+size_t BM_get_map_size_sparse(struct BM *map)
 {
     int i;
-    int size;
+    size_t size;
     struct BMlink *p;
 
-    size = map->rows * sizeof(struct BMlink *);
+    size = (size_t) map->rows * sizeof(struct BMlink *);
     for (i = 0; i < map->rows; i++) {
 	p = ((struct BMlink **)(map->data))[i];
 	while (p != NULL) {

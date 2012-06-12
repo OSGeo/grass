@@ -242,12 +242,12 @@ int BM_get(struct BM *map, int x, int y)
  *  \return int
  */
 
-int BM_get_map_size(struct BM *map)
+size_t BM_get_map_size(struct BM *map)
 {
     if (map->sparse)
 	return BM_get_map_size_sparse(map);
 
-    return map->bytes * map->rows;
+    return (size_t) map->bytes * map->rows;
 }
 
 
