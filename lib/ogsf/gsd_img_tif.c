@@ -51,7 +51,7 @@ unsigned short rowsperstrip = 0;
 int GS_write_tif(const char *name)
 {
     TIFF *out;
-    int y, x;
+    unsigned int y, x;
     unsigned int xsize, ysize;
     int mapsize, linebytes;
     unsigned char *buf, *tmpptr;
@@ -96,7 +96,7 @@ int GS_write_tif(const char *name)
 
     /* Done with Header Info */
     for (y = 0; y < ysize; y++) {
-	int yy = ysize - y - 1;
+	unsigned int yy = ysize - y - 1;
 
 	tmpptr = buf;
 
