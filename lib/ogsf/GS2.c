@@ -1730,13 +1730,13 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    atty = ATTY_INT;
 	}
 
-	if (0 > gs_malloc_att_buff(gs, att, ATTY_NULL)) {
+	if (0 == gs_malloc_att_buff(gs, att, ATTY_NULL)) {
 	    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	}
 
 	switch (atty) {
 	case ATTY_MASK:
-	    if (0 > gs_malloc_att_buff(gs, att, ATTY_MASK)) {
+	    if (0 == gs_malloc_att_buff(gs, att, ATTY_MASK)) {
 		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
@@ -1744,7 +1744,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    
 	    break;
 	case ATTY_CHAR:
-	    if (0 > gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
+	    if (0 == gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
 		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
@@ -1753,7 +1753,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 
 	    break;
 	case ATTY_SHORT:
-	    if (0 > gs_malloc_att_buff(gs, att, ATTY_SHORT)) {
+	    if (0 == gs_malloc_att_buff(gs, att, ATTY_SHORT)) {
 		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
@@ -1761,7 +1761,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 				      tbuff->nm, &has_null);
 	    break;
 	case ATTY_FLOAT:
-	    if (0 > gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
+	    if (0 == gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
 		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
@@ -1771,7 +1771,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    break;
 	case ATTY_INT:
 	default:
-	    if (0 > gs_malloc_att_buff(gs, att, ATTY_INT)) {
+	    if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
 		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
@@ -1819,7 +1819,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	}
 	else if (ATTY_FLOAT == atty) {
 	    if (!reuse) {
-		if (0 > gs_malloc_att_buff(gs, att, ATTY_INT)) {
+		if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
 		    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 		}
 

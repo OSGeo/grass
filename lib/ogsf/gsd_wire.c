@@ -485,6 +485,7 @@ int gsd_wire_arrows(geosurf * surf)
      */
 
     check_color = 1;
+    curcolor = 0;
     coloratt = &(surf->att[ATT_COLOR]);
     col_src = surf->att[ATT_COLOR].att_src;
 
@@ -690,6 +691,7 @@ int gsd_coarse_surf_map(geosurf * surf)
     /* will need to check for color source of FUNC_ATT & NOTSET_ATT, 
        or else use more general and inefficient gets */
     check_color = 1;
+    curcolor = 0;
     coloratt = &(surf->att[ATT_COLOR]);
     col_src = surf->att[ATT_COLOR].att_src;
 

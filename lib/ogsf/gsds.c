@@ -502,11 +502,11 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	case ATTY_NULL:
 	    if (ndims != 2) {
 		/* higher dimension bitmaps not supported */
-		return (-1);
+		return 0;
 	    }
 
 	    if (NULL == (ds->databuff.nm = BM_create(dims[1], dims[0]))) {
-		return (-1);
+		return 0;
 	    }
 
 	    siz = BM_get_map_size(ds->databuff.nm);
@@ -520,7 +520,7 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	    }
 
 	    if (NULL == (ds->databuff.bm = BM_create(dims[1], dims[0]))) {
-		return (-1);
+		return 0;
 	    }
 
 	    siz = BM_get_map_size(ds->databuff.bm);
@@ -533,11 +533,11 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	    if (siz) {
 		if (NULL ==
 		    (ds->databuff.cb = (unsigned char *)G_malloc(siz))) {
-		    return (-1);
+		    return 0;
 		}
 	    }
 	    else {
-		return (-1);
+		return 0;
 	    }
 
 	    break;
@@ -547,11 +547,11 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 
 	    if (siz) {
 		if (NULL == (ds->databuff.sb = (short *)G_malloc(siz))) {
-		    return (-1);
+		    return 0;
 		}
 	    }
 	    else {
-		return (-1);
+		return 0;
 	    }
 
 	    break;
@@ -561,11 +561,11 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 
 	    if (siz) {
 		if (NULL == (ds->databuff.ib = (int *)G_malloc(siz))) {
-		    return (-1);
+		    return 0;
 		}
 	    }
 	    else {
-		return (-1);
+		return 0;
 	    }
 
 	    break;
@@ -575,17 +575,17 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 
 	    if (siz) {
 		if (NULL == (ds->databuff.fb = (float *)G_malloc(siz))) {
-		    return (-1);
+		    return 0;
 		}
 	    }
 	    else {
-		return (-1);
+		return 0;
 	    }
 
 	    break;
 
 	default:
-	    return (-1);
+	    return 0;
 	}
 
 	ds->changed = 0;	/* starting with clean slate */
@@ -601,7 +601,7 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	return (siz);
     }
 
-    return (-1);
+    return 0;
 }
 
 /*!
