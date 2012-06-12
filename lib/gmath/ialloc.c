@@ -61,7 +61,7 @@ int **G_alloc_imatrix(int rows, int cols)
     int i;
 
     m = (int **)G_calloc(rows, sizeof(int *));
-    m[0] = (int *)G_calloc(rows * cols, sizeof(int));
+    m[0] = (int *)G_calloc((size_t) rows * cols, sizeof(int));
     for (i = 1; i < rows; i++)
 	m[i] = m[i - 1] + cols;
 
