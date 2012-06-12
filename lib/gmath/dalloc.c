@@ -63,7 +63,7 @@ double **G_alloc_matrix(int rows, int cols)
     int i;
 
     m = (double **)G_calloc(rows, sizeof(double *));
-    m[0] = (double *)G_calloc(rows * cols, sizeof(double));
+    m[0] = (double *)G_calloc((size_t) rows * cols, sizeof(double));
     for (i = 1; i < rows; i++)
 	m[i] = m[i - 1] + cols;
 
@@ -107,7 +107,7 @@ float **G_alloc_fmatrix(int rows, int cols)
     int i;
 
     m = (float **)G_calloc(rows, sizeof(float *));
-    m[0] = (float *)G_calloc(rows * cols, sizeof(float));
+    m[0] = (float *)G_calloc((size_t) rows * cols, sizeof(float));
     for (i = 1; i < rows; i++)
 	m[i] = m[i - 1] + cols;
 
