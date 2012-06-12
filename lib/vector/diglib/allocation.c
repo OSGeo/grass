@@ -78,7 +78,7 @@ void *dig__alloc_space(int n_wanted, int *n_elements, int chunk_size, void *ptr,
 
     /*  first time called allocate initial storage  */
     if (*n_elements == 0)
-	ptr = G_calloc((unsigned)to_alloc, (unsigned)element_size);
+	ptr = G_calloc(to_alloc, element_size);
     else
 	ptr = dig__frealloc((char *)ptr, to_alloc, element_size, *n_elements);
 
@@ -126,7 +126,7 @@ void *dig__falloc(int nelem, int elsize)
 	nelem = 1;
     }
 
-    ptr = G_calloc((unsigned)nelem, (unsigned)elsize);
+    ptr = G_calloc(nelem, elsize);
     return (ptr);
 }
 
@@ -141,7 +141,7 @@ void *dig__frealloc(void *oldptr, int nelem, int elsize, int oldnelem)
 	nelem = 1;
     }
 
-    ptr = G_calloc((unsigned)nelem, (unsigned)elsize);
+    ptr = G_calloc(nelem, elsize);
 
     /*  out of memory  */
     if (!ptr)
@@ -150,7 +150,7 @@ void *dig__frealloc(void *oldptr, int nelem, int elsize, int oldnelem)
     {
 	register char *a;
 	register char *b;
-	register long n;
+	register size_t n;
 
 	n = oldnelem * elsize;
 	a = ptr;
