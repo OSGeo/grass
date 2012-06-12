@@ -539,13 +539,15 @@ def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
 	kv = line.split(sep, 1)
 	k = kv[0].strip()
 	if len(kv) > 1:
-	    v = kv[1]
+	    v = kv[1].strip()
 	else:
 	    v = dflt
+        
         if val_type:
             result[k] = val_type(v)
         else:
             result[k] = v
+    
     return result
 
 # interface to g.gisenv
