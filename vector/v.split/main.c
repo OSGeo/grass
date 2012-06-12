@@ -26,7 +26,8 @@
 #include <grass/glocale.h>
 
 #define FROM_KILOMETERS  1000.0
-#define FROM_FEET           0.3048
+#define FROM_FEET        0.3048
+#define FROM_SFEET       1200.0 / 3937.0
 #define FROM_MILES       1609.344
 #define FROM_NAUTMILES   1852.0
 
@@ -71,8 +72,8 @@ int main(int argc, char *argv[])
     units_opt->type = TYPE_STRING;
     units_opt->required = NO;
     units_opt->multiple = NO;
-    units_opt->options = "meters,kilometers,feet,miles,nautmiles";
-    units_opt->answer = "meters";
+    units_opt->options = "map,meters,kilometers,feet,surveyfeet,miles,nautmiles";
+    units_opt->answer = "map";
     units_opt->description = _("Length units");
     
     vertices_opt = G_define_option();
@@ -103,11 +104,13 @@ int main(int argc, char *argv[])
 	    length *= FROM_KILOMETERS;
 	else if (strcmp(units_opt->answer, "feet") == 0)
 	    length *= FROM_FEET;
+	else if (strcmp(units_opt->answer, "surveyfeet") == 0)
+	    length *= FROM_SFEET;
 	else if (strcmp(units_opt->answer, "miles") == 0)
 	    length *= FROM_MILES;
 	else if (strcmp(units_opt->answer, "nautmiles") == 0)
 	    length *= FROM_NAUTMILES;
-	else
+	else if (strcmp(units_opt->answer, "map") != 0)
 	    G_fatal_error(_("Unknown unit %s"), units_opt->answer); 
 
 	/* set line length function */
@@ -121,7 +124,7 @@ int main(int argc, char *argv[])
 	    /* convert length to map units */
 	    if ((factor = G_database_units_to_meters_factor()) == 0)
 		G_fatal_error(_("Can not get projection units"));
-	    else {
+	    else if (strcmp(units_opt->answer, "map") != 0) {
 		/* meters to units */
 		length = length / factor;
 	    }
@@ -232,7 +235,7 @@ int main(int argc, char *argv[])
 		int start = 0;	/* number of coordinates written */
 
 		while (start < Points->n_points - 1) {
-		    int i, v;
+		    int i, v = 0;
 
 		    Vect_reset_line(Points2);
 		    for (i = 0; i < vertices; i++) {
