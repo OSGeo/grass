@@ -234,7 +234,7 @@ typedef struct
     int data_id;
     int dims[MAXDIMS];
     int ndims;
-    int numbytes;
+    size_t numbytes;
     char *unique_name;
     typbuff databuff;
     IFLAG changed;

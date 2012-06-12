@@ -712,9 +712,9 @@ typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
    \param type buffer type (based on raster map type)
 
    \return -1 on error
-   \return pointer to typbuff (casted)
+   \return amount of allocated memory
  */
-int gs_malloc_att_buff(geosurf * gs, int desc, int type)
+size_t gs_malloc_att_buff(geosurf * gs, int desc, int type)
 {
     int hdata, dims[2], ndims;
 

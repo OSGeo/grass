@@ -3,6 +3,8 @@
 
 /* these defines work with modeling coordinates only */
 
+/* TODO: avoid integer overflow */
+
 /* view resolutions */
 #define VXRES(gs)   (gs->x_mod * gs->xres)
 #define VYRES(gs)   (gs->y_mod * gs->yres)

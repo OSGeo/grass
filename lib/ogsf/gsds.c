@@ -76,7 +76,7 @@ static int Numsets = 0;
 
 static int Cur_id = LUCKY;
 static int Cur_max;
-static int Tot_mem = 0;
+static size_t Tot_mem = 0;
 
 /*!
    \brief Initialize gsds
@@ -390,9 +390,10 @@ int gsds_free_data_buff(int id, int typ)
 
    \return freed size
  */
-int free_data_buffs(dataset * ds, int typ)
+size_t free_data_buffs(dataset * ds, int typ)
 {
-    int nsiz = 1, i, siz, freed = 0;
+    int i;
+    size_t siz, nsiz = 1, freed = 0;
 
     for (i = 0; i < ds->ndims; i++) {
 	nsiz *= ds->dims[i];
@@ -476,12 +477,13 @@ int free_data_buffs(dataset * ds, int typ)
    \param ndims number of dimensions
    \param type data type
 
-   \return
+   \return amount of allocated memory
  */
-int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
+size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 {
     dataset *ds;
-    int i, siz = 1;
+    int i;
+    size_t siz = 1;
 
     if ((ds = get_dataset(id))) {
 	/*
