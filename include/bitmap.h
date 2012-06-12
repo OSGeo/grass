@@ -18,7 +18,7 @@ struct BM
 {
     int rows;
     int cols;
-    int bytes;
+    size_t bytes;
     unsigned char *data;
     int sparse;
     /* char *token; */
