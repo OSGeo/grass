@@ -35,6 +35,7 @@ void print_key_value(const char *key, const char *value, int shell)
 
 int print_status_file(const char *file, int shell)
 {
+    int i;
     FILE *fp;
     const char *p;
 
@@ -47,54 +48,32 @@ int print_status_file(const char *file, int shell)
     key_val = G_fread_key_value(fp);
     fclose(fp);
 
+    /* check required options */
     if (strcmp(file, "OGR") == 0) {
 	/* dsn (required) */
 	p = G_find_key_value("dsn", key_val);
 	if (!p)
 	    G_fatal_error(_("OGR datasource (dsn) not defined"));
-	print_key_value("dsn", p, shell);
     
 	/* format (required) */
 	p = G_find_key_value("format", key_val);
 	if (!p)
 	    G_fatal_error(_("OGR format not defined"));
-	print_key_value("format", p, shell);
-	
-	/* options */
-	p = G_find_key_value("options", key_val);
-	print_key_value("options", p, shell);
     }
     else { /* PG */
 	/* conninfo (required) */
 	p = G_find_key_value("conninfo", key_val);
 	if (!p)
 	    G_fatal_error(_("PG connection info (conninfo) not defined"));
-	print_key_value("conninfo", p, shell);
-
-	/* format (hardcoded) */
-	print_key_value("format", "PostgreSQL", shell);
-
-	/* schema */
-	p = G_find_key_value("schema", key_val);
-	print_key_value("schema", p, shell);
-
-	/* fid */
-	p = G_find_key_value("fid", key_val);
-	print_key_value("fid", p, shell);
-
-	/* geometry_name */
-	p = G_find_key_value("geometry_name", key_val);
-	print_key_value("geometry_name", p, shell);
-
-	/* spatial_index */
-	p = G_find_key_value("spatial_index", key_val);
-	print_key_value("spatial_index", p, shell);
-
-	/* primary_key */
-	p = G_find_key_value("primary_key", key_val);
-	print_key_value("primary_key", p, shell);
+        
+        /* force format */
+        print_key_value("format", "PostgreSQL", shell);
     }
 
+    /* print all options */
+    for (i = 0; i < key_val->nitems; i++)
+        print_key_value(key_val->key[i], key_val->value[i], shell);
+    
     G_free_key_value(key_val);
 
     return TRUE;
