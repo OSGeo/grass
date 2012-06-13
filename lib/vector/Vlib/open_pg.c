@@ -23,6 +23,8 @@
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
+#define TOPOGEOM_COLUMN "topo"
+
 struct edge_data {
     int id;
     int start_node;
@@ -37,6 +39,7 @@ static SF_FeatureType ftype_from_string(const char *);
 static int drop_table(struct Format_info_pg *);
 static int check_schema(const struct Format_info_pg *);
 static int create_table(struct Format_info_pg *, const struct field_info *);
+static int create_topo_schema(struct Format_info_pg *, int);
 static void connect_db(struct Format_info_pg *);
 static int check_topo(struct Format_info_pg *, struct Plus_head *);
 static int parse_bbox(const char *, struct bound_box *);
@@ -48,6 +51,7 @@ static struct P_line *read_p_line(struct Plus_head *, int,
                                   struct Format_info_cache *);
 static int load_plus_head(struct Format_info_pg *, struct Plus_head *);
 static void notice_processor(void *, const char *);
+static char *get_sftype(SF_FeatureType);
 #endif
 
 /*!
@@ -371,11 +375,20 @@ int V2_open_new_pg(struct Map_info *Map, int type)
         }
     }
 
+    /* create new feature table */
     if (create_table(pg_info, Fi) == -1) {
-        G_warning(_("Unable to create new PostGIS table"));
+        G_warning(_("Unable to create new PostGIS feature table"));
         return -1;
     }
-
+    
+    /* create new topology schema (if PostGIS topology support is enabled) */
+    if(pg_info->toposchema_name) {
+        if (create_topo_schema(pg_info, Vect_is_3d(Map)) == -1) {
+            G_warning(_("Unable to create new PostGIS topology schema"));
+            return -1;
+        }
+    }
+    
     if (Fi)
         G_free(Fi);
 
@@ -505,7 +518,7 @@ SF_FeatureType ftype_from_string(const char *type)
 }
 
 /*!
-  \brief Drop feature table
+  \brief Drop feature table and topology schema if exists
 
   \param pg_info pointer to Format_info_pg
 
@@ -514,15 +527,49 @@ SF_FeatureType ftype_from_string(const char *type)
 */
 int drop_table(struct Format_info_pg *pg_info)
 {
+    int i;
     char stmt[DB_SQL_MAX];
-
+    char *topo_schema;
+    
+    PGresult *result, *result_drop;
+    
+    /* drop topology schema(s) related to the feature table */
+    sprintf(stmt, "SELECT t.name FROM topology.layer AS l JOIN "
+            "topology.topology AS t ON l.topology_id = t.id "
+            "WHERE l.table_name = '%s'", pg_info->table_name);
+    G_debug(2, "SQL: %s", stmt);
+    
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+        PQclear(result);
+        return -1;
+    }
+    for (i = 0; i < PQntuples(result); i++) {
+        topo_schema = PQgetvalue(result, i, 0);
+        sprintf(stmt, "SELECT topology.DropTopology('%s')",
+                topo_schema);
+        G_debug(2, "SQL: %s", stmt);
+        
+        result_drop = PQexec(pg_info->conn, stmt);
+        if (!result_drop || PQresultStatus(result_drop) != PGRES_TUPLES_OK)
+            G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+        
+        G_verbose_message(_("PostGIS topology schema <%s> dropped"),
+                          topo_schema);
+        PQclear(result_drop);
+    }
+    PQclear(result);
+    
+    /* drop feature table */
     sprintf(stmt, "DROP TABLE \"%s\".\"%s\"",
             pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
-
+    
     if (execute(pg_info->conn, stmt) == -1) {
         return -1;
     }
+
     return 0;
 }
 
@@ -586,8 +633,9 @@ int check_schema(const struct Format_info_pg *pg_info)
 int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 {
     int spatial_index, primary_key;
-    char stmt[DB_SQL_MAX], *geom_type;
-
+    char stmt[DB_SQL_MAX];
+    char *geom_type;
+    
     PGresult *result;
 
     /* by default create spatial index & add primary key */
@@ -609,10 +657,21 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
         p = G_find_key_value("spatial_index", key_val);
         if (p && G_strcasecmp(p, "off") == 0)
             spatial_index = FALSE;
+        
         /* disable primary key ? */
         p = G_find_key_value("primary_key", key_val);
         if (p && G_strcasecmp(p, "off") == 0)
             primary_key = FALSE;
+
+        /* PostGIS topology enabled ? */
+        p = G_find_key_value("topology", key_val);
+        if (p && G_strcasecmp(p, "on") == 0) {
+            /* define topology name
+               this should be configurable by the user
+            */
+            G_asprintf(&(pg_info->toposchema_name), "topo_%s",
+                       pg_info->table_name);
+        }
     }
 
     /* create schema if not exists */
@@ -746,7 +805,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
         execute(pg_info->conn, "ROLLBACK");
         return -1;
     }
-
+    
     /* add geometry column */
     sprintf(stmt, "SELECT AddGeometryColumn('%s', '%s', "
             "'%s', %d, '%s', %d)",
@@ -755,13 +814,13 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
             geom_type, pg_info->coor_dim);
     G_debug(2, "SQL: %s", stmt);
     result = PQexec(pg_info->conn, stmt);
-
+    
     if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
         PQclear(result);
         execute(pg_info->conn, "ROLLBACK");
         return -1;
     }
-
+    
     /* create index ? */
     if (spatial_index) {
         G_verbose_message(_("Building spatial index on <%s>..."),
@@ -772,7 +831,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
                 pg_info->schema_name, pg_info->table_name,
                 pg_info->geom_column);
         G_debug(2, "SQL: %s", stmt);
-
+        
         if (execute(pg_info->conn, stmt) == -1) {
             execute(pg_info->conn, "ROLLBACK");
             return -1;
@@ -780,6 +839,97 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     }
 
     /* close transaction (create table) */
+    if (execute(pg_info->conn, "COMMIT") == -1) {
+        return -1;
+    }
+
+    return 0;
+}
+
+/*!
+  \brief Create new PostGIS topology schema
+
+  - create topology schema
+  - add topology column to the feature table
+  
+  \param pg_info pointer to Format_info_pg
+
+  \return 0 on success
+  \return 1 topology disable, nothing to do
+  \return -1 on failure
+*/
+int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
+{
+    double tolerance;
+    char stmt[DB_SQL_MAX];
+    
+    PGresult *result;
+    
+    /* read default values from PG file*/
+    tolerance = 0.;
+    if (G_find_file2("", "PG", G_mapset())) {
+        FILE *fp;
+        const char *p;
+
+        struct Key_Value *key_val;
+
+        fp = G_fopen_old("", "PG", G_mapset());
+        if (!fp) {
+            G_fatal_error(_("Unable to open PG file"));
+        }
+        key_val = G_fread_key_value(fp);
+        fclose(fp);
+
+        /* tolerance */
+        p = G_find_key_value("tolerance", key_val);
+        if (p)
+            tolerance = atof(p);
+
+        /* topogeom column */
+        p = G_find_key_value("topogeom_column", key_val);
+        if (p)
+            pg_info->topogeom_column = G_store(p);
+        else
+            pg_info->topogeom_column = G_store(TOPOGEOM_COLUMN);
+    }
+
+    /* begin transaction (create topo schema) */
+    if (execute(pg_info->conn, "BEGIN") == -1) {
+        return -1;
+    }
+
+    /* create topology schema */
+    G_message(_("Creating topology schema <%s>..."), pg_info->toposchema_name);
+    sprintf(stmt, "SELECT topology.createtopology('%s', "
+            "find_srid('%s', '%s', '%s'), %f, '%s')",
+            pg_info->toposchema_name, pg_info->schema_name,
+            pg_info->table_name, pg_info->geom_column, tolerance,
+            with_z == WITH_Z ? "t" : "f");
+    G_debug(2, "SQL: %s", stmt);
+
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+        execute(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+    
+    /* add topo column to the feature table */
+    G_message(_("Adding new topology column <%s>..."), pg_info->topogeom_column);
+    sprintf(stmt, "SELECT topology.AddTopoGeometryColumn('%s', '%s', '%s', "
+            "'%s', '%s')", pg_info->toposchema_name, pg_info->schema_name,
+            pg_info->table_name, pg_info->topogeom_column,
+            get_sftype(pg_info->feature_type));
+    G_debug(2, "SQL: %s", stmt);
+
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+        execute(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    /* close transaction (create topo schema) */
     if (execute(pg_info->conn, "COMMIT") == -1) {
         return -1;
     }
@@ -874,6 +1024,11 @@ int parse_bbox(const char *value, struct bound_box *bbox)
     unsigned int i;
     size_t length, prefix_length;
     char **tokens, **tokens_coord, *coord;
+    
+    if (strlen(value) < 1) {
+        G_warning(_("Empty bounding box"));
+        return -1;
+    }
     
     prefix_length = strlen("box3d(");
     if (G_strncasecmp(value, "box3d(", prefix_length) != 0)
@@ -1462,5 +1617,32 @@ void notice_processor(void *arg, const char *message)
     if (G_verbose() > G_verbose_std()) {
         fprintf(stderr, "%s", message);
     }
+}
+
+/*!
+  \brief Get simple feature type as a string
+
+  Used for AddTopoGeometryColumn().
+
+  Valid types:
+   - SF_POINT
+   - SF_LINESTRING
+   - SF_POLYGON
+
+  \return string with feature type
+  \return empty string
+*/
+char *get_sftype(SF_FeatureType sftype)
+{
+    if (sftype == SF_POINT)
+        return "POINT";
+    else if (sftype == SF_LINESTRING)
+        return "LINE";
+    else if (sftype == SF_POLYGON)
+        return "POLYGON";
+    else
+        G_warning(_("Unsupported feature type %d"), sftype);
+    
+    return "";
 }
 #endif
