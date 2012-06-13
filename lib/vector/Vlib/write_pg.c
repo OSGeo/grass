@@ -42,6 +42,9 @@ static int write_feature(struct Format_info_pg *,
                          int, const struct field_info *);
 static char *build_insert_stmt(const struct Format_info_pg *, const char *,
                                int, const struct field_info *);
+static char *build_topo_stmt(const struct Format_info_pg *, int, const char *);
+static char *build_topogeom_stmt(const struct Format_info_pg *, int, int, int);
+static int execute_topo(PGconn *, const char *);
 #endif
 
 /*!
@@ -206,7 +209,7 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
                          const struct line_pnts * points,
                          const struct line_cats * cats)
 {
-    G_debug(3, "V1_rewrite_line_pg(): line=%d type=%d offset=%llu",
+    G_debug(3, "V1_rewrite_line_pg(): line=%d type=%d offset=%lu",
             line, type, offset);
 #ifdef HAVE_POSTGRES
     if (type != V1_read_line_pg(Map, NULL, NULL, offset)) {
@@ -575,7 +578,7 @@ int write_feature(struct Format_info_pg *pg_info,
         return -1;
     }
 
-    byte_order = ENDIAN_LITTLE; /* TODO: get endianness for system from dig__byte_order_out()? */
+    byte_order = dig__byte_order_out();
 
     /* get wkb data */
     nbytes = -1;
@@ -641,7 +644,9 @@ int write_feature(struct Format_info_pg *pg_info,
     strcpy(text_data_p, hex_data);
     G_free(hex_data);
 
-    /* build INSERT statement */
+    /* build INSERT statement
+       simple feature geometry + attributes
+    */
     stmt = build_insert_stmt(pg_info, text_data, cat, Fi);
     G_debug(2, "SQL: %s", stmt);
 
@@ -652,16 +657,45 @@ int write_feature(struct Format_info_pg *pg_info,
             return -1;
     }
 
-    if (execute(pg_info->conn, stmt) == -1) {
+    /* stmt can NULL when writing PostGIS topology with no attributes
+     * attached */
+    if (stmt && execute(pg_info->conn, stmt) == -1) {
         /* rollback transaction */
         execute(pg_info->conn, "ROLLBACK");
         return -1;
     }
+    G_free(stmt);
+    
+    /* write feature in PostGIS topology schema if enabled */
+    if (pg_info->toposchema_name) {
+        int id, do_update;
+
+        do_update = stmt ? TRUE : FALSE; /* update or insert new record 
+                                            to the feature table */
+        
+        /* insert feature into topology schema (node or edge) */
+        stmt = build_topo_stmt(pg_info, type, text_data);
+        id = execute_topo(pg_info->conn, stmt);
+        if (id == -1) {
+            /* rollback transaction */
+            execute(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+        G_free(stmt);
+
+        /* insert topoelement into feature table) */
+        stmt = build_topogeom_stmt(pg_info, id, type, do_update);
+        if (execute(pg_info->conn, stmt) == -1) {
+            /* rollback transaction */
+            execute(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+        G_free(stmt);
+    }
 
     G_free(wkb_data);
     G_free(text_data);
-    G_free(stmt);
-
+    
     return 0;
 }
 
@@ -705,10 +739,9 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
         db_set_string(&dbstmt, buf);
 
         /* prepare INSERT statement */
-        sprintf(buf, "INSERT INTO \"%s\".\"%s\" (%s",
-                pg_info->schema_name, pg_info->table_name,
-                pg_info->geom_column);
-
+        sprintf(buf, "INSERT INTO \"%s\".\"%s\" (",
+                pg_info->schema_name, pg_info->table_name);
+        
         /* select data */
         if (db_open_select_cursor(pg_info->dbdriver, &dbstmt,
                                   &cursor, DB_SEQUENTIAL) != DB_OK) {
@@ -737,9 +770,11 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                         continue;
 
                     /* -> columns */
-                    sprintf(buf_tmp, ",%s", colname);
+                    sprintf(buf_tmp, "%s", colname);
                     strcat(buf, buf_tmp);
-
+                    if (col < ncol - 1)
+                        strcat(buf, ",");
+                    
                     /* -> values */
                     value = db_get_column_value(column);
                     /* for debug only */
@@ -754,40 +789,53 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                     if (!db_test_value_isnull(value)) {
                         switch (ctype) {
                         case DB_C_TYPE_INT:
-                            sprintf(buf_tmp, ",%d", db_get_value_int(value));
+                            sprintf(buf_tmp, "%d", db_get_value_int(value));
                             break;
                         case DB_C_TYPE_DOUBLE:
-                            sprintf(buf_tmp, ",%.14f",
+                            sprintf(buf_tmp, "%.14f",
                                     db_get_value_double(value));
                             break;
                         case DB_C_TYPE_STRING:
                             str_val = G_store(db_get_value_string(value));
                             G_str_to_sql(str_val);
-                            sprintf(buf_tmp, ",'%s'", str_val);
+                            sprintf(buf_tmp, "'%s'", str_val);
                             G_free(str_val);
                             break;
                         case DB_C_TYPE_DATETIME:
                             db_convert_column_value_to_string(column,
                                                               &dbstmt);
-                            sprintf(buf_tmp, ",%s", db_get_string(&dbstmt));
+                            sprintf(buf_tmp, "%s", db_get_string(&dbstmt));
                             break;
                         default:
                             G_warning(_("Unsupported column type %d"), ctype);
-                            sprintf(buf_tmp, ",NULL");
+                            sprintf(buf_tmp, "NULL");
                             break;
                         }
                     }
                     else {
-                        sprintf(buf_tmp, ",NULL");
+                        sprintf(buf_tmp, "NULL");
                     }
                     strcat(buf_val, buf_tmp);
+                    if (col < ncol - 1)
+                        strcat(buf_val, ",");
                 }
-
-                G_asprintf(&stmt, "%s) VALUES ('%s'::GEOMETRY%s)",
-                           buf, geom_data, buf_val);
+                
+                if (!pg_info->toposchema_name) {
+                    /* simple feature access */
+                    G_asprintf(&stmt, "%s,%s) VALUES (%s,'%s'::GEOMETRY)",
+                               buf, pg_info->geom_column, buf_val, geom_data);
+                }
+                else {
+                    /* PostGIS topology access, write geometry in
+                     * topology schema, skip geometry at this point */
+                    G_asprintf(&stmt, "%s) VALUES (%s)",
+                               buf, buf_val);
+                }
             }
         }
     }
+    else if (pg_info->toposchema_name)
+        return NULL; /* don't write simple feature element */
 
     if (!stmt) {
         /* no attributes */
@@ -799,4 +847,113 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
 
     return stmt;
 }
+
+/*!
+  \brief Build SELECT statement to insert new element into PostGIS
+  topology schema
+
+  \param pg_info so pointer to Format_info_pg
+  \param type feature type (GV_POINT, ...)
+  \param geom_data geometry in wkb
+
+  \return pointer to allocated string buffer with SQL statement
+  \return NULL on error
+*/
+char *build_topo_stmt(const struct Format_info_pg *pg_info,
+                      int type, const char *geom_data)
+{
+    char *stmt;
+    
+    stmt = NULL;
+    if (type == GV_POINT) {
+        G_asprintf(&stmt, "SELECT AddNode('%s', '%s'::GEOMETRY)",
+                pg_info->toposchema_name, geom_data);
+    }
+    
+    return stmt;
+}
+
+/*!
+  \brief Build INSERT / UPDATE statement to insert topo geometry
+  object into feature table
+
+  Allocated string should be freed by G_free()
+  
+  \param pg_info so pointer to Format_info_pg
+  \param type feature type (GV_POINT, ...)
+  \param id topology element id
+  \param do_update TRUE for UPDATE otherwise build SELECT statement
+  
+  \return pointer to allocated string buffer with SQL statement
+  \return NULL on error
+*/
+char *build_topogeom_stmt(const struct Format_info_pg *pg_info,
+                          int id, int type, int do_update)
+{
+    int topogeom_type;
+    char *stmt;
+    
+    stmt = NULL;
+
+    if (type == GV_POINT)
+        topogeom_type = 1;
+    else if (type == GV_LINES)
+        topogeom_type = 2;
+    else {
+        G_warning(_("Unsupported topo geometry type %d"), type);
+        return NULL;
+    }
+    
+    if (!do_update)
+        G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES "
+                   "(topology.CreateTopoGeom('%s', 1, %d, "
+                   "'{{%d, %d}}'::topology.topoelementarray))",
+                   pg_info->schema_name, pg_info->table_name,
+                   pg_info->topogeom_column, pg_info->toposchema_name,
+                   topogeom_type, id, topogeom_type);
+    else
+        G_asprintf(&stmt, "UPDATE \"%s\".\"%s\" SET %s = "
+                   "topology.CreateTopoGeom('%s', 1, %d, "
+                   "'{{%d, %d}}'::topology.topoelementarray) "
+                   "WHERE %s = %d",
+                   pg_info->schema_name, pg_info->table_name,
+                   pg_info->topogeom_column, pg_info->toposchema_name,
+                   topogeom_type, id, topogeom_type,
+                   pg_info->fid_column, id);
+    
+    return stmt;
+}
+
+/*!
+   \brief Execute SQL topo select statement
+
+   \param conn pointer to PGconn
+   \param stmt query
+
+   \return value on success
+   \return -1 on error
+ */
+int execute_topo(PGconn *conn, const char *stmt)
+{
+    int ret;
+    PGresult *result;
+
+    result = NULL;
+
+    G_debug(3, "execute_topo(): %s", stmt);
+    result = PQexec(conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK ||
+        PQntuples(result) != 1) {
+        PQclear(result);
+
+        G_warning(_("Execution failed: %s"), PQerrorMessage(conn));
+        return -1;
+    }
+
+    ret = atoi(PQgetvalue(result, 0, 0));
+    PQclear(result);
+    
+    return ret;
+}
+   
 #endif
