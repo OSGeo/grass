@@ -279,7 +279,7 @@ class GMConsole(wx.SplitterWindow):
         self.btnOutputClear.Bind(wx.EVT_BUTTON,  self.OnOutputClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON,   self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON,     self.OnCmdAbort)
-        self.btnCmdAbort.Bind(EVT_CMD_ABORT,     self.OnCmdAbort)
+        self.Bind(EVT_CMD_ABORT,                 self.OnCmdAbort)
         self.btnCmdProtocol.Bind(wx.EVT_TOGGLEBUTTON, self.OnCmdProtocol)
         
         self._layout()
