@@ -915,6 +915,8 @@ int main(int argc, char *argv[])
     /* Update database / print to stdout / create output map */
     if (flag.print->answer) {	/* print header */
 	fprintf(stdout, "from_cat");
+	if (do_all)
+	    fprintf(stdout, "|to_cat");
 	i = 0;
 	while (Upload[i].upload != END) {
 	    fprintf(stdout, "|%s", Upload[i].column);
@@ -972,7 +974,7 @@ int main(int argc, char *argv[])
     if (!do_all) {
 	count = nfcats;
     }
-    else if (print_as_matrix) {
+    else {
 	qsort((void *)Near, count, sizeof(NEAR), cmp_near_to);
     }
 
@@ -1055,6 +1057,8 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		fprintf(stdout, "%d", Near[i].from_cat);
+		if (do_all)
+		    fprintf(stdout, "|%d", Near[i].to_cat);
 		print_upload(Near, Upload, i, &cvarr, catval);
 		fprintf(stdout, "\n");
 	    }
