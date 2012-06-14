@@ -1,11 +1,11 @@
 
 /****************************************************************************
  *
- * MODULE:       r3.out.netcdf 
+ * MODULE:       r3.out.netCDF 
  *   	    	
  * AUTHOR(S):    Soeren Gebbert
  *
- * PURPOSE:      Export a 3D raster map as netcdf file  
+ * PURPOSE:      Export a 3D raster map as netCDF file  
  *
  * COPYRIGHT:    (C) 2012 by the GRASS Development Team
  *
@@ -51,7 +51,7 @@
 #define UNITS "units"
 #define DEGREES_EAST "degrees_east"
 #define DEGREES_NORTH "degrees_north"
-#define HISTORY_TEXT "GRASS GIS 7 NetCDF export of r3.out.netcdf"
+#define HISTORY_TEXT "GRASS GIS 7 netCDF export of r3.out.netcdf"
 #define CF_SUPPORT "CF-1.5"
 
 #define ERR(e) {fatalError(nc_strerror(e));}
@@ -94,7 +94,7 @@ static void setParams()
 
     param.output = G_define_standard_option(G_OPT_F_OUTPUT);
     param.output->key = "output";
-    param.output->description = _("Name for netcdf output file");
+    param.output->description = _("Name for netCDF output file");
 
     param.null = G_define_option();
     param.null->key = "null";
@@ -103,7 +103,7 @@ static void setParams()
     param.null->multiple = NO;
     param.null->description =
 	_
-	("The value to be used for null values, default is the NetCDF standard");
+	("The value to be used for null values, default is the netCDF standard");
 
     param.proj = G_define_flag();
     param.proj->key = 'p';
@@ -584,9 +584,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("raster3d"));
-    G_add_keyword(_("netcdf"));
+    G_add_keyword(_("netCDF"));
     G_add_keyword(_("export"));
-    module->description = _("Export a 3D raster map as netcdf file.");
+    module->description = _("Export a 3D raster map as netCDF file.");
 
     /* Get parameters from user */
     setParams();
@@ -616,7 +616,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Error opening 3d raster map <%s>"),
 		      param.input->answer);
 
-    /* Create netcdf file */
+    /* Create netCDF file */
     if ((retval = nc_create(param.output->answer, NC_CLOBBER, &ncid)))
 	ERR(retval);
 
@@ -647,7 +647,7 @@ int main(int argc, char *argv[])
     if (!Rast3d_close(map))
 	fatalError(_("Unable to close 3D raster map"));
 
-    /* Close the netcdf file */
+    /* Close the netCDF file */
     if ((retval = nc_close(ncid)))
 	ERR(retval);
 
