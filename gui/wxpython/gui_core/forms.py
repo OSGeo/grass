@@ -714,7 +714,8 @@ class TaskFrame(wx.Frame):
         
     def OnAbort(self, event):
         """!Abort running command"""
-        event = goutput.wxCmdAbort(aborted = True)
+        from gui_core.goutput import wxCmdAbort
+        event = wxCmdAbort(aborted = True)
         wx.PostEvent(self.goutput, event)
 
     def OnCopy(self, event):
