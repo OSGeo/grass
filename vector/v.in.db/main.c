@@ -63,11 +63,11 @@ int main(int argc, char *argv[])
 
     driver_opt = G_define_standard_option(G_OPT_DB_DRIVER);
     driver_opt->options = db_list_drivers();
-    driver_opt->answer = (char *) db_get_default_driver_name();
+    driver_opt->answer = (char *)db_get_default_driver_name();
     driver_opt->guisection = _("Connection");
 
     database_opt = G_define_standard_option(G_OPT_DB_DATABASE);
-    database_opt->answer = (char *) db_get_default_database_name();
+    database_opt->answer = (char *)db_get_default_database_name();
     database_opt->guisection = _("Connection");
 
     xcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -97,7 +97,8 @@ int main(int argc, char *argv[])
     same_table_flag = G_define_flag();
     same_table_flag->key = 't';
     same_table_flag->guisection = _("Connection");
-    same_table_flag->description = _("Use imported table as attribute table for new map");
+    same_table_flag->description =
+	_("Use imported table as attribute table for new map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -177,7 +178,7 @@ int main(int argc, char *argv[])
     nrows = db_get_num_rows(&cursor);
 
     G_debug(2, "%d points selected", nrows);
-    
+
     count = 0;
     G_message(_("Writing features..."));
     while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
@@ -201,7 +202,7 @@ int main(int argc, char *argv[])
 	    else
 		coor[i] = db_get_value_double(value);
 	}
-	
+
 	Vect_reset_line(Points);
 	Vect_reset_cats(Cats);
 
@@ -220,25 +221,29 @@ int main(int argc, char *argv[])
     /* Copy table */
     G_message(_("Copying attributes..."));
     if (!same_table_flag->answer) {
-        if (where_opt->answer)
-	ret =
-	    db_copy_table_where(driver_opt->answer, database_opt->answer,
-				table_opt->answer, fi->driver, fi->database,
-				fi->table, where_opt->answer);
-    else
-	ret =
-	    db_copy_table(driver_opt->answer, database_opt->answer,
-			  table_opt->answer, fi->driver, fi->database,
-			  fi->table);
-    if (ret == DB_FAILED) {
-	G_warning(_("Unable to copy table"));
+	if (where_opt->answer)
+	    ret =
+		db_copy_table_where(driver_opt->answer, database_opt->answer,
+				    table_opt->answer, fi->driver,
+				    fi->database, fi->table,
+				    where_opt->answer);
+	else
+	    ret =
+		db_copy_table(driver_opt->answer, database_opt->answer,
+			      table_opt->answer, fi->driver, fi->database,
+			      fi->table);
+	if (ret == DB_FAILED) {
+	    G_warning(_("Unable to copy table"));
+	}
+	else {
+	    Vect_map_add_dblink(&Map, 1, NULL, fi->table, keycol_opt->answer,
+				fi->database, fi->driver);
+	}
     }
     else {
-	Vect_map_add_dblink(&Map, 1, NULL, fi->table, keycol_opt->answer,
-			    fi->database, fi->driver);
-    }
-    } else {
-        Vect_map_add_dblink(&Map, 1, NULL, table_opt->answer, keycol_opt->answer, database_opt->answer, driver_opt->answer);
+	Vect_map_add_dblink(&Map, 1, NULL, table_opt->answer,
+			    keycol_opt->answer, database_opt->answer,
+			    driver_opt->answer);
     }
 
     Vect_build(&Map);
