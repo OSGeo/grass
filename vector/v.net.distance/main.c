@@ -131,8 +131,6 @@ int main(int argc, char *argv[])
     ncol->description = _("Node cost column (number)");
     ncol->guisection = _("Cost");
 
-    map_out = G_define_standard_option(G_OPT_V_OUTPUT);
-
     geo_f = G_define_flag();
     geo_f->key = 'g';
     geo_f->description =
