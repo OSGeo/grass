@@ -42,7 +42,6 @@
 #%option G_OPT_M_COORDS
 #% multiple: yes
 #% required: yes
-### 
 #%end
 #%flag 
 #%key: c
