@@ -39,8 +39,10 @@
 #% description: Name for output PNG image
 #% required : no
 #%end
-#%option G_OPT_M_EN
-#% required : yes
+#%option G_OPT_M_COORDS
+#% multiple: yes
+#% required: yes
+### 
 #%end
 #%flag 
 #%key: c
@@ -155,7 +157,7 @@ def main():
     group = options['group']
     raster = options['raster']
     output = options['output']
-    coords = options['east_north']
+    coords = options['coordinates']
     label = flags['c']
     gnuplot = flags['g']
 
