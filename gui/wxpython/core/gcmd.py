@@ -575,7 +575,7 @@ class CommandThread(Thread):
         # wait for the process to end, sucking in stuff until it does end
         while self.module.poll() is None:
             if self._want_abort: # abort running process
-                self.module.kill()
+                self.module.terminate()
                 self.aborted = True
                 return 
             if self.stdout:
