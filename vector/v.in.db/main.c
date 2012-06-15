@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     struct Option *driver_opt, *database_opt, *table_opt;
     struct Option *xcol_opt, *ycol_opt, *zcol_opt, *keycol_opt, *where_opt,
 	*outvect;
+    struct Flag *same_table_flag;
     struct GModule *module;
     struct Map_info Map;
     struct line_pnts *Points;
@@ -92,6 +93,11 @@ int main(int argc, char *argv[])
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
     outvect = G_define_standard_option(G_OPT_V_OUTPUT);
+
+    same_table_flag = G_define_flag();
+    same_table_flag->key = 't';
+    same_table_flag->guisection = _("Connection");
+    same_table_flag->description = _("Use imported table as attribute table for new map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -213,7 +219,8 @@ int main(int argc, char *argv[])
 
     /* Copy table */
     G_message(_("Copying attributes..."));
-    if (where_opt->answer)
+    if (!same_table_flag->answer) {
+        if (where_opt->answer)
 	ret =
 	    db_copy_table_where(driver_opt->answer, database_opt->answer,
 				table_opt->answer, fi->driver, fi->database,
@@ -223,13 +230,15 @@ int main(int argc, char *argv[])
 	    db_copy_table(driver_opt->answer, database_opt->answer,
 			  table_opt->answer, fi->driver, fi->database,
 			  fi->table);
-
     if (ret == DB_FAILED) {
 	G_warning(_("Unable to copy table"));
     }
     else {
 	Vect_map_add_dblink(&Map, 1, NULL, fi->table, keycol_opt->answer,
 			    fi->database, fi->driver);
+    }
+    } else {
+        Vect_map_add_dblink(&Map, 1, NULL, table_opt->answer, keycol_opt->answer, database_opt->answer, driver_opt->answer);
     }
 
     Vect_build(&Map);
