@@ -27,6 +27,7 @@ SUBDIRS = \
 	t.rast3d.mapcalc \
 	t.rast3d.univar \
 	t.vect.list \
+	t.vect.db.select \
 	t.vect.extract \
 	t.vect.what.strds \
 	t.vect.observe.strds \
