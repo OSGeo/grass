@@ -465,14 +465,14 @@ int add_geometry_ogr(struct Plus_head *plus,
 
 	/* alloc space for islands if needed */
 	if (nRings > ogr_info->cache.lines_alloc) {
-	    ogr_info->cache.lines_alloc += 20;
+	    ogr_info->cache.lines_alloc += nRings;
 	    ogr_info->cache.lines = (struct line_pnts **) G_realloc(ogr_info->cache.lines,
 								    ogr_info->cache.lines_alloc *
 								    sizeof(struct line_pnts *));
 	    ogr_info->cache.lines_types = (int *) G_realloc(ogr_info->cache.lines_types,
 							    ogr_info->cache.lines_alloc * sizeof(int));
 		
-	    for (i = ogr_info->cache.lines_alloc - 20; i < ogr_info->cache.lines_alloc; i++) {
+	    for (i = ogr_info->cache.lines_alloc - nRings; i < ogr_info->cache.lines_alloc; i++) {
 		ogr_info->cache.lines[i] = Vect_new_line_struct();
 		ogr_info->cache.lines_types[i] = -1;
 	    }
@@ -491,7 +491,7 @@ int add_geometry_ogr(struct Plus_head *plus,
 				  OGR_G_GetX(hRing, i), OGR_G_GetY(hRing, i),
 				  OGR_G_GetZ(hRing, i));
 	    }
-	    npoints += ogr_info->cache.lines[0]->n_points;
+	    npoints += ogr_info->cache.lines[iPart]->n_points;
 	    
 	    /* register boundary */
 	    add_part(parts, iPart);
@@ -572,14 +572,14 @@ int add_geometry_ogr(struct Plus_head *plus,
 
 	/* alloc space for parts if needed */
 	if (nParts > ogr_info->cache.lines_alloc) {
-	    ogr_info->cache.lines_alloc += 20;
+	    ogr_info->cache.lines_alloc += nParts;
 	    ogr_info->cache.lines = (struct line_pnts **) G_realloc(ogr_info->cache.lines,
 								    ogr_info->cache.lines_alloc *
 								    sizeof(struct line_pnts *));
 	    ogr_info->cache.lines_types = (int *) G_realloc(ogr_info->cache.lines_types,
 							    ogr_info->cache.lines_alloc * sizeof(int));
 		
-	    for (i = ogr_info->cache.lines_alloc - 20; i < ogr_info->cache.lines_alloc; i++) {
+	    for (i = ogr_info->cache.lines_alloc - nParts; i < ogr_info->cache.lines_alloc; i++) {
 		ogr_info->cache.lines[i] = Vect_new_line_struct();
 		ogr_info->cache.lines_types[i] = -1;
 	    }
@@ -748,12 +748,18 @@ int Vect_fidx_dump(const struct Map_info *Map, FILE *out)
     
     fprintf(out, "---------- FEATURE INDEX DUMP ----------\n");
     
+    fprintf(out, "format: %s\n", Vect_maptype_info(Map));
+    if (Vect_maptype(Map) == GV_FORMAT_POSTGIS &&
+        Map->fInfo.pg.toposchema_name)
+        fprintf(out, "topology: PostGIS\n");
+    else
+        fprintf(out, "topology: pseudo\n");
     fprintf(out, "feature type: %s\n", 
 	    Vect_get_finfo_geometry_type(Map));
-    fprintf(out, "number of features: %d\n\noffset array:\n",
+    fprintf(out, "number of features: %d\n\noffset : value (fid or part idx):\n",
 	    Vect_get_num_lines(Map));
     for (i = 0; i < offset->array_num; i++) {
-	fprintf(out, "%5d : %d\n", i, offset->array[i]);
+	fprintf(out, "%6d : %d\n", i, offset->array[i]);
     }
 
     return 1;
