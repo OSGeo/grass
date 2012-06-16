@@ -239,7 +239,7 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
     }
     else if (cat) {
 	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", GV_KEY_COLUMN);
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "categories");
 	*varray = Vect_new_varray(Vect_get_num_lines(In));
 	if (Vect_set_varray_from_cat_string
 	    (In, layer, cat, mask_type, 1, *varray) == -1) {
@@ -248,7 +248,29 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
 	}
 	return 1;
     }
-    else {
+    else { /* all features of given layer */
+	int i, n, cat;
+	int ltype;			/* line type */
+	struct line_cats *Cats;
+
+	if (layer < 1)
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "categories");
+
+	n = Vect_get_num_lines(In);
+	*varray = Vect_new_varray(n);
+	Cats = Vect_new_cats_struct();
+
+	for (i = 1; i <= n; i++) {
+	    ltype = Vect_read_line(In, NULL, Cats, i);
+
+	    if (!(ltype & mask_type))
+		continue;	/* is not specified type */
+
+	    if (Vect_cat_get(Cats, layer, &cat))
+		(*varray)->c[i] = 1;
+	}
+	Vect_destroy_cats_struct(Cats);
+
 	return 2;
     }
 
