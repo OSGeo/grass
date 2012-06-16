@@ -1,13 +1,13 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.net.distance</em> finds the nearast element in set <em>to</em> 
-for every element in set <em>from</em>. 
+for every point in set <em>from</em>. 
 
 <h2>NOTES</h2>
 
 These two sets are given by the respective <b>layer</b>, <b>where</b> 
 and <b>cats</b> parameters. The type of <em>to</em> features is specified 
-by <b>to_type</b> parameter and all <em>from</em> features are <em>points</em>. 
+by <b>to_type</b> parameter. All <em>from</em> features are <em>points</em>. 
 A table is linked to <b>output</b> map containing various information 
 about the relation. More specifically, the table has three columns: 
 <em>cat</em>, <em>tcat</em> and <em>dist</em> storing category of each 
@@ -19,18 +19,35 @@ from a point then the category of this point is assigned to the line.
 Note that every line may contain more than one category value since a
 single line may be on the shortest path for more than one <em>from</em> 
 feature. And so the shortest paths can be easily obtained by querying 
-lines with corresponding category number.<br>
+lines with corresponding category number.
+<p>
 The costs of arcs in forward and backward direction are specified by 
 <b>afcolumn</b> and <b>abcolumn</b> columns respectively. If 
 <b>abcolumn</b> is not given, the same cost is used in both directions.  
 
 <h2>EXAMPLES</h2>
 Find shortest path and distance from every school to the nearest hospital 
-and show path from school number one.
-<div class="code"><pre>
-v.net.distance input=city output=nearest from_where="type=school" to_where="type=hospital" afcolumn=SHAPE_LEN
-d.vect nearest cats=1
+and show all paths.
+
+<p>
+Streets are grey lines, schools are green circles, hospitals are red 
+crosses, shortest paths are blue lines:
+<p><img src="vnetdistance.png" alt="v.net.distance example" border="1">
+
+<p><div class="code"><pre>
+# connect schools to streets as layer 2
+v.net input=streets_wake points=schools_wake output=streets_net1 operation=connect thresh=400 alayer=1 nlayer=2
+
+# connect hospitals to streets as layer 3
+v.net input=streets_net1 points=hospitals output=streets_net2 operation=connect thresh=400 alayer=1 nlayer=3
+
+# inspect the result
+v.category in=streets_net2 op=report
+
+# shortest paths from schools (points in layer 2) to nearest hospitals (points in layer 3)
+v.net.distance in=streets_net2 out=schools_to_hospitals flayer=2 tlayer=3
 </pre></div>
+
 <p>
 <h2>SEE ALSO</h2>
 
@@ -44,6 +61,7 @@ d.vect nearest cats=1
 <h2>AUTHORS</h2>
 
 Daniel Bundala, Google Summer of Code 2009, Student<br>
-Wolf Bergenheim, Mentor
+Wolf Bergenheim, Mentor<br>
+Markus Metz
 
 <p><i>Last changed: $Date$</i>

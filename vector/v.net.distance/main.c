@@ -4,11 +4,12 @@
  * MODULE:     v.net.distance
  *
  * AUTHOR(S):  Daniel Bundala
+ *             Markus Metz
  *
  * PURPOSE:    Computes shortest distance via the network between
- *             the given sets of features.
+ *             two given sets of features.
  *
- * COPYRIGHT:  (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
+ * COPYRIGHT:  (C) 2009-2010, 2012 by Daniel Bundala, and the GRASS Development Team
  *
  *             This program is free software under the
  *             GNU General Public License (>=v2).
