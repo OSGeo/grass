@@ -32,13 +32,14 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *catf_opt, *wheref_opt;
-    struct Option *catt_opt, *wheret_opt, *to_type_opt;
-    struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol;
+    struct Option *catf_opt, *fieldf_opt, *wheref_opt;
+    struct Option *catt_opt, *fieldt_opt, *wheret_opt, *typet_opt;
+    struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol, *atype_opt;
     struct Flag *geo_f;
     int with_z, geo;
-    int mask_type;
+    int atype, ttype;
     struct varray *varrayf, *varrayt;
+    int flayer, tlayer;
     int afield, nfield;
     dglGraph_s *graph;
     struct ilist *nodest;
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
     module->label = _("Computes shortest distance via the network between "
 		      "the given sets of features.");
     module->description =
-	_("Finds the shortest paths from a feature 'to' to every feature 'from' "
+	_("Finds the shortest paths from a point 'from' to every feature 'to' "
 	 "and various information about this relation are uploaded to the attribute table.");
 
     /* Define the different options as defined in gis.h */
@@ -77,11 +78,22 @@ int main(int argc, char *argv[])
     afield_opt->description = _("Arc layer");
     afield_opt->guisection = _("Cost");
 
+    atype_opt = G_define_standard_option(G_OPT_V_TYPE);
+    atype_opt->options = "line,boundary";
+    atype_opt->answer = "line,boundary";
+    atype_opt->description = _("Arc type");
+    atype_opt->guisection = _("Cost");
+
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
     nfield_opt->answer = "2";
     nfield_opt->description = _("Node layer");
     nfield_opt->guisection = _("Cost");
+
+    fieldf_opt = G_define_standard_option(G_OPT_V_FIELD);
+    fieldf_opt->key = "from_layer";
+    fieldf_opt->label = _("From layer number or name");
+    fieldf_opt->guisection = _("From");
 
     catf_opt = G_define_standard_option(G_OPT_V_CATS);
     catf_opt->key = "from_cats";
@@ -94,6 +106,18 @@ int main(int argc, char *argv[])
 	_("From WHERE conditions of SQL statement without 'where' keyword");
     wheref_opt->guisection = _("From");
 
+    fieldt_opt = G_define_standard_option(G_OPT_V_FIELD);
+    fieldt_opt->key = "to_layer";
+    fieldt_opt->description = _("To layer number or name");
+    fieldt_opt->guisection = _("To");
+
+    typet_opt = G_define_standard_option(G_OPT_V_TYPE);
+    typet_opt->key = "to_type";
+    typet_opt->options = "point,line,boundary";
+    typet_opt->answer = "point";
+    typet_opt->description = _("To feature type");
+    typet_opt->guisection = _("To");
+
     catt_opt = G_define_standard_option(G_OPT_V_CATS);
     catt_opt->key = "to_cats";
     catt_opt->label = _("To category values");
@@ -104,13 +128,6 @@ int main(int argc, char *argv[])
     wheret_opt->label =
 	_("To WHERE conditions of SQL statement without 'where' keyword");
     wheret_opt->guisection = _("To");
-
-    to_type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    to_type_opt->key = "to_type";
-    to_type_opt->options = "point,line,boundary";
-    to_type_opt->answer = "point";
-    to_type_opt->description = _("To feature type");
-    to_type_opt->guisection = _("To");
 
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "afcolumn";
@@ -140,7 +157,9 @@ int main(int argc, char *argv[])
     /* options and flags parser */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-    mask_type = Vect_option_to_types(to_type_opt);
+
+    atype = Vect_option_to_types(atype_opt);
+    ttype = Vect_option_to_types(typet_opt);
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -188,16 +207,21 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    NetA_initialise_varray(&In, nfield, GV_POINT, wheref_opt->answer,
+    flayer = atoi(fieldf_opt->answer);
+    tlayer = atoi(fieldt_opt->answer);
+
+    NetA_initialise_varray(&In, flayer, GV_POINT, wheref_opt->answer,
 			   catf_opt->answer, &varrayf);
-    NetA_initialise_varray(&In, nfield, mask_type, wheret_opt->answer,
+
+    NetA_initialise_varray(&In, tlayer, ttype, wheret_opt->answer,
 			   catt_opt->answer, &varrayt);
 
     nodest = Vect_new_list();
     NetA_varray_to_nodes(&In, varrayt, nodest, nodes_to_features);
 
-    Vect_net_build_graph(&In, mask_type, 1, 0, afcol->answer, abcol->answer,
+    Vect_net_build_graph(&In, atype, afield, nfield, afcol->answer, abcol->answer,
 			 ncol->answer, geo, 0);
+
     graph = &(In.graph);
     NetA_distance_from_points(graph, nodest, dst, prev);
 
@@ -236,14 +260,14 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    for (i = 1; i <= nlines; i++)
+    for (i = 1; i <= nlines; i++) {
 	if (varrayf->c[i]) {
 	    int type = Vect_read_line(&In, Points, Cats, i);
 	    int node, tcat, cat;
 	    double cost;
 	    dglInt32_t *vertex, vertex_id;
 
-	    if (!Vect_cat_get(Cats, nfield, &cat))
+	    if (!Vect_cat_get(Cats, flayer, &cat))
 		continue;
 		
 	    if (type & GV_POINTS) {
@@ -266,7 +290,7 @@ int main(int argc, char *argv[])
 		vertex_id = dglNodeGet_Id(graph, vertex);
 	    }
 	    Vect_read_line(&In, NULL, Cats, nodes_to_features[vertex_id]);
-	    if (!Vect_cat_get(Cats, nfield, &tcat))
+	    if (!Vect_cat_get(Cats, tlayer, &tcat))
 		continue;
 	    sprintf(buf, "insert into %s values (%d, %d, %f)", Fi->table, cat,
 		    tcat, cost);
@@ -279,6 +303,7 @@ int main(int argc, char *argv[])
 			      db_get_string(&sql));
 	    };
 	}
+    }
 
     for (i = 1; i <= nlines; i++)
 	if (on_path[i]->n_cats > 0) {
