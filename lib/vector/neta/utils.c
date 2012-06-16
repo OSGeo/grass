@@ -170,6 +170,7 @@ void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
 			  struct ilist *nodes, int *nodes_to_features)
 {
     int nlines, nnodes, i;
+    struct line_pnts *Points = Vect_new_line_struct();
 
     nlines = Vect_get_num_lines(map);
     nnodes = Vect_get_num_nodes(map);
@@ -177,17 +178,21 @@ void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
 	for (i = 1; i <= nnodes; i++)
 	    nodes_to_features[i] = -1;
 
-    for (i = 1; i <= nlines; i++)
+    for (i = 1; i <= nlines; i++) {
 	if (varray->c[i]) {
-	    int type = Vect_read_line(map, NULL, NULL, i);
+	    int type = Vect_read_line(map, Points, NULL, i);
 
 	    if (type == GV_POINT) {
 		int node;
 
-		Vect_get_line_nodes(map, i, &node, NULL);
-		Vect_list_append(nodes, node);
-		if (nodes_to_features)
-		    nodes_to_features[node] = i;
+		node = Vect_find_node(map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		if (node) {
+		    Vect_list_append(nodes, node);
+		    if (nodes_to_features)
+			nodes_to_features[node] = i;
+		}
+		else
+		    G_warning(_("Point %d is not connected!"), i);
 	    }
 	    else {
 		int node1, node2;
@@ -199,6 +204,8 @@ void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
 		    nodes_to_features[node1] = nodes_to_features[node2] = i;
 	    }
 	}
+    }
+    Vect_destroy_line_struct(Points);
 }
 
 /*!
