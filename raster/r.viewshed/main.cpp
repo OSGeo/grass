@@ -289,16 +289,16 @@ int main(int argc, char *argv[])
 	    else {
 		G_debug(1, "are ok.");
 	    }
-	    G_debug(1, "Intermediate stream location: %s", viewOptions.streamdir);
 	}
 	G_important_message(_("Intermediate files will not be deleted \
 		              in case of abnormal termination."));
+	G_important_message(_("Intermediate location: %s"), viewOptions.streamdir);
 	G_important_message(_("To save space delete these files manually!"));
 
 
 	/* initialize IOSTREAM memory manager */
 	MM_manager.set_memory_limit(memSizeBytes);
-	MM_manager.warn_memory_limit();
+	MM_manager.ignore_memory_limit();
 	MM_manager.print_limit_mode();
 
 

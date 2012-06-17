@@ -147,6 +147,9 @@ void delete_from_tree(TreeNode ** root, double key);
 /*search for a node with the given key */
 TreeNode *search_for_node(TreeNode * root, double key);
 
+/*find the min value in the given tree value */
+double find_value_min_value(TreeValue * v);
+
 /*find the max value in the given tree
    //you need to provide a compare function to compare the nodes */
 double find_max_value(TreeNode * root);

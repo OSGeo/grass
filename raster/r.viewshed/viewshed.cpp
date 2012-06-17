@@ -325,9 +325,9 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader * hd,
 
     for (size_t i = 0; i < nevents; i++) {
 
-	int perc = (int)((double)i / nevents * 1000000.);
+	int perc = (int)(1000000 * i / nevents);
 	if (perc > 0 && perc < 1000000)
-	    G_percent(perc, 1000000, 2);
+	    G_percent(perc, 1000000, 1);
 
 	/*get out one event at a time and process it according to its type */
 	e = &(eventList[i]);
@@ -506,7 +506,7 @@ IOVisibilityGrid *viewshed_external(char *inputfname, GridHeader * hd,
        structure */
     StatusNode sn;
 
-    G_message(_("Calculating distances..."));
+    G_message(_("Initialize sweepline..."));
 
     rt_start(sweepTime);
     for (dimensionType i = vp->col + 1; i < hd->ncols; i++) {
@@ -576,9 +576,9 @@ IOVisibilityGrid *viewshed_external(char *inputfname, GridHeader * hd,
 
     for (off_t i = 0; i < nbEvents; i++) {
 
-	int perc = (int)((double)i / nbEvents * 1000000.);
+	int perc = (int)(1000000 * i / nbEvents);
 	if (perc > 0)
-	    G_percent(perc, 1000000, 2);
+	    G_percent(perc, 1000000, 1);
 
 	/*get out one event at a time and process it according to its type */
 	ae = eventList->read_item(&e);
