@@ -694,8 +694,12 @@ int RadialCompare::compare(const AEvent & a, const AEvent & b)
 	/*a.angle == b.angle */
 	if (a.eventType == EXITING_EVENT)
 	    return -1;
-	else if (a.eventType == ENTERING_EVENT)
+	if (b.eventType == EXITING_EVENT)
 	    return 1;
+	if (a.eventType == ENTERING_EVENT)
+	    return 1;
+	if (b.eventType == ENTERING_EVENT)
+	    return -1;
 	return 0;
     }
 }
