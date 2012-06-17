@@ -188,14 +188,12 @@ char compare_values(TreeValue * v1, TreeValue * v2)
 
 
 /*a function used to compare two doubles */
+/* a < b : -1
+ * a > b : 1
+ * a == b : 0 */
 char compare_double(double a, double b)
 {
-    if (fabs(a - b) < EPSILON)
-	return 0;
-    if (a - b < 0)
-	return -1;
-
-    return 1;
+    return (a < b ? -1 : (a > b));
 }
 
 
@@ -264,7 +262,7 @@ void insert_into_tree(TreeNode ** root, TreeValue value)
     TreeNode *inserted = nextNode;
 
     /*update augmented maxGradient */
-    nextNode->value.maxGradient = nextNode->value.gradient[1];
+    nextNode->value.maxGradient = find_value_min_value(&nextNode->value);
     while (nextNode->parent != NIL) {
 	if (nextNode->parent->value.maxGradient < nextNode->value.maxGradient)
 	    nextNode->parent->value.maxGradient = nextNode->value.maxGradient;
@@ -432,7 +430,7 @@ void delete_from_tree(TreeNode ** root, double key)
     double left, right;
 
     while (curNode->parent != NIL) {
-	if (curNode->parent->value.maxGradient == y->value.gradient[1]) {
+	if (curNode->parent->value.maxGradient == find_value_min_value(&y->value)) {
 	    left = find_max_value(curNode->parent->left);
 	    right = find_max_value(curNode->parent->right);
 
@@ -441,10 +439,10 @@ void delete_from_tree(TreeNode ** root, double key)
 	    else
 		curNode->parent->value.maxGradient = right;
 
-	    if (curNode->parent->value.gradient[1] >
+	    if (find_value_min_value(&curNode->parent->value) >
 		curNode->parent->value.maxGradient)
 		curNode->parent->value.maxGradient =
-		    curNode->parent->value.gradient[1];
+		    find_value_min_value(&curNode->parent->value);
 	}
 	else {
 	    break;
@@ -458,14 +456,14 @@ void delete_from_tree(TreeNode ** root, double key)
 	toFix->left->value.maxGradient >
 	toFix->right->value.maxGradient ? toFix->left->value.
 	maxGradient : toFix->right->value.maxGradient;
-    if (tmpMax > toFix->value.gradient[1])
+    if (tmpMax > find_value_min_value(&toFix->value))
 	toFix->value.maxGradient = tmpMax;
     else
-	toFix->value.maxGradient = toFix->value.gradient[1];
+	toFix->value.maxGradient = find_value_min_value(&toFix->value);
 
     /*13-15 */
     if (y != NIL && y != z) {
-	double zGradient = z->value.gradient[1];
+	double zGradient = find_value_min_value(&z->value);
 
 	z->value.key = y->value.key;
 	z->value.gradient[0] = y->value.gradient[0];
@@ -482,14 +480,14 @@ void delete_from_tree(TreeNode ** root, double key)
 	    toFix->left->value.maxGradient >
 	    toFix->right->value.maxGradient ? toFix->left->value.
 	    maxGradient : toFix->right->value.maxGradient;
-	if (tmpMax > toFix->value.gradient[1])
+	if (tmpMax > find_value_min_value(&toFix->value))
 	    toFix->value.maxGradient = tmpMax;
 	else
-	    toFix->value.maxGradient = toFix->value.gradient[1];
+	    toFix->value.maxGradient = find_value_min_value(&toFix->value);
 
 	while (z->parent != NIL) {
 	    if (z->parent->value.maxGradient == zGradient) {
-		if (z->parent->value.gradient[1] != zGradient &&
+		if (find_value_min_value(&z->parent->value) != zGradient &&
 		    (!(z->parent->left->value.maxGradient == zGradient &&
 		       z->parent->right->value.maxGradient == zGradient))) {
 
@@ -501,10 +499,10 @@ void delete_from_tree(TreeNode ** root, double key)
 		    else
 			z->parent->value.maxGradient = right;
 
-		    if (z->parent->value.gradient[1] >
+		    if (find_value_min_value(&z->parent->value) >
 			z->parent->value.maxGradient)
 			z->parent->value.maxGradient =
-			    z->parent->value.gradient[1];
+			    find_value_min_value(&z->parent->value);
 
 		}
 
@@ -608,6 +606,24 @@ void rb_delete_fixup(TreeNode ** root, TreeNode * x)
     return;
 }
 
+/*find the min value in the given tree value */
+double find_value_min_value(TreeValue * v)
+{
+    if (v->gradient[0] < v->gradient[1]) {
+	if (v->gradient[0] < v->gradient[2])
+	    return v->gradient[0];
+	else
+	    return v->gradient[2];
+    }
+    else {
+	if (v->gradient[1] < v->gradient[2])
+	    return v->gradient[1];
+	else
+	    return v->gradient[2];
+    }
+    return v->gradient[0];
+}
+
 /*find the max value in the given tree
    //you need to provide a compare function to compare the nodes */
 double find_max_value(TreeNode * root)
@@ -631,8 +647,9 @@ double find_max_value_within_key(TreeNode * root, double maxKey, double angle, d
     if (keyNode == NIL) {
 	/*fprintf(stderr, "key node not found. error occured!\n");
 	   //there is no point in the structure with key < maxKey */
+	/*node not found */
+	G_fatal_error(_("Attempt to find node with key=%f failed"), maxKey);
 	return SMALLEST_GRADIENT;
-	exit(1);
     }
 
     TreeNode *currNode = keyNode;
@@ -640,17 +657,33 @@ double find_max_value_within_key(TreeNode * root, double maxKey, double angle, d
     double tmpMax;
     double curr_gradient;
 
+    while (currNode->parent != NIL) {
+	if (currNode == currNode->parent->right) {	/*its the right node of its parent; */
+	    tmpMax = find_max_value(currNode->parent->left);
+	    if (tmpMax > max)
+		max = tmpMax;
+	    if (find_value_min_value(&currNode->parent->value) > max)
+		max = find_value_min_value(&currNode->parent->value);
+	}
+	currNode = currNode->parent;
+    }
+
+    if (max > gradient)
+	return max;
+
     /* traverse all nodes with smaller distance */
+    max = SMALLEST_GRADIENT;
+    currNode = keyNode;
     while (currNode != NIL) {
 	int checkme = (currNode->value.angle[0] <= angle &&
 	              currNode->value.angle[2] >= angle);
 		      
 	if (!checkme && currNode->value.key > 0) {
-	    G_warning(_("\nangles outside angle %.4f"), angle);
+	    G_warning(_("Angles outside angle %.4f"), angle);
 	    G_warning(_("ENTER angle %.4f"), currNode->value.angle[0]);
 	    G_warning(_("CENTER angle %.4f"), currNode->value.angle[1]);
 	    G_warning(_("EXIT angle %.4f"), currNode->value.angle[2]);
-	    G_warning(_("\nENTER gradient %.4f"), currNode->value.gradient[0]);
+	    G_warning(_("ENTER gradient %.4f"), currNode->value.gradient[0]);
 	    G_warning(_("CENTER gradient %.4f"), currNode->value.gradient[1]);
 	    G_warning(_("EXIT gradient %.4f"), currNode->value.gradient[2]);
 	}
@@ -729,20 +762,20 @@ void left_rotate(TreeNode ** root, TreeNode * x)
     tmpMax = x->left->value.maxGradient > y->left->value.maxGradient ?
 	x->left->value.maxGradient : y->left->value.maxGradient;
 
-    if (tmpMax > x->value.gradient[1])
+    if (tmpMax > find_value_min_value(&x->value))
 	x->value.maxGradient = tmpMax;
     else
-	x->value.maxGradient = x->value.gradient[1];
+	x->value.maxGradient = find_value_min_value(&x->value);
 
 
     /*fix y */
     tmpMax = x->value.maxGradient > y->right->value.maxGradient ?
 	x->value.maxGradient : y->right->value.maxGradient;
 
-    if (tmpMax > y->value.gradient[1])
+    if (tmpMax > find_value_min_value(&y->value))
 	y->value.maxGradient = tmpMax;
     else
-	y->value.maxGradient = y->value.gradient[1];
+	y->value.maxGradient = find_value_min_value(&y->value);
 
     /*left rotation
        //see pseudocode on page 278 in CLRS */
@@ -781,19 +814,19 @@ void right_rotate(TreeNode ** root, TreeNode * y)
     tmpMax = x->right->value.maxGradient > y->right->value.maxGradient ?
 	x->right->value.maxGradient : y->right->value.maxGradient;
 
-    if (tmpMax > y->value.gradient[1])
+    if (tmpMax > find_value_min_value(&y->value))
 	y->value.maxGradient = tmpMax;
     else
-	y->value.maxGradient = y->value.gradient[1];
+	y->value.maxGradient = find_value_min_value(&y->value);
 
     /*fix x */
     tmpMax = x->left->value.maxGradient > y->value.maxGradient ?
 	x->left->value.maxGradient : y->value.maxGradient;
 
-    if (tmpMax > x->value.gradient[1])
+    if (tmpMax > find_value_min_value(&x->value))
 	x->value.maxGradient = tmpMax;
     else
-	x->value.maxGradient = x->value.gradient[1];
+	x->value.maxGradient = find_value_min_value(&x->value);
 
     /*ratation */
     y->left = x->right;
