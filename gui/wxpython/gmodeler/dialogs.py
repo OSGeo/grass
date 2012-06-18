@@ -33,7 +33,7 @@ from core                 import globalvar
 from core                 import utils
 from gui_core.widgets     import GNotebook
 from core.gcmd            import GError, EncodeString
-from gui_core.dialogs     import ElementDialog, MapLayersDialog
+from gui_core.dialogs     import ElementDialog, MapLayersDialogForModeler
 from gui_core.ghelp       import SearchModuleWindow
 from gui_core.prompt      import GPromptSTC
 from gui_core.forms       import CmdPanel
@@ -460,7 +460,7 @@ class ModelLoopDialog(ModelItemDialog):
 
     def OnSeries(self, event):
         """!Define map series as condition"""
-        dialog = MapLayersDialog(parent = self, title = _("Define series of maps"), modeler = True)
+        dialog = MapLayersDialogForModeler(parent = self, title = _("Define series of maps"))
         if dialog.ShowModal() != wx.ID_OK:
             dialog.Destroy()
             return
