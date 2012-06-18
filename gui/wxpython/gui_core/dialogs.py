@@ -40,6 +40,7 @@ from bisect import bisect
 import wx
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
+from wx.lib.newevent import NewEvent
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -52,6 +53,8 @@ from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED
 from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings
 from core.debug       import Debug
+
+wxApplyMapLayers, EVT_APPLY_MAP_LAYERS= NewEvent()
 
 class ElementDialog(wx.Dialog):
     def __init__(self, parent, title, label, id = wx.ID_ANY,
@@ -1025,9 +1028,8 @@ class GroupDialog(wx.Dialog):
         
     def OnAddLayer(self, event):
         """!Add new layer to listbox"""
-        dlg = MapLayersDialog(parent = self, title = _("Add selected map layers into group"),
-                              mapType = 'raster', selectAll = False,
-                              fullyQualified = True, showFullyQualified = False)
+        dlg = MapLayersDialogForGroups(parent = self, title = _("Add selected map layers into group"))
+        
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
@@ -1213,76 +1215,92 @@ class GroupDialog(wx.Dialog):
             self.Destroy()
         event.Skip()
         
-class MapLayersDialog(wx.Dialog):
-    def __init__(self, parent, title, modeler = False,
-                 mapType = None, selectAll = True, fullyQualified = True, showFullyQualified = True, 
+class MapLayersDialogBase(wx.Dialog):
+    """!Base dialog for selecting map layers (raster, vector).
+
+    There are 3 subclasses: MapLayersDialogForGroups, MapLayersDialogForModeler,
+    MapLayersDialog. Base class contains core functionality.
+    """
+    def __init__(self, parent, title, 
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        """!Dialog for selecting map layers (raster, vector)
-        
-        Valid mapType values:
-         - raster
-         - raster3d
-         - vector
-        
-        @param mapType type of map (if None: raster, vector, 3d raster, if one only: selects it and disables selection)
-        @param selectAll all/none maps should be selected by default
-        @param fullyQualified True if dialog should return full map names by default
-        @param showFullyQualified True to show 'fullyQualified' checkbox, otherwise hide it
-        """
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
                            style = style, **kwargs)
         
         self.parent = parent # GMFrame or ?
-        self.mapType = mapType
-        self.selectAll = selectAll
+        self.mainSizer = wx.BoxSizer(wx.VERTICAL)
         
         # dialog body
         self.bodySizer = self._createDialogBody()
+        self.mainSizer.Add(item = self.bodySizer, proportion = 1,
+                      flag = wx.EXPAND | wx.ALL, border = 5)
+        
         # update list of layer to be loaded
         self.map_layers = [] # list of map layers (full list type/mapset)
         self.LoadMapLayers(self.GetLayerType(cmd = True),
                            self.mapset.GetStringSelection())
-        
-        self.fullyQualified = wx.CheckBox(parent = self, id = wx.ID_ANY,
-                                          label = _("Use fully-qualified map names"))
-        self.fullyQualified.SetValue(fullyQualified)
-        self.fullyQualified.Show(showFullyQualified)
 
-        self.dseries = None
-        if modeler:
-            self.dseries = wx.CheckBox(parent = self, id = wx.ID_ANY,
-                                       label = _("Dynamic series (%s)") % 'g.mlist')
-            self.dseries.SetValue(False)
-        
+        self._fullyQualifiedNames()
+        self._modelerDSeries()
+
         # buttons
         btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
         btnOk = wx.Button(parent = self, id = wx.ID_OK)
         btnOk.SetDefault()
         
         # sizers & do layout
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(btnCancel)
-        btnSizer.AddButton(btnOk)
-        btnSizer.Realize()
+        self.btnSizer = wx.StdDialogButtonSizer()
+        self.btnSizer.AddButton(btnCancel)
+        self.btnSizer.AddButton(btnOk)
+        self._addApplyButton()
+        self.btnSizer.Realize()
         
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item = self.bodySizer, proportion = 1,
-                      flag = wx.EXPAND | wx.ALL, border = 5)
-        mainSizer.Add(item = self.fullyQualified, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
-        if self.dseries:
-            mainSizer.Add(item = self.dseries, proportion = 0,
-                          flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
-        
-        mainSizer.Add(item = btnSizer, proportion = 0,
+        self.mainSizer.Add(item = self.btnSizer, proportion = 0,
                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
 
-        self.SetSizer(mainSizer)
-        mainSizer.Fit(self)
+        self.SetSizer(self.mainSizer)
+        self.mainSizer.Fit(self)
 
         # set dialog min size
         self.SetMinSize(self.GetSize())
-        
+
+    def _modelerDSeries(self):
+        """!Method used only by MapLayersDialogForModeler,
+        for other subclasses does nothing.
+        """
+        pass
+
+    def _addApplyButton(self):
+        """!Method used only by MapLayersDialog,
+        for other subclasses does nothing.
+        """
+        pass
+
+    def _fullyQualifiedNames(self):
+        """!Adds CheckBox which determines is fully qualified names are retuned.
+        """
+        self.fullyQualified = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                           label = _("Use fully-qualified map names"))
+        self.fullyQualified.SetValue(True)
+        self.mainSizer.Add(item = self.fullyQualified, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+
+    def _useFullyQualifiedNames(self):
+        return self.fullyQualified.IsChecked()
+
+    def _layerTypes(self):
+        """!Determines which layer types can be chosen.
+
+         Valid values:
+         - raster
+         - raster3d
+         - vector
+         """
+        return [_('raster'), _('3D raster'), _('vector')]
+
+    def _selectAll(self):
+        """!Check all layers by default"""
+        return True
+
     def _createDialogBody(self):
         bodySizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         bodySizer.AddGrowableCol(1)
@@ -1294,26 +1312,18 @@ class MapLayersDialog(wx.Dialog):
                       pos = (0,0))
         
         self.layerType = wx.Choice(parent = self, id = wx.ID_ANY,
-                                   choices = [_('raster'), _('3D raster'), _('vector')], size = (100,-1))
-        
-        if self.mapType:
-            if self.mapType == 'raster':
-                self.layerType.SetSelection(0)
-            elif self.mapType == 'raster3d':
-                self.layerType.SetSelection(1)
-            elif self.mapType == 'vector':
-                self.layerType.SetSelection(2)
-            self.layerType.Disable()
-        else:
-            self.layerType.SetSelection(0)
+                                   choices = self._layerTypes(), size = (100,-1))
+
+        self.layerType.SetSelection(0)
             
         bodySizer.Add(item = self.layerType,
-                      pos = (0,1))
-        
+                           pos = (0,1))
+        self.layerType.Bind(wx.EVT_CHOICE, self.OnChangeParams)
+
         # select toggle
         self.toggle = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                   label = _("Select toggle"))
-        self.toggle.SetValue(self.selectAll)
+        self.toggle.SetValue(self._selectAll())
         bodySizer.Add(item = self.toggle,
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (0,2))
@@ -1352,7 +1362,6 @@ class MapLayersDialog(wx.Dialog):
                       pos = (3,1), span = (1, 2))
         
         # bindings
-        self.layerType.Bind(wx.EVT_CHOICE, self.OnChangeParams)
         self.mapset.Bind(wx.EVT_COMBOBOX, self.OnChangeParams)
         self.layers.Bind(wx.EVT_RIGHT_DOWN, self.OnMenu)
         self.filter.Bind(wx.EVT_TEXT, self.OnFilter)
@@ -1372,7 +1381,7 @@ class MapLayersDialog(wx.Dialog):
         # check all items by default
         for item in range(self.layers.GetCount()):
             
-            self.layers.Check(item, check = self.selectAll)
+            self.layers.Check(item, check = self._selectAll())
         
     def OnChangeParams(self, event):
         """!Filter parameters changed by user"""
@@ -1401,7 +1410,7 @@ class MapLayersDialog(wx.Dialog):
         
         self.PopupMenu(menu)
         menu.Destroy()
-        
+
     def OnSelectAll(self, event):
         """!Select all map layer from list"""
         for item in range(self.layers.GetCount()):
@@ -1454,12 +1463,11 @@ class MapLayersDialog(wx.Dialog):
             # layers.append(self.layers.GetStringSelec(indx))
             pass
 
-        fullyQualified = self.fullyQualified.IsChecked()
         mapset = self.mapset.GetStringSelection()
         for item in range(self.layers.GetCount()):
             if not self.layers.IsChecked(item):
                 continue
-            if fullyQualified:
+            if self._useFullyQualifiedNames():
                 layerNames.append(self.layers.GetString(item) + '@' + mapset)
             else:
                 layerNames.append(self.layers.GetString(item))
@@ -1484,6 +1492,58 @@ class MapLayersDialog(wx.Dialog):
         
         return ltype
 
+class MapLayersDialog(MapLayersDialogBase):
+    """!Subclass of MapLayersDialogBase used in Layer Manager. 
+
+    Contains apply button, which sends wxApplyMapLayers event.
+    """
+    def __init__(self, parent, title, **kwargs):
+        MapLayersDialogBase.__init__(self, parent = parent, title = title, **kwargs)
+
+    def _addApplyButton(self):
+        btnApply = wx.Button(parent = self, id = wx.ID_APPLY)
+        self.btnSizer.AddButton(btnApply)
+        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
+
+    def OnApply(self, event):
+        event = wxApplyMapLayers(mapLayers = self.GetMapLayers(), ltype = self.GetLayerType(cmd = True))
+        wx.PostEvent(self, event)
+
+class MapLayersDialogForGroups(MapLayersDialogBase):
+    """!Subclass of MapLayersDialogBase used for specyfying maps in an imagery group. 
+
+    Shows only raster maps.
+    """
+    def __init__(self, parent, title, **kwargs):
+        MapLayersDialogBase.__init__(self, parent = parent, title = title, **kwargs)
+
+    def _layerTypes(self):
+        return [_('raster'),]
+
+    def _selectAll(self):
+        """!Could be overriden"""
+        return False
+
+    def _fullyQualifiedNames(self):
+        pass
+
+    def _useFullyQualifiedNames(self):
+        return True
+
+
+class MapLayersDialogForModeler(MapLayersDialogBase):
+    """!Subclass of MapLayersDialogBase used in Modeler. 
+    """
+    def __init__(self, parent, title, **kwargs):
+        MapLayersDialogBase.__init__(self, parent = parent, title = title, **kwargs)
+
+    def _modelerDSeries(self):
+        self.dseries = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                   label = _("Dynamic series (%s)") % 'g.mlist')
+        self.dseries.SetValue(False)
+        self.mainSizer.Add(item = self.dseries, proportion = 0,
+                           flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+
     def GetDSeries(self):
         """!Used by modeler only
 
@@ -1499,6 +1559,7 @@ class MapLayersDialog(wx.Dialog):
         cond += 'mapset=%s`' % self.mapset.GetStringSelection()
         
         return cond
+
     
 class ImportDialog(wx.Dialog):
     """!Dialog for bulk import of various data (base class)"""

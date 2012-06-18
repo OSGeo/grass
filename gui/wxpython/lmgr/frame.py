@@ -49,6 +49,7 @@ from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
 from gui_core.goutput      import GMConsole
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
+from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
 from gui_core.menu         import Menu
@@ -1407,19 +1408,25 @@ class GMFrame(wx.Frame):
     def OnAddMaps(self, event = None):
         """!Add selected map layers into layer tree"""
         dialog = MapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
+        dialog.Bind(EVT_APPLY_MAP_LAYERS, self.OnApplyMapLayers)
+        val = dialog.ShowModal()
         
-        if dialog.ShowModal() != wx.ID_OK:
-            dialog.Destroy()
-            return
+        if val == wx.ID_OK:
+            self.AddMaps(dialog.GetMapLayers(), dialog.GetLayerType(cmd = True))
+        dialog.Destroy()
         
+    def OnApplyMapLayers(self, event):
+        self.AddMaps(mapLayers = event.mapLayers, ltype = event.ltype)
+
+    def AddMaps(self, mapLayers, ltype):
+        """!Add map layers to layer tree."""
         # start new map display if no display is available
         if not self.curr_page:
             self.NewDisplay()
             
         maptree = self.curr_page.maptree
         
-        for layerName in dialog.GetMapLayers():
-            ltype = dialog.GetLayerType(cmd = True)
+        for layerName in mapLayers:
             if ltype == 'rast':
                 cmd = ['d.rast', 'map=%s' % layerName]
                 wxType = 'raster'
@@ -1440,8 +1447,6 @@ class GMFrame(wx.Frame):
                                        lopacity = 1.0,
                                        lcmd = cmd,
                                        lgroup = None)
-        dialog.Destroy()
-        
     def OnAddRaster(self, event):
         """!Add raster map layer"""
         # start new map display if no display is available
