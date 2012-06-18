@@ -1553,6 +1553,7 @@ programming. The programmer should use only routines with this prefix.
 - \subpage vlibAsciiFn
 - \subpage vlibSFAFn
 - \subpage vlibGeosFn
+- \subpage vlibPgFn
 
 \section vlibArea Vector area functions
 
@@ -2301,6 +2302,36 @@ Note: The functions are available only if GRASS is compiled with
 
  - Vect_get_isle_points_geos()
 
+\section vlibPgFn Vector PostgreSQL/PostGIS functions
+
+Note: The functions are available only if GRASS is compiled with
+<tt>--with-postgres</tt> switch.
+
+ - Vect_open_topo_pg()
+
+ - Vect_build_pg()
+
+(For internal use only)
+
+ - V1_open_old_pg(), V2_open_old_pg() called by Vect_open_old()
+
+ - V1_open_new_pg(), V2_open_new_pg() called by Vect_open_new()
+
+ - V1_rewind_pg(), V2_rewind_pg() called by Vect_rewind()
+
+ - V1_close_pg(), V2_close_pg() called by Vect_close()
+
+ - V1_read_line_pg(), V2_read_line_pg() called by Vect_read_line()
+
+ - V1_read_next_line_pg(), V2_read_next_line_pg() called by Vect_read_next_line()
+
+ - V1_delete_line_pg(), V2_delete_line_sfa() called by Vect_delete_line()
+
+ - V1_write_line_pg(), V2_write_line_pg() called by Vect_write_line()
+
+ - V1_rewrite_line_pg(), V2_rewrite_line_sfa() called by Vect_rewrite_line()
+
+ - V2_write_area_pg(), see <tt>v.out.postgis</tt> for implementation issues
 
 \section vlibAuthors Authors
 
@@ -2312,7 +2343,7 @@ Updates for GRASS 7:
 
 - Markus Metz (file-based spatial index, vector topology)
 
-- Martin Landa (GEOS support, direct OGR read access) <landa.martin gmail.com>
+- Martin Landa (GEOS support, direct OGR read access, PostgreSQL/PostGIS support) <landa.martin gmail.com>
 
 \section vlibReferences References
 
