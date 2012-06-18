@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
     static struct line_pnts *Points;
-    struct line_cats *Cats;
+    struct line_cats *Cats, *TCats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *catf_opt, *fieldf_opt, *wheref_opt;
@@ -164,6 +164,7 @@ int main(int argc, char *argv[])
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    TCats = Vect_new_cats_struct();
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
 				 G_FATAL_EXIT);
@@ -279,7 +280,8 @@ int main(int argc, char *argv[])
 	    }
 	    if (node < 1)
 		continue;
-	    Vect_write_line(&Out, type, Points, Cats);
+	    if (dst[node] < 0)
+		continue; /* unreachable */
 	    cost = dst[node] / (double)In.cost_multip;
 	    vertex = dglGetNode(graph, node);
 	    vertex_id = node;
@@ -290,9 +292,12 @@ int main(int argc, char *argv[])
 		vertex = dglEdgeGet_Head(graph, prev[vertex_id]);
 		vertex_id = dglNodeGet_Id(graph, vertex);
 	    }
-	    Vect_read_line(&In, NULL, Cats, nodes_to_features[vertex_id]);
-	    if (!Vect_cat_get(Cats, tlayer, &tcat))
+	    G_debug(3, "read line %d, vertex id %d", nodes_to_features[vertex_id], (int)vertex_id);
+	    Vect_read_line(&In, NULL, TCats, nodes_to_features[vertex_id]);
+	    if (!Vect_cat_get(TCats, tlayer, &tcat))
 		continue;
+
+	    Vect_write_line(&Out, type, Points, Cats);
 	    sprintf(buf, "insert into %s values (%d, %d, %f)", Fi->table, cat,
 		    tcat, cost);
 
