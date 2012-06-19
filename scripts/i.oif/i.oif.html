@@ -7,6 +7,7 @@ comprising the highest scoring combination from <em>i.oif</em> are used as the
 three color channels required for <em>d.rgb</em> or <em>r.composite</em>.
 <p>The analysis is saved to a file in the current directory called "i.oif.result".
 
+
 <h2>NOTES</h2>
 
 Colour Composites in BGR order: important band combinations (example: 
@@ -36,6 +37,13 @@ vegetational stress and mortality. Roads are less evident as band 3 is blue.
 <li> 457: shows soil texture classes (clay, loam, sandy).
 </ul>
 
+<p>
+By default the module will calculate standard deviations for all bands in
+parallel. To run serially use the <b>-s</b> flag. If the <tt>WORKERS</tt>
+environment variable is set, the number of concurrent processes will be
+limited to that number of jobs.
+
+
 <h2>EXAMPLE</h2>
 
 North Carolina sample dataset:
@@ -50,6 +58,7 @@ i.oif image1=lsat7_2002_10 image2=lsat7_2002_20 image3=lsat7_2002_30 \
 
 Jensen, 1996. Introductory digital image processing. Prentice Hall, p.98. ISBN 0-13-205840-5
 
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -59,9 +68,11 @@ Jensen, 1996. Introductory digital image processing. Prentice Hall, p.98. ISBN 0
 <a href="r.univar.html">r.univar</a>
 </em>
 
+
 <h2>AUTHOR</h2>
 
 Markus Neteler, ITC-Irst, Trento, Italy<br>
 Updated to GRASS 5.7 by Michael Barton, Arizona State University
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
