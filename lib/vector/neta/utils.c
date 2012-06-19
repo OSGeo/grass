@@ -226,14 +226,15 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
 {
     int n, ni;
     
+    if (layer < 1)
+	G_fatal_error(_("'%s' must be > 0"), "layer");
+
     n = Vect_get_num_lines(In);
     *varray = Vect_new_varray(n);
     ni = 0;
     
     /* parse filter option and select appropriate lines */
     if (where) {
-	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
 	if (cat)
 	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
 	ni = Vect_set_varray_from_db(In, layer, where, mask_type, 1, *varray);
@@ -243,8 +244,6 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
 	return ni;
     }
     else if (cat) {
-	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "categories");
 	ni = Vect_set_varray_from_cat_string(In, layer, cat, mask_type, 1, *varray);
 	if (ni == -1) {
 	    G_warning(_("Problem loading category values"));
@@ -255,9 +254,6 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
 	int i, cat;
 	int ltype;			/* line type */
 	struct line_cats *Cats;
-
-	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "categories");
 
 	Cats = Vect_new_cats_struct();
 
