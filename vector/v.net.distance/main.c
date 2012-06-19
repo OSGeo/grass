@@ -216,14 +216,14 @@ int main(int argc, char *argv[])
     if (NetA_initialise_varray(&In, flayer, GV_POINT, wheref_opt->answer,
 			   catf_opt->answer, &varrayf) <= 0) {
 	G_fatal_error(_("No 'from' features selected. "
-			"Please check options '%s', '%s', '%s'"),
+			"Please check options '%s', '%s', '%s'."),
 			fieldf_opt->key, wheref_opt->key, catf_opt->key);
     }
 
     if (NetA_initialise_varray(&In, tlayer, ttype, wheret_opt->answer,
 			   catt_opt->answer, &varrayt) <= 0) {
 	G_fatal_error(_("No 'to' features selected. "
-			"Please check options '%s', '%s', '%s'"),
+			"Please check options '%s', '%s', '%s'."),
 			fieldt_opt->key, wheret_opt->key, catt_opt->key);
     }
 
