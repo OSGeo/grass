@@ -57,6 +57,10 @@
 #% key: g
 #% description: Print in shell script style
 #% End
+#% Flag
+#% key: s
+#% description: Process bands serially (default: run in parallel)
+#% End
 
 import sys
 import os
@@ -86,6 +90,7 @@ def perms():
 
 def main():
     shell = flags['g']
+    serial = flags['s']
     image = {}
     for band in bands:
 	image[band] = options['image%d' % band]
@@ -93,11 +98,45 @@ def main():
     # calculate the Stddev for TM bands
     grass.message(_("Calculating Standard deviations for all bands..."))
     stddev = {}
-    for band in bands:
-	grass.verbose("band %d" % band)
-	s = grass.read_command('r.univar', flags = 'g', map = image[band])
-	kv = grass.parse_key_val(s)
-	stddev[band] = float(kv['stddev'])
+
+    if serial:
+        for band in bands:
+	    grass.verbose("band %d" % band)
+	    s = grass.read_command('r.univar', flags = 'g', map = image[band])
+	    kv = grass.parse_key_val(s)
+	    stddev[band] = float(kv['stddev'])
+    else:
+	# run all bands in parallel
+	if "WORKERS" in os.environ:
+            workers = int(os.environ["WORKERS"])
+	else:
+	    workers = 6
+
+	proc = {}
+	pout = {}
+
+	# spawn jobs in the background
+	for band in bands:
+	    grass.debug("band %d, <%s>  %% %d" % (band, image[band], band % workers))
+	    proc[band] = grass.pipe_command('r.univar', flags = 'g', map = image[band])
+	    if band % workers is 0:
+		# wait for the ones launched so far to finish
+		for bandp in bands[:band]:
+		    if not proc[bandp].stdout.closed:
+			pout[bandp] = proc[bandp].communicate()[0]
+		    proc[bandp].wait()
+
+	# wait for jobs to finish, collect the output
+	for band in bands:
+	    if not proc[band].stdout.closed:
+		pout[band] = proc[band].communicate()[0]
+	    proc[band].wait()
+
+	# parse the results
+        for band in bands:
+	    kv = grass.parse_key_val(pout[band])
+	    stddev[band] = float(kv['stddev'])
+
 
     grass.message(_("Calculating Correlation Matrix..."))
     correlation = {}
@@ -118,9 +157,9 @@ def main():
                     "(Best combination comes first):"))
     
     if shell:
-	fmt = "%d%d%d:%f\n"
+	fmt = "%d%d%d:%.4f\n"
     else:
-	fmt = "%d%d%d:  %f\n"
+	fmt = "%d%d%d:  %.4f\n"
 
     outf = file('i.oif.result', 'w')
     for v, p in oif:
