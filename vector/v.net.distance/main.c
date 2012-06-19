@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     struct ilist *nodest;
     int i, nnodes, nlines;
     int *dst, *nodes_to_features;
+    int from_nr;			/* 'from' features not reachable */
     dglInt32_t **prev;
     struct line_cats **on_path;
     char buf[2000];
@@ -212,11 +213,19 @@ int main(int argc, char *argv[])
     flayer = atoi(fieldf_opt->answer);
     tlayer = atoi(fieldt_opt->answer);
 
-    NetA_initialise_varray(&In, flayer, GV_POINT, wheref_opt->answer,
-			   catf_opt->answer, &varrayf);
+    if (NetA_initialise_varray(&In, flayer, GV_POINT, wheref_opt->answer,
+			   catf_opt->answer, &varrayf) <= 0) {
+	G_fatal_error(_("No 'from' features selected. "
+			"Please check options '%s', '%s', '%s'"),
+			fieldf_opt->key, wheref_opt->key, catf_opt->key);
+    }
 
-    NetA_initialise_varray(&In, tlayer, ttype, wheret_opt->answer,
-			   catt_opt->answer, &varrayt);
+    if (NetA_initialise_varray(&In, tlayer, ttype, wheret_opt->answer,
+			   catt_opt->answer, &varrayt) <= 0) {
+	G_fatal_error(_("No 'to' features selected. "
+			"Please check options '%s', '%s', '%s'"),
+			fieldt_opt->key, wheret_opt->key, catt_opt->key);
+    }
 
     nodest = Vect_new_list();
     NetA_varray_to_nodes(&In, varrayt, nodest, nodes_to_features);
@@ -262,6 +271,7 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
+    from_nr = 0;
     for (i = 1; i <= nlines; i++) {
 	if (varrayf->c[i]) {
 	    int type = Vect_read_line(&In, Points, Cats, i);
@@ -280,8 +290,11 @@ int main(int argc, char *argv[])
 	    }
 	    if (node < 1)
 		continue;
-	    if (dst[node] < 0)
-		continue; /* unreachable */
+	    if (dst[node] < 0) {
+		/* unreachable */
+		from_nr++;
+ 		continue;
+	    }
 	    cost = dst[node] / (double)In.cost_multip;
 	    vertex = dglGetNode(graph, node);
 	    vertex_id = node;
@@ -332,6 +345,9 @@ int main(int argc, char *argv[])
     G_free(nodes_to_features);
     G_free(dst);
     G_free(prev);
+
+    if (from_nr)
+	G_warning(_("%d 'from' features were not reachable"), from_nr);
 
     exit(EXIT_SUCCESS);
 }
