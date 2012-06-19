@@ -68,7 +68,6 @@ SUBDIRS = \
 	v.krige \
 	wxpyimgview
 
-#	d.out.gpsdrive \
 #	r.mapcalculator \
 #	r.rgb \
 #	r3.mapcalculator \
