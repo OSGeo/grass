@@ -207,9 +207,9 @@ def main():
 
     if region['nsres'] != region['nsres3'] or region['ewres'] != region['ewres3']:
         grass.run_command('g.region', flags = '3p')
-        grass.error(_("The 2D and 3D region settings are different. Can not continue."))
+        grass.fatal(_("The 2D and 3D region settings are different. Can not continue."))
 
-    grass.verbose(_("Region bottom=%.15g  top=%.15g  vertical_cell_res=%.15g  (depths %d)"),
+    grass.verbose(_("Region bottom=%.15g  top=%.15g  vertical_cell_res=%.15g  (depths %d)")
        % (region['b'], region['t'], region['tbres'], region['depths']))
 
     grass.verbose(_("Creating slices ..."))
@@ -226,8 +226,7 @@ def main():
     proc = {}
 
     for i in range(1, 1 + depths):
-        i_str = '%05d' % i
-	tmp_layer_name = 'tmp.r3xyz.%d.%s' % (os.getpid(), i_str)
+	tmp_layer_name = 'tmp.r3xyz.%d.%s' % (os.getpid(), '%05d' % i)
 
         zrange_min = region['b'] + (region['tbres'] * (i-1))
 
@@ -243,7 +242,7 @@ def main():
 
 	proc[i] = grass.start_command('r.in.xyz', input = infile, output = tmp_layer_name,
 				      fs = fs, method = method, x = x, y = y, z = z,
-				      percent = percent, type = dtype,
+				      percent = percent, type = data_type,
 				      zrange = '%.15g,%.15g' % (zrange_min, zrange_max),
 				      addl_opts)
 
@@ -253,7 +252,7 @@ def main():
 		if not proc[p_i].stdout.closed:
 		    pout[p_i] = proc[p_i].communicate()[0]
 		if proc[p_i].wait() is not 0:
-		    grass.error(_("Trouble importing data. Aborting."))
+		    grass.fatal(_("Trouble importing data. Aborting."))
 
 
     # wait for jobs to finish, collect any stray output
@@ -261,7 +260,7 @@ def main():
 	if not proc[p_i].stdout.closed:
 	    pout[p_i] = proc[p_i].communicate()[0]
 	if proc[p_i].wait() is not 0:
-	    grass.error(_("Trouble importing data. Aborting."))
+	    grass.fatal(_("Trouble importing data. Aborting."))
 
     del proc
 
