@@ -51,6 +51,30 @@ Using the Serpent Mound dataset. (see the
 </pre></div>
 
 
+<h2>TODO</h2>
+
+Currently this module stores only the z-value into the voxel,
+which is perhaps a little monochromatic. The 'n' statistic
+and simple presence,absence may still be of interest though.
+<p>
+Possible ideas for adding full <tt>x,y,z,value</tt> support
+to the module include piping the input file through a z-range
+gate filter in Python while simultaneously setting the
+<em>r.in.xyz</em> module's <tt>z=</tt> option to be the
+column of the value to be stored. This will be slower than a
+dedicated <tt>r.in.xyzv</tt> module would be, but less memory
+intensive and less complicated to code (fewer bugs). The question
+is how much slower would it be, and if that is acceptable. It
+seems like a reasonable approach for experimenting with a
+working prototype though.
+<p>
+Another idea (which is likely the way I'll go) is to add a
+new extra-column filter option to <em>r.in.xyz</em>. The
+data can then be filtered by z-range while simultaneously
+storing the data of another (possibly gate-ranged itself)
+column.
+
+
 <h2>BUGS</h2>
 
 <em>r.to.rast3</em> always creates a <tt>double</tt> output map
