@@ -225,6 +225,7 @@ int main(int argc, char *argv[])
     zrange_opt->required = NO;
     zrange_opt->key_desc = "min,max";
     zrange_opt->description = _("Filter range for z data (min,max)");
+    zrange_opt->guisection = _("Advanced Input");
 
     zscale_opt = G_define_option();
     zscale_opt->key = "zscale";
@@ -232,6 +233,7 @@ int main(int argc, char *argv[])
     zscale_opt->required = NO;
     zscale_opt->answer = "1.0";
     zscale_opt->description = _("Scale to apply to z data");
+    zscale_opt->guisection = _("Advanced Input");
 
     vcol_opt = G_define_option();
     vcol_opt->key = "value_column";
