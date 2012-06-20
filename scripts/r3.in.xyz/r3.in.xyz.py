@@ -111,7 +111,7 @@
 #% guisection: Input
 #%End
 #%Option
-#% key: value
+#% key: value_column
 #% type: integer
 #% required: no
 #% multiple: no
@@ -125,9 +125,16 @@
 #% type: double
 #% required: no
 #% key_desc: min,max
-#% description: Filter range for value data (min,max)
-#% guisection: Input
+#% description: Filter range for value column data (min,max)
 #%End
+#%option
+#% key: vscale
+#% type: double
+#% required: no
+#% multiple: no
+#% description: Scaling factor to apply to value column data
+#% answer: 1.0
+#%end
 #%Option
 #% key: percent
 #% type: integer
@@ -187,8 +194,9 @@ def main():
     x = options['x']
     y = options['y']
     z = options['z']
-    value = int(options['value'])
+    value_column = options['value_column']
     vrange = options['vrange']
+    vscale = options['vscale']
     percent = options['percent']
     pth = options['pth']
     trim = options['trim']
@@ -203,8 +211,21 @@ def main():
     if not os.path.exists(infile):
 	grass.fatal(_("Unable to read input file <%s>") % infile)
 
-    if value is not 0:
-	grass.fatal(_("This functionality is not yet operational."))
+
+    addl_opts = {}
+    if pth:
+        addl_opts['pth'] = '%s' % pth
+    if trim:
+        addl_opts['trim'] = '%s' % trim
+    if value_column:
+        addl_opts['value_column'] = '%s' % value_column
+    if vrange:
+        addl_opts['vrange'] = '%s' % vrange
+    if vscale:
+        addl_opts['vscale'] = '%s' % vscale
+    if ignore_broken:
+        addl_opts['flags'] = 'i'
+
 
     if scan_only or shell_style:
         if shell_style:
@@ -212,16 +233,10 @@ def main():
 	else:
 	    doShell = ''
         grass.run_command('r.in.xyz', flags = 's' + doShell, input = infile,
-			  output = 'dummy', fs = fs, x = x, y = y, z = z)
+			  output = 'dummy', fs = fs, x = x, y = y, z = z,
+			  **addl_opts)
 	sys.exit()
 
-    addl_opts = {}
-    if pth:
-        addl_opts['pth'] = '%s' % pth
-    if trim:
-        addl_opts['trim'] = '%s' % trim
-    if ignore_broken:
-        addl_opts['flags'] = 'i'
 
     if dtype is 'float':
        data_type = 'FCELL'
@@ -269,15 +284,11 @@ def main():
         grass.message(_("Processing horizontal slice %d of %d [%.15g,%.15g) ...")
 		        % (i, region['depths'], zrange_min, zrange_max))
 
-	#if not value:
 	proc[i] = grass.start_command('r.in.xyz', input = infile, output = tmp_layer_name,
 				      fs = fs, method = method, x = x, y = y, z = z,
 				      percent = percent, type = data_type,
 				      zrange = '%.15g,%.15g' % (zrange_min, zrange_max),
 				      **addl_opts)
-	#else:
-	#    use new alternate gate-range filter option in r.in.xyz
-
 
 	grass.debug("i=%d, %%=%d  (workers=%d)" % (i, i % workers, workers))
 	#print sys.getsizeof(proc)  # sizeof(proc array)  [not so big]
