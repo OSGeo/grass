@@ -482,13 +482,14 @@ class GMConsole(wx.SplitterWindow):
         # update history file
         env = grass.gisenv()
         try:
-            fileHistory = codecs.open(os.path.join(env['GISDBASE'],
-                                                   env['LOCATION_NAME'],
-                                                   env['MAPSET'],
-                                                   '.bash_history'),
-                                      encoding = 'utf-8', mode = 'a')
+            filePath = os.path.join(env['GISDBASE'],
+                                    env['LOCATION_NAME'],
+                                    env['MAPSET'],
+                                    '.bash_history')
+            fileHistory = codecs.open(filePath, encoding = 'utf-8', mode = 'a')
         except IOError, e:
-            GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e),
+            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
+                    {filePath: filePath, error : e },
                    parent = self.parent)
             fileHistory = None
         
@@ -656,7 +657,8 @@ class GMConsole(wx.SplitterWindow):
         
         dlg = wx.FileDialog(self, message = _("Save file as..."),
                             defaultFile = "grass_cmd_output.txt",
-                            wildcard = _("%s (*.txt)|*.txt|%s (*)|*") % (_("Text files"), _("Files")),
+                            wildcard = _("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") % 
+                            {txt: _("Text files"), files: _("Files")},
                             style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
         
         # Show the dialog and retrieve the user response. If it is the OK response,
@@ -668,7 +670,7 @@ class GMConsole(wx.SplitterWindow):
                 output = open(path, "w")
                 output.write(text)
             except IOError, e:
-                GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e))
+                GError(_("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {path: path, error: e})
             finally:
                 output.close()
             self.parent.SetStatusText(_("Commands output saved into '%s'") % path)
@@ -781,7 +783,8 @@ class GMConsole(wx.SplitterWindow):
             if len(cmds) > 0:
                 output.write('\n')
         except IOError, e:
-            GError(_("Unable to write file '%s'.\n\nDetails: %s") % (path, e))
+            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
+                    {filePath: self.cmdFileProtocol, error: e})
         finally:
             output.close()
             
@@ -800,7 +803,8 @@ class GMConsole(wx.SplitterWindow):
             # ask for the file
             dlg = wx.FileDialog(self, message = _("Save file as..."),
                                 defaultFile = "grass_cmd_protocol.txt",
-                                wildcard = _("%s (*.txt)|*.txt|%s (*)|*") % (_("Text files"), _("Files")),
+                                wildcard = _("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") % 
+                                            {txt: _("Text files"), files: _("Files")},
                                 style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
             if dlg.ShowModal() == wx.ID_OK:
                 self.cmdFileProtocol = dlg.GetPath()
