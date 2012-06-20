@@ -256,7 +256,7 @@ def main():
 
 
     # wait for jobs to finish, collect any stray output
-    for p_i in range(1, 1 + depths)[:i]:
+    for p_i in range(1, 1 + depths):
 	if not proc[p_i].stdout.closed:
 	    pout[p_i] = proc[p_i].communicate()[0]
 	if proc[p_i].wait() is not 0:
