@@ -194,15 +194,18 @@ int main(int argc, char *argv[])
 
     if (NetA_initialise_varray
 	(&In, nfield, GV_POINT,
-	 wheresource_opt->answer, catsource_opt->answer, &varray_source) == 2)
-	G_fatal_error(_("Neither %s nor %s was given"), catsource_opt->key,
-		      wheresource_opt->key);
+	 wheresource_opt->answer, catsource_opt->answer, &varray_source) <= 0) {
+	G_fatal_error(_("No source features selected. "
+			"Please check options '%s', '%s'."),
+			catsource_opt->key, wheresource_opt->key);
+    }
     if (NetA_initialise_varray
 	(&In, nfield, GV_POINT, wheresink_opt->answer,
-	 catsink_opt->answer, &varray_sink) == 2)
-	G_fatal_error(_("Neither %s nor %s was given"), catsink_opt->key,
-		      wheresink_opt->key);
-
+	 catsink_opt->answer, &varray_sink) <= 0) {
+	G_fatal_error(_("No sink features selected. "
+			"Please check options '%s', '%s'."),
+			catsink_opt->key, wheresink_opt->key);
+    }
 
     NetA_varray_to_nodes(&In, varray_source, source_list, NULL);
     NetA_varray_to_nodes(&In, varray_sink, sink_list, NULL);

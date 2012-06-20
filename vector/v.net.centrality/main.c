@@ -228,10 +228,13 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    chcat =
-	(NetA_initialise_varray
-	 (&In, afield, mask_type, where_opt->answer, cat_opt->answer,
-	  &varray) == 1);
+    if (where_opt->answer || cat_opt->answer) {
+	chcat = (NetA_initialise_varray(&In, afield, GV_POINT,
+	                                where_opt->answer,
+					cat_opt->answer, &varray) > 0);
+    }
+    else
+	chcat = 0;
 
     /* Create table */
     Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
@@ -340,11 +343,10 @@ int main(int argc, char *argv[])
 	if (type == GV_POINT && (!chcat || varray->c[i])) {
 	    int cat, node;
 
-	    if (!Vect_cat_get(Cats, afield, &cat))
+	    if (!Vect_cat_get(Cats, nfield, &cat))
 		continue;
 	    Vect_write_line(&Out, type, Points, Cats);
 	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
-	    /* Vect_get_line_nodes(&In, i, &node, NULL); */
 	    process_node(node, cat);
 	    covered[node] = 1;
 	}

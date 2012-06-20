@@ -144,14 +144,18 @@ int main(int argc, char *argv[])
 
     if (NetA_initialise_varray
 	(&In, nfield, GV_POINT, whereset1_opt->answer,
-	 catset1_opt->answer, &varray_set1) == 2)
-	G_fatal_error(_("Neither %s nor %s was given"), catset1_opt->key,
-		      whereset1_opt->key);
+	 catset1_opt->answer, &varray_set1) <= 0) {
+	G_fatal_error(_("No features for %s selected. "
+			"Please check options '%s', '%s'."),
+			"set1", catset1_opt->key, whereset1_opt->key);
+    }
     if (NetA_initialise_varray
 	(&In, nfield, GV_POINT, whereset2_opt->answer,
-	 catset2_opt->answer, &varray_set2) == 2)
-	G_fatal_error(_("Neither %s nor %s was given"), catset2_opt->key,
-		      whereset2_opt->key);
+	 catset2_opt->answer, &varray_set2) <= 0) {
+	G_fatal_error(_("No features for %s selected. "
+			"Please check options '%s', '%s'."),
+			"set2", catset2_opt->key, whereset2_opt->key);
+    }
 
     set1_list = Vect_new_list();
     set2_list = Vect_new_list();
