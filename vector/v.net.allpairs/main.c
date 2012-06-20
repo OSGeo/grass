@@ -145,10 +145,13 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    chcat =
-	(NetA_initialise_varray
-	 (&In, nfield, GV_POINT, where_opt->answer, cat_opt->answer,
-	  &varray) == 1);
+    if (where_opt->answer || cat_opt->answer) {
+	chcat = (NetA_initialise_varray(&In, nfield, GV_POINT,
+	                                where_opt->answer,
+					cat_opt->answer, &varray) > 0);
+    }
+    else
+	chcat = 0;
 
     /* Create table */
     Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
