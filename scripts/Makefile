@@ -40,6 +40,7 @@ SUBDIRS = \
 	r.shaded.relief \
 	r.tileset \
 	r.unpack \
+	r3.in.xyz \
 	v.build.all \
 	v.centroids \
 	v.convert.all \
