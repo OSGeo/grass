@@ -489,7 +489,7 @@ class GMConsole(wx.SplitterWindow):
             fileHistory = codecs.open(filePath, encoding = 'utf-8', mode = 'a')
         except IOError, e:
             GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
-                    {filePath: filePath, error : e },
+                    {'filePath': filePath, 'error' : e },
                    parent = self.parent)
             fileHistory = None
         
@@ -658,7 +658,7 @@ class GMConsole(wx.SplitterWindow):
         dlg = wx.FileDialog(self, message = _("Save file as..."),
                             defaultFile = "grass_cmd_output.txt",
                             wildcard = _("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") % 
-                            {txt: _("Text files"), files: _("Files")},
+                            {'txt': _("Text files"), 'files': _("Files")},
                             style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
         
         # Show the dialog and retrieve the user response. If it is the OK response,
@@ -670,7 +670,7 @@ class GMConsole(wx.SplitterWindow):
                 output = open(path, "w")
                 output.write(text)
             except IOError, e:
-                GError(_("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {path: path, error: e})
+                GError(_("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {'path': path, 'error': e})
             finally:
                 output.close()
             self.parent.SetStatusText(_("Commands output saved into '%s'") % path)
@@ -784,7 +784,7 @@ class GMConsole(wx.SplitterWindow):
                 output.write('\n')
         except IOError, e:
             GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
-                    {filePath: self.cmdFileProtocol, error: e})
+                    {'filePath': self.cmdFileProtocol, 'error': e})
         finally:
             output.close()
             
@@ -804,7 +804,7 @@ class GMConsole(wx.SplitterWindow):
             dlg = wx.FileDialog(self, message = _("Save file as..."),
                                 defaultFile = "grass_cmd_protocol.txt",
                                 wildcard = _("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") % 
-                                            {txt: _("Text files"), files: _("Files")},
+                                            {'txt': _("Text files"), 'files': _("Files")},
                                 style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
             if dlg.ShowModal() == wx.ID_OK:
                 self.cmdFileProtocol = dlg.GetPath()

@@ -133,7 +133,7 @@ def db_select(sql = None, filename = None, table = None, **args):
         args['table'] = table
     else:
         fatal(_("Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided") %
-              {sql: 'sql', filename: 'filename', table: 'table'} )
+              {'sql': 'sql', 'filename': 'filename', 'table': 'table'} )
     
     if 'fs' not in args:
         args['fs'] = '|'
