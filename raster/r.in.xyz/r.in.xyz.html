@@ -9,10 +9,10 @@ x,y,z points may also be imported.
 for example raw LIDAR or sidescan sonar swath data. It has been tested with
 datasets as large as tens of billion of points (705GB in a single file).
  <!-- Doug Newcomb, US Fish & Wildlife Service -->
+
 <p>
 Available statistics for populating the raster are:<br>
-<ul>
-<li>
+<blockquote>
 <table>
 <tr><td><em>n</em></td>        <td>number of points in cell</td></tr>
 <tr><td><em>min</em></td>      <td>minimum value of points in cell</td></tr>
@@ -29,12 +29,20 @@ Available statistics for populating the raster are:<br>
 <tr><td><em>skewness</em></td> <td>skewness of points in cell</td></tr>
 <tr><td><em>trimmean</em></td> <td>trimmed mean of points in cell</td></tr>
 </table><br>
+</blockquote>
 
+<ul>
 <li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]
 <li><em>Coefficient of variance</em> is given in percentage and defined as
 <tt>(stddev/mean)*100</tt>.
 </ul>
 <br>
+
+<p>
+It is also possible to bin and store another data column (e.g. backscatter)
+while simultaneously filtering and scaling both the data column values and
+the z range.
+
 
 <h2>NOTES</h2>
 
@@ -81,6 +89,7 @@ The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
 preserving data precision and limiting system resource consumption.
 If reading data from a <tt>stdin</tt> stream, the program can only run using
 a single pass.
+
 
 <h3>Setting region bounds and resolution</h3>
 
@@ -140,6 +149,18 @@ map. [In this example the user may want to include a lower bound filter in
 <em>r.neighbors</em> to smooth the stddev map before further use.]
 
 
+<h3>Alternate value column</h3>
+
+The <b>value_column</b> parameter can be used in specialized cases when you
+want to filter by z-range but bin and store another column's data. For
+example if you wanted to look at backscatter values between 1000 and 1500
+meters elevation. This is particularly useful when using <em>r.in.xyz</em>
+to prepare depth slices for a 3D raster &mdash; the <b>zrange</b> option defines
+the depth slice but the data values stored in the voxels describe an
+additional dimension. As with the z column, a filtering range and scaling
+factor may be applied.
+
+
 <h3>Reprojection</h3>
 
 If the raster map is to be reprojected, it may be more appropriate to reproject
@@ -165,6 +186,7 @@ Typical commands to create a DEM using a regularized spline fit:
   v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
 </pre></div>
 <br>
+
 
 <h2>EXAMPLE</h2>
 
@@ -203,11 +225,15 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
 
 <ul>
 <li> Support for multiple map output from a single run.<br>
-     <tt>method=string[,string,...] output=name[,name,...]</tt>
+     <tt>method=string[,string,...] output=name[,name,...]</tt><br>
+     This can be easily handled by a wrapper script, with the added
+     benefit of it being very simple to parallelize that way.
 <li> Add two new flags for support for direct binary input from libLAS
      for LIDAR data and MB-System's mbio for multi-beam bathymetry data.
      <!-- Bob Covill has supplied patches for MBIO interface already -->
+     <br><i>note</i>: See the new <em>r.in.lidar</em> module for this.
 </ul>
+
 
 <h2>BUGS</h2>
 
@@ -229,6 +255,7 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
 If you encounter any problems (or solutions!) please contact the GRASS
 Development Team.
 
+
 <h2>SEE ALSO</h2>
 
 <i>
@@ -236,6 +263,8 @@ Development Team.
 <a href="m.proj.html">m.proj</a><br>
 <a href="r.fillnulls.html">r.fillnulls</a><br>
 <a href="r.in.ascii.html">r.in.ascii</a><br>
+<a href="r.in.lidar.html">r.in.lidar</a><br>
+<a href="r3.in.xyz.html">r3.in.xyz</a><br>
 <a href="r.mapcalc.html">r.mapcalc</a><br>
 <a href="r.neighbors.html">r.neighbors</a><br>
 <a href="r.out.xyz.html">r.out.xyz</a><br>

@@ -38,7 +38,7 @@
 #define METHOD_TRIMMEAN   13
 
 /* main.c */
-int scan_bounds(FILE *, int, int, int, char *, int, int, double);
+int scan_bounds(FILE *, int, int, int, int, char *, int, int, double, double);
 
 /* support.c */
 int blank_array(void *, int, int, RASTER_MAP_TYPE, int);

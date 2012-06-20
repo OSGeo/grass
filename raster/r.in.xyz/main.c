@@ -3,7 +3,7 @@
  *
  *  Calculates univariate statistics from the non-null cells of a GRASS raster map
  *
- *   Copyright 2006 by M. Hamish Bowman, and The GRASS Development Team
+ *   Copyright 2006-2012 by M. Hamish Bowman, and The GRASS Development Team
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *
  *   Extended 2007 by Volker Wichmann to support the aggregate functions
@@ -98,11 +98,11 @@ int main(int argc, char *argv[])
     FILE *in_fp;
     int out_fd;
     char *infile, *outmap;
-    int xcol, ycol, zcol, max_col, percent;
-    int do_zfilter;
+    int xcol, ycol, zcol, vcol, max_col, percent;
+    int do_zfilter, do_vfilter;
     int method = -1;
     int bin_n, bin_min, bin_max, bin_sum, bin_sumsq, bin_index;
-    double zrange_min, zrange_max, d_tmp;
+    double zrange_min, zrange_max, vrange_min, vrange_max, d_tmp;
     char *fs;			/* field delim */
     off_t filesize;
     int linesize;
@@ -133,6 +133,7 @@ int main(int argc, char *argv[])
     double min = 0.0 / 0.0;	/* init as nan */
     double max = 0.0 / 0.0;	/* init as nan */
     double zscale = 1.0;
+    double vscale = 1.0;
     size_t offset, n_offset;
     int n = 0;
     double sum = 0.;
@@ -149,7 +150,7 @@ int main(int argc, char *argv[])
     struct Option *input_opt, *output_opt, *delim_opt, *percent_opt,
 	*type_opt;
     struct Option *method_opt, *xcol_opt, *ycol_opt, *zcol_opt, *zrange_opt,
-	*zscale_opt;
+	*zscale_opt, *vcol_opt, *vrange_opt, *vscale_opt;
     struct Option *trim_opt, *pth_opt;
     struct Flag *scan_flag, *shell_style, *skipline;
 
@@ -212,7 +213,10 @@ int main(int argc, char *argv[])
     zcol_opt->type = TYPE_INTEGER;
     zcol_opt->required = NO;
     zcol_opt->answer = "3";
-    zcol_opt->description = _("Column number of data values in input file");
+    zcol_opt->label = _("Column number of data values in input file");
+    zcol_opt->description =
+	_("If a separate value column is given, this option refers to the "
+	  "z-coordinate column to be filtered by the zrange option");
     zcol_opt->guisection = _("Input");
 
     zrange_opt = G_define_option();
@@ -228,6 +232,31 @@ int main(int argc, char *argv[])
     zscale_opt->required = NO;
     zscale_opt->answer = "1.0";
     zscale_opt->description = _("Scale to apply to z data");
+
+    vcol_opt = G_define_option();
+    vcol_opt->key = "value_column";
+    vcol_opt->type = TYPE_INTEGER;
+    vcol_opt->required = NO;
+    vcol_opt->answer = "0";
+    vcol_opt->label = _("Alternate column number of data values in input file");
+    vcol_opt->description = _("If not given (or set to 0) the z-column data is used");
+    vcol_opt->guisection = _("Advanced Input");
+
+    vrange_opt = G_define_option();
+    vrange_opt->key = "vrange";
+    vrange_opt->type = TYPE_DOUBLE;
+    vrange_opt->required = NO;
+    vrange_opt->key_desc = "min,max";
+    vrange_opt->description = _("Filter range for alternate value column data (min,max)");
+    vrange_opt->guisection = _("Advanced Input");
+
+    vscale_opt = G_define_option();
+    vscale_opt->key = "vscale";
+    vscale_opt->type = TYPE_DOUBLE;
+    vscale_opt->required = NO;
+    vscale_opt->answer = "1.0";
+    vscale_opt->description = _("Scale to apply to alternate value column data");
+    vscale_opt->guisection = _("Advanced Input");
 
     percent_opt = G_define_option();
     percent_opt->key = "percent";
@@ -292,15 +321,19 @@ int main(int argc, char *argv[])
     xcol = atoi(xcol_opt->answer);
     ycol = atoi(ycol_opt->answer);
     zcol = atoi(zcol_opt->answer);
-    if ((xcol < 0) || (ycol < 0) || (zcol < 0))
+    vcol = atoi(vcol_opt->answer);
+    if ((xcol < 0) || (ycol < 0) || (zcol < 0) || (vcol < 0))
 	G_fatal_error(_("Please specify a reasonable column number."));
     max_col = (xcol > ycol) ? xcol : ycol;
     max_col = (zcol > max_col) ? zcol : max_col;
+    if(vcol)
+	max_col = (vcol > max_col) ? vcol : max_col;
 
     percent = atoi(percent_opt->answer);
     zscale = atof(zscale_opt->answer);
+    vscale = atof(vscale_opt->answer);
 
-    /* parse zrange */
+    /* parse zrange and vrange */
     do_zfilter = FALSE;
     if (zrange_opt->answer != NULL) {
 	if (zrange_opt->answers[0] == NULL)
@@ -314,6 +347,22 @@ int main(int argc, char *argv[])
 	    d_tmp = zrange_max;
 	    zrange_max = zrange_min;
 	    zrange_min = d_tmp;
+	}
+    }
+
+    do_vfilter = FALSE;
+    if (vrange_opt->answer != NULL) {
+	if (vrange_opt->answers[0] == NULL)
+	    G_fatal_error(_("Invalid vrange"));
+
+	sscanf(vrange_opt->answers[0], "%lf", &vrange_min);
+	sscanf(vrange_opt->answers[1], "%lf", &vrange_max);
+	do_vfilter = TRUE;
+
+	if (vrange_min > vrange_max) {
+	    d_tmp = vrange_max;
+	    vrange_max = vrange_min;
+	    vrange_min = d_tmp;
 	}
     }
 
@@ -484,11 +533,11 @@ int main(int argc, char *argv[])
     }
 
     if (scan_flag->answer) {
-	if (zrange_opt->answer)
-	    G_warning(_("zrange will not be taken into account during scan"));
+	if (zrange_opt->answer || vrange_opt->answer)
+	    G_warning(_("range filters will not be taken into account during scan"));
 
-	scan_bounds(in_fp, xcol, ycol, zcol, fs, shell_style->answer,
-		    skipline->answer, zscale);
+	scan_bounds(in_fp, xcol, ycol, zcol, vcol, fs, shell_style->answer,
+		    skipline->answer, zscale, vscale);
 
 	if (!from_stdin)
 	    fclose(in_fp);
@@ -638,7 +687,6 @@ int main(int argc, char *argv[])
 	    if (1 != sscanf(tokens[zcol - 1], "%lf", &z))
 		G_fatal_error(_("Bad z-coordinate line %lu column %d. <%s>"),
 			      line, zcol, tokens[zcol - 1]);
-
 	    z = z * zscale;
 
 	    if (zrange_opt->answer) {
@@ -648,8 +696,23 @@ int main(int argc, char *argv[])
 		}
 	    }
 
+	    if(vcol) {
+		if (1 != sscanf(tokens[vcol - 1], "%lf", &z))
+		    G_fatal_error(_("Bad data value line %lu column %d. <%s>"),
+				    line, vcol, tokens[vcol - 1]);
+		/* we're past the zrange check, so pass over control of the variable */
+		z = z * vscale;
+
+		if (vrange_opt->answer) {
+		    if (z < vrange_min || z > vrange_max) {
+		    	G_free_tokens(tokens);
+		    	continue;
+		    }
+		}
+	    }
+
 	    count++;
-	    /*          G_debug(5, "x: %f, y: %f, z: %f", x, y, z); */
+	    /* G_debug(5, "x: %f, y: %f, z: %f", x, y, z); */
 	    G_free_tokens(tokens);
 
 	    /* find the bin in the current array box */
@@ -1066,19 +1129,21 @@ int main(int argc, char *argv[])
 
 
 
-int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
-		int shell_style, int skipline, double zscale)
+int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, int vcol, char *fs,
+		int shell_style, int skipline, double zscale, double vscale)
 {
     unsigned long line;
     int first, max_col;
     char buff[BUFFSIZE];
-    double min_x, max_x, min_y, max_y, min_z, max_z;
+    double min_x, max_x, min_y, max_y, min_z, max_z, min_v, max_v;
     char **tokens;
     int ntokens;		/* number of tokens */
-    double x, y, z;
+    double x, y, z, v;
 
     max_col = (xcol > ycol) ? xcol : ycol;
     max_col = (zcol > max_col) ? zcol : max_col;
+    if(vcol)
+	max_col = (vcol > max_col) ? vcol : max_col;
 
     line = 0;
     first = TRUE;
@@ -1157,7 +1222,8 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 	if (first) {
 	    min_z = z;
 	    max_z = z;
-	    first = FALSE;
+	    if(!vcol)
+		first = FALSE;
 	}
 	else {
 	    if (z < min_z)
@@ -1166,22 +1232,47 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 		max_z = z;
 	}
 
+	if(vcol) {
+	    if (1 != sscanf(tokens[vcol - 1], "%lf", &v))
+	    	G_fatal_error(_("Bad data value line %lu column %d. <%s>"), line,
+	    		      vcol, tokens[vcol - 1]);
+
+	    if (first) {
+	    	min_v = v;
+	    	max_v = v;
+		first = FALSE;
+	    }
+	    else {
+	    	if (v < min_v)
+	    	    min_v = v;
+	    	if (v > max_v)
+	    	    max_v = v;
+	    }
+	}
 
 	G_free_tokens(tokens);
     }
 
     if (!shell_style) {
 	fprintf(stderr, _("Range:     min         max\n"));
-	fprintf(stdout, "x: %11f %11f\n", min_x, max_x);
-	fprintf(stdout, "y: %11f %11f\n", min_y, max_y);
-	fprintf(stdout, "z: %11f %11f\n", min_z * zscale, max_z * zscale);
+	fprintf(stdout, "x: %11.15g %11.15g\n", min_x, max_x);
+	fprintf(stdout, "y: %11.15g %11.15g\n", min_y, max_y);
+	fprintf(stdout, "z: %11.15g %11.15g\n", min_z * zscale, max_z * zscale);
+	if(vcol)
+	    fprintf(stdout, "v: %11.15g %11.15g\n", min_v * vscale, max_v * vscale);
     }
-    else
-	fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
+    else {
+	fprintf(stdout, "n=%.15g s=%.15g e=%.15g w=%.15g b=%.15g t=%.15g",
 		max_y, min_y, max_x, min_x, min_z * zscale, max_z * zscale);
+	if(vcol)
+	    fprintf(stdout, " min=%.15g max=%.15g\n", min_v * vscale,
+		    max_v * vscale);
+	else
+	    fprintf(stdout, "\n");
+    }
 
     G_debug(1, "Processed %lu lines.", line);
-    G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
+    G_debug(1, "region template: g.region n=%.15g s=%.15g e=%.15g w=%.15g",
 	    max_y, min_y, max_x, min_x);
 
     return 0;
