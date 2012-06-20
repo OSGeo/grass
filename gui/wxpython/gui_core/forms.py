@@ -93,27 +93,6 @@ from gui_core.widgets import FloatValidator, GNotebook
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
-# From lib/gis/col_str.c, except purple which is mentioned
-# there but not given RGB values
-str2rgb = {'aqua': (100, 128, 255),
-           'black': (0, 0, 0),
-           'blue': (0, 0, 255),
-           'brown': (180, 77, 25),
-           'cyan': (0, 255, 255),
-           'gray': (128, 128, 128),
-           'green': (0, 255, 0),
-           'grey': (128, 128, 128),
-           'indigo': (0, 128, 255),
-           'magenta': (255, 0, 255),
-           'orange': (255, 128, 0),
-           'purple': (128, 0, 128),
-           'red': (255, 0, 0),
-           'violet': (128, 0, 255),
-           'white': (255, 255, 255),
-           'yellow': (255, 255, 0)}
-rgb2str = {}
-for (s,r) in str2rgb.items():
-    rgb2str[ r ] = s
 
 """!Hide some options in the GUI"""
 #_blackList = { 'enabled' : False,
@@ -122,19 +101,6 @@ for (s,r) in str2rgb.items():
 _blackList = { 'enabled' : False,
                'items'   : {} }
 
-def color_resolve(color):
-    if len(color) > 0 and color[0] in "0123456789":
-        rgb = tuple(map(int, color.split(':')))
-        label = color
-    else:
-        # Convert color names to RGB
-        try:
-            rgb = str2rgb[color]
-            label = color
-        except KeyError:
-            rgb = (200, 200, 200)
-            label = _('Select Color')
-    return (rgb, label)
 
 def text_beautify(someString , width = 70):
     """!Make really long texts shorter, clean up whitespace and remove
@@ -1340,9 +1306,9 @@ class CmdPanel(wx.Panel):
                     default_color = (200,200,200)
                     label_color = _("Select Color")
                     if p.get('default','') !=  '':
-                        default_color, label_color = color_resolve(p['default'])
-                    if p.get('value','') !=  '': # parameter previously set
-                        default_color, label_color = color_resolve(p['value'])
+                        default_color, label_color = utils.color_resolve(p['default'])
+                    if p.get('value','') !=  '' and p.get('value','') != 'none': # parameter previously set
+                        default_color, label_color = utils.color_resolve(p['value'])
                     if prompt == 'color_none':
                         this_sizer = wx.BoxSizer(orient = wx.HORIZONTAL)
                     else:
@@ -1358,7 +1324,7 @@ class CmdPanel(wx.Panel):
                     btn_colour.Bind(csel.EVT_COLOURSELECT,  self.OnColorChange)
                     if prompt == 'color_none':
                         none_check = wx.CheckBox(which_panel, wx.ID_ANY, _("Transparent"))
-                        if p.get('value','') !=  '' and p.get('value',[''])[0] == "none":
+                        if p.get('value','')  == "none":
                             none_check.SetValue(True)
                         else:
                             none_check.SetValue(False)
@@ -1806,7 +1772,7 @@ class CmdPanel(wx.Panel):
                     new_color = colorchooser.GetValue()[:]
                     # This is weird: new_color is a 4-tuple and new_color[:] is a 3-tuple
                     # under wx2.8.1
-                    new_label = rgb2str.get(new_color, ':'.join(map(str,new_color)))
+                    new_label = utils.rgb2str.get(new_color, ':'.join(map(str,new_color)))
                     colorchooser.SetLabel(new_label)
                     colorchooser.SetColour(new_color)
                     colorchooser.Refresh()
@@ -2238,7 +2204,7 @@ if __name__ == "__main__":
             "gisprompt" : False,
             "multiple" : "yes",
             # values must be an array of strings
-            "values" : str2rgb.keys() + map(str, str2rgb.values())
+            "values" : utils.str2rgb.keys() + map(str, utils.str2rgb.values())
             },{
             "name" : "a_file",
             "description" : "A file selector",
