@@ -99,7 +99,6 @@ int main(int argc, char *argv[])
     int out_fd;
     char *infile, *outmap;
     int xcol, ycol, zcol, vcol, max_col, percent;
-    int do_zfilter, do_vfilter;
     int method = -1;
     int bin_n, bin_min, bin_max, bin_sum, bin_sumsq, bin_index;
     double zrange_min, zrange_max, vrange_min, vrange_max, d_tmp;
@@ -336,14 +335,12 @@ int main(int argc, char *argv[])
     vscale = atof(vscale_opt->answer);
 
     /* parse zrange and vrange */
-    do_zfilter = FALSE;
     if (zrange_opt->answer != NULL) {
 	if (zrange_opt->answers[0] == NULL)
 	    G_fatal_error(_("Invalid zrange"));
 
 	sscanf(zrange_opt->answers[0], "%lf", &zrange_min);
 	sscanf(zrange_opt->answers[1], "%lf", &zrange_max);
-	do_zfilter = TRUE;
 
 	if (zrange_min > zrange_max) {
 	    d_tmp = zrange_max;
@@ -352,14 +349,12 @@ int main(int argc, char *argv[])
 	}
     }
 
-    do_vfilter = FALSE;
     if (vrange_opt->answer != NULL) {
 	if (vrange_opt->answers[0] == NULL)
 	    G_fatal_error(_("Invalid vrange"));
 
 	sscanf(vrange_opt->answers[0], "%lf", &vrange_min);
 	sscanf(vrange_opt->answers[1], "%lf", &vrange_max);
-	do_vfilter = TRUE;
 
 	if (vrange_min > vrange_max) {
 	    d_tmp = vrange_max;
