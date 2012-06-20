@@ -531,7 +531,7 @@ int main(int argc, char *argv[])
 
     if (scan_flag->answer) {
 	if (zrange_opt->answer || vrange_opt->answer)
-	    G_warning(_("range filters will not be taken into account during scan"));
+	    G_warning(_("Range filters will not be taken into account during scan"));
 
 	scan_bounds(in_fp, xcol, ycol, zcol, vcol, fs, shell_style->answer,
 		    skipline->answer, zscale, vscale);
