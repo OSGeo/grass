@@ -28,6 +28,7 @@ from grass.script import task as gtask
 
 from core.gcmd  import RunCommand
 from core.debug import Debug
+# from core.settings import UserSettings
 
 def normalize_whitespace(text):
     """!Remove redundant whitespace from a string"""
@@ -745,3 +746,42 @@ def GetSettingsPath():
         return os.path.join(os.getenv('APPDATA'), 'grass%d' % version)
     
     return os.path.join(os.getenv('HOME'), '.grass%d' % version)
+
+
+
+# From lib/gis/col_str.c, except purple which is mentioned
+# there but not given RGB values
+str2rgb = {'aqua': (100, 128, 255),
+           'black': (0, 0, 0),
+           'blue': (0, 0, 255),
+           'brown': (180, 77, 25),
+           'cyan': (0, 255, 255),
+           'gray': (128, 128, 128),
+           'green': (0, 255, 0),
+           'grey': (128, 128, 128),
+           'indigo': (0, 128, 255),
+           'magenta': (255, 0, 255),
+           'orange': (255, 128, 0),
+           'purple': (128, 0, 128),
+           'red': (255, 0, 0),
+           'violet': (128, 0, 255),
+           'white': (255, 255, 255),
+           'yellow': (255, 255, 0)}
+rgb2str = {}
+for (s,r) in str2rgb.items():
+    rgb2str[ r ] = s
+
+
+def color_resolve(color):
+    if len(color) > 0 and color[0] in "0123456789":
+        rgb = tuple(map(int, color.split(':')))
+        label = color
+    else:
+        # Convert color names to RGB
+        try:
+            rgb = str2rgb[color]
+            label = color
+        except KeyError:
+            rgb = (200, 200, 200)
+            label = _('Select Color')
+    return (rgb, label)

@@ -44,7 +44,7 @@ from core.gcmd       import CommandThread, GMessage, GError, GException, EncodeS
 from gui_core.forms  import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
-from core.settings   import UserSettings, Settings
+from core.settings   import UserSettings, Settings, GetDisplayVectSettings
 from gui_core.ghelp  import SearchModuleWindow
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
@@ -139,9 +139,9 @@ class CmdThread(threading.Thread):
             time.sleep(.1)
 
             # set default color table for raster data
-            if UserSettings.Get(group = 'cmd', key = 'rasterColorTable', subkey = 'enabled') and \
+            if UserSettings.Get(group = 'rasterLayer', key = 'colorTable', subkey = 'enabled') and \
                     args[0][0][:2] == 'r.':
-                colorTable = UserSettings.Get(group = 'cmd', key = 'rasterColorTable', subkey = 'selection')
+                colorTable = UserSettings.Get(group = 'rasterLayer', key = 'colorTable', subkey = 'selection')
                 mapName = None
                 if args[0][0] == 'r.mapcalc':
                     try:
@@ -950,8 +950,9 @@ class GMConsole(wx.SplitterWindow):
                                 lcmd = ['d.rast',
                                         'map=%s' % name]
                             else:
+                                defaultParams = GetDisplayVectSettings()
                                 lcmd = ['d.vect',
-                                        'map=%s' % name]
+                                        'map=%s' % name] + defaultParams
                             mapTree.AddLayer(ltype = prompt,
                                              lcmd = lcmd,
                                              lname = name)

@@ -39,7 +39,7 @@ sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script          import core as grass
 
 from core.gcmd             import RunCommand, GError, GMessage
-from core.settings         import UserSettings
+from core.settings         import UserSettings, GetDisplayVectSettings
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import ManagerData
@@ -1434,7 +1434,7 @@ class GMFrame(wx.Frame):
                 cmd = ['d.rast3d', 'map=%s' % layerName]
                 wxType = '3d-raster'
             elif ltype == 'vect':
-                cmd = ['d.vect', 'map=%s' % layerName]
+                cmd = ['d.vect', 'map=%s' % layerName] + GetDisplayVectSettings()
                 wxType = 'vector'
             else:
                 GError(parent = self,

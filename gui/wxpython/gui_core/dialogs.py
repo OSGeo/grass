@@ -51,7 +51,7 @@ from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select
 from gui_core.forms   import GUI
 from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED
 from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
-from core.settings    import UserSettings
+from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
 
 wxApplyMapLayers, EVT_APPLY_MAP_LAYERS= NewEvent()
@@ -1743,7 +1743,7 @@ class ImportDialog(wx.Dialog):
         if self.importType == 'gdal':
             cmd = ['d.rast',
                    'map=%s' % name]
-            if UserSettings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'):
+            if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
                 cmd.append('-n')
             
             item = maptree.AddLayer(ltype = 'raster',
@@ -1753,7 +1753,7 @@ class ImportDialog(wx.Dialog):
             item = maptree.AddLayer(ltype = 'vector',
                                     lname = name, lchecked = False,
                                     lcmd = ['d.vect',
-                                            'map=%s' % name],
+                                            'map=%s' % name] + GetDisplayVectSettings(),
                                     multiple = False)
         
         maptree.mapdisplay.MapWindow.ZoomToMap()

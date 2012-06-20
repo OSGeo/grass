@@ -38,7 +38,7 @@ from modules.histogram   import HistogramFrame
 from core.utils          import GetLayerNameFromCmd
 from wxplot.profile      import ProfileFrame
 from core.debug          import Debug
-from core.settings       import UserSettings
+from core.settings       import UserSettings, GetDisplayVectSettings
 from vdigit.main         import haveVDigit
 from core.gcmd           import GWarning
 from gui_core.toolbars   import BaseIcons
@@ -986,7 +986,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.GetPyData(layer)[0]['cmd'] = module.GetCmd()
         elif ltype == 'raster':
             cmd = ['d.rast']
-            if UserSettings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'):
+            if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
                 cmd.append('-n')
                          
         elif ltype == '3d-raster':
@@ -994,7 +994,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                         
         elif ltype == 'rgb':
             cmd = ['d.rgb']
-            if UserSettings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'):
+            if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
                 cmd.append('-n')
             
         elif ltype == 'his':
@@ -1010,12 +1010,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             cmd = ['d.rast.num']
             
         elif ltype == 'vector':
-            types = list()
-            for ftype in ['point', 'line', 'boundary', 'centroid', 'area', 'face']:
-                if UserSettings.Get(group = 'cmd', key = 'showType', subkey = [ftype, 'enabled']):
-                    types.append(ftype)
-            
-            cmd = ['d.vect', 'type=%s' % ','.join(types)]
+            cmd = ['d.vect'] + GetDisplayVectSettings()
             
         elif ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed

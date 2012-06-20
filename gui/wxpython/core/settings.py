@@ -27,7 +27,7 @@ import locale
 
 from core       import globalvar
 from core.gcmd  import GException, GError
-from core.utils import GetSettingsPath, PathJoin
+from core.utils import GetSettingsPath, PathJoin, rgb2str
 
 class Settings:
     """!Generic class where to store settings"""
@@ -242,15 +242,48 @@ class Settings:
                 'verbosity' : {
                     'selection' : 'grassenv'
                     },
-                # d.rast
-                'rasterOpaque' : {
+                'addNewLayer' : {
+                    'enabled' : True,
+                    },
+                'interactiveInput' : {
+                    'enabled' : True,
+                    },
+                },
+            #
+            # d.rast
+            #
+            'rasterLayer': {
+                'opaque': {
                     'enabled' : False
                     },
-                'rasterColorTable' : {
-                    'enabled'   : False,
-                    'selection' : 'rainbow',
+                'colorTable': {
+                    'enabled' : False,
+                    'selection' : 'rainbow'
                     },
-                # d.vect
+                },
+            #
+            # d.vect
+            #
+            'vectorLayer': {
+                'featureColor': {
+                    'color' : (0, 0, 0),
+                    'transparent' : {
+                        'enabled': False
+                        }
+                    },
+                'areaFillColor': {
+                    'color' : (200, 200, 200),
+                    'transparent' : {
+                        'enabled': False
+                        }
+                    },
+                'line': {
+                    'width' : 0,
+                    },
+                'point': {
+                    'symbol': 'basic/x',
+                    'size' : 5,
+                    },
                 'showType': {
                     'point' : {
                         'enabled' : True
@@ -270,12 +303,6 @@ class Settings:
                     'face' : {
                         'enabled' : True
                         },
-                    },
-                'addNewLayer' : {
-                    'enabled' : True,
-                    },
-                'interactiveInput' : {
-                    'enabled' : True,
                     },
                 },
             #
@@ -1098,3 +1125,27 @@ class Settings:
             self.userSettings[key] = copy.deepcopy(self.defaultSettings[key])
         
 UserSettings = Settings()
+
+def GetDisplayVectSettings():
+    settings = list()
+    if not UserSettings.Get(group = 'vectorLayer', key = 'featureColor', subkey = ['transparent', 'enabled']):
+        featureColor = UserSettings.Get(group = 'vectorLayer', key = 'featureColor', subkey = 'color')
+        settings.append('color=%s' % rgb2str.get(featureColor, ':'.join(map(str,featureColor))))
+    else:
+        settings.append('color=none')
+    if not UserSettings.Get(group = 'vectorLayer', key = 'areaFillColor', subkey = ['transparent', 'enabled']):
+        fillColor = UserSettings.Get(group = 'vectorLayer', key = 'areaFillColor', subkey = 'color')
+        settings.append('fcolor=%s' % rgb2str.get(fillColor, ':'.join(map(str,fillColor))))
+    else:
+        settings.append('fcolor=none')
+    
+    settings.append('width=%s' % UserSettings.Get(group = 'vectorLayer', key = 'line', subkey = 'width'))
+    settings.append('icon=%s' % UserSettings.Get(group = 'vectorLayer', key = 'point', subkey = 'symbol'))
+    settings.append('size=%s' % UserSettings.Get(group = 'vectorLayer', key = 'point', subkey = 'size'))
+    types = []
+    for ftype in ['point', 'line', 'boundary', 'centroid', 'area', 'face']:
+         if UserSettings.Get(group = 'vectorLayer', key = 'showType', subkey = [ftype, 'enabled']):
+             types.append(ftype)
+    settings.append('type=%s' % ','.join(types))
+
+    return settings

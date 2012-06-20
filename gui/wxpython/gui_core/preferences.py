@@ -48,6 +48,7 @@ from core          import globalvar
 from core.gcmd     import RunCommand
 from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, GetSettingsPath
 from core.settings import UserSettings
+from gui_core.dialogs import SymbolDialog
 
 wxSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
 
@@ -189,6 +190,8 @@ class PreferencesBaseDialog(wx.Dialog):
                 value = win.IsChecked()
             elif win.GetName() == 'GetStringSelection':
                 value = win.GetStringSelection()
+            elif win.GetName() == 'GetLabel':
+                value = win.GetLabel()
             elif win.GetName() == 'GetColour':
                 value = tuple(win.GetValue())
             else:
@@ -244,6 +247,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self._createAppearancePage(self.notebook)
         self._createDisplayPage(self.notebook)
         self._createCmdPage(self.notebook)
+        self._createLayersPage(self.notebook)
         self._createAttributeManagerPage(self.notebook)
         self._createProjectionPage(self.notebook)
         
@@ -821,10 +825,20 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
         
+        panel.SetSizer(border)
+        
+        return panel
+
+    def _createLayersPage(self, notebook):
+        """!Create notebook page for layer settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        notebook.AddPage(page = panel, text = _("Layers"))
+        
+        border = wx.BoxSizer(wx.VERTICAL)
         #
         # raster settings
         #
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Raster settings"))
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Default raster settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
@@ -837,8 +851,8 @@ class PreferencesDialog(PreferencesBaseDialog):
         rasterOpaque = wx.CheckBox(parent = panel, id = wx.ID_ANY,
                                     label = _("Make null cells opaque"),
                                     name = 'IsChecked')
-        rasterOpaque.SetValue(self.settings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'))
-        self.winId['cmd:rasterOpaque:enabled'] = rasterOpaque.GetId()
+        rasterOpaque.SetValue(self.settings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'))
+        self.winId['rasterLayer:opaque:enabled'] = rasterOpaque.GetId()
         
         gridSizer.Add(item = rasterOpaque,
                       pos = (row, 0), span = (1, 2))
@@ -848,8 +862,8 @@ class PreferencesDialog(PreferencesBaseDialog):
         rasterCTCheck = wx.CheckBox(parent = panel, id = wx.ID_ANY,
                                     label = _("Default color table"),
                                     name = 'IsChecked')
-        rasterCTCheck.SetValue(self.settings.Get(group = 'cmd', key = 'rasterColorTable', subkey = 'enabled'))
-        self.winId['cmd:rasterColorTable:enabled'] = rasterCTCheck.GetId()
+        rasterCTCheck.SetValue(self.settings.Get(group = 'rasterLayer', key = 'colorTable', subkey = 'enabled'))
+        self.winId['rasterLayer:colorTable:enabled'] = rasterCTCheck.GetId()
         rasterCTCheck.Bind(wx.EVT_CHECKBOX, self.OnCheckColorTable)
         
         gridSizer.Add(item = rasterCTCheck,
@@ -858,8 +872,8 @@ class PreferencesDialog(PreferencesBaseDialog):
         rasterCTName = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
                                choices = GetColorTables(),
                                name = "GetStringSelection")
-        rasterCTName.SetStringSelection(self.settings.Get(group = 'cmd', key = 'rasterColorTable', subkey = 'selection'))
-        self.winId['cmd:rasterColorTable:selection'] = rasterCTName.GetId()
+        rasterCTName.SetStringSelection(self.settings.Get(group = 'rasterLayer', key = 'colorTable', subkey = 'selection'))
+        self.winId['rasterLayer:colorTable:selection'] = rasterCTName.GetId()
         if not rasterCTCheck.IsChecked():
             rasterCTName.Enable(False)
         
@@ -872,10 +886,10 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         # vector settings
         #
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Vector settings"))
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Default vector settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
-        gridSizer = wx.FlexGridSizer (cols = 7, hgap = 3, vgap = 3)
+        gridSizer = wx.FlexGridSizer (cols = 7, hgap = 10, vgap = 3)
         
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Display:")),
@@ -884,11 +898,99 @@ class PreferencesDialog(PreferencesBaseDialog):
         for type in ('point', 'line', 'centroid', 'boundary',
                      'area', 'face'):
             chkbox = wx.CheckBox(parent = panel, label = type)
-            checked = self.settings.Get(group = 'cmd', key = 'showType',
+            checked = self.settings.Get(group = 'vectorLayer', key = 'showType',
                                         subkey = [type, 'enabled'])
             chkbox.SetValue(checked)
-            self.winId['cmd:showType:%s:enabled' % type] = chkbox.GetId()
+            self.winId['vectorLayer:showType:%s:enabled' % type] = chkbox.GetId()
             gridSizer.Add(item = chkbox)
+
+        sizer.Add(item = gridSizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+
+        row = col = 0
+        gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
+        gridSizer.AddGrowableCol(0)
+        gridSizer.AddGrowableCol(3)
+
+        # feature color
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Feature color:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (row, 0))
+        featureColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                         colour = self.settings.Get(group = 'vectorLayer',
+                                                                    key = 'featureColor',
+                                                                    subkey = 'color'),
+                                         size = globalvar.DIALOG_COLOR_SIZE)
+        featureColor.SetName('GetColour')
+        self.winId['vectorLayer:featureColor:color'] = featureColor.GetId()
+        gridSizer.Add(item = featureColor, pos = (row, col + 2), flag = wx.ALIGN_RIGHT)
+        
+        transpFeature = wx.CheckBox(parent  = panel, id = wx.ID_ANY,
+                                    label = _("Transparent"), name = "IsChecked")
+        transpFeature.SetValue(self.settings.Get(group = 'vectorLayer', key = 'featureColor',
+                                                     subkey =  ['transparent', 'enabled']))
+        self.winId['vectorLayer:featureColor:transparent:enabled'] = transpFeature.GetId()
+        gridSizer.Add(item = transpFeature, pos = (row, col + 1), flag = wx.ALIGN_CENTER_VERTICAL)
+
+
+        # area fill color
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Area fill color:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (row, col))
+        fillColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                      colour = self.settings.Get(group = 'vectorLayer',
+                                                                 key = 'areaFillColor',
+                                                                 subkey = 'color'),
+                                      size = globalvar.DIALOG_COLOR_SIZE)
+        fillColor.SetName('GetColour')
+        self.winId['vectorLayer:areaFillColor:color'] = fillColor.GetId()
+        gridSizer.Add(item = fillColor, pos = (row, col + 2), flag = wx.ALIGN_RIGHT)
+
+        transpArea = wx.CheckBox(parent  = panel, id = wx.ID_ANY,
+                                 label = _("Transparent"), name = "IsChecked")
+        transpArea.SetValue(self.settings.Get(group = 'vectorLayer', key = 'areaFillColor',
+                                              subkey = ['transparent', 'enabled']))
+        self.winId['vectorLayer:areaFillColor:transparent:enabled'] = transpArea.GetId()
+        gridSizer.Add(item = transpArea, pos = (row, col + 1), flag = wx.ALIGN_CENTER_VERTICAL)
+
+        # line
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Line width:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (row, col))
+        hlWidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (50, -1),
+                              initial = self.settings.Get(group = 'vectorLayer', key = 'line', subkey = 'width'),
+                              min = 1, max = 1e6, name = "GetValue")
+        self.winId['vectorLayer:line:width'] = hlWidth.GetId()
+        gridSizer.Add(item = hlWidth, pos = (row, col + 1), span = (1, 2), flag = wx.ALIGN_RIGHT)
+
+        # symbol
+        row = 0
+        col = 4
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Symbol size:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (row, col))
+        ptSize = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (50, -1),
+                              initial = self.settings.Get(group = 'vectorLayer', key = 'point', subkey = 'size'),
+                              min = 1, max = 1e6, name = "GetValue")
+        self.winId['vectorLayer:point:size'] = ptSize.GetId()
+        gridSizer.Add(item = ptSize, pos = (row, col + 2), flag = wx.ALIGN_RIGHT)
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Symbol:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (row, col))
+        symbolPath = self.settings.Get(group = 'vectorLayer', key = 'point', subkey = 'symbol')
+        symbolLabel = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                    label = symbolPath, name = 'GetLabel')
+        symbolLabel.SetMinSize((150, -1))
+        self.winId['vectorLayer:point:symbol'] = symbolLabel.GetId()
+        gridSizer.Add(item = symbolLabel, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, pos = (row, col + 1))
+
+        bitmap = wx.Bitmap(os.path.join(globalvar.ETCSYMBOLDIR, symbolPath) + '.png')
+        bb = wx.BitmapButton(parent = panel, id = wx.ID_ANY, bitmap = bitmap, name = "symbolButton")
+        bb.Bind(wx.EVT_BUTTON, self.OnSetSymbol)
+        gridSizer.Add(item = bb, pos = (row, col + 2))
 
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
@@ -1163,7 +1265,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def OnCheckColorTable(self, event):
         """!Set/unset default color table"""
-        win = self.FindWindowById(self.winId['cmd:rasterColorTable:selection'])
+        win = self.FindWindowById(self.winId['rasterLayer:colorTable:selection'])
         if event.IsChecked():
             win.Enable()
         else:
@@ -1287,6 +1389,18 @@ class PreferencesDialog(PreferencesBaseDialog):
         dlg.Destroy()
 
         event.Skip()
+
+    def OnSetSymbol(self, event):
+        """!Opens symbol dialog"""
+        winId = self.winId['vectorLayer:point:symbol']
+        label = self.FindWindowById(winId)
+        bb = self.FindWindowByName('symbolButton')
+        dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
+                           currentSymbol = label.GetLabel())
+        if dlg.ShowModal() == wx.ID_OK:
+            img = dlg.GetSelectedSymbol(fullPath = True)
+            label.SetLabel(dlg.GetSelectedSymbol(fullPath = False))
+            bb.SetBitmapLabel(wx.Bitmap(img + '.png'))
 
     def OnEnableWheelZoom(self, event):
         """!Enable/disable wheel zoom mode control"""
