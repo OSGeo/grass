@@ -256,10 +256,10 @@ def main():
 
 
     # wait for jobs to finish, collect any stray output
-    for p_i in range(1, 1 + depths):
-	if not proc[p_i].stdout.closed:
-	    pout[p_i] = proc[p_i].communicate()[0]
-	if proc[p_i].wait() is not 0:
+    for i in range(1, 1 + depths):
+	if not proc[i].stdout.closed:
+	    pout[i] = proc[i].communicate()[0]
+	if proc[i].wait() is not 0:
 	    grass.fatal(_("Trouble importing data. Aborting."))
 
     del proc
