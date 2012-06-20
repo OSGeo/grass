@@ -11,6 +11,12 @@ parameter usage and tips.
 The map is created using the rows, columns, and depths set by
 current region settings. Be sure to check and adjust these with
 the <em>g.region</em> module before performing the import.
+<p>
+You may either use the z-value as the data value for the voxel
+(e.g. with the 'n' statistic), or alternately scan another
+column for the data values to bin into the voxels. This alternate
+data column can be both filtered by range and have a scaling
+factor applied to it.
 
 
 <h2>NOTES</h2>
@@ -19,10 +25,12 @@ The 2D and 3D horizontal region resolutions must match. See the
 EXAMPLES section below.
 <p>
 Unlike <em>r.in.xyz</em>, reading from stdin and z-scaling are not
-possible.
+possible. Filtering by z-range is accomplished by setting the 3D region.
 <p>
 To enable parallel processing support, set the <b>workers=</b> option
 to match the number of CPUs or CPU-cores avaiable on your system.
+Alternatively, the <tt>WORKERS</tt> environment variable can be set
+to the number of concurrent processes desired.
 <p>
 Points falling exactly on a vertical bound will belong to the depth
 band below them, except for points exactly on the top bound, which will
@@ -50,29 +58,13 @@ Using the Serpent Mound dataset. (see the
      method=mean x=1 y=2 z=3 fs=space type=float
 </pre></div>
 
+The same, but aggregate and store backscatter strength from column 5
+into voxels in instead of the z-value:
+<div class="code"><pre>
+  r3.in.xyz in=Serpent_Mound_Model_LAS_Data.txt out=serpent3D.bakscat \
+     method=mean x=1 y=2 z=3 val=5 fs=space type=float
+</pre></div>
 
-<h2>TODO</h2>
-
-Currently this module stores only the z-value into the voxel,
-which is perhaps a little monochromatic. The 'n' statistic
-and simple presence,absence may still be of interest though.
-<p>
-Possible ideas for adding full <tt>x,y,z,value</tt> support
-to the module include piping the input file through a z-range
-gate filter in Python while simultaneously setting the
-<em>r.in.xyz</em> module's <tt>z=</tt> option to be the
-column of the value to be stored. This will be slower than a
-dedicated <tt>r.in.xyzv</tt> module would be, but less memory
-intensive and less complicated to code (fewer bugs). The question
-is how much slower would it be, and if that is acceptable. It
-seems like a reasonable approach for experimenting with a
-working prototype though.
-<p>
-Another idea (which is likely the way I'll go) is to add a
-new extra-column filter option to <em>r.in.xyz</em>. The
-data can then be filtered by z-range while simultaneously
-storing the data of another (possibly gate-ranged itself)
-column.
 
 
 <h2>BUGS</h2>
