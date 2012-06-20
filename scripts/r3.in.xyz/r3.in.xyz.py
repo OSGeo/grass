@@ -154,8 +154,8 @@ from grass.script import core as grass
 
 
 def cleanup():
-    # FIXME for pid and regex
-    grass.run_command('g.mremove', flags = 'f', rast = 'tmp.r3xyz.$$.*', quiet = True)
+    grass.run_command('g.mremove', flags = 'f', rast = 'tmp.r3xyz.%d.*' % os.getpid(),
+		      quiet = True)
 
 
 def main():
