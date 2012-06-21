@@ -2,9 +2,9 @@
 #
 ############################################################################
 #
-# MODULE:	r.buffer
+# MODULE:	r.buffer.lowmem
 # AUTHOR(S):	Glynn Clements
-# PURPOSE:	Replacement for r.buffer using r.grow.distance
+# PURPOSE:	Low-memory replacement for r.buffer using r.grow.distance
 #
 # COPYRIGHT:	(C) 2008, 2010 by Glynn Clements
 #

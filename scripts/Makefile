@@ -25,7 +25,7 @@ SUBDIRS = \
 	i.tasscap \
 	m.proj \
 	r.blend \
-	r.buffer \
+	r.buffer.lowmem \
 	r.colors.stddev \
 	r.fillnulls \
 	r.grow \
