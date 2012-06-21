@@ -490,7 +490,6 @@ int open_map(const char *name, int mod, int row, int col)
     int use_cats = 0;
     int use_colors = 0;
     struct map *m;
-    int fd;
 
     if (row < min_row)
 	min_row = row;
@@ -504,8 +503,6 @@ int open_map(const char *name, int mod, int row, int col)
     mapset = G_find_raster2(name, "");
     if (!mapset)
 	G_fatal_error(_("Raster map <%s> not found"), name);
-
-    fd = Rast_open_old(name, mapset);
 
     switch (mod) {
     case 'M':
@@ -561,7 +558,7 @@ int open_map(const char *name, int mod, int row, int col)
     m->use_rowio = 0;
     m->min_row = row;
     m->max_row = row;
-    m->fd = fd;
+    m->fd = -1;
 
     if (use_cats)
 	init_cats(m);
