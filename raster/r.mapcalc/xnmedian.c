@@ -74,19 +74,18 @@ int f_nmedian(int argc, const int *argt, void **args)
 	    CELL *a2 = &a[argc / 2];
 
 	    for (i = 0; i < columns; i++) {
-		int nv = 1;
+		int n = 0;
 
 		for (j = 0; j < argc; j++) {
 		    if (IS_NULL_C(&argv[j][i]))
 			continue;
-		    a[j] = argv[j][i];
-		    nv = 0;
+		    a[n++] = argv[j][i];
 		}
 
-		if (nv)
+		if (!n)
 		    SET_NULL_C(&res[i]);
 		else {
-		    qsort(a, argc, sizeof(CELL), icmp);
+		    qsort(a, n, sizeof(CELL), icmp);
 		    res[i] = (*a1 + *a2) / 2;
 		}
 	    }
@@ -102,19 +101,18 @@ int f_nmedian(int argc, const int *argt, void **args)
 	    FCELL *a2 = &a[argc / 2];
 
 	    for (i = 0; i < columns; i++) {
-		int nv = 1;
+		int n = 0;
 
 		for (j = 0; j < argc; j++) {
 		    if (IS_NULL_F(&argv[j][i]))
 			continue;
-		    a[j] = argv[j][i];
-		    nv = 0;
+		    a[n++] = argv[j][i];
 		}
 
-		if (nv)
+		if (!n)
 		    SET_NULL_F(&res[i]);
 		else {
-		    qsort(a, argc, sizeof(FCELL), fcmp);
+		    qsort(a, n, sizeof(FCELL), fcmp);
 		    res[i] = (*a1 + *a2) / 2;
 		}
 	    }
@@ -130,19 +128,18 @@ int f_nmedian(int argc, const int *argt, void **args)
 	    DCELL *a2 = &a[argc / 2];
 
 	    for (i = 0; i < columns; i++) {
-		int nv = 1;
+		int n = 0;
 
 		for (j = 0; j < argc; j++) {
 		    if (IS_NULL_D(&argv[j][i]))
 			continue;
-		    a[j] = argv[j][i];
-		    nv = 0;
+		    a[n++] = argv[j][i];
 		}
 
-		if (nv)
+		if (!n)
 		    SET_NULL_D(&res[i]);
 		else {
-		    qsort(a, argc, sizeof(DCELL), dcmp);
+		    qsort(a, n, sizeof(DCELL), dcmp);
 		    res[i] = (*a1 + *a2) / 2;
 		}
 	    }

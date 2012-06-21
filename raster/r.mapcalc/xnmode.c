@@ -78,19 +78,18 @@ int f_nmode(int argc, const int *argt, void **args)
 	    CELL **argv = (CELL **) & args[1];
 
 	    for (i = 0; i < columns; i++) {
-		int nv = 1;
+		int n = 0;
 
 		for (j = 0; j < argc; j++) {
 		    if (IS_NULL_C(&argv[j][i]))
 			continue;
-		    value[j] = (double)argv[j][i];
-		    nv = 0;
+		    value[n++] = (double)argv[j][i];
 		}
 
-		if (nv)
+		if (!n)
 		    SET_NULL_C(&res[i]);
 		else
-		    res[i] = (CELL) mode(value, argc);
+		    res[i] = (CELL) mode(value, n);
 	    }
 	    return 0;
 	}
@@ -100,19 +99,18 @@ int f_nmode(int argc, const int *argt, void **args)
 	    FCELL **argv = (FCELL **) & args[1];
 
 	    for (i = 0; i < columns; i++) {
-		int nv = 1;
+		int n = 0;
 
 		for (j = 0; j < argc; j++) {
 		    if (IS_NULL_F(&argv[j][i]))
 			continue;
-		    value[j] = (double)argv[j][i];
-		    nv = 0;
+		    value[n++] = (double)argv[j][i];
 		}
 
-		if (nv)
+		if (!n)
 		    SET_NULL_F(&res[i]);
 		else
-		    res[i] = (FCELL) mode(value, argc);
+		    res[i] = (FCELL) mode(value, n);
 	    }
 	    return 0;
 	}
@@ -122,19 +120,18 @@ int f_nmode(int argc, const int *argt, void **args)
 	    DCELL **argv = (DCELL **) & args[1];
 
 	    for (i = 0; i < columns; i++) {
-		int nv = 1;
+		int n = 0;
 
 		for (j = 0; j < argc; j++) {
 		    if (IS_NULL_D(&argv[j][i]))
 			continue;
-		    value[j] = (double)argv[j][i];
-		    nv = 0;
+		    value[n++] = (double)argv[j][i];
 		}
 
-		if (nv)
+		if (!n)
 		    SET_NULL_D(&res[i]);
 		else
-		    res[i] = (DCELL) mode(value, argc);
+		    res[i] = (DCELL) mode(value, n);
 	    }
 	    return 0;
 	}
