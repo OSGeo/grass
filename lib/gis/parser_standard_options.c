@@ -773,7 +773,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = YES;
 	Opt->answer = "start";
-	Opt->options = "start,during,overlap,contain,equal";
+	Opt->options = "start,during,overlap,contain,equal,follows,precedes";
 	Opt->description = _("The method to be used for sampling the input dataset");
 	break;
     }

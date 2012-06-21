@@ -67,6 +67,9 @@ t.sample method=equal   input=precip_abs0,precip_abs0,precip_abs0,precip_abs0 sa
 t.sample method=during  input=precip_abs0,precip_abs0,precip_abs0 samtype=stvds sample=pnts_abs0 -c
 t.sample method=overlap input=precip_abs0,precip_abs0 samtype=stvds sample=pnts_abs0 -cs
 t.sample method=contain input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
+t.sample method=precedes input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
+t.sample method=follows input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
+t.sample method=precedes,follows input=precip_abs0 samtype=stvds sample=pnts_abs0 -c
 t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -cs
 
 

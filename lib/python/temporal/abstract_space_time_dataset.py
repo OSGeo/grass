@@ -301,7 +301,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
            Allowed and not allowed temporal relationships for correct topology
            after      -> allowed
-           before     -> allowed
+           precedes     -> allowed
            follows    -> allowed
            precedes   -> allowed
 
@@ -415,6 +415,14 @@ class abstract_space_time_dataset(abstract_dataset):
                             map    :  s-----------e
                             granule:  s-----------e
 
+                          * follows: Select maps which temporally follow the selection granule
+                            map    :              s-----------e
+                            granule:  s-----------e
+                     
+                          * precedes: Select maps which temporally precedes the selection granule
+                            map    :  s-----------e
+                            granule:              s-----------e
+
                           All these methods can be combined. Method must be of type tuple including the identification strings.
            @param spatial: If set True additional the spatial overlapping is used for selection -> spatio-temporal relation. 
                            The returned map objects will have temporal and spatial extents
@@ -428,6 +436,8 @@ class abstract_space_time_dataset(abstract_dataset):
         use_overlap = False
         use_contain = False
         use_equal = False
+        use_follows = False
+        use_precedes = False
 
         # Initialize the methods
         if method:
@@ -442,6 +452,10 @@ class abstract_space_time_dataset(abstract_dataset):
                     use_contain = True
                 if name == "equal":
                     use_equal = True
+                if name == "follows":
+                    use_follows = True
+                if name == "precedes":
+                    use_precedes = True
         else:
             use_during = True
             use_overlap = True
@@ -463,6 +477,8 @@ class abstract_space_time_dataset(abstract_dataset):
             use_overlap = False
             use_contain = False
             use_equal = False
+            use_follows = False
+            use_precedes = False
 
         dbif, connect = init_dbif(dbif)
 
@@ -476,8 +492,8 @@ class abstract_space_time_dataset(abstract_dataset):
             start, end = granule.get_valid_time()
 
             where = create_temporal_relation_sql_where_statement(start, end, use_start, \
-                    use_during, use_overlap, use_contain, use_equal)  
-                    
+                    use_during, use_overlap, use_contain, use_equal, use_follows, use_precedes)  
+
             maps = self.get_registered_maps_as_objects(where, "start_time", dbif)
 
             result = {}
@@ -878,7 +894,7 @@ class abstract_space_time_dataset(abstract_dataset):
         # Create tables
         sql_path = get_sql_template_path()
 
-        # We need to create the map raster register table before we can register the map
+        # We need to create the map raster register table precedes we can register the map
         if map_register_table == None:
             # Create a unique id
             uuid_rand = "map_" + str(uuid.uuid4()).replace("-", "")
@@ -1236,7 +1252,8 @@ class abstract_space_time_dataset(abstract_dataset):
 ###############################################################################
 
 def create_temporal_relation_sql_where_statement(start, end, use_start=True, use_during=False, 
-                                        use_overlap=False, use_contain=False, use_equal=False):
+                                        use_overlap=False, use_contain=False, use_equal=False,
+                                        use_follows=False, use_precedes=False):
     """!Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
 
         @param start: The start time
@@ -1269,6 +1286,15 @@ def create_temporal_relation_sql_where_statement(start, end, use_start=True, use
         @param use_equal: Select maps which temporally equal to the selection granule
                          map    :  s-----------e
                          granule:  s-----------e
+
+        @param use_follows: Select maps which temporally follow the selection granule
+                         map    :              s-----------e
+                         granule:  s-----------e
+ 
+        @param use_precedes: Select maps which temporally precedes the selection granule
+                         map    :  s-----------e
+                         granule:              s-----------e
+
     """
 
     where = "("
@@ -1303,6 +1329,18 @@ def create_temporal_relation_sql_where_statement(start, end, use_start=True, use
             where += " OR "
 
         where += "(start_time = '%s' and end_time = '%s')" % (start, end)
+
+    if use_follows:
+        if use_start or use_during or use_overlap or use_contain or use_equal:
+            where += " OR "
+
+        where += "(start_time = '%s')" % (end)
+
+    if use_precedes:
+        if use_start or use_during or use_overlap or use_contain or use_equal or use_follows: 
+            where += " OR "
+
+        where += "(end_time = '%s')" % (start)
 
     where += ")"
     
