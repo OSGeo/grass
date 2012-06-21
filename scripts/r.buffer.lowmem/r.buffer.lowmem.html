@@ -1,10 +1,21 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.buffer</em> creates a new raster map layer showing
+<em>r.buffer.lowmem</em> creates a new raster map layer showing
 buffer (a.k.a. "distance" or "proximity") zones around all
 cells that contain non-NULL category values in an existing
 raster map layer.  The distances of buffer zones from cells
-with non-zero category values are user-chosen.  Suppose,
+with non-zero category values are user-chosen.
+
+<p>
+This is the low-memory alternative to the classic <em>r.buffer</em>
+module. It is much slower than the classic version, but will
+run on massive raster maps without using a lot of RAM. If your
+raster map is larger than 32000x32000 cells on a system with
+1 GB of RAM, or larger than 90000x90000 cells on a system with
+8 GB of RAM, consider using this module.
+
+<p>
+Suppose,
 for example, that you want to place buffer zones around
 roads.  This program could create the raster map layer
 shown below on the right based on road information
@@ -93,7 +104,9 @@ Result:
 
 <em>
 <a href="g.region.html">g.region</a><br>
+<a href="r.buffer.html">r.buffer</a><br>
 <a href="r.cost.html">r.cost</a><br>
+<a href="r.grow.distance.html">r.grow.distance</a><br>
 <a href="r.mapcalc.html">r.mapcalc</a><br>
 <a href="r.reclass.html">r.reclass</a><br>
 <a href="v.buffer.html">v.buffer</a>
@@ -107,5 +120,8 @@ Research Laboratory
 <br>
 James Westervelt, U.S. Army Construction Engineering 
 Research Laboratory
+<br>
+Low-memory Python version by Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

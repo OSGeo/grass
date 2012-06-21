@@ -29,6 +29,7 @@ contained in the raster map layer shown on the left.
 </pre></div>
 <br>
 
+
 <h2>NOTES</h2>
 
 The user has the option of identifying up to 250 continuous zones.
@@ -67,6 +68,14 @@ are not desired to be calculated into category NULL.
 The <b>-z</b> flag can be used to ignore raster values of zero instead of NULL
 values in the input raster map.
 <p>
+When working with massive raster regions consider the <em>r.buffer.lowmem</em>
+module if RAM use becomes a problem. The lowmem version can be &gt; 40x slower,
+but will work with minimal memory requirements. The classic <em>r.buffer</em>
+should be able to deal with raster maps of 32000x32000 size on a system with
+1 GB RAM, and rasters of 90000x90000 on a system with 8 GB RAM without going
+into swap.
+
+
 <h2>EXAMPLE</h2>
 
 In the following example, the buffer zones would be (in the default units
@@ -89,10 +98,12 @@ Result:
       6       400-500 meters
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="g.region.html">g.region</a><br>
+<a href="r.buffer.lowmem.html">r.buffer.lowmem</a><br>
 <a href="r.cost.html">r.cost</a><br>
 <a href="r.mapcalc.html">r.mapcalc</a><br>
 <a href="r.reclass.html">r.reclass</a><br>

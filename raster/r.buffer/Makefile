@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = r.buffer2
+PGM = r.buffer
 
 LIBES = $(RASTERLIB) $(GISLIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)
