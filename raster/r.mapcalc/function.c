@@ -68,6 +68,11 @@ func_desc func_descs[] = {
     {"median", c_varop, f_median},
     {"mode", c_varop, f_mode},
 
+    {"nmax", c_varop, f_nmax},
+    {"nmin", c_varop, f_nmin},
+    {"nmedian", c_varop, f_nmedian},
+    {"nmode", c_varop, f_nmode},
+
     {"graph", c_graph, f_graph},
 
     {"rand", c_binop, f_rand},

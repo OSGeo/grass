@@ -78,12 +78,16 @@ extern args_t c_graph;
 
 extern func_t f_min;
 extern func_t f_max;
+extern func_t f_nmin;
+extern func_t f_nmax;
 extern args_t c_varop;
 
 extern func_t f_median;
+extern func_t f_nmedian;
 extern args_t c_median;
 
 extern func_t f_mode;
+extern func_t f_nmode;
 extern args_t c_mode;
 
 extern func_t f_rand;
