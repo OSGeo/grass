@@ -28,6 +28,7 @@ from datetime_math import *
 from space_time_datasets import *
 
 import grass.lib.vector as vector
+import grass.lib.gis as gis
 from ctypes import *
 
 # Uncomment this to detect the error
@@ -1599,7 +1600,7 @@ def test_rtree():
     rect.boundary[4] = 0
     rect.boundary[5] = 0
 
-    _list = vector.ilist()
+    _list = gis.ilist()
 
     num = vector.RTreeSearch2(tree, byref(rect), byref(_list))
 
@@ -1622,5 +1623,5 @@ if __name__ == "__main__":
     test_spatial_relations()
     test_temporal_topology_builder()
     test_map_list_sorting()
-    test_rtree()
+    #test_rtree()
     
