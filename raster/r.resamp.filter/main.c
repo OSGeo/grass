@@ -464,8 +464,8 @@ int main(int argc, char *argv[])
 	filter = &filters[num_filters++];
 	type = find_method(filter_arg);
 	filter->func = type->func;
-	filter->x_radius = fabs(atoi(x_radius_arg));
-	filter->y_radius = fabs(atoi(y_radius_arg));
+	filter->x_radius = fabs(atof(x_radius_arg));
+	filter->y_radius = fabs(atof(y_radius_arg));
 	if (type->radius) {
 	    double rx = type->radius * filter->x_radius;
 	    double ry = type->radius * filter->y_radius;
