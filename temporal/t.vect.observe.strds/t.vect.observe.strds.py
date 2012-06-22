@@ -20,7 +20,7 @@
 #% keywords: sampling
 #%end
 
-#%option G_OPT_STVDS_INPUT
+#%option G_OPT_V_INPUT
 #%end
 
 #%option G_OPT_STRDS_INPUT
