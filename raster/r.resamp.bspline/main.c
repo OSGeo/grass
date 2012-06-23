@@ -7,12 +7,11 @@
  *
  * PURPOSE:      Spline Interpolation
  *
- * COPYRIGHT:    (C) 2010 GRASS development team
+ * COPYRIGHT:    (C) 2010, 2012 by GRASS development team
  *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **********************************************************************/
 
@@ -83,7 +82,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("resample"));
     G_add_keyword(_("interpolation"));
     module->description =
-	_("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
+	_("Performs bicubic or bilinear spline interpolation with Tykhonov regularization.");
 
     in_opt = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -91,12 +90,12 @@ int main(int argc, char *argv[])
 
     grid_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     grid_opt->key = "grid";
-    grid_opt->description = _("Output vector with interpolation grid");
+    grid_opt->description = _("Name for output vector map with interpolation grid");
     grid_opt->required = NO;
     
     mask_opt = G_define_standard_option(G_OPT_R_INPUT);
     mask_opt->key = "mask";
-    mask_opt->label = _("Raster map to use for masking");
+    mask_opt->label = _("Name of raster map to use for masking");
     mask_opt->description = _("Only cells that are not NULL and not zero are interpolated");
     mask_opt->required = NO;
 
