@@ -23,6 +23,7 @@
 #include <string.h>
 #include "what.h"
 #include <grass/display.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -94,7 +95,7 @@ int main(int argc, char **argv)
     if (opt1->answers && opt1->answers[0])
 	rast = opt1->answers;
 
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup(0);
@@ -133,6 +134,6 @@ int main(int argc, char **argv)
     what(once->answer, terse->answer, colrow->answer, fs->answer, width,
 	 mwidth);
 
-    R_close_driver();
+    D_close_driver();
     exit(EXIT_SUCCESS);
 }

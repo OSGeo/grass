@@ -75,7 +75,7 @@ int what(int once, int terse, int colrow, char *fs, int width, int mwidth)
 
 	    show_dval(width, mwidth, name[i], mapset[i], dbuf[col],
 		      Rast_get_d_cat(&dbuf[col], &cats[i]), terse,
-		      fs);
+		      fs, map_type[i]);
 	}
     }
     while (!once);

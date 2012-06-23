@@ -3,9 +3,9 @@ MODULE_TOPDIR = ../..
 
 PGM = d.what.rast
 
-LIBES        = $(DISPLAYLIB) $(GISLIB)
+LIBES        = $(DISPLAYLIB) $(RASTERLIB) $(GISLIB)
 
-DEPENDENCIES = $(DISPLAYDEP) $(GISDEP)
+DEPENDENCIES = $(DISPLAYDEP) $(RASTERDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
