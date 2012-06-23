@@ -93,7 +93,7 @@ def main():
 			  history = "r.blend %s channel." % ch)
 	grass.run_command('r.support', map = map,
 			  history = "  %d%% of %s, %d%% of %s" % (percent, first, perc_inv, second))
-	grass.run_command('r.support', map = output, history = "")
+	grass.run_command('r.support', map = map, history = "")
 	grass.run_command('r.support', map = map, history = os.environ['CMDLINE'])
 
 
