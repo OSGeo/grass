@@ -1,6 +1,7 @@
-#include <grass/gis.h>
 #include <unistd.h>
 #include <string.h>
+#include <grass/gis.h>
+#include <grass/raster.h>
 
 static int nlines = 100;
 
@@ -55,7 +56,7 @@ int show_cat(int width, int mwidth,
 
 int show_dval(int width, int mwidth,
 	      char *name, char *mapset, DCELL dval, char *label,
-	      int terse, char *fs)
+	      int terse, char *fs, RASTER_MAP_TYPE map_type)
 {
     DCELL dcell_val;
     char *fname;
@@ -71,10 +72,10 @@ int show_dval(int width, int mwidth,
 	}
 	else {
 	    if (!isatty(fileno(stdout)))
-		fprintf(stdout, "%s, actual %s%f%s%s\n", fname, fs, dval, fs,
-			label);
-	    fprintf(stderr, "%s, actual %s%f%s%s\n", fname, fs, dval, fs,
-		    label);
+		fprintf(stdout, "%s, actual %s%.*g%s%s\n", fname, fs,
+			map_type == FCELL_TYPE ? 7 : 15, dval, fs, label);
+	    fprintf(stderr, "%s, actual %s%.*g%s%s\n", fname, fs,
+		    map_type == FCELL_TYPE ? 7 : 15, dval, fs, label);
 	}
     }
     else {
@@ -87,10 +88,12 @@ int show_dval(int width, int mwidth,
 	}
 	else {
 	    if (!isatty(fileno(stdout)))
-		fprintf(stdout, "%*s in %-*s, actual  (%f)%s\n", width, name,
-			mwidth, mapset, dval, label);
-	    fprintf(stderr, "%*s in %-*s, actual  (%f)%s\n", width, name,
-		    mwidth, mapset, dval, label);
+		fprintf(stdout, "%*s in %-*s, actual  (%.*g)%s\n", width, name,
+			mwidth, mapset, map_type == FCELL_TYPE ? 7 : 15,
+			dval, label);
+	    fprintf(stderr, "%*s in %-*s, actual  (%.*g)%s\n", width, name,
+		    mwidth, mapset, map_type == FCELL_TYPE ? 7 : 15, dval,
+		    label);
 	}
     }
     nlines += 1;
