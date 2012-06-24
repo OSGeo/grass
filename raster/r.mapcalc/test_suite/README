@@ -5,15 +5,13 @@
 #spearfish
 
 g.region rast=elevation.10m res=5
+export GRASS_OVERWRITE=1
+export GRASS_VERBOSE=0
+
 FIRST=elevation.10m
 SECOND=aspect
 PERCENT=35
 OUTPUT=tmp.mpclc
-
-g.region n=4323650 s=4318940 w=289020 e=295110 res=2
-
-export GRASS_OVERWRITE=1
-export GRASS_VERBOSE=0
 
 
 # try with different numbers of workers
