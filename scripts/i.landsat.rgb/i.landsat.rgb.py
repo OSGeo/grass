@@ -63,6 +63,12 @@ import sys
 import os
 import string
 import grass.script as grass
+try:
+    # new for python 2.6, in 2.5 it may be easy_install'd.
+    import multiprocessing as mp
+    do_mp = True
+except:
+    do_mp = False
 
 
 def get_percentile(map, percentiles):
@@ -78,6 +84,18 @@ def get_percentile(map, percentiles):
     val_str2 = ('percentile_%.15g' % float(val2)).replace('.','_')
     return (float(kv[val_str1]), float(kv[val_str2]))
 
+# wrapper to handle multiprocesses communications back to the parent
+def get_percentile_mp(map, percentiles, conn):
+    # Process() doesn't like storing connection parts in
+    #  separate dictionaries, only wants to pass through tuples,
+    #  so instead of just sending the sending the pipe we have to
+    #  send both parts then keep the one we want.  ??
+    output_pipe, input_pipe = conn
+    input_pipe.close()
+    result = get_percentile(map, percentiles)
+    grass.debug('child (%s) (%.1f, %.1f)' % (map, result[0], result[1]))
+    output_pipe.send(result)
+    output_pipe.close()
 
 def set_colors(map, v0, v1):
     rules = [
@@ -113,24 +131,73 @@ def main():
 	    grass.run_command('r.colors', map = i, color = 'grey255')
 	sys.exit(0)
 
+
     if not preserve:
-	for i in [red, green, blue]:
-	    grass.message(_("Processing <%s>...") % i)
-	    (v0, v1) = get_percentile(i, ['2', brightness])
-	    grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
-	    set_colors(i, v0, v1)
+        if do_mp:
+            grass.message(_("Processing ..."))
+	    # set up jobs and launch jobs
+	    proc = {}
+	    conn = {}
+	    for i in [red, green, blue]:
+	        conn[i] = mp.Pipe()
+	        proc[i] = mp.Process(target = get_percentile_mp,
+				     args = (i, ['2', brightness],
+				     conn[i],))
+		proc[i].start()
+
+	    # collect results and wait for jobs to finish
+	    for i in [red, green, blue]:
+		output_pipe, input_pipe = conn[i]
+		(v0, v1) = input_pipe.recv()
+		grass.debug('parent (%s) (%.1f, %.1f)' % (i, v0, v1))
+		input_pipe.close()
+		proc[i].join()
+		set_colors(i, v0, v1)
+
+	else:
+	    for i in [red, green, blue]:
+	        grass.message(_("Processing <%s>...") % i)
+	        (v0, v1) = get_percentile(i, ['2', brightness])
+	        grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
+	        set_colors(i, v0, v1)
+
     else:
 	all_max = 0
 	all_min = 999999
-	for i in [red, green, blue]:
-	    grass.message(_("Processing <%s>...") % i)
-	    (v0, v1) = get_percentile(i, ['2', brightness])
-	    grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
-	    all_min = min(all_min, v0)
-	    all_max = max(all_max, v1)
+
+	if do_mp:
+	    grass.message(_("Processing ..."))
+	    # set up jobs and launch jobs
+	    proc = {}
+	    conn = {}
+	    for i in [red, green, blue]:
+		conn[i] = mp.Pipe()
+		proc[i] = mp.Process(target = get_percentile_mp,
+				     args = (i, ['2', brightness],
+				     conn[i],))
+		proc[i].start()
+
+	    # collect results and wait for jobs to finish
+	    for i in [red, green, blue]:
+		output_pipe, input_pipe = conn[i]
+		(v0, v1) = input_pipe.recv()
+		grass.debug('parent (%s) (%.1f, %.1f)' % (i, v0, v1))
+		input_pipe.close()
+		proc[i].join()
+		all_min = min(all_min, v0)
+		all_max = max(all_max, v1)
+	else:
+	    for i in [red, green, blue]:
+		grass.message(_("Processing <%s>...") % i)
+		(v0, v1) = get_percentile(i, ['2', brightness])
+		grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
+		all_min = min(all_min, v0)
+		all_max = max(all_max, v1)
+
 	grass.debug("all_min=%f   all_max=%f" % (all_min, all_max))
 	for i in [red, green, blue]:
-	    set_colors(i, v0, v1)
+	    set_colors(i, all_min, all_max)
+
 
     # write cmd history:
     mapset = grass.gisenv()['MAPSET']
