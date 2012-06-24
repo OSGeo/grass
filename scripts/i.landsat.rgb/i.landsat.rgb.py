@@ -64,10 +64,20 @@ import os
 import string
 import grass.script as grass
 
-def get_percentile(map, percentile):
-    s = grass.read_command('r.univar', flags = 'ge', map = map, percentile = percentile)
+
+def get_percentile(map, percentiles):
+    # todo: generalize for any list length
+    val1 = percentiles[0]
+    val2 = percentiles[1]
+    values = '%s,%s' % (val1, val2)
+    s = grass.read_command('r.univar', flags = 'ge',
+			   map = map, percentile = values)
     kv = grass.parse_key_val(s)
-    return float(kv['percentile_%s' % percentile])
+    # cleanse to match what the key name will become
+    val_str1 = ('percentile_%.15g' % float(val1)).replace('.','_')
+    val_str2 = ('percentile_%.15g' % float(val2)).replace('.','_')
+    return (float(kv[val_str1]), float(kv[val_str2]))
+
 
 def set_colors(map, v0, v1):
     rules = [
@@ -78,6 +88,7 @@ def set_colors(map, v0, v1):
 	]
     rules = ''.join(rules)
     grass.write_command('r.colors', map = map, rules = '-', stdin = rules)
+
 
 def main():
     red = options['red']
@@ -105,8 +116,7 @@ def main():
     if not preserve:
 	for i in [red, green, blue]:
 	    grass.message(_("Processing <%s>...") % i)
-	    v0 = get_percentile(i, 2)
-	    v1 = get_percentile(i, brightness)
+	    (v0, v1) = get_percentile(i, ['2', brightness])
 	    grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
 	    set_colors(i, v0, v1)
     else:
@@ -114,8 +124,7 @@ def main():
 	all_min = 999999
 	for i in [red, green, blue]:
 	    grass.message(_("Processing <%s>...") % i)
-	    v0 = get_percentile(i, 2)
-	    v1 = get_percentile(i, brightness)
+	    (v0, v1) = get_percentile(i, ['2', brightness])
 	    grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
 	    all_min = min(all_min, v0)
 	    all_max = max(all_max, v1)
