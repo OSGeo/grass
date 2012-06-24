@@ -17,7 +17,8 @@ OUTPUT=tmp.mpclc
 # try with different numbers of workers
 for w in `seq 14` ; do
    echo -n "Workers: $w"
-   time WORKERS=$w  r.mapcalc "$OUTPUT.r = r#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * r#$SECOND ; \
+   time WORKERS=$w  r.mapcalc \
+       "$OUTPUT.r = r#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * r#$SECOND ; \
         $OUTPUT.g = g#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * g#$SECOND ; \
         $OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND"
    echo
