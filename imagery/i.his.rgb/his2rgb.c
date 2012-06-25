@@ -37,6 +37,15 @@ void his2rgb(CELL *rowbuffer[3], int columns)
 
 
     for (sample = 0; sample < columns; sample++) {
+	if (Rast_is_c_null_value(&rowbuffer[0][sample]) ||
+	    Rast_is_c_null_value(&rowbuffer[1][sample]) ||
+	    Rast_is_c_null_value(&rowbuffer[2][sample])) {
+	    Rast_set_c_null_value(&rowbuffer[0][sample], 1);
+	    Rast_set_c_null_value(&rowbuffer[1][sample], 1);
+	    Rast_set_c_null_value(&rowbuffer[2][sample], 1);
+	    continue;
+	}
+
 	red = green = blue = 0.0;
 	scalei = (double)rowbuffer[1][sample];
 	scalei /= 255.;
