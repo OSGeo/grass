@@ -35,6 +35,15 @@ void rgb2his(CELL * rowbuffer[3], int columns)
     double hue = 0.0L;		/* hue                                   */
 
     for (sample = 0; sample < columns; sample++) {
+	if (Rast_is_c_null_value(&rowbuffer[0][sample]) ||
+	    Rast_is_c_null_value(&rowbuffer[1][sample]) ||
+	    Rast_is_c_null_value(&rowbuffer[2][sample])) {
+	    Rast_set_c_null_value(&rowbuffer[0][sample], 1);
+	    Rast_set_c_null_value(&rowbuffer[1][sample], 1);
+	    Rast_set_c_null_value(&rowbuffer[2][sample], 1);
+	    continue;
+	}
+
 	scaler = (double)rowbuffer[0][sample];
 	scaler /= 255.0;
 	scaleg = (double)rowbuffer[1][sample];
