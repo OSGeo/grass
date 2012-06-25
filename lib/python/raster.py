@@ -99,3 +99,35 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
                    verbose = verbose,
                    overwrite = overwrite) != 0:
 	fatal(_("An error occurred while running r.mapcalc"))
+
+
+def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
+    """!Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
+
+    \code
+    >>> expr1 = '"%s" = "%s" * 10' % (output, input)
+    >>> p1 = grass.mapcalc_start(expr1, stdout = subprocess.PIPE)
+    >>> print p1
+    <subprocess.Popen object at 0xb7c12f6c>
+    >>> # start other jobs now ...
+    
+    >>> # collect the results and wait for them to finish:
+    >>> if not p1.stdout.closed:
+    ...     pout1 = p1.communicate()[0]
+    >>> p1.wait()
+    \endcode
+
+    (maybe stdout = subprocess.PIPE and p1.stdout.closed can be avoided)
+
+    @param exp expression
+    @param kwargs
+    
+    @return Popen object
+    """
+    t = string.Template(exp)
+    e = t.substitute(**kwargs)
+
+    return start_command('r.mapcalc', expression = e,
+                        quiet = quiet,
+                        verbose = verbose,
+                        overwrite = overwrite)
