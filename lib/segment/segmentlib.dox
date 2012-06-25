@@ -88,11 +88,11 @@ This can be done with the <I>Segment Library</I> routine:
 
 <P>
 <I>int segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
-  int srows, int scols, int len, int nseg), open a new segment structure.
+  int srows, int scols, int len, int nseg)</I>, open a new segment structure.
 <P>
   A new file with full path name <B>fname</B> will be created and 
   formatted. The original nonsegmented data matrix consists of 
-  <B>nrows</B> and <B>ncols. The segments consist of <B>srows</B> by 
+  <B>nrows</B> and <B>ncols</B>. The segments consist of <B>srows</B> by
   <B>scols</B>. The data items have length <B>len</B> bytes. The number 
   of segments to be retained in memory is given by <B>nseg</B>. This 
   routine calls segment_format() and segment_init(), see below. If 
