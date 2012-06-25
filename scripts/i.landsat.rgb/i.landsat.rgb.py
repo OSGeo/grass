@@ -58,6 +58,10 @@
 #% key: r
 #% description: Reset to standard color range
 #%end
+#%flag
+#% key: s
+#% description: Process bands serially (default: run in parallel)
+#%end
 
 import sys
 import os
@@ -117,6 +121,9 @@ def main():
     preserve = flags['p']
     reset = flags['r']
 
+    if flags['s']:
+        do_mp = False
+
     # 90 or 98? MAX value controls brightness
     # think of percent (0-100), must be positive or 0
     # must be more than "2" ?
@@ -135,7 +142,7 @@ def main():
     if not preserve:
         if do_mp:
             grass.message(_("Processing ..."))
-	    # set up jobs and launch jobs
+	    # set up jobs and launch them
 	    proc = {}
 	    conn = {}
 	    for i in [red, green, blue]:
