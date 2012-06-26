@@ -43,9 +43,7 @@ static int by_point(const void *, const void *);
 
 static int tty = 0;
 
-/* *************************************************************** */
-/* *************************************************************** */
-/* *************************************************************** */
+
 int main(int argc, char *argv[])
 {
     int i, j;
@@ -98,7 +96,7 @@ int main(int argc, char *argv[])
     module->description =
 	_("Queries raster maps on their category values and category labels.");
 
-    opt.input = G_define_standard_option(G_OPT_R_INPUTS);
+    opt.input = G_define_standard_option(G_OPT_R_MAPS);
     opt.input->description = _("Name of existing raster map(s) to query");
 
     opt.coords = G_define_standard_option(G_OPT_M_COORDS);
