@@ -23,14 +23,13 @@ the cell(s) at this geographic location.
 
 <h2>EXAMPLES</h2>
 
-
 <h3>Input from <tt>stdin</tt> on the command line</h3>
 
 Input coordinates may be given directly from <tt>stdin</tt>, for example:
 <br> (input data appears between the "<tt>EOF</tt>" markers)
 
 <div class="code"><pre>
-r.what input=soils,aspect << EOF
+r.what map=soils,aspect << EOF
 635342.21 7654321.09 site 1
 653324.88 7563412.42 site 2
 EOF
@@ -40,7 +39,7 @@ EOF
 </pre></div>
 
 <div class="code"><pre>
-echo "635342.21 7654321.09" | r.what input=soils,aspect
+echo "635342.21 7654321.09" | r.what map=soils,aspect
 
 635342.21|7654321.09|45|21
 </pre></div>
@@ -53,7 +52,7 @@ as follows. If we have a file called <i>input_coord.txt</i> containing the
 coordinates and labels given in the example above:
 
 <div class="code"><pre>
-r.what input=soils,aspect < input_coord.txt
+r.what map=soils,aspect < input_coord.txt
 
 635342.21|7654321.09|site 1|45|21
 653324.88|7563412.42|site 2|44|20
@@ -67,7 +66,7 @@ pairs directly. The maximum number of pairs will be limited by your system's
 maximum input line length (e.g. 4096 characters).
 
 <div class="code"><pre>
-r.what input=soils,aspect east_north=635342.21,7654321.09,653324.88,7563412.42
+r.what map=soils,aspect coordinates=635342.21,7654321.09,653324.88,7563412.42
 
 635342.21|7654321.09|45|21
 653324.88|7563412.42|44|20
@@ -76,25 +75,27 @@ r.what input=soils,aspect east_north=635342.21,7654321.09,653324.88,7563412.42
 
 <h3>Input coordinates piped from another program</h3>
 
-The input coordinates may be "piped" from the <tt>stdout</tt> of another program.
+The input coordinates may be "piped" from the <tt>stdout</tt> of another
+program. 
+<!-- (d.where is still present in grass7, but not very useful in this context)
 For example:
-
 <div class="code"><pre>
-d.where | r.what input=soils,aspect
+d.where | r.what map=soils,aspect
 
 635342.21|7654321.09|45|21
 653324.88|7563412.42|44|20
 </pre></div>
-
+-->
 In the next example, vector point coordinates are piped from the
-<em>v.out.ascii</em> module . The standard UNIX program "<tt>tr</tt>" is
+<em>v.out.ascii</em> module. The standard UNIX program "<tt>tr</tt>" is
 used to convert the column separators in <em>v.out.ascii</em>'s output into
 spaces for <em>r.what</em>.
 
 
 <div class="code"><pre>
-v.out.ascii bugsites fs=' ' | r.what input=soils,aspect
+v.out.ascii bugsites fs=' ' | r.what map=soils,aspect
 </pre></div>
+
 
 <h3>Output containing raster map category labels</h3>
 
@@ -102,7 +103,7 @@ Here we use the <b>-f</b> label flag to enable the output of category labels
 associated with the raster cell(s), as well as values. (categorical maps only)
 
 <div class="code"><pre>
-r.what -f input=soils,aspect << EOF
+r.what -f map=soils,aspect << EOF
 635342.21 7654321.09 site 1
 653324.88 7563412.42 site 2
 EOF
@@ -133,8 +134,10 @@ The maximum number of raster map layers that can be queried at one time is 400.
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
 
+
 <h2>AUTHOR</h2>
 Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
