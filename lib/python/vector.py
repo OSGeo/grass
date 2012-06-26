@@ -221,7 +221,7 @@ def vector_db_select(map, layer = 1, **kwargs):
     ['cat', 'AREA', 'PERIMETER', 'FULL_HYDRO', 'FULL_HYDR2', 'FTYPE', 'FCODE', 'NAME']
     >>> print grass.vector_db_select('lakes')['values'][3]
     ['3', '19512.86146', '708.44683', '4', '55652', 'LAKE/POND', '39000', '']
-    >>> print grass.vector_db_select('lakes', column = 'FTYPE')['values'][3]
+    >>> print grass.vector_db_select('lakes', columns = 'FTYPE')['values'][3]
     ['LAKE/POND']
     \endcode
 
