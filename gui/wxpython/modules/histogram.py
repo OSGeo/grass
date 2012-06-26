@@ -284,7 +284,7 @@ class HistogramFrame(wx.Frame):
 
         # find selected map
         self.mapname = None
-        if not parent.IsStandalone():
+        if parent.GetName() == "MapWindow" and not parent.IsStandalone():
             tree = parent.GetLayerManager().GetLayerTree()
 
             if tree.layer_selected and tree.GetPyData(tree.layer_selected)[0]['type'] == 'raster':
