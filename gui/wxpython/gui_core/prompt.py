@@ -604,8 +604,8 @@ class GPrompt(object):
         if not cmdString or self.standAlone:
             return
         
-        if cmdString[:2] == 'd.' and not self.parent.curr_page:
-            self.parent.NewDisplay(show = True)
+        if cmdString[:2] == 'd.' and not self.parent.parent.curr_page:
+            self.parent.parent.NewDisplay(show = True)
                 
         self.commands.append(cmdString) # trace commands
 
