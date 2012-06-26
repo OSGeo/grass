@@ -106,15 +106,14 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwar
 
     \code
     >>> expr1 = '"%s" = "%s" * 10' % (output, input)
-    >>> p1 = grass.mapcalc_start(expr1, stdout = subprocess.PIPE)
-    >>> print p1
-    <subprocess.Popen object at 0xb7c12f6c>
-    >>> # start other jobs now ...
-    
-    >>> # collect the results and wait for them to finish:
-    >>> if not p1.stdout.closed:
-    ...     pout1 = p1.communicate()[0]
+    >>> expr2 = '...'   # etc.
+    >>> # launch the jobs:
+    >>> p1 = grass.mapcalc_start(expr1)
+    >>> p2 = grass.mapcalc_start(expr2)   # etc.
+    ...
+    >>> # wait for them to finish:
     >>> p1.wait()
+    >>> p2.wait()   # etc.
     \endcode
 
     (maybe stdout = subprocess.PIPE and p1.stdout.closed can be avoided)
