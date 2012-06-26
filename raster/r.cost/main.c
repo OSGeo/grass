@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     int maxmem;
     int segments_in_memory;
     int cost_fd, cum_fd, dir_fd, nearest_fd;
-    int have_stop_points = 0, dir = 0;
+    int have_stop_points = FALSE, dir = FALSE;
     double my_cost, nearest;
     double null_cost, dnullval;
     int srows, scols;
@@ -130,6 +130,7 @@ int main(int argc, char *argv[])
     struct History history;
     double peak = 0.0;
     int dsize, nearest_size;
+    double disk_mb, mem_mb;
 
     G_gisinit(argv[0]);
 
@@ -392,27 +393,22 @@ int main(int argc, char *argv[])
 	segments_in_memory = 1;
 
     /* report disk space and memory requirements */
-    G_message("--------------------------------------------");
-    if (dir == 1) {
-	double disk_mb, mem_mb;
-
+    if (dir == TRUE) {
 	disk_mb = (double) nrows * ncols * 32. / 1048576.;
 	mem_mb  = (double) srows * scols * 32. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
-	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
-	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
-	
     }
     else {
-	double disk_mb, mem_mb;
-
 	disk_mb = (double) nrows * ncols * 24. / 1048576.;
 	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
+    }
+    if (disk_mb > 200 || mem_mb > 200 || G_verbose() > G_verbose_std()) {
+	G_message("--------------------------------------------");
 	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
 	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
-    }
-    G_message("--------------------------------------------");
+	G_message("--------------------------------------------");
+    }	
     
     if (flag5->answer) {
 	Rast_close(cost_fd);
@@ -426,7 +422,7 @@ int main(int argc, char *argv[])
 		     sizeof(struct cc), segments_in_memory) != 1)
 	G_fatal_error(_("Can not create temporary file"));
 
-    if (dir == 1) {
+    if (dir == TRUE) {
 	if (segment_open(&dir_seg, G_tempfile(), nrows, ncols, srows, scols,
 		         sizeof(double), segments_in_memory) != 1)
 	    G_fatal_error(_("Can not create temporary file"));
@@ -487,7 +483,7 @@ int main(int argc, char *argv[])
 	G_percent(1, 1, 1);
     }
 
-    if (dir == 1) {
+    if (dir == TRUE) {
 	int i;
 
 	G_message(_("Initializing directional output "));
@@ -610,7 +606,7 @@ int main(int argc, char *argv[])
 	    }
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
-	    have_stop_points = 1;
+	    have_stop_points = TRUE;
 
 	    col = (int)Rast_easting_to_col(Points->x[0], &window);
 	    row = (int)Rast_northing_to_row(Points->y[0], &window);
@@ -961,7 +957,7 @@ int main(int argc, char *argv[])
 		costs.nearest = nearest;
 		segment_put(&cost_seg, &costs, row, col);
 		new_cell = insert(min_cost, row, col);
-		if (dir == 1) {
+		if (dir == TRUE) {
 		    segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
@@ -971,7 +967,7 @@ int main(int argc, char *argv[])
 		costs.nearest = nearest;
 		segment_put(&cost_seg, &costs, row, col);
 		new_cell = insert(min_cost, row, col);
-		if (dir == 1) {
+		if (dir == TRUE) {
 		    segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
@@ -1098,7 +1094,7 @@ int main(int argc, char *argv[])
 	    G_free(nearest_cell);
     }
 
-    if (dir == 1) {
+    if (dir == TRUE) {
 	double *p;
 
 	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
@@ -1119,24 +1115,21 @@ int main(int argc, char *argv[])
     }
 
     segment_close(&cost_seg);	/* release memory  */
-    if (dir == 1) {
+    if (dir == TRUE)
 	segment_close(&dir_seg);
-    }
-    Rast_close(cost_fd);
+     Rast_close(cost_fd);
     Rast_close(cum_fd);
-    if (dir == 1) {
+    if (dir == TRUE)
 	Rast_close(dir_fd);
-    }
-    if (nearest_layer) {
+    if (nearest_layer)
 	Rast_close(nearest_fd);
-    }
 
     /* writing history file */
     Rast_short_history(cum_cost_layer, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(cum_cost_layer, &history);
 
-    if (dir == 1) {
+    if (dir == TRUE) {
 	Rast_short_history(move_dir_layer, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(move_dir_layer, &history);
