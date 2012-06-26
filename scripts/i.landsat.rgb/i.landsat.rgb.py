@@ -11,7 +11,7 @@
 # PURPOSE:      create pretty LANDSAT RGBs: the trick is to remove outliers 
 #               using percentiles (area under the histogram curve)
 #
-# COPYRIGHT:	(C) 2006,2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 2006, 2008, 2012 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -49,14 +49,17 @@
 #%flag
 #% key: f
 #% description: Extend colors to full range of data on each channel
+#% guisection: Colors
 #%end
 #%flag
 #% key: p
 #% description: Preserve relative colors, adjust brightness only
+#% guisection: Colors
 #%end
 #%flag
 #% key: r
 #% description: Reset to standard color range
+#% guisection: Colors
 #%end
 #%flag
 #% key: s
