@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 	  "point locations given in display coordinates.");
 
     coords = G_define_option();
-    coords->key = "coordinates";
+    coords->key = "at";
     coords->key_desc = "x,y";
     coords->type = TYPE_DOUBLE;
     coords->required = NO;
