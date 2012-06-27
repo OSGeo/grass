@@ -35,7 +35,7 @@ between observation points--can greatly increase processing time.
 
 <p>Moreover, the maximum number of splines for each direction at each time is
 fixed, regardless of the spline step length. As the total number of splines used
-increases (i.e., with small spline step lengths), the region is automatically
+increases (i.e., with small spline step lengths), the region is automatically split
 into subregions for interpolation. Each subregion can contain no more than
 150x150 splines. To avoid subregion boundary problems, subregions are created to
 partially overlap each other. A weighted mean of observations, based on point
@@ -71,6 +71,7 @@ cross-validation output reports <i>mean</i> and <i>rms</i> of the residuals from
 the true point value and the estimated from the interpolation for a fixed series
 of <b><i>lambda_i</i></b> values. No vector nor raster output will be created
 when cross-validation is selected. 
+
 
 <h2>EXAMPLES</h2>
 
@@ -129,12 +130,14 @@ this reason, vector map output "<b><i>output=</i></b>" is not permitted with the
 DBF driver. There are no problems with the raster map output from the DBF
 driver.
 
+
 <h2>SEE ALSO</h2>
 
 <em><a
 href="http://grass.osgeo.org/grass64/manuals/html64_user/v.surf.idw.html">v.surf.idw</a>,
 <a
 href="http://grass.osgeo.org/grass64/manuals/html64_user/v.surf.rst.html">v.surf.rst</a></em>
+
 
 <h2>AUTHORS</h2>
 
@@ -144,6 +147,7 @@ Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni, Mirko Reguzzoni
 <p>Update for GRASS 6.X and improvements:
 <br>
 Roberto Antolin
+
 
 <h2>REFERENCES</h2>
 
@@ -161,4 +165,5 @@ dati LIDAR, Rivista dell'Agenzia del Territorio, n. 3-2003, pp. 11-22
 Determination of Digital Terrain Models. Proceedings of Jornadas de SIG Libre,
 Girona, Espa&ntilde;a. CD ISBN: 978-84-690-3886-9 <br>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
