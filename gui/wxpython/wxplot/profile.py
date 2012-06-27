@@ -22,6 +22,7 @@ import math
 import wx
 import wx.lib.plot as plot
 
+from core.gcmd import GWarning
 import grass.script as grass
 
 try:
@@ -129,13 +130,21 @@ class ProfileFrame(BasePlotFrame):
         self.coordstr = ''
         lasteast = lastnorth = None
         
+        region = grass.region()
+        insideRegion = True
         if len(self.mapwin.polycoords) > 0:
             for point in self.mapwin.polycoords:
+                if not (region['w'] <= point[0] <= region['e'] and region['s'] <= point[1] <= region['n']):
+                    insideRegion = False
                 # build string of coordinate points for r.profile
                 if self.coordstr == '':
                     self.coordstr = '%d,%d' % (point[0], point[1])
                 else:
                     self.coordstr = '%s,%d,%d' % (self.coordstr, point[0], point[1])
+
+        if not insideRegion:
+            GWarning(message = _("Not all points of profile lie inside computational region."),
+                     parent = self)
 
         if len(self.rasterList) == 0:
             return
