@@ -225,7 +225,7 @@ int main(int argc, char *argv[])
     if (!(dvr = G__getenv2("DB_DRIVER", G_VAR_MAPSET)))
 	G_fatal_error(_("Unable to read name of driver"));
 
-    /* Setting auxiliar table's name */
+    /* Set auxiliary table's name */
     if (vector) {
 	if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
 	    sprintf(table_name, "%s_aux", xname);
@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 			  dvr);
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
-	    G_fatal_error(_("Old auxiliar table could not be dropped"));
+	    G_fatal_error(_("Old auxiliary table could not be dropped"));
 	db_close_database_shutdown_driver(driver);
     }
 
@@ -320,8 +320,9 @@ int main(int argc, char *argv[])
     /* vector output */
     if (vector && !map) {
 	if (strcmp(dvr, "dbf") == 0)
-	    G_fatal_error(_("Sorry, <%s> driver is not allowed for vector output in this module. "
-			   "Try with a raster output or other driver."), dvr);
+	    G_fatal_error(_("Sorry, the <%s> driver is not compatible with "
+			  "the vector output of this module. "
+			  "Try with raster output or another driver."), dvr);
 
 	Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				     G_FATAL_EXIT);
@@ -362,7 +363,7 @@ int main(int argc, char *argv[])
 	db_CatValArray_init(&cvarr);
 	Fi = Vect_get_field(&In, bspline_field);
 	if (Fi == NULL)
-	    G_fatal_error(_("Cannot read field info"));
+	    G_fatal_error(_("Cannot read layer info"));
 
 	driver_cats = db_start_driver_open_database(Fi->driver, Fi->database);
 	/*G_debug (0, _("driver=%s db=%s"), Fi->driver, Fi->database); */
@@ -398,7 +399,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No database connection for driver <%s> is defined. "
 			"Run db.connect."), dvr);
 
-    /* Create auxiliar table */
+    /* Create auxiliary table */
     if (vector) {
 	if ((flag_auxiliar = P_Create_Aux4_Table(driver, table_name)) == FALSE) {
 	    P_Drop_Aux_Table(driver, table_name);
@@ -435,12 +436,11 @@ int main(int argc, char *argv[])
 	if (seg_mb < 3)
 	    G_fatal_error(_("Memory in MB must be >= 3"));
 
-	if (mask_opt->answer ) {
+	if (mask_opt->answer)
 	    seg_size = sizeof(double) + sizeof(char);
-	}
-	else {
+	else
 	    seg_size = sizeof(double);
-	}
+
 	seg_size = (seg_size * SEGSIZE * SEGSIZE) / (1 << 20);
 	segments_in_memory = seg_mb / seg_size + 0.5;
 	G_debug(1, "%d %dx%d segments held in memory", segments_in_memory, SEGSIZE, SEGSIZE);
@@ -634,6 +634,21 @@ int main(int argc, char *argv[])
 		    elaboration_reg.west, elaboration_reg.east);
 	    G_debug(1, "Interpolation: \t\tSOUTH:%.2f",
 		    elaboration_reg.south);
+
+#ifdef DEBUG_SUBREGIONS
+	    fprintf(stdout, "B 5\n");
+	    fprintf(stdout, " %.11g %.11g\n", elaboration_reg.east, elaboration_reg.north);
+	    fprintf(stdout, " %.11g %.11g\n", elaboration_reg.west, elaboration_reg.north);
+	    fprintf(stdout, " %.11g %.11g\n", elaboration_reg.west, elaboration_reg.south);
+	    fprintf(stdout, " %.11g %.11g\n", elaboration_reg.east, elaboration_reg.south);
+	    fprintf(stdout, " %.11g %.11g\n", elaboration_reg.east, elaboration_reg.north);
+	    fprintf(stdout, "C 1 1\n");
+	    fprintf(stdout, " %.11g %.11g\n", (elaboration_reg.west + elaboration_reg.east) / 2,
+					      (elaboration_reg.south + elaboration_reg.north) / 2);
+	    fprintf(stdout, " 1 %d\n", subregion);
+#endif
+
+
 
 	    /* reading points in interpolation region */
 	    dim_vect = nsplx * nsply;
@@ -902,10 +917,10 @@ int main(int argc, char *argv[])
 	else
 	    P_Aux_to_Vector(&In_ext, &Out, driver, table_name);
 
-	/* Dropping auxiliar table */
+	/* Drop auxiliary table */
 	G_debug(1, "%s: Dropping <%s>", argv[0], table_name);
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
-	    G_fatal_error(_("Auxiliar table could not be dropped"));
+	    G_fatal_error(_("Auxiliary table could not be dropped"));
     }
 
     db_close_database_shutdown_driver(driver);
