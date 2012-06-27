@@ -86,7 +86,7 @@ def main():
     
     if strds_sp.is_in_db() == False:
         dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
+        grass.fatal(_("Space time raster dataset <%s> not found") % (strds_id))
 
     strds_sp.select(dbif)
 
@@ -112,7 +112,7 @@ def main():
 
     if not rows:
         dbif.close()
-        grass.fatal(_("Space time vector dataset <%s> is empty") % sg.get_id())
+        grass.fatal(_("Space time vector dataset <%s> is empty") % out_sp.get_id())
 
     # Create the output space time vector dataset
 
