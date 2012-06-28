@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;
-    struct Option *opt1, *opt2, *opt4, *opt5, *opt6, *opt7, *opt8, *opt9, *opt10, *opt11, *opt12;
+    struct Option *opt_input, *opt_color, *opt_lines, *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range, *opt_font, *opt_path, *opt_charset, *opt_fontscale;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *size;
     struct Range range;
     struct FPRange fprange;
@@ -75,6 +75,7 @@ int main(int argc, char **argv)
     double UserRangeMin, UserRangeMax, UserRangeTemp;
     double *catlist, maxCat;
     int catlistCount, use_catlist;
+    double fontscale;
 
 
     /* Initialize the GIS calls */
@@ -87,94 +88,103 @@ int main(int argc, char **argv)
 	_("Displays a legend for a raster map in the active frame "
 	  "of the graphics monitor.");
 
-    opt1 = G_define_standard_option(G_OPT_R_MAP);
-    opt1->description = _("Name of raster map");
+    opt_input = G_define_standard_option(G_OPT_R_MAP);
+    opt_input->description = _("Name of raster map");
 
-    opt2 = G_define_option();
-    opt2->key = "color";
-    opt2->type = TYPE_STRING;
-    opt2->answer = DEFAULT_FG_COLOR;
-    opt2->gisprompt = "old_color,color,color";
-    opt2->description = _("Sets the legend's text color");
+    opt_color = G_define_option();
+    opt_color->key = "color";
+    opt_color->type = TYPE_STRING;
+    opt_color->answer = DEFAULT_FG_COLOR;
+    opt_color->gisprompt = "old_color,color,color";
+    opt_color->description = _("Sets the legend's text color");
 
-    opt4 = G_define_option();
-    opt4->key = "lines";
-    opt4->type = TYPE_INTEGER;
-    opt4->answer = "0";
-    opt4->options = "0-1000";
-    opt4->description =
+    opt_lines = G_define_option();
+    opt_lines->key = "lines";
+    opt_lines->type = TYPE_INTEGER;
+    opt_lines->answer = "0";
+    opt_lines->options = "0-1000";
+    opt_lines->description =
 	_("Number of text lines (useful for truncating long legends)");
-    opt4->guisection = _("Advanced");
+    opt_lines->guisection = _("Advanced");
 
-    opt5 = G_define_option();
-    opt5->key = "thin";
-    opt5->type = TYPE_INTEGER;
-    opt5->required = NO;
-    opt5->answer = "1";
-    opt5->options = "1-1000";
-    opt5->description = _("Thinning factor (thin=10 gives cats 0,10,20...)");
-    opt5->guisection = _("Advanced");
+    opt_thin = G_define_option();
+    opt_thin->key = "thin";
+    opt_thin->type = TYPE_INTEGER;
+    opt_thin->required = NO;
+    opt_thin->answer = "1";
+    opt_thin->options = "1-1000";
+    opt_thin->description = _("Thinning factor (thin=10 gives cats 0,10,20...)");
+    opt_thin->guisection = _("Advanced");
 
-    opt6 = G_define_option();
-    opt6->key = "labelnum";
-    opt6->type = TYPE_INTEGER;
-    opt6->answer = "5";
-    opt6->options = "2-100";
-    opt6->description = _("Number of text labels for smooth gradient legend");
-    opt6->guisection = _("Advanced");
+    opt_labelnum = G_define_option();
+    opt_labelnum->key = "labelnum";
+    opt_labelnum->type = TYPE_INTEGER;
+    opt_labelnum->answer = "5";
+    opt_labelnum->options = "2-100";
+    opt_labelnum->description = _("Number of text labels for smooth gradient legend");
+    opt_labelnum->guisection = _("Advanced");
 
-    opt7 = G_define_option();
-    opt7->key = "at";
-    opt7->key_desc = "bottom,top,left,right";
-    opt7->type = TYPE_DOUBLE;	/* needs to be TYPE_DOUBLE to get past options check */
-    opt7->required = NO;
-    opt7->options = "0-100";
-    opt7->label =
+    opt_at = G_define_option();
+    opt_at->key = "at";
+    opt_at->key_desc = "bottom,top,left,right";
+    opt_at->type = TYPE_DOUBLE;	/* needs to be TYPE_DOUBLE to get past options check */
+    opt_at->required = NO;
+    opt_at->options = "0-100";
+    opt_at->label =
 	_("Size and placement as percentage of screen coordinates (0,0 is lower left)");
-    opt7->description = opt7->key_desc;
-    opt7->answer = NULL;
+    opt_at->description = opt_at->key_desc;
+    opt_at->answer = NULL;
 
-    opt8 = G_define_option();
-    opt8->key = "use";
-    opt8->key_desc = "catnum";
-    opt8->type = TYPE_DOUBLE;	/* string as it is fed through the parser? */
-    opt8->required = NO;
-    opt8->description =
+    opt_use = G_define_option();
+    opt_use->key = "use";
+    opt_use->key_desc = "catnum";
+    opt_use->type = TYPE_DOUBLE;	/* string as it is fed through the parser? */
+    opt_use->required = NO;
+    opt_use->description =
 	_("List of discrete category numbers/values for legend");
-    opt8->multiple = YES;
-    opt8->guisection = _("Advanced");
+    opt_use->multiple = YES;
+    opt_use->guisection = _("Advanced");
 
-    opt9 = G_define_option();
-    opt9->key = "range";
-    opt9->key_desc = "min,max";
-    opt9->type = TYPE_DOUBLE;	/* should it be type_double or _string ?? */
-    opt9->required = NO;
-    opt9->description =
+    opt_range = G_define_option();
+    opt_range->key = "range";
+    opt_range->key_desc = "min,max";
+    opt_range->type = TYPE_DOUBLE;	/* should it be type_double or _string ?? */
+    opt_range->required = NO;
+    opt_range->description =
 	_("Use a subset of the map range for the legend (min,max)");
-    opt9->guisection = _("Advanced");
+    opt_range->guisection = _("Advanced");
 
-    opt10 = G_define_option();
-    opt10->key = "font";
-    opt10->type = TYPE_STRING;
-    opt10->required = NO;
-    opt10->description = _("Font name");
-    opt10->guisection = _("Advanced");
+    opt_font = G_define_option();
+    opt_font->key = "font";
+    opt_font->type = TYPE_STRING;
+    opt_font->required = NO;
+    opt_font->description = _("Font name");
+    opt_font->guisection = _("Advanced");
 
-    opt11 = G_define_option();
-    opt11->key = "path";
-    opt11->type = TYPE_STRING;
-    opt11->required = NO;
-    opt11->description = _("Path to font file");
-    opt11->gisprompt = "old_file,file,font";
-    opt11->guisection = _("Advanced");
+    opt_fontscale = G_define_option();
+    opt_fontscale->key = "fontscale";
+    opt_fontscale->type = TYPE_DOUBLE;
+    opt_fontscale->required = NO;
+    opt_fontscale->answer = "5";
+    opt_fontscale->options = "0-100";
+    opt_fontscale->description = _("Font scaling factor for floating point legends");
+    opt_fontscale->guisection = _("Advanced");
 
-    opt12 = G_define_option();
-    opt12->key = "charset";
-    opt12->type = TYPE_STRING;
-    opt12->required = NO;
-    opt12->description =
+    opt_path = G_define_option();
+    opt_path->key = "path";
+    opt_path->type = TYPE_STRING;
+    opt_path->required = NO;
+    opt_path->description = _("Path to font file");
+    opt_path->gisprompt = "old_file,file,font";
+    opt_path->guisection = _("Advanced");
+
+    opt_charset = G_define_option();
+    opt_charset->key = "charset";
+    opt_charset->type = TYPE_STRING;
+    opt_charset->required = NO;
+    opt_charset->description =
 	_("Text encoding (only applicable to TrueType fonts)");
-    opt12->guisection = _("Advanced");
+    opt_charset->guisection = _("Advanced");
 
     hidestr = G_define_flag();
     hidestr->key = 'v';
@@ -209,7 +219,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    map_name = opt1->answer;
+    map_name = opt_input->answer;
 
     hide_catstr = hidestr->answer;	/* note hide_catstr gets changed and re-read below */
     hide_catnum = hidenum->answer;
@@ -217,28 +227,32 @@ int main(int argc, char **argv)
     do_smooth = smooth->answer;
     flip = flipit->answer;
 
+    /* Create the fontscale factor for floating point legends */
+    fontscale = atof(opt_fontscale->answer);
+    fontscale = 1.0 / (100.0/fontscale);
+
     color = 0;			/* if only to get rid of the compiler warning  */
-    if (opt2->answer != NULL) {
-	new_colr = D_translate_color(opt2->answer);
+    if (opt_color->answer != NULL) {
+	new_colr = D_translate_color(opt_color->answer);
 	if (new_colr == 0)
-	    G_fatal_error(_("Don't know the color %s"), opt2->answer);
+	    G_fatal_error(_("Don't know the color %s"), opt_color->answer);
 	color = new_colr;
     }
 
-    if (opt4->answer != NULL)
-	sscanf(opt4->answer, "%d", &lines);
+    if (opt_lines->answer != NULL)
+	sscanf(opt_lines->answer, "%d", &lines);
 
     thin = 1;
-    if (opt5->answer != NULL)
-	sscanf(opt5->answer, "%d", &thin);
+    if (opt_thin->answer != NULL)
+	sscanf(opt_thin->answer, "%d", &thin);
     if (!thin)
 	thin = 1;
 
-    if (opt6->answer != NULL)
-	sscanf(opt6->answer, "%d", &steps);
+    if (opt_labelnum->answer != NULL)
+	sscanf(opt_labelnum->answer, "%d", &steps);
 
     catlistCount = 0;
-    if (opt8->answer != NULL) {	/* should this be answerS ? */
+    if (opt_use->answer != NULL) {	/* should this be answerS ? */
 	use_catlist = TRUE;
 
 	catlist = (double *)G_calloc(100 + 1, sizeof(double));
@@ -246,8 +260,8 @@ int main(int argc, char **argv)
 	    catlist[i] = 1.0 * (i + 1);
 	catlist[i] = 0;
 
-	for (i = 0; (opt8->answers[i] != NULL) && i < 100; i++)
-	    catlist[i] = atof(opt8->answers[i]);
+	for (i = 0; (opt_use->answers[i] != NULL) && i < 100; i++)
+	    catlist[i] = atof(opt_use->answers[i]);
 
 	catlistCount = i;
     }
@@ -256,9 +270,9 @@ int main(int argc, char **argv)
 
 
     UserRange = FALSE;
-    if (opt9->answer != NULL) {	/* should this be answerS ? */
-	sscanf(opt9->answers[0], "%lf", &UserRangeMin);
-	sscanf(opt9->answers[1], "%lf", &UserRangeMax);
+    if (opt_range->answer != NULL) {	/* should this be answerS ? */
+	sscanf(opt_range->answers[0], "%lf", &UserRangeMin);
+	sscanf(opt_range->answers[1], "%lf", &UserRangeMax);
 	UserRange = TRUE;
 	if (UserRangeMin > UserRangeMax) {
 	    UserRangeTemp = UserRangeMax;
@@ -291,23 +305,23 @@ int main(int argc, char **argv)
     white = D_translate_color(DEFAULT_FG_COLOR);
     black = D_translate_color(DEFAULT_BG_COLOR);
     
-    if (opt10->answer)
-	D_font(opt10->answer);
-    else if (opt11->answer)
-	D_font(opt11->answer);
+    if (opt_font->answer)
+	D_font(opt_font->answer);
+    else if (opt_path->answer)
+	D_font(opt_path->answer);
 
-    if (opt12->answer)
-	D_encoding(opt12->answer);
+    if (opt_charset->answer)
+	D_encoding(opt_charset->answer);
 
     /* Figure out where to put text */
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
 
-    if (opt7->answer != NULL) {
-	sscanf(opt7->answers[0], "%lf", &Y1);
-	sscanf(opt7->answers[1], "%lf", &Y0);
-	sscanf(opt7->answers[2], "%lf", &X0);
-	sscanf(opt7->answers[3], "%lf", &X1);
+    if (opt_at->answer != NULL) {
+	sscanf(opt_at->answers[0], "%lf", &Y1);
+	sscanf(opt_at->answers[1], "%lf", &Y0);
+	sscanf(opt_at->answers[2], "%lf", &X0);
+	sscanf(opt_at->answers[3], "%lf", &X1);
     }
     else {			/* default */
 	Y1 = 12;
@@ -438,7 +452,7 @@ int main(int argc, char **argv)
 	    for (i = 0, k = 0; i < catlistCount; i++) {
 		if ((catlist[i] < min_ind) || (catlist[i] > max_ind)) {
 		    G_fatal_error(_("use=%s out of range [%d,%d] (extend with range= ?)"),
-				  opt8->answers[i], min_ind, max_ind);
+				  opt_use->answers[i], min_ind, max_ind);
 		}
 
 		cstr = Rast_get_d_cat(&catlist[i], &cats);
@@ -494,7 +508,7 @@ int main(int argc, char **argv)
 	}
 
 	/* center really tiny legends */
-	if (opt7->answer == NULL) {	/* if defualt scaling */
+	if (opt_at->answer == NULL) {	/* if defualt scaling */
 	    if (!do_smooth && (dots_per_line < 4))	/* if so small that there's no box */
 		if ((b - (dots_per_line * lines)) / (b * 1.0) > 0.15)	/* if there's more than a 15% blank at the bottom */
 		    y0 = ((b - t) - (dots_per_line * lines)) / 2;
@@ -544,10 +558,10 @@ int main(int argc, char **argv)
 	    for (i = 0; i < catlistCount; i++) {
 		if ((catlist[i] < dmin) || (catlist[i] > dmax)) {
 		    G_fatal_error(_("use=%s out of range [%.3f, %.3f] (extend with range= ?)"),
-				  opt8->answers[i], dmin, dmax);
+				  opt_use->answers[i], dmin, dmax);
 		}
-		if (strlen(opt8->answers[i]) > MaxLabelLen)
-		    MaxLabelLen = strlen(opt8->answers[i]);
+		if (strlen(opt_use->answers[i]) > MaxLabelLen)
+		    MaxLabelLen = strlen(opt_use->answers[i]);
 	    }
 	}
 	do_cats = 0;		/* if only to get rid of the compiler warning  */
@@ -676,13 +690,13 @@ int main(int argc, char **argv)
 
 	    /* Draw text */
 	    if (!horiz)
-		txsiz = (int)((y1 - y0) / 20);
+		txsiz = (int)((y1 - y0) * fontscale);
 	    else
-		txsiz = (int)((x1 - x0) / 20);
+		txsiz = (int)((x1 - x0) * fontscale);
 
 	    /* scale text to fit in window if position not manually set */
 	    /* usually not needed, except when frame is really narrow   */
-	    if (opt7->answer == NULL) {	/* ie defualt scaling */
+	    if (opt_at->answer == NULL) {	/* ie default scaling */
 		ScaleFactor = ((r - x1) / ((MaxLabelLen + 1) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 		if (ScaleFactor < 1.0) {
 		    txsiz = (int)(txsiz * ScaleFactor);
@@ -776,7 +790,7 @@ int main(int argc, char **argv)
 	txsiz = (int)((y1 - y0) / (2.0 * lines));
 
 	/* scale text to fit in window if position not manually set */
-	if (opt7->answer == NULL) {	/* ie defualt scaling */
+	if (opt_at->answer == NULL) {	/* ie defualt scaling */
 	    ScaleFactor = ((true_r - true_l) / ((MaxLabelLen + 3) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 	    if (ScaleFactor < 1.0) {
 		txsiz = (int)floor(txsiz * ScaleFactor);
@@ -896,14 +910,14 @@ int main(int argc, char **argv)
 		    if(use_catlist)
 			/* pass through format exactly as given by the user in
 			   the use= command line parameter (helps with log scale) */
-			sprintf(buff, "%s", opt8->answers[i]);
+			sprintf(buff, "%s", opt_use->answers[i]);
 		    else 
 			/* automatically generated/tuned decimal precision format */
 			sprintf(buff, DispFormat, catlist[i]);
 		}
 		else {
 		    if(use_catlist)
-			sprintf(buff, "%s", opt8->answers[catlistCount - i - 1]);
+			sprintf(buff, "%s", opt_use->answers[catlistCount - i - 1]);
 		    else
 			sprintf(buff, DispFormat, catlist[catlistCount - i - 1]);
 		}
