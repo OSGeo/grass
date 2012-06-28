@@ -162,7 +162,7 @@ class ProfileFrame(BasePlotFrame):
                 ret = RunCommand('r.what',
                                  parent = self,
                                  read = True,
-                                 input = self.rasterList[0],
+                                 map = self.rasterList[0],
                                  coordinates = '%d,%d' % (point[0],point[1]))
                 
                 val = ret.splitlines()[0].split('|')[3]
