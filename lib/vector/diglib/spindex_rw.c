@@ -1000,13 +1000,7 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 
 	    newnode = RTreeNewNode(t, s[top].sn.level);
 	    /* copy from stack node */
-	    newnode->level = s[top].sn.level;
-	    newnode->count = s[top].sn.count;
-	    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
-	    for (j = 0; j < maxcard; j++) {
-		newnode->branch[j].rect = s[top].sn.branch[j].rect;
-		newnode->branch[j].child = s[top].sn.branch[j].child;
-	    }
+	    RTreeCopyNode(newnode, &(s[top].sn), t);
 
 	    top--;
 	    /* update child of parent node
