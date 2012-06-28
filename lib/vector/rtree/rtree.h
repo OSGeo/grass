@@ -204,6 +204,7 @@ int RTreeOverlap(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 /* RTree node management */
 struct RTree_Node *RTreeNewNode(struct RTree *, int);
 void RTreeInitNode(struct RTree *, struct RTree_Node *, int);
+void RTreeCopyNode(struct RTree_Node *, struct RTree_Node *, struct RTree *);
 void RTreeFreeNode(struct RTree_Node *);
 void RTreeDestroyNode(struct RTree_Node *, int);
 

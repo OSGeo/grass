@@ -80,7 +80,6 @@ int RTreePickBranch(struct RTree_Rect *, struct RTree_Node *, struct RTree *);
 void RTreeDisconnectBranch(struct RTree_Node *, int, struct RTree *);
 void RTreePrintNode(struct RTree_Node *, int, struct RTree *);
 void RTreeTabIn(int);
-void RTreeCopyNode(struct RTree_Node *, struct RTree_Node *, struct RTree *);
 void RTreeCopyBranch(struct RTree_Branch *, struct RTree_Branch *, struct RTree *);
 
 /* rect.c */

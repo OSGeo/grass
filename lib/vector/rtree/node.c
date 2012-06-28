@@ -80,7 +80,7 @@ struct RTree_Node *RTreeNewNode(struct RTree *t, int level)
     assert(n);
 
     n->count = 0;
-    n->level = -1;
+    n->level = level;
 
     for (i = 0; i < MAXCARD; i++) {
 	RTreeNewRect(&(n->branch[i].rect), t);
