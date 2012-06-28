@@ -186,7 +186,7 @@ def main():
         if out_sp.is_time_absolute():
             vect.set_absolute_time(start, end)
         else:
-            vect.set_relative_time(start, end, strds_ds.get_relative_time_unit())
+            vect.set_relative_time(start, end, strds_sp.get_relative_time_unit())
        
         if vect.is_in_db(dbif):
             vect.update_all(dbif)
