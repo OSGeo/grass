@@ -27,6 +27,14 @@
 #% key: strds
 #%end
 
+#%option G_OPT_STVDS_OUTPUT
+#%end
+
+#%option G_OPT_V_OUTPUT
+#% key: vector_output
+#% description: Name of the new created vector map that stores the sampled values 
+#%end
+
 #%option
 #% key: column
 #% type: string
@@ -35,13 +43,6 @@
 #% multiple: no
 #%end
 
-#%option
-#% key: output
-#% type: string
-#% description: Name the new created space time vector dataset and the new vector map 
-#% required: yes
-#% multiple: no
-#%end
 
 #%option G_OPT_DB_WHERE
 #%end
@@ -61,6 +62,7 @@ def main():
     # Get the options
     input = options["input"]
     output = options["output"]
+    vector_output = options["vector_output"]
     strds = options["strds"]
     where = options["where"]
     column = options["column"]
@@ -114,35 +116,46 @@ def main():
         dbif.close()
         grass.fatal(_("Space time vector dataset <%s> is empty") % out_sp.get_id())
 
-    # Create the output space time vector dataset
-
-    out_sp.set_initial_values(strds_sp.get_temporal_type(), \
-                              strds_sp.get_semantic_type(),\
-                              _("Observaion of space time raster dataset <%s>")%(strds_id),\
-                              _("Observation of space time raster dataset <%s> with vector map <%s>")%(strds_id, input))
-
-    out_sp.insert(dbif)
-
     num_rows = len(rows)
 
+    # Get the layer and database connections of the input vector
+    vector_db = grass.vector.vector_db(input)
+
     # We copy the vector table and create the new layers
-    layers= ""
+    
+    if vector_db:
+	# Use the first layer to copy the categories from
+        layers= "1,"
+    else:
+        layers= ""
     first = True
     for layer in range(num_rows):
         layer += 1
+        # Skip existing layer
+	if vector_db and vector_db.has_key(layer) and vector_db[layer]["layer"] == layer:
+	    continue
         if first:
             layers += "%i"%(layer)    
             first = False
         else:
             layers += ",%i"%(layer)    
 
-    print layers
-
-    vectmap = output
+    # Use the name of the space time vector dataset as new vector name
+    vectmap = vector_output
+	
+    # We create a new vector map using the categories of the original map
     ret = grass.run_command("v.category", input=input, layer=layers, output=vectmap, option="transfer", overwrite=grass.overwrite())
     if ret != 0:
         grass.fatal(_("Unable to create new layers for vector map <%s>") % (vectmap))
-        
+ 
+    # Create the output space time vector dataset
+    out_sp.set_initial_values(strds_sp.get_temporal_type(), \
+                              strds_sp.get_semantic_type(),\
+                              _("Observaion of space time raster dataset <%s>")%(strds_id),\
+                              _("Observation of space time raster dataset <%s> with vector map <%s>")%(strds_id, input))
+
+    out_sp.insert(dbif)
+       
     dummy = out_sp.get_new_map_instance(None)
 
     # Sample the space time raster dataset with the vector map at specific layer with v.what.rast
@@ -165,14 +178,18 @@ def main():
 	    coltype = "INT"
 	
         # Try to add a column
-	ret = grass.run_command("v.db.addcolumn", map=vectmap, layer=count, column="%s %s" % (col_name, coltype), overwrite=grass.overwrite())
-	if ret != 0:
+	if vector_db and vector_db.has_key(count) and vector_db[count]["table"]:
+	    ret = grass.run_command("v.db.addcolumn", map=vectmap, layer=count, column="%s %s" % (col_name, coltype), overwrite=grass.overwrite())
+	    if ret != 0:
+	        dbif.close()
+	        grass.fatal(_("Unable to add column %s to vector map <%s> with layer %i")%(col_name, vectmap, count))
+        else:
             # Try to add a new table
             grass.message("Add table to layer %i"%(count))
 	    ret = grass.run_command("v.db.addtable", map=vectmap, layer=count, columns="%s %s" % (col_name, coltype), overwrite=grass.overwrite())
 	    if ret != 0:
 	        dbif.close()
-	        grass.fatal(_("Unable to add column %s to vector map <%s> with layer %i")%(col_name, vectmap, count))
+	        grass.fatal(_("Unable to add table to vector map <%s> with layer %i")%(vectmap, count))
 
 	# Call v.what.rast
 	ret = grass.run_command("v.what.rast", map=vectmap, layer=count, raster=rastmap, column=col_name, where=where)
