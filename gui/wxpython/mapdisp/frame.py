@@ -685,7 +685,7 @@ class MapFrame(SingleMapFrame):
         if rast:
             rcmd.append('-f')
             rcmd.append('-n')
-            rcmd.append('input=%s' % ','.join(rast))
+            rcmd.append('map=%s' % ','.join(rast))
             rcmd.append('coordinates=%f,%f' % (float(east), float(north)))
         
         if vect:
