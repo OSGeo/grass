@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
     OGRGeometryH Ogr_geometry, Ogr_oRing, poSpatialFilter;
     OGRSpatialReferenceH Ogr_projection;
     OGREnvelope oExt;
+    OGRwkbGeometryType Ogr_geom_type; 
 
     int OFTIntegerListlength;
 
@@ -215,7 +216,8 @@ int main(int argc, char *argv[])
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
-    flag.list->description = _("List available OGR layers in data source and exit");
+    flag.list->description = _("List available OGR layers including feature types " 
+				"in data source and exit"); 
     flag.list->guisection = _("Print");
     flag.list->suppress_required = YES;
 
@@ -332,15 +334,18 @@ int main(int argc, char *argv[])
     for (i = 0; i < navailable_layers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+	Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn); 
 	
 	available_layer_names[i] =
 	    G_store((char *)OGR_FD_GetName(Ogr_featuredefn));
 
 	if (flag.list->answer)
-	    fprintf(stdout, "%s\n", available_layer_names[i]);
+	    fprintf(stdout, "%s (%s)\n", available_layer_names[i], 
+		    OGRGeometryTypeToName(Ogr_geom_type));
     }
     if (flag.list->answer) {
 	fflush(stdout);
+	OGR_DS_Destroy(Ogr_ds);
 	exit(EXIT_SUCCESS);
     }
     
@@ -512,6 +517,7 @@ int main(int argc, char *argv[])
         /* If the i flag is set, clean up? and exit here */
         if(flag.no_import->answer)
         {
+	    OGR_DS_Destroy(Ogr_ds);
             exit(EXIT_SUCCESS);
         }
     }
@@ -1196,9 +1202,7 @@ int main(int argc, char *argv[])
 	G_message("%s", separator);
     }
 
-    /* needed?
-     * OGR_DS_Destroy( Ogr_ds );
-     */
+    OGR_DS_Destroy(Ogr_ds);
 
     if (use_tmp_vect) {
 	/* Copy temporary vector to output vector */
