@@ -1935,7 +1935,7 @@ class CoordinatesSelect(wx.Panel):
         self.buttonInsCoords = buttons.ThemedGenBitmapToggleButton(parent = self, id = wx.ID_ANY,
                                                                    bitmap = icon,
                                                                    size = globalvar.DIALOG_COLOR_SIZE)
-        
+        self.registered = False
         self.buttonInsCoords.Bind(wx.EVT_BUTTON, self._onClick)
         self._doLayout()
         
@@ -1957,11 +1957,13 @@ class CoordinatesSelect(wx.Panel):
                 self.buttonInsCoords.SetToggle(False)
                 return
             
+            self.registered = True
             self.lmgr.GetLayerTree().GetMapDisplay().Raise()
         else:
             if self.mapWin and \
                     self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
                                                             self._onMapClickHandler):
+                    self.registered = False
                     return
             
             self.buttonInsCoords.SetToggle(False)           
@@ -1969,7 +1971,8 @@ class CoordinatesSelect(wx.Panel):
     def _onMapClickHandler(self, event):
         """!Gets coordinates from mapwindow"""
         if event == "unregistered":
-            self.buttonInsCoords.SetToggle(False)
+            if self.buttonInsCoords:
+                self.buttonInsCoords.SetToggle(False)
             return
         
         e, n = self.mapWin.GetLastEN()
@@ -1985,7 +1988,7 @@ class CoordinatesSelect(wx.Panel):
         
     def __del__(self):
         """!Unregistrates _onMapClickHandler from mapWin"""
-        if self.mapWin:
+        if self.mapWin and self.registered:
             self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
                                                     self._onMapClickHandler)
 
