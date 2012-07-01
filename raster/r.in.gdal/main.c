@@ -615,6 +615,9 @@ int main(int argc, char *argv[])
 	}
     }
 
+    /* close the GDALDataset to avoid segfault in libgdal */
+    GDALClose(hDS);
+
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
@@ -646,6 +649,8 @@ int main(int argc, char *argv[])
 	G_put_window(&cur_wind);
 	G_message(_("Region for the current mapset updated"));
     }
+
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
@@ -979,7 +984,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	}
     }
 
-    G_done_msg(_("Raster map <%s> created."), output);
+    G_message(_("Raster map <%s> created."), output);
 
     return;
 }
