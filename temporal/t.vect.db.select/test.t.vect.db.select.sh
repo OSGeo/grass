@@ -41,3 +41,4 @@ t.unregister type=vect maps=prec_observer:1,prec_observer:2,prec_observer:3,prec
 
 g.remove vect=prec_observer,test_extract
 g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+
