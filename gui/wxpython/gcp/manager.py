@@ -2126,7 +2126,7 @@ class VectGroup(wx.Dialog):
         self.grassdatabase = grassdb
         self.xylocation = location
         self.xymapset = mapset
-        self.xuygroup = group
+        self.xygroup = group
         
         #
         # get list of valid vector directories
