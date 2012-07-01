@@ -15,20 +15,22 @@ Classes:
  - manager::EditGCP
  - manager::GrSettingsDialog
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Michael Barton
-@author Updated by Martin Landa <landa.martin gmail.com>
-@author Markus Metz redesign georectfier -> GCP Manager
+@author Original author Michael Barton
+@author Original version improved by Martin Landa <landa.martin gmail.com>
+@author Rewritten by Markus Metz redesign georectfier -> GCP Manage
+@author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 """
 
 import os
 import sys
 import shutil
 import time
+from copy import copy
 
 import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin
@@ -797,6 +799,12 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.parent = parent # GMFrame
         self.parent.gcpmanagement = self
         
+        #
+        # register data structures for drawing GCP's
+        #
+        self.pointsToDrawTgt = self.TgtMapWindow.RegisterGraphicsToDraw(graphicsType = "point", setStatusFunc = self.SetGCPSatus)
+        self.pointsToDrawSrc = self.SrcMapWindow.RegisterGraphicsToDraw(graphicsType = "point", setStatusFunc = self.SetGCPSatus)
+        
         # window resized
         self.resize = False
 
@@ -932,6 +940,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.Bind(wx.EVT_SIZE,     self.OnSize)
         self.Bind(wx.EVT_IDLE,     self.OnIdle)
         self.Bind(wx.EVT_CLOSE,    self.OnQuit)
+        
+        self.SetSettings()
 
     def __del__(self):
         """!Disable GCP manager mode"""
@@ -1064,102 +1074,77 @@ class GCP(MapFrame, ColumnSorterMixin):
         # GCP number, source E, source N, target E, target N, fwd error, bkwd error
         self.mapcoordlist[key] = [key, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-    def DrawGCP(self, coordtype):
-        """
-        Updates GCP and map coord maps and redraws
-        active (checked) GCP markers
+    def SetSettings(self):
+        """!Sets settings for drawing of GCP's.
         """
         self.highest_only = UserSettings.Get(group='gcpman', key='rms', subkey='highestonly')
-
         self.show_unused =  UserSettings.Get(group='gcpman', key='symbol', subkey='unused')
-        col = UserSettings.Get(group='gcpman', key='symbol', subkey='color')
-        wxLowCol = wx.Colour(col[0], col[1], col[2], 255)
-        col = UserSettings.Get(group='gcpman', key='symbol', subkey='hcolor')
-        wxHiCol = wx.Colour(col[0], col[1], col[2], 255)
-        col = UserSettings.Get(group='gcpman', key='symbol', subkey='scolor')
-        wxSelCol = wx.Colour(col[0], col[1], col[2], 255)
-        col = UserSettings.Get(group='gcpman', key='symbol', subkey='ucolor')
-        wxUnCol = wx.Colour(col[0], col[1], col[2], 255)
-        spx = UserSettings.Get(group='gcpman', key='symbol', subkey='size')
-        wpx = UserSettings.Get(group='gcpman', key='symbol', subkey='width')
+        
+        colours = { "color"  : "default", 
+                    "hcolor" : "highest", 
+                    "scolor" : "selected",
+                    "ucolor" : "unused" }
+        wpx = UserSettings.Get(group = 'gcpman', key = 'symbol', subkey = 'width')
+        
+        for k, v in colours.iteritems():
+            col = UserSettings.Get(group='gcpman', key='symbol', subkey= k)
+            self.pointsToDrawSrc.GetPen(v).SetColour(wx.Colour(col[0], col[1], col[2], 255)) # TODO GetPen neni to spatne? 
+            self.pointsToDrawTgt.GetPen(v).SetColour(wx.Colour(col[0], col[1], col[2], 255))
+            
+            self.pointsToDrawSrc.GetPen(v).SetWidth(wpx)
+            self.pointsToDrawTgt.GetPen(v).SetWidth(wpx)
+        
+        spx = UserSettings.Get(group = 'gcpman', key = 'symbol', subkey = 'size')
+        self.pointsToDrawSrc.SetPropertyVal("size", int(spx))
+        self.pointsToDrawTgt.SetPropertyVal("size", int(spx))
+        
         font = self.GetFont()
         font.SetPointSize(int(spx) + 2)
-
-        penOrig = polypenOrig = None
-
-        mapWin = None
         
-        if coordtype == 'source':
-            mapWin = self.SrcMapWindow
-            e_idx = 1
-            n_idx = 2
-        elif coordtype == 'target':
-            mapWin = self.TgtMapWindow
-            e_idx = 3
-            n_idx = 4
-
-        if not mapWin:
-            GError(parent = self,
-                   message="%s%s." % (_("mapwin not defined for "),
-                                      str(idx)))
-            return
-
-        #for gcp in self.mapcoordlist:
-        for idx in range(self.list.GetItemCount()):
-
-            key = self.list.GetItemData(idx)
-            gcp = self.mapcoordlist[key]
-
-            if not self.list.IsChecked(idx):
-                if self.show_unused:
-                    wxCol = wxUnCol
+        textProp = {}
+        textProp['active'] = True
+        textProp['font'] = font
+        self.pointsToDrawSrc.SetPropertyVal("text", textProp)
+        self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
+        
+    def SetGCPSatus(self, item, itemIndex):
+        """!Before GCP is drawn, decides it's colour and whether it
+        will be drawed.
+        """
+        key = self.list.GetItemData(itemIndex)
+        itemIndex += 1 # incremented because of itemDataMap (has one more item) - will be changed
+        
+        if not self.list.IsChecked(key - 1):
+                wxPen = "unused"
+                if not self.show_unused:
+                    item.SetPropertyVal('hide', True)
                 else:
-                    continue
+                    item.SetPropertyVal('hide', False)
+        
+        else:
+            item.SetPropertyVal('hide', False)
+            if self.highest_only == True:
+                if itemIndex == self.highest_key:
+                    wxPen = "highest"
+                else:
+                    wxPen = "default"
             else:
-                if self.highest_only == True:
-                    if key == self.highest_key:
-                        wxCol = wxHiCol
-                    else:
-                        wxCol = wxLowCol
-                elif self.rmsthresh > 0:
-                    if (gcp[5] > self.rmsthresh):
-                        wxCol = wxHiCol
-                    else:
-                        wxCol = wxLowCol
-
-            if idx == self.list.selected:
-                wxCol = wxSelCol
-
-            if not penOrig:
-                penOrig = mapWin.pen
-                polypenOrig = mapWin.polypen
-                mapWin.pen = wx.Pen(colour=wxCol, width=wpx, style=wx.SOLID)
-                mapWin.polypen = wx.Pen(colour=wxCol, width=wpx, style=wx.SOLID) # ?
-
-            mapWin.pen.SetColour(wxCol)
-            mapWin.polypen.SetColour(wxCol)
-
-            coord = mapWin.Cell2Pixel((gcp[e_idx], gcp[n_idx]))
-            mapWin.DrawCross(pdc=mapWin.pdcTmp, coords=coord,
-                             size=spx, text={ 'text' : '%s' % str(gcp[0]),
-                                            'active' : True,
-                                            'font' : font,
-                                            'color': wxCol,
-                                            'coords': [coord[0] + 5,
-                                                       coord[1] + 5,
-                                                       5,
-                                                       5]})
-            
-        if penOrig:
-            mapWin.pen = penOrig
-            mapWin.polypen = polypenOrig
+                if (gcp[5] > self.rmsthresh):
+                    wxPen = "highest"
+                else:
+                    wxPen = "default"
         
+        if itemIndex == self.list.selectedkey:
+            wxPen = "selected"
+        
+        item.SetPropertyVal('label', str(itemIndex))
+        item.SetPropertyVal('penName', wxPen)
+
     def SetGCPData(self, coordtype, coord, mapdisp=None, confirm=False):
+        """!Inserts coordinates from file, mouse click on map, or
+        after editing into selected item of GCP list and checks it for
+        use.
         """
-        Inserts coordinates from file, mouse click on map, or after editing
-        into selected item of GCP list and checks it for use
-        """
-        
         index = self.list.GetSelected()
         if index == wx.NOT_FOUND:
             return
@@ -1173,46 +1158,48 @@ class GCP(MapFrame, ColumnSorterMixin):
                 currloc = _("source")
             else:
                 currloc = _("target")
-            ret = wx.MessageBox(parent=self,
-                                caption=_("Set GCP coordinates"),
-                                message=_('Set %(coor)s coordinates for GCP No. %(key)s? \n\n'
-                                          'East: %(coor0)s \n'
-                                          'North: %(coor1)s') % \
+            ret = wx.MessageBox(parent = self,
+                                caption = _("Set GCP coordinates"),
+                                message = _('Set %(coor)s coordinates for GCP No. %(key)s? \n\n'
+                                            'East: %(coor0)s \n'
+                                            'North: %(coor1)s') % \
                                     { 'coor' : currloc,
                                       'key' : str(key),
                                       'coor0' : str(coord0),
                                       'coor1' : str(coord1) },
-                                style=wx.ICON_QUESTION | wx.YES_NO | wx.CENTRE)
-
+                                style = wx.ICON_QUESTION | wx.YES_NO | wx.CENTRE)
+            
             # for wingrass
             if os.name == 'nt':
                 self.MapWindow.SetFocus()
             if ret == wx.NO:
                 return
-            
+        
         if coordtype == 'source':
             self.list.SetStringItem(index, 1, str(coord0))
             self.list.SetStringItem(index, 2, str(coord1))
             self.mapcoordlist[key][1] = coord[0]
             self.mapcoordlist[key][2] = coord[1]
+            self.pointsToDrawSrc.GetItem(key - 1).SetCoords([coord0, coord1])
+            
         elif coordtype == 'target':
             self.list.SetStringItem(index, 3, str(coord0))
             self.list.SetStringItem(index, 4, str(coord1))
             self.mapcoordlist[key][3] = coord[0]
             self.mapcoordlist[key][4] = coord[1]
-            
+            self.pointsToDrawTgt.GetItem(key - 1).SetCoords([coord0, coord1])
+        
         self.list.SetStringItem(index, 5, '0')
         self.list.SetStringItem(index, 6, '0')
         self.mapcoordlist[key][5] = 0.0
         self.mapcoordlist[key][6] = 0.0
-
+        
         # self.list.ResizeColumns()
-
+        
     def SaveGCPs(self, event):
+        """!Make a POINTS file or save GCP coordinates to existing
+        POINTS file
         """
-        Make a POINTS file or save GCP coordinates to existing POINTS file
-        """
-
         self.GCPcount = 0
         try:
             f = open(self.file['points'], mode='w')
@@ -1996,8 +1983,6 @@ class GCPList(wx.ListCtrl,
             if self.gcp.show_target:
                 targetMapWin = self.gcp.TgtMapWindow
                 targetMapWin.UpdateMap(render=False, renderVector=False)
-
-        pass
     
     def AddGCPItem(self):
         """
@@ -2021,19 +2006,28 @@ class GCPList(wx.ListCtrl,
                           wx.LIST_STATE_SELECTED)
 
         self.ResizeColumns()
-
+        
+        self.gcp.pointsToDrawSrc.AddItem(coords = [0,0], label = str(self.selectedkey))
+        self.gcp.pointsToDrawTgt.AddItem(coords = [0,0], label = str(self.selectedkey))
+        
         return self.selected
 
     def DeleteGCPItem(self):
-        """
-        Deletes selected item in GCP list
+        """!Deletes selected item in GCP list.
         """
         if self.selected == wx.NOT_FOUND:
             return
 
         key = self.GetItemData(self.selected)
         self.DeleteItem(self.selected)
-
+        
+        if self.selected != wx.NOT_FOUND:
+            item = self.gcp.pointsToDrawSrc.GetItem(key - 1)
+            self.gcp.pointsToDrawSrc.DeleteItem(item)
+            
+            item = self.gcp.pointsToDrawTgt.GetItem(key - 1)
+            self.gcp.pointsToDrawTgt.DeleteItem(item)
+        
         return key
         
     def ResizeColumns(self):
@@ -2044,7 +2038,7 @@ class GCPList(wx.ListCtrl,
             # first column is checkbox, don't set to minWidth
             if i > 0 and self.GetColumnWidth(i) < minWidth[i > 4]:
                 self.SetColumnWidth(i, minWidth[i > 4])
-
+        
         self.SendSizeEvent()
 
     def GetSelected(self):
@@ -2052,10 +2046,8 @@ class GCPList(wx.ListCtrl,
         return self.selected
 
     def OnItemSelected(self, event):
+        """!Item selected
         """
-        Item selected
-        """
-
         if self.render and self.selected != event.GetIndex():
             self.selected = event.GetIndex()
             self.selectedkey = self.GetItemData(self.selected)
@@ -2064,7 +2056,6 @@ class GCPList(wx.ListCtrl,
             if self.gcp.show_target:
                 targetMapWin = self.gcp.TgtMapWindow
                 targetMapWin.UpdateMap(render=False, renderVector=False)
-
         event.Skip()
 
     def OnItemActivated(self, event):
@@ -2105,19 +2096,24 @@ class GCPList(wx.ListCtrl,
                                                   float(values[3]),
                                                   0.0,
                                                   0.0]
+                    
+                    self.gcp.pointsToDrawSrc.GetItem(key - 1).SetCoords([float(values[0]), 
+                                                                         float(values[1])])
+                    self.gcp.pointsToDrawTgt.GetItem(key - 1).SetCoords([float(values[2]), 
+                                                                         float(values[3])])
                     self.gcp.UpdateColours()
-        
+                    
     def OnColClick(self, event):
         """!ListCtrl forgets selected item..."""
         self.selected = self.FindItemData(-1, self.selectedkey)
         self.SetItemState(self.selected,
                           wx.LIST_STATE_SELECTED,
                           wx.LIST_STATE_SELECTED)
+        
         event.Skip()
 
 class VectGroup(wx.Dialog):
-    """
-    Dialog to create a vector group (VREF file) for georectifying
+    """!Dialog to create a vector group (VREF file) for georectifying
 
     @todo Replace by g.group
     """
@@ -2130,7 +2126,7 @@ class VectGroup(wx.Dialog):
         self.grassdatabase = grassdb
         self.xylocation = location
         self.xymapset = mapset
-        self.xygroup = group
+        self.xuygroup = group
         
         #
         # get list of valid vector directories
@@ -2720,16 +2716,17 @@ class GrSettingsDialog(wx.Dialog):
 
         layers = None
 
-        UserSettings.Set(group='gcpman', key='rms', subkey='highestonly',
-                         value=self.highlighthighest.GetValue())
+        UserSettings.Set(group = 'gcpman', key = 'rms', subkey = 'highestonly',
+                         value = self.highlighthighest.GetValue())
+        
         if self.sdfactor > 0:
             UserSettings.Set(group='gcpman', key='rms', subkey='sdfactor',
                              value=self.sdfactor)
-
+            
             self.parent.sdfactor = self.sdfactor
             if self.parent.rmsthresh > 0:
-                self.parent.rmsthresh = self.parent.mean + self.parent.sdfactor * self.parent.rmssd
-
+                self.parent.rmsthresh = self.parent.rmsmean + self.parent.sdfactor * self.parent.rmssd
+        
         UserSettings.Set(group='gcpman', key='symbol', subkey='color',
                          value=tuple(wx.FindWindowById(self.symbol['color']).GetColour()))
         UserSettings.Set(group='gcpman', key='symbol', subkey='hcolor',
@@ -2744,7 +2741,7 @@ class GrSettingsDialog(wx.Dialog):
                          value=wx.FindWindowById(self.symbol['size']).GetValue())
         UserSettings.Set(group='gcpman', key='symbol', subkey='width',
                          value=wx.FindWindowById(self.symbol['width']).GetValue())
-
+        
         srcrender = False
         srcrenderVector = False
         tgtrender = False
@@ -2817,6 +2814,7 @@ class GrSettingsDialog(wx.Dialog):
                 self.parent.TgtMapWindow.ZoomToMap(layers = self.parent.TgtMap.GetListOfLayers())
         
         self.parent.UpdateColours(srcrender, srcrenderVector, tgtrender, tgtrenderVector)
+        self.parent.SetSettings()        
 
     def OnSave(self, event):
         """!Button 'Save' pressed"""
