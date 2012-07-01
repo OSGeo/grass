@@ -123,6 +123,8 @@ def main():
     full = flags['f']
     preserve = flags['p']
     reset = flags['r']
+    
+    global do_mp
 
     if flags['s']:
         do_mp = False
