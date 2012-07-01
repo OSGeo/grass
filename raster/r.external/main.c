@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct {
-	struct Flag *o, *f, *e, *r, *h, *v;
+	struct Flag *o, *f, *e, *h, *v;
     } flag;
     int min_band, max_band, band;
     struct band_info info;
@@ -104,10 +104,6 @@ int main(int argc, char *argv[])
     flag.e->key = 'e';
     flag.e->label = _("Extend region extents based on new dataset");
     flag.e->description = _("Also updates the default region if in the PERMANENT mapset");
-
-    flag.r = G_define_flag();
-    flag.r->key = 'r';
-    flag.r->description = _("Require exact range");
 
     flag.h = G_define_flag();
     flag.h->key = 'h';
@@ -209,12 +205,15 @@ int main(int argc, char *argv[])
 		title2 = G_store(title);
 	}
 
-	query_band(hBand, output2, flag.r->answer, &cellhd, &info);
+	query_band(hBand, output2, &cellhd, &info);
 	create_map(input, band, output2, &cellhd, &info, title, flip);
 
 	G_free(output2);
 	G_free(title2);
     }
+
+    /* close the GDALDataset to avoid segfault in libgdal */
+    GDALClose(hDS);
 
     if (flag.e->answer)
 	update_default_window(&cellhd);

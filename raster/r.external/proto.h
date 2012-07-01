@@ -21,7 +21,7 @@ enum flip {
 };
 
 /* link.c */
-void query_band(GDALRasterBandH, const char *, int,
+void query_band(GDALRasterBandH, const char *,
 		struct Cell_head *, struct band_info *);
 void make_cell(const char *, const struct band_info *);
 void make_link(const char *, const char *, int,

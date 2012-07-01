@@ -5,7 +5,7 @@
 
 #include "proto.h"
 
-void query_band(GDALRasterBandH hBand, const char *output, int exact_range,
+void query_band(GDALRasterBandH hBand, const char *output,
 		struct Cell_head *cellhd, struct band_info *info)
 {
     int bGotMin, bGotMax;
@@ -52,7 +52,7 @@ void query_band(GDALRasterBandH hBand, const char *output, int exact_range,
     info->range[0] = GDALGetRasterMinimum(hBand, &bGotMin);
     info->range[1] = GDALGetRasterMaximum(hBand, &bGotMax);
     if(!(bGotMin && bGotMax))
-	GDALComputeRasterMinMax(hBand, !exact_range, info->range);
+	GDALComputeRasterMinMax(hBand, 0, info->range);
 
     Rast_init_colors(&info->colors);
 
