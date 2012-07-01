@@ -577,7 +577,7 @@ class GMConsole(wx.SplitterWindow):
                         command[0] != 'v.krige':
                     # no arguments given
                     try:
-                        GUI(parent = self).ParseCommand(command)
+                        GUI(parent = self, lmgr = self.parent).ParseCommand(command)
                     except GException, e:
                         print >> sys.stderr, e
                     return
@@ -618,7 +618,7 @@ class GMConsole(wx.SplitterWindow):
                 
             if task:
                 # process GRASS command without argument
-                GUI(parent = self).ParseCommand(command)
+                GUI(parent = self, lmgr = self.parent).ParseCommand(command)
             else:
                 self.cmdThread.RunCmd(command, stdout = self.cmdStdOut, stderr = self.cmdStdErr,
                                       onDone = onDone, onPrepare = onPrepare, userData = userData)

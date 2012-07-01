@@ -9,7 +9,7 @@ Can be used either from Layer Manager or as d.mon backend.
 Classes:
  - mapdisp::MapFrame
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -17,8 +17,9 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapFrame)
+@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapFrame, handlers support)
 @author Anna Kratochvilova <kratochanna gmail.com> (SingleMapFrame)
+@author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
 import os
@@ -466,7 +467,7 @@ class MapFrame(SingleMapFrame):
         """
         if self.GetMapToolbar():
             if event:
-                self.toolbars['map'].OnTool(event)
+                self.SwitchTool(self.toolbars['map'], event)
             self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "pointer"
@@ -497,7 +498,7 @@ class MapFrame(SingleMapFrame):
         """!Rotate 3D view
         """
         if self.GetMapToolbar():
-            self.toolbars['map'].OnTool(event)
+            self.SwitchTool(self.toolbars['map'], event)
             self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "rotate"
@@ -509,7 +510,7 @@ class MapFrame(SingleMapFrame):
         """!Fly-through mode
         """
         if self.GetMapToolbar():
-            self.toolbars['map'].OnTool(event)
+            self.SwitchTool(self.toolbars['map'], event)
             self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "fly"
@@ -826,12 +827,12 @@ class MapFrame(SingleMapFrame):
     def OnQuery(self, event):
         """!Query tools menu"""
         if self.GetMapToolbar():
-            self.toolbars['map'].OnTool(event)
+            self.SwitchTool(self.toolbars['map'], event)
             action = self.toolbars['map'].GetAction()
-            
+        
         self.toolbars['map'].action['desc'] = 'queryMap'
         self.MapWindow.mouse['use'] = "query"
-        
+
         if not self.IsStandalone():
             # switch to output console to show query results
             self._layerManager.notebook.SetSelectionByName('output')
@@ -901,6 +902,8 @@ class MapFrame(SingleMapFrame):
         along transect drawn on map display
         """
         self.totaldist = 0.0 # total measured distance
+        
+        self.SwitchTool(self.toolbars['map'], event)
         
         # switch Layer Manager to output console to show measure results
         self._layerManager.notebook.SetSelectionByName('output')
@@ -1095,6 +1098,7 @@ class MapFrame(SingleMapFrame):
         """
         if self.dialogs['barscale']:
             return
+        self.SwitchTool(self.toolbars['map'], event)
         
         id = 0 # unique index for overlay layer
 
@@ -1156,6 +1160,7 @@ class MapFrame(SingleMapFrame):
     def OnAddText(self, event):
         """!Handler for text decoration menu selection.
         """
+        self.SwitchTool(self.toolbars['map'], event)
         if self.MapWindow.dragid > -1:
             id = self.MapWindow.dragid
             self.MapWindow.dragid = -1
@@ -1316,3 +1321,32 @@ class MapFrame(SingleMapFrame):
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['map']
+
+    def SwitchTool(self, toolbar, event):
+        """!Calls UpdateTools to manage connected toolbars"""
+        self.UpdateTools(event)
+        SingleMapFrame.SwitchTool(self, toolbar, event)
+
+    def UpdateTools(self, event):
+        """!Method deals with relations of toolbars and other
+        elements""" 
+        # untoggles button in other toolbars
+        for toolbar in self.toolbars.itervalues():
+            if hasattr(event, 'GetEventObject') == True:
+                if event.GetEventObject() == toolbar:
+                    continue
+            toolbar.ToggleTool(toolbar.action['id'], False)
+            toolbar.action['id'] = -1
+            toolbar.OnTool(None)
+        
+        # mouse settings
+        self.MapWindow.mouse['box'] = 'point' 
+        self.MapWindow.mouse['use'] = 'pointer'
+        
+        # untoggles button in add legend dialog
+        if self.dialogs['legend']:
+            if hasattr(event ,'GetEventObject'):
+                if event.GetEventObject().GetId() == \
+                        self.dialogs['legend'].FindWindowByName('resize').GetId():
+                    return
+            self.dialogs['legend'].FindWindowByName('resize').SetValue(0)

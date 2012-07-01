@@ -6,12 +6,13 @@
 List of classes:
  - toolbars::VDigitToolbar
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 import wx
 
@@ -53,7 +54,7 @@ class VDigitToolbar(BaseToolbar):
         
         # create toolbars (two rows optionally)
         self.InitToolbar(self._toolbarData())
-        self.Bind(wx.EVT_TOOL, self.OnTool)
+        self.Bind(wx.EVT_TOOL, self._toolChosen)
         
         # default action (digitize new point, line, etc.)
         self.action = { 'desc' : '',
@@ -233,41 +234,45 @@ class VDigitToolbar(BaseToolbar):
         
         return self._getToolbarData(data)
     
+    def _toolChosen(self, event):
+        """!Tool selected -> untoggles selected tools in other
+        toolbars
+
+        @todo implement iclass front-end
+        """
+        self.parent.MapWindow.UnregisterAllHandlers()
+        
+        if hasattr(self.parent, "UpdateTools"):
+            self.parent.UpdateTools(event)
+        self.OnTool(event)
+        
     def OnTool(self, event):
-        """!Tool selected -> disable selected tool in map toolbar"""
-        aId = self.parent.GetMapToolbar().GetAction(type = 'id')
-        self.parent.GetMapToolbar().ToggleTool(aId, False)
-                
+        """!Tool selected -> untoggles previusly selected tool in
+        toolbar"""
         # set cursor
         cursor = self.parent.cursors["cross"]
         self.MapWindow.SetCursor(cursor)
         
         # pointer
         self.parent.OnPointer(None)
-                
-        if event:
-            # deselect previously selected tool
-            aId = self.action.get('id', -1)
-            if aId != event.GetId() and \
-                    self.action['id'] != -1:
-                self.ToggleTool(self.action['id'], False)
-            else:
-                self.ToggleTool(self.action['id'], True)
-            
-            self.action['id'] = event.GetId()
-            
-            event.Skip()
-        
-        if self.action['id'] != -1:
-            self.ToggleTool(self.action['id'], True)
-        
+         
+        aId = self.action.get('id', -1)       
+        BaseToolbar.OnTool(self, event)
+
         # clear tmp canvas
-        if self.action['id'] != aId:
+        if self.action['id'] != aId or aId == -1:
+            self.MapWindow.polycoords = []
             self.MapWindow.ClearLines(pdc = self.MapWindow.pdcTmp)
             if self.digit and \
                     len(self.MapWindow.digit.GetDisplay().GetSelected()) > 0:
                 # cancel action
                 self.MapWindow.OnMiddleDown(None)
+        
+        # set no action
+        if self.action['id'] == -1:
+            self.action = { 'desc' : '',
+                            'type' : '',
+                            'id'   : -1 }
         
         # set focus
         self.MapWindow.SetFocus()

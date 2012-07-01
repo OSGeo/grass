@@ -8,7 +8,7 @@ Classes:
  - mapdisp::SingleMapFrame
  - mapdisp::DoubleMapFrame
 
-(C) 2009-2011 by the GRASS Development Team
+(C) 2009-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -282,7 +282,7 @@ class MapFrameBase(wx.Frame):
         Set mouse cursor, zoombox attributes, and zoom direction
         """
         toolbar = self.GetMapToolbar()
-        self._switchTool(toolbar, event)
+        self.SwitchTool(toolbar, event)
         
         win = self.GetWindow()
         self._prepareZoom(mapWindow = win, zoomType = 1)
@@ -292,7 +292,7 @@ class MapFrameBase(wx.Frame):
         Set mouse cursor, zoombox attributes, and zoom direction
         """
         toolbar = self.GetMapToolbar()
-        self._switchTool(toolbar, event)
+        self.SwitchTool(toolbar, event)
         
         win = self.GetWindow()
         self._prepareZoom(mapWindow = win, zoomType = -1)
@@ -311,8 +311,12 @@ class MapFrameBase(wx.Frame):
         # change the cursor
         mapWindow.SetCursor(self.cursors["cross"])
     
-    def _switchTool(self, toolbar, event):
+    def SwitchTool(self, toolbar, event):
         """!Helper function to switch tools"""
+        # unregistration of all registered mouse event handlers of
+        # Mapwindow
+        self.MapWindow.UnregisterAllHandlers()
+        
         if toolbar:
             toolbar.OnTool(event)
             toolbar.action['desc'] = ''
@@ -321,7 +325,7 @@ class MapFrameBase(wx.Frame):
         """!Panning, set mouse to drag
         """
         toolbar = self.GetMapToolbar()
-        self._switchTool(toolbar, event)
+        self.SwitchTool(toolbar, event)
         
         win = self.GetWindow()
         self._preparePan(mapWindow = win)
@@ -522,7 +526,7 @@ class DoubleMapFrame(MapFrameBase):
         Set mouse cursor, zoombox attributes, and zoom direction
         """
         toolbar = self.GetMapToolbar()
-        self._switchTool(toolbar, event)
+        self.SwitchTool(toolbar, event)
         
         win = self.GetFirstWindow()
         self._prepareZoom(mapWindow = win, zoomType = 1)
@@ -535,7 +539,7 @@ class DoubleMapFrame(MapFrameBase):
         Set mouse cursor, zoombox attributes, and zoom direction
         """
         toolbar = self.GetMapToolbar()
-        self._switchTool(toolbar, event)
+        self.SwitchTool(toolbar, event)
         
         win = self.GetFirstWindow()
         self._prepareZoom(mapWindow = win, zoomType = -1)
@@ -547,7 +551,7 @@ class DoubleMapFrame(MapFrameBase):
         """!Panning, set mouse to drag
         """
         toolbar = self.GetMapToolbar()
-        self._switchTool(toolbar, event)
+        self.SwitchTool(toolbar, event)
         
         win = self.GetFirstWindow()
         self._preparePan(mapWindow = win)

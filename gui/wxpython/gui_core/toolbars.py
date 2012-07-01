@@ -164,24 +164,19 @@ class BaseToolbar(wx.ToolBar):
         if self.parent.GetName() == "GCPFrame":
             return
         
-        if hasattr(self.parent, 'toolbars'):
-            if self.parent.GetToolbar('vdigit'):
-                # update vdigit toolbar (unselect currently selected tool)
-                id = self.parent.toolbars['vdigit'].GetAction(type = 'id')
-                self.parent.toolbars['vdigit'].ToggleTool(id, False)
+        id = self.action.get('id', -1)
         
         if event:
             # deselect previously selected tool
-            id = self.action.get('id', -1)
-            if id != event.GetId():
+            if id != -1 and id != event.GetId() :
                 self.ToggleTool(self.action['id'], False)
-            else:
+            elif id != -1:
                 self.ToggleTool(self.action['id'], True)
             
             self.action['id'] = event.GetId()
             
             event.Skip()
-        else:
+        elif id != -1:
             # initialize toolbar
             self.ToggleTool(self.action['id'], True)
         

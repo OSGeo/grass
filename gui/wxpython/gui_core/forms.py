@@ -43,6 +43,7 @@ COPYING coming with GRASS for details.
 @author Daniel Calvelo <dca.gis@gmail.com>
 @author Martin Landa <landa.martin@gmail.com>
 @author Luca Delucchi <lucadeluge@gmail.com>
+@author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
 import sys
@@ -348,11 +349,12 @@ class TaskFrame(wx.Frame):
     """
     def __init__(self, parent, task_description, id = wx.ID_ANY,
                  get_dcmd = None, layer = None,
-                 style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
+                 style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, lmgr = None, **kwargs):
         self.get_dcmd = get_dcmd
         self.layer    = layer
         self.task     = task_description
-        self.parent   = parent            # LayerTree | Modeler | None | ...
+        self.parent   = parent             # LayerTree | Modeler | None | ...
+        self.lmgr     = lmgr  
         if parent and parent.GetName() == 'Modeler':
             self.modeler = self.parent
         else:
@@ -418,7 +420,7 @@ class TaskFrame(wx.Frame):
         
         # notebooks
         self.notebookpanel = CmdPanel(parent = self.panel, task = self.task,
-                                      frame = self)
+                                      frame = self, lmgr = self.lmgr)
         self.goutput = self.notebookpanel.goutput
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(item = self.notebookpanel, proportion = 1, flag = wx.EXPAND)
@@ -736,7 +738,7 @@ class CmdPanel(wx.Panel):
     """!A panel containing a notebook dividing in tabs the different
     guisections of the GRASS cmd.
     """
-    def __init__(self, parent, task, id = wx.ID_ANY, frame = None, *args, **kwargs):
+    def __init__(self, parent, task, id = wx.ID_ANY, frame = None, lmgr = None, *args, **kwargs):
         if frame:
             self.parent = frame
         else:
@@ -778,7 +780,7 @@ class CmdPanel(wx.Panel):
 
         panelsizer = wx.BoxSizer(orient = wx.VERTICAL)
 
-        # Build notebook
+        # build notebook
         self.notebook = GNotebook(self, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON )
         self.notebook.SetTabAreaColour(globalvar.FNPageColor)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
@@ -1101,7 +1103,8 @@ class CmdPanel(wx.Panel):
                                               'layer_all',
                                               'location',
                                               'mapset',
-                                              'dbase') and \
+                                              'dbase',
+                                              'coords') and \
                                               p.get('element', '') not in ('file', 'dir'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
@@ -1414,7 +1417,29 @@ class CmdPanel(wx.Panel):
                     # a textctl and a button;
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
-
+                    
+                # interactive inserting of coordinates from map window
+                elif prompt == 'coords':
+                    # interactive inserting if layer manager is accessible
+                    if lmgr:
+                        win = gselect.CoordinatesSelect(parent = which_panel, 
+                                                        lmgr = lmgr, 
+                                                        multiple =  p.get('multiple', False),
+                                                        param = p)
+                        p['wxId'] = [win.GetTextWin().GetId()]
+                        win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
+                    
+                    # normal text field
+                    else:
+                        win = wx.TextCtrl(parent = which_panel)
+                        p['wxId'] = [win.GetId()]
+                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    
+                    which_sizer.Add(item = win, 
+                                    proportion = 0,
+                                    flag = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT, 
+                                    border = 5)
+            
             if self.parent.GetName() == 'MainFrame' and self.parent.modeler:
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
@@ -1934,13 +1959,14 @@ class CmdPanel(wx.Panel):
         
 class GUI:
     def __init__(self, parent = None, show = True, modal = False,
-                 centreOnParent = False, checkError = False):
+                 centreOnParent = False, checkError = False, lmgr = None):
         """!Parses GRASS commands when module is imported and used from
         Layer Manager.
         """
         self.parent = parent
         self.show   = show
         self.modal  = modal
+        self.lmgr   = lmgr
         self.centreOnParent = centreOnParent
         self.checkError     = checkError
         
@@ -2046,7 +2072,8 @@ class GUI:
         if self.show is not None:
             self.mf = TaskFrame(parent = self.parent,
                                 task_description = self.grass_task,
-                                get_dcmd = get_dcmd, layer = layer)
+                                get_dcmd = get_dcmd, layer = layer,
+                                lmgr = self.lmgr)
         else:
             self.mf = None
         

@@ -692,6 +692,7 @@ class DecorationDialog(wx.Dialog):
         
     def OnResize(self, event):
         if self.FindWindowByName('resize').GetValue():
+            self.parent.SwitchTool(self.parent.toolbars['map'], event)
             self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
             self.parent.MapWindow.mouse['use'] = 'legend'
             self.parent.MapWindow.mouse['box'] = 'box'

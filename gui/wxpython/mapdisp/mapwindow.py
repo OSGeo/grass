@@ -6,7 +6,7 @@
 Classes:
  - mapwindow::BufferedWindow
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -14,6 +14,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton
 @author Jachym Cepicky
+@author Vaclav Petras <wenzeslaus gmail.com> (handlers support)
+@author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
 import os
@@ -1742,3 +1744,18 @@ class BufferedWindow(MapWindow, wx.Window):
     def GetMap(self):
         """!Get render.Map() instance"""
         return self.Map
+
+    def RegisterMouseEventHandler(self, event, handler, cursor = None):
+        """!Calls UpdateTools to manage connected toolbars"""
+        self.parent.UpdateTools(None)
+        MapWindow.RegisterMouseEventHandler(self, event, handler, cursor)
+
+    def UnregisterMouseEventHandler(self, event, handler):
+        """!Sets pointer and toggles it after unregistration"""
+        MapWindow.UnregisterMouseEventHandler(self, event, handler)
+        
+        # sets pointer mode
+        toolbar = self.parent.toolbars['map']
+        toolbar.action['id'] = vars(toolbar)["pointer"]
+        toolbar.OnTool(None)
+        self.parent.OnPointer(event = None)
