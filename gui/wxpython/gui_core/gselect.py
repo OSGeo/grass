@@ -22,6 +22,7 @@ Classes:
  - gselect::ProjSelect
  - gselect::ElementSelect
  - gselect::OgrTypeSelect
+ - gselect::CoordinatesSelect
 
 (C) 2007-2012 by the GRASS Development Team 
 
@@ -31,6 +32,7 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
+@author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
 import os
@@ -39,7 +41,9 @@ import glob
 
 import wx
 import wx.combo
+import wx.lib.buttons          as  buttons
 import wx.lib.filebrowsebutton as filebrowse
+
 from wx.lib.newevent import NewEvent
 
 from core import globalvar
@@ -1909,3 +1913,82 @@ class OgrTypeSelect(wx.Panel):
             return 'line'
         elif sel == 2:
             return 'boundary'
+
+class CoordinatesSelect(wx.Panel):
+    def __init__(self, parent, lmgr = None, multiple = False, **kwargs):
+        """!Widget to get coordinates from map window  by mouse click
+        
+        @param parent parent window
+        @param lmgr layer manager 
+        @param multiple - True if it is possible to insert more coordinates
+        """
+        self.lmgr     = lmgr
+        self.multiple = multiple
+        self.mapWin   = None
+        
+        super(CoordinatesSelect, self).__init__(parent = parent, id = wx.ID_ANY)
+        
+        self.coordsField = wx.TextCtrl(parent = self, id = wx.ID_ANY, 
+                                       size = globalvar.DIALOG_TEXTCTRL_SIZE)
+        
+        icon = wx.Bitmap(os.path.join(globalvar.ETCICONDIR, "grass", "pointer.png"))
+        self.buttonInsCoords = buttons.ThemedGenBitmapToggleButton(parent = self, id = wx.ID_ANY,
+                                                                   bitmap = icon,
+                                                                   size = globalvar.DIALOG_COLOR_SIZE)
+        
+        self.buttonInsCoords.Bind(wx.EVT_BUTTON, self._onClick)
+        self._doLayout()
+        
+    def _doLayout(self):
+        self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.dialogSizer.Add(item = self.coordsField,  
+                             proportion = 1, 
+                             flag = wx.EXPAND)
+        self.dialogSizer.Add(item = self.buttonInsCoords)
+        self.SetSizer(self.dialogSizer)
+        
+    def _onClick(self, event):
+        """!Button for interacitve inserting of coordinates clicked"""
+        if self.buttonInsCoords.GetToggle() and self.lmgr.GetLayerTree():   
+            self.mapWin = self.lmgr.GetLayerTree().GetMapDisplay().GetWindow()            
+            if self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
+                                                     self._onMapClickHandler,
+                                                     wx.StockCursor(wx.CURSOR_CROSS)) == False:
+                self.buttonInsCoords.SetToggle(False)
+                return
+            
+            self.lmgr.GetLayerTree().GetMapDisplay().Raise()
+        else:
+            if self.mapWin and \
+                    self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
+                                                            self._onMapClickHandler):
+                    return
+            
+            self.buttonInsCoords.SetToggle(False)           
+    
+    def _onMapClickHandler(self, event):
+        """!Gets coordinates from mapwindow"""
+        if event == "unregistered":
+            self.buttonInsCoords.SetToggle(False)
+            return
+        
+        e, n = self.mapWin.GetLastEN()
+        prevCoords = ""
+        
+        if self.multiple:
+            prevCoords = self.coordsField.GetValue().strip()
+            if prevCoords != "":
+                prevCoords += ","
+        
+        value = prevCoords + str(e) + "," + str(n)
+        self.coordsField.SetValue(value)
+        
+    def __del__(self):
+        """!Unregistrates _onMapClickHandler from mapWin"""
+        if self.mapWin:
+            self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
+                                                    self._onMapClickHandler)
+
+    def GetTextWin(self):
+        """!Get TextCtrl widget"""
+        return self.coordsField

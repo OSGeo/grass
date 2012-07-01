@@ -6,7 +6,7 @@
 Classes:
  - mapwindow::MapWindow
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -14,11 +14,16 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton
 @author Jachym Cepicky
+@author Vaclav Petras <wenzeslaus gmail.com> (handlers support)
+@author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
 import wx
 
 from core.settings import UserSettings
+from core.gcmd     import GError
+
+from grass.script import core as grass
 
 class MapWindow(object):
     """!Abstract map display window class
@@ -30,7 +35,6 @@ class MapWindow(object):
      - _bindMouseEvents method which binds MouseEvent handlers
      - Pixel2Cell
      - Cell2Pixel (if it is possible)
-    
     """
     def __init__(self, parent, id = wx.ID_ANY,
                  Map = None, tree = None, lmgr = None, **kwargs):
@@ -53,19 +57,73 @@ class MapWindow(object):
         # stores overridden cursor
         self._overriddenCursor = None
 
+        # dictionary where event types are stored as keys and lists of
+        # handlers for these types as values
+        self.handlersContainer = {
+            wx.EVT_LEFT_DOWN : [],
+            wx.EVT_LEFT_UP : [],
+            wx.EVT_LEFT_DCLICK : [],
+            wx.EVT_MIDDLE_DOWN : [],
+            wx.EVT_MIDDLE_UP : [],
+            wx.EVT_MIDDLE_DCLICK : [],
+            wx.EVT_RIGHT_DOWN : [],
+            wx.EVT_RIGHT_UP : [],
+            wx.EVT_RIGHT_DCLICK : [],
+            wx.EVT_MOTION : [],
+            wx.EVT_ENTER_WINDOW : [],
+            wx.EVT_LEAVE_WINDOW : [],
+            wx.EVT_MOUSEWHEEL : [],
+            wx.EVT_MOUSE_EVENTS : []
+            }
+        
+        wx.CallAfter(self.InitBinding)
+
+    def __del__(self):
+        self.UnregisterAllHandlers()
+
+    def InitBinding(self):
+        """!Binds helper functions, which calls all handlers
+           registered to events with the events
+        """
+        for ev, handlers in self.handlersContainer.iteritems():
+            self.Bind(ev, self.EventTypeHandler(handlers))
+    
+    def EventTypeHandler(self, evHandlers):
+         return lambda event:self.HandlersCaller(event, evHandlers)  
+    
+    def HandlersCaller(self, event, handlers):
+        """!Hepler function which calls all handlers registered for
+        event
+        """
+        for handler in handlers:
+            try:
+                handler(event)
+            except:
+                handlers.remove(handler)
+                GError(parent = self,
+                       message=_("Error occured during calling of handler: %s \n"
+                                 "Handler was unregistered.") % handler.__name__)
+        
+        event.Skip() 
+
     def RegisterMouseEventHandler(self, event, handler, cursor = None):
         """!Binds event handler
         
         Call event.Skip() in handler to allow default processing in MapWindow.
-        
+
+        If any error occures inside of handler, the handler is removed.
+
+        Before handler is unregistered it is called with 
+        string value "unregistered" of event parameter.
+
         @code
         # your class methods
         def OnButton(self, event):
             # current map display's map window
             # expects LayerManager to be the parent
             self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
-            if self.mapwin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
-                                                     wx.StockCursor(wx.CURSOR_CROSS)):
+            if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
+                                                wx.StockCursor(wx.CURSOR_CROSS)):
                 self.parent.GetLayerTree().GetMapDisplay().Raise()
             else:
                 # handle that you cannot get coordinates
@@ -74,7 +132,7 @@ class MapWindow(object):
             # get real world coordinates of mouse click
             coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
             self.text.SetLabel('Coor: ' + str(coor))
-            self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN)
+            self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
             event.Skip()
         @endcode
         
@@ -85,13 +143,11 @@ class MapWindow(object):
         @return True if successful
         @return False if event cannot be bind
         """
+        # inserts handler into list
+        for containerEv, handlers in self.handlersContainer.iteritems():
+            if event == containerEv: 
+                handlers.append(handler)
         
-        # if it is a VDigitWindow it cannot be used
-        # hasattr is ugly
-        if hasattr(self, "digit"):
-            return False
-        
-        self.Bind(event, handler)
         self.mouse['useBeforeGenericEvent'] = self.mouse['use']
         self.mouse['use'] = 'genericEvent'
         
@@ -101,26 +157,51 @@ class MapWindow(object):
         
         return True
 
+    def UnregisterAllHandlers(self):
+        """!Unregisters all registered handlers 
 
-    def UnregisterMouseEventHandler(self, event):
-        """!Unbinds event handler a restores previous state
+        Before each handler is unregistered it is called with string
+        value "unregistered" of event parameter.
+        """
+        for containerEv, handlers in self.handlersContainer.iteritems():
+            for handler in handlers:
+                try:
+                    handler("unregistered")
+                    handlers.remove(handler)
+                except:
+                    GError(parent = self,
+                           message = _("Error occured during unregistration of handler: %s \n \
+                                       Handler was unregistered.") % handler.__name__)
+                    handlers.remove(handler)
         
-        You should unbind to restore normal MapWindow behaviour.
-        Note that this operation will unbind any other external (non-MapWindow) handlers.
+    def UnregisterMouseEventHandler(self, event, handler):
+        """!Unbinds event handler for event
         
-        @param event event to unbind
+        Before handler is unregistered it is called with string value
+        "unregistered" of event parameter.
+
+        @param handler handler to unbind
+        @param event event from which handler will be unbinded
         
         @return True if successful
         @return False if event cannot be unbind
         """
-        if hasattr(self, "digit"):
-            return False
-        
-        # it is not yet possible in wxPython to unbind exact event
-        ret = self.Unbind(event)
-        
-        # restore bind state
-        self._bindMouseEvents()
+        # removes handler from list 
+        for containerEv, handlers in self.handlersContainer.iteritems():
+            if event != containerEv:
+                continue
+            try:
+                handler("unregistered")
+                if handler in handlers:
+                    handlers.remove(handler)
+                else:
+                    grass.warning(_("Handler: %s was not registered") \
+                                      % handler.__name__)
+            except:
+                GError(parent = self,
+                       message = _("Error occured during unregistration of handler: %s \n \
+                                       Handler was unregistered") % handler.__name__)
+                handlers.remove(handler) 
         
         # restore mouse use (previous state)
         self.mouse['use'] = self.mouse['useBeforeGenericEvent']
@@ -129,7 +210,7 @@ class MapWindow(object):
         if self._overriddenCursor:
             self.SetCursor(self._overriddenCursor)
         
-        return ret
+        return True
     
     def Pixel2Cell(self, (x, y)):
         raise NotImplementedError()

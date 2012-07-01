@@ -88,6 +88,7 @@ class ProfileFrame(BasePlotFrame):
     def OnDrawTransect(self, event):
         """!Draws transect to profile in map display
         """
+        self.parent.SwitchTool(self.parent.toolbars['map'], event)
         self.mapwin.polycoords = []
         self.seglist = []
         self.mapwin.ClearLines(self.mapwin.pdc)
@@ -118,13 +119,10 @@ class ProfileFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupProfile(self):
-        """!Create coordinate string for profiling. Create segment list for
-           transect segment markers.
+        """!Create coordinate string for profiling. Create segment
+           list for transect segment markers.
         """
-
-        #
         # create list of coordinate points for r.profile
-        #                
         dist = 0
         cumdist = 0
         self.coordstr = ''
@@ -141,20 +139,18 @@ class ProfileFrame(BasePlotFrame):
                     self.coordstr = '%d,%d' % (point[0], point[1])
                 else:
                     self.coordstr = '%s,%d,%d' % (self.coordstr, point[0], point[1])
-
+        
         if not insideRegion:
             GWarning(message = _("Not all points of profile lie inside computational region."),
                      parent = self)
-
+        
         if len(self.rasterList) == 0:
             return
-
+        
         # title of window
         self.ptitle = _('Profile of')
-
-        #
+        
         # create list of coordinates for transect segment markers
-        #
         if len(self.mapwin.polycoords) > 0:
             self.seglist = []
             for point in self.mapwin.polycoords:
@@ -166,7 +162,8 @@ class ProfileFrame(BasePlotFrame):
                                  coordinates = '%d,%d' % (point[0],point[1]))
                 
                 val = ret.splitlines()[0].split('|')[3]
-                if val == None or val == '*': continue
+                if val == None or val == '*':
+                    continue
                 val = float(val)
                 
                 # calculate distance between coordinate points
@@ -174,14 +171,14 @@ class ProfileFrame(BasePlotFrame):
                     dist = math.sqrt(math.pow((lasteast-point[0]),2) + math.pow((lastnorth-point[1]),2))
                 cumdist += dist
                 
-                #store total transect length
+                # store total transect length
                 self.transect_length = cumdist
-
+                
                 # build a list of distance,value pairs for each segment of transect
                 self.seglist.append((cumdist,val))
                 lasteast = point[0]
                 lastnorth = point[1]
-
+            
             # delete extra first segment point
             try:
                 self.seglist.pop(0)
