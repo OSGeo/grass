@@ -42,25 +42,29 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("version"));
-    module->description = _("Displays version and copyright information.");
+    module->description = _("Displays GRASS version and copyright information.");
 
     copyright = G_define_flag();
     copyright->key = 'c';
     copyright->description = _("Print also the copyright message");
+    copyright->guisection = _("Additional info");
 
     build = G_define_flag();
     build->key = 'b';
     build->description = _("Print also the GRASS build information");
+    build->guisection = _("Additional info");
 
     gish_rev = G_define_flag();
     gish_rev->key = 'r';
     gish_rev->description =
 	_("Print also the GIS library revision number and time");
+    gish_rev->guisection = _("Additional info");
 
     shell = G_define_flag();
     shell->key = 'g';
     shell->description = _("Print info in shell script style (including SVN revision number)");
-    
+    shell->guisection = _("Shell");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
