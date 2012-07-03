@@ -808,8 +808,13 @@ class GMConsole(wx.SplitterWindow):
                                 style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
             if dlg.ShowModal() == wx.ID_OK:
                 self.cmdFileProtocol = dlg.GetPath()
+            else:
+                wx.CallAfter(self.btnCmdProtocol.SetValue, False)
+            
             dlg.Destroy()
             
+        event.Skip()
+        
     def OnCmdAbort(self, event):
         """!Abort running command"""
         self.cmdThread.abort()
