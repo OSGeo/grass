@@ -7,7 +7,7 @@ Classes:
  - preferences::PreferencesDialog
  - preferences::PropertiesDialog
 
-(C) 2010-2011 by the GRASS Development Team
+(C) 2010-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -458,7 +458,7 @@ class PropertiesDialog(wx.Dialog):
     def _layout(self):
         metaSizer = wx.StaticBoxSizer(self.metaBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
+        gridSizer.AddGrowableCol(1)
         gridSizer.AddGrowableRow(1)
         gridSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                          label = _("Name:")),
@@ -487,7 +487,7 @@ class PropertiesDialog(wx.Dialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (2, 1))
-        metaSizer.Add(item = gridSizer)
+        metaSizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
         
         cmdSizer = wx.StaticBoxSizer(self.cmdBox, wx.VERTICAL)
         cmdSizer.Add(item = self.overwrite,
