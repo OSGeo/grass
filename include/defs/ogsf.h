@@ -243,6 +243,7 @@ int GVL_load_vol(int, const char *);
 int GVL_get_volname(int, char *);
 void GVL_set_trans(int, float, float, float);
 int GVL_get_trans(int, float *, float *, float *);
+void GVL_set_draw_wire(int, int);
 void GVL_draw_vol(int);
 void GVL_draw_wire(int);
 void GVL_alldraw_vol(void);

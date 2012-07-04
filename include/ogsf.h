@@ -443,6 +443,7 @@ typedef struct g_vol
     double xmin, xmax, ymin, ymax, zmin, zmax;
     double xrange, yrange, zrange;
     float x_trans, y_trans, z_trans;
+    int draw_wire;
 
     int n_isosurfs;
     geovol_isosurf *isosurf[MAX_ISOSURFS];
