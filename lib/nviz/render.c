@@ -62,9 +62,10 @@ void Nviz_init_render_window(struct render_window *rwin)
 void Nviz_destroy_render_window(struct render_window *rwin)
 {
 #if defined(OPENGL_X11)
-    glXDestroyContext(rwin->displayId, rwin->contextId);
     glXDestroyGLXPixmap(rwin->displayId, rwin->windowId);
     XFreePixmap(rwin->displayId, rwin->pixmap);
+    glXDestroyContext(rwin->displayId, rwin->contextId);
+    XCloseDisplay(rwin->displayId);
 #elif defined(OPENGL_AQUA)
     aglDestroyPixelFormat(rwin->pixelFmtId);
     aglDestroyContext(rwin->contextId);
