@@ -116,8 +116,6 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwar
     >>> p2.wait()   # etc.
     \endcode
 
-    (maybe stdout = subprocess.PIPE and p1.stdout.closed can be avoided)
-
     @param exp expression
     @param kwargs
     
