@@ -233,6 +233,7 @@ int main(int argc, char *argv[])
 
     G_done_msg(_("File <%s> created."), output_name);
 
+    Nviz_destroy_data(&data);
     Nviz_destroy_render_window(offscreen);
 
     G_free((void *)output_name);
