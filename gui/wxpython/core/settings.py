@@ -672,6 +672,7 @@ class Settings:
                         'mode'       : 0, # isosurfaces
                         'shading'    : 1, # gouraud
                         'resolution' : 3, # polygon resolution
+                        'box'        : False # draw wire box
                         },
                     'shine': {
                         'map' : False,

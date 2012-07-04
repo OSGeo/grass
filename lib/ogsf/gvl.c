@@ -212,6 +212,7 @@ int gvl_init_vol(geovol * gvl, double ox, double oy, double oz,
     gvl->zrange = gvl->zmax - gvl->zmin;
 
     gvl->x_trans = gvl->y_trans = gvl->z_trans = 0.0;
+    gvl->draw_wire = 0;
 
     gvl->n_isosurfs = 0;
     G_zero(gvl->isosurf, sizeof(geovol_isosurf *) * MAX_ISOSURFS);

@@ -374,6 +374,27 @@ int GVL_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 }
 
 /*!
+   \brief Set drawing wire box
+
+   \param id volume set id
+   \param draw_wire 1 for drawing wire, 0 otherwise
+ */
+void GVL_set_draw_wire(int id, int draw_wire)
+{
+    geovol *gvl;
+
+    G_debug(3, "GVL_set_draw_wire");
+
+    gvl = gvl_get_vol(id);
+
+    if (gvl) {
+	gvl->draw_wire = draw_wire;
+    }
+
+    return;
+}
+
+/*!
    \brief Draw volume set
 
    \param vid volume set id
@@ -386,6 +407,9 @@ void GVL_draw_vol(int vid)
 
     if (gvl) {
 	gvld_vol(gvl);
+        if (gvl->draw_wire) {
+	    gvld_wind3_box(gvl);
+        }
     }
 
     return;

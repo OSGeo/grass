@@ -67,7 +67,7 @@ int gvld_vol(geovol *gvl)
  */
 int gvld_wire_vol(geovol * gvl)
 {
-    G_debug(5, "gvld_vol(): id=%d", gvl->gvol_id);
+    G_debug(5, "gvld_wire_vol(): id=%d", gvl->gvol_id);
 
     gvld_wind3_box(gvl);
 

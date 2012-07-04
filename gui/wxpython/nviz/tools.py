@@ -1564,6 +1564,14 @@ class NvizToolWindow(FN.FlatNotebook):
         resol.Bind(wx.EVT_TEXT, self.OnVolumeResolution)
         gridSizer.Add(item = resol, pos = (0, 5))
         
+        # draw wire box
+        box = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                            label = _("Draw wire box"))
+        box.SetName("value")
+        self.win['volume']['draw']['box'] = box.GetId()
+        box.Bind(wx.EVT_CHECKBOX, self.OnVolumeDrawBox)
+        gridSizer.Add(item = box, pos = (1, 0), span = (1, 6))
+
         boxSizer.Add(item = gridSizer, proportion = 0,
                      flag = wx.ALL | wx.EXPAND, border = 3)
         pageSizer.Add(item = boxSizer, proportion = 0,
@@ -3668,6 +3676,17 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Set isosurface/slice draw mode"""
         self.SetVolumeDrawMode(event.GetSelection())
         
+    def OnVolumeDrawBox(self, event):
+        """!Set wire box drawing"""
+        data = self.GetLayerData('volume')['volume']
+        vid = data['object']['id']
+        checked = self.FindWindowById(self.win['volume']['draw']['box']).GetValue()
+        self._display.SetVolumeDrawBox(vid, checked)
+        data['draw']['box']['enabled'] = checked
+
+        if self.mapDisplay.IsAutoRendered():
+            self.mapWindow.Refresh(False)
+
     def SetVolumeDrawMode(self, selection):
         """!Set isosurface draw mode"""
         data = self.GetLayerData('volume')['volume']
@@ -4769,6 +4788,8 @@ class NvizToolWindow(FN.FlatNotebook):
                     value = 1
             if control == 'resolution':
                 value = idata[data['draw']['mode']['desc']]['value']
+            if control == 'box':
+                value = idata['enabled']
             
             if win.GetName() == "selection":
                 win.SetSelection(value)

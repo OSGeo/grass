@@ -1645,7 +1645,25 @@ class Nviz(object):
         GVL_set_trans(id, x, y, z)
         
         return 1
-    
+
+    def SetVolumeDrawBox(self, id, ifBox):
+        """!Display volume wire box
+        
+        @param id volume id
+        @param ifBox True to draw wire box, False otherwise
+        
+        @return 1 on success
+        @return -1 volume not found
+        """
+        if not GVL_vol_exists(id):
+            return -1
+
+        Debug.msg(3, "Nviz::SetVolumeDrawBox(): id=%d, ifBox=%d", id, ifBox)
+        
+        GVL_set_draw_wire(id, int(ifBox))
+
+        return 1
+
     def GetCPlaneCurrent(self):
         return Nviz_get_current_cplane(self.data)
     

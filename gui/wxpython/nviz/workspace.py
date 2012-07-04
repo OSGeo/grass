@@ -120,6 +120,10 @@ class NvizSettings(object):
                     desc = 'slice'
                 data['draw']['mode'] = { 'value' : sel,
                                          'desc' : desc, }
+            elif control == 'box':
+                box = UserSettings.Get(group = 'nviz', key = 'volume', subkey = ['draw', 'box'])
+                data['draw']['box'] = {'enabled': box}
+
             else:
                 data['draw'][control] = {}
                 data['draw'][control]['isosurface'] = { 'value' : value }
