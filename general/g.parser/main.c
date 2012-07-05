@@ -66,10 +66,7 @@ int main(int argc, char *argv[])
 
     filename = argv[1];
     argv++, argc--;
-    /* g.parser should write to stderr only in case of an error. */
-    /* G_debug output is not an error. */
-
-    /* G_debug(2, "filename = %s", filename); */
+    G_debug(2, "filename = %s", filename);
 
     ctx.fp = fopen(filename, "r");
     if (!ctx.fp) {
