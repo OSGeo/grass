@@ -8,6 +8,9 @@
 
 #define CURSOR_PAGE 500
 
+#define FID_COLUMN       "fid"
+#define GEOMETRY_COLUMN "geom"
+
 #define SWAP32(x) \
         ((unsigned int)( \
             (((unsigned int)(x) & (unsigned int)0x000000ffUL) << 24) | \

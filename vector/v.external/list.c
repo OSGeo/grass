@@ -211,7 +211,8 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 		    fprintf(fd, "%s\n", value_table);
 	    }
 	}
-	if (table_name && strcmp(value_table, table_name) == 0) {
+	if ((!schema_name || strcmp(value_schema, schema_name) == 0) &&
+            table_name && strcmp(value_table, table_name) == 0) {
 	    ret = row;
 	    *is3D = WITHOUT_Z;
 	}

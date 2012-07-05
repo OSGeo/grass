@@ -467,6 +467,7 @@ int Vect_build_sidx(struct Map_info *);
 int Vect_open_fidx(struct Map_info *, struct Format_info_offset *);
 int Vect_save_fidx(struct Map_info *, struct Format_info_offset *);
 int Vect_fidx_dump(const struct Map_info *, FILE *);
+int Vect_save_frmt(struct Map_info *);
 
 int Vect__write_head(const struct Map_info *);
 int Vect__read_head(struct Map_info *);

@@ -240,12 +240,12 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
 
     /* if fid_column not defined, use 'ogc_fid' */
     if (!pg_info->fid_column) {
-        pg_info->fid_column = G_store("ogc_fid");
+        pg_info->fid_column = G_store(FID_COLUMN);
     }
 
     /* if geom_column not defined, use 'wkb_geometry' */
     if (!pg_info->geom_column) {
-        pg_info->geom_column = G_store("wkb_geometry");
+        pg_info->geom_column = G_store(GEOMETRY_COLUMN);
     }
 
     /* check if feature table already exists */
