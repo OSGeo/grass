@@ -44,8 +44,14 @@ int V1_close_ogr(struct Map_info *Map)
     
     ogr_info = &(Map->fInfo.ogr);
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
-	(Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW))
-	Vect__write_head(Map);
+        (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW)) {
+        /* write header */
+        Vect__write_head(Map);
+        if (G_find_file2("", "OGR", G_mapset())) {
+            /* write frmt file for created PG-link */
+            Vect_save_frmt(Map);
+        }
+    }
 
     if (ogr_info->feature_cache)
 	OGR_F_Destroy(ogr_info->feature_cache);

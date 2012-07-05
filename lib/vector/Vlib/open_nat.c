@@ -90,7 +90,7 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 */
 int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 {
-    char buf[1000];
+    char buf[GPATH_MAX];
 
     G_debug(1, "V1_open_new_nat(): name = %s", name);
 
@@ -122,10 +122,6 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 	unlink(name_buf);
 
     G_file_name(name_buf, buf, GV_COOR_ELEMENT, G_mapset());
-
-    Map->head.size = 0;
-    Map->head.head_size = GV_COOR_HEAD_SIZE + 4;
-    Vect__write_head(Map);
 
     /* set conversion matrices */
     dig_init_portable(&(Map->head.port), dig__byte_order_out());

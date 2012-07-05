@@ -84,7 +84,7 @@ int Vect__write_head(const struct Map_info *Map)
 
     head_fp = G_fopen_new(buf, GV_HEAD_ELEMENT);
     if (head_fp == NULL) {
-	G_warning(_("Unable to open header file of vector <%s>"),
+	G_warning(_("Unable to create header file for vector map <%s>"),
 		  Vect_get_full_name(Map));
 	return -1;
     }
@@ -102,7 +102,8 @@ int Vect__write_head(const struct Map_info *Map)
     fprintf(head_fp, "MAP THRESH:   %f\n", Vect_get_thresh(Map));
 
     fclose(head_fp);
-    return (0);
+
+    return 0;
 }
 
 /*!

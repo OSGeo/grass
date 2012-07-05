@@ -51,8 +51,6 @@ int Vect_hist_command(struct Map_info *Map)
 /*!
    \brief Write string to history file
 
-   Only native format supported.
-   
    \param Map pointer to Map_info structure
    \param str string to write
 
@@ -69,7 +67,7 @@ int Vect_hist_write(struct Map_info *Map, const char *str)
 	fflush(Map->hist_fp);
     }
 
-    return (ret);
+    return ret;
 }
 
 /*!

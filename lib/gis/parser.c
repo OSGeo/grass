@@ -1325,11 +1325,6 @@ static int check_overwrite(void)
 			found = TRUE;
 		    }
                     
-		    if (found && strcmp(element, "vector") == 0 &&
-			(G_find_file("", "OGR", G_mapset()) ||
-			 G_find_file("", "PG", G_mapset())))
-			found = FALSE;
-		    
 		    if (found) {	/* found */
 			if (!st->overwrite && !over) {
                             if (G_verbose() > -1) {

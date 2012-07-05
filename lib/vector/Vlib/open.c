@@ -25,9 +25,9 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-/* PG-related defines */
-#define FID_COLUMN "fid"
-#define GEOMETRY_COLUMN "geom"
+#ifdef HAVE_POSTGRES
+#include "pg_local_proto.h"
+#endif
 
 /*
   \brief Number of levels
@@ -108,6 +108,7 @@ static int (*Open_new_array[][2]) () = {
 
 static int open_old(struct Map_info *, const char *, const char *,
                     const char *, int, int);
+static int map_format(struct Map_info *);
 
 /*!
   \brief Predetermine level at which a vector map will be opened for
@@ -700,8 +701,7 @@ int Vect_open_update_head(struct Map_info *Map, const char *name,
 int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 {
     int ret;
-    char buf[500];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX], buf[GPATH_MAX];
 
     G_debug(2, "Vect_open_new(): name = %s", name);
 
@@ -725,103 +725,20 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
         return -1;
     }
 
-    /* determine output format native or ogr */
-    Map->format = GV_FORMAT_NATIVE;
-    if (strcmp(G_program_name(), "v.external") != 0) {
-        if (G_find_file2("", "OGR", G_mapset())) {
-            /* OGR */
-            FILE *fp;
-            const char *p;
-            
-            struct Key_Value *key_val;
-            struct Format_info_ogr *ogr_info;
-            
-            G_debug(2, " using OGR format");
-            Map->format = GV_FORMAT_OGR_DIRECT;
-            fp = G_fopen_old("", "OGR", G_mapset());
-            if (!fp) {
-                G_fatal_error(_("Unable to open OGR file"));
-            }
-            key_val = G_fread_key_value(fp);
-            fclose(fp);
-            
-            ogr_info = &(Map->fInfo.ogr);
-            /* format */
-            p = G_find_key_value("format", key_val);
-            if (p)
-                ogr_info->driver_name = G_store(p);
-            /* dsn */
-            p = G_find_key_value("dsn", key_val);
-            if (p)
-                ogr_info->dsn = G_store(p);
-            /* options */
-            p = G_find_key_value("options", key_val);
-            if (p)
-                ogr_info->layer_options = G_tokenize(p, ",");
-            
-            ogr_info->layer_name = G_store(name);
-        }
-        if (G_find_file2("", "PG", G_mapset())) {
-            /* PostGIS */
-            if (Map->fInfo.ogr.driver_name) {
-                G_warning(_("OGR output also detected, using OGR"));
-            }
-            else {
-                FILE *fp;
-                const char *p;
-                
-                struct Key_Value *key_val;
-                struct Format_info_pg *pg_info;
-                
-                G_debug(2, " using PostGIS format");
-                Map->format = GV_FORMAT_POSTGIS;
-                fp = G_fopen_old("", "PG", G_mapset());
-                if (!fp) {
-                    G_fatal_error(_("Unable to open PG file"));
-                }
-                key_val = G_fread_key_value(fp);
-                fclose(fp);
-                
-                pg_info = &(Map->fInfo.pg);
-                /* conninfo */
-                p = G_find_key_value("conninfo", key_val);
-                if (p) {
-                    pg_info->conninfo = G_store(p);
-                    G_debug(1, "PG: conninfo = '%s'", pg_info->conninfo);
-                }
-                
-                /* schema (default: public) */
-                p = G_find_key_value("schema", key_val);
-                if (p)
-                    pg_info->schema_name = G_store(p);
-                else
-                    pg_info->schema_name = G_store("public");
-                G_debug(1, "PG: schema_name = '%s'", pg_info->schema_name);
-                
-                /* fid column (default: ogc_fid) */
-                p = G_find_key_value("fid", key_val);
-                if (p)
-                    pg_info->fid_column = G_store(p);
-                else
-                    pg_info->fid_column = G_store(FID_COLUMN);
-                G_debug(1, "PG: fid_column = '%s'", pg_info->fid_column);
-                
-                /* geometry column (default: wkb_geometry) */
-                p = G_find_key_value("geometry_name", key_val);
-                if (p)
-                    pg_info->geom_column = G_store(p);
-                else
-                    pg_info->geom_column = G_store(GEOMETRY_COLUMN);
-                G_debug(1, "PG: geom_column = '%s'", pg_info->geom_column);
-                
-                /* table name */
-                Map->fInfo.pg.table_name = G_store(name);
-            }
-        }
-    }
-    if (Map->format == GV_FORMAT_NATIVE) {
-        /* native */
-        G_debug(2, " using native format");
+    /* store basic info (map@mapset) */
+    Map->name = G_store(name);
+    Map->mapset = G_store(G_mapset());
+    Map->location = G_store(G_location());
+    Map->gisdbase = G_store(G_gisdbase());
+
+    /* determine output format */
+    if (strcmp(G_program_name(), "v.external") != 0)
+        Map->format = map_format(Map);
+    else
+        Map->format = GV_FORMAT_NATIVE;
+
+    if (Map->format != GV_FORMAT_OGR_DIRECT) {
+        G_debug(2, " using non-direct format");
 
         /* check if map already exists */
         if (G_find_vector2(name, G_mapset()) != NULL) {
@@ -834,13 +751,27 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
                 return -1;
             }
         }
+
+        /* write header file
+
+           note: header & history file is also written for external
+           formats since vector library create links automatically
+           when closing the map
+        */
+        Map->head.size = 0;
+        Map->head.head_size = GV_COOR_HEAD_SIZE + 4;
+        Vect__write_head(Map);
+
+        /* create history file */
+        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+        Map->hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
+        if (Map->hist_fp == NULL) {
+            G_warning(_("Unable to open history file of vector map <%s>"),
+                      name);
+            return -1;
+        }
     }
 
-    Map->name     = G_store(name);
-    Map->mapset   = G_store(G_mapset());
-    Map->location = G_store(G_location());
-    Map->gisdbase = G_store(G_gisdbase());
-    
     /* set 2D/3D */
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = (with_z != 0);
 
@@ -850,17 +781,6 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
         return -1;
     }
 
-    if (Map->format == GV_FORMAT_NATIVE) {
-        /* Open history file */
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-        Map->hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
-        if (Map->hist_fp == NULL) {
-            G_warning(_("Unable to open history file of vector map <%s>"),
-                      name);
-            return -1;
-        }
-    }
-    
     Open_level = 0;
 
     /* initialize topo */
@@ -1183,4 +1103,105 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     Plus->Spidx_built = TRUE;
 
     return 0;
+}
+
+/* check for external formats definition */
+int map_format(struct Map_info *Map)
+{
+    if (G_find_file2("", "OGR", G_mapset())) {
+        /* OGR */
+        FILE *fp;
+        const char *p;
+        
+        struct Key_Value *key_val;
+        struct Format_info_ogr *ogr_info;
+        
+        G_debug(2, " using OGR format");
+        Map->format = GV_FORMAT_OGR;
+        fp = G_fopen_old("", "OGR", G_mapset());
+        if (!fp) {
+            G_fatal_error(_("Unable to open OGR file"));
+        }
+        key_val = G_fread_key_value(fp);
+        fclose(fp);
+        
+        ogr_info = &(Map->fInfo.ogr);
+        /* format */
+        p = G_find_key_value("format", key_val);
+        if (p)
+            ogr_info->driver_name = G_store(p);
+        /* dsn */
+        p = G_find_key_value("dsn", key_val);
+        if (p)
+            ogr_info->dsn = G_store(p);
+        /* options */
+        p = G_find_key_value("options", key_val);
+        if (p)
+            ogr_info->layer_options = G_tokenize(p, ",");
+        
+        ogr_info->layer_name = G_store(Map->name);
+    }
+    if (G_find_file2("", "PG", G_mapset())) {
+        /* PostGIS */
+        if (Map->fInfo.ogr.driver_name) {
+            G_warning(_("OGR output also detected, using OGR"));
+        }
+        else {
+            FILE *fp;
+            const char *p;
+            
+            struct Key_Value *key_val;
+            struct Format_info_pg *pg_info;
+            
+            G_debug(2, " using PostGIS format");
+            Map->format = GV_FORMAT_POSTGIS;
+            fp = G_fopen_old("", "PG", G_mapset());
+            if (!fp) {
+                G_fatal_error(_("Unable to open PG file"));
+            }
+            key_val = G_fread_key_value(fp);
+            fclose(fp);
+            
+            pg_info = &(Map->fInfo.pg);
+            /* conninfo */
+            p = G_find_key_value("conninfo", key_val);
+            if (p) {
+                pg_info->conninfo = G_store(p);
+                G_debug(1, "PG: conninfo = '%s'", pg_info->conninfo);
+            }
+            
+            /* schema (default: public) */
+            p = G_find_key_value("schema", key_val);
+            if (p)
+                pg_info->schema_name = G_store(p);
+            else
+                pg_info->schema_name = G_store("public");
+            G_debug(1, "PG: schema_name = '%s'", pg_info->schema_name);
+            
+            /* fid column (default: fid) */
+            p = G_find_key_value("fid", key_val);
+            if (p)
+                pg_info->fid_column = G_store(p);
+#ifdef HAVE_POSTGRES
+            else
+                pg_info->fid_column = G_store(FID_COLUMN);
+#endif
+            G_debug(1, "PG: fid_column = '%s'", pg_info->fid_column);
+            
+            /* geometry column (default: geom) */
+            p = G_find_key_value("geometry_name", key_val);
+            if (p)
+                pg_info->geom_column = G_store(p);
+#ifdef HAVE_POSTGRES
+            else
+                pg_info->geom_column = G_store(GEOMETRY_COLUMN);
+#endif
+            G_debug(1, "PG: geom_column = '%s'", pg_info->geom_column);
+            
+            /* table name */
+            pg_info->table_name = G_store(Map->name);
+        }
+    }
+
+    return Map->format;
 }

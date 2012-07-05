@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
+   (C) 2001-2009, 2011-2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -135,12 +135,10 @@ int Vect_close(struct Map_info *Map)
 
     }
 
-    if (Map->format == GV_FORMAT_NATIVE) {
-	G_debug(1, "close history file");
-	if (Map->hist_fp != NULL)
-	    fclose(Map->hist_fp);
-    }
-
+    G_debug(1, "close history file");
+    if (Map->hist_fp)
+        fclose(Map->hist_fp);
+    
     /* close level 1 files / data sources if not head_only */
     if (!Map->head_only) {
 	if (((*Close_array[Map->format][1]) (Map)) != 0) {
@@ -158,6 +156,61 @@ int Vect_close(struct Map_info *Map)
     Map->open = VECT_CLOSED_CODE;
 
     return 0;
+}
+
+/*!
+   \brief Save format definition file for vector map
+
+   \param Map pointer to Map_info structure
+
+   \return 1 on success
+   \return 0 on error
+ */
+int Vect_save_frmt(struct Map_info *Map)
+{
+    FILE *fd;
+    char buf[GPATH_MAX];
+    
+    if (Map->format != GV_FORMAT_OGR &&
+        Map->format != GV_FORMAT_POSTGIS) {
+        G_warning(_("Invalid request for writing frmt file - map format is %d"), Map->format);
+        return 0;
+    }
+    
+    /* create frmt file */
+    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+    fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
+    if (fd == NULL) {
+        G_fatal_error("Unable to create file '%s'", buf);
+    }
+
+    if (Map->format == GV_FORMAT_POSTGIS) {
+#ifdef HAVE_POSTGRES
+        fprintf(fd, "FORMAT: postgis\n");
+        fprintf(fd, "CONNINFO: %s\n", Map->fInfo.pg.conninfo);
+        fprintf(fd, "SCHEMA: %s\n",   Map->fInfo.pg.schema_name);
+        fprintf(fd, "TABLE: %s\n",    Map->fInfo.pg.table_name);
+#else
+        G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+        return 0;
+#endif
+    } else if (Map->format == GV_FORMAT_OGR) {
+#ifdef HAVE_OGR
+        fprintf(fd, "FORMAT: ogr\n");
+        fprintf(fd, "DSN: %s\n",   Map->fInfo.ogr.dsn);
+        fprintf(fd, "LAYER: %s\n", Map->fInfo.ogr.layer_name);
+#else
+        G_fatal_error(_("GRASS is not compiled with OGR support"));
+        return 0;
+#endif
+    }
+
+    G_verbose_message(_("Link to vector map <%s> created"), Map->name);
+
+    /* close frmt file */
+    fclose(fd);
+
+    return 1;
 }
 
 void unlink_file(const struct Map_info *Map, const char *name)
