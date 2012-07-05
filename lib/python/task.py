@@ -431,8 +431,9 @@ def get_interface_description(cmd):
     @param cmd command (name of GRASS module)
     """
     try:
-        cmdout, cmderr = Popen([cmd, '--interface-description'], stdout = PIPE,
-                               stderr = PIPE).communicate()
+	p = Popen([cmd, '--interface-description'], stdout = PIPE,
+						    stderr = PIPE)
+        cmdout, cmderr = p.communicate()
         
         # TODO: replace ugly hack bellow
         if not cmdout and sys.platform == 'win32':
@@ -440,10 +441,11 @@ def get_interface_description(cmd):
                 cmd += '.py'
             
             os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
-            cmdout, cmderr = Popen([sys.executable, cmd, '--interface-description'], stdout = PIPE,
-                                   stderr = PIPE).communicate()
+	    p = Popen([sys.executable, cmd, '--interface-description'],
+		      stdout = PIPE, stderr = PIPE)
+            cmdout, cmderr = p.communicate()
         
-        if cmderr:
+        if p.returncode != 0:
             raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
                                  "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : decode(cmderr) }
     
