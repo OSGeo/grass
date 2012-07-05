@@ -508,7 +508,8 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         imgs = []
         for overlay in self.Map.GetListOfLayers(l_type = "overlay", l_active = True):
-            if os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
+            if overlay.mapfile is not None \
+               and os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
                 img = wx.Image(overlay.mapfile, wx.BITMAP_TYPE_ANY)
                 self.imagedict[img] = { 'id' : overlay.id,
                                         'layer' : overlay }
