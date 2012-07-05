@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Delaunay triangulation..."));
     divide(0, n - 1, &l_cw, &r_ccw);
 
-    output_edges(n, mode3d, Type, Out);
+    output_edges(n, mode3d, Type, &Out);
 
     free_memory();
 

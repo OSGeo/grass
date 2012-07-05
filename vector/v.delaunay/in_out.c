@@ -74,8 +74,8 @@ int cmp(const void *a, const void *b)
     return 0;
 }
 
-void output_edges(unsigned int n, int mode3d, int Type,
-		  struct Map_info map_out)
+void output_edges(unsigned int n, int mode3d, int type,
+		  struct Map_info *Out)
 {
     struct edge *e_start, *e;
     struct vertex *u, *v;
@@ -109,7 +109,7 @@ void output_edges(unsigned int n, int mode3d, int Type,
 
 		Vect_append_point(Points, x1, y1, z1);
 		Vect_append_point(Points, x2, y2, z2);
-		Vect_write_line(&map_out, Type, Points, Cats);
+		Vect_write_line(Out, type, Points, Cats);
 	    }
 	    e = NEXT(e, u);
 	} while (!SAME_EDGE(e, e_start));
@@ -120,7 +120,7 @@ void output_edges(unsigned int n, int mode3d, int Type,
 /* Print the ring of triangles about each vertex. */
 
 void output_triangles(unsigned int n,
-		      int mode3d, int Type, struct Map_info map_out)
+		      int mode3d, int type, struct Map_info *Out)
 {
     struct edge *e_start, *e, *next;
     struct vertex *u, *v, *w;
@@ -161,17 +161,17 @@ void output_triangles(unsigned int n,
 			Vect_reset_line(Points);
 			Vect_append_point(Points, x1, y1, z1);
 			Vect_append_point(Points, x2, y2, z2);
-			Vect_write_line(&map_out, Type, Points, Cats);
+			Vect_write_line(Out, type, Points, Cats);
 
 			Vect_reset_line(Points);
 			Vect_append_point(Points, x2, y2, z2);
 			Vect_append_point(Points, x3, y3, z3);
-			Vect_write_line(&map_out, Type, Points, Cats);
+			Vect_write_line(Out, type, Points, Cats);
 
 			Vect_reset_line(Points);
 			Vect_append_point(Points, x3, y3, z3);
 			Vect_append_point(Points, x1, y1, z1);
-			Vect_write_line(&map_out, Type, Points, Cats);
+			Vect_write_line(Out, type, Points, Cats);
 		    }
 	    }
 	    /* Next edge around u. */
@@ -200,7 +200,7 @@ void remove_duplicates(unsigned int *size)
 int read_sites(int mode3d, int complete_map, struct Map_info* map_in,
 	       struct bound_box Box, int field)
 {
-    int nlines, line, allocated, nsites;
+    int nlines, line, nsites;
     struct line_pnts *Points;
     struct line_cats *Cats;
     
@@ -209,8 +209,7 @@ int read_sites(int mode3d, int complete_map, struct Map_info* map_in,
 
     nlines = Vect_get_num_lines(map_in);
     alloc_sites(nlines);
-    allocated = nlines;
-
+    
     nsites = 0;
     G_message(_("Reading point features..."));
     for (line = 1; line <= nlines; line++) {
