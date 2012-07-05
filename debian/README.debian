@@ -22,6 +22,10 @@
 
   sudo apt-get install flex bison libreadline-dev libncurses5-dev # ... etc.
 
+# You can take care of this pretty much automatically with:
+
+ sudo apt-get build-dep grass
+
 
 # In your favorite text editor open debian/changelog and adjust the
 # version number on the top line to reflect the GRASS SVN checkout number.
