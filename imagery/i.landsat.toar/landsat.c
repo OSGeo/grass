@@ -49,8 +49,7 @@ double lsat_rad2temp(double rad, band_data * band)
 #define abs(x)	(((x)>0)?(x):(-x))
 
 void lsat_bandctes(lsat_data * lsat, int i, char method,
-		   double percent, int dos, double sat_zenith,
-		   double rayleigh)
+		   double percent, int dos, double rayleigh)
 {
     double pi_d2, sin_e, cos_v, rad_sun;
 
@@ -61,7 +60,7 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 
     pi_d2 = (double)(PI * lsat->dist_es * lsat->dist_es);
     sin_e = (double)(sin(D2R * lsat->sun_elev));
-    cos_v = (double)(cos(D2R * sat_zenith));
+    cos_v = (double)(cos(D2R * (lsat->number < 4 ? 9.2 : 8.2)));
 
 	/** Global irradiance on the sensor.
 		Radiance to reflectance coefficient, only NO thermal bands.

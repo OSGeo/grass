@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE in_data_type;
     
     struct Option *input_prefix, *output_prefix, *metfn, *sensor, *adate, *pdate, *elev,
-	*bgain, *metho, *perc, *dark, *satz, *atmo;
+	*bgain, *metho, *perc, *dark, *atmo;
     char *inputname, *met, *outputname, *sensorname;
     struct Flag *msss, *frad, *l5_mtl;
     
@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
     char band_in[GNAME_MAX], band_out[GNAME_MAX];
     int i, j, q, method, pixel, dn_dark[MAX_BANDS], dn_mode[MAX_BANDS];
     int overwrite;
-    double qcal, rad, ref, percent, ref_mode, sat_zenith, rayleigh;
-    
+    double qcal, rad, ref, percent, ref_mode, rayleigh;
+
     struct Colors colors;
     struct FPRange range;
     double min, max;
@@ -168,14 +168,6 @@ int main(int argc, char *argv[])
     dark->answer = "1000";
     dark->guisection = _("Settings");
 
-    satz = G_define_option();
-    satz->key = "sat_zenith";
-    satz->type = TYPE_DOUBLE;
-    satz->required = NO;
-    satz->description = _("Satellite zenith in degrees");
-    satz->answer = "8.2000";
-    satz->guisection = _("Settings");
-
     atmo = G_define_option();
     atmo->key = "rayleigh";
     atmo->type = TYPE_DOUBLE;
@@ -240,7 +232,6 @@ int main(int argc, char *argv[])
     lsat.sun_elev = elev->answer == NULL ? 0. : atof(elev->answer);
     percent = atof(perc->answer);
     pixel = atoi(dark->answer);
-    sat_zenith = atof(satz->answer);
     rayleigh = atof(atmo->answer);
 
     /* Data from MET file: only Landsat-7 ETM+ and Landsat-5 TM  */
@@ -406,8 +397,7 @@ int main(int argc, char *argv[])
 	    Rast_close(infd);
 	}
 	/* Calculate transformation constants */
-	lsat_bandctes(&lsat, i, method, percent, dn_dark[i], sat_zenith,
-		      rayleigh);
+	lsat_bandctes(&lsat, i, method, percent, dn_dark[i], rayleigh);
     }
 
     if (strlen(lsat.creation) == 0)
