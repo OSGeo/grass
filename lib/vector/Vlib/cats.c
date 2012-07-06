@@ -30,6 +30,8 @@ struct line_cats *Vect__new_cats_struct(void);
 
    This structure is used for reading and writing vector cats. The
    library routines handle all memory allocation.
+   
+   To free allocated memory call Vect_destroy_cats_struct().
 
    \return struct line_cats *
    \return NULL on error
