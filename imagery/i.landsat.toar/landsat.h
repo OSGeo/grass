@@ -61,6 +61,6 @@ double lsat_qcal2rad(double, band_data *);
 double lsat_rad2ref(double, band_data *);
 double lsat_rad2temp(double, band_data *);
 
-void lsat_bandctes(lsat_data *, int, char, double, int, double, double);
+void lsat_bandctes(lsat_data *, int, char, double, int, double);
 
 #endif
