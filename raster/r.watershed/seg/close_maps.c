@@ -229,6 +229,9 @@ int close_maps(void)
 	    }
 	    Rast_put_row(fd, cbuf, CELL_TYPE);
 	}
+
+	Rast_close(fd);
+
 	Rast_init_colors(&colors);
 	Rast_make_grey_scale_colors(&colors, 1, 8);
 	Rast_write_colors(asp_name, this_mapset, &colors);
