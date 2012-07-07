@@ -180,6 +180,7 @@ class MapFrame(SingleMapFrame):
         self.dialogs['category'] = None
         self.dialogs['barscale'] = None
         self.dialogs['legend'] = None
+        self.dialogs['vnet'] = None
 
         self.decorationDialog = None # decoration/overlays
         
@@ -1321,6 +1322,17 @@ class MapFrame(SingleMapFrame):
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['map']
+
+    def OnVnet(self, event):
+        """!Dialog for v.net* modules 
+        """
+        if self.dialogs['vnet']:
+            return
+        else:
+            from vnet.dialog import VNETDialog
+            self.dialogs['vnet'] = VNETDialog(parent = self)
+            self.dialogs['vnet'].CenterOnScreen()
+            self.dialogs['vnet'].Show()
 
     def SwitchTool(self, toolbar, event):
         """!Calls UpdateTools to manage connected toolbars"""

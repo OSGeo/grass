@@ -46,6 +46,8 @@ MapIcons =  {
                             label = _('Add text layer')),
     'histogram'  : MetaIcon(img = 'layer-raster-histogram',
                             label = _('Create histogram of raster map')),
+    'vnet'       : MetaIcon(img = 'line-split',
+                            label = _('Vector network analysis (experimental, GSoC 2012)')),
     }
 
 NvizIcons = {
@@ -241,7 +243,8 @@ class MapToolbar(BaseToolbar):
                       (MapIcons["profile"],    self.parent.OnProfile),
                       (MapIcons["scatter"],    self.parent.OnScatterplot),
                       (MapIcons["histogram"],  self.parent.OnHistogramPyPlot),
-                      (BaseIcons["histogramD"], self.parent.OnHistogram)))
+                      (BaseIcons["histogramD"], self.parent.OnHistogram),
+                      (MapIcons["vnet"],        self.parent.OnVnet)))
         
     def OnDecoration(self, event):
         """!Decorations overlay menu
