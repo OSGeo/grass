@@ -147,12 +147,10 @@ def expand_module_class_name(c):
              'r3'  : 'raster3d',
              's'   : 'sites',
              'v'   : 'vector',
-             'gui' : 'gui/wxpython' }
+             'wx'  : 'gui/wxpython'
+             }
     
-    if name.has_key(c):
-        return name[c]
-    
-    return c
+    return name.get(c, c)
 
 # list installed extensions
 def get_installed_extensions(force = False):
@@ -686,18 +684,12 @@ def install_extension_win(name):
 # install extension on other plaforms
 def install_extension_other(name):
     gisbase = os.getenv('GISBASE')
-    # gui_list = get_wxgui_extensions()
-    gui_list = list()
+    classchar = name.split('.', 1)[0]
+    moduleclass = expand_module_class_name(classchar)
+    url = options['svnurl'] + '/' + moduleclass + '/' + name
+    if classchar == 'wx' and not flags['s']:
+        grass.fatal(_("Installation of wxGUI extension requires -%s flag.") % 's')
     
-    if name not in gui_list:
-        classchar = name.split('.', 1)[0]
-        moduleclass = expand_module_class_name(classchar)
-        url = options['svnurl'] + '/' + moduleclass + '/' + name
-    else:
-        url = options['svnurl'] + '/gui/wxpython/' + name
-        if not flags['s']:
-            grass.fatal(_("Installation of wxGUI extension requires -%s flag.") % 's')
-        
     grass.message(_("Fetching <%s> from GRASS-Addons SVN (be patient)...") % name)
     
     os.chdir(tmpdir)
@@ -718,14 +710,19 @@ def install_extension_other(name):
              'etc'     : os.path.join(tmpdir, name, 'etc'),
              }
     
-    makeCmd = ['make',
-               'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
-               'BIN=%s' % dirs['bin'],
-               'HTMLDIR=%s' % dirs['html'],
-               'MANDIR=%s' % dirs['man'],
-               'SCRIPTDIR=%s' % dirs['scripts'],
-               'ETC=%s' % os.path.join(dirs['etc'],name)
-               ]
+    if classchar != 'wx':
+        makeCmd = ['make',
+                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
+                   'BIN=%s' % dirs['bin'],
+                   'HTMLDIR=%s' % dirs['html'],
+                   'MANDIR=%s' % dirs['man'],
+                   'SCRIPTDIR=%s' % dirs['scripts'],
+                   'ETC=%s' % os.path.join(dirs['etc'],name)
+                   ]
+    else:
+        makeCmd = ['make',
+                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ ')
+                   ]
     
     installCmd = ['make',
                   'MODULE_TOPDIR=%s' % gisbase,
@@ -737,25 +734,18 @@ def install_extension_other(name):
     if flags['d']:
         grass.message(_("To compile run:"))
         sys.stderr.write(' '.join(makeCmd) + '\n')
-        grass.message(_("To install run:\n\n"))
+        grass.message(_("To install run:"))
         sys.stderr.write(' '.join(installCmd) + '\n')
         return 0
     
     os.chdir(os.path.join(tmpdir, name))
     
-    grass.message(_("Compiling..."))    
-    if name not in gui_list:
-        ret = grass.call(makeCmd,
-                         stdout = outdev)
-    else:
-        ret = grass.call(['make',
-                          'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ ')],
-                         stdout = outdev)
-    
-    if ret != 0:
+    grass.message(_("Compiling..."))
+    if 0 != grass.call(makeCmd,
+                       stdout = outdev):
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
-
-    if flags['i'] or name in gui_list:
+    
+    if flags['i'] or classchar == 'wx':
         return 0
     
     grass.message(_("Installing..."))
@@ -911,7 +901,7 @@ def create_dir(path):
         os.makedirs(path)                
     except OSError, e:                   
         grass.fatal(_("Unable to create '%s': %s") % (path, e))                  
-        
+    
     grass.debug("'%s' created" % path)
 
 def check_dirs():
@@ -925,6 +915,9 @@ def check_dirs():
 
 # fix file URI in manual page
 def update_manual_page(module):
+    if module.split('.', 1)[0] == 'wx':
+        return # skip for GUI modules
+    
     # read original html file
     htmlfile = os.path.join(options['prefix'], 'docs', 'html', module + '.html')
     try:
