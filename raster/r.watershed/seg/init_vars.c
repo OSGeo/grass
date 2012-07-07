@@ -286,7 +286,6 @@ int init_vars(int argc, char *argv[])
     alt_value_buf = Rast_allocate_buf(CELL_TYPE);
 
     /* read elevation input and mark NULL/masked cells */
-    G_message("New version");
     G_message("SECTION 1a: Mark masked and NULL cells");
     MASK_flag = 0;
     do_points = (GW_LARGE_INT) nrows * ncols;
