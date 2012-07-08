@@ -94,7 +94,16 @@ int start_mon(const char *name, const char *output, int select,
     close(creat(cmd_value, 0666));
 
     G_verbose_message(_("Staring monitor <%s> with env file '%s'"), name, env_value);
-    
+    if (G_verbose() > G_verbose_std()) {
+        FILE *fd;
+        
+        fd = fopen(env_value, "r");
+        while (G_getl2(buf, sizeof(buf) - 1, fd) != 0) {
+            fprintf(stderr, " %s\n", buf);
+        }
+        fclose(fd);
+    }
+
     G_debug(1, "start: name=%s ", name);
     G_debug(3, "       envfile = %s", env_value);
     G_debug(3, "       cmdfile = %s", cmd_value);
