@@ -88,4 +88,6 @@ void list_cmd(const char *name, FILE *fd_out)
     while (G_getl2(buf, sizeof(buf) - 1, fd) != 0) {
 	fprintf(fd_out, "%s\n", buf);
     }
+    
+    fclose(fd);
 }
