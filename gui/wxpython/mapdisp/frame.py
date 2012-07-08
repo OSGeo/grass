@@ -1329,7 +1329,7 @@ class MapFrame(SingleMapFrame):
         if self.dialogs['vnet']:
             return
         else:
-            from vnet.dialog import VNETDialog
+            from vnet.dialogs import VNETDialog
             self.dialogs['vnet'] = VNETDialog(parent = self)
             self.dialogs['vnet'].CenterOnScreen()
             self.dialogs['vnet'].Show()
