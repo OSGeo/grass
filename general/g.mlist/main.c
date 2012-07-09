@@ -143,9 +143,9 @@ int main(int argc, char *argv[])
 
     if (opt.exclude->answer) {
 	if (flag.regex->answer || flag.extended->answer)
-	    exclude = G_ls_regex_filter(opt.pattern->answer, 1, (int) flag.extended->answer);
+	    exclude = G_ls_regex_filter(opt.exclude->answer, 1, (int) flag.extended->answer);
 	else
-	    exclude = G_ls_glob_filter(opt.pattern->answer, 1);
+	    exclude = G_ls_glob_filter(opt.exclude->answer, 1);
     }
 
     if (strcmp(opt.separator->answer, "newline") == 0)
