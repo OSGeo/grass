@@ -9,7 +9,7 @@
  *
  * PURPOSE:    Module for line simplification and smoothing
  *
- * COPYRIGHT:  (C) 2007-2010 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2007-2010, 2012 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2).  Read the file COPYING that
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     int n_lines;
     int simplification, mask_type;
     struct varray *varray;
-    char *s;
+    char *s, *descriptions;
 
     /* initialize GIS environment */
     G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("smoothing"));
     G_add_keyword(_("displacement"));
     G_add_keyword(_("network generalization"));
-    module->description = _("Tool for vector based generalization.");
+    module->description = _("Performs vector based generalization.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -89,7 +89,8 @@ int main(int argc, char *argv[])
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "line,boundary,area";
     type_opt->answer = "line,boundary,area";
-
+    type_opt->guisection = _("Selection");
+    
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
 
@@ -100,20 +101,36 @@ int main(int argc, char *argv[])
     method_opt->multiple = NO;
     method_opt->options =
 	"douglas,douglas_reduction,lang,reduction,reumann,boyle,sliding_averaging,distance_weighting,chaiken,hermite,snakes,network,displacement";
-    method_opt->descriptions = _("douglas;Douglas-Peucker Algorithm;"
-				 "douglas_reduction;Douglas-Peucker Algorithm with reduction parameter;"
-				 "lang;Lang Simplification Algorithm;"
-				 "reduction;Vertex Reduction Algorithm eliminates points close to each other;"
-				 "reumann;Reumann-Witkam Algorithm;"
-				 "boyle;Boyle's Forward-Looking Algorithm;"
-				 "sliding_averaging;McMaster's Sliding Averaging Algorithm;"
-				 "distance_weighting;McMaster's Distance-Weighting Algorithm;"
-				 "chaiken;Chaiken's Algorithm;"
-				 "hermite;Interpolation by Cubic Hermite Splines;"
-				 "snakes;Snakes method for line smoothing;"
-				 "network;Network generalization;"
-				 "displacement;Displacement of lines close to each other;");
-
+    descriptions = NULL;
+    G_asprintf(&descriptions,
+               "douglas;%s;"
+               "douglas_reduction;%s;"
+               "lang;%s;"
+               "reduction;%s;"
+               "reumann;%s;"
+               "boyle;%s;"
+               "sliding_averaging;%s;"
+               "distance_weighting;%s;"
+               "chaiken;%s;"
+               "hermite;%s;"
+               "snakes;%s;"
+               "network;%s;"
+               "displacement;%s;",
+               _("Douglas-Peucker Algorithm"),
+               _("Douglas-Peucker Algorithm with reduction parameter"),
+               _("Lang Simplification Algorithm"),
+               _("Vertex Reduction Algorithm eliminates points close to each other"),
+               _("Reumann-Witkam Algorithm"),
+               _("Boyle's Forward-Looking Algorithm"),
+               _("McMaster's Sliding Averaging Algorithm"),
+               _("McMaster's Distance-Weighting Algorithm"),
+               _("Chaiken's Algorithm"),
+               _("Interpolation by Cubic Hermite Splines"),
+               _("Snakes method for line smoothing"),
+               _("Network generalization"),
+               _("Displacement of lines close to each other"));
+    method_opt->descriptions = G_store(descriptions);
+    
     method_opt->description = _("Generalization algorithm");
 
     thresh_opt = G_define_option();
@@ -138,7 +155,7 @@ int main(int argc, char *argv[])
     reduction_opt->options = "0-100";
     reduction_opt->description =
 	_("Percentage of the points in the output of 'douglas_reduction' algorithm");
-
+    
     slide_opt = G_define_option();
     slide_opt->key = "slide";
     slide_opt->type = TYPE_DOUBLE;
@@ -204,12 +221,16 @@ int main(int argc, char *argv[])
     iterations_opt->description = _("Number of iterations");
 
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
+    cat_opt->guisection = _("Selection");
+    
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    where_opt->guisection = _("Selection");
 
     ca_flag = G_define_flag();
     ca_flag->key = 'c';
     ca_flag->description = _("Copy attributes");
-
+    ca_flag->guisection = _("Attributes");
+    
     /* options and flags parser */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
