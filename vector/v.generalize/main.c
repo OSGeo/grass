@@ -528,12 +528,12 @@ int main(int argc, char *argv[])
 
     G_message("-----------------------------------------------------");
     if (total_input != 0 && total_input != total_output)
-	G_message(_("Number of vertices for selected lines %s from %d to %d (%d%%)."),
-		  simplification ? _("reduced") : _("changed"), 
-		  total_input, total_output,
-		  (total_output * 100) / total_input);
-
-    G_done_msg(" ");
+	G_done_msg(_("Number of vertices for selected features %s from %d to %d (%d%%)."),
+                   simplification ? _("reduced") : _("changed"), 
+                   total_input, total_output,
+                   (total_output * 100) / total_input);
+    else
+        G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
