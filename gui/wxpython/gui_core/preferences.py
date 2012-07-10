@@ -39,6 +39,7 @@ except ImportError:
 import wx
 import wx.lib.colourselect    as csel
 import wx.lib.mixins.listctrl as listmix
+import wx.lib.scrolledpanel as SP
 
 from wx.lib.newevent import NewEvent
 
@@ -55,7 +56,7 @@ wxSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
 class PreferencesBaseDialog(wx.Dialog):
     """!Base preferences dialog"""
     def __init__(self, parent, settings, title = _("User settings"),
-                 size = (500, 375),
+                 size = (500, 425),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         self.parent = parent # ModelerFrame
         self.title  = title
@@ -256,7 +257,8 @@ class PreferencesDialog(PreferencesBaseDialog):
         
     def _createGeneralPage(self, notebook):
         """!Create notebook page for general settings"""
-        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False, scroll_y = True)
         notebook.AddPage(page = panel, text = _("General"))
         
         border = wx.BoxSizer(wx.VERTICAL)
@@ -386,8 +388,8 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def _createAppearancePage(self, notebook):
         """!Create notebook page for display settings"""
-   
-        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False, scroll_y = True)
         notebook.AddPage(page = panel, text = _("Appearance"))
 
         border = wx.BoxSizer(wx.VERTICAL)
@@ -560,7 +562,8 @@ class PreferencesDialog(PreferencesBaseDialog):
     def _createDisplayPage(self, notebook):
         """!Create notebook page for display settings"""
    
-        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False, scroll_y = True)
         notebook.AddPage(page = panel, text = _("Map Display"))
 
         border = wx.BoxSizer(wx.VERTICAL)
@@ -715,24 +718,33 @@ class PreferencesDialog(PreferencesBaseDialog):
         # mouse wheel zoom
         #
         row += 1
-        wheelZooming = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                  label = _("Enable zooming by mouse wheel"),
-                                  name = "IsChecked")
-        wheelZooming.SetValue(self.settings.Get(group = 'display', key = 'mouseWheelZoom',
-                                                subkey = 'enabled'))
-        self.winId['display:mouseWheelZoom:enabled'] = wheelZooming.GetId()
-
-        gridSizer.Add(item = wheelZooming,
-                      pos = (row, 0), flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
-                      
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                          label = _("Mouse wheel action:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
         listOfModes = self.settings.Get(group = 'display', key = 'mouseWheelZoom', subkey = 'choices', internal = True)
-        zoomMode = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
-                             choices = listOfModes,
-                             name = "GetSelection")
-        zoomMode.SetSelection(self.settings.Get(group = 'display', key = 'mouseWheelZoom', subkey = 'selection'))
-        self.winId['display:mouseWheelZoom:selection'] = zoomMode.GetId()
-
-        gridSizer.Add(item = zoomMode,
+        zoomAction = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
+                               choices = listOfModes,
+                               name = "GetSelection")
+        zoomAction.SetSelection(self.settings.Get(group = 'display', key = 'mouseWheelZoom', subkey = 'selection'))
+        self.winId['display:mouseWheelZoom:selection'] = zoomAction.GetId()
+        gridSizer.Add(item = zoomAction,
+                      flag = wx.ALIGN_RIGHT,
+                      pos = (row, 1))
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                          label = _("Mouse scrolling direction:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        listOfModes = self.settings.Get(group = 'display', key = 'scrollDirection', subkey = 'choices', internal = True)
+        scrollDir = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
+                               choices = listOfModes,
+                               name = "GetSelection")
+        scrollDir.SetSelection(self.settings.Get(group = 'display', key = 'scrollDirection', subkey = 'selection'))
+        self.winId['display:scrollDirection:selection'] = scrollDir.GetId()
+        gridSizer.Add(item = scrollDir,
                       flag = wx.ALIGN_RIGHT,
                       pos = (row, 1))
 
@@ -743,7 +755,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 
         # bindings
         fontButton.Bind(wx.EVT_BUTTON, self.OnSetFont)
-        wheelZooming.Bind(wx.EVT_CHECKBOX, self.OnEnableWheelZoom)
+        zoomAction.Bind(wx.EVT_CHOICE, self.OnEnableWheelZoom)
         
         # enable/disable controls according to settings
         self.OnEnableWheelZoom(None)
@@ -752,7 +764,8 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def _createCmdPage(self, notebook):
         """!Create notebook page for commad dialog settings"""
-        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False, scroll_y = True)
         notebook.AddPage(page = panel, text = _("Command"))
         
         border = wx.BoxSizer(wx.VERTICAL)
@@ -831,7 +844,8 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def _createLayersPage(self, notebook):
         """!Create notebook page for layer settings"""
-        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False, scroll_y = True)
         notebook.AddPage(page = panel, text = _("Layers"))
         
         border = wx.BoxSizer(wx.VERTICAL)
@@ -1001,7 +1015,8 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def _createAttributeManagerPage(self, notebook):
         """!Create notebook page for 'Attribute Table Manager' settings"""
-        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False, scroll_y = True)
         notebook.AddPage(page = panel, text = _("Attributes"))
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1130,7 +1145,8 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def _createProjectionPage(self, notebook):
         """!Create notebook page for workspace settings"""
-        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False, scroll_y = True)
         notebook.AddPage(page = panel, text = _("Projection"))
         
         border = wx.BoxSizer(wx.VERTICAL)
@@ -1404,10 +1420,14 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def OnEnableWheelZoom(self, event):
         """!Enable/disable wheel zoom mode control"""
-        checkId = self.winId['display:mouseWheelZoom:enabled']
         choiceId = self.winId['display:mouseWheelZoom:selection']
-        enable = self.FindWindowById(checkId).IsChecked()
-        self.FindWindowById(choiceId).Enable(enable)
+        choice = self.FindWindowById(choiceId)
+        if choice.GetSelection() == 2:
+            enable = False
+        else:
+            enable = True
+        scrollId = self.winId['display:scrollDirection:selection']
+        self.FindWindowById(scrollId).Enable(enable)
         
 class DefaultFontDialog(wx.Dialog):
     """

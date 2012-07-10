@@ -1287,9 +1287,9 @@ class PsMapBufferedWindow(wx.Window):
         """!Mouse wheel scrolled.
 
         Changes zoom."""
-        if not UserSettings.Get(group = 'display',
-                                key = 'mouseWheelZoom',
-                                subkey = 'enabled'):
+        if UserSettings.Get(group = 'display',
+                            key = 'mouseWheelZoom',
+                            subkey = 'selection') == 2:
             event.Skip()
             return
 
@@ -1298,7 +1298,7 @@ class PsMapBufferedWindow(wx.Window):
         self.mouse['begin'] = event.GetPosition()
         
         if UserSettings.Get(group = 'display',
-                            key = 'mouseWheelZoom',
+                            key = 'scrollDirection',
                             subkey = 'selection'):
             zoom *= -1
             

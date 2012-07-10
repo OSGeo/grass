@@ -970,9 +970,10 @@ class BufferedWindow(MapWindow, wx.Window):
     def OnMouseWheel(self, event):
         """!Mouse wheel moved
         """
-        if not UserSettings.Get(group = 'display',
-                                key = 'mouseWheelZoom',
-                                subkey = 'enabled'):
+        zoomBehaviour = UserSettings.Get(group = 'display',
+                                         key = 'mouseWheelZoom',
+                                         subkey = 'selection')
+        if zoomBehaviour == 2:
             event.Skip()
             return
             
@@ -980,19 +981,24 @@ class BufferedWindow(MapWindow, wx.Window):
         current  = event.GetPositionTuple()[:]
         wheel = event.GetWheelRotation()
         Debug.msg (5, "BufferedWindow.MouseAction(): wheel=%d" % wheel)
-        # zoom 1/2 of the screen, centered to current mouse position (TODO: settings)
-        begin = (current[0] - self.Map.width / 4,
-                 current[1] - self.Map.height / 4)
-        end   = (current[0] + self.Map.width / 4,
-                 current[1] + self.Map.height / 4)
-        
+        # zoom 1/2 of the screen (TODO: settings)
+        if zoomBehaviour == 0:  # zoom and recenter
+            # TODO: fix zooming out
+            begin = (current[0] - self.Map.width / 4,
+                     current[1] - self.Map.height / 4)
+            end   = (current[0] + self.Map.width / 4,
+                     current[1] + self.Map.height / 4)
+        elif zoomBehaviour == 1:  # zoom to current cursor position
+            begin = (current[0]/2, current[1]/2)
+            end = ((self.Map.width - current[0])/2 + current[0],
+                   (self.Map.height - current[1])/2 + current[1])
         if wheel > 0:
             zoomtype = 1
         else:
             zoomtype = -1
         
         if UserSettings.Get(group = 'display',
-                            key = 'mouseWheelZoom',
+                            key = 'scrollDirection',
                             subkey = 'selection'):
             zoomtype *= -1
             
