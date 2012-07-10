@@ -66,6 +66,9 @@ int start_mon(const char *name, const char *output, int select,
     env_fd = creat(env_value, 0666);
     if (env_fd < 0)
 	G_fatal_error(_("Unable to create file '%s'"), env_value);
+
+    sprintf(buf, "GRASS_PNG_READ=TRUE\n");
+    write(env_fd, buf, strlen(buf));
     if (width) {
 	sprintf(buf, "GRASS_WIDTH=%s\n", width);
 	write(env_fd, buf, strlen(buf));
