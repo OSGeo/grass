@@ -5,8 +5,10 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   Inspired by v.out.ogr's code.
+   Partly inspired by v.out.ogr's code.
 
+   \todo How to deal with OGRNullFID
+   
    (C) 2009-2011, 2012 by Martin Landa, and the GRASS Development Team
 
    This program is free software under the GNU General Public License
@@ -32,18 +34,23 @@ static int write_attributes(dbDriver *, int, const struct field_info *,
 
   Note:
    - centroids are not supported in OGR, pseudotopo holds virtual
-     centroids
-   - boundaries are not supported in OGR, pseudotopo treats polygons
-     as boundaries
+     centroids (it's coordinates determined from spatial index)
+   - unclosed boundaries are not supported in OGR, pseudotopo treats
+     polygons as boundaries
      
-  \todo How to deal with OGRNullFID ?
-  
+  Supported feature types:
+   - GV_POINT (written as wkbPoint)
+   - GV_LINE (wkbLineString)
+   - GV_BOUNDARY (wkbPolygon)
+   - GV_FACE (wkbPolygon25D)
+   - GV_KERNEL (wkbPoint25D)
+
   \param Map pointer to Map_info structure
-  \param type feature type (GV_POINT, GV_LINE, ...)
+  \param type feature type
   \param points pointer to line_pnts structure (feature geometry) 
   \param cats pointer to line_cats structure (feature categories)
   
-  \return feature offset into file
+  \return feature index in offset array (related to pseudo-topology)
   \return -1 on error
 */
 off_t V1_write_line_ogr(struct Map_info *Map, int type,
@@ -206,11 +213,13 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 }
 
 /*!
-  \brief Rewrites feature at the given offset (level 1) (OGR interface)
+  \brief Rewrites feature at the given offset on level 1 (OGR interface)
+  
+  This function simply calls V1_delete_line_ogr() and V1_write_line_ogr().
   
   \param Map pointer to Map_info structure
   \param offset feature offset
-  \param type feature type (GV_POINT, GV_LINE, ...)
+  \param type feature type (see V1_write_line_ogr() for supported types)
   \param points feature geometry
   \param cats feature categories
   
@@ -221,7 +230,7 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 			  int line, int type, off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
-    G_debug(3, "V1_rewrite_line_ogr(): line=%d type=%d offset=%llu",
+    G_debug(3, "V1_rewrite_line_ogr(): line=%d type=%d offset=%lu",
 	    line, type, offset);
 #ifdef HAVE_OGR
     if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
@@ -240,10 +249,10 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 }
 
 /*!
-  \brief Deletes feature at the given offset (level 1)
+  \brief Deletes feature at the given offset on level 1 (OGR interface)
   
   \param Map pointer Map_info structure
-  \param offset feature offset
+  \param offset offset of feature to be deleted
   
   \return  0 on success
   \return -1 on error
