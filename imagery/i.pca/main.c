@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     opt_in->description = _("Name of two or more input raster maps");
 
     opt_out = G_define_option();
-    opt_out->label = _("Base name for output raster maps");
+    opt_out->label = _("Prefix for output raster maps");
     opt_out->description =
 	_("A numerical suffix will be added for each component map");
     opt_out->key = "output_prefix";
