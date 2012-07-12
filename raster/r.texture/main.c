@@ -113,7 +113,6 @@ int main(int argc, char *argv[])
     opt_output->key = "prefix";
     opt_output->type = TYPE_STRING;
     opt_output->required = YES;
-    opt_output->gisprompt = "new,cell,raster";
     opt_output->description = _("Prefix for output raster map(s)");
 
     opt_size = G_define_option();
