@@ -1350,7 +1350,11 @@ class MapLayersDialogBase(wx.Dialog):
         bodySizer.Add(item = self.filter,
                       flag = wx.EXPAND,
                       pos = (2,1), span = (1, 2))
-        
+
+        self.filter.SetFocus()
+        self.filter.SetToolTipString(_("Put here regular expression."
+                                       "'.*' means anything, '^' beginning and '$' end."))
+
         # layer list 
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("List of maps:")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_TOP,
@@ -1439,7 +1443,7 @@ class MapLayersDialogBase(wx.Dialog):
         list = []
         for layer in self.map_layers:
             try:
-                if re.compile('^' + event.GetString()).search(layer):
+                if re.compile(event.GetString()).search(layer):
                     list.append(layer)
             except:
                 pass
