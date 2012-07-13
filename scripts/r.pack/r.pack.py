@@ -40,18 +40,25 @@ def cleanup():
 
 def main():
     infile = options['input']
+    mapset = None
+    if '@' in infile:
+        infile, mapset = infile.split('@')
+
     if options['output']:
-        outfile = options['output']
+        outfile_path, outfile_base = os.path.split(options['output'])
     else:
-        outfile = infile + '.pack'
+        outfile_path = os.getcwd()
+        outfile_base = infile + '.pack'
     
+    outfile = os.path.join(outfile_path, outfile_base)
+
     global tmp
     tmp = grass.tempdir()
     tmp_dir = os.path.join(tmp, infile)
     os.mkdir(tmp_dir)
     grass.debug('tmp_dir = %s' % tmp_dir)
     
-    gfile = grass.find_file(name = infile, element = 'cell')
+    gfile = grass.find_file(name = infile, element = 'cell', mapset = mapset)
     if not gfile['name']:
         grass.fatal(_("Raster map <%s> not found") % infile)
     
@@ -92,18 +99,17 @@ def main():
     
     # pack it all up
     os.chdir(tmp)
-    tar = tarfile.TarFile.open(name = outfile, mode = 'w:gz')
+    tar = tarfile.TarFile.open(name = outfile_base, mode = 'w:gz')
     tar.add(infile, recursive = True)
     tar.close()
     try:
-        shutil.move(outfile, olddir)
+        shutil.move(outfile_base, outfile)
     except shutil.Error, e:
         grass.fatal(e)
         
     os.chdir(olddir)
     
-    grass.verbose(_("Raster map saved to '%s'" % \
-                        os.path.join(olddir, outfile)))
+    grass.verbose(_("Raster map saved to '%s'" % outfile))
     
 if __name__ == "__main__":
     options, flags = grass.parser()
