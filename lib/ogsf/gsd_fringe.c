@@ -131,21 +131,23 @@ void gsd_display_fringe(geosurf * surf, unsigned long clr, float elev,
 }
 
 /*!
-   \brief ADD
+   \brief Draw fringe polygon in x direction
 
-   \param bot
+   \param bot coordinate of fringe bottom
    \param surf surface (geosurf)
-   \param row
+   \param row row along which is fringe drawn
    \param side
  */
 void gsd_fringe_horiz_poly(float bot, geosurf * surf, int row, int side)
 {
     int col;
-    int cnt;
     float pt[4];
     typbuff *buff;
     long offset;
     int xcnt;
+    int row_shift, max_row_shift;
+    
+    max_row_shift = 20;
 
     GS_set_draw(GSD_FRONT);
     gsd_pushmatrix();
@@ -155,7 +157,7 @@ void gsd_fringe_horiz_poly(float bot, geosurf * surf, int row, int side)
     buff = gs_get_att_typbuff(surf, ATT_TOPO, 0);
     xcnt = VCOLS(surf);
 
-    gsd_bgnpolygon();
+    gsd_bgnqstrip();
 
     col = 0;
     /* floor left */
@@ -167,33 +169,43 @@ void gsd_fringe_horiz_poly(float bot, geosurf * surf, int row, int side)
     gsd_vert_func(pt);
 
     offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-    GET_MAPATT(buff, offset, pt[Z]);
+    
+    /* find nearest row with defined z coordinate  */
+    row_shift = 0;
+    while (!GET_MAPATT(buff, offset, pt[Z]) && row_shift < max_row_shift) {
+	row_shift++;
+	if (side)
+	    offset = ((row - row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+	else
+	    offset = ((row + row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+    }
     pt[Z] = pt[Z] * surf->z_exag;
     gsd_vert_func(pt);
 
-    cnt = 1;
     for (col = 0; col < xcnt - 1; col++) {
-	/* bottom right */
+	/* bottom vertex */
 	pt[X] = col * (surf->x_mod * surf->xres);
 	pt[Y] =
 	    ((surf->rows - 1) * surf->yres) -
 	    ((row + side) * (surf->y_mod * surf->yres));
+	pt[Z] = bot;
+	gsd_vert_func(pt);
+	
+	/* map vertex */
 	offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-	GET_MAPATT(buff, offset, pt[Z]);
+	row_shift = 0;
+	while (!GET_MAPATT(buff, offset, pt[Z]) && row_shift < max_row_shift) {
+	    row_shift++;
+	    if (side)
+		offset = ((row - row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+	    else
+		offset = ((row + row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+	}
 	pt[Z] = pt[Z] * surf->z_exag;
 	gsd_vert_func(pt);
-	cnt++;
     }
 
-    col--;
-    pt[X] = col * (surf->x_mod * surf->xres);
-    pt[Y] =
-	((surf->rows - 1) * surf->yres) -
-	((row + side) * (surf->y_mod * surf->yres));
-    pt[Z] = bot;
-    gsd_vert_func(pt);
-
-    gsd_endpolygon();
+    gsd_endqstrip();
 
     GS_done_draw();
     gsd_popmatrix();
@@ -203,21 +215,23 @@ void gsd_fringe_horiz_poly(float bot, geosurf * surf, int row, int side)
 }
 
 /*!
-   \brief ADD
+   \brief Draw fringe outline in x direction
 
-   \param bot
+   \param bot coordinate of fringe bottom
    \param surf surface (geosurf)
-   \param row
+   \param row row along which is fringe drawn
    \param side
  */
 void gsd_fringe_horiz_line(float bot, geosurf * surf, int row, int side)
 {
     int col;
-    int cnt;
     float pt[4];
     typbuff *buff;
     long offset;
     int xcnt;
+    int row_shift, max_row_shift;
+    
+    max_row_shift = 20;
 
     GS_set_draw(GSD_FRONT);
     gsd_pushmatrix();
@@ -239,12 +253,19 @@ void gsd_fringe_horiz_line(float bot, geosurf * surf, int row, int side)
     pt[Z] = bot;
     gsd_vert_func(pt);
 
+    /* find nearest row with defined z coordinate  */
     offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-    GET_MAPATT(buff, offset, pt[Z]);
+    row_shift = 0;
+    while (!GET_MAPATT(buff, offset, pt[Z]) && row_shift < max_row_shift) {
+	row_shift++;
+	if (side)
+	    offset = ((row - row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+	else
+	    offset = ((row + row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+    }
     pt[Z] = pt[Z] * surf->z_exag;
     gsd_vert_func(pt);
 
-    cnt = 1;
     for (col = 0; col < xcnt - 1; col++) {
 	/* bottom right */
 	pt[X] = col * (surf->x_mod * surf->xres);
@@ -252,10 +273,16 @@ void gsd_fringe_horiz_line(float bot, geosurf * surf, int row, int side)
 	    ((surf->rows - 1) * surf->yres) -
 	    ((row + side) * (surf->y_mod * surf->yres));
 	offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-	GET_MAPATT(buff, offset, pt[Z]);
+	row_shift = 0;
+	while (!GET_MAPATT(buff, offset, pt[Z]) && row_shift < max_row_shift) {
+	    row_shift++;
+	    if (side)
+		offset = ((row - row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+	    else
+		offset = ((row + row_shift) * surf->y_mod * surf->cols) + (col * surf->x_mod);
+	}
 	pt[Z] = pt[Z] * surf->z_exag;
 	gsd_vert_func(pt);
-	cnt++;
     }
 
     col--;
@@ -284,29 +311,31 @@ void gsd_fringe_horiz_line(float bot, geosurf * surf, int row, int side)
 }
 
 /*!
-   \brief ADD
+   \brief Draw fringe outline in y direction
 
-   \param bot
+   \param bot coordinate of fringe bottom
    \param surf surface (geosurf)
-   \param col
-   \param side [unused]
+   \param col column along which is fringe drawn
+   \param side
  */
 void gsd_fringe_vert_poly(float bot, geosurf * surf, int col, int side)
 {
 
     int row;
-    int cnt;
     float pt[4];
     typbuff *buff;
     long offset;
     int ycnt;
+    int col_shift, max_col_shift;
+    
+    max_col_shift = 20;
 
     GS_set_draw(GSD_FRONT);
     gsd_pushmatrix();
     gsd_do_scale(1);
     gsd_translate(surf->x_trans, surf->y_trans, surf->z_trans);
 
-    gsd_bgnpolygon();
+    gsd_bgnqstrip();
 
     buff = gs_get_att_typbuff(surf, ATT_TOPO, 0);
     ycnt = VROWS(surf);
@@ -319,33 +348,42 @@ void gsd_fringe_vert_poly(float bot, geosurf * surf, int col, int side)
     pt[Z] = bot;
     gsd_vert_func(pt);
 
+    /* find nearest row with defined z coordinate  */
     offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-    GET_MAPATT(buff, offset, pt[Z]);
+    col_shift = 0;
+    while (!GET_MAPATT(buff, offset, pt[Z]) && col_shift < max_col_shift) {
+	col_shift++;
+	if (side)
+	    offset = (row * surf->y_mod * surf->cols) + ((col - col_shift) * surf->x_mod);
+	else
+	    offset = (row * surf->y_mod * surf->cols) + ((col + col_shift) * surf->x_mod);
+    }
     pt[Z] = pt[Z] * surf->z_exag;
     gsd_vert_func(pt);
 
-    cnt = 1;
     for (row = 0; row < ycnt - 1; row++) {
-	/* bottom right */
+	/* floor */
 	pt[X] = col * (surf->x_mod * surf->xres);
 	pt[Y] =
 	    ((surf->rows - 1) * surf->yres) -
 	    (row * (surf->y_mod * surf->yres));
+	pt[Z] = bot;
+	gsd_vert_func(pt);
+	/* map elevation */
 	offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-	GET_MAPATT(buff, offset, pt[Z]);
+	col_shift = 0;
+	while (!GET_MAPATT(buff, offset, pt[Z]) && col_shift < max_col_shift) {
+	    col_shift++;
+	    if (side)
+		offset = (row * surf->y_mod * surf->cols) + ((col - col_shift) * surf->x_mod);
+	    else
+		offset = (row * surf->y_mod * surf->cols) + ((col + col_shift) * surf->x_mod);
+	}
 	pt[Z] = pt[Z] * surf->z_exag;
 	gsd_vert_func(pt);
-	cnt++;
     }
 
-    row--;
-    pt[X] = col * (surf->x_mod * surf->xres);
-    pt[Y] =
-	((surf->rows - 1) * surf->yres) - (row * (surf->y_mod * surf->yres));
-    pt[Z] = bot;
-    gsd_vert_func(pt);
-
-    gsd_endpolygon();
+    gsd_endqstrip();
 
     GS_done_draw();
     gsd_popmatrix();
@@ -355,21 +393,23 @@ void gsd_fringe_vert_poly(float bot, geosurf * surf, int col, int side)
 }
 
 /*!                                             
-   \brief ADD
+   \brief Draw fringe outline in y direction
 
-   \param bot
+   \param bot coordinate of fringe bottom
    \param surf surface (geosurf)
-   \param col
-   \param side [unused]
+   \param col column along which is fringe drawn
+   \param side
  */
 void gsd_fringe_vert_line(float bot, geosurf * surf, int col, int side)
 {
     int row;
-    int cnt;
     float pt[4];
     typbuff *buff;
     long offset;
     int ycnt;
+    int col_shift, max_col_shift;
+    
+    max_col_shift = 20;
 
     GS_set_draw(GSD_FRONT);
     gsd_pushmatrix();
@@ -389,12 +429,19 @@ void gsd_fringe_vert_line(float bot, geosurf * surf, int col, int side)
     pt[Z] = bot;
     gsd_vert_func(pt);
 
+    /* find nearest row with defined z coordinate  */
     offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-    GET_MAPATT(buff, offset, pt[Z]);
+    col_shift = 0;
+    while (!GET_MAPATT(buff, offset, pt[Z]) && col_shift < max_col_shift) {
+	col_shift++;
+	if (side)
+	    offset = (row * surf->y_mod * surf->cols) + ((col - col_shift) * surf->x_mod);
+	else
+	    offset = (row * surf->y_mod * surf->cols) + ((col + col_shift) * surf->x_mod);
+    }
     pt[Z] = pt[Z] * surf->z_exag;
     gsd_vert_func(pt);
 
-    cnt = 1;
     for (row = 0; row < ycnt - 1; row++) {
 	/* bottom right */
 	pt[X] = col * (surf->x_mod * surf->xres);
@@ -402,10 +449,16 @@ void gsd_fringe_vert_line(float bot, geosurf * surf, int col, int side)
 	    ((surf->rows - 1) * surf->yres) -
 	    (row * (surf->y_mod * surf->yres));
 	offset = (row * surf->y_mod * surf->cols) + (col * surf->x_mod);
-	GET_MAPATT(buff, offset, pt[Z]);
+	col_shift = 0;
+	while (!GET_MAPATT(buff, offset, pt[Z]) && col_shift < max_col_shift) {
+	    col_shift++;
+	    if (side)
+		offset = (row * surf->y_mod * surf->cols) + ((col - col_shift) * surf->x_mod);
+	    else
+		offset = (row * surf->y_mod * surf->cols) + ((col + col_shift) * surf->x_mod);
+	}
 	pt[Z] = pt[Z] * surf->z_exag;
 	gsd_vert_func(pt);
-	cnt++;
     }
 
     row--;
