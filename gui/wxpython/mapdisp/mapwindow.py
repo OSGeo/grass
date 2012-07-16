@@ -981,9 +981,18 @@ class BufferedWindow(MapWindow, wx.Window):
         current  = event.GetPositionTuple()[:]
         wheel = event.GetWheelRotation()
         Debug.msg (5, "BufferedWindow.MouseAction(): wheel=%d" % wheel)
+        
+        if wheel > 0:
+            zoomtype = 1
+        else:
+            zoomtype = -1
+        if UserSettings.Get(group = 'display',
+                            key = 'scrollDirection',
+                            subkey = 'selection'):
+            zoomtype *= -1
         # zoom 1/2 of the screen (TODO: settings)
         if zoomBehaviour == 0:  # zoom and recenter
-            if wheel > 0:
+            if zoomtype > 0:
                 begin = (current[0] - self.Map.width / 4,
                          current[1] - self.Map.height / 4)
                 end   = (current[0] + self.Map.width / 4,
@@ -997,15 +1006,7 @@ class BufferedWindow(MapWindow, wx.Window):
             begin = (current[0]/2, current[1]/2)
             end = ((self.Map.width - current[0])/2 + current[0],
                    (self.Map.height - current[1])/2 + current[1])
-        if wheel > 0:
-            zoomtype = 1
-        else:
-            zoomtype = -1
         
-        if UserSettings.Get(group = 'display',
-                            key = 'scrollDirection',
-                            subkey = 'selection'):
-            zoomtype *= -1
             
         # zoom
         self.Zoom(begin, end, zoomtype)
