@@ -81,11 +81,14 @@ care of following rules:
 3. Usage of limited HTML tags
    Since the MAN conversion of g.html2man is limited, please use
    no other HTML tags than:
-   <a> <b> <blink> <body> <br> <code> <dd> <dl> <dt> <em> 
-   <h2> <h3> <h4> <head> <header> <hr> <i> <img> <li> <ol> <p>
+   <a> <b> <body> <br> <code> <dd> <dl> <dt> <em> 
+   <h2> <h3> <h4> <head> <hr> <i> <img> <li> <ol> <p>
    <pre> <sup> <table> <td> <th> <title> <tr> <ul>
 
-   (The converter is here: tools/g.html2man/)
+   Note that all tags has a closing tag except for <hr/>, <br/> and <p>.
+   Use lower case forms.
+
+   (The MAN converter is here: tools/g.html2man/.)
 
 4. Suggested HTML markup protocol:
    Module names (i.e., v.category) should be emphsized with <em>,
