@@ -95,8 +95,6 @@ int read_env_file(const char *path)
 
   Default display driver is Cairo, if not available PNG is used.
 
-  \todo Replace strncmp by G_strncasecmp()
-  
   \return 0 on success
   \return 1 no monitor defined
 */
@@ -117,7 +115,7 @@ int D_open_driver(void)
 	env = NULL;
 	G_asprintf(&env, "MONITOR_%s_MAPFILE", m);
 	v = G__getenv(env);
-	if (strncmp(m, "wx", 2) == 0) 
+	if (G_strncasecmp(m, "wx", 2) == 0) 
 	    p = NULL; /* use default display driver */
 	else
 	    p = m;
