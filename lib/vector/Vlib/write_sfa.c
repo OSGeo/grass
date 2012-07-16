@@ -1,7 +1,7 @@
 /*!
    \file lib/vector/Vlib/write_sfa.c
 
-   \brief Vector library - write vector feature - simple feature access
+   \brief Vector library - write vector feature - simple feature access (level 2)
 
    Higher level functions for reading/writing/manipulating vectors.
 
@@ -30,14 +30,14 @@ void V2__add_line_to_topo_sfa(struct Map_info *, int, const struct line_pnts *,
 #endif
 
 /*!
-  \brief Writes feature on level 2 (OGR/PostGIS interface)
+  \brief Writes feature on level 2 (OGR/PostGIS interface, pseudo-topological level)
 
   \param Map pointer to Map_info structure
-  \param type feature type (GV_POINT, GV_LINE, ...)
+  \param type feature type (see V1_write_line_ogr() for list of supported types)
   \param points pointer to line_pnts structure (feature geometry) 
   \param cats pointer to line_cats structure (feature categories)
   
-  \return feature offset into file
+  \return feature index in offset array (related to pseudo-topology)
   \return -1 on error
 */
 off_t V2_write_line_sfa(struct Map_info *Map, int type,
@@ -124,14 +124,15 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
 }
 
 /*!
-  \brief Rewrites feature to 'coor' file (topology level) - internal use only
+  \brief Rewrites feature at the given offset on level 2 (OGR/PostGIS
+  interface, pseudo-topological level)
   
   \param Map pointer to Map_info structure
-  \param line feature id
-  \param type feature type (GV_POINT, GV_LINE, ...)
-  \param offset unused
-  \param points feature geometry
-  \param cats feature categories
+  \param line feature id to be rewritten
+  \param type feature type (see V1_write_line_ogr() for supported types)
+  \param offset unused (kept for consistency)
+  \param points pointer to line_pnts structure (feature geometry)
+  \param cats pointer to line_cats structure feature categories
   
   \return offset where line was rewritten
   \return -1 on error
@@ -139,7 +140,7 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
 off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type, off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
-    G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d offset=%llu",
+    G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d offset=%lu",
 	    line, type, offset);
 
 #if defined HAVE_OGR || defined HAVE_POSTGRES
@@ -158,12 +159,12 @@ off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type, off_t offset
 }
 
 /*!
-  \brief Deletes feature (topology level) -- internal use only
+  \brief Deletes feature on level 2 (OGR/PostGIS interface)
   
   \todo Update fidx
   
   \param pointer to Map_info structure
-  \param line feature id
+  \param line feature id to be deleted
   
   \return 0 on success
   \return -1 on error
@@ -250,8 +251,8 @@ int V2_delete_line_sfa(struct Map_info *Map, int line)
 
   \param Map pointer to Map_info structure
   \param line feature id
-  \param points pointer to line_pnts structure (feature's geometry)
-  \param cats pointer to line_cats structure (feature's categories)
+  \param points pointer to line_pnts structure (feature geometry)
+  \param cats pointer to line_cats structure (feature categories)
 */
 void V2__add_line_to_topo_sfa(struct Map_info *Map, int line,
 			      const struct line_pnts *points,
