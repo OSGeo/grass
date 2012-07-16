@@ -1329,7 +1329,14 @@ class MapFrame(SingleMapFrame):
         if self.dialogs['vnet']:
             return
         else:
-            from vnet.dialogs import VNETDialog
+            try:
+                from vnet.dialogs import VNETDialog
+            except ImportError:
+                GError(_("wx.vnet not available, run '%s' to install this "
+                         "extension") % 'g.extension -s extension=wx.vnet',
+                       parent = self)
+                return
+            
             self.dialogs['vnet'] = VNETDialog(parent = self)
             self.dialogs['vnet'].CenterOnScreen()
             self.dialogs['vnet'].Show()
