@@ -85,6 +85,7 @@ care of following rules:
    <h2> <h3> <h4> <head> <header> <hr> <i> <img> <li> <ol> <p>
    <pre> <sup> <table> <td> <th> <title> <tr> <ul>
 
+   (The converter is here: tools/g.html2man/)
 
 4. Suggested HTML markup protocol:
    Module names (i.e., v.category) should be emphsized with <em>,
