@@ -56,7 +56,7 @@ wxSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
 class PreferencesBaseDialog(wx.Dialog):
     """!Base preferences dialog"""
     def __init__(self, parent, settings, title = _("User settings"),
-                 size = (500, 425),
+                 size = (500, 475),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         self.parent = parent # ModelerFrame
         self.title  = title
