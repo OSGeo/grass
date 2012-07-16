@@ -220,8 +220,8 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
   \param Map pointer to Map_info structure
   \param offset feature offset
   \param type feature type (see V1_write_line_ogr() for supported types)
-  \param points feature geometry
-  \param cats feature categories
+  \param points pointer to line_pnts structure (feature geometry)
+  \param cats pointer to line_cats structure (feature categories)
   
   \return feature offset (rewriten feature)
   \return -1 on error

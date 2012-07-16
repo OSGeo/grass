@@ -6,10 +6,10 @@
    Higher level functions for reading/writing/manipulating vectors.
 
    Operations:
-    - Add feature
+    - Write new feature
     - Rewrite feature
     - Delete feature
-    - Restore feature
+    - Restore deleted feature
 
    (C) 2001-2010, 2012 by the GRASS Development Team
 
@@ -158,19 +158,20 @@ static int (*Vect_restore_line_array[][3]) () = {
 };
 
 /*!
-   \brief Writes new feature to the end of file
+   \brief Writes new feature
 
-   Vector map topology is not required.
+   New feature is written to the end of file (in the case of native
+   format). Vector map topology is not required.
 
-   The function calls G_fatal_error() on error.
-
+   Calls G_fatal_error() when vector map is not opened.
+   
    \param Map pointer to Map_info structure
-   \param type feature type (GV_POINT, GV_LINE, ...)
-   \param points feature geometry
-   \param cats feature categories
+   \param type feature type (see dig_defines.h for supported types)
+   \param points ointer to line_pnts structure (feature geometry)
+   \param cats pointer to line_cats structure (feature categories)
 
-   \return new feature id (level 2)
-   \return offset into file where the feature starts (level 1)
+   \return new feature id (on level 2)
+   \return offset into file where the feature starts (on level 1)
    \return -1 on error
  */
 off_t Vect_write_line(struct Map_info *Map, int type,
@@ -196,7 +197,9 @@ off_t Vect_write_line(struct Map_info *Map, int type,
     if (offset == -1)
 	G_fatal_error(_("Unable to write feature (negative offset)"));
     */
-    /* NOTE: returns new line id on level 2 and file offset on level 1 */
+    
+    /* note: returns new feature id on level 2 and file offset on
+       level 1 */
     return offset;
 }
 
@@ -232,7 +235,7 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
     }
 
     offset = Map->plus.Line[line]->offset;
-    G_debug(3, "Vect_rewrite_line(): name = %s, line = %d offset = %llu",
+    G_debug(3, "Vect_rewrite_line(): name = %s, line = %d offset = %lu",
 	    Map->name, line, offset);
     ret = (*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type,
 							       offset,
