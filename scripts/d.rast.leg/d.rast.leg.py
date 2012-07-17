@@ -51,6 +51,10 @@
 #%option G_OPT_R_MAP
 #% description: Name of raster map to display
 #%end
+#%flag
+#%  key: s
+#%  description: Draw smooth gradient
+#%end
 #%option
 #% key: lines
 #% type: integer
@@ -88,6 +92,7 @@ def main():
     rast = options['raster']
     omit = flags['n']
     flip = flags['f']
+    smooth = flags['s']
 
     #for -n flag of d.legend
     if not grass.find_file(map)['file']:
@@ -146,6 +151,8 @@ def main():
         lflags += 'f'
     if omit:
         lflags += 'n'
+    if smooth:
+        lflags += 's'
 
 #    if has_hist or omit:
 #        lflags += 'n'
