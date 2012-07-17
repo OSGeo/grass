@@ -95,6 +95,7 @@ int gvld_isosurf(geovol * gvl)
     int x, y, z, i, iv;
     float xc, yc, zc;
     float xres, yres, zres;
+    unsigned r, g, b;
 
     int j, p, num, c_ndx, crnt_ev;
     float n[3], pt[4];
@@ -346,10 +347,14 @@ int gvld_isosurf(geovol * gvl)
 				n[Z] *= -1;
 			    }
 
-			    if (check_color[i])
+			    if (check_color[i]) {
+				r = READ();
+				g = READ();
+				b = READ();
 				curcolor[i] =
-				    (READ() & 0xff) | ((READ() & 0xff) << 8) |
-				    ((READ() & 0xff) << 16);
+				    (r & 0xff) | ((g & 0xff) << 8) |
+				    ((b & 0xff) << 16);
+			    }
 
 			    if (check_transp[i])
 				ktrans[i] = READ() << 24;;
@@ -365,7 +370,7 @@ int gvld_isosurf(geovol * gvl)
 				pksh = ksh[i];
 				pkem = kem[i];
 				gsd_set_material(1, 1, ksh[i], kem[i],
-						 (int)curcolor);
+						 curcolor[i]);
 			    }
 
 			    gsd_litvert_func(n, ktrans[i] | curcolor[i], pt);
