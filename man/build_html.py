@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) 2003-2006, 2009-2011 by the GRASS Development Team, Markus Neteler, Glynn Clements
+# (c) 2003-2006, 2009-2012 by the GRASS Development Team, Markus Neteler, Glynn Clements
 
 import sys
 import os
@@ -160,7 +160,7 @@ footer_tmpl = string.Template(\
 r"""<BR><BR>
 <hr>
 <p><a href="${index_url}">Help Index</a> | <a href="full_index.html">Full Index</a><br>
-&copy; 2003-2011 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+&copy; 2003-2012 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 </body>
 </html>
 """)
@@ -296,7 +296,8 @@ def write_html_cmd_overview(f):
     f.write(overview_tmpl.substitute(box_color = box_color))
 
 def write_html_footer(f, index_url):
-    f.write(footer_tmpl.substitute(index_url = index_url))
+    f.write(footer_tmpl.substitute(grass_version = grass_version,
+                                   index_url = index_url))
 
 def get_desc(cmd):
     f = open(cmd, 'r')
