@@ -82,6 +82,15 @@ no longer produce), and the version 3.0 format (which is
 automatically used when new raster map layers are
 created).
 
+<p>
+RLE compression versus zlib compression: if the environment variable
+GRASS_INT_ZLIB exists, new raster maps will be compressed using zlib 
+instead of RLE compression. In the cellhd file, the value for
+"compressed" is 1 for RLE and 2 for zlib.
+<br>
+Obviously, decompression is controlled by the raster's "compressed"
+header value, not the environment variable.
+
 <h4>PRE-3.0 FORMAT:</h4> 
 
 First 3 bytes (chars) - These are a special code that identifies 
