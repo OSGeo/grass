@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	struct Flag *print, *topo, *shell;
     } flag;
     struct {
-	struct Option *map, *field, *coords, *maxdist;
+	struct Option *map, *field, *coords, *maxdist, *type;
     } opt;
     struct Cell_head window;
     struct GModule *module;
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     struct Map_info *Map;
 
     char buf[2000];
-    int i, level, ret;
+    int i, level, ret, type;
     int *field;
     double xval, yval, xres, yres, maxd, x;
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
@@ -67,6 +67,9 @@ int main(int argc, char **argv)
     opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
     opt.field->multiple = YES;
     
+    opt.type = G_define_standard_option(G_OPT_V3_TYPE);
+    opt.type->answer = "point,line,area,face";
+
     opt.coords = G_define_standard_option(G_OPT_M_COORDS);
     opt.coords->required = YES;
     opt.coords->label = _("Coordinates for query");
@@ -102,6 +105,7 @@ int main(int argc, char **argv)
 	vect = opt.map->answers;
 
     maxd = atof(opt.maxdist->answer);
+    type = Vect_option_to_types(opt.type);
 
     if (maxd == 0.0) {
 	G_get_window(&window);
@@ -159,7 +163,7 @@ int main(int argc, char **argv)
 	while (fgets(buf, sizeof(buf), stdin) != NULL) {
 	    ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
 	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
-		what(Map, nvects, vect, xval, yval, maxd, flag.topo->answer,
+		what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
 		     flag.print->answer, flag.shell->answer, field);
 	    }
 	    else {
@@ -173,7 +177,7 @@ int main(int argc, char **argv)
 	for (i = 0; opt.coords->answers[i] != NULL; i += 2) {
 	    xval = atof(opt.coords->answers[i]);
 	    yval = atof(opt.coords->answers[i + 1]);
-	    what(Map, nvects, vect, xval, yval, maxd, flag.topo->answer,
+	    what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
 		 flag.print->answer, flag.shell->answer, field);
 	}
     }
