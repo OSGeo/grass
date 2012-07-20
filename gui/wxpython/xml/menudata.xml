@@ -187,14 +187,15 @@
 	    <menuitem>
 	      <label>WMS import</label>
 	      <help>Download and import data from WMS servers.</help>
-	      <keywords>raster,import,wms</keywords><handler>OnImportWMS</handler>
-	      <command>r.in.wms</command>
+	      <keywords>raster,import,wms</keywords>
+	      <handler>OnImportWMS</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Unpack raster map</label>
 	      <help>Unpacks a raster map packed with r.pack.</help>
-	      <keywords>raster,import,copying</keywords><handler>OnMenuCmd</handler>
+	      <keywords>raster,import,copying</keywords>
+	      <handler>OnMenuCmd</handler>
 	      <command>r.unpack</command>
 	    </menuitem>
 	  </items>
@@ -207,7 +208,6 @@
 	      <help>Converts vector layers into a GRASS vector map using OGR.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>OnImportOgrLayers</handler>
-	      <command>v.in.ogr</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -244,7 +244,6 @@
 	      <help>Converts files in DXF format to GRASS vector map format.</help>
 	      <keywords>vector,import,dxf</keywords>
 	      <handler>OnImportDxfFile</handler>
-	      <command>v.in.dxf</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -447,7 +446,8 @@
 	    <menuitem>
 	      <label>Pack raster map</label>
 	      <help>Packs up a raster map and support files for copying.</help>
-	      <keywords>raster,export,copying</keywords><handler>OnMenuCmd</handler>
+	      <keywords>raster,export,copying</keywords>
+	      <handler>OnMenuCmd</handler>
 	      <command>r.pack</command>
 	    </menuitem>
 	  </items>
@@ -561,7 +561,6 @@
 	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
 	      <keywords>vector,import,input,external,OGR,PostGIS</keywords>
               <handler>OnLinkOgrLayers</handler>
-	      <command>v.external</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -576,7 +575,6 @@
 	      <help>Defines vector output format utilizing OGR library.</help>
 	      <keywords>vector,export,output,external,OGR,PostGIS</keywords>
               <handler>OnVectorOutputFormat</handler>
-	      <command>v.external.out</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -788,7 +786,6 @@
 	      <help>Set/unset access to other mapsets in current location</help>
 	      <keywords>general,settings,search path</keywords>
 	      <handler>OnMapsets</handler>
-	      <command>g.mapsets</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>User access</label>
@@ -893,7 +890,6 @@
 	      <help>Installs new extension from GRASS AddOns SVN repository.</help>
 	      <keywords>general,installation,extensions</keywords>
 	      <handler>OnInstallExtension</handler>
-	      <command>g.extension</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Update installed extensions</label>
@@ -907,7 +903,6 @@
 	      <help>Removes installed GRASS AddOns extension.</help>
 	      <keywords>general,installation,extensions</keywords>
 	      <handler>OnUninstallExtension</handler>
-	      <command>g.extension</command>
 	    </menuitem>
 	<separator />
 	<menuitem>
@@ -1053,11 +1048,10 @@
 	      <command>r.colors.stddev</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Color rules</label>
+	      <label>Create color rules</label>
 	      <help>Interactive management of raster color tables.</help>
 	      <keywords>raster,color table</keywords>
 	      <handler>RulesCmd</handler>
-	      <command>r.colors</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Export color table</label>
@@ -1169,7 +1163,6 @@
 	  <help>Raster map calculator.</help>
 	  <keywords>raster,algebra</keywords>
 	  <handler>OnMapCalculator</handler>
-	  <command>r.mapcalc</command>
 	</menuitem>
 	<menu>
 	  <label>Neighborhood analysis</label>
@@ -2094,7 +2087,6 @@
 	      <help>Toolset for cleaning topology of vector map.</help>
 	      <keywords>vector,topology</keywords>
 	      <handler>OnVectorCleaning</handler>
-	      <command>v.clean</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Smooth or simplify</label>
@@ -2651,7 +2643,6 @@
 	      <help>Creates, edits, and lists groups of imagery files.</help>
 	      <keywords>imagery,map management</keywords>
 	      <handler>OnEditImageryGroups</handler>
-	      <command>i.group</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Target group</label>
