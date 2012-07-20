@@ -101,7 +101,8 @@ static void F_generate(const char *drvname, const char *dbname,
     db_free_string(&str);
 }
 
-void what(struct Map_info *Map, int nvects, char **vect, double east, double north, double maxdist, int topo, int showextra, int script, int *field)
+void what(struct Map_info *Map, int nvects, char **vect, double east, double north,
+          double maxdist, int qtype, int topo, int showextra, int script, int *field)
 {
     int type;
     char east_buf[40], north_buf[40];
@@ -133,12 +134,15 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 	Vect_reset_cats(Cats);
 	/* Try to find point first and only if no one was found try lines,
 	 *  otherwise point on line could not be selected and similarly for areas */
+	
+	type = ((GV_POINT | GV_CENTROID) & qtype);
 	line =
 	    Vect_find_line(&Map[i], east, north, 0.0, GV_POINT | GV_CENTROID,
 			   maxdist, 0, 0);
 	if (line == 0) {
+	    type = ((GV_LINE | GV_BOUNDARY | GV_FACE) & qtype);
 	    line = Vect_find_line(&Map[i], east, north, 0.0,
-				  GV_LINE | GV_BOUNDARY | GV_FACE, maxdist, 0, 0);
+				  type, maxdist, 0, 0);
 	}
 
 	if (line == 0) {
