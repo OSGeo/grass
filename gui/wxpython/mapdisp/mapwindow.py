@@ -134,7 +134,25 @@ class BufferedWindow(MapWindow, wx.Window):
     def _bindMouseEvents(self):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
         self.Bind(wx.EVT_MOTION,       self.OnMotion)
-        
+        self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
+
+    def OnContextMenu(self, event):
+        """!Show Map Display context menu"""
+        if hasattr(self, "digit"):
+            event.Skip()
+            return
+
+        if not hasattr(self, "popupCopyCoordinates"):
+            self.popupCopyCoordinates = wx.NewId()
+            self.Bind(wx.EVT_MENU, self.OnCopyCoordinates, id = self.popupCopyCoordinates)
+
+        # generate popup-menu
+        menu = wx.Menu()
+        menu.Append(self.popupCopyCoordinates, _("Copy coordinates to clipboard"))
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
     def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0]):
         """!Draws map and overlay decorations
         """
@@ -1316,6 +1334,17 @@ class BufferedWindow(MapWindow, wx.Window):
             self._onMouseMoving(event)
         
         event.Skip()
+
+    def OnCopyCoordinates(self, event):
+        """!Copy coordinates to cliboard"""
+        e, n = self.GetLastEN()
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            # TODO: put delimiter in settings and apply also for Go to in statusbar
+            delim = ';'
+            do.SetText(str(e) + delim + str(n))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
         
     def ClearLines(self, pdc = None):
         """!Clears temporary drawn lines from PseudoDC
