@@ -96,7 +96,6 @@
 	      <help>Import raster data into a GRASS map layer using GDAL.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>OnImportGdalLayers</handler>
-	      <command>r.in.gdal</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
