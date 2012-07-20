@@ -1292,7 +1292,7 @@ class GdalSelect(wx.Panel):
             if current['format'] != 'native':
                 self.OnSetFormat(event = None, format = current['format'])
                 self.OnSetDsn(event = None, path = current['dsn'])
-                self.creationOpt.SetValue(current['options'])
+                self.creationOpt.SetValue(current.get('options', ''))
         else:
             if not ogr:
                 self.OnSetFormat(event = None, format = 'GeoTIFF')
