@@ -949,6 +949,9 @@ class GMConsole(wx.SplitterWindow):
                                                                     param = p.get('name', ''))
                             
                             if mapTree.GetMap().GetListOfLayers(l_name = name):
+                                display = mapTree.GetMapDisplay()
+                                if display and display.IsAutoRendered():
+                                    display.GetWindow().UpdateMap(render = True)
                                 continue
                             
                             if prompt == 'raster':
