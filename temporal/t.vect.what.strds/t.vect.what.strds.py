@@ -115,11 +115,11 @@ def main():
         dbif.close()
         grass.fatal(_("Input and aggregation dataset must have the same temporal type"))
 
-    # Check if intervals are present
+    # Check if intervals are present in the sample dataset
     if sp.get_temporal_type() == "absolute":
-        map_time = strds_sp.absolute_time.get_map_time()
+        map_time = sp.absolute_time.get_map_time()
     else:
-        map_time = strds_sp.relative_time.get_map_time()
+        map_time = sp.relative_time.get_map_time()
     
     if map_time != "interval":
         dbif.close()
