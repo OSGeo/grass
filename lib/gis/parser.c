@@ -443,7 +443,7 @@ int G_parser(int argc, char **argv)
 	}
 	
 	/* If first arg is "--rest-description" then print out
-        * a rest description of the task */
+        * a ReST description of the task */
 	if (strcmp(argv[1], "--rest-description") == 0) {
 	    G__usage_rest();
 	    exit(EXIT_SUCCESS);
