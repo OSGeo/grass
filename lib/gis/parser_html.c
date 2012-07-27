@@ -1,3 +1,16 @@
+/*!
+  \file lib/gis/parser_html.c
+  
+  \brief GIS Library - Argument parsing functions (HTML output)
+  
+  (C) 2001-2009, 2011-2012 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <stdio.h>
 
 #include <grass/gis.h>
