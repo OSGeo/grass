@@ -3,10 +3,11 @@
  
   \brief Vector library - OGC Simple Features Access
 
-  Note: In progress! Currently on GV_POINT, GV_LINE, GV_AREA are supported.
-  
   Higher level functions for reading/writing/manipulating vectors.
-
+  
+  Note: <b>In progress!</b> Currently on GV_POINT, GV_LINE,
+  GV_BOUNDARY are supported.
+  
   \todo
    - Vect_sfa_line_is_simple()
    - Vect_sfa_line_srid()
@@ -19,7 +20,7 @@
 
   Reference: http://www.opengeospatial.org/standards/sfa
 
-  (C) 2009, 2011 by the GRASS Development Team
+  (C) 2009, 2011-2012 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -40,13 +41,14 @@ static void print_point(const struct line_pnts *, int, int, int, FILE *);
   \brief Get SF type of given vector feature
 
   List of supported feature types:
-   - GV_POINT    -> SF_POINT
-   - GV_LINE     -> SF_LINESTRING / SF_LINEARRING
-   - GV_AREA     -> SF_POLYGON
+   - GV_POINT         -> SF_POINT
+   - GV_LINE          -> SF_LINESTRING
+   - GV_LINE (closed) -> SF_LINEARRING
+   - GV_BOUNDARY      -> SF_POLYGON
 
   \param Points  pointer to line_pnts structure
-  \param type    feature type (GV_POINT, GV_LINE, ...)
-  \param with_z  non-zero value for 3D data
+  \param type    feature type (see supported types above)
+  \param with_z  WITH_Z for 3D data
 
   \return SF type identificator (see list of supported types)
   \return -1 on error
@@ -77,7 +79,7 @@ int Vect_sfa_get_type(SF_FeatureType sftype)
 	return GV_LINE;
     case SF_POLYGON:
     case SF_POLYGON25D:
-	return GV_AREA;
+	return GV_BOUNDARY;
     default:
 	break;
     }
@@ -112,9 +114,9 @@ int Vect_sfa_check_line_type(const struct line_pnts *Points, int type,
   \param Points pointer to line_pnts structure
   \param type   feature type (GV_POINT, GV_LINE, ...)
 
-  \return 0
-  \return 1
-  \return 2
+  \return 0 for GV_POINT
+  \return 1 for GV_LINE
+  \return 2 for GV_BOUNDARY
   \return -1 unsupported feature type
 */
 int Vect_sfa_line_dimension(int type)
@@ -123,7 +125,7 @@ int Vect_sfa_line_dimension(int type)
 	return 0;
     if (type == GV_LINE)
 	return 1;
-    if (type == GV_AREA)
+    if (type == GV_BOUNDARY)
 	return 2;
 
     return -1;
@@ -132,8 +134,16 @@ int Vect_sfa_line_dimension(int type)
 /*!
   \brief Get geometry type (string)
 
-  \param Points pointer to line_pnts structure
-  \param type   feature type (GV_POINT, GV_LINE, ...)
+  Supported types:
+  - GV_POINT             -> SF_POINT      -> "POINT"
+  - GV_LINE              -> SF_LINESTRING -> "LINESTRING"
+  - GV_LINE (closed)     -> SF_LINEARRING -> "LINEARRING"
+  - GV_BOUNDARY (closed) -> SF_POLYGON -> "POLYGON"
+  
+  Note: Allocated string should be freed by G_free().
+  
+  \param Points pointer to line_pnts structure (feature geometry)
+  \param type   feature type (see supported types above)
 
   \return geometry type string
   \return NULL unsupported feature type
@@ -148,7 +158,9 @@ char *Vect_sfa_line_geometry_type(const struct line_pnts *Points, int type)
 	return G_store("LINESTRING");
     if (sftype == SF_LINEARRING)
 	return G_store("LINEARRING");
-
+    if (sftype == SF_POLYGON)
+        return G_store("POLYGON");
+    
     return NULL;
 }
 
@@ -236,7 +248,7 @@ int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type, int with_z
   \brief Check if feature is closed
 
   \param Points pointer to line_pnts structure
-  \param type   feature type (GV_POINT, GV_LINE, ...)
+  \param type   feature type (GV_LINE or GV_BOUNDARY)
 
   \return 1  feature closed
   \return 0  feature not closed
@@ -268,13 +280,12 @@ int check_sftype(const struct line_pnts *points, int type,
     }
 
     if (type == GV_LINE) {
-	if (sftype == SF_LINESTRING) {
+	if (sftype == SF_LINESTRING)
 	    return 1;
-	}
-	if (sftype == SF_LINEARRING) {
-	    if (Vect_sfa_is_line_closed(points, type, with_z))
-		return 1;
-	}
+	
+	if (sftype == SF_LINEARRING &&
+            Vect_sfa_is_line_closed(points, type, with_z))
+            return 1;
     }
 
     if (type == GV_BOUNDARY) {
