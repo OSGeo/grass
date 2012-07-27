@@ -284,11 +284,11 @@ associated routines.
 
 \section Raster_Header_File Raster Header File
 
-The raster header file contains information describing the geographic
-extent of the map layer, the grid cell resolution, and the format used
-to store the data in the raster file. The format of this file is
-described in \ref Raster_Header_Format. The routines described below
-use the <i>Cell_head</i> structure which is shown in detail in \ref
+The raster header file (<tt>cellhd</tt>) contains information
+describing the geographic extent of the raster map, the grid cell
+resolution, the format used to store the data in the raster file, see
+Cell_head structure for details. The routines described below use the
+Cell_head structure which is shown in detail in \ref
 GIS_Library_Data_Structures.
 
  - Rast_get_cellhd()

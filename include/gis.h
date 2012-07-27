@@ -82,10 +82,15 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define U_MINUTES       DATETIME_MINUTE 
 #define U_SECONDS       DATETIME_SECOND 
 
+/*! \brief Projection code - XY coordinate system */
 #define PROJECTION_XY  0
+/*! \brief Projection code - UTM */
 #define PROJECTION_UTM 1
+/*! \brief Projection code - plane */
 #define PROJECTION_SP  2
+/*! \brief Projection code - LatLong */
 #define PROJECTION_LL  3
+/*! \brief Projection code - other coordinate system (other then noted above) */
 #define PROJECTION_OTHER  99
 
 #define PROJECTION_FILE "PROJ_INFO"
@@ -311,27 +316,62 @@ enum
 
 /*=========================== Typedefs/Structures ==========================*/
 
+/*!
+  \brief 2D/3D raster map header (used also for region)
+*/
 struct Cell_head
 {
-    int format;			/* max number of bytes per cell minus 1         */
-    int compressed;		/* 0 = uncompressed, 1 = compressed, -1 pre 3.0 */
-    int rows;			/* number of rows in the data 2D                */
-    int rows3;			/* number of rows in the data 3D                */
-    int cols;			/* number of columns in the data 2D             */
-    int cols3;			/* number of columns in the data 3D             */
-    int depths;			/* number of depths in data                     */
-    int proj;			/* projection (see #defines above)              */
-    int zone;			/* projection zone                              */
-    double ew_res;		/* east to west cell size 2D                    */
-    double ew_res3;		/* east to west cell size 3D                    */
-    double ns_res;		/* north to south cell size 2D                  */
-    double ns_res3;		/* north to south cell size 3D                  */
-    double tb_res;		/* top to bottom cell size                      */
-    double north;		/* coordinates of map layer                     */
+    /*! \brief Max number of bytes per raster data value minus 1 (raster header only) */
+    int format;
+    /*! \brief Compression mode (raster header only)
+
+      - 0: uncompressed
+      - 1: compressed
+      - -1: pre GRASS 3.0
+    */
+    int compressed;
+    /*! \brief Number of rows for 2D data */
+    int rows;
+    /*! \brief Number of rows for 3D data */
+    int rows3;
+    /*! \brief Number of columns for 2D data */
+    int cols;
+    /*! \brief Number of columns for 3D data */
+    int cols3;
+    /*! \brief number of depths for 3D data */
+    int depths;
+    /*! \brief Projection code
+
+      - PROJECTION_XY
+      - PROJECTION_UTM
+      - PROJECTION_SP
+      - PROJECTION_LL
+      - PROJECTION_OTHER
+     */
+    int proj;
+    /*! \brief Projection zone (UTM) */
+    int zone;
+    /*! \brief Resolution - east to west cell size for 2D data */
+    double ew_res;
+    /*! \brief Resolution - east to west cell size for 3D data */
+    double ew_res3;   
+    /*! \brief Resolution - north to south cell size for 2D data */
+    double ns_res;     
+    /*! \brief Resolution - north to south cell size for 3D data */
+    double ns_res3;   
+    /*! \brief Resolution - top to bottom cell size for 3D data */
+    double tb_res;    
+    /*! \brief Extent coordinates (north) */
+    double north;     
+    /*! \brief Extent coordinates (south) */
     double south;
+    /*! \brief Extent coordinates (east) */
     double east;
+    /*! \brief Extent coordinates (west) */
     double west;
+    /*! \brief Extent coordinates (top) - 3D data*/
     double top;
+    /*! \brief Extent coordinates (bottom) - 3D data */
     double bottom;
 };
 
