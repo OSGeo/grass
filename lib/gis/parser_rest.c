@@ -5,8 +5,11 @@
 
 #include "parser_local_proto.h"
 #include "string.h"
-// static void print_escaped_for_html(FILE * f, const char *str);
-// static void print_escaped_for_html_options(FILE * f, const char *str);
+
+/*!
+static void print_escaped_for_html(FILE * f, const char *str);
+static void print_escaped_for_html_options(FILE * f, const char *str);
+*/
 
 /*!
   \brief Print module usage description in HTML format.
@@ -43,7 +46,7 @@ void G__usage_rest(void)
     fprintf(stdout,"   :alt: GRASS logo\n\n");
     
     fprintf(stdout,"%s\n----\n", _("NAME"));
-    fprintf(stdout, "**%s**", st->pgm_name); //TODO fix bold + emphase now only bold
+    fprintf(stdout, "**%s**", st->pgm_name); /*! TODO fix bold + emphase now only bold */
 
     if (st->module_info.label || st->module_info.description)
 	fprintf(stdout, " - ");
@@ -200,14 +203,14 @@ void G__usage_rest(void)
 
 	    if (opt->options) {
 		fprintf(stdout, "    %s: *", _("Options"));
-// 		print_escaped_for_html_options(stdout, opt->options);
+		/*! print_escaped_for_html_options(stdout, opt->options); */
 		fprintf(stdout, "%s", opt->options);
 		fprintf(stdout, "*\n");
 	    }
 
 	    if (opt->def) {
 		fprintf(stdout, "    %s: *", _("Default"));
-// 		print_escaped_for_html(stdout, opt->def);
+		/*! print_escaped_for_html(stdout, opt->def); */
 		fprintf(stdout,"%s", opt->def);
 		fprintf(stdout, "*\n");
 	    }
@@ -218,10 +221,10 @@ void G__usage_rest(void)
 		while (opt->opts[i]) {
 		    if (opt->descs[i]) {
 			fprintf(stdout, "    **");
-// 			print_escaped_for_html(stdout, opt->opts[i]);
+			/*! print_escaped_for_html(stdout, opt->opts[i]); */
 			fprintf(stdout,"%s", opt->opts[i]);
 			fprintf(stdout, "**: ");
-// 			print_escaped_for_html(stdout, opt->descs[i]);
+			/*! print_escaped_for_html(stdout, opt->descs[i]); */
 			fprintf(stdout, "%s\n", opt->descs[i]);
 		    }
 		    i++;
@@ -239,40 +242,41 @@ void G__usage_rest(void)
 
 /*!
  * \brief Format text for HTML output
- */
+
 #define do_escape(c,escaped) case c: fputs(escaped,f);break
-// void print_escaped_for_html(FILE * f, const char *str)
-// {
-//     const char *s;
-// 
-//     for (s = str; *s; s++) {
-// 	switch (*s) {
-// 	    do_escape('&', "&amp;");
-// 	    do_escape('<', "&lt;");
-// 	    do_escape('>', "&gt;");
-// 	    do_escape('\n', "<br>");
-// 	    do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
-// 	default:
-// 	    fputc(*s, f);
-// 	}
-//     }
-// }
-// 
-// void print_escaped_for_html_options(FILE * f, const char *str)
-// {
-//     const char *s;
-// 
-//     for (s = str; *s; s++) {
-// 	switch (*s) {
-// 	    do_escape('&', "&amp;");
-// 	    do_escape('<', "&lt;");
-// 	    do_escape('>', "&gt;");
-// 	    do_escape('\n', "<br>");
-// 	    do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
-// 	    do_escape(',',  ", ");
-// 	default:
-// 	    fputc(*s, f);
-// 	}
-//     }
-// }
+ void print_escaped_for_html(FILE * f, const char *str)
+ {
+     const char *s;
+ 
+     for (s = str; *s; s++) {
+ 	switch (*s) {
+ 	    do_escape('&', "&amp;");
+ 	    do_escape('<', "&lt;");
+ 	    do_escape('>', "&gt;");
+ 	    do_escape('\n', "<br>");
+ 	    do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
+ 	default:
+ 	    fputc(*s, f);
+ 	}
+     }
+ }
+ 
+ void print_escaped_for_html_options(FILE * f, const char *str)
+ {
+     const char *s;
+ 
+     for (s = str; *s; s++) {
+ 	switch (*s) {
+ 	    do_escape('&', "&amp;");
+ 	    do_escape('<', "&lt;");
+ 	    do_escape('>', "&gt;");
+ 	    do_escape('\n', "<br>");
+ 	    do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
+ 	    do_escape(',',  ", ");
+ 	default:
+ 	    fputc(*s, f);
+ 	}
+     }
+ }
+*/
 #undef do_escape
