@@ -1,10 +1,22 @@
+/*!
+  \file lib/gis/parser_rest.c
+  
+  \brief GIS Library - Argument parsing functions (REST output)
+  
+  (C) 2012 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Luca Delucchi
+*/
 #include <stdio.h>
+#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
 #include "parser_local_proto.h"
-#include "string.h"
 
 /*!
 static void print_escaped_for_html(FILE * f, const char *str);
@@ -20,7 +32,7 @@ void G__usage_rest(void)
     struct Flag *flag;
     const char *type;
     int new_prompt = 0;
-    int s;
+    unsigned int s;
 
     new_prompt = G__uses_new_gisprompt();
 
