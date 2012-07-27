@@ -82,15 +82,15 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define U_MINUTES       DATETIME_MINUTE 
 #define U_SECONDS       DATETIME_SECOND 
 
-/*! \brief Projection code - XY coordinate system */
-#define PROJECTION_XY  0
+/*! \brief Projection code - XY coordinate system (unreferenced data) */
+#define PROJECTION_XY     0
 /*! \brief Projection code - UTM */
-#define PROJECTION_UTM 1
-/*! \brief Projection code - plane */
-#define PROJECTION_SP  2
-/*! \brief Projection code - LatLong */
-#define PROJECTION_LL  3
-/*! \brief Projection code - other coordinate system (other then noted above) */
+#define PROJECTION_UTM    1
+/*! \brief Projection code - State Plane */
+#define PROJECTION_SP     2
+/*! \brief Projection code - Latitude-Longitude */
+#define PROJECTION_LL     3
+/*! \brief Projection code - other projection (other then noted above) */
 #define PROJECTION_OTHER  99
 
 #define PROJECTION_FILE "PROJ_INFO"
