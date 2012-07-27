@@ -2117,48 +2117,24 @@ by routines in this library, are described in the sections below.
 
 
 The raster header data structure is used for two purposes. It is used
-for raster header information for map layers. It also used to hold
-region values. The structure is:
+for raster header information for raster map. It also used to hold
+region values.
 
-\code
-struct Cell_head
-{
-    int format;			/* max number of bytes per cell minus 1         */
-    int compressed;		/* 0 = uncompressed, 1 = compressed, -1 pre 3.0 */
-    int rows;			/* number of rows in the data 2D                */
-    int rows3;			/* number of rows in the data 3D                */
-    int cols;			/* number of columns in the data 2D             */
-    int cols3;			/* number of columns in the data 3D             */
-    int depths;			/* number of depths in data                     */
-    int proj;			/* projection (see #defines above)              */
-    int zone;			/* projection zone                              */
-    double ew_res;		/* east to west cell size 2D                    */
-    double ew_res3;		/* east to west cell size 3D                    */
-    double ns_res;		/* north to south cell size 2D                  */
-    double ns_res3;		/* north to south cell size 3D                  */
-    double tb_res;		/* top to bottom cell size                      */
-    double north;		/* coordinates of map layer                     */
-    double south;
-    double east;
-    double west;
-    double top;
-    double bottom;
-};
-\endcode
+See documentation of Cell_head structure for details.
 
-
-The <i>format</i> and <i>compressed</i> fields apply only to raster
-headers. The <i>format</i> field describes the number of bytes per
-raster data value and the <i>compressed</i> field indicates if the
-raster file is compressed or not. The other fields apply both to
-raster headers and regions. The geographic boundaries are described by
-<i>north, south, east</i> and <i>west</i>. The grid resolution is
-described by <i>ew_res</i> and <i>ns_res</i>. The cartographic
-projection is described by <i>proj</i> and the related zone for the
-projection by <i>zone</i>. The <i>rows</i> and <i>cols</i> indicate
-the number of rows and columns in the raster file, or in the
-region. See \ref Raster_Header_File for more information about
-raster headers, and \ref Region for more information about regions.
+The <tt>format</tt> and <tt>compressed</tt> fields apply only to
+raster headers. The <tt>format</tt> field describes the number of
+bytes per raster data value and the <tt>compressed</tt> field
+indicates if the raster file is compressed or not. The other fields
+apply both to raster headers and regions. The geographic boundaries
+are described by <tt>north, south, east</tt> and <tt>west</tt>. The
+grid resolution is described by <tt>ew_res</tt> and
+<tt>ns_res</tt>. The cartographic projection is described by
+<tt>proj</tt> and the related zone for the projection by
+<tt>zone</tt>. The <tt>rows</tt> and <tt>cols</tt> indicate the number
+of rows and columns in the raster map, or in the region. See \ref
+Raster_Header_File for more information about raster headers, and \ref
+Region for more information about regions.
 
 The routines described in \ref Raster_Header_File use this structure.
 
