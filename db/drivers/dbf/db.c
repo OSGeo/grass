@@ -94,6 +94,16 @@ int db__driver_open_database(dbHandle * handle)
 		db_d_report_error();
 		return DB_FAILED;
 	    }
+	    else {
+		/* now that the dbf/ dir is created, try again */
+		dir = opendir(db.name);
+		if (dir == NULL) {
+		    db_d_append_error(_("Cannot open DBF database directory: %s"),
+					name);
+		    db_d_report_error();
+		    return DB_FAILED;
+		}
+	    }
 	}
 	else {			/* some other problem */
 	    db_d_append_error(_("Unable to open DBF database: %s"), name);
