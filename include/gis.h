@@ -321,7 +321,10 @@ enum
 */
 struct Cell_head
 {
-    /*! \brief Max number of bytes per raster data value minus 1 (raster header only) */
+    /*! \brief Max number of bytes per raster data value minus 1 (raster header only)
+
+     Note: -1 for FP raster maps
+    */
     int format;
     /*! \brief Compression mode (raster header only)
 
