@@ -441,6 +441,13 @@ int G_parser(int argc, char **argv)
 	    G__usage_html();
 	    exit(EXIT_SUCCESS);
 	}
+	
+	/* If first arg is "--rest-description" then print out
+        * a rest description of the task */
+	if (strcmp(argv[1], "--rest-description") == 0) {
+	    G__usage_rest();
+	    exit(EXIT_SUCCESS);
+	}	
 
 	/* If first arg is "--wps-process-description" then print out
 	 * the wps process description of the task */
