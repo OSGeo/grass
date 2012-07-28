@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.wms2</em> handles all of downloading and importing raster
+<em>r.in.wms</em> handles all of downloading and importing raster
 data from an <a href="http://www.opengeospatial.org/standards/wms">OGC
 WMS</a> web mapping server. It need only be told the desired data to
 collect (bounds and resolution) via a region, the server to get the
@@ -25,7 +25,7 @@ capabilities request to NASA's OnEarth server</a>.
 <h3>General Get Capabilities Request</h3>
 
 <div class="code"><pre>
-r.in.wms2 -c mapserver=http://wms.cuzk.cz/wms.asp
+r.in.wms -c mapserver=http://wms.cuzk.cz/wms.asp
 </pre></div>
 
 <h3>CUZK download</h3>
@@ -34,12 +34,12 @@ r.in.wms2 -c mapserver=http://wms.cuzk.cz/wms.asp
 World extend data:
 
 <div class="code"><pre>
-r.in.wms2 mapserver=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsat_1_01 styles=default,default output=landsat srs=4326 format=png 
+r.in.wms mapserver=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsat_1_01 styles=default,default output=landsat srs=4326 format=png 
 </pre></div>
 * Server supports only WMS 1.1.1 <br>
 
 <div class="code"><pre>
-r.in.wms2 mapserver=http://132.156.97.59/cgi-bin/worldmin_en-ca_ows layers=GSC:WORLD_PrecambrianDomains output=pokus srs=4326 format=jpeg 
+r.in.wms mapserver=http://132.156.97.59/cgi-bin/worldmin_en-ca_ows layers=GSC:WORLD_PrecambrianDomains output=pokus srs=4326 format=jpeg 
 </pre></div>
 * Server supports only WMS 1.1.1 
 <br>
@@ -48,7 +48,7 @@ r.in.wms2 mapserver=http://132.156.97.59/cgi-bin/worldmin_en-ca_ows layers=GSC:W
 Data in extend of Czech Republic:
 
 <div class="code"><pre>
-r.in.wms2 output=kn mapserver=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-linie srs=4326 format=png
+r.in.wms output=kn mapserver=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-linie srs=4326 format=png
 </pre></div>
 
 
