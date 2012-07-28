@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.wms</em> handles all of downloading and importing raster data
-from an <a href="http://www.opengeospatial.org/standards/wms">OGC
+<em>r.in.wms2</em> handles all of downloading and importing raster
+data from an <a href="http://www.opengeospatial.org/standards/wms">OGC
 WMS</a> web mapping server. It need only be told the desired data to
 collect (bounds and resolution) via a region, the server to get the
 data from, and the layer or layers to get. It downloads the data in
@@ -9,8 +9,10 @@ tiles, reprojects it, imports it, and patches it back together.
 
 <h2>NOTES</h2>
 
+<!--
 By default data is downloaded to <tt>$GISDBASE/wms_download</tt>. This can be changed
 by setting the <b>folder</b> option when using <em>r.in.wms</em>.
+-->
 
 <p>To understand the data you are getting it is necessary to look at the
 capabilities of the WMS server. This should be available via a capabilities
@@ -18,120 +20,57 @@ request. This is an
 <a href="http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities">example
 capabilities request to NASA's OnEarth server</a>.
 
-<p><!--
-Some brain-dead servers will only talk to certain web browsers. You can
-fool these by adding <tt>- -user-agent=MSIE5.5</tt> to <b>wgetoptions</b>
-or for curl adding <tt>-A "MSIE5.5"</tt> to <b>curloptions</b>.
--->
-Other brain-dead servers will not accept queries in the form of POST data.
-If you get an error try using the <b>-g</b> flag to force <em>r.in.wms</em>
-to send an atomic GET request instead.
-
 <h2>EXAMPLES</h2>
 
 <h3>General Get Capabilities Request</h3>
 
-A capabilities request like
-<a href="http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities">http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities</a>
-is where you should start. It tells you what data is offered, the projections
-it is in,  where to find meta data, resolutions, scales, and bounds for
-data, etc.
-
-E.g. lists the layers available from the NASA OnEarth server.
-
 <div class="code"><pre>
-r.in.wms mapserver=http://wms.jpl.nasa.gov/wms.cgi -l
+r.in.wms2 -c mapserver=http://wms.cuzk.cz/wms.asp
 </pre></div>
 
-<h3>US NED Elevation from OnEarth server download (metric units)</h3>
+<h3>CUZK download</h3>
 
-Set the resolution to 30 (assuming you're in metric units):
-<div class="code"><pre>
-g.region res=30 -ap
-r.in.wms -o output=elevation_meters mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-         layers=us_ned styles=real
-</pre></div>
 
-Downloads real number meter elevation from OnEarth to cover the current
-region. Uses <b>-o</b> for opaque to get smaller download.
-
-<h3>US NED Elevation from OnEarth server download (feet units)</h3>
-
-Set the resolution to 90 (assuming you're in feet units) a save this
-region with a name; this makes resuming downloads possible or rather
-easier:
+World extend data:
 
 <div class="code"><pre>
-g.region res=90 -ap
-g.region save=panhandle-90ft
-
-r.in.wms -o output=elevation_feet mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-         layers=us_ned styles=feet_real region=panhandle-90ft
+r.in.wms2 mapserver=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsat_1_01 styles=default,default output=landsat srs=4326 format=png 
 </pre></div>
-
-Downloads real number feet elevation from OnEarth to cover the current
-region. Uses <b>-o</b> for opaque to get smaller download. Using a named
-region lets us resume later easily.
+* Server supports only WMS 1.1.1 <br>
 
 <div class="code"><pre>
-r.in.wms -d output=elevation_feet mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-         layers=us_ned styles=feet_real -o region=panhandle-90ft method=cubic
+r.in.wms2 mapserver=http://132.156.97.59/cgi-bin/worldmin_en-ca_ows layers=GSC:WORLD_PrecambrianDomains output=pokus srs=4326 format=jpeg 
 </pre></div>
+* Server supports only WMS 1.1.1 
+<br>
+<br>
 
-Use flag <b>-d</b> to skip ahead to downloading. This could be used to try
-downloading again (if some files failed last time) or to import the data
-differently. Since downloaded files are remembered those already received
-successfully are not re-requested. In this case we are reimporting the
-data using the cubic interpolation method instead of nearest neighbor.
-
-<h3>LANDSAT from OnEarth server download</h3>
-
-Set the resolution to 30 meters for LANDSAT:
-<div class="code"><pre>
-g.region res=30 -ap
-r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-         output=wms_global_mosaic
-</pre></div>
-Downloads LANDSAT color scene.
-
-
-<h3>DRG from Terraserver server download</h3>
-
-Set the resolution to 1.2 meters for DRGs. Their native resolution is
-2.4 meters, so this is some pretty hefty oversampling:
+Data in extend of Czech Republic:
 
 <div class="code"><pre>
-g.region res=1.2 -ap
-g.region save=drg-resolution
-
-r.in.wms output=terraserver-drg mapserver=http://terraserver.microsoft.com/ogcmap6.ashx \
-         layers=DRG region=drg-resolution format=jpeg srs=EPSG:26910
+r.in.wms2 output=kn mapserver=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-linie srs=4326 format=png
 </pre></div>
 
-Downloads digital raster graphics from Microsoft TerraServer. Note that
-srs will need to be changed to a projection that is appropriate for your
-region.
 
 <h2>TODO</h2>
 
 <ul>
-  <li>Use optionally <a href="http://gdal.osgeo.org/frmt_wms.html">GDAL WMS driver</a></li>
+  <li>Implement Tiled WMS</li>
 </ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.tileset.html">r.tileset</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.patch.html">r.patch</a>,
-<a href="r.colors.html">r.colors</a>,
-<a href="r.composite.html">r.composite</a><br><br>
-<a href="v.in.wfs.html">v.in.wfs</a>
+  <a href="r.in.gdal.html">r.in.gdal</a>,
+  <a href="r.patch.html">r.patch</a>,
+  <a href="r.colors.html">r.colors</a>,
+  <a href="r.composite.html">r.composite</a>,
+  <a href="v.in.wfs.html">v.in.wfs</a>
 </em>
 
 <h2>AUTHORS</h2>
 
-Soeren Gebbert, Jachym Cepicky, and Cedric Shock<br>
-Updated for GRASS 7 by Martin Landa, CTU in Prague, Czech Republic (05/2009)
+Stepan Turek, Czech Technical University in Prague, Czech Republic (bachelor's final project 2012, mentor: Martin Landa) 
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

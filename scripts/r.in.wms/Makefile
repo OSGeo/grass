@@ -1,16 +1,18 @@
 MODULE_TOPDIR = ../..
 
-PGM=r.in.wms
+PGM = r.in.wms
+
+MODULES = wms_base wms_drv wms_gdal_drv
+PYFILES := $(patsubst %,$(ETC)/%.py,$(MODULES))
+PYCFILES := $(patsubst %,$(ETC)/%.pyc,$(MODULES))
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
+include $(MODULE_TOPDIR)/include/Make/Python.make
 
-SRCFILES = wms_parse.py wms_request.py wms_download.py gdalwarp.py r.in.gdalwarp.py wms_gdal.py
-DSTFILES := $(patsubst %,$(ETC)/r.in.wms/%,$(SRCFILES))
+default: script $(PYFILES) $(PYCFILES)
 
-default: script $(DSTFILES)
-
-$(ETC)/r.in.wms/%: % | $(ETC)/r.in.wms
-	$(INSTALL) $< $@
-
-$(ETC)/r.in.wms:
+$(ETCDIR):
 	$(MKDIR) $@
+
+$(ETC)/%: % | $(ETC)
+	$(INSTALL_DATA) $< $@
