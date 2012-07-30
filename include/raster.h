@@ -147,24 +147,40 @@ struct Categories
     /* label, and quant rules are never reordered. Olga apr,95 */
 };
 
+/*! \brief Raster history info (metadata)
+
+  See History structure for implementation issues.
+*/
 enum History_field
 {
+    /*! \brief Raster name */
     HIST_MAPID,
+    /*! \brief Raster title */
     HIST_TITLE,
+    /*! \brief Raster mapset */
     HIST_MAPSET,
+    /*! \brief User who creater raster map */
     HIST_CREATOR,
+    /*! \brief Map type (always "raster") */
     HIST_MAPTYPE,
+    /*! \brief Description of original data source (two lines) */
     HIST_DATSRC_1,
     HIST_DATSRC_2,
+    /*! \brief One-line data description */
     HIST_KEYWRD,
 
+    /*! \brief Number of fields to be defined in History structure */
     HIST_NUM_FIELDS,
 };
 
+/*! \brief Raster history info (metadata) */
 struct History
 {
+    /*! \brief Array of fields (see \ref History_field for details) */
     char *fields[HIST_NUM_FIELDS];
+    /*! \brief Number of lines in lines array */
     int nlines;
+    /*! \brief Lines array */
     char **lines;
 };
 
