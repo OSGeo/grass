@@ -294,13 +294,10 @@ GIS_Library_Data_Structures.
  - Rast_get_cellhd()
 
 The raster header for the raster file in the specified mapset is read
-into the <em>cellhd</em> structure. If there is an error reading the
-raster header file, a diagnostic message is printed and -1 is
-returned. Otherwise, 0 is returned.
+into the Cell_head structure.
 
-<b>Note:</b> If the raster file is a reclass file, the raster header
-for the referenced raster file is read instead. See \ref Reclass_Format
-for information about reclass files, and Rast_is_reclass()
+<b>Note:</b> If the raster file is a reclassified, the raster header
+for the referenced raster file is read instead. See Rast_is_reclass()
 for distinguishing reclass files from regular raster files.
 
 <b>Note:</b> It is not necessary to get the raster header for a map
@@ -319,9 +316,7 @@ region). It also makes projection-specific adjustments.
  - Rast_put_cellhd()
 
 This routine writes the information from the Cell_head structure to
-the raster header file for the map layer in the current mapset. If
-there was an error creating the raster header, -1 is returned. No
-diagnostic is printed. Otherwise, 1 is returned to indicate success.
+the raster header file for the map layer in the current mapset.
 
 <b>Note:</b> Programmers should have no reason to use this routine. It
 is used by Rast_close() to give new raster files correct header
@@ -640,10 +635,9 @@ from the, histogram information.
 
 The history file contains documentary information about the raster
 file: who created it, when it was created, what was the original data
-source, what information is contained in the raster file, etc. This
-file is discussed in \ref Raster_History_File_Format.
+source, what information is contained in the raster file, etc.
 
-The following routines manage this file. They use the <em>History</em>
+The following routines manage this file. They use the History
 structure which is described in \ref GIS_Library_Data_Structures.
 
 <b>Note:</b> This structure has existed relatively unmodified since
@@ -653,30 +647,24 @@ the routines or the data structure which support the history file.
 
  - Rast_read_history()
 
-Read raster history file. This routine reads the history file for the
-raster map into the <em>history</em> structure. A diagnostic message
-is printed and -1 is returned if there is an error reading the history
-file. Otherwise, 0 is returned.
+Reads raster history file. This routine reads the history file for the
+raster map into the History structure.
 
  - Rast_write_history()
 
-Write raster history file. This routine writes the history file for
-the raster map in the current mapset from the <em>history</em>
-structure. A diagnostic message is printed and -1 is returned if there
-is an error writing the history file. Otherwise, 0 is returned.
+Writes raster history file. This routine writes the history file for
+the raster map in the current mapset from the History structure.
 
-<b>Note:</b> The <em>history</em> structure should first be
+<b>Note:</b> The History structure should first be
 initialized using Rast_short_history().
 
  - Rast_short_history()
 
-Initialize history structureThis routine initializes the
-<em>history</em> structure, recording the date, user, module name and
-the raster map.
+This routine initializes History structure, recording the date, user,
+module name and the raster map.
 
 <b>Note:</b> This routine only initializes the data structure. It does
 not write the history file.
-
 
 \section Raster_Range_File Raster Range File
 

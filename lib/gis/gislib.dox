@@ -2203,28 +2203,11 @@ to store and retrieve color information using this structure.
 
 \subsection struct_History struct History
 
-The <i>History</i> structure is used to document raster files. The 
-information contained here is for the user. It is not used in any 
-operational way by GRASS. The structure is:
+The History structure is used to document raster files. The
+information contained here is for the user. It is not used in any
+operational way by GRASS. 
 
-\code
-# define MAXEDLINES 50
-# define RECORD_LEN 80
-
-struct History
-{
- char mapid[RECORD_LEN];
- char title[RECORD_LEN];
- char mapset[RECORD_LEN];
- char creator[RECORD_LEN];
- char maptype[RECORD_LEN];
- char datsrc_1[RECORD_LEN];
- char datsrc_2[RECORD_LEN];
- char keywrd[RECORD_LEN];
- int edlinecnt;
- char edhist[MAXEDLINES][RECORD_LEN];
-};
-\endcode
+See documentation of History structure for details.
 
 The <i>mapid</i> and <i>mapset</i> are the raster file name and
 mapset, <i>title</i> is the raster file title, <i>creator</i> is the
