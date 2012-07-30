@@ -269,7 +269,7 @@ def vector_db_select(map, layer = 1, **kwargs):
              'values' : values }
 
 # interface to v.what
-def vector_what(map, coord, distance = 0.0):
+def vector_what(map, coord, distance = 0.0, ttype = None):
     """!Query vector map at given locations
     
     To query one vector map at one location
@@ -306,6 +306,7 @@ def vector_what(map, coord, distance = 0.0):
     @param map vector map(s) to query given as string or list/tuple
     @param coord coordinates of query given as tuple (easting, northing) or list of tuples
     @param distance query threshold distance (in map units)
+    @param ttype list of topology types (default of v.what are point, line, area, face)
 
     @return parsed list
     """
@@ -327,13 +328,17 @@ def vector_what(map, coord, distance = 0.0):
         for e, n in coord:
             coord_list.append('%f,%f' % (e, n))
     
+    cmdParams = dict(quiet      = True,
+                     flags      = 'ag',
+                     map        = ','.join(map_list),
+                     layer      = ','.join(layer_list),
+                     coordinates = ','.join(coord_list),
+                     distance   = float(distance))
+    if ttype:
+        cmdParams['type'] = ','.join(ttype)
+
     ret = read_command('v.what',
-                       quiet      = True,
-                       flags      = 'ag',
-                       map        = ','.join(map_list),
-                       layer      = ','.join(layer_list),
-                       coordinates = ','.join(coord_list),
-                       distance   = float(distance))
+                       **cmdParams)
     
     if "LC_ALL" in os.environ:
         os.environ["LC_ALL"] = locale
