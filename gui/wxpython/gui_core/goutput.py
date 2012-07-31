@@ -62,20 +62,34 @@ def GrassCmd(cmd, env = None, stdout = None, stderr = None):
 class CmdThread(threading.Thread):
     """!Thread for GRASS commands"""
     requestId = 0
-    def __init__(self, parent, requestQ, resultQ, **kwds):
+    def __init__(self, parent, requestQ = None, resultQ = None, **kwds):
         threading.Thread.__init__(self, **kwds)
-
+        
+        if requestQ is None:
+            self.requestQ = Queue.Queue()
+        else:
+            self.requestQ = requestQ
+        
+        if resultQ is None:
+            self.resultQ = Queue.Queue()
+        else:
+            self.resultQ = resultQ
+        
         self.setDaemon(True)
-
+        
         self.parent = parent # GMConsole
         self._want_abort_all = False
-        
-        self.requestQ = requestQ
-        self.resultQ = resultQ
         
         self.start()
 
     def RunCmd(self, *args, **kwds):
+        """!Run command in queue
+
+        @param args unnamed command arguments
+        @param kwds named command arguments
+
+        @return request id in queue
+        """
         CmdThread.requestId += 1
         
         self.requestCmd = None
