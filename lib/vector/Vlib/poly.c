@@ -97,18 +97,15 @@ static int comp_double(double *i, double *j)
     if (*i < *j)
 	return -1;
 
-    if (*i > *j)
-	return 1;
-
-    return 0;
+    return (*i > *j);
 }
 
 static int V__within(double a, double x, double b)
 {
     if (a < b)
 	return (x >= a && x <= b);
-    else
-	return (x >= b && x <= a);
+
+    return (x >= b && x <= a);
 }
 
 /*
@@ -668,10 +665,9 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
     if (n_intersects == -1)
 	return 2;
 
-    if (n_intersects % 2)
-	return 1;
-    else
-	return 0;
+    /* odd number of intersections: inside, return 1 
+     * even number of intersections: outside, return 0 */
+    return (n_intersects & 1);
 }
 
 /*!
@@ -743,10 +739,9 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 	G_debug(3, "  n_intersects = %d", n_intersects);
     }
 
-    if (n_intersects % 2)
-	return 1;
-    else
-	return 0;
+    /* odd number of intersections: inside, return 1 
+     * even number of intersections: outside, return 0 */
+    return (n_intersects & 1);
 }
 
 /*!
@@ -810,8 +805,7 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
 	n_intersects += inter;
     }
 
-    if (n_intersects % 2)
-	return 1;
-    else
-	return 0;
+    /* odd number of intersections: inside, return 1 
+     * even number of intersections: outside, return 0 */
+    return (n_intersects & 1);
 }
