@@ -75,7 +75,7 @@ int RTreeValidChildF(union RTree_Child *);
 /* node.c */
 void RTreeNodeCover(struct RTree_Node *, struct RTree_Rect *, struct RTree *);
 int RTreeAddBranch(struct RTree_Branch *, struct RTree_Node *, struct RTree_Node **, 
-            struct RTree_ListBranch **, struct RTree_Rect *, int *, struct RTree *);
+            struct RTree_ListBranch **, struct RTree_Rect *, char *, struct RTree *);
 int RTreePickBranch(struct RTree_Rect *, struct RTree_Node *, struct RTree *);
 void RTreeDisconnectBranch(struct RTree_Node *, int, struct RTree *);
 void RTreePrintNode(struct RTree_Node *, int, struct RTree *);
@@ -97,7 +97,7 @@ void RTreePrintRect(struct RTree_Rect *, int, struct RTree *);
 /*-----------------------------------------------------------------------------
 | Copy second rectangle to first rectangle.
 -----------------------------------------------------------------------------*/
-#define RTreeCopyRect(r1, r2, t) memcpy((r1)->boundary, (r2)->boundary, (t)->nsides_alloc * sizeof(RectReal))
+#define RTreeCopyRect(r1, r2, t) memcpy((r1)->boundary, (r2)->boundary, (t)->rectsize)
 
 
 /* split.c */

@@ -312,13 +312,10 @@ static void RTreeSwapBranches(struct RTree_Branch *a, struct RTree_Branch *b, st
 ----------------------------------------------------------------------*/
 static int RTreeCompareBranches(struct RTree_Branch *a, struct RTree_Branch *b, int side)
 {
-    if (a->rect.boundary[side] > b->rect.boundary[side])
-	return 1;
-    else if (a->rect.boundary[side] < b->rect.boundary[side])
+    if (a->rect.boundary[side] < b->rect.boundary[side])
 	return -1;
 
-    /* boundaries are equal */
-    return 0;
+    return (a->rect.boundary[side] > b->rect.boundary[side]);
 }
 
 /*----------------------------------------------------------------------
@@ -342,7 +339,7 @@ static int RTreeBranchBufIsSorted(int first, int last, int side, struct RTree *t
 ----------------------------------------------------------------------*/
 static int RTreePartitionBranchBuf(int first, int last, int side, struct RTree *t)
 {
-    int pivot, mid = (first + last) / 2;
+    int pivot, mid = ((first + last) >> 1);
     int larger, smaller;
 
     if (last - first == 1) {	/* only two items in list */
@@ -354,25 +351,21 @@ static int RTreePartitionBranchBuf(int first, int last, int side, struct RTree *
     }
 
     /* larger of two */
+    larger = pivot = mid;
+    smaller = first;
     if (RTreeCompareBranches(&(t->BranchBuf[first]), &(t->BranchBuf[mid]), side)
 	== 1) {
 	larger = pivot = first;
 	smaller = mid;
     }
-    else {
-	larger = pivot = mid;
-	smaller = first;
-    }
 
     if (RTreeCompareBranches(&(t->BranchBuf[larger]), &(t->BranchBuf[last]), side)
 	== 1) {
 	/* larger is largest, get the larger of smaller and last */
+	pivot = last;
 	if (RTreeCompareBranches
 	    (&(t->BranchBuf[smaller]), &(t->BranchBuf[last]), side) == 1) {
 	    pivot = smaller;
-	}
-	else {
-	    pivot = last;
 	}
     }
 
@@ -488,8 +481,9 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
 	smallest_overlap = DBL_MAX;
 	smallest_vol = DBL_MAX;
 
-	/* first lower then upper bounds for each axis */
-	for (s = 0; s < 2; s++) {
+	/* first upper then lower bounds for each axis */
+	s = 1;
+	do {
 	    RTreeQuicksortBranchBuf(i + s * t->ndims_alloc, t);
 
 	    side = s;
@@ -578,7 +572,7 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
 		    }
 		}
 	    }    /* end of distribution check */
-	}    /* end of side check */
+	} while (s--);   /* end of side check */
     }    /* end of axis check */
 
     /* Use best distribution to classify branches */

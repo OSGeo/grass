@@ -18,6 +18,7 @@
 #ifndef _R_TREE_H_
 #define _R_TREE_H_
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -123,13 +124,14 @@ struct RTree_PartitionVars {
 struct RTree
 {
     /* RTree setup info */
-    int fd;                 	  /* file descriptor */
-    unsigned char ndims;    	  /* number of dimensions */
-    unsigned char nsides;   	  /* number of sides = 2 * ndims */
-    unsigned char ndims_alloc;    	  /* number of dimensions allocated */
+    int fd;                       /* file descriptor */
+    unsigned char ndims;          /* number of dimensions */
+    unsigned char nsides;         /* number of sides = 2 * ndims */
+    unsigned char ndims_alloc;    /* number of dimensions allocated */
     unsigned char nsides_alloc;   /* number of sides allocated = 2 * ndims allocated */
-    int nodesize;           	  /* node size in bytes */
-    int branchsize;         	  /* branch size in bytes */
+    int nodesize;                 /* node size in bytes */
+    int branchsize;               /* branch size in bytes */
+    int rectsize;                 /* rectangle size in bytes */
 
     /* RTree info, useful to calculate space requirements */
     int n_nodes;            /* number of nodes */
