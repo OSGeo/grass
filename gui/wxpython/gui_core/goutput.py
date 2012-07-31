@@ -344,6 +344,8 @@ class GMConsole(wx.SplitterWindow):
         outputSizer.Fit(self)
         outputSizer.SetSizeHints(self)
         self.panelOutput.SetSizer(outputSizer)
+        # eliminate gtk_widget_size_allocate() warnings
+        outputSizer.SetVirtualSizeHints(self.panelOutput)
         
         if self.cmdPrompt.IsShown():
             promptSizer.Fit(self)
