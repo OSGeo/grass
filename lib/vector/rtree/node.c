@@ -338,7 +338,7 @@ static int RTreeDistIsSorted(struct dist *d, int first, int last)
  */
 static int RTreePartitionDist(struct dist *d, int first, int last)
 {
-    int pivot, mid = (first + last) / 2;
+    int pivot, mid = ((first + last) >> 1);
     int larger, smaller;
 
     if (last - first == 1) {	/* only two items in list */
@@ -349,22 +349,18 @@ static int RTreePartitionDist(struct dist *d, int first, int last)
     }
 
     /* Larger of two */
+    larger = pivot = mid;
+    smaller = first;
     if (d[first].distance > d[mid].distance) {
 	larger = pivot = first;
 	smaller = mid;
     }
-    else {
-	larger = pivot = mid;
-	smaller = first;
-    }
 
     if (d[larger].distance > d[last].distance) {
 	/* larger is largest, get the larger of smaller and last */
+	pivot = last;
 	if (d[smaller].distance > d[last].distance) {
 	    pivot = smaller;
-	}
-	else {
-	    pivot = last;
 	}
     }
 
@@ -539,7 +535,7 @@ static void RTreeRemoveBranches(struct RTree_Node *n, struct RTree_Branch *b,
  */
 int RTreeAddBranch(struct RTree_Branch *b, struct RTree_Node *n,
 		   struct RTree_Node **newnode, struct RTree_ListBranch **ee,
-		   struct RTree_Rect *cover, int *overflow, struct RTree *t)
+		   struct RTree_Rect *cover, char *overflow, struct RTree *t)
 {
     int i, maxkids;
 

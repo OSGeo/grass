@@ -56,13 +56,13 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
     new_rtree->free_nodes.alloc = 0;
     new_rtree->free_nodes.pos = NULL;
 
+    new_rtree->rectsize = new_rtree->nsides_alloc * sizeof(RectReal);
     new_rtree->nodesize = sizeof(struct RTree_Node) -
                           MAXCARD * sizeof(RectReal *) +
-			  MAXCARD * new_rtree->nsides_alloc * sizeof(RectReal);
+			  MAXCARD * new_rtree->rectsize;
 
     new_rtree->branchsize = sizeof(struct RTree_Branch) -
-                            sizeof(RectReal *) +
-			    new_rtree->nsides_alloc * sizeof(RectReal);
+                            sizeof(RectReal *) + new_rtree->rectsize;
     
     /* create empty root node */
     n = RTreeNewNode(new_rtree, 0);

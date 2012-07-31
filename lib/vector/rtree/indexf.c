@@ -40,7 +40,7 @@ int RTreeSearchF(struct RTree *t, struct RTree_Rect *r,
 		 SearchHitCallback *shcb, void *cbarg)
 {
     struct RTree_Node *n;
-    int hitCount = 0, found, currlevel;
+    int hitCount = 0, notfound, currlevel;
     int i;
     int top = 0;
     struct fstack *s = t->fs;
@@ -57,7 +57,7 @@ int RTreeSearchF(struct RTree *t, struct RTree_Rect *r,
     while (top >= 0) {
 	if (s[top].sn.level > 0) {		/* this is an internal node in the tree */
 	    n = &(s[top].sn);
-	    found = 1;
+	    notfound = 1;
 	    currlevel = s[top].sn.level - 1;
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		if (s[top].sn.branch[i].child.pos > -1 &&
@@ -67,11 +67,11 @@ int RTreeSearchF(struct RTree *t, struct RTree_Rect *r,
 		    s[top].pos = n->branch[i].child.pos;
 		    RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
 		    s[top].branch_id = 0;
-		    found = 0;
+		    notfound = 0;
 		    break;
 		}
 	    }
-	    if (found) {
+	    if (notfound) {
 		/* nothing else found, go back up */
 		s[top].branch_id = t->nodecard;
 		top--;
@@ -110,7 +110,7 @@ int RTreeSearchF(struct RTree *t, struct RTree_Rect *r,
 static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int level, 
 			     struct RTree_Node *newnode, off_t *newnode_pos,
 			     struct RTree *t,
-			     struct RTree_ListBranch **ee, int *overflow)
+			     struct RTree_ListBranch **ee, char *overflow)
 {
     int i, currlevel;
     struct RTree_Rect *cover;
@@ -152,30 +152,22 @@ static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int 
     }
     
     /* Have reached level for insertion. Add rect, split if necessary */
-    if (s[top].sn.level == level) {
-	RTreeCopyRect(&(b->rect), r, t);
-	/* child field of leaves contains tid of data record */
-	b->child = child;
-	/* add branch, may split node or remove branches */
-	if (top)
-	    cover = &(s[top - 1].sn.branch[s[top - 1].branch_id].rect);
-	else 
-	    cover = NULL;
-	result = RTreeAddBranch(b, &(s[top].sn), &n2, ee, cover, overflow, t);
-	/* write out new node if node was split */
-	if (result == 1) {
-	    *newnode_pos = RTreeGetNodePos(t);
-	    RTreeWriteNode(n2, t);
-	    t->n_nodes++;
-	}
-	/* update node */
-	RTreePutNode(&(s[top].sn), s[top].pos, t);
+    RTreeCopyRect(&(b->rect), r, t);
+    /* child field of leaves contains tid of data record */
+    b->child = child;
+    /* add branch, may split node or remove branches */
+    cover = NULL;
+    if (top)
+	cover = &(s[top - 1].sn.branch[s[top - 1].branch_id].rect);
+    result = RTreeAddBranch(b, &(s[top].sn), &n2, ee, cover, overflow, t);
+    /* write out new node if node was split */
+    if (result == 1) {
+	*newnode_pos = RTreeGetNodePos(t);
+	RTreeWriteNode(n2, t);
+	t->n_nodes++;
     }
-    else {
-	/* Not supposed to happen */
-	assert(s[top].sn.level == level);
-	return 0;
-    }
+    /* update node */
+    RTreePutNode(&(s[top].sn), s[top].pos, t);
     
     /* go back up */
     while (top) {
@@ -204,10 +196,9 @@ static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int 
 	    RTreeNodeCover(n2, &(b->rect), t);
 	    
 	    /* add branch, may split node or remove branches */
+	    cover = NULL;
 	    if (top)
 		cover = &(s[top - 1].sn.branch[s[top - 1].branch_id].rect);
-	    else
-		cover = NULL;
 	    result = RTreeAddBranch(b, &(s[top].sn), &n2, ee, cover, overflow, t);
 	    
 	    /* write out new node if node was split */
@@ -239,8 +230,8 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
                      struct RTree *t)
 {
     struct RTree_ListBranch *e, *reInsertList = NULL;
-    int result;
-    int i, overflow[MAXLEVEL];
+    int i, result;
+    char overflow[MAXLEVEL];
     off_t newnode_pos = -1;
 
     static struct RTree_Node oldroot, newroot, newnode;
@@ -257,8 +248,7 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
     }
 
     /* R*-tree forced reinsertion: for each level only once */
-    for (i = 0; i < MAXLEVEL; i++)
-	overflow[i] = 1;
+    memset(overflow, 1, MAXLEVEL);
 
     result =
 	RTreeInsertRect2F(r, child, level, &newnode, &newnode_pos, t,
@@ -282,8 +272,11 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
 	t->rootpos = RTreeGetNodePos(t);
 	RTreeWriteNode(&newroot, t);
 	t->n_nodes++;
-    }    
-    else if (result == 2) {	/* branches were removed */
+	
+	return result;
+    }
+
+    if (result == 2) {	/* branches were removed */
 	while (reInsertList) {
 	    /* get next branch in list */
 	    RTreeCopyBranch(b, &(reInsertList->b), t);
@@ -353,7 +346,7 @@ RTreeDeleteRect2F(struct RTree_Rect *r, union RTree_Child child, struct RTree *t
     RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
     s[top].branch_id = 0;
 
-    while (notfound) {
+    while (notfound && top >= 0) {
 	/* go down to level 0, remember path */
 	if (s[top].sn.level > 0) {
 	    n = &(s[top].sn);
@@ -497,8 +490,7 @@ int RTreeDeleteRectF(struct RTree_Rect *r, union RTree_Child child, struct RTree
 	}
 	return 0;
     }
-    else {
-	return 1;
-    }
+
+    return 1;
 }
 
