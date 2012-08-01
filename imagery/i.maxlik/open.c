@@ -25,10 +25,10 @@ int open_files(void)
     if (Ref.nfiles <= 1) {
 	if (Ref.nfiles <= 0)
 	    G_fatal_error(_("Subgroup <%s> of group <%s> doesn't have any raster maps. "
-			    "The subgroup must have at least 2 raster maps."));
+			    "The subgroup must have at least 2 raster maps."), subgroup, group);
 	else
 	    G_fatal_error(_("Subgroup <%s> of group <%s> only has 1 raster map. "
-			    "The subgroup must have at least 2 raster maps."));
+			    "The subgroup must have at least 2 raster maps."), subgroup, group);
     }
 
     cell = (DCELL **) G_malloc(Ref.nfiles * sizeof(DCELL *));
