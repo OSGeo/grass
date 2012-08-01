@@ -321,6 +321,10 @@ class MapFrameBase(wx.Frame):
             toolbar.OnTool(event)
             toolbar.action['desc'] = ''
             
+    def OnPointer(self, event):
+        """!Sets mouse mode to pointer."""
+        self.MapWindow.mouse['use'] = 'pointer'
+
     def OnPan(self, event):
         """!Panning, set mouse to drag
         """
