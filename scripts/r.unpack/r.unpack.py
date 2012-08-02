@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ############################################################################
 #
-# MODULE:	r.pack
+# MODULE:	r.unpack
 # AUTHOR(S):	Hamish Bowman, Otago University, New Zealand
 #               Converted to Python by Martin Landa <landa.martin gmail.com>
 # PURPOSE:	Unpack up a raster map packed with r.pack
@@ -61,7 +61,7 @@ def main():
     input_base = os.path.basename(infile)
     shutil.copyfile(infile, os.path.join(tmp_dir, input_base))
     os.chdir(tmp_dir)
-    tar = tarfile.TarFile.open(name = input_base, mode = 'r:gz')
+    tar = tarfile.TarFile.open(name = input_base, mode = 'r')
     try:
         data_name = tar.getnames()[0]
     except:
@@ -83,7 +83,8 @@ def main():
     os.chdir(data_name)
     
     # check projection compatibility in a rather crappy way
-    if not filecmp.cmp('PROJ_INFO', os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')):
+    if not grass.compare_key_value_text_files('PROJ_INFO', os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')) or\
+       not grass.compare_key_value_text_files('PROJ_UNITS', os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')):
         if flags['o']:
             grass.warning(_("Projection information does not match. Proceeding..."))
         else:
