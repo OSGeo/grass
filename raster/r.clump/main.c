@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     opt_title->key = "title";
     opt_title->type = TYPE_STRING;
     opt_title->required = NO;
-    opt_title->description = _("Title");
+    opt_title->description = _("Title for output raster map");
 
     /* parse options */
     if (G_parser(argc, argv))
