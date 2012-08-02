@@ -550,6 +550,117 @@ def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
     
     return result
 
+def _text_to_key_value_dict(filename, sep=":", val_sep=","):
+    """
+        !Convert a key-value text file, where entries are separated
+        by newlines and the key and value are separated by `sep', 
+        into a key-value dictionary and discover/use the correct 
+        data types (float, int or string) for values.
+        
+        @param filename The name or name and path of the text file to convert
+        @param sep The character that separates the keys and values, default is ":"
+        @param val_sep The character that separates the values of a single key, default is ","
+        @return The dictionary 
+        
+        A text file with this content:
+        \code
+        a: Hello
+        b: 1.0
+        c: 1,2,3,4,5
+        d : hello,8,0.1
+        \endcode
+        
+        Will be represented as this dictionary:
+        \code
+        {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
+        \endcode
+        
+    """
+    text = open(filename, "r").readlines()
+    kvdict = KeyValue()
+    
+    for line in text:
+        key, value = line.split(sep)
+        key = key.strip()
+        value = value.strip()
+        
+        values = value.split(val_sep)
+        value_list = []
+        
+        for value in values:
+            not_float = False
+            not_int = False
+            
+            # Convert values into correct types
+            # We first try integer then float
+            try:
+                value_converted = int(value)
+            except:
+                not_int = True
+            if not_int:
+                try:
+                    value_converted = float(value)
+                except:
+                    not_float = True
+                
+            if not_int and not_float:
+                value_converted = value.strip()
+            
+            value_list.append(value_converted)
+            
+        kvdict[key] = value_list
+    return kvdict
+
+def compare_key_value_text_files(filename_a, filename_b, sep=":", val_sep=",", precision=0.000001):
+    """
+        !Compare two key-value text files that may contain projection parameter
+        
+        @param filename_a The name of the first key-value text file 
+        @param filenmae_b The name of the second key-value text file
+        @param sep The character that separates the keys and values, default is ":"
+        @param val_sep The character that separates the values of a single key, default is ","
+        @param precision The precision with which the floating point values are compares
+           if abs(a - b) > precision : return False
+        @return True if full or almost identical, False if different
+           
+        This method will print a warning in case keys that are present in the first file
+        are not present in the second one.
+        The comparison method tries to convert the values into there native format (float, int or string)
+        to allow correct comparison.
+        
+        An example key-value text file may have this content:
+        \code
+        a: Hello
+        b: 1.0
+        c: 1,2,3,4,5
+        d : hello,8,0.1
+        \endcode
+    """
+    dict_a = _text_to_key_value_dict(filename_a, sep)
+    dict_b = _text_to_key_value_dict(filename_b, sep)
+    
+    missing_keys = 0
+    
+    # We compare matching keys
+    for key in dict_a.keys():
+        if dict_b.has_key(key):
+            # Floating point values must be handled separately
+            if isinstance(dict_a[key], float) and isinstance(dict_b[key], float):
+                if abs(dict_a[key] - dict_b[key]) > precision:
+                    return False
+            elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
+                return False
+            else:
+                if dict_a[key] != dict_b[key]:
+                    return False
+        else:
+            missing_keys += 1
+    if missing_keys == len(dict_a):
+        return False
+    if missing_keys > 0:
+        grass.warning(_("Several keys (%i out of %i) are missing in the target file")%(missing_keys, len(dict_a)))
+    return True
+    
 # interface to g.gisenv
 
 def gisenv():
