@@ -26,6 +26,10 @@
 #% description: Name for output file (default is <input>.pack)
 #% required : no
 #%end
+#%flag
+#% key: c
+#% description: Switch the compression off
+#%end
 
 import os
 import sys
@@ -40,17 +44,19 @@ def cleanup():
 
 def main():
     infile = options['input']
+    compression_off = flags['c']
     mapset = None
     if '@' in infile:
         infile, mapset = infile.split('@')
 
     if options['output']:
-        outfile_path, outfile_base = os.path.split(options['output'])
+        outfile_path, outfile_base = os.path.split(os.path.abspath(options['output']))
     else:
-        outfile_path = os.getcwd()
-        outfile_base = infile + '.pack'
+        outfile_path, outfile_base = os.path.split(os.path.abspath(infile + ".pack"))
     
     outfile = os.path.join(outfile_path, outfile_base)
+    
+    print outfile
 
     global tmp
     tmp = grass.tempdir()
@@ -99,7 +105,10 @@ def main():
     
     # pack it all up
     os.chdir(tmp)
-    tar = tarfile.TarFile.open(name = outfile_base, mode = 'w:gz')
+    if compression_off:
+        tar = tarfile.TarFile.open(name = outfile_base, mode = 'w:')
+    else:
+        tar = tarfile.TarFile.open(name = outfile_base, mode = 'w:gz')
     tar.add(infile, recursive = True)
     tar.close()
     try:
