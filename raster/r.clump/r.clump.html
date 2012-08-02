@@ -1,41 +1,45 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.clump</em> finds all areas of contiguous cell category values in the
-input raster map layer <em>name.</em> It assigns a unique category value
-to each such area ("clump") in the resulting output raster map layer
-<em>name.</em> 
+<em>r.clump</em> finds all areas of contiguous cell category values in
+the input raster map. It assigns a unique category value to each such
+area (&quot;clump&quot;) in the resulting output raster map.
 
-Category distinctions in the input raster map layer are preserved.  This
+<p>
+Category distinctions in the input raster map are preserved.  This
 means that if distinct category values are adjacent, they will NOT be
-clumped together.  (The user can run <em><A
-HREF="r.reclass.html">r.reclass</a></em> prior to <em>r.clump</em> to
-recategorize cells and reassign cell category values.)
+clumped together. The user can
+run <em><a href="r.reclass.html">r.reclass</a></em> prior
+to <em>r.clump</em> to recategorize cells and reassign cell category
+values.
 
 <h2>NOTES</h2>
 
-<em>r.clump</em> moves a 2x2 matrix over the input raster map layer. 
-The lower right-hand corner of the matrix is grouped with the cells above it, 
-or to the left of it (diagonal cells are not considered.) 
+<em>r.clump</em> moves a 2x2 matrix over the input raster map. The
+lower right-hand corner of the matrix is grouped with the cells above
+it, or to the left of it (diagonal cells are not considered.)
+
 <p>
-<em>r.clump</em> works properly with raster map layers that
-contain only "fat" areas (more than a single cell in
-width).  Linear elements (lines that are a single cell
-wide) may or may not be clumped together depending on the
-direction of the line - horizontal and vertical lines of
-cells are considered to be contiguous, but diagonal lines
-of cells are not considered to be contiguous and are broken
-up into separate clumps.
+<em>r.clump</em> works properly with raster map that contain only
+&quot;fat&quot; areas (more than a single cell in width). Linear
+elements (lines that are a single cell wide) may or may not be clumped
+together depending on the direction of the line - horizontal and
+vertical lines of cells are considered to be contiguous, but diagonal
+lines of cells are not considered to be contiguous and are broken up
+into separate clumps.
 
-<p> 
-
-A random color table and other support files are
-generated for the <em>output</em> raster map layer.
+<p>
+A random color table and other support files are generated for the
+output raster map.
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="r.buffer.html">r.buffer</a>,
-<a href="r.grow.html">r.grow</a><br>,
+<a href="r.grow.html">r.grow</a>
+</em>
+
+<p>
+</em>
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.mfilter.html">r.mfilter</a>,
 <a href="r.neighbors.html">r.neighbors</a>,
@@ -47,7 +51,8 @@ generated for the <em>output</em> raster map layer.
 
 <h2>AUTHOR</h2>
 
-Michael Shapiro, U.S. Army Construction Engineering 
-Research Laboratory
+Michael Shapiro, U.S. Army Construction Engineering Research
+Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
