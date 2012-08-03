@@ -193,12 +193,13 @@ def import_stds(input, output, extrdir, title = None, descr = None, location = N
 	if not location:
 		temp_name = core.tempfile()
 		temp_file = open(temp_name, "w")
+		proj_name = os.path.abspath(proj_file_name)
 
 		p = core.start_command("g.proj", flags = "j", stdout = temp_file)
 		p.communicate()
 		temp_file.close()
 
-		if not core.compare_key_value_text_files(temp_name, proj_file_name, sep="="):
+		if not core.compare_key_value_text_files(temp_name, proj_name, sep="="):
 			if overr:
 				core.warning(_("Projection information does not match. Proceeding..."))
 			else:
