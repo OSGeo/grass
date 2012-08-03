@@ -76,11 +76,11 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 	else:
 	    id = name
 
-	if type == "rast":
+	if type == "rast" or type == "raster":
 	    sp = dataset_factory("strds", id)
 	elif type == "rast3d":
 	    sp = dataset_factory("str3ds", id)
-	elif type == "vect":
+	elif type == "vect" or type == "vector":
 	    sp = dataset_factory("stvds", id)
 	else:
 	    core.fatal(_("Unkown map type: %s")%(type))
@@ -333,7 +333,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
 def dataset_factory(type, id):
     """!A factory functions to create space time or map datasets
     
-       @param type: the dataset type: rast, rast3d, vect, strds, str3ds, stvds
+       @param type: the dataset type: rast or raster, rast3d, vect or vector, strds, str3ds, stvds
        @param id: The id of the dataset ("name@mapset")
     """
     if type == "strds":
@@ -342,11 +342,11 @@ def dataset_factory(type, id):
         sp = space_time_raster3d_dataset(id)
     elif type == "stvds":
         sp = space_time_vector_dataset(id)
-    elif type == "rast":
+    elif type == "rast" or type == "raster":
         sp = raster_dataset(id)
     elif type == "rast3d":
         sp = raster3d_dataset(id)
-    elif type == "vect":
+    elif type == "vect" or  type == "vector":
         sp = vector_dataset(id)
     else:
         core.error(_("Unknown dataset type: %s") % type)

@@ -14,5 +14,7 @@ from temporal_relationships import *
 from unit_tests import *
 from aggregation import *
 from extract import *
+from stds_export import *
+from stds_import import *
 from mapcalc import *
 from univar_statistics import *
