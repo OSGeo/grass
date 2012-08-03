@@ -42,6 +42,8 @@ def collect_map_names(sp, dbif, start, end, sampling):
     use_overlap = False
     use_contain = False
     use_equal = False
+    use_follows = False
+    use_precedes = False
 
     # Initialize the methods
     if sampling:
@@ -56,6 +58,11 @@ def collect_map_names(sp, dbif, start, end, sampling):
                 use_contain = True
             if name == "equal":
                 use_equal = True
+            if name == "follows":
+                use_follows = True
+            if name == "precedes":
+                use_precedes = True
+
     else:
         use_start = True
 
@@ -65,8 +72,10 @@ def collect_map_names(sp, dbif, start, end, sampling):
         use_overlap = False
         use_contain = False
         use_equal = False
+        use_follows = False
+        use_precedes = False
 
-    where = create_temporal_relation_sql_where_statement(start, end, use_start, use_during, use_overlap, use_contain, use_equal)
+    where = create_temporal_relation_sql_where_statement(start, end, use_start, use_during, use_overlap, use_contain, use_equal, use_follows, use_precedes)
    
     rows = sp.get_registered_maps("id", where, "start_time", dbif)
 

@@ -580,10 +580,13 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
     kvdict = KeyValue()
     
     for line in text:
-        key, value = line.split(sep)
-        key = key.strip()
-        value = value.strip()
-        
+        if line.find(sep) >= 0:
+            key, value = line.split(sep)
+            key = key.strip()
+            value = value.strip()
+        else:
+            # Jump over empty values
+            continue
         values = value.split(val_sep)
         value_list = []
         

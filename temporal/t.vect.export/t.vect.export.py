@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.rast.export
+# MODULE:	t.vect.export
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	Export a space time raster dataset
+# PURPOSE:	Export a space time vector dataset.as GRASS specific archive file
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,16 +15,16 @@
 #############################################################################
 
 #%module
-#% description: Exports space time raster dataset.
+#% description: Export a space time vector dataset.as GRASS specific archive file
 #% keywords: temporal
 #% keywords: export
 #%end
 
-#%option G_OPT_STRDS_INPUT
+#%option G_OPT_STVDS_INPUT
 #%end
 
 #%option G_OPT_F_OUTPUT
-#% description: Name of a space time raster dataset archive
+#% description: Name of a space time vector dataset archive
 #%end
 
 #%option G_OPT_M_DIR
@@ -47,11 +47,11 @@
 #%option
 #% key: format
 #% type: string
-#% description: The export format of a single raster map. Supported are GeoTIFF via r.out.gdal and the GRASS package format of r.pack.
+#% description: The export format of a single raster map. Supported are GML via v.out.ogr and the GRASS package format of v.pack.
 #% required: no
 #% multiple: no
-#% options: GTiff,pack
-#% answer: GTiff
+#% options: GML,pack
+#% answer: GML
 #%end
 
 #%option G_OPT_T_WHERE
@@ -75,7 +75,7 @@ def main():
 	# Make sure the temporal database exists
 	tgis.create_temporal_database()
 	# Export the space time raster dataset
-	tgis.export_stds(_input, output, compression, workdir, where, _format, "strds")
+	tgis.export_stds(_input, output, compression, workdir, where, _format, "stvds")
      
 ############################################################################
 if __name__ == "__main__":

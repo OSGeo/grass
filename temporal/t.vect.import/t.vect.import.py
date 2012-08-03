@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:        t.rast.import
+# MODULE:        t.vect.import
 # AUTHOR(S):     Soeren Gebbert
 #               
-# PURPOSE:        Import a space time raster dataset
+# PURPOSE:        Import a space time vector dataset archive file
 # COPYRIGHT:        (C) 2011 by the GRASS Development Team
 #
 #                This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Imports space time raster dataset.
+#% description: Import a space time vector dataset archive file
 #% keywords: temporal
 #% keywords: import
 #%end
@@ -23,7 +23,7 @@
 #%option G_OPT_F_INPUT
 #%end
 
-#%option G_OPT_STRDS_OUTPUT
+#%option G_OPT_STVDS_OUTPUT
 #%end
 
 #%option G_OPT_M_DIR
@@ -56,11 +56,6 @@
 #%end
 
 #%flag
-#% key: l
-#% description: Link the raster files using r.external
-#%end
-
-#%flag
 #% key: e
 #% description: Extend location extents based on new dataset
 #%end
@@ -72,7 +67,7 @@
 
 #%flag
 #% key: c
-#% description: Create the location specified by the "location" parameter and exit. Do not import the space time raster datasets.
+#% description: Create the location specified by the "location" parameter and exit. Do not import the space time vector datasets.
 #%end
 
 import grass.script as grass
@@ -87,13 +82,12 @@ def main():
 	title = options["title"]
 	descr = options["description"]
 	location = options["location"]
-	link = flags["l"]
 	exp = flags["e"]
 	overr = flags["o"]
 	create = flags["c"]
 	
 	tgis.import_stds(input, output, extrdir, title, descr, location, 
-                link, exp, overr, create, "strds")
+                None, exp, overr, create, "stvds")
 
 if __name__ == "__main__":
     options, flags = grass.parser()

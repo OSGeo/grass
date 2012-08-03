@@ -33,21 +33,15 @@ t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test w
 
 # The first @test
 t.register -i type=rast input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
-t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 workdir=test
 
-# Import the data into a new location
-t.rast.import --o location=new_test_1 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
-              title="A test" description="Description of a test"
-ls -la $GISDBASE/new_test_1/PERMANENT
+t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=GTiff workdir=test
+t.rast.export input=precip_abs1 output=strds_export.tar.gz compression=gzip format=GTiff workdir=test
+t.rast.export input=precip_abs1 output=strds_export.tar compression=no format=GTiff workdir=test
+t.rast.export input=precip_abs1 output=strds_export_pack.tar compression=no format=pack workdir=test
+t.rast.export input=precip_abs1 output=strds_export_pack.tar.gz compression=gzip format=pack workdir=test
+t.rast.export input=precip_abs1 output=strds_export_pack.tar.bz2 compression=bzip2 format=pack workdir=test
 
-t.rast.import --o location=new_test_2 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
-          -l  title="A test" description="Description of a test"
-ls -la $GISDBASE/new_test_2/PERMANENT
-
-t.rast.import --o location=new_test_3 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
-          -c  title="A test" description="Description of a test"
-ls -la $GISDBASE/new_test_3/PERMANENT
-
+# Checking different flags
 t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
           -oe title="A test" description="Description of a test"
 t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
@@ -57,13 +51,31 @@ t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
 t.rast.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
           -l  title="A test" description="Description of a test"
 
+# Import using different compression and formats
+t.rast.import --o input=strds_export.tar.gz output=precip_abs1 extrdir=test\
+              title="A test" description="Description of a test"
+r.info prec_1
+t.rast.import --o input=strds_export.tar output=precip_abs1 extrdir=test\
+              title="A test" description="Description of a test"
+r.info prec_1
+t.rast.import --o input=strds_export_pack.tar output=precip_abs1 extrdir=test\
+              title="A test" description="Description of a test"
+r.info prec_1
+t.rast.import --o input=strds_export_pack.tar.gz output=precip_abs1 extrdir=test\
+              title="A test" description="Description of a test"
+r.info prec_1
+t.rast.import --o input=strds_export_pack.tar.bz2 output=precip_abs1 extrdir=test\
+              title="A test" description="Description of a test"
+r.info prec_1
 
+# Cleaning up
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
 g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 rm -rf test
-rm strds_export.tar.bz2
-# Remove the newly created locations
-rm -rf $GISDBASE/new_test_1
-rm -rf $GISDBASE/new_test_2
-rm -rf $GISDBASE/new_test_3
+#rm strds_export.tar.bz2
+#rm strds_export.tar.gz
+#rm strds_export.tar
+#rm strds_export_pack.tar  
+#rm strds_export_pack.tar.gz
+#rm strds_export_pack.tar.bz2
