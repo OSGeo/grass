@@ -21,9 +21,18 @@ double
 dig_x_intersect(double beg_x,
 		double end_x, double beg_y, double end_y, double Y)
 {
-    double b, a;
+    double b;
+    
+    /* solve simple linear equation to get X = a + b * Y
+     * with
+     * b = (end_x - beg_x) / (end_y - beg_y)
+     * a = beg_x - b * beg_y
+     * 
+     * simplify a + b * Y: 
+     * a + b * Y = beg_x - b * beg_y + b * Y
+     * a + b * Y = beg_x + b * (Y - beg_y) */
 
     b = (end_x - beg_x) / (end_y - beg_y);
-    a = beg_x - b * beg_y;
-    return (a + b * Y);
+
+    return beg_x + b * (Y - beg_y);
 }
