@@ -78,6 +78,8 @@ static void add_cross(int asegment, double adistance, int bsegment,
 		      double bdistance, double x, double y);
 static double dist2(double x1, double y1, double x2, double y2);
 
+static int debug_level = -1;
+
 #if 0
 static int ident(double x1, double y1, double x2, double y2, double thresh);
 #endif
@@ -257,8 +259,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	    *z2 = 0;
 	    if (!switched)
 		return 3;
-	    else
-		return 4;
+
+	    return 4;
 	}
 	/* b contains a */
 	if (ay1 >= by1 && ay2 <= by2) {
@@ -271,8 +273,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	    *z2 = 0;
 	    if (!switched)
 		return 4;
-	    else
-		return 3;
+
+	    return 3;
 	}
 
 	/* general overlap, 2 intersection points */
@@ -383,8 +385,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	*z2 = 0;
 	if (!switched)
 	    return 3;
-	else
-	    return 4;
+
+	return 4;
     }
     /* b contains a */
     if (ax1 >= bx1 && ax2 <= bx2) {
@@ -397,8 +399,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	*z2 = 0;
 	if (!switched)
 	    return 4;
-	else
-	    return 3;
+
+	return 3;
     }
 
     /* general overlap, 2 intersection points (lines are not vertical) */
@@ -612,6 +614,15 @@ Vect_line_intersection(struct line_pnts *APoints,
     int seg1, seg2, vert1, vert2;
     static struct RTree_Rect rect;
     static int rect_init = 0;
+
+    if (debug_level == -1) {
+	const char *dstr = G__getenv("DEBUG");
+
+	if (dstr != NULL)
+	    debug_level = atoi(dstr);
+	else
+	    debug_level = 0;
+    }
 
     if (!rect_init) {
 	rect.boundary = G_malloc(6 * sizeof(RectReal));
@@ -835,13 +846,16 @@ Vect_line_intersection(struct line_pnts *APoints,
 	      cmp_cross);
 
 	/* Print all (raw) breaks */
-	for (i = 0; i < n_cross; i++) {
-	    G_debug(3,
-		    "  cross = %d seg1/dist1 = %d/%f seg2/dist2 = %d/%f x = %f y = %f",
-		    i, cross[i].segment[current],
-		    sqrt(cross[i].distance[current]),
-		    cross[i].segment[second], sqrt(cross[i].distance[second]),
-		    cross[i].x, cross[i].y);
+	    /* avoid loop when not debugging */
+	if (debug_level > 2) {
+	    for (i = 0; i < n_cross; i++) {
+		G_debug(3,
+			"  cross = %d seg1/dist1 = %d/%f seg2/dist2 = %d/%f x = %f y = %f",
+			i, cross[i].segment[current],
+			sqrt(cross[i].distance[current]),
+			cross[i].segment[second], sqrt(cross[i].distance[second]),
+			cross[i].x, cross[i].y);
+	    }
 	}
 
 	/* Remove breaks on first/last line vertices */
