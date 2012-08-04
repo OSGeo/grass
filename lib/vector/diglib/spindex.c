@@ -704,8 +704,8 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
    \return number of selected lines
    \return 0 not found
  */
-int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box,
-		      struct boxlist *list)
+int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box, 
+                     struct boxlist *list)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -838,10 +838,10 @@ int dig_find_area_box(struct Plus_head *Plus, struct boxlist *list)
 	rect_init = 6;
     }
 
-    G_debug(3, "dig_find_line_box()");
+    G_debug(3, "dig_find_area_box()");
 
     if (list->n_values < 1)
-	G_fatal_error(_("Unable to get area bounding box. No feature id given."));
+	G_fatal_error(_("No area id given"));
 
     rect.boundary[0] = list->box[0].W;
     rect.boundary[1] = list->box[0].S;
@@ -920,10 +920,10 @@ int dig_find_isle_box(struct Plus_head *Plus, struct boxlist *list)
 	rect_init = 6;
     }
 
-    G_debug(3, "dig_find_line_box()");
+    G_debug(3, "dig_find_isle_box()");
 
     if (list->n_values < 1)
-	G_fatal_error(_("No line id given"));
+	G_fatal_error(_("No isle id given"));
 
     rect.boundary[0] = list->box[0].W;
     rect.boundary[1] = list->box[0].S;
