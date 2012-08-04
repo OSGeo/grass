@@ -220,7 +220,8 @@ struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
     int i, j, np;
     int group, t;
     int looped;
-    double EPSILON = 0.00000001;
+    /* double EPSILON = 0.00000001; */
+    double EPSILON = GRASS_EPSILON;
     double *x, *y;
     double x1, y1, x2, y2;
     int res;
