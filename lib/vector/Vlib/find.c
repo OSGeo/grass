@@ -307,6 +307,8 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 	if (size_list[1].size < size_list[0].size) {
 	    size_list[0].i = List->id[1];
 	    size_list[1].i = List->id[0];
+	    size_list[0].box = List->box[1];
+	    size_list[1].box = List->box[0];
 	}
     }
     else if (List->n_values > 2)
