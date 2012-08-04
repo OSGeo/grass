@@ -240,12 +240,11 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 		Vect_get_line_nodes(Map, bline, &bnode1, &bnode2);
 		BBox = List->box[j];
 
+		node = 0;
 		if (anode1 == bnode1 || anode1 == bnode2)
 		    node = anode1;
 		else if (anode2 == bnode1 || anode2 == bnode2)
 		    node = anode2;
-		else
-		    node = 0;
 
 		if (node) {
 		    Vect_get_node_coor(Map, node, &nodex, &nodey, NULL);
@@ -399,14 +398,11 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 				}
 			    }
 			}
-			Vect_destroy_line_struct(BXLines[k]);
 		    }
 		    nbreaks += nbxlines - 1;
 		}
-		else {
-		    for (k = 0; k < nbxlines; k++)
-			Vect_destroy_line_struct(BXLines[k]);
-		}
+		for (k = 0; k < nbxlines; k++)
+		    Vect_destroy_line_struct(BXLines[k]);
 	    }
 	    if (BXLines)
 		G_free(BXLines);
