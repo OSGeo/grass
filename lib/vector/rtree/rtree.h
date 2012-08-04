@@ -195,13 +195,15 @@ struct RTree
 };
 
 /* RTree main functions */
-int RTreeSearch(struct RTree *, struct RTree_Rect *, SearchHitCallback *,
-		       void *);
+int RTreeSearch(struct RTree *, struct RTree_Rect *,
+                SearchHitCallback *, void *);
 int RTreeInsertRect(struct RTree_Rect *, int, struct RTree *);
 int RTreeDeleteRect(struct RTree_Rect *, int, struct RTree *);
 struct RTree *RTreeNewIndex(int, off_t, int);
 void RTreeFreeIndex(struct RTree *);
 int RTreeOverlap(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+int RTreeContained(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+int RTreeContains(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 
 /* RTree node management */
 struct RTree_Node *RTreeNewNode(struct RTree *, int);
