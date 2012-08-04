@@ -57,32 +57,26 @@ dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
     if (ret == -1)
 	return -1;
 
+    angle = -9.;
     if (type & GV_LINES) {
 	if (lineid < 0)
 	    angle = dig_calc_end_angle(points, 0);
 	else
 	    angle = dig_calc_begin_angle(points, 0);
     }
-    else {
-	angle = -9.;
-    }
     G_debug(3, "    angle = %f", angle);
 
-    /* make sure the new angle is less than the empty space at end */
-    node->angles[nlines] = 999.;
-
-    for (i = 0; i <= nlines; i++) {	/* alloced for 1 more */
-	if (angle < node->angles[i]) {
-	    /* make room for insertion */
-	    for (j = nlines - 1; j >= i; j--) {
-		node->angles[j + 1] = node->angles[j];
-		node->lines[j + 1] = node->lines[j];
-	    }
-	    node->angles[i] = angle;
-	    node->lines[i] = lineid;
+    i = nlines;
+    while (i > 0) {
+	if (angle > node->angles[i - 1])
 	    break;
-	}
+	node->angles[i] = node->angles[i - 1];
+	node->lines[i] = node->lines[i - 1];
+
+	i--;
     }
+    node->angles[i] = angle;
+    node->lines[i] = lineid;
 
     node->n_lines++;
 
