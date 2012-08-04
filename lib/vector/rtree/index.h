@@ -59,15 +59,15 @@ void RTreeReInsertNode(struct RTree_Node *, struct RTree_ListNode **);
 void RTreeFreeListBranch(struct RTree_ListBranch *);
 
 /* indexm.c */
-int RTreeSearchM(struct RTree *, struct RTree_Rect *, SearchHitCallback *,
-		       void *);
+int RTreeSearchM(struct RTree *, struct RTree_Rect *,
+                 SearchHitCallback *, void *);
 int RTreeInsertRectM(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
 int RTreeDeleteRectM(struct RTree_Rect *, union RTree_Child, struct RTree *);
 int RTreeValidChildM(union RTree_Child *child);
 
 /* indexf.c */
-int RTreeSearchF(struct RTree *, struct RTree_Rect *, SearchHitCallback *,
-		       void *);
+int RTreeSearchF(struct RTree *, struct RTree_Rect *,
+                 SearchHitCallback *, void *);
 int RTreeInsertRectF(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
 int RTreeDeleteRectF(struct RTree_Rect *, union RTree_Child, struct RTree *);
 int RTreeValidChildF(union RTree_Child *);

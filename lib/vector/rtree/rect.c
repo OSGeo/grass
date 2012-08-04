@@ -436,11 +436,11 @@ int RTreeOverlap(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 
 
 /*-----------------------------------------------------------------------------
-| Decide whether rectangle r is contained in rectangle s.
+| Decide whether rectangle s is contained in rectangle r.
 -----------------------------------------------------------------------------*/
 int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
-    register int i, j, result;
+    register int i, j;
 
     /* assert(r && s); */
 
@@ -452,11 +452,38 @@ int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
     if (Undefined(s, t))
 	return FALSE;
 
-    result = TRUE;
     for (i = 0; i < t->ndims; i++) {
 	j = i + t->ndims_alloc;	/* index for high sides */
-	result = result && r->boundary[i] >= s->boundary[i]
-	    && r->boundary[j] <= s->boundary[j];
+	if (s->boundary[i] < r->boundary[i] ||
+	    s->boundary[j] > r->boundary[j])
+	    return FALSE;
     }
-    return result;
+    return TRUE;
+}
+
+
+/*-----------------------------------------------------------------------------
+| Decide whether rectangle s fully contains rectangle r.
+-----------------------------------------------------------------------------*/
+int RTreeContains(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
+{
+    register int i, j;
+
+    /* assert(r && s); */
+
+    /* undefined rect is contained in any other */
+    if (Undefined(r, t))
+	return TRUE;
+
+    /* no rect (except an undefined one) is contained in an undef rect */
+    if (Undefined(s, t))
+	return FALSE;
+
+    for (i = 0; i < t->ndims; i++) {
+	j = i + t->ndims_alloc;	/* index for high sides */
+	if (s->boundary[i] > r->boundary[i] ||
+	    s->boundary[j] < r->boundary[j])
+	    return FALSE;
+    }
+    return TRUE;
 }

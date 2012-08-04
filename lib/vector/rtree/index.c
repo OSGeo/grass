@@ -207,9 +207,15 @@ void RTreeFreeIndex(struct RTree *t)
  * Search in an index tree for all data retangles that
  * overlap or touch the argument rectangle.
  * Return the number of qualifying data rects.
+ * 
+ * add option to select operator to select rectangles ?
+ * current: overlap
+ * possible alternatives: 
+ *  - select all rectangles that are fully contained in r
+ *  - select all rectangles that fully contain r
  */
-int RTreeSearch(struct RTree *t, struct RTree_Rect *r, SearchHitCallback *shcb,
-		void *cbarg)
+int RTreeSearch(struct RTree *t, struct RTree_Rect *r,
+                SearchHitCallback *shcb, void *cbarg)
 {
     assert(r && t);
 
