@@ -1315,8 +1315,8 @@ int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
 
    \return number of qualifying rectangles
  */
-int rtree_search(struct RTree *t, struct RTree_Rect *r, SearchHitCallback shcb,
-		 void *cbarg, struct Plus_head *Plus)
+int rtree_search(struct RTree *t, struct RTree_Rect *r,
+                 SearchHitCallback shcb, void *cbarg, struct Plus_head *Plus)
 {
     int hitCount = 0, found, maxcard;
     int i, j;
