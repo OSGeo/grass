@@ -54,24 +54,10 @@ class Settings:
     def _generateLocale(self):
         """!Generate locales
         """
-        # collect available locales
-        self.locs = list(set(locale.locale_alias.values()))
-        self.locs.append('en_GB.UTF-8')
+        import os
+        
+        self.locs = os.listdir(os.path.join(os.environ['GISBASE'], 'locale'))
         self.locs.sort()
-        
-        try:
-            loc = list(locale.getdefaultlocale())
-        except ValueError, e:
-            sys.stderr.write(_('ERROR: %s\n') % str(e))
-            return 'C'
-        
-        if loc[1] == 'UTF8':
-            loc[1] = 'UTF-8'
-        code_loc = "%s.%s" % (loc[0], loc[1])
-        if code_loc in self.locs:
-            return code_loc
-        
-        return 'C'
         
     def _defaultSettings(self):
         """!Define default settings

@@ -294,15 +294,6 @@ def read_gui():
         warning(_("GUI <%s> not supported in this version") % grass_gui)
         grass_gui = default_gui
     
-def get_locale():
-    global locale
-    locale = None
-    for var in ['LC_ALL', 'LC_MESSAGES', 'LANG', 'LANGUAGE']: 
-        loc = os.getenv(var) 
-        if loc: 
-            locale = loc[0:2] 
-        return 
-
 def path_prepend(dir, var):
     path = os.getenv(var)
     if path:
@@ -647,6 +638,7 @@ def load_gisrc():
     location = os.path.join(gisdbase, location_name, mapset)
 
 def set_env_from_gisrc():
+    import locale
     kv = read_gisrc()
     
     ### addons
@@ -658,8 +650,27 @@ def set_env_from_gisrc():
             os.environ['GRASS_ADDON_PATH'] = addon_path
     
     ### language
-    if kv.get('LANG'):
-        os.environ['LANGUAGE'] = kv.get('LANG')
+    language = kv.get('LANG')
+    if language:
+        language = language.split('.')[0] # Split off ignored .encoding part if present
+        try:
+            locale.setlocale(locale.LC_MESSAGES, language)
+        except:
+            try:
+                # Locale lang.encoding might be missing. Let's try UTF-8 encoding before giving up
+                # as on Linux systems lang.UTF-8 locales are more common than legacy ISO-8859 ones.
+                language = locale.normalize('%s.UTF-8' % language)
+                locale.setlocale(locale.LC_MESSAGES, language)
+            except:
+                # If we got so far, provided locale is not supported on this system
+                # C is safe failback.
+                print "Failed to set LC_MESSAGES to %s. Giving up." % language
+                language = 'C'
+        os.environ['LANGUAGE'] = language
+        os.environ['LC_MESSAGES'] = language
+        # Calling gettext.install twice seems to allow to see also localized startup messages
+        # Black magic ;)
+        gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode = True)
     
 def check_lock():
     global lockfile
@@ -1068,9 +1079,6 @@ read_gui()
 
 # Get environmental variables from gisenv variables
 set_env_from_gisrc()
-
-# Get Locale name
-get_locale()
 
 # Set PATH, PYTHONPATH
 set_paths()
