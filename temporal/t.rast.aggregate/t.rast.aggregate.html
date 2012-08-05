@@ -1,0 +1,90 @@
+<h2>DESCRIPTION</h2>
+
+<em>t.rast.aggregate</em> temporally aggregates space time raster datasets by a specific temporal granularity.
+The granularity can be <em>seconds, minutes, hours, days, weeks, months</em> and <em>years</em>.
+Mixing of granularities is not supported.
+<p>
+This module is sensitive to the current region and mask settings, hence spatial extent and spatial resolution. 
+In case the registered raster maps of the input space time raster dataset
+have different spatial resolutions, the default nearest neighbour resampling method is used for
+runtime spatial aggregation.
+
+<h2>NOTES</h2>
+
+The raster module <em>r.series</em> is used internally. Hence all aggregate
+methods of <em>r.series</em> are supported. See the <a href="r.series.html">r.series</a> manpage
+for details.
+<p>
+This module will shift the start date for each aggregation process depending on the 
+provided temporal granularity. The following shifts will performed:
+
+<ul>
+    <li><em>granularity years</em>: will start at the first of January, hence 14-08-2012 00:01:30 will be shifted to 01-01-2012 00:00:00</li>
+    <li><em>granularity months</em>: will start at the first day of a month, hence 14-08-2012 will be shifted to 01-08-2012 00:00:00</li>
+    <li><em>granularity weeks</em>: will start at the first day of a week (monday), hence 14-08-2012 01:30:30 will be shifted to 13-08-2012 01:00:00</li>
+    <li><em>granularity days</em>: will start at the first hour of a day, hence 14-08-2012 00:01:30 will be shifted to 14-08-2012 00:00:00</li>
+    <li><em>granularity hours</em>: will start at the first minute of a hour, hence 14-08-2012 01:30:30 will be shifted to 14-08-2012 01:00:00</li>
+    <li><em>granularity minutes</em>: will start at the first second of a minute, hence 14-08-2012 01:30:30 will be shifted to 14-08-2012 01:30:00</li>
+</ul>
+
+<h2>EXAMPLE</h2>
+
+In this example we create 7 raster maps that will be registered in a single space time
+raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
+The names of the raster maps are stored in a text file that is used for raster map registration. 
+<p>
+The space time raster dataset <em>precipitation_daily</em> with daily temporal granularity 
+will be aggregated to weekly precipitation resulting in the output space time raster dataset
+<em>precipitation_weekly</em>. The base name of the new generated raster maps is <em>prec_weekly</em>, the
+granularity is 1 week. The aggregation method is set to <em>sum</em> to accumulate the precipitation values
+of all raster maps in a week. The sampling option assures that only raster maps that are 
+temporally during a week will be considered for computation: 
+
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+
+for map in ${MAPS} ; do
+    r.mapcalc --o expr="${map} = 1" 
+    echo ${map} >> map_list.txt 
+done
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily \
+           file=map_list.txt start=20-08-2012 increment="1 days"
+
+t.info type=strds input=precipitation_daily
+
+t.rast.aggregate input=precipitation_daily \
+                 output=precipitation_weekly \
+                 base=prec_weekly granularity="1 weeks" \
+                 method=sum sampling=during
+
+t.support input=precipitation_weekly \
+          title="Weekly precipitation" \
+          description="Aggregated precipitation dataset with weekly resolution"
+                 
+t.info type=strds input=precipitation_weekly
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a><br>
+<a href="t.rast.extract.html">t.rast.extract</a><br>
+<a href="r.series.html">r.series</a><br>
+<a href="g.region.html">g.region</a><br>
+<a href="t.info.html">t.info</a><br>
+</em>
+
+
+<h2>AUTHORS</h2>
+
+Sören Gebbert
+
+<p><i>Last changed: $Date$</i>
