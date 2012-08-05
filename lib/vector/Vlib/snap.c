@@ -41,7 +41,7 @@ typedef struct
 } NEW;
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
-int add_item(int id, struct RTree_Rect rect, struct ilist *list)
+int add_item(int id, const struct RTree_Rect *rect, struct ilist *list)
 {
     G_ilist_add(list, id);
     return 1;
