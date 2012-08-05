@@ -292,7 +292,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 			}
 			else {
 			    if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], aIn,
-			                           aarea, abox)) {
+			                           aarea, &abox)) {
 				found = 1;
 				break;
 			    }
