@@ -5,7 +5,7 @@
 # MODULE:	t.list
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	List space time and map datasets
+# PURPOSE:	List space time datasets and maps registered in the temporal database
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Lists space time datasets and maps.
+#% description: List space time datasets and maps registered in the temporal database
 #% keywords: temporal
 #% keywords: list
 #%end

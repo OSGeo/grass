@@ -5,7 +5,7 @@
 # MODULE:	tr.aggregate
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Create a new space time raster dataset from the aggregated data of an existing space time raster dataset
+# PURPOSE:	Temporally aggregates the maps of a space time raster dataset by a user defined granularity.
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Creates a new space time raster dataset from the aggregated data of an existing space time raster dataset.
+#% description: Temporally aggregates the maps of a space time raster dataset by a user defined granularity.
 #% keywords: temporal
 #% keywords: aggregation
 #%end
@@ -29,7 +29,7 @@
 #%option
 #% key: granularity
 #% type: string
-#% description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or a double value for relative time
+#% description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or an integer value for relative time
 #% required: yes
 #% multiple: no
 #%end
@@ -151,7 +151,8 @@ def main():
         input_map_names = tgis.collect_map_names(sp, dbif, start, end, sampling)
 
         if input_map_names:
-            new_map = tgis.aggregate_raster_maps(input_map_names, base, start, end, count, method, register_null, dbif)
+            new_map = tgis.aggregate_raster_maps(input_map_names, base, start, end, 
+						count, method, register_null, dbif)
 
             if new_map:
                 # Set the time stamp and write it to the raster map
