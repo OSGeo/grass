@@ -342,7 +342,7 @@ double Vect_area_perimeter(const struct line_pnts *Points)
    \return 0 if not 
  */
 int Vect_point_in_area(double x, double y, const struct Map_info *Map,
-                       int area, struct bound_box box)
+                       int area, struct bound_box *box)
 {
     int i, isle;
     const struct Plus_head *Plus;
@@ -363,7 +363,7 @@ int Vect_point_in_area(double x, double y, const struct Map_info *Map,
     for (i = 0; i < Area->n_isles; i++) {
 	isle = Area->isles[i];
 	Vect_get_isle_box(Map, isle, &ibox);
-	poly = Vect_point_in_island(x, y, Map, isle, ibox);
+	poly = Vect_point_in_island(x, y, Map, isle, &ibox);
 	if (poly >= 1)
 	    return 0;		/* excludes island boundary (poly == 2), OK? */
     }
