@@ -1411,7 +1411,7 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r,
 		    hitCount++;
 		    if (shcb) {	/* call the user-provided callback */
 			if (!shcb((int)s[top].sn.branch[i].child.id,
-				  s[top].sn.branch[i].rect, cbarg)) {
+				  &s[top].sn.branch[i].rect, cbarg)) {
 			    /* callback wants to terminate search early */
 			    return hitCount;
 			}
