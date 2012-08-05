@@ -299,9 +299,12 @@ char *Vect_hist_read(char *, int, const struct Map_info *);
 /* Selecting features */
 int Vect_select_lines_by_box(struct Map_info *, const struct bound_box *,
                          int, struct boxlist *);
-int Vect_select_areas_by_box(struct Map_info *, const struct bound_box *, struct boxlist *);
-int Vect_select_isles_by_box(struct Map_info *, const struct bound_box *, struct boxlist *);
-int Vect_select_nodes_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
+int Vect_select_areas_by_box(struct Map_info *, const struct bound_box *,
+                             struct boxlist *);
+int Vect_select_isles_by_box(struct Map_info *, const struct bound_box *,
+			     struct boxlist *);
+int Vect_select_nodes_by_box(struct Map_info *, const struct bound_box *,
+                             struct ilist *);
 int Vect_find_node(struct Map_info *, double, double, double, double, int);
 int Vect_find_line(struct Map_info *, double, double, double, int, double,
                    int, int);
@@ -326,9 +329,9 @@ int Vect_get_point_in_area(const struct Map_info *, int, double *, double *);
 int Vect_get_point_in_poly(const struct line_pnts *, double *, double *);
 int Vect_get_point_in_poly_isl(const struct line_pnts *, const struct line_pnts **, int,
                                double *, double *);
-int Vect_point_in_area(double, double, const struct Map_info *, int, struct bound_box);
-int Vect_point_in_area_outer_ring(double, double, const struct Map_info *, int, struct bound_box);
-int Vect_point_in_island(double, double, const struct Map_info *, int, struct bound_box);
+int Vect_point_in_area(double, double, const struct Map_info *, int, struct bound_box *);
+int Vect_point_in_area_outer_ring(double, double, const struct Map_info *, int, struct bound_box *);
+int Vect_point_in_island(double, double, const struct Map_info *, int, struct bound_box *);
 int Vect_point_in_poly(double, double, const struct line_pnts *);
 
 /* Cleaning */
