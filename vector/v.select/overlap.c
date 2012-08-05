@@ -57,7 +57,7 @@ int line_overlap_area(struct Map_info *LMap, int line, struct Map_info *AMap,
 
     /* Try if any of line vertices is within area */
     for (i = 0; i < LPoints->n_points; i++) {
-	if (Vect_point_in_area(LPoints->x[i], LPoints->y[i], AMap, area, box)) {
+	if (Vect_point_in_area(LPoints->x[i], LPoints->y[i], AMap, area, &box)) {
 	    G_debug(4, "  -> line vertex inside area");
 	    return 1;
 	}
