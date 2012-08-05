@@ -511,7 +511,7 @@ int main(int argc, char *argv[])
 		continue;
 
 	    /* point in area */
-	    if (Vect_point_in_area(Points->x[0], Points->y[0], &AIn, area, box)) {
+	    if (Vect_point_in_area(Points->x[0], Points->y[0], &AIn, area, &box)) {
 		AREA_CAT *area_info, search_ai;
 
 		int tmp_cat;
