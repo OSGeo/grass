@@ -114,7 +114,7 @@ int dig_del_area(struct Plus_head *, int);
 int dig_add_isle(struct Plus_head *, int, plus_t *, struct bound_box *);
 int dig_del_isle(struct Plus_head *, int);
 int dig_build_area_with_line(struct Plus_head *, plus_t, int, plus_t **);
-int dig_angle_next_line(struct Plus_head *, plus_t, int, int);
+int dig_angle_next_line(struct Plus_head *, plus_t, int, int, float *);
 int dig_node_angle_check(struct Plus_head *, int, int);
 int dig_area_get_box(struct Plus_head *, plus_t, struct bound_box *);
 int dig_isle_get_box(struct Plus_head *, plus_t, struct bound_box *);
@@ -219,8 +219,8 @@ int dig_Rd_spidx(struct gvfile *, struct Plus_head *);
 
 int dig_dump_spidx(FILE *, const struct Plus_head *);
 
-int rtree_search(struct RTree *, struct RTree_Rect *, SearchHitCallback ,
-		void *, struct Plus_head *);
+int rtree_search(struct RTree *, struct RTree_Rect *, 
+                 SearchHitCallback , void *, struct Plus_head *);
 
 /* struct_alloc.c */
 int dig_node_alloc_line(struct P_node *, int add);
