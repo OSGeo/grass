@@ -103,7 +103,7 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
     n_lines = 1;
     while (1) {
 	next_line =
-	    dig_angle_next_line(plus, prev_line, GV_RIGHT, GV_BOUNDARY);
+	    dig_angle_next_line(plus, prev_line, GV_RIGHT, GV_BOUNDARY, NULL);
 	G_debug(3, "next_line = %d", next_line);
 
 	if (next_line == 0)
@@ -260,15 +260,26 @@ int dig_area_add_isle(struct Plus_head *plus, int area, int isle)
 
     G_debug(3, "dig_area_add_isle(): area = %d isle = %d", area, isle);
 
+    if (debug_level == -1) {
+	const char *dstr = G__getenv("DEBUG");
+
+	if (dstr != NULL)
+	    debug_level = atoi(dstr);
+	else
+	    debug_level = 0;
+    }
+
     Area = plus->Area[area];
     if (Area == NULL)
 	G_fatal_error("Attempt to add isle to dead area");
 
-    for (i = 0; i < Area->n_isles; i++) {
-	if (Area->isles[i] == isle) {
-	    /* Already exists: bug in vector libs */
-	    G_debug(3, "isle already registered in area");
-	    return 0;
+    if (debug_level > 0) {
+	for (i = 0; i < Area->n_isles; i++) {
+	    if (Area->isles[i] == isle) {
+		/* Already exists: bug in vector libs */
+		G_warning(_("Isle already registered in area"));
+		return 0;
+	    }
 	}
     }
 
@@ -455,7 +466,7 @@ int dig_del_area(struct Plus_head *plus, int area)
  */
 int
 dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
-		    int type)
+		    int type, float *angle)
 {
     int i, next;
     int current;
@@ -478,8 +489,11 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 
     Line = plus->Line[abs(current_line)];
     
-    if (!(Line->type & GV_LINES))
+    if (!(Line->type & GV_LINES)) {
+	if (angle)
+	    *angle = -9.;
 	return 0;
+    }
 
     node = 0;
     if (current_line > 0) {
@@ -521,8 +535,11 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 	if (Node->lines[current] == current_line)
 	    next = current;
     }
-    if (next == -1)
+    if (next == -1) {
+	if (angle)
+	    *angle = -9.;
 	return 0;		/* not found */
+    }
 
     G_debug(3, "  current position = %d", next);
     while (1) {
@@ -554,6 +571,8 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 
 	if (Line->type & type) {	/* line found */
 	    G_debug(3, "  this one");
+	    if (angle)
+		*angle = Node->angles[next];
 	    return (Node->lines[next]);
 	}
 
@@ -562,6 +581,9 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 	    break;
     }
     G_debug(3, "  Line NOT found at node %d", (int)node);
+    if (angle)
+	*angle = -9.;
+
     return 0;
 }
 
@@ -616,8 +638,8 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
     angle1 = dig_node_line_angle(plus, node, line);
 
     /* Next */
-    next = dig_angle_next_line(plus, line, GV_RIGHT, type);
-    angle2 = dig_node_line_angle(plus, node, next);
+    next = dig_angle_next_line(plus, line, GV_RIGHT, type, &angle2);
+    /* angle2 = dig_node_line_angle(plus, node, next); */
     if (angle1 == angle2) {
 	G_debug(3,
 		"  The line to the right has the same angle: node = %d, line = %d",
@@ -626,8 +648,8 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
     }
 
     /* Previous */
-    prev = dig_angle_next_line(plus, line, GV_LEFT, type);
-    angle2 = dig_node_line_angle(plus, node, prev);
+    prev = dig_angle_next_line(plus, line, GV_LEFT, type, &angle2);
+    /* angle2 = dig_node_line_angle(plus, node, prev); */
     if (angle1 == angle2) {
 	G_debug(3,
 		"  The line to the left has the same angle: node = %d, line = %d",
