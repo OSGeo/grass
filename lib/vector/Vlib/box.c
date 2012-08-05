@@ -28,15 +28,12 @@
    \return 1 point is in box
    \return 0 point is not in box
  */
-int Vect_point_in_box(double x, double y, double z, const struct bound_box * Box)
+int Vect_point_in_box(double x, double y, double z, const struct bound_box *Box)
 {
 
-    if (x >= Box->W && x <= Box->E &&
-	y >= Box->S && y <= Box->N && z >= Box->B && z <= Box->T) {
-	return 1;
-    }
-
-    return 0;
+    return (x >= Box->W && x <= Box->E &&
+	    y >= Box->S && y <= Box->N && 
+	    z >= Box->B && z <= Box->T);
 }
 
 /*!
@@ -48,7 +45,7 @@ int Vect_point_in_box(double x, double y, double z, const struct bound_box * Box
    \return 1 boxes overlap
    \return 0 boxes do not overlap
  */
-int Vect_box_overlap(const struct bound_box * A, const struct bound_box * B)
+int Vect_box_overlap(const struct bound_box *A, const struct bound_box *B)
 {
 
     if (A->E < B->W || A->W > B->E ||
@@ -67,7 +64,7 @@ int Vect_box_overlap(const struct bound_box * A, const struct bound_box * B)
 
    \return 1
  */
-int Vect_box_copy(struct bound_box * A, const struct bound_box * B)
+int Vect_box_copy(struct bound_box *A, const struct bound_box *B)
 {
 
     A->N = B->N;
@@ -88,7 +85,7 @@ int Vect_box_copy(struct bound_box * A, const struct bound_box * B)
 
    \return 1
  */
-int Vect_box_extend(struct bound_box * A, const struct bound_box * B)
+int Vect_box_extend(struct bound_box *A, const struct bound_box *B)
 {
 
     if (B->N > A->N)
@@ -133,7 +130,7 @@ int Vect_box_extend(struct bound_box * A, const struct bound_box * B)
  */
 
 int
-Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound_box * Box)
+Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound_box *Box)
 {
     int mod;
 
@@ -202,19 +199,18 @@ Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound
    \return 1 on success
    \return 0 line is dead
  */
-int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * Box)
+int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_line *Line;
     int type;
     static struct line_pnts *Points = NULL;
-    static struct boxlist *list = NULL;
 
     Plus = (struct Plus_head *)&(Map->plus);
     Line = Plus->Line[line];
 
     if (Line == NULL) {		/* dead */
-	G_zero(Box, sizeof(struct bound_box));
+	Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
 	return 0;
     }
 	
@@ -222,43 +218,9 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
 
     /* GV_LINES: retrieve box from spatial index */
     if (type & GV_LINES) {
-	int node = 0;
-	struct bound_box bbox;
-
-	if (type == GV_LINE) {
-	    struct P_topo_l *topo = (struct P_topo_l *)Line->topo;
-
-	    node = topo->N1;
-	}
-	else if (type == GV_BOUNDARY) {
-	    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
-
-	    node = topo->N1;
-	}
 	
-	if (list == NULL) {
-	    list = Vect_new_boxlist(1);
-	}
-	Vect_reset_boxlist(list);
-	
-	bbox.N = Plus->Node[node]->y;
-	bbox.S = Plus->Node[node]->y;
-	bbox.E = Plus->Node[node]->x;
-	bbox.W = Plus->Node[node]->x;
-	bbox.T = Plus->Node[node]->z;
-	bbox.B = Plus->Node[node]->z;
-
-	dig_boxlist_add(list, line, bbox);
-	
-	if (dig_find_line_box(Plus, list) == 0)
+	if (dig_find_line_box(Plus, line, Box) == 0)
 	    G_fatal_error(_("Unable to find bbox for feature %d"), line);
-
-	Box->N = list->box[0].N;
-	Box->S = list->box[0].S;
-	Box->E = list->box[0].E;
-	Box->W = list->box[0].W;
-	Box->T = list->box[0].T;
-	Box->B = list->box[0].B;
 
 	if (!Vect_is_3d(Map)) {
 	    Box->T =  PORT_DOUBLE_MAX;
@@ -294,51 +256,26 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
    \return 1 on success
    \return 0 area is dead
  */
-int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * Box)
+int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_area *Area;
-    struct P_line *Line;
-    struct P_node *Node;
-    static struct boxlist *list = NULL;
-    struct bound_box bbox;
-    struct P_topo_b *topo;
 
     Plus = (struct Plus_head *)&(Map->plus);
     Area = Plus->Area[area];
 
     if (Area == NULL) {		/* dead */
-        G_zero(Box, sizeof(struct bound_box));
+	Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
 	return 0;
     }
 
-    Line = Plus->Line[abs(Area->lines[0])];
-    topo = (struct P_topo_b *)Line->topo;
-    Node = Plus->Node[topo->N1];
-
-    if (list == NULL) {
-	list = Vect_new_boxlist(TRUE);
-    }
-    Vect_reset_boxlist(list);
-    
-    bbox.N = Node->y;
-    bbox.S = Node->y;
-    bbox.E = Node->x;
-    bbox.W = Node->x;
-    bbox.T = Node->z;
-    bbox.B = Node->z;
-
-    dig_boxlist_add(list, area, bbox);
-    
-    if (dig_find_area_box(Plus, list) == 0)
+    if (dig_find_area_box(Plus, area, Box) == 0)
 	G_fatal_error(_("Unable to get bounding box for area %d"), area);
 
-    Box->N = list->box[0].N;
-    Box->S = list->box[0].S;
-    Box->E = list->box[0].E;
-    Box->W = list->box[0].W;
-    Box->T = list->box[0].T;
-    Box->B = list->box[0].B;
+    if (!Vect_is_3d(Map)) {
+	Box->T =  PORT_DOUBLE_MAX;
+	Box->B = -PORT_DOUBLE_MAX;
+    }
 
     return 1;
 }
@@ -351,58 +288,28 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
    \param[out] Box bounding box
 
    \return 1 on success
-   \return 0 isle is dead
+   \return 0 isle is dead / bounding box not found
  */
-int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box * Box)
+int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_isle *Isle;
-    struct P_line *Line;
-    struct P_node *Node;
-    static struct boxlist *list = NULL;
-    struct bound_box bbox;
-    struct P_topo_b *topo;
 
     Plus = (struct Plus_head *)&(Map->plus);
     Isle = Plus->Isle[isle];
 
     if (Isle == NULL) {		/* dead */
-	Box->N = 0;
-	Box->S = 0;
-	Box->E = 0;
-	Box->W = 0;
-	Box->T = 0;
-	Box->B = 0;
+	Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
 	return 0;
     }
 
-    Line = Plus->Line[abs(Isle->lines[0])];
-    topo = (struct P_topo_b *)Line->topo;
-    Node = Plus->Node[topo->N1];
-
-    if (list == NULL) {
-	list = Vect_new_boxlist(1);
-    }
-    Vect_reset_boxlist(list);
-    
-    bbox.N = Node->y;
-    bbox.S = Node->y;
-    bbox.E = Node->x;
-    bbox.W = Node->x;
-    bbox.T = Node->z;
-    bbox.B = Node->z;
-
-    dig_boxlist_add(list, isle, bbox);
-    
-    if (dig_find_isle_box(Plus, list) == 0)
+    if (dig_find_isle_box(Plus, isle, Box) == 0)
 	G_fatal_error(_("Could not find isle box"));
 
-    Box->N = list->box[0].N;
-    Box->S = list->box[0].S;
-    Box->E = list->box[0].E;
-    Box->W = list->box[0].W;
-    Box->T = list->box[0].T;
-    Box->B = list->box[0].B;
+    if (!Vect_is_3d(Map)) {
+	Box->T =  PORT_DOUBLE_MAX;
+	Box->B = -PORT_DOUBLE_MAX;
+    }
 
     return 1;
 }
@@ -416,7 +323,7 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box * B
    \return 1 on success
    \return 0 on error
  */
-int Vect_get_map_box(const struct Map_info *Map, struct bound_box * Box)
+int Vect_get_map_box(const struct Map_info *Map, struct bound_box *Box)
 {
     const struct Plus_head *Plus;
 
@@ -442,7 +349,7 @@ int Vect_get_map_box(const struct Map_info *Map, struct bound_box * Box)
    \return 1 on success
    \return 0 on error
  */
-int Vect_region_box(const struct Cell_head *Window, struct bound_box * Box)
+int Vect_region_box(const struct Cell_head *Window, struct bound_box *Box)
 {
 
     Box->N = Window->north;
