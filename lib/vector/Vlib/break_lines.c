@@ -230,6 +230,11 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 	    if (List_break && !Vect_val_in_list(List_break, bline)) {
 		continue;
 	    }
+
+	    /* check intersection of aline with bline only once */
+	    if (bline > aline)
+		continue;
+
 	    G_debug(3, "  j = %d bline = %d", j, bline);
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
