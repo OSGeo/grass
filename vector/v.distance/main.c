@@ -796,7 +796,7 @@ int main(int argc, char *argv[])
 		    Vect_get_area_points(&To, area, TPoints);
 
 		    /* Find the distance to this area */
-		    if (Vect_point_in_area(FPoints->x[0], FPoints->y[0], &To, area, List->box[i])) {	/* in area */
+		    if (Vect_point_in_area(FPoints->x[0], FPoints->y[0], &To, area, &List->box[i])) {	/* in area */
 			tmp_dist = 0;
 			tmp_tx = FPoints->x[0];
 			tmp_ty = FPoints->y[0];
