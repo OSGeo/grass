@@ -107,7 +107,7 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
         type = V1_read_line_ogr(Map, line_p, line_c, Line->offset);
 
     if (type != Line->type)
-        G_fatal_error(_("Unexpected feature type (%s) - should be (%d)"),
+        G_fatal_error(_("Unexpected feature type (%d) - should be (%d)"),
                       type, Line->type);
 
     return type;
