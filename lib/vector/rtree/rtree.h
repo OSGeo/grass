@@ -85,11 +85,11 @@ struct RTree_Node       /* node for spatial index */
  * It can terminate the search early by returning 0 in which case
  * the search will return the number of hits found up to that point.
  */
-typedef int SearchHitCallback(int id, struct RTree_Rect rect, void *arg);
+typedef int SearchHitCallback(int id, const struct RTree_Rect *rect, void *arg);
 
 struct RTree;
 
-typedef int rt_search_fn(struct RTree *, struct RTree_Rect *,
+typedef int rt_search_fn(struct RTree *, const struct RTree_Rect *,
                          SearchHitCallback *, void *);
 typedef int rt_insert_fn(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
 typedef int rt_delete_fn(struct RTree_Rect *, union RTree_Child, struct RTree *);
