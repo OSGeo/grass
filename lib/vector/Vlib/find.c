@@ -38,8 +38,8 @@ static int sort_by_size(const void *a, const void *b)
     
     if (as->size < bs->size)
 	return -1;
-    else
-	return (as->size > bs->size);
+
+    return (as->size > bs->size);
 }
 
 
@@ -264,17 +264,15 @@ Vect_find_line_list(struct Map_info *map,
 int Vect_find_area(struct Map_info *Map, double x, double y)
 {
     int i, ret, area;
-    static int first = 1;
     struct bound_box box;
-    static struct boxlist *List;
+    static struct boxlist *List = NULL;
     static BOX_SIZE *size_list;
     static int alloc_size_list = 0;
 
     G_debug(3, "Vect_find_area() x = %f y = %f", x, y);
 
-    if (first) {
+    if (!List) {
 	List = Vect_new_boxlist(1);
-	first = 0;
 	alloc_size_list = 10;
 	size_list = G_malloc(alloc_size_list * sizeof(BOX_SIZE));
     }
@@ -316,7 +314,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 
     for (i = 0; i < List->n_values; i++) {
 	area = size_list[i].i;
-	ret = Vect_point_in_area(x, y, Map, area, size_list[i].box);
+	ret = Vect_point_in_area(x, y, Map, area, &size_list[i].box);
 
 	G_debug(3, "    area = %d Vect_point_in_area() = %d", area, ret);
 
@@ -366,7 +364,7 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
     current = 0;
     for (i = 0; i < List->n_values; i++) {
 	island = List->id[i];
-	ret = Vect_point_in_island(x, y, Map, island, List->box[i]);
+	ret = Vect_point_in_island(x, y, Map, island, &List->box[i]);
 
 	if (ret >= 1) {		/* inside */
 	    if (current > 0) {	/* not first */

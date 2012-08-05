@@ -684,7 +684,7 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
  */
 int
 Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
-			      int area, struct bound_box box)
+			      int area, struct bound_box *box)
 {
     static int first = 1;
     int n_intersects, inter;
@@ -706,7 +706,7 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     Area = Plus->Area[area];
 
     /* First it must be in box */
-    if (X < box.W || X > box.E || Y > box.N || Y < box.S)
+    if (X < box->W || X > box->E || Y > box->N || Y < box->S)
 	return 0;
 
     n_intersects = 0;
@@ -757,7 +757,7 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
    \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
  */
 int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
-                         int isle, struct bound_box box)
+                         int isle, struct bound_box *box)
 {
     static int first = 1;
     int n_intersects, inter;
@@ -777,7 +777,7 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     Plus = &(Map->plus);
     Isle = Plus->Isle[isle];
 
-    if (X < box.W || X > box.E || Y > box.N || Y < box.S)
+    if (X < box->W || X > box->E || Y > box->N || Y < box->S)
 	return 0;
 
     n_intersects = 0;

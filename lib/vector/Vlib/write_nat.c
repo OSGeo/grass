@@ -180,11 +180,11 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		if (!s)
 		    next_line =
 			dig_angle_next_line(plus, line, GV_RIGHT,
-					    GV_BOUNDARY);
+					    GV_BOUNDARY, NULL);
 		else
 		    next_line =
 			dig_angle_next_line(plus, -line, GV_RIGHT,
-					    GV_BOUNDARY);
+					    GV_BOUNDARY, NULL);
 		
 		if (next_line != 0) {	/* there is a boundary to the right */
 		    NLine = plus->Line[abs(next_line)];
@@ -707,25 +707,25 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
 	/* Adjacent are stored: > 0 - we want right side; < 0 - we want left side */
 	n_adjacent = 0;
 
-	next_line = dig_angle_next_line(plus, line, GV_RIGHT, GV_BOUNDARY);
+	next_line = dig_angle_next_line(plus, line, GV_RIGHT, GV_BOUNDARY, NULL);
 	if (next_line != 0 && abs(next_line) != line) {
 	    /* N1, to the right -> we want the right side for > 0  and left for < 0 */
 	    adjacent[n_adjacent] = next_line;
 	    n_adjacent++;
 	}
-	next_line = dig_angle_next_line(plus, line, GV_LEFT, GV_BOUNDARY);
+	next_line = dig_angle_next_line(plus, line, GV_LEFT, GV_BOUNDARY, NULL);
 	if (next_line != 0 && abs(next_line) != line) {
 	    /* N1, to the left -> we want the left side for > 0  and right for < 0 */
 	    adjacent[n_adjacent] = -next_line;
 	    n_adjacent++;
 	}
-	next_line = dig_angle_next_line(plus, -line, GV_RIGHT, GV_BOUNDARY);
+	next_line = dig_angle_next_line(plus, -line, GV_RIGHT, GV_BOUNDARY, NULL);
 	if (next_line != 0 && abs(next_line) != line) {
 	    /* N2, to the right -> we want the right side for > 0  and left for < 0 */
 	    adjacent[n_adjacent] = next_line;
 	    n_adjacent++;
 	}
-	next_line = dig_angle_next_line(plus, -line, GV_LEFT, GV_BOUNDARY);
+	next_line = dig_angle_next_line(plus, -line, GV_LEFT, GV_BOUNDARY, NULL);
 	if (next_line != 0 && abs(next_line) != line) {
 	    /* N2, to the left -> we want the left side for > 0  and right for < 0 */
 	    adjacent[n_adjacent] = -next_line;

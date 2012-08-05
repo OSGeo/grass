@@ -133,7 +133,7 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
 	while (1) {
 	    next_line =
 		dig_angle_next_line(Plus, current_line, GV_RIGHT,
-				    GV_BOUNDARY);
+				    GV_BOUNDARY, NULL);
 
 	    /* Add this line to the list */
 	    /* TODO: Vect_val_in_list() and Vect_list_append() behave O(n)
