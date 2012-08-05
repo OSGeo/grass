@@ -147,6 +147,27 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     return 0;
 }
 
+
+/* for qsort */
+
+typedef struct {
+    int i;
+    double size;
+    struct bound_box box;
+} BOX_SIZE;
+
+static int sort_by_size(const void *a, const void *b)
+{
+    BOX_SIZE *as = (BOX_SIZE *)a;
+    BOX_SIZE *bs = (BOX_SIZE *)b;
+    
+    if (as->size < bs->size)
+	return -1;
+
+    return (as->size > bs->size);
+}
+
+
 /*!
    \brief Find area outside island
 
@@ -158,8 +179,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
  */
 int Vect_isle_find_area(struct Map_info *Map, int isle)
 {
-    int j, line, sel_area, area, poly;
-    static int first_call = 1;
+    int i, line, sel_area, area, poly;
     const struct Plus_head *plus;
     struct P_line *Line;
     struct P_node *Node;
@@ -167,9 +187,22 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     struct P_area *Area;
     struct P_topo_b *topo;
     double size, cur_size;
-    struct bound_box box, abox;
-    static struct boxlist *List;
+    struct bound_box box, *abox;
+    static struct boxlist *List = NULL;
     static struct line_pnts *APoints;
+    static BOX_SIZE *size_list;
+    static int alloc_size_list = 0;
+    static int debug_level = -1;
+
+    if (debug_level == -1) {
+	const char *dstr = G__getenv("DEBUG");
+
+	if (dstr != NULL)
+	    debug_level = atoi(dstr);
+	else
+	    debug_level = 0;
+    }
+    debug_level = 2;
 
     /* Note: We should check all isle points (at least) because if topology is not clean
      * and two areas overlap, isle which is not completely within area may be attached,
@@ -183,10 +216,11 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 	return 0;
     }
 
-    if (first_call) {
+    if (!List) {
 	List = Vect_new_boxlist(1);
 	APoints = Vect_new_line_struct();
-	first_call = 0;
+	alloc_size_list = 10;
+	size_list = G_malloc(alloc_size_list * sizeof(BOX_SIZE));
     }
 
     Isle = plus->Isle[isle];
@@ -205,11 +239,45 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     Vect_select_areas_by_box(Map, &box, List);
     G_debug(3, "%d areas overlap island boundary point", List->n_values);
 
+    Vect_get_isle_box(Map, isle, &box);
+
+    /* sort areas by bbox size
+     * get the smallest area that contains the isle
+     * using the bbox size is working because if 2 areas both contain
+     * the isle, one of these areas must be inside the other area
+     * which means that the bbox of the outer area must be lager than
+     * the bbox of the inner area, and equal bbox sizes are not possible */
+
+    if (alloc_size_list < List->n_values) {
+	alloc_size_list = List->n_values;
+	size_list = G_realloc(size_list, alloc_size_list * sizeof(BOX_SIZE));
+    }
+
+    for (i = 0; i < List->n_values; i++) {
+	size_list[i].i = List->id[i];
+	abox = &List->box[i];
+	size_list[i].box = List->box[i];
+	size_list[i].size = (abox->N - abox->S) * (abox->E - abox->W);
+    }
+
+    if (List->n_values > 1) {
+	if (List->n_values == 2) {
+	    /* simple swap */
+	    if (size_list[1].size < size_list[0].size) {
+		size_list[0].i = List->id[1];
+		size_list[1].i = List->id[0];
+		size_list[0].box = List->box[1];
+		size_list[1].box = List->box[0];
+	    }
+	}
+	else
+	    qsort(size_list, List->n_values, sizeof(BOX_SIZE), sort_by_size);
+    }
+
     sel_area = 0;
     cur_size = -1;
-    Vect_get_isle_box(Map, isle, &box);
-    for (j = 0; j < List->n_values; j++) {
-	area = List->id[j];
+    for (i = 0; i < List->n_values; i++) {
+	area = size_list[i].i;
 	G_debug(3, "area = %d", area);
 
 	Area = plus->Area[area];
@@ -227,10 +295,10 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 	 * Then reading coordinates for all those areas would take a long time -> check first 
 	 * if isle's box is completely within area box */
 
-	abox = List->box[j];
+	abox = &size_list[i].box;
 
-	if (box.E > abox.E || box.W < abox.W || box.N > abox.N ||
-	    box.S < abox.S) {
+	if (box.E > abox->E || box.W < abox->W || box.N > abox->N ||
+	    box.S < abox->S) {
 	    G_debug(3, "  isle not completely inside area box");
 	    continue;
 	}
@@ -239,41 +307,52 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 	G_debug(3, "  poly = %d", poly);
 
 	if (poly == 1) {	/* point in area, but node is not part of area inside isle (would be poly == 2) */
-	    /* In rare case island is inside more areas in that case we have to calculate area
-	     * of outer ring and take the smaller */
-	    if (sel_area == 0) {	/* first */
-		sel_area = area;
+
+	    if (debug_level == 0) {
+		G_debug(3, "Island %d in area %d", isle, sel_area);
+		return area;
 	    }
-	    else {		/* is not first */
-		if (cur_size < 0) {	/* second area */
-		    /* This is slow, but should not be called often */
-		    Vect_get_area_points(Map, sel_area, APoints);
-		    /* G_begin_polygon_area_calculations();
-		       cur_size =
+	    else {
+		/* In rare case island is inside more areas in that case we have to calculate area
+		 * of outer ring and take the smaller */
+		if (sel_area == 0) {	/* first */
+		    sel_area = area;
+		}
+		else {		/* is not first */
+		    if (cur_size < 0) {	/* second area */
+			/* This is slow, but should not be called often */
+			Vect_get_area_points(Map, sel_area, APoints);
+			/* G_begin_polygon_area_calculations();
+			   cur_size =
+			   G_area_of_polygon(APoints->x, APoints->y,
+			   APoints->n_points); */
+			/* this is faster, but there may be latlon problems: the poles */
+			dig_find_area_poly(APoints, &cur_size);
+			G_debug(3, "  first area size = %f (n points = %d)",
+				cur_size, APoints->n_points);
+
+		    }
+
+		    Vect_get_area_points(Map, area, APoints);
+		    /* size =
 		       G_area_of_polygon(APoints->x, APoints->y,
 		       APoints->n_points); */
 		    /* this is faster, but there may be latlon problems: the poles */
-		    dig_find_area_poly(APoints, &cur_size);
-		    G_debug(3, "  first area size = %f (n points = %d)",
-			    cur_size, APoints->n_points);
+		    dig_find_area_poly(APoints, &size);
+		    G_debug(3, "  area size = %f (n points = %d)", size,
+			    APoints->n_points);
 
+		    if (size > 0 && size < cur_size) {
+			sel_area = area;
+			cur_size = size;
+			/* this can not happen because the first area must be
+			 * inside the second area because the node
+			 * is inside both areas */
+			G_warning(_("Larger bbox but smaller area!!!"));
+		    }
 		}
-
-		Vect_get_area_points(Map, area, APoints);
-		/* size =
-		   G_area_of_polygon(APoints->x, APoints->y,
-		   APoints->n_points); */
-		/* this is faster, but there may be latlon problems: the poles */
-		dig_find_area_poly(APoints, &size);
-		G_debug(3, "  area size = %f (n points = %d)", size,
-			APoints->n_points);
-
-		if (size > 0 && size < cur_size) {
-		    sel_area = area;
-		    cur_size = size;
-		}
+		G_debug(3, "sel_area = %d cur_size = %f", sel_area, cur_size);
 	    }
-	    G_debug(3, "sel_area = %d cur_size = %f", sel_area, cur_size);
 	}
     }
     if (sel_area > 0) {
