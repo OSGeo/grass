@@ -90,7 +90,13 @@ int main(int argc, char *argv[])
     
     /* parse & read options */
     parse_args(argc, argv, &options, &flags);
-
+    
+    /* check for weird options */
+    if (G_strncasecmp(options.dsn->answer, "PG:", 3) == 0 &&
+        strcmp(options.format->answer, "PostgreSQL") != 0)
+        G_warning(_("Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" "
+                    "format (\"%s\" given)"), options.format->answer);
+    
     /* parse dataset creation options */
     i = 0;
     while (options.dsco->answers[i]) {
