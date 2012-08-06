@@ -776,8 +776,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = (with_z != 0);
 
     if ((*Open_new_array[Map->format][1]) (Map, name, with_z) < 0) {
-        G_fatal_error(_("Unable to create vector map <%s>"),
-                      name);
+        Vect_delete(name); /* clean up */
         return -1;
     }
 
