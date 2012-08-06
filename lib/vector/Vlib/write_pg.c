@@ -31,18 +31,24 @@
 
 #define WKBSRIDFLAG 0x20000000
 
+static off_t write_line_sf(struct Map_info *, int,
+                           const struct line_pnts **, int,
+                           const struct line_cats *);
+static off_t write_line_tp(struct Map_info *, int,
+                           const struct line_pnts *);
 static char *binary_to_hex(int, const unsigned char *);
 static unsigned char *point_to_wkb(int, const struct line_pnts *, int, int *);
 static unsigned char *linestring_to_wkb(int, const struct line_pnts *,
                                         int, int *);
-static unsigned char *polygon_to_wkb(int, const struct line_pnts *,
+static unsigned char *polygon_to_wkb(int, const struct line_pnts **, int,
                                      int, int *);
 static int write_feature(struct Format_info_pg *,
-                         int, const struct line_pnts *, int,
+                         int, const struct line_pnts **, int, int,
                          int, const struct field_info *);
 static char *build_insert_stmt(const struct Format_info_pg *, const char *,
                                int, const struct field_info *);
-static char *build_topo_stmt(const struct Format_info_pg *, int, const char *);
+static char *build_topo_stmt(const struct Format_info_pg *, int,
+                             const struct P_line *, const char *);
 static char *build_topogeom_stmt(const struct Format_info_pg *, int, int, int);
 static int execute_topo(PGconn *, const char *);
 #endif
@@ -69,123 +75,10 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
                        const struct line_cats *cats)
 {
 #ifdef HAVE_POSTGRES
-    int cat;
-    off_t offset;
-
-    SF_FeatureType sf_type;
-
-    struct field_info *Fi;
-    struct Format_info_pg *pg_info;
-    struct Format_info_offset *offset_info;
-
-    pg_info = &(Map->fInfo.pg);
-    offset_info = &(pg_info->offset);
-
-    if (!pg_info->conn) {
-        G_warning(_("No connection defined"));
-        return -1;
-    }
-
-    if (!pg_info->table_name) {
-        G_warning(_("PostGIS feature table not defined"));
-        return -1;
-    }
-
-    if (pg_info->feature_type == SF_UNKNOWN) {
-        /* create PostGIS table if doesn't exist */
-        if (V2_open_new_pg(Map, type) < 0)
-            return -1;
-    }
-
-    Fi = NULL;                  /* no attributes to be written */
-    cat = -1;
-    if (cats->n_cats > 0 && Vect_get_num_dblinks(Map) > 0) {
-        /* check for attributes */
-        Fi = Vect_get_dblink(Map, 0);
-        if (Fi) {
-            if (!Vect_cat_get(cats, Fi->number, &cat))
-                G_warning(_("No category defined for layer %d"), Fi->number);
-            if (cats->n_cats > 1) {
-                G_warning(_("Feature has more categories, using "
-                            "category %d (from layer %d)"),
-                          cat, cats->field[0]);
-            }
-        }
-    }
-
-    sf_type = pg_info->feature_type;
-
-    /* determine matching PostGIS feature geometry type */
-    if (type & (GV_POINT | GV_KERNEL)) {
-        if (sf_type != SF_POINT && sf_type != SF_POINT25D) {
-            G_warning(_("Feature is not a point. Skipping."));
-            return -1;
-        }
-    }
-    else if (type & GV_LINE) {
-        if (sf_type != SF_LINESTRING && sf_type != SF_LINESTRING25D) {
-            G_warning(_("Feature is not a line. Skipping."));
-            return -1;
-        }
-    }
-    else if (type & GV_BOUNDARY) {
-        if (sf_type != SF_POLYGON) {
-            G_warning(_("Feature is not a polygon. Skipping."));
-            return -1;
-        }
-    }
-    else if (type & GV_FACE) {
-        if (sf_type != SF_POLYGON25D) {
-            G_warning(_("Feature is not a face. Skipping."));
-            return -1;
-        }
-    }
-    else {
-        G_warning(_("Unsupported feature type (%d)"), type);
-        return -1;
-    }
-
-    G_debug(3, "V1_write_line_pg(): type = %d n_points = %d cat = %d",
-            type, points->n_points, cat);
-
-    if (sf_type == SF_POLYGON || sf_type == SF_POLYGON25D) {
-        int npoints;
-
-        npoints = points->n_points - 1;
-        if (points->x[0] != points->x[npoints] ||
-            points->y[0] != points->y[npoints] ||
-            points->z[0] != points->z[npoints]) {
-            G_warning(_("Boundary is not closed. Skipping."));
-            return -1;
-        }
-    }
-
-    /* write feature's geometry and fid */
-    if (-1 == write_feature(pg_info, type, points,
-                            Vect_is_3d(Map) ? WITH_Z : WITHOUT_Z, cat, Fi)) {
-        execute(pg_info->conn, "ROLLBACK");
-        return -1;
-    }
-
-    /* update offset array */
-    if (offset_info->array_num >= offset_info->array_alloc) {
-        offset_info->array_alloc += 1000;
-        offset_info->array = (int *)G_realloc(offset_info->array,
-                                              offset_info->array_alloc *
-                                              sizeof(int));
-    }
-
-    offset = offset_info->array_num;
-
-    offset_info->array[offset_info->array_num++] = cat;
-    if (sf_type == SF_POLYGON || sf_type == SF_POLYGON25D) {
-        /* register first part in offset array */
-        offset_info->array[offset_info->array_num++] = 0;
-    }
-    G_debug(3, "V1_write_line_pg(): -> offset = %lu offset_num = %d cat = %d",
-            (unsigned long)offset, offset_info->array_num, cat);
-
-    return offset;
+    if (!Map->fInfo.pg.toposchema_name)
+        return write_line_sf(Map, type, &points, 1, cats);
+    else
+        return write_line_tp(Map, type, points);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -285,7 +178,214 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
 #endif
 }
 
+/*!
+   \brief Writes area on level 2 (PostGIS interface)
+
+   \param Map pointer to Map_info structure
+   \param type feature type (GV_POINT, GV_LINE, ...)
+   \param points pointer to line_pnts structure (boundary geometry) 
+   \param cats pointer to line_cats structure (feature categories)
+   \param ipoints pointer to line_pnts structure (isles geometry) 
+   \param nisles number of isles
+   
+   \return feature offset into file
+   \return -1 on error
+ */
+off_t V2_write_area_pg(struct Map_info *Map, 
+                       const struct line_pnts *bpoints,
+                       const struct line_cats *cats,
+                       const struct line_pnts **ipoints, int nisles)
+{
 #ifdef HAVE_POSTGRES
+    int i;
+    off_t ret;
+    const struct line_pnts **points;
+
+    if (nisles > 0) {
+        points = (const struct line_pnts **) G_calloc(nisles + 1, sizeof(struct line_pnts *));
+        points[0] = bpoints;
+        for (i = 0; i < nisles; i++)
+            points[i + 1] = ipoints[i];
+    }
+    else {
+        points = &bpoints;
+    }
+    
+    ret = write_line_sf(Map, GV_BOUNDARY, points, nisles + 1, cats);
+
+    if (nisles > 0)
+        G_free(points);
+
+    return ret;
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+#ifdef HAVE_POSTGRES
+off_t write_line_sf(struct Map_info *Map, int type,
+                    const struct line_pnts **points, int nparts,
+                    const struct line_cats *cats)
+{
+    int cat;
+    off_t offset;
+
+    SF_FeatureType sf_type;
+
+    struct field_info *Fi;
+    struct Format_info_pg *pg_info;
+    struct Format_info_offset *offset_info;
+
+    pg_info = &(Map->fInfo.pg);
+    offset_info = &(pg_info->offset);
+
+    if (!pg_info->conn) {
+        G_warning(_("No connection defined"));
+        return -1;
+    }
+
+    if (!pg_info->table_name) {
+        G_warning(_("PostGIS feature table not defined"));
+        return -1;
+    }
+
+    if (pg_info->feature_type == SF_UNKNOWN) {
+        /* create PostGIS table if doesn't exist */
+        if (V2_open_new_pg(Map, type) < 0)
+            return -1;
+    }
+
+    Fi = NULL;                  /* no attributes to be written */
+    cat = -1;
+    if (cats->n_cats > 0 && Vect_get_num_dblinks(Map) > 0) {
+        /* check for attributes */
+        Fi = Vect_get_dblink(Map, 0);
+        if (Fi) {
+            if (!Vect_cat_get(cats, Fi->number, &cat))
+                G_warning(_("No category defined for layer %d"), Fi->number);
+            if (cats->n_cats > 1) {
+                G_warning(_("Feature has more categories, using "
+                            "category %d (from layer %d)"),
+                          cat, cats->field[0]);
+            }
+        }
+    }
+
+    sf_type = pg_info->feature_type;
+
+    /* determine matching PostGIS feature geometry type */
+    if (type & (GV_POINT | GV_KERNEL)) {
+        if (sf_type != SF_POINT && sf_type != SF_POINT25D) {
+            G_warning(_("Feature is not a point. Skipping."));
+            return -1;
+        }
+    }
+    else if (type & GV_LINE) {
+        if (sf_type != SF_LINESTRING && sf_type != SF_LINESTRING25D) {
+            G_warning(_("Feature is not a line. Skipping."));
+            return -1;
+        }
+    }
+    else if (type & GV_BOUNDARY || type & GV_CENTROID) {
+        if (sf_type != SF_POLYGON) {
+            G_warning(_("Feature is not a polygon. Skipping."));
+            return -1;
+        }
+    }
+    else if (type & GV_FACE) {
+        if (sf_type != SF_POLYGON25D) {
+            G_warning(_("Feature is not a face. Skipping."));
+            return -1;
+        }
+    }
+    else {
+        G_warning(_("Unsupported feature type (%d)"), type);
+        return -1;
+    }
+    
+    G_debug(3, "write_line_sf(): type = %d n_points = %d cat = %d",
+            type, points[0]->n_points, cat);
+
+    if (sf_type == SF_POLYGON || sf_type == SF_POLYGON25D) {
+        /* skip this check when writing PostGIS topology */
+        int part, npoints;
+
+        for (part = 0; part < nparts; part++) { 
+            npoints = points[part]->n_points - 1;
+            if (points[part]->x[0] != points[part]->x[npoints] ||
+                points[part]->y[0] != points[part]->y[npoints] ||
+                points[part]->z[0] != points[part]->z[npoints]) {
+                G_warning(_("Boundary is not closed. Skipping."));
+                return -1;
+            }
+        }
+    }
+
+    /* write feature's geometry and fid */
+    if (-1 == write_feature(pg_info, type, points, nparts,
+                            Vect_is_3d(Map) ? WITH_Z : WITHOUT_Z, cat, Fi)) {
+        execute(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    /* update offset array */
+    if (offset_info->array_num >= offset_info->array_alloc) {
+        offset_info->array_alloc += 1000;
+        offset_info->array = (int *)G_realloc(offset_info->array,
+                                              offset_info->array_alloc *
+                                              sizeof(int));
+    }
+
+    offset = offset_info->array_num;
+
+    offset_info->array[offset_info->array_num++] = cat;
+    if (sf_type == SF_POLYGON || sf_type == SF_POLYGON25D) {
+        /* register first part in offset array */
+        offset_info->array[offset_info->array_num++] = 0;
+    }
+    G_debug(3, "write_line_sf(): -> offset = %lu offset_num = %d cat = %d",
+            (unsigned long)offset, offset_info->array_num, cat);
+
+    return offset;
+}
+
+off_t write_line_tp(struct Map_info *Map, int type,
+                    const struct line_pnts *points)
+{
+    struct Format_info_pg *pg_info;
+    
+    pg_info = &(Map->fInfo.pg);
+
+    if (!pg_info->conn) {
+        G_warning(_("No connection defined"));
+        return -1;
+    }
+
+    if (!pg_info->table_name) {
+        G_warning(_("PostGIS feature table not defined"));
+        return -1;
+    }
+
+    if (pg_info->feature_type == SF_UNKNOWN) {
+        /* create PostGIS table if doesn't exist */
+        if (V2_open_new_pg(Map, type) < 0)
+            return -1;
+    }
+    
+    G_debug(3, "write_line_pg(): type = %d n_points = %d",
+            type, points->n_points);
+
+    /* write feature's geometry and fid */
+    if (-1 == write_feature(pg_info, type, &points, 1,
+                            Vect_is_3d(Map) ? WITH_Z : WITHOUT_Z, -1, NULL)) {
+        execute(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    return 0;
+}
+
 /*!
    \brief Binary data to HEX
 
@@ -463,7 +563,8 @@ unsigned char *linestring_to_wkb(int byte_order,
    See OGRPolygon::exportToWkb from GDAL/OGR library
 
    \param byte_order byte order (ENDIAN_LITTLE or ENDIAN_BIG)
-   \param points feature geometry
+   \param ipoints list of ring geometries (first is outer ring)
+   \param nrings number of rings
    \param with_z WITH_Z for 3D data
    \param[out] nsize buffer size
 
@@ -471,21 +572,26 @@ unsigned char *linestring_to_wkb(int byte_order,
    \return NULL on error
  */
 unsigned char *polygon_to_wkb(int byte_order,
-                              const struct line_pnts *points, int with_z,
-                              int *nsize)
+                              const struct line_pnts** points, int nrings,
+                              int with_z, int *nsize)
 {
-    int i, point_size, nrings;
+    int i, ring, point_size, offset;
     unsigned char *wkb_data;
     unsigned int sf_type;
 
-    if (points->n_points < 3)
+    /* check data validity */
+    if (nrings < 1)
         return NULL;
+    for (ring = 0; ring < nrings; ring++) {
+        if (points[ring]->n_points < 3)
+            return NULL;
+    }
 
     /* allocate buffer */
     point_size = 8 * (with_z ? 3 : 2);
-    /* one ring only */
-    nrings = 1;
-    *nsize = 9 + (4 + point_size * points->n_points);
+    *nsize = 9;
+    for (ring = 0; ring < nrings; ring++)
+        *nsize += 4 + point_size * points[ring]->n_points;
     wkb_data = G_malloc(*nsize);
     G_zero(wkb_data, *nsize);
 
@@ -517,31 +623,38 @@ unsigned char *polygon_to_wkb(int byte_order,
         memcpy(wkb_data + 5, &nrings, 4);
     }
 
-    /* serialize ring */
-    memcpy(wkb_data + 9, &(points->n_points), 4);
-    for (i = 0; i < points->n_points; i++) {
-        memcpy(wkb_data + 9 + 4 + point_size * i, &(points->x[i]), 8);
-        memcpy(wkb_data + 9 + 4 + 8 + point_size * i, &(points->y[i]), 8);
-
-        if (with_z) {
-            memcpy(wkb_data + 9 + 4 + 16 + point_size * i, &(points->z[i]),
-                   8);
+    /* serialize rings */
+    offset = 9;
+    for (ring = 0; ring < nrings; ring++) {
+        memcpy(wkb_data + offset, &(points[ring]->n_points), 4);
+        for (i = 0; i < points[ring]->n_points; i++) {
+            memcpy(wkb_data + offset +
+                   4 + point_size * i, &(points[ring]->x[i]), 8);
+            memcpy(wkb_data + offset +
+                   4 + 8 + point_size * i, &(points[ring]->y[i]), 8);
+            
+            if (with_z) {
+                memcpy(wkb_data + offset +
+                       4 + 16 + point_size * i, &(points[ring]->z[i]), 8);
+            }
+        }
+        
+        offset += 4 + point_size * points[ring]->n_points;
+        
+        /* swap if needed */
+        if (byte_order == ENDIAN_BIG) {
+            int npoints, nitems;
+            
+            npoints = SWAP32(points[ring]->n_points);
+            memcpy(wkb_data + 5, &npoints, 4);
+            
+            nitems = (with_z ? 3 : 2) * points[ring]->n_points;
+            for (i = 0; i < nitems; i++) {
+                SWAPDOUBLE(wkb_data + offset + 4 + 8 * i);
+            }
         }
     }
-
-    /* swap if needed */
-    if (byte_order == ENDIAN_BIG) {
-        int npoints, nitems;
-
-        npoints = SWAP32(points->n_points);
-        memcpy(wkb_data + 5, &npoints, 4);
-
-        nitems = (with_z ? 3 : 2) * points->n_points;
-        for (i = 0; i < nitems; i++) {
-            SWAPDOUBLE(wkb_data + 9 + 4 + 8 * i);
-        }
-    }
-
+    
     return wkb_data;
 }
 
@@ -551,6 +664,7 @@ unsigned char *polygon_to_wkb(int byte_order,
    \param pg_info pointer to Format_info_pg struct
    \param type feature type (GV_POINT, GV_LINE, ...)
    \param points pointer to line_pnts struct
+   \param nparts number of parts (rings for polygon)
    \param with_z WITH_Z for 3D data
    \param cat category number (-1 for no category)
    \param Fi pointer to field_info (attributes to copy, NULL for no attributes)
@@ -558,9 +672,9 @@ unsigned char *polygon_to_wkb(int byte_order,
    \return -1 on error
    \retirn 0 on success
  */
-int write_feature(struct Format_info_pg *pg_info,
-                  int type, const struct line_pnts *points, int with_z,
-                  int cat, const struct field_info *Fi)
+int write_feature(struct Format_info_pg *pg_info, int type,
+                  const struct line_pnts **points, int nparts,
+                  int with_z, int cat, const struct field_info *Fi)
 {
     int byte_order, nbytes, nsize;
     unsigned int sf_type;
@@ -583,13 +697,22 @@ int write_feature(struct Format_info_pg *pg_info,
     /* get wkb data */
     nbytes = -1;
     wkb_data = NULL;
-    if (type == GV_POINT)
-        wkb_data = point_to_wkb(byte_order, points, with_z, &nbytes);
+    if (type == GV_POINT || type == GV_CENTROID)
+        wkb_data = point_to_wkb(byte_order, points[0], with_z, &nbytes);
     else if (type == GV_LINE)
-        wkb_data = linestring_to_wkb(byte_order, points, with_z, &nbytes);
-    else if (type == GV_BOUNDARY)
-        wkb_data = polygon_to_wkb(byte_order, points, with_z, &nbytes);
-
+        wkb_data = linestring_to_wkb(byte_order, points[0], with_z, &nbytes);
+    else if (type == GV_BOUNDARY) {
+        if (!pg_info->toposchema_name) {
+            /* PostGIS simple feature access */
+            wkb_data = polygon_to_wkb(byte_order, points, nparts,
+                                      with_z, &nbytes);
+        }
+        else {
+            /* PostGIS topology access */
+            wkb_data = linestring_to_wkb(byte_order, points[0], with_z, &nbytes);
+        }
+    }
+    
     if (!wkb_data || nbytes < 1) {
         G_warning(_("Unsupported feature type %d"), type);
         return -1;
@@ -674,7 +797,7 @@ int write_feature(struct Format_info_pg *pg_info,
                                             to the feature table */
         
         /* insert feature into topology schema (node or edge) */
-        stmt = build_topo_stmt(pg_info, type, text_data);
+        stmt = build_topo_stmt(pg_info, type, NULL, text_data);
         id = execute_topo(pg_info->conn, stmt);
         if (id == -1) {
             /* rollback transaction */
@@ -686,7 +809,6 @@ int write_feature(struct Format_info_pg *pg_info,
         /* insert topoelement into feature table) */
         stmt = build_topogeom_stmt(pg_info, id, type, do_update);
         if (execute(pg_info->conn, stmt) == -1) {
-            /* rollback transaction */
             execute(pg_info->conn, "ROLLBACK");
             return -1;
         }
@@ -853,21 +975,58 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
   topology schema
 
   \param pg_info so pointer to Format_info_pg
-  \param type feature type (GV_POINT, ...)
+  \param Line pointer to P_line struct (topo)
   \param geom_data geometry in wkb
 
   \return pointer to allocated string buffer with SQL statement
   \return NULL on error
 */
-char *build_topo_stmt(const struct Format_info_pg *pg_info,
-                      int type, const char *geom_data)
+char *build_topo_stmt(const struct Format_info_pg *pg_info, int type,
+                      const struct P_line *Line, const char *geom_data)
 {
     char *stmt;
     
     stmt = NULL;
-    if (type == GV_POINT) {
+    switch(type) {
+    case GV_POINT: {
+#if 0
+        G_asprintf(&stmt, "INSERT INTO \"%s\".node (geom) VALUES ('%s'::GEOMETRY)",
+                   pg_info->toposchema_name, geom_data);
+#else
+        G_asprintf(&stmt, "SELECT topology.AddNode('%s', '%s'::GEOMETRY)",
+                   pg_info->toposchema_name, geom_data);
+#endif
+        break;
+    }
+    case GV_LINE: {
+        struct P_topo_l *topo;
+        
+        topo = (struct P_topo_l *) Line->topo;
+        G_asprintf(&stmt, "INSERT INTO \"%s\".edge_data (geom,"
+                   "start_node,end_node,"
+                   "next_left_edge,abs_next_left_edge,"
+                   "next_right_edge,abs_next_right_edge,"
+                   "left_face,right_face) "
+                   "VALUES ('%s'::GEOMETRY,%d,%d,0,0,0,0,0,0)",
+                   pg_info->toposchema_name, geom_data,
+                   topo->N1, topo->N2);
+        break;
+    }
+    case GV_CENTROID: {
+        /* TopoGeo_AddPoint ? */
         G_asprintf(&stmt, "SELECT AddNode('%s', '%s'::GEOMETRY)",
-                pg_info->toposchema_name, geom_data);
+                   pg_info->toposchema_name, geom_data);
+        break;
+    }
+    case GV_BOUNDARY: {
+        /* TopoGeo_AddLineString ? */
+        G_asprintf(&stmt, "SELECT AddEdge('%s', '%s'::GEOMETRY)",
+                   pg_info->toposchema_name, geom_data);
+        break;
+    }
+    default:
+        G_warning(_("Unsupported feature type %d"), Line->type);
+        break;
     }
     
     return stmt;
@@ -897,7 +1056,7 @@ char *build_topogeom_stmt(const struct Format_info_pg *pg_info,
 
     if (type == GV_POINT)
         topogeom_type = 1;
-    else if (type == GV_LINES)
+    else if (type & GV_LINES)
         topogeom_type = 2;
     else {
         G_warning(_("Unsupported topo geometry type %d"), type);
