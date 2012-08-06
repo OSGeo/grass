@@ -20,6 +20,12 @@ void make_link(const char *dsn_opt,
     
     key_val = G_create_key_value();
 
+    /* check for weird options */
+    if (G_strncasecmp(dsn_opt, "PG:", 3) == 0 &&
+        strcmp(format, "PostgreSQL") != 0)
+        G_warning(_("Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" "
+                    "format (\"%s\" given)"), format);
+    
     /* use OGR ? */
     if (strcmp(format, "PostgreSQL") == 0) {
 #if defined HAVE_OGR && defined HAVE_POSTGRES
