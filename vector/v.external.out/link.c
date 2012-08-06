@@ -126,10 +126,10 @@ void make_link(const char *dsn_opt,
     /* save file - OGR or PG */
     fp = G_fopen_new("", filename);
     if (!fp)
-	G_fatal_error(_("Unable to create %s file"), filename);
+	G_fatal_error(_("Unable to create <%s> file"), filename);
 
     if (G_fwrite_key_value(fp, key_val) < 0)
-	G_fatal_error(_("Error writing %s file"), filename);
+	G_fatal_error(_("Error writing <%s> file"), filename);
 
     fclose(fp);
 }
