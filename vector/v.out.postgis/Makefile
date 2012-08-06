@@ -1,0 +1,14 @@
+MODULE_TOPDIR = ../..
+
+PGM=v.out.postgis
+
+LIBES = $(GPROJLIB) $(VECTORLIB) $(DBMILIB) $(GISLIB) 
+DEPENDENCIES = $(GPROJDEP) $(VECTORDEP) $(DBMIDEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC) $(PROJINC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+ifneq ($(USE_POSTGRES),)
+default: cmd
+endif
