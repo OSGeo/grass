@@ -4,7 +4,7 @@
 #include <grass/vector.h>
 
 struct params {
-    struct Option *input, *layer, *dsn, *olayer;
+    struct Option *input, *layer, *dsn, *olayer, *schema;
 };
 
 struct flags {
@@ -20,6 +20,6 @@ int export_topo(struct Map_info *, int, struct Map_info *);
 
 /* options.c */
 void define_options(struct params *, struct flags *);
-char *create_pgfile(const char *, int);
+char *create_pgfile(const char *, const char *, int);
 
 #endif /* __LOCAL_PROTO_V_OUT_POSTGIS__ */
