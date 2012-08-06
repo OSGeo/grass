@@ -1,5 +1,6 @@
 
 #include <stdlib.h>
+#include <string.h>
 #include <grass/raster.h>
 
 #include "R.h"
