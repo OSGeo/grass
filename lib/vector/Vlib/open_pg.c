@@ -634,19 +634,21 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 {
     int spatial_index, primary_key;
     char stmt[DB_SQL_MAX];
-    char *geom_type;
+    char *geom_type, *def_file;
     
     PGresult *result;
 
+    def_file = getenv("GRASS_VECTOR_PGFILE");
+    
     /* by default create spatial index & add primary key */
     spatial_index = primary_key = TRUE;
-    if (G_find_file2("", "PG", G_mapset())) {
+    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
         FILE *fp;
         const char *p;
 
         struct Key_Value *key_val;
 
-        fp = G_fopen_old("", "PG", G_mapset());
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
         if (!fp) {
             G_fatal_error(_("Unable to open PG file"));
         }
@@ -862,18 +864,21 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
 {
     double tolerance;
     char stmt[DB_SQL_MAX];
+    char *def_file;
     
     PGresult *result;
     
+    def_file = getenv("GRASS_VECTOR_PGFILE");
+    
     /* read default values from PG file*/
     tolerance = 0.;
-    if (G_find_file2("", "PG", G_mapset())) {
+    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
         FILE *fp;
         const char *p;
 
         struct Key_Value *key_val;
 
-        fp = G_fopen_old("", "PG", G_mapset());
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
         if (!fp) {
             G_fatal_error(_("Unable to open PG file"));
         }
@@ -899,7 +904,8 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     }
 
     /* create topology schema */
-    G_message(_("Creating topology schema <%s>..."), pg_info->toposchema_name);
+    G_verbose_message(_("Creating topology schema <%s>..."),
+                      pg_info->toposchema_name);
     sprintf(stmt, "SELECT topology.createtopology('%s', "
             "find_srid('%s', '%s', '%s'), %f, '%s')",
             pg_info->toposchema_name, pg_info->schema_name,
@@ -915,7 +921,8 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     }
     
     /* add topo column to the feature table */
-    G_message(_("Adding new topology column <%s>..."), pg_info->topogeom_column);
+    G_verbose_message(_("Adding new topology column <%s>..."),
+                      pg_info->topogeom_column);
     sprintf(stmt, "SELECT topology.AddTopoGeometryColumn('%s', '%s', '%s', "
             "'%s', '%s')", pg_info->toposchema_name, pg_info->schema_name,
             pg_info->table_name, pg_info->topogeom_column,
