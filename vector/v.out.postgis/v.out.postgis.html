@@ -1,0 +1,67 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.out.postgis</em> exports existing GRASS vector map layer into
+PostGIS feature table.
+
+<h2>NOTES</h2>
+
+Currently only 2D vector features are supported.
+
+<p>
+By default <em>v.out.postgis</em> exports vector data as <em>simple
+features</em>, ie. boundaries and centroids (forming topological
+areas) become polygons, isles become holes. Geometry of simple feature
+elements is stored in PostGIS feature table.
+
+<p>
+<em>v.out.postgis</em> also allows to export vector features as
+<em>topological elements</em>
+in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+Topology</a>. PostGIS Topology extension uses three tables to store
+different topological primitives which forms topological objects like
+areas or isles in GRASS terminology. <em>Nodes</em> (0-dimensional
+elements) are stored in &quot;node&quot; table, <em>edges</em>
+(1-dimensional elements) in &quot;edge&quot; table and <em>faces</em>
+(2-dimensional elements) in &quot;face&quot; table.
+
+<ul>
+  <li>GRASS nodes are stored in <i>node</i> table</li>
+  <li>GRASS points are stored in <i>node</i> table as regular nodes</li>
+  <li>GRASS centroids are stored in <i>node</i> table as regular nodes
+  (<tt>containing_face</tt> refers to related area)</li>
+  <li>GRASS lines are stored in <i>edge</i> table</li>
+  <li>GRASS boundaries are stored in <i>edge</i> table</li>
+  <li>GRASS areas are stored in <i>face</i> table</li>
+</ul>
+
+Tables <i>node</i>, <i>edge</i> and <i>face</i> are stored in given topological schema. By default <em>v.out.postgis</em> defines it's name as <tt>topo_&lt;name of input vector map&gt;</tt>.
+
+<h2>EXAMPLES</h2>
+
+<em>To be added</em>
+
+<h2>TODO</h2>
+
+<ul>
+  <li>Multi-feature export</li>
+</ul>
+
+<h2>REFERENCES</h2>
+
+<ul>
+  <li><a href="http://postgis.refractions.net/docs/Topology.html">PostGIS Topology</a> manual</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="v.out.ogr.html">v.out.ogr</a>,
+  <a href="v.external.out.html">v.external.out</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Martin Landa, Czech Technical University in Prague, Czech Republic
+
+<p>
+<i>Last changed: $Date$</i>
