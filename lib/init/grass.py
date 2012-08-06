@@ -663,10 +663,14 @@ def set_env_from_gisrc():
                 locale.setlocale(locale.LC_MESSAGES, language)
             except:
                 # If we got so far, provided locale is not supported on this system
-                # C is safe failback.
-                print "Failed to set LC_MESSAGES to %s. Giving up." % language
-                language = 'C'
+                print "Failed to set LC_MESSAGES to %s as defined by g.gisenv LANG parameter" % language
+                default_locale = locale.getdefaultlocale()
+                if default_locale[0]:
+                    language = default_locale[0]
+                else:
+                    language = 'C'
         os.environ['LANGUAGE'] = language
+        os.environ['LANG'] = language
         os.environ['LC_MESSAGES'] = language
         # Calling gettext.install twice seems to allow to see also localized startup messages
         # Black magic ;)
