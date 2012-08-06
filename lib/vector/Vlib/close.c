@@ -81,7 +81,8 @@ int Vect_close(struct Map_info *Map)
        write mode on level 2 */
     if (strcmp(Map->mapset, G_mapset()) == 0 &&
 	Map->support_updated &&
-	Map->plus.built == GV_BUILD_ALL) {
+	Map->plus.built == GV_BUILD_ALL &&
+        getenv("GRASS_VECTOR_PGFILE") == NULL) {  /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
 
         unlink_file(Map, GV_TOPO_ELEMENT); /* topo */
 
@@ -119,7 +120,8 @@ int Vect_close(struct Map_info *Map)
 	/* NOTE: also close sidx for GV_FORMAT_OGR if not direct OGR access */
 	if (Map->format != GV_FORMAT_OGR_DIRECT &&
 	    Map->plus.Spidx_built == TRUE &&
-	    Map->plus.built == GV_BUILD_ALL)
+	    Map->plus.built == GV_BUILD_ALL &&
+            getenv("GRASS_VECTOR_PGFILE") == NULL) /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
 	    fclose(Map->plus.spidx_fp.file);
     }
 
