@@ -737,7 +737,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     else
         Map->format = GV_FORMAT_NATIVE;
 
-    if (Map->format != GV_FORMAT_OGR_DIRECT) {
+    if (Map->format != GV_FORMAT_OGR_DIRECT &&
+        getenv("GRASS_VECTOR_PGFILE") == NULL) { /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
         G_debug(2, " using non-direct format");
 
         /* check if map already exists */
@@ -776,7 +777,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = (with_z != 0);
 
     if ((*Open_new_array[Map->format][1]) (Map, name, with_z) < 0) {
-        Vect_delete(name); /* clean up */
+        if (getenv("GRASS_VECTOR_PGFILE") == NULL)  /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
+            Vect_delete(name); /* clean up */
         return -1;
     }
 
@@ -1143,7 +1145,7 @@ int map_format(struct Map_info *Map)
         ogr_info->layer_name = G_store(Map->name);
     }
     
-    def_file = getenv("GRASS_VECTOR_PGFILE");
+    def_file = getenv("GRASS_VECTOR_PGFILE");  /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
     if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
         /* PostGIS */
         if (Map->fInfo.ogr.driver_name) {
