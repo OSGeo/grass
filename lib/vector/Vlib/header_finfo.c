@@ -1,7 +1,8 @@
 /*!
    \file lib/vector/Vlib/header_finfo.c
 
-   \brief Vector library - header manipulation (external formats)
+   \brief Vector library - header manipulation (relevant for external
+   formats)
 
    Higher level functions for reading/writing/manipulating vectors.
 
@@ -12,7 +13,7 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
-   \author Update to GRASS 7 (OGR support) by Martin Landa <landa.martin gmail.com>
+   \author Update to GRASS 7 (OGR/PostGIS support) by Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/vector.h>
@@ -57,7 +58,7 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
 
    Returns:
     - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
-    - table name for PostGIS format (GV_FORMAT_POSTGIS)
+    - table name for PostGIS format (GV_FORMAT_POSTGIS) including schema (<schema>.<table>)
 
    Note: allocated string should be freed by G_free()
 
@@ -96,12 +97,10 @@ char *Vect_get_finfo_layer_name(const struct Map_info *Map)
 /*!
   \brief Get format info (relevant only for non-native formats)
 
-   Returns:
-    - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
-    
   \param Map pointer to Map_info structure
   
-  \return string containing name of OGR format (allocated by G_store())
+  \return string containing name of OGR format
+  \return "PostgreSQL" for PostGIS format (GV_FORMAT_POSTGIS)
   \return NULL on error (or on missing OGR/PostgreSQL support)
 */
 const char *Vect_get_finfo_format_info(const struct Map_info *Map)
@@ -201,22 +200,19 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 }
 
 /*!
-  \brief Get geometry column (relevant only for non-native DB formats)
+  \brief Get header info for non-native formats
 
-  \param Map pointer to Map_info structure
-
-  \return allocated string with geometry column name
-  \return NULL on error (map format is native)
+  Prints a warning for native format.
+  
+  \param Map pointer to Ma_info structure
+  
+  \return pointer to Format_info structure
 */
-const char *Vect_get_finfo_geometry_column(const struct Map_info *Map)
+const struct Format_info* Vect_get_finfo(const struct Map_info *Map)
 {
-    if (Map->format == GV_FORMAT_POSTGIS) {
-#ifndef HAVE_POSTGRES
-        G_warning(_("GRASS is not compiled with PostgreSQL support"));
-#else
-        return Map->fInfo.pg.geom_column;
-#endif
-    }
-
-    return NULL;
+    if (Map->format == GV_FORMAT_NATIVE)
+        G_warning(_("Native vector format detected for <%s>"),
+                  Vect_get_full_name(Map));
+    
+    return &(Map->fInfo);
 }
