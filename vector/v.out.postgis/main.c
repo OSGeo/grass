@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct params params;
     struct flags flags;
     
-    int ret, field, do_areas;
+    int ret, field;
     struct Map_info In, Out;
     
     G_gisinit(argv[0]);
@@ -60,12 +60,13 @@ int main(int argc, char *argv[])
                   params.input->answer);
     
     /* create output for writing */
-    create_pgfile(params.dsn->answer, flags.topo->answer ? TRUE : FALSE);
+    create_pgfile(params.dsn->answer, params.schema->answer, flags.topo->answer ? TRUE : FALSE);
     
     if (-1 == Vect_open_new(&Out, params.olayer->answer, Vect_is_3d(&In)))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
                       params.olayer->answer);
-    
+    Vect_set_error_handler_io(NULL, &Out); /* define error handler */
+
     /* define attributes */
     field = Vect_get_field_number(&In, params.layer->answer);
     if (!flags.table->answer)

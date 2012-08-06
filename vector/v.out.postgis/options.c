@@ -25,6 +25,13 @@ void define_options(struct params *params, struct flags *flags)
     params->dsn->description =
         _("Starts with 'PG' prefix, eg. 'PG:dbname=grass'");
     
+    params->schema = G_define_option();
+    params->schema->key = "schema";
+    params->schema->type = TYPE_STRING;
+    params->schema->required = NO;
+    params->schema->description = _("Database schema");
+    params->schema->answer = "public";
+    
     params->olayer = G_define_option();
     params->olayer->key = "olayer";
     params->olayer->type = TYPE_STRING;
@@ -45,7 +52,7 @@ void define_options(struct params *params, struct flags *flags)
         _("Export PostGIS topology instead of simple features");
 }
 
-char *create_pgfile(const char *dsn, int topo)
+char *create_pgfile(const char *dsn, const char *schema, int topo)
 {
     char *filename, *conninfo;
     FILE *fp;
@@ -79,6 +86,8 @@ char *create_pgfile(const char *dsn, int topo)
     }
     
     G_set_key_value("conninfo", conninfo, key_val);
+    if (schema)
+        G_set_key_value("schema", schema, key_val);
     if (topo)
         G_set_key_value("topology", "on", key_val);
 
