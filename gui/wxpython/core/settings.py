@@ -58,6 +58,10 @@ class Settings:
         
         self.locs = os.listdir(os.path.join(os.environ['GISBASE'], 'locale'))
         self.locs.sort()
+        # Add a default choice to not override system locale
+        self.locs.insert(0, 'system')
+        
+        return 'system'
         
     def _defaultSettings(self):
         """!Define default settings

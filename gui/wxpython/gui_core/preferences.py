@@ -138,6 +138,8 @@ class PreferencesBaseDialog(wx.Dialog):
                 value = win.SetSelection(value)
             elif win.GetName() == 'GetStringSelection':
                 value = win.SetStringSelection(value)
+            elif win.GetName() == 'GetLabel':
+                value = win.SetLabel(value)
             else:
                 value = win.SetValue(value)
         
@@ -163,11 +165,15 @@ class PreferencesBaseDialog(wx.Dialog):
         Posts event EVT_SETTINGS_CHANGED.
         """
         if self._updateSettings():
+            if self.settings.Get(group = 'language', key = 'locale', subkey = 'lc_all') == 'system':
+                self.settings.Set(group = 'language', key = 'locale', subkey = 'lc_all', value = None)
             self.settings.SaveToFile()
             self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % self.settings.filePath)
             lang = UserSettings.Get(group = 'language', key = 'locale', subkey = 'lc_all')
             if lang:
                 RunCommand('g.gisenv', set = 'LANG=%s' % lang)
+            else:
+                RunCommand('g.gisenv', set = 'LANG=')
             event = wxSettingsChanged()
             wx.PostEvent(self, event)
             self.Close()
