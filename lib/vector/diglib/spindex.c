@@ -568,7 +568,8 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
 }
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
-static int _add_item(int id, struct RTree_Rect rect, struct ilist *list)
+static int _add_item(int id, const struct RTree_Rect *rect,
+                     struct ilist *list)
 {
     G_ilist_add(list, id);
     return 1;
@@ -576,17 +577,17 @@ static int _add_item(int id, struct RTree_Rect rect, struct ilist *list)
 
 /* This function is called by RTreeSearch() to add 
  * selected node/line/area/isle to the box list */
-static int _add_item_with_box(int id, struct RTree_Rect rect,
+static int _add_item_with_box(int id, const struct RTree_Rect *rect,
                               struct boxlist *list)
 {
     struct bound_box box;
     
-    box.W = rect.boundary[0];
-    box.S = rect.boundary[1];
-    box.B = rect.boundary[2];
-    box.E = rect.boundary[3];
-    box.N = rect.boundary[4];
-    box.T = rect.boundary[5];
+    box.W = rect->boundary[0];
+    box.S = rect->boundary[1];
+    box.B = rect->boundary[2];
+    box.E = rect->boundary[3];
+    box.N = rect->boundary[4];
+    box.T = rect->boundary[5];
 
     dig_boxlist_add(list, id, box);
     return 1;
@@ -600,17 +601,17 @@ struct boxid
 
 /* This function is called by RTreeSearch() to add 
  * selected node/line/area/isle to the box list */
-static int _set_item_box(int id, struct RTree_Rect rect,
+static int _set_item_box(int id, const struct RTree_Rect *rect,
                          struct boxid *box_id)
 {
     if (id == box_id->id) {
 	
-	box_id->box->W = rect.boundary[0];
-	box_id->box->S = rect.boundary[1];
-	box_id->box->B = rect.boundary[2];
-	box_id->box->E = rect.boundary[3];
-	box_id->box->N = rect.boundary[4];
-	box_id->box->T = rect.boundary[5];
+	box_id->box->W = rect->boundary[0];
+	box_id->box->S = rect->boundary[1];
+	box_id->box->B = rect->boundary[2];
+	box_id->box->E = rect->boundary[3];
+	box_id->box->N = rect->boundary[4];
+	box_id->box->T = rect->boundary[5];
 	
 	return 0;
     }
@@ -661,7 +662,7 @@ dig_select_nodes(struct Plus_head *Plus, const struct bound_box * box,
 }
 
 /* This function is called by RTreeSearch() for nodes to find the node id */
-static int _add_node(int id, struct RTree_Rect rect, int *node)
+static int _add_node(int id, const struct RTree_Rect *rect, int *node)
 {
     *node = id;
     return 0;
