@@ -56,10 +56,14 @@ class Settings:
         """
         import os
         
-        self.locs = os.listdir(os.path.join(os.environ['GISBASE'], 'locale'))
-        self.locs.sort()
-        # Add a default choice to not override system locale
-        self.locs.insert(0, 'system')
+        try:
+            self.locs = os.listdir(os.path.join(os.environ['GISBASE'], 'locale'))
+            self.locs.sort()
+            # Add a default choice to not override system locale
+            self.locs.insert(0, 'system')
+        except:
+            # No NLS
+            self.locs = ['system']
         
         return 'system'
         
