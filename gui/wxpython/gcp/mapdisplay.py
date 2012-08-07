@@ -315,9 +315,8 @@ class MapFrame(SingleMapFrame):
         Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        if self.GetToolbar('map'):
-            self.toolbars['map'].OnTool(event)
-            self.toolbars['map'].action['desc'] = ''
+        self.toolbars['gcpdisp'].OnTool(event)
+        self.toolbars['gcpdisp'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
@@ -345,9 +344,8 @@ class MapFrame(SingleMapFrame):
         Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        if self.GetToolbar('map'):
-            self.toolbars['map'].OnTool(event)
-            self.toolbars['map'].action['desc'] = ''
+	self.toolbars['gcpdisp'].OnTool(event)
+	self.toolbars['gcpdisp'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
@@ -374,9 +372,8 @@ class MapFrame(SingleMapFrame):
         """
         Panning, set mouse to drag
         """
-        if self.GetToolbar('map'):
-            self.toolbars['map'].OnTool(event)
-            self.toolbars['map'].action['desc'] = ''
+	self.toolbars['gcpdisp'].OnTool(event)
+	self.toolbars['gcpdisp'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "pan"
         self.MapWindow.mouse['box'] = "pan"

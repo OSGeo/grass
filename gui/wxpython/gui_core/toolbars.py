@@ -161,8 +161,6 @@ class BaseToolbar(wx.ToolBar):
     def OnTool(self, event):
         """!Tool selected
         """
-        if self.parent.GetName() == "GCPFrame":
-            return
         
         id = self.action.get('id', -1)
         
