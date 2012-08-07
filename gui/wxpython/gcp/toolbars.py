@@ -39,12 +39,8 @@ class GCPManToolbar(BaseToolbar):
 
     def _toolbarData(self):
         icons = {
-            'gcpSave'    : MetaIcon(img = 'gcp-save',
-                                    label = _('Save GCPs to POINTS file')),
-            'gcpReload'  : MetaIcon(img = 'reload',
-                                    label = _('Reload GCPs from POINTS file')),
             'gcpAdd'     : MetaIcon(img = 'gcp-add',
-                                    label = _('Add new GCP')),
+                                    label = _('Add new GCP to the list')),
             'gcpDelete'  : MetaIcon(img = 'gcp-delete',
                                     label = _('Delete selected GCP')),
             'gcpClear'   : MetaIcon(img = 'gcp-remove',
@@ -53,14 +49,13 @@ class GCPManToolbar(BaseToolbar):
                                     label = _('Recalculate RMS error')),
             'georectify' : MetaIcon(img = 'georectify',
                                     label = _('Georectify')),
+            'gcpSave'    : MetaIcon(img = 'gcp-save',
+                                    label = _('Save GCPs to POINTS file')),
+            'gcpReload'  : MetaIcon(img = 'reload',
+                                    label = _('Reload GCPs from POINTS file')),
             }
         
-        return self._getToolbarData((('gcpSave', icons["gcpSave"],
-                                      self.parent.SaveGCPs),
-                                     ('gcpReload', icons["gcpReload"],
-                                      self.parent.ReloadGCPs),
-                                     (None, ),
-                                     ('gcpAdd', icons["gcpAdd"],
+        return self._getToolbarData((('gcpAdd', icons["gcpAdd"],
                                       self.parent.AddGCP),
                                      ('gcpDelete', icons["gcpDelete"],
                                       self.parent.DeleteGCP),
@@ -70,7 +65,12 @@ class GCPManToolbar(BaseToolbar):
                                      ('rms', icons["gcpRms"],
                                       self.parent.OnRMS),
                                      ('georect', icons["georectify"],
-                                      self.parent.OnGeorect))
+                                      self.parent.OnGeorect),
+                                     (None, ),
+				     ('gcpSave', icons["gcpSave"],
+                                      self.parent.SaveGCPs),
+                                     ('gcpReload', icons["gcpReload"],
+                                      self.parent.ReloadGCPs))
                                     )
     
 class GCPDisplayToolbar(BaseToolbar):
@@ -109,8 +109,8 @@ class GCPDisplayToolbar(BaseToolbar):
         """!Toolbar data"""
         icons = {
             'gcpSet'    : MetaIcon(img = 'gcp-create',
-                                   label = _('Set GCP'),
-                                   desc = _('Define GCP (Ground Control Points)')),
+                                   label = _('Update GCP coordinates'),
+                                   desc = _('Update GCP coordinates)')),
             'quit'      : BaseIcons['quit'].SetLabel(_('Quit georectification tool')),
             'settings'  : BaseIcons['settings'].SetLabel( _('Georectifier settings')),
             'help'      : BaseIcons['help'].SetLabel(_('Georectifier manual')),
@@ -124,13 +124,17 @@ class GCPDisplayToolbar(BaseToolbar):
                                       self.parent.OnErase),
                                      (None, ),
                                      ("gcpset", icons["gcpSet"],
-                                      self.parent.OnPointer),
+                                      self.parent.OnPointer,
+				      wx.ITEM_CHECK),
                                      ("pan", BaseIcons["pan"],
-                                      self.parent.OnPan),
+                                      self.parent.OnPan,
+				      wx.ITEM_CHECK),
                                      ("zoomin", BaseIcons["zoomIn"],
-                                      self.parent.OnZoomIn),
+                                      self.parent.OnZoomIn,
+				      wx.ITEM_CHECK),
                                      ("zoomout", BaseIcons["zoomOut"],
-                                      self.parent.OnZoomOut),
+                                      self.parent.OnZoomOut,
+				      wx.ITEM_CHECK),
                                      ("zoommenu", BaseIcons["zoomMenu"],
                                       self.parent.OnZoomMenuGCP),
                                      (None, ),
@@ -147,3 +151,4 @@ class GCPDisplayToolbar(BaseToolbar):
                                      ('quit', icons["quit"],
                                       self.parent.OnQuit))
                                     )
+
