@@ -1133,7 +1133,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
         
-        self.Unselect()
+        self.SelectItem(item, False)
         
         # update progress bar range (mapwindow statusbar)
         self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
