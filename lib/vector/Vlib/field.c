@@ -161,7 +161,7 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
 
   \param In pointer to Map_info structure (input)
   \param Out pointer to Map_info structure (output)
-  \param first_only copy only first link
+  \param first_only TRUE to copy only first link otherwise all DB links are copied
 */
 void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
 			   int first_only)
