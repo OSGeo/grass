@@ -293,7 +293,7 @@ static void print_error(const char *msg, const int type)
 		while (print_word(stderr, &w, &len, lead)) ;
 	    }
 	    else {
-		fprintf(stderr, "%s\n", msg);
+                fprintf(stderr, "%s%s\n", prefix_std[type], msg);
 	    }
 
 	    if ((type != MSG) && isatty(fileno(stderr))
