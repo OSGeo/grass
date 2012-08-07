@@ -11,15 +11,11 @@ struct flags {
     struct Flag *table, *topo;
 };
 
-/* export.c */
-int export_lines(struct Map_info *, int, struct Map_info *);
-int export_areas(struct Map_info *, int, struct Map_info *);
-
-/* export_topo.c */
-int export_topo(struct Map_info *, int, struct Map_info *);
+/* create.c */
+void create_table(struct Map_info *, struct Map_info *);
+char *create_pgfile(const char *, const char *, int);
 
 /* options.c */
 void define_options(struct params *, struct flags *);
-char *create_pgfile(const char *, const char *, int);
 
 #endif /* __LOCAL_PROTO_V_OUT_POSTGIS__ */
