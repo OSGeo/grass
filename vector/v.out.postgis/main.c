@@ -9,7 +9,7 @@
  * COPYRIGHT:    (C) 2012 by Martin Landa, and the GRASS Development Team
  *
  *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
+ *               Public License (>=v2). Read the file COPYING that
  *               comes with GRASS for details.
  *
  **************************************************************/
@@ -65,45 +65,19 @@ int main(int argc, char *argv[])
     if (-1 == Vect_open_new(&Out, params.olayer->answer, Vect_is_3d(&In)))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
                       params.olayer->answer);
-    Vect_set_error_handler_io(NULL, &Out); /* define error handler */
-
+    
     /* define attributes */
     field = Vect_get_field_number(&In, params.layer->answer);
     if (!flags.table->answer)
         Vect_copy_map_dblinks(&In, &Out, TRUE);
 
-    ret = 0;
-    if (flags.topo->answer) {
-        /* PostGIS topology export */
-        G_message(_("Exporting features (topology)..."));
-        ret = export_topo(&In, field, &Out);
-    }
-    else {
-        /* simple features export */
-        int do_areas;
+    /* create PostGIS layer */
+    create_table(&In, &Out);
 
-        do_areas = FALSE;
-        if (Vect_level(&In) >= 2) {
-            if (Vect_get_num_areas(&In) > 0)
-                do_areas = TRUE;
-        }
-        else {
-            G_warning(_("Unable to process areas"));
-        }
-        
-        if (!do_areas) {
-            G_message(_("Exporting features..."));
-            ret = export_lines(&In, field, &Out);
-        }
-        else {
-            G_message(_("Exporting areas..."));
-            ret = export_areas(&In, field, &Out);
-        }
-    }
+    /* copy vector features */
+    if (Vect_copy_map_lines_field(&In, field, &Out) != 0)
+        G_fatal_error(_("Copying features failed"));
     
-    if (ret > 0)
-        G_message(_("%d features exported"), ret);
-
     Vect_build(&Out);
     
     Vect_close(&In);
