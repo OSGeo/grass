@@ -174,9 +174,9 @@ int copy_lines_2(struct Map_info *In, int field, int native, struct Map_info *Ou
     ret = 0;
     nlines = Vect_get_num_lines(In);
     if (native)
-        G_message(_("Exporting features..."));
+        G_message(_("Copying features..."));
     else
-        G_message(_("Exporting features (%s)..."),
+        G_message(_("Copying features (%s)..."),
                       Vect_get_finfo_geometry_type(Out));
     
     for (i = 1; i <= nlines; i++) {
