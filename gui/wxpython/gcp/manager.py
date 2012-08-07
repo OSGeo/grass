@@ -1063,13 +1063,13 @@ class GCP(MapFrame, ColumnSorterMixin):
         Clears all values in selected item of GCP list and unchecks it
         """
         index = self.list.GetSelected()
-
-        for i in range(4):
-            self.list.SetStringItem(index, i, '0.0')
-        self.list.SetStringItem(index, 4, '')
-        self.list.SetStringItem(index, 5, '')
-        self.list.CheckItem(index, False)
         key = self.list.GetItemData(index)
+
+        for i in range(1, 5):
+            self.list.SetStringItem(index, i, '0.0')
+        self.list.SetStringItem(index, 5, '')
+        self.list.SetStringItem(index, 6, '')
+        self.list.CheckItem(index, False)
 
         # GCP number, source E, source N, target E, target N, fwd error, bkwd error
         self.mapcoordlist[key] = [key, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
