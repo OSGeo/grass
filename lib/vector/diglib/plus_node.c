@@ -28,6 +28,9 @@ static double dist_squared(double, double, double, double);
  *
  * 'node' must of course already exist space will be alloced to add 'line' to array
  *
+ * Lines are sorted in increasing angle order and
+ * degenerated lines are set to -9 (ignored).
+ * 
  * \param[in] plus pointer to Plus_head structure
  * \param[in] nodeid node id
  * \param[in] lineid line id
@@ -68,7 +71,7 @@ dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
 
     i = nlines;
     while (i > 0) {
-	if (angle > node->angles[i - 1])
+	if (angle >= node->angles[i - 1])
 	    break;
 	node->angles[i] = node->angles[i - 1];
 	node->lines[i] = node->lines[i - 1];

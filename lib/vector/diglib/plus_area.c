@@ -453,7 +453,7 @@ int dig_del_area(struct Plus_head *plus, int area)
  * \brief Find number line of next angle to follow an line
  *
  * Assume that lines are sorted in increasing angle order and angles
- * of points and degenerated lines are set to 9 (ignored).
+ * of points and degenerated lines are set to -9 (ignored).
  *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] current_line current line id, negative if request for node 2
