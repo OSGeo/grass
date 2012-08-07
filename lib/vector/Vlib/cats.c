@@ -341,11 +341,29 @@ void Vect_destroy_cat_list(struct cat_list *p)
 
 
 /*!
-   \brief Convert string of categories and cat ranges separated by commas to cat_list.
+   \brief Converts string of categories and cat ranges separated by commas to cat_list.
 
-   Examples of string: 2,3,5-9,20. str - input string
+   \par Examples of string:
+   \verbatim
+   5,6,7
+   3-9
+   2,3,5-9,20\endverbatim
+   
+   \par Example:
+   \code
+   ...
+   str = "2,3,5-9,20"
+   catList = Vect_new_cat_list()
 
-   \param[in] str cat list string
+   Vect_str_to_cat_list(str, catList)
+   \endcode
+   \verbatim
+   catList.field = 0
+   catList.n_ranges = 4
+   catList.min = {2, 3, 5, 20}
+   catList.max = {2, 3, 9, 20}\endverbatim
+
+   \param[in] str category list as a string
    \param[out] list result cat_list structure
 
    \return number of errors in ranges
