@@ -640,7 +640,6 @@ struct Format_info_pg
     */
     PGconn   *conn;
     PGresult *res;
-    // dbDriver *dbdriver;
 #else
     void     *conn;
     void     *res;
@@ -661,9 +660,9 @@ struct Format_info_pg
     */
     struct Format_info_offset offset;
 
-    /* Full-topology support */
+    /* PostGIS topology support */
     /*!
-      \brief TopoGeometry column
+      \brief TopoGeometry column (feature table)
     */
     char    *topogeom_column;
     /*!
