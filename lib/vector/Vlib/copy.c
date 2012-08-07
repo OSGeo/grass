@@ -96,6 +96,16 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
     return ret;
 }
 
+/*!
+  \brief Copy vector features on level 1
+
+  \param In input vector map
+  \param field layer number (-1 for all layers)
+  \param Out output vector map
+  
+  \return 0 on success
+  \return 1 on error
+*/
 int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
 {
     int ret, type;
@@ -138,6 +148,16 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
     return ret;
 }
 
+/*!
+  \brief Copy vector features on level 2
+
+  \param In input vector map
+  \param field layer number (-1 for all layers)
+  \param Out output vector map
+  
+  \return 0 on success
+  \return 1 on error
+*/
 int copy_lines_2(struct Map_info *In, int field, int native, struct Map_info *Out)
 {
     int i, type, nlines;
@@ -217,7 +237,10 @@ int copy_lines_2(struct Map_info *In, int field, int native, struct Map_info *Ou
                 continue;   /* different layer */
         }
         
-        Vect_write_line(Out, type, Points, Cats);
+        if (-1 == Vect_write_line(Out, type, Points, Cats)) {
+            G_warning(_("Writing new feature failed"));
+            return 1;
+        }
     }
 
     Vect_destroy_line_struct(Points);
@@ -228,6 +251,15 @@ int copy_lines_2(struct Map_info *In, int field, int native, struct Map_info *Ou
     return ret;
 }
 
+/*!
+  \brief Copy nodes as points (PostGIS Topology only)
+
+  \param In input vector map
+  \param Out output vector map
+  
+  \return 0 on success
+  \return 1 on error
+*/
 int copy_nodes(const struct Map_info *In, struct Map_info *Out)
 {
     int nnodes, node, with_z;
@@ -260,6 +292,16 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
     return nnodes;
 }
 
+/*!
+  \brief Copy areas as polygons (OGR/PostGIS simple features access only)
+
+  \param In input vector map
+  \param field layer number (> 0)
+  \param Out output vector map
+  
+  \return 0 on success
+  \return 1 on error
+*/
 int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
 {
     int i, area, nareas, cat, isle, nisles, nisles_alloc;
