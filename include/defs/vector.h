@@ -120,7 +120,7 @@ void Vect_destroy_list(struct ilist *);
 /* List of bounding boxes with ids */
 struct boxlist *Vect_new_boxlist(int);
 int Vect_boxlist_append(struct boxlist *, int, struct bound_box);
-int Vect_boxlist_append_list(struct boxlist *, const struct boxlist *);
+int Vect_boxlist_append_boxlist(struct boxlist *, const struct boxlist *);
 int Vect_boxlist_delete(struct boxlist *, int);
 int Vect_boxlist_delete_boxlist(struct boxlist *, const struct boxlist *);
 int Vect_val_in_boxlist(const struct boxlist *, int);
