@@ -1,5 +1,5 @@
 /*!
-   \file m33_table.h
+   \file mc33_table.h
 
    \brief OGSF library - 
 

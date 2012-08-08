@@ -1,13 +1,13 @@
 /*!
-\mainpage RFC List of the GRASS Project Steering Committee
+\page RFC List of the GRASS Project Steering Committee
 
 List of \link psc_motions Motions of the GRASS Project Steering Committee\endlink
 
 A list of all GRASS RFC documents, with status. 
 
-- \link rfc1_psc RFC 1: Project Steering Committee Guidelines\endlink (Adopted)
-- \link rfc2_psc RFC 2: Legal aspects of code contributions\endlink (Adopted)
-- \link rfc3_psc RFC 3: PSC Voting Procedures\endlink (Proposed)
+- \subpage rfc1_psc (Adopted)
+- \subpage rfc2_psc (Adopted)
+- \subpage rfc3_psc (Proposed)
 
 <a href="http://grass.osgeo.org/">GRASS GIS</a>
 */

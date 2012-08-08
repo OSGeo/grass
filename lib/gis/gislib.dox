@@ -93,7 +93,7 @@ etc.) which are not tied directly to database processing.
 
 It is assumed that the reader has read \ref location for a general
 description of GRASS databases, \ref Raster_File_Processing for
-details about raster map layers in GRASS, and Region_and_Mask
+details about raster map layers in GRASS, and \ref Region_and_Mask
 (<b>???</b>) which discusses regions and masks. The routines in the
 <em>GIS Library</em> are presented in functional groupings, rather
 than in alphabetical order. The order of presentation will, it is
@@ -170,7 +170,7 @@ used to modify the error handling:
  - G_set_error_routine() change error handling
 
 This routine provides a different error handler for G_fatal_error()
-and G_warning(). The <m>handler</em> routine must be defined as
+and G_warning(). The <em>handler</em> routine must be defined as
 follows:
 
 \code
@@ -282,7 +282,7 @@ environment and return its value (which is a character string). If
 <em>name</em> is not set, G_getenv() issues an error message and calls
 exit(). G__setenv() just returns the NULL pointer.
 
- - G_setenv ()
+ - G_setenv()
 
  - G__setenv()
   
@@ -748,7 +748,7 @@ available to support latitude-longitude databases.
 
 Latitudes and longitudes are specified in degrees. Northern latitudes
 range from 0 to 90 degrees, and southern latitudes from 0 to
--90. Longitudes have no limits since longitudes ±360 degrees are
+-90. Longitudes have no limits since longitudes Â±360 degrees are
 equivalent.
 
 Coordinates are represented in ASCII using the format
@@ -810,7 +810,7 @@ G_format_northing(north, buf, -1);             /* double to ASCII */
 
 
 These next routines provide a mechanism for determining the relative
-position of a pair of longitudes. Since longitudes of ±360 are
+position of a pair of longitudes. Since longitudes of Â±360 are
 equivalent, but GRASS requires the east to be bigger than the west,
 some adjustment of coordinates is necessary.
 
@@ -1477,8 +1477,9 @@ int main(int argc, char *argv[])
 
 \subsection Complete_Structure_Members_Table Complete Structure Members Table
 
-<v>struct Flag</v>
-<table border=1>
+\subsubsection memtabFlag struct Flag
+
+<table>
 <tr>
  <td>structure member</td>
  <td>C type</td>
@@ -1509,8 +1510,9 @@ int main(int argc, char *argv[])
 </tr>
 </table>
 
-<b>struct Option</b>
-<table border=1>
+\subsubsection memtabOption struct Option
+
+<table>
 <tr>
  <td>structure member</td>
  <td>C type </td>
@@ -1531,7 +1533,7 @@ int main(int argc, char *argv[])
  <td>int </td>
  <td>YES </td>
  <td>none </td>
- <td>Option type: <br>
+ <td>%Option type: <br>
  TYPE_STRING <br>
  TYPE_INTEGER <br>
  TYPE_DOUBLE <br>

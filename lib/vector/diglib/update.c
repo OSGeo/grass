@@ -1,6 +1,6 @@
 
 /**
- * \file update.c
+ * \file lib/vector/diglib/update.c
  *
  * \brief Vector library - update topology (lower level functions)
  *

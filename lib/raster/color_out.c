@@ -34,7 +34,7 @@ static void write_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g, int b,
   \brief Print color table
 
   \param colors pointer to Colors structure
-  \param min,max minimum and maximum value for percentage output (used only when <em>perc<em> is non-zero)
+  \param min,max minimum and maximum value for percentage output (used only when \p perc is non-zero)
   \param fp file where to print color table rules
   \param perc TRUE for percentage output
 */

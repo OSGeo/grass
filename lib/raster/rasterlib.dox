@@ -6,6 +6,8 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
+\tableofcontents
+
 <b>TODO: Needs to be cleaned up. The upper GRASS 4.x and the lower
 GRASS 5.x/6.x parts need to me merged and updated to GRASS 7</b>
 
@@ -779,8 +781,9 @@ while(Rast_next_cell_stat(&cat, &count, &s))
   fprintf(stdout, "%ld %ld\n", (long) cat, count);
 \endcode
 
-\section  GRASS_5_raster_API GRASS 5 raster API [needs to be merged
-      into above sections]
+\section  GRASS_5_raster_API GRASS 5 raster API
+
+<em>Needs to be merged into above sections.<em>
 
 \subsection The_CELL_Data_Type The CELL Data Type
 
@@ -824,7 +827,7 @@ CELL type, this problem does not arise. It is only when CELL data must
 be used in routines which do not know about the CELL type, that the
 values must be cast to or from long.
 
-\subsection 5.0 Changes to  <TT>"gis.h"</TT>
+\subsection GRASS_5_raster_API_gish Changes to gis.h
 
 The "gis.h" contains 5 new items:
 
@@ -1188,7 +1191,7 @@ didn't have a <tt>null</tt> file, but typically used zero to indicate
 a null value).
 
 For a floating-point map, any cells which were null will become zero
-(when writing FP data, a null has a zero written to the fcell/<map>
+(when writing FP data, a null has a zero written to the fcell/\<map\>
 file, and the corresponding bit is set in the <tt>null</tt> file).
 
 \section Color_Functions Color Functions (new and upgraded)
@@ -1201,7 +1204,7 @@ struct _Color_Rule_
 {
 struct
 {
-    int version;                                   /* set by read\_colors: -1=old,1=new */
+    int version;                                   /* set by read_colors: -1=old,1=new */
     DCELL shift;
     int invert;
     int is_float;                                  /* defined on floating point raster data? */
@@ -1318,7 +1321,7 @@ Modified to return a color for NULL-values.
 
 Modified to return a color for the NULL-value.
 
-\section Changes_to_the_Colors_structure Changes to the <TT>Colors</TT> structure
+\section Changes_to_the_Colors_structure Changes to the Colors structure
 
 
 Modifications to the Colors structure to support colors for
@@ -1341,7 +1344,7 @@ color rule for each inteval, and the binary search is then used when
 looking up colors instead of linearly searching through all color
 rules.
 
-\section Changes_to_the_colr_file Changes to the <TT>colr</TT> file
+\section Changes_to_the_colr_file Changes to the \c colr file
 
 
  - The rules are written out using floating-point format, removing trailing zeros (possibly producing integers) . For example, to ramp from red to green for the range [1.3,5.0]:
@@ -1640,7 +1643,7 @@ struct Categories
 } ;
 \endcode
 
-\section Changes_to_the_cats_file Changes to the <TT>cats</TT> file
+\section Changes_to_the_cats_file Changes to the \c cats file
 
 The format of explicit label entries is the same for integer maps.
 

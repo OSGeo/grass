@@ -1,10 +1,7 @@
 #include <grass/dbmi.h>
 
 /*!
-   \fn int db__driver_close_cursor (dbCursor *cursor)
-   \brief 
-   \return 
-   \param 
+   This function calls db_procedure_not_implemented().
  */
 
 int db__driver_close_cursor(dbCursor * cursor)

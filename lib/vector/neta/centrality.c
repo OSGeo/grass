@@ -1,5 +1,5 @@
 /*!
-   \file vector/neta/centality.c
+   \file lib/vector/neta/centrality.c
 
    \brief Network Analysis library - centrality
 
