@@ -58,6 +58,7 @@ class Settings:
         
         try:
             self.locs = os.listdir(os.path.join(os.environ['GISBASE'], 'locale'))
+            self.locs.append('en') # GRASS doesn't ship EN po files
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, 'system')
