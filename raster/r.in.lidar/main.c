@@ -45,7 +45,7 @@ int new_node(void)
 
     if (num_nodes >= max_nodes) {
 	max_nodes += SIZE_INCREMENT;
-	nodes = G_realloc(nodes, max_nodes * sizeof(struct node));
+	nodes = G_realloc(nodes, (size_t)max_nodes * sizeof(struct node));
     }
 
     return n;
@@ -98,11 +98,10 @@ int main(int argc, char *argv[])
     int out_fd;
     char *infile, *outmap;
     int percent;
-    int do_zfilter;
     int method = -1;
     int bin_n, bin_min, bin_max, bin_sum, bin_sumsq, bin_index;
     double zrange_min, zrange_max, d_tmp;
-    long estimated_lines;
+    unsigned long estimated_lines;
 
     RASTER_MAP_TYPE rtype;
     struct History history;
@@ -386,14 +385,12 @@ int main(int argc, char *argv[])
     zscale = atof(zscale_opt->answer);
 
     /* parse zrange */
-    do_zfilter = FALSE;
     if (zrange_opt->answer != NULL) {
 	if (zrange_opt->answers[0] == NULL)
 	    G_fatal_error(_("Invalid zrange"));
 
 	sscanf(zrange_opt->answers[0], "%lf", &zrange_min);
 	sscanf(zrange_opt->answers[1], "%lf", &zrange_max);
-	do_zfilter = TRUE;
 
 	if (zrange_min > zrange_max) {
 	    d_tmp = zrange_max;
@@ -523,20 +520,29 @@ int main(int argc, char *argv[])
     npasses = (int)ceil(1.0 * region.rows / rows);
 
     if (!scan_flag->answer) {
+	/* check if rows * (cols + 1) go into a size_t */
+	if (sizeof(size_t) < 8) {
+	    double dsize = rows * (cols + 1);
+	    
+	    if (dsize != (size_t)rows * (cols + 1))
+		G_fatal_error(_("Unable to process the hole map at once. "
+		                "Please set the %s option to some value lower than 100."),
+				percent_opt->key);
+	}
 	/* allocate memory (test for enough before we start) */
 	if (bin_n)
-	    n_array = G_calloc(rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+	    n_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
 	if (bin_min)
-	    min_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    min_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	if (bin_max)
-	    max_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    max_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	if (bin_sum)
-	    sum_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    sum_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	if (bin_sumsq)
-	    sumsq_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    sumsq_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	if (bin_index)
 	    index_array =
-		G_calloc(rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+		G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
 
 	/* and then free it again */
 	if (bin_n)
@@ -610,33 +616,33 @@ int main(int argc, char *argv[])
 
 	if (bin_n) {
 	    G_debug(2, "allocating n_array");
-	    n_array = G_calloc(rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+	    n_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
 	    blank_array(n_array, rows, cols, CELL_TYPE, 0);
 	}
 	if (bin_min) {
 	    G_debug(2, "allocating min_array");
-	    min_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    min_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	    blank_array(min_array, rows, cols, rtype, -1);	/* fill with NULLs */
 	}
 	if (bin_max) {
 	    G_debug(2, "allocating max_array");
-	    max_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    max_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	    blank_array(max_array, rows, cols, rtype, -1);	/* fill with NULLs */
 	}
 	if (bin_sum) {
 	    G_debug(2, "allocating sum_array");
-	    sum_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    sum_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	    blank_array(sum_array, rows, cols, rtype, 0);
 	}
 	if (bin_sumsq) {
 	    G_debug(2, "allocating sumsq_array");
-	    sumsq_array = G_calloc(rows * (cols + 1), Rast_cell_size(rtype));
+	    sumsq_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
 	    blank_array(sumsq_array, rows, cols, rtype, 0);
 	}
 	if (bin_index) {
 	    G_debug(2, "allocating index_array");
 	    index_array =
-		G_calloc(rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+		G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
 	    blank_array(index_array, rows, cols, CELL_TYPE, -1);	/* fill with NULLs */
 	}
 
