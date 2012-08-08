@@ -89,7 +89,7 @@ typedef int SearchHitCallback(int id, const struct RTree_Rect *rect, void *arg);
 
 struct RTree;
 
-typedef int rt_search_fn(struct RTree *, const struct RTree_Rect *,
+typedef int rt_search_fn(struct RTree *, struct RTree_Rect *,
                          SearchHitCallback *, void *);
 typedef int rt_insert_fn(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
 typedef int rt_delete_fn(struct RTree_Rect *, union RTree_Child, struct RTree *);
