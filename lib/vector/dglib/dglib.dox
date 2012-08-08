@@ -4,6 +4,37 @@ by GRASS Development Team
 
 http://grass.osgeo.org/dglib/
 
+\section vlibDglibShortIntro Short introduction
+
+The Directed Graph Library or DGLib (Micarelli 2002)
+provides functionality for vector network analysis. This library
+released under GPL is hosted by the GRASS project (within the GRASS
+source code). As a stand-alone library it may also be used by other
+software projects.
+
+The Directed Graph Library library provides functionality to assign
+costs to lines and/or nodes. That means that costs can be accumulated
+while traveling along polylines. The user can assign individual costs
+to all lines and/or nodes of a vector map and later calculate least costly
+path connections based on the accumulated costs. Applications are
+transport analysis, connectivity and more. Implemented applications
+cover shortest/fastest path, traveling salesman (round trip), allocation of
+sources (creation of subnetworks), minimum Steiner trees (star-like
+connections), and iso-distances (from centers).
+
+For details, please read Blazek et al. 2002 (see below).
+
+Related vector functions are:
+ Vect_graph_add_edge(),
+ Vect_graph_init(),
+ Vect_graph_set_node_costs(),
+ Vect_graph_shortest_path(),
+ Vect_net_build_graph(),
+ Vect_net_nearest_nodes(),
+ Vect_net_shortest_path(), and
+ Vect_net_shortest_path_coor().
+
+
 \section intro Introduction
 
 The Directed Graph Library or DGLib (Micarelli 2002) provides
@@ -267,6 +298,14 @@ dglEdgeGet_Id()
 dglEdgeGet_Cost()
 
 dglFreeSPReport()
+
+\section vlibReferences References
+
+R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
+ vector architecture. In Open source GIS - GRASS users conference 2002,
+ Trento, Italy, 11-13 September 2002. University of Trento, Italy, 2002.
+ <a href="http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf">http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf</a>
+ 
 
 \section contacts Contacts
 
