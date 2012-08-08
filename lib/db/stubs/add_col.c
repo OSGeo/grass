@@ -1,10 +1,7 @@
 #include <grass/dbmi.h>
 
 /*!
-   \fn int db__driver_add_column (dbString *tableName, dbColumn *column)
-   \brief 
-   \return 
-   \param 
+   This function calls db_procedure_not_implemented().
  */
 int db__driver_add_column(dbString * tableName, dbColumn * column)
 {

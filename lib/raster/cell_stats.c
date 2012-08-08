@@ -174,8 +174,8 @@ static void init_node(NODE * node, int idx, int offset)
  * \brief Random query of cell stats
  *
  * This routine allows a random query of the Cell_stats structure. The
- * <i>count</i> associated with the raster value <i>cat</i> is
- * set. The routine returns 1 if <i>cat<i> was found in the
+ * \p count associated with the raster value \p cat is
+ * set. The routine returns 1 if \p cat was found in the
  * structure, 0 otherwise.
  *
  * Allow finding the count for the NULL-value.

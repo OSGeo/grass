@@ -1,5 +1,5 @@
 /*!
-  \file lib/temporal/src/connect.c
+  \file lib/temporal/lib/connect.c
   
   \brief Temporal GIS Library - connect to TGIS DB
   

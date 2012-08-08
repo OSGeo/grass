@@ -1,5 +1,5 @@
 /*!
- * \file error.c
+ * \file lib/gis/error.c
  * 
  * \brief GIS Library - Error messages functions
  *

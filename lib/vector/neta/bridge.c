@@ -1,5 +1,5 @@
 /*!
-   \file vector/neta/bridges.c
+   \file lib/vector/neta/bridge.c
 
    \brief Network Analysis library - bridges
 

@@ -106,7 +106,7 @@ variables or explicitly set at run-time.
 \verbatim 
         Precision
         RLE
-\endverbatim 
+\endverbatim
 
 <P>
 Precision indicates how many of the mantissa bits should be stored on
@@ -307,7 +307,7 @@ typedef struct{
     int proj;  /* Projection (see gis.h) */
     int zone;  /* Projection zone (see gis.h) */
 
-} RASTER3D\_Region;
+} RASTER3D_Region;
 \endverbatim
 
 <P>
@@ -608,18 +608,18 @@ The vertical units are defined in gis.h and can be spatial or temporal.
 No environment variable.
 
 <P>
+\verbatim
 void Rast3d_set_unit (map, unit)
         RASTER3d_Map; /* the map */
         char *unit; /* The data unit description */ 
-<P>
+
 void Rast3d_set_vertical_unit (map, unit)
         RASTER3d_Map; /* the map */
         char *unit;  /* Use the standard from units.c in lib/gis */
-<P>
 void Rast3d_set_vertical_unit2 (map, unit)
         RASTER3d_Map; /* the map */
         int unit; /* defined in gis.h */
-<P>
+\endverbatim
 
 \section Error_Handling Error Handling: Setting the error function
 
@@ -828,9 +828,14 @@ float Rast3d_getFloatRegion(void *map, int x, int y, int z)Is
   return value.
 
 <P>
-double Rast3d_getDoubleRegion(void *map, int x, int y, int z)Is
-  equivalent to <TT>Rast3d_getValueRegion (map, x, y, z, &amp;value,
-    DCELL_TYPE);</TT> return value.
+
+\code
+Rast3d_getDoubleRegion(map, x, y, z)
+\endcode
+is equivalent to
+\code
+Rast3d_getValueRegion(map, x, y, z, &amp;value, DCELL_TYPE)
+\endcode
 
 <P>
 int Rast3d_putValue(void *map, int x, int y, int z, char *value, int
@@ -1161,8 +1166,13 @@ Returns
         NULL ... otherwise.
 
 <P>
-char *Rast3d_allocTiles(void *map, int nofTiles)
-Is equivalent to Rast3d_allocTilesType (map, nofTiles, Rast3d_fileTypeMap (map)).
+\code
+Rast3d_allocTiles(map, nofTiles)
+\endcode
+is equivalent to
+\code
+Rast3d_allocTilesType(map, nofTiles, Rast3d_fileTypeMap(map)).
+\endcode
 
 <P>
 void Rast3d_freeTiles(char *tiles)
@@ -1563,9 +1573,11 @@ void Rast3d_customResampleFun(void *map, int row, int col, int depth,
   Rast3d_getValueRegion() (cf. Section 22.4.3).
 
 <P>
-void Rast3d_nearestNeighbor(void *map, int row, int col, int depth, char
-  *value, int type) The default resampling function which uses nearest
-  neighbor resampling.
+The default resampling function which uses nearest
+neighbor resampling.
+\code
+Rast3d_nearestNeighbor(map, row, col, depth, value, type)
+\endcode
 
 <P>
 void Rast3d_getResamplingFun(void *map, void  (**resampleFun)())

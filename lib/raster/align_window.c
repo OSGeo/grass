@@ -1,5 +1,5 @@
 /*!
- * \file gis/align_window.c
+ * \file lib/raster/align_window.c
  *
  * \brief GIS Library - Window alignment functions.
  *

@@ -1,5 +1,5 @@
 /*!
-  \file lib/manage/sighol.c
+  \file lib/manage/sighold.c
   
   \brief Manage Library - Hold signals
   

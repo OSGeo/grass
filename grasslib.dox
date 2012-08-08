@@ -352,7 +352,7 @@ Each module which modifies and writes data must read from <b>input</b>
 and write to <b>output</b> so that data may not be lost. For example
 <tt>v.spag</tt> works on <b>map</b> at in GRASS GIS 5.0 but if program
 (system) crashes or threshold was specified incorrectly and vector was
-not backuped, data were lost. In this case </b>map</b> option should
+not backuped, data were lost. In this case <b>map</b> option should
 be replaced by <b>input</b> and <b>output</b>.
 
 Topology is always built by default if the coor file was modified.

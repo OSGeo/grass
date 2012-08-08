@@ -1,6 +1,6 @@
 
 /**
-   \file datum.c
+   \file lib/proj/datum.c
 
    \brief GProj library - Functions for reading datum parameters from the location database
 
