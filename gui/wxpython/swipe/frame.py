@@ -13,7 +13,7 @@ from mapdisp            import statusbar as sb
 from core.debug         import Debug
 from mapdisp.statusbar  import EVT_AUTO_RENDER
 
-from swipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar
+from swipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
 from swipe.mapwindow import SwipeBufferedWindow, EVT_MOTION
 from swipe.dialogs   import SwipeMapDialog
 
@@ -26,7 +26,7 @@ class SwipeMapFrame(DoubleMapFrame):
         #
         # Add toolbars
         #
-        toolbars = ['swipeMap', 'swipeMain']
+        toolbars = ['swipeMisc', 'swipeMap', 'swipeMain']
         if sys.platform == 'win32':
             self.AddToolbar(toolbars.pop(1))
             toolbars.reverse()
@@ -211,6 +211,18 @@ class SwipeMapFrame(DoubleMapFrame):
                       CloseButton(False).Layer(2).Row(1).
                       BestSize((self.toolbars[name].GetBestSize())))
 
+        if name == "swipeMisc":
+            self.toolbars[name] = SwipeMiscToolbar(self)
+
+            self._mgr.AddPane(self.toolbars[name],
+                      wx.aui.AuiPaneInfo().
+                      Name(name).Caption(_("Misc Toolbar")).
+                      ToolbarPane().Top().
+                      LeftDockable(False).RightDockable(False).
+                      BottomDockable(False).TopDockable(True).
+                      CloseButton(False).Layer(2).Row(1).
+                      BestSize((self.toolbars[name].GetBestSize())))
+
     def _addPanes(self):
         """!Add splitter window and sliders to aui manager"""
         # splitter window
@@ -346,6 +358,9 @@ class SwipeMapFrame(DoubleMapFrame):
             return False
 
         return True
+
+    def OnCloseWindow(self, event):
+        self.Destroy()
 
 
 class MapSplitter(wx.SplitterWindow):

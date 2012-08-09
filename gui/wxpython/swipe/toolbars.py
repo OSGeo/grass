@@ -4,8 +4,9 @@
 @brief Map Swipe toolbars and icons.
 
 Classes:
- - toolbars::swipeMapToolbar
- - toolbars::swipeMainToolbar
+ - toolbars::SwipeMapToolbar
+ - toolbars::SwipeMainToolbar
+ - toolbars::SwipeMiscToolbar
 
 (C) 2006-2012 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -21,7 +22,9 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 
 swipeIcons = {
-        'tools': MetaIcon(img = 'tools', label = _('Tools')),
+        'tools': MetaIcon(img = 'tools', label = _("Tools")),
+        'quit' : BaseIcons['quit'].SetLabel(_("Quit Map Swipe")),
+        'addRast' : BaseIcons['addRast'].SetLabel(_("Select raster maps")),
         }
 
 class SwipeMapToolbar(BaseToolbar):
@@ -93,7 +96,7 @@ class SwipeMainToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data"""
         icons = swipeIcons
-        return self._getToolbarData((("addRaster", BaseIcons['addRast'],
+        return self._getToolbarData((("addRaster", swipeIcons['addRast'],
                                       self.parent.OnSelectRasters),
                                      (None, ),
                                      ("tools", swipeIcons['tools'],
@@ -121,3 +124,23 @@ class SwipeMainToolbar(BaseToolbar):
         # will be called before PopupMenu returns.
         self.parent.GetWindow().PopupMenu(toolMenu)
         toolMenu.Destroy()
+
+
+class SwipeMiscToolbar(BaseToolbar):
+    """!Toolbar with miscellaneous tools related to app
+    """
+    def __init__(self, parent):
+        """!Toolbar constructor
+        """
+        BaseToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        # realize the toolbar
+        self.Realize()
+        
+    def _toolbarData(self):
+        """!Toolbar data"""
+        icons = BaseIcons
+        return self._getToolbarData((("quit", swipeIcons['quit'],
+                                      self.parent.OnCloseWindow),
+                                     ))

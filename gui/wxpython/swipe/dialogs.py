@@ -23,7 +23,7 @@ from gui_core           import gselect
 class SwipeMapDialog(ElementDialog):
     """!Dialog used to select raster maps"""
     def __init__(self, parent, title = _("Select raster maps"), id =  wx.ID_ANY, first = None, second = None):
-        ElementDialog.__init__(self, parent, title, label = _("Name of first raster map:"))
+        ElementDialog.__init__(self, parent, title, label = _("Name of top/left raster map:"))
 
         self.element = gselect.Select(parent = self.panel, type = 'raster',
                                       size = globalvar.DIALOG_GSELECT_SIZE)
@@ -47,7 +47,7 @@ class SwipeMapDialog(ElementDialog):
                            flag = wx.EXPAND | wx.ALL, border = 1)
  
         self.dataSizer.Add(wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                         label = _("Name of second raster map:")), proportion = 0,
+                                         label = _("Name of bottom/right raster map:")), proportion = 0,
                            flag = wx.EXPAND | wx.ALL, border = 1)
 
         self.dataSizer.Add(self.element2, proportion = 0,

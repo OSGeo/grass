@@ -491,6 +491,7 @@ available in GRASS 5 and GRASS 6.
 - swipe::toolbars
  - toolbars::SwipeMapToolbar
  - toolbars::SwipeMainToolbar
+ - toolbars::SwipeMiscToolbar
 
 \subsection other Other GUI modules
 
