@@ -25,7 +25,7 @@
  * Releases the allocated memory associated with the segment file 
  * <b>seg</b> and deletes the temporary file.
  *
- * \param[in,out] seg
+ * \param[in,out] SEG segment
  * \return 1 if successful
  * \return -1 if SEGMENT is not available (not open)
  */

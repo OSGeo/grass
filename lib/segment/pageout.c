@@ -28,7 +28,7 @@
  * Finds segment value <b>i</b> in segment <b>seg</b> and pages it out 
  * to disk.
  *
- * \param[in] seg segment
+ * \param[in] SEG segment
  * \param[in] i segment value
  * \return 1 if successful
  * \return -1 on error

@@ -28,7 +28,7 @@
  * Finds <b>n</b> in the segment file, <b>seg</b>, and selects it as the 
  * current segment.
  *
- * \param[in] seg segment
+ * \param[in] SEG segment
  * \param[in] n segment number
  * \return 1 if successful
  * \return -1 if unable to seek or read segment file

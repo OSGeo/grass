@@ -25,8 +25,6 @@
 
 
 /**
- * \fn int segment_put_row (SEGMENT *SEG, void *buf, int row)
- *
  * \brief Write row to segment file.
  *
  * Transfers non-segmented matrix data, row by row, into a segment
@@ -36,7 +34,7 @@
  * file. <b>row</b> specifies the row from the data matrix being 
  * transferred.
  *
- * \param[in,out] seg segment
+ * \param[in,out] SEG segment
  * \param[in] buf data to write to segment
  * \param[in] row
  * \return 1 if successful

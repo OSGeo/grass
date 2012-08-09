@@ -21,8 +21,6 @@
 
 
 /**
- * \fn int segment_get (SEGMENT *SEG, void *buf, int row, int col)
- *
  * \brief Get value from segment file.
  *
  * Provides random read access to the segmented data. It gets
@@ -30,7 +28,7 @@
  * <b>seg</b> for the corresponding <b>row</b> and <b>col</b> in the
  * original data matrix.
  *
- * \param[in] seg segment
+ * \param[in] SEG segment
  * \param[in,out] buf value return buffer
  * \param[in] row
  * \param[in] col
