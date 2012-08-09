@@ -9,7 +9,6 @@ cells beyond the lake. Lake depth is reported relative to specified water level
 <p>This module uses a 3x3 moving window approach to find all cells that
 match three criteria and to define the lake:
 
-
 <ul>
  <li>cells are below the specified elevation (i.e., water level);</li>
  <li>cells are connected with an initial cell (seed or E,N value);</li>
@@ -19,7 +18,8 @@ match three criteria and to define the lake:
 <p>The water level must be in DEM units.
 
 <h2>NOTES</h2>
-<p>The seed (starting) point can be a raster map with at least one
+
+The seed (starting) point can be a raster map with at least one
 cell value greater than zero, or a seed point can be specified as an E,
 N coordinate pair. If the seed is specified as a coordinate pair, an additional
 check is done to make sure that the target water level is above the level of 
@@ -61,7 +61,9 @@ if( if( isnull(${seedmap}),0,${seedmap}>0), ${wlevel}-${dem}, \
   if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1]>0 && ${wlevel}>${dem}),\
  ${wlevel}-${dem}, null() )))
 </pre></div>
-<p>The ${seedmap} variable is replaced by seed map names, ${dem} with DEM map name, and
+
+<p>
+The ${seedmap} variable is replaced by seed map names, ${dem} with DEM map name, and
 ${wlevel} with target water level.  To get single water level, this code block is
 called with same level numerous times (in a loop) as the lake grows by single cells
 during single run.
