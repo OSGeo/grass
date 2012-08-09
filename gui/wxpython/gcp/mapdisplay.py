@@ -114,11 +114,11 @@ class MapFrame(SingleMapFrame):
         #
         self.grwiz.SwitchEnv('source')
         self.SrcMapWindow = BufferedWindow(self, id=wx.ID_ANY,
-                                          Map=self.SrcMap, tree=self.tree, lmgr=self._layerManager)
+                                          Map=self.SrcMap, frame = self, tree=self.tree, lmgr=self._layerManager)
 
         self.grwiz.SwitchEnv('target')
         self.TgtMapWindow = BufferedWindow(self, id=wx.ID_ANY,
-                                          Map=self.TgtMap, tree=self.tree, lmgr=self._layerManager)
+                                          Map=self.TgtMap, frame = self, tree=self.tree, lmgr=self._layerManager)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
         self.SrcMapWindow.SetCursor(self.cursors["cross"])

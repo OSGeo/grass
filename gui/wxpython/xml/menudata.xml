@@ -742,6 +742,12 @@
 	  <handler>OnPsMap</handler>
 	  <command>ps.map</command>
 	</menuitem>
+	<menuitem>
+	  <label>Map Swipe</label>
+	  <help>Launch Map Swipe</help>
+	  <keywords>visualization,raster</keywords>
+	  <handler>OnMapSwipe</handler>
+	</menuitem>
 	<separator />
 	<menuitem>
 	  <label>Launch script</label>

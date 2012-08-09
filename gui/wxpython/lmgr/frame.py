@@ -65,6 +65,7 @@ from lmgr.pyshell          import PyShellWindow
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
+from swipe.frame           import SwipeMapFrame
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
@@ -375,6 +376,26 @@ class GMFrame(wx.Frame):
         win = PsMapFrame(parent = self)
         win.CentreOnScreen()
         
+        win.Show()
+
+    def OnMapSwipe(self, event):
+        """!Launch Map Swipe"""
+        win = SwipeMapFrame(parent = self)
+
+        rasters = []
+        tree = self.GetLayerTree()
+        if tree:
+            for layer in tree.GetSelections():
+                if tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
+                    continue
+                rasters.append(tree.GetPyData(layer)[0]['maplayer'].GetName())
+
+        if len(rasters) >= 1:
+            win.SetFirstRaster(rasters[0])
+        if len(rasters) >= 2:
+            win.SetSecondRaster(rasters[1])
+
+        win.CentreOnScreen()
         win.Show()
 
     def OnDone(self, cmd, returncode):

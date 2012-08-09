@@ -28,7 +28,7 @@ except ImportError:
 
 class IClassVDigitWindow(VDigitWindow):
     """! Class similar to VDigitWindow but specialized for wxIClass."""
-    def __init__(self, parent, map):
+    def __init__(self, parent, map, frame):
         """!
         
         @a parent should has toolbar providing current class (category).
@@ -36,7 +36,7 @@ class IClassVDigitWindow(VDigitWindow):
         @param parent gui parent
         @param map map renderer instance
         """
-        VDigitWindow.__init__(self, parent = parent, Map = map)
+        VDigitWindow.__init__(self, parent = parent, Map = map, frame = frame)
         
     def _onLeftDown(self, event):
         action = self.toolbar.GetAction()

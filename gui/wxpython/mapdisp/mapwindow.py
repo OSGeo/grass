@@ -51,11 +51,12 @@ class BufferedWindow(MapWindow, wx.Window):
     can also save the drawing to file by calling the
     SaveToFile() method.
     """
-    def __init__(self, parent, id = wx.ID_ANY,
-                 Map = None, tree = None, lmgr = None,
+    def __init__(self, parent, Map, frame,
+                 id = wx.ID_ANY, tree = None, lmgr = None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
-        MapWindow.__init__(self, parent, id, Map, tree, lmgr, **kwargs)
-        wx.Window.__init__(self, parent, id, style = style, **kwargs)
+        MapWindow.__init__(self, parent = parent, id = id, Map = Map,
+                           frame = frame, tree = tree, lmgr = lmgr, **kwargs)
+        wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
         
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
@@ -446,10 +447,10 @@ class BufferedWindow(MapWindow, wx.Window):
                     updatemap = False
 
             # reposition checkbox in statusbar
-            self.parent.StatusbarReposition()
+            self.frame.StatusbarReposition()
             
             # update statusbar
-            self.parent.StatusbarUpdate()
+            self.frame.StatusbarUpdate()
 
             if updatemap:
                 self.UpdateMap(render = True)
@@ -533,7 +534,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 for key in self.imagedict.keys():
                     if self.imagedict[key]['id'] == overlay.id:
                         del self.imagedict[key]
-
+                
                 self.imagedict[img] = { 'id' : overlay.id,
                                         'layer' : overlay }
                 imgs.append(img)
@@ -587,9 +588,9 @@ class BufferedWindow(MapWindow, wx.Window):
         # initialize process bar (only on 'render')
         #
         if render or renderVector:
-            self.parent.GetProgressBar().Show()
-            if self.parent.GetProgressBar().GetRange() > 0:
-                self.parent.GetProgressBar().SetValue(1)
+            self.frame.GetProgressBar().Show()
+            if self.frame.GetProgressBar().GetRange() > 0:
+                self.frame.GetProgressBar().SetValue(1)
         
         #
         # render background image if needed
@@ -606,16 +607,16 @@ class BufferedWindow(MapWindow, wx.Window):
             if render:
                 # update display size
                 self.Map.ChangeMapSize(self.GetClientSize())
-                if self.parent.GetProperty('resolution'):
+                if self.frame.GetProperty('resolution'):
                     # use computation region resolution for rendering
                     windres = True
                 else:
                     windres = False
                 
-                self.mapfile = self.Map.Render(force = True, mapWindow = self.parent,
+                self.mapfile = self.Map.Render(force = True, mapWindow = self.frame,
                                                windres = windres)
             else:
-                self.mapfile = self.Map.Render(force = False, mapWindow = self.parent)
+                self.mapfile = self.Map.Render(force = False, mapWindow = self.frame)
             
         except GException, e:
             GError(message = e.value)
@@ -700,20 +701,20 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mouse['use'] = 'pointer'
             self.mouse['box'] = 'point'
             self.mouse['end'] = [0, 0]
-            self.SetCursor(self.parent.cursors["default"])
+            self.SetCursor(self.frame.cursors["default"])
             
         stop = time.clock()
         
         #
         # hide process bar
         #
-        self.parent.GetProgressBar().Hide()
+        self.frame.GetProgressBar().Hide()
 
         #
         # update statusbar 
         #
         ### self.Map.SetRegion()
-        self.parent.StatusbarUpdate()
+        self.frame.StatusbarUpdate()
         
         
         Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
@@ -1042,7 +1043,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.UpdateMap()
         
         # update statusbar
-        self.parent.StatusbarUpdate()
+        self.frame.StatusbarUpdate()
         
         self.Refresh()
         self.processMouse = True
@@ -1158,7 +1159,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.UpdateMap(render = True)
             
             # update statusbar
-            self.parent.StatusbarUpdate()
+            self.frame.StatusbarUpdate()
             
         elif self.mouse["use"] == "query":
             # querying
@@ -1173,15 +1174,15 @@ class BufferedWindow(MapWindow, wx.Window):
                     nVectors += 1
             
             if isRaster or nVectors > 1:
-                self.parent.QueryMap(self.mouse['begin'][0],self.mouse['begin'][1])
+                self.frame.QueryMap(self.mouse['begin'][0],self.mouse['begin'][1])
             else:
-                self.parent.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
+                self.frame.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
                 # clear temp canvas
                 self.UpdateMap(render = False, renderVector = False)
             
         elif self.mouse["use"] == "queryVector":
             # editable mode for vector map layers
-            self.parent.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
+            self.frame.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
             
             # clear temp canvas
             self.UpdateMap(render = False, renderVector = False)
@@ -1189,24 +1190,24 @@ class BufferedWindow(MapWindow, wx.Window):
         elif self.mouse["use"] in ["measure", "profile"]:
             # measure or profile
             if self.mouse["use"] == "measure":
-                self.parent.MeasureDist(self.mouse['begin'], self.mouse['end'])
+                self.frame.MeasureDist(self.mouse['begin'], self.mouse['end'])
             
             self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
             self.ClearLines(pdc = self.pdcTmp)
             self.DrawLines(pdc = self.pdcTmp)
         
         elif self.mouse["use"] == "pointer" and \
-                not self.parent.IsStandalone() and \
-                self.parent.GetLayerManager().gcpmanagement:
+                not self.frame.IsStandalone() and \
+                self.frame.GetLayerManager().gcpmanagement:
             # -> GCP manager
-            if self.parent.GetToolbar('gcpdisp'):
+            if self.frame.GetToolbar('gcpdisp'):
                 coord = self.Pixel2Cell(self.mouse['end'])
-                if self.parent.MapWindow == self.parent.SrcMapWindow:
+                if self.frame.MapWindow == self.frame.SrcMapWindow:
                     coordtype = 'source'
                 else:
                     coordtype = 'target'
                 
-                self.parent.GetLayerManager().gcpmanagement.SetGCPData(coordtype, coord, self, confirm = True)
+                self.frame.GetLayerManager().gcpmanagement.SetGCPData(coordtype, coord, self, confirm = True)
                 self.UpdateMap(render = False, renderVector = False)
             
         elif self.mouse["use"] == "pointer" and \
@@ -1228,10 +1229,10 @@ class BufferedWindow(MapWindow, wx.Window):
             
         elif self.mouse['use'] == 'legend':
             self.ResizeLegend(self.mouse["begin"], self.mouse["end"])
-            self.parent.dialogs['legend'].FindWindowByName("resize").SetValue(False)
+            self.frame.dialogs['legend'].FindWindowByName("resize").SetValue(False)
             self.Map.GetOverlay(1).SetActive(True)
-            self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
-            self.parent.MapWindow.mouse['use'] = 'pointer'
+            self.frame.MapWindow.SetCursor(self.frame.cursors["default"])
+            self.frame.MapWindow.mouse['use'] = 'pointer'
             
             self.UpdateMap()
             
@@ -1249,7 +1250,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mouse['box'] = 'point'
             self.mouse['end'] = [0, 0]
             self.Refresh()
-            self.SetCursor(self.parent.cursors["default"])
+            self.SetCursor(self.frame.cursors["default"])
         
         elif self.mouse["use"] != "profile" or \
                 (self.mouse['use'] != 'pointer' and \
@@ -1264,11 +1265,11 @@ class BufferedWindow(MapWindow, wx.Window):
             # self.ovlcoords[self.dragid] = self.pdc.GetIdBounds(self.dragid)
             if self.dragid > 100:
                 self.currtxtid = self.dragid
-                self.parent.OnAddText(None)
+                self.frame.OnAddText(None)
             elif self.dragid == 0:
-                self.parent.OnAddBarscale(None)
+                self.frame.OnAddBarscale(None)
             elif self.dragid == 1:
-                self.parent.OnAddLegend(None)
+                self.frame.OnAddLegend(None)
         
     def OnRightDown(self, event):
         """!Right mouse button pressed
@@ -1318,18 +1319,18 @@ class BufferedWindow(MapWindow, wx.Window):
         self.UpdateMap(render = True)
         
         # update statusbar
-        self.parent.StatusbarUpdate()
+        self.frame.StatusbarUpdate()
         
     def OnMouseEnter(self, event):
         """!Mouse entered window and no mouse buttons were pressed
         """
-        if not self.parent.IsStandalone() and \
-                self.parent.GetLayerManager().gcpmanagement:
-            if self.parent.GetToolbar('gcpdisp'):
-                if not self.parent.MapWindow == self:
-                    self.parent.MapWindow = self
-                    self.parent.Map = self.Map
-                    self.parent.UpdateActive(self)
+        if not self.frame.IsStandalone() and \
+                self.frame.GetLayerManager().gcpmanagement:
+            if self.frame.GetToolbar('gcpdisp'):
+                if not self.frame.MapWindow == self:
+                    self.frame.MapWindow = self
+                    self.frame.Map = self.Map
+                    self.frame.UpdateActive(self)
                     # needed for wingrass
                     self.SetFocus()
         else:
@@ -1502,8 +1503,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.Map.region['center_northing'] = cn
             self.Map.region['ewres'] = (newreg['e'] - newreg['w']) / self.Map.width
             self.Map.region['nsres'] = (newreg['n'] - newreg['s']) / self.Map.height
-            if not self.parent.HasProperty('alignExtent') or \
-                    self.parent.GetProperty('alignExtent'):
+            if not self.frame.HasProperty('alignExtent') or \
+                    self.frame.GetProperty('alignExtent'):
                 self.Map.AlignExtentFromDisplay()
             else:
                 for k in ('n', 's', 'e', 'w'):
@@ -1530,7 +1531,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # disable tool if stack is empty
         if len(self.zoomhistory) < 2: # disable tool
-            toolbar = self.parent.GetMapToolbar()
+            toolbar = self.frame.GetMapToolbar()
             toolbar.Enable('zoomBack', enable = False)
         
         # zoom to selected region
@@ -1541,7 +1542,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.UpdateMap()
         
         # update statusbar
-        self.parent.StatusbarUpdate()
+        self.frame.StatusbarUpdate()
 
     def ZoomHistory(self, n, s, e, w):
         """!Manages a list of last 10 zoom extents
@@ -1569,7 +1570,7 @@ class BufferedWindow(MapWindow, wx.Window):
         else:
             enable = False
         
-        toolbar = self.parent.GetMapToolbar()
+        toolbar = self.frame.GetMapToolbar()
         
         toolbar.Enable('zoomBack', enable)
         
@@ -1626,7 +1627,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if render:
             self.UpdateMap()
         
-        self.parent.StatusbarUpdate()
+        self.frame.StatusbarUpdate()
         
     def ZoomToWind(self):
         """!Set display geometry to match computational region
@@ -1639,7 +1640,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.UpdateMap()
         
-        self.parent.StatusbarUpdate()
+        self.frame.StatusbarUpdate()
 
     def ZoomToDefault(self):
         """!Set display geometry to match default region settings
@@ -1652,7 +1653,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.UpdateMap()
         
-        self.parent.StatusbarUpdate()
+        self.frame.StatusbarUpdate()
     
     
     def GoTo(self, e, n):
@@ -1798,7 +1799,7 @@ class BufferedWindow(MapWindow, wx.Window):
         dEast  = (e2 - e1)
         dNorth = (n2 - n1)
         
-        if self.parent.Map.projinfo['proj'] == 'll' and haveCtypes:
+        if self.frame.Map.projinfo['proj'] == 'll' and haveCtypes:
             dist = gislib.G_distance(e1, n1, e2, n2)
         else:
             dist = math.sqrt(math.pow((dEast), 2) + math.pow((dNorth), 2))
@@ -1811,7 +1812,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
     def RegisterMouseEventHandler(self, event, handler, cursor = None):
         """!Calls UpdateTools to manage connected toolbars"""
-        self.parent.UpdateTools(None)
+        self.frame.UpdateTools(None)
         MapWindow.RegisterMouseEventHandler(self, event, handler, cursor)
 
     def UnregisterMouseEventHandler(self, event, handler):
@@ -1819,10 +1820,10 @@ class BufferedWindow(MapWindow, wx.Window):
         MapWindow.UnregisterMouseEventHandler(self, event, handler)
         
         # sets pointer mode
-        toolbar = self.parent.toolbars['map']
+        toolbar = self.frame.toolbars['map']
         toolbar.action['id'] = vars(toolbar)["pointer"]
         toolbar.OnTool(None)
-        self.parent.OnPointer(event = None)
+        self.frame.OnPointer(event = None)
         
     def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc = None, drawFunc = None):
         """! Method allows to register graphics to draw.
