@@ -23,6 +23,7 @@ static int connect_lines(struct Map_info *, int, int, int,
   \param Map pointer to Map_info
   \param List list of selected lines
   \param coord points location
+  \param thresh threshold
   \param[out] List_updated list of rewritten features (or NULL)
   
   \return number of modified lines
