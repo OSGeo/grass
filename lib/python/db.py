@@ -122,7 +122,7 @@ def db_select(sql = None, filename = None, table = None, **args):
     @param sql SQL statement to perform (or None)
     @param filename name of file with SQL statements (or None)
     @param table name of table to query (or None)
-    @param args  see db.select arguments
+    @param args  see \gmod{db.select} arguments
     """
     fname = tempfile(create = False)
     if sql:

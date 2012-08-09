@@ -108,9 +108,9 @@ if __name__ == "__main__":
 
  - python::core::write_command()
 
-<b>Interface to g.message</b>
+<b>Interface to \gmod{g.message}</b>
 
-These all run g.message, differing only in which flag (if any) is
+These all run \gmod{g.message}, differing only in which flag (if any) is
 used. fatal() is error(), but also calls sys.exit(1).
 
  - python::core::debug()
@@ -127,9 +127,9 @@ used. fatal() is error(), but also calls sys.exit(1).
 
  - python::core::warning()
 
-<b>Interface to g.parser</b>
+<b>Interface to \gmod{g.parser}</b>
 
-Interface to g.parser, intended to be run from the top-level, e.g.
+Interface to \gmod{g.parser}, intended to be run from the top-level, e.g.
 
 \code
 	if __name__ == "__main__":
@@ -139,9 +139,9 @@ Interface to g.parser, intended to be run from the top-level, e.g.
 
  - python::core::parser()
 
-<b>Interface to g.tempfile</b>
+<b>Interface to \gmod{g.tempfile}</b>
 
-Returns the name of a temporary file, created with g.tempfile.
+Returns the name of a temporary file, created with \gmod{g.tempfile}.
 
  - python::core::tempfile()
 
@@ -149,11 +149,11 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - python::core::parse_key_val()
 
-<b>Interface to g.gisenv</b>
+<b>Interface to \gmod{g.gisenv}</b>
 
  - python::core::gisenv()
 
-<b>Interface to g.region</b>
+<b>Interface to \gmod{g.region}</b>
 
  - python::core::del_temp_region()
 
@@ -163,11 +163,11 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - python::core::use_temp_region()
 
-<b>Interface to g.findfile</b>
+<b>Interface to \gmod{g.findfile}</b>
 
  - python::core::find_file()
 
-<b>Interface to g.list</b>
+<b>Interface to \gmod{g.list}</b>
 
  - python::core::list_grouped()
 
@@ -177,11 +177,11 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - python::core::mlist_grouped()
 
-<b>Interface to g.mapsets</b>
+<b>Interface to \gmod{g.mapsets}</b>
 
  - python::core::mapsets()
 
-<b>Interface to g.version</b>
+<b>Interface to \gmod{g.version}</b>
 
  - python::core::version()
 
