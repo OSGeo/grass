@@ -67,13 +67,13 @@ class NvizThread(Thread):
 
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """!OpenGL canvas for Map Display Window"""
-    def __init__(self, parent, id = wx.ID_ANY,
+    def __init__(self, parent, id = wx.ID_ANY, frame = None,
                  Map = None, tree = None, lmgr = None):
         self.parent = parent # MapFrame
         
         glcanvas.GLCanvas.__init__(self, parent, id)
-        MapWindow.__init__(self, parent, id, 
-                           Map, tree, lmgr)
+        MapWindow.__init__(self, parent = parent, id = id, frame = frame,
+                           Map = Map, tree = tree, lmgr = lmgr)
         self.Hide()
         
         self.init = False

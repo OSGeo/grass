@@ -36,10 +36,11 @@ class MapWindow(object):
      - Pixel2Cell
      - Cell2Pixel (if it is possible)
     """
-    def __init__(self, parent, id = wx.ID_ANY,
-                 Map = None, tree = None, lmgr = None, **kwargs):
+    def __init__(self, parent, Map, frame,
+                 id = wx.ID_ANY, tree = None, lmgr = None, **kwargs):
         self.parent = parent # MapFrame
         self.Map    = Map
+        self.frame = frame
         self.tree   = tree
         self.lmgr   = lmgr
         
@@ -228,7 +229,7 @@ class MapWindow(object):
         except (ValueError):
             self.lastEN = None
         # FIXME: special case for vdigit and access to statusbarManager
-        if self.parent.statusbarManager.GetMode() == 0: # Coordinates            
+        if self.frame.statusbarManager.GetMode() == 0: # Coordinates            
             updated = False
             if hasattr(self, "digit"):
                 precision = int(UserSettings.Get(group = 'projection', key = 'format',
@@ -236,7 +237,7 @@ class MapWindow(object):
                 updated = self._onMotion(self.lastEN, precision)
 
             if not updated:
-                self.parent.CoordinatesChanged()
+                self.frame.CoordinatesChanged()
         
         event.Skip()
 

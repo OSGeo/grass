@@ -33,11 +33,15 @@ This program is free software under the GNU General Public License
 
 import wx
 
+from wx.lib.newevent import NewEvent
+
 from core          import utils
 from core.gcmd     import GMessage, RunCommand
 from core.settings import UserSettings
 
 from grass.script  import core as grass
+
+wxAutoRender, EVT_AUTO_RENDER = NewEvent()
 
 class SbException:
     """! Exception class used in SbManager and SbItems"""
@@ -366,6 +370,9 @@ class SbRender(SbItem):
         
     def OnToggleRender(self, event):
         # (other items should call self.mapFrame.IsAutoRendered())
+        event = wxAutoRender(state = self.GetValue())
+        wx.PostEvent(self.mapFrame, event)
+        
         if self.GetValue():
             self.mapFrame.OnRender(None)
 

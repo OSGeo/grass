@@ -83,8 +83,8 @@ class IClassMapFrame(DoubleMapFrame):
                                 firstMap = Map(), secondMap = Map(),
                                 **kwargs)
         
-        self.firstMapWindow = IClassVDigitWindow(self, map = self.firstMap)
-        self.secondMapWindow = BufferedWindow(self, Map = self.secondMap)
+        self.firstMapWindow = IClassVDigitWindow(self, map = self.firstMap, frame = self)
+        self.secondMapWindow = BufferedWindow(self, Map = self.secondMap, frame = self)
         self.MapWindow = self.firstMapWindow # current by default
         
         self._bindWindowsActivation()

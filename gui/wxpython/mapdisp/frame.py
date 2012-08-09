@@ -129,7 +129,7 @@ class MapFrame(SingleMapFrame):
         # Init map display (buffered DC & set default cursor)
         #
         self.MapWindow2D = BufferedWindow(self, id = wx.ID_ANY,
-                                          Map = self.Map, tree = self.tree, lmgr = self._layerManager)
+                                          Map = self.Map, frame = self, tree = self.tree, lmgr = self._layerManager)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
         self.MapWindow.SetCursor(self.cursors["default"])
@@ -219,7 +219,7 @@ class MapFrame(SingleMapFrame):
         
         if not self.MapWindowVDigit:
             from vdigit.mapwindow import VDigitWindow
-            self.MapWindowVDigit = VDigitWindow(self, id = wx.ID_ANY,
+            self.MapWindowVDigit = VDigitWindow(self, id = wx.ID_ANY, frame = self,
                                                 Map = self.Map, tree = self.tree,
                                                 lmgr = self._layerManager)
             self.MapWindowVDigit.Show()
@@ -294,8 +294,8 @@ class MapFrame(SingleMapFrame):
         
         # create GL window
         if not self.MapWindow3D:
-            self.MapWindow3D = GLWindow(self, id = wx.ID_ANY,
-                                             Map = self.Map, tree = self.tree, lmgr = self._layerManager)
+            self.MapWindow3D = GLWindow(self, id = wx.ID_ANY, frame = self,
+                                        Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self.MapWindow = self.MapWindow3D
             self.MapWindow.SetCursor(self.cursors["default"])
             
