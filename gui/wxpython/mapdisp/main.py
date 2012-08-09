@@ -35,6 +35,7 @@ from core.render   import Map
 from mapdisp.frame import MapFrame
 from grass.script  import core as grass
 from core.debug    import Debug
+from core.settings import UserSettings
 
 # for standalone app
 monFile = { 'cmd' : None,
