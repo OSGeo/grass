@@ -984,7 +984,7 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
 
    See also Vect_line_buffer().
 
-   \param InPoints input line geometry
+   \param Points input line geometry
    \param da distance along major axis
    \param db distance along minor axis
    \param dalpha angle between 0x and major axis
@@ -1119,11 +1119,11 @@ void Vect_area_buffer2(const struct Map_info *Map, int area, double da, double d
    \param px input point x-coordinate
    \param py input point y-coordinate
    \param da distance along major axis
-   \param da distance along minor axis
+   \param db distance along minor axis
    \param dalpha angle between 0x and major axis
    \param round make corners round
    \param tol maximum distance between theoretical arc and output segments
-   \param[out] nPoints output polygon outer border (ccw order)
+   \param[out] oPoints output polygon outer border (ccw order)
  */
 void Vect_point_buffer2(double px, double py, double da, double db,
 			double dalpha, int round, double tol,

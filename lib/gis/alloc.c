@@ -26,7 +26,7 @@
  *
  * \param file file name
  * \param line line number
- * \param t number of elements
+ * \param n number of elements
  */
 
 void *G__malloc(const char *file, int line, size_t n)

@@ -283,7 +283,8 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 /*!
   \brief Write data to GRASS ASCII vector format
 
-  \param dascii pointer to the ASCII file
+  \param ascii  pointer to the ASCII file
+  \param att    att file (< version 5 only)
   \param Map    pointer to Map_info structure
   \param ver    version number 4 or 5
   \param format format GV_ASCII_FORMAT_POINT or GV_ASCII_FORMAT_STD

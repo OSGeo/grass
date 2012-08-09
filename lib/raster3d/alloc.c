@@ -64,7 +64,7 @@ void *Rast3d_realloc(void *ptr, int nBytes)
  *
  *  Same as <em>free (ptr)</em>.
  *
- *  \param ptr
+ *  \param buf
  *  \return void
  */
 

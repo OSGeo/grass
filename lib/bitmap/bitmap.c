@@ -84,7 +84,7 @@ struct BM *BM_create(int x, int y)
 /*!
  * \brief Destroy bitmap and free all associated memory
  *
- *  \param struct BM *map
+ *  \param map
  *  \return int returns 0
  */
 int BM_destroy(struct BM *map)
@@ -141,8 +141,8 @@ int BM_destroy(struct BM *map)
  *
  * returns 0 on success or -1 on error
  *
- *  \param int mode
- *  \param int size
+ *  \param mode
+ *  \param size
  *  \return int
  */
 

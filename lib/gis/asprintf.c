@@ -36,6 +36,7 @@
  *
  * \param[out] out
  * \param[in] fmt
+ * \param ap
  * \return number of bytes written
  */
 
@@ -88,8 +89,9 @@ int G_asprintf(char **out, const char *fmt, ...)
  * times in a loop.
  *
  * \param[out] out
- * \param[out] size
+ * \param[out] osize
  * \param[in] fmt
+ * \param ap
  * \return number of bytes written
  */
 

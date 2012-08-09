@@ -26,10 +26,9 @@
    Bridge is an array containing the indices of the bridges.
 
    \param graph input graph
-   \param[out] bridges_list list of bridges
+   \param[out] bridge_list list of bridges
 
-   \return number of bridges
-   \return -1 on error
+   \return number of bridges, -1 on error
  */
 int NetA_compute_bridges(dglGraph_s * graph, struct ilist *bridge_list)
 {
