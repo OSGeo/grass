@@ -139,7 +139,6 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - linkm:	Linked list memory manager - \ref linkm (obsolete?)
  - manage:      \ref managelib
  - symbol:	Drawing symbols for %point %vector data library - \ref symbol
- - vask:	Cursor management library - \ref vask
 
 \section interfaces Interfaces
 
