@@ -298,7 +298,6 @@ class SwipeMapFrame(DoubleMapFrame):
         """
         Debug.msg (3, "SwipeMapFrame.SetLayer(): name=%s" % name)
         
-        self.rasters['first'] = name
         # this simple application enables to keep only one raster
         mapInstance.DeleteAllLayers()
         cmdlist = ['d.rast', 'map=%s' % name]
