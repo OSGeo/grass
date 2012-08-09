@@ -1972,6 +1972,8 @@ class GCPList(wx.ListCtrl,
 
         self.ResizeColumns()
         self.render = True
+	
+	self.EnsureVisible(self.selected)
 
     def OnCheckItem(self, index, flag):
         """!Item is checked/unchecked"""
@@ -2010,6 +2012,8 @@ class GCPList(wx.ListCtrl,
         self.gcp.pointsToDrawSrc.AddItem(coords = [0,0], label = str(self.selectedkey))
         self.gcp.pointsToDrawTgt.AddItem(coords = [0,0], label = str(self.selectedkey))
         
+	self.EnsureVisible(self.selected)
+
         return self.selected
 
     def DeleteGCPItem(self):
