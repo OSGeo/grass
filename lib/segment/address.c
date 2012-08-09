@@ -92,8 +92,6 @@ int segment_address_slow(const SEGMENT * SEG, off_t row, off_t col, int *n,
 }
 
 /**
- * \fn int segment_address (SEGMENT *SEG, int row, int col, int *n, int *index)
- *
  * \brief Gets segment address and returns <b>n</b> and <b>index</b>.
  *
  * \param[in] SEG segment

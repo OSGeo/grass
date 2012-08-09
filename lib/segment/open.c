@@ -19,8 +19,6 @@
 #include "local_proto.h"
 
 /**
- * \fn int segment_open (SEGMENT *SEG, char *fname, off_t nrows, off_t ncols, int srows, int scols, int len, int nseg)
- *
  * \brief Initialize segment structure and open segment file.
  *
  * Initializes the <b>seg</b> structure and prepares a temporary file. 
@@ -28,7 +26,7 @@
  *
  * <b>Note:</b> The file with name fname will be created anew.
  *
- * \param[in,out] seg segment
+ * \param[in,out] SEG segment
  * \param[in] fname file name
  * \param[in] nrows number of non-segmented rows
  * \param[in] ncols number of non-segmented columns

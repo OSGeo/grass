@@ -25,7 +25,7 @@
  * final <i>segment_put()</i> to force all pending updates to disk. Must 
  * also be called before the first call to <i>segment_get_row</i>.
  *
- * \param[in] seg segment
+ * \param[in] SEG segment
  * \return always returns 0
  */
 

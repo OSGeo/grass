@@ -31,8 +31,6 @@ static int zero_fill(int, off_t);
 
 
 /**
- * \fn int segment_format (int fd, int nrows, int ncols, int srows, int scols, int len)
- *
  * \brief Format a segment file.
  *
  * The segmentation routines require a disk file to be used for paging 
@@ -68,8 +66,6 @@ int segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
 }
 
 /**
- * \fn int segment_format_nofill (int fd, int nrows, int ncols, int srows, int scols, int len)
- *
  * \brief Format a segment file.
  *
  * The segmentation routines require a disk file to be used for paging 

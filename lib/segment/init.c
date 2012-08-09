@@ -48,7 +48,7 @@ static int read_off_t(int, off_t *);
  * <b>Note:</b> The size of a segment is <em>scols*srows*len</em> plus a 
  * few bytes for managing each segment.
  *
- * \param[in,out] seg segment
+ * \param[in,out] SEG segment
  * \param[in] fd file descriptor
  * \param[in] nseg number of segments to remain in memory
  * \return 1 if successful

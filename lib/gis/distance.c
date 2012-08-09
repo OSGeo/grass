@@ -83,8 +83,8 @@ double G_distance(double e1, double n1, double e2, double n2)
 /*!
   \brief Returns distance between two line segments in meters.
   
-  \param ax1,ay2,ax2,ay2 first segment
-  \param bx1,by2,bx2,by2 second segment
+  \param ax1,ay1,ax2,ay2 first segment
+  \param bx1,by1,bx2,by2 second segment
   
   \return distance value
 */
@@ -112,7 +112,7 @@ double G_distance_between_line_segments(double ax1, double ay1,
   \brief Returns distance between a point and line segment in meters.
   
   \param xp,yp point coordinates
-  \param x1,x1 segment point coordinates
+  \param x1,y1 segment point coordinates
   \param x2,y2 segment point coordinates
   
   \return distance

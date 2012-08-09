@@ -22,8 +22,6 @@
 
 
 /**
- * \fn int segment_seek (SEGMENT *SEG, int n, int index)
- *
  * \brief Seek into a segment.
  *
  * \param[in,out] SEG segment
