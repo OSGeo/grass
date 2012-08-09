@@ -40,7 +40,7 @@ plus_t Vect_get_num_nodes(const struct Map_info *Map)
    \brief Get number of primitives in vector map
 
    \param map pointer to Map_info struct
-   \patam type feature type
+   \param type feature type
 
    \return number of primitives
  */

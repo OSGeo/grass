@@ -1,6 +1,6 @@
 
 /**
- * \file setup.c
+ * \file lib/segment/setup.c
  *
  * \brief Segment setup routines.
  *

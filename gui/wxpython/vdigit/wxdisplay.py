@@ -918,7 +918,7 @@ class DisplayDriver:
 
         @todo map units
         
-        @alpha color value for aplha channel
+        @param alpha color value for aplha channel
         """
         color = dict()
         for key in self.settings.keys():

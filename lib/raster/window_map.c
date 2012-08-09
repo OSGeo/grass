@@ -1,5 +1,5 @@
 /*!
- * \file window_map.c
+ * \file lib/raster/window_map.c
  *
  * \brief Raster Library - Window mapping functions.
  *

@@ -1,6 +1,6 @@
 
 /**
- * \file get.c
+ * \file lib/segment/get.c
  *
  * \brief Get segment routines.
  *

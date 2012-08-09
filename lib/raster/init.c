@@ -1,6 +1,6 @@
 
 /**
- * \file rasterinit.c
+ * \file lib/raster/init.c
  * 
  * \brief Raster Library - Handles program initialization.
  *

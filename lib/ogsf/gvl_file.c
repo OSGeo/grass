@@ -131,7 +131,7 @@ geovol_file *gvl_file_get_volfile(int id)
    \brief Find file with name and type in geovol_file array an return handle
 
    \param name file name
-   \para begin
+   \param begin
 
    \param data id
    \param -1 not found
@@ -680,7 +680,7 @@ int get_buff_value(IFLAG type, void *data, int offset, void *value)
 
    \param vf pointer to geovol_file struct
    \param x,y,z real point
-   \oaram[out] value data value
+   \param[out] value data value
 
    \return -1 on failure
    \return 1 on success

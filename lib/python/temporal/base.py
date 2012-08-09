@@ -37,9 +37,9 @@ class dict_sql_serializer(object):
 	"""!Convert the internal dictionary into a string of semicolon separated SQL statements
 	   The keys are the column names and the values are the row entries
 
-	   @type must be SELECT. INSERT, UPDATE
-	   @table The name of the table to select, insert or update
-	   @where The optional where statement
+	   @param type must be SELECT. INSERT, UPDATE
+	   @param table The name of the table to select, insert or update
+	   @param where The optional where statement
 	   @return the sql string
 	"""
 

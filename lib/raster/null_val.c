@@ -1,5 +1,5 @@
 /*!
- * \file raster/null_value.c
+ * \file lib/raster/null_val.c
  *
  * \brief Raster Library - NULL value management
  *

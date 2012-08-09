@@ -46,7 +46,7 @@ static double scan_double(const char *, double *);
 #define TEST(x) (flags&(1<<x))
 
 /*!
-  \bried Read cell header (for internal use only)
+  \brief Read cell header (for internal use only)
   
   \param fp file descriptor
   \param[out] cellhd pointer to Cell_head structure

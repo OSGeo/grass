@@ -532,7 +532,7 @@ class AttributeManager(wx.Frame):
         """!GRASS Attribute Table Manager window
 
         @param parent parent window
-        @parem id window id
+        @param id window id
         @param title window title or None for default title
         @param vetorName name of vector map
         @param item item from Layer Tree

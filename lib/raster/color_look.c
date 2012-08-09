@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_lookup.c
+ * \file lib/raster/color_look.c
  * 
  * \brief Raster Library - Lookup array of colors 
  *

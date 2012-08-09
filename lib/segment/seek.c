@@ -1,6 +1,6 @@
 
 /**
- * \file seek.c
+ * \file lib/segment/seek.c
  *
  * \brief Segment seek routines.
  *

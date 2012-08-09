@@ -713,8 +713,7 @@ void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
 
    \param id surface id
    \param x1,y1,x2,y2 line nodes
-   \param lasp ?
-   \paran n ?
+
    \return number of points used
  */
 int GS_draw_nline_onsurf(int id, float x1, float y1, float x2, float y2,
@@ -2876,7 +2875,7 @@ int GS_get_twist(void)
 
    10ths of degrees off twelve o'clock
 
-   \params t tenths of degrees clockwise from 12:00.
+   \param t tenths of degrees clockwise from 12:00.
  */
 void GS_set_twist(int t)
 {

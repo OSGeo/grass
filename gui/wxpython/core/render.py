@@ -1191,7 +1191,7 @@ class Map(object):
         @param l_render render an image (if True)
         
         @return new layer on success
-        @retutn None on failure
+        @return None on failure
         """
         Debug.msg (2, "Map.AddOverlay(): cmd=%s, render=%d" % (command, l_render))
         overlay = Overlay(id = id, type = type, cmd = command,
@@ -1254,7 +1254,7 @@ class Map(object):
         
         @return list of overlays (list=True)
         @return overlay (list=False)
-        @retur None (list=False) if no overlay or more overlays found
+        @return None (list=False) if no overlay or more overlays found
         """
         ovl = []
         for overlay in self.overlays:

@@ -36,7 +36,7 @@ static int list_element(FILE *, const char *, const char *, const char *,
   lister (char *name char *mapset, char* buf)
   \endcode
   
-  Given file <em>name</em>, and </em>mapset</em>, lister() should
+  Given file <em>name</em>, and <em>mapset</em>, lister() should
   copy a string into 'buf' when called with name == "", should set
   buf to general title for mapset list.
   

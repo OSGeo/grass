@@ -1,5 +1,5 @@
 /**
- * \file close.c
+ * \file lib/segment/close.c
  *
  * \brief Segment closing routine.
  *

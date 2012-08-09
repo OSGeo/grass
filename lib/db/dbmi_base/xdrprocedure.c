@@ -47,7 +47,7 @@ int db__start_procedure_call(int procnum)
   \param n
 
   \return DB_OK  ok
-  \returnDB_EOF eof from client
+  \return DB_EOF eof from client
 */
 int db__recv_procnum(int *n)
 {

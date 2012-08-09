@@ -28,7 +28,6 @@
  * should be used by modules that need to display the current location
  * to the user. See Locations for an explanation of locations.
  *
- *  \param
  *  \return char* tolocation name
  */
 
@@ -46,7 +45,6 @@ const char *G_location(void)
  * directory, this routine will return a string which looks like
  * <i>/home/user/grassdata/spearfish</i>.
  *
- *  \param
  *  \return char * 
  */
 
@@ -67,7 +65,6 @@ char *G_location_path(void)
 /*!
  * \brief Get current location path
  *
- *  \param
  *  \return char* to location path
  */
 char *G__location_path(void)

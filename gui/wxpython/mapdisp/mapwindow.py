@@ -918,7 +918,7 @@ class BufferedWindow(MapWindow, wx.Window):
         @param rotation rotate symbol
         @param text draw also text (text, font, color, rotation)
         @param textAlign alignment (default 'lower-right')
-        @textOffset offset for text (from center point)
+        @param textOffset offset for text (from center point)
         """
         Debug.msg(4, "BufferedWindow.DrawCross(): pdc=%s, coords=%s, size=%d" % \
                   (pdc, coords, size))

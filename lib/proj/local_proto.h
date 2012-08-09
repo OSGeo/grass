@@ -1,6 +1,6 @@
 
 /**
-   \file lib/proj/local_proto.hlocal_proto.h
+   \file lib/proj/local_proto.h
 
    \brief GProj library
 

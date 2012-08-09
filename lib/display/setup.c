@@ -1,5 +1,5 @@
 /*!
-  \file lib/driver/setup.c
+  \file lib/display/setup.c
 
   \brief Display Driver - setup
 

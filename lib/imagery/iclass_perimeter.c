@@ -40,7 +40,7 @@
 /*!
    \brief Creates perimeters from vector areas of given category.
 
-   \param vector_map name of vector map
+   \param Map vector map
    \param layer_name layer name (within vector map)
    \param category vector category (cat column value)
    \param[out] perimeters list of perimeters

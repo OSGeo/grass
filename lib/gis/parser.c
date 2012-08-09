@@ -761,7 +761,7 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 }
 
 /*!
-  \Get overwrite value
+  \brief Get overwrite value
 
   \return 1 overwrite enabled
   \return 0 overwrite disabled

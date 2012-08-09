@@ -1,6 +1,6 @@
 
 /**
- * \file release.c
+ * \file lib/segment/release.c
  *
  * \brief Segment release routines.
  *

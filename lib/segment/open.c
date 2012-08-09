@@ -1,6 +1,6 @@
 
 /**
- * \file open.c
+ * \file lib/segment/open.c
  *
  * \brief Segment creation routine.
  *
