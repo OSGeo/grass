@@ -58,7 +58,7 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
 
    Returns:
     - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
-    - table name for PostGIS format (GV_FORMAT_POSTGIS) including schema (<schema>.<table>)
+    - table name for PostGIS format (GV_FORMAT_POSTGIS) including schema (\<schema\>.\<table\>)
 
    Note: allocated string should be freed by G_free()
 

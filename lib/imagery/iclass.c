@@ -39,7 +39,7 @@
 
    \param statistics pointer to bands statistics
    \param refer pointer to band files structure
-   \param vector_map name of vector map with training areas
+   \param map_info vector map with training areas
    \param layer_name vector layer
    \param group name of imagery group
    \param raster_name name of temporary raster map (to be created)

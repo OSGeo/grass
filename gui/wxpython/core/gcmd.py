@@ -103,7 +103,7 @@ class GError:
         @param message error message
         @param parent centre window on parent if given
         @param caption window caption (if not given "Error")
-        @showTraceback True to show also Python traceback
+        @param showTraceback True to show also Python traceback
         """
         if not caption:
             caption = _('Error')

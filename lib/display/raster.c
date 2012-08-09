@@ -1,5 +1,5 @@
 /*!
-  \file lib/driver/raster.c
+  \file lib/display/raster.c
 
   \brief Display Driver - draw raster data
 

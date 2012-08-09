@@ -1,6 +1,6 @@
 
 /**
- * \file put.c
+ * \file lib/segment/put.c
  *
  * \brief Segment write routines.
  *

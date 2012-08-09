@@ -1118,7 +1118,7 @@ class Settings:
     def Reset(self, key = None):
         """!Reset to default settings
 
-        @key key in settings dict (None for all keys)
+        @param key key in settings dict (None for all keys)
         """
         if not key:
             self.userSettings = copy.deepcopy(self.defaultSettings)

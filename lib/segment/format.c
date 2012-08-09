@@ -1,6 +1,6 @@
 
 /**
- * \file format.c
+ * \file lib/segment/format.c
  *
  * \brief Segment formatting routines.
  *

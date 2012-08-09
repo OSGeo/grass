@@ -104,7 +104,6 @@ void alloc_statistics(IClass_statistics * statistics, int nbands)
    Frees all allocated arrays in statistics structure.
 
    \param statistics pointer to statistics structure
-   \param nbands number of band files
  */
 void I_iclass_free_statistics(IClass_statistics * statistics)
 {
@@ -185,7 +184,7 @@ int make_all_statistics(IClass_statistics * statistics,
 /*!
    \brief Calculate statistics for one training area.
 
-   \param statistics[out] pointer to statistics structure
+   \param[out] statistics pointer to statistics structure
    \param perimeter area perimeter
    \param band_buffer buffer to read band rows into
    \param band_fd band files descriptors

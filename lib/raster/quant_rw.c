@@ -66,7 +66,7 @@ void Rast_round_fp_map(const char *name, const char *mapset)
  * in <tt>f_range</tt> producing the integer range
  * [<em>cmin,cmax</em>].
  *
- * Make a rule for map <name> that maps floating range (d_min, d_max)
+ * Make a rule for map \<name\> that maps floating range (d_min, d_max)
  * into integer range (min, max)
  * This function is useful when the quant rule doesn't depend of the
  * range of produced float data, for example the slope map whould
@@ -107,7 +107,7 @@ void Rast_quantize_fp_map(const char *name, const char *mapset,
  * 90] even if the range of slopes is not 0-90. The aspect map would be
  * quantized from [0.0, 360.0] to [0, 360].
  *
- * Make a rule for map <name> that maps floating range (d_min, d_max)
+ * Make a rule for map \<name\> that maps floating range (d_min, d_max)
  * into integer range (min, max)
  * This function is useful when the quant rule doesn't depend of the
  * range of produced float data, for example the slope map whould

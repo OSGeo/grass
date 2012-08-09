@@ -151,7 +151,7 @@ const char *Vect_get_column_types(const struct Map_info *Map, int field)
    \param field layer number
 
    \return list of column(s) types on success
-   \retutn NULL on error 
+   \return NULL on error 
  */
 const char *Vect_get_column_names_types(const struct Map_info *Map, int field)
 {

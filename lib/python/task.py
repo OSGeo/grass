@@ -198,7 +198,7 @@ class grassTask:
         @param ignoreErrors True to return whatever has been built so
         far, even though it would not be a correct command for GRASS
         @param ignoreRequired True to ignore required flags, otherwise
-        '<required>' is shown
+        '@<required@>' is shown
         @param ignoreDefault True to ignore parameters with default values
         """
         cmd = [self.name]

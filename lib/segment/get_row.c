@@ -1,6 +1,6 @@
 
 /**
- * \file get_row.c
+ * \file lib/segment/get_row.c
  *
  * \brief Segment row retrieval routines.
  *

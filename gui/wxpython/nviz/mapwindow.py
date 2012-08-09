@@ -253,7 +253,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def ComputeFlyValues(self, mx, my):
         """!Compute parameters for fly-through navigation
         
-        @params mx,my results from ComputeMxMy method
+        @param mx,my results from ComputeMxMy method
         """
         self.fly['value'] = [0, 0, 0]
         

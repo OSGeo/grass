@@ -126,7 +126,7 @@ class VectorSelect(Select):
         select vector maps. Control allows to filter vector maps. If you
         don't need this feature use Select class instead
         
-        @ftype filter vector maps based on feature type
+        @param ftype filter vector maps based on feature type
         """
         Select.__init__(self, parent = parent, id = wx.ID_ANY,
                         type = 'vector', **kwargs)

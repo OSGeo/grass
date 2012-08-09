@@ -86,26 +86,26 @@ int G__make_location(const char *location_name,
  * This function creates a new location in the current database,
  * initializes the projection, default window and current window.  
  *
- * \param char * location_name
+ * \param location_name
  *                      The name of the new location.  Should not include
  *                      the full path, the location will be created within
  *                      the current database.
- * \param struct Cell_head *wind
+ * \param wind
  *                      Contains the default window setting for the
  *                      new location.  All fields should be set in this
  *                      structure, and care should be taken to ensure that
  *                      the proj/zone fields match the definition in the
  *                      proj_info parameter (see G_set_cellhd_from_projinfo()).
  *
- * \param struct Key_Value *proj_info
+ * \param proj_info
  *                      Projection definition suitable to write to the
  *                      PROJ_INFO file, or NULL for PROJECTION_XY.
  *
- * \param struct Key_Value *proj_units
+ * \param proj_units
  *                      Projection units suitable to write to the PROJ_UNITS
  *                      file, or NULL.
  *
- * \param FILE *report_file 
+ * \param report_file 
  *                      File to which creation information should be written
  *                      (can be stdout).  Currently not used.
  *

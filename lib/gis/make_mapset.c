@@ -86,13 +86,13 @@ int G__make_mapset(const char *gisdbase_name, const char *location_name,
  * This function creates a new mapset in the current location,
  * initializes default window and current window.
  *
- * \param char * gisdbase_name
+ * \param gisdbase_name
  *                      The full path of GISDBASE to create mapset in.
  *                      If NULL then current GISDBASE is used.
- * \param char * location_name
+ * \param location_name
  *                      The name location to create mapset in.
  *                      If NULL then current location is used.
- * \param char * mapset_name
+ * \param mapset_name
  *                      The name of the new mapset.  Should not include
  *                      the full path, the mapset will be created within
  *                      the current database and location.

@@ -4,9 +4,9 @@
   These functions and definitions support the site format for 5.0
   (format proposed by Dave Gerdes):
   
-  <pre>
+  \verbatim
   easting|northing|[z|[d4|]...][#category_int] [ [@attr_text OR %flt] ... ]
-  </pre>
+  \endverbatim
  
   to allow multidimensions (everything preceding the last '|') and any
   number of text or numeric attribute fields.

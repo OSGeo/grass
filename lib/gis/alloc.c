@@ -1,5 +1,5 @@
 /*!
- * \file fis/alloc.c
+ * \file lib/gis/alloc.c
  *
  * \brief GIS Library - Memory allocation routines.
  *

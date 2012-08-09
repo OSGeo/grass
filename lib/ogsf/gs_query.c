@@ -37,7 +37,7 @@
 
 
 /*!
-   \biref Crude method of intersecting line of sight with closest part of surface. 
+   \brief Crude method of intersecting line of sight with closest part of surface. 
 
    Uses los vector to determine the point of first intersection
    which is returned in point. Returns 0 if los doesn't intersect. 
@@ -175,7 +175,7 @@ int gs_los_intersect1(int surfid, float (*los)[3], float *point)
 }
 
 /*!
-   \biref Crude method of intersecting line of sight with closest part of surface. 
+   \brief Crude method of intersecting line of sight with closest part of surface. 
 
    This version uses the shadow of the los projected down to
    the surface to generate a line_on_surf, then follows each

@@ -23,7 +23,7 @@ class PsMapData(MenuData):
     def __init__(self, path = None):
         """!Menu for Cartographic Composer (psmap.py)
         
-        @path path to XML to be read (None for menudata_psmap.xml)
+        @param path path to XML to be read (None for menudata_psmap.xml)
         """
         if not path:
             path = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata_psmap.xml')

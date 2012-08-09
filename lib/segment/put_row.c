@@ -1,6 +1,6 @@
 
 /**
- * \file put_row.c
+ * \file lib/segment/put_row.c
  *
  * \brief Write segment row routines.
  *

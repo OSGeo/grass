@@ -1,5 +1,5 @@
 /*!
- \file lib/gis/color_tables.c
+ \file lib/gis/color_rules.c
  
  \brief GIS Library - Color tables management subroutines
 
