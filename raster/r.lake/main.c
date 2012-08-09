@@ -191,19 +191,19 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (smap_opt->answer && sdxy_opt->answer)
-	G_fatal_error(_("Both seed map and coordinates cannot be specified"));
+	G_fatal_error("%s", _("Both seed map and coordinates cannot be specified"));
 
     if (!smap_opt->answer && !sdxy_opt->answer)
-	G_fatal_error(_("Seed map or seed coordinates must be set!"));
+	G_fatal_error("%s", _("Seed map or seed coordinates must be set!"));
 
     if (sdxy_opt->answer && !lake_opt->answer)
-	G_fatal_error(_("Seed coordinates and output map lake= must be set!"));
+	G_fatal_error("%s", _("Seed coordinates and output map lake= must be set!"));
 
     if (lake_opt->answer && overwrite_flag->answer)
-	G_fatal_error(_("Both lake and overwrite cannot be specified"));
+	G_fatal_error("%s", _("Both lake and overwrite cannot be specified"));
 
     if (!lake_opt->answer && !overwrite_flag->answer)
-	G_fatal_error(_("Output lake map or overwrite flag must be set!"));
+	G_fatal_error("%s", _("Output lake map or overwrite flag must be set!"));
 
     terrainmap = tmap_opt->answer;
     seedmap = smap_opt->answer;
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 
 	if (start_row < 0 || start_row > rows ||
 	    start_col < 0 || start_col > cols)
-	    G_fatal_error(_("Seed point outside the current region"));
+	    G_fatal_error("%s", _("Seed point outside the current region"));
     }
 
     /* Open terran map */
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
     in_terran = (FCELL **) G_malloc(rows * sizeof(FCELL *));
     out_water = (FCELL **) G_malloc(rows * sizeof(FCELL *));
     if (in_terran == NULL || out_water == NULL)
-	G_fatal_error(_("G_malloc: out of memory"));
+	G_fatal_error("%s", _("G_malloc: out of memory"));
 
 
     G_debug(1, "Loading maps...");
@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
     if (sdxy_opt->answer)
 	/* Check is water level higher than seed point */
 	if (in_terran[start_row][start_col] >= water_level)
-	    G_fatal_error(_("Given water level at seed point is below earth surface. "
+	    G_fatal_error("%s", _("Given water level at seed point is below earth surface. "
 			   "Increase water level or move seed point."));
     out_water[start_row][start_col] = 1;
 
@@ -345,10 +345,10 @@ int main(int argc, char *argv[])
     save_map(out_water, out_fd, rows, cols, negative_flag->answer, &min_depth,
 	     &max_depth, &area, &volume);
 
-    G_message(_("Lake depth from %f to %f"), min_depth, max_depth);
+    G_message(_("Lake depth from %f to %f (specified water level is taken as zero)"), min_depth, max_depth);
     G_message(_("Lake area %f square meters"), area);
     G_message(_("Lake volume %f cubic meters"), volume);
-    G_warning(_("Volume is correct only if lake depth (terrain raster map) is in meters"));
+    G_warning("%s", _("Volume is correct only if lake depth (terrain raster map) is in meters"));
 
     /* Close all files. Lake map gets written only now. */
     Rast_close(in_terran_fd);

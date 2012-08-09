@@ -3,7 +3,8 @@
 <p>The module fills a lake to a target water level from a given start point. The user
 can think of it as <em>r.grow</em> with additional checks for elevation.  The resulting
 raster map contains cells with values representing lake depth and NULL for all other 
-cells beyond the lake.
+cells beyond the lake. Lake depth is reported relative to specified water level
+(specified level = 0 depth).
 
 <p>This module uses a 3x3 moving window approach to find all cells that
 match three criteria and to define the lake:
@@ -69,7 +70,6 @@ during single run.
 
 <ul>
   <li>The entire map is loaded into RAM.</li>
-  <li>The module is NOT large file safe. (due to the previous point)</li>
   <li>A completely negative seed map will not work! At least one cell must have 
   a value &gt; 0. Output from <em>r.lake -n</em> can NOT be used as input in the next run.</li>
 </ul>
