@@ -132,7 +132,9 @@ raster. Any samples taken within this margin will be null.</li>
 <li><a href="r.resamp.rst.html">r.resamp.rst</a> Regularized Spline with Tension 
 (RST) interpolation 2D: Behaves similarly, i.e. it computes a surface assuming 
 that the values are samples at each raster cell's centre, and samples the surface
-at each region cell's centre.
+at each region cell's centre.</li>
+<li><a href="r.resamp.bspline.html">r.resamp.bspline</a> Bicubic or bilinear 
+spline interpolation with Tykhonov regularization.</li>
 <p>
 
 <li>For <a href="r.resamp.stats.html">r.resamp.stats</a> without <b>-w</b>, the value of 
@@ -160,9 +162,9 @@ Furthermore, there are modules available for reinterpolation of "sparse"
 <li> Interpolating from contour lines (<a href="r.contour.html">r.contour</a>)</li>
 </ul>
 
-For Lidar and similar data, <a href="r.in.xyz.html">r.in.xyz</a> supports loading
-and binning of ungridded x,y,z ASCII data into a new raster map. The user may choose from
-a variety of statistical methods in creating the new raster.
+For Lidar and similar data, <a href="r.in.lidar.html">r.in.lidar</a> and <a href="r.in.xyz.html">r.in.xyz</a>
+support loading and binning of ungridded x,y,z ASCII data into a new raster map.
+The user may choose from a variety of statistical methods in creating the new raster map.
 <p>
 
 Otherwise, for interpolation of scattered data, use the <em>v.surf.*</em> set of
