@@ -53,13 +53,17 @@ def time_delta_to_relative_time(delta):
 ###############################################################################
 
 def increment_datetime_by_string(mydate, increment, mult = 1):
-    """!Return a new datetime object incremented with the provided relative dates specified as string.
-       Additional a multiplier can be specified to multiply the increment before adding to the provided datetime object.
+    """!Return a new datetime object incremented with the provided 
+       relative dates specified as string.
+       Additional a multiplier can be specified to multiply the increment 
+       before adding to the provided datetime object.
 
        @param mydate A datetime object to incremented
        @param increment A string providing increment information:
-                  The string may include comma separated values of type seconds, minutes, hours, days, weeks, months and years
-                  Example: Increment the datetime 2001-01-01 00:00:00 with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
+                  The string may include comma separated values of type seconds, 
+                  minutes, hours, days, weeks, months and years
+                  Example: Increment the datetime 2001-01-01 00:00:00 
+                  with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
                   will result in the datetime 2003-02-18 12:05:00
        @param mult A multiplier, default is 1
     """
