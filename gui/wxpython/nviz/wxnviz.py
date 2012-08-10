@@ -87,7 +87,7 @@ class Nviz(object):
     def __init__(self, glog, gprogress):
         """!Initialize Nviz class instance
         
-        @param log logging area
+        @param glog logging area
         @param gprogress progressbar
         """
         global errfunc, perfunc, log, progress
@@ -300,11 +300,13 @@ class Nviz(object):
         
     def SetLight(self, x, y, z, color, bright, ambient, w = 0, lid = 1):
         """!Change lighting settings
+        
         @param x,y,z position
         @param color light color (as string)
         @param bright light brightness
         @param ambient light ambient
         @param w local coordinate (default to 0)
+        @param lid light id
         """
         Nviz_set_light_position(self.data, lid, x, y, z, w)
         Nviz_set_light_bright(self.data, lid, bright)
@@ -769,8 +771,8 @@ class Nviz(object):
         
         @todo all
          
-        @param surface id (< 0 for all)
-        @param color color string (R:G:B)
+        @param id surface id (< 0 for all)
+        @param color_str color string (R:G:B)
         
         @return 1 on success
         @return -1 surface not found
@@ -934,7 +936,8 @@ class Nviz(object):
         @param id vector id
         @param color_str color string
         @param width line width
-        @param flat
+        @param size size of the symbol
+        @param marker type of the symbol
         
         @return -1 vector set not found
         """
@@ -997,7 +1000,7 @@ class Nviz(object):
         """!Read vector colors
         
         @param name vector map name
-        @mapset mapset name ("" for search path)
+        @param mapset mapset name (empty string (\c "") for search path)
         
         @return -1 on error 
         @return 0 if color table missing 
@@ -1112,6 +1115,7 @@ class Nviz(object):
         
         @param id volume id
         @param level isosurface level (topography)
+        @param isosurf_id isosurface id
         
         @return -1 on failure
         @return 1 on success
@@ -1136,6 +1140,7 @@ class Nviz(object):
         """!Add new slice
         
         @param id volume id
+        @param slice_id slice id
         
         @return -1 on failure
         @return number of slices
@@ -1458,7 +1463,8 @@ class Nviz(object):
     def SetIsosurfaceMode(self, id, mode):
         """!Set draw mode for isosurfaces
         
-        @param mode
+        @param id isosurface id
+        @param mode isosurface draw mode
         
         @return 1 on success
         @return -1 volume set not found
@@ -1477,7 +1483,8 @@ class Nviz(object):
     def SetSliceMode(self, id, mode):
         """!Set draw mode for slices
         
-        @param mode
+        @param id slice id
+        @param mode slice draw mode
         
         @return 1 on success
         @return -1 volume set not found
@@ -1496,6 +1503,7 @@ class Nviz(object):
     def SetIsosurfaceRes(self, id, res):
         """!Set draw resolution for isosurfaces
         
+        @param id isosurface id
         @param res resolution value
         
         @return 1 on success
@@ -1515,6 +1523,7 @@ class Nviz(object):
     def SetSliceRes(self, id, res):
         """!Set draw resolution for slices
         
+        @param id slice id
         @param res resolution value
         
         @return 1 on success
@@ -1562,7 +1571,6 @@ class Nviz(object):
         
         @param id volume id
         @param slice_id slice id
-        @param x1,x2,y1,y2,z1,z2 slice coordinates
         @param value transparency value (0 - 255)
         
         @return 1 on success
@@ -1587,6 +1595,8 @@ class Nviz(object):
     def SetIsosurfaceInOut(self, id, isosurf_id, inout):
         """!Set inout mode
         
+        @param id volume id
+        @param isosurf_id isosurface id
         @param inout mode true/false
         
         @return 1 on success
