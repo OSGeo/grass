@@ -38,7 +38,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended, header
     """
     
     # We need a database interface
-    dbif = sql_database_interface_connection()
+    dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
    
     mapset =  core.gisenv()["MAPSET"]
@@ -115,7 +115,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column, w
     """
 
     # We need a database interface
-    dbif = sql_database_interface_connection()
+    dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
    
     mapset =  core.gisenv()["MAPSET"]

@@ -47,11 +47,11 @@ class abstract_space_time_dataset(abstract_dataset):
 
            @param ident: The unique identifier of the new object
         """
-        raise IOError("This method must be implemented in the subclasses")
+        raise ImplementationError("This method must be implemented in the subclasses")
 
     def get_map_register(self):
         """!Return the name of the map register table"""
-        raise IOError("This method must be implemented in the subclasses")
+        raise ImplementationError("This method must be implemented in the subclasses")
 
     def set_map_register(self, name):
         """!Set the name of the map register table
@@ -60,7 +60,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
            @param name: The name of the register table
         """
-        raise IOError("This method must be implemented in the subclasses")
+        raise ImplementationError("This method must be implemented in the subclasses")
  
     def print_self(self):
 	"""!Print the content of the internal structure to stdout"""

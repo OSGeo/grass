@@ -541,7 +541,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
 
     sst = dataset_factory(sampletype, sid)
 
-    dbif = sql_database_interface_connection()
+    dbif = ()
     dbif.connect()
 
     for st in sts:

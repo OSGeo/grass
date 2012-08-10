@@ -42,7 +42,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method, nprocs
     """
     
     # We need a database interface for fast computation
-    dbif = sql_database_interface_connection()
+    dbif = ()
     dbif.connect()
 
     mapset =  core.gisenv()["MAPSET"]

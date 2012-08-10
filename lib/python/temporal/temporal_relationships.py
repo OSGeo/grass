@@ -29,7 +29,7 @@ class temporal_topology_builder(object):
     """!This class is designed to build the temporal topology based on a lists of maps
     
 	Example:
-	
+	@code
 	# We have a space time raster dataset and build a map list
 	# from all registered maps ordered by start time
 	maps = strds.get_registered_maps_as_objects()
@@ -56,7 +56,7 @@ class temporal_topology_builder(object):
 	
 	# Dictionary like accessed
 	_map = tb["name@mapset"]
-	       
+	@endcode
     
     """
     def __init__(self):

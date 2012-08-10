@@ -80,7 +80,7 @@ def main():
 
     sp = tgis.dataset_factory(type, id)
 
-    dbif = tgis.sql_database_interface_connection()
+    dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     if sp.is_in_db(dbif) and grass.overwrite() == False:

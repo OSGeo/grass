@@ -62,7 +62,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1, regi
 	
     dummy = sp.get_new_map_instance(None)
 	
-    dbif = sql_database_interface_connection()
+    dbif = ()
     dbif.connect()
     
     if sp.is_in_db(dbif) == False:

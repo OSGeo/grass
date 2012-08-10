@@ -73,7 +73,7 @@ def main():
         id = input + "@" + mapset
 
     # We need a database interface
-    dbif = tgis.sql_database_interface_connection()
+    dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
     
     sp = tgis.space_time_raster_dataset(id)
