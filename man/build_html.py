@@ -90,6 +90,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
        <li><a href="imageryintro.html">Intro image processing</a></li>
        <li><a href="vectorintro.html">Intro vector map processing and network analysis</a></li>
        <li><a href="databaseintro.html">Intro database management</a></li>
+       <li><a href="temporalintro.html">Intro temporal data processing</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
