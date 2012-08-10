@@ -36,14 +36,14 @@ from abstract_space_time_dataset import *
 
 ###############################################################################
 
-class raster_dataset(abstract_map_dataset):
+class raster_dataset(AbstractMapDataset):
     """!Raster dataset class
 
        This class provides functions to select, update, insert or delete raster
        map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
-	abstract_map_dataset.__init__(self)
+	AbstractMapDataset.__init__(self)
 	self.reset(ident)
 
     def get_type(self):
@@ -259,14 +259,14 @@ class raster_dataset(abstract_map_dataset):
 
 ###############################################################################
 
-class raster3d_dataset(abstract_map_dataset):
+class raster3d_dataset(AbstractMapDataset):
     """!Raster3d dataset class
 
        This class provides functions to select, update, insert or delete raster3d
        map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
-	abstract_map_dataset.__init__(self)
+	AbstractMapDataset.__init__(self)
 	self.reset(ident)
 
     def get_type(self):
@@ -470,14 +470,14 @@ class raster3d_dataset(abstract_map_dataset):
 
 ###############################################################################
 
-class vector_dataset(abstract_map_dataset):
+class vector_dataset(AbstractMapDataset):
     """!Vector dataset class
 
        This class provides functions to select, update, insert or delete vector
        map information and valid time stamps into the SQL temporal database.
     """
     def __init__(self, ident):
-	abstract_map_dataset.__init__(self)
+	AbstractMapDataset.__init__(self)
 	self.reset(ident)
 
     def get_type(self):
@@ -686,11 +686,11 @@ class vector_dataset(abstract_map_dataset):
 
 ###############################################################################
 
-class space_time_raster_dataset(abstract_space_time_dataset):
+class space_time_raster_dataset(AbstractSpaceTimeDataset):
     """!Space time raster dataset class
     """
     def __init__(self, ident):
-        abstract_space_time_dataset.__init__(self, ident)
+        AbstractSpaceTimeDataset.__init__(self, ident)
 
     def get_type(self):
         return "strds"
@@ -733,12 +733,12 @@ class space_time_raster_dataset(abstract_space_time_dataset):
 
 ###############################################################################
 
-class space_time_raster3d_dataset(abstract_space_time_dataset):
+class space_time_raster3d_dataset(AbstractSpaceTimeDataset):
     """!Space time raster3d dataset class
     """
 
     def __init__(self, ident):
-        abstract_space_time_dataset.__init__(self, ident)
+        AbstractSpaceTimeDataset.__init__(self, ident)
 
     def get_type(self):
         return "str3ds"
@@ -787,12 +787,12 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
 
 ###############################################################################
 
-class space_time_vector_dataset(abstract_space_time_dataset):
+class space_time_vector_dataset(AbstractSpaceTimeDataset):
     """!Space time vector dataset class
     """
 
     def __init__(self, ident):
-        abstract_space_time_dataset.__init__(self, ident)
+        AbstractSpaceTimeDataset.__init__(self, ident)
 
     def get_type(self):
         return "stvds"

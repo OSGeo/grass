@@ -8,14 +8,14 @@ Temporal GIS related functions to be used in temporal GIS Python library package
 Usage:
 
 >>> import grass.temporal as tgis
->>> ad = abstract_dataset()
+>>> ad = AbstractDataset()
 >>> ad.reset(ident="soil@PERMANENT")
 Traceback (most recent call last):
   File "/usr/lib/python2.7/doctest.py", line 1289, in __run
     compileflags, 1) in test.globs
   File "<doctest __main__[2]>", line 1, in <module>
     ad.reset(ident="soil@PERMANENT")
-  File "abstract_dataset.py", line 53, in reset
+  File "AbstractDataset.py", line 53, in reset
     raise ImplementationError("This method must be implemented in the subclasses")
 ImplementationError: 'This method must be implemented in the subclasses'
 
@@ -42,7 +42,7 @@ class ImplementationError(Exception):
     def __str__(self):
         return repr(self.msg)
     
-class abstract_dataset(object):
+class AbstractDataset(object):
     """!This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""
 
     def reset(self, ident):
@@ -83,13 +83,7 @@ class abstract_dataset(object):
 
     def print_self(self):
         """!Print the content of the internal structure to stdout"""
-        self.base.print_self()
-        if self.is_time_absolute():
-            self.absolute_time.print_self()
-        if self.is_time_relative():
-            self.relative_time.print_self()
-        self.spatial_extent.print_self()
-        self.metadata.print_self()
+        raise ImplementationError("This method must be implemented in the subclasses")
 
     def set_id(self, ident):
         self.base.set_id(ident)
@@ -224,7 +218,7 @@ class abstract_dataset(object):
         statement += self.spatial_extent.get_insert_statement_mogrified(dbif)
         statement += self.metadata.get_insert_statement_mogrified(dbif)
 
-        if execute == True:
+        if execute:
             dbif.execute_transaction(statement)
             if connect:
                 dbif.close()
@@ -256,7 +250,7 @@ class abstract_dataset(object):
         statement += self.spatial_extent.get_update_statement_mogrified(dbif)
         statement += self.metadata.get_update_statement_mogrified(dbif)
 
-        if execute == True:
+        if execute:
             dbif.execute_transaction(statement)
             if connect:
                 dbif.close()
@@ -289,7 +283,7 @@ class abstract_dataset(object):
             dbif)
         statement += self.metadata.get_update_all_statement_mogrified(dbif)
 
-        if execute == True:
+        if execute:
             dbif.execute_transaction(statement)
             if connect:
                 dbif.close()

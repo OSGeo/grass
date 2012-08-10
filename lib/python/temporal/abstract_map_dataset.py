@@ -7,11 +7,9 @@ Temporal GIS related functions to be used in temporal GIS Python library package
 
 Usage:
 
-@code
-import grass.temporal as tgis
-
-...
-@endcode
+>>> import grass.temporal as tgis
+>>> tmr = TemporalMapRelations()
+>>> amd = AbstractMapDataset()
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -24,7 +22,7 @@ from abstract_dataset import *
 from datetime_math import *
 
 
-class TemporalMapRelations(abstract_dataset):
+class TemporalMapRelations(AbstractDataset):
     """!This class implements a temporal topology access structure
 
        This object will be set up by temporal topology creation methods.
@@ -42,17 +40,26 @@ class TemporalMapRelations(abstract_dataset):
        * contains (including started, finished)
 
 
-       Code:
+       @code:
        # We have build the temporal topology and we know the first map
        start = first
        while start:
 
            # Print all maps this map temporally contains
            dlist = start.get_contains()
-           for _map in dlist:
-               _map.print_info()
+           for map in dlist:
+               map.print_info()
 
            start = start.next()
+         @endcode  
+        
+        Usage:
+        
+        >>> import grass.temporal as tgis
+        >>> tmr = TemporalMapRelations()
+        >>> tmr.print_temporal_topology_info()
+         +-------------------- Temporal Topology -------------------------------------+
+        >>> tmr.print_temporal_topology_shell_info()
     """
 
     def __init__(self):
@@ -75,27 +82,27 @@ class TemporalMapRelations(abstract_dataset):
         """!Check if the temporal topology was build"""
         return self._has_temporal_topology
 
-    def set_temporal_next(self, _map):
+    def set_temporal_next(self, map_):
         """!Set the map that is temporally as closest located after this map.
 
            Temporally located means that the start time of the "next" map is
            temporally located AFTER the start time of this map, but temporally
            near than other maps of the same dataset.
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
-        self._temporal_topology["NEXT"] = _map
+        self._temporal_topology["NEXT"] = map_
 
-    def set_temporal_prev(self, _map):
+    def set_temporal_prev(self, map_):
         """!Set the map that is temporally as closest located before this map.
 
            Temporally located means that the start time of the "previous" map is
            temporally located BEFORE the start time of this map, but temporally
            near than other maps of the same dataset.
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
-        self._temporal_topology["PREV"] = _map
+        self._temporal_topology["PREV"] = map_
 
     def temporal_next(self):
         """!Return the map with a start time temporally located after
@@ -117,14 +124,14 @@ class TemporalMapRelations(abstract_dataset):
             return None
         return self._temporal_topology["PREV"]
 
-    def append_temporal_equivalent(self, _map):
+    def append_temporal_equivalent(self, map_):
         """!Append a map with equivalent temporal extent as this map
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
         if "EQUAL" not in self._temporal_topology:
             self._temporal_topology["EQUAL"] = []
-        self._temporal_topology["EQUAL"].append(_map)
+        self._temporal_topology["EQUAL"].append(map_)
 
     def get_temporal_equivalent(self):
         """!Return a list of map objects with equivalent temporal extent as this map
@@ -135,14 +142,14 @@ class TemporalMapRelations(abstract_dataset):
             return None
         return self._temporal_topology["EQUAL"]
 
-    def append_temporal_overlaps(self, _map):
+    def append_temporal_overlaps(self, map_):
         """!Append a map that this map temporally overlaps
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
         if "OVERLAPS" not in self._temporal_topology:
             self._temporal_topology["OVERLAPS"] = []
-        self._temporal_topology["OVERLAPS"].append(_map)
+        self._temporal_topology["OVERLAPS"].append(map_)
 
     def get_temporal_overlaps(self):
         """!Return a list of map objects that this map temporally overlaps
@@ -153,14 +160,14 @@ class TemporalMapRelations(abstract_dataset):
             return None
         return self._temporal_topology["OVERLAPS"]
 
-    def append_temporal_overlapped(self, _map):
+    def append_temporal_overlapped(self, map_):
         """!Append a map that this map temporally overlapped
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
         if "OVERLAPPED" not in self._temporal_topology:
             self._temporal_topology["OVERLAPPED"] = []
-        self._temporal_topology["OVERLAPPED"].append(_map)
+        self._temporal_topology["OVERLAPPED"].append(map_)
 
     def get_temporal_overlapped(self):
         """!Return a list of map objects that this map temporally overlapped
@@ -171,14 +178,14 @@ class TemporalMapRelations(abstract_dataset):
             return None
         return self._temporal_topology["OVERLAPPED"]
 
-    def append_temporal_follows(self, _map):
+    def append_temporal_follows(self, map_):
         """!Append a map that this map temporally follows
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
         if "FOLLOWS" not in self._temporal_topology:
             self._temporal_topology["FOLLOWS"] = []
-        self._temporal_topology["FOLLOWS"].append(_map)
+        self._temporal_topology["FOLLOWS"].append(map_)
 
     def get_temporal_follows(self):
         """!Return a list of map objects that this map temporally follows
@@ -189,14 +196,14 @@ class TemporalMapRelations(abstract_dataset):
             return None
         return self._temporal_topology["FOLLOWS"]
 
-    def append_temporal_precedes(self, _map):
+    def append_temporal_precedes(self, map_):
         """!Append a map that this map temporally precedes
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
         if "PRECEDES" not in self._temporal_topology:
             self._temporal_topology["PRECEDES"] = []
-        self._temporal_topology["PRECEDES"].append(_map)
+        self._temporal_topology["PRECEDES"].append(map_)
 
     def get_temporal_precedes(self):
         """!Return a list of map objects that this map temporally precedes
@@ -207,15 +214,15 @@ class TemporalMapRelations(abstract_dataset):
             return None
         return self._temporal_topology["PRECEDES"]
 
-    def append_temporal_during(self, _map):
+    def append_temporal_during(self, map_):
         """!Append a map that this map is temporally located during
            This includes temporal relationships starts and finishes
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
         if "DURING" not in self._temporal_topology:
             self._temporal_topology["DURING"] = []
-        self._temporal_topology["DURING"].append(_map)
+        self._temporal_topology["DURING"].append(map_)
 
     def get_temporal_during(self):
         """!Return a list of map objects that this map is temporally located during
@@ -227,15 +234,15 @@ class TemporalMapRelations(abstract_dataset):
             return None
         return self._temporal_topology["DURING"]
 
-    def append_temporal_contains(self, _map):
+    def append_temporal_contains(self, map_):
         """!Append a map that this map temporally contains
            This includes temporal relationships started and finished
 
-           @param _map: This object should be of type abstract_map_dataset or derived classes
+           @param map_: This object should be of type AbstractMapDataset or derived classes
         """
         if "CONTAINS" not in self._temporal_topology:
             self._temporal_topology["CONTAINS"] = []
-        self._temporal_topology["CONTAINS"].append(_map)
+        self._temporal_topology["CONTAINS"].append(map_)
 
     def get_temporal_contains(self):
         """!Return a list of map objects that this map temporally contains
@@ -250,14 +257,14 @@ class TemporalMapRelations(abstract_dataset):
     def _generate_map_list_string(self, map_list, line_wrap=True):
         count = 0
         string = ""
-        for _map in map_list:
+        for map_ in map_list:
             if line_wrap and count > 0 and count % 3 == 0:
                 string += "\n | ............................ "
                 count = 0
             if count == 0:
-                string += _map.get_id()
+                string += map_.get_id()
             else:
-                string += ",%s" % _map.get_id()
+                string += ",%s" % map_.get_id()
             count += 1
 
         return string
@@ -292,29 +299,29 @@ class TemporalMapRelations(abstract_dataset):
 
         print " +-------------------- Temporal Topology -------------------------------------+"
         #          0123456789012345678901234567890
-        if _next:
+        if _next is not None:
             print " | Next: ...................... " + str(_next.get_id())
-        if _prev:
+        if _prev is not None:
             print " | Previous: .................. " + str(_prev.get_id())
-        if _equal:
+        if _equal is not None:
             print " | Equivalent: ................ " + \
                 self._generate_map_list_string(_equal)
-        if _follows:
+        if _follows is not None:
             print " | Follows: ................... " + \
                 self._generate_map_list_string(_follows)
-        if _precedes:
+        if _precedes is not None:
             print " | Precedes: .................. " + \
                 self._generate_map_list_string(_precedes)
-        if _overlaps:
+        if _overlaps is not None:
             print " | Overlaps: .................. " + \
                 self._generate_map_list_string(_overlaps)
-        if _overlapped:
+        if _overlapped is not None:
             print " | Overlapped: ................ " + \
                 self._generate_map_list_string(_overlapped)
-        if _during:
+        if _during is not None:
             print " | During: .................... " + \
                 self._generate_map_list_string(_during)
-        if _contains:
+        if _contains is not None:
             print " | Contains: .................. " + \
                 self._generate_map_list_string(_contains)
 
@@ -331,33 +338,33 @@ class TemporalMapRelations(abstract_dataset):
         _during = self.get_temporal_during()
         _contains = self.get_temporal_contains()
 
-        if _next:
+        if _next is not None:
             print "next=" + _next.get_id()
-        if _prev:
+        if _prev is not None:
             print "prev=" + _prev.get_id()
-        if _equal:
+        if _equal is not None:
             print "equivalent=" + self._generate_map_list_string(_equal, False)
-        if _follows:
+        if _follows is not None:
             print "follows=" + self._generate_map_list_string(_follows, False)
-        if _precedes:
+        if _precedes is not None:
             print "precedes=" + self._generate_map_list_string(
                 _precedes, False)
-        if _overlaps:
+        if _overlaps is not None:
             print "overlaps=" + self._generate_map_list_string(
                 _overlaps, False)
-        if _overlapped:
+        if _overlapped is not None:
             print "overlapped=" + \
                 self._generate_map_list_string(_overlapped, False)
-        if _during:
+        if _during is not None:
             print "during=" + self._generate_map_list_string(_during, False)
-        if _contains:
+        if _contains is not None:
             print "contains=" + self._generate_map_list_string(
                 _contains, False)
 
 ###############################################################################
 
 
-class abstract_map_dataset(TemporalMapRelations):
+class AbstractMapDataset(TemporalMapRelations):
     """!This is the base class for all maps (raster, vector, raster3d)
        providing additional function to set the valid time and the spatial extent.
     """
@@ -450,7 +457,7 @@ class abstract_map_dataset(TemporalMapRelations):
         if self.is_time_absolute():
             start_time, end_time, tz = self.get_absolute_time()
             start = datetime_to_grass_datetime_string(start_time)
-            if end_time:
+            if end_time is not None:
                 end = datetime_to_grass_datetime_string(end_time)
                 start += " / %s" % (end)
         else:
@@ -463,11 +470,14 @@ class abstract_map_dataset(TemporalMapRelations):
         return start
 
     def get_map_id(self):
-        """!Return the map id. The map id is the unique map identifier in grass and must not be equal to the
-           primary key identifier (id) of the map in the database. Since vector maps may have layer information,
+        """!Return the map id. The map id is the unique map identifier 
+           in grass and must not be equal to the
+           primary key identifier (id) of the map in the database. 
+           Since vector maps may have layer information,
            the unique id is a combination of name, layer and mapset.
 
-           Use get_map_id() every time your need to access the grass map in the file system but not to identify
+           Use get_map_id() every time your need to access the grass map 
+           in the file system but not to identify
            map information in the temporal database.
 
         """
@@ -489,7 +499,7 @@ class abstract_map_dataset(TemporalMapRelations):
         if name.find(":") >= 0:
             name, layer = name.split(":")
 
-        if layer:
+        if layer is not None:
             return "%s:%s@%s" % (name, layer, mapset)
         else:
             return "%s@%s" % (name, mapset)
@@ -527,7 +537,7 @@ class abstract_map_dataset(TemporalMapRelations):
         datasets = self.get_registered_datasets()
         count = 0
         string = ""
-        if datasets:
+        if datasets is not None:
             for ds in datasets:
                 if count > 0 and count % 3 == 0:
                     string += "\n | ............................ "
@@ -554,7 +564,7 @@ class abstract_map_dataset(TemporalMapRelations):
         datasets = self.get_registered_datasets()
         count = 0
         string = ""
-        if datasets:
+        if datasets is not None:
             for ds in datasets:
                 if count == 0:
                     string += ds["id"]
@@ -569,40 +579,46 @@ class abstract_map_dataset(TemporalMapRelations):
     def insert(self, dbif=None, execute=True):
         """!Insert temporal dataset entry into database from the internal structure
 
-           This functions assures that the timetsamp is written to the grass file system based database
+           This functions assures that the timetsamp is written to the 
+           grass file system based database
 
            @param dbif: The database interface to be used
            @param execute: If True the SQL statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are 
+                           returned and must be executed by the caller.
         """
         self.write_timestamp_to_grass()
-        return abstract_dataset.insert(self, dbif, execute)
+        return AbstractDataset.insert(self, dbif, execute)
 
     def update(self, dbif=None, execute=True):
         """!Update temporal dataset entry of database from the internal structure
            excluding None variables
 
-           This functions assures that the timetsamp is written to the grass file system based database
+           This functions assures that the timetsamp is written to the 
+           grass file system based database
 
            @param dbif: The database interface to be used
            @param execute: If True the SQL statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are 
+                           returned and must be executed by the caller.
         """
         self.write_timestamp_to_grass()
-        return abstract_dataset.update(self, dbif, execute)
+        return AbstractDataset.update(self, dbif, execute)
 
     def update_all(self, dbif=None, execute=True):
         """!Update temporal dataset entry of database from the internal structure
            and include None varuables.
 
-           This functions assures that the timetsamp is written to the grass file system based database
+           This functions assures that the timetsamp is written to the 
+           grass file system based database
 
            @param dbif: The database interface to be used
            @param execute: If True the SQL statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are 
+                           returned and must be executed by the caller.
         """
         self.write_timestamp_to_grass()
-        return abstract_dataset.update_all(self, dbif, execute)
+        return AbstractDataset.update_all(self, dbif, execute)
 
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
         """!Set the absolute time interval with start time and end time
@@ -610,10 +626,9 @@ class abstract_map_dataset(TemporalMapRelations):
            @param start_time: a datetime object specifying the start time of the map
            @param end_time: a datetime object specifying the end time of the map
            @param timezone: Thee timezone of the map
-
         """
         if start_time and not isinstance(start_time, datetime):
-            if self.get_layer():
+            if self.get_layer() is not None:
                 core.fatal(_("Start time must be of type datetime for %s map <%s> with layer: %s") % (self.get_type(), self.get_map_id(), self.get_layer()))
             else:
                 core.fatal(_("Start time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_map_id()))
@@ -624,7 +639,7 @@ class abstract_map_dataset(TemporalMapRelations):
             else:
                 core.fatal(_("End time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_map_id()))
 
-        if start_time and end_time:
+        if start_time is not None and end_time is not None:
             if start_time > end_time:
                 if self.get_layer():
                     core.fatal(_("End time must be greater than start time for %s map <%s> with layer: %s") % (self.get_type(), self.get_map_id(), self.get_layer()))
@@ -636,7 +651,6 @@ class abstract_map_dataset(TemporalMapRelations):
                     end_time = None
 
         self.base.set_ttype("absolute")
-
         self.absolute_time.set_start_time(start_time)
         self.absolute_time.set_end_time(end_time)
         self.absolute_time.set_timezone(timezone)
@@ -644,7 +658,8 @@ class abstract_map_dataset(TemporalMapRelations):
     def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif=None):
         """!Update the absolute time
 
-           This functions assures that the timetsamp is written to the grass file system based database
+           This functions assures that the timetsamp is written to the 
+           grass file system based database
 
            @param start_time: a datetime object specifying the start time of the map
            @param end_time: a datetime object specifying the end time of the map
@@ -656,7 +671,7 @@ class abstract_map_dataset(TemporalMapRelations):
         self.absolute_time.update_all(dbif)
         self.base.update(dbif)
 
-        if connect == True:
+        if connect:
             dbif.close()
 
         self.write_timestamp_to_grass()
@@ -666,14 +681,15 @@ class abstract_map_dataset(TemporalMapRelations):
 
            @param start_time: A double value
            @param end_time: A double value
-           @param unit: The unit of the relative time. Supported units: years, months, days, hours, minutes, seconds
+           @param unit: The unit of the relative time. Supported units: 
+                        years, months, days, hours, minutes, seconds
 
            Return True for success and False otherwise
 
         """
 
         if not self.check_relative_time_unit(unit):
-            if self.get_layer():
+            if self.get_layer() is not None:
                 core.error(_("Unsupported relative time unit type for %s map <%s> with layer %s: %s") % (self.get_type(), self.get_id(), self.get_layer(), unit))
             else:
                 core.error(_("Unsupported relative time unit type for %s map <%s>: %s") % (self.get_type(), self.get_id(), unit))
@@ -681,7 +697,7 @@ class abstract_map_dataset(TemporalMapRelations):
 
         if start_time is not None and end_time is not None:
             if int(start_time) > int(end_time):
-                if self.get_layer():
+                if self.get_layer() is not None:
                     core.error(_("End time must be greater than start time for %s map <%s> with layer %s") % (self.get_type(), self.get_id(), self.get_layer()))
                 else:
                     core.error(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
@@ -705,7 +721,8 @@ class abstract_map_dataset(TemporalMapRelations):
     def update_relative_time(self, start_time, end_time, unit, dbif=None):
         """!Update the relative time interval
 
-           This functions assures that the timetsamp is written to the grass file system based database
+           This functions assures that the timetsamp is written to the 
+           grass file system based database
 
            @param start_time: A double value
            @param end_time: A double value
@@ -717,7 +734,7 @@ class abstract_map_dataset(TemporalMapRelations):
             self.relative_time.update_all(dbif)
             self.base.update(dbif)
 
-        if connect == True:
+        if connect:
             dbif.close()
 
         self.write_timestamp_to_grass()
@@ -745,7 +762,7 @@ class abstract_map_dataset(TemporalMapRelations):
         if start is not None:
             if end is not None:
                 if start >= end:
-                    if self.get_layer():
+                    if self.get_layer() is not None:
                         core.error(_("Map <%s> with layer %s has incorrect time interval, start time is greater than end time") % (self.get_map_id(), self.get_layer()))
                     else:
                         core.error(_("Map <%s> has incorrect time interval, start time is greater than end time") % (self.get_map_id()))
@@ -765,12 +782,15 @@ class abstract_map_dataset(TemporalMapRelations):
             * Remove the space time dataset register table
 
            @param dbif: The database interface to be used
-           @param update: Call for each unregister statement the update from registered maps
-                          of the space time dataset. This can slow down the un-registration process significantly.
+           @param update: Call for each unregister statement the update from 
+                          registered maps of the space time dataset. 
+                          This can slow down the un-registration process significantly.
            @param execute: If True the SQL DELETE and DROP table statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are 
+                           returned and must be executed by the caller.
 
-           @return The SQL statements if execute == False, else an empty string, None in case of a failure
+           @return The SQL statements if execute == False, else an empty string, 
+                   None in case of a failure
         """
 
         dbif, connect = init_dbif(dbif)
@@ -786,7 +806,7 @@ class abstract_map_dataset(TemporalMapRelations):
                 dbif=dbif, update=update, execute=False)
 
             # Remove the strds register table
-            if self.get_stds_register():
+            if self.get_stds_register() is not None:
                 statement += "DROP TABLE " + self.get_stds_register() + ";\n"
 
             core.verbose(_("Delete %s dataset <%s> from temporal database")
@@ -795,7 +815,7 @@ class abstract_map_dataset(TemporalMapRelations):
             # Delete yourself from the database, trigger functions will take care of dependencies
             statement += self.base.get_delete_statement()
 
-        if execute == True:
+        if execute:
             dbif.execute_transaction(statement)
 
         # Remove the timestamp from the file system
@@ -803,7 +823,7 @@ class abstract_map_dataset(TemporalMapRelations):
 
         self.reset(None)
 
-        if connect == True:
+        if connect:
             dbif.close()
 
         if execute:
@@ -816,14 +836,16 @@ class abstract_map_dataset(TemporalMapRelations):
 
            @param dbif: The database interface to be used
            @param update: Call for each unregister statement the update from registered maps
-                          of the space time dataset. This can slow down the un-registration process significantly.
+                          of the space time dataset. This can slow down the 
+                          un-registration process significantly.
            @param execute: If True the SQL DELETE and DROP table statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are 
+                           returned and must be executed by the caller.
 
            @return The SQL statements if execute == False, else an empty string
         """
 
-        if self.get_layer():
+        if self.get_layer() is not None:
             core.verbose(_("Unregister %s map <%s> with layer %s from space time datasets") %
                          (self.get_type(), self.get_map_id(), self.get_layer()))
         else:
@@ -837,7 +859,7 @@ class abstract_map_dataset(TemporalMapRelations):
         rows = self.get_registered_datasets(dbif)
 
         # For each stds in which the map is registered
-        if rows:
+        if rows is not None:
             count = 0
             num_sps = len(rows)
             for row in rows:
@@ -855,10 +877,10 @@ class abstract_map_dataset(TemporalMapRelations):
 
             core.percent(1, 1, 1)
 
-        if execute == True:
+        if execute:
             dbif.execute_transaction(statement)
 
-        if connect == True:
+        if connect:
             dbif.close()
 
         if execute:
@@ -868,8 +890,8 @@ class abstract_map_dataset(TemporalMapRelations):
 
     def get_registered_datasets(self, dbif=None):
         """!Return all space time dataset ids in which this map is registered as
-           dictionary like rows with column "id" or None if this map is not registered in any
-           space time dataset.
+           dictionary like rows with column "id" or None if this map is not 
+           registered in any space time dataset.
 
            @param dbif: The database interface to be used
         """
@@ -886,7 +908,13 @@ class abstract_map_dataset(TemporalMapRelations):
         except:
             core.error(_("Unable to select space time dataset register table <%s>") % (self.get_stds_register()))
 
-        if connect == True:
+        if connect:
             dbif.close()
 
         return rows
+
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
