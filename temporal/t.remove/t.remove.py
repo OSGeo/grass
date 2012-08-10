@@ -59,7 +59,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    dbif = tgis.sql_database_interface_connection()
+    dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     dataset_list = []

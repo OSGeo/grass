@@ -98,11 +98,11 @@ class raster_dataset(abstract_map_dataset):
 	
     def reset(self, ident):
 	"""!Reset the internal structure and set the identifier"""
-	self.base = raster_base(ident=ident)
-	self.absolute_time = raster_absolute_time(ident=ident)
-	self.relative_time = raster_relative_time(ident=ident)
-	self.spatial_extent = raster_spatial_extent(ident=ident)
-	self.metadata = raster_metadata(ident=ident)
+	self.base = RasterBase(ident=ident)
+	self.absolute_time = RasterAbslouteTime(ident=ident)
+	self.relative_time = RasterRelativeTime(ident=ident)
+	self.spatial_extent = RasterSpatialExtent(ident=ident)
+	self.metadata = RasterMetadata(ident=ident)
 		
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map. 
@@ -306,11 +306,11 @@ class raster3d_dataset(abstract_map_dataset):
         
     def reset(self, ident):
 	"""!Reset the internal structure and set the identifier"""
-	self.base = raster3d_base(ident=ident)
-	self.absolute_time = raster3d_absolute_time(ident=ident)
-	self.relative_time = raster3d_relative_time(ident=ident)
-	self.spatial_extent = raster3d_spatial_extent(ident=ident)
-	self.metadata = raster3d_metadata(ident=ident)
+	self.base = Raster3DBase(ident=ident)
+	self.absolute_time = Raster3DAbslouteTime(ident=ident)
+	self.relative_time = Raster3DRelativeTime(ident=ident)
+	self.spatial_extent = Raster3DSpatialExtent(ident=ident)
+	self.metadata = Raster3DMetadata(ident=ident)
 
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map. 
@@ -515,11 +515,11 @@ class vector_dataset(abstract_map_dataset):
 	
     def reset(self, ident):
 	"""!Reset the internal structure and set the identifier"""
-	self.base = vector_base(ident=ident)
-	self.absolute_time = vector_absolute_time(ident=ident)
-	self.relative_time = vector_relative_time(ident=ident)
-	self.spatial_extent = vector_spatial_extent(ident=ident)
-	self.metadata = vector_metadata(ident=ident)
+	self.base = VectorBase(ident=ident)
+	self.absolute_time = VectorAbslouteTime(ident=ident)
+	self.relative_time = VectorRelativeTime(ident=ident)
+	self.spatial_extent = VectorSpatialExtent(ident=ident)
+	self.metadata = VectorMetadata(ident=ident)
 
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map. 
@@ -724,12 +724,12 @@ class space_time_raster_dataset(abstract_space_time_dataset):
     def reset(self, ident):
 
 	"""!Reset the internal structure and set the identifier"""
-	self.base = strds_base(ident=ident)
+	self.base = STRDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
-        self.absolute_time = strds_absolute_time(ident=ident)
-        self.relative_time = strds_relative_time(ident=ident)
-	self.spatial_extent = strds_spatial_extent(ident=ident)
-	self.metadata = strds_metadata(ident=ident)
+        self.absolute_time = STRDSAbslouteTime(ident=ident)
+        self.relative_time = STRDSRelativeTime(ident=ident)
+	self.spatial_extent = STRDSSpatialExtent(ident=ident)
+	self.metadata = STRDSMetadata(ident=ident)
 
 ###############################################################################
 
@@ -778,12 +778,12 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
     def reset(self, ident):
 
 	"""!Reset the internal structure and set the identifier"""
-	self.base = str3ds_base(ident=ident)
+	self.base = STR3DSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
-        self.absolute_time = str3ds_absolute_time(ident=ident)
-        self.relative_time = str3ds_relative_time(ident=ident)
-	self.spatial_extent = str3ds_spatial_extent(ident=ident)
-	self.metadata = str3ds_metadata(ident=ident)
+        self.absolute_time = STR3DSAbslouteTime(ident=ident)
+        self.relative_time = STR3DSRelativeTime(ident=ident)
+	self.spatial_extent = STR3DSSpatialExtent(ident=ident)
+	self.metadata = STR3DSMetadata(ident=ident)
 
 ###############################################################################
 
@@ -826,10 +826,104 @@ class space_time_vector_dataset(abstract_space_time_dataset):
     def reset(self, ident):
 
 	"""!Reset the internal structure and set the identifier"""
-	self.base = stvds_base(ident=ident)
+	self.base = STVDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
-        self.absolute_time = stvds_absolute_time(ident=ident)
-        self.relative_time = stvds_relative_time(ident=ident)
-	self.spatial_extent = stvds_spatial_extent(ident=ident)
-	self.metadata = stvds_metadata(ident=ident)
+        self.absolute_time = STVDSAbslouteTime(ident=ident)
+        self.relative_time = STVDSRelativeTime(ident=ident)
+	self.spatial_extent = STVDSSpatialExtent(ident=ident)
+	self.metadata = STVDSMetadata(ident=ident)
+
+###############################################################################
+
+class AbstractDatasetComparisonKeyStartTime(object):
+    """!This comparison key can be used to sort lists of abstract datasets by start time
+
+        Example:
+
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
+
+        # Sort the maps in the list by start time
+        sorted_map_list = sorted(
+            map_list, key=AbstractDatasetComparisonKeyStartTime)
+    """
+    def __init__(self, obj, *args):
+        self.obj = obj
+
+    def __lt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA < startB
+
+    def __gt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA > startB
+
+    def __eq__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA == startB
+
+    def __le__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA <= startB
+
+    def __ge__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA >= startB
+
+    def __ne__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA != startB
+
+###############################################################################
+
+class AbstractDatasetComparisonKeyEndTime(object):
+    """!This comparison key can be used to sort lists of abstract datasets by end time
+
+        Example:
+
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
+
+        # Sort the maps in the list by end time
+        sorted_map_list = sorted(
+            map_list, key=AbstractDatasetComparisonKeyEndTime)
+    """
+    def __init__(self, obj, *args):
+        self.obj = obj
+
+    def __lt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA < endB
+
+    def __gt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA > endB
+
+    def __eq__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA == endB
+
+    def __le__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA <= endB
+
+    def __ge__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA >= endB
+
+    def __ne__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA != endB
 

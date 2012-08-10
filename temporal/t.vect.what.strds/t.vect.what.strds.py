@@ -80,7 +80,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # We need a database interface
-    dbif = tgis.sql_database_interface_connection()
+    dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
    
     mapset =  grass.gisenv()["MAPSET"]
