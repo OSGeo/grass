@@ -1,20 +1,18 @@
-import os
+
 import sys
 import  wx
 import time
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 import grass.script as grass
 
 from gui_core.mapdisp   import DoubleMapFrame
-from core.render        import Map, MapLayer
+from core.render        import Map
 from mapdisp            import statusbar as sb
 from core.debug         import Debug
 from mapdisp.statusbar  import EVT_AUTO_RENDER
 
 from swipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
-from swipe.mapwindow import SwipeBufferedWindow, EVT_MOTION
+from swipe.mapwindow import SwipeBufferedWindow
 from swipe.dialogs   import SwipeMapDialog
 
 
@@ -279,8 +277,6 @@ class SwipeMapFrame(DoubleMapFrame):
         dlg = SwipeMapDialog(self, first = self.rasters['first'], second = self.rasters['second'])
         if dlg.ShowModal() == wx.ID_OK:
             maps = dlg.GetValues()
-            raster1 = grass.find_file(name = maps[0], element = 'cell')
-            raster2 = grass.find_file(name = maps[1], element = 'cell')
             self.SetFirstRaster(name = maps[0])
             self.SetSecondRaster(name = maps[1])
 
@@ -354,7 +350,7 @@ class SwipeMapFrame(DoubleMapFrame):
         return self.toolbars['swipeMap']
 
     def IsStandalone(self):
-        if parent:
+        if self.parent:
             return False
 
         return True
@@ -455,20 +451,3 @@ class MapSplitter(wx.SplitterWindow):
 
         self.GetWindow1().movingSash = True
         self.GetWindow2().movingSash = True
-
-
-def main():
-    import gettext
-    
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
-    app = wx.PySimpleApp()
-    wx.InitAllImageHandlers()
-
-    frame = SwipeMapFrame()
-    frame.Show()
-    app.MainLoop()
-
-
-if __name__ == '__main__':
-    main()
