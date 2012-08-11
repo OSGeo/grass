@@ -95,7 +95,6 @@ class SwipeMainToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = swipeIcons
         return self._getToolbarData((("addRaster", swipeIcons['addRast'],
                                       self.parent.OnSelectRasters),
                                      (None, ),
@@ -105,7 +104,6 @@ class SwipeMainToolbar(BaseToolbar):
 
     def OnToolMenu(self, event):
         """!Menu for additional tools"""
-        point = wx.GetMousePosition()
         toolMenu = wx.Menu()
         
         for label, itype, handler, desc in (
@@ -140,7 +138,6 @@ class SwipeMiscToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = BaseIcons
         return self._getToolbarData((("quit", swipeIcons['quit'],
                                       self.parent.OnCloseWindow),
                                      ))

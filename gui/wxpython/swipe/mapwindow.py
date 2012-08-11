@@ -17,7 +17,7 @@ for details.
 Class _MouseEvent taken from wxPython FloatCanvas source code (Christopher Barker).
 """
 
-import time
+
 import wx
 
 from core.debug import Debug
