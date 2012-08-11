@@ -44,20 +44,22 @@ def main():
     first = options['first']
     second = options['second']
 
-    gfile = grass.find_file(name = first)
-    if not gfile['name']:
-        grass.fatal(_("Raster map <%s> not found") % first)
-
-    gfile = grass.find_file(name = second)
-    if not gfile['name']:
-        grass.fatal(_("Raster map <%s> not found") % second)
+    for mapName in [first, second]:    
+        if mapName:
+            gfile = grass.find_file(name = mapName)
+            if not gfile['name']:
+                grass.fatal(_("Raster map <%s> not found") % mapName)
 
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
 
     frame = SwipeMapFrame()
-    frame.SetFirstRaster(first)
-    frame.SetSecondRaster(second)
+    
+    if first:
+        frame.SetFirstRaster(first)
+    if second:
+        frame.SetSecondRaster(second)
+
     frame.Show()
 
     app.MainLoop()
