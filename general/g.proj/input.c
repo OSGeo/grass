@@ -88,7 +88,7 @@ int input_wkt(char *wktfile)
     if (infd) {
 	fread(buff, sizeof(buff), 1, infd);
 	if (ferror(infd))
-	    G_fatal_error("%s", _("Error reading WKT projection description"));
+	    G_fatal_error(_("Error reading WKT projection description"));
 	else
 	    fclose(infd);
 	/* Get rid of newlines */
@@ -140,7 +140,7 @@ int input_proj4(char *proj4params)
 
     hSRS = OSRNewSpatialReference(NULL);
     if (OSRImportFromProj4(hSRS, proj4string) != OGRERR_NONE)
-	G_fatal_error("%s", _("Can't parse PROJ.4-style parameter string"));
+	G_fatal_error(_("Can't parse PROJ.4-style parameter string"));
 
     G_free(proj4string);
 
@@ -178,7 +178,7 @@ int input_epsg(int epsg_num)
 
     hSRS = OSRNewSpatialReference(NULL);
     if (OSRImportFromEPSG(hSRS, epsg_num) != OGRERR_NONE)
-	G_fatal_error("%s", _("Unable to translate EPSG code"));
+	G_fatal_error(_("Unable to translate EPSG code"));
 
     ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 
@@ -215,7 +215,7 @@ int input_georef(char *geofile)
 
     /* Try opening file with OGR first because it doesn't output a
      * (potentially confusing) error message if it can't open the file */
-    G_message("%s", _("Trying to open with OGR..."));
+    G_message(_("Trying to open with OGR..."));
     OGRRegisterAll();
 
     if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
@@ -223,7 +223,7 @@ int input_georef(char *geofile)
 	OGRLayerH ogr_layer;
 	OGRSpatialReferenceH ogr_srs;
 
-	G_message("%s", _("...succeeded."));
+	G_message(_("...succeeded."));
 	/* Get the first layer */
 	ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
 	ogr_srs = OGR_L_GetSpatialRef(ogr_layer);
@@ -236,13 +236,13 @@ int input_georef(char *geofile)
 	/* Try opening with GDAL */
 	GDALDatasetH gdal_ds;
 
-	G_message("%s", _("Trying to open with GDAL..."));
+	G_message(_("Trying to open with GDAL..."));
 	GDALAllRegister();
 
 	if ((gdal_ds = GDALOpen(geofile, GA_ReadOnly))) {
 	    char *wktstring;
 
-	    G_message("%s", _("...succeeded."));
+	    G_message(_("...succeeded."));
 	    wktstring = (char *)GDALGetProjectionRef(gdal_ds);
 	    ret =
 		GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, wktstring,
