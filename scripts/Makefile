@@ -16,11 +16,11 @@ SUBDIRS = \
 	g.extension \
 	g.extension.rebuild.all \
 	g.manual \
-	i.fusion.brovey \
 	i.image.mosaic \
 	i.in.spotvgt \
 	i.landsat.rgb \
 	i.oif \
+	i.pansharpen \
 	i.spectral \
 	i.tasscap \
 	m.proj \
