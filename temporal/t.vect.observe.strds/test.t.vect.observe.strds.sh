@@ -25,7 +25,7 @@ t.info type=stvds input=prec_observer
 t.vect.list input=prec_observer
 t.vect.db.select input=prec_observer
 
-t.vect.observe.strds input=test_1 strds=precip_abs1 output=test_1_observer vector=test_1_observer
+t.vect.observe.strds input=test_1 strds=precip_abs1 output=test_1_observer  vector=test_1_observer
 v.info test_1_observer
 t.info type=stvds input=test_1_observer
 t.vect.list input=test_1_observer

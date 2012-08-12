@@ -4,7 +4,7 @@
 #
 # MODULE:	t.remove
 # AUTHOR(S):	Soeren Gebbert
-#               
+#
 # PURPOSE:	Remove space time datasets from the temporal database
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
@@ -46,15 +46,16 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
-    
+
     # Get the options
     datasets = options["input"]
     file = options["file"]
     type = options["type"]
 
     if datasets and file:
-        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
+        core.fata(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -84,9 +85,9 @@ def main():
             line_list = line.split("\n")
             dataset_name = line_list[0]
             dataset_list.append(dataset_name)
-    
-    mapset =  grass.gisenv()["MAPSET"]
-    
+
+    mapset = grass.gisenv()["MAPSET"]
+
     statement = ""
 
     for name in dataset_list:
@@ -101,7 +102,8 @@ def main():
 
         if sp.is_in_db(dbif) == False:
             dbif.close()
-            grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
+            grass.fatal(_("Space time %s dataset <%s> not found")
+                        % (sp.get_new_map_instance(None).get_type(), id))
 
         statement += sp.delete(dbif=dbif, execute=False)
 
@@ -113,4 +115,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

@@ -43,7 +43,7 @@
 #% description: The base name of the new created raster maps. This name will be extended with a numerical prefix
 #% required: no
 #% multiple: no
-#% gisprompt: 
+#% gisprompt:
 #%end
 
 #%option
@@ -66,6 +66,7 @@ from multiprocessing import Process
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -79,12 +80,12 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    
-    tgis.extract_dataset(input, output, "raster", where, expression, base, nprocs, register_null)
-    
+
+    tgis.extract_dataset(input, output, "raster", where, expression,
+                         base, nprocs, register_null)
+
 ###############################################################################
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

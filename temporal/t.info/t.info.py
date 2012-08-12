@@ -4,7 +4,7 @@
 #
 # MODULE:	t.info
 # AUTHOR(S):	Soeren Gebbert
-#               
+#
 # PURPOSE:	Print information about a space-time dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
@@ -53,6 +53,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     name = options["input"]
@@ -67,8 +68,10 @@ def main():
         #      0123456789012345678901234567890
         print " +------------------- Temporal DBMI backend information ----------------------+"
         print " | DBMI Python interface:...... " + str(tgis.dbmi.__name__)
-        print " | DBMI init string:........... " + str(tgis.get_temporal_dbmi_init_string())
-        print " | SQL template path:.......... " + str(tgis.get_sql_template_path())
+        print " | DBMI init string:........... " + str(
+            tgis.get_temporal_dbmi_init_string())
+        print " | SQL template path:.......... " + str(
+            tgis.get_sql_template_path())
         print " +----------------------------------------------------------------------------+"
         return
 
@@ -78,14 +81,14 @@ def main():
     if name.find("@") >= 0:
         id = name
     else:
-        mapset =  grass.gisenv()["MAPSET"]
+        mapset = grass.gisenv()["MAPSET"]
         id = name + "@" + mapset
 
     ds = tgis.dataset_factory(type, id)
 
     if ds.is_in_db() == False:
         grass.fatal(_("Dataset <%s> not found") % (id))
-        
+
     ds.select()
 
     if shellstyle == True:
@@ -96,4 +99,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

@@ -59,13 +59,14 @@
 
 #%flag
 #% key: h
-#% description: Print column names 
+#% description: Print column names
 #%end
 
 import grass.script as grass
 import grass.temporal as tgis
 
 ############################################################################
+
 
 def main():
 
@@ -82,10 +83,10 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    
-    tgis.print_vector_dataset_univar_statistics(input, twhere, layer, type, column, where, extended, header, fs)
+
+    tgis.print_vector_dataset_univar_statistics(
+        input, twhere, layer, type, column, where, extended, header, fs)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

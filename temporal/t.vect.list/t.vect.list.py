@@ -4,8 +4,8 @@
 #
 # MODULE:	t.vect.list
 # AUTHOR(S):	Soeren Gebbert
-#               
-# PURPOSE:	List registered maps of a space time vector dataset 
+#
+# PURPOSE:	List registered maps of a space time vector dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -36,7 +36,7 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Select columns to be printed to stdout 
+#% description: Select columns to be printed to stdout
 #% required: no
 #% multiple: yes
 #% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
@@ -65,13 +65,14 @@
 
 #%flag
 #% key: h
-#% description: Print column names 
+#% description: Print column names
 #%end
 
 import grass.script as grass
 import grass.temporal as tgis
 
 ############################################################################
+
 
 def main():
 
@@ -87,7 +88,8 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    tgis.list_maps_of_stds("stvds", input, columns, order, where, separator, method, header)
+    tgis.list_maps_of_stds(
+        "stvds", input, columns, order, where, separator, method, header)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

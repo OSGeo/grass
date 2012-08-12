@@ -64,6 +64,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -77,10 +78,10 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    
-    tgis.extract_dataset(input, output, "raster3d", where, expression, base, nprocs, register_null)
+
+    tgis.extract_dataset(input, output, "raster3d", where, expression,
+                         base, nprocs, register_null)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

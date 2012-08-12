@@ -4,8 +4,8 @@
 #
 # MODULE:	t.rast3d.list
 # AUTHOR(S):	Soeren Gebbert
-#               
-# PURPOSE:	List registered maps of a space time raster3d dataset 
+#
+# PURPOSE:	List registered maps of a space time raster3d dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -31,7 +31,7 @@
 #% description: Order the space time dataset by category
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
 #% answer: start_time
 #%end
 
@@ -41,7 +41,7 @@
 #% description: Columns to be printed to stdout
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
 #% answer: name,mapset,start_time,end_time
 #%end
 
@@ -67,13 +67,14 @@
 
 #%flag
 #% key: h
-#% description: Print column names 
+#% description: Print column names
 #%end
 
 import grass.script as grass
 import grass.temporal as tgis
 
 ############################################################################
+
 
 def main():
 
@@ -89,7 +90,8 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    tgis.list_maps_of_stds("str3ds", input, columns, order, where, separator, method, header)
+    tgis.list_maps_of_stds(
+        "str3ds", input, columns, order, where, separator, method, header)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
