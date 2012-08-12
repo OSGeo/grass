@@ -617,7 +617,7 @@ int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
     
     if (!node_init) {
 	for (i = 0; i < MAXCARD; i++)
-	    RTreeNewRect(&(n.branch[i].rect), t);
+	    RTreeAllocBoundary(&(n.branch[i].rect), t);
     }
 
     /* recursive nearly-but-a-bit-messy depth-first pre-order traversal
@@ -998,7 +998,7 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 	if (loadnode) {
 	    /* ready to load node to memory */
 
-	    newnode = RTreeNewNode(t, s[top].sn.level);
+	    newnode = RTreeAllocNode(t, s[top].sn.level);
 	    /* copy from stack node */
 	    RTreeCopyNode(newnode, &(s[top].sn), t);
 

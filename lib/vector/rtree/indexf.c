@@ -126,9 +126,9 @@ static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int 
     
     if (!rect_init) {
 	for (i = 0; i < MAXCARD; i++) {
-	    RTreeNewRect(&(nn.branch[i].rect), t);
+	    RTreeAllocBoundary(&(nn.branch[i].rect), t);
 	}
-	RTreeNewRect(&nr, t);
+	RTreeAllocBoundary(&nr, t);
 	rect_init = t->ndims_alloc;
     }
 
@@ -240,9 +240,9 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
     
     if (!rect_init) {
 	for (i = 0; i < MAXCARD; i++) {
-	    RTreeNewRect(&(oldroot.branch[i].rect), t);
-	    RTreeNewRect(&(newroot.branch[i].rect), t);
-	    RTreeNewRect(&(newnode.branch[i].rect), t);
+	    RTreeAllocBoundary(&(oldroot.branch[i].rect), t);
+	    RTreeAllocBoundary(&(newroot.branch[i].rect), t);
+	    RTreeAllocBoundary(&(newnode.branch[i].rect), t);
 	}
 	rect_init = t->ndims_alloc;
     }
@@ -336,7 +336,7 @@ RTreeDeleteRect2F(struct RTree_Rect *r, union RTree_Child child, struct RTree *t
     assert(ee);
     
     if (!rect_init) {
-	RTreeNewRect(&(nr), t);
+	RTreeAllocBoundary(&(nr), t);
 	rect_init = 1;
     }
 
@@ -409,7 +409,7 @@ RTreeDeleteRect2F(struct RTree_Rect *r, union RTree_Child child, struct RTree *t
 	else {
 	    /* not enough entries in child, eliminate child node */
 	    assert(s[top].sn.branch[i].child.pos == s[down].pos);
-	    n = RTreeNewNode(t, s[down].sn.level);
+	    n = RTreeAllocNode(t, s[down].sn.level);
 	    /* copy node */
 	    RTreeCopyNode(n, &(s[down].sn), t);
 	    RTreeAddNodePos(s[top].sn.branch[i].child.pos, s[down].sn.level, t);
@@ -442,7 +442,7 @@ int RTreeDeleteRectF(struct RTree_Rect *r, union RTree_Child child, struct RTree
     
     if (!rect_init) {
 	for (i = 0; i < MAXCARD; i++) {
-	    RTreeNewRect(&(rn.branch[i].rect), t);
+	    RTreeAllocBoundary(&(rn.branch[i].rect), t);
 	}
 	rect_init = 1;
     }

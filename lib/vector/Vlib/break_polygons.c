@@ -130,7 +130,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 
     filename = G_tempfile();
     fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-    RTree = RTreeNewIndex(fd, 0, 2);
+    RTree = RTreeCreateTree(fd, 0, 2);
     remove(filename);
 
     filename = G_tempfile();
@@ -389,7 +389,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
     }
 
     close(RTree->fd);
-    RTreeFreeIndex(RTree);
+    RTreeDestroyTree(RTree);
     close(xpntfd);
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(BPoints);

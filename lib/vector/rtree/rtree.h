@@ -198,21 +198,36 @@ struct RTree
 int RTreeSearch(struct RTree *, struct RTree_Rect *,
                 SearchHitCallback *, void *);
 int RTreeInsertRect(struct RTree_Rect *, int, struct RTree *);
+void RTreeSetRect1D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max);
+void RTreeSetRect2D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max, double y_min, double y_max);
+void RTreeSetRect3D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max, double y_min, double y_max, double z_min,
+                   double z_max);
+void RTreeSetRect4D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max, double y_min, double y_max, double z_min,
+                   double z_max, double t_min, double t_max);
 int RTreeDeleteRect(struct RTree_Rect *, int, struct RTree *);
-struct RTree *RTreeNewIndex(int, off_t, int);
-void RTreeFreeIndex(struct RTree *);
+void RTreePrintRect(struct RTree_Rect *, int, struct RTree *);
+struct RTree *RTreeCreateTree(int, off_t, int);
+void RTreeDestroyTree(struct RTree *);
 int RTreeOverlap(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 int RTreeContained(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 int RTreeContains(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 
 /* RTree node management */
-struct RTree_Node *RTreeNewNode(struct RTree *, int);
+struct RTree_Node *RTreeAllocNode(struct RTree *, int);
 void RTreeInitNode(struct RTree *, struct RTree_Node *, int);
 void RTreeCopyNode(struct RTree_Node *, struct RTree_Node *, struct RTree *);
 void RTreeFreeNode(struct RTree_Node *);
 void RTreeDestroyNode(struct RTree_Node *, int);
 
-void RTreeNewRect(struct RTree_Rect *, struct RTree *);
+/* RTree rectangle allocation and deletion */
+struct RTree_Rect *RTreeAllocRect(struct RTree *t);
+void RTreeFreeRect(struct RTree_Rect *r);
+void RTreeAllocBoundary(struct RTree_Rect *r, struct RTree *t);
+void RTreeFreeBoundary(struct RTree_Rect *r);
 
 /* RTree IO */
 size_t RTreeReadNode(struct RTree_Node *, off_t, struct RTree *);
