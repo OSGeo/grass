@@ -7,6 +7,8 @@ Temporal GIS related functions to be used in temporal GIS Python library package
 
 Usage:
 
+@code
+
 >>> import grass.temporal as tgis
 >>> ad = AbstractDataset()
 >>> ad.reset(ident="soil@PERMANENT")
@@ -19,7 +21,9 @@ Traceback (most recent call last):
     raise ImplementationError("This method must be implemented in the subclasses")
 ImplementationError: 'This method must be implemented in the subclasses'
 
-(C) 2008-2011 by the GRASS Development Team
+@endcode
+
+(C) 2011-2012 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -43,7 +47,8 @@ class ImplementationError(Exception):
         return repr(self.msg)
     
 class AbstractDataset(object):
-    """!This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""
+    """!This is the base class for all datasets 
+       (raster, vector, raster3d, strds, stvds, str3ds)"""
 
     def reset(self, ident):
         """!Reset the internal structure and set the identifier
@@ -107,7 +112,8 @@ class AbstractDataset(object):
         return self.base.get_mapset()
 
     def get_valid_time(self):
-        """!Returns a tuple of the start, the end valid time, this can be either datetime or double values
+        """!Returns a tuple of the start, the end valid time, 
+           this can be either datetime or double values
            @return A tuple of (start_time, end_time)
         """
 
@@ -124,7 +130,9 @@ class AbstractDataset(object):
         return (start, end)
 
     def get_absolute_time(self):
-        """!Returns a tuple of the start, the end valid time and the timezone of the map
+        """!Returns a tuple of the start, the end 
+           valid time and the timezone of the map
+           
            @return A tuple of (start_time, end_time, timezone)
         """
 
@@ -135,7 +143,8 @@ class AbstractDataset(object):
         return (start, end, tz)
 
     def get_relative_time(self):
-        """!Returns the relative time interval (start_time, end_time, unit) or None if not present"""
+        """!Returns the relative time interval (start_time, end_time, unit) 
+           or None if not present"""
 
         start = self.relative_time.get_start_time()
         end = self.relative_time.get_end_time()
@@ -151,7 +160,8 @@ class AbstractDataset(object):
         return unit
 
     def check_relative_time_unit(self, unit):
-        """!Check if unit is of type  years, months, days, hours, minutes or seconds
+        """!Check if unit is of type  years, months, days, hours, 
+           minutes or seconds
 
            Return True if success or False otherwise
         """
@@ -166,11 +176,13 @@ class AbstractDataset(object):
         return self.base.get_ttype()
 
     def get_spatial_extent(self):
-        """!Return a tuple of spatial extent (north, south, east, west, top, bottom) """
+        """!Return a tuple of spatial extent 
+           (north, south, east, west, top, bottom) """
         return self.spatial_extent.get_spatial_extent()
 
     def select(self, dbif=None):
-        """!Select temporal dataset entry from database and fill up the internal structure"""
+        """!Select temporal dataset entry from database and fill 
+           up the internal structure"""
 
         dbif, connect = init_dbif(dbif)
 
@@ -197,12 +209,14 @@ class AbstractDataset(object):
         raise ImplementationError("This method must be implemented in the subclasses")
 
     def insert(self, dbif=None, execute=True):
-        """!Insert temporal dataset entry into database from the internal structure
+        """!Insert temporal dataset entry into 
+           database from the internal structure
 
 
            @param dbif: The database interface to be used
            @param execute: If True the SQL statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are returned 
+                           and must be executed by the caller.
         """
 
         dbif, connect = init_dbif(dbif)
@@ -234,7 +248,8 @@ class AbstractDataset(object):
 
            @param dbif: The database interface to be used
            @param execute: If True the SQL statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are returned 
+                           and must be executed by the caller.
         """
 
         dbif, connect = init_dbif(dbif)
@@ -266,7 +281,8 @@ class AbstractDataset(object):
 
            @param dbif: The database interface to be used
            @param execute: If True the SQL statements will be executed.
-                           If False the prepared SQL statements are returned and must be executed by the caller.
+                           If False the prepared SQL statements are returned 
+                           and must be executed by the caller.
         """
 
         dbif, connect = init_dbif(dbif)

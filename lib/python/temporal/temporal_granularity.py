@@ -25,14 +25,14 @@ from datetime_math import *
 
 ###############################################################################
 
-def compute_relative_time_granularity(maps):            
+
+def compute_relative_time_granularity(maps):
     """!Compute the relative time granularity
-        
-        Attention: The computation of the granularity is only correct in case of not
-        overlapping intervals. Hence a correct temporal topology is required for
-        computation.
-    
-	
+
+        Attention: The computation of the granularity 
+        is only correct in case of not overlapping intervals. 
+        Hence a correct temporal topology is required for computation.
+
         @param maps: a ordered by start_time list of map objects
     """
 
@@ -44,7 +44,7 @@ def compute_relative_time_granularity(maps):
     for map in maps:
         start, end = map.get_valid_time()
         if start and end:
-            t =  abs(end - start)
+            t = abs(end - start)
             delta.append(int(t))
 
     # Compute the timedelta of the gaps
@@ -54,12 +54,13 @@ def compute_relative_time_granularity(maps):
             if relation == "after":
                 start1, end1 = maps[i].get_valid_time()
                 start2, end2 = maps[i + 1].get_valid_time()
-                # Gaps are between intervals, intervals and points, points and points
+                # Gaps are between intervals, intervals and 
+                # points, points and points
                 if end1 and start2:
-                    t =  abs(end1 - start2)
+                    t = abs(end1 - start2)
                     delta.append(int(t))
-                if  not end1 and start2:
-                    t =  abs(start1 - start2)
+                if not end1 and start2:
+                    t = abs(start1 - start2)
                     delta.append(int(t))
 
     delta.sort()
@@ -76,16 +77,16 @@ def compute_relative_time_granularity(maps):
 
 ###############################################################################
 
-def compute_absolute_time_granularity(maps):                  
+
+def compute_absolute_time_granularity(maps):
     """!Compute the absolute time granularity
-        
-        Attention: The computation of the granularity is only correct in case of not
-        overlapping intervals. Hence a correct temporal topology is required for
-        computation.
-    
-	
+
+        Attention: The computation of the granularity 
+        is only correct in case of not overlapping intervals. 
+        Hence a correct temporal topology is required for computation.
+
         @param maps: a ordered by start_time list of map objects
-    """     
+    """
 
     has_seconds = False
     has_minutes = False
@@ -117,83 +118,85 @@ def compute_absolute_time_granularity(maps):
             if relation == "after":
                 start1, end1 = maps[i].get_valid_time()
                 start2, end2 = maps[i + 1].get_valid_time()
-                # Gaps are between intervals, intervals and points, points and points
+                # Gaps are between intervals, intervals and 
+                # points, points and points
                 if end1 and start2:
                     delta.append(end1 - start2)
                     datetime_delta.append(compute_datetime_delta(end1, start2))
-                if  not end1 and start2:
+                if not end1 and start2:
                     delta.append(start2 - start1)
-                    datetime_delta.append(compute_datetime_delta(start1, start2))
+                    datetime_delta.append(compute_datetime_delta(
+                        start1, start2))
 
     # Check what changed
     dlist = []
     for d in datetime_delta:
-        if d.has_key("second") and d["second"] > 0:
+        if "second" in d and d["second"] > 0:
             has_seconds = True
-        if d.has_key("minute") and d["minute"] > 0:
+        if "minute" in d and d["minute"] > 0:
             has_minutes = True
-        if d.has_key("hour") and d["hour"] > 0:
+        if "hour" in d and d["hour"] > 0:
             has_hours = True
-        if d.has_key("day") and d["day"] > 0:
+        if "day" in d and d["day"] > 0:
             has_days = True
-        if d.has_key("month") and d["month"] > 0:
+        if "month" in d and d["month"] > 0:
             has_months = True
-        if d.has_key("year") and d["year"] > 0:
+        if "year" in d and d["year"] > 0:
             has_years = True
 
     # Create a list with a single time unit only
     if has_seconds:
         for d in datetime_delta:
-            if d.has_key("second"):
-                dlist.append(d["second"])   
-            elif d.has_key("minute"):
-                dlist.append(d["minute"] * 60)   
-            elif d.has_key("hour"):
-                dlist.append(d["hour"] * 3600)   
-            elif d.has_key("day"):
-                dlist.append(d["day"] * 24 * 3600)   
+            if "second" in d:
+                dlist.append(d["second"])
+            elif "minute" in d:
+                dlist.append(d["minute"] * 60)
+            elif "hour" in d:
+                dlist.append(d["hour"] * 3600)
+            elif "day" in d:
+                dlist.append(d["day"] * 24 * 3600)
             else:
-                dlist.append(d["max_days"] * 24 * 3600)   
-        use_seconds = True        
+                dlist.append(d["max_days"] * 24 * 3600)
+        use_seconds = True
     elif has_minutes:
         for d in datetime_delta:
-            if d.has_key("minute"):
-                dlist.append(d["minute"])   
-            elif d.has_key("hour"):
-                dlist.append(d["hour"] * 60)   
-            elif d.has_key("day"):
-                dlist.append(d["day"] * 24 * 60)   
+            if "minute" in d:
+                dlist.append(d["minute"])
+            elif "hour" in d:
+                dlist.append(d["hour"] * 60)
+            elif "day" in d:
+                dlist.append(d["day"] * 24 * 60)
             else:
-                dlist.append(d["max_days"] * 24 * 60)   
-        use_minutes = True        
+                dlist.append(d["max_days"] * 24 * 60)
+        use_minutes = True
     elif has_hours:
         for d in datetime_delta:
-            if d.has_key("hour"):
-                dlist.append(d["hour"])   
-            elif d.has_key("day"):
-                dlist.append(d["day"] * 24)   
+            if "hour" in d:
+                dlist.append(d["hour"])
+            elif "day" in d:
+                dlist.append(d["day"] * 24)
             else:
-                dlist.append(d["max_days"] * 24)   
-        use_hours = True        
+                dlist.append(d["max_days"] * 24)
+        use_hours = True
     elif has_days:
         for d in datetime_delta:
-            if d.has_key("day"):
-                dlist.append(d["day"])   
+            if "day" in d:
+                dlist.append(d["day"])
             else:
-                dlist.append(d["max_days"])   
-        use_days = True        
+                dlist.append(d["max_days"])
+        use_days = True
     elif has_months:
         for d in datetime_delta:
-            if d.has_key("month"):
-                dlist.append(d["month"])   
-            elif d.has_key("year"):
-                dlist.append(d["year"] * 12)   
-        use_months = True        
+            if "month" in d:
+                dlist.append(d["month"])
+            elif "year" in d:
+                dlist.append(d["year"] * 12)
+        use_months = True
     elif has_years:
         for d in datetime_delta:
-            if d.has_key("year"):
-                dlist.append(d["year"])   
-        use_years = True        
+            if "year" in d:
+                dlist.append(d["year"])
+        use_years = True
 
     dlist.sort()
     ulist = list(set(dlist))
@@ -229,20 +232,23 @@ def compute_absolute_time_granularity(maps):
 #  See http://www.opensource.org/licenses/mit-license.php
 # Error Codes:
 #   None
-def gcd(a,b):
-	"""!The Euclidean Algorithm """
-	a = abs(a)
-	b = abs(b)
-        while a:
-                a, b = b%a, a
-        return b
-        
+
+
+def gcd(a, b):
+    """!The Euclidean Algorithm """
+    a = abs(a)
+    b = abs(b)
+    while a:
+        a, b = b % a, a
+    return b
+
 ###############################################################################
 
+
 def gcd_list(list):
-	"""!Finds the GCD of numbers in a list.
-	Input: List of numbers you want to find the GCD of
-		E.g. [8, 24, 12]
-	Returns: GCD of all numbers
-	"""
-	return reduce(gcd, list)
+    """!Finds the GCD of numbers in a list.
+    Input: List of numbers you want to find the GCD of
+            E.g. [8, 24, 12]
+    Returns: GCD of all numbers
+    """
+    return reduce(gcd, list)

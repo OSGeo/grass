@@ -9,7 +9,8 @@ Usage:
 @code
 import grass.temporal as tgis
 
-tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, method, register_null, dbif)
+tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end,
+    count, method, register_null, dbif)
 
 ...
 @endcode
@@ -27,6 +28,7 @@ import grass.lib.gis as libgis
 
 ###############################################################################
 
+
 def collect_map_names(sp, dbif, start, end, sampling):
     """!Gather all maps from dataset using a specific sample method
 
@@ -36,7 +38,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
        @param end: The end time of the sample interval, may be relative or absolute
        @param sampling: The sampling methods to use
     """
-    
+
     use_start = False
     use_during = False
     use_overlap = False
@@ -75,8 +77,15 @@ def collect_map_names(sp, dbif, start, end, sampling):
         use_follows = False
         use_precedes = False
 
-    where = create_temporal_relation_sql_where_statement(start, end, use_start, use_during, use_overlap, use_contain, use_equal, use_follows, use_precedes)
-   
+    where = create_temporal_relation_sql_where_statement(start, end, 
+                                                         use_start, 
+                                                         use_during, 
+                                                         use_overlap, 
+                                                         use_contain, 
+                                                         use_equal, 
+                                                         use_follows, 
+                                                         use_precedes)
+
     rows = sp.get_registered_maps("id", where, "start_time", dbif)
 
     if not rows:
@@ -86,13 +95,15 @@ def collect_map_names(sp, dbif, start, end, sampling):
     for row in rows:
         names.append(row["id"])
 
-    return names    
+    return names
 
 ###############################################################################
 
-def aggregate_raster_maps(inputs, base, start, end, count, method, register_null, dbif):
+
+def aggregate_raster_maps(inputs, base, start, end, count, method, 
+                          register_null, dbif):
     """!Aggregate a list of raster input maps with r.series
-       
+
        @param inputs: The names of the raster maps to be aggregated
        @param base: The basename of the new created raster maps
        @param start: The start time of the sample interval, may be relative or absolute
@@ -103,13 +114,11 @@ def aggregate_raster_maps(inputs, base, start, end, count, method, register_null
        @param dbif: The temporal database interface to use
     """
 
-    core.verbose(_("Aggregate %s raster maps") %(len(inputs)))
+    core.verbose(_("Aggregate %s raster maps") % (len(inputs)))
     output = "%s_%i" % (base, count)
-    
+
     mapset = libgis.G_mapset()
-
     map_id = output + "@" + mapset
-
     new_map = raster_dataset(map_id)
 
     # Check if new map is in the temporal database
@@ -122,7 +131,8 @@ def aggregate_raster_maps(inputs, base, start, end, count, method, register_null
             core.error(_("Raster map <%s> is already in temporal database, use overwrite flag to overwrite"))
             return
 
-    core.verbose(_("Compute aggregation of maps between %s - %s" % (str(start), str(end))))
+    core.verbose(_("Compute aggregation of maps between %s - %s" % (
+        str(start), str(end))))
 
     # Create the r.series input file
     filename = core.tempfile(True)
@@ -134,20 +144,21 @@ def aggregate_raster_maps(inputs, base, start, end, count, method, register_null
 
     file.close()
     # Run r.series
-    ret = core.run_command("r.series", flags="z", file=filename, output=output, overwrite=core.overwrite(), method=method)
+    ret = core.run_command("r.series", flags="z", file=filename,
+                           output=output, overwrite=core.overwrite(), 
+                           method=method)
 
     if ret != 0:
         dbif.close()
         core.fatal(_("Error while r.series computation"))
-        
 
     # Read the raster map data
     new_map.load()
-    
+
     # In case of a null map continue, do not register null maps
-    if new_map.metadata.get_min() == None and new_map.metadata.get_max() == None:
+    if new_map.metadata.get_min() is None and new_map.metadata.get_max() is None:
         if not register_null:
             core.run_command("g.remove", rast=output)
             return None
-    
+
     return new_map

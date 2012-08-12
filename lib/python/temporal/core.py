@@ -9,6 +9,8 @@ SQL database and to establish a connection to the database.
 
 Usage:
 
+\code
+
 >>> import grass.temporal as tgis
 >>> # Create the temporal database
 >>> tgis.create_temporal_database()
@@ -18,9 +20,12 @@ Usage:
 >>> # Execute a SQL statement
 >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
 >>> # Mogrify an SQL statement
->>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?", ("precipitation",)])
+>>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?", 
+... ("precipitation",)])
 "SELECT name from raster_base where name = 'precipitation'"
 >>> dbif.close()
+
+\endcode
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -47,7 +52,8 @@ if "driver" in kv:
         # Needed for dictionary like cursors
         import psycopg2.extras
     else:
-        core.fatal(_("Unable to initialize the temporal DBMI interface. Use t.connect to specify the driver and the database string"))
+        core.fatal(_("Unable to initialize the temporal DBMI interface. Use "
+                     "t.connect to specify the driver and the database string"))
 else:
     # Use the default sqlite variable
     core.run_command("t.connect", flags="d")
@@ -67,13 +73,17 @@ def get_temporal_dbmi_init_string():
                 "$LOCATION_NAME", grassenv["LOCATION_NAME"])
             return string
         else:
-            core.fatal(_("Unable to initialize the temporal GIS DBMI interface. Use t.connect to specify the driver and the database string"))
+            core.fatal(_("Unable to initialize the temporal GIS DBMI "
+                         "interface. Use t.connect to specify the driver "
+                         "and the database string"))
     elif dbmi.__name__ == "psycopg2":
         if "database" in kv:
             string = kv["database"]
             return string
         else:
-            core.fatal(_("Unable to initialize the temporal GIS DBMI interface. Use t.connect to specify the driver and the database string"))
+            core.fatal(_("Unable to initialize the temporal GIS DBMI "
+                         "interface. Use t.connect to specify the driver "
+                         "and the database string"))
             return "dbname=grass_test user=soeren password=abcdefgh"
 
 ###############################################################################
@@ -88,10 +98,12 @@ def get_sql_template_path():
 
 
 def create_temporal_database():
-    """!This function creates the grass location database structure for raster, vector and raster3d maps
-       as well as for the space-time datasets strds, str3ds and stvds
+    """!This function creates the grass location database structure for raster, 
+       vector and raster3d maps as well as for the space-time datasets strds, 
+       str3ds and stvds
 
-       This functions must be called before any spatio-temporal processing can be started
+       This functions must be called before any spatio-temporal processing 
+       can be started
     """
 
     database = get_temporal_dbmi_init_string()
@@ -108,7 +120,8 @@ def create_temporal_database():
         connection = dbmi.connect(database)
         cursor = connection.cursor()
         # Check for raster_base table
-        cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name=%s)", ('raster_base',))
+        cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
+                       "WHERE table_name=%s)", ('raster_base',))
         db_exists = cursor.fetchone()[0]
         connection.commit()
         cursor.close()
@@ -214,7 +227,8 @@ class SQLDatabaseInterfaceConnection():
         init = get_temporal_dbmi_init_string()
         #print "Connect to",  self.database
         if dbmi.__name__ == "sqlite3":
-            self.connection = dbmi.connect(init, detect_types=dbmi.PARSE_DECLTYPES | dbmi.PARSE_COLNAMES)
+            self.connection = dbmi.connect(init, 
+                    detect_types=dbmi.PARSE_DECLTYPES | dbmi.PARSE_COLNAMES)
             self.connection.row_factory = dbmi.Row
             self.connection.isolation_level = None
             self.cursor = self.connection.cursor()
@@ -277,8 +291,8 @@ class SQLDatabaseInterfaceConnection():
                         break
 
                     if args[count] is None:
-                        statement = "%sNULL%s" % (statement[0:
-                                                            pos], statement[pos + 1:])
+                        statement = "%sNULL%s" % (statement[0:pos], 
+                                                  statement[pos + 1:])
                     elif isinstance(args[count], (int, long)):
                         statement = "%s%d%s" % (statement[0:pos], args[count],
                                                 statement[pos + 1:])
@@ -286,8 +300,11 @@ class SQLDatabaseInterfaceConnection():
                         statement = "%s%f%s" % (statement[0:pos], args[count],
                                                 statement[pos + 1:])
                     else:
-                        # Default is a string, this works for datetime objects too
-                        statement = "%s\'%s\'%s" % (statement[0:pos], str(args[count]), statement[pos + 1:])
+                        # Default is a string, this works for datetime 
+                        # objects too
+                        statement = "%s\'%s\'%s" % (statement[0:pos], 
+                                                    str(args[count]), 
+                                                    statement[pos + 1:])
                     count += 1
 
                 return statement
@@ -301,7 +318,7 @@ class SQLDatabaseInterfaceConnection():
             @param statement The executable SQL statement or SQL script
         """
         connect = False
-        if self.connected == False:
+        if not self.connected:
             self.connect()
             connect = True
 
@@ -309,6 +326,7 @@ class SQLDatabaseInterfaceConnection():
         sql_script += "BEGIN TRANSACTION;\n"
         sql_script += statement
         sql_script += "END TRANSACTION;"
+        
         try:
             if dbmi.__name__ == "sqlite3":
                 self.cursor.executescript(statement)
@@ -316,9 +334,10 @@ class SQLDatabaseInterfaceConnection():
                 self.cursor.execute(statement)
             self.connection.commit()
         except:
-            if connect == True:
+            if connect:
                 self.close()
-            core.error(_("Unable to execute transaction:\n %s") % (statement))
+            core.error(_("Unable to execute transaction:\n %(sql)s" % \
+                         {"sql":statement}))
             raise
 
         if connect:
@@ -327,13 +346,17 @@ class SQLDatabaseInterfaceConnection():
 ###############################################################################
 
 def init_dbif(dbif):
-    """!This method checks if the database interface connection exists, if not a new one
-        will be created, connected and True will be returned
+    """!This method checks if the database interface connection exists, 
+        if not a new one will be created, connected and True will be returned
 
         Usage code sample:
+        \code
+        
         dbif, connect = tgis.init_dbif(dbif)
         if connect:
             dbif.close()
+        
+        \code
     """
     if dbif is None:
         dbif = SQLDatabaseInterfaceConnection()
