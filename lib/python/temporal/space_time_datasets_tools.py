@@ -385,17 +385,17 @@ def dataset_factory(type, id):
        @param id: The id of the dataset ("name@mapset")
     """
     if type == "strds":
-        sp = space_time_raster_dataset(id)
+        sp = SpaceTimeRasterDataset(id)
     elif type == "str3ds":
-        sp = space_time_raster3d_dataset(id)
+        sp = SpaceTimeRaster3DDataset(id)
     elif type == "stvds":
-        sp = space_time_vector_dataset(id)
+        sp = SpaceTimeVectorDataset(id)
     elif type == "rast" or type == "raster":
-        sp = raster_dataset(id)
+        sp = RasterDataset(id)
     elif type == "rast3d":
-        sp = raster3d_dataset(id)
+        sp = Raster3DDataset(id)
     elif type == "vect" or type == "vector":
-        sp = vector_dataset(id)
+        sp = VectorDataset(id)
     else:
         core.error(_("Unknown dataset type: %s") % type)
         return None
@@ -474,14 +474,20 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         if maps and len(maps) > 0:
 
             if isinstance(maps[0], list):
-                first_time, dummy = maps[0][0].get_valid_time()
+                if len(maps[0]) > 0:
+                    first_time, dummy = maps[0][0].get_valid_time()
+                else:
+                    core.fatal(_("Unable to list maps. Internal Error."))
             else:
                 first_time, dummy = maps[0].get_valid_time()
 
             for mymap in maps:
 
                 if isinstance(mymap, list):
-                    map = mymap[0]
+                    if len(mymap) > 0:
+                        map = mymap[0]
+                    else:
+                        core.fatal(_("Unable to list maps. Internal Error."))
                 else:
                     map = mymap
 
@@ -602,7 +608,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
 
     sst = dataset_factory(sampletype, sid)
 
-    dbif = ()
+    dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     for st in sts:

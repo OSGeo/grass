@@ -782,18 +782,18 @@ class VectorDataset(AbstractMapDataset):
 
         # Fill metadata
         self.metadata.set_3d_info(kvp["is_3d"])
-        self.metadata.set_points(kvp["points"])
-        self.metadata.set_lines(kvp["lines"])
-        self.metadata.set_boundaries(kvp["boundaries"])
-        self.metadata.set_centroids(kvp["centroids"])
-        self.metadata.set_faces(kvp["faces"])
-        self.metadata.set_kernels(kvp["kernels"])
-        self.metadata.set_primitives(kvp["primitives"])
-        self.metadata.set_nodes(kvp["nodes"])
-        self.metadata.set_areas(kvp["areas"])
-        self.metadata.set_islands(kvp["islands"])
-        self.metadata.set_holes(kvp["holes"])
-        self.metadata.set_volumes(kvp["volumes"])
+        self.metadata.set_number_of_points(kvp["points"])
+        self.metadata.set_number_of_lines(kvp["lines"])
+        self.metadata.set_number_of_boundaries(kvp["boundaries"])
+        self.metadata.set_number_of_centroids(kvp["centroids"])
+        self.metadata.set_number_of_faces(kvp["faces"])
+        self.metadata.set_number_of_kernels(kvp["kernels"])
+        self.metadata.set_number_of_primitives(kvp["primitives"])
+        self.metadata.set_number_of_nodes(kvp["nodes"])
+        self.metadata.set_number_of_areas(kvp["areas"])
+        self.metadata.set_number_of_islands(kvp["islands"])
+        self.metadata.set_number_of_holes(kvp["holes"])
+        self.metadata.set_number_of_volumes(kvp["volumes"])
 
 ###############################################################################
 

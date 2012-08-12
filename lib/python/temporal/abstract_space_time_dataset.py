@@ -796,16 +796,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 map_view = self.get_new_map_instance(
                     None).get_type() + "_view_rel_time"
 
-            if columns is not None:
+            if columns is not None and columns != "":
                 sql = "SELECT %s FROM %s  WHERE %s.id IN (SELECT id FROM %s)" %\
                       (columns, map_view, map_view, self.get_map_register())
             else:
                 sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % \
                       (map_view, map_view, self.get_map_register())
 
-            if where is not None:
+            if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])
-            if order is not None:
+            if order is not None and order != "":
                 sql += " ORDER BY %s" % (order.split(";")[0])
 
             try:

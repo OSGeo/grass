@@ -17,7 +17,6 @@ from multiprocessing import Process
 
 ############################################################################
 
-
 def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     register_null=False, layer=1,
                     vtype="point,line,boundary,centroid,area,face"):
@@ -55,15 +54,15 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         id = input + "@" + mapset
 
     if type == "raster":
-        sp = space_time_raster_dataset(id)
+        sp = SpaceTimeRasterDataset(id)
     elif type == "raster3d":
-        sp = space_time_raster3d_dataset(id)
+        sp = SpaceTimeRaster3DDataset(id)
     elif type == "vector":
-        sp = space_time_vector_dataset(id)
+        sp = SpaceTimeVectorDataset(id)
 
     dummy = sp.get_new_map_instance(None)
 
-    dbif = ()
+    dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     if not sp.is_in_db(dbif):
@@ -156,20 +155,22 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                                  % expression)
                     if row["layer"]:
                         proc_list.append(Process(target=run_vector_extraction,
-                                                 args=(row["name"] + "@" + row["mapset"],
+                                                 args=(row["name"] + "@" + \
+                                                       row["mapset"],
                                                  map_name, row["layer"], 
                                                  vtype, expression)))
                     else:
                         proc_list.append(Process(target=run_vector_extraction,
-                                                 args=(row["name"] + "@" + row["mapset"],
+                                                 args=(row["name"] + "@" + \
+                                                       row["mapset"],
                                                  map_name, layer, vtype, 
                                                  expression)))
 
                 proc_list[proc_count].start()
                 proc_count += 1
 
-                # Join processes if the maximum number of processes are reached or the end of the
-                # loop is reached
+                # Join processes if the maximum number of processes are 
+                # reached or the end of the loop is reached
                 if proc_count == nprocs or proc_count == num_rows:
                     proc_count = 0
                     exitcodes = 0
@@ -229,8 +230,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                                 empty_maps.append(new_map)
                                 continue
                     elif type == "vector":
-                        if new_map.metadata.get_primitives() == 0 or \
-                           new_map.metadata.get_primitives() is None:
+                        if new_map.metadata.get_number_of_primitives() == 0 or \
+                           new_map.metadata.get_number_of_primitives() is None:
                             if not register_null:
                                 empty_maps.append(new_map)
                                 continue
@@ -276,18 +277,15 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
 ###############################################################################
 
-
 def run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
     return core.run_command("r.mapcalc", expression=expr,
                             overwrite=core.overwrite(), quiet=True)
 
-
 def run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
     return core.run_command("r3.mapcalc", expression=expr,
                             overwrite=core.overwrite(), quiet=True)
-
 
 def run_vector_extraction(input, output, layer, type, where):
     """Helper function to run r.mapcalc in parallel"""
