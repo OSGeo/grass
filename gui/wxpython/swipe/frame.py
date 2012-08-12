@@ -61,6 +61,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(EVT_AUTO_RENDER, self.OnAutoRenderChanged)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         self.SetSize((800, 600))
         
@@ -77,7 +78,8 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def CallAfterInit(self):
         self.InitSliderBindings()
-        self.OnSelectRasters(event = None)
+        if not (self.rasters['first'] and self.rasters['second']):
+            self.OnSelectRasters(event = None)
         
     def InitStatusbar(self):
         """!Init statusbar (default items)."""
@@ -158,18 +160,18 @@ class SwipeMapFrame(DoubleMapFrame):
     def OnSize(self, event):
         Debug.msg (4, "SwipeMapFrame.OnSize()")
         self.resize = time.clock()
-        w1 = self.GetFirstWindow()
-        w2 = self.GetSecondWindow()
-
-        sizeAll = self.splitter.GetSize()
-        w1.SetClientSize(sizeAll)
-        w2.SetClientSize(sizeAll)
-        
-        w1.OnSize(event)
-        w2.OnSize(event)
 
     def OnIdle(self, event):
         if self.resize and time.clock() - self.resize > 0.2:
+            w1 = self.GetFirstWindow()
+            w2 = self.GetSecondWindow()
+
+            sizeAll = self.splitter.GetSize()
+            w1.SetClientSize(sizeAll)
+            w2.SetClientSize(sizeAll)
+            
+            w1.OnSize(event)
+            w2.OnSize(event)
             self.ResetSlider()
             self.resize = False
 
