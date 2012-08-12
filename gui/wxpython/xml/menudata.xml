@@ -2724,11 +2724,11 @@
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>Brovey sharpening</label>
-	  <help>Brovey transform to merge multispectral and high-res panchromatic channels</help>
-	  <keywords>imagery,fusion,Brovey</keywords>
+	  <label>Pan sharpening</label>
+	  <help>Sharpen image by merging multispectral and high-res panchromatic channels</help>
+	  <keywords>imagery,fusion,sharpen,IHS,PCI,Brovey</keywords>
 	  <handler>OnMenuCmd</handler>
-	  <command>i.fusion.brovey</command>
+	  <command>i.pansharpen</command>
 	</menuitem>
 	<menu>
 	  <label>Classify image</label>
