@@ -19,7 +19,7 @@ t.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 s
 
 # The @test
 # We need to create a nice space time vector dataset with layers for testing
-t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer column=observation
+t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer vector=prec_observer column=observation
 t.vect.list input=prec_observer
 t.vect.db.select input=prec_observer
 t.vect.db.select input=prec_observer where="cat = 1" fs="  |  "
@@ -28,7 +28,7 @@ t.vect.db.select input=prec_observer where="cat = 1" fs="  |  " columns=observat
 # Time instances
 t.register --o input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2004-01-01 00:00:00" increment="3 months"
 
-t.vect.observe.strds --o input=prec strds=precip_abs1 output=prec_observer
+t.vect.observe.strds --o input=prec strds=precip_abs1 output=prec_observer vector=prec_observer 
 t.vect.list input=prec_observer
 t.vect.db.select input=prec_observer
 t.vect.db.select input=prec_observer where="cat = 1" fs="  |  "

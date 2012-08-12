@@ -4,7 +4,7 @@
 #
 # MODULE:	t.list
 # AUTHOR(S):	Soeren Gebbert
-#               
+#
 # PURPOSE:	List space time datasets and maps registered in the temporal database
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
@@ -72,6 +72,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -110,14 +111,13 @@ def main():
     if order:
         sql += " ORDER BY " + order
 
-
     dbif.cursor.execute(sql)
     rows = dbif.cursor.fetchall()
     dbif.close()
 
     # Print the query result to stout
     if rows:
-        if separator == None or separator == "":
+        if separator is None or separator == "":
             separator = "\t"
 
         # Print the column names if requested
@@ -141,7 +141,7 @@ def main():
                 else:
                     output += str(col)
                 count += 1
-                
+
             print output
 
 if __name__ == "__main__":

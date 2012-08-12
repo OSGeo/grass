@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.support
-# AUTHOR(S):	Soeren Gebbert
-#               
-# PURPOSE:	Modify the metadata of a space time dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# MODULE:       t.support
+# AUTHOR(S):    Soeren Gebbert
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+# PURPOSE:      Modify the metadata of a space time dataset
+# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (version 2). Read the file COPYING that comes with GRASS
+#               for details.
 #
 #############################################################################
 
@@ -67,6 +67,7 @@ import grass.script as grass
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -82,13 +83,13 @@ def main():
     tgis.create_temporal_database()
 
     #Get the current mapset to create the id of the space time dataset
-    mapset =  grass.gisenv()["MAPSET"]
+    mapset = grass.gisenv()["MAPSET"]
 
     if name.find("@") >= 0:
         id = name
     else:
         id = name + "@" + mapset
-        
+
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
@@ -96,24 +97,25 @@ def main():
 
     if stds.is_in_db(dbif=dbif) == False:
         dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (stds.get_new_map_instance(None).get_type(), id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (
+            stds.get_new_map_instance(None).get_type(), id))
 
     stds.select(dbif=dbif)
-    
+
     update = False
     if title:
-	stds.metadata.set_title(title=title)
-	update = True
-	# Update only non-null entries
+        stds.metadata.set_title(title=title)
+        update = True
+        # Update only non-null entries
     if description:
-	stds.metadata.set_description(description=description)
-	update = True
+        stds.metadata.set_description(description=description)
+        update = True
     if semantic:
-	stds.base.set_semantic_type(semantic_type=semantic)
-	update = True
+        stds.base.set_semantic_type(semantic_type=semantic)
+        update = True
 
     if update:
-	stds.update(dbif=dbif)
+        stds.update(dbif=dbif)
 
     if map_update:
         #Update the registered maps from the grass spatial database
@@ -123,41 +125,40 @@ def main():
 
         count = 0
         maps = stds.get_registered_maps_as_objects(dbif=dbif)
-        
+
         # We collect the delete and update statements
         for map in maps:
-	    
-	    grass.percent(count, len(maps), 1)
-	    count += 1
-	    
-	    map.select(dbif=dbif)
-	    
-	    # Check if the map is present in the grass spatial database
-	    # Update if present, delete if not present
-	    if map.map_exists():
-		# Read new metadata from the spatial database
-		map.load()
-		statement += map.update(dbif=dbif, execute=False)
-	    else:
-		# Delete the map from the temporal database
-		# We need to update all effected space time datasets
-		rows = map.get_registered_datasets(dbif)
-		if rows: 
-		    for row in rows:
-			dataset_dict[row["id"]] = row["id"]
-		# Collect the delete statements
-		statement += map.delete(dbif=dbif, update=False, execute=False)
-	
+
+            grass.percent(count, len(maps), 1)
+            count += 1
+
+            map.select(dbif=dbif)
+
+            # Check if the map is present in the grass spatial database
+            # Update if present, delete if not present
+            if map.map_exists():
+                # Read new metadata from the spatial database
+                map.load()
+                statement += map.update(dbif=dbif, execute=False)
+            else:
+                # Delete the map from the temporal database
+                # We need to update all effected space time datasets
+                rows = map.get_registered_datasets(dbif)
+                if rows:
+                    for row in rows:
+                        dataset_dict[row["id"]] = row["id"]
+                # Collect the delete statements
+                statement += map.delete(dbif=dbif, update=False, execute=False)
 
         # Execute the collected SQL statements
         dbif.execute_transaction(statement)
-        
-	# Update the effected space time datasets
+
+        # Update the effected space time datasets
         for id in dataset_dict:
-	    stds_new = stds.get_new_instance(id)
-	    stds_new.select(dbif=dbif)
+            stds_new = stds.get_new_instance(id)
+            stds_new.select(dbif=dbif)
             stds_new.update_from_registered_maps(dbif=dbif)
-        
+
     if map_update or update:
         stds.update_from_registered_maps(dbif=dbif)
 
@@ -166,4 +167,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

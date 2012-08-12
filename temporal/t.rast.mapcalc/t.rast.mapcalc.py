@@ -74,6 +74,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -85,18 +86,18 @@ def main():
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
     spatial = flags["s"]
-    
+
     # Create the method list
     method = method.split(",")
-        
+
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    
-    tgis.dataset_mapcalculator(inputs, output, "raster", expression, base, method, nprocs, register_null, spatial)
-    
+
+    tgis.dataset_mapcalculator(inputs, output, "raster", expression,
+                               base, method, nprocs, register_null, spatial)
+
 ###############################################################################
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

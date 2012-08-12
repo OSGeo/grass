@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.rast.export
-# AUTHOR(S):	Soeren Gebbert
-#               
-# PURPOSE:	Export a space time raster dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# MODULE:       t.rast.export
+# AUTHOR(S):    Soeren Gebbert
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+# PURPOSE:      Export a space time raster dataset
+# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (version 2). Read the file COPYING that comes with GRASS
+#               for details.
 #
 #############################################################################
 
@@ -60,23 +60,24 @@
 import grass.script as grass
 import grass.temporal as tgis
 
-    
+
 ############################################################################
 def main():
 
-	# Get the options
-	_input = options["input"]
-	output = options["output"]
-	compression = options["compression"]
-	workdir = options["workdir"]
-	where = options["where"]
-	_format = options["format"]
+    # Get the options
+    _input = options["input"]
+    output = options["output"]
+    compression = options["compression"]
+    workdir = options["workdir"]
+    where = options["where"]
+    _format = options["format"]
 
-	# Make sure the temporal database exists
-	tgis.create_temporal_database()
-	# Export the space time raster dataset
-	tgis.export_stds(_input, output, compression, workdir, where, _format, "strds")
-     
+    # Make sure the temporal database exists
+    tgis.create_temporal_database()
+    # Export the space time raster dataset
+    tgis.export_stds(
+        _input, output, compression, workdir, where, _format, "strds")
+
 ############################################################################
 if __name__ == "__main__":
     options, flags = grass.parser()

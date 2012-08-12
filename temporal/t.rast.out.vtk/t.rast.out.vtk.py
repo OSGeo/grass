@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.rast.out.vtk
-# AUTHOR(S):	Soeren Gebbert
-#               
-# PURPOSE:	Export space time raster dataset as VTK time series
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# MODULE:       t.rast.out.vtk
+# AUTHOR(S):    Soeren Gebbert
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+# PURPOSE:      Export space time raster dataset as VTK time series
+# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (version 2). Read the file COPYING that comes with GRASS
+#               for details.
 #
 #############################################################################
 
@@ -71,6 +71,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -86,27 +87,28 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    if not os.path.exists(expdir): 
+    if not os.path.exists(expdir):
         grass.fatal(_("Export directory <%s> not found.") % expdir)
 
     os.chdir(expdir)
 
-    mapset =  grass.gisenv()["MAPSET"]
+    mapset = grass.gisenv()["MAPSET"]
 
     if input.find("@") >= 0:
         id = input
     else:
         id = input + "@" + mapset
 
-    sp = tgis.space_time_raster_dataset(id)
-    
+    sp = tgis.SpaceTimeRasterDataset(id)
+
     if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (
+            sp.get_new_map_instance(None).get_type(), id))
 
     sp.select()
 
     if use_granularity:
-	# Attention: A list of lists of maps will be returned
+        # Attention: A list of lists of maps will be returned
         maps = sp.get_registered_maps_as_objects_by_granularity()
         # Create a NULL map in case of granularity support
         null_map = "temporary_null_map_%i" % os.getpid()
@@ -114,24 +116,29 @@ def main():
     else:
         maps = sp.get_registered_maps_as_objects(where, "start_time", None)
 
-    # To have scalar values with the same name, we need to copy the raster maps using a single name
+    # To have scalar values with the same name, we need to copy the 
+    # raster maps using a single name
     map_name = "%s_%i" % (sp.base.get_name(), os.getpid())
 
     count = 0
-    if maps:
+    if maps is not None:
         for map in maps:
-	    if use_granularity:
-		id = map[0].get_map_id()
-	    else:
-		id = map.get_map_id()
+            if use_granularity:
+                if len(map[0]) > 0:
+                    id = map[0].get_map_id()
+                else:
+                    continue
+            else:
+                id = map.get_map_id()
             # None ids will be replaced by NULL maps
-            if id == None:
+            if id is None:
                 id = null_map
-            
-            grass.run_command("g.copy", rast="%s,%s" % (id, map_name), overwrite=True)
-            out_name = "%6.6i_%s.vtk" % (count, sp.base.get_name()) 
 
-            mflags=""
+            grass.run_command("g.copy", rast="%s,%s" % (id, map_name), 
+                              overwrite=True)
+            out_name = "%6.6i_%s.vtk" % (count, sp.base.get_name())
+
+            mflags = ""
             if use_pdata:
                 mflags += "p"
             if coorcorr:
@@ -139,9 +146,14 @@ def main():
 
             # Export the raster map with r.out.vtk
             if elevation:
-                ret = grass.run_command("r.out.vtk", flags=mflags, null=null, input=map_name, elevation=elevation, output=out_name, overwrite=grass.overwrite())
+                ret = grass.run_command("r.out.vtk", flags=mflags, null=null, 
+                                        input=map_name, elevation=elevation, 
+                                        output=out_name, 
+                                        overwrite=grass.overwrite())
             else:
-                ret = grass.run_command("r.out.vtk", flags=mflags, null=null, input=map_name, output=out_name, overwrite=grass.overwrite())
+                ret = grass.run_command("r.out.vtk", flags=mflags, null=null, 
+                                        input=map_name, output=out_name, 
+                                        overwrite=grass.overwrite())
 
             if ret != 0:
                 grass.fatal(_("Unable to export raster map <%s>" % name))

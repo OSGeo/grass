@@ -59,6 +59,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -75,13 +76,14 @@ def main():
     if input.find("@") >= 0:
         id = input
     else:
-        mapset =  grass.gisenv()["MAPSET"]
+        mapset = grass.gisenv()["MAPSET"]
         id = input + "@" + mapset
 
-    sp = tgis.space_time_raster_dataset(id)
+    sp = tgis.SpaceTimeRasterDataset(id)
 
     if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (
+            sp.get_new_map_instance(None).get_type(), id))
 
     sp.select()
 
@@ -95,22 +97,24 @@ def main():
         for row in rows:
             string = "%s\n" % (row["id"])
             file.write(string)
-        
+
         file.close()
 
-        ret = grass.run_command("r.series", flags="z", file=filename, output=output, overwrite=grass.overwrite(), method=method)
+        ret = grass.run_command("r.series", flags="z", file=filename,
+                                output=output, overwrite=grass.overwrite(), 
+                                method=method)
 
         if ret == 0 and not add_time:
             if sp.is_time_absolute():
                 start_time, end_time, tz = sp.get_absolute_time()
             else:
                 start_time, end_time = sp.get_relative_time()
-                
+
             # Create the time range for the output map
             if output.find("@") >= 0:
                 id = output
             else:
-                mapset =  grass.gisenv()["MAPSET"]
+                mapset = grass.gisenv()["MAPSET"]
                 id = output + "@" + mapset
 
             map = sp.get_new_map_instance(id)
@@ -130,4 +134,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

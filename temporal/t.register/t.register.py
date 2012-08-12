@@ -87,6 +87,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -104,8 +105,9 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Register maps
-    tgis.register_maps_in_space_time_dataset(type=type, name=name, maps=maps, file=file, start=start, end=end, \
-                                             unit=unit, increment=increment, dbif=None, interval=interval, fs=fs)
+    tgis.register_maps_in_space_time_dataset(
+        type=type, name=name, maps=maps, file=file, start=start, end=end,
+        unit=unit, increment=increment, dbif=None, interval=interval, fs=fs)
 
 ###############################################################################
 

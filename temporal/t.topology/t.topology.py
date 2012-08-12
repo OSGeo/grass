@@ -4,7 +4,7 @@
 #
 # MODULE:	t.topology
 # AUTHOR(S):	Soeren Gebbert
-#               
+#
 # PURPOSE:	List and modify temporal topology of a space time dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
@@ -39,6 +39,7 @@ import grass.temporal as tgis
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -54,19 +55,21 @@ def main():
     if name.find("@") >= 0:
         id = name
     else:
-        mapset =  grass.gisenv()["MAPSET"]
+        mapset = grass.gisenv()["MAPSET"]
         id = name + "@" + mapset
 
     sp = tgis.dataset_factory(type, id)
 
     if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
-        
+        grass.fatal(_("Space time %s dataset <%s> not found") % (
+            sp.get_new_map_instance(None).get_type(), id))
+
     # Insert content from db
     sp.select()
 
     # Get ordered map list
-    maps = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=None)
+    maps = sp.get_registered_maps_as_objects(
+        where=where, order="start_time", dbif=None)
 
     if tmatrix:
         sp.print_temporal_relationships(maps)
@@ -84,13 +87,13 @@ def main():
     check = sp.check_temporal_topology(maps)
     if check:
         #      0123456789012345678901234567890
-        print " | Temporal topology is: ...... valid"                
+        print " | Temporal topology is: ...... valid"
     else:
         #      0123456789012345678901234567890
-        print " | Temporal topology is: ...... invalid"                
+        print " | Temporal topology is: ...... invalid"
 
     dict = sp.count_temporal_types(maps)
- 
+
     for key in dict.keys():
         if key == "interval":
             #      0123456789012345678901234567890
@@ -101,7 +104,7 @@ def main():
             print " | Invalid time stamps: ....... %s" % (dict[key])
 
     #      0123456789012345678901234567890
-    print " | Number of gaps: ............ %i" % sp.count_gaps(maps)                
+    print " | Number of gaps: ............ %i" % sp.count_gaps(maps)
 
     if sp.is_time_absolute():
         gran = tgis.compute_absolute_time_granularity(maps)
@@ -145,4 +148,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

@@ -67,6 +67,7 @@ from multiprocessing import Process
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -82,12 +83,12 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    
-    tgis.extract_dataset(input, output, "vector", where, expression, base, nprocs, register_null, layer, type)
-    
+
+    tgis.extract_dataset(input, output, "vector", where, expression,
+                         base, nprocs, register_null, layer, type)
+
 ###############################################################################
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

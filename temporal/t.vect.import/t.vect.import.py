@@ -4,7 +4,7 @@
 #
 # MODULE:        t.vect.import
 # AUTHOR(S):     Soeren Gebbert
-#               
+#
 # PURPOSE:        Import a space time vector dataset archive file
 # COPYRIGHT:        (C) 2011 by the GRASS Development Team
 #
@@ -73,23 +73,23 @@
 import grass.script as grass
 import grass.temporal as tgis
 
+
 def main():
 
-	# Get the options
-	input = options["input"]
-	output = options["output"]
-	extrdir = options["extrdir"]
-	title = options["title"]
-	descr = options["description"]
-	location = options["location"]
-	exp = flags["e"]
-	overr = flags["o"]
-	create = flags["c"]
-	
-	tgis.import_stds(input, output, extrdir, title, descr, location, 
-                None, exp, overr, create, "stvds")
+    # Get the options
+    input = options["input"]
+    output = options["output"]
+    extrdir = options["extrdir"]
+    title = options["title"]
+    descr = options["description"]
+    location = options["location"]
+    exp = flags["e"]
+    overr = flags["o"]
+    create = flags["c"]
+
+    tgis.import_stds(input, output, extrdir, title, descr, location,
+                     None, exp, overr, create, "stvds")
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.rast.to.rast3
-# AUTHOR(S):	Soeren Gebbert
-#               
-# PURPOSE:	Convert a space time raster dataset into a rast3d map
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# MODULE:       t.rast.to.rast3
+# AUTHOR(S):    Soeren Gebbert
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+# PURPOSE:      Convert a space time raster dataset into a rast3d map
+# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (version 2). Read the file COPYING that comes with GRASS
+#               for details.
 #
 #############################################################################
 
@@ -34,6 +34,7 @@ from datetime import datetime
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -43,74 +44,79 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    mapset =  grass.gisenv()["MAPSET"]
+    mapset = grass.gisenv()["MAPSET"]
 
     if input.find("@") >= 0:
         id = input
     else:
         id = input + "@" + mapset
 
-    sp = tgis.space_time_raster_dataset(id)
+    sp = tgis.SpaceTimeRasterDataset(id)
 
     if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (sp.get_new_map_instance(None).get_type(), id))
+        grass.fatal(_("Space time %s dataset <%s> not found") % (
+            sp.get_new_map_instance(None).get_type(), id))
 
     sp.select()
-    
+
     grass.use_temp_region()
 
     maps = sp.get_registered_maps_as_objects_by_granularity()
     num_maps = len(maps)
-    
+
     # Get the granularity and set bottom, top and top-bottom resolution
     granularity = sp.get_granularity()
-    
+
     # This is the reference time to scale the z coordinate
     reftime = datetime(1900, 1, 1)
 
-    # We set top and bottom according to the start time in relation to the date 1900-01-01 00:00:00
-    # In case of days, hours, minutes and seconds, a double number is used to represent days and fracs of a day
-    
-    # Space time voxel cubes with montly or yearly granularity can not be mixed with other temporal units
-    
+    # We set top and bottom according to the start time in relation 
+    # to the date 1900-01-01 00:00:00
+    # In case of days, hours, minutes and seconds, a double number 
+    # is used to represent days and fracs of a day
+
+    # Space time voxel cubes with montly or yearly granularity can not be 
+    # mixed with other temporal units
+
     # Compatible temporal units are : days, hours, minutes and seconds
     # Incompatible are years and moths
     start, end = sp.get_valid_time()
-        
+
     if sp.is_time_absolute():
-        unit = granularity.split(" ")[1] 
+        unit = granularity.split(" ")[1]
         granularity = int(granularity.split(" ")[0])
-        
+
         if unit == "years":
-	    bottom = start.year - 1900
-	    top = granularity * num_maps
-	elif unit == "months":
-	    bottom = (start.year - 1900) * 12 + start.month
-	    top = granularity * num_maps
-	else:
-	    bottom = tgis.time_delta_to_relative_time(start - reftime)
-	    days = 0
-	    hours = 0
-	    minutes = 0
-	    seconds = 0
-	    if unit == "days":
-		days = granularity
-	    if unit == "hours":
-		hours = granularity
-	    if unit == "minutes":
-		minutes = granularity
-	    if unit == "seconds":
-		seconds = granularity
-		
-	    granularity = days + hours/24.0 + minutes/1440.0 + seconds/86400.0 
+            bottom = start.year - 1900
+            top = granularity * num_maps
+        elif unit == "months":
+            bottom = (start.year - 1900) * 12 + start.month
+            top = granularity * num_maps
+        else:
+            bottom = tgis.time_delta_to_relative_time(start - reftime)
+            days = 0
+            hours = 0
+            minutes = 0
+            seconds = 0
+            if unit == "days":
+                days = granularity
+            if unit == "hours":
+                hours = granularity
+            if unit == "minutes":
+                minutes = granularity
+            if unit == "seconds":
+                seconds = granularity
+
+            granularity = days + hours / 24.0 + minutes / \
+                1440.0 + seconds / 86400.0
     else:
         unit = sp.get_relative_time_unit()
-	bottom = start
+        bottom = start
 
     top = bottom + granularity * num_maps
-    
+
     ret = grass.run_command("g.region", t=top, b=bottom, tbres=granularity)
-    
+
     if ret != 0:
         grass.fatal(_("Unable to set 3d region"))
 
@@ -119,24 +125,25 @@ def main():
     grass.mapcalc("%s = null()" % (null_map))
 
     if maps:
-    	count = 0
-	map_names = ""
+        count = 0
+        map_names = ""
         for map in maps:
-	    # Use the first map
+            # Use the first map
             id = map[0].get_id()
             # None ids will be replaced by NULL maps
-            if id == None:
+            if id is None:
                 id = null_map
 
-	    if count == 0:
-	        map_names = id
+            if count == 0:
+                map_names = id
             else:
                 map_names += ",%s" % id
 
             count += 1
 
-        ret = grass.run_command("r.to.rast3", input=map_names, output=output, overwrite=grass.overwrite())
-     
+        ret = grass.run_command("r.to.rast3", input=map_names,
+                                output=output, overwrite=grass.overwrite())
+
         if ret != 0:
             grass.fatal(_("Unable to create raster3d map <%s>" % output))
 
@@ -146,7 +153,9 @@ def main():
     descr = _("This space time voxel cube was created with t.rast.to.rast3")
 
     # Set the unit
-    ret = grass.run_command("r3.support", map=output, vunit=unit, title=title, description=descr, overwrite=grass.overwrite())
+    ret = grass.run_command("r3.support", map=output, vunit=unit,
+                            title=title, description=descr, 
+                            overwrite=grass.overwrite())
 
     # Register the space time voxel cube in the temporal GIS
     if output.find("@") >= 0:
@@ -155,12 +164,12 @@ def main():
         id = output + "@" + mapset
 
     start, end = sp.get_valid_time()
-    r3ds = tgis.raster3d_dataset(id)
+    r3ds = tgis.Raster3DDataset(id)
 
     if r3ds.is_in_db():
         r3ds.select()
         r3ds.delete()
-        r3ds = tgis.raster3d_dataset(id)
+        r3ds = tgis.Raster3DDataset(id)
 
     r3ds.load()
 

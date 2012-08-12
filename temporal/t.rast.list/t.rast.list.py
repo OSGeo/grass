@@ -4,8 +4,8 @@
 #
 # MODULE:	t.rast.list
 # AUTHOR(S):	Soeren Gebbert
-#               
-# PURPOSE:	List registered maps of a space time raster dataset 
+#
+# PURPOSE:	List registered maps of a space time raster dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -30,7 +30,7 @@
 #% description: Order the space time dataset by category
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
 #% answer: start_time
 #%end
 
@@ -40,7 +40,7 @@
 #% description: Select columns to be printed to stdout
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
 #% answer: name,mapset,start_time,end_time
 #%end
 
@@ -66,13 +66,14 @@
 
 #%flag
 #% key: h
-#% description: Print column names 
+#% description: Print column names
 #%end
 
 import grass.script as grass
 import grass.temporal as tgis
 
 ############################################################################
+
 
 def main():
 
@@ -88,7 +89,8 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    tgis.list_maps_of_stds("strds", input, columns, order, where, separator, method, header)
+    tgis.list_maps_of_stds(
+        "strds", input, columns, order, where, separator, method, header)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -4,7 +4,7 @@
 #
 # MODULE:	t.sample
 # AUTHOR(S):	Soeren Gebbert
-#               
+#
 # PURPOSE:	Sample the input space time dataset(s) with a sample space time dataset and print the result to stdout
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
@@ -25,7 +25,7 @@
 
 #%option G_OPT_STDS_INPUT
 #% key: sample
-#% description: Name of the sample space time dataset 
+#% description: Name of the sample space time dataset
 #%end
 
 #%option G_OPT_STDS_TYPE
@@ -51,12 +51,12 @@
 
 #%flag
 #% key: c
-#% description: Print column names 
+#% description: Print column names
 #%end
 
 #%flag
 #% key: s
-#% description: Check spatial overlap to perform spatio-temporal sampling 
+#% description: Check spatial overlap to perform spatio-temporal sampling
 #%end
 
 
@@ -64,6 +64,7 @@ import grass.script as grass
 import grass.temporal as tgis
 
 ############################################################################
+
 
 def main():
 
@@ -82,7 +83,8 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    tgis.sample_stds_by_stds_topology(intype, samtype, inputs, sampler, header, separator, method, spatial)
+    tgis.sample_stds_by_stds_topology(intype, samtype, inputs, sampler,
+                                      header, separator, method, spatial)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
