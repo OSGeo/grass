@@ -48,7 +48,8 @@ class SQLBuilder(wx.Frame):
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_sql.ico'),
                              wx.BITMAP_TYPE_ICO))
         
-        self.parent = parent
+        self.parent     = parent
+        self.evtHandler = None
         
         # variables
         self.vectmap = vectmap # fullname
@@ -68,12 +69,12 @@ class SQLBuilder(wx.Frame):
 
         # statusbar
         self.statusbar = self.CreateStatusBar(number=1)
-       
+        
         self._doLayout(modeChoices)
 
     def _doLayout(self, modeChoices):
         """!Do dialog layout"""
-      
+        
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
 
         
@@ -97,7 +98,7 @@ class SQLBuilder(wx.Frame):
         self.text_sql = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                     value = '', size = (-1, 50),
                                     style=wx.TE_MULTILINE)
- 
+        
         self.text_sql.SetInsertionPointEnd()
         wx.CallAfter(self.text_sql.SetFocus)
 
@@ -114,24 +115,24 @@ class SQLBuilder(wx.Frame):
         self.btn_close.SetToolTipString(_("Close the dialog"))
         
         self.btn_logic = { 'is' : ['=', ],
-                        'isnot' : ['!=', ],
-                        'like'  : ['LIKE', ],
-                        'gt'    : ['>', ],
-                        'ge'    : ['>=', ],
-                        'lt'    : ['<', ],
-                        'le'    : ['<=', ],
-                        'or'    : ['OR', ],
-                        'not'   : ['NOT', ],
-                        'and'   : ['AND', ],
-                        'brac'  : ['()', ],
-                        'prc'   : ['%', ] }
+                           'isnot' : ['!=', ],
+                           'like'  : ['LIKE', ],
+                           'gt'    : ['>', ],
+                           'ge'    : ['>=', ],
+                           'lt'    : ['<', ],
+                           'le'    : ['<=', ],
+                           'or'    : ['OR', ],
+                           'not'   : ['NOT', ],
+                           'and'   : ['AND', ],
+                           'brac'  : ['()', ],
+                           'prc'   : ['%', ] }
     
         self.btn_logicpanel = wx.Panel(parent = self.panel, id = wx.ID_ANY)    
         for key, value in self.btn_logic.iteritems():
             btn = wx.Button(parent = self.btn_logicpanel, id = wx.ID_ANY,
                             label = value[0])
             self.btn_logic[key].append(btn.GetId())
-          
+            
         self.buttonsizer = wx.FlexGridSizer(cols = 4, hgap = 5, vgap = 5)
         self.buttonsizer.Add(item = self.btn_clear)
         self.buttonsizer.Add(item = self.btn_apply)
@@ -171,8 +172,7 @@ class SQLBuilder(wx.Frame):
                         flag = wx.EXPAND)
 
         modesizer = wx.BoxSizer(wx.VERTICAL)
-
-
+        
         self.mode = wx.RadioBox(parent = self.panel, id = wx.ID_ANY,
                                 label = " %s " % _("Interactive insertion"),
                                 choices = modeChoices, 
@@ -181,7 +181,7 @@ class SQLBuilder(wx.Frame):
 
         self.mode.SetSelection(1) # default 'values'
         modesizer.Add(item = self.mode, proportion = 1,
-                       flag = wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border = 5)
+                      flag = wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border = 5)
 
         # self.list_columns.SetMinSize((-1,130))
         # self.list_values.SetMinSize((-1,100))
@@ -194,7 +194,7 @@ class SQLBuilder(wx.Frame):
                                       choices = self.colvalues,
                                       style = wx.LB_MULTIPLE)
         valuesizer.Add(item = self.list_values, proportion = 1,
-                            flag = wx.EXPAND)
+                       flag = wx.EXPAND)
         self.valuespanel.SetSizer(valuesizer)
 
         self.btn_unique = wx.Button(parent = self.valuespanel, id = wx.ID_ANY,
@@ -211,36 +211,36 @@ class SQLBuilder(wx.Frame):
                          flag = wx.ALIGN_CENTER_HORIZONTAL)
 
         valuesizer.Add(item = buttonsizer3, proportion = 0,
-                            flag = wx.TOP, border = 5)
+                       flag = wx.TOP, border = 5)
         
         # hsizer1.Add(wx.StaticText(self.panel,-1, "Unique values: "), border=0, proportion=1)
  
         self.hsizer.Add(item = columnsizer, proportion = 1,
-                   flag = wx.EXPAND)
+                        flag = wx.EXPAND)
         self.hsizer.Add(item = self.valuespanel, proportion = 1,
-                   flag = wx.EXPAND)
+                        flag = wx.EXPAND)
 
         self.close_onapply = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                          label = _("Close dialog on apply"))
         self.close_onapply.SetValue(True)
  
         self.pagesizer.Add(item = databaseboxsizer,
-                      flag = wx.ALL | wx.EXPAND, border = 5)
+                           flag = wx.ALL | wx.EXPAND, border = 5)
         self.pagesizer.Add(item = modesizer, proportion = 0,
-                   flag = wx.ALL, border = 5)
+                           flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
         self.pagesizer.Add(item = self.hsizer, proportion = 1,
-                      flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+                           flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
         # self.pagesizer.Add(self.btn_uniqe,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         # self.pagesizer.Add(self.btn_uniqesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         self.pagesizer.Add(item = self.btn_logicpanel, proportion = 0,
-                      flag = wx.ALIGN_CENTER_HORIZONTAL)
+                           flag = wx.ALIGN_CENTER_HORIZONTAL)
         self.pagesizer.Add(item = sqlboxsizer, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+                           flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
         self.pagesizer.Add(item = self.buttonsizer, proportion = 0,
-                      flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+                           flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         self.pagesizer.Add(item = self.close_onapply, proportion = 0,
-                      flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
-
+                           flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+        
         #
         # bindings
         #
