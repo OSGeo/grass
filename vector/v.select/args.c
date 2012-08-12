@@ -6,6 +6,8 @@
 
 void parse_options(struct GParm *parm, struct GFlag *flag)
 {
+    char *desc;
+
     parm->input[0] = G_define_standard_option(G_OPT_V_INPUT);
     parm->input[0]->description = _("Name of input vector map (A)");
     parm->input[0]->key = "ainput";
@@ -47,24 +49,40 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
 	_("A feature is written to output if the result of operation 'ainput operator binput' is true. "
 	  "An input feature is considered to be true, if category of given layer is defined.");
     parm->operator->answer = "overlap";
+    desc = NULL;
 #ifndef HAVE_GEOS
     parm->operator->options = "overlap";
-    parm->operator->descriptions = _("overlap;features partially or completely overlap");
+    G_asprintf(&desc,
+               "overlap;%s",
+               _("features partially or completely overlap"));
+    parm->operator->descriptions = desc;
 
     parm->relate = NULL;
 #else
+    G_asprintf(&desc,
+	       "overlap;%s;"
+	       "equals;%s;"
+	       "disjoint;%s;"
+	       "intersects;%s;"
+	       "touches;%s;"
+	       "crosses;%s;"
+	       "within;%s;"
+	       "contains;%s;"
+	       "overlaps;%s;"
+	       "relate;%s;",
+	       _("features partially or completely overlap"),
+	       _("features are spatially equals (using GEOS)"),
+	       _("features do not spatially intersect (using GEOS)"),
+	       _("features spatially intersect (using GEOS)"),
+	       _("features spatially touches (using GEOS)"),
+	       _("features spatially crosses (using GEOS)"),
+	       _("feature A is completely inside feature B (using GEOS)"),
+	       _("feature B is completely inside feature A (using GEOS)"),
+	       _("features spatially overlap (using GEOS)"),
+	       _("feature A is spatially related to feature B (using GEOS, "
+		 "requires 'relate' option)"));
     parm->operator->options = "overlap,equals,disjoint,intersects,touches,crosses,within,contains,overlaps,relate";
-    parm->operator->descriptions = _("overlap;features partially or completely overlap;"
-				     "equals;features are spatially equals (using GEOS);"
-				    "disjoint;features do not spatially intersect (using GEOS);"
-				    "intersects;features spatially intersect (using GEOS);"
-				    "touches;features spatially touches (using GEOS);"
-				    "crosses;features spatially crosses (using GEOS);"
-				    "within;feature A is completely inside feature B (using GEOS);"
-				    "contains;feature B is completely inside feature A (using GEOS);"
-				    "overlaps;features spatially overlap (using GEOS);"
-				    "relate;feature A is spatially related to feature B (using GEOS, "
-				    "requires 'relate' option);");
+    parm->operator->descriptions = desc;
     
     parm->relate = G_define_option();
     parm->relate->key = "relate";

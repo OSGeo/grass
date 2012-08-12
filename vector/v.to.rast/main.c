@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 	*val_opt, *rgbcol_opt, *label_opt, *type_opt;
     int nrows, use, value_type, type;
     double value;
+    char *desc;
 
     G_gisinit(argv[0]);
 
@@ -61,11 +62,15 @@ int main(int argc, char *argv[])
     use_opt->multiple = NO;
     use_opt->options = "attr,cat,val,z,dir";
     use_opt->description = _("Source of raster values");
-    use_opt->descriptions = _("attr;read values from attribute table;"
-			      "cat;use category values;"
-			      "val;use value specified by value option;"
-			      "z;use z coordinate (points or contours only);"
-			      "dir;output as flow direction (lines only)");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
+	       _("read values from attribute table"),
+	       _("use category values"),
+	       _("use value specified by value option"),
+	       _("use z coordinate (points or contours only)"),
+	       _("output as flow direction (lines only)"));
+    use_opt->descriptions = desc;
 
     col = G_define_standard_option(G_OPT_DB_COLUMN);
     col->key = "attrcolumn";

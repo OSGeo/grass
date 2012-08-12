@@ -59,6 +59,8 @@ int main(int argc, char *argv[])
 	struct Flag *over, *extend, *formats, *tolower, *no_import;
     } flag;
 
+    char *desc;
+
     int i, j, layer, arg_s_num, nogeom, ncnames;
     float xmin, ymin, xmax, ymax;
     int ncols = 0, type;
@@ -176,11 +178,14 @@ int main(int argc, char *argv[])
     param.type->options = "point,line,boundary,centroid";
     param.type->answer = "";
     param.type->description = _("Optionally change default input type");
-    param.type->descriptions =
-	_("point;import area centroids as points;"
-	  "line;import area boundaries as lines;"
-	  "boundary;import lines as area boundaries;"
-	  "centroid;import points as centroids");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "point;%s;line;%s;boundary;%s;centroid;%s",
+	       _("import area centroids as points"),
+	       _("import area boundaries as lines"),
+	       _("import lines as area boundaries"),
+	       _("import points as centroids"));
+    param.type->descriptions = desc;
     param.type->guisection = _("Selection");
 
     param.snap = G_define_option();

@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     struct line_pnts *Points, *Points2, *oPoints, **iPoints;
     struct line_cats *Cats;
+    
+    char *desc;
 
     int line, nlines, inner_count, j;
     int layer;
@@ -87,10 +89,13 @@ int main(int argc, char *argv[])
     side_opt->multiple = NO;
     side_opt->options = "left,right,both";
     side_opt->description = _("Side");
-    side_opt->descriptions =
-	_("left;Parallel line is on the left;"
-	  "right;Parallel line is on the right;"
-	  "both;Parallel lines on both sides");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "left;%s;right;%s;both;%s",
+	       _("Parallel line is on the left"),
+	       _("Parallel line is on the right"),
+	       _("Parallel lines on both sides"));
+    side_opt->descriptions = desc;
 
     tol_opt = G_define_option();
     tol_opt->key = "tolerance";

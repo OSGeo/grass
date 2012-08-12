@@ -13,8 +13,8 @@
 int parser(int argc, char *argv[], struct GParams *params,
 	   enum mode *action_mode)
 {
-    char *desc;
-    
+    char *desc_tool, *desc_query, *desc_snap;
+
     /* parameters */
     params->map = G_define_standard_option(G_OPT_V_MAP);
     params->map->label = _("Name of vector map to edit");
@@ -34,8 +34,8 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->tool->required = YES;
     params->tool->multiple = NO;
     params->tool->description = _("Tool");
-    desc = NULL;
-    G_asprintf(&desc,
+    desc_tool = NULL;
+    G_asprintf(&desc_tool,
 	       "create;%s;"
 	       "add;%s;"
 	       "delete;%s;"
@@ -77,7 +77,7 @@ int parser(int argc, char *argv[], struct GParams *params,
 		 "vector lines)"),
 	       _("Change feature type (point<->centroid, line<->boundary)"),
 	       _("Delete selected areas from vector map (based on selected centroids)"));
-    params->tool->descriptions = desc;
+    params->tool->descriptions = desc_tool;
     params->tool->options = "create,add,delete,copy,move,flip,catadd,catdel,"
 	"merge,break,snap,connect,chtype,"
 	"vertexadd,vertexdel,vertexmove,areadel,zbulk,select";
@@ -153,10 +153,14 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->query->description =
 	_("For 'shorter' use negative threshold value, "
 	  "positive value for 'longer'");
-    params->query->descriptions =
-	_("length;Select only lines or boundaries shorter"
-	  "/longer than threshold distance;"
-	  "dangle;Select dangles shorter/longer than " "threshold distance");
+    desc_query = NULL;
+    G_asprintf(&desc_query,
+               "length;%s;"
+	       "dangle;%s",
+	       _("Select only lines or boundaries shorter"
+		 "/longer than threshold distance"),
+	       _("Select dangles shorter/longer than threshold distance"));
+    params->query->descriptions = desc_query;
     params->query->guisection = _("Selection");
 
     params->bmaps = G_define_standard_option(G_OPT_V_MAPS);
@@ -170,9 +174,15 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->snap->options = "no,node,vertex";
     params->snap->description =
 	_("Snap added or modified features in the given threshold to the nearest existing feature");
-    params->snap->descriptions =
-	_("no;Not apply snapping;" "node;Snap only to node;"
-	  "vertex;Allow snapping also to vertex");
+    desc_snap = NULL;
+    G_asprintf(&desc_snap,
+	       "no;%s;"
+	       "node;%s;"
+	       "vertex;%s",
+	       _("Not apply snapping"),
+	       _("Snap only to node"),
+	       _("Allow snapping also to vertex"));
+    params->snap->descriptions = desc_snap;
     params->snap->answer = "no";
 
     params->zbulk = G_define_option();

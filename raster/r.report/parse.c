@@ -9,6 +9,7 @@ int parse_command_line(int argc, char *argv[])
     char pl_desc[256];
     char pw_desc[256];
     int i;
+    char *desc;
     struct
     {
 	struct Option *cell;
@@ -43,9 +44,17 @@ int parse_command_line(int argc, char *argv[])
     parms.units->required = NO;
     parms.units->multiple = YES;
     parms.units->description = _("Units");
-    parms.units->descriptions =
-	_("mi;miles;me;meters;k;kilometers;a;acres;"
-	  "h;hectares;c;cell counts;p;percent cover");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "mi;%s;me;%s;k;%s;a;%s;h;%s;c;%s;p;%s",
+	       _("miles"),
+	       _("meters"),
+	       _("kilometers"),
+	       _("acres"),
+	       _("hectares"),
+	       _("cell counts"),
+	       _("percent cover"));
+    parms.units->descriptions = desc;
     parms.units->options = "mi,me,k,a,h,c,p";
     parms.units->guisection = _("Output settings");
 

@@ -94,6 +94,7 @@ int main(int argc, char **argv)
     struct Option *output;
     struct Option *cats;
     struct Option *type_opt;
+    char *desc;
 
     int polyline;
     int *lines_visited;
@@ -123,9 +124,13 @@ int main(int argc, char **argv)
     cats->type = TYPE_STRING;
     cats->description = _("Category number mode");
     cats->options = "no,first,multi";
-    cats->descriptions = _("no;Do not assign any category number to polyline;"
-			   "first;Assign category number of first line to polyline;"
-			   "multi;Assign multiple category numbers to polyline");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "no;%s;first;%s;multi;%s",
+	       _("Do not assign any category number to polyline"),
+	       _("Assign category number of first line to polyline"),
+	       _("Assign multiple category numbers to polyline"));
+    cats->descriptions = desc;
     cats->answer = "no";
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);

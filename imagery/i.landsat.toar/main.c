@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 {
     struct History history;
     struct GModule *module;
+    char *desc;
     
     struct Cell_head cellhd;
     
@@ -97,13 +98,16 @@ int main(int argc, char *argv[])
     sensor->label = _("Spacecraft sensor");
     sensor->description = _("Required only if 'metfile' not given");
     sensor->options = "mss1,mss2,mss3,tm4,tm5,tm7";
-    sensor->descriptions =
-	_("mss1;Landsat-1 MSS;"
-	  "mss2;Landsat-2 MSS;"
-	  "mss3;Landsat-3 MSS;"
-	  "tm4;Landsat-4 TM;"
-	  "tm5;Landsat-5 TM;"
-	  "tm7;Landsat-7 ETM+");
+    desc = NULL;
+    G_asprintf(&desc,
+	        "mss1;%s;mss2;%s;mss3;%s;tm4;%s;tm5;%s;tm7;%s",
+	        _("Landsat-1 MSS"),
+	        _("Landsat-2 MSS"),
+	        _("Landsat-3 MSS"),
+	        _("Landsat-4 TM"),
+	        _("Landsat-5 TM"),
+	        _("Landsat-7 ETM+"));
+    sensor->descriptions = desc;
     sensor->required = NO;
     sensor->guisection = _("Metadata");
 

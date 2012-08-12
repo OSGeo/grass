@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *points_fl;
     int points_p;
+    char *desc;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -85,8 +86,12 @@ int main(int argc, char *argv[])
     position_opt->options = "region,coor";
     position_opt->answer = "region";
     position_opt->description = _("Where to place the grid");
-    position_opt->descriptions = _("region;current region;"
-				   "coor;use 'coor' and 'box' options");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "region;%s;coor;%s",
+	       _("current region"),
+	       _("use 'coor' and 'box' options"));
+    position_opt->descriptions = desc;
 
     coord = G_define_option();
     coord->key = "coor";

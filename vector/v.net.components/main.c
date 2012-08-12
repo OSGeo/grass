@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     dglGraph_s *graph;
     int *component, nnodes, type, i, nlines, components, j, max_cat;
     char buf[2000], *covered;
+    char *desc;
 
     /* Attribute table */
     dbString sql;
@@ -116,8 +117,12 @@ int main(int argc, char *argv[])
     method_opt->required = YES;
     method_opt->multiple = NO;
     method_opt->options = "weak,strong";
-    method_opt->descriptions = _("weak;Weakly connected components;"
-				 "strong;Strongly connected components;");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "weak;%s;strong;%s",
+	       _("Weakly connected components"),
+	       _("Strongly connected components"));
+    method_opt->descriptions = desc;
     method_opt->description = _("Type of components");
 
     add_f = G_define_flag();

@@ -27,6 +27,7 @@ int parse_command_line(int argc, char *argv[])
     {
 	struct Flag *p, *s, *t;
     } flags;
+    char *desc;
 
     parms.vect = G_define_standard_option(G_OPT_V_MAP);
 
@@ -54,26 +55,43 @@ int parse_command_line(int argc, char *argv[])
     parms.option->options =
 	"cat,area,compact,fd,perimeter,length,count,coor,start,end,sides,query,slope,sinuous,azimuth";
     parms.option->description = _("Value to upload");
-    parms.option->descriptions =
-	"cat;insert new row for each category if doesn't exist yet;"
-	"area;area size;"
-	"compact;compactness of an area, calculated as \n"
-	"              compactness = perimeter / (2 * sqrt(PI * area));"
-	"fd;fractal dimension of boundary defining a polygon, calculated as \n"
-	"              fd = 2 * (log(perimeter) / log(area));"
-	"perimeter;perimeter length of an area;"
-	"length;line length;"
-	"count;number of features for each category;"
-	"coor;point coordinates, X,Y or X,Y,Z;"
-	"start;line/boundary starting point coordinates, X,Y or X,Y,Z;"
-	"end;line/boundary end point coordinates, X,Y or X,Y,Z;"
-	"sides;categories of areas on the left and right side of the boundary, "
-	"'qlayer' is used for area category;"
-	"query;result of a database query for all records of the geometry"
-	"(or geometries) from table specified by 'qlayer' option;"
-	"slope;slope steepness of vector line or boundary;"
-	"sinuous;line sinuousity, calculated as line length / distance between end points;"
-	"azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode";
+    desc = NULL;
+    G_asprintf(&desc,
+	       "cat;%s;"
+	       "area;%s;"
+	       "compact;%s;"
+	       "fd;%s;"
+	       "perimeter;%s;"
+	       "length;%s;"
+	       "count;%s;"
+	       "coor;%s;"
+	       "start;%s;"
+	       "end;%s;"
+	       "sides;%s;"
+	       "query;%s;"
+	       "slope;%s;"
+	       "sinuous;%s;"
+	       "azimuth;%s;",
+	       _("insert new row for each category if doesn't exist yet"),
+	       _("area size"),
+	       _("compactness of an area, calculated as \n"
+		 "              compactness = perimeter / (2 * sqrt(PI * area))"),
+	       _("fractal dimension of boundary defining a polygon, calculated as \n"
+		 "              fd = 2 * (log(perimeter) / log(area))"),
+	       _("perimeter length of an area"),
+	       _("line length"),
+	       _("number of features for each category"),
+	       _("point coordinates, X,Y or X,Y,Z"),
+	       _("line/boundary starting point coordinates, X,Y or X,Y,Z"),
+	       _("line/boundary end point coordinates, X,Y or X,Y,Z"),
+	       _("categories of areas on the left and right side of the boundary, "
+		 "'qlayer' is used for area category"),
+	       _("result of a database query for all records of the geometry"
+		 "(or geometries) from table specified by 'qlayer' option"),
+	       _("slope steepness of vector line or boundary"),
+	       _("line sinuousity, calculated as line length / distance between end points"),
+	       _("line azimuth, calculated as angle between North direction and endnode direction at startnode"));
+    parms.option->descriptions = desc;
 
     parms.units = G_define_standard_option(G_OPT_M_UNITS);
     parms.units->options =

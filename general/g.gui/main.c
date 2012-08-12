@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     const char *gui_type_env;
     char progname[GPATH_MAX];
+    char *desc;
 
     G_gisinit(argv[0]);
 
@@ -43,8 +44,12 @@ int main(int argc, char *argv[])
     type->type = TYPE_STRING;
     type->label = _("GUI type");
     type->description = _("Default value: GRASS_GUI if defined otherwise wxpython");
-    type->descriptions = _("wxpython;wxPython based GUI (wxGUI);"
-			   "text;command line interface only");
+    desc = NULL;
+    G_asprintf(&desc,
+	        "wxpython;%s;text;%s",
+	        _("wxPython based GUI (wxGUI)"),
+	        _("command line interface only"));
+    type->descriptions = desc;
     type->options = "wxpython,text";
 
     rc_file = G_define_standard_option(G_OPT_F_INPUT);

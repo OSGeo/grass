@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *input1, *input2, *output;
     struct History history;	/*metadata */
+    char *desc;
 
     /************************************/ 
     char *result;		/*output raster name */
@@ -67,10 +68,14 @@ int main(int argc, char *argv[])
     input1->required = YES;
     input1->description = _("Name of USLE R equation");
     input1->options = "roose, morgan, foster, elswaify";
-    input1->descriptions = _("roose;Roosle (1975);"
-			     "morgan;Morgan (1974);"
-			     "foster;Foster (1981);"
-			     "elswaify;El-Swaify (1985)");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "roose;%s;morgan;%s;foster;%s;elswaify;%s",
+	       _("Roosle (1975)"),
+	       _("Morgan (1974)"),
+	       _("Foster (1981)"),
+	       _("El-Swaify (1985)"));
+    input1->descriptions = desc;
     input1->answer = "morgan";
 
     /********************/ 

@@ -16,6 +16,8 @@ void parse_args(int argc, char **argv,
 	*field_opt, *column_opt, *where_opt, *cats_opt, *type_opt;
     struct Flag *old_flag, *header_flag, *region_flag;
     
+    char * desc;
+    
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -49,9 +51,13 @@ void parse_args(int argc, char **argv,
     format_opt->options = "point,standard,wkt";
     format_opt->answer = "point";
     format_opt->description = _("Output format");
-    format_opt->descriptions = _("point;Simple point format (point per row);"
-				 "standard;GRASS ASCII vector format;"
-				 "wkt;OGC well-known text;");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "point;%s;standard;%s;wkt;%s",
+	       _("Simple point format (point per row)"),
+	       _("GRASS ASCII vector format"),
+	       _("OGC well-known text"));
+    format_opt->descriptions = desc;
 
     delim_opt = G_define_standard_option(G_OPT_F_SEP);
     delim_opt->description = _("Field separator (points mode)");

@@ -307,6 +307,7 @@ int main(int argc, char **argv)
     struct Option *grp, *val, *fmt, *xfm_pts;
     struct Flag *sum, *rev_flag, *dump_flag;
     struct GModule *module;
+    char *desc;
 
     G_gisinit(argv[0]);
 
@@ -333,15 +334,19 @@ int main(int argc, char **argv)
     fmt->required = NO;
     fmt->multiple = YES;
     fmt->options = "idx,src,dst,fwd,rev,fxy,rxy,fd,rd";
-    fmt->descriptions = _("idx;point index;"
-			  "src;source coordinates;"
-			  "dst;destination coordinates;"
-			  "fwd;forward coordinates (destination);"
-			  "rev;reverse coordinates (source);"
-			  "fxy;forward coordinates difference (destination);"
-			  "rxy;reverse coordinates difference (source);"
-			  "fd;forward error (destination);"
-			  "rd;reverse error (source)");
+    desc = NULL;
+    G_asprintf(&desc,
+	        "idx;%s;src;%s;dst;%s;fwd;%s;rev;%s;fxy;%s;rxy;%s;fd;%s;rd;%s",
+	        _("point index"),
+	        _("source coordinates"),
+	        _("destination coordinates"),
+	        _("forward coordinates (destination)"),
+	        _("reverse coordinates (source)"),
+	        _("forward coordinates difference (destination)"),
+	        _("reverse coordinates difference (source)"),
+	        _("forward error (destination)"),
+	        _("reverse error (source)"));
+    fmt->descriptions = desc;
     fmt->answer = "fd,rd";
     fmt->description = _("Output format");
 

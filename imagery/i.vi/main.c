@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
     char *viflag;		/*Switch for particular index */
+    char *desc;
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *input5, *input6,
 	*input7, *input8, *input9, *input10, *input11, *output;
@@ -94,21 +95,26 @@ int main(int argc, char *argv[])
     input1->type = TYPE_STRING;
     input1->required = YES;
     input1->description = _("Name of vegetation index");
-    input1->descriptions =_("arvi;Atmospherically Resistant Vegetation Indices;"
-			    "dvi;Difference Vegetation Index;"
-			    "evi;Enhanced Vegetation Index;"
-			    "gvi;Green Vegetation Index;"
-			    "gari;Green atmospherically resistant vegetation index;"
-			    "gemi;Global Environmental Monitoring Index;"
-			    "ipvi;Infrared Percentage Vegetation Index;"
-			    "msavi;Modified Soil Adjusted Vegetation Index;"
-			    "msavi2;second Modified Soil Adjusted Vegetation Index;"
-			    "ndvi;Normalized Difference Vegetation Index;"
-			    "pvi;Perpendicular Vegetation Index;"
-			    "savi;Soil Adjusted Vegetation Index;"
-                            "sr;Simple Ratio;"
-                            "vari;Visible Atmospherically Resistant Index;"
-			    "wdvi;Weighted Difference Vegetation Index;");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "arvi;%s;dvi;%s;evi;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
+	       "msavi2;%s;ndvi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
+	       _("Atmospherically Resistant Vegetation Indices"),
+	       _("Difference Vegetation Index"),
+	       _("Enhanced Vegetation Index"),
+	       _("Green Vegetation Index"),
+	       _("Green atmospherically resistant vegetation index"),
+	       _("Global Environmental Monitoring Index"),
+	       _("Infrared Percentage Vegetation IndexInfrared Percentage Vegetation Index"),
+	       _("Modified Soil Adjusted Vegetation Index"),
+	       _("second Modified Soil Adjusted Vegetation Index"),
+	       _("Normalized Difference Vegetation Index"),
+	       _("Perpendicular Vegetation Index"),
+	       _("Soil Adjusted Vegetation Index"),
+	       _("Simple Ratio"),
+	       _("Visible Atmospherically Resistant Index"),
+	       _("Weighted Difference Vegetation Index"));
+    input1->descriptions = desc;
     input1->options = "arvi,dvi,evi,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
     input1->answer = "ndvi";
 
