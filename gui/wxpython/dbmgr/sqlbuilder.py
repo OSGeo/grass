@@ -10,7 +10,7 @@ Classes:
 
 Usage:
 @code
-python sqlbuilder.py vector_map
+python sqlbuilder.py select|update vector_map
 @endcode
 
 (C) 2007-2009, 2011-2012 by the GRASS Development Team
@@ -706,15 +706,28 @@ class SQLBuilderUpdate(SQLBuilder):
                                 }
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) not in [3, 4]:
         print >>sys.stderr, __doc__
         sys.exit()
     
+    if len(sys.argv) == 3:
+        layer = 1
+    else:
+        layer = int(sys.argv[3])
+
+    if sys.argv[1] == 'select':
+        sqlBuilder = SQLBuilderSelect
+    elif sys.argv[1] == 'update':
+        sqlBuilder = SQLBuilderUpdate
+    else:
+        print >>sys.stderr, __doc__
+        sys.exit()
+
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
-    
+
     app = wx.App(0)
-    sqlb = SQLFrame(parent = None, title = _('SQL Builder'), vectmap = sys.argv[1])
+    sqlb = sqlBuilder(parent = None, vectmap = sys.argv[2], layer = layer)
     sqlb.Show()
-    
+      
     app.MainLoop()
