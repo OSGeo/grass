@@ -880,7 +880,7 @@ class STR3DSAbsoluteTime(STDSAbsoluteTime):
 class STVDSAbsoluteTime(STDSAbsoluteTime):
     def __init__(self, ident=None, start_time=None, end_time=None, 
                  granularity=None, timezone=None):
-        STDSAbsoluteTime.__init__(self, "RelativeTemporalExtent",
+        STDSAbsoluteTime.__init__(self, "stvds_absolute_time",
             ident, start_time, end_time, granularity, timezone)
 
 ###############################################################################

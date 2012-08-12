@@ -119,14 +119,14 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     mapset = libgis.G_mapset()
     map_id = output + "@" + mapset
-    new_map = raster_dataset(map_id)
+    new_map = RasterDataset(map_id)
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):
         if core.overwrite() == True:
             # Remove the existing temporal database entry
             new_map.delete(dbif)
-            new_map = raster_dataset(map_id)
+            new_map = RasterDataset(map_id)
         else:
             core.error(_("Raster map <%s> is already in temporal database, use overwrite flag to overwrite"))
             return

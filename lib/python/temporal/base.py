@@ -663,7 +663,7 @@ class DatasetBase(SQLDatabaseInterface):
         """
         if self.id.find(":") >= 0:
             # Remove the layer identifier from the id
-            return iself.d.split("@")[0].split(":")[0] + "@" + \
+            return self.id.split("@")[0].split(":")[0] + "@" + \
                    self.id.split("@")[1]
         else:
             return self.id

@@ -42,7 +42,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
     """
 
     # We need a database interface for fast computation
-    dbif = ()
+    dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     mapset = core.gisenv()["MAPSET"]
@@ -56,9 +56,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         id = input_name_list[0] + "@" + mapset
 
     if type == "raster":
-        first_input = space_time_raster_dataset(id)
+        first_input = SpaceTimeRasterDataset(id)
     else:
-        first_input = space_time_raster3d_dataset(id)
+        first_input = SpaceTimeRaster3DDataset(id)
 
     if not first_input.is_in_db(dbif):
         dbif.close()

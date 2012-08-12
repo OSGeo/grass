@@ -1622,18 +1622,18 @@ def test_map_list_sorting():
 def test_1d_rtree():
     """Testing the rtree ctypes wrapper"""
 
-    tree = vector.RTreeNewIndex(-1, 0, 1)
+    tree = vector.RTreeCreateTree(-1, 0, 1)
 
     for i in xrange(10):
         
         rect = vector.RTree_Rect()
         # Allocate the boundary
-        vector.RTreeNewRect(byref(rect), tree)
+        vector.RTreeAllocBoundary(byref(rect), tree)
         vector.RTreeSetRect1D(byref(rect), tree, float(i - 2), float(i + 2))
         vector.RTreeInsertRect(byref(rect), i + 1, tree)
 
     rect = vector.RTree_Rect()
-    vector.RTreeNewRect(byref(rect), tree)
+    vector.RTreeAllocBoundary(byref(rect), tree)
     vector.RTreeSetRect1D(byref(rect), tree, 2.0, 7.0)
 
     list_ = gis.ilist()
@@ -1645,18 +1645,20 @@ def test_1d_rtree():
     for i in xrange(list_.n_values):
         print "id", list_.value[i]
 
+    vector.RTreeDestroyTree(tree)
+    
 ###############################################################################
 
 def test_2d_rtree():
     """Testing the rtree ctypes wrapper"""
 
-    tree = vector.RTreeNewIndex(-1, 0, 2)
+    tree = vector.RTreeCreateTree(-1, 0, 2)
 
     for i in xrange(10):
         
         rect = vector.RTree_Rect()
         # Allocate the boundary
-        vector.RTreeNewRect(byref(rect), tree)
+        vector.RTreeAllocBoundary(byref(rect), tree)
 
         vector.RTreeSetRect2D(byref(rect), tree, 
                               float(i - 2), float(i + 2), 
@@ -1664,7 +1666,7 @@ def test_2d_rtree():
         vector.RTreeInsertRect(byref(rect), i + 1, tree)
 
     rect = vector.RTree_Rect()
-    vector.RTreeNewRect(byref(rect), tree)
+    vector.RTreeAllocBoundary(byref(rect), tree)
     vector.RTreeSetRect2D(byref(rect), tree, 2.0, 7.0, 2.0, 7.0)
 
     list_ = gis.ilist()
@@ -1676,18 +1678,20 @@ def test_2d_rtree():
     for i in xrange(list_.n_values):
         print "id", list_.value[i]
 
+    vector.RTreeDestroyTree(tree)
+    
 ###############################################################################
 
 def test_3d_rtree():
     """Testing the rtree ctypes wrapper"""
 
-    tree = vector.RTreeNewIndex(-1, 0, 3)
+    tree = vector.RTreeCreateTree(-1, 0, 3)
 
     for i in xrange(10):
         
         rect = vector.RTree_Rect()
         # Allocate the boundary
-        vector.RTreeNewRect(byref(rect), tree)
+        vector.RTreeAllocBoundary(byref(rect), tree)
         vector.RTreeSetRect3D(byref(rect), tree, 
                               float(i - 2), float(i + 2), 
                               float(i - 2), float(i + 2), 
@@ -1697,7 +1701,7 @@ def test_3d_rtree():
         vector.RTreePrintRect(byref(rect), 1, tree)
 
     rect = vector.RTree_Rect()
-    vector.RTreeNewRect(byref(rect), tree)
+    vector.RTreeAllocBoundary(byref(rect), tree)
     vector.RTreeSetRect3D(byref(rect), tree, 2.0, 7.0, 2.0, 7.0, 2.0, 7.0)
     print "Select"
     vector.RTreePrintRect(byref(rect), 1, tree)
@@ -1710,18 +1714,20 @@ def test_3d_rtree():
     print "Number of overlapping rectangles", num
     for i in xrange(list_.n_values):
         print "id", list_.value[i]
+        
+    vector.RTreeDestroyTree(tree)
 
 ###############################################################################
 
 def test_4d_rtree():
     """Testing the rtree ctypes wrapper"""
 
-    tree = vector.RTreeNewIndex(-1, 0, 4)
+    tree = vector.RTreeCreateTree(-1, 0, 4)
 
     for i in xrange(10):
         
         # Allocate the boundary
-        rect = vector.RTreeNewRect(None, tree)
+        rect = vector.RTreeAllocRect(tree)
         vector.RTreeSetRect4D(rect, tree, 
                               float(i - 2), float(i + 2), 
                               float(i - 2), float(i + 2), 
@@ -1729,18 +1735,22 @@ def test_4d_rtree():
                               float(i - 2), float(i + 2))
         vector.RTreeInsertRect(rect, i + 1, tree)
 
-    rect = vector.RTreeNewRect(None, tree)
+    rect = vector.RTreeAllocRect(tree)
     vector.RTreeSetRect4D(rect, tree, 2.0, 7.0, 2.0, 
                           7.0, 2.0, 7.0, 2.0, 7.0)
-
+    
     list_ = gis.ilist()
 
     num = vector.RTreeSearch2(tree, rect, byref(list_))
+
+    vector.RTreeFreeRect(rect)
 
     # print rectangle ids
     print "Number of overlapping rectangles", num
     for i in xrange(list_.n_values):
         print "id", list_.value[i]
+        
+    vector.RTreeDestroyTree(tree)
 
 ###############################################################################
 
