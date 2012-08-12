@@ -9,6 +9,7 @@ from gui_core.mapdisp   import DoubleMapFrame
 from core.render        import Map
 from mapdisp            import statusbar as sb
 from core.debug         import Debug
+from core.gcmd          import RunCommand
 from mapdisp.statusbar  import EVT_AUTO_RENDER
 
 from swipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
@@ -356,6 +357,11 @@ class SwipeMapFrame(DoubleMapFrame):
             return False
 
         return True
+
+    def OnHelp(self, event):
+        RunCommand('g.manual',
+                   quiet = True,
+                   entry = 'wxGUI.MapSwipe')
 
     def OnCloseWindow(self, event):
         self.Destroy()
