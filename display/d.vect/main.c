@@ -54,6 +54,7 @@ int main(int argc, char **argv)
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
     struct Flag *id_flag, *table_acolors_flag, *cats_acolors_flag,
 	*zcol_flag, *sqrt_flag;
+    char *desc;
     
     struct cat_list *Clist;
     LATTR lattr;
@@ -84,12 +85,16 @@ int main(int argc, char **argv)
     display_opt->answer = "shape";
     display_opt->options = "shape,cat,topo,dir,attr,zcoor";
     display_opt->description = _("Display");
-    display_opt->descriptions = _("shape;Display geometry of features;"
-				  "cat;Display category numbers of features;"
-				  "topo;Display topology information (nodes, edges);"
-				  "dir;Display direction of linear features;"
-				  "attr;Display selected attribute based on 'attrcolumn';"
-				  "zcoor;Display z-coordinate of features (only for 3D vector maps)");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "shape;%s;cat;%s;topo;%s;dir;%s;attr;%s;zcoor;%s",
+	       _("Display geometry of features"),
+	       _("Display category numbers of features"),
+	       _("Display topology information (nodes, edges)"),
+	       _("Display direction of linear features"),
+	       _("Display selected attribute based on 'attrcolumn'"),
+	       _("Display z-coordinate of features (only for 3D vector maps)"));
+    display_opt->descriptions = desc;
     
     /* Query */
     type_opt = G_define_standard_option(G_OPT_V_TYPE);

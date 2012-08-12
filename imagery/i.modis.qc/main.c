@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
     struct Option *productname, *qcname, *input, *input_band, *output;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
+    char *desc_productname, *desc_qcname, *desc_input_band;
 
     char *result;		/*output raster name */
 
@@ -138,15 +139,25 @@ int main(int argc, char *argv[])
     productname->type = TYPE_STRING;
     productname->required = YES;
     productname->description = _("Name of MODIS product type");
-    productname->descriptions =_("mod09Q1;surf. refl. 250m 8-days;"
-				 "mod09A1;surf. refl. 500m 8-days;"
-				 "mod09A1s;surf. refl. 500m 8-days, State QA;"
-				 "mod11A1;LST 1Km daily (Day/Night);"
-				 "mod11A2;LST 1Km 8-days (Day/Night);"
-				 "mod13A2;VI 1Km 16-days;"
-				 "mcd43B2;Brdf-Albedo Quality (Ancillary SDS) 1Km 8-days;"
-				 "mcd43B2q;Brdf-Albedo Quality (BRDF SDS) 1Km 8-days;"
-				 );
+    desc_productname = NULL;
+    G_asprintf(&desc_productname,
+	       "mod09Q1;%s;"
+	       "mod09A1;%s;"
+	       "mod09A1s;%s;"
+	       "mod11A1;%s;"
+	       "mod11A2;%s;"
+	       "mod13A2;%s;"
+	       "mcd43B2;%s;"
+	       "mcd43B2q;%s",
+	       _("surf. refl. 250m 8-days"),
+	       _("surf. refl. 500m 8-days"),
+	       _("surf. refl. 500m 8-days, State QA"),
+	       _("LST 1Km daily (Day/Night)"),
+	       _("LST 1Km 8-days (Day/Night)"),
+	       _("VI 1Km 16-days"),
+	       _("Brdf-Albedo Quality (Ancillary SDS) 1Km 8-days"),
+	       _("Brdf-Albedo Quality (BRDF SDS) 1Km 8-days"));
+    productname->descriptions = desc_productname;
     productname->options = "mod09Q1,mod09A1,mod09A1s,mod11A1,mod11A2,mod13A2,mcd43B2,mcd43B2q";
     productname->answer = "mod13A2";
     
@@ -155,45 +166,85 @@ int main(int argc, char *argv[])
     qcname->type = TYPE_STRING;
     qcname->required = YES;
     qcname->description = _("Name of QC type to extract");
-    qcname->descriptions =_("adjcorr;mod09: Adjacency Correction;"
-                            "atcorr;mod09: Atmospheric Correction;"
-                            "cloud;mod09: Cloud State;"
-                            "data_quality;mod09: Band-Wise Data Quality Flag;"
-                            "diff_orbit_from_500m;mod09: 250m Band is at Different Orbit than 500m;"
-                            "modland_qa;mod09: MODIS Land General Quality Assessment;"
-                            "mandatory_qa_11A1;mod11A1: MODIS Land General Quality Assessment;"
-                            "data_quality_flag_11A1;mod11A1: Detailed Quality Indications;"
-                            "emis_error_11A1;mod11A1: Average Emissivity Error Classes;"
-                            "lst_error_11A1;mod11A1: Average LST Error Classes;"
-                            "data_quality_flag_11A2;mod11A2: Detailed Quality Indications;"
-                            "emis_error_11A2;mod11A2: Average Emissivity Error Classes;"
-                            "mandatory_qa_11A2;mod11A2: MODIS Land General Quality Assessment;"
-                            "lst_error_11A2;mod11A2: Average LST Error Classes;"
-                            "aerosol_quantity;mod09A1s: StateQA Internal Snow Mask;"
-                            "brdf_correction_performed;mod09A1s: StateQA Internal Snow Mask;"
-                            "cirrus_detected;mod09A1s: StateQA Internal Snow Mask;"
-                            "cloud_shadow;mod09A1s: StateQA Internal Snow Mask;"
-                            "cloud_state;mod09A1s: StateQA Internal Snow Mask;"
-                            "internal_cloud_algorithm;mod09A1s: StateQA Internal Snow Mask;"
-                            "internal_fire_algorithm;mod09A1s: StateQA Internal Snow Mask;"
-                            "internal_snow_mask;mod09A1s: StateQA Internal Snow Mask;"
-                            "land_water;mod09A1s: StateQA Internal Snow Mask;"
-                            "mod35_snow_ice;mod09A1s: StateQA Internal Snow Mask;"
-                            "pixel_adjacent_to_cloud;mod09A1s: StateQA Internal Snow Mask;"
-			    "modland_qa;mod13A2: MODIS Land General Quality Assessment;"
-			    "vi_usefulness;mod13A2: Quality estimation of the pixel;"
-			    "aerosol_quantity;mod13A2: Quantity range of Aerosol;"
-			    "pixel_adjacent_to_cloud;mod13A2: if pixel is a cloud neighbour;"
-			    "brdf_correction_performed;mod13A2: if BRDF correction performed;"
-			    "mixed_clouds;mod13A2: if pixel mixed with clouds;"
-			    "land_water;mod13A2: separate land from various water objects;"
-			    "possible_snow_ice;mod13A2: if snow/ice present in pixel;"
-			    "possible_shadow;mod13A2: if shadow is present in pixel;"
-			    "platform;mcd43B2: Quality of BRDF correction performed;"
-			    "land_water;mcd43B2: Quality of BRDF correction performed;"
-			    "sun_z_angle_at_local_noon;mcd43B2: Quality of BRDF correction performed;"
-			    "brdf_correction_performed;mcd43B2q: Quality of BRDF correction performed"
-			    );
+    desc_qcname = NULL;
+    G_asprintf(&desc_qcname,
+               "adjcorr;%s;"
+	       "atcorr;%s;"
+	       "cloud;%s;"
+	       "data_quality;%s;"
+	       "diff_orbit_from_500m;%s;"
+	       "modland_qa;%s;"
+	       "mandatory_qa_11A1;%s;"
+	       "data_quality_flag_11A1;%s;"
+	       "emis_error_11A1;%s;"
+	       "lst_error_11A1;%s;"
+	       "data_quality_flag_11A2;%s;"
+	       "emis_error_11A2;%s;"
+	       "mandatory_qa_11A2;%s;"
+	       "lst_error_11A2;%s;"
+	       "aerosol_quantity;%s;"
+	       "brdf_correction_performed;%s;"
+	       "cirrus_detected;%s;"
+	       "cloud_shadow;%s;"
+	       "cloud_state;%s;"
+	       "internal_cloud_algorithm;%s;"
+	       "internal_fire_algorithm;%s;"
+	       "internal_snow_mask;%s;"
+	       "land_water;%s;"
+	       "mod35_snow_ice;%s;"
+	       "pixel_adjacent_to_cloud;%s;"
+	       "modland_qa;%s;"
+	       "vi_usefulness;%s;"
+	       "aerosol_quantity;%s;"
+	       "pixel_adjacent_to_cloud;%s;"
+	       "brdf_correction_performed;%s;"
+	       "mixed_clouds;%s;"
+	       "land_water;%s;"
+	       "possible_snow_ice;%s;"
+	       "possible_shadow;%s;"
+	       "platform;%s;"
+	       "land_water;%s;"
+	       "sun_z_angle_at_local_noon;%s;"
+	       "brdf_correction_performed;%s",
+	       _("mod09: Adjacency Correction"),
+	       _("mod09: Atmospheric Correction"),
+	       _("mod09: Cloud State"),
+	       _("mod09: Band-Wise Data Quality Flag"),
+	       _("mod09: 250m Band is at Different Orbit than 500m"),
+	       _("mod09: MODIS Land General Quality Assessment"),
+	       _("mod11A1: MODIS Land General Quality Assessment"),
+	       _("mod11A1: Detailed Quality Indications"),
+	       _("mod11A1: Average Emissivity Error Classes"),
+	       _("mod11A1: Average LST Error Classes"),
+	       _("mod11A2: Detailed Quality Indications"),
+	       _("mod11A2: Average Emissivity Error Classes"),
+	       _("mod11A2: MODIS Land General Quality Assessment"),
+	       _("mod11A2: Average LST Error Classes"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod09A1s: StateQA Internal Snow Mask"),
+	       _("mod13A2: MODIS Land General Quality Assessment"),
+	       _("mod13A2: Quality estimation of the pixel"),
+	       _("mod13A2: Quantity range of Aerosol"),
+	       _("mod13A2: if pixel is a cloud neighbour"),
+	       _("mod13A2: if BRDF correction performed"),
+	       _("mod13A2: if pixel mixed with clouds"),
+	       _("mod13A2: separate land from various water objects"),
+	       _("mod13A2: if snow/ice present in pixel"),
+	       _("mod13A2: if shadow is present in pixel"),
+	       _("mcd43B2: Quality of BRDF correction performed"),
+	       _("mcd43B2: Quality of BRDF correction performed"),
+	       _("mcd43B2: Quality of BRDF correction performed"),
+	       _("mcd43B2q: Quality of BRDF correction performed"));
+    qcname->descriptions = desc_qcname;
     qcname->options = "adjcorr,atcorr,cloud,data_quality,diff_orbit_from_500m,modland_qa,mandatory_qa_11A1,data_quality_flag_11A1,emis_error_11A1,lst_error_11A1,data_quality_flag_11A2,emis_error_11A2,mandatory_qa_11A2,lst_error_11A2,aerosol_quantity,brdf_correction_performed,cirrus_detected,cloud_shadow,cloud_state,internal_cloud_algorithm,internal_fire_algorithm,internal_snow_mask,land_water,mod35_snow_ice,pixel_adjacent_to_cloud,modland_qa,vi_usefulness,aerosol_quantity,pixel_adjacent_to_cloud,brdf_correction_performed,mixed_clouds,land_water,possible_snow_ice,possible_shadow,platform,land_water,sun_z_angle_at_local_noon,brdf_correction_performed";
     qcname->answer = "modland_qa";
 
@@ -203,13 +254,17 @@ int main(int argc, char *argv[])
     input_band->required = NO;
     input_band->description =
       _("Band number of Modis product (mod09Q1=[1,2],mod09A1=[1-7], mcd43B2q=[1-7])");
-    input_band->descriptions =_("1;Band 1: Red;"
-                                "2;Band 2: NIR;"
-                                "3;Band 3: Blue;"
-                                "4;Band 4: Green;"
-                                "5;Band 5: SWIR 1;"
-                                "6;Band 6: SWIR 2;"
-                                "7;Band 7: SWIR 3;");
+    desc_input_band = NULL;
+    G_asprintf(&desc_input_band,
+               "1;%s;2;%s;3;%s;4;%s;5;%s;6;%s;7;%s",
+	       _("Band 1: Red"),
+	       _("Band 2: NIR"),
+	       _("Band 3: Blue"),
+	       _("Band 4: Green"),
+	       _("Band 5: SWIR 1"),
+	       _("Band 6: SWIR 2"),
+	       _("Band 7: SWIR 3"));
+    input_band->descriptions = desc_input_band;
     input_band->options = "1,2,3,4,5,6,7";
     
     /********************/ 

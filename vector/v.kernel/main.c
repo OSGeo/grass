@@ -78,6 +78,7 @@ int main(int argc, char **argv)
     struct Option *stddev_opt, *dsize_opt, *segmax_opt, *netmax_opt,
 	*multip_opt, *node_opt, *kernel_opt;
     struct Flag *flag_o, *flag_q, *flag_normalize, *flag_multiply;
+    char *desc;
 
     struct Map_info In, Net, Out;
     int fdout = -1, maskfd = -1;
@@ -165,9 +166,12 @@ int main(int argc, char **argv)
     node_opt->description = _("Node method");
     node_opt->options = "none,split";
     node_opt->answer = "none";
-    node_opt->descriptions =
-	_("none;No method applied at nodes with more than 2 arcs;"
-	  "split;Equal split (Okabe 2009) applied at nodes;");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "none;%s;split;%s",
+	       _("No method applied at nodes with more than 2 arcs"),
+	       _("Equal split (Okabe 2009) applied at nodes"));
+    node_opt->descriptions = desc;
 
     kernel_opt = G_define_option();
     kernel_opt->key = "kernel";

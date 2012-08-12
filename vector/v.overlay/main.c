@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     struct Map_info In[2], Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
+    char *desc;
 
     struct field_info *Fi = NULL;
     char buf[1000];
@@ -96,13 +97,16 @@ int main(int argc, char *argv[])
 	  "of operation 'ainput operator binput' is true. "
 	  "Input feature is considered to be true, if "
 	  "category of given layer is defined.");
-    operator_opt->descriptions =
-	_("and;also known as 'intersection' in GIS;"
-	  "or;also known as 'union' in GIS (only for atype=area);"
-	  "not;features from ainput not overlayed by features " "from binput;"
-	  "xor;features from either ainput or binput but "
-	  "not those from ainput overlayed by binput (only "
-	  "for atype=area)");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "and;%s;or;%s;not;%s;xor;%s",
+	       _("also known as 'intersection' in GIS"),
+	       _("also known as 'union' in GIS (only for atype=area)"),
+	       _("features from ainput not overlayed by features from binput"),
+	       _("features from either ainput or binput but "
+		 "not those from ainput overlayed by binput (only "
+		 "for atype=area)"));
+    operator_opt->descriptions = desc;
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     

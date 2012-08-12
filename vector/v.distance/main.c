@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     struct {
 	struct Flag *print, *all;
     } flag;
+    char *desc;
     struct Map_info From, To, Out, *Outp;
     int from_type, to_type, from_field, to_field;
     double max, min;
@@ -148,23 +149,32 @@ int main(int argc, char *argv[])
     opt.upload->options = "cat,dist,to_x,to_y,to_along,to_angle,to_attr";
     opt.upload->description =
 	_("Values describing the relation between two nearest features");
-    opt.upload->descriptions =
-	_("cat;category of the nearest feature;"
-	  "dist;minimum distance to nearest feature;"
-	  "to_x;x coordinate of the nearest point on the 'to' feature;"
-	  "to_y;y coordinate of the nearest point on the 'to' feature;"
-	  "to_along;distance to the nearest point on the 'to' feature along "
-	     "that linear feature;"
-	  "to_angle;angle along the nearest linear feature in the 'to' map, "
-	     "measured CCW from the +x axis, in radians, between -Pi and Pi "
-	     "inclusive;"
-	  "to_attr;attribute of nearest feature given by to_column option");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "cat;%s;"
+	       "dist;%s;"
+	       "to_x;%s;"
+	       "to_y;%s;"
+	       "to_along;%s;"
+	       "to_angle;%s;"
+	       "to_attr;%s",
+	       _("category of the nearest feature"),
+	       _("minimum distance to nearest feature"),
+	       _("x coordinate of the nearest point on the 'to' feature"),
+	       _("y coordinate of the nearest point on the 'to' feature"),
+	       _("distance to the nearest point on the 'to' feature along "
+		 "that linear feature"),
+	       _("angle along the nearest linear feature in the 'to' map, "
+		 "measured CCW from the +x axis, in radians, between -Pi and Pi "
+		 "inclusive"),
+	       _("attribute of nearest feature given by to_column option"));
     /*  "from_x - x coordinate of the nearest point on 'from' feature;" */
     /*  "from_y - y coordinate of the nearest point on 'from' feature;" */
     /* "from_along - distance to the nearest point on 'from' feature along linear feature;" */
     /* "from_angle - angle between the linear feature in 'to' map and the +x "
 	"axis, at the location of point/centroid in 'from' map, CCW, in "
 	"radians, between -Pi and Pi inclusive;" */
+    opt.upload->descriptions = desc;
 
     opt.column = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.column->required = YES;

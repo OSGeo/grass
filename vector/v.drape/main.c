@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *rast_opt, *method_opt,
 	*scale_opt, *where_opt, *layer_opt, *null_opt;
+    char *desc;
 
     struct Map_info In, Out;
     struct line_pnts *Points;
@@ -165,9 +166,13 @@ int main(int argc, char *argv[])
     method_opt->multiple = NO;
     method_opt->options = "nearest,bilinear,cubic";
     method_opt->answer = "nearest";
-    method_opt->descriptions = "nearest;nearest neighbor;"
-	"bilinear;bilinear interpolation;"
-	"cubic;cubic convolution interpolation;";
+    desc = NULL;
+    G_asprintf(&desc,
+	       "nearest;%s;bilinear;%s;cubic;%s",
+	       _("nearest neighbor"),
+	       _("bilinear interpolation"),
+	       _("cubic convolution interpolation"));
+    method_opt->descriptions = desc;
     method_opt->description = _("Sampling method");
     
     scale_opt = G_define_option();

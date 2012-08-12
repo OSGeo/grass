@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     struct Option *map_in, *map_out;
     struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol,
                   *method_opt;
+    char *desc;
     int with_z;
     int afield, nfield, mask_type;
     dglGraph_s *graph;
@@ -91,8 +92,12 @@ int main(int argc, char *argv[])
     method_opt->required = YES;
     method_opt->multiple = NO;
     method_opt->options = "bridge,articulation";
-    method_opt->descriptions = _("bridge;Finds bridges;"
-				 "articulation;Finds articulation points;");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "bridge;%s;articulation;%s",
+	       _("Finds bridges"),
+	       _("Finds articulation points"));
+    method_opt->descriptions = desc;
     method_opt->description = _("Feature type");
 
     /* options and flags parser */

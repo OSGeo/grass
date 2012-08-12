@@ -815,14 +815,20 @@ void args_cplane(struct GParams *params)
 
 void args_fringe(struct GParams *params)
 {
+    char *desc;
+    
     params->fringe = G_define_option();
     params->fringe->key = "fringe";
     params->fringe->type = TYPE_STRING;
     params->fringe->options = "nw,ne,sw,se";
-    params->fringe->descriptions = _("nw;North-West edge;"
-				     "ne;North-East edge;"
-				     "sw;South-West edge;"
-				     "se;South-East edge");
+    desc = NULL;
+    G_asprintf(&desc,
+	        "nw;%s;ne;%s;sw;%s;se;%s",
+	        _("North-West edge"),
+	        _("North-East edge"),
+	        _("South-West edge"),
+	        _("South-East edge"));
+    params->fringe->descriptions = desc;
     params->fringe->description = _("Fringe edges");
     params->fringe->guisection = _("Fringe");
     params->fringe->multiple = YES;

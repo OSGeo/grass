@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
     struct Flag *shell;
     FREPORT **freps;
     int nfreps, rtype, fld;
+    char *desc;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -98,13 +99,23 @@ int main(int argc, char *argv[])
     option_opt->multiple = NO;
     option_opt->options = "add,del,chlayer,sum,report,print,transfer";
     option_opt->description = _("Action to be done");
-    option_opt->descriptions = _("add;add a new category;"
-				 "del;delete category (-1 to delete all categories of given layer);"
-				 "chlayer;change layer number (e.g. layer=3,1 changes layer 3 to layer 1);"
-				 "sum;add the value specified by cat option to the current category value;"
-				 "transfer;copy values from one layer to another (e.g. layer=1,2,3 copies values from layer 1 to layer 2 and 3);"
-				 "report;print report (statistics), in shell style: layer type count min max;"
-				 "print;print category values, more cats in the same layer are separated by '/'");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "add;%s;"
+	       "del;%s;"
+	       "chlayer;%s;"
+	       "sum;%s;"
+	       "transfer;%s;"
+	       "report;%s;"
+	       "print;%s",
+	       _("add a new category"),
+	       _("delete category (-1 to delete all categories of given layer)"),
+	       _("change layer number (e.g. layer=3,1 changes layer 3 to layer 1)"),
+	       _("add the value specified by cat option to the current category value"),
+	       _("copy values from one layer to another (e.g. layer=1,2,3 copies values from layer 1 to layer 2 and 3)"),
+	       _("print report (statistics), in shell style: layer type count min max"),
+	       _("print category values, more cats in the same layer are separated by '/'"));
+    option_opt->descriptions = desc;
     
     cat_opt = G_define_standard_option(G_OPT_V_CAT);
     cat_opt->answer = "1";

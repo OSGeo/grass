@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 	*region_flag;
     char *table;
     char *fs;
+    char *desc;
     int zcoor = WITHOUT_Z, make_table;
 
     struct Map_info Map;
@@ -63,8 +64,12 @@ int main(int argc, char *argv[])
     format_opt->required = NO;
     format_opt->multiple = NO;
     format_opt->options = "point,standard";
-    format_opt->descriptions = _("point;simple x,y[,z] list;"
-				 "standard;GRASS vector ASCII format");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "point;%s;standard;%s",
+	       _("simple x,y[,z] list"),
+	       _("GRASS vector ASCII format"));
+    format_opt->descriptions = desc;
     format_opt->answer = "point";
     format_opt->description = _("Input file format");
     format_opt->guisection = _("Input format");

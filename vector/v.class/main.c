@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
     double finfo;
     double *classbreaks, min, max, *data;
     struct GASTATS stats;
+    char *desc;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -64,11 +65,19 @@ int main(int argc, char *argv[])
     algo_opt->multiple = NO;
     algo_opt->options = "int,std,qua,equ,dis";
     algo_opt->description = _("Algorithm to use for classification");
-    algo_opt->descriptions = _("int;simple intervals;"
-			       "std;standard deviations;"
-			       "qua;quantiles;"
-			       "equ;equiprobable (normal distribution);");
-/*			       "dis;discontinuities"); currently disabled because of bugs*/
+    desc = NULL;
+    G_asprintf(&desc,
+	       "int;%s;"
+	       "std;%s;"
+	       "qua;%s;"
+	       "equ;%s",
+	       /* "dis;%s" */
+	       _("simple intervals"),
+	       _("standard deviations"),
+	       _("quantiles"),
+	       _("equiprobable (normal distribution)"));
+	       /* _("discontinuities"));currently disabled because of bugs */
+    algo_opt->descriptions = desc;
 
     nbclass_opt = G_define_option();
     nbclass_opt->key = "nbclasses";

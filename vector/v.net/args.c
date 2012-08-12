@@ -7,6 +7,8 @@
 
 void define_options(struct opt *opt)
 {
+    char *desc;
+    
     opt->input = G_define_standard_option(G_OPT_V_INPUT);
     opt->input->required = NO;
     opt->input->label = _("Name of input vector line map (arcs)");
@@ -32,22 +34,20 @@ void define_options(struct opt *opt)
     opt->action->multiple = NO;
     opt->action->options = "nodes,connect,arcs,report,nreport";
     opt->action->description = _("Operation to be performed");
-    opt->action->descriptions =
-	_("nodes;"
-	  "new point is placed on each node (line end) "
-	  "if doesn't exist;"
-	  "connect;"
-	  "connect still unconnected points to vector network "
-	  "by inserting new line(s);"
-	  "arcs;"
-	  "new line is created from start point "
-	  "to end point;"
-	  "report;"
-	  "print to standard output "
-	  "{line_category start_point_category end_point_category};"
-	  "nreport;"
-	  "print to standard output "
-	  "{point_category line_category[,line_category...]}");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "nodes;%s;connect;%s;arcs;%s;report;%s;nreport;%s",
+	       _("new point is placed on each node (line end) "
+		 "if doesn't exist"),
+	       _("connect still unconnected points to vector network "
+		 "by inserting new line(s)"),
+	       _("new line is created from start point "
+		 "to end point"),
+	       _("print to standard output "
+		 "{line_category start_point_category end_point_category}"),
+	       _("print to standard output "
+		 "{point_category line_category[,line_category...]}"));
+    opt->action->descriptions = desc;
 
     opt->afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     opt->afield_opt->key = "alayer";

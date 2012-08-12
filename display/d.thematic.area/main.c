@@ -55,6 +55,7 @@ int main(int argc, char **argv)
     struct Option *field_opt;
     struct Option *legend_file_opt;
     struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag;
+    char *desc;
 
     struct cat_list *Clist;
     int *cats, ncat, nrec, ctype;
@@ -102,10 +103,14 @@ int main(int argc, char **argv)
     algo_opt->multiple = NO;
     algo_opt->options = "int,std,qua,equ,dis";
     algo_opt->description = _("Algorithm to use for classification");
-    algo_opt->descriptions = _("int;simple intervals;"
-			       "std;standard deviations;"
-			       "qua;quantiles;"
-			       "equ;equiprobable (normal distribution);");
+    desc = NULL;
+    G_asprintf(&desc,
+	        "int;%s;std;%s;qua;%s;equ;%s",
+	        _("simple intervals"),
+	        _("standard deviations"),
+	        _("quantiles"),
+	        _("equiprobable (normal distribution)"));
+    algo_opt->descriptions = desc;
     /*currently disabled because of bugs       "dis;discontinuities"); */
 
     nbclass_opt = G_define_option();
