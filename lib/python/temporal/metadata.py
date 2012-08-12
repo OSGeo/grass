@@ -6,6 +6,8 @@ Temporal GIS related metadata functions to be used in Python scripts and tgis pa
 
 Usage:
 
+@code
+
 >>> import grass.temporal as tgis
 >>> meta = tgis.RasterMetadata()
 >>> meta = tgis.Raster3DMetadata()
@@ -13,6 +15,8 @@ Usage:
 >>> meta = tgis.STRDSMetadata()
 >>> meta = tgis.STR3DSMetadata()
 >>> meta = tgis.STVDSMetadata()
+
+@endcode
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -31,8 +35,9 @@ class RasterMetadataBase(SQLDatabaseInterface):
     
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.RasterMetadataBase(table="metadata", ident="soil@PERMANENT",
+        @code
+        
+        >>> meta = RasterMetadataBase(table="metadata", ident="soil@PERMANENT",
         ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
         ... ewres=0.1, min=0, max=100)
         >>> meta.datatype
@@ -69,7 +74,8 @@ class RasterMetadataBase(SQLDatabaseInterface):
         ewres=0.1
         min=0.0
         max=100.0
-    
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, datatype=None, cols=None, 
 		rows=None, number_of_cells=None, nsres=None, ewres=None, 
@@ -267,9 +273,10 @@ class RasterMetadata(RasterMetadataBase):
         register table is stored.
        
         Usage:
+        
+        @code
        
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.RasterMetadata(ident="soil@PERMANENT",
+        >>> meta = RasterMetadata(ident="soil@PERMANENT",
         ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
         ... ewres=0.1, min=0, max=100)
         >>> meta.datatype
@@ -310,6 +317,8 @@ class RasterMetadata(RasterMetadataBase):
         min=0.0
         max=100.0
         strds_register=None
+        
+        @endcode
     """
     def __init__(self, ident=None, strds_register=None, datatype=None, 
 		 cols=None, rows=None, number_of_cells=None, nsres=None, 
@@ -363,9 +372,10 @@ class Raster3DMetadata(RasterMetadataBase):
         raster dataset register table is stored.
        
         Usage:
+        
+        @code
        
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.Raster3DMetadata(ident="soil@PERMANENT",
+        >>> meta = Raster3DMetadata(ident="soil@PERMANENT",
         ... datatype="FCELL", cols=100, rows=100, depths=100,
         ... number_of_cells=1000000, nsres=0.1, ewres=0.1, tbres=0.1,
         ... min=0, max=100)
@@ -415,6 +425,8 @@ class Raster3DMetadata(RasterMetadataBase):
         str3ds_register=None
         depths=100
         tbres=0.1
+        
+        @endcode
     """
     def __init__(self, ident=None, str3ds_register=None, datatype=None, 
 		 cols=None, rows=None, depths=None, number_of_cells=None, 
@@ -507,8 +519,9 @@ class VectorMetadata(SQLDatabaseInterface):
         raster dataset register table is stored.
        
         Usage:
+        
+        @code
        
-        >>> import grass.temporal as tgis
         >>> meta = VectorMetadata(ident="lidar@PERMANENT", is_3d=True, 
         ... number_of_points=1, number_of_lines=2, number_of_boundaries=3,
         ... number_of_centroids=4, number_of_faces=5, number_of_kernels=6, 
@@ -573,6 +586,8 @@ class VectorMetadata(SQLDatabaseInterface):
         islands=10
         holes=11
         volumes=12
+        
+        @endcode
     """
     def __init__(
         self, ident=None, stvds_register=None, is_3d=False, 
@@ -851,13 +866,15 @@ class VectorMetadata(SQLDatabaseInterface):
 
 
 class STDSMetadataBase(SQLDatabaseInterface):
-    """!This is the space time dataset metadata base class for strds, stvds and str3ds datasets
+    """!This is the space time dataset metadata base class for 
+       strds, stvds and str3ds datasets
        setting/getting the id, the title and the description
        
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.STDSMetadataBase(ident="soils@PERMANENT",
+        @code
+        
+        >>> meta = STDSMetadataBase(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
         'soils@PERMANENT'
@@ -874,6 +891,8 @@ class STDSMetadataBase(SQLDatabaseInterface):
          | Soils 1950 - 2010
         >>> meta.print_shell_info()
         number_of_maps=None
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, title=None, description=None):
 
@@ -956,16 +975,18 @@ class STDSMetadataBase(SQLDatabaseInterface):
 
 
 class STDSRasterMetadataBase(STDSMetadataBase):
-    """!This is the space time dataset metadata base class for strds and str3ds datasets
+    """!This is the space time dataset metadata base 
+       class for strds and str3ds datasets
 
        Most of the metadata values are set by triggers in the database when
-       new raster or voxel maps are added. Therefor only some set- an many get-functions
-       are available.
+       new raster or voxel maps are added. Therefor only some 
+       set- an many get-functions are available.
        
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.STDSRasterMetadataBase(ident="soils@PERMANENT",
+        @code
+        
+        >>> meta = STDSRasterMetadataBase(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
         'soils@PERMANENT'
@@ -1006,6 +1027,8 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         min_max=None
         max_min=None
         max_max=None
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, title=None, description=None):
 
@@ -1147,8 +1170,9 @@ class STRDSMetadata(STDSRasterMetadataBase):
         
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.STRDSMetadata(ident="soils@PERMANENT",
+        @code
+        
+        >>> meta = STRDSMetadata(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
         'soils@PERMANENT'
@@ -1193,6 +1217,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
         max_min=None
         max_max=None
         raster_register=None
+        
+        @endcode
     """
     def __init__(self, ident=None, raster_register=None, title=None, description=None):
 
@@ -1241,8 +1267,9 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.STR3DSMetadata(ident="soils@PERMANENT",
+        @code
+        
+        >>> meta = STR3DSMetadata(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
         'soils@PERMANENT'
@@ -1293,6 +1320,8 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         tbres_min=None
         tbres_max=None
         raster3d_register=None
+        
+        @endcode
         """
     def __init__(self, ident=None, raster3d_register=None, title=None, description=None):
 
@@ -1366,9 +1395,12 @@ class STVDSMetadata(STDSMetadataBase):
        Most of the metadata values are set by triggers in the database when
        new vector maps are added. Therefor only some set- an many get-functions
        are available.
-       
-        >>> import grass.temporal as tgis
-        >>> meta = tgis.STVDSMetadata(ident="lidars@PERMANENT",
+        
+        Usage:
+        
+        @code
+        
+        >>> meta = STVDSMetadata(ident="lidars@PERMANENT",
         ... title="LIDARS", description="LIDARS 2008 - 2010")
         >>> meta.id
         'lidars@PERMANENT'
@@ -1424,6 +1456,8 @@ class STVDSMetadata(STDSMetadataBase):
         islands=None
         holes=None
         volumes=None
+        
+        @endcode
     """
     def __init__(
         self, ident=None, vector_register=None, title=None, description=None):
@@ -1600,18 +1634,18 @@ class STVDSMetadata(STDSMetadataBase):
         STDSMetadataBase.print_info(self)
         print " | Vector register table:...... " + str(
             self.get_vector_register())
-        print " | Number of points ........... " + str(self.get_number_of_points())
-        print " | Number of lines ............ " + str(self.get_number_of_lines())
-        print " | Number of boundaries ....... " + str(self.get_number_of_boundaries())
-        print " | Number of centroids ........ " + str(self.get_number_of_centroids())
-        print " | Number of faces ............ " + str(self.get_number_of_faces())
-        print " | Number of kernels .......... " + str(self.get_number_of_kernels())
-        print " | Number of primitives ....... " + str(self.get_number_of_primitives())
-        print " | Number of nodes ............ " + str(self.get_number_of_nodes())
-        print " | Number of areas ............ " + str(self.get_number_of_areas())
-        print " | Number of islands .......... " + str(self.get_number_of_islands())
-        print " | Number of holes ............ " + str(self.get_number_of_holes())
-        print " | Number of volumes .......... " + str(self.get_number_of_volumes())
+        print " | Number of points ........... " + str(self.number_of_points)
+        print " | Number of lines ............ " + str(self.number_of_lines)
+        print " | Number of boundaries ....... " + str(self.number_of_boundaries)
+        print " | Number of centroids ........ " + str(self.number_of_centroids)
+        print " | Number of faces ............ " + str(self.number_of_faces)
+        print " | Number of kernels .......... " + str(self.number_of_kernels)
+        print " | Number of primitives ....... " + str(self.number_of_primitives)
+        print " | Number of nodes ............ " + str(self.number_of_nodes)
+        print " | Number of areas ............ " + str(self.number_of_areas)
+        print " | Number of islands .......... " + str(self.number_of_islands)
+        print " | Number of holes ............ " + str(self.number_of_holes)
+        print " | Number of volumes .......... " + str(self.number_of_volumes)
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""

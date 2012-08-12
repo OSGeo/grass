@@ -6,10 +6,14 @@ Temporal GIS related temporal extent functions to be used in Python scripts and 
 
 Usage:
 
+@code
+
 >>> import grass.temporal as tgis
 >>> from datetime import datetime
 >>> t = tgis.RasterRelativeTime()
 >>> t = tgis.RasterAbsoluteTime()
+
+@endcode
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -34,8 +38,9 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> A = tgis.AbstractTemporalExtent(table="raster_absolute_time",
+        @code
+        
+        >>> A = AbstractTemporalExtent(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=datetime(2001, 01, 01),
         ... end_time=datetime(2005,01,01) )
         >>> A.id
@@ -51,7 +56,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         start_time=2001-01-01 00:00:00
         end_time=2005-01-01 00:00:00
         >>> # relative time
-        >>> A = tgis.AbstractTemporalExtent(table="raster_absolute_time",
+        >>> A = AbstractTemporalExtent(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=0, end_time=1 )
         >>> A.id
         'soil@PERMANENT'
@@ -65,6 +70,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         >>> A.print_shell_info()
         start_time=0
         end_time=1
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
@@ -77,21 +84,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def starts(self, extent):
         """!Return True if this temporal extent (A) starts at the start of the 
            provided temporal extent (B) and finishes within it
+           @verbatim
            A  |-----|
            B  |---------|
+           @endverbatim
            
            @param extent: The temporal extent object with which this extent starts
            
            Usage:
            
+           @code
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
            >>> A.starts(B)
            True
            >>> B.starts(A)
            False
+           
+           @endcode
         """
         if  self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
@@ -105,20 +116,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def started(self, extent):
         """!Return True if this temporal extent (A) started at the start of the 
            provided temporal extent (B) and finishes after it
+           @verbatim
            A  |---------|
            B  |-----|
+           @endverbatim
            
            @param extent: The temporal extent object with which this extent started
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=5, end_time=6 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
            >>> A.started(B)
            True
            >>> B.started(A)
            False
+           
+           @endcode
         """
         if  self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
@@ -132,20 +148,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def finishes(self, extent):
         """!Return True if this temporal extent (A) starts after the start of the 
            provided temporal extent (B) and finishes with it
+           @verbatim
            A      |-----|
            B  |---------|
+           @endverbatim
            
            @param extent: The temporal extent object with which this extent finishes
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=6, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=6, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
            >>> A.finishes(B)
            True
            >>> B.finishes(A)
            False
+           
+           @endcode
         """
         if  self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
@@ -159,20 +180,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def finished(self, extent):
         """!Return True if this temporal extent (A) starts before the start of the 
            provided temporal extent (B) and finishes with it
+           @verbatim
            A  |---------|
            B      |-----|
+           @endverbatim
            
            @param extent: The temporal extent object with which this extent finishes
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=6, end_time=7 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=6, end_time=7 )
            >>> A.finished(B)
            True
            >>> B.finished(A)
            False
+           
+           @endcode
         """
         if  self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
@@ -186,20 +212,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def after(self, extent):
         """!Return True if this temporal extent (A) is located after the  
            provided temporal extent (B)
+           @verbatim
            A             |---------|
            B  |---------|
+           @endverbatim
            
            @param extent: The temporal extent object that is located before this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=8, end_time=9 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=6, end_time=7 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=8, end_time=9 )
+           >>> B = AbstractTemporalExtent(start_time=6, end_time=7 )
            >>> A.after(B)
            True
            >>> B.after(A)
            False
+           
+           @endcode
         """
         if extent.D["end_time"] is None:
             if self.D["start_time"] > extent.D["start_time"]:
@@ -215,20 +246,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def before(self, extent):
         """!Return True if this temporal extent (A) is located before the  
            provided temporal extent (B)
+           @verbatim
            A  |---------|
            B             |---------|
+           @endverbatim
            
            @param extent: The temporal extent object that is located after this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=6, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=8, end_time=9 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=6, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=8, end_time=9 )
            >>> A.before(B)
            True
            >>> B.before(A)
            False
+           
+           @endcode
         """
         if self.D["end_time"] is None:
             if self.D["start_time"] < extent.D["start_time"]:
@@ -244,29 +280,34 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def adjacent(self, extent):
         """!Return True if this temporal extent (A) is a meeting neighbor the 
            provided temporal extent (B)
+           @verbatim
            A            |---------|
            B  |---------|
            A  |---------|
            B            |---------|
+           @endverbatim
            
            @param extent: The temporal extent object that is a meeting neighbor
                           of this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=7, end_time=9 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=7, end_time=9 )
            >>> A.adjacent(B)
            True
            >>> B.adjacent(A)
            True
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=3, end_time=5 )
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=5 )
            >>> A.adjacent(B)
            True
            >>> B.adjacent(A)
            True
+           
+           @endcode
         """
         if  self.D["end_time"] is None and extent.D["end_time"] is None:
             return False
@@ -280,19 +321,26 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def follows(self, extent):
         """!Return True if this temporal extent (A) follows the  
            provided temporal extent (B)
+           @verbatim
            A            |---------|
            B  |---------|
+           @endverbatim
            
            @param extent: The temporal extent object that is the predecessor
                           of this extent
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=3, end_time=5 )
+           Usage:
+           
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=5 )
            >>> A.follows(B)
            True
            >>> B.follows(A)
            False
+           
+           @endcode
         """
         if  extent.D["end_time"] is None:
             return False
@@ -305,21 +353,26 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def precedes(self, extent):
         """!Return True if this temporal extent (A) precedes the provided 
            temporal extent (B)
+           @verbatim
            A  |---------|
            B            |---------|
+           @endverbatim
            
            @param extent: The temporal extent object that is the successor
                           of this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=7, end_time=9 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=7, end_time=9 )
            >>> A.precedes(B)
            True
            >>> B.precedes(A)
            False
+           
+           @endcode
         """
         if  self.D["end_time"] is None:
             return False
@@ -332,20 +385,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def during(self, extent):
         """!Return True if this temporal extent (A) is located during the provided 
            temporal extent (B)
+           @verbatim
            A   |-------|
            B  |---------|
-           
+           @endverbatim
+                      
            @param extent: The temporal extent object that contains this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=4, end_time=9 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=4, end_time=9 )
            >>> A.during(B)
            True
            >>> B.during(A)
            False
+           
+           @endcode
         """
         # Check single point of time in interval
         if  extent.D["end_time"] is None:
@@ -368,21 +426,26 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def contains(self, extent):
         """!Return True if this temporal extent (A) contains the provided 
            temporal extent (B)
+           @verbatim
            A  |---------|
            B   |-------|
+           @endverbatim
            
            @param extent: The temporal extent object that is located 
                           during this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=4, end_time=9 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=5, end_time=8 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=4, end_time=9 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=8 )
            >>> A.contains(B)
            True
            >>> B.contains(A)
            False
+           
+           @endcode
         """
         # Check single point of time in interval
         if  self.D["end_time"] is None:
@@ -405,21 +468,26 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def equivalent(self, extent):
         """!Return True if this temporal extent (A) is equivalent to the provided 
            temporal extent (B)
+           @verbatim
            A  |---------|
            B  |---------|
+           @endverbatim
            
            @param extent: The temporal extent object that is equivalent 
                           during this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=5, end_time=6 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
            >>> A.equivalent(B)
            True
            >>> B.equivalent(A)
            True
+           
+           @endcode
         """
         if  self.D["end_time"] is None and extent.D["end_time"] is None:
             if self.D["start_time"] == extent.D["start_time"]:
@@ -439,21 +507,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def overlapped(self, extent):
         """!Return True if this temporal extent (A) overlapped the provided 
            temporal extent (B)
+           @verbatim
            A  |---------|
            B    |---------|
-           
+           @endverbatim
            @param extent: The temporal extent object that is overlaps 
                           this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=6, end_time=8 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> B = AbstractTemporalExtent(start_time=6, end_time=8 )
            >>> A.overlapped(B)
            True
            >>> B.overlapped(A)
            False
+           
+           @endcode
         """
         if  self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
@@ -468,21 +540,26 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
     def overlaps(self, extent):
         """!Return True if this temporal extent (A) overlapps the provided 
            temporal extent (B)
+           @verbatim
            A    |---------|
            B  |---------|
+           @endverbatim
            
            @param extent: The temporal extent object that is overlapped 
                           this extent
            
            Usage:
            
-           >>> import grass.temporal as tgis
-           >>> A = tgis.AbstractTemporalExtent(start_time=6, end_time=8 )
-           >>> B = tgis.AbstractTemporalExtent(start_time=5, end_time=7 )
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=6, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
            >>> A.overlaps(B)
            True
            >>> B.overlaps(A)
            False
+           
+           @endcode
         """
         if  self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
@@ -663,17 +740,20 @@ class AbsoluteTemporalExtent(AbstractTemporalExtent):
 ###############################################################################
 
 class RasterAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, timezone=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, 
+                 timezone=None):
         AbsoluteTemporalExtent.__init__(self, "raster_absolute_time",
             ident, start_time, end_time, timezone)
 
 class Raster3DAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, timezone=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, 
+                 timezone=None):
         AbsoluteTemporalExtent.__init__(self, "raster3d_absolute_time",
             ident, start_time, end_time, timezone)
 
 class VectorAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, timezone=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, 
+                 timezone=None):
         AbsoluteTemporalExtent.__init__(self, "vector_absolute_time",
             ident, start_time, end_time, timezone)
 
@@ -687,8 +767,9 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> A = tgis.STDSAbsoluteTime(table="strds_absolute_time",
+        @code
+        
+        >>> A = STDSAbsoluteTime(table="strds_absolute_time",
         ... ident="strds@PERMANENT", start_time=datetime(2001, 01, 01),
         ... end_time=datetime(2005,01,01), granularity="1 days",
         ... map_time="interval")
@@ -713,6 +794,8 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         end_time=2005-01-01 00:00:00
         granularity=1 days
         map_time=interval
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None, 
                  granularity=None, timezone=None, map_time=None):
@@ -808,9 +891,10 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
         start_time and end_time must be of type integer
        
         Usage:
+        
+        @code
        
-        >>> import grass.temporal as tgis
-        >>> A = tgis.RelativeTemporalExtent(table="raster_absolute_time",
+        >>> A = RelativeTemporalExtent(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=0, end_time=1, unit="years")
         >>> A.id
         'soil@PERMANENT'
@@ -829,6 +913,8 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
         start_time=0
         end_time=1
         unit=years
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None, 
                  unit=None):
@@ -916,9 +1002,10 @@ class STDSRelativeTime(RelativeTemporalExtent):
         start_time and end_time must be of type integer
        
         Usage:
+        
+        @code
        
-        >>> import grass.temporal as tgis
-        >>> A = tgis.STDSRelativeTime(table="raster_absolute_time",
+        >>> A = STDSRelativeTime(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=0, end_time=1, unit="years",
         ... granularity=5, map_time="interval")
         >>> A.id
@@ -946,6 +1033,8 @@ class STDSRelativeTime(RelativeTemporalExtent):
         unit=years
         granularity=5
         map_time=interval
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None, 
                  unit=None, granularity=None, map_time=None):

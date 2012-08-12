@@ -6,6 +6,8 @@ Temporal GIS related spatial extent functions to be used in Python scripts and t
 
 Usage:
 
+@code
+
 >>> import grass.temporal as tgis
 >>> extent = tgis.RasterSpatialExtent( 
 ... ident="raster@PERMANENT", north=90, south=90, east=180, west=180,
@@ -26,6 +28,7 @@ Usage:
 ... ident="stvds@PERMANENT", north=90, south=90, east=180, west=180,
 ... top=100, bottom=-20)
 
+@endcode
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -43,8 +46,11 @@ class SpatialExtent(SQLDatabaseInterface):
         This class implements a three dimensional axis aligned bounding box
         and functions to compute topological relationships
         
-        >>> import grass.temporal as tgis
-        >>> extent = tgis.SpatialExtent(table="raster_spatial_extent", 
+        Usage:
+        
+        @code
+        
+        >>> extent = SpatialExtent(table="raster_spatial_extent", 
         ... ident="soil@PERMANENT", north=90, south=90, east=180, west=180,
         ... top=100, bottom=-20)
         >>> extent.id
@@ -76,6 +82,8 @@ class SpatialExtent(SQLDatabaseInterface):
         west=180.0
         top=100.0
         bottom=-20.0
+        
+        @endcode
     """
     def __init__(self, table=None, ident=None, north=None, south=None, 
                  east=None, west=None, top=None, bottom=None, proj="XY"):
@@ -98,7 +106,8 @@ class SpatialExtent(SQLDatabaseInterface):
         """
 
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute overlapping_2d for spatial extents"))
+            core.error(_("Projections are different. Unable to compute "
+                         "overlapping_2d for spatial extents"))
             return False
 
         N = extent.get_north()
@@ -142,11 +151,14 @@ class SpatialExtent(SQLDatabaseInterface):
            
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> A = tgis.SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
         >>> A.overlapping(B)
         True
+        
+        @endcode
         """
 
         if not self.overlapping_2d(extent):
@@ -164,8 +176,8 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def intersect_2d(self, extent):
-        """!Return the two dimensional intersection as spatial_extent object or None
-           in case no intersection was found.
+        """!Return the two dimensional intersection as spatial_extent 
+           object or None in case no intersection was found.
         """
 
         if not self.overlapping_2d(extent):
@@ -211,14 +223,15 @@ class SpatialExtent(SQLDatabaseInterface):
         return new
 
     def intersect(self, extent):
-        """!Return the three dimensional intersection as spatial_extent object or None
-        in case no intersection was found.
+        """!Return the three dimensional intersection as spatial_extent 
+        object or None in case no intersection was found.
         
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> A = tgis.SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -228,7 +241,7 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 10.0
          | Top:........................ 50.0
          | Bottom:..................... -50.0
-        >>> B = tgis.SpatialExtent(north=40, south=30, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=10, bottom=-50, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -238,7 +251,7 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 10.0
          | Top:........................ 50.0
          | Bottom:..................... -50.0
-        >>> B = tgis.SpatialExtent(north=40, south=30, east=60, west=30, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, bottom=-50, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -248,7 +261,7 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 30.0
          | Top:........................ 50.0
          | Bottom:..................... -50.0
-        >>> B = tgis.SpatialExtent(north=40, south=30, east=60, west=30, bottom=-30, top=50)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, bottom=-30, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -258,7 +271,7 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 30.0
          | Top:........................ 50.0
          | Bottom:..................... -30.0
-        >>> B = tgis.SpatialExtent(north=40, south=30, east=60, west=30, bottom=-30, top=30)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, bottom=-30, top=30)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -268,6 +281,8 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 30.0
          | Top:........................ 30.0
          | Bottom:..................... -30.0
+         
+         @endcode
         """
 
         if not self.overlapping(extent):
@@ -295,15 +310,19 @@ class SpatialExtent(SQLDatabaseInterface):
         return new
 
     def is_in_2d(self, extent):
-        """Check two dimensional if the self is located in extent
-
+        """!Check two dimensional if the self is located in extent
+        
+        @verbatim
          _____
         |A _  |
         | |_| |
         |_____|B 
+        
+        @endverbatim
         """
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute is_in_2d for spatial extents"))
+            core.error(_("Projections are different. Unable to compute "
+                         "is_in_2d for spatial extents"))
             return False
 
         eN = extent.get_north()
@@ -338,17 +357,20 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def is_in(self, extent):
-        """Check three dimensional if the self is located in extent 
+        """!Check three dimensional if the self is located in extent 
         
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> A = tgis.SpatialExtent(north=79, south=21, east=59, west=11, bottom=-49, top=49)
-        >>> B = tgis.SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        @code
+        
+        >>> A = SpatialExtent(north=79, south=21, east=59, west=11, bottom=-49, top=49)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
         >>> A.is_in(B)
         True
         >>> B.is_in(A)
         False
+        
+        @endcode
         """
         if not self.is_in_2d(extent):
             return False
@@ -367,18 +389,19 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def contain_2d(self, extent):
-        """Check two dimensional if self contains extent """
+        """!Check two dimensional if self contains extent """
         return extent.is_in_2d(self)
 
     def contain(self, extent):
-        """Check three dimensional if self contains extent """
+        """!Check three dimensional if self contains extent """
         return extent.is_in(self)
 
     def equivalent_2d(self, extent):
-        """Check two dimensional if self is equivalent to extent """
+        """!Check two dimensional if self is equivalent to extent """
 
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute equivalent_2d for spatial extents"))
+            core.error(_("Projections are different. Unable to compute "
+                         "equivalent_2d for spatial extents"))
             return False
 
         eN = extent.get_north()
@@ -413,7 +436,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def equivalent(self, extent):
-        """Check three dimensional if self is equivalent to extent """
+        """!Check three dimensional if self is equivalent to extent """
 
         if not self.equivalent_2d(extent):
             return False
@@ -432,7 +455,9 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def cover_2d(self, extent):
-        """Return True if two dimensional self covers extent
+        """!Return True if two dimensional self covers extent
+           
+           @verbatim
             _____    _____    _____    _____
            |A  __|  |__  A|  |A | B|  |B | A|
            |  |B |  | B|  |  |  |__|  |__|  |
@@ -447,6 +472,8 @@ class SpatialExtent(SQLDatabaseInterface):
            |A|B  |  |_____|A |A|B|A|  |_____|A
            | |   |  |B    |  | | | |  |_____|B
            |_|___|  |_____|  |_|_|_|  |_____|A
+           
+           @endverbatim
 
            The following cases are excluded:
            * contain
@@ -513,7 +540,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def cover(self, extent):
-        """Return True if three dimensional self covers extent
+        """!Return True if three dimensional self covers extent
 
            The following cases are excluded:
            * contain
@@ -598,22 +625,27 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def covered_2d(self, extent):
-        """Check two dimensional if self is covered by  extent """
+        """!Check two dimensional if self is covered by  extent """
 
         return extent.cover_2d(self)
 
     def covered(self, extent):
-        """Check three dimensional if self is covered by extent """
+        """!Check three dimensional if self is covered by extent """
 
         return extent.cover(self)
 
     def overlap_2d(self, extent):
-        """Return True if the two dimensional extents overlap. Code is lend from wind_overlap.c in lib/gis
+        """!Return True if the two dimensional extents overlap. Code is 
+           lend from wind_overlap.c in lib/gis
+           
+           @verbatim
             _____
            |A  __|__
            |  |  | B|
            |__|__|  |
               |_____|
+              
+           @endverbatim
 
            The following cases are excluded:
            * contain
@@ -668,7 +700,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def overlap(self, extent):
-        """Return True if the three dimensional extents overlap
+        """!Return True if the three dimensional extents overlap
 
            The following cases are excluded:
            * contain
@@ -731,22 +763,26 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def meet_2d(self, extent):
-        """ Check if self and extent meet each other in two dimensions
+        """!Check if self and extent meet each other in two dimensions
+        
+        @verbatim
           _____ _____    _____ _____
          |  A  |  B  |  |  B  |  A  |
          |_____|     |  |     |     |
                |_____|  |_____|_____|
 
-                 ___
-                | A |
-                |   |
-                |___|    _____
-               |  B  |  |  B  |
-               |     |  |     |
-               |_____|  |_____|_
-                          |  A  |
-                          |     |
-                          |_____|
+           ___
+          | A |
+          |   |
+          |___|    _____
+         |  B  |  |  B  |
+         |     |  |     |
+         |_____|  |_____|_
+                    |  A  |
+                    |     |
+                    |_____|
+         
+         @endverbatim
 
         """
 
@@ -805,7 +841,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def meet(self, extent):
-        """ Check if self and extent meet each other in three dimensions"""
+        """!Check if self and extent meet each other in three dimensions"""
         eN = extent.get_north()
         eS = extent.get_south()
         eE = extent.get_east()
@@ -880,7 +916,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def disjoint_2d(self, extent):
-        """Return True if the two dimensional extents are disjoint
+        """!Return True if the two dimensional extents are disjoint
         """
 
         if self.overlapping_2d(extent) or self.meet_2d(extent):
@@ -888,7 +924,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def disjoint(self, extent):
-        """Return True if the three dimensional extents are disjoint
+        """!Return True if the three dimensional extents are disjoint
         """
 
         if self.overlapping(extent) or self.meet(extent):
@@ -896,7 +932,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def spatial_relation_2d(self, extent):
-        """Returns the two dimensional spatial relation between self and extent
+        """!Returns the two dimensional spatial relation between self and extent
 
         Spatial relations are:
         * disjoint
@@ -931,7 +967,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return "unknown"
 
     def spatial_relation(self, extent):
-        """Returns the three dimensional spatial relation between self and extent
+        """!Returns the three dimensional spatial relation between self and extent
 
         Spatial relations are:
         * disjoint
@@ -946,19 +982,20 @@ class SpatialExtent(SQLDatabaseInterface):
         
         Usage:
         
-        >>> import grass.temporal as tgis
-        >>> A = tgis.SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
         >>> A.spatial_relation(B)
         'equivalent'
         >>> B.spatial_relation(A)
         'equivalent'
-        >>> B = tgis.SpatialExtent(north=70, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=70, south=20, east=60, west=10, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'cover'
         >>> A.spatial_relation(B)
         'cover'
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=70, south=30, east=60, west=10, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'cover'
         >>> A.spatial_relation(B)
@@ -967,135 +1004,137 @@ class SpatialExtent(SQLDatabaseInterface):
         'covered'
         >>> B.spatial_relation(A)
         'covered'
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=50, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=70, south=30, east=50, west=10, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'cover'
         >>> B.spatial_relation_2d(A)
         'covered'
         >>> A.spatial_relation(B)
         'cover'
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
         >>> B.spatial_relation(A)
         'covered'
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'contain'
         >>> A.spatial_relation(B)
         'cover'
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=50, west=20, bottom=-40, top=50)
+        >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-40, top=50)
         >>> A.spatial_relation(B)
         'cover'
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=50, west=20, bottom=-40, top=40)
+        >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-40, top=40)
         >>> A.spatial_relation(B)
         'contain'
         >>> B.spatial_relation(A)
         'in'
-        >>> B = tgis.SpatialExtent(north=90, south=30, east=50, west=20, bottom=-40, top=40)
+        >>> B = SpatialExtent(north=90, south=30, east=50, west=20, bottom=-40, top=40)
         >>> A.spatial_relation_2d(B)
         'overlap'
         >>> A.spatial_relation(B)
         'overlap'
-        >>> B = tgis.SpatialExtent(north=90, south=5, east=70, west=5, bottom=-40, top=40)
+        >>> B = SpatialExtent(north=90, south=5, east=70, west=5, bottom=-40, top=40)
         >>> A.spatial_relation_2d(B)
         'in'
         >>> A.spatial_relation(B)
         'overlap'
-        >>> B = tgis.SpatialExtent(north=90, south=5, east=70, west=5, bottom=-40, top=60)
+        >>> B = SpatialExtent(north=90, south=5, east=70, west=5, bottom=-40, top=60)
         >>> A.spatial_relation(B)
         'overlap'
-        >>> B = tgis.SpatialExtent(north=90, south=5, east=70, west=5, bottom=-60, top=60)
+        >>> B = SpatialExtent(north=90, south=5, east=70, west=5, bottom=-60, top=60)
         >>> A.spatial_relation(B)
         'in'
-        >>> A = tgis.SpatialExtent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=60, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=60, south=20, east=60, west=10, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'meet'
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=60, south=40, east=60, west=10, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=60, south=40, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'meet'
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=40, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=40, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'meet'
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=90, south=30, east=60, west=40, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=90, south=30, east=60, west=40, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'meet'
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=70, south=50, east=60, west=40, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=70, south=50, east=60, west=40, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'meet'
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=60, south=20, east=60, west=40, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=60, south=20, east=60, west=40, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'meet'
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=40, south=20, east=60, west=40, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=40, south=20, east=60, west=40, bottom=-50, top=50)
         >>> A.spatial_relation_2d(B)
         'disjoint'
         >>> A.spatial_relation(B)
         'disjoint'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=60, south=20, east=60, west=40, bottom=-60, top=60)
+        >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=60, south=20, east=60, west=40, bottom=-60, top=60)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-        >>> B = tgis.SpatialExtent(north=90, south=30, east=60, west=40, bottom=-40, top=40)
+        >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=90, south=30, east=60, west=40, bottom=-40, top=40)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-        >>> B = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+        >>> B = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-        >>> B = tgis.SpatialExtent(north=80, south=50, east=60, west=30, bottom=-50, top=0)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+        >>> B = SpatialExtent(north=80, south=50, east=60, west=30, bottom=-50, top=0)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-        >>> B = tgis.SpatialExtent(north=70, south=50, east=50, west=30, bottom=-50, top=0)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+        >>> B = SpatialExtent(north=70, south=50, east=50, west=30, bottom=-50, top=0)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-        >>> B = tgis.SpatialExtent(north=90, south=30, east=70, west=10, bottom=-50, top=0)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+        >>> B = SpatialExtent(north=90, south=30, east=70, west=10, bottom=-50, top=0)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=50, west=10, bottom=-50, top=0)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+        >>> B = SpatialExtent(north=70, south=30, east=50, west=10, bottom=-50, top=0)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-        >>> B = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+        >>> B = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-        >>> B = tgis.SpatialExtent(north=80, south=50, east=60, west=30, bottom=0, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+        >>> B = SpatialExtent(north=80, south=50, east=60, west=30, bottom=0, top=50)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-        >>> B = tgis.SpatialExtent(north=70, south=50, east=50, west=30, bottom=0, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+        >>> B = SpatialExtent(north=70, south=50, east=50, west=30, bottom=0, top=50)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-        >>> B = tgis.SpatialExtent(north=90, south=30, east=70, west=10, bottom=0, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+        >>> B = SpatialExtent(north=90, south=30, east=70, west=10, bottom=0, top=50)
         >>> A.spatial_relation(B)
         'meet'
-        >>> A = tgis.SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-        >>> B = tgis.SpatialExtent(north=70, south=30, east=50, west=10, bottom=0, top=50)
+        >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+        >>> B = SpatialExtent(north=70, south=30, east=50, west=10, bottom=0, top=50)
         >>> A.spatial_relation(B)
         'meet'
+        
+        @endverbatim
         """
 
         if self.equivalent(extent):
@@ -1118,7 +1157,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return "unknown"
 
     def set_spatial_extent(self, north, south, east, west, top, bottom):
-        """Set the spatial extent"""
+        """!Set the spatial extent"""
 
         self.set_north(north)
         self.set_south(south)
@@ -1128,7 +1167,7 @@ class SpatialExtent(SQLDatabaseInterface):
         self.set_bottom(bottom)
 
     def set_projection(self, proj):
-        """Set the projection of the spatial extent it should be XY or LL.
+        """!Set the projection of the spatial extent it should be XY or LL.
            As default the projection is XY
         """
         if proj is None or (proj != "XY" and proj != "LL"):
@@ -1144,54 +1183,54 @@ class SpatialExtent(SQLDatabaseInterface):
         self.set_west(west)
 
     def set_id(self, ident):
-        """Convenient method to set the unique identifier (primary key)"""
+        """!Convenient method to set the unique identifier (primary key)"""
         self.ident = ident
         self.D["id"] = ident
 
     def set_north(self, north):
-        """Set the northern edge of the map"""
+        """!Set the northern edge of the map"""
         if north is not None:
             self.D["north"] = float(north)
         else:
             self.D["north"] = None
 
     def set_south(self, south):
-        """Set the southern edge of the map"""
+        """!Set the southern edge of the map"""
         if south is not None:
             self.D["south"] = float(south)
         else:
             self.D["south"] = None
 
     def set_west(self, west):
-        """Set the western edge of the map"""
+        """!Set the western edge of the map"""
         if west is not None:
             self.D["west"] = float(west)
         else:
             self.D["west"] = None
 
     def set_east(self, east):
-        """Set the eastern edge of the map"""
+        """!Set the eastern edge of the map"""
         if east is not None:
             self.D["east"] = float(east)
         else:
             self.D["east"] = None
 
     def set_top(self, top):
-        """Set the top edge of the map"""
+        """!Set the top edge of the map"""
         if top is not None:
             self.D["top"] = float(top)
         else:
             self.D["top"] = None
 
     def set_bottom(self, bottom):
-        """Set the bottom edge of the map"""
+        """!Set the bottom edge of the map"""
         if bottom is not None:
             self.D["bottom"] = float(bottom)
         else:
             self.D["bottom"] = None
 
     def get_id(self):
-        """Convenient method to get the unique identifier (primary key)
+        """!Convenient method to get the unique identifier (primary key)
            @return None if not found
         """
         if "id" in self.D:
@@ -1200,15 +1239,16 @@ class SpatialExtent(SQLDatabaseInterface):
             return None
 
     def get_projection(self):
-        """Get the projection of the spatial extent"""
+        """!Get the projection of the spatial extent"""
         return self.D["proj"]
 
     def get_volume(self):
-        """Compute the volume of the extent, in case z is zero 
+        """!Compute the volume of the extent, in case z is zero 
            (top == bottom or top - bottom = 1) the area is returned"""
 
         if self.get_projection() == "LL":
-            core.error(_("Volume computation is not supported for LL projections"))
+            core.error(_("Volume computation is not supported "
+                         "for LL projections"))
 
         area = self.get_area()
 
@@ -1222,10 +1262,11 @@ class SpatialExtent(SQLDatabaseInterface):
         return area * z
 
     def get_area(self):
-        """Compute the area of the extent, extent in z direction is ignored"""
+        """!Compute the area of the extent, extent in z direction is ignored"""
 
         if self.get_projection() == "LL":
-            core.error(_("Area computation is not supported for LL projections"))
+            core.error(_("Area computation is not supported "
+                         "for LL projections"))
 
         bbox = self.get_spatial_extent()
 
@@ -1235,18 +1276,20 @@ class SpatialExtent(SQLDatabaseInterface):
         return x * y
 
     def get_spatial_extent(self):
-        """Return a tuple (north, south, east, west, top, bottom) of the spatial extent"""
+        """!Return a tuple (north, south, east, west, top, bottom) 
+           of the spatial extent"""
 
         return (
-            self.get_north(), self.get_south, self.get_east(), self.get_west(),
-            self.get_top(), self.get_bottom())
+            self.north, self.south, self.east, self.west,
+            self.top, self.bottom)
 
     def get_spatial_extent_2d(self):
-        """Return a tuple (north, south, east, west,) of the 2d spatial extent"""
-        return (self.get_north(), self.get_south, self.get_east(), self.get_west())
+        """!Return a tuple (north, south, east, west,) of the 2d spatial extent
+        """
+        return (self.north, self.south, self.east, self.west)
 
     def get_north(self):
-        """Get the northern edge of the map
+        """!Get the northern edge of the map
            @return None if not found"""
         if "north" in self.D:
             return self.D["north"]
@@ -1254,7 +1297,7 @@ class SpatialExtent(SQLDatabaseInterface):
             return None
 
     def get_south(self):
-        """Get the southern edge of the map
+        """!Get the southern edge of the map
            @return None if not found"""
         if "south" in self.D:
             return self.D["south"]
@@ -1262,7 +1305,7 @@ class SpatialExtent(SQLDatabaseInterface):
             return None
 
     def get_east(self):
-        """Get the eastern edge of the map
+        """!Get the eastern edge of the map
            @return None if not found"""
         if "east" in self.D:
             return self.D["east"]
@@ -1270,7 +1313,7 @@ class SpatialExtent(SQLDatabaseInterface):
             return None
 
     def get_west(self):
-        """Get the western edge of the map
+        """!Get the western edge of the map
            @return None if not found"""
         if "west" in self.D:
             return self.D["west"]
@@ -1278,7 +1321,7 @@ class SpatialExtent(SQLDatabaseInterface):
             return None
 
     def get_top(self):
-        """Get the top edge of the map
+        """!Get the top edge of the map
            @return None if not found"""
         if "top" in self.D:
             return self.D["top"]
@@ -1286,7 +1329,7 @@ class SpatialExtent(SQLDatabaseInterface):
             return None
 
     def get_bottom(self):
-        """Get the bottom edge of the map
+        """!Get the bottom edge of the map
            @return None if not found"""
         if "bottom" in self.D:
             return self.D["bottom"]
@@ -1302,7 +1345,7 @@ class SpatialExtent(SQLDatabaseInterface):
     bottom= property(fget=get_bottom, fset=set_bottom)
 
     def print_info(self):
-        """Print information about this class in human readable style"""
+        """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Spatial extent ----------------------------------------+"
         print " | North:...................... " + str(self.get_north())
@@ -1325,37 +1368,38 @@ class SpatialExtent(SQLDatabaseInterface):
 ###############################################################################
 
 class RasterSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, 
+                 west=None, top=None, bottom=None):
         SpatialExtent.__init__(self, "raster_spatial_extent",
                                 ident, north, south, east, west, top, bottom)
 
-
 class Raster3DSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, 
+                 west=None, top=None, bottom=None):
         SpatialExtent.__init__(self, "raster3d_spatial_extent",
                                 ident, north, south, east, west, top, bottom)
 
-
 class VectorSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, 
+                 west=None, top=None, bottom=None):
         SpatialExtent.__init__(self, "vector_spatial_extent",
                                 ident, north, south, east, west, top, bottom)
 
-
 class STRDSSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, 
+                 west=None, top=None, bottom=None):
         SpatialExtent.__init__(self, "strds_spatial_extent",
                                 ident, north, south, east, west, top, bottom)
 
-
 class STR3DSSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, 
+                 west=None, top=None, bottom=None):
         SpatialExtent.__init__(self, "str3ds_spatial_extent",
                                 ident, north, south, east, west, top, bottom)
 
-
 class STVDSSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, 
+                 west=None, top=None, bottom=None):
         SpatialExtent.__init__(self, "stvds_spatial_extent",
                                 ident, north, south, east, west, top, bottom)
 
