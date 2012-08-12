@@ -71,7 +71,7 @@ void RTreeInitNode(struct RTree *t, struct RTree_Node *n, int type)
 }
 
 /* Make a new node and initialize to have all branch cells empty. */
-struct RTree_Node *RTreeNewNode(struct RTree *t, int level)
+struct RTree_Node *RTreeAllocNode(struct RTree *t, int level)
 {
     int i;
     struct RTree_Node *n;
@@ -83,7 +83,7 @@ struct RTree_Node *RTreeNewNode(struct RTree *t, int level)
     n->level = level;
 
     for (i = 0; i < MAXCARD; i++) {
-	RTreeNewRect(&(n->branch[i].rect), t);
+	RTreeAllocBoundary(&(n->branch[i].rect), t);
 	RTreeInitBranch[NODETYPE(level, t->fd)](&(n->branch[i]), t);
     }
 
@@ -97,7 +97,7 @@ void RTreeFreeNode(struct RTree_Node *n)
     assert(n);
 
     for (i = 0; i < MAXCARD; i++)
-	free(n->branch[i].rect.boundary);
+	RTreeFreeBoundary(&(n->branch[i].rect));
 
     free(n);
 }
@@ -433,7 +433,7 @@ static struct RTree_ListBranch *RTreeNewListBranch(struct RTree *t)
        (struct RTree_ListBranch *)malloc(sizeof(struct RTree_ListBranch));
 
     assert(p);
-    RTreeNewRect(&(p->b.rect), t);
+    RTreeAllocBoundary(&(p->b.rect), t);
 
     return p;
 }
@@ -578,7 +578,7 @@ int RTreeAddBranch(struct RTree_Branch *b, struct RTree_Node *n,
 	    if (t->fd > -1)
 		RTreeInitNode(t, *newnode, NODETYPE(n->level, t->fd));
 	    else
-		*newnode = RTreeNewNode(t, (n)->level);
+		*newnode = RTreeAllocNode(t, (n)->level);
 	    RTreeSplitNode(n, b, *newnode, t);
 	    return 1;
 	}

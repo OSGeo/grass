@@ -692,7 +692,7 @@ Vect_line_intersection(struct line_pnts *APoints,
      *  in bound box */
 
     /* Create rtree for B line */
-    MyRTree = RTreeNewIndex(-1, 0, 2);
+    MyRTree = RTreeCreateTree(-1, 0, 2);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
@@ -756,7 +756,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     }
 
     /* Free RTree */
-    RTreeFreeIndex(MyRTree);
+    RTreeDestroyTree(MyRTree);
 
     G_debug(2, "n_cross = %d", n_cross);
     /* Lines do not cross each other */
@@ -1239,7 +1239,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
      *  in bound box */
 
     /* Create rtree for B line */
-    MyRTree = RTreeNewIndex(-1, 0, 2);
+    MyRTree = RTreeCreateTree(-1, 0, 2);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
@@ -1309,7 +1309,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     }
 
     /* Free RTree */
-    RTreeFreeIndex(MyRTree);
+    RTreeDestroyTree(MyRTree);
 
     return cross_found;
 }

@@ -31,7 +31,7 @@
  * ndims number of dimensions
  * returns pointer to RTree structure
  */
-struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
+struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 {
     struct RTree *new_rtree;
     struct RTree_Node *n;
@@ -65,7 +65,7 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
                             sizeof(RectReal *) + new_rtree->rectsize;
     
     /* create empty root node */
-    n = RTreeNewNode(new_rtree, 0);
+    n = RTreeAllocNode(new_rtree, 0);
     new_rtree->rootlevel = n->level = 0;       /* leaf */
     new_rtree->root = NULL;
 
@@ -89,11 +89,11 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
 
 	    /* alloc memory for rectangles */
 	    for (j = 0; j < MAXCARD; j++) {
-		RTreeNewRect(&(new_rtree->nb[i][0].n.branch[j].rect), new_rtree);
-		RTreeNewRect(&(new_rtree->nb[i][1].n.branch[j].rect), new_rtree);
-		RTreeNewRect(&(new_rtree->nb[i][2].n.branch[j].rect), new_rtree);
+		RTreeAllocBoundary(&(new_rtree->nb[i][0].n.branch[j].rect), new_rtree);
+		RTreeAllocBoundary(&(new_rtree->nb[i][1].n.branch[j].rect), new_rtree);
+		RTreeAllocBoundary(&(new_rtree->nb[i][2].n.branch[j].rect), new_rtree);
 
-		RTreeNewRect(&(new_rtree->fs[i].sn.branch[j].rect), new_rtree);
+		RTreeAllocBoundary(&(new_rtree->fs[i].sn.branch[j].rect), new_rtree);
 	    }
 	}
 
@@ -136,25 +136,25 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
     new_rtree->n_leafs = 0;
 
     /* initialize temp variables */
-    RTreeNewRect(&(new_rtree->p.cover[0]), new_rtree);
-    RTreeNewRect(&(new_rtree->p.cover[1]), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->p.cover[0]), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->p.cover[1]), new_rtree);
     
-    RTreeNewRect(&(new_rtree->tmpb1.rect), new_rtree);
-    RTreeNewRect(&(new_rtree->tmpb2.rect), new_rtree);
-    RTreeNewRect(&(new_rtree->c.rect), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->tmpb1.rect), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->tmpb2.rect), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->c.rect), new_rtree);
     for (i = 0; i <= MAXCARD; i++) {
-	RTreeNewRect(&(new_rtree->BranchBuf[i].rect), new_rtree);
+	RTreeAllocBoundary(&(new_rtree->BranchBuf[i].rect), new_rtree);
     }
-    RTreeNewRect(&(new_rtree->rect_0), new_rtree);
-    RTreeNewRect(&(new_rtree->rect_1), new_rtree);
-    RTreeNewRect(&(new_rtree->upperrect), new_rtree);
-    RTreeNewRect(&(new_rtree->orect), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->rect_0), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->rect_1), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->upperrect), new_rtree);
+    RTreeAllocBoundary(&(new_rtree->orect), new_rtree);
     new_rtree->center_n = (RectReal *)malloc(new_rtree->ndims_alloc * sizeof(RectReal));
 
     return new_rtree;
 }
 
-void RTreeFreeIndex(struct RTree *t)
+void RTreeDestroyTree(struct RTree *t)
 {
     int i, j;
 
@@ -173,29 +173,28 @@ void RTreeFreeIndex(struct RTree *t)
 
 	    /* free memory for rectangles */
 	    for (j = 0; j < MAXCARD; j++) {
-		free(t->nb[i][0].n.branch[j].rect.boundary);
-		free(t->nb[i][1].n.branch[j].rect.boundary);
-		free(t->nb[i][2].n.branch[j].rect.boundary);
-
-		free(t->fs[i].sn.branch[j].rect.boundary);
+		RTreeFreeBoundary(&(t->nb[i][0].n.branch[j].rect));
+		RTreeFreeBoundary(&(t->nb[i][1].n.branch[j].rect));
+		RTreeFreeBoundary(&(t->nb[i][2].n.branch[j].rect));
+		RTreeFreeBoundary(&(t->fs[i].sn.branch[j].rect));
 	    }
 	}
     }
 
     /* free temp variables */
-    free(t->p.cover[0].boundary);
-    free(t->p.cover[1].boundary);
+    RTreeFreeBoundary(&(t->p.cover[0]));
+    RTreeFreeBoundary(&(t->p.cover[1]));
     
-    free(t->tmpb1.rect.boundary);
-    free(t->tmpb2.rect.boundary);
-    free(t->c.rect.boundary);
+    RTreeFreeBoundary(&(t->tmpb1.rect));
+    RTreeFreeBoundary(&(t->tmpb2.rect));
+    RTreeFreeBoundary(&(t->c.rect));
     for (i = 0; i <= MAXCARD; i++) {
-	free(t->BranchBuf[i].rect.boundary);
+        RTreeFreeBoundary(&(t->BranchBuf[i].rect));
     }
-    free(t->rect_0.boundary);
-    free(t->rect_1.boundary);
-    free(t->upperrect.boundary);
-    free(t->orect.boundary);
+    RTreeFreeBoundary(&(t->rect_0));
+    RTreeFreeBoundary(&(t->rect_1));
+    RTreeFreeBoundary(&(t->upperrect));
+    RTreeFreeBoundary(&(t->orect));
     free(t->center_n);
 
     free(t);
@@ -295,7 +294,7 @@ void RTreeReInsertNode(struct RTree_Node *n, struct RTree_ListNode **ee)
  */
 void RTreeFreeListBranch(struct RTree_ListBranch *p)
 {
-    free(p->b.rect.boundary);
+    RTreeFreeBoundary(&(p->b.rect));
     free(p);
 }
 

@@ -92,7 +92,6 @@ RectReal RTreeRectMargin(struct RTree_Rect *, struct RTree *);
 void RTreeCombineRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 void RTreeExpandRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 int RTreeCompareRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
-void RTreePrintRect(struct RTree_Rect *, int, struct RTree *);
 
 /*-----------------------------------------------------------------------------
 | Copy second rectangle to first rectangle.

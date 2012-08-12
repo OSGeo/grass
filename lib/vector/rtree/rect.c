@@ -31,18 +31,81 @@
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+/**-----------------------------------------------------------------------------
+ \brief Create a new rectangle for a given tree
 
-/*-----------------------------------------------------------------------------
-| Create a new rectangle for a given tree
+ This method allocates a new rectangle and initializes
+ the internal boundary coordinates based on the tree dimension.
+
+ Hence a call to RTreeNewBoundary() is not necessary.
+
+ \param t: The pointer to a RTree struct
+ \return A new allocated RTree_Rect struct
 -----------------------------------------------------------------------------*/
-void RTreeNewRect(struct RTree_Rect *r, struct RTree *t)
+struct RTree_Rect *RTreeAllocRect(struct RTree *t)
 {
+    struct RTree_Rect *r;
+
+    assert(t);
+
+    r = (struct RTree_Rect *)malloc(sizeof(struct RTree_Rect));
+
+    assert(r);
+
+    RTreeAllocBoundary(r, t);
+    return r;
+}
+
+/**----------------------------------------------------------------------------
+ \brief Delete a rectangle
+
+ This method deletes (free) the allocated memory of a rectangle.
+
+ \param r: The pointer to the rectangle to be deleted
+-----------------------------------------------------------------------------*/
+void RTreeFreeRect(struct RTree_Rect *r)
+{
+    assert(r);
+    RTreeFreeBoundary(r);
+    free(r);
+}
+
+/**----------------------------------------------------------------------------
+ \brief Allocate the boundary array of a rectangle for a given tree
+
+ This method allocated the boundary coordinates array in
+ provided rectangle. It does not release previously allocated memory.
+
+ \param r: The  pointer to rectangle to initialize the boundary coordinates.
+           This is usually a rectangle that was created on the stack or
+           self allocated.
+ \param t: The pointer to a RTree struct
+-----------------------------------------------------------------------------*/
+void RTreeAllocBoundary(struct RTree_Rect *r, struct RTree *t)
+{
+    assert(r && t);
     r->boundary = (RectReal *)malloc(t->rectsize);
     assert(r->boundary);
 }
 
-/*-----------------------------------------------------------------------------
-| Initialize a rectangle to have all 0 coordinates.
+/**----------------------------------------------------------------------------
+ \brief Delete the boundary of a rectangle
+
+ This method deletes (free) the memory of the boundary of a rectangle
+ and sets the boundary pointer to NULL.
+
+ \param r: The pointer to the rectangle to delete the boundary from.
+-----------------------------------------------------------------------------*/
+void RTreeFreeBoundary(struct RTree_Rect *r)
+{
+    assert(r);
+    if(r->boundary)
+        free(r->boundary);
+    r->boundary = NULL;
+}
+
+/**-----------------------------------------------------------------------------
+ \brief Initialize a rectangle to have all 0 coordinates.
 -----------------------------------------------------------------------------*/
 void RTreeInitRect(struct RTree_Rect *r, struct RTree *t)
 {
@@ -52,6 +115,109 @@ void RTreeInitRect(struct RTree_Rect *r, struct RTree *t)
 	r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal) 0;
 }
 
+/**-----------------------------------------------------------------------------
+ \brief Set one dimensional coordinates of a rectangle for a given tree.
+
+ All coordinates of the rectangle will be initialized to 0 before
+ the x coordinates are set.
+
+ \param r: The pointer to the rectangle
+ \param t: The pointer to the RTree
+ \param x_min: The lower x coordinate
+ \param x_max: The higher x coordinate
+-----------------------------------------------------------------------------*/
+void RTreeSetRect1D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max)
+{
+    RTreeInitRect(r, t);
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
+}
+
+/**-----------------------------------------------------------------------------
+ \brief Set two dimensional coordinates of a rectangle for a given tree.
+
+ All coordinates of the rectangle will be initialized to 0 before
+ the x and y coordinates are set.
+
+ \param r: The pointer to the rectangle
+ \param t: The pointer to the RTree
+ \param x_min: The lower x coordinate
+ \param x_max: The higher x coordinate
+ \param y_min: The lower y coordinate
+ \param y_max: The higher y coordinate
+-----------------------------------------------------------------------------*/
+void RTreeSetRect2D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max, double y_min, double y_max)
+{
+    RTreeInitRect(r, t);
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
+    r->boundary[1] = (RectReal)y_min;
+    r->boundary[1 + t->ndims_alloc] = (RectReal)y_max;
+}
+
+/**-----------------------------------------------------------------------------
+ \brief Set three dimensional coordinates of a rectangle for a given tree.
+
+ All coordinates of the rectangle will be initialized to 0 before
+ the x,y and z coordinates are set.
+
+ \param r: The pointer to the rectangle
+ \param t: The pointer to the RTree
+ \param x_min: The lower x coordinate
+ \param x_max: The higher x coordinate
+ \param y_min: The lower y coordinate
+ \param y_max: The higher y coordinate
+ \param z_min: The lower z coordinate
+ \param z_max: The higher z coordinate
+-----------------------------------------------------------------------------*/
+void RTreeSetRect3D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max, double y_min, double y_max, double z_min,
+                   double z_max)
+{
+    RTreeInitRect(r, t);
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
+    r->boundary[1] = (RectReal)y_min;
+    r->boundary[1 + t->ndims_alloc] = (RectReal)y_max;
+    r->boundary[2] = (RectReal)z_min;
+    r->boundary[2 + t->ndims_alloc] = (RectReal)z_max;
+}
+
+/**-----------------------------------------------------------------------------
+ \brief Set 4 dimensional coordinates of a rectangle for a given tree.
+
+ All coordinates of the rectangle will be initialized to 0 before
+ the x,y,z and t coordinates are set.
+
+ \param r: The pointer to the rectangle
+ \param t: The pointer to the RTree
+ \param x_min: The lower x coordinate
+ \param x_max: The higher x coordinate
+ \param y_min: The lower y coordinate
+ \param y_max: The higher y coordinate
+ \param z_min: The lower z coordinate
+ \param z_max: The higher z coordinate
+ \param t_min: The lower t coordinate
+ \param t_max: The higher t coordinate
+-----------------------------------------------------------------------------*/
+void RTreeSetRect4D(struct RTree_Rect *r, struct RTree *t, double x_min,
+                   double x_max, double y_min, double y_max, double z_min,
+                   double z_max, double t_min, double t_max)
+{
+    assert(t->ndims >= 4);
+
+    RTreeInitRect(r, t);
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
+    r->boundary[1] = (RectReal)y_min;
+    r->boundary[1 + t->ndims_alloc] = (RectReal)y_max;
+    r->boundary[2] = (RectReal)z_min;
+    r->boundary[2 + t->ndims_alloc] = (RectReal)z_max;
+    r->boundary[3] = (RectReal)t_min;
+    r->boundary[3 + t->ndims_alloc] = (RectReal)t_max;
+}
 /*-----------------------------------------------------------------------------
 | Return a rect whose first low side is higher than its opposite side -
 | interpreted as an undefined rect.

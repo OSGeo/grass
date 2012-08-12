@@ -47,22 +47,22 @@ int dig_spidx_init(struct Plus_head *Plus)
 	
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Node_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Node_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
 
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Line_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Line_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
 
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Area_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Area_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
 
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Isle_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Isle_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
 
 	Plus->Face_spidx = NULL;
@@ -70,10 +70,10 @@ int dig_spidx_init(struct Plus_head *Plus)
 	Plus->Hole_spidx = NULL;
     }
     else {
-	Plus->Node_spidx = RTreeNewIndex(-1, 0, ndims);
-	Plus->Line_spidx = RTreeNewIndex(-1, 0, ndims);
-	Plus->Area_spidx = RTreeNewIndex(-1, 0, ndims);
-	Plus->Isle_spidx = RTreeNewIndex(-1, 0, ndims);
+	Plus->Node_spidx = RTreeCreateTree(-1, 0, ndims);
+	Plus->Line_spidx = RTreeCreateTree(-1, 0, ndims);
+	Plus->Area_spidx = RTreeCreateTree(-1, 0, ndims);
+	Plus->Isle_spidx = RTreeCreateTree(-1, 0, ndims);
 	Plus->Face_spidx = NULL;
 	Plus->Volume_spidx = NULL;
 	Plus->Hole_spidx = NULL;
@@ -109,15 +109,15 @@ void dig_spidx_free_nodes(struct Plus_head *Plus)
 	char *filename;
 	
 	close(Plus->Node_spidx->fd);
-	RTreeFreeIndex(Plus->Node_spidx);
+	RTreeDestroyTree(Plus->Node_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Node_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Node_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
     }
     else {
-	RTreeFreeIndex(Plus->Node_spidx);
-	Plus->Node_spidx = RTreeNewIndex(-1, 0, ndims);
+	RTreeDestroyTree(Plus->Node_spidx);
+	Plus->Node_spidx = RTreeCreateTree(-1, 0, ndims);
     }
 }
 
@@ -138,15 +138,15 @@ void dig_spidx_free_lines(struct Plus_head *Plus)
 	char *filename;
 	
 	close(Plus->Line_spidx->fd);
-	RTreeFreeIndex(Plus->Line_spidx);
+	RTreeDestroyTree(Plus->Line_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Line_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Line_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
     }
     else {
-	RTreeFreeIndex(Plus->Line_spidx);
-	Plus->Line_spidx = RTreeNewIndex(-1, 0, ndims);
+	RTreeDestroyTree(Plus->Line_spidx);
+	Plus->Line_spidx = RTreeCreateTree(-1, 0, ndims);
     }
 }
 
@@ -167,15 +167,15 @@ void dig_spidx_free_areas(struct Plus_head *Plus)
 	char *filename;
 	
 	close(Plus->Area_spidx->fd);
-	RTreeFreeIndex(Plus->Area_spidx);
+	RTreeDestroyTree(Plus->Area_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Area_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Area_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
     }
     else {
-	RTreeFreeIndex(Plus->Area_spidx);
-	Plus->Area_spidx = RTreeNewIndex(-1, 0, ndims);
+	RTreeDestroyTree(Plus->Area_spidx);
+	Plus->Area_spidx = RTreeCreateTree(-1, 0, ndims);
     }
 }
 
@@ -196,15 +196,15 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
 	char *filename;
 	
 	close(Plus->Isle_spidx->fd);
-	RTreeFreeIndex(Plus->Isle_spidx);
+	RTreeDestroyTree(Plus->Isle_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-	Plus->Isle_spidx = RTreeNewIndex(fd, 0, ndims);
+	Plus->Isle_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
     }
     else {
-	RTreeFreeIndex(Plus->Isle_spidx);
-	Plus->Isle_spidx = RTreeNewIndex(-1, 0, ndims);
+	RTreeDestroyTree(Plus->Isle_spidx);
+	Plus->Isle_spidx = RTreeCreateTree(-1, 0, ndims);
     }
 }
 
@@ -218,22 +218,22 @@ void dig_spidx_free(struct Plus_head *Plus)
     /* Node spidx */
     if (Plus->Node_spidx->fd > -1)
 	close(Plus->Node_spidx->fd);
-    RTreeFreeIndex(Plus->Node_spidx);
+    RTreeDestroyTree(Plus->Node_spidx);
 
     /* Line spidx */
     if (Plus->Line_spidx->fd > -1)
 	close(Plus->Line_spidx->fd);
-    RTreeFreeIndex(Plus->Line_spidx);
+    RTreeDestroyTree(Plus->Line_spidx);
 
     /* Area spidx */
     if (Plus->Area_spidx->fd > -1)
 	close(Plus->Area_spidx->fd);
-    RTreeFreeIndex(Plus->Area_spidx);
+    RTreeDestroyTree(Plus->Area_spidx);
 
     /* Isle spidx */
     if (Plus->Isle_spidx->fd > -1)
 	close(Plus->Isle_spidx->fd);
-    RTreeFreeIndex(Plus->Isle_spidx);
+    RTreeDestroyTree(Plus->Isle_spidx);
 
     /* 3D future : */
     /* Face spidx */

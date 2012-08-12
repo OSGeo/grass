@@ -204,7 +204,7 @@ int RTreeInsertRectM(struct RTree_Rect *r, union RTree_Child child, int level,
     if (result == 1) {		/* root split */
 	/* grow a new root, & tree taller */
 	t->rootlevel++;
-	newroot = RTreeNewNode(t, t->rootlevel);
+	newroot = RTreeAllocNode(t, t->rootlevel);
 	newroot->level = t->rootlevel;
 	/* branch for old root */
 	RTreeNodeCover(t->root, &(b->rect), t);
@@ -237,7 +237,7 @@ int RTreeInsertRectM(struct RTree_Rect *r, union RTree_Child child, int level,
 	    if (result == 1) {	/* root split */
 		/* grow a new root, & tree taller */
 		t->rootlevel++;
-		newroot = RTreeNewNode(t, t->rootlevel);
+		newroot = RTreeAllocNode(t, t->rootlevel);
 		newroot->level = t->rootlevel;
 		/* branch for old root */
 		RTreeNodeCover(t->root, &(b->rect), t);

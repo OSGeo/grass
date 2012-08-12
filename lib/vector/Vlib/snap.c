@@ -127,7 +127,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
 	rtreefd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 	remove(filename);
     }
-    RTree = RTreeNewIndex(rtreefd, 0, 2);
+    RTree = RTreeCreateTree(rtreefd, 0, 2);
 
     thresh2 = thresh * thresh;
 
@@ -438,7 +438,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     G_free(XPnts);
     G_free(Index);
     G_free(New);
-    RTreeFreeIndex(RTree);
+    RTreeDestroyTree(RTree);
     if (rtreefd >= 0)
 	close(rtreefd);
 
