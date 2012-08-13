@@ -3,19 +3,28 @@
 <em>v.in.lidar</em> converts LiDAR point clouds in LAS format to a GRASS 
 vector, using the <a href="http://www.liblas.org">libLAS</a> library. 
 The created vector is true 3D with x, y, z coordinates.
-<p>The typical file extensions for the LAS format are .las and .laz (compressed). 
+<p>
+The typical file extensions for the LAS format are .las and .laz (compressed). 
 The compressed LAS format can be imported only if libLAS has been compiled 
 with laszip support. It is also recommended to compile libLAS with GDAL, 
-needed to text for matching projections.
-<p>For larger datasets, it is recommended to not build topology (-b flag).
+needed to test for matching projections.
+<p>
+For larger datasets, it is recommended to not build topology (-b flag).
 Also, creating a table with attributes can take some time for larger datasets.
-
-<p>The optional <b>spatial</b> parameter defines spatial query extents.
+<p>
+The optional <b>spatial</b> parameter defines spatial query extents.
 This parameter allows the user to restrict the region to a spatial subset
 while importing the data. All LiDAR points falling into this rectangle 
 subregion are imported. The <b>-r</b> current region flag is identical, 
 but uses the current region settings as the spatial bounds 
 (see <em><a href="g.region.html">g.region</a></em>).
+<p>
+A LiDAR pulse can have multiple returns. The first return values can be 
+used to obtain a digital surface model (DSM) where e.g. canopy cover is 
+represented. The last return values can be used to obtain a digital 
+terrain model (DTM) where e.g. the forest floor instead of canopy 
+cover is represented. The <b>filter</b> option allows to select one of 
+first, mid, or last returns.
 
 <h2>Location Creation</h2>
 
