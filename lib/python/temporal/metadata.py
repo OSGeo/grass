@@ -509,15 +509,11 @@ class Raster3DMetadata(RasterMetadataBase):
 
 class VectorMetadata(SQLDatabaseInterface):
     """!This is the vector metadata class
-       
+        
         This class is the interface to the vector_metadata table in the
         temporal database that stores the metadata of all registered 
-        3D raster maps.
+        vector maps.
         
-        The metadata includes all raster metadata variables and additional
-        the number of depths, the top-bottom resolution and the space time 3D
-        raster dataset register table is stored.
-       
         Usage:
         
         @code
@@ -693,7 +689,8 @@ class VectorMetadata(SQLDatabaseInterface):
             return None
 
     def get_3d_info(self):
-        """!Return True if the map is three dimensional, False if not and None if not info was found"""
+        """!Return True if the map is three dimensional, 
+           False if not and None if not info was found"""
         if "is_3d" in self.D:
             return self.D["is_3d"]
         else:
@@ -976,11 +973,12 @@ class STDSMetadataBase(SQLDatabaseInterface):
 
 class STDSRasterMetadataBase(STDSMetadataBase):
     """!This is the space time dataset metadata base 
-       class for strds and str3ds datasets
+        class for strds and str3ds datasets
 
-       Most of the metadata values are set by triggers in the database when
-       new raster or voxel maps are added. Therefor only some 
-       set- an many get-functions are available.
+        Most of the metadata values are set by SQL scripts in the database when
+        new maps are added. Therefor only some set- an many 
+        get-functions are available.
+        
        
         Usage:
         
@@ -1168,6 +1166,10 @@ class STRDSMetadata(STDSRasterMetadataBase):
         temporal database that stores the metadata of all registered 
         space time raster datasets
         
+        Most of the metadata values are set by SQL scripts in the database when
+        new raster maps are added. Therefor only some set- an many 
+        get-functions are available.
+        
         Usage:
         
         @code
@@ -1259,11 +1261,15 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
 
 class STR3DSMetadata(STDSRasterMetadataBase):
-    """!This is the space time raster3d metadata class
+    """!This is the space time 3D raster metadata class
     
         This class is the interface to the str3ds_metadata table in the
         temporal database that stores the metadata of all registered 
         space time 3D raster datasets
+        
+        Most of the metadata values are set by SQL scripts in the database when
+        new 3D raster maps are added. Therefor only some set- an many 
+        get-functions are available.
         
         Usage:
         
@@ -1391,8 +1397,12 @@ class STR3DSMetadata(STDSRasterMetadataBase):
 
 class STVDSMetadata(STDSMetadataBase):
     """!This is the space time vector dataset metadata class
-    
-       Most of the metadata values are set by triggers in the database when
+        
+       This class is the interface to the stvds_metadata table in the
+       temporal database that stores the metadata of all registered 
+       space time vector datasets
+        
+       Most of the metadata values are set by SQL scripts in the database when
        new vector maps are added. Therefor only some set- an many get-functions
        are available.
         

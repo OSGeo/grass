@@ -206,11 +206,11 @@ def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
 def adjust_datetime_to_granularity(mydate, granularity):
     """!Modify the datetime object to fit the given granularity    
     
-        * Years will start at the first of Januar
-        * Months will start at the first day of the month
-        * Days will start at the first Hour of the day
-        * Hours will start at the first minute of an hour
-        * Minutes will start at the first second of a minute
+        - Years will start at the first of Januar
+        - Months will start at the first day of the month
+        - Days will start at the first Hour of the day
+        - Hours will start at the first minute of an hour
+        - Minutes will start at the first second of a minute
         
         Usage:
         

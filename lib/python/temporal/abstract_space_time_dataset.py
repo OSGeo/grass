@@ -213,9 +213,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            The map list must be ordered by start time
 
            The temporal type can be:
-           * point    -> only the start time is present
-           * interval -> start and end time
-           * invalid  -> No valid time point or interval found
+           
+           - point    -> only the start time is present
+           - interval -> start and end time
+           - invalid  -> No valid time point or interval found
 
            @param maps: A sorted (start_time) list of AbstractDataset objects
            @param dbif: The database interface to be used
@@ -318,23 +319,24 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            Allowed and not allowed temporal relationships for correct topology:
            @verbatim
-           * after      -> allowed
-           * precedes   -> allowed
-           * follows    -> allowed
-           * precedes   -> allowed
+           - after      -> allowed
+           - precedes   -> allowed
+           - follows    -> allowed
+           - precedes   -> allowed
 
-           * equivalent -> not allowed
-           * during     -> not allowed
-           * contains   -> not allowed
-           * overlaps   -> not allowed
-           * overlapped -> not allowed
-           * starts     -> not allowed
-           * finishes   -> not allowed
-           * started    -> not allowed
-           * finished   -> not allowed
+           - equivalent -> not allowed
+           - during     -> not allowed
+           - contains   -> not allowed
+           - overlaps   -> not allowed
+           - overlapped -> not allowed
+           - starts     -> not allowed
+           - finishes   -> not allowed
+           - started    -> not allowed
+           - finished   -> not allowed
            @endverbatim
 
            @param maps: A sorted (start_time) list of AbstractDataset objects
+           @param dbif: The database interface to be used
            @return True if topology is correct
         """
         if maps is None:
@@ -419,7 +421,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                   only the start time is used for sampling. In case of mixed 
                   of interval data the user can chose between:
                   
-                  * start: Select maps of which the start time is 
+                  - start: Select maps of which the start time is 
                     located in the selection granule
                     @verbatim
                     map    :        s
@@ -432,14 +434,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     granule:  s-----------------e
                     @endverbatim
 
-                  * during: Select maps which are temporal 
+                  - during: Select maps which are temporal 
                     during the selection granule
                     @verbatim
                     map    :     s-----------e
                     granule:  s-----------------e
                     @endverbatim
 
-                  * overlap: Select maps which temporal overlap 
+                  - overlap: Select maps which temporal overlap 
                     the selection granule
                     @verbatim
                     map    :     s-----------e
@@ -449,28 +451,28 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     granule:  s----------e
                     @endverbatim
 
-                  * contain: Select maps which temporally contain 
+                  - contain: Select maps which temporally contain 
                     the selection granule
                     @verbatim
                     map    :  s-----------------e
                     granule:     s-----------e
                     @endverbatim
 
-                  * equal: Select maps which temporally equal 
+                  - equal: Select maps which temporally equal 
                     to the selection granule
                     @verbatim
                     map    :  s-----------e
                     granule:  s-----------e
                     @endverbatim
 
-                  * follows: Select maps which temporally follow 
+                  - follows: Select maps which temporally follow 
                     the selection granule
                     @verbatim
                     map    :              s-----------e
                     granule:  s-----------e
                     @endverbatim
 
-                  * precedes: Select maps which temporally precedes 
+                  - precedes: Select maps which temporally precedes 
                     the selection granule
                     @verbatim
                     map    :  s-----------e
@@ -735,8 +737,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            @param order: The SQL order statement to be used to order the 
                          objects in the list without "ORDER BY"
            @param dbif: The database interface to be used
-
-           In case nothing found None is returned
+           @return The ordered map object list, 
+                   In case nothing found None is returned
         """
 
         dbif, connect = init_dbif(dbif)

@@ -310,18 +310,28 @@ class AbstractDataset(object):
         return statement
 
     def set_time_to_absolute(self):
+        """!Set the temporal type to absolute"""
         self.base.set_ttype("absolute")
 
     def set_time_to_relative(self):
+        """!Set the temporal type to relative"""
         self.base.set_ttype("relative")
 
     def is_time_absolute(self):
+        """!Return True in case the temporal type is absolute
+        
+        @return True if temporal type is absolute, False otherwise
+        """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "absolute"
         else:
             return None
 
     def is_time_relative(self):
+        """!Return True in case the temporal type is relative
+        
+        @return True if temporal type is relative, False otherwise
+        """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "relative"
         else:
