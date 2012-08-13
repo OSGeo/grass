@@ -9,8 +9,11 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Html.make
 include $(MODULE_TOPDIR)/include/Make/Compile.make
+include $(MODULE_TOPDIR)/include/Make/Rest.make
 
-cmd: $(BIN)/$(PGM)$(EXE) html
+cmd: $(BIN)/$(PGM)$(EXE) html restdocs
+
+restdocs: $(BIN)/$(PGM)$(EXE) rest
 
 $(BIN)/$(PGM)$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
 	$(call linker)

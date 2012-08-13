@@ -3,6 +3,7 @@ MODULE_TOPDIR = ../..
 PGM=grocat
 include $(MODULE_TOPDIR)/include/Make/Etc.make
 include $(MODULE_TOPDIR)/include/Make/NoHtml.make
+include $(MODULE_TOPDIR)/include/Make/NoRest.make
 
 TCLSRC := $(wildcard *.tcl)
 TCLDST := $(patsubst %.tcl,$(ETC)/gtcltk/%.tcl,$(TCLSRC))
