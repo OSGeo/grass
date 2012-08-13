@@ -1,20 +1,40 @@
+/*!
+   \file lib/vector/rtree/index.c
 
-/****************************************************************************
-* MODULE:       R-Tree library 
-*              
-* AUTHOR(S):    Antonin Guttman - original code
-*               Daniel Green (green@superliminal.com) - major clean-up
-*                               and implementation of bounding spheres
-*               Markus Metz - file-based and memory-based R*-tree
-*               
-* PURPOSE:      Multidimensional index
-*
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*****************************************************************************/
+   \brief R-Tree library - Multidimensional index
+
+   Higher level functions for managing R*-Trees.
+
+   (C) 2010-2012 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Antonin Guttman - original code
+   \author Daniel Green (green@superliminal.com) - major clean-up
+	       and implementation of bounding spheres
+   \author Markus Metz - file-based and memory-based R*-tree
+ */
+
+/* Read these articles first before attempting to modify the code
+ * 
+ * R-Tree reference:
+ * Guttman, A. (1984). "R-Trees: A Dynamic Index Structure for Spatial
+ * Searching". Proceedings of the 1984 ACM SIGMOD international 
+ * conference on Management of data - SIGMOD '84. pp. 47.
+ * DOI:10.1145/602259.602266
+ * ISBN 0897911288
+ *  
+ * R*-Tree reference:
+ * Beckmann, N.; Kriegel, H. P.; Schneider, R.; Seeger, B. (1990).
+ * "The R*-tree: an efficient and robust access method for points and 
+ * rectangles". Proceedings of the 1990 ACM SIGMOD international 
+ * conference on Management of data - SIGMOD '90. pp. 322.
+ * DOI:10.1145/93597.98741
+ * ISBN 0897913655
+ */
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -22,15 +42,22 @@
 #include <assert.h>
 #include <grass/gis.h>
 #include "index.h"
-//#include "card.h"
 
-/* 
- * Make a new index, empty.
- * fp pointer to file holding index, file must be opened as w+
- * rootpos postion of rootnode (past any header info)
- * ndims number of dimensions
- * returns pointer to RTree structure
- */
+/*!
+  \brief Create new empty R*-Tree
+
+  This method creates a new RTree, either in memory (fd < 0) or in file.
+  If the file descriptor is positive, the corresponding file must have 
+  been opened for reading and writing.
+  This method must also be called if an existing tree previously saved
+  to file is going to be accessed.
+
+  \param fd file descriptor to hold data, negative toggles memory mode
+  \param rootpos offset in file to root node (past any header info)
+  \param ndims number of dimensions for the new tree: min 2, max 20
+
+  \return pointer to new RTree structure
+*/
 struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 {
     struct RTree *new_rtree;
@@ -154,6 +181,19 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     return new_rtree;
 }
 
+/*!
+  \brief Destroy an R*-Tree
+
+  This method releases all memory allocated to a RTree. It deletes all 
+  rectangles and all memory allocated for internal support data.
+  Note that for a file-based RTree, the file is not deleted and not 
+  closed. The file can thus be used to permanently store an RTree.
+
+  \param t pointer to RTree structure
+
+  \return nothing
+*/
+
 void RTreeDestroyTree(struct RTree *t)
 {
     int i, j;
@@ -202,10 +242,23 @@ void RTreeDestroyTree(struct RTree *t)
     return;
 }
 
+/*!
+  \brief Search an R*-Tree
+
+  Search in an RTree for all data retangles that overlap or touch the 
+  argument rectangle.
+  Return the number of qualifying data rectangles.
+  The search stops if the SearchHitCallBack function returns 0 (zero)
+  or if there are no more qualifying data rectangles.
+
+  \param t pointer to RTree structure
+  \param r pointer to rectangle to use for searching
+  \param shcb Search Hit CallBack function
+  \param cbarg custom pointer used as argument for the shcb fn
+
+  \return number of qualifying data rectangles
+*/
 /*
- * Search in an index tree for all data retangles that
- * overlap or touch the argument rectangle.
- * Return the number of qualifying data rects.
  * 
  * add option to select operator to select rectangles ?
  * current: overlap
@@ -221,12 +274,15 @@ int RTreeSearch(struct RTree *t, struct RTree_Rect *r,
     return t->search_rect(t, r, shcb, cbarg);
 }
 
-/* 
- * Insert a data rectangle into an RTree index structure.
- * r pointer to rectangle
- * tid data id stored with rectangle, must be > 0
- * t RTree where rectangle should be inserted
- */
+/*!
+  \brief Insert an item into a R*-Tree
+
+  \param r pointer to rectangle to use for searching
+  \param tid data id stored with rectangle, must be > 0
+  \param t pointer to RTree structure
+
+  \return number of qualifying data rectangles
+*/
 int RTreeInsertRect(struct RTree_Rect *r, int tid, struct RTree *t)
 {
     union RTree_Child newchild;
@@ -239,18 +295,21 @@ int RTreeInsertRect(struct RTree_Rect *r, int tid, struct RTree *t)
     return t->insert_rect(r, newchild, 0, t);
 }
 
-/* 
- * Delete a data rectangle from an index structure.
- * Pass in a pointer to a Rect, the tid of the record, ptr RTree.
- * Returns 1 if record not found, 0 if success.
- * RTreeDeleteRect1 provides for eliminating the root.
- *
- * RTreeDeleteRect() should be called by external functions instead of 
- * RTreeDeleteRect1()
- * wrapper for RTreeDeleteRect1 not really needed, but restricts 
- * compile warnings to rtree lib
- * this way it's easier to fix if necessary? 
- */
+/*!
+  \brief Delete an item from a R*-Tree
+  
+  This method deletes an item from the RTree. The rectangle passed to 
+  this method does not need to be the exact rectangle, the only
+  requirement is that this rectangle overlaps with the rectangle to 
+  be deleted. The rectangle to be deleted is identified by its id.
+
+  \param r pointer to rectangle to use for searching
+  \param tid id of the data to be deleted, must be > 0
+  \param t pointer to RTree structure
+
+  \return 0 on success
+  \return 1 if data item not found
+*/
 int RTreeDeleteRect(struct RTree_Rect *r, int tid, struct RTree *t)
 {
     union RTree_Child child;
@@ -261,6 +320,12 @@ int RTreeDeleteRect(struct RTree_Rect *r, int tid, struct RTree *t)
 
     return t->delete_rect(r, child, t);
 }
+
+
+/***********************************
+ *    internally used functions    *
+ ***********************************/ 
+
 
 /*
  * Allocate space for a node in the list used in DeleteRect to
@@ -290,7 +355,7 @@ void RTreeReInsertNode(struct RTree_Node *n, struct RTree_ListNode **ee)
 }
 
 /* 
- * Free ListBranch
+ * Free ListBranch, used by R*-type forced reinsertion
  */
 void RTreeFreeListBranch(struct RTree_ListBranch *p)
 {
