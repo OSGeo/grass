@@ -364,6 +364,8 @@ class SwipeMapFrame(DoubleMapFrame):
                    entry = 'wxGUI.MapSwipe')
 
     def OnCloseWindow(self, event):
+        self.GetFirstMap().Clean()
+        self.GetSecondMap().Clean()
         self.Destroy()
 
 
