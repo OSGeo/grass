@@ -179,7 +179,7 @@ class PreferencesBaseDialog(wx.Dialog):
             if lang:
                 RunCommand('g.gisenv', set = 'LANG=%s' % lang)
             else:
-                RunCommand('g.gisenv', set = 'LANG=')
+                RunCommand('g.gisenv', unset = 'LANG')
             event = wxSettingsChanged()
             wx.PostEvent(self, event)
             self.Close()
