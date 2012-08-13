@@ -24,7 +24,7 @@ it is being specified solely in square meters.
 <h3>Supported OGR Vector Formats</h3>
 
 <a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI
-Shapefile</a><br>
+Shapefile</a><br />
 <a href="http://www.gdal.org/ogr/drv_mitab.html">Mapinfo File</a>
 
 <p>Further available drivers such as UK .NTF, SDTS, TIGER, IHO S-57 (ENC),
@@ -81,53 +81,53 @@ Alternate method:
 <div class="code"><pre>
 v.in.ogr dsn=/home/user/shape_data layer=test_shape output=grass_map 
 </pre></div>
-<br>
+<br />
 
 <li><b>MapInfo files</b>
 <div class="code"><pre>
 v.in.ogr dsn=./ layer=mapinfo_test output=grass_map
 </pre></div>
-<br>
+<br />
 
-<li><b>Arc Coverage</b><br>
+<li><b>Arc Coverage</b><br />
  We import the Arcs and Label points, the module takes care to
- build areas:<br>
+ build areas:<br />
 <div class="code"><pre>
 v.in.ogr dsn=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
-<br>
+<br />
 
-<li><b>E00 file</b> (see also <em><a href="v.in.e00.html">v.in.e00</a></em>)<br>
+<li><b>E00 file</b> (see also <em><a href="v.in.e00.html">v.in.e00</a></em>)<br />
  First we have to convert the E00 file to an Arc Coverage with 'avcimport' 
  (<a href="http://avce00.maptools.org/avce00/index.html">AVCE00 tools</a>,
- use <em>e00conv</em> first in case that <em>avcimport</em> fails):<br>
+ use <em>e00conv</em> first in case that <em>avcimport</em> fails):<br />
 <div class="code"><pre>
 avcimport e00file coverage
 v.in.ogr dsn=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
-<br>
+<br />
 
-<li><b>SDTS files</b> (you have to select the CATD file)<br>
+<li><b>SDTS files</b> (you have to select the CATD file)<br />
 <div class="code"><pre>
 v.in.ogr dsn=CITXCATD.DDF output=cities
 </pre></div>
-<br>
+<br />
 
-<li><b>TIGER files</b><br>
+<li><b>TIGER files</b><br />
 <div class="code"><pre>
 v.in.ogr dsn=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
 type=boundary,centroid snap=-1
 </pre></div>
-<br>
+<br />
 
-<li><b>PostGIS maps</b> (area example)<br>
+<li><b>PostGIS maps</b> (area example)<br />
 <div class="code"><pre>
 v.in.ogr dsn="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 </pre></div>
-<br>
+<br />
 
-<li><b>Oracle Spatial maps </b><br>
+<li><b>Oracle Spatial maps </b><br />
 Note that you have to set the environment-variables <tt>ORACLE_BASE,
 ORACLE_SID, ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt> accordingly.
 <div class="code"><pre>
@@ -159,14 +159,14 @@ db.select table=river
 
 <h2>NOTES</h2>
 
-The characters used for table column names are limited. Supported are:<br>
+The characters used for table column names are limited. Supported are:<br />
 <div class="code"><pre>
 [A-Za-z][A-Za-z0-9_]*
 </pre></div>
 
 This means that SQL neither supports '.' (dots) nor '-' (minus) nor '#' in table
 column names. Also a table name must start with a character, not a number.
-<br>
+<br />
 <em>v.in.ogr</em> converts '.', '-' and '#' to '_' (underscore) during import.
 The <em>-w</em> flag changes capital column names to lowercase characters as
 a convenience for SQL usage (lowercase column names avoid the need to quote them
@@ -194,13 +194,13 @@ areas are imported. Otherwise tiny areas are filtered out during import
 <h2>ERROR MESSAGES</h2>
 
 <i>"ERROR: DBMI-DBF driver error:
-SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'"</i><br>
+SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'"</i><br />
 
 indicates that a column name corresponds to a reserved SQL word (here: 'DESC').
 A different column name should be used. The <em>cnames</em> parameter can be used
 to assign different column names on the fly.
 
-<p><i>"ERROR: Projection of dataset does not appear to match the current location."</i><br>
+<p><i>"ERROR: Projection of dataset does not appear to match the current location."</i><br />
 
 You need to create a location whose projection matches the data you
 wish to import. Try using <em>location</em> parameter to create a new location based
@@ -209,7 +209,7 @@ it to another location with <em>v.proj</em>.
 
 <h2>REFERENCES</h2>
 
-<a href="http://www.gdal.org/ogr/">OGR vector library</a> <br>
+<a href="http://www.gdal.org/ogr/">OGR vector library</a> <br />
 <a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation
 
 
@@ -224,7 +224,7 @@ it to another location with <em>v.proj</em>.
 <a href="v.external.html">v.external</a>,
 <a href="v.in.db.html">v.in.db</a>,
 <a href="v.in.e00.html">v.in.e00</a>,
-<a href="v.out.ogr.html">v.out.ogr</a>,<br>
+<a href="v.out.ogr.html">v.out.ogr</a>,<br />
 <a href="grass-pg.html">PostGIS driver</a>
 </em>
 
@@ -232,7 +232,7 @@ it to another location with <em>v.proj</em>.
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-irst, Trento, Italy
-<br>
+<br />
 Location and spatial extent support by Markus Neteler and Paul Kelly
 
 <p><i>Last changed: $Date$</i>

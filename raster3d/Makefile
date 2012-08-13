@@ -27,3 +27,6 @@ default: htmldir
 
 htmldir: parsubdirs
 
+restdocs: restdir
+
+restdir: parsubdirs

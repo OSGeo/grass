@@ -146,3 +146,13 @@ $(HTMLDIR)/r.in.png:
 
 $(HTMLDIR)/r.out.png:
 	# no-op - override Html.make rule for .png image files
+
+restdocs: restdir
+	 
+restdir: parsubdirs
+         $(RESTDIR)/r.in.png:
+	     # no-op - override Html.make rule for .png image files
+
+         $(RESTDIR)/r.out.png:
+	     # no-op - override Html.make rule for .png image files
+
