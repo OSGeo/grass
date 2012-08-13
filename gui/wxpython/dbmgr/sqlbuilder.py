@@ -49,7 +49,6 @@ class SQLBuilder(wx.Frame):
                              wx.BITMAP_TYPE_ICO))
         
         self.parent     = parent
-        self.evtHandler = None
         
         # variables
         self.vectmap = vectmap # fullname
@@ -355,10 +354,6 @@ class SQLBuilder(wx.Frame):
         return self.text_sql.GetValue().strip().replace("\n"," ")
         
     def OnClose(self, event):
-        """!Close button pressed"""
-        if self.evtHandler:
-            self.evtHandler(event = 'close')
-        
         self.Destroy()
         event.Skip()
  
@@ -497,6 +492,13 @@ class SQLBuilderSelect(SQLBuilder):
     def CloseOnApply(self):
         """!Return True if the dialog will be close on apply"""
         return self.close_onapply.IsChecked()
+
+    def OnClose(self, event):
+        """!Close button pressed"""
+        if self.evtHandler:
+            self.evtHandler(event = 'close')
+    
+        SQLBuilder.OnClose(self, event)
 
 class SQLBuilderUpdate(SQLBuilder):
     """!Class for building UPDATE SQL statement"""
