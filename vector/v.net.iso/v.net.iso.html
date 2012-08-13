@@ -12,13 +12,15 @@ length / speed = 10 km / (100 km/h) = 0.1 h.
 Supported are cost assignments for both arcs and nodes, 
 and also different costs for both directions of a vector line. 
 For areas, costs will be calculated along boundary lines.
-<p>The input vector needs to be prepared with <em>v.net operation=connect</em> 
+<p>
+The input vector needs to be prepared with <em>v.net operation=connect</em> 
 in order to connect points representing center nodes to the network.
 
 <h2>NOTES</h2>
 
 Nodes and arcs can be closed using cost = -1. 
-<p>Nodes must be on the isolines.
+<p>
+Nodes must be on the isolines.
 
 
 <h2>EXAMPLES</h2>
@@ -26,13 +28,17 @@ Nodes and arcs can be closed using cost = -1.
 The map must contain at least one center (point) on the vector network 
 which can be patched into with <a href="v.net.html">v.net</a>.
 
-<p>Isonetwork using distance:
-<p><img src="vnetiso.png" alt="v.net.iso example with distance" border="1">
+<p>
+Isonetwork using distance:
+<p>
+<img src="vnetiso.png" alt="v.net.iso example with distance" border="1">
 
-<p>Isonetwork using time:
-<p><img src="vnetisotime.png" alt="v.net.iso example with traveling time" border="1">
+<p>
+Isonetwork using time:
+<p>
+<img src="vnetisotime.png" alt="v.net.iso example with traveling time" border="1">
 
-<p><h4>Subdivision of a network using distance:</h4>
+<h4>Subdivision of a network using distance:</h4>
 
 <div class="code"><pre>
 # Spearfish
@@ -150,13 +156,15 @@ d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.path.html">d.path</a></em>,
-<em><a href="v.net.html">v.net</a></em>,
-<em><a href="v.net.alloc.html">v.net.alloc</a></em>,
-<em><a href="v.net.path.html">v.net.path</a></em>,
-<em><a href="v.net.salesman.html">v.net.salesman</a></em>,
-<em><a href="v.net.steiner.html">v.net.steiner</a></em>,
-<em><a href="v.patch.html">v.patch</a></em>
+<em>
+<a href="d.path.html">d.path</a>,
+<a href="v.net.html">v.net</a>,
+<a href="v.net.alloc.html">v.net.alloc</a>,
+<a href="v.net.path.html">v.net.path</a>,
+<a href="v.net.salesman.html">v.net.salesman</a>,
+<a href="v.net.steiner.html">v.net.steiner</a>,
+<a href="v.patch.html">v.patch</a>
+</em>
 
 <h2>AUTHOR</h2>
 
