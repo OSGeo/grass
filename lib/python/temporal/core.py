@@ -9,7 +9,7 @@ SQL database and to establish a connection to the database.
 
 Usage:
 
-\code
+@code
 
 >>> import grass.temporal as tgis
 >>> # Create the temporal database
@@ -25,7 +25,7 @@ Usage:
 "SELECT name from raster_base where name = 'precipitation'"
 >>> dbif.close()
 
-\endcode
+@endcode
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -212,8 +212,8 @@ class SQLDatabaseInterfaceConnection():
     """!This class represents the database interface connection
 
        The following DBMS are supported:
-       * sqlite via the sqlite3 standard library
-       * postgresql via psycopg2
+         * sqlite via the sqlite3 standard library
+         * postgresql via psycopg2
 
     """
     def __init__(self):
@@ -250,6 +250,22 @@ class SQLDatabaseInterfaceConnection():
 
     def mogrify_sql_statement(self, content):
         """!Return the SQL statement and arguments as executable SQL string
+        
+           @param content: The content as tuple with two entries, the first 
+                           entry is the SQL statement with DBMI specific
+                           place holder (?), the second entry is the argument
+                           list that should substitue the place holder.
+            
+           Usage:
+           
+           @code
+           
+           >>> dbif = SQLDatabaseInterfaceConnection()
+           >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
+           ... ["soil@PERMANENT",]])
+           "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
+           
+           @endcode
         """
         sql = content[0]
         args = content[1]
@@ -350,13 +366,18 @@ def init_dbif(dbif):
         if not a new one will be created, connected and True will be returned
 
         Usage code sample:
-        \code
+        @code
         
-        dbif, connect = tgis.init_dbif(dbif)
+        dbif, connect = tgis.init_dbif(None)
+        
+        sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
+                                               ["id", "soil@PERMANENT"])
+        dbif.execute_transaction(sql)
+        
         if connect:
             dbif.close()
         
-        \code
+        @endcode
     """
     if dbif is None:
         dbif = SQLDatabaseInterfaceConnection()

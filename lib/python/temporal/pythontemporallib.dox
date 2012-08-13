@@ -8,20 +8,57 @@ TODO: add some documentation
 
 List of modules:
 
+Core functionality such as the database interface connection to sqlite3 
+and postgresql as well as the creation of the temporal database are defined here:
+
+- python::temporal::core
+
+In these modules are the temporal database interfaces for raster maps, 
+3D raster maps, vector maps and space time datasets defined. 
+
+Additionally the temporal and spatial extent modules implement the topological 
+relationship computation that is needed for spatio-temporal topology computation.
+
+- python::temporal::base
+- python::temporal::spatial_extent
+- python::temporal::temporal_extent
+- python::temporal::metadata
+
+Several "abstract" modules are defined that implement the shared functionality 
+of time stamped maps and space time datasets, such as temporal and spatial
+handling and representation. 
+
 - python::temporal::abstract_dataset
 - python::temporal::abstract_map_dataset
 - python::temporal::abstract_space_time_dataset
-- python::temporal::aggregation
-- python::temporal::base
-- python::temporal::core
-- python::temporal::datetime_math
-- python::temporal::metadata
+
+All dataset classes that are used in the GRASS temporal modules are specified
+here:
+
 - python::temporal::space_time_datasets
-- python::temporal::space_time_datasets_tools
-- python::temporal::spatial_extent
-- python::temporal::temporal_extent
-- python::temporal::temporal_granularity
+
+Helper functions to compute temporal granularity, handling of datetime objects
+and their conversion as well as topology computation are defined in these modules:
+
+- python::temporal::datetime_math
 - python::temporal::temporal_relationships
+- python::temporal::temporal_granularity
+
+Functionality that is shared between different temporal GRASS modules, such as
+map listing, map registration and unregistration, aggregation, extraction,
+map calculation, statistics as well as import and export of 
+space time datasets are defined here:
+
+- python::temporal::space_time_datasets_tools
+- python::temporal::aggregation
+- python::temporal::extract
+- python::temporal::mapcalc
+- python::temporal::stds_export
+- python::temporal::stds_import
+- python::temporal::univar_statistics
+
+Lots of unit tests:
+
 - python::temporal::unit_tests
 
 \section pythonTempAuthors Authors

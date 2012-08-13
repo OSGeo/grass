@@ -577,19 +577,20 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
            
            The following temporal relationships are supported:
-           * equivalent
-           * during
-           * contains
-           * overlaps
-           * overlapped
-           * after
-           * before
-           * starts
-           * finishes
-           * started
-           * finished
-           * follows
-           * precedes
+           
+               - equivalent
+               - during
+               - contains
+               - overlaps
+               - overlapped
+               - after
+               - before
+               - starts
+               - finishes
+               - started
+               - finished
+               - follows
+               - precedes
            
            @param extent: The temporal extent 
            @return The name of the temporal relation or None if no relation found
@@ -886,7 +887,7 @@ class STVDSAbsoluteTime(STDSAbsoluteTime):
 ###############################################################################
 
 class RelativeTemporalExtent(AbstractTemporalExtent):
-    """!This is the relative time class for all maps and spacetime datasets
+    """!This is the relative time class for all maps and space time datasets
 
         start_time and end_time must be of type integer
        
@@ -894,7 +895,7 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
         
         @code
        
-        >>> A = RelativeTemporalExtent(table="raster_absolute_time",
+        >>> A = RelativeTemporalExtent(table="raster_relative_time",
         ... ident="soil@PERMANENT", start_time=0, end_time=1, unit="years")
         >>> A.id
         'soil@PERMANENT'
@@ -925,12 +926,13 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
 
     def set_unit(self, unit):
         """!Set the unit of the relative time. Valid units are:
-           * years
-           * months
-           * days
-           * hours
-           * minutes
-           * seconds
+        
+           - years
+           - months
+           - days
+           - hours
+           - minutes
+           - seconds
         """
         self.D["unit"] = unit
 
@@ -997,7 +999,7 @@ class VectorRelativeTime(RelativeTemporalExtent):
 ###############################################################################
 
 class STDSRelativeTime(RelativeTemporalExtent):
-    """!This is the relative time class for all maps and spacetime datasets
+    """!This is the relative time class for all maps and space time datasets
 
         start_time and end_time must be of type integer
        
@@ -1005,11 +1007,11 @@ class STDSRelativeTime(RelativeTemporalExtent):
         
         @code
        
-        >>> A = STDSRelativeTime(table="raster_absolute_time",
-        ... ident="soil@PERMANENT", start_time=0, end_time=1, unit="years",
+        >>> A = STDSRelativeTime(table="strds_relative_time",
+        ... ident="strds@PERMANENT", start_time=0, end_time=1, unit="years",
         ... granularity=5, map_time="interval")
         >>> A.id
-        'soil@PERMANENT'
+        'strds@PERMANENT'
         >>> A.start_time
         0
         >>> A.end_time

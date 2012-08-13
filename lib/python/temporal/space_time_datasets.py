@@ -811,7 +811,8 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         return SpaceTimeRasterDataset(ident)
 
     def get_new_map_instance(self, ident):
-        """!Return a new instance of a map dataset which is associated with the type of this class"""
+        """!Return a new instance of a map dataset which is associated "
+        "with the type of this class"""
         return RasterDataset(ident)
 
     def get_map_register(self):

@@ -94,15 +94,29 @@ class SpatialExtent(SQLDatabaseInterface):
         self.set_projection(proj)
 
     def overlapping_2d(self, extent):
-        """!Return True if the two dimensional extents overlap. 
-           Code is lend from wind_overlap.c in lib/gis
-
-           Overlapping includes the spatial relations:
-           * contain
-           * in
-           * cover
-           * covered
-           * equivalent
+        """!Return True if this (A) and the provided spatial extent (B) overlaps
+        in two dimensional space. 
+        Code is lend from wind_overlap.c in lib/gis
+        
+        Overlapping includes the spatial relations:
+        
+        - contain
+        - in
+        - cover
+        - covered
+        - equivalent
+        
+         @code
+         
+         >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
+         >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
+         >>> A.overlapping_2d(B)
+         True
+         
+         @endcode
+        
+        @param extent: The spatial extent to check overlapping with
+        @return True or False
         """
 
         if self.get_projection() != extent.get_projection():
@@ -140,25 +154,30 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def overlapping(self, extent):
-        """!Return True if the three dimensional extents overlap
-
-       Overlapping includes the spatial relations:
-       * contain
-       * in
-       * cover
-       * covered
-       * equivalent
-           
-        Usage:
+        """!Return True if this (A) and the provided spatial 
+        extent (B) overlaps in three dimensional space.
         
-        @code
+        Overlapping includes the spatial relations:
         
-        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-        >>> A.overlapping(B)
-        True
-        
-        @endcode
+        - contain
+        - in
+        - cover
+        - covered
+        - equivalent
+            
+         Usage:
+         
+         @code
+         
+         >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+         >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+         >>> A.overlapping(B)
+         True
+         
+         @endcode
+         
+         @param extent: The spatial extent to check overlapping with
+         @return True or False
         """
 
         if not self.overlapping_2d(extent):
@@ -177,7 +196,10 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def intersect_2d(self, extent):
         """!Return the two dimensional intersection as spatial_extent 
-           object or None in case no intersection was found.
+        object or None in case no intersection was found.
+       
+        @param extent: The spatial extent to intersect with
+         @return The intersection spatial extent
         """
 
         if not self.overlapping_2d(extent):
@@ -230,8 +252,10 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @code
         
-        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -241,7 +265,8 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 10.0
          | Top:........................ 50.0
          | Bottom:..................... -50.0
-        >>> B = SpatialExtent(north=40, south=30, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=10, 
+        ... bottom=-50, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -251,7 +276,8 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 10.0
          | Top:........................ 50.0
          | Bottom:..................... -50.0
-        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, 
+        ... bottom=-50, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -261,7 +287,8 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 30.0
          | Top:........................ 50.0
          | Bottom:..................... -50.0
-        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, bottom=-30, top=50)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, 
+        ... bottom=-30, top=50)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -271,7 +298,8 @@ class SpatialExtent(SQLDatabaseInterface):
          | West:....................... 30.0
          | Top:........................ 50.0
          | Bottom:..................... -30.0
-        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, bottom=-30, top=30)
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, 
+        ... bottom=-30, top=30)
         >>> C = A.intersect(B)
         >>> C.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -283,6 +311,10 @@ class SpatialExtent(SQLDatabaseInterface):
          | Bottom:..................... -30.0
          
          @endcode
+         
+         
+         @param extent: The spatial extent to intersect with
+         @return The intersection spatial extent
         """
 
         if not self.overlapping(extent):
@@ -310,7 +342,8 @@ class SpatialExtent(SQLDatabaseInterface):
         return new
 
     def is_in_2d(self, extent):
-        """!Check two dimensional if the self is located in extent
+        """!Return True if this extent (A) is located in the provided spatial
+        extent (B) in two dimensions.
         
         @verbatim
          _____
@@ -319,6 +352,9 @@ class SpatialExtent(SQLDatabaseInterface):
         |_____|B 
         
         @endverbatim
+        
+        @param extent: The spatial extent
+        @return True or False
         """
         if self.get_projection() != extent.get_projection():
             core.error(_("Projections are different. Unable to compute "
@@ -357,20 +393,26 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def is_in(self, extent):
-        """!Check three dimensional if the self is located in extent 
+        """!Return True if this extent (A) is located in the provided spatial
+        extent (B) in three dimensions.
         
         Usage:
         
         @code
         
-        >>> A = SpatialExtent(north=79, south=21, east=59, west=11, bottom=-49, top=49)
-        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> A = SpatialExtent(north=79, south=21, east=59, west=11, 
+        ... bottom=-49, top=49)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
         >>> A.is_in(B)
         True
         >>> B.is_in(A)
         False
         
         @endcode
+        
+        @param extent: The spatial extent
+        @return True or False
         """
         if not self.is_in_2d(extent):
             return False
@@ -389,16 +431,71 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def contain_2d(self, extent):
-        """!Check two dimensional if self contains extent """
+        """!Return True if this extent (A) contains the provided spatial
+        extent (B) in two dimensions.
+        
+        Usage:
+        
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
+        >>> B = SpatialExtent(north=79, south=21, east=59, west=11)
+        >>> A.contain_2d(B)
+        True
+        >>> B.contain_2d(A)
+        False
+        
+        @endcode
+        
+        @param extent: The spatial extent
+        @return True or False
+        """
         return extent.is_in_2d(self)
 
-    def contain(self, extent):
-        """!Check three dimensional if self contains extent """
+    def contain(self, extent):        
+        """!Return True if this extent (A) contains the provided spatial
+        extent (B) in three dimensions.
+        
+        Usage:
+        
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> B = SpatialExtent(north=79, south=21, east=59, west=11, 
+        ... bottom=-49, top=49)
+        >>> A.contain(B)
+        True
+        >>> B.contain(A)
+        False
+        
+        @endcode
+        
+        @param extent: The spatial extent
+        @return True or False
+        """
         return extent.is_in(self)
 
     def equivalent_2d(self, extent):
-        """!Check two dimensional if self is equivalent to extent """
-
+        """!Return True if this extent (A) is equal to the provided spatial
+        extent (B) in two dimensions.
+        
+        Usage:
+        
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10)
+        >>> A.equivalent_2d(B)
+        True
+        >>> B.equivalent_2d(A)
+        True
+        
+        @endcode
+        
+        @param extent: The spatial extent
+        @return True or False
+        """
         if self.get_projection() != extent.get_projection():
             core.error(_("Projections are different. Unable to compute "
                          "equivalent_2d for spatial extents"))
@@ -436,7 +533,27 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def equivalent(self, extent):
-        """!Check three dimensional if self is equivalent to extent """
+        """!Return True if this extent (A) is equal to the provided spatial
+        extent (B) in three dimensions.
+        
+        Usage:
+        
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> A.equivalent(B)
+        True
+        >>> B.equivalent(A)
+        True
+        
+        @endcode
+        
+        @param extent: The spatial extent
+        @return True or False
+        """
 
         if not self.equivalent_2d(extent):
             return False
@@ -455,30 +572,35 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def cover_2d(self, extent):
-        """!Return True if two dimensional self covers extent
+        """!Return True if this extent (A) covers the provided spatial
+        extent (B) in two dimensions.
            
-           @verbatim
-            _____    _____    _____    _____
-           |A  __|  |__  A|  |A | B|  |B | A|
-           |  |B |  | B|  |  |  |__|  |__|  |
-           |__|__|  |__|__|  |_____|  |_____|
+        @verbatim
+         _____    _____    _____    _____
+        |A  __|  |__  A|  |A | B|  |B | A|
+        |  |B |  | B|  |  |  |__|  |__|  |
+        |__|__|  |__|__|  |_____|  |_____|
+        
+         _____    _____    _____    _____
+        |A|B| |  |A  __|  |A _  |  |__  A|
+        | |_| |  |  |__|B | |B| | B|__|  |
+        |_____|  |_____|  |_|_|_|  |_____|
+        
+         _____    _____    _____    _____
+        |A|B  |  |_____|A |A|B|A|  |_____|A
+        | |   |  |B    |  | | | |  |_____|B
+        |_|___|  |_____|  |_|_|_|  |_____|A
+        
+        @endverbatim
+        
+        The following cases are excluded:
+        
+        - contain
+        - in
+        - equivalent
 
-            _____    _____    _____    _____
-           |A|B| |  |A  __|  |A _  |  |__  A|
-           | |_| |  |  |__|B | |B| | B|__|  |
-           |_____|  |_____|  |_|_|_|  |_____|
-
-            _____    _____    _____    _____
-           |A|B  |  |_____|A |A|B|A|  |_____|A
-           | |   |  |B    |  | | | |  |_____|B
-           |_|___|  |_____|  |_|_|_|  |_____|A
-           
-           @endverbatim
-
-           The following cases are excluded:
-           * contain
-           * in
-           * equivalent
+        @param extent: The spatial extent
+        @return True or False
         """
 
         if self.get_projection() != extent.get_projection():
@@ -540,16 +662,21 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def cover(self, extent):
-        """!Return True if three dimensional self covers extent
+        """!Return True if this extent covers the provided spatial
+        extent in three dimensions.
+        
+        The following cases are excluded:
+        
+        - contain
+        - in
+        - equivalent
 
-           The following cases are excluded:
-           * contain
-           * in
-           * equivalent
+        @param extent: The spatial extent
+        @return True or False
         """
-
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute cover for spatial extents"))
+            core.error(_("Projections are different. Unable to compute "
+                         "cover for spatial extents"))
             return False
 
         # Exclude equivalent_2d
@@ -625,34 +752,61 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def covered_2d(self, extent):
-        """!Check two dimensional if self is covered by  extent """
+        """!Return True if this extent is covered by the provided spatial
+        extent in two dimensions.
+        
+        The following cases are excluded:
+        
+        - contain
+        - in
+        - equivalent
+
+        @param extent: The spatial extent
+        @return True or False
+        """
 
         return extent.cover_2d(self)
 
     def covered(self, extent):
-        """!Check three dimensional if self is covered by extent """
+        """!Return True if this extent is covered by the provided spatial
+        extent in three dimensions.
+        
+        The following cases are excluded:
+        
+        - contain
+        - in
+        - equivalent
+
+        @param extent: The spatial extent
+        @return True or False
+        """
 
         return extent.cover(self)
 
     def overlap_2d(self, extent):
-        """!Return True if the two dimensional extents overlap. Code is 
-           lend from wind_overlap.c in lib/gis
+        """!Return True if this extent (A) overlaps with the provided spatial
+        extent (B) in two dimensions.
+        Code is lend from wind_overlap.c in lib/gis
+        
+        @verbatim
+         _____
+        |A  __|__
+        |  |  | B|
+        |__|__|  |
+           |_____|
            
-           @verbatim
-            _____
-           |A  __|__
-           |  |  | B|
-           |__|__|  |
-              |_____|
-              
-           @endverbatim
-
-           The following cases are excluded:
-           * contain
-           * in
-           * cover
-           * covered
-           * equivalent
+        @endverbatim
+        
+        The following cases are excluded:
+        
+        - contain
+        - in
+        - cover
+        - covered
+        - equivalent
+           
+        @param extent: The spatial extent
+        @return True or False
         """
 
         if self.contain_2d(extent):
@@ -700,14 +854,19 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def overlap(self, extent):
-        """!Return True if the three dimensional extents overlap
+        """!Return True if this extent overlaps with the provided spatial
+        extent in three dimensions.
 
-           The following cases are excluded:
-           * contain
-           * in
-           * cover
-           * covered
-           * equivalent
+        The following cases are excluded:
+        
+        - contain
+        - in
+        - cover
+        - covered
+        - equivalent
+           
+        @param extent: The spatial extent
+        @return True or False
         """
 
         if self.is_in(extent):
@@ -763,27 +922,37 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def meet_2d(self, extent):
-        """!Check if self and extent meet each other in two dimensions
+        """!Return True if this extent (A) meets with the provided spatial
+        extent (B) in two dimensions.
         
         @verbatim
-          _____ _____    _____ _____
-         |  A  |  B  |  |  B  |  A  |
-         |_____|     |  |     |     |
-               |_____|  |_____|_____|
-
+          _____ _____ 
+         |  A  |  B  |
+         |_____|     |
+               |_____|
+          _____ _____
+         |  B  |  A  |
+         |     |     |
+         |_____|_____|
            ___
           | A |
           |   |
-          |___|    _____
-         |  B  |  |  B  |
-         |     |  |     |
-         |_____|  |_____|_
-                    |  A  |
-                    |     |
-                    |_____|
-         
+          |___| 
+         |  B  |
+         |     |  
+         |_____|  
+          _____
+         |  B  |
+         |     |
+         |_____|_
+           |  A  |
+           |     |
+           |_____|
+             
          @endverbatim
-
+           
+        @param extent: The spatial extent
+        @return True or False
         """
 
         eN = extent.get_north()
@@ -841,7 +1010,12 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def meet(self, extent):
-        """!Check if self and extent meet each other in three dimensions"""
+        """!Return True if this extent meets with the provided spatial
+        extent in three dimensions.
+           
+        @param extent: The spatial extent
+        @return True or False
+        """
         eN = extent.get_north()
         eS = extent.get_south()
         eE = extent.get_east()
@@ -916,7 +1090,21 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def disjoint_2d(self, extent):
-        """!Return True if the two dimensional extents are disjoint
+        """!Return True if this extent (A) is disjoint with the provided spatial
+        extent (B) in three dimensions.
+        
+        @verbatim
+          _____ 
+         |  A  |
+         |_____|       
+         _______ 
+        |   B   |
+        |_______|
+                     
+         @endverbatim
+         
+        @param extent: The spatial extent
+        @return True or False
         """
 
         if self.overlapping_2d(extent) or self.meet_2d(extent):
@@ -924,7 +1112,11 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def disjoint(self, extent):
-        """!Return True if the three dimensional extents are disjoint
+        """!Return True if this extent is disjoint with the provided spatial
+        extent in three dimensions.
+           
+        @param extent: The spatial extent
+        @return True or False
         """
 
         if self.overlapping(extent) or self.meet(extent):
@@ -932,17 +1124,19 @@ class SpatialExtent(SQLDatabaseInterface):
         return True
 
     def spatial_relation_2d(self, extent):
-        """!Returns the two dimensional spatial relation between self and extent
+        """!Returns the two dimensional spatial relation between this
+        extent and the provided spatial extent in two dimensions.
 
         Spatial relations are:
-        * disjoint
-        * meet
-        * overlap
-        * cover
-        * covered
-        * in
-        * contain
-        * equivalent
+        
+        - disjoint
+        - meet
+        - overlap
+        - cover
+        - covered
+        - in
+        - contain
+        - equivalent
         
         Usage: see self.spatial_relation()
         """
@@ -967,17 +1161,19 @@ class SpatialExtent(SQLDatabaseInterface):
         return "unknown"
 
     def spatial_relation(self, extent):
-        """!Returns the three dimensional spatial relation between self and extent
+        """!Returns the two dimensional spatial relation between this
+        extent and the provided spatial extent in three dimensions.
 
         Spatial relations are:
-        * disjoint
-        * meet
-        * overlap
-        * cover
-        * covered
-        * in
-        * contain
-        * equivalent
+        
+        - disjoint
+        - meet
+        - overlap
+        - cover
+        - covered
+        - in
+        - contain
+        - equivalent
             
         
         Usage:
@@ -1157,7 +1353,7 @@ class SpatialExtent(SQLDatabaseInterface):
         return "unknown"
 
     def set_spatial_extent(self, north, south, east, west, top, bottom):
-        """!Set the spatial extent"""
+        """!Set the three dimensional spatial extent"""
 
         self.set_north(north)
         self.set_south(south)
@@ -1176,6 +1372,7 @@ class SpatialExtent(SQLDatabaseInterface):
             self.D["proj"] = proj
 
     def set_spatial_extent_2d(self, north, south, east, west):
+        """!Set the two dimensional spatial extent"""
 
         self.set_north(north)
         self.set_south(south)

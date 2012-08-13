@@ -279,7 +279,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.close()
 
     def get_is_in_db_statement(self):
-        """Return the selection string"""
+        """!Return the selection string"""
         return "SELECT id FROM " + self.get_table_name() + \
                " WHERE id = \'" + str(self.ident) + "\';\n"
 
