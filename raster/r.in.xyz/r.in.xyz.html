@@ -17,7 +17,8 @@ datasets as large as tens of billion of points (705GB in a single file).
  <!-- Doug Newcomb, US Fish & Wildlife Service -->
 
 <p>
-Available statistics for populating the raster are:<br>
+Available statistics for populating the raster are:
+<p>
 <blockquote>
 <table>
 <tr><td><em>n</em></td>        <td>number of points in cell</td></tr>
@@ -34,7 +35,7 @@ Available statistics for populating the raster are:<br>
    <td>p<sup><i>th</i></sup> percentile of points in cell</td></tr>
 <tr><td><em>skewness</em></td> <td>skewness of points in cell</td></tr>
 <tr><td><em>trimmean</em></td> <td>trimmed mean of points in cell</td></tr>
-</table><br>
+</table>
 </blockquote>
 
 <ul>
@@ -42,13 +43,11 @@ Available statistics for populating the raster are:<br>
 <li><em>Coefficient of variance</em> is given in percentage and defined as
 <tt>(stddev/mean)*100</tt>.
 </ul>
-<br>
 
 <p>
 It is also possible to bin and store another data column (e.g. backscatter)
 while simultaneously filtering and scaling both the data column values and
 the z range.
-
 
 <h2>NOTES</h2>
 
@@ -107,16 +106,16 @@ A suitable resolution can be found by dividing the number of input points
 by the area covered. e.g.
 
 <div class="code"><pre>
-  wc -l inputfile.txt
-  g.region -p
-  # points_per_cell = n_points / (rows * cols)
+wc -l inputfile.txt
+g.region -p
+# points_per_cell = n_points / (rows * cols)
 
-  g.region -e
-  # UTM location:
-  # points_per_sq_m = n_points / (ns_extent * ew_extent)
+g.region -e
+# UTM location:
+# points_per_sq_m = n_points / (ns_extent * ew_extent)
 
-  # Lat/Lon location:
-  # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
+# Lat/Lon location:
+# points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
 
 <p>
@@ -191,7 +190,6 @@ Typical commands to create a DEM using a regularized spline fit:
   r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
   v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
 </pre></div>
-<br>
 
 
 <h2>EXAMPLE</h2>
@@ -224,7 +222,6 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
   r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
   r.colors lidar_min.rst_scaled rule=bcyr -n -e
 </pre></div>
-<br>
 
 
 <h2>TODO</h2>
@@ -264,32 +261,33 @@ Development Team.
 
 <h2>SEE ALSO</h2>
 
-<i>
-<a href="g.region.html">g.region</a><br>
-<a href="m.proj.html">m.proj</a><br>
-<a href="r.fillnulls.html">r.fillnulls</a><br>
-<a href="r.in.ascii.html">r.in.ascii</a><br>
-<a href="r.in.lidar.html">r.in.lidar</a><br>
-<a href="r3.in.xyz.html">r3.in.xyz</a><br>
-<a href="r.mapcalc.html">r.mapcalc</a><br>
-<a href="r.neighbors.html">r.neighbors</a><br>
-<a href="r.out.xyz.html">r.out.xyz</a><br>
-<a href="r.to.rast3.html">r.to.rast3</a><br>
-<a href="r.to.vect.html">r.to.vect</a><br>
-<a href="r.univar.html">r.univar</a><br>
-<a href="v.in.ascii.html">v.in.ascii</a><br>
-<a href="v.surf.rst.html">v.surf.rst</a><br>
-<br>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="m.proj.html">m.proj</a>,
+<a href="r.fillnulls.html">r.fillnulls</a>,
+<a href="r.in.ascii.html">r.in.ascii</a>,
+<a href="r.in.lidar.html">r.in.lidar</a>,
+<a href="r3.in.xyz.html">r3.in.xyz</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.neighbors.html">r.neighbors</a>,
+<a href="r.out.xyz.html">r.out.xyz</a>,
+<a href="r.to.rast3.html">r.to.rast3</a>,
+<a href="r.to.vect.html">r.to.vect</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="v.surf.rst.html">v.surf.rst</a>
+</em>
+<p>
+<em>
 <a href="v.lidar.correction.html">v.lidar.correction</a>,
 <a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
 <a href="v.lidar.growing.html">v.lidar.growing</a>,
 <a href="v.outlier.html">v.outlier</a>,
 <a href="v.surf.bspline.html">v.surf.bspline</a>
-</i>
-<p><i><a href="http://www.ivarch.com/programs/pv.shtml">pv</a></i>
+</em>
+<p>
+<em><a href="http://www.ivarch.com/programs/pv.shtml">pv</a></em>
  - The UNIX pipe viewer utility
-<br><br>
-
 
 <h2>AUTHORS</h2>
 
@@ -301,5 +299,4 @@ New Zealand</i><br>
 Extended by Volker Wichmann to support the aggregate functions
 <i>median, percentile, skewness</i> and <i>trimmed mean</i>.
 
-<br>
 <p><i>Last changed: $Date$</i>
