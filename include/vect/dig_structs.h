@@ -1558,8 +1558,6 @@ struct P_line
       - GV_CENTROID
       - GV_FACE
       - GV_KERNEL
-      - GV_AREA
-      - GV_VOLUME
     */
     char type;
     /*!
