@@ -18,7 +18,7 @@ from swipe.dialogs   import SwipeMapDialog
 
 
 class SwipeMapFrame(DoubleMapFrame):
-    def __init__(self, parent  = None, title = _("Map Swipe"), name = "swipe", **kwargs):
+    def __init__(self, parent  = None, title = _("GRASS GIS Map Swipe"), name = "swipe", **kwargs):
         DoubleMapFrame.__init__(self, parent = parent, title = title, name = name,
                                 firstMap = Map(), secondMap = Map(), **kwargs)
         Debug.msg (1, "SwipeMapFrame.__init__()")
