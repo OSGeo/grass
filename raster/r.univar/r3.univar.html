@@ -16,16 +16,18 @@ that was rasterized to create the <b>zones</b> input raster.
 
 <h2>NOTES</h2>
 
-As with most GRASS raster3d modules, <em>r3.univar</em> operates on the cell
+As with most GRASS raster3d modules, <em>r3.univar</em> operates on the voxel
 array defined by the current 3d region settings, not the original extent and
 resolution of the input map. See <em><a href="g.region.html">g.region</a></em>.
-<p>This module can use large amounts of system memory when the <b>-e</b>
+<p>
+This module can use large amounts of system memory when the <b>-e</b>
 extended statistics flag is used with a very large region setting. If the
 region is too large the module should exit gracefully with a memory allocation
 error. Basic statistics can be calculated using any size input region.
 
 <!-- no rast3D support?
-<p>The <em>r.quantile</em> module will be significantly more efficient for
+<p>
+The <em>r.quantile</em> module will be significantly more efficient for
 calculating percentiles with large maps.
 -->
 
@@ -38,14 +40,15 @@ calculating percentiles with large maps.
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="g.region.html">g.region</a><br>
-<a href="r.univar.html">r.univar</a><br>
-<a href="r.mode.html">r.mode</a><br>
-<a href="r.quantile.html">r.quantile</a><br>
-<a href="r.series.html">r.series</a><br>
-<a href="r.stats.html">r.stats</a><br>
-<a href="r.statistics.html">r.statistics</a><br>
-<a href="v.univar.html">v.univar</a><br>
+<a href="g.region.html">g.region</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="r.mode.html">r.mode</a>,
+<a href="r.quantile.html">r.quantile</a>,
+<a href="r.series.html">r.series</a>,
+<a href="r3.stats.html">r3.stats</a>,
+<a href="r.statistics.html">r.statistics</a>,
+<a href="v.rast.stats.html">v.rast.stats</a>,
+<a href="v.univar.html">v.univar</a>
 </em>
 
 
