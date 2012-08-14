@@ -13,6 +13,7 @@
 #               for details.
 #
 #############################################################################
+# 8/2012: added fp maps support, cleanup, removed tabs AK
 # 3/2007: added label support MN
 # 3/2004: added parser support MN
 # 11/2001 added mapset support markus
@@ -49,7 +50,10 @@
 
 import sys
 import os
+import atexit
 import grass.script as grass
+
+TMPRAST = []
 
 def main():
     infile = options['input']
@@ -61,59 +65,80 @@ def main():
     kv = grass.parse_key_val(s, sep = ':')
     s = kv['projection'].strip().split()
     if s == '0':
-	grass.fatal(_("xy-locations are not supported"))
-	grass.fatal(_("Need projected data with grids in meters"))
+        grass.fatal(_("xy-locations are not supported"))
+        grass.fatal(_("Need projected data with grids in meters"))
 
     if not lesser and not greater:
-	grass.fatal(_("You have to specify either lesser= or greater="))
+        grass.fatal(_("You have to specify either lesser= or greater="))
     if lesser and greater:
-	grass.fatal(_("lesser= and greater= are mutually exclusive"))
+        grass.fatal(_("lesser= and greater= are mutually exclusive"))
     if lesser:
-	limit = float(lesser)
+        limit = float(lesser)
     if greater:
-	limit = float(greater)
+        limit = float(greater)
 
     if not grass.find_file(infile)['name']:
-	grass.fatal(_("Raster map <%s> not found") % infile)
+        grass.fatal(_("Raster map <%s> not found") % infile)
 
     clumpfile = "%s.clump.%s" % (infile.split('@')[0], outfile)
+    TMPRAST.append(clumpfile)
 
     if not grass.overwrite():
-	if grass.find_file(clumpfile)['name']:
-	    grass.fatal(_("Temporary raster map <%s> exists") % clumpfile)
+        if grass.find_file(clumpfile)['name']:
+            grass.fatal(_("Temporary raster map <%s> exists") % clumpfile)
 
     grass.message(_("Generating a clumped raster file ..."))
     grass.run_command('r.clump', input = infile, output = clumpfile)
 
     if lesser:
-	grass.message(_("Generating a reclass map with area size less than or equal to %f hectares...") % limit)
+        grass.message(_("Generating a reclass map with area size less than or equal to %f hectares...") % limit)
     else:
-	grass.message(_("Generating a reclass map with area size greater than or equal to %f hectares...") % limit)
+        grass.message(_("Generating a reclass map with area size greater than or equal to %f hectares...") % limit)
 
     recfile = outfile + '.recl'
+    TMPRAST.append(recfile)
 
-    p1 = grass.pipe_command('r.stats', flags = 'aln', input = (clumpfile, infile), fs = '|')
+    flags = 'aln'
+    if grass.raster_info(infile)['datatype'] in ('FCELL', 'DCELL'):
+        flags += 'i'
+    p1 = grass.pipe_command('r.stats', flags = flags, input = (clumpfile, infile), fs = '|')
     p2 = grass.feed_command('r.reclass', input = clumpfile, output = recfile, rules = '-')
+    rules = ''
     for line in p1.stdout:
-	f = line.rstrip('\r\n').split('|')
-	if len(f) < 5:
-	    continue
-	hectares = float(f[4]) * 0.0001
-	if lesser:
-	    test = hectares <= limit
-	else:
-	    test = hectares >= limit
-	if test:
-	    p2.stdin.write("%s = %s %s\n" % (f[0], f[2], f[3]))
+        f = line.rstrip('\r\n').split('|')
+        if len(f) < 5:
+            continue
+        hectares = float(f[4]) * 0.0001
+        if lesser:
+            test = hectares <= limit
+        else:
+            test = hectares >= limit
+        if test:
+            rules += "%s = %s %s\n" % (f[0], f[2], f[3])
+    if rules:
+        p2.stdin.write(rules)
     p1.wait()
     p2.stdin.close()
     p2.wait()
+    if p2.returncode != 0:
+        if lesser:
+            grass.fatal(_("No areas of size less than or equal to %f hectares found.") % limit)
+        else:
+            grass.fatal(_("No areas of size greater than or equal to %f hectares found.") % limit)
 
     grass.message(_("Generating output raster map <%s>...") % outfile)
 
     grass.mapcalc("$outfile = $recfile", outfile = outfile, recfile = recfile)
-    grass.run_command('g.remove', rast = [recfile, clumpfile], quiet = True)
+
+def cleanup():
+    """!Delete temporary maps"""
+    TMPRAST.reverse() # reclassed map first
+    for rast in TMPRAST:
+        grass.run_command("g.remove",
+                          rast = rast,
+                          quiet = True)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+    atexit.register(cleanup)
+    sys.exit(main())
