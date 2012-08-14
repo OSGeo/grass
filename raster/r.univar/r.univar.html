@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.univar</em> calculates the univariate statistics of a raster map.
-This includes the number of cells counted, minimum and maximum cell values,
-range, arithmetic mean, population variance, standard deviation, and 
+<em>r.univar</em> calculates the univariate statistics of one or several raster
+map(s). This includes the number of cells counted, minimum and maximum cell
+values, range, arithmetic mean, population variance, standard deviation, and 
 coefficient of variation. Statistics are calculated separately for every
 category/zone found in the <b>zones</b> input map if given.
 If the <b>-e</b> extended statistics flag is given the 1st quartile, median,
@@ -13,23 +13,31 @@ If the <b>-t</b> flag is given the results are presented in tabular format
 with the given field separator. The table can immediately be converted to a
 vector attribute table which can then be linked to a vector, e.g. the vector
 that was rasterized to create the <b>zones</b> input raster.
+<p>
+When multiple input maps are given to <em>r.univar</em>, the overall statistics
+are calculated. This is useful for a time series of the same variable, as well as
+for the case of a segmented/tiled dataset. Allowing multiple raster maps to be
+specified saves the user from using a temporary raster map for the result of 
+<em>r.series</em> or <em>r.patch</em>.
 
 <h2>NOTES</h2>
 
-As with most GRASS raster modules, <em>r.univar</em> operates on the cell
+As with most GRASS raster modules, <em>r.univar</em> operates on the raster
 array defined by the current region settings, not the original extent and
 resolution of the input map. See <em><a href="g.region.html">g.region</a></em>.
-<p>This module can use large amounts of system memory when the <b>-e</b>
+<p>
+This module can use large amounts of system memory when the <b>-e</b>
 extended statistics flag is used with a very large region setting. If the
 region is too large the module should exit gracefully with a memory allocation
 error. Basic statistics can be calculated using any size input region.
-<p>Without a <b>zones</b> input raster, the <em>r.quantile</em> module will
+<p>
+Without a <b>zones</b> input raster, the <em>r.quantile</em> module will
 be significantly more efficient for calculating percentiles with large maps.
 
 <h2>EXAMPLE</h2>
 
 Calculate the raster statistics for zones within a vector map coverage
-and upload the results for mean, min and max back to the vector map.
+and upload the results for mean, min and max back to the vector map:
 
 <div class="code"><pre>
 #### set the raster region to match the map
@@ -106,15 +114,15 @@ v.db.select fields_stats
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="g.region.html">g.region</a><br>
-<a href="r3.univar.html">r3.univar</a><br>
-<a href="r.mode.html">r.mode</a><br>
-<a href="r.quantile.html">r.quantile</a><br>
-<a href="r.series.html">r.series</a><br>
-<a href="r.stats.html">r.stats</a><br>
-<a href="r.statistics.html">r.statistics</a><br>
-<a href="v.rast.stats.html">v.rast.stats</a><br>
-<a href="v.univar.html">v.univar</a><br>
+<a href="g.region.html">g.region</a>,
+<a href="r3.univar.html">r3.univar</a>,
+<a href="r.mode.html">r.mode</a>,
+<a href="r.quantile.html">r.quantile</a>,
+<a href="r.series.html">r.series</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r.statistics.html">r.statistics</a>,
+<a href="v.rast.stats.html">v.rast.stats</a>,
+<a href="v.univar.html">v.univar</a>
 </em>
 
 
@@ -122,6 +130,7 @@ v.db.select fields_stats
 
 Hamish Bowman, Otago University, New Zealand<br>
 Extended statistics by Martin Landa<br>
+Multiple input map support by Ivan Shmakov<br>
 Zonal loop by Markus Metz
 
 <p><i>Last changed: $Date$</i>
