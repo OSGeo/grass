@@ -614,7 +614,8 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
         kvdict[key] = value_list
     return kvdict
 
-def compare_key_value_text_files(filename_a, filename_b, sep=":", val_sep=",", precision=0.000001):
+def compare_key_value_text_files(filename_a, filename_b, sep=":", 
+                                 val_sep=",", precision=0.000001):
     """
         !Compare two key-value text files that may contain projection parameter
         
@@ -661,7 +662,8 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":", val_sep=",", p
     if missing_keys == len(dict_a):
         return False
     if missing_keys > 0:
-        grass.warning(_("Several keys (%i out of %i) are missing in the target file")%(missing_keys, len(dict_a)))
+        warning(_("Several keys (%i out of %i) are missing "
+                  "in the target file")%(missing_keys, len(dict_a)))
     return True
     
 # interface to g.gisenv

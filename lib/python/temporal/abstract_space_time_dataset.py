@@ -628,6 +628,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         dbif, connect = init_dbif(dbif)
 
         obj_list = []
+        
+        if self.get_map_time() == "point" or self.get_map_time() == "mixed":
+            core.error(_("The space time %(type)s dataset <%(name)s> must have"
+                         " interval time"%\
+                         {"type":self.get_new_map_instance(None).get_type(),
+                          "name":self.get_id()}))
 
         if gran is None:
             gran = self.get_granularity()
@@ -646,7 +652,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             if rows is not None:
                 if len(rows) > 1:
-                    core.warning(_("More than one map found in a granule. Temporal granularity seems to be invalid or the chosen granularity is not a greatest common divider of all intervals and gaps in the dataset."))
+                    core.warning(_("More than one map found in a granule. "
+                                   "Temporal granularity seems to be invalid or"
+                                   " the chosen granularity is not a greatest "
+                                   "common divider of all intervals and gaps "
+                                   "in the dataset."))
 
                 maplist = []
                 for row in rows:
@@ -656,7 +666,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     if self.is_time_absolute():
                         map.set_absolute_time(start, next)
                     elif self.is_time_relative():
-                        map.set_relative_time(start, next, self.get_relative_time_unit())
+                        map.set_relative_time(start, next, 
+                                              self.get_relative_time_unit())
 
                     maplist.append(copy.copy(map))
 

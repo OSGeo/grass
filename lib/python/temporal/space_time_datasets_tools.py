@@ -418,14 +418,14 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         @param separator: The field separator character between the columns
         @param method: String identifier to select a method out of cols,
                        comma,delta or deltagaps
-            * "cols": Print preselected columns specified by columns
-            * "comma": Print the map ids (name@mapset) as comma separated string
-            * "delta": Print the map ids (name@mapset) with start time,
+            - "cols": Print preselected columns specified by columns
+            - "comma": Print the map ids (name@mapset) as comma separated string
+            - "delta": Print the map ids (name@mapset) with start time,
                        end time, relative length of intervals and the relative
                        distance to the begin
-            * "deltagaps": Same as "delta" with additional listing of gaps.
+            - "deltagaps": Same as "delta" with additional listing of gaps.
                            Gaps can be simply identified as the id is "None"
-            * "gran": List map using the granularity of the space time dataset,
+            - "gran": List map using the granularity of the space time dataset,
                       columns are identical to deltagaps
         @param header: Set True to print column names
     """
@@ -458,6 +458,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
             maps = sp.get_registered_maps_as_objects(where, "start_time", None)
         elif method == "gran":
             maps = sp.get_registered_maps_as_objects_by_granularity(None)
+            
+        print "The maps object:", maps
 
         if header:
             string = ""
@@ -477,7 +479,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                 if len(maps[0]) > 0:
                     first_time, dummy = maps[0][0].get_valid_time()
                 else:
-                    core.fatal(_("Unable to list maps. Internal Error."))
+                    core.warning(_("Empty map list."))
+                    return
             else:
                 first_time, dummy = maps[0].get_valid_time()
 
@@ -487,7 +490,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                     if len(mymap) > 0:
                         map = mymap[0]
                     else:
-                        core.fatal(_("Unable to list maps. Internal Error."))
+                        core.error(_("Empty entry in map list, continue to next entry"))
                 else:
                     map = mymap
 

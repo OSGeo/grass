@@ -28,7 +28,9 @@ SUBDIRS = \
 	t.rast3d.univar \
 	t.vect.list \
 	t.vect.db.select \
+	t.vect.export \
 	t.vect.extract \
+	t.vect.import \
 	t.vect.what.strds \
 	t.vect.observe.strds \
 	t.vect.univar
