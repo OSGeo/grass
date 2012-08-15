@@ -87,7 +87,6 @@ t.rast.list -h input=precip_abs1
 t.rast.list -h fs=" | " method=cols      input=precip_abs1
 t.rast.list -h fs=" | " method=delta     input=precip_abs1
 t.rast.list -h fs=" | " method=deltagaps input=precip_abs1
-t.rast.list -h fs=" | " method=gran      input=precip_abs1
 
 t.register type=rast -i input=precip_abs2 file="${n2}" 
 t.rast.list    fs=" | " method=comma     input=precip_abs2
@@ -115,7 +114,10 @@ t.rast.list -h input=precip_abs5
 t.rast.list -h fs=" | " method=cols      input=precip_abs5
 t.rast.list -h fs=" | " method=delta     input=precip_abs5
 t.rast.list -h fs=" | " method=deltagaps input=precip_abs5
+
+# @test of @failure, time instances and mixed time is not supported
 t.rast.list -h fs=" | " method=gran      input=precip_abs5
+t.rast.list -h fs=" | " method=gran      input=precip_abs1
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs0,precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_abs5

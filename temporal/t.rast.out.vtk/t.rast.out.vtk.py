@@ -124,7 +124,7 @@ def main():
     if maps is not None:
         for map in maps:
             if use_granularity:
-                if len(map[0]) > 0:
+                if len(map) > 0:
                     id = map[0].get_map_id()
                 else:
                     continue
