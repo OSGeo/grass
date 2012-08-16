@@ -77,6 +77,34 @@ class GNotebook(FN.FlatNotebook):
             del kwargs['name']
         super(GNotebook, self).InsertPage(**kwargs)
 
+    def DeletePage(self, page):
+        """!Delete page
+
+        @param page name
+        @return True if page was deleted, False if not exists
+        """
+        delPageIndex = self.GetPageIndexByName(page)
+        if delPageIndex != -1:
+            super(GNotebook, self).DeletePage(delPageIndex)
+            del self.notebookPages[page]
+            return True
+        else:
+            return False
+
+    def RemovePage(self, page):
+        """!Delete page without deleting the associated window.
+
+        @param page name
+        @return True if page was deleted, False if not exists
+        """
+        delPageIndex = self.GetPageIndexByName(page)
+        if delPageIndex != -1:
+            super(GNotebook, self).RemovePage(delPageIndex)
+            del self.notebookPages[page]
+            return True
+        else:
+            return False
+
     def SetSelectionByName(self, page):
         """!Set notebook
         
