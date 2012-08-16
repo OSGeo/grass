@@ -47,7 +47,7 @@ from core.utils       import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
 from dbmgr.vinfo      import VectorDBInfo, unicodeValue, createDbInfoDesc
 from core.debug       import Debug
-from dbmgr.dialogs    import ModifyTableRecord
+from dbmgr.dialogs    import ModifyTableRecord, AddColumnDialog
 from core.settings    import UserSettings
 
 class Log:
@@ -67,13 +67,15 @@ class VirtualAttributeList(wx.ListCtrl,
                            listmix.ColumnSorterMixin):
     """!Support virtual list class for Attribute Table Manager (browse page)
     """
-    def __init__(self, parent, log, dbMgrData, layer):
+    def __init__(self, parent, log, dbMgrData, layer, pages):
         # initialize variables
         self.parent  = parent
         self.log     = log
         self.dbMgrData = dbMgrData
         self.mapDBInfo = self.dbMgrData['mapDBInfo']
         self.layer   = layer
+        self.pages = pages
+
         self.fieldCalc = None      
         self.columns = {} # <- LoadData()
         
@@ -360,6 +362,7 @@ class VirtualAttributeList(wx.ListCtrl,
         popupMenu = wx.Menu()
 
         if not hasattr (self, "popupID1"):
+            #TODO put to dict
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
             self.popupID3 = wx.NewId()
@@ -382,8 +385,17 @@ class VirtualAttributeList(wx.ListCtrl,
         popupMenu.AppendMenu(self.popupID3, _("Calculate (only numeric columns)"),
                              subMenu)
         popupMenu.Append(self.popupID13, text = _("Field calculator"))
+
+        if not self.pages['manageTable']:
+            popupMenu.AppendSeparator()
+            self.popupID14 = wx.NewId()
+            popupMenu.Append(self.popupID14, text = _("Add column"))
+            if not self.dbMgrData['editable']:
+              popupMenu.Enable(self.popupID14, False)
+
         if not self.dbMgrData['editable']:
-            popupMenu.Enable(self.popupID13, False)           
+            popupMenu.Enable(self.popupID13, False)
+          
         if not self.dbMgrData['editable'] or \
                 self.columns[self.GetColumn(self._col).GetText()]['ctype'] not in (types.IntType, types.FloatType):
             popupMenu.Enable(self.popupID3, False)
@@ -401,6 +413,8 @@ class VirtualAttributeList(wx.ListCtrl,
         self.Bind (wx.EVT_MENU, self.OnColumnSortAsc, id = self.popupID10)
         self.Bind (wx.EVT_MENU, self.OnColumnSortDesc, id = self.popupID2)
         self.Bind(wx.EVT_MENU, self.OnFiledCalculator, id = self.popupID13)
+        if not self.pages['manageTable']:
+            self.Bind(wx.EVT_MENU, self.OnAddColumn, id = self.popupID14)
 
         for id in (self.popupID4, self.popupID5, self.popupID6,
                    self.popupID7, self.popupID8, self.popupID9,
@@ -477,7 +491,6 @@ class VirtualAttributeList(wx.ListCtrl,
         
     def OnFiledCalculator(self, event):
         """!Calls SQLBuilderUpdate instance"""
-
         if not self.fieldCalc:
             self.fieldCalc = SQLBuilderUpdate(parent = self, id = wx.ID_ANY,
                                               vectmap = self.dbMgrData['vectName'],
@@ -486,6 +499,20 @@ class VirtualAttributeList(wx.ListCtrl,
             self.fieldCalc.Show()
         else:
             self.fieldCalc.Raise()
+
+    def OnAddColumn(self, event):
+        """!Add column into table"""
+        table = self.dbMgrData['mapDBInfo'].layers[self.layer]['table']
+        dlg = AddColumnDialog(parent = self, title = _('Add column to table <%s>') % table)
+        if not dlg:
+            return
+        if dlg.ShowModal() == wx.ID_OK:
+            data = dlg.GetData()
+            self.pages['browse'].AddColumn(name = data['name'],
+                                           ctype = data['ctype'],
+                                           length = data['length'])
+        dlg.Destroy()
+
     def SortItems(self, sorter = cmp):
         """!Sort items"""
         items = list(self.itemDataMap.keys())
@@ -569,7 +596,9 @@ class DbMgrBase:
         
         # vector attributes can be changed only if vector map is in
         # the current mapset
-        mapInfo = grass.find_file(name = self.dbMgrData['vectName'], element = 'vector')
+        mapInfo = None
+        if self.dbMgrData['vectName']:
+            mapInfo = grass.find_file(name = self.dbMgrData['vectName'], element = 'vector')
         if not mapInfo or mapInfo['mapset'] != grass.gisenv()['MAPSET']:
              self.dbMgrData['editable'] = False
         else:
@@ -597,9 +626,9 @@ class DbMgrBase:
         For the import use methods addLayer in DbMgrBrowsePage and DbMgrTablesPage
         """
         if self.pages['browse']: 
-            self.pages['browse'].DeleteAllLayerPages()
+            self.pages['browse'].DeleteAllPages()
         if self.pages['manageTable']:
-            self.pages['manageTable'].DeleteAllLayerPages()
+            self.pages['manageTable'].DeleteAllPages()
 
         self.dbMgrData['vectName'] = vectorName
 
@@ -652,9 +681,9 @@ class DbMgrBase:
             # self.browsePage.DeletePage(page)
             # break
             if self.pages['browse']: 
-                self.pages['browse'].DeleteLayerPage(layer)
+                self.pages['browse'].DeletePage(layer)
             if self.pages['manageTable']:                
-                self.pages['manageTable'].DeleteLayerPage(layer)
+                self.pages['manageTable'].DeletePage(layer)
 
         # fetch fresh db info
         self.dbMgrData['mapDBInfo'] = VectorDBInfo(self.dbMgrData['vectName'])    
@@ -677,6 +706,10 @@ class DbMgrBase:
     def GetVectorName(self):
         """!Get vector name"""
         return self.dbMgrData['vectName']
+
+    def GetVectorLayers(self):
+        """!Get layers of vector map which have table"""
+        return self.dbMgrData['mapDBInfo'].layers.keys()
 
 class DbMgrNotebookBase(FN.FlatNotebook):
     def __init__(self, parent, parentDbMgrBase):
@@ -727,16 +760,19 @@ class DbMgrNotebookBase(FN.FlatNotebook):
 
     def OnLayerPageChanged(self, event):
         """!Layer tab changed"""
-        pageNum = event.GetSelection()    
+
+        # because of SQL Query notebook  
+        if event.GetEventObject() != self:
+            return
+
+        pageNum = self.GetSelection()    
         self.selLayer = self.layers[pageNum]
-        
         try:
             idCol = self.layerPage[self.selLayer]['whereColumn']
         except KeyError:
             idCol = None
         
         try:
-            self.OnChangeSql(None)
             # update statusbar
             self.log.write(_("Number of loaded records: %d") % \
                                self.FindWindowById(self.layerPage[self.selLayer]['data']).\
@@ -801,10 +837,12 @@ class DbMgrNotebookBase(FN.FlatNotebook):
             
         wx.EndBusyCursor()        
 
-    def DeleteLayerPage(self, layer):
+    def DeletePage(self, layer):
         """!Removes layer page"""
-        pageNum = self.GetSelection()
-        self.DeletePage(self.layers.index(layer))
+        if layer not in self.layers:
+            return False
+
+        FN.FlatNotebook.DeletePage(self, self.layers.index(layer))
 
         self.layers.remove(layer)
         del self.layerPage[layer]
@@ -814,12 +852,55 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         else:
             self.selLayer = None
 
-    def DeleteAllLayerPages(self):
+        return True
+
+    def DeleteAllPages(self):
         """!Removes all layer pages"""
-        self.DeleteAllPages()
+        FN.FlatNotebook.DeleteAllPages(self)
         self.layerPage = {}
         self.layers = []
         self.selLayer = None
+
+    def AddColumn(self, name, ctype, length):
+        """!Add new column to the table"""
+        table = self.dbMgrData['mapDBInfo'].layers[self.selLayer]['table']
+        
+        if not name:
+            GError(parent = self,
+                   message = _("Unable to add column to the table. "
+                               "No column name defined."))
+            return False
+         
+        # cast type if needed
+        if ctype == 'double':
+            ctype = 'double precision'
+        if ctype != 'varchar':
+            length = '' # FIXME
+        
+        # check for duplicate items
+        if name in self.dbMgrData['mapDBInfo'].GetColumns(table):
+            GError(parent = self,
+                   message = _("Column <%(column)s> already exists in table <%(table)s>.") % \
+                       {'column' : name, 'table' : self.dbMgrData['mapDBInfo'].layers[self.selLayer]["table"]}
+                   )
+            return False
+
+        # add v.db.addcolumn command to the list
+        if ctype == 'varchar':
+            ctype += ' (%d)' % length
+        self.listOfCommands.append(('v.db.addcolumn',
+                                    { 'map'     : self.dbMgrData['vectName'],
+                                      'layer'   : self.selLayer,
+                                      'columns' : '%s %s' % (name, ctype) }
+                                    ))
+        # apply changes
+        self.ApplyCommands(self.listOfCommands, self.listOfSQLStatements)
+                
+        return True
+
+    def GetAddedLayers(self):
+        """!Get list of added layers"""
+        return self.layers[:]
 
 class DbMgrBrowsePage(DbMgrNotebookBase):
     def __init__(self, parent, parentDbMgrBase, onlyLayer = -1):
@@ -833,16 +914,17 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         DbMgrNotebookBase.__init__(self, parent = parent, 
                                        parentDbMgrBase = parentDbMgrBase)
 
+        #   for Sql Query notebook adaptation on current width
+        self.sqlBestSize = None
+
         for layer in self.dbMgrData['mapDBInfo'].layers.keys():
             if onlyLayer > 0 and layer != onlyLayer:
                 continue
             self.AddLayer(layer)
 
-        self.SetSelection(0) # select first layer
-
         if self.layers:
+            self.SetSelection(0) 
             self.selLayer = self.layers[0]
-            self.OnChangeSql(None)
             self.log.write(_("Number of loaded records: %d") % \
                            self.FindWindowById(self.layerPage[self.selLayer]['data']).GetItemCount())
 
@@ -857,7 +939,14 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         @param layer vector map layer conntected to table
         @param pos position of tab, if -1 it is added to end
+
+        @return True if layer was added 
+        @return False if layer was not added - layer has been already added or has empty table or does not exist 
         """
+        if layer in self.layers or \
+            layer not in self.parentDbMgrBase.GetVectorLayers():
+            return False    
+
         panel = wx.Panel(parent = self, id = wx.ID_ANY)
             
         #IMPORTANT NOTE: wx.StaticBox MUST be defined BEFORE any of the 
@@ -869,7 +958,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
             
         win = VirtualAttributeList(panel, self.log,
-                                   self.dbMgrData, layer)
+                                   self.dbMgrData, layer, self.pages)
         if win.IsEmpty():
             del panel
             return False
@@ -912,33 +1001,48 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                       border = 3)
 
         # sql statement box
-        btnApply = wx.Button(parent = panel, id = wx.ID_APPLY)
+        FNPageStyle = FN.FNB_NO_NAV_BUTTONS | \
+                       FN.FNB_NO_X_BUTTON
+        if globalvar.hasAgw:
+            dbmStyle = { 'agwStyle' : FNPageStyle }
+        else:
+            dbmStyle = { 'style' : FNPageStyle }
+        sqlNtb = FN.FlatNotebook(parent = panel, id = wx.ID_ANY,
+                                 **dbmStyle)
+        # Simple tab
+        simpleSqlPanel = wx.Panel(parent = sqlNtb, id = wx.ID_ANY)
+        sqlNtb.AddPage(page = simpleSqlPanel,
+                       text = _('Simple'))
+
+        btnApply = wx.Button(parent = simpleSqlPanel, id = wx.ID_APPLY, name = 'btnApply')
         btnApply.SetToolTipString(_("Apply SELECT statement and reload data records"))
         btnApply.Bind(wx.EVT_BUTTON, self.OnApplySqlStatement)
-        btnSqlBuilder = wx.Button(parent = panel, id = wx.ID_ANY, label = _("SQL Builder"))
-        btnSqlBuilder.Bind(wx.EVT_BUTTON, self.OnBuilder)
 
-        sqlSimple = wx.RadioButton(parent = panel, id = wx.ID_ANY,
-                                  label = _("Simple"))
-        sqlSimple.SetValue(True)
-        sqlAdvanced = wx.RadioButton(parent = panel, id = wx.ID_ANY,
-                                     label = _("Advanced"))
-        sqlSimple.Bind(wx.EVT_RADIOBUTTON,   self.OnChangeSql)
-        sqlAdvanced.Bind(wx.EVT_RADIOBUTTON, self.OnChangeSql)
-
-        sqlWhereColumn = wx.ComboBox(parent = panel, id = wx.ID_ANY,
+        whereSimpleSqlPanel = wx.Panel(parent = simpleSqlPanel, id = wx.ID_ANY, name = 'wherePanel')   
+        sqlWhereColumn = wx.ComboBox(parent = whereSimpleSqlPanel, id = wx.ID_ANY,
                                      size = (100,-1),
                                      style = wx.CB_SIMPLE | wx.CB_READONLY,
                                      choices = self.dbMgrData['mapDBInfo'].GetColumns(self.dbMgrData['mapDBInfo'].layers[layer]['table']))
         sqlWhereColumn.SetSelection(0)
-        sqlWhereCond = wx.Choice(parent = panel, id = wx.ID_ANY,
+        sqlWhereCond = wx.Choice(parent = whereSimpleSqlPanel, id = wx.ID_ANY,
                                  size = (55,-1),
                                  choices = ['=', '!=', '<', '<=', '>', '>='])
-        sqlWhereValue = wx.TextCtrl(parent = panel, id = wx.ID_ANY, value = "",
+        sqlWhereValue = wx.TextCtrl(parent = whereSimpleSqlPanel, id = wx.ID_ANY, value = "",
                                     style = wx.TE_PROCESS_ENTER)
         sqlWhereValue.SetToolTipString(_("Example: %s") % "MULTILANE = 'no' AND OBJECTID < 10")
 
-        sqlStatement = wx.TextCtrl(parent = panel, id = wx.ID_ANY,
+        sqlLabel = wx.StaticText(parent = simpleSqlPanel, id = wx.ID_ANY,
+                                label = "SELECT * FROM %s WHERE " % \
+                                      self.dbMgrData['mapDBInfo'].layers[layer]['table'])
+        # Advanced tab
+        advancedSqlPanel = wx.Panel(parent = sqlNtb, id = wx.ID_ANY)   
+        sqlNtb.AddPage(page = advancedSqlPanel,
+                       text = _('Advanced'))
+
+        btnSqlBuilder = wx.Button(parent = advancedSqlPanel, id = wx.ID_ANY, label = _("SQL Builder"))
+        btnSqlBuilder.Bind(wx.EVT_BUTTON, self.OnBuilder)
+
+        sqlStatement = wx.TextCtrl(parent = advancedSqlPanel, id = wx.ID_ANY,
                                    value = "SELECT * FROM %s" % \
                                        self.dbMgrData['mapDBInfo'].layers[layer]['table'],
                                    style = wx.TE_PROCESS_ENTER)
@@ -946,62 +1050,106 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlWhereValue.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
         sqlStatement.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
 
-        sqlLabel = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                label = "SELECT * FROM %s WHERE " % \
-                                      self.dbMgrData['mapDBInfo'].layers[layer]['table'])
-        label_query = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                    label = "")
+        # Simple tab layout
+        simpleSqlSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
+        simpleSqlSizer.AddGrowableCol(1)
 
-        sqlFlexSizer = wx.FlexGridSizer (cols = 3, hgap = 5, vgap = 5)
-        sqlFlexSizer.AddGrowableCol(1)
+        sqlSimpleWhereSizer= wx.BoxSizer(wx.HORIZONTAL)
 
-        sqlFlexSizer.Add(item = sqlSimple,
-                         flag = wx.ALIGN_CENTER_VERTICAL)
-        sqlSimpleSizer = wx.BoxSizer(wx.HORIZONTAL)
-        sqlSimpleSizer.Add(item = sqlLabel,
-                           flag = wx.ALIGN_CENTER_VERTICAL)
-        sqlSimpleSizer.Add(item = sqlWhereColumn,
-                           flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
-        sqlSimpleSizer.Add(item = sqlWhereCond,
-                           flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
-                           border = 3)
-        sqlSimpleSizer.Add(item = sqlWhereValue, proportion = 1,
-                           flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
-        sqlFlexSizer.Add(item = sqlSimpleSizer,
-                         flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
-        sqlFlexSizer.Add(item = btnApply,
-                         flag = wx.ALIGN_RIGHT)
-        sqlFlexSizer.Add(item = sqlAdvanced,
-                         flag = wx.ALIGN_CENTER_VERTICAL)
-        sqlFlexSizer.Add(item = sqlStatement,
-                         flag = wx.EXPAND)
-        sqlFlexSizer.Add(item = btnSqlBuilder,
-                         flag = wx.ALIGN_RIGHT)
+        sqlSimpleWhereSizer.Add(item = sqlWhereColumn,
+                                flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL| wx.LEFT,
+                                border = 3)
+        sqlSimpleWhereSizer.Add(item = sqlWhereCond,
+                                flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+                                border = 3)
+        sqlSimpleWhereSizer.Add(item = sqlWhereValue, proportion = 1,
+                                flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+                                border = 3)
+        whereSimpleSqlPanel.SetSizer(sqlSimpleWhereSizer)
+        simpleSqlSizer.Add(item = sqlLabel, border = 5, pos = (0, 0),
+                           flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.LEFT)
+        simpleSqlSizer.Add(item = whereSimpleSqlPanel, border = 5, pos = (0, 1),
+                           flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.EXPAND)     
+        simpleSqlSizer.Add(item = btnApply, border = 5, pos = (0, 2),
+                           flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP)
 
-        sqlSizer.Add(item = sqlFlexSizer,
+        simpleSqlPanel.SetSizer(simpleSqlSizer)
+
+        # Advanced tab layout
+        advancedSqlSizer = wx.FlexGridSizer (cols = 2, hgap = 5, vgap = 5)
+        advancedSqlSizer.AddGrowableCol(0)
+
+        advancedSqlSizer.Add(item = sqlStatement,
+                             flag = wx.EXPAND | wx.ALL, border = 5)
+        advancedSqlSizer.Add(item = btnSqlBuilder,
+                             flag = wx.ALIGN_RIGHT | wx.TOP | wx.RIGHT | wx.BOTTOM, border = 5)
+
+        sqlSizer.Add(item = sqlNtb,
                      flag = wx.ALL | wx.EXPAND,
                      border = 3)
+
+        advancedSqlPanel.SetSizer(advancedSqlSizer)
 
         pageSizer.Add(item = listSizer,
                       proportion = 1,
                       flag = wx.ALL | wx.EXPAND,
                       border = 5)
-
         pageSizer.Add(item = sqlSizer,
                       proportion = 0,
                       flag = wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.EXPAND,
                       border = 5)
 
         panel.SetSizer(pageSizer)
+         
+        sqlNtb.Bind(wx.EVT_SIZE, self.OnSqlQuerySizeWrap(layer))
 
         self.layerPage[layer]['data']      = win.GetId()
-        self.layerPage[layer]['simple']    = sqlSimple.GetId()
-        self.layerPage[layer]['advanced']  = sqlAdvanced.GetId()
+        self.layerPage[layer]['sqlNtb']    = sqlNtb.GetId()
         self.layerPage[layer]['whereColumn'] = sqlWhereColumn.GetId()
         self.layerPage[layer]['whereOperator'] = sqlWhereCond.GetId()
         self.layerPage[layer]['where']     = sqlWhereValue.GetId()
         self.layerPage[layer]['builder']   = btnSqlBuilder.GetId()
         self.layerPage[layer]['statement'] = sqlStatement.GetId()
+        self.layerPage[layer]['sqlIsReduced'] = False  # for SQL Query adaptation on width     
+
+        return True
+
+    def OnSqlQuerySizeWrap(self, layer):
+        """!Helper function"""
+        return lambda event : self.OnSqlQuerySize(event, layer)  
+
+    def OnSqlQuerySize(self, event, layer):
+        """!Adapts SQL Query Simple tab on current width"""
+
+        sqlNtb = event.GetEventObject()
+        if not self.sqlBestSize:
+            self.sqlBestSize = sqlNtb.GetBestSize()
+
+        size = sqlNtb.GetSize()    
+        sqlReduce = self.sqlBestSize[0] > size[0] 
+        if (sqlReduce and self.layerPage[layer]['sqlIsReduced']) or \
+           (not sqlReduce and not self.layerPage[layer]['sqlIsReduced']):
+           event.Skip()
+           return
+
+        wherePanel = sqlNtb.FindWindowByName('wherePanel')
+        btnApply = sqlNtb.FindWindowByName('btnApply')
+        sqlSimpleSizer = btnApply.GetContainingSizer()
+
+        if sqlReduce:
+            self.layerPage[layer]['sqlIsReduced'] = True
+            sqlSimpleSizer.AddGrowableCol(0)
+            sqlSimpleSizer.RemoveGrowableCol(1)
+            sqlSimpleSizer.SetItemPosition(wherePanel, (1, 0))
+            sqlSimpleSizer.SetItemPosition(btnApply, (1, 1))
+        else:
+            self.layerPage[layer]['sqlIsReduced'] = False
+            sqlSimpleSizer.AddGrowableCol(1)
+            sqlSimpleSizer.RemoveGrowableCol(0)
+            sqlSimpleSizer.SetItemPosition(wherePanel, (0, 1))
+            sqlSimpleSizer.SetItemPosition(btnApply, (0, 2))
+
+        event.Skip()
 
     def OnDataItemActivated(self, event):
         """!Item activated, highlight selected item"""
@@ -1587,29 +1735,18 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                            cats = ListOfCatsToRange(cats))
             
             self.mapdisplay.MapWindow.UpdateMap(render = True, renderVector = True)
-
-    def OnChangeSql(self, event):
-        """!Switch simple/advanced sql statement"""
-        if self.FindWindowById(self.layerPage[self.selLayer]['simple']).GetValue():
-            self.FindWindowById(self.layerPage[self.selLayer]['where']).Enable(True)
-            self.FindWindowById(self.layerPage[self.selLayer]['statement']).Enable(False)
-            self.FindWindowById(self.layerPage[self.selLayer]['builder']).Enable(False)
-        else:
-            self.FindWindowById(self.layerPage[self.selLayer]['where']).Enable(False)
-            self.FindWindowById(self.layerPage[self.selLayer]['statement']).Enable(True)
-            self.FindWindowById(self.layerPage[self.selLayer]['builder']).Enable(True)
      
     def OnApplySqlStatement(self, event):
         """!Apply simple/advanced sql statement"""
         keyColumn = -1 # index of key column
         listWin = self.FindWindowById(self.layerPage[self.selLayer]['data'])
         sql = None
-        win = self.FindWindowById(self.layerPage[self.selLayer]['simple'])
+        win = self.FindWindowById(self.layerPage[self.selLayer]['sqlNtb'])
         if not win:
             return
         
         wx.BeginBusyCursor()
-        if win.GetValue():
+        if win.GetSelection() == 0:
             # simple sql statement
             whereCol = self.FindWindowById(self.layerPage[self.selLayer]['whereColumn']).GetStringSelection()
             whereOpe = self.FindWindowById(self.layerPage[self.selLayer]['whereOperator']).GetStringSelection()
@@ -1766,12 +1903,19 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.SetSelection(0) # select first layer
             self.selLayer = self.layers[0]
 
-    def AddLayer(self, layer = -1, pos = -1):
+    def AddLayer(self, layer, pos = -1):
         """!Adds tab which represents table 
 
         @param layer vector map layer connected to table
         @param pos position of tab, if -1 it is added to end
+
+        @return True if layer was added 
+        @return False if layer was not added - layer has been already added or does not exist 
         """
+        if layer in self.layers or \
+            layer not in self.parentDbMgrBase.GetVectorLayers():
+            return False
+
         self.layers.append(layer) 
 
         self.layerPage[layer] = {}
@@ -1931,6 +2075,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             for widget in [columnTo, columnFrom, length, ctype, 
                            column,   btnAddCol,  btnRenameCol]:
                 widget.Enable(False)
+
+        return True
 
     def _createTableDesc(self, parent, table):
         """!Create list with table description"""
@@ -2128,53 +2274,27 @@ class DbMgrTablesPage(DbMgrNotebookBase):
 
     def OnTableItemAdd(self, event):
         """!Add new column to the table"""
-        table = self.dbMgrData['mapDBInfo'].layers[self.selLayer]['table']
         name = self.FindWindowById(self.layerPage[self.selLayer]['addColName']).GetValue()
-        
-        if not name:
-            GError(parent = self,
-                   message = _("Unable to add column to the table. "
-                               "No column name defined."))
-            return
-        
+                
         ctype = self.FindWindowById(self.layerPage[self.selLayer]['addColType']). \
             GetStringSelection()
         
-        # cast type if needed
-        if ctype == 'double':
-            ctype = 'double precision'
-        if ctype == 'varchar':
-            length = int(self.FindWindowById(self.layerPage[self.selLayer]['addColLength']). \
-                             GetValue())
-        else:
-            length = '' # FIXME
+        length = int(self.FindWindowById(self.layerPage[self.selLayer]['addColLength']). \
+                     GetValue())
         
         # add item to the list of table columns
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['tableData'])
-        # check for duplicate items
-        if tlist.FindItem(start = -1, str = name) > -1:
-            GError(parent = self,
-                   message = _("Column <%(column)s> already exists in table <%(table)s>.") % \
-                       {'column' : name, 'table' : self.dbMgrData['mapDBInfo'].layers[self.selLayer]["table"]}
-                   )
-            return
+
+
         index = tlist.InsertStringItem(sys.maxint, str(name))
         tlist.SetStringItem(index, 0, str(name))
         tlist.SetStringItem(index, 1, str(ctype))
         tlist.SetStringItem(index, 2, str(length))
         
-        # add v.db.addcolumn command to the list
-        if ctype == 'varchar':
-            ctype += ' (%d)' % length
-        self.listOfCommands.append(('v.db.addcolumn',
-                                    { 'map'     : self.dbMgrData['vectName'],
-                                      'layer'   : self.selLayer,
-                                      'columns' : '%s %s' % (name, ctype) }
-                                    ))
-        # apply changes
-        self.ApplyCommands(self.listOfCommands, self.listOfSQLStatements)
-        
+        self.AddColumn(name, ctype, length)
+
         # update widgets
+        table = self.dbMgrData['mapDBInfo'].layers[self.selLayer]['table']
         self.FindWindowById(self.layerPage[self.selLayer]['addColName']).SetValue('')
         self.FindWindowById(self.layerPage[self.selLayer]['renameCol']).SetItems(self.dbMgrData['mapDBInfo'].GetColumns(table))
         self.FindWindowById(self.layerPage[self.selLayer]['renameCol']).SetSelection(0)

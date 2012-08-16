@@ -6,13 +6,15 @@
 List of classes:
  - dialogs::DisplayAttributesDialog
  - dialogs::ModifyTableRecord
+ - dialogs::AddColumnDialog
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
 import os
@@ -700,3 +702,96 @@ class ModifyTableRecord(wx.Dialog):
             valueList.insert(self.keyId, str(self.cat))
                              
         return valueList
+
+class AddColumnDialog(wx.Dialog):
+    def __init__(self, parent, title, id = wx.ID_ANY,
+                 style = wx.DEFAULT_DIALOG_STYLE  | wx.RESIZE_BORDER):
+        """!Dialog for adding column into table
+        """
+        wx.Dialog.__init__(self, parent, id, title, style = style)
+        
+        self.CenterOnParent()
+
+        self.data = {} 
+        self.data['addColName'] = wx.TextCtrl(parent = self, id = wx.ID_ANY, value = '',
+                                              size = (150, -1), style = wx.TE_PROCESS_ENTER)
+
+           
+        self.data['addColType'] = wx.Choice (parent = self, id = wx.ID_ANY,
+                                             choices = ["integer",
+                                                        "double",
+                                                        "varchar",
+                                                        "date"]) # FIXME
+        self.data['addColType'].SetSelection(0)
+        self.data['addColType'].Bind(wx.EVT_CHOICE, self.OnTableChangeType)
+            
+        self.data['addColLength'] = wx.SpinCtrl(parent = self, id = wx.ID_ANY, size = (65, -1),
+                                                initial = 250,
+                                                min = 1, max = 1e6)
+        self.data['addColLength'].Enable(False)
+
+
+        # buttons
+        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnOk = wx.Button(self, wx.ID_OK)
+        self.btnOk.SetDefault()
+
+        self._layout()
+
+    def _layout(self):
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        addSizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        addSizer.Add(item =  wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Column")),
+                     flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                     border = 5)
+        addSizer.Add(item = self.data['addColName'], proportion = 1,
+                     flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                     border = 5)
+
+        addSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Type")), 
+                     flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                     border = 5)
+        addSizer.Add(item = self.data['addColType'],
+                     flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                     border = 5)
+
+        addSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Length")),
+                     flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                     border = 5)
+        addSizer.Add(item = self.data['addColLength'],
+                     flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                     border = 5)
+
+        sizer.Add(item = addSizer, proportion = 0,
+                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnOk)
+        btnSizer.Realize()
+
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+
+        self.SetSizer(sizer)
+
+        self.Fit()
+
+    def GetData(self):
+        """!Get inserted data from dialog's widgets"""
+        values = {}
+        values['name'] = self.data['addColName'].GetValue()
+        values['ctype'] = self.data['addColType'].GetStringSelection()
+        values['length'] = int(self.data['addColLength'].GetValue())
+
+        return values
+  
+    def OnTableChangeType(self, event):
+        """!Data type for new column changed. Enable or disable
+        data length widget"""
+        if event.GetString() == "varchar":
+            self.data['addColLength'].Enable(True)
+        else:
+            self.data['addColLength'].Enable(False)     
