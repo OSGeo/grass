@@ -172,6 +172,7 @@ class VirtualAttributeList(wx.ListCtrl,
         
         if sql:
             ret = RunCommand('db.select',
+                             overwrite = True,
                              quiet = True,
                              parent = self,
                              flags = 'c',
