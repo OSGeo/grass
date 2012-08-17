@@ -163,19 +163,21 @@ class VirtualAttributeList(wx.ListCtrl,
         except:
             keyId = -1
         
+        fs = UserSettings.Get(group = 'atm', key = 'fieldSeparator', subkey = 'value')
         # read data
         # FIXME: Max. number of rows, while the GUI is still usable
 
         # stdout can be very large, do not use PIPE, redirect to temp file
         # TODO: more effective way should be implemented...
         outFile = tempfile.NamedTemporaryFile(mode = 'w+b')
-        
+
         if sql:
             ret = RunCommand('db.select',
                              overwrite = True,
                              quiet = True,
                              parent = self,
                              flags = 'c',
+                             fs = fs,
                              sql = sql,
                              output = outFile.name)
         else:
@@ -187,6 +189,7 @@ class VirtualAttributeList(wx.ListCtrl,
                                  map = self.mapDBInfo.map,
                                  layer = layer,
                                  columns = ','.join(columns),
+                                 fs = fs,
                                  where = where,
                                  stdout = outFile)
             else:
@@ -196,6 +199,7 @@ class VirtualAttributeList(wx.ListCtrl,
                                  flags = 'c',
                                  map = self.mapDBInfo.map,
                                  layer = layer,
+                                 fs = fs,
                                  where = where,
                                  stdout = outFile) 
         
@@ -233,7 +237,17 @@ class VirtualAttributeList(wx.ListCtrl,
             
             if not record:
                 break
-           
+
+            record = record.split(fs)
+            if len(columns) != len(record):
+                GError(parent = self,
+                       message = _("Inconsistent number of columns "
+                                   "in the table <%(table)s>. "
+                                   "Try to change field separator in GUI Settings, "
+                                   "Attributes tab, Data browser section.") % \
+                               {'table' : tableName })
+                return
+
             self.AddDataRow(i, record, columns, keyId)
 
             i += 1
@@ -272,7 +286,7 @@ class VirtualAttributeList(wx.ListCtrl,
             j += 1
             cat = i + 1
         
-        for value in record.split('|'):
+        for value in record:
             if self.columns[columns[j]]['ctype'] != types.StringType:
                 try:
                     ### casting disabled (2009/03)
