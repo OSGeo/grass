@@ -1014,6 +1014,8 @@ class SbGoToGCP(SbItem):
                           wx.LIST_STATE_SELECTED)
         listCtrl.render = True
         
+        listCtrl.EnsureVisible(listCtrl.selected)
+
         srcWin = self.mapFrame.GetSrcWindow()
         tgtWin = self.mapFrame.GetTgtWindow()
         
