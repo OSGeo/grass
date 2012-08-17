@@ -3,20 +3,19 @@
 
 @brief Map Swipe map window.
 
+Class _MouseEvent taken from wxPython FloatCanvas source code (Christopher Barker).
+
 Classes:
  - mapwindow::SwipeBufferedWindow
  - mapwindow::_MouseEvent
 
-(C) 2006-2012 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+(C) 2012 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Anna Kratochvilova <kratochanna gmail.com>
-
-Class _MouseEvent taken from wxPython FloatCanvas source code (Christopher Barker).
 """
-
 
 import wx
 

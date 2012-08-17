@@ -1,3 +1,18 @@
+"""!
+@package swipe.frame
+
+@brief Map Swipe Frame
+
+Classes:
+ - dialogs::SwipeMapDialog
+
+(C) 2012 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Anna Kratochvilova <kratochanna gmail.com>
+"""
 
 import sys
 import  wx
