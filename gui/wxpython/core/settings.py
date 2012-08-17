@@ -1081,7 +1081,7 @@ class Settings:
         except KeyError:
             raise GException("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
         
-    def Append(self, dict, group, key, subkey, value):
+    def Append(self, dict, group, key, subkey, value, overwrite = True):
         """!Set value of key/subkey
 
         Create group/key/subkey if not exists
@@ -1091,25 +1091,33 @@ class Settings:
         @param key key
         @param subkey subkey (value or list)
         @param value value
+        @param overwrite True to overwrite existing value
         """
+        hasValue = True
         if group not in dict:
             dict[group] = {}
-
+            hasValue = False
+        
         if key not in dict[group]:
             dict[group][key] = {}
-
+            hasValue = False
+        
         if type(subkey) == types.ListType:
             # TODO: len(subkey) > 2
             if subkey[0] not in dict[group][key]:
                 dict[group][key][subkey[0]] = {}
+                hasValue = False
+            
             try:
-                dict[group][key][subkey[0]][subkey[1]] = value
+                if overwrite or (not overwrite and not hasValue):
+                    dict[group][key][subkey[0]][subkey[1]] = value
             except TypeError:
                 print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
                     ' (' + group + ':' + key + ':' + subkey[0] + ':' + subkey[1] + ')'
         else:
             try:
-                dict[group][key][subkey] = value
+                if overwrite or (not overwrite and not hasValue):
+                    dict[group][key][subkey] = value
             except TypeError:
                 print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
                     ' (' + group + ':' + key + ':' + subkey + ')'
