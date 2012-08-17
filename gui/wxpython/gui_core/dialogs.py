@@ -54,7 +54,8 @@ from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLaye
 from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
 
-wxApplyMapLayers, EVT_APPLY_MAP_LAYERS= NewEvent()
+wxApplyMapLayers, EVT_APPLY_MAP_LAYERS = NewEvent()
+wxApplyOpacity, EVT_APPLY_OPACITY = NewEvent()
 
 class ElementDialog(wx.Dialog):
     def __init__(self, parent, title, label, id = wx.ID_ANY,
@@ -2263,6 +2264,10 @@ class SetOpacityDialog(wx.Dialog):
 
         btnCancel = wx.Button(parent = panel, id = wx.ID_CANCEL)
         btnsizer.AddButton(btnCancel)
+
+        btnApply = wx.Button(parent = panel, id = wx.ID_APPLY)
+        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
+        btnsizer.AddButton(btnApply)
         btnsizer.Realize()
 
         sizer.Add(item = btnsizer, proportion = 0,
@@ -2280,6 +2285,10 @@ class SetOpacityDialog(wx.Dialog):
         # return opacity value
         opacity = float(self.value.GetValue()) / 100
         return opacity
+
+    def OnApply(self, event):
+        event = wxApplyOpacity(value = self.GetOpacity())
+        wx.PostEvent(self, event)
 
 def GetImageHandlers(image):
     """!Get list of supported image handlers"""
