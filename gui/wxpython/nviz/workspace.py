@@ -329,10 +329,10 @@ class NvizSettings(object):
         
         # arrow
         if type == 'arrow':
-            data['arrow'] = UserSettings.Get(group = 'nviz', key = 'arrow')
+            data['arrow'] = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'arrow'))
             data['arrow']['color'] = "%d:%d:%d" % (
                 UserSettings.Get(group = 'nviz', key = 'arrow', subkey = 'color')[:3])
-            data['arrow'].update(UserSettings.Get(group = 'nviz', key = 'arrow', internal = True))
+            data['arrow'].update(copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'arrow', internal = True)))
             data['arrow']['show'] = False
         
         # arrow
