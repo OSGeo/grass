@@ -30,7 +30,7 @@ except ImportError:
 from grass.script import core as grass
 
 from core                import globalvar
-from gui_core.dialogs    import SqlQueryFrame, SetOpacityDialog
+from gui_core.dialogs    import SqlQueryFrame, SetOpacityDialog, EVT_APPLY_OPACITY
 from gui_core.forms      import GUI
 from mapdisp.frame       import MapFrame
 from core.render         import Map
@@ -678,23 +678,38 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         dlg = SetOpacityDialog(self, opacity = current_opacity,
                                title = _("Set opacity of <%s>") % maplayer.GetName())
         dlg.CentreOnParent()
+        dlg.Bind(EVT_APPLY_OPACITY, self.OnApplyLayerOpacity)
 
         if dlg.ShowModal() == wx.ID_OK:
-            new_opacity = dlg.GetOpacity() # string
-            self.Map.ChangeOpacity(maplayer, new_opacity)
-            maplayer.SetOpacity(new_opacity)
-            self.SetItemText(self.layer_selected,
-                             self._getLayerName(self.layer_selected))
+            self.ChangeLayerOpacity(layer = self.layer_selected, value = dlg.GetOpacity())
+        dlg.Destroy()
+
+    def OnApplyLayerOpacity(self, event):
+        """!Handles EVT_APPLY_OPACITY event."""
+        self.ChangeLayerOpacity(layer = self.layer_selected, value = event.value)
+
+    def ChangeLayerOpacity(self, layer, value):
+        """!Change opacity value of layer
+        @param layer layer for which to change (item in layertree)
+        @param value opacity value (float between 0 and 1)
+        """
+        maplayer = self.GetPyData(layer)[0]['maplayer']
+        self.Map.ChangeOpacity(maplayer, value)
+        maplayer.SetOpacity(value)
+        self.SetItemText(layer,
+                         self._getLayerName(layer))
+        
+        # vector layer currently edited
+        if self.GetMapDisplay().GetToolbar('vdigit') and \
+                self.GetMapDisplay().GetToolbar('vdigit').GetLayer() == maplayer:
+            alpha = int(value * 255)
+            self.GetMapDisplay().GetWindow().digit.GetDisplay().UpdateSettings(alpha = alpha)
             
-            # vector layer currently edited
-            if self.mapdisplay.GetToolbar('vdigit') and \
-                    self.mapdisplay.GetToolbar('vdigit').GetLayer() == maplayer:   
-                alpha = int(new_opacity * 255)
-                self.mapdisplay.GetWindow().digit.GetDisplay().UpdateSettings(alpha = alpha)
-                
-            # redraw map if auto-rendering is enabled
-            self.rerender = True
-            self.reorder = True
+        # redraw map if auto-rendering is enabled
+        renderVector = False
+        if self.GetMapDisplay().GetToolbar('vdigit'):
+            renderVector = True
+        self.GetMapDisplay().GetWindow().UpdateMap(render = False, renderVector = renderVector)
 
     def OnNvizProperties(self, event):
         """!Nviz-related properties (raster/vector/volume)
