@@ -9,7 +9,7 @@ from gui_core.mapdisp   import DoubleMapFrame
 from core.render        import Map
 from mapdisp            import statusbar as sb
 from core.debug         import Debug
-from core.gcmd          import RunCommand
+from core.gcmd          import RunCommand, GError
 from mapdisp.statusbar  import EVT_AUTO_RENDER
 
 from swipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
@@ -280,8 +280,17 @@ class SwipeMapFrame(DoubleMapFrame):
         dlg = SwipeMapDialog(self, first = self.rasters['first'], second = self.rasters['second'])
         if dlg.ShowModal() == wx.ID_OK:
             maps = dlg.GetValues()
-            self.SetFirstRaster(name = maps[0])
-            self.SetSecondRaster(name = maps[1])
+            res1 = self.SetFirstRaster(name = maps[0])
+            res2 = self.SetSecondRaster(name = maps[1])
+
+            if not (res1 and res2):
+                message = ''
+                if not res1:
+                    message += _("Map <%s> not found. ") % maps[0]
+                if not res2:
+                    message += _("Map <%s> not found.") % maps[1]
+                GError(parent = self, message = message)
+                dlg.Destroy()
 
         dlg.Destroy()
         self.OnRender(event = None)
@@ -293,6 +302,9 @@ class SwipeMapFrame(DoubleMapFrame):
             self.rasters['first'] = raster['fullname']
             self.SetLayer(name = raster['fullname'], mapInstance = self.GetFirstMap())
             self.OnZoomToMap(event = None)
+            return True
+
+        return False
 
     def SetSecondRaster(self, name):
         """!Set raster map to second Map"""
@@ -301,6 +313,9 @@ class SwipeMapFrame(DoubleMapFrame):
             self.rasters['second'] = raster['fullname']
             self.SetLayer(name = raster['fullname'], mapInstance = self.GetSecondMap())
             self.OnZoomToMap(event = None)
+            return True
+
+        return False
 
     def SetLayer(self, name, mapInstance):
         """!Sets layer in Map.
