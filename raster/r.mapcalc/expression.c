@@ -370,7 +370,8 @@ static char *format_map(const expression * e)
 
 static char *format_function(const expression * e, int prec)
 {
-    char *args[1024];
+    char **args = NULL;
+    int num_args = 0;
     char *result;
     int len;
     int i;
@@ -381,6 +382,10 @@ static char *format_function(const expression * e, int prec)
     len = strlen(e->data.func.name) + 3;
 
     for (i = 1; i <= e->data.func.argc; i++) {
+	if (i >= num_args) {
+	    num_args = i + 1000;
+	    args = G_realloc(args, num_args * sizeof(char *));
+	}
 	args[i] = format_expression_prec(e->data.func.args[i], 9);
 	if (i > 1)
 	    len += 2;
