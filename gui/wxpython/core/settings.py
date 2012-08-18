@@ -1093,6 +1093,7 @@ class Settings:
         @param value value
         @param overwrite True to overwrite existing value
         """
+
         hasValue = True
         if group not in dict:
             dict[group] = {}
@@ -1107,6 +1108,8 @@ class Settings:
             if subkey[0] not in dict[group][key]:
                 dict[group][key][subkey[0]] = {}
                 hasValue = False
+            if subkey[1] not in dict[group][key][subkey[0]]:
+                hasValue = False
             
             try:
                 if overwrite or (not overwrite and not hasValue):
@@ -1115,6 +1118,9 @@ class Settings:
                 print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
                     ' (' + group + ':' + key + ':' + subkey[0] + ':' + subkey[1] + ')'
         else:
+            if subkey not in dict[group][key]:
+                hasValue = False
+            
             try:
                 if overwrite or (not overwrite and not hasValue):
                     dict[group][key][subkey] = value
