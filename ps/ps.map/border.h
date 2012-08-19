@@ -10,7 +10,7 @@
 
 struct border
 {
-    double R, G, B;
+    double r, g, b;
     double width;
 };
 

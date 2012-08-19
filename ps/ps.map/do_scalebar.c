@@ -53,6 +53,7 @@ int do_scalebar(void)
 	margin = 2;
     fprintf(PS.fp, "/mg %d def\n", margin);
     x = sb.x - (length / 2.);
+    set_font_name(sb.font);
     set_font_size(sb.fontsize);
     set_line_width(sb.width);
 
@@ -86,8 +87,7 @@ int do_scalebar(void)
 	    /* do text */
 	    if (i == 0 || lab == sb.numbers) {
 		sprintf(num, "%s", nice_number((sb.length / sb.segment) * i));
-		text_box_path(x1, y2 + margin, CENTER, LOWER, num,
-			      sb.fontsize, 0);
+		text_box_path(x1, y2 + margin, CENTER, LOWER, num, 0);
 		if (sb.bgcolor) {	/* TODO: take bg color, not just [white|none] */
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
@@ -101,8 +101,7 @@ int do_scalebar(void)
 		(sb.numbers == 1 && i == seg - 1)) {
 		/* special case for last label */
 		sprintf(num, "%s", nice_number(sb.length));
-		text_box_path(x2, y2 + margin, CENTER, LOWER, num,
-			      sb.fontsize, 0);
+		text_box_path(x2, y2 + margin, CENTER, LOWER, num, 0);
 		if (sb.bgcolor) {
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
@@ -125,7 +124,7 @@ int do_scalebar(void)
 	fprintf(PS.fp, "%.1f %.1f %.1f %.1f L D\n", x1, y1, x2, y2);
 
 	/* draw label */
-	text_box_path(x1, y1 + margin, CENTER, LOWER, "0", sb.fontsize, 0);
+	text_box_path(x1, y1 + margin, CENTER, LOWER, "0", 0);
 	if (sb.bgcolor) {
 	    set_rgb_color(WHITE);
 	    fprintf(PS.fp, "F ");
@@ -148,7 +147,7 @@ int do_scalebar(void)
 
 	/* draw label */
 	sprintf(num, "%s", nice_number(sb.length));
-	text_box_path(x1, y2 + margin, CENTER, LOWER, num, sb.fontsize, 0);
+	text_box_path(x1, y2 + margin, CENTER, LOWER, num, 0);
 	if (sb.bgcolor) {
 	    set_rgb_color(WHITE);
 	    fprintf(PS.fp, "F ");
@@ -172,8 +171,7 @@ int do_scalebar(void)
 	    if (lab == sb.numbers) {
 		sprintf(num, "%s", nice_number((sb.length / sb.segment) * i));
 
-		text_box_path(x1, y3 + margin, CENTER, LOWER, num,
-			      sb.fontsize, 0);
+		text_box_path(x1, y3 + margin, CENTER, LOWER, num, 0);
 		if (sb.bgcolor) {
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
@@ -202,7 +200,7 @@ int do_scalebar(void)
 	strcpy(num, _("nautical miles"));
     
     text_box_path(72.0 * (x + length/2), 72.0 * (PS.page_height - (sb.y + 0.075)),
-	CENTER, UPPER, num, sb.fontsize, 0);
+	CENTER, UPPER, num, 0);
 
     if (sb.bgcolor) {
 	set_rgb_color(WHITE);

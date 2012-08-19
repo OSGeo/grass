@@ -144,8 +144,9 @@ int do_geogrid_numbers(void)
     double lat, lon;
     double grid;
     char num_text[50];
-    int vy, vx, hy = 0, hx = 0;
-    int first, x, y, last_bottom, last_right;
+    int vy, vx /*, hy = 0, hx = 0 */;
+    int x, y, last_bottom, last_right;
+    /* int first = 1; */
     int margin;
 
     if (PS.geogrid <= 0 || PS.geogrid_numbers <= 0)
@@ -167,7 +168,6 @@ int do_geogrid_numbers(void)
     set_font_name(PS.geogrid_font);
     set_font_size(PS.geogrid_fontsize);
     set_ps_color(&PS.geogrid_numbers_color);
-    first = 1;
 
     /* vertical grid numbers
      * these numbers only appear on the right edge
@@ -181,7 +181,6 @@ int do_geogrid_numbers(void)
     fprintf(PS.fp, "/mg %d def\n", margin);
     g = floor(north / grid) * grid;
     last_bottom = (int)PS.map_top;
-    first = 1;
 
     for (; g > south; g -= grid) {
 	e1 = east;		/* draw at east boundary */
@@ -201,18 +200,20 @@ int do_geogrid_numbers(void)
 	if (y - PS.grid_fontsize < (int)PS.map_bot)
 	    continue;
 	G_format_northing(g, num_text, PROJECTION_LL);
-	text_box_path(x, y, RIGHT, CENTER, num_text, PS.geogrid_fontsize, 0);
+	text_box_path(x, y, RIGHT, CENTER, num_text, 0);
 	set_rgb_color(WHITE);
 	fprintf(PS.fp, "F ");
 	set_ps_color(&PS.geogrid_numbers_color);
 	fprintf(PS.fp, "TIB\n");
 	last_bottom = y - PS.geogrid_fontsize;
+	/*
 	if (first) {
 	    first = 0;
 	    hy = y + (int)(0.5 * (double)PS.geogrid_fontsize + 0.5) + margin;
 	    hx = x + 0.7 * strlen(num_text) * PS.geogrid_fontsize +
 		2 * margin;
 	}
+	*/
     }
 
     /* horizontal grid numbers along the bottom

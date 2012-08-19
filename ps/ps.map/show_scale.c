@@ -11,6 +11,7 @@ int show_scale(void)
 {
     double fontsize;
 
+    /* TODO: add font name, size, color options */
     fontsize = FONTSIZE;
     fprintf(PS.fp, "(Helvetica) FN %.1lf SF\n", fontsize);
     fprintf(PS.fp, "(SCALE:   %s)\n", PS.scaletext);

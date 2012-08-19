@@ -190,12 +190,12 @@ int do_label(FILE * fd, int font_override)
 	    multi_text = multi_lines(value);
 	    if (multi_text) {
 		/* multiple lines - text is in PostScript array "ta" */
-		multi_text_box_path(x, y, xref, yref, value, fontsize,
-				    rotate);
+		multi_text_box_path(x, y, xref, yref, value, fontsize, 
+		                    rotate);
 	    }
 	    else {
 		/* single line - text is left on stack */
-		text_box_path(x, y, xref, yref, value, fontsize, rotate);
+		text_box_path(x, y, xref, yref, value, rotate);
 	    }
 
 	    if (opaque && !color_none(&background)) {

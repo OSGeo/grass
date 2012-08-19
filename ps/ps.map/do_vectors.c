@@ -149,7 +149,7 @@ int do_vpoints(int after_masking)
 	    continue;
 	}
 
-	PS_vpoints_plot(&Map, n, LINE_DRAW_LINE);
+	PS_vpoints_plot(&Map, n);
 
 	Vect_close(&Map);
 	fprintf(PS.fp, "[] 0 setdash\n");

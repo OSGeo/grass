@@ -77,7 +77,7 @@ int eps_save(FILE * fp, char *epsf, char *name)
 }
 
 /* draw EPS file saved by eps_save */
-int eps_draw_saved(FILE * fp, char *name, double x, double y, double scale,
+int eps_draw_saved(char *name, double x, double y, double scale,
 		   double rotate)
 {
     fprintf(PS.fp, "\nBeginEPSF\n");

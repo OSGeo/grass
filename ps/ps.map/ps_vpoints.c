@@ -16,10 +16,10 @@
 #include "local_proto.h"
 #include "vector.h"
 
-int PS_vpoints_plot(struct Map_info *P_map, int vec, int type)
+int PS_vpoints_plot(struct Map_info *P_map, int vec)
 {
-    struct line_pnts *Points, *nPoints, *pPoints;
-    int k, line, cat, nlines, ret;
+    struct line_pnts *Points;
+    int line, ltype, cat, nlines, ret;
     struct line_cats *Cats;
 
     char eps[50], epsfile[1024], sname[100];
@@ -48,8 +48,6 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec, int type)
     PSCOLOR color;
 
     cv_rgb = NULL;
-
-
 
     /* Create vector array if required */
     if (vector.layer[vec].cats != NULL || vector.layer[vec].where != NULL) {
@@ -120,24 +118,20 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec, int type)
 
 
     /* read and plot vectors */
-    k = 0;
     nlines = Vect_get_num_lines(P_map);
     for (line = 1; line <= nlines; line++) {
-	if (0 > (ret = Vect_read_line(P_map, Points, Cats, line))) {
-	    if (ret == -1)
-		G_warning(_("Read error in vector map"));
-	    break;
-	}
-	if (!(ret & GV_POINTS))
+	if (!Vect_line_alive(P_map, line))
 	    continue;
-	if (!(ret & vector.layer[vec].ltype))
+	ltype = Vect_read_line(P_map, Points, Cats, line);
+
+	if (!(ltype & GV_POINTS))
+	    continue;
+	if (!(ltype & vector.layer[vec].ltype))
 	    continue;
 
 	if (Varray != NULL && Varray->c[line] == 0)
 	    continue;		/* is not in array */
 
-	pPoints = Points;
-	nPoints = 0;
 	Vect_cat_get(Cats, 1, &cat);
 
 	nn = Points->y[0];
@@ -260,7 +254,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec, int type)
 	if (vector.layer[vec].epstype == 1) {	/* draw common eps */
 	    /* calculate translation */
 	    eps_trans(llx, lly, urx, ury, x, y, size, rotate, &xt, &yt);
-	    eps_draw_saved(PS.fp, eps, xt, yt, size, rotate);
+	    eps_draw_saved(eps, xt, yt, size, rotate);
 	}
 	else if (vector.layer[vec].epstype == 2) {	/* draw epses */
 	    sprintf(epsfile, "%s%d%s", vector.layer[vec].epspre, cat,

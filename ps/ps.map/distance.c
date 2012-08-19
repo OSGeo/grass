@@ -13,6 +13,7 @@ double distance(double east, double west)
      * Note, must do lat-lon in 3 pieces, otherwise distance "line" may
      * go the wrong way around the globe
      */
+
     G_begin_distance_calculations();
 
     if (east < west) {
@@ -28,7 +29,8 @@ double distance(double east, double west)
     e2 = e1 + incr;
 
     meters = G_distance(west, 0.0, e1, 0.0) +
-	G_distance(e1, 0.0, e2, 0.0) + G_distance(e2, 0.0, east, 0.0);
+	     G_distance(e1, 0.0, e2, 0.0) +
+	     G_distance(e2, 0.0, east, 0.0);
 
     return meters;
 }
