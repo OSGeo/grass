@@ -109,7 +109,7 @@ class VirtualAttributeList(wx.ListCtrl,
         # sort item by category (id)
         if keyColumn > -1:
             self.SortListItems(col = keyColumn, ascending = True) 
-        else:
+        elif keyColumn:
             self.SortListItems(col = 0, ascending = True) 
         
         # events
@@ -246,6 +246,7 @@ class VirtualAttributeList(wx.ListCtrl,
                                    "Try to change field separator in GUI Settings, "
                                    "Attributes tab, Data browser section.") % \
                                {'table' : tableName })
+                self.columns = {} # because of IsEmpty method
                 return
 
             self.AddDataRow(i, record, columns, keyId)
@@ -975,7 +976,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         win = VirtualAttributeList(panel, self.log,
                                    self.dbMgrData, layer, self.pages)
         if win.IsEmpty():
-            del panel
+            panel.Destroy()
             return False
 
         self.layers.append(layer)
