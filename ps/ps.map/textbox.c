@@ -11,9 +11,12 @@
 #define UPPER 1
 #define CENTER 2
 
+/* font name, size, and color must be set first, outside text_box_path()
+ * because text_box_path() is called repeatedly with identical 
+ * font name, size, and color */
 int
 text_box_path(double x, double y, int xref, int yref, char *text,
-	      int fontsize, float rotate)
+	      float rotate)
 {
     /* get relative box coordinates */
     fprintf(PS.fp, "ZB (%s) PB\n", text);

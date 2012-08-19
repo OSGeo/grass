@@ -25,7 +25,7 @@ int read_border(void)
     double width;
     char ch;
     int r, g, b;
-    double color_R, color_G, color_B;
+    double color_r, color_g, color_b;
     int ret;
 
     static char *help[] = {
@@ -37,7 +37,7 @@ int read_border(void)
     G_debug(1, "Reading border settings ..");
 
     width = 1.;
-    color_R = color_G = color_B = 0.;
+    color_r = color_g = color_b = 0.;
 
     while (input(2, buf, help)) {
 	if (!key_data(buf, &key, &data))
@@ -46,12 +46,12 @@ int read_border(void)
 	if (KEY("color")) {
 	    ret = G_str_to_color(data, &r, &g, &b);
 	    if (ret == 1) {
-		color_R = r / 255.;
-		color_G = g / 255.;
-		color_B = b / 255.;
+		color_r = r / 255.;
+		color_g = g / 255.;
+		color_b = b / 255.;
 	    }
 	    else if (ret == 2)	/* i.e. "none" */
-		color_R = color_G = color_B = -1.;
+		color_r = color_g = color_b = -1.;
 	    else
 		error(key, data, "illegal border color request");
 
@@ -74,9 +74,9 @@ int read_border(void)
 	error(key, data, "illegal border sub-request");
     }
 
-    brd.R = color_R;
-    brd.G = color_G;
-    brd.B = color_B;
+    brd.r = color_r;
+    brd.g = color_g;
+    brd.b = color_b;
     brd.width = width;
 
     return 0;

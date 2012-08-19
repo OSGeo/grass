@@ -30,9 +30,7 @@ int map_setup(void)
 		PS.map_pix_wide = 72.0 * PS.map_width;
 		PS.map_pix_high = 72.0 * PS.map_height;
 	    }
-
-	    /* else, kill the scale */
-	    else
+	    else    /* kill the scale */
 		PS.scaletext[0] = 0;
 	}
 
@@ -52,9 +50,7 @@ int map_setup(void)
 		PS.map_pix_wide = 72.0 * PS.map_width;
 		PS.map_pix_high = 72.0 * PS.map_height;
 	    }
-
-	    /* else, kill the scale */
-	    else
+	    else    /* kill the scale */
 		PS.scaletext[0] = 0;
 	}
 

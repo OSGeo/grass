@@ -131,7 +131,6 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
     double e, w, n, s, aw, shift;
     double llx, lly, urx, ury, sc;
     char pat[50];
-    struct line_cats *Cats;
     struct bound_box box;
     struct varray *Varray = NULL;
     PSCOLOR color;
@@ -141,8 +140,6 @@ int PS_vareas_plot(struct Map_info *P_map, int vec)
     dbCatValArray cvarr_rgb;
 
     fprintf(PS.fp, "1 setlinejoin\n");	/* set line join to round */
-
-    Cats = Vect_new_cats_struct();
 
     /* Create vector array if required */
     if (vector.layer[vec].cats != NULL || vector.layer[vec].where != NULL) {

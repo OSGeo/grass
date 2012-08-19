@@ -24,7 +24,7 @@ int PS_colortable(void)
     int center_cols;
     DCELL dmin, dmax, val;
     struct Colors colors;
-    double t, l, r;
+    double t, l /*, r */;
     double x1, x2, y, dy, fontsize, tl;
     double col_width;
     int do_color;
@@ -80,7 +80,7 @@ int PS_colortable(void)
     if (ct.width <= 0.0 || ct.width > PS.page_width - PS.right_marg - ct.x)
 	ct.width = PS.page_width - PS.right_marg - ct.x;
 
-    r = l + 72.0 * ct.width;
+    /* r = l + 72.0 * ct.width; */ /* unused */
     col_width = ct.width / (double)ct.cols;
 
     G_debug(3, "clrtbl: adjusted ct.x=[%.3f] ct.y=[%.3f] ct.width=[%.3f] "
@@ -154,9 +154,9 @@ int PS_colortable(void)
 
 	    x2 = x1 + fontsize;
 
-	    if (!i || dmax == dmin)
+	    if (!i || dmax == dmin) {
 		/* draw a 1-color rectangle */
-	    {
+
 		/* set box fill color */
 		if (!i)
 		    Rast_get_null_value_color(&R, &G, &B, &colors);
@@ -201,10 +201,10 @@ int PS_colortable(void)
 		set_ps_color(&ct.color);
 		fprintf(PS.fp, "1 W stroke\n");
 	    }
-	    else
+	    else {
 		/* split the rectangle into NSTEPS horizontal strips and
 		   draw each with the corresponding value's color */
-	    {
+
 		for (jj = 0; jj < NSTEPS; jj++) {
 		    /* set box fill color */
 		    val = dmin + (double)jj *(dmax - dmin) / NSTEPS;

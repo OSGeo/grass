@@ -14,7 +14,7 @@ int read_point(double e, double n)
     int fcolor_R, fcolor_G, fcolor_B;
     int ret;
     double size, width, rotate;
-    int have_icon;
+    /* int have_icon; */ /* unused */
     char ch;
     char *key, *data;
     int masked;
@@ -33,7 +33,6 @@ int read_point(double e, double n)
     size = 6.0;
     width = -1.0;  /* default is proportionate to symbol size */
     rotate = 0.0;
-    have_icon = 0;
     masked = 0;
     color_R = color_G = color_B = 0;
     fcolor_R = fcolor_G = fcolor_B = 128;

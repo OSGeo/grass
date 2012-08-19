@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
     can_reset_scale = 1;
     hdr.fp = NULL;
     grp.do_group = 0;
-    brd.R = brd.G = brd.B = 0.;
+    brd.r = brd.g = brd.b = 0.;
     brd.width = 1.;
 
     PS.min_y = 72.0 * (PS.page_height - PS.top_marg);
@@ -239,9 +239,8 @@ int main(int argc, char *argv[])
     /* get current mapset */
     PS.cell_mapset = G_mapset();
 
-    /* set current window */
-    G_get_set_window(&PS.w);
-    Rast_set_window(&PS.w);
+    /* get current window */
+    Rast_get_window(&PS.w);
 
     read_instructions(copies_set, can_reset_scale);
     

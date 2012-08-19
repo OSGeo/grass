@@ -43,10 +43,11 @@ int read_colortable(void)
     PSCOLOR color;
 
 
-    fontsize = 0;
+    fontsize = 10;
     set_color(&color, 0, 0, 0);
     cols = 1;
     h = w = x = y = 0.0;
+    ct.font = G_store("Helvetica");
     ct.nodata = TRUE;
     ct.tickbar = FALSE;
     ct.discrete = -1;	    /* default: TRUE for CELL map, FALSE for FP maps */

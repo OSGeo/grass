@@ -14,7 +14,7 @@ int do_plt(int after_masking)
 {
     FILE *fp;
     char buf[1024], symb[1024], sname[100];
-    char name[1024], prev_name[50];
+    char name[1024] /*, prev_name[50] */;
     double e1, n1, e2, n2, llx, lly, urx, ury;
     int color_R, color_G, color_B;
     int fcolor_R, fcolor_G, fcolor_B;
@@ -26,8 +26,6 @@ int do_plt(int after_masking)
     PSCOLOR pcolor, pfcolor;
     SYMBOL *Symb;
     static int snum = 0;
-
-    prev_name[0] = 0;
 
     if (PS.plfile == NULL)
 	return 1;

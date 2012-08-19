@@ -82,7 +82,8 @@ void reset_map_location(void)
     w = PS.page_width - PS.map_x_orig - PS.right_marg;
     h = PS.page_height - PS.map_y_loc - PS.bot_marg;
 
-    if (PS.map_width <= 0 || PS.map_width > w)	/* not specified or greater than available space */
+    if (PS.map_width <= 0 || PS.map_width > w)
+	/* not specified or greater than available space */
 	PS.map_width = w;
 
     if (PS.map_height <= 0 || PS.map_height > h)

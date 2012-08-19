@@ -25,9 +25,8 @@ int PS_fcolortable(void)
     int i, k;
     int R, G, B;
     DCELL dmin, dmax, val;
-    double t, l, r;		/* legend top, left, right */
-    double x1, x2, y, dy, fontsize, xu, yu;
-    double col_width;
+    double t, l;		/* legend top, left, right */
+    double x1, x2, y, dy, xu, yu;
     double width;		/* width of legend in map units */
     double height;		/* width of legend in map units */
     double cwidth;		/* width of one color line */
@@ -40,7 +39,8 @@ int PS_fcolortable(void)
     double ex, cur_d, cur_ex;
     int do_color;
     double grey_color_val, margin;
-    int max_label_length = 0, label_posn, label_xref, label_yref;
+    unsigned int max_label_length = 0;
+    int label_posn, label_xref, label_yref;
 
     /* let user know what's happenning */
     G_message(_("Creating color table for <%s in %s>..."),
@@ -70,9 +70,10 @@ int PS_fcolortable(void)
 
     do_color = (PS.grey == 0 && PS.level == 2);
 
-    /* set font */
-    fontsize = (double)ct.fontsize;
-    fprintf(PS.fp, "(%s) FN %.1f SF\n", ct.font, fontsize);
+    /* set font name, size, and color */
+    set_font_name(ct.font);
+    set_font_size(ct.fontsize);
+    set_ps_color(&ct.color);
 
     /* set colortable location,  */
     /* if height and width are not given, calculate defaults */
@@ -81,7 +82,7 @@ int PS_fcolortable(void)
     if (ct.height <= 0)
 	ct.height = 10 * ct.fontsize / 72.0;
 
-    dy = 1.5 * fontsize;
+    dy = 1.5 * ct.fontsize;
 
     G_debug(3, "pwidth = %f pheight = %f", PS.page_width, PS.page_height);
     G_debug(3, "ct.width = %f ct.height = %f", ct.width, ct.height);
@@ -112,8 +113,7 @@ int PS_fcolortable(void)
 
     G_debug(3, "corrected ct.x = %f ct.y = %f", ct.x, ct.y);
 
-    r = l + 72.0 * ct.width;
-    col_width = ct.width / (double)ct.cols;
+    /* r = l + 72.0 * ct.width; */ /* unused */
 
     /* Calc number of colors to print */
     width = 72.0 * ct.width;
@@ -237,11 +237,11 @@ int PS_fcolortable(void)
 	*ch = '\0';
 
 	if (ct.tickbar)		/* switch to draw tic all the way through bar */
-	    fprintf(PS.fp, "(%s) %f %f MS\n", buf, x1 + 0.2 * fontsize,
-		    y - 0.35 * fontsize);
+	    fprintf(PS.fp, "(%s) %f %f MS\n", buf, x1 + 0.2 * ct.fontsize,
+		    y - 0.35 * ct.fontsize);
 	else
-	    fprintf(PS.fp, "(%s) %f %f MS\n", buf, x2 + 0.2 * fontsize,
-		    y - 0.35 * fontsize);
+	    fprintf(PS.fp, "(%s) %f %f MS\n", buf, x2 + 0.2 * ct.fontsize,
+		    y - 0.35 * ct.fontsize);
 
 	if(strlen(buf) > max_label_length)
 	    max_label_length = strlen(buf);
@@ -256,7 +256,7 @@ int PS_fcolortable(void)
         units = "";
 
     if(strlen(units)) {
-	margin = 0.2 * fontsize;
+	margin = 0.2 * ct.fontsize;
 	if (margin < 2)
 	    margin = 2;
 	fprintf(PS.fp, "/mg %.1f def\n", margin);
@@ -284,16 +284,16 @@ int PS_fcolortable(void)
 	case 2:
 	    /* directly above the tick numbers */
 	    if (ct.tickbar)
-		xu = x1 + 0.2 * fontsize;
+		xu = x1 + 0.2 * ct.fontsize;
 	    else
-		xu = x2 + 0.2 * fontsize;
+		xu = x2 + 0.2 * ct.fontsize;
 	    yu = t + 0.05*72;
 	    label_xref = LEFT;
 	    label_yref = LOWER;
 	    break;
 	case 3:
 	    /* to the right of the tick numbers */
-	    xu = 0.15*72 + max_label_length*fontsize*0.5;
+	    xu = 0.15*72 + max_label_length * ct.fontsize * 0.5;
 	    if (ct.tickbar)
 		xu += x1;
 	    else
@@ -305,9 +305,9 @@ int PS_fcolortable(void)
 	case 4:
 	    /* directly below the tick numbers */
 	    if (ct.tickbar)
-		xu = x1 + 0.2 * fontsize;
+		xu = x1 + 0.2 * ct.fontsize;
 	    else
-		xu = x2 + 0.2 * fontsize;
+		xu = x2 + 0.2 * ct.fontsize;
 	    yu = t - height - 0.05*72;
 	    label_xref = LEFT;
 	    label_yref = UPPER;
@@ -321,7 +321,7 @@ int PS_fcolortable(void)
 	    break;
 	}
 
-	text_box_path( xu, yu, label_xref, label_yref, units, fontsize, 0);
+	text_box_path( xu, yu, label_xref, label_yref, units, 0);
 	fprintf(PS.fp, "TIB\n");
 	set_rgb_color(BLACK);
     }

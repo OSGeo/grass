@@ -2,6 +2,9 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
+/* TODO: when done, 
+ * remove session file or save it to a user-specified location */
+
 static char cur[2000];
 static char *sessionfile = NULL;
 static FILE *fd;

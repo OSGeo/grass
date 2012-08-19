@@ -176,7 +176,7 @@ int PS_vlegend(void);
 
 #ifdef GRASS_VECTOR_H
 /* ps_vpoints.c */
-int PS_vpoints_plot(struct Map_info *, int, int);
+int PS_vpoints_plot(struct Map_info *, int);
 
 /* ps_vlines.c */
 int PS_vlines_plot(struct Map_info *, int, int);
@@ -198,9 +198,6 @@ int set_paper(char *);
 void reset_map_location(void);
 void print_papers(void);
 
-/* r_instructions.c */
-void read_instructions(int, int);
-
 /* r_border.c */
 int read_border(void);
 
@@ -215,6 +212,9 @@ int read_header(void);
 
 /* r_info.c */
 int read_info(void);
+
+/* r_instructions.c */
+void read_instructions(int, int);
 
 /* r_labels.c */
 int read_labels(char *, char *);
@@ -286,7 +286,7 @@ int symbol_save(SYMBOL *, PSCOLOR *, PSCOLOR *, char *);
 #endif
 #endif
 /* textbox.c */
-int text_box_path(double, double, int, int, char *, int, float);
+int text_box_path(double, double, int, int, char *, float);
 
 /* vector.c */
 void vector_init(void);
@@ -301,7 +301,7 @@ int eps_trans(double, double, double, double, double, double, double, double,
 	      double *, double *);
 #ifdef _STDIO_H
 int eps_save(FILE *, char *, char *);
-int eps_draw_saved(FILE *, char *, double, double, double, double);
+int eps_draw_saved(char *, double, double, double, double);
 int eps_draw(FILE *, char *, double, double, double, double);
 int pat_save(FILE *, char *, char *);
 #endif
