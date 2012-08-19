@@ -92,7 +92,7 @@ int do_scalebar(void)
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
 		}
-		set_rgb_color(BLACK);
+		set_rgb_color(sb.color);
 		fprintf(PS.fp, "TIB\n");
 		lab = 0;
 	    }
@@ -106,7 +106,7 @@ int do_scalebar(void)
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
 		}
-		set_rgb_color(BLACK);
+		set_rgb_color(sb.color);
 		fprintf(PS.fp, "TIB\n");
 	    }
 
@@ -129,7 +129,7 @@ int do_scalebar(void)
 	    set_rgb_color(WHITE);
 	    fprintf(PS.fp, "F ");
 	}
-	set_rgb_color(BLACK);
+	set_rgb_color(sb.color);
 	fprintf(PS.fp, "TIB\n");
 
 
@@ -152,7 +152,7 @@ int do_scalebar(void)
 	    set_rgb_color(WHITE);
 	    fprintf(PS.fp, "F ");
 	}
-	set_rgb_color(BLACK);
+	set_rgb_color(sb.color);
 	fprintf(PS.fp, "TIB\n");
 
 
@@ -176,7 +176,7 @@ int do_scalebar(void)
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
 		}
-		set_rgb_color(BLACK);
+		set_rgb_color(sb.color);
 		fprintf(PS.fp, "TIB\n");
 		lab = 0;
 	    }
@@ -206,7 +206,7 @@ int do_scalebar(void)
 	set_rgb_color(WHITE);
 	fprintf(PS.fp, "F ");
     }
-    set_rgb_color(BLACK);
+    set_rgb_color(sb.color);
     fprintf(PS.fp, "TIB\n");
 
 

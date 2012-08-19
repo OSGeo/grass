@@ -139,6 +139,17 @@ int read_scalebar(void)
 		continue;
 	}
 
+	if (KEY("color"))
+	{
+	    sb.color = get_color_number(data);
+	    if (sb.color < 0)
+	    {
+		sb.color = BLACK;
+		error(key, data, "illegal color request");
+	    }
+	    continue;
+	}
+
 	if (KEY("background")) {
 	    sb.bgcolor = yesno(key, data);
 	    continue;
