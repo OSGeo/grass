@@ -10,7 +10,8 @@
 
 int read_cell(char *name, char *mapset)
 {
-    char fullname[100];
+    /* full name can be "name@mapset in mapset" */
+    char fullname[GNAME_MAX + 2 * GMAPSET_MAX + 4];
 
     PS.do_colortable = 0;
     if (PS.cell_fd >= 0) {
