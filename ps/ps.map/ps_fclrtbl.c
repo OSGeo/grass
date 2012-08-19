@@ -121,7 +121,7 @@ int PS_fcolortable(void)
     cwidth = 0.1;
     ncols = (int)height / cwidth;
     step = (dmax - dmin) / (ncols - 1);
-    lwidth = width > 72 ? 0.02 * 72 : 0.02 * width;
+    lwidth = ct.lwidth;
 
     /* Print color band */
     y = t;

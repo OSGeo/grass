@@ -18,6 +18,7 @@ static char *help[] = {
     "where      x y",
     "width      table_width",
     "height     fptable_height",
+    "lwidth     line_width",
     "raster	raster_name",
     "range	min max",
     "cols       columns",
@@ -36,7 +37,7 @@ int read_colortable(void)
     char *key, *data;
     char name[GNAME_MAX], mapset[GMAPSET_MAX];
     int fontsize, cols, nodata, tickbar, discrete;
-    double w, h, x, y;
+    double w, h, x, y, lw;
     int range_override;
     double min, max, tmpD;
     int r, g, b, ret;
@@ -47,6 +48,7 @@ int read_colortable(void)
     set_color(&color, 0, 0, 0);
     cols = 1;
     h = w = x = y = 0.0;
+    lw = 1;
     ct.font = G_store("Helvetica");
     ct.nodata = TRUE;
     ct.tickbar = FALSE;
@@ -77,6 +79,14 @@ int read_colortable(void)
 	if (KEY("height")) {
 	    if (sscanf(data, "%lf", &h) != 1 || h <= 0) {
 		error(key, data, _("illegal height request"));
+	    }
+	    else
+		continue;
+	}
+
+	if (KEY("lwidth")) {
+	    if (sscanf(data, "%lf", &lw) != 1 || lw < 0) {
+		error(key, data, _("illegal width request"));
 	    }
 	    else
 		continue;
@@ -189,6 +199,7 @@ int read_colortable(void)
     ct.range_override = range_override;
     ct.width = w;
     ct.height = h;
+    ct.lwidth = lw;
     ct.color = color;
     ct.cols = cols;
 

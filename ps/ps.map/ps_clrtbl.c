@@ -199,7 +199,7 @@ int PS_colortable(void)
 /* grey border	fprintf(PS.fp, "B F .247 .247 .247 C 1 W stroke\n"); */
 		fprintf(PS.fp, "B F ");
 		set_ps_color(&ct.color);
-		fprintf(PS.fp, "1 W stroke\n");
+		fprintf(PS.fp, "%.2f W stroke\n", ct.lwidth);
 	    }
 	    else {
 		/* split the rectangle into NSTEPS horizontal strips and
@@ -226,7 +226,7 @@ int PS_colortable(void)
 		    fprintf(PS.fp, "B CF stroke\n");
 		}		/* done filling the box */
 
-		/* outline the box in black */
+		/* outline the box in the specified color, see above */
 		fprintf(PS.fp, "%.1f ", x1);
 		if (center_cols)
 		    fprintf(PS.fp, "mvx ");
@@ -235,7 +235,10 @@ int PS_colortable(void)
 		if (center_cols)
 		    fprintf(PS.fp, "mvx ");
 		fprintf(PS.fp, "%.1f ", y + fontsize);
-		fprintf(PS.fp, "B BW stroke\n");
+		fprintf(PS.fp, "B ");
+		set_ps_color(&ct.color);
+		fprintf(PS.fp, "%.2f W stroke\n", ct.lwidth);
+
 	    }	/* done drawing the box */
 
 	    /* do the text */
