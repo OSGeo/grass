@@ -13,21 +13,27 @@ extern int do_vlegend;
 extern int ps_copies;
 
 static char *help[] = {
-    "rast       rastermap             setcolor   val_range(s) color",
+    "cell       rastermap             rast       rastermap",
+    "raster     rastermap             group      imagery group",
+    "greyrast   greyscale rastermap   grayrast   grayscale rastermap",
+    "rgb        3 rastermaps for RGB  setcolor   val_range(s) color",
     "vpoints    vector points map     scalebar   [f|s]",
     "vlines     vector lines map      paper      [a4|a3|us-letter|...]",
     "vareas     vector areas map      maploc     x y [width height]",
     "labels     labelfile             text       east north text",
     "region     regionfile            line       east north east north",
     "grid       spacing               point      east north",
-    "geogrid    spacing               header",
-    "outline                          mapinfo",
-    "colortable [y|n]                 vlegend",
+    "geogrid    spacing               header     header text",
+    "colortable [y|n]                 vlegend    vector legend",
     "comments   [unix-file]           psfile     PostScript include file",
     "read       unix-file             eps        Encapsulated PostScript file",
+    "border     [y|n]                 mapinfo    map information",
+    "window     region definition     region     region definition",
+    "maskcolor  MASK color",
     "rectangle  east north east north",
     "scale      1:#|# inches|# panels|1 inch = # miles",
-    "border     [y|n]",
+    "outline    map composition outline",
+    "copies     number of copies",
     ""
 };
 
