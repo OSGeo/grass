@@ -260,9 +260,6 @@ int main(int argc, char *argv[])
     ps_mask_file = G_tempfile();
     ps_map();
 
-    G_done_msg(_("PostScript file '%s' successfully written."),
-	       output_file->answer);
-
     /* cleanup the tempfiles */
     unlink(ps_mask_file);
     if (PS.plfile)
@@ -272,6 +269,9 @@ int main(int argc, char *argv[])
     /*    if(sessionfile) unlink(sessionfile);    created in session.c (how to remove?) */
     if (labels.other)
 	unlink(labels.other);
+
+    G_done_msg(_("PostScript file '%s' successfully written."),
+	       output_file->answer);
 
     exit(EXIT_SUCCESS);
 }
