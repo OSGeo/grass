@@ -162,7 +162,7 @@ class PsMapFrame(wx.Frame):
         self.cmdThread = CmdThread(self, self.requestQ, self.resultQ)
         
         self._layout()
-        self.SetMinSize(wx.Size(750, 600))
+        self.SetMinSize(wx.Size(775, 600))
         
         self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)

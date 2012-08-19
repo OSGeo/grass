@@ -22,6 +22,7 @@ import wx
 from core              import globalvar
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon        import MetaIcon
+from core.globalvar    import ETCIMGDIR
 
 class PsMapToolbar(BaseToolbar):
     def __init__(self, parent):
@@ -32,9 +33,18 @@ class PsMapToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent)
         
         self.InitToolbar(self._toolbarData())
-        
+
+        # custom button for graphics mode selection
+        # TODO: could this be somehow generalized?
+        self.arrowButton = self.CreateSelectionButton()
+        self.arrowButtonId = self.InsertControl(17, self.arrowButton)
+        self.arrowButton.Bind(wx.EVT_BUTTON, self.OnDrawGraphicsMenu)
+
+        self.drawGraphicsAction = None
+        self.OnAddPoint(event = None)
+
         self.Realize()
-        
+
         self.action = { 'id' : self.pointer }
         self.defaultAction = { 'id' : self.pointer,
                                'bind' : self.parent.OnPointer }
@@ -83,8 +93,6 @@ class PsMapToolbar(BaseToolbar):
                                     label = _('Image')),
             'addNorthArrow': MetaIcon(img = 'north-arrow-add',
                                       label = _('North Arrow')),
-            'drawGraphics': MetaIcon(img = 'edit',
-                                     label = _('Add simple graphics')),
             'pointAdd'    : MetaIcon(img = 'point-add',
                                      label = _('Point')),
             'lineAdd'     : MetaIcon(img = 'line-add',
@@ -119,12 +127,12 @@ class PsMapToolbar(BaseToolbar):
                                       self.parent.OnAddRaster),
                                      ('addVector', BaseIcons['addVect'],
                                       self.parent.OnAddVect),
-                                     ("dec", BaseIcons["overlay"],
-                                      self.OnDecoration),
-                                     ("drawGraphics", icons["drawGraphics"],
-                                      self.OnDrawGraphics, wx.ITEM_CHECK),
                                      ("delete", icons["deleteObj"],
                                       self.parent.OnDelete),
+                                     ("dec", BaseIcons["overlay"],
+                                      self.OnDecoration),
+                                     ("drawGraphics", icons['pointAdd'],
+                                      self.OnDrawGraphics, wx.ITEM_CHECK),
                                      (None, ),
                                      ("preview", icons["preview"],
                                       self.parent.OnPreview),
@@ -150,13 +158,72 @@ class PsMapToolbar(BaseToolbar):
                       (self.icons["addNorthArrow"], self.parent.OnAddNorthArrow)))
 
     def OnDrawGraphics(self, event):
+        """!Graphics tool activated."""
+        self.OnTool(event)
+        # we need the previous id
+        if self.drawGraphicsAction == 'pointAdd':
+            self.parent.OnAddPoint(event)
+        elif self.drawGraphicsAction == 'lineAdd':
+            self.parent.OnAddLine(event)
+        elif self.drawGraphicsAction == 'rectangleAdd':
+            self.parent.OnAddRectangle(event)
+
+    def OnDrawGraphicsMenu(self, event):
         """!Simple geometry features (point, line, rectangle) overlay menu
         """
-        # we need the previous id
-        self.actionOld = self.action['id']
-        self.OnTool(event)
-        self.action['id'] = self.actionOld
-        self._onMenu(((self.icons["pointAdd"],      self.parent.OnAddPoint),
-                      (self.icons["lineAdd"],       self.parent.OnAddLine),
-                      (self.icons["rectangleAdd"],  self.parent.OnAddRectangle),
+        self._onMenu(((self.icons["pointAdd"],      self.OnAddPoint),
+                      (self.icons["lineAdd"],       self.OnAddLine),
+                      (self.icons["rectangleAdd"],  self.OnAddRectangle),
                     ))
+
+    def OnAddPoint(self, event):
+        """!Point mode selected.
+
+        Graphics drawing tool is activated. Tooltip changed.
+        """
+        self.SetToolNormalBitmap(self.drawGraphics, self.icons["pointAdd"].GetBitmap())
+        self.SetToolShortHelp(self.drawGraphics, _("Add simple graphics: points"))
+        self.drawGraphicsAction = 'pointAdd'
+        if event:
+            self.ToggleTool(self.drawGraphics, True)
+            self.parent.OnAddPoint(event)
+
+    def OnAddLine(self, event):
+        """!Line mode selected.
+
+        Graphics drawing tool is activated. Tooltip changed.
+        """
+        self.SetToolNormalBitmap(self.drawGraphics, self.icons["lineAdd"].GetBitmap())
+        self.SetToolShortHelp(self.drawGraphics, _("Add simple graphics: lines"))
+        self.ToggleTool(self.drawGraphics, True)
+        if event:
+            self.drawGraphicsAction = 'lineAdd'
+            self.parent.OnAddLine(event)
+
+    def OnAddRectangle(self, event):
+        """!Rectangle mode selected.
+
+        Graphics drawing tool is activated. Tooltip changed.
+        """
+        self.SetToolNormalBitmap(self.drawGraphics, self.icons["rectangleAdd"].GetBitmap())
+        self.SetToolShortHelp(self.drawGraphics, _("Add simple graphics: rectangles"))
+        self.ToggleTool(self.drawGraphics, True)
+        if event:
+            self.drawGraphicsAction = 'rectangleAdd'
+            self.parent.OnAddRectangle(event)
+
+    def CreateSelectionButton(self):
+        """!Add button to toolbar for selection of graphics drawing mode.
+
+        Button must be custom (not toolbar tool) to set smaller width.
+        """
+        arrowPath = os.path.join(ETCIMGDIR, 'small_down_arrow.png')
+        if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
+            bitmap = wx.Bitmap(name = arrowPath)
+        else:
+            bitmap = wx.ArtProvider.GetBitmap(id = wx.ART_MISSING_IMAGE, client = wx.ART_TOOLBAR)
+        button =  wx.BitmapButton(parent = self, id = wx.ID_ANY, size = ((-1, self.GetSize()[1])),
+                                  bitmap = bitmap, style = wx.NO_BORDER)
+        button.SetToolTipString(_("Select graphics tool"))
+
+        return button
