@@ -69,7 +69,7 @@ int f_z(int argc, const int *argt, void **args)
     if (argt[0] != DCELL_TYPE)
 	return E_RES_TYPE;
 
-    z = window->top - (current_depth + 0.5) * window->tb_res;
+    z = window->bottom + ((current_depth) + 0.5) * window->tb_res;
 
     for (i = 0; i < columns; i++)
 	res[i] = z;
