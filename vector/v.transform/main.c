@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
 
     struct Option *vold, *vnew, *xshift, *yshift, *zshift,
-	*xscale, *yscale, *zscale, *zrot, *columns, *table, *field;
+	*xscale, *yscale, *zscale, *zrot, *columns, *field_opt;
     struct Flag *tozero_flag, *print_mat_flag, *swap_flag, *no_topo;
 
     char mon[4], date[40], buf[1000];
@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     int idx, out3d;
     char **tokens;
     char *columns_name[7];	/* xshift, yshift, zshift, xscale, yscale, zscale, zrot */
+    int field;
 
     G_gisinit(argv[0]);
 
@@ -92,8 +93,8 @@ int main(int argc, char *argv[])
 
     vold = G_define_standard_option(G_OPT_V_INPUT);
 
-    field = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    field->guisection = _("Custom");
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    field_opt->guisection = _("Custom");
 
     vnew = G_define_standard_option(G_OPT_V_OUTPUT);
 
@@ -161,11 +162,6 @@ int main(int argc, char *argv[])
     zrot->answer = "0.0";
     zrot->guisection = _("Custom");
 
-    table = G_define_standard_option(G_OPT_DB_TABLE);
-    table->description =
-	_("Name of table containing transformation parameters");
-    table->guisection = _("Custom");
-
     columns = G_define_standard_option(G_OPT_DB_COLUMNS);
     columns->label =
 	_("Name of attribute column(s) used as transformation parameters");
@@ -181,17 +177,16 @@ int main(int argc, char *argv[])
 
     Vect_check_input_output_name(vold->answer, vnew->answer, G_FATAL_EXIT);
 
-    out3d = WITHOUT_Z;
+    /* open input vector */
+    Vect_open_old2(&Old, vold->answer, "", field_opt->answer);
 
-    if (!table->answer && columns->answer) {
-	G_fatal_error(_("Table name is not defined. Please use '%s' parameter."),
-		      table->key);
+    field = Vect_get_field_number(&Old, field_opt->answer);
+    if (field < 1 && columns->answer) {
+	G_fatal_error(_("Columns require a valid layer. Please use '%s' parameter."),
+		      field_opt->key);
     }
 
-    if (table->answer && strcmp(vnew->answer, table->answer) == 0) {
-	G_fatal_error(_("Name of table and name for output vector map must be different. "
-		       "Otherwise the table is overwritten."));
-    }
+    out3d = Vect_is_3d(&Old);
 
     /* tokenize columns names */
     for (i = 0; i <= IDX_ZROT; i++) {
@@ -241,15 +236,12 @@ int main(int argc, char *argv[])
     trans_params[IDX_ZSCALE] = atof(zscale->answer);
     trans_params[IDX_ZROT] = atof(zrot->answer);
 
-    /* open vector maps */
-    Vect_open_old2(&Old, vold->answer, "", field->answer);
-
     /* should output be 3D ? 
      * note that z-scale and ztozero have no effect with input 2D */
-    if (Vect_is_3d(&Old) || trans_params[IDX_ZSHIFT] != 0. ||
-	columns_name[IDX_ZSHIFT])
+    if (trans_params[IDX_ZSHIFT] != 0. || columns_name[IDX_ZSHIFT])
 	out3d = WITH_Z;
 
+    /* open output vector */
     Vect_open_new(&New, vnew->answer, out3d);
 
     /* copy and set header */
@@ -284,7 +276,7 @@ int main(int argc, char *argv[])
     G_important_message(_("Tranforming features..."));
     transform_digit_file(&Old, &New,
 			 ztozero, swap_flag->answer, trans_params,
-			 table->answer, columns_name, Vect_get_field_number(&Old, field->answer));
+			 columns_name, field);
 
     G_important_message(_("Copying attributes..."));
     if (Vect_copy_tables(&Old, &New, 0))
