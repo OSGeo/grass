@@ -66,9 +66,9 @@ int main(int argc, char *argv[])
     dbString stmt, dbstr;
     dbDriver *driver, *to_driver;
     int *catexist, ncatexist, *cex;
-    char buf1[2000], buf2[2000];
+    char buf1[2000], buf2[2000], to_attr_sqltype[256];
     int update_ok, update_err, update_exist, update_notexist, update_dupl,
-	update_notfound;
+	update_notfound, sqltype;
     struct boxlist *List;
     struct bound_box box;
     dbCatValArray cvarr;
@@ -390,40 +390,36 @@ int main(int argc, char *argv[])
     db_init_string(&stmt);
     db_init_string(&dbstr);
     driver = NULL;
-    if (!flag.print->answer) {
+    if (!flag.print->answer && !do_all) {
 
-	if (!do_all) {
-	    Fi = Vect_get_field(&From, from_field);
-	    if (Fi == NULL)
-		G_fatal_error(_("Database connection not defined for layer <%s>"),
-			      opt.from_field->answer);
+	Fi = Vect_get_field(&From, from_field);
+	if (Fi == NULL)
+	    G_fatal_error(_("Database connection not defined for layer <%s>"),
+			  opt.from_field->answer);
 
-	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	    if (driver == NULL)
-		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			      Fi->database, Fi->driver);
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	if (driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
 
-	    /* check if column exists */
-	    i = 0;
-	    while (opt.column->answers[i]) {
-		db_get_column(driver, Fi->table, opt.column->answers[i],
-			      &column);
-		if (column) {
-		    db_free_column(column);
-		    column = NULL;
-		}
-		else {
-		    G_fatal_error(_("Column <%s> not found in table <%s>"),
-				  opt.column->answers[i], Fi->table);
-		}
-		i++;
+	/* check if column exists */
+	i = 0;
+	while (opt.column->answers[i]) {
+	    db_get_column(driver, Fi->table, opt.column->answers[i],
+			  &column);
+	    if (column) {
+		db_free_column(column);
+		column = NULL;
 	    }
+	    else {
+		G_fatal_error(_("Column <%s> not found in table <%s>"),
+			      opt.column->answers[i], Fi->table);
+	    }
+	    i++;
 	}
-	else {
-	    driver = db_start_driver_open_database(NULL, NULL);
-	    if (driver == NULL)
-		G_fatal_error(_("Unable to open default database"));
-	}
+	/* close db connection */
+	db_close_database_shutdown_driver(driver);
+	driver = NULL;
     }
 
     to_driver = NULL;
@@ -439,9 +435,18 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  toFi->database, toFi->driver);
 
-	/* check if to_column exists */
+	/* check if to_column exists and get its SQL type */
 	db_get_column(to_driver, toFi->table, opt.to_column->answer, &column);
 	if (column) {
+            sqltype = db_get_column_sqltype(column); 
+	    switch(sqltype) { 
+		case DB_SQL_TYPE_CHARACTER: 
+		    sprintf(to_attr_sqltype, "VARCHAR(%d)", db_get_column_length(column)); 
+		    break; 
+		default: 
+		    sprintf(to_attr_sqltype, "%s", db_sqltype_name(sqltype)); 
+	    }
+
 	    db_free_column(column);
 	    column = NULL;
 	}
@@ -482,6 +487,8 @@ int main(int argc, char *argv[])
 		}
 	    }
 	}
+	db_close_database_shutdown_driver(to_driver);
+	to_driver = NULL;
     }
 
     FPoints = Vect_new_line_struct();
@@ -922,6 +929,45 @@ int main(int argc, char *argv[])
 
     G_debug(3, "count = %d", count);
 
+    /* select 'to' attributes */
+    if (opt.to_column->answer) {
+	int nrec;
+
+	to_driver =
+	    db_start_driver_open_database(toFi->driver, toFi->database);
+	if (to_driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  toFi->database, toFi->driver);
+
+	db_CatValArray_init(&cvarr);
+	nrec = db_select_CatValArray(to_driver, toFi->table, toFi->key,
+				     opt.to_column->answer, NULL, &cvarr);
+	G_debug(3, "selected values = %d", nrec);
+
+	if (cvarr.ctype == DB_C_TYPE_DATETIME) {
+	    G_warning(_("DATETIME type not yet supported, no attributes will be uploaded"));
+	}
+	db_close_database_shutdown_driver(to_driver);
+	to_driver = NULL;
+    }
+
+    /* open from driver */
+    if (!flag.print->answer) {
+	if (!do_all) {
+
+	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	    if (driver == NULL)
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			      Fi->database, Fi->driver);
+	}
+	else {
+	    driver = db_start_driver_open_database(NULL, NULL);
+	    if (driver == NULL)
+		G_fatal_error(_("Unable to open default database"));
+	}
+    }
+
+
     /* Update database / print to stdout / create output map */
     if (flag.print->answer) {	/* print header */
 	fprintf(stdout, "from_cat");
@@ -956,6 +1002,9 @@ int main(int argc, char *argv[])
 	    case TO_ALONG:
 	    case TO_ANGLE:
 		sprintf(buf2, "%s double precision", Upload[j].column);
+                break; 
+	    case TO_ATTR: 
+		sprintf(buf2, "%s %s", Upload[j].column, to_attr_sqltype);
 	    }
 	    db_append_string(&stmt, buf2);
 	    j++;
@@ -990,21 +1039,6 @@ int main(int argc, char *argv[])
 
     if (driver)
 	db_begin_transaction(driver);
-
-    /* select 'to' attributes */
-    if (opt.to_column->answer) {
-	int nrec;
-
-	db_CatValArray_init(&cvarr);
-	nrec = db_select_CatValArray(to_driver, toFi->table, toFi->key,
-				     opt.to_column->answer, NULL, &cvarr);
-	G_debug(3, "selected values = %d", nrec);
-
-	if (cvarr.ctype == DB_C_TYPE_DATETIME) {
-	    G_warning(_("DATETIME type not yet supported, no attributes will be uploaded"));
-	}
-	db_close_database_shutdown_driver(to_driver);
-    }
 
     if (!(flag.print->answer || (do_all && !opt.table->answer))) /* no printing */
 	G_message("Update vector attributes...");
