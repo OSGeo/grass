@@ -874,10 +874,16 @@ class AboutWindow(wx.Frame):
         """!Close window"""
         self.Close()
 
-class HelpFrame(wx.Frame):
-    """!GRASS Quickstart help window"""
+class HelpFrame(wx.Dialog):
+    """!GRASS Quickstart help window
+
+    As a base class wx.Dialog is used, because of not working
+    close button with wx.Frame when dialog is called from wizard.
+    If parent is None, application TopLevelWindow is used (wxPython standard behaviour).
+    """
     def __init__(self, parent, id, title, size, file):
-        wx.Frame.__init__(self, parent = parent, id = id, title = title, size = size)
+        wx.Dialog.__init__(self, parent = parent, id = id, title = title,
+                           size = size, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MINIMIZE_BOX)
         
         sizer = wx.BoxSizer(wx.VERTICAL)
         
