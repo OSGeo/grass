@@ -138,11 +138,11 @@ int Vect_read_next_line(const struct Map_info *Map,
 /*!
    \brief Read vector feature
 
-   This function implements random access. Note that constraits are
-   ignored!
+   This function implements random access. Note that constraints are
+   ignored! Needs at least GV_BUILD_BASE topology.
 
    G_fatal_error() is called on failure.
-   
+
    \param Map pointer to vector map
    \param[out] line_p feature geometry
    (pointer to line_pnts struct)
