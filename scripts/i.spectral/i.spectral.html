@@ -3,7 +3,6 @@
 <em>i.spectral</em> displays spectral response at user specified 
 locations in images.
 
-
 <h2>NOTES</h2>
 
 This script needs gnuplot to be installed.
@@ -11,6 +10,21 @@ This script needs gnuplot to be installed.
 
 <h2>EXAMPLE</h2>
 
+Analysis of LANDSAT TM7 channels (North Carolina dataset):
+
+<div class="code"><pre>
+g.region rast=lsat7_2002_10 -p
+i.spectral -g raster=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+           coordinates=636069,215440,637958,223393,633277,223605
+</pre></div>
+
+<center>
+<img src="i_spectral.png" border=1><br>
+Spectral plot of 3 different land cover types: (1) water, (2) green vegetation, and (3) highway
+</center>
+
+
+<p>
 North Carolina sample dataset:
 
 <div class="code"><pre>
