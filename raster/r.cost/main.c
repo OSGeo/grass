@@ -474,6 +474,12 @@ int main(int argc, char *argv[])
 			break;
 		    }
 		}
+		if (p < 0) {
+		    G_warning(_("Negative cell value found at row %d, col %d. "
+				"Setting negative value to null_cost value"),
+			      row, i);
+		    p = null_cost;
+		}
 		costs.cost_in = p;
 		segment_put(&cost_seg, &costs, row, i);
 		ptr2 = G_incr_void_ptr(ptr2, dsize);
@@ -632,7 +638,7 @@ int main(int argc, char *argv[])
 	Vect_close(&In);
 
 	if (!have_stop_points)
-	    G_warning(_("No stop points found in vector <%s>"), opt7->answer);
+	    G_warning(_("No stop points found in vector <%s>"), opt8->answer);
     }
 
     /* read raster with start points */
