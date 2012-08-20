@@ -31,7 +31,7 @@
    \return number of removed areas 
  */
 int
-Vect_remove_small_areas(struct Map_info *Map, double thresh,
+Vect_remove_small_areas_org(struct Map_info *Map, double thresh,
 			struct Map_info *Err, double *removed_area)
 {
     int area, nareas;
@@ -101,7 +101,7 @@ Vect_remove_small_areas(struct Map_info *Map, double thresh,
 	}
 	G_debug(3, "num neighbours = %d", AList->n_values);
 
-	/* Go through the list of neghours and find that with the longest boundary */
+	/* Go through the list of neighours and find that with the longest boundary */
 	dissolve_neighbour = 0;
 	length = -1.0;
 	for (i = 0; i < AList->n_values; i++) {
@@ -175,6 +175,132 @@ Vect_remove_small_areas(struct Map_info *Map, double thresh,
 
     G_verbose_message(_("%d areas of total size %g removed"), nremoved,
 		size_removed);
+
+    return (nremoved);
+}
+
+int
+Vect_remove_small_areas(struct Map_info *Map, double thresh,
+			struct Map_info *Err, double *removed_area)
+{
+    int area, nareas;
+    int nremoved = 0;
+    struct ilist *List;
+    struct ilist *AList;
+    struct line_pnts *Points;
+    struct line_cats *Cats;
+    double size_removed = 0.0;
+    int left, right, dissolve_neighbour;
+
+    List = Vect_new_list();
+    AList = Vect_new_list();
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+
+    nareas = Vect_get_num_areas(Map);
+    for (area = 1; area <= Vect_get_num_areas(Map); area++) {
+	int i, centroid, remove_boundary;
+	double length, size;
+
+	if (area <= nareas)
+	    G_percent(area, nareas, 1);
+	G_debug(3, "area = %d", area);
+	if (!Vect_area_alive(Map, area))
+	    continue;
+
+	size = Vect_get_area_area(Map, area);
+	if (size > thresh)
+	    continue;
+	size_removed += size;
+
+	/* The area is smaller than the limit -> remove */
+
+	/* Remove centroid */
+	centroid = Vect_get_area_centroid(Map, area);
+	if (centroid > 0) {
+	    if (Err) {
+		Vect_read_line(Map, Points, Cats, centroid);
+		Vect_write_line(Err, GV_CENTROID, Points, Cats);
+	    }
+	    Vect_delete_line(Map, centroid);
+	}
+
+	/* Find the adjacent area with which the longest boundary is shared */
+
+	Vect_get_area_boundaries(Map, area, List);
+
+	/* Go through the list of boundaries and find the longest boundary */
+	remove_boundary = 0;
+	length = -1.0;
+	for (i = 0; i < List->n_values; i++) {
+	    int line;
+	    double l = 0.0;
+
+	    line = List->value[i];
+	    G_debug(4, "   line = %d", line);
+
+	    Vect_read_line(Map, Points, NULL, abs(line));
+	    l = Vect_line_length(Points);
+
+	    if (l > length) {
+		length = l;
+		remove_boundary = line;
+	    }
+	}
+
+	G_debug(3, "remove_boundary = %d", remove_boundary);
+
+	Vect_get_line_areas(Map, abs(remove_boundary), &left, &right);
+	if (remove_boundary > 0)
+	    dissolve_neighbour = left;
+	else
+	    dissolve_neighbour = right;
+
+	G_debug(3, "dissolve_neighbour = %d", dissolve_neighbour);
+
+	/* Make list of boundaries to be removed */
+	Vect_reset_list(AList);
+	for (i = 0; i < List->n_values; i++) {
+	    int line, neighbour;
+
+	    line = List->value[i];
+	    Vect_get_line_areas(Map, abs(line), &left, &right);
+	    if (line > 0)
+		neighbour = left;
+	    else
+		neighbour = right;
+
+	    G_debug(3, "   neighbour = %d", neighbour);
+
+	    if (neighbour == dissolve_neighbour) {
+		Vect_list_append(AList, abs(line));
+	    }
+	}
+
+	/* Remove boundaries */
+	for (i = 0; i < AList->n_values; i++) {
+	    int line;
+
+	    line = AList->value[i];
+
+	    if (Err) {
+		Vect_read_line(Map, Points, Cats, line);
+		Vect_write_line(Err, GV_BOUNDARY, Points, Cats);
+	    }
+	    Vect_delete_line(Map, line);
+	}
+
+	nremoved++;
+    }
+
+    if (removed_area)
+	*removed_area = size_removed;
+
+    G_verbose_message(_("%d areas of total size %g removed"), nremoved,
+		size_removed);
+
+    Vect_build_partial(Map, GV_BUILD_BASE);
+    Vect_merge_lines(Map, GV_BOUNDARY, NULL, NULL);
 
     return (nremoved);
 }

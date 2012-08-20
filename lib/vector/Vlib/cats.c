@@ -275,6 +275,7 @@ int Vect_field_cat_del(struct line_cats *Cats, int field, int cat)
 	    }
 	    Cats->n_cats--;
 	    found = 1;
+	    n--;		/* check again this position */
 	}
     }
 
