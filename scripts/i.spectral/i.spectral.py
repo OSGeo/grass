@@ -189,7 +189,7 @@ def main():
     numbands = len(rastermaps)
 
     what = []
-    s = grass.read_command('r.what', input = rastermaps, coordinates = coords, quiet = True)
+    s = grass.read_command('r.what', map = rastermaps, coordinates = coords, quiet = True)
     for l in s.splitlines():
 	f = l.split('|')
 	for i, v in enumerate(f):
