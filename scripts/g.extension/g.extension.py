@@ -453,8 +453,12 @@ def install_extension():
             ret += install_extension_other(module)
         if len(mlist) > 1:
             print '-' * 60
-        grass.verbose(_("Updating manual page for <%s>...") % module)
-        update_manual_page(module)
+        if not flags['d']:
+            grass.verbose(_("Updating manual page for <%s>...") % module)
+            update_manual_page(module)
+    
+    if flags['d']:
+        return
     
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
@@ -466,7 +470,6 @@ def install_extension():
     if not os.getenv('GRASS_ADDON_BASE'):
         grass.warning(_('This add-on module will not function until you set the '
                         'GRASS_ADDON_BASE environment variable (see "g.manual variables")'))
-
 
 # update local meta-file when installing new extension (toolbox / modules)
 def install_toolbox_xml(name):
