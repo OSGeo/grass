@@ -232,37 +232,27 @@ int Vect_check_dblink(const struct dblinks *p, int field, const char *name)
   \brief Add new DB connection to dblinks structure
   
   \param[in,out] p pointer to existing dblinks structure
-  \param number  layer number (1 for OGR)
-  \param lname   layer name (layer for OGR) - if not given use table name
-  \param table   table name (layer for OGR)
-  \param key     key name
-  \param db      database name (datasource for OGR)
-  \param driver  driver name (dbf, postgresql, ogr, ...)
+  \param number layer number (1 for OGR)
+  \param name   layer name (layer for OGR) - if not given use table name
+  \param table  table name (layer for OGR)
+  \param key    key name
+  \param db     database name (datasource for OGR)
+  \param driver driver name (dbf, postgresql, ogr, ...)
   
   \return 0 on success
   \return -1 error
  */
-int Vect_add_dblink(struct dblinks *p, int number, const char *lname,
+int Vect_add_dblink(struct dblinks *p, int number, const char *name,
 		    const char *table, const char *key, const char *db,
 		    const char *driver)
 {
     int ret;
-    char *name = NULL;
 
     G_debug(3, "Field number <%d>, name <%s>", number, name);
-    if (lname) {
-	name = G_store(lname);
+    if (!name) {
+	/* if name is not given, use table name */
+	name = table;
     }
-    else if (table) {
-	/* if layer name is not given, use table name */
-	name = G_store(table);
-    }
-    if (name) {
-	/* replace all spaces with underscore, otherwise dbln can't be read */
-	G_strip(name);
-	G_strchg(name, ' ', '_');
-    }
-
     ret = Vect_check_dblink(p, number, name);
     if (ret == 1) {
 	G_warning(_("Layer number %d or name <%s> already exists"), number,
@@ -279,8 +269,11 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *lname,
 
     p->field[p->n_fields].number = number;
 
-    if (name != NULL)
-	p->field[p->n_fields].name = name;
+    if (name != NULL) {
+	p->field[p->n_fields].name = G_store(name);
+	/* replace all spaces with underscore, otherwise dbln can't be read */
+	G_strchg(p->field[p->n_fields].name, ' ', '_');
+    }
     else
 	p->field[p->n_fields].name = NULL;
 
@@ -314,18 +307,17 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *lname,
   
   \param Map pointer to Map_info structure
   \param field layer number
-  \param name layer name
+  \param field_name layer name
   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE 
 
   \return pointer to allocated field_info structure
  */
 struct field_info *Vect_default_field_info(struct Map_info *Map,
-					   int field, const char *name, int type)
+					   int field, const char *field_name, int type)
 {
     struct field_info *fi;
     char buf[GNAME_MAX], buf2[GNAME_MAX];
     const char *schema;
-    char *field_name = NULL;
     dbConnection connection;
 
     G_debug(1, "Vect_default_field_info(): map = %s field = %d", Map->name,
@@ -369,11 +361,6 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 	sprintf(buf, "%s", Map->name);
     }
     else {
-	if (name) {
-	    field_name = G_store(name);
-	    G_strip(field_name);
-	    G_strchg(field_name, ' ', '_');
-	}
 	if (field_name != NULL && strlen(field_name) > 0)
 	    sprintf(buf, "%s_%s", Map->name, field_name);
 	else
@@ -389,10 +376,8 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
     }
 
     /* Field name */
-    if (field_name) {
+    if (field_name)
 	fi->name = G_store(field_name);
-	G_free(field_name);
-    }
     else
 	fi->name = G_store(buf);
 

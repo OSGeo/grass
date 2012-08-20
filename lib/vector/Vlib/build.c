@@ -745,17 +745,16 @@ int Vect_get_built(const struct Map_info *Map)
 */
 void Vect__build_downgrade(struct Map_info *Map, int build)
 {
-    int line, area;
+    int line;
     struct Plus_head *plus;
     struct P_line *Line;
-    struct P_area *Area;
     
     plus = &(Map->plus);
     
     /* lower level request - release old sources (this also
        initializes structures and numbers of elements) */
     if (plus->built >= GV_BUILD_CENTROIDS && build < GV_BUILD_CENTROIDS) {
-        /* reset info about centroids stored for areas */
+        /* reset info about areas stored for centroids */
         for (line = 1; line <= plus->n_lines; line++) {
             Line = plus->Line[line];
             if (Line && Line->type == GV_CENTROID) {
@@ -763,13 +762,10 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
                 topo->area = 0;
             }
         }
-        /* reset info about areas stored for centroids */
-        for (area = 1; area <= plus->n_areas; area++) {
-            Area = plus->Area[area];
-	    if (Area)
-		Area->centroid = 0;
-        }
-	/* keep areas and isles */
+        dig_free_plus_areas(plus);
+        dig_spidx_free_areas(plus);
+        dig_free_plus_isles(plus);
+        dig_spidx_free_isles(plus);
     }
     
     if (plus->built >= GV_BUILD_AREAS && build < GV_BUILD_AREAS) {
