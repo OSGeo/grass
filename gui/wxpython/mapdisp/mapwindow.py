@@ -947,6 +947,25 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return self.lineid
 
+    def _computeZoomToPointAndRecenter(self, position, zoomtype):
+        """!Computes zoom parameters for recenter mode.
+
+        Computes begin and end parameters for Zoom() method.
+        Used for zooming by single click (not box)
+        and mouse wheel zooming (zoom and recenter mode).
+        """
+        if zoomtype > 0:
+            begin = (position[0] - self.Map.width / 4,
+                     position[1] - self.Map.height / 4)
+            end   = (position[0] + self.Map.width / 4,
+                     position[1] + self.Map.height / 4)
+        else:
+            begin = ((self.Map.width - position[0]) / 2,
+                     (self.Map.height - position[1]) / 2)
+            end = (begin[0] + self.Map.width / 2,
+                   begin[1] + self.Map.height / 2)
+        return begin, end
+
     def MouseActions(self, event):
         """!Mouse motion and button click notifier
         """
@@ -1020,16 +1039,8 @@ class BufferedWindow(MapWindow, wx.Window):
             zoomtype *= -1
         # zoom 1/2 of the screen (TODO: settings)
         if zoomBehaviour == 0:  # zoom and recenter
-            if zoomtype > 0:
-                begin = (current[0] - self.Map.width / 4,
-                         current[1] - self.Map.height / 4)
-                end   = (current[0] + self.Map.width / 4,
-                         current[1] + self.Map.height / 4)
-            else:
-                begin = ((self.Map.width - current[0]) / 2,
-                         (self.Map.height - current[1]) / 2)
-                end = (begin[0] + self.Map.width / 2,
-                       begin[1] + self.Map.height / 2)
+            begin, end = self._computeZoomToPointAndRecenter(position = current, zoomtype = zoomtype)
+
         elif zoomBehaviour == 1:  # zoom to current cursor position
             begin = (current[0]/2, current[1]/2)
             end = ((self.Map.width - current[0])/2 + current[0],
@@ -1147,12 +1158,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 # set region for click (zero-width box)
                 if begin[0] - end[0] == 0 or \
                         begin[1] - end[1] == 0:
-                    # zoom 1/2 of the screen (TODO: settings)
-                    begin = (end[0] - self.Map.width / 4,
-                             end[1] - self.Map.height / 4)
-                    end   = (end[0] + self.Map.width / 4,
-                             end[1] + self.Map.height / 4)
-            
+                    begin, end = self._computeZoomToPointAndRecenter(position = end, zoomtype = self.zoomtype)
             self.Zoom(begin, end, self.zoomtype)
 
             # redraw map
