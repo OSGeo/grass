@@ -794,7 +794,7 @@ class GRASSStartup(wx.Frame):
         # help text in lib/init/helptext.html
         file = os.path.join(self.gisbase, "docs", "html", "helptext.html")
 
-        helpFrame = HelpFrame(parent = self, id = wx.ID_ANY,
+        helpFrame = HelpFrame(parent = None, id = wx.ID_ANY,
                               title = _("GRASS Quickstart"),
                               size = (640, 480),
                               file = file)

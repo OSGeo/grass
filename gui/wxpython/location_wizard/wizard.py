@@ -19,6 +19,7 @@ Classes:
  - wizard::CustomPage
  - wizard::SummaryPage
  - wizard::LocationWizard
+ - wizard::WizardWithHelpButton
 
 (C) 2007-2011 by the GRASS Development Team
 
@@ -40,6 +41,7 @@ import wx.lib.scrolledpanel as scrolled
 from core                    import globalvar
 from core                    import utils
 from core.gcmd               import RunCommand, GError, GMessage, GWarning
+from gui_core.ghelp          import HelpFrame
 from location_wizard.base    import BaseClass
 from location_wizard.dialogs import RegionDef, SelectTransformDialog
 
@@ -120,7 +122,8 @@ class DatabasePage(TitledPage):
                        wx.ALL, border = 5,
                        pos = (1, 3))
         
-        self.sizer.Add(item = self.MakeLabel("%s:" % _("Project Location")),
+        self.sizer.Add(item = self.MakeLabel("%s:" % _("Project Location"),
+                                             tooltip = _("Name of location directory in GIS Data Directory")),
                        flag = wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5,
@@ -131,7 +134,9 @@ class DatabasePage(TitledPage):
                        wx.ALL, border = 5,
                        pos = (2, 2))
 
-        self.sizer.Add(item = self.MakeLabel("%s:" % _("Location Title")),
+        self.sizer.Add(item = self.MakeLabel("%s:" % _("Location Title"),
+                                             tooltip = _("Optional location title, "
+                                                         "you can leave this field blank.")),
                        flag = wx.ALIGN_RIGHT |
                        wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5,
@@ -1757,8 +1762,10 @@ class LocationWizard(wx.Object):
         #
         # define wizard pages
         #
-        self.wizard = wiz.Wizard(parent, id = wx.ID_ANY, title = _("Define new GRASS Location"),
-                                 bitmap = wizbmp, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+        self.wizard = WizardWithHelpButton(parent, id = wx.ID_ANY, title = _("Define new GRASS Location"),
+                                           bitmap = wizbmp)
+        self.wizard.Bind(wiz.EVT_WIZARD_HELP, self.OnHelp)
+
         self.startpage = DatabasePage(self.wizard, self, grassdatabase)
         self.csystemspage = CoordinateSystemPage(self.wizard, self)
         self.projpage = ProjectionsPage(self.wizard, self)
@@ -2110,3 +2117,22 @@ class LocationWizard(wx.Object):
         proj4string = '%s +no_defs' % proj4string
         
         return proj4string
+
+    def OnHelp(self, event):
+        """'Help' button clicked"""
+        # help text in lib/init/helptext.html
+        filePath = os.path.join(os.getenv('GISBASE'), "docs", "html", "helptext.html")
+
+        helpFrame = HelpFrame(parent = None, id = wx.ID_ANY,
+                              title = _("GRASS Quickstart"),
+                              size = (640, 480),
+                              file = filePath)
+        helpFrame.Show(True)
+
+
+class WizardWithHelpButton(wiz.Wizard):
+    def __init__(self, parent, id, title, bitmap):
+        pre = wiz.PreWizard()
+        pre.SetExtraStyle(wx.wizard.WIZARD_EX_HELPBUTTON)
+        pre.Create(parent = parent, id = id, title = title, bitmap = bitmap)
+        self.PostCreate(pre)
