@@ -60,7 +60,7 @@ g.region rast=elevation.10m -p
 v.random random n=200
 v.db.addtable random col="el10 double precision"
 # transfer elevations to attribute table of random points map:
-v.what.rast random rast=elevation.10m col=elev
+v.what.rast random rast=elevation.10m col=el10
 v.db.select random
 
 # comparative sampling of second map, incl. differences:
@@ -77,7 +77,6 @@ d.vect.thematic -l elev_sample column=diff type=point
 g.region vect=nc_state
 d.vect.thematic -l precip_30ynormals column=annual type=point
 </pre></div>
-
 
 <h2>SEE ALSO</h2>
 
