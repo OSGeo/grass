@@ -68,7 +68,7 @@ int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
 		    }
 		}
 		else {		/* delete old category */
-		    if (Vect_field_cat_del(Cats, layer, cat) == 1) {
+		    if (Vect_field_cat_del(Cats, layer, cat) > 0) {
 			rewrite = 1;
 		    }
 		}
