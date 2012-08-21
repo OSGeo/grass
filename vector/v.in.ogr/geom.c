@@ -256,8 +256,31 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    G_warning(_("Skipping empty geometry feature"));
 	    return 0;
 	}
+
 	Vect_append_point(Points, OGR_G_GetX(hGeom, 0), OGR_G_GetY(hGeom, 0),
 			  OGR_G_GetZ(hGeom, 0));
+
+	if (Points->x[0] != Points->x[0])
+	    G_warning("x is nan");
+	if (Points->y[0] != Points->y[0])
+	    G_warning("y is nan");
+	if (Points->z[0] != Points->z[0])
+	    G_warning("y is nan");
+
+	if (Points->x[0] > PORT_DOUBLE_MAX)
+	    G_warning("x is inf");
+	if (Points->y[0] > PORT_DOUBLE_MAX)
+	    G_warning("y is inf");
+	if (Points->z[0] > PORT_DOUBLE_MAX)
+	    G_warning("y is inf");
+
+	if (Points->x[0] < -PORT_DOUBLE_MAX)
+	    G_warning("x is -inf");
+	if (Points->y[0] < -PORT_DOUBLE_MAX)
+	    G_warning("y is -inf");
+	if (Points->z[0] < -PORT_DOUBLE_MAX)
+	    G_warning("y is -inf");
+
 	if (type & GV_CENTROID)
 	    otype = GV_CENTROID;
 	else
