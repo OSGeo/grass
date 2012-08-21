@@ -296,9 +296,33 @@ int main(int argc, char **argv)
 		Vect_net_shortest_path(&Map, cities[i], cities[j], NULL,
 				       &cost);
 
-	    if (ret == -1)
-		G_fatal_error(_("Destination node [%d] is unreachable "
-				"from node [%d]"), cities[i], cities[j]);
+	    if (ret == -1) {
+		double coor_x, coor_y, coor_z;
+		int cat1, cat2;
+		
+		Vect_get_node_coor(&Map, cities[i], &coor_x, &coor_y, &coor_z);
+		line = Vect_find_line(&Map, coor_x, coor_y, coor_z, GV_POINT, 0, 0, 0);
+		
+		if (!line)
+		    G_fatal_error(_("No point at node %d"), cities[i]);
+
+		Vect_read_line(&Map, Points, Cats, line);
+		if (!(Vect_cat_get(Cats, tfield, &cat1)))
+		    G_fatal_error(_("No category for point at node %d"), cities[i]);
+
+		Vect_get_node_coor(&Map, cities[j], &coor_x, &coor_y, &coor_z);
+		line = Vect_find_line(&Map, coor_x, coor_y, coor_z, GV_POINT, 0, 0, 0);
+		
+		if (!line)
+		    G_fatal_error(_("No point at node %d"), cities[j]);
+
+		Vect_read_line(&Map, Points, Cats, line);
+		if (!(Vect_cat_get(Cats, tfield, &cat2)))
+		    G_fatal_error(_("No category for point at node %d"), cities[j]);
+
+		G_fatal_error(_("Destination node [cat %d] is unreachable "
+				"from node [cat %d]"), cat1, cat2);
+	    }
 
 	    /* add to directional cost cache: from, to, cost */
 	    costs[i][k].city = j;
