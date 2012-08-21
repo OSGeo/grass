@@ -330,7 +330,7 @@ def main():
     if not where:
         where = None
 
-    stats = grass.read_command('v.univar', flags = 'eg', map = map, type = stype, column = column, where = where)
+    stats = grass.read_command('v.univar', flags = 'eg', map = map, type = stype, column = column, where = where, layer = layer)
     stats = grass.parse_key_val(stats)
 
     min  = float(stats['min'])
