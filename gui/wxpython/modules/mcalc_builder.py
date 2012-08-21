@@ -111,6 +111,11 @@ class MapCalcFrame(wx.Frame):
             element = 'rast3d'
         else:
             element = 'cell'
+
+        # characters which can be in raster map name but the map name must be then quoted
+        self.charactersToQuote = '+-&!<>%~?^|'
+        # stores last typed map name in Select widget to distinguish typing from selection
+        self.lastMapName = ''
         
         self.operatorBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                         label=" %s " % _('Operators'))
@@ -244,7 +249,7 @@ class MapCalcFrame(wx.Frame):
         self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveExpression)
         self.btn_load.Bind(wx.EVT_BUTTON, self.OnLoadExpression)
         
-        self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
+        self.mapselect.Bind(wx.EVT_TEXT, self.OnSelectTextEvt)
         self.function.Bind(wx.EVT_COMBOBOX, self._return_funct)
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
         self.newmaptxt.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
@@ -404,11 +409,26 @@ class MapCalcFrame(wx.Frame):
         elif event.GetId() == self.btn['parenr'].GetId(): mark = ")"
         self._addSomething(mark)
         
-    def OnSelect(self, event):
-        """!Gets raster map or function selection and send it to
-        insertion method
+    def OnSelectTextEvt(self, event):
+        """!Checks if user is typing or the event was emited by map selection.
+        Prevents from changing focus.
         """
         item = event.GetString()
+        if not (abs(len(item) - len(self.lastMapName)) == 1  and \
+            self.lastMapName in item or item in self.lastMapName):
+            self.OnSelect(event)
+        self.lastMapName = item
+
+    def OnSelect(self, event):
+        """!Gets raster map or function selection and send it to
+        insertion method. 
+
+        Checks for characters which can be in raster map name but 
+        the raster map name must be then quoted.
+        """
+        item = event.GetString().strip()
+        if any((char in item) for char in self.charactersToQuote):
+            item = '"' + item + '"'
         self._addSomething(item)
 
     def OnUpdateStatusBar(self, event):
