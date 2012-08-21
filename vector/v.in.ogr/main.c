@@ -315,8 +315,11 @@ int main(int argc, char *argv[])
     ncnames = 0;
     if (param.cnames->answers) {
 	i = 0;
-	while (param.cnames->answers[i++]) {
+	while (param.cnames->answers[i]) {
+	    G_strip(param.cnames->answers[i]);
+	    G_strchg(param.cnames->answers[i], ' ', '\0');
 	    ncnames++;
+	    i++;
 	}
     }
 
