@@ -1293,7 +1293,7 @@
 	      <help>Creates shaded relief map from an elevation map (DEM).</help>
 	      <keywords>raster,elevation</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>r.shaded.relief</command>
+	      <command>r.shaded.relief2</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
