@@ -1890,8 +1890,8 @@ class CmdPanel(wx.Panel):
                 dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
                                    currentSymbol = p['value'])
                 if dlg.ShowModal() == wx.ID_OK:
-                    img = dlg.GetSelectedSymbol(fullPath = True)
-                    p['value'] = dlg.GetSelectedSymbol(fullPath = False)
+                    img = dlg.GetSelectedSymbolPath()
+                    p['value'] = dlg.GetSelectedSymbolName()
                     
                     bitmapButton = wx.FindWindowById(p['wxId'][0])
                     label = wx.FindWindowById(p['wxId'][1])
