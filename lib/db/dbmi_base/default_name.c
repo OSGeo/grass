@@ -111,7 +111,7 @@ int db_set_default_connection(void)
 	G__make_mapset_element("dbf");
     }
     else if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
-	/* Set default values and create dbf db dir */
+	/* Set default values and create sqlite db dir */
 
 	connection.driverName = "sqlite";
 	/*
@@ -119,8 +119,17 @@ int db_set_default_connection(void)
 	 *      or per-map DBs in $MASPET/vector/mapname/sqlite.db (how to set that here?)
 	 *      or $MAPSET/sqlite/mapname.sql as with dbf?
 	 */
+	 
+	 /* http://www.sqlite.org/lockingv3.html
+	  * When SQLite creates a journal file on Unix, it opens the 
+	  * directory that contains that file and calls fsync() on the 
+	  * directory, in an effort to push the directory information to disk.
+	  * 
+	  * -> have sqlite.db in a separate directory
+	  */
 	connection.databaseName =
-	    "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db";
+	    "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
+	G__make_mapset_element("sqlite");
 	db_set_connection(&connection);
     }
     else
