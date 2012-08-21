@@ -474,6 +474,9 @@ class MapCalcFrame(wx.Frame):
                                "a new raster map to create."))
             return
         
+        if not (name[0] == '"' and name[-1] == '"') and any((char in name) for char in self.charactersToQuote):
+            name = '"' + name + '"'
+
         expr = self.text_mcalc.GetValue().strip().replace("\n", " ")
         if not expr:
             GError(parent = self,
@@ -500,7 +503,7 @@ class MapCalcFrame(wx.Frame):
         """!Add create map to the layer tree"""
         if not self.addbox.IsChecked():
             return
-        name = self.newmaptxt.GetValue().strip() + '@' + grass.gisenv()['MAPSET']
+        name = self.newmaptxt.GetValue().strip(' "') + '@' + grass.gisenv()['MAPSET']
         mapTree = self.parent.GetLayerTree()
         if not mapTree.GetMap().GetListOfLayers(l_name = name):
             mapTree.AddLayer(ltype = 'raster',
