@@ -72,10 +72,10 @@ int header(int unit1, int unit2)
 	divider("|");
 
 	label = nlayers > 1 ? "MAPS:" : "MAP:";
-	len1 = strlen(label) + 1;
 
 	mask = maskinfo();
 	label = "MASK:";
+	len1 = strlen(label) + 1;
 	while (mask) {
 	    fprintf(stdout, "|%-*s", len1, label);
 	    label = "";
