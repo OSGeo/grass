@@ -23,7 +23,7 @@ void format_double(double value, char *buf)
 
 void print_region(const struct Map_info *Map)
 {
-    char tmp1[100], tmp2[100];
+    char tmp1[1024], tmp2[1024];
     
     struct bound_box box;
 
@@ -277,8 +277,8 @@ void print_shell(const struct Map_info *Map)
 void print_info(const struct Map_info *Map)
 {
     int i, map_type;
-    char line[100];
-    char tmp1[100], tmp2[100];
+    char line[1024];
+    char tmp1[1024], tmp2[1024];
     char timebuff[256];
     struct TimeStamp ts;
     int time_ok, first_time_ok, second_time_ok;
