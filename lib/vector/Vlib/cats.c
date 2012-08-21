@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 
 static int cmp(const void *pa, const void *pb);
-struct line_cats *Vect__new_cats_struct(void);
+static struct line_cats *Vect__new_cats_struct(void);
 
 
 /*!
@@ -54,7 +54,7 @@ struct line_cats *Vect_new_cats_struct()
 
    \return struct line_cats *
  */
-struct line_cats *Vect__new_cats_struct()
+static struct line_cats *Vect__new_cats_struct()
 {
     struct line_cats *p;
 
@@ -203,9 +203,8 @@ int Vect_field_cat_get(const struct line_cats *Cats, int field, struct ilist *ca
     
     /* go through cats and find if field exist */
     for (n = 0; n < Cats->n_cats; n++) {
-	if (Cats->field[n] != field)
-	    continue;
-	Vect_list_append(cats, Cats->cat[n]);
+	if (Cats->field[n] == field)
+	    Vect_list_append(cats, Cats->cat[n]);
     }
 
     return cats->n_values;
@@ -217,12 +216,12 @@ int Vect_field_cat_get(const struct line_cats *Cats, int field, struct ilist *ca
    \param[in,out] Cats line_cats structure
    \param field layer number
 
-   \return 1 deleted
+   \return number of categories deleted
    \return 0 layer does not exist
  */
 int Vect_cat_del(struct line_cats *Cats, int field)
 {
-    int n, m, found = 0;
+    int n, m, found;
 
     /* check input value */
     /*
@@ -231,17 +230,16 @@ int Vect_cat_del(struct line_cats *Cats, int field)
      */
 
     /* go through cats and find if field exist */
+    m = 0;
     for (n = 0; n < Cats->n_cats; n++) {
-	if (Cats->field[n] == field) {
-	    for (m = n; m < Cats->n_cats - 1; m++) {
-		Cats->field[m] = Cats->field[m + 1];
-		Cats->cat[m] = Cats->cat[m + 1];
-	    }
-	    Cats->n_cats--;
-	    found = 1;
-	    n--;		/* check again this position */
+	if (Cats->field[n] != field) {
+	    Cats->field[m] = Cats->field[n];
+	    Cats->cat[m] = Cats->cat[n];
+	    m++;
 	}
     }
+    found = Cats->n_cats - m;
+    Cats->n_cats = m;
 
     return (found);
 }
@@ -253,31 +251,33 @@ int Vect_cat_del(struct line_cats *Cats, int field)
    \param field layer number
    \param cat category to be deleted or -1 to delete all cats of given field
 
-   \return 1 deleted
+   \return number of categories deleted
    \return 0 field/category number does not exist
  */
 int Vect_field_cat_del(struct line_cats *Cats, int field, int cat)
 {
-    register int n, m, found = 0;
+    register int n, m, found;
 
     /* check input value */
     /*
        if (field < 1 || field > GV_FIELD_MAX)
        return (0);
      */
+     
+    if (cat == -1)
+	return Vect_cat_del(Cats, field);
 
     /* go through cats and find if field exist */
+    m = 0;
     for (n = 0; n < Cats->n_cats; n++) {
-	if (Cats->field[n] == field && (Cats->cat[n] == cat || cat == -1)) {
-	    for (m = n; m < Cats->n_cats - 1; m++) {
-		Cats->field[m] = Cats->field[m + 1];
-		Cats->cat[m] = Cats->cat[m + 1];
-	    }
-	    Cats->n_cats--;
-	    found = 1;
-	    n--;		/* check again this position */
+	if (Cats->field[n] != field || Cats->cat[n] != cat) {
+	    Cats->field[m] = Cats->field[n];
+	    Cats->cat[m] = Cats->cat[n];
+	    m++;
 	}
     }
+    found = Cats->n_cats - m;
+    Cats->n_cats = m;
 
     return (found);
 }
@@ -514,12 +514,12 @@ int Vect_cat_in_array(int cat, const int *array, int ncats)
     i = bsearch((void *)&cat, (void *)array, (size_t) ncats,
 		sizeof(int), cmp);
 
-    if (i != NULL)
-	return (TRUE);
-
-    return (FALSE);
+    return (i != NULL);
 }
 
+/* return -1 if *p1 < *p2
+ * return  1 if *p1 > *p2
+ * return  0 if *p1 == *p2 */
 static int cmp(const void *pa, const void *pb)
 {
     int *p1 = (int *)pa;
@@ -527,7 +527,5 @@ static int cmp(const void *pa, const void *pb)
 
     if (*p1 < *p2)
 	return -1;
-    if (*p1 > *p2)
-	return 1;
-    return 0;
+    return (*p1 > *p2);
 }
