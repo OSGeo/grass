@@ -24,6 +24,7 @@ for details.
 
 import os
 import types
+import copy
 import __builtin__
 
 from core import *
@@ -283,7 +284,16 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
       'Table': 'archsites', 'Type': 'Point', 'Id': 8}]
     @endcode
 
-    To query one vector map at more locations
+    To query one vector map with multiple layers (no additional parameters required)
+    @code
+    for q in grass.vector_what(map = 'some_map', coord = (596532.357143,4920486.21429), distance = 100.0):
+        print q['Map'], q['Layer'], q['Attributes']
+
+    new_bug_sites 1 {'str1': 'Beetle_site', 'GRASSRGB': '', 'cat': '80'}
+    new_bug_sites 2 {'cat': '80'}
+    @endcode
+
+    To query more vector maps at one location
     @code
     for q in grass.vector_what(map = ('archsites', 'roads'), coord = (595743, 4925281),
                                distance = 250):
@@ -293,7 +303,7 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
     roads {'label': 'interstate', 'cat': '1'}
     @endcode
 
-    To query more vector maps at one location
+    To query one vector map at more locations
     @code
     for q in grass.vector_what(map = 'archsites', coord = [(595743, 4925281), (597950, 4918898)],
                                distance = 250):
@@ -348,6 +358,9 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
         return data
     
     dict_attrb = None
+    dict_map = None
+    dict_layer = None
+    attr_pseudo_key = 'Attributes'
     for item in ret.splitlines():
         try:
             key, value = __builtin__.map(lambda x: x.strip(), item.split('=', 1))
@@ -357,21 +370,42 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
             continue
         
         if key == 'Map':
-            dict_main  = { 'Map' : value }
+            # attach the last one from the previous map
+            if dict_layer is not None:
+                dict_main = copy.copy(dict_map)
+                dict_main.update(dict_layer)
+                data.append(dict_main)
+            dict_map  = { key : value }
+            dict_layer = None
             dict_attrb = None
-            data.append(dict_main)
-            continue
-        else:
-            if dict_attrb is not None:
-                dict_attrb[key] = value
+        elif key == 'Layer':
+            # attach the last the previous Layer
+            if dict_layer is not None:
+                dict_main = copy.copy(dict_map)
+                dict_main.update(dict_layer)
+                data.append(dict_main)
+            dict_layer = { key: int(value) }
+            dict_attrb = None
+        elif key == 'Key_column':
+            dict_layer[key] = value
+            dict_attrb = dict()
+            dict_layer[attr_pseudo_key] = dict_attrb
+        elif dict_attrb is not None:
+            dict_attrb[key] = value
+        elif dict_layer is not None:
+            if key == 'Category':
+                dict_layer[key] = int(value)
             else:
-                if key in ('Category', 'Layer', 'Id'):
-                    dict_main[key] = int(value)
-                else:
-                    dict_main[key] = value
-            if key == 'Key_column':
-                # skip attributes
-                dict_attrb = dict()
-                dict_main['Attributes'] = dict_attrb
+                dict_layer[key] = value
+        else:
+            dict_map[key] = value
+            # TODO: there are some keys which has non-string values
+            # examples: Sq_Meters, Hectares, Acres, Sq_Miles
+    
+    # attach the last one
+    if dict_layer is not None:
+        dict_main = copy.copy(dict_map)
+        dict_main.update(dict_layer)
+        data.append(dict_main)
     
     return data
