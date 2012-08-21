@@ -1,11 +1,18 @@
 #include <string.h>
 #include <stdio.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
 
 char *print_label(char *s, int len, int pflag, int spacing, int dot)
 {
     char *x;
     int n;
     int i;
+
+    if (len <= 0) {
+	G_warning(_("Page width is too small"));
+	return NULL;
+    }
 
     /* strip away leading spaces */
     while (*s == ' ')
