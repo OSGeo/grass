@@ -896,7 +896,10 @@ class GMConsole(wx.SplitterWindow):
                     event.cmd[0] == 'r.mapcalc':
                 return
             
-            display = self.parent.GetLayerTree().GetMapDisplay()
+            tree = self.parent.GetLayerTree()
+            display = None
+            if tree:
+                display = tree.GetMapDisplay()
             if not display or not display.IsAutoRendered():
                 return
             mapLayers = map(lambda x: x.GetName(),
