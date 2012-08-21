@@ -416,11 +416,13 @@ int main(int argc, char *argv[])
 	cellhd.cols = 20;
 	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
 	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
+
 	/* use OGR extents if possible, needed to skip corrupted data
 	 * in OGR dsn/layer */
 	have_ogr_extent = 1;
     }
-    else {
+    
+    if (!have_ogr_extent) {
 	cellhd.north = 1.;
 	cellhd.south = 0.;
 	cellhd.west = 0.;
@@ -440,12 +442,21 @@ int main(int argc, char *argv[])
     }
 
     /* set spatial filter */
-    if (flag.region->answer && !param.spat->answer) {
+    if (flag.region->answer) {
 	if (param.spat->answer)
 	    G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
+	if (nlayers > 1)
+	    G_warning(_("The region flag is applied only to the first OGR layer"));
 
 	G_get_window(&cur_wind);
 	if (have_ogr_extent) {
+	    /* check for any overlap */
+	    if (cur_wind.west > xmax || cur_wind.east < xmin ||
+	        cur_wind.south > ymax || cur_wind.north < ymin) {
+		G_warning(_("The current region does not overlap with OGR input. Nothing to import."));
+		OGR_DS_Destroy(Ogr_ds);
+		exit(EXIT_SUCCESS);
+	    }
 	    if (xmin < cur_wind.west)
 		xmin = cur_wind.west;
 	    if (xmax > cur_wind.east)
@@ -463,51 +474,56 @@ int main(int argc, char *argv[])
 	}
     }
     if (param.spat->answer) {
-	double coor;
+	double spatxmin = xmin,
+	       spatxmax = xmax,
+	       spatymin = ymin,
+	       spatymax = ymax;
+
+	if (nlayers > 1)
+	    G_warning(_("The 'spatial' option is applied only to the first OGR layer"));
+
 	/* See as reference: gdal/ogr/ogr_capi_test.c */
 
 	/* cut out a piece of the map */
 	/* order: xmin,ymin,xmax,ymax */
-	arg_s_num = 0;
 	i = 0;
 	while (param.spat->answers[i]) {
-	    if (!have_ogr_extent) {
-		if (i == 0)
-		    xmin = atof(param.spat->answers[i]);
-		if (i == 1)
-		    ymin = atof(param.spat->answers[i]);
-		if (i == 2)
-		    xmax = atof(param.spat->answers[i]);
-		if (i == 3)
-		    xmax = atof(param.spat->answers[i]);
-	    }
-	    else {
-		if (i == 0) {
-		    coor = atof(param.spat->answers[i]);
-		    if (xmin < coor)
-			xmin = coor;
-		}
-		if (i == 1) {
-		    coor = atof(param.spat->answers[i]);
-		    if (ymin < coor)
-			ymin = coor;
-		}
-		if (i == 2) {
-		    coor = atof(param.spat->answers[i]);
-		    if (xmax > coor)
-			xmax = coor;
-		}
-		if (i == 3) {
-		    coor = atof(param.spat->answers[i]);
-		    if (ymax > coor)
-			ymax = coor;
-		}
-	    }
-	    arg_s_num++;
+	    if (i == 0)
+		spatxmin = atof(param.spat->answers[i]);
+	    if (i == 1)
+		spatymin = atof(param.spat->answers[i]);
+	    if (i == 2)
+		spatxmax = atof(param.spat->answers[i]);
+	    if (i == 3)
+		spatymax = atof(param.spat->answers[i]);
 	    i++;
 	}
-	if (arg_s_num != 4)
+	if (i != 4)
 	    G_fatal_error(_("4 parameters required for 'spatial' parameter"));
+
+	if (!have_ogr_extent) {
+	    xmin = spatxmin;
+	    ymin = spatymin;
+	    xmax = spatxmax;
+	    ymax = spatymax;
+	}
+	else {
+	    /* check for any overlap */
+	    if (spatxmin > xmax || spatxmax < xmin ||
+	        spatymin > ymax || spatymax < ymin) {
+		G_warning(_("The 'spatial' parameters do not overlap with OGR input. Nothing to import."));
+		OGR_DS_Destroy(Ogr_ds);
+		exit(EXIT_SUCCESS);
+	    }
+	    if (xmin < spatxmin)
+		xmin = spatxmin;
+	    if (ymin < spatymin)
+		ymin = spatymin;
+	    if (xmax > spatxmax)
+		xmax = spatxmax;
+	    if (ymax > spatymax)
+		ymax = spatymax;
+	}
     }
     if (param.spat->answer || flag.region->answer || have_ogr_extent) {
 	G_debug(2, "cut out with boundaries: xmin:%f ymin:%f xmax:%f ymax:%f",
@@ -528,6 +544,9 @@ int main(int argc, char *argv[])
 
     if (param.where->answer) {
 	/* select by attribute */
+	if (nlayers > 1)
+	    G_warning(_("The 'where' option is applied only to the first OGR layer"));
+
 	OGR_L_SetAttributeFilter(Ogr_layer, param.where->answer);
     }
 
