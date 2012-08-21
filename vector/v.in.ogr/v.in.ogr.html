@@ -20,6 +20,10 @@ special cases (then use <a href="v.clean.html">v.clean</a>).
 <p>The <b>min_area</b> threshold value is being specified as area size
 in map units with the exception of latitude-longitude locations in which
 it is being specified solely in square meters.
+<p>The <b>snap</b> threshold value is used to snap boundary vertices to 
+each other if the distance in map units between two vertices is not 
+larger than the threshold. Snapping is by default disabled with -1. See 
+also the <a href="v.clean.html">v.clean</a> manual.
 
 <h3>Supported OGR Vector Formats</h3>
 
