@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     char *desc;
 
     int i, j, layer, arg_s_num, nogeom, ncnames;
-    float xmin, ymin, xmax, ymax;
+    double xmin, ymin, xmax, ymax;
     int ncols = 0, type;
     double min_area, snap;
     char buf[2000], namebuf[2000], tempvect[GNAME_MAX];
@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
     OGRGeometryH Ogr_geometry, Ogr_oRing, poSpatialFilter;
     OGRSpatialReferenceH Ogr_projection;
     OGREnvelope oExt;
+    int have_ogr_extent = 0;
     OGRwkbGeometryType Ogr_geom_type; 
 
     int OFTIntegerListlength;
@@ -404,17 +405,65 @@ int main(int argc, char *argv[])
     /* Get first imported layer to use for extents and projection check */
     Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[0]);
 
-    if (flag.region->answer) {
+    /* fetch boundaries */
+    G_get_window(&cellhd);
+    if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
+	cellhd.north = ymax = oExt.MaxY;
+	cellhd.south = ymin = oExt.MinY;
+	cellhd.west = xmin = oExt.MinX;
+	cellhd.east = xmax = oExt.MaxX;
+	cellhd.rows = 20;	/* TODO - calculate useful values */
+	cellhd.cols = 20;
+	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
+	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
+	/* use OGR extents if possible, needed to skip corrupted data
+	 * in OGR dsn/layer */
+	have_ogr_extent = 1;
+    }
+    else {
+	cellhd.north = 1.;
+	cellhd.south = 0.;
+	cellhd.west = 0.;
+	cellhd.east = 1.;
+	cellhd.top = 1.;
+	cellhd.bottom = 1.;
+	cellhd.rows = 1;
+	cellhd.rows3 = 1;
+	cellhd.cols = 1;
+	cellhd.cols3 = 1;
+	cellhd.depths = 1;
+	cellhd.ns_res = 1.;
+	cellhd.ns_res3 = 1.;
+	cellhd.ew_res = 1.;
+	cellhd.ew_res3 = 1.;
+	cellhd.tb_res = 1.;
+    }
+
+    /* set spatial filter */
+    if (flag.region->answer && !param.spat->answer) {
 	if (param.spat->answer)
 	    G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
 
 	G_get_window(&cur_wind);
-	xmin = cur_wind.west;
-	xmax = cur_wind.east;
-	ymin = cur_wind.south;
-	ymax = cur_wind.north;
+	if (have_ogr_extent) {
+	    if (xmin < cur_wind.west)
+		xmin = cur_wind.west;
+	    if (xmax > cur_wind.east)
+		xmax = cur_wind.east;
+	    if (ymin < cur_wind.south)
+		ymin = cur_wind.south;
+	    if (ymax > cur_wind.north)
+		ymax = cur_wind.north;
+	}
+	else {
+	    xmin = cur_wind.west;
+	    xmax = cur_wind.east;
+	    ymin = cur_wind.south;
+	    ymax = cur_wind.north;
+	}
     }
     if (param.spat->answer) {
+	double coor;
 	/* See as reference: gdal/ogr/ogr_capi_test.c */
 
 	/* cut out a piece of the map */
@@ -422,21 +471,45 @@ int main(int argc, char *argv[])
 	arg_s_num = 0;
 	i = 0;
 	while (param.spat->answers[i]) {
-	    if (i == 0)
-		xmin = atof(param.spat->answers[i]);
-	    if (i == 1)
-		ymin = atof(param.spat->answers[i]);
-	    if (i == 2)
-		xmax = atof(param.spat->answers[i]);
-	    if (i == 3)
-		ymax = atof(param.spat->answers[i]);
+	    if (!have_ogr_extent) {
+		if (i == 0)
+		    xmin = atof(param.spat->answers[i]);
+		if (i == 1)
+		    ymin = atof(param.spat->answers[i]);
+		if (i == 2)
+		    xmax = atof(param.spat->answers[i]);
+		if (i == 3)
+		    xmax = atof(param.spat->answers[i]);
+	    }
+	    else {
+		if (i == 0) {
+		    coor = atof(param.spat->answers[i]);
+		    if (xmin < coor)
+			xmin = coor;
+		}
+		if (i == 1) {
+		    coor = atof(param.spat->answers[i]);
+		    if (ymin < coor)
+			ymin = coor;
+		}
+		if (i == 2) {
+		    coor = atof(param.spat->answers[i]);
+		    if (xmax > coor)
+			xmax = coor;
+		}
+		if (i == 3) {
+		    coor = atof(param.spat->answers[i]);
+		    if (ymax > coor)
+			ymax = coor;
+		}
+	    }
 	    arg_s_num++;
 	    i++;
 	}
 	if (arg_s_num != 4)
 	    G_fatal_error(_("4 parameters required for 'spatial' parameter"));
     }
-    if (param.spat->answer || flag.region->answer) {
+    if (param.spat->answer || flag.region->answer || have_ogr_extent) {
 	G_debug(2, "cut out with boundaries: xmin:%f ymin:%f xmax:%f ymax:%f",
 		xmin, ymin, xmax, ymax);
 
@@ -456,37 +529,6 @@ int main(int argc, char *argv[])
     if (param.where->answer) {
 	/* select by attribute */
 	OGR_L_SetAttributeFilter(Ogr_layer, param.where->answer);
-    }
-
-    /* fetch boundaries */
-    if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
-	G_get_window(&cellhd);
-	cellhd.north = oExt.MaxY;
-	cellhd.south = oExt.MinY;
-	cellhd.west = oExt.MinX;
-	cellhd.east = oExt.MaxX;
-	cellhd.rows = 20;	/* TODO - calculate useful values */
-	cellhd.cols = 20;
-	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
-	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
-    }
-    else {
-	cellhd.north = 1.;
-	cellhd.south = 0.;
-	cellhd.west = 0.;
-	cellhd.east = 1.;
-	cellhd.top = 1.;
-	cellhd.bottom = 1.;
-	cellhd.rows = 1;
-	cellhd.rows3 = 1;
-	cellhd.cols = 1;
-	cellhd.cols3 = 1;
-	cellhd.depths = 1;
-	cellhd.ns_res = 1.;
-	cellhd.ns_res3 = 1.;
-	cellhd.ew_res = 1.;
-	cellhd.ew_res3 = 1.;
-	cellhd.tb_res = 1.;
     }
 
     /* suppress boundary splitting ? */
