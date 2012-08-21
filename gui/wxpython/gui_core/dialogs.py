@@ -2653,13 +2653,13 @@ class SymbolDialog(wx.Dialog):
         
         self.infoLabel.SetLabel(event.name)
         
-    def GetSelectedSymbol(self, fullPath = False):
-        """!Returns currently selected symbol.
-        
-        @param fullPath true to return absolute path to symbol,
-        otherwise returns e.g. 'basic/x'
+    def GetSelectedSymbolName(self):
+        """!Returns currently selected symbol name (e.g. 'basic/x').
+        """ 
+        # separator must be '/' and not dependent on OS
+        return self.selectedDir + '/' + self.selected
+
+    def GetSelectedSymbolPath(self):
+        """!Returns currently selected symbol full path.
         """
-        if fullPath:
-            return os.path.join(self.symbolPath, self.selectedDir, self.selected)
-            
-        return os.path.join(self.selectedDir, self.selected)
+        return os.path.join(self.symbolPath, self.selectedDir, self.selected)

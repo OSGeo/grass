@@ -2260,8 +2260,8 @@ class VPropertiesDialog(PsmapDialog):
         dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
                            currentSymbol = self.symbolName.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
-            img = dlg.GetSelectedSymbol(fullPath = True)
-            name = dlg.GetSelectedSymbol(fullPath = False)
+            img = dlg.GetSelectedSymbolPath()
+            name = dlg.GetSelectedSymbolName()
             self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
             self.symbolName.SetLabel(name)
             
@@ -4714,8 +4714,8 @@ class PointDialog(PsmapDialog):
         dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
                            currentSymbol = self.symbolLabel.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
-            img = dlg.GetSelectedSymbol(fullPath = True)
-            name = dlg.GetSelectedSymbol(fullPath = False)
+            img = dlg.GetSelectedSymbolPath()
+            name = dlg.GetSelectedSymbolName()
             self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
             self.symbolLabel.SetLabel(name)
             

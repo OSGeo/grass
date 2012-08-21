@@ -1447,8 +1447,8 @@ class PreferencesDialog(PreferencesBaseDialog):
         dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
                            currentSymbol = label.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
-            img = dlg.GetSelectedSymbol(fullPath = True)
-            label.SetLabel(dlg.GetSelectedSymbol(fullPath = False))
+            img = dlg.GetSelectedSymbolPath()
+            label.SetLabel(dlg.GetSelectedSymbolName())
             bb.SetBitmapLabel(wx.Bitmap(img + '.png'))
 
     def OnEnableWheelZoom(self, event):
