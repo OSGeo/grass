@@ -18,6 +18,8 @@
 #include <sys/types.h>
 #include <string.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
+#include <grass/version.h>
 
 int dig_write_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 {
@@ -148,10 +150,12 @@ int dig_read_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 	if (plus->cidx_Back_Major > GV_CIDX_VER_MAJOR ||
 	    plus->cidx_Back_Minor > GV_CIDX_VER_MINOR) {
 	    /* This version of GRASS lib is lower than the oldest which can read this format */
+	    G_debug(1, "Category index format version %d.%d",
+		    plus->cidx_Version_Major, plus->cidx_Version_Minor);
 	    G_fatal_error
-		("Category index format version %d.%d is not supported by this release."
-		 " Try to rebuild topology or upgrade GRASS.",
-		 plus->cidx_Version_Major, plus->cidx_Version_Minor);
+		(_("This version of GRASS (%d.%d) is too old to read this category index format."
+		 " Try to rebuild topology or upgrade GRASS to at least version %d."),
+		 GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR, GRASS_VERSION_MAJOR + 1);
 	    return (-1);
 	}
 
