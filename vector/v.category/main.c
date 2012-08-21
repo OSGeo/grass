@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
 				 (Clist &&
 				  Vect_cat_in_cat_list(id, Clist) == TRUE))) {
 		ret = Vect_field_cat_del(Cats, fields[0], cat);
-		if (ret == 1) {
+		if (ret > 0) {
 		    nmodified++;
 		}
 	    }
