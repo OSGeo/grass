@@ -17,8 +17,8 @@
 #%module
 #% description: Converts a space time raster dataset into a raster3d map.
 #% keywords: temporal
+#% keywords: conversion
 #% keywords: raster3d
-#% keywords: convert
 #%end
 
 #%option G_OPT_STRDS_INPUT

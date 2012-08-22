@@ -115,12 +115,12 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    G_add_keyword(_("QC"));
-    G_add_keyword(_("Quality Control"));
-    G_add_keyword(_("Surface Reflectance"));
-    G_add_keyword(_("Land Surface Temperature"));
-    G_add_keyword(_("Vegetation"));
-    G_add_keyword(_("Modis"));
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("imagery quality assessment"));
+    G_add_keyword(_("surface reflectance"));
+    G_add_keyword(_("land surface temperature"));
+    G_add_keyword(_("vegetation"));
+    G_add_keyword(_("MODIS"));
     module->description =
 	_("Extracts quality control parameters from Modis QC layers.");
 

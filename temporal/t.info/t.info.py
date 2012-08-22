@@ -17,7 +17,7 @@
 #%module
 #% description: Lists information about space time datasets and maps.
 #% keywords: temporal
-#% keywords: info
+#% keywords: metadata
 #%end
 
 #%option

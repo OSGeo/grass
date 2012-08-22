@@ -43,7 +43,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("attributes"));
+    G_add_keyword(_("classification"));
+    G_add_keyword(_("attribute table"));
     G_add_keyword(_("statistics"));
     module->description =
 	_("Classifies attribute data, e.g. for thematic mapping");
