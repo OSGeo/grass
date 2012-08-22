@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     int points_in_polyline;
     int start_line;
     int nlines;
-    int write_cats;
+    int write_cats, copy_tables;
 
     int type, ltype;
 
@@ -183,6 +183,8 @@ int main(int argc, char **argv)
     /* Step over all lines in binary map */
     polyline = 0;
     nlines = 0;
+    
+    copy_tables = (write_cats != NO_CATS);
 
     for (line = 1; line <= Vect_get_num_lines(&map); line++) {
 	Vect_reset_cats(Cats);
@@ -194,6 +196,7 @@ int main(int argc, char **argv)
 	    /* copy points to output as they are, with cats */
 	    Vect_read_line(&map, points, Cats, line);
 	    Vect_write_line(&Out, ltype, points, Cats);
+	    copy_tables = 1;
 	    continue;
 	}
 
@@ -225,7 +228,7 @@ int main(int argc, char **argv)
 	      polyline, Vect_get_name(&Out), Vect_get_mapset(&Out));
 
     /* Copy (all linked) tables if needed */
-    if (write_cats != NO_CATS) {
+    if (copy_tables) {
         if (Vect_copy_tables(&map, &Out, 0))
             G_warning(_("Failed to copy attribute table to output map"));
     }
