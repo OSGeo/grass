@@ -6,9 +6,9 @@
  *               Major rewrite by Radim Blazek, October 2002
  *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com> (cats)
- *               Markus Metz (geometry type management)
+ *               Markus Metz (geometry type management, cats, attributes)
  * PURPOSE:      
- * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
     /* Step over all lines in binary map */
     polyline = 0;
     nlines = 0;
-    
+
     copy_tables = (write_cats != NO_CATS);
 
     for (line = 1; line <= Vect_get_num_lines(&map); line++) {
@@ -196,7 +196,8 @@ int main(int argc, char **argv)
 	    /* copy points to output as they are, with cats */
 	    Vect_read_line(&map, points, Cats, line);
 	    Vect_write_line(&Out, ltype, points, Cats);
-	    copy_tables = 1;
+	    if (Cats->n_cats > 0)
+		copy_tables = 1;
 	    continue;
 	}
 
