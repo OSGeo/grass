@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
-    G_add_keyword(_("image transformation"));
+    G_add_keyword(_("transformation"));
     G_add_keyword(_("PCA"));
     module->description = _("Principal components analysis (PCA) "
 			    "for image processing.");

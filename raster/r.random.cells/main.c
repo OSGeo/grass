@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("sampling"));
     G_add_keyword(_("random"));
-    G_add_keyword(_("cell"));
     module->description =
 	_("Generates random cell values with spatial dependence.");
 

@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("sampling"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("random"));
     module->description = _("Generates randomly 2D/3D vector points map.");

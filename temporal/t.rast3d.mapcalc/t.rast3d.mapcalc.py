@@ -17,7 +17,7 @@
 #%module
 #% description: Performs r3.mapcalc expressions on maps of sampled space time raster3d datasets.
 #% keywords: temporal
-#% keywords: mapcalc
+#% keywords: algebra
 #%end
 
 #%option G_OPT_STR3DS_INPUTS

@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("distance"));
     G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
     module->description =

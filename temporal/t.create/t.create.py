@@ -17,6 +17,7 @@
 #%module
 #% description: Creates a space time dataset.
 #% keywords: temporal
+#% keywords: map management
 #% keywords: create
 #%end
 

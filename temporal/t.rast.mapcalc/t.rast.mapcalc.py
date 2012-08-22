@@ -17,7 +17,7 @@
 #%module
 #% description: Performs r.mapcalc expressions on maps of sampled space time raster datasets.
 #% keywords: temporal
-#% keywords: mapcalc
+#% keywords: algebra
 #%end
 
 #%option G_OPT_STRDS_INPUTS
