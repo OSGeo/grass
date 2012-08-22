@@ -46,7 +46,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
-    G_add_keyword(_("networking"));
+    G_add_keyword(_("network"));
+    G_add_keyword(_("path"));
     module->description =
 	_("Finds shortest path for selected starting and ending node.");
 

@@ -41,6 +41,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("sampling"));
     G_add_keyword(_("position"));
     G_add_keyword(_("querying"));
     module->description =
