@@ -73,8 +73,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("sampling"));
     G_add_keyword(_("raster"));
-    G_add_keyword(_("resample"));
     module->description =
 	_("Samples a raster map at vector point locations.");
 

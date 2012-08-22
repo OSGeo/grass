@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->overwrite = TRUE;
     G_add_keyword(_("vector"));
-    G_add_keyword(_("editing"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("editing"));
     module->description = _("Edits a vector map, allows adding, deleting "
 			    "and modifying selected vector features.");
 

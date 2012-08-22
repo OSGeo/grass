@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
-    G_add_keyword(_("setup"));
+    G_add_keyword(_("settings"));
     module->description = _("Lists the available fonts.");
 
     flagl = G_define_flag();

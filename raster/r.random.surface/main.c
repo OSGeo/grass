@@ -55,8 +55,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("random"));
     G_add_keyword(_("surface"));
+    G_add_keyword(_("random"));
     module->description =
 	_("Generates random surface(s) with spatial dependence.");
 

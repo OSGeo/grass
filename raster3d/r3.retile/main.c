@@ -99,9 +99,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster3d"));
-    G_add_keyword(_("retile"));
+    G_add_keyword(_("tiling"));
     G_add_keyword(_("voxel"));
-    module->description = _("Retiles an existing RASTER3D map with user defined x, y and z tile size");
+    module->description = _("Retiles an existing 3D raster map with user defined x, y and z tile size.");
 
     /* Get parameters from user */
     set_params();
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_debug(3, _("Open 3d raster map <%s>"), param.input->answer);
+    G_debug(3, "Open 3d raster map <%s>", param.input->answer);
 
     mapset = G_find_raster3d(param.input->answer, "");
     

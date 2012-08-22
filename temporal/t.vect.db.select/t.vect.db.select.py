@@ -19,6 +19,7 @@
 #% keywords: temporal
 #% keywords: vector
 #% keywords: database
+#% keywords: attribute table
 #% keywords: select
 #%end
 

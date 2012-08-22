@@ -18,8 +18,8 @@
 #%module
 #% description: Dissolves boundaries between adjacent areas sharing a common category number or attribute.
 #% keywords: vector
-#% keywords: area
 #% keywords: dissolve
+#% keywords: area
 #%end
 #%option G_OPT_V_INPUT
 #%end

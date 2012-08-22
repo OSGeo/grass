@@ -58,8 +58,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("position"));
     G_add_keyword(_("querying"));
+    G_add_keyword(_("position"));
     module->description = _("Queries a vector map at given locations.");
 
     opt.map = G_define_standard_option(G_OPT_V_MAPS);
