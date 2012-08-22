@@ -124,8 +124,9 @@ class VectorDBInfo(VectorDBInfoBase):
                     continue
                 if key in ret:
                     ret[key].append(value)
-                else:
-                    ret[key].append(None)
+            if 'Id' not in record.keys():
+                ret['Id'].append(None)
+
         return ret
     
     def SelectFromTable(self, layer, cols = '*', where = None):
