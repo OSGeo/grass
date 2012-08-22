@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("volume"));
+    G_add_keyword(_("voxel"));
     G_add_keyword(_("conversion"));
     module->description =
         _("Converts 2D raster map slices to one 3D raster volume map.");

@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("volume"));
+    G_add_keyword(_("voxel"));
     G_add_keyword(_("conversion"));
     module->description = _("Converts a vector map "
 			    "(only points) into a 3D raster map.");
