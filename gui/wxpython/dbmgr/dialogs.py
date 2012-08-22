@@ -400,7 +400,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 idx = 0
                 for layer in data['Layer']:
                     layer = int(layer)
-                    if 'Id' in data:
+                    if data['Id'][idx] is not None:
                         tfid = int(data['Id'][idx])
                     else:
                         tfid = 0 # Area / Volume
