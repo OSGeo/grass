@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("reclass"));
+    G_add_keyword(_("reclassification"));
     G_add_keyword(_("attributes"));
     module->description =
 	_("Changes vector category values for an existing vector map "
