@@ -124,6 +124,8 @@ class VectorDBInfo(VectorDBInfoBase):
                     continue
                 if key in ret:
                     ret[key].append(value)
+                else:
+                    ret[key].append(None)
         return ret
     
     def SelectFromTable(self, layer, cols = '*', where = None):
