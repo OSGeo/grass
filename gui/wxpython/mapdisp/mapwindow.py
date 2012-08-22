@@ -31,7 +31,7 @@ import wx
 import grass.script as grass
 
 from gui_core.dialogs   import SavedRegion
-from core.gcmd          import RunCommand, GException, GError
+from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapwindow import MapWindow
@@ -1169,22 +1169,15 @@ class BufferedWindow(MapWindow, wx.Window):
             
         elif self.mouse["use"] == "query":
             # querying
-            layers = self.GetSelectedLayer(multi = True)
-            isRaster = False
-            nVectors = 0
-            for l in layers:
-                if l.GetType() == 'raster':
-                    isRaster = True
-                    break
-                if l.GetType() == 'vector':
-                    nVectors += 1
-            
-            if isRaster or nVectors > 1:
-                self.frame.QueryMap(self.mouse['begin'][0],self.mouse['begin'][1])
-            else:
-                self.frame.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
-                # clear temp canvas
-                self.UpdateMap(render = False, renderVector = False)
+            if self.frame.IsStandalone():
+                GMessage(parent = self.frame,
+                         message = _("Querying is not implemented in standalone mode of Map Display"))
+                return
+
+            layers = self.GetSelectedLayer(type = 'item', multi = True)
+
+            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1], layers)
+            self.UpdateMap(render = False, renderVector = False)
             
         elif self.mouse["use"] == "queryVector":
             # editable mode for vector map layers

@@ -96,28 +96,34 @@ class VectorDBInfo(VectorDBInfoBase):
                                  coord = (float(queryCoords[0]), float(queryCoords[1])),
                                  distance = float(qdist))
 
-        if len(data) < 1 or 'Table' not in data[0]:
+        if len(data) < 1 or all(('Table' not in record) for record in data):
             return None
         
         # process attributes
-        table = data[0]['Table']
-        for key, value in data[0]['Attributes'].iteritems():
-            if len(value) < 1:
-                value = None
-            else:
-                if self.tables[table][key]['ctype'] != types.StringType:
-                    value = self.tables[table][key]['ctype'] (value)
-                else:
-                    value = unicodeValue(value)
-            self.tables[table][key]['values'].append(value)
-        
         ret = dict()
-        for key, value in data[0].iteritems():
-            if key == 'Attributes':
-                continue
+        for key in ['Category', 'Layer', 'Table', 'Id']:
             ret[key] = list()
-            ret[key].append(value)
-        
+
+        for record in data:
+            if not 'Table' in record:
+                continue
+
+            table = record['Table']
+            for key, value in record['Attributes'].iteritems():
+                if len(value) < 1:
+                    value = None
+                else:
+                    if self.tables[table][key]['ctype'] != types.StringType:
+                        value = self.tables[table][key]['ctype'] (value)
+                    else:
+                        value = unicodeValue(value)
+                self.tables[table][key]['values'].append(value)
+            
+            for key, value in record.iteritems():
+                if key == 'Attributes':
+                    continue
+                if key in ret:
+                    ret[key].append(value)
         return ret
     
     def SelectFromTable(self, layer, cols = '*', where = None):

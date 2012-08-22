@@ -761,21 +761,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.mouse['end'] = event.GetPositionTuple()
         if self.mouse["use"] == "query":
             # querying
-            layers = self.GetSelectedLayer(multi = True)
-            isRaster = False
-            nVectors = 0
-            for l in layers:
-                if l.GetType() == 'raster':
-                    isRaster = True
-                    break
-                if l.GetType() == 'vector':
-                    nVectors += 1
-            
-            if isRaster or nVectors > 1:
-                self.OnQueryMap(event)
-            else:
-                self.OnQueryVector(event)
-                    
+            if self.frame.IsStandalone():
+                GMessage(parent = self.frame,
+                         message = _("Querying is not implemented in standalone mode of Map Display"))
+                return
+
+            layers = self.GetSelectedLayer(type = 'item', multi = True)
+
+            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1], layers)
+
         elif self.mouse["use"] in ('arrow', 'scalebar'):
             self.lmgr.nviz.FindWindowById(
                     self.lmgr.nviz.win['decoration'][self.mouse["use"]]['place']).SetValue(False)
@@ -1003,16 +997,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.render['quick'] = False
         self.Refresh(False)
-    
-    def OnQueryMap(self, event):
-        """!Query raster and vector maps"""
-        self.OnQuerySurface(event)
-        self.parent.QueryMap(event.GetX(), event.GetY())
         
-    def OnQuerySurface(self, event):
+    def QuerySurface(self, x, y):
         """!Query surface on given position"""
         size = self.GetClientSizeTuple()
-        result = self._display.QueryMap(event.GetX(), size[1] - event.GetY())
+        result = self._display.QueryMap(x, size[1] - y)
         if result:
             self.qpoints.append((result['x'], result['y'], result['z']))
             self.log.WriteLog("%-30s: %.3f" % (_("Easting"),   result['x']))

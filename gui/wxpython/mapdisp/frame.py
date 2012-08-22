@@ -54,7 +54,7 @@ from wxplot.scatter     import ScatterFrame
 
 from mapdisp import statusbar as sb
 
-from grass.script import core as grass
+import grass.script as grass
 
 haveCtypes = False
 
@@ -630,55 +630,89 @@ class MapFrame(SingleMapFrame):
             pgnum = self.layerbook.GetPageIndex(self.page)
             if pgnum > -1:
                 self.layerbook.DeletePage(pgnum)
-    
-    
-    def QueryMap(self, x, y):
-        """!Query raster or vector map layers by r/v.what
-        
+
+    def Query(self, x, y, layers):
+        """!Query selected layers. 
+
+        Calls QueryMap in case of raster or more vectors,
+        or QueryVector in case of one vector with db connection.
+
         @param x,y coordinates
+        @param layers selected tree item layers
         """
+        num = 0
+        filteredLayers = []
+        for layer in layers:
+            ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+            if ltype in ('raster', 'rgb', 'his',
+                         'vector', 'thememap', 'themechart'):
+                filteredLayers.append(layer)
+
+        if not filteredLayers:
+            GMessage(parent = self,
+                     message = _('No raster or vector map layer selected for querying.'))
+            return
+            
+        layers = filteredLayers
         # set query snap distance for v.what at map unit equivalent of 10 pixels
         qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
         east, north = self.MapWindow.Pixel2Cell((x, y))
+
+        posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
+                                         y + self.MapWindow.dialogOffset))
+
+        isRaster = False
+        nVectors = 0
+        isDbConnection = False
+        for l in layers:
+            maplayer = self.tree.GetPyData(l)[0]['maplayer']
+            if maplayer.GetType() == 'raster':
+                isRaster = True
+                break
+            if maplayer.GetType() == 'vector':
+                nVectors += 1
+                isDbConnection = grass.vector_db(maplayer.GetName())
+
+        if not self.IsPaneShown('3d'):
+            if isRaster or nVectors > 1 or not isDbConnection:
+                self.QueryMap(east, north, qdist, layers)
+            else:
+                self.QueryVector(east, north, qdist, posWindow, layers[0])
+        else:
+            if isRaster:
+                self.MapWindow.QuerySurface(x, y)
+            if nVectors > 1 or not isDbConnection:
+                self.QueryMap(east, north, qdist, layers)
+            elif nVectors == 1:
+                self.QueryVector(east, north, qdist, posWindow, layers[0])
+
+    def QueryMap(self, east, north, qdist, layers):
+        """!Query raster or vector map layers by r/v.what
         
-        if not self.IsStandalone():
-            num = 0
-            for layer in self.tree.GetSelections():
-                ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-                if ltype in ('raster', 'rgb', 'his',
-                             'vector', 'thememap', 'themechart'):
-                    num += 1
-            
-            if num < 1:
-                GMessage(parent = self,
-                         message = _('No raster or vector map layer selected for querying.'))
-                return
-        
+        @param east,north coordinates
+        @param qdist query distance
+        @param layers selected tree items
+        """
         rast = list()
         vect = list()
         rcmd = ['r.what', '--v']
         vcmd = ['v.what', '--v']
         
-        if self.IsStandalone():
-            pass
-        else:
-            for layer in self.tree.GetSelections():
-                ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-                dcmd = self.tree.GetPyData(layer)[0]['cmd']
-                name, found = GetLayerNameFromCmd(dcmd)
-                
-                if not found:
-                    continue
-                if ltype == 'raster':
-                    rast.append(name)
-                elif ltype in ('rgb', 'his'):
-                    for iname in name.split('\n'):
-                        rast.append(iname)
-                elif ltype in ('vector', 'thememap', 'themechart'):
-                    vect.append(name)
-        # rasters are not queried this way in 3D, we don't want them now
-        if self.IsPaneShown('3d'):
-            rast = list()
+        for layer in layers:
+            ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+            dcmd = self.tree.GetPyData(layer)[0]['cmd']
+            name, found = GetLayerNameFromCmd(dcmd)
+            
+            if not found:
+                continue
+            if ltype == 'raster':
+                rast.append(name)
+            elif ltype in ('rgb', 'his'):
+                for iname in name.split('\n'):
+                    rast.append(iname)
+            elif ltype in ('vector', 'thememap', 'themechart'):
+                vect.append(name)
+
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
         os.environ["GRASS_REGION"] = self.Map.SetRegion(windres = False)
@@ -714,19 +748,14 @@ class MapFrame(SingleMapFrame):
         Debug.msg(1, "QueryMap(): raster=%s vector=%s" % (','.join(rast),
                                                           ','.join(vect)))
         # parse query command(s)
-        if not self.IsStandalone():
-            if rast:
-                self._layerManager.goutput.RunCmd(rcmd,
-                                                  compReg = False,
-                                                  onDone  =  self._QueryMapDone)
-            if vect:
-                self._layerManager.goutput.RunCmd(vcmd,
-                                                  onDone = self._QueryMapDone)
-        else:
-            if rast:
-                RunCommand(rcmd)
-            if vect:
-                RunCommand(vcmd)
+
+        if rast and not self.IsPaneShown('3d'):
+            self._layerManager.goutput.RunCmd(rcmd,
+                                              compReg = False,
+                                              onDone  =  self._QueryMapDone)
+        if vect:
+            self._layerManager.goutput.RunCmd(vcmd,
+                                              onDone = self._QueryMapDone)
         
     def _QueryMapDone(self, cmd, returncode):
         """!Restore settings after querying (restore GRASS_REGION)
@@ -744,29 +773,15 @@ class MapFrame(SingleMapFrame):
         if hasattr(self, "tmpreg"):
             del self.tmpreg
         
-    def QueryVector(self, x, y):
+    def QueryVector(self, east, north, qdist, posWindow, layer):
         """!Query vector map layer features
 
         Attribute data of selected vector object are displayed in GUI dialog.
         Data can be modified (On Submit)
         """
-        if not self.tree.layer_selected or \
-                self.tree.GetPyData(self.tree.layer_selected)[0]['type'] != 'vector':
-            GMessage(parent = self,
-                     message = _("No map layer selected for querying."))
-            return
+        mapName = self.tree.GetPyData(layer)[0]['maplayer'].name
         
-        posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
-                                         y + self.MapWindow.dialogOffset))
-        
-        qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) /
-                        self.Map.width)
-        
-        east, north = self.MapWindow.Pixel2Cell((x, y))
-        
-        mapName = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name
-        
-        if self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetMapset() != \
+        if self.tree.GetPyData(layer)[0]['maplayer'].GetMapset() != \
                 grass.gisenv()['MAPSET']:
             mode = 'display'
         else:
@@ -812,7 +827,7 @@ class MapFrame(SingleMapFrame):
                     qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId = False)
                 
                 # set opacity based on queried layer
-                opacity = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetOpacity(float = True)
+                opacity = self.tree.GetPyData(layer)[0]['maplayer'].GetOpacity(float = True)
                 qlayer.SetOpacity(opacity)
                 
                 self.MapWindow.UpdateMap(render = False, renderVector = False)
