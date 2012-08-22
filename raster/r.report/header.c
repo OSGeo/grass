@@ -71,8 +71,6 @@ int header(int unit1, int unit2)
 
 	divider("|");
 
-	label = nlayers > 1 ? "MAPS:" : "MAP:";
-
 	mask = maskinfo();
 	label = "MASK:";
 	len1 = strlen(label) + 1;
@@ -90,6 +88,7 @@ int header(int unit1, int unit2)
 	 */
 
 	label = nlayers > 1 ? "MAPS:" : "MAP:";
+	len1 = strlen(label) + 1;
 	for (i = 0; i < nlayers; i++) {
 	    char *title;
 
