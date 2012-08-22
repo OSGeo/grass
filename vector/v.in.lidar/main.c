@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("LIDAR"));
     module->description = _("Converts LAS LiDAR point clouds to a GRASS vector map with libLAS.");
 
     in_opt = G_define_standard_option(G_OPT_F_INPUT);

@@ -87,6 +87,7 @@ static void parse_command_line(int argc, char **argv)
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
+    G_add_keyword(_("attribute table"));
     G_add_keyword(_("SQL"));
     module->description =
 	_("List all databases for a given driver and location.");
