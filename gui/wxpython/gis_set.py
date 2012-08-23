@@ -41,6 +41,7 @@ import wx.lib.scrolledpanel as scrolled
 from gui_core.ghelp import HelpFrame
 from core.gcmd      import GMessage, GError, DecodeString, RunCommand
 from core.utils     import GetListOfLocations, GetListOfMapsets
+from location_wizard.dialogs import RegionDef
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -387,10 +388,90 @@ class GRASSStartup(wx.Frame):
         gWizard = LocationWizard(parent = self,
                                  grassdatabase = self.tgisdbase.GetValue())
         if gWizard.location !=  None:
-            self.OnSetDatabase(event)
+            self.tgisdbase.SetValue(gWizard.grassdatabase)
+            self.OnSetDatabase(None)
             self.UpdateMapsets(os.path.join(self.gisdbase, gWizard.location))
             self.lblocations.SetSelection(self.listOfLocations.index(gWizard.location))
             self.lbmapsets.SetSelection(0)
+            self.SetLocation(self.gisdbase, gWizard.location, 'PERMANENT')
+            if gWizard.georeffile:
+                message = _("Do you want to import data source <%(name)s> to created location?"
+                            " Default region will be set to match imported map.") % {'name': gWizard.georeffile}
+                dlg = wx.MessageDialog(parent = self,
+                                       message = message,
+                                       caption = _("Import data"),
+                                       style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                dlg.CenterOnScreen()
+                if dlg.ShowModal() == wx.ID_YES:
+                    self.ImportFile(gWizard.georeffile)
+                else:
+                    self.SetDefaultRegion(location = gWizard.location)
+                dlg.Destroy()
+            else:
+                self.SetDefaultRegion(location = gWizard.location)
+
+            self.ExitSuccessfully()
+
+    def SetDefaultRegion(self, location):
+        """!Asks to set default region."""
+        dlg = wx.MessageDialog(parent = self,
+                               message = _("Do you want to set the default "
+                                           "region extents and resolution now?"),
+                               caption = _("Location <%s> created") % location,
+                               style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+        dlg.CenterOnScreen()
+        if dlg.ShowModal() == wx.ID_YES:
+            dlg.Destroy()
+            defineRegion = RegionDef(self, location = location)
+            defineRegion.CenterOnScreen()
+            defineRegion.ShowModal()
+            defineRegion.Destroy()
+        else:
+            dlg.Destroy()
+
+    def ImportFile(self, filePath):
+        """!Tries to import file as vector or raster.
+
+        If successfull sets default region from imported map.
+        """
+        returncode, stdout, messagesIfVector = RunCommand('v.in.ogr', dsn = filePath, flags = 'l',
+                                                  read = True, getErrorMsg = True)
+        if returncode == 0:
+            wx.BeginBusyCursor()
+            wx.Yield()
+            returncode, messages = RunCommand('v.in.ogr', dsn = filePath, 
+                                              output = os.path.splitext(os.path.basename(filePath))[0],
+                                              getErrorMsg = True)
+            wx.EndBusyCursor()
+            if returncode != 0:
+                message = _("Import of vector data source <%(name)s> failed.") % {'name': filePath}
+                message += "\n" + messages
+                GError(message = message)
+            else:
+                GMessage(message = _("Vector data source <%(name)s> imported successfully.") % {'name': filePath})
+                stdout = RunCommand('g.list', type = 'vect', read = True)
+                maps = stdout.splitlines()
+                if maps:
+                    # TODO: what about resolution?
+                    RunCommand('g.region', flags = 's', vect = maps[0])
+                    
+        else:
+            wx.BeginBusyCursor()
+            wx.Yield()
+            returncode, messages = RunCommand('r.in.gdal', input = filePath,
+                                              output = os.path.splitext(os.path.basename(filePath))[0],
+                                              getErrorMsg = True)
+            wx.EndBusyCursor()
+            if returncode != 0:
+                message = _("Attempt to import data source <%(name)s> as raster or vector failed. ") % {'name': filePath}
+                message += "\n\n" +  messagesIfVector + "\n" + messages
+                GError(message = message)
+            else:
+                GMessage(message = _("Raster data source <%(name)s> imported successfully.") % {'name': filePath})
+                stdout = RunCommand('g.list', type = 'rast', read = True)
+                maps = stdout.splitlines()
+                if maps:
+                    RunCommand('g.region', flags = 's', rast = maps[0])
 
     def OnManageLoc(self, event):
         """!Location management choice control handler
@@ -774,7 +855,10 @@ class GRASSStartup(wx.Frame):
                     return
             else:
                 return
-        
+        self.SetLocation(dbase, location, mapset)
+        self.ExitSuccessfully()
+
+    def SetLocation(self, dbase, location, mapset):
         RunCommand("g.gisenv",
                    set = "GISDBASE=%s" % dbase)
         RunCommand("g.gisenv",
@@ -782,6 +866,8 @@ class GRASSStartup(wx.Frame):
         RunCommand("g.gisenv",
                    set = "MAPSET=%s" % mapset)
         
+
+    def ExitSuccessfully(self):
         self.Destroy()
         sys.exit(0)
 
