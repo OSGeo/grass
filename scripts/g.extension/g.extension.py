@@ -708,6 +708,7 @@ def install_extension_other(name):
     dirs = { 'bin'     : os.path.join(tmpdir, name, 'bin'),
              'docs'    : os.path.join(tmpdir, name, 'docs'),
              'html'    : os.path.join(tmpdir, name, 'docs', 'html'),
+             'rest'    : os.path.join(tmpdir, name, 'docs', 'rest'),
              'man'     : os.path.join(tmpdir, name, 'docs', 'man', 'man1'),
              'scripts' : os.path.join(tmpdir, name, 'scripts'),
              'etc'     : os.path.join(tmpdir, name, 'etc'),
@@ -718,6 +719,7 @@ def install_extension_other(name):
                    'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
                    'BIN=%s' % dirs['bin'],
                    'HTMLDIR=%s' % dirs['html'],
+                   'RESTDIR=%s' % dirs['rest'],
                    'MANDIR=%s' % dirs['man'],
                    'SCRIPTDIR=%s' % dirs['scripts'],
                    'ETC=%s' % os.path.join(dirs['etc'],name)
@@ -747,6 +749,8 @@ def install_extension_other(name):
     if 0 != grass.call(makeCmd,
                        stdout = outdev):
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
+    
+    import pdb; pdb.set_trace()
     
     if flags['i'] or classchar == 'wx':
         return 0
@@ -835,6 +839,7 @@ def remove_extension_std(name, force = False):
     for fpath in [os.path.join(options['prefix'], 'bin', name),
                   os.path.join(options['prefix'], 'scripts', name),
                   os.path.join(options['prefix'], 'docs', 'html', name + '.html'),
+                  os.path.join(options['prefix'], 'docs', 'rest', name + '.txt'),
                   os.path.join(options['prefix'], 'docs', 'man', 'man1', name + '.1')]:
         if os.path.isfile(fpath):
             if force:
@@ -910,6 +915,7 @@ def create_dir(path):
 def check_dirs():
     create_dir(os.path.join(options['prefix'], 'bin'))           
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
+    create_dir(os.path.join(options['prefix'], 'docs', 'rest'))
     check_style_files('grass_logo.png')
     check_style_files('grassdocs.css')
     create_dir(os.path.join(options['prefix'], 'etc'))
