@@ -324,6 +324,7 @@ class GMFrame(wx.Frame):
     def OnLocationWizard(self, event):
         """!Launch location wizard"""
         from location_wizard.wizard import LocationWizard
+        from location_wizard.dialogs import RegionDef
         
         gWizard = LocationWizard(parent = self,
                                  grassdatabase = grass.gisenv()['GISDBASE'])
@@ -350,6 +351,22 @@ class GMFrame(wx.Frame):
                          message = _("Current location is <%(loc)s>.\n"
                                      "Current mapset is <%(mapset)s>.") % \
                              { 'loc' : location, 'mapset' : 'PERMANENT' })
+
+                # code duplication with gis_set.py
+                dlg = wx.MessageDialog(parent = self,
+                               message = _("Do you want to set the default "
+                                           "region extents and resolution now?"),
+                               caption = _("Location <%s> created") % location,
+                               style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+                dlg.CenterOnScreen()
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+                    defineRegion = RegionDef(self, location = location)
+                    defineRegion.CenterOnScreen()
+                    defineRegion.ShowModal()
+                    defineRegion.Destroy()
+                else:
+                    dlg.Destroy()
         
     def OnSettingsChanged(self, event):
         """!Here can be functions which have to be called after EVT_SETTINGS_CHANGED. 
