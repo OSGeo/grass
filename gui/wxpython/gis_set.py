@@ -721,7 +721,8 @@ class GRASSStartup(wx.Frame):
                 self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
             except StandardError, e:
                 GError(parent = self,
-                       message = _("Unable to create new mapset: %s") % e)
+                       message = _("Unable to create new mapset: %s") % e,
+                       showTraceback = False)
                 return False
         
         dlg.Destroy()
