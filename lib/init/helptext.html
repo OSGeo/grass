@@ -10,8 +10,11 @@ and environmental consulting companies.
 
 <h2>1. Startup of GRASS GIS</h2>
 
+After launching GRASS GIS, the startup screen will open:
+<p>
+ 
 <center>
-  <img src="grass_start.png" alt="[GRASS start screen]">
+  <img src="grass_start.png" alt="[GRASS GIS start screen]">
 </center>
 
 <h3><img src="circle_1.png" alt="[(1)]">&nbsp;Selecting the GIS Database directory</h3>
@@ -56,19 +59,19 @@ one, you can enter GRASS. The graphical user interface
 menu system, map visualization tool, digitizer, and more.
 
 
-<h2>2. Background GRASS Location structure</h2>
+<h2>2. Background: GRASS Location structure</h2>
 
-<center>
-  <img src="help_loc_struct.png" alt="[GRASS Location structure]"><br>
-  <i>Fig. 1: GRASS Location structure</i>
-</center>
-
-<p>
 A LOCATION is simply a set of directories which contains the GRASS
 data of a project. Within each LOCATION, a mandatory "PERMANENT"
 MAPSET exists which contains projection information and some more
 definitions. It can be used to store the base cartography in it as
 "PERMANENT" is visible to all users accessing a LOCATION.
+<p>
+
+<center>
+  <img src="help_loc_struct.png" alt="[GRASS Location structure]"><br>
+  <i>Fig. 1: GRASS GIS location structure</i>
+</center>
 
 <h3>Creating and maintaining MAPSETs</h3>
 One motivation to maintain different MAPSETs is to store maps
@@ -102,13 +105,13 @@ all mapsets a WIND file is kept, for storing the current boundary
 coordinate values and the currently selected raster resolution.  Users
 have the option of switching back to the default region at any time.
 
-<h2>3. Creating a GRASS database with sample data</h2>
+<h2>3. Creating a GRASS Database with Sample Data</h2>
 
 To create the GRASS database:
 
 <ol>
 <li> Find a place on your disk where you have write access and that
-    has enough diskspace to hold your spatial data.</LI>
+    has enough disk space to hold your spatial data.</LI>
 <li> Create a subdirectory that will hold the general GRASS database
     (e.g. using a file manager or with <tt>mkdir /data/grassdata</tt> or 
     <tt>mkdir /home/yourlogin/grassdata</tt>).</LI>
@@ -117,39 +120,42 @@ To create the GRASS database:
 <p>Sample data such as the "Spearfish" or the "North Carolina" sample datasets
 may be downloaded from 
 <a href="http://grass.osgeo.org/download/data.php">http://grass.osgeo.org/download/data.php</a>
-and placed in this new database directory.
+and the compressed data package(s) extracted into this new database directory.
 <p>
+Now you are ready to select a sample dataset in the GRASS GIS startup screen
+(see above) and start the session.
 
-<h2>4. Create New Location with Location Wizard</h2>
+<h2>4. Creating A New Location with Location Wizard</h2>
 The <a href="wxGUI.html">wxGUI</a> graphical user interface provides a
 graphical "Location Wizard" which let's you easily create a
-new LOCATION. You will be guided through a series of dialogues to
+new LOCATION for own data. You will be guided through a series of dialogues to
 browse and select predefined projections (also via EPSG code) or to
 define individual projections. The rules to define the resolution as
 described above also apply here.
 
 <p>
-You can also create new location from a georeferenced data file.
+<i>Hint: You can create new location easily from a georeferenced data file.
 In this case you are asked whether the data itself should be imported
-into the new location. The default region is then set to match imported map.
+into the new location. The default region is then set to match imported map
+and the GRASS GIS session is opened.</i>
 
 <p>
-After defining new location wxGUI starts automatically.
-If some data were imported, you can to add them into
-the Layer Manager now.
-If your location is empty you can import your data from menu
-File -&gt; Import raster/vector data.
+After defining new location, wxGUI starts automatically.
+If data were already imported, you can add them into the Layer Manager now
+and display them. If your location is empty you can import your data from 
+the menu: Go to "File" -&gt; "Import raster/vector data" (see also the
+related Wiki page on <a href="http://grass.osgeo.org/wiki/Importing_data">Importing data</a>).
 
 <p>
-Under some circumstances you can find useful to create New Location using
-text based location wizard (see
-<a href="http://grass.osgeo.org/wiki/GRASS_Location_Wizard#Text_based_location_wizard">http://grass.osgeo.org/wiki/GRASS_Location_Wizard</a>).
+Under some circumstances you may find it useful to create a new location using
+the <b>text based location wizard</b>. For this, see
+<a href="http://grass.osgeo.org/wiki/GRASS_Location_Wizard#Text_based_location_wizard">http://grass.osgeo.org/wiki/GRASS_Location_Wizard</a>.
 
 
 <h2>Further Reading</h2>
 
-Please have a look at the GRASS web site for tutorials and books:
-<a href="http://grass.osgeo.org/gdp/index.php">http://grass.osgeo.org/gdp/index.php</a>.
+Please have a look at the GRASS GIS web site for tutorials and books:
+<a href="http://grass.osgeo.org/gdp/">http://grass.osgeo.org/gdp/</a>.
 
 <h2>See also</h2>
 
