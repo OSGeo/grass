@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("DEM"));
+    G_add_keyword(_("surface"));
     G_add_keyword(_("contours"));
     G_add_keyword(_("vector"));
     module->description = _("Produces a vector map of specified "
