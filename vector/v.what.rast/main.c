@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE out_type;
     CELL *cell;
     DCELL *dcell;
+    int width;
     double drow, dcol;
     char buf[2000];
     struct {
@@ -123,6 +124,10 @@ int main(int argc, char *argv[])
     fd = Rast_open_old(opt.rast->answer, "");
 
     out_type = Rast_get_map_type(fd);
+    
+    width = 7;
+    if (out_type == DCELL_TYPE)
+	width = 15;
 
     /* TODO: Later possibly category labels */
     /* 
@@ -146,7 +151,7 @@ int main(int argc, char *argv[])
 	G_warning(_("Raster type is float and column type is integer, some data lost!!"));
 
     /* Read vector points to cache */
-    Cache_size = Vect_get_num_primitives(&Map, GV_POINT);
+    Cache_size = Vect_get_num_primitives(&Map, GV_POINTS);
     /* Note: Some space may be wasted (outside region or no category) */
 
     cache = (struct order *)G_calloc(Cache_size, sizeof(struct order));
@@ -165,7 +170,7 @@ int main(int argc, char *argv[])
 	G_percent(i, nlines, 2);
 	
 	/* check type */
-	if (!(type & GV_POINT))
+	if (!(type & GV_POINTS))
 	    continue;		/* Points only */
 
 	/* check region */
@@ -266,6 +271,7 @@ int main(int argc, char *argv[])
 	    cache[point].dvalue = dcell[cache[point].col];
 	}
     }				/* point loop */
+    Rast_close(fd);
 
     /* Update table from cache */
     G_debug(1, "Updating db table");
@@ -317,7 +323,7 @@ int main(int argc, char *argv[])
 		sprintf(buf, "NULL");
 	    }
 	    else {
-		sprintf(buf, "%.10f", cache[point].dvalue);
+		sprintf(buf, "%.*f", width, cache[point].dvalue);
 	    }
 	}
 	db_append_string(&stmt, buf);
