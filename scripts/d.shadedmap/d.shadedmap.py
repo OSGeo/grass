@@ -17,6 +17,7 @@
 #%module
 #% description: Drapes a color raster over a shaded relief map.
 #% keywords: display
+#% keywords: elevation
 #%end
 #%option G_OPT_R_INPUT
 #% key: reliefmap

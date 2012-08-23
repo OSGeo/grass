@@ -17,6 +17,7 @@
 #%module
 #% description: Blends color components of two raster maps by a given ratio.
 #% keywords: raster
+#% keywords: composite
 #%end
 #%option G_OPT_R_INPUT
 #% key: first
