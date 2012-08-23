@@ -23,7 +23,7 @@ scriptstrings: $(STRINGDIR)/$(PGM)_to_translate.c
 install:
 	$(INSTALL) $(SCRIPT) $(INST_DIR)/scripts/
 	$(INSTALL_DATA) $(HTMLDIR)/$(PGM).html $(INST_DIR)/docs/html/
-	$(INSTALL_DATA) $(HTMLDIR)/$(PGM).txt $(INST_DIR)/docs/rest/
+	$(INSTALL_DATA) $(RESTDIR)/$(PGM).txt $(INST_DIR)/docs/rest/
 	$(INSTALL_DATA) $(ARCH_DISTDIR)/docs/man/man1/$(PGM).1 $(INST_DIR)/docs/man/man1/
 	if [ -d "$(ETC)/$(PGM)" ] ; then \
 		cp -rL $(ETC)/$(PGM) $(INST_DIR)/etc/ ; \
