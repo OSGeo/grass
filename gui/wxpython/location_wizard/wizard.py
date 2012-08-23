@@ -41,7 +41,6 @@ import wx.lib.scrolledpanel as scrolled
 from core                    import globalvar
 from core                    import utils
 from core.gcmd               import RunCommand, GError, GMessage, GWarning
-from gui_core.ghelp          import HelpFrame
 from location_wizard.base    import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -2113,15 +2112,9 @@ class LocationWizard(wx.Object):
 
     def OnHelp(self, event):
         """'Help' button clicked"""
+
         # help text in lib/init/helptext.html
-        filePath = os.path.join(os.getenv('GISBASE'), "docs", "html", "helptext.html")
-
-        helpFrame = HelpFrame(parent = None, id = wx.ID_ANY,
-                              title = _("GRASS Quickstart"),
-                              size = (640, 480),
-                              file = filePath)
-        helpFrame.Show(True)
-
+        RunCommand('g.manual', entry = 'helptext')
 
 class WizardWithHelpButton(wiz.Wizard):
     def __init__(self, parent, id, title, bitmap):

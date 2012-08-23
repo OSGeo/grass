@@ -880,6 +880,9 @@ class HelpFrame(wx.Dialog):
     As a base class wx.Dialog is used, because of not working
     close button with wx.Frame when dialog is called from wizard.
     If parent is None, application TopLevelWindow is used (wxPython standard behaviour).
+
+    Currently not used (was in location wizard before)
+    due to unsolved problems - window sometimes does not respond.
     """
     def __init__(self, parent, id, title, size, file):
         wx.Dialog.__init__(self, parent = parent, id = id, title = title,
