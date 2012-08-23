@@ -17,6 +17,7 @@
 #%module
 #% description: Lists registered maps of a space time vector dataset.
 #% keywords: temporal
+#% keywords: map management
 #% keywords: list
 #%end
 
