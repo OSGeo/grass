@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("support"));
     G_add_keyword(_("scripts"));
     module->label =
 	_("Prints a message, warning, progress info, or fatal error in the GRASS way.");

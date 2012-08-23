@@ -95,8 +95,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("imagery"));
+    G_add_keyword(_("radiometric conversion"));
     G_add_keyword(_("Terra-ASTER"));
-    G_add_keyword(_("DN"));
     G_add_keyword(_("radiance"));
     G_add_keyword(_("reflectance"));
     G_add_keyword(_("brightness temperature"));
