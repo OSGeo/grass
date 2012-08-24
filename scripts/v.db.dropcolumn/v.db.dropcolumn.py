@@ -76,10 +76,10 @@ def main():
         
         if driver == "sqlite":
             # echo "Using special trick for SQLite"
-            # http://www.sqlite.org/faq.html#q13
+            # http://www.sqlite.org/faq.html#q11
             colnames = []
             coltypes = []
-            for f in grass.db_describe(table)['cols']:
+            for f in grass.db_describe(table, database = database, driver = driver)['cols']:
                 if f[0] == column:
                     continue
                 colnames.append(f[0])
