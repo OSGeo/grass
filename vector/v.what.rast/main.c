@@ -124,10 +124,10 @@ int main(int argc, char *argv[])
     fd = Rast_open_old(opt.rast->answer, "");
 
     out_type = Rast_get_map_type(fd);
-    
-    width = 7;
-    if (out_type == DCELL_TYPE)
-	width = 15;
+
+    width = 15;
+    if (out_type == FCELL_TYPE)
+	width = 7;
 
     /* TODO: Later possibly category labels */
     /* 
@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
 		sprintf(buf, "NULL");
 	    }
 	    else {
-		sprintf(buf, "%.*f", width, cache[point].dvalue);
+		sprintf(buf, "%.*g", width, cache[point].dvalue);
 	    }
 	}
 	db_append_string(&stmt, buf);
