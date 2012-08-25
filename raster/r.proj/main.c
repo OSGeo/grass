@@ -493,7 +493,12 @@ int main(int argc, char **argv)
     for (row = 0; row < outcellhd.rows; row++) {
 	/* obufptr = obuffer */;
 
+#if 0
+	/* parallelization does not always work,
+	 * segfaults in the interpolation functions 
+	 * can happen */
         #pragma omp parallel for schedule (static)
+#endif
 
 	for (col = 0; col < outcellhd.cols; col++) {
 	    void *obufptr = (void *)((const unsigned char *)obuffer + col * cell_size);
