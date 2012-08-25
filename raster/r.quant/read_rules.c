@@ -49,8 +49,8 @@ int report_range(void)
     if (Rast_is_d_null_value(&old_dmin) || Rast_is_d_null_value(&old_dmax))
 	G_message(_("Old data range is empty"));
     else {
-	sprintf(buff, "%.10f", old_dmin);
-	sprintf(buff2, "%.10f", old_dmax);
+	sprintf(buff, "%.15g", old_dmin);
+	sprintf(buff2, "%.15g", old_dmax);
 	G_trim_decimal(buff);
 	G_trim_decimal(buff2);
 	G_message(_("Old data range is %s to %s"), buff, buff2);
@@ -66,7 +66,7 @@ int report_range(void)
 
 int read_rules(const char *filename)
 {
-    char buf[256];
+    char buf[1024];
     DCELL dLow, dHigh;
     CELL iLow, iHigh;
     int line, n, nrules = 0;
