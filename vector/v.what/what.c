@@ -107,11 +107,11 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
     int type;
     char east_buf[40], north_buf[40];
     double sq_meters, sqm_to_sqft, acres, hectares, sq_miles;
-    double z = 0, l = 0;
+    double z, l;
     int notty = 0;
-    int getz = 0;
+    int getz;
     struct field_info *Fi;
-    plus_t line, area = 0, centroid;
+    plus_t line, area, centroid;
     int i;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -130,22 +130,32 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 
 
     for (i = 0; i < nvects; i++) {
+	/* init variables */
+	area = 0;
+	getz = 0;
+	z = 0;
+	l = 0;
+	line = 0;
 
 	Vect_reset_cats(Cats);
+	Vect_reset_line(Points);
+
 	/* Try to find point first and only if no one was found try lines,
 	 *  otherwise point on line could not be selected and similarly for areas */
 	
-	type = ((GV_POINT | GV_CENTROID) & qtype);
-	line =
-	    Vect_find_line(&Map[i], east, north, 0.0, GV_POINT | GV_CENTROID,
-			   maxdist, 0, 0);
-	if (line == 0) {
-	    type = ((GV_LINE | GV_BOUNDARY | GV_FACE) & qtype);
+	type = (GV_POINTS & qtype);
+	if (type) {
+	    line =
+		Vect_find_line(&Map[i], east, north, 0.0, type,
+			       maxdist, 0, 0);
+	}
+	type = ((GV_LINE | GV_BOUNDARY | GV_FACE) & qtype);
+	if (line == 0 && type) {
 	    line = Vect_find_line(&Map[i], east, north, 0.0,
 				  type, maxdist, 0, 0);
 	}
 
-	if (line == 0) {
+	if (line == 0 && (qtype & GV_AREA)) {
 	    area = Vect_find_area(&Map[i], east, north);
 	    getz = Vect_tin_get_z(&Map[i], east, north, &z, NULL, NULL);
 	}
@@ -191,7 +201,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 	nlines++;
 
 	if (line + area == 0) {
-	    if (line + area > 0 || G_verbose() >= G_verbose_std()) {
+	    if (G_verbose() >= G_verbose_std()) {
 		fprintf(stdout, _("Nothing Found.\n"));
 		if (notty)
 		    fprintf(stderr, _("Nothing Found.\n"));
