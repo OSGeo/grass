@@ -438,13 +438,16 @@ class MapFrame(SingleMapFrame):
         
         event.Skip()
         
+    def RemoveQueryLayer(self):
+        """!Removes temporary map layers (queries)"""
+        qlayer = self.GetMap().GetListOfLayers(l_name = globalvar.QUERYLAYER)
+        for layer in qlayer:
+            self.GetMap().DeleteLayer(layer)
+
     def OnRender(self, event):
         """!Re-render map composition (each map layer)
         """
-        # delete tmp map layers (queries)
-        qlayer = self.Map.GetListOfLayers(l_name = globalvar.QUERYLAYER)
-        for layer in qlayer:
-            self.Map.DeleteLayer(layer)
+        self.RemoveQueryLayer()
         
         # delete tmp lines
         if self.MapWindow.mouse["use"] in ("measure",
@@ -810,14 +813,14 @@ class MapFrame(SingleMapFrame):
         cats = self.dialogs['attributes'].GetCats()
         
         qlayer = None
-        if not self.IsPaneShown('3d'):
+        if not self.IsPaneShown('3d') and self.IsAutoRendered():
             try:
                 qlayer = self.Map.GetListOfLayers(l_name = globalvar.QUERYLAYER)[0]
             except IndexError:
                 pass
         
         if self.dialogs['attributes'].mapDBInfo and cats:
-            if not self.IsPaneShown('3d'):
+            if not self.IsPaneShown('3d') and self.IsAutoRendered():
                 # highlight feature & re-draw map
                 if qlayer:
                     qlayer.SetCmd(self.AddTmpVectorMapLayer(mapName, cats,
