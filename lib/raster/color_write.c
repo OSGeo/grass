@@ -250,7 +250,7 @@ static void format_min(char *str, double dval)
     G_trim_decimal(str);
     sscanf(str, "%lf", &dtmp);
     if (dtmp != dval) {  /* if no zeros after decimal point were trimmed */
-	/* lower dval by fraction of GRASS_EPSILON */
+	/* lower dval by GRASS_EPSILON fraction */
 	if (dval > 0)
 	    sprintf(str, "%.15g", dval * (1 - GRASS_EPSILON));
 	else
@@ -268,7 +268,7 @@ static void format_max(char *str, double dval)
     G_trim_decimal(str);
     sscanf(str, "%lf", &dtmp);
     if (dtmp != dval) {  /* if  no zeros after decimal point were trimmed */
-	/* increase dval by fraction of GRASS_EPSILON */
+	/* increase dval by by GRASS_EPSILON fraction */
 	if (dval > 0)
 	    sprintf(str, "%.15g", dval * (1 + GRASS_EPSILON));
 	else
