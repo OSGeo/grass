@@ -299,14 +299,16 @@ class DisplayAttributesDialog(wx.Dialog):
     def OnCancel(self, event):
         """!Cancel button pressed
         """
-        self.parent.parent.dialogs['attributes'] = None
-        
+        frame = self.parent.parent
+        frame.dialogs['attributes'] = None
         if hasattr(self, "digit"):
             self.parent.digit.GetDisplay().SetSelected([])
-            self.parent.UpdateMap(render = False)
-        else:
-            self.parent.parent.OnRender(None)
-        
+            if frame.IsAutoRendered():
+                self.parent.UpdateMap(render = False)
+        elif frame.IsAutoRendered():
+            frame.RemoveQueryLayer()
+            self.parent.UpdateMap(render = True)
+
         self.Close()
 
     def OnSubmit(self, event):

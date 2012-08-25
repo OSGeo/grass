@@ -1177,14 +1177,6 @@ class BufferedWindow(MapWindow, wx.Window):
             layers = self.GetSelectedLayer(type = 'item', multi = True)
 
             self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1], layers)
-            self.UpdateMap(render = False, renderVector = False)
-            
-        elif self.mouse["use"] == "queryVector":
-            # editable mode for vector map layers
-            self.frame.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
-            
-            # clear temp canvas
-            self.UpdateMap(render = False, renderVector = False)
         
         elif self.mouse["use"] in ["measure", "profile"]:
             # measure or profile
