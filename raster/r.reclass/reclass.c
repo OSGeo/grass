@@ -208,7 +208,7 @@ int reclass(const char *old_name, const char *old_mapset,
     struct History hist;
     int is_reclass;
     FILE *fd;
-    char buf[256];
+    char buf[GNAME_MAX + GMAPSET_MAX];
 
     is_reclass = Rast_get_reclass(old_name, old_mapset, &old);
     if (is_reclass < 0)
@@ -230,7 +230,7 @@ int reclass(const char *old_name, const char *old_mapset,
 	G_fatal_error(_("Cannot create reclass file of <%s>"), new_name);
 
     if (!title) {
-	sprintf(buf, "Reclass of %s in %s", new.name, new.mapset);
+	G_snprintf(buf, sizeof(buf), "Reclass of %s in %s", new.name, new.mapset);
 	title = buf;
     }
 
