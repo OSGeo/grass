@@ -248,7 +248,6 @@ static void format_min(char *str, double dval)
     sprintf(str, "%.15g", dval);
     /* Note that G_trim_decimal() does not trim e.g. 1.0000000e-20 */
     G_trim_decimal(str);
-
     sscanf(str, "%lf", &dtmp);
     if (dtmp != dval) {  /* if no zeros after decimal point were trimmed */
 	/* lower dval by fraction of GRASS_EPSILON */
