@@ -123,6 +123,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.flag = ''                       # flag for drag and drop hittest
         self.rerender = False                # layer change requires a rerendering if auto render
         self.reorder = False                 # layer change requires a reordering
+        self.hitCheckbox = False             # if cursor points at layer checkbox (to cancel selection changes)
         
         try:
             ctstyle |= CT.TR_ALIGN_WINDOWS
@@ -225,6 +226,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_ITEM_COLLAPSED,   self.OnCollapseNode)
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED,   self.OnActivateLayer)
         self.Bind(wx.EVT_TREE_SEL_CHANGED,      self.OnChangeSel)
+        self.Bind(wx.EVT_TREE_SEL_CHANGING,     self.OnChangingSel)
         self.Bind(CT.EVT_TREE_ITEM_CHECKED,     self.OnLayerChecked)
         self.Bind(wx.EVT_TREE_DELETE_ITEM,      self.OnDeleteLayer)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
@@ -232,6 +234,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnRenamed)
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
+        self.Bind(wx.EVT_MOTION,                self.OnMotion)
 
     def _setGradient(self, iType = None):
         """!Set gradient for items
@@ -1148,8 +1151,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
         
-        self.SelectItem(item, False)
-        
         # update progress bar range (mapwindow statusbar)
         self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
         
@@ -1205,14 +1206,28 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         event.Skip()
 
+    def OnMotion(self, event):
+        """!Mouse is moving.
+
+        Detects if mouse points at checkbox.
+        """
+        thisItem, flags = self.HitTest(event.GetPosition())
+        if flags & CT.TREE_HITTEST_ONITEMCHECKICON:
+            self.hitCheckbox = True
+        else:
+            self.hitCheckbox = False
+        
+    def OnChangingSel(self, event):
+        """!Selection is changing.
+
+        If the user is clicking on checkbox, selection change is vetoed.
+        """
+        if self.hitCheckbox:
+            event.Veto()
+
     def OnChangeSel(self, event):
         """!Selection changed"""
-        oldlayer = event.GetOldItem()
         layer = event.GetItem()
-        if layer == oldlayer:
-            event.Veto()
-            return
-        
         digitToolbar = self.mapdisplay.GetToolbar('vdigit')
         if digitToolbar:
             mapLayer = self.GetPyData(layer)[0]['maplayer']
