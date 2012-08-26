@@ -292,10 +292,10 @@ class Settings:
                         'enabled' : True
                         },
                     'centroid' : {
-                        'enabled' : True
+                        'enabled' : False
                         },
                     'boundary' : {
-                        'enabled' : True
+                        'enabled' : False
                         },
                     'area' : {
                         'enabled' : True
