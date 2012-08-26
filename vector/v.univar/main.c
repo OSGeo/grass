@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "point,line,boundary,centroid,area";
+    type_opt->options = "point,line,area";
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->required = YES;
