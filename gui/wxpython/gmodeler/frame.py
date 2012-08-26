@@ -105,7 +105,7 @@ class ModelFrame(wx.Frame):
         
         self.pythonPanel = PythonPanel(parent = self)
         
-        self.goutput = GMConsole(parent = self, notebook = self.notebook)
+        self.goutput = GMConsole(parent = self, frame = self, notebook = self.notebook)
         
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')

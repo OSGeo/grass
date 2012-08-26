@@ -90,7 +90,7 @@ from gui_core         import gselect
 from core             import gcmd
 from core             import utils
 from core.settings    import UserSettings
-from gui_core.widgets import FloatValidator, GNotebook
+from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
@@ -781,9 +781,24 @@ class CmdPanel(wx.Panel):
         panelsizer = wx.BoxSizer(orient = wx.VERTICAL)
 
         # build notebook
-        self.notebook = GNotebook(self, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON )
-        self.notebook.SetTabAreaColour(globalvar.FNPageColor)
-        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
+        style = UserSettings.Get(group = 'appearance', key = 'commandNotebook', subkey = 'selection')
+        if style == 0: # basic top
+            self.notebook = FormNotebook(self, style = wx.BK_TOP)
+            self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
+        elif style == 1: # basic left
+            self.notebook = FormNotebook(self, style = wx.BK_LEFT)
+            self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
+        elif style == 2: # fancy green
+            self.notebook = GNotebook(self, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON )
+            self.notebook.SetTabAreaColour(globalvar.FNPageColor)
+            self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
+        elif style == 3:
+            self.notebook = FormListbook(self, style = wx.BK_LEFT)
+            self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
+        self.notebook.Refresh()
+
+        imageList = wx.ImageList(16, 16)
+        self.notebook.AssignImageList(imageList)
 
         tab = {}
         tabsizer = {}
@@ -791,22 +806,31 @@ class CmdPanel(wx.Panel):
             tab[section] = ScrolledPanel(parent = self.notebook)
             tab[section].SetScrollRate(10, 10)
             tabsizer[section] = wx.BoxSizer(orient = wx.VERTICAL)
-            self.notebook.AddPage(page = tab[section], text = section)
+            self.notebook.AddPage(page = tab[section], text = section, name = section)
+            index = self.AddBitmapToImageList(section, imageList)
+            if index >= 0:
+                self.notebook.SetPageImage(section, index)
 
         # are we running from command line?
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
             from gui_core.goutput import GMConsole
-            self.goutput = GMConsole(parent = self, margin = False)
+            self.goutput = GMConsole(parent = self.notebook, frame = self.parent, margin = False, notebook = self.notebook)
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
+            index = self.AddBitmapToImageList(section = 'output', imageList = imageList)
+            if index >= 0:
+                self.notebook.SetPageImage('output', index)
         else:
             self.goutput = None
         
-        self.manual_tab = HelpPanel(parent = self, grass_command = self.task.name)
+        self.manual_tab = HelpPanel(parent = self.notebook, grass_command = self.task.name)
         if not self.manual_tab.IsFile():
             self.manual_tab.Hide()
         else:
             self.notebook.AddPage(page = self.manual_tab, text = _("Manual"), name = 'manual')
+            index = self.AddBitmapToImageList(section = 'manual', imageList = imageList)
+            if index >= 0:
+                self.notebook.SetPageImage('manual', index)
         
         self.notebook.SetSelection(0)
 
@@ -1957,6 +1981,19 @@ class CmdPanel(wx.Panel):
             
         event.Skip()
         
+    def AddBitmapToImageList(self, section, imageList):
+        iconTheme = UserSettings.Get(group = 'appearance', key = 'iconTheme', subkey = 'type')
+        iconSectionDict = {'manual': os.path.join(globalvar.ETCICONDIR, iconTheme, 'help.png'),
+                           _("Optional"): os.path.join(globalvar.ETCICONDIR, iconTheme, 'settings.png')}
+        if section in iconSectionDict.keys():
+            bitmap = wx.Bitmap(iconSectionDict[section])
+            bitmap.SetSize((16, 16))
+            idx = imageList.Add(bitmap)
+            return idx
+
+        return -1
+
+
 class GUI:
     def __init__(self, parent = None, show = True, modal = False,
                  centreOnParent = False, checkError = False, lmgr = None):

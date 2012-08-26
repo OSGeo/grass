@@ -146,6 +146,9 @@ class Settings:
                 'iconTheme' : {
                     'type' : 'grass'
                     },
+                'commandNotebook' : {
+                    'selection' : 2
+                    },
                 },
             #
             # language
@@ -819,7 +822,12 @@ class Settings:
         self.internalSettings['appearance']['gSelectPopupHeight']['min'] = 50
         # there is also maxHeight given to TreeCtrlComboPopup.GetAdjustedSize
         self.internalSettings['appearance']['gSelectPopupHeight']['max'] = 1000
-        
+        self.internalSettings['appearance']['commandNotebook']['choices'] = \
+            (_("Basic top"),
+             _("Basic left"),
+             _("Fancy green"),
+             _("List left"))
+
         self.internalSettings['display']['driver']['choices'] = ['cairo', 'png']
         self.internalSettings['display']['statusbarMode']['choices'] = None # set during MapFrame init
         self.internalSettings['display']['mouseWheelZoom']['choices'] = (_('Zoom and recenter'),

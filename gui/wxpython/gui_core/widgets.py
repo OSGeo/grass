@@ -50,24 +50,29 @@ from core.debug  import Debug
 from wx.lib.newevent import NewEvent
 wxSymbolSelectionChanged, EVT_SYMBOL_SELECTION_CHANGED  = NewEvent()
 
-class GNotebook(FN.FlatNotebook):
-    """!Generic notebook widget
+
+class NotebookController:
+    """!Provides handling of notebook page names.
+
+    Translates page names to page indices.
+    Class is aggregated in notebook subclasses.
+    Notebook subclasses must delegate methods to controller.
+    Methods inherited from notebook class must be delegated explicitly
+    and other methods can be delegated by @c __getattr__.
     """
-    def __init__(self, parent, style, **kwargs):
-        if globalvar.hasAgw:
-            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, agwStyle = style, **kwargs)
-        else:
-            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
-        
+    def __init__(self, classObject, widget):
         self.notebookPages = {}
-            
+        self.classObject = classObject
+        self.widget = widget
+
     def AddPage(self, **kwargs):
         """!Add a new page
         """
         if 'name' in kwargs:
             self.notebookPages[kwargs['name']] = kwargs['page']
             del kwargs['name']
-        super(GNotebook, self).AddPage(**kwargs)
+
+        self.classObject.AddPage(self.widget, **kwargs)
 
     def InsertPage(self, **kwargs):
         """!Insert a new page
@@ -75,7 +80,7 @@ class GNotebook(FN.FlatNotebook):
         if 'name' in kwargs:
             self.notebookPages[kwargs['name']] = kwargs['page']
             del kwargs['name']
-        super(GNotebook, self).InsertPage(**kwargs)
+        self.classObject.InsertPage(self.widget, **kwargs)
 
     def DeletePage(self, page):
         """!Delete page
@@ -85,9 +90,10 @@ class GNotebook(FN.FlatNotebook):
         """
         delPageIndex = self.GetPageIndexByName(page)
         if delPageIndex != -1:
-            super(GNotebook, self).DeletePage(delPageIndex)
-            del self.notebookPages[page]
-            return True
+            ret = self.classObject.DeletePage(self.widget, delPageIndex)
+            if ret:
+                del self.notebookPages[page]
+            return ret
         else:
             return False
 
@@ -99,9 +105,10 @@ class GNotebook(FN.FlatNotebook):
         """
         delPageIndex = self.GetPageIndexByName(page)
         if delPageIndex != -1:
-            super(GNotebook, self).RemovePage(delPageIndex)
-            del self.notebookPages[page]
-            return True
+            ret = self.classObject.RemovePage(self.widget, delPageIndex)
+            if ret:
+                del self.notebookPages[page]
+            return ret
         else:
             return False
 
@@ -111,9 +118,36 @@ class GNotebook(FN.FlatNotebook):
         @param page names, eg. 'layers', 'output', 'search', 'pyshell', 'nviz'
         """
         idx = self.GetPageIndexByName(page)
-        if self.GetSelection() != idx:
-            self.SetSelection(idx)
+        if self.classObject.GetSelection(self.widget) != idx:
+            self.classObject.SetSelection(self.widget, idx)
+
+    def GetPageIndexByName(self, page):
+        """!Get notebook page index
         
+        @param page name
+        """
+        if page not in self.notebookPages:
+            return -1
+        for pageIndex in range(self.classObject.GetPageCount(self.widget)):
+            if self.notebookPages[page] == self.classObject.GetPage(self.widget, pageIndex):
+                break
+        return pageIndex
+
+    def SetPageImage(self, page, index):
+        """!Sets image index for page
+
+        @param page page name
+        @param index image index (in wx.ImageList)
+        """
+        pageIndex = self.GetPageIndexByName(page)
+        self.classObject.SetPageImage(self.widget, pageIndex, index)
+
+
+class FlatNotebookController(NotebookController):
+    """!Controller specialized for FN.FlatNotebook subclasses"""
+    def __init__(self, classObject, widget):
+        NotebookController.__init__(self, classObject, widget)
+
     def GetPageIndexByName(self, page):
         """!Get notebook page index
         
@@ -122,7 +156,115 @@ class GNotebook(FN.FlatNotebook):
         if page not in self.notebookPages:
             return -1
         
-        return self.GetPageIndex(self.notebookPages[page])
+        return self.classObject.GetPageIndex(self.widget, self.notebookPages[page])
+
+
+class GNotebook(FN.FlatNotebook):
+    """!Generic notebook widget.
+
+    Enables advanced style settings.
+    Problems with hidden tabs and does not respect system colors (native look).
+    """
+    def __init__(self, parent, style, **kwargs):
+        if globalvar.hasAgw:
+            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, agwStyle = style, **kwargs)
+        else:
+            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
+        
+        self.controller = FlatNotebookController(classObject = FN.FlatNotebook, widget = self)
+
+    def AddPage(self, **kwargs):
+        """! @copydoc NotebookController::AddPage()"""
+        self.controller.AddPage(**kwargs)
+
+    def InsertPage(self, **kwargs):
+        """! @copydoc NotebookController::InsertPage()"""
+        self.controller.InsertPage(**kwargs)
+
+    def DeletePage(self, page):
+        """! @copydoc NotebookController::DeletePage()"""
+        return self.controller.DeletePage(page)
+
+    def RemovePage(self, page):
+        """! @copydoc NotebookController::RemovePage()"""
+        return self.controller.RemovePage(page)
+
+    def SetPageImage(self, page, index):
+        """! @copydoc NotebookController::SetPageImage()"""
+        return self.controller.SetPageImage(page, index)
+
+    def SetPageImage(self, page, index):
+        """!Does nothing because we don't want images for this style"""
+        pass
+
+    def __getattr__(self, name):
+        return getattr(self.controller, name)
+
+class FormNotebook(wx.Notebook):
+    """!Notebook widget.
+
+    Respects native look.
+    """
+    def __init__(self, parent, style):
+        wx.Notebook.__init__(self, parent, id = wx.ID_ANY, style = style)
+        self.controller = NotebookController(classObject = wx.Notebook, widget = self)
+
+    def AddPage(self, **kwargs):
+        """!@copydoc NotebookController::AddPage()"""
+        self.controller.AddPage(**kwargs)
+
+    def InsertPage(self, **kwargs):
+        """! @copydoc NotebookController::InsertPage()"""
+        self.controller.InsertPage(**kwargs)
+
+    def DeletePage(self, page):
+        """ @copydoc NotebookController::DeletePage()"""
+        return self.controller.DeletePage(page)
+
+    def RemovePage(self, page):
+        """ @copydoc NotebookController::RemovePage()"""
+        return self.controller.RemovePage(page)
+
+    def SetPageImage(self, page, index):
+        """! @copydoc NotebookController::SetPageImage()"""
+        return self.controller.SetPageImage(page, index)
+
+    def __getattr__(self, name):
+        return getattr(self.controller, name)
+
+
+class FormListbook(wx.Listbook):
+    """!Notebook widget.
+
+    Respects native look.
+    """
+    def __init__(self, parent, style):
+        wx.Listbook.__init__(self, parent, id = wx.ID_ANY, style = style)
+        self.controller = NotebookController(classObject = wx.Listbook, widget = self)
+            
+    def AddPage(self, **kwargs):
+        """!@copydoc NotebookController::AddPage()"""
+        self.controller.AddPage(**kwargs)
+
+    def InsertPage(self, **kwargs):
+        """! @copydoc NotebookController::InsertPage()"""
+        self.controller.InsertPage(**kwargs)
+
+    def DeletePage(self, page):
+        """ @copydoc NotebookController::DeletePage()"""
+        return self.controller.DeletePage(page)
+
+    def RemovePage(self, page):
+        """ @copydoc NotebookController::RemovePage()"""
+        return self.controller.RemovePage(page)
+
+    def SetPageImage(self, page, index):
+        """! @copydoc NotebookController::SetPageImage()"""
+        return self.controller.SetPageImage(page, index)
+
+    def __getattr__(self, name):
+        return getattr(self.controller, name)
+
 
 class ScrolledPanel(SP.ScrolledPanel):
     """!Custom ScrolledPanel to avoid strange behaviour concerning focus"""
