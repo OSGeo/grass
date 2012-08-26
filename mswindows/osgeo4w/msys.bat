@@ -56,11 +56,16 @@ if NOT "%PART1%" == "%WD%" (
 )
 
 rem ember Set up option to use rxvt based on value of %1
-if "x%MSYSCON%" == "x" set MSYSCON=rxvt.exe
+set MSYSCON=unknown
 if "x%1" == "x-norxvt" set MSYSCON=sh.exe
 if "x%1" == "x--norxvt" set MSYSCON=sh.exe
-if "x%MSYSCON%" == "xsh.exe" shift
+if "x%1" == "x-rxvt" set MSYSCON=rxvt.exe
+if "x%1" == "x--rxvt" set MSYSCON=rxvt.exe
+if NOT "x%MSYSCON%" == "xunknown" shift
 
+if "x%MSYSCON%" == "xunknown" set MSYSCON=sh.exe
+
+rem the default is a MSYS (user), not a MINGW (developer) console
 if "x%MSYSTEM%" == "x" set MSYSTEM=MINGW32
 if "%1" == "MINGW32" set MSYSTEM=MINGW32
 if "%1" == "MSYS" set MSYSTEM=MSYS
@@ -101,7 +106,8 @@ exit
 
 :startsh
 if NOT EXIST "%WD%sh.exe" goto notfound
-start "MSYS 1.0" "%WD%sh" --login -i
+if "x%*" == "x" start "MSYS 1.0" "%WD%sh" --login -i
+if NOT "x%*" == "x" start "MSYS 1.0" "%WD%sh" --login -c "%*"
 exit
 
 :EOF
