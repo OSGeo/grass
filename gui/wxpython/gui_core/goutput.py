@@ -198,7 +198,7 @@ class CmdThread(threading.Thread):
 class GMConsole(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
-    def __init__(self, parent, id = wx.ID_ANY, margin = False,
+    def __init__(self, parent, frame, id = wx.ID_ANY, margin = False,
                  notebook = None,
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  **kwargs):
@@ -210,6 +210,7 @@ class GMConsole(wx.SplitterWindow):
         
         # initialize variables
         self.parent          = parent # GMFrame | CmdPanel | ?
+        self.frame = frame
         if notebook:
             self._notebook = notebook
         else:
@@ -285,7 +286,7 @@ class GMConsole(wx.SplitterWindow):
         self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into file; "
                                                "content saved when switching off."))
         
-        if self.parent.GetName() != 'LayerManager':
+        if self.frame.GetName() != 'LayerManager':
             self.btnCmdClear.Hide()
             self.btnCmdProtocol.Hide()
         
@@ -329,7 +330,7 @@ class GMConsole(wx.SplitterWindow):
         cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
         
-        if self.parent.GetName() != 'LayerManager':
+        if self.frame.GetName() != 'LayerManager':
             proportion = (1, 1)
         else:
             proportion = (2, 3)
@@ -506,7 +507,7 @@ class GMConsole(wx.SplitterWindow):
         except IOError, e:
             GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
                     {'filePath': filePath, 'error' : e },
-                   parent = self.parent)
+                   parent = self.frame)
             fileHistory = None
         
         if fileHistory:
@@ -518,7 +519,7 @@ class GMConsole(wx.SplitterWindow):
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
-            if self.parent.GetName() == "LayerManager" and \
+            if self.frame.GetName() == "LayerManager" and \
                     command[0][0:2] == "d." and \
                     'help' not in ' '.join(command[1:]):
                 # display GRASS commands
@@ -542,23 +543,23 @@ class GMConsole(wx.SplitterWindow):
                                  'd.barscale'     : 'barscale',
                                  'd.redraw'       : 'redraw'}[command[0]]
                 except KeyError:
-                    GMessage(parent = self.parent,
+                    GMessage(parent = self.frame,
                              message = _("Command '%s' not yet implemented in the WxGUI. "
                                          "Try adding it as a command layer instead.") % command[0])
                     return
                 
                 if layertype == 'barscale':
-                    self.parent.curr_page.maptree.GetMapDisplay().OnAddBarscale(None)
+                    self.frame.GetLayerTree().GetMapDisplay().OnAddBarscale(None)
                 elif layertype == 'rastleg':
-                    self.parent.curr_page.maptree.GetMapDisplay().OnAddLegend(None)
+                    self.frame.GetLayerTree().GetMapDisplay().OnAddLegend(None)
                 elif layertype == 'redraw':
-                    self.parent.curr_page.maptree.GetMapDisplay().OnRender(None)
+                    self.frame.GetLayerTree().GetMapDisplay().OnRender(None)
                 else:
                     # add layer into layer tree
                     lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
                                                              layerType = layertype)
-                    if self.parent.GetName() == "LayerManager":
-                        self.parent.curr_page.maptree.AddLayer(ltype = layertype,
+                    if self.frame.GetName() == "LayerManager":
+                        self.frame.GetLayerTree().AddLayer(ltype = layertype,
                                                                lname = lname,
                                                                lcmd = command)
             
@@ -602,8 +603,8 @@ class GMConsole(wx.SplitterWindow):
                 if switchPage:
                     self._notebook.SetSelectionByName('output')
                     
-                    self.parent.SetFocus()
-                    self.parent.Raise()
+                    self.frame.SetFocus()
+                    self.frame.Raise()
                 
                 # activate computational region (set with g.region)
                 # for all non-display commands.
@@ -689,7 +690,7 @@ class GMConsole(wx.SplitterWindow):
                 GError(_("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {'path': path, 'error': e})
             finally:
                 output.close()
-            self.parent.SetStatusText(_("Commands output saved into '%s'") % path)
+            self.frame.SetStatusText(_("Commands output saved into '%s'") % path)
         
         dlg.Destroy()
 
@@ -714,9 +715,9 @@ class GMConsole(wx.SplitterWindow):
         """!Update statusbar text"""
         if event.GetString():
             nItems = len(self.cmdPrompt.GetCommandItems())
-            self.parent.SetStatusText(_('%d modules match') % nItems, 0)
+            self.frame.SetStatusText(_('%d modules match') % nItems, 0)
         else:
-            self.parent.SetStatusText('', 0)
+            self.frame.SetStatusText('', 0)
         
         event.Skip()
 
@@ -733,7 +734,7 @@ class GMConsole(wx.SplitterWindow):
         
         # message prefix
         if type == 'warning':
-            messege = 'WARNING: ' + message
+            message = 'WARNING: ' + message
         elif type == 'error':
             message = 'ERROR: ' + message
         
@@ -804,7 +805,7 @@ class GMConsole(wx.SplitterWindow):
         finally:
             output.close()
             
-        self.parent.SetStatusText(_("Commands protocol saved into '%s'") % self.cmdFileProtocol)
+        self.frame.SetStatusText(_("Commands protocol saved into '%s'") % self.cmdFileProtocol)
         del self.cmdFileProtocol
         
     def OnCmdProtocol(self, event = None):
@@ -837,23 +838,23 @@ class GMConsole(wx.SplitterWindow):
         
     def OnCmdRun(self, event):
         """!Run command"""
-        if self.parent.GetName() == 'Modeler':
-            self.parent.OnCmdRun(event)
+        if self.frame.GetName() == 'Modeler':
+            self.frame.OnCmdRun(event)
         
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
         self.btnCmdAbort.Enable()
 
     def OnCmdPrepare(self, event):
         """!Prepare for running command"""
-        if self.parent.GetName() == 'Modeler':
-            self.parent.OnCmdPrepare(event)
+        if self.frame.GetName() == 'Modeler':
+            self.frame.OnCmdPrepare(event)
         
         event.Skip()
         
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
-        if self.parent.GetName() == 'Modeler':
-            self.parent.OnCmdDone(event)
+        if self.frame.GetName() == 'Modeler':
+            self.frame.OnCmdDone(event)
             
         # Process results here
         try:
@@ -890,13 +891,13 @@ class GMConsole(wx.SplitterWindow):
             Debug.SetLevel()
             self.Redirect()
         
-        if self.parent.GetName() == "LayerManager":
+        if self.frame.GetName() == "LayerManager":
             self.btnCmdAbort.Enable(False)
             if event.cmd[0] not in globalvar.grassCmd or \
                     event.cmd[0] == 'r.mapcalc':
                 return
             
-            tree = self.parent.GetLayerTree()
+            tree = self.frame.GetLayerTree()
             display = None
             if tree:
                 display = tree.GetMapDisplay()
@@ -922,37 +923,37 @@ class GMConsole(wx.SplitterWindow):
                 if mapName in mapLayers:
                     display.GetWindow().UpdateMap(render = True)
                     return
-        elif self.parent.GetName() == 'Modeler':
+        elif self.frame.GetName() == 'Modeler':
             pass
         else: # standalone dialogs
-            dialog = self.parent.parent
-            if hasattr(self.parent.parent, "btn_abort"):
+            dialog = self.frame
+            if hasattr(dialog, "btn_abort"):
                 dialog.btn_abort.Enable(False)
             
-            if hasattr(self.parent.parent, "btn_cancel"):
+            if hasattr(dialog, "btn_cancel"):
                 dialog.btn_cancel.Enable(True)
             
-            if hasattr(self.parent.parent, "btn_clipboard"):
+            if hasattr(dialog, "btn_clipboard"):
                 dialog.btn_clipboard.Enable(True)
             
-            if hasattr(self.parent.parent, "btn_help"):
+            if hasattr(dialog, "btn_help"):
                 dialog.btn_help.Enable(True)
             
-            if hasattr(self.parent.parent, "btn_run"):
+            if hasattr(dialog, "btn_run"):
                 dialog.btn_run.Enable(True)
             
             if event.returncode == 0 and not event.aborted:
                 try:
-                    winName = self.parent.parent.parent.GetName()
+                    winName = self.frame.parent.GetName()
                 except AttributeError:
                     winName = ''
                 
                 if winName == 'LayerManager':
-                    mapTree = self.parent.parent.parent.GetLayerTree()
+                    mapTree = self.frame.parent.GetLayerTree()
                 elif winName == 'LayerTree':
-                    mapTree = self.parent.parent.parent
+                    mapTree = self.frame.parent
                 elif winName: # GMConsole
-                    mapTree = self.parent.parent.parent.parent.GetLayerTree()
+                    mapTree = self.frame.parent.parent.GetLayerTree()
                 else:
                     mapTree = None
                 

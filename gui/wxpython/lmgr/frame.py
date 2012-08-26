@@ -253,7 +253,7 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page = self.gm_cb, text = _("Map layers"), name = 'layers')
         
         # create 'command output' text area
-        self.goutput = GMConsole(self)
+        self.goutput = GMConsole(self, frame = self)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
         self._setCopyingOfSelectedText()
         
@@ -307,6 +307,7 @@ class GMFrame(wx.Frame):
         self.notebook.SetSelectionByName('layers')
         self.notebook.RemovePage('nviz')
         del self.nviz
+
         # hide toolbar
         self._auimgr.GetPane('toolbarNviz').Hide()
         for pos, toolbar in enumerate(('toolbarVector', 'toolbarTools', 'toolbarMisc')):

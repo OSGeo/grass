@@ -570,7 +570,28 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
-        
+        #
+        # command dialog style
+        #
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Command dialog style:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        styleList = wx.Choice(parent = panel, id = wx.ID_ANY, size = (325, -1),
+                                choices = self.settings.Get(group = 'appearance', key = 'commandNotebook',
+                                                            subkey = 'choices', internal = True),
+                                name = "GetSelection")
+        styleList.SetSelection(self.settings.Get(group = 'appearance', key = 'commandNotebook',
+                                                   subkey = 'selection'))
+        self.winId['appearance:commandNotebook:selection'] = styleList.GetId()
+
+        gridSizer.Add(item = styleList,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         
