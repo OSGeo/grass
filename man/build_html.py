@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) 2003-2006, 2009-2012 by the GRASS Development Team, Markus Neteler, Glynn Clements
+# (c) 2003-2006, 2009-2012 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
 
 import sys
 import os
@@ -160,7 +160,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
 footer_tmpl = string.Template(\
 r"""<BR><BR>
 <hr>
-<p><a href="${index_url}">Help Index</a> | <a href="full_index.html">Full Index</a><br>
+<p><a href="${index_url}">Help Index</a> | <a href="topics.html">Topics Index</a> | <a href="full_index.html">Full Index</a><br>
 &copy; 2003-2012 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 </body>
 </html>
@@ -236,6 +236,38 @@ message_tmpl = string.Template(\
 r"""Generated HTML docs in ${html_dir}/index.html
 ----------------------------------------------------------------------
 Following modules are missing the 'description.html' file in src code:
+""")
+#"
+
+moduletopics_tmpl = string.Template(\
+r"""
+<li> <a href="topic_${key}.html">${name}</a></li>
+"""
+)
+#"
+
+headertopics_tmpl = \
+r"""
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade> 
+<h2>Topics</h2>
+<ul>
+"""
+#"
+
+headerkey_tmpl = string.Template(\
+r"""
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade> 
+
+<h2>Topic: ${keyword}</h2>
+<table>
 """)
 #"
 

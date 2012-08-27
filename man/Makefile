@@ -50,6 +50,7 @@ default: $(DSTFILES)
 	$(MAKE) $(INDICES)
 	$(call build,check)
 	$(MAKE) manpages
+	GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_topics.py $(HTMLDIR)
 	$(MAKE) restdocs
 
 restdocs: $(DSTFILES_REST)
