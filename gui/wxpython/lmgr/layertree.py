@@ -1216,6 +1216,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.hitCheckbox = True
         else:
             self.hitCheckbox = False
+        event.Skip()
         
     def OnChangingSel(self, event):
         """!Selection is changing.
