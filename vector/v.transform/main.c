@@ -211,8 +211,11 @@ int main(int argc, char *argv[])
 		    idx = IDX_ZSCALE;
 		else if (strcmp(tokens[0], zrot->key) == 0)
 		    idx = IDX_ZROT;
-		else
+		else {
+		    G_warning(_("Unknown column parameter '%s'"),
+		              tokens[0]);
 		    idx = -1;
+		}
 
 		if (idx != -1)
 		    columns_name[idx] = G_store(tokens[1]);
