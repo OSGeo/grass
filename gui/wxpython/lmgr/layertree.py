@@ -124,6 +124,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.rerender = False                # layer change requires a rerendering if auto render
         self.reorder = False                 # layer change requires a reordering
         self.hitCheckbox = False             # if cursor points at layer checkbox (to cancel selection changes)
+        self.forceCheck = False              # force check layer if CheckItem is called
         
         try:
             ctstyle |= CT.TR_ALIGN_WINDOWS
@@ -228,6 +229,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_SEL_CHANGED,      self.OnChangeSel)
         self.Bind(wx.EVT_TREE_SEL_CHANGING,     self.OnChangingSel)
         self.Bind(CT.EVT_TREE_ITEM_CHECKED,     self.OnLayerChecked)
+        self.Bind(CT.EVT_TREE_ITEM_CHECKING,    self.OnLayerChecking)
         self.Bind(wx.EVT_TREE_DELETE_ITEM,      self.OnDeleteLayer)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
         self.Bind(wx.EVT_TREE_END_DRAG,         self.OnEndDrag)
@@ -833,6 +835,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             checked = True
         
+        self.forceCheck = True
         self.CheckItem(layer, checked = checked)
         
         # add text and icons for each layer ltype
@@ -1124,6 +1127,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
         event.Skip()
 
+    def OnLayerChecking(self, event):
+        """!Layer checkbox is being checked.
+
+        Continue only if mouse is above checkbox or layer was checked programatically.
+        """
+        if self.hitCheckbox or self.forceCheck:
+            self.forceCheck = False
+            event.Skip()
+        else:
+            event.Veto()
+
     def OnLayerChecked(self, event):
         """!Enable/disable data layer"""
         self.lmgr.WorkspaceChanged()
@@ -1137,6 +1151,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if self.GetPyData(item)[0]['type'] == 'group':
                 child, cookie = self.GetFirstChild(item)
                 while child:
+                    self.forceCheck = True
                     self.CheckItem(child, checked)
                     mapLayer = self.GetPyData(child)[0]['maplayer']
                     if not digitToolbar or \
@@ -1212,7 +1227,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Detects if mouse points at checkbox.
         """
         thisItem, flags = self.HitTest(event.GetPosition())
-        if flags & CT.TREE_HITTEST_ONITEMCHECKICON:
+        # workaround: in order not to check checkox when clicking outside
+        # we need flag TREE_HITTEST_ONITEMCHECKICON but not TREE_HITTEST_ONITEMLABEL
+        # this applies only for TR_FULL_ROW_HIGHLIGHT style
+        if (flags & CT.TREE_HITTEST_ONITEMCHECKICON) and not (flags & CT.TREE_HITTEST_ONITEMLABEL):
             self.hitCheckbox = True
         else:
             self.hitCheckbox = False
@@ -1436,6 +1454,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             self.GetPyData(newItem)[0]['ctrl'] = None
             
+        self.forceCheck = True
         self.CheckItem(newItem, checked = checked) # causes a new render
         
         return newItem
