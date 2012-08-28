@@ -25,6 +25,4 @@ include $(MODULE_TOPDIR)/include/Make/Shlib.make
 
 lib: $(GRASS_LIBRARY_TYPE)
 	if [ "$(PGM)" != "" -a -f "$(PGM)".html ] ; then $(MAKE) html ; fi
-	
-lib: $(GRASS_LIBRARY_TYPE)
 	if [ "$(PGM)" != "" -a -f "$(PGM)".html ] ; then $(MAKE) rest ; fi
