@@ -1,7 +1,8 @@
 /*!
   \file lib/vector/Vlib/open.c
   
-  \brief Vector library - Open vector map (native or OGR/PostGIS format)
+  \brief Vector library - Open existing or create new vector map
+  (native or OGR/PostGIS format)
   
   Higher level functions for reading/writing/manipulating vectors.
   
@@ -691,9 +692,15 @@ int Vect_open_update_head(struct Map_info *Map, const char *name,
   By default list of updated features is not maintained, see
   Vect_set_updated() for details.
   
-  \param[in,out] Map pointer to Map_info structure
-  \param name name of vector map
-  \param with_z non-zero value for 3D vector data
+  By default map format is native (GV_FORMAT_NATIVE). If OGR file is
+  found in the current mapset then the map (ie. OGR layer) is created
+  in given OGR datasource (GV_FORMAT_OGR). Similarly if PG file exists
+  then the map (ie. PostGIS table) is created using PostGIS interface
+  (GV_FORMAT_POSTGIS). The format of map is stored in Map->format.
+
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to be created
+  \param with_z WITH_Z for 3D vector data otherwise WITHOUT_Z
   
   \return 1 on success
   \return -1 on error
@@ -703,13 +710,15 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     int ret;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX], buf[GPATH_MAX];
 
-    G_debug(2, "Vect_open_new(): name = %s", name);
+    G_debug(2, "Vect_open_new(): name = %s with_z = %d", name, with_z);
 
+    /* zero Map_info structure */
     G_zero(Map, sizeof(struct Map_info));
     
-    /* init header */
+    /* init header info */
     Vect__init_head(Map);
 
+    /* check for fully-qualified map name */
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
         if (strcmp(xmapset, G_mapset()) != 0) {
             G_fatal_error(_("<%s> is not the current mapset (%s)"), name,
@@ -1183,7 +1192,7 @@ int map_format(struct Map_info *Map)
                 pg_info->schema_name = G_store("public");
             G_debug(1, "PG: schema_name = '%s'", pg_info->schema_name);
             
-            /* fid column (default: ogc_fid) */
+            /* fid column (default: FID_COLUMN) */
             p = G_find_key_value("fid", key_val);
             if (p)
                 pg_info->fid_column = G_store(p);
@@ -1193,7 +1202,7 @@ int map_format(struct Map_info *Map)
 #endif
             G_debug(1, "PG: fid_column = '%s'", pg_info->fid_column);
             
-            /* geometry column (default: wkb_geometry) */
+            /* geometry column (default: GEOMETRY_COLUMN) */
             p = G_find_key_value("geometry_name", key_val);
             if (p)
                 pg_info->geom_column = G_store(p);
