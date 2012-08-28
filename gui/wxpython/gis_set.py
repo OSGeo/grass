@@ -135,6 +135,9 @@ class GRASSStartup(wx.Frame):
                                  label = _("&Create mapset"))
         self.bwizard = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                  label = _("&Location wizard"))
+        self.bwizard.SetToolTipString(_("Start location wizard."
+                                        " After location is created successfully,"
+                                        " GRASS session is started."))
         self.manageloc = wx.Choice(parent = self.panel, id = wx.ID_ANY,
                                    choices = [_('Rename mapset'), _('Rename location'),
                                             _('Delete mapset'), _('Delete location')])
