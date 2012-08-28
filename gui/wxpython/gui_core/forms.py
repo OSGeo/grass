@@ -797,44 +797,13 @@ class CmdPanel(wx.Panel):
             self.notebook.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChange)
         self.notebook.Refresh()
 
-        imageList = wx.ImageList(16, 16)
-        self.notebook.AssignImageList(imageList)
-
         tab = {}
         tabsizer = {}
         for section in sections:
             tab[section] = ScrolledPanel(parent = self.notebook)
             tab[section].SetScrollRate(10, 10)
             tabsizer[section] = wx.BoxSizer(orient = wx.VERTICAL)
-            self.notebook.AddPage(page = tab[section], text = section, name = section)
-            index = self.AddBitmapToImageList(section, imageList)
-            if index >= 0:
-                self.notebook.SetPageImage(section, index)
-
-        # are we running from command line?
-        ### add 'command output' tab regardless standalone dialog
-        if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
-            from gui_core.goutput import GMConsole
-            self.goutput = GMConsole(parent = self.notebook, frame = self.parent, margin = False, notebook = self.notebook)
-            self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
-            index = self.AddBitmapToImageList(section = 'output', imageList = imageList)
-            if index >= 0:
-                self.notebook.SetPageImage('output', index)
-        else:
-            self.goutput = None
         
-        self.manual_tab = HelpPanel(parent = self.notebook, grass_command = self.task.name)
-        if not self.manual_tab.IsFile():
-            self.manual_tab.Hide()
-        else:
-            self.notebook.AddPage(page = self.manual_tab, text = _("Manual"), name = 'manual')
-            index = self.AddBitmapToImageList(section = 'manual', imageList = imageList)
-            if index >= 0:
-                self.notebook.SetPageImage('manual', index)
-        
-        self.notebook.SetSelection(0)
-
-        panelsizer.Add(item = self.notebook, proportion = 1, flag = wx.EXPAND)
 
         #
         # flags
@@ -1591,10 +1560,9 @@ class CmdPanel(wx.Panel):
         if pLocation and pMapset and pMap:
             pLocation['wxId-bind'] +=  pMap['wxId']
             pMapset['wxId-bind'] = pMap['wxId']
-        
-	#
-	# determine panel size
-	#
+        #
+        # determine panel size
+        #
         maxsizes = (0, 0)
         for section in sections:
             tab[section].SetSizer(tabsizer[section])
@@ -1609,9 +1577,44 @@ class CmdPanel(wx.Panel):
         for section in sections:
             tab[section].SetMinSize((self.constrained_size[0], self.panelMinHeight))
         
+        
+        # add pages to notebook
+        imageList = wx.ImageList(16, 16)
+        self.notebook.AssignImageList(imageList)
+
+        for section in sections:
+            self.notebook.AddPage(page = tab[section], text = section, name = section)
+            index = self.AddBitmapToImageList(section, imageList)
+            if index >= 0:
+                self.notebook.SetPageImage(section, index)
+
+        # are we running from command line?
+        ### add 'command output' tab regardless standalone dialog
+        if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
+            from gui_core.goutput import GMConsole
+            self.goutput = GMConsole(parent = self.notebook, frame = self.parent, margin = False, notebook = self.notebook)
+            self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
+            index = self.AddBitmapToImageList(section = 'output', imageList = imageList)
+            if index >= 0:
+                self.notebook.SetPageImage('output', index)
+        else:
+            self.goutput = None
+        
+        self.manual_tab = HelpPanel(parent = self.notebook, grass_command = self.task.name)
+        if not self.manual_tab.IsFile():
+            self.manual_tab.Hide()
+        else:
+            self.notebook.AddPage(page = self.manual_tab, text = _("Manual"), name = 'manual')
+            index = self.AddBitmapToImageList(section = 'manual', imageList = imageList)
+            if index >= 0:
+                self.notebook.SetPageImage('manual', index)
+        
         if self.manual_tab.IsLoaded():
             self.manual_tab.SetMinSize((self.constrained_size[0], self.panelMinHeight))
-        
+
+        self.notebook.SetSelection(0)
+
+        panelsizer.Add(item = self.notebook, proportion = 1, flag = wx.EXPAND)
         self.SetSizer(panelsizer)
         panelsizer.Fit(self.notebook)
         
