@@ -163,7 +163,8 @@ int main(int argc, char *argv[])
     }
 
     /* create new vector map */
-    Vect_open_new(&Out, output, flag.z->answer ? WITH_Z : WITHOUT_Z);
+    if (-1 == Vect_open_new(&Out, output, flag.z->answer ? WITH_Z : WITHOUT_Z))
+        G_fatal_error(_("Unable to create vector map <%s>"), output);
 
     /* Do we need to write random values into attribute table? */
     if (parm.zcol->answer) {
