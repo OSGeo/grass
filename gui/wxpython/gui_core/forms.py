@@ -794,7 +794,7 @@ class CmdPanel(wx.Panel):
             self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
         elif style == 3:
             self.notebook = FormListbook(self, style = wx.BK_LEFT)
-            self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
+            self.notebook.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChange)
         self.notebook.Refresh()
 
         imageList = wx.ImageList(16, 16)
