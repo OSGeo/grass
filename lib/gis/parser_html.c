@@ -69,10 +69,10 @@ void G__usage_html(void)
 	fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
-    fprintf(stdout, "<b>%s</b><br>\n", st->pgm_name);
+    fprintf(stdout, "<div id=\"name\"><b>%s</b><br></div>\n", st->pgm_name);
     fprintf(stdout, "<b>%s help</b><br>\n", st->pgm_name);
 
-    fprintf(stdout, "<b>%s</b>", st->pgm_name);
+    fprintf(stdout, "<div id=\"synopsis\"><b>%s</b>", st->pgm_name);
 
 
 
@@ -129,11 +129,12 @@ void G__usage_html(void)
     fprintf(stdout, " [--<b>verbose</b>] ");
     fprintf(stdout, " [--<b>quiet</b>] ");
 
-    fprintf(stdout, "\n");
+    fprintf(stdout, "\n</div>\n");
 
 
     /* now long version */
     fprintf(stdout, "\n");
+    fprintf(stdout, "<div id=\"flags\">\n");
     if (st->n_flags || new_prompt) {
 	flag = &st->first_flag;
 	fprintf(stdout, "<h3>%s:</h3>\n", _("Flags"));
@@ -170,8 +171,10 @@ void G__usage_html(void)
 
 	fprintf(stdout, "</dl>\n");
     }
+    fprintf(stdout, "</div>\n");
 
     fprintf(stdout, "\n");
+    fprintf(stdout, "<div id=\"parameters\">\n");
     if (st->n_opts) {
 	opt = &st->first_option;
 	fprintf(stdout, "<h3>%s:</h3>\n", _("Parameters"));
@@ -249,6 +252,7 @@ void G__usage_html(void)
 	}
 	fprintf(stdout, "</dl>\n");
     }
+    fprintf(stdout, "</div>\n");
 
     fprintf(stdout, "</body>\n</html>\n");
 }
