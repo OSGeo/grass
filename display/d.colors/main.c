@@ -38,6 +38,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("color table"));
     G_add_keyword(_("raster"));
     module->description =
 	"Allows the user to interactively change the color table "
