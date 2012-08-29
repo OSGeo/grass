@@ -47,6 +47,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("algebra"));
+    G_add_keyword(_("statistics"));
     G_add_keyword(_("raster"));
     G_add_keyword(_("aggregation"));
     module->label = _("Neighborhood analysis tool for vector point maps.");

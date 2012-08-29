@@ -19,8 +19,8 @@
 #%module
 #% description: Calculates univariate statistics from a raster map based on vector polygon map and uploads statistics to new attribute columns.
 #% keywords: vector
-#% keywords: raster
 #% keywords: statistics
+#% keywords: raster
 #%end
 #%flag
 #% key: c

@@ -18,6 +18,7 @@
 #%module
 #% description: Prints a graph of the correlation between raster maps (in pairs).
 #% keywords: display
+#% keywords: statistics
 #% keywords: raster
 #% keywords: diagram
 #% keywords: correlation

@@ -51,6 +51,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("graphics"));
     G_add_keyword(_("raster"));
     module->description = _("Displays user-specified raster map in the active "
 			    "graphics frame.");

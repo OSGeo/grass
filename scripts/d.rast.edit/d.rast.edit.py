@@ -21,8 +21,8 @@
 #%module
 #% description: Edits cell values in a raster map.
 #% keywords: display
+#% keywords: editing
 #% keywords: raster
-#% keywords: edit
 #%end
 #%option G_OPT_R_INPUT
 #%end

@@ -23,8 +23,8 @@
 #%Module
 #%  description: Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp.
 #%  keywords: raster
-#%  keywords: imagery
 #%  keywords: import
+#%  keywords: imagery
 #%  keywords: Terra-ASTER
 #%End
 #%option G_OPT_F_INPUT

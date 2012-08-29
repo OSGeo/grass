@@ -20,8 +20,8 @@ for details.
 #%module
 #% description: Performs ordinary or block kriging for vector maps.
 #% keywords: vector
-#% keywords: raster
 #% keywords: interpolation
+#% keywords: raster
 #% keywords: kriging
 #%end
 
