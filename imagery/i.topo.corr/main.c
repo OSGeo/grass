@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     /* initialize module */
     module = G_define_module();
-    G_add_keyword(_("raster"));
+    G_add_keyword(_("imagery"));
     G_add_keyword(_("terrain"));
     G_add_keyword(_("topographic correction"));
     module->description = _("Computes topographic correction of reflectance.");
