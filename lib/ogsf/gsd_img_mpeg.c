@@ -65,7 +65,7 @@ static AVStream *add_video_stream(AVFormatContext * oc, int codec_id, int w,
 
     c = st->codec;
     c->codec_id = codec_id;
-    c->codec_type = CODEC_TYPE_VIDEO;
+    c->codec_type = AVMEDIA_TYPE_VIDEO;
 
     /* put sample parameters */
     c->bit_rate = 400000;
@@ -214,7 +214,7 @@ static void write_video_frame(AVFormatContext * oc, AVStream * st)
 
 	av_init_packet(&pkt);
 
-	pkt.flags |= PKT_FLAG_KEY;
+	pkt.flags |= AV_PKT_FLAG_KEY;
 	pkt.stream_index = st->index;
 	pkt.data = (uint8_t *) picture;
 	pkt.size = sizeof(AVPicture);
@@ -235,7 +235,7 @@ static void write_video_frame(AVFormatContext * oc, AVStream * st)
 		av_rescale_q(c->coded_frame->pts, c->time_base,
 			     st->time_base);
 	    if (c->coded_frame->key_frame)
-		pkt.flags |= PKT_FLAG_KEY;
+		pkt.flags |= AV_PKT_FLAG_KEY;
 	    pkt.stream_index = st->index;
 	    pkt.data = video_outbuf;
 	    pkt.size = out_size;
@@ -300,10 +300,10 @@ int gsd_init_mpeg(const char *filename)
     av_register_all();
 
     /* auto detect the output format from the name. default is mpeg. */
-    fmt = guess_format(NULL, filename, NULL);
+    fmt = av_guess_format(NULL, filename, NULL);
     if (!fmt) {
 	G_warning(_("Unable to deduce output format from file extension: using MPEG"));
-	fmt = guess_format("mpeg", NULL, NULL);
+	fmt = av_guess_format("mpeg", NULL, NULL);
     }
     if (!fmt) {
 	G_warning(_("Unable to find suitable output format"));
@@ -311,7 +311,7 @@ int gsd_init_mpeg(const char *filename)
     }
 
     /* allocate the output media context */
-    oc = av_alloc_format_context();
+    oc = avformat_alloc_context();
     if (!oc) {
 	G_warning(_("Out of memory"));
 	return (-1);
