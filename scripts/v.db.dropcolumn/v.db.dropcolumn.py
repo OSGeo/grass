@@ -21,8 +21,8 @@
 #%module
 #% description: Drops a column from the attribute table connected to a given vector map.
 #% keywords: vector
-#% keywords: database
 #% keywords: attribute table
+#% keywords: database
 #%end
 
 #%option G_OPT_V_MAP

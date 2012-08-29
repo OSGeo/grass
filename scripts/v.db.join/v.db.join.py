@@ -17,8 +17,8 @@
 #%module
 #% description: Allows to join a table to a vector map table.
 #% keywords: vector
-#% keywords: database
 #% keywords: attribute table
+#% keywords: database
 #%end
 
 #%option G_OPT_V_MAP
