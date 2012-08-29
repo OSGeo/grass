@@ -41,11 +41,12 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
+    G_add_keyword(_("imagery"));
     G_add_keyword(_("emissivity"));
     G_add_keyword(_("land flux"));
     G_add_keyword(_("energy balance"));
     module->description =
-	_("Computes emissivity from NDVI, generic method for spares land.");
+	_("Computes emissivity from NDVI, generic method for sparse land.");
     
     /* Define the different options */ 
     input = G_define_standard_option(G_OPT_R_INPUT);

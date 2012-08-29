@@ -100,10 +100,10 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("LRS"));
+    G_add_keyword(_("Linear Reference System"));
     G_add_keyword(_("networking"));
-    module->description = _("Create stationing from input lines, "
-			    "and linear reference system");
+    module->description = _("Creates stationing from input lines, "
+			    "and linear reference system.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->description = _("Input vector map containing lines");
