@@ -119,9 +119,9 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("LRS"));
+    G_add_keyword(_("Linear Reference System"));
     G_add_keyword(_("networking"));
-    module->description = _("Create Linear Reference System");
+    module->description = _("Creates a linear reference system.");
 
     in_lines_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_lines_opt->key = "in_lines";

@@ -24,8 +24,8 @@
 
 #%module
 #% description: Mosaics several images and extends colormap.
-#% keywords: raster
 #% keywords: imagery
+#% keywords: geometry
 #% keywords: mosaicking
 #%end
 #%option G_OPT_R_INPUTS

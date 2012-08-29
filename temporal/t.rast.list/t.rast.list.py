@@ -17,6 +17,7 @@
 #%module
 #% description: Lists registered maps of a space time raster dataset.
 #% keywords: temporal
+#% keywords: map management
 #% keywords: raster
 #% keywords: list
 #%end

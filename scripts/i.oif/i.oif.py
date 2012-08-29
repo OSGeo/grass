@@ -24,10 +24,10 @@
 
 
 #% Module
-#%  description: Calculates Optimum-Index-Factor table for LANDSAT TM bands 1-5, & 7
-#%  keywords: raster
-#%  keywords: imagery
-#%  keywords: statistics
+#% description: Calculates Optimum-Index-Factor table for LANDSAT TM bands 1-5, & 7
+#% keywords: imagery
+#% keywords: landsat
+#% keywords: statistics
 #% End
 #% option G_OPT_R_INPUT
 #% key: image1

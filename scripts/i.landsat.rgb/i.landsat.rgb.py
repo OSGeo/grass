@@ -22,8 +22,8 @@
 
 #%module
 #% description: Performs auto-balancing of colors for LANDSAT images.
-#% keywords: raster
 #% keywords: imagery
+#% keywords: landsat
 #% keywords: colors
 #%end
 #%option G_OPT_R_INPUT
