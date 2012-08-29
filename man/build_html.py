@@ -81,16 +81,17 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Quick Introduction</h3>
       <ul>
        <li><a href="helptext.html">How to start with GRASS</a></li>
+       <li><a href="topics.html">Index of topics</a></li>
       </ul>
      <p>
       <ul>
-       <li><a href="projectionintro.html">Intro projections and spatial transformations</a></li>
-       <li><a href="rasterintro.html">Intro 2D raster map processing</a></li>
-       <li><a href="raster3dintro.html">Intro 3D raster map (voxel) processing</a></li>
-       <li><a href="imageryintro.html">Intro image processing</a></li>
-       <li><a href="vectorintro.html">Intro vector map processing and network analysis</a></li>
-       <li><a href="databaseintro.html">Intro database management</a></li>
-       <li><a href="temporalintro.html">Intro temporal data processing</a></li>
+       <li><a href="projectionintro.html">Intro: projections and spatial transformations</a></li>
+       <li><a href="rasterintro.html">Intro: 2D raster map processing</a></li>
+       <li><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
+       <li><a href="imageryintro.html">Intro: image processing</a></li>
+       <li><a href="vectorintro.html">Intro: vector map processing and network analysis</a></li>
+       <li><a href="databaseintro.html">Intro: database management</a></li>
+       <li><a href="temporalintro.html">Intro: temporal data processing</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
@@ -158,7 +159,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
 #"
 
 footer_tmpl = string.Template(\
-r"""<BR><BR>
+r"""<br><br>
 <hr>
 <p><a href="${index_url}">Help Index</a> | <a href="topics.html">Topics Index</a> | <a href="full_index.html">Full Index</a><br>
 &copy; 2003-2012 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
@@ -173,7 +174,7 @@ r"""<b><a href="#${cmd}">${cmd}.*</a></b>""")
 
 cmd2_tmpl = string.Template(\
 r"""<a name="${cmd}"></a>
-<BR><BR><h3>${cmd}.* commands:</h3>
+<br><br><h3>${cmd}.* commands:</h3>
 <table>
 """)
 #"
@@ -185,7 +186,7 @@ r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td><
 
 sections = \
 r""" ]
-<BR><BR>
+<br><br>
 
 <table border=0>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#d">d.*</a> </td><td>display commands</td></tr>
@@ -207,12 +208,12 @@ r""" ]
 #"
 
 modclass_intro_tmpl = string.Template(\
-r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a><p>
+r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a> | <a href="topics.html">topics</a> <p>
 """)
 #"
 
 modclass_tmpl = string.Template(\
-r"""Go <a href="index.html">back to help overview</a><BR><BR><BR>
+r"""Go <a href="index.html">back to help overview</a><br><br><br>
 <b>${modclass} commands:</b>
 <table>
 """)
@@ -225,8 +226,8 @@ r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td><
 
 
 full_index_header = \
-r"""Go <a href="index.html">back to help overview</a><BR>
-<BR><h3>Full command index:</h3>
+r"""Go <a href="index.html">back to help overview</a><br>
+<br><h3>Full command index:</h3>
 [ 
 """
 #"
