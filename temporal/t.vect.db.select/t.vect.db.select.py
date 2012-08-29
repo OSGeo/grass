@@ -17,9 +17,9 @@
 #%module
 #% description: Prints attributes of vector maps registered in a space time vector dataset.
 #% keywords: temporal
+#% keywords: attribute table
 #% keywords: vector
 #% keywords: database
-#% keywords: attribute table
 #% keywords: select
 #%end
 

@@ -18,8 +18,8 @@
 #%module
 #% description: Allows to update a column in the attribute table connected to a vector map.
 #% keywords: vector
-#% keywords: database
 #% keywords: attribute table
+#% keywords: database
 #%end
 #%option G_OPT_V_MAP
 #%end

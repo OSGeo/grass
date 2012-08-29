@@ -19,6 +19,7 @@
 #%module
 #% description: Displays thematic vector map
 #% keywords: display
+#% keywords: cartography
 #% keywords: vector
 #% keywords: thematic
 #% keywords: legend

@@ -49,8 +49,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
+    G_add_keyword(_("database"));
     module->description =
 	_("Prints/sets DB connection for a vector map to attribute table.");
 

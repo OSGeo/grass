@@ -20,6 +20,7 @@
 #% description: Calculates univariate statistics on selected table column for a GRASS vector map.
 #% keywords: vector
 #% keywords: statistics
+#% keywords: attribute table
 #%end
 #%flag
 #% key: e
