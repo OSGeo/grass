@@ -68,13 +68,13 @@ int main(int argc, char *argv[])
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = _("ndvi");
-    input2->description = _("Name of the ndvi map [-1.0;+1.0]");
+    input2->description = _("Name of the NDVI map [-1.0;+1.0]");
     input2->answer = _("ndvi");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
     input3->key = _("temperature");
     input3->description =
-	_("Name of the Surface temperature map [degree Kelvin]");
+	_("Name of the surface temperature map [K]");
     input3->answer = _("tempk");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     input5 = G_define_standard_option(G_OPT_R_INPUT);
     input5->key = _("temperaturedifference2m");
     input5->description =
-	_("Name of the difference of temperature from surface skin to about 2 m height [K]");
+	_("Name of the difference map of temperature from surface skin to about 2 m height [K]");
     input5->answer = _("dtair");
 
     input6 = G_define_standard_option(G_OPT_R_INPUT);
