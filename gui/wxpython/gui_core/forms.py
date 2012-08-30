@@ -1812,6 +1812,12 @@ class CmdPanel(wx.Panel):
 
         self.Layout()
 
+        # skip is needed for wx.Notebook on Windows
+        event.Skip()
+        # this is needed for dialogs launched from layer manager
+        # event is somehow propagated?
+        event.StopPropagation()
+
     def OnColorChange(self, event):
         myId = event.GetId()
         for p in self.task.params:
