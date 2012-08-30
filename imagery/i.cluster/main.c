@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
     }
 
     if (sscanf(parm.iterations->answer, "%d", &iters) != 1 || iters < 1) {
-	G_fatal_error(_("Illegal value of iterations (%s>)"),
+	G_fatal_error(_("Illegal value of iterations (%s)"),
 		      parm.iterations->answer);
     }
 
