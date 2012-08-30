@@ -23,6 +23,9 @@ import sys
 import wx
 import wx.lib.scrolledpanel as scrolled
 
+if __name__ == '__main__':
+    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+
 from core                 import globalvar
 from core.gcmd            import RunCommand
 from location_wizard.base import BaseClass
@@ -32,9 +35,9 @@ from grass.script import core as grass
 class RegionDef(BaseClass, wx.Dialog):
     """!Page for setting default region extents and resolution
     """
-    def __init__(self, parent, id = wx.ID_ANY,
+    def __init__(self, parent, id = wx.ID_ANY, size = (650, 800),
                  title = _("Set default region extent and resolution"), location = None):
-        wx.Dialog.__init__(self, parent, id, title, size = (650,300))
+        wx.Dialog.__init__(self, parent, id, title)
         panel = wx.Panel(self, id = wx.ID_ANY)
         
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
@@ -205,6 +208,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.__DoLayout(panel)
         self.SetMinSize(self.GetBestSize())
         self.minWindowSize = self.GetMinSize()
+        wx.CallAfter(self.settings3D.Collapse, True)
     
     def MakeSettings3DPaneContent(self, pane):
         """!Create 3D region settings pane"""
@@ -611,3 +615,19 @@ class SelectTransformDialog(wx.Dialog):
         self.transnum = self.translist.GetSelection()
         self.transnum = self.transnum - 1
         return self.transnum
+
+def testRegionDef():
+    import sys
+    import gettext
+    import wx.lib.inspection
+    import grass.script as grass
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+
+    app = wx.PySimpleApp()
+
+    dlg = RegionDef(None, location = grass.gisenv()["LOCATION_NAME"])
+    dlg.Show()
+    wx.lib.inspection.InspectionTool().Show()
+    app.MainLoop()
+if __name__ == '__main__':
+    testRegionDef()
