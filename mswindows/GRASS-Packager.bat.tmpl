@@ -74,6 +74,13 @@ copy %OSGEO4W_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy 'Windows batchfiles for use with R' (GRASS-R-integration) from source to PACKAGE_DIR\extrabin
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+copy %OSGEO4W_DIR%\usr\src\grass_trunk\mswindows\external\rbatch\* %PACKAGE_DIR%\extrabin
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
 @echo Copy SQLite content to PACKAGE_DIR\sqlite
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
