@@ -11147,7 +11147,7 @@ msgstr "Imposta l'estensione e la risoluzione della region di default"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:83
 msgid "&Set region"
-msgstr "%Imposta region"
+msgstr "&Imposta region"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:113
 msgid "Invalid location selected."
