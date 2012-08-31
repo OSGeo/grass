@@ -54,10 +54,12 @@ class ScatterFrame(BasePlotFrame):
                     "aqua", "grey", "orange", "brown", "purple", "violet", \
                     "indigo"]
         
+        self._initOpts()
+
         if len(self.rasterList) > 1: # set raster name(s) from layer manager if a map is selected
             self.InitRasterOpts(self.rasterList, 'scatter')
-
-        self._initOpts()
+        else:
+            self.raster = {}
 
     def _initOpts(self):
         """!Initialize plot options

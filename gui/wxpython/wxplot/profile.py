@@ -66,13 +66,13 @@ class ProfileFrame(BasePlotFrame):
                            "aqua", "black", "grey", "orange", "brown", "purple", "violet",
                            "indigo"]
         
+        self._initOpts()
+
         if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
             self.raster = self.InitRasterOpts(self.rasterList, self.plottype)
         else:
             self.raster = {}
-        
-        self._initOpts()
-        
+                
         # determine units (axis labels)
         if self.parent.Map.projinfo['units'] != '':
             self.xlabel = _('Distance (%s)') % self.parent.Map.projinfo['units']
