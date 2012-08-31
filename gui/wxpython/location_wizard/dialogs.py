@@ -37,7 +37,7 @@ class RegionDef(BaseClass, wx.Dialog):
     """
     def __init__(self, parent, id = wx.ID_ANY, size = (800, 600),
                  title = _("Set default region extent and resolution"), location = None):
-        wx.Dialog.__init__(self, parent, id, title)
+        wx.Dialog.__init__(self, parent, id, title, size = size)
         panel = wx.Panel(self, id = wx.ID_ANY)
         
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
