@@ -35,7 +35,7 @@ from grass.script import core as grass
 class RegionDef(BaseClass, wx.Dialog):
     """!Page for setting default region extents and resolution
     """
-    def __init__(self, parent, id = wx.ID_ANY, size = (650, 800),
+    def __init__(self, parent, id = wx.ID_ANY, size = (800, 600),
                  title = _("Set default region extent and resolution"), location = None):
         wx.Dialog.__init__(self, parent, id, title)
         panel = wx.Panel(self, id = wx.ID_ANY)
