@@ -535,7 +535,7 @@ class Settings:
                     },
                 },
              'scatter': {
-                'rasters' : {
+                'raster' : {
                     'pcolor' : (0, 0, 255, 255),
                     'pfill' : 'solid',
                     'psize' : 1,

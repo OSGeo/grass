@@ -110,7 +110,7 @@ class ScatterRasterDialog(wx.Dialog):
 
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
 
-        self.parent = parent
+        self.parent = parent 
         self.rasterList = self.parent.rasterList
         self.bins = self.parent.bins
         self.scattertype = self.parent.scattertype
@@ -487,7 +487,7 @@ class HistRasterDialog(wx.Dialog):
         
 
 class TextDialog(wx.Dialog):
-    def __init__(self, parent, id, title, plottype = '',
+    def __init__(self, parent, id, title, plottype = '', 
                  style = wx.DEFAULT_DIALOG_STYLE, **kwargs):
         """!Dialog to set histogram text options: font, title
         and font size, axis labels and font size
@@ -514,6 +514,7 @@ class TextDialog(wx.Dialog):
                          'bold' : wx.FONTWEIGHT_BOLD }
 
         self.parent = parent
+        self.plottype = plottype
 
         self.ptitle = self.parent.ptitle
         self.xlabel = self.parent.xlabel
@@ -716,12 +717,12 @@ class TextDialog(wx.Dialog):
 
     def OnSave(self, event):
         """!Button 'Save' pressed"""
-        self.UpdateSettings()
+        self.OnApply(None)
         fileSettings = {}
-        UserSettings.ReadSettingsFile(settings=fileSettings)
-        fileSettings['plot'] = UserSettings.Get(group = 'plot')
-        file = UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().goutput.WriteLog(_('Plot text settings saved to file \'%s\'.') % file)
+        UserSettings.ReadSettingsFile(settings = fileSettings)
+        fileSettings[self.plottype] = UserSettings.Get(group = self.plottype)
+        UserSettings.SaveToFile(fileSettings)
+        self.parent.parent.GetLayerManager().goutput.WriteLog(_('Plot text sizes saved to file \'%s\'.') % UserSettings.filePath)
         self.EndModal(wx.ID_OK)
 
     def OnApply(self, event):
@@ -731,7 +732,7 @@ class TextDialog(wx.Dialog):
         
     def OnOk(self, event):
         """!Button 'OK' pressed"""
-        self.UpdateSettings()
+        self.OnApply(None)
         self.EndModal(wx.ID_OK)
 
     def OnCancel(self, event):
@@ -739,17 +740,19 @@ class TextDialog(wx.Dialog):
         self.EndModal(wx.ID_CANCEL)
         
 class OptDialog(wx.Dialog):
-    def __init__(self, parent, id, title, plottype = '',
+    def __init__(self, parent, id, title, plottype = '', 
                  style = wx.DEFAULT_DIALOG_STYLE, **kwargs): 
         """!Dialog to set various options for data plotted, including: line
         width, color, style; marker size, color, fill, and style; grid
         and legend options.
         """
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
+
         # init variables
         self.parent = parent
         self.linestyledict = parent.linestyledict
         self.ptfilldict = parent.ptfilldict
+        self.parent = parent
         self.plottype = plottype
         
         self.pttypelist = ['circle',
@@ -794,8 +797,8 @@ class OptDialog(wx.Dialog):
         return list
 
     def _do_layout(self):
-        """!Do layout"""
-        # dialog layout
+        """!Options dialog layout
+        """
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.StaticBox(parent = self, id = wx.ID_ANY,
@@ -1105,43 +1108,78 @@ class OptDialog(wx.Dialog):
         #
         btnSave = wx.Button(self, wx.ID_SAVE)
         btnApply = wx.Button(self, wx.ID_APPLY)
+        btnOk = wx.Button(self, wx.ID_OK)
         btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnSave.SetDefault()
+        btnOk.SetDefault()
+
+#        btnSave = wx.Button(self, wx.ID_SAVE)
+#        btnApply = wx.Button(self, wx.ID_APPLY)
+#        btnCancel = wx.Button(self, wx.ID_CANCEL)
+#        btnSave.SetDefault()
 
         # tooltips for buttons
         btnApply.SetToolTipString(_("Apply changes for the current session"))
+        btnOk.SetToolTipString(_("Apply changes for the current session and close dialog"))
         btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
-        btnSave.SetDefault()
         btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
+
+        
+#        btnApply.SetToolTipString(_("Apply changes for the current session"))
+#        btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
+#        btnSave.SetDefault()
+#        btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
+
 
         # sizers
         btnStdSizer = wx.StdDialogButtonSizer()
-        btnStdSizer.AddButton(btnCancel)
-        btnStdSizer.AddButton(btnSave)
+        btnStdSizer.AddButton(btnOk)
         btnStdSizer.AddButton(btnApply)
+        btnStdSizer.AddButton(btnCancel)
         btnStdSizer.Realize()
         
-        sizer.Add(item = btnStdSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = btnSave, proportion = 0, flag = wx.ALIGN_LEFT | wx.ALL, border = 5)
+        btnSizer.Add(item = btnStdSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        sizer.Add(item = btnSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+
+
+#        # sizers
+#        btnStdSizer = wx.StdDialogButtonSizer()
+#        btnStdSizer.AddButton(btnCancel)
+#        btnStdSizer.AddButton(btnSave)
+#        btnStdSizer.AddButton(btnApply)
+#        btnStdSizer.Realize()
+        
+#        sizer.Add(item = btnStdSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
 
         #
         # bindings for buttons and map plot settings controls
         #
         self.mapchoice.Bind(wx.EVT_CHOICE, self.OnSetMap)
-        
-        if self.plottype != 'scatter':
-            color.Bind(csel.EVT_COLOURSELECT, self.OnSetOpt)
-            width.Bind(wx.EVT_SPINCTRL, self.OnSetOpt)
-            style.Bind(wx.EVT_CHOICE, self.OnSetOpt)
-            legend.Bind(wx.EVT_TEXT, self.OnSetOpt)
+
+## change        
+        # Bindings not needed. Will update with OnApply
+#        if self.plottype != 'scatter':
+#            color.Bind(csel.EVT_COLOURSELECT, self.OnSetOpt)
+#            width.Bind(wx.EVT_SPINCTRL, self.OnSetOpt)
+#            style.Bind(wx.EVT_CHOICE, self.OnSetOpt)
+#            legend.Bind(wx.EVT_TEXT, self.OnSetOpt)
             
-        if self.plottype != 'histogram':
-            ptcolor.Bind(csel.EVT_COLOURSELECT, self.OnSetOpt)
-            ptsize.Bind(wx.EVT_SPINCTRL, self.OnSetOpt)
-            ptfill.Bind(wx.EVT_CHOICE, self.OnSetOpt)
-            ptlegend.Bind(wx.EVT_TEXT, self.OnSetOpt)
-            pttype.Bind(wx.EVT_CHOICE, self.OnSetOpt)
+#        if self.plottype != 'histogram':
+#            ptcolor.Bind(csel.EVT_COLOURSELECT, self.OnSetOpt)
+#            ptsize.Bind(wx.EVT_SPINCTRL, self.OnSetOpt)
+#            ptfill.Bind(wx.EVT_CHOICE, self.OnSetOpt)
+#            ptlegend.Bind(wx.EVT_TEXT, self.OnSetOpt)
+#            pttype.Bind(wx.EVT_CHOICE, self.OnSetOpt)
             
+#        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
+#        btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
+#        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+
+        # bindings
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
+        btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
+        btnOk.SetDefault()
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
 
@@ -1175,25 +1213,36 @@ class OptDialog(wx.Dialog):
         self.map = self.rasterList[self.mapchoice.GetCurrentSelection()]
         self.UpdateSettings()
         self.parent.SetGraphStyle()
-        if self.parent.plot:
-            p = self.parent.CreatePlotList()
-            self.parent.DrawPlot(p)
+        p = self.parent.CreatePlotList()
+        self.parent.DrawPlot(p)
+
+## change if clause not relevant
+#        if self.parent.plot:
+#            p = self.parent.CreatePlotList()
+#            self.parent.DrawPlot(p)
 
     def UpdateSettings(self):
         """!Apply settings to each map and to entire plot"""
-        
+## change updating properties for pcolor, pwidth, pstyle, psize, ptype, pfill        
         # update plot settings for selected map
         self.raster[self.map]['pcolor'] = self.FindWindowById(self.wxId['pcolor']).GetColour()
+        self.properties['raster']['pcolor'] = self.raster[self.map]['pcolor']
+        
         self.raster[self.map]['plegend'] = self.FindWindowById(self.wxId['plegend']).GetValue()
         
         if self.plottype != 'scatter':
             self.raster[self.map]['pwidth'] = int(self.FindWindowById(self.wxId['pwidth']).GetValue())
+            self.properties['raster']['pwidth'] = self.raster[self.map]['pwidth']
             self.raster[self.map]['pstyle'] = self.FindWindowById(self.wxId['pstyle']).GetStringSelection()
+            self.properties['raster']['pstyle'] = self.raster[self.map]['pstyle']
             
         elif self.plottype == 'scatter':
             self.raster[self.map]['psize'] = self.FindWindowById(self.wxId['psize']).GetValue()
+            self.properties['raster']['psize'] = self.raster[self.map]['psize']
             self.raster[self.map]['ptype'] = self.FindWindowById(self.wxId['ptype']).GetValue()
+            self.properties['raster']['ptype'] = self.raster[self.map]['ptype']
             self.raster[self.map]['pfill'] = self.FindWindowById(self.wxId['pfill']).GetValue()
+            self.properties['raster']['pfill'] = self.raster[self.map]['pfill']
 
         # update settings for entire plot
         for axis in ('x-axis', 'y-axis'):
@@ -1212,6 +1261,8 @@ class OptDialog(wx.Dialog):
         self.properties['grid']['color'] = self.FindWindowById(self.wxId['grid']['color']).GetColour()
         self.properties['grid']['enabled'] = self.FindWindowById(self.wxId['grid']['enabled']).IsChecked()
 
+        # this makes more sense in the text properties, including for settings update. But will need to change
+        # layout for controls to text dialog too.
         self.properties['font']['prop']['legendSize'] = self.FindWindowById(self.wxId['font']['legendSize']).GetValue()
         self.properties['legend']['enabled'] = self.FindWindowById(self.wxId['legend']['enabled']).IsChecked()
 
@@ -1221,17 +1272,26 @@ class OptDialog(wx.Dialog):
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings = fileSettings)
         fileSettings[self.plottype] = UserSettings.Get(group = self.plottype)
-        file = UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().goutput.WriteLog(_('Plot settings saved to file \'%s\'.') % file)
+        UserSettings.SaveToFile(fileSettings)
+        self.parent.parent.GetLayerManager().goutput.WriteLog(_('Plot settings saved to file \'%s\'.') % UserSettings.filePath)
         self.Close()
 
     def OnApply(self, event):
         """!Button 'Apply' pressed. Does not close dialog"""
         self.UpdateSettings()
         self.parent.SetGraphStyle()
-        if self.parent.plot:
-            p = self.parent.CreatePlotList()
-            self.parent.DrawPlot(p)
+        p = self.parent.CreatePlotList()
+        self.parent.DrawPlot(p)
+##change
+
+#        if self.parent.plot:
+#            p = self.parent.CreatePlotList()
+#            self.parent.DrawPlot(p)
+
+    def OnOk(self, event):
+        """!Button 'OK' pressed"""
+        self.OnApply(None)
+        self.EndModal(wx.ID_OK)
         
     def OnCancel(self, event):
         """!Button 'Cancel' pressed"""
