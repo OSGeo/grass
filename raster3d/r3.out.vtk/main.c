@@ -165,7 +165,7 @@ void check_input_maps(void)
                     Rast3d_fatal_error(_("3D vector map <%s> not found"),
                                    param.vectormaps->answers[i]);
             } else {
-                Rast3d_fatal_error(_("Please provide three G3D vector maps [x,y,z]"));
+                Rast3d_fatal_error(_("Please provide three 3D raster maps for the xyz-vector maps [x,y,z]"));
             }
         }
     }
