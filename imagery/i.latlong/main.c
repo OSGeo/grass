@@ -4,11 +4,11 @@
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates the longitude of the pixels in the map. 
  *
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT: (C) 2002-2008, 2012 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               This program is free software under the GNU General
+ *   	    	 Public License (>=v2). Read the file COPYING that
+ *   	    	 comes with GRASS for details.
  *
  *****************************************************************************/
     
@@ -57,14 +57,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("latitude"));
     G_add_keyword(_("longitude"));
     G_add_keyword(_("projection"));
-    module->description = _("Creates a latitude/longitude map.");
+    module->description = _("Creates a latitude/longitude raster map.");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->description = _("Name of the input map");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output1->description = _("Name of the output latitude or longitude layer");
+    output1->description = _("Name for output latitude or longitude raster map");
     
     flag1 = G_define_flag();
     flag1->key = 'l';
@@ -99,11 +98,11 @@ int main(int argc, char *argv[])
 	not_ll = 1;
 
 	if ((in_proj_info = G_get_projinfo()) == NULL)
-	    G_fatal_error(_("Can't get projection info of current location"));
+	    G_fatal_error(_("Unable to get projection info of current location"));
 	if ((in_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_("Can't get projection units of current location"));
+	    G_fatal_error(_("Unable to get projection units of current location"));
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-	    G_fatal_error(_("Can't get projection key values of current location"));
+	    G_fatal_error(_("Unable to get projection key values of current location"));
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
 	
