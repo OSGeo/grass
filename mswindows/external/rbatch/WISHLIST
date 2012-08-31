@@ -1,0 +1,11 @@
+WISHLIST
+
+o Sweave.bat
+  - output file name
+  - commandArgs
+  - brew
+
+o clean up documentation
+
+o test latest version of XP (recent versions were tested only on Vista;
+  versions up to 0.3-2 tested only on XP)

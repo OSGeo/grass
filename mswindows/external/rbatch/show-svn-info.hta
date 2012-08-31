@@ -1,0 +1,45 @@
+<head>
+<STYLE TYPE="text/css">
+.highlight {background:#ff00ff}
+.text {color:#ff00ff}
+.both {color:white;background:black}
+</STYLE> 
+<title>show-svn-info</title>
+</head>
+<body onLoad="window.resizeTo(650,450);">
+<h1>Tortoise SubVersion</h1>
+<A href="http://batchfiles.googlecode.com">batchfiles home page</a>
+<A href="http://cran.r-project.org/contrib/extra/batchfiles/">(CRAN)</a><br><br>
+<A href="http://tortoisesvn.net">Tortoise SVN home page</a>
+<A href="http://tortoisesvn.net/help">(Help)</a>
+<A href="http://groups.google.com/group/tortoisesvn">(Forum)</a> 
+<A href="http://groups.google.com/group/tortoisesvn-dev">(Devel Forum)</a><br><br>
+<script type="text/jscript">
+
+// based on code in section 6.4 of Tortoise SVN manual
+
+// testCOM.js - javascript file
+// test script for the SubWCRev COM/Automation-object
+
+filesystem = new ActiveXObject("Scripting.FileSystemObject");
+
+SubWCRev1 = new ActiveXObject("SubWCRev.object");
+SubWCRev2 = new ActiveXObject("SubWCRev.object");
+SubWCRev3 = new ActiveXObject("SubWCRev.object");
+
+SubWCRev1.GetWCInfo(filesystem.GetAbsolutePathName("."), 0, 0);
+SubWCRev2.GetWCInfo(filesystem.GetAbsolutePathName(".."), 1, 1);
+SubWCRev3.GetWCInfo(filesystem.GetAbsolutePathName("SubWCRev.cpp"), 
+                    0, 0);
+
+sInfo1 = "Revision = " + SubWCRev1.Revision + "<br>" +
+      "\nMin Revision = " + SubWCRev1.MinRev + "<br>" +
+      "\nMax Revision = " + SubWCRev1.MaxRev + "<br>" +
+      "\nDate = " + SubWCRev1.Date + "<br>" +
+      '\nURL = <a href="' + SubWCRev1.Url + '">' + SubWCRev1.Url + "</a><br>" +
+      "\nAuthor = " + SubWCRev1.Author + "<br>" +
+      "\nHasMods = " + SubWCRev1.HasModifications;
+document.write(sInfo1);
+</script>
+</body>
+</html>

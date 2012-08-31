@@ -1,0 +1,63 @@
+
+batchfiles is a set of batch, javascript and HTML
+Application files that are useful for running R and
+associated programs.
+
+Version 0.6-0 updates them for the new architecture
+specific directory structure in R 2.12.0 .
+
+A few of the lesser used utilities have been dropped.
+
+Each batchfile is self contained.  To install just
+place all or just any that you wish to use anywhere on
+your path.  The batch command:
+
+	path
+
+will show you which folders are on your path.
+
+
+DOWNLOAD
+
+They can be downloaded individually from the svn
+repository available via the home page or they can be
+downloaded all at one in a zip file from CRAN here:
+http://cran.r-project.org/contrib/extra/batchfiles/
+
+
+MORE INFO
+
+More info is available from the home page:
+http://batchfiles.googlecode.com
+
+
+LIST OF PROGRAMS
+
+Legend:
+h = no args gives help
+0 = common usage is to enter command name without arguments
+d = in development
+* = all files marked with one star are the same.  Program checks name by which its called to determine action.
+** = all files marked with two stars are the same.  Program checks name by which its called to determine action.
+
+#Rscript.bat - put at top of R file to make it a batch file (h) (*)
+clip2r.js - pastes clipboard into Rgui.  See comments in file for use from vim. (0)(d)
+copydir.bat - copy a library from one version of R to another (h)
+el.js - run elevated - Vista and up, e.g. el Rgui  runs R elevated
+find-miktex.hta - GUI to find MiKTeX (0)
+kopy.bat - copy Rcmd to other batch files (h)(d)
+movedir.bat - move library from one version of R to another (h) 
+R.bat - like R.exe but finds R from registry (0) (*)
+Rcmd.bat - like Rcmd.exe but finds R from registry (h) (*)
+Rgui.bat - like Rgui.exe but finds R from registry (0) (*)
+RguiStart.bat - like Rgui.bat but arg1 defines folder to start R in (*)
+Rscript.bat - run .R script (h) (*)
+Rterm.bat - like rterm.exe but finds R from registry (h) (*)
+Rtidy.bat - reformat a .R file, e.g. Rtidy myfile.R > outfile.R (d)
+Rtools.bat - place Rtools on path for remainder of console session (0) (*)
+Rversions.bat - list R and set R version in registry, e.g. on Vista: el cmd/c Rversions R-2.12.0 (0)
+show-svn-info.hta - show svn info if current folder is an svn checkout (0)
+Stangle.bat - run arg1 through Stangle (h) (**)
+Sweave.bat - run arg1 through Sweave (h) (**)
+
+

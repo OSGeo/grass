@@ -1,0 +1,146 @@
+XP BATCH COMMAND RESOURCES
+
+This file contains R-specific resources for Windows XP batch file
+creation and also general resources for Windows XP batch file creation.
+
+A. MAKING A WINDOWS PACKAGE IN R
+--------------------------------
+
+Make sure that:
+
+- you have read:
+   "Writing R Extensions" manual
+   http://www.murdoch-sutherland.com/Rtools/
+
+- you have downloaded and installed the tools from
+  http://www.murdoch-sutherland.com/Rtools/tools.zip.
+
+- you have installed LaTeX (MiKTeX), perl, the Microsoft help
+  compiler, and (if the package contains C or Fortran source code) the
+  MinGW compilers, as described at
+    http://www.murdoch-sutherland.com/Rtools/.
+  
+- read
+  http://www.murdoch-sutherland.com/Rtools/miktex.html
+
+- your path contains the tools, htmlhelp, and the bin directories for R,
+  LaTeX, Perl, and (if the package contains C or Fortran source code
+  to be compiled with MinGW) MinGW.  The tools directory should be the
+  first item in the path.  This link shows how to set your path:
+  http://www.computerhope.com/issues/ch000549.htm
+
+Assuming that the R installation is in \Program Files\R\R-x.y-z
+
+1. Assuming your source package tree is in \Rpkgs\mypackage
+   then at a Windows command prompt:
+
+        cd \Rpkgs
+        Rcmd INSTALL mypackage
+
+   which will install it to \Program Files\R\R-x.y-z\library\mypackage
+   Or if you want to install it to a separate library:
+
+        cd \Rpkgs
+        md library
+        Rcmd INSTALL -l library mypackage
+
+2. Now in R:
+
+        library(mypackage)
+        ... test it out ...
+
+   or if you installed it to a separate library:
+
+        library(mypackage, lib = "/Rpkgs/library")
+
+3. Once it seems reasonably OK, see whether it passes Rcmd check:
+
+        cd \Rpkgs
+        Rcmd check mypackage
+
+   and fix it up until it does.
+
+4. Now create versions for Unix and Windows that you can distribute:
+
+        cd \Rpkgs
+        Rcmd build mypackage
+        Rcmd build mypackage --binary
+
+5. If you want to submit it to CRAN then upload the .tar.gz
+   file that was created from the "Rcmd build mypackage"
+   command in #4 to ftp://cran.R-project.org/incoming .
+   I usually use FileZilla to do the upload.
+   http://filezilla.sourceforge.net/
+
+
+B. Some R Resources on making packages
+--------------------------------------
+
+John Fox provides a batch file for making packages:
+
+	http://tolstoy.newcastle.edu.au/R/help/04/11/6729.html
+
+Henrik Bengtsson provides a batch file for setting environment
+variables:
+
+	http://tolstoy.newcastle.edu.au/R/devel/04a/0594.html
+
+Information on building packages can be found in the Writing
+Extensions Manual.    The following link is also useful although
+the enclosed batch files eliminate the need for some of the 
+procedures discussed:
+
+	http://www.murdoch-sutherland.com/Rtools/
+
+Googling for
+
+	creating making R packages
+
+will find links to a number of privately written tutorials.
+(I have not reviewed these.)
+
+C. GENERAL RESOURCES ON WINDOWS BATCH FILE PROGRAMMMING
+-------------------------------------------------------
+
+The Windows command line commands will bring up help information 
+that is particularly useful:
+
+	help set
+	help for
+	help if
+
+Here are some links on Windows batch file programmming.
+
+	ftp://garbo.uwasa.fi/pc/link/tscmd.zip - FAQ with many idioms
+
+	http://gearbox.maem.umr.edu/batch/f_w_util/ - Frank Westlake utilities
+
+	http://gearbox.maem.umr.edu/fwu/ - more Frank Westlake utilities
+
+	http://groups-beta.google.com/group/alt.msdos.batch.nt/msg/5a9587e871c27a75 - cmd bugs
+
+	http://groups-beta.google.com/group/alt.msdos.batch/msg/7b1d22945c89af75 - cmd help resources 
+
+	http://msdn.microsoft.com/downloads/list/webdev.asp - Windows script downloads
+
+	http://thesystemguard.com/TheGuardBook/CCS-Int/ - info on batch commands
+
+	http://www.allenware.com/icsw/icswref.htm - info on batch commands
+
+	http://www.commandline.co.uk - Ritchie Lawrence cmd line utilities
+
+	http://www.cybermesa.com/~bstewart/ - Bill Stewart’s scripting tools
+
+	http://www.fpschultze.de - FP Shcultze’s batch tricks
+
+	http://www.microsoft.com/technet/community/columns/scripts - MS TechNet scripting
+
+	http://www.murdoch-sutherland.com/Rtools - R package building tools
+
+	http://www.paulsadowski.com/WSH/cmdutils.htm - Paul Sadowski batch info
+
+	http://www.ss64.com/nt/index.html - batch command reference
+
+	http://www.vlaurie.com/computers2/Articles/rundll32.htm - rundll for batch scripts
+
+
