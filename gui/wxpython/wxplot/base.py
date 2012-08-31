@@ -123,10 +123,7 @@ class BasePlotFrame(wx.Frame):
 
     def InitPlotOpts(self, plottype):
         """!Initialize options for entire plot
-        """
- 
- ## change get more saved values for initialization
-        
+        """        
         self.plottype = plottype                # histogram, profile, or scatter
 
         self.properties = {}                    # plot properties
@@ -183,8 +180,6 @@ class BasePlotFrame(wx.Frame):
         """
 
         rdict = {} # initialize a dictionary
-
-#        self.properties['raster'] = {}
         self.properties['raster'] = UserSettings.Get(group = self.plottype, key = 'raster')
 
         for r in rasterList:
@@ -207,8 +202,6 @@ class BasePlotFrame(wx.Frame):
             rdict[r]['datalist'] = [] # list of cell value,frequency pairs for plotting histogram
             rdict[r]['pline'] = None
             rdict[r]['datatype'] = ret['datatype']
-
-## change init with saved values
 
             #    
             #initialize with saved values
@@ -248,8 +241,6 @@ class BasePlotFrame(wx.Frame):
         
         if len(rasterList) == 0: return
         
-## change to init with saved values
-
         rdict = {} # initialize a dictionary
         for rpair in rasterList:
             idx = rasterList.index(rpair)
@@ -317,8 +308,6 @@ class BasePlotFrame(wx.Frame):
         self.client.SetEnableZoom(self.zoom)
         self.client.SetEnableDrag(self.drag)
         
-## change - changed order so that grid settings go last and axis go first
-
         #
         # axis settings
         #
@@ -510,8 +499,6 @@ class BasePlotFrame(wx.Frame):
         self.ptitle = dlg.ptitle
         self.xlabel = dlg.xlabel
         self.ylabel = dlg.ylabel
-## change these are redundant and can cause problems
-#        dlg.UpdateSettings()
 
         self.client.SetFont(self.properties['font']['wxfont'])
         self.client.SetFontSizeTitle(self.properties['font']['prop']['titleSize'])
@@ -522,7 +509,6 @@ class BasePlotFrame(wx.Frame):
             self.plot.setXLabel(dlg.xlabel)
             self.plot.setYLabel(dlg.ylabel)
 
-#        dlg.OnSave()        
         self.OnRedraw(event = None)
     
     def PlotText(self, event):
@@ -532,11 +518,8 @@ class BasePlotFrame(wx.Frame):
                                  plottype = self.plottype, 
                                  title = _('Histogram text settings'))
 
-## change to work correctly
-
         btnval = dlg.ShowModal()
         if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
-#            self.OnPlotText(dlg)
             dlg.Destroy()            
 
 
@@ -551,14 +534,7 @@ class BasePlotFrame(wx.Frame):
                         title = _('Plot settings'))
         btnval = dlg.ShowModal()
 
-## change buttons to be like text options
-
         if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
-            
-## change these are redundant and can cause problems
-
-#            dlg.UpdateSettings()            
-#            self.SetGraphStyle()            
             dlg.Destroy()            
 
     def PrintMenu(self, event):
