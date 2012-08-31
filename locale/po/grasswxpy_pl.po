@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2012-08-30 01:13+0100\n"
+"PO-Revision-Date: 2012-08-30 17:01+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
 "Language: pl\n"
@@ -8316,7 +8316,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:333
 msgid "Preview generated"
-msgstr ""
+msgstr "Podgląd wygenerowany"
 
 #: ../gui/wxpython/psmap/frame.py:361
 msgid "Save file as"
@@ -11703,9 +11703,8 @@ msgid "GCP Manager settings saved to file '%s'."
 msgstr "Ustawienia menadżera GCP zapisano w pliku '%s'."
 
 #: ../gui/wxpython/gcp/mapdisplay.py:45
-#, fuzzy
 msgid "GRASS GIS Manage Ground Control Points"
-msgstr "Zarządzaj Terenowymi Punktami Kontrolnymi (GCP)"
+msgstr "Zarządzanie Terenowymi Punktami Kontrolnymi (GCP)"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:149
 msgid "GCP List"
@@ -11720,9 +11719,8 @@ msgid "Target Display"
 msgstr "Ekran docelowy"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:233
-#, fuzzy
 msgid "GCP Display toolbar"
-msgstr "Wyświetl mapę"
+msgstr ""
 
 #: ../gui/wxpython/gcp/mapdisplay.py:246
 msgid "GCP Manager toolbar"
@@ -13200,9 +13198,8 @@ msgid "Invalid:"
 msgstr "Niewłaściwy:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:130
-#, fuzzy
 msgid "Running:"
-msgstr "Uruchomiony"
+msgstr "Uruchomiony:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:150
 #: ../gui/wxpython/gmodeler/preferences.py:269
@@ -13223,7 +13220,6 @@ msgid "Vector:"
 msgstr "Wektor:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:321
-#, fuzzy
 msgid "Loop"
 msgstr "Pętla"
 
@@ -13253,7 +13249,7 @@ msgstr "Nazwa elementu:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:117
 msgid "Add new GRASS module to the model"
-msgstr ""
+msgstr "Dodaj nowy moduł GRASS do modelu"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:204
 msgid ""
@@ -14876,9 +14872,8 @@ msgstr "Zapisz zmiany"
 #~ msgid "GRASS GIS Hardcopy Map Output Utility (experimental prototype)"
 #~ msgstr "Narzędzie zapisu wydruku map PostScript."
 
-#, fuzzy
 #~ msgid "Close all"
-#~ msgstr "Zamknij okno dialogu"
+#~ msgstr "Zamknij wszystkie"
 
 #~ msgid "No map layer selected"
 #~ msgstr "Nie wybrano warstwy mapy"
@@ -14926,9 +14921,8 @@ msgstr "Zapisz zmiany"
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
 #~ msgstr "Interaktywny input dla klasifikacji nadzorowanej (wymaga Xterm)"
 
-#, fuzzy
 #~ msgid "Topographic correction"
-#~ msgstr "Korekcja atmosferyczna"
+#~ msgstr "Korekcja topograficzna"
 
 #~ msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
 #~ msgstr "Tworzy mapę rastrową przekroju (2D) mapy rastrowej 3D i mapy rastrowej wysokości (2D)."
