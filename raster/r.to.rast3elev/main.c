@@ -191,7 +191,7 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use RASTER3D mask (if exists) with input map");
+    param.mask->description = _("Use 3D raster mask (if exists) with input map");
 
     return;
 }
@@ -284,7 +284,7 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
                     /*Write the value to the 3D map */
                     if (Rast3d_put_double(db.map, x, y, z, value) < 0)
-                        fatal_error(db, _("Error writing RASTER3D double data"));
+                        fatal_error(db, _("Error writing 3D raster double data"));
                 }
             } else {
                 /*Use this method for every following 3d raster maps access */
@@ -317,7 +317,7 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
                     /*Write the value to the 3D map */
                     if (Rast3d_put_double(db.map, x, y, z, value) < 0)
-                        fatal_error(db, _("Error writing RASTER3D double data"));
+                        fatal_error(db, _("Error writing 3D raster double data"));
 
                 }
             }
@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
 
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
-        G_message(_("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
+        G_message(_("The 2D and 3D region settings are different. I will use the 3D region settings to adjust the 2D region."));
         G_get_set_window(&window2d);
         window2d.ns_res = region.ns_res;
         window2d.ew_res = region.ew_res;
@@ -440,7 +440,7 @@ int main(int argc, char *argv[])
     db.map = Rast3d_open_new_opt_tile_size(param.output->answer, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, maxSize);
 
     if (db.map == NULL)
-        fatal_error(db, _("Error opening 3d raster map"));
+        fatal_error(db, _("Error opening 3D raster map"));
 
 
     /*if requested set the Mask on */
