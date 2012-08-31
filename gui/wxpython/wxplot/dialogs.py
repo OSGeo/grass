@@ -381,7 +381,6 @@ class HistRasterDialog(wx.Dialog):
         #
         # Nsteps for FP maps and histogram type selection
         #
-
         label = wx.StaticText(parent = self, id = wx.ID_ANY, 
                               label = _("Number of bins (for FP maps)"))
         box.Add(item = label,
@@ -1112,23 +1111,11 @@ class OptDialog(wx.Dialog):
         btnCancel = wx.Button(self, wx.ID_CANCEL)
         btnOk.SetDefault()
 
-#        btnSave = wx.Button(self, wx.ID_SAVE)
-#        btnApply = wx.Button(self, wx.ID_APPLY)
-#        btnCancel = wx.Button(self, wx.ID_CANCEL)
-#        btnSave.SetDefault()
-
         # tooltips for buttons
         btnApply.SetToolTipString(_("Apply changes for the current session"))
         btnOk.SetToolTipString(_("Apply changes for the current session and close dialog"))
         btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
         btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
-
-        
-#        btnApply.SetToolTipString(_("Apply changes for the current session"))
-#        btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
-#        btnSave.SetDefault()
-#        btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
-
 
         # sizers
         btnStdSizer = wx.StdDialogButtonSizer()
@@ -1142,41 +1129,10 @@ class OptDialog(wx.Dialog):
         btnSizer.Add(item = btnStdSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         sizer.Add(item = btnSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
 
-
-#        # sizers
-#        btnStdSizer = wx.StdDialogButtonSizer()
-#        btnStdSizer.AddButton(btnCancel)
-#        btnStdSizer.AddButton(btnSave)
-#        btnStdSizer.AddButton(btnApply)
-#        btnStdSizer.Realize()
-        
-#        sizer.Add(item = btnStdSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
-
         #
         # bindings for buttons and map plot settings controls
         #
         self.mapchoice.Bind(wx.EVT_CHOICE, self.OnSetMap)
-
-## change        
-        # Bindings not needed. Will update with OnApply
-#        if self.plottype != 'scatter':
-#            color.Bind(csel.EVT_COLOURSELECT, self.OnSetOpt)
-#            width.Bind(wx.EVT_SPINCTRL, self.OnSetOpt)
-#            style.Bind(wx.EVT_CHOICE, self.OnSetOpt)
-#            legend.Bind(wx.EVT_TEXT, self.OnSetOpt)
-            
-#        if self.plottype != 'histogram':
-#            ptcolor.Bind(csel.EVT_COLOURSELECT, self.OnSetOpt)
-#            ptsize.Bind(wx.EVT_SPINCTRL, self.OnSetOpt)
-#            ptfill.Bind(wx.EVT_CHOICE, self.OnSetOpt)
-#            ptlegend.Bind(wx.EVT_TEXT, self.OnSetOpt)
-#            pttype.Bind(wx.EVT_CHOICE, self.OnSetOpt)
-            
-#        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-#        btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-#        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-
-        # bindings
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
         btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
         btnOk.SetDefault()
@@ -1216,15 +1172,8 @@ class OptDialog(wx.Dialog):
         p = self.parent.CreatePlotList()
         self.parent.DrawPlot(p)
 
-## change if clause not relevant
-#        if self.parent.plot:
-#            p = self.parent.CreatePlotList()
-#            self.parent.DrawPlot(p)
-
     def UpdateSettings(self):
         """!Apply settings to each map and to entire plot"""
-## change updating properties for pcolor, pwidth, pstyle, psize, ptype, pfill        
-        # update plot settings for selected map
         self.raster[self.map]['pcolor'] = self.FindWindowById(self.wxId['pcolor']).GetColour()
         self.properties['raster']['pcolor'] = self.raster[self.map]['pcolor']
         
@@ -1282,11 +1231,6 @@ class OptDialog(wx.Dialog):
         self.parent.SetGraphStyle()
         p = self.parent.CreatePlotList()
         self.parent.DrawPlot(p)
-##change
-
-#        if self.parent.plot:
-#            p = self.parent.CreatePlotList()
-#            self.parent.DrawPlot(p)
 
     def OnOk(self, event):
         """!Button 'OK' pressed"""
