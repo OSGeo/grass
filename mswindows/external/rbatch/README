@@ -1,0 +1,367 @@
+
+batchfiles contains GPL-2 batch files for installing and maintaining R.  
+
+Each is self contained, independent of the others and need no installation. 
+Just place it anywhere on your path.
+
+---
+
+PROGRAM LIST
+
+Legend:
+h = no args gives help
+0 = common usage is to enter command name without arguments
+d = in development
+2.11 = only works with R 2.11
+* = all files marked with one star are the same.  Program checks name by which its called to determine action.
+** = all files marked with two stars are the same.  Program checks name by which its called to determine action.
+
+#Rscript.bat - put at top of R file to make it a batch file (h) (*)
+clip2r.js - pastes clipboard into Rgui.  See comments in file for use from vim. (0)(d)
+copydir.bat - copy a library from one version of R to another (h)
+el.js - run elevated - Vista and up, e.g. el Rgui  runs R elevated
+find-miktex.hta - GUI to find MiKTeX (0)
+kopy.bat - copy Rcmd to other batch files (h)(d)
+movedir.bat - move library from one version of R to another (h) 
+R.bat - like R.exe but finds R from registry (0) (*)
+Rcmd.bat - like Rcmd.exe but finds R from registry (h) (*)
+Rgui.bat - like Rgui.exe but finds R from registry (0) (*)
+RguiStart.bat - like Rgui.bat but arg1 defines folder to start R in (*)
+Rscript.bat - run .R script (h) (*)
+Rterm.bat - like rterm.exe but finds R from registry (h) (*)
+Rtidy.bat - reformat a .R file, e.g. Rtidy myfile.R > outfile.R (d)
+Rtools.bat - place Rtools on path for remainder of console session (0) (*)
+Rversions.bat - list R and set R version in registry, e.g. on Vista: el cmd/c Rversions R-2.10.1 (0)
+Rversions.hta - GUI interface to RSetReg.  List and set R version, e.g. on Vista: el cmd /c Rversions.hta (0)(2.11)
+show-svn-info.hta - show svn info if current folder is an svn checkout (0)
+Stangle.bat - run arg1 through Stangle (h) (**)
+Sweave.bat - run arg1 through Sweave (h) (**)
+
+---
+
+DESCRIPTIONS
+
+R.bat, Rcmd.bat, Rscript.bat, Rgui.bat, and RguiStart.bat are all the same
+file.  They query the name by which they were called to determine what they do.
+Similarly Sweave.bat and Stangle.bat are the same file.
+
+The home page and NEWS file provide more info.
+
+BATCH PROGRAMS
+
+0. Rtools.bat
+1. R.bat, Rcmd.bat, Rscript.bat, Rgui.bat
+2. #Rscript.bat
+3. RguiStart.bat
+4. Sweave.bat and Stangle.bat
+5. copydir.bat
+6. movedir.bat
+7. find-miktex.hta
+
+
+0. Rtools.bat.  Sets path to what Rcmd.bat and others use internally.
+This only sets the path for the current command shell instance.
+
+1. R.bat, Rcmd.bat, Rscript.bat, Rgui.bat, Rscript.bat - are front
+ends to  the corresponding .exe files.  They locate R in the registry (and also
+look in a few other places if not found there).  Then they look for Rtools and
+MiKTeX and if found they add them temporarily to the path.  (Rtools and MiKTeX
+are needed when building R packages from source but are not needed for just
+running R nor are they need to download and install binary packages from CRAN.)
+Then they run R.exe, Rcmd.exe, Rscript.exe, Rgui.exe or JGR.exe with the same
+arguments.    They are actually all the same file just renamed.  (RguiStart.bat
+described separately is also the same file and all the code from this file is
+also at the end of Sweave.bat, also described separately.)  The file checks
+what name it was called by and acts accordingly.
+
+Their main advantages are:
+- you don't have to modify your path just to run R.
+- you don't have to modify your path to build R packages from source.
+- when you upgrade R they automatically work without change
+  since they will pick up the new version of R from the registry
+  automatically.
+- Sweave.bat and Stangle.bat, unlike, Rcmd Sweave and Rcmd Stangle
+  do not depend on rtools.
+
+You can put Rgui.bat on your desktop and associate a Windows
+ShortCut key (http://support.microsoft.com/kb/310417) with
+it so that you can just press the Windows key and
+R, say, to activate R.
+
+Here are some examples of using them from the command line.
+It assumes you have placed el.js, Rcmd.bat and Rgui.bat in
+your path.  el cmd spawns a command console with Administrator
+rights.  This is needed to build HTML help but you can omit
+the el command if you don't need that.
+
+    el cmd
+	Rcmd check mypackage 
+	Rcmd build mypackage
+	Rcmd build mypackage --binary
+	Rcmd INSTALL mypackage_1.0-0.tar.gz
+	Rcmd INSTALL mypackage_1.0-0.tar.gz -l library
+	Rscript myprog.R < mydata.dat
+	Rgui
+
+(When installing packages on Vista it is recommended that
+you do this from within a console session that has Administrator
+rights.  It will typically work even without that; however, the
+HTML help will not be created.)
+
+Older version of the Rcmd BATCH command in R had problems
+with spaces in pathnames so be sure you use a sufficiently
+recent version of R.  If you are using an old version of R
+that has problems use the short name corresponding to any
+long name with spaces:
+
+For example, suppose we have a file 
+   C:\Documents and Settings\Administrator\myfile.R .
+Then try this:
+
+	cd \
+	dir/x doc*
+	Rcmd BATCH c:\docume~1\Administrator\myfile.R
+
+where the dir/x command showed us the short name corresponding to
+the longer space-embedded name: Documents and Settings.  
+
+2. #Rscript.bat
+
+#Rscript.bat can be used as the first line of an R script to make 
+it callable as a batch file.  For example, if we have a myfile.R
+file then we can create a myfile.bat file that looks like this:
+
+#Rscript %0 %*
+...R code from myfile.R goes here...
+
+and now we can just issue the command myfile to run it.  We
+no longer need myfile.R.
+
+See the Rtidy.bat file for an example.  Note that it does have 
+the disadvantage that the output of the R program starts off 
+with the command itself.  R needs to be able to handle the 
+perl/python/ruby -x switch.  In the meantime #Rscript.bat 
+will mainly be useful for those scripts where the output does 
+not go to the standard output or where the addition of this 
+line is acceptable.
+
+3. RguiStart.bat
+
+This is like Rgui.bat except it intercepts the first argument
+and interprets it as the folder in which to start R (or if its
+an .Rdata file then it interprets it as the .Rdata file to start 
+R with).  The main reason for its existence is so that you can 
+place it in your SendTo folder.  On Vista do this:
+
+  copy RguiStart.bat %APPDATA%\Microsoft\Windows\SendTo
+
+(or to locate locate the SendTo folder in Windows Explorer on Vista
+enter shell:sendto into the Windows Explorer address bar and copy
+your RguiStart.bat file there.)
+
+Then, on Vista, when you are in Windows Explorer you can right click 
+on any folder in your user area and choose SendTo.  From the SendTo
+menu choose RGuiStart.bat to start up R in that folder.  If you 
+right click on an .Rdata file rather than a folder then R will
+start up with that file loaded (although in that case its probably
+easier to just double click the .Rdata file provided you have
+file type associations set up -- if you don't then the RguiStart.bat
+will provide an alternative).
+
+A second possibility is to place RguiStart.bat on your desktop and
+then drag a folder to it to start R in that folder.
+
+A third possibility is to just shift right click a folder in Windows
+Explorer and choose Open Command Window Here and then when the command
+window opens enter Rgui assuming you have placed Rgui.bat somewhere in
+your path.
+
+4. Sweave.bat and Stangle.bat - will run Sweave, then pdflatex and then
+display latex file.  Stangle.bat will run Stangle producing an R file.
+Unlike Rcmd Sweave and Rcmd Stangle these do not depend on rtools.
+Sweave.bat and Stangle.bat are actually the same file.  The file determines
+what to do by looking at the name by which it was called.
+
+      Sweave mydoc.Rnw
+   or
+      Sweave mydoc 
+
+The script runs Sweave, pdflatex and then displays the pdf
+file (assuming the user has .pdf extension associated with a
+pdf viewer).  If there is an error in Sweave or the .tex
+file is not newer than the Sweave'd file the script stops.
+Similarly if there is an error in pdflatex or the .pdf is
+not newer than the .tex file then the script stops.  Note
+that _two_ .pdf files are generated.  They are identical
+except one has a unique name created by suffixing the base
+with the date and time and .bck.pdf.  The one with the unique name 
+is the one viewed.  This overcomes problems of not being able to
+view the .pdf if the .pdf from a prior run is current being
+viewed (which would happen since by default the Acrobat viewer 
+won't allow you to view two files of the same name concurrently).
+Every so often the user should delete all *.bck.pdf files.
+
+Try:
+
+sweave
+
+without arguments to see options and get more info.
+
+Aside from using sweave from the command line, if you place
+sweave.bat in your SendTo folder as discussed under
+RguiStart.bat you can right click .Rnw files and choose
+SendTo > sweave to sweave them.
+
+You may need to copy Sweave.sty to the directory containing
+your .Rnw sweave file to use sweave.bat .
+
+5. Rversions.bat - similar to Rversions.hta but 
+-- its batch whereas Rversions.hta is GUI
+-- uses slightly different heuristic to find R versions
+-- run without args to list versions available; run with any of
+   the listed versions to set that as the new version
+-- both forms work on XP; to run arg form on Vista run it elevated
+   e.g. el cmd /c Rversions.bat R-2.10.0
+
+Examples:
+
+	:: list R versions
+	rversions.bat
+
+	:: check mypkg using R current version, 2.4.0, say
+	Rcmd check mypkg
+
+	:: switch to version R-2.5.0 and recheck
+	rversions R-2.5.0
+	Rcmd check mypkg
+
+	:: reset back to version 2.4.0
+	rversions.bat R-2.4.0
+
+6. copydir.bat - can be used to copy the libraries from an
+old version of R to your new one.  It will not overwrite any
+libraries already there so it should be safe to use. e.g. to
+upgrade R to a new version
+
+  :: Example is for upgrading from R-2.4.1 to R-2.5.0
+
+  :: first, download and install R-2.11.0
+  :: now perform the next two commands at the Windows console
+
+  cd %userprofile%\Documents\R\win-library
+  :: you can use movedir instead of copydir if you prefer to move them
+  copydir 2.10\library 2.11\library
+  
+  :: ... now startup new version of R (R 2.11.0 in this example)
+  # issue this command in R 2.5.0
+  update.packages(checkBuilt = TRUE, ask = "graphics")
+  # or (see note below)
+  update.packages(ask = "graphics")
+
+  :: press OK and it will update those packages as necessary
+
+  # ... optionally check for deprecated packages
+  # 1. first select all repositories that you use with menu:
+  #    Packages | Repositories
+  # 2. second check if there are any deprecated packages that
+  #    were copied over but are not longer on CRAN or other repository
+  dp <- setdiff(installed.packages()[,1], available.packages()[,1])
+  # look at what we have
+  dp
+  # if you wish to remove them issue the remove.packages command:
+  # remove.packages(dp)
+
+  :: ... exit R and start it up again ...
+
+Note that the checkBuilt=TRUE argument will potentially
+cause all your packages to be downloaded again so you could
+try leaving it off and then reissue the command with
+checkBuilt=TRUE later only if you run into problems.  I
+normally do it without the checkBuilt=TRUE.
+
+It is anticipated that this command will ultimately be
+superceded by functionality in the R setup procedure at
+which time this will be deprecated.  Note that this method
+of just copying libraries may not work depending on the
+versions of R involved.  If its necessary to re-install most
+packages it can be done by issuing the following R command
+after performing the copydir.bat:
+install.packages(installed.packages()[,1])
+ 
+(Note that 2.8 of the R Windows FAQ
+
+http://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f
+
+refers to copying any installed package to the library
+folder but does not address how to accomplish that.  That
+omission is what copydir.bat addresses.)
+
+An alternative to copydir is to reinstall all packages
+
+	# Alternative to copydir.bat #1
+	# this example is for moving from 2.4.1 to 2.5.0
+	# run this in R 2.5.0
+	setwd(R.home())
+	ip <- installed.packages(lib.loc = "../R-2.4.1/library")
+	ip <- ip[ip[,1]!="base" ,1]
+	install.packages(ip)
+
+The above is taken from:
+https://www.stat.math.ethz.ch/pipermail/r-help/2007-May/131806.html
+Note that you may still have to use movedir.bat or copydir.bat
+after the above if it fails to install everything.  Since movedir.bat
+and copydir.bat won't overwrite anything this should be safe.
+
+	# Alternative to copydir.bat #2
+	#---run in previous version, e.g. R 2.4.1
+	packages <- installed.packages()[,"Package"]
+	save(packages, file = "~/Rpackages")
+
+	#---run in new version, e.g. R 2.5.0
+	load("~/Rpackages")
+	install.packages(setdiff(packages, installed.packages()[,"Package"]))
+
+	file.remove("~/Rpackages")
+
+This copydir alternative is based on:
+https://www.stat.math.ethz.ch/pipermail/r-help/2007-May/131131.html
+
+7. movedir - same arguments as copydir.  Only difference is
+that it moves the directories rather than copying them.  This
+can be used if you are no longer interested in using the
+packages with the old version of R other than by
+reinstalling them.)  This has the advantage that its much
+faster than copydir.  The example under copydir works with
+movedir too.  Just replace copydir with movedir in that
+example.  Comments under copydir.bat apply here too.  I
+mostly use movedir.bat myself instead of copydir.bat since
+its so much faster.
+
+8. show-svn-info.hta - Just run this from any Tortoise SVN folder
+and it will display some information about it.  Requires version 1.5
+or higher of Tortoise SVN.
+
+9. find-miktex.hta - displays the path to the MiKTeX bin directory.
+Just enter find-miktex.hta at the Windows command line (no arguments 
+are needed) or double click it from Windows Explorer.  
+
+ADDITIONAL FILES
+
+1. RESOURCES - additional information on writing Windows XP
+batch files.
+
+2. COPYRIGHT and COPYING - this is free software subject to
+   the GPL license as described.
+
+3. THANKS - acknowledgments.
+
+DEPRECATED AND CHANGED
+
+- Rfind.bat
+- makepkg.bat
+- Rversions.hta
+- toggerDoc.pl
+
+These are no longer distributed but can be found in older distributions of this
+package.  It is unknown whether they work with recent versions of R.  (I found
+I was not using these so am no longer maintaining them.)

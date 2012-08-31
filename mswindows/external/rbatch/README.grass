@@ -1,0 +1,22 @@
+README.grass - written by Helmut Kudrnovsky - alectoria gmx.at
+
+This directory contains windows batch files for installing and maintaining R, for 
+an improved coupling of GRASS GIS and R (www.r-project.org) in a windows environment.
+
+--
+
+Files integrated from 
+
+svn checkout http://batchfiles.googlecode.com/svn/trunk/
+
+at svn-revision 104 (2012-08-31).
+
+--
+
+For more information on 'Windows batchfiles for use with R' see their home page at
+
+http://code.google.com/p/batchfiles/
+
+or read the README file in this directory.
+
+--
