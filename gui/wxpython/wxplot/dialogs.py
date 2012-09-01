@@ -832,7 +832,9 @@ class OptDialog(wx.Dialog):
             choicelist.append(str(i))
 
         self.mapchoice = wx.Choice(parent = self, id = wx.ID_ANY, size = (300, -1),
-                                   choices = choicelist)
+                                   choices = choicelist)        
+        self.mapchoice.SetToolTipString(_("Settings for selected map"))
+
         if not self.map:
             self.map = self.rasterList[self.mapchoice.GetCurrentSelection()]
         else:
@@ -867,7 +869,7 @@ class OptDialog(wx.Dialog):
             label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Line style"))
             gridSizer.Add(item = label, flag = wx.ALIGN_CENTER_VERTICAL, pos = (row, 0))
             style = wx.Choice(parent = self, id = wx.ID_ANY, 
-                                 size = (120, -1), choices = self.linestyledict.keys(), style = wx.CB_DROPDOWN)
+                                 size = (120, -1), choices = self.linestyledict.keys())
             style.SetStringSelection(self.raster[self.map]['pstyle'])
             self.wxId['pstyle'] = style.GetId()
             gridSizer.Add(item = style, pos = (row, 1))
@@ -908,10 +910,10 @@ class OptDialog(wx.Dialog):
             self.wxId['marker']['size'] = ptsize.GetId()
             gridSizer.Add(item = ptsize, pos = (1, 1))
             
-            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Style"))
+            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Fill"))
             gridSizer.Add(item = label, flag = wx.ALIGN_CENTER_VERTICAL, pos = (2, 0))
-            ptfill = wx.ComboBox(parent = self, id = wx.ID_ANY,
-                                 size = (120, -1), choices = self.ptfilldict.keys(), style = wx.CB_DROPDOWN)
+            ptfill = wx.Choice(parent = self, id = wx.ID_ANY,
+                                 size = (120, -1), choices = self.ptfilldict.keys())
             ptfill.SetStringSelection(self.properties['marker']['fill'])
             self.wxId['marker']['fill'] = ptfill.GetId()
             gridSizer.Add(item = ptfill, pos = (2, 1))
@@ -923,10 +925,9 @@ class OptDialog(wx.Dialog):
             self.wxId['marker']['legend'] = ptlegend.GetId()
             gridSizer.Add(item = ptlegend, pos = (3, 1))
                     
-            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Type"))
+            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Style"))
             gridSizer.Add(item = label, flag = wx.ALIGN_CENTER_VERTICAL, pos = (4, 0))
-            pttype = wx.ComboBox(parent = self, 
-                                 size = (200, -1), choices = self.pttypelist, style = wx.CB_DROPDOWN)
+            pttype = wx.Choice(parent = self, size = (200, -1), choices = self.pttypelist)
             pttype.SetStringSelection(self.properties['marker']['type'])
             self.wxId['marker']['type'] = pttype.GetId()
             gridSizer.Add(item = pttype, pos = (4, 1))
@@ -959,10 +960,10 @@ class OptDialog(wx.Dialog):
             self.wxId['psize'] = ptsize.GetId()
             gridSizer.Add(item = ptsize, pos = (1, 1))
             
-            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Style"))
+            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Fill"))
             gridSizer.Add(item = label, flag = wx.ALIGN_CENTER_VERTICAL, pos = (2, 0))
-            ptfill = wx.ComboBox(parent = self, id = wx.ID_ANY,
-                                 size = (120, -1), choices = self.ptfilldict.keys(), style = wx.CB_DROPDOWN)
+            ptfill = wx.Choice(parent = self, id = wx.ID_ANY,
+                               size = (120, -1), choices = self.ptfilldict.keys())
             ptfill.SetStringSelection(self.raster[self.map]['pfill'])
             self.wxId['pfill'] = ptfill.GetId()
             gridSizer.Add(item = ptfill, pos = (2, 1))
@@ -974,10 +975,9 @@ class OptDialog(wx.Dialog):
             self.wxId['plegend'] = ptlegend.GetId()
             gridSizer.Add(item = ptlegend, pos = (3, 1))
                     
-            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Type"))
+            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Style"))
             gridSizer.Add(item = label, flag = wx.ALIGN_CENTER_VERTICAL, pos = (4, 0))
-            pttype = wx.ComboBox(parent = self, 
-                                 size = (200, -1), choices = self.pttypelist, style = wx.CB_DROPDOWN)
+            pttype = wx.Choice(parent = self, size = (200, -1), choices = self.pttypelist)
             pttype.SetStringSelection(self.raster[self.map]['ptype'])
             self.wxId['ptype'] = pttype.GetId()
             gridSizer.Add(item = pttype, pos = (4, 1))
@@ -1007,11 +1007,11 @@ class OptDialog(wx.Dialog):
             prop = self.properties[atype]['prop']
             
             row = 0
-            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Style"))
+            label = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Scale"))
             gridSizer.Add(item = label, flag = wx.ALIGN_CENTER_VERTICAL, pos = (row, 0))
-            type = wx.Choice(parent = self, id = wx.ID_ANY,
-                               size = (100, -1), choices = self.axislist, style = wx.CB_DROPDOWN)
+            type = wx.Choice(parent = self, id = wx.ID_ANY, size = (100, -1), choices = self.axislist)
             type.SetStringSelection(prop['type']) 
+            type.SetToolTipString(_("Automatic axis scaling, custom max and min, or scale matches data range (min)" ))
             self.wxId[atype]['type'] = type.GetId()
             gridSizer.Add(item = type, pos = (row, 1))
                         
@@ -1188,9 +1188,9 @@ class OptDialog(wx.Dialog):
         elif self.plottype == 'scatter':
             self.raster[self.map]['psize'] = self.FindWindowById(self.wxId['psize']).GetValue()
             self.properties['raster']['psize'] = self.raster[self.map]['psize']
-            self.raster[self.map]['ptype'] = self.FindWindowById(self.wxId['ptype']).GetValue()
+            self.raster[self.map]['ptype'] = self.FindWindowById(self.wxId['ptype']).GetStringSelection()
             self.properties['raster']['ptype'] = self.raster[self.map]['ptype']
-            self.raster[self.map]['pfill'] = self.FindWindowById(self.wxId['pfill']).GetValue()
+            self.raster[self.map]['pfill'] = self.FindWindowById(self.wxId['pfill']).GetStringSelection()
             self.properties['raster']['pfill'] = self.raster[self.map]['pfill']
 
         # update settings for entire plot
@@ -1204,7 +1204,7 @@ class OptDialog(wx.Dialog):
             self.properties['marker']['color'] = self.FindWindowById(self.wxId['marker']['color']).GetColour()
             self.properties['marker']['fill'] = self.FindWindowById(self.wxId['marker']['fill']).GetStringSelection()
             self.properties['marker']['size'] = self.FindWindowById(self.wxId['marker']['size']).GetValue()
-            self.properties['marker']['type'] = self.FindWindowById(self.wxId['marker']['type']).GetValue()
+            self.properties['marker']['type'] = self.FindWindowById(self.wxId['marker']['type']).GetStringSelection()
             self.properties['marker']['legend'] = self.FindWindowById(self.wxId['marker']['legend']).GetValue()
 
         self.properties['grid']['color'] = self.FindWindowById(self.wxId['grid']['color']).GetColour()
