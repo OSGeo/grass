@@ -1766,7 +1766,9 @@ class GMFrame(wx.Frame):
                     else:
                         self.SaveToWorkspaceFile(self.workspaceFile)
                 elif ret == wx.ID_CANCEL:
-                    event.Veto()
+                    # when called from menu, it gets CommandEvent and not CloseEvent
+                    if hasattr(event, 'Veto'):
+                        event.Veto()
                     dlg.Destroy()
                     return
                 dlg.Destroy()
