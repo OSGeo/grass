@@ -62,6 +62,12 @@ Distance from the streams network (North Carolina sample dataset):
 g.region rast=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
 </pre></div>
+<p>
+Distance from sea in meters in latitude-longitude location:
+<div class="code"><pre>
+g.region rast=sea -p
+r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
+</pre></div>
 
 
 <h2>SEE ALSO</h2>
