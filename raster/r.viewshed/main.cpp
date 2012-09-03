@@ -44,6 +44,7 @@
 extern "C"
 {
 #include <grass/config.h>
+#include <grass/raster.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 }
