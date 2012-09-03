@@ -486,8 +486,10 @@ int main(int argc, char *argv[])
 
     G_free(inrast_redchan);
     Rast_close(infd_redchan);
-    G_free(inrast_nirchan);
-    Rast_close(infd_nirchan);
+    if (nirchan) {
+    	G_free(inrast_nirchan);
+    	Rast_close(infd_nirchan);
+    }
     if (greenchan) {
 	G_free(inrast_greenchan);
 	Rast_close(infd_greenchan);
