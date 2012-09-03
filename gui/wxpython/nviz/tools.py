@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 import copy
 import types
 
@@ -237,7 +238,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # perspective
         # set initial defaults here (or perhaps in a default values file), not in user settings
         #todo: consider setting an absolute max at 360 instead of undefined. (leave the default max value at pi)
-        tooltip = _("Adjusts the viewer's angle of view")
+        tooltip = _("Adjusts the distance and angular perspective of the image viewpoint")
         self._createControl(panel, data = self.win['view'], name = 'persp',
                             tooltip = tooltip, range = (1, 120),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
@@ -250,25 +251,23 @@ class NvizToolWindow(FN.FlatNotebook):
                       flag = wx.ALIGN_CENTER)        
         
         # twist
-        tooltip = _("Rotates the scene about the horizontal axis."
-                   " An angle of 0 is flat. The scene rotates between -90 and 90 degrees.")
+        tooltip = _("Tilts the plane of the surface from the horizontal")
         self._createControl(panel, data = self.win['view'], name = 'twist',
                             tooltip = tooltip, range = (-180,180),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
-        gridSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Twist:")),
+        gridSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Tilt:")),
                       pos = (1, 1), flag = wx.ALIGN_CENTER)
         gridSizer.Add(item = self.FindWindowById(self.win['view']['twist']['slider']), pos = (2, 1))
         gridSizer.Add(item = self.FindWindowById(self.win['view']['twist']['text']), pos = (3, 1),
                       flag = wx.ALIGN_CENTER)        
         
         # height + z-exag
-        tooltip = _("Adjusts the viewer's height above the scene")
+        tooltip = _("Adjusts the viewing height above the surface"
+                    " (angle of view automatically adjusts to maintain the same center of view)")
         self._createControl(panel, data = self.win['view'], name = 'height', sliderHor = False,
                             tooltip = tooltip, range = (0, 1),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
-        tooltip = _("Adjusts the vertical exaggeration of the surface. "
-                    "As an example, if the easting and northing are in meters and the elevation in feet, "
-                    "a vertical exaggeration of .305 would produce a true (unexaggerated) surface. ")
+        tooltip = _("Adjusts the relative height of features above the plane of the surface")
         self._createControl(panel, data = self.win['view'], name = 'z-exag', sliderHor = False,
                             tooltip = tooltip, range = (0, 10), floatSlider = True,
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
@@ -485,7 +484,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                                           key = 'animation', subkey = 'prefix'))
         prefixCtrl.SetToolTipString(_("Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."))
         fileTypeLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("File format:"))
-        fileTypeCtrl = wx.Choice(parent = panel, id = wx.ID_ANY, choices = ["PPM", "TIF"])
+        fileTypeCtrl = wx.Choice(parent = panel, id = wx.ID_ANY, choices = ["TIF", "PPM"])
         
         save = wx.Button(parent = panel, id = wx.ID_ANY,
                          label = "Save")
@@ -872,7 +871,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['surface']['position']['reset'] = reset.GetId()
         
         self.win['surface']['position']['axis'] = axis.GetId()
-        axis.SetSelection(0)
+        axis.SetSelection(2)
         axis.Bind(wx.EVT_CHOICE, self.OnSurfaceAxis)
         
         pslide = self.FindWindowById(self.win['surface']['position']['slider'])
@@ -1009,8 +1008,8 @@ class NvizToolWindow(FN.FlatNotebook):
         self._createControl(panel, data = self.win['cplane']['rotation'], name = 'rot', size = 250,
                             range = (0, 360), sliderHor = True, tooltip = tooltip,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
-        self.FindWindowById(self.win['cplane']['rotation']['rot']['slider']).SetValue(0)
-        self.FindWindowById(self.win['cplane']['rotation']['rot']['text']).SetValue(0)
+        self.FindWindowById(self.win['cplane']['rotation']['rot']['slider']).SetValue(180)
+        self.FindWindowById(self.win['cplane']['rotation']['rot']['text']).SetValue(180)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['rot']['slider']),
                       pos = (2, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['rot']['text']),
@@ -1681,7 +1680,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['volume']['position']['reset'] = reset.GetId()
         
         self.win['volume']['position']['axis'] = axis.GetId()
-        axis.SetSelection(0)
+        axis.SetSelection(2) # Z
         axis.Bind(wx.EVT_CHOICE, self.OnVolumeAxis)
         
         pslide = self.FindWindowById(self.win['volume']['position']['slider'])
@@ -2606,7 +2605,10 @@ class NvizToolWindow(FN.FlatNotebook):
         ne = wx.Button(panel, id = wx.ID_ANY, label = _("NE"))
         se = wx.Button(panel, id = wx.ID_ANY, label = _("SE"))
         sw = wx.Button(panel, id = wx.ID_ANY, label = _("SW"))
-        minWidth = sw.GetTextExtent(sw.GetLabel())[0] + 15
+        padding = 15
+        if sys.platform == 'darwin':
+            padding = 20
+        minWidth = sw.GetTextExtent(sw.GetLabel())[0] + padding
         for win, name in zip((w, n, s, e, nw, ne, se, sw),
                         ('w', 'n', 's', 'e', 'nw', 'ne', 'se', 'sw')):
             win.SetMinSize((minWidth, -1))
@@ -2861,7 +2863,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         for win in self.win['surface']['position'].itervalues():
             if win == self.win['surface']['position']['axis']:
-                self.FindWindowById(win).SetSelection(0)
+                self.FindWindowById(win).SetSelection(2) # Z
             elif win == self.win['surface']['position']['reset']:
                 continue
             else:
@@ -4132,7 +4134,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Reset position of volume"""
         for win in self.win['volume']['position'].itervalues():
             if win == self.win['volume']['position']['axis']:
-                self.FindWindowById(win).SetSelection(0)
+                self.FindWindowById(win).SetSelection(2) # Z
             elif win == self.win['volume']['position']['reset']:
                 continue
             else:
@@ -4254,6 +4256,9 @@ class NvizToolWindow(FN.FlatNotebook):
             planeIndex = -1
             self.EnablePage("cplane", enabled = False)
         self.mapWindow.SelectCPlane(planeIndex)
+        if planeIndex >= 0:
+            self.mapWindow.UpdateCPlane(planeIndex, changes = ['rotation', 'position', 'shading'])
+
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         self.UpdateCPlanePage(planeIndex)
@@ -4320,8 +4325,10 @@ class NvizToolWindow(FN.FlatNotebook):
             planeIndex = int(plane.split()[-1]) - 1
         except:#TODO disabled page
             planeIndex = -1
+
         self.mapWindow.cplanes[planeIndex] = copy.deepcopy(UserSettings.Get(group = 'nviz',
                                                                             key = 'cplane'))
+        self.mapWindow.cplanes[planeIndex]['on'] = True
         event = wxUpdateCPlane(update = ('position','rotation','shading'), current = planeIndex)
         wx.PostEvent(self.mapWindow, event)
         self.OnCPlaneChangeDone(None)
@@ -4647,11 +4654,11 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         dim = self._display.GetLongDim()
         self.FindWindowById(self.win['surface']['position']['slider']).SetRange(-2 * dim, 2 * dim)
-        if 'x' in data['position']:
-            xval = data['position']['x']
-            self.FindWindowById(self.win['surface']['position']['axis']).SetSelection(0)
+        if 'z' in data['position']:
+            zval = data['position']['z']
+            self.FindWindowById(self.win['surface']['position']['axis']).SetSelection(2)
             for control in ('slider','text'):
-                    self.FindWindowById(self.win['surface']['position'][control]).SetValue(xval)
+                    self.FindWindowById(self.win['surface']['position'][control]).SetValue(zval)
         # enable/disable res widget + set draw mode
         self.OnSurfaceMode(event = None)
 
@@ -4858,11 +4865,11 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         # position
         #
-        if 'x' in data['position']:
-            xval = data['position']['x']
-            self.FindWindowById(self.win['volume']['position']['axis']).SetSelection(0)
+        if 'z' in data['position']:
+            zval = data['position']['z']
+            self.FindWindowById(self.win['volume']['position']['axis']).SetSelection(2)
             for control in ('slider','text'):
-                    self.FindWindowById(self.win['volume']['position'][control]).SetValue(xval)    
+                    self.FindWindowById(self.win['volume']['position'][control]).SetValue(zval)
         # set topo range
         mapRange = self._get3dRange(name = layer.name)
         desc = self.FindWindowById(self.win['volume']['desc'])
@@ -5059,8 +5066,7 @@ class ViewPositionWindow(PositionWindow):
     def __init__(self, parent, mapwindow, id = wx.ID_ANY,
                  **kwargs):
         PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)
-        self.SetToolTipString(_("Adjusts the look direction (azimuth). "
-                                "Click and drag the puck to change the current eye position."))
+        self.SetToolTipString(_("Adjusts the distance and direction of the image viewpoint"))
         self.data = self.mapWindow.view
         self.PostDraw()
         
