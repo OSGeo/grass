@@ -544,9 +544,9 @@ class MapFrame(SingleMapFrame):
         """!Save map to image
         """
         if self.IsPaneShown('3d'):
-            filetype = "PPM file (*.ppm)|*.ppm|TIF file (*.tif)|*.tif"
-            ltype = [{ 'ext' : 'ppm', 'type' : 'ppm' },
-                     { 'ext' : 'tif', 'type' : 'tif' }]
+            filetype = "TIF file (*.tif)|*.tif|PPM file (*.ppm)|*.ppm"
+            ltype = [{ 'ext' : 'tif', 'type' : 'tif' },
+                     { 'ext' : 'ppm', 'type' : 'ppm' }]
         else:
             img = self.MapWindow.img
             if not img:

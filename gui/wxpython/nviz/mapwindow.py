@@ -168,7 +168,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(EVT_UPDATE_PROP,   self.UpdateMapObjProperties)
         self.Bind(EVT_UPDATE_VIEW,   self.OnUpdateView)
         self.Bind(EVT_UPDATE_LIGHT,  self.UpdateLight)
-        self.Bind(EVT_UPDATE_CPLANE, self.UpdateCPlane)
+        self.Bind(EVT_UPDATE_CPLANE, self.OnUpdateCPlane)
         
         self.Bind(wx.EVT_TIMER, self.OnTimerAnim, self.timerAnim)
         self.Bind(wx.EVT_TIMER, self.OnTimerFly, self.timerFly)
@@ -1566,19 +1566,22 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 except IndexError:
                     pass
                     
-    def UpdateCPlane(self, event):
+    def OnUpdateCPlane(self, event):
         """!Change cutting plane settings"""
-        current = event.current
-        for each in event.update:
+        self.UpdateCPlane(event.current, event.update)
+
+    def UpdateCPlane(self, index, changes):
+        """!Change cutting plane settings"""
+        for each in changes:
             if each == 'rotation':
-                self._display.SetCPlaneRotation(0, self.cplanes[current]['rotation']['tilt'],
-                                                   self.cplanes[current]['rotation']['rot'])
+                self._display.SetCPlaneRotation(0, self.cplanes[index]['rotation']['tilt'],
+                                                   self.cplanes[index]['rotation']['rot'])
             if each == 'position':
-                self._display.SetCPlaneTranslation(self.cplanes[current]['position']['x'],
-                                                   self.cplanes[current]['position']['y'],
-                                                   self.cplanes[current]['position']['z'])
+                self._display.SetCPlaneTranslation(self.cplanes[index]['position']['x'],
+                                                   self.cplanes[index]['position']['y'],
+                                                   self.cplanes[index]['position']['z'])
             if each == 'shading':
-                self._display.SetFenceColor(self.cplanes[current]['shading'])
+                self._display.SetFenceColor(self.cplanes[index]['shading'])
             
     def UnloadRaster(self, item):
         """!Unload 2d raster map
