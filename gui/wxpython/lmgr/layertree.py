@@ -253,6 +253,22 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetFirstGradientColour(wx.Colour(100, 100, 100))
             self.SetSecondGradientColour(wx.Colour(150, 150, 150))
         
+    def GetSelections(self):
+        """Returns a list of selected items.
+
+        This method is copied from customtreecontrol and overriden because
+        with some version wx (?) multiple selection doesn't work. 
+        Probably it is caused by another GetSelections method in treemixin.DragAndDrop?
+        """
+        array = []
+        idRoot = self.GetRootItem()
+        if idRoot:
+            array = self.FillArray(idRoot, array)
+        
+        #else: the tree is empty, so no selections
+
+        return array
+
     def GetMap(self):
         """!Get map instace"""
         return self.Map
@@ -463,8 +479,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID['univar'],  False)
                 self.popupMenu.Enable(self.popupID['prof'],    False)
                 self.popupMenu.Enable(self.popupID['meta'],    False)
-                self.popupMenu.Enable(self.popupID['nviz'],    False)
                 self.popupMenu.Enable(self.popupID['export'],  False)
+                if self.lmgr.IsPaneShown('toolbarNviz'):
+                    self.popupMenu.Enable(self.popupID['nviz'], False)
 
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()
