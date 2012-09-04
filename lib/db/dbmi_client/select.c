@@ -105,7 +105,7 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
 {
     int type, more, alloc, count;
     int *val;
-    char buf[1024];
+    char *buf = NULL;
     const char *sval;
     dbString stmt;
     dbCursor cursor;
@@ -125,14 +125,15 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
     val = (int *)G_malloc(alloc * sizeof(int));
 
     if (where == NULL || strlen(where) == 0)
-	G_snprintf(buf, 1023, "SELECT %s FROM %s", col, tab);
+	G_asprintf(&buf, "SELECT %s FROM %s", col, tab);
     else
-	G_snprintf(buf, 1023, "SELECT %s FROM %s WHERE %s", col, tab, where);
+	G_asprintf(&buf, "SELECT %s FROM %s WHERE %s", col, tab, where);
 
     G_debug(3, "  SQL: %s", buf);
 
     db_init_string(&stmt);
     db_set_string(&stmt, buf);
+    G_free(buf);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
 	return (-1);
@@ -204,7 +205,7 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
 		    int id, const char *col, dbValue * val)
 {
     int more, count;
-    char buf[1024];
+    char *buf = NULL;
     dbString stmt;
     dbCursor cursor;
     dbColumn *column;
@@ -222,9 +223,10 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
     }
 
     G_zero(val, sizeof(dbValue));
-    sprintf(buf, "SELECT %s FROM %s WHERE %s = %d\n", col, tab, key, id);
+    G_asprintf(&buf, "SELECT %s FROM %s WHERE %s = %d", col, tab, key, id);
     db_init_string(&stmt);
     db_set_string(&stmt, buf);
+    G_free(buf);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
 	return (-1);
@@ -268,7 +270,7 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 			  dbCatValArray * cvarr)
 {
     int i, type, more, nrows, ncols;
-    char buf[1024];
+    char *buf = NULL;
     dbString stmt;
     dbCursor cursor;
     dbColumn *column;
@@ -290,13 +292,14 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 
     if (strcmp(key, col) == 0) {
 	ncols = 1;
-	sprintf(buf, "SELECT %s FROM %s", key, tab);
+	G_asprintf(&buf, "SELECT %s FROM %s", key, tab);
     }
     else {
 	ncols = 2;
-	sprintf(buf, "SELECT %s, %s FROM %s", key, col, tab);
+	G_asprintf(&buf, "SELECT %s, %s FROM %s", key, col, tab);
     }
     db_set_string(&stmt, buf);
+    G_free(buf);
 
     if (where != NULL && strlen(where) > 0) {
 	db_append_string(&stmt, " WHERE ");
