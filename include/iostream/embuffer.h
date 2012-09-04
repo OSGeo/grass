@@ -380,8 +380,7 @@ public:
      
   // return the number of items actually inserted 
   long insert(AMI_STREAM<T>* str, 
-	      //long bos=0); 
-	      long bos); 
+	      long bos=0);
   
   //print range of elements in buffer
   void print_range();
@@ -1137,7 +1136,7 @@ long em_buffer<T,Key>::insert(T* a, long n) {
    
    return the number of items actually inserted */
 template<class T, class Key>
-long em_buffer<T,Key>::insert(AMI_STREAM<T>* str, long bos=0) {
+long em_buffer<T,Key>::insert(AMI_STREAM<T>* str, long bos) {
 
   assert(str);
   
