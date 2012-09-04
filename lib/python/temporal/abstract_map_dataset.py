@@ -62,7 +62,7 @@ class TemporalMapRelations(AbstractDataset):
          +-------------------- Temporal Topology -------------------------------------+
         >>> tmr.print_temporal_topology_shell_info()
         
-        @code
+        @endcode
     """
 
     def __init__(self):
