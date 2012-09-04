@@ -509,7 +509,7 @@ void BasicMinMaxHeap<T>::print_range() const {
   T a, b;
   min(a);
   max(b);
-  if (size) {
+  if (size()) {
     cout << a.getPriority() << ".."
 	 << b.getPriority();
   }
