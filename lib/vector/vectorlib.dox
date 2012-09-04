@@ -2,6 +2,8 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
+\tableofcontents
+
 \par Table of contents
 - \ref vlibBackground
 - \ref vlibIntro
@@ -18,10 +20,10 @@ by GRASS Development Team (http://grass.osgeo.org)
 - \ref vlibSeealso
 
 \par Subpages
-- \subpage vlibs
+- \subpage vlibDescription
 - \subpage vlibFormat
 - \subpage vlibTopology
-- \subpage vlibSpatialIndex
+- \subpage vlibIndices
 - \subpage vlibAscii
 - \subpage vlibOgr
 - \subpage vlibTin

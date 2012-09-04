@@ -2,6 +2,8 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
+\tableofcontents
+
 \par Table of contents
 
 - \ref vlibDirectoryStructure
@@ -159,7 +161,7 @@ map river because table is stored in a reliable RDBMS.
 Besides internal library functions there are two main libraries:
 
 - Vlib (Vector library), see \ref vlibIntro
-- DGLib (Directed Graph Library), see \ref vlibDglib
+- DGLib (Directed Graph Library), see \ref dglib
 
 For historical reasons, there are two internal libraries:
 
