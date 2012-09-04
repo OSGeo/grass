@@ -197,6 +197,7 @@ def register_maps_in_space_time_dataset(
 
         # Put the map into the database
         if not map.is_in_db(dbif):
+            print "Map not in db"
             is_in_db = False
             # Break in case no valid time is provided
             if start == "" or start is None:
@@ -217,8 +218,23 @@ def register_maps_in_space_time_dataset(
 
         else:
             is_in_db = True
-            if not core.overwrite:
+            
+            # Check the overwrite flag
+            if not core.overwrite():                        
+                if map.get_layer():
+                    core.warning(_("Map is already registered in temporal database. "
+                                   "Unable to update %s map <%s> with layer %i. "
+                                   "Overwrite flag is not set.") %
+                               (map.get_type(), map.get_map_id(), map.get_layer()))
+                else:
+                    core.warning(_("Map is already registered in temporal database. "
+                                   "Unable to update %s map <%s>. "
+                                   "Overwrite flag is not set.") %
+                               (map.get_type(), map.get_map_id()))
+                # Jump to next map
                 continue
+            
+            # Select information from temporal database
             map.select(dbif)
             
             # Safe the datasets that must be updated
@@ -230,11 +246,11 @@ def register_maps_in_space_time_dataset(
                 if name and map.get_temporal_type() != sp.get_temporal_type():
                     dbif.close()
                     if map.get_layer():
-                        core.fatal(_("Unable to register %s map <%s> with layer. "
+                        core.fatal(_("Unable to update %s map <%s> with layer. "
                                      "The temporal types are different.") %
                                    (map.get_type(), map.get_map_id(), map.get_layer()))
                     else:
-                        core.fatal(_("Unable to register %s map <%s>. "
+                        core.fatal(_("Unable to update %s map <%s>. "
                                      "The temporal types are different.") %
                                    (map.get_type(), map.get_map_id()))
 
