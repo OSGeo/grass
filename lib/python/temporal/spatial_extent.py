@@ -1330,7 +1330,7 @@ class SpatialExtent(SQLDatabaseInterface):
         >>> A.spatial_relation(B)
         'meet'
         
-        @endverbatim
+        @endcode
         """
 
         if self.equivalent(extent):
