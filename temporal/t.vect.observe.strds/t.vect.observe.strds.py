@@ -5,7 +5,7 @@
 # MODULE:       t.vect.oberve.rast
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:      Observe specific locations in a space time raster dataset over a periode of time using vector points
+# PURPOSE:      Observe specific locations in a space time raster dataset over a period of time using vector points
 # COPYRIGHT:    (C) 2011 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Observes specific locations in a space time raster dataset over a periode of time using vector points.
+#% description: Observes specific locations in a space time raster dataset over a period of time using vector points.
 #% keywords: temporal
 #% keywords: sampling
 #%end
