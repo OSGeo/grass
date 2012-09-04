@@ -5,7 +5,7 @@
 # MODULE:	t.vect.univar
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Calculates univariate statistics from the non-null cells for each registered vector map of a space time vector dataset
+# PURPOSE:	Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Calculates univariate statistics from the non-null cells for each registered vector map of a space time vector dataset.
+#% description: Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset
 #% keywords: temporal
 #% keywords: statistics
 #% keywords: vector

@@ -176,6 +176,8 @@ def register_maps_in_space_time_dataset(
     num_maps = len(maplist)
     map_object_list = []
     statement = ""
+    # Store the ids of datasets that must be updated
+    datatsets_to_modify = {}
 
     core.message(_("Gathering map informations"))
 
@@ -218,6 +220,12 @@ def register_maps_in_space_time_dataset(
             if not core.overwrite:
                 continue
             map.select(dbif)
+            
+            # Safe the datasets that must be updated
+            datasets = map.get_registered_datasets(dbif)
+            for dataset in datasets:
+                datatsets_to_modify[dataset["id"]] = dataset["id"]
+            
             if name and map.get_temporal_type() != sp.get_temporal_type():
                 dbif.close()
                 if map.get_layer():
@@ -283,6 +291,18 @@ def register_maps_in_space_time_dataset(
     if name:
         core.message(_("Update space time raster dataset"))
         sp.update_from_registered_maps(dbif)
+        
+    # Update affected datasets
+    if datatsets_to_modify:
+        for dataset in datatsets_to_modify:
+            if type == "rast" or type == "raster":
+                ds = dataset_factory("strds", dataset)
+            elif type == "rast3d":
+                ds = dataset_factory("str3ds", dataset)
+            elif type == "vect" or type == "vector":
+                ds = dataset_factory("stvds", dataset)
+            ds.select(dbif)
+            ds.update_from_registered_maps(dbif)
 
     if connect == True:
         dbif.close()

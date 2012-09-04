@@ -5,7 +5,7 @@
 # MODULE:       t.vect.what.strds
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:      Uploads raster map values at spatial and temporal positions of vector points to the tables.
+# PURPOSE:      Store raster map values at spatial and temporal positions of vector points as vector attributes.
 # COPYRIGHT:    (C) 2011 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Uploads raster map values at spatial and temporal positions of vector points to the tables.
+#% description: Store raster map values at spatial and temporal positions of vector points as vector attributes.
 #% keywords: temporal
 #% keywords: sampling
 #%end
