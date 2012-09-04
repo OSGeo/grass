@@ -94,7 +94,7 @@ def main():
     dummy = tgis.RasterDataset(None)
 
     # Map names as comma separated string
-    if maps is not None:
+    if maps is not None and maps != "":
         if maps.find(",") == -1:
             maplist = [maps, ]
         else:

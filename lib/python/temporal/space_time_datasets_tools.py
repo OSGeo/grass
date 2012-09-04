@@ -223,19 +223,20 @@ def register_maps_in_space_time_dataset(
             
             # Safe the datasets that must be updated
             datasets = map.get_registered_datasets(dbif)
-            for dataset in datasets:
-                datatsets_to_modify[dataset["id"]] = dataset["id"]
-            
-            if name and map.get_temporal_type() != sp.get_temporal_type():
-                dbif.close()
-                if map.get_layer():
-                    core.fatal(_("Unable to register %s map <%s> with layer. "
-                                 "The temporal types are different.") %
-                               (map.get_type(), map.get_map_id(), map.get_layer()))
-                else:
-                    core.fatal(_("Unable to register %s map <%s>. "
-                                 "The temporal types are different.") %
-                               (map.get_type(), map.get_map_id()))
+            if datasets:
+                for dataset in datasets:
+                    datatsets_to_modify[dataset["id"]] = dataset["id"]
+                
+                if name and map.get_temporal_type() != sp.get_temporal_type():
+                    dbif.close()
+                    if map.get_layer():
+                        core.fatal(_("Unable to register %s map <%s> with layer. "
+                                     "The temporal types are different.") %
+                                   (map.get_type(), map.get_map_id(), map.get_layer()))
+                    else:
+                        core.fatal(_("Unable to register %s map <%s>. "
+                                     "The temporal types are different.") %
+                                   (map.get_type(), map.get_map_id()))
 
         # Load the data from the grass file database
         map.load()
@@ -664,6 +665,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
             string += "%s" % ("distance_from_begin")
+            print string
 
         first_time, dummy = mapmatrizes[0][0]["granule"].get_valid_time()
 
