@@ -18,11 +18,17 @@
 
 /*!
   \brief Get the current working window (region)
-  
+
   The current working window values are returned in the structure
-  <i>window</i>.
-  
-  \param[out] window window structure to be set
+  \p window.
+
+  Previous calls to G_set_window() affects values returned by this function.
+  Previous calls to G_put_window() affects values returned by this function
+  only if the current working window is not initialized.
+
+  \param[out] window pointer to window structure to be set
+
+  \sa G_set_window(), G_get_window()
 */
 void G_get_set_window(struct Cell_head *window)
 {
@@ -31,9 +37,16 @@ void G_get_set_window(struct Cell_head *window)
 }
 
 /*!
-  \brief Establishes 'window' as the current working window.
-  
+  \brief Establishes \p window as the current working window (region).
+
+  This function adjusts the \p window before setting the region
+  so you don't have to call G_adjust_Cell_head().
+
+  \note Only the current process is affected.
+
   \param window window to become operative window
+
+  \sa G_get_set_window(), G_put_window()
 */
 void G_set_window(struct Cell_head *window)
 {
