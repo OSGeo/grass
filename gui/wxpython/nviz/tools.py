@@ -4652,13 +4652,8 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         # position
         #
-        dim = self._display.GetLongDim()
-        self.FindWindowById(self.win['surface']['position']['slider']).SetRange(-2 * dim, 2 * dim)
-        if 'z' in data['position']:
-            zval = data['position']['z']
-            self.FindWindowById(self.win['surface']['position']['axis']).SetSelection(2)
-            for control in ('slider','text'):
-                    self.FindWindowById(self.win['surface']['position'][control]).SetValue(zval)
+        self.OnSurfaceAxis(None)
+
         # enable/disable res widget + set draw mode
         self.OnSurfaceMode(event = None)
 
