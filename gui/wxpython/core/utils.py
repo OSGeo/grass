@@ -114,15 +114,24 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                      'h_map', 's_map', 'i_map',
                      'reliefmap', 'labels'):
                 params.append((idx, p, v))
-        
+
         if len(params) < 1:
-            if len(dcmd) > 1 and '=' not in dcmd[1]:
-                task = gtask.parse_interface(dcmd[0])
-                p = task.get_options()['params'][0].get('name', '')
-                params.append((1, p, dcmd[1]))
+            if len(dcmd) > 1:
+                i = 1
+                while i < len(dcmd):
+                    if '=' not in dcmd[i] and not dcmd[i].startswith('-'):
+                        task = gtask.parse_interface(dcmd[0])
+                        # this expects the first parameter to be the right one
+                        p = task.get_options()['params'][0].get('name', '')
+                        params.append((i, p, dcmd[i]))
+                        break
+                    i += 1
             else:
                 return mapname, False
-        
+
+        if len(params) < 1:
+            return mapname, False
+
         mapname = params[0][2]
         mapset = ''
         if fullyQualified and '@' not in mapname:
@@ -140,13 +149,13 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
             else:
                 mapset = grass.gisenv()['MAPSET']
             
-            # update dcmd
-            for i, p, v in params:
-                if p == 'layer':
-                    continue
-                dcmd[i] = p + '=' + v
-                if mapset:
-                    dcmd[i] += '@' + mapset
+        # update dcmd
+        for i, p, v in params:
+            if p == 'layer':
+                continue
+            dcmd[i] = p + '=' + v
+            if mapset:
+                dcmd[i] += '@' + mapset
         
         maps = list()
         ogr = False
