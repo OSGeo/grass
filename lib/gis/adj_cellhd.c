@@ -34,8 +34,6 @@
  * \param[in,out] cellhd pointer to Cell_head structure
  * \param row_flag compute n-s resolution
  * \param col_flag compute e-w resolution
-
- * \return NULL on success
  */
 void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
@@ -177,12 +175,13 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
  * If <i>depth_flag</i> are false, number of depths is calculated from 
  * top-bottom resolution.
  *
+ * \warning This function can cause segmentation fault without any warning
+ * when it is called with Cell_head top and bottom set to zero.
+ *
  * \param[in,out] cellhd pointer to Cell_head structure
  * \param row_flag compute n-s resolution
  * \param col_flag compute e-w resolution
  * \param depth_flag compute t-b resolution
- *
- * \return NULL on success
  */
 void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 			 int col_flag, int depth_flag)
