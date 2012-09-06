@@ -20,7 +20,7 @@ last step is done only in case of high planimetric resolution.
 
 <h2>NOTES</h2>
 
-The input data should be the output result of the <em>v.lidar.correction</em> 
+The input data should be the output result of the <em>v.lidar.edgedetection</em>,
 module. Otherwise, it goes to error! The output of this module will be 
 the input of <em>v.lidar.correction</em> module. The output will be a vector 
 map which points are pre-classified as:
@@ -48,15 +48,18 @@ v.lidar.growing input=edge output=growing first=firstpulse
 </pre></div>
 
 <h2>SEE ALSO</h2>
-<em><a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a></em>,
-<em><a href="v.lidar.correction.html">v.lidar.correction</a></em>,
-<em><a href="v.surf.bspline.html">v.surf.bspline</a></em>
+
+<em>
+<a HREF="v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
+<a HREF="v.lidar.correction.html">v.lidar.correction</a>,
+<a HREF="v.surf.bspline.html">v.surf.bspline</a>
+</em>
 
 <h2>AUTHOR</h2>
 Original version of program in GRASS 5.4:
 <br>
 Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni and Mirko Reguzzoni
-<br><br>
+<p>
 Update for GRASS 6.X:
 <br>
 Roberto Antolin and Gonzalo Moreno
@@ -66,26 +69,21 @@ Roberto Antolin and Gonzalo Moreno
 Antolin, R. et al., 2006. Digital terrain models determination by LiDAR 
 technology: Po basin experimentation. Bolletino di Geodesia e Scienze 
 Affini, anno LXV, n. 2, pp. 69-89.
-<br>
-<br>
+<p>
 Brovelli M. A., Cannata M., Longoni U.M., 2004. LIDAR Data Filtering and 
 DTM Interpolation Within GRASS, Transactions in GIS, April 2004,  vol. 8, 
 iss. 2, pp. 155-174(20), Blackwell Publishing Ltd.
-<br>
-<br>
+<p>
 Brovelli M. A., Cannata M., 2004. Digital Terrain model reconstruction in 
 urban areas from airborne laser scanning data: the method and an  example 
 for Pavia (Northern Italy). Computers and Geosciences 30 (2004) pp.325-331
-<br>
-<br>
+<p>
 Brovelli M. A. and Longoni U.M., 2003. Software per il filtraggio di dati 
 LIDAR, Rivista dell?Agenzia del Territorio, n. 3-2003, pp. 11-22 (ISSN 1593-2192).
-<br>
-<br>
+<p>
 Brovelli M. A., Cannata M. and Longoni U.M., 2002. DTM LIDAR in area urbana, 
 Bollettino SIFET N.2, pp. 7-26.
-<br>
-<br>
+<p>
 Performances of the filter can be seen in the
 <a href="http://www.itc.nl/isprswgIII-3/filtertest/MainDoc.htm">ISPRS WG III/3 Comparison of Filters</a> 
 report by Sithole, G. and Vosselman, G., 2003. 
