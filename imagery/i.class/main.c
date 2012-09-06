@@ -278,11 +278,11 @@ static int check_files(char *img_group, char *img_subgroup,
 	G_fatal_error(_("Unable to open output signature file '%s'"),
 		      out_sig);
 
+    I_init_signatures(&Sigs, Refer.nfiles);
     if (in_sig) {
 	FILE *insig_fd;
 
 	G_message(_("\nSEED SIGNATURES"));
-	I_init_signatures(&Sigs, Refer.nfiles);
 
 	if (!
 	    (insig_fd =
