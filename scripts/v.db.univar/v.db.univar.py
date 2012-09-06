@@ -16,6 +16,9 @@
 #
 #############################################################################
 
+# TODO: this module should be named db.univar.
+# v.db.univar should have as input options vector and layer instead of table
+
 #%module
 #% description: Calculates univariate statistics on selected table column for a GRASS vector map.
 #% keywords: vector
