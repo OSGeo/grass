@@ -37,9 +37,8 @@ GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "g
 sys.path.append(GUIModulesPath)
 
 from core import globalvar
-import gui_core.gselect
-import gui_core.goutput
-import menuform
+from gui_core import gselect
+from gui_core import goutput
 from core.settings import UserSettings
 #import help
 

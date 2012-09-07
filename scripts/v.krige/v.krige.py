@@ -95,6 +95,10 @@ from tempfile import gettempdir
 import time
 import thread
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
+from core import globalvar
+
 if not os.environ.has_key("GISBASE"):
     print "You must be in GRASS GIS to run this program."
     sys.exit(1)
@@ -296,7 +300,6 @@ def main(argv = None):
         importR()
         argv = sys.argv[1:] # stripping first item, the full name of this script
         # wxGUI call
-        import globalvar
         if not os.getenv("GRASS_WXBUNDLED"):
             globalvar.CheckForWx()
         import vkrige as GUI
