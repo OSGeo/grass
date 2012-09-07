@@ -13,7 +13,7 @@
 <!-- meta page description: PostgreSQL driver -->
 <h1>PostgreSQL driver in GRASS</h1>
 
-The driver name is 'pg'.
+The driver name in GRASS is 'pg'.
 
 <h2>Creating a PostgreSQL database</h2>
 
@@ -36,13 +36,12 @@ db.tables -p
 
 All SQL commands supported by PostgreSQL.
 
-It's not possible to use C-like escapes (with backslash
-like \n etc) within SQL syntax. 
+It's not possible to use C-like escapes (with backslash like \n etc)
+within the SQL syntax.
 
 <h2>Operators available in conditions</h2>
 
 All SQL operators supported by PostgreSQL.
-
 
 <h2>Adding an unique ID column</h2>
 
@@ -59,7 +58,7 @@ echo "
 </pre></div>
 
 
-<h2>Attribute Converters</h2>
+<h2>Attribute import into PostgreSQL</h2>
 
 CSV import into PostgreSQL:
 <div class="code"><pre>
@@ -67,11 +66,7 @@ CSV import into PostgreSQL:
 COPY t1 FROM 'filename' USING DELIMITERS ',';
 </pre></div>
 
-<a href="http://www.klaban.torun.pl/prog/pg2xbase/">pg2xbase</a>: 
-DBF to PostgreSQL converter.
-<br>
-
-<h2>Geometry import from PostgreSQL table</h2>
+<h2>Geometry import from PostgreSQL table into GRASS</h2>
 
 <em>v.in.db</em> creates a new vector (points) map from a database table
 containing coordinates. See <a href="v.in.db.html">here</a> for examples.
@@ -118,14 +113,14 @@ v.info -t test
 <ul>
 <li><a href="http://postgis.refractions.net/download/">PostGIS with shp2pgsql</a>:<br>
  <tt>shp2pgsql -D lakespy2 lakespy2 test > lakespy2.sql</tt>
-<br><br>
+<p>
 <li><a href="http://e00pg.sourceforge.net/">e00pg</a>: E00 to PostGIS filter,
 see also <em><a href="v.in.e00.html">v.in.e00</a></em>.
-<br><br>
+<p>
 <li>GDAL/OGR <a href="http://www.gdal.org/ogr/">ogrinfo and ogr2ogr</a>:
 GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
   <tt>ogr2ogr -f "PostgreSQL" shapefile ??</tt>
-<br><br>
+<p>
 </ul>
 
 
@@ -138,23 +133,20 @@ GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
 <a href="database.html">Help pages for database modules</a>,<br>
 <a href="sql.html">SQL support in GRASS GIS</a>
 </em>
-<br><br>
-<em>
-<a href="http://www.PostgreSQL.org">PostgreSQL web site</a>,<br>
-<a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a>
-</em>
 <p>
-Book: <a href="http://www.postgresql.org/docs/books/awbook.html">PostgreSQL:
-  Introduction and Concepts</a> by Bruce Momjian<br>
 <em>
-<a href="http://www.postgresql.org/docs/">PostgreSQL Documentation</a><br>
-<a href="http://techdocs.postgresql.org/">PostgreSQL Technical Documentation</a><br>
-<a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL driver documentation</a><br>
-<a href="http://mapserver.gis.umn.edu/cgi-bin/wiki.pl?MapServerWiki">MapServer Wiki</a>
+<a href="http://www.postgresql.org/">PostgreSQL web site</a>,<br>
+<a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a>
+<p>
+<a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL driver
+documentation</a>
 </em>
 
 <p><i>Last changed: $Date$</i>
-<HR>
-<br><a href=index.html>Help Index</a>
+<hr>
+<br>
+<a href="index.html">Main index</a> -
+<a href="database.html">database index</a> -
+<a href="full_index.html">full index</a>
 </body>
 </html>

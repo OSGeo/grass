@@ -15,7 +15,6 @@
 MySQL database driver in GRASS enables GRASS to store vector
 attributes in MySQL embedded database without necessity 
 to run MySQL server.
-<p>
 
 <h2>Driver and database name</h2>
 GRASS modules require 2 parameters to connect to a database.
@@ -34,15 +33,14 @@ it is possible to use 3 variables:
 
 <p>
 Examples of connection parameters:
-<pre>
-  db.connect driver=mesql database='$GISDBASE/$LOCATION_NAME/$MAPSET/mysql'
-  db.connect driver=mesql database=/home/user1/db
-</pre>
+<div class="code"><pre>
+db.connect driver=mesql database='$GISDBASE/$LOCATION_NAME/$MAPSET/mysql'
+db.connect driver=mesql database=/home/user1/db
+</pre></div>
 
 <h2>Data types, indexes</h2>
 For more information about supported data types and indexes
-see the documentation for 
-<a href="grass-mysql.html">MySQL (mysql) driver</a>
+see the documentation for <a href="grass-mysql.html">MySQL (mysql) driver</a>.
 
 <h2>Database type</h2>
 Because database closing was found very slow if InnoDB was used,
@@ -52,13 +50,14 @@ the InnoDB storage is disabled by default (hardcoded
 <h2>Note</h2>
 The embedded server is started with hardcoded '--bootstrap'
 option to avoid warning about missing 
-mysql.time_zone_leap_second table. This can be fixed in future.
+"mysql.time_zone_leap_second table". This can be fixed in future.
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="db.connect.html">db.connect</a>,
-<a href="sql.html">SQL support in GRASS GIS</a></em>
+<a href="sql.html">SQL support in GRASS GIS</a>
+</em>
 
 <h2>Credits</h2>
 Development of the driver was sponsored by
@@ -69,7 +68,10 @@ as part of a project for <a href="http://www.atac.roma.it/">ATAC</a>.
 Radim Blazek
 
 <p><i>Last changed: $Date$</i>
-<HR>
-<br><a href=index.html>Help Index</a>
+<hr>
+<br>
+<a href="index.html">Main index</a> -
+<a href="database.html">database index</a> -
+<a href="full_index.html">full index</a>
 </body>
 </html>
