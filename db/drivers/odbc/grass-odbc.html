@@ -58,25 +58,36 @@ In this example we copy the dbf file of a SHAPE map into ODBC, then connect
 GRASS to the ODBC DBMS. Usually the table will be already present in the
 DBMS.
 
-<ul>
-<li>
-Configure ODBC driver for selected database (manually or with 'ODBCConfig').
-ODBC drivers are defined in /etc/odbcinst.ini. Here is example:</li>
+<h3>Defining the ODBC connection</h3>
 
-<li><div class="code"><pre>
+<h4>MS-Windows</h4>
+On MS-Windows, in order to be able to connect, the ODBC connection
+needs to be configured using dedicated tools (tool called "ODBC Data Source
+Administrator") and give a name to that connection. This name is then used
+as database name when accessing from a client via ODBC.
+
+<h4>Linux</h4>
+
+Configure ODBC driver for selected database (manually or with 'ODBCConfig').
+ODBC drivers are defined in /etc/odbcinst.ini. Here an example:
+<p>
+<div class="code"><pre>
 &nbsp;[PostgreSQL]
 &nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp; = ODBC for PostgreSQL
 &nbsp;Driver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/lib/libodbcpsql.so
 &nbsp;Setup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/lib/libodbcpsqlS.so
-&nbsp;FileUsage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1</pre></div>
+&nbsp;FileUsage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1
+</pre></div>
 
-<li> Create DSN (data source name). The DSN is used as database name in db.*
+<p>
+Create DSN (data source name). The DSN is used as database name in db.*
 modules. Then DSN must be defined in $HOME/.odbc.ini (for this user only) or in
 /etc/odbc.ini for (for all users) [watch out for the database name which
 appears twice and also for the PostgreSQL protocol version]. Omit blanks at
-the beginning of lines:</li>
+the beginning of lines:
+<p>
 
-<li><div class="code"><pre>
+<div class="code"><pre>
 &nbsp;[grass6test]
 &nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = PostgreSQL
 &nbsp;Driver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = PostgreSQL
@@ -97,7 +108,8 @@ the beginning of lines:</li>
 &nbsp;FakeOidIndex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = No
 &nbsp;ConnSettings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =</pre></div>
 
-Configuration of an DSN without GUI is described on <a href="http://www.unixodbc.org/odbcinst.html">http://www.unixodbc.org/odbcinst.html</a>,
+Configuration of an DSN without GUI is described on
+<a href="http://www.unixodbc.org/odbcinst.html">http://www.unixodbc.org/odbcinst.html</a>,
 but odbc.ini and .odbc.ini may be created by the 'ODBCConfig' tool. You can
 easily view your DSN structure by 'DataManager'. Configuration with
 GUI is described on <a href="http://www.unixodbc.org/doc/UserManual/">http://www.unixodbc.org/doc/UserManual/</a>
@@ -108,50 +120,53 @@ psql -V
 </pre></div>
 
 
-<li>
+<h3>Using the ODBC driver</h3>
+
 Now create a new database if not yet existing:
+<p>
 <div class="code"><pre>
 db.createdb driver=odbc database=grass6test
 </pre></div>
-
-</li><li>Now store the table 'mytable.dbf' (here: in current directory) into PostgreSQL
-through ODBC:
+<p>
+To store a table 'mytable.dbf' (here: in current directory) into 
+PostgreSQL through ODBC, run:
+<p>
 <div class="code"><pre>
 db.connect driver=odbc database=grass6test
 db.copy from_driver=dbf from_database=./ from_table=mytable \
         to_driver=odbc to_database=grass6test to_table=mytable
 </pre></div>
-
-</li><li> Next link map to attribute table (now the ODBC table is used, not the dbf file):
-
+<p>
+Next link the map to the attribute table (now the ODBC table
+is used, not the dbf file):
+<p>
 <div class="code"><pre>
 v.db.connect map=mytable.shp table=mytable key=ID \
              database=grass6test driver=odbc
 v.db.connect -p
 </pre></div>
-
-</li><li>
+<p>
 Finally a test: Here we should see the table columns (if the ODBC connection works):
 <div class="code"><pre>
 db.tables -p
 db.columns table=mytable
-
 </pre></div>
-Now the table name 'mytable' should appear.
 <p>
+Now the table name 'mytable' should appear.
+<br>
 Doesn't work? Check with 'isql &lt;databasename&gt;' if the ODBC-PostgreSQL
 connection is really established.
-</ul>
+<p>
 
 Note that you can also connect mySQL, Oracle etc. through ODBC to GRASS.
-
+<p>
 You can also check the vector map itself concerning a current link to a
 table:
-
+<p>
 <div class="code"><pre>
 v.db.connect -p mytable.shp
 </pre></div>
-
+<p>
 which should print the database connection through ODBC to the defined RDBMS.
 
 <h2>SEE ALSO</h2>
@@ -160,10 +175,16 @@ which should print the database connection through ODBC to the defined RDBMS.
 <a href="db.connect.html">db.connect</a>,
 <a href="v.db.connect.html">v.db.connect</a>,
 <a href="http://www.unixODBC.org">unixODBC web site</a>,
-<a href="sql.html">SQL support in GRASS GIS</a></em>
+<a href="sql.html">SQL support in GRASS GIS</a>
+</em>
 
-<p><i>Last changed: $Date$</i>
-<HR>
-<br><a href=index.html>Help Index</a>
+<p>
+<i>Last changed: $Date$</i>
+
+<hr>
+<br>
+<a href="index.html">Main index</a> -
+<a href="database.html">database index</a> -
+<a href="full_index.html">full index</a>
 </body>
 </html>
