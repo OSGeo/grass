@@ -249,8 +249,12 @@ static void make_list(
 	return;
 
     if (count > 0) {
-	if (any)
-	    fprintf(stdout, "\n");
+	if (any) {
+	    if (pretty)
+		fprintf(stdout, "\n");
+	    else
+		fprintf(stdout, "%s", separator);
+	}
 	G_message(_("%s available in mapset <%s>:"),
 		  elem->text, mapset);
     }
