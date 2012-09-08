@@ -386,7 +386,8 @@ static void close_map(map * m)
 
 int map_type(const char *name, int mod)
 {
-    char *mapset, *tmpname;
+    const char *mapset;
+    char *tmpname;
     int result;
 
     switch (mod) {
@@ -425,7 +426,8 @@ int map_type(const char *name, int mod)
 int open_map(const char *name, int mod, int row, int col)
 {
     int i;
-    char *mapset, *tmpname;
+    const char *mapset;
+    char *tmpname;
     int use_cats = 0;
     int use_colors = 0;
     map *m;
