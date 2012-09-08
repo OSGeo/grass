@@ -157,6 +157,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
    \param graph input graph
    \param source_list list of sources
    \param sink_list list of sinks
+   \param flow
    \param[out] cut list of edges (cut)
 
    \return number of edges
@@ -250,7 +251,7 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
 
    \param in from graph
    \param out to graph
-   \param node_cost list of node costs
+   \param node_costs list of node costs
 
    \return number of undirected edges in the graph
    \return -1 on failure

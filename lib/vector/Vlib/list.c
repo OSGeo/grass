@@ -279,7 +279,8 @@ void Vect_destroy_boxlist(struct boxlist *list)
  * \brief Append new item to the end of list if not yet present 
  *
  * \param[in,out] list pointer to ilist structure
- * \param val new item to append to the end of list
+ * \param id new item to append to the end of list
+ * \param box bounding box
  *
  * \return 0 on success
  * \return 1 on error
@@ -352,7 +353,7 @@ int Vect_boxlist_append_boxlist(struct boxlist *alist, const struct boxlist *bli
  * \brief Remove a given value (item) from list
  *
  * \param[in,out] list pointer to boxlist structure
- * \param val to remove
+ * \param id to remove
  *
  * \return 0 on success
  * \return 1 on error
@@ -406,7 +407,7 @@ int Vect_boxlist_delete_boxlist(struct boxlist *alist, const struct boxlist *bli
  * \brief Find a given item in the list
  *
  * \param list pointer to boxlist structure
- * \param val value of item
+ * \param id value of item
  *
  * \return 1 if an item is found
  * \return 0 no found item in the list

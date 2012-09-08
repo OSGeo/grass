@@ -142,11 +142,11 @@ void D_show_conversions(void)
  * allows conversions between all three coordinate systems to be performed.
  * Note this routine is called by <i>D_setup</i>.
  *
- *  \param region
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
+ *  \param window region
+ *  \param t top
+ *  \param b bottom
+ *  \param l left
+ *  \param r right
  *  \return none
  */
 void D_do_conversions(const struct Cell_head *window,
@@ -217,10 +217,10 @@ void D_set_src(double t, double b, double l, double r)
  * D_get_src() returns the frame bounds in the source coordinate system
  * (used by D_* functions)
  *
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
+ *  \param t top
+ *  \param b bottom
+ *  \param l left
+ *  \param r right
  *  \return void
  */
 void D_get_src(double *t, double *b, double *l, double *r)
@@ -265,10 +265,10 @@ void D_set_dst(double t, double b, double l, double r)
  * The various D_setup() commands all set the destination coordinate
  * system to the current frame reported by R_get_window().
  *
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
+ *  \param t top
+ *  \param b bottom
+ *  \param l left
+ *  \param r right
  *  \return none
  */
 void D_get_dst(double *t, double *b, double *l, double *r)
@@ -309,7 +309,7 @@ void D_get_d(double x[2][2])
  * Returns a <i>row</i> value in the array coordinate system when provided the
  * corresponding <b>y</b> value in the screen coordinate system.
  *
- *  \param y
+ *  \param D_row y
  *  \return double
  */
 
@@ -325,7 +325,7 @@ double D_d_to_a_row(double D_row)
  * Returns a <i>column</i> value in the array coordinate system when provided the
  * corresponding <b>x</b> value in the screen coordinate system.
  *
- *  \param x
+ *  \param D_col x
  *  \return double
  */
 
@@ -341,7 +341,7 @@ double D_d_to_a_col(double D_col)
  * Returns a <i>north</i> value in the earth coordinate system when provided the
  * corresponding <b>y</b> value in the screen coordinate system.
  *
- *  \param y
+ *  \param D_row y
  *  \return double
  */
 
@@ -357,7 +357,7 @@ double D_d_to_u_row(double D_row)
  * Returns an <i>east</i> value in the earth coordinate system when provided the
  * corresponding <b>x</b> value in the screen coordinate system.
  *
- *  \param x
+ *  \param D_col x
  *  \return double
  */
 
@@ -373,7 +373,7 @@ double D_d_to_u_col(double D_col)
  * Returns a <i>y</i> value in the earth coordinate system when provided the
  * corresponding <b>row</b> value in the array coordinate system.
  *
- *  \param row
+ *  \param A_row row
  *  \return double
  */
 
@@ -390,7 +390,7 @@ double D_a_to_u_row(double A_row)
  * provided the corresponding <b>column</b> value in the array coordinate
  * system.
  *
- *  \param column
+ *  \param A_col column
  *  \return double
  */
 
@@ -406,7 +406,7 @@ double D_a_to_u_col(double A_col)
  * Returns a <i>y</i> value in the screen coordinate system when provided the
  * corresponding <b>row</b> value in the array coordinate system.
  *
- *  \param row
+ *  \param A_row row
  *  \return double
  */
 
@@ -423,7 +423,7 @@ double D_a_to_d_row(double A_row)
  * provided the corresponding <b>column</b> value in the array coordinate
  * system.
  *
- *  \param column
+ *  \param A_col column
  *  \return double
  */
 
@@ -439,7 +439,7 @@ double D_a_to_d_col(double A_col)
  * Returns a <i>y</i> value in the screen coordinate system when provided the
  * corresponding <b>north</b> value in the earth coordinate system.
  *
- *  \param north
+ *  \param U_row north
  *  \return double
  */
 
@@ -455,7 +455,7 @@ double D_u_to_d_row(double U_row)
  * Returns an <i>x</i> value in the screen coordinate system when provided the
  * corresponding <b>east</b> value in the earth coordinate system.
  *
- *  \param east
+ *  \param U_col east
  *  \return double
  */
 
@@ -471,7 +471,7 @@ double D_u_to_d_col(double U_col)
  * Returns a <i>row</i> value in the array coordinate system when provided the
  * corresponding <b>north</b> value in the earth coordinate system.
  *
- *  \param north
+ *  \param U_row north
  *  \return double
  */
 
@@ -487,7 +487,7 @@ double D_u_to_a_row(double U_row)
  * Returns a <i>column</i> value in the array coordinate system when provided the
  * corresponding <b>east</b> value in the earth coordinate system.
  *
- *  \param east
+ *  \param U_col east
  *  \return double
  */
 

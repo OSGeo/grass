@@ -14,11 +14,9 @@
 
 
 /*!
- * \brief 
+ * \brief This function ignores the error.
  *
- *  This function ignores the error.
- *
- *  \param 
+ *  \param msg
  *  \return void
  */
 
@@ -28,12 +26,12 @@ void Rast3d_skip_error(const char *msg)
 
 
 /*!
- * \brief 
+ * \brief Prints error message
  *
  *  This function prints the
- * error message <em>msg</em> to <em>stderr</em> and returns.
+ *  error message <em>msg</em> to <em>stderr</em> and returns.
  *
- *  \param 
+ *  \param msg
  *  \return void
  */
 
@@ -46,12 +44,12 @@ void Rast3d_print_error(const char *msg)
 
 
 /*!
- * \brief 
+ * \brief Prints fatal error message
  *
- *  This function prints the
- * error message <em>msg</em>, and terminates the program with an error status.
+ *  This function prints the fatal
+ *  error message <em>msg</em>, and terminates the program with an error status.
  *
- *  \param 
+ *  \param msg
  *  \return void
  */
 

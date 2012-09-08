@@ -18,7 +18,7 @@
 /*!
   \brief Get list structure
 
-  \param element id
+  \param n element id
   
   \return pointer to list structure
   \return NULL on error

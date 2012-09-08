@@ -37,7 +37,6 @@ static int init(void);
  *
  * Initializes GIS engine and ensures a valid mapset is available.
  *
- * \param[in] pgm Program (module) name
  * \return always returns 0 on success
  * \return exit() is called on error
  */

@@ -69,7 +69,7 @@ int g3d_vertical_unit_default = U_UNDEFINED;
 
 
 /*!
- * \brief 
+ * \brief set compression mode
  *
  * <em>doCompress</em> should be one of RASTER3D_NO_COMPRESSION and
  * RASTER3D_COMPRESSION, <em>doRle</em> should be either RASTER3D_NO_RLE or
@@ -112,9 +112,7 @@ Rast3d_set_compression_mode(int doCompress, int doLzw, int doRle, int precision)
 
 
 /*!
- * \brief 
- *
- * 
+ * \brief get compression mode
  *
  *  \param doCompress
  *  \param doLzw
@@ -141,9 +139,7 @@ Rast3d_get_compression_mode(int *doCompress, int *doLzw, int *doRle,
 
 
 /*!
- * \brief 
- *
- *  set cache size
+ * \brief set cache size
  *
  *  \param nTiles
  *  \return void
@@ -161,9 +157,7 @@ void Rast3d_set_cache_size(int nTiles)
 
 
 /*!
- * \brief 
- *
- *  get cache size
+ * \brief get cache size
  *
  *  \return int
  */
@@ -178,8 +172,6 @@ int Rast3d_get_cache_size()
 
 /*!
  * \brief Set cache limit
- *
- *  set cache limit
  *
  *  \param nBytes
  *  \return void
@@ -199,9 +191,6 @@ void Rast3d_set_cache_limit(int nBytes)
 /*!
  * \brief Get cache limit
  *
- *  get cache limit
- *
- *  \param nBytes
  *  \return int
  */
 
@@ -214,9 +203,7 @@ int Rast3d_get_cache_limit()
 
 
 /*!
- * \brief 
- *
- *  set G3d file type
+ * \brief set G3d file type
  *
  *  \param type
  *  \return void
@@ -234,11 +221,8 @@ void Rast3d_set_file_type(int type)
 
 
 /*!
- * \brief 
+ * \brief get G3d file type
  *
- * get G3d file type
- *
- *  \param type
  *  \return int
  */
 
@@ -251,9 +235,7 @@ int Rast3d_get_file_type()
 
 
 /*!
- * \brief 
- *
- * set Tile Dimension
+ * \brief set Tile Dimension
  *
  *  \param tileX
  *  \param tileY
@@ -280,9 +262,7 @@ void Rast3d_set_tile_dimension(int tileX, int tileY, int tileZ)
 
 
 /*!
- * \brief 
- *
- *  get Tile Dimension
+ * \brief get Tile Dimension
  *
  *  \param tileX
  *  \param tileY
@@ -301,11 +281,9 @@ void Rast3d_get_tile_dimension(int *tileX, int *tileY, int *tileZ)
 
 
 /*!
- * \brief 
+ * \brief set error function
  *
- *  set error function
- *
- *  \param 
+ *  \param fun
  *  \return void
  */
 
@@ -318,9 +296,7 @@ void Rast3d_set_error_fun(void (*fun) (const char *))
 
 
 /*!
- * \brief 
- *
- * Initializes the default values described
+ * \brief Initializes the default values described
  * in RASTER3D Defaults.  Applications have to use this function only if they need to
  * query the default values before the first file (either old or new) has been
  * opened.

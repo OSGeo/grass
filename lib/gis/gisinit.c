@@ -32,6 +32,7 @@ static int gisinit(void);
 /*!
   \brief Initialize GIS Library and ensures a valid mapset is available.
   
+  \param version
   \param pgm program (module) name
   
   \return always returns 0 on success

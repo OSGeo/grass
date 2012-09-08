@@ -45,8 +45,9 @@ static void make_incr();
  * elements are set to zero.
  </li></ul>
  *
- *
+ *  \param dt
  *  \param from
+ *  \param to
  *  \param round
  *  \return int
  */

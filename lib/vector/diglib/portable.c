@@ -636,6 +636,7 @@ int dig__fwrite_port_F(const float *buf,
    \param buf data buffer
    \param cnt number of members
    \param[in,out] fp pointer to struct gvfile
+   \param port_off_t_size
 
    \return 0 error
    \return 1 OK

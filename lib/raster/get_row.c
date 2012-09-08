@@ -651,7 +651,6 @@ void Rast_get_row_nomask(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  * \param fd file descriptor for the opened raster map
  * \param buf buffer for the row to be placed into
  * \param row data row desired
- * \param data_type data type
  *
  * \return void
  */
@@ -668,7 +667,6 @@ void Rast_get_c_row_nomask(int fd, CELL * buf, int row)
  * \param fd file descriptor for the opened raster map
  * \param buf buffer for the row to be placed into
  * \param row data row desired
- * \param data_type data type
  *
  * \return void
  */
@@ -685,7 +683,6 @@ void Rast_get_f_row_nomask(int fd, FCELL * buf, int row)
  * \param fd file descriptor for the opened raster map
  * \param buf buffer for the row to be placed into
  * \param row data row desired
- * \param data_type data type
  *
  * \return void
  */
@@ -991,6 +988,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 
    \param fd file descriptor for the opened map
    \param buf buffer for the row to be placed into
+   \param flags
    \param row data row desired
 
    \return void

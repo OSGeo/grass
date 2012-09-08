@@ -38,7 +38,7 @@ void G_init_ilist(struct ilist *list)
  *  In case reallocation fails, G_fatal_error() will be invoked by the
  *  allocation function.
  *
- * \param ilist The ilist pointer
+ * \param list The ilist pointer
  * \param val The value to attach
  *
  * */

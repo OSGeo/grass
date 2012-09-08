@@ -51,7 +51,7 @@ void Rast_set_c_color(CELL cat, int r, int g, int b, struct Colors *colors)
  * 
  * See Rast_set_c_color() for detailed information.
  *
- * \param cat raster cell value
+ * \param val raster cell value
  * \param r red value
  * \param g green value
  * \param b blue value

@@ -20,8 +20,8 @@
 
   \param driver db driver
   \param table_name table name
-  \param[out] list of db indexes
-  \param[out] number of items in the list
+  \param[out] list list of db indexes
+  \param[out] dbDriver number of items in the list
 
   \return DB_OK on success
   \return DB_FAILED on failure

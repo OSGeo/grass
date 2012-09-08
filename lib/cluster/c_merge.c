@@ -16,7 +16,7 @@
 /*!
   \brief ?
   
-  \param pointer to Cluster structure
+  \param C pointer to Cluster structure
 
   \return 0
 */

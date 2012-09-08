@@ -12,8 +12,8 @@
  * letters in the string <b>s</b> are converted to their lower case equivalent.
  * Returns <b>s.</b>
  *
- *  \param s
- *  \return char * 
+ *  \param string
+ *  \return char
  */
 
 char *G_tolcase(char *string)
@@ -42,8 +42,8 @@ char *G_tolcase(char *string)
  * Lower case letters in the string <b>s</b> are converted to their upper case equivalent.
  * Returns <b>s.</b>
  *
- *  \param s
- *  \return char * 
+ *  \param string
+ *  \return char
  */
 
 char *G_toucase(char *string)

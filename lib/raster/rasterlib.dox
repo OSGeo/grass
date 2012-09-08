@@ -783,7 +783,7 @@ while(Rast_next_cell_stat(&cat, &count, &s))
 
 \section  GRASS_5_raster_API GRASS 5 raster API
 
-<em>Needs to be merged into above sections.<em>
+<em>Needs to be merged into above sections.</em>
 
 \subsection The_CELL_Data_Type The CELL Data Type
 

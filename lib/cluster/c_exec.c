@@ -15,10 +15,12 @@
 #include <grass/glocale.h>
 
 /*!
+  \param C pointer to Cluster structure
   \param maxclass maximum number of classes
   \param iterations maximum number of iterations
   \param convergence percentage of points stable
   \param separation minimum distance between class centroids
+  \param min_class_size minimum size of class
   \param checkpoint routine to be called at various steps
   \param interrupted boolean to check for interrupt
 

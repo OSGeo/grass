@@ -171,7 +171,7 @@ static int sort_by_size(const void *a, const void *b)
 /*!
    \brief Find area outside island
 
-   \param Map_info vector map
+   \param Map vector map
    \param isle isle id
 
    \return area id
@@ -368,7 +368,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 /*!
    \brief (Re)Attach isle to area
 
-   \param Map_info vector map
+   \param Map vector map
    \param isle isle id
 
    \return 0
@@ -405,7 +405,7 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 /*!
    \brief (Re)Attach isles to areas in given bounding box
 
-   \param Map_info vector map
+   \param Map vector map
    \param box bounding box
 
    \return 0
@@ -469,7 +469,7 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
     This problem can be avoided altogether if properly attached
     centroids are skipped MM 2009
 
-   \param Map_info vector map
+   \param Map vector map
    \param box bounding box
 
    \return 0
@@ -742,6 +742,7 @@ int Vect_get_built(const struct Map_info *Map)
   implementation issues.
 
   \param Map pointer to Map_info
+  \param build
 */
 void Vect__build_downgrade(struct Map_info *Map, int build)
 {

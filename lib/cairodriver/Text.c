@@ -317,7 +317,7 @@ static void font_list_toy(char ***list, int *count, int verbose)
   \brief Get list of fonts
 
   \param[out] list font list
-  \param[out] number of items in the list
+  \param[out] count number of items in the list
 */
 void Cairo_font_list(char ***list, int *count)
 {
@@ -331,7 +331,7 @@ void Cairo_font_list(char ***list, int *count)
   \brief Get fonts into
 
   \param[out] list font list
-  \param[out] number of items in the list
+  \param[out] count number of items in the list
 */
 void Cairo_font_info(char ***list, int *count)
 {

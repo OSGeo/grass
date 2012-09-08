@@ -91,7 +91,7 @@ void Vect_destroy_line_struct(struct line_pnts *p)
 
    \param Points pointer to line_ptns structure
    \param x,y,z  array of coordinates
-   \param number of points to be copied
+   \param n number of points to be copied
 
    \return 0 on success
    \return -1 on out of memory

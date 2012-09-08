@@ -143,10 +143,10 @@ static void reduce_path(struct path *dst, const struct path *src, double eps)
  * Sets the clipping window to the pixel window that corresponds
  * to the current database region. This is the default.
  *
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
+ *  \param t top
+ *  \param b bottom
+ *  \param l left
+ *  \param r right
  */
 
 void D_set_clip(double t, double b, double l, double r)

@@ -43,7 +43,7 @@ static void sort_dirent(dbDirent *, int);
   Append one entry with name = NULL to mark end of array
   
   \param dirname directory name
-  \param[out] number of entities
+  \param[out] n number of entities
 
   \return pointer to dbDirent
   \return NULL on error

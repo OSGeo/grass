@@ -20,7 +20,8 @@
   
   \param Points1 first line geometry
   \param Points2 second line geometry
-  \param[out] index of minimal distance
+  \param with_z WITH_Z for 3D data
+  \param[out] mindistidx index of minimal distance
   
   \return minimal distance betwen two lines (their nodes)
 */

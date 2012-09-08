@@ -74,8 +74,6 @@ int db_d_begin_transaction(void)
 /*!
   \brief Commit transaction
   
-  \param driver db driver
-  
   \return DB_OK on success
   \return DB_FAILED on failure
  */
