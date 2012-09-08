@@ -430,6 +430,7 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
 
    \param Plus pointer to Plus_head structure
    \param line line id
+   \param x,y,z coordinates
 
    \return 0
  */

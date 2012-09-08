@@ -26,9 +26,9 @@ static void add_color_rule(const void *, int, int, int,
   
   See Rast_add_color_rule() for details.
   
-  \param v1 cell value
+  \param val1 cell value
   \param r1,g1,b1 color value
-  \param v2 cell value
+  \param val2 cell value
   \param r2,g2,b2 color value
   \param[in,out] colors pointer to color table structure
 */
@@ -46,9 +46,9 @@ void Rast_add_d_color_rule(const DCELL * val1, int r1, int g1, int b1,
   
   See Rast_add_color_rule() for details.
   
-  \param v1 cell value
+  \param cat1 cell value
   \param r1,g1,b1 color value
-  \param v2 cell value
+  \param cat2 cell value
   \param r2,g2,b2 color value
   \param[in,out] colors pointer to color table structure
 */
@@ -66,9 +66,9 @@ void Rast_add_f_color_rule(const FCELL * cat1, int r1, int g1, int b1,
   
   See Rast_add_color_rule() for details.
   
-  \param v1 cell value
+  \param cat1 cell value
   \param r1,g1,b1 color value
-  \param v2 cell value
+  \param cat2 cell value
   \param r2,g2,b2 color value
   \param[in,out] colors pointer to color table structure
 */
@@ -94,9 +94,9 @@ void Rast_add_c_color_rule(const CELL * cat1, int r1, int g1, int b1,
    - If <em>map_type</em> is FCELL_TYPE, calls Rast_add_f_color_rule()
    - If <em>map_type</em> is DCELL_TYPE, calls Rast_add_d_color_rule()
    
-  \param v1 cell value
+  \param val1 cell value
   \param r1,g1,b1 color value
-  \param v2 cell value
+  \param val2 cell value
   \param r2,g2,b2 color value
   \param[in,out] colors pointer to color table structure
   \param data_type raster data type (CELL, FCELL, DCELL)

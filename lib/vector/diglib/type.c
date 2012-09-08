@@ -50,7 +50,7 @@ int dig_type_to_store(int type)
 /*!
    \brief Convert type from store type
 
-   \param type feature store type
+   \param stype feature store type
 
    \return type
  */

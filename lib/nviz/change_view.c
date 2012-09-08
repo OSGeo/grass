@@ -88,8 +88,8 @@ int Nviz_update_ranges(nv_data * dc)
 /*!
    \brief Change position of view
 
-   \param data nviz data
-   \param x_pos,y_pos x,y position (model coordinates)
+   \param x_pos x position (model coordinates)
+   \param y_pos y position (model coordinates)
 
    \return 1
  */
@@ -149,7 +149,6 @@ void Nviz_get_viewpoint_position(double *x_pos, double *y_pos)
 /*!
    \brief Change viewpoint height
 
-   \param data nviz data
    \param height height value (world coordinates)
 
    \return 1
@@ -191,7 +190,6 @@ void Nviz_get_viewpoint_height(double *height)
 /*!
    \brief Change viewpoint perspective (field of view)
 
-   \param data nviz data
    \param persp perspective value (0-100, in degrees)
 
    \return 1
@@ -213,8 +211,7 @@ int Nviz_set_viewpoint_persp(int persp)
 /*!
    \brief Change viewpoint twist
 
-   \param data nviz data
-   \param persp twist value (-180-180, in degrees)
+   \param twist persp twist value (-180-180, in degrees)
 
    \return 1
  */
@@ -314,6 +311,7 @@ void Nviz_init_rotation(void)
   Changes viewpoint and viewdir.
   Based on visualization/nviz/src/togl_flythrough.c and simplified.
 
+  \param data nviz data
   \param fly_info values computed from mouse movement
   \param scale rate of movement
   \param lateral type of movement

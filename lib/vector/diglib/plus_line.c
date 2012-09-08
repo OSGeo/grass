@@ -120,6 +120,7 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
  * \param[in] type feature type
  * \param[in] Points line geometry
  * \param[in] offset line offset
+ * \param[in] box bounding box
  *
  * \return -1 on error      
  * \return line id
@@ -175,6 +176,7 @@ dig_add_line(struct Plus_head *plus, int type, const struct line_pnts *Points,
  * \param[in] type feature type
  * \param[in] Points line geometry
  * \param[in] offset line offset
+ * \param[in] box bounding box
  *
  * \return -1 on error      
  * \return line id
@@ -201,6 +203,7 @@ dig_restore_line(struct Plus_head *plus, int lineid,
  *
  * \param[in,out] plus pointer to Plus_head structure
  * \param[in] line line id
+ * \param[in] x,y,z coordinates
  *
  * \return -1 on error
  * \return  0 OK

@@ -366,7 +366,7 @@ int dig_write_plus_file(struct gvfile * fp_plus, struct Plus_head *Plus)
 /*!
  * \brief Writes topo structure (nodes) to topo file
  *
- * \param[in,out] fp_plus topo file
+ * \param[in,out] plus topo file
  * \param[in] Plus pointer to Plus_head structure
  *
  * \return 0 on success
@@ -390,7 +390,7 @@ int dig_write_nodes(struct gvfile * plus, struct Plus_head *Plus)
 /*!
  * \brief Writes topo structure (lines) to topo file
  *
- * \param[in,out] fp_plus topo file
+ * \param[in,out] plus topo file
  * \param[in] Plus pointer to Plus_head structure
  *
  * \return 0 on success
@@ -415,7 +415,7 @@ int dig_write_lines(struct gvfile * plus, struct Plus_head *Plus)
 /*!
  * \brief Writes topo structure (areas) to topo file
  *
- * \param[in,out] fp_plus topo file
+ * \param[in,out] plus topo file
  * \param[in] Plus pointer to Plus_head structure
  *
  * \return 0 on success
@@ -440,7 +440,7 @@ int dig_write_areas(struct gvfile * plus, struct Plus_head *Plus)
 /*!
  * \brief Writes topo structure (isles) to topo file
  *
- * \param[in,out] fp_plus topo file
+ * \param[in,out] plus topo file
  * \param[in] Plus pointer to Plus_head structure
  *
  * \return 0 on success

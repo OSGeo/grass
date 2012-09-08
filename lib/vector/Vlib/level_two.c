@@ -39,7 +39,7 @@ plus_t Vect_get_num_nodes(const struct Map_info *Map)
 /*!
    \brief Get number of primitives in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
    \param type feature type
 
    \return number of primitives
@@ -67,7 +67,7 @@ plus_t Vect_get_num_primitives(const struct Map_info *Map, int type)
 /*!
    \brief Fetch number of features (points, lines, boundaries, centroids) in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of features
  */
@@ -79,7 +79,7 @@ plus_t Vect_get_num_lines(const struct Map_info *Map)
 /*!
    \brief Get number of areas in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of areas
  */
@@ -91,7 +91,7 @@ plus_t Vect_get_num_areas(const struct Map_info *Map)
 /*!
    \brief Fetch number of kernels in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of kernels
  */
@@ -104,7 +104,7 @@ plus_t Vect_get_num_kernels(const struct Map_info *Map)
 /*!
    \brief Get number of faces in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of faces
  */
@@ -117,7 +117,7 @@ plus_t Vect_get_num_faces(const struct Map_info *Map)
 /*!
    \brief Fetch number of volumes in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of volumes
  */
@@ -130,7 +130,7 @@ plus_t Vect_get_num_volumes(const struct Map_info *Map)
 /*!
    \brief Get number of islands in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of islands
  */
@@ -143,7 +143,7 @@ plus_t Vect_get_num_islands(const struct Map_info *Map)
 /*!
    \brief Fetch number of holes in vector map
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of holes
  */
@@ -156,7 +156,7 @@ plus_t Vect_get_num_holes(const struct Map_info *Map)
 /*!
    \brief Get number of defined dblinks
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of dblinks
  */
@@ -172,7 +172,7 @@ int Vect_get_num_dblinks(const struct Map_info *Map)
    Note: Vect_set_updated() must be called to maintain list of updated
    features
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of updated features
  */
@@ -187,7 +187,7 @@ int Vect_get_num_updated_lines(const struct Map_info *Map)
    Note: Vect_set_updated() must be called to maintain list of updated
    features
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
    \param idx index
 
    \return updated line
@@ -203,7 +203,7 @@ int Vect_get_updated_line(const struct Map_info *Map, int idx)
    Note: Vect_set_updated() must be called to maintain list of updated
    features
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
    \param idx index
 
    \return updated line
@@ -216,7 +216,7 @@ off_t Vect_get_updated_line_offset(const struct Map_info *Map, int idx)
 /*!
    \brief Get number of updated nodes
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
 
    \return number of updated nodes
  */
@@ -231,7 +231,7 @@ int Vect_get_num_updated_nodes(const struct Map_info *Map)
    Note: Vect_set_updated() must be called to maintain list of updated
    features
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
    \param idx index
 
    \return updated node
@@ -244,7 +244,7 @@ int Vect_get_updated_node(const struct Map_info *Map, int idx)
 /*!
    \brief Get line type
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
    \param line line id
 
    \return line type
@@ -262,7 +262,7 @@ int Vect_get_line_type(const struct Map_info *Map, int line)
 /*!
    \brief Get node coordinates
 
-   \param map pointer to Map_info struct
+   \param Map pointer to Map_info struct
    \param num node id
    \param x,y,z coordinates values (for 2D coordinates z is NULL)
 

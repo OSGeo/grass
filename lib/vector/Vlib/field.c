@@ -205,6 +205,7 @@ int Vect_map_check_dblink(const struct Map_info *Map, int field, const char *nam
 
   \param p pointer to existing dblinks structure
   \param field layer number
+  \param name layer name
 
   \return 1 dblink for field exists
   \return 0 dblink does not exist for field

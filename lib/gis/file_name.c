@@ -19,7 +19,7 @@
 /*!
   \brief Builds full path names to GIS data files
 
-  If name is of the form nnn@ppp then path is set
+  If name is of the form "nnn@ppp" then path is set
   as if name had been nnn and mapset had been ppp
   (mapset parameter itself is ignored in this case)
   

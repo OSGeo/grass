@@ -27,7 +27,7 @@
  * Color range is 0-255.
  *
  * \param colors pointer to Colors structure which holds color info
- * \param stalf pointer to Cell_stats structure which holds cell stats info
+ * \param statf pointer to Cell_stats structure which holds cell stats info
  */
 void Rast_make_histogram_eq_colors(struct Colors *colors,
 				   struct Cell_stats *statf)
@@ -94,7 +94,7 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
    cell stats structure info. Color range is 0-255.
 
    \param colors pointer to Colors structure which holds color info
-   \param stalf pointer to Cell_stats structure which holds cell stats info
+   \param statf pointer to Cell_stats structure which holds cell stats info
    \param min minimum value
    \param max maximum value
  */

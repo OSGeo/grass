@@ -27,7 +27,7 @@
    Array degree has to be properly initialised to nnodes+1 elements
 
    \param graph input graph
-   \param[out] array of degrees
+   \param[out] degree array of degrees
  */
 void NetA_degree_centrality(dglGraph_s * graph, double *degree)
 {

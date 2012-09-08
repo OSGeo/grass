@@ -43,7 +43,7 @@ struct P_node *dig_alloc_node()
 /*!
   \brief Free node structure
 
-  \param pointer to P_node struct to be freed
+  \param Node pointer to P_node struct to be freed
 */
 void dig_free_node(struct P_node *Node)
 {
@@ -181,10 +181,11 @@ void dig_free_line(struct P_line *Line)
 /*!
   \brief Reallocate array of pointers to lines.
   
- \param add space for 'add' number of lines is added.
+  \param Plus pointer to Plus_head structure
+  \param add space for 'add' number of lines is added.
  
- \return 0 on success
- \return -1 on error
+  \return 0 on success
+  \return -1 on error
 */
 int dig_alloc_lines(struct Plus_head *Plus, int add)
 {
@@ -205,6 +206,7 @@ int dig_alloc_lines(struct Plus_head *Plus, int add)
 /*!
   \brief Reallocate array of pointers to areas.
 
+  \param Plus pointer to Plus_head structure
   \param add space for 'add' number of areas is added
  
   \return 0 on success
@@ -229,6 +231,7 @@ int dig_alloc_areas(struct Plus_head *Plus, int add)
 /*!
   \brief Reallocate array of pointers to isles
 
+  \param Plus pointer to Plus_head structure
   \param add space for 'add' number of isles is added.
  
   \return 0 on success
@@ -273,7 +276,7 @@ struct P_area *dig_alloc_area()
 /*!
   \brief Free area structure
 
-  \param pointer to P_area struct to be freed
+  \param Area pointer to P_area struct to be freed
 */
 void dig_free_area(struct P_area *Area)
 {
@@ -308,7 +311,7 @@ struct P_isle *dig_alloc_isle()
 /*!
   \brief Free isle structure
 
-  \param pointer to P_isle struct to be freed
+  \param Isle pointer to P_isle struct to be freed
 */
 void dig_free_isle(struct P_isle *Isle)
 {
@@ -368,7 +371,7 @@ int dig_alloc_points(struct line_pnts *points, int num)
   \brief Allocate room for 'num' fields and category arrays 
   in struct line_cats 
 
-  \param points pointer to line_cats struct
+  \param cats pointer to line_cats struct
   \param num number of cats
  
   \return 0 on success
@@ -456,7 +459,7 @@ int dig_area_alloc_isle(struct P_area * area, int add)
 /*!
   \brief Allocate space in  P_isle for add new lines
 
-  \param area pointer to P_area struct
+  \param isle pointer to P_area struct
   \param add number of isle to be added
 
   \return 0 on success

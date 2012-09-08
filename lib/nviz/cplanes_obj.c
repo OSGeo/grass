@@ -23,6 +23,9 @@ static geoview Gv;
    The number of clip planes is fixed (MAX_CPLANES) and
    we'll create them all ahead of time anyway we just let
    the user decide on the id for each.
+
+   \param data nviz data
+   \param id
  */
 int Nviz_new_cplane(nv_data * data, int id)
 {
@@ -68,6 +71,7 @@ int Nviz_off_cplane(nv_data * data, int id)
 /*!
    \brief Draw the clip plane
 
+   \param data nviz data
    \param bound1
    \param bound2
  */

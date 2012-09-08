@@ -24,7 +24,7 @@
 /*!
    \brief Build topology 
 
-   \param Map_info vector map
+   \param Map vector map
    \param build build level
 
    \return 1 on success

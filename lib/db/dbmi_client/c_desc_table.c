@@ -20,7 +20,7 @@
   
   \param driver db driver
   \param name table name
-  \param[out] pointer to dbTable structure
+  \param[out] table pointer to dbTable structure
 
   \return DB_OK on success
   \return DB_FAILED on failure

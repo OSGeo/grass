@@ -409,12 +409,12 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
 /*!
   \brief Copy a table
  
-  \param from_dvrname name of driver from table is copied
+  \param from_drvname name of driver from table is copied
   \param from_dbname name of database from table is copied
-  \param from_tbl_name name of table to be copied
-  \param to_dvrname name of driver to - where table is copied to
+  \param from_tblname name of table to be copied
+  \param to_drvname name of driver to - where table is copied to
   \param to_dbname name of database to - where table is copied to
-  \param to_dbname name of copied table
+  \param to_tblname name of copied table
 
   \return DB_OK on success
   \return DB_FAILED on failure
@@ -431,12 +431,12 @@ int db_copy_table(const char *from_drvname, const char *from_dbname,
 /*!
   \brief Copy a table (by where statement)
 
-  \param from_dvrname name of driver from table is copied
+  \param from_drvname name of driver from table is copied
   \param from_dbname name of database from table is copied
-  \param from_tbl_name name of table to be copied
-  \param to_dvrname name of driver to - where table is copied to
+  \param from_tblname name of table to be copied
+  \param to_drvname name of driver to - where table is copied to
   \param to_dbname name of database to - where table is copied to
-  \param to_dbname name of copied table
+  \param to_tblname name of copied table
   \param where WHERE SQL condition (without where key word)
 
   \return DB_OK on success
@@ -455,12 +455,12 @@ int db_copy_table_where(const char *from_drvname, const char *from_dbname,
 /*!
   \brief Copy a table (by select statement)
 
-  \param from_dvrname name of driver from table is copied
+  \param from_drvname name of driver from table is copied
   \param from_dbname name of database from table is copied
-  \param from_tbl_name name of table to be copied
-  \param to_dvrname name of driver to - where table is copied to
+  \param from_dbname name of table to be copied
+  \param to_drvname name of driver to - where table is copied to
   \param to_dbname name of database to - where table is copied to
-  \param to_dbname name of copied table
+  \param to_tblname name of copied table
   \param select full select statement
 
   \return DB_OK on success
@@ -479,12 +479,12 @@ int db_copy_table_select(const char *from_drvname, const char *from_dbname,
 /*!
   \brief Copy a table (by keys)
 
-  \param from_dvrname name of driver from table is copied
+  \param from_drvname name of driver from table is copied
   \param from_dbname name of database from table is copied
-  \param from_tbl_name name of table to be copied
-  \param to_dvrname name of driver to - where table is copied to
+  \param from_tblname name of table to be copied
+  \param to_drvname name of driver to - where table is copied to
   \param to_dbname name of database to - where table is copied to
-  \param to_dbname name of copied table
+  \param to_tblname name of copied table
   \param selcol name of column used to select records by values in ivals or NULL
   \param ivals pointer to array of integer values or NULL
   \param nvals number of values in ivals

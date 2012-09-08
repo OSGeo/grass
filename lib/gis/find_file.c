@@ -143,9 +143,9 @@ static const char *find_file1(
  *
  * Returns the mapset name where the file was found.
  *
- * If the user specifies a fully qualified element (<i>name@mapset</i>)
- * which exists, then G_find_file() modifies <i>name</i>
- * by removing the "@<i>mapset</i>" part.
+ * If the user specifies a fully qualified element (name@mapset)
+ * which exists, then G_find_file() modifies "name"
+ * by removing the "@mapset" part.
  *
  * Rejects all names that begin with "."
  *

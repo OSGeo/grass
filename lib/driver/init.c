@@ -42,7 +42,7 @@ int matrix_valid;
 /*!
   \brief Initialize display driver
 
-  \param pointer to driver structure
+  \param drv pointer to driver structure
 */
 void LIB_init(const struct driver *drv)
 {

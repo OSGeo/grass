@@ -173,6 +173,7 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
  * \param[in] plus pointer to Plus_head structure
  * \param[in] n_lines number of lines
  * \param[in] lines array of lines, negative for reverse direction
+ * \param[in] box bounding box
  *
  * \return number of new area
  * \return -1 on error
@@ -459,6 +460,7 @@ int dig_del_area(struct Plus_head *plus, int area)
  * \param[in] current_line current line id, negative if request for node 2
  * \param[in] side side GV_RIGHT or GV_LEFT
  * \param[in] type line type (GV_LINE, GV_BOUNDARY or both)
+ * \param[in] angle
  *
  * \return line number of next angle to follow an line (negative if connected by node2)
  *               (number of current line may be return if dangle - this is used in build)
@@ -671,6 +673,7 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
  * \param[in] plus pointer to Plus_head structure
  * \param[in] n_lines number of lines
  * \param[in] lines array of lines, negative for reverse direction 
+ * \param[in] box bounding box
  *
  * \return number of new isle
  * \return -1 on error

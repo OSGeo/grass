@@ -219,7 +219,7 @@ int db_set_index_type_unique(dbIndex * index)
 /*!
   \brief Set index type to non-unique
   
-  \void return type void?
+  \todo return type void?
 
   \param index pointer to dbIndex
 

@@ -119,6 +119,7 @@ GEOSGeometry *Vect_read_area_geos(struct Map_info * Map, int area)
    You should free allocated memory by GEOSGeom_destroy().
 
    \param Map pointer to Map_info structure
+   \param points pointer to line_pnts structure
    \param type feature type (see supported types)
 
    \return pointer to GEOSGeometry instance

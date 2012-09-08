@@ -22,7 +22,7 @@
   \param List list of selected primitives
   \param layer layer number
   \param del action (non-zero for delete otherwise add)
-  \param cats_list list of category numbers
+  \param Clist list of category numbers
   
   \return number of modified primitives
   \return -1 on error

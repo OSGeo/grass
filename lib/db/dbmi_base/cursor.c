@@ -30,7 +30,7 @@ void db_init_cursor(dbCursor *cursor)
    \brief Allocate table for cursor
 
    \param cursor pointer to dbCursor
-   \param ncol   number of column in table
+   \param ncols  number of column in table
 
    \return DB_OK on success
    \return error code on error

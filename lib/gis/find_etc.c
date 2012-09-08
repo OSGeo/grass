@@ -55,9 +55,9 @@ static char *G__find_etc(const char *name)
  *  note:
  *      rejects all names that begin with "."
  *
- *  \param char *name       file name to look for
+ *  \param name file name to look for
  *
- *  \return char *  pointer to a string with full path to
+ *  \return pointer to a string with full path to
  *              where file was found, or NULL if not found
  */
 char *G_find_etc(const char *name)

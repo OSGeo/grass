@@ -16,7 +16,7 @@
 /*!
   \brief Get distinct value
 
-  \param pointer to Cluster structure
+  \param C pointer to Cluster structure
   \param separation separation value
 
   \return distiction value

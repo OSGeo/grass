@@ -552,6 +552,7 @@ Vect_net_shortest_path(struct Map_info *Map, int from, int to,
    \param Map vector map
    \param line line id
    \param direction direction (GV_FORWARD, GV_BACKWARD) 
+   \param[out] cost
 
    \return 1 OK
    \return 0 does not exist (was not inserted)
@@ -638,6 +639,7 @@ int Vect_net_get_node_cost(const struct Map_info *Map, int node, double *cost)
    \param[out] Points1 pointer to structure where to store vertices on nearest line to node1 (or NULL)
    \param[out] Points2 pointer to structure where to store vertices on nearest line to node2 (or NULL)
    \param[out] pointer where to distance to the line (or NULL)
+   \param[out] distance
 
    \return number of nodes found (0,1,2)
  */
@@ -884,7 +886,7 @@ Vect_net_shortest_path_coor(struct Map_info *Map,
    \param costs pointer where to store costs on the network (or NULL)
    \param Points pointer to the structure where to store vertices of shortest path (or NULL)
    \param List pointer to the structure where list of lines on the network is stored (or NULL)
-   \param List pointer to the structure where list of nodes on the network is stored (or NULL)
+   \param NodesList pointer to the structure where list of nodes on the network is stored (or NULL)
    \param FPoints pointer to the structure where to store line from 'from' to first network node (or NULL)
    \param TPoints pointer to the structure where to store line from last network node to 'to' (or NULL)
    \param fdist distance from 'from' to the net (or NULL)

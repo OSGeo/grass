@@ -96,7 +96,7 @@ static struct Categories save_cats;
  *
  * \param name raster map name
  * \param mapset mapset name
- * \param[out] cats pointer to Cats structure
+ * \param[out] pcats pointer to Cats structure
  * 
  * \return -1 on error
  * \return 0 on success
@@ -132,7 +132,7 @@ int Rast_read_cats(const char *name,
  *
  * \param name vector map name
  * \param mapset mapset name
- * \param[out] cats pointer to Cats structure
+ * \param[out] pcats pointer to Cats structure
  * 
  * \return -1 on error
  * \return 0 on success
@@ -285,7 +285,7 @@ static CELL read_cats(const char *element,
  * map layer does not have a title, then a pointer to the empty string
  * "" is returned.
  *
- * \param cats pointer to Categories structure
+ * \param pcats pointer to Categories structure
  *
  * \return title
  * \return "" if missing
@@ -546,6 +546,7 @@ void Rast_mark_d_cats(const DCELL * rast_row,
  * \param rast_row raster row to update stats
  * \param ncols number of columns
  * \param pcats pointer to Categories structure
+ * \param data_type map type
  *
  * \return -1 on error
  * \return 1 on success
@@ -1174,8 +1175,10 @@ void Rast_set_cats_title(const char *title, struct Categories *pcats)
    \brief Set category fmt (?)
 
    \param fmt
-   \param m1,
-   \param a1,m2,a2
+   \param m1
+   \param a1
+   \param m2
+   \param a2
    \param pcats pointer to Categories structure
  */
 void Rast_set_cats_fmt(const char *fmt, double m1, double a1, double m2,

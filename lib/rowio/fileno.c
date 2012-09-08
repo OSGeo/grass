@@ -18,7 +18,7 @@
  *
  * Returns the file descriptor associated with the ROWIO structure.
  *
- * \param r pointer to ROWIO structure
+ * \param R pointer to ROWIO structure
  *
  * \return file descriptor
  */

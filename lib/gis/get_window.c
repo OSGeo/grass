@@ -99,7 +99,7 @@ void G_get_default_window(struct Cell_head *window)
   
   G_fatal_error() is called on error
   
-  \param window[out] pointer to Cell_head
+  \param window pointer to Cell_head
   \param element element type
   \param name map name
   \param mapset mapset name

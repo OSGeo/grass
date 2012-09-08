@@ -20,7 +20,9 @@
   This color will then be used for any subsequent drawing operation
   until a new source pattern is set.
   
-  \param color value
+  \param r red color value
+  \param g green color value
+  \param b blue color value
 */
 void Cairo_Color(int r, int g, int b)
 {

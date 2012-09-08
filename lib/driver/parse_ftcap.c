@@ -119,7 +119,7 @@ struct GFONT_CAP *parse_fontcap(void)
 /*!
   \brief Free allocated GFONT_CAP structure
 
-  \param fpcap pointer to GFONT_CAP to be freed
+  \param ftcap pointer to GFONT_CAP to be freed
 */
 void free_fontcap(struct GFONT_CAP *ftcap)
 {

@@ -19,7 +19,7 @@
 /*!
   \brief Delete table
 
-  \param drv driver name
+  \param drvname driver name
   \param dbname database name
   \param tblname table name
 

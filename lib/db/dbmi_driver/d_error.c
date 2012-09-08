@@ -60,7 +60,7 @@ void init()
 /*!
   \brief Append error message for DB driver
 
-  \param frmt formatted message
+  \param fmt formatted message
 */
 void db_d_append_error(const char *fmt, ...)
 {

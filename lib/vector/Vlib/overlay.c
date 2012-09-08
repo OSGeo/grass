@@ -47,9 +47,11 @@ int Vect_overlay_str_to_operator(const char *str)
    \brief Overlay 2 vector maps and create new one
 
    \param AMap vector map A
+   \param atype feature type for A
    \param AList unused ?
    \param AAList unused ?
    \param BMap vector map B
+   \param btype feature type for B
    \param BList unused ?
    \param BAList unused ?
    \param operator operator code
@@ -89,7 +91,6 @@ int Vect_overlay(struct Map_info *AMap, int atype, struct ilist *AList, struct i
    \param btype feature type for B
    \param BList unused ?
    \param BAList unused ?
-   \param operator operator code
    \param OMap output vector map
 
    \return 1 on success

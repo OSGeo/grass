@@ -22,7 +22,7 @@
   \param path db path
   \param npaths number of given paths
   \param[out] handles handle infos
-  \param[out] number of handle infos
+  \param[out] count number of handle infos
 
   \return DB_OK on success
   \return DB_FAILED on failure

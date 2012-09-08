@@ -1,17 +1,14 @@
-
 /**
  * \file debug.c
  *
  * \brief GIS Library - Debug functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2012 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
- *
- * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -23,6 +20,26 @@
 
 static int initialized;
 static int grass_debug_level;
+
+/**
+ * \brief Initiate debugging.
+ */
+void G_init_debug(void)
+{
+    const char *lstr;
+
+    if (G_is_initialized(&initialized))
+	return;
+
+    lstr = G__getenv("DEBUG");
+
+    if (lstr != NULL)
+	grass_debug_level = atoi(lstr);
+    else
+	grass_debug_level = 0;
+
+    G_initialize_done(&initialized);
+}
 
 /**
  * \brief Print debugging message.
@@ -45,24 +62,6 @@ static int grass_debug_level;
  * \return 0 on error
  * \return 1 on success
  */
-
-void G_init_debug(void)
-{
-    const char *lstr;
-
-    if (G_is_initialized(&initialized))
-	return;
-
-    lstr = G__getenv("DEBUG");
-
-    if (lstr != NULL)
-	grass_debug_level = atoi(lstr);
-    else
-	grass_debug_level = 0;
-
-    G_initialize_done(&initialized);
-}
-
 int G_debug(int level, const char *msg, ...)
 {
     char *filen;
