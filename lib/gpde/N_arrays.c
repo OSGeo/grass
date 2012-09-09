@@ -94,7 +94,7 @@ N_array_2d *N_alloc_array_2d(int cols, int rows, int offset, int type)
 
     if (data->type == CELL_TYPE) {
 	data->cell_array =
-	    (CELL *) G_calloc(data->rows_intern * data->cols_intern,
+	    (CELL *) G_calloc((size_t) data->rows_intern * data->cols_intern,
 			      sizeof(CELL));
 	G_debug(3,
 		"N_alloc_array_2d: CELL array allocated rows_intern %i cols_intern %i offset %i",
@@ -102,7 +102,7 @@ N_array_2d *N_alloc_array_2d(int cols, int rows, int offset, int type)
     }
     else if (data->type == FCELL_TYPE) {
 	data->fcell_array =
-	    (FCELL *) G_calloc(data->rows_intern * data->cols_intern,
+	    (FCELL *) G_calloc((size_t) data->rows_intern * data->cols_intern,
 			       sizeof(FCELL));
 	G_debug(3,
 		"N_alloc_array_2d: FCELL array allocated rows_intern %i cols_intern %i offset %i",
@@ -111,7 +111,7 @@ N_array_2d *N_alloc_array_2d(int cols, int rows, int offset, int type)
     }
     else if (data->type == DCELL_TYPE) {
 	data->dcell_array =
-	    (DCELL *) G_calloc(data->rows_intern * data->cols_intern,
+	    (DCELL *) G_calloc((size_t) data->rows_intern * data->cols_intern,
 			       sizeof(DCELL));
 	G_debug(3,
 		"N_alloc_array_2d: DCELL array allocated rows_intern %i cols_intern %i offset %i",
@@ -751,7 +751,7 @@ N_array_3d *N_alloc_array_3d(int cols, int rows, int depths, int offset,
 
     if (data->type == FCELL_TYPE) {
 	data->fcell_array =
-	    (float *)G_calloc(data->depths_intern * data->rows_intern *
+	    (float *)G_calloc((size_t) data->depths_intern * data->rows_intern *
 			      data->cols_intern, sizeof(float));
 	G_debug(3,
 		"N_alloc_array_3d: float array allocated rows_intern %i cols_intern %i depths_intern %i offset %i",
@@ -760,7 +760,7 @@ N_array_3d *N_alloc_array_3d(int cols, int rows, int depths, int offset,
     }
     else if (data->type == DCELL_TYPE) {
 	data->dcell_array =
-	    (double *)G_calloc(data->depths_intern * data->rows_intern *
+	    (double *)G_calloc((size_t) data->depths_intern * data->rows_intern *
 			       data->cols_intern, sizeof(double));
 	G_debug(3,
 		"N_alloc_array_3d: double array allocated rows_intern %i cols_intern %i depths_intern %i offset %i",
