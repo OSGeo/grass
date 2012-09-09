@@ -62,12 +62,11 @@ int main(int argc, char **argv)
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
-    fs_opt->description = _("Output field separator");
     fs_opt->guisection = _("Format");
 
     vs_opt = G_define_standard_option(G_OPT_F_SEP);
     vs_opt->key = "vs";
-    vs_opt->description = _("Output vertical record separator");
+    vs_opt->label = _("Output vertical record separator");
     vs_opt->answer = NULL;
     vs_opt->guisection = _("Format");
 
