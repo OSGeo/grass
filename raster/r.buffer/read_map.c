@@ -36,7 +36,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
     register CELL *cell;
     register MAPTYPE *ptr;
 
-    map = (MAPTYPE *) G_malloc(window.rows * window.cols * sizeof(MAPTYPE));
+    map = (MAPTYPE *) G_malloc((size_t) window.rows * window.cols * sizeof(MAPTYPE));
 
     fd = Rast_open_old(input, mapset);
 
