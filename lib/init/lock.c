@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -57,8 +58,8 @@ int main(int argc, char *argv[])
 	G_fatal_error("%s: ", argv[0]);
     }
     if (write(lock, &lockpid, sizeof lockpid) != sizeof lockpid)
-	G_fatal_error(_("Unable to write lockfile %s (disk full? Permissions?)"),
-		      file);
+	G_fatal_error(_("Unable to write lockfile %s (%s)"),
+		      file, strerror(errno));
     close(lock);
     exit(0);
 #endif
