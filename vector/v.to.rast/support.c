@@ -421,6 +421,8 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    RASTER_MAP_TYPE map_type;
 	    long count;
 
+	    map_type = Rast_map_type(rast_name, G_mapset());
+
 	    if (label_column) {
 
 		Rast_set_cats_title("Labels", &rast_cats);
@@ -499,16 +501,14 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		    /* add the raster category to label */
 		    my_labels_rules[i].i = cat;
 
-		    Rast_set_c_cat(&(my_labels_rules[i].i),
+		    Rast_set_cat(&(my_labels_rules[i].i),
 				 &(my_labels_rules[i].i),
 				 db_get_string(&my_labels_rules[i].label),
-				 &rast_cats);
+				 &rast_cats, map_type);
 		}			/* for each value in database */
 	    }
 	    else  {
 		fd = Rast_open_old(rast_name, G_mapset());
-
-		map_type = Rast_map_type(rast_name, G_mapset());
 
 		rowbuf = Rast_allocate_buf(map_type);
 
