@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     double length = -1;
     int vertices = 0;
     double (*line_length) ();
-    int latlon = 0;
+    int geodesic = 0;
 
     G_gisinit(argv[0]);
 
@@ -114,8 +114,14 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unknown unit %s"), units_opt->answer); 
 
 	/* set line length function */
-	if ((latlon = (G_projection() == PROJECTION_LL)) == 1)
-	    line_length = Vect_line_geodesic_length;
+	if (G_projection() == PROJECTION_LL) {
+	    if (strcmp(units_opt->answer, "map") == 0)
+		line_length = Vect_line_length;
+	    else {
+		line_length = Vect_line_geodesic_length;
+		geodesic = 1;
+	    }
+	}
 	else {
 	    double factor;
 	    
@@ -129,7 +135,10 @@ int main(int argc, char *argv[])
 		length = length / factor;
 	    }
 	}
-	G_verbose_message(_("length in %s: %g"), (latlon ? "meters" : "map units"), length);
+	if (strcmp(units_opt->answer, "map") == 0)
+	    G_verbose_message(_("Length in map units: %g"), length);
+	else
+	    G_verbose_message(_("Length in meters: %g"), length);
     }
 
     if (vertices_opt->answer) {
@@ -178,14 +187,18 @@ int main(int argc, char *argv[])
 		    Vect_write_line(&Out, ltype, Points, Cats);
 		}
 		else {
-		    int n, i;
+		    long n, i;
+
+		    G_debug(3, "l: %f, length: %f", l, length);
 
 		    n = ceil(l / length);
-		    if (latlon)
+		    if (geodesic)
 			l = Vect_line_length(Points);
 
 		    step = l / n;
 		    from = 0.;
+		    
+		    G_debug(3, "n: %ld, step: %f", n, step);
 
 		    for (i = 0; i < n; i++) {
 			int ret;
