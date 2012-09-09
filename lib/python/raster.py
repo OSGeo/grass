@@ -89,6 +89,9 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
     """!Interface to r.mapcalc.
 
     @param exp expression
+    @param quiet True to run quietly (<tt>--q</tt>)
+    @param verbose True to run verbosely (<tt>--v</tt>)
+    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
     @param kwargs
     """
     t = string.Template(exp)
@@ -117,6 +120,9 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwar
     \endcode
 
     @param exp expression
+    @param quiet True to run quietly (<tt>--q</tt>)
+    @param verbose True to run verbosely (<tt>--v</tt>)
+    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
     @param kwargs
     
     @return Popen object
@@ -128,3 +134,4 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwar
                         quiet = quiet,
                         verbose = verbose,
                         overwrite = overwrite)
+

@@ -74,6 +74,9 @@ def mapcalc3d(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
     """!Interface to r3.mapcalc.
 
     @param exp expression
+    @param quiet True to run quietly (<tt>--q</tt>)
+    @param verbose True to run verbosely (<tt>--v</tt>)
+    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
     @param kwargs
     """
     t = string.Template(exp)
