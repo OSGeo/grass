@@ -215,12 +215,11 @@ void parse_command_line(int argc, char **argv)
     database->guisection = _("Connection");
     
     fs = G_define_standard_option(G_OPT_F_SEP);
-    fs->description = _("Output field separator");
     fs->guisection = _("Format");
 
     vs = G_define_standard_option(G_OPT_F_SEP);
     vs->key = "vs";
-    vs->description = _("Output vertical record separator");
+    vs->label = _("Output vertical record separator");
     vs->answer = NULL;
     vs->guisection = _("Format");
 
