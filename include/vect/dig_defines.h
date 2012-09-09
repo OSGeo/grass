@@ -184,7 +184,7 @@
 #define GV_POINTS (GV_POINT | GV_CENTROID )
 #define GV_LINES (GV_LINE | GV_BOUNDARY )
 
-/*! \types Used in store like 'coor' file or postgis type column (must not change) */
+/*! \brief Types used in store like 'coor' file or postgis type column (must not change) */
 #define GV_STORE_POINT    1
 #define GV_STORE_LINE     2
 #define GV_STORE_BOUNDARY 3

@@ -7,7 +7,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author David D. Gray <ddgray AT armacde demon co uk>
+ * \author David D. Gray, ddgray@armacde.demon co uk
  * \author GRASS GIS Development Team
  *
  * \date 2000-2007

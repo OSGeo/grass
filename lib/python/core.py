@@ -1168,7 +1168,7 @@ def float_or_dms(s):
 def mapsets(search_path = False):
     """!List available mapsets
 
-    @param searchPatch True to list mapsets only in search path
+    @param search_path True to list mapsets only in search path
     
     @return list of mapsets
     """
@@ -1196,7 +1196,7 @@ def create_location(dbase, location,
     
     @param dbase path to GRASS database
     @param location location name to create
-    @param epgs if given create new location based on EPSG code
+    @param epsg if given create new location based on EPSG code
     @param proj4 if given create new location based on Proj4 definition
     @param filename if given create new location based on georeferenced file
     @param wkt if given create new location based on WKT definition (path to PRJ file)
