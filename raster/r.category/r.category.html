@@ -17,7 +17,7 @@ specified, then the labels for those categories only are printed. The
 values. The user may also (optionally) specify that a field separator other
 than a space or tab be used to separate the category value from its
 corresponding category label in the output, by using the
-<b>fs=</b><em>character</em>|<em>space</em>|<em>tab</em> option (see example
+<b>separator=</b><em>character</em>|<em>space</em>|<em>tab</em> option (see example
 below). If no field separator is specified by the user, a tab is used to
 separate these fields in the output, by default.
 
@@ -120,7 +120,7 @@ prints only the category values and labels for <em>soils</em> map layer
 categories <tt>10, 12</tt>, and <tt>15</tt> through <tt>20</tt>; and
 
 <dt><span class="code"><tt>
-r.category map=soils cats=10,20 fs=':'
+r.category map=soils cats=10,20 separator=':'
 </tt></span>
 <dd>
 prints the values and labels for <em>soils</em> map layer categories
@@ -151,17 +151,19 @@ EOF
 
 <h2>TODO</h2>
 
-Respect the <b>fs=</b> field separator setting for input rules.
+Respect the <b>separator=</b> field separator setting for input rules.
 
 
 <h2>SEE ALSO</h2>
 
 UNIX Manual entries for <i>awk</i> and <i>sort</i>
 
-<p><em><a href="r.coin.html">r.coin</a></em>,
-<em><a href="r.describe.html">r.describe</a></em>,
-<em><a href="d.what.rast.html">d.what.rast</a></em>,
-<em><a href="r.support.html">r.support</a></em>
+<p>
+<em><a href="r.coin.html">r.coin</a>,
+<a href="r.describe.html">r.describe</a>,
+<a href="d.what.rast.html">d.what.rast</a>,
+<a href="r.support.html">r.support</a>
+</em>
 
 <h2>AUTHORS</h2>
 

@@ -50,7 +50,7 @@ boundaries:
 
 <div class="code"><pre>
 # patch tiles after import:
-v.patch -e `g.mlist type=vect pat="clc2000_*" fs=","` out=clc2000_patched
+v.patch -e `g.mlist type=vect pat="clc2000_*" separator=","` out=clc2000_patched
 
 # remove duplicated tile boundaries:
 v.clean clc2000_patched out=clc2000_clean tool=snap,break,rmdupl thresh=.01

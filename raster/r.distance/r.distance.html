@@ -40,20 +40,27 @@ The output format lends itself to filtering.  For example, to "see" lines
 connecting each of the category pairs in two maps, filter the output using
 awk and then into <em>d.graph</em>:
 <p>
-<div class="code"><pre>r.distance maps=map1,map2 | \
-awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m</pre></div>
+<div class="code"><pre>
+r.distance maps=map1,map2 | \
+  awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m
+</pre></div>
 
 <p>To create a vector map of all the "map1" coordinates, filter the output into
 awk and then into <em>v.in.ascii</em>:
 <p>
-<div class="code"><pre>r.distance maps=map1,map2 | \
-<br>awk -F: '{print $4,$5}' | v.in.ascii format=point output=name fs=space</pre></div>
+<div class="code"><pre>
+r.distance maps=map1,map2 | \
+  awk -F: '{print $4,$5}' | v.in.ascii format=point output=name separator=space
+</pre></div>
 
 <h2>SEE ALSO</h2>
-<em><a href="r.buffer.html">r.buffer</a></em>,
-<em><a href="r.cost.html">r.cost</a></em>,
-<em><a href="r.drain.html">r.drain</a></em>,
-<em><a href="v.distance.html">v.distance</a></em>
+
+<em>
+<a href="r.buffer.html">r.buffer</a>,
+<a href="r.cost.html">r.cost</a>,
+<a href="r.drain.html">r.drain</a>,
+<a href="v.distance.html">v.distance</a>
+</em>
 
 <h2>AUTHOR</h2>
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

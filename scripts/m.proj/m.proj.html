@@ -76,7 +76,7 @@ The same, but load points from a file named "<tt>waypoints.txt</tt>" and
 continue on to import the results into a GRASS vector points map in the
 current map projection:
 <div class="code"><pre>
-m.proj -i in=waypoints.txt | cut -f1 -d' ' | v.in.ascii out=test_pt fs=tab
+m.proj -i in=waypoints.txt | cut -f1 -d' ' | v.in.ascii out=test_pt separator=tab
 </pre></div>
 Here the standard UNIX <em>cut</em> tool is used to discard the <tt>z</tt>
 residual.

@@ -74,7 +74,7 @@
 #% answer: float
 #%End
 #%Option
-#% key: sep
+#% key: separator
 #% type: string
 #% required: no
 #% multiple: no

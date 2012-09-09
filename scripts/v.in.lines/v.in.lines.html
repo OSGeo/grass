@@ -2,7 +2,6 @@
 
 Imports a stream of ASCII x,y[,z] coordinates as a line or series of lines.
 
-
 <h2>NOTES</h2>
 
 Input ASCII coordinates are simply a series of "x&nbsp;y" data points.
@@ -12,11 +11,10 @@ Lines are separated by a row containing "<tt>NaN&nbsp;NaN</tt>".
 stream and using the <b>-z</b> flag.
 <p>This script is a simple wrapper around the <em>v.in.mapgen</em> module.
 
-
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-v.in.lines in=- out=two_lines fs=, &lt;&lt;EOF
+v.in.lines in=- out=two_lines separator=, &lt;&lt;EOF
 167.846717,-46.516653
 167.846663,-46.516645
 167.846656,-46.516644

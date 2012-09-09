@@ -29,7 +29,7 @@ North Carolina sample dataset:
 
 <div class="code"><pre>
 g.region rast=lsat7_2002_10 -p
-LIST=`g.mlist type=rast pat="lsat7_2002_[1-5,7]0" fs=","`
+LIST=`g.mlist type=rast pattern="lsat7_2002_[1-5,7]0" separator=","`
 i.spectral raster=$LIST coordinates=637502.25,221744.25
 </pre></div>
 
