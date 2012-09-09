@@ -170,7 +170,7 @@ class ScatterFrame(BasePlotFrame):
                              input = '%s,%s' % rpair,
                              flags = freqflag,
                              nsteps = self.bins,
-                             fs = ',',
+                             sep = ',',
                              quiet = True,
                              read = True)
             

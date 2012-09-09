@@ -689,7 +689,7 @@ class LayerSelect(wx.ComboBox):
             ret = RunCommand('v.db.connect',
                              read = True,
                              quiet = True,
-                             fs = '|',
+                             sep = '|',
                              flags = 'g',
                              map = vector)
             if ret:
@@ -954,7 +954,7 @@ class MapsetSelect(wx.ComboBox):
         if self.searchPath:
             mlist = RunCommand('g.mapsets',
                                read = True, flags = 'p',
-                               fs = 'newline').splitlines()
+                               sep = 'newline').splitlines()
         else:
             mlist = GetListOfMapsets(self.gisdbase, self.location,
                                      selectable = False)

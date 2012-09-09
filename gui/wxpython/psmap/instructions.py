@@ -1396,7 +1396,7 @@ class RasterLegend(InstructionObject):
                 rows = ceil(maxim / cols )
             else:
                 cat = grass.read_command('r.category', map = raster,
-                                    fs = ':').strip().split('\n')
+                                    sep = ':').strip().split('\n')
                 rows = ceil(float(len(cat)) / cols )
                             
                 

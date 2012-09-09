@@ -356,7 +356,7 @@ def matchhist(original, target, matched):
     
     for i in images:
         # calculate number of cells for each grey value for for each image
-        stats_out = grass.pipe_command('r.stats', flags='cin', input= i, fs=':')
+        stats_out = grass.pipe_command('r.stats', flags='cin', input= i, sep=':')
         stats =  stats_out.communicate()[0].split('\n')[:-1]
         stats_dict = dict( s.split(':', 1) for s in stats)
         total_cells = 0 # total non-null cells

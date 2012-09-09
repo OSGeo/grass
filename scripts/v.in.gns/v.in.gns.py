@@ -135,7 +135,7 @@ def main():
 
     columns = [desc[1] for desc in coldescs]
 
-    grass.run_command('v.in.ascii', cat = 0, x = 5, y = 4, fs = ';',
+    grass.run_command('v.in.ascii', cat = 0, x = 5, y = 4, sep = ';',
 		      input = tmpfile, output = filevect,
 		      columns = columns)
 

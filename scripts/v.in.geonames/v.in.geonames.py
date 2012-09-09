@@ -150,7 +150,7 @@ def main():
 		   'timezone varchar(50)',
 		   'modification date']
 
-    grass.run_command('v.in.ascii', cat = 0, x = 6, y = 5, fs = '|',
+    grass.run_command('v.in.ascii', cat = 0, x = 6, y = 5, sep = '|',
 		      input = tmpfile, output = outfile,
 		      columns = columns)
 

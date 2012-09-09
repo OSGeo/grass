@@ -112,7 +112,7 @@ class TrThread(threading.Thread):
 def main():
     input = options['input']
     output = options['output']
-    fs = options['fs']
+    fs = options['sep']
     proj_in = options['proj_input']
     proj_out = options['proj_output']
     ll_in = flags['i']

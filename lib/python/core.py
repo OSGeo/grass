@@ -1178,7 +1178,7 @@ def mapsets(search_path = False):
         flags = 'l'
     mapsets = read_command('g.mapsets',
                            flags = flags,
-                           fs = 'newline',
+                           sep = 'newline',
                            quiet = True)
     if not mapsets:
         fatal(_("Unable to list mapsets"))
