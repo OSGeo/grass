@@ -62,7 +62,7 @@ default action if the <b>cat</b> parameter is not set.
 
 Data may be imported from many spreadsheet programs by saving the
 spreadsheet as a comma separated variable (.csv) text file, and then
-using the <b>fs=','</b> or <b>fs=comma</b> option
+using the <b>separator=','</b> or <b>separator=comma</b> option
 with <em>v.in.ascii</em> in <b>points</b> mode.  If the input file
 contains any header lines, such as column headings, the
 <b>skip</b> parameter should be used. These skipped header lines will
@@ -248,7 +248,7 @@ into <em>v.in.ascii</em>, only the vector map geometry will be generated.
 
 Convert ground control points into vector points:
 <div class="code"><pre>
-cat $MAPSET/group/$GROUP/POINTS | v.in.ascii out=$GROUP_gcp fs=space skip=3 \
+cat $MAPSET/group/$GROUP/POINTS | v.in.ascii out=$GROUP_gcp separator=space skip=3 \
     col='x double precision, y double precision, x_target double precision, \
     y_target double precision, ok int'
 </pre></div>

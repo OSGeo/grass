@@ -199,15 +199,15 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
 
 <div class="code"><pre>
     # scan and set region bounds
-  r.in.xyz -s fs=, in=lidaratm2.txt out=test
+  r.in.xyz -s separator="," in=lidaratm2.txt out=test
   g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
   g.region res=0:00:00.075 -a
     # create "n" map containing count of points per cell for checking density
-  r.in.xyz in=lidaratm2.txt out=lidar_n fs=, method=n zrange=-2,50
+  r.in.xyz in=lidaratm2.txt out=lidar_n separator="," method=n zrange=-2,50
     # check point density [rho = n_sum / (rows*cols)]
   r.univar lidar_n | grep sum
     # create "min" map (elevation filtered for premature hits)
-  r.in.xyz in=lidaratm2.txt out=lidar_min fs=, method=min zrange=-2,50
+  r.in.xyz in=lidaratm2.txt out=lidar_min separator="," method=min zrange=-2,50
     # zoom to area of interest
   g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
     # check number of non-null cells (try and keep under a few million)
