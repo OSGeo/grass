@@ -255,7 +255,7 @@ def ListOfMapsets(get = 'ordered'):
                          read = True,
                          quiet = True,
                          flags = 'l',
-                         fs = 'newline')
+                         sep = 'newline')
         
         if ret:
             mapsets = ret.splitlines()
@@ -268,7 +268,7 @@ def ListOfMapsets(get = 'ordered'):
                          read = True,
                          quiet = True,
                          flags = 'p',
-                         fs = 'newline')
+                         sep = 'newline')
         if ret:
             if get == 'accessible':
                 mapsets = ret.splitlines()
@@ -302,7 +302,7 @@ def GetVectorNumberOfLayers(parent, vector):
                                read = True,
                                flags = 'g',
                                map = fullname,
-                               fs = ';')
+                               sep = ';')
     if ret != 0:
         sys.stderr.write(_("Vector map <%(map)s>: %(msg)s\n") % { 'map' : fullname, 'msg' : msg })
         return layers
@@ -570,7 +570,7 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
                        input = '-',
                        proj_input = projIn,
                        proj_output = projOut,
-                       fs = ';',
+                       sep = ';',
                        stdin = '%f;%f' % (coord[0], coord[1]),
                        read = True)
     if coors:

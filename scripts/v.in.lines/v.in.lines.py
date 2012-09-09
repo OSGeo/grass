@@ -44,7 +44,7 @@ def cleanup():
 def main():
     global tmp
 
-    fs = options['fs']
+    fs = options['sep']
     threeD = flags['z']
 
     prog = 'v.in.lines'

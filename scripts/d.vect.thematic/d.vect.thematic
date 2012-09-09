@@ -361,9 +361,9 @@ if [ "$GIS_FLAG_S" -eq 1 ] ; then
     export GRASS_PNG_AUTO_WRITE
 fi
 
-table=`v.db.connect $GIS_OPT_MAP -g fs=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $2}'`
-database=`v.db.connect $GIS_OPT_MAP -g fs=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $4}'`
-driver=`v.db.connect $GIS_OPT_MAP -g fs=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $5}'`
+table=`v.db.connect $GIS_OPT_MAP -g sep=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $2}'`
+database=`v.db.connect $GIS_OPT_MAP -g sep=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $4}'`
+driver=`v.db.connect $GIS_OPT_MAP -g sep=";" | grep -w $GIS_OPT_LAYER | awk -F ";" '{print $5}'`
 
 if [ -z "$table" ]
     then

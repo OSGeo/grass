@@ -150,7 +150,7 @@ class Histogram2Frame(BasePlotFrame):
                              input = raster,
                              flags = freqflag,
                              nsteps = self.bins,
-                             fs = ',',
+                             sep = ',',
                              quiet = True,
                              read = True)
             

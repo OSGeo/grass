@@ -520,7 +520,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("Name for output file");
 	break;
     case G_OPT_F_SEP:
-	Opt->key = "fs";
+	Opt->key = "separator";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "character";
 	Opt->required = NO;

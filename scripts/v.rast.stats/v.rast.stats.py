@@ -131,7 +131,7 @@ def main():
 	grass.fatal(_("An error occurred while converting vector to raster"))
 
     # dump cats to file to avoid "too many argument" problem:
-    p = grass.pipe_command('r.category', map = rastertmp, fs = ';', quiet = True)
+    p = grass.pipe_command('r.category', map = rastertmp, sep = ';', quiet = True)
     cats = []
     for line in p.stdout:
 	cats.append(line.rstrip('\r\n').split(';')[0])
@@ -219,7 +219,7 @@ def main():
 
     # do the stats
     p = grass.pipe_command('r.univar', flags = 't' + 'g' + extstat, map = raster, 
-                      zones = rastertmp, percentile = percentile, fs = ';')
+                      zones = rastertmp, percentile = percentile, sep = ';')
 
     first_line = 1
     for line in p.stdout:

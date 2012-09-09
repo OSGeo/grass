@@ -101,7 +101,7 @@ def main():
     flags = 'aln'
     if grass.raster_info(infile)['datatype'] in ('FCELL', 'DCELL'):
         flags += 'i'
-    p1 = grass.pipe_command('r.stats', flags = flags, input = (clumpfile, infile), fs = '|')
+    p1 = grass.pipe_command('r.stats', flags = flags, input = (clumpfile, infile), sep = '|')
     p2 = grass.feed_command('r.reclass', input = clumpfile, output = recfile, rules = '-')
     rules = ''
     for line in p1.stdout:

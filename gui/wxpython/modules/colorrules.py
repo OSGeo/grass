@@ -1369,7 +1369,7 @@ class VectorColorTable(ColorTable):
                              map = self.inmap,
                              layer = self.properties['layer'],
                              columns = columns,
-                             fs = sep,
+                             sep = sep,
                              stdout = outFile)
         else:
             self.preview.EraseMap()

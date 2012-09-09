@@ -74,7 +74,7 @@
 #% answer: float
 #%End
 #%Option
-#% key: fs
+#% key: sep
 #% type: string
 #% required: no
 #% multiple: no
@@ -190,7 +190,7 @@ def main():
     output = options['output']
     method = options['method']
     dtype = options['type']
-    fs = options['fs']
+    fs = options['sep']
     x = options['x']
     y = options['y']
     z = options['z']

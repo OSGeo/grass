@@ -177,7 +177,7 @@ class VirtualAttributeList(wx.ListCtrl,
                              quiet = True,
                              parent = self,
                              flags = 'c',
-                             fs = fs,
+                             sep = fs,
                              sql = sql,
                              output = outFile.name)
         else:
@@ -189,7 +189,7 @@ class VirtualAttributeList(wx.ListCtrl,
                                  map = self.mapDBInfo.map,
                                  layer = layer,
                                  columns = ','.join(columns),
-                                 fs = fs,
+                                 sep = fs,
                                  where = where,
                                  stdout = outFile)
             else:
@@ -199,7 +199,7 @@ class VirtualAttributeList(wx.ListCtrl,
                                  flags = 'c',
                                  map = self.mapDBInfo.map,
                                  layer = layer,
-                                 fs = fs,
+                                 sep = fs,
                                  where = where,
                                  stdout = outFile) 
         
