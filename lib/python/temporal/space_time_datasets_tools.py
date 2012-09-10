@@ -197,7 +197,6 @@ def register_maps_in_space_time_dataset(
 
         # Put the map into the database
         if not map.is_in_db(dbif):
-            print "Map not in db"
             is_in_db = False
             # Break in case no valid time is provided
             if start == "" or start is None:
@@ -496,8 +495,6 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         elif method == "gran":
             maps = sp.get_registered_maps_as_objects_by_granularity(None)
             
-        print "The maps object:", maps
-
         if header:
             string = ""
             string += "%s%s" % ("id", separator)
@@ -509,6 +506,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
             string += "%s" % ("distance_from_begin")
+            print string
 
         if maps and len(maps) > 0:
 
@@ -527,7 +525,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                     if len(mymap) > 0:
                         map = mymap[0]
                     else:
-                        core.error(_("Empty entry in map list, continue to next entry"))
+                        core.fatal(_("Empty entry in map list, this should not happen."))
                 else:
                     map = mymap
 

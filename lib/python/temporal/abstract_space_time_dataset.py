@@ -650,7 +650,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
-            if rows is not None:
+            if rows is not None and len(rows) != 0:
                 if len(rows) > 1:
                     core.warning(_("More than one map found in a granule. "
                                    "Temporal granularity seems to be invalid or"
@@ -660,7 +660,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
                 maplist = []
                 for row in rows:
-                   # Take the first map
+                    # Take the first map
                     map = self.get_new_map_instance(rows[0]["id"])
 
                     if self.is_time_absolute():
@@ -672,7 +672,21 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     maplist.append(copy.copy(map))
 
                 obj_list.append(copy.copy(maplist))
+	    else:
+		# Found a gap
+                map = self.get_new_map_instance(None)
 
+                if self.is_time_absolute():
+                    map.set_absolute_time(start, next)
+                elif self.is_time_relative():
+                    map.set_relative_time(start, next, 
+                                         self.get_relative_time_unit())
+
+                maplist = []
+                maplist.append(copy.copy(map))
+
+                obj_list.append(copy.copy(maplist))
+	
             start = next
 
         if connect:
