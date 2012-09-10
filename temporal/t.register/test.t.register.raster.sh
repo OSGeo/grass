@@ -29,63 +29,63 @@ t.create --o type=strds temporaltype=absolute output=precip_abs5 title="A test" 
 t.create --o type=strds temporaltype=absolute output=precip_abs6 title="A test" descr="A test"
 t.create --o type=strds temporaltype=absolute output=precip_abs7 title="A test" descr="A test"
 
-t.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 seconds"
+t.register --o -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 seconds"
 t.info type=strds input=precip_abs1
 t.info -g type=strds input=precip_abs1
 r.info map=prec_1
 t.rast.list input=precip_abs1
 t.topology input=precip_abs1
 
-t.register -i input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="20 seconds, 5 minutes"
+t.register --o -i input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="20 seconds, 5 minutes"
 t.info type=strds input=precip_abs2
 t.info -g type=strds input=precip_abs2
 r.info map=prec_1
 t.rast.list input=precip_abs2
 t.topology input=precip_abs2
 
-t.register -i input=precip_abs3 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="8 hours"
+t.register --o -i input=precip_abs3 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="8 hours"
 t.info -g type=strds input=precip_abs3
 r.info map=prec_1
 t.rast.list input=precip_abs3
 t.topology input=precip_abs3
 
-t.register input=precip_abs4 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 days"
+t.register --o input=precip_abs4 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 days"
 t.info -g type=strds input=precip_abs4
 r.info map=prec_1
 t.rast.list input=precip_abs4
 t.topology input=precip_abs4
 
-t.register input=precip_abs5 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="4 weeks"
+t.register --o input=precip_abs5 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="4 weeks"
 t.info -g type=strds input=precip_abs5
 r.info map=prec_1
 t.rast.list input=precip_abs5
 t.topology input=precip_abs5
 
-t.register input=precip_abs6 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-08-01" increment="2 months"
+t.register --o input=precip_abs6 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-08-01" increment="2 months"
 t.info -g type=strds input=precip_abs6
 r.info map=prec_1
 t.rast.list input=precip_abs6
 t.topology input=precip_abs6
 
-t.register input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="20 years, 3 months, 1 days, 4 hours"
+t.register --o input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="20 years, 3 months, 1 days, 4 hours"
 t.info -g type=strds input=precip_abs7
 r.info map=prec_1
 t.rast.list input=precip_abs7
 t.topology input=precip_abs7
 # Register with different valid time again
-t.register input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
+t.register --o input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
 t.info -g type=strds input=precip_abs7
 r.info map=prec_1
 t.rast.list input=precip_abs7
 t.topology input=precip_abs7
 # Register with different valid time again creating an interval
-t.register -i input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
+t.register --o -i input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
 t.info -g type=strds input=precip_abs7
 r.info map=prec_1
 t.rast.list input=precip_abs7
 t.topology input=precip_abs7
 
-t.register input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" end="2002-01-01"
+t.register --o input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" end="2002-01-01"
 t.info -g type=strds input=precip_abs7
 r.info map=prec_1
 t.rast.list input=precip_abs7
@@ -93,7 +93,7 @@ t.topology input=precip_abs7
 
 # Check for correct errors
 # Increment format error
-t.register -i input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="months"
+t.register -i --o input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="months"
 
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3

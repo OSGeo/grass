@@ -58,47 +58,47 @@ t.create --o type=strds temporaltype=relative output=precip_abs8 title="A test w
 
 # Test with input files
 # File 1, and 3 without a space time raster dataset
-t.register -i file="${n1}" start=0 increment=7 unit=days
+t.register --o -i file="${n1}" start=0 increment=7 unit=days
 t.unregister --v type=rast file="${n1}"
-t.register file="${n2}" unit=minutes
+t.register --o file="${n2}" unit=minutes
 t.unregister --v type=rast file="${n1}"
-t.register -i file="${n3}" unit=seconds
+t.register --o -i file="${n3}" unit=seconds
 t.unregister --v type=rast file="${n1}"
 # File 1
-t.register -i input=precip_abs8 file="${n1}" start=0 increment=7 unit=days
+t.register --o -i input=precip_abs8 file="${n1}" start=0 increment=7 unit=days
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 1
 t.unregister --v type=rast file="${n1}"
-t.register input=precip_abs8 file="${n1}" start=20 unit=years
+t.register --o input=precip_abs8 file="${n1}" start=20 unit=years
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 2
 t.unregister --v type=rast file="${n1}"
-t.register input=precip_abs8 file="${n2}" unit=minutes
+t.register --o input=precip_abs8 file="${n2}" unit=minutes
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 2 ERROR ERROR -- Increment computation needs to be fixed
 t.unregister --v type=rast file="${n1}"
-t.register input=precip_abs8 file="${n2}" increment=14 unit=days
+t.register --o input=precip_abs8 file="${n2}" increment=14 unit=days
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 2 ERROR ERROR -- Increment computation needs to be fixed
 t.unregister --v type=rast file="${n1}"
-t.register -i input=precip_abs8 file="${n2}" increment=14 unit=days
+t.register --o -i input=precip_abs8 file="${n2}" increment=14 unit=days
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 
 # File 3
 t.unregister --v type=rast file="${n1}"
-t.register -i input=precip_abs8 file="${n3}" unit=seconds
+t.register --o -i input=precip_abs8 file="${n3}" unit=seconds
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 
 t.unregister --v type=rast file="${n1}"
 
 # @test of correct @failure handling
-t.register -i input=precip_abs8 maps=preac_1,prec_2 file="${n3}" # Maps and file set
-t.register -i input=precip_abs8 file="${n3}" # No relative unit set
+t.register --o -i input=precip_abs8 maps=preac_1,prec_2 file="${n3}" # Maps and file set
+t.register --o -i input=precip_abs8 file="${n3}" # No relative unit set
 
 t.remove --v type=strds input=precip_abs8

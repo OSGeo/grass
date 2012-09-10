@@ -38,6 +38,14 @@ import os
 import copy
 import grass.script.core as core
 
+# This variable specifies if the ctypes interface to the grass 
+# libraries should be used to read map specific data. If set to False
+# the grass scripting library will be used to get map informations.
+# The advantage of the ctypes inteface is speed, the disadvantage is that
+# the GRASS C functions may call G_fatal_error() which exits the process.
+# That is not catchable in Python.
+use_ctypes_map_access = True
+
 ###############################################################################
 
 # The chosen DBMI back-end can be defined on runtime
@@ -60,7 +68,6 @@ else:
     import sqlite3 as dbmi
 
 ###############################################################################
-
 
 def get_temporal_dbmi_init_string():
     kv = core.parse_command("t.connect", flags="pg")
@@ -88,6 +95,22 @@ def get_temporal_dbmi_init_string():
 
 ###############################################################################
 
+def set_use_ctypes_map_access(use_ctype = True):
+    """!Define the map access method for the temporal GIS library
+    
+       Using ctypes to read map metadata is much faster
+       then using the grass.script interface that calls grass modules.
+       The disadvantage is that GRASS C-library function will call
+       G_fatal_error() that will exit the calling process.
+
+       GUI developer should set this flag to False.
+
+       @param use_ctype: True use ctypes interface, False use grass.script interface
+    """
+    global use_ctypes_map_access
+    use_ctypes_map_access = use_ctypes
+
+###############################################################################
 
 def get_sql_template_path():
     base = os.getenv("GISBASE")
@@ -95,7 +118,6 @@ def get_sql_template_path():
     return os.path.join(base_etc, "sql")
 
 ###############################################################################
-
 
 def create_temporal_database():
     """!This function creates the grass location database structure for raster, 

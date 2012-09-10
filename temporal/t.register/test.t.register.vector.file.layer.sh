@@ -54,19 +54,19 @@ t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds1 title="A 
 # The first @test
 # Test with input files
 # File 1
-t.register --v type=vect input=lidar_abs_ds1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register --o --v type=vect input=lidar_abs_ds1 file="${n1}" start="2001-01-01" increment="1 months"
 t.list type=vect columns=id,name,start_time,end_time where="name='lidar_abs_1'"
 # File 1
-t.register --v type=vect input=lidar_abs_ds1 file="${n1}" start="2001-01-01"
+t.register --o --v type=vect input=lidar_abs_ds1 file="${n1}" start="2001-01-01"
 t.list type=vect columns=id,name,start_time,end_time where="name='lidar_abs_1'"
 # File 2
-t.register --v type=vect input=lidar_abs_ds1 file="${n2}" 
+t.register --o --v type=vect input=lidar_abs_ds1 file="${n2}" 
 t.list type=vect columns=id,name,start_time,end_time where="name='lidar_abs_1'"
 # File 2
-t.register --v type=vect input=lidar_abs_ds1 -i file="${n2}" start=file increment="1 months"
+t.register --o --v type=vect input=lidar_abs_ds1 -i file="${n2}" start=file increment="1 months"
 t.list type=vect columns=id,name,start_time,end_time where="name='lidar_abs_1'"
 # File 3
-t.register --v type=vect input=lidar_abs_ds1 file="${n3}" start=file 
+t.register --o --v type=vect input=lidar_abs_ds1 file="${n3}" start=file 
 t.list type=vect columns=id,name,start_time,end_time where="name='lidar_abs_1'"
 
 t.unregister --v type=vect maps=lidar_abs_1:1,lidar_abs_1:2,lidar_abs_1:3,lidar_abs_1:4,lidar_abs_1:5,lidar_abs_1:6
