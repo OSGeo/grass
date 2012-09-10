@@ -7,22 +7,26 @@ and at least one output file name. The user can also specify the
 <i>format</i> for slope (degrees, percent; default=degrees), and the 
 <i>zfactor</i>: multiplicative factor to convert elevation units to meters;
 (default 1.0).
-<p>The <i>elevation</i> input raster map specified by the user must contain true
+<p>
+The <i>elevation</i> input raster map specified by the user must contain true
 elevation values, <b>not</b> rescaled or categorized data. If the elevation
 values are in feet or other units than meters (with a conversion factor
 <i>meters:</i>, defined in PROJ_UNITS), they must be converted to meters using
 the parameter <i>zfactor</i>.
-<p>The <i>aspect</i> output raster map indicates the direction that slopes are
+<p>
+The <i>aspect</i> output raster map indicates the direction that slopes are
 facing. The aspect categories represent the number degrees of east. Category
 and color table files are also generated for the aspect map layer. The aspect
 categories represent the number degrees of east and they increase
 counterclockwise: 90deg is North, 180 is West, 270 is South 360 is East. The
 aspect value 0 is used to indicate undefined aspect in flat areas with slope=0.
-<p>The <i>slope</i> output raster map contains slope values, stated in degrees of
+<p>
+The <i>slope</i> output raster map contains slope values, stated in degrees of
 inclination from the horizontal if <i>format</i>=degrees option (the default)
 is chosen, and in percent rise if <i>format</i>=percent option is chosen.
 Category and color table files are generated.
-<p>Profile and tangential curvatures are the curvatures in the direction of
+<p>
+Profile and tangential curvatures are the curvatures in the direction of
 steepest slope and in the direction of the contour tangent respectively. The
 curvatures are expressed as 1/metres, e.g. a curvature of 0.05 corresponds to a
 radius of curvature of 20m. Convex form values are positive and concave form values
@@ -107,6 +111,7 @@ reclassification is given below:
              6       255      0       0
              7         0      0       0</pre></div>
 
+
 <h2>NOTES</h2>
 
 To ensure that the raster elevation map layer is not inappropriately resampled,
@@ -117,22 +122,27 @@ and west) are shifted, if necessary, to line up along edges of the nearest
 cells in the elevation map. If the user really wants the elevation map
 resampled to the current region resolution, the -a flag should be specified.
 
-<p>The current mask is ignored.
+<p>
+The current mask is ignored.
 
-<p>The algorithm used to determine slope and aspect uses a 3x3 neighborhood
+<p>
+The algorithm used to determine slope and aspect uses a 3x3 neighborhood
 around each cell in the elevation file. Thus, it is not possible to determine
 slope and aspect for the cells adjacent to the edges in the elevation map
 layer. These cells are assigned a "zero slope" value (category 0) in both
 the slope and aspect raster map layers.
 
-<p>Horn's formula is used to find the first order derivatives in x and y directions.
+<p>
+Horn's formula is used to find the first order derivatives in x and y directions.
 
-<p>Only when using integer elevation models, the aspect is biased in 0,
+<p>
+Only when using integer elevation models, the aspect is biased in 0,
 45, 90, 180, 225, 270, 315, and 360 directions; i.e., the distribution
 of aspect categories is very uneven, with peaks at 0, 45,..., 360 categories.
 When working with floating point elevation models, no such aspect bias occurs.
 
-<p>Because most cells with a very small slope end up having category 0,
+<p>
+Because most cells with a very small slope end up having category 0,
 45, ..., 360, it is sometimes possible to reduce the bias in these directions
 by filtering out the aspect in areas where the terrain is almost flat. A new
 option <i>min_slp_allowed</i> was added to specify the minimum slope for which
@@ -153,14 +163,18 @@ Developments in Soil Science, vol. 33, Elsevier, 387-410 pp,
 <a href="http://www.geomorphometry.org">http://www.geomorphometry.org</a>
 </ul>
 
+
 <h2>SEE ALSO</h2>
+
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>,
 <em><a href="r.neighbors.html">r.neighbors</a></em>,
 <em><a href="r.reclass.html">r.reclass</a></em>,
 <em><a href="r.rescale.html">r.rescale</a></em>
 
+
 <h2>AUTHORS</h2>
 Michael Shapiro, U.S.Army Construction Engineering Research Laboratory<br>
 Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

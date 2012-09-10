@@ -28,7 +28,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include "local_proto.h"
 
 /* 10/99 from GMSL, updated to new GRASS 5 code style , changed default "prec" to float */
 
@@ -86,7 +85,7 @@ int main(int argc, char *argv[])
     void *dyy_raster, *dyy_ptr = NULL;
     void *dxy_raster, *dxy_ptr = NULL;
     int i;
-    RASTER_MAP_TYPE out_type = 0, data_type;
+    RASTER_MAP_TYPE out_type, data_type;
     int Wrap;			/* global wraparound */
     struct Cell_head window, cellhd;
     struct History hist;
@@ -179,13 +178,12 @@ int main(int argc, char *argv[])
     parm.slope_fmt->guisection = _("Settings");
 
     parm.out_precision = G_define_option();
-    parm.out_precision->key = "prec";
+    parm.out_precision->key = "precision";
     parm.out_precision->type = TYPE_STRING;
-    parm.out_precision->required = NO;
-    parm.out_precision->answer = "float";
-    parm.out_precision->options = "default,double,float,int";
+    parm.out_precision->options = "CELL,FCELL,DCELL";
     parm.out_precision->description =
 	_("Type of output aspect and slope maps");
+    parm.out_precision->answer = "FCELL";
     parm.out_precision->guisection = _("Settings");
 
     parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -262,6 +260,10 @@ int main(int argc, char *argv[])
     flag.a->guisection = _("Settings");
 
 
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
+
     radians_to_degrees = 180.0 / M_PI;
     degrees_to_radians = M_PI / 180.0;
 
@@ -285,8 +287,6 @@ int main(int argc, char *argv[])
 	answer[i] = tan_ans * tan_ans;
     }
 
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
 
     elev_name = parm.elevation->answer;
     slope_name = parm.slope->answer;
@@ -346,22 +346,19 @@ int main(int argc, char *argv[])
 	Rast_set_window(&window);
     }
 
-    if (strcmp(parm.out_precision->answer, "double") == 0)
+    if (strcmp(parm.out_precision->answer, "DCELL") == 0)
 	out_type = DCELL_TYPE;
-    else if (strcmp(parm.out_precision->answer, "float") == 0)
+    else if (strcmp(parm.out_precision->answer, "FCELL") == 0)
 	out_type = FCELL_TYPE;
-    else if (strcmp(parm.out_precision->answer, "int") == 0)
+    else if (strcmp(parm.out_precision->answer, "CELL") == 0)
 	out_type = CELL_TYPE;
-    else if (strcmp(parm.out_precision->answer, "default") == 0)
-	out_type = -1;
     else
 	G_fatal_error(_("Wrong raster type: %s"), parm.out_precision->answer);
 
     data_type = out_type;
-    if (data_type < 0)
-	data_type = DCELL_TYPE;
     /* data type is the type of data being processed,
        out_type is type of map being created */
+    /* ? why not use Rast_map_type() then ? */
 
     G_get_set_window(&window);
 
@@ -423,7 +420,7 @@ int main(int argc, char *argv[])
     Rast_set_d_null_value(elev_cell[2], ncols);
 
     if (slope_name != NULL) {
-	slope_fd = opennew(slope_name, out_type);
+	slope_fd = Rast_open_new(slope_name, out_type);
 	slp_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(slp_raster, Rast_window_cols(), data_type);
 	Rast_put_row(slope_fd, slp_raster, data_type);
@@ -434,7 +431,7 @@ int main(int argc, char *argv[])
     }
 
     if (aspect_name != NULL) {
-	aspect_fd = opennew(aspect_name, out_type);
+	aspect_fd = Rast_open_new(aspect_name, out_type);
 	asp_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(asp_raster, Rast_window_cols(), data_type);
 	Rast_put_row(aspect_fd, asp_raster, data_type);
@@ -445,7 +442,7 @@ int main(int argc, char *argv[])
     }
 
     if (pcurv_name != NULL) {
-	pcurv_fd = opennew(pcurv_name, out_type);
+	pcurv_fd = Rast_open_new(pcurv_name, out_type);
 	pcurv_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(pcurv_raster, Rast_window_cols(), data_type);
 	Rast_put_row(pcurv_fd, pcurv_raster, data_type);
@@ -456,7 +453,7 @@ int main(int argc, char *argv[])
     }
 
     if (tcurv_name != NULL) {
-	tcurv_fd = opennew(tcurv_name, out_type);
+	tcurv_fd = Rast_open_new(tcurv_name, out_type);
 	tcurv_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(tcurv_raster, Rast_window_cols(), data_type);
 	Rast_put_row(tcurv_fd, tcurv_raster, data_type);
@@ -467,7 +464,7 @@ int main(int argc, char *argv[])
     }
 
     if (dx_name != NULL) {
-	dx_fd = opennew(dx_name, out_type);
+	dx_fd = Rast_open_new(dx_name, out_type);
 	dx_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dx_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dx_fd, dx_raster, data_type);
@@ -478,7 +475,7 @@ int main(int argc, char *argv[])
     }
 
     if (dy_name != NULL) {
-	dy_fd = opennew(dy_name, out_type);
+	dy_fd = Rast_open_new(dy_name, out_type);
 	dy_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dy_fd, dy_raster, data_type);
@@ -489,7 +486,7 @@ int main(int argc, char *argv[])
     }
 
     if (dxx_name != NULL) {
-	dxx_fd = opennew(dxx_name, out_type);
+	dxx_fd = Rast_open_new(dxx_name, out_type);
 	dxx_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dxx_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dxx_fd, dxx_raster, data_type);
@@ -500,7 +497,7 @@ int main(int argc, char *argv[])
     }
 
     if (dyy_name != NULL) {
-	dyy_fd = opennew(dyy_name, out_type);
+	dyy_fd = Rast_open_new(dyy_name, out_type);
 	dyy_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dyy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dyy_fd, dyy_raster, data_type);
@@ -511,7 +508,7 @@ int main(int argc, char *argv[])
     }
 
     if (dxy_name != NULL) {
-	dxy_fd = opennew(dxy_name, out_type);
+	dxy_fd = Rast_open_new(dxy_name, out_type);
 	dxy_raster = Rast_allocate_buf(data_type);
 	Rast_set_null_value(dxy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dxy_fd, dxy_raster, data_type);
