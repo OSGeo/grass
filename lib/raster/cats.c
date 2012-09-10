@@ -157,7 +157,10 @@ int Rast_read_vector_cats(const char *name,
 }
 
 /*!
-   \brief Get number of categories
+   \brief Get the max category number
+
+   Return the max category number of a raster map
+   of type CELL.
 
    \param name raster map name
    \param mapset mapset name
