@@ -8,7 +8,7 @@
 #               Modified to produce floating and double values maps
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Creates a raster plane map from user specified inclination and azimuth
-# COPYRIGHT:	(C) 2004,2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 2004-2012 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -60,9 +60,9 @@
 #%option
 #% key: type
 #% type: string 
-#% options: int,float,double
-#% description: Type of the raster map to be created
-#% required : yes
+#% options: CELL,FCELL,DCELL
+#% description: Type of raster map to be created
+#% answer: FCELL
 #%end
 
 import sys
@@ -101,14 +101,20 @@ def main():
     ky = cosaz * tandip
     kz = el - ea * sinaz * tandip - no * cosaz * tandip
 
-    if type == "int":
+    if type == "CELL":
 	round = "round"
+	dtype = "int"
+    elif type == "FCELL":
+	round = ""
+	dtype = "float"
     else:
 	round = ""
+	dtype = "double"
 
     grass.mapcalc("$name = $type($round(x() * $kx + y() * $ky + $kz))",
-		  name = name, type = type, round = round, kx = kx, ky = ky, kz = kz)
+		  name = name, type = dtype, round = round, kx = kx, ky = ky, kz = kz)
 
+    grass.run_command('r.support', map = name, history = '')
     grass.raster_history(name)
 
     grass.message(_("Done."))
