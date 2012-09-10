@@ -48,7 +48,7 @@ for details.
 #%option
 #% key: model
 #% type: string
-#% options: Nug,Exp,Sph,Gau,Exc,Mat,Ste,Cir,Lin,Bes,Pen,Per,Hol,Log,Pow,Spl,Leg
+#% options: Nug,Exp,Sph,Gau,Exc,Mat,Ste,Cir,Lin,Bes,Pen,Per,Hol,Log,Pow,Spl,Leg,Err,Int
 #% multiple: yes
 #% label: Variogram model(s)
 #% description: Leave empty to test all models (requires automap)
