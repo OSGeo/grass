@@ -33,17 +33,17 @@ except ImportError:
     sys.exit(_("No GRASS-python library found."))
 ### wxGUI imports
 
-GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "gui_modules")
+GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
 sys.path.append(GUIModulesPath)
 
 from core import globalvar
 from gui_core import gselect
 from gui_core import goutput
 from core.settings import UserSettings
+from gui_core.widgets import GNotebook
 #import help
 
 import wx
-import wx.lib.flatnotebook as FN
 #import wx.lib.plot as plot # for plotting the variogram.
 
 # global variables
@@ -92,10 +92,7 @@ class KrigingPanel(wx.Panel):
         #    2. Kriging. In book pages one for each R package. Includes variogram fit.
         KrigingSizer = wx.StaticBoxSizer(wx.StaticBox(self, id = wx.ID_ANY, label = _("Kriging")), wx.HORIZONTAL)
 
-        self.RPackagesBook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
-                                        style = FN.FNB_BOTTOM |
-                                        FN.FNB_NO_NAV_BUTTONS |
-                                        FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
+        self.RPackagesBook = GNotebook(parent = self, style = globalvar.FNPageDStyle)
         
         for Rpackage in ["gstat"]: # , "geoR"]: #@TODO: enable it if/when it'll be implemented.
             self.CreatePage(package = Rpackage, Rinstance = Rinstance, controller = controller)
@@ -104,7 +101,7 @@ class KrigingPanel(wx.Panel):
         self.goutput = goutput.GMConsole(parent = self, frame = self.parent, margin = False,
                                          notebook = self.RPackagesBook)
         self.goutputId = self.RPackagesBook.GetPageCount()
-        self.outpage = self.RPackagesBook.AddPage(self.goutput, text = _("Command output"))
+        self.outpage = self.RPackagesBook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         
         self.RPackagesBook.SetSelection(0)
         KrigingSizer.Add(self.RPackagesBook, proportion = 1, flag = wx.EXPAND)
