@@ -27,9 +27,11 @@ import grass.lib.raster as libraster
 import grass.lib.vector as libvector
 import grass.lib.raster3d as libraster3d
 import grass.script.array as garray
+import grass.script.raster as raster
+import grass.script.vector as vector
+import grass.script.raster3d as raster3d
 
 from abstract_space_time_dataset import *
-
 
 ###############################################################################
 
@@ -316,7 +318,12 @@ class RasterDataset(AbstractMapDataset):
         self.base.set_creator(str(getpass.getuser()))
 
         # Get the data from an existing raster map
-        kvp = self.read_info()
+        global use_ctypes_map_access
+
+	if use_ctypes_map_access:
+            kvp = self.read_info()
+        else:
+            kvp = raster.raster_info(self.get_id())
 
         # Fill spatial extent
 
@@ -331,8 +338,8 @@ class RasterDataset(AbstractMapDataset):
         self.metadata.set_min(kvp["min"])
         self.metadata.set_max(kvp["max"])
 
-        rows = kvp["rows"]
-        cols = kvp["cols"]
+        rows = int(kvp["rows"])
+        cols = int(kvp["cols"])
 
         ncells = cols * rows
 
@@ -532,8 +539,13 @@ class Raster3DDataset(AbstractMapDataset):
 
         # Fill spatial extent
 
-        # Get the data from an existing raster map
-        kvp = self.read_info()
+        # Get the data from an existing 3D raster map
+        global use_ctypes_map_access
+
+	if use_ctypes_map_access:
+            kvp = self.read_info()
+        else:
+            kvp = raster3d.raster3d_info(self.get_id())
 
         self.set_spatial_extent(north=kvp["north"], south=kvp["south"],
                                 east=kvp["east"], west=kvp["west"],
@@ -547,9 +559,9 @@ class Raster3DDataset(AbstractMapDataset):
         self.metadata.set_min(kvp["min"])
         self.metadata.set_max(kvp["max"])
 
-        rows = kvp["rows"]
-        cols = kvp["cols"]
-        depths = kvp["depths"]
+        rows = int(kvp["rows"])
+        cols = int(kvp["cols"])
+        depths = int(kvp["depths"])
 
         ncells = cols * rows
 
@@ -717,7 +729,7 @@ class VectorDataset(AbstractMapDataset):
         kvp["top"] = bbox.T
         kvp["bottom"] = bbox.B
 
-        kvp["is_3d"] = bool(libvector.Vect_is_3d(byref(Map)))
+        kvp["map3d"] = bool(libvector.Vect_is_3d(byref(Map)))
 
         # Read number of features
         if with_topo:
@@ -737,7 +749,7 @@ class VectorDataset(AbstractMapDataset):
             # Summarize the primitives
             kvp["primitives"] = kvp["points"] + kvp["lines"] + \
                 kvp["boundaries"] + kvp["centroids"]
-            if kvp["is_3d"]:
+            if kvp["map3d"]:
                 kvp["primitives"] += kvp["faces"] + kvp["kernels"]
 
             # Read topology information
@@ -772,8 +784,13 @@ class VectorDataset(AbstractMapDataset):
         # Fill base information
         self.base.set_creator(str(getpass.getuser()))
 
-        # Get the data from an existing raster map
-        kvp = self.read_info()
+        # Get the data from an existing vector map
+        global use_ctypes_map_access
+
+	if use_ctypes_map_access:
+            kvp = self.read_info()
+        else:
+            kvp = vector.vector_info(self.get_map_id())
 
         # Fill spatial extent
         self.set_spatial_extent(north=kvp["north"], south=kvp["south"],
@@ -781,7 +798,7 @@ class VectorDataset(AbstractMapDataset):
                                 top=kvp["top"], bottom=kvp["bottom"])
 
         # Fill metadata
-        self.metadata.set_3d_info(kvp["is_3d"])
+        self.metadata.set_3d_info(kvp["map3d"])
         self.metadata.set_number_of_points(kvp["points"])
         self.metadata.set_number_of_lines(kvp["lines"])
         self.metadata.set_number_of_boundaries(kvp["boundaries"])

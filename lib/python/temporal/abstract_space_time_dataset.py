@@ -692,7 +692,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if connect:
             dbif.close()
 
-        return obj_list
+        if obj_list:
+            return obj_list
+        return None
 
     def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
         """!Return all registered maps as ordered (by start_time) object list with

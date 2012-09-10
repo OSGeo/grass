@@ -12,6 +12,14 @@ r.mapcalc --o expr="prec_4 = 400"
 r.mapcalc --o expr="prec_5 = 500"
 r.mapcalc --o expr="prec_6 = 600"
 
+n1=`g.tempfile pid=1 -d`
+
+cat > "${n1}" << EOF
+prec_1|2001-01-01|2001-04-01
+prec_2|2001-05-01|2001-07-01
+prec_3|2001-08-01|2001-10-01
+EOF
+
 # @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
 
@@ -54,6 +62,13 @@ t.info type=rast3d input=precipitation
 r3.info precipitation
 
 t.register --o --v -i type=rast input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 seconds"
+t.info type=strds input=precip_abs
+
+t.rast.to.rast3 --o input=precip_abs output=precipitation
+t.info type=rast3d input=precipitation
+r3.info precipitation
+
+t.register --o --v -i type=rast input=precip_abs file=${n1}
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation

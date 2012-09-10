@@ -58,23 +58,23 @@ t.create --o type=strds temporaltype=absolute output=precip_abs8 title="A test w
 
 # Test with input files
 # File 1
-t.register -i input=precip_abs8 file="${n1}" start="2001-01-01" increment="1 months"
+t.register --o -i input=precip_abs8 file="${n1}" start="2001-01-01" increment="1 months"
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 1
-t.register input=precip_abs8 file="${n1}" start="2001-01-01" 
+t.register --o input=precip_abs8 file="${n1}" start="2001-01-01" 
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 2
-t.register input=precip_abs8 file="${n2}"
+t.register --o input=precip_abs8 file="${n2}"
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 2
-t.register input=precip_abs8 file="${n2}" increment="1 months"
+t.register --o input=precip_abs8 file="${n2}" increment="1 months"
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 3
-t.register -i input=precip_abs8 file="${n3}"
+t.register --o -i input=precip_abs8 file="${n3}"
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 
