@@ -8,7 +8,7 @@ PURPOSE:   Performs ordinary or block kriging
 
 DEPENDS:   R 2.x, packages gstat, maptools and spgrass6, optional: automap
 
-COPYRIGHT: (C) 2009 by the GRASS Development Team
+COPYRIGHT: (C) 2009, 2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -48,7 +48,7 @@ for details.
 #%option
 #% key: model
 #% type: string
-#% options: Exp,Sph,Gau,Mat,Lin
+#% options: Nug,Exp,Sph,Gau,Exc,Mat,Ste,Cir,Lin,Bes,Pen,Per,Hol,Log,Pow,Spl,Leg
 #% multiple: yes
 #% label: Variogram model(s)
 #% description: Leave empty to test all models (requires automap)
@@ -156,9 +156,7 @@ class Controller:
             
         # GRASS checks for null values in the chosen column. R can hardly handle column as a variable,
         # looks for a hardcoded string.
-        logger.message("Got here")
         cols = grass.vector_columns(map=map, layer=1)
-        logger.message("Not here:")
         nulls = int(grass.parse_command('v.univar',
                                         map=map,
                                         column=column,
