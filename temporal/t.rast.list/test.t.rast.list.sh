@@ -66,58 +66,53 @@ prec_6|2001-06-01|2001-07-01
 EOF
 
 t.create --o type=strds temporaltype=absolute output=precip_abs0 title="A test with input files" descr="A test with input files"
-t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
-t.create --o type=strds temporaltype=absolute output=precip_abs2 title="A test with input files" descr="A test with input files"
-t.create --o type=strds temporaltype=absolute output=precip_abs3 title="A test with input files" descr="A test with input files"
-t.create --o type=strds temporaltype=absolute output=precip_abs4 title="A test with input files" descr="A test with input files"
-t.create --o type=strds temporaltype=absolute output=precip_abs5 title="A test with input files" descr="A test with input files"
 
 # The @test
-t.register type=rast -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=rast --o -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 t.rast.list    fs=" | " method=comma     input=precip_abs0
-t.rast.list -h input=precip_abs1
+t.rast.list -h input=precip_abs0
 t.rast.list -h fs=" | " method=cols      input=precip_abs0
 t.rast.list -h fs=" | " method=delta     input=precip_abs0
 t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
 t.rast.list -h fs=" | " method=gran      input=precip_abs0
 
-t.register type=rast    input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
-t.rast.list    fs=" | " method=comma     input=precip_abs1
-t.rast.list -h input=precip_abs1
-t.rast.list -h fs=" | " method=cols      input=precip_abs1
-t.rast.list -h fs=" | " method=delta     input=precip_abs1
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs1
+t.register type=rast --o input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list -h input=precip_abs0
+t.rast.list -h fs=" | " method=cols      input=precip_abs0
+t.rast.list -h fs=" | " method=delta     input=precip_abs0
+t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
+# ERROR: no interval time   
+t.rast.list -h fs=" | " method=gran      input=precip_abs0
 
-t.register type=rast -i input=precip_abs2 file="${n2}" 
-t.rast.list    fs=" | " method=comma     input=precip_abs2
-t.rast.list -h input=precip_abs2
-t.rast.list -h fs=" | " method=cols      input=precip_abs2
-t.rast.list -h fs=" | " method=delta     input=precip_abs2
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs2
-t.rast.list -h fs=" | " method=gran      input=precip_abs2
+t.register type=rast --o -i input=precip_abs0 file="${n2}" 
+t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list -h input=precip_abs0
+t.rast.list -h fs=" | " method=cols      input=precip_abs0
+t.rast.list -h fs=" | " method=delta     input=precip_abs0
+t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
+# ERROR: no interval time   
+t.rast.list -h fs=" | " method=gran      input=precip_abs0
 
-t.register type=rast -i input=precip_abs3 file="${n3}"
-t.rast.list    fs=" | " method=comma     input=precip_abs3
-t.rast.list -h fs=" | " method=delta     input=precip_abs3
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs3
-t.rast.list -h fs=" | " method=gran      input=precip_abs3
+t.register type=rast --o -i input=precip_abs0 file="${n3}"
+t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list -h fs=" | " method=delta     input=precip_abs0
+t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
+t.rast.list -h fs=" | " method=gran      input=precip_abs0
 
-t.register type=rast -i input=precip_abs4 file="${n4}"
-t.rast.list    fs=" | " method=comma     input=precip_abs4
-t.rast.list -h fs=" | " method=delta     input=precip_abs4
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs4
-t.rast.list -h fs=" | " method=gran      input=precip_abs4
+t.register type=rast --o -i input=precip_abs0 file="${n4}"
+t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list -h fs=" | " method=delta     input=precip_abs0
+t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
+t.rast.list -h fs=" | " method=gran      input=precip_abs0
 
-t.register type=rast -i input=precip_abs5 file="${n5}"
-t.rast.list    fs=" | " method=comma     input=precip_abs5
-t.rast.list -h input=precip_abs5
-t.rast.list -h fs=" | " method=cols      input=precip_abs5
-t.rast.list -h fs=" | " method=delta     input=precip_abs5
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs5
-
-# @test of @failure, time instances and mixed time is not supported
-t.rast.list -h fs=" | " method=gran      input=precip_abs5
-t.rast.list -h fs=" | " method=gran      input=precip_abs1
+t.register type=rast --o -i input=precip_abs0 file="${n5}"
+t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list -h input=precip_abs0
+t.rast.list -h fs=" | " method=cols      input=precip_abs0
+t.rast.list -h fs=" | " method=delta     input=precip_abs0
+t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
+t.rast.list -h fs=" | " method=gran      input=precip_abs0
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-t.remove type=strds input=precip_abs0,precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_abs5
+t.remove type=strds input=precip_abs0

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Tests the temporaly topology module of space time datasets 
+# Tests the temporal topology module of space time datasets 
 
 # We need to set a specific region in the
 # @preprocess step of this test. 
