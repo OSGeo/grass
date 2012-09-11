@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>GRASS-PostgreSQL driver</title>
+<title>GRASS-PostgreSQL DB driver</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
@@ -11,14 +11,15 @@
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
 <!-- meta page description: PostgreSQL driver -->
-<h1>PostgreSQL driver in GRASS</h1>
+<h1>PostgreSQL DB driver in GRASS</h1>
 
-The driver name in GRASS is 'pg'.
+The DB (database) driver name in GRASS is <b>pg</b>.
 
 <h2>Creating a PostgreSQL database</h2>
 
-A new database is created with 'createdb', see the PostgreSQL manual
-for details.
+A new database is created with <tt>createdb</tt>, see
+the <a href="http://www.postgresql.org/docs/manuals/">PostgreSQL
+manual</a> for details.
 
 <h2>Connecting GRASS to PostgreSQL</h2>
 
@@ -49,12 +50,10 @@ Import vector module require an unique ID column which can
 be generated as follows in a PostgreSQL table:
 
 <div class="code"><pre>
-echo "
- ALTER TABLE mytable ADD ID integer;
- CREATE SEQUENCE mytable_seq;
- UPDATE mytabe SET ID = nextval('mytable_seq');
- DROP SEQUENCE mytable_seq;
-" | db.execute
+db.execute sql="ALTER TABLE mytable ADD ID integer"
+db.execute sql="CREATE SEQUENCE mytable_seq"
+db.execute sql="UPDATE mytabe SET ID = nextval('mytable_seq')"
+db.execute sql="DROP SEQUENCE mytable_seq"
 </pre></div>
 
 
@@ -68,8 +67,9 @@ COPY t1 FROM 'filename' USING DELIMITERS ',';
 
 <h2>Geometry import from PostgreSQL table into GRASS</h2>
 
-<em>v.in.db</em> creates a new vector (points) map from a database table
-containing coordinates. See <a href="v.in.db.html">here</a> for examples.
+<em><a href="v.in.db.html">v.in.db</a></em> creates a new vector
+(points) map from a database table containing
+coordinates. See <a href="v.in.db.html">here</a> for examples.
 
 <h2>PostGIS: PostgreSQL with vector geometry</h2>
 
@@ -113,36 +113,39 @@ v.info -t test
 <ul>
 <li><a href="http://postgis.refractions.net/download/">PostGIS with shp2pgsql</a>:<br>
  <tt>shp2pgsql -D lakespy2 lakespy2 test > lakespy2.sql</tt>
-<p>
+</li>
 <li><a href="http://e00pg.sourceforge.net/">e00pg</a>: E00 to PostGIS filter,
 see also <em><a href="v.in.e00.html">v.in.e00</a></em>.
-<p>
+</li>
 <li>GDAL/OGR <a href="http://www.gdal.org/ogr/">ogrinfo and ogr2ogr</a>:
 GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
   <tt>ogr2ogr -f "PostgreSQL" shapefile ??</tt>
-<p>
+</li>
 </ul>
 
+<h2>REFERENCES</h2>
+
+<ul>
+<li><a href="http://www.postgresql.org/">PostgreSQL web site</a></li>
+<li><a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a></li>
+<li><a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL
+driver documentation</a></li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="db.connect.html">db.connect</a>,
-<a href="db.execute.html">db.execute</a>,<br>
-<a href="databaseintro.html">Database management in GRASS GIS</a>,<br>
-<a href="database.html">Help pages for database modules</a>,<br>
-<a href="sql.html">SQL support in GRASS GIS</a>
-</em>
-<p>
-<em>
-<a href="http://www.postgresql.org/">PostgreSQL web site</a>,<br>
-<a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a>
-<p>
-<a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL driver
-documentation</a>
+<a href="db.execute.html">db.execute</a>
 </em>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<a href="databaseintro.html">Database management in GRASS GIS</a><br>
+<a href="database.html">Help pages for database modules</a><br>
+<a href="sql.html">SQL support in GRASS GIS</a><br>
+
+<p>
+<i>Last changed: $Date$</i>
 <hr>
 <br>
 <a href="index.html">Main index</a> -
