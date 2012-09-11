@@ -33,11 +33,13 @@ int main(int argc, char *argv[])
     struct Map_info Map;
 
     FILE *ascii, *att;
-    char *input, *output, *delim, **columns, *where, *field_name;
+    char *input, *output, *delim, **columns, *where, *field_name, *cats;
     int format, dp, field, ret, region, old_format, header, type;
     int ver, pnt;
 
     struct cat_list *clist;
+    
+    clist = NULL;
     
     G_gisinit(argv[0]);
 
@@ -50,7 +52,7 @@ int main(int argc, char *argv[])
 
     parse_args(argc, argv, &input, &output, &format, &dp, &delim,
 	       &field_name, &columns, &where, &region, &old_format, &header,
-	       &clist, &type);
+	       &cats, &type);
     
     if (format == GV_ASCII_FORMAT_STD && columns) {
 	G_warning(_("Parameter 'column' ignored in standard mode"));
@@ -92,7 +94,17 @@ int main(int argc, char *argv[])
     }
 
     field = Vect_get_field_number(&Map, field_name);
-    
+    if (cats) {
+        clist = Vect_new_cat_list();
+        
+        clist->field = field;
+        if (clist->field < 1)
+            G_fatal_error(_("Layer <%s> not found"), field_name);
+        ret = Vect_str_to_cat_list(cats, clist);
+        if (ret > 0)
+            G_fatal_error(_("%d errors in <%s> option"), ret, "cats");
+    }
+
     if (strcmp(output, "-") != 0) {
 	if (ver == 4) {
 	    ascii = G_fopen_new("dig_ascii", output);
@@ -150,5 +162,8 @@ int main(int argc, char *argv[])
 
     Vect_close(&Map);
 
+    if (cats)
+        Vect_destroy_cat_list(clist);
+    
     exit(EXIT_SUCCESS);
 }

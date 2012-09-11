@@ -10,13 +10,13 @@
 void parse_args(int argc, char **argv,
 		char **input, char**output, int *format, int *dp, char **delim,
 		char **field, char ***columns, char **where, int *region,
-		int *old_format, int *header, struct cat_list **clist, int *type)
+		int *old_format, int *header, char **cats, int *type)
 {
     struct Option *input_opt, *output_opt, *format_opt, *dp_opt, *delim_opt,
 	*field_opt, *column_opt, *where_opt, *cats_opt, *type_opt;
     struct Flag *old_flag, *header_flag, *region_flag;
     
-    char * desc;
+    char *desc;
     
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -130,23 +130,18 @@ void parse_args(int argc, char **argv,
 	    (*columns)[i] = G_store(column_opt->answers[i]);
 	(*columns)[nopt - 1] = NULL;
     }
+
     *where = NULL;
     if (where_opt->answer) {
 	*where = G_store(where_opt->answer);
     }
-    *clist = NULL;
+
+    *cats = NULL;
     if (cats_opt->answer) {
-	int ret;
-	
-	*clist = Vect_new_cat_list();
-	(*clist)->field = atoi(field_opt->answer);
-	if ((*clist)->field < 1)
-	    G_fatal_error(_("Option <%s> must be > 0"), field_opt->key);
-	ret = Vect_str_to_cat_list(cats_opt->answer, *clist);
-	if (ret > 0)
-	    G_fatal_error(_("%d errors in cat option"), ret);
+        *cats = G_store(cats_opt->answer);
     }
-    *region = region_flag->answer ? 1 : 0;
-    *old_format = old_flag->answer ? 1 : 0;
-    *header = header_flag->answer ? 1 : 0;
+
+    *region = region_flag->answer ? TRUE : FALSE;
+    *old_format = old_flag->answer ? TRUE : FALSE;
+    *header = header_flag->answer ? TRUE : FALSE;
 }
