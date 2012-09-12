@@ -52,7 +52,7 @@ be generated as follows in a PostgreSQL table:
 <div class="code"><pre>
 db.execute sql="ALTER TABLE mytable ADD ID integer"
 db.execute sql="CREATE SEQUENCE mytable_seq"
-db.execute sql="UPDATE mytabe SET ID = nextval('mytable_seq')"
+db.execute sql="UPDATE mytable SET ID = nextval('mytable_seq')"
 db.execute sql="DROP SEQUENCE mytable_seq"
 </pre></div>
 
@@ -123,15 +123,6 @@ GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
 </li>
 </ul>
 
-<h2>REFERENCES</h2>
-
-<ul>
-<li><a href="http://www.postgresql.org/">PostgreSQL web site</a></li>
-<li><a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a></li>
-<li><a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL
-driver documentation</a></li>
-</ul>
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -143,6 +134,15 @@ driver documentation</a></li>
 <a href="databaseintro.html">Database management in GRASS GIS</a><br>
 <a href="database.html">Help pages for database modules</a><br>
 <a href="sql.html">SQL support in GRASS GIS</a><br>
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li><a href="http://www.postgresql.org/">PostgreSQL web site</a></li>
+<li><a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a></li>
+<li><a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL
+driver documentation</a></li>
+</ul>
 
 <p>
 <i>Last changed: $Date$</i>
