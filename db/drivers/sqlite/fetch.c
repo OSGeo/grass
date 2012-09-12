@@ -164,7 +164,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    dt->hour = 0;
 	    dt->minute = 0;
 	    dt->seconds = 0.0;
-	    G_debug(3, "sqlite fetched date: %s", text);
+	    G_debug(3, "sqlite fetched date: <%s>", text);
 	    ns = sscanf(text, "%4d-%2d-%2d", &dt->year, &dt->month, &dt->day);
 	    if (ns != 3) {
 		db_d_append_error("%s %s",
