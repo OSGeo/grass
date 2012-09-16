@@ -42,6 +42,55 @@ connect the copied tables to the output map.-->
 v.overlay ainput=lake binput=province output=lakeXprovince operator=or
 </pre></div>
 
+<h2>EXAMPLE POLYGON TO POLYGON UNION</h2>
+
+Polygon union of urban area and Census 2000 areas (North Carolina dataset):
+
+<div class="code"><pre>
+# input maps
+d.vect urbanarea
+d.vect census_wake2000
+
+# union
+v.overlay ain=census_wake2000 bin=urbanarea out=urban_census2000 operator=or
+
+# show result, graphically zooming a subset
+g.region n=230400 s=223800 w=655800 e=662400
+d.erase
+d.vect urban_census2000
+
+# show merged attribute table
+v.db.select urban_census2000 where="cat=108" -v
+cat|108
+a_cat|98
+a_AREA|231001264
+a_PERIMETE|67804.305
+a_TRACT_|98
+a_TRACT_ID|98
+a_RINGS_OK|1
+a_RINGS_NO|0
+a_ID|98
+a_FIPSSTCO|37183
+a_TRT2000|054108
+a_STFID|37183054108
+a_TRACTID|541.08
+a_TRACT|541.08
+b_cat|55
+b_OBJECTID|55
+b_UA|73261
+b_NAME|Raleigh
+b_UA_TYPE|UA
+</pre></div>
+
+<center>
+<img src="v_overlay_urbanarea.png" alt="GRASS v.overlay: polygon to polygon union (input 1)" border=1>
+<img src="v_overlay_census_wake2000.png" alt="GRASS v.overlay: polygon to polygon union (input 2)" border=1>
+<img src="v_overlay_urban_census2000.png" alt="GRASS v.overlay: polygon to polygon union (result)" border=1>
+<br>
+<i>v.overlay: Polygon union of urban area and Census 2000 areas (North Carolina dataset)</i>
+</center>
+
+
 <h2>EXAMPLE LINE TO POLYGON CLIPPING</h2>
 
 Using the North Carolina sample dataset, we clip the roads map to the area
