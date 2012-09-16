@@ -19,13 +19,6 @@ void define_options(struct params *params, struct flags *flags)
     params->dsn->description =
         _("Starts with 'PG' prefix, eg. 'PG:dbname=grass'");
     
-    params->schema = G_define_option();
-    params->schema->key = "schema";
-    params->schema->type = TYPE_STRING;
-    params->schema->required = NO;
-    params->schema->description = _("Database schema");
-    params->schema->answer = "public";
-    
     params->olayer = G_define_option();
     params->olayer->key = "olayer";
     params->olayer->type = TYPE_STRING;

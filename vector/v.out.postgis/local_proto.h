@@ -4,7 +4,7 @@
 #include <grass/vector.h>
 
 struct params {
-    struct Option *input, *layer, *dsn, *olayer, *schema;
+    struct Option *input, *layer, *dsn, *olayer;
 };
 
 struct flags {
