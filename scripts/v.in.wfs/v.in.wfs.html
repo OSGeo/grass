@@ -9,10 +9,31 @@ external servers.
 Import of GRASS user map:
 <p><div class="code"><pre>
 # run in LatLong location:
-v.in.wfs \
- url="http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0" out=grass_users
+v.in.wfs url="http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?" output=grass_users
 
 v.db.select grass_users where="name ~ 'Markus'"
+</pre></div>
+
+<p>
+Download 25 ship wrecks from LINZ data service:
+<br>
+(first create yourself a free API key at
+  <a href="http://data.linz.govt.nz/p/web-services/">http://data.linz.govt.nz/p/web-services/</a>)
+
+<p>
+<div class="code"><pre>
+# run in LatLong location:
+URL='http://wfs.data.linz.govt.nz/&lt;PUT YOUR API KEY HERE&gt;/wfs?'
+
+# download available layers to wms_capabilities.xml
+v.in.wfs -l url="$URL" 
+</pre></div>
+
+From that file we learn that the shipwreck layer is called "<tt>v:x633</tt>"
+and that EPSG code 4326 (LatLong WGS84) is a supported SRS for this data layer.
+
+<div class="code"><pre>
+v.in.wfs url="$URL" output=linz_hydro_25_wrecks name="v:x633" srs="EPSG:4326" max=25
 </pre></div>
 
 
@@ -25,6 +46,7 @@ Parser support (for GML).
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="g.region.html">g.region</a>,
 <a href="r.in.wms.html">r.in.wms</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
