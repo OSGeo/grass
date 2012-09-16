@@ -135,8 +135,8 @@ def db_select(sql = None, filename = None, table = None, **args):
         fatal(_("Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided") %
               {'sql': 'sql', 'filename': 'filename', 'table': 'table'} )
     
-    if 'fs' not in args:
-        args['fs'] = '|'
+    if 'sep' not in args:
+        args['sep'] = '|'
     
     ret = run_command('db.select', quiet = True,
                       flags = 'c',
@@ -147,7 +147,7 @@ def db_select(sql = None, filename = None, table = None, **args):
         fatal(_("Fetching data failed"))
     
     ofile = open(fname)
-    result = map(lambda x: tuple(x.rstrip(os.linesep).split(args['fs'])),
+    result = map(lambda x: tuple(x.rstrip(os.linesep).split(args['sep'])),
                  ofile.readlines())
     ofile.close()
     try_remove(fname)
