@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2012-09-08 01:03+0100\n"
-"Last-Translator: Robert Szczepanek <robert@szczepanek.pl>\n"
+"PO-Revision-Date: 2012-09-17 23:03+0100\n"
+"Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -3911,12 +3911,12 @@ msgstr "'%s' skopiowano do schowka"
 
 #: ../gui/wxpython/gui_core/forms.py:762 ../gui/wxpython/gui_core/forms.py:775
 msgid "Required"
-msgstr "Wymagane"
+msgstr "Podstawa"
 
 #: ../gui/wxpython/gui_core/forms.py:765 ../gui/wxpython/gui_core/forms.py:775
 #: ../gui/wxpython/gui_core/forms.py:1990
 msgid "Optional"
-msgstr "Opcjonalne"
+msgstr "Opcje"
 
 #: ../gui/wxpython/gui_core/forms.py:842
 #: ../gui/wxpython/gui_core/forms.py:1438
@@ -3958,7 +3958,7 @@ msgstr "Wynik polecenia"
 
 #: ../gui/wxpython/gui_core/forms.py:1607
 msgid "Manual"
-msgstr "Przewodnik użytkownika"
+msgstr "Przewodnik"
 
 #: ../gui/wxpython/gui_core/forms.py:1648
 msgid "Nothing to load."
@@ -5825,9 +5825,8 @@ msgstr "Analizy sąsiedztwa"
 
 # przykryj nie brzmi ...; może złącz, scal?
 #: ../gui/wxpython/menustrings.py:330
-#, fuzzy
 msgid "Overlay rasters"
-msgstr "Przykryj mapy rastrowe"
+msgstr "Nakładanie rastrów"
 
 # poprzecznego?
 #: ../gui/wxpython/menustrings.py:331
@@ -6656,7 +6655,7 @@ msgstr "Linie równoległe"
 
 #: ../gui/wxpython/menustrings.py:539
 msgid "Creates parallel line to input vector lines."
-msgstr "Utworzy linie równoległe do podanych linii wektorowych."
+msgstr "Tworzy linie równoległe do podanych linii wektorowych."
 
 #: ../gui/wxpython/menustrings.py:540
 msgid "Dissolve boundaries"
@@ -6729,7 +6728,7 @@ msgstr "Aktualizuje metadane mapy wektorowej."
 
 #: ../gui/wxpython/menustrings.py:558
 msgid "Topology maintenance"
-msgstr ""
+msgstr "Topologia"
 
 #: ../gui/wxpython/menustrings.py:559
 msgid "Create or rebuild topology"
@@ -8295,9 +8294,8 @@ msgid "Scalebar is not appropriate for this projection"
 msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:1018
-#, fuzzy
 msgid "wxGUI Cartographic Composer"
-msgstr "Graficzny modeler wxGUI"
+msgstr "Kompozytor wydruków wxGUI"
 
 #: ../gui/wxpython/psmap/frame.py:1020
 msgid ""
@@ -14738,9 +14736,8 @@ msgstr "Zapisz zmiany"
 #~ msgid "Settings named '%s' not found"
 #~ msgstr "Ustawienia o nazwie '%s' nie odnalezione"
 
-#, fuzzy
 #~ msgid "GRASS GIS Cartographic Composer (experimental prototype)"
-#~ msgstr "Graficzny modeler GRASS GIS"
+#~ msgstr "Kompozytor wydruków GRASS GIS (prototyp)"
 
 #, fuzzy
 #~ msgid "GRASS GIS Graphical Modeler (experimental prototype)"

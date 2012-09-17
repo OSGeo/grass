@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2012-08-30 00:46+0100\n"
+"PO-Revision-Date: 2012-09-17 22:46+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: GRASS Translation Team\n"
 "Language: pl\n"
@@ -6695,17 +6695,17 @@ msgstr "Flagi"
 #: ../lib/gis/parser_help.c:194 ../lib/gis/parser_interface.c:329
 #: ../lib/gis/parser_html.c:163 ../lib/gis/parser_rest.c:164
 msgid "Allow output files to overwrite existing files"
-msgstr "Pozwól plikom wyjściowym nadpisywać istniejące pliki"
+msgstr "Nadpisz istniejące pliki"
 
 #: ../lib/gis/parser_help.c:196 ../lib/gis/parser_interface.c:337
 #: ../lib/gis/parser_html.c:167 ../lib/gis/parser_rest.c:168
 msgid "Verbose module output"
-msgstr "Głośne wyjście modułu (maximum komunikatów)"
+msgstr "Głośne wyjście modułu (maksimum komunikatów)"
 
 #: ../lib/gis/parser_help.c:197 ../lib/gis/parser_interface.c:344
 #: ../lib/gis/parser_html.c:170 ../lib/gis/parser_rest.c:171
 msgid "Quiet module output"
-msgstr "Ciche wyjście modułu (minimum komunikatów)"
+msgstr "Uruchom bez komunikatów"
 
 #: ../lib/gis/parser_help.c:205
 #, fuzzy
