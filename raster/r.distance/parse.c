@@ -28,23 +28,12 @@ void parse(int argc, char *argv[], struct Parms *parms)
     struct Flag *labels, *overlap;
     const char *name, *mapset;
 
-    maps = G_define_option();
+    maps = G_define_standard_option(G_OPT_R_MAPS);
+    maps->key_desc = "name1,name2";
+    maps->description = _("Name of two input raster maps for computing inter-class distances");
 
-    maps->key = "maps";
-    maps->key_desc = "map1,map2";
-    maps->required = YES;
-    maps->multiple = NO;
-    maps->type = TYPE_STRING;
-    maps->description = _("Maps for computing inter-class distances");
-    maps->gisprompt = "old,cell,raster";
-
-    fs = G_define_option();
-    fs->key = "fs";
-    fs->required = NO;
-    fs->multiple = NO;
+    fs = G_define_standard_option(G_OPT_F_SEP);
     fs->answer = ":";		/* colon is default output fs */
-    fs->type = TYPE_STRING;
-    fs->description = _("Output field separator");
 
     labels = G_define_flag();
     labels->key = 'l';
