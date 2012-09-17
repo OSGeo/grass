@@ -66,8 +66,9 @@ SUBDIRS = \
 	v.report \
 	v.out.gps \
 	v.what.vect \
-	v.krige \
 	wxpyimgview
+
+#        v.krige \
 
 #	r.mapcalculator \
 #	r.rgb \
