@@ -103,7 +103,6 @@ int main(int argc, char *argv[])
     
     sep = G_define_standard_option(G_OPT_F_SEP);
     sep->label = _("Field separator for RMS report");
-    sep->description = _("Special characters: newline, space, comma, tab");
 
     flag_use3d = G_define_flag();
     flag_use3d->key = '3';

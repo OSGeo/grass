@@ -114,9 +114,7 @@ int main(int argc, char *argv[])
 	_("Name for output file (if omitted or \"-\" output to stdout)");
 
     option.fs = G_define_standard_option(G_OPT_F_SEP);
-    option.fs->key_desc = "character|space|tab";
     option.fs->answer = "space";
-    option.fs->description = _("Output field separator");
 
     option.nv = G_define_option();
     option.nv->key = "nv";

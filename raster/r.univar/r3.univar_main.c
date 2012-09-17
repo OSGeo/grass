@@ -52,7 +52,6 @@ void set_params()
 	_("Percentile to calculate (requires extended statistics flag)");
 
     param.separator = G_define_standard_option(G_OPT_F_SEP);
-    param.separator->description = _("Special characters: space, comma, tab");
 
     param.shell_style = G_define_flag();
     param.shell_style->key = 'g';

@@ -198,9 +198,6 @@ int main(int argc, char *argv[])
 	_("Column to hold statistics, must be of type double, will be created if not existing");
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
-    fs_opt->answer = "|";
-    fs_opt->key_desc = "character|space|tab";
-    fs_opt->description = _("Output field separator");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
