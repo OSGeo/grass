@@ -69,9 +69,7 @@ int main(int argc, char *argv[])
     parm.vals->description = _("Example: 1.4,3.8,13");
 
     parm.fs = G_define_standard_option(G_OPT_F_SEP);
-    parm.fs->key_desc = "character|space|tab";
     parm.fs->answer = "tab";
-    parm.fs->description = _("Output field separator");
 
     parm.raster = G_define_standard_option(G_OPT_R_INPUT);
     parm.raster->key = "raster";
