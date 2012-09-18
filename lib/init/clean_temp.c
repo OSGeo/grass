@@ -32,8 +32,6 @@
 #define BUF_MAX 4096
 #endif
 
-extern int errno;
-
 #define SLEEP 30		/* 30 seconds */
 
 /* Recursively scan the directory pathname, removing directory and files */
