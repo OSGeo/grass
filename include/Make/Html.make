@@ -1,12 +1,6 @@
 
 # generic html rules for all commands
 
-ifdef CROSS_COMPILING
-
-html:
-
-else
-
 htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2))
 
 IMGSRC := $(wildcard *.png) $(wildcard *.jpg)
@@ -30,6 +24,12 @@ $(MANDIR)/%.$(MANSECT): $(HTMLDIR)/%.html
 
 %.tmp.html: $(HTMLSRC)
 	if [ "$(HTMLSRC)" != "" ] ; then $(call htmldesc,$<,$@) ; fi
+
+ifdef CROSS_COMPILING
+
+html:
+
+else
 
 html: $(HTMLDIR)/$(PGM).html $(MANDIR)/$(PGM).$(MANSECT)
 
