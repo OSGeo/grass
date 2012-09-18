@@ -768,6 +768,8 @@ static const char *papszDatumEquiv[] = {
     "Deutsches_Hauptdreiecksnetz",
     "South_American_1969",
     "South_American_Datum_1969",
+    "ITRF_1992",
+    "ITRF92",
     NULL
 };
 

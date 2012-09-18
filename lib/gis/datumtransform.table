@@ -96,3 +96,5 @@ tokyo   "towgs84=-147.54,507.26,680.47" "Japan" " "
 tokyo   "towgs84=-147,506,687" "South Korea" " "
 # Campo Inchauspe, personal communication CONAE (http://www.conae.gov.ar), Argentina:
 cai     "towgs84=-149.1,138.1,90.9,-0.142,0.344,0.301,0.388" "Argentina" "provided by CONAE, Argentina"
+# http://lists.maptools.org/pipermail/proj/2012-September/006413.html
+itrf92	"towgs84=0,0,0,0,0,0,0" "Mexico" "Considered identical to WGS84"
