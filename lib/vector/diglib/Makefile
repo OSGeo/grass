@@ -21,7 +21,9 @@ endif
 
 default: lib
 	@echo "==============TEST============="
+ifeq ($(strip $(CROSS_COMPILING)),)
 	$(MAKE) test
+endif
 
 test: $(OBJDIR)/test.tmp $(TESTFILE)
 	diff $(OBJDIR)/test.tmp $(TESTFILE)
