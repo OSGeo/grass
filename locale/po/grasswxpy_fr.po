@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2012-09-10 08:15+0100\n"
+"PO-Revision-Date: 2012-09-11 20:24+0200\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -1728,7 +1728,7 @@ msgstr "Histogramme"
 
 #: ../gui/wxpython/lmgr/layertree.py:451 ../gui/wxpython/menustrings.py:518
 msgid "Univariate raster statistics"
-msgstr ""
+msgstr "Statistiques raster univariées"
 
 #: ../gui/wxpython/lmgr/layertree.py:453
 msgid "Profile"
@@ -1791,7 +1791,7 @@ msgstr "Échec de la numérisation de vecteur"
 #: ../gui/wxpython/lmgr/layertree.py:684
 #, python-format
 msgid "Set opacity of <%s>"
-msgstr "Régler l'opacité <%s>"
+msgstr "Régler l'opacité de <%s>"
 
 #: ../gui/wxpython/lmgr/layertree.py:795
 msgid "Layer group:"
@@ -1817,7 +1817,7 @@ msgstr "raster"
 #: ../gui/wxpython/lmgr/layertree.py:848
 #: ../gui/wxpython/gui_core/dialogs.py:1300
 msgid "3D raster"
-msgstr "Carte raster 3D :"
+msgstr "Carte raster 3D"
 
 #: ../gui/wxpython/lmgr/layertree.py:851
 msgid "RGB"
@@ -2071,7 +2071,7 @@ msgid ""
 msgstr ""
 "Impossible de renommer le jeu de cartes.\n"
 "\n"
-"Le jeu de cartes <%s> existe déjà dans le secteur."
+"Le jeu de cartes <%s> existe déjà dans ce secteur."
 
 #: ../gui/wxpython/gis_set.py:530
 #, python-format
@@ -2214,7 +2214,7 @@ msgid ""
 msgstr ""
 "ÊTES-VOUS VRAIMENT SÛR ?\n"
 "\n"
-"Si vous persistez à exécuter une autre session GRASS, vous risquez de corrompre vos données. Jetez un dernier œil à votre gestionnaire de tâches pour vous assurer..."
+"Si vous avez une autre session GRASS en cours, vous risquez de corrompre vos données. Vérifiez dans votre gestionnaire de tâches pour en être sûr ..."
 
 #: ../gui/wxpython/gis_set.py:855
 #, python-format
@@ -2225,7 +2225,7 @@ msgid ""
 msgstr ""
 "Impossible d'enlever '%(lock)s'.\n"
 "\n"
-"Détails: %(reason)s"
+"Détails : %(reason)s"
 
 #: ../gui/wxpython/gis_set.py:954
 msgid "Starting GRASS for the first time"
@@ -2662,7 +2662,7 @@ msgstr "Liste de couches"
 #: ../gui/wxpython/dbmgr/base.py:3250
 #, python-format
 msgid "Drop also linked attribute table (%s)"
-msgstr "Éliminer également la table attributaire liée (%s)"
+msgstr "Supprimer également la table attributaire liée (%s)"
 
 #: ../gui/wxpython/dbmgr/base.py:2469
 msgid "Column name"
@@ -4250,7 +4250,6 @@ msgid "Save region:"
 msgstr "Enregistrer une région :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:590
-#, fuzzy
 msgid "Set size and position"
 msgstr "Taille et position"
 
@@ -4298,99 +4297,89 @@ msgstr ""
 "Double-clic pour modifier les options."
 
 #: ../gui/wxpython/gui_core/dialogs.py:920
-#, fuzzy
 msgid "Create or edit imagery groups"
 msgstr "Créer/éditer un groupe d'images"
 
 #: ../gui/wxpython/gui_core/dialogs.py:938
-#, fuzzy
 msgid "Apply changes to selected group and close dialog"
 msgstr "Appliquer les modifications et fermer la boîte de dialogue"
 
 #: ../gui/wxpython/gui_core/dialogs.py:939
-#, fuzzy
 msgid "Apply changes to selected group"
-msgstr "Appliquer les modifications pour cette session"
+msgstr "Appliquer les modifications"
 
 #: ../gui/wxpython/gui_core/dialogs.py:940
-#, fuzzy
 msgid "Close dialog, changes are not applied"
-msgstr "Fermer la boîte de dialogue après validation"
+msgstr "Fermer la boîte de dialogue, les modifications ne seront pas appliquées"
 
 #: ../gui/wxpython/gui_core/dialogs.py:981
 msgid "Select the group you want to edit or enter name of new group:"
-msgstr ""
+msgstr "Sélectionner le groupe que vous voulez modifier ou entrez le nom d'un nouveau groupe :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:992
-#, fuzzy
 msgid "Layers in selected group:"
-msgstr "Sélectionner la couche"
+msgstr "Couches dans le groupe sélectionné :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1004
-#, fuzzy
 msgid "Select map layers and add them to the list."
-msgstr "La couche sélectionnée n'est pas un vecteur."
+msgstr "Sélectionner la couche et l'ajouter à la liste"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1008
 #, fuzzy
 msgid "Remove selected layer(s) from list."
-msgstr "Voulez-vous retirer la(les) carte(s) sélectionnée(s) de l'arborescence des couches ?"
+msgstr "Suprimer la(les) couche(s) sélectionnée(s) de la liste."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1018
 msgid "Define also sub-group (same name as group)"
-msgstr ""
+msgstr "Définir également un sous-groupe (même nom que le groupe)"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1033
-#, fuzzy
 msgid "Add selected map layers into group"
-msgstr "Ajouter les cartes sélectionnées dans l'arborescence des couches"
+msgstr "Ajouter les couches sélectionnées dans le groupe"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1066
 #, python-format
 msgid "Group <%s> was changed, do you want to apply changes?"
-msgstr ""
+msgstr "Le groupe <%s> a été modifié, voulez-vous enregistrer les modifications ?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1068
-#, fuzzy
 msgid "Unapplied changes"
-msgstr "Appliquer les changements"
+msgstr "Modifications non appliquées"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1150
 #, python-format
 msgid "No changes to apply in group <%s>."
-msgstr ""
+msgstr "Pas de modifications à appliquer au groupe <%s>."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1153
 #, python-format
 msgid "Group <%s> was successfully created."
-msgstr ""
+msgstr "Le groupe <%s> a été créé."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1155
 #, python-format
 msgid "Group <%s> was successfully changed."
-msgstr ""
+msgstr "Le groupe <%s> a été modifié."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1158
-#, fuzzy, python-format
+#, python-format
 msgid "Creating of new group <%s> failed."
-msgstr "Échec du géoréférencement de la carte vecteur <%s>"
+msgstr "La création du nouveau groupe <%s> a échoué."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1160
 #, python-format
 msgid "Changing of group <%s> failed."
-msgstr ""
+msgstr "La modification du groupe <%s> a échoué."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1189
-#, fuzzy
 msgid "No group selected."
-msgstr "Pas de carte sélectionnée !"
+msgstr "Pas de groupe sélectionné."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1284
 msgid "Use fully-qualified map names"
-msgstr ""
+msgstr "Utilisez un nom de carte complet"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1312
-#, fuzzy
 msgid "Map type:"
 msgstr "Type de carte :"
 
@@ -4403,9 +4392,8 @@ msgid "Mapset:"
 msgstr "Jeu de cartes :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1344
-#, fuzzy
 msgid "Pattern:"
-msgstr "Modèle"
+msgstr "Modèle :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1356
 msgid "Put here regular expression.'.*' means anything, '^' beginning and '$' end."
@@ -4511,9 +4499,8 @@ msgid "Open %s dialog"
 msgstr "Ouvrir la boite de dialogue %s"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1835
-#, fuzzy
 msgid "No layers selected. Operation canceled."
-msgstr "Aucune carte sélectionnée. Opération annulée."
+msgstr "Aucune couche sélectionnée. Opération annulée."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1936
 #, fuzzy
@@ -4574,19 +4561,16 @@ msgid " SQL statement "
 msgstr "Clause SQL"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2500
-#, fuzzy
 msgid "Symbols"
-msgstr "symbole"
+msgstr "Symboles"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2527
-#, fuzzy
 msgid "Symbol directory:"
-msgstr "Taille de symbole :"
+msgstr "Répertoire des symboles :"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2535
-#, fuzzy
 msgid "Symbol name:"
-msgstr "Taille de symbole :"
+msgstr "Nom du symbole :"
 
 #: ../gui/wxpython/menustrings.py:2 ../gui/wxpython/menustrings.py:914
 msgid "&File"
@@ -4682,7 +4666,6 @@ msgid "Close all open map display windows"
 msgstr "Fermer tous les fenêtres d'affichage de cartes"
 
 #: ../gui/wxpython/menustrings.py:30
-#, fuzzy
 msgid "Common formats import"
 msgstr "Importer des formats standards"
 
@@ -4808,11 +4791,11 @@ msgstr "Téklécharge et importe des données depuis un serveur WMS."
 #: ../gui/wxpython/menustrings.py:58
 #, fuzzy
 msgid "Unpack raster map"
-msgstr "pas de carte raster"
+msgstr "Dépaqueter une carte raster"
 
 #: ../gui/wxpython/menustrings.py:59
 msgid "Unpacks a raster map packed with r.pack."
-msgstr ""
+msgstr "Dépaqueter une carte raster empaquetée avec r.pack."
 
 #: ../gui/wxpython/menustrings.py:61
 msgid "Common import formats"
@@ -4850,7 +4833,7 @@ msgstr "Importe des cartes vecteur au format d'anciennes versions de GRASS."
 
 #: ../gui/wxpython/menustrings.py:69
 msgid "Historical GRASS vector import (all maps)"
-msgstr "Importation de cartes vecteurs ancienne version de GRASS (toutes les cartes)"
+msgstr "Import de cartes vecteurs ancienne version de GRASS (toutes les cartes)"
 
 #: ../gui/wxpython/menustrings.py:70
 msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
@@ -4866,7 +4849,7 @@ msgstr "Convertir des fichiers DXF en carte vecteur GRASS."
 
 #: ../gui/wxpython/menustrings.py:73
 msgid "WFS"
-msgstr ""
+msgstr "WFS"
 
 #: ../gui/wxpython/menustrings.py:74
 #, fuzzy
@@ -14256,7 +14239,7 @@ msgstr "Sommet"
 #~ msgstr "Géoréférencer, rectifier et importer une image Terra-ASTER et ses DEM's associés avec gdalwarp."
 
 #~ msgid "Downloads and imports data from WMS servers"
-#~ msgstr "Téklécharger et importer des données depuis un serveur WMS"
+#~ msgstr "Télécharger et importer des données depuis un serveur WMS"
 
 #~ msgid "ASCII points/GRASS ASCII vector import"
 #~ msgstr "Importer des points ASCII/vecteurs GRASS ASCII"
@@ -15219,7 +15202,7 @@ msgstr "Sommet"
 #~ msgstr "Convertit 3 cartes raster (R,V,B) en fichier image PPM à la résolution de la RÉGION COURANTE."
 
 #~ msgid "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel resolution of the currently defined region."
-#~ msgstr "/Exporte une carte raster en fichier image TIFFbit à la résolution de la région courante. "
+#~ msgstr "Exporte une carte raster en fichier image TIFFbit à la résolution de la région courante. "
 
 #~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
 #~ msgstr "Exporte une carte raster vers le langage Virtual Reality Modeling (VRML)"
@@ -15284,3 +15267,21 @@ msgstr "Sommet"
 
 #~ msgid "Add on double-click"
 #~ msgstr "Ajouter par double-clic"
+
+#~ msgid "Download waypoints, routes, and tracks from a Garmin GPS receiver into a vector map."
+#~ msgstr "Télécharger des waypoints, routes, traces depuis un récepteur GPS garmin vers une carte vectorielle."
+
+#~ msgid "GPSBabel GPS import"
+#~ msgstr "Import GPS depuis GPSBabel"
+
+#~ msgid "Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map."
+#~ msgstr "Importer des waypoints, routes, et traces depuis un récepteur GPS ou un fichier GPS vers une carte vectorielle."
+
+#~ msgid "Imports 3-dimensional Vis5D files (i.e. the V5D file with 1 variable and 1 time step)."
+#~ msgstr "Importer un fichier 3D Vis5D (i.e. fichier V5D avec 1 variable et 1 pas de temps)."
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr "Convertir une couche raster vers un fichier de hauteur pou POVRAY."
+
+#~ msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"
+#~ msgstr "Convertir vers le format POV-RAY, GRASS x,y,z -> POV-Ray x,z,y"
