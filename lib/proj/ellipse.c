@@ -71,7 +71,7 @@ GPJ__get_ellipsoid_params(struct Key_Value *proj_keys,
 	/* else use ellipsoid defined in PROJ_INFO */
 	ellps = G_store(G_find_key_value("ellps", proj_keys));
 
-    if (ellps != NULL) {
+    if (ellps != NULL && *ellps) {
 	if (GPJ_get_ellipsoid_by_name(ellps, &estruct) < 0)
 	    G_fatal_error(_("Invalid ellipsoid <%s> in file"), ellps);
 
@@ -84,6 +84,9 @@ GPJ__get_ellipsoid_params(struct Key_Value *proj_keys,
 	return 1;
     }
     else {
+	if (ellps)    /* *ellps = '\0' */
+	    G_free(ellps);
+
 	str3 = G_find_key_value("a", proj_keys);
 	if (str3 != NULL) {
 	    char *str4;
