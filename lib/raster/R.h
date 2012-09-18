@@ -71,7 +71,6 @@ struct fileinfo			/* Information for opened cell files */
 
 struct R__			/*  Structure of library globals */
 {
-    int little_endian;          /* Flag denoting little-endian architecture */
     RASTER_MAP_TYPE fp_type;	/* type for writing floating maps */
     int mask_fd;		/* File descriptor for automatic mask   */
     int auto_mask;		/* Flag denoting automatic masking      */

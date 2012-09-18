@@ -108,6 +108,9 @@ static int gisinit(void)
     /* Mark window as not set */
     G__.window_set = 0;
 
+    /* byte order */
+    G__.little_endian = G_is_little_endian();
+
     initialized = 1;
 
     setlocale(LC_NUMERIC, "C");

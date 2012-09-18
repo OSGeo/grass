@@ -1,14 +1,14 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <grass/raster.h>
+#include <grass/gis.h>
 
-#include "R.h"
+#include "G.h"
 
 static void swap_float(void *dstp, const void *srcp) {
     unsigned char *dst = (unsigned char *) dstp;
     const unsigned char *src = (const unsigned char *) srcp;
-    if (R__.little_endian) {
+    if (G__.little_endian) {
 	dst[0] = src[3];
 	dst[1] = src[2];
 	dst[2] = src[1];
@@ -21,7 +21,7 @@ static void swap_float(void *dstp, const void *srcp) {
 static void swap_double(void *dstp, const void *srcp) {
     unsigned char *dst = (unsigned char *) dstp;
     const unsigned char *src = (const unsigned char *) srcp;
-    if (R__.little_endian) {
+    if (G__.little_endian) {
 	dst[0] = src[7];
 	dst[1] = src[6];
 	dst[2] = src[5];
@@ -35,22 +35,22 @@ static void swap_double(void *dstp, const void *srcp) {
 	memcpy(dst, src, 8);
 }
 
-void Rast_xdr_get_float(float *dst, const void *src)
+void G_xdr_get_float(float *dst, const void *src)
 {
     swap_float(dst, src);
 }
 
-void Rast_xdr_put_float(void *dst, const float *src)
+void G_xdr_put_float(void *dst, const float *src)
 {
     swap_float(dst, src);
 }
 
-void Rast_xdr_get_double(double *dst, const void *src)
+void G_xdr_get_double(double *dst, const void *src)
 {
     swap_double(dst, src);
 }
 
-void Rast_xdr_put_double(void *dst, const double *src)
+void G_xdr_put_double(void *dst, const double *src)
 {
     swap_double(dst, src);
 }

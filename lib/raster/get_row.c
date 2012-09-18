@@ -292,7 +292,7 @@ static void cell_values_float(int fd, const unsigned char *data,
 	    continue;
 	}
 
-	Rast_xdr_get_float(&c[i], &work_buf[cmap[i]-1]);
+	G_xdr_get_float(&c[i], &work_buf[cmap[i]-1]);
     }
 }
 
@@ -311,7 +311,7 @@ static void cell_values_double(int fd, const unsigned char *data,
 	    continue;
 	}
 
-	Rast_xdr_get_double(&c[i], &work_buf[cmap[i]-1]);
+	G_xdr_get_double(&c[i], &work_buf[cmap[i]-1]);
     }
 }
 

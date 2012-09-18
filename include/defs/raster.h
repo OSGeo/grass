@@ -578,12 +578,6 @@ double Rast_col_to_easting(double, const struct Cell_head *);
 void Rast__create_window_mapping(int);
 int Rast_row_repeat_nomask(int, int);
 
-/* xdr.c */
-void Rast_xdr_get_float(float *, const void *);
-void Rast_xdr_put_float(void *, const float *);
-void Rast_xdr_get_double(double *, const void *);
-void Rast_xdr_put_double(void *, const double *);
-
 /* zero_cell.c */
 void Rast_zero_buf(void *, RASTER_MAP_TYPE);
 void Rast_zero_input_buf(void *, RASTER_MAP_TYPE);
