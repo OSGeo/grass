@@ -154,7 +154,7 @@ static void convert_float(float *work_buf, int size, char *null_buf,
 	else
 	    f = rast[i];
 
-	Rast_xdr_put_float(&work_buf[i], &f);
+	G_xdr_put_float(&work_buf[i], &f);
     }
 }
 
@@ -174,7 +174,7 @@ static void convert_double(double *work_buf, int size, char *null_buf,
 	else
 	    d = rast[i];
 
-	Rast_xdr_put_double(&work_buf[i], &d);
+	G_xdr_put_double(&work_buf[i], &d);
     }
 }
 

@@ -112,8 +112,8 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 	    return 2;
 	}
 
-	Rast_xdr_get_double(&dcell1, xdr_buf[0]);
-	Rast_xdr_get_double(&dcell2, xdr_buf[1]);
+	G_xdr_get_double(&dcell1, xdr_buf[0]);
+	G_xdr_get_double(&dcell2, xdr_buf[1]);
 
 	Rast_update_fp_range(dcell1, drange);
 	Rast_update_fp_range(dcell2, drange);
@@ -303,8 +303,8 @@ void Rast_write_fp_range(const char *name, const struct FPRange *range)
 	return;
     }
 
-    Rast_xdr_put_double(xdr_buf[0], &range->min);
-    Rast_xdr_put_double(xdr_buf[1], &range->max);
+    G_xdr_put_double(xdr_buf[0], &range->min);
+    G_xdr_put_double(xdr_buf[1], &range->max);
 
     if (write(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
 	G_remove_misc("cell_misc", "f_range", name);
