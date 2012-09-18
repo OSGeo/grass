@@ -25,7 +25,12 @@
 #include <grass/glocale.h>
 
 #ifdef HAVE_SYS_IOCTL_H
+#ifdef __ANDROID__
+#  include <asm/ioctls.h>
+#  include <asm/termios.h>
+#else
 #  include <sys/ioctl.h>
+#endif
 #endif
 
 typedef int ls_filter_func(const char * /*filename */ , void * /*closure */ );
