@@ -7,7 +7,6 @@ To determine the elevation of a point on a contour map, an individual
 might interpolate its value from those of the two nearest contour lines
 (uphill and downhill).
 
-
 <p>
 <em>r.surf.contour</em> works in a similar way.  Initially, a vector map of
 the contour lines is made with the elevation of each line as an attribute.
@@ -64,6 +63,37 @@ slight anomalies may occur.  The speed of <em>r.surf.contour</em> is dependent
 on how far "apart" the contour lines are from each other (as measured in
 raster cells).  Since a flood fill algorithm is used, the program's running
 time will grow exponentially with the distance between contour lines.
+
+<h2>EXAMPLE</h2>
+
+Example to create contour lines from elevation model, then recreating DEM
+from these contour lines along with differences analysis (North Carolina
+sample data set):
+
+<div class="code"><pre>
+g.region rast=elevation -p
+
+# get minimum elevation value
+r.univar elevation
+
+# generate vector contour lines 
+r.contour input=elevation output=contours_5m step=5 minlevel=50
+
+# rasterize contour lines
+v.info -c contours_5m
+v.to.rast input=contours_5m output=contours_5m use=attr column=level
+
+# generate DEM from rasterized contour lines
+r.surf.contour input=contours_5m output=elevation_from_cont5m
+
+# calculate difference map
+r.mapcalc "diff = elevation - elevation_from_cont5m"
+r.colors diff color=differences
+
+# analyze differences statistically
+r.univar diff
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
