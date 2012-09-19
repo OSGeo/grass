@@ -5,6 +5,19 @@
 
 #include "G.h"
 
+static void swap_int(void *dstp, const void *srcp) {
+    unsigned char *dst = (unsigned char *) dstp;
+    const unsigned char *src = (const unsigned char *) srcp;
+    if (G__.little_endian) {
+	dst[0] = src[3];
+	dst[1] = src[2];
+	dst[2] = src[1];
+	dst[3] = src[0];
+    }
+    else
+	memcpy(dst, src, 4);
+}
+
 static void swap_float(void *dstp, const void *srcp) {
     unsigned char *dst = (unsigned char *) dstp;
     const unsigned char *src = (const unsigned char *) srcp;
@@ -33,6 +46,16 @@ static void swap_double(void *dstp, const void *srcp) {
     }
     else
 	memcpy(dst, src, 8);
+}
+
+void G_xdr_get_int(int *dst, const void *src)
+{
+    swap_int(dst, src);
+}
+
+void G_xdr_put_int(void *dst, const int *src)
+{
+    swap_int(dst, src);
 }
 
 void G_xdr_get_float(float *dst, const void *src)
