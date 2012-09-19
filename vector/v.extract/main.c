@@ -24,7 +24,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-#include <search.h>
 #include <sys/types.h>
 #include <unistd.h>
 
