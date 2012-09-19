@@ -725,6 +725,8 @@ void G__write_Cell_head3(FILE *, const struct Cell_head *, int);
 void G_write_zeros(int, size_t);
 
 /* xdr.c */
+void G_xdr_get_int(int *, const void *);
+void G_xdr_put_int(void *, const int *);
 void G_xdr_get_float(float *, const void *);
 void G_xdr_put_float(void *, const float *);
 void G_xdr_get_double(double *, const void *);
