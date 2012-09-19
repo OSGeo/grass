@@ -8,6 +8,3 @@
 
 /* histo.c */
 int make_histo(int **, int, int);
-
-/* utils.c */
-double myrand(void);
