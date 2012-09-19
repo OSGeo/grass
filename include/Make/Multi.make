@@ -15,7 +15,11 @@ multi: progs htmlmulti
 
 progs: $(PROGFILES)
 
+ifdef CROSS_COMPILING
+htmlmulti:
+else
 htmlmulti: $(HTMLFILES) $(MANFILES)
+endif
 
 $(BIN)/%$(EXE): $(DEPENDENCIES)
 	$(call linker)
