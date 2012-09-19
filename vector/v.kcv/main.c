@@ -25,28 +25,19 @@
 #include <grass/glocale.h>
 #include "kcv.h"
 
-#ifndef RAND_MAX
-#define RAND_MAX (pow(2.0,31.0)-1)
-#endif
-#if defined(__CYGWIN__) || defined(__APPLE__) || defined(__MINGW32__)
-double drand48()
+static double myrand(void)
 {
-    return (rand() / 32767.0);
+    return rand() / (1.0 * RAND_MAX);
 }
-
-#define srand48(sv) (srand((unsigned)(sv)))
-#else
-double drand48();
-void srand48();
-#endif
 
 struct Cell_head window;
 
 int main(int argc, char *argv[])
 {
     int line, nlines, nlinks;
-    double east, north, (*rng) (), max, myrand();
-    int i, j, nsites, np, *p, dcmp();
+    double (*rng)(void);
+    double east, north;
+    int i, j, nsites, np, *p;
     int *pnt_part;
     struct Map_info In, Out;
     static struct line_pnts *Points;
@@ -94,7 +85,11 @@ int main(int argc, char *argv[])
 
     drand48_flag = G_define_flag();
     drand48_flag->key = 'd';
+#ifdef HAVE_DRAND48
     drand48_flag->description = _("Use drand48()");
+#else
+    drand48_flag->description = _("Use drand48() (ignored)");
+#endif
 
     G_gisinit(argv[0]);
 
@@ -103,14 +98,15 @@ int main(int argc, char *argv[])
 
     np = atoi(npart_opt->answer);
 
+#ifdef HAVE_DRAND48
     if (drand48_flag->answer) {
 	rng = drand48;
-	max = 1.0;
 	srand48((long)getpid());
     }
-    else {
+    else
+#endif
+    {
 	rng = myrand;
-	max = RAND_MAX;
 	srand(getpid());
     }
 
@@ -204,8 +200,8 @@ int main(int argc, char *argv[])
 	    int nearest = 0;
 	    double dist;
 
-	    east = rng() / max * (box.E - box.W) + box.W;
-	    north = rng() / max * (box.N - box.S) + box.S;
+	    east = rng() * (box.E - box.W) + box.W;
+	    north = rng() * (box.N - box.S) + box.S;
 
 	    G_debug(3, "east = %f north = %f", east, north);
 
