@@ -305,8 +305,7 @@ class GMFrame(wx.Frame):
         """!Remove nviz notebook page"""
         # if more mapwindow3D were possible, check here if nb page should be removed
         self.notebook.SetSelectionByName('layers')
-        self.notebook.RemovePage('nviz')
-        del self.nviz
+        self.notebook.DeletePage('nviz')
 
         # hide toolbar
         self._auimgr.GetPane('toolbarNviz').Hide()
