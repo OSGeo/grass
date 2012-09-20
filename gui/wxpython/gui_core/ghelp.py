@@ -483,7 +483,11 @@ class AboutWindow(wx.Frame):
         self.langUsed = grass.gisenv().get('LANG', None)
         if not self.langUsed:
             import locale
-            self.langUsed = '.'.join(locale.getdefaultlocale())
+            loc = locale.getdefaultlocale()
+            if loc == (None, None):
+                self.langUsed = _('unknown')
+            else:
+                self.langUsed = u'%s.%s' % (loc[0], loc[1])
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                                                label = self.langUsed),
                           pos = (row, 1),
