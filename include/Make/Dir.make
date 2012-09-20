@@ -4,7 +4,6 @@
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Html.make
-include $(MODULE_TOPDIR)/include/Make/Rest.make
 
 # don't install *.png, *.jpg for directories
 # to prevent problems with r.out.png etc
@@ -40,8 +39,6 @@ clean: clean-recursive
 depend: depend-recursive
 
 htmldir: html
-
-restdir: rest
 
 .PHONY: subdirs parsubdirs htmldir $(SUBDIRS)
 

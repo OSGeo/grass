@@ -27,7 +27,3 @@ htmldir:
 	$(MAKE) -C drivers
 	$(MAKE) parsubdirs
 
-restdocs: restdir
-
-restdir: $(MAKE) parsubdirs
-

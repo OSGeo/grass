@@ -18,10 +18,6 @@ default: htmldir
 
 htmldir: parsubdirs
 
-restdocs: restdir
-
-restdir: parsubdirs
-
 diglib: rtree
 
 Vlib: rtree dglib diglib

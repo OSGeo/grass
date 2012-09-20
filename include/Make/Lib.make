@@ -8,7 +8,6 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Html.make
 include $(MODULE_TOPDIR)/include/Make/Compile.make
-include $(MODULE_TOPDIR)/include/Make/Rest.make
 
 ifneq ($(LIB),)
 LIB_NAME := $($(LIB)_LIBNAME)
@@ -25,4 +24,3 @@ include $(MODULE_TOPDIR)/include/Make/Shlib.make
 
 lib: $(GRASS_LIBRARY_TYPE)
 	if [ "$(PGM)" != "" -a -f "$(PGM)".html ] ; then $(MAKE) html ; fi
-	if [ "$(PGM)" != "" -a -f "$(PGM)".html ] ; then $(MAKE) rest ; fi
