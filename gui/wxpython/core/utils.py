@@ -132,30 +132,34 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
         if len(params) < 1:
             return mapname, False
 
-        mapname = params[0][2]
-        mapset = ''
-        if fullyQualified and '@' not in mapname:
-            if layerType in ('raster', 'vector', '3d-raster', 'rgb', 'his'):
-                try:
-                    if layerType in ('raster', 'rgb', 'his'):
-                        findType = 'cell'
-                    else:
-                        findType = layerType
-                    mapset = grass.find_file(mapname, element = findType)['mapset']
-                except AttributeError, e: # not found
-                    return '', False
-                if not mapset:
-                    found = False
-            else:
-                mapset = grass.gisenv()['MAPSET']
+        # need to add mapset for all maps
+        mapsets = {}
+        for i, p, v in params:
+            mapname = v
+            mapset = ''
+            if fullyQualified and '@' not in mapname:
+                if layerType in ('raster', 'vector', '3d-raster', 'rgb', 'his'):
+                    try:
+                        if layerType in ('raster', 'rgb', 'his'):
+                            findType = 'cell'
+                        else:
+                            findType = layerType
+                        mapset = grass.find_file(mapname, element = findType)['mapset']
+                    except AttributeError, e: # not found
+                        return '', False
+                    if not mapset:
+                        found = False
+                else:
+                    mapset = grass.gisenv()['MAPSET']
+            mapsets[i] = mapset
             
         # update dcmd
         for i, p, v in params:
             if p == 'layer':
                 continue
             dcmd[i] = p + '=' + v
-            if mapset:
-                dcmd[i] += '@' + mapset
+            if i in mapsets and mapsets[i]:
+                dcmd[i] += '@' + mapsets[i]
         
         maps = list()
         ogr = False
