@@ -56,7 +56,6 @@ DRIVERDIR       = $(ARCH_DISTDIR)/driver
 DBDRIVERDIR     = $(ARCH_DISTDIR)/driver/db
 DOCSDIR         = $(ARCH_DISTDIR)/docs
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
-RESTDIR         = $(ARCH_DISTDIR)/docs/rest
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale

@@ -102,23 +102,5 @@ changelog:
 	fi
 	sh svn2cl ./ChangeLog
 
-rest_dirs = \
-	db \
-	general \
-	imagery \
-	ps \
-	raster \
-	raster3d \
-	scripts \
-	temporal \
-	vector \
-	
-restdocs:
-	$(MAKE)
-	$(MKDIR) $(RESTDIR)
-	for dir in $(rest_dirs) ; do \
-	  $(MAKE) -C $$dir rest ; \
-	  done
-	
 .PHONY: htmldocs-single htmldocs packagehtmldocs pdfdocs cleandocs html2pdfdoc
 .PHONY: html2pdfdoccomplete changelog
