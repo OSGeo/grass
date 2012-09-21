@@ -107,7 +107,7 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         ret = grass.read_command('g.mapsets',
                                  quiet = True,
                                  flags = 'l',
-                                 fs = 'newline')
+                                 sep = 'newline')
         self.mapsets = []
         if ret:
             self.mapsets = ret.splitlines()
@@ -116,7 +116,7 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         ret = grass.read_command('g.mapsets',
                                  quiet = True,
                                  flags = 'p',
-                                 fs = 'newline')
+                                 sep = 'newline')
         mapsets_access = []
         if ret:
             mapsets_access = ret.splitlines()

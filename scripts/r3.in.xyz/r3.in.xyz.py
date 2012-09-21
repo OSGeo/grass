@@ -233,7 +233,7 @@ def main():
 	else:
 	    doShell = ''
         grass.run_command('r.in.xyz', flags = 's' + doShell, input = infile,
-			  output = 'dummy', fs = fs, x = x, y = y, z = z,
+			  output = 'dummy', sep = fs, x = x, y = y, z = z,
 			  **addl_opts)
 	sys.exit()
 
@@ -285,7 +285,7 @@ def main():
 		        % (i, region['depths'], zrange_min, zrange_max))
 
 	proc[i] = grass.start_command('r.in.xyz', input = infile, output = tmp_layer_name,
-				      fs = fs, method = method, x = x, y = y, z = z,
+				      sep = fs, method = method, x = x, y = y, z = z,
 				      percent = percent, type = data_type,
 				      zrange = '%.15g,%.15g' % (zrange_min, zrange_max),
 				      **addl_opts)
@@ -312,7 +312,7 @@ def main():
     grass.verbose(_("Assembling 3D cube ..."))
 
     #input order: lower most strata first
-    slices = grass.read_command('g.mlist', type = 'rast', fs = ',',
+    slices = grass.read_command('g.mlist', type = 'rast', sep = ',',
 				pattern = 'tmp.r3xyz.%d.*' % os.getpid()).rstrip('\n')
     grass.debug(slices)
 
