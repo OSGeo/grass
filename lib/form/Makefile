@@ -25,8 +25,7 @@ CFLAGS := $(subst $(MACOSX_ARCHS),,$(CFLAGS)) $(MACOSX_ARCHS_TCLTK)
 LDFLAGS := $(subst $(MACOSX_ARCHS),,$(LDFLAGS)) $(MACOSX_ARCHS_TCLTK)
 endif
 
-LIBES = $(DBMILIB) $(GISLIB) $(DATETIMELIB) $(TCLTKLIBPATH) $(TCLTKLIBS) \
-	$(MATHLIB)
+LIBES = $(DBMILIB) $(GISLIB) $(DATETIMELIB) $(TCLTKLIBPATH) $(TCLTKLIBS)
 
 default: lib $(GTCLTKFORM)
 
@@ -40,4 +39,4 @@ $(FORM): form.tcl | $(FORMDIR)
 	$(INSTALL_DATA) $< $@
 
 $(FORMPROG): $(OBJDIR)/form.o | $(FORMDIR)
-	$(call linker_base,$(LINK),$(LDFLAGS),$(MANIFEST_OBJ) $(LIBES))
+	$(call linker)
