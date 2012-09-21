@@ -89,7 +89,6 @@ XEXTRALIBS          = @X_EXTRA_LIBS@
 USE_X11             = @USE_X11@
 
 MATHLIB             = @MATHLIB@ 
-XDRLIB              = @XDRLIB@
 ICONVLIB            = @ICONVLIB@
 INTLLIB             = @INTLLIB@
 SOCKLIB             = @SOCKLIB@
