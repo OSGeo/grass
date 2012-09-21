@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include <time.h>
 #include <stdarg.h>
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 #include <grass/gis.h>
 
 #include "raster3d_intern.h"

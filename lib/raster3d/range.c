@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -63,9 +61,8 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
 {
     int fd;
     int bytes_read;
-    char xdr_buf[100];
+    char xdr_buf[2 * RASTER3D_XDR_DOUBLE_LENGTH];
     DCELL dcell1, dcell2;
-    XDR xdr_str;
 
     Rast_init_fp_range(drange);
 
@@ -92,14 +89,8 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
 	return 2;
     }
 
-    xdrmem_create(&xdr_str, xdr_buf, (u_int) RASTER3D_XDR_DOUBLE_LENGTH * 2,
-		  XDR_DECODE);
-
-    if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2)) {
-	close(fd);
-	G_warning(_("Error reading range file for [%s in %s]"), name, mapset);
-	return -1;
-    }
+    G_xdr_get_double(&dcell1, &xdr_buf[RASTER3D_XDR_DOUBLE_LENGTH * 0]);
+    G_xdr_get_double(&dcell2, &xdr_buf[RASTER3D_XDR_DOUBLE_LENGTH * 1]);
 
     Rast_update_fp_range(dcell1, drange);
     Rast_update_fp_range(dcell2, drange);
@@ -156,9 +147,8 @@ void Rast3d_range_min_max(RASTER3D_Map * map, double *min, double *max)
 static int writeRange(const char *name, struct FPRange *range)
  /* adapted from Rast_write_fp_range */
 {
-    char xdr_buf[100];
+    char xdr_buf[2 * RASTER3D_XDR_DOUBLE_LENGTH];
     int fd;
-    XDR xdr_str;
 
     fd = G_open_new_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name);
     if (fd < 0) {
@@ -172,13 +162,8 @@ static int writeRange(const char *name, struct FPRange *range)
 	return 0;
     }
 
-    xdrmem_create(&xdr_str, xdr_buf, (u_int) RASTER3D_XDR_DOUBLE_LENGTH * 2,
-		  XDR_ENCODE);
-
-    if (!xdr_double(&xdr_str, &(range->min)))
-	goto error;
-    if (!xdr_double(&xdr_str, &(range->max)))
-	goto error;
+    G_xdr_put_double(&xdr_buf[RASTER3D_XDR_DOUBLE_LENGTH * 0], &range->min);
+    G_xdr_put_double(&xdr_buf[RASTER3D_XDR_DOUBLE_LENGTH * 1], &range->max);
 
     if (write(fd, xdr_buf, RASTER3D_XDR_DOUBLE_LENGTH * 2) != RASTER3D_XDR_DOUBLE_LENGTH * 2)
 	goto error;

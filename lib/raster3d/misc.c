@@ -3,8 +3,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 
 #include <grass/raster.h>
 

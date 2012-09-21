@@ -2,16 +2,12 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 #include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
 
 int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
 {
-    int firstTime = 1;
-    XDR xdrEncodeStream;
     char xdrIntBuf[RASTER3D_XDR_INT_LENGTH * 1024];
     u_int n;
 
@@ -28,27 +24,14 @@ int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
 	}
     }
 
-    if (firstTime) {
-	xdrmem_create(&xdrEncodeStream, xdrIntBuf, RASTER3D_XDR_INT_LENGTH * 1024,
-		      XDR_ENCODE);
-	firstTime = 1;
-    }
-
     do {
+	int j;
 	n = nofNum % 1024;
 	if (n == 0)
 	    n = 1024;
 
-	if (!xdr_setpos(&xdrEncodeStream, 0)) {
-	    Rast3d_error("Rast3d_write_ints: positioning xdr failed");
-	    return 0;
-	}
-
-	if (!xdr_vector(&xdrEncodeStream, (char *)i, n, sizeof(int),
-			(xdrproc_t) xdr_int)) {
-	    Rast3d_error("Rast3d_write_ints: writing xdr failed");
-	    return 0;
-	}
+	for (j = 0; j < n; j++)
+	    G_xdr_put_int(&xdrIntBuf[RASTER3D_XDR_INT_LENGTH * j], i);
 
 	if (write(fd, xdrIntBuf, RASTER3D_XDR_INT_LENGTH * n) !=
 	    RASTER3D_XDR_INT_LENGTH * n) {
@@ -67,8 +50,6 @@ int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
 
 int Rast3d_read_ints(int fd, int useXdr, int *i, int nofNum)
 {
-    int firstTime = 1;
-    XDR xdrDecodeStream;
     char xdrIntBuf[RASTER3D_XDR_INT_LENGTH * 1024];
     u_int n;
 
@@ -85,13 +66,8 @@ int Rast3d_read_ints(int fd, int useXdr, int *i, int nofNum)
 	}
     }
 
-    if (firstTime) {
-	xdrmem_create(&xdrDecodeStream, xdrIntBuf, RASTER3D_XDR_INT_LENGTH * 1024,
-		      XDR_DECODE);
-	firstTime = 1;
-    }
-
     do {
+	int j;
 	n = nofNum % 1024;
 	if (n == 0)
 	    n = 1024;
@@ -102,16 +78,8 @@ int Rast3d_read_ints(int fd, int useXdr, int *i, int nofNum)
 	    return 0;
 	}
 
-	if (!xdr_setpos(&xdrDecodeStream, 0)) {
-	    Rast3d_error("Rast3d_read_ints: positioning xdr failed");
-	    return 0;
-	}
-
-	if (!xdr_vector(&xdrDecodeStream, (char *)i, n, sizeof(int),
-			(xdrproc_t) xdr_int)) {
-	    Rast3d_error("Rast3d_read_ints: reading xdr failed");
-	    return 0;
-	}
+	for (j = 0; j < n; j++)
+	    G_xdr_get_int(i, &xdrIntBuf[RASTER3D_XDR_INT_LENGTH * j]);
 
 	nofNum -= n;
 	i += n;
