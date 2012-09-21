@@ -3,8 +3,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 
 #include <grass/raster.h>
 
@@ -62,7 +60,7 @@ void Rast3d_set_xdr_null_float(float *f)
 
 /*---------------------------------------------------------------------------*/
 
-XDR xdrEncodeStream, xdrDecodeStream;	/* xdr support structures */
+static size_t xdr_off;
 
 int Rast3d_init_fp_xdr(RASTER3D_Map * map, int misuseBytes)
 
@@ -71,10 +69,6 @@ int Rast3d_init_fp_xdr(RASTER3D_Map * map, int misuseBytes)
  /* nof addtl bytes allocated for the xdr array so that */
 		      /* the array can also be (mis)used for other purposes */
 {
-    int doAlloc;
-
-    doAlloc = 0;
-
     if (xdr == NULL) {
 	xdrLength = map->tileSize * RASTER3D_MAX(map->numLengthExtern,
 					    map->numLengthIntern) +
@@ -84,8 +78,6 @@ int Rast3d_init_fp_xdr(RASTER3D_Map * map, int misuseBytes)
 	    Rast3d_error("Rast3d_init_fp_xdr: error in Rast3d_malloc");
 	    return 0;
 	}
-
-	doAlloc = 1;
     }
     else if (map->tileSize * RASTER3D_MAX(map->numLengthExtern,
 				     map->numLengthIntern) + misuseBytes
@@ -98,13 +90,6 @@ int Rast3d_init_fp_xdr(RASTER3D_Map * map, int misuseBytes)
 	    Rast3d_error("Rast3d_init_fp_xdr: error in Rast3d_realloc");
 	    return 0;
 	}
-
-	doAlloc = 1;
-    }
-
-    if (doAlloc) {
-	xdrmem_create(&(xdrEncodeStream), xdr, (u_int) xdrLength, XDR_ENCODE);
-	xdrmem_create(&(xdrDecodeStream), xdr, (u_int) xdrLength, XDR_DECODE);
     }
 
     return 1;
@@ -114,8 +99,6 @@ int Rast3d_init_fp_xdr(RASTER3D_Map * map, int misuseBytes)
 
 static void *xdrTmp;
 static int dstType, srcType, type, externLength, eltLength, isFloat, useXdr;
-static int (*xdrFun) ();
-static XDR *xdrs;
 static double tmpValue, *tmp;
 
 int Rast3d_init_copy_to_xdr(RASTER3D_Map * map, int sType)
@@ -124,24 +107,34 @@ int Rast3d_init_copy_to_xdr(RASTER3D_Map * map, int sType)
     useXdr = map->useXdr;
     srcType = sType;
 
-    if (map->useXdr == RASTER3D_USE_XDR) {
-	if (!xdr_setpos(&(xdrEncodeStream), 0)) {
-	    Rast3d_error("Rast3d_InitCopyToXdr: positioning xdr failed");
-	    return 0;
-	}
-	xdrs = &(xdrEncodeStream);
-    }
+    if (map->useXdr == RASTER3D_USE_XDR)
+	xdr_off = 0;
 
     type = map->type;
     isFloat = (type == FCELL_TYPE);
     externLength = Rast3d_extern_length(type);
     eltLength = Rast3d_length(srcType);
-    if (isFloat)
-	xdrFun = xdr_float;
-    else
-	xdrFun = xdr_double;
     tmp = &tmpValue;
 
+    return 1;
+}
+
+/*---------------------------------------------------------------------------*/
+
+static int xdr_put(const void *src)
+{
+    if (isFloat) {
+	if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > xdrLength) 
+	    return 0;
+	G_xdr_put_float((char*)xdr + xdr_off, src);
+	xdr_off += RASTER3D_XDR_FLOAT_LENGTH;
+    }
+    else {
+	if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > xdrLength)
+	    return 0;
+	G_xdr_put_double((char*)xdr + xdr_off, src);
+	xdr_off += RASTER3D_XDR_DOUBLE_LENGTH;
+    }
     return 1;
 }
 
@@ -161,14 +154,11 @@ int Rast3d_copy_to_xdr(const void *src, int nofNum)
 
 	if (Rast3d_is_null_value_num(src, srcType)) {
 	    Rast3d_set_xdr_null_num(xdrTmp, isFloat);
-	    if (!xdr_setpos(xdrs, xdr_getpos(xdrs) + externLength)) {
-		Rast3d_error("Rast3d_copy_to_xdr: positioning xdr failed");
-		return 0;
-	    }
+	    xdr_off += externLength;
 	}
 	else {
 	    if (type == srcType) {
-		if (xdrFun(xdrs, src) < 0) {
+		if (!xdr_put(src)) {
 		    Rast3d_error("Rast3d_copy_to_xdr: writing xdr failed");
 		    return 0;
 		}
@@ -178,7 +168,7 @@ int Rast3d_copy_to_xdr(const void *src, int nofNum)
 		    *((float *)tmp) = (float)*((double *)src);
 		else
 		    *((double *)tmp) = (double)*((float *)src);
-		if (xdrFun(xdrs, tmp) < 0) {
+		if (!xdr_put(tmp)) {
 		    Rast3d_error("Rast3d_copy_to_xdr: writing xdr failed");
 		    return 0;
 		}
@@ -199,24 +189,34 @@ int Rast3d_init_copy_from_xdr(RASTER3D_Map * map, int dType)
     useXdr = map->useXdr;
     dstType = dType;
 
-    if (useXdr == RASTER3D_USE_XDR) {
-	if (!xdr_setpos(&(xdrDecodeStream), 0)) {
-	    Rast3d_error("Rast3d_init_copy_from_xdr: positioning xdr failed");
-	    return 0;
-	}
-	xdrs = &(xdrDecodeStream);
-    }
+    if (useXdr == RASTER3D_USE_XDR)
+	xdr_off = 0;
 
     type = map->type;
     isFloat = (type == FCELL_TYPE);
     externLength = Rast3d_extern_length(type);
     eltLength = Rast3d_length(dstType);
-    if (isFloat)
-	xdrFun = xdr_float;
-    else
-	xdrFun = xdr_double;
     tmp = &tmpValue;
 
+    return 1;
+}
+
+/*---------------------------------------------------------------------------*/
+
+static int xdr_get(void *src)
+{
+    if (isFloat) {
+	if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > xdrLength) 
+	    return 0;
+	G_xdr_get_float(src, (char*)xdr + xdr_off);
+	xdr_off += RASTER3D_XDR_FLOAT_LENGTH;
+    }
+    else {
+	if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > xdrLength)
+	    return 0;
+	G_xdr_get_double(src, (char*)xdr + xdr_off);
+	xdr_off += RASTER3D_XDR_DOUBLE_LENGTH;
+    }
     return 1;
 }
 
@@ -236,20 +236,17 @@ int Rast3d_copy_from_xdr(int nofNum, void *dst)
 
 	if (Rast3d_is_xdr_null_num(xdrTmp, isFloat)) {
 	    Rast3d_set_null_value(dst, 1, dstType);
-	    if (!xdr_setpos(xdrs, xdr_getpos(xdrs) + externLength)) {
-		Rast3d_error("Rast3d_copy_from_xdr: positioning xdr failed");
-		return 0;
-	    }
+	    xdr_off += externLength;
 	}
 	else {
 	    if (type == dstType) {
-		if (xdrFun(xdrs, dst) < 0) {
+		if (!xdr_get(dst)) {
 		    Rast3d_error("Rast3d_copy_from_xdr: reading xdr failed");
 		    return 0;
 		}
 	    }
 	    else {
-		if (xdrFun(xdrs, tmp) < 0) {
+		if (!xdr_get(tmp)) {
 		    Rast3d_error("Rast3d_copy_from_xdr: reading xdr failed");
 		    return 0;
 		}

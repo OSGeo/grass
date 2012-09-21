@@ -1,8 +1,3 @@
-#include <rpc/types.h>
-#include <rpc/xdr.h>
-
-/*---------------------------------------------------------------------------*/
-
 #include <grass/raster3d.h>
 #include <grass/gis.h>
 

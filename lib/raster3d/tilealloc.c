@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 #include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/

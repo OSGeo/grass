@@ -1,5 +1,3 @@
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -13,36 +11,16 @@ static unsigned char clearMask[9] =
 
 /*---------------------------------------------------------------------------*/
 
-static void Rast3d_float2xdrFloat(float *f, float *xdrf)
+static void Rast3d_float2xdrFloat(const float *f, float *xdrf)
 {
-    XDR xdrEncodeStream;
-
-    xdrmem_create(&xdrEncodeStream, (caddr_t) xdrf, 4, XDR_ENCODE);
-
-    if (!xdr_setpos(&xdrEncodeStream, 0))
-	Rast3d_fatal_error("Rast3d_float2xdrFloat: positioning xdr failed");
-
-    if (!xdr_float(&xdrEncodeStream, f))
-	Rast3d_fatal_error("Rast3d_float2xdrFloat: writing xdr failed");
-
-    xdr_destroy(&xdrEncodeStream);
+    G_xdr_put_float(xdrf, f);
 }
 
 /*---------------------------------------------------------------------------*/
 
-static void Rast3d_double2xdrDouble(double *d, double *xdrd)
+static void Rast3d_double2xdrDouble(const double *d, double *xdrd)
 {
-    XDR xdrEncodeStream;
-
-    xdrmem_create(&xdrEncodeStream, (caddr_t) xdrd, 8, XDR_ENCODE);
-
-    if (!xdr_setpos(&xdrEncodeStream, 0))
-	Rast3d_fatal_error("Rast3d_double2xdrDouble: positioning xdr failed");
-
-    if (!xdr_double(&xdrEncodeStream, d))
-	Rast3d_fatal_error("Rast3d_double2xdrDouble: writing xdr failed");
-
-    xdr_destroy(&xdrEncodeStream);
+    G_xdr_put_double(xdrd, d);
 }
 
 /*---------------------------------------------------------------------------*/

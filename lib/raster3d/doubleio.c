@@ -2,16 +2,12 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 #include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
 
 int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
 {
-    int firstTime = 1;
-    XDR xdrEncodeStream;
     char xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * 1024];
     u_int n;
 
@@ -28,28 +24,14 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
 	}
     }
 
-
-    if (firstTime) {
-	xdrmem_create(&xdrEncodeStream, xdrDoubleBuf,
-		      RASTER3D_XDR_DOUBLE_LENGTH * 1024, XDR_ENCODE);
-	firstTime = 1;
-    }
-
     do {
+	int j;
 	n = nofNum % 1024;
 	if (n == 0)
 	    n = 1024;
 
-	if (!xdr_setpos(&xdrEncodeStream, 0)) {
-	    Rast3d_error("Rast3d_write_doubles: positioning xdr failed");
-	    return 0;
-	}
-
-	if (!xdr_vector(&xdrEncodeStream, (char *)i, n, sizeof(double),
-			(xdrproc_t) xdr_double)) {
-	    Rast3d_error("Rast3d_write_doubles: writing xdr failed");
-	    return 0;
-	}
+	for (j = 0; j < n; j++)
+	    G_xdr_put_double(&xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * j], i);
 
 	if (write(fd, xdrDoubleBuf, RASTER3D_XDR_DOUBLE_LENGTH * n) !=
 	    RASTER3D_XDR_DOUBLE_LENGTH * n) {
@@ -68,8 +50,6 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
 
 int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
 {
-    int firstTime = 1;
-    XDR xdrDecodeStream;
     char xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * 1024];
     u_int n;
 
@@ -86,13 +66,8 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
 	}
     }
 
-    if (firstTime) {
-	xdrmem_create(&xdrDecodeStream, xdrDoubleBuf,
-		      RASTER3D_XDR_DOUBLE_LENGTH * 1024, XDR_DECODE);
-	firstTime = 1;
-    }
-
     do {
+	int j;
 	n = nofNum % 1024;
 	if (n == 0)
 	    n = 1024;
@@ -103,16 +78,8 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
 	    return 0;
 	}
 
-	if (!xdr_setpos(&xdrDecodeStream, 0)) {
-	    Rast3d_error("Rast3d_read_doubles: positioning xdr failed");
-	    return 0;
-	}
-
-	if (!xdr_vector(&xdrDecodeStream, (char *)i, n, sizeof(double),
-			(xdrproc_t) xdr_double)) {
-	    Rast3d_error("Rast3d_read_doubles: reading xdr failed");
-	    return 0;
-	}
+	for (j = 0; j < n; j++)
+	    G_xdr_get_double(i, &xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * j]);
 
 	nofNum -= n;
 	i += n;
