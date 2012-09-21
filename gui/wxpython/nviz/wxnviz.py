@@ -944,6 +944,10 @@ class Nviz(object):
         if not GP_site_exists(id):
             return -1
         
+        # dtree and ctree defined but not used
+        if marker > 5:
+            marker += 2
+        
         Debug.msg(3, "Nviz::SetVectorPointMode(): id=%d, color=%s, "
                   "width=%d, size=%f, marker=%d",
                   id, color_str, width, size, marker)

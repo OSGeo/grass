@@ -871,8 +871,6 @@ class Settings:
                                                                        _("sphere"),
                                                                        _("cube"),
                                                                        _("diamond"),
-                                                                       _("dtree"),
-                                                                       _("ctree"),
                                                                        _("aster"),
                                                                        _("gyro"),
                                                                        _("histogram"))
