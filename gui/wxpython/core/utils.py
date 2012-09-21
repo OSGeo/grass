@@ -135,6 +135,8 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
         # need to add mapset for all maps
         mapsets = {}
         for i, p, v in params:
+            if p == 'layer':
+                continue
             mapname = v
             mapset = ''
             if fullyQualified and '@' not in mapname:
