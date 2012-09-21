@@ -518,17 +518,6 @@ DBMIEXTRALIB="$LIBS"
 LIBS="$ac_save_libs"
 AC_SUBST(DBMIEXTRALIB)
 
-# Note: -lxdr -liberty -lws2_32 is for MinGW
-
-AC_CHECK_FUNC(xdrmem_create, XDRLIB=, [
-AC_CHECK_LIB(sun, xdrmem_create, XDRLIB=-lsun, [
-AC_CHECK_LIB(nsl, xdrmem_create, XDRLIB=-lnsl, [
-AC_CHECK_LIB(rpclib, xdrmem_create, XDRLIB=-lrpclib, [
-AC_CHECK_LIB(xdr, xdrmem_create, XDRLIB="-lxdr -liberty -lws2_32" , 
-   [ AC_MSG_ERROR([*** Unable to locate XDR functions.]) ], -liberty -lws2_32 )
-])])])])
-AC_SUBST(XDRLIB)
-
 AC_CHECK_FUNCS(asprintf)
 AC_SUBST(HAVE_ASPRINTF)
 

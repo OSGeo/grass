@@ -15,7 +15,7 @@ endif
 endif
 
 linker_base = $(PRELINK) && $(1) $(2) -o $@ $(filter %.o,$^) $(filter %.res,$^) $(3)
-linker_x = $(call linker_base,$(1),$(LDFLAGS) $(EXTRA_LDFLAGS),$(FMODE_OBJ) $(MANIFEST_OBJ) $(LIBES) $(EXTRA_LIBS) $(MATHLIB) $(XDRLIB))
+linker_x = $(call linker_base,$(1),$(LDFLAGS) $(EXTRA_LDFLAGS),$(FMODE_OBJ) $(MANIFEST_OBJ) $(LIBES) $(EXTRA_LIBS) $(MATHLIB))
 linker_c = $(call linker_x,$(CC))
 linker_cxx = $(call linker_x,$(CXX))
 linker = $(call linker_x,$(LINK))
