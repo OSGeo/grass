@@ -22,7 +22,6 @@
 ############################## Make Variables ###############################
 
 CC                  = @CC@
-#FC                  = @F77@
 CXX                 = @CXX@
 LEX                 = @LEX@
 YACC                = @YACC@
@@ -98,10 +97,6 @@ ZLIB                = @ZLIB@
 ZLIBINCPATH         = @ZLIBINCPATH@
 ZLIBLIBPATH         = @ZLIBLIBPATH@
 
-#DBM:
-#DBMINCPATH          = @DBMINCPATH@
-#DBMLIBPATH          = @DBMLIBPATH@
-#DBMLIB              = @DBMLIB@
 DBMIEXTRALIB         = @DBMIEXTRALIB@
 
 #readline
@@ -140,10 +135,6 @@ ODBCLIB             = @ODBCLIB@
 PNGINC              = @PNGINC@
 PNGLIB              = @PNGLIB@
 USE_PNG             = @USE_PNG@
-
-JPEGINCPATH         = @JPEGINCPATH@
-JPEGLIBPATH         = @JPEGLIBPATH@
-JPEGLIB             = @JPEGLIB@
 
 TIFFINCPATH         = @TIFF_INCLUDE_DIRS@
 TIFFLIBPATH         = @TIFF_LIBRARY_DIRS@
