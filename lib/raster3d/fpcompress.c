@@ -692,7 +692,7 @@ G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
 
 /*--------------------------------------------------------------------------*/
 
-/* IMPORTANT!!! this function changes the "src". */
+/* IMPORTANT!!! this function modifies "src" in case of run length encoding RLE. */
 
 int
 Rast3d_fpcompress_write_xdr_nums(int fd, char *src, int nofNum, int precision,

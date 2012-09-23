@@ -21,8 +21,8 @@
 
 /*- Parameters and global variables -----------------------------------------*/
 typedef struct {
-    struct Option *unit, *integration, *depths, *rows, *cols;
-    struct Flag *full, *testunit, *testint;
+    struct Option *unit, *integration, *depths, *rows, *cols, *tile_size;
+    struct Flag *full, *testunit, *testint, *rle, *compression;
 } paramType;
 
 paramType param; /*Parameters */
@@ -54,21 +54,28 @@ void set_params(void) {
     param.depths->type = TYPE_INTEGER;
     param.depths->required = NO;
     param.depths->answer = "20";
-    param.depths->description = _("The number of depths to be used for the large file put value test");
+    param.depths->description = _("The number of depths to be used for the large file put/get value test");
 
     param.rows = G_define_option();
     param.rows->key = "rows";
     param.rows->type = TYPE_INTEGER;
     param.rows->required = NO;
     param.rows->answer = "5400";
-    param.rows->description = _("The number of rows to be used for the large file put value test");
+    param.rows->description = _("The number of rows to be used for the large file put/get value test");
 
     param.cols = G_define_option();
     param.cols->key = "cols";
     param.cols->type = TYPE_INTEGER;
     param.cols->required = NO;
     param.cols->answer = "10800";
-    param.cols->description = _("The number of columns to be used for the large file put value test");
+    param.cols->description = _("The number of columns to be used for the large file put/get value test");
+
+    param.tile_size = G_define_option();
+    param.tile_size->key = "tile_size";
+    param.tile_size->type = TYPE_INTEGER;
+    param.tile_size->required = NO;
+    param.tile_size->answer = "32";
+    param.tile_size->description = _("The tile size in kilo bytes to be used for the large file put/get value test. Set the tile size to 2048 and the number of row*cols*depths > 130000 to reproduce the tile rle error.");
 
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
@@ -82,6 +89,13 @@ void set_params(void) {
     param.full->key = 'a';
     param.full->description = _("Run all unit and integration tests");
 
+    param.compression = G_define_flag();
+    param.compression->key = 'l';
+    param.compression->description = _("Switch lzw compression on");
+
+    param.rle = G_define_flag();
+    param.rle->key = 'r';
+    param.rle->description = _("Use run length encoding RLE to encode/decode single tiles. Attention RLE is buggy in case of large tiles or files.");
 }
 
 /* ************************************************************************* */
@@ -91,7 +105,10 @@ void set_params(void) {
 int main(int argc, char *argv[]) {
     struct GModule *module;
     int returnstat = 0, i;
-    int depths, rows, cols;
+    int depths, rows, cols, tile_size;
+    int doCompress = RASTER3D_COMPRESSION;
+    int doLzw = RASTER3D_USE_LZW;
+    int doRle = RASTER3D_NO_RLE;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -109,6 +126,23 @@ int main(int argc, char *argv[]) {
     depths = atoi(param.depths->answer);
     rows   = atoi(param.rows->answer);
     cols   = atoi(param.cols->answer);
+    tile_size = atoi(param.tile_size->answer);
+
+    if(param.compression->answer) {
+        doCompress = RASTER3D_COMPRESSION;
+        doLzw = RASTER3D_USE_LZW;
+    } else {
+        doCompress = RASTER3D_NO_COMPRESSION;
+        doLzw = RASTER3D_NO_LZW;
+    }
+    if(param.rle->answer) {
+        doCompress = RASTER3D_COMPRESSION;
+        doRle = RASTER3D_USE_RLE;
+    } else
+        doRle = RASTER3D_NO_RLE;
+
+    /* Set the compression mode that should be used */
+    Rast3d_set_compression_mode(doCompress, doLzw, doRle, RASTER3D_MAX_PRECISION);
    
     /* Initiate the defaults for testing */
     Rast3d_init_defaults();
@@ -117,7 +151,7 @@ int main(int argc, char *argv[]) {
     if (param.testunit->answer || param.full->answer) {
         returnstat += unit_test_coordinate_transform();
         returnstat += unit_test_put_get_value();
-        returnstat += unit_test_put_get_value_large_file(depths, rows, cols);
+        returnstat += unit_test_put_get_value_large_file(depths, rows, cols, tile_size);
     }
 
     /*Run the integration tests */
@@ -137,7 +171,7 @@ int main(int argc, char *argv[]) {
                     if (strcmp(param.unit->answers[i], "putget") == 0)
                         returnstat += unit_test_put_get_value();
                     if (strcmp(param.unit->answers[i], "large") == 0)
-                        returnstat += unit_test_put_get_value_large_file(depths, rows, cols);
+                        returnstat += unit_test_put_get_value_large_file(depths, rows, cols, tile_size);
                     
                     i++;
                 }
