@@ -109,7 +109,7 @@ int test_large_file(int depths, int rows, int cols, int tile_size)
                 /* Add cols, rows and depths and put this in the map */
                 Rast3d_get_value(map, x, y, z, &value, DCELL_TYPE);
                 if(fabs(value - (double)(count) > EPSILON)) {
-                    /* printf("At: z %i y %i x %i -- value %.14lf != %.14lf\n", z, y, x, value, (double)(count)); */
+                    G_message("At: z %i y %i x %i -- value %.14lf != %.14lf\n", z, y, x, value, (double)(count));
 			sum++;
                 }
                 count++;
