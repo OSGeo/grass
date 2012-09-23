@@ -19,18 +19,20 @@
 #include "test_g3d_lib.h"
 #include "grass/interpf.h"
 
-static int test_large_file(int depths, int rows, int cols);
+#define EPSILON 0.000000001
+
+static int test_large_file(int depths, int rows, int cols, int tile_size);
 
 /* *************************************************************** */
 /* Perfrome the coordinate transformation tests ****************** */
 /* *************************************************************** */
-int unit_test_put_get_value_large_file(int depths, int rows, int cols)
+int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_size)
 {
     int sum = 0;
 
     G_message(_("\n++ Running g3d put/get value large file unit tests ++"));
 
-    sum += test_large_file(depths, rows, cols);
+    sum += test_large_file(depths, rows, cols, tile_size);
 
 
     if (sum > 0)
@@ -43,7 +45,7 @@ int unit_test_put_get_value_large_file(int depths, int rows, int cols)
 
 /* *************************************************************** */
 
-int test_large_file(int depths, int rows, int cols)
+int test_large_file(int depths, int rows, int cols, int tile_size)
 {
     int sum = 0; 
     int x, y, z;
@@ -72,7 +74,7 @@ int test_large_file(int depths, int rows, int cols)
         
     G_message("Creating 3D raster map");
 
-    map = Rast3d_open_new_opt_tile_size("test_put_get_value_dcell_large", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 2048);
+    map = Rast3d_open_new_opt_tile_size("test_put_get_value_dcell_large", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, tile_size);
     
     /* The window is the same as the map region ... of course */
     Rast3d_set_window_map(map, &region);
@@ -83,8 +85,9 @@ int test_large_file(int depths, int rows, int cols)
         for(y = 0; y < region.rows; y++) {
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
-                value = x + y + z + x * y * z / count++;
+                value = count;
                 Rast3d_put_value(map, x, y, z, &value, DCELL_TYPE);
+                count++;
             }
         }
     }
@@ -96,7 +99,7 @@ int test_large_file(int depths, int rows, int cols)
          
     G_message("Verifying 3D raster map");
 
-    map = Rast3d_open_cell_old("test_put_get_value_dcell_large", G_mapset(), &region, DCELL_TYPE, 2048);
+    map = Rast3d_open_cell_old("test_put_get_value_dcell_large", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XYZ);
     
     count = 1;
     for(z = 0; z < region.depths; z++) {
@@ -105,8 +108,11 @@ int test_large_file(int depths, int rows, int cols)
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 Rast3d_get_value(map, x, y, z, &value, DCELL_TYPE);
-                if(value != (double)(x + y + z  + x * y * z/count++))
+                if(fabs(value - (double)(count) > EPSILON)) {
+                    /* printf("At: z %i y %i x %i -- value %.14lf != %.14lf\n", z, y, x, value, (double)(count)); */
 			sum++;
+                }
+                count++;
             }
         }
     }

@@ -243,7 +243,8 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 
     Rast3d_make_mapset_map_directory(map->fileName);
 
-    map->useXdr = RASTER3D_USE_XDR;
+    /* XDR support has been removed */
+    map->useXdr = RASTER3D_NO_XDR;
 
     if (g3d_file_type == FCELL_TYPE) {
 	if (precision > 23)
@@ -266,8 +267,6 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 
     if (compression == RASTER3D_NO_COMPRESSION)
 	precision = RASTER3D_MAX_PRECISION;
-    if (compression == RASTER3D_COMPRESSION)
-	map->useXdr = RASTER3D_USE_XDR;
 
     if (RASTER3D_HAS_INDEX) {
 	map->indexLongNbytes = sizeof(long);
