@@ -48,8 +48,13 @@ void write_point(struct Map_info *Out, double x, double y, double z,
 
     /* Write point */
     Vect_append_point(PPoints, x, y, z);
-    Vect_cat_set(PCats, 1, line_cat);
-    Vect_cat_set(PCats, 2, point_cat);
+    if (line_cat > 0) {
+        Vect_cat_set(PCats, 1, line_cat);
+        Vect_cat_set(PCats, 2, point_cat);
+    }
+    else {
+        Vect_cat_set(PCats, 1, point_cat);
+    }
     Vect_write_line(Out, GV_POINT, PPoints, PCats);
 
     /* Attributes */
@@ -319,8 +324,11 @@ int main(int argc, char **argv)
 	    ltype = Vect_read_line(&In, LPoints, LCats, line);
 	    if (!(ltype & type))
 		continue;
-	    if (!Vect_cat_get(LCats, field, &cat))
+            if (!Vect_cat_get(LCats, field, &cat) && field != -1)
 		continue;
+            // Assign CAT for layer 0 objects (i.e. boundaries)
+            if (field == -1)
+                cat = -1;
 
 	    if (LPoints->n_points <= 1) {
 		write_point(&Out, LPoints->x[0], LPoints->y[0], LPoints->z[0],
