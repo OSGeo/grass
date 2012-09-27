@@ -53,15 +53,19 @@ void write_point(struct Map_info *Out, double x, double y, double z,
         Vect_cat_set(PCats, 2, point_cat);
     }
     else {
-        Vect_cat_set(PCats, 1, point_cat);
+        Vect_cat_set(PCats, 2, point_cat);
     }
     Vect_write_line(Out, GV_POINT, PPoints, PCats);
 
     /* Attributes */
     if (!table) {
 	db_zero_string(&stmt);
-	sprintf(buf, "insert into %s values ( %d, %d, %.15g )", Fi->table,
-		point_cat, line_cat, along);
+        if (line_cat > 0)
+            sprintf(buf, "insert into %s values ( %d, %d, %.15g )", Fi->table,
+                point_cat, line_cat, along);
+        else
+            sprintf(buf, "insert into %s values ( %d, %.15g )", Fi->table,
+                point_cat, along);
 	db_append_string(&stmt, buf);
 
 	if (db_execute_immediate(driver, &stmt) != DB_OK) {
@@ -286,7 +290,12 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
 
-	sprintf(buf,
+	if (field == -1) 
+            sprintf(buf,
+                "create table %s ( cat int, along double precision )",
+                Fi->table);
+         else
+            sprintf(buf,
 		"create table %s ( cat int, lcat int, along double precision )",
 		Fi->table);
 	db_append_string(&stmt, buf);
