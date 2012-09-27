@@ -115,7 +115,7 @@ class BasePlotFrame(wx.Frame):
                 
         self.colorDict = {}
         for clr in grass.named_colors.iterkeys():
-            if clr == 'white' or clr == 'black': continue
+            if clr == 'white': continue
             r = grass.named_colors[clr][0] * 255
             g = grass.named_colors[clr][1] * 255
             b = grass.named_colors[clr][2] * 255
@@ -217,7 +217,7 @@ class BasePlotFrame(wx.Frame):
             else:
                 rdict[r]['pstyle'] = 'solid'
                         
-            if idx <= len(self.colorList):
+            if idx < len(self.colorList):
                 if idx == 0:
                     # use saved color for first plot
                     if self.properties['raster']['pcolor'] != None:
