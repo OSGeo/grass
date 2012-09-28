@@ -8,7 +8,7 @@
  *             Martin Landa, CTU in Prague, Czech Republic (v.out.ascii.db merged & update (OGR) for GRASS7)
  *
  * PURPOSE:    Writes GRASS vector data as ASCII files
- * COPYRIGHT:  (C) 2000-2009, 2011 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2000-2009, 2011-2012 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2). Read the file COPYING that comes
