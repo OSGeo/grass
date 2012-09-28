@@ -66,6 +66,7 @@ int first = 1;
 
 /* Statistics */
 int count = 0;		/* number of features with non-null attribute */
+int nlines;          /* number of primitives */
 double sum = 0.0;
 double sumsq = 0.0;
 double sumcb = 0.0;
@@ -181,7 +182,6 @@ static void select_from_geometry(void)
     int i, j, k, ncats, *cats;
     int type;
     struct line_pnts *iPoints, *jPoints;
-    int nlines;
 
     iPoints = Vect_new_line_struct();
     jPoints = Vect_new_line_struct();
