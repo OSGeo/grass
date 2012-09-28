@@ -660,13 +660,17 @@ class DatasetBase(SQLDatabaseInterface):
            without layer information
 
            @param return the name of the vector map as name@mapset
+                  or None in case the id was not set
         """
-        if self.id.find(":") >= 0:
-            # Remove the layer identifier from the id
-            return self.id.split("@")[0].split(":")[0] + "@" + \
-                   self.id.split("@")[1]
+        if self.id:
+            if self.id.find(":") >= 0:
+                # Remove the layer identifier from the id
+                return self.id.split("@")[0].split(":")[0] + "@" + \
+                       self.id.split("@")[1]
+            else:
+                return self.id
         else:
-            return self.id
+            return None
 
     def get_layer(self):
         """!Convenient method to get the layer of the map (part of primary key)
