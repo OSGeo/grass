@@ -5,7 +5,7 @@
  
   Higher level functions for reading/writing/manipulating vectors.
   
-  (C) 2001-2009, 2011 by the GRASS Development Team
+  (C) 2001-2009, 2011-2012 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -26,12 +26,13 @@
 static int srch(const void *, const void *);
 static int check_cat(const struct line_cats *, const struct cat_list *,
 		     const int *, int);
+static void free_col_arrays(int *, char *, char**);
 
 /*!
   \brief Read data in GRASS ASCII vector format
 
-  \param ascii pointer to the ASCII file
-  \param Map   pointer to Map_info structure
+  \param ascii    pointer to the input ASCII file
+  \param[out] Map pointer to the output Map_info structure
 
   \return number of read features
   \return -1 on error
@@ -283,8 +284,8 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 /*!
   \brief Write data to GRASS ASCII vector format
 
-  \param ascii  pointer to the ASCII file
-  \param att    att file (< version 5 only)
+  \param[out] ascii  pointer to the output ASCII file
+  \param[out] att    att file (< version 5 only)
   \param Map    pointer to Map_info structure
   \param ver    version number 4 or 5
   \param format format GV_ASCII_FORMAT_POINT or GV_ASCII_FORMAT_STD
@@ -295,8 +296,9 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
   \param field  field number
   \param Clist  list of categories to filter features or NULL
   \param where  SQL select where statement to filter features or NULL
-  \param columns array of columns to be included to the output or NULL
-  \param header non-zero to print also header
+  \param column_names array of columns to be included to the output or NULL
+                 "*" as the first item in the array indicates all columns
+  \param header TRUE to print also header
 
   \return number of written features
   \return -1 on error
@@ -305,7 +307,7 @@ int Vect_write_ascii(FILE *ascii,
 		     FILE *att, struct Map_info *Map, int ver,
 		     int format, int dp, char *fs, int region_flag, int type,
 		     int field, const struct cat_list *Clist, const char* where,
-		     const char **columns, int header)
+		     const char **column_names, int header)
 {
     int ltype, ctype, i, cat, n_lines, line, left, right, found;
     double *xptr, *yptr, *zptr, x, y;
@@ -318,8 +320,8 @@ int Vect_write_ascii(FILE *ascii,
     int count;
 
     /* where || columns */
-    struct field_info *Fi = NULL;
-    dbDriver *driver = NULL;
+    struct field_info *Fi;
+    dbDriver *driver;
     dbValue value;
     dbHandle handle;
     int *cats, ncats, more;
@@ -329,8 +331,16 @@ int Vect_write_ascii(FILE *ascii,
     dbValue *Value;
     char buf[2000];
     dbCursor cursor;
-    int *coltypes = NULL;
-    char *all_columns = NULL;
+    /* columns */
+    char **columns;
+    int *coltypes;
+    char *all_columns;
+    
+    Fi = NULL;
+    driver = NULL;
+    columns = NULL;
+    coltypes = NULL;
+    all_columns = NULL;
     
     G_zero(&value, sizeof(dbValue));
     db_init_string(&dbstring);
@@ -351,7 +361,7 @@ int Vect_write_ascii(FILE *ascii,
     xstring = ystring = zstring = NULL;
     cats = NULL;
     
-    if (where || columns) {
+    if (where || column_names) {
 	Fi = Vect_get_field(Map, field);
 	if (!Fi) {
 	    G_fatal_error(_("Database connection not defined for layer %d"),
@@ -373,17 +383,49 @@ int Vect_write_ascii(FILE *ascii,
 	ncats = db_select_int(driver, Fi->table, Fi->key, where, &cats);
 	G_debug(3, "%d categories selected from table <%s>", ncats, Fi->table);
 
-	if (!columns) {
+	if (!column_names) {
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
 	}
 	else {
-	    int len_all = 0;
-
-	    i = 0;
-	    while (columns[i])
-		len_all += strlen(columns[i++]);
-	    
+            int len_all;
+            
+            if (column_names[0] && strcmp(column_names[0], "*") == 0) {
+                int icol, ncols;
+                const char *col_name;
+                
+                /* all columns */
+                db_set_string(&dbstring, Fi->table);
+                if (db_describe_table(driver, &dbstring, &Table) != DB_OK) {
+                    G_warning(_("Unable to describe table <%s>"), Fi->table);
+                    return -1;
+                }
+                
+                ncols = db_get_table_number_of_columns(Table);
+                /* key column skipped */
+                columns = (char **) G_malloc(ncols * sizeof(char *));
+                icol = i = 0;
+                for (i = 0; i < ncols; i++) {
+                    col_name = db_get_column_name(db_get_table_column(Table, i));
+                    if (strcmp(Fi->key, col_name) == 0)
+                        continue;
+                    columns[icol++] = G_store(col_name);
+                }
+                columns[ncols-1] = NULL;
+                
+                db_zero_string(&dbstring);
+                db_free_table(Table);
+                Table = NULL;
+            }
+            else {
+                columns = (char **)column_names;
+            }
+            
+            /* selected columns only */
+            i = 0;
+            while (columns[i])
+                len_all += strlen(columns[i++]);
+            
 	    coltypes = G_malloc(i * sizeof(int));
 	    
 	    all_columns = G_malloc(len_all + i + 2);
@@ -428,8 +470,8 @@ int Vect_write_ascii(FILE *ascii,
 		db_close_database(driver);
 		db_shutdown_driver(driver);
 
-		G_free(coltypes);
-		G_free(all_columns);
+                free_col_arrays(coltypes, all_columns,
+                                column_names && strcmp(column_names[0], "*") == 0 ? columns : NULL);
 	    }
 	    
 	    return -1;
@@ -439,9 +481,9 @@ int Vect_write_ascii(FILE *ascii,
 	    if (columns) {
 		db_close_database(driver);
 		db_shutdown_driver(driver);
-
-		G_free(coltypes);
-		G_free(all_columns);
+                
+                free_col_arrays(coltypes, all_columns,
+                                column_names && strcmp(column_names[0], "*") == 0 ? columns : NULL);
 	    }
 	    break;
 	}
@@ -786,7 +828,7 @@ int srch(const void *pa, const void *pb)
 /*!
   \brief Write data to GRASS ASCII vector format
 
-  \param dascii pointer to the ASCII file
+  \param[out] dascii pointer to the output ASCII file
   \param Map    pointer to Map_info structure
 */
 void Vect_write_ascii_head(FILE *dascii, struct Map_info *Map)
@@ -827,4 +869,18 @@ int check_cat(const struct line_cats *Cats, const struct cat_list *Clist,
     }
     
     return TRUE;
+}
+
+/* free column arrays, see Vect_write_ascii() */
+void free_col_arrays(int *coltypes, char *all_columns, char**columns)
+{
+    G_free(coltypes);
+    G_free(all_columns);
+    if (columns) {
+        int i;
+        i = 0;
+        while(columns[i])
+            G_free(columns[i++]);
+        G_free(columns);
+    }
 }
