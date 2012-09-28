@@ -24,11 +24,11 @@ in the <tt>$LOCATION/$MAPSET/dig_ascii/</tt> and <tt>$LOCATION/$MAPSET/dig_att</
 exported. Use <em><a href="v.category.html">v.category</a></em> to add
 them if needed.
 
-<p><em>v.out.ascii</em> does not copy the <tt>dig_cats</tt> file
-associated with the binary vector <b>input</b> map to the
-new <b>output</b> file name. The user must copy the <tt>dig_cats</tt>
-file to the new <b>output</b> name if this is desired (e.g. using the
-UNIX <em>cp</em> command).
+<p><em>v.out.ascii</em> in the old version mode (<b>-o</b>) does not
+copy the <tt>dig_cats</tt> file associated with the binary
+vector <b>input</b> map to the new <b>output</b> file name. The user
+must copy the <tt>dig_cats</tt> file to the new <b>output</b> name if
+this is desired (e.g. using the UNIX <em>cp</em> command).
 
 <p>It is possible to output the coordinates of vertices in a non-points vector
 feature by first converting the vector feature to a points map with 
@@ -39,6 +39,8 @@ with <em>v.out.ascii</em> in
 <h2>EXAMPLES</h2>
 
 <h3>Standard mode</h3>
+
+See <a href="vectorascii.html">ASCII format</a> specification.
 
 <p><div class="code"><pre>
 v.out.ascii input=quads format=standard
@@ -83,12 +85,23 @@ v.out.ascii input=quads format=point
 604433.84|4921087.1|2
 </pre></div>
 
-<div class="code"><pre>
-v.out.ascii input=archsites format=point where="cat > 5 and cat <= 8" columns=str1
+Print also selected attributes:
 
-600375|4925235|6|Prairie Site
-606635|4920773|7|Jensen Pass
-595755|4925300|8|No Name
+<div class="code"><pre>
+v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=GEOD_NAME
+
+573638.06289275|271623.25042595|6|27 WC 6
+574416.81289275|274116.65542595|7|27 WC 7
+575301.31189275|275303.81342595|8|27 WC 8
+</pre></div>
+
+To print all attributes type <b>columns=*</b>:
+
+<div class="code"><pre>
+v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=*
+573638.06289275|271623.25042595|6|6|0.00000000|0.00000000|6|6|27 WC 6|573638.09200000|271623.24100000|0.00|0|1.00000000|1.00000000
+574416.81289275|274116.65542595|7|7|0.00000000|0.00000000|7|7|27 WC 7|574416.84100000|274116.64900000|0.00|0|1.00000000|1.00000000
+575301.31189275|275303.81342595|8|8|0.00000000|0.00000000|8|8|27 WC 8|575301.30600000|275303.82600000|0.00|0|1.00000000|1.00000000
 </pre></div>
 
 <h3>WKT mode</h3>
@@ -113,10 +126,11 @@ POLYGON((599587.18209620 4914067.53414294, 599375.87959179 4927959.83330436,
 <em>
 <a href="v.category.html">v.category</a>,
 <a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="v.to.points.html">v.to.points</a><br>
+<a href="v.to.points.html">v.to.points</a>
+</em>
+<p>
 <a href="vectorascii.html">GRASS ASCII vector format</a> specification<br>
 <a href="sql.html">GRASS SQL interface</a>
-</em>
 
 <h2>AUTHORS</h2>
 

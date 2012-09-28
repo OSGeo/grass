@@ -30,11 +30,11 @@ void parse_args(int argc, char **argv,
     output_opt->label = _("Name for output ASCII file "
 			  "or ASCII vector name if '-o' is defined");
     output_opt->description = _("'-' for standard output");
-    output_opt->required = NO;
     output_opt->answer = "-";
 
     column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
-    column_opt->description = _("Name of attribute column(s) to be exported (point mode)");
+    column_opt->label = _("Name of attribute column(s) to be exported (point mode)");
+    column_opt->description = _("\"*\" for all columns");
     column_opt->guisection = _("Points");
     
     cats_opt = G_define_standard_option(G_OPT_V_CATS);
