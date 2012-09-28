@@ -534,6 +534,7 @@ static void summary(void)
     }
     else {
 	if(geometry->answer) {
+	    fprintf(stdout, "number of primitives: %d\n", nlines);
 	    fprintf(stdout, "number of non zero distances: %d\n", count);
 	    fprintf(stdout, "number of zero distances: %d\n", nzero);
 	}
