@@ -3380,6 +3380,11 @@
         </menuitem>
         <separator />
         <menuitem>
+          <label>About system</label>
+          <help>Prints system information</help>
+          <handler>OnSystemInfo</handler>
+        </menuitem>
+        <menuitem>
           <label>About GRASS GIS</label>
           <help>About GRASS GIS</help>
           <handler>OnAboutGRASS</handler>

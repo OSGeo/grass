@@ -22,6 +22,7 @@ import sys
 import os
 import tempfile
 import stat
+import platform
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -775,6 +776,23 @@ class GMFrame(wx.Frame):
                                             lcmd = ['d.vect', 'map=%s' % name])
         dlg.Destroy()
         
+    def OnSystemInfo(self, event):
+        """!Print system information"""
+        vInfo = grass.version()
+        
+        self.goutput.WriteLog("%s: %s\n"
+                              "%s: %s\n"
+                              "%s: %s (%s)\n"
+                              "Python: %s\n"
+                              "wxPython: %s\n"
+                              "%s: %s\n"% (_("GRASS version"), vInfo['version'],
+                                           _("GRASS SVN Revision"), vInfo['revision'],
+                                           _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
+                                           platform.python_version(),
+                                           wx.__version__,
+                                           _("Platform"), platform.platform()),
+                              switchPage = True)
+    
     def OnAboutGRASS(self, event):
         """!Display 'About GRASS' dialog"""
         win = AboutWindow(self)
