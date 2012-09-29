@@ -723,3 +723,89 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
             print string
 
     dbif.close()
+
+###############################################################################
+
+def tlist_grouped(type):
+    """!List of temporal elements grouped by mapsets.
+
+    Returns a dictionary where the keys are mapset 
+    names and the values are lists of space time datasets in that
+    mapset. Example:
+
+    @code
+    >>> tgis.tlist_grouped('strds')['PERMANENT']
+    ['precipitation', 'temperature']
+    @endcode
+    
+    @param type element type (strds, str3ds, stvds)
+
+    @return directory of mapsets/elements
+    """
+    result = {}
+    
+    mapset = None
+    if type == 'stds':
+        types = ['strds', 'str3ds', 'stvds']
+    else:
+        types = [type]
+    for type in types:
+        try:
+            tlist_result = tlist(type)
+        except core.ScriptError, e:
+            warning(e)
+            continue
+
+        for line in tlist_result:
+            try:
+                name, mapset = line.split('@')
+            except ValueError:
+                warning(_("Invalid element '%s'") % line)
+                continue
+            
+            if mapset in result:
+                result[mapset].append(name)
+            else:        
+                result[mapset] = [name, ]
+
+    return result
+
+###############################################################################
+
+def tlist(type):
+    """!Return a list of space time datasets of absolute and relative time
+     
+    @param type element type (strds, str3ds, stvds)
+
+    @return a list of space time dataset ids
+    """
+    id = None
+    sp = dataset_factory(type, id)
+
+    dbif = SQLDatabaseInterfaceConnection()
+    dbif.connect()
+
+    output = []
+    temporal_type = ["absolute", 'relative']
+    for type in temporal_type:
+        # Table name
+        if type == "absolute":
+            table = sp.get_type() + "_view_abs_time"
+        else:
+            table = sp.get_type() + "_view_rel_time"
+
+        # Create the sql selection statement
+        sql = "SELECT id FROM " + table
+        sql += " ORDER BY id"
+
+        dbif.cursor.execute(sql)
+        rows = dbif.cursor.fetchall()
+
+        # Append the ids of the space time datasets
+        for row in rows:
+            for col in row:
+                output.append(str(col))
+    dbif.close()
+
+    return output
+
