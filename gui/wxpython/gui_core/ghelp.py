@@ -1,7 +1,7 @@
 """!
 @package gui_core.ghelp
 
-@brief Help window
+@brief Help/about window, menu tree, search module tree
 
 Classes:
  - ghelp::SearchModuleWindow
@@ -12,7 +12,7 @@ Classes:
  - ghelp::HelpWindow
  - ghelp::HelpPanel
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2008-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,7 +41,7 @@ from core             import globalvar
 from core             import utils
 from lmgr.menudata    import ManagerData
 from core.gcmd        import GError, DecodeString
-from gui_core.widgets import GNotebook, StaticWrapText, ItemTree, ScrolledPanel
+from gui_core.widgets import FormListbook, StaticWrapText, ItemTree, ScrolledPanel
 from core.debug       import Debug
 
 class SearchModuleWindow(wx.Panel):
@@ -386,15 +386,59 @@ class AboutWindow(wx.Frame):
                  title = _('About GRASS GIS'), **kwargs):
         wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, title = title, size = size, **kwargs)
         
-        panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         # icon
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
+        # notebook
+        self.aboutNotebook = FormListbook(self.panel, style = wx.BK_LEFT)
+        #self.aboutNotebook = GNotebook(self.panel, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON) 
+        #self.aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
+        
+        for title, win in ((_("Info"), self._pageInfo()),
+                           (_("Copyright"), self._pageCopyright()),
+                           (_("License"), self._pageLicense()),
+                           (_("Authors"), self._pageCredit()),
+                           (_("Contributors"), self._pageContributors()),
+                           (_("Extra contributors"), self._pageContributors(extra = True)),
+                           (_("Translators"), self._pageTranslators()),
+                           (_("Translation status"), self._pageStats())):
+            self.aboutNotebook.AddPage(page = win, text = title)
+        self.aboutNotebook.Refresh()
+        wx.CallAfter(self.aboutNotebook.SetSelection, 0)
+        
+        # buttons
+        self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
+        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
+
+        self._doLayout()
+        
+    def _doLayout(self):
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnClose, proportion = 0,
+                     flag = wx.ALL | wx.ALIGN_RIGHT,
+                     border = 5)
+        
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(item = self.aboutNotebook, proportion = 1,
+                  flag = wx.EXPAND | wx.ALL, border = 1)
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 1)
+        
+        self.SetMinSize((400, 400))
+        
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+                
+        self.Layout()
+        
+    def _pageInfo(self):
+        """!Info page"""
         # get version and web site
         vInfo = grass.version()
         
-        infoTxt = ScrolledPanel(parent = panel)
+        infoTxt = ScrolledPanel(self.aboutNotebook)
         infoTxt.SetBackgroundColour('WHITE')
         infoTxt.SetupScrolling()
         infoSizer = wx.BoxSizer(wx.VERTICAL)
@@ -493,43 +537,11 @@ class AboutWindow(wx.Frame):
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)        
         
-        # create a flat notebook for displaying information about GRASS
-        aboutNotebook = GNotebook(panel, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON) 
-        aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
-        
-        for title, win in ((_("Info"), infoTxt),
-                           (_("Copyright"), self._pageCopyright()),
-                           (_("License"), self._pageLicense()),
-                           (_("Authors"), self._pageCredit()),
-                           (_("Contributors"), self._pageContributors()),
-                           (_("Extra contributors"), self._pageContributors(extra = True)),
-                           (_("Translators"), self._pageTranslators()),
-                           (_("Translation status"), self._pageStats())):
-            aboutNotebook.AddPage(page = win, text = title)
-        wx.CallAfter(aboutNotebook.SetSelection, 0)
-        
-        # buttons
-        btnClose = wx.Button(parent = panel, id = wx.ID_CLOSE)
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = btnClose, proportion = 0,
-                     flag = wx.ALL | wx.ALIGN_RIGHT,
-                     border = 5)
-        # bindings
-        btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
-        
         infoTxt.SetSizer(infoSizer)
         infoSizer.Fit(infoTxt)
-        
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(item = aboutNotebook, proportion = 1,
-                  flag = wx.EXPAND | wx.ALL, border = 1)
-        sizer.Add(item = btnSizer, proportion = 0,
-                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 1)
-        panel.SetSizer(sizer)
-        
-        self.Layout()
-        self.SetMinSize((400, 400))
-        
+       
+        return infoTxt
+    
     def _pageCopyright(self):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
@@ -541,7 +553,7 @@ class AboutWindow(wx.Frame):
             copytext = _('%s file missing') % 'COPYING'
         
         # put text into a scrolling panel
-        copyrightwin = ScrolledPanel(self)
+        copyrightwin = ScrolledPanel(self.aboutNotebook)
         copyrightwin.SetBackgroundColour('WHITE')
         copyrighttxt = wx.StaticText(copyrightwin, id = wx.ID_ANY, label = copytext)
         copyrightwin.SetAutoLayout(True)
@@ -564,7 +576,7 @@ class AboutWindow(wx.Frame):
         else:
             license = _('%s file missing') % 'GPL.TXT'
         # put text into a scrolling panel
-        licensewin = ScrolledPanel(self)
+        licensewin = ScrolledPanel(self.aboutNotebook)
         licensewin.SetBackgroundColour('WHITE')
         licensetxt = wx.StaticText(licensewin, id = wx.ID_ANY, label = license)
         licensewin.SetAutoLayout(True)
@@ -587,7 +599,7 @@ class AboutWindow(wx.Frame):
             authorsFile.close()
         else:
             authors = _('%s file missing') % 'AUTHORS'
-        authorwin = ScrolledPanel(self)
+        authorwin = ScrolledPanel(self.aboutNotebook)
         authorwin.SetBackgroundColour('WHITE')
         authortxt = wx.StaticText(authorwin, id = wx.ID_ANY, label = authors)
         authorwin.SetAutoLayout(True)
@@ -635,7 +647,7 @@ class AboutWindow(wx.Frame):
         else:
             contribs = None
         
-        contribwin = ScrolledPanel(self)
+        contribwin = ScrolledPanel(self.aboutNotebook)
         contribwin.SetBackgroundColour('WHITE')
         contribwin.SetAutoLayout(True)
         contribwin.SetupScrolling()
@@ -697,7 +709,7 @@ class AboutWindow(wx.Frame):
         else:
             translators = None
         
-        translatorswin = ScrolledPanel(self)
+        translatorswin = ScrolledPanel(self.aboutNotebook)
         translatorswin.SetBackgroundColour('WHITE')
         translatorswin.SetAutoLayout(True)
         translatorswin.SetupScrolling()
@@ -847,7 +859,7 @@ class AboutWindow(wx.Frame):
             jsStats = json.load(statsFile)
         else:
             jsStats = None
-        self.statswin = ScrolledPanel(self)
+        self.statswin = ScrolledPanel(self.aboutNotebook)
         self.statswin.SetBackgroundColour('WHITE')
         self.statswin.SetAutoLayout(True)
 
