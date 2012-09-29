@@ -393,8 +393,6 @@ class AboutWindow(wx.Frame):
 
         # notebook
         self.aboutNotebook = FormListbook(self.panel, style = wx.BK_LEFT)
-        #self.aboutNotebook = GNotebook(self.panel, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON) 
-        #self.aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
         
         for title, win in ((_("Info"), self._pageInfo()),
                            (_("Copyright"), self._pageCopyright()),
@@ -472,7 +470,7 @@ class AboutWindow(wx.Frame):
 
         row += 2
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = _('SVN Revision:')),
+                                               label = '%s:' % _('SVN Revision')),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         
@@ -483,7 +481,7 @@ class AboutWindow(wx.Frame):
         
         row += 1
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = _('GIS Library Revision:')),
+                                               label = '%s:' % _('GIS Library Revision')),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         
@@ -495,7 +493,7 @@ class AboutWindow(wx.Frame):
 
         row += 2
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = _('Python:')),
+                                               label = 'Python:'),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         
@@ -506,7 +504,7 @@ class AboutWindow(wx.Frame):
 
         row += 1
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = _('wxPython:')),
+                                               label =  'wxPython:'),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         
@@ -521,7 +519,7 @@ class AboutWindow(wx.Frame):
         
         row += 2
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = _('Language:')),
+                                               label = "%s:" % _('Language')),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         self.langUsed = grass.gisenv().get('LANG', None)
