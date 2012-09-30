@@ -21,7 +21,7 @@
 #% keywords: vector
 #%end
 
-#%option G_OPT_STRDS_INPUT
+#%option G_OPT_STVDS_INPUT
 #%end
 
 #%option G_OPT_V_FIELD
