@@ -49,6 +49,7 @@ from wx.lib.newevent import NewEvent
 from core import globalvar
 
 import grass.script as grass
+import grass.temporal as tgis
 from   grass.script import task as gtask
 
 from core.gcmd     import RunCommand, GError, GMessage
@@ -319,17 +320,24 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                        '3d.view':'3dview',
                        '3dview':'3dview',
                        '3D viewing parameters':'3dview',
-                       '3D view parameters':'3dview'}
+                       '3D view parameters':'3dview',
+                       'stds':'stds',
+                       'strds':'strds',
+                       'str3ds':'str3ds',
+                       'stvds':'stvds'}
         
         if element not in elementdict:
             self.AddItem(_('Not selectable element'))
             return
         
-        if globalvar.have_mlist:
-            filesdict = grass.mlist_grouped(elementdict[element],
-                                            check_search_path = False)
+        if element in ('stds', 'strds', 'str3ds', 'stvds'):
+            filesdict = tgis.tlist_grouped(elementdict[element])
         else:
-            filesdict = grass.list_grouped(elementdict[element],
+            if globalvar.have_mlist:
+                filesdict = grass.mlist_grouped(elementdict[element],
+                                                check_search_path = False)
+            else:
+                filesdict = grass.list_grouped(elementdict[element],
                                            check_search_path = False)
         
         # list of mapsets in current location
