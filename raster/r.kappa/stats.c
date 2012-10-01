@@ -43,7 +43,7 @@ int stats(void)
 
     argv[argc++] = "-cin";
 
-    argv[argc++] = "fs=:";
+    argv[argc++] = "separator=:";
 
     sprintf(buf, "input=%s,%s",
 	    G_fully_qualified_name(maps[1], mmapset),

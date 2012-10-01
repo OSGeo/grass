@@ -18,7 +18,7 @@ FILE *run_stats(struct Popen *child,
     argv[0] = "r.stats";
     argv[1] = mode;
     argv[2] = input;
-    argv[3] = "fs=space";
+    argv[3] = "separator=space";
     argv[4] = NULL;
 
     /* maybe use r.stats's output= option instead of reading from stdout here, whatever's easier. */
