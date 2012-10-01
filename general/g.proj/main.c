@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
 	*ingeo,			/* Input geo-referenced file readable by 
 				 * GDAL or OGR                              */
 #endif
+	*datum,			/* datum to add (or replace existing datum) */
 	*dtrans;		/* index to datum transform option          */
     struct GModule *module;
     
@@ -156,6 +157,17 @@ int main(int argc, char *argv[])
     inepsg->description = _("EPSG projection code");
 #endif
 
+    datum = G_define_option();
+    datum->key = "datum";
+    datum->type = TYPE_STRING;
+    datum->key_desc = "name";
+    datum->required = NO;
+    datum->guisection = _("Datum");
+    datum->label =
+	_("Datum (overrides any datum specified in input co-ordinate system)");
+    datum->description = 
+	_("Accepts standard GRASS datum codes, or \"list\" to list and exit");
+
     dtrans = G_define_option();
     dtrans->key = "datumtrans";
     dtrans->type = TYPE_INTEGER;
@@ -204,6 +216,20 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Only one of '%s', '%s', '%s' or '%s' options may be specified"),
 		      ingeo->key, inwkt->key, inproj4->key, inepsg->key);
 
+    /* List supported datums if requested; code originally 
+     * from G_ask_datum_name() (formerly in libgis) */
+    if (datum->answer && strcmp(datum->answer, "list") == 0) {
+	const char *dat;
+	int i;
+
+	for (i = 0; (dat = G_datum_name(i)); i++) {	
+	    fprintf(stdout, "---\n%d\n%s\n%s\n%s ellipsoid\n",
+		    i, dat, G_datum_description(i), G_datum_ellipsoid(i));
+	}
+
+	exit(EXIT_SUCCESS);
+    }
+
     /* Input */
     /* We can only have one input source, hence if..else construct */
 
@@ -233,7 +259,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Projection files missing"));
 
     /* Set Datum Parameters if necessary or requested */
-    set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
+    set_datumtrans(datum->answer, atoi(dtrans->answer), forcedatumtrans->answer);
 
 
     /* Output */

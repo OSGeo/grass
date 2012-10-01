@@ -7,8 +7,8 @@ functionality is limited to:
 <ul>
 <li>Reporting the projection information for the current location, 
 either in conventional GRASS (-p flag) or PROJ.4 (-j flag) format</li>
-<li>Reporting and modifying the datum transformation parameters for
-the current location</li>
+<li>Changing the datum, or reporting and modifying the datum transformation 
+parameters, for the current location</li>
 </ul>
 
 <p>When compiled with OGR, functionality is increased and allows output of 
@@ -33,7 +33,7 @@ file.</dd>
 
 <dt>proj4=<em>description</em> or <em>-</em></dt>
 <dd><em>description</em> should be a projection description in 
-<a href="http://remotesensing.org/proj/">PROJ.4</a> format, enclosed in
+<a href="http://proj.osgeo.org/">PROJ.4</a> format, enclosed in
 quotation marks if there are any spaces. If <em>-</em> is given for
 <em>description</em>, the PROJ.4 description will be read from stdin rather 
 than as a directly-supplied command-line parameter.</dd>
@@ -46,6 +46,18 @@ co-ordinate system and datum information files, stored in the directory
 <tt>$GISBASE/etc/proj/ogr_csv</tt>. These can be updated if necessary
 to support future revisions of the EPSG database.</dd>
 </dl>
+
+<p>If datum information is incorrect or missing in the input
+co-ordinate system definition (e.g. PROJ.4 descriptions have very limited
+support for specifying datum names), a GRASS datum abbreviation can instead be
+supplied using the <em>datum</em> parameter. This will override any
+datum contained in the input co-ordinate system, and discard
+any datum transformation parameters. Enter datum=<em>list</em> to return a
+list of all the datums supported by GRASS. Note that the -t flag is
+implicit when a value for <em>datum</em> is specified. Since any
+existing datum transformation parameters will have been discarded, the
+<em>datumtrans</em> parameter should in general always be used in
+conjunction with <em>datum</em>.
 
 <p>The -p, -j, -w, etc. flags are all functional when importing projection
 information from an external source, meaning that <em>g.proj</em> can be
@@ -165,6 +177,14 @@ stored in a text file:<br>
 
 <div class="code"><pre>
 g.proj -c wkt=irish_grid.prj location=irish_grid
+</pre></div>
+
+<p>Create a new location from a PROJ.4 description, explicitly
+specifying a datum and using the default datum transformation
+parameters:<br>
+
+<div class="code"><pre>
+g.proj -c location=spain proj4="+proj=utm +zone=30 +ellps=intl" datum=eur50 datumtrans=0
 </pre></div>
 
 <p>Reproject external raster map to current GRASS projection (does not always make sense!)

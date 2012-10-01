@@ -21,7 +21,7 @@ void print_wkt(int, int);
 #endif
 
 /* datumtrans.c */
-int set_datumtrans(int, int);
+int set_datumtrans(char *, int, int);
 
 /* create.c */
 void create_location(char *);

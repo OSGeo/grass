@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/gprojects.h>
 
 #include "local_proto.h"
@@ -26,6 +27,9 @@
  * 
  * \brief Add or replace datum transformation parameters to the current
  *        co-ordinate system definition
+ * 
+ * \param datum       Use this datum (overrides any datum found in the
+ *                    current co-ordinate system definition).
  * 
  * \param datumtrans  Index number of parameter set to use, 0 to leave
  *                    unspecifed (or remove specific parameters, leaving just
@@ -38,17 +42,24 @@
  * \return            1 if a change was made, 0 if not.
  **/
 
-int set_datumtrans(int datumtrans, int force)
+int set_datumtrans(char *datum, int datumtrans, int force)
 {
-    char *params, *datum = NULL;
     int paramsets, status;
 
     if (cellhd.proj == PROJECTION_XY)
 	return 0;
 
-    status = GPJ__get_datum_params(projinfo, &datum, &params);
-    G_debug(3, "set_datumtrans(): GPJ__get_datum_params() status=%d", status);
-    G_free(params);
+    if (datum)
+	/* datum name provided; set status to 1 to indicate no parameters available */
+	status = 1;
+    else {
+	/* extract datum name and parameter status from input co-ordinate system */
+	char *params;
+
+	status = GPJ__get_datum_params(projinfo, &datum, &params);
+	G_debug(3, "set_datumtrans(): GPJ__get_datum_params() status=%d", status);
+	G_free(params);
+    }
 
     if (datum) {
 	/* A datum name is specified; need to determine if
@@ -136,7 +147,8 @@ int set_datumtrans(int datumtrans, int force)
 	/* Copy old PROJ_INFO, skipping out any keys related
 	 * to datum parameters */
 	for (i = 0; i < projinfo->nitems; i++) {
-	    if (strcmp(projinfo->key[i], "dx") == 0
+	    if (strcmp(projinfo->key[i], "datum") == 0
+		|| strcmp(projinfo->key[i], "dx") == 0
 		|| strcmp(projinfo->key[i], "dy") == 0
 		|| strcmp(projinfo->key[i], "dz") == 0
 		|| strcmp(projinfo->key[i], "datumparams") == 0
@@ -148,7 +160,9 @@ int set_datumtrans(int datumtrans, int force)
 			    temp_projinfo);
 	}
 
-	/* Finally add new parameters (if we have them) */
+	/* Finally (re-)add datum name and add new parameters (if we have them) */
+	G_set_key_value("datum", datum, temp_projinfo);
+	G_message(_("Datum set to <%s>"), datum);
 	if (chosenparams != NULL) {
 	    /* Now split 'chosenparams' into key/value format */
 	    paramkey = strtok(chosenparams, "=");
