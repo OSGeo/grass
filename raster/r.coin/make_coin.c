@@ -52,7 +52,7 @@ int make_coin(void)
 
     args[0] = "r.stats";
     args[1] = "-anrc";
-    args[2] = "fs=:";
+    args[2] = "separator=:";
     args[3] = input;
     args[4] = NULL;
 

@@ -47,7 +47,7 @@ int get_stats(void)
 	    argv[argc++] = tmp;
 	}
 
-	argv[argc++] = "fs=:";
+	argv[argc++] = "separator=:";
 
 	argv[argc++] = SF_REDIRECT_FILE;
 	argv[argc++] = SF_STDOUT;
