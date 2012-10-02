@@ -860,7 +860,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         except IndexError:
             return None
         
-        if len(utils.split(str(entry))) > 1:
+        try:
+            splitted = utils.split(str(entry))
+        except ValueError: # No closing quotation error
+            return None
+        if len(splitted) > 1:
             if cmd in globalvar.grassCmd:
                 toComplete['cmd'] = cmd
                 if entry[-1] == ' ':
