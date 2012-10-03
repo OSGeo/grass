@@ -275,6 +275,11 @@ toupper
 ungetc
 vfprintf
 vsprintf
+fgetpos64
+fopen64
+freopen64
+fsetpos64
+tmpfile64
 EOF
 
 dropdb "$dbname"
@@ -496,24 +501,31 @@ SELECT symbol
 	FROM ansi ;
 
 CREATE TABLE nonansi_progs AS
-	SELECT a.symbol, COUNT(*)
+	SELECT a.program, a.symbol
 	FROM prog_imp a, nonansi b
-	WHERE a.symbol = b.symbol
-	AND a.program NOT LIKE 'bin/%'
-	GROUP BY a.symbol ;
+	WHERE a.symbol = b.symbol ;
 
 CREATE TABLE nonansi_libs AS
-	SELECT a.symbol, COUNT(*)
+	SELECT a.library, a.symbol
 	FROM imports a, nonansi b
-	WHERE a.symbol = b.symbol
-	GROUP BY a.symbol ;
+	WHERE a.symbol = b.symbol ;
+
+CREATE TABLE nonansi_prog_counts AS
+	SELECT symbol, COUNT(*)
+	FROM nonansi_progs
+	GROUP BY symbol ;
+
+CREATE TABLE nonansi_lib_counts AS
+	SELECT symbol, COUNT(*)
+	FROM nonansi_libs
+	GROUP BY symbol ;
 
 SELECT symbol
 INTO TABLE nonansi_counts
-	FROM nonansi_progs
+	FROM nonansi_prog_counts
 UNION
 SELECT symbol
-	FROM nonansi_libs ;
+	FROM nonansi_lib_counts ;
 
 ALTER TABLE nonansi_counts
 	ADD COLUMN progs INTEGER ;
@@ -526,16 +538,16 @@ UPDATE nonansi_counts
 
 UPDATE nonansi_counts
 	SET progs = b.count
-	FROM nonansi_progs b
+	FROM nonansi_prog_counts b
 	WHERE nonansi_counts.symbol = b.symbol ;
 
 UPDATE nonansi_counts
 	SET libs = c.count
-	FROM nonansi_libs c
+	FROM nonansi_lib_counts c
 	WHERE nonansi_counts.symbol = c.symbol;
 
 -- SELECT a.symbol, a.program
--- 	FROM prog_imp a, nonansi_progs b
+-- 	FROM prog_imp a, nonansi_prog_counts b
 -- 	WHERE a.symbol = b.symbol
 -- 	AND a.program NOT LIKE 'bin/%'
 -- 	ORDER BY b.count DESC, b.symbol ;
