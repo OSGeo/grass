@@ -151,6 +151,7 @@ int main(int argc, char *argv[])
     inepsg = G_define_option();
     inepsg->key = "epsg";
     inepsg->type = TYPE_INTEGER;
+    inepsg->key_desc = "code";
     inepsg->required = NO;
     inepsg->options = "1-1000000";
     inepsg->guisection = _("Specification");
@@ -169,8 +170,9 @@ int main(int argc, char *argv[])
 	_("Accepts standard GRASS datum codes, or \"list\" to list and exit");
 
     dtrans = G_define_option();
-    dtrans->key = "datumtrans";
+    dtrans->key = "datum_trans";
     dtrans->type = TYPE_INTEGER;
+    dtrans->key_desc = "index";
     dtrans->required = NO;
     dtrans->options = "-1-100";
     dtrans->answer = "0";
