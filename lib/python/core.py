@@ -698,7 +698,7 @@ def locn_is_latlong():
     else:
 	return False
 
-def region(region3d = False):
+def region(region3d = False, complete = False):
     """!Returns the output from running "g.region -g", as a
     dictionary. Example:
 
@@ -717,6 +717,8 @@ def region(region3d = False):
     flgs = 'g'
     if region3d:
         flgs += '3'
+    if complete:
+        flgs += 'cep'
     
     s = read_command("g.region", flags = flgs)
     reg = parse_key_val(s, val_type = float)
