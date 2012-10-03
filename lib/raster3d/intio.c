@@ -4,18 +4,12 @@
 #include <unistd.h>
 #include "raster3d_intern.h"
 
-#ifndef _GNU_H_WINDOWS32_SOCKETS
-typedef unsigned int u_int;
-typedef unsigned long u_long;
-typedef unsigned short u_short;
-#endif
-
 /*---------------------------------------------------------------------------*/
 
 int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
 {
     char xdrIntBuf[RASTER3D_XDR_INT_LENGTH * 1024];
-    u_int n;
+    unsigned int n;
 
     if (nofNum <= 0)
 	Rast3d_fatal_error("Rast3d_write_ints: nofNum out of range");
@@ -57,7 +51,7 @@ int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
 int Rast3d_read_ints(int fd, int useXdr, int *i, int nofNum)
 {
     char xdrIntBuf[RASTER3D_XDR_INT_LENGTH * 1024];
-    u_int n;
+    unsigned int n;
 
     if (nofNum <= 0)
 	Rast3d_fatal_error("Rast3d_read_ints: nofNum out of range");
