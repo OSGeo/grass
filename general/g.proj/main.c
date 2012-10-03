@@ -258,8 +258,12 @@ int main(int argc, char *argv[])
 	&& (projinfo == NULL || projunits == NULL))
 	G_fatal_error(_("Projection files missing"));
 
+    /* Override input datum if requested */
+    if(datum->answer)
+	set_datum(datum->answer);
+
     /* Set Datum Parameters if necessary or requested */
-    set_datumtrans(datum->answer, atoi(dtrans->answer), forcedatumtrans->answer);
+    set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
 
 
     /* Output */
