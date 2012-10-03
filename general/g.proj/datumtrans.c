@@ -25,11 +25,70 @@
 
 /**
  * 
- * \brief Add or replace datum transformation parameters to the current
- *        co-ordinate system definition
+ * \brief Add or replace datum to the current co-ordinate system definition
  * 
  * \param datum       Use this datum (overrides any datum found in the
  *                    current co-ordinate system definition).
+ * 
+ * \return            1 if a change was made, 0 if not.
+ **/
+
+int set_datum(char *datum)
+{
+    struct gpj_datum dstruct;
+    struct Key_Value *temp_projinfo;
+    int i;
+
+    if (cellhd.proj == PROJECTION_XY)
+	return 0;
+
+    if (!datum || GPJ_get_datum_by_name(datum, &dstruct) < 0)
+    {
+	G_fatal_error(_("Invalid datum code <%s>"), datum);
+	return 0;
+    }
+
+    temp_projinfo = G_create_key_value();
+
+    /* Copy old PROJ_INFO, skipping out any keys related
+     * to datum or ellipsoid parameters */
+    for (i = 0; i < projinfo->nitems; i++) {
+        if (strcmp(projinfo->key[i], "datum") == 0
+	    || strcmp(projinfo->key[i], "dx") == 0
+	    || strcmp(projinfo->key[i], "dy") == 0
+	    || strcmp(projinfo->key[i], "dz") == 0
+	    || strcmp(projinfo->key[i], "datumparams") == 0
+	    || strcmp(projinfo->key[i], "nadgrids") == 0
+	    || strcmp(projinfo->key[i], "towgs84") == 0
+	    || strcmp(projinfo->key[i], "ellps") == 0
+	    || strcmp(projinfo->key[i], "a") == 0
+	    || strcmp(projinfo->key[i], "b") == 0
+	    || strcmp(projinfo->key[i], "es") == 0
+	    || strcmp(projinfo->key[i], "f") == 0
+	    || strcmp(projinfo->key[i], "rf") == 0)
+	    continue;
+
+	G_set_key_value(projinfo->key[i], projinfo->value[i],
+			temp_projinfo);
+    }
+
+    /* Finally add datum and ellipsoid names */
+    G_set_key_value("datum", dstruct.name, temp_projinfo);
+    G_message(_("Datum set to <%s>"), dstruct.name);
+    G_set_key_value("ellps", dstruct.ellps, temp_projinfo);
+    G_message(_("Ellipsoid set to <%s>"), dstruct.ellps);
+
+    /* Destroy original key/value structure and replace with new one */
+    G_free_key_value(projinfo);
+    projinfo = temp_projinfo;
+
+    return 1;
+}
+
+/**
+ * 
+ * \brief Add or replace datum transformation parameters to the current
+ *        co-ordinate system definition
  * 
  * \param datumtrans  Index number of parameter set to use, 0 to leave
  *                    unspecifed (or remove specific parameters, leaving just
@@ -42,24 +101,17 @@
  * \return            1 if a change was made, 0 if not.
  **/
 
-int set_datumtrans(char *datum, int datumtrans, int force)
+int set_datumtrans(int datumtrans, int force)
 {
+    char *params, *datum = NULL;
     int paramsets, status;
 
     if (cellhd.proj == PROJECTION_XY)
 	return 0;
 
-    if (datum)
-	/* datum name provided; set status to 1 to indicate no parameters available */
-	status = 1;
-    else {
-	/* extract datum name and parameter status from input co-ordinate system */
-	char *params;
-
-	status = GPJ__get_datum_params(projinfo, &datum, &params);
-	G_debug(3, "set_datumtrans(): GPJ__get_datum_params() status=%d", status);
-	G_free(params);
-    }
+    status = GPJ__get_datum_params(projinfo, &datum, &params);
+    G_debug(3, "set_datumtrans(): GPJ__get_datum_params() status=%d", status);
+    G_free(params);
 
     if (datum) {
 	/* A datum name is specified; need to determine if
@@ -147,8 +199,7 @@ int set_datumtrans(char *datum, int datumtrans, int force)
 	/* Copy old PROJ_INFO, skipping out any keys related
 	 * to datum parameters */
 	for (i = 0; i < projinfo->nitems; i++) {
-	    if (strcmp(projinfo->key[i], "datum") == 0
-		|| strcmp(projinfo->key[i], "dx") == 0
+	    if (strcmp(projinfo->key[i], "dx") == 0
 		|| strcmp(projinfo->key[i], "dy") == 0
 		|| strcmp(projinfo->key[i], "dz") == 0
 		|| strcmp(projinfo->key[i], "datumparams") == 0
@@ -160,9 +211,7 @@ int set_datumtrans(char *datum, int datumtrans, int force)
 			    temp_projinfo);
 	}
 
-	/* Finally (re-)add datum name and add new parameters (if we have them) */
-	G_set_key_value("datum", datum, temp_projinfo);
-	G_message(_("Datum set to <%s>"), datum);
+	/* Finally add new parameters (if we have them) */
 	if (chosenparams != NULL) {
 	    /* Now split 'chosenparams' into key/value format */
 	    paramkey = strtok(chosenparams, "=");
