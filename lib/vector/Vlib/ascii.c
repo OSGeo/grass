@@ -388,7 +388,7 @@ int Vect_write_ascii(FILE *ascii,
 	    db_shutdown_driver(driver);
 	}
 	else {
-            int len_all;
+            int len_all = 0;
             
             if (column_names[0] && strcmp(column_names[0], "*") == 0) {
                 int icol, ncols;
