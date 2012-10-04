@@ -42,7 +42,6 @@ def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
     os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'scripts')
     if sys.platform.startswith('win'): # added for winGRASS
          os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'extralib')
-         os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'msys', 'bin')
     # define LD_LIBRARY_PATH
     if '@LD_LIBRARY_PATH_VAR@' not in os.environ:
         os.environ['@LD_LIBRARY_PATH_VAR@'] = ''
