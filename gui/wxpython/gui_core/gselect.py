@@ -94,7 +94,7 @@ class Select(wx.combo.ComboCtrl):
      
     def OnKeyUp(self, event):
         """!Shows popupwindow if down arrow key is released"""
-        if event.GetKeyCode() == wx.WXK_DOWN:
+        if event.GetKeyCode() == wx.WXK_DOWN and not self.IsPopupShown():
             self.ShowPopup() 
         else:
             event.Skip()
