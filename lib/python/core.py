@@ -1191,7 +1191,7 @@ def mapsets(search_path = False):
 
 def create_location(dbase, location,
                     epsg = None, proj4 = None, filename = None, wkt = None,
-                    datum = None, desc = None):
+                    datum = None, datum_trans = None, desc = None):
     """!Create new location
 
     Raise ScriptError on error.
@@ -1202,7 +1202,8 @@ def create_location(dbase, location,
     @param proj4 if given create new location based on Proj4 definition
     @param filename if given create new location based on georeferenced file
     @param wkt if given create new location based on WKT definition (path to PRJ file)
-    @param datum datum transformation parameters (used for epsg and proj4)
+    @param datum GRASS format datum code
+    @param datum_trans datum transformation parameters (used for epsg and proj4)
     @param desc description of the location (creates MYNAME file)
     """
     gisdbase = None
@@ -1216,6 +1217,8 @@ def create_location(dbase, location,
     kwargs = dict()
     if datum:
         kwargs['datum'] = datum
+    if datum_trans:
+        kwargs['datum_trans'] = datum_trans
     
     if epsg:
         ps = pipe_command('g.proj',
