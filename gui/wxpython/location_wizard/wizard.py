@@ -891,8 +891,10 @@ class DatumPage(TitledPage):
 #                proj4string = self.parent.CreateProj4String() + ' +datum=%s' % self.datum
                 ret = RunCommand('g.proj',
                                  read = True,
-                                 proj4 = '%s +datum=%s' % (proj, self.datum), 
-                                 datumtrans = '-1')
+                                 proj4 = '%s' % proj,
+                                 datum = '%s' % self.datum, 
+                                 datum_trans = '-1')
+#                wx.Messagebox('here')
                 if ret != '':
                     dtrans = ''
                     # open a dialog to select datum transform number
@@ -909,14 +911,14 @@ class DatumPage(TitledPage):
                         event.Veto()
                         return 'Datum transform is required.'
                     
-                    self.parent.datumtrans = dtrans
+                    self.parent.datum_trans = dtrans
                 
             self.GetNext().SetPrev(self)
             self.parent.ellipsepage.ellipse = self.ellipse
             self.parent.ellipsepage.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
 
     def OnEnterPage(self,event):
-        self.parent.datumtrans = None
+        self.parent.datum_trans = None
         if event.GetDirection():
             if len(self.datum) == 0:
                 # disable 'next' button by default when entering from previous page
@@ -1358,7 +1360,7 @@ class EPSGPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
     def OnEnterPage(self, event):
-        self.parent.datumtrans = None
+        self.parent.datum_trans = None
         if event.GetDirection():
             if not self.epsgcode:
                 # disable 'next' button by default
@@ -1381,7 +1383,7 @@ class EPSGPage(TitledPage):
                 ret = RunCommand('g.proj',
                                  read = True,
                                  epsg = self.epsgcode,
-                                 datumtrans = '-1')
+                                 datum_trans = '-1')
                 
                 if ret != '':
                     dtrans = ''
@@ -1399,7 +1401,7 @@ class EPSGPage(TitledPage):
                         event.Veto()
                         return 'Datum transform is required.'
                     
-                    self.parent.datumtrans = dtrans
+                    self.parent.datum_trans = dtrans
             self.GetNext().SetPrev(self)
 
     def OnText(self, event):
@@ -1533,7 +1535,7 @@ class CustomPage(TitledPage):
             ret, out, err = RunCommand('g.proj',
                                        read = True, getErrorMsg = True,
                                        proj4 = self.customstring, 
-                                       datumtrans = '-1')
+                                       datum_trans = '-1')
             if ret != 0:
                 wx.MessageBox(parent = self,
                               message = err,
@@ -1558,7 +1560,7 @@ class CustomPage(TitledPage):
                     event.Veto()
                     return _('Datum transform is required.')
                 
-                self.parent.datumtrans = dtrans
+                self.parent.datum_trans = dtrans
         
         self.GetNext().SetPrev(self)
             
@@ -1662,7 +1664,8 @@ class SummaryPage(TitledPage):
         location = self.parent.startpage.location
         proj4string = self.parent.CreateProj4String()
         epsgcode = self.parent.epsgpage.epsgcode
-        dtrans = self.parent.datumtrans
+        datum = self.parent.datumpage.datum
+        dtrans = self.parent.datum_trans
         
         global coordsys
         if coordsys in ('proj', 'epsg'):
@@ -1670,7 +1673,8 @@ class SummaryPage(TitledPage):
                 ret, projlabel, err = RunCommand('g.proj',
                                                  flags = 'jf',
                                                  proj4 = proj4string,
-                                                 datumtrans = dtrans,
+                                                 datum = datum,
+                                                 datum_trans = dtrans,
                                                  location = location,
                                                  getErrorMsg = True,
                                                  read = True)
@@ -1678,13 +1682,15 @@ class SummaryPage(TitledPage):
                 ret, projlabel, err = RunCommand('g.proj',
                                                  flags = 'jf',
                                                  epsg = epsgcode,
-                                                 datumtrans = dtrans,
+                                                 datum_trans = dtrans,
                                                  location = location,
                                                  getErrorMsg = True,
                                                  read = True)
 
             finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
+                if datum != '':
+                    projlabel = projlabel + ' ' + 'datum=%s' % datum
                 self.lproj4string.SetLabel(projlabel.replace(' ', os.linesep))
                 finishButton.Enable(True)
             else:
@@ -1755,7 +1761,7 @@ class LocationWizard(wx.Object):
         #
         # datum transform number and list of datum transforms
         #
-        self.datumtrans = None
+        self.datum_trans = None
         self.proj4string = ''
 
         # file from which new location is created
@@ -2027,7 +2033,8 @@ class LocationWizard(wx.Object):
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
                                       proj4 = self.CreateProj4String(),
-                                      datum = self.datumtrans,
+                                      datum = self.datumpage.datum,
+                                      datum_trans = self.datum_trans,
                                       desc = self.startpage.locTitle)
             elif coordsys == 'custom':
                 grass.create_location(dbase = self.startpage.grassdatabase,
@@ -2041,7 +2048,8 @@ class LocationWizard(wx.Object):
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
                                       epsg = self.epsgpage.epsgcode,
-                                      datum = self.datumtrans,
+                                      datum = self.datumpage.datum,
+                                      datum_trans = self.datum_trans,
                                       desc = self.startpage.locTitle)
             elif coordsys == "file":
                 if not self.filepage.georeffile or \
@@ -2074,7 +2082,7 @@ class LocationWizard(wx.Object):
         projdesc = self.projpage.projdesc
         proj4params = self.paramspage.p4projparams
                 
-        datum = self.datumpage.datum
+#        datum = self.datumpage.datum
         if self.datumpage.datumdesc:
             datumdesc = self.datumpage.datumdesc +' - ' + self.datumpage.ellipse
         else:
@@ -2099,9 +2107,7 @@ class LocationWizard(wx.Object):
                 item = ' +' + item
             proj4string = '%s %s' % (proj4string, item)
             
-        # set datum and transform parameters if relevant
-        if datum != '':
-            proj4string = '%s +datum=%s' % (proj4string, datum)
+        # set datum transform parameters if relevant
         if datumparams:
             for item in datumparams:
                 proj4string = '%s +%s' % (proj4string,item)
