@@ -6,5 +6,8 @@ TARGETS := $(patsubst %.py,$(TOOLSDIR)/%.py,html.py groff.py g.html2man.py)
 
 default: $(TARGETS)
 
-$(TOOLSDIR)/%.py: %.py
+$(TOOLSDIR)/g.html2man.py: g.html2man.py
 	$(INSTALL) $< $@
+
+$(TOOLSDIR)/%.py: %.py
+	$(INSTALL_DATA) $< $@
