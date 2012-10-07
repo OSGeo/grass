@@ -190,7 +190,7 @@ def main():
     output = options['output']
     method = options['method']
     dtype = options['type']
-    fs = options['sep']
+    fs = options['separator']
     x = options['x']
     y = options['y']
     z = options['z']
