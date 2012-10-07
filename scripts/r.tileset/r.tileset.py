@@ -372,7 +372,7 @@ def main():
                           (tile_bbox['w'], tile_bbox['s'], tile_bbox['e'], tile_bbox['n'],
                            tile_size_overlap[0], tile_size_overlap[1])
                 else:
-                    fs = options['sep']
+                    fs = options['separator']
                     print "%s%s%s%s%s%s%s%s%s%s%s" % \
                           (tile_bbox['w'], fs, tile_bbox['s'], fs, tile_bbox['e'], fs, tile_bbox['n'], fs,
                            tile_size_overlap[0], fs, tile_size_overlap[1])
