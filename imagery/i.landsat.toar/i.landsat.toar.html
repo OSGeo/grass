@@ -6,17 +6,20 @@ top-of-atmosphere reflectance and temperature (band 6 of the sensors
 TM and ETM+). Optionally, it can be used to calculate the at-surface
 radiance or reflectance with atmospheric correction (DOS method).
 
-<p>Usually, to do so the production date, the acquisition date, and the
+<p>
+Usually, to do so the production date, the acquisition date, and the
 solar elevation is needed. Moreover, for Landsat-7 ETM+ it is also
 needed the gain (high or low) of the nine respective bands.
 
-<p>Optionally, the data can be read from header file (.met) for all
+<p>
+Optionally (recommended), the data can be read from metadata file (.met or MTL.txt) for all
 Landsat MSS, TM and ETM+. However, if the solar elevation or the
-product creation date are given the values of the metfile are
-overwriten. This is necessary when the data in the metfile is
+product creation date are given the values of the metadata file are
+overwriten (only with .met files). This is necessary when the data in the .met file is
 incorrect or not accurate.
 
-<p><b>Attention</b>: Any null value or smaller than QCALmin in the input
+<p>
+<b>Attention</b>: Any null value or smaller than QCALmin in the input
 raster is set to null in the output raster and it is not included in
 the equations.
 
@@ -30,7 +33,8 @@ reflectance. The thermal band is first converted from QCAL to
 at-sensor radiance, and then to effective at-sensor temperature in
 Kelvin degrees.
 
-<p>Radiometric calibration converts QCAL to <b>at-sensor radiance</b>, a
+<p>
+Radiometric calibration converts QCAL to <b>at-sensor radiance</b>, a
 radiometric quantity measured in W/(m&sup2; * sr * &micro;m) using the
 equations:
 <ul>
@@ -43,7 +47,8 @@ where, <em>Lmax</em> and <em>Lmin</em> are the calibration constants,
 and <em>QCALmax</em> and <em>QCALmin</em> are the highest and the
 lowest points of the range of rescaled radiance in QCAL.
 
-<p>Then, to calculate <b>at-sensor reflectance</b> the equations are:
+<p>
+Then, to calculate <b>at-sensor reflectance</b> the equations are:
 
 <ul>
   <li> sun_radiance = [Esun * sin(e)] / (PI * d^2)</li>
@@ -68,7 +73,8 @@ bands):
   <li> reflectance = radiance / sun_radiance </li>
 </ul>
 
-<p><b>Note</b>: Other possibility to avoid negative values is set to zero
+<p>
+<b>Note</b>: Other possibility to avoid negative values is set to zero
 this values (radiance and/or reflectance), but this option is ease
 with uncorrected method
 and <em><a href="r.mapcalc.html">r.mapcalc</a></em>.
@@ -120,12 +126,8 @@ negative value.
 In verbose mode (flag <b>--verbose</b>), the program write basic
 satellite data and the parameters used in the transformations.
 
-<p>In L5_MTL mode (flag <b>-t</b>), the Landsat 5TM imagery that has a
-_MTL.txt metadata file can be processed. Landsat 7 ETM+ does not need
-a flag since .met and _MTL.txt are sufficient compatible for this
-sensor.
-
-<p>Production date is not an exact value but it is necessary to apply
+<p>
+Production date is not an exact value but it is necessary to apply
 correct calibration constants, which were changed in the dates:
 <ul>
   <li>Landsat-1 MSS: never </li>
@@ -147,7 +149,15 @@ files 293_39.61_toar and 293_39.62_toar:
 
 <div class="code"><pre>
 i.landsat.toar input_prefix=203_30. output_prefix=_toar \
-  sensor=tm7 met=p203r030_7x20010620.met
+  metfile=p203r030_7x20010620.met
+</pre></div>
+
+or
+
+<div class="code"><pre>
+i.landsat.toar input_prefix=L5121060_06020060714. \
+  output_prefix=L5121060_06020060714_toar \
+  metfile=L5121060_06020060714_MTL.txt
 </pre></div>
 
 or
@@ -155,15 +165,7 @@ or
 <div class="code"><pre>
 i.landsat.toar input_prefix=203_30. output_prefix=_toar \
   sensor=tm7 product_date=2004-06-07 date=2001-06-20 \
-  solar_elevation=64.3242970 gain="HHHLHLHHL"
-</pre></div>
-
-or
-
-<div class="code"><pre>
-i.landsat.toar input_prefix=L5121060_06020060714. \
-  output_prefix=L5121060_06020060714_toar sensor=tm5 \
-  metfile=L5121060_06020060714_MTL.txt -t
+  sun_elevation=64.3242970 gain="HHHLHLHHL"
 </pre></div>
 
 <h2>REFERENCES</h2>
@@ -171,27 +173,27 @@ i.landsat.toar input_prefix=L5121060_06020060714. \
 <ul>
   <li>Chander G., B.L. Markham and D.L. Helder, 2009: Remote Sensing of
     Environment, vol. 113</li>
-  
+
   <li>Chander G.H. and B. Markham, 2003.: IEEE Transactions On Geoscience And
     Remote Sensing, vol. 41, no. 11.</li>
-  
+
   <li>Chavez P.S., jr. 1996. Image-based atmospheric corrections -
     Revisited and Improved. Photogrammetric Engineering and Remote
     Sensing 62(9): 1025-1036.</li>
-  
+
   <li>Huang et al: At-Satellite Reflectance, 2002: A First Order Normalization
     Of Landsat 7 ETM+ Images.</li>
-  
+
   <li>R. Irish: <a href="http://landsathandbook.gsfc.nasa.gov/orbit_coverage/">Landsat
       7. Science Data Users Handbook</a>. February 17, 2007; 15 May 2011.</li>
-  
+
   <li>Markham B.L. and J.L. Barker, 1986: Landsat MSS and TM Post-Calibration
     Dynamic Ranges, Exoatmospheric Reflectances and At-Satellite
     Temperatures. EOSAT Landsat Technical Notes, No. 1.</li>
-  
+
   <li>Moran M.S., R.D. Jackson, P.N. Slater and P.M. Teillet, 1992: Remote
     Sensing of Environment, vol. 41.</li>
-  
+
   <li>Song et al, 2001: Classification and Change Detection Using Landsat TM
     Data, When and How to Correct Atmospheric Effects? Remote Sensing
     of Environment, vol. 75.</li>
@@ -210,4 +212,5 @@ i.landsat.toar input_prefix=L5121060_06020060714. \
 E. Jorge Tizado  (ej.tizado unileon es), Dept. Biodiversity and Environmental Management,
 University of Le&oacute;n, Spain
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
