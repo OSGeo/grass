@@ -5,6 +5,27 @@ It permits to insert missing nodes or arcs and to connect unconnected
 nodes to the network within a given distance threshold. 
 It can also report the current network graph status. 
 
+<h4>operation options</h4>
+<dl>
+<dt><em>connect</em> 
+<dd>Connects unconnected points in the input <em>points</em> vector map 
+to the vector network by inserting new lines.
+<dt><em>nodes</em>
+<dd>A new point is added for each node (line start/end) if a point does 
+not exist yet for this node.
+<dt><em>arcs</em>
+<dd>A new line is created from start point to end point.
+<dt><em>report</em>
+<dd>Print arc information:
+<div><pre>
+line_category start_point_category end_point_category
+</pre></div>
+<dt><em>nreport</em> 
+<dd>Print node information:
+<div><pre>point_category line_category[,line_category...]
+</pre></div>
+</dl>
+
 <p>In terms of network analysis, a network consists of nodes connected by 
 arcs. In a vector map prepared for network analysis, nodes are represented 
 by the grass-internal geometry type <em>node</em> and arcs by the geometry 
@@ -21,7 +42,7 @@ line with is part of the network. If no line is starting or ending at a
 given point, this point is not part of the network, i.e. the point is 
 unconnected and unreachable.
 
-<h3>NOTES</h3>
+<h2>NOTES</h2>
 
 If vector editing is required to modify the
 graph, <em><a href="wxGUI.Vector_Digitizer.html">wxGUI vector
@@ -30,7 +51,7 @@ used. Separately,
 <a href="lrs.html">Linear Referencing System</a> is available in
 GRASS.
 
-<h3>EXAMPLES</h3>
+<h2>EXAMPLES</h2>
 
 <a href="http://www.grassbook.org/data_menu3rd.php">NC dataset</a> based examples.
 
