@@ -3,6 +3,7 @@
 
 /* tree functions */
 struct RB_TREE *rbtree_create(rb_compare_fn *, size_t);
+void rbtree_clear(struct RB_TREE *);
 void rbtree_destroy(struct RB_TREE *);
 int rbtree_insert(struct RB_TREE *, void *);
 int rbtree_remove(struct RB_TREE *, const void *);
