@@ -590,7 +590,7 @@ static int _add_item_with_box(int id, const struct RTree_Rect *rect,
     box.N = rect->boundary[4];
     box.T = rect->boundary[5];
 
-    dig_boxlist_add(list, id, box);
+    dig_boxlist_add(list, id, &box);
     return 1;
 }
 

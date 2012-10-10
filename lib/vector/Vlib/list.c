@@ -285,7 +285,7 @@ void Vect_destroy_boxlist(struct boxlist *list)
  * \return 0 on success
  * \return 1 on error
  */
-int Vect_boxlist_append(struct boxlist *list, int id, struct bound_box box)
+int Vect_boxlist_append(struct boxlist *list, int id, const struct bound_box *box)
 {
     int i;
     size_t size;
@@ -312,7 +312,7 @@ int Vect_boxlist_append(struct boxlist *list, int id, struct bound_box box)
 
     list->id[list->n_values] = id;
     if (list->have_boxes)
-	list->box[list->n_values] = box;
+	list->box[list->n_values] = *box;
     list->n_values++;
 
     return 0;
@@ -336,14 +336,14 @@ int Vect_boxlist_append_boxlist(struct boxlist *alist, const struct boxlist *bli
 
     if (blist->have_boxes) {
 	for (i = 0; i < blist->n_values; i++)
-	    Vect_boxlist_append(alist, blist->id[i], blist->box[i]);
+	    Vect_boxlist_append(alist, blist->id[i], &blist->box[i]);
     }
     else {
 	struct bound_box box;
 
 	box.E = box.W = box.N = box.S = box.T = box.B = 0;
 	for (i = 0; i < blist->n_values; i++)
-	    Vect_boxlist_append(alist, blist->id[i], box);
+	    Vect_boxlist_append(alist, blist->id[i], &box);
     }
 
     return 0;

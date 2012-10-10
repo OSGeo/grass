@@ -61,7 +61,7 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
 	Line = plus->Line[line];
 	if (!(Line->type & type))
 	    continue;
-	dig_boxlist_add(list, line, LocList->box[i]);
+	dig_boxlist_add(list, line, &LocList->box[i]);
     }
 
     G_debug(3, "  %d lines of requested type", list->n_values);
