@@ -34,12 +34,12 @@
 #include <grass/rbtree.h>
 
 /* internal functions */
-struct RB_NODE *rbtree_single(struct RB_NODE *, int);
-struct RB_NODE *rbtree_double(struct RB_NODE *, int);
-void *rbtree_first(struct RB_TRAV *);
-void *rbtree_next(struct RB_TRAV *);
-struct RB_NODE *rbtree_make_node(size_t, void *);
-int is_red(struct RB_NODE *);
+static struct RB_NODE *rbtree_single(struct RB_NODE *, int);
+static struct RB_NODE *rbtree_double(struct RB_NODE *, int);
+static void *rbtree_first(struct RB_TRAV *);
+static void *rbtree_next(struct RB_TRAV *);
+static struct RB_NODE *rbtree_make_node(size_t, void *);
+static int is_red(struct RB_NODE *);
 
 
 /* create new tree and initialize
@@ -80,7 +80,7 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
 	    return 0;
     }
     else {
-	struct RB_NODE head = { 0 };	/* False tree root */
+	struct RB_NODE head = { 0, 0, {0, 0} };	/* False tree root */
 	struct RB_NODE *g, *t;	/* Grandparent & parent */
 	struct RB_NODE *p, *q;	/* Iterator & parent */
 	int dir = 0, last = 0;
@@ -151,7 +151,7 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
  */
 int rbtree_remove(struct RB_TREE *tree, const void *data)
 {
-    struct RB_NODE head = { 0 };	/* False tree root */
+    struct RB_NODE head = { 0, 0, {0, 0} };	/* False tree root */
     struct RB_NODE *q, *p, *g;	/* Helpers */
     struct RB_NODE *f = NULL;	/* Found item */
     int dir = 1, removed = 0;
@@ -407,8 +407,8 @@ void *rbtree_next(struct RB_TRAV *trav)
 	return NULL;		/* finished traversing */
 }
 
-/* destroy the tree */
-void rbtree_destroy(struct RB_TREE *tree)
+/* clear the tree, removing all entries */
+void rbtree_clear(struct RB_TREE *tree)
 {
     struct RB_NODE *it;
     struct RB_NODE *save = tree->root;
@@ -434,6 +434,15 @@ void rbtree_destroy(struct RB_TREE *tree)
 	    save->link[1] = it;
 	}
     }
+    tree->root = NULL;
+}
+
+/* destroy the tree */
+void rbtree_destroy(struct RB_TREE *tree)
+{
+    /* remove all entries */
+    rbtree_clear(tree);
+
     free(tree);
     tree = NULL;
 }
@@ -498,7 +507,7 @@ int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
  *******************************************************/
 
 /* add a new node to the tree */
-struct RB_NODE *rbtree_make_node(size_t datasize, void *data)
+static struct RB_NODE *rbtree_make_node(size_t datasize, void *data)
 {
     struct RB_NODE *new_node = (struct RB_NODE *)malloc(sizeof(*new_node));
 
@@ -518,7 +527,7 @@ struct RB_NODE *rbtree_make_node(size_t datasize, void *data)
 }
 
 /* check for red violation */
-int is_red(struct RB_NODE *root)
+static int is_red(struct RB_NODE *root)
 {
     if (root)
 	return root->red == 1;
@@ -527,7 +536,7 @@ int is_red(struct RB_NODE *root)
 }
 
 /* single rotation */
-struct RB_NODE *rbtree_single(struct RB_NODE *root, int dir)
+static struct RB_NODE *rbtree_single(struct RB_NODE *root, int dir)
 {
     struct RB_NODE *newroot = root->link[!dir];
 
@@ -541,7 +550,7 @@ struct RB_NODE *rbtree_single(struct RB_NODE *root, int dir)
 }
 
 /* double rotation */
-struct RB_NODE *rbtree_double(struct RB_NODE *root, int dir)
+static struct RB_NODE *rbtree_double(struct RB_NODE *root, int dir)
 {
     root->link[!dir] = rbtree_single(root->link[!dir], !dir);
     return rbtree_single(root, dir);
