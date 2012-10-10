@@ -13,12 +13,13 @@ MODULES = core db raster raster3d vector array setup task
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
-CLEAN_SUBDIRS = ctypes temporal
+CLEAN_SUBDIRS = ctypes temporal pygrass
 EXTRA_CLEAN_FILES = setup.py
 
 default: $(PYFILES) $(PYCFILES) $(GDIR)/__init__.py $(GDIR)/__init__.pyc
 	-$(MAKE) -C ctypes || echo $(CURDIR)/ctypes >> $(ERRORLOG)
 	-$(MAKE) -C temporal || echo $(CURDIR)/temporal >> $(ERRORLOG)
+	-$(MAKE) -C pygrass || echo $(CURDIR)/pygrass >> $(ERRORLOG)
 
 $(PYDIR):
 	$(MKDIR) $@
