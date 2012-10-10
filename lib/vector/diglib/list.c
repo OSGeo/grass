@@ -31,7 +31,7 @@ int dig_init_boxlist(struct boxlist *list, int have_boxes)
 }
 
 /* Add item to box list, does not check for duplicates */
-int dig_boxlist_add(struct boxlist *list, int id, struct bound_box box)
+int dig_boxlist_add(struct boxlist *list, int id, const struct bound_box *box)
 {
     if (list->n_values == list->alloc_values) {
 	size_t size = (list->n_values + 1000) * sizeof(int);
@@ -55,7 +55,7 @@ int dig_boxlist_add(struct boxlist *list, int id, struct bound_box box)
 
     list->id[list->n_values] = id;
     if (list->have_boxes)
-	list->box[list->n_values] = box;
+	list->box[list->n_values] = *box;
     list->n_values++;
 
     return 1;

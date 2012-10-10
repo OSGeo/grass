@@ -90,7 +90,7 @@ int dig_set_distance_to_line_tolerance(double);
 
 /* list.c */
 int dig_init_boxlist(struct boxlist *, int);
-int dig_boxlist_add(struct boxlist *, int, struct bound_box);
+int dig_boxlist_add(struct boxlist *, int, const struct bound_box *);
 
 /* plus.c */
 int dig_init_plus(struct Plus_head *);
