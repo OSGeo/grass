@@ -53,12 +53,12 @@ from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportD
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
-from gui_core.menu         import Menu
+from gui_core.menu         import Menu, MenuTreeWindow
 from gmodeler.model        import Model
 from gmodeler.frame        import ModelFrame
 from psmap.frame           import PsMapFrame
 from core.debug            import Debug
-from gui_core.ghelp        import MenuTreeWindow, AboutWindow
+from gui_core.ghelp        import AboutWindow
 from modules.extensions    import InstallExtensionWindow, UninstallExtensionWindow
 from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
