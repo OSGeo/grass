@@ -780,14 +780,22 @@ class GMFrame(wx.Frame):
         """!Print system information"""
         vInfo = grass.version()
         
+        try:
+            from osgeo import gdal
+            gdalVersion = gdal.__version__
+        except:
+            gdalVersion = _("unknown")
+        
         self.goutput.WriteLog("%s: %s\n"
                               "%s: %s\n"
                               "%s: %s (%s)\n"
+                              "GDAL/OGR: %s\n"
                               "Python: %s\n"
                               "wxPython: %s\n"
                               "%s: %s\n"% (_("GRASS version"), vInfo['version'],
                                            _("GRASS SVN Revision"), vInfo['revision'],
                                            _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
+                                           gdalVersion,
                                            platform.python_version(),
                                            wx.__version__,
                                            _("Platform"), platform.platform()),
