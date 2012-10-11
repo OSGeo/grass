@@ -9,7 +9,7 @@ Classes:
  - extensions::UninstallExtensionWindow
  - extensions::CheckListExtension
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2008-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -21,7 +21,6 @@ import os
 import sys
 
 import wx
-import wx.lib.mixins.listctrl as listmix
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
@@ -34,7 +33,7 @@ from grass.script import task as gtask
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from gui_core.forms   import GUI
-from gui_core.widgets import ItemTree
+from gui_core.widgets import ItemTree, GListCtrl
 from gui_core.ghelp   import SearchModuleWindow
 
 class InstallExtensionWindow(wx.Frame):
@@ -473,18 +472,12 @@ class UninstallExtensionWindow(wx.Frame):
         """!Shows command dialog"""
         GUI(parent = self).ParseCommand(cmd = ['g.extension'])
 
-class CheckListExtension(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+class CheckListExtension(GListCtrl):
     """!List of mapset/owner/group"""
     def __init__(self, parent):
-        self.parent = parent
+        GListCtrl.__init__(self, parent)
         
-        wx.ListCtrl.__init__(self, parent, id = wx.ID_ANY,
-                             style = wx.LC_REPORT)
-        listmix.CheckListCtrlMixin.__init__(self)
-        
-        # setup mixins
-        listmix.ListCtrlAutoWidthMixin.__init__(self)
-
+        # load extensions
         self.InsertColumn(0, _('Extension'))
         self.LoadData()
         

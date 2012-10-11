@@ -66,7 +66,7 @@ class Menu(wx.MenuBar):
             menu.AppendSeparator()
             return
         
-        if len(gcmd) > 0 and handler in ('OnMenuCmd', 'RunMenuCmd'):
+        if gcmd:
             helpString = gcmd + ' -- ' + help
             if menustyle == 1:
                 label += '   [' + gcmd + ']'
