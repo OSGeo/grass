@@ -5,8 +5,10 @@
 
 Classes:
  - menu::Menu
+ - menu::MenuTreeWindow
+ - menu::MenuTree
 
-(C) 2010 by the GRASS Development Team
+(C) 2010-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -20,10 +22,13 @@ This program is free software under the GNU General Public License
 
 import wx
 
-from core          import globalvar
-from core          import utils
-from core.gcmd     import EncodeString
-from core.settings import UserSettings
+from core              import globalvar
+from core              import utils
+from core.gcmd         import EncodeString
+from core.settings     import UserSettings
+from gui_core.widgets  import ItemTree
+from lmgr.menudata     import ManagerData
+from gui_core.ghelp    import SearchModuleWindow
 
 class Menu(wx.MenuBar):
     def __init__(self, parent, data):
@@ -33,7 +38,7 @@ class Menu(wx.MenuBar):
         self.menudata = data
         self.menucmd  = dict()
         
-        self.menustyle = UserSettings.Get(group='appearance', key='menustyle', subkey='selection')
+        self.menustyle = UserSettings.Get(group = 'appearance', key = 'menustyle', subkey = 'selection')
         
         for eachMenuData in self.menudata.GetMenu():
             for eachHeading in eachMenuData:
@@ -118,3 +123,199 @@ class Menu(wx.MenuBar):
 
         # but in this case just call Skip so the default is done
         event.Skip()
+
+class MenuTreeWindow(wx.Panel):
+    """!Show menu tree"""
+    def __init__(self, parent, id = wx.ID_ANY, **kwargs):
+        self.parent = parent # LayerManager
+        
+        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
+        
+        self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                    label = " %s " % _("Menu tree (double-click to run command)"))
+        # tree
+        self.tree = MenuTree(parent = self, data = ManagerData())
+        self.tree.Load()
+
+        # search widget
+        self.search = SearchModuleWindow(parent = self, showChoice = False)
+        
+        # buttons
+        self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("&Run"))
+        self.btnRun.SetToolTipString(_("Run selected command"))
+        self.btnRun.Enable(False)
+        
+        # bindings
+        self.btnRun.Bind(wx.EVT_BUTTON,            self.OnRun)
+        self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
+        self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
+        self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
+        self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
+        
+        self._layout()
+        
+        self.search.SetFocus()
+        
+    def _layout(self):
+        """!Do dialog layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        # body
+        dataSizer = wx.StaticBoxSizer(self.dataBox, wx.HORIZONTAL)
+        dataSizer.Add(item = self.tree, proportion =1,
+                      flag = wx.EXPAND)
+        
+        # buttons
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnRun, proportion = 0)
+        
+        sizer.Add(item = dataSizer, proportion = 1,
+                  flag = wx.EXPAND | wx.ALL, border = 5)
+
+        sizer.Add(item = self.search, proportion = 0,
+                  flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+        
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALIGN_RIGHT | wx.BOTTOM | wx.RIGHT, border = 5)
+        
+        sizer.Fit(self)
+        sizer.SetSizeHints(self)
+        
+        self.SetSizer(sizer)
+        
+        self.Fit()
+        self.SetAutoLayout(True)        
+        self.Layout()
+        
+    def OnCloseWindow(self, event):
+        """!Close window"""
+        self.Destroy()
+        
+    def OnRun(self, event):
+        """!Run selected command"""
+        if not self.tree.GetSelected():
+            return # should not happen
+        
+        data = self.tree.GetPyData(self.tree.GetSelected())
+        if not data:
+            return
+
+        handler = 'self.parent.' + data['handler'].lstrip('self.')
+        if data['handler'] == 'self.OnXTerm':
+            wx.MessageBox(parent = self,
+                          message = _('You must run this command from the menu or command line',
+                                      'This command require an XTerm'),
+                          caption = _('Message'), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+        elif data['command']:
+            eval(handler)(event = None, cmd = data['command'].split())
+        else:
+            eval(handler)(None)
+
+    def OnShowItem(self, event):
+        """!Show selected item"""
+        self.tree.OnShowItem(event)
+        if self.tree.GetSelected():
+            self.btnRun.Enable()
+        else:
+            self.btnRun.Enable(False)
+        
+    def OnItemActivated(self, event):
+        """!Item activated (double-click)"""
+        item = event.GetItem()
+        if not item or not item.IsOk():
+            return
+        
+        data = self.tree.GetPyData(item)
+        if not data or 'command' not in data:
+            return
+        
+        self.tree.itemSelected = item
+        
+        self.OnRun(None)
+        
+    def OnItemSelected(self, event):
+        """!Item selected"""
+        item = event.GetItem()
+        if not item or not item.IsOk():
+            return
+        
+        data = self.tree.GetPyData(item)
+        if not data or 'command' not in data:
+            return
+        
+        if data['command']:
+            label = data['command'] + ' -- ' + data['description']
+        else:
+            label = data['description']
+        
+        self.parent.SetStatusText(label, 0)
+        
+    def OnUpdateStatusBar(self, event):
+        """!Update statusbar text"""
+        element = self.search.GetSelection()
+        self.tree.SearchItems(element = element,
+                              value = event.GetString())
+        
+        nItems = len(self.tree.itemsMarked)
+        if event.GetString():
+            self.parent.SetStatusText(_("%d modules match") % nItems, 0)
+        else:
+            self.parent.SetStatusText("", 0)
+        
+        event.Skip()
+        
+class MenuTree(ItemTree):
+    """!Menu tree class"""
+    def __init__(self, parent, data, **kwargs):
+        self.parent   = parent
+        self.menudata = data
+
+        super(MenuTree, self).__init__(parent, **kwargs)
+        
+        self.menustyle = UserSettings.Get(group = 'appearance', key = 'menustyle', subkey = 'selection')
+        
+    def Load(self, data = None):
+        """!Load menu data tree
+
+        @param data menu data (None to use self.menudata)
+        """
+        if not data:
+            data = self.menudata
+        
+        self.itemsMarked = [] # list of marked items
+        for eachMenuData in data.GetMenu():
+            for label, items in eachMenuData:
+                item = self.AppendItem(parentId = self.root,
+                                       text = label.replace('&', ''))
+                self.__AppendItems(item, items)
+        
+    def __AppendItems(self, item, data):
+        """!Append items into tree (used by Load()
+        
+        @param item tree item (parent)
+        @parent data menu data"""
+        for eachItem in data:
+            if len(eachItem) == 2:
+                if eachItem[0]:
+                    itemSub = self.AppendItem(parentId = item,
+                                    text = eachItem[0])
+                self.__AppendItems(itemSub, eachItem[1])
+            else:
+                if eachItem[0]:
+                    label = eachItem[0]
+                    if eachItem[3]:
+                        if self.menustyle == 1:
+                            label += ' [' + eachItem[3] + ']'
+                        elif self.menustyle == 2:
+                            label = '[' + eachItem[3] + ']'
+                    
+                    itemNew = self.AppendItem(parentId = item,
+                                              text = label)
+                    
+                    data = { 'item'        : eachItem[0],
+                             'description' : eachItem[1],
+                             'handler'  : eachItem[2],
+                             'command'  : eachItem[3],
+                             'keywords' : eachItem[4] }
+                    
+                    self.SetPyData(itemNew, data)

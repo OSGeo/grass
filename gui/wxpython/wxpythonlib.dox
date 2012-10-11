@@ -112,8 +112,6 @@ available in GRASS 5 and GRASS 6.
  - forms::GrassGUIApp
 - gui_core::ghelp
  - ghelp::SearchModuleWindow
- - ghelp::MenuTreeWindow
- - ghelp::MenuTree
  - ghelp::AboutWindow
  - ghelp::HelpFrame
  - ghelp::HelpWindow
@@ -151,6 +149,8 @@ available in GRASS 5 and GRASS 6.
  - mapwindow::MapWindow
 - gui_core::menu
  - menu::Menu
+ - menu::MenuTreeWindow
+ - menu::MenuTree
 - gui_core::preferences
  - preferences::PreferencesBaseDialog
  - preferences::PreferencesDialog
