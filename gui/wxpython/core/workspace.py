@@ -267,7 +267,7 @@ class ProcessWorkspaceFile:
         nviz = {}
         if node_nviz.find('surface') is not None: # -> raster
             nviz['surface'] = {}
-            for sec in ('attribute', 'draw', 'mask', 'position'):
+            for sec in ('attribute', 'draw', 'position'):
                 nviz['surface'][sec] = {}
         elif node_nviz.find('vlines') is not None or \
                 node_nviz.find('vpoints') is not None: # -> vector
@@ -760,6 +760,8 @@ class WriteWorkspaceFile(object):
             for name in data[attrb].iterkeys():
                 # surface attribute
                 if attrb == 'attribute':
+                    if data[attrb][name]['map'] is None:
+                        continue
                     self.file.write('%s<%s name="%s" map="%d">\n' % \
                                    (' ' * self.indent, attrb, name, data[attrb][name]['map']))
                     self.indent += 4
