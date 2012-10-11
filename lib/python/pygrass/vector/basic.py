@@ -38,7 +38,6 @@ class Bbox(object):
     """
     def __init__(self, north=0, south=0, east=0, west=0, top=0, bottom=0):
         self.c_bbox = ctypes.pointer(libvect.bound_box())
-	# self.c_bbox.contents.N = north ? etc
         self.north = north
         self.south = south
         self.east = east
@@ -101,11 +100,7 @@ class Bbox(object):
 
 class BoxList(object):
     def __init__(self, boxlist=None):
-	# should this
         self.c_boxlist = ctypes.pointer(libvect.boxlist())
-	# not rather be
-	# self.c_boxlist = libvect.Vect_new_boxlist(1)
-	# ?
         # if set to 0, the list will hold only ids and no boxes
         self.c_boxlist.contents.have_boxes = 1
         if boxlist is not None:
@@ -152,9 +147,7 @@ class BoxList(object):
         ..
         """
         indx = self.__len__()
-	# MM: I am not sure about ctypes.byref
-	# Vect_boxlist_append() wants a pointer to the box, not the box itself
-        libvect.Vect_boxlist_append(self.c_boxlist, indx, ctypes.byref(box.c_bbox.contents))
+        libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
 
 #    def extend(self, boxlist):
 #        """Extend a boxlist with another boxlist or using a list of Bbox, using
@@ -232,11 +225,7 @@ class Ilist(object):
     """Instantiate a list of integer using the C GRASS struct ``ilist``,
     the class contains this struct as ``c_ilist`` attribute. """
     def __init__(self, integer_list=None):
-	# should this
         self.c_ilist = ctypes.pointer(libvect.struct_ilist())
-	# not rather be
-	# self.c_ilist = libvect.Vect_new_list()
-	# ?
         if integer_list is not None:
             self.extend(integer_list)
 
@@ -316,11 +305,7 @@ class Cats(object):
         if c_cats is not None:
             self.c_cats = c_cats
         else:
-	    # should this
             self.c_cats = ctypes.pointer(libvect.line_cats())
-	    # not rather be
-	    # self.c_cats = libvect.Vect_new_cats_struct()
-	    # ?
             self.get_area_cats()
 
     def get_area_cats(self):
