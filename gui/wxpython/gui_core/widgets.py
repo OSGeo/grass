@@ -14,8 +14,9 @@ Classes:
  - widgets::IntegerValidator
  - widgets::FloatValidator
  - widgets::ItemTree
+ - widgets::GListCtrl
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2008-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -30,6 +31,7 @@ import sys
 import string
 
 import wx
+import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
 try:
     import wx.lib.agw.flatnotebook   as FN
@@ -641,3 +643,66 @@ class SingleSymbolPanel(wx.Panel):
         self.selected = True
         self.SetBackgroundColour(self.selectColor)
         
+class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+    """!Generic ListCtrl with popup menu to select/deselect all
+    items"""
+    def __init__(self, parent):
+        self.parent = parent
+        
+        wx.ListCtrl.__init__(self, parent, id = wx.ID_ANY,
+                             style = wx.LC_REPORT)
+        listmix.CheckListCtrlMixin.__init__(self)
+        
+        # setup mixins
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
+        
+        self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnPopupMenu) #wxMSW
+        self.Bind(wx.EVT_RIGHT_UP,            self.OnPopupMenu) #wxGTK
+
+    def LoadData(self):
+        """!Load data into list"""
+        pass
+
+    def OnPopupMenu(self, event):
+        """!Show popup menu"""
+        if self.GetItemCount() < 1:
+            return
+        
+        if not hasattr(self, "popupDataID1"):
+            self.popupDataID1 = wx.NewId()
+            self.popupDataID2 = wx.NewId()
+            
+            self.Bind(wx.EVT_MENU, self.OnSelectAll,  id = self.popupDataID1)
+            self.Bind(wx.EVT_MENU, self.OnSelectNone, id = self.popupDataID2)
+        
+        # generate popup-menu
+        menu = wx.Menu()
+        menu.Append(self.popupDataID1, _("Select all"))
+        menu.Append(self.popupDataID2, _("Deselect all"))
+        
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def OnSelectAll(self, event):
+        """!Select all items"""
+        item = -1
+        
+        while True:
+            item = self.GetNextItem(item)
+            if item == -1:
+                break
+            self.CheckItem(item, True)
+        
+        event.Skip()
+        
+    def OnSelectNone(self, event):
+        """!Deselect items"""
+        item = -1
+        
+        while True:
+            item = self.GetNextItem(item, wx.LIST_STATE_SELECTED)
+            if item == -1:
+                break
+            self.CheckItem(item, False)
+        
+        event.Skip()

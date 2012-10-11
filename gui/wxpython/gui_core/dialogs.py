@@ -49,7 +49,7 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
 from gui_core.forms   import GUI
-from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED
+from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED, GListCtrl
 from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
@@ -2098,19 +2098,14 @@ class DxfImportDialog(ImportDialog):
         """!Show command dialog"""
         GUI(parent = self, modal = True).ParseCommand(cmd = ['v.in.dxf'])
                 
-class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
-                 listmix.CheckListCtrlMixin, listmix.TextEditMixin):
+class LayersList(GListCtrl, listmix.TextEditMixin):
     """!List of layers to be imported (dxf, shp...)"""
     def __init__(self, parent, columns, log = None):
-        self.parent = parent
+        GListCtrl.__init__(self, parent)
         
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
-                             style = wx.LC_REPORT)
-        listmix.CheckListCtrlMixin.__init__(self)
         self.log = log
         
         # setup mixins
-        listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
         
         for i in range(len(columns)):
@@ -2124,9 +2119,6 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         for i in range(len(width)):
             self.SetColumnWidth(col = i, width = width[i])
         
-        self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnPopupMenu) #wxMSW
-        self.Bind(wx.EVT_RIGHT_UP,            self.OnPopupMenu) #wxGTK
-
     def LoadData(self, data = None):
         """!Load data into list"""
         self.DeleteAllItems()
@@ -2141,50 +2133,6 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         # check by default only on one item
         if len(data) == 1:
             self.CheckItem(index, True)
-        
-    def OnPopupMenu(self, event):
-        """!Show popup menu"""
-        if self.GetItemCount() < 1:
-            return
-        
-        if not hasattr(self, "popupDataID1"):
-            self.popupDataID1 = wx.NewId()
-            self.popupDataID2 = wx.NewId()
-            
-            self.Bind(wx.EVT_MENU, self.OnSelectAll,  id = self.popupDataID1)
-            self.Bind(wx.EVT_MENU, self.OnSelectNone, id = self.popupDataID2)
-        
-        # generate popup-menu
-        menu = wx.Menu()
-        menu.Append(self.popupDataID1, _("Select all"))
-        menu.Append(self.popupDataID2, _("Deselect all"))
-        
-        self.PopupMenu(menu)
-        menu.Destroy()
-
-    def OnSelectAll(self, event):
-        """!Select all items"""
-        item = -1
-        
-        while True:
-            item = self.GetNextItem(item)
-            if item == -1:
-                break
-            self.CheckItem(item, True)
-        
-        event.Skip()
-        
-    def OnSelectNone(self, event):
-        """!Deselect items"""
-        item = -1
-        
-        while True:
-            item = self.GetNextItem(item, wx.LIST_STATE_SELECTED)
-            if item == -1:
-                break
-            self.CheckItem(item, False)
-        
-        event.Skip()
         
     def OnLeftDown(self, event):
         """!Allow editing only output name
