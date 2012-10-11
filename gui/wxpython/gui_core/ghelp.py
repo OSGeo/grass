@@ -43,6 +43,7 @@ from lmgr.menudata    import ManagerData
 from core.gcmd        import GError, DecodeString
 from gui_core.widgets import FormListbook, StaticWrapText, ItemTree, ScrolledPanel
 from core.debug       import Debug
+from core.settings    import UserSettings
 
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
@@ -340,6 +341,8 @@ class MenuTree(ItemTree):
 
         super(MenuTree, self).__init__(parent, **kwargs)
         
+        self.menustyle = UserSettings.Get(group = 'appearance', key = 'menustyle', subkey = 'selection')
+        
     def Load(self, data = None):
         """!Load menu data tree
 
@@ -368,8 +371,15 @@ class MenuTree(ItemTree):
                 self.__AppendItems(itemSub, eachItem[1])
             else:
                 if eachItem[0]:
+                    label = eachItem[0]
+                    if eachItem[3]:
+                        if self.menustyle == 1:
+                            label += ' [' + eachItem[3] + ']'
+                        elif self.menustyle == 2:
+                            label = '[' + eachItem[3] + ']'
+                    
                     itemNew = self.AppendItem(parentId = item,
-                                              text = eachItem[0])
+                                              text = label)
                     
                     data = { 'item'        : eachItem[0],
                              'description' : eachItem[1],
