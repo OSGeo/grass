@@ -468,7 +468,7 @@ def install_extension(url):
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
     else:
         grass.message(_("Updating metadata file..."))
-        install_extension_xml(mlist)
+        install_extension_xml(url, mlist)
         grass.message(_("Installation of <%s> successfully finished") % options['extension'])
     
     if not os.getenv('GRASS_ADDON_BASE'):
