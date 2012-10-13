@@ -8,18 +8,24 @@
 static void write_history(int, char *, double **, double *);
 
 
-void write_support(int bands, char *outname, double **eigmat, double *eigval)
+void write_support(int bands, char *inname, char *outname, double **eigmat, double *eigval)
 {
     const char *mapset = G_mapset();
     struct Colors colors;
     struct FPRange range;
     DCELL min, max;
 
-    /* make grey scale color table */
-    Rast_read_fp_range(outname, mapset, &range);
-    Rast_get_fp_range_min_max(&range, &min, &max);
+    if (inname) {
+	Rast_read_colors(inname, "", &colors);
+    }
+    else {
+	/* make grey scale color table */
+	Rast_read_fp_range(outname, mapset, &range);
+	Rast_get_fp_range_min_max(&range, &min, &max);
 
-    Rast_make_grey_scale_fp_colors(&colors, min, max);
+	Rast_make_grey_scale_fp_colors(&colors, min, max);
+
+    }
 
     if (Rast_map_is_fp(outname, mapset))
 	Rast_mark_colors_as_fp(&colors);
@@ -66,14 +72,13 @@ static void write_history(int bands, char *outname, double **eigmat, double *eig
 	Rast_append_history(&hist, tmpeigen);
 
 	/* write eigen values to screen */
-	if(first_map)
+	if (first_map)
 	    fprintf(stdout, "%s\n", tmpeigen);
     }
-
-    Rast_command_history(&hist);
 
     /* only write to stderr the first time (this fn runs for every output map) */
     first_map = FALSE;
 
+    Rast_command_history(&hist);
     Rast_write_history(outname, &hist);
 }

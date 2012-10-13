@@ -12,41 +12,23 @@ reading the input raster map layers. When the rescale
 option is used, the output files are rescaled to fit the
 min,max range.
 
-<h2>OPTIONS</h2>
+<p>
+If the output is not rescaled (<em>rescale=0,0</em>, the output raster 
+maps will be of type DCELL, otherwise the output raster maps will be of 
+type CELL.
 
-<h3>Parameters:</h3>
-<dl>
-<dt><b>input=</b><em>name,name</em>[<em>,name,name</em>,...] 
-<dd>Name of two or more input raster map layers.
-
-<dt><b>output=</b><em>name</em> 
-<dd>The output raster map layer name to which suffixes are
-added.  Each output raster map layer is assigned this
-user-specified <em>name</em> with a numerical (.1, .2, ...
-.n) suffix.
-
-<dt><b>rescale=</b><em>min,max</em> 
-<dd>The optional output category range. (Default: 0,255) If
-rescale=0,0,  no rescaling is performed on output files.
-
-<dd>If output is rescaled, the output raster will be of type CELL. If 
-the output is not rescaled, the output raster will be of type DCELL.
-
-<dt><b>-n</b> <em>normalize input raster maps</em> 
-<dd>By default, the values of the input raster maps are centered for each 
+<p>By default, the values of the input raster maps are centered for each 
 map separately with <em>x - mean</em>. With <em>-n</em>, the input raster 
 maps are normalized for each map separately with <em>(x - mean) / stddev</em>. 
 Normalizing is highly recommended when the input raster maps have different
 units, e.g. represent different environmental parameters. 
 
-<dt><b>-f</b> <em>output will be filtered input bands</em> 
-<dd>This option, together with the <em>percent</em> option, can be used 
-to remove noise from input bands. Input bands will be recalculated from 
-a subset of the principal components. The subset is selected by using 
-only the most important (highest eigenvalue) principal components which 
-explain together <em>percent</em> percent variance observed in the 
-input bands.
-</dl>
+<p>The <em>-f</em> flag, together with the <em>percent</em> option, can 
+be used to remove noise from input bands. Input bands will be 
+recalculated from a subset of the principal components (inverse PCA). 
+The subset is selected by using only the most important (highest 
+eigenvalue) principal components which explain together <em>percent</em> 
+percent variance observed in the input bands.
 
 
 <h2>NOTES</h2>
@@ -60,16 +42,20 @@ history files. View with <em>r.info</em>.
 
 <h2>EXAMPLE</h2>
 
-Using the Spearfish Imagery sample dataset
+Using Landsat imagery in the North Carolina sample dataset:
 
 <div class="code"><pre>
-i.pca in=spot.ms.1,spot.ms.2,spot.ms.3 out=spot_pca
+i.pca in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+    out=lsat7_2002_pca
 
-r.info -h spot_pca.1
+r.info -h lsat7_2002_pca.1
    Eigen values, (vectors), and [percent importance]:
-   PC1   1159.75 ( 0.6237, 0.6503, 0.4337) [88.38%]
-   PC2    146.50 ( 0.2403, 0.3685,-0.8981) [11.16%]
-   PC3      5.97 (-0.7438, 0.6643, 0.0735) [ 0.45%]
+   PC1   4334.35 ( 0.2824, 0.3342, 0.5092,-0.0087, 0.5264, 0.5217) [83.04%]
+   PC2    588.31 ( 0.2541, 0.1885, 0.2923,-0.7428,-0.5110,-0.0403) [11.27%]
+   PC3    239.22 ( 0.3801, 0.3819, 0.2681, 0.6238,-0.4000,-0.2980) [ 4.58%]
+   PC4     32.85 ( 0.1752,-0.0191,-0.4053, 0.1593,-0.4435, 0.7632) [ 0.63%]
+   PC5     20.73 (-0.6170,-0.2514, 0.6059, 0.1734,-0.3235, 0.2330) [ 0.40%]
+   PC6      4.08 (-0.5475, 0.8021,-0.2282,-0.0607,-0.0208, 0.0252) [ 0.08%]
 </pre></div>
 
 
