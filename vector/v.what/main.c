@@ -101,13 +101,27 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* initialize variables */
+    vect = NULL;
+    Map = NULL;
+    nvects = 0;
+    field = NULL;
+
     if (opt.map->answers && opt.map->answers[0])
 	vect = opt.map->answers;
+    else
+	G_fatal_error(_("No input vector maps!"));
 
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
 
     if (maxd == 0.0) {
+	/* this code is a translation from d.what.vect which uses display
+	 * resolution to figure out a querying distance
+	 * display resolution is not available here
+	 * using raster resolution instead to determine vector querying 
+	 * distance does not really make sense
+	 * maxd = 0 can make sense */
 	G_get_window(&window);
 	x = window.proj;
 	G_format_resolution(window.ew_res, ewres, x);
