@@ -335,6 +335,12 @@ Vect_net_build_graph(struct Map_info *Map,
     /* Set node attributes */
     G_debug(2, "Register nodes");
     if (ncol != NULL) {
+	double x, y, z;
+	struct bound_box box;
+	struct boxlist *List;
+	
+	List = Vect_new_boxlist(0);
+
 	G_debug(2, "Set nodes' costs");
 	if (nfield < 1)
 	    G_fatal_error("Node field < 1");
@@ -372,12 +378,19 @@ Vect_net_build_graph(struct Map_info *Map,
 	    /* TODO: what happens if we set attributes of not existing node (skipped lines,
 	     *       nodes without lines) */
 
-	    nlines = Vect_get_node_n_lines(Map, i);
-	    G_debug(2, "  node = %d nlines = %d", i, nlines);
+	    /* select points at node */
+	    Vect_get_node_coor(Map, i, &x, &y, &z);
+	    box.E = box.W = x;
+	    box.N = box.S = y;
+	    box.T = box.B = z;
+	    Vect_select_lines_by_box(Map, &box, GV_POINT, List);
+
+	    G_debug(2, "  node = %d nlines = %d", i, List->n_values);
 	    cfound = 0;
 	    dcost = 0;
-	    for (j = 0; j < nlines; j++) {
-		line = Vect_get_node_line(Map, i, j);
+
+	    for (j = 0; j < List->n_values; j++) {
+		line = List->id[i];
 		G_debug(2, "  line (%d) = %d", j, line);
 		type = Vect_read_line(Map, NULL, Cats, line);
 		if (!(type & GV_POINT))
@@ -420,6 +433,8 @@ Vect_net_build_graph(struct Map_info *Map,
 	}
 	db_close_database_shutdown_driver(driver);
 	db_CatValArray_free(&fvarr);
+	
+	Vect_destroy_boxlist(List);
     }
 
     G_message(_("Flattening the graph..."));
