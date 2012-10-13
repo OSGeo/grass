@@ -106,6 +106,8 @@ Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
     struct line_pnts *Points;
     struct line_cats *ACats, *BCats, *OCats;
     struct ilist *AOList, *BOList;
+    struct boxlist *boxlist;
+    struct bound_box box;
 
     /* TODO: support Lists */
 
@@ -115,6 +117,7 @@ Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
     OCats = Vect_new_cats_struct();
     AOList = Vect_new_list();
     BOList = Vect_new_list();
+    boxlist = Vect_new_boxlist(0);
 
     /* TODO: support all types; at present only point x point, area x point and point x area supported  */
     if ((atype & GV_LINES) || (btype & GV_LINES))
@@ -133,17 +136,15 @@ Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
 	    if (!(altype & GV_POINTS))
 		continue;
 
-	    node =
-		Vect_find_node(BMap, Points->x[0], Points->y[0], Points->z[0],
-			       0, 1);
-	    G_debug(3, "overlay: node = %d", node);
-	    if (node == 0)
-		continue;
+	    box.E = box.W = Points->x[0];
+	    box.N = box.S = Points->y[0];
+	    box.T = box.B = Points->z[0];
+	    Vect_select_lines_by_box(BMap, &box, GV_POINTS, boxlist);
 
 	    Vect_reset_cats(OCats);
 
-	    for (j = 0; j < Vect_get_node_n_lines(BMap, node); j++) {
-		line = Vect_get_node_line(BMap, node, j);
+	    for (j = 0; j < boxlist->n_values; j++) {
+		line = boxlist->id[j];
 		bltype = Vect_read_line(BMap, NULL, BCats, line);
 		if (!(bltype & GV_POINTS))
 		    continue;
@@ -235,6 +236,14 @@ Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
 
 	}
     }
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(ACats);
+    Vect_destroy_cats_struct(BCats);
+    Vect_destroy_cats_struct(OCats);
+    Vect_destroy_list(AOList);
+    Vect_destroy_list(BOList);
+    Vect_destroy_boxlist(boxlist);
 
     return 0;
 }
