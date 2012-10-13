@@ -6,11 +6,13 @@
 
 int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
 {
-    int i, node, nnodes, line, nlines, count, type, found;
+    int i, node, nnodes, line, nlines, count, type, add_point;
     double x, y, z;
 
     struct line_pnts *Points, *Pout;
     struct line_cats *Cats;
+    struct boxlist *List;
+    struct bound_box box;
 
     int cat;
 
@@ -18,6 +20,7 @@ int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
     Pout = Vect_new_line_struct();
 
     Cats = Vect_new_cats_struct();
+    List = Vect_new_boxlist(0);
 
     /* Rewrite all primitives to output file */
     cat = 0;
@@ -40,23 +43,29 @@ int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
     nnodes = Vect_get_num_nodes(In);
     count = 0;
     for (node = 1; node <= nnodes; node++) {
-	int has_lines = 0;
 
 	nlines = Vect_get_node_n_lines(In, node);
-	found = 0;
+	add_point = 0;
 	for (i = 0; i < nlines; i++) {
 	    line = abs(Vect_get_node_line(In, node, i));
 	    type = Vect_read_line(In, NULL, NULL, line);
-	    if (type == GV_POINT) {
-		found = 1;
-	    }
 	    if (type & GV_LINES) {
-		has_lines = 1;
+		add_point = 1;
+		break;
 	    }
 	}
-	if (has_lines && !found) {	/* Write new point */
-	    Vect_reset_line(Pout);
+
+	if (add_point) {
 	    Vect_get_node_coor(In, node, &x, &y, &z);
+	    box.E = box.W = x;
+	    box.N = box.S = y;
+	    box.T = box.B = z;
+	    Vect_select_lines_by_box(In, &box, GV_POINT, List);
+	    add_point = List->n_values == 0;
+	}
+
+	if (add_point) {	/* Write new point */
+	    Vect_reset_line(Pout);
 	    Vect_append_point(Pout, x, y, z);
 	    Vect_reset_cats(Cats);
 	    if (add_cats) {
@@ -70,6 +79,7 @@ int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(Pout);
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_boxlist(List);
 
     return count;
 }
