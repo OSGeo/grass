@@ -60,7 +60,7 @@ static void write_history(int bands, char *outname, double **eigmat, double *eig
 	}
 	strcat(tmpeigen, ") ");
 	
-	sprintf(tmpa, "[%5.2f%%]", eigval[i] * 100/eigval_total);
+	sprintf(tmpa, "[%5.2f%%]", eigval[i] * 100 / eigval_total);
 	strcat(tmpeigen, tmpa);
 
 	Rast_append_history(&hist, tmpeigen);

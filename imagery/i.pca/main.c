@@ -37,7 +37,7 @@ static CELL round_c(double);
 static int set_output_scale(struct Option *, int *, int *, int *);
 static int calc_mu_cov(int *, double **, double *, double *, int);
 static int write_pca(double **, double *, double *, int *, char *, int,
-                     int, int, int);
+                     int, int, int, int);
 
 #ifdef PCA_DEBUG
 static int dump_eigen(int, double **, double *);
@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
 {
     int i;			/* Loop control variables */
     int bands;			/* Number of image bands */
+    int pcbands;		/* Number of pc scores to use for filtering */
+    int pcperc;			/* cumulative percent to use for filtering */
     double *mu;			/* Mean vector for image bands */
     double *stddev;		/* Stddev vector for image bands */
     double **covar;		/* Covariance Matrix */
@@ -57,8 +59,8 @@ int main(int argc, char *argv[])
     int scale, scale_max, scale_min;
 
     struct GModule *module;
-    struct Option *opt_in, *opt_out, *opt_scale;
-    struct Flag *flag_norm;
+    struct Option *opt_in, *opt_out, *opt_scale, *opt_filt;
+    struct Flag *flag_norm, *flag_filt;
 
     /* initialize GIS engine */
     G_gisinit(argv[0]);
@@ -95,10 +97,27 @@ int main(int argc, char *argv[])
 	_("For no rescaling use 0,0");
     opt_scale->guisection = _("Rescale");
     
+    opt_filt = G_define_option();
+    opt_filt->key = "percent";
+    opt_filt->type = TYPE_INTEGER;
+    opt_filt->required = NO;
+    opt_filt->options = "50-99";
+    opt_filt->answer = "99";
+    opt_filt->label =
+	_("Cumulative percent importance for filtering");
+    opt_filt->guisection = _("Filter");
+
     flag_norm = G_define_flag();
     flag_norm->key = 'n';
-    flag_norm->description = (_("Normalize (center and scale) input maps"));
+    flag_norm->label = (_("Normalize (center and scale) input maps"));
+    flag_norm->description = (_("Default: center only"));
     
+    flag_filt = G_define_flag();
+    flag_filt->key = 'f';
+    flag_filt->label = (_("Output will be filtered input bands"));
+    flag_filt->description = (_("Applies inverse PCA after PCA"));
+    flag_filt->guisection = _("Filter");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -116,6 +135,16 @@ int main(int argc, char *argv[])
 
     /* get scale parameters */
     set_output_scale(opt_scale, &scale, &scale_min, &scale_max);
+
+    /* filter threshold */
+    pcperc = -1;
+    if (flag_filt->answer) {
+	pcperc = atoi(opt_filt->answer);
+	if (pcperc < 0)
+	    G_fatal_error(_("'%s' must be positive"), opt_filt->key);
+	if (pcperc > 99)
+	    G_fatal_error(_("'%s' must be < 100"), opt_filt->key);
+    }
 
     /* allocate memory */
     covar = G_alloc_matrix(bands, bands);
@@ -157,9 +186,34 @@ int main(int argc, char *argv[])
     G_debug(1, "Transposing eigen matrix...");
     G_math_d_A_T(eigmat, bands);
 
+    pcbands = 0;
+    if (flag_filt->answer) {
+	double eigval_total = 0.0;
+	double eigval_perc = 0.0;
+
+	for (i = 0; i < bands; i++) {
+	    eigval_total += eigval[i];
+	}
+	for (i = 0; i < bands; i++) {
+	    eigval_perc += eigval[i] * 100. / eigval_total;
+	    pcbands++;
+	    if (eigval_perc > pcperc)
+		break;
+	}
+
+	/* filtering has an effect only if at least one PC is removed  */
+	if (pcbands == bands)
+	    pcbands--;
+	if (pcbands < 2)
+	    G_fatal_error(_("Not enough principal components left for filtering"));
+
+	G_message(_("Using %d of %d principal components for filtering"), pcbands, bands);
+	scale = 0;
+    }
+
     /* write output images */
     write_pca(eigmat, mu, stddev, inp_fd, opt_out->answer, bands,
-              scale, scale_min, scale_max);
+              scale, scale_min, scale_max, pcbands);
 
     /* write colors and history to output */
     for (i = 0; i < bands; i++) {
@@ -170,7 +224,7 @@ int main(int argc, char *argv[])
 	/* write colors and history to file */
 	write_support(bands, outname, eigmat, eigval);
 
-	/* close output file */
+	/* close input files */
 	Rast_unopen(inp_fd[i]);
     }
     
@@ -328,7 +382,7 @@ static int calc_mu_cov(int *fds, double **covar, double *mu,
 static int
 write_pca(double **eigmat, double *mu, double *stddev,
           int *inp_fd, char *out_basename, int bands, 
-	  int scale, int scale_min, int scale_max)
+	  int scale, int scale_min, int scale_max, int fbands)
 {
     int i, j;
     void **outbuf = (void **) G_malloc(bands * sizeof(void *));
@@ -345,9 +399,13 @@ write_pca(double **eigmat, double *mu, double *stddev,
     int outcell_mapsiz = Rast_cell_size(outmap_type);
     int *out_fd = (int *) G_malloc(bands * sizeof(int));
     DCELL **inbuf = (DCELL **) G_malloc(bands * sizeof(DCELL *));
+    DCELL *pcs = NULL;
 
     /* 2 passes for rescale.  1 pass for no rescale */
     int PASSES = (scale) ? 2 : 1;
+
+    if (fbands)
+	pcs = (DCELL *) G_malloc(fbands * sizeof(DCELL));
 
     /* allocate memory for row buffers */
     for (i = 0; i < bands; i++) {
@@ -400,17 +458,46 @@ write_pca(double **eigmat, double *mu, double *stddev,
 		    }
 		    continue;
 		}
+		
+		if (fbands) {
+		    /* calculate all PC scores */
+		    for (i = 0; i < fbands; i++) {
+			DCELL dval = 0.;
+
+			for (j = 0; j < bands; j++) {
+			    /* corresp. cell of j-th band */
+			    if (stddev)
+				dval += eigmat[i][j] * 
+					((inbuf[j][col] - mu[j]) / stddev[j]);
+			    else
+				dval += eigmat[i][j] * (inbuf[j][col] - mu[j]);
+			}
+			pcs[i] = dval;
+		    }
+		}
 
 		for (i = 0; i < bands; i++) {
 		    DCELL dval = 0.;
 
-		    for (j = 0; j < bands; j++) {
-			/* corresp. cell of j-th band */
+		    if (fbands) {
+			for (j = 0; j < fbands; j++) {
+			    /* corresp. PC score of j-th band */
+			    dval += eigmat[j][i] * pcs[j];
+			}
 			if (stddev)
-			    dval += eigmat[i][j] * 
-			            ((inbuf[j][col] - mu[j]) / stddev[j]);
+			    dval = dval * stddev[i] + mu[i];
 			else
-			    dval += eigmat[i][j] * (inbuf[j][col] - mu[j]);
+			    dval += mu[i];
+		    }
+		    else {
+			for (j = 0; j < bands; j++) {
+			    /* corresp. cell of j-th band */
+			    if (stddev)
+				dval += eigmat[i][j] * 
+					((inbuf[j][col] - mu[j]) / stddev[j]);
+			    else
+				dval += eigmat[i][j] * (inbuf[j][col] - mu[j]);
+			}
 		    }
 
 
