@@ -1,16 +1,19 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.net.allpairs</em> computes the shortest path between each selected 
-node and all other selected nodes. 
+node and all other selected nodes. The output is a vector with the 
+selected nodes and the shortest paths. 
 
 <h2>NOTES</h2>
 
-An attribute table is created and linked to layer 1. The table 
-contains three columns: <em>cat</em>, <em>to_cat</em>, <em>cost</em>. 
-Each entry denotes the cost of the shortest path from <em>cat</em> to 
-<em>to_cat</em>. If the cost is negative then no path exists. If points 
-are specified by <b>cats, layer</b> or <b>where</b> parameters then the 
-table is filled only for the selected points.
+An attribute table is created and linked to layer <em>alayer</em>. The 
+table contains four columns: <em>cat</em>, <em>from_cat</em>, 
+<em>to_cat</em>, <em>cost</em>. 
+Each <em>cat</em> entry denotes the category of the shortest path from 
+the node with category <em>from_cat</em> to the node with category 
+<em>to_cat</em>. If points are specified by <b>cats, layer</b> or 
+<b>where</b> parameters then the table is filled only for the selected 
+points.
 <br>
 If <b>abcolumn</b> is not given then then the same costs are used for 
 forward and backward arcs.

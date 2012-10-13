@@ -32,8 +32,9 @@ struct _spnode {
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
-    static struct line_pnts *Points;
+    static struct line_pnts *Points, *aPoints;
     struct line_cats *Cats;
+    struct ilist *List;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *cat_opt, *afield_opt, *nfield_opt, *where_opt, *abcol,
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
     int mask_type;
     struct varray *varray;
     struct _spnode *spnode;
-    int i, j, geo, nnodes, nlines;
+    int i, j, k, geo, nnodes, line, nlines, cat;
     char buf[2000];
 
     /* Attribute table */
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
 
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
     cat_opt->guisection = _("Selection");
+
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Selection");
 
@@ -116,6 +118,7 @@ int main(int argc, char *argv[])
     mask_type = GV_LINE | GV_BOUNDARY;
 
     Points = Vect_new_line_struct();
+    aPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
@@ -154,9 +157,9 @@ int main(int argc, char *argv[])
 	chcat = 0;
 
     /* Create table */
-    Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
-    Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
-			Fi->driver);
+    Fi = Vect_default_field_info(&Out, afield, NULL, GV_MTABLE);
+    Vect_map_add_dblink(&Out, afield, NULL, Fi->table, GV_KEY_COLUMN,
+                        Fi->database, Fi->driver);
     db_init_string(&sql);
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL)
@@ -164,7 +167,7 @@ int main(int argc, char *argv[])
 		      Fi->database, Fi->driver);
 
     sprintf(buf,
-	    "create table %s ( cat integer, to_cat integer, cost double precision)",
+	    "create table %s ( cat integer, from_cat integer, to_cat integer, cost double precision)",
 	    Fi->table);
 
     db_set_string(&sql, buf);
@@ -174,12 +177,10 @@ int main(int argc, char *argv[])
 	db_close_database_shutdown_driver(driver);
 	G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&sql));
     }
-    /*
     if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK) {
 	if (strcmp(Fi->driver, "dbf"))
 	    G_warning(_("Cannot create index"));
     }
-    */
     if (db_grant_on_table
 	(driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
 	G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
@@ -203,22 +204,23 @@ int main(int argc, char *argv[])
 	spnode[i].node = -1;
     }
 
+    G_message(_("Writing node points..."));
     nlines = Vect_get_num_lines(&In);
     nnodes = 0;
     for (i = 1; i <= nlines; i++) {
-	int node, cat;
-	int type = Vect_read_line(&In, Points, Cats, i);
+	int node;
 
-	if (type != GV_POINT)
+	if (Vect_get_line_type(&In, i) != GV_POINT)
 	    continue;
+	
+	Vect_read_line(&In, Points, Cats, i);
 
-	/* Vect_get_line_nodes(&In, i, &node, NULL); */
 	node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
 	if (node) {
 	    Vect_cat_get(Cats, nfield, &cat);
 	    if (cat != -1) {
-		Vect_write_line(&Out, GV_POINT, Points, Cats);
 		if (!chcat || varray->c[i]) {
+		    Vect_write_line(&Out, GV_POINT, Points, Cats);
 		    spnode[nnodes].cat = cat;
 		    spnode[nnodes].node = node;
 		    nnodes++;
@@ -226,10 +228,14 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
-    /* check for duplicate cats ? */
+    /* copy node table */
+    if (Vect_get_field(&In, nfield))
+	Vect_copy_table(&In, &Out, nfield, nfield, NULL, GV_POINT);
 
-    G_message(_("Writing data into the table..."));
+    G_message(_("Writing shortest paths..."));
     G_percent_reset();
+    cat = 1;
+    List = Vect_new_list();
     for (i = 0; i < nnodes; i++) {
 	G_percent(i, nnodes, 1);
 
@@ -237,14 +243,19 @@ int main(int argc, char *argv[])
 	    double cost;
 	    int ret;
 	    
-	    ret = Vect_net_shortest_path(&In, spnode[i].node,
-	                                 spnode[j].node, NULL, &cost);
+	    if (i == j)
+		continue;
 	    
-	    if (ret == -1)
-		cost = -1;
+	    ret = Vect_net_shortest_path(&In, spnode[i].node,
+	                                 spnode[j].node, List, &cost);
+	    
+	    if (ret == -1) {
+		/* unreachable */
+		continue;
+	    }
 
-	    sprintf(buf, "insert into %s values (%d, %d, %f)",
-		    Fi->table, spnode[i].cat, spnode[j].cat, cost);
+	    sprintf(buf, "insert into %s values (%d, %d, %d, %f)",
+		    Fi->table, cat, spnode[i].cat, spnode[j].cat, cost);
 	    db_set_string(&sql, buf);
 	    G_debug(3, db_get_string(&sql));
 
@@ -253,6 +264,25 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot insert new record: %s"),
 			      db_get_string(&sql));
 	    }
+	    Vect_reset_cats(Cats);
+	    Vect_cat_set(Cats, afield, cat);
+	    cat++;
+
+	    Vect_reset_line(aPoints);
+
+	    for (k = 0; k < List->n_values; k++) {
+		line = List->value[k];
+		Vect_read_line(&In, Points, NULL, abs(line));
+		if (line > 0)
+		    Vect_append_points(aPoints, Points,
+				       GV_FORWARD);
+		else
+		    Vect_append_points(aPoints, Points,
+				       GV_BACKWARD);
+	    }
+
+	    Vect_write_line(&Out, GV_LINE, aPoints, Cats);
+
 	}
     }
     G_percent(1, 1, 1);
