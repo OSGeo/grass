@@ -56,18 +56,17 @@ class AttributeManager(wx.Frame, DbMgrBase):
         @param selection name of page to be selected
         @param kwagrs other wx.Frame's arguments
         """
-
         self.parent = parent
         try:
-            mapdisplay = self.parent.curr_page.maptree.mapdisplay
+            mapdisplay = self.parent.GetMapDisplay()
         except:
             mapdisplay = None
-
+        
         DbMgrBase.__init__(self, id = id, mapdisplay = mapdisplay,
-                                 vectorName = vectorName, item = item, 
-                                 log = log, statusbar = self, 
-                                 **kwargs)
- 
+                           vectorName = vectorName, item = item, 
+                           log = log, statusbar = self, 
+                           **kwargs)
+        
         wx.Frame.__init__(self, parent, id, *kwargs)
 
         # title

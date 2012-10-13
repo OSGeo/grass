@@ -104,7 +104,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if 'style' in kwargs:
             ctstyle |= kwargs['style']
             del kwargs['style']
-        self.disp_idx = kwargs['idx']
+        self.displayIndex = kwargs['idx']
         del kwargs['idx']
         self.lmgr = kwargs['lmgr']
         del kwargs['lmgr']
@@ -145,7 +145,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setGradient()
         
         # init associated map display
-        pos = wx.Point((self.disp_idx + 1) * 25, (self.disp_idx + 1) * 25)
+        pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
         self.mapdisplay = MapFrame(self, id = wx.ID_ANY, pos = pos,
                                    size = globalvar.MAP_WINDOW_SIZE,
                                    style = wx.DEFAULT_FRAME_STYLE,
@@ -155,7 +155,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # title
         self.mapdisplay.SetTitle(_("GRASS GIS Map Display: %(id)d  - Location: %(loc)s") % \
-                                     { 'id' : self.disp_idx + 1,
+                                     { 'id' : self.displayIndex + 1,
                                        'loc' : grass.gisenv()["LOCATION_NAME"] })
         
         # show new display
