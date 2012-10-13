@@ -2,6 +2,6 @@
 #define __LOCAL_PROTO_H__
 
 /* support.c */
-void write_support(int, char *, double **, double *);
+void write_support(int, char *, char *, double **, double *);
 
 #endif

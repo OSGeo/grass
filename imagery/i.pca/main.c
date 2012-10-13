@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     if (!calc_mu_cov(inp_fd, covar, mu, stddev, bands))
 	G_fatal_error(_("No non-null values"));
 
-    G_math_d_copy(covar[0], eigmat[0], bands*bands);
+    G_math_d_copy(covar[0], eigmat[0], bands * bands);
     G_debug(1, "Calculating eigenvalues and eigenvectors...");
     G_math_eigen(eigmat, eigval, bands);
 
@@ -217,15 +217,18 @@ int main(int argc, char *argv[])
 
     /* write colors and history to output */
     for (i = 0; i < bands; i++) {
-	char outname[80];
+	char outname[GNAME_MAX];
+
+	/* close input files */
+	Rast_unopen(inp_fd[i]);
 
 	sprintf(outname, "%s.%d", opt_out->answer, i + 1);
 
 	/* write colors and history to file */
-	write_support(bands, outname, eigmat, eigval);
-
-	/* close input files */
-	Rast_unopen(inp_fd[i]);
+	if (flag_filt->answer)
+	    write_support(bands, opt_in->answers[i], outname, eigmat, eigval);
+	else
+	    write_support(bands, NULL, outname, eigmat, eigval);
     }
     
     /* free memory */
@@ -395,7 +398,7 @@ write_pca(double **eigmat, double *mu, double *stddev,
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
     /* why CELL_TYPE when scaling output ? */
-    int outmap_type = (scale) ? CELL_TYPE : FCELL_TYPE;
+    int outmap_type = (scale) ? CELL_TYPE : DCELL_TYPE;
     int outcell_mapsiz = Rast_cell_size(outmap_type);
     int *out_fd = (int *) G_malloc(bands * sizeof(int));
     DCELL **inbuf = (DCELL **) G_malloc(bands * sizeof(DCELL *));
@@ -499,7 +502,6 @@ write_pca(double **eigmat, double *mu, double *stddev,
 				dval += eigmat[i][j] * (inbuf[j][col] - mu[j]);
 			}
 		    }
-
 
 		    /* the cell entry is complete */
 		    if (scale && (pass == 1)) {
