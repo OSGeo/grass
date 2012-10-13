@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 	    else
 		narcs = create_arcs(file_arcs, Points, Out, afield, nfield);
 
-	    sprintf(message, _("%d lines (arcs) written to output."), narcs);
+	    sprintf(message, _("%d lines (network arcs) written to output."), narcs);
 	}
 
 	if (In) {

@@ -6,29 +6,37 @@
 
 int report(struct Map_info *In, int afield, int nfield, int action)
 {
-    int i, j, k, line, ltype, nnodes;
+    int i, j, line, nlines, ltype, node, nnodes;
     int cat_line, cat_node[2];
 
     struct line_cats *Cats, *Cats2;
+    struct line_pnts *Points;
+    struct bound_box box;
 
-    int node;
     double x, y, z;
 
     Cats = Vect_new_cats_struct();
     Cats2 = Vect_new_cats_struct();
+    Points = Vect_new_line_struct();
+
+    nlines = Vect_get_num_lines(In);
 
     if (action == TOOL_REPORT) {
+	struct boxlist *List;
+
+	List = Vect_new_boxlist(0);
+
 	/* For all lines find categories for points on nodes */
-	for (i = 1; i <= Vect_get_num_lines(In); i++) {
+	for (i = 1; i <= nlines; i++) {
 	    ltype = Vect_read_line(In, NULL, Cats, i);
-	    if (ltype != GV_LINE)
+	    if (!(ltype & GV_LINES))
 		continue;
 
 	    cat_line = 0;
 	    if (!Vect_cat_get(Cats, afield, &cat_line))
 		G_warning(_("Line %d has no category"), i);
 
-	    cat_node[0] = cat_node[1] = 0;
+	    cat_node[0] = cat_node[1] = -1;
 	    for (j = 0; j < 2; j++) {
 		if (j == 0)
 		    Vect_get_line_nodes(In, i, &node, NULL);
@@ -36,45 +44,59 @@ int report(struct Map_info *In, int afield, int nfield, int action)
 		    Vect_get_line_nodes(In, i, NULL, &node);
 
 		Vect_get_node_coor(In, node, &x, &y, &z);
-		nnodes = 0;
 
-		for (k = 0; k < Vect_get_node_n_lines(In, node); k++) {
-		    line = abs(Vect_get_node_line(In, node, k));
-		    ltype = Vect_read_line(In, NULL, Cats, line);
-		    if (ltype != GV_POINT)
-			continue;
-
+		box.E = box.W = x;
+		box.N = box.S = y;
+		box.T = box.B = z;
+		Vect_select_lines_by_box(In, &box, GV_POINT, List);
+		
+		nnodes = List->n_values;
+		if (nnodes > 0) {
+		    line = List->id[nnodes - 1]; /* last in list */
+		    Vect_read_line(In, NULL, Cats, line);
 		    Vect_cat_get(Cats, nfield, &(cat_node[j]));
-
-		    nnodes++;
 		}
-		if (nnodes == 0)
-		    G_warning(_("Point not found: %.3lf %.3lf %.3lf line category: %d"),
+
+		if (nnodes == 0) {
+		    /* this is ok, not every node needs to be 
+		     * represented by a point */
+		    G_debug(4, "No point here: %g %g %.g line category: %d",
 			      x, y, z, cat_line);
+		}
 		else if (nnodes > 1)
-		    G_warning(_("%d points found: %.3lf %.3lf %.3lf line category: %d"),
+		    G_warning(_("%d points found: %g %g %g line category: %d"),
 			      nnodes, x, y, z, cat_line);
 	    }
 	    fprintf(stdout, "%d %d %d\n", cat_line, cat_node[0], cat_node[1]);
 	}
     }
     else {			/* node report */
+	int elem, nelem, type, k, l;
+	struct ilist *List;
 
-	int nnodes, node;
+	List = Vect_new_list();
 
-	nnodes = Vect_get_num_nodes(In);
 
-	for (node = 1; node <= nnodes; node++) {
-	    int nelem, elem, type, i, j, k, l;
+	for (i = 1; i <= nlines; i++) {
+	    
+	    if (Vect_get_line_type(In, i) != GV_POINT)
+		continue;
 
-	    nelem = Vect_get_node_n_lines(In, node);
+	    Vect_read_line(In, Points, Cats, i);
 
-	    /* Loop through all points */
-	    for (i = 0; i < nelem; i++) {
-		elem = abs(Vect_get_node_line(In, node, i));
-		type = Vect_read_line(In, NULL, Cats, elem);
-		if (type != GV_POINT)
-		    continue;
+	    box.E = box.W = Points->x[0];
+	    box.N = box.S = Points->y[0];
+	    box.T = box.B = Points->z[0];
+	    
+	    nnodes = Vect_select_nodes_by_box(In, &box, List);
+	    
+	    if (nnodes > 1) {
+		G_warning(_("Duplicate nodes at x=%g y=%g z=%g "),
+			  Points->x[0], Points->y[0], Points->z[0]);
+	    }
+	    if (nnodes > 0) {
+		node = List->value[0];
+		nelem = Vect_get_node_n_lines(In, node);
 
 		/* Loop through all cats of point */
 		for (j = 0; j < Cats->n_cats; j++) {
