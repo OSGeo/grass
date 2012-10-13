@@ -1,23 +1,25 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.distance</em> finds the nearest element in vector map
-(<em>to</em>) for elements in vector map (<em>from</em>). Various
-information about the vectors' relationships (distance, category, etc.) may be uploaded
-to the attribute table attached to the first vector map, or printed to
-'stdout'.  A new vector map may be created where lines connecting
-nearest points on features are written. <em>dmin</em> and/or <em>dmax</em> can be used to limit the search radius.
+<em>v.distance</em> finds the nearest element in vector map (<em>to</em>) 
+for elements in vector map (<em>from</em>). Various information about 
+the vectors' relationships (distance, category, etc.) may be uploaded to 
+the attribute table attached to the first vector map, or printed to 
+'stdout'. A new vector map may be created where lines connecting 
+nearest points on features are written. <em>dmin</em> and/or 
+<em>dmax</em> can be used to limit the search radius.
 
 <h2>NOTES</h2>
 
-If a nearest feature does not have a category, the attribute column is updated
-to <em>null</em>.  This is true also for areas, which means for example,
-that if a point is in an island (area WITHOUT category), <em>v.distance</em> 
-does not search for the nearest area WITH category; the island is identified 
-as the nearest and category updated to null.
-<p>The upload <em>column</em>(s) must already exist. Create one with <em>v.db.addcolumn</em>.
-<p>In lat-long locations <em>v.distance</em> gives distances (<em>dist</em>
-and <em>to_along</em>) in meters not in degrees calculated as geodesic
-distances on a sphere.
+If a nearest feature does not have a category, the attribute column is 
+updated to <em>null</em>.
+<p>The upload <em>column</em>(s) must already exist. Create one with 
+<em>v.db.addcolumn</em>.
+
+<!-- needs Vect_line_geodesic_distance()
+<p>In lat-long locations <em>v.distance</em> gives distances 
+(<em>dist</em> and <em>to_along</em>) in meters not in degrees 
+calculated as geodesic distances on a sphere.
+-->
 
 <h2>EXAMPLES</h2>
 
@@ -37,7 +39,7 @@ v.distance from=pnt to=ln upload=cat column=linecat
 For each point from vector map <b>pnt</b>, find the <em>nearest area</em>
 from map <b>ar</b> within the given threshold and write the related
 area categories to column <b>areacat</b> in an attribute table attached
-to vector map <b>pnt</b> (in the case that a point falls into a polygon area,
+to vector map <b>pnt</b> (in the case that a point falls into an area,
 the distance is zero):
 
 <div class="code"><pre>
@@ -143,6 +145,7 @@ Janne Soimasuo 1994, University of Joensuu, Faculty of Forestry, Finland<br>
 Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<br>
 Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<br>
 Matrix-like output by Martin Landa, FBK-irst, Trento, Italy<br>
-Improved processing speed: Markus Metz
+Improved processing speed: Markus Metz<br>
+Distance from any feature to any feature Markus Metz
 
 <p><i>Last changed: $Date$</i>

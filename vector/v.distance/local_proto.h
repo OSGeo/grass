@@ -1,3 +1,4 @@
+#include <grass/vector.h>
 #include <grass/dbmi.h>
 
 /* define codes for characteristics of relation between two nearest features */
@@ -19,8 +20,10 @@ typedef struct
     int from_cat;		/* category (from) */
     int count;			/* number of features already found */
     int to_cat;			/* category (to) */
-    double from_x, from_y, from_z, to_x, to_y, to_z;	/* coordinates of nearest point */
+    double from_x, from_y, from_z; /* coordinates of nearest 'from' point */
+    double to_x, to_y, to_z;	/* coordinates of nearest 'to' point */
     double from_along, to_along;	/* distance along a linear feature to the nearest point */
+    double from_angle;		/* angle of linear feature in nearest point */
     double to_angle;		/* angle of linear feature in nearest point */
     double dist;		/* distance to nearest feature */
 } NEAR;
@@ -36,5 +39,29 @@ typedef struct
 int cmp_near(const void *, const void *);
 int cmp_near_to(const void *, const void *);
 int cmp_exist(const void *, const void *);
+
+/* distance.c */
+int get_line_box(const struct line_pnts *Points, 
+                 struct bound_box *box);
+int line2line(struct line_pnts *FPoints, int ftype,
+              struct line_pnts *TPoints, int ttype,
+	      double *fx, double *fy, double *fz,
+	      double *falong, double *fangle,
+	      double *tx, double *ty, double *tz,
+	      double *talong, double *tangle,
+	      double *dist,
+	      int with_z,
+	      int geodesic);
+int line2area(const struct Map_info *To,
+	      struct line_pnts *Points, int type,
+	      int area, const struct bound_box *abox,
+	      double *fx, double *fy, double *fz,
+	      double *falong, double *fangle,
+	      double *tx, double *ty, double *tz,
+	      double *talong, double *tangle,
+	      double *dist,
+	      int with_z,
+	      int geodesic);
+
 /* print.c */
 int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *);

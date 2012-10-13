@@ -9,10 +9,11 @@
  *               - updated to 5.7 by Radim Blazek 2003
  *               - OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *               - speed-up for dmax != 0 Markus Metz 2010
+ *               - support all features Markus Metz 2012
  *               
  * PURPOSE:      Calculates distance from a point to nearest feature in vector layer. 
  *               
- * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -34,7 +35,7 @@
 
 int main(int argc, char *argv[])
 {
-    int i, j, k;
+    int i, j;
     int print_as_matrix;	/* only for do_all=TRUE */
     int do_all;			/* calculate from each to each within the threshold */
     struct GModule *module;
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
     } flag;
     char *desc;
     struct Map_info From, To, Out, *Outp;
-    int from_type, to_type, from_field, to_field;
+    int from_type, to_type, from_field, to_field, with_z;
     double max, min;
     double *max_step;
     int n_max_steps, curr_step;
@@ -58,10 +59,12 @@ int main(int argc, char *argv[])
     NEAR *Near, *near;
     int anear;			/* allocated space, used only for do_all */
     UPLOAD *Upload;		/* zero terminated */
-    int ftype, fcat, tcat, count;
-    int nfrom, nto, nfcats, fline, tline, tseg, tarea, area, isle, nisles;
-    double tx, ty, tz, dist, talong, tmp_tx, tmp_ty, tmp_tz, tmp_dist,
-	tmp_talong;
+    int ftype, ttype, fcat, nfcats, tcat, count, fline, tfeature;
+    int nfrom, nfromlines, nfromareas, nto, ntolines, ntoareas;
+    int tarea, area, isle, nisles, nlines;
+    double fx, fy, fz, falong, fangle, tx, ty, tz, talong, tangle, dist;
+    double tmp_fx, tmp_fy, tmp_fz, tmp_falong, tmp_fangle, tmp_dist;
+    double tmp_tx, tmp_ty, tmp_tz, tmp_talong, tmp_tangle;
     struct field_info *Fi, *toFi;
     dbString stmt, dbstr;
     dbDriver *driver, *to_driver;
@@ -69,8 +72,8 @@ int main(int argc, char *argv[])
     char buf1[2000], buf2[2000], to_attr_sqltype[256];
     int update_ok, update_err, update_exist, update_notexist, update_dupl,
 	update_notfound, sqltype;
-    struct boxlist *List;
-    struct bound_box box;
+    struct boxlist *lList, *aList;
+    struct bound_box fbox, box;
     dbCatValArray cvarr;
     dbColumn *column;
 
@@ -100,8 +103,8 @@ int main(int argc, char *argv[])
 
     opt.from_type = G_define_standard_option(G_OPT_V_TYPE);
     opt.from_type->key = "from_type";
-    opt.from_type->options = "point,centroid";
-    opt.from_type->answer = "point";
+    opt.from_type->options = "point,line,boundary,centroid,area";
+    opt.from_type->answer = "point,line,area";
     opt.from_type->label = _("Feature type (from)");
     opt.from_type->guisection = _("From");
 
@@ -289,15 +292,35 @@ int main(int argc, char *argv[])
 
     from_field = Vect_get_field_number(&From, opt.from_field->answer);
 
-    if (Vect_get_num_primitives(&From, GV_POINTS) < 1) {
+    nfromlines = Vect_get_num_primitives(&From, from_type);
+    nfromareas = 0;
+    if (from_type & GV_AREA)
+	nfromareas = Vect_get_num_areas(&From);
+
+    nfrom = nfromlines + nfromareas;
+    if (nfrom < 1) {
 	const char *name = Vect_get_full_name(&From);
 	Vect_close(&From);
-	G_fatal_error(_("No points/centroids found in <%s>"), name);
+	G_fatal_error(_("No features of selected type found in <%s>"), name);
     }
     
     /* Open 'to' vector */
     Vect_set_open_level(2);
     Vect_open_old2(&To, opt.to->answer, "", opt.to_field->answer);
+
+    ntolines = Vect_get_num_primitives(&To, from_type);
+    ntoareas = 0;
+    if (to_type & GV_AREA)
+	ntoareas = Vect_get_num_areas(&To);
+
+    nto = ntolines + ntoareas;
+    if (nto < 1) {
+	const char *name = Vect_get_full_name(&To);
+	Vect_close(&From);
+	Vect_close(&To);
+	G_fatal_error(_("No features of selected type found in <%s>"), name);
+    }
+    with_z = (Vect_is_3d(&From) && Vect_is_3d(&To));
 
     to_field = Vect_get_field_number(&To, opt.to_field->answer);
 
@@ -317,7 +340,6 @@ int main(int argc, char *argv[])
     if (max != 0) {
 	struct bound_box fbox, tbox;
 	double dx, dy, dz, tmp_max;
-	int n_features = 0;
 
 	Vect_get_map_box(&From, &fbox);
 	Vect_get_map_box(&To, &tbox);
@@ -339,35 +361,24 @@ int main(int argc, char *argv[])
 	/* with max > 0 but max <<< tmp_max, 2 steps are sufficient, first 0 then max
 	 * a reasonable number of steps also depends on the number of features in To
 	 * e.g. only one area in To, no need to step */
-	nto = Vect_get_num_lines(&To);
-	for (tline = 1; tline <= nto; tline++) {
-	    /* TODO: Vect_get_line_type() */
-	    n_features += ((to_type & To.plus.Line[tline]->type) != 0);
-	}
-	if (to_type & GV_AREA) {
-	    if (Vect_get_num_areas(&To) > n_features)
-		n_features = Vect_get_num_areas(&To);
-	}
-	if (n_features == 0)
-	    G_fatal_error(_("No features of selected type in To vector <%s>"),
-			    opt.to->answer);
-	n_max_steps = sqrt(n_features) * max / tmp_max;
+
+	n_max_steps = sqrt(nto) * max / tmp_max;
 	/* max 9 steps from testing */
 	if (n_max_steps > 9)
 	    n_max_steps = 9;
 	if (n_max_steps < 2)
 	    n_max_steps = 2;
-	if (n_max_steps > n_features)
-	    n_max_steps = n_features;
+	if (n_max_steps > nto)
+	    n_max_steps = nto;
 
 	G_debug(2, "max = %f", max);
 	G_debug(2, "maximum reasonable search distance = %f", tmp_max);
-	G_debug(2, "n_features = %d", n_features);
+	G_debug(2, "n 'to' features = %d", nto);
 	G_debug(2, "n_max_steps = %d", n_max_steps);
     }
 
     if (min > max)
-	G_fatal_error("dmin can not be larger than dmax");
+	G_fatal_error(_("dmin can not be larger than dmax"));
 
     if (n_max_steps > 1) {
 	/* set up steps to increase search box */
@@ -391,6 +402,7 @@ int main(int argc, char *argv[])
     db_init_string(&stmt);
     db_init_string(&dbstr);
     driver = NULL;
+    Fi = NULL;
     if (!flag.print->answer && !do_all) {
 
 	Fi = Vect_get_field(&From, from_field);
@@ -424,6 +436,7 @@ int main(int argc, char *argv[])
     }
 
     to_driver = NULL;
+    toFi = NULL;
     if (opt.to_column->answer) {
 	toFi = Vect_get_field(&To, to_field);
 	if (toFi == NULL)
@@ -496,24 +509,19 @@ int main(int argc, char *argv[])
     TPoints = Vect_new_line_struct();
     FCats = Vect_new_cats_struct();
     TCats = Vect_new_cats_struct();
-    List = Vect_new_boxlist(1);
+    lList = Vect_new_boxlist(1); /* line list */
+    aList = Vect_new_boxlist(1); /* area list */
 
     /* Allocate space ( may be more than needed (duplicate cats and elements without cats) ) */
-    nfrom = Vect_get_num_lines(&From);
-    nto = Vect_get_num_lines(&To);
-    if (do_all) {
-	/* Be careful with do_all, it can easily run out of memory */
-	anear = 2 * nfrom;
-	Near = (NEAR *) G_calloc(anear, sizeof(NEAR));
-    }
-    else {
-	Near = (NEAR *) G_calloc(nfrom, sizeof(NEAR));
-    }
+    /* Be careful with do_all, it can easily run out of memory */
+    anear = nfrom;
+    Near = (NEAR *) G_calloc(nfrom, sizeof(NEAR));
 
     /* Read all cats from 'from' */
+    nfcats = 0;
     if (!do_all) {
-	nfcats = 0;
-	for (i = 1; i <= nfrom; i++) {
+	nlines = Vect_get_num_lines(&From);
+	for (i = 1; i <= nlines; i++) {
 	    ftype = Vect_read_line(&From, NULL, FCats, i);
 
 	    /* This keeps also categories of areas for future (if area s in from_type) */
@@ -525,22 +533,28 @@ int main(int argc, char *argv[])
 	    if (fcat < 0)
 		continue;
 	    Near[nfcats].from_cat = fcat;
+	    Near[nfcats].dist = -1;
+	    Near[nfcats].count = 0;
 	    nfcats++;
 	}
 	G_debug(1, "%d cats loaded from vector (including duplicates)",
 		nfcats);
+	
+	if (nfcats == 0)
+	    G_fatal_error(_("No categories for 'from' for slected type and layer"));
+
 	/* Sort by cats and remove duplicates */
 	qsort((void *)Near, nfcats, sizeof(NEAR), cmp_near);
 
 	/* remove duplicates */
+	j = 1;
 	for (i = 1; i < nfcats; i++) {
-	    if (Near[i].from_cat == Near[i - 1].from_cat) {
-		for (j = i; j < nfcats - 1; j++) {
-		    Near[j].from_cat = Near[j + 1].from_cat;
-		}
-		nfcats--;
+	    if (Near[i].from_cat != Near[j - 1].from_cat) {
+		Near[j].from_cat = Near[i].from_cat;
+		j++;
 	    }
 	}
+	nfcats = j;
 
 	G_debug(1, "%d cats loaded from vector (unique)", nfcats);
     }
@@ -549,20 +563,15 @@ int main(int argc, char *argv[])
     /* Note: as from_type is restricted to GV_POINTS (for now) everything is simple */
 
     count = 0;			/* count of distances in 'do_all' mode */
-    /* Find nearest lines */
-    if (to_type & (GV_POINTS | GV_LINES)) {
-	struct line_pnts *LLPoints;
+    /* Find nearest features for 'from' lines */
+    if (nfromlines) {
+	G_message(_("Finding nearest features..."));
+	
+	near = NULL;
+	nlines = Vect_get_num_lines(&From);
 
-	if (G_projection() == PROJECTION_LL) {
-	    LLPoints = Vect_new_line_struct();
-	}
-	else {
-	    LLPoints = NULL;
-	}
-	G_message(_("Finding nearest feature..."));
-	for (fline = 1; fline <= nfrom; fline++) {
+	for (fline = 1; fline <= nlines; fline++) {
 	    int tmp_tcat;
-	    double tmp_tangle, tangle;
 	    double tmp_min = (min < 0 ? 0 : min);
 	    double box_edge = 0;
 	    int done = FALSE;
@@ -571,99 +580,98 @@ int main(int argc, char *argv[])
 
 	    G_debug(3, "fline = %d", fline);
 	    G_percent(fline, nfrom, 2);
-	    ftype = Vect_read_line(&From, FPoints, FCats, fline);
+	    ftype = Vect_get_line_type(&From, fline);
 	    if (!(ftype & from_type))
 		continue;
 
+	    Vect_read_line(&From, FPoints, FCats, fline);
 	    Vect_cat_get(FCats, from_field, &fcat);
 	    if (fcat < 0 && !do_all)
 		continue;
 
+	    get_line_box(FPoints, &fbox);
+
+	    if (!do_all) {
+		/* find near by 'from' cat */
+		near = (NEAR *) bsearch((void *)&fcat, Near, nfcats,
+				        sizeof(NEAR), cmp_near);
+	    }
+
+	    dist = PORT_DOUBLE_MAX; /* distance to nearest 'to' feature */
+
 	    while (!done) {
 		done = TRUE;
+
+		tfeature = 0;  /* id of nearest 'to' feature */
 
 		if (!do_all) {
 		    /* enlarge search box until we get a hit */
 		    /* the objective is to enlarge the search box
 		     * in the first iterations just a little bit
 		     * to keep the number of hits low */
-		    Vect_reset_boxlist(List);
 		    while (curr_step < n_max_steps) {
 			box_edge = max_step[curr_step];
 
 			if (box_edge < tmp_min)
 			    continue;
 			
-			box.E = FPoints->x[0] + box_edge;
-			box.W = FPoints->x[0] - box_edge;
-			box.N = FPoints->y[0] + box_edge;
-			box.S = FPoints->y[0] - box_edge;
+			box.E = fbox.E + box_edge;
+			box.W = fbox.W - box_edge;
+			box.N = fbox.N + box_edge;
+			box.S = fbox.S - box_edge;
 			box.T = PORT_DOUBLE_MAX;
 			box.B = -PORT_DOUBLE_MAX;
 
-			Vect_select_lines_by_box(&To, &box, to_type, List);
+			if (ntolines)
+			    Vect_select_lines_by_box(&To, &box, to_type, lList);
+			if (ntoareas)
+			    Vect_select_areas_by_box(&To, &box, aList);
 
 			curr_step++;
-			if (List->n_values > 0)
+			if (lList->n_values > 0 || aList->n_values > 0)
 			    break;
 		    }
 		}
 		else {
-		    box.E = FPoints->x[0] + max;
-		    box.W = FPoints->x[0] - max;
-		    box.N = FPoints->y[0] + max;
-		    box.S = FPoints->y[0] - max;
+		    box.E = fbox.E + max;
+		    box.W = fbox.W - max;
+		    box.N = fbox.N + max;
+		    box.S = fbox.S - max;
 		    box.T = PORT_DOUBLE_MAX;
 		    box.B = -PORT_DOUBLE_MAX;
 
-		    Vect_select_lines_by_box(&To, &box, to_type, List);
+		    if (ntolines)
+			Vect_select_lines_by_box(&To, &box, to_type, lList);
+		    if (ntoareas)
+			Vect_select_areas_by_box(&To, &box, aList);
 		}
 
-		G_debug(3, "  %d lines in box", List->n_values);
+		G_debug(3, "  %d lines in box", lList->n_values);
 
-		tline = 0;
-		dist = PORT_DOUBLE_MAX;
-		for (i = 0; i < List->n_values; i++) {
+		for (i = 0; i < lList->n_values; i++) {
 		    tmp_tcat = -1;
-		    Vect_read_line(&To, TPoints, TCats, List->id[i]);
+		    ttype = Vect_read_line(&To, TPoints, TCats, lList->id[i]);
 
-		    tseg =
-			Vect_line_distance(TPoints, FPoints->x[0], FPoints->y[0],
-					   FPoints->z[0], (Vect_is_3d(&From) &&
-							   Vect_is_3d(&To)) ?
-					   WITH_Z : WITHOUT_Z, &tmp_tx, &tmp_ty,
-					   &tmp_tz, &tmp_dist, NULL, &tmp_talong);
-
-		    Vect_point_on_line(TPoints, tmp_talong, NULL, NULL, NULL,
-				       &tmp_tangle, NULL);
+		    line2line(FPoints, ftype, TPoints, ttype,
+		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
+		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
+			      &tmp_dist, with_z, 0);
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
 
 		    /* TODO: more cats of the same field */
 		    Vect_cat_get(TCats, to_field, &tmp_tcat);
-		    if (G_projection() == PROJECTION_LL) {
-			/* calculate distances in meters not degrees (only 2D) */
-			Vect_reset_line(LLPoints);
-			Vect_append_point(LLPoints, FPoints->x[0], FPoints->y[0],
-					  FPoints->z[0]);
-			Vect_append_point(LLPoints, tmp_tx, tmp_ty, tmp_tz);
-			tmp_dist = Vect_line_geodesic_length(LLPoints);
-			Vect_reset_line(LLPoints);
-			for (k = 0; k < tseg; k++)
-			    Vect_append_point(LLPoints, TPoints->x[k],
-					      TPoints->y[k], TPoints->z[k]);
-			Vect_append_point(LLPoints, tmp_tx, tmp_ty, tmp_tz);
-			tmp_talong = Vect_line_geodesic_length(LLPoints);
-		    }
 
 		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
 			    tmp_tcat);
 
 		    if (do_all) {
 			if (anear <= count) {
-			    anear += 10 + nfrom / 10;
+			    anear += 10 + nto / 10;
 			    Near = (NEAR *) G_realloc(Near, anear * sizeof(NEAR));
+			    if (!Near)
+				G_fatal_error(_("Out of memory!"));
 			}
 			near = &(Near[count]);
 
@@ -671,9 +679,11 @@ int main(int argc, char *argv[])
 			near->from_cat = fcat;
 			near->to_cat = tmp_tcat;	/* -1 is OK */
 			near->dist = tmp_dist;
-			near->from_x = FPoints->x[0];
-			near->from_y = FPoints->y[0];
-			near->from_z = FPoints->z[0];
+			near->from_x = tmp_fx;
+			near->from_y = tmp_fy;
+			near->from_z = tmp_fz;
+			near->from_along = tmp_falong;	/* 0 for points */
+			near->from_angle = tmp_fangle;
 			near->to_x = tmp_tx;
 			near->to_y = tmp_ty;
 			near->to_z = tmp_tz;
@@ -683,10 +693,79 @@ int main(int argc, char *argv[])
 			count++;
 		    }
 		    else {
-			if (tline == 0 || (tmp_dist < dist)) {
-			    tline = List->id[i];
+			if (tfeature == 0 || (tmp_dist < dist)) {
+			    tfeature = lList->id[i];
 			    tcat = tmp_tcat;
 			    dist = tmp_dist;
+			    fx = tmp_fx;
+			    fy = tmp_fy;
+			    fz = tmp_fz;
+			    falong = tmp_falong;
+			    fangle = tmp_fangle;
+			    tx = tmp_tx;
+			    ty = tmp_ty;
+			    tz = tmp_tz;
+			    talong = tmp_talong;
+			    tangle = tmp_tangle;
+			}
+		    }
+		}
+
+		G_debug(3, "  %d areas in box", aList->n_values);
+
+		for (i = 0; i < aList->n_values; i++) {
+		    tmp_tcat = -1;
+
+		    line2area(&To, FPoints, ftype, aList->id[i], &aList->box[i],
+		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
+		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
+			      &tmp_dist, with_z, 0);
+
+		    if (tmp_dist > max || tmp_dist < min)
+			continue;	/* not in threshold */
+
+		    /* TODO: more cats of the same field */
+		    Vect_cat_get(TCats, to_field, &tmp_tcat);
+
+		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
+			    tmp_tcat);
+
+		    if (do_all) {
+			if (anear <= count) {
+			    anear += 10 + nto / 10;
+			    Near = (NEAR *) G_realloc(Near, anear * sizeof(NEAR));
+			    if (!Near)
+				G_fatal_error(_("Out of memory!"));
+			}
+			near = &(Near[count]);
+
+			/* store info about relation */
+			near->from_cat = fcat;
+			near->to_cat = tmp_tcat;	/* -1 is OK */
+			near->dist = tmp_dist;
+			near->from_x = tmp_fx;
+			near->from_y = tmp_fy;
+			near->from_z = tmp_fz;
+			near->from_along = tmp_falong;	/* 0 for points */
+			near->from_angle = tmp_fangle;
+			near->to_x = tmp_tx;
+			near->to_y = tmp_ty;
+			near->to_z = tmp_tz;
+			near->to_along = tmp_talong;	/* 0 for points */
+			near->to_angle = tmp_tangle;
+			near->count++;
+			count++;
+		    }
+		    else {
+			if (tfeature == 0 || (tmp_dist < dist)) {
+			    tfeature = aList->id[i];
+			    tcat = tmp_tcat;
+			    dist = tmp_dist;
+			    fx = tmp_fx;
+			    fy = tmp_fy;
+			    fz = tmp_fz;
+			    falong = tmp_falong;
+			    fangle = tmp_fangle;
 			    tx = tmp_tx;
 			    ty = tmp_ty;
 			    tz = tmp_tz;
@@ -700,31 +779,29 @@ int main(int argc, char *argv[])
 
 		if (!do_all && curr_step < n_max_steps) {
 		    /* enlarging the search box is possible */
-		    if (tline > 0 && dist > box_edge) {
+		    if (tfeature > 0 && dist > box_edge) {
 			/* line found but distance > search edge:
 			 * line bbox overlaps with search box, line itself is outside search box */
 			done = FALSE;
 		    }
-		    else if (tline == 0) {
+		    else if (tfeature == 0) {
 			/* no line within max dist, but search box can still be enlarged */
 			done = FALSE;
 		    }
 		}
-		if (done && !do_all && tline > 0) {
-		    /* find near by cat */
-		    near =
-			(NEAR *) bsearch((void *)&fcat, Near, nfcats,
-					 sizeof(NEAR), cmp_near);
+		if (done && !do_all && tfeature > 0) {
 
-		    G_debug(4, "  near.from_cat = %d near.count = %d",
+		    G_debug(4, "  near->from_cat = %d near->count = %d",
 			    near->from_cat, near->count);
 		    /* store info about relation */
 		    if (near->count == 0 || near->dist > dist) {
 			near->to_cat = tcat;	/* -1 is OK */
 			near->dist = dist;
-			near->from_x = FPoints->x[0];
-			near->from_y = FPoints->y[0];
-			near->from_z = FPoints->z[0];
+			near->from_x = fx;
+			near->from_y = fy;
+			near->from_z = fz;
+			near->from_along = falong;	/* 0 for points */
+			near->from_angle = fangle;
 			near->to_x = tx;
 			near->to_y = ty;
 			near->to_z = tz;
@@ -733,117 +810,223 @@ int main(int argc, char *argv[])
 		    }
 		    near->count++;
 		}
-	    } /* done */
-	} /* next feature */
-	if (LLPoints) {
-	    Vect_destroy_line_struct(LLPoints);
-	}
+	    } /* done searching 'to' */
+	} /* next from feature */
     }
 
-    /* Find nearest areas */
-    if (to_type & GV_AREA) {
+    /* Find nearest features for 'from' areas */
+    /* the code is pretty much identical to the one for lines */
+    if (nfromareas) {
 	
-	G_message(_("Finding nearest areas..."));
-	for (fline = 1; fline <= nfrom; fline++) {
+	near = NULL;
+
+	G_message(_("Finding nearest features for areas..."));
+	for (area = 1; area <= nfromareas; area++) {
+	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
 	    double box_edge = 0;
 	    int done = FALSE;
 	    
 	    curr_step = 0;
 
-	    G_debug(3, "fline = %d", fline);
-	    G_percent(fline, nfrom, 2);
-	    ftype = Vect_read_line(&From, FPoints, FCats, fline);
-	    if (!(ftype & from_type))
-		continue;
+	    G_debug(3, "farea = %d", area);
+	    G_percent(area, nfromareas, 2);
 
+	    Vect_get_area_cats(&From, area, FCats);
 	    Vect_cat_get(FCats, from_field, &fcat);
 	    if (fcat < 0 && !do_all)
 		continue;
 
+	    Vect_get_area_box(&From, area, &fbox);
+	    Vect_reset_line(FPoints);
+
+	    if (!do_all) {
+		/* find near by 'from' cat */
+		near = (NEAR *) bsearch((void *)&fcat, Near, nfcats,
+				        sizeof(NEAR), cmp_near);
+	    }
+
+	    dist = PORT_DOUBLE_MAX; /* distance to nearest 'to' feature */
+
 	    while (!done) {
 		done = TRUE;
+
+		tfeature = 0;  /* id of nearest 'to' feature */
 
 		if (!do_all) {
 		    /* enlarge search box until we get a hit */
 		    /* the objective is to enlarge the search box
 		     * in the first iterations just a little bit
 		     * to keep the number of hits low */
-		    Vect_reset_boxlist(List);
 		    while (curr_step < n_max_steps) {
 			box_edge = max_step[curr_step];
 
 			if (box_edge < tmp_min)
 			    continue;
 			
-			box.E = FPoints->x[0] + box_edge;
-			box.W = FPoints->x[0] - box_edge;
-			box.N = FPoints->y[0] + box_edge;
-			box.S = FPoints->y[0] - box_edge;
+			box.E = fbox.E + box_edge;
+			box.W = fbox.W - box_edge;
+			box.N = fbox.N + box_edge;
+			box.S = fbox.S - box_edge;
 			box.T = PORT_DOUBLE_MAX;
 			box.B = -PORT_DOUBLE_MAX;
 
-			Vect_select_areas_by_box(&To, &box, List);
+			if (ntolines)
+			    Vect_select_lines_by_box(&To, &box, to_type, lList);
+			if (ntoareas)
+			    Vect_select_areas_by_box(&To, &box, aList);
 
 			curr_step++;
-			if (List->n_values > 0)
+			if (lList->n_values > 0 || aList->n_values > 0)
 			    break;
 		    }
 		}
 		else {
-		    box.E = FPoints->x[0] + max;
-		    box.W = FPoints->x[0] - max;
-		    box.N = FPoints->y[0] + max;
-		    box.S = FPoints->y[0] - max;
+		    box.E = fbox.E + max;
+		    box.W = fbox.W - max;
+		    box.N = fbox.N + max;
+		    box.S = fbox.S - max;
 		    box.T = PORT_DOUBLE_MAX;
 		    box.B = -PORT_DOUBLE_MAX;
 
-		    Vect_select_areas_by_box(&To, &box, List);
+		    if (ntolines)
+			Vect_select_lines_by_box(&To, &box, to_type, lList);
+		    if (ntoareas)
+			Vect_select_areas_by_box(&To, &box, aList);
 		}
 
-		G_debug(4, "%d areas selected by box", List->n_values);
+		G_debug(3, "  %d lines in box", lList->n_values);
+
+		for (i = 0; i < lList->n_values; i++) {
+		    tmp_tcat = -1;
+		    ttype = Vect_read_line(&To, TPoints, TCats, lList->id[i]);
+
+		    /* area to line */
+		    line2area(&From, TPoints, ttype, area, &fbox,
+		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
+		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
+			      &tmp_dist, with_z, 0);
+
+		    if (tmp_dist > max || tmp_dist < min)
+			continue;	/* not in threshold */
+
+		    /* TODO: more cats of the same field */
+		    Vect_cat_get(TCats, to_field, &tmp_tcat);
+
+		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
+			    tmp_tcat);
+
+		    if (do_all) {
+			if (anear <= count) {
+			    anear += 10 + nto / 10;
+			    Near = (NEAR *) G_realloc(Near, anear * sizeof(NEAR));
+			    if (!Near)
+				G_fatal_error(_("Out of memory!"));
+			}
+			near = &(Near[count]);
+
+			/* store info about relation */
+			near->from_cat = fcat;
+			near->to_cat = tmp_tcat;	/* -1 is OK */
+			near->dist = tmp_dist;
+			near->from_x = tmp_fx;
+			near->from_y = tmp_fy;
+			near->from_z = tmp_fz;
+			near->from_along = tmp_falong;	/* 0 for points */
+			near->from_angle = tmp_fangle;
+			near->to_x = tmp_tx;
+			near->to_y = tmp_ty;
+			near->to_z = tmp_tz;
+			near->to_along = tmp_talong;	/* 0 for points */
+			near->to_angle = tmp_tangle;
+			near->count++;
+			count++;
+		    }
+		    else {
+			if (tfeature == 0 || (tmp_dist < dist)) {
+			    tfeature = lList->id[i];
+			    tcat = tmp_tcat;
+			    dist = tmp_dist;
+			    fx = tmp_fx;
+			    fy = tmp_fy;
+			    fz = tmp_fz;
+			    falong = tmp_falong;
+			    fangle = tmp_fangle;
+			    tx = tmp_tx;
+			    ty = tmp_ty;
+			    tz = tmp_tz;
+			    talong = tmp_talong;
+			    tangle = tmp_tangle;
+			}
+		    }
+		}
+
+		G_debug(3, "  %d areas in box", aList->n_values);
 
 		/* For each area in box check the distance */
-		tarea = 0;
-		dist = PORT_DOUBLE_MAX;
-		for (i = 0; i < List->n_values; i++) {
-		    int tmp_tcat;
+		for (i = 0; i < aList->n_values; i++) {
+		    int tmp_tcat, poly;
 
-		    area = List->id[i];
-		    G_debug(4, "%d: area %d", i, area);
-		    Vect_get_area_points(&To, area, TPoints);
+		    tarea = aList->id[i];
+		    G_debug(4, "%d: area %d", i, tarea);
+		    Vect_get_area_points(&To, tarea, TPoints);
+		    
+		    ttype = GV_BOUNDARY;
 
 		    /* Find the distance to this area */
-		    if (Vect_point_in_area(FPoints->x[0], FPoints->y[0], &To, area, &List->box[i])) {	/* in area */
-			tmp_dist = 0;
-			tmp_tx = FPoints->x[0];
-			tmp_ty = FPoints->y[0];
-		    }
-		    else if (Vect_point_in_poly(FPoints->x[0], FPoints->y[0], TPoints) > 0) {	/* in isle */
-			nisles = Vect_get_area_num_isles(&To, area);
-			for (j = 0; j < nisles; j++) {
-			    double tmp2_dist, tmp2_tx, tmp2_ty;
+		    poly = line2area(&From, TPoints, ttype, area, &fbox,
+		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
+		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
+			      &tmp_dist, with_z, 0);
 
-			    isle = Vect_get_area_isle(&To, area, j);
-			    Vect_get_isle_points(&To, isle, TPoints);
-			    Vect_line_distance(TPoints, FPoints->x[0],
-					       FPoints->y[0], FPoints->z[0],
-					       WITHOUT_Z, &tmp2_tx, &tmp2_ty,
-					       NULL, &tmp2_dist, NULL, NULL);
+		    if (poly == 3) {
+			/* 'to' area is outside 'from' area,
+			 * check if 'from' area is inside 'to' area */
+			poly = 0;
+			/* boxes must overlap */
+			if (Vect_box_overlap(&fbox, &aList->box[i])) {
+			    if (FPoints->n_points == 0)
+				Vect_get_area_points(&From, area, FPoints);
+			    for (j = 0; j < FPoints->n_points; j++) {
+				poly = Vect_point_in_poly(FPoints->x[0], FPoints->y[0], TPoints);
+				if (poly)
+				    break;
+			    }
+			}
+			if (poly) {
+			    double tmp2_tx, tmp2_ty, tmp2_tz, tmp2_talong, tmp2_tangle;
+			    double tmp2_fx, tmp2_fy, tmp2_fz, tmp2_falong, tmp2_fangle;
+			    double tmp2_dist;
 
-			    if (j == 0 || tmp2_dist < tmp_dist) {
-				tmp_dist = tmp2_dist;
-				tmp_tx = tmp2_tx;
-				tmp_ty = tmp2_ty;
+			    /* 'from' area is inside 'to' area,
+			     * get distance to 'to' isles */
+			    nisles = Vect_get_area_num_isles(&To, tarea);
+			    for (j = 0; j < nisles; j++) {
+				isle = Vect_get_area_isle(&To, tarea, j);
+				Vect_get_isle_points(&To, isle, TPoints);
+
+				line2area(&From, TPoints, ttype, area, &fbox,
+					  &tmp2_tx, &tmp2_ty, &tmp2_tz, &tmp2_talong, &tmp2_tangle,
+					  &tmp2_fx, &tmp2_fy, &tmp2_fz, &tmp2_falong, &tmp2_fangle,
+					  &tmp2_dist, with_z, 0);
+
+				if (tmp2_dist < tmp_dist) {
+				    tmp_dist = tmp2_dist;
+				    tmp_fx = tmp2_fx;
+				    tmp_fy = tmp2_fy;
+				    tmp_fz = tmp2_fz;
+				    tmp_falong = tmp2_falong;
+				    tmp_fangle = tmp2_fangle;
+				    tmp_tx = tmp2_tx;
+				    tmp_ty = tmp2_ty;
+				    tmp_tz = tmp2_tz;
+				    tmp_talong = tmp2_talong;
+				    tmp_tangle = tmp2_tangle;
+				}
 			    }
 			}
 		    }
-		    else {		/* outside area */
-			Vect_line_distance(TPoints, FPoints->x[0], FPoints->y[0],
-					   FPoints->z[0], WITHOUT_Z, &tmp_tx,
-					   &tmp_ty, NULL, &tmp_dist, NULL, NULL);
 
-		    }
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
 		    Vect_get_area_cats(&To, area, TCats);
@@ -872,41 +1055,51 @@ int main(int argc, char *argv[])
 			near->from_cat = fcat;
 			near->to_cat = tmp_tcat;	/* -1 is OK */
 			near->dist = tmp_dist;
-			near->from_x = FPoints->x[0];
-			near->from_y = FPoints->y[0];
+			near->from_x = tmp_fx;
+			near->from_y = tmp_fy;
+			near->from_z = tmp_fz;
+			near->from_along = tmp_falong;	/* 0 for points */
+			near->from_angle = tmp_fangle;
 			near->to_x = tmp_tx;
 			near->to_y = tmp_ty;
-			near->to_along = 0;	/* nonsense for areas */
-			near->to_angle = 0;	/* not supported for areas */
+			near->to_z = tmp_tz;
+			near->to_along = tmp_talong;	/* 0 for points */
+			near->to_angle = tmp_tangle;
 			near->count++;
 			count++;
 		    }
-		    else if (tarea == 0 || tmp_dist < dist) {
-			tarea = area;
-			tcat = tmp_tcat;
-			dist = tmp_dist;
-			tx = tmp_tx;
-			ty = tmp_ty;
+		    else {
+			if (tfeature == 0 || tmp_dist < dist) {
+			    tfeature = tarea;
+			    tcat = tmp_tcat;
+			    dist = tmp_dist;
+			    fx = tmp_fx;
+			    fy = tmp_fy;
+			    fz = tmp_fz;
+			    falong = tmp_falong;
+			    fangle = tmp_fangle;
+			    tx = tmp_tx;
+			    ty = tmp_ty;
+			    tz = tmp_tz;
+			    talong = tmp_talong;
+			    tangle = tmp_tangle;
+			}
 		    }
 		}
 
 		if (!do_all && curr_step < n_max_steps) {
 		    /* enlarging the search box is possible */
-		    if (tarea > 0 && dist > box_edge) {
+		    if (tfeature > 0 && dist > box_edge) {
 			/* area found but distance > search edge:
 			 * area bbox overlaps with search box, area itself is outside search box */
 			done = FALSE;
 		    }
-		    else if (tarea == 0) {
+		    else if (tfeature == 0) {
 			/* no area within max dist, but search box can still be enlarged */
 			done = FALSE;
 		    }
 		}
-		if (done && !do_all && tarea > 0) {
-		    /* find near by cat */
-		    near =
-			(NEAR *) bsearch((void *)&fcat, Near, nfcats,
-					 sizeof(NEAR), cmp_near);
+		if (done && !do_all && tfeature > 0) {
 
 		    G_debug(4, "near.from_cat = %d near.count = %d dist = %f",
 			    near->from_cat, near->count, near->dist);
@@ -915,12 +1108,16 @@ int main(int argc, char *argv[])
 		    if (near->count == 0 || near->dist > dist) {
 			near->to_cat = tcat;	/* -1 is OK */
 			near->dist = dist;
-			near->from_x = FPoints->x[0];
-			near->from_y = FPoints->y[0];
+			near->from_x = fx;
+			near->from_y = fy;
+			near->from_z = fz;
+			near->from_along = falong;
+			near->from_angle = fangle;
 			near->to_x = tx;
 			near->to_y = ty;
-			near->to_along = 0;	/* nonsense for areas */
-			near->to_angle = 0;	/* not supported for areas */
+			near->to_z = tz;
+			near->to_along = talong;
+			near->to_angle = tangle;
 		    }
 		    near->count++;
 		}
@@ -968,6 +1165,8 @@ int main(int argc, char *argv[])
 	}
     }
 
+    update_ok = update_err = update_exist = update_notexist = update_dupl =
+	update_notfound = ncatexist = 0;
 
     /* Update database / print to stdout / create output map */
     if (flag.print->answer) {	/* print header */
@@ -1028,8 +1227,6 @@ int main(int argc, char *argv[])
 	    db_select_int(driver, Fi->table, Fi->key, NULL, &catexist);
 	G_debug(1, "%d cats selected from the table", ncatexist);
     }
-    update_ok = update_err = update_exist = update_notexist = update_dupl =
-	update_notfound = 0;
 
     if (!do_all) {
 	count = nfcats;
