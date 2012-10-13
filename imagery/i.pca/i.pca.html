@@ -38,6 +38,14 @@ map separately with <em>x - mean</em>. With <em>-n</em>, the input raster
 maps are normalized for each map separately with <em>(x - mean) / stddev</em>. 
 Normalizing is highly recommended when the input raster maps have different
 units, e.g. represent different environmental parameters. 
+
+<dt><b>-f</b> <em>output will be filtered input bands</em> 
+<dd>This option, together with the <em>percent</em> option, can be used 
+to remove noise from input bands. Input bands will be recalculated from 
+a subset of the principal components. The subset is selected by using 
+only the most important (highest eigenvalue) principal components which 
+explain together <em>percent</em> percent variance observed in the 
+input bands.
 </dl>
 
 
