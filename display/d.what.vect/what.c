@@ -205,7 +205,10 @@ int what(int once, int txt, int terse, int width, int mwidth,
 
 		    fprintf(stdout,
 			    "-----------------------------------------------\n");
-		    Vect_get_line_areas(&(Map[i]), line, &left, &right);
+		    if (type & GV_BOUNDARY)
+			Vect_get_line_areas(&(Map[i]), line, &left, &right);
+		    else
+			left = right = 0;
 		    fprintf(stdout,
 			    _("Line: %d  Type: %s  Left: %d  Right: %d  "),
 			    line, buf, left, right);
@@ -214,11 +217,12 @@ int what(int once, int txt, int terse, int width, int mwidth,
 			fprintf(stdout, _("Length: %f\n"), l);
 		    }
 		    else {	/* points */
-			nnodes = 1;
+			nnodes = 0;
 			fprintf(stdout, "\n");
 		    }
 
-		    Vect_get_line_nodes(&(Map[i]), line, &node[0], &node[1]);
+		    if (nnodes > 0)
+			Vect_get_line_nodes(&(Map[i]), line, &node[0], &node[1]);
 
 		    for (n = 0; n < nnodes; n++) {
 			double nx, ny, nz;
