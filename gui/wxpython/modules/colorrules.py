@@ -352,15 +352,15 @@ class ColorTable(wx.Frame):
         # set map layer from layer tree, first selected,
         # if not the right type, than select another
         try:
-            sel = self.parent.curr_page.maptree.layer_selected
-            if sel and self.parent.curr_page.maptree.GetPyData(sel)[0]['type'] == self.mapType:
+            sel = self.parent.GetLayerTree().layer_selected
+            if sel and self.parent.GetLayerTree().GetPyData(sel)[0]['type'] == self.mapType:
                 layer = sel
             else:
-                layer = self.parent.curr_page.maptree.FindItemByData(key = 'type', value = self.mapType)
+                layer = self.parent.GetLayerTree().FindItemByData(key = 'type', value = self.mapType)
         except:
             layer = None
         if layer:
-            mapLayer = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer']
+            mapLayer = self.parent.GetLayerTree().GetPyData(layer)[0]['maplayer']
             name = mapLayer.GetName()
             type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
@@ -1555,13 +1555,13 @@ class VectorColorTable(ColorTable):
         
     def UseAttrColumn(self, useAttrColumn):
         """!Find layers and apply the changes in d.vect command"""
-        layers = self.parent.curr_page.maptree.FindItemByData(key = 'name', value = self.inmap)
+        layers = self.parent.GetLayerTree().FindItemByData(key = 'name', value = self.inmap)
         if not layers:
             return
         for layer in layers:
-            if self.parent.curr_page.maptree.GetPyData(layer)[0]['type'] != 'vector':
+            if self.parent.GetLayerTree().GetPyData(layer)[0]['type'] != 'vector':
                 continue
-            cmdlist = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].GetCmd()
+            cmdlist = self.parent.GetLayerTree().GetPyData(layer)[0]['maplayer'].GetCmd()
             
             if self.attributeType == 'color':
                 if useAttrColumn:
@@ -1575,7 +1575,7 @@ class VectorColorTable(ColorTable):
                 cmdlist[1].update({'size_column': self.properties['storeColumn']})
             elif self.attributeType == 'width':
                 cmdlist[1].update({'width_column' :self.properties['storeColumn']})
-            self.parent.curr_page.maptree.GetPyData(layer)[0]['cmd'] = cmdlist
+            self.parent.GetLayerTree().GetPyData(layer)[0]['cmd'] = cmdlist
         
     def CreateColorTable(self, tmp = False):
         """!Create color rules (color table or color column)"""
@@ -1840,7 +1840,7 @@ class BufferedWindow(wx.Window):
         if self.render:
             # extent is taken from current map display
             try:
-                self.Map.region = copy.deepcopy(self.parent.parent.curr_page.maptree.Map.region)
+                self.Map.region = copy.deepcopy(self.parent.parent.GetLayerTree().GetMap().GetCurrentRegion())
             except AttributeError:
                 self.Map.region = self.Map.GetRegion()
             # render new map images

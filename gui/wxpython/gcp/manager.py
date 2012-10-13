@@ -1247,8 +1247,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         sourceMapWin = self.SrcMapWindow
         targetMapWin = self.TgtMapWindow
-        #targetMapWin = self.parent.curr_page.maptree.mapdisplay.MapWindow
-
+        
         if not sourceMapWin:
             GError(parent = self,
                    message = "%s. %s%s" % (_("source mapwin not defined"),

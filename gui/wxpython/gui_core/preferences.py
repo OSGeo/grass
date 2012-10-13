@@ -243,9 +243,10 @@ class PreferencesBaseDialog(wx.Dialog):
             size = self.parent.GetSize()
             dim = '%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
             # opened displays
-            for page in range(0, self.parent.gm_cb.GetPageCount()):
-                pos = self.parent.gm_cb.GetPage(page).maptree.mapdisplay.GetPosition()
-                size = self.parent.gm_cb.GetPage(page).maptree.mapdisplay.GetSize()
+            for page in range(0, self.parent.GetLayerNotebook().GetPageCount()):
+                mapdisp = self.parent.GetLayerNotebook().GetPage(page).maptree.GetMapDisplay()
+                pos  = mapdisp.GetPosition()
+                size = mapdisp.GetSize()
 
                 dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
 

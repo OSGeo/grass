@@ -579,10 +579,11 @@ class WriteWorkspaceFile(object):
         file.write('%s</layer_manager>\n' % (' ' * self.indent))
         
         # list of displays
-        for page in range(0, self.lmgr.gm_cb.GetPageCount()):
-            dispName = self.lmgr.gm_cb.GetPageText(page)
-            mapTree = self.lmgr.gm_cb.GetPage(page).maptree
-            region = mapTree.Map.region
+        for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):
+            dispName = self.lmgr.GetLayerNotebook().GetPageText(page)
+            mapTree = self.lmgr.GetLayerNotebook().GetPage(page).maptree
+            region = mapTree.GetMap().GetCurrentRegion()
+            mapdisp = mapTree.GetMapDisplay()
             
             displayPos = mapTree.mapdisplay.GetPosition()
             displaySize = mapTree.mapdisplay.GetSize()
