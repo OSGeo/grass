@@ -247,7 +247,10 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		int n, node[2], nnodes, nnlines, nli, nodeline, left, right;
 		float angle;
 
-		Vect_get_line_areas(&(Map[i]), line, &left, &right);
+		if (type & GV_BOUNDARY)
+		    Vect_get_line_areas(&(Map[i]), line, &left, &right);
+		else
+		    left = right = 0;
 		if (script) {
 		    fprintf(stdout, "Feature_max_distance=%f\n", maxdist);
 		    fprintf(stdout,
@@ -266,12 +269,13 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, _("Length: %f\n"), l);
 		}
 		else {		/* points */
-		    nnodes = 1;
+		    nnodes = 0;
 		    if (!script)
 			fprintf(stdout, "\n");
 		}
 
-		Vect_get_line_nodes(&(Map[i]), line, &node[0], &node[1]);
+		if (nnodes > 0)
+		    Vect_get_line_nodes(&(Map[i]), line, &node[0], &node[1]);
 
 		for (n = 0; n < nnodes; n++) {
 		    double nx, ny, nz;
