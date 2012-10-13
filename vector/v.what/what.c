@@ -8,6 +8,8 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "what.h"
+
+/* TODO: remove leftover from interactive querying */
 static int nlines = 50;
 
 #define WDTH 5
