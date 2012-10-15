@@ -1,0 +1,36 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.pack</em> collects vector map elements and support files and
+compressed them using <em>gzip</em> algorithm for copying. The packed
+file can be afterwards unpacked
+by <em><a href="v.unpack.html">v.unpack</a></em>.
+
+<h2>NOTES</h2>
+
+Name of the pack file is determined by default from <b>input</b>
+parameter. Optionaly the name can be given by <b>output</b> parameter.
+
+<h2>EXAMPLE</h2>
+
+Pack up vector map <i>random_point</i> into <i>random_point.pack</i> file.
+
+<div class="code"><pre>
+v.pack input=random_point
+</pre></div>
+
+the vector map can be afterwards unpacked by
+
+<div class="code"><pre>
+v.unpack input=random_point.pack
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="v.unpack.html">v.unpack</a>,
+  <a href="v.in.gdal.html">v.in.gdal</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Luca Delucchi, Fondazione E. Mach (Italy), based on the <em>r.pack</em> code

@@ -65,6 +65,8 @@ SUBDIRS = \
 	v.rast.stats \
 	v.report \
 	v.out.gps \
+	v.pack \
+	v.unpack \
 	v.what.vect \
 	wxpyimgview
 
