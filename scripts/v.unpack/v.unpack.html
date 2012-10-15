@@ -1,0 +1,36 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.unpack</em> allows to unpack vector maps packed by <em><a href="v.pack.html">v.pack</a></em>.
+
+<h2>NOTES</h2>
+
+Name of the vector map is determined by default from pack file
+internals. Optionaly the name can be given by <b>output</b> parameter.
+
+<h2>EXAMPLE</h2>
+
+Pack up vector map <i>random_point</i> into <i>random_point.pack</i> file.
+
+<div class="code"><pre>
+v.pack input=random_point
+</pre></div>
+
+the vector map can be afterwards unpacked by
+
+<div class="code"><pre>
+v.unpack input=random_point.pack
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="v.pack.html">v.pack</a>,
+  <a href="v.in.gdal.html">v.in.gdal</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Luca Delucchi, Fondazione E. Mach (Italy), based on the <em>r.unpack</em> code
+
+<p>
+<i>Last changed: $Date$</i>
