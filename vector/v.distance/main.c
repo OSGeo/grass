@@ -988,17 +988,28 @@ int main(int argc, char *argv[])
 			    if (FPoints->n_points == 0)
 				Vect_get_area_points(&From, area, FPoints);
 			    for (j = 0; j < FPoints->n_points; j++) {
-				poly = Vect_point_in_poly(FPoints->x[0], FPoints->y[0], TPoints);
+				poly = Vect_point_in_poly(FPoints->x[j], FPoints->y[j], TPoints);
 				if (poly)
 				    break;
 			    }
+			}
+			if (poly) {
+			    /* 'from' area is (partially) inside 'to' area,
+			     * get distance to 'to' area */
+			    poly = line2area(&To, FPoints, ttype, tarea, &aList->box[i],
+				      &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
+				      &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
+				      &tmp_dist, with_z, 0);
+
+			    /* inside isle ? */
+			    poly = poly == 2;
 			}
 			if (poly) {
 			    double tmp2_tx, tmp2_ty, tmp2_tz, tmp2_talong, tmp2_tangle;
 			    double tmp2_fx, tmp2_fy, tmp2_fz, tmp2_falong, tmp2_fangle;
 			    double tmp2_dist;
 
-			    /* 'from' area is inside 'to' area,
+			    /* 'from' area is (partially) inside 'to' area,
 			     * get distance to 'to' isles */
 			    nisles = Vect_get_area_num_isles(&To, tarea);
 			    for (j = 0; j < nisles; j++) {

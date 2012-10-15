@@ -96,6 +96,9 @@ int line2line(struct line_pnts *FPoints, int ftype,
 					 &tmp_dist, NULL, &tmp_along);
 	    if (*dist > tmp_dist) {
 		*dist = tmp_dist;
+		*fx = FPoints->x[i];
+		*fy = FPoints->y[i];
+		*fz = FPoints->z[i];
 		*tx = tmp_x;
 		*ty = tmp_y;
 		*tz = tmp_z;
@@ -126,6 +129,11 @@ int line2line(struct line_pnts *FPoints, int ftype,
 		*fy = tmp_y;
 		*fz = tmp_z;
 		*falong = tmp_along;
+		*tx = TPoints->x[i];
+		*ty = TPoints->y[i];
+		*tz = TPoints->z[i];
+		*talong = 0.;
+		*tangle = -9.;
 		fseg = tmp_seg;
 	    }
 	}
