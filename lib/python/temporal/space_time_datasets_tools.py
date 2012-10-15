@@ -222,9 +222,9 @@ def register_maps_in_space_time_dataset(
             if not core.overwrite():                        
                 if map.get_layer():
                     core.warning(_("Map is already registered in temporal database. "
-                                   "Unable to update %s map <%s> with layer %i. "
+                                   "Unable to update %s map <%s> with layer %s. "
                                    "Overwrite flag is not set.") %
-                               (map.get_type(), map.get_map_id(), map.get_layer()))
+                               (map.get_type(), map.get_map_id(), str(map.get_layer())))
                 else:
                     core.warning(_("Map is already registered in temporal database. "
                                    "Unable to update %s map <%s>. "

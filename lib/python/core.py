@@ -367,36 +367,37 @@ def warning(msg):
 
 def error(msg):
     """!Display an error message using `g.message -e`
+    
+    @param msg error message to be displayed
+    """
+    message(msg, flag = 'e')
 
-    Raise exception when on_error is 'raise'.
+def fatal(msg):
+    """!Display an error message using `g.message -e`, then abort
+    
+    Raise exception when raise_on_error is 'True'.
     
     @param msg error message to be displayed
     """
     global raise_on_error
     if raise_on_error:
         raise ScriptError(msg)
-    else:
-        message(msg, flag = 'e')
-
-def fatal(msg):
-    """!Display an error message using `g.message -e`, then abort
     
-    @param msg error message to be displayed
-    """
     error(msg)
     sys.exit(1)
     
 def set_raise_on_error(raise_exp = True):
-    """!Define behaviour on error (error() called)
+    """!Define behaviour on fatal error (fatal() called)
 
     @param raise_exp True to raise ScriptError instead of calling
-    error()
+    sys.exit(1) in fatal()
     
     @return current status
     """
     global raise_on_error
     tmp_raise = raise_on_error
     raise_on_error = raise_exp
+    return tmp_raise
 
 # interface to g.parser
 

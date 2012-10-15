@@ -71,31 +71,31 @@ t.create --o type=stvds temporaltype=absolute output=lidar_abs4 title="A test wi
 t.create --o type=stvds temporaltype=absolute output=lidar_abs5 title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register type=vect  input=lidar_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register --o type=vect  input=lidar_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 t.vect.list    fs=" | " method=comma     input=lidar_abs1
 t.vect.list -h input=lidar_abs1
 t.vect.list -h fs=" | " method=cols      input=lidar_abs1
 t.vect.list -h fs=" | " method=delta     input=lidar_abs1
 t.vect.list -h fs=" | " method=deltagaps input=lidar_abs1
 
-t.register type=vect -i input=lidar_abs2 file="${n2}"
+t.register --o type=vect -i input=lidar_abs2 file="${n2}"
 t.vect.list    fs=" | " method=comma     input=lidar_abs2
 t.vect.list -h input=lidar_abs2
 t.vect.list -h fs=" | " method=cols      input=lidar_abs2
 t.vect.list -h fs=" | " method=delta     input=lidar_abs2
 t.vect.list -h fs=" | " method=deltagaps input=lidar_abs2
 
-t.register type=vect -i input=lidar_abs3 file="${n3}"
+t.register --o type=vect -i input=lidar_abs3 file="${n3}"
 t.vect.list    fs=" | " method=comma     input=lidar_abs3
 t.vect.list -h fs=" | " method=delta     input=lidar_abs3
 t.vect.list -h fs=" | " method=deltagaps input=lidar_abs3
 
-t.register type=vect -i input=lidar_abs4 file="${n4}"
+t.register --o type=vect -i input=lidar_abs4 file="${n4}"
 t.vect.list    fs=" | " method=comma     input=lidar_abs4
 t.vect.list -h fs=" | " method=delta     input=lidar_abs4
 t.vect.list -h fs=" | " method=deltagaps input=lidar_abs4
 
-t.register type=vect -i input=lidar_abs5 file="${n5}"
+t.register --o type=vect -i input=lidar_abs5 file="${n5}"
 t.vect.list    fs=" | " method=comma     input=lidar_abs5
 t.vect.list -h input=lidar_abs5
 t.vect.list -h fs=" | " method=cols      input=lidar_abs5
