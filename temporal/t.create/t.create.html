@@ -1,11 +1,97 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+The purpose of this module is the creation of space time datasets of 
+type raster (STRDS), 3D raster (STR3DS) and vector (STVDS).
+<p>
+Space time datasets represent spatio-temporal fields in the temporal GRASS framework.
+They are designed to collect any amount of time stamped maps with time intervals
+and time instances. 
+The temporal type of a space time dataset 
+can be absolute or relative and must be set on dataset creation besides the name and the description.
+<p>
+Time stamped maps can registered in and unregistered from space time datasets.
+The spatio-temporal extent as well as the metadata of a space time dataset is derived from its registered maps.
+Hence the metadata is dependent from the dataset type (raster, 3D raster, vector). 
+<p>
+
+
+<h2>EXAMPLE</h2>
+
+In this example we create 7 raster maps using r.mapcalc with random values 
+that will be registered in a single space time
+raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
+The names of the raster maps are stored in a text 
+file that is used for raster map registration.
+We use <em>t.create</em> for the space time raster dataset creation 
+and <em>t.register</em> to register the raster maps
+in the space time raster dataset.
+At the end we print extent and metadata informations about the 
+space time raster dataset to stdout using <em>t.info</em>.
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+
+for map in ${MAPS} ; do
+    r.mapcalc --o expr="${map} = rand(0, 10)" 
+    echo ${map} >> map_list.txt 
+done
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily \
+           file=map_list.txt start=20-08-2012 increment="1 days"
+
+t.info type=strds input=precipitation_daily
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily@PERMANENT
+ | Name: ...................... precipitation_daily
+ | Mapset: .................... PERMANENT
+ | Creator: ................... soeren
+ | Creation time: ............. 2012-10-16 00:20:28.920018
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-27 00:00:00
+ | End time:................... 2012-09-03 00:00:00
+ | Granularity:................ 1 days
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 70.0
+ | South:...................... 0.0
+ | East:.. .................... 100.0
+ | West:....................... 0.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Number of registered maps:.. 7
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
+ | Minimum value min:.......... 0.0
+ | Minimum value max:.......... 0.0
+ | Maximum value min:.......... 9.0
+ | Maximum value max:.......... 9.0
+ | Raster register table:...... precipitation_daily_PERMANENT_raster_register
+ +----------------------------------------------------------------------------+
+</pre></div>
+
+
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="t.create.html">t.create</a>,
+<a href="t.register.html">t.register</a>,
 <a href="t.info.html">t.info</a>
 </em>
 
