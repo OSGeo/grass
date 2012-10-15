@@ -1,84 +1,93 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.out.mpeg</em> is a tool for combining a series of GRASS raster maps
-into a single MPEG-1 (Motion Pictures Expert Group) format file.  MPEG-1 is
-a "lossy" video compression format, so the quality of each resulting frame
-of the animation will be much diminished from the original raster image. 
-The resulting output file may then be viewed using your favorite mpeg-format
-viewing program.
-MPEG-2 and MPEG-4 provide much better quality animations.
+<em>r.out.mpeg</em> is a tool for combining a series of GRASS raster
+maps into a single MPEG-1
+(<a href="http://en.wikipedia.org/wiki/Moving_Picture_Experts_Group">Motion
+Pictures Experts Group</a>) format file.  MPEG-1 is a
+&quot;lossy&quot; video compression format, so the quality of each
+resulting frame of the animation will be much diminished from the
+original raster image.  The resulting output file may then be viewed
+using your favorite mpeg-format viewing program.  MPEG-2 and MPEG-4
+provide much better quality animations.
 
-<p>The user may define up to four "views", or sub-windows, to animate
-simultaneously.  e.g., View 1 could be rainfall, View 2 flooded areas, View
-3 damage to bridges or levees, View 4 other economic damage, all animated as
-a time series. A black border 2 pixels wide is drawn around each view. There
-is an arbitrary limit of 400 files per view (400 animation frames). 
-Temporary files are created in the conversion process, so lack of adequate
-tmp space could also limit the number of frames you are able to convert.
+<p>The user may define up to four &quot;views&quot;, or sub-windows,
+to animate simultaneously.  e.g., View 1 could be rainfall, View 2
+flooded areas, View 3 damage to bridges or levees, View 4 other
+economic damage, all animated as a time series. A black border 2
+pixels wide is drawn around each view. There is an arbitrary limit of
+400 files per view (400 animation frames).  Temporary files are
+created in the conversion process, so lack of adequate tmp space could
+also limit the number of frames you are able to convert.
 <!-- flag to keep these to feed into another more modern encoder? -->
 
-<p>The environment variable GMPEG_SIZE is checked for a value to use as the
-dimension, in pixels, of the longest dimension of the animation image.  If
-GMPEG_SIZE is not set, the animation size defaults to the rows &amp; columns
-in the current GRASS region, scaling if necessary to a default minimum size
-of 200 and maximum of 500.  These size defaults are overridden when using
-the -c flag (see below).  The resolution of the current GRASS region is
-maintained, independent of image size.  Playback programs have to decode the
-compressed data "on-the-fly", therefore smaller dimensioned animations will
-provide higher frame rates and smoother animations.
+<p>The environment variable GMPEG_SIZE is checked for a value to use
+as the dimension, in pixels, of the longest dimension of the animation
+image.  If GMPEG_SIZE is not set, the animation size defaults to the
+rows &amp; columns in the current GRASS region, scaling if necessary
+to a default minimum size of 200 and maximum of 500.  These size
+defaults are overridden when using the <b>-c</b> flag (see below). The
+resolution of the current GRASS region is maintained, independent of
+image size.  Playback programs have to decode the compressed data
+"on-the-fly", therefore smaller dimensioned animations will provide
+higher frame rates and smoother animations.
 
-<p>UNIX - style wild cards may be used with the command line version in place
-of a raster map name, but wild cards must be quoted.
+<p>UNIX - style wild cards may be used with the command line version
+in place of a raster map name, but wild cards must be quoted.
 
-<h2>Example:</h2>
+<p>A quality value of <b>qual=1</b> will yield higher quality images,
+but with less compression (larger MPEG file size). Compression ratios
+will vary depending on the number of frames in the animation, but an
+MPEG produced using <b>qual=5</b> will usually be about 60% the size
+of the MPEG produced using <b>qual=1</b>.
+
+<h2>Example</h2>
+
 <div class="code"><pre>
 r.out.mpeg view1="rain[1-9]","rain1[0-2]" view2="temp*"
 </pre></div>
 
-<p>If the number of files differs for each view, the view with the fewest files
-will determine the number of frames in the animation.
+<p>If the number of files differs for each view, the view with the
+fewest files will determine the number of frames in the animation.
 
-<p>With <b>-c</b> flag the module converts "on the fly", uses less disk space
-by using <em>r.out.ppm</em> with stdout option to convert frames as needed
-instead of converting all frames to ppm before encoding.  Only use when
-encoding a single view.  Use of this option also overrides any size
-defaults, using the <b>CURRENTLY DEFINED GRASS REGION for the output size</b>.
-So be careful to set region to a reasonable size prior to encoding.
-
-<p>A quality value of <em>qual=1</em> will yield higher quality images, but
-with less compression (larger MPEG file size).  Compression ratios will vary
-depending on the number of frames in the animation, but an MPEG produced
-using <em>qual=5</em> will usually be about 60% the size of the MPEG
-produced using <em>qual=1</em>.
+<p>With <b>-c</b> flag the module converts "on the fly", uses less
+disk space by using <em><a href="r.out.ppm.html">r.out.ppm</a></em>
+with stdout option to convert frames as needed instead of converting
+all frames to ppm before encoding.  Only use when encoding a single
+view.  Use of this option also overrides any size defaults, using
+the <b>CURRENTLY DEFINED GRASS REGION for the output size</b>. So be
+careful to set region to a reasonable size prior to encoding.
 
 <h2>BUGS</h2>
-MPEG images must be 16-pixel aligned for successful compression, so if the
-rows &amp; columns of the calculated image size (scaled, with borders added)
-are not evenly divisible by 16, a few rows/columns will be cut off the
-bottom &amp; right sides of the image. The MPEG format is optimized to
-recognize image MOTION, so abrupt changes from one frame to another will
-cause a "noisy" encoding.
+
+MPEG images must be 16-pixel aligned for successful compression, so if
+the rows &amp; columns of the calculated image size (scaled, with
+borders added) are not evenly divisible by 16, a few rows/columns will
+be cut off the bottom &amp; right sides of the image. The MPEG format
+is optimized to recognize image MOTION, so abrupt changes from one
+frame to another will cause a "noisy" encoding.
 
 <h2>NOTES</h2>
-This program requires the program <em>mpeg_encode</em> (aka <em>ppmtompeg</em>):
-<p>MPEG-1 Video Software Encoder<br>
-(Version 1.3; March 14, 1994)
+
+This program requires the program <em>mpeg_encode</em>
+(aka <em>ppmtompeg</em>):
+<p>MPEG-1 Video Software Encoder<br> (Version 1.3; March 14, 1994)
 <p>Lawrence A. Rowe, Kevin Gong, Ketan Patel, and Dan Wallach Computer Science 
 Division-EECS, Univ. of Calif. at Berkeley
 <p>Available from Berkeley: 
-<a href="http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html">http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html</a>
+<a href="http://biowiki.org/BerkeleyMpegEncoder">http://biowiki.org/BerkeleyMpegEncoder</a>
 <br>or as part of the netpbm package (<em>ppmtompeg</em>):
 <a href="http://netpbm.sourceforge.net">http://netpbm.sourceforge.net</a>
-
+<!--
 <p>Playback may be done with many viewers; <em>mpeg_encode</em>'s official companion 
 is <em>mpeg_play</em> available from Berkeley at 
 <a href="ftp://mm-ftp.cs.berkeley.edu/pub/multimedia/mpeg/play/">ftp://mm-ftp.cs.berkeley.edu/pub/multimedia/mpeg/play/</a>
 or a precompiled Debian package from 
 <a href="http://packages.debian.org/ucbmpeg-play">http://packages.debian.org/ucbmpeg-play</a>
 (includes maintained source code).
-
-<p>Use of the <em>-c</em> flag requires the <em>r.out.ppm</em> GRASS module 
-with the <em>stdout</em> option.
+-->
+<p>Use of the <b>-c</b> flag requires
+the <em><a href="r.out.ppm.html">r.out.ppm</a></em> GRASS module with
+the <b>stdout</b> option.
 
 
 <h2>SEE ALSO</h2>
