@@ -585,9 +585,9 @@ class WriteWorkspaceFile(object):
             region = mapTree.GetMap().GetCurrentRegion()
             mapdisp = mapTree.GetMapDisplay()
             
-            displayPos = mapTree.mapdisplay.GetPosition()
-            displaySize = mapTree.mapdisplay.GetSize()
-            if mapTree.mapdisplay.toolbars['map'].combo.GetSelection() == 1:
+            displayPos = mapdisp.GetPosition()
+            displaySize = mapdisp.GetSize()
+            if mapdisp.toolbars['map'].combo.GetSelection() == 1:
                 viewmode = '3d'
             else:
                 viewmode = '2d'
@@ -601,11 +601,11 @@ class WriteWorkspaceFile(object):
                        'extent="%f,%f,%f,%f" '
                        'viewMode="%s" >\n' % (' ' * self.indent,
                                               dispName.encode('utf8'),
-                                              int(mapTree.mapdisplay.GetProperty('render')),
-                                              mapTree.mapdisplay.statusbarManager.GetMode(),
-                                              int(mapTree.mapdisplay.GetProperty('region')),
-                                              int(mapTree.mapdisplay.GetProperty('alignExtent')),
-                                              int(mapTree.mapdisplay.GetProperty('resolution')),
+                                              int(mapdisp.GetProperty('render')),
+                                              mapdisp.statusbarManager.GetMode(),
+                                              int(mapdisp.GetProperty('region')),
+                                              int(mapdisp.GetProperty('alignExtent')),
+                                              int(mapdisp.GetProperty('resolution')),
                                               displayPos[0],
                                               displayPos[1],
                                               displaySize[0],
@@ -617,7 +617,7 @@ class WriteWorkspaceFile(object):
                                               viewmode
                                               ))
             # projection statusbar info
-            if mapTree.mapdisplay.GetProperty('projection') and \
+            if mapdisp.GetProperty('projection') and \
                     UserSettings.Get(group='display', key='projection', subkey='proj4'):
                 self.indent += 4
                 file.write('%s<projection' % (' ' * self.indent))
@@ -636,8 +636,8 @@ class WriteWorkspaceFile(object):
             item = mapTree.GetFirstChild(mapTree.root)[0]
             self.__writeLayer(mapTree, item)
             
-            if mapTree.mapdisplay.MapWindow3D is not None:
-                nvizDisp = mapTree.mapdisplay.MapWindow3D
+            if mapdisp.MapWindow3D is not None:
+                nvizDisp = mapdisp.MapWindow3D
                 self.__writeNvizState(view = nvizDisp.view, iview =  nvizDisp.iview, 
                                       light = nvizDisp.light, constants = nvizDisp.constants)
             
