@@ -54,20 +54,22 @@ information.
 For nodes created using the <em>connect</em> and <em>arcs</em> operations (methods 1
 and 3 above), the nodes can be reconnected to the attribute table of the 
 input vector points file using the attribute table manager ("manage layers" 
-tab) or by running (<em><a href="v.db.connect.html">v.db.connect</a></em>).
+tab) or by running <em><a href="v.db.connect.html">v.db.connect</a></em>.
 
 <p>
 For nodes created using the <em>nodes</em> operation 
 (method 2 above), it is possible to create an attribute table for the 
 new nodes in layer 2 using the attribute table manager and connect it to
-layer 2 ("manage layers" tab) or to create a table with v.db.addtable, 
-connect it to layer 2 with (<em><a href="v.db.connect.html">v.db.connect</a></em>),
-and update the new table with cat values with (<em><a href="v.to.db.html">v.to.db</a></em>). 
+layer 2 ("manage layers" tab) or to create a table with
+<em><a href="v.db.addtable.html">v.db.addtable</a>, 
+connect it to layer 2 with <em><a href="v.db.connect.html">v.db.connect</a></em>,
+and update the new table with cat values with <em><a href="v.to.db.html">v.to.db</a></em>. 
 
 <p>
 Once a vector network has been created, it can be analyzed in a number
 of powerful ways using the suite of <em>v.net</em>.* modules. The shortest route 
-between two nodes, following arcs, can be computed (<em><a href="v.net.path.html">v.net.path</a></em>), as can the 
+between two nodes, following arcs, can be computed
+(<em><a href="v.net.path.html">v.net.path</a></em>), as can the 
 shortest route that will pass through a set of nodes and return to the 
 starting node (<em><a href="v.net.salesman.html">v.net.salesman</a></em>).
 Least cost routes through the network can be calculated on the basis of
