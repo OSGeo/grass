@@ -102,7 +102,7 @@ def main():
 
             select = grass.read_command("v.db.select", map=vector_name, 
                                         layer=layer, columns=columns, 
-                                        fs="%s" % (fs), where=where)
+                                        separator="%s" % (fs), where=where)
 
             if not select:
                 grass.fatal(_("Unable to run v.db.select for vector map <%s> "

@@ -170,6 +170,8 @@ def import_stds(
                           should be imported
     """
 
+    global raise_on_error
+    old_state = core.raise_on_error
     core.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
@@ -393,3 +395,5 @@ def import_stds(
             ret = core.run_command("g.mapset", mapset=old_env["MAPSET"],
                                    location=old_env["LOCATION_NAME"],
                                    gisdbase=old_env["GISDBASE"])
+        
+        core.set_raise_on_error(old_state)
