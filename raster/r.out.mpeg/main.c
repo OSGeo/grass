@@ -114,6 +114,7 @@ int main(int argc, char **argv)
 	viewopts[i]->required = (i ? NO : YES);
 	G_asprintf(&buf, _("Name of input raster map(s) for view no.%d"), i + 1);
 	viewopts[i]->description = G_store(buf);
+        viewopts[i]->guisection = _("Views");
 	G_free(buf);
     }
 
@@ -129,12 +130,13 @@ int main(int argc, char **argv)
     qual->options = "1-5";
     qual->description =
 	_("Quality factor (1 = highest quality, lowest compression)");
-
+    qual->guisection = _("Settings");
+    
     conv = G_define_flag();
     conv->key = 'c';
     conv->label = _("Convert on the fly, uses less disk space");
     conv->description =	_("Requires r.out.ppm with stdout option");
-
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
