@@ -14,17 +14,19 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+import os
 import sys
-import  wx
+import wx
 import time
 
 import grass.script as grass
 
 from gui_core.mapdisp   import DoubleMapFrame
+from gui_core.dialogs   import GetImageHandlers
 from core.render        import Map
 from mapdisp            import statusbar as sb
 from core.debug         import Debug
-from core.gcmd          import RunCommand, GError
+from core.gcmd          import RunCommand, GError, GMessage
 from mapdisp.statusbar  import EVT_AUTO_RENDER
 
 from swipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
@@ -357,6 +359,74 @@ class SwipeMapFrame(DoubleMapFrame):
         splitter.ReplaceWindow(w2, w1)
         # self.OnSize(None)
         splitter.OnSashChanged(None)
+
+    def _saveToFile(self, fileName, fileType):
+        """!Creates composite image by rendering both images and
+        pasting them into the new one.
+
+        @todo specify size of the new image (problem is inaccurate scaling)
+        @todo make dividing line width and color optional
+        """
+        # get size paramteres
+        x, y = self.secondMapWindow.GetImageCoords()
+        width, height = self.splitter.GetClientSize()
+        lineWidth = 1
+        # render to temporary files
+        filename1 = grass.tempfile(False) + '1'
+        filename2 = grass.tempfile(False) + '2'
+        self.firstMapWindow.SaveToFile(filename1, fileType, width, height)
+        self.secondMapWindow.SaveToFile(filename2, fileType, width, height)
+        # create empty white image  - needed for line
+        im = wx.EmptyImage(width, height)
+        im.Replace(0, 0, 0, 255, 255, 255)
+
+        # paste images
+        if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+            im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
+            im.Paste(im1, 0, 0)
+            im.Paste(wx.Image(filename2), -x, -y + lineWidth)
+        else:
+            im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
+            im.Paste(im1, 0, 0)
+            im.Paste(wx.Image(filename2), -x + lineWidth, -y)
+        im.SaveFile(fileName, fileType)
+
+        # remove temporary files
+        grass.try_remove(filename1)
+        grass.try_remove(filename2)
+
+    def SaveToFile(self, event):
+        """!Save map to image
+        """
+        img = self.firstMapWindow.img or self.secondMapWindow.img
+        if not img:
+            GMessage(parent = self,
+                     message = _("Nothing to render (empty map). Operation canceled."))
+            return
+        filetype, ltype = GetImageHandlers(img)
+        
+        # get filename
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Choose a file name to save the image "
+                                        "(no need to add extension)"),
+                            wildcard = filetype,
+                            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if not path:
+                dlg.Destroy()
+                return
+            
+            base, ext = os.path.splitext(path)
+            fileType = ltype[dlg.GetFilterIndex()]['type']
+            extType  = ltype[dlg.GetFilterIndex()]['ext']
+            if ext != extType:
+                path = base + '.' + extType
+            
+            self._saveToFile(path, fileType)
+            
+        dlg.Destroy()
 
     def OnSwitchOrientation(self, event):
         """!Switch orientation of the sash."""
