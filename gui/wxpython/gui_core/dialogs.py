@@ -1353,8 +1353,10 @@ class MapLayersDialogBase(wx.Dialog):
                       pos = (2,1), span = (1, 2))
 
         self.filter.SetFocus()
-        self.filter.SetToolTipString(_("Put here regular expression."
-                                       "'.*' means anything, '^' beginning and '$' end."))
+        self.filter.SetToolTipString(_("Put here a regular expression."
+                                       " Characters '.*' stand for anything,"
+                                       " character '^' stands for the beginning"
+                                       " and '$' for the end."))
 
         # layer list 
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("List of maps:")),
