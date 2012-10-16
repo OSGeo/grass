@@ -54,6 +54,8 @@
 #%end
 
 #%option G_OPT_T_TYPE
+#% multiple: yes
+#% answer: absolute,relative
 #%end
 
 #%option
@@ -93,58 +95,64 @@ def main():
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
+    
+    first = True
+    
+    for ttype in temporaltype.split(","):
+    
+        # Create the sql selection statement
+        # Table name
+        if ttype == "absolute":
+            table = sp.get_type() + "_view_abs_time"
+        else:
+            table = sp.get_type() + "_view_rel_time"
+    
+        if columns.find("all") == -1:
+            sql = "SELECT " + str(columns) + " FROM " + table
+        else:
+            sql = "SELECT * FROM " + table
+    
+        if where:
+            sql += " WHERE " + where
+    
+        if order:
+            sql += " ORDER BY " + order
+    
+        dbif.cursor.execute(sql)
+        rows = dbif.cursor.fetchall()
+    
+        # Print the query result to stout
+        if rows:
+            if separator is None or separator == "":
+                separator = "\t"
+    
+            # Print the column names if requested
+            if colhead == True and first == True:
+                output = ""
+                count = 0
+                for key in rows[0].keys():
+                    if count > 0:
+                        output += separator + str(key)
+                    else:
+                        output += str(key)
+                    count += 1
+                print output
+                first = False
+    
+            for row in rows:
+                output = ""
+                count = 0
+                for col in row:
+                    if count > 0:
+                        output += separator + str(col)
+                    else:
+                        output += str(col)
+                    count += 1
+    
+                print output
 
-    # Create the sql selection statement
-    # Table name
-    if temporaltype == "absolute":
-        table = sp.get_type() + "_view_abs_time"
-    else:
-        table = sp.get_type() + "_view_rel_time"
-
-    if columns.find("all") == -1:
-        sql = "SELECT " + str(columns) + " FROM " + table
-    else:
-        sql = "SELECT * FROM " + table
-
-    if where:
-        sql += " WHERE " + where
-
-    if order:
-        sql += " ORDER BY " + order
-
-    dbif.cursor.execute(sql)
-    rows = dbif.cursor.fetchall()
     dbif.close()
-
-    # Print the query result to stout
-    if rows:
-        if separator is None or separator == "":
-            separator = "\t"
-
-        # Print the column names if requested
-        if colhead == True:
-            output = ""
-            count = 0
-            for key in rows[0].keys():
-                if count > 0:
-                    output += separator + str(key)
-                else:
-                    output += str(key)
-                count += 1
-            print output
-
-        for row in rows:
-            output = ""
-            count = 0
-            for col in row:
-                if count > 0:
-                    output += separator + str(col)
-                else:
-                    output += str(col)
-                count += 1
-
-            print output
-
+        
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()

@@ -23,7 +23,7 @@
 #%option
 #% key: input
 #% type: string
-#% description: Name of an existing space time or map dataset
+#% description: Name of an existing space time dataset or map
 #% required: no
 #% multiple: no
 #%end
@@ -64,7 +64,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    if system:
+    if system and not shellstyle:
         #      0123456789012345678901234567890
         print " +------------------- Temporal DBMI backend information ----------------------+"
         print " | DBMI Python interface:...... " + str(tgis.dbmi.__name__)
@@ -73,6 +73,11 @@ def main():
         print " | SQL template path:.......... " + str(
             tgis.get_sql_template_path())
         print " +----------------------------------------------------------------------------+"
+        return
+    elif system:
+        print "dbmi_python_interface=" + str(tgis.dbmi.__name__)
+        print "dbmi_init_string=" + str(tgis.get_temporal_dbmi_init_string())
+        print "sql_template_path=" + str(tgis.get_sql_template_path())
         return
 
     if not system and not name:
@@ -87,7 +92,7 @@ def main():
     ds = tgis.dataset_factory(type, id)
 
     if ds.is_in_db() == False:
-        grass.fatal(_("Dataset <%s> not found") % (id))
+        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
     ds.select()
 
