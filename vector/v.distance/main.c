@@ -968,19 +968,21 @@ int main(int argc, char *argv[])
 		    int tmp_tcat, poly;
 
 		    tarea = aList->id[i];
-		    G_debug(4, "%d: area %d", i, tarea);
+		    G_debug(4, "%d: 'to' area id %d", i, tarea);
+
 		    Vect_get_area_points(&To, tarea, TPoints);
 		    
 		    ttype = GV_BOUNDARY;
 
-		    /* Find the distance to this area */
+		    /* Find the distance of the outer ring of 'to' area
+		     * to 'from' area */
 		    poly = line2area(&From, TPoints, ttype, area, &fbox,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 			      &tmp_dist, with_z, 0);
 
 		    if (poly == 3) {
-			/* 'to' area is outside 'from' area,
+			/* 'to' outer ring is outside 'from' area,
 			 * check if 'from' area is inside 'to' area */
 			poly = 0;
 			/* boxes must overlap */
@@ -996,6 +998,8 @@ int main(int argc, char *argv[])
 			if (poly) {
 			    /* 'from' area is (partially) inside 'to' area,
 			     * get distance to 'to' area */
+			    if (FPoints->n_points == 0)
+				Vect_get_area_points(&From, area, FPoints);
 			    poly = line2area(&To, FPoints, ttype, tarea, &aList->box[i],
 				      &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 				      &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
@@ -1004,7 +1008,7 @@ int main(int argc, char *argv[])
 			    /* inside isle ? */
 			    poly = poly == 2;
 			}
-			if (poly) {
+			if (poly == 1) {
 			    double tmp2_tx, tmp2_ty, tmp2_tz, tmp2_talong, tmp2_tangle;
 			    double tmp2_fx, tmp2_fy, tmp2_fz, tmp2_falong, tmp2_fangle;
 			    double tmp2_dist;
@@ -1040,7 +1044,7 @@ int main(int argc, char *argv[])
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
-		    Vect_get_area_cats(&To, area, TCats);
+		    Vect_get_area_cats(&To, tarea, TCats);
 		    tmp_tcat = -1;
 		    /* TODO: all cats of given field ? */
 		    for (j = 0; j < TCats->n_cats; j++) {

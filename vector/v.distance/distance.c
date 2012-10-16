@@ -197,6 +197,7 @@ int line2area(const struct Map_info *To,
     int i, j;
     double tmp_dist;
     int isle, nisles;
+    int all_inside_outer, all_outside_outer, all_outside_inner;
     static struct line_pnts *aPoints = NULL;
     static struct line_pnts **iPoints = NULL;
     static struct bound_box *ibox = NULL;
@@ -237,6 +238,8 @@ int line2area(const struct Map_info *To,
     }
 
     /* inside area ? */
+    all_inside_outer = all_outside_outer = 1;
+    all_outside_inner = 1;
 
     for (i = 0; i < Points->n_points; i++) {
 	if (Vect_point_in_box(Points->x[i], Points->y[i],
@@ -245,6 +248,15 @@ int line2area(const struct Map_info *To,
 	    int poly;
 	    
 	    poly = Vect_point_in_poly(Points->x[i], Points->y[i], aPoints);
+	    
+	    if (poly > 0) {
+		/* inside outer ring */
+		all_outside_outer = 0;
+	    }
+	    else {
+		/* outside outer ring */
+		all_inside_outer = 0;
+	    }
 	    
 	    /* exactly on boundary */
 	    if (poly == 2) {
@@ -255,9 +267,9 @@ int line2area(const struct Map_info *To,
 		
 		return 1;
 	    }
-	    /* inside */
+	    /* inside outer ring */
 	    else if (poly == 1) {
-		int inside = 0;
+		int inside_isle = 0;
 
 		for (j = 0; j < nisles; j++) {
 		    if (Vect_point_in_box(Points->x[i], Points->y[i], Points->z[i], 
@@ -270,6 +282,8 @@ int line2area(const struct Map_info *To,
 			    double tmp_fx, tmp_fy, tmp_fz, tmp_fangle, tmp_falong;
 			    double tmp_tx, tmp_ty, tmp_tz, tmp_tangle, tmp_talong;
 
+			    /* pass all points of the line, 
+			     * this will catch an intersection */
 			    line2line(Points, type, iPoints[j], GV_BOUNDARY,
 				      &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 				      &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
@@ -291,16 +305,17 @@ int line2area(const struct Map_info *To,
 				*tangle = tmp_tangle;
 			    }
 
-			    if (poly == 1)
-				inside = 1;
+			    if (poly == 1) /* excludes isle boundary */
+				inside_isle = 1;
 			    
 			}
 		    }
 		    if (*dist == 0)
 			break;
 		}
-		/* inside area (inside outer ring, outside inner rings) */
-		if (!inside) {
+		/* inside area (inside outer ring, outside inner rings
+		 * or exactly on one of the inner rings) */
+		if (!inside_isle) {
 		    *fx = Points->x[i];
 		    *fy = Points->y[i];
 		    *fz = Points->z[i];
@@ -313,17 +328,48 @@ int line2area(const struct Map_info *To,
 
 		    return 1;
 		}
-		/* inside one of the islands */
-		else
-		    return 2;
+		else {
+		    /* inside one of the islands */
+		    all_outside_inner = 0;
+		    if (*dist == 0) {
+			/* the line intersected with the isle boundary
+			 * -> line is partially inside the area */
+			return 1;
+		    }
+		    /* else continue with next point */
+		}
 	    } /* end inside outer ring */
 	}
-	/* not possible */
+	else {
+	    /* point not in box of outer ring */
+	    all_inside_outer = 0;
+	}
+	/* exactly on boundary */
 	if (*dist == 0)
 	    return 1;
     }
+    
+    /* if all points are inside the outer ring and inside inner rings,
+     * there could still be an intersection with one of the inner rings */
+     if (all_inside_outer) {
+	 if (all_outside_inner) {
+	     /* at least one point is really inside the area!
+	      * that should have been detected above */
+	     G_fatal_error(_("At least one point is really inside the area!"));
+	 }
+	 /* else all points are inside one of the area isles 
+	  * and we already have the minimum distance */
+	  return 2;
+     }
 
-    /* line is outside area */
+    /* if at least one point was found to be inside the outer ring, 
+     * but no point really inside the area,
+     * and at least one point outside,
+     * then there must be an intersection of the line with both 
+     * the outer ring and one of the isle boundaries */
+
+    /* if all line points are outside of the area,
+     * intersection is still possible */
 
     line2line(Points, type, aPoints, GV_BOUNDARY,
 	      fx, fy, fz, falong, fangle,
