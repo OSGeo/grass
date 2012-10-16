@@ -72,6 +72,9 @@ class SwipeMapToolbar(BaseToolbar):
                                       self.parent.OnZoomBack),
                                      ("zoomToMap", icons["zoomExtent"],
                                       self.parent.OnZoomToMap),
+                                     (None, ),
+                                     ('saveFile', icons['saveFile'],
+                                      self.parent.SaveToFile),
                                     ))
                                     
     def SetActiveMap(self, index):
