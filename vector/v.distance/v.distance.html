@@ -8,6 +8,38 @@ the attribute table attached to the first vector map, or printed to
 nearest points on features are written. <em>dmin</em> and/or 
 <em>dmax</em> can be used to limit the search radius.
 
+<p>
+For lines to lines, say line A to line B, <em>v.distance</em> calculates 
+the shortest distance of each vertex in A with each segment (not vertex) 
+in B. The module then calculates the shortest distance of each vertex in 
+B to each segment in A. The overall shortest distance of A points to B 
+segments and B points to A segments is used. Additionally, 
+<em>v.distance</em> checks for intersections. In case of intersections,
+the first intersection found is used and the distance set to zero.
+
+<p>
+For lines to areas, the distance is set to zero if a line is (partially) 
+inside an area. The first point of the line that is inside the area is 
+used as common point. The distance is also set to zero if the line 
+intersects with the outer ring or any of the inner rings (isles), in 
+which case the fist intersection is used as common point.
+
+<p>
+For areas to areas, the module checks first for overlap or if one area
+is (partially) inside the other area. This is computationally quite
+intensive. If the outer rings of the two areas do not overlap, the
+distance is calculated as above for lines to lines, treating the outer
+rings as two lines. Again, the first point encountered falling into an
+area is used as common point, or the first intersection point.
+
+<p>
+For anything else than points to lines, there can be several common
+locations with zero distance, and the common location would then be the 
+result of an overlay consisting of several points, lines, or areas.
+<em>v.distance</em> selects in these cases a single point, and does not 
+create an overlay like <em>v.overlay</em>.
+
+
 <h2>NOTES</h2>
 
 If a nearest feature does not have a category, the attribute column is 
