@@ -4,13 +4,13 @@
 #
 # Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2006.
 # Vincent Bain <bain toraval.fr>, 2007, 2012.
-# Sylvain Maillard <sylvain.maillard gmail.com>, 2011.
+# Sylvain Maillard <sylvain.maillard gmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2012-09-11 20:24+0200\n"
+"PO-Revision-Date: 2012-10-11 20:52+0200\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -19,7 +19,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
 
 #: ../gui/wxpython/nviz/tools.py:84 ../gui/wxpython/nviz/preferences.py:55
 #: ../gui/wxpython/nviz/preferences.py:60
@@ -4697,7 +4696,7 @@ msgstr "Importation de lignes et de polygones ASCII"
 
 #: ../gui/wxpython/menustrings.py:37
 msgid "Creates raster maps from ASCII polygon/line/point data files."
-msgstr "Créer des cartes raster à partir de fichiers de données ASCII point/ligne/polygone."
+msgstr "Créer des cartes raster depuis des données ASCII point/ligne/polygone."
 
 #: ../gui/wxpython/menustrings.py:38
 #, fuzzy
@@ -4723,7 +4722,7 @@ msgstr "Importer un GRIDATB.FOR"
 
 #: ../gui/wxpython/menustrings.py:43
 msgid "Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map"
-msgstr "Importer un fichier carte GRIDATB.FOR (TOPMODEL) dans un carte 'rater' GRASS"
+msgstr "Importer un fichier carte GRIDATB.FOR (TOPMODEL) vers une carte raster GRASS"
 
 #: ../gui/wxpython/menustrings.py:44
 msgid "Matlab 2D array import"
@@ -5221,7 +5220,7 @@ msgstr "Liste"
 
 #: ../gui/wxpython/menustrings.py:166
 msgid "Lists available GRASS data base files of the user-specified data type."
-msgstr ""
+msgstr "Lister les fichiers de base de données GRASS disponibles du type spécifié par l'utilisateur."
 
 #: ../gui/wxpython/menustrings.py:167
 msgid "List filtered"
@@ -5229,15 +5228,15 @@ msgstr "Liste filtrée"
 
 #: ../gui/wxpython/menustrings.py:168
 msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
-msgstr ""
+msgstr "Lister les fichiers de base de données GRASS disponibles du type spécifié par l'utilisateur en utilisant un modèle de recherche."
 
 #: ../gui/wxpython/menustrings.py:170
 msgid "Renames data base element files in the user's current mapset."
-msgstr ""
+msgstr "Renommer les fichiers éléments de la base de données dans le jeu de données courant de l'utilisateur"
 
 #: ../gui/wxpython/menustrings.py:172
 msgid "Removes data base element files from the user's current mapset."
-msgstr ""
+msgstr "Supprimer les fichiers éléments de base de données du jeu de données courant de l'utilisateur"
 
 #: ../gui/wxpython/menustrings.py:173
 msgid "Delete filtered"
@@ -5275,7 +5274,7 @@ msgstr "Raster 2.5D vers volume"
 
 #: ../gui/wxpython/menustrings.py:181 ../gui/wxpython/menustrings.py:314
 msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-msgstr ""
+msgstr "Crée un volume 3D à partir de cartes raster 2D d'altitude et de valeurs."
 
 #: ../gui/wxpython/menustrings.py:182 ../gui/wxpython/menustrings.py:593
 msgid "Vector to raster"
@@ -5296,15 +5295,15 @@ msgstr "Importer un fichier 'raster' binaire dans une couche 'raster' GRASS."
 
 #: ../gui/wxpython/menustrings.py:186 ../gui/wxpython/menustrings.py:597
 msgid "2D vector to 3D vector"
-msgstr ""
+msgstr "vecteur 2D vers vecteur 3D"
 
 #: ../gui/wxpython/menustrings.py:187 ../gui/wxpython/menustrings.py:598
 msgid "Performs transformation of 2D vector features to 3D."
-msgstr ""
+msgstr "Effectue la transformation de données vectorielles de 2D vers 3D."
 
 #: ../gui/wxpython/menustrings.py:188 ../gui/wxpython/menustrings.py:599
 msgid "Sites to vector"
-msgstr "GRASS Sites vers vectorielle"
+msgstr "GRASS Sites vers vecteur"
 
 #: ../gui/wxpython/menustrings.py:189 ../gui/wxpython/menustrings.py:600
 msgid "Converts a GRASS site_lists file into a vector map."
@@ -5344,19 +5343,19 @@ msgstr "Exécuter un modèle préparé avec le modeleur graphique"
 
 #: ../gui/wxpython/menustrings.py:198
 msgid "NVIZ (requires Tcl/Tk)"
-msgstr ""
+msgstr "NVIZ (nécessite Tcl/Tk)"
 
 #: ../gui/wxpython/menustrings.py:199
 msgid "nviz - Visualization and animation tool for GRASS data."
-msgstr ""
+msgstr "nviz - Outil de visualisation et d'animation de données GRASS."
 
 #: ../gui/wxpython/menustrings.py:200
 msgid "3D image rendering"
-msgstr ""
+msgstr "Rendu d'image 3D"
 
 #: ../gui/wxpython/menustrings.py:201
 msgid "Creates a 3D rendering of GIS data."
-msgstr ""
+msgstr "Crée un rendu 3D de données SIG."
 
 #: ../gui/wxpython/menustrings.py:202
 msgid "Bearing/distance to coordinates"
@@ -5364,7 +5363,7 @@ msgstr "Gisement/distance vers coordonnées"
 
 #: ../gui/wxpython/menustrings.py:203
 msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa."
-msgstr ""
+msgstr "Un utilitaire simple pour convertir des mesures de gisements et distances vers des coordonnées et vice-versa."
 
 #: ../gui/wxpython/menustrings.py:205
 msgid "Launch Cartographic Composer"
@@ -5479,19 +5478,16 @@ msgid "Change settings"
 msgstr "Modifier les paramètres"
 
 #: ../gui/wxpython/menustrings.py:235
-#, fuzzy
 msgid "Create new location"
-msgstr "Créer un nouveau secteur ?"
+msgstr "Créer un nouveau secteur"
 
 #: ../gui/wxpython/menustrings.py:236
-#, fuzzy
 msgid "Launches location wizard to create new GRASS location."
-msgstr "Voulez-vous créer le secteur GRASS <%s> ?"
+msgstr "Lance l'assistant pour créer un nouveau secteur GRASS."
 
 #: ../gui/wxpython/menustrings.py:238
-#, fuzzy
 msgid "Creates new mapset in the current location, changes current mapset."
-msgstr "Changer le secteur de travail courant et le jeux de cartes."
+msgstr "Crée un nouveau jeux de cartes dans le secteur de travail courant, et change le jeux de cartes courant."
 
 #: ../gui/wxpython/menustrings.py:239
 msgid "Version"
@@ -5548,7 +5544,7 @@ msgstr "Reconstruit et installe en local des extensions GRASS Addons."
 #: ../gui/wxpython/menustrings.py:252
 #: ../gui/wxpython/modules/extensions.py:463
 msgid "Remove extension"
-msgstr "Supprimer une extension"
+msgstr "Supprimer une extenion"
 
 #: ../gui/wxpython/menustrings.py:253
 msgid "Removes installed GRASS AddOns extension."
@@ -5694,7 +5690,7 @@ msgstr "Mosaïquer"
 
 #: ../gui/wxpython/menustrings.py:287
 msgid "Produces tilings of the source projection for use in the destination region and projection."
-msgstr ""
+msgstr "Produit une mosaïque de la projection source pour utilisation dans la région et projection de destination."
 
 #: ../gui/wxpython/menustrings.py:288 ../gui/wxpython/menustrings.py:575
 msgid "Manage colors"
@@ -5794,7 +5790,7 @@ msgstr "Cercles concentriques"
 
 #: ../gui/wxpython/menustrings.py:318
 msgid "Creates a raster map containing concentric rings around a given point."
-msgstr ""
+msgstr "Crée une carte raster contenant des cercles concentriques autour d'un point donné."
 
 #: ../gui/wxpython/menustrings.py:319
 msgid "Closest points"
@@ -5827,7 +5823,7 @@ msgstr "Fenêtre mouvante"
 
 #: ../gui/wxpython/menustrings.py:327
 msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
-msgstr ""
+msgstr "Rend la catégorie de chaque cellule une fontion des valeurs de catégorie des cellules voisines, et enregistre la nouvelle valeur dans une carte raster de sortie."
 
 #: ../gui/wxpython/menustrings.py:328
 msgid "Neighborhood points"
@@ -5848,7 +5844,7 @@ msgstr "Produit en croix"
 
 #: ../gui/wxpython/menustrings.py:332
 msgid "Creates a cross product of the category values from multiple raster map layers."
-msgstr ""
+msgstr "Crée un produit croisé des valeurs de catégories de multiples cartes raster."
 
 #: ../gui/wxpython/menustrings.py:333
 msgid "Raster series"
@@ -5856,7 +5852,7 @@ msgstr "Série raster"
 
 #: ../gui/wxpython/menustrings.py:334
 msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
-msgstr ""
+msgstr "Rend la valeur de sortie des cellules une foncton des valeurs des cellules correspondantes dans les cartes raster d'entrée."
 
 #: ../gui/wxpython/menustrings.py:335
 msgid "Patch raster maps"
@@ -5864,7 +5860,7 @@ msgstr "Combiner des cartes raster"
 
 #: ../gui/wxpython/menustrings.py:336
 msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
-msgstr ""
+msgstr "Crée une carte raster composite en utilisant les valeurs connues d'une (ou plusieurs) carte pour remplir les zones de \"no data\" d'une autre carte."
 
 #: ../gui/wxpython/menustrings.py:337
 msgid "Statistical overlay"
@@ -5889,19 +5885,20 @@ msgstr "Rayonnement solaire et ombrage"
 
 #: ../gui/wxpython/menustrings.py:342
 msgid "Solar irradiance and irradiation"
-msgstr ""
+msgstr "Rayonnement solaire et irradiation"
 
 #: ../gui/wxpython/menustrings.py:343
 msgid "Solar irradiance and irradiation model."
-msgstr ""
+msgstr "Modèle de rayonnement solaire et d'irradiation."
 
 #: ../gui/wxpython/menustrings.py:344
 msgid "Shadows map"
 msgstr "Carte des ombres"
 
 #: ../gui/wxpython/menustrings.py:345
+#, fuzzy
 msgid "Calculates cast shadow areas from sun position and elevation raster map."
-msgstr ""
+msgstr "Calcule les zones d'ombre depuis la position du soleil et une carte d'altitude."
 
 #: ../gui/wxpython/menustrings.py:346
 msgid "Terrain analysis"
@@ -5913,7 +5910,7 @@ msgstr "Générer des lignes de coutour"
 
 #: ../gui/wxpython/menustrings.py:348
 msgid "Produces a vector map of specified contours from a raster map."
-msgstr ""
+msgstr "Créer une couche vecteur GRASS avec les contours d'une couche raster GRASS."
 
 #: ../gui/wxpython/menustrings.py:349
 msgid "Cost surface"
@@ -5969,7 +5966,7 @@ msgstr "Objets de texture"
 
 #: ../gui/wxpython/menustrings.py:362
 msgid "Generate images with textural features from a raster map."
-msgstr ""
+msgstr "Génère des images de textures à partir d'une couche raster."
 
 #: ../gui/wxpython/menustrings.py:363
 msgid "Visibility"
@@ -5998,12 +5995,14 @@ msgid "Generates a raster map of distance to features in input raster map."
 msgstr "Convertir des tranches de cartes raster 2D en une carte volumique raster 3D. "
 
 #: ../gui/wxpython/menustrings.py:369
+#, fuzzy
 msgid "Horizon angle"
-msgstr ""
+msgstr "Angle d'hoziron"
 
 #: ../gui/wxpython/menustrings.py:370
+#, fuzzy
 msgid "Horizon angle computation from a digital elevation model."
-msgstr ""
+msgstr "Calcule l'angle d'horizon depuis un modèle numérique d'altitude."
 
 #: ../gui/wxpython/menustrings.py:371
 msgid "Transform features"
@@ -6015,7 +6014,7 @@ msgstr "Agglomérer"
 
 #: ../gui/wxpython/menustrings.py:373
 msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
-msgstr ""
+msgstr "Reclasser les données dans une couche raster en regroupant les cellules qui forment des zones physiques discrètes."
 
 #: ../gui/wxpython/menustrings.py:374
 msgid "Grow"
@@ -6023,7 +6022,7 @@ msgstr "Dilater"
 
 #: ../gui/wxpython/menustrings.py:375
 msgid "Generates a raster map layer with contiguous areas grown by one cell."
-msgstr ""
+msgstr "Produit une couche raster où les aires contiguës ont été agrandies d'une cellule."
 
 #: ../gui/wxpython/menustrings.py:376
 msgid "Thin"
@@ -6060,7 +6059,7 @@ msgstr "Carte sans dépressions ni lignes de flux"
 
 #: ../gui/wxpython/menustrings.py:384
 msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
-msgstr ""
+msgstr "Filtrer et générer une couche d'altitude sans dépressions et une couche de direction d'écoulement depuis une couche d'altitude donnée."
 
 #: ../gui/wxpython/menustrings.py:385
 msgid "Flow accumulation"
@@ -6068,7 +6067,7 @@ msgstr "Flux accumulé"
 
 #: ../gui/wxpython/menustrings.py:386
 msgid "Flow computation for massive grids (float version)."
-msgstr ""
+msgstr "Calcul des flux pour une grille massive (version nombre flottants)."
 
 #: ../gui/wxpython/menustrings.py:387
 msgid "Flow lines"
@@ -6105,7 +6104,7 @@ msgstr "Sous-bassins versants"
 
 #: ../gui/wxpython/menustrings.py:395
 msgid "SIMWE Overland flow modeling"
-msgstr ""
+msgstr "Modélisation SIM&WE de l'écoulement de surface"
 
 #: ../gui/wxpython/menustrings.py:396
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
@@ -6113,7 +6112,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:397
 msgid "SIMWE Sediment flux modeling"
-msgstr ""
+msgstr "Modélisation SIMWE des flux de sédiments"
 
 #: ../gui/wxpython/menustrings.py:398
 msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
@@ -6133,7 +6132,7 @@ msgstr "Simulation TOPMODEL"
 
 #: ../gui/wxpython/menustrings.py:402
 msgid "Simulates TOPMODEL which is a physically based hydrologic model."
-msgstr ""
+msgstr "Simule TOPMODEL, qui est un modèle hydrologique à base physique."
 
 #: ../gui/wxpython/menustrings.py:403
 msgid "USLE K-factor"
@@ -6183,7 +6182,7 @@ msgstr "Analyse de paysage"
 
 #: ../gui/wxpython/menustrings.py:414
 msgid "Contains a set of measures for attributes, diversity, texture, juxtaposition, and edge."
-msgstr ""
+msgstr "Contient un jeu de mesures des attributs, diversité, texture, juuxtaposition et angle."
 
 #: ../gui/wxpython/menustrings.py:415
 msgid "Analyze patches"
@@ -6203,7 +6202,7 @@ msgstr "Mise en place de l'échantillonnage et de l'analyse"
 
 #: ../gui/wxpython/menustrings.py:419
 msgid "Configuration editor for r.li.'index'"
-msgstr ""
+msgstr "Editeur de configuration de \"l'index\" r.li "
 
 #: ../gui/wxpython/menustrings.py:420
 msgid "Edge density"
@@ -6283,7 +6282,7 @@ msgstr "Diversité de Shannon"
 
 #: ../gui/wxpython/menustrings.py:439
 msgid "Calculates Shannon's diversity index on a raster map"
-msgstr ""
+msgstr "Calcule l'indice de diversité de Shannon sur une carte raster"
 
 #: ../gui/wxpython/menustrings.py:440
 msgid "Simpson's diversity"
@@ -6291,7 +6290,7 @@ msgstr "Diversité de Simpson"
 
 #: ../gui/wxpython/menustrings.py:441
 msgid "Calculates Simpson's diversity index on a raster map"
-msgstr ""
+msgstr "Calcule l'indice de diversité de Simpson sur une carte raster"
 
 #: ../gui/wxpython/menustrings.py:442
 msgid "Richness"
@@ -6303,7 +6302,7 @@ msgstr "Indice de forme"
 
 #: ../gui/wxpython/menustrings.py:445
 msgid "Calculates shape index on a raster map"
-msgstr ""
+msgstr "Calcule l'indice de forme sur une carte raster"
 
 #: ../gui/wxpython/menustrings.py:446
 msgid "Wildfire modeling"
@@ -11335,7 +11334,7 @@ msgstr "Afficher la légende"
 #: ../gui/wxpython/wxplot/dialogs.py:1225
 #, fuzzy, python-format
 msgid "Plot settings saved to file '%s'."
-msgstr "Paramètres de géo-rectification sauvés dans le fichier '%s'."
+msgstr "Réglages de profil sauvegardés dans le fichier '%s'."
 
 #: ../gui/wxpython/gcp/manager.py:133
 msgid "Setup for georectification"
@@ -13889,6 +13888,12 @@ msgstr "Quitter le module de digitalisation"
 msgid "&Stop"
 msgstr "Sommet"
 
+msgid "Profile settings saved to file '%s'."
+msgstr "Réglages de profil sauvegardés dans le fichier '%s'."
+
+msgid "No map layer selected"
+msgstr "Pas de couche sélectionnée"
+
 #~ msgid "Delete last"
 #~ msgstr "Supprimer le dernier"
 
@@ -14245,7 +14250,7 @@ msgstr "Sommet"
 #~ msgstr "Importer des points ASCII/vecteurs GRASS ASCII"
 
 #~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
-#~ msgstr "Crée un carte vecteur depuis un fichier de points ASCII ou un fichier vecteur ASCII."
+#~ msgstr "Crée une carte vecteur depuis un fichier de points ASCII ou un fichier vecteur ASCII."
 
 #~ msgid "Import GetFeature from WFS"
 #~ msgstr "Importer des données « GetFeature » depuis un WFS"
@@ -14898,7 +14903,7 @@ msgstr "Sommet"
 #~ msgstr "Exporter une carte vers une image PNG non-géoréférencée."
 
 #~ msgid "Exports the color table associated with a raster map layer."
-#~ msgstr "Exporter la table de couleur associée à une carte mamtricielle."
+#~ msgstr "Exporter la table de couleur associée à une carte matricielle."
 
 #~ msgid "display"
 #~ msgstr "afficher"
@@ -14963,9 +14968,6 @@ msgstr "Sommet"
 
 #~ msgid "Select raster map 3 (optional):"
 #~ msgstr "Sélectionner la carte raster 3 (optionnel) :"
-
-#~ msgid "Profile settings saved to file '%s'."
-#~ msgstr "Réglages de profil sauvegardés dans le fichier '%s'."
 
 #~ msgid "Profile line settings"
 #~ msgstr "Réglages de ligne du profil"
@@ -15050,7 +15052,7 @@ msgstr "Sommet"
 #~ msgid "Interactively reset the location's projection settings."
 #~ msgstr "Réinitialisation interactive des réglages de projection du secteur."
 
-# L'usage en traduction française semble êter de conserver les anglicismes frontend et backend
+# L'usage en traduction française semble être de conserver les anglicismes frontend et backend
 #~ msgid "Convert coordinates from one projection to another (cs2cs frontend)."
 #~ msgstr "Convertir les coordonnées d'une projection à une autre (frontend cs2cs)."
 
@@ -15150,9 +15152,6 @@ msgstr "Sommet"
 #~ msgid "Quit 3D view mode"
 #~ msgstr "Quitter le mode vue 3D"
 
-#~ msgid "No map layer selected"
-#~ msgstr "Pas de couche sélectionnée"
-
 #~ msgid "Georectifier settings saved to file '%s'."
 #~ msgstr "Paramètres de géo-rectification sauvés dans le fichier '%s'."
 
@@ -15226,7 +15225,7 @@ msgstr "Sommet"
 #~ msgstr "Réglages vecteur"
 
 #~ msgid "Queries raster map layers on their category values and category labels."
-#~ msgstr "Interroge "
+#~ msgstr "Interroger des cartes raster sur leurs valeurs de catégories et d'étiquettes."
 
 #~ msgid "Manage or report categories"
 #~ msgstr "Gérer ou rendre compte des catégories"
@@ -15285,3 +15284,49 @@ msgstr "Sommet"
 
 #~ msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"
 #~ msgstr "Convertir vers le format POV-RAY, GRASS x,y,z -> POV-Ray x,z,y"
+
+#, fuzzy
+#~ msgid "Adjusts the relative height of features above the plane of the surface"
+#~ msgstr "Ajuster la hauteur de la vue au dessus de la scène"
+
+#~ msgid "Copies available data files in the user's current mapset search path and location to the appropriate element directories under the user's current mapset."
+#~ msgstr "Copier les fichiers de données disponibles dans le chemin de recherche et le Secteur vers le répertoire approprié sous le jeu de données courant de l'utilisateur."
+
+#~ msgid "Set color rules based on stddev from a map's mean value."
+#~ msgstr "Définir les règles de couleurs depuis l'écart-type des valeurs moyennes d'une carte."
+
+#~ msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map layer."
+#~ msgstr "Rend la valeur de chaque cellule une fonction des valeurs d'attributs des points ou centroids voisins, et enregistre la nouvelle valeur de cellule dans une carte raster de sortie."
+
+#~ msgid "Thins non-zero cells that denote linear features in a raster map."
+#~ msgstr "\"Amincit\" les cellules de valeur non-nulles qui semblent appartenir à des entités linéaires dans une couche raster."
+
+#~ msgid "Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+#~ msgstr "Prends les données vectorielles de cours d'eau, les transforme en raster, et soustrait la profondeur du modèle de terrain en sortie."
+
+#~ msgid "Fills lake from seed at given level."
+#~ msgstr "Remplit le lac depuis un point d'origine jusqu'à un niveau donné."
+
+#~ msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)."
+#~ msgstr "Constructin de courbes de terrain (lignes du courant), longueur des courants, et densité de lignes de courants (zones amont) à partir d'un modèle numérique d'altitudes (MNA) raster."
+
+#~ msgid "Set up (requires XTerm)"
+#~ msgstr "Paramètrage (requiert XTerm)"
+
+#~ msgid "Interactive tool used to setup the sampling and analysis framework that will be used by the other r.le programs."
+#~ msgstr "Outil interactif utiliser pour paramétrer l'échantillonnage et l'analyse qui sera utilisée par les autres programmes r.le ."
+
+#~ msgid "Summary and display (requires XTerm)"
+#~ msgstr "Résumé et affichage (requiert XTerm)"
+
+#, fuzzy
+#~ msgid "Plot text sizes saved to file '%s'."
+#~ msgstr "Réglages sauvegardés dans le fichier '%s'."
+
+#, fuzzy
+#~ msgid "Settings for selected map"
+#~ msgstr "Définir la région calculée à partir de la(des) carte(s) sélectionnée(s)"
+
+#, fuzzy
+#~ msgid "Scale"
+#~ msgstr "Échelle"
