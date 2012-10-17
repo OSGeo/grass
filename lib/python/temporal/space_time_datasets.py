@@ -542,7 +542,7 @@ class Raster3DDataset(AbstractMapDataset):
         # Get the data from an existing 3D raster map
         global use_ctypes_map_access
 
-	if use_ctypes_map_access:
+        if use_ctypes_map_access:
             kvp = self.read_info()
         else:
             kvp = raster3d.raster3d_info(self.get_id())
