@@ -726,6 +726,12 @@
           <handler>OnMenuCmd</handler>
           <command>m.nviz.image</command>
         </menuitem>
+        <menuitem>
+          <label>Animation tool (experimental - addons)</label>
+          <help>Launch animation tool.</help>
+          <keywords>visualization,raster,animation</keywords>
+          <handler>OnAnimationTool</handler>
+        </menuitem>
         <separator />
         <menuitem>
           <label>Bearing/distance to coordinates</label>
