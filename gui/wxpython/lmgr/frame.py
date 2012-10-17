@@ -574,6 +574,8 @@ class GMFrame(wx.Frame):
         
         if event:
             cmd = self.menucmd[event.GetId()]
+        else:
+            cmd = ''
         
         try:
             cmdlist = cmd.split(' ')
