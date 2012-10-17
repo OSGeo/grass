@@ -514,19 +514,21 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             
             if self.seltree.GetRootItem() == self.seltree.GetItemParent(item):
                 self.value = [] # cannot select mapset item
-            else:
-                mapsetItem = self.seltree.GetItemParent(item)
-                fullName = self.seltree.GetItemText(item)
-                if self.fullyQualified:
-                    fullName += '@' + self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
-                
-                if self.multiple is True:
-                    # text item should be unique
-                    self.value.append(fullName)
-                else:
-                    self.value = [fullName]
+                evt.Skip()
+                return
             
-            self.Dismiss()
+            mapsetItem = self.seltree.GetItemParent(item)
+            fullName = self.seltree.GetItemText(item)
+            if self.fullyQualified:
+                fullName += '@' + self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
+            
+            if self.multiple is True:
+                # text item should be unique
+                self.value.append(fullName)
+            else:
+                self.value = [fullName]
+            
+        self.Dismiss()
         
         evt.Skip()
 
