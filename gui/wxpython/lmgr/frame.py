@@ -1221,7 +1221,7 @@ class GMFrame(wx.Frame):
                                        'loc' : grass.gisenv()["LOCATION_NAME"] })
         dlg.Destroy()
         
-    def RulesCmd(self, event):
+    def RulesCmd(self, event, cmd = None):
         """!Launches dialog for commands that need rules input and
         processes rules
         """
