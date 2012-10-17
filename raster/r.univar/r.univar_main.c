@@ -3,7 +3,7 @@
  *
  *  Calculates univariate statistics from the non-null cells of a GRASS raster map
  *
- *   Copyright (C) 2004-2006 by the GRASS Development Team
+ *   Copyright (C) 2004-2006, 2012 by the GRASS Development Team
  *   Author(s): Hamish Bowman, University of Otago, New Zealand
  *              Extended stats: Martin Landa
  *              Zonal stats: Markus Metz
@@ -39,6 +39,7 @@ void set_params()
     param.output_file->required = NO;
     param.output_file->description =
 	_("Name for output file (if omitted or \"-\" output to stdout)");
+    param.output_file->guisection = _("Output settings");
 
     param.percentile = G_define_option();
     param.percentile->key = "percentile";
@@ -49,21 +50,26 @@ void set_params()
     param.percentile->answer = "90";
     param.percentile->description =
 	_("Percentile to calculate (requires extended statistics flag)");
-
+    param.percentile->guisection = _("Extended");
+    
     param.separator = G_define_standard_option(G_OPT_F_SEP);
+    param.separator->guisection = _("Formatting");
 
     param.shell_style = G_define_flag();
     param.shell_style->key = 'g';
     param.shell_style->description =
 	_("Print the stats in shell script style");
+    param.shell_style->guisection = _("Formatting");
 
     param.extended = G_define_flag();
     param.extended->key = 'e';
     param.extended->description = _("Calculate extended statistics");
+    param.extended->guisection = _("Extended");
 
     param.table = G_define_flag();
     param.table->key = 't';
     param.table->description = _("Table output format instead of standard output format");
+    param.table->guisection = _("Formatting");
 
     return;
 }
@@ -78,7 +84,6 @@ static void process_raster(univar_stat * stats, int fd, int fdz,
 /* *************************************************************** */
 int main(int argc, char *argv[])
 {
-    unsigned int rows, cols;	/*  totals  */
     int rasters;
 
     struct Cell_head region;
@@ -111,9 +116,7 @@ int main(int argc, char *argv[])
     }
 
     G_get_window(&region);
-    rows = region.rows;
-    cols = region.cols;
-
+    
     /* table field separator */
     zone_info.sep = param.separator->answer;
     if (strcmp(zone_info.sep, "\\t") == 0)
@@ -222,8 +225,8 @@ static int open_raster(const char *infile)
 static univar_stat *univar_stat_with_percentiles(int map_type)
 {
     univar_stat *stats;
-    int i, j;
-    int n_zones = zone_info.n_zones;
+    unsigned int i, j;
+    unsigned int n_zones = zone_info.n_zones;
 
     if (n_zones == 0)
 	n_zones = 1;
@@ -246,8 +249,8 @@ static void
 process_raster(univar_stat * stats, int fd, int fdz, const struct Cell_head *region)
 {
     /* use G_window_rows(), G_window_cols() here? */
-    const int rows = region->rows;
-    const int cols = region->cols;
+    const unsigned int rows = region->rows;
+    const unsigned int cols = region->cols;
 
     const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd);
     const size_t value_sz = Rast_cell_size(map_type);
