@@ -14,7 +14,6 @@ for details.
 from datetime import datetime, date, time, timedelta
 import grass.script.core as core
 import copy
-from dateutil import parser
 
 DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
@@ -551,8 +550,17 @@ def compute_datetime_delta(start, end):
 
 
 def string_to_datetime(time_string):
-    """!Convert a string into a datetime object using the dateutil parser. 
-       Return None in case of failure"""
+    """!Convert a string into a datetime object 
+    
+        Supported ISO string formats are: 
+        - YYYY-mm-dd
+        - YYYY-mm-dd HH:MM:SS
+        
+        Time zones are not supported
+        
+        @param time_string: The time string to convert
+        @return datetime object or None in case of an error
+    """
 
     # BC is not supported
     if time_string.find("bc") > 0:
@@ -560,11 +568,23 @@ def string_to_datetime(time_string):
                    "in the temporal database")
         return None
 
-    try:
-        dt = parser.parse(time_string)
-        return dt
-    except:
+    # BC is not supported
+    if time_string.find("+") > 0:
+        core.error("Time zones are not supported "
+                   "in the temporal database")
         return None
+        
+    if time_string.find(":") > 0:
+        time_format = "%Y-%m-%d %H:%M:%S"
+    else:
+        time_format = "%Y-%m-%d"
+  
+    try:
+        return  datetime.strptime(time_string, time_format)
+    except:
+        core.error("Unable to parse time string: %s"%time_string)
+        return None
+
 
 ###############################################################################
 
