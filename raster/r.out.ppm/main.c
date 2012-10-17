@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *rast, *ppm_file;
-    struct Flag *gscale;
+    struct Flag *gscale, *header;
     char *map, *p, ofile[1000];
     unsigned char *set, *ored, *ogrn, *oblu;
     CELL *cell_buf;
@@ -65,6 +65,10 @@ int main(int argc, char *argv[])
     gscale = G_define_flag();
     gscale->key = 'g';
     gscale->description = _("Output greyscale instead of color");
+
+    header = G_define_flag();
+    header->key = 'h';
+    header->description = _("Suppress printing of PPM header");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -116,29 +120,30 @@ int main(int argc, char *argv[])
 	}
     }
     /* write header info */
+    if (!header->answer) {
+	if (!gscale->answer)
+	    fprintf(fp, "P6\n");
+	/* Magic number meaning rawbits, 24bit color to ppm format */
+	else
+	    fprintf(fp, "P5\n");
+	/* Magic number meaning rawbits, 8bit greyscale to ppm format */
 
-    if (!gscale->answer)
-	fprintf(fp, "P6\n");
-    /* Magic number meaning rawbits, 24bit color to ppm format */
-    else
-	fprintf(fp, "P5\n");
-    /* Magic number meaning rawbits, 8bit greyscale to ppm format */
+	if (!do_stdout) {
+	    fprintf(fp, "# CREATOR: %s from GRASS raster map \"%s\"\n",
+	            G_program_name(), rast->answer);
+	    fprintf(fp, "# east-west resolution: %f\n", w.ew_res);
+	    fprintf(fp, "# north-south resolution: %f\n", w.ns_res);
+	    fprintf(fp, "# South edge: %f\n", w.south);
+	    fprintf(fp, "# West edge: %f\n", w.west);
+	    /* comments */
+	}
 
-    if (!do_stdout) {
-	fprintf(fp, "# CREATOR: %s from GRASS raster map \"%s\"\n",
-		G_program_name(), rast->answer);
-	fprintf(fp, "# east-west resolution: %f\n", w.ew_res);
-	fprintf(fp, "# north-south resolution: %f\n", w.ns_res);
-	fprintf(fp, "# South edge: %f\n", w.south);
-	fprintf(fp, "# West edge: %f\n", w.west);
-	/* comments */
+	fprintf(fp, "%d %d\n", w.cols, w.rows);
+	/* width & height */
+
+	fprintf(fp, "255\n");
+	/* max intensity val */
     }
-
-    fprintf(fp, "%d %d\n", w.cols, w.rows);
-    /* width & height */
-
-    fprintf(fp, "255\n");
-    /* max intensity val */
 
 
     G_important_message(_("Converting..."));
