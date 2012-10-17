@@ -1282,7 +1282,22 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         
         win.Show()
+
+    def OnAnimationTool(self, event):
+        """!Launch Animation tool
+        """
+        try:
+            from animation.frame import AnimationFrame
+        except ImportError:
+            GError(_("Extension <%s> not available, run '%s' to install it.") % \
+                       ('wx.animation', 'g.extension -s extension=wx.animation'),
+                   parent = self, showTraceback = False)
+            return
         
+        frame = AnimationFrame(parent = self)
+        frame.CentreOnScreen()
+        frame.Show()
+                
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
