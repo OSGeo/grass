@@ -68,7 +68,7 @@ class InstallExtensionWindow(wx.Frame):
             task = gtask.parse_interface('g.extension.py')
         else:
             task = gtask.parse_interface('g.extension')
-        ignoreFlags = ['l', 'c', 'g', 'a', 'f', 't', 'quiet', 'verbose']
+        ignoreFlags = ['l', 'c', 'g', 'a', 'f', 't', 'quiet']
         if sys.platform == 'win32':
             ignoreFlags.append('d')
             ignoreFlags.append('i')
@@ -174,7 +174,10 @@ class InstallExtensionWindow(wx.Frame):
         flags = list()
         for key in self.options.keys():
             if self.options[key].IsChecked():
-                flags.append('-%s' % key)
+                if len(key) == 1:
+                    flags.append('-%s' % key)
+                else:
+                    flags.append('--%s' % key)
         
         return ['g.extension'] + flags + ['extension=' + name,
                                           'svnurl=' + self.repo.GetValue().strip()]
