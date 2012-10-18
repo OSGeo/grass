@@ -817,19 +817,27 @@ class GMFrame(wx.Frame):
             from osgeo import gdal
             gdalVersion = gdal.__version__
         except:
-            gdalVersion = _("unknown")
+            try:
+                gdalVersion = grass.Popen(['gdalinfo', '--version'], stdout = grass.PIPE).communicate()[0].rstrip('\n')
+            except:
+                gdalVersion = _("unknown")
+        try:
+            projVersion = RunCommand('proj', getErrorMsg = True)[1].splitlines()[0]
+        except:
+            projVersion = _("unknown")
         
         self.goutput.WriteCmdLog(_("System Info"))
         self.goutput.WriteLog("%s: %s\n"
                               "%s: %s\n"
                               "%s: %s (%s)\n"
                               "GDAL/OGR: %s\n"
+                              "PROJ4: %s\n"
                               "Python: %s\n"
                               "wxPython: %s\n"
                               "%s: %s\n"% (_("GRASS version"), vInfo['version'],
                                            _("GRASS SVN Revision"), vInfo['revision'],
                                            _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
-                                           gdalVersion,
+                                           gdalVersion, projVersion,
                                            platform.python_version(),
                                            wx.__version__,
                                            _("Platform"), platform.platform()),
