@@ -370,7 +370,11 @@ class GRASSStartup(wx.Frame):
             try:
                 rc = open(gisrc, "r")
                 for line in rc.readlines():
-                    key, val = line.split(":", 1)
+                    try:
+                        key, val = line.split(":", 1)
+                    except ValueError, e:
+                        sys.stderr.write(_('Invalid line in GISRC file (%s):%s\n' % \
+                                               (e, line)))
                     grassrc[key.strip()] = DecodeString(val.strip())
             finally:
                 rc.close()
