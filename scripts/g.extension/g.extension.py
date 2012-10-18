@@ -268,6 +268,21 @@ def get_toolbox_modules(url, name):
 
     return tlist
 
+def get_optional_params(mnode):
+    try:
+        desc = mnode.find('description').text
+    except AttributeError:
+        desc = ''
+    if desc is None:
+        desc = ''
+    try:
+        keyw = mnode.find('keywords').text
+    except AttributeError:
+        keyw = ''
+    if keyw is None:
+        keyw = ''
+        
+    return desc, keyw
 
 def list_available_modules(url, mlist = None):
     # try to download XML metadata file first
@@ -285,13 +300,8 @@ def list_available_modules(url, mlist = None):
             if mlist and name not in mlist:
                 continue
             if flags['c'] or flags['g']:
-                desc = mnode.find('description').text
-                if not desc:
-                    desc = ''
-                keyw = mnode.find('keywords').text
-                if not keyw:
-                    keyw = ''
-
+                desc, keyw = get_optional_params(mnode)
+            
             if flags['g']:
                 print 'name=' + name
                 print 'description=' + desc
@@ -577,14 +587,9 @@ def install_extension_xml(url, mlist):
                         if path[0] == 'scripts':
                             path[-1] += '.py'
                     fList.append(os.path.sep.join(path))
-
-            desc = mnode.find('description').text
-            if not desc:
-                desc = ''
-            keyw = mnode.find('keywords').text
-            if not keyw:
-                keyw = ''
-
+            
+            desc, keyw = get_optional_params(mnode)
+            
             data[name] = {
                 'desc'  : desc,
                 'keyw'  : keyw,
