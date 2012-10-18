@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
     Vect_open_old2(&To, opt.to->answer, "", opt.to_field->answer);
 
-    ntolines = Vect_get_num_primitives(&To, from_type);
+    ntolines = Vect_get_num_primitives(&To, to_type);
     ntoareas = 0;
     if (to_type & GV_AREA)
 	ntoareas = Vect_get_num_areas(&To);
@@ -714,6 +714,10 @@ int main(int argc, char *argv[])
 		G_debug(3, "  %d areas in box", aList->n_values);
 
 		for (i = 0; i < aList->n_values; i++) {
+		    /* ignore isles OK ? */
+		    if (Vect_get_area_centroid(&To, aList->id[i]) == 0)
+			continue;
+
 		    tmp_tcat = -1;
 
 		    line2area(&To, FPoints, ftype, aList->id[i], &aList->box[i],
@@ -832,7 +836,10 @@ int main(int argc, char *argv[])
 	    G_debug(3, "farea = %d", area);
 	    G_percent(area, nfromareas, 2);
 
-	    Vect_get_area_cats(&From, area, FCats);
+	    if (Vect_get_area_cats(&From, area, FCats) == 1)
+		/* ignore isles OK ? */
+		continue;
+
 	    Vect_cat_get(FCats, from_field, &fcat);
 	    if (fcat < 0 && !do_all)
 		continue;
@@ -969,6 +976,10 @@ int main(int argc, char *argv[])
 
 		    tarea = aList->id[i];
 		    G_debug(4, "%d: 'to' area id %d", i, tarea);
+
+		    /* ignore isles OK ? */
+		    if (Vect_get_area_centroid(&To, tarea) == 0)
+			continue;
 
 		    Vect_get_area_points(&To, tarea, TPoints);
 		    
