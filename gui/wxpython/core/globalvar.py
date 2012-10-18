@@ -25,6 +25,8 @@ ETCWXDIR = os.path.join(ETCDIR, "gui", "wxpython")
 ETCIMGDIR = os.path.join(ETCDIR, "gui", "images")
 ETCSYMBOLDIR = os.path.join(ETCDIR, "gui", "images", "symbols")
 
+from core.debug import Debug
+
 sys.path.append(os.path.join(ETCDIR, "python"))
 import grass.script as grass
 
@@ -146,47 +148,46 @@ def GetGRASSCommands():
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
         cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
     
-    # scan addons (base)
-    addons_base = os.getenv('GRASS_ADDON_BASE')
-    if addons_base and os.path.exists(addons_base) \
-            and not os.path.isdir(addons_base):
-        bpath = os.path.join(addons_base, 'bin')
-        if not scriptsOnly and os.path.exists(bpath) and \
-                os.path.isdir(bpath):
-            for fname in os.listdir(bpath):
-                name, ext = os.path.splitext(fname)
-                if not EXT_BIN:
-                    cmd.append(fname)
-                elif ext == EXT_BIN:
-                    cmd.append(name)
-        
-        spath = os.path.join(addons_base, 'scripts')            
-        if os.path.exists(spath) and os.path.isdir(spath):
-            for fname in os.listdir(spath):
-                name, ext = os.path.splitext(fname)
-                if not EXT_SCT:
-                    cmd.append(fname)
-                elif ext == EXT_SCT:
-                    cmd.append(name)
+    return set(cmd), scripts
+
+def UpdateGRASSAddOnCommands():
+    """!Update list of available GRASS AddOns commands to use when
+    parsing string from the command line
+    """
+    global grassCmd, grassScripts
     
     # scan addons (path)
-    if os.getenv('GRASS_ADDON_PATH'):
-        for path in os.getenv('GRASS_ADDON_PATH').split(os.pathsep):
-            if not os.path.exists(path) or not os.path.isdir(path):
-                continue
-            for fname in os.listdir(path):
-                if scripts: # win32
-                    name, ext = os.path.splitext(fname)
-                    cmd.append(name)
-                    if ext in scripts.keys():
-                        scripts[ext].append(name)
-                else:
-                    cmd.append(fname)
+    addonPath = os.getenv('GRASS_ADDON_PATH', '')
+    addonBase = os.getenv('GRASS_ADDON_BASE')
+    if addonBase:
+        addonPath += os.pathsep + os.path.join(addonBase, 'bin') + os.pathsep + \
+            os.path.join(addonBase, 'scripts')
     
-    return set(cmd), scripts
+    nCmd = 0
+    for path in addonPath.split(os.pathsep):
+        if not os.path.exists(path) or not os.path.isdir(path):
+            continue
+        for fname in os.listdir(path):
+            if grassScripts: # win32
+                name, ext = os.path.splitext(fname)
+                if name not in grassCmd:
+                    grassCmd.add(name)
+                    nCmd += 1
+                if ext in grassScripts.keys() and \
+                        name not in grassScripts[ext]:
+                    grassScripts[ext].append(name)
+                    nCmd += 1
+            else:
+                if fname not in grassCmd:
+                    grassCmd.add(fname)
+                    nCmd += 1
+                    
+    Debug.msg(1, "Number of new AddOn commands: %d", nCmd)
 
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd, grassScripts = GetGRASSCommands()
+Debug.msg(1, "Number of GRASS commands: %d", len(grassCmd))
+UpdateGRASSAddOnCommands()
 
 """@Toolbar icon size"""
 toolbarSize = (24, 24)
