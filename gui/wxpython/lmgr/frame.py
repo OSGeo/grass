@@ -886,7 +886,9 @@ class GMFrame(wx.Frame):
                          (None, None),
                          ('vectImport',    self.OnImportOgrLayers),
                          ('vectLink',      self.OnLinkOgrLayers),
-                         ('vectOut',       self.OnVectorOutputFormat)))
+                         ('vectOut',       self.OnVectorOutputFormat),
+                         (None, None),
+                         ('wmsImport',     self.OnImportWMS)))
         
     def OnWorkspaceNew(self, event = None):
         """!Create new workspace file
