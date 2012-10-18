@@ -37,7 +37,12 @@ For anything else than points to lines, there can be several common
 locations with zero distance, and the common location would then be the 
 result of an overlay consisting of several points, lines, or areas.
 <em>v.distance</em> selects in these cases a single point, and does not 
-create an overlay like <em>v.overlay</em>.
+create an overlay like <em>v.overlay</em>. In this implementation, any 
+shared point is as good as any other. Calculating an intersection is 
+costlier than to check if a vertex is inside a polygon. For example, if 
+a vertex of the boundary of the 'to' area is inside the 'from' area, it 
+is a common location. For speed reasons, the distance is then set to 
+zero and no further tests are done.
 
 
 <h2>NOTES</h2>
@@ -49,7 +54,7 @@ updated to <em>null</em>.
 
 <!-- needs Vect_line_geodesic_distance()
 <p>In lat-long locations <em>v.distance</em> gives distances 
-(<em>dist</em> and <em>to_along</em>) in meters not in degrees 
+(<em>dist</em> and <em>to_along</em>) not in degrees but in meters  
 calculated as geodesic distances on a sphere.
 -->
 
