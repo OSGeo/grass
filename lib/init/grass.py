@@ -52,7 +52,7 @@ if sys.platform == 'win32':
 else:
     grass_config_dirname = ".grass7"
     grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
-    grass_env_file = os.path.join(grass_config_dir, 'bashrc')
+    grass_env_file = None # see check_shell()
 
 gisbase = os.path.normpath(gisbase)
 
@@ -639,13 +639,25 @@ def load_gisrc():
     
     location = os.path.join(gisdbase, location_name, mapset)
 
-def set_env_from_gisrc():
-    ### TODO: eliminate all env-from-gisrc
+def get_env_variable_from_file(key):
+    if not os.access(grass_env_file, os.R_OK):
+        return None
+    
+    for line in readfile(grass_env_file).split(os.linesep):
+        try:
+            k, v = map(lambda x: x.strip(), line.strip().split(' ', 1)[1].split('=', 1))
+        except:
+            continue
+        if k == key:
+            return v
+    
+    return None
+
+def set_language():
     import locale
-    kv = read_gisrc()
     
     ### language
-    language = kv.get('LANG')
+    language = get_env_variable_from_file('LANG')
     if language:
         language = language.split('.')[0] # Split off ignored .encoding part if present
         orig_language = language
@@ -722,7 +734,7 @@ def make_fontcap():
         call(["g.mkfontcap"])
     
 def check_shell():
-    global sh, shellname
+    global sh, shellname, grass_env_file
     # cygwin has many problems with the shell setup
     # below, so i hardcoded everything here.
     if os.getenv('CYGWIN'):
@@ -744,6 +756,11 @@ def check_shell():
             shellname = "Bourne Shell"
         else:
             shellname = "shell"
+    
+    if sh in ['csh', 'tcsh']:
+        grass_env_file = os.path.join(grass_config_dir, 'cshrc')
+    elif sh in ['bash', 'msh', 'cygwin']:
+        grass_env_file = os.path.join(grass_config_dir, 'bashrc')
     
     # check for SHELL
     if not os.getenv('SHELL'):
@@ -847,9 +864,11 @@ def csh_startup():
     f.write("GRASS %s > '" % grass_version)
     f.write("set BOGUS=``;unset BOGUS")
     
-    path = os.path.join(userhome, ".grass.cshrc")
+    path = os.path.join(userhome, ".grass.cshrc") # left for backward compatibility
     if os.access(path, os.R_OK):
-        f.write(readfile(path))
+        f.write(readfile(path) + '\n')
+    if os.access(grass_env_file, os.R_OK):
+        f.write(readfile(grass_env_file) + '\n')
     
     mail_re = re.compile(r"^ *set  *mail *= *")
     
@@ -906,7 +925,7 @@ def bash_startup():
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
     
     f.close()
-    
+
     exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
     
     os.environ['HOME'] = userhome
@@ -1094,9 +1113,6 @@ create_gisrc()
 # Ensure GUI is set
 read_gui()
 
-# Get environmental variables from gisenv variables
-set_env_from_gisrc()
-
 # Set PATH, PYTHONPATH
 set_paths()
 
@@ -1163,6 +1179,9 @@ if not os.access(os.path.join(location, "VAR"), os.F_OK):
     call(['db.connect', '-c', '--quiet'])
 
 check_shell()
+
+# Set language
+set_language()
 
 check_batch_job()
 
