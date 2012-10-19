@@ -671,9 +671,13 @@ def set_language():
                 locale.setlocale(locale.LC_ALL, language)
             except:
                 # If we got so far, provided locale is not supported on this system
-                print "Failed to set LC_ALL to %s" % language
-                default_locale = locale.getdefaultlocale()
-                if default_locale[0]:
+                sys.stderr.write("Failed to set LC_ALL to %s\n" % language)
+                try:
+                    default_locale = locale.getdefaultlocale()
+                except:
+                    default_locale = None
+                
+                if default_locale and default_locale[0]:
                     language = default_locale[0]
                 else:
                     language = 'C'
