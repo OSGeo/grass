@@ -762,9 +762,12 @@ def GetSettingsPath():
     
     return os.path.join(os.getenv('HOME'), '.grass%d' % version)
 
-def StoreEnvVariable(key, value, envFile = None):
+def StoreEnvVariable(key, value = None, envFile = None):
     """!Store environmental variable
 
+    If value is not given (is None) then environmental variable is
+    unset.
+    
     @param key env key
     @param value env value
     @param envFile path to the environmental file (None for default location)
@@ -779,32 +782,39 @@ def StoreEnvVariable(key, value, envFile = None):
     
     # read env file
     environ = dict()
+    lineSkipped = list()
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
         except IOError, e:
-            sys.stderr.write(_("Unable to open file '%s'") % envFile)
+            sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
         for line in fd.readlines():
+            line = line.rstrip(os.linesep)
             try:
-                key, value = line.split(' ', 1).strip().split('=', 1)
-            except:
-                sys.stderr.write(_("%s: unable to parse '%s'") % (envFile, line))
+                k, v = map(lambda x: x.strip(), line.split(' ', 1)[1].split('=', 1))
+            except StandardError, e:
+                sys.stderr.write(_("%s: line skipped - unable to parse '%s'\n"
+                                   "Reason: %s\n") % (envFile, line, e))
+                lineSkipped.append(line)
                 continue
-            if key in environ:
-                sys.stderr.write(_("Duplicated key: %s") % key)
-            environ[key] = value
+            if k in environ:
+                sys.stderr.write(_("Duplicated key: %s\n") % k)
+            environ[k] = v
         
         fd.close()
     
     # update environmental variables
-    environ[key] = value
+    if value is None and key in environ:
+        del environ[key]
+    else:
+        environ[key] = value
     
     # write update env file
     try:
         fd = open(envFile, 'w')
     except IOError, e:
-        sys.stderr.write(_("Unable to create file '%s'") % envFile)
+        sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
         return
     if windows:
         expCmd = 'set'
@@ -813,7 +823,11 @@ def StoreEnvVariable(key, value, envFile = None):
     
     for key, value in environ.iteritems():
         fd.write('%s %s=%s\n' % (expCmd, key, value))
-        
+    
+    # write also skipped lines
+    for line in lineSkipped:
+        fd.write(line + os.linesep)
+    
     fd.close()
 
 def SetAddOnPath(addonPath = None, key = 'PATH'):
@@ -834,7 +848,7 @@ def SetAddOnPath(addonPath = None, key = 'PATH'):
                                                   'GRASS%s' % gVersion,
                                                   'addons'))
     
-    StoreEnvVariable('GRASS_ADDON_' + key, addonPath)
+    StoreEnvVariable(key = 'GRASS_ADDON_' + key, value = addonPath)
     os.environ['GRASS_ADDON_' + key] = addonPath
 
 # From lib/gis/col_str.c, except purple which is mentioned
