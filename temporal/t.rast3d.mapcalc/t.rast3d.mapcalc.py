@@ -90,7 +90,7 @@ def main():
     method = method.split(",")
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     tgis.dataset_mapcalculator(inputs, output, "raster3d", expression,
                                base, method, nprocs, register_null, spatial)

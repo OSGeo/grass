@@ -32,6 +32,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
        collecting of metadata.
     """
     def __init__(self, ident):
+        AbstractDataset.__init__(self)
         self.reset(ident)
         self.map_counter = 0
 
@@ -1018,7 +1019,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Check if map is already registered
         if stds_register_table is not None:
-            if dbmi.paramstyle == "qmark":
+            if dbif.dbmi.paramstyle == "qmark":
                 sql = "SELECT id FROM " + \
                     stds_register_table + " WHERE id = (?)"
             else:
@@ -1115,7 +1116,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Register the stds in the map stds register table
         # Check if the entry is already there
-        if dbmi.paramstyle == "qmark":
+        if dbif.dbmi.paramstyle == "qmark":
             sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
         else:
             sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
@@ -1127,7 +1128,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # In case of no entry make a new one
         if row is None:
-            if dbmi.paramstyle == "qmark":
+            if dbif.dbmi.paramstyle == "qmark":
                 sql = "INSERT INTO " + map_register_table + \
                     " (id) " + "VALUES (?);\n"
             else:
@@ -1138,7 +1139,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 (sql, (self.base.get_id(),)))
 
         # Now put the raster name in the stds map register table
-        if dbmi.paramstyle == "qmark":
+        if dbif.dbmi.paramstyle == "qmark":
             sql = "INSERT INTO " + stds_register_table + \
                 " (id) " + "VALUES (?);\n"
         else:
@@ -1193,7 +1194,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Check if the map is registered in the space time raster dataset
         if map_register_table is not None:
-            if dbmi.paramstyle == "qmark":
+            if dbif.dbmi.paramstyle == "qmark":
                 sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
             else:
                 sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
@@ -1220,7 +1221,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Remove the space time raster dataset from the raster dataset register
         if map_register_table is not None:
-            if dbmi.paramstyle == "qmark":
+            if dbif.dbmi.paramstyle == "qmark":
                 sql = "DELETE FROM " + map_register_table + " WHERE id = ?;\n"
             else:
                 sql = "DELETE FROM " + map_register_table + " WHERE id = %s;\n"
@@ -1230,7 +1231,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Remove the raster map from the space time raster dataset register
         if stds_register_table is not None:
-            if dbmi.paramstyle == "qmark":
+            if dbif.dbmi.paramstyle == "qmark":
                 sql = "DELETE FROM " + stds_register_table + " WHERE id = ?;\n"
             else:
                 sql = "DELETE FROM " + \
@@ -1353,7 +1354,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             if row is not None:
                 # This seems to be a bug in sqlite3 Python driver
-                if dbmi.__name__ == "sqlite3":
+                if dbif.dbmi.__name__ == "sqlite3":
                     tstring = row[0]
                     # Convert the unicode string into the datetime format
                     if self.is_time_absolute():

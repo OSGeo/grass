@@ -72,9 +72,8 @@ def main():
     descr = options["description"]
     semantic = options["semantictype"]
 
-    # Make sure the temporal database exists
-    tgis.create_temporal_database()
-
+    tgis.init()
+    
     #Get the current mapset to create the id of the space time dataset
 
     mapset = grass.gisenv()["MAPSET"]

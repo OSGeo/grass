@@ -36,7 +36,25 @@ for details.
 """
 import os
 import copy
+import sys
 import grass.script.core as core
+# Import all supported database backends
+try:
+    import sqlite3
+except ImportError:
+    raise
+# Postgresql is optional, existence is checked when needed
+try:
+    import psycopg2
+    import psycopg2.extras
+except:
+    pass
+
+# Global variable that defines the backend
+# of the temporal GIS
+# It can either be "sqlite" or "pg"
+tgis_backed = None
+
 
 # This variable specifies if the ctypes interface to the grass 
 # libraries should be used to read map specific data. If set to False
@@ -45,34 +63,14 @@ import grass.script.core as core
 # the GRASS C functions may call G_fatal_error() which exits the process.
 # That is not catchable in Python.
 use_ctypes_map_access = True
-
-###############################################################################
-
-# The chosen DBMI back-end can be defined on runtime
-# Check the grass environment before import
-core.run_command("t.connect", flags="c")
-kv = core.parse_command("t.connect", flags="pg")
-if "driver" in kv:
-    if kv["driver"] == "sqlite":
-        import sqlite3 as dbmi
-    elif kv["driver"] == "pg":
-        import psycopg2 as dbmi
-        # Needed for dictionary like cursors
-        import psycopg2.extras
-    else:
-        core.fatal(_("Unable to initialize the temporal DBMI interface. Use "
-                     "t.connect to specify the driver and the database string"))
-else:
-    # Use the default sqlite variable
-    core.run_command("t.connect", flags="d")
-    import sqlite3 as dbmi
-
+        
 ###############################################################################
 
 def get_temporal_dbmi_init_string():
     kv = core.parse_command("t.connect", flags="pg")
     grassenv = core.gisenv()
-    if dbmi.__name__ == "sqlite3":
+    global tgis_backed
+    if tgis_backed == "sqlite":
         if "database" in kv:
             string = kv["database"]
             string = string.replace("$GISDBASE", grassenv["GISDBASE"])
@@ -83,15 +81,14 @@ def get_temporal_dbmi_init_string():
             core.fatal(_("Unable to initialize the temporal GIS DBMI "
                          "interface. Use t.connect to specify the driver "
                          "and the database string"))
-    elif dbmi.__name__ == "psycopg2":
+    elif tgis_backed == "pg":
         if "database" in kv:
             string = kv["database"]
             return string
-        else:
-            core.fatal(_("Unable to initialize the temporal GIS DBMI "
-                         "interface. Use t.connect to specify the driver "
-                         "and the database string"))
-            return "dbname=grass_test user=soeren password=abcdefgh"
+    else:
+        core.fatal(_("Unable to initialize the temporal GIS DBMI "
+                     "interface. Use t.connect to specify the driver "
+                     "and the database string"))
 
 ###############################################################################
 
@@ -112,6 +109,13 @@ def set_use_ctypes_map_access(use_ctype = True):
 
 ###############################################################################
 
+def get_use_ctypes_map_access(use_ctype = True):
+    """!Return true if ctypes is used for map access """
+    global use_ctypes_map_access
+    return use_ctypes_map_access
+
+###############################################################################
+
 def get_sql_template_path():
     base = os.getenv("GISBASE")
     base_etc = os.path.join(base, "etc")
@@ -119,25 +123,61 @@ def get_sql_template_path():
 
 ###############################################################################
 
-def create_temporal_database():
-    """!This function creates the grass location database structure for raster, 
+def init():
+    """!This function set the correct database backend from the environmental variables
+       and creates the grass location database structure for raster, 
        vector and raster3d maps as well as for the space-time datasets strds, 
-       str3ds and stvds
+       str3ds and stvds in case it not exists.
 
-       This functions must be called before any spatio-temporal processing 
-       can be started
+        ATTENTION: This functions must be called before any spatio-temporal processing 
+                   can be started
     """
+    # We need to set the correct database backend from the environment variables
+    global tgis_backed
+    
+    dbmi = sqlite3
 
+    core.run_command("t.connect", flags="c")
+    kv = core.parse_command("t.connect", flags="pg")
+    
+    if "driver" in kv:
+        if kv["driver"] == "sqlite":
+            tgis_backed = kv["driver"]
+        elif kv["driver"] == "pg":
+            tgis_backed = kv["driver"]
+            try:
+                import psycopg2
+            except ImportError:
+                core.error("Unable to locate the Postgresql SQL Python interface module psycopg2.")
+                raise
+            dbmi = psycopg2
+        else:
+            core.fatal(_("Unable to initialize the temporal DBMI interface. Use "
+                         "t.connect to specify the driver and the database string"))
+    else:
+        # Set the default sqlite3 connection in case nothing was defined
+        core.run_command("t.connect", flags="d")
+            
     database = get_temporal_dbmi_init_string()
 
     db_exists = False
 
     # Check if the database already exists
-    if dbmi.__name__ == "sqlite3":
+    if tgis_backed == "sqlite":
         # Check path of the sqlite database
         if os.path.exists(database):
-            db_exists = True
-    elif dbmi.__name__ == "psycopg2":
+            # Connect to database
+            connection = dbmi.connect(database)
+            cursor = connection.cursor()
+            # Check for raster_base table
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='raster_base';")
+            
+            name = cursor.fetchone()[0]
+            if name == "raster_base":
+                db_exists = True
+            connection.commit()
+            cursor.close()
+    elif tgis_backed == "pg":
         # Connect to database
         connection = dbmi.connect(database)
         cursor = connection.cursor()
@@ -186,7 +226,7 @@ def create_temporal_database():
     connection = dbmi.connect(database)
     cursor = connection.cursor()
 
-    if dbmi.__name__ == "sqlite3":
+    if tgis_backed == "sqlite":
 
         sqlite3_delete_trigger_sql = open(os.path.join(get_sql_template_path(
         ), "sqlite3_delete_trigger.sql"), 'r').read()
@@ -207,7 +247,7 @@ def create_temporal_database():
         cursor.executescript(str3ds_tables_sql)
         cursor.executescript(str3ds_metadata_sql)
         cursor.executescript(sqlite3_delete_trigger_sql)
-    elif dbmi.__name__ == "psycopg2":
+    elif tgis_backed == "pg":
         # Execute the SQL statements for postgresql
         # Create the global tables for the native grass datatypes
         cursor.execute(raster_tables_sql)
@@ -240,6 +280,11 @@ class SQLDatabaseInterfaceConnection():
     """
     def __init__(self):
         self.connected = False
+        global tgis_backend
+        if tgis_backed == "sqlite":
+            self.dbmi = sqlite3
+        else:
+            self.dbmi = psycopg2
 
     def connect(self):
         """!Connect to the DBMI to execute SQL statements
@@ -248,19 +293,19 @@ class SQLDatabaseInterfaceConnection():
         """
         init = get_temporal_dbmi_init_string()
         #print "Connect to",  self.database
-        if dbmi.__name__ == "sqlite3":
-            self.connection = dbmi.connect(init, 
-                    detect_types=dbmi.PARSE_DECLTYPES | dbmi.PARSE_COLNAMES)
-            self.connection.row_factory = dbmi.Row
+        if self.dbmi.__name__ == "sqlite3":
+            self.connection = self.dbmi.connect(init, 
+                    detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
+            self.connection.row_factory = self.dbmi.Row
             self.connection.isolation_level = None
             self.cursor = self.connection.cursor()
             self.cursor.execute("PRAGMA synchronous = OFF")
             self.cursor.execute("PRAGMA journal_mode = MEMORY")
-        elif dbmi.__name__ == "psycopg2":
-            self.connection = dbmi.connect(init)
+        elif self.dbmi.__name__ == "psycopg2":
+            self.connection = self.dbmi.connect(init)
             #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
             self.cursor = self.connection.cursor(
-                cursor_factory=dbmi.extras.DictCursor)
+                cursor_factory = self.dbmi.extras.DictCursor)
         self.connected = True
 
     def close(self):
@@ -291,8 +336,8 @@ class SQLDatabaseInterfaceConnection():
         """
         sql = content[0]
         args = content[1]
-
-        if dbmi.__name__ == "psycopg2":
+        
+        if self.dbmi.__name__ == "psycopg2":
             if len(args) == 0:
                 return sql
             else:
@@ -308,7 +353,7 @@ class SQLDatabaseInterfaceConnection():
                     self.close()
                     return statement
 
-        elif dbmi.__name__ == "sqlite3":
+        elif self.dbmi.__name__ == "sqlite3":
             if len(args) == 0:
                 return sql
             else:
@@ -366,7 +411,7 @@ class SQLDatabaseInterfaceConnection():
         sql_script += "END TRANSACTION;"
         
         try:
-            if dbmi.__name__ == "sqlite3":
+            if self.dbmi.__name__ == "sqlite3":
                 self.cursor.executescript(statement)
             else:
                 self.cursor.execute(statement)

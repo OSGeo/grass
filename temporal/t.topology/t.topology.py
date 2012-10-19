@@ -49,7 +49,7 @@ def main():
     tmatrix = flags['m']
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     #Get the current mapset to create the id of the space time dataset
     if name.find("@") >= 0:

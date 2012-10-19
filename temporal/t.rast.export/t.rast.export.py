@@ -73,7 +73,7 @@ def main():
     _format = options["format"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
     # Export the space time raster dataset
     tgis.export_stds(
         _input, output, compression, workdir, where, _format, "strds")

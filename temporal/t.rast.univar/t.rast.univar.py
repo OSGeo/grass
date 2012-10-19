@@ -61,7 +61,7 @@ def main():
     fs = options["fs"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     tgis.print_gridded_dataset_univar_statistics(
         "strds", input, where, extended, header, fs)

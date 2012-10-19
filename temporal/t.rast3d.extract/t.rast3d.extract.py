@@ -77,7 +77,7 @@ def main():
     register_null = flags["n"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     tgis.extract_dataset(input, output, "raster3d", where, expression,
                          base, nprocs, register_null)

@@ -71,7 +71,7 @@ def main():
     add_time = flags["t"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     if input.find("@") >= 0:
         id = input

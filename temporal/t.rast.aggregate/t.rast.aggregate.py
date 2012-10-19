@@ -83,7 +83,7 @@ def main():
     sampling = options["sampling"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
     # We need a database interface
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
