@@ -758,11 +758,84 @@ def GetSettingsPath():
 
     # keep location of settings files rc and wx in sync with lib/init/grass.py
     if sys.platform == 'win32':
-        return os.path.join(os.getenv('APPDATA'), 'grass%d' % version)
+        return os.path.join(os.getenv('APPDATA'), 'GRASS%d' % version)
     
     return os.path.join(os.getenv('HOME'), '.grass%d' % version)
 
+def StoreEnvVariable(key, value, envFile = None):
+    """!Store environmental variable
 
+    @param key env key
+    @param value env value
+    @param envFile path to the environmental file (None for default location)
+    """
+    windows = sys.platform == 'win32'
+    if not envFile:
+        gVersion = grass.version()['version'].split('.', 1)[0]
+        if not windows:
+            envFile = os.path.join(os.getenv('HOME'), '.grass%s' % gVersion, 'bashrc')
+        else:
+            envFile = os.path.join(os.getenv('APPDATA'), 'GRASS%s' % gVersion, 'env.bat')
+    
+    # read env file
+    environ = dict()
+    if os.path.exists(envFile):
+        try:
+            fd = open(envFile)
+        except IOError, e:
+            sys.stderr.write(_("Unable to open file '%s'") % envFile)
+            return
+        for line in fd.readlines():
+            try:
+                key, value = line.split(' ', 1).strip().split('=', 1)
+            except:
+                sys.stderr.write(_("%s: unable to parse '%s'") % (envFile, line))
+                continue
+            if key in environ:
+                sys.stderr.write(_("Duplicated key: %s") % key)
+            environ[key] = value
+        
+        fd.close()
+    
+    # update environmental variables
+    environ[key] = value
+    
+    # write update env file
+    try:
+        fd = open(envFile, 'w')
+    except IOError, e:
+        sys.stderr.write(_("Unable to create file '%s'") % envFile)
+        return
+    if windows:
+        expCmd = 'set'
+    else:
+        expCmd = 'export'
+    
+    for key, value in environ.iteritems():
+        fd.write('%s %s=%s\n' % (expCmd, key, value))
+        
+    fd.close()
+
+def SetAddOnPath(addonPath = None, key = 'PATH'):
+    """!Set default AddOn path
+
+    @addonPath path to addons (None for default)
+    @key env key - 'PATH' or 'BASE'
+    """
+    gVersion = grass.version()['version'].split('.', 1)[0]
+    # update env file
+    if not addonPath:
+        if sys.platform != 'win32':
+            addonPath = os.path.join(os.path.join(os.getenv('HOME'),
+                                                  '.grass%s' % gVersion,
+                                                  'addons'))
+        else:
+            addonPath = os.path.join(os.path.join(os.getenv('APPDATA'),
+                                                  'GRASS%s' % gVersion,
+                                                  'addons'))
+    
+    StoreEnvVariable('GRASS_ADDON_' + key, addonPath)
+    os.environ['GRASS_ADDON_' + key] = addonPath
 
 # From lib/gis/col_str.c, except purple which is mentioned
 # there but not given RGB values
@@ -785,7 +858,6 @@ str2rgb = {'aqua': (100, 128, 255),
 rgb2str = {}
 for (s,r) in str2rgb.items():
     rgb2str[ r ] = s
-
 
 def color_resolve(color):
     if len(color) > 0 and color[0] in "0123456789":

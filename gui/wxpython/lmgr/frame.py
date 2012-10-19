@@ -41,6 +41,7 @@ from grass.script          import core as grass
 
 from core.gcmd             import RunCommand, GError, GMessage
 from core.settings         import UserSettings, GetDisplayVectSettings
+from core.utils            import SetAddOnPath
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import ManagerData
@@ -708,8 +709,7 @@ class GMFrame(wx.Frame):
                                    caption = _("Update Addons path?"),
                                    style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
-                os.environ['GRASS_ADDON_PATH'] = os.pathsep.join(addonPath)
-                RunCommand('g.gisenv', set = 'ADDON_PATH=%s' % os.environ['GRASS_ADDON_PATH'])
+                SetAddOnPath(os.pathsep.join(addonPath), key = 'PATH')
         
         self.goutput.WriteCmdLog(_("Launching script '%s'...") % filename)
         self.goutput.RunCmd([filename], switchPage = True)
