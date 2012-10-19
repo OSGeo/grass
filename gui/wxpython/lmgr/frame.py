@@ -829,7 +829,7 @@ class GMFrame(wx.Frame):
             projVersion = _("unknown")
         # check also OSGeo4W on MS Windows
         if sys.platform == 'win32' and \
-                os.path.exists(os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")):
+                not os.path.exists(os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")):
             osgeo4w = ' (OSGeo4W)'
         else:
             osgeo4w = ''
