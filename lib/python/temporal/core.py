@@ -13,7 +13,7 @@ Usage:
 
 >>> import grass.temporal as tgis
 >>> # Create the temporal database
->>> tgis.create_temporal_database()
+>>> tgis.init()
 >>> # Establish a database connection
 >>> dbif, connected = tgis.init_dbif(None)
 >>> dbif.connect()
@@ -39,10 +39,11 @@ import copy
 import sys
 import grass.script.core as core
 # Import all supported database backends
+# Ignore import errors sicne they are checked later
 try:
     import sqlite3
 except ImportError:
-    raise
+    pass
 # Postgresql is optional, existence is checked when needed
 try:
     import psycopg2
@@ -135,7 +136,6 @@ def init():
     # We need to set the correct database backend from the environment variables
     global tgis_backed
     
-    dbmi = sqlite3
 
     core.run_command("t.connect", flags="c")
     kv = core.parse_command("t.connect", flags="pg")
@@ -143,6 +143,12 @@ def init():
     if "driver" in kv:
         if kv["driver"] == "sqlite":
             tgis_backed = kv["driver"]
+            try:
+                import sqlite3
+            except ImportError:
+                core.error("Unable to locate the sqlite SQL Python interface module sqlite3.")
+                raise
+            dbmi = sqlite3
         elif kv["driver"] == "pg":
             tgis_backed = kv["driver"]
             try:
@@ -154,6 +160,7 @@ def init():
         else:
             core.fatal(_("Unable to initialize the temporal DBMI interface. Use "
                          "t.connect to specify the driver and the database string"))
+            dbmi = sqlite3
     else:
         # Set the default sqlite3 connection in case nothing was defined
         core.run_command("t.connect", flags="d")
