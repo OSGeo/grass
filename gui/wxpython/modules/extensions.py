@@ -471,6 +471,11 @@ class UninstallExtensionWindow(wx.Frame):
         
         self.extList.LoadData()
         
+        # update prompt
+        globalvar.UpdateGRASSAddOnCommands(eList)
+        log = self.parent.GetLogWindow()
+        log.GetPrompt().SetFilter(None)
+        
     def OnCmdDialog(self, event):
         """!Shows command dialog"""
         GUI(parent = self).ParseCommand(cmd = ['g.extension'])
