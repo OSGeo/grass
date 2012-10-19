@@ -150,9 +150,11 @@ def GetGRASSCommands():
     
     return set(cmd), scripts
 
-def UpdateGRASSAddOnCommands():
+def UpdateGRASSAddOnCommands(eList = None):
     """!Update list of available GRASS AddOns commands to use when
     parsing string from the command line
+
+    @param eList list of AddOns commands to remove
     """
     global grassCmd, grassScripts
     
@@ -162,7 +164,14 @@ def UpdateGRASSAddOnCommands():
     if addonBase:
         addonPath += os.pathsep + os.path.join(addonBase, 'bin') + os.pathsep + \
             os.path.join(addonBase, 'scripts')
-    
+        
+    # remove commands first
+    if eList:
+        for ext in eList:
+            if ext in grassCmd:
+                grassCmd.remove(ext)
+        Debug.msg(1, "Number of removed AddOn commands: %d", len(eList))
+
     nCmd = 0
     for path in addonPath.split(os.pathsep):
         if not os.path.exists(path) or not os.path.isdir(path):
@@ -177,6 +186,7 @@ def UpdateGRASSAddOnCommands():
                         continue
                     if name not in grassCmd:
                         grassCmd.add(name)
+                        Debug.msg(3, "AddOn commands: %s", name)
                         nCmd += 1
                 if ext == '.py' and \
                         ext in grassScripts.keys() and \
@@ -185,6 +195,7 @@ def UpdateGRASSAddOnCommands():
             else:
                 if fname not in grassCmd:
                     grassCmd.add(fname)
+                    Debug.msg(3, "AddOn commands: %s", fname)
                     nCmd += 1
                     
     Debug.msg(1, "Number of new AddOn commands: %d", nCmd)
