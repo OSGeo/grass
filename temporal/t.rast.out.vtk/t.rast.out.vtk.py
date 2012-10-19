@@ -84,7 +84,7 @@ def main():
     use_granularity = flags["g"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     if not os.path.exists(expdir):
         grass.fatal(_("Export directory <%s> not found.") % expdir)

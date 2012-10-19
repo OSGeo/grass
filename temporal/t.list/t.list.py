@@ -88,7 +88,7 @@ def main():
     colhead = flags['c']
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     id = None
     sp = tgis.dataset_factory(type, id)

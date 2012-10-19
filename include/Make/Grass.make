@@ -169,7 +169,7 @@ libs = \
 	SQLP:sqlp \
 	STATS:stats \
 	SYMB:symb \
-        TEMPORAL:temporal \
+	TEMPORAL:temporal \
 	VECTOR:vector \
 	VEDIT:vedit \
 	NETA:neta \

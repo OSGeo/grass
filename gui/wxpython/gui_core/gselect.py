@@ -163,6 +163,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.fullyQualified = True
         
         self.SetFilter(None)
+
+        tgis.init()
         
     def Create(self, parent):
         self.seltree = wx.TreeCtrl(parent, style=wx.TR_HIDE_ROOT

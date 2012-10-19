@@ -80,7 +80,7 @@ def main():
     map_update = flags["m"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     #Get the current mapset to create the id of the space time dataset
     mapset = grass.gisenv()["MAPSET"]

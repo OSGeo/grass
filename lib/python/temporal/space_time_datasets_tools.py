@@ -274,7 +274,7 @@ def register_maps_in_space_time_dataset(
             statement += map.insert(dbif=dbif, execute=False)
 
         # Sqlite3 performace better for huge datasets when committing in small chunks
-        if dbmi.__name__ == "sqlite3":
+        if dbif.dbmi.__name__ == "sqlite3":
             if count % 100 == 0:
                 if statement is not None and statement != "":
                     core.message(_("Registering maps in the temporal database")

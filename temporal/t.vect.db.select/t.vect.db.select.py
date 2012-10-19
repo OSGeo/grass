@@ -71,7 +71,7 @@ def main():
         columns = None
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     mapset = grass.gisenv()["MAPSET"]
 

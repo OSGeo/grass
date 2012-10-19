@@ -55,7 +55,7 @@ def main():
     type = options["type"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     if maps and file:
         grass.fatal(_(

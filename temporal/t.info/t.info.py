@@ -62,12 +62,14 @@ def main():
     system = flags['s']
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
+    
+    dbif = tgis.SQLDatabaseInterfaceConnection()
 
     if system and not shellstyle:
         #      0123456789012345678901234567890
         print " +------------------- Temporal DBMI backend information ----------------------+"
-        print " | DBMI Python interface:...... " + str(tgis.dbmi.__name__)
+        print " | DBMI Python interface:...... " + str(dbif.dbmi.__name__)
         print " | DBMI init string:........... " + str(
             tgis.get_temporal_dbmi_init_string())
         print " | SQL template path:.......... " + str(
@@ -75,7 +77,7 @@ def main():
         print " +----------------------------------------------------------------------------+"
         return
     elif system:
-        print "dbmi_python_interface=" + str(tgis.dbmi.__name__)
+        print "dbmi_python_interface=" + str(dbif.dbmi.__name__)
         print "dbmi_init_string=" + str(tgis.get_temporal_dbmi_init_string())
         print "sql_template_path=" + str(tgis.get_sql_template_path())
         return

@@ -66,6 +66,7 @@ class TemporalMapRelations(AbstractDataset):
     """
 
     def __init__(self):
+        AbstractDataset.__init__(self)
         self.reset_temporal_topology()
 
     def reset_temporal_topology(self):

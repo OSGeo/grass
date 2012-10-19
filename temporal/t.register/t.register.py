@@ -104,7 +104,7 @@ def main():
     interval = flags["i"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
     # Register maps
     tgis.register_maps_in_space_time_dataset(
         type=type, name=name, maps=maps, file=file, start=start, end=end,

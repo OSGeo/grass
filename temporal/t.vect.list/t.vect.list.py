@@ -87,7 +87,7 @@ def main():
     header = flags["h"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     tgis.list_maps_of_stds(
         "stvds", input, columns, order, where, separator, method, header)

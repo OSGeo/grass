@@ -81,7 +81,7 @@ def main():
     method = method.split(",")
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     tgis.sample_stds_by_stds_topology(intype, samtype, inputs, sampler,
                                       header, separator, method, spatial)

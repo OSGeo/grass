@@ -49,6 +49,8 @@ class ImplementationError(Exception):
 class AbstractDataset(object):
     """!This is the base class for all datasets 
        (raster, vector, raster3d, strds, stvds, str3ds)"""
+    def __init__(self):
+        pass
 
     def reset(self, ident):
         """!Reset the internal structure and set the identifier
@@ -231,7 +233,7 @@ class AbstractDataset(object):
                 dbif)
         statement += self.spatial_extent.get_insert_statement_mogrified(dbif)
         statement += self.metadata.get_insert_statement_mogrified(dbif)
-
+        
         if execute:
             dbif.execute_transaction(statement)
             if connect:

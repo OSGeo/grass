@@ -82,7 +82,7 @@ def main():
     fs = options["fs"]
 
     # Make sure the temporal database exists
-    tgis.create_temporal_database()
+    tgis.init()
 
     tgis.print_vector_dataset_univar_statistics(
         input, twhere, layer, type, column, where, extended, header, fs)

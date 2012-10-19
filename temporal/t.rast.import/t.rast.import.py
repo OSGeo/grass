@@ -92,6 +92,8 @@ def main():
     exp = flags["e"]
     overr = flags["o"]
     create = flags["c"]
+    
+    tgis.init()
 
     tgis.import_stds(input, output, extrdir, title, descr, location,
                      link, exp, overr, create, "strds")
