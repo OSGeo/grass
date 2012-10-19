@@ -47,7 +47,7 @@ from grass.script import core as grass
 
 from core          import globalvar
 from core.gcmd     import RunCommand, GError
-from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, GetSettingsPath
+from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, GetSettingsPath, StoreEnvVariable
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
 
@@ -177,9 +177,9 @@ class PreferencesBaseDialog(wx.Dialog):
             self.settings.SaveToFile()
             self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % self.settings.filePath)
             if lang:
-                RunCommand('g.gisenv', set = 'LANG=%s' % lang)
+                StoreEnvVariable(key = 'LANG', value = lang)
             else:
-                RunCommand('g.gisenv', unset = 'LANG')
+                StoreEnvVariable(key = 'LANG')
             event = wxSettingsChanged()
             wx.PostEvent(self, event)
             self.Close()
