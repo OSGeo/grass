@@ -1161,6 +1161,12 @@ else:
     else:
         non_interactive(args[0])
 
+# Set shell
+check_shell()
+
+# Set language
+set_language()
+
 # User selects LOCATION and MAPSET if not set
 set_data()
 
@@ -1177,11 +1183,6 @@ make_fontcap()
 #  is this really needed?? Modules should call this when/if required.
 if not os.access(os.path.join(location, "VAR"), os.F_OK):
     call(['db.connect', '-c', '--quiet'])
-
-check_shell()
-
-# Set language
-set_language()
 
 check_batch_job()
 
