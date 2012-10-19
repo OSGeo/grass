@@ -168,15 +168,20 @@ def UpdateGRASSAddOnCommands():
         if not os.path.exists(path) or not os.path.isdir(path):
             continue
         for fname in os.listdir(path):
+            if fname in ['docs', 'modules.xml']:
+                continue
             if grassScripts: # win32
                 name, ext = os.path.splitext(fname)
                 if name not in grassCmd:
-                    grassCmd.add(name)
-                    nCmd += 1
-                if ext in grassScripts.keys() and \
+                    if ext not in ['.exe', '.py']:
+                        continue
+                    if name not in grassCmd:
+                        grassCmd.add(name)
+                        nCmd += 1
+                if ext == '.py' and \
+                        ext in grassScripts.keys() and \
                         name not in grassScripts[ext]:
                     grassScripts[ext].append(name)
-                    nCmd += 1
             else:
                 if fname not in grassCmd:
                     grassCmd.add(fname)

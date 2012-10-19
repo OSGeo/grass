@@ -48,9 +48,11 @@ else:
 if sys.platform == 'win32':
     grass_config_dirname = "GRASS7"
     grass_config_dir = os.path.join(os.getenv('APPDATA'), grass_config_dirname)
+    grass_env_file = os.path.join(grass_config_dir, 'env.bat')
 else:
     grass_config_dirname = ".grass7"
     grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
+    grass_env_file = os.path.join(grass_config_dir, 'bashrc')
 
 gisbase = os.path.normpath(gisbase)
 
@@ -638,16 +640,9 @@ def load_gisrc():
     location = os.path.join(gisdbase, location_name, mapset)
 
 def set_env_from_gisrc():
+    ### TODO: eliminate all env-from-gisrc
     import locale
     kv = read_gisrc()
-    
-    ### addons
-    if kv.get('ADDON_PATH'):
-        addon_path = kv.get('ADDON_PATH')
-        if os.getenv('GRASS_ADDON_PATH'):
-            os.environ['GRASS_ADDON_PATH'] += os.pathsep + addon_path
-        else:
-            os.environ['GRASS_ADDON_PATH'] = addon_path
     
     ### language
     language = kv.get('LANG')
@@ -900,9 +895,12 @@ def bash_startup():
     f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
     f.write("PROMPT_COMMAND=\"'%s'\"\n" % os.path.join(gisbase, 'etc', 'prompt.py'))
     
-    path = os.path.join(userhome, ".grass.bashrc")
+    # read environmental variables
+    path = os.path.join(userhome, ".grass.bashrc") # left for backward compatibility
     if os.access(path, os.R_OK):
         f.write(readfile(path) + '\n')
+    if os.access(grass_env_file, os.R_OK):
+        f.write(readfile(grass_env_file) + '\n')
     
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
