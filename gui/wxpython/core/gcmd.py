@@ -528,11 +528,11 @@ class CommandThread(Thread):
         # TODO: replace ugly hack bellow
         args = self.cmd
         if sys.platform == 'win32':
-            ext = os.path.splitext(self.cmd[0])[1] == '.py'
-            if ext or self.cmd[0] in globalvar.grassScripts['.py']:
+            ext = os.path.splitext(self.cmd[0])[1] == globalvar.SCT_EXT
+            if ext or self.cmd[0] in globalvar.grassScripts[globalvar.SCT_EXT]:
                 os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
                 if not ext:
-                    args = [sys.executable, self.cmd[0] + '.py'] + self.cmd[1:]
+                    args = [sys.executable, self.cmd[0] + globalvar.SCT_EXT] + self.cmd[1:]
                 else:
                     args = [sys.executable, self.cmd[0]] + self.cmd[1:]
         
