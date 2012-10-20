@@ -198,8 +198,8 @@ class CmdThread(threading.Thread):
 class GMConsole(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
-    def __init__(self, parent, frame, id = wx.ID_ANY, margin = False,
-                 notebook = None,
+    def __init__(self, parent, id = wx.ID_ANY, margin = False,
+                 frame = None, notebook = None,
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  **kwargs):
         wx.SplitterWindow.__init__(self, parent, id, style = style, *kwargs)
@@ -209,8 +209,12 @@ class GMConsole(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent = self, id = wx.ID_ANY)
         
         # initialize variables
-        self.parent          = parent # GMFrame | CmdPanel | ?
-        self.frame = frame
+        self.parent = parent # GMFrame | CmdPanel | ?
+        if frame:
+            self.frame = frame
+        else:
+            self.frame = parent
+        
         if notebook:
             self._notebook = notebook
         else:
