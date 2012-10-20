@@ -104,6 +104,12 @@ DIALOG_COLOR_SIZE = (30, 30)
 MAP_WINDOW_SIZE = (800, 600)
 GM_WINDOW_SIZE = (500, 600)
 
+if sys.platform == 'win32':
+    BIN_EXT = '.exe'
+    SCT_EXT = '.py'
+else:
+    BIN_EXT = SCT_EXT = ''
+
 def GetGRASSCommands():
     """!Create list of available GRASS commands to use when parsing
     string from the command line
@@ -114,9 +120,7 @@ def GetGRASSCommands():
     gisbase = os.environ['GISBASE']
     cmd = list()
     if sys.platform == 'win32':
-        scripts = { '.bat' : list(),
-                    '.py'  : list()
-                    }
+        scripts = { SCT_EXT : list() }
     else:
         scripts = {}
     
@@ -182,13 +186,13 @@ def UpdateGRASSAddOnCommands(eList = None):
             if grassScripts: # win32
                 name, ext = os.path.splitext(fname)
                 if name not in grassCmd:
-                    if ext not in ['.exe', '.py']:
+                    if ext not in [BIN_EXT, SCT_EXT]:
                         continue
                     if name not in grassCmd:
                         grassCmd.add(name)
                         Debug.msg(3, "AddOn commands: %s", name)
                         nCmd += 1
-                if ext == '.py' and \
+                if ext == SCT_EXT and \
                         ext in grassScripts.keys() and \
                         name not in grassScripts[ext]:
                     grassScripts[ext].append(name)
