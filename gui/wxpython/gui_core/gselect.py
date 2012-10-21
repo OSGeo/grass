@@ -165,8 +165,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.fullyQualified = True
         
         self.SetFilter(None)
-
-        tgis.init()
         
     def Create(self, parent):
         self.seltree = wx.TreeCtrl(parent, style=wx.TR_HIDE_ROOT
@@ -550,6 +548,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         """!Set object properties"""
         if 'type' in kargs:
             self.type = kargs['type']
+            if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
+                tgis.init()
         if 'mapsets' in kargs:
             self.mapsets = kargs['mapsets']
         if 'multiple' in kargs:
