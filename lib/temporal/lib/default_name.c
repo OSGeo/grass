@@ -60,7 +60,7 @@ int tgis_set_default_connection(void)
 {
     dbConnection connection;
 
-    G_debug(1,
+    G_debug(0,
 	    "Creating new default TGIS DB params with tgis_set_default_connection()");
 
     if (strcmp(TGISDB_DEFAULT_DRIVER, "sqlite") == 0) {
