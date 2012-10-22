@@ -27,6 +27,8 @@ void G__script(void)
     char *type;
 
     fprintf(fp,
+	    "#!/usr/bin/env python\n");
+    fprintf(fp,
 	    "############################################################################\n");
     fprintf(fp, "#\n");
     fprintf(fp, "# MODULE:       %s_wrapper\n", G_program_name());
