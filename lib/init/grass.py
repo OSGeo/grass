@@ -859,14 +859,14 @@ def csh_startup():
     try_remove(tcshrc)
     
     f = open(cshrc, 'w')
-    f.write("set home = %s" % userhome)
-    f.write("set history = 3000 savehist = 3000  noclobber ignoreeof")
-    f.write("set histfile = %s" % os.path.join(os.getenv('HOME'), ".history"))
+    f.write("set home = %s\n" % userhome)
+    f.write("set history = 3000 savehist = 3000  noclobber ignoreeof\n")
+    f.write("set histfile = %s\n" % os.path.join(os.getenv('HOME'), ".history"))
     
-    f.write("set prompt = '\\")
-    f.write("Mapset <%s> in Location <%s> \\" % (mapset, location_name))
-    f.write("GRASS %s > '" % grass_version)
-    f.write("set BOGUS=``;unset BOGUS")
+    f.write("set prompt = '\\\n")
+    f.write("Mapset <%s> in Location <%s> \\\n" % (mapset, location_name))
+    f.write("GRASS %s > '\n" % grass_version)
+    f.write("set BOGUS=``;unset BOGUS\n")
     
     path = os.path.join(userhome, ".grass.cshrc") # left for backward compatibility
     if os.access(path, os.R_OK):
@@ -886,7 +886,7 @@ def csh_startup():
                     f.write(l)
     
     path = os.getenv('PATH').split(':')
-    f.write("set path = ( %s ) " % ' '.join(path))
+    f.write("set path = ( %s ) \n" % ' '.join(path))
     
     f.close()
     writefile(tcshrc, readfile(cshrc))
