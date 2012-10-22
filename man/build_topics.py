@@ -59,3 +59,4 @@ for key, values in sorted(keywords.iteritems()):
     write_html_footer(keyfile, "index.html")
 topicsfile.write("</ul>\n")
 write_html_footer(topicsfile, "index.html")  
+topicsfile.close()
