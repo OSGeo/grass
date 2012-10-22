@@ -34,6 +34,8 @@
 #%end
 
 #%option G_OPT_STDS_TYPE
+#% guidependency: input
+#% guisection: Required
 #%end
 
 #%option

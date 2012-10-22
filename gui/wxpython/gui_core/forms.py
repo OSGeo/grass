@@ -149,11 +149,12 @@ class UpdateThread(Thread):
         p = self.task.get_param(self.eventId, element = 'wxId', raiseError = False)
         if not p or 'wxId-bind' not in p:
             return
-        
+
+        # is this check necessary?
         # get widget prompt
-        pType = p.get('prompt', '')
-        if not pType:
-            return
+        # pType = p.get('prompt', '')
+        # if not pType:
+        #     return
         
         # check for map/input parameter
         pMap = self.task.get_param('map', raiseError = False)
@@ -182,6 +183,17 @@ class UpdateThread(Thread):
             if pBind:
                 pBind['value'] = ''
             
+            # set appropriate types in t.* modules element selections
+            if name == 'Select':
+                type_param = self.task.get_param('type', element = 'name', raiseError = False)
+                maps_param = self.task.get_param('maps', element = 'name', raiseError = False)
+                self.data[win.GetParent().SetType] = {'etype': type_param.get('value')}
+                # t.(un)register has one type for 'input', 'maps'
+                if maps_param is not None:
+                    if maps_param['wxId'][0] != uid:
+                        element_dict = {'rast': 'strds', 'vect': 'stvds', 'rast3d': 'str3ds'}
+                        self.data[win.GetParent().SetType] = {'etype': element_dict[type_param.get('value')]}
+
             map = layer = None
             driver = db = table = None
             if name in ('LayerSelect', 'ColumnSelect'):
@@ -293,7 +305,7 @@ class UpdateThread(Thread):
                     self.data[win.UpdateItems] = { 'dbase' : pDbase.get('value', ''),
                                                    'location' : pLocation.get('value', ''),
                                                    'mapset' : pMapset.get('value', '')}
-            
+
 def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
 
@@ -1030,6 +1042,8 @@ class CmdPanel(wx.Panel):
                             p['wxId'] = [cb.GetId(),]
                             cb.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             cb.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            if p.get('guidependency', ''):
+                                cb.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
             
             # text entry
             if (p.get('type','string') in ('string','integer','float')
@@ -1117,12 +1131,25 @@ class CmdPanel(wx.Panel):
                         formatSelector = False
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                     else:
+                        elem = p.get('element', None)
+                        # hack for t.* modules
+                        if elem in ('stds', 'map'):
+                            orig_elem = elem
+                            type_param = self.task.get_param('type', element = 'name', raiseError = False)
+                            if type_param:
+                                elem = type_param.get('default', None)
+                                # for t.(un)register:
+                                maps_param = self.task.get_param('maps', element = 'name', raiseError = False)
+                                if maps_param and orig_elem == 'stds':
+                                    element_dict = {'rast': 'strds', 'vect': 'stvds', 'rast3d': 'str3ds'}
+                                    elem = element_dict[type_param.get('default')]
+                        
+
                         selection = gselect.Select(parent = which_panel, id = wx.ID_ANY,
                                                    size = globalvar.DIALOG_GSELECT_SIZE,
-                                                   type = p.get('element', ''),
+                                                   type = elem,
                                                    multiple = multiple, nmaps = len(p.get('key_desc', [])),
                                                    mapsets = mapsets, fullyQualified = p.get('age', 'old') == 'old')
-                        
                         value = self._getValue(p)
                         if value:
                             selection.SetValue(value)
@@ -1480,9 +1507,6 @@ class CmdPanel(wx.Panel):
         pLocation = None
         pMapset = None
         for p in self.task.params:
-            if p.get('gisprompt', False) == False:
-                continue
-            
             guidep = p.get('guidependency', '')
             
             if guidep:
@@ -1494,6 +1518,8 @@ class CmdPanel(wx.Panel):
                         if 'wxId-bind' not in p:
                             p['wxId-bind'] = list()
                         p['wxId-bind'] +=  pOpt['wxId']
+                continue
+            if p.get('gisprompt', False) == False:
                 continue
             
             prompt = p.get('element', '')

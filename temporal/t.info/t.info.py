@@ -20,12 +20,8 @@
 #% keywords: metadata
 #%end
 
-#%option
-#% key: input
-#% type: string
+#%option G_OPT_STDS_INPUT
 #% description: Name of an existing space time dataset or map
-#% required: no
-#% multiple: no
 #%end
 
 #%option
@@ -33,6 +29,8 @@
 #% type: string
 #% description: Type of the dataset, default is strds (space time raster dataset)
 #% required: no
+#% guidependency: input
+#% guisection: Required
 #% options: strds, str3ds, stvds, rast, rast3d, vect
 #% answer: strds
 #%end
@@ -45,6 +43,7 @@
 #%flag
 #% key: s
 #% description: Print information about the temporal DBMI interface and exit
+#% suppress_required: yes
 #%end
 
 
