@@ -21,26 +21,26 @@
 #% keywords: remove
 #%end
 
-#%option G_OPT_STDS_INPUT
+#%option G_OPT_STDS_INPUTS
 #% required: no
-#%end
-
-#%option
-#% key: file
-#% type: string
-#% description: Input file with dataset names, one per line
-#% required: no
-#% multiple: no
 #%end
 
 #%option
 #% key: type
 #% type: string
 #% description: Type of the space time dataset, default is strds
+#% guidependency: inputs
 #% required: no
 #% options: strds, str3ds, stvds
 #% answer: strds
 #%end
+
+#%option G_OPT_F_INPUT
+#% key: file
+#% description: Input file with dataset names, one per line
+#% required: no
+#%end
+
 
 import grass.script as grass
 import grass.temporal as tgis
@@ -51,12 +51,12 @@ import grass.temporal as tgis
 def main():
 
     # Get the options
-    datasets = options["input"]
+    datasets = options["inputs"]
     file = options["file"]
     type = options["type"]
 
     if datasets and file:
-        core.fata(_("%s= and %s= are mutually exclusive") % ("input", "file"))
+        core.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
     # Make sure the temporal database exists
     tgis.init()

@@ -30,6 +30,7 @@
 #%end
 
 #%option G_OPT_MAP_TYPE
+#% guidependency: input,maps
 #%end
 
 #%option G_OPT_FILE_INPUT
