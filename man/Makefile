@@ -25,7 +25,7 @@ categories = \
 
 IDXCATS := $(foreach cat,$(categories),$(lastword $(subst :, ,$(cat))))
 
-IDXSRC = full_index index $(IDXCATS)
+IDXSRC = full_index index topics $(IDXCATS)
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
