@@ -48,6 +48,14 @@ define build
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_$(1).py $(2)
 endef
 
+define build_topics
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_topics.py $(HTMLDIR)
+endef
+
+$(HTMLDIR)/topics.html: $(ALL_HTML)
+	$(call build_topics)
+	touch $@
+
 $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
