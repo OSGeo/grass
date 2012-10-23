@@ -31,6 +31,7 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+import copy
 import wx
 
 from wx.lib.newevent import NewEvent
@@ -770,7 +771,13 @@ class SbDisplayGeometry(SbTextItem):
         self.label = _("Display geometry")
         
     def Show(self):
-        region = self.mapFrame.GetMap().GetCurrentRegion()
+        region = copy.copy(self.mapFrame.GetMap().GetCurrentRegion())
+        if self.mapFrame.GetProperty('resolution'):
+            compRegion = self.mapFrame.GetMap().GetRegion(add3d = False)
+            region['rows'] = abs(int((region['n'] - region['s']) / compRegion['nsres']) + 0.5)
+            region['cols'] = abs(int((region['e'] - region['w']) / compRegion['ewres']) + 0.5)
+            region['nsres'] = compRegion['nsres']
+            region['ewres'] = compRegion['ewres']
         self.SetValue("rows=%d; cols=%d; nsres=%.2f; ewres=%.2f" %
                      (region["rows"], region["cols"],
                       region["nsres"], region["ewres"]))
