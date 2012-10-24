@@ -1537,7 +1537,10 @@ class GdalSelect(wx.Panel):
         
         if sel == self.sourceMap['file']:   # file
             self.dsnType = 'file'
-            format = self.input[self.dsnType][2][0]
+            try:
+                format = self.input[self.dsnType][2][0]
+            except IndexError:
+                format = ''
             try:
                 ext = self.format.GetExtension(format)
                 if not ext:
