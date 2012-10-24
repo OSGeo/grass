@@ -516,6 +516,7 @@ static void summary(void)
 	    fprintf(stdout, "min=%g\n", min);
 	    fprintf(stdout, "max=%g\n", max);
 	    fprintf(stdout, "range=%g\n", max - min);
+	    fprintf(stdout, "sum=%g\n", sum);
 	    if (compatible && (otype & GV_POINTS)) {
 		fprintf(stdout, "mean=%g\n", mean);
 		fprintf(stdout, "mean_abs=%g\n", mean_abs);
@@ -548,6 +549,7 @@ static void summary(void)
 	    fprintf(stdout, "minimum: %g\n", min);
 	    fprintf(stdout, "maximum: %g\n", max);
 	    fprintf(stdout, "range: %g\n", max - min);
+	    fprintf(stdout, "sum: %g\n", sum);
 	    if (compatible && (otype & GV_POINTS)) {
 		fprintf(stdout, "mean: %g\n", mean);
 		fprintf(stdout, "mean of absolute values: %g\n", mean_abs);
