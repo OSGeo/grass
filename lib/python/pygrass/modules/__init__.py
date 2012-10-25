@@ -44,9 +44,9 @@ _GETFROMTAG = {
 
 _GETTYPE = {
     'string': str,
-    'integer': np.int32,
-    'float': np.float32,
-    'double': np.float64,
+    'integer': int,
+    'float': float,
+    'double': float,
 }
 
 
@@ -177,8 +177,8 @@ class Parameter(object):
             else:
                 self._value = value
         else:
-            raise TypeError('The Parameter <%s>, require: %s' %
-                            (self.name, self.typedesc))
+            str_err = 'The Parameter <%s>, require: %s, get: %s instead'
+            raise TypeError(str_err % (self.name, self.typedesc, type(value)))
 
     # here the property function is used to transform value in an attribute
     # in this case we define which function must be use to get/set the value
@@ -462,6 +462,9 @@ class Module(object):
         #
         if self.run_:
             self.run()
+
+    def __str__(self):
+        return ' '.join(self.make_cmd())
 
     @property
     def __doc__(self):
