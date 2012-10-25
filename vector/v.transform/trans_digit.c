@@ -31,6 +31,7 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
     Cats = Vect_new_cats_struct();
 
     driver = NULL;
+    fi = NULL;
     if (field > 0) {
 	fi = Vect_get_field(Old, field);
 
@@ -39,7 +40,7 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  fi->database, fi->driver);
 
-	trans_params = (double *)G_calloc(IDX_ZROT, sizeof(double));
+	trans_params = (double *)G_calloc(IDX_ZROT + 1, sizeof(double));
     }
     else {
 	trans_params = trans_params_def;
