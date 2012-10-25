@@ -57,7 +57,7 @@ class SearchModuleWindow(wx.Panel):
                              _('keywords')    : 'keywords' }
         
         self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                label = " %s " % _("Find module(s)"))
+                                label = " %s " % _("Find module - (press Enter for next match)"))
         
         self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY,
                                   choices = [_('description'),
@@ -65,10 +65,10 @@ class SearchModuleWindow(wx.Panel):
                                              _('command')])
         self.searchBy.SetSelection(0)
         
-        self.search = wx.TextCtrl(parent = self, id = wx.ID_ANY,
-                                  value = "", size = (-1, 25),
-                                  style = wx.TE_PROCESS_ENTER)
-        self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
+        self.search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
+                                    size = (-1, 25), style = wx.TE_PROCESS_ENTER)
+        if self.cmdPrompt:
+            self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
         
         if self.showTip:
             self.searchTip = StaticWrapText(parent = self, id = wx.ID_ANY,
@@ -108,6 +108,10 @@ class SearchModuleWindow(wx.Panel):
         self.SetSizer(sizer)
         sizer.Fit(self)
 
+    def GetCtrl(self):
+        """!Get SearchCtrl widget"""
+        return self.search
+    
     def GetSelection(self):
         """!Get selected element"""
         selection = self.searchBy.GetStringSelection()

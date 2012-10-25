@@ -132,7 +132,7 @@ class MenuTreeWindow(wx.Panel):
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
         self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                    label = " %s " % _("Menu tree (double-click to run command)"))
+                                    label = " %s " % _("Menu tree (double-click or Ctrl-Enter to run command)"))
         # tree
         self.tree = MenuTree(parent = self, data = ManagerData())
         self.tree.Load()
@@ -142,15 +142,16 @@ class MenuTreeWindow(wx.Panel):
         
         # buttons
         self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("&Run"))
-        self.btnRun.SetToolTipString(_("Run selected command"))
+        self.btnRun.SetToolTipString(_("Run selected command from the menu tree"))
         self.btnRun.Enable(False)
         
         # bindings
         self.btnRun.Bind(wx.EVT_BUTTON,            self.OnRun)
         self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
-        self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
-        self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
+#        self.search.GetCtrl().Bind(wx.EVT_TEXT_ENTER,  self.OnShowItem)
+        self.search.GetCtrl().Bind(wx.EVT_TEXT,        self.OnUpdateStatusBar)
+        self.search.GetCtrl().Bind(wx.EVT_KEY_UP,      self.OnKeyUp)
         
         self._layout()
         
@@ -211,6 +212,13 @@ class MenuTreeWindow(wx.Panel):
         else:
             eval(handler)(None)
 
+    def OnKeyUp(self, event):
+        if event.GetKeyCode() == wx.WXK_RETURN:
+            if event.ControlDown():
+                self.OnRun(event)
+            else:
+                self.OnShowItem(event)
+        
     def OnShowItem(self, event):
         """!Show selected item"""
         self.tree.OnShowItem(event)
@@ -253,11 +261,11 @@ class MenuTreeWindow(wx.Panel):
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         element = self.search.GetSelection()
-        self.tree.SearchItems(element = element,
-                              value = event.GetString())
+        value = event.GetEventObject().GetValue()
+        self.tree.SearchItems(element = element, value = value)
         
         nItems = len(self.tree.itemsMarked)
-        if event.GetString():
+        if value:
             self.parent.SetStatusText(_("%d modules match") % nItems, 0)
         else:
             self.parent.SetStatusText("", 0)
