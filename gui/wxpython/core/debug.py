@@ -11,7 +11,7 @@ from core.debug import Debug
 Debug.msg (3, 'debug message')
 @endcode
          
-(C) 2007-2009, 2011-2012 by the GRASS Development Team
+(C) 2007-2009, 2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -22,6 +22,8 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
+import grass.script as grass
+
 class DebugMsg:
     """!wxGUI debugging
     
@@ -30,17 +32,14 @@ class DebugMsg:
     @endcode
     """
     def __init__(self):
-        self.SetLevel() # -> default debug level
+        # default level
+        self.debuglevel = 0
+        
+        self.SetLevel()
 
     def SetLevel(self):
         """!Initialize gui debug level
         """
-        try:
-            import grass.script as grass
-        except ImportError:
-            self.debuglevel = 0
-            return
-        
         self.debuglevel = int(grass.gisenv().get('WX_DEBUG', 0))
         
     def msg(self, level, message, *args):
