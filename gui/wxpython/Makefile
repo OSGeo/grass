@@ -19,7 +19,8 @@ PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler gui_core iclass lm
 	mapdisp modules nviz psmap swipe vdigit wxplot ogc_services)
 DSTDIRS := $(patsubst %,$(ETCDIR)/%,icons scripts xml)
 
-default: $(DSTFILES) menustrings.py
+default: $(DSTFILES)
+	-$(MAKE) menustrings.py
 	$(MAKE) parsubdirs
 
 $(ETCDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
