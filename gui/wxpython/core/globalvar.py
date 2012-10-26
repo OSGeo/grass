@@ -102,7 +102,7 @@ DIALOG_LAYER_SIZE = (100, -1)
 DIALOG_COLOR_SIZE = (30, 30)
 
 MAP_WINDOW_SIZE = (800, 600)
-GM_WINDOW_SIZE = (500, 600)
+GM_WINDOW_SIZE = (525, 600)
 
 if sys.platform == 'win32':
     BIN_EXT = '.exe'
