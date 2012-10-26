@@ -156,7 +156,7 @@ class GMFrame(wx.Frame):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
         # minimal frame size
-        self.SetMinSize((500, 400))
+        self.SetMinSize((globalvar.GM_WINDOW_SIZE[0], 400))
 
         # AUI stuff
         self._auimgr.AddPane(self.notebook, wx.aui.AuiPaneInfo().
