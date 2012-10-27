@@ -44,7 +44,7 @@ from core.gcmd       import CommandThread, GMessage, GError, GException, EncodeS
 from gui_core.forms  import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
-from core.settings   import UserSettings, Settings, GetDisplayVectSettings
+from core.settings   import UserSettings, GetDisplayVectSettings
 from gui_core.ghelp  import SearchModuleWindow
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
@@ -1170,14 +1170,12 @@ class GMStc(stc.StyledTextCtrl):
     def SetStyle(self):
         """!Set styles for styled text output windows with type face 
         and point size selected by user (Courier New 10 is default)"""
-
-        settings = Settings()
         
-        typeface = settings.Get(group = 'appearance', key = 'outputfont', subkey = 'type')   
+        typeface = UserSettings.Get(group = 'appearance', key = 'outputfont', subkey = 'type')   
         if typeface == "":
             typeface = "Courier New"
         
-        typesize = settings.Get(group = 'appearance', key = 'outputfont', subkey = 'size')
+        typesize = UserSettings.Get(group = 'appearance', key = 'outputfont', subkey = 'size')
         if typesize == None or typesize <= 0:
             typesize = 10
         typesize = float(typesize)
