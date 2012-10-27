@@ -73,8 +73,8 @@ else
     GRASS_EXECUTABLE=grass${MAJOR}${MINOR}
 fi
 
-export GRASS_PYTHON="/c/OSGeo4W/bin/python.exe"
-export PYTHONHOME="/c/OSGeo4W/apps/Python27"
+export GRASS_PYTHON="$OSGEO4W_ROOT_MSYS/bin/python.exe"
+export PYTHONHOME="$OSGEO4W_ROOT_MSYS/apps/Python27"
 
 if [ -f mswindows/osgeo4w/package.log ]; then 
     i=0 
