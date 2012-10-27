@@ -189,7 +189,7 @@ class Parameter(object):
             value = ','.join([str(v) for v in self._value])
         else:
             value = str(self._value)
-        return "%s=%s" % (self.name, value)
+        return """%s=%s""" % (self.name, value)
 
     def __repr__(self):
         str_repr = "Parameter <%s> (required:%s, type:%s, multiple:%s)"
@@ -375,9 +375,9 @@ class Module(object):
         self._flags = ''
         self.run_ = True
         self.finish_ = True
-        self.stdin_ = subprocess.PIPE
-        self.stdout = subprocess.PIPE
-        self.stderr = subprocess.PIPE
+        self.stdin_ = None
+        self.stdout_ = None
+        self.stderr_ = None
         self.popen = None
 
         if args or kargs:
@@ -417,6 +417,12 @@ class Module(object):
         if 'stdin_' in kargs:
             self.stdin_ = kargs['stdin_']
             del(kargs['stdin_'])
+        if 'stdout_' in kargs:
+            self.stdout_ = kargs['stdout_']
+            del(kargs['stdout_'])
+        if 'stderr_' in kargs:
+            self.stderr_ = kargs['stderr_']
+            del(kargs['stderr_'])
         if 'finish_' in kargs:
             self.finish_ = kargs['finish_']
             del(kargs['finish_'])
@@ -496,8 +502,8 @@ class Module(object):
         cmd = self.make_cmd()
         #print(repr(cmd))
         self.popen = subprocess.Popen(cmd, stdin=self.stdin_,
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.PIPE)
+                                      stdout=self.stdout_,
+                                      stderr=self.stderr_)
         if self.finish_:
             self.popen.wait()
             self.stdout, self.stderr = self.popen.communicate()
