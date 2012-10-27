@@ -142,13 +142,13 @@ class Parameter(object):
         else:
             raise TypeError('New type: %s, ignored' % diz['type'])
 
-        self.description = diz['description']
-        self.keydesc = diz['keydesc'] if 'keydesc' in diz else None
+        self.description = diz.get('description', None)
+        self.keydesc = diz.get('keydesc', None)
         self.values = [self._type(
             i) for i in diz['values']] if 'values' in diz else None
         self.default = self._type(
             diz['default']) if 'default' in diz else None
-        self.guisection = diz['guisection'] if 'guisection' in diz else None
+        self.guisection = diz.get('guisection', None)
         if 'gisprompt' in diz:
             self.type = diz['gisprompt']['prompt']
             self.input = False if diz['gisprompt']['age'] == 'new' else True
@@ -247,8 +247,8 @@ class Flag(object):
         self.special = True if self.name in (
             'verbose', 'overwrite', 'quiet', 'run') else False
         self.description = diz['description']
-        self.default = diz['default'] if 'default' in diz else None
-        self.guisection = diz['guisection'] if 'guisection' in diz else None
+        self.default = diz.get('default', None)
+        self.guisection = diz.get('guisection', None)
 
     def __str__(self):
         if self.value:
