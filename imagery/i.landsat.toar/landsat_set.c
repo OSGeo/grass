@@ -424,7 +424,7 @@ void set_TM5(lsat_data * lsat)
     if (julian >= jbuf) {
 	G_warning
 	    ("Using QCalMin=1.0 as a NLAPS product processed after 4/4/2004");
-	G_warning("Discard this message if using the L5_MTL (-t) flag");
+	G_warning("Ignore this message when using the metfile option");
     }
     lsat->number = 5;
     sensor_TM(lsat);
