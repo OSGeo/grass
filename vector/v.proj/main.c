@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     int out_zone = 0;
     int overwrite;		/* overwrite output map */
     const char *mapset;
-    const char *omap_name, *map_name, *iset_name, *oset_name, *iloc_name;
+    const char *omap_name, *map_name, *iset_name, *iloc_name;
     struct pj_info info_in;
     struct pj_info info_out;
     const char *gbase;
@@ -148,8 +148,6 @@ int main(int argc, char *argv[])
     else
 	iset_name = G_store(G_mapset());
 
-    oset_name = G_store(G_mapset());
-
     iloc_name = ilocopt->answer;
 
     if (ibaseopt->answer)
@@ -222,7 +220,7 @@ int main(int argc, char *argv[])
 	    exit(EXIT_FAILURE);
 
 	Vect_set_open_level(1);
-	G_debug(1, "Open old: location: %s mapset : %s", G__location_path(),
+	G_debug(1, "Open old: location: %s mapset : %s", G_location_path(),
 		G_mapset());
 	Vect_open_old(&Map, map_name, mapset);
     }
@@ -362,7 +360,7 @@ int main(int argc, char *argv[])
 	    tgt_box.S = y;
     }
 
-    G_debug(1, "Open new: location: %s mapset : %s", G__location_path(),
+    G_debug(1, "Open new: location: %s mapset : %s", G_location_path(),
 	    G_mapset());
     Vect_open_new(&Out_Map, omap_name, Vect_is_3d(&Map));
 
