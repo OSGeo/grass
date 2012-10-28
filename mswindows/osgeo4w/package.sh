@@ -21,8 +21,16 @@ export PACKAGE=${1:-1}
 # package name for osgeo4w
 # eg. 70-dev -> grass70-dev, empty for release
 export PACKAGE_NAME=$2
-export OSGEO4W_ROOT_MSYS="/c/OSGeo4W"
-export OSGEO4W_ROOT="C:\\\OSGeo4W"
+# OSGeo4W directory postfix, separate OSGeo4W installations are used
+# for building GRASS 6.x and 7.x
+if test -z "$3" ; then
+    OSGEO4W_ROOT_POSTFIX=""
+else
+    OSGEO4W_ROOT_POSTFIX="$3"
+fi
+export OSGEO4W_ROOT_MSYS="/c/OSGeo4W${OSGEO4W_ROOT_POSTFIX}"
+export OSGEO4W_ROOT="C:\\\OSGeo4W${OSGEO4W_ROOT_POSTFIX}"
+
 export PATH=.:/c/mingw/bin:/usr/local/bin:/bin:$OSGEO4W_ROOT_MSYS/bin:/c/WINDOWS/system32:/c/WINDOWS:/c/WINDOWS/System32/Wbem:/c/Subversion:$PWD/mswindows/osgeo4w
 
 T0=$(date +%s) 
