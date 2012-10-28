@@ -106,19 +106,22 @@ int listdb(dbString* path, int npaths,
             continue;
         len = strlen(dp->d_name) - 3;
         /* try to open file as SQLite database */
-        if (len > 0 && 
-            G_strcasecmp(dp->d_name + len, ".db") == 0 && 
-            sqlite3_open(dp->d_name, &sqlite) == SQLITE_OK) {
-           
-            if (sqlite3_close(sqlite) == SQLITE_BUSY) {
-                db_d_append_error(_("SQLite database connection '%s' is still busy"),
-                                  dp->d_name);
-                continue;
+        if (len > 0 && G_strcasecmp(dp->d_name + len, ".db") == 0) {
+            char fpath[GPATH_MAX];
+            
+            sprintf(fpath, "%s/%s", db_get_string(path), dp->d_name);
+            if (sqlite3_open(fpath, &sqlite) == SQLITE_OK) {
+                if (sqlite3_close(sqlite) == SQLITE_BUSY) {
+                    db_d_append_error(_("SQLite database connection '%s' is still busy"),
+                                      dp->d_name);
+                    continue;
+                }
+                
+                hcount++;
+                dlist = (char **) G_realloc(dlist, hcount * sizeof(char *));
+                G_debug(3, "%s", dp->d_name);
+                dlist[hcount-1] = G_store(dp->d_name);
             }
-            hcount++;
-            dlist = (char **) G_realloc(dlist, hcount * sizeof(char *));
-            G_debug(3, "%s", dp->d_name);
-            dlist[hcount-1] = G_store(dp->d_name);
         }
     }
     G_debug(1, "db count = %d", hcount);
