@@ -18,17 +18,14 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-
 struct
 {
     char *driver, *database;
     int s;
 } parms;
 
-
 /* function prototypes */
 static void parse_command_line(int, char **);
-
 
 int main(int argc, char **argv)
 {
@@ -51,16 +48,19 @@ int main(int argc, char **argv)
 
     system_tables = parms.s;
     if (db_list_tables(driver, &names, &count, system_tables) != DB_OK)
-	exit(ERROR);
+        G_fatal_error(_("Unable to list tables from database <%s>"), parms.database);
+    
     for (i = 0; i < count; i++)
 	fprintf(stdout, "%s\n", db_get_string(&names[i]));
+
+    if (count < 1)
+        G_important_message(_("No tables found"));
 
     db_close_database(driver);
     db_shutdown_driver(driver);
 
     exit(EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {
