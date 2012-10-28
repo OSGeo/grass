@@ -372,7 +372,6 @@ int G_llres_scan(const char *, double *);
 /* location.c */
 const char *G_location(void);
 char *G_location_path(void);
-char *G__location_path(void);
 
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
@@ -411,7 +410,7 @@ char *G_toucase(char *);
 
 /* mapset.c */
 const char *G_mapset(void);
-const char *G__mapset(void);
+char *G_mapset_path(void);
 
 /* mapset_msc.c */
 int G__make_mapset_element(const char *);

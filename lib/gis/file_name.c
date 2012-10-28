@@ -16,6 +16,8 @@
 #include <string.h>
 #include <grass/gis.h>
 
+#include "gis_local_proto.h"
+
 /*!
   \brief Builds full path names to GIS data files
 
