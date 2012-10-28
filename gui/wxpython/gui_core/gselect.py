@@ -1763,7 +1763,12 @@ class GdalSelect(wx.Panel):
             if format == 'SQLite' or format == 'Rasterlite':
                 win = self.input['db-win']['file']
             elif format == 'PostgreSQL' or format == 'PostGIS WKT Raster driver':
-                if grass.find_program('psql', ['--help']):
+                # try to get list of PG databases
+                db = RunCommand('db.databases', quiet = True, read = True,
+                                driver = 'pg').splitlines()
+                if db is not None:
+                    win.SetItems(sorted(db))
+                elif grass.find_program('psql', ['--help']):
                     win = self.input['db-win']['choice']
                     if not win.GetItems():
                         p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
