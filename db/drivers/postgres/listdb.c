@@ -7,7 +7,9 @@
   (>=v2). Read the file COPYING that comes with GRASS for details.
   
   \author Radim Blazek
+  \author Updated for GRASS 7 by Martin Landa <landa.martin gmail.com>
  */
+
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "globals.h"
@@ -26,18 +28,22 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
     *dbcount = 0;
 
     /* TODO: the solution below is not good as user usually does not have permissions for "template1" */
-    db_d_append_error(_("db_driver_list_databases() is not implemented"));
-    db_d_report_error();
-    return DB_FAILED;
+    /*    db_d_append_error(_("db_driver_list_databases() is not implemented"));
+          db_d_report_error();
+          return DB_FAILED;
+    */
 
-    if (npaths > 0) {
-	G_debug(3, "location: %s", db_get_string(dbpath));
-	if (parse_conn(db_get_string(dbpath), &pgconn) == DB_FAILED) {
-	    db_d_report_error();
-	    return DB_FAILED;
-	}
+    if (npaths < 1) {
+        db_d_append_error(_("No path given"));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
+    if (parse_conn(db_get_string(dbpath), &pgconn) == DB_FAILED) {
+        db_d_report_error();
+        return DB_FAILED;
+    }
+    
     G_debug(3, "host = %s, port = %s, options = %s, tty = %s",
 	    pgconn.host, pgconn.port, pgconn.options, pgconn.tty);
 

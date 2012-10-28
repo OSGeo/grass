@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
@@ -31,7 +32,7 @@
  */
 int db__driver_open_database(dbHandle * handle)
 {
-    char name2[2000];
+    char name2[GPATH_MAX];
     const char *name;
 
     G_debug(3, "\ndb_driver_open_database()");
@@ -81,8 +82,9 @@ int db__driver_open_database(dbHandle * handle)
     G_debug(2, "name2 = '%s'", name2);
 
     if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
-	db_d_append_error("%s %s",
-			  _("Unable to open database: "),
+	db_d_append_error("%s %s\n%s",
+			  _("Unable to open database:"),
+                          name2,
 			  (char *)sqlite3_errmsg(sqlite));
 	db_d_report_error();
 	return DB_FAILED;
@@ -109,4 +111,38 @@ int db__driver_close_database(void)
 	G_fatal_error(_("SQLite database connection is still busy"));
 
     return DB_OK;
+}
+
+/**
+ * \brief Create new empty SQLite database.
+ *
+ * \param handle dbHandle
+
+ * \return DB_OK on success
+ * \return DB_FAILED on failure
+ */
+
+int db__driver_create_database(dbHandle *handle)
+{
+    const char *name;
+    name = db_get_handle_dbname(handle);
+    
+    G_debug(1, "db_create_database(): %s", name);
+
+    if (access(name, F_OK) == 0) {
+        db_d_append_error(_("Database <%s> already exists"), name);
+        db_d_report_error();
+        return DB_FAILED;
+    }
+    
+    if (sqlite3_open(name, &sqlite) != SQLITE_OK) {
+	db_d_append_error("%s %s\n%s",
+			  _("Unable to create database:"),
+                          name,
+			  (char *) sqlite3_errmsg(sqlite));
+	db_d_report_error();
+	return DB_FAILED;
+    }
+    
+    return DB_FAILED;
 }
