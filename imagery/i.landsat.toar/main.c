@@ -11,7 +11,7 @@
  * PURPOSE:      Calculate TOA Radiance or Reflectance and Kinetic Temperature
  *               for Landsat 1/2/3/4/5 MS, 4/5 TM or 7 ETM+
  *
- * COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
     int infd, outfd;
     void *ptr;
     int nrows, ncols, row, col;
-    
+
     RASTER_MAP_TYPE in_data_type;
-    
+
     struct Option *input_prefix, *output_prefix, *metfn, *sensor, *adate, *pdate, *elev,
 	*bgain, *metho, *perc, *dark, *atmo;
     char *inputname, *met, *outputname, *sensorname;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     struct FPRange range;
     double min, max;
     unsigned long hist[256], h_max;
-    
+
     /* initialize GIS environment */
     G_gisinit(argv[0]);
 
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     sensor->options = "mss1,mss2,mss3,mss4,mss5,tm4,tm5,tm7";
     desc = NULL;
     G_asprintf(&desc,
-	        "mss1;%s;mss2;%s;mss3;%s;mss4;%smss5;%stm4;%s;tm5;%s;tm7;%s",
+	        "mss1;%s;mss2;%s;mss3;%s;mss4;%s;mss5;%s;tm4;%s;tm5;%s;tm7;%s",
 	        _("Landsat-1 MSS"),
 	        _("Landsat-2 MSS"),
 	        _("Landsat-3 MSS"),
@@ -213,8 +213,10 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Illegal date format: [%s] (yyyy-mm-dd)"),
 			  lsat.date);
     }
+    /* Unnecessary because G_zero filled
     else
 	lsat.date[0] = '\0';
+	*/
 
     if (pdate->answer != NULL) {
 	strncpy(lsat.creation, pdate->answer, 11);
@@ -223,17 +225,23 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Illegal date format: [%s] (yyyy-mm-dd)"),
 			  lsat.creation);
     }
+    /* Unnecessary because G_zero filled
     else
 	lsat.creation[0] = '\0';
+	*/
 
     lsat.sun_elev = elev->answer == NULL ? 0. : atof(elev->answer);
     percent = atof(perc->answer);
     pixel = atoi(dark->answer);
     rayleigh = atof(atmo->answer);
 
+    /* Unnecessary because G_zero filled
+    lsat.flag = NOMETADATAFILE;
+     */
     /* Data from metadata file */
     if (met != NULL)
     {
+        lsat.flag = METADATAFILE;
         i = strlen(met);
         if (strcmp(met + i - 7, "MTL.txt") == 0)
         {
@@ -242,7 +250,7 @@ int main(int argc, char *argv[])
         else if (strcmp(met + i - 4, ".met") == 0)
         {
             if (strcmp(sensorname, "tm7") == 0)
-                lsat_mtldata(met, &lsat);  /* .met of Landsat-7 = new MTL file */
+                lsat_mtldata(met, &lsat);  /* old .met of Landsat-7 = new MTL file */
             else
                 lsat_metdata(met, &lsat);
         }
@@ -536,7 +544,7 @@ int main(int argc, char *argv[])
 	    Rast_put_row(outfd, outrast, DCELL_TYPE);
 	}
 	G_percent(1, 1, 1);
-	
+
 	ref_mode = 0.;
 	if (method > DOS && !lsat.band[i].thermal) {
 	    ref_mode = lsat_qcal2rad(dn_mode[i], &lsat.band[i]);
