@@ -421,10 +421,9 @@ void set_TM5(lsat_data * lsat)
     }
 
     jbuf = julian_char("2004-04-04");
-    if (julian >= jbuf) {
-	G_warning
-	    ("Using QCalMin=1.0 as a NLAPS product processed after 4/4/2004");
-	G_warning("Ignore this message when using the metfile option");
+    if (julian >= jbuf && !(lsat->flag & METADATAFILE) )
+    {
+        G_warning("Using QCalMin=1.0 as a NLAPS product processed after 04/04/2004");
     }
     lsat->number = 5;
     sensor_TM(lsat);
