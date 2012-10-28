@@ -1,7 +1,37 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.databases</em> lists all databases for a given driver. Supported drivers
-are dbf, shp, odbc and pg.
+<em>db.databases</em> lists all databases for a given <b>driver</b>
+and optionally <b>location</b>. 
+
+<h2>NOTES</h2>
+
+Currently supported database drivers are
+<em><a href="grass-sqlite.html">SQLite</a></em>, <em><a href="grass-pg.html">PostgreSQL</a></em>,
+and <em><a href="grass-odbc.html">ODBC</a></em>.
+
+<p>
+Default <b>location</b> for SQLite driver is the full path for the
+current mapset. For PostgreSQL driver it's empty connection string.
+
+<h2>EXAMPLES</h2>
+
+List SQLite databases in the current mapset:
+
+<div class="code"><pre>
+db.databases driver=sqlite
+</pre></div>
+
+List SQLite databases in the given directory:
+
+<div class="code"><pre>
+db.databases driver=sqlite location=/opt/sqlite
+</pre></div>
+
+List PostgreSQL databases from database server running on given port:
+
+<div class="code"><pre>
+db.databases driver=pg location="host=server_name port=5333"
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
@@ -10,11 +40,16 @@ are dbf, shp, odbc and pg.
 <a href="db.drivers.html">db.drivers</a>,
 <a href="db.execute.html">db.execute</a>,
 <a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="sql.html">GRASS SQL interface</a></em>
+<a href="db.tables.html">db.tables</a>
+</em>
+
+<p>
+<a href="sql.html">GRASS SQL interface</a>
 
 <h2>AUTHOR</h2>
 
-Radim Blazek, ITC-Irst, Trento, Italy
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+Updated for GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
