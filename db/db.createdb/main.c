@@ -61,7 +61,8 @@ static void parse_command_line(int argc, char **argv)
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     driver->required = YES;
-
+    driver->answer = (char *) db_get_default_driver_name();
+    
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     database->required = YES;
 
@@ -71,7 +72,7 @@ static void parse_command_line(int argc, char **argv)
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("SQL"));
     module->description = _("Creates an empty database.");
-
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
