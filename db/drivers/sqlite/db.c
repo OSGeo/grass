@@ -102,7 +102,6 @@ int db__driver_open_database(dbHandle * handle)
  *
  * \return always returns DB_OK
  */
-
 int db__driver_close_database(void)
 {
     G_debug(3, "db_close_database()");
@@ -117,11 +116,10 @@ int db__driver_close_database(void)
  * \brief Create new empty SQLite database.
  *
  * \param handle dbHandle
-
+ *
  * \return DB_OK on success
  * \return DB_FAILED on failure
  */
-
 int db__driver_create_database(dbHandle *handle)
 {
     const char *name;
@@ -144,5 +142,27 @@ int db__driver_create_database(dbHandle *handle)
 	return DB_FAILED;
     }
     
-    return DB_FAILED;
+    return DB_OK;
+}
+
+/**
+ * \brief Delete existing SQLite database.
+ *
+ * \param handle dbHandle
+ *
+ * \return DB_OK on success
+ * \return DB_FAILED on failure
+ */
+int db__driver_delete_database(dbHandle *handle)
+{
+    const char *name;
+    name = db_get_handle_dbname(handle);
+    
+    if (access(name, F_OK) != 0) {
+        db_d_append_error(_("Database <%s> not found"), name);
+        db_d_report_error();
+        return DB_FAILED;
+    }
+
+    return remove(name) == 0 ? DB_OK : DB_FAILED;
 }
