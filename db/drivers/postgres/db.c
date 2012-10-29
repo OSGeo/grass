@@ -7,6 +7,7 @@
   (>=v2). Read the file COPYING that comes with GRASS for details.
   
   \author Radim Blazek
+  \author Create/drop database by Martin Landa <landa.martin gmail.com>
  */
 
 #include <stdlib.h>
@@ -25,6 +26,8 @@ static void notice_processor(void *arg, const char *message)
         fprintf(stderr, "%s", message);
     }
 }
+
+static int create_delete_db();
 
 int db__driver_open_database(dbHandle * handle)
 {
@@ -185,5 +188,97 @@ int db__driver_open_database(dbHandle * handle)
 int db__driver_close_database()
 {
     PQfinish(pg_conn);
+    return DB_OK;
+}
+
+/*!
+  \brief Create new empty PostgreSQL database.
+  
+  \param handle dbHandle
+  
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db__driver_create_database(dbHandle *handle)
+{
+    return create_delete_db(handle, TRUE);
+}
+
+/*!
+  \brief Drop existing PostgreSQL database.
+  
+  \param handle dbHandle
+  
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db__driver_delete_database(dbHandle *handle)
+{
+    return create_delete_db(handle, FALSE);
+}
+
+/* create or drop database */
+int create_delete_db(dbHandle *handle, int create)
+{
+    dbString stmt;
+    const char *template_db, *name, *user, *password;
+    
+    PGCONN pgconn;
+    PGresult *res;
+    
+    db_init_string(&stmt);
+    
+    template_db = "template1";
+    name = db_get_handle_dbname(handle); /* database to create */
+    
+    if (parse_conn(template_db, &pgconn) == DB_FAILED) {
+	db_d_report_error();
+	return DB_FAILED;
+    }
+    G_debug(3,
+	    "db_driver_create_database(): host = %s, port = %s, options = %s, tty = %s, "
+	    "dbname = %s, user = %s, password = %s, "
+	    "schema = %s", pgconn.host, pgconn.port, pgconn.options,
+	    pgconn.tty, pgconn.dbname, pgconn.user, pgconn.password,
+	    pgconn.schema);
+    db_get_login("pg", template_db, &user, &password);
+    
+    pg_conn = PQsetdbLogin(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+			   pgconn.dbname, user, password);
+    if (PQstatus(pg_conn) == CONNECTION_BAD) {
+	db_d_append_error(_("Connection failed."));
+	db_d_append_error("\n");
+	db_d_append_error(PQerrorMessage(pg_conn));
+	db_d_report_error();
+	PQfinish(pg_conn);
+	return DB_FAILED;
+    }
+
+    /* create new database */
+    if (create)
+	db_set_string(&stmt, "CREATE DATABASE ");
+    else
+	db_set_string(&stmt, "DROP DATABASE ");
+    db_append_string(&stmt, name);
+    
+    res = PQexec(pg_conn,
+		 db_get_string(&stmt));
+    if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
+	if (create)
+	    db_d_append_error(_("Unable to create database <%s>"), name);
+	else
+	    db_d_append_error(_("Unable to drop database <%s>"), name);
+	db_d_append_error("\n");
+	db_d_append_error(PQerrorMessage(pg_conn));
+	db_d_report_error();
+	
+	PQclear(res);	
+	PQfinish(pg_conn);
+	return DB_FAILED;
+    }
+
+    PQclear(res);
+    PQfinish(pg_conn);
+
     return DB_OK;
 }
