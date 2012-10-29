@@ -1,17 +1,94 @@
 <h2>DESCRIPTION</h2>
+ 
+<em>v.db.reconnect.all</em> changes database connection of all layers
+of all vector maps in the current mapset from the source
+(<b>old_database</b>) to the target (<b>new_database</b>) database. If
+a link does not match the <b>old_database</b> it is left untouched.
 
-<em>v.db.reconnect.all</em> changes database connection of all layers of
-all vectors in the current mapset from old_database to database. If a link
-does not match the old_database it is left untouched.
-
+<p>
+Optionally attribute tables in <b>new_database</b> can be created if
+not exist by <b>-c</b> flag. 
+ 
 <h2>NOTES</h2>
-
-The value of the <em>old_database</em> option needs to be the exact
+ 
+The value of the <b>old_database</b> option needs to be the exact
 string which appears as the fourth field printed by
-<tt>v.db.connect -g</tt>, i.e. with substituted variables.
+<tt>v.db.connect -g</tt>. 
 
+<div class="code"><pre>
+v.db.connect -g map=census 
+1/census|census|cat|/home/user/grassdata/nc_spm_base/PERMANENT/dbf/|dbf
+</pre></div>
 
-<h2>AUTHOR</h2>
-Radim Blazek
+<em>v.db.reconnect.all</em> respect also variables to be
+substituted. In the example above,
+database <tt>/home/user/grassdata/nc_spm_base/PERMANENT/dbf/</tt> can
+be also defined as <tt>'$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'</tt>
+(see examples).
+ 
+<p>
+Attribute tables from <b>old_database</b> are after reconnecting left
+untouched. <em>v.db.reconnect.all</em> deletes those tables
+automatically only when <b>-d</b> flag is given.
 
-<p><i>Last changed: $Date$</i>
+<p>
+Also note that <em>v.db.reconnect.all</em> doesn't change default
+database driver or database (<tt>db.connect -p</tt>). Default database
+connection settings for newly created attribute data can be defined
+by <em><a href="db.connect.html">db.connect</a></em>.
+
+<h2>EXAMPLES</h2>
+
+In the examples below are assumed, that attribute tables are linked to
+the vector maps through <a href="grass-dbf.html">DBF</a> database
+driver.
+ 
+<h3>Reconnect DBF attribute tables to SQLite database</h3>
+
+Reconnect <a href="grass-dbf.html">DBF</a> attribute tables linked to
+the vector maps in the current mapset
+to <a href="grass-sqlite.html">SQLite</a> database:
+
+<div class="code"><pre>
+v.db.reconnect.all old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
+ new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+</pre></div>
+
+If attribute table doesn't exist in the target database
+(<b>new_database</b>) then the module prints an error message.
+
+<h3>Convert DBF attribute tables to SQLite database</h3>
+
+For coping DBF tables to SQLite database and reconnecting them for all
+vector maps in the current mapset must be defined also <b>-c</b> flag.
+
+<div class="code"><pre>
+v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
+ new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+</pre></div>
+
+To automatically remove original DBF attribute tables after
+reconnecting the vector maps use <b>-d</b> flag. Note that attribute
+tables will be deleted <i>permanently</i> from the source
+database. This option should be used very carefully!
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="v.db.connect.html">v.db.connect</a>,
+  <a href="db.connect.html">db.connect</a>,
+  <a href="db.copy.html">db.copy</a>,
+  <a href="db.createdb.html">db.createdb</a>,
+  <a href="db.droptable.html">db.droptable</a>
+</em>
+
+<p>
+<a href="sql.html">GRASS SQL interface</a>
+
+<h2>AUTHORS</h2>
+
+Radim Blazek<br>
+Major update by Martin Landa, Czech Technical University in Prague, Czech Republic
+ 
+<p>
+<i>Last changed: $Date$</i>
