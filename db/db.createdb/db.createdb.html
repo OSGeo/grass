@@ -1,38 +1,62 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.createdb</em> allows the user to create a new empty database through
-different drivers. A working database connection needs to be established.  
-
-<h2>EXAMPLE</h2>
-
-<em>Create a new PostgreSQL database (if PostgreSQL connection is established
-through odbc driver)</em><br>
-
-<div class="code"><pre>
-db.createdb driver=odbc database=grass60test
-</pre></div>
+<em>db.createdb</em> allows the user to create a new empty database
+through different drivers. A working database connection needs to be
+established, see <em><a href="db.login.html">db.login</a></em>.
 
 <p>
-<em>Create a new PostgreSQL database (if PostgreSQL connection is established
-through pg driver)</em><br>
+Currently only <a href="grass-sqlite.html">SQLite</a>
+and <a href="grass-pg.html">PostgreSQL</a> database drivers are
+supported.
+
+<h2>EXAMPLES</h2>
+
+<h3>Create a new SQLite file-based database</h3>
+
 <div class="code"><pre>
-db.createdb driver=pg database='host=pgserver.itc.it,dbname=grass60test'
+db.createdb driver=sqlite database=/opt/sqlite.db
 </pre></div>
+
+<h3>Create a new PostgreSQL database</h3>
+
+Create a new PostgreSQL database (if PostgreSQL connection is
+established through <em>odbc</em> driver):
+
+<div class="code"><pre>
+db.createdb driver=odbc database=grasstest
+</pre></div>
+
+Create a new PostgreSQL database (if PostgreSQL connection is established
+through <em>pg</em> driver):
+
+<div class="code"><pre>
+db.createdb driver=pg database=grasstest
+</pre></div>
+
+<h2>TODO</h2>
+
+Support other database drivers too.
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="db.dropdb.html">db.dropdb</a>,
 <a href="db.columns.html">db.columns</a>,
 <a href="db.describe.html">db.describe</a>,
 <a href="db.drivers.html">db.drivers</a>,
 <a href="db.droptable.html">db.droptable</a>,
 <a href="db.execute.html">db.execute</a>,
 <a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="sql.html">GRASS SQL interface</a></em>
+<a href="db.tables.html">db.tables</a>
+</em>
 
-<h2>AUTHOR</h2>
+<p>
+<a href="sql.html">GRASS SQL interface</a>
 
-Radim Blazek, ITC-Irst, Trento, Italy
+<h2>AUTHORS</h2>
 
-<p><i>Last changed: $Date$</i>
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+SQLite and PostgreSQL support by Martin Landa, Czech Technical University in Prague, Czech Republic
+
+<p>
+<i>Last changed: $Date$</i>
