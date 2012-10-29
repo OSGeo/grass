@@ -120,7 +120,7 @@ int listdb(dbString* path, int npaths,
                 hcount++;
                 dlist = (char **) G_realloc(dlist, hcount * sizeof(char *));
                 G_debug(3, "%s", dp->d_name);
-                dlist[hcount-1] = G_store(dp->d_name);
+                dlist[hcount-1] = G_store(fpath);
             }
         }
     }
