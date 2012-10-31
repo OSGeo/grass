@@ -36,7 +36,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
     struct line_pnts *APoints, *BPoints;
     struct line_cats *ACats, *BCats;
     int i, j, c, atype, btype, bline;
-    int nlines, nbcats_orig;
+    int nlines, nbcats_orig, npoints;
     struct bound_box ABox;
     struct boxlist *List;
     int ndupl;
@@ -66,6 +66,15 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	atype = Vect_read_line(Map, APoints, ACats, i);
 	if (!(atype & type))
 	    continue;
+	
+	npoints = APoints->n_points;
+	Vect_line_prune(APoints);
+	
+	if (npoints != APoints->n_points) {
+	    Vect_rewrite_line(Map, i, atype, APoints, ACats);
+	    nlines = Vect_get_num_lines(Map);
+	    continue;
+	}
 
 	Vect_line_box(APoints, &ABox);
 	Vect_select_lines_by_box(Map, &ABox, type, List);
@@ -78,6 +87,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 		continue;
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
+	    Vect_line_prune(BPoints);
 
 	    /* check for duplicates */
 	    if (!Vect_line_check_duplicate(APoints, BPoints, Vect_is_3d(Map)))
@@ -114,6 +124,9 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 
 /*!
    \brief Check for duplicate lines
+   
+   Note that lines must be pruned with Vect_line_prune() before passed 
+   to Vect_line_check_duplicate()
 
    \param APoints first line geometry
    \param BPoints second line geometry
