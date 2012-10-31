@@ -375,11 +375,11 @@ int main(int argc, char *argv[])
 	    break;
 	case TOOL_RMBRIDGE:
 	    G_message(_("Tool: Remove bridges"));
-	    Vect_remove_bridges(&Out, pErr);
+	    Vect_remove_bridges(&Out, pErr, NULL, NULL);
 	    break;
 	case TOOL_CHBRIDGE:
 	    G_message(_("Tool: Change type of boundary bridges"));
-	    Vect_chtype_bridges(&Out, pErr);
+	    Vect_chtype_bridges(&Out, pErr, NULL, NULL);
 	    break;
 	case TOOL_RMDAC:
 	    G_message(_("Tool: Remove duplicate area centroids"));
