@@ -639,68 +639,75 @@ def load_gisrc():
     
     location = os.path.join(gisdbase, location_name, mapset)
 
-def get_env_variable_from_file(key):
+# load environmental variables from grass_env_file
+def load_env():
     if not os.access(grass_env_file, os.R_OK):
-        return None
+        return
     
     for line in readfile(grass_env_file).split(os.linesep):
         try:
             k, v = map(lambda x: x.strip(), line.strip().split(' ', 1)[1].split('=', 1))
         except:
             continue
-        if k == key:
-            return v
+        os.environ[k] = v
     
-    return None
-
 def set_language():
     import locale
     
-    ### language
-    language = get_env_variable_from_file('LANG')
-    if language:
-        language = language.split('.')[0] # Split off ignored .encoding part if present
-        orig_language = language
-        try:
-            locale.setlocale(locale.LC_ALL, language)
-        except:
+    language = os.getenv('LANG')
+    if not language:
+        return
+    
+    language = language.split('.')[0] # Split off ignored .encoding part if present
+    orig_language = language
+    try:
+        locale.setlocale(locale.LC_ALL, language)
+    except locale.Error, e:
+        if sys.platform != 'win32': # Don't try on Windows, it will probably not work
+            sys.stderr.write("Failed to set LC_ALL to %s (%s)\n" % (language, e))
             try:
-                # Locale lang.encoding might be missing. Let's try UTF-8 encoding before giving up
-                # as on Linux systems lang.UTF-8 locales are more common than legacy ISO-8859 ones.
-                language = locale.normalize('%s.UTF-8' % language)
+                # Locale lang.encoding might be missing. Let's try
+                # UTF-8 encoding before giving up as on Linux systems
+                # lang.UTF-8 locales are more common than legacy
+                # ISO-8859 ones.
+                language = locale.normalize('%s.UTF-8' % (language))
                 locale.setlocale(locale.LC_ALL, language)
-            except:
-                # If we got so far, provided locale is not supported on this system
-                sys.stderr.write("Failed to set LC_ALL to %s\n" % language)
-                try:
-                    default_locale = locale.getdefaultlocale()
-                except:
-                    default_locale = None
-                
-                if default_locale and default_locale[0]:
-                    language = default_locale[0]
-                else:
-                    language = 'C'
+            except locale.Error, e:
+                # If we got so far, provided locale is not supported
+                # on this system
+                sys.stderr.write("Failed to set LC_ALL to %s (%s)\n" % (language, e))
+                ### locale.getdefaultlocale() is probably related to gettext?
+                # try:
+                #     default_locale = locale.getdefaultlocale()
+                # except:
+                #     default_locale = None
+                # if default_locale and default_locale[0]:
+                #     language = default_locale[0]
+                # else:
+                language = 'C'
+    
+    # Set up environment for subprocesses
+    for lc in ('LC_CTYPE', 'LC_MESSAGES', 'LC_TIME', 'LC_COLLATE', 'LC_MONETARY', 'LC_PAPER',
+               'LC_NAME', 'LC_ADDRESS', 'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION'):
+        os.environ[lc] = language
+            
+    # Some code in GRASS might not like other decimal separators than .
+    # Other potential sources for problems are: LC_TIME LC_CTYPE
+    locale.setlocale(locale.LC_NUMERIC, 'C')
+    os.environ['LC_NUMERIC'] = 'C'
+    if os.getenv('LC_ALL'):
+        del os.environ['LC_ALL'] # Remove LC_ALL to not override LC_NUMERIC
+    
+    # Even if setting locale has failed, let's set LANG in a hope,
+    # that UI will use it GRASS texts will be in selected language,
+    # system messages (i.e. OK, Cancel etc.) - in system default
+    # language
+    os.environ['LANGUAGE'] = orig_language
+    os.environ['LANG'] = orig_language
         
-        # Set up environment for subprocesses
-        for lc in ('LC_CTYPE', 'LC_MESSAGES', 'LC_TIME', 'LC_COLLATE', 'LC_MONETARY', 'LC_PAPER', 'LC_NAME', 'LC_ADDRESS', 'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION'):
-            os.environ[lc] = language
-        
-        # Some code in GRASS might not like other decimal separators than .
-        # Other potential sources for problems are: LC_TIME LC_CTYPE
-        locale.setlocale(locale.LC_NUMERIC, 'C')
-        os.environ['LC_NUMERIC'] = 'C'
-        if os.getenv('LC_ALL'):
-            del os.environ['LC_ALL'] # Remove LC_ALL to not override LC_NUMERIC
-        
-        # Even if setting locale has failed, let's set LANG in a hope, that UI will use it
-        # GRASS texts will be in selected language, system messages (i.e. OK, Cancel etc.) - in system default language
-        os.environ['LANGUAGE'] = orig_language
-        os.environ['LANG'] = orig_language
-        
-        # Calling gettext.install twice seems to allow to see also localized startup messages
-        # Black magic ;)
-        gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode = True)
+    # Calling gettext.install twice seems to allow to see also
+    # localized startup messages Black magic ;)
+    gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode = True)
     
 def check_lock():
     global lockfile
@@ -1167,6 +1174,9 @@ else:
 
 # Set shell
 check_shell()
+
+# Load environmental variables from the file
+load_env()
 
 # Set language
 set_language()
