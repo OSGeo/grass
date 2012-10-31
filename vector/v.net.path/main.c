@@ -48,17 +48,17 @@ int main(int argc, char **argv)
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "line,boundary";
     type_opt->answer = "line,boundary";
-    type_opt->description = _("Arc type");
+    type_opt->label = _("Arc type");
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     afield_opt->key = "alayer";
     afield_opt->answer = "1";
-    afield_opt->description = _("Arc layer");
+    afield_opt->label = _("Arc layer");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
     nfield_opt->answer = "2";
-    nfield_opt->description = _("Node layer");
+    nfield_opt->label = _("Node layer");
 
     file_opt = G_define_standard_option(G_OPT_F_INPUT);
     file_opt->key = "file";

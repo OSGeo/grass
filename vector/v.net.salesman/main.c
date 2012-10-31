@@ -142,12 +142,12 @@ int main(int argc, char **argv)
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     afield_opt->key = "alayer";
-    afield_opt->description = _("Arc layer");
+    afield_opt->label = _("Arc layer");
 
     tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     tfield_opt->key = "nlayer";
     tfield_opt->answer = "2";
-    tfield_opt->description = _("Node layer (used for cities)");
+    tfield_opt->label = _("Node layer (used for cities)");
 
     afcol = G_define_option();
     afcol->key = "afcolumn";

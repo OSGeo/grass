@@ -78,12 +78,12 @@ int main(int argc, char **argv)
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     afield_opt->key = "alayer";
     afield_opt->answer = "1";
-    afield_opt->description = _("Arc layer");
+    afield_opt->label = _("Arc layer");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
     nfield_opt->answer = "2";
-    nfield_opt->description = _("Node layer");
+    nfield_opt->label = _("Node layer");
 
     afcol = G_define_option();
     afcol->key = "afcolumn";
