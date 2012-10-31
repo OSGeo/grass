@@ -61,6 +61,11 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 	if (!Vect_area_alive(Map, area))
 	    continue;
 
+	centroid = Vect_get_area_centroid(Map, area);
+	if (!centroid) {
+	    continue;
+	}
+
 	/* Check box */
 	Vect_get_area_box(Map, area, &box);
 	if (box.N < window->south || box.S > window->north ||
@@ -84,7 +89,6 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 		    continue;
 	    }
 	    else {
-		centroid = Vect_get_area_centroid(Map, area);
 		G_debug(3, "centroid = %d", centroid);
 		if (centroid < 1)
 		    continue;
@@ -107,7 +111,6 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 	}
 	else if (Clist->field > 0) {
 	    found = FALSE;
-	    centroid = Vect_get_area_centroid(Map, area);
 	    G_debug(3, "\tcentroid = %d", centroid);
 	    if (centroid < 1)
 		continue;
@@ -159,7 +162,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 				(Clist->field > 0 ? Clist->field :
 				 (Cats->n_cats > 0 ? Cats->field[0] : 1)));
 
-	if (!Vect_get_area_centroid(Map, area) && cat == -1) {
+	if (cat == -1) {
 	    continue;
 	}
 
