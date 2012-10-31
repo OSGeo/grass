@@ -249,5 +249,11 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
     if (new_lines)
 	*new_lines = newl;
 
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+    Vect_destroy_line_struct(MPoints);
+    Vect_destroy_cats_struct(MCats);
+    Vect_destroy_list(List);
+
     return merged;
 }
