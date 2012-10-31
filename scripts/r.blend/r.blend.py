@@ -75,7 +75,7 @@ def main():
 
     grass.message(_("Calculating the three component maps..."))
 
-    template = string.Template("$$output.$ch = $$frac1 * $ch#$$first + $$frac2 * $ch#$$second")
+    template = string.Template("$$output.$ch = if(isnull($$first), $ch#$$second, if(isnull($$second), $ch#$$first, $$frac1 * $ch#$$first + $$frac2 * $ch#$$second))")
     cmd = [template.substitute(ch = ch) for ch in ['r','g','b']]
     cmd = ';'.join(cmd)
 
