@@ -687,7 +687,7 @@ int count_node_arcs(struct Map_info *Map, int node)
     n = Vect_get_node_n_lines(Map, node);
     for (i = 0; i < n; i++) {
 	line = Vect_get_node_line(Map, node, i);
-	type = Vect_read_line(Map, NULL, NULL, abs(line));
+	type = Vect_get_line_type(Map, abs(line));
 	if (type & GV_LINES)
 	    count++;
     }
