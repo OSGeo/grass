@@ -466,6 +466,10 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
 
     /* can't split boundaries with only 2 vertices */
     if (Points->n_points == 2) {
+	Vect_line_prune(Points);
+	
+	if (Points->n_points < 2)
+	    return 0;
 	Vect_write_line(Map, otype, Points, Cats);
 	return 0;
     }
@@ -494,7 +498,10 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
 	Vect_append_point(OutPoints, Points->x[i], Points->y[i],
 			  Points->z[i]);
     }
-    Vect_write_line(Map, otype, OutPoints, Cats);
+    Vect_line_prune(OutPoints);
+    
+    if (OutPoints->n_points > 1)
+	Vect_write_line(Map, otype, OutPoints, Cats);
 
     Vect_destroy_line_struct(OutPoints);
 

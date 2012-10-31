@@ -26,9 +26,11 @@ int Vect_point_on_line(const struct line_pnts *, double, double *, double *,
                        double *, double *, double *);
 int Vect_line_segment(const struct line_pnts *, double, double, struct line_pnts *);
 double Vect_line_length(const struct line_pnts *);
-double Vect_area_perimeter(const struct line_pnts *);
 double Vect_line_geodesic_length(const struct line_pnts *);
 int Vect_line_distance(const struct line_pnts *, double, double, double, int,
+                       double *, double *, double *, double *, double *,
+                       double *);
+int Vect_line_geodesic_distance(const struct line_pnts *, double, double, double, int,
                        double *, double *, double *, double *, double *,
                        double *);
 void Vect_line_box(const struct line_pnts *, struct bound_box *);
@@ -267,6 +269,7 @@ int Vect_get_node_n_lines(const struct Map_info *, int);
 int Vect_get_node_line(const struct Map_info *, int, int);
 float Vect_get_node_line_angle(const struct Map_info *, int, int);
 
+double Vect_area_perimeter(const struct line_pnts *);
 int Vect_get_area_points(const struct Map_info *, int, struct line_pnts *);
 int Vect_get_area_centroid(const struct Map_info *, int);
 int Vect_get_area_num_isles(const struct Map_info *, int);
@@ -352,8 +355,8 @@ void Vect_snap_lines_list(struct Map_info *, const struct ilist *, double,
 void Vect_remove_dangles(struct Map_info *, int, double, struct Map_info *);
 void Vect_chtype_dangles(struct Map_info *, double, struct Map_info *);
 void Vect_select_dangles(struct Map_info *, int, double, struct ilist *);
-void Vect_remove_bridges(struct Map_info *, struct Map_info *);
-void Vect_chtype_bridges(struct Map_info *, struct Map_info *);
+void Vect_remove_bridges(struct Map_info *, struct Map_info *, int *, int *);
+void Vect_chtype_bridges(struct Map_info *, struct Map_info *, int *, int *);
 int Vect_remove_small_areas(struct Map_info *, double, struct Map_info *,
                             double *);
 int Vect_clean_small_angles_at_nodes(struct Map_info *, int,

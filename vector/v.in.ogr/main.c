@@ -743,7 +743,7 @@ int main(int argc, char *argv[])
 	    split_distance =
 		area_size / log(n_polygon_boundaries);
 	    /* divisor is the handle: increase divisor to decrease split_distance */
-	    split_distance = split_distance / 5.;
+	    split_distance = split_distance / 16.;
 	    G_debug(1, "root of area size: %f", area_size);
 	    G_verbose_message(_("Boundary splitting distance in map units: %G"),
 		      split_distance);
@@ -1132,13 +1132,20 @@ int main(int argc, char *argv[])
 	}
 
 	G_message("%s", separator);
+	Vect_build_partial(&Tmp, GV_BUILD_AREAS);
+
+	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {
 	    G_message(_("Changing boundary bridges to lines..."));
-	    Vect_chtype_bridges(&Tmp, NULL);
+	    Vect_chtype_bridges(&Tmp, NULL, &nmodif, NULL);
+	    if (nmodif)
+		Vect_build_partial(&Tmp, GV_BUILD_NONE);
 	}
 	else {
 	    G_message(_("Removing bridges..."));
-	    Vect_remove_bridges(&Tmp, NULL);
+	    Vect_remove_bridges(&Tmp, NULL, &nmodif, NULL);
+	    if (nmodif)
+		Vect_build_partial(&Tmp, GV_BUILD_NONE);
 	}
 
 	/* Boundaries are hopefully clean, build areas */
