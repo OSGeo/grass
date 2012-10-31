@@ -664,7 +664,7 @@ def set_language():
         locale.setlocale(locale.LC_ALL, language)
     except locale.Error, e:
         if sys.platform != 'win32': # Don't try on Windows, it will probably not work
-            sys.stderr.write("Failed to set LC_ALL to %s (%s)\n" % (language, e))
+            # sys.stderr.write("Failed to set LC_ALL to %s (%s)\n" % (language, e))
             try:
                 # Locale lang.encoding might be missing. Let's try
                 # UTF-8 encoding before giving up as on Linux systems
