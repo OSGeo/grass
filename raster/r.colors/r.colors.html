@@ -1,8 +1,11 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.colors</em> allows the user to create and/or modify the color
-table for a raster map. The raster map (specified on the command line
-by <b>map</b>) must exist in the user's current mapset search path.
+table for a raster map or several raster maps at once. 
+The raster maps (specified on the command line
+by <b>map</b> or as <b>file</b> using an input file with one map name per line) 
+must exist in the user's current mapset search path.
+
 
 <p>The <b>rast</b> option allows user to specify a raster map <i>name</i>
 from which to copy the color map.
@@ -20,7 +23,7 @@ preclude the need for <em>grey.eq</em> rule, when used as
 a color table identical to <em>color=grey.eq</em>,
 because <em>grey.eq</em> scales the fraction by 256 to get a grey
 level, while <b>-e</b> uses it to interpolate the original color
-table. If the original colour table is a 0-255 grey scale, <b>-e</b>
+table. If the original color table is a 0-255 grey scale, <b>-e</b>
 is effectively scaling the fraction by 255. Different algorithms are
 used. <b>-e</b> is designed to work with any color table, both the
 floating point and the integer raster maps.
@@ -52,6 +55,12 @@ grey scale), <i>byg</i> (blue-yellow-green), <i>byr</i>
 ryg</i> (red-yellow-green), <i>random</i>, and <i>wave</i> are
 pre-defined color tables that <em>r.colors</em> knows how to create
 without any further input.
+
+<p>
+In case several input raster maps are provided the range (min, max) of all maps 
+will be used for color table creation. Hence the created color table will span from
+the smallest minimum to the largest maximum value of all input raster maps and
+will be applied to all input raster maps.
 
 <p>In general, tables which associate colors with percentages (aspect, bcyr, byg,
 byr, elevation, grey, gyr, rainbow, ramp, ryb, ryg and wave) can be applied to
