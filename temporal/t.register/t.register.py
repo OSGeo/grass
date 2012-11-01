@@ -33,8 +33,9 @@
 #% guidependency: input,maps
 #%end
 
-#%option G_OPT_FILE_INPUT
+#%option G_OPT_F_INPUT
 #% key: file
+#% required: no
 #% description: Input file with map names, one per line. Additionally the start time and the end time can be specified per line
 #%end
 

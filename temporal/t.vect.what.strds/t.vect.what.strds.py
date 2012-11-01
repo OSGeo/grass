@@ -109,7 +109,7 @@ def main():
 
     if strds_sp.is_in_db() == False:
         dbif.close()
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+        grass.fatal(_("Space time raster dataset <%s> not found in temporal database") % (strds_id))
 
     strds_sp.select(dbif)
 

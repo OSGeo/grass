@@ -25,6 +25,7 @@
 #%end
 
 #%option G_OPT_STDS_TYPE
+#% description: The output type of the space time dataset
 #%end
 
 #%option G_OPT_T_TYPE
