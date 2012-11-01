@@ -1,0 +1,73 @@
+<h2>DESCRIPTION</h2>
+
+The purpose of <em>t.rast.colors</em> is to compute a 
+color table based on all registered maps of a space time 
+raster dataset and to assign this color table to each map. 
+Hence the created color table reflects the data range of 
+the space time raster dataset. This module is a simple 
+wrapper around <a href="r.colors.html">r.colors</a>. 
+All options of <em>r.colors</em> are supported.
+Internally a file with map names is created and passed 
+to the <em>file</em> option of <em>r.colors</em>.
+<p>
+Please have a look at the <a href="r.colors.html">r.colors</a> 
+manpage for further informations.
+
+<h2>EXAMPLE</h2>
+
+In this example we create 6 raster maps that will be registered in a single space time
+raster dataset named <em>precip_abs</em> using a monthly temporal granularity.
+Then we set an equilized grey color table using <em>t.rast.colors</em> and print the
+color table of the first map to stdout representing the data range of the space time raster dataset.
+
+<div class="code"><pre>
+
+g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
+
+r.mapcalc --o expr="prec_1 = 100"
+r.mapcalc --o expr="prec_2 = 200"
+r.mapcalc --o expr="prec_3 = 300"
+r.mapcalc --o expr="prec_4 = 400"
+r.mapcalc --o expr="prec_5 = 500"
+r.mapcalc --o expr="prec_6 = 600"
+
+t.create --o type=strds temporaltype=absolute \
+    output=precip_abs title="Color setting example" \
+    descr="Color setting example"
+
+t.register type=rast input=precip_abs \
+    maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
+    start="2001-01-01" increment="1 months"
+
+# Grey color table for the full range 100 - 600
+t.rast.colors input=precip_abs color=grey.eq
+r.colors.out map=prec_1
+
+100 21:21:21
+199 21:21:21
+200 64:64:64
+299 64:64:64
+300 106:106:106
+399 106:106:106
+400 149:149:149
+499 149:149:149
+500 192:192:192
+599 192:192:192
+600 234:234:234
+nv 255:255:255
+default 255:255:255
+
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.colors.html">r.colors</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert
+
+<p><i>Last changed: $Date: 2012-08-29 14:55:21 +0200 (Mi, 29. Aug 2012) $</i>
+
