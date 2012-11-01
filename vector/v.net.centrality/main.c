@@ -345,6 +345,8 @@ int main(int argc, char *argv[])
 
 	    if (!Vect_cat_get(Cats, nfield, &cat))
 		continue;
+	    Vect_reset_cats(Cats);
+	    Vect_cat_set(Cats, 1, cat);
 	    Vect_write_line(&Out, type, Points, Cats);
 	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
 	    process_node(node, cat);
