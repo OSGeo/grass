@@ -162,7 +162,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 				(Clist->field > 0 ? Clist->field :
 				 (Cats->n_cats > 0 ? Cats->field[0] : 1)));
 
-	if (cat == -1) {
+	if (!centroid && cat == -1) {
 	    continue;
 	}
 
