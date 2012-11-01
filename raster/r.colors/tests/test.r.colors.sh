@@ -16,8 +16,8 @@ r3.mapcalc --o expr="volume_double = double(col() + row() + depth())"
 r3.mapcalc --o expr="volume_double_null = if(row() == 1 || row() == 5, null(), volume_double)"
 
 # First we @test the integer maps
-# We use the examples to test the import, export and setting of color tables with differrent options
-# the vaidation is based on raster map colur rules @files reference files created with r.colors.out
+# We use the examples to test the import, export and setting of color tables with different options
+# the validation is based on raster map color rules @files reference files created with r.colors.out
 r.colors    map=test_elev_int rules=example1 && r.colors.out --o map=test_elev_int rules=test_elev_int_example1.txt
 r.colors -e map=test_elev_int rules=example1 && r.colors.out --o map=test_elev_int rules=test_elev_int_example1_hist.txt
 r.colors    map=test_elev_int rules=example2 && r.colors.out --o map=test_elev_int rules=test_elev_int_example2.txt
