@@ -9,7 +9,7 @@ SUBDIRS = \
 	i.cluster \
 	i.eb.evapfr \
 	i.eb.eta \
-	i.eb.h_SEBAL01 \
+	i.eb.h_sebal01 \
 	i.eb.netrad \
 	i.eb.soilheatflux \
 	i.evapo.mh \
