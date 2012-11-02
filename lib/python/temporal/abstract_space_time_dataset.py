@@ -45,6 +45,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         raise ImplementationError(
             "This method must be implemented in the subclasses")
 
+    def create_map_register_name(self):
+        """!Create the name of the map register table of this space time dataset
+        
+            The name, mapset and the map type are used to create the table name.
+            
+            ATTENTION: It must be assured that the base object has selected its 
+            content from the database.
+        """
+        
+        return self.base.get_name() + "_" + \
+                self.base.get_mapset() + "_" + \
+                self.get_new_map_instance(None).get_type() + "_register"
+
     def get_map_register(self):
         """!Return the name of the map register table"""
         raise ImplementationError(
@@ -610,9 +623,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            A valid temporal topology (no overlapping or inclusion allowed) 
            is needed to get correct results.
 
-           The dataset must have "interval" as temporal map type, 
-           so all maps have valid interval time.
-
            Gaps between maps are identified as unregistered maps with id==None.
 
            The objects are initialized with the id and the temporal 
@@ -629,12 +639,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         dbif, connect = init_dbif(dbif)
 
         obj_list = []
-        
-        if self.get_map_time() == "point" or self.get_map_time() == "mixed":
-            core.error(_("The space time %(type)s dataset <%(name)s> must have"
-                         " interval time"%\
-                         {"type":self.get_new_map_instance(None).get_type(),
-                          "name":self.get_id()}))
 
         if gran is None:
             gran = self.get_granularity()
@@ -651,6 +655,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
+            found_gap = False
+            
             if rows is not None and len(rows) != 0:
                 if len(rows) > 1:
                     core.warning(_("More than one map found in a granule. "
@@ -673,8 +679,39 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     maplist.append(copy.copy(map))
 
                 obj_list.append(copy.copy(maplist))
-	    else:
-		# Found a gap
+            else:    
+                # Searching for time instances
+                where = "(start_time = '%s')" % (start)
+    
+                rows = self.get_registered_maps("id", where, "start_time", dbif)
+    
+                if rows is not None and len(rows) != 0:
+                    if len(rows) > 1:
+                        core.warning(_("More than one map found in a granule. "
+                                       "Temporal granularity seems to be invalid or"
+                                       " the chosen granularity is not a greatest "
+                                       "common divider of all time instances "
+                                       "in the dataset."))
+    
+                    maplist = []
+                    for row in rows:
+                        # Take the first map
+                        map = self.get_new_map_instance(rows[0]["id"])
+    
+                        if self.is_time_absolute():
+                            map.set_absolute_time(start, None)
+                        elif self.is_time_relative():
+                            map.set_relative_time(start, None, 
+                                                  self.get_relative_time_unit())
+    
+                        maplist.append(copy.copy(map))
+    
+                    obj_list.append(copy.copy(maplist))
+                found_gap = True
+            
+            # Gap handling
+            if found_gap:
+                # Found a gap
                 map = self.get_new_map_instance(None)
 
                 if self.is_time_absolute():
@@ -853,6 +890,57 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return rows
 
+    def rename(self, ident, dbif=None):
+        """!Rename the space time dataset
+
+           This method renames the space time dataset, the map register table
+           and updates the entries in registered maps stds register.
+
+           @param ident: The new identifier name@mapset
+           @param dbif: The database interface to be used
+        """
+
+        dbif, connect = init_dbif(dbif)
+
+        # SELECT all needed information from the database
+        self.select(dbif)
+        
+        # We need to select the registered maps here
+        maps = self.get_registered_maps_as_objects(None, "start_time", dbif)
+        
+        # Safe old identifier
+        old_ident = self.get_id()
+        # We need to rename the old table
+        old_map_register_table = self.get_map_register()
+        
+        # Set new identifier
+        self.set_id(ident)
+        # Create map register table name from new identifier
+        new_map_register_table = self.create_map_register_name()
+        # Set new map register table name
+        self.set_map_register(new_map_register_table)
+        
+        # Get the update statement, we update the table entry of the old identifier
+        statement = self.update(dbif, execute=False, ident=old_ident)
+        
+        # We need to rename the raster register table
+        statement += "ALTER TABLE %s RENAME TO \'%s\';\n"%\
+                     (old_map_register_table, new_map_register_table)
+
+        # We need to rename the space time dataset in the maps register table
+        if maps:
+            for map in maps:
+                map.select()
+                statement += "UPDATE %s SET id = \'%s\' WHERE id = \'%s\';\n"%\
+                             (map.get_stds_register(), ident, old_ident)
+                         
+        
+        # Execute the accumulated statements
+        dbif.execute_transaction(statement)
+        
+        if connect:
+            dbif.close()
+    
     def delete(self, dbif=None, execute=True):
         """!Delete a space time dataset from the temporal database
 
@@ -926,6 +1014,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             In case the map is already registered this function 
             will break with a warning and return False.
 
+           @param map: The AbstractMapDataset object that should be registered
            @param dbif: The database interface to be used
         """
         dbif, connect = init_dbif(dbif)
@@ -1087,8 +1176,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # We need to create the table and register it
         if stds_register_table is None:
             # Create table name
-            stds_register_table = stds_name + "_" + \
-                stds_mapset + "_" + map.get_type() + "_register"
+            stds_register_table = self.create_map_register_name()
             # Read the SQL template
             sql = open(os.path.join(sql_path, 
                                     "stds_map_register_table_template.sql"), 

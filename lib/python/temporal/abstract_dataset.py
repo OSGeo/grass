@@ -244,7 +244,7 @@ class AbstractDataset(object):
             dbif.close()
         return statement
 
-    def update(self, dbif=None, execute=True):
+    def update(self, dbif=None, execute=True, ident=None):
         """!Update temporal dataset entry of database from the internal structure
            excluding None variables
 
@@ -252,20 +252,22 @@ class AbstractDataset(object):
            @param execute: If True the SQL statements will be executed.
                            If False the prepared SQL statements are returned 
                            and must be executed by the caller.
+           @param ident: The identifier to be updated, useful for renaming
         """
 
         dbif, connect = init_dbif(dbif)
 
         # Build the UPDATE SQL statement
-        statement = self.base.get_update_statement_mogrified(dbif)
+        statement = self.base.get_update_statement_mogrified(dbif, ident)
         if self.is_time_absolute():
             statement += self.absolute_time.get_update_statement_mogrified(
-                dbif)
+                dbif, ident)
         if self.is_time_relative():
             statement += self.relative_time.get_update_statement_mogrified(
-                dbif)
-        statement += self.spatial_extent.get_update_statement_mogrified(dbif)
-        statement += self.metadata.get_update_statement_mogrified(dbif)
+                dbif, ident)
+        statement += self.spatial_extent.get_update_statement_mogrified(dbif, 
+                                                                        ident)
+        statement += self.metadata.get_update_statement_mogrified(dbif, ident)
 
         if execute:
             dbif.execute_transaction(statement)
@@ -277,7 +279,7 @@ class AbstractDataset(object):
             dbif.close()
         return statement
 
-    def update_all(self, dbif=None, execute=True):
+    def update_all(self, dbif=None, execute=True, ident=None):
         """!Update temporal dataset entry of database from the internal structure
            and include None variables.
 
@@ -285,21 +287,22 @@ class AbstractDataset(object):
            @param execute: If True the SQL statements will be executed.
                            If False the prepared SQL statements are returned 
                            and must be executed by the caller.
+           @param ident: The identifier to be updated, useful for renaming
         """
 
         dbif, connect = init_dbif(dbif)
 
         # Build the UPDATE SQL statement
-        statement = self.base.get_update_all_statement_mogrified(dbif)
+        statement = self.base.get_update_all_statement_mogrified(dbif, ident)
         if self.is_time_absolute():
             statement += self.absolute_time.get_update_all_statement_mogrified(
-                dbif)
+                dbif, ident)
         if self.is_time_relative():
             statement += self.relative_time.get_update_all_statement_mogrified(
-                dbif)
+                dbif, ident)
         statement += self.spatial_extent.get_update_all_statement_mogrified(
-            dbif)
-        statement += self.metadata.get_update_all_statement_mogrified(dbif)
+            dbif, ident)
+        statement += self.metadata.get_update_all_statement_mogrified(dbif, ident)
 
         if execute:
             dbif.execute_transaction(statement)
