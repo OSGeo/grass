@@ -92,14 +92,14 @@ class SearchModuleWindow(wx.Panel):
         gridSizer.Add(item = self.search,
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
         row = 1
+        if self.showChoice:
+            gridSizer.Add(item = self.searchChoice,
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
+            row += 1
         if self.showTip:
             gridSizer.Add(item = self.searchTip,
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
             row += 1
-        
-        if self.showChoice:
-            gridSizer.Add(item = self.searchChoice,
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
         
         gridSizer.AddGrowableCol(1)
 
@@ -128,7 +128,7 @@ class SearchModuleWindow(wx.Panel):
             event.Skip()
             return
         
-        text = event.GetString()
+        text = event.GetEventObject().GetValue()
         if not text:
             self.cmdPrompt.SetFilter(None)
             mList = self.cmdPrompt.GetCommandItems()
@@ -166,8 +166,9 @@ class SearchModuleWindow(wx.Panel):
                 
         self.cmdPrompt.SetFilter(modules)
         self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
+        self.searchChoice.SetSelection(0)
         if self.showTip:
-            self.searchTip.SetLabel(_("%d modules found") % iFound)
+            self.searchTip.SetLabel(_("%d modules match") % iFound)
         
         event.Skip()
         
@@ -176,7 +177,7 @@ class SearchModuleWindow(wx.Panel):
         cmd  = event.GetString().split(' ', 1)[0]
         text = cmd + ' '
         pos = len(text)
-
+        
         if self.cmdPrompt:
             self.cmdPrompt.SetText(text)
             self.cmdPrompt.SetSelectionStart(pos)
@@ -186,7 +187,7 @@ class SearchModuleWindow(wx.Panel):
         desc = self.cmdPrompt.GetCommandDesc(cmd)
         if self.showTip:
             self.searchTip.SetLabel(desc)
-    
+        
     def Reset(self):
         """!Reset widget"""
         self.searchBy.SetSelection(0)
