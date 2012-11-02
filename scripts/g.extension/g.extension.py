@@ -467,10 +467,7 @@ def install_extension(url):
             ret += install_extension_other(module)
         if len(mlist) > 1:
             print '-' * 60
-        if not flags['d']:
-            grass.verbose(_("Updating manual page for <%s>...") % module)
-            update_manual_page(module)
-
+    
     if flags['d']:
         return
 
@@ -478,7 +475,10 @@ def install_extension(url):
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
     else:
         grass.message(_("Updating metadata file..."))
-        install_extension_xml(url, mlist)
+        blist = install_extension_xml(url, mlist)
+        for module in blist:
+            update_manual_page(module)
+        
         grass.message(_("Installation of <%s> successfully finished") % options['extension'])
     
     if not os.getenv('GRASS_ADDON_BASE'):
@@ -557,7 +557,7 @@ def install_toolbox_xml(url, name):
 
     write_xml_toolboxes(fXML, tree)
 
-
+# return list of executables for update_manual_page()
 def install_extension_xml(url, mlist):
     if len(mlist) > 1:
         # read metadata from remote server (toolboxes)
@@ -567,6 +567,7 @@ def install_extension_xml(url, mlist):
     url = url + "modules.xml"
 
     data = {}
+    bList = []
     try:
         f = urlopen(url)
         tree = etree.fromstring(f.read())
@@ -581,10 +582,13 @@ def install_extension_xml(url, mlist):
             if bnode is not None:
                 for fnode in bnode.findall('file'):
                     path = fnode.text.split('/')
-                    if windows:
-                        if path[0] == 'bin':
+                    if path[0] == 'bin':
+                        bList.append(path[-1])
+                        if windows:
                             path[-1] += '.exe'
-                        if path[0] == 'scripts':
+                    elif path[0] == 'scripts':
+                        bList.append(path[-1])
+                        if windows:
                             path[-1] += '.py'
                     fList.append(os.path.sep.join(path))
             
@@ -661,6 +665,8 @@ def install_extension_xml(url, mlist):
             tree.append(tnode)
 
     write_xml_modules(fXML, tree)
+
+    return bList
 
 # install extension on MS Windows
 def install_extension_win(name):
@@ -937,6 +943,7 @@ def update_manual_page(module):
     if module.split('.', 1)[0] == 'wx':
         return # skip for GUI modules
 
+    grass.verbose(_("Manual page for <%s> updated") % module)
     # read original html file
     htmlfile = os.path.join(options['prefix'], 'docs', 'html', module + '.html')
     try:
