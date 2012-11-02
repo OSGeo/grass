@@ -31,11 +31,11 @@ EOF
 
 cat > "${n2}" << EOF
 prec_1|2001-01-01
-prec_2|2001-02-01
-prec_3|2001-03-01
-prec_4|2001-04-01
-prec_5|2001-05-01
-prec_6|2001-06-01
+prec_2|2001-03-01
+prec_3|2001-04-01
+prec_4|2001-05-01
+prec_5|2001-08-01
+prec_6|2001-09-01
 EOF
 
 cat > "${n3}" << EOF
@@ -91,7 +91,6 @@ t.rast.list -h input=precip_abs0
 t.rast.list -h fs=" | " method=cols      input=precip_abs0
 t.rast.list -h fs=" | " method=delta     input=precip_abs0
 t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
-# ERROR: no interval time   
 t.rast.list -h fs=" | " method=gran      input=precip_abs0
 
 t.register type=rast --o -i input=precip_abs0 file="${n3}"
