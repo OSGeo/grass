@@ -30,11 +30,12 @@ import re
 
 if __name__ == "__main__":
     sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-from core                 import globalvar
+
 import wx
-from wx.lib import ogl
+from   wx.lib import ogl
 import wx.lib.flatnotebook    as FN
 
+from core                 import globalvar
 from gui_core.widgets     import GNotebook
 from gui_core.goutput     import GMConsole, PyStc
 from core.debug           import Debug
@@ -620,7 +621,7 @@ class ModelFrame(wx.Frame):
             self.searchDialog.CentreOnParent()
         else:
             self.searchDialog.Reset()
-            
+        
         if self.searchDialog.ShowModal() == wx.ID_CANCEL:
             self.searchDialog.Hide()
             return
@@ -631,8 +632,8 @@ class ModelFrame(wx.Frame):
         self.ModelChanged()
         
         # add action to canvas
-        width, height = self.canvas.GetSize()
-        action = ModelAction(self.model, cmd = cmd, x = width/2, y = height/2,
+        x, y = self.canvas.GetNewShapePos()
+        action = ModelAction(self.model, cmd = cmd, x = x, y = y,
                              id = self.model.GetNextId())
         overwrite = self.model.GetProperties().get('overwrite', None)
         if overwrite is not None:
@@ -640,7 +641,7 @@ class ModelFrame(wx.Frame):
         
         self.canvas.diagram.AddShape(action)
         action.Show(True)
-
+        
         self._addEvent(action)
         self.model.AddItem(action)
         
@@ -1004,6 +1005,22 @@ class ModelCanvas(ogl.ShapeCanvas):
         
         self.Refresh()
   
+    def GetNewShapePos(self):
+        """!Determine optimal position for newly added object
+
+        @return x,y
+        """
+        xNew, yNew = map(lambda x: x / 2, self.GetSize())
+        diagram = self.GetDiagram()
+        
+        for shape in diagram.GetShapeList():
+            y = shape.GetY()
+            yBox = shape.GetBoundingBoxMin()[1] / 2
+            if yBox > 0 and y < yNew + yBox and y > yNew - yBox:
+                yNew += yBox * 3
+        
+        return xNew, yNew
+    
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
     def __init__(self, log, frame):
