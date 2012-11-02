@@ -51,7 +51,7 @@
 
 #%flag
 #% key: r
-#% description: Remove existing color table
+#% description: Remove existing color tables
 #%end
 
 #%flag
