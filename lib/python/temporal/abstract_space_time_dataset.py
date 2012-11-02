@@ -622,6 +622,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            A valid temporal topology (no overlapping or inclusion allowed) 
            is needed to get correct results.
+           
+           Space time datasets with interval time, time instances and mixed time 
+           are supported.
 
            Gaps between maps are identified as unregistered maps with id==None.
 
@@ -630,7 +633,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case more map information are needed, use the select() 
            method for each listed object.
 
-           @param gran: The granularity to be used
+           @param gran: The granularity to be used, if None the granularity of 
+                        the space time dataset is used.
            @param dbif: The database interface to be used
 
            @return ordered object list, in case nothing found None is returned
@@ -644,6 +648,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             gran = self.get_granularity()
 
         start, end = self.get_valid_time()
+        
+        # Time instances and mixed time
+        is_irregular = False
+        
+        # We need to adjust the end time in case the the dataset ha no
+        # interval time, so we can catch time instances at the end
+        if self.get_map_time() != "interval":
+            is_irregular = True
+
+            if self.is_time_absolute():
+                end = increment_datetime_by_string(end, gran)
+            else:
+                end = end + gran
 
         while start < end:
             if self.is_time_absolute():
@@ -679,8 +696,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     maplist.append(copy.copy(map))
 
                 obj_list.append(copy.copy(maplist))
-            else:    
-                # Searching for time instances
+            else:
+                # We truely found a gap and maybe a time instance
+                found_gap = True
+                
+                # Searching for time instances with start time in the current 
+                # granule
                 where = "(start_time = '%s')" % (start)
     
                 rows = self.get_registered_maps("id", where, "start_time", dbif)
@@ -707,11 +728,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         maplist.append(copy.copy(map))
     
                     obj_list.append(copy.copy(maplist))
-                found_gap = True
+                    
+                # In case of irregular time (point, mixed) the last granule 
+                # does not belong to the dataset and will be ignored
+                if is_irregular:
+                    if next == end:
+                        found_gap = False
             
             # Gap handling
             if found_gap:
-                # Found a gap
+                # Append a map object with None as id to indicate a gap
                 map = self.get_new_map_instance(None)
 
                 if self.is_time_absolute():
