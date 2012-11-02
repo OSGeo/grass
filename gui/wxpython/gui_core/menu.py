@@ -149,9 +149,8 @@ class MenuTreeWindow(wx.Panel):
         self.btnRun.Bind(wx.EVT_BUTTON,            self.OnRun)
         self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
-#        self.search.GetCtrl().Bind(wx.EVT_TEXT_ENTER,  self.OnShowItem)
-        self.search.GetCtrl().Bind(wx.EVT_TEXT,        self.OnUpdateStatusBar)
-        self.search.GetCtrl().Bind(wx.EVT_KEY_UP,      self.OnKeyUp)
+        self.search.GetCtrl().Bind(wx.EVT_TEXT,    self.OnUpdateStatusBar)
+        self.search.GetCtrl().Bind(wx.EVT_KEY_UP,  self.OnKeyUp)
         
         self._layout()
         
