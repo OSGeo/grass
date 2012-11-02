@@ -12,6 +12,7 @@ SUBDIRS = \
 	t.unregister \
 	t.rast.aggregate \
 	t.rast.aggregate.ds \
+	t.rast.colors \
 	t.rast.to.rast3 \
 	t.rast.univar \
 	t.rast.list \
@@ -26,6 +27,7 @@ SUBDIRS = \
 	t.rast3d.extract \
 	t.rast3d.mapcalc \
 	t.rast3d.univar \
+	t.rename \
 	t.vect.list \
 	t.vect.db.select \
 	t.vect.export \
