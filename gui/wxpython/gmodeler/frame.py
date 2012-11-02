@@ -120,8 +120,8 @@ class ModelFrame(wx.Frame):
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         
         self._layout()
-        self.SetMinSize((475, 300))
-        self.SetSize((640, 480))
+        self.SetMinSize((640, 300))
+        self.SetSize((800, 600))
         
         # fix goutput's pane size
         if self.goutput:
@@ -1045,24 +1045,9 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                     dlg.Destroy()
                 del self.frame.defineRelation
         
-        if shape.Selected():
-            shape.Select(False, dc)
-        else:
-            redraw = False
-            shapeList = canvas.GetDiagram().GetShapeList()
-            toUnselect = list()
-            
-            for s in shapeList:
-                if s.Selected():
-                    toUnselect.append(s)
-            
-            shape.Select(True, dc)
-            
-            for s in toUnselect:
-                s.Select(False, dc)
-                
-        canvas.Refresh(False)
-
+        # select object
+        self._onSelectShape(shape)
+        
         if hasattr(shape, "GetLog"):
             self.log.SetStatusText(shape.GetLog(), 0)
         else:
@@ -1171,7 +1156,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.x = x
         self.y = y
         
+        # select object
         shape = self.GetShape()
+        self._onSelectShape(shape)
+        
         popupMenu = wx.Menu()
         popupMenu.Append(self.popupID['remove'], text=_('Remove'))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID['remove'])
@@ -1224,6 +1212,28 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.Enable(enable)
         self.frame.ModelChanged()
         self.frame.canvas.Refresh()
+        
+    def _onSelectShape(self, shape):
+        canvas = shape.GetCanvas()
+        dc = wx.ClientDC(canvas)
+        
+        if shape.Selected():
+            shape.Select(False, dc)
+        else:
+            redraw = False
+            shapeList = canvas.GetDiagram().GetShapeList()
+            toUnselect = list()
+            
+            for s in shapeList:
+                if s.Selected():
+                    toUnselect.append(s)
+            
+            shape.Select(True, dc)
+            
+            for s in toUnselect:
+                s.Select(False, dc)
+        
+        canvas.Refresh(False)
         
     def OnAddPoint(self, event):
         """!Add control point"""
