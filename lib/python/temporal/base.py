@@ -401,24 +401,33 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.cursor.execute(sql, args)
             dbif.close()
 
-    def get_update_statement(self):
+    def get_update_statement(self, ident=None):
         """!Return the sql statement and the argument list 
-           in database specific style"""
-        return self.serialize("UPDATE", self.get_table_name(), 
+           in database specific style
+           
+           @param ident: The identifier to be updated, useful for renaming
+           
+           """
+        if ident:
+            return self.serialize("UPDATE", self.get_table_name(), 
+                              "WHERE id = \'" + str(ident) + "\'")
+        else:
+            return self.serialize("UPDATE", self.get_table_name(), 
                               "WHERE id = \'" + str(self.ident) + "\'")
 
-    def get_update_statement_mogrified(self, dbif=None):
+    def get_update_statement_mogrified(self, dbif=None, ident=None):
         """!Return the update statement as mogrified string
 
            @param dbif: The database interface to be used, 
                         if None a temporary connection will be established
+           @param ident: The identifier to be updated, useful for renaming
         """
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_update_statement())
+        return dbif.mogrify_sql_statement(self.get_update_statement(ident))
 
-    def update(self, dbif=None):
+    def update(self, dbif=None, ident=None):
         """!Serialize the content of this object and update it in the temporal
            database using the internal identifier
 
@@ -426,11 +435,12 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
            @param dbif: The database interface to be used, 
                         if None a temporary connection will be established
+           @param ident: The identifier to be updated, useful for renaming
         """
         if self.ident is None:
             raise IOError("Missing identifer")
 
-        sql, args = self.get_update_statement()
+        sql, args = self.get_update_statement(indent)
         #print sql
         #print args
 
@@ -442,34 +452,43 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.cursor.execute(sql, args)
             dbif.close()
 
-    def get_update_all_statement(self):
+    def get_update_all_statement(self, ident=None):
         """!Return the sql statement and the argument 
-           list in database specific style"""
-        return self.serialize("UPDATE ALL", self.get_table_name(), 
+           list in database specific style
+           
+           @param ident: The identifier to be updated, useful for renaming
+           """
+        if ident:
+            return self.serialize("UPDATE ALL", self.get_table_name(), 
+                              "WHERE id = \'" + str(ident) + "\'")
+        else:
+            return self.serialize("UPDATE ALL", self.get_table_name(), 
                               "WHERE id = \'" + str(self.ident) + "\'")
 
-    def get_update_all_statement_mogrified(self, dbif=None):
+    def get_update_all_statement_mogrified(self, dbif=None, ident=None):
         """!Return the update all statement as mogrified string
 
            @param dbif: The database interface to be used, 
                         if None a temporary connection will be established
+           @param ident: The identifier to be updated, useful for renaming
         """
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_update_all_statement())
+        return dbif.mogrify_sql_statement(self.get_update_all_statement(ident))
 
-    def update_all(self, dbif=None):
+    def update_all(self, dbif=None, ident=None):
         """!Serialize the content of this object, including None objects, 
         and update it in the temporal database using the internal identifier
 
            @param dbif: The database interface to be used, 
                         if None a temporary connection will be established
+           @param ident: The identifier to be updated, useful for renaming
         """
         if self.ident is None:
             raise IOError("Missing identifer")
 
-        sql, args = self.get_update_all_statement()
+        sql, args = self.get_update_all_statement(ident)
         #print sql
         #print args
 

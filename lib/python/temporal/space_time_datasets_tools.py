@@ -230,13 +230,17 @@ def register_maps_in_space_time_dataset(
                                    "Unable to update %s map <%s>. "
                                    "Overwrite flag is not set.") %
                                (map.get_type(), map.get_map_id()))
+                
+                # Simple registration is allowed
+                if name:
+                    map_object_list.append(map)
                 # Jump to next map
                 continue
             
             # Select information from temporal database
             map.select(dbif)
             
-            # Safe the datasets that must be updated
+            # Save the datasets that must be updated
             datasets = map.get_registered_datasets(dbif)
             if datasets:
                 for dataset in datasets:
@@ -293,7 +297,7 @@ def register_maps_in_space_time_dataset(
         dbif.execute_transaction(statement)
 
     # Finally Register the maps in the space time dataset
-    if name:
+    if name and map_object_list:
         statement = ""
         count = 0
         num_maps = len(map_object_list)
@@ -304,7 +308,7 @@ def register_maps_in_space_time_dataset(
             count += 1
 
     # Update the space time tables
-    if name:
+    if name and map_object_list:
         core.message(_("Update space time raster dataset"))
         sp.update_from_registered_maps(dbif)
         
@@ -353,7 +357,6 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
     if ttype == "absolute":
         start_time = string_to_datetime(start)
         if start_time is None:
-            dbif.close()
             core.fatal(_("Unable to convert string \"%s\"into a "
                          "datetime object") % (start))
         end_time = None
