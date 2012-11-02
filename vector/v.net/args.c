@@ -83,6 +83,13 @@ void define_options(struct opt *opt)
     opt->cats_flag->label = _("Assign unique categories to new points");
     opt->cats_flag->description = _("For operation 'nodes'");
     opt->cats_flag->guisection = _("Nodes");
+
+    opt->snap_flag = G_define_flag();
+    opt->snap_flag->key = 's';
+    opt->snap_flag->label = _("Snap points to network");
+    opt->snap_flag->description =
+	_("For operation 'connect'. By default, a new line from the point to the network is created.");
+    opt->snap_flag->guisection = _("Nodes");
 }
 
 void parse_arguments(const struct opt *opt,

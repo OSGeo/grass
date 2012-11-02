@@ -18,10 +18,10 @@
  * \return number of new arcs
  */
 int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
-		 struct Map_info *Out, int nfield, double thresh)
+		 struct Map_info *Out, int nfield, double thresh, int snap)
 {
     int narcs;
-    int type, line, seg, i, ltype;
+    int type, line, seg, i, ltype, broken;
     double px, py, pz, spdist, dist;
 
     struct line_pnts *Points, *Pline, *Pout;
@@ -63,13 +63,17 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 	if (seg == 0)
 	    G_fatal_error(_("Failed to find intersection segment"));
 	/* break the line */
+	broken = 0;
 	Vect_reset_line(Pout);
 	for (i = 0; i < seg; i++) {
 	    Vect_append_point(Pout, Pline->x[i], Pline->y[i], Pline->z[i]);
 	}
 	Vect_append_point(Pout, px, py, pz);
 	Vect_line_prune(Pout);
-	Vect_rewrite_line(Out, line, ltype, Pout, Cline);
+	if (Pout->n_points > 1) {
+	    Vect_rewrite_line(Out, line, ltype, Pout, Cline);
+	    broken++;
+	}
 
 	Vect_reset_line(Pout);
 	Vect_append_point(Pout, px, py, pz);
@@ -77,23 +81,40 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 	    Vect_append_point(Pout, Pline->x[i], Pline->y[i], Pline->z[i]);
 	}
 	Vect_line_prune(Pout);
-	Vect_write_line(Out, ltype, Pout, Cline);
+	if (Pout->n_points > 1) {
+	    if (broken)
+		Vect_write_line(Out, ltype, Pout, Cline);
+	    else
+		Vect_rewrite_line(Out, line, ltype, Pout, Cline);
+	    broken++;
+	}
+	if (broken == 2)
+	    narcs++;
 
 	if (dist > 0.0) {
-	    /* write new arc */
-	    Vect_reset_line(Pout);
-	    Vect_append_point(Pout, px, py, pz);
-	    Vect_append_point(Pout, Points->x[0], Points->y[0], Points->z[0]);
-	    Vect_write_line(Out, ltype, Pout, Cline);
+	    if (snap) {
+		/* snap point */
+		Points->x[0] = px;
+		Points->y[0] = py;
+		Points->z[0] = pz;
+	    }
+	    else {
+		/* write new arc */
+		Vect_reset_line(Pout);
+		Vect_append_point(Pout, px, py, pz);
+		Vect_append_point(Pout, Points->x[0], Points->y[0], Points->z[0]);
+		Vect_write_line(Out, ltype, Pout, Cline);
+
+		narcs++;
+	    }
 	}
 
 	/* add points to 'nfield' layer */
 	for (i = 0; i < Cats->n_cats; i++) {
 	    Cats->field[i] = nfield;	/* all points to 'nfield' layer */
 	}
-	Vect_write_line(Out, type, Points, Cats);
 
-	narcs++;
+	Vect_write_line(Out, type, Points, Cats);
     }
 
     Vect_destroy_line_struct(Points);
