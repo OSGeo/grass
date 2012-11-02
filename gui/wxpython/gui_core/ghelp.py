@@ -128,6 +128,10 @@ class SearchModuleWindow(wx.Panel):
             event.Skip()
             return
         
+        # hide autocomplete
+        if self.cmdPrompt.AutoCompActive():
+            self.cmdPrompt.AutoCompCancel()
+        
         text = event.GetEventObject().GetValue()
         if not text:
             self.cmdPrompt.SetFilter(None)

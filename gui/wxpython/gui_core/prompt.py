@@ -726,7 +726,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # create command and map lists for autocompletion
         #
         self.AutoCompSetIgnoreCase(False) 
-        
+                
         #
         # line margins
         #
@@ -942,7 +942,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """
         # keycodes used: "." = 46, "=" = 61, "-" = 45 
         pos = self.GetCurrentPos()
-        #complete command after pressing '.'
+        # complete command after pressing '.'
         if event.GetKeyCode() == 46 and not event.ShiftDown():
             self.autoCompList = list()
             entry = self.GetTextLeft()

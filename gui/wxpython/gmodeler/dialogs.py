@@ -113,6 +113,7 @@ class ModelDataDialog(ElementDialog):
             event.Skip()
         else:
             self.Destroy()
+
 class ModelSearchDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Add new GRASS module to the model"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
@@ -149,6 +150,7 @@ class ModelSearchDialog(wx.Dialog):
         self.cmd_prompt.Bind(wx.EVT_KEY_UP, self.OnText)
         self.search.searchChoice.Bind(wx.EVT_CHOICE, self.OnText)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btnOk)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
         
         self._layout()
         
@@ -196,6 +198,10 @@ class ModelSearchDialog(wx.Dialog):
     
     def OnOk(self, event):
         """!Button 'OK' pressed"""
+        # hide autocomplete
+        if self.cmd_prompt.AutoCompActive():
+            self.cmd_prompt.AutoCompCancel()
+        
         self.btnOk.SetFocus()
         cmd = self.GetCmd()
         
@@ -212,6 +218,14 @@ class ModelSearchDialog(wx.Dialog):
             return
         
         self.EndModal(wx.ID_OK)
+        
+    def OnCancel(self, event):
+        """Cancel pressed, close window"""
+        # hide autocomplete
+        if self.cmd_prompt.AutoCompActive():
+            self.cmd_prompt.AutoCompCancel()
+        
+        self.Hide()
         
     def OnText(self, event):
         """!Text in prompt changed"""
