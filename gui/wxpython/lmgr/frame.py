@@ -813,20 +813,6 @@ class GMFrame(wx.Frame):
         """!Print system information"""
         vInfo = grass.version()
         
-        # GDAL/OGR
-        try:
-            from osgeo import gdal
-            gdalVersion = gdal.__version__
-        except:
-            try:
-                gdalVersion = grass.Popen(['gdalinfo', '--version'], stdout = grass.PIPE).communicate()[0].rstrip('\n')
-            except:
-                gdalVersion = _("unknown")
-        # PROJ4
-        try:
-            projVersion = RunCommand('proj', getErrorMsg = True)[1].splitlines()[0]
-        except:
-            projVersion = _("unknown")
         # check also OSGeo4W on MS Windows
         if sys.platform == 'win32' and \
                 not os.path.exists(os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")):
@@ -839,13 +825,14 @@ class GMFrame(wx.Frame):
                               "%s: %s\n"
                               "%s: %s (%s)\n"
                               "GDAL/OGR: %s\n"
-                              "PROJ4: %s\n"
+                              "PROJ.4: %s\n"
+                              "GEOS: %s\n"
                               "Python: %s\n"
                               "wxPython: %s\n"
                               "%s: %s%s\n"% (_("GRASS version"), vInfo['version'],
                                            _("GRASS SVN Revision"), vInfo['revision'],
                                            _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
-                                           gdalVersion, projVersion,
+                                           vInfo['gdal'], vInfo['proj4'], vInfo['geos'],
                                            platform.python_version(),
                                            wx.__version__,
                                            _("Platform"), platform.platform(), osgeo4w),

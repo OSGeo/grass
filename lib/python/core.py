@@ -1325,15 +1325,16 @@ def version():
     @code
     print version()
 
-    {'date': '2011', 'libgis_date': '2011-08-13 01:14:30 +0200 (Sat, 13 Aug 2011)',
-    'version': '7.0.svn', 'libgis_revision': '47604', 'revision': '47963'}
+    {'proj4': '4.8.0', 'geos': '3.3.5', 'libgis_revision': '52468',
+     'libgis_date': '2012-07-27 22:53:30 +0200 (Fri, 27 Jul 2012)',
+     'version': '7.0.svn', 'date': '2012', 'gdal': '2.0dev', 'revision': '53670'}
     @endcode
     """
     data = parse_command('g.version',
-                         flags = 'rg')
+                         flags = 'rge')
     for k, v in data.iteritems():
         data[k.strip()] = v.replace('"', '').strip()
-        
+    
     return data
 
 # get debug_level
