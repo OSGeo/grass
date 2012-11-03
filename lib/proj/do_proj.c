@@ -61,7 +61,7 @@ static double METERS_in = 1.0, METERS_out = 1.0;
  **/
 
 int pj_do_proj(double *x, double *y,
-	       struct pj_info *info_in, struct pj_info *info_out)
+	       const struct pj_info *info_in, const struct pj_info *info_out)
 {
     int ok;
     double u, v;
@@ -132,7 +132,7 @@ int pj_do_proj(double *x, double *y,
  **/
 
 int pj_do_transform(int count, double *x, double *y, double *h,
-		    struct pj_info *info_in, struct pj_info *info_out)
+		    const struct pj_info *info_in, const struct pj_info *info_out)
 {
     int ok;
     int has_h = 1;
