@@ -37,6 +37,7 @@ SUBDIRS = \
 	r.pack \
 	r.plane \
 	r.reclass.area \
+	r.rgb \
 	r.shaded.relief \
 	r.tileset \
 	r.unpack \
@@ -73,7 +74,6 @@ SUBDIRS = \
 #        v.krige \
 
 #	r.mapcalculator \
-#	r.rgb \
 #	r3.mapcalculator \
 #	v.in.gps \
 
