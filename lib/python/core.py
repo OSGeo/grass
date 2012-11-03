@@ -66,7 +66,6 @@ class ScriptError(Exception):
         return self.value
         
 raise_on_error = False # raise exception instead of calling fatal()
-debug_level = 0        # DEBUG level
 
 def call(*args, **kwargs):
     return Popen(*args, **kwargs).wait()
@@ -167,9 +166,8 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
 
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
     
-    global debug_level
-    if debug_level > 0:
-        sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level, __name__, ' '.join(args)))
+    if debug_level() > 0:
+        sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level(), __name__, ' '.join(args)))
         sys.stderr.flush()
     
     return Popen(args, **popts)
@@ -1338,5 +1336,13 @@ def version():
     return data
 
 # get debug_level
-if find_program('g.gisenv', ['--help']):
-    debug_level = int(gisenv().get('DEBUG', 0))
+_debug_level = None
+
+def debug_level():
+    global _debug_level
+    if _debug_level is not None:
+        return _debug_level
+    if find_program('g.gisenv', ['--help']):
+        _debug_level = int(gisenv().get('DEBUG', 0))
+    else:
+        _debug_level = 0
