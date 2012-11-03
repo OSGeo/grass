@@ -1,7 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.version</em> prints to standard output the GRASS version number,
-date, the GRASS copyright and GRASS build information.
+date, the GRASS copyright (<b>-c</b> flag), and GRASS build information
+(<b>-b</b> flag).
 
 <h2>NOTES</h2>
 
@@ -9,47 +10,67 @@ This program requires no command line arguments; the user simply types
 <em>g.version</em> on the command line to see the version number and
 date of the GRASS software currently being run by the user.
 
-<h2>EXAMPLES</h2>
+<p>
+Information about GRASS
+core <a href="http://grass.osgeo.org/programming7/gislib.html">GIS
+Library</a> can be printed by <b>-r</b> flag.
 
-<div class="code"><pre>
-g.version 
+<p>
+Version numbers of additional libraries
+like <a href="http://trac.osgeo.org/proj/">PROJ.4</a>, <a href="http://gdal.org/">GDAL/OGR</a>
+or <a href="http://trac.osgeo.org/geos">GEOS</a> are printed
+by <b>-e</b> flag.
 
-GRASS 7.0.svn45136 (2011)
-</pre></div>
-
-<div class="code"><pre>
-g.version -r
-
-GRASS 7.0.svn45136 (2011)
-Revision: 45093 
-Date: 2011-01-20 13:10:50 +0100 (Thu, 20 Jan 2011)
-</pre></div>
-
-<div class="code"><pre>
-g.version -rg
-
-version=7.0.svn
-revision=45136
-date=2011
-gis_revision=Revision: 45093 
-gis_date=Date: 2011-01-20 13:10:50 +0100 (Thu, 20 Jan 2011) 
-</pre></div>
-
-<h2>PYTHON</h2>
-
-See <em><a href="http://grass.osgeo.org/programming7/pythonlib.html">Python
-Scripting Library</a></em> for more info.
+<p>
+See also function <tt>version()</tt>
+from <a href="http://grass.osgeo.org/wiki/GRASS_Python_Scripting_Library">Python
+Scripting Library</a>.
 
 <div class="code"><pre>
 import grass.script as grass
 
-grass.version()
+print grass.version()
 </div>
 
-<h2>AUTHOR</h2>
+<h2>EXAMPLES</h2>
+
+<h3>Basic info</h3>
+<div class="code"><pre>
+g.version 
+
+GRASS 7.0.svn (2012)
+</pre></div>
+
+<h3>GIS Library info</h3>
+
+<div class="code"><pre>
+g.version -r
+
+GRASS 7.0.svn (2012)
+libgis Revision: 52468 
+libgis Date: 2012-07-27 22:53:30 +0200 (Fri, 27 Jul 2012) 
+</pre></div>
+
+<h3>Full info in shell script style</h3>
+<div class="code"><pre>
+g.version -rge
+
+version=7.0.svn
+revision=53670
+date=2012
+libgis_revision=52468 
+libgis_date="2012-07-27 22:53:30 +0200 (Fri, 27 Jul 2012) "
+proj4=4.8.0
+gdal=1.9.2
+geos=3.3.5
+</pre></div>
+
+<h2>AUTHORS</h2>
 
 Michael Shapiro, 
 U.S. Army Construction Engineering 
-Research Laboratory
+Research Laboratory<br>
+Extended info by Martin Landa, Czech Technical University in Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

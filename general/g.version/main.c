@@ -5,9 +5,10 @@
 * AUTHOR(S):	Michael Shapiro, CERL
 *               Andreas Lange - <andreas.lange rhein-main.de>
 *  	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
+*               Extended info by Martin Landa <landa.martin gmail.com>
 * PURPOSE: 	Output GRASS version number, date and copyright message.
 *             
-* COPYRIGHT:  	(C) 2000-2011 by the GRASS Development Team
+* COPYRIGHT:  	(C) 2000-2012 by the GRASS Development Team
 *
 *   	    	This program is free software under the GPL (>=v2)
 *   	    	Read the file COPYING that comes with GRASS for details.
@@ -19,6 +20,16 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+#include <proj_api.h>
+
+#ifdef HAVE_GDAL
+#include <gdal_version.h>
+#endif
+
+#ifdef HAVE_GEOS
+#include <geos_c.h>
+#endif
 
 #ifndef GRASS_VERSION_UPDATE_PKG
 #define GRASS_VERSION_UPDATE_PKG "0.1"
@@ -35,7 +46,7 @@ static const char GRASS_CONFIGURE_PARAMS[] =
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Flag *copyright, *build, *gish_rev, *shell;
+    struct Flag *copyright, *build, *gish_rev, *shell, *extended;
 
     G_gisinit(argv[0]);
 
@@ -59,6 +70,12 @@ int main(int argc, char *argv[])
     gish_rev->description =
 	_("Print also the GIS library revision number and time");
     gish_rev->guisection = _("Additional info");
+
+    extended = G_define_flag();
+    extended->key = 'e';
+    extended->label = _("Print also extended info for additional libraries");
+    extended->description = _("GDAL/OGR, PROJ.4, GEOS");
+    extended->guisection = _("Additional info");
 
     shell = G_define_flag();
     shell->key = 'g';
@@ -104,5 +121,44 @@ int main(int argc, char *argv[])
 	G_free_tokens(rev_time);
     }
 
+    if (extended->answer) {
+        char *proj = NULL;
+        G_asprintf(&proj, "%d", PJ_VERSION);
+        if (strlen(proj) == 3) {
+            if (shell->answer)
+                fprintf(stdout, "proj4=%c.%c.%c\n", proj[0], proj[1], proj[2]); 
+            else
+                fprintf(stdout, "PROJ.4: %c.%c.%c\n", proj[0], proj[1], proj[2]); 
+        }
+        else {
+            if (shell->answer)
+                fprintf(stdout, "proj4=%s\n", proj);
+            else
+                fprintf(stdout, "PROJ.4: %s\n", proj);
+        }
+#ifdef HAVE_GDAL
+        if (shell->answer)
+            fprintf(stdout, "gdal=%s\n", GDAL_RELEASE_NAME);
+        else
+            fprintf(stdout, "GDAL/OGR: %s\n", GDAL_RELEASE_NAME);
+#else
+        if (shell->answer)
+            fprintf(stdout, "gdal=\n");
+        else
+            fprintf(stdout, "%s\n", _("GRASS not compiled with GDAL/OGR support"));
+#endif
+#ifdef HAVE_GEOS
+        if (shell->answer)
+            fprintf(stdout, "geos=%s\n", GEOS_VERSION);
+        else
+            fprintf(stdout, "GEOS: %s\n", GEOS_VERSION);
+#else
+        if (shell->answer)
+            fprintf(stdout, "geos=\n");
+        else
+            fprintf(stdout, "%s\n", _("GRASS not compiled with GEOS support"));
+#endif
+    }
+    
     return (EXIT_SUCCESS);
 }
