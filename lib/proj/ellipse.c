@@ -49,7 +49,7 @@ int GPJ_get_ellipsoid_params(double *a, double *e2, double *rf)
 }
 
 int
-GPJ__get_ellipsoid_params(struct Key_Value *proj_keys,
+GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
 			  double *a, double *e2, double *rf)
 {
     struct gpj_ellps estruct;

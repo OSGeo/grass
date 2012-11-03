@@ -56,8 +56,8 @@ static int nopt1;
  *          1 otherwise
  **/
 
-int pj_get_kv(struct pj_info *info, struct Key_Value *in_proj_keys,
-	      struct Key_Value *in_units_keys)
+int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
+	      const struct Key_Value *in_units_keys)
 {
     const char *str;
     int i;
@@ -391,7 +391,7 @@ const char *set_proj_lib(const char *name)
  *         returned NULL for either co-ordinate system)
  **/
 
-int pj_print_proj_params(struct pj_info *iproj, struct pj_info *oproj)
+int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *oproj)
 {
     char *str;
 

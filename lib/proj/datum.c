@@ -170,7 +170,7 @@ int GPJ_get_datum_params(char **name, char **params)
  * 
  **/
 
-int GPJ__get_datum_params(struct Key_Value *projinfo,
+int GPJ__get_datum_params(const struct Key_Value *projinfo,
 			  char **datumname, char **params)
 {
     int returnval = -1;

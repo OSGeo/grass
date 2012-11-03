@@ -52,8 +52,8 @@ static void DatumNameMassage(char **);
  *         WKT format
  * \return NULL on error
  */
-char *GPJ_grass_to_wkt(struct Key_Value *proj_info,
-		       struct Key_Value *proj_units,
+char *GPJ_grass_to_wkt(const struct Key_Value *proj_info,
+		       const struct Key_Value *proj_units,
 		       int esri_style, int prettify)
 {
 #ifdef HAVE_OGR
@@ -94,8 +94,8 @@ char *GPJ_grass_to_wkt(struct Key_Value *proj_info,
  * \return OGRSpatialReferenceH object representing the co-ordinate system
  *         defined by proj_info and proj_units or NULL if it fails
  */
-OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
-				      struct Key_Value * proj_units)
+OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
+				      const struct Key_Value * proj_units)
 {
     struct pj_info pjinfo;
     char *proj4, *proj4mod, *wkt, *modwkt, *startmod, *lastpart;
