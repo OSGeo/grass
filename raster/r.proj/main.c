@@ -245,6 +245,7 @@ int main(int argc, char **argv)
 
     mapname = outmap->answer ? outmap->answer : inmap->answer;
     if (mapname && !list->answer && !overwrite &&
+	!print_bounds->answer && !gprint_bounds->answer &&
 	G_find_raster(mapname, G_mapset()))
 	G_fatal_error(_("option <%s>: <%s> exists."), "output", mapname);
 
@@ -354,10 +355,15 @@ int main(int argc, char **argv)
 	G_message(_("Input map <%s@%s> in location <%s>:"),
 	    inmap->answer, setname, inlocation->answer);
 
-	if (pj_do_proj(&iwest, &isouth, &iproj, &oproj) < 0)
-	    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-	if (pj_do_proj(&ieast, &inorth, &iproj, &oproj) < 0)
-	    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+	outcellhd.north = -1e9;
+	outcellhd.south =  1e9;
+	outcellhd.east  = -1e9;
+	outcellhd.west  =  1e9;
+	bordwalk2(&incellhd, &outcellhd, &iproj, &oproj);
+	inorth = outcellhd.north;
+	isouth = outcellhd.south;
+	ieast  = outcellhd.east;
+	iwest  = outcellhd.west;
 
 	G_format_northing(inorth, north_str, curr_proj);
 	G_format_northing(isouth, south_str, curr_proj);

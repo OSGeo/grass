@@ -35,8 +35,10 @@ struct menu
     char *text;			/* menu display - full description       */
 };
 
-extern void bordwalk(struct Cell_head *, struct Cell_head *, struct pj_info *,
-		     struct pj_info *);
+extern void bordwalk(const struct Cell_head *, struct Cell_head *,
+		     const struct pj_info *, const struct pj_info *);
+extern void bordwalk2(const struct Cell_head *, struct Cell_head *,
+		      const struct pj_info *, const struct pj_info *);
 extern struct cache *readcell(int, const char *);
 extern block *get_block(struct cache *, int);
 extern void release_cache(struct cache *);
