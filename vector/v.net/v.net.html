@@ -28,7 +28,11 @@ file and add these nodes to an existing vector network of arcs (i.e.,
 lines/boundaries). This is useful when the goal is to analyze a set of places
 (points) in relation to a network--for example travel costs between places.
 Only points within the <em>thresh</em> (threshold) distance to a line/boundary
-will be connected as network nodes.</li>
+will be connected as network nodes. There are two ways to connect nodes. By 
+default, <em>v.net</em> will create new lines connecting each point to
+the closest line of the network. If you use the <em>-s</em> flag,
+however, the new nodes will be added on the closest line of the network at the 
+point closest to the point you wish to add.</li>
 
 <li>Create nodes and arcs from a vector line/boundary file using the <em>node</em>
 operation. This is useful if you are mostly interested in the
