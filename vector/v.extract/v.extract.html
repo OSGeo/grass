@@ -7,7 +7,7 @@ established.
 Dissolving (optional) is based on the output categories. If 2 adjacent
 areas have the same output category, the boundary is removed.
 
-<p>If <b>list</b>, <b>file</b>, <b>random</b> or <b>where</b> options are not
+<p>If <b>cats</b>, <b>file</b>, <b>random</b> or <b>where</b> options are not
 specified, all features of given type and layer are
 extracted. Categories are not changed in that case.
 
@@ -22,7 +22,7 @@ is normally held in the area's centroid) you must first use
 
 <h3>Extract areas by category number with dissolving #1:</h3>
 <div class="code"><pre>
-v.extract -d list=1,2,3,4 input=soils output=soil_groupa type=area new=0
+v.extract -d cats=1,2,3,4 input=soils output=soil_groupa type=area new=0
 </pre></div>
 
 <p>produces a new vector <b>soil_groupa</b>, containing those areas from vector
@@ -31,7 +31,7 @@ dissolved, and all areas in the new map will be assigned category number 0.
 
 <h3>Extract areas by category number with dissolving #2:</h3>
 <div class="code"><pre>
-v.extract -d list=1-4 input=soils output=soil_groupa type=area new=-1
+v.extract -d cats=1-4 input=soils output=soil_groupa type=area new=-1
 </pre></div>
 <p>produces a new vector map <b>soil_groupa</b> containing the areas from vector
 <b>soils</b> which have categories <b>1 thru 4</b>. Any common boundaries are
@@ -70,10 +70,10 @@ v.extract input=forest output=forest_canopy where="CANOPY not NULL"
 Remove unreferenced stations from the GlobalSOD database:
 <div class="code"><pre>
 # check what to delete:
-v.db.select gsod_stationlist where="latitude < -91"
+v.db.select gsod_stationlist where="latitude &lt; -91"
 
 # perform reverse selection
-v.extract -r gsod_stationlist out=gsod_stationlist_clean where="latitude < -91"
+v.extract -r gsod_stationlist out=gsod_stationlist_clean where="latitude &lt; -91"
 
 v.db.select gsod_stationlist_clean
 </pre></div>
@@ -100,7 +100,7 @@ attributes of adjacent (left/right) areas are identical.
 
 <h3>Remove islands from polygon map</h3>
 <div class="code"><pre>
-v.extract in=map_with_islands out=maps_without_islands list=1-99999
+v.extract in=map_with_islands out=maps_without_islands cats=1-99999
 # and/or
 v.extract -d in=map_with_islands out=maps_without_islands
 </pre></div>
