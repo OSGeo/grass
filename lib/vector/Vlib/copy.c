@@ -287,10 +287,12 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
         if (with_z)
             Points->z[0] = z;
         
+#ifdef HAVE_POSTGRES
         if (-1 == V2__write_node_pg(Out, Points)) {
             G_warning(_("Writing node %d failed"), node);
             return 1;
         }
+#endif
     }
 
     Vect_destroy_line_struct(Points);
