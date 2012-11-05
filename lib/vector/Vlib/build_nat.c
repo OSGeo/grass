@@ -61,7 +61,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
     Cats = Vect_new_cats_struct();
     
     if (plus->built < GV_BUILD_BASE) {
-	register int npoints, c;
+      int npoints, c;
 
 	/* 
 	 *  We shall go through all primitives in coor file and add
@@ -78,7 +78,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	    /* register line */
 	    type = Vect_read_next_line(Map, Points, Cats);
 
-	    /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	    /* Note: check for dead lines is not needed, because they
+               are skipped by V1_read_next_line() */
 	    if (type == -1) {
 		G_warning(_("Unable to read vector map"));
 		return 0;

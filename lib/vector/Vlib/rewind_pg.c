@@ -54,11 +54,11 @@ int V1_rewind_pg(struct Map_info *Map)
 
         sprintf(stmt, "CLOSE %s_%s%p",
                 pg_info->schema_name, pg_info->table_name, pg_info->conn);
-        if (execute(pg_info->conn, stmt) == -1) {
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to close cursor"));
             return -1;
         }
-        execute(pg_info->conn, "COMMIT");
+        Vect__execute_pg(pg_info->conn, "COMMIT");
     }
 
     return 0;

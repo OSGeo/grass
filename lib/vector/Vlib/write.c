@@ -81,7 +81,7 @@ static off_t (*Vect_write_line_array[][3]) () = {
 #endif
 #ifdef HAVE_POSTGRES
     , {
-	write_dummy, V1_write_line_pg, V2_write_line_sfa}
+	write_dummy, V1_write_line_pg, V2_write_line_pg}
 #else
     , {
 	write_dummy, format_l, format_l}

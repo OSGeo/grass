@@ -429,7 +429,7 @@ int Vect_open_topo_pg(struct Map_info *Map, int head_only)
     /* free and init plus structure */
     dig_init_plus(plus);
     
-    return load_plus(Map, head_only);
+    return Vect__load_plus_pg(Map, head_only);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -566,7 +566,7 @@ int drop_table(struct Format_info_pg *pg_info)
             pg_info->schema_name, pg_info->table_name);
     G_debug(2, "SQL: %s", stmt);
     
-    if (execute(pg_info->conn, stmt) == -1) {
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         return -1;
     }
 
@@ -595,7 +595,7 @@ int check_schema(const struct Format_info_pg *pg_info)
 
     if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
         PQclear(result);
-        execute(pg_info->conn, "ROLLBACK");
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
 
@@ -610,8 +610,8 @@ int check_schema(const struct Format_info_pg *pg_info)
 
     if (!found) {
         sprintf(stmt, "CREATE SCHEMA %s", pg_info->schema_name);
-        if (execute(pg_info->conn, stmt) == -1) {
-            execute(pg_info->conn, "ROLLBACK");
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
         }
         G_warning(_("Schema <%s> doesn't exist, created"),
@@ -768,14 +768,14 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     strcat(stmt, ")");          /* close CREATE TABLE statement */
 
     /* begin transaction (create table) */
-    if (execute(pg_info->conn, "BEGIN") == -1) {
+    if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1) {
         return -1;
     }
 
     /* create table */
     G_debug(2, "SQL: %s", stmt);
-    if (execute(pg_info->conn, stmt) == -1) {
-        execute(pg_info->conn, "ROLLBACK");
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
 
@@ -785,8 +785,8 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
                 pg_info->schema_name, pg_info->table_name,
                 pg_info->fid_column);
         G_debug(2, "SQL: %s", stmt);
-        if (execute(pg_info->conn, stmt) == -1) {
-            execute(pg_info->conn, "ROLLBACK");
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
         }
     }
@@ -804,7 +804,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
         break;
     default:
         G_warning(_("Unsupported feature type %d"), pg_info->feature_type);
-        execute(pg_info->conn, "ROLLBACK");
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
     
@@ -819,7 +819,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     
     if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
         PQclear(result);
-        execute(pg_info->conn, "ROLLBACK");
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
     
@@ -834,14 +834,14 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
                 pg_info->geom_column);
         G_debug(2, "SQL: %s", stmt);
         
-        if (execute(pg_info->conn, stmt) == -1) {
-            execute(pg_info->conn, "ROLLBACK");
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
         }
     }
 
     /* close transaction (create table) */
-    if (execute(pg_info->conn, "COMMIT") == -1) {
+    if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1) {
         return -1;
     }
 
@@ -899,7 +899,7 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     }
 
     /* begin transaction (create topo schema) */
-    if (execute(pg_info->conn, "BEGIN") == -1) {
+    if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1) {
         return -1;
     }
 
@@ -916,7 +916,7 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     result = PQexec(pg_info->conn, stmt);
     if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
         G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
-        execute(pg_info->conn, "ROLLBACK");
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
     
@@ -932,12 +932,12 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     result = PQexec(pg_info->conn, stmt);
     if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
         G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
-        execute(pg_info->conn, "ROLLBACK");
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
 
     /* close transaction (create topo schema) */
-    if (execute(pg_info->conn, "COMMIT") == -1) {
+    if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1) {
         return -1;
     }
 
@@ -1191,8 +1191,8 @@ struct P_node *read_p_node(struct Plus_head *plus, int n,
     PQclear(res);
     
     /* get node coordinates */
-    if (SF_POINT != cache_feature(wkb_data, FALSE, FALSE,
-                                  &(pg_info->cache), NULL))
+    if (SF_POINT != Vect__cache_feature_pg(wkb_data, FALSE, FALSE,
+                                           &(pg_info->cache), NULL))
         G_warning(_("Node %d: unexpected feature type %d"),
                   n, pg_info->cache.sf_type);
     
@@ -1300,7 +1300,7 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
     }
 
     /* update spatial index */
-    cache_feature(data->wkb_geom, FALSE, FALSE, cache, NULL);
+    Vect__cache_feature_pg(data->wkb_geom, FALSE, FALSE, cache, NULL);
     itype = cache->lines_types[0];
     if ((line->type & GV_POINTS && itype != GV_POINT) ||
         (line->type & GV_LINES  && itype != GV_LINE))
@@ -1427,7 +1427,7 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
   \return 0 on success
   \return -1 on error
 */
-int load_plus(struct Map_info *Map, int head_only)
+int Vect__load_plus_pg(struct Map_info *Map, int head_only)
 {
     int i, id, ntuples;
     char stmt[DB_SQL_MAX];

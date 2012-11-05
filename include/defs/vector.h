@@ -541,6 +541,8 @@ off_t V2_write_line_nat(struct Map_info *, int, const struct line_pnts *,
                         const struct line_cats *);
 off_t V2_write_line_sfa(struct Map_info *, int, const struct line_pnts *,
                         const struct line_cats *);
+off_t V2_write_line_pg(struct Map_info *, int, const struct line_pnts *,
+                       const struct line_cats *);
 off_t V1_rewrite_line_nat(struct Map_info *, int, int, off_t,
                           const struct line_pnts *, const struct line_cats *);
 off_t V1_rewrite_line_ogr(struct Map_info *, int, int, off_t,
@@ -551,9 +553,6 @@ off_t V2_rewrite_line_nat(struct Map_info *, int, int, off_t,
                           const struct line_pnts *, const struct line_cats *);
 off_t V2_rewrite_line_sfa(struct Map_info *, int, int, off_t,
                           const struct line_pnts *, const struct line_cats *);
-off_t V2_write_area_pg(struct Map_info *, const struct line_pnts *,
-                       const struct line_cats *,
-                       const struct line_pnts **, int);
 
     /* Build topology */
 int Vect_build_nat(struct Map_info *, int);

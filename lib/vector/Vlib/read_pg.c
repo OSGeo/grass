@@ -476,7 +476,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     if (fid < 1) {
         /* next (read n features) */
         if (!pg_info->res) {
-            if (set_initial_query(pg_info, FALSE) == -1)
+            if (Vect__set_initial_query_pg(pg_info, FALSE) == -1)
                 return -1;
         }
     }
@@ -487,7 +487,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
             return -1;
         }
 
-        if (execute(pg_info->conn, "BEGIN") == -1)
+        if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
             return -1;
 
         if (!pg_info->toposchema_name) {
@@ -508,7 +508,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
                 topotable_name = "edge";
             else {
                 G_warning(_("Unsupported feature type %d"), type);
-                execute(pg_info->conn, "ROLLBACK");
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return -1;
             }
             
@@ -520,7 +520,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
                     topotable_name, topotable_name, fid);
         }
 
-        if (execute(pg_info->conn, stmt) == -1)
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1)
             return -1;
 
         sprintf(stmt, "FETCH ALL in %s_%s%p",
@@ -547,7 +547,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
                 pg_info->schema_name, pg_info->table_name, pg_info->conn);
         pg_info->res = PQexec(pg_info->conn, stmt);
         if (!pg_info->res) {
-            execute(pg_info->conn, "ROLLBACK");
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
         }
         pg_info->next_line = 0;
@@ -561,12 +561,12 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
 
             sprintf(stmt, "CLOSE %s_%s%p",
                     pg_info->schema_name, pg_info->table_name, pg_info->conn);
-            if (execute(pg_info->conn, stmt) == -1) {
-                execute(pg_info->conn, "ROLLBACK");
+            if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 G_warning(_("Unable to close cursor"));
                 return -1;
             }
-            execute(pg_info->conn, "COMMIT");
+            Vect__execute_pg(pg_info->conn, "COMMIT");
         }
         return -2;
     }
@@ -583,9 +583,9 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
         }
     }
     pg_info->cache.sf_type =
-        cache_feature(data, FALSE,
-                      left_face != 0 || right_face != 0 ? TRUE : FALSE,
-                      &(pg_info->cache), NULL);
+        Vect__cache_feature_pg(data, FALSE,
+                               left_face != 0 || right_face != 0 ? TRUE : FALSE,
+                               &(pg_info->cache), NULL);
     if (fid < 0) {
         pg_info->cache.fid =
             atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
@@ -599,12 +599,12 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
 
         sprintf(stmt, "CLOSE %s_%s%p",
                 pg_info->schema_name, pg_info->table_name, pg_info->conn);
-        if (execute(pg_info->conn, stmt) == -1) {
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to close cursor"));
             return -1;
         }
 
-        if (execute(pg_info->conn, "COMMIT") == -1)
+        if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
             return -1;
     }
 
@@ -666,10 +666,10 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
    \return simple feature type
    \return SF_UNKNOWN on error
  */
-SF_FeatureType cache_feature(const char *data, int skip_polygon,
-                             int force_boundary,
-                             struct Format_info_cache *cache,
-                             struct feat_parts * fparts)
+SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
+                                      int force_boundary,
+                                      struct Format_info_cache *cache,
+                                      struct feat_parts * fparts)
 {
     int ret, byte_order, nbytes, is3D;
     unsigned char *wkb_data;
@@ -691,12 +691,12 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
     if (nbytes < 5) {
         /* G_free(wkb_data); */
         if (nbytes > 0) {
-            G_debug(3, "cache_feature(): invalid geometry");
+            G_debug(3, "Vect__cache_feature_pg(): invalid geometry");
             G_warning(_("Invalid WKB content: %d bytes"), nbytes);
             return SF_UNKNOWN;
         }
         else {
-            G_debug(3, "cache_feature(): no geometry");
+            G_debug(3, "Vect__cache_feature_pg(): no geometry");
             return SF_NONE;
         }
     }
@@ -745,7 +745,7 @@ SF_FeatureType cache_feature(const char *data, int skip_polygon,
         ftype = (SF_FeatureType) wkb_data[4];
         is3D = wkb_data[1] & 0x80 || wkb_data[3] & 0x80;
     }
-    G_debug(3, "cache_feature(): sf_type = %d", ftype);
+    G_debug(3, "Vect__cache_feature_pg(): sf_type = %d", ftype);
 
     /* allocate space in lines cache - be minimalistic
 
@@ -1130,11 +1130,11 @@ int error_corrupted_data(const char *msg)
    \return 0 on success
    \return -1 on error
  */
-int set_initial_query(struct Format_info_pg *pg_info, int fetch_all)
+int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
 {
     char stmt[DB_SQL_MAX];
 
-    if (execute(pg_info->conn, "BEGIN") == -1)
+    if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
         return -1;
 
     if (!pg_info->toposchema_name) {
@@ -1164,8 +1164,8 @@ int set_initial_query(struct Format_info_pg *pg_info, int fetch_all)
     }
     G_debug(2, "SQL: %s", stmt);
     
-    if (execute(pg_info->conn, stmt) == -1) {
-        execute(pg_info->conn, "ROLLBACK");
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
 
@@ -1177,7 +1177,7 @@ int set_initial_query(struct Format_info_pg *pg_info, int fetch_all)
                 pg_info->schema_name, pg_info->table_name, pg_info->conn);
     pg_info->res = PQexec(pg_info->conn, stmt);
     if (!pg_info->res) {
-        execute(pg_info->conn, "ROLLBACK");
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
         G_warning(_("Unable to get features"));
         return -1;
     }
@@ -1197,13 +1197,13 @@ int set_initial_query(struct Format_info_pg *pg_info, int fetch_all)
    \return 0 on success
    \return -1 on error
  */
-int execute(PGconn * conn, const char *stmt)
+int Vect__execute_pg(PGconn * conn, const char *stmt)
 {
     PGresult *result;
 
     result = NULL;
 
-    G_debug(3, "execute(): %s", stmt);
+    G_debug(3, "Vect__execute_pg(): %s", stmt);
     result = PQexec(conn, stmt);
     if (!result || PQresultStatus(result) != PGRES_COMMAND_OK) {
         PQclear(result);
@@ -1315,7 +1315,7 @@ int get_centroid_topo(struct Format_info_pg *pg_info,
     data = (char *)PQgetvalue(res, 0, 0);
     PQclear(res);
     
-    if (GV_POINT != cache_feature(data, FALSE, FALSE, &(pg_info->cache), NULL))
+    if (GV_POINT != Vect__cache_feature_pg(data, FALSE, FALSE, &(pg_info->cache), NULL))
         return -1;
     
     Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);

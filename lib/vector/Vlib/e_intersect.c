@@ -15,7 +15,9 @@
 
 #include <stdlib.h>
 #include <math.h>
+
 #include <grass/gis.h>
+
 #include "e_intersect.h"
 
 #define SWAP(a,b) {double t = a; a = b; b = t;}

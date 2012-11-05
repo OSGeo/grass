@@ -22,6 +22,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 static off_t V1__rewrite_line_nat(struct Map_info *, off_t, int,
 				  const struct line_pnts *, const struct line_cats *);
 
@@ -133,8 +135,8 @@ static void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
     \param points pointer to line_pnts structure (feature's geometry)
     \param cats pointer to line_cats structure (feature's categories)
 */
-static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
-				     const struct line_pnts *points, const struct line_cats *cats)
+void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
+                              const struct line_pnts *points, const struct line_cats *cats)
 {
     int first, s, n, i;
     int type, node, next_line, area, side, sel_area, new_area[2];
@@ -297,11 +299,13 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
     }
 
     /* Add category index */
-    for (i = 0; i < cats->n_cats; i++) {
-	dig_cidx_add_cat_sorted(plus, cats->field[i], cats->cat[i], line,
-				type);
+    if (cats) {
+        for (i = 0; i < cats->n_cats; i++) {
+            dig_cidx_add_cat_sorted(plus, cats->field[i], cats->cat[i], line,
+                                    type);
+        }
     }
-
+    
     return;
 }
 
