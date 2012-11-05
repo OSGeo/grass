@@ -17,7 +17,7 @@
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	      struct field_info *Fi, dbDriver * driver, int operator,
-	      int *ofield, ATTRIBUTES * attr)
+	      int *ofield, ATTRIBUTES * attr, struct ilist *BList)
 {
     int ret, input, line, nlines, area, nareas;
     int in_area, in_centr, out_cat;
@@ -37,7 +37,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
      * and Vect_clean_small_angles_at_nodes() until no more small dangles are found */
     do {
 	G_message(_("Breaking lines..."));
-	Vect_break_lines(Out, GV_LINE | GV_BOUNDARY, NULL);
+	Vect_break_lines_list(Out, NULL, BList, GV_LINE | GV_BOUNDARY, NULL);
 
 	/* Probably not necessary for LINE x AREA */
 	G_message(_("Removing duplicates..."));

@@ -51,7 +51,7 @@ int point_area(struct Map_info *Map, int field, double x, double y,
 
 int line_area(struct Map_info *In, int *field, struct Map_info *Out,
 	      struct field_info *Fi, dbDriver * driver, int operator,
-	      int *ofield, ATTRIBUTES * attr)
+	      int *ofield, ATTRIBUTES * attr, struct ilist *BList)
 {
     int line, nlines, ncat;
     struct line_pnts *Points;
@@ -67,7 +67,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
     db_init_string(&stmt);
 
     G_message(_("Breaking lines..."));
-    Vect_break_lines(Out, GV_LINE | GV_BOUNDARY, NULL);
+    Vect_break_lines_list(Out, NULL, BList, GV_LINE | GV_BOUNDARY, NULL);
 
     /* Basic topology needed only */
     Vect_build_partial(Out, GV_BUILD_BASE);
