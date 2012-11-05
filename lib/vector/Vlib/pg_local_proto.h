@@ -51,12 +51,17 @@ struct feat_parts
 };
 
 /* functions used in *_pg.c files */
-int execute(PGconn *, const char *);
-SF_FeatureType cache_feature(const char *, int, int,
-			     struct Format_info_cache *,
-			     struct feat_parts *);
-int set_initial_query(struct Format_info_pg *, int);
-int load_plus(struct Map_info *, int);
+int Vect__execute_pg(PGconn *, const char *);
+SF_FeatureType Vect__cache_feature_pg(const char *, int, int,
+                                      struct Format_info_cache *,
+                                      struct feat_parts *);
+int Vect__set_initial_query_pg(struct Format_info_pg *, int);
+int Vect__load_plus_pg(struct Map_info *, int);
+
+off_t V2__write_node_pg(struct Map_info *, const struct line_pnts *);
+off_t V2__write_area_pg(struct Map_info *, const struct line_pnts *,
+                        const struct line_cats *,
+                        const struct line_pnts **, int);
 
 #endif /* HAVE_POSTGRES */
 

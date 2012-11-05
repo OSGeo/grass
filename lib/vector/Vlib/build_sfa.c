@@ -329,7 +329,7 @@ void build_pg(struct Map_info *Map, int build)
     G_zero(&fparts, sizeof(struct feat_parts));
     
     /* get all features */
-    if (set_initial_query(pg_info, TRUE) != 0)
+    if (Vect__set_initial_query_pg(pg_info, TRUE) != 0)
         return;
     
     /* scan records */
@@ -345,8 +345,8 @@ void build_pg(struct Map_info *Map, int build)
 	G_progress(iFeature + 1, 1e4);
 
 	/* cache feature (lines) */
-	if (SF_NONE == cache_feature(wkb_data, FALSE, FALSE,
-                                     &(pg_info->cache), &fparts)) {
+	if (SF_NONE == Vect__cache_feature_pg(wkb_data, FALSE, FALSE,
+                                              &(pg_info->cache), &fparts)) {
 	    G_warning(_("Feature %d without geometry skipped"),
 		      iFeature + 1);
 	    continue;

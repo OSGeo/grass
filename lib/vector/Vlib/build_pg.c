@@ -78,8 +78,8 @@ int Vect_build_pg(struct Map_info *Map, int build)
     }
 
     /* commit transaction block (update mode only) */
-    if (pg_info->inTransaction && execute(pg_info->conn, "COMMIT") == -1)
-	return -1;
+    if (pg_info->inTransaction && Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
+	return 0;
 
     pg_info->inTransaction = FALSE;
 
@@ -135,13 +135,19 @@ int build_topo(struct Map_info *Map, int build)
         return 0;
     }
     
+    /* read topology from PostGIS ???
     if (plus->built < GV_BUILD_BASE) {
         if (load_plus(Map, FALSE) != 0)
             return 0;
     }
+    */
+
+    /* build GRASS-like topology from PostGIS topological
+       primitives */
+    if (Vect_build_nat(Map, build) != 1)
+        return 0;
     
-    plus->built = build;
-    
+    /* update PostGIS topology based on GRASS-like topology */
     return 1;
 }
 #endif

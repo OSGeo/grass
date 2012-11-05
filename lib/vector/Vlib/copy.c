@@ -18,6 +18,10 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#ifdef HAVE_POSTGRES
+#include "pg_local_proto.h"
+#endif
+
 static int copy_lines_1(struct Map_info *, int, struct Map_info *);
 static int copy_lines_2(struct Map_info *, int, int, struct Map_info *);
 static int copy_nodes(const struct Map_info *, struct Map_info *);
@@ -44,7 +48,7 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
 
    Note: Try to copy on level 2 otherwise level 1 is used.
    
-   \todo Implement V2_write_area_ogr()
+   \todo Implement V2__write_area_ogr()
    
    \param In input vector map
    \param field layer number (-1 for all layers)
@@ -283,13 +287,15 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
         if (with_z)
             Points->z[0] = z;
         
-        if (-1 == Vect_write_line(Out, GV_POINT, Points, NULL))
-            G_fatal_error(_("Unable to export node %d. Exiting."), node);
+        if (-1 == V2__write_node_pg(Out, Points)) {
+            G_warning(_("Writing node %d failed"), node);
+            return 1;
+        }
     }
 
     Vect_destroy_line_struct(Points);
     
-    return nnodes;
+    return 0;
 }
 
 /*!
@@ -357,9 +363,17 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
         
         if (ogr)
             Vect_write_line(Out, GV_BOUNDARY, Points, Cats);
-        else
-            V2_write_area_pg(Out, Points, Cats,
-                             (const struct line_pnts **) IPoints, nisles);
+        else {
+#if HAVE_POSTGRES
+            if (-1 == V2__write_area_pg(Out, Points, Cats,
+                                        (const struct line_pnts **) IPoints, nisles)) {
+                G_warning(_("Writing area %d failed"), area);
+                return 1;
+            }
+#else
+            G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+#endif
+        }
     }
     
     /* free allocated space for isles */
@@ -369,7 +383,7 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
-    return nareas;
+    return 0;
 }
 
 /*!
