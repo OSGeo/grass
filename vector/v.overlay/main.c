@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     struct Map_info In[2], Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
+    struct ilist *BList;
     char *desc;
 
     struct field_info *Fi = NULL;
@@ -194,8 +195,10 @@ int main(int argc, char *argv[])
     }
 
     /* Copy lines to output */
+    BList = Vect_new_list();
+    Vect_build_partial(&Out, GV_BUILD_BASE);
     for (input = 0; input < 2; input++) {
-	int ncats, index, nlines_out;
+	int ncats, index, nlines_out, newline;
 
 	Vect_set_open_level(2);
 	Vect_open_old2(&(In[input]), in_opt[input]->answer, "", field_opt[input]->answer);
@@ -223,7 +226,9 @@ int main(int argc, char *argv[])
 		    continue;
 	    }
 
-	    Vect_write_line(&Out, ltype, Points, Cats);
+	    newline = Vect_write_line(&Out, ltype, Points, Cats);
+	    if (input == 1)
+		G_ilist_add(BList, newline);
 	    nlines_out++;
 	}
 	if (nlines_out == 0) {
@@ -485,10 +490,10 @@ int main(int argc, char *argv[])
 
     /* AREA x AREA */
     if (type[0] == GV_AREA) {
-	area_area(In, field, &Out, Fi, driver, operator, ofield, attr);
+	area_area(In, field, &Out, Fi, driver, operator, ofield, attr, BList);
     }
     else {			/* LINE x AREA */
-	line_area(In, field, &Out, Fi, driver, operator, ofield, attr);
+	line_area(In, field, &Out, Fi, driver, operator, ofield, attr, BList);
     }
 
     G_message(_("Rebuilding topology..."));
