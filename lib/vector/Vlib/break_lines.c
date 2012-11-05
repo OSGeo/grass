@@ -115,6 +115,29 @@ Vect_check_line_breaks_list(struct Map_info *Map, struct ilist *List_break,
     return break_lines(Map, List_break, List_ref, type, Err, 1);
 }
 
+static int cmp(const void *a, const void *b)
+{
+    int ai = *(int *)a;
+    int bi = *(int *)b;
+    
+    return (ai < bi ? -1 : ai > bi);
+}
+
+static void sort_ilist(struct ilist *List, int (*cmp_ilist)(const void *, const void *))
+{
+    int i, is_sorted = 1;
+    
+    for (i = 1; i < List->n_values; i++) {
+	if (cmp_ilist(&List->value[i - 1], &List->value[i]) == 1) {
+	    is_sorted = 0;
+	    break;
+	}
+    }
+    
+    if (!is_sorted)
+	qsort(List->value, List->n_values, sizeof(int), cmp);
+}
+
 int
 break_lines(struct Map_info *Map, struct ilist *List_break,
 		      struct ilist *List_ref, int type,
@@ -169,6 +192,9 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
      * the file, and process next line (remaining lines overlapping box are skipped)
      */
     nbreaks = 0;
+    
+    if (List_ref)
+	sort_ilist(List_ref, cmp);
 
     for (iline = 0; iline < nlines; iline++) {
 	G_percent(iline, nlines, 1);
@@ -179,7 +205,8 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 	    aline = iline + 1;
 	}
 
-	if (List_ref && !Vect_val_in_list(List_ref, aline))
+	if (List_ref &&
+	    !bsearch(&aline, List_ref->value, List_ref->n_values, sizeof(int), cmp))
 	    continue;
 
 	G_debug(3, "aline =  %d", aline);
@@ -232,8 +259,13 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 	    }
 
 	    /* check intersection of aline with bline only once */
-	    if (bline > aline)
-		continue;
+	    if (bline > aline) {
+		if (!List_ref)
+		    continue;
+		else if (bsearch(&bline, List_ref->value, List_ref->n_values,
+		            sizeof(int), cmp))
+		    continue;
+	    }
 
 	    G_debug(3, "  j = %d bline = %d", j, bline);
 
@@ -335,16 +367,17 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 		    /* line may collapse, don't write zero length lines */
 		    Vect_line_prune(AXLines[k]);
 		    if ((atype & GV_POINTS) || AXLines[k]->n_points > 1) {
-			if (!check)
+			if (!check) {
 			    ret = Vect_write_line(Map, atype, AXLines[k],
 			                          ACats);
-			if (List_ref) {
-			    Vect_list_append(List_ref, ret);
-			}
-			G_debug(3, "Line %d written, npoints = %d", ret,
-				AXLines[k]->n_points);
-			if (List_break) {
-			    Vect_list_append(List_break, ret);
+			    if (List_ref) {
+				G_ilist_add(List_ref, ret);
+			    }
+			    G_debug(3, "Line %d written, npoints = %d", ret,
+				    AXLines[k]->n_points);
+			    if (List_break) {
+				Vect_list_append(List_break, ret);
+			    }
 			}
 		    }
 
@@ -373,13 +406,14 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 			/* line may collapse, don't write zero length lines */
 			Vect_line_prune(BXLines[k]);
 			if ((btype & GV_POINTS) || BXLines[k]->n_points > 1) {
-			    if (!check)
+			    if (!check) {
 				ret =
 				    Vect_write_line(Map, btype, BXLines[k],
 						    BCats);
-			    G_debug(5, "Line %d written", ret);
-			    if (List_break) {
-				Vect_list_append(List_break, ret);
+				G_debug(5, "Line %d written", ret);
+				if (List_break) {
+				    Vect_list_append(List_break, ret);
+				}
 			    }
 			}
 
