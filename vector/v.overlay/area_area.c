@@ -51,6 +51,28 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
     /* ?: May be result of Vect_break_lines() + Vect_remove_duplicates() any dangle or bridge?
      * In that case, calls to Vect_remove_dangles() and Vect_remove_bridges() would be also necessary */
 
+    Vect_build_partial(Out, GV_BUILD_AREAS);
+    nlines = Vect_get_num_lines(Out);
+    ret = 0;
+    for (line = 1; line <= nlines; line++) {
+	if (!Vect_line_alive(Out, line))
+	    continue;
+	if (Vect_get_line_type(Out, line) == GV_BOUNDARY) {
+	    int left, rite;
+	    
+	    Vect_get_line_areas(Out, line, &left, &rite);
+	    
+	    if (left == 0 || rite == 0) {
+		ret = 1;
+		break;
+	    }
+	}
+    }
+    if (ret) {
+	Vect_remove_dangles(Out, GV_BOUNDARY, -1, NULL);
+	Vect_remove_bridges(Out, NULL, NULL, NULL);
+    }
+
     /* Attach islands */
     G_message(_("Attaching islands..."));
     Vect_build_partial(Out, GV_BUILD_ATTACH_ISLES);
