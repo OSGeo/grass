@@ -254,7 +254,7 @@ class ModelFrame(wx.Frame):
         self.Destroy()
 
     def OnSize(self, event):
-        """Window resized, save to the model"""
+        """!Window resized, save to the model"""
         self.ModelChanged()
         event.Skip()
         
