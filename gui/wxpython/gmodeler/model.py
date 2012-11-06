@@ -1416,6 +1416,12 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         """!Set items (id)"""
         self.items = items
 
+    def OnDraw(self, dc):
+        """!Draw loop in canvas"""
+        self._setBrush()
+        ogl.RectangleShape.Recentre(self, dc) # re-center text
+        ogl.RectangleShape.OnDraw(self, dc)
+
 class ModelCondition(ModelItem, ogl.PolygonShape):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '',
                  items = { 'if' : [], 'else' : [] }):
