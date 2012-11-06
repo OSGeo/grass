@@ -515,14 +515,13 @@ class BasePlotFrame(wx.Frame):
         """!Set custom text values for profile title and axis labels.
         """
         dlg = TextDialog(parent = self, id = wx.ID_ANY, 
-                                 plottype = self.plottype, 
-                                 title = _('Histogram text settings'))
-
+                         plottype = self.plottype, 
+                         title = _('Text settings'))
+        
         btnval = dlg.ShowModal()
         if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
             dlg.Destroy()            
-
-
+        
     def PlotOptions(self, event):
         """!Set various profile options, including: line width, color,
         style; marker size, color, fill, and style; grid and legend
