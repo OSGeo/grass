@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	*ofield_opt, *operator_opt;
     struct Flag *table_flag;
     struct Map_info In[2], Out;
-    struct line_pnts *Points;
+    struct line_pnts *Points, *Points2;
     struct line_cats *Cats;
     struct ilist *BList;
     char *desc;
@@ -160,6 +160,7 @@ int main(int argc, char *argv[])
 				 G_FATAL_EXIT);
 
     Points = Vect_new_line_struct();
+    Points2 = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
     /* Open output */
@@ -226,9 +227,37 @@ int main(int argc, char *argv[])
 		    continue;
 	    }
 
-	    newline = Vect_write_line(&Out, ltype, Points, Cats);
-	    if (input == 1)
-		G_ilist_add(BList, newline);
+	    /* TODO: figure out a reasonable threshold */
+	    if (Points->n_points > 100) {
+		int vertices = 100;
+		int start = 0;	/* number of coordinates written */
+		
+		/* split */
+		while (start < Points->n_points - 1) {
+		    int v = 0;
+
+		    Vect_reset_line(Points2);
+		    for (i = 0; i < vertices; i++) {
+			v = start + i;
+			if (v == Points->n_points)
+			    break;
+
+			Vect_append_point(Points2, Points->x[v], Points->y[v],
+					  Points->z[v]);
+		    }
+
+		    newline = Vect_write_line(&Out, ltype, Points2, Cats);
+		    if (input == 1)
+			G_ilist_add(BList, newline);
+
+		    start = v;
+		}
+	    }
+	    else {
+		newline = Vect_write_line(&Out, ltype, Points, Cats);
+		if (input == 1)
+		    G_ilist_add(BList, newline);
+	    }
 	    nlines_out++;
 	}
 	if (nlines_out == 0) {
@@ -483,10 +512,6 @@ int main(int argc, char *argv[])
 	Vect_map_add_dblink(&Out, ofield[0], NULL, Fi->table, GV_KEY_COLUMN,
 			    Fi->database, Fi->driver);
     }
-
-    G_verbose_message(_("Building partial topology..."));
-    /* do not print output, because befor cleaning it is nonsense */
-    Vect_build_partial(&Out, GV_BUILD_BASE);
 
     /* AREA x AREA */
     if (type[0] == GV_AREA) {

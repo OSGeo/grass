@@ -31,8 +31,11 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    
+    /* optional snap ? */
 
-    /* Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
+    /* same procedure like for v.in.ogr
+     * Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
      * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
      * and Vect_clean_small_angles_at_nodes() until no more small dangles are found */
     do {
@@ -72,6 +75,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	Vect_remove_dangles(Out, GV_BOUNDARY, -1, NULL);
 	Vect_remove_bridges(Out, NULL, NULL, NULL);
     }
+
+    G_message(_("Merging lines..."));
+    Vect_merge_lines(Out, GV_BOUNDARY, NULL, NULL);
 
     /* Attach islands */
     G_message(_("Attaching islands..."));

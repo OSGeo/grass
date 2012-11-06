@@ -22,7 +22,7 @@ int point_area(struct Map_info *Map, int field, double x, double y,
 	       struct line_cats *Cats)
 {
     int i, area, centr;
-    struct line_cats *CCats = NULL;
+    static struct line_cats *CCats = NULL;
 
     Vect_reset_cats(Cats);
     area = Vect_find_area(Map, x, y);
@@ -68,9 +68,13 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
 
     G_message(_("Breaking lines..."));
     Vect_break_lines_list(Out, NULL, BList, GV_LINE | GV_BOUNDARY, NULL);
+    G_message(_("Merging lines..."));
+    Vect_merge_lines(Out, GV_LINE, NULL, NULL);
 
+#if 0
     /* Basic topology needed only */
     Vect_build_partial(Out, GV_BUILD_BASE);
+#endif
 
     nlines = Vect_get_num_lines(Out);
 
