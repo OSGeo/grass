@@ -76,6 +76,14 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	    continue;
 	}
 
+	npoints = APoints->n_points;
+	Vect_line_prune(APoints);
+	if (npoints != APoints->n_points) {
+	    Vect_rewrite_line(Map, i, atype, APoints, ACats);
+	    nlines = Vect_get_num_lines(Map);
+	    continue;
+	}
+
 	Vect_line_box(APoints, &ABox);
 	Vect_select_lines_by_box(Map, &ABox, type, List);
 	G_debug(3, "  %d lines selected by box", List->n_values);
@@ -83,7 +91,9 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	for (j = 0; j < List->n_values; j++) {
 	    bline = List->id[j];
 	    G_debug(3, "  j = %d bline = %d", j, bline);
-	    if (i == bline)
+
+	    /* check duplicate of bline only once */
+	    if (i <= bline)
 		continue;
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
