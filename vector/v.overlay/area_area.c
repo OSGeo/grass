@@ -76,11 +76,14 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	Vect_remove_bridges(Out, NULL, NULL, NULL);
     }
 
+    Vect_build_partial(Out, GV_BUILD_NONE);
+    Vect_build_partial(Out, GV_BUILD_BASE);
     G_message(_("Merging lines..."));
     Vect_merge_lines(Out, GV_BOUNDARY, NULL, NULL);
 
     /* Attach islands */
     G_message(_("Attaching islands..."));
+    Vect_build_partial(Out, GV_BUILD_NONE);
     Vect_build_partial(Out, GV_BUILD_ATTACH_ISLES);
 
 
@@ -181,6 +184,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	Vect_append_point(Points, Centr[area].x, Centr[area].y, 0.0);
 
 	/* Add new cats for all combinations of input cats (-1 in cycle for null) */
+	/* TODO: put cats of input maps into different layers, i.e.
+	 * preserve cat values, change layer number if needed */
 	for (i = -1; i < Centr[area].cat[0]->n_cats; i++) {
 	    int j;
 

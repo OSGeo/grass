@@ -136,6 +136,8 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
 	    Vect_reset_cats(OCats);
 
 	    /* rewrite with all combinations of acat - bcat (-1 in cycle for null) */
+	    /* TODO: put cats of input maps into different layers, i.e.
+	     * preserve cat values, change layer number if needed */
 	    for (i = -1; i < Cats->n_cats; i++) {	/* line cats */
 		int j;
 
