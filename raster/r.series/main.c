@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 
     parm.file = G_define_standard_option(G_OPT_F_INPUT);
     parm.file->key = "file";
-    parm.file->description = _("Input file with raster map names and optional weights per line, field separator between name and weight is |");
+    parm.file->description = _("Input file with one raster map name and optional one weight per line, field separator between name and weight is |");
     parm.file->required = NO;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
