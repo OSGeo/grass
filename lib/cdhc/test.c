@@ -40,8 +40,11 @@ int main(int argc, char **argv)
     y = watson_u2_exp(x, n);
     y = anderson_darling_exp(x, n);
     y = chi_square_exp(x, n);
+
+/* missing from source code:
     y = mod_maxlik_ratio(x, n);
     y = coeff_variation(x, n);
+*/
     y = kotz_families(x, n);
 
     return EXIT_SUCCESS;
