@@ -120,11 +120,15 @@ def main():
     
     mapset = grass.gisenv()['MAPSET']
         
-    for vect in grass.list_grouped('vect')[mapset]:
+    vectors = grass.list_grouped('vect')[mapset]
+    num_vectors = len(vectors)
+    
+    i = 0
+    for vect in vectors:
         vect = "%s@%s" % (vect, mapset)
-        grass.message('-' * 60)
-        grass.message(_("Reconnecting vector map <%s>...") % vect)
-        grass.message('-' * 60)
+        i += 1
+	grass.message(_("%s\nReconnecting vector map <%s> (%d of %d)...\n%s") % \
+                          ('-' * 80, vect, i, num_vectors, '-' * 80))
         for f in grass.vector_db(vect, stderr = nuldev).itervalues():
             layer = f['layer']
             schema_table = f['table']
