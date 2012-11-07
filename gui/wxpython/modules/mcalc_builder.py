@@ -6,7 +6,7 @@
 Classes:
  - mcalc_builder::MapCalcFrame
 
-(C) 2008, 2011 by the GRASS Development Team
+(C) 2008, 2011-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -19,13 +19,13 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-from core import globalvar
 import wx
-
 import grass.script as grass
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'wxpython'))
+
+from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from gui_core.gselect import Select
 from gui_core.forms   import GUI
@@ -119,6 +119,8 @@ class MapCalcFrame(wx.Frame):
         
         self.operatorBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                         label=" %s " % _('Operators'))
+        self.outputBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                      label=" %s " % _('Output'))
         self.operandBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                        label=" %s " % _('Operands'))
         self.expressBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
@@ -268,7 +270,8 @@ class MapCalcFrame(wx.Frame):
         
         controlSizer = wx.BoxSizer(wx.HORIZONTAL)
         operatorSizer = wx.StaticBoxSizer(self.operatorBox, wx.HORIZONTAL)
-
+        outOpeSizer = wx.BoxSizer(wx.VERTICAL)
+        
         buttonSizer1 = wx.GridBagSizer(5, 1)
         buttonSizer1.Add(item = self.btn['add'], pos = (0,0))
         buttonSizer1.Add(item = self.btn['minus'], pos = (0,1))
@@ -297,20 +300,22 @@ class MapCalcFrame(wx.Frame):
         buttonSizer2.Add(item = self.btn['compl'], pos = (5,1))
         buttonSizer2.Add(item = self.btn['not'], pos = (4,1))
 
+        outputSizer = wx.StaticBoxSizer(self.outputBox, wx.VERTICAL)
+        outputSizer.Add(item = self.newmaplabel,
+                        flag = wx.ALIGN_CENTER | wx.BOTTOM | wx.TOP, border = 5)
+        outputSizer.Add(item = self.newmaptxt,
+                        flag = wx.EXPAND)
+        
         operandSizer = wx.StaticBoxSizer(self.operandBox, wx.HORIZONTAL)
         
         buttonSizer3 = wx.GridBagSizer(7, 1)
-        buttonSizer3.Add(item = self.newmaplabel, pos = (0,0),
-                         span = (1, 2), flag = wx.ALIGN_CENTER)
-        buttonSizer3.Add(item = self.newmaptxt, pos = (1,0),
-                         span = (1, 2))
-        buttonSizer3.Add(item = self.functlabel, pos = (2,0),
+        buttonSizer3.Add(item = self.functlabel, pos = (0,0),
                          span = (1,2), flag = wx.ALIGN_CENTER)
-        buttonSizer3.Add(item = self.function, pos = (3,0),
+        buttonSizer3.Add(item = self.function, pos = (1,0),
                          span = (1,2))                         
-        buttonSizer3.Add(item = self.mapsellabel, pos = (4,0),
+        buttonSizer3.Add(item = self.mapsellabel, pos = (2,0),
                          span = (1,2), flag = wx.ALIGN_CENTER)
-        buttonSizer3.Add(item = self.mapselect, pos = (5,0),
+        buttonSizer3.Add(item = self.mapselect, pos = (3,0),
                          span = (1,2))
         threebutton = wx.GridBagSizer(1, 2)
         threebutton.Add(item = self.btn['parenl'], pos = (0,0),
@@ -319,7 +324,7 @@ class MapCalcFrame(wx.Frame):
                          span = (1,1), flag = wx.ALIGN_CENTER)
         threebutton.Add(item = self.btn_clear, pos = (0,2),
                          span = (1,1), flag = wx.ALIGN_RIGHT)
-        buttonSizer3.Add(item = threebutton, pos = (6,0),
+        buttonSizer3.Add(item = threebutton, pos = (4,0),
 	                 span = (1,1), flag = wx.ALIGN_CENTER)
 
         buttonSizer4 = wx.BoxSizer(wx.HORIZONTAL)
@@ -348,7 +353,11 @@ class MapCalcFrame(wx.Frame):
         
         controlSizer.Add(item = operatorSizer, proportion = 1,
                          flag = wx.RIGHT | wx.EXPAND, border = 5)
-        controlSizer.Add(item = operandSizer, proportion = 0,
+        outOpeSizer.Add(item = outputSizer, proportion = 0,
+                         flag = wx.EXPAND)
+        outOpeSizer.Add(item = operandSizer, proportion = 1,
+                         flag = wx.EXPAND | wx.TOP, border = 5)
+        controlSizer.Add(item = outOpeSizer, proportion = 0,
                          flag = wx.EXPAND)
 
         expressSizer = wx.StaticBoxSizer(self.expressBox, wx.HORIZONTAL)
