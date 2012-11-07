@@ -1342,7 +1342,6 @@ def debug_level():
     global _debug_level
     if _debug_level is not None:
         return _debug_level
+    _debug_level = 0
     if find_program('g.gisenv', ['--help']):
         _debug_level = int(gisenv().get('DEBUG', 0))
-    else:
-        _debug_level = 0
