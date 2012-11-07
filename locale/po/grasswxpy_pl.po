@@ -46,7 +46,7 @@ msgstr "Animacja"
 
 #: ../gui/wxpython/nviz/tools.py:219
 msgid "Control View"
-msgstr ""
+msgstr "Kontrola widoku"
 
 #: ../gui/wxpython/nviz/tools.py:240
 msgid "Adjusts the viewer's angle of view"
@@ -583,11 +583,11 @@ msgstr "Pozycja źródła światła"
 
 #: ../gui/wxpython/nviz/tools.py:1748
 msgid "Adjusts the light height"
-msgstr ""
+msgstr "Ustawia wysokość źródła światła"
 
 #: ../gui/wxpython/nviz/tools.py:1772
 msgid "Light color and intensity"
-msgstr ""
+msgstr "Kolor i intensywność oświetlenia"
 
 #: ../gui/wxpython/nviz/tools.py:1786 ../gui/wxpython/nviz/preferences.py:306
 msgid "Brightness:"
@@ -595,7 +595,7 @@ msgstr "Jasność:"
 
 #: ../gui/wxpython/nviz/tools.py:1788
 msgid "Adjusts the brightness of the light"
-msgstr ""
+msgstr "Ustawia jasność światła"
 
 #: ../gui/wxpython/nviz/tools.py:1797 ../gui/wxpython/nviz/preferences.py:320
 msgid "Ambient:"
@@ -603,7 +603,7 @@ msgstr "Otaczające:"
 
 #: ../gui/wxpython/nviz/tools.py:1799
 msgid "Adjusts the ambient light"
-msgstr ""
+msgstr "Ustawia oświetlenie otoczenia"
 
 #: ../gui/wxpython/nviz/tools.py:1860
 msgid "Edges with fringe"
@@ -3725,7 +3725,7 @@ msgstr "Uruchom polecenie"
 
 #: ../gui/wxpython/gui_core/ghelp.py:274
 msgid "You must run this command from the menu or command line"
-msgstr ""
+msgstr "Uruchom polecenie z menu lub wiersza poleceń"
 
 #: ../gui/wxpython/gui_core/ghelp.py:329
 #: ../gui/wxpython/gui_core/goutput.py:718
@@ -3805,7 +3805,7 @@ msgstr "Brak pliku %s"
 #: ../gui/wxpython/gui_core/ghelp.py:628 ../gui/wxpython/gui_core/ghelp.py:690
 #, python-format
 msgid "Error when reading file '%s'."
-msgstr ""
+msgstr "Błąd odczytu pliku '%s'."
 
 #: ../gui/wxpython/gui_core/ghelp.py:629 ../gui/wxpython/gui_core/ghelp.py:691
 msgid "Lines:"
@@ -3908,7 +3908,7 @@ msgstr "Zamknij okno po zakończeniu"
 
 #: ../gui/wxpython/gui_core/forms.py:519
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
-msgstr ""
+msgstr "Zamknij okno po pomyślnym zakończeniu polecenia. Zmień ustawienia w oknie dialogowym Preferencje ('Command' tab)."
 
 #: ../gui/wxpython/gui_core/forms.py:699
 #, python-format
@@ -3992,7 +3992,7 @@ msgstr "Nie można przetworzyć polecenia '%s'"
 #: ../gui/wxpython/gui_core/forms.py:2089
 #, python-format
 msgid "%(cmd)s: parameter '%(key)s' not available"
-msgstr ""
+msgstr "%(cmd)s: parametr '%(key)s' jest niedostępny"
 
 #: ../gui/wxpython/gui_core/forms.py:2185
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
@@ -4160,7 +4160,7 @@ msgstr "nieznany"
 #: ../gui/wxpython/gui_core/goutput.py:874
 #, fuzzy
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
-msgstr "Zauważ, że dane są pozostawione w niespójnym stanie i  mogą zostać uszkodzone"
+msgstr "Zauważ, że dane są pozostawione w niespójnym stanie i mogą zostać uszkodzone"
 
 #: ../gui/wxpython/gui_core/goutput.py:876
 msgid "Command aborted"
@@ -4173,12 +4173,12 @@ msgstr "Polecenie zakończone"
 #: ../gui/wxpython/gui_core/goutput.py:1365
 #: ../gui/wxpython/gmodeler/frame.py:179
 msgid "Python script contains local modifications"
-msgstr ""
+msgstr "Skrypt pythona zawiera zmiany"
 
 #: ../gui/wxpython/gui_core/mapdisp.py:109 ../gui/wxpython/core/render.py:412
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
-msgstr ""
+msgstr "Nie znaleziono modułu '%s'. Nie można uruchomić okna wyświetlania mapy."
 
 #: ../gui/wxpython/gui_core/dialogs.py:118
 msgid "Type of element:"
@@ -4787,7 +4787,7 @@ msgstr "Rozpakuj mapę rastrową"
 
 #: ../gui/wxpython/menustrings.py:59
 msgid "Unpacks a raster map packed with r.pack."
-msgstr ""
+msgstr "Rozpakowuje mapę rastrową spakowaną r.pack."
 
 #: ../gui/wxpython/menustrings.py:61
 msgid "Common import formats"
@@ -5397,7 +5397,7 @@ msgstr "Wyświetl ustawienia"
 
 #: ../gui/wxpython/menustrings.py:215 ../gui/wxpython/menustrings.py:217
 msgid "Manages the boundary definitions for the geographic region."
-msgstr "Definiowanie granic geograficznych obszaru roboczego."
+msgstr "Zarządza zasięgiem obszaru geograficznego."
 
 #: ../gui/wxpython/menustrings.py:216
 msgid "Set region"
@@ -5520,24 +5520,24 @@ msgstr "Zainstaluj rozszerzenie"
 
 #: ../gui/wxpython/menustrings.py:249
 msgid "Installs new extension from GRASS AddOns SVN repository."
-msgstr "Pobierz rozszerzenie z repozytorium."
+msgstr "Pobierz wtyczkę z repozytorium."
 
 #: ../gui/wxpython/menustrings.py:250
 msgid "Update installed extensions"
-msgstr "Aktualizuj rozszerzenia"
+msgstr "Aktualizuj wtyczki"
 
 #: ../gui/wxpython/menustrings.py:251
 msgid "Rebuilds all locally installed GRASS Addons extensions."
-msgstr "Przebuduj wszystkie zainstalowane rozszerzenia."
+msgstr "Przebudowuje wszystkie zainstalowane wtyczki."
 
 #: ../gui/wxpython/menustrings.py:252
 #: ../gui/wxpython/modules/extensions.py:463
 msgid "Remove extension"
-msgstr "Usuń rozszerzenie"
+msgstr "Usuń wtyczkę"
 
 #: ../gui/wxpython/menustrings.py:253
 msgid "Removes installed GRASS AddOns extension."
-msgstr "Usuń zainstalowane rozszerzenia."
+msgstr "Usuwa zainstalowane wtyczki."
 
 #: ../gui/wxpython/menustrings.py:254 ../gui/wxpython/menustrings.py:932
 msgid "Preferences"
@@ -7534,12 +7534,12 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:773
 msgid "Modis quality control"
-msgstr ""
+msgstr "Kontrola jakości Modis"
 
 #: ../gui/wxpython/menustrings.py:774
 #, fuzzy
 msgid "Extracts quality control parameters from Modis QC layers."
-msgstr "Ekstrahuje parametry terenu z DEM."
+msgstr "Ekstrahuje parametry kontroli jakości z warstw Modis QC."
 
 #: ../gui/wxpython/menustrings.py:775
 msgid "Atmospheric correction"
@@ -7547,7 +7547,7 @@ msgstr "Korekcja atmosferyczna"
 
 #: ../gui/wxpython/menustrings.py:776
 msgid "Performs atmospheric correction using the 6S algorithm."
-msgstr ""
+msgstr "Przeprowadza korekcję atmosferyczną przy użyciiu algorytmu 6S."
 
 #: ../gui/wxpython/menustrings.py:777
 msgid "LatLong map"
@@ -7732,7 +7732,7 @@ msgstr "Zarządzanie wartościami 3D NULL"
 #: ../gui/wxpython/menustrings.py:821
 #, fuzzy
 msgid "Explicitly create the 3D NULL-value bitmap file."
-msgstr "Utwórz plik bitmapy wartości NULL 3D"
+msgstr "Tworzy plik bitmapy wartości NULL 3D."
 
 #: ../gui/wxpython/menustrings.py:822
 msgid "Manage timestamp"
@@ -7769,7 +7769,7 @@ msgstr "Maska 3D"
 #: ../gui/wxpython/menustrings.py:832
 #, fuzzy
 msgid "Establishes the current working 3D raster mask."
-msgstr "Nie można utworzyć profilu dla mapy rastrowej."
+msgstr "Ustanawia bieżącą maskę rastrową 3D."
 
 #: ../gui/wxpython/menustrings.py:833
 msgid "Volume calculator"
@@ -7818,9 +7818,8 @@ msgid "Voxel statistics"
 msgstr "Statystyki 3D"
 
 #: ../gui/wxpython/menustrings.py:845
-#, fuzzy
 msgid "Generates volume statistics for 3D raster maps."
-msgstr "Obliczenia statystyk dla map rastrowych 3D."
+msgstr "Oblicza statystyki dla map rastrowych 3D."
 
 #: ../gui/wxpython/menustrings.py:846
 msgid "Univariate statistics for volumes"
@@ -7854,9 +7853,8 @@ msgid "List drivers"
 msgstr "Lista sterowników"
 
 #: ../gui/wxpython/menustrings.py:853
-#, fuzzy
 msgid "Lists all database drivers."
-msgstr "Wyświetl listę wszystkich sterowników bazy danych."
+msgstr "Wyświetla listę wszystkich sterowników baz danych."
 
 #: ../gui/wxpython/menustrings.py:854
 msgid "List tables"
@@ -8120,12 +8118,12 @@ msgstr "&Model"
 #: ../gui/wxpython/menustrings.py:935
 #, fuzzy
 msgid "Add command"
-msgstr "Dodaj komendę"
+msgstr "Dodaj polecenie"
 
 #: ../gui/wxpython/menustrings.py:936
 #, fuzzy
 msgid "Add action (GRASS command) to model"
-msgstr "Dodaj akcję (moduł GRASS) do modelu"
+msgstr "Dodaj akcję (polecenie GRASS) do modelu"
 
 #: ../gui/wxpython/menustrings.py:937
 msgid "Add data"
@@ -8133,7 +8131,7 @@ msgstr "Dodaj dane"
 
 #: ../gui/wxpython/menustrings.py:938
 msgid "Add data item to model"
-msgstr "Dodaj dane"
+msgstr "Dodaj dane do modelu"
 
 #: ../gui/wxpython/menustrings.py:939
 msgid "Define relation"
@@ -9600,7 +9598,7 @@ msgstr "Odpytaj tabelę mapy wektorowej"
 
 #: ../gui/wxpython/modules/colorrules.py:288
 msgid "Bad color format. Use color format '0:0:0'"
-msgstr ""
+msgstr "Niewłaściwy format koloru. Użyj '0:0:0'"
 
 #: ../gui/wxpython/modules/colorrules.py:373
 #: ../gui/wxpython/wxplot/dialogs.py:355
@@ -9830,7 +9828,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/extensions.py:42
 msgid "Fetch & install extension from GRASS Addons"
-msgstr "Pobierz i zainstaluj rozszerzenie"
+msgstr "Pobierz i zainstaluj wtyczki z GRASS AddOns"
 
 #: ../gui/wxpython/modules/extensions.py:52
 msgid "Repository"
@@ -9838,15 +9836,15 @@ msgstr "Repozytorium"
 
 #: ../gui/wxpython/modules/extensions.py:54
 msgid "List of extensions"
-msgstr "Lista rozszerzeń"
+msgstr "Lista wtyczek"
 
 #: ../gui/wxpython/modules/extensions.py:58
 msgid "Fetch full info including description and keywords"
-msgstr ""
+msgstr "Pobierz pełen opis i słowa kluczowe"
 
 #: ../gui/wxpython/modules/extensions.py:94
 msgid "&Fetch"
-msgstr ""
+msgstr "&Pobierz"
 
 #: ../gui/wxpython/modules/extensions.py:95
 msgid "Fetch list of available modules from GRASS Addons SVN repository"
@@ -9879,12 +9877,11 @@ msgstr ""
 
 #: ../gui/wxpython/modules/extensions.py:388
 msgid "Uninstall GRASS Addons extensions"
-msgstr "Odinstaluj rozszerzenia"
+msgstr "Odinstaluj wtyczki"
 
 #: ../gui/wxpython/modules/extensions.py:397
-#, fuzzy
 msgid "List of installed extensions"
-msgstr "Lista zainstalowanych rozszerzeń"
+msgstr "Lista zainstalowanych wtyczek"
 
 #: ../gui/wxpython/modules/extensions.py:403
 msgid "&Uninstall"
@@ -9892,7 +9889,7 @@ msgstr "&Odinstaluj"
 
 #: ../gui/wxpython/modules/extensions.py:404
 msgid "Uninstall selected AddOns extensions"
-msgstr "Odinstaluj wybrane rozszerzenia"
+msgstr "Odinstaluj wybraną wtyczkę"
 
 #: ../gui/wxpython/modules/extensions.py:451
 msgid "No extension selected for removal. Operation canceled."
@@ -12768,9 +12765,8 @@ msgstr "Konsola Pythona"
 
 #: ../gui/wxpython/gmodeler/frame.py:181
 #: ../gui/wxpython/gmodeler/frame.py:1601
-#, fuzzy
 msgid "Python script is up-to-date"
-msgstr "Skrypt pythona (*.py)|*.py"
+msgstr "Skrypt pythona jest aktualny"
 
 #: ../gui/wxpython/gmodeler/frame.py:196
 msgid "Redrawing model..."
@@ -12953,7 +12949,7 @@ msgstr "plik"
 
 #: ../gui/wxpython/gmodeler/frame.py:1294
 msgid "Add new variable to the model"
-msgstr ""
+msgstr "Dodaj nową zmienną do modelu"
 
 #: ../gui/wxpython/gmodeler/frame.py:1414
 msgid "List of items - right-click to delete"
@@ -13018,7 +13014,7 @@ msgstr "Zapisz plik"
 
 #: ../gui/wxpython/gmodeler/frame.py:1577
 msgid "Python script is locally modificated. Refresh will discard all changes. Do you really want to continue?"
-msgstr ""
+msgstr "Skrypt pythona jest miejscami zmieniony. Odświeżenie odrzuci zmiany. Czy chcesz odrzucić zmiany?"
 
 #: ../gui/wxpython/gmodeler/frame.py:1580
 #, fuzzy
@@ -14014,6 +14010,9 @@ msgstr "Emisja"
 msgid "Unable to switch to mapset <%s>."
 msgstr "Nie można przełączyć na mapset <%s>."
 
+msgid "Duplicate attributes"
+msgstr "Duplikuj atrybuty"
+
 #~ msgid "Delete last"
 #~ msgstr "Usuń ostatni"
 
@@ -14302,9 +14301,6 @@ msgstr "Nie można przełączyć na mapset <%s>."
 #, fuzzy
 #~ msgid "Color table already exists. Check out 'replace existing color table' to overwrite it."
 #~ msgstr "Plik regionu <%s> już istnieje.Chcesz go nadpisać?"
-
-#~ msgid "Duplicate attributes"
-#~ msgstr "Duplikuj atrybuty"
 
 #, fuzzy
 #~ msgid "Close current"
@@ -15054,3 +15050,43 @@ msgstr "Nie można przełączyć na mapset <%s>."
 #, fuzzy
 #~ msgid "Scale"
 #~ msgstr "Skala:"
+
+#, fuzzy
+#~ msgid "GRASS version"
+#~ msgstr "Rozpocznij sesję GRASS-a"
+
+#, fuzzy
+#~ msgid "GRASS SVN Revision"
+#~ msgstr "Rewizja SVN:"
+
+#, fuzzy
+#~ msgid "GIS Library Revision"
+#~ msgstr "Rewizja biblioteki GIS:"
+
+#, fuzzy
+#~ msgid "SVN Revision"
+#~ msgstr "Rewizja SVN:"
+
+#~ msgid "Addons extensions"
+#~ msgstr "Wtyczki"
+
+#~ msgid "Install extension from addons"
+#~ msgstr "Zainstaluj wtyczki"
+
+#, fuzzy
+#~ msgid "Prints system information"
+#~ msgstr "Informacje"
+
+#, fuzzy
+#~ msgid "Unable to open file '%s'\n"
+#~ msgstr ""
+#~ "Nie można otworzyć pliku\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Duplicated key: %s\n"
+#~ msgstr "Duplikuj atrybuty"
+
+#, fuzzy
+#~ msgid "Unable to create file '%s'\n"
+#~ msgstr "Nie można przeczytać pliku %s."
