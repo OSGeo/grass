@@ -11,12 +11,12 @@ ETCDIR = $(ETC)/gui/wxpython
 
 SRCFILES := $(wildcard icons/*.* scripts/* xml/*) \
 	$(wildcard core/* dbmgr/* gcp/* gmodeler/* gui_core/* iclass/* lmgr/* location_wizard/* \
-	mapdisp/* modules/* nviz/* psmap/* swipe/* vdigit/* wxplot/* ogc_services/*) \
+	mapdisp/* modules/* nviz/* psmap/* mapswipe/* vdigit/* wxplot/* ogc_services/*) \
 	gis_set.py gis_set_error.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
 PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler gui_core iclass lmgr location_wizard \
-	mapdisp modules nviz psmap swipe vdigit wxplot ogc_services)
+	mapdisp modules nviz psmap mapswipe vdigit wxplot ogc_services)
 DSTDIRS := $(patsubst %,$(ETCDIR)/%,icons scripts xml)
 
 default: $(DSTFILES)

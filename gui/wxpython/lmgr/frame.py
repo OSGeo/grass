@@ -67,7 +67,7 @@ from lmgr.pyshell          import PyShellWindow
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
-from swipe.frame           import SwipeMapFrame
+from mapswipe.frame        import SwipeMapFrame
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
