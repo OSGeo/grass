@@ -1,5 +1,5 @@
 """!
-@package swipe.dialogs
+@package mapswipe.dialogs
 
 @brief Dialogs used in Map Swipe
 

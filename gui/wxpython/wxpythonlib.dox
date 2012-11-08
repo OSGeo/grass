@@ -36,7 +36,7 @@ vector digitizer or georectification tool are also available.
  - \ref psmap
  - \ref locWizard
  - \ref plot
- - \ref swipe
+ - \ref mapswipe
  - \ref other
 - \ref devel
 - \ref seeAlso
@@ -478,17 +478,17 @@ available in GRASS 5 and GRASS 6.
  - toolbars::IClassMapManagerToolbar
  - toolbars::IClassMiscToolbar
 
-\subsection swipe Map Swipe
+\subsection mapswipe Map Swipe
 
-- swipe::frame
+- mapswipe::frame
  - frame::SwipeMapFrame
  - frame::MapSplitter
-- swipe::mapwindow
+- mapswipe::mapwindow
  - mapwindow::SwipeBufferedWindow
  - mapwindow::_MouseEvent
-- swipe::dialogs
+- mapswipe::dialogs
  - dialogs::SwipeMapDialog
-- swipe::toolbars
+- mapswipe::toolbars
  - toolbars::SwipeMapToolbar
  - toolbars::SwipeMainToolbar
  - toolbars::SwipeMiscToolbar

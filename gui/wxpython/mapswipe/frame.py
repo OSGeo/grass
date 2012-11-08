@@ -1,5 +1,5 @@
 """!
-@package swipe.frame
+@package mapswipe.frame
 
 @brief Map Swipe Frame
 
@@ -29,9 +29,9 @@ from core.debug         import Debug
 from core.gcmd          import RunCommand, GError, GMessage
 from mapdisp.statusbar  import EVT_AUTO_RENDER
 
-from swipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
-from swipe.mapwindow import SwipeBufferedWindow
-from swipe.dialogs   import SwipeMapDialog
+from mapswipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
+from mapswipe.mapwindow import SwipeBufferedWindow
+from mapswipe.dialogs   import SwipeMapDialog
 
 
 class SwipeMapFrame(DoubleMapFrame):
