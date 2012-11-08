@@ -33,8 +33,8 @@ from core.gcmd          import RunCommand
 
 import grass.script as grass
 
-from example.toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
-from example.dialogs  import ExampleMapDialog
+from toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
+from dialogs  import ExampleMapDialog
 
 # It is possible to call grass library functions (in C) directly via ctypes
 # however this is less stable. Example is available in trunk/doc/python/, ctypes
@@ -117,7 +117,7 @@ class ExampleMapFrame(SingleMapFrame):
         
         
         # create map window
-        self.MapWindow = BufferedWindow(self, Map = self.GetMap())
+        self.MapWindow = BufferedWindow(self, Map = self.GetMap(), frame = self)
         
         # create whatever you want, here it is a widget for displaying raster info
         self.info = ExampleInfoTextManager(self)
