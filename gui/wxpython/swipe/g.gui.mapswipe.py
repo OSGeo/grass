@@ -45,8 +45,8 @@ import grass.script as grass
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
-from core.settings import UserSettings
-from frame import SwipeMapFrame
+from core.settings  import UserSettings
+from mapswipe.frame import SwipeMapFrame
 
 
 def main():
