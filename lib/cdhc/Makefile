@@ -18,7 +18,7 @@ test: $(OBJDIR)/test$(EXE)
 	cd $(OBJDIR) && $(call run_grass,./test < ../test_numbers.csv)
 
 #  Test functions
-$(OBJDIR)/test$(EXE): $(OBJDIR)/test.o $(CDHCDEP)
+$(OBJDIR)/test$(EXE): $(OBJDIR)/test.o $(GISDEP) $(CDHCDEP)
 	$(call linker)
 
-$(OBJDIR)/test$(EXE): LIBES = $(CDHCLIB)
+$(OBJDIR)/test$(EXE): LIBES = $(GISLIB) $(CDHCLIB)
