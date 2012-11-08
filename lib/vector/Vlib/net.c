@@ -390,7 +390,7 @@ Vect_net_build_graph(struct Map_info *Map,
 	    dcost = 0;
 
 	    for (j = 0; j < List->n_values; j++) {
-		line = List->id[i];
+		line = List->id[j];
 		G_debug(2, "  line (%d) = %d", j, line);
 		type = Vect_read_line(Map, NULL, Cats, line);
 		if (!(type & GV_POINT))
