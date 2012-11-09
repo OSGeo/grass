@@ -131,7 +131,6 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
 	        --with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
-		--with-tcltk \
 		--with-sqlite \
 		--with-curses \
 		--with-regex \
