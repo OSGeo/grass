@@ -8,7 +8,7 @@
 # PURPOSE:  	This configure runs all the tests to determine what components
 #   	    	are installed on the current system. It also defines certain
 #   	    	configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2009, 2011 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2009, 2011-2012 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #   	    	Public License (>=v2). Read the file COPYING that
@@ -246,7 +246,6 @@ AC_ARG_WITH(macosx-sdk,
                           compile with a system SDK on MacOSX. (default: no)],, with_macosx_sdk="no")
 LOC_ARG_WITH(tiff, TIFF)
 LOC_ARG_WITH(png, PNG)
-LOC_ARG_WITH(tcltk, Tcl/Tk)
 LOC_ARG_WITH(postgres, PostgreSQL, no)
 LOC_ARG_WITH(mysql, MySQL, no)
 LOC_ARG_WITH(sqlite, SQLite, no)
@@ -313,9 +312,6 @@ LOC_ARG_WITH_LIB(tiff, TIFF)
 
 LOC_ARG_WITH_INC(png, PNG)
 LOC_ARG_WITH_LIB(png, PNG)
-
-LOC_ARG_WITH_INC(tcltk, Tcl/Tk)
-LOC_ARG_WITH_LIB(tcltk, Tcl/Tk)
 
 LOC_ARG_WITH_INC(postgres, PostgreSQL)
 LOC_ARG_WITH_LIB(postgres, PostgreSQL)
@@ -1274,114 +1270,6 @@ AC_SUBST(OPENGLULIB)
 
 # Done checking OpenGL
 
-# Enable TCLTK option
-
-LOC_CHECK_USE(tcltk,Tcl/Tk,USE_TCLTK)
-
-TCLINCDIR=
-TCLTKLIBPATH=
-TCLTKLIBS=
-
-if test -n "$USE_TCLTK"; then
-
-# With Tcl/Tk includes directory
-
-LOC_CHECK_INC_PATH(tcltk,Tcl/Tk,TCLINCDIR)
-
-LOC_CHECK_INCLUDES(tcl.h,Tcl,$TCLINCDIR)
-
-LOC_CHECK_INCLUDES(tk.h,Tk,$TCLINCDIR $X_CFLAGS)
-
-# Tcl/Tk version checks
-
-LOC_CHECK_VERSION_STRING(tcl.h,TCL_VERSION,Tcl,tcl_ver,$TCLINCDIR,UNKNOWN)
-
-LOC_CHECK_VERSION_STRING(tk.h,TK_VERSION,Tk,tk_ver,$TCLINCDIR $X_CFLAGS,UNKNOWN)
-
-if test "$tcl_ver" = "$tk_ver" ; then
-    tcltk_ver="$tcl_ver"
-else
-    AC_MSG_ERROR([*** Tcl/Tk version mismatch.])
-fi
-
-# FreeBSD and CygWin don't have a "dot" between major/minor version number
-tcltk_ver2=`echo "$tcltk_ver" | sed 's/\.//g'`
-
-# With Tcl/Tk library directory
-
-LOC_CHECK_LIB_PATH(tcltk,Tcl/Tk,TCLTKLIBPATH)
-
-TCLLIB=
-TKLIB=
-MACOSX_ARCHS_TCLTK=
-
-# Can't test tcl/tk libs on 64bit OSX Aqua for now
-# assume that if OpenGL Aqua, then user specifies TclTk Aqua
-if test "$OPENGL_AQUA" = 1 ; then
-    save_CFLAGS="$CFLAGS"
-    CFLAGS="`echo \"$CFLAGS\" | sed -E 's/-arch +x86_64//g' | sed -E 's/-arch +ppc64//g'`"
-    save_LDFLAGS="$LDFLAGS"
-    LDFLAGS="`echo \"$LDFLAGS\" | sed -E 's/-arch +x86_64//g' | sed -E 's/-arch +ppc64//g'`"
-fi
-
-LOC_CHECK_LIBS(tcl,           Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
-LOC_CHECK_LIBS(tcl$tcltk_ver, Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
-LOC_CHECK_LIBS(tcl$tcltk_ver2,Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
-],$DLLIB)
-],$DLLIB)
-],$DLLIB)
-
-LOC_CHECK_LIBS(tk,           Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
-LOC_CHECK_LIBS(tk$tcltk_ver, Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
-LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
-],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
-],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
-],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
-
-# restore CFLAGS/LDLFAGS from Aqua 64bit strip
-# only Tcl/Tk-based makefiles will strip 64bit out during compile
-if test "$OPENGL_AQUA" = 1 ; then
-   CFLAGS="$save_CFLAGS"
-   LDFLAGS="$save_LDFLAGS"
-fi
-
-TCLTKLIBS="$TKLIB $TCLLIB"
-
-# check for available OSX archs in TclTk
-if test -n "$MACOSX_ARCHS" ; then
-  save_LDFLAGS="$LDFLAGS"
-  LDFLAGS=
-  save_CFLAGS="$CFLAGS"
-  CFLAGS=
-  tlib=`echo "$TCLLIB" | sed -e 's/-l//' -e 's/^  *//' -e 's/  *$//'`
-  for a in i386 ppc x86_64 ppc64
-  do
-    # add only if in MACOSX_ARCHS
-    AC_CHECK_LIB($tlib, Tcl_Init, [
-      if test -n "`echo "$MACOSX_ARCHS" | grep $a`" ; then
-        MACOSX_ARCHS_TCLTK="$MACOSX_ARCHS_TCLTK -arch $a"
-      fi
-      ],, -arch $a $MACOSX_SDK $TCLTKLIBPATH)
-  done
-  LDFLAGS="$save_LDFLAGS"
-  CFLAGS="$save_CFLAGS"
-fi
-
-AC_DEFINE(HAVE_TCLTK)
-
-fi # $USE_TCLTK
-
-TKINCDIR=$TCLINCDIR
-
-AC_SUBST(USE_TCLTK)
-AC_SUBST(TCLINCDIR)
-AC_SUBST(TKINCDIR)
-AC_SUBST(TCLTKLIBPATH)
-AC_SUBST(TCLTKLIBS)
-AC_SUBST(MACOSX_ARCHS_TCLTK)
-
-# Done checking Tcl/Tk
-
 # Enable ODBC option
 
 LOC_CHECK_USE(odbc,ODBC,USE_ODBC)
@@ -1986,29 +1874,21 @@ cp -f config.status config.status.${ARCH}
 
 # Display configuration status
 
-USE_TOGL=
-if test -n "${USE_TCLTK}" -a -n "${USE_OPENGL}" ; then
-    USE_TOGL="1"
-fi
-
 LOC_MSG()
 LOC_MSG([GRASS is now configured for:  ${host}])
 LOC_MSG()
-LOC_MSG([  Source directory:            ${SRCDIR}])
-LOC_MSG([  Build directory:             ${DSTDIR}])
-LOC_MSG([  Installation directory:      ${INSTDIR}])
-LOC_MSG([  Startup script in directory: ${bindir}])
-LOC_MSG([  C compiler:                  ${CC} ${CFLAGS}])
-LOC_MSG([  C++ compiler:                ${CXX} ${CXXFLAGS}])
-#LOC_MSG([  FORTRAN compiler:            ${F77} ${FFLAGS}])
-LOC_MSG([  Building shared libraries:   ${shared_ok}])
-LOC_MSG([  OpenGL platform:             ${OPENGL_TYPE}])
+LOC_MSG([  Source directory:           ${SRCDIR}])
+LOC_MSG([  Build directory:            ${DSTDIR}])
+LOC_MSG([  Installation directory:     ${INSTDIR}])
+LOC_MSG([  Startup script in directory:${bindir}])
+LOC_MSG([  C compiler:                 ${CC} ${CFLAGS}])
+LOC_MSG([  C++ compiler:               ${CXX} ${CXXFLAGS}])
+LOC_MSG([  Building shared libraries:  ${shared_ok}])
+LOC_MSG([  OpenGL platform:            ${OPENGL_TYPE}])
 LOC_MSG()
 LOC_MSG_USE(MacOSX application,MACOSX_APP)
 LOC_MSG([  MacOSX architectures:       ${MACOSX_ARCHS}])
 LOC_MSG([  MacOSX SDK:                 ${MACOSX_SDK}])
-LOC_MSG()
-LOC_MSG_USE(Tcl/Tk NVIZ,USE_TOGL)
 LOC_MSG()
 LOC_MSG_USE(BLAS support,USE_BLAS)
 LOC_MSG_USE(C++ support,USE_CXX)
@@ -2036,7 +1916,6 @@ LOC_MSG_USE(Readline support,USE_READLINE)
 LOC_MSG_USE(Regex support,USE_REGEX)
 LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
-LOC_MSG_USE(Tcl/Tk support,USE_TCLTK)
 LOC_MSG_USE(wxWidgets support,USE_WXWIDGETS)
 LOC_MSG_USE(X11 support,USE_X11)
 LOC_MSG()
