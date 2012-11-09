@@ -438,6 +438,7 @@ int main(int argc, char *argv[])
     to_driver = NULL;
     toFi = NULL;
     if (opt.to_column->answer) {
+
 	toFi = Vect_get_field(&To, to_field);
 	if (toFi == NULL)
 	    G_fatal_error(_("Database connection not defined for layer %d"),
@@ -484,6 +485,17 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (fcname) {
+
+		Fi = Vect_get_field(&From, from_field);
+		if (Fi == NULL)
+		    G_fatal_error(_("Database connection not defined for layer <%s>"),
+				  opt.from_field->answer);
+
+		driver = db_start_driver_open_database(Fi->driver, Fi->database);
+		if (driver == NULL)
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+				  Fi->database, Fi->driver);
+
 		fctype = db_column_Ctype(driver, Fi->table, fcname);
 		tctype =
 		    db_column_Ctype(to_driver, toFi->table,
@@ -499,8 +511,12 @@ int main(int argc, char *argv[])
 		    ) {
 		    G_fatal_error(_("Incompatible column types"));
 		}
+		/* close db connection */
+		db_close_database_shutdown_driver(driver);
+		driver = NULL;
 	    }
 	}
+	/* close db connection */
 	db_close_database_shutdown_driver(to_driver);
 	to_driver = NULL;
     }
