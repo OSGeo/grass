@@ -15,7 +15,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate user
 #               interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2011 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2012 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -343,7 +343,9 @@ def set_paths():
         path_prepend(grass_man_path, 'MANPATH')
     else:
         try:
-            p = Popen(['manpath'], stdout = subprocess.PIPE)
+            nul = open(os.devnull, 'w')
+            p = Popen(['manpath'], stdout = subprocess.PIPE, stderr = nul)
+            nul.close()
             s = p.stdout.read()
             p.wait()
             sys_man_path = s.strip()
