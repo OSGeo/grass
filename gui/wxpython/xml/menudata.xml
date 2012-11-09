@@ -713,13 +713,6 @@
         </menuitem>
         <separator />
         <menuitem>
-          <label>NVIZ (requires Tcl/Tk)</label>
-          <help>nviz - Visualization and animation tool for GRASS data.</help>
-          <keywords>visualization,raster,raster3d,vector,display</keywords>
-          <handler>OnMenuCmd</handler>
-          <command>nviz</command>
-        </menuitem>
-        <menuitem>
           <label>3D image rendering</label>
           <help>Creates a 3D rendering of GIS data.</help>
           <keywords>visualization,raster,vector,raster3d</keywords>
