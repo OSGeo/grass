@@ -1,7 +1,6 @@
 MODULE_TOPDIR = ..
 
-SUBDIRS = nviz \
-	xganim \
+SUBDIRS = xganim \
 	ximgview \
 	wximgview
 
