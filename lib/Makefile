@@ -22,7 +22,6 @@ SUBDIRS = \
 	db \
 	fonts \
 	gtcltk \
-	form \
 	proj \
 	vector \
 	imagery \
