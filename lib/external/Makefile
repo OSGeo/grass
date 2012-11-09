@@ -2,7 +2,6 @@
 MODULE_TOPDIR = ../..
 
 SUBDIRS = \
-	bwidget \
 	ccmath  \
 	shapelib
 
