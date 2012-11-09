@@ -206,9 +206,6 @@
 /* define if NLS requested */
 #undef USE_NLS
 
-/* define if TclTk exists */
-#undef HAVE_TCLTK
-
 /* define if putenv() exists */
 #undef HAVE_PUTENV
 
