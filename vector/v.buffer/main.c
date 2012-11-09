@@ -180,6 +180,98 @@ int buffer_cats(struct buf_contours *arr_bc, struct spatial_index *si,
     return inside;
 }
 
+static int cmp_int(const void *a, const void *b)
+{
+    int ai = *(int *)a;
+    int bi = *(int *)b;
+    
+    return (ai < bi ? -1 : (ai > bi));
+}
+
+/* parse filter options */
+/* return cat list or NULL */
+struct cat_list *parse_filter_options(struct Map_info *Map, int layer,
+                      char *where, char *cats)
+{
+    struct cat_list *list = NULL;
+
+    if (where) {
+	struct field_info *Fi = NULL;
+	dbDriver *driver = NULL;
+	int ncats, *cats = NULL;
+	int i, j;
+	
+	if (layer < 1)
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
+	if (cats)
+	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
+
+	Fi = Vect_get_field(Map, layer);
+	if (!Fi) {
+	    G_fatal_error(_("Database connection not defined for layer %d"),
+			  layer);
+	}
+
+	G_verbose_message(_("Loading categories from table <%s>..."), Fi->table);
+
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	if (driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
+	
+	ncats = db_select_int(driver, Fi->table, Fi->key, where,
+			      &cats);
+	if (ncats == -1)
+		G_fatal_error(_("Unable select records from table <%s>"),
+			      Fi->table);
+	G_verbose_message(_("%d categories loaded"), ncats);
+	    
+	db_close_database_shutdown_driver(driver);
+
+	/* sort */
+	qsort(cats, ncats, sizeof(int), cmp_int);
+	
+	/* remove duplicates */
+	j = 1;
+	for (i = 1; i < ncats; i++) {
+	    if (cats[i] != cats[j - 1]) {
+		cats[j] = cats[i];
+		j++;
+	    }
+	}
+	ncats = j;
+	
+	/* convert to cat list */
+	list = Vect_new_cat_list();
+	
+	Vect_array_to_cat_list(cats, ncats, list);
+	
+	if (cats)
+	    G_free(cats);
+
+
+    }
+    else if (cats) {
+	if (layer < 1)
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", GV_KEY_COLUMN);
+	list = Vect_new_cat_list();
+
+	if (Vect_str_to_cat_list(cats, list) > 0) {
+	    G_warning(_("Problem loading category values"));
+	}
+    }
+    
+    if (list) {
+	if (list->n_ranges < 1) {
+	    Vect_destroy_cat_list(list);
+	    list = NULL;
+	}
+    }
+	
+    return list;
+}
+
+
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out, Buf;
@@ -188,10 +280,12 @@ int main(int argc, char *argv[])
     char bufname[GNAME_MAX];
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *dista_opt, *distb_opt,
-	*angle_opt;
+	          *angle_opt;
     struct Flag *straight_flag, *nocaps_flag, *cats_flag;
-    struct Option *tol_opt, *bufcol_opt, *scale_opt, *field_opt;
+    struct Option *tol_opt, *bufcol_opt, *scale_opt, *field_opt,
+		  *where_opt, *cats_opt;
 
+    struct cat_list *cat_list = NULL;
     int verbose;
     double da, db, dalpha, tolerance, unit_tolerance;
     int type;
@@ -227,6 +321,12 @@ int main(int argc, char *argv[])
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     field_opt->guisection = _("Selection");
+
+    cats_opt = G_define_standard_option(G_OPT_V_CATS);
+    cats_opt->guisection = _("Selection");
+    
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    where_opt->guisection = _("Selection");
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "point,line,boundary,centroid,area";
@@ -316,6 +416,9 @@ int main(int argc, char *argv[])
 	field = Vect_get_field_number(&In, field_opt->answer);
     else
 	field = -1;
+
+    cat_list = parse_filter_options(&In, field, where_opt->answer,
+                                  cats_opt->answer);
 	
     if (bufcol_opt->answer && field == -1)
 	G_fatal_error(_("The bufcol option requires a valid layer."));
@@ -464,7 +567,22 @@ int main(int argc, char *argv[])
 		continue;
 
 	    Vect_read_line(&In, NULL, Cats, centroid);
-	    if (field > 0 && !Vect_cat_get(Cats, field, &cat))
+
+	    if (cat_list) {
+		int found = 0;
+
+		for (i = 0; i < Cats->n_cats; i++) {
+		    if (Cats->field[i] == field &&
+			Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
+			
+			found = 1;
+			break;
+		    }
+		}
+		if (!found)
+		    continue;
+	    }
+	    else if (field > 0 && !Vect_cat_get(Cats, field, &cat))
 		continue;
 
 	    Vect_reset_cats(CCats);
@@ -568,7 +686,21 @@ int main(int argc, char *argv[])
 	    if (!(ltype & type))
 		continue;
 
-	    if (field > 0 && !Vect_cat_get(Cats, field, &cat))
+	    if (cat_list) {
+		int found = 0;
+
+		for (i = 0; i < Cats->n_cats; i++) {
+		    if (Cats->field[i] == field &&
+			Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
+			
+			found = 1;
+			break;
+		    }
+		}
+		if (!found)
+		    continue;
+	    }
+	    else if (field > 0 && !Vect_cat_get(Cats, field, &cat))
 		continue;
 
 	    Vect_reset_cats(CCats);
