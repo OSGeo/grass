@@ -27,7 +27,7 @@
 #%end
 #%option G_OPT_F_INPUT
 #% key: file
-#% description: Name of model file to be loaded (*.gmx)
+#% description: Name of model file to be loaded (*.gxm)
 #% required: no
 #%end
 
