@@ -28,9 +28,6 @@ import tempfile
 import copy
 import re
 
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-
 import wx
 from   wx.lib import ogl
 import wx.lib.flatnotebook    as FN
@@ -1635,19 +1632,3 @@ class PythonPanel(wx.Panel):
     def IsEmpty(self):
         """!Check if python script is empty"""
         return len(self.body.GetText()) == 0
-        
-def main():
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
-    app = wx.PySimpleApp()
-    wx.InitAllImageHandlers()
-    frame = ModelFrame(parent = None)
-    if len(sys.argv) > 1:
-        frame.LoadModelFile(sys.argv[1])
-    frame.Show()
-    
-    app.MainLoop()
-    
-if __name__ == "__main__":
-    main()
