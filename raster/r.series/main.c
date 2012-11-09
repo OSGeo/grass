@@ -45,6 +45,7 @@ struct menu
     {c_reg_m,  0, "slope",      "linear regression slope"},
     {c_reg_c,  0, "offset",     "linear regression offset"},
     {c_reg_r2, 0, "detcoeff",   "linear regression coefficient of determination"},
+    {c_reg_t,  0, "tvalue",     "linear regression t-value"},
     {c_quart1, 0, "quart1",     "first quartile"},
     {c_quart3, 0, "quart3",     "third quartile"},
     {c_perc90, 0, "perc90",     "ninetieth percentile"},

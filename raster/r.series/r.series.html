@@ -19,6 +19,7 @@ Following methods are available:
  <li>slope: linear regression slope
  <li>offset: linear regression offset
  <li>detcoeff: linear regression coefficient of determination
+ <li>tvalue: linear regression t-value
  <li>min_raster: raster map number with the minimum time-series value
  <li>max_raster: raster map number with the maximum time-series value
  </ul> 
@@ -45,7 +46,7 @@ ignored by most aggregates, or will cause the result to be NULL if -n is given).
 The <em>low,high</em> thresholds are floating point, so use <em>-inf</em> or
 <em>inf</em> for a single threshold (e.g., <em>range=0,inf</em> to ignore
 negative values, or <em>range=-inf,-200.4</em> to ignore values above -200.4).
-<p>Linear regression (slope, offset, coefficient of determination) assumes equal time intervals.
+<p>Linear regression (slope, offset, coefficient of determination, t-value) assumes equal time intervals.
 If the data have irregular time intervals, NULL raster maps can be inserted into time series
 to make time intervals equal (see example).
 <p>Number of raster maps to be processed is given by the limit of the
