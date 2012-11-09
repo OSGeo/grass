@@ -31,9 +31,11 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *input, *output, *field;
-    struct Flag *all, *flat;
+    struct Option *input, *output, *field, *cats_opt, *where_opt;
+    struct Flag *region_flag, *flat;
     struct Cell_head window;
+    int layer;
+    struct cat_list *cat_list = NULL;
 
     char *sitefile;
 
@@ -58,10 +60,13 @@ int main(int argc, char **argv)
 
     output = G_define_standard_option(G_OPT_V_OUTPUT);
     
-    all = G_define_flag();
-    all->key = 'a';
-    all->description =
-	_("Use all vector points (do not limit to current region)");
+    cats_opt = G_define_standard_option(G_OPT_V_CATS);
+    
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+
+    region_flag = G_define_flag();
+    region_flag->key = 'r';
+    region_flag->description = _("Limit to current region");
 
     flat = G_define_flag();
     flat->key = 'f';
@@ -80,17 +85,21 @@ int main(int argc, char **argv)
     if (Vect_open_old2(&Map, sitefile, "", field->answer) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), sitefile);
     
+    layer = Vect_get_field_number(&Map, field->answer);
+    cat_list = parse_filter_options(&Map, layer, where_opt->answer,
+                                  cats_opt->answer);
+    
     /* load site coordinates */
     G_get_window(&window);
-    numSitePoints = loadSiteCoordinates(&Map, &points, all->answer, &window,
-					Vect_get_field_number(&Map, field->answer));
+    numSitePoints = loadSiteCoordinates(&Map, &points, region_flag->answer, &window,
+					layer, cat_list);
     if (numSitePoints < 0)
 	G_fatal_error(_("Error loading vector points from <%s>"), sitefile);
     
     if (numSitePoints < 3)
 	G_fatal_error(_("Convex hull calculation requires at least three points (%d found)"), numSitePoints);
     
-    G_verbose_message(_("%d points read from vector map <%s>"), sitefile);
+    G_verbose_message(_("%d points read from vector map <%s>"), numSitePoints, sitefile);
     
     /* create a 2D or a 3D hull? */
     MODE2D = 1;
@@ -101,7 +110,10 @@ int main(int argc, char **argv)
 	MODE2D = 1;
     }
 
-    /* create vector map */
+    /* close input vector */
+    Vect_close(&Map);
+
+    /* create output vector map */
     if (0 > Vect_open_new(&Map, output->answer, MODE2D ? WITHOUT_Z : WITH_Z)) {
 	G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
     }
