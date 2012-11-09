@@ -130,7 +130,6 @@ libs = \
 	DLG:dlg \
 	DRIVER:driver \
 	DSPF:dspf \
-	FORM:form \
 	RASTER3D:g3d \
 	GIS:gis \
 	GMATH:gmath \
