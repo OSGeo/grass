@@ -857,7 +857,7 @@
             </menuitem>
             <separator />
             <menuitem>
-              <label>Version</label>
+              <label>Version and copyright</label>
               <help>Displays version and copyright information.</help>
               <keywords>general,version</keywords>
               <handler>RunMenuCmd</handler>
