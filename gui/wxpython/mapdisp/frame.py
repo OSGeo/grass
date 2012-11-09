@@ -194,22 +194,11 @@ class MapFrame(SingleMapFrame):
         
         if not haveVDigit:
             from vdigit import errorMsg
-            msg = _("Unable to start wxGUI vector digitizer.\nDo you want to start "
-                    "TCL/TK digitizer (v.digit) instead?\n\n"
-                    "Details: %s" % errorMsg)
             
             self.toolbars['map'].combo.SetValue(_("2D view"))
-            dlg = wx.MessageDialog(parent = self,
-                                   message = msg,
-                                   caption=_("Vector digitizer failed"),
-                                   style = wx.YES_NO | wx.CENTRE)
-            if dlg.ShowModal() == wx.ID_YES:
-                mapName = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetName()
-                self._layerManager.goutput.RunCmd(['v.digit', 'map=%s' % mapName],
-                                                  switchPage = False)
-            dlg.Destroy()
             
-            self.toolbars['map'].combo.SetValue(_("2D view"))
+            GError(_("Unable to start wxGUI vector digitizer.\n"
+                     "Details: %s") % errorMsg, parent = self)
             return
         
         if self._layerManager:

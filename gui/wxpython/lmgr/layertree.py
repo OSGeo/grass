@@ -40,7 +40,7 @@ from wxplot.profile      import ProfileFrame
 from core.debug          import Debug
 from core.settings       import UserSettings, GetDisplayVectSettings
 from vdigit.main         import haveVDigit
-from core.gcmd           import GWarning
+from core.gcmd           import GWarning, GError
 from gui_core.toolbars   import BaseIcons
 from icons.icon          import MetaIcon
 
@@ -631,20 +631,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         if not haveVDigit:
             from vdigit import errorMsg
-            msg = _("Unable to start wxGUI vector digitizer.\nDo you want to start "
-                    "TCL/TK digitizer (v.digit) instead?\n\n"
-                    "Details: %s" % errorMsg)
             
             self.mapdisplay.toolbars['map'].combo.SetValue (_("2D view"))
-            dlg = wx.MessageDialog(parent = self.mapdisplay,
-                                   message = msg,
-                                   caption=_("Vector digitizer failed"),
-                                   style = wx.YES_NO | wx.CENTRE)
-            if dlg.ShowModal() == wx.ID_YES:
-                self.lmgr.goutput.RunCmd(['v.digit', 'map=%s' % maplayer.GetName()],
-                                         switchPage = False)
             
-            dlg.Destroy()
+            GError(_("Unable to start wxGUI vector digitizer.\n"
+                     "Details: %s") % errorMsg, parent = self)
             return
         
         if not self.mapdisplay.GetToolbar('vdigit'): # enable tool

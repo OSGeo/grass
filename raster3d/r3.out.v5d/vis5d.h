@@ -54,10 +54,6 @@
 #define USAFILE "OUTLUSAM"
 
 
-/* Default filename of Tcl startup commands: */
-#define TCL_STARTUP_FILE "vis5d.tcl"
-
-
 /* Default directory to search for user functions: */
 #define FUNCTION_PATH "userfuncs"
 

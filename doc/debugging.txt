@@ -20,49 +20,6 @@ Further hints:
 '-Werror-implicit-function-declaration'
      Give a warning (or error) whenever a function is used before being
      declared.
-
-----------------------------------------------------
-Tcl/TK:
-
-A) Pure Tcl code:
-
-   Typically you need to add "trace" commands to the code
-   in question.
-
-B) To debug  TCL code which uses C (including hybrid C+Tcl 
-   code, e.g. NVIZ, v.digit, run (example):
-
-GRASS:~> g.gisenv set="DEBUG=1"
-GRASS:~> d.text.freetype > dtf_tcl.txt
-
-then edit 'dtf_tcl.txt'  to remove the "| wish &" from the end.
-
-then '. dtf_tcl.txt > dtf.tcl' to get rid of the echo-proofing chars.
-
-then 'wish < dtf.tcl'  to test it.
-
-References:
-"Is white space significant in Tcl"  http://wiki.tcl.tk/981
-"Tcl quoting hell"  http://wiki.tcl.tk/1726
-"1 minute intro to tcl"  http://www.pconline.com/~erc/tcl.htm
-
-NVIZ debug tip:
-   at the start of nviz2.2_script, change the DEBUG setting to:
-   set DEBUG 1
-
-To debug NVIZ:
-
-$ gdb $GISBASE/etc/nviz2.2/nviz
-> run -f $GISBASE/etc/nviz2.2/scripts/nviz2.2_script <any args>
-
-If you don't need to debug the startup, you can start NVIZ then
-"attach" to the process. E.g.
-
-$ gdb $GISBASE/etc/nviz2.2/nviz
-> attach <pid>
-> break Create_OS_Ctx
-> cont
-
 ----------------------------------------------------
 
 To make gcc less tolerant in accepting errors and code flaws, compile
