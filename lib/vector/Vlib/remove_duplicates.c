@@ -84,7 +84,10 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	    continue;
 	}
 
-	Vect_line_box(APoints, &ABox);
+	/* select potential duplicates */
+	ABox.E = ABox.W = APoints->x[0];
+	ABox.N = ABox.S = APoints->y[0];
+	ABox.T = ABox.B = APoints->z[0];
 	Vect_select_lines_by_box(Map, &ABox, type, List);
 	G_debug(3, "  %d lines selected by box", List->n_values);
 
