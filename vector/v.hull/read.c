@@ -82,7 +82,7 @@ static int cmp_int(const void *a, const void *b)
 /* parse filter options */
 /* return cat list or NULL */
 struct cat_list *parse_filter_options(struct Map_info *Map, int layer,
-                      char *where, char *cats)
+                      char *where, char *catstr)
 {
     struct cat_list *list = NULL;
 
@@ -94,7 +94,7 @@ struct cat_list *parse_filter_options(struct Map_info *Map, int layer,
 	
 	if (layer < 1)
 	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
-	if (cats)
+	if (catstr)
 	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
 
 	Fi = Vect_get_field(Map, layer);
@@ -139,15 +139,13 @@ struct cat_list *parse_filter_options(struct Map_info *Map, int layer,
 	
 	if (cats)
 	    G_free(cats);
-
-
     }
-    else if (cats) {
+    else if (catstr) {
 	if (layer < 1)
 	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", GV_KEY_COLUMN);
 	list = Vect_new_cat_list();
 
-	if (Vect_str_to_cat_list(cats, list) > 0) {
+	if (Vect_str_to_cat_list(catstr, list) > 0) {
 	    G_warning(_("Problem loading category values"));
 	}
     }
