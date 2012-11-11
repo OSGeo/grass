@@ -83,7 +83,7 @@ static int debug_level = -1;
 #if 0
 static int ident(double x1, double y1, double x2, double y2, double thresh);
 #endif
-static int cross_seg(int id, struct RTree_Rect rect, int *arg);
+static int cross_seg(int id, const struct RTree_Rect *rect, int *arg);
 static int find_cross(int id, const struct RTree_Rect *rect, int *arg);
 
 #define D  ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
@@ -182,8 +182,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
      *       Can it be a problem to set the tolerance to 0.0 ? */
     dtol = 0.0;
     if (fabs(d) > dtol) {
-	r1 = D1 / d;
-	r2 = D2 / d;
+	r1 = d1 / d;
+	r2 = d2 / d;
 
 	G_debug(2, " -> not parallel/collinear: r1 = %f, r2 = %f", r1, r2);
 
@@ -203,7 +203,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     /* segments are parallel or collinear */
     G_debug(3, " -> parallel/collinear");
 
-    if (D1 || D2) {		/* lines are parallel */
+    if (d1 || d2) {		/* lines are parallel */
 	G_debug(2, "  -> parallel");
 	return 0;
     }
@@ -542,7 +542,7 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
 static struct line_pnts *APnts, *BPnts;
 
 /* break segments (called by rtree search) */
-static int cross_seg(int id, struct RTree_Rect rect, int *arg)
+static int cross_seg(int id, const struct RTree_Rect *rect, int *arg)
 {
     double x1, y1, z1, x2, y2, z2;
     int i, j, ret;
@@ -693,6 +693,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 
     /* Create rtree for B line */
     MyRTree = RTreeCreateTree(-1, 0, 2);
+    RTreeSetOverflow(MyRTree, 0);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
@@ -767,6 +768,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     }
 
     /* Snap breaks to nearest vertices within RE threshold */
+    /* Calculate distances along segments */
     for (i = 0; i < n_cross; i++) {
 	/* 1. of A seg */
 	seg = cross[i].segment[0];
@@ -774,6 +776,8 @@ Vect_line_intersection(struct line_pnts *APoints,
 	    dist2(cross[i].x, cross[i].y, APoints->x[seg], APoints->y[seg]);
 	x = APoints->x[seg];
 	y = APoints->y[seg];
+
+	cross[i].distance[0] = curdist;
 
 	/* 2. of A seg */
 	dist =
@@ -789,12 +793,15 @@ Vect_line_intersection(struct line_pnts *APoints,
 	seg = cross[i].segment[1];
 	dist =
 	    dist2(cross[i].x, cross[i].y, BPoints->x[seg], BPoints->y[seg]);
+	cross[i].distance[1] = dist;
+
 	if (dist < curdist) {
 	    curdist = dist;
 	    x = BPoints->x[seg];
 	    y = BPoints->y[seg];
 	}
-	dist = dist2(cross[i].x, cross[i].y, BPoints->x[seg + 1], BPoints->y[seg + 1]);	/* 2. of B seg */
+	/* 2. of B seg */
+	dist = dist2(cross[i].x, cross[i].y, BPoints->x[seg + 1], BPoints->y[seg + 1]);
 	if (dist < curdist) {
 	    curdist = dist;
 	    x = BPoints->x[seg + 1];
@@ -803,17 +810,15 @@ Vect_line_intersection(struct line_pnts *APoints,
 	if (curdist < rethresh * rethresh) {
 	    cross[i].x = x;
 	    cross[i].y = y;
-	}
-    }
 
-    /* Calculate distances along segments */
-    for (i = 0; i < n_cross; i++) {
-	seg = cross[i].segment[0];
-	cross[i].distance[0] =
-	    dist2(APoints->x[seg], APoints->y[seg], cross[i].x, cross[i].y);
-	seg = cross[i].segment[1];
-	cross[i].distance[1] =
-	    dist2(BPoints->x[seg], BPoints->y[seg], cross[i].x, cross[i].y);
+	    /* Update distances along segments */
+	    seg = cross[i].segment[0];
+	    cross[i].distance[0] =
+		dist2(APoints->x[seg], APoints->y[seg], cross[i].x, cross[i].y);
+	    seg = cross[i].segment[1];
+	    cross[i].distance[1] =
+		dist2(BPoints->x[seg], BPoints->y[seg], cross[i].x, cross[i].y);
+	}
     }
 
     /* l = 1 ~ line A, l = 2 ~ line B */
@@ -1240,6 +1245,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 
     /* Create rtree for B line */
     MyRTree = RTreeCreateTree(-1, 0, 2);
+    RTreeSetOverflow(MyRTree, 0);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
