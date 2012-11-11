@@ -248,7 +248,7 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
     }
 
     /* R*-tree forced reinsertion: for each level only once */
-    memset(overflow, 1, MAXLEVEL);
+    memset(overflow, t->overflow, MAXLEVEL);
 
     result =
 	RTreeInsertRect2F(r, child, level, &newnode, &newnode_pos, t,
