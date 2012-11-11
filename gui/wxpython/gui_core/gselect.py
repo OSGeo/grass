@@ -329,11 +329,11 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                        'stvds':'stvds'}
         
         if element not in elementdict:
-            self.AddItem(_('Not selectable element'))
+            self.AddItem(_('Not selectable element'), node = False)
             return
         
         if element in ('stds', 'strds', 'str3ds', 'stvds'):
-            filesdict = tgis.tlist_grouped(elementdict[element])
+            filesdict = tgis.tlist_grouped(elementdict[element], element == 'stds')
         else:
             if globalvar.have_mlist:
                 filesdict = grass.mlist_grouped(elementdict[element],
@@ -353,7 +353,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         
         first_mapset = None
         for mapset in mapsets:
-            mapset_node = self.AddItem(_('Mapset') + ': ' + mapset)
+            mapset_node = self.AddItem(_('Mapset') + ': ' + mapset, node = True, mapset = mapset)
+            node = mapset_node
             if not first_mapset:
                 first_mapset = mapset_node
             
@@ -361,21 +362,18 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             if mapset not in filesdict:
                 continue
             try:
-                elem_list = filesdict[mapset]
-                elem_list.sort()
-                for elem in elem_list:
-                    if elem != '':
-                        fullqElem = elem + '@' + mapset
-                        if elements is not None:
-                            if (exclude and fullqElem in elements) or \
-                                    (not exclude and fullqElem not in elements):
-                                continue
-                        
-                        if self.filterElements:
-                            if self.filterElements(fullqElem):
-                                self.AddItem(elem, parent = mapset_node)
-                        else:
-                            self.AddItem(elem, parent = mapset_node)
+                if type(filesdict[mapset]) == dict:
+                    for elementType in filesdict[mapset].keys():
+                        node = self.AddItem(_('Type: ') + elementType, mapset = mapset,
+                                            node = True, parent = mapset_node)
+                        self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
+                        elem_list = filesdict[mapset][elementType]
+                        self._addItems(elist = elem_list, elements = elements,
+                                       mapset = mapset, exclude = exclude, node = node)
+                else:
+                    elem_list = filesdict[mapset]
+                    self._addItems(elist = elem_list, elements = elements,
+                                   mapset = mapset, exclude = exclude, node = node)
             except StandardError, e:
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
@@ -400,15 +398,39 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                     collapse = False
                 
                 if collapse:
-                    self.seltree.Collapse(mapset_node)
+                    self.seltree.CollapseAllChildren(mapset_node)
                 else:
-                    self.seltree.Expand(mapset_node)
+                    self.seltree.ExpandAllChildren(mapset_node)
         
         if first_mapset:
             # select first mapset (MSW hack)
             self.seltree.SelectItem(first_mapset)
     
     # helpers
+    def _addItems(self, elist, elements, mapset, exclude, node):
+        """!Helper function for adding multiple items (maps, stds).
+
+        @param elist list of map/stds names
+        @param elements list of forced elements
+        @param mapset mapset name
+        @param exclude True to exclude, False for forcing the list
+        @param node parent node
+        """
+        elist.sort()
+        for elem in elist:
+            if elem != '':
+                fullqElem = elem + '@' + mapset
+                if elements is not None:
+                    if (exclude and fullqElem in elements) or \
+                            (not exclude and fullqElem not in elements):
+                        continue
+                
+                if self.filterElements:
+                    if self.filterElements(fullqElem):
+                        self.AddItem(elem, mapset = mapset, node = False, parent = node)
+                else:
+                    self.AddItem(elem, mapset = mapset, node = False, parent = node)
+
     def FindItem(self, parentItem, text, startLetters = False):
         """!Finds item with given name or starting with given text"""
         startletters = startLetters
@@ -425,14 +447,15 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             item, cookie = self.seltree.GetNextChild(parentItem, cookie)
         return wx.TreeItemId()
     
-    def AddItem(self, value, parent=None):
+    def AddItem(self, value, mapset = None, node = True, parent = None):
         if not parent:
             root = self.seltree.GetRootItem()
             if not root:
                 root = self.seltree.AddRoot("<hidden root>")
             parent = root
 
-        item = self.seltree.AppendItem(parent, text=value)
+        data = {'node': node, 'mapset': mapset}
+        item = self.seltree.AppendItem(parent, text = value, data = wx.TreeItemData(data))
         return item
     
     # able to recieve only wx.EVT_KEY_UP
@@ -482,13 +505,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.Dismiss()
             
         elif event.GetKeyCode() == wx.WXK_RETURN:
-            if self.seltree.GetRootItem() == self.seltree.GetItemParent(item):
-                self.value = [] 
+            if self.seltree.GetPyData(item)['node']:
+                self.value = []
             else:
-                mapsetItem = self.seltree.GetItemParent(item)
                 fullName = self.seltree.GetItemText(item)
                 if self.fullyQualified:
-                    fullName += '@' + self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
+                    fullName += '@' + self.seltree.GetPyData(item)['mapset']
                 
                 if self.multiple:
                     self.value.append(fullName)
@@ -519,14 +541,13 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
             self.curitem = item
             
-            if self.seltree.GetRootItem() == self.seltree.GetItemParent(item):
+            if self.seltree.GetPyData(item)['node']:
                 evt.Skip()
                 return
             
-            mapsetItem = self.seltree.GetItemParent(item)
             fullName = self.seltree.GetItemText(item)
             if self.fullyQualified:
-                fullName += '@' + self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
+                fullName += '@' + self.seltree.GetPyData(item)['mapset']
             
             if self.multiple:
                 self.value.append(fullName)

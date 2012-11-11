@@ -729,7 +729,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
 
 ###############################################################################
 
-def tlist_grouped(type):
+def tlist_grouped(type, group_type = False):
     """!List of temporal elements grouped by mapsets.
 
     Returns a dictionary where the keys are mapset 
@@ -765,11 +765,20 @@ def tlist_grouped(type):
             except ValueError:
                 warning(_("Invalid element '%s'") % line)
                 continue
-            
-            if mapset in result:
+
+            if mapset not in result:
+                if group_type:
+                    result[mapset] = {}
+                else:
+                    result[mapset] = []
+
+            if group_type:
+                if type in result[mapset]:
+                    result[mapset][type].append(name)
+                else:        
+                    result[mapset][type] = [name, ]
+            else:
                 result[mapset].append(name)
-            else:        
-                result[mapset] = [name, ]
 
     return result
 
