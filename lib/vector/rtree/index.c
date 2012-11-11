@@ -95,6 +95,9 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     n = RTreeAllocNode(new_rtree, 0);
     new_rtree->rootlevel = n->level = 0;       /* leaf */
     new_rtree->root = NULL;
+    
+    /* use overflow by default */
+    new_rtree->overflow = 1;
 
     if (fd > -1) {  /* file based */
 	/* nodecard and leafcard can be adjusted, must NOT be larger than MAXCARD */
@@ -179,6 +182,24 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     new_rtree->center_n = (RectReal *)malloc(new_rtree->ndims_alloc * sizeof(RectReal));
 
     return new_rtree;
+}
+
+/*!
+  \brief Enable/disable R*-tree forced reinsertion (overflow)
+
+  For dynamic R*-trees with runtime insertion and deletion, 
+  forced reinsertion results in a more compact tree, searches are a bit
+  faster. For static R*-trees (no insertion/deletion after creation)
+  forced reinsertion can be disabled at the cost of slower searches.
+
+  \param t pointer to RTree structure
+  \param overflow binary flag
+
+  \return nothing
+*/
+void RTreeSetOverflow(struct RTree *t, char overflow)
+{
+    t->overflow = overflow != 0;
 }
 
 /*!

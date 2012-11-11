@@ -145,6 +145,7 @@ struct RTree
     int min_leaf_fill;      /* balance criteria for leaf removal */
     int minfill_node_split; /* balance criteria for splitting */
     int minfill_leaf_split; /* balance criteria for splitting */
+    char overflow;	    /* enable/disable overflow */
     
     /* free node positions for recycling */
     struct _recycle {
@@ -211,6 +212,7 @@ void RTreeSetRect4D(struct RTree_Rect *r, struct RTree *t, double x_min,
 int RTreeDeleteRect(struct RTree_Rect *, int, struct RTree *);
 void RTreePrintRect(struct RTree_Rect *, int, struct RTree *);
 struct RTree *RTreeCreateTree(int, off_t, int);
+void RTreeSetOverflow(struct RTree *, char);
 void RTreeDestroyTree(struct RTree *);
 int RTreeOverlap(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 int RTreeContained(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
