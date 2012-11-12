@@ -7,6 +7,7 @@ Created on Thu Jul 12 10:23:15 2012
 """
 from __future__ import print_function
 import subprocess
+import fnmatch
 
 try:
     from collections import OrderedDict
@@ -508,10 +509,17 @@ class Module(object):
             self.popen.wait()
             self.stdout, self.stderr = self.popen.communicate()
 
+_CMDS = list(grass.script.core.get_commands()[0])
+_CMDS.sort()
+
 
 class MetaModule(object):
     def __init__(self, prefix):
         self.prefix = prefix
+
+    def __dir__(self):
+        return [mod[(len(self.prefix) + 1):].replace('.', '_')
+                for mod in fnmatch.filter(_CMDS, "%s.*" % self.prefix)]
 
     def __getattr__(self, name):
         return Module('%s.%s' % (self.prefix, name.replace('_', '.')))
