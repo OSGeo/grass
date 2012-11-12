@@ -507,3 +507,37 @@ class Module(object):
         if self.finish_:
             self.popen.wait()
             self.stdout, self.stderr = self.popen.communicate()
+
+
+class MetaModule(object):
+    def __init__(self, prefix):
+        self.prefix = prefix
+
+    def __getattr__(self, name):
+        return Module('%s.%s' % (self.prefix, name.replace('_', '.')))
+
+
+# http://grass.osgeo.org/grass70/manuals/html70_user/full_index.html
+#[ d.* | db.* | g.* | i.* | m.* | ps.* | r.* | r3.* | t.* | v.* ]
+#
+#  d.*	display commands
+#  db.*	database commands
+#  g.*	general commands
+#  i.*	imagery commands
+#  m.*	miscellaneous commands
+#  ps.*	postscript commands
+#  r.*	raster commands
+#  r3.*	raster3D commands
+#  t.*	temporal commands
+#  v.*	vector commands
+
+display = MetaModule('d')
+database = MetaModule('db')
+general = MetaModule('g')
+imagery = MetaModule('i')
+miscellaneous = MetaModule('m')
+postscript = MetaModule('ps')
+raster = MetaModule('r')
+raster3D = MetaModule('r3')
+temporal = MetaModule('t')
+vector = MetaModule('v')
