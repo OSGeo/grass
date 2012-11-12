@@ -14,9 +14,9 @@ from vector_type import VTYPE, GV_TYPE
 #
 from pygrass.errors import GrassError
 
-from basic import Bbox
 import geometry
 from abstract import Info
+from basic import Bbox
 
 import grass.script.core as core
 _GRASSENV = core.gisenv()
@@ -27,8 +27,8 @@ _NUMOF = {"areas": libvect.Vect_get_num_areas,
           "holes": libvect.Vect_get_num_holes,
           "islands": libvect.Vect_get_num_islands,
           "kernels": libvect.Vect_get_num_kernels,
-          "line_points": libvect.Vect_get_num_line_points,
-          "lines": libvect.Vect_get_num_lines,
+          "lines": libvect.Vect_get_num_line_points,
+          "points": libvect.Vect_get_num_lines,
           "nodes": libvect.Vect_get_num_nodes,
           "updated_lines": libvect.Vect_get_num_updated_lines,
           "updated_nodes": libvect.Vect_get_num_updated_nodes,
@@ -41,7 +41,8 @@ _GEOOBJ = {"areas": geometry.Area,
            "islands": geometry.Isle,
            "kernels": None,
            "line_points": None,
-           "lines": geometry.Boundary,
+           "points": geometry.Point,
+           "lines": geometry.Line,
            "nodes": geometry.Node,
            "volumes": None}
 
@@ -125,12 +126,9 @@ class Vector(Info):
                                      c_points=c_points,
                                      c_cats=c_cats)
 
-    def bbox(self):
-        """Return the BBox of the vecor map
-        """
-        bbox = Bbox()
-        libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox)
-        return bbox
+    def rewind(self):
+        if libvect.Vect_rewind(self.c_mapinfo) == -1:
+            raise GrassError("Vect_rewind raise an error.")
 
     def write(self, geo_obj):
         """::
@@ -388,3 +386,11 @@ class VectorTopo(Vector):
                 raise GrassError("C funtion: Vect_restore_line.")
         else:
             raise ValueError("The value have not an offset attribute.")
+
+    def bbox(self):
+        """Return the BBox of the vecor map
+        """
+        bbox = Bbox()
+        if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
+            raise GrassError("I can not find the Bbox.")
+        return bbox

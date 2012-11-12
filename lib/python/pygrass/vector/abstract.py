@@ -226,7 +226,8 @@ class Info(object):
             return False
 
     def is_open(self):
-        return bool(self.c_mapinfo.contents.open)
+        return (self.c_mapinfo.contents.open != 0 and
+                self.c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE)
 
     def open(self, mode='r', layer='0', overwrite=None):
         """::
@@ -239,7 +240,6 @@ class Info(object):
 
         ..
         """
-        print "Sto aprendo..."
         # check if map exists or not
         if not self.exist() and mode != 'w':
             raise OpenError("Map <%s> not found." % self._name)
@@ -265,7 +265,7 @@ class Info(object):
         # initialize the dblinks object
         self.dblinks = DBlinks(self.c_mapinfo)
         # check the C function result.
-        if openvect != self._topo_level:
+        if openvect == -1:
             str_err = "Not able to open the map, C function return %d."
             raise OpenError(str_err % openvect)
 
@@ -282,6 +282,15 @@ class Info(object):
         env.remove(vect=self.name)
 
     def build(self):
-        """Build vector Topology"""
-        #TODO: Add function
-        pass
+        """Close the vector map and build vector Topology"""
+        self.close()
+        libvect.Vect_set_open_level(1)
+        if libvect.Vect_open_old2(self.c_mapinfo, self.name,
+                                  self.mapset, '0') != 1:
+            str_err = 'Error when trying to open the vector map.'
+            raise GrassError(str_err)
+        # Vect_build returns 1 on success and 0 on error (bool approach)
+        if libvect.Vect_build(self.c_mapinfo) != 1:
+            str_err = 'Error when trying build topology with Vect_build'
+            raise GrassError(str_err)
+        libvect.Vect_close(self.c_mapinfo)

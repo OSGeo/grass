@@ -174,11 +174,15 @@ class Point(Geo):
 
     ..
     """
-    def __init__(self, x=0, y=0, z=None, **kargs):
+    def __init__(self, x=0, y=0, z=None, is2D=True, **kargs):
         super(Point, self).__init__(**kargs)
-        self.is2D = True if z is None else False
-        z = z if z is not None else 0
-        libvect.Vect_append_point(self.c_points, x, y, z)
+        if self.id is not None:
+            self.read()
+            self.is2D = is2D
+        else:
+            self.is2D = True if z is None else False
+            z = z if z is not None else 0
+            libvect.Vect_append_point(self.c_points, x, y, z)
 
         # geometry type
         self.gtype = libvect.GV_POINT
