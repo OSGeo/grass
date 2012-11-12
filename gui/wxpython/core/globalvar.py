@@ -28,21 +28,22 @@ ETCSYMBOLDIR = os.path.join(ETCDIR, "gui", "images", "symbols")
 from core.debug import Debug
 
 sys.path.append(os.path.join(ETCDIR, "python"))
-import grass.script as grass
+from grass.script.core import get_commands
+
 
 def CheckWxVersion(version = [2, 8, 11, 0]):
     """!Check wx version"""
     ver = wx.version().split(' ')[0]
     if map(int, ver.split('.')) < version:
         return False
-    
+
     return True
 
 def CheckForWx():
     """!Try to import wx module and check its version"""
     if 'wx' in sys.modules.keys():
         return
-    
+
     minVersion = [2, 8, 1, 1]
     try:
         try:
@@ -53,7 +54,7 @@ def CheckForWx():
         wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
         import wx
         version = wx.version().split(' ')[0]
-        
+
         if map(int, version.split('.')) < minVersion:
             raise ValueError('Your wxPython version is %s.%s.%s.%s' % tuple(version.split('.')))
 
@@ -67,7 +68,7 @@ def CheckForWx():
     except locale.Error, e:
         print >> sys.stderr, "Unable to set locale:", e
         os.environ['LC_ALL'] = ''
-    
+
 if not os.getenv("GRASS_WXBUNDLED"):
     CheckForWx()
 import wx
@@ -84,7 +85,7 @@ QUERYLAYER = 'qlayer'
 FNPageStyle = FN.FNB_VC8 | \
     FN.FNB_BACKGROUND_GRADIENT | \
     FN.FNB_NODRAG | \
-    FN.FNB_TABS_BORDER_SIMPLE 
+    FN.FNB_TABS_BORDER_SIMPLE
 
 FNPageDStyle = FN.FNB_FANCY_TABS | \
     FN.FNB_BOTTOM | \
@@ -110,49 +111,6 @@ if sys.platform == 'win32':
 else:
     BIN_EXT = SCT_EXT = ''
 
-def GetGRASSCommands():
-    """!Create list of available GRASS commands to use when parsing
-    string from the command line
-
-    @return list of commands (set) and directory of scripts (collected
-    by extension - MS Windows only)
-    """
-    gisbase = os.environ['GISBASE']
-    cmd = list()
-    if sys.platform == 'win32':
-        scripts = { SCT_EXT : list() }
-    else:
-        scripts = {}
-    
-    # scan bin/
-    if os.path.exists(os.path.join(gisbase, 'bin')):
-        for fname in os.listdir(os.path.join(gisbase, 'bin')):
-            if scripts: # win32
-                name, ext = os.path.splitext(fname)
-                if ext != '.manifest':
-                    cmd.append(name)
-                if ext in scripts.keys():
-                    scripts[ext].append(name)
-            else:
-                cmd.append(fname)
-    
-    # scan scripts/
-    if os.path.exists(os.path.join(gisbase, 'scripts')):
-        for fname in os.listdir(os.path.join(gisbase, 'scripts')):
-            if scripts: # win32
-                name, ext = os.path.splitext(fname)
-                if ext in scripts.keys():
-                    scripts[ext].append(name)
-                cmd.append(name)
-            else:
-                cmd.append(fname)
-    
-    # scan gui/scripts/
-    if os.path.exists(os.path.join(gisbase, 'etc', 'gui', 'scripts')):
-        os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
-        cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
-    
-    return set(cmd), scripts
 
 def UpdateGRASSAddOnCommands(eList = None):
     """!Update list of available GRASS AddOns commands to use when
@@ -161,14 +119,14 @@ def UpdateGRASSAddOnCommands(eList = None):
     @param eList list of AddOns commands to remove
     """
     global grassCmd, grassScripts
-    
+
     # scan addons (path)
     addonPath = os.getenv('GRASS_ADDON_PATH', '')
     addonBase = os.getenv('GRASS_ADDON_BASE')
     if addonBase:
         addonPath += os.pathsep + os.path.join(addonBase, 'bin') + os.pathsep + \
             os.path.join(addonBase, 'scripts')
-        
+
     # remove commands first
     if eList:
         for ext in eList:
@@ -201,11 +159,11 @@ def UpdateGRASSAddOnCommands(eList = None):
                     grassCmd.add(fname)
                     Debug.msg(3, "AddOn commands: %s", fname)
                     nCmd += 1
-                    
+
     Debug.msg(1, "Number of new AddOn commands: %d", nCmd)
 
 """@brief Collected GRASS-relared binaries/scripts"""
-grassCmd, grassScripts = GetGRASSCommands()
+grassCmd, grassScripts = get_commands()
 Debug.msg(1, "Number of GRASS commands: %d", len(grassCmd))
 UpdateGRASSAddOnCommands()
 
