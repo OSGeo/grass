@@ -115,7 +115,7 @@ def get_commands():
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
         if os.path.exists(dir_path):
-            for fname in os.listdir(os.path.join(gisbase, 'bin')):
+            for fname in os.listdir(os.path.join(gisbase, directory)):
                 if scripts:  # win32
                     name, ext = os.path.splitext(fname)
                     if ext != '.manifest':
