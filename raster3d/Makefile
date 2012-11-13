@@ -10,6 +10,7 @@ SUBDIRS = \
 	r3.mkdspf \
 	r3.null \
 	r3.out.ascii \
+	r3.out.bin \
 	r3.out.netcdf \
 	r3.out.v5d \
 	r3.out.vtk \
