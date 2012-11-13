@@ -1833,7 +1833,7 @@ class WriteModelFile:
                                   (' ' * self.indent, values['value']))
             if 'description' in values:
                 self.fd.write('%s<description>%s</description>\n' % \
-                                  (' ' * self.indent, values['description']))
+                                  (' ' * self.indent, EncodeString(values['description'])))
             self.indent -= 4
             self.fd.write('%s</variable>\n' % (' ' * self.indent))
         self.indent -= 4
