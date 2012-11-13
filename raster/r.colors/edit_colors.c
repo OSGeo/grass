@@ -68,11 +68,23 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     if (type == RASTER3D_TYPE) {
         opt.maps = G_define_standard_option(G_OPT_R3_MAPS);
-        opt.maps->required = NO;
     } else {
         opt.maps = G_define_standard_option(G_OPT_R_MAPS);
-        opt.maps->required = NO;
     }
+    opt.maps->required = NO;
+    opt.maps->guisection = _("Define");
+
+    opt.file = G_define_standard_option(G_OPT_F_INPUT);
+    opt.file->key = "file";
+    opt.file->required = NO;
+    opt.file->label =
+        _("Input file with one map name per line");
+    opt.file->description =
+        _("Input map names can be defined in an input file in case a large"
+        		" amount of maps must be specified. This option is mutual"
+        		" exclusive to the map option.");
+    opt.file->required = NO;
+    opt.file->guisection = _("Define");
 
     opt.colr = G_define_standard_option(G_OPT_M_COLR);
     opt.colr->guisection = _("Define");
@@ -83,12 +95,6 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     opt.rast->description =
         _("Raster map from which to copy color table");
     opt.rast->guisection = _("Define");
-
-    opt.file = G_define_standard_option(G_OPT_F_INPUT);
-    opt.file->key = "file";
-    opt.file->required = NO;
-    opt.file->description =
-        _("Input file with one map name per line");
 
     opt.volume = G_define_standard_option(G_OPT_R3_INPUT);
     opt.volume->key = "volume";
