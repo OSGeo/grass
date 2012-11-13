@@ -309,19 +309,23 @@ class PsMapFrame(wx.Frame):
         # show preview only when user doesn't want to create ps or pdf 
         if havePILImage and event.userData['temp'] and not event.userData['pdfname']:
             RunCommand('g.region', cols = event.userData['regionOld']['cols'], rows = event.userData['regionOld']['rows'])
-## wx.BusyInfo does not display the message
-##            busy = wx.BusyInfo(message = "Generating preview, wait please", parent = self)
-
+            # wx.BusyInfo does not display the message
+            busy = wx.BusyInfo(message = _("Generating preview, wait please"), parent = self)
+            wx.Yield()
             try:
                 im = PILImage.open(event.userData['filename'])
                 if self.instruction[self.pageId]['Orientation'] == 'Landscape':
                     im = im.rotate(270)
-                
+
+                # hack for Windows, change method for loading EPS
+                if sys.platform == 'win32':
+                    im.load = loadPSForWindows(im)
                 im.save(self.imgName, format = 'PNG')
                 
             except IOError, e:
                 GError(parent = self,
                        message = _("Unable to generate preview. %s") % e)
+                del busy
                 return
             
                 
@@ -329,7 +333,7 @@ class PsMapFrame(wx.Frame):
             self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
             self.previewCanvas.DrawImage(rect = rect)
             
-##            busy.Destroy()
+            del busy
             self.SetStatusText(_('Preview generated'), 0)
             self.book.SetSelection(1)
             self.currentPage = 1
@@ -337,7 +341,7 @@ class PsMapFrame(wx.Frame):
         grass.try_remove(event.userData['instrFile'])
         if event.userData['temp']:
             grass.try_remove(event.userData['filename'])
-        
+
     def getFile(self, wildcard):
         suffix = []
         for filter in wildcard.split('|')[1::2]:
@@ -2161,6 +2165,62 @@ class PsMapBufferedWindow(wx.Window):
         return wx.Rect(rect.GetLeft()*scale, rect.GetTop()*scale,
                        rect.GetSize()[0]*scale, rect.GetSize()[1]*scale)   
     
+
+# hack for Windows, loading EPS works only on Unix
+# these functions are taken from EpsImagePlugin.py
+def loadPSForWindows(self):
+    # Load EPS via Ghostscript
+    if not self.tile:
+        return
+    self.im = GhostscriptForWindows(self.tile, self.size, self.fp)
+    self.mode = self.im.mode
+    self.size = self.im.size
+    self.tile = []
+
+def GhostscriptForWindows(tile, size, fp):
+    """Render an image using Ghostscript (Windows only)"""
+    # Unpack decoder tile
+    decoder, tile, offset, data = tile[0]
+    length, bbox = data
+
+    import tempfile, os
+
+    file = tempfile.mktemp()
+
+    # Build ghostscript command - for Windows
+    command = ["gs",
+               "-q",                    # quite mode
+               "-g%dx%d" % size,        # set output geometry (pixels)
+               "-dNOPAUSE -dSAFER",     # don't pause between pages, safe mode
+               "-sDEVICE=ppmraw",       # ppm driver
+               "-sOutputFile=%s" % file # output file
+              ]
+
+    command = string.join(command)
+
+    # push data through ghostscript
+    try:
+        gs = os.popen(command, "w")
+        # adjust for image origin
+        if bbox[0] != 0 or bbox[1] != 0:
+            gs.write("%d %d translate\n" % (-bbox[0], -bbox[1]))
+        fp.seek(offset)
+        while length > 0:
+            s = fp.read(8192)
+            if not s:
+                break
+            length = length - len(s)
+            gs.write(s)
+        status = gs.close()
+        if status:
+            raise IOError("gs failed (status %d)" % status)
+        im = Image.core.open_ppm(file)
+    finally:
+        try: os.unlink(file)
+        except: pass
+
+    return im
+
 def main():
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
