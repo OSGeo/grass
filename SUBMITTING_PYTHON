@@ -8,6 +8,7 @@ care of following rules:
 [ see SUBMITTING      for C hints ]
 [ see SUBMITTING_DOCS for documentation ]
 
+See also http://www.python.org/dev/peps/pep-0008/
 
 0.  Indentation
 
@@ -19,9 +20,11 @@ care of following rules:
     See also "Python Style Guide" by Guido van Rossum
     http://www.python.org/doc/essays/styleguide.html
 
+
 1.  Instructions for the GRASS script parser can be found in the g.parser 
     module's help page.
     http://grass.osgeo.org/grass70/manuals/html70_user/g.parser.html
+
 
 2.  Use the directory structure to place your script appropriately into
     the source tree
@@ -29,6 +32,7 @@ care of following rules:
 
     Also add a Makefile and a <module>.html file into this directory.
     See existing Python scripts for examples.
+
 
 3.  Add a header section to the script you submit and make sure you
     include the copyright. The purpose section is meant to contain a
@@ -64,8 +68,10 @@ COPYRIGHT: (C) 2007 John Doe, and by the GRASS Development Team
     Just select an existing module which is close to your application to save
     efforts.
 
+
 4.  We don't want the $ ID $ in source code any more as it causes problems
     for the branches.
+
 
 5.  Create and use secure temporary files and directories. Use the
     grass.tempfile() or grass.tempdir() functions to do this. e.g.
@@ -75,6 +81,7 @@ COPYRIGHT: (C) 2007 John Doe, and by the GRASS Development Team
 	if TMP is None:
 	    grass.fatal("Unable to create temporary files")
 	    
+
 6.  Use grass.findfile() when there is a need to test if a map exists.
 
 	# test for input raster map
@@ -110,6 +117,7 @@ COPYRIGHT: (C) 2007 John Doe, and by the GRASS Development Team
         grass.debug("Our calculated value is: %d" % value)
 
     Try to omit any usage of the 'print' command for informational output.
+
 
 8.  PLEASE take the time to add comments throughout your code explaining what
     the code is doing. It will save a HUGE amount of time and frustration for
