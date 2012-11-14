@@ -310,6 +310,13 @@
               <command>r3.in.ascii</command>
             </menuitem>
             <menuitem>
+              <label>Raw binary array 3D import</label>
+              <help>Import a binary raster file into a GRASS 3D raster map.</help>
+              <keywords>raster3d,import</keywords>
+              <handler>OnMenuCmd</handler>
+              <command>r3.in.bin</command>
+            </menuitem>
+            <menuitem>
               <label>Vis5D import</label>
               <help>Import 3-dimensional Vis5D files.</help>
               <keywords>raster3d,voxel</keywords>
@@ -516,6 +523,13 @@
               <keywords>raster3d,voxel,export</keywords>
               <handler>OnMenuCmd</handler>
               <command>r3.out.ascii</command>
+            </menuitem>
+            <menuitem>
+              <label>Raw binary array 3D export</label>
+              <help>Exports a GRASS 3D raster map to a binary array.</help>
+              <keywords>raster3d,export</keywords>
+              <handler>OnMenuCmd</handler>
+              <command>r3.out.bin</command>
             </menuitem>
             <menuitem>
               <label>Vis5D export</label>
