@@ -493,7 +493,7 @@ def CmdToTuple(cmd):
     """!Convert command list to tuple for gcmd.RunCommand()"""
     if len(cmd) < 1:
         return None
-        
+    
     dcmd = {}
     for item in cmd[1:]:
         if '=' in item: # params
@@ -503,13 +503,15 @@ def CmdToTuple(cmd):
             flag = item[2:]
             if flag in ('verbose', 'quiet', 'overwrite'):
                 dcmd[str(flag)] = True
-        else: # -> flags
+        elif len(item) == 2 and item[0] == '-': # -> flags
             if 'flags' not in dcmd:
                 dcmd['flags'] = ''
-            dcmd['flags'] += item.replace('-', '')
-                
-    return (cmd[0],
-            dcmd)
+            dcmd['flags'] += item[1]
+        else: # unnamed parameter
+            module = gtask.parse_interface(cmd[0])
+            dcmd[module.define_first()] = item
+    
+    return (cmd[0], dcmd)
 
 def PathJoin(*args):
     """!Check path created by os.path.join"""

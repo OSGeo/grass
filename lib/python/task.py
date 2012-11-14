@@ -73,10 +73,14 @@ class grassTask:
         
     def define_first(self):
         """!Define first parameter
+
+        @return name of first parameter
         """
         if len(self.params) > 0:
             self.firstParam = self.params[0]['name']
         
+        return self.firstParam
+    
     def get_error_msg(self):
         """!Get error message ('' for no error)
         """

@@ -151,10 +151,10 @@ class Layer(object):
                                       quiet = True,
                                       **self.cmd[1])
                 
-            if msg:
-                sys.stderr.write(_("Command '%s' failed\n") % self.GetCmd(string = True))
-                sys.stderr.write(_("Details: %s\n") % msg)
             if ret != 0:
+                sys.stderr.write(_("Command '%s' failed\n") % self.GetCmd(string = True))
+                if msg:
+                    sys.stderr.write(_("Details: %s\n") % msg)
                 raise GException()
         
         except GException:
@@ -277,7 +277,7 @@ class Layer(object):
             for c in cmd:
                 self.cmd.append(utils.CmdToTuple(c))
         else:
-            self.cmd  = utils.CmdToTuple(cmd)
+            self.cmd = utils.CmdToTuple(cmd)
         Debug.msg(3, "Layer.SetCmd(): cmd='%s'" % self.GetCmd(string = True))
         
         # for re-rendering
