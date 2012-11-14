@@ -1228,16 +1228,17 @@ class GMFrame(wx.Frame):
                                        'loc' : grass.gisenv()["LOCATION_NAME"] })
         dlg.Destroy()
         
-    def RulesCmd(self, event, cmd = None):
-        """!Launches dialog for commands that need rules input and
-        processes rules
+    def OnRasterRules(self, event):
+        """!Launches dialog for raster color rules
         """
-        cmd = self.GetMenuCmd(event)
-        
-        if cmd[0] == 'r.colors':
-            ctable = RasterColorTable(self)
-        else:
-            ctable = VectorColorTable(self, attributeType = 'color')
+        ctable = RasterColorTable(self)
+        ctable.CentreOnScreen()
+        ctable.Show()
+
+    def OnVectorRules(self, event):
+        """!Launches dialog for vector color rules
+        """
+        ctable = VectorColorTable(self, attributeType = 'color')
         ctable.CentreOnScreen()
         ctable.Show()
         

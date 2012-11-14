@@ -1066,7 +1066,7 @@
               <label>Create color rules</label>
               <help>Interactive management of raster color tables.</help>
               <keywords>raster,color table</keywords>
-              <handler>RulesCmd</handler>
+              <handler>OnRasterRules</handler>
             </menuitem>
             <menuitem>
               <label>Export color table</label>
@@ -2134,9 +2134,8 @@
             <menuitem>
               <label>Color rules</label>
               <help>Interactive management of vector color tables.</help>
-              <handler>RulesCmd</handler>
+              <handler>OnVectorRules</handler>
               <keywords>vector,color table</keywords>
-              <command>v.colors</command>
             </menuitem>
             <menuitem>
               <label>Export color table</label>
