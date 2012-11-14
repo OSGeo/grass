@@ -173,7 +173,7 @@
             <menuitem>
               <label>Terra ASTER HDF import</label>
               <help>Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp.</help>
-              <keywords>raster,imagery,import</keywords>
+              <keywords>raster,import,imagery,Terra-ASTER</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.in.aster</command>
             </menuitem>
@@ -249,7 +249,7 @@
             <separator />
             <menuitem>
               <label>WFS</label>
-              <help>Imports GetFeature from WFS.</help>
+              <help>Imports GetFeature from a WFS server.</help>
               <keywords>vector,import,wfs</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.in.wfs</command>
@@ -293,7 +293,7 @@
             <menuitem>
               <label>LAS LiDAR points import</label>
               <help>Converts LAS LiDAR point clouds to a GRASS vector map with libLAS.</help>
-              <keywords>vector,import</keywords>
+              <keywords>vector,import,LIDAR</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.in.lidar</command>
             </menuitem>
@@ -644,14 +644,14 @@
             <menuitem>
               <label>Raster series to volume</label>
               <help>Converts 2D raster map slices to one 3D raster volume map.</help>
-              <keywords>raster,volume,conversion</keywords>
+              <keywords>raster,conversion,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.to.rast3</command>
             </menuitem>
             <menuitem>
               <label>Raster 2.5D to volume</label>
               <help>Creates a 3D volume map based on 2D elevation and value raster maps.</help>
-              <keywords>raster,raster3d,voxel,conversion</keywords>
+              <keywords>raster,conversion,raster3d,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.to.rast3elev</command>
             </menuitem>
@@ -659,14 +659,14 @@
             <menuitem>
               <label>Vector to raster</label>
               <help>Converts (rasterize) a vector map into a raster map.</help>
-              <keywords>vector,raster,conversion,rasterization</keywords>
+              <keywords>vector,conversion,raster,rasterization</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.to.rast</command>
             </menuitem>
             <menuitem>
               <label>Vector to volume</label>
               <help>Converts a vector map (only points) into a 3D raster map.</help>
-              <keywords>vector,volume,conversion</keywords>
+              <keywords>vector,conversion,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.to.rast3</command>
             </menuitem>
@@ -688,7 +688,7 @@
             <menuitem>
               <label>Volume to raster series</label>
               <help>Converts 3D raster maps to 2D raster maps</help>
-              <keywords>raster3d,raster,voxel</keywords>
+              <keywords>raster3d,conversion,raster,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>r3.to.rast</command>
             </menuitem>
@@ -715,7 +715,7 @@
         <menuitem>
           <label>3D image rendering</label>
           <help>Creates a 3D rendering of GIS data.</help>
-          <keywords>visualization,raster,vector,raster3d</keywords>
+          <keywords>visualization,graphics,raster,vector,raster3d</keywords>
           <handler>OnMenuCmd</handler>
           <command>m.nviz.image</command>
         </menuitem>
@@ -737,7 +737,7 @@
         <menuitem>
           <label>Cartographic Composer</label>
           <help>Launch Cartographic Composer</help>
-          <keywords>postscript,map,printing</keywords>
+          <keywords>postscript,printing</keywords>
           <handler>OnPsMap</handler>
           <command>ps.map</command>
         </menuitem>
@@ -1001,7 +1001,7 @@
             </menuitem>
             <menuitem>
               <label>Resample using bspline</label>
-              <help>Bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
+              <help>Performs bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
               <keywords>raster,surface,resample,interpolation</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.resamp.bspline</command>
@@ -1079,7 +1079,7 @@
             <menuitem>
               <label>Blend 2 color rasters</label>
               <help>Blends color components of two raster maps by a given ratio.</help>
-              <keywords>raster</keywords>
+              <keywords>raster,composite</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.blend</command>
             </menuitem>
@@ -1105,7 +1105,7 @@
         <menuitem>
           <label>Query values by coordinates</label>
           <help>Queries raster maps on their category values and category labels.</help>
-          <keywords>raster,position,querying</keywords>
+          <keywords>raster,querying,position</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.what</command>
         </menuitem>
@@ -1131,14 +1131,14 @@
             <menuitem>
               <label>Raster series to volume</label>
               <help>Converts 2D raster map slices to one 3D raster volume map.</help>
-              <keywords>raster,volume,conversion</keywords>
+              <keywords>raster,conversion,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.to.rast3</command>
             </menuitem>
             <menuitem>
               <label>Raster 2.5D to volume</label>
               <help>Creates a 3D volume map based on 2D elevation and value raster maps.</help>
-              <keywords>raster,raster3d,voxel,conversion</keywords>
+              <keywords>raster,conversion,raster3d,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.to.rast3elev</command>
             </menuitem>
@@ -1147,7 +1147,7 @@
         <separator />
         <menuitem>
           <label>Buffer rasters</label>
-          <help>Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.</help>
+          <help>Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values.</help>
           <keywords>raster,buffer</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.buffer</command>
@@ -1186,14 +1186,14 @@
             <menuitem>
               <label>Moving window</label>
               <help>Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer.</help>
-              <keywords>raster,algebra,statistics</keywords>
+              <keywords>raster,algebra,statistics,aggregation</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.neighbors</command>
             </menuitem>
             <menuitem>
               <label>Neighborhood points</label>
               <help>Neighborhood analysis tool for vector point maps.</help>
-              <keywords>vector,raster,aggregation</keywords>
+              <keywords>vector,algebra,statistics,raster,aggregation</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.neighbors</command>
             </menuitem>
@@ -1212,7 +1212,7 @@
             <menuitem>
               <label>Raster series</label>
               <help>Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers.</help>
-              <keywords>raster,series</keywords>
+              <keywords>raster,aggregation,series</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.series</command>
             </menuitem>
@@ -1246,14 +1246,14 @@
             <menuitem>
               <label>Solar irradiance and irradiation</label>
               <help>Solar irradiance and irradiation model.</help>
-              <keywords>raster,sun energy</keywords>
+              <keywords>raster,solar,sun energy</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.sun</command>
             </menuitem>
             <menuitem>
               <label>Shadows map</label>
               <help>Calculates cast shadow areas from sun position and elevation raster map.</help>
-              <keywords>raster,sun position</keywords>
+              <keywords>raster,solar,sun position</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.sunmask</command>
             </menuitem>
@@ -1265,7 +1265,7 @@
             <menuitem>
               <label>Generate contour lines</label>
               <help>Produces a vector map of specified contours from a raster map.</help>
-              <keywords>raster,DEM,contours,vector</keywords>
+              <keywords>raster,surface,contours,vector</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.contour</command>
             </menuitem>
@@ -1294,7 +1294,7 @@
             <menuitem>
               <label>Shaded relief</label>
               <help>Creates shaded relief map from an elevation map (DEM).</help>
-              <keywords>raster,elevation</keywords>
+              <keywords>raster,terrain</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.shaded.relief2</command>
             </menuitem>
@@ -1346,7 +1346,7 @@
             <menuitem>
               <label>Horizon angle</label>
               <help>Horizon angle computation from a digital elevation model.</help>
-              <keywords>raster,sun position</keywords>
+              <keywords>raster,solar,sun position</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.horizon</command>
             </menuitem>
@@ -1492,7 +1492,7 @@
         <menuitem>
           <label>Groundwater flow</label>
           <help>Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.</help>
-          <keywords>raster,groundwater flow</keywords>
+          <keywords>raster,groundwater flow,hydrology</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.gwflow</command>
         </menuitem>
@@ -1666,7 +1666,7 @@
             <menuitem>
               <label>Interactively edit category values</label>
               <help>Edits cell values in a raster map.</help>
-              <keywords>display,raster,edit</keywords>
+              <keywords>display,editing,raster</keywords>
               <handler>OnMenuCmd</handler>
               <command>d.rast.edit</command>
             </menuitem>
@@ -1717,14 +1717,14 @@
             <menuitem>
               <label>Random cells</label>
               <help>Generates random cell values with spatial dependence.</help>
-              <keywords>raster,random,cell</keywords>
+              <keywords>raster,sampling,random</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.random.cells</command>
             </menuitem>
             <menuitem>
               <label>Random cells and vector points</label>
               <help>Creates a raster map layer and vector point map containing randomly located points.</help>
-              <keywords>raster,random,vector</keywords>
+              <keywords>raster,sampling,vector,random</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.random</command>
             </menuitem>
@@ -1774,7 +1774,7 @@
             <menuitem>
               <label>Random surface with spatial dependence</label>
               <help>Generates random surface(s) with spatial dependence.</help>
-              <keywords>raster,random,surface</keywords>
+              <keywords>raster,surface,random</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.random.surface</command>
             </menuitem>
@@ -1968,7 +1968,7 @@
             <menuitem>
               <label>Edit vector map (non-interactively)</label>
               <help>Edits a vector map, allows adding, deleting and modifying selected vector features.</help>
-              <keywords>vector,editing,geometry</keywords>
+              <keywords>vector,geometry,editing</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.edit</command>
             </menuitem>
@@ -1992,7 +1992,7 @@
             <menuitem>
               <label>Dissolve boundaries</label>
               <help>Dissolves boundaries between adjacent areas sharing a common category number or attribute.</help>
-              <keywords>vector,area,dissolve</keywords>
+              <keywords>vector,dissolve,area</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.dissolve</command>
             </menuitem>
@@ -2064,7 +2064,7 @@
             <menuitem>
               <label>Create or rebuild topology</label>
               <help>Creates topology for vector map.</help>
-              <keywords>vector,geometry,topology</keywords>
+              <keywords>vector,topology,geometry</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.build</command>
             </menuitem>
@@ -2079,7 +2079,7 @@
             <menuitem>
               <label>Build polylines</label>
               <help>Builds polylines from lines or boundaries.</help>
-              <keywords>vector,geometry,topology</keywords>
+              <keywords>vector,topology,geometry</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.build.polylines</command>
             </menuitem>
@@ -2101,13 +2101,13 @@
             <menuitem>
               <label>Clean vector map</label>
               <help>Toolset for cleaning topology of vector map.</help>
-              <keywords>vector,topology</keywords>
+              <keywords>vector,topology,geometry</keywords>
               <handler>OnVectorCleaning</handler>
               <command>v.clean</command>
             </menuitem>
             <menuitem>
               <label>Smooth or simplify</label>
-              <help>Tool for vector based generalization.</help>
+              <help>Performs vector based generalization.</help>
               <keywords>vector,generalization,simplification,smoothing,displacement,network generalization</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.generalize</command>
@@ -2152,14 +2152,14 @@
             <menuitem>
               <label>Query with coordinate(s)</label>
               <help>Queries a vector map at given locations.</help>
-              <keywords>vector,position,querying</keywords>
+              <keywords>vector,querying,position</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.what</command>
             </menuitem>
             <menuitem>
               <label>Query vector attribute data</label>
               <help>Prints vector map attributes.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.select</command>
             </menuitem>
@@ -2178,7 +2178,7 @@
             <menuitem>
               <label>Select by another map</label>
               <help>Selects features from vector map (A) by features from other vector map (B).</help>
-              <keywords>vector,spatial query</keywords>
+              <keywords>vector,geometry,spatial query</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.select</command>
             </menuitem>
@@ -2190,14 +2190,14 @@
             <menuitem>
               <label>Vector to raster</label>
               <help>Converts (rasterize) a vector map into a raster map.</help>
-              <keywords>vector,raster,conversion,rasterization</keywords>
+              <keywords>vector,conversion,raster,rasterization</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.to.rast</command>
             </menuitem>
             <menuitem>
               <label>Vector to volume</label>
               <help>Converts a vector map (only points) into a 3D raster map.</help>
-              <keywords>vector,volume,conversion</keywords>
+              <keywords>vector,conversion,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.to.rast3</command>
             </menuitem>
@@ -2221,7 +2221,7 @@
         <menuitem>
           <label>Buffer vectors</label>
           <help>Creates a buffer around vector features of given type.</help>
-          <keywords>vector,geometry,buffer</keywords>
+          <keywords>vector,buffer,geometry</keywords>
           <handler>OnMenuCmd</handler>
           <command>v.buffer</command>
         </menuitem>
@@ -2256,29 +2256,29 @@
           <items>
             <menuitem>
               <label>Create LRS</label>
-              <help>Create Linear Reference System</help>
-              <keywords>vector,LRS,networking</keywords>
+              <help>Creates a linear reference system.</help>
+              <keywords>vector,Linear Reference System,networking</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.lrs.create</command>
             </menuitem>
             <menuitem>
               <label>Create stationing</label>
-              <help>Create stationing from input lines, and linear reference system</help>
-              <keywords>vector,LRS,networking</keywords>
+              <help>Creates stationing from input lines, and linear reference system.</help>
+              <keywords>vector,Linear Reference System,networking</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.lrs.label</command>
             </menuitem>
             <menuitem>
               <label>Create points/segments</label>
               <help>Creates points/segments from input lines, linear reference system and positions read from stdin or a file.</help>
-              <keywords>vector,LRS,networking</keywords>
+              <keywords>vector,Linear Reference System,networking</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.lrs.segment</command>
             </menuitem>
             <menuitem>
               <label>Find line id and offset</label>
               <help>Finds line id and real km+offset for given points in vector map using linear reference system.</help>
-              <keywords>vector,LRS,networking</keywords>
+              <keywords>vector,Linear Reference System,networking</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.lrs.where</command>
             </menuitem>
@@ -2287,7 +2287,7 @@
         <menuitem>
           <label>Nearest features</label>
           <help>Finds the nearest element in vector map 'to' for elements in vector map 'from'.</help>
-          <keywords>vector,database,attribute table</keywords>
+          <keywords>vector,distance,database,attribute table</keywords>
           <handler>OnMenuCmd</handler>
           <command>v.distance</command>
         </menuitem>
@@ -2349,7 +2349,7 @@
             <menuitem>
               <label>Visibility network</label>
               <help>Visibility graph construction.</help>
-              <keywords>vector,path,visibility</keywords>
+              <keywords>vector,network,path,visibility</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.net.visibility</command>
             </menuitem>
@@ -2418,7 +2418,7 @@
             <menuitem>
               <label>Overlay vector maps</label>
               <help>Overlays two vector maps.</help>
-              <keywords>vector,geometry</keywords>
+              <keywords>vector,geometry,spatial query</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.overlay</command>
             </menuitem>
@@ -2445,7 +2445,7 @@
             <menuitem>
               <label>Reclassify</label>
               <help>Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column.</help>
-              <keywords>vector,reclass,attributes</keywords>
+              <keywords>vector,reclassification,attributes</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.reclass</command>
             </menuitem>
@@ -2457,28 +2457,28 @@
             <menuitem>
               <label>Update area attributes from raster</label>
               <help>Calculates univariate statistics from a raster map based on vector polygon map and uploads statistics to new attribute columns.</help>
-              <keywords>vector,raster,statistics</keywords>
+              <keywords>vector,statistics,raster</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.rast.stats</command>
             </menuitem>
             <menuitem>
               <label>Update area attributes from vector</label>
               <help>Count points in areas, calculate statistics from point attributes.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.vect.stats</command>
             </menuitem>
             <menuitem>
               <label>Update point attributes from areas</label>
               <help>Uploads vector values at positions of vector points to the table.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,sampling,database,attribute table</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.what.vect</command>
             </menuitem>
             <menuitem>
               <label>Update database values from vector</label>
               <help>Populates database values from vector features.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.to.db</command>
             </menuitem>
@@ -2486,14 +2486,14 @@
             <menuitem>
               <label>Sample raster maps at point locations</label>
               <help>Uploads raster values at positions of vector points to the table.</help>
-              <keywords>vector,raster,position,querying,attribute table</keywords>
+              <keywords>vector,sampling,raster,position,querying,attribute table</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.what.rast</command>
             </menuitem>
             <menuitem>
               <label>Sample raster neighborhood around points</label>
               <help>Samples a raster map at vector point locations.</help>
-              <keywords>vector,raster,resample</keywords>
+              <keywords>vector,sampling,raster</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.sample</command>
             </menuitem>
@@ -2560,7 +2560,7 @@
             <menuitem>
               <label>Generate random points</label>
               <help>Generates randomly 2D/3D vector points map.</help>
-              <keywords>vector,statistics,random</keywords>
+              <keywords>vector,sampling,statistics,random</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.random</command>
             </menuitem>
@@ -2602,7 +2602,7 @@
             <menuitem>
               <label>Classify attribute data</label>
               <help>Classifies attribute data, e.g. for thematic mapping</help>
-              <keywords>vector,attributes,statistics</keywords>
+              <keywords>vector,classification,attribute table,statistics</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.class</command>
             </menuitem>
@@ -2625,7 +2625,7 @@
             <menuitem>
               <label>Univariate statistics for attribute columns</label>
               <help>Calculates univariate statistics on selected table column for a GRASS vector map.</help>
-              <keywords>vector,statistics</keywords>
+              <keywords>vector,statistics,attribute table</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.univar</command>
             </menuitem>
@@ -2672,7 +2672,7 @@
             <menuitem>
               <label>Mosaic images</label>
               <help>Mosaics several images and extends colormap.</help>
-              <keywords>raster,imagery,mosaicking</keywords>
+              <keywords>imagery,geometry,mosaicking</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.image.mosaic</command>
             </menuitem>
@@ -2684,7 +2684,7 @@
             <menuitem>
               <label>Color balance for RGB</label>
               <help>Performs auto-balancing of colors for LANDSAT images.</help>
-              <keywords>raster,imagery,colors</keywords>
+              <keywords>imagery,landsat,colors</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.landsat.rgb</command>
             </menuitem>
@@ -2720,15 +2720,15 @@
         <menuitem>
           <label>Spectral response</label>
           <help>Displays spectral response at user specified locations in group or images.</help>
-          <keywords>imagery,raster,multispectral</keywords>
+          <keywords>imagery,querying,raster,multispectral</keywords>
           <handler>OnMenuCmd</handler>
           <command>i.spectral</command>
         </menuitem>
         <separator />
         <menuitem>
           <label>Pan sharpening</label>
-          <help>Sharpen image by merging multispectral and high-res panchromatic channels</help>
-          <keywords>imagery,fusion,sharpen,IHS,PCI,Brovey</keywords>
+          <help>Image fusion algorithms to sharpen multispectral with high-res panchromatic channels</help>
+          <keywords>imagery,fusion,sharpen,Brovey,IHS,PCA</keywords>
           <handler>OnMenuCmd</handler>
           <command>i.pansharpen</command>
         </menuitem>
@@ -2813,21 +2813,21 @@
             <menuitem>
               <label>Principal components</label>
               <help>Principal components analysis (PCA) for image processing.</help>
-              <keywords>imagery,image transformation,PCA</keywords>
+              <keywords>imagery,transformation,PCA</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.pca</command>
             </menuitem>
             <menuitem>
               <label>Fast Fourier</label>
               <help>Fast Fourier Transform (FFT) for image processing.</help>
-              <keywords>imagery,FFT</keywords>
+              <keywords>imagery,Fast Fourier Transform</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.fft</command>
             </menuitem>
             <menuitem>
               <label>Inverse Fast Fourier</label>
               <help>Inverse Fast Fourier Transform (IFFT) for image processing.</help>
-              <keywords>imagery,FFT</keywords>
+              <keywords>imagery,Fast Fourier Transform</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.ifft</command>
             </menuitem>
@@ -2840,14 +2840,14 @@
             <menuitem>
               <label>Aster DN to radiance/reflectance</label>
               <help>Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN.</help>
-              <keywords>imagery,Terra-ASTER,DN,radiance,reflectance,brightness temperature</keywords>
+              <keywords>imagery,radiometric conversion,Terra-ASTER,radiance,reflectance,brightness temperature</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.aster.toar</command>
             </menuitem>
             <menuitem>
               <label>Landsat DN to radiance/reflectance</label>
               <help>Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+.</help>
-              <keywords>imagery,landsat,top-of-atmosphere reflectance,dos-type simple atmospheric correction</keywords>
+              <keywords>imagery,radiometric conversion,landsat,top-of-atmosphere reflectance,dos-type simple atmospheric correction</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.landsat.toar</command>
             </menuitem>
@@ -2862,7 +2862,7 @@
             <menuitem>
               <label>Modis quality control</label>
               <help>Extracts quality control parameters from Modis QC layers.</help>
-              <keywords>QC,Quality Control,Surface Reflectance,Land Surface Temperature,Vegetation,Modis</keywords>
+              <keywords>imagery,imagery quality assessment,surface reflectance,land surface temperature,vegetation,MODIS</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.modis.qc</command>
             </menuitem>
@@ -2877,7 +2877,7 @@
             <separator />
             <menuitem>
               <label>LatLong map</label>
-              <help>Creates a latitude/longitude map.</help>
+              <help>Creates a latitude/longitude raster map.</help>
               <keywords>imagery,latitude,longitude,projection</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.latlong</command>
@@ -2885,7 +2885,7 @@
             <menuitem>
               <label>Sunshine hours</label>
               <help>Creates a sunshine hours map.</help>
-              <keywords>sunshine,hours,daytime</keywords>
+              <keywords>imagery,solar,sunshine,hours,daytime</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.sunhours</command>
             </menuitem>
@@ -2918,8 +2918,8 @@
             </menuitem>
             <menuitem>
               <label>Emissivity</label>
-              <help>Computes emissivity from NDVI, generic method for spares land.</help>
-              <keywords>emissivity,land flux,energy balance</keywords>
+              <help>Computes emissivity from NDVI, generic method for sparse land.</help>
+              <keywords>imagery,emissivity,land flux,energy balance</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.emissivity</command>
             </menuitem>
@@ -3024,7 +3024,7 @@
             <menuitem>
               <label>OIF for LandSat TM</label>
               <help>Calculates Optimum-Index-Factor table for LANDSAT TM bands 1-5, &amp; 7</help>
-              <keywords>raster,imagery,statistics</keywords>
+              <keywords>imagery,landsat,statistics</keywords>
               <handler>OnMenuCmd</handler>
               <command>i.oif</command>
             </menuitem>
@@ -3060,7 +3060,7 @@
             <menuitem>
               <label>Volume to raster series</label>
               <help>Converts 3D raster maps to 2D raster maps</help>
-              <keywords>raster3d,raster,voxel</keywords>
+              <keywords>raster3d,conversion,raster,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>r3.to.rast</command>
             </menuitem>
@@ -3099,21 +3099,21 @@
         <menuitem>
           <label>Cross section</label>
           <help>Creates cross section 2D raster map from 3D raster map based on 2D elevation map</help>
-          <keywords>raster3d,raster,voxel</keywords>
+          <keywords>raster3d,profile,raster,voxel</keywords>
           <handler>OnMenuCmd</handler>
           <command>r3.cross.rast</command>
         </menuitem>
     <menuitem>
       <label>Groundwater modeling</label>
-      <help>Numerical calculation program for transient, confined groundwater flow in three dimensions</help>
-      <keywords>raster3d,voxel,hydrology,groundwater,numeric,simulation</keywords>
+      <help>Numerical calculation program for transient, confined groundwater flow in three dimensions.</help>
+      <keywords>raster3d,groundwater flow,voxel,hydrology</keywords>
       <handler>OnMenuCmd</handler>
       <command>r3.gwflow</command>
     </menuitem>
         <menuitem>
           <label>Interpolate volume from points</label>
           <help>Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm.</help>
-          <keywords>vector,surface,interpolation,RST</keywords>
+          <keywords>vector,voxel,surface,interpolation,RST</keywords>
           <handler>OnMenuCmd</handler>
           <command>v.vol.rst</command>
         </menuitem>
@@ -3124,7 +3124,7 @@
             <menuitem>
               <label>Basic volume metadata</label>
               <help>Outputs basic information about a user-specified 3D raster map layer.</help>
-              <keywords>raster3d,voxel</keywords>
+              <keywords>raster3d,metadata,voxel</keywords>
               <handler>OnMenuCmd</handler>
               <command>r3.info</command>
             </menuitem>
@@ -3154,8 +3154,8 @@
           <items>
             <menuitem>
               <label>List databases</label>
-              <help>List all databases for a given driver and location.</help>
-              <keywords>database,SQL</keywords>
+              <help>Lists all databases for a given driver and location.</help>
+              <keywords>database,attribute table,SQL</keywords>
               <handler>OnMenuCmd</handler>
               <command>db.databases</command>
             </menuitem>
@@ -3203,7 +3203,7 @@
             <menuitem>
               <label>Login</label>
               <help>Sets user/password for DB driver/database.</help>
-              <keywords>database,connection settings</keywords>
+              <keywords>database,attribute table,connection settings</keywords>
               <handler>OnMenuCmd</handler>
               <command>db.login</command>
             </menuitem>
@@ -3211,14 +3211,14 @@
             <menuitem>
               <label>Create database</label>
               <help>Creates an empty database.</help>
-              <keywords>database,SQL</keywords>
+              <keywords>database,attribute table,SQL</keywords>
               <handler>OnMenuCmd</handler>
               <command>db.createdb</command>
             </menuitem>
             <menuitem>
               <label>Drop database</label>
-              <help>Removes a database.</help>
-              <keywords>database,SQL</keywords>
+              <help>Removes an existing database.</help>
+              <keywords>database,attribute table,SQL</keywords>
               <handler>OnMenuCmd</handler>
               <command>db.dropdb</command>
             </menuitem>
@@ -3260,7 +3260,7 @@
           <items>
             <menuitem>
               <label>Query any table</label>
-              <help>Selects data from attribute table (performs SQL query statement(s)).</help>
+              <help>Selects data from attribute table.</help>
               <keywords>database,attribute table,SQL</keywords>
               <handler>OnMenuCmd</handler>
               <command>db.select</command>
@@ -3268,7 +3268,7 @@
             <menuitem>
               <label>Query vector attribute data</label>
               <help>Prints vector map attributes.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.select</command>
             </menuitem>
@@ -3288,21 +3288,21 @@
             <menuitem>
               <label>New table</label>
               <help>Creates and connects a new attribute table to a given layer of an existing vector map.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.addtable</command>
             </menuitem>
             <menuitem>
               <label>Remove table</label>
               <help>Removes existing attribute table of a vector map.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.droptable</command>
             </menuitem>
             <menuitem>
               <label>Join table</label>
               <help>Allows to join a table to a vector map table.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.join</command>
             </menuitem>
@@ -3310,21 +3310,21 @@
             <menuitem>
               <label>Add columns</label>
               <help>Adds one or more columns to the attribute table connected to a given vector map.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.addcolumn</command>
             </menuitem>
             <menuitem>
               <label>Drop column</label>
               <help>Drops a column from the attribute table connected to a given vector map.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.dropcolumn</command>
             </menuitem>
             <menuitem>
               <label>Rename column</label>
               <help>Renames a column in the attribute table connected to a given vector map.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.renamecolumn</command>
             </menuitem>
@@ -3332,29 +3332,29 @@
             <menuitem>
               <label>Change values</label>
               <help>Allows to update a column in the attribute table connected to a vector map.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.update</command>
             </menuitem>
             <menuitem>
               <label>Drop row</label>
               <help>Removes a vector feature from a vector map through attribute selection.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.droprow</command>
             </menuitem>
             <separator />
             <menuitem>
               <label>Reconnect vectors to database</label>
-              <help>Reconnects vectors to a new database.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <help>Reconnects attribute tables for all vector maps from the current mapset to a new database.</help>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.reconnect.all</command>
             </menuitem>
             <menuitem>
               <label>Set vector map - database connection</label>
               <help>Prints/sets DB connection for a vector map to attribute table.</help>
-              <keywords>vector,database,attribute table</keywords>
+              <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.db.connect</command>
             </menuitem>
