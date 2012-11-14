@@ -1221,14 +1221,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         ctrl = event.GetEventObject().GetId()
         cmd = event.GetString()
         
+        # find layer tree item by ctrl
         layer = self.GetFirstVisibleItem()
-
         while layer and layer.IsOk():
             if self.GetPyData(layer)[0]['ctrl'] == ctrl:
                 break
-            
             layer = self.GetNextVisible(layer)
-
+        
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
         
@@ -1629,8 +1628,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.GetToolbar('vdigit').UpdateListOfLayers(updateTool = True)
         
         # redraw map if auto-rendering is enabled
-        self.rerender = True
-        self.reorder = True
+        self.rerender = self.reorder = True
         
     def OnCloseWindow(self, event):
         pass
