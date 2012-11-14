@@ -520,7 +520,7 @@ class SavedRegion(wx.Dialog):
         elif loadsave == 'save':
             label.SetLabel(_("Save region:"))
             selection = Select(parent = self, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
-                               type = 'windows', mapsets  =  [grass.gisenv()['MAPSET']])
+                               type = 'windows', mapsets = [grass.gisenv()['MAPSET']], fullyQualified = False)
         
         box.Add(item = selection, proportion = 0, flag = wx.ALIGN_CENTRE | wx.ALL, border = 5)
         selection.SetFocus()
