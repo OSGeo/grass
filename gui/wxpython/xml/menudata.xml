@@ -1067,7 +1067,6 @@
               <help>Interactive management of raster color tables.</help>
               <keywords>raster,color table</keywords>
               <handler>RulesCmd</handler>
-              <command>r.colors</command>
             </menuitem>
             <menuitem>
               <label>Export color table</label>
