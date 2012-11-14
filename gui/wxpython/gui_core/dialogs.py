@@ -497,14 +497,14 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
     return dlg
 
 class SavedRegion(wx.Dialog):
-    def __init__(self, parent, id = wx.ID_ANY, title = "", loadsave = 'load',
+    def __init__(self, parent, title, id = wx.ID_ANY, loadsave = 'load',
                  **kwargs):
-        """!Loading and saving of display extents to saved region file
+        """!Loading or saving of display extents to saved region file
 
         @param loadsave load or save region?
         """
         wx.Dialog.__init__(self, parent, id, title, **kwargs)
-
+        
         self.loadsave = loadsave
         self.wind = ''
         
@@ -526,12 +526,12 @@ class SavedRegion(wx.Dialog):
         selection.SetFocus()
         selection.Bind(wx.EVT_TEXT, self.OnRegion)
         
-        sizer.Add(item = box, proportion = 0, flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL,
+        sizer.Add(item = box, proportion = 0, flag = wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                   border = 5)
         
         line = wx.StaticLine(parent = self, id = wx.ID_ANY, size = (20, -1), style = wx.LI_HORIZONTAL)
         sizer.Add(item = line, proportion = 0,
-                  flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, border = 5)
+                  flag = wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border = 5)
         
         btnsizer = wx.StdDialogButtonSizer()
         
@@ -551,6 +551,10 @@ class SavedRegion(wx.Dialog):
         
     def OnRegion(self, event):
         self.wind = event.GetString()
+
+    def GetName(self):
+        """!Return region name"""
+        return self.wind
     
 class DecorationDialog(wx.Dialog):
     """!Controls setting options and displaying/hiding map overlay

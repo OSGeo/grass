@@ -1271,40 +1271,34 @@ class MapFrame(SingleMapFrame):
         """
         self.MapWindow.DisplayToWind()
  
-    def SaveDisplayRegion(self, event):
+    def OnSaveDisplayRegion(self, event):
         """!Save display extents to named region file.
         """
-        self.MapWindow.SaveDisplayRegion()
+        self.MapWindow.SaveRegion(display = True)
+
+    def OnSaveWindRegion(self, event):
+        """!Save computational region to named region file.
+        """
+        self.MapWindow.SaveRegion(display = False)
         
     def OnZoomMenu(self, event):
         """!Popup Zoom menu
         """
         point = wx.GetMousePosition()
         zoommenu = wx.Menu()
-        # Add items to the menu
-
-        zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to computational region'))
-        zoommenu.AppendItem(zoomwind)
-        self.Bind(wx.EVT_MENU, self.OnZoomToWind, zoomwind)
-
-        zoomdefault = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to default region'))
-        zoommenu.AppendItem(zoomdefault)
-        self.Bind(wx.EVT_MENU, self.OnZoomToDefault, zoomdefault)
-
-        zoomsaved = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to saved region'))
-        zoommenu.AppendItem(zoomsaved)
-        self.Bind(wx.EVT_MENU, self.OnZoomToSaved, zoomsaved)
-
-        savewind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Set computational region from display extent'))
-        zoommenu.AppendItem(savewind)
-        self.Bind(wx.EVT_MENU, self.OnDisplayToWind, savewind)
-
-        savezoom = wx.MenuItem(zoommenu, wx.ID_ANY, _('Save display geometry to named region'))
-        zoommenu.AppendItem(savezoom)
-        self.Bind(wx.EVT_MENU, self.SaveDisplayRegion, savezoom)
-
-        # Popup the menu. If an item is selected then its handler
-        # will be called before PopupMenu returns.
+        
+        for label, handler in ((_('Zoom to computational region'), self.OnZoomToWind),
+                               (_('Zoom to default region'), self.OnZoomToDefault),
+                               (_('Zoom to saved region'), self.OnZoomToSaved),
+                               (_('Set computational region from display extent'), self.OnDisplayToWind),
+                               (_('Save display geometry to named region'), self.OnSaveDisplayRegion),
+                               (_('Save computational region to named region'), self.OnSaveWindRegion)):
+            mid = wx.MenuItem(zoommenu, wx.ID_ANY, label)
+            zoommenu.AppendItem(mid)
+            self.Bind(wx.EVT_MENU, handler, mid)
+            
+        # Popup the menu. If an item is selected then its handler will
+        # be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
 

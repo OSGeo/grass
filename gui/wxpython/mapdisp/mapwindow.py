@@ -1696,20 +1696,20 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         dlg = SavedRegion(parent = self,
                           title = _("Zoom to saved region extents"),
-                          loadsave='load')
+                          loadsave = 'load')
         
-        if dlg.ShowModal() == wx.ID_CANCEL or not dlg.wind:
+        if dlg.ShowModal() == wx.ID_CANCEL or not dlg.GetName():
             dlg.Destroy()
             return
         
-        if not grass.find_file(name = dlg.wind, element = 'windows')['name']:
+        if not grass.find_file(name = dlg.GetName(), element = 'windows')['name']:
             wx.MessageBox(parent = self,
-                          message = _("Region <%s> not found. Operation canceled.") % dlg.wind,
+                          message = _("Region <%s> not found. Operation canceled.") % dlg.GetName(),
                           caption = _("Error"), style = wx.ICON_ERROR | wx.OK | wx.CENTRE)
             dlg.Destroy()
             return
         
-        self.Map.GetRegion(regionName = dlg.wind,
+        self.Map.GetRegion(regionName = dlg.GetName(),
                            update = True)
         
         dlg.Destroy()
@@ -1721,34 +1721,54 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.UpdateMap()
                 
-    def SaveDisplayRegion(self):
-        """!Save display extents to named region file.
+    def SaveRegion(self, display = True):
+        """!Save display extents/compulational region to named region
+        file.
+
+        @param display True for display extends otherwise computational region
         """
-        dlg = SavedRegion(parent = self,
-                          title = _("Save display extents to region file"),
-                          loadsave='save')
+        if display:
+            title = _("Save display extents to region file")
+        else:
+            title = _("Save computational region to region file")
         
-        if dlg.ShowModal() == wx.ID_CANCEL or not dlg.wind:
+        dlg = SavedRegion(parent = self, title = title, loadsave = 'save')
+        if dlg.ShowModal() == wx.ID_CANCEL or not dlg.GetName():
             dlg.Destroy()
             return
         
         # test to see if it already exists and ask permission to overwrite
-        if grass.find_file(name = dlg.wind, element = 'windows')['name']:
+        if grass.find_file(name = dlg.GetName(), element = 'windows')['name']:
             overwrite = wx.MessageBox(parent = self,
                                       message = _("Region file <%s> already exists. "
-                                                  "Do you want to overwrite it?") % (dlg.wind),
+                                                  "Do you want to overwrite it?") % (dlg.GetName()),
                                       caption = _("Warning"), style = wx.YES_NO | wx.CENTRE)
-            if (overwrite == wx.YES):
-                self.SaveRegion(dlg.wind)
+            if overwrite != wx.YES:
+                dlg.Destroy()
+                return
+        
+        if display:
+            self._saveDisplayRegion(dlg.GetName())
         else:
-            self.SaveRegion(dlg.wind)
+            self._saveCompRegion(dlg.GetName())
         
         dlg.Destroy()
+
+    def _saveCompRegion(self, name):
+        """!Save region settings to region file
         
-    def SaveRegion(self, wind):
-        """!Save region settings
+        @param name region name
+        """
+        RunCommand('g.region',
+                   overwrite = True,
+                   parent = self,
+                   flags = 'u',
+                   save = name)
         
-        @param wind region name
+    def _saveDisplayRegion(self, name):
+        """!Save display extents to region file
+        
+        @param name region name
         """
         new = self.Map.GetCurrentRegion()
         
@@ -1766,7 +1786,7 @@ class BufferedWindow(MapWindow, wx.Window):
                    w = new['w'],
                    rows = int(new['rows']),
                    cols = int(new['cols']),
-                   save = wind)
+                   save = name)
         
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
