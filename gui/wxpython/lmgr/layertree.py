@@ -43,6 +43,7 @@ from vdigit.main         import haveVDigit
 from core.gcmd           import GWarning, GError
 from gui_core.toolbars   import BaseIcons
 from icons.icon          import MetaIcon
+from modules.colorrules  import RasterColorTable
 
 TREE_ITEM_HEIGHT = 25
 
@@ -587,8 +588,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnRasterColorTable(self, event):
         """!Set color table for raster map"""
         name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
-        GUI(parent = self, centreOnParent = False).ParseCommand(['r.colors',
-                                                                 'map=%s' % name])
+        ctable = RasterColorTable(self, layerTree = self)
+        ctable.SetMap(name)
+        ctable.Show()
+        ctable.CentreOnScreen()
 
     def OnVectorColorTable(self, event):
         """!Set color table for vector map"""

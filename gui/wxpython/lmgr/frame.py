@@ -1231,16 +1231,17 @@ class GMFrame(wx.Frame):
     def OnRasterRules(self, event):
         """!Launches dialog for raster color rules
         """
-        ctable = RasterColorTable(self)
-        ctable.CentreOnScreen()
+        ctable = RasterColorTable(self, layerTree = self.GetLayerTree())
         ctable.Show()
+        ctable.CentreOnScreen()
 
     def OnVectorRules(self, event):
         """!Launches dialog for vector color rules
         """
-        ctable = VectorColorTable(self, attributeType = 'color')
-        ctable.CentreOnScreen()
+        ctable = VectorColorTable(self, layerTree = self.GetLayerTree(),
+                                  attributeType = 'color')
         ctable.Show()
+        ctable.CentreOnScreen()
         
     def OnEditImageryGroups(self, event, cmd = None):
         """!Show dialog for creating and editing groups.

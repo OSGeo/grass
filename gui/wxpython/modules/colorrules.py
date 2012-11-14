@@ -12,13 +12,13 @@ Classes:
  - colorrules::ThematicVectorTable
  - colorrules::BufferedWindow
 
-(C) 2008, 2010-2011 by the GRASS Development Team
+(C) 2008, 2010-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton (Arizona State University)
-@author Martin Landa <landa.martin gmail.com> (various updates)
+@author Martin Landa <landa.martin gmail.com> (various updates, pre-defined color table)
 @author Anna Kratochvilova <kratochanna gmail.com> (split to base and derived classes)
 """
 
@@ -311,7 +311,7 @@ class RulesPanel:
         return sqlrule  
 
 class ColorTable(wx.Frame):
-    def __init__(self, parent, title, id = wx.ID_ANY,
+    def __init__(self, parent, title, layerTree = None, id = wx.ID_ANY,
                  style = wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
         """!Dialog for interactively entering rules for map management
@@ -320,7 +320,9 @@ class ColorTable(wx.Frame):
         @param raster True to raster otherwise vector
         @param nviz True if ColorTable is called from nviz thematic mapping
         """
-        self.parent = parent # GMFrame
+        self.parent = parent        # GMFrame ?
+        self.layerTree = layerTree  # LayerTree or None
+        
         wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
@@ -332,8 +334,10 @@ class ColorTable(wx.Frame):
         
         # input map to change
         self.inmap = ''
+        
         # reference to layer with preview
-        self.layer = None     
+        self.layer = None
+        
         # layout
         self._doLayout()
         
@@ -354,15 +358,15 @@ class ColorTable(wx.Frame):
         # set map layer from layer tree, first selected,
         # if not the right type, than select another
         try:
-            sel = self.parent.GetLayerTree().layer_selected
-            if sel and self.parent.GetLayerTree().GetPyData(sel)[0]['type'] == self.mapType:
+            sel = self.layerTree.layer_selected
+            if sel and self.layerTree.GetPyData(sel)[0]['type'] == self.mapType:
                 layer = sel
             else:
-                layer = self.parent.GetLayerTree().FindItemByData(key = 'type', value = self.mapType)
+                layer = self.layerTree.FindItemByData(key = 'type', value = self.mapType)
         except:
             layer = None
         if layer:
-            mapLayer = self.parent.GetLayerTree().GetPyData(layer)[0]['maplayer']
+            mapLayer = self.layerTree.GetPyData(layer)[0]['maplayer']
             name = mapLayer.GetName()
             type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
@@ -553,7 +557,7 @@ class ColorTable(wx.Frame):
         else:
             # re-render preview and current map window
             self.OnPreview(None)
-            display = self.parent.GetLayerTree().GetMapDisplay()
+            display = self.layerTree.GetMapDisplay()
             if display and display.IsAutoRendered():
                 display.GetWindow().UpdateMap(render = True)
         
@@ -758,6 +762,10 @@ class ColorTable(wx.Frame):
                    quiet = True,
                    parent = self,
                    entry = cmd)
+
+    def SetMap(self, name):
+        """!Set map name and update dialog"""
+        self.selectionInput.SetValue(name)
         
     def _IsNumber(self, s):
         """!Check if 's' is a number"""
@@ -767,7 +775,6 @@ class ColorTable(wx.Frame):
         except ValueError:
             return False
         
-
 class RasterColorTable(ColorTable):
     def __init__(self, parent, **kwargs):
         """!Dialog for interactively entering color rules for raster maps"""
@@ -790,10 +797,7 @@ class RasterColorTable(ColorTable):
         
         # self.SetMinSize(self.GetSize()) 
         self.SetMinSize((650, 700))
-        
-        self.CentreOnScreen()
-        self.Show()
-    
+                
     def _doLayout(self):
         """!Do main layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -835,19 +839,18 @@ class RasterColorTable(ColorTable):
         """!Raster map selected"""
         if event:
             self.inmap = event.GetString()
-    
+        
         self.loadRules.SetValue('')
         self.saveRules.SetValue('')
+        
         if self.inmap:
             if not grass.find_file(name = self.inmap, element = 'cell')['file']:
                 self.inmap = None
         
         if not self.inmap:
-            self.btnPreview.Enable(False)
-            self.btnOK.Enable(False)
-            self.btnApply.Enable(False)
-            self.btnDefault.Enable(False)
-            self.btnSet.Enable(False)
+            for btn in (self.btnPreview, self.btnOK,
+                        self.btnApply, self.btnDefault, self.btnSet):
+                btn.Enable(False)
             self.LoadTable()
             return
         
@@ -860,11 +863,9 @@ class RasterColorTable(ColorTable):
         else:
             self.inmap = ''
             self.properties['min'] = self.properties['max'] = None
-            self.btnPreview.Enable(False)
-            self.btnOK.Enable(False)
-            self.btnApply.Enable(False)
-            self.btnDefault.Enable(False)
-            self.btnSet.Enable(False)
+            for btn in (self.btnPreview, self.btnOK,
+                        self.btnApply, self.btnDefault, self.btnSet):
+                btn.Enable(False)
             self.preview.EraseMap()
             self.cr_label.SetLabel(_('Enter raster category values or percents'))
             return
@@ -877,13 +878,11 @@ class RasterColorTable(ColorTable):
                                  { 'range' : mapRange,
                                    'min' : self.properties['min'],
                                    'max' : self.properties['max'] })                       
-            
-        self.btnPreview.Enable()
-        self.btnOK.Enable()
-        self.btnApply.Enable()
-        self.btnDefault.Enable()
-        self.btnSet.Enable()
-
+        
+        for btn in (self.btnPreview, self.btnOK,
+                    self.btnApply, self.btnDefault, self.btnSet):
+            btn.Enable()
+        
     def OnPreview(self, tmp = True):
         """!Update preview (based on computational region)"""
         if not self.inmap:
@@ -1591,13 +1590,13 @@ class VectorColorTable(ColorTable):
         
     def UseAttrColumn(self, useAttrColumn):
         """!Find layers and apply the changes in d.vect command"""
-        layers = self.parent.GetLayerTree().FindItemByData(key = 'name', value = self.inmap)
+        layers = self.layerTree.FindItemByData(key = 'name', value = self.inmap)
         if not layers:
             return
         for layer in layers:
-            if self.parent.GetLayerTree().GetPyData(layer)[0]['type'] != 'vector':
+            if self.layerTree.GetPyData(layer)[0]['type'] != 'vector':
                 continue
-            cmdlist = self.parent.GetLayerTree().GetPyData(layer)[0]['maplayer'].GetCmd()
+            cmdlist = self.layerTree.GetPyData(layer)[0]['maplayer'].GetCmd()
             
             if self.attributeType == 'color':
                 if useAttrColumn:
@@ -1611,7 +1610,7 @@ class VectorColorTable(ColorTable):
                 cmdlist[1].update({'size_column': self.properties['storeColumn']})
             elif self.attributeType == 'width':
                 cmdlist[1].update({'width_column' :self.properties['storeColumn']})
-            self.parent.GetLayerTree().GetPyData(layer)[0]['cmd'] = cmdlist
+            self.layerTree.GetPyData(layer)[0]['cmd'] = cmdlist
         
     def CreateColorTable(self, tmp = False):
         """!Create color rules (color table or color column)"""
