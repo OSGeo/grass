@@ -745,6 +745,7 @@ int main(int argc, char *argv[])
 			continue;	/* not in threshold */
 
 		    /* TODO: more cats of the same field */
+		    Vect_get_area_cats(&To, aList->id[i], TCats);
 		    Vect_cat_get(TCats, to_field, &tmp_tcat);
 
 		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
