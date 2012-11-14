@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
 	G_gisinit(argv[0]);
 
 	module = G_define_module();
-	G_add_keyword(_("3D raster"));
+	G_add_keyword(_("raster3d"));
 	G_add_keyword(_("export"));
 	module->description = _("Exports a GRASS 3D raster map to a binary array.");
 
