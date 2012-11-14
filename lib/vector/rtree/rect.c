@@ -537,20 +537,26 @@ void RTreeCombineRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
 /*-----------------------------------------------------------------------------
 | Expand first rectangle to cover second rectangle.
 -----------------------------------------------------------------------------*/
-void RTreeExpandRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
+int RTreeExpandRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
 		     struct RTree *t)
 {
-    int i, j;
+    int i, j, ret = 0;
 
     /* assert(r1 && r2); */
 
     if (Undefined(r2, t))
-	return;
+	return ret;
 
     for (i = 0; i < t->ndims; i++) {
-	r1->boundary[i] = MIN(r1->boundary[i], r2->boundary[i]);
+	if (r1->boundary[i] > r2->boundary[i]) {
+	    r1->boundary[i] = r2->boundary[i];
+	    ret = 1;
+	}
 	j = i + t->ndims_alloc;
-	r1->boundary[j] = MAX(r1->boundary[j], r2->boundary[j]);
+	if (r1->boundary[j] < r2->boundary[j]) {
+	    r1->boundary[j] = r2->boundary[j];
+	    ret = 1;
+	}
     }
 
     for (i = t->ndims; i < t->ndims_alloc; i++) {
@@ -558,6 +564,8 @@ void RTreeExpandRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
 	j = i + t->ndims_alloc;
 	r1->boundary[j] = 0;
     }
+    
+    return ret;
 }
 
 

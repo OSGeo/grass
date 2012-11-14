@@ -178,7 +178,7 @@ static int RTreeInsertRect2M(struct RTree_Rect *r, union RTree_Child child, int 
 
 /* 
  * Insert a data rectangle into an index structure.
- * RTreeInsertRectM provides for splitting the root;
+ * RTreeInsertRect provides for splitting the root;
  * returns 1 if root was split, 0 if it was not.
  * The level argument specifies the number of steps up from the leaf
  * level to insert; e.g. a data rectangle goes in at level = 0.
@@ -197,10 +197,9 @@ int RTreeInsertRectM(struct RTree_Rect *r, union RTree_Child child, int level,
     /* R*-tree forced reinsertion: for each level only once */
     memset(overflow, t->overflow, MAXLEVEL);
 
-    result =
-	RTreeInsertRect2M(r, child, level, &newnode, t, &reInsertList,
-			 overflow);
-			 
+    result = RTreeInsertRect2M(r, child, level, &newnode, t,
+                               &reInsertList, overflow);
+
     if (result == 1) {		/* root split */
 	/* grow a new root, & tree taller */
 	t->rootlevel++;
