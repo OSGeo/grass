@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.out.bin
@@ -24,9 +23,17 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
-
 RASTER3D_Map *map;
 RASTER3D_Region region;
+unsigned char *out_cell;
+
+static void swap_2(void *p) {
+	unsigned char *q = p;
+	unsigned char t;
+	t = q[0];
+	q[0] = q[1];
+	q[1] = t;
+}
 
 static void swap_4(void *p) {
 	unsigned char *q = p;
@@ -56,24 +63,58 @@ static void swap_8(void *p) {
 	q[4] = t;
 }
 
-static void write_float(FILE *fp, int swap_flag, float x) {
-	if (swap_flag)
-		swap_4(&x);
+static void write_cell(FILE *fp, const DCELL in_cell, int as_integer, int bytes,
+		int swap_flag) {
+	if (!as_integer) {
+		switch (bytes) {
+		case 4:
+			*(float *) out_cell = (float) in_cell;
+			break;
+		case 8:
+			*(double *) out_cell = (double) in_cell;
+			break;
+		}
+	} else {
+		switch (bytes) {
+		case 1:
+			*(unsigned char *) out_cell = (unsigned char) in_cell;
+			break;
+		case 2:
+			*(short *) out_cell = (short) in_cell;
+			break;
+		case 4:
+			*(int *) out_cell = (int) in_cell;
+			break;
+#ifdef HAVE_LONG_LONG_INT
+		case 8:
+			*(long long *) out_cell = (long long) in_cell;
+			break;
+#endif
+		}
+	}
 
-	if (fwrite(&x, 4, 1, fp) != 1)
+	if (swap_flag) {
+		switch (bytes) {
+		case 1:
+			break;
+		case 2:
+			swap_2(out_cell);
+			break;
+		case 4:
+			swap_4(out_cell);
+			break;
+		case 8:
+			swap_8(out_cell);
+			break;
+		}
+	}
+
+	if (fwrite(out_cell, bytes, 1, fp) != 1)
 		G_fatal_error(_("Error writing data"));
 }
 
-static void write_double(FILE *fp, int swap_flag, double x) {
-	if (swap_flag)
-		swap_8(&x);
-
-	if (fwrite(&x, 8, 1, fp) != 1)
-		G_fatal_error(_("Error writing data"));
-}
-
-void raster3d_to_bin(FILE * fp, DCELL null_value, int byte_swap, int row_swap,
-		int depth_swap) {
+static void raster3d_to_bin(FILE * fp, DCELL null_value, int as_integer,
+		int bytes, int byte_swap, int row_swap, int depth_swap) {
 	DCELL dvalue;
 	FCELL fvalue;
 	int x, y, z;
@@ -88,13 +129,12 @@ void raster3d_to_bin(FILE * fp, DCELL null_value, int byte_swap, int row_swap,
 
 	for (z = 0; z < depths; z++) {
 		G_percent(z, depths, 1);
-		for (y = 0; y < rows; y++) { /* g3d rows count from south to north */
+		for (y = 0; y < rows; y++) {
 			for (x = 0; x < cols; x++) {
 
 				/* From west to east */
 				col = x;
 				/* The default is to write rows from north to south
-				 to be r.in.ascii compatible
 				 */
 				row = y;
 				/* From bottom to the top */
@@ -113,17 +153,20 @@ void raster3d_to_bin(FILE * fp, DCELL null_value, int byte_swap, int row_swap,
 					Rast3d_get_value(map, col, row, depth, &fvalue, FCELL_TYPE);
 
 					if (Rast3d_is_null_value_num(&fvalue, FCELL_TYPE))
-						write_float(fp, byte_swap, (float)null_value);
+						write_cell(fp, null_value, as_integer, bytes,
+								byte_swap);
 					else
-						write_float(fp, byte_swap, fvalue);
+						write_cell(fp, (DCELL) fvalue, as_integer, bytes,
+								byte_swap);
 				} else {
 
 					Rast3d_get_value(map, col, row, depth, &dvalue, DCELL_TYPE);
 
 					if (Rast3d_is_null_value_num(&dvalue, DCELL_TYPE))
-						write_double(fp, byte_swap, null_value);
+						write_cell(fp, null_value, as_integer, bytes,
+								byte_swap);
 					else
-						write_double(fp, byte_swap, dvalue);
+						write_cell(fp, dvalue, as_integer, bytes, byte_swap);
 				}
 			}
 		}
@@ -139,9 +182,10 @@ int main(int argc, char *argv[]) {
 		struct Option *output;
 		struct Option *null;
 		struct Option *order;
+		struct Option *bytes;
 	} parm;
 	struct {
-		struct Flag *swap, *row, *depth;
+		struct Flag *swap, *row, *depth, *integer;
 	} flag;
 	char *name;
 	char *outfile;
@@ -149,7 +193,11 @@ int main(int argc, char *argv[]) {
 	int do_stdout;
 	int order;
 	int swap_flag;
+	int bytes;
+	int as_integer = 0;
 	FILE *fp;
+
+	out_cell = NULL;
 
 	G_gisinit(argv[0]);
 
@@ -170,6 +218,14 @@ int main(int argc, char *argv[]) {
 	parm.null->required = NO;
 	parm.null->answer = "0";
 	parm.null->description = _("Value to write out for null");
+
+	parm.bytes = G_define_option();
+	parm.bytes->key = "bytes";
+	parm.bytes->type = TYPE_INTEGER;
+	parm.bytes->required = YES;
+	parm.bytes->options = "1,2,4,8";
+	parm.bytes->description = _("Number of bytes per cell in binary file");
+	parm.bytes->guisection = _("Settings");
 
 	parm.order = G_define_option();
 	parm.order->key = "order";
@@ -193,13 +249,33 @@ int main(int argc, char *argv[]) {
 	flag.depth->description = _("Switch the depth order in output "
 			"from bottom->top to top->bottom");
 
+	flag.integer = G_define_flag();
+	flag.integer->key = 'i';
+	flag.integer->description = _("Write data as integer");
+
 	if (G_parser(argc, argv))
 		exit(EXIT_FAILURE);
 
 	if (sscanf(parm.null->answer, "%lf", &null_val) != 1)
 		G_fatal_error(_("Invalid value for null (integers only)"));
 
+	as_integer = flag.integer->answer;
 	name = parm.input->answer;
+
+	if (parm.bytes->answer)
+		bytes = atoi(parm.bytes->answer);
+	else if (as_integer)
+		bytes = 4;
+	else
+		bytes = 8;
+
+	if (!as_integer && bytes < 4)
+		G_fatal_error(_("Floating-point output requires bytes=4 or bytes=8"));
+
+#ifndef HAVE_LONG_LONG_INT
+	if (as_integer && bytes > 4)
+	G_fatal_error(_("Integer output doesn't support bytes=8 in this build"));
+#endif
 
 	if (parm.output->answer)
 		outfile = parm.output->answer;
@@ -226,6 +302,8 @@ int main(int argc, char *argv[]) {
 	swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
 	do_stdout = strcmp("-", outfile) == 0;
+
+	out_cell = G_malloc(bytes);
 
 	if (NULL == G_find_raster3d(parm.input->answer, ""))
 		Rast3d_fatal_error(_("3D raster map <%s> not found"),
@@ -263,12 +341,15 @@ int main(int argc, char *argv[]) {
 	G_verbose_message(_("cols=%d"), region.cols);
 	G_verbose_message(_("depths=%d"), region.depths);
 
-	raster3d_to_bin(fp, null_val, swap_flag, flag.row->answer,
-			flag.depth->answer);
+	raster3d_to_bin(fp, null_val, as_integer, bytes, swap_flag,
+			flag.row->answer, flag.depth->answer);
 
 	Rast3d_close(map);
 
 	fclose(fp);
+
+	if(out_cell)
+		G_free(out_cell);
 
 	return EXIT_SUCCESS;
 }
