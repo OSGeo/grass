@@ -1,7 +1,7 @@
 /*
- *   r.in.bin
+ *   r3.in.bin
  *
- *   Copyright (C) 2000 by the GRASS Development Team
+ *   Copyright (C) 2000, 2012 by the GRASS Development Team
  *   Author: Bob Covill <bcovill tekmap.ns.ca>
  *
  *   This program is free software under the GPL (>=v2)
@@ -244,13 +244,14 @@ int main(int argc, char *argv[]) {
 
 	/* Set description */
 	module = G_define_module();
-	G_add_keyword(_("raster"));
+	G_add_keyword(_("raster3d"));
 	G_add_keyword(_("import"));
 	module->description =
-			_("Import a binary raster file into a GRASS 3D raster map layer.");
+			_("Imports a binary raster file into a GRASS 3D raster map.");
 
 	parm.input = G_define_standard_option(G_OPT_F_INPUT);
-	parm.input->description = _("Binary 3D raster file to be imported");
+	parm.input->description = _("Name of binary 3D raster file to be imported");
+	parm.input->gisprompt = "old,file,bin_input";
 
 	parm.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
