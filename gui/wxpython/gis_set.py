@@ -39,7 +39,7 @@ import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
 
 from gui_core.ghelp import HelpFrame
-from core.gcmd      import GMessage, GError, DecodeString, RunCommand
+from core.gcmd      import GMessage, GError, DecodeString, RunCommand, GWarning
 from core.utils     import GetListOfLocations, GetListOfMapsets
 from location_wizard.dialogs import RegionDef
 
@@ -215,29 +215,35 @@ class GRASSStartup(wx.Frame):
         if location == "<UNKNOWN>" or \
                 not os.path.isdir(os.path.join(self.gisdbase, location)):
             location = None
-
-        if location:
-            # list of locations
-            self.UpdateLocations(self.gisdbase)
+        
+        # list of locations
+        self.UpdateLocations(self.gisdbase)
+        try:
+            self.lblocations.SetSelection(self.listOfLocations.index(location),
+                                          force = True)
+            self.lblocations.EnsureVisible(self.listOfLocations.index(location))
+        except ValueError:
+            sys.stderr.write(_("ERROR: Location <%s> not found\n") % self.GetRCValue("LOCATION_NAME"))
+            if len(self.listOfLocations) > 0:
+                self.lblocations.SetSelection(0, force = True)
+                self.lblocations.EnsureVisible(0)
+                location = self.listOfLocations[0]
+            else:
+                return
+        
+        # list of mapsets
+        self.UpdateMapsets(os.path.join(self.gisdbase, location))
+        mapset = self.GetRCValue("MAPSET")
+        if mapset:
             try:
-                self.lblocations.SetSelection(self.listOfLocations.index(location),
-                                              force = True)
-                self.lblocations.EnsureVisible(self.listOfLocations.index(location))
+                self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset),
+                                            force = True)
+                self.lbmapsets.EnsureVisible(self.listOfMapsets.index(mapset))
             except ValueError:
-                print >> sys.stderr, _("ERROR: Location <%s> not found") % location
-            
-            # list of mapsets
-            self.UpdateMapsets(os.path.join(self.gisdbase, location))
-            mapset = self.GetRCValue("MAPSET")
-            if mapset:
-                try:
-                    self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset),
-                                                force = True)
-                    self.lbmapsets.EnsureVisible(self.listOfMapsets.index(mapset))
-                except ValueError:
-                    self.lbmapsets.Clear()
-                    print >> sys.stderr, _("ERROR: Mapset <%s> not found") % mapset
-                    
+                sys.stderr.write(_("ERROR: Mapset <%s> not found\n") % mapset)
+                self.lbmapsets.SetSelection(0, force = True)
+                self.lbmapsets.EnsureVisible(0)
+        
     def _do_layout(self):
         sizer           = wx.BoxSizer(wx.VERTICAL)
         dbase_sizer     = wx.BoxSizer(wx.HORIZONTAL)
