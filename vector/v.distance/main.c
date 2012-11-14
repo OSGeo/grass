@@ -665,7 +665,6 @@ int main(int argc, char *argv[])
 		G_debug(3, "  %d lines in box", lList->n_values);
 
 		for (i = 0; i < lList->n_values; i++) {
-		    tmp_tcat = -1;
 		    ttype = Vect_read_line(&To, TPoints, TCats, lList->id[i]);
 
 		    line2line(FPoints, ftype, TPoints, ttype,
@@ -676,8 +675,16 @@ int main(int argc, char *argv[])
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
 
-		    /* TODO: more cats of the same field */
-		    Vect_cat_get(TCats, to_field, &tmp_tcat);
+		    tmp_tcat = -1;
+		    /* TODO: all cats of given field ? */
+		    for (j = 0; j < TCats->n_cats; j++) {
+			if (TCats->field[j] == to_field) {
+			    if (tmp_tcat >= 0)
+				G_warning(_("More cats found in to_layer (line=%d)"),
+					  lList->id[i]);
+			    tmp_tcat = TCats->cat[j];
+			}
+		    }
 
 		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
 			    tmp_tcat);
@@ -734,8 +741,6 @@ int main(int argc, char *argv[])
 		    if (Vect_get_area_centroid(&To, aList->id[i]) == 0)
 			continue;
 
-		    tmp_tcat = -1;
-
 		    line2area(&To, FPoints, ftype, aList->id[i], &aList->box[i],
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
@@ -746,7 +751,17 @@ int main(int argc, char *argv[])
 
 		    /* TODO: more cats of the same field */
 		    Vect_get_area_cats(&To, aList->id[i], TCats);
-		    Vect_cat_get(TCats, to_field, &tmp_tcat);
+		    tmp_tcat = -1;
+
+		    /* TODO: all cats of given field ? */
+		    for (j = 0; j < TCats->n_cats; j++) {
+			if (TCats->field[j] == to_field) {
+			    if (tmp_tcat >= 0)
+				G_warning(_("More cats found in to_layer (area=%d)"),
+					  aList->id[i]);
+			    tmp_tcat = TCats->cat[j];
+			}
+		    }
 
 		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
 			    tmp_tcat);
@@ -922,7 +937,6 @@ int main(int argc, char *argv[])
 		G_debug(3, "  %d lines in box", lList->n_values);
 
 		for (i = 0; i < lList->n_values; i++) {
-		    tmp_tcat = -1;
 		    ttype = Vect_read_line(&To, TPoints, TCats, lList->id[i]);
 
 		    /* area to line */
@@ -934,8 +948,16 @@ int main(int argc, char *argv[])
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
 
-		    /* TODO: more cats of the same field */
-		    Vect_cat_get(TCats, to_field, &tmp_tcat);
+		    tmp_tcat = -1;
+		    /* TODO: all cats of given field ? */
+		    for (j = 0; j < TCats->n_cats; j++) {
+			if (TCats->field[j] == to_field) {
+			    if (tmp_tcat >= 0)
+				G_warning(_("More cats found in to_layer (line=%d)"),
+					  lList->id[i]);
+			    tmp_tcat = TCats->cat[j];
+			}
+		    }
 
 		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
 			    tmp_tcat);
@@ -1079,7 +1101,7 @@ int main(int argc, char *argv[])
 			if (TCats->field[j] == to_field) {
 			    if (tmp_tcat >= 0)
 				G_warning(_("More cats found in to_layer (area=%d)"),
-					  area);
+					  tarea);
 			    tmp_tcat = TCats->cat[j];
 			}
 		    }
