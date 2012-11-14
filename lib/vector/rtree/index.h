@@ -90,7 +90,7 @@ RectReal RTreeRectSphericalVolume(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectVolume(struct RTree_Rect *, struct RTree *);
 RectReal RTreeRectMargin(struct RTree_Rect *, struct RTree *);
 void RTreeCombineRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
-void RTreeExpandRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+int RTreeExpandRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 int RTreeCompareRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
 
 /*-----------------------------------------------------------------------------

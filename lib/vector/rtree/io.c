@@ -38,7 +38,9 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
 	assert(t->free_nodes.pos);
     }
     t->free_nodes.pos[t->free_nodes.avail++] = pos;
-    
+
+    /* TODO: search with t->used[level][which] instead of which,
+     * then which = t->used[level][which] */
     which = (pos == t->nb[level][2].pos ? 2 : pos == t->nb[level][1].pos);
     t->nb[level][which].pos = -1;
     t->nb[level][which].dirty = 0;
@@ -72,7 +74,7 @@ size_t RTreeReadBranch(struct RTree_Branch *b, struct RTree *t)
 {
     size_t size = 0;
 
-    size += read(t->fd, b->rect.boundary, t->nsides * sizeof(RectReal));
+    size += read(t->fd, b->rect.boundary, t->rectsize);
     size += read(t->fd, &(b->child), sizeof(union RTree_Child));
 
     return size;
@@ -98,13 +100,20 @@ size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 /* get node from buffer or file */
 void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *t)
 {
-    int which = (nodepos == t->nb[level][2].pos ? 2 : nodepos == t->nb[level][1].pos);
+    int which = 0;
+
+    /* TODO: search with t->used[level][which] instead of which,
+     * then which = t->used[level][which] */
+    while (t->nb[level][which].pos != nodepos &&
+           t->nb[level][which].pos >= 0 && which < 2)
+	which++;
 
     if (t->nb[level][which].pos != nodepos) {
 	/* replace least recently used (fastest method of lru, pseudo-lru, mru) */
 	which = t->used[level][2];
 	/* rewrite node in buffer */
 	if (t->nb[level][which].dirty) {
+	    assert(t->nb[level][which].pos >= 0);
 	    RTreeRewriteNode(&(t->nb[level][which].n), t->nb[level][which].pos, t);
 	    t->nb[level][which].dirty = 0;
 	}
@@ -123,6 +132,7 @@ void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *
     }
     /* copy node */
     RTreeCopyNode(n, &(t->nb[level][which].n), t);
+    assert(n->level == level);
 }
 
 /* write branch to file */
@@ -130,7 +140,7 @@ size_t RTreeWriteBranch(struct RTree_Branch *b, struct RTree *t)
 {
     size_t size = 0;
 
-    size += write(t->fd, b->rect.boundary, t->nsides * sizeof(RectReal));
+    size += write(t->fd, b->rect.boundary, t->rectsize);
     size += write(t->fd, &(b->child), sizeof(union RTree_Child));
 
     return size;
@@ -157,14 +167,22 @@ size_t RTreeWriteNode(struct RTree_Node *n, struct RTree *t)
 size_t RTreeRewriteNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
     lseek(t->fd, nodepos, SEEK_SET);
-    return write(t->fd, n, t->nodesize);
+
+    return RTreeWriteNode(n, t);
 }
 
 /* update node in buffer */
 void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
-    int which = (nodepos == t->nb[n->level][2].pos ? 2 : nodepos == t->nb[n->level][1].pos);
-    
+    int which = 0;
+
+    /* TODO: search with t->used[level][which] instead of which,
+     * then which = t->used[level][which] */
+    while (t->nb[n->level][which].pos != nodepos && which < 2)
+	which++;
+
+    assert(t->nb[n->level][which].pos == nodepos);
+    assert(t->nb[n->level][which].n.level == n->level);
     /* copy node */
     RTreeCopyNode(&(t->nb[n->level][which].n), n, t);
     t->nb[n->level][which].dirty = 1;
@@ -182,15 +200,22 @@ void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 }
 
 /* update rectangle */
-void RTreeUpdateRect(struct RTree_Rect *r, struct RTree_Node *n, off_t nodepos, int b, struct RTree *t)
+void RTreeUpdateRect(struct RTree_Rect *r, struct RTree_Node *n,
+                     off_t nodepos, int b, struct RTree *t)
 {
-    int i;
-    int which = (nodepos == t->nb[n->level][2].pos ?
-		 2 : nodepos == t->nb[n->level][1].pos);
+    int i, j;
+    int which = 0;
     
-    for (i = 0; i < t->nsides; i++) {
+    while (t->nb[n->level][which].pos != nodepos && which < 2)
+	which++;
+
+    assert(t->nb[n->level][which].n.level == n->level);
+    for (i = 0; i < t->ndims_alloc; i++) {
 	t->nb[n->level][which].n.branch[b].rect.boundary[i] =
 	                  n->branch[b].rect.boundary[i] = r->boundary[i];
+	j = i + t->ndims_alloc;
+	t->nb[n->level][which].n.branch[b].rect.boundary[j] =
+	                  n->branch[b].rect.boundary[j] = r->boundary[j];
     }
 
     t->nb[n->level][which].dirty = 1;

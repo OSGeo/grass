@@ -130,10 +130,6 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 	/* write empty root node */
 	lseek(new_rtree->fd, rootpos, SEEK_SET);
 	RTreeWriteNode(n, new_rtree);
-	new_rtree->nb[0][0].n = *n;
-	new_rtree->nb[0][0].pos = rootpos;
-	new_rtree->used[0][0] = 0;
-	new_rtree->used[0][2] = 2;
 	RTreeFreeNode(n);
 
 	new_rtree->insert_rect = RTreeInsertRectF;
