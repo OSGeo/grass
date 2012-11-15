@@ -40,42 +40,28 @@ west -&gt; east for columns
 north -&gt; south for rows
 bottom -&gt; top for depths
 </pre></div>
+The header is followed by cell values in <em>floating point</em> format.
+Cell values are exported as a series of horizontal slices in row-major
+order. The data starts with the upper left corner (NW) at the bottom of the data set:
 
-This order is compatible with the <em>r.in.ascii</em> row -&gt; column ordering. The column 
-order can not be changed but the row and depth order. Supported orders are:
+<div class="code"><pre>
+(x, y + rows,     z), (x + 1, y + rows,     z), ... (x + cols, y + rows,     z)
+(x, y + rows,     z), (x + 1, y + rows - 1, z), ... (x + cols, y + rows - 1, z)
+          .                     .                                .
+          .                     .                                .
+          .                     .                                .
+(x, y,   z + depths), (x + 1, y,   z + depths), ... (x + cols, y,   z + depths)
+</pre></div>
 
+This order is compatible with the <em>r.in.ascii</em> row -&gt; column ordering.
+<p>
+Supported orders are:
 <ul>
 <li><b>nsbt</b>: north -&gt; south and bottom -&gt; top ordering which is the default (no flags)</li>
 <li><b>snbt</b>: south -&gt; north and bottom -&gt; top ordering using <em>-r</em> flag</li>
 <li><b>nstb</b>: north -&gt; south and top -&gt; bottom ordering using <em>-d</em> flag</li>
 <li><b>sntb</b>: south -&gt; north and top -&gt; bottom ordering using <em>-rd</em> flag</li>
 </ul>
-
-The header is followed by cell values in <em>floating point</em> format.
-Cell values are output as a series of horizontal slices in row-major
-order. That is in case of the default north -&gt; south and bottom -&gt; top (nsbt) ordering:
-
-<div class="code"><pre>
-  (x, y, z)       (x + 1, y, z)     ...     (x + cols, y, z)
-(x, y + 1, z)   (x + 1, y + 1, z)   ...   (x + cols, y + 1, z)
-      .                 .                           .
-      .                 .                           .
-      .                 .                           .
-(x, y + rows, z) (x + 1, y + rows, z) ... (x + cols, y + rows, z)
-
-
-  (x, y, z + 1)       (x + 1, y, z + 1)     ...     (x + cols, y, z + 1)
-(x, y + 1, z + 1)   (x + 1, y + 1, z + 1)   ...   (x + cols, y + 1, z + 1)
-      .                 .                           .
-      .                 .                           .
-      .                 .                           .
-(x, y + rows, z + 1)   (x + 1, y + rows, z + 1) ... (x + cols, y + rows, z + 1)
-
-and so on.
-</pre></div>
-
-The data starts with the upper left corner (NW) at the bottom of the data set.
-
 <p>One level maps can be imported with <em>r.in.ascii</em> (2D raster) using
 the default <b>nsbt</b> order and removing the header lines "version",
 "order", "top", "bottom" and "levels".
