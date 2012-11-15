@@ -222,7 +222,6 @@ int main(int argc, char *argv[]) {
 	struct {
 		struct Flag *integer_in;
 		struct Flag *sign;
-		struct Flag *swap;
 		struct Flag *depth;
 		struct Flag *row;
 	} flag;
@@ -366,11 +365,6 @@ int main(int argc, char *argv[]) {
 	flag.sign->description = _("Signed data (two's complement)");
 	flag.sign->guisection = _("Settings");
 
-	flag.swap = G_define_flag();
-	flag.swap->key = 'b';
-	flag.swap->description = _("Byte Swap the Data During Import");
-	flag.swap->guisection = _("Settings");
-
 	if (G_parser(argc, argv))
 		exit(EXIT_FAILURE);
 
@@ -385,12 +379,6 @@ int main(int argc, char *argv[]) {
 		order = G_is_little_endian() ? 1 : 0;
 	else if (G_strcasecmp(parm.order->answer, "swap") == 0)
 		order = G_is_little_endian() ? 0 : 1;
-
-	if (flag.swap->answer) {
-		if (strcmp(parm.order->answer, "native") != 0)
-			G_fatal_error(_("order= and -b are mutually exclusive"));
-		order = G_is_little_endian() ? 0 : 1;
-	}
 
 	byte_swap = order == (G_is_little_endian() ? 0 : 1);
 

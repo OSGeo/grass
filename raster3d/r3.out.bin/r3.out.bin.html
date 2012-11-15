@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 The <em>r3.out.bin</em> program exports a GRASS 3D raster map to a binary array
-file. Optionally, output can be sent to standard output (stdout) for direct
+file. Optionally, output can be send to standard output (stdout) for direct
 input (pipe) into other applications. Data is exported according to the
 original GRASS 3D raster type (float, double). 
 
@@ -12,11 +12,23 @@ the write order of the depths (bottom->top to top->bottom) can be switched.
 <p>
 The region parameters are printed to stderr when setting the verbose flag.
 Export of little and big endian byte order is supported.
+<p>
+Have a look at <a href="r3.out.ascii.html">r3.out.ascii</a> to manual page that 
+describes the internal layout of the 3D raster maps and the supported
+row and depth switch options. 
+
+<h2>Examples</h2>
+
+Have a look at the examples in <a href="r3.in.bin.html">r3.in.bin</a>.
+
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.out.bin.html">r.out.bin</a>,
-<a href="r3.out.ascii.html">r3.out.bin</a></em>
+<em>
+<a href="r3.in.bin.html">r3.in.bin</a>,
+<a href="r3.out.ascii.html">r3.out.bin</a>,
+<a href="r3.in.ascii.html">r3.in.bin</a>
+</em>
 
 
 <h2>AUTHOR</h2>
