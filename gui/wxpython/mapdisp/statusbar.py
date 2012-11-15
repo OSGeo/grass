@@ -730,7 +730,8 @@ class SbMask(SbItem):
         self.widget.Hide()
         
     def Update(self):
-        if grass.find_file(name = 'MASK', element = 'cell')['name']:
+        if grass.find_file(name = 'MASK', element = 'cell',
+                           mapset = grass.gisenv()['MAPSET'])['name']:
             self.Show()
         else:
             self.Hide()
