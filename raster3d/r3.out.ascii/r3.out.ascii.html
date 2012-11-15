@@ -11,12 +11,13 @@ module is sensitive to region settings (set with <em>g.region</em>).
 output.
 
 <h2>NOTES</h2>
-The default format for the ASCII file is equivalent to that required
+The default format of the exported ASCII file is equivalent to that required
 by <em>r3.in.ascii</em>. In particular, files output by
 <em>r3.out.ascii</em> with header information may be converted back to
 3D raster maps with <em>r3.in.ascii</em>.
 
-<p>The format of the ASCII file is:
+<p>
+The format of the ASCII file is:
 <div class="code"><pre>
 version: <i>"grass7"</i>
 order:   <i>"nsbt" or "nstb" or "snbt" or "sntb"</i>
@@ -41,16 +42,21 @@ north -&gt; south for rows
 bottom -&gt; top for depths
 </pre></div>
 The header is followed by cell values in <em>floating point</em> format.
+<p>This header is followed by the cell values in <em>floating point</em> format 
+organized in rows with constant <em>col</em> and <em>level</em> coordinate.
+The rows are organized by constant <em>level</em> coordinate. Individual cell
+values are separated by <em>space</em> or <em>CR</em>.
 Cell values are exported as a series of horizontal slices in row-major
-order. The data starts with the upper left corner (NW) at the bottom of the data set:
+order. The data starts with the upper left corner (NW) at the bottom of the data set.
+The values at the following coordinates are exported:
 
 <div class="code"><pre>
-(x, y + rows,     z), (x + 1, y + rows,     z), ... (x + cols, y + rows,     z)
-(x, y + rows,     z), (x + 1, y + rows - 1, z), ... (x + cols, y + rows - 1, z)
+(x, y + rows,     z) (x + 1, y + rows,     z) ... (x + cols, y + rows,     z)
+(x, y + rows,     z) (x + 1, y + rows - 1, z) ... (x + cols, y + rows - 1, z)
           .                     .                                .
           .                     .                                .
           .                     .                                .
-(x, y,   z + depths), (x + 1, y,   z + depths), ... (x + cols, y,   z + depths)
+(x, y,   z + depths) (x + 1, y,   z + depths) ... (x + cols, y,   z + depths)
 </pre></div>
 
 This order is compatible with the <em>r.in.ascii</em> row -&gt; column ordering.
@@ -62,9 +68,117 @@ Supported orders are:
 <li><b>nstb</b>: north -&gt; south and top -&gt; bottom ordering using <em>-d</em> flag</li>
 <li><b>sntb</b>: south -&gt; north and top -&gt; bottom ordering using <em>-rd</em> flag</li>
 </ul>
-<p>One level maps can be imported with <em>r.in.ascii</em> (2D raster) using
+<p>
+The internal storage scheme of 3D raster maps is visualized in the following picture:
+<center>
+<img src="g3d_volume_layout.png" border=0><br>
+<table border=0 width=700>
+<tr><td><center>
+<i>The coordinate system and tile layout of a voxel map in GRASS</i>
+</center></td></tr>
+</table>
+</center>
+
+<p>
+One level maps can be imported with <em>r.in.ascii</em> (2D raster) using
 the default <b>nsbt</b> order and removing the header lines "version",
 "order", "top", "bottom" and "levels".
+
+<h2>Example</h2>
+We define a small region with 4 columns, 3 rows and 2 depths (4x3x2) and export
+it using different ordering definitions: 
+<div class="code"><pre>
+g.region res3=1 t=2 b=0 w=0 e=4 s=0 n=3
+r3.mapcalc "simple_example = row() + col() + depth()"
+</pre></div>
+
+Default order:
+<div class="code"><pre>
+r3.out.ascii input=simple_example dp=0
+
+version: grass7
+order: nsbt
+north: 3.000000
+south: 0.000000
+east: 4.000000
+west: 0.000000
+top: 2.000000
+bottom: 0.000000
+rows: 3
+cols: 4
+levels: 2
+3 4 5 6 
+4 5 6 7 
+5 6 7 8 
+4 5 6 7 
+5 6 7 8 
+6 7 8 9 
+</pre></div>
+Inverse row order (-r) 
+<div class="code"><pre>
+r3.out.ascii input=simple_example dp=0 -r
+
+version: grass7
+order: snbt
+north: 3.000000
+south: 0.000000
+east: 4.000000
+west: 0.000000
+top: 2.000000
+bottom: 0.000000
+rows: 3
+cols: 4
+levels: 2
+5 6 7 8 
+4 5 6 7 
+3 4 5 6 
+6 7 8 9 
+5 6 7 8 
+4 5 6 7
+</pre></div>
+Inverse depth order (-d) 
+<div class="code"><pre>
+r3.out.ascii input=simple_example dp=0 -d
+version: grass7
+order: nstb
+north: 3.000000
+south: 0.000000
+east: 4.000000
+west: 0.000000
+top: 2.000000
+bottom: 0.000000
+rows: 3
+cols: 4
+levels: 2
+4 5 6 7 
+5 6 7 8 
+6 7 8 9 
+3 4 5 6 
+4 5 6 7 
+5 6 7 8
+</pre></div>
+Inverse row and depth order (-rd) 
+<div class="code"><pre>
+r3.out.ascii input=simple_example dp=0 -rd
+
+version: grass7
+order: sntb
+north: 3.000000
+south: 0.000000
+east: 4.000000
+west: 0.000000
+top: 2.000000
+bottom: 0.000000
+rows: 3
+cols: 4
+levels: 2
+6 7 8 9 
+5 6 7 8 
+4 5 6 7 
+5 6 7 8 
+4 5 6 7 
+3 4 5 6
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
