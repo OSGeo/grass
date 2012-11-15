@@ -132,6 +132,7 @@ for i in `ls test_in_bin_float_*.txt` ; do
     diff $i test_out_bin_float.ref
 done
 
-g.mremove -f rast3d=*
-rm *.txt
-rm *.bin
+g.mremove -f rast3d=test_in*
+g.mremove -f rast3d=test_out*
+rm test_in_*.txt
+rm test_out_*.bin
