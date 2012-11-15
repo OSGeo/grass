@@ -185,7 +185,7 @@ int main(int argc, char *argv[]) {
 		struct Option *bytes;
 	} parm;
 	struct {
-		struct Flag *swap, *row, *depth, *integer;
+		struct Flag *row, *depth, *integer;
 	} flag;
 	char *name;
 	char *outfile;
@@ -233,11 +233,7 @@ int main(int argc, char *argv[]) {
 	parm.order->required = NO;
 	parm.order->options = "big,little,native,swap";
 	parm.order->description = _("Output byte order");
-	parm.order->answer = "native";
-
-	flag.swap = G_define_flag();
-	flag.swap->key = 's';
-	flag.swap->description = _("Byte swap output");
+	parm.order->answer = "native";;
 
 	flag.row = G_define_flag();
 	flag.row->key = 'r';
@@ -292,12 +288,6 @@ int main(int argc, char *argv[]) {
 		order = G_is_little_endian() ? 1 : 0;
 	else if (G_strcasecmp(parm.order->answer, "swap") == 0)
 		order = G_is_little_endian() ? 0 : 1;
-
-	if (flag.swap->answer) {
-		if (strcmp(parm.order->answer, "native") != 0)
-			G_fatal_error(_("order= and -s are mutually exclusive"));
-		order = G_is_little_endian() ? 0 : 1;
-	}
 
 	swap_flag = order == (G_is_little_endian() ? 0 : 1);
 

@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r3.in.bin</em> allows a user to create a GRASS 3D raster map 
-from a variety of binary 3D raster data formats. 
+from a variety of binary 3D raster data formats.
 
 <p>The top, bottom, north, south, east, and west field values entered 
 are the coordinates of the edges of the geographic region. 
@@ -9,6 +9,36 @@ The depths, rows and cols field values entered describe the dimensions
 of the matrix of data to follow. 
 If the bytes field is entered incorrectly an error will be generated
 suggesting a closer bytes value. 
+
+<h2>NOTES</h2>
+
+The write order of the rows (north->south to south->north) and 
+the write order of the depths (bottom->top to top->bottom) can be switched.
+<p>
+Have a look at <a href="r3.out.ascii.html">r3.out.ascii</a> to manual page that 
+describes the internal layout of the 3D raster maps and the supported
+row and depth switch options.
+<p>
+Import of little and big endian byte order as well as signed and
+unsigned integer data types is supported. 
+
+<h2>Example</h2>
+
+First we create a specific region and a 3D raster map that we will export with
+<a href="r3.out.bin.html">r3.out.bin</a> and import again.
+
+<div class="code"><pre>
+g.region w=0 e=180 s=0 n=90 b=0 t=100 res3=10
+r3.mapcalc expr="test_out_bin_float = float(if(row() == 2, null(), row()))"
+
+r3.out.bin input=test_out_bin_float byte=4 null=-9999 \
+    output=test_out_bin_float_native_b4.bin order=native
+
+r3.in.bin output=test_in_bin_float byte=4 null=-9999 \
+    input=test_out_bin_float_native_b4.bin order=native \
+    bottom=0 top=100 west=0 east=180 south=0 north=90 \
+    cols=18 rows=9 depths=10
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
