@@ -11,12 +11,12 @@ import fnmatch
 
 try:
     from collections import OrderedDict
-except:
+except ImportError:
     from pygrass.orderdict import OrderedDict
 
 from itertools import izip_longest
 from xml.etree.ElementTree import fromstring
-import numpy as np
+
 import grass
 
 
@@ -185,12 +185,20 @@ class Parameter(object):
     # in this case we define which function must be use to get/set the value
     value = property(fget=_get_value, fset=_set_value)
 
-    def __str__(self):
+    def get_bash(self):
         if isinstance(self._value, list) or isinstance(self._value, tuple):
             value = ','.join([str(v) for v in self._value])
         else:
             value = str(self._value)
         return """%s=%s""" % (self.name, value)
+
+    def get_python(self):
+        if not self.value:
+            return ''
+        return """%s=%r""" % (self.name, self._value)
+
+    def __str__(self):
+        return self.get_bash()
 
     def __repr__(self):
         str_repr = "Parameter <%s> (required:%s, type:%s, multiple:%s)"
@@ -251,7 +259,7 @@ class Flag(object):
         self.default = diz.get('default', None)
         self.guisection = diz.get('guisection', None)
 
-    def __str__(self):
+    def get_bash(self):
         if self.value:
             if self.special:
                 return '--%s' % self.name[0]
@@ -259,6 +267,18 @@ class Flag(object):
                 return '-%s' % self.name
         else:
             return ''
+
+    def get_python(self):
+        if self.value:
+            if self.special:
+                return '%s=True' % self.name
+            else:
+                return self.name
+        else:
+            return ''
+
+    def __str__(self):
+        return self.get_bash()
 
     def __repr__(self):
         return "Flag <%s> (%s)" % (self.name, self.description)
@@ -353,6 +373,7 @@ class Module(object):
         self.inputs = TypeDict(Parameter)
         self.outputs = TypeDict(Parameter)
         self.required = []
+
         # Insert parameters into input/output and required
         for par in self.params_list:
             if par.input:
@@ -373,7 +394,6 @@ class Module(object):
         #
         # Add new attributes to the class
         #
-        self._flags = ''
         self.run_ = True
         self.finish_ = True
         self.stdin_ = None
@@ -385,18 +405,26 @@ class Module(object):
             self.__call__(*args, **kargs)
 
     def _get_flags(self):
-        return self._flags
+        return ''.join([flg.get_python() for flg in self.flags_dict.values()
+                        if not flg.special])
 
     def _set_flags(self, value):
         if isinstance(value, str):
-            flgs = [flg for flg in self.flags_dict
-                    if not self.flags_dict[flg].special]
-            # we need to check if the flag is valid, special flags are not
-            # allow
-            if value in flgs:
-                self._flags = value
+            if value == '':
+                for  flg in self.flags_dict.values():
+                    if not flg.special:
+                        flg.value = False
             else:
-                raise ValueError('Flag not valid, valid flag are: %r' % flgs)
+                flgs = [flg.name for flg in self.flags_dict.values()
+                        if not flg.special]
+                # we need to check if the flag is valid, special flags are not
+                # allow
+                for val in value:
+                    if val in flgs:
+                        self.flags_dict[val].value = True
+                    else:
+                        str_err = 'Flag not valid: %r, valid flag are: %r'
+                        raise ValueError(str_err % (val, flgs))
         else:
             raise TypeError('The flags attribute must be a string')
 
@@ -462,13 +490,35 @@ class Module(object):
                 if flag in self.flags_dict:
                     self.flags_dict[flag].value = True
                 else:
-                    raise FlagError('Flag "%s" not valid.')
+                    raise FlagError('Flag "%s" not valid.' % flag)
 
         #
         # check if execute
         #
         if self.run_:
             self.run()
+
+    def get_bash(self):
+        return ' '.join(self.make_cmd())
+
+    def get_python(self):
+        prefix = self.name.split('.')[0]
+        name = '_'.join(self.name.split('.')[1:])
+        params = ', '.join([par.get_python() for par in self.params_list
+                           if par.get_python() != ''])
+        special = ', '.join([flg.get_python()
+                             for flg in self.flags_dict.values()
+                             if flg.special and flg.get_python() != ''])
+        #     pre name par flg special
+        if self.flags and special:
+            return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params,
+                                                self.flags, special)
+        elif self.flags:
+            return "%s.%s(%s, flags=%r)" % (prefix, name, params, self.flags)
+        elif special:
+            return "%s.%s(%s, %s)" % (prefix, name, params, special)
+        else:
+            return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
         return ' '.join(self.make_cmd())
@@ -495,13 +545,12 @@ class Module(object):
             if par.value is not None:
                 args.append(str(par))
         for flg in self.flags_dict:
-            if self.flags_dict[flg].value is not None:
+            if self.flags_dict[flg].value:
                 args.append(str(self.flags_dict[flg]))
         return args
 
     def run(self, node=None):
         cmd = self.make_cmd()
-        #print(repr(cmd))
         self.popen = subprocess.Popen(cmd, stdin=self.stdin_,
                                       stdout=self.stdout_,
                                       stderr=self.stderr_)
