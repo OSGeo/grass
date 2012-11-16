@@ -2188,7 +2188,7 @@ def GhostscriptForWindows(tile, size, fp):
     file = tempfile.mktemp()
 
     # Build ghostscript command - for Windows
-    command = ["gs",
+    command = ["gswin32c",
                "-q",                    # quite mode
                "-g%dx%d" % size,        # set output geometry (pixels)
                "-dNOPAUSE -dSAFER",     # don't pause between pages, safe mode
