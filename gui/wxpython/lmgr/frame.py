@@ -49,7 +49,7 @@ from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
-from gui_core.goutput      import GMConsole
+from gui_core.goutput      import GConsole
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
@@ -255,7 +255,7 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page = self.notebookLayers, text = _("Map layers"), name = 'layers')
         
         # create 'command output' text area
-        self.goutput = GMConsole(self, frame = self)
+        self.goutput = GConsole(self, frame = self)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
         self._setCopyingOfSelectedText()
         

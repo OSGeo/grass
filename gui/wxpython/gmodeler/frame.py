@@ -34,7 +34,7 @@ import wx.lib.flatnotebook    as FN
 
 from core                 import globalvar
 from gui_core.widgets     import GNotebook
-from gui_core.goutput     import GMConsole
+from gui_core.goutput     import GConsole
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
@@ -104,7 +104,7 @@ class ModelFrame(wx.Frame):
         
         self.pythonPanel = PythonPanel(parent = self)
         
-        self.goutput = GMConsole(parent = self, frame = self, notebook = self.notebook)
+        self.goutput = GConsole(parent = self, frame = self, notebook = self.notebook)
         
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')

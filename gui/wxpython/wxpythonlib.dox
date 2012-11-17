@@ -118,10 +118,10 @@ available in GRASS 5 and GRASS 6.
  - ghelp::HelpPanel
 - gui_core::goutput
  - goutput::CmdThread
- - goutput::GMConsole
- - goutput::GMStc
- - goutput::GMStdout
- - goutput::GMStderr
+ - goutput::GConsole
+ - goutput::GStc
+ - goutput::GStdout
+ - goutput::GStderr
 - gui_core::gselect
  - gselect::Select
  - gselect::VectorSelect
