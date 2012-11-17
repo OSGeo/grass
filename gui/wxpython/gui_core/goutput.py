@@ -52,6 +52,12 @@ wxCmdDone,     EVT_CMD_DONE     = NewEvent()
 wxCmdAbort,    EVT_CMD_ABORT    = NewEvent()
 wxCmdPrepare,  EVT_CMD_PREPARE  = NewEvent()
 
+
+GC_EMPTY = 0
+GC_SEARCH = 1
+GC_PROMPT = 2
+
+
 def GrassCmd(cmd, env = None, stdout = None, stderr = None):
     """!Return GRASS command thread"""
     return CommandThread(cmd, env = env,
@@ -199,6 +205,7 @@ class GConsole(wx.SplitterWindow):
     def __init__(self, parent, id = wx.ID_ANY, margin = False,
                  frame = None, notebook = None,
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
+                 gcstyle = GC_EMPTY,
                  **kwargs):
         wx.SplitterWindow.__init__(self, parent, id, style = style, *kwargs)
         self.SetName("GConsole")
@@ -217,6 +224,8 @@ class GConsole(wx.SplitterWindow):
             self._notebook = notebook
         else:
             self._notebook = self.parent.notebook
+
+        self._gcstyle = gcstyle
         self.lineWidth       = 80
         
         # remember position of line begining (used for '\r')
@@ -241,14 +250,16 @@ class GConsole(wx.SplitterWindow):
         self.Bind(EVT_CMD_RUN,     self.OnCmdRun)
         self.Bind(EVT_CMD_DONE,    self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
-        
+
         # search & command prompt
+        # move to the if below
+        # search depends on cmd prompt
         self.cmdPrompt = GPromptSTC(parent = self)
-        
-        if self.parent.GetName() != 'LayerManager':
-            self.search = None
+        if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
-        else:
+
+
+        if self._gcstyle & GC_SEARCH:
             self.infoCollapseLabelExp = _("Click here to show search module engine")
             self.infoCollapseLabelCol = _("Click here to hide search module engine")
             self.searchPane = wx.CollapsiblePane(parent = self.panelOutput,
@@ -259,7 +270,9 @@ class GConsole(wx.SplitterWindow):
             self.searchPane.Collapse(True)
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
             self.search.Bind(wx.EVT_TEXT,             self.OnUpdateStatusBar)
-        
+        else:
+            self.search = None
+
         # stream redirection
         self.cmdStdOut = GStdout(self)
         self.cmdStdErr = GStderr(self)
@@ -269,9 +282,14 @@ class GConsole(wx.SplitterWindow):
         
         self.outputBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
                                       label = " %s " % _("Output window"))
+
+        if self._gcstyle & GC_PROMPT:
+            cmdLabel = _("Command prompt")
+        else:
+            cmdLabel = _("Command")
         self.cmdBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
-                                   label = " %s " % _("Command prompt"))
-        
+                                   label = " %s " % cmdLabel)
+
         # buttons
         self.btnOutputClear = wx.Button(parent = self.panelOutput, id = wx.ID_CLEAR)
         self.btnOutputClear.SetToolTipString(_("Clear output window content"))
@@ -288,7 +306,7 @@ class GConsole(wx.SplitterWindow):
         self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into file; "
                                                "content saved when switching off."))
         
-        if self.frame.GetName() != 'LayerManager':
+        if not self._gcstyle & GC_PROMPT:
             self.btnCmdClear.Hide()
             self.btnCmdProtocol.Hide()
         
@@ -308,12 +326,12 @@ class GConsole(wx.SplitterWindow):
         outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
         cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
         
-        if self.cmdPrompt.IsShown():
+        if self._gcstyle & GC_PROMPT:
             promptSizer = wx.BoxSizer(wx.VERTICAL)
             promptSizer.Add(item = self.cmdPrompt, proportion = 1,
                         flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
         
-        if self.search and self.search.IsShown():
+        if self._gcstyle & GC_SEARCH:
             outputSizer.Add(item = self.searchPane, proportion = 0,
                             flag = wx.EXPAND | wx.ALL, border = 3)
         outputSizer.Add(item = self.cmdOutput, proportion = 1,
@@ -332,10 +350,10 @@ class GConsole(wx.SplitterWindow):
         cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
         
-        if self.frame.GetName() != 'LayerManager':
-            proportion = (1, 1)
-        else:
+        if self._gcstyle & GC_PROMPT:
             proportion = (2, 3)
+        else:
+            proportion = (1, 1)
         
         btnSizer.Add(item = outBtnSizer, proportion = proportion[0],
                      flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
@@ -350,13 +368,13 @@ class GConsole(wx.SplitterWindow):
         # eliminate gtk_widget_size_allocate() warnings
         outputSizer.SetVirtualSizeHints(self.panelOutput)
         
-        if self.cmdPrompt.IsShown():
+        if self._gcstyle & GC_PROMPT:
             promptSizer.Fit(self)
             promptSizer.SetSizeHints(self)
             self.panelPrompt.SetSizer(promptSizer)
         
         # split window
-        if self.cmdPrompt.IsShown():
+        if self._gcstyle & GC_PROMPT:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
