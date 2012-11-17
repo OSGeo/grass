@@ -5,10 +5,10 @@
 
 Classes:
  - goutput::CmdThread
- - goutput::GMConsole
- - goutput::GMStdout
- - goutput::GMStderr
- - goutput::GMStc
+ - goutput::GConsole
+ - goutput::GStdout
+ - goutput::GStderr
+ - goutput::GStc
 
 (C) 2007-2012 by the GRASS Development Team
 
@@ -75,7 +75,7 @@ class CmdThread(threading.Thread):
         
         self.setDaemon(True)
         
-        self.parent = parent # GMConsole
+        self.parent = parent # GConsole
         self._want_abort_all = False
         
         self.start()
@@ -193,7 +193,7 @@ class CmdThread(threading.Thread):
         if self.requestQ.empty():
             self._want_abort_all = False
         
-class GMConsole(wx.SplitterWindow):
+class GConsole(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
     def __init__(self, parent, id = wx.ID_ANY, margin = False,
@@ -201,7 +201,7 @@ class GMConsole(wx.SplitterWindow):
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  **kwargs):
         wx.SplitterWindow.__init__(self, parent, id, style = style, *kwargs)
-        self.SetName("GMConsole")
+        self.SetName("GConsole")
         
         self.panelOutput = wx.Panel(parent = self, id = wx.ID_ANY)
         self.panelPrompt = wx.Panel(parent = self, id = wx.ID_ANY)
@@ -233,7 +233,7 @@ class GMConsole(wx.SplitterWindow):
         self.progressbar.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
         
         # text control for command output
-        self.cmdOutput = GMStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
+        self.cmdOutput = GStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
                                wrap = None) 
         self.cmdOutputTimer = wx.Timer(self.cmdOutput, id = wx.ID_ANY)
         self.cmdOutput.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
@@ -261,8 +261,8 @@ class GMConsole(wx.SplitterWindow):
             self.search.Bind(wx.EVT_TEXT,             self.OnUpdateStatusBar)
         
         # stream redirection
-        self.cmdStdOut = GMStdout(self)
-        self.cmdStdErr = GMStderr(self)
+        self.cmdStdOut = GStdout(self)
+        self.cmdStdErr = GStderr(self)
         
         # thread
         self.cmdThread = CmdThread(self, self.requestQ, self.resultQ)
@@ -425,7 +425,7 @@ class GMConsole(wx.SplitterWindow):
         given style
 
         @param line text line
-        @param style text style (see GMStc)
+        @param style text style (see GStc)
         @param stdout write to stdout or stderr
         """
 
@@ -954,7 +954,7 @@ class GMConsole(wx.SplitterWindow):
                     mapTree = self.frame.parent.GetLayerTree()
                 elif winName == 'LayerTree':
                     mapTree = self.frame.parent
-                elif winName: # GMConsole
+                elif winName: # GConsole
                     mapTree = self.frame.parent.parent.GetLayerTree()
                 else:
                     mapTree = None
@@ -1010,8 +1010,8 @@ class GMConsole(wx.SplitterWindow):
         """!Get prompt"""
         return self.cmdPrompt
     
-class GMStdout:
-    """!GMConsole standard output
+class GStdout:
+    """!GConsole standard output
 
     Based on FrameOutErr.py
 
@@ -1022,7 +1022,7 @@ class GMStdout:
     Licence:   GPL
     """
     def __init__(self, parent):
-        self.parent = parent # GMConsole
+        self.parent = parent # GConsole
 
     def write(self, s):
         if len(s) == 0 or s == '\n':
@@ -1036,8 +1036,8 @@ class GMStdout:
                               type = '')
             wx.PostEvent(self.parent.cmdOutput, evt)
         
-class GMStderr:
-    """!GMConsole standard error output
+class GStderr:
+    """!GConsole standard error output
 
     Based on FrameOutErr.py
 
@@ -1048,7 +1048,7 @@ class GMStderr:
     Licence:   GPL
     """
     def __init__(self, parent):
-        self.parent = parent # GMConsole
+        self.parent = parent # GConsole
         
         self.type = ''
         self.message = ''
@@ -1109,8 +1109,8 @@ class GMStderr:
             evt = wxCmdProgress(value = progressValue)
             wx.PostEvent(self.parent.progressbar, evt)
             
-class GMStc(stc.StyledTextCtrl):
-    """!Styled GMConsole
+class GStc(stc.StyledTextCtrl):
+    """!Styled text control for GRASS stdout and stderr.
 
     Based on FrameOutErr.py
 

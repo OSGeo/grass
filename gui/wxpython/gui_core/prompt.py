@@ -471,7 +471,7 @@ class GPrompt(object):
     See subclass GPromptPopUp and GPromptSTC.
     """
     def __init__(self, parent):
-        self.parent = parent                 # GMConsole
+        self.parent = parent                 # GConsole
         self.panel  = self.parent.GetPanel()
         
         if self.parent.parent.GetName() not in ("LayerManager", "Modeler"):
@@ -758,7 +758,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         
     def OnTextSelectionChanged(self, event):
         """!Copy selected text to clipboard and skip event.
-        The same function is in GMStc class (goutput.py).
+        The same function is in GStc class (goutput.py).
         """
         wx.CallAfter(self.Copy)
         event.Skip()
