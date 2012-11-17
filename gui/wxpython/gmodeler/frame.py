@@ -34,7 +34,7 @@ import wx.lib.flatnotebook    as FN
 
 from core                 import globalvar
 from gui_core.widgets     import GNotebook
-from gui_core.goutput     import GMConsole, PyStc
+from gui_core.goutput     import GMConsole
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
@@ -49,6 +49,7 @@ from gmodeler.toolbars    import ModelerToolbar
 
 from gmodeler.model       import *
 from gmodeler.dialogs     import *
+from gmodeler.pystc       import PyStc
 
 from grass.script import core as grass
 
