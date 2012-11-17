@@ -122,7 +122,6 @@ available in GRASS 5 and GRASS 6.
  - goutput::GMStc
  - goutput::GMStdout
  - goutput::GMStderr
- - goutput::PyStc
 - gui_core::gselect
  - gselect::Select
  - gselect::VectorSelect
@@ -311,6 +310,8 @@ available in GRASS 5 and GRASS 6.
 - gmodeler::preferences
  - preferences::PreferencesDialog
  - preferences::PropertiesDialog
+- gmodeler::pystc
+ - pystc::PyStc
 
 \subsection vdigit Vector digitizer
 
