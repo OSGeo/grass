@@ -8850,9 +8850,9 @@ LDFLAGS="$FFMPEGLIBPATH $LDFLAGS"
 
 
 
-echo $ac_n "checking for avcodec_init in -lavcodec""... $ac_c" 1>&6
-echo "configure:8855: checking for avcodec_init in -lavcodec" >&5
-ac_lib_var=`echo avcodec'_'avcodec_init | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for avcodec_register in -lavcodec""... $ac_c" 1>&6
+echo "configure:8855: checking for avcodec_register in -lavcodec" >&5
+ac_lib_var=`echo avcodec'_'avcodec_register | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
 LIBS="-lavcodec $FFMPEGLIB  $LIBS"
@@ -8862,10 +8862,10 @@ cat > conftest.$ac_ext <<EOF
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
-char avcodec_init();
+char avcodec_register();
 
 int main() {
-avcodec_init()
+avcodec_register()
 ; return 0; }
 EOF
 if { (eval echo configure:8872: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
@@ -8886,9 +8886,9 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 else
   echo "$ac_t""no" 1>&6
 
-echo $ac_n "checking for avcodec_init in -lavcodec""... $ac_c" 1>&6
-echo "configure:8891: checking for avcodec_init in -lavcodec" >&5
-ac_lib_var=`echo avcodec'_'avcodec_init | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for avcodec_register in -lavcodec""... $ac_c" 1>&6
+echo "configure:8891: checking for avcodec_register in -lavcodec" >&5
+ac_lib_var=`echo avcodec'_'avcodec_register | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
 LIBS="-lavcodec $FFMPEGLIB $MATHLIB $LIBS"
@@ -8898,10 +8898,10 @@ cat > conftest.$ac_ext <<EOF
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
-char avcodec_init();
+char avcodec_register();
 
 int main() {
-avcodec_init()
+avcodec_register()
 ; return 0; }
 EOF
 if { (eval echo configure:8908: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
@@ -8948,9 +8948,9 @@ LDFLAGS="$FFMPEGLIBPATH $LDFLAGS"
 
 
 
-echo $ac_n "checking for av_set_parameters in -lavformat""... $ac_c" 1>&6
-echo "configure:8953: checking for av_set_parameters in -lavformat" >&5
-ac_lib_var=`echo avformat'_'av_set_parameters | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for avformat_write_header in -lavformat""... $ac_c" 1>&6
+echo "configure:8953: checking for avformat_write_header in -lavformat" >&5
+ac_lib_var=`echo avformat'_'avformat_write_header | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
 LIBS="-lavformat $FFMPEGLIB  $LIBS"
@@ -8960,10 +8960,10 @@ cat > conftest.$ac_ext <<EOF
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
-char av_set_parameters();
+char avformat_write_header();
 
 int main() {
-av_set_parameters()
+avformat_write_header()
 ; return 0; }
 EOF
 if { (eval echo configure:8970: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
@@ -8984,9 +8984,9 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 else
   echo "$ac_t""no" 1>&6
 
-echo $ac_n "checking for av_set_parameters in -lavformat""... $ac_c" 1>&6
-echo "configure:8989: checking for av_set_parameters in -lavformat" >&5
-ac_lib_var=`echo avformat'_'av_set_parameters | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for avformat_write_header in -lavformat""... $ac_c" 1>&6
+echo "configure:8989: checking for avformat_write_header in -lavformat" >&5
+ac_lib_var=`echo avformat'_'avformat_write_header | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
 LIBS="-lavformat $FFMPEGLIB $MATHLIB $LIBS"
@@ -8996,10 +8996,10 @@ cat > conftest.$ac_ext <<EOF
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
-char av_set_parameters();
+char avformat_write_header();
 
 int main() {
-av_set_parameters()
+avformat_write_header()
 ; return 0; }
 EOF
 if { (eval echo configure:9006: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
