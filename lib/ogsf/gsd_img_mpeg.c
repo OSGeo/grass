@@ -26,6 +26,7 @@
 /* FFMPEG stuff */
 #ifdef HAVE_FFMPEG
 #include <avformat.h>
+#include <avio.h>
 
 /* 5 seconds stream duration */
 #define STREAM_DURATION   5.0
@@ -57,7 +58,7 @@ static AVStream *add_video_stream(AVFormatContext * oc, int codec_id, int w,
     AVCodecContext *c;
     AVStream *st;
 
-    st = av_new_stream(oc, 0);
+    st = avformat_new_stream(oc, NULL);
     if (!st) {
 	G_warning(_("Unable to allocate stream"));
 	return NULL;
@@ -96,7 +97,12 @@ static AVStream *add_video_stream(AVFormatContext * oc, int codec_id, int w,
 	c->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
     c->flags |= CODEC_FLAG_QSCALE;
-    c->global_quality = st->quality = FF_QP2LAMBDA * 10;
+    /* Quality, as it has been removed from AVCodecContext and put in AVVideoFrame.
+       
+       \todo use AVVideoFrame
+       c->global_quality = st->quality = FF_QP2LAMBDA * 10;
+    */
+    c->global_quality = FF_QP2LAMBDA * 10;
 
     return st;
 }
@@ -157,7 +163,7 @@ static void open_video(AVFormatContext * oc, AVStream * st)
     }
 
     /* open the codec */
-    if (avcodec_open(c, codec) < 0) {
+    if (avcodec_open2(c, codec, NULL) < 0) {
 	G_warning(_("Unable to open codec"));
 	return;
     }
@@ -260,7 +266,7 @@ static void write_video_frame(AVFormatContext * oc, AVStream * st)
    \param oc [unused]
    \param st
  */
-static void close_video(AVFormatContext * oc, AVStream * st)
+static void close_video(AVStream * st)
 {
     avcodec_close(st->codec);
     av_free(picture->data[0]);
@@ -332,12 +338,12 @@ int gsd_init_mpeg(const char *filename)
     }
 
     /* set the output parameters (must be done even if no parameters). */
-    if (av_set_parameters(oc, NULL) < 0) {
+    if (avformat_write_header(oc, NULL) < 0) {
 	G_warning(_("Invalid output format parameters"));
 	return (-1);
     }
 
-    dump_format(oc, 0, filename, 1);
+    av_dump_format(oc, 0, filename, 1);
 
     /* now that all the parameters are set, we can open the audio and
        video codecs and allocate the necessary encode buffers */
@@ -346,14 +352,14 @@ int gsd_init_mpeg(const char *filename)
 
     /* open the output file, if needed */
     if (!(fmt->flags & AVFMT_NOFILE)) {
-	if (url_fopen(&oc->pb, filename, URL_WRONLY) < 0) {
+	if (avio_open(&oc->pb, filename, AVIO_FLAG_WRITE) < 0) {
 	    G_warning(_("Unable to open <%s>"), filename);
 	    return (-1);
 	}
     }
 
     /* write the stream header, if any */
-    av_write_header(oc);
+    avformat_write_header(oc, NULL);
 
 
 #else
@@ -373,8 +379,8 @@ int gsd_init_mpeg(const char *filename)
 int gsd_write_mpegframe(void)
 {
 #ifdef HAVE_FFMPEG
-    unsigned int xsize, ysize;
-    int x, y, xy, xy_uv;
+    unsigned int xsize, ysize, x;
+    int y, xy, xy_uv;
     int yy, uu, vv;
     unsigned char *pixbuf;
 
@@ -420,9 +426,9 @@ int gsd_write_mpegframe(void)
 int gsd_close_mpeg(void)
 {
 #ifdef HAVE_FFMPEG
-    int i;
+    unsigned int i;
 
-    close_video(oc, video_st);
+    close_video(video_st);
 
     /* write the trailer, if any */
     av_write_trailer(oc);
@@ -435,11 +441,7 @@ int gsd_close_mpeg(void)
 
     if (!(fmt->flags & AVFMT_NOFILE)) {
 	/* close the output file */
-#if (LIBAVFORMAT_VERSION_INT>>16) < 52
-	url_fclose(&oc->pb);
-#else
-	url_fclose(oc->pb);
-#endif
+	avio_close(oc->pb);
     }
 
     /* free the stream */
