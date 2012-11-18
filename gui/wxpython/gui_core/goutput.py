@@ -44,6 +44,7 @@ from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
 from core.settings   import UserSettings, GetDisplayVectSettings
 from gui_core.ghelp  import SearchModuleWindow
+from core.modulesdata import ModulesData
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
@@ -251,10 +252,13 @@ class GConsole(wx.SplitterWindow):
         self.Bind(EVT_CMD_DONE,    self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
 
+        # information about available modules
+        modulesData = ModulesData()
+
         # search & command prompt
         # move to the if below
         # search depends on cmd prompt
-        self.cmdPrompt = GPromptSTC(parent = self)
+        self.cmdPrompt = GPromptSTC(parent = self, modulesData = modulesData)
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
@@ -266,7 +270,7 @@ class GConsole(wx.SplitterWindow):
                                                  label = self.infoCollapseLabelExp,
                                                  style = wx.CP_DEFAULT_STYLE |
                                                  wx.CP_NO_TLW_RESIZE | wx.EXPAND)
-            self.MakeSearchPaneContent(self.searchPane.GetPane())
+            self.MakeSearchPaneContent(self.searchPane.GetPane(), modulesData)
             self.searchPane.Collapse(True)
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
             self.search.Bind(wx.EVT_TEXT,             self.OnUpdateStatusBar)
@@ -387,11 +391,13 @@ class GConsole(wx.SplitterWindow):
         self.SetAutoLayout(True)
         self.Layout()
 
-    def MakeSearchPaneContent(self, pane):
+    def MakeSearchPaneContent(self, pane, modulesData):
         """!Create search pane"""
         border = wx.BoxSizer(wx.VERTICAL)
         
-        self.search = SearchModuleWindow(parent = pane, cmdPrompt = self.cmdPrompt)
+        self.search = SearchModuleWindow(parent = pane,
+                                         cmdPrompt = self.cmdPrompt,
+                                         modulesData = modulesData)
         
         border.Add(item = self.search, proportion = 0,
                    flag = wx.EXPAND | wx.ALL, border = 1)

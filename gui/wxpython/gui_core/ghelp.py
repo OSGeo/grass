@@ -44,11 +44,12 @@ from core.settings    import UserSettings
 
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
-    def __init__(self, parent, id = wx.ID_ANY, cmdPrompt = None,
+    def __init__(self, parent, modulesData, id = wx.ID_ANY, cmdPrompt = None,
                  showChoice = True, showTip = False, **kwargs):
         self.showTip    = showTip
         self.showChoice = showChoice
         self.cmdPrompt  = cmdPrompt
+        self.modulesData = modulesData
         
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
@@ -59,10 +60,11 @@ class SearchModuleWindow(wx.Panel):
         self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                 label = " %s " % _("Find module - (press Enter for next match)"))
         
-        self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY,
-                                  choices = [_('description'),
-                                             _('keywords'),
-                                             _('command')])
+        self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY)
+        items = [_('description'), _('keywords'), _('command')]
+        datas = ['description', 'keywords', 'command']
+        for item, data in zip(items, datas):
+            self.searchBy.Append(item = item, clientData = data)
         self.searchBy.SetSelection(0)
         
         self.search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
@@ -77,7 +79,7 @@ class SearchModuleWindow(wx.Panel):
         if self.showChoice:
             self.searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
             if self.cmdPrompt:
-                self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
+                self.searchChoice.SetItems(self.modulesData.GetCommandItems())
             self.searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
         
         self._layout()
@@ -134,45 +136,21 @@ class SearchModuleWindow(wx.Panel):
         
         text = event.GetEventObject().GetValue()
         if not text:
-            self.cmdPrompt.SetFilter(None)
-            mList = self.cmdPrompt.GetCommandItems()
+            self.modulesData.SetFilter()
+            mList = self.modulesData.GetCommandItems()
             self.searchChoice.SetItems(mList)
             if self.showTip:
                 self.searchTip.SetLabel(_("%d modules found") % len(mList))
             event.Skip()
             return
-        
-        modules = dict()
-        iFound = 0
-        for module, data in self.cmdPrompt.moduleDesc.iteritems():
-            found = False
-            sel = self.searchBy.GetSelection()
-            if sel == 0: # -> description
-                if text in data['desc']:
-                    found = True
-            elif sel == 1: # keywords
-                if text in ','.join(data['keywords']):
-                    found = True
-            else: # command
-                if module[:len(text)] == text:
-                    found = True
-            
-            if found:
-                iFound += 1
-                try:
-                    group, name = module.split('.')
-                except ValueError:
-                    continue # TODO
-                
-                if group not in modules:
-                    modules[group] = list()
-                modules[group].append(name)
-                
-        self.cmdPrompt.SetFilter(modules)
-        self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
+
+        findIn = self.searchBy.GetClientData(self.searchBy.GetSelection())
+        modules, nFound = self.modulesData.FindModules(text = text, findIn = findIn)
+        self.modulesData.SetFilter(modules)
+        self.searchChoice.SetItems(self.modulesData.GetCommandItems())
         self.searchChoice.SetSelection(0)
         if self.showTip:
-            self.searchTip.SetLabel(_("%d modules match") % iFound)
+            self.searchTip.SetLabel(_("%d modules match") % nFound)
         
         event.Skip()
         
@@ -188,7 +166,7 @@ class SearchModuleWindow(wx.Panel):
             self.cmdPrompt.SetCurrentPos(pos)
             self.cmdPrompt.SetFocus()
         
-        desc = self.cmdPrompt.GetCommandDesc(cmd)
+        desc = self.modulesData.GetCommandDesc(cmd)
         if self.showTip:
             self.searchTip.SetLabel(desc)
         
