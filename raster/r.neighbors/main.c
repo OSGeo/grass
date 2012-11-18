@@ -322,7 +322,9 @@ int main(int argc, char *argv[])
 	    DCELL *rp = &result[col];
 
             if (selection && selection[col]) {
-		*rp = ncb.buf[ncb.dist][col];
+                /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
+                 * Thus original data start is shifted by ncb.dist! */
+		*rp = ncb.buf[ncb.dist][col+ncb.dist];
 		continue;
 	    }
 

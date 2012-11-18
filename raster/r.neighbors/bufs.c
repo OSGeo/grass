@@ -15,12 +15,12 @@ int allocate_bufs(void)
     int i;
     int bufsize;
 
-    bufsize = (Rast_window_cols() + 2 * ncb.nsize) * sizeof(DCELL);
+    bufsize = (Rast_window_cols() + 2 * ncb.dist) * sizeof(DCELL);
 
     ncb.buf = (DCELL **) G_malloc(ncb.nsize * sizeof(DCELL *));
     for (i = 0; i < ncb.nsize; i++) {
 	ncb.buf[i] = (DCELL *) G_malloc(bufsize);
-	Rast_set_d_null_value(ncb.buf[i], Rast_window_cols() + 2 * ncb.nsize);
+	Rast_set_d_null_value(ncb.buf[i], Rast_window_cols() + 2 * ncb.dist);
     }
 
     return 0;
