@@ -67,7 +67,7 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
     if (schema)
         G_set_key_value("schema", schema, key_val);
     if (topo)
-        G_set_key_value("topology", "on", key_val);
+        G_set_key_value("topology", "yes", key_val);
 
     /* extra options */
     if (options) {
