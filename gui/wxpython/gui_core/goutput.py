@@ -43,7 +43,7 @@ from gui_core.forms  import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
 from core.settings   import UserSettings, GetDisplayVectSettings
-from gui_core.widgets import SearchModuleWindow, EVT_MODULE_SELECTED
+from gui_core.widgets import SearchModuleWidget, EVT_MODULE_SELECTED
 from core.modulesdata import ModulesData
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
@@ -398,7 +398,7 @@ class GConsole(wx.SplitterWindow):
         """!Create search pane"""
         border = wx.BoxSizer(wx.VERTICAL)
         
-        self.search = SearchModuleWindow(parent = pane,
+        self.search = SearchModuleWidget(parent = pane,
                                          modulesData = modulesData)
         
         border.Add(item = self.search, proportion = 0,

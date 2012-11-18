@@ -54,7 +54,7 @@ from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportD
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
-from gui_core.menu         import Menu, MenuTreeWindow
+from gui_core.menu         import Menu, SearchModuleWindow
 from gmodeler.model        import Model
 from gmodeler.frame        import ModelFrame
 from psmap.frame           import PsMapFrame
@@ -262,7 +262,7 @@ class GMFrame(wx.Frame):
         
         # create 'search module' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'):
-            self.search = MenuTreeWindow(parent = self)
+            self.search = SearchModuleWindow(parent = self)
             self.notebook.AddPage(page = self.search, text = _("Search module"), name = 'search')
         else:
             self.search = None
