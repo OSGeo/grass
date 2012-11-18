@@ -201,14 +201,14 @@ int draw_scale(int toptext, int size)
 
 	D_pos_rel(0, 1 - 4);
 	for (i = 1; i <= scales[incr].seg; i++) {
-	    xarr[0] = 0;	    yarr[0] = 0;
-	    xarr[1] = seg_len;	    yarr[1] = 0;
-	    xarr[2] = 0;	    yarr[2] = (i % 2 ? -4 : 4);
-	    xarr[3] = -seg_len;	    yarr[3] = 0;
-	    xarr[4] = 0;	    yarr[4] = (i % 2 ? 4 : -4);
+	    xarr[0] = 0;		    yarr[0] = 0;
+	    xarr[1] = (int)seg_len;	    yarr[1] = 0;
+	    xarr[2] = 0;		    yarr[2] = (i % 2 ? -4 : 4);
+	    xarr[3] = -(int)seg_len;	    yarr[3] = 0;
+	    xarr[4] = 0;		    yarr[4] = (i % 2 ? 4 : -4);
 	    /* width is seg_len and height is 4 */
-	    D_polygon_rel(xarr, yarr, 4);
-	    D_pos_rel(seg_len, 0);
+	    D_polygon_rel(xarr, yarr, 5);
+	    D_pos_rel((int)seg_len, 0);
 	}
     }
     else if (do_bar) {
@@ -225,8 +225,8 @@ int draw_scale(int toptext, int size)
 	D_pos_rel(0, 1);
 	for (i = 1; i <= scales[incr].seg; i += 2) {
 	    /* width is seg_len and height is 5 */
-	    D_box_rel(seg_len, -5);
-	    D_pos_rel(seg_len * 2, 0);
+	    D_box_rel((int)seg_len, -5);
+	    D_pos_rel((int)seg_len * 2, 0);
 	}
     }
     else {			/* draw simple line scale */
