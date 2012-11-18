@@ -5,15 +5,14 @@
 
    GRASS OpenGL gsurf OGSF Library 
 
-   (C) 1999-2008 by the GRASS Development Team
+   (C) 1999-2008, 2012 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL, GMSL/University of Illinois
-   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+   \author Doxygenized (May 2008) and update for FFMPEG >= 0.7
+   (November 2012) by Martin Landa <landa.martin gmail.com>
  */
 
 #include <stdlib.h>
@@ -58,7 +57,11 @@ static AVStream *add_video_stream(AVFormatContext * oc, int codec_id, int w,
     AVCodecContext *c;
     AVStream *st;
 
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+    st = av_new_stream(oc, 0);
+#else
     st = avformat_new_stream(oc, NULL);
+#endif
     if (!st) {
 	G_warning(_("Unable to allocate stream"));
 	return NULL;
@@ -97,12 +100,13 @@ static AVStream *add_video_stream(AVFormatContext * oc, int codec_id, int w,
 	c->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
     c->flags |= CODEC_FLAG_QSCALE;
-    /* Quality, as it has been removed from AVCodecContext and put in AVVideoFrame.
-       
-       \todo use AVVideoFrame
-       c->global_quality = st->quality = FF_QP2LAMBDA * 10;
-    */
+    
+    /* Quality, as it has been removed from AVCodecContext and put in AVVideoFrame. */
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+    c->global_quality = st->quality = FF_QP2LAMBDA * 10;
+#else
     c->global_quality = FF_QP2LAMBDA * 10;
+#endif
 
     return st;
 }
@@ -163,7 +167,11 @@ static void open_video(AVFormatContext * oc, AVStream * st)
     }
 
     /* open the codec */
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+    if (avcodec_open(c, codec) < 0) { 
+#else
     if (avcodec_open2(c, codec, NULL) < 0) {
+#endif
 	G_warning(_("Unable to open codec"));
 	return;
     }
@@ -338,12 +346,20 @@ int gsd_init_mpeg(const char *filename)
     }
 
     /* set the output parameters (must be done even if no parameters). */
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+    if (av_set_parameters(oc, NULL) < 0) { 
+#else
     if (avformat_write_header(oc, NULL) < 0) {
+#endif
 	G_warning(_("Invalid output format parameters"));
-	return (-1);
+	return -1;
     }
 
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+    dump_format(oc, 0, filename, 1); 
+#else
     av_dump_format(oc, 0, filename, 1);
+#endif
 
     /* now that all the parameters are set, we can open the audio and
        video codecs and allocate the necessary encode buffers */
@@ -352,21 +368,28 @@ int gsd_init_mpeg(const char *filename)
 
     /* open the output file, if needed */
     if (!(fmt->flags & AVFMT_NOFILE)) {
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+        if (url_fopen(&oc->pb, filename, URL_WRONLY) < 0) { 
+#else
 	if (avio_open(&oc->pb, filename, AVIO_FLAG_WRITE) < 0) {
+#endif
 	    G_warning(_("Unable to open <%s>"), filename);
 	    return (-1);
 	}
     }
 
     /* write the stream header, if any */
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+    av_write_header(oc);
+#else
     avformat_write_header(oc, NULL);
-
+#endif
 
 #else
-    G_warning(_("NVIZ has not been built with MPEG output support"));
-    return (-1);
+    G_warning(_("OGSF library has not been built with MPEG output support"));
+    return -1;
 #endif
-    return (0);
+    return 0;
 }
 
 /*!
@@ -441,7 +464,13 @@ int gsd_close_mpeg(void)
 
     if (!(fmt->flags & AVFMT_NOFILE)) {
 	/* close the output file */
-	avio_close(oc->pb);
+#if (LIBAVFORMAT_VERSION_INT>>16) < 52
+      url_fclose(&oc->pb);
+#elif LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+      url_fclose(oc->pb);
+#else
+      avio_close(oc->pb);
+#endif 
     }
 
     /* free the stream */
@@ -451,5 +480,5 @@ int gsd_close_mpeg(void)
     G_debug(3, "Closed MPEG stream");
 #endif
 
-    return (0);
+    return 0;
 }
