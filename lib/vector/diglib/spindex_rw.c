@@ -620,7 +620,7 @@ int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
     
     if (!node_init) {
 	for (i = 0; i < MAXCARD; i++)
-	    RTreeAllocBoundary(&(n.branch[i].rect), t);
+	    n.branch[i].rect.boundary = RTreeAllocBoundary(t);
     }
 
     /* recursive nearly-but-a-bit-messy depth-first pre-order traversal
