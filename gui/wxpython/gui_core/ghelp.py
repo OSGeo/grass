@@ -32,6 +32,7 @@ except ImportError:
     import wx.lib.customtreectrl as CT
     from wx.lib.hyperlink import HyperLinkCtrl
 import wx.lib.flatnotebook as FN
+from wx.lib.newevent import NewEvent
 
 import grass.script as grass
 
@@ -42,13 +43,14 @@ from gui_core.widgets import FormListbook, StaticWrapText, ScrolledPanel
 from core.debug       import Debug
 from core.settings    import UserSettings
 
+gModuleSelected, EVT_MODULE_SELECTED = NewEvent()
+
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
-    def __init__(self, parent, modulesData, id = wx.ID_ANY, cmdPrompt = None,
+    def __init__(self, parent, modulesData, id = wx.ID_ANY,
                  showChoice = True, showTip = False, **kwargs):
         self.showTip    = showTip
         self.showChoice = showChoice
-        self.cmdPrompt  = cmdPrompt
         self.modulesData = modulesData
         
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
@@ -69,8 +71,7 @@ class SearchModuleWindow(wx.Panel):
         
         self.search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
                                     size = (-1, 25), style = wx.TE_PROCESS_ENTER)
-        if self.cmdPrompt:
-            self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
+        self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
         
         if self.showTip:
             self.searchTip = StaticWrapText(parent = self, id = wx.ID_ANY,
@@ -78,8 +79,7 @@ class SearchModuleWindow(wx.Panel):
         
         if self.showChoice:
             self.searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
-            if self.cmdPrompt:
-                self.searchChoice.SetItems(self.modulesData.GetCommandItems())
+            self.searchChoice.SetItems(self.modulesData.GetCommandItems())
             self.searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
         
         self._layout()
@@ -126,14 +126,7 @@ class SearchModuleWindow(wx.Panel):
 
     def OnSearchModule(self, event):
         """!Search module by keywords or description"""
-        if not self.cmdPrompt:
-            event.Skip()
-            return
-        
-        # hide autocomplete
-        if self.cmdPrompt.AutoCompActive():
-            self.cmdPrompt.AutoCompCancel()
-        
+
         text = event.GetEventObject().GetValue()
         if not text:
             self.modulesData.SetFilter()
@@ -157,15 +150,10 @@ class SearchModuleWindow(wx.Panel):
     def OnSelectModule(self, event):
         """!Module selected from choice, update command prompt"""
         cmd  = event.GetString().split(' ', 1)[0]
-        text = cmd + ' '
-        pos = len(text)
-        
-        if self.cmdPrompt:
-            self.cmdPrompt.SetText(text)
-            self.cmdPrompt.SetSelectionStart(pos)
-            self.cmdPrompt.SetCurrentPos(pos)
-            self.cmdPrompt.SetFocus()
-        
+
+        moduleEvent = gModuleSelected(name = cmd)
+        wx.PostEvent(self, moduleEvent)
+       
         desc = self.modulesData.GetCommandDesc(cmd)
         if self.showTip:
             self.searchTip.SetLabel(desc)

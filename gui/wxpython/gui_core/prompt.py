@@ -34,7 +34,6 @@ from grass.script import task as gtask
 
 from core          import globalvar
 from core          import utils
-from lmgr.menudata import LayerManagerMenuData
 from core.gcmd     import EncodeString, DecodeString, GetRealCmd
 
 class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -687,6 +686,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPressed)
         self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnItemSelected)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
         
     def OnTextSelectionChanged(self, event):
         """!Copy selected text to clipboard and skip event.
@@ -768,7 +768,21 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                     self.cmdDesc = gtask.parse_interface(GetRealCmd(cmd))
                 except IOError:
                     self.cmdDesc = None
-        
+
+    def OnKillFocus(self, event):
+        """!Hides autocomplete"""
+        # hide autocomplete
+        if self.AutoCompActive():
+            self.AutoCompCancel()
+        event.Skip()
+
+    def SetTextAndFocus(self, text):
+        pos = len(text)
+        self.SetText(text)
+        self.SetSelectionStart(pos)
+        self.SetCurrentPos(pos)
+        self.SetFocus()
+
     def UpdateCmdHistory(self, cmd):
         """!Update command history
         

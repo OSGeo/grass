@@ -43,7 +43,7 @@ from gui_core.forms  import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
 from core.settings   import UserSettings, GetDisplayVectSettings
-from gui_core.ghelp  import SearchModuleWindow
+from gui_core.ghelp  import SearchModuleWindow, EVT_MODULE_SELECTED
 from core.modulesdata import ModulesData
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
@@ -274,6 +274,9 @@ class GConsole(wx.SplitterWindow):
             self.searchPane.Collapse(True)
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
             self.search.Bind(wx.EVT_TEXT,             self.OnUpdateStatusBar)
+            self.search.Bind(EVT_MODULE_SELECTED,
+                             lambda event:
+                                 self.cmdPrompt.SetTextAndFocus(event.name + ' '))
         else:
             self.search = None
 
@@ -396,7 +399,6 @@ class GConsole(wx.SplitterWindow):
         border = wx.BoxSizer(wx.VERTICAL)
         
         self.search = SearchModuleWindow(parent = pane,
-                                         cmdPrompt = self.cmdPrompt,
                                          modulesData = modulesData)
         
         border.Add(item = self.search, proportion = 0,

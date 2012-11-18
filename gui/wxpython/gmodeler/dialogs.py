@@ -31,10 +31,11 @@ import wx.lib.mixins.listctrl as listmix
 
 from core                 import globalvar
 from core                 import utils
+from core.modulesdata     import ModulesData
 from gui_core.widgets     import GNotebook
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import ElementDialog, MapLayersDialogForModeler
-from gui_core.ghelp       import SearchModuleWindow
+from gui_core.ghelp       import SearchModuleWindow, EVT_MODULE_SELECTED
 from gui_core.prompt      import GPromptSTC
 from gui_core.forms       import CmdPanel
 from gui_core.gselect     import Select
@@ -134,13 +135,16 @@ class ModelSearchDialog(wx.Dialog):
         
         self.cmdBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                    label=" %s " % _("Command"))
-        
-        self.cmd_prompt = GPromptSTC(parent = self)
-        self.search = SearchModuleWindow(parent = self.panel, cmdPrompt = self.cmd_prompt, showTip = True)
+
+        modulesData = ModulesData()
+        self.cmd_prompt = GPromptSTC(parent = self, modulesData = modulesData)
+        self.search = SearchModuleWindow(parent = self.panel,
+                                         modulesData = modulesData,
+                                         showTip = True)
+        self.search.Bind(EVT_MODULE_SELECTED,
+                             lambda event:
+                                 self.cmd_prompt.SetTextAndFocus(event.name + ' '))                  
         wx.CallAfter(self.cmd_prompt.SetFocus)
-        
-        # get commands
-        items = self.cmd_prompt.GetCommandItems()
         
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
         self.btnOk     = wx.Button(self.panel, wx.ID_OK)
@@ -155,7 +159,7 @@ class ModelSearchDialog(wx.Dialog):
         self._layout()
         
         self.SetSize((500, 275))
-        
+
     def _layout(self):
         cmdSizer = wx.StaticBoxSizer(self.cmdBox, wx.VERTICAL)
         cmdSizer.Add(item = self.cmd_prompt, proportion = 1,
