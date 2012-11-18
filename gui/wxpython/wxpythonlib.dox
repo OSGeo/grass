@@ -186,7 +186,7 @@ available in GRASS 5 and GRASS 6.
 - lmgr::layertree
  - lmgr::LayerTree
 - lmgr::menudata
- - menudata::MenuData
+ - menudata::LayerManagerMenuData
 - lmgr::pyshell
  - pyshell::PyShellWindow
 - lmgr::toolbars
@@ -295,7 +295,7 @@ available in GRASS 5 and GRASS 6.
  - frame::ItemPanel
  - frame::PythonPanel
 - gmodeler::menudata
- - menudata::ModelerData
+ - menudata::ModelerMenuData
 - gmodeler::model
  - model::Model
  - model::ModelObject
@@ -409,7 +409,7 @@ available in GRASS 5 and GRASS 6.
  - frame::PsMapFrame
  - frame::PsMapBufferedWindow
 - psmap::menudata
- - menudata::PsMapData
+ - menudata::PsMapMenuData
 - psmap::toolbars
  - toolbars::PsMapToolbar
 

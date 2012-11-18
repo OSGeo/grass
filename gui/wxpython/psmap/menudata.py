@@ -4,7 +4,7 @@
 @brief wxPsMap - menu entries
 
 Classes:
- - menudata::PsMapData
+ - menudata::PsMapMenuData
 
 (C) 2011 by the GRASS Development Team
 
@@ -19,7 +19,7 @@ import os
 from core                 import globalvar
 from core.menudata        import MenuData
 
-class PsMapData(MenuData):
+class PsMapMenuData(MenuData):
     def __init__(self, path = None):
         """!Menu for Cartographic Composer (psmap.py)
         

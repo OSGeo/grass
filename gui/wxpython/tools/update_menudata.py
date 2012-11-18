@@ -32,7 +32,7 @@ from grass.script import task as gtask
 
 if __name__ == "__main__":
     sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-from lmgr.menudata  import ManagerData
+from lmgr.menudata  import LayerManagerMenuData
 from core.globalvar import grassCmd
 
 def parseModules():
@@ -151,7 +151,7 @@ def main(argv = None):
     modules = dict()
     modules = parseModules()
     grass.info("Step 3: reading menu data...")
-    data = ManagerData()
+    data = LayerManagerMenuData()
     grass.info("Step 4: updating menu data...")
     updateData(data, modules)
     
