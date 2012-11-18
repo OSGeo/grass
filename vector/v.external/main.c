@@ -161,28 +161,27 @@ int main(int argc, char *argv[])
     /* create frmt file */
     sprintf(buf, "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
-    if (fd == NULL) {
-        G_fatal_error("Unable to create file '%s'", buf);
-    }
+    if (fd == NULL)
+        G_fatal_error(_("Unable to create file '%s/%s'"), buf, GV_FRMT_ELEMENT);
     
     if (!use_ogr) {
         char *table_name, *schema_name;
         
         get_table_name(options.layer->answer, &table_name, &schema_name);
         
-        fprintf(fd, "FORMAT: postgis\n");
-        fprintf(fd, "CONNINFO: %s\n", dsn);
+        fprintf(fd, "format: postgis\n");
+        fprintf(fd, "conninfo: %s\n", dsn);
         if (schema_name)
-            fprintf(fd, "SCHEMA: %s\n", schema_name);
-        fprintf(fd, "TABLE: %s\n", table_name);
+            fprintf(fd, "schema: %s\n", schema_name);
+        fprintf(fd, "table: %s\n", table_name);
 
         G_free(table_name);
         G_free(schema_name);
     }
     else {
-        fprintf(fd, "FORMAT: ogr\n");
-        fprintf(fd, "DSN: %s\n", dsn);
-        fprintf(fd, "LAYER: %s\n", options.layer->answer);
+        fprintf(fd, "format: ogr\n");
+        fprintf(fd, "dsn: %s\n", dsn);
+        fprintf(fd, "layer: %s\n", options.layer->answer);
     }
     fclose(fd);
     

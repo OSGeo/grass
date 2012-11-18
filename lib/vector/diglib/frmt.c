@@ -53,7 +53,7 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
         while (*ptr == ' ')
             ptr++;
 
-        if (strcmp(buf1, "FORMAT") == 0) {
+        if (G_strcasecmp(buf1, "FORMAT") == 0) {
 #ifdef HAVE_OGR
             if (G_strcasecmp(ptr, "ogr") == 0) {
                 frmt = GV_FORMAT_OGR;
@@ -107,19 +107,19 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
 
 #ifdef HAVE_OGR
         if (frmt == GV_FORMAT_OGR) {
-            if (strcmp(buf1, "DSN") == 0)
+            if (G_strcasecmp(buf1, "DSN") == 0)
                 finfo->ogr.dsn = G_store(ptr);
-            if (strcmp(buf1, "LAYER") == 0)
+            if (G_strcasecmp(buf1, "LAYER") == 0)
                 finfo->ogr.layer_name = G_store(ptr);
         }
 #endif
 #ifdef HAVE_POSTGRES
         if (frmt == GV_FORMAT_POSTGIS) {
-            if (strcmp(buf1, "CONNINFO") == 0)
+            if (G_strcasecmp(buf1, "CONNINFO") == 0)
                 finfo->pg.conninfo = G_store(ptr);
-            if (strcmp(buf1, "SCHEMA") == 0)
+            if (G_strcasecmp(buf1, "SCHEMA") == 0)
                 finfo->pg.schema_name = G_store(ptr);
-            if (strcmp(buf1, "TABLE") == 0)
+            if (G_strcasecmp(buf1, "TABLE") == 0)
                 finfo->pg.table_name = G_store(ptr);
         }
 #endif
