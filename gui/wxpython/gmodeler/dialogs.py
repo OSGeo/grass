@@ -32,7 +32,7 @@ import wx.lib.mixins.listctrl as listmix
 from core                 import globalvar
 from core                 import utils
 from core.modulesdata     import ModulesData
-from gui_core.widgets     import SearchModuleWindow, EVT_MODULE_SELECTED
+from gui_core.widgets     import SearchModuleWidget, EVT_MODULE_SELECTED
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import ElementDialog, MapLayersDialogForModeler
 from gui_core.prompt      import GPromptSTC
@@ -137,7 +137,7 @@ class ModelSearchDialog(wx.Dialog):
 
         modulesData = ModulesData()
         self.cmd_prompt = GPromptSTC(parent = self, modulesData = modulesData)
-        self.search = SearchModuleWindow(parent = self.panel,
+        self.search = SearchModuleWidget(parent = self.panel,
                                          modulesData = modulesData,
                                          showTip = True)
         self.search.Bind(EVT_MODULE_SELECTED,

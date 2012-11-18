@@ -15,7 +15,7 @@ Classes:
  - widgets::FloatValidator
  - widgets::ItemTree
  - widgets::GListCtrl
- - widgets::SearchModuleWindow
+ - widgets::SearchModuleWidget
 
 (C) 2008-2012 by the GRASS Development Team
 
@@ -712,8 +712,8 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCt
 gModuleSelected, EVT_MODULE_SELECTED = NewEvent()
 
 
-class SearchModuleWindow(wx.Panel):
-    """!Search module window (used in MenuTreeWindow)"""
+class SearchModuleWidget(wx.Panel):
+    """!Search module widget (used in SearchModuleWindow)"""
     def __init__(self, parent, modulesData, id = wx.ID_ANY,
                  showChoice = True, showTip = False, **kwargs):
         self.showTip = showTip

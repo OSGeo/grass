@@ -149,7 +149,7 @@ available in GRASS 5 and GRASS 6.
  - mapwindow::MapWindow
 - gui_core::menu
  - menu::Menu
- - menu::MenuTreeWindow
+ - menu::SearchModuleWindow
  - menu::MenuTree
 - gui_core::preferences
  - preferences::PreferencesBaseDialog
@@ -176,7 +176,7 @@ available in GRASS 5 and GRASS 6.
  - widgets::FloatValidator
  - widgets::NTCValidator
  - widgets::ItemTree
- - widgets::SearchModuleWindow
+ - widgets::SearchModuleWidget
 
 \subsection lmgr Layer Manager
 

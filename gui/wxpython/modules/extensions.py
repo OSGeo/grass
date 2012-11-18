@@ -34,7 +34,7 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.utils       import SetAddOnPath
 from gui_core.forms   import GUI
-from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWindow
+from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget
 
 
 class InstallExtensionWindow(wx.Frame):
@@ -58,7 +58,7 @@ class InstallExtensionWindow(wx.Frame):
                                     label = _("Fetch full info including description and keywords"))
         self.fullDesc.SetValue(True)
         
-        self.search = SearchModuleWindow(parent = self.panel, modulesData = None)
+        self.search = SearchModuleWidget(parent = self.panel, modulesData = None)
         self.search.SetSelection(0) 
         
         self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())

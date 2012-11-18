@@ -5,7 +5,7 @@
 
 Classes:
  - menu::Menu
- - menu::MenuTreeWindow
+ - menu::SearchModuleWindow
  - menu::MenuTree
 
 (C) 2010-2012 by the GRASS Development Team
@@ -27,7 +27,7 @@ from core              import utils
 from core.modulesdata  import ModulesData
 from core.gcmd         import EncodeString
 from core.settings     import UserSettings
-from gui_core.widgets  import ItemTree, SearchModuleWindow
+from gui_core.widgets  import ItemTree, SearchModuleWidget
 from lmgr.menudata     import LayerManagerMenuData
 
 class Menu(wx.MenuBar):
@@ -124,7 +124,7 @@ class Menu(wx.MenuBar):
         # but in this case just call Skip so the default is done
         event.Skip()
 
-class MenuTreeWindow(wx.Panel):
+class SearchModuleWindow(wx.Panel):
     """!Show menu tree"""
     def __init__(self, parent, id = wx.ID_ANY, **kwargs):
         self.parent = parent # LayerManager
@@ -139,7 +139,7 @@ class MenuTreeWindow(wx.Panel):
         self.tree.Load()
 
         # search widget
-        self.search = SearchModuleWindow(parent = self,
+        self.search = SearchModuleWidget(parent = self,
                                          modulesData = ModulesData(menuData.GetModules()),
                                          showChoice = False)
         
