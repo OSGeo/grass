@@ -52,7 +52,7 @@ struct RTree_Rect *RTreeAllocRect(struct RTree *t)
 
     assert(r);
 
-    RTreeAllocBoundary(r, t);
+    r->boundary = RTreeAllocBoundary(t);
     return r;
 }
 
@@ -81,11 +81,13 @@ void RTreeFreeRect(struct RTree_Rect *r)
            self allocated.
  \param t: The pointer to a RTree struct
 -----------------------------------------------------------------------------*/
-void RTreeAllocBoundary(struct RTree_Rect *r, struct RTree *t)
+RectReal *RTreeAllocBoundary(struct RTree *t)
 {
-    assert(r && t);
-    r->boundary = (RectReal *)malloc(t->rectsize);
-    assert(r->boundary);
+    RectReal *boundary = (RectReal *)malloc(t->rectsize);
+
+    assert(boundary);
+
+    return boundary;
 }
 
 /**----------------------------------------------------------------------------
@@ -111,7 +113,7 @@ void RTreeInitRect(struct RTree_Rect *r, struct RTree *t)
 {
     register int i;
 
-    for (i = 0; i < t->ndims; i++)
+    for (i = 0; i < t->ndims_alloc; i++)
 	r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal) 0;
 }
 
@@ -229,8 +231,8 @@ void RTreeNullRect(struct RTree_Rect *r, struct RTree *t)
     /* assert(r); */
 
     r->boundary[0] = (RectReal) 1;
-    r->boundary[t->nsides - 1] = (RectReal) - 1;
-    for (i = 1; i < t->ndims; i++)
+    r->boundary[t->nsides_alloc - 1] = (RectReal) - 1;
+    for (i = 1; i < t->ndims_alloc; i++)
 	r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal) 0;
 
     return;
@@ -508,14 +510,14 @@ void RTreeCombineRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
     /* assert(r1 && r2 && r3); */
 
     if (Undefined(r1, t)) {
-	for (i = 0; i < t->nsides; i++)
+	for (i = 0; i < t->nsides_alloc; i++)
 	    r3->boundary[i] = r2->boundary[i];
 
 	return;
     }
 
     if (Undefined(r2, t)) {
-	for (i = 0; i < t->nsides; i++)
+	for (i = 0; i < t->nsides_alloc; i++)
 	    r3->boundary[i] = r1->boundary[i];
 
 	return;

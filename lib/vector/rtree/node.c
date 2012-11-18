@@ -83,7 +83,7 @@ struct RTree_Node *RTreeAllocNode(struct RTree *t, int level)
     n->level = level;
 
     for (i = 0; i < MAXCARD; i++) {
-	RTreeAllocBoundary(&(n->branch[i].rect), t);
+	n->branch[i].rect.boundary = RTreeAllocBoundary(t);
 	RTreeInitBranch[NODETYPE(level, t->fd)](&(n->branch[i]), t);
     }
 
@@ -433,7 +433,7 @@ static struct RTree_ListBranch *RTreeNewListBranch(struct RTree *t)
        (struct RTree_ListBranch *)malloc(sizeof(struct RTree_ListBranch));
 
     assert(p);
-    RTreeAllocBoundary(&(p->b.rect), t);
+    p->b.rect.boundary = RTreeAllocBoundary(t);
 
     return p;
 }
