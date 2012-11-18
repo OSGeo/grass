@@ -24,11 +24,13 @@
 #include <grass/config.h>
 #include "index.h"
 
+#define USAGE_SWAP
+
 /* add new free node position for recycling */
 void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
 {
-    int which;
-    
+    int which, i;
+
     if (t->free_nodes.avail >= t->free_nodes.alloc) {
 	size_t size;
 
@@ -39,25 +41,34 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
     }
     t->free_nodes.pos[t->free_nodes.avail++] = pos;
 
-    /* TODO: search with t->used[level][which] instead of which,
-     * then which = t->used[level][which] */
-    which = (pos == t->nb[level][2].pos ? 2 : pos == t->nb[level][1].pos);
+    /* check mru first */
+    i = 0;
+    while (t->nb[level][t->used[level][i]].pos != pos &&
+           i < NODE_BUFFER_SIZE)
+	i++;
+
+    assert(i < NODE_BUFFER_SIZE);
+    which = t->used[level][i];
+    assert(t->nb[level][which].n.level == level);
     t->nb[level][which].pos = -1;
     t->nb[level][which].dirty = 0;
     
     /* make it lru */
-    if (t->used[level][0] == which) {
-	t->used[level][0] = t->used[level][1];
-	t->used[level][1] = t->used[level][2];
-	t->used[level][2] = which; 
-    }
-    else if (t->used[level][1] == which) {
-	t->used[level][1] = t->used[level][2];
-	t->used[level][2] = which; 
+    if (i < NODE_BUFFER_SIZE - 1) { /* which != t->used[level][NODE_BUFFER_SIZE - 1] */
+#ifdef USAGE_SWAP
+	t->used[level][i] = t->used[level][NODE_BUFFER_SIZE - 1];
+	t->used[level][NODE_BUFFER_SIZE - 1] = which;
+#else
+	while (i < NODE_BUFFER_SIZE - 1) {
+	    t->used[level][i] = t->used[level][i + 1];
+	    i++;
+	}
+	t->used[level][NODE_BUFFER_SIZE - 1] = which;
+#endif
     }
 }
 
-/* looks for free node position, sets file pointer, returns position */
+/* look for free node position, set file pointer, return position */
 off_t RTreeGetNodePos(struct RTree *t)
 {
     if (t->free_nodes.avail > 0) {
@@ -100,39 +111,49 @@ size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 /* get node from buffer or file */
 void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *t)
 {
-    int which = 0;
+    int which, i = 0;
 
-    /* TODO: search with t->used[level][which] instead of which,
-     * then which = t->used[level][which] */
-    while (t->nb[level][which].pos != nodepos &&
-           t->nb[level][which].pos >= 0 && which < 2)
-	which++;
+    /* check mru first */
+    while (t->nb[level][t->used[level][i]].pos != nodepos &&
+           t->nb[level][t->used[level][i]].pos >= 0 &&
+	   i < NODE_BUFFER_SIZE - 1)
+	i++;
+
+    which = t->used[level][i];
 
     if (t->nb[level][which].pos != nodepos) {
-	/* replace least recently used (fastest method of lru, pseudo-lru, mru) */
-	which = t->used[level][2];
+	if (t->nb[level][which].pos >= 0) {
+	    assert(i == NODE_BUFFER_SIZE - 1);
+	}
 	/* rewrite node in buffer */
 	if (t->nb[level][which].dirty) {
 	    assert(t->nb[level][which].pos >= 0);
-	    RTreeRewriteNode(&(t->nb[level][which].n), t->nb[level][which].pos, t);
+	    assert(t->nb[level][which].n.level == level);
+	    RTreeRewriteNode(&(t->nb[level][which].n),
+	                     t->nb[level][which].pos, t);
 	    t->nb[level][which].dirty = 0;
 	}
 	RTreeReadNode(&(t->nb[level][which].n), nodepos, t);
 	t->nb[level][which].pos = nodepos;
     }
+    assert(t->nb[level][which].n.level == level);
     /* make it mru */
-    if (t->used[level][2] == which) {
-	t->used[level][2] = t->used[level][1];
-	t->used[level][1] = t->used[level][0];
-	t->used[level][0] = which; 
+    if (i) { /* t->used[level][0] != which */
+#ifdef USAGE_SWAP
+	t->used[level][i] = t->used[level][0];
+	t->used[level][0] = which;
+#else
+	while (i) {
+	    t->used[level][i] = t->used[level][i - 1];
+	    i--;
+	}
+	t->used[level][0] = which;
+#endif
     }
-    else if (t->used[level][1] == which) {
-	t->used[level][1] = t->used[level][0];
-	t->used[level][0] = which; 
-    }
-    /* copy node */
+
     RTreeCopyNode(n, &(t->nb[level][which].n), t);
-    assert(n->level == level);
+    
+    /* return &(t->nb[level][which].n); */
 }
 
 /* write branch to file */
@@ -171,31 +192,71 @@ size_t RTreeRewriteNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     return RTreeWriteNode(n, t);
 }
 
+/* mark node in buffer as changed */
+void RTreeNodeChanged(struct RTree_Node *n, off_t nodepos, struct RTree *t)
+{
+    int which, i = 0;
+
+    /* check mru first */
+    while (t->nb[n->level][t->used[n->level][i]].pos != nodepos &&
+           i < NODE_BUFFER_SIZE)
+	i++;
+
+    assert(i < NODE_BUFFER_SIZE);
+    /* as it is used, it should always be mru */
+    assert(i == 0);
+    which = t->used[n->level][i];
+    assert(t->nb[n->level][which].n.level == n->level);
+
+    t->nb[n->level][which].dirty = 1;
+
+    /* make it mru */
+    if (i) { /* t->used[level][0] != which */
+#ifdef USAGE_SWAP
+	t->used[n->level][i] = t->used[n->level][0];
+	t->used[n->level][0] = which;
+#else
+	while (i) {
+	    t->used[n->level][i] = t->used[n->level][i - 1];
+	    i--;
+	}
+	t->used[n->level][0] = which;
+#endif
+    }
+}
+
 /* update node in buffer */
 void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
-    int which = 0;
+    int which, i = 0;
 
-    /* TODO: search with t->used[level][which] instead of which,
-     * then which = t->used[level][which] */
-    while (t->nb[n->level][which].pos != nodepos && which < 2)
-	which++;
+    /* check mru first */
+    while (t->nb[n->level][t->used[n->level][i]].pos != nodepos &&
+           i < NODE_BUFFER_SIZE)
+	i++;
 
-    assert(t->nb[n->level][which].pos == nodepos);
+    assert(i < NODE_BUFFER_SIZE);
+    /* as it is used, it should always be mru */
+    assert(i == 0);
+    which = t->used[n->level][i];
+
     assert(t->nb[n->level][which].n.level == n->level);
     /* copy node */
     RTreeCopyNode(&(t->nb[n->level][which].n), n, t);
     t->nb[n->level][which].dirty = 1;
 
     /* make it mru */
-    if (t->used[n->level][2] == which) {
-	t->used[n->level][2] = t->used[n->level][1];
-	t->used[n->level][1] = t->used[n->level][0];
-	t->used[n->level][0] = which; 
-    }
-    else if (t->used[n->level][1] == which) {
-	t->used[n->level][1] = t->used[n->level][0];
-	t->used[n->level][0] = which; 
+    if (i) { /* t->used[level][0] != which */
+#ifdef USAGE_SWAP
+	t->used[n->level][i] = t->used[n->level][0];
+	t->used[n->level][0] = which;
+#else
+	while (i) {
+	    t->used[n->level][i] = t->used[n->level][i - 1];
+	    i--;
+	}
+	t->used[n->level][0] = which;
+#endif
     }
 }
 
@@ -203,46 +264,56 @@ void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 void RTreeUpdateRect(struct RTree_Rect *r, struct RTree_Node *n,
                      off_t nodepos, int b, struct RTree *t)
 {
-    int i, j;
-    int which = 0;
-    
-    while (t->nb[n->level][which].pos != nodepos && which < 2)
-	which++;
+    int i, j, k, which;
+
+    /* check mru first */
+    i = 0;
+    while (t->nb[n->level][t->used[n->level][i]].pos != nodepos &&
+           i < NODE_BUFFER_SIZE)
+	i++;
+
+    assert(i < NODE_BUFFER_SIZE);
+    /* as it is used, it should always be mru */
+    assert(i == 0);
+    which = t->used[n->level][i];
 
     assert(t->nb[n->level][which].n.level == n->level);
-    for (i = 0; i < t->ndims_alloc; i++) {
-	t->nb[n->level][which].n.branch[b].rect.boundary[i] =
-	                  n->branch[b].rect.boundary[i] = r->boundary[i];
-	j = i + t->ndims_alloc;
+    for (j = 0; j < t->ndims_alloc; j++) {
 	t->nb[n->level][which].n.branch[b].rect.boundary[j] =
 	                  n->branch[b].rect.boundary[j] = r->boundary[j];
+	k = j + t->ndims_alloc;
+	t->nb[n->level][which].n.branch[b].rect.boundary[k] =
+	                  n->branch[b].rect.boundary[k] = r->boundary[k];
     }
 
     t->nb[n->level][which].dirty = 1;
 
     /* make it mru */
-    if (t->used[n->level][2] == which) {
-	t->used[n->level][2] = t->used[n->level][1];
-	t->used[n->level][1] = t->used[n->level][0];
-	t->used[n->level][0] = which; 
-    }
-    else if (t->used[n->level][1] == which) {
-	t->used[n->level][1] = t->used[n->level][0];
-	t->used[n->level][0] = which; 
+    if (i) { /* t->used[level][0] != which */
+#ifdef USAGE_SWAP
+	t->used[n->level][i] = t->used[n->level][0];
+	t->used[n->level][0] = which;
+#else
+	while (i) {
+	    t->used[n->level][i] = t->used[n->level][i - 1];
+	    i--;
+	}
+	t->used[n->level][0] = which;
+#endif
     }
 }
 
 /* flush pending changes to file */
 void RTreeFlushBuffer(struct RTree *t)
 {
-    int i;
+    int i, j;
     
     for (i = 0; i <= t->rootlevel; i++) {
-	if (t->nb[i][0].dirty)
-	    RTreeRewriteNode(&(t->nb[i][0].n), t->nb[i][0].pos, t);
-	if (t->nb[i][1].dirty)
-	    RTreeRewriteNode(&(t->nb[i][1].n), t->nb[i][1].pos, t);
-	if (t->nb[i][2].dirty)
-	    RTreeRewriteNode(&(t->nb[i][2].n), t->nb[i][2].pos, t);
+	for (j = 0; j < NODE_BUFFER_SIZE; j++) {
+	    if (t->nb[i][j].dirty) {
+		RTreeRewriteNode(&(t->nb[i][j].n), t->nb[i][j].pos, t);
+		t->nb[i][j].dirty = 0;
+	    }
+	}
     }
 }

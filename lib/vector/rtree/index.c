@@ -62,7 +62,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 {
     struct RTree *new_rtree;
     struct RTree_Node *n;
-    int i, j;
+    int i, j, k;
     
     new_rtree = (struct RTree *)malloc(sizeof(struct RTree));
 
@@ -78,7 +78,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 
     new_rtree->nsides_alloc = 2 * new_rtree->ndims_alloc;
 
-    /* init free nodes */
+    /* init free node positions */
     new_rtree->free_nodes.avail = 0;
     new_rtree->free_nodes.alloc = 0;
     new_rtree->free_nodes.pos = NULL;
@@ -94,7 +94,6 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     /* create empty root node */
     n = RTreeAllocNode(new_rtree, 0);
     new_rtree->rootlevel = n->level = 0;       /* leaf */
-    new_rtree->root = NULL;
     
     /* use overflow by default */
     new_rtree->overflow = 1;
@@ -105,25 +104,27 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 	new_rtree->leafcard = MAXCARD;
 
 	/* initialize node buffer */
+	new_rtree->nb = calloc(MAXLEVEL, sizeof(struct NodeBuffer *));
+	new_rtree->nb[0] = calloc(MAXLEVEL * NODE_BUFFER_SIZE, sizeof(struct NodeBuffer));
+	for (i = 1; i < MAXLEVEL; i++) {
+	    new_rtree->nb[i] = new_rtree->nb[i - 1] + NODE_BUFFER_SIZE;
+	}
+
 	for (i = 0; i < MAXLEVEL; i++) {
-	    new_rtree->nb[i][0].dirty = 0;
-	    new_rtree->nb[i][1].dirty = 0;
-	    new_rtree->nb[i][2].dirty = 0;
-	    new_rtree->nb[i][0].pos = -1;
-	    new_rtree->nb[i][1].pos = -1;
-	    new_rtree->nb[i][2].pos = -1;
-	    /* usage order */
-	    new_rtree->used[i][0] = 2;
-	    new_rtree->used[i][1] = 1;
-	    new_rtree->used[i][2] = 0;
 
-	    /* alloc memory for rectangles */
 	    for (j = 0; j < MAXCARD; j++) {
-		RTreeAllocBoundary(&(new_rtree->nb[i][0].n.branch[j].rect), new_rtree);
-		RTreeAllocBoundary(&(new_rtree->nb[i][1].n.branch[j].rect), new_rtree);
-		RTreeAllocBoundary(&(new_rtree->nb[i][2].n.branch[j].rect), new_rtree);
+		new_rtree->fs[i].sn.branch[j].rect.boundary = RTreeAllocBoundary(new_rtree);
+	    }
+	    for (j = 0; j < NODE_BUFFER_SIZE; j++) {
+		new_rtree->nb[i][j].dirty = 0;
+		new_rtree->nb[i][j].pos = -1;
+		/* usage order */
+		new_rtree->used[i][j] = j;
 
-		RTreeAllocBoundary(&(new_rtree->fs[i].sn.branch[j].rect), new_rtree);
+		/* alloc memory for rectangles */
+		for (k = 0; k < MAXCARD; k++) {
+		    new_rtree->nb[i][j].n.branch[k].rect.boundary = RTreeAllocBoundary(new_rtree);
+		}
 	    }
 	}
 
@@ -131,6 +132,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 	lseek(new_rtree->fd, rootpos, SEEK_SET);
 	RTreeWriteNode(n, new_rtree);
 	RTreeFreeNode(n);
+	new_rtree->root = NULL;
 
 	new_rtree->insert_rect = RTreeInsertRectF;
 	new_rtree->delete_rect = RTreeDeleteRectF;
@@ -162,19 +164,19 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     new_rtree->n_leafs = 0;
 
     /* initialize temp variables */
-    RTreeAllocBoundary(&(new_rtree->p.cover[0]), new_rtree);
-    RTreeAllocBoundary(&(new_rtree->p.cover[1]), new_rtree);
+    new_rtree->p.cover[0].boundary = RTreeAllocBoundary(new_rtree);
+    new_rtree->p.cover[1].boundary = RTreeAllocBoundary(new_rtree);
     
-    RTreeAllocBoundary(&(new_rtree->tmpb1.rect), new_rtree);
-    RTreeAllocBoundary(&(new_rtree->tmpb2.rect), new_rtree);
-    RTreeAllocBoundary(&(new_rtree->c.rect), new_rtree);
+    new_rtree->tmpb1.rect.boundary = RTreeAllocBoundary(new_rtree);
+    new_rtree->tmpb2.rect.boundary = RTreeAllocBoundary(new_rtree);
+    new_rtree->c.rect.boundary = RTreeAllocBoundary(new_rtree);
     for (i = 0; i <= MAXCARD; i++) {
-	RTreeAllocBoundary(&(new_rtree->BranchBuf[i].rect), new_rtree);
+	new_rtree->BranchBuf[i].rect.boundary = RTreeAllocBoundary(new_rtree);
     }
-    RTreeAllocBoundary(&(new_rtree->rect_0), new_rtree);
-    RTreeAllocBoundary(&(new_rtree->rect_1), new_rtree);
-    RTreeAllocBoundary(&(new_rtree->upperrect), new_rtree);
-    RTreeAllocBoundary(&(new_rtree->orect), new_rtree);
+    new_rtree->rect_0.boundary = RTreeAllocBoundary(new_rtree);
+    new_rtree->rect_1.boundary = RTreeAllocBoundary(new_rtree);
+    new_rtree->upperrect.boundary = RTreeAllocBoundary(new_rtree);
+    new_rtree->orect.boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->center_n = (RectReal *)malloc(new_rtree->ndims_alloc * sizeof(RectReal));
 
     return new_rtree;
@@ -213,30 +215,18 @@ void RTreeSetOverflow(struct RTree *t, char overflow)
 
 void RTreeDestroyTree(struct RTree *t)
 {
-    int i, j;
+    int i;
 
     assert(t);
 
     if (t->fd > -1) {
 	if (t->free_nodes.alloc)
 	    free(t->free_nodes.pos);
+	free(t->nb[0]);
+	free(t->nb);
     }
     else if (t->root)
 	RTreeDestroyNode(t->root, t->root->level ? t->nodecard : t->leafcard);
-
-    if (t->fd > -1) {  /* file based */
-	/* free node buffer */
-	for (i = 0; i < MAXLEVEL; i++) {
-
-	    /* free memory for rectangles */
-	    for (j = 0; j < MAXCARD; j++) {
-		RTreeFreeBoundary(&(t->nb[i][0].n.branch[j].rect));
-		RTreeFreeBoundary(&(t->nb[i][1].n.branch[j].rect));
-		RTreeFreeBoundary(&(t->nb[i][2].n.branch[j].rect));
-		RTreeFreeBoundary(&(t->fs[i].sn.branch[j].rect));
-	    }
-	}
-    }
 
     /* free temp variables */
     RTreeFreeBoundary(&(t->p.cover[0]));

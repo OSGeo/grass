@@ -51,6 +51,9 @@ typedef double RectReal;
 /* maximum no of levels = tree depth */
 #define MAXLEVEL 20        /* 8^MAXLEVEL items are guaranteed to fit into the tree */
 
+/* number of nodes buffered per level */
+#define NODE_BUFFER_SIZE 4
+
 struct RTree_Rect
 {
     RectReal *boundary;	/* xmin,ymin,...,xmax,ymax,... */
@@ -111,6 +114,14 @@ struct mstack
     int branch_id;		/* branch number to follow down */
 };
 
+/* node buffer for file-based index */
+struct NodeBuffer
+{
+    struct RTree_Node n;	/* buffered node */
+    off_t pos;	    		/* file position of buffered node */
+    char dirty;         	/* node in buffer was modified */
+};
+
 /* temp vars for node splitting */
 struct RTree_PartitionVars {
     int partition[MAXCARD + 1];
@@ -154,19 +165,13 @@ struct RTree
         off_t *pos;         /* array of available positions */
     } free_nodes;
 
-    /* node buffer for file-based index, three nodes per level
-     * more than three nodes per level would require too complex cache management */
-    struct NodeBuffer
-    {
-	struct RTree_Node n;	    /* buffered node */
-	off_t pos;	    /* file position of buffered node */
-	char dirty;         /* node in buffer was modified */
-    } nb[MAXLEVEL][3];
+    /* node buffer for file-based index */
+    struct NodeBuffer **nb;
 
     /* usage order of buffered nodes per level
      * used[level][0] = most recently used
-     * used[level][2] = least recently used */
-    char used[MAXLEVEL][3];
+     * used[level][NODE_BUFFER_SIZE - 1] = least recently used */
+    int used[MAXLEVEL][NODE_BUFFER_SIZE];
 
     /* insert, delete, search */
     rt_insert_fn *insert_rect;
@@ -228,7 +233,7 @@ void RTreeDestroyNode(struct RTree_Node *, int);
 /* RTree rectangle allocation and deletion */
 struct RTree_Rect *RTreeAllocRect(struct RTree *t);
 void RTreeFreeRect(struct RTree_Rect *r);
-void RTreeAllocBoundary(struct RTree_Rect *r, struct RTree *t);
+RectReal *RTreeAllocBoundary(struct RTree *t);
 void RTreeFreeBoundary(struct RTree_Rect *r);
 
 /* RTree IO */
