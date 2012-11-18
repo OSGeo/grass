@@ -4,7 +4,6 @@
 @brief Help/about window, menu tree, search module tree
 
 Classes:
- - ghelp::SearchModuleWindow
  - ghelp::AboutWindow
  - ghelp::HelpFrame
  - ghelp::HelpWindow
@@ -19,155 +18,24 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import codecs
 import platform
 
 import wx
 from wx.html import HtmlWindow
 try:
-    import wx.lib.agw.customtreectrl as CT
     from wx.lib.agw.hyperlink import HyperLinkCtrl
 except ImportError:
-    import wx.lib.customtreectrl as CT
     from wx.lib.hyperlink import HyperLinkCtrl
-import wx.lib.flatnotebook as FN
-from wx.lib.newevent import NewEvent
 
 import grass.script as grass
 
 from core             import globalvar
-from core             import utils
 from core.gcmd        import GError, DecodeString
-from gui_core.widgets import FormListbook, StaticWrapText, ScrolledPanel
+from gui_core.widgets import FormListbook, ScrolledPanel
 from core.debug       import Debug
-from core.settings    import UserSettings
 
-gModuleSelected, EVT_MODULE_SELECTED = NewEvent()
 
-class SearchModuleWindow(wx.Panel):
-    """!Search module window (used in MenuTreeWindow)"""
-    def __init__(self, parent, modulesData, id = wx.ID_ANY,
-                 showChoice = True, showTip = False, **kwargs):
-        self.showTip    = showTip
-        self.showChoice = showChoice
-        self.modulesData = modulesData
-        
-        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
-        
-        self._searchDict = { _('description') : 'description',
-                             _('command')     : 'command',
-                             _('keywords')    : 'keywords' }
-        
-        self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                label = " %s " % _("Find module - (press Enter for next match)"))
-        
-        self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY)
-        items = [_('description'), _('keywords'), _('command')]
-        datas = ['description', 'keywords', 'command']
-        for item, data in zip(items, datas):
-            self.searchBy.Append(item = item, clientData = data)
-        self.searchBy.SetSelection(0)
-        
-        self.search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
-                                    size = (-1, 25), style = wx.TE_PROCESS_ENTER)
-        self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
-        
-        if self.showTip:
-            self.searchTip = StaticWrapText(parent = self, id = wx.ID_ANY,
-                                            size = (-1, 35))
-        
-        if self.showChoice:
-            self.searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
-            self.searchChoice.SetItems(self.modulesData.GetCommandItems())
-            self.searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
-        
-        self._layout()
-
-    def _layout(self):
-        """!Do layout"""
-        sizer = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
-        gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
-        
-        gridSizer.Add(item = self.searchBy,
-                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
-        gridSizer.Add(item = self.search,
-                      flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
-        row = 1
-        if self.showChoice:
-            gridSizer.Add(item = self.searchChoice,
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
-            row += 1
-        if self.showTip:
-            gridSizer.Add(item = self.searchTip,
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
-            row += 1
-        
-        gridSizer.AddGrowableCol(1)
-
-        sizer.Add(item = gridSizer, proportion = 1)
-        
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-
-    def GetCtrl(self):
-        """!Get SearchCtrl widget"""
-        return self.search
-    
-    def GetSelection(self):
-        """!Get selected element"""
-        selection = self.searchBy.GetStringSelection()
-        
-        return self._searchDict[selection]
-
-    def SetSelection(self, i):
-        """!Set selection element"""
-        self.searchBy.SetSelection(i)
-
-    def OnSearchModule(self, event):
-        """!Search module by keywords or description"""
-
-        text = event.GetEventObject().GetValue()
-        if not text:
-            self.modulesData.SetFilter()
-            mList = self.modulesData.GetCommandItems()
-            if self.showChoice:
-                self.searchChoice.SetItems(mList)
-            if self.showTip:
-                self.searchTip.SetLabel(_("%d modules found") % len(mList))
-            event.Skip()
-            return
-
-        findIn = self.searchBy.GetClientData(self.searchBy.GetSelection())
-        modules, nFound = self.modulesData.FindModules(text = text, findIn = findIn)
-        self.modulesData.SetFilter(modules)
-        if self.showChoice:
-            self.searchChoice.SetItems(self.modulesData.GetCommandItems())
-            self.searchChoice.SetSelection(0)
-        if self.showTip:
-            self.searchTip.SetLabel(_("%d modules match") % nFound)
-        
-        event.Skip()
-        
-    def OnSelectModule(self, event):
-        """!Module selected from choice, update command prompt"""
-        cmd  = event.GetString().split(' ', 1)[0]
-
-        moduleEvent = gModuleSelected(name = cmd)
-        wx.PostEvent(self, moduleEvent)
-       
-        desc = self.modulesData.GetCommandDesc(cmd)
-        if self.showTip:
-            self.searchTip.SetLabel(desc)
-        
-    def Reset(self):
-        """!Reset widget"""
-        self.searchBy.SetSelection(0)
-        self.search.SetValue('')
-        if self.showTip:
-            self.searchTip.SetLabel('')
-        
-        
 class AboutWindow(wx.Frame):
     """!Create custom About Window
     """

@@ -34,8 +34,8 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.utils       import SetAddOnPath
 from gui_core.forms   import GUI
-from gui_core.widgets import ItemTree, GListCtrl
-from gui_core.ghelp   import SearchModuleWindow
+from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWindow
+
 
 class InstallExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,

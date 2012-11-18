@@ -27,9 +27,8 @@ from core              import utils
 from core.modulesdata  import ModulesData
 from core.gcmd         import EncodeString
 from core.settings     import UserSettings
-from gui_core.widgets  import ItemTree
+from gui_core.widgets  import ItemTree, SearchModuleWindow
 from lmgr.menudata     import LayerManagerMenuData
-from gui_core.ghelp    import SearchModuleWindow
 
 class Menu(wx.MenuBar):
     def __init__(self, parent, data):
