@@ -15,7 +15,8 @@
 #define KERNEL_COSINE       6
 
 
-double kernelFunction(int function, int dimension, double bandwidth, double x);
+void setKernelFunction(int function);
+double kernelFunction(int dimension, double bandwidth, double x);
 
 double euclidean_distance(double *x, double *y, int n);
 double gaussian2dBySigma(double d, double sigma);
@@ -29,13 +30,14 @@ double brent_iterate(double (*f) (), double x_lower, double x_upper,
 double kernel1(double d, double rs, double lambda);
 double segno(double x);
 
+/* main.c */
 int read_points(struct Map_info *In, double ***coordinate, double dsize);
 double compute_all_distances(double **coordinate, double **dists, int n,
 			     double dmax);
 double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
 				 double netmax, double **dists, double dmax);
 void compute_distance(double N, double E, struct Map_info *In, double sigma,
-		      double term, double *gaussian, double dmax, int kernel_function);
+		      double *gaussian, double dmax);
 void compute_net_distance(double x, double y, struct Map_info *In,
 			  struct Map_info *Net, double netmax, double sigma,
-			  double term, double *gaussian, double dmax, int node_method, int kernel_function);
+			  double *gaussian, double dmax, int node_method);

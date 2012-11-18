@@ -4,6 +4,8 @@
 #include <grass/glocale.h>
 #include "global.h"
 
+static double (*kernelfn)(int dimension, double bandwidth, double x);
+
 /*********************** Gaussian ****************************/
 /* probability for gaussian distribution */
 double gaussian2dBySigma(double d, double sigma)
@@ -214,33 +216,36 @@ double cosineKernel(int dimension, double bandwidth, double x)
     return k * (M_PI / 4. * cos(M_PI / 2. * x));
 }
 
-double kernelFunction(int function, int dimension, double bandwidth, double x)
+double kernelFunction(int dimension, double bandwidth, double x)
 {
-    if (dimension > 2 && function != KERNEL_GAUSSIAN) {
-	G_fatal_error(_("Dimension > 2 supported only by gaussian function"));
-    }
+    return kernelfn(dimension, bandwidth, x);
+}
+
+void setKernelFunction(int function)
+{
     switch (function) {
     case KERNEL_UNIFORM:
-	return uniformKernel(dimension, bandwidth, x);
+	kernelfn = uniformKernel;
 	break;
     case KERNEL_TRIANGULAR:
-	return triangularKernel(dimension, bandwidth, x);
+	kernelfn = triangularKernel;
 	break;
     case KERNEL_EPANECHNIKOV:
-	return epanechnikovKernel(dimension, bandwidth, x);
+	kernelfn = epanechnikovKernel;
 	break;
     case KERNEL_QUARTIC:
-	return quarticKernel(dimension, bandwidth, x);
+	kernelfn = quarticKernel;
 	break;
     case KERNEL_TRIWEIGHT:
-	return triweightKernel(dimension, bandwidth, x);
+	kernelfn = triweightKernel;
 	break;
     case KERNEL_GAUSSIAN:
-	return gaussianKernel2(dimension, bandwidth, x);
+	kernelfn = gaussianKernel2;
 	break;
     case KERNEL_COSINE:
-	return cosineKernel(dimension, bandwidth, x);
+	kernelfn = cosineKernel;
 	break;
+    default:
+	G_fatal_error("Unknown kernel function");
     }
-    G_fatal_error("Unknown kernel function");
 }

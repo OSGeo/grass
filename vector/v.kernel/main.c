@@ -248,6 +248,8 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Optimal standard deviation calculation is supported only for kernel function 'gaussian'."));
 	}
     }
+    
+    setKernelFunction(kernel_function);
 
     if (flag_q->answer) {
 	flag_o->answer = 1;
@@ -387,9 +389,9 @@ int main(int argc, char **argv)
 	struct line_cats *SCats;
 	double total = 0.0;
 
-	G_message(_("\nWriting output vector map using smooth parameter=%f."),
+	G_message(_("Writing output vector map using smooth parameter=%f."),
 		  sigma);
-	G_message(_("\nNormalising factor=%f."),
+	G_message(_("Normalising factor=%f."),
 		  1. / gaussianFunction(sigma / 4., sigma, dimension));
 
 	/* Divide lines to segments and calculate gaussian for center of each segment */
@@ -424,9 +426,8 @@ int main(int argc, char **argv)
 		G_debug(3, "  segment = %d, offset = %f, xy = %f %f", seg,
 			offset1, x, y);
 
-		compute_net_distance(x, y, &In, &Net, netmax, sigma, term,
-				     &gaussian, dmax, node_method,
-				     kernel_function);
+		compute_net_distance(x, y, &In, &Net, netmax, sigma,
+				     &gaussian, dmax, node_method);
 		gaussian *= multip;
 		if (gaussian > gausmax)
 		    gausmax = gaussian;
@@ -515,8 +516,7 @@ int main(int argc, char **argv)
 		E = Rast_col_to_easting(col + 0.5, &window);
 
 		/* compute_distance(N, E, &In, sigma, term, &gaussian, dmax); */
-		compute_distance(N, E, &In, sigma, term, &gaussian, dmax,
-				 kernel_function);
+		compute_distance(N, E, &In, sigma, &gaussian, dmax);
 
 		output_cell[col] = multip * gaussian;
 		if (gaussian > gausmax)
@@ -697,22 +697,17 @@ int count_node_arcs(struct Map_info *Map, int node)
 /* Compute gausian for x, y along Net, using all points in In */
 void compute_net_distance(double x, double y, struct Map_info *In,
 			  struct Map_info *Net, double netmax, double sigma,
-			  double term, double *gaussian, double dmax,
-			  int node_method, int kernel_function)
+			  double *gaussian, double dmax, int node_method)
 {
     int i;
     double dist, kernel;
-    static struct line_pnts *Points = NULL;
     static struct line_pnts *FPoints = NULL;
     struct bound_box box;
     static struct boxlist *PointsList = NULL;
     static struct ilist *NodesList = NULL;
 
-    if (!Points)
-	Points = Vect_new_line_struct();
-
     if (!PointsList)
-	PointsList = Vect_new_boxlist(0);
+	PointsList = Vect_new_boxlist(1);
 
     if (node_method == NODE_EQUAL_SPLIT) {
 	if (!NodesList)
@@ -741,15 +736,15 @@ void compute_net_distance(double x, double y, struct Map_info *In,
 	int line, ret;
 
 	line = PointsList->id[i];
-	Vect_read_line(In, Points, NULL, line);
 
-	G_debug(3, "  SP: %f %f -> %f %f", x, y, Points->x[0], Points->y[0]);
+	G_debug(3, "  SP: %f %f -> %f %f", x, y, PointsList->box[i].E, PointsList->box[i].N);
 	/*ret = Vect_net_shortest_path_coor(Net, x, y, 0.0, Points->x[0], */
 	/*Points->y[0], 0.0, netmax, netmax, */
 	/*&dist, NULL, NULL, NULL, NULL, NULL, */
 	/*NULL); */
 	ret = Vect_net_shortest_path_coor2(Net,
-					   Points->x[0], Points->y[0], 0.0,
+					   PointsList->box[i].E,
+					   PointsList->box[i].N, 0.0,
 					   x, y, 0.0, netmax, 1.0,
 					   &dist, NULL,
 					   NULL, NodesList, FPoints, NULL,
@@ -767,7 +762,7 @@ void compute_net_distance(double x, double y, struct Map_info *In,
 	    continue;
 
 	/* kernel = gaussianKernel(dist / sigma, term); */
-	kernel = kernelFunction(kernel_function, 1, sigma, dist);
+	kernel = kernelFunction(1, sigma, dist);
 
 	if (node_method == NODE_EQUAL_SPLIT) {
 	    int j, node;
@@ -795,8 +790,8 @@ void compute_net_distance(double x, double y, struct Map_info *In,
 }
 
 void compute_distance(double N, double E, struct Map_info *In,
-		      double sigma, double term, double *gaussian,
-		      double dmax, int kernel_function)
+		      double sigma, double *gaussian,
+		      double dmax)
 {
     int line, nlines;
     double a[2], b[2];
@@ -805,16 +800,13 @@ void compute_distance(double N, double E, struct Map_info *In,
     /* spatial index handling, borrowed from lib/vector/Vlib/find.c */
     struct bound_box box;
     static struct boxlist *NList = NULL;
-    static struct line_pnts *Points = NULL;
 
     a[0] = E;
     a[1] = N;
 
     if (!NList) {
-	NList = Vect_new_boxlist(0);
+	NList = Vect_new_boxlist(1);
     }
-    if (!Points)
-	Points = Vect_new_line_struct();
 
     /* create bounding box 2x2*dmax size from the current cell center */
     box.N = N + dmax;
@@ -831,17 +823,13 @@ void compute_distance(double N, double E, struct Map_info *In,
 
     for (line = 0; line < nlines; line++) {
 
-	Vect_read_line(In, Points, NULL, NList->id[line]);
-
-	b[0] = Points->x[0];
-	b[1] = Points->y[0];
+	b[0] = NList->box[line].E;
+	b[1] = NList->box[line].N;
 
 	dist = euclidean_distance(a, b, 2);
 
 	if (dist <= dmax)
 	    /* *gaussian += gaussianKernel(dist / sigma, term); */
-	    *gaussian += kernelFunction(kernel_function, 2, sigma, dist);
-
-
+	    *gaussian += kernelFunction(2, sigma, dist);
     }
 }
