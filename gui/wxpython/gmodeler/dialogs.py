@@ -32,10 +32,9 @@ import wx.lib.mixins.listctrl as listmix
 from core                 import globalvar
 from core                 import utils
 from core.modulesdata     import ModulesData
-from gui_core.widgets     import GNotebook
+from gui_core.widgets     import SearchModuleWindow, EVT_MODULE_SELECTED
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import ElementDialog, MapLayersDialogForModeler
-from gui_core.ghelp       import SearchModuleWindow, EVT_MODULE_SELECTED
 from gui_core.prompt      import GPromptSTC
 from gui_core.forms       import CmdPanel
 from gui_core.gselect     import Select

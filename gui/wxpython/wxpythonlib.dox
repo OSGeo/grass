@@ -113,7 +113,6 @@ available in GRASS 5 and GRASS 6.
  - forms::CmdPanel
  - forms::GrassGUIApp
 - gui_core::ghelp
- - ghelp::SearchModuleWindow
  - ghelp::AboutWindow
  - ghelp::HelpFrame
  - ghelp::HelpWindow
@@ -177,6 +176,7 @@ available in GRASS 5 and GRASS 6.
  - widgets::FloatValidator
  - widgets::NTCValidator
  - widgets::ItemTree
+ - widgets::SearchModuleWindow
 
 \subsection lmgr Layer Manager
 
