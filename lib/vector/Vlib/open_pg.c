@@ -234,20 +234,17 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
     }
 
     /* if schema not defined, use 'public' */
-    if (!pg_info->schema_name) {
+    if (!pg_info->schema_name)
         pg_info->schema_name = G_store("public");
-    }
 
-    /* if fid_column not defined, use 'ogc_fid' */
-    if (!pg_info->fid_column) {
+    /* if fid_column not defined, use 'fid' */
+    if (!pg_info->fid_column)
         pg_info->fid_column = G_store(FID_COLUMN);
-    }
 
-    /* if geom_column not defined, use 'wkb_geometry' */
-    if (!pg_info->geom_column) {
+    /* if geom_column not defined, use 'geom' */
+    if (!pg_info->geom_column)
         pg_info->geom_column = G_store(GEOMETRY_COLUMN);
-    }
-
+    
     /* check if feature table already exists */
     sprintf(stmt, "SELECT * FROM pg_tables "
             "WHERE schemaname = '%s' AND tablename = '%s'",
@@ -650,32 +647,34 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 
         fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
         if (!fp) {
-            G_fatal_error(_("Unable to open PG file"));
+            G_warning(_("Unable to open PG file"));
         }
-        key_val = G_fread_key_value(fp);
-        fclose(fp);
-
-        /* disable spatial index ? */
-        p = G_find_key_value("spatial_index", key_val);
-        if (p && G_strcasecmp(p, "off") == 0)
-            spatial_index = FALSE;
-        
-        /* disable primary key ? */
-        p = G_find_key_value("primary_key", key_val);
-        if (p && G_strcasecmp(p, "off") == 0)
-            primary_key = FALSE;
-
-        /* PostGIS topology enabled ? */
-        p = G_find_key_value("topology", key_val);
-        if (p && G_strcasecmp(p, "on") == 0) {
-            /* define topology name
-               this should be configurable by the user
-            */
-            G_asprintf(&(pg_info->toposchema_name), "topo_%s",
-                       pg_info->table_name);
+        else {
+            key_val = G_fread_key_value(fp);
+            fclose(fp);
+            
+            /* disable spatial index ? */
+            p = G_find_key_value("spatial_index", key_val);
+            if (p && G_strcasecmp(p, "no") == 0)
+                spatial_index = FALSE;
+            
+            /* disable primary key ? */
+            p = G_find_key_value("primary_key", key_val);
+            if (p && G_strcasecmp(p, "no") == 0)
+                primary_key = FALSE;
+            
+            /* PostGIS topology enabled ? */
+            p = G_find_key_value("topology", key_val);
+            if (p && G_strcasecmp(p, "yes") == 0) {
+                /* define topology name
+                   this should be configurable by the user
+                */
+                G_asprintf(&(pg_info->toposchema_name), "topo_%s",
+                           pg_info->table_name);
+            }
         }
     }
-
+    
     /* create schema if not exists */
     if (G_strcasecmp(pg_info->schema_name, "public") != 0) {
         if (check_schema(pg_info) != 0)

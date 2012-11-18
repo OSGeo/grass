@@ -4,7 +4,7 @@
 #include <grass/vector.h>
 
 struct params {
-    struct Option *input, *layer, *dsn, *olayer;
+    struct Option *input, *layer, *dsn, *olayer, *opts, *olink;
 };
 
 struct flags {
@@ -13,7 +13,7 @@ struct flags {
 
 /* create.c */
 void create_table(struct Map_info *, struct Map_info *);
-char *create_pgfile(const char *, const char *, int);
+char *create_pgfile(const char *, const char *, const char *, char **, int);
 
 /* options.c */
 void define_options(struct params *, struct flags *);

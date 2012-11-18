@@ -46,10 +46,8 @@ int V1_close_pg(struct Map_info *Map)
     if (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW) {
         /* write header */
         Vect__write_head(Map);
-        if (G_find_file2("", "PG", G_mapset())) {
-            /* write frmt file for created PG-link */
-            Vect_save_frmt(Map);
-        }
+        /* write frmt file for created PG-link */
+        Vect_save_frmt(Map);
     }
 
     /* close connection */

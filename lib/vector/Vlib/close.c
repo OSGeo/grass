@@ -72,17 +72,64 @@ static void unlink_file(const struct Map_info *, const char *);
  */
 int Vect_close(struct Map_info *Map)
 {
+    int create_link; /* used for external formats only */
     struct Coor_info CInfo;
-
+    
     G_debug(1, "Vect_close(): name = %s, mapset = %s, format = %d, level = %d",
 	    Map->name, Map->mapset, Map->format, Map->level);
-
+    
+    /* check for external formats whether to create a link */
+    create_link = TRUE;
+    if (Map->format == GV_FORMAT_OGR ||
+        Map->format == GV_FORMAT_POSTGIS) {
+        char *def_file;
+        
+        if (Map->format == GV_FORMAT_POSTGIS) {
+            if (getenv("GRASS_VECTOR_PGFILE"))
+                def_file = getenv("GRASS_VECTOR_PGFILE");
+            else
+                def_file = "PG";
+        }
+        else {
+            def_file = "OGR";
+        }
+        if (G_find_file2("", def_file, G_mapset())) {
+            FILE       *fp;
+            const char *p;
+            
+            struct Key_Value *key_val;
+            
+            fp = G_fopen_old("", def_file, G_mapset());
+            if (!fp) {
+                G_warning(_("Unable to open %s file"), def_file);
+            }
+            else {
+                key_val = G_fread_key_value(fp);
+                fclose(fp);
+                
+                /* create a vector link in the current mapset ? */
+                p = G_find_key_value("link", key_val);
+                if (p && G_strcasecmp(p, "no") == 0) {
+                    create_link = FALSE;
+                }
+                else {
+                    p = G_find_key_value("link_name", key_val);
+                    if (p) {
+                        /* use different name for a link */
+                        G_free(Map->name);
+                        Map->name = G_store(p);
+                    }
+                }
+            }
+        }
+    }
+    
     /* store support files for vector maps in the current mapset if in
        write mode on level 2 */
     if (strcmp(Map->mapset, G_mapset()) == 0 &&
-	Map->support_updated &&
-	Map->plus.built == GV_BUILD_ALL &&
-        getenv("GRASS_VECTOR_PGFILE") == NULL) {  /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
+        Map->support_updated &&
+        Map->plus.built == GV_BUILD_ALL &&
+        create_link) {
 
         unlink_file(Map, GV_TOPO_ELEMENT); /* topo */
 
@@ -121,7 +168,7 @@ int Vect_close(struct Map_info *Map)
 	if (Map->format != GV_FORMAT_OGR_DIRECT &&
 	    Map->plus.Spidx_built == TRUE &&
 	    Map->plus.built == GV_BUILD_ALL &&
-            getenv("GRASS_VECTOR_PGFILE") == NULL) /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
+            create_link)
 	    fclose(Map->plus.spidx_fp.file);
     }
 
@@ -143,7 +190,7 @@ int Vect_close(struct Map_info *Map)
     
     /* close level 1 files / data sources if not head_only */
     if (!Map->head_only) {
-	if (((*Close_array[Map->format][1]) (Map)) != 0) {
+	if (create_link && ((*Close_array[Map->format][1]) (Map)) != 0) {
 	    G_warning(_("Unable to close vector <%s>"),
 		      Vect_get_full_name(Map));
 	    return 1;

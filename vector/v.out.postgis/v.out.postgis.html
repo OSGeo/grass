@@ -1,44 +1,161 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.out.postgis</em> exports existing GRASS vector map layer into
+<em>v.out.postgis</em> exports an existing GRASS vector map layer to
 PostGIS feature table.
+
+<p>
+By default GRASS topological features are converted into simple
+features
+(see <a href="http://www.opengeospatial.org/standards/sfa">OGC Simple
+Feature Access</a> specification for details). Flag <b>-l</b> allows
+to export vector features as topological elements stored
+in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+Topology</a> schema.
+
+<p>
+Additional creation options can be defined by <b>options</b> parameter:
+<ul>
+  <li><tt>FID=&lt;column&gt;</tt> - name of column which will be used as
+  primary key (feature id), default: <tt>fid</tt></li>
+  <li><tt>GEOMETRY_NAME=&lt;column&gt;</tt> name of column which will
+  be used for storing geometry data in feature table, default: <tt>geom</tt></li>
+  <li><tt>SPATIAL_INDEX=YES|NO</tt> - enable/disable creating spatial
+  index on geometry column, default: <tt>YES</tt></li>
+  <li><tt>PRIMARY_KEY=YES|NO</tt> - enable/disable adding primary key
+  on FID column, default: <tt>YES</tt></li>
+  <li><tt>TOPOSCHEMA_NAME=&lt;schema name&gt;</tt> - name of PostGIS
+  Topology schema (relevant only for <b>-l</b> flag),
+  default: <tt>topo_&lt;input&gt;</tt>
+</ul>
+
+Note that <em>options</em> defined
+by <em><a href="v.external.out.html">v.external.out</a></em> are
+ignored by <em>v.out.postgis</em>.
+
+<p>
+<em>v.out.postgis</em> optionally also creates new vector map in the
+current mapset if <b>olink</b> is defined.
 
 <h2>NOTES</h2>
 
-Currently only 2D vector features are supported.
+Currently only 2D vector features (points, lines, boundaries and
+centroids) are supported.
 
 <p>
 By default <em>v.out.postgis</em> exports vector data as <em>simple
 features</em>, ie. boundaries and centroids (forming topological
 areas) become polygons, isles become holes. Geometry of simple feature
-elements is stored in PostGIS feature table.
+elements is stored in PostGIS feature table as column
+&quot;geom&quot;. Default name of the geometry column can be changed
+by <b>options=</b><tt>GEOMETRY_NAME=&lt;column&gt;</tt>.
 
 <p>
 <em>v.out.postgis</em> also allows to export vector features as
 <em>topological elements</em>
 in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
-Topology</a>. PostGIS Topology extension uses three tables to store
-different topological primitives which forms topological objects like
+Topology</a> schema. PostGIS Topology extension uses three tables to
+store basic topological elements which forms topological objects like
 areas or isles in GRASS terminology. <em>Nodes</em> (0-dimensional
-elements) are stored in &quot;node&quot; table, <em>edges</em>
-(1-dimensional elements) in &quot;edge&quot; table and <em>faces</em>
-(2-dimensional elements) in &quot;face&quot; table.
+topological elements) are stored in &quot;node&quot;
+table, <em>edges</em> (1-dimensional elements) in &quot;edge&quot;
+table and <em>faces</em> (2-dimensional elements) in &quot;face&quot;
+table.
 
 <ul>
   <li>GRASS nodes are stored in <i>node</i> table</li>
   <li>GRASS points are stored in <i>node</i> table as regular nodes</li>
   <li>GRASS centroids are stored in <i>node</i> table as regular nodes
-  (<tt>containing_face</tt> refers to related area)</li>
+    (&quot;containing_face&quot; refers to related area)</li>
   <li>GRASS lines are stored in <i>edge</i> table</li>
   <li>GRASS boundaries are stored in <i>edge</i> table</li>
   <li>GRASS areas are stored in <i>face</i> table</li>
 </ul>
 
-Tables <i>node</i>, <i>edge</i> and <i>face</i> are stored in given topological schema. By default <em>v.out.postgis</em> defines it's name as <tt>topo_&lt;name of input vector map&gt;</tt>.
+Tables <i>node</i>, <i>edge</i> and <i>face</i> are stored in given
+topological schema. By default <em>v.out.postgis</em> defines it's
+name as <tt>topo_&lt;input&gt;</tt>. Name of topology schema can be
+defined by <b>options=</b><tt>TOPOSCHEMA_NAME=&lt;name&gt;</tt>.
 
 <h2>EXAMPLES</h2>
 
-<em>To be added</em>
+<h3>Export Simple Features</h3>
+
+Export vector map <i>urbanarea</i> as feature table <i>urbanarea</i>
+located in database <i>grass</i>, schema <i>public</i>. Note that this
+database schema is automatically used when not defined by the user.
+
+<div class="code"><pre>
+v.out.postgis input=urbanarea dsn="PG:dbname=grass"
+</pre></div>
+
+GRASS areas are converted into polygons, isles into holes. We can
+check the number or created polygons by simple SQL query bellow.
+
+<div class="code"><pre>
+db.select driver=pg database=grass \
+ sql="SELECT ST_GeometryType(geom) as geom_type, count(*) from urbanarea group by geom_type"
+
+geom_type|count
+ST_Polygon|657
+</pre></div>
+
+<h3>Export data into specific database schema</h3>
+
+Database schema for storing exported data can be defined
+by <b>olayer</b> as
+<tt>&lt;schema_name&gt;.&lt;table_name&gt;</tt>. If the specified
+schema doesn't exist in the database, then it's automatically created.
+
+<p>
+Export vector map &quot;bridges&quot; as feature table in database
+schema &quot;grassout&quot;.
+
+<div class="code"><pre>
+v.out.postgis input=bridges dsn="PG:dbname=grass" olayer=grassout.bridges
+</pre></div>
+
+<h3>Export data with creation options</h3>
+
+Example bellow demonstrates how to define name for geometry column and
+disable building spatial index.
+
+<div class="code"><pre>
+v.out.postgis input=roadsmajor dsn="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO"
+</pre></div>
+
+<h3>Link exported data</h3>
+
+Exported data can be linked as vector map created in the current
+mapset by specifing <b>olink</b> parameter. In the example below
+vector map &quot;busstopsall&quot; from PERMANENT mapset is exported
+into &quot;grass&quot; PostGIS database. <em>v.out.postgis</em> after
+successful export also creates in the current mapset GRASS vector map
+as a link to the PostGIS feature table.
+
+<div class="code"><pre>
+v.out.postgis input=busstopsall@PERMANENT dsn="PG:dbname=grass" olink=busstopsall_pg
+</pre></div>
+
+Created link can be checked
+by <em><a href="v.info.html">v.info</a></em>:
+
+<div class="code"><pre>
+ v.info busstopsall_pg
+
+...
+ |----------------------------------------------------------------------------|
+ | Map format:      PostGIS (PostgreSQL)                                      |
+ | DB table:        public.busstopsall                                        |
+ | DB name:         grass                                                     |
+ | Geometry column: geom                                                      |
+ | Feature type:    point                                                     |
+ | Topology:        pseudo (simple features)                                  |
+ |----------------------------------------------------------------------------|
+...
+
+</pre></div>
+
+<h3>Export topological data</h3>
 
 <h2>TODO</h2>
 
@@ -49,19 +166,23 @@ Tables <i>node</i>, <i>edge</i> and <i>face</i> are stored in given topological 
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://postgis.refractions.net/docs/Topology.html">PostGIS Topology</a> manual</li>
+  <li><a href="http://www.opengeospatial.org/standards/sfa">OGC Simple Feature Access</a> specification</li>
+  <li><a href="http://postgis.refractions.net/docs/Topology.html">PostGIS Topology</a> documentation</li>
 </ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
   <a href="v.out.ogr.html">v.out.ogr</a>,
-  <a href="v.external.out.html">v.external.out</a>
+  <a href="v.external.html">v.external</a>,
+  <a href="v.external.out.html">v.external.out</a>,
+  <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
 
-<h2>AUTHORS</h2>
+<h2>AUTHOR</h2>
 
 Martin Landa, Czech Technical University in Prague, Czech Republic
+(development supported by Fondazione Edmund Mach and Comune di Trento, Italy)
 
 <p>
 <i>Last changed: $Date$</i>
