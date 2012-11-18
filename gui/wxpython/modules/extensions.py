@@ -34,8 +34,94 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.utils       import SetAddOnPath
 from gui_core.forms   import GUI
-from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget
+from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget, EVT_MODULE_SELECTED
 
+
+class ExtensionModulesData(object):
+    """!Holds information about modules.
+
+    @todo add doctest
+    """
+    def __init__(self, modulesDesc):
+
+        self.moduleDesc = modulesDesc
+        self.moduleDescOriginal = modulesDesc
+
+    def GetCommandDesc(self, cmd):
+        """!Gets the description for a given module (command).
+
+        If the given module is not available, an empty string is returned.
+        
+        \code
+        print data.GetCommandDesc('r.info')
+        Outputs basic information about a raster map.
+        \endcode
+        """
+        if cmd in self.moduleDesc:
+            return self.moduleDesc[cmd]['description']
+
+        return ''
+
+    def GetCommandItems(self):
+        """!Gets list of available modules (commands).
+
+        The list contains available module names.
+
+        \code
+        print data.GetCommandItems()[0:4]
+        ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate']
+        \endcode
+        """
+        items = self.moduleDesc.keys()
+        items.sort()
+
+        return items
+
+    def FindModules(self, text, findIn):
+        """!Finds modules according to given text.
+
+        @param text string to search
+        @param findIn where to search for text
+        (allowed values are 'description', 'keywords' and 'command')
+        """
+        modules = dict()
+        iFound = 0
+        for module, data in self.moduleDescOriginal.iteritems():
+            found = False
+            if findIn == 'description':
+                if text in data['description']:
+                    found = True
+            elif findIn == 'keywords':
+                if text in data['keywords']:
+                    found = True
+            elif findIn == 'command':
+                if module[:len(text)] == text:
+                    found = True
+            else:
+                raise ValueError("Parameter findIn is not valid")
+
+            if found:
+                iFound += 1
+                modules[module] = data
+        return modules, iFound
+
+    def SetFilter(self, data = None):
+        """!Sets filter modules
+
+        If @p data is not specified, module dictionary is derived
+        from an internal data structures.
+        
+        @todo Document this method.
+
+        @param data data dict
+        """
+        if data:
+            self.moduleDesc = data
+        else:
+            self.moduleDesc = self.moduleDescOriginal
+
+    def SetData(self, data):
+        self.moduleDesc = self.moduleDescOriginal = data
 
 class InstallExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
@@ -57,11 +143,14 @@ class InstallExtensionWindow(wx.Frame):
         self.fullDesc = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Fetch full info including description and keywords"))
         self.fullDesc.SetValue(True)
-        
-        self.search = SearchModuleWidget(parent = self.panel, modulesData = None)
-        self.search.SetSelection(0) 
-        
+
         self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
+        
+        self.modulesData = ExtensionModulesData(modulesDesc = self.tree.GetModules())
+        self.search = SearchModuleWidget(parent = self.panel, modulesData = self.modulesData,
+                                         showChoice = False)
+        self.search.SetSelection(0)
+        self.search.Bind(EVT_MODULE_SELECTED, self.OnShowItem)
         
         self.optionBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                       label = " %s " % _("Options"))
@@ -191,8 +280,8 @@ class InstallExtensionWindow(wx.Frame):
             return
         
         self.tree.SearchItems(element = element,
-                              value = event.GetString())
-        
+                              value = event.GetEventObject().GetValue())
+
         nItems = len(self.tree.itemsMarked)
         if event.GetString():
             self.SetStatusText(_("%d items match") % nItems, 0)
@@ -210,6 +299,8 @@ class InstallExtensionWindow(wx.Frame):
         wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
         self.tree.Load(url = self.repo.GetValue().strip(), full = self.fullDesc.IsChecked())
+        modulesDesc = self.tree.GetModules()
+        self.modulesData.SetData(modulesDesc)
         self.SetStatusText("", 0)
         wx.EndBusyCursor()
 
@@ -384,6 +475,22 @@ class ExtensionTree(ItemTree):
     def IsLoaded(self):
         """Check if items are loaded"""
         return self._loaded
+
+    def GetModules(self):
+        modules = {}
+        root = self.GetRootItem()
+        child, cookie = self.GetFirstChild(root)
+        while child and child.IsOk():
+            if self.ItemHasChildren(child):
+                subChild, subCookie = self.GetFirstChild(child)
+                while subChild and subChild.IsOk():
+                    name = self.GetItemText(subChild)
+                    data = self.GetPyData(subChild)
+                    modules[name] = data
+                    subChild, subCookie = self.GetNextChild(child, subCookie)
+            child, cookie = self.GetNextChild(root, cookie)
+
+        return modules
 
 class UninstallExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
