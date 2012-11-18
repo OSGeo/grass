@@ -58,7 +58,7 @@ class InstallExtensionWindow(wx.Frame):
                                     label = _("Fetch full info including description and keywords"))
         self.fullDesc.SetValue(True)
         
-        self.search = SearchModuleWindow(parent = self.panel)
+        self.search = SearchModuleWindow(parent = self.panel, modulesData = None)
         self.search.SetSelection(0) 
         
         self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
