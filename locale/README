@@ -48,12 +48,19 @@ NOTE: Also G_warning() and G_fatal_error() need the message
 NOTE2: Also the parameters/flags of each module needs the
        macro _().
 
+NOTE3: Notices to translators can be added by placing
+       a comment line starting with GTC tag just above
+       message to be translated:
+        /* GTC A comma separated keyword list. 
+           Should not contain spaces! */
+        keywords = _("first,second,third");
+        
 All these messages strings will be then automatically 
 extracted into the message files.
 
 See for example ./vector/v.what.rast/main.c
 
-NOTE3: Such lines
+NOTE4: Such lines
         fprintf (stdout,"\n");
   do not need a change as no translation is needed.
 

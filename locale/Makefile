@@ -47,11 +47,11 @@ pot:
 		exit 1 ; \
 	fi
 	@echo "Generating $(LIBDOMAIN)..."
-	xgettext -k_ -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
+	xgettext -k_ -cGTC -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
 	@echo "Generating $(MODDOMAIN)..."
-	xgettext -k_ -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
+	xgettext -k_ -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
 	@echo "Generating $(WXPYDOMAIN)..."
-	xgettext -k_ -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)` 
+	xgettext -k_ -cGTC -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)` 
 
 #merge already existing translations with new messages in POT template file and create new po files:
 update-po:
