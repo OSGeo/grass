@@ -883,7 +883,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.toComplete = self.EntityToComplete()
             try:
                 if self.toComplete['entity'] == 'command': 
-                    self.autoCompList = self.modulesData.GetCommandItems(entry.strip())
+                    self.autoCompList = self.modulesData.GetDictOfModules()[entry.strip()]
             except (KeyError, TypeError):
                 return
             self.ShowList()
