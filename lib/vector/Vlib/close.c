@@ -235,19 +235,19 @@ int Vect_save_frmt(struct Map_info *Map)
 
     if (Map->format == GV_FORMAT_POSTGIS) {
 #ifdef HAVE_POSTGRES
-        fprintf(fd, "FORMAT: postgis\n");
-        fprintf(fd, "CONNINFO: %s\n", Map->fInfo.pg.conninfo);
-        fprintf(fd, "SCHEMA: %s\n",   Map->fInfo.pg.schema_name);
-        fprintf(fd, "TABLE: %s\n",    Map->fInfo.pg.table_name);
+        fprintf(fd, "format: postgis\n");
+        fprintf(fd, "conninfo: %s\n", Map->fInfo.pg.conninfo);
+        fprintf(fd, "schema: %s\n",   Map->fInfo.pg.schema_name);
+        fprintf(fd, "table: %s\n",    Map->fInfo.pg.table_name);
 #else
         G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
         return 0;
 #endif
     } else if (Map->format == GV_FORMAT_OGR) {
 #ifdef HAVE_OGR
-        fprintf(fd, "FORMAT: ogr\n");
-        fprintf(fd, "DSN: %s\n",   Map->fInfo.ogr.dsn);
-        fprintf(fd, "LAYER: %s\n", Map->fInfo.ogr.layer_name);
+        fprintf(fd, "format: ogr\n");
+        fprintf(fd, "dsn: %s\n",   Map->fInfo.ogr.dsn);
+        fprintf(fd, "layer: %s\n", Map->fInfo.ogr.layer_name);
 #else
         G_fatal_error(_("GRASS is not compiled with OGR support"));
         return 0;
