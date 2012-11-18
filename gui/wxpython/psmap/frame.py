@@ -39,7 +39,7 @@ from psmap.toolbars     import PsMapToolbar
 from core.gcmd          import RunCommand, GError, GMessage
 from core.settings      import UserSettings
 from gui_core.forms     import GUI
-from psmap.menudata     import PsMapData
+from psmap.menudata     import PsMapMenuData
 
 from psmap.dialogs      import *
 from psmap.instructions import *
@@ -61,7 +61,7 @@ class PsMapFrame(wx.Frame):
         wx.Frame.__init__(self, parent = parent, id = id, title = title, name = "PsMap", **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         #menubar
-        self.menubar = Menu(parent = self, data = PsMapData())
+        self.menubar = Menu(parent = self, data = PsMapMenuData())
         self.SetMenuBar(self.menubar)
         #toolbar
 

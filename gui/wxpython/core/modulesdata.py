@@ -23,7 +23,7 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core import globalvar
-from lmgr.menudata import ManagerData
+from lmgr.menudata import LayerManagerMenuData
 
 
 class ModulesData(object):
@@ -36,7 +36,7 @@ class ModulesData(object):
         if modulesDesc is not None:
             self.moduleDesc = modulesDesc
         else:
-            self.moduleDesc = ManagerData().GetModules()
+            self.moduleDesc = LayerManagerMenuData().GetModules()
 
         self.moduleList = self._getListOfModules()
 

@@ -34,7 +34,7 @@ from grass.script import task as gtask
 
 from core          import globalvar
 from core          import utils
-from lmgr.menudata import ManagerData
+from lmgr.menudata import LayerManagerMenuData
 from core.gcmd     import EncodeString, DecodeString, GetRealCmd
 
 class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):

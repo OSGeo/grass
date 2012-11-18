@@ -44,7 +44,7 @@ from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
-from lmgr.menudata         import ManagerData
+from lmgr.menudata         import LayerManagerMenuData
 from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
@@ -214,7 +214,7 @@ class GMFrame(wx.Frame):
         
     def _createMenuBar(self):
         """!Creates menu bar"""
-        self.menubar = Menu(parent = self, data = ManagerData())
+        self.menubar = Menu(parent = self, data = LayerManagerMenuData())
         self.SetMenuBar(self.menubar)
         self.menucmd = self.menubar.GetCmd()
         

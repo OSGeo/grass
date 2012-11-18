@@ -215,11 +215,11 @@ if __name__ == "__main__":
     sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython"))
     
     if menu == 'manager':
-        from lmgr.menudata     import ManagerData
-        data = ManagerData()
+        from lmgr.menudata     import LayerManagerMenuData
+        data = LayerManagerMenuData()
     else:
-        from gmodeler.menudata import ModelerData
-        data = ModelerData()
+        from gmodeler.menudata import ModelerMenuData
+        data = ModelerMenuData()
     
     if action == 'strings':
         data.PrintStrings(sys.stdout)

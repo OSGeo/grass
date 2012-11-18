@@ -27,7 +27,7 @@ from core              import utils
 from core.gcmd         import EncodeString
 from core.settings     import UserSettings
 from gui_core.widgets  import ItemTree
-from lmgr.menudata     import ManagerData
+from lmgr.menudata     import LayerManagerMenuData
 from gui_core.ghelp    import SearchModuleWindow
 
 class Menu(wx.MenuBar):
@@ -134,7 +134,7 @@ class MenuTreeWindow(wx.Panel):
         self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                     label = " %s " % _("Menu tree (double-click or Ctrl-Enter to run command)"))
         # tree
-        menuData = ManagerData()
+        menuData = LayerManagerMenuData()
         self.tree = MenuTree(parent = self, data = menuData)
         self.tree.Load()
 

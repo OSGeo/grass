@@ -4,7 +4,7 @@
 @brief wxGUI Graphical Modeler - menu data
 
 Classes:
- - menudata::ModelerData
+ - menudata::ModelerMenuData
 
 (C) 2010-2011 by the GRASS Development Team
 
@@ -19,7 +19,7 @@ import os
 from core                 import globalvar
 from core.menudata        import MenuData
 
-class ModelerData(MenuData):
+class ModelerMenuData(MenuData):
     def __init__(self, filename = None):
         if not filename:
             gisbase = os.getenv('GISBASE')
