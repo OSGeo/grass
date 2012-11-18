@@ -470,7 +470,7 @@ class GPrompt(object):
 
     See subclass GPromptPopUp and GPromptSTC.
     """
-    def __init__(self, parent):
+    def __init__(self, parent, modulesData):
         self.parent = parent                 # GConsole
         self.panel  = self.parent.GetPanel()
         
@@ -478,18 +478,12 @@ class GPrompt(object):
             self.standAlone = True
         else:
             self.standAlone = False
-        
-        # dictionary of modules (description, keywords, ...)
-        if not self.standAlone:
-            if self.parent.parent.GetName() == 'Modeler':
-                self.moduleDesc = ManagerData().GetModules()
-            else:
-                self.moduleDesc = parent.parent.menubar.GetData().GetModules()
-            self.moduleList = self._getListOfModules()
-            self.mapList    = self._getListOfMaps()
-            self.mapsetList = utils.ListOfMapsets()
-        else:
-            self.moduleDesc = self.moduleList = self.mapList = None
+
+        # probably only subclasses need this
+        self.modulesData = modulesData
+
+        self.mapList    = self._getListOfMaps()
+        self.mapsetList = utils.ListOfMapsets()
         
         # auto complete items
         self.autoCompList   = list()
@@ -524,66 +518,6 @@ class GPrompt(object):
         
         return hist
 
-    def GetCommandDesc(self, cmd):
-        """!Get description for given command"""
-        if cmd in self.moduleDesc:
-            return self.moduleDesc[cmd]['desc']
-        
-        return ''
-    
-    def GetCommandItems(self):
-        """!Get list of available commands"""
-        items = list()
-        
-        if self.autoCompFilter is not None:
-            mList = self.autoCompFilter
-        else:
-            mList = self.moduleList
-            
-        if not mList:
-            return items
-        
-        prefixes = mList.keys()
-        prefixes.sort()
-        
-        for prefix in prefixes:
-            for command in mList[prefix]:
-                name = prefix + '.' + command
-                if name not in items:
-                    items.append(name)
-                
-        items.sort()
-        
-        return items
-    
-    def _getListOfModules(self):
-        """!Get list of modules"""
-        result = dict()
-        for module in globalvar.grassCmd:
-            try:
-                group, name = module.split('.',1)
-            except ValueError:
-                continue # TODO
-            
-            if group not in result:
-                result[group] = list()
-            result[group].append(name)
-            
-            # for better auto-completion: 
-            # not only result['r']={...,'colors.out',...}, but also result['r.colors']={'out',...}
-            for i in range(len(name.split('.'))-1):
-                group = '.'.join([group,name.split('.',1)[0]])
-                name = name.split('.',1)[1]
-                if group not in result:
-                    result[group] = list()
-                result[group].append(name)
-      
-        # sort list of names
-        for group in result.keys():
-            result[group].sort()
-        
-        return result
-    
     def _getListOfMaps(self):
         """!Get list of maps"""
         result = dict()
@@ -653,10 +587,8 @@ class GPrompt(object):
         @param module True to filter modules, otherwise data
         """
         if module:
-            if data:
-                self.moduleList = data
-            else:
-                self.moduleList = self._getListOfModules()
+            # TODO: remove this and module param
+            raise NotImplementedError("Replace by call to common ModulesData object (SetFilter with module=True)")
         else:
             if data:
                 self.dataList = data
@@ -712,8 +644,8 @@ class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
         
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     """!Styled wxGUI prompt with autocomplete and calltips"""    
-    def __init__(self, parent, id = wx.ID_ANY, margin = False):
-        GPrompt.__init__(self, parent)
+    def __init__(self, parent, modulesData, id = wx.ID_ANY, margin = False):
+        GPrompt.__init__(self, parent, modulesData)
         wx.stc.StyledTextCtrl.__init__(self, self.panel, id)
         
         #
@@ -770,7 +702,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if self.toComplete['entity'] == 'command':
             item = self.toComplete['cmd'].rpartition('.')[0] + '.' + self.autoCompList[event.GetIndex()] 
             try:
-                desc = self.moduleDesc[item]['desc']        
+                desc = self.modulesData.GetCommandDesc(item)
             except KeyError:
                 desc = '' 
             self.ShowStatusText(desc)
@@ -951,7 +883,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.toComplete = self.EntityToComplete()
             try:
                 if self.toComplete['entity'] == 'command': 
-                    self.autoCompList = self.moduleList[entry.strip()]
+                    self.autoCompList = self.modulesData.GetCommandItems(entry.strip())
             except (KeyError, TypeError):
                 return
             self.ShowList()

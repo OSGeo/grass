@@ -134,11 +134,14 @@ class MenuTreeWindow(wx.Panel):
         self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                     label = " %s " % _("Menu tree (double-click or Ctrl-Enter to run command)"))
         # tree
-        self.tree = MenuTree(parent = self, data = ManagerData())
+        menuData = ManagerData()
+        self.tree = MenuTree(parent = self, data = menuData)
         self.tree.Load()
 
         # search widget
-        self.search = SearchModuleWindow(parent = self, showChoice = False)
+        self.search = SearchModuleWindow(parent = self,
+                                         modulesData = menuData.GetModules(),
+                                         showChoice = False)
         
         # buttons
         self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("&Run"))

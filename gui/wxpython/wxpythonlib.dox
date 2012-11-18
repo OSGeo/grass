@@ -68,6 +68,8 @@ available in GRASS 5 and GRASS 6.
  - gcmd::CommandThread
 - core::menudata
  - menudata::MenuData
+- core::modulesdata
+ - modulesdata::ModulesData
 - core::render
  - render::Layer
  - render::Layer
