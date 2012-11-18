@@ -24,6 +24,7 @@ import wx
 
 from core              import globalvar
 from core              import utils
+from core.modulesdata  import ModulesData
 from core.gcmd         import EncodeString
 from core.settings     import UserSettings
 from gui_core.widgets  import ItemTree
@@ -140,7 +141,7 @@ class MenuTreeWindow(wx.Panel):
 
         # search widget
         self.search = SearchModuleWindow(parent = self,
-                                         modulesData = menuData.GetModules(),
+                                         modulesData = ModulesData(menuData.GetModules()),
                                          showChoice = False)
         
         # buttons
