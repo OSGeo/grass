@@ -38,7 +38,7 @@ class ModulesData(object):
         else:
             self.moduleDesc = LayerManagerMenuData().GetModules()
 
-        self.moduleList = self._getListOfModules()
+        self.moduleDict = self.GetDictOfModules()
 
     def GetCommandDesc(self, cmd):
         """!Gets the description for a given module (command).
@@ -67,7 +67,7 @@ class ModulesData(object):
         """
         items = list()
 
-        mList = self.moduleList
+        mList = self.moduleDict
 
         prefixes = mList.keys()
         prefixes.sort()
@@ -82,12 +82,12 @@ class ModulesData(object):
 
         return items
 
-    def _getListOfModules(self):
-        """!Gets list of modules as a dictionary optimized for autocomplete.
+    def GetDictOfModules(self):
+        """!Gets modules as a dictionary optimized for autocomplete.
 
         \code
-        print data._getListOfModules()['r'][0:4]
-        print data._getListOfModules()['r.li'][0:4]
+        print data.GetDictOfModules()['r'][0:4]
+        print data.GetDictOfModules()['r.li'][0:4]
         r: ['basins.fill', 'bitpattern', 'blend', 'buffer']
         r.li: ['cwed', 'dominance', 'edgedensity', 'mpa']
         \endcode
@@ -164,9 +164,9 @@ class ModulesData(object):
         @param data data dict
         """
         if data:
-            self.moduleList = data
+            self.moduleDict = data
         else:
-            self.moduleList = self._getListOfModules()
+            self.moduleDict = self.GetDictOfModules()
 
 
 def test():
@@ -175,7 +175,7 @@ def test():
     print '%s:' % module, data.GetCommandDesc(module)
     print '[0:5]:', data.GetCommandItems()[0:5]
 
-    modules = data._getListOfModules()  # pylint: disable=W0212
+    modules = data.GetDictOfModules()
     print 'r:', modules['r'][0:4]
     print 'r.li:', modules['r.li'][0:4]
     
