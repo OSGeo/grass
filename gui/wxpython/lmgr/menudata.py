@@ -49,7 +49,7 @@ class LayerManagerMenuData(MenuData):
                             keywords = child.text.split(',')
                     
                 if module:
-                    modules[module] = { 'desc': description,
+                    modules[module] = { 'description': description,
                                         'keywords' : keywords }
                     if len(keywords) < 1:
                         print >> sys.stderr, "WARNING: Module <%s> has no keywords" % module

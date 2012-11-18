@@ -51,7 +51,7 @@ class ModulesData(object):
         \endcode
         """
         if cmd in self.moduleDesc:
-            return self.moduleDesc[cmd]['desc']
+            return self.moduleDesc[cmd]['description']
 
         return ''
 
@@ -131,7 +131,7 @@ class ModulesData(object):
         for module, data in self.moduleDesc.iteritems():
             found = False
             if findIn == 'description':
-                if text in data['desc']:
+                if text in data['description']:
                     found = True
             elif findIn == 'keywords':
                 if text in ','.join(data['keywords']):
