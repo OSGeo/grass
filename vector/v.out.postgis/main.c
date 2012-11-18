@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     struct flags flags;
     
     int ret, field;
-    char *schema, *olayer;
+    char *schema, *olayer, *pg_file;
     struct Map_info In, Out;
     
     G_gisinit(argv[0]);
@@ -37,9 +37,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
     G_add_keyword(_("PostGIS"));
+    G_add_keyword(_("simple features"));
+    G_add_keyword(_("topology"));
 
     module->description =
-        _("Converts a vector map layer to PostGIS.");
+        _("Exports a vector map layer to PostGIS feature table.");
     module->overwrite = TRUE;
     
     define_options(&params, &flags);
@@ -50,7 +52,15 @@ int main(int argc, char *argv[])
     /* if olayer not given, use input as the name */
     schema = NULL;
     if (!params.olayer->answer) {
-        olayer = G_store(params.input->answer);
+        char name[GNAME_MAX], mapset[GMAPSET_MAX];
+        
+        /* check for fully qualified name */
+        if (G_name_is_fully_qualified(params.input->answer,
+                                      name, mapset))
+            olayer = G_store(name);
+        else
+            olayer = G_store(params.input->answer);
+        G_debug(1, "olayer=%s", olayer);
     }
     else {
         /* check for schema */
@@ -72,18 +82,20 @@ int main(int argc, char *argv[])
     if (!schema)
         schema = "public";
     G_debug(1, "Database schema: %s", schema);
-    
+        
     /* open input for reading */
     ret = Vect_open_old2(&In, params.input->answer, "", params.layer->answer);
     if (ret == -1)
         G_fatal_error(_("Unable to open vector map <%s>"),
                       params.input->answer);
+    Vect_set_error_handler_io(&In, &Out);
     if (ret < 2) 
         G_warning(_("Unable to open vector map <%s> on topological level"),
                   params.input->answer);
     
     /* create output for writing */
-    create_pgfile(params.dsn->answer, schema, flags.topo->answer ? TRUE : FALSE);
+    pg_file = create_pgfile(params.dsn->answer, schema, params.olink->answer,
+                            params.opts->answers, flags.topo->answer ? TRUE : FALSE);
     
     if (-1 == Vect_open_new(&Out, olayer, Vect_is_3d(&In)))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
@@ -115,5 +127,8 @@ int main(int argc, char *argv[])
     
     Vect_close(&Out);
 
+    /* remove PG file */
+    G_remove("", pg_file);
+    
     exit(EXIT_SUCCESS);
 }

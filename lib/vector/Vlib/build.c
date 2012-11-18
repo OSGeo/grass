@@ -973,7 +973,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 /*!
    \brief Save topology file for vector map
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return 1 on success
    \return 0 on error
@@ -981,7 +981,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 int Vect_save_topo(struct Map_info *Map)
 {
     struct Plus_head *plus;
-    char fname[GPATH_MAX], buf[GPATH_MAX];
+    char buf[GPATH_MAX];
     struct gvfile fp;
 
     G_debug(1, "Vect_save_topo()");
@@ -990,12 +990,10 @@ int Vect_save_topo(struct Map_info *Map)
 
     /*  write out all the accumulated info to the plus file  */
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G_file_name(fname, buf, GV_TOPO_ELEMENT, Map->mapset);
-    G_debug(1, "Open topo: %s", fname);
     dig_file_init(&fp);
-    fp.file = fopen(fname, "w");
+    fp.file = G_fopen_new(buf, GV_TOPO_ELEMENT);
     if (fp.file == NULL) {
-	G_warning(_("Unable to open topo file for write <%s>"), fname);
+	G_warning(_("Unable to create topo file for vector map <%s>"), Map->name);
 	return 0;
     }
 
