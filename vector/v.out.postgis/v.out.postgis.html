@@ -47,7 +47,18 @@ features</em>, ie. boundaries and centroids (forming topological
 areas) become polygons, isles become holes. Geometry of simple feature
 elements is stored in PostGIS feature table as column
 &quot;geom&quot;. Default name of the geometry column can be changed
-by <b>options=</b><tt>GEOMETRY_NAME=&lt;column&gt;</tt>.
+by <b>options=</b><tt>GEOMETRY_NAME=&lt;column&gt;</tt>. Note that for
+exporting vector features as simple features can be alternatively
+used <a href="http://gdal.org/ogr/drv_pg.html">PostgreSQL driver</a>
+from <a href="http://gdal.org/ogr/">OGR</a> library
+through <em><a href="v.out.ogr.html">v.out.ogr</a></em> module.
+
+<p>
+Also note that it's allowed to store in the feature table only
+features of the same type, ie. mixing of points and lines is not
+possible. The feature type is determined for output feature table from
+the first read vector feature when accessing data sequentially. Vector
+features of other types are during export skipped.
 
 <p>
 <em>v.out.postgis</em> also allows to export vector features as
@@ -80,8 +91,8 @@ defined by <b>options=</b><tt>TOPOSCHEMA_NAME=&lt;name&gt;</tt>.
 
 <h3>Export Simple Features</h3>
 
-Export vector map <i>urbanarea</i> as feature table <i>urbanarea</i>
-located in database <i>grass</i>, schema <i>public</i>. Note that this
+Export vector map &quot;urbanarea&quot; as feature table &quot;urbanarea&quot;
+located in database &quot;grass&quot;, schema &quot;public&quot;. Note that this
 database schema is automatically used when not defined by the user.
 
 <div class="code"><pre>
@@ -98,6 +109,21 @@ db.select driver=pg database=grass \
 geom_type|count
 ST_Polygon|657
 </pre></div>
+
+<i>Note:</i> same procedure can be done
+by <em><a href="v.out.ogr.html">v.out.ogr</a></em> module, eg.
+
+<div class="code"><pre>
+v.out.ogr input=urbanarea dsn="PG:dbname=grass" format=PostgreSQL
+</pre></div>
+
+In this case GRASS vector data are exported to PostGIS database using
+OGR library, namely using PostgreSQL driver. Contrary to
+the <em><a href="v.out.ogr.html">v.out.ogr</a></em>
+module, <em>v.out.postgis</em> is using directly PostGIS data provider
+which is part of GRASS vector engine. Beside
+that, <em>v.out.postgis</em> is optimized for PostGIS export including
+topological access to the data.
 
 <h3>Export data into specific database schema</h3>
 
@@ -126,7 +152,7 @@ v.out.postgis input=roadsmajor dsn="PG:dbname=grass" options="GEOMETRY_NAME=wkb_
 <h3>Link exported data</h3>
 
 Exported data can be linked as vector map created in the current
-mapset by specifing <b>olink</b> parameter. In the example below
+mapset by specifying <b>olink</b> parameter. In the example below
 vector map &quot;busstopsall&quot; from PERMANENT mapset is exported
 into &quot;grass&quot; PostGIS database. <em>v.out.postgis</em> after
 successful export also creates in the current mapset GRASS vector map
@@ -155,12 +181,35 @@ by <em><a href="v.info.html">v.info</a></em>:
 
 </pre></div>
 
+<h3>Export data without attributes</h3>
+
+<em>v.out.postgis</em> allows to ignore attributes when exporting
+vector features by specifing <b>-t</b> flag.
+
+Command bellow exports vector features without attributes. The feature
+will contain only two columns, the fid and geometry column.
+
+<div class="code"><pre>
+v.out.postgis -t input=railroads dsn="PG:dbname=grass"
+</pre></div>
+
 <h3>Export topological data</h3>
+
+By default <em>v.out.postgis</em> exports data as simple
+features. Flag <b>-l</b> allows to export data as topological elements
+instead of simple features. Export topological elements is stored in
+PostGIS Topology schema.
+
+<div class="code"><pre>
+v.out.postgis -l input=busroutesall dsn="PG:dbname=grass"
+</pre></div>
 
 <h2>TODO</h2>
 
 <ul>
   <li>Multi-feature export</li>
+  <li>Allow mixed features (points, lines) - use
+  GeometryCollection</li>
 </ul>
 
 <h2>REFERENCES</h2>
