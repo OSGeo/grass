@@ -9,7 +9,7 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 {
 
     int i, k, j;
-    int rows, cols, x_cols;
+    int rows, cols;
     int num_v_rows, num_v_cols;
     double x, y, x_len;
     double sx, sy;
@@ -35,8 +35,7 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
      * to make sure that each section of the grid
      * line is less than half way around the globe
      */
-    x_len = length / (1. * nbreaks);
-    x_cols = cols * (1. * nbreaks);
+     x_len = length / (1. * nbreaks + 1);
 
     /* write out all the vector lengths (x vectors) of the entire grid  */
     G_verbose_message(_("Writing out vector rows..."));
@@ -50,8 +49,9 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 
 	for (k = 0; k < cols; k++) {
 	    x = startx;
-	    for (j = 0; j < nbreaks; j++) {
-		if (j < nbreaks -1)
+            j = 0;
+	    do {
+		if (j < nbreaks)
 		    next_x = x + x_len;
 		else
 		    next_x = startx + length;
@@ -69,7 +69,8 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 
 		y = sy;
 		x = next_x = snext_x;
-	    }
+                j++;
+	    } while (j <= nbreaks);
 	    startx += length;
 	}
 	y += width;
@@ -82,7 +83,8 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 	y = grid_info->origin_y;
 	G_percent(k, num_v_cols, 2);
 
-	for (i = 0; i < rows; ++i) {
+	i = 0;
+        do {
 	    next_y = y + width;
 
 	    sx = x;
@@ -97,7 +99,8 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 
 	    x = sx;
 	    y = next_y = snext_y;
-	}
+            i++;
+	} while (i < rows);
 	/* To get exactly the same coordinates as above, x+=length is wrong */
 	x += length;
     }
