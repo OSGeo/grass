@@ -131,7 +131,8 @@ class SearchModuleWindow(wx.Panel):
         if not text:
             self.modulesData.SetFilter()
             mList = self.modulesData.GetCommandItems()
-            self.searchChoice.SetItems(mList)
+            if self.showChoice:
+                self.searchChoice.SetItems(mList)
             if self.showTip:
                 self.searchTip.SetLabel(_("%d modules found") % len(mList))
             event.Skip()
@@ -140,8 +141,9 @@ class SearchModuleWindow(wx.Panel):
         findIn = self.searchBy.GetClientData(self.searchBy.GetSelection())
         modules, nFound = self.modulesData.FindModules(text = text, findIn = findIn)
         self.modulesData.SetFilter(modules)
-        self.searchChoice.SetItems(self.modulesData.GetCommandItems())
-        self.searchChoice.SetSelection(0)
+        if self.showChoice:
+            self.searchChoice.SetItems(self.modulesData.GetCommandItems())
+            self.searchChoice.SetSelection(0)
         if self.showTip:
             self.searchTip.SetLabel(_("%d modules match") % nFound)
         
