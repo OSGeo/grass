@@ -471,7 +471,7 @@ class Module(object):
                 # verbose and quiet) work like parameters
                 self.flags_dict[key].value = val
             else:
-                raise ParameterError('Parameter not found')
+                raise ParameterError('%s is not a valid parameter.' % key)
 
         #
         # check reqire parameters
