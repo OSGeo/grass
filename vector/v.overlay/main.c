@@ -138,15 +138,14 @@ int main(int argc, char *argv[])
 
     if (operator_opt->answer[0] == 'a')
 	operator = OP_AND;
-
     else if (operator_opt->answer[0] == 'o')
 	operator = OP_OR;
-
     else if (operator_opt->answer[0] == 'n')
 	operator = OP_NOT;
-
     else if (operator_opt->answer[0] == 'x')
 	operator = OP_XOR;
+    else
+	G_fatal_error(_("Unknown operator '%s'"), operator_opt->answer);
 
     /* OP_OR, OP_XOR is not supported for lines,
        mostly because I'am not sure if they make enouhg sense */
@@ -226,6 +225,11 @@ int main(int argc, char *argv[])
 		if (!(ltype & type[input]))
 		    continue;
 	    }
+	    
+	    /* lines and boundaries must have at least 2 distinct vertices */
+	    Vect_line_prune(Points);
+	    if (Points->n_points < 2)
+		continue;
 
 	    /* TODO: figure out a reasonable threshold */
 	    if (Points->n_points > 100) {
@@ -297,8 +301,6 @@ int main(int argc, char *argv[])
 
 	G_debug(3, "%d cats read from index", attr[input].n);
 
-	G_verbose_message(_("Collecting input attributes..."));
-
 	attr[input].null_values = NULL;
 	attr[input].columns = NULL;
 
@@ -312,6 +314,8 @@ int main(int argc, char *argv[])
 	    dbColumn *Column;
 	    dbValue *Value;
 	    int sqltype, ctype;
+
+	    G_verbose_message(_("Collecting input attributes..."));
 
 	    inFi = Vect_get_field(&(In[input]), field[input]);
 	    if (!inFi) {
@@ -392,7 +396,7 @@ int main(int argc, char *argv[])
 	    attr[input].columns = G_store(db_get_string(&col_defs));
 
 	    while (1) {
-		int cat;
+		int cat = -1;
 		ATTR *at;
 
 		if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
@@ -530,6 +534,23 @@ int main(int argc, char *argv[])
 	/* Close table */
 	db_commit_transaction(driver);
 	db_close_database_shutdown_driver(driver);
+    }
+    if (ofield[0] < 1 && !table_flag->answer) {
+	int otype;
+	
+	if (type[0] == GV_AREA)
+	    otype = GV_CENTROID;
+	else
+	    otype = GV_LINE;
+	
+	/* copy attributes from ainput */
+	if (ofield[1] > 0 && field[0] > 0) {
+	    Vect_copy_table(&In[0], &Out, field[0], ofield[1], NULL, otype);
+	}
+	/* copy attributes from binput */
+	if (ofield[2] > 0 && field[1] > 0 && ofield[1] != ofield[2]) {
+	    Vect_copy_table(&In[1], &Out, field[1], ofield[2], NULL, otype);
+	}
     }
 
     Vect_close(&(In[0]));

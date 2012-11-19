@@ -112,11 +112,13 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	for (area = 1; area <= nareas; area++) {
 	    Centr[area].cat[input] = Vect_new_cats_struct();
 
+	    G_percent(area, nareas, 1);
+
 	    in_area =
 		Vect_find_area(&(In[input]), Centr[area].x, Centr[area].y);
 	    if (in_area > 0) {
 		in_centr = Vect_get_area_centroid(&(In[input]), in_area);
-		if (in_centr > 0) {
+		if (in_centr > 0 && ofield[input + 1] > 0) {
 		    int i;
 
 		    Vect_read_line(&(In[input]), NULL, Cats, in_centr);
@@ -125,7 +127,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 			if (Cats->field[i] == field[input]) {
 			    ATTR *at;
 
-			    Vect_cat_set(Centr[area].cat[input], field[input],
+			    Vect_cat_set(Centr[area].cat[input], ofield[input + 1],
 					 Cats->cat[i]);
 
 			    /* Mark as used */
@@ -138,7 +140,6 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 		    }
 		}
 	    }
-	    G_percent(area, nareas, 1);
 	}
     }
 
@@ -148,6 +149,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
     out_cat = 1;
     for (area = 1; area <= nareas; area++) {
 	int i;
+
+	G_percent(area, nareas, 1);
 
 	/* check the condition */
 	switch (operator) {
@@ -183,114 +186,114 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 
 	Vect_append_point(Points, Centr[area].x, Centr[area].y, 0.0);
 
-	/* Add new cats for all combinations of input cats (-1 in cycle for null) */
-	/* TODO: put cats of input maps into different layers, i.e.
-	 * preserve cat values, change layer number if needed */
-	for (i = -1; i < Centr[area].cat[0]->n_cats; i++) {
-	    int j;
+	if (ofield[0]  > 0) {
+	    /* Add new cats for all combinations of input cats (-1 in cycle for null) */
+	    for (i = -1; i < Centr[area].cat[0]->n_cats; i++) {
+		int j;
 
-	    if (i == -1 && Centr[area].cat[0]->n_cats > 0)
-		continue;	/* no need to make null */
-
-	    for (j = -1; j < Centr[area].cat[1]->n_cats; j++) {
-		if (j == -1 && Centr[area].cat[1]->n_cats > 0)
+		if (i == -1 && Centr[area].cat[0]->n_cats > 0)
 		    continue;	/* no need to make null */
 
-		if (ofield[0] > 0)
-		    Vect_cat_set(Cats, ofield[0], out_cat);
+		for (j = -1; j < Centr[area].cat[1]->n_cats; j++) {
+		    if (j == -1 && Centr[area].cat[1]->n_cats > 0)
+			continue;	/* no need to make null */
 
-		/* attributes */
-		if (driver) {
-		    ATTR *at;
+		    if (ofield[0] > 0)
+			Vect_cat_set(Cats, ofield[0], out_cat);
 
-		    sprintf(buf, "insert into %s values ( %d", Fi->table,
-			    out_cat);
-		    db_set_string(&stmt, buf);
+		    /* attributes */
+		    if (driver) {
+			ATTR *at;
 
-		    /* cata */
-		    if (i >= 0) {
-			if (attr[0].columns) {
-			    at = find_attr(&(attr[0]),
-					   Centr[area].cat[0]->cat[i]);
-			    if (!at)
-				G_fatal_error(_("Attribute not found"));
+			sprintf(buf, "insert into %s values ( %d", Fi->table,
+				out_cat);
+			db_set_string(&stmt, buf);
 
-			    if (at->values)
-				db_append_string(&stmt, at->values);
-			    else
+			/* cata */
+			if (i >= 0) {
+			    if (attr[0].columns) {
+				at = find_attr(&(attr[0]),
+					       Centr[area].cat[0]->cat[i]);
+				if (!at)
+				    G_fatal_error(_("Attribute not found"));
+
+				if (at->values)
+				    db_append_string(&stmt, at->values);
+				else
+				    db_append_string(&stmt, attr[0].null_values);
+			    }
+			    else {
+				sprintf(buf, ", %d", Centr[area].cat[0]->cat[i]);
+				db_append_string(&stmt, buf);
+			    }
+			}
+			else {
+			    if (attr[0].columns) {
 				db_append_string(&stmt, attr[0].null_values);
+			    }
+			    else {
+				sprintf(buf, ", null");
+				db_append_string(&stmt, buf);
+			    }
+			}
+
+			/* catb */
+			if (j >= 0) {
+			    if (attr[1].columns) {
+				at = find_attr(&(attr[1]),
+					       Centr[area].cat[1]->cat[j]);
+				if (!at)
+				    G_fatal_error(_("Attribute not found"));
+
+				if (at->values)
+				    db_append_string(&stmt, at->values);
+				else
+				    db_append_string(&stmt, attr[1].null_values);
+			    }
+			    else {
+				sprintf(buf, ", %d", Centr[area].cat[1]->cat[j]);
+				db_append_string(&stmt, buf);
+			    }
 			}
 			else {
-			    sprintf(buf, ", %d", Centr[area].cat[0]->cat[i]);
-			    db_append_string(&stmt, buf);
-			}
-		    }
-		    else {
-			if (attr[0].columns) {
-			    db_append_string(&stmt, attr[0].null_values);
-			}
-			else {
-			    sprintf(buf, ", null");
-			    db_append_string(&stmt, buf);
-			}
-		    }
-
-		    /* catb */
-		    if (j >= 0) {
-			if (attr[1].columns) {
-			    at = find_attr(&(attr[1]),
-					   Centr[area].cat[1]->cat[j]);
-			    if (!at)
-				G_fatal_error(_("Attribute not found"));
-
-			    if (at->values)
-				db_append_string(&stmt, at->values);
-			    else
+			    if (attr[1].columns) {
 				db_append_string(&stmt, attr[1].null_values);
+			    }
+			    else {
+				sprintf(buf, ", null");
+				db_append_string(&stmt, buf);
+			    }
 			}
-			else {
-			    sprintf(buf, ", %d", Centr[area].cat[1]->cat[j]);
-			    db_append_string(&stmt, buf);
-			}
+
+			db_append_string(&stmt, " )");
+
+			G_debug(3, db_get_string(&stmt));
+
+			if (db_execute_immediate(driver, &stmt) != DB_OK)
+			    G_warning(_("Unable to insert new record: '%s'"),
+				      db_get_string(&stmt));
 		    }
-		    else {
-			if (attr[1].columns) {
-			    db_append_string(&stmt, attr[1].null_values);
-			}
-			else {
-			    sprintf(buf, ", null");
-			    db_append_string(&stmt, buf);
-			}
-		    }
-
-		    db_append_string(&stmt, " )");
-
-		    G_debug(3, db_get_string(&stmt));
-
-		    if (db_execute_immediate(driver, &stmt) != DB_OK)
-			G_warning(_("Unable to insert new record: '%s'"),
-				  db_get_string(&stmt));
+		    out_cat++;
 		}
-		out_cat++;
 	    }
 	}
 
 	/* Add all cats from imput vectors */
-	if (ofield[1] > 0) {
+	if (ofield[1] > 0 && field[0] > 0) {
 	    for (i = 0; i < Centr[area].cat[0]->n_cats; i++) {
-		Vect_cat_set(Cats, ofield[1], Centr[area].cat[0]->cat[i]);
+		if (Centr[area].cat[0]->field[i] == field[0])
+		    Vect_cat_set(Cats, ofield[1], Centr[area].cat[0]->cat[i]);
 	    }
 	}
 
-	if (ofield[2] > 0) {
+	if (ofield[2] > 0 && field[1] > 0 && ofield[1] != ofield[2]) {
 	    for (i = 0; i < Centr[area].cat[1]->n_cats; i++) {
-		Vect_cat_set(Cats, ofield[2], Centr[area].cat[1]->cat[i]);
+		if (Centr[area].cat[1]->field[i] == field[1])
+		    Vect_cat_set(Cats, ofield[2], Centr[area].cat[1]->cat[i]);
 	    }
 	}
 
 	Vect_write_line(Out, GV_CENTROID, Points, Cats);
-
-	G_percent(area, nareas, 1);
     }
 
     /* Build topology and remove boundaries with area without centroid on both sides */
