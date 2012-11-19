@@ -149,6 +149,8 @@ class Parameter(object):
             i) for i in diz['values']] if 'values' in diz else None
         self.default = self._type(
             diz['default']) if 'default' in diz else None
+        if self.default is not None:
+            self._value = self.default
         self.guisection = diz.get('guisection', None)
         if 'gisprompt' in diz:
             self.type = diz['gisprompt']['prompt']
@@ -166,7 +168,7 @@ class Parameter(object):
                 self._value = [
                     val for val in value if isinstance(value, self._type)]
             else:
-                str_err = 'The Parameter <%s>, not support multiple inputs'
+                str_err = 'The Parameter <%s> does not accept multiple inputs'
                 raise TypeError(str_err % self.name)
         elif isinstance(value, self._type):
             if self.values:
