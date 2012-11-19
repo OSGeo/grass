@@ -98,10 +98,10 @@ class KrigingPanel(wx.Panel):
             self.CreatePage(package = Rpackage, Rinstance = Rinstance, controller = controller)
         
         ## Command output. From menuform module, cmdPanel class
-        self.goutput = goutput.GConsole(parent = self, frame = self.parent, margin = False,
-                                         notebook = self.RPackagesBook)
+        self.goutput = goutput.GConsole(parent = self, frame = self.parent, margin = False)
         self.goutputId = self.RPackagesBook.GetPageCount()
         self.outpage = self.RPackagesBook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
+        self.goutput.Bind(goutput.EVT_OUTPUT_TEXT, self.OnOutputText)
         
         self.RPackagesBook.SetSelection(0)
         KrigingSizer.Add(self.RPackagesBook, proportion = 1, flag = wx.EXPAND)
@@ -254,6 +254,16 @@ class KrigingPanel(wx.Panel):
     
     def OnVarianceCBChecked(self, event):
         self.OutputVarianceMapName.Enable(event.IsChecked())
+
+    def OnOutputText(self, event):
+        """!Manages @c 'output' notebook page according to event priority."""
+        if event.priority == 1:
+            self.RPackagesBook.HighlightPageByName('output')
+        if event.priority >= 2:
+            self.RPackagesBook.SetSelectionByName('output')
+        if event.priority >= 3:
+            self.SetFocus()
+            self.Raise()
 
 class KrigingModule(wx.Frame):
     """ Kriging module for GRASS GIS. Depends on R and its packages gstat and geoR. """

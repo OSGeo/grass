@@ -448,23 +448,26 @@ class GConsole(wx.SplitterWindow):
                 sys.stderr = sys.__stderr__
         
     def WriteLog(self, text, style = None, wrap = None,
-                 switchPage = False):
+                 switchPage = False, priority = 1):
         """!Generic method for writing log message in 
         given style
 
         @param line text line
         @param style text style (see GStc)
         @param stdout write to stdout or stderr
+        @param switchPage for backward compatibility
+        (replace by priority: False=1, True=2)
+        @param priority priority of this message
+        (0=no priority, 1=normal, 2=medium, 3=high)
         """
 
         self.cmdOutput.SetStyle()
 
         # documenting old behavior/implementation:
         # switch notebook if required
-        if switchPage:
-            priority = 2
-        else:
-            priority = 1
+        if priority == 1:
+            if switchPage:
+                priority = 2
         event = gOutputText(priority = priority)
         wx.PostEvent(self, event)
         
