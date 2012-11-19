@@ -50,7 +50,7 @@ from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
-from gui_core.goutput      import GConsole, GC_SEARCH, GC_PROMPT
+from gui_core.goutput      import GConsole, GC_SEARCH, GC_PROMPT, EVT_OUTPUT_TEXT
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
@@ -261,6 +261,7 @@ class GMFrame(wx.Frame):
         self.goutput = GConsole(self, frame = self,
                                 gcstyle = GC_SEARCH | GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
+        self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
         self._setCopyingOfSelectedText()
         
         # create 'search module' notebook page
@@ -522,6 +523,16 @@ class GMFrame(wx.Frame):
         self.currentPage = None
 
         event.Skip()
+
+    def OnOutputText(self, event):
+        """!Manages @c 'output' notebook page according to event priority."""
+        if event.priority == 1:
+            self.notebook.HighlightPageByName('output')
+        if event.priority >= 2:
+            self.notebook.SetSelectionByName('output')
+        if event.priority >= 3:
+            self.SetFocus()
+            self.Raise()
 
     def GetLayerNotebook(self):
         """!Get Layers Notebook"""
