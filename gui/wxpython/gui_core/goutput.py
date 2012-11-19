@@ -39,6 +39,7 @@ from   grass.script import task as gtask
 from core            import globalvar
 from core            import utils
 from core.gcmd       import CommandThread, GMessage, GError, GException, EncodeString
+from core.events     import gShowNotification
 from gui_core.forms  import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
@@ -732,7 +733,8 @@ class GConsole(wx.SplitterWindow):
                 GError(_("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {'path': path, 'error': e})
             finally:
                 output.close()
-            self.frame.SetStatusText(_("Commands output saved into '%s'") % path)
+            message = _("Commands output saved into '%s'") % path
+            wx.PostEvent(self, gShowNotification(self.GetId(), message = message))
         
         dlg.Destroy()
 
@@ -786,8 +788,9 @@ class GConsole(wx.SplitterWindow):
                     {'filePath': self.cmdFileProtocol, 'error': e})
         finally:
             output.close()
-            
-        self.frame.SetStatusText(_("Commands protocol saved into '%s'") % self.cmdFileProtocol)
+        
+        message = _("Commands protocol saved into '%s'") % self.cmdFileProtocol
+        wx.PostEvent(self, gShowNotification(self.GetId(), message = message))
         del self.cmdFileProtocol
         
     def OnCmdProtocol(self, event = None):
