@@ -30,6 +30,10 @@ class ModulesData(object):
     """!Holds information about modules.
 
     @todo add doctest
+    @todo analyze what exactly this class is doing
+    @todo split this class into two classes
+
+    @see modules::extensions::ExtensionModulesData
     """
     def __init__(self, modulesDesc = None):
 

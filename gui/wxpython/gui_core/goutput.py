@@ -273,7 +273,6 @@ class GConsole(wx.SplitterWindow):
             self.MakeSearchPaneContent(self.searchPane.GetPane(), modulesData)
             self.searchPane.Collapse(True)
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
-            self.search.Bind(wx.EVT_TEXT,             self.OnUpdateStatusBar)
             self.search.Bind(EVT_MODULE_SELECTED,
                              lambda event:
                                  self.cmdPrompt.SetTextAndFocus(event.name + ' '))
@@ -738,16 +737,6 @@ class GConsole(wx.SplitterWindow):
         else:
             self.cmdPrompt.Unbind(stc.EVT_STC_PAINTED)
             self.cmdOutput.Unbind(stc.EVT_STC_PAINTED)
-        
-    def OnUpdateStatusBar(self, event):
-        """!Update statusbar text"""
-        if event.GetString():
-            nItems = len(self.cmdPrompt.GetCommandItems())
-            self.frame.SetStatusText(_('%d modules match') % nItems, 0)
-        else:
-            self.frame.SetStatusText('', 0)
-        
-        event.Skip()
 
     def OnCmdOutput(self, event):
         """!Print command output"""
