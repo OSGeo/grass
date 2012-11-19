@@ -50,23 +50,23 @@ int RTreeSearchF(struct RTree *t, struct RTree_Rect *r,
     /* add root node position to stack */
     currlevel = t->rootlevel;
     s[top].pos = t->rootpos;
-    /* s[top].sn = RTreeGetNode(s[top].pos, currlevel, t); */
-    RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
+    s[top].sn = RTreeGetNode(s[top].pos, currlevel, t);
+    /* RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t); */
     s[top].branch_id = i = 0;
     
     while (top >= 0) {
-	n = &(s[top].sn);
-	if (s[top].sn.level > 0) {		/* this is an internal node in the tree */
+	n = s[top].sn;
+	if (s[top].sn->level > 0) {		/* this is an internal node in the tree */
 	    notfound = 1;
-	    currlevel = s[top].sn.level - 1;
+	    currlevel = s[top].sn->level - 1;
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
-		if (s[top].sn.branch[i].child.pos > -1 &&
-		    RTreeOverlap(r, &(s[top].sn.branch[i].rect), t)) {
+		if (s[top].sn->branch[i].child.pos > -1 &&
+		    RTreeOverlap(r, &(s[top].sn->branch[i].rect), t)) {
 		    s[top++].branch_id = i + 1;
 		    /* add next node to stack */
 		    s[top].pos = n->branch[i].child.pos;
-		    /* s[top].sn = RTreeGetNode(s[top].pos, currlevel, t); */
-		    RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
+		    s[top].sn = RTreeGetNode(s[top].pos, currlevel, t);
+		    /* RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t); */
 		    s[top].branch_id = 0;
 		    notfound = 0;
 		    break;
@@ -80,12 +80,12 @@ int RTreeSearchF(struct RTree *t, struct RTree_Rect *r,
 	}
 	else {			/* this is a leaf node */
 	    for (i = 0; i < t->leafcard; i++) {
-		if (s[top].sn.branch[i].child.id &&
-		    RTreeOverlap(r, &(s[top].sn.branch[i].rect), t)) {
+		if (s[top].sn->branch[i].child.id &&
+		    RTreeOverlap(r, &(s[top].sn->branch[i].rect), t)) {
 		    hitCount++;
 		    if (shcb) {	/* call the user-provided callback */
-			if (!shcb(s[top].sn.branch[i].child.id,
-			          &s[top].sn.branch[i].rect, cbarg)) {
+			if (!shcb(s[top].sn->branch[i].child.id,
+			          &(s[top].sn->branch[i].rect), cbarg)) {
 			    /* callback wants to terminate search early */
 			    return hitCount;
 			}
@@ -139,22 +139,22 @@ static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int 
     /* add root node position to stack */
     currlevel = t->rootlevel;
     s[top].pos = t->rootpos;
-    /* s[top].sn = RTreeGetNode(s[top].pos, currlevel, t); */
-    RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
+    s[top].sn = RTreeGetNode(s[top].pos, currlevel, t);
+    /* RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t); */
 
     /* go down to level of insertion */
-    while (s[top].sn.level > level) {
-	n = &(s[top].sn);
-	currlevel = s[top].sn.level - 1;
+    while (s[top].sn->level > level) {
+	n = s[top].sn;
+	currlevel = s[top].sn->level - 1;
 	i = RTreePickBranch(r, n, t);
 	s[top++].branch_id = i;
 	/* add next node to stack */
 	s[top].pos = n->branch[i].child.pos;
-	/* s[top].sn = RTreeGetNode(s[top].pos, currlevel, t); */
-	RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
-	assert(s[top].sn.level == currlevel);
+	s[top].sn = RTreeGetNode(s[top].pos, currlevel, t);
+	/* RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t); */
+	assert(s[top].sn->level == currlevel);
     }
-    assert(s[top].sn.level == level);
+    assert(s[top].sn->level == level);
 
     /* Have reached level for insertion. Add rect, split if necessary */
     RTreeCopyRect(&(b->rect), r, t);
@@ -163,11 +163,11 @@ static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int 
     /* add branch, may split node or remove branches */
     cover = NULL;
     if (top)
-	cover = &(s[top - 1].sn.branch[s[top - 1].branch_id].rect);
-    result = RTreeAddBranch(b, &(s[top].sn), &n2, ee, cover, overflow, t);
+	cover = &(s[top - 1].sn->branch[s[top - 1].branch_id].rect);
+    result = RTreeAddBranch(b, s[top].sn, &n2, ee, cover, overflow, t);
     /* update node */
-    RTreePutNode(&(s[top].sn), s[top].pos, t);
-    /* RTreeNodeChanged(s[top].sn, s[top].pos, t); */
+    /* RTreePutNode(&(s[top].sn), s[top].pos, t); */
+    RTreeNodeChanged(s[top].sn, s[top].pos, t);
     /* write out new node if node was split */
     if (result == 1) {
 	*newnode_pos = RTreeGetNodePos(t);
@@ -180,32 +180,30 @@ static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int 
 	down = top--;
 	i = s[top].branch_id;
 	if (result == 0) {        /* branch was added */
-	    RTreeCombineRect(&(s[top].sn.branch[i].rect), r, &nr, t);
+	    RTreeCombineRect(&(s[top].sn->branch[i].rect), r, &nr, t);
 	    /* rewrite rect */
+	    /*
 	    if (!RTreeCompareRect(&nr, &(s[top].sn.branch[i].rect), t)) {
 		RTreeUpdateRect(&nr, &(s[top].sn), s[top].pos, i, t);
 	    }
-	    /*
+	    */
 	    if (RTreeExpandRect(&(s[top].sn->branch[i].rect), r, t)) {
 		RTreeNodeChanged(s[top].sn, s[top].pos, t);
 	    }
-	    */
 	}
 	else if (result == 2) {	/* branches were removed */
 	    /* get node cover of previous node */
-	    RTreeNodeCover(&(s[down].sn), &nr, t);
+	    RTreeNodeCover(s[down].sn, &nr, t);
 	    /* rewrite rect */
-	    if (!RTreeCompareRect(&nr, &(s[top].sn.branch[i].rect), t)) {
-		RTreeUpdateRect(&nr, &(s[top].sn), s[top].pos, i, t);
-		/*
+	    if (!RTreeCompareRect(&nr, &(s[top].sn->branch[i].rect), t)) {
+		/* RTreeUpdateRect(&nr, &(s[top].sn), s[top].pos, i, t); */
 		RTreeCopyRect(&(s[top].sn->branch[i].rect), &nr, t);
 		RTreeNodeChanged(s[top].sn, s[top].pos, t);
-		*/
 	    }
 	}
 	else if (result == 1) {                /* node was split */
 	    /* get node cover of previous node */
-	    RTreeNodeCover(&(s[down].sn), &(s[top].sn.branch[i].rect), t);
+	    RTreeNodeCover(s[down].sn, &(s[top].sn->branch[i].rect), t);
 	    /* add new branch for new node previously added by RTreeAddBranch() */
 	    b->child.pos = *newnode_pos;
 	    RTreeNodeCover(n2, &(b->rect), t);
@@ -213,13 +211,13 @@ static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int 
 	    /* add branch, may split node or remove branches */
 	    cover = NULL;
 	    if (top)
-		cover = &(s[top - 1].sn.branch[s[top - 1].branch_id].rect);
+		cover = &(s[top - 1].sn->branch[s[top - 1].branch_id].rect);
 	    result =
-		RTreeAddBranch(b, &(s[top].sn), &n2, ee, cover, overflow, t);
+		RTreeAddBranch(b, s[top].sn, &n2, ee, cover, overflow, t);
 
 	    /* update node */
-	    RTreePutNode(&(s[top].sn), s[top].pos, t);
-	    /* RTreeNodeChanged(s[top].sn, s[top].pos, t); */
+	    /* RTreePutNode(&(s[top].sn), s[top].pos, t); */
+	    RTreeNodeChanged(s[top].sn, s[top].pos, t);
 
 	    /* write out new node if node was split */
 	    if (result == 1) {
@@ -254,13 +252,13 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
     struct RTree_Branch *b = &(t->tmpb1);
     off_t newnode_pos = -1;
 
-    static struct RTree_Node oldroot;
+    struct RTree_Node *oldroot;
     static struct RTree_Node newroot, newnode;
     static int rect_init = 0;
     
     if (!rect_init) {
 	for (i = 0; i < MAXCARD; i++) {
-	    oldroot.branch[i].rect.boundary = RTreeAllocBoundary(t);
+	    /* oldroot.branch[i].rect.boundary = RTreeAllocBoundary(t); */
 	    newroot.branch[i].rect.boundary = RTreeAllocBoundary(t);
 	    newnode.branch[i].rect.boundary = RTreeAllocBoundary(t);
 	}
@@ -274,14 +272,14 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
 			       t, &reInsertList, overflow);
 
     if (result == 1) {	/* root split */
-	/* oldroot = RTreeGetNode(t->rootpos, t->rootlevel, t); */
-	RTreeGetNode(&oldroot, t->rootpos, t->rootlevel, t);
+	oldroot = RTreeGetNode(t->rootpos, t->rootlevel, t);
+	/* RTreeGetNode(&oldroot, t->rootpos, t->rootlevel, t); */
 	/* grow a new root, & tree taller */
 	t->rootlevel++;
 	RTreeInitNode(t, &newroot, NODETYPE(t->rootlevel, t->fd));
 	newroot.level = t->rootlevel;
 	/* branch for old root */
-	RTreeNodeCover(&oldroot, &(b->rect), t);
+	RTreeNodeCover(oldroot, &(b->rect), t);
 	b->child.pos = t->rootpos;
 	RTreeAddBranch(b, &newroot, NULL, NULL, NULL, NULL, t);
 	/* branch for new node created by RTreeInsertRect2() */
@@ -310,14 +308,14 @@ int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
 				 &reInsertList, overflow);
 
 	    if (result == 1) {	/* root split */
-		/* oldroot = RTreeGetNode(t->rootpos, t->rootlevel, t); */
-		RTreeGetNode(&oldroot, t->rootpos, t->rootlevel, t);
+		oldroot = RTreeGetNode(t->rootpos, t->rootlevel, t);
+		/* RTreeGetNode(&oldroot, t->rootpos, t->rootlevel, t); */
 		/* grow a new root, & tree taller */
 		t->rootlevel++;
 		RTreeInitNode(t, &newroot, NODETYPE(t->rootlevel, t->fd));
 		newroot.level = t->rootlevel;
 		/* branch for old root */
-		RTreeNodeCover(&oldroot, &(b->rect), t);
+		RTreeNodeCover(oldroot, &(b->rect), t);
 		b->child.pos = t->rootpos;
 		RTreeAddBranch(b, &newroot, NULL, NULL, NULL, NULL, t);
 		/* branch for new node created by RTreeInsertRect2() */
@@ -364,23 +362,23 @@ RTreeDeleteRect2F(struct RTree_Rect *r, union RTree_Child child, struct RTree *t
     /* add root node position to stack */
     currlevel = t->rootlevel;
     s[top].pos = t->rootpos;
-    /* s[top].sn = RTreeGetNode(s[top].pos, currlevel, t); */
-    RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
+    s[top].sn = RTreeGetNode(s[top].pos, currlevel, t);
+    /* RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t); */
     s[top].branch_id = 0;
 
     while (notfound && top >= 0) {
 	/* go down to level 0, remember path */
-	if (s[top].sn.level > 0) {
-	    n = &(s[top].sn);
-	    currlevel = s[top].sn.level - 1;
+	if (s[top].sn->level > 0) {
+	    n = s[top].sn;
+	    currlevel = s[top].sn->level - 1;
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		if (n->branch[i].child.pos > -1 &&
 		    RTreeOverlap(r, &(n->branch[i].rect), t)) {
 		    s[top++].branch_id = i + 1;
 		    /* add next node to stack */
 		    s[top].pos = n->branch[i].child.pos;
-		    /* s[top].sn = RTreeGetNode(s[top].pos, currlevel, t); */
-		    RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t);
+		    s[top].sn = RTreeGetNode(s[top].pos, currlevel, t);
+		    /* RTreeGetNode(&(s[top].sn), s[top].pos, currlevel, t); */
 		    s[top].branch_id = 0;
 
 		    notfound = 0;
@@ -397,11 +395,11 @@ RTreeDeleteRect2F(struct RTree_Rect *r, union RTree_Child child, struct RTree *t
 	}
 	else {
 	    for (i = 0; i < t->leafcard; i++) {
-		if (s[top].sn.branch[i].child.id &&
-		    s[top].sn.branch[i].child.id == child.id) { /* found item */
-		    RTreeDisconnectBranch(&(s[top].sn), i, t);
-		    RTreePutNode(&(s[top].sn), s[top].pos, t);
-		    /* RTreeNodeChanged(s[top].sn, s[top].pos, t); */
+		if (s[top].sn->branch[i].child.id &&
+		    s[top].sn->branch[i].child.id == child.id) { /* found item */
+		    RTreeDisconnectBranch(s[top].sn, i, t);
+		    /* RTreePutNode(&(s[top].sn), s[top].pos, t); */
+		    RTreeNodeChanged(s[top].sn, s[top].pos, t);
 		    t->n_leafs--;
 		    notfound = 0;
 		    break;
@@ -421,33 +419,31 @@ RTreeDeleteRect2F(struct RTree_Rect *r, union RTree_Child child, struct RTree *t
 	down = top;
 	top--;
 	i = s[top].branch_id - 1;
-	assert(s[down].sn.level == s[top].sn.level - 1);
+	assert(s[down].sn->level == s[top].sn->level - 1);
 
-	minfill = (s[down].sn.level ? t->min_node_fill : t->min_leaf_fill);
-	if (s[down].sn.count >= minfill) {
+	minfill = (s[down].sn->level ? t->min_node_fill : t->min_leaf_fill);
+	if (s[down].sn->count >= minfill) {
 	    /* just update node cover */
-	    RTreeNodeCover(&(s[down].sn), &nr, t);
+	    RTreeNodeCover(s[down].sn, &nr, t);
 	    /* rewrite rect */
-	    if (!RTreeCompareRect(&nr, &(s[top].sn.branch[i].rect), t)) {
-		RTreeUpdateRect(&nr, &(s[top].sn), s[top].pos, i, t);
-		/*
+	    if (!RTreeCompareRect(&nr, &(s[top].sn->branch[i].rect), t)) {
+		/* RTreeUpdateRect(&nr, &(s[top].sn), s[top].pos, i, t); */
 		RTreeCopyRect(&(s[top].sn->branch[i].rect), &nr, t);
 		RTreeNodeChanged(s[top].sn, s[top].pos, t);
-		*/
 	    }
 	}
 	else {
 	    /* not enough entries in child, eliminate child node */
-	    assert(s[top].sn.branch[i].child.pos == s[down].pos);
-	    n = RTreeAllocNode(t, s[down].sn.level);
+	    assert(s[top].sn->branch[i].child.pos == s[down].pos);
+	    n = RTreeAllocNode(t, s[down].sn->level);
 	    /* copy node */
-	    RTreeCopyNode(n, &(s[down].sn), t);
-	    RTreeAddNodePos(s[down].pos, s[down].sn.level, t);
+	    RTreeCopyNode(n, s[down].sn, t);
+	    RTreeAddNodePos(s[down].pos, s[down].sn->level, t);
 	    RTreeReInsertNode(n, ee);
-	    RTreeDisconnectBranch(&(s[top].sn), i, t);
+	    RTreeDisconnectBranch(s[top].sn, i, t);
 
-	    RTreePutNode(&(s[top].sn), s[top].pos, t);
-	    /* RTreeNodeChanged(s[top].sn, s[top].pos, t); */
+	    /* RTreePutNode(&(s[top].sn), s[top].pos, t); */
+	    RTreeNodeChanged(s[top].sn, s[top].pos, t);
 	}
     }
 
@@ -508,9 +504,11 @@ int RTreeDeleteRectF(struct RTree_Rect *r, union RTree_Child child, struct RTree
 	}
 
 	/* check for redundant root (not leaf, 1 child) and eliminate */
-	/* n = RTreeGetNode(t->rootpos, t->rootlevel, t); */
+	n = RTreeGetNode(t->rootpos, t->rootlevel, t);
+	/*
 	RTreeGetNode(&rn, t->rootpos, t->rootlevel, t);
 	n = &rn;
+	*/
 	
 	if (n->count == 1 && n->level > 0) {
 	    for (i = 0; i < t->nodecard; i++) {
