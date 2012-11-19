@@ -67,7 +67,10 @@ def GrassCmd(cmd, env = None, stdout = None, stderr = None):
 class CmdThread(threading.Thread):
     """!Thread for GRASS commands"""
     requestId = 0
-    def __init__(self, parent, requestQ = None, resultQ = None, **kwds):
+    def __init__(self, receiver, requestQ = None, resultQ = None, **kwds):
+        """!
+        @param receiver event receiver (used in PostEvent)
+        """
         threading.Thread.__init__(self, **kwds)
         
         if requestQ is None:
@@ -82,7 +85,7 @@ class CmdThread(threading.Thread):
         
         self.setDaemon(True)
         
-        self.parent = parent # GConsole
+        self.receiver = receiver
         self._want_abort_all = False
         
         self.start()
@@ -128,13 +131,13 @@ class CmdThread(threading.Thread):
                                  pid = requestId,
                                  onPrepare = vars()['onPrepare'],
                                  userData = vars()['userData'])
-            wx.PostEvent(self.parent, event)
+            wx.PostEvent(self.receiver, event)
             
             # run command
             event = wxCmdRun(cmd = args[0],
                              pid = requestId)
             
-            wx.PostEvent(self.parent, event)
+            wx.PostEvent(self.receiver, event)
             
             time.sleep(.1)
             self.requestCmd = vars()['callable'](*args, **kwds)
@@ -190,7 +193,7 @@ class CmdThread(threading.Thread):
                               userData = vars()['userData'])
             
             # send event
-            wx.PostEvent(self.parent, event)
+            wx.PostEvent(self.receiver, event)
             
     def abort(self, abortall = True):
         """!Abort command(s)"""
@@ -249,11 +252,10 @@ class GConsole(wx.SplitterWindow):
         self.cmdOutput = GStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
                                wrap = None) 
         self.cmdOutputTimer = wx.Timer(self.cmdOutput, id = wx.ID_ANY)
-        self.cmdOutput.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
-        self.cmdOutput.Bind(wx.EVT_TIMER, self.OnProcessPendingOutputWindowEvents)
+        self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
+        self.Bind(wx.EVT_TIMER, self.OnProcessPendingOutputWindowEvents)
         self.Bind(EVT_CMD_RUN,     self.OnCmdRun)
         self.Bind(EVT_CMD_DONE,    self.OnCmdDone)
-        self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
 
         # information about available modules
         modulesData = ModulesData()
@@ -817,24 +819,14 @@ class GConsole(wx.SplitterWindow):
         
     def OnCmdRun(self, event):
         """!Run command"""
-        if self.frame.GetName() == 'Modeler':
-            self.frame.OnCmdRun(event)
-        
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
         self.btnCmdAbort.Enable()
 
-    def OnCmdPrepare(self, event):
-        """!Prepare for running command"""
-        if self.frame.GetName() == 'Modeler':
-            self.frame.OnCmdPrepare(event)
-        
         event.Skip()
-        
+
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
-        if self.frame.GetName() == 'Modeler':
-            self.frame.OnCmdDone(event)
-            
+
         # Process results here
         try:
             ctime = time.time() - event.time
@@ -998,8 +990,11 @@ class GStdout:
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """
-    def __init__(self, parent):
-        self.parent = parent # GConsole
+    def __init__(self, receiver):
+        """!
+        @param receiver event receiver (used in PostEvent)
+        """
+        self.receiver = receiver
 
     def write(self, s):
         if len(s) == 0 or s == '\n':
@@ -1011,7 +1006,7 @@ class GStdout:
             
             evt = wxCmdOutput(text = line + '\n',
                               type = '')
-            wx.PostEvent(self.parent.cmdOutput, evt)
+            wx.PostEvent(self.receiver, evt)
         
 class GStderr:
     """!GConsole standard error output
@@ -1024,8 +1019,11 @@ class GStderr:
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """
-    def __init__(self, parent):
-        self.parent = parent # GConsole
+    def __init__(self, receiver):
+        """!
+        @param receiver event receiver (used in PostEvent)
+        """
+        self.receiver = receiver
         
         self.type = ''
         self.message = ''
@@ -1067,14 +1065,14 @@ class GStderr:
                     continue
                 evt = wxCmdOutput(text = line,
                                   type = '')
-                wx.PostEvent(self.parent.cmdOutput, evt)
+                wx.PostEvent(self.receiver, evt)
             elif len(line) > 0:
                 self.message += line.strip() + '\n'
 
             if self.printMessage and len(self.message) > 0:
                 evt = wxCmdOutput(text = self.message,
                                   type = self.type)
-                wx.PostEvent(self.parent.cmdOutput, evt)
+                wx.PostEvent(self.receiver, evt)
 
                 self.type = ''
                 self.message = ''
@@ -1084,7 +1082,7 @@ class GStderr:
         if progressValue > -1:
             # self.gmgauge.SetValue(progressValue)
             evt = wxCmdProgress(value = progressValue)
-            wx.PostEvent(self.parent.progressbar, evt)
+            wx.PostEvent(self.receiver, evt)
             
 class GStc(stc.StyledTextCtrl):
     """!Styled text control for GRASS stdout and stderr.

@@ -34,7 +34,8 @@ import wx.lib.flatnotebook    as FN
 
 from core                 import globalvar
 from gui_core.widgets     import GNotebook
-from gui_core.goutput     import GConsole, EVT_OUTPUT_TEXT
+from gui_core.goutput     import GConsole, \
+    EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_OUTPUT_TEXT
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
@@ -106,7 +107,10 @@ class ModelFrame(wx.Frame):
         
         self.goutput = GConsole(parent = self, frame = self)
         self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
-        
+        self.Bind(EVT_CMD_RUN, self.OnCmdRun)
+        self.Bind(EVT_CMD_DONE, self.OnCmdDone)
+        self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
+
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
         self.notebook.AddPage(page = self.variablePanel, text=_('Variables'), name = 'variables')
