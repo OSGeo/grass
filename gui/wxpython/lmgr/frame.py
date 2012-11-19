@@ -477,8 +477,6 @@ class GMFrame(wx.Frame):
         """!Page in notebook changed"""
         page = event.GetSelection()
         if page == self.notebook.GetPageIndexByName('output'):
-            # remove '(...)'
-            self.notebook.SetPageText(page, _("Command console"))
             wx.CallAfter(self.goutput.ResetFocus)
         self.SetStatusText('', 0)
         

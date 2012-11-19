@@ -72,8 +72,12 @@ class NotebookController:
         self.notebookPages = {}
         self.classObject = classObject
         self.widget = widget
-        # TODO: (...) should be only once in wxGUI
         self.highlightedTextEnd = _(" (...)")
+        self.BindPageChanged()
+
+    def BindPageChanged(self):
+        """!Binds page changed event."""
+        self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
     def AddPage(self, **kwargs):
         """!Add a new page
@@ -131,12 +135,23 @@ class NotebookController:
         idx = self.GetPageIndexByName(page)
         if self.classObject.GetSelection(self.widget) != idx:
             self.classObject.SetSelection(self.widget, idx)
-            # FIXME: this code was not explicitly tested
-            # FIXME: remove this from function lmgr.frame.Frame.OnPageChanged
-            text = self.classObject.GetPageText(self.widget, idx)
-            if text.endswith(self.highlightedTextEnd):
-                text.replace(self.highlightedTextEnd, '')
-                self.classObject.SetPageText(self.widget, idx, text)
+
+            self.RemoveHighlight(idx)
+
+    def OnRemoveHighlight(self, event):
+        """!Highlighted tab name should be removed."""
+        page = event.GetSelection()
+        self.RemoveHighlight(page)
+
+    def RemoveHighlight(self, page):
+        """!Removes highlight string from notebook tab name if necessary.
+
+        @param page index
+        """
+        text = self.classObject.GetPageText(self.widget, page)
+        if text.endswith(self.highlightedTextEnd):
+            text = text.replace(self.highlightedTextEnd, '')
+            self.classObject.SetPageText(self.widget, page, text)
 
     def GetPageIndexByName(self, page):
         """!Get notebook page index
@@ -175,6 +190,9 @@ class FlatNotebookController(NotebookController):
     """!Controller specialized for FN.FlatNotebook subclasses"""
     def __init__(self, classObject, widget):
         NotebookController.__init__(self, classObject, widget)
+
+    def BindPageChanged(self):
+        self.widget.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
     def GetPageIndexByName(self, page):
         """!Get notebook page index
