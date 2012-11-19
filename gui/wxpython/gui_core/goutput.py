@@ -213,7 +213,7 @@ class GConsole(wx.SplitterWindow):
         
         self.panelOutput = wx.Panel(parent = self, id = wx.ID_ANY)
         self.panelPrompt = wx.Panel(parent = self, id = wx.ID_ANY)
-        
+
         # initialize variables
         self.parent = parent # GMFrame | CmdPanel | ?
         if frame:
@@ -228,9 +228,6 @@ class GConsole(wx.SplitterWindow):
 
         self._gcstyle = gcstyle
         self.lineWidth       = 80
-        
-        # remember position of line begining (used for '\r')
-        self.linePos         = -1
         
         # create queues
         self.requestQ = Queue.Queue()
@@ -742,6 +739,8 @@ class GConsole(wx.SplitterWindow):
         """!Print command output"""
         message = event.text
         type  = event.type
+        self.cmdOutput.AddStyledMessage(message, type)
+
         if self._notebook.GetSelection() != self._notebook.GetPageIndexByName('output'):
             page = self._notebook.GetPageIndexByName('output')
             textP = self._notebook.GetPageText(page)
@@ -749,57 +748,6 @@ class GConsole(wx.SplitterWindow):
                 textP += ' (...)'
             self._notebook.SetPageText(page, textP)
         
-        # message prefix
-        if type == 'warning':
-            message = 'WARNING: ' + message
-        elif type == 'error':
-            message = 'ERROR: ' + message
-        
-        p1 = self.cmdOutput.GetEndStyled()
-        self.cmdOutput.GotoPos(p1)
-        
-        if '\b' in message:
-            if self.linepos < 0:
-                self.linepos = p1
-            last_c = ''
-            for c in message:
-                if c == '\b':
-                    self.linepos -= 1
-                else:
-                    if c == '\r':
-                        pos = self.cmdOutput.GetCurLine()[1]
-                        # self.cmdOutput.SetCurrentPos(pos)
-                    else:
-                        self.cmdOutput.SetCurrentPos(self.linepos)
-                    self.cmdOutput.ReplaceSelection(c)
-                    self.linepos = self.cmdOutput.GetCurrentPos()
-                    if c != ' ':
-                        last_c = c
-            if last_c not in ('0123456789'):
-                self.cmdOutput.AddTextWrapped('\n', wrap = None)
-                self.linepos = -1
-        else:
-            self.linepos = -1 # don't force position
-            if '\n' not in message:
-                self.cmdOutput.AddTextWrapped(message, wrap = 60)
-            else:
-                self.cmdOutput.AddTextWrapped(message, wrap = None)
-
-        p2 = self.cmdOutput.GetCurrentPos()
-        
-        if p2 >= p1:
-            self.cmdOutput.StartStyling(p1, 0xff)
-        
-            if type == 'error':
-                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleError)
-            elif type == 'warning':
-                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleWarning)
-            elif type == 'message':
-                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleMessage)
-            else: # unknown
-                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleUnknown)
-        
-        self.cmdOutput.EnsureCaretVisible()
         
     def OnCmdProgress(self, event):
         """!Update progress message info"""
@@ -1141,6 +1089,8 @@ class GStc(stc.StyledTextCtrl):
         self.SetUndoCollection(True)
         self.SetReadOnly(True)
 
+        # remember position of line begining (used for '\r')
+        self.linePos         = -1
         #
         # styles
         #                
@@ -1236,24 +1186,25 @@ class GStc(stc.StyledTextCtrl):
         of the string"""
         # allow writing to output window
         self.SetReadOnly(False)
-        
+
         if wrap:
             txt = textwrap.fill(txt, wrap) + '\n'
         else:
             if txt[-1] != '\n':
                 txt += '\n'
-        
+
         if '\r' in txt:
-            self.parent.linePos = -1
+            self.linePos = -1
             for seg in txt.split('\r'):
-                if self.parent.linePos > -1:
-                    self.SetCurrentPos(self.parent.linePos)
+                if self.linePos > -1:
+                    self.SetCurrentPos(self.linePos)
                     self.ReplaceSelection(seg)
                 else:
-                    self.parent.linePos = self.GetCurrentPos()
+                    self.linePos = self.GetCurrentPos()
                     self.AddText(seg)
         else:
-            self.parent.linePos = self.GetCurrentPos()
+            self.linePos = self.GetCurrentPos()
+            
             try:
                 self.AddText(txt)
             except UnicodeDecodeError:
@@ -1266,6 +1217,66 @@ class GStc(stc.StyledTextCtrl):
                     txt = EncodeString(txt)
                 
                 self.AddText(txt)
-        
+
         # reset output window to read only
         self.SetReadOnly(True)
+    
+    def AddStyledMessage(self, message, style = None):
+        """!Add message to text area.
+
+        Handles messages with progress percentages.
+
+        @param message message to be added
+        @param style style of message, allowed values: 'message', 'warning', 'error' or None
+        """
+        # message prefix
+        if style == 'warning':
+            message = 'WARNING: ' + message
+        elif style == 'error':
+            message = 'ERROR: ' + message
+        
+        p1 = self.GetEndStyled()
+        self.GotoPos(p1)
+        
+        # is this still needed?
+        if '\b' in message:
+            if self.linePos < 0:
+                self.linePos = p1
+            last_c = ''
+            for c in message:
+                if c == '\b':
+                    self.linePos -= 1
+                else:
+                    if c == '\r':
+                        pos = self.GetCurLine()[1]
+                        # self.SetCurrentPos(pos)
+                    else:
+                        self.SetCurrentPos(self.linePos)
+                    self.ReplaceSelection(c)
+                    self.linePos = self.GetCurrentPos()
+                    if c != ' ':
+                        last_c = c
+            if last_c not in ('0123456789'):
+                self.AddTextWrapped('\n', wrap = None)
+                self.linePos = -1
+        else:
+            self.linePos = -1 # don't force position
+            if '\n' not in message:
+                self.AddTextWrapped(message, wrap = 60)
+            else:
+                self.AddTextWrapped(message, wrap = None)
+        p2 = self.GetCurrentPos()
+        
+        if p2 >= p1:
+            self.StartStyling(p1, 0xff)
+        
+            if style == 'error':
+                self.SetStyling(p2 - p1, self.StyleError)
+            elif style == 'warning':
+                self.SetStyling(p2 - p1, self.StyleWarning)
+            elif style == 'message':
+                self.SetStyling(p2 - p1, self.StyleMessage)
+            else: # unknown
+                self.SetStyling(p2 - p1, self.StyleUnknown)
+        
+        self.EnsureCaretVisible()
