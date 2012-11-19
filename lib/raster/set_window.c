@@ -154,10 +154,8 @@ static void update_window_mappings(void)
 	    fcb->open_mode != OPEN_NEW_COMPRESSED)
 	    continue;
 
-	if (fcb->open_mode == OPEN_OLD) {
+	if (fcb->open_mode == OPEN_OLD)
 	    G_fatal_error(_("Input window changed while maps are open for read"));
-	    Rast__create_window_mapping(i);
-	}
     }
 
     /* turn masking (back) on if necessary */
