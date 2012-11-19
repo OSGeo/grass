@@ -1617,8 +1617,9 @@ class CmdPanel(wx.Panel):
         # are we running from command line?
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
-            from gui_core.goutput import GConsole
-            self.goutput = GConsole(parent = self.notebook, frame = self.parent, margin = False, notebook = self.notebook)
+            from gui_core.goutput import GConsole, EVT_OUTPUT_TEXT
+            self.goutput = GConsole(parent = self.notebook, frame = self.parent, margin = False)
+            self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
             index = self.AddBitmapToImageList(section = 'output', imageList = imageList)
             if index >= 0:
@@ -1844,6 +1845,16 @@ class CmdPanel(wx.Panel):
             # this is needed for dialogs launched from layer manager
             # event is somehow propagated?
             event.StopPropagation()
+
+    def OnOutputText(self, event):
+        """!Manages @c 'output' notebook page according to event priority."""
+        if event.priority == 1:
+            self.notebook.HighlightPageByName('output')
+        if event.priority >= 2:
+            self.notebook.SetSelectionByName('output')
+        if event.priority >= 3:
+            self.SetFocus()
+            self.Raise()
 
     def OnColorChange(self, event):
         myId = event.GetId()

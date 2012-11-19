@@ -34,7 +34,7 @@ import wx.lib.flatnotebook    as FN
 
 from core                 import globalvar
 from gui_core.widgets     import GNotebook
-from gui_core.goutput     import GConsole
+from gui_core.goutput     import GConsole, EVT_OUTPUT_TEXT
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
@@ -104,7 +104,8 @@ class ModelFrame(wx.Frame):
         
         self.pythonPanel = PythonPanel(parent = self)
         
-        self.goutput = GConsole(parent = self, frame = self, notebook = self.notebook)
+        self.goutput = GConsole(parent = self, frame = self)
+        self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
         
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
@@ -687,8 +688,17 @@ class ModelFrame(wx.Frame):
         self.model.AddItem(data)
         
         self.canvas.Refresh()
-        
-        
+
+    def OnOutputText(self, event):
+        """!Manages @c 'output' notebook page according to event priority."""
+        if event.priority == 1:
+            self.notebook.HighlightPageByName('output')
+        if event.priority >= 2:
+            self.notebook.SetSelectionByName('output')
+        if event.priority >= 3:
+            self.SetFocus()
+            self.Raise()
+
     def OnHelp(self, event):
         """!Display manual page"""
         grass.run_command('g.manual',
