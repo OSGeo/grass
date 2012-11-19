@@ -112,9 +112,11 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 
 	for (i = 0; i < MAXLEVEL; i++) {
 
+	    /*
 	    for (j = 0; j < MAXCARD; j++) {
 		new_rtree->fs[i].sn.branch[j].rect.boundary = RTreeAllocBoundary(new_rtree);
 	    }
+	    */
 	    for (j = 0; j < NODE_BUFFER_SIZE; j++) {
 		new_rtree->nb[i][j].dirty = 0;
 		new_rtree->nb[i][j].pos = -1;

@@ -52,7 +52,7 @@ typedef double RectReal;
 #define MAXLEVEL 20        /* 8^MAXLEVEL items are guaranteed to fit into the tree */
 
 /* number of nodes buffered per level */
-#define NODE_BUFFER_SIZE 4
+#define NODE_BUFFER_SIZE 8
 
 struct RTree_Rect
 {
@@ -103,7 +103,7 @@ typedef int rt_valid_child_fn(union RTree_Child *);
 /* stack for file-based index */
 struct fstack
 {
-    struct RTree_Node sn;	/* stack node */
+    struct RTree_Node *sn;	/* stack node */
     int branch_id;		/* branch number to follow down */
     off_t pos;			/* file position of stack node */
 };

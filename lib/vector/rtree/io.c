@@ -47,6 +47,7 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
            i < NODE_BUFFER_SIZE)
 	i++;
 
+    /* is it possible that this node is not in the buffer? */
     assert(i < NODE_BUFFER_SIZE);
     which = t->used[level][i];
     assert(t->nb[level][which].n.level == level);
@@ -55,16 +56,14 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
     
     /* make it lru */
     if (i < NODE_BUFFER_SIZE - 1) { /* which != t->used[level][NODE_BUFFER_SIZE - 1] */
-#ifdef USAGE_SWAP
-	t->used[level][i] = t->used[level][NODE_BUFFER_SIZE - 1];
-	t->used[level][NODE_BUFFER_SIZE - 1] = which;
-#else
-	while (i < NODE_BUFFER_SIZE - 1) {
+	/* simple swap does not work here */
+	while (i < NODE_BUFFER_SIZE - 1 &&
+	       t->nb[level][t->used[level][i + 1]].pos != -1) {
 	    t->used[level][i] = t->used[level][i + 1];
 	    i++;
 	}
-	t->used[level][NODE_BUFFER_SIZE - 1] = which;
-#endif
+	assert(i < NODE_BUFFER_SIZE);
+	t->used[level][i] = which;
     }
 }
 
@@ -109,7 +108,7 @@ size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 }
 
 /* get node from buffer or file */
-void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *t)
+struct RTree_Node *RTreeGetNode(off_t nodepos, int level, struct RTree *t)
 {
     int which, i = 0;
 
@@ -122,9 +121,6 @@ void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *
     which = t->used[level][i];
 
     if (t->nb[level][which].pos != nodepos) {
-	if (t->nb[level][which].pos >= 0) {
-	    assert(i == NODE_BUFFER_SIZE - 1);
-	}
 	/* rewrite node in buffer */
 	if (t->nb[level][which].dirty) {
 	    assert(t->nb[level][which].pos >= 0);
@@ -151,9 +147,9 @@ void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *
 #endif
     }
 
-    RTreeCopyNode(n, &(t->nb[level][which].n), t);
+    /* RTreeCopyNode(n, &(t->nb[level][which].n), t); */
     
-    /* return &(t->nb[level][which].n); */
+    return &(t->nb[level][which].n);
 }
 
 /* write branch to file */
