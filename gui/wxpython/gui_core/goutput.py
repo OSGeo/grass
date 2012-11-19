@@ -199,12 +199,23 @@ class CmdThread(threading.Thread):
         self.requestCmd.abort()
         if self.requestQ.empty():
             self._want_abort_all = False
-        
+
+
+# Occurs event when some new text appears.
+# Text priority is specified by priority attribute.
+# Priority is 1 (lowest), 2, 3 (highest);
+# value 0 is currently not used and probably will not be used.
+# In theory, it can be used when text is completely uninteresting.
+# It is similar to wx.EVT_TEXT.
+# However, the new text or the whole text are not event attributes.
+gOutputText, EVT_OUTPUT_TEXT = NewEvent()
+
+
 class GConsole(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
     def __init__(self, parent, id = wx.ID_ANY, margin = False,
-                 frame = None, notebook = None,
+                 frame = None,
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  gcstyle = GC_EMPTY,
                  **kwargs):
@@ -220,11 +231,6 @@ class GConsole(wx.SplitterWindow):
             self.frame = frame
         else:
             self.frame = parent
-        
-        if notebook:
-            self._notebook = notebook
-        else:
-            self._notebook = self.parent.notebook
 
         self._gcstyle = gcstyle
         self.lineWidth       = 80
@@ -453,8 +459,14 @@ class GConsole(wx.SplitterWindow):
 
         self.cmdOutput.SetStyle()
 
+        # documenting old behavior/implementation:
+        # switch notebook if required
         if switchPage:
-            self._notebook.SetSelectionByName('output')
+            priority = 2
+        else:
+            priority = 1
+        event = gOutputText(priority = priority)
+        wx.PostEvent(self, event)
         
         if not style:
             style = self.cmdOutput.StyleDefault
@@ -622,14 +634,15 @@ class GConsole(wx.SplitterWindow):
                     except GException, e:
                         print >> sys.stderr, e
                     return
-                
-                # switch to 'Command output' if required
+
+                # documenting old behavior/implementation:
+                # switch and focus if required
+                # TODO: this probably should be run command event
                 if switchPage:
-                    self._notebook.SetSelectionByName('output')
-                    
-                    self.frame.SetFocus()
-                    self.frame.Raise()
-                
+                    priority = 3
+                    event = gOutputText(priority = priority)
+                    wx.PostEvent(self, event)
+
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 if compReg:
@@ -739,16 +752,14 @@ class GConsole(wx.SplitterWindow):
         """!Print command output"""
         message = event.text
         type  = event.type
+
         self.cmdOutput.AddStyledMessage(message, type)
 
-        if self._notebook.GetSelection() != self._notebook.GetPageIndexByName('output'):
-            page = self._notebook.GetPageIndexByName('output')
-            textP = self._notebook.GetPageText(page)
-            if textP[-1] != ')':
-                textP += ' (...)'
-            self._notebook.SetPageText(page, textP)
-        
-        
+        # documenting old behavior/implementation:
+        # add elipses if not active
+        event = gOutputText(priority = 1)
+        wx.PostEvent(self, event)
+
     def OnCmdProgress(self, event):
         """!Update progress message info"""
         self.progressbar.SetValue(event.value)
@@ -1091,6 +1102,7 @@ class GStc(stc.StyledTextCtrl):
 
         # remember position of line begining (used for '\r')
         self.linePos         = -1
+
         #
         # styles
         #                
@@ -1220,7 +1232,7 @@ class GStc(stc.StyledTextCtrl):
 
         # reset output window to read only
         self.SetReadOnly(True)
-    
+
     def AddStyledMessage(self, message, style = None):
         """!Add message to text area.
 

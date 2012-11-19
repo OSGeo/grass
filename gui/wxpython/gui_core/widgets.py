@@ -65,9 +65,15 @@ class NotebookController:
     and other methods can be delegated by @c __getattr__.
     """
     def __init__(self, classObject, widget):
+        """!        
+        @param classObject notebook class name (object, i.e. FlatNotebook)
+        @param widget notebook instance
+        """
         self.notebookPages = {}
         self.classObject = classObject
         self.widget = widget
+        # TODO: (...) should be only once in wxGUI
+        self.highlightedTextEnd = _(" (...)")
 
     def AddPage(self, **kwargs):
         """!Add a new page
@@ -117,13 +123,20 @@ class NotebookController:
             return False
 
     def SetSelectionByName(self, page):
-        """!Set notebook
-        
-        @param page names, eg. 'layers', 'output', 'search', 'pyshell', 'nviz'
+        """!Set active notebook page.
+
+        @param page name, eg. 'layers', 'output', 'search', 'pyshell', 'nviz'
+        (depends on concrete notebook instance)
         """
         idx = self.GetPageIndexByName(page)
         if self.classObject.GetSelection(self.widget) != idx:
             self.classObject.SetSelection(self.widget, idx)
+            # FIXME: this code was not explicitly tested
+            # FIXME: remove this from function lmgr.frame.Frame.OnPageChanged
+            text = self.classObject.GetPageText(self.widget, idx)
+            if text.endswith(self.highlightedTextEnd):
+                text.replace(self.highlightedTextEnd, '')
+                self.classObject.SetPageText(self.widget, idx, text)
 
     def GetPageIndexByName(self, page):
         """!Get notebook page index
@@ -136,6 +149,17 @@ class NotebookController:
             if self.notebookPages[page] == self.classObject.GetPage(self.widget, pageIndex):
                 break
         return pageIndex
+
+    def HighlightPageByName(self, page):
+        pageIndex = self.GetPageIndexByName(page)
+        self.HighlightPage(pageIndex)
+        
+    def HighlightPage(self, index):
+        if self.classObject.GetSelection(self.widget) != index:
+            text = self.classObject.GetPageText(self.widget, index)
+            if not text.endswith(self.highlightedTextEnd):
+                text += self.highlightedTextEnd
+            self.classObject.SetPageText(self.widget, index, text)
 
     def SetPageImage(self, page, index):
         """!Sets image index for page
@@ -192,10 +216,6 @@ class GNotebook(FN.FlatNotebook):
     def RemovePage(self, page):
         """! @copydoc NotebookController::RemovePage()"""
         return self.controller.RemovePage(page)
-
-    def SetPageImage(self, page, index):
-        """! @copydoc NotebookController::SetPageImage()"""
-        return self.controller.SetPageImage(page, index)
 
     def SetPageImage(self, page, index):
         """!Does nothing because we don't want images for this style"""
