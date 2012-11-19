@@ -8,6 +8,7 @@ Created on Thu Jul 12 10:23:15 2012
 from __future__ import print_function
 import subprocess
 import fnmatch
+import re
 
 try:
     from collections import OrderedDict
@@ -145,13 +146,36 @@ class Parameter(object):
 
         self.description = diz.get('description', None)
         self.keydesc = diz.get('keydesc', None)
-        self.values = [self._type(
-            i) for i in diz['values']] if 'values' in diz else None
+
+        #
+        # values
+        #
+        if 'values' in diz:
+            try:
+                # chek if it's a range string: "3-30"
+                isrange = re.match("(?P<min>\d+)-(?P<max>\d+)",
+                                   diz['values'][0])
+                if isrange:
+                    range_min, range_max = isrange.groups()
+                    self.values = range(int(range_min), int(range_max) + 1)
+                self.isrange = diz['values'][0]
+            except TypeError:
+                self.values = [self._type(i) for i in diz['values']]
+                self.isrange = False
+
+        #
+        # default
+        #
         self.default = self._type(
             diz['default']) if 'default' in diz else None
         if self.default is not None:
             self._value = self.default
+
         self.guisection = diz.get('guisection', None)
+
+        #
+        # gisprompt
+        #
         if 'gisprompt' in diz:
             self.type = diz['gisprompt']['prompt']
             self.input = False if diz['gisprompt']['age'] == 'new' else True
@@ -171,7 +195,7 @@ class Parameter(object):
                 str_err = 'The Parameter <%s> does not accept multiple inputs'
                 raise TypeError(str_err % self.name)
         elif isinstance(value, self._type):
-            if self.values:
+            if hasattr(self, 'values'):
                 if value in self.values:
                     self._value = value
                 else:
@@ -218,14 +242,19 @@ class Parameter(object):
 
         {name}: {default}{required}{multi}{ptype}
             {description}{values}"","""
+        if hasattr(self, 'values'):
+            if self.isrange:
+                vals = self.isrange
+            else:
+                vals = ', '.join([repr(val) for val in self.values])
+        else:
+            vals = False
         return _DOC['param'].format(name=self.name,
                 default=repr(self.default) + ', ' if self.default else '',
                 required='required, ' if self.required else 'optional, ',
                 multi='multi' if self.multiple else '',
                 ptype=self.typedesc, description=self.description,
-                values='\n    Values: {0}'.format(', '.join([repr(val)
-                                                  for val in self.values]))
-                       if self.values else '')
+                values='\n    Values: {0}'.format(vals)  if vals else '')
 
 
 class TypeDict(OrderedDict):
