@@ -42,6 +42,7 @@ from grass.script          import core as grass
 from core.gcmd             import RunCommand, GError, GMessage
 from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath
+from core.events           import EVT_SHOW_NOTIFICATION
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import LayerManagerMenuData
@@ -154,6 +155,8 @@ class GMFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(EVT_SHOW_NOTIFICATION,
+                  lambda event: self.SetStatusText(event.message))
 
         # minimal frame size
         self.SetMinSize((globalvar.GM_WINDOW_SIZE[0], 400))

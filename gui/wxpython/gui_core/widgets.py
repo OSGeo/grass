@@ -49,6 +49,7 @@ except ImportError:
 
 from core        import globalvar
 from core.debug  import Debug
+from core.events import gShowNotification
 
 from wx.lib.newevent import NewEvent
 wxSymbolSelectionChanged, EVT_SYMBOL_SELECTION_CHANGED  = NewEvent()
@@ -800,19 +801,21 @@ class SearchModuleWidget(wx.Panel):
             mList = self.modulesData.GetCommandItems()
             if self.showChoice:
                 self.searchChoice.SetItems(mList)
-            if self.showTip:
-                self.searchTip.SetLabel(_("%d modules found") % len(mList))
-            event.Skip()
-            return
+            label = _("%d modules found") % len(mList)
+        else:
+            findIn = self.searchBy.GetClientData(self.searchBy.GetSelection())
+            modules, nFound = self.modulesData.FindModules(text = text, findIn = findIn)
+            self.modulesData.SetFilter(modules)
+            if self.showChoice:
+                self.searchChoice.SetItems(self.modulesData.GetCommandItems())
+                self.searchChoice.SetSelection(0)
+            label = _("%d modules match") % nFound
 
-        findIn = self.searchBy.GetClientData(self.searchBy.GetSelection())
-        modules, nFound = self.modulesData.FindModules(text = text, findIn = findIn)
-        self.modulesData.SetFilter(modules)
-        if self.showChoice:
-            self.searchChoice.SetItems(self.modulesData.GetCommandItems())
-            self.searchChoice.SetSelection(0)
         if self.showTip:
-            self.searchTip.SetLabel(_("%d modules match") % nFound)
+            self.searchTip.SetLabel(label)
+
+        newEvent = gShowNotification(self.GetId(), message = label)
+        wx.PostEvent(self, newEvent)
 
         event.Skip()
 

@@ -40,7 +40,8 @@ from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget, EVT_MODULE
 class ExtensionModulesData(object):
     """!Holds information about modules.
 
-    @todo add doctest
+    @todo add some test
+    @todo this class has some common methods with core::modulesdata::ModulesData
     """
     def __init__(self, modulesDesc):
 
