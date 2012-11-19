@@ -246,7 +246,7 @@ class GConsole(wx.SplitterWindow):
         self.progressbar = wx.Gauge(parent = self.panelOutput, id = wx.ID_ANY,
                                     range = 100, pos = (110, 50), size = (-1, 25),
                                     style = wx.GA_HORIZONTAL)
-        self.progressbar.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
+        self.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
         
         # text control for command output
         self.cmdOutput = GStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
@@ -768,6 +768,7 @@ class GConsole(wx.SplitterWindow):
     def OnCmdProgress(self, event):
         """!Update progress message info"""
         self.progressbar.SetValue(event.value)
+        event.Skip()
 
     def CmdProtocolSave(self):
         """Save commands protocol into the file"""
@@ -816,6 +817,7 @@ class GConsole(wx.SplitterWindow):
     def OnCmdAbort(self, event):
         """!Abort running command"""
         self.cmdThread.abort()
+        event.Skip()
         
     def OnCmdRun(self, event):
         """!Run command"""
@@ -967,7 +969,8 @@ class GConsole(wx.SplitterWindow):
                 self.cmdOutput.Update()
                 time.sleep(2)
                 dialog.Close()
-        
+        event.Skip()
+
     def OnProcessPendingOutputWindowEvents(self, event):
         wx.GetApp().ProcessPendingEvents()
 
