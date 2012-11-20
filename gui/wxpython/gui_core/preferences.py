@@ -434,10 +434,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
         outfontButton = wx.Button(parent = panel, id = wx.ID_ANY,
-                               label = _("Set font"), size = (100, -1))
+                                  label = _("Set font"))
         gridSizer.Add(item = outfontButton,
-                      flag = wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL,
+                      flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
 
         #
@@ -628,7 +627,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
         fontButton = wx.Button(parent = panel, id = wx.ID_ANY,
-                               label = _("Set font"), size = (100, -1))
+                               label = _("Set font"))
         gridSizer.Add(item = fontButton,
                       flag = wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL,
