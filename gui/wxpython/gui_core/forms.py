@@ -1620,7 +1620,7 @@ class CmdPanel(wx.Panel):
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
             from gui_core.goutput import GConsole, EVT_OUTPUT_TEXT
-            self.goutput = GConsole(parent = self.notebook, frame = self.parent, margin = False)
+            self.goutput = GConsole(parent = self.notebook, margin = False)
             self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
             index = self.AddBitmapToImageList(section = 'output', imageList = imageList)

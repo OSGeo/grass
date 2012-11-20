@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import re
 import textwrap
 import time
 import threading
@@ -205,7 +206,7 @@ class CmdThread(threading.Thread):
             self._want_abort_all = False
 
 
-# Occurs event when some new text appears.
+# Occurs when some new text appears.
 # Text priority is specified by priority attribute.
 # Priority is 1 (lowest), 2, 3 (highest);
 # value 0 is currently not used and probably will not be used.
@@ -214,16 +215,30 @@ class CmdThread(threading.Thread):
 # However, the new text or the whole text are not event attributes.
 gOutputText, EVT_OUTPUT_TEXT = NewEvent()
 
+# Occurs when ignored command is called.
+# Attribute cmd contains command (as a list).
+gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
+
 
 class GConsole(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
-    def __init__(self, parent, id = wx.ID_ANY, margin = False,
-                 frame = None,
+    def __init__(self, parent, margin = False,
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  gcstyle = GC_EMPTY,
+                 ignoredCmdPattern = None,
                  **kwargs):
-        wx.SplitterWindow.__init__(self, parent, id, style = style, *kwargs)
+        """!
+        @param parent gui parent
+        @param margin use margin in output pane (GStc)
+        @param style wx.SplitterWindow style
+        @param gcstyle GConsole style
+        (GC_EMPTY, GC_PROMPT to show command prompt,
+        GC_SEARCH to show search widget)
+        @param ignoredCmdPattern regular expression specifying commads
+        to be ignored (e.g. @c '^d\..*' for display commands)
+        """
+        wx.SplitterWindow.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
         self.SetName("GConsole")
         
         self.panelOutput = wx.Panel(parent = self, id = wx.ID_ANY)
@@ -231,14 +246,10 @@ class GConsole(wx.SplitterWindow):
 
         # initialize variables
         self.parent = parent # GMFrame | CmdPanel | ?
-        if frame:
-            self.frame = frame
-        else:
-            self.frame = parent
 
         self._gcstyle = gcstyle
         self.lineWidth       = 80
-        
+        self._ignoredCmdPattern = ignoredCmdPattern
         # create queues
         self.requestQ = Queue.Queue()
         self.resultQ = Queue.Queue()
@@ -519,12 +530,16 @@ class GConsole(wx.SplitterWindow):
     def RunCmd(self, command, compReg = True, switchPage = False, skipInterface = False,
                onDone = None, onPrepare = None, userData = None):
         """!Run command typed into console command prompt (GPrompt).
-        
-        @todo Display commands (*.d) are captured and processed
-        separately by mapdisp.py. Display commands are rendered in map
-        display widget that currently has the focus (as indicted by
-        mdidx).
-        
+
+        @todo Document the other event.
+        @todo Solve problem with the other event
+        (now uses gOutputText event but there is no text,
+        use onPrepare handler instead?)
+
+        Posts event EVT_IGNORED_CMD_RUN when command which should be ignored
+        (according to ignoredCmdPattern) is run.
+        For example, see layer manager which handles d.* on its own.
+
         @param command command given as a list (produced e.g. by utils.split())
         @param compReg True use computation region
         @param switchPage switch to output page
@@ -549,7 +564,7 @@ class GConsole(wx.SplitterWindow):
         except IOError, e:
             GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
                     {'filePath': filePath, 'error' : e },
-                   parent = self.frame)
+                   parent = self)
             fileHistory = None
         
         if fileHistory:
@@ -560,51 +575,15 @@ class GConsole(wx.SplitterWindow):
         
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
-            # except display commands (they are handled differently)
-            if self.frame.GetName() == "LayerManager" and \
-                    command[0][0:2] == "d." and \
-                    'help' not in ' '.join(command[1:]):
-                # display GRASS commands
-                try:
-                    layertype = {'d.rast'         : 'raster',
-                                 'd.rast3d'       : '3d-raster',
-                                 'd.rgb'          : 'rgb',
-                                 'd.his'          : 'his',
-                                 'd.shaded'       : 'shaded',
-                                 'd.legend'       : 'rastleg',
-                                 'd.rast.arrow'   : 'rastarrow',
-                                 'd.rast.num'     : 'rastnum',
-                                 'd.rast.leg'     : 'maplegend',
-                                 'd.vect'         : 'vector',
-                                 'd.thematic.area': 'thememap',
-                                 'd.vect.chart'   : 'themechart',
-                                 'd.grid'         : 'grid',
-                                 'd.geodesic'     : 'geodesic',
-                                 'd.rhumbline'    : 'rhumb',
-                                 'd.labels'       : 'labels',
-                                 'd.barscale'     : 'barscale',
-                                 'd.redraw'       : 'redraw'}[command[0]]
-                except KeyError:
-                    GMessage(parent = self.frame,
-                             message = _("Command '%s' not yet implemented in the WxGUI. "
-                                         "Try adding it as a command layer instead.") % command[0])
-                    return
-                
-                if layertype == 'barscale':
-                    self.frame.GetLayerTree().GetMapDisplay().OnAddBarscale(None)
-                elif layertype == 'rastleg':
-                    self.frame.GetLayerTree().GetMapDisplay().OnAddLegend(None)
-                elif layertype == 'redraw':
-                    self.frame.GetLayerTree().GetMapDisplay().OnRender(None)
-                else:
-                    # add layer into layer tree
-                    lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
-                                                             layerType = layertype)
-                    if self.frame.GetName() == "LayerManager":
-                        self.frame.GetLayerTree().AddLayer(ltype = layertype,
-                                                               lname = lname,
-                                                               lcmd = command)
-            
+            # except ignored commands (event is emitted)
+
+            if self._ignoredCmdPattern and \
+              re.compile(self._ignoredCmdPattern).search(command[0]) and \
+              '--help' not in command:
+                event = gIgnoredCmdRun(cmd = command)
+                wx.PostEvent(self, event)
+                return
+
             else:
                 # other GRASS commands (r|v|g|...)
                 try:
@@ -756,7 +735,10 @@ class GConsole(wx.SplitterWindow):
             self.cmdOutput.Unbind(stc.EVT_STC_PAINTED)
 
     def OnCmdOutput(self, event):
-        """!Print command output"""
+        """!Print command output
+
+        Posts event EVT_OUTPUT_TEXT with priority attribute set to 1.
+        """
         message = event.text
         type  = event.type
 
@@ -830,7 +812,10 @@ class GConsole(wx.SplitterWindow):
         event.Skip()
 
     def OnCmdDone(self, event):
-        """!Command done (or aborted)"""
+        """!Command done (or aborted)
+
+        Posts event EVT_MAP_CREATED.
+        """
 
         # Process results here
         try:
