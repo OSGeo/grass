@@ -42,7 +42,7 @@ from grass.script          import core as grass
 from core.gcmd             import RunCommand, GError, GMessage
 from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath
-from core.events           import EVT_SHOW_NOTIFICATION
+from core.events           import EVT_SHOW_NOTIFICATION, EVT_MAP_CREATED
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import LayerManagerMenuData
@@ -157,6 +157,7 @@ class GMFrame(wx.Frame):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(EVT_SHOW_NOTIFICATION,
                   lambda event: self.SetStatusText(event.message))
+        self.Bind(EVT_MAP_CREATED, self.OnMapCreated)
 
         # minimal frame size
         self.SetMinSize((globalvar.GM_WINDOW_SIZE[0], 400))
@@ -1552,8 +1553,14 @@ class GMFrame(wx.Frame):
     def OnApplyMapLayers(self, event):
         self.AddMaps(mapLayers = event.mapLayers, ltype = event.ltype)
 
-    def AddMaps(self, mapLayers, ltype):
-        """!Add map layers to layer tree."""
+    def AddMaps(self, mapLayers, ltype, check = False):
+        """!Add map layers to layer tree.
+
+        @param mapLayers list of map names
+        @param ltype layer type ('rast', 'rast3d', 'vect')
+        @param check @c True if new layers should be checked in layer tree
+        @c False otherwise
+        """
         # start new map display if no display is available
         if not self.currentPage:
             self.NewDisplay()
@@ -1577,10 +1584,48 @@ class GMFrame(wx.Frame):
             
             newItem = maptree.AddLayer(ltype = wxType,
                                        lname = layerName,
-                                       lchecked = False,
+                                       lchecked = check,
                                        lopacity = 1.0,
                                        lcmd = cmd,
                                        lgroup = None)
+
+    def OnMapCreated(self, event):
+        if event.add is None:
+            if UserSettings.Get(group = 'cmd',
+                                key = 'addNewLayer', subkey = 'enabled'):
+                self.AddOrUpdateMap(event.name, event.ltype)
+        elif event.add:
+            self.AddOrUpdateMap(event.name, event.ltype)
+
+    def AddOrUpdateMap(self, mapName, ltype):
+        """!Add map layer or update"""
+        # start new map display if no display is available
+
+        # TODO: standardize type identifiers
+        convertType = {'raster': 'rast',
+                       '3d-raster': 'rast3d',
+                       'vector': 'vect'}
+        try:
+            grassType = convertType[ltype]
+        except KeyError:
+            if ltype in convertType.values():
+                grassType = ltype
+            else:
+                GError(parent = self,
+                       message = _("Unsupported map layer type <%s>.") % ltype)
+                return
+
+        if not self.currentPage:
+            self.AddMaps([mapName], grassType, check = True)
+        else:
+            display = self.GetLayerTree().GetMapDisplay()
+            mapLayers = map(lambda x: x.GetName(),
+                            display.GetMap().GetListOfLayers(l_type = ltype))
+            if mapName in mapLayers:
+                display.GetWindow().UpdateMap(render = True)
+            else:
+                self.AddMaps([mapName], grassType, check = True)
+
     def OnAddRaster(self, event):
         """!Add raster map layer"""
         # start new map display if no display is available

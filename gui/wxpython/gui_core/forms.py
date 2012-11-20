@@ -90,6 +90,7 @@ from gui_core         import gselect
 from core             import gcmd
 from core             import utils
 from core.settings    import UserSettings
+from core.events      import EVT_MAP_CREATED
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
@@ -533,9 +534,10 @@ class TaskFrame(wx.Frame):
             guisizer.Add(item = self.closebox, proportion = 0,
                          flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                          border = 5)
-        
+        # bindings
         self.Bind(wx.EVT_CLOSE,  self.OnCancel)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+        self.Bind(EVT_MAP_CREATED, self.OnMapCreated)
         
         # do layout
         # called automatically by SetSizer()
@@ -606,34 +608,34 @@ class TaskFrame(wx.Frame):
 
         @param returncode command's return code (0 for success)
         """
-        if not self.parent or returncode !=  0:
-            return
-        if self.parent.GetName() not in ('LayerTree', 'LayerManager'):
-            return
-        
-        if self.parent.GetName() == 'LayerTree':
-            display = self.parent.GetMapDisplay()
-        else: # Layer Manager
-            display = self.parent.GetLayerTree().GetMapDisplay()
-            
-        if not display or not display.IsAutoRendered():
-            return
-        
-        mapLayers = map(lambda x: x.GetName(),
-                        display.GetMap().GetListOfLayers(l_type = 'raster') +
-                        display.GetMap().GetListOfLayers(l_type = 'vector'))
-        
-        task = GUI(show = None).ParseCommand(cmd)
-        for p in task.get_options()['params']:
-            if p.get('prompt', '') not in ('raster', 'vector'):
-                continue
-            mapName = p.get('value', '')
-            if '@' not in mapName:
-                mapName = mapName + '@' + grass.gisenv()['MAPSET']
-            if mapName in mapLayers:
-                display.GetWindow().UpdateMap(render = True)
-                return
-        
+
+        if hasattr(self, "btn_cancel"):
+            self.btn_cancel.Enable(True)
+
+        if hasattr(self, "btn_clipboard"):
+            self.btn_clipboard.Enable(True)
+
+        if hasattr(self, "btn_help"):
+            self.btn_help.Enable(True)
+
+        if hasattr(self, "btn_run"):
+            self.btn_run.Enable(True)
+
+        if hasattr(self, "get_dcmd") and \
+                    self.get_dcmd is None and \
+                    hasattr(self, "closebox") and \
+                    self.closebox.IsChecked() and \
+                    (returncode == 0):
+                # was closed also when aborted but better is leave it open
+                wx.FutureCall(2000, self.Close)
+
+    def OnMapCreated(self, event):
+        if hasattr(self, "addbox") and self.addbox.IsChecked():
+            event.add = True
+        else:
+            event.add = False
+        event.Skip()
+    
     def OnOK(self, event):
         """!OK button pressed"""
         cmd = self.OnApply(event)

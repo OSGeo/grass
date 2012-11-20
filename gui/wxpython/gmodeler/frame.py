@@ -36,6 +36,7 @@ from core                 import globalvar
 from gui_core.widgets     import GNotebook
 from gui_core.goutput     import GConsole, \
     EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_OUTPUT_TEXT
+from core.events          import EVT_MAP_CREATED
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
@@ -110,6 +111,7 @@ class ModelFrame(wx.Frame):
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
+        self.Bind(EVT_MAP_CREATED, self.OnMapCreated)
 
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
@@ -226,7 +228,15 @@ class ModelFrame(wx.Frame):
                 action.Update(running = True)
         except IndexError:
             pass
-        
+
+    def OnMapCreated(self, event):
+        """!Map was created but we don't want to add it to layer tree.
+        """
+        # remove this method if you want to add it to layer tree
+        # or see gui_core.forms.TaskFrame.OnMapCreated
+        event.add = False
+        event.Skip()
+
     def OnCloseWindow(self, event):
         """!Close window"""
         if self.modelChanged and \
