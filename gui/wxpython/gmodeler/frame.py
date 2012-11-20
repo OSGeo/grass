@@ -106,7 +106,7 @@ class ModelFrame(wx.Frame):
         
         self.pythonPanel = PythonPanel(parent = self)
         
-        self.goutput = GConsole(parent = self, frame = self)
+        self.goutput = GConsole(parent = self)
         self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)

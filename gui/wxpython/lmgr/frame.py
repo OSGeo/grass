@@ -41,7 +41,7 @@ from grass.script          import core as grass
 
 from core.gcmd             import RunCommand, GError, GMessage
 from core.settings         import UserSettings, GetDisplayVectSettings
-from core.utils            import SetAddOnPath
+from core.utils            import SetAddOnPath, GetLayerNameFromCmd
 from core.events           import EVT_SHOW_NOTIFICATION, EVT_MAP_CREATED
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
@@ -50,7 +50,7 @@ from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
-from gui_core.goutput      import GConsole, GC_SEARCH, GC_PROMPT, EVT_OUTPUT_TEXT
+from gui_core.goutput      import GConsole, GC_SEARCH, GC_PROMPT, EVT_OUTPUT_TEXT, EVT_IGNORED_CMD_RUN
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
@@ -259,10 +259,13 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page = self.notebookLayers, text = _("Map layers"), name = 'layers')
         
         # create 'command output' text area
-        self.goutput = GConsole(self, frame = self,
-                                gcstyle = GC_SEARCH | GC_PROMPT)
+        self.goutput = GConsole(self,
+                                gcstyle = GC_SEARCH | GC_PROMPT,
+                                ignoredCmdPattern = '^d\..*')
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
         self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
+        self.goutput.Bind(EVT_IGNORED_CMD_RUN,
+                          lambda event: self.DisplayCmdRun(event.cmd))
         self._setCopyingOfSelectedText()
         
         # create 'search module' notebook page
@@ -532,6 +535,52 @@ class GMFrame(wx.Frame):
         if event.priority >= 3:
             self.SetFocus()
             self.Raise()
+
+    def DisplayCmdRun(self, command):
+        """!Handles display commands.
+
+        @param command command in a list
+        """
+        try:
+            # display GRASS commands
+            layertype = {'d.rast'         : 'raster',
+                         'd.rast3d'       : '3d-raster',
+                         'd.rgb'          : 'rgb',
+                         'd.his'          : 'his',
+                         'd.shaded'       : 'shaded',
+                         'd.legend'       : 'rastleg',
+                         'd.rast.arrow'   : 'rastarrow',
+                         'd.rast.num'     : 'rastnum',
+                         'd.rast.leg'     : 'maplegend',
+                         'd.vect'         : 'vector',
+                         'd.thematic.area': 'thememap',
+                         'd.vect.chart'   : 'themechart',
+                         'd.grid'         : 'grid',
+                         'd.geodesic'     : 'geodesic',
+                         'd.rhumbline'    : 'rhumb',
+                         'd.labels'       : 'labels',
+                         'd.barscale'     : 'barscale',
+                         'd.redraw'       : 'redraw'}[command[0]]
+        except KeyError:
+            GMessage(parent = self,
+                     message = _("Command '%s' not yet implemented in the WxGUI. "
+                                 "Try adding it as a command layer instead.") % command[0])
+            return
+        
+        if layertype == 'barscale':
+            self.GetLayerTree().GetMapDisplay().OnAddBarscale(None)
+        elif layertype == 'rastleg':
+            self.GetLayerTree().GetMapDisplay().OnAddLegend(None)
+        elif layertype == 'redraw':
+            self.GetLayerTree().GetMapDisplay().OnRender(None)
+        else:
+            # add layer into layer tree
+            lname, found = GetLayerNameFromCmd(command, fullyQualified = True,
+                                               layerType = layertype)
+            if found:
+                self.GetLayerTree().AddLayer(ltype = layertype,
+                                             lname = lname,
+                                             lcmd = command)
 
     def GetLayerNotebook(self):
         """!Get Layers Notebook"""
