@@ -23,3 +23,8 @@ from wx.lib.newevent import NewCommandEvent
 # The message attribute contains the text of the message (plain text)
 gShowNotification, EVT_SHOW_NOTIFICATION = NewCommandEvent()
 
+
+# Occurs event when some map is created or updated by a module.
+# attributes: name: map name, ltype: map type,
+# add: if map should be added to layer tree (questionable attribute)
+gMapCreated, EVT_MAP_CREATED = NewCommandEvent()

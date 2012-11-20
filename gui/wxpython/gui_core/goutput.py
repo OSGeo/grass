@@ -39,11 +39,11 @@ from   grass.script import task as gtask
 from core            import globalvar
 from core            import utils
 from core.gcmd       import CommandThread, GMessage, GError, GException, EncodeString
-from core.events     import gShowNotification
+from core.events     import gShowNotification, gMapCreated
 from gui_core.forms  import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
-from core.settings   import UserSettings, GetDisplayVectSettings
+from core.settings   import UserSettings
 from gui_core.widgets import SearchModuleWidget, EVT_MODULE_SELECTED
 from core.modulesdata import ModulesData
 
@@ -866,112 +866,32 @@ class GConsole(wx.SplitterWindow):
         if event.cmd[0] == 'g.gisenv':
             Debug.SetLevel()
             self.Redirect()
-        
-        if self.frame.GetName() == "LayerManager":
-            self.btnCmdAbort.Enable(False)
-            if event.cmd[0] not in globalvar.grassCmd or \
-                    event.cmd[0] == 'r.mapcalc':
-                return
+
+        # do nothing when no map added
+        if event.returncode != 0 or event.aborted:
+            event.Skip()
+            return
+
+        # find which maps were created
+        try:
+            task = GUI(show = None).ParseCommand(event.cmd)
+        except GException, e:
+            print >> sys.stderr, e
+            task = None
+            return
             
-            tree = self.frame.GetLayerTree()
-            display = None
-            if tree:
-                display = tree.GetMapDisplay()
-            if not display or not display.IsAutoRendered():
-                return
-            mapLayers = map(lambda x: x.GetName(),
-                            display.GetMap().GetListOfLayers(l_type = 'raster') +
-                            display.GetMap().GetListOfLayers(l_type = 'vector'))
-            
-            try:
-                task = GUI(show = None).ParseCommand(event.cmd)
-            except GException, e:
-                print >> sys.stderr, e
-                task = None
-                return
-            
-            for p in task.get_options()['params']:
-                if p.get('prompt', '') not in ('raster', 'vector'):
-                    continue
-                mapName = p.get('value', '')
-                if '@' not in mapName:
-                    mapName = mapName + '@' + grass.gisenv()['MAPSET']
-                if mapName in mapLayers:
-                    display.GetWindow().UpdateMap(render = True)
-                    return
-        elif self.frame.GetName() == 'Modeler':
-            pass
-        else: # standalone dialogs
-            dialog = self.frame
-            if hasattr(dialog, "btn_abort"):
-                dialog.btn_abort.Enable(False)
-            
-            if hasattr(dialog, "btn_cancel"):
-                dialog.btn_cancel.Enable(True)
-            
-            if hasattr(dialog, "btn_clipboard"):
-                dialog.btn_clipboard.Enable(True)
-            
-            if hasattr(dialog, "btn_help"):
-                dialog.btn_help.Enable(True)
-            
-            if hasattr(dialog, "btn_run"):
-                dialog.btn_run.Enable(True)
-            
-            if event.returncode == 0 and not event.aborted:
-                try:
-                    winName = self.frame.parent.GetName()
-                except AttributeError:
-                    winName = ''
-                
-                if winName == 'LayerManager':
-                    mapTree = self.frame.parent.GetLayerTree()
-                elif winName == 'LayerTree':
-                    mapTree = self.frame.parent
-                elif winName: # GConsole
-                    mapTree = self.frame.parent.parent.GetLayerTree()
-                else:
-                    mapTree = None
-                
-                cmd = dialog.notebookpanel.createCmd(ignoreErrors = True)
-                if hasattr(dialog, "addbox") and dialog.addbox.IsChecked():
-                    # add created maps into layer tree
-                    for p in dialog.task.get_options()['params']:
-                        prompt = p.get('prompt', '')
-                        if prompt in ('raster', 'vector', '3d-raster') and \
-                                p.get('age', 'old') == 'new' and \
-                                p.get('value', None):
-                            name, found = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
-                                                                    param = p.get('name', ''))
-                            
-                            if mapTree.GetMap().GetListOfLayers(l_name = name):
-                                display = mapTree.GetMapDisplay()
-                                if display and display.IsAutoRendered():
-                                    display.GetWindow().UpdateMap(render = True)
-                                continue
-                            
-                            if prompt == 'raster':
-                                lcmd = ['d.rast',
-                                        'map=%s' % name]
-                            elif prompt == '3d-raster':
-                                lcmd = ['d.rast3d',
-                                        'map=%s' % name]
-                            else:
-                                defaultParams = GetDisplayVectSettings()
-                                lcmd = ['d.vect',
-                                        'map=%s' % name] + defaultParams
-                            mapTree.AddLayer(ltype = prompt,
-                                             lcmd = lcmd,
-                                             lname = name)
-            
-            if hasattr(dialog, "get_dcmd") and \
-                    dialog.get_dcmd is None and \
-                    hasattr(dialog, "closebox") and \
-                    dialog.closebox.IsChecked() and \
-                    (event.returncode == 0 or event.aborted):
-                self.cmdOutput.Update()
-                time.sleep(2)
-                dialog.Close()
+        for p in task.get_options()['params']:
+            prompt = p.get('prompt', '')
+            if prompt in ('raster', 'vector', '3d-raster') and \
+                    p.get('age', 'old') == 'new' and \
+                    p.get('value', None):
+                name = p.get('value')
+                if '@' not in name:
+                    name = name + '@' + grass.gisenv()['MAPSET']
+                mapEvent = gMapCreated(self.GetId(),
+                                       name = name, ltype = prompt, add = None)
+                wx.PostEvent(self, mapEvent)
+
         event.Skip()
 
     def OnProcessPendingOutputWindowEvents(self, event):
