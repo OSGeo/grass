@@ -33,15 +33,17 @@ int main(int argc, char *argv[])
 {
     int i, input, line, nlines, operator;
     int type[2], field[2], ofield[3];
+    double snap_thresh;
     struct GModule *module;
     struct Option *in_opt[2], *out_opt, *type_opt[2], *field_opt[2],
-	*ofield_opt, *operator_opt;
+	*ofield_opt, *operator_opt, *snap_opt;
     struct Flag *table_flag;
     struct Map_info In[2], Out;
     struct line_pnts *Points, *Points2;
     struct line_cats *Cats;
     struct ilist *BList;
     char *desc;
+    int verbose;
 
     struct field_info *Fi = NULL;
     char buf[1000];
@@ -120,6 +122,13 @@ int main(int argc, char *argv[])
     ofield_opt->description = _("If 0 or not given, "
 				"the category is not written");
 
+    snap_opt = G_define_option();
+    snap_opt->key = "snap";
+    snap_opt->label = _("Snapping threshold for boundaries");
+    snap_opt->description = _("Disable snapping with snap <= 0");
+    snap_opt->type = TYPE_DOUBLE;
+    snap_opt->answer = "0";
+
     table_flag = G_define_standard_flag(G_FLG_V_TABLE);
 
     if (G_parser(argc, argv))
@@ -128,6 +137,8 @@ int main(int argc, char *argv[])
     for (input = 0; input < 2; input++) {
 	type[input] = Vect_option_to_types(type_opt[input]);
     }
+    if (type[0] & GV_AREA)
+	type[0] = GV_AREA;
 
     ofield[0] = ofield[1] = ofield[2] = 0;
     i = 0;
@@ -157,6 +168,8 @@ int main(int argc, char *argv[])
 				 G_FATAL_EXIT);
     Vect_check_input_output_name(in_opt[1]->answer, out_opt->answer,
 				 G_FATAL_EXIT);
+
+    snap_thresh = atof(snap_opt->answer);
 
     Points = Vect_new_line_struct();
     Points2 = Vect_new_line_struct();
@@ -196,7 +209,10 @@ int main(int argc, char *argv[])
 
     /* Copy lines to output */
     BList = Vect_new_list();
+    verbose = G_verbose();
+    G_set_verbose(0);
     Vect_build_partial(&Out, GV_BUILD_BASE);
+    G_set_verbose(verbose);
     for (input = 0; input < 2; input++) {
 	int ncats, index, nlines_out, newline;
 
@@ -519,7 +535,7 @@ int main(int argc, char *argv[])
 
     /* AREA x AREA */
     if (type[0] == GV_AREA) {
-	area_area(In, field, &Out, Fi, driver, operator, ofield, attr, BList);
+	area_area(In, field, &Out, Fi, driver, operator, ofield, attr, BList, snap_thresh);
     }
     else {			/* LINE x AREA */
 	line_area(In, field, &Out, Fi, driver, operator, ofield, attr, BList);

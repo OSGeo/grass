@@ -1,6 +1,17 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.overlay</em> allows the user to overlay two vector area maps.
+<em>v.overlay</em> allows the user to overlay two vector maps. Features 
+in <em>ainput</em> can be lines or areas and are cut with areas in 
+<em>binput</em>. Simple clipping can be performed with the <em>and</em> 
+oerator.
+<p>
+If areas in <em>ainput</em> are overlaid with areas in <em>binput</em>, 
+it is sometimes necessary to snap areas of <em>binput</em> to those of 
+<em>ainput</em>, otherwise areas can go missing or many sliver areas 
+can be created. Snapping can be enabled by setting the <em>snap</em> 
+option to a value larger zero. Recommended are values between 
+0.00000001 and 0.0001. Using larger values for snapping can have 
+undesired side-effects.
 <!-- This is outdated 
 There are 3 links attached to features in output map, 
 <ul>
@@ -14,17 +25,37 @@ There are 3 links attached to features in output map,
 <li><b>field 3</b>: category of <i>bfield</i> from <i>binput</i>
 </ul>
 -->
-The resulting output map has a merged attribute-table. The origin column-names
-have a prefix (<em>a_</em> and <em>b_</em>) which results from the ainput- and binput-map.
+<p>
+If the first number of the <em>olayer</em> option is > 0, then the 
+resulting output map has a merged attribute table in the given layer 
+number. The original column names have a prefix (<em>a_</em> and 
+<em>b_</em>) corresponding to <em>ainput</em> and <em>binput</em> map.
+<p>
+If the second number of the <em>olayer</em> option is > 0, then the 
+categories of <em>ainput</em> in layer <em>alayer</em> are transfered to
+the output layer with the second number.
+<p>
+If the third number of the <em>olayer</em> option is > 0, then the 
+categories of <em>binput</em> in layer <em>blayer</em> are transfered to
+the output layer with the third number.
 
 <h2>NOTES</h2>
-Currently only areas are supported for the operators <em>or</em> and <em>xor</em>! See also <a href="v.select.html">v.select</a>.
+Currently only areas in <em>ainput</em> are supported for the operators 
+<em>or</em> and <em>xor</em>! See also <a href="v.select.html">v.select</a>.
 
-The operator defines what kind of operation will be done. Features are written to output,
-if the result of an operation 'ainput operator binput' is true.
+The operator defines what kind of operation will be done. Features are 
+written to output, if the result of an operation 'ainput operator binput' 
+is true.
 <p>
-Attributes of the tables from ainput and binput are joined into a new table
-linked to the output maps new cat-column. 
+If the first number of the <em>olayer</em> option is > 0, then attributes 
+of the tables from ainput and binput are joined into a new table linked 
+to the output map with a new cat column. 
+<p>
+If the second number of the <em>olayer</em> option is > 0, then the 
+attribute table of ainput is copied to the output map. 
+<p>
+If the third number of the <em>olayer</em> option is > 0, then the 
+attribute table of binput is copied to the output map. 
 
 <!-- This is outdated
 <p><div class="code"><pre>
@@ -94,17 +125,18 @@ b_UA_TYPE|UA
 <h2>EXAMPLE LINE TO POLYGON CLIPPING</h2>
 
 Using the North Carolina sample dataset, we clip the roads map to the area
-of city of Raleigh:
+of city of Raleigh, preserving road attributes in layer 1:
 <div class="code"><pre>
 g.region vect=zipcodes_wake
 
-# extract Raleigh city
+# extract Raleigh city:
 v.extract in=zipcodes_wake out=raleigh \
             where="ZIPNAME = 'RALEIGH'"
 
 # clip road network to city polygon:
 v.overlay ainput=roadsmajor atype=line binput=raleigh \
-            out=roadsmajor_raleigh operator=and
+            out=roadsmajor_raleigh operator=and \
+	    olayer=0,1,0
 </pre></div>
 
 <center>
@@ -127,6 +159,7 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh \
 
 <h2>AUTHORS</h2>
 
-Radim Blazek, ITC-Irst, Trento, Italy
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+Markus Metz
 
 <p><i>Last changed: $Date$</i>

@@ -17,7 +17,7 @@
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	      struct field_info *Fi, dbDriver * driver, int operator,
-	      int *ofield, ATTRIBUTES * attr, struct ilist *BList)
+	      int *ofield, ATTRIBUTES * attr, struct ilist *BList, double snap)
 {
     int ret, input, line, nlines, area, nareas;
     int in_area, in_centr, out_cat;
@@ -28,11 +28,20 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
     char buf[1000];
     dbString stmt;
     int nmodif;
+    int verbose;
+
+    verbose = G_verbose();
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     
-    /* optional snap ? */
+    /* optional snap */
+    if (snap > 0) {
+	G_message(_("Snapping lines..."));
+	/* snap boundaries in B to boundaries in A
+	 * not modifying boundaries in A */
+	Vect_snap_lines_list2(Out, BList, GV_BOUNDARY, snap, NULL);
+    }
 
     /* same procedure like for v.in.ogr
      * Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
@@ -54,7 +63,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
     /* ?: May be result of Vect_break_lines() + Vect_remove_duplicates() any dangle or bridge?
      * In that case, calls to Vect_remove_dangles() and Vect_remove_bridges() would be also necessary */
 
+    G_set_verbose(0);
     Vect_build_partial(Out, GV_BUILD_AREAS);
+    G_set_verbose(verbose);
     nlines = Vect_get_num_lines(Out);
     ret = 0;
     for (line = 1; line <= nlines; line++) {
@@ -76,8 +87,10 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	Vect_remove_bridges(Out, NULL, NULL, NULL);
     }
 
+    G_set_verbose(0);
     Vect_build_partial(Out, GV_BUILD_NONE);
     Vect_build_partial(Out, GV_BUILD_BASE);
+    G_set_verbose(verbose);
     G_message(_("Merging lines..."));
     Vect_merge_lines(Out, GV_BOUNDARY, NULL, NULL);
 
@@ -186,7 +199,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 
 	Vect_append_point(Points, Centr[area].x, Centr[area].y, 0.0);
 
-	if (ofield[0]  > 0) {
+	if (ofield[0] > 0) {
 	    /* Add new cats for all combinations of input cats (-1 in cycle for null) */
 	    for (i = -1; i < Centr[area].cat[0]->n_cats; i++) {
 		int j;
@@ -342,6 +355,10 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
     }
 
     /* Delete boundaries */
+    G_set_verbose(0);
+    Vect_build_partial(Out, GV_BUILD_NONE);
+    Vect_build_partial(Out, GV_BUILD_BASE);
+    G_set_verbose(verbose);
     for (line = 1; line <= nlines; line++) {
 	if (Del[line])
 	    Vect_delete_line(Out, line);
