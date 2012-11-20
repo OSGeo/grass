@@ -118,7 +118,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 		Vect_find_area(&(In[input]), Centr[area].x, Centr[area].y);
 	    if (in_area > 0) {
 		in_centr = Vect_get_area_centroid(&(In[input]), in_area);
-		if (in_centr > 0 && ofield[input + 1] > 0) {
+		if (in_centr > 0) {
 		    int i;
 
 		    Vect_read_line(&(In[input]), NULL, Cats, in_centr);
@@ -278,7 +278,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	    }
 	}
 
-	/* Add all cats from imput vectors */
+	/* Add all cats from input vectors */
 	if (ofield[1] > 0 && field[0] > 0) {
 	    for (i = 0; i < Centr[area].cat[0]->n_cats; i++) {
 		if (Centr[area].cat[0]->field[i] == field[0])
