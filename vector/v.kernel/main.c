@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     double sigmaOptimal;
     struct GModule *module;
     double dsize;
-    double term;
+    double term = 0;
 
     double gausmax = 0;
     int notreachable = 0;
@@ -248,8 +248,6 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Optimal standard deviation calculation is supported only for kernel function 'gaussian'."));
 	}
     }
-    
-    setKernelFunction(kernel_function);
 
     if (flag_q->answer) {
 	flag_o->answer = 1;
@@ -309,7 +307,6 @@ int main(int argc, char **argv)
     else {
 	/* check and open the name of output map */
 	if (!flag_q->answer) {
-	    Rast_set_fp_type(DCELL_TYPE);
 	    fdout = Rast_open_new(out_opt->answer, DCELL_TYPE);
 
 	    /* open mask file */
@@ -377,11 +374,16 @@ int main(int argc, char **argv)
 	}
     }
 
-    term = 1. / (pow(sigma, dimension) * pow((2. * M_PI), dimension / 2.));
-
     dmax = sigma;
     if (kernel_function == KERNEL_GAUSSIAN)
-	dmax = sigma * 4.;
+	dmax = sigma * 4.;  /* should be sigma /= 4.; */
+
+    if (net_opt->answer) {
+	setKernelFunction(kernel_function, 1, sigma, &term);
+    }
+    else {
+	setKernelFunction(kernel_function, 2, sigma, &term);
+    }
 
     if (net) {
 	int line, nlines;
@@ -426,7 +428,7 @@ int main(int argc, char **argv)
 		G_debug(3, "  segment = %d, offset = %f, xy = %f %f", seg,
 			offset1, x, y);
 
-		compute_net_distance(x, y, &In, &Net, netmax, sigma,
+		compute_net_distance(x, y, &In, &Net, netmax, sigma, term,
 				     &gaussian, dmax, node_method);
 		gaussian *= multip;
 		if (gaussian > gausmax)
@@ -516,7 +518,7 @@ int main(int argc, char **argv)
 		E = Rast_col_to_easting(col + 0.5, &window);
 
 		/* compute_distance(N, E, &In, sigma, term, &gaussian, dmax); */
-		compute_distance(N, E, &In, sigma, &gaussian, dmax);
+		compute_distance(N, E, &In, sigma, term, &gaussian, dmax);
 
 		output_cell[col] = multip * gaussian;
 		if (gaussian > gausmax)
@@ -697,7 +699,7 @@ int count_node_arcs(struct Map_info *Map, int node)
 /* Compute gausian for x, y along Net, using all points in In */
 void compute_net_distance(double x, double y, struct Map_info *In,
 			  struct Map_info *Net, double netmax, double sigma,
-			  double *gaussian, double dmax, int node_method)
+			  double term, double *gaussian, double dmax, int node_method)
 {
     int i;
     double dist, kernel;
@@ -762,7 +764,7 @@ void compute_net_distance(double x, double y, struct Map_info *In,
 	    continue;
 
 	/* kernel = gaussianKernel(dist / sigma, term); */
-	kernel = kernelFunction(1, sigma, dist);
+	kernel = kernelFunction(term, sigma, dist);
 
 	if (node_method == NODE_EQUAL_SPLIT) {
 	    int j, node;
@@ -790,7 +792,7 @@ void compute_net_distance(double x, double y, struct Map_info *In,
 }
 
 void compute_distance(double N, double E, struct Map_info *In,
-		      double sigma, double *gaussian,
+		      double sigma, double term, double *gaussian,
 		      double dmax)
 {
     int line, nlines;
@@ -830,6 +832,6 @@ void compute_distance(double N, double E, struct Map_info *In,
 
 	if (dist <= dmax)
 	    /* *gaussian += gaussianKernel(dist / sigma, term); */
-	    *gaussian += kernelFunction(2, sigma, dist);
+	    *gaussian += kernelFunction(term, sigma, dist);
     }
 }
