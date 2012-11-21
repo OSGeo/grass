@@ -827,7 +827,10 @@ class ModelFrame(wx.Frame):
         except GException, e:
             GError(parent = self,
                    message = _("Reading model file <%s> failed.\n"
-                               "Invalid file, unable to parse XML document.") % filename)
+                               "Invalid file, unable to parse XML document.\n\n%s") % \
+                       (filename, e),
+                   showTraceback = False)
+            return
         
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
