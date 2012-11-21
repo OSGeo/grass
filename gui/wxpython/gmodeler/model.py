@@ -31,6 +31,7 @@ import copy
 import re
 import mimetypes
 import time
+import locale
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -1778,7 +1779,8 @@ class WriteModelFile:
         
     def _header(self):
         """!Write header"""
-        self.fd.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+        enc = locale.getdefaultlocale()[1]
+        self.fd.write('<?xml version="1.0" encoding="%s"?>\n' % enc)
         self.fd.write('<!DOCTYPE gxm SYSTEM "grass-gxm.dtd">\n')
         self.fd.write('%s<gxm>\n' % (' ' * self.indent))
         self.indent += 4

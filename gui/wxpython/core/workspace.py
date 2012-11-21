@@ -17,11 +17,13 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import locale
 
 import wx
 
 from core.utils     import normalize_whitespace
 from core.settings  import UserSettings
+from core.gcmd      import EncodeString
 from nviz.main      import NvizSettings
 
 class ProcessWorkspaceFile:
@@ -560,7 +562,8 @@ class WriteWorkspaceFile(object):
         self.indent = 0
         
         # write header
-        self.file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+        enc = locale.getdefaultlocale()[1]
+        self.file.write('<?xml version="1.0" encoding="%s"?>\n' % enc)
         self.file.write('<!DOCTYPE gxw SYSTEM "grass-gxw.dtd">\n')
         self.file.write('%s<gxw>\n' % (' ' * self.indent))
         
@@ -668,12 +671,12 @@ class WriteWorkspaceFile(object):
             if type == 'command':
                 cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string=True)
                 self.file.write('%s<layer type="%s" name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, type, cmd, checked));
+                               (' ' * self.indent, type, EncodeString(cmd), checked));
                 self.file.write('%s</layer>\n' % (' ' * self.indent));
             elif type == 'group':
                 name = mapTree.GetItemText(item)
                 self.file.write('%s<group name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, name.encode('utf8'), checked));
+                               (' ' * self.indent, EncodeString(name), checked));
                 self.indent += 4
                 subItem = mapTree.GetFirstChild(item)[0]
                 self.__writeLayer(mapTree, subItem)
@@ -687,7 +690,7 @@ class WriteWorkspaceFile(object):
                 if opacity < 1:
                     name = name.split('(', -1)[0].strip()
                 self.file.write('%s<layer type="%s" name="%s" checked="%d" opacity="%f">\n' % \
-                                    (' ' * self.indent, type, name.encode('utf8'), checked, opacity));
+                                    (' ' * self.indent, type, EncodeString(name), checked, opacity));
                 
                 self.indent += 4
                 # selected ?
