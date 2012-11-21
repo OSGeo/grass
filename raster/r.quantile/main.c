@@ -34,7 +34,7 @@ static unsigned int *slots;
 static DCELL slot_size;
 static unsigned long total;
 static int num_values;
-static unsigned char *slot_bins;
+static unsigned short *slot_bins;
 static int num_bins;
 static struct bin *bins;
 static DCELL *values;
@@ -309,13 +309,16 @@ int main(int argc, char *argv[])
 	    quants[i] = 1.0 * (i + 1) / (num_quants + 1);
     }
 
+    if (num_quants > 65535)
+	G_fatal_error(_("Too many quantiles"));
+
     infile = Rast_open_old(opt.input->answer, "");
 
     Rast_read_fp_range(opt.input->answer, "", &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
 
     slots = G_calloc(num_slots, sizeof(unsigned int));
-    slot_bins = G_calloc(num_slots, sizeof(unsigned char));
+    slot_bins = G_calloc(num_slots, sizeof(unsigned short));
 
     slot_size = (max - min) / num_slots;
 
