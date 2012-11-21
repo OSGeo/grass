@@ -899,12 +899,13 @@ class GMFrame(wx.Frame):
                               "GDAL/OGR: %s\n"
                               "PROJ.4: %s\n"
                               "GEOS: %s\n"
+                              "SQLite: %s\n"
                               "Python: %s\n"
                               "wxPython: %s\n"
                               "%s: %s%s\n"% (_("GRASS version"), vInfo['version'],
                                            _("GRASS SVN Revision"), vInfo['revision'],
                                            _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
-                                           vInfo['gdal'], vInfo['proj4'], vInfo['geos'],
+                                           vInfo['gdal'], vInfo['proj4'], vInfo['geos'], vInfo['sqlite'],
                                            platform.python_version(),
                                            wx.__version__,
                                            _("Platform"), platform.platform(), osgeo4w),

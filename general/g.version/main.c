@@ -31,6 +31,10 @@
 #include <geos_c.h>
 #endif
 
+#ifdef HAVE_SQLITE
+#include <sqlite3.h>
+#endif
+
 #ifndef GRASS_VERSION_UPDATE_PKG
 #define GRASS_VERSION_UPDATE_PKG "0.1"
 #endif
@@ -157,6 +161,17 @@ int main(int argc, char *argv[])
             fprintf(stdout, "geos=\n");
         else
             fprintf(stdout, "%s\n", _("GRASS not compiled with GEOS support"));
+#endif
+#ifdef HAVE_SQLITE
+        if (shell->answer)
+            fprintf(stdout, "sqlite=%s\n", SQLITE_VERSION);
+        else
+            fprintf(stdout, "SQLite: %s\n", SQLITE_VERSION);
+#else
+        if (shell->answer)
+            fprintf(stdout, "sqlite=\n");
+        else
+            fprintf(stdout, "%s\n", _("GRASS not compiled with SQLite support"));
 #endif
     }
     
