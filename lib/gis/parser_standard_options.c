@@ -456,8 +456,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->answer = "1";
 	Opt->label = _("Layer number or name");
 	Opt->description =
-	    _("A single vector map can be connected to multiple database "
-	      "tables. This number determines which table to use. "
+	    _("Vector features can have category values in different layers."
+	      " This number determines which layer to use. "
 	      "When used with direct OGR access this is the layer name.");
 	Opt->gisprompt = "old,layer,layer";
 	break;
