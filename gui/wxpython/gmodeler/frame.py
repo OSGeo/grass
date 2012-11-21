@@ -36,7 +36,7 @@ from core                 import globalvar
 from gui_core.widgets     import GNotebook
 from gui_core.goutput     import GConsole, \
     EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_OUTPUT_TEXT
-from core.events          import EVT_MAP_CREATED
+from core.events          import EVT_MAP_CREATED, EVT_SHOW_NOTIFICATION
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
@@ -112,6 +112,8 @@ class ModelFrame(wx.Frame):
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
         self.Bind(EVT_MAP_CREATED, self.OnMapCreated)
+        self.Bind(EVT_SHOW_NOTIFICATION,
+                  lambda event: self.SetStatusText(event.message))
 
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
