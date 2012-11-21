@@ -34,7 +34,7 @@ int
 Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
 			 int type, struct boxlist *list)
 {
-    int i, line, nlines;
+    int i, line, nlines, ntypes, mtype;
     struct Plus_head *plus;
     struct P_line *Line;
     static struct boxlist *LocList = NULL;
@@ -45,6 +45,45 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
     plus = &(Map->plus);
 
     list->n_values = 0;
+
+    ntypes = mtype = 0;
+    /* count the number of different primitives in Map */
+    if (plus->n_plines != 0) {
+	ntypes++;
+	mtype |= GV_POINT;
+    }
+    if (plus->n_llines != 0) {
+	ntypes++;
+	mtype |= GV_LINE;
+    }
+    if (plus->n_blines != 0) {
+	ntypes++;
+	mtype |= GV_BOUNDARY;
+    }
+    if (plus->n_clines != 0) {
+	ntypes++;
+	mtype |= GV_CENTROID;
+    }
+    if (plus->n_flines != 0) {
+	ntypes++;
+	mtype |= GV_FACE;
+    }
+    if (plus->n_klines != 0) {
+	ntypes++;
+	mtype |= GV_KERNEL;
+    }
+
+    if (ntypes == 1) {
+	/* there is only one type in Map */
+	if (mtype & type)
+	    return dig_select_lines(plus, Box, list);
+	return 0;
+    }
+
+    if (ntypes == 0)
+	/* empty vector */
+	return 0;
+
     if (!LocList) {
 	LocList = (struct boxlist *)G_malloc(sizeof(struct boxlist));
 	dig_init_boxlist(LocList, 1);
