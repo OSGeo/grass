@@ -232,10 +232,6 @@ class ModelSearchDialog(wx.Dialog):
 
     def OnCancel(self, event):
         """Cancel pressed, close window"""
-        # hide autocomplete
-        if self.cmd_prompt.AutoCompActive():
-            self.cmd_prompt.AutoCompCancel()
-        
         self.Hide()
         
     def OnText(self, event):
