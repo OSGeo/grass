@@ -35,7 +35,7 @@ from core.modulesdata     import ModulesData
 from gui_core.widgets     import SearchModuleWidget, EVT_MODULE_SELECTED
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import ElementDialog, MapLayersDialogForModeler
-from gui_core.prompt      import GPromptSTC
+from gui_core.prompt      import GPromptSTC, EVT_GPROMPT_RUN_CMD
 from gui_core.forms       import CmdPanel
 from gui_core.gselect     import Select
 from gmodeler.model       import *
@@ -130,19 +130,21 @@ class ModelSearchDialog(wx.Dialog):
         self.SetName("ModelerDialog")
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
+        self._command = None
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         self.cmdBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                    label=" %s " % _("Command"))
 
         modulesData = ModulesData()
-        self.cmd_prompt = GPromptSTC(parent = self, modulesData = modulesData)
+        self.cmd_prompt = GPromptSTC(parent = self, modulesData = modulesData, updateCmdHistory = False)
+        self.cmd_prompt.Bind(EVT_GPROMPT_RUN_CMD, self.OnCommand)
         self.search = SearchModuleWidget(parent = self.panel,
                                          modulesData = modulesData,
                                          showTip = True)
         self.search.Bind(EVT_MODULE_SELECTED,
                              lambda event:
-                                 self.cmd_prompt.SetTextAndFocus(event.name + ' '))                  
+                                 self.cmd_prompt.SetTextAndFocus(event.name + ' '))
         wx.CallAfter(self.cmd_prompt.SetFocus)
         
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
@@ -186,42 +188,48 @@ class ModelSearchDialog(wx.Dialog):
         """!Get dialog panel"""
         return self.panel
 
-    def GetCmd(self):
-        """!Get command"""
+    def _getCmd(self):
         line = self.cmd_prompt.GetCurLine()[0].strip()
         if len(line) == 0:
-            list()
-        
-        try:
-            cmd = utils.split(str(line))
-        except UnicodeError:
-            cmd = utils.split(EncodeString((line)))
-            
+            cmd = list()
+        else:
+            try:
+                cmd = utils.split(str(line))
+            except UnicodeError:
+                cmd = utils.split(EncodeString((line)))
         return cmd
-    
-    def OnOk(self, event):
-        """!Button 'OK' pressed"""
-        # hide autocomplete
-        if self.cmd_prompt.AutoCompActive():
-            self.cmd_prompt.AutoCompCancel()
-        
-        self.btnOk.SetFocus()
-        cmd = self.GetCmd()
-        
+
+    def GetCmd(self):
+        """!Get command"""
+        return self._command
+
+    def ValidateCmd(self, cmd):
         if len(cmd) < 1:
             GError(parent = self,
                    message = _("Command not defined.\n\n"
                                "Unable to add new action to the model."))
-            return
+            return False
         
         if cmd[0] not in globalvar.grassCmd:
             GError(parent = self,
                    message = _("'%s' is not a GRASS module.\n\n"
                                "Unable to add new action to the model.") % cmd[0])
-            return
-        
-        self.EndModal(wx.ID_OK)
-        
+            return False
+        return True
+
+    def OnCommand(self, event):
+        """!Command in prompt confirmed"""
+        if self.ValidateCmd(event.cmd):
+            self._command = event.cmd
+            self.EndModal(wx.ID_OK)
+
+    def OnOk(self, event):
+        """!Button 'OK' pressed"""
+        cmd = self._getCmd()
+        if self.ValidateCmd(cmd):
+            self._command = cmd
+            self.EndModal(wx.ID_OK)
+
     def OnCancel(self, event):
         """Cancel pressed, close window"""
         # hide autocomplete

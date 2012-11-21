@@ -6,7 +6,12 @@
 Put here only truly general events. Once you find that your event can be
 generated in more than one class, put your event here. Otherwise,
 leave it in your class file.
-        
+
+General notice:
+Command events are propagated to parent windows. However they do not propagate 
+beyond dialogs. Events do not propagate at all.
+
+
 (C) 2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License

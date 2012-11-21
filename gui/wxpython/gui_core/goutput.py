@@ -30,6 +30,8 @@ import Queue
 import codecs
 import locale
 
+sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+
 import wx
 from   wx import stc
 from wx.lib.newevent import NewEvent
@@ -42,7 +44,7 @@ from core            import utils
 from core.gcmd       import CommandThread, GMessage, GError, GException, EncodeString
 from core.events     import gShowNotification, gMapCreated
 from gui_core.forms  import GUI
-from gui_core.prompt import GPromptSTC
+from gui_core.prompt import GPromptSTC, EVT_GPROMPT_RUN_CMD
 from core.debug      import Debug
 from core.settings   import UserSettings
 from gui_core.widgets import SearchModuleWidget, EVT_MODULE_SELECTED
@@ -276,6 +278,9 @@ class GConsole(wx.SplitterWindow):
         # move to the if below
         # search depends on cmd prompt
         self.cmdPrompt = GPromptSTC(parent = self, modulesData = modulesData)
+        self.cmdPrompt.Bind(EVT_GPROMPT_RUN_CMD, 
+                            lambda event: self.RunCmd(command = event.cmd))
+
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
@@ -578,7 +583,7 @@ class GConsole(wx.SplitterWindow):
             # except ignored commands (event is emitted)
 
             if self._ignoredCmdPattern and \
-              re.compile(self._ignoredCmdPattern).search(command[0]) and \
+              re.compile(self._ignoredCmdPattern).search(' '.join(command)) and \
               '--help' not in command:
                 event = gIgnoredCmdRun(cmd = command)
                 wx.PostEvent(self, event)
@@ -1204,3 +1209,30 @@ class GStc(stc.StyledTextCtrl):
                 self.SetStyling(p2 - p1, self.StyleUnknown)
         
         self.EnsureCaretVisible()
+
+
+class GConsoleFrame(wx.Frame):
+    """!Standalone GConsole for testing only"""
+    def __init__(self, parent, id = wx.ID_ANY, title = "GConsole Test Frame",
+                 style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
+        wx.Frame.__init__(self, parent = parent, id = id, title = title)
+
+        panel = wx.Panel(self, id = wx.ID_ANY)
+        self.goutput = GConsole(parent = panel, gcstyle = GC_SEARCH | GC_PROMPT)
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(item = self.goutput, proportion = 1, flag = wx.EXPAND, border = 0)
+
+        panel.SetSizer(mainSizer)
+        mainSizer.Fit(panel)
+        self.SetMinSize((550, 500))
+
+
+def testGConsole():
+    app = wx.PySimpleApp()
+    frame = GConsoleFrame(parent = None)
+    frame.Show()
+    app.MainLoop()
+
+if __name__ == '__main__':
+    testGConsole()

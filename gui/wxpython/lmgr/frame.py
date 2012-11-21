@@ -23,6 +23,7 @@ import os
 import tempfile
 import stat
 import platform
+import re
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -261,11 +262,11 @@ class GMFrame(wx.Frame):
         # create 'command output' text area
         self.goutput = GConsole(self,
                                 gcstyle = GC_SEARCH | GC_PROMPT,
-                                ignoredCmdPattern = '^d\..*')
+                                ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$')
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
         self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
         self.goutput.Bind(EVT_IGNORED_CMD_RUN,
-                          lambda event: self.DisplayCmdRun(event.cmd))
+                          lambda event: self.RunSpecialCmd(event.cmd))
         self._setCopyingOfSelectedText()
         
         # create 'search module' notebook page
@@ -536,11 +537,19 @@ class GMFrame(wx.Frame):
             self.SetFocus()
             self.Raise()
 
-    def DisplayCmdRun(self, command):
+    def RunSpecialCmd(self, command):
+        if re.compile('^d\..*').search(command[0]):
+            self.RunDisplayCmd(command)
+        elif re.compile('r[3]?\.mapcalc').search(command[0]):
+            self.OnMapCalculator(event = None, cmd = command)
+
+    def RunDisplayCmd(self, command):
         """!Handles display commands.
 
         @param command command in a list
         """
+        if not self.currentPage:
+            self.NewDisplay(show = True)
         try:
             # display GRASS commands
             layertype = {'d.rast'         : 'raster',

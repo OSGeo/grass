@@ -29,12 +29,15 @@ import wx
 import wx.stc
 import wx.lib.mixins.listctrl as listmix
 
+from wx.lib.newevent import NewEvent
+
 from grass.script import core as grass
 from grass.script import task as gtask
 
 from core          import globalvar
 from core          import utils
 from core.gcmd     import EncodeString, DecodeString, GetRealCmd
+from core.events   import gShowNotification
 
 class PromptListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """!PopUp window used by GPromptPopUp"""
@@ -464,19 +467,17 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         
         event.Skip()
 
+
+gPromptRunCmd, EVT_GPROMPT_RUN_CMD = NewEvent()
+
 class GPrompt(object):
     """!Abstract class for interactive wxGUI prompt
 
     See subclass GPromptPopUp and GPromptSTC.
     """
-    def __init__(self, parent, modulesData):
+    def __init__(self, parent, modulesData, updateCmdHistory):
         self.parent = parent                 # GConsole
         self.panel  = self.parent.GetPanel()
-        
-        if self.parent.parent.GetName() not in ("LayerManager", "Modeler"):
-            self.standAlone = True
-        else:
-            self.standAlone = False
 
         # probably only subclasses need this
         self.modulesData = modulesData
@@ -490,6 +491,8 @@ class GPrompt(object):
         
         # command description (gtask.grassTask)
         self.cmdDesc   = None
+
+        self._updateCmdHistory = updateCmdHistory
         self.cmdbuffer = self._readHistory()
         self.cmdindex  = len(self.cmdbuffer)
         
@@ -530,16 +533,9 @@ class GPrompt(object):
         
         @param cmdString command to run (given as a string)
         """
-        if self.parent.GetName() == "ModelerDialog":
-            self.parent.OnOk(None)
+        if not cmdString:
             return
-        
-        if not cmdString or self.standAlone:
-            return
-        
-        if cmdString[:2] == 'd.' and not self.parent.parent.GetMapDisplay():
-            self.parent.parent.NewDisplay(show = True)
-                
+
         self.commands.append(cmdString) # trace commands
 
         # parse command into list
@@ -548,28 +544,13 @@ class GPrompt(object):
         except UnicodeError:
             cmd = utils.split(EncodeString((cmdString)))
         cmd = map(DecodeString, cmd)
-        
-        # send the command list to the processor 
-        if cmd[0] in ('r.mapcalc', 'r3.mapcalc') and len(cmd) == 1:
-            self.parent.parent.OnMapCalculator(event = None, cmd = cmd)
-        else:
-            self.parent.RunCmd(cmd)
-            
+
+        wx.PostEvent(self, gPromptRunCmd(cmd = cmd))
+
         # add command to history & clean prompt
         self.UpdateCmdHistory(cmd)
         self.OnCmdErase(None)
-        self.parent.parent.statusbar.SetStatusText('')
-        
-    def OnUpdateStatusBar(self, event):
-        """!Update Layer Manager status bar"""
-        if self.standAlone:
-            return
-        
-        if event is None:
-            self.parent.parent.statusbar.SetStatusText("")
-        else:
-            self.parent.parent.statusbar.SetStatusText(_("Type GRASS command and run by pressing ENTER"))
-            event.Skip()
+        self.ShowStatusText('')
         
     def GetPanel(self):
         """!Get main widget panel"""
@@ -643,9 +624,10 @@ class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
         
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     """!Styled wxGUI prompt with autocomplete and calltips"""    
-    def __init__(self, parent, modulesData, id = wx.ID_ANY, margin = False):
-        GPrompt.__init__(self, parent, modulesData)
-        wx.stc.StyledTextCtrl.__init__(self, self.panel, id)
+    def __init__(self, parent, modulesData, updateCmdHistory = True, margin = False):
+        GPrompt.__init__(self, parent = parent, 
+                         modulesData = modulesData, updateCmdHistory = updateCmdHistory)
+        wx.stc.StyledTextCtrl.__init__(self, self.panel, id = wx.ID_ANY)
         
         #
         # styles
@@ -757,17 +739,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         cmd = text.strip().split(' ')[0]
         
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
-            if cmd in ('r.mapcalc', 'r3.mapcalc') and \
-                    self.parent.parent.GetName() == 'LayerManager':
-                self.parent.parent.OnMapCalculator(event = None, cmd = [cmd])
-                # add command to history & clean prompt
-                self.UpdateCmdHistory([cmd])
-                self.OnCmdErase(None)
-            else:
-                try:
-                    self.cmdDesc = gtask.parse_interface(GetRealCmd(cmd))
-                except IOError:
-                    self.cmdDesc = None
+            try:
+                self.cmdDesc = gtask.parse_interface(GetRealCmd(cmd))
+            except IOError:
+                self.cmdDesc = None
 
     def OnKillFocus(self, event):
         """!Hides autocomplete"""
@@ -788,6 +763,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         
         @param cmd command given as a list
         """
+        if not self._updateCmdHistory:
+            return
         # add command to history    
         self.cmdbuffer.append(' '.join(cmd))
         
@@ -1057,7 +1034,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             pos = self.GetCurrentPos()            
             self.InsertText(pos,txt)
             self.LineEnd()
-            self.parent.parent.statusbar.SetStatusText('')
+
+            self.ShowStatusText('')
             
         elif event.GetKeyCode() == wx.WXK_RETURN and \
                 self.AutoCompActive() == False:
@@ -1069,9 +1047,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             if len(items) == 1:
                 cmd = items[0].strip()
                 if cmd in globalvar.grassCmd and \
-                        cmd != 'r.mapcalc' and \
                         (not self.cmdDesc or cmd != self.cmdDesc.get_name()):
-                    
                     try:
                         self.cmdDesc = gtask.parse_interface(GetRealCmd(cmd))
                     except IOError:
@@ -1083,12 +1059,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
     def ShowStatusText(self, text):
         """!Sets statusbar text, if it's too long, it is cut off"""
-        maxLen = self.parent.parent.statusbar.GetFieldRect(0).GetWidth()/ 7 # any better way?
-        if len(text) < maxLen:
-            self.parent.parent.statusbar.SetStatusText(text)
-        else:
-            self.parent.parent.statusbar.SetStatusText(text[:maxLen]+'...')
-        
+        # event is not propagated beyond dialog
+        # thus when GPrompt in Modeler is inside a dialog, 
+        # it does not show text in modeler statusbar which is probably
+        # the right behaviour. The dialog itself should display the text.
+        wx.PostEvent(self, gShowNotification(self.GetId(), message = text))
         
     def GetTextLeft(self):
         """!Returns all text left of the caret"""
