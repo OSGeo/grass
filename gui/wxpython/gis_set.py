@@ -214,7 +214,7 @@ class GRASSStartup(wx.Frame):
         location = self.GetRCValue("LOCATION_NAME")
         if location == "<UNKNOWN>":
             return
-        if os.path.isdir(os.path.join(self.gisdbase, location)):
+        if not os.path.isdir(os.path.join(self.gisdbase, location)):
             location = None
         
         # list of locations
