@@ -68,6 +68,12 @@ def substitute_db(database):
 
 # create database if doesn't exist
 def create_db(driver, database):
+    if driver == 'sqlite':
+        path = os.path.dirname(database)
+        # check if destination directory exists
+        if not os.path.isdir(path):
+            os.makedirs(path)
+    
     if database in grass.read_command('db.databases', quiet = True,
                                       driver = driver).splitlines():
         return False

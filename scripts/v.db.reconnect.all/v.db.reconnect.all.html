@@ -53,7 +53,7 @@ to <a href="grass-sqlite.html">SQLite</a> database:
 
 <div class="code"><pre>
 v.db.reconnect.all old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
- new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+ new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 </pre></div>
 
 If attribute table doesn't exist in the target database
@@ -66,7 +66,7 @@ vector maps in the current mapset must be defined also <b>-c</b> flag.
 
 <div class="code"><pre>
 v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
- new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+ new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 </pre></div>
 
 To automatically remove original DBF attribute tables after
