@@ -107,7 +107,15 @@ def drop_tab(driver, database, table):
                               driver = driver, database = database,
                               table = table, stderr = nuldev):
         grass.fatal(_("Unable to drop table <%s>") % table)
-    
+        
+# create index on key column
+def create_index(driver, database, table, index_name, key):
+    grass.info(_("Creating index <%s>...") % index_name)
+    if 0 != grass.run_command('db.execute', quiet = True,
+                              driver = driver, database = database,
+                              sql = "create index %s on %s(%s)" % (index_name, table, key)):
+        grass.warning(_("Unable to create index <%s>") % index_name)
+
 def main():
     old_database = substitute_db(options['old_database'])
     if options['new_driver']:
@@ -163,6 +171,10 @@ def main():
                     copy_tab(driver, database, schema_table,
                              new_driver, new_database, new_schema_table)
                 
+                    # try to build index on key column
+                    create_index(new_driver, new_database, new_schema_table,
+                                 table + '_' + key, key)
+                
                 # reconnect tables
                 if 0 != grass.run_command('v.db.connect', flags = 'o', quiet = True, map = vect,
                                           layer = layer, driver = new_driver, database = new_database,
@@ -176,7 +188,10 @@ def main():
             else:
                 grass.warning(_("Layer <%d> will not be reconnected, "
                                 "database or schema do not match.") % layer)
-         
+    
+    grass.info(_("It's recommended to change default DB connection settings. "
+                 "See 'db.connect' for details."))
+    
     return 0
 
 if __name__ == "__main__":

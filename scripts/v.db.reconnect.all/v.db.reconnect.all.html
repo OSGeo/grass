@@ -7,7 +7,9 @@ a link does not match the <b>old_database</b> it is left untouched.
 
 <p>
 Optionally attribute tables in <b>new_database</b> can be created if
-not exist by <b>-c</b> flag. 
+not exist by <b>-c</b> flag. In this case <em>v.db.reconnect.all</em>
+also tries to create index on key column (usually &quot;cat&quot;
+column).
  
 <h2>NOTES</h2>
  
