@@ -36,6 +36,35 @@ from rowio import RowIO
 from category import Category
 from history import History
 
+
+def coor2pixel((north, east), region):
+    """Convert coordinates into a pixel row and col ::
+
+        >>> from pygrass import Region
+        >>> reg = Region()
+        >>> coor2pixel((reg.north, reg.west), reg)
+        (0.0, 0.0)
+        >>> coor2pixel((reg.south, reg.east), reg) == (reg.rows, reg.cols)
+        True
+    """
+    return (libraster.Rast_northing_to_row(north, region.c_region),
+            libraster.Rast_easting_to_col(east, region.c_region))
+
+
+def pixel2coor((row, col), region):
+    """Convert row and col of a pixel into a coordinates ::
+
+        >>> from pygrass import Region
+        >>> reg = Region()
+        >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
+        True
+        >>> pixel2coor((reg.rows, reg.cols), reg) == (reg.south, reg.east)
+        True
+    """
+    return (libraster.Rast_row_to_northing(row, region.c_region),
+            libraster.Rast_col_to_easting(col, region.c_region))
+
+
 class RasterRow(RasterAbstractBase):
     """Raster_row_access": Inherits: "Raster_abstract_base" and implements
     the default row access of the Rast library.
