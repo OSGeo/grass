@@ -59,6 +59,8 @@ int db__driver_list_databases(dbString* path, int npaths,
         
         db_init_string(&spath);
         db_set_string(&spath, cpath);
+        db_append_string(&spath, "/");
+        db_append_string(&spath, "sqlite");
         G_free(cpath);
         
         if (listdb(&spath, 1, handles, count) != DB_OK)
