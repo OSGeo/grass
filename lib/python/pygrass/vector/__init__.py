@@ -75,7 +75,6 @@ class Vector(Info):
         self._topo_level = 1
         self._class_name = 'Vector'
         self.overwrite = False
-        self.dblinks = None
 
     def __repr__(self):
         if self.exist():
