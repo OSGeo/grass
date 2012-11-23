@@ -84,8 +84,9 @@ class GCPWizard(object):
     Start wizard here and finish wizard here
     """
 
-    def __init__(self, parent):
+    def __init__(self, parent, giface):
         self.parent = parent # GMFrame
+        self._giface = giface
 
         #
         # get environmental variables
@@ -222,9 +223,10 @@ class GCPWizard(object):
             #
             # start GCP Manager
             #
-            self.gcpmgr = GCP(self.parent, grwiz=self, size=globalvar.MAP_WINDOW_SIZE,
-                                               toolbars=["gcpdisp"],
-                                               Map=self.SrcMap, lmgr=self.parent)
+            self.gcpmgr = GCP(self.parent, giface = self._giface, 
+                              grwiz=self, size=globalvar.MAP_WINDOW_SIZE,
+                              toolbars=["gcpdisp"],
+                              Map=self.SrcMap, lmgr=self.parent)
 
             # load GCPs
             self.gcpmgr.InitMapDisplay()
@@ -778,11 +780,12 @@ class GCP(MapFrame, ColumnSorterMixin):
     Manages ground control points for georectifying. Calculates RMS statistics.
     Calls i.rectify or v.rectify to georectify map.
     """
-    def __init__(self, parent, grwiz = None, id = wx.ID_ANY,
+    def __init__(self, parent, giface, grwiz = None, id = wx.ID_ANY,
                  title = _("Manage Ground Control Points"),
                  size = (700, 300), toolbars = ["gcpdisp"], Map = None, lmgr = None):
 
         self.grwiz = grwiz # GR Wizard
+        self._giface = giface
 
         if tgt_map['raster'] == '' and tgt_map['vector'] == '':
             self.show_target = False
@@ -790,7 +793,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.show_target = True
         
         #wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
-        MapFrame.__init__(self, parent = parent, title = title, size = size,
+        MapFrame.__init__(self, parent = parent, giface = self._giface, title = title, size = size,
                             Map = Map, toolbars = toolbars, lmgr = lmgr, name = 'GCPMapWindow')
 
         #
@@ -1235,7 +1238,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # if event != None save also to backup file
         if event:
             shutil.copy(self.file['points'], self.file['points_bak'])
-            self.parent.goutput.WriteLog(_('POINTS file saved for group <%s>') % self.xygroup)
+            self._giface.WriteLog(_('POINTS file saved for group <%s>') % self.xygroup)
             #self.SetStatusText(_('POINTS file saved'))
 
     def ReadGCPs(self):
@@ -1421,8 +1424,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
                 self.outname = str(vect.split('@')[0]) + self.extension
-                print self.outname
-                self.parent.goutput.WriteLog(text = _('Transforming <%s>...') % vect,
+                self._giface.WriteLog(text = _('Transforming <%s>...') % vect,
                                              switchPage = True)
                 ret = msg = ''
                 
@@ -1459,14 +1461,15 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.VectGRList.append(self.outname)
             print '*****vector list = ' + str(self.VectGRList)
         else:
-            self.parent.goutput.WriteError(_('Georectification of vector map <%s> failed') %
-                                                   self.outname)
+            self._giface.WriteError(_('Georectification of vector map <%s> failed') %
+                                      self.outname)
 
          
     def OnSettings(self, event):
         """!GCP Manager settings"""
-        dlg = GrSettingsDialog(parent=self, id=wx.ID_ANY, title=_('GCP Manager settings'))
-        
+        dlg = GrSettingsDialog(parent=self, giface=self._giface,
+                               id=wx.ID_ANY, title=_('GCP Manager settings'))
+
         if dlg.ShowModal() == wx.ID_OK:
             pass
         
@@ -1745,9 +1748,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def OnHelp(self, event):
         """!Show GCP Manager manual page"""
-        cmdlist = ['g.manual', 'entry=wxGUI.GCP_Manager']
-        self.parent.goutput.RunCmd(cmdlist, compReg=False,
-                                       switchPage=False)
+        self._giface.Help(entry = 'wxGUI.GCP_Manager')
 
     def OnUpdateActive(self, event):
 
@@ -2341,7 +2342,7 @@ class EditGCP(wx.Dialog):
         return valuelist
 
 class GrSettingsDialog(wx.Dialog):
-    def __init__(self, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize,
+    def __init__(self, parent, id, giface, title, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_DIALOG_STYLE):
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         """
@@ -2826,7 +2827,7 @@ class GrSettingsDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings['gcpman'] = UserSettings.Get(group='gcpman')
         file = UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.goutput.WriteLog(_('GCP Manager settings saved to file \'%s\'.') % file)
+        self._giface.WriteLog(_('GCP Manager settings saved to file \'%s\'.') % file)
         #self.Close()
 
     def OnApply(self, event):

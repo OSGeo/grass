@@ -42,7 +42,7 @@ class MapFrame(SingleMapFrame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
-    def __init__(self, parent=None, title=_("GRASS GIS Manage Ground Control Points"),
+    def __init__(self, parent, giface, title=_("GRASS GIS Manage Ground Control Points"),
                  toolbars=["gcpdisp"], tree=None, notebook=None, lmgr=None,
                  page=None, Map=None, auimgr=None, name = 'GCPMapWindow', **kwargs):
         """!Main map display window with toolbars, statusbar and
@@ -58,13 +58,14 @@ class MapFrame(SingleMapFrame):
         @param kwargs wx.Frame attribures
         """
         
-        SingleMapFrame.__init__(self, parent = parent, title = title,
+        SingleMapFrame.__init__(self, parent = parent, giface = giface, title = title,
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
         
         self._layerManager = lmgr   # Layer Manager object
         self.tree       = tree      # Layer Manager layer tree object
         self.page       = page      # Notebook page holding the layer tree
         self.layerbook  = notebook  # Layer Manager layer tree notebook
+        self._giface = giface
         #
         # Add toolbars
         #
@@ -113,11 +114,11 @@ class MapFrame(SingleMapFrame):
         # Init map display (buffered DC & set default cursor)
         #
         self.grwiz.SwitchEnv('source')
-        self.SrcMapWindow = BufferedWindow(self, id=wx.ID_ANY,
+        self.SrcMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
                                           Map=self.SrcMap, frame = self, tree=self.tree, lmgr=self._layerManager)
 
         self.grwiz.SwitchEnv('target')
-        self.TgtMapWindow = BufferedWindow(self, id=wx.ID_ANY,
+        self.TgtMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
                                           Map=self.TgtMap, frame = self, tree=self.tree, lmgr=self._layerManager)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap

@@ -55,13 +55,14 @@ wxSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
 
 class PreferencesBaseDialog(wx.Dialog):
     """!Base preferences dialog"""
-    def __init__(self, parent, settings, title = _("User settings"),
+    def __init__(self, parent, giface, settings, title = _("User settings"),
                  size = (500, 475),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         self.parent = parent # ModelerFrame
         self.title  = title
         self.size   = size
         self.settings = settings
+        self._giface = giface
         
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
                            style = style)
@@ -148,7 +149,7 @@ class PreferencesBaseDialog(wx.Dialog):
         Posts event EVT_SETTINGS_CHANGED.
         """
         if self._updateSettings():
-            self.parent.goutput.WriteLog(_('Settings applied to current session but not saved'))
+            self._giface.WriteLog(_('Settings applied to current session but not saved'))
             event = wxSettingsChanged()
             wx.PostEvent(self, event)
             self.Close()
@@ -175,7 +176,7 @@ class PreferencesBaseDialog(wx.Dialog):
                 self.settings.Set(group = 'language', key = 'locale', subkey = 'lc_all', value = 'C')
                 lang = 'C'
             self.settings.SaveToFile()
-            self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % self.settings.filePath)
+            self._giface.WriteLog(_('Settings saved to file \'%s\'.') % self.settings.filePath)
             if lang:
                 StoreEnvVariable(key = 'LANG', value = lang)
             else:
@@ -243,8 +244,7 @@ class PreferencesBaseDialog(wx.Dialog):
             size = self.parent.GetSize()
             dim = '%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
             # opened displays
-            for page in range(0, self.parent.GetLayerNotebook().GetPageCount()):
-                mapdisp = self.parent.GetLayerNotebook().GetPage(page).maptree.GetMapDisplay()
+            for mapdisp in self._giface.GetAllMapDisplays():
                 pos  = mapdisp.GetPosition()
                 size = mapdisp.GetSize()
 
@@ -258,10 +258,9 @@ class PreferencesBaseDialog(wx.Dialog):
 
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""
-    def __init__(self, parent, title = _("GUI Settings"),
+    def __init__(self, parent, giface, title = _("GUI Settings"),
                  settings = UserSettings):
-        
-        PreferencesBaseDialog.__init__(self, parent = parent, title = title,
+        PreferencesBaseDialog.__init__(self, parent = parent, giface = giface, title = title,
                                        settings = settings)
         
         # create notebook pages

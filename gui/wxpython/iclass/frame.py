@@ -69,7 +69,7 @@ class IClassMapFrame(DoubleMapFrame):
     
     It is wxGUI counterpart of old i.class module.
     """
-    def __init__(self, parent = None, title = _("Supervised Classification Tool"),
+    def __init__(self, parent = None, giface = None, title = _("Supervised Classification Tool"),
                  toolbars = ["iClassMisc", "iClassMap", "vdigit", "iClass"],
                  size = (875, 600), name = 'IClassWindow', **kwargs):
         """!
@@ -82,9 +82,11 @@ class IClassMapFrame(DoubleMapFrame):
                                 name = name,
                                 firstMap = Map(), secondMap = Map(),
                                 **kwargs)
-        
-        self.firstMapWindow = IClassVDigitWindow(self, map = self.firstMap, frame = self)
-        self.secondMapWindow = BufferedWindow(self, Map = self.secondMap, frame = self)
+        self._giface = giface
+        self.firstMapWindow = IClassVDigitWindow(parent = self, giface = self._giface,
+                                                 map = self.firstMap, frame = self)
+        self.secondMapWindow = BufferedWindow(parent = self, giface = self._giface,
+                                              Map = self.secondMap, frame = self)
         self.MapWindow = self.firstMapWindow # current by default
         
         self._bindWindowsActivation()
@@ -188,8 +190,7 @@ class IClassMapFrame(DoubleMapFrame):
             
     def OnHelp(self, event):
         """!Show help page"""
-        grass.run_command('g.manual',
-                          entry = 'wxGUI.IClass')
+        self._giface.Help(entry = 'wxGUI.IClass')
         
     def CreateTempVector(self):
         """!Create temporary vector map for training areas"""

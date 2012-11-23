@@ -35,7 +35,8 @@ from mapswipe.dialogs   import SwipeMapDialog
 
 
 class SwipeMapFrame(DoubleMapFrame):
-    def __init__(self, parent  = None, title = _("GRASS GIS Map Swipe"), name = "swipe", **kwargs):
+    def __init__(self, parent  = None, giface = None, 
+                 title = _("GRASS GIS Map Swipe"), name = "swipe", **kwargs):
         DoubleMapFrame.__init__(self, parent = parent, title = title, name = name,
                                 firstMap = Map(), secondMap = Map(), **kwargs)
         Debug.msg (1, "SwipeMapFrame.__init__()")
@@ -50,7 +51,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self.AddToolbar(toolbars.pop(0))
         for toolb in toolbars:
             self.AddToolbar(toolb)
-
+        self._giface = giface
         #
         # create widgets
         #
@@ -59,8 +60,10 @@ class SwipeMapFrame(DoubleMapFrame):
         self.sliderH = wx.Slider(self, id = wx.ID_ANY, style = wx.SL_HORIZONTAL)
         self.sliderV = wx.Slider(self, id = wx.ID_ANY, style = wx.SL_VERTICAL)
         
-        self.firstMapWindow = SwipeBufferedWindow(parent = self.splitter, Map = self.firstMap, frame = self)
-        self.secondMapWindow = SwipeBufferedWindow(parent = self.splitter, Map = self.secondMap, frame = self)
+        self.firstMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
+                                                  Map = self.firstMap, frame = self)
+        self.secondMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
+                                                   Map = self.secondMap, frame = self)
         self.MapWindow = self.firstMapWindow # current by default
         self.firstMap.region = self.secondMap.region
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
@@ -459,9 +462,7 @@ class SwipeMapFrame(DoubleMapFrame):
         return True
 
     def OnHelp(self, event):
-        RunCommand('g.manual',
-                   quiet = True,
-                   entry = 'wxGUI.MapSwipe')
+        self._giface.Help(entry = 'wxGUI.MapSwipe')
 
     def OnCloseWindow(self, event):
         self.GetFirstMap().Clean()

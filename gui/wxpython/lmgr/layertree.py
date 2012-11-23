@@ -98,7 +98,7 @@ LMIcons = {
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     """!Creates layer tree structure
     """
-    def __init__(self, parent,
+    def __init__(self, parent, giface,
                  id = wx.ID_ANY, style = wx.SUNKEN_BORDER,
                  ctstyle = CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
@@ -115,6 +115,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         del kwargs['notebook']
         showMapDisplay = kwargs['showMapDisplay']
         del kwargs['showMapDisplay']
+
+        self._giface = giface
         self.treepg = parent                 # notebook page holding layer tree
         self.Map = Map()                     # instance of render.Map to be associated with display
         self.root = None                     # ID of layer tree root node
@@ -149,7 +151,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # init associated map display
         pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
-        self.mapdisplay = MapFrame(self, id = wx.ID_ANY, pos = pos,
+        self.mapdisplay = MapFrame(self, giface = self._giface, id = wx.ID_ANY, pos = pos,
                                    size = globalvar.MAP_WINDOW_SIZE,
                                    style = wx.DEFAULT_FRAME_STYLE,
                                    tree = self, notebook = self.notebook,
@@ -488,14 +490,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()
-        
+
     def OnTopology(self, event):
         """!Rebuild topology of selected vector map"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         cmd = ['v.build',
                'map=%s' % mapLayer.GetName()]
-        self.lmgr.goutput.RunCmd(cmd, switchPage = True)
-        
+        self._giface.RunCmd(cmd, switchPage = True)
+
     def OnSqlQuery(self, event):
         """!Show SQL query window for PostGIS layers
         """
@@ -517,7 +519,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         cmd.append('map=%s' % mapLayer.GetName())
 
         # print output to command log area
-        self.lmgr.goutput.RunCmd(cmd, switchPage = True)
+        self._giface.RunCmd(cmd, switchPage = True)
 
     def OnSetCompRegFromRaster(self, event):
         """!Set computational region from selected raster map (ignore NULLs)"""
@@ -528,8 +530,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                'zoom=%s' % mapLayer.GetName()]
         
         # print output to command log area
-        self.lmgr.goutput.RunCmd(cmd)
-         
+        self._giface.RunCmd(cmd)
+
     def OnSetCompRegFromMap(self, event):
         """!Set computational region from selected raster/vector map
         """
@@ -561,8 +563,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # print output to command log area
         if len(cmd) > 1:
             cmd.append('-p')
-            self.lmgr.goutput.RunCmd(cmd, compReg = False)
-        
+            self._giface.RunCmd(cmd, compReg = False)
+
     def OnProfile(self, event):
         """!Plot profile of given raster map layer"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
@@ -621,8 +623,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnUnivariateStats(self, event):
         """!Univariate raster statistics"""
         name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
-        self.lmgr.goutput.RunCmd(['r.univar', 'map=%s' % name], switchPage = True)
-        
+        self._giface.RunCmd(['r.univar', 'map=%s' % name], switchPage = True)
+
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user
         """
