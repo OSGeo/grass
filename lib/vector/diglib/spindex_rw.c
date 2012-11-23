@@ -715,6 +715,8 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
     /* root node is written out last and its position returned */
 
     while (top >= 0) {
+	if (s[top].sn == NULL)
+	    G_fatal_error("NULL node ptr at top = %d", top);
 	n = s[top].sn;
 	writeout = 1;
 	/* this is an internal node in the RTree
@@ -1305,6 +1307,72 @@ int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
     return 0;
 }
 
+/* read node from file */
+static void rtree_read_node(struct NodeBuffer *nb,
+                              off_t nodepos, struct RTree *t, struct Plus_head *Plus)
+{
+    int i, maxcard;
+    off_t pos;
+    struct gvfile *file = &(Plus->spidx_fp);
+
+    dig_fseek(file, nodepos, SEEK_SET);
+    /* read with dig__fread_port_* fns */
+    dig__fread_port_I(&(nb->n.count), 1, file);
+    dig__fread_port_I(&(nb->n.level), 1, file);
+    maxcard = nb->n.level ? t->nodecard : t->leafcard;
+    for (i = 0; i < maxcard; i++) {
+	dig__fread_port_D(nb->n.branch[i].rect.boundary, NUMSIDES,
+			  file);
+	dig__fread_port_O(&pos, 1, file,
+			  Plus->spidx_port.off_t_size);
+	/* leaf node: vector object IDs are stored in child.id */
+	if (nb->n.level == 0) {
+	    nb->n.branch[i].child.id = (int)pos;
+	}
+	else {
+	    nb->n.branch[i].child.pos = pos;
+	}
+    }
+}
+
+/* get node from buffer or file */
+static struct RTree_Node *rtree_get_node(off_t nodepos, int level,
+                                         struct RTree *t,
+					 struct Plus_head *Plus)
+{
+    int which, i = 0;
+
+    /* check mru first */
+    while (t->nb[level][t->used[level][i]].pos != nodepos &&
+           t->nb[level][t->used[level][i]].pos >= 0 &&
+	   i < NODE_BUFFER_SIZE - 1)
+	i++;
+
+    which = t->used[level][i];
+
+    if (t->nb[level][which].pos != nodepos) {
+	rtree_read_node(&(t->nb[level][which]), nodepos, t, Plus);
+	t->nb[level][which].pos = nodepos;
+    }
+    assert(t->nb[level][which].n.level == level);
+    /* make it mru */
+    if (i) { /* t->used[level][0] != which */
+#if 0
+	t->used[level][i] = t->used[level][0];
+	t->used[level][0] = which;
+#else
+	while (i) {
+	    t->used[level][i] = t->used[level][i - 1];
+	    i--;
+	}
+	t->used[level][0] = which;
+#endif
+    }
+
+    return &(t->nb[level][which].n);
+}
+
+
 /*!
    \brief Search spatial index file
    Can't use regular RTreeSearch() here because sidx must be read
@@ -1321,24 +1389,15 @@ int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
 int rtree_search(struct RTree *t, struct RTree_Rect *r,
                  SearchHitCallback shcb, void *cbarg, struct Plus_head *Plus)
 {
-    int hitCount = 0, found, maxcard;
-    int i, j;
-    struct spidxstack *last;
-    static struct spidxstack s[MAXLEVEL];
-    static int stack_init = 0;
-    int top = 0;
+    int hitCount = 0, found;
+    /* int j, maxcard; */
+    int i;
+    struct spidxpstack s[MAXLEVEL];
+    int top = 0, level;
+    off_t lastpos;
 
     assert(r);
     assert(t);
-
-    if (!stack_init) {
-	for (i = 0; i < MAXLEVEL; i++) {
-	    for (j = 0; j < MAXCARD; j++) {
-		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
-	    }
-	}
-	stack_init = 1;
-    }
 
     /* stack size of t->rootlevel + 1 is enough because of depth first search */
     /* only one node per level on stack at any given time */
@@ -1346,6 +1405,8 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r,
     dig_set_cur_port(&(Plus->spidx_port));
 
     /* add root node position to stack */
+    s[top].sn = rtree_get_node(t->rootpos, t->rootlevel, t, Plus);
+#if 0
     dig_fseek(&(Plus->spidx_fp), t->rootpos, SEEK_SET);
     /* read with dig__fread_port_* fns */
     dig__fread_port_I(&(s[top].sn.count), 1, &(Plus->spidx_fp));
@@ -1364,18 +1425,23 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r,
 	    s[top].sn.branch[j].child.pos = s[top].pos[j];
 	}
     }
+#endif
 
     s[top].branch_id = i = 0;
 
     while (top >= 0) {
-	last = &(s[top]);
-	if (s[top].sn.level > 0) {	/* this is an internal node in the tree */
+	level = s[top].sn->level;
+	if (level > 0) {	/* this is an internal node in the tree */
 	    found = 1;
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
-		if (s[top].pos[i] > 0 &&
-		    RTreeOverlap(r, &(s[top].sn.branch[i].rect), t)) {
+		lastpos = s[top].sn->branch[i].child.pos;
+		if (lastpos > 0 &&
+		    RTreeOverlap(r, &(s[top].sn->branch[i].rect), t)) {
 		    s[top++].branch_id = i + 1;
-		    dig_fseek(&(Plus->spidx_fp), last->pos[i], SEEK_SET);
+		    s[top].sn = rtree_get_node(lastpos, level - 1, t, Plus);
+		    
+#if 0
+		    dig_fseek(&(Plus->spidx_fp), lastpos, SEEK_SET);
 		    /* read with dig__fread_port_* fns */
 		    dig__fread_port_I(&(s[top].sn.count), 1,
 				      &(Plus->spidx_fp));
@@ -1395,7 +1461,7 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r,
 			    s[top].sn.branch[j].child.pos = s[top].pos[j];
 			}
 		    }
-
+#endif
 		    s[top].branch_id = 0;
 		    found = 0;
 		    break;
@@ -1409,12 +1475,12 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r,
 	}
 	else {			/* this is a leaf node */
 	    for (i = 0; i < t->leafcard; i++) {
-		if (s[top].sn.branch[i].child.id &&
-		    RTreeOverlap(r, &(s[top].sn.branch[i].rect), t)) {
+		if (s[top].sn->branch[i].child.id &&
+		    RTreeOverlap(r, &(s[top].sn->branch[i].rect), t)) {
 		    hitCount++;
 		    if (shcb) {	/* call the user-provided callback */
-			if (!shcb((int)s[top].sn.branch[i].child.id,
-				  &s[top].sn.branch[i].rect, cbarg)) {
+			if (!shcb((int)s[top].sn->branch[i].child.id,
+				  &s[top].sn->branch[i].rect, cbarg)) {
 			    /* callback wants to terminate search early */
 			    return hitCount;
 			}
