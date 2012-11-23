@@ -11,6 +11,8 @@ import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 from grass.script import core as grasscore
 
+from pygrass.errors import GrassError
+from pygrass.region import Region
 
 def looking(filter_string, obj):
     """
@@ -93,3 +95,22 @@ def pixel2coor((col, row), region):
     """
     return (libraster.Rast_row_to_northing(row, region.c_region),
             libraster.Rast_col_to_easting(col, region.c_region))
+
+
+def get_raster_for_points(point, raster):
+    """Query a raster map for each point feature of a vector
+
+    Parameters
+    -------------
+
+    point: point vector object
+
+    raster: raster object
+    """
+    reg = Region()
+    if not point.is_open():
+        point.open()
+    if point.num_primitive_of('point') == 0:
+        raise GrassError(_("Vector doesn't contain points"))
+    values = [raster.get_value(poi.coords, reg) for poi in point.viter('point')]
+    return values
