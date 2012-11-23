@@ -66,6 +66,8 @@ void Vect_destroy_cats_struct(struct line_cats *);
 int Vect_get_area_cats(const struct Map_info *, int, struct line_cats *);
 int Vect_get_area_cat(const struct Map_info *, int, int);
 int Vect_get_line_cat(const struct Map_info *, int, int);
+struct cat_list *Vect_cats_set_constraint(struct Map_info *, int, char *, char *);
+int Vect_cats_in_constraint(struct line_cats *, int, struct cat_list *);
 
 /* List of categories */
 struct cat_list *Vect_new_cat_list(void);

@@ -5,20 +5,21 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2012 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2).  Read the file COPYING that comes with GRASS for details.
  *
- * \author Original author CERL, probably Dave Gerdes or Mike
- * Higgins
+ * \author Original author CERL, probably Dave Gerdes or Mike Higgins
  * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  * \author Various updates by Martin Landa <landa.martin gmail.com>
+ * \author Various updates by Markus Metz
  */
 
 #include <stdlib.h>
 #include <string.h>
 #include <grass/vector.h>
+#include <grass/dbmi.h>
 #include <grass/glocale.h>
 
 static int cmp(const void *pa, const void *pb);
@@ -91,7 +92,7 @@ void Vect_destroy_cats_struct(struct line_cats *p)
    \brief Add new field/cat to category structure if doesn't exist
    yet.
 
-   \param[in] Cats line_cats structure
+   \param[in,out] Cats line_cats structure
    \param[in] field layer number
    \param[in] cat category number
 
@@ -156,17 +157,15 @@ int Vect_cat_get(const struct line_cats *Cats, int field, int *cat)
 {
     int n, ret;
 
-    /* check input value */
-    /*
-      if (field < 1 || field > GV_FIELD_MAX)
-      return (0);
-    */
-    
     /* field was not found */    
     ret = 0;
     if (cat)
 	*cat = -1;
     
+    /* check input value */
+    if (field < 1 || field > GV_FIELD_MAX)
+	return (0);
+
     /* go through cats and find if field exist */
     for (n = 0; n < Cats->n_cats; n++) {
 	if (Cats->field[n] == field) {
@@ -302,8 +301,8 @@ int Vect_reset_cats(struct line_cats *Cats)
 /*!
    \brief Allocate memory for cat_list structure.
 
-   \return poiter to allocated structure
-   \return NULL on out of memory
+   \return pointer to allocated structure
+   \return NULL if out of memory
  */
 struct cat_list *Vect_new_cat_list()
 {
@@ -354,18 +353,18 @@ void Vect_destroy_cat_list(struct cat_list *p)
    \code
    ...
    str = "2,3,5-9,20"
-   catList = Vect_new_cat_list()
+   cat_list = Vect_new_cat_list()
 
-   Vect_str_to_cat_list(str, catList)
+   Vect_str_to_cat_list(str, cat_list)
    \endcode
    \verbatim
-   catList.field = 0
-   catList.n_ranges = 4
-   catList.min = {2, 3, 5, 20}
-   catList.max = {2, 3, 9, 20}\endverbatim
+   cat_list->field = 0
+   cat_list->n_ranges = 4
+   cat_list->min = {2, 3, 5, 20}
+   cat_list->max = {2, 3, 9, 20}\endverbatim
 
    \param[in] str category list as a string
-   \param[out] list result cat_list structure
+   \param[in,out] list pointer to cat_list structure
 
    \return number of errors in ranges
  */
@@ -442,7 +441,7 @@ int Vect_str_to_cat_list(const char *str, struct cat_list *list)
 
    \param vals array of integers
    \param nvals number of values
-   \param[out] list result cat_list structure
+   \param[in,out] list pointer to cat_list structure
 
    \return number of ranges
  */
@@ -484,7 +483,7 @@ int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
    \param list cat_list structure
 
    \return TRUE if cat is in list
-   \return FALSE if it is not
+   \return FALSE if not
  */
 int Vect_cat_in_cat_list(int cat, const struct cat_list *list)
 {
@@ -496,6 +495,141 @@ int Vect_cat_in_cat_list(int cat, const struct cat_list *list)
 
     return (FALSE);
 }
+
+/*!
+   \brief Set category constraints using 'where' or 'cats' option and layer number.
+
+   \param Map pointer to Map_info structure
+   \param layer layer number
+   \param where where statement
+   \param catstr category list as string
+
+   \return pointer to cat_list structure or NULL
+ */
+struct cat_list *Vect_cats_set_constraint(struct Map_info *Map, int layer,
+                                         char *where, char *catstr)
+{
+    struct cat_list *list = NULL;
+    int ret;
+
+    if (layer < 1) {
+	G_warning(_("Layer number must be > 0 for category constraints"));
+	/* no valid constraints, all categories qualify */
+	return list;
+    }
+
+    /* where has precedence over cats */
+    if (where) {
+	struct field_info *Fi = NULL;
+	dbDriver *driver = NULL;
+	int ncats, *cats = NULL;
+	int i, j;
+
+	if (catstr)
+	    G_warning(_("'%s' and '%s' parameters were supplied, cats will be ignored"), "where", "cats");
+
+	Fi = Vect_get_field(Map, layer);
+	if (!Fi) {
+	    G_fatal_error(_("Database connection not defined for layer %d"),
+			  layer);
+	}
+
+	G_verbose_message(_("Loading categories from table <%s>..."), Fi->table);
+
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	if (driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
+	
+	ncats = db_select_int(driver, Fi->table, Fi->key, where,
+			      &cats);
+	if (ncats == -1)
+		G_fatal_error(_("Unable select records from table <%s>"),
+			      Fi->table);
+	G_verbose_message(_("%d categories loaded"), ncats);
+	    
+	db_close_database_shutdown_driver(driver);
+
+	/* sort */
+	qsort(cats, ncats, sizeof(int), cmp);
+	
+	/* remove duplicates */
+	j = 1;
+	for (i = 1; i < ncats; i++) {
+	    if (cats[i] != cats[j - 1]) {
+		cats[j] = cats[i];
+		j++;
+	    }
+	}
+	ncats = j;
+	
+	/* convert to cat list */
+	list = Vect_new_cat_list();
+	
+	ret = Vect_array_to_cat_list(cats, ncats, list);
+	if (ret > 0)
+	    G_warning(_("%d errors in '%s' option"), ret, "where");
+	
+	if (cats)
+	    G_free(cats);
+    }
+    else if (catstr) {
+	list = Vect_new_cat_list();
+
+	ret = Vect_str_to_cat_list(catstr, list);
+	if (ret > 0)
+	    G_warning(_("%d errors in '%s' option"), ret, "cats");
+    }
+    
+    if (list) {
+	if (list->n_ranges < 1) {
+	    Vect_destroy_cat_list(list);
+	    list = NULL;
+	}
+    }
+	
+    return list;
+}
+
+/*!
+   \brief Check if categories match with category constraints.
+
+   \param Cats line_cats structure
+   \param layer layer number
+   \param list cat_list structure
+
+   \return 0 no match, categories are outside constraints
+   \return 1 match, categories are inside constraints
+ */
+int Vect_cats_in_constraint(struct line_cats *Cats, int layer,
+			      struct cat_list *list)
+{
+    int i;
+
+    if (layer < 1) {
+	G_warning(_("Layer number must be > 0 for category constraints"));
+	/* no valid constraint, all categories qualify */
+	return 1;
+    }
+
+    if (list) {
+	for (i = 0; i < Cats->n_cats; i++) {
+	    if (Cats->field[i] == layer &&
+		Vect_cat_in_cat_list(Cats->cat[i], list)) {
+		return 1;
+	    }
+	}
+	return 0;
+    }
+
+    for (i = 0; i < Cats->n_cats; i++) {
+	if (Cats->field[i] == layer)
+	    return 1;
+    }
+	
+    return 0;
+}
+
 
 /*!
    \brief Check if category is in ordered array of integers.
