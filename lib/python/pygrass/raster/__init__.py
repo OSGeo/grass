@@ -24,6 +24,7 @@ import grass.lib.rowio as librowio
 #
 from pygrass.errors import OpenError, must_be_open
 from pygrass.region import Region
+import pygrass.env as env
 
 #
 # import raster classes
@@ -649,6 +650,19 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         np.memmap._close(self)
         grasscore.try_remove(self.filename)
         self._fd = None
+
+    def get_value(self, point, region=None):
+        """This method returns the pixel value of a given pair of coordinates:
+
+        Parameters
+        ------------
+
+        point = pair of coordinates in tuple object
+        """
+        if not region:
+            region = Region()
+        x, y = env.coor2pixel(point.coords(), region)
+        return self[x][y]
 
 
 def random_map_only_columns(mapname, mtype, overwrite=True, factor=100):
