@@ -203,7 +203,7 @@ class MapFrame(SingleMapFrame):
             return
         
         if self._layerManager:
-            log = self._layerManager.goutput
+            log = self._layerManager.GetLogWindow()
         else:
             log = None
         
@@ -934,11 +934,12 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.SetCursor(self.cursors["pencil"])
         
         # initiating output
-        style = self._layerManager.goutput.cmdOutput.StyleWarning
-        self._giface.WriteLog(_('Click and drag with left mouse button '
+        # TODO: this should be something like:
+        # write important message or write tip
+        self._giface.WriteWarning(_('Click and drag with left mouse button '
                                               'to measure.%s'
                                               'Double click with left button to clear.') % \
-                                                (os.linesep), style)
+                                                (os.linesep))
         if self.Map.projinfo['proj'] != 'xy':
             units = self.Map.projinfo['units']
             self._giface.WriteCmdLog(_('Measuring distance') + ' ('

@@ -624,7 +624,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         fileSettings['nviz'] = UserSettings.Get(group = 'nviz')
         
         UserSettings.SaveToFile(fileSettings)
-        self.parent.goutput.WriteLog(
+        self.parent._gconsole.WriteLog(
                 _('3D view settings saved to file <%s>.') % UserSettings.filePath)
         
         self.Destroy()

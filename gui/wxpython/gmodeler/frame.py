@@ -328,11 +328,11 @@ class ModelFrame(wx.Frame):
             dlg.Destroy()
             
             if rast:
-                self.goutput.RunCmd(['g.remove', 'rast=%s' %','.join(rast)])
+                self._gconsole.RunCmd(['g.remove', 'rast=%s' %','.join(rast)])
             if rast3d:
-                self.goutput.RunCmd(['g.remove', 'rast3d=%s' %','.join(rast3d)])
+                self._gconsole.RunCmd(['g.remove', 'rast3d=%s' %','.join(rast3d)])
             if vect:
-                self.goutput.RunCmd(['g.remove', 'vect=%s' %','.join(vect)])
+                self._gconsole.RunCmd(['g.remove', 'vect=%s' %','.join(vect)])
             
             self.SetStatusText(_("%d maps deleted from current mapset") % \
                                  int(len(rast) + len(rast3d) + len(vect)))
@@ -1559,8 +1559,8 @@ class PythonPanel(wx.Panel):
             mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
             os.chmod(self.filename, mode | stat.S_IXUSR)
         
-        self.parent.goutput.RunCmd([fd.name], switchPage = True,
-                                   skipInterface = True, onDone = self.OnDone)
+        self.parent._gconsole.RunCmd([fd.name], switchPage = True,
+                                     skipInterface = True, onDone = self.OnDone)
         
         event.Skip()
 

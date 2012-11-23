@@ -52,8 +52,9 @@ from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
 from core.gconsole         import GConsole, \
-    EVT_CMD_OUTPUT, EVT_CMD_RUN, EVT_CMD_DONE, EVT_IGNORED_CMD_RUN
-from gui_core.goutput      import GConsoleWindow, GC_SEARCH, GC_PROMPT
+    EVT_CMD_OUTPUT, EVT_CMD_RUN, EVT_CMD_DONE, \
+    EVT_IGNORED_CMD_RUN, EVT_IMPORTANT_CMD_RUN
+from gui_core.goutput      import GConsoleWindow, EVT_GC_CONTENT_CHANGED, GC_SEARCH, GC_PROMPT
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
@@ -270,17 +271,23 @@ class GMFrame(wx.Frame):
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       gcstyle = GC_SEARCH | GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
+        # EVT_CMD_OUTPUT and EVT_GC_CONTENT_CHANGED are similar but should be distinct
+        # (logging/messages may be splited from GConsole commad running interface)
+        # thus, leaving this bind here
         self._gconsole.Bind(EVT_CMD_OUTPUT,
                                 lambda event:
-                                    self._switchPageHandler(event = event, priority = 1))        
-        self._gconsole.Bind(EVT_CMD_RUN,
-                                lambda event:
-                                    self._switchPageHandler(event = event, priority = 2))
-        self._gconsole.Bind(EVT_CMD_DONE,
-                                lambda event:
-                                    self._switchPageHandler(event = event, priority = 3))
-        self.goutput.Bind(EVT_IGNORED_CMD_RUN,
-                          lambda event: self.RunSpecialCmd(event.cmd))
+                                    self._switchPageHandler(event = event, priority = 1))
+        self._gconsole.Bind(EVT_IMPORTANT_CMD_RUN,
+                            lambda event:
+                                self._switchPageHandler(event = event, priority = 2))
+        self._gconsole.Bind(EVT_IGNORED_CMD_RUN,
+                            lambda event: self.RunSpecialCmd(event.cmd))
+        # if you are chnaging GConsoleWindow to GConsole and
+        # EVT_GC_CONTENT_CHANGED to somthing like EVT_LOG_OUTPUT
+        # you are doing right
+        self.goutput.Bind(EVT_GC_CONTENT_CHANGED,
+                          lambda event:
+                              self._switchPageHandler(event = event, priority = 1))
         self._setCopyingOfSelectedText()
         
         # create 'search module' notebook page
@@ -444,7 +451,7 @@ class GMFrame(wx.Frame):
     def OnDone(self, cmd, returncode):
         """Command execution finised"""
         if hasattr(self, "model"):
-            self.model.DeleteIntermediateData(log = self.goutput)
+            self.model.DeleteIntermediateData(log = self._gconsole)
             del self.model
         self.SetStatusText('')
         
@@ -463,7 +470,7 @@ class GMFrame(wx.Frame):
         
         self.model = Model()
         self.model.LoadModel(filename)
-        self.model.Run(log = self.goutput, onDone = self.OnDone, parent = self)
+        self.model.Run(log = self._goutput, onDone = self.OnDone, parent = self)
         
         dlg.Destroy()
         
@@ -645,8 +652,8 @@ class GMFrame(wx.Frame):
             return mlist
 
     def GetLogWindow(self):
-        """!Get widget for command output"""
-        return self.goutput
+        """!Gets console for command output and messages"""
+        return self._gconsole
     
     def GetToolbar(self, name):
         """!Returns toolbar if exists else None"""
@@ -696,7 +703,7 @@ class GMFrame(wx.Frame):
         """!Run command selected from menu"""
         if event:
             cmd = self.GetMenuCmd(event)
-        self.goutput.RunCmd(cmd)
+        self._gconsole.RunCmd(cmd)
 
     def OnMenuCmd(self, event = None, cmd = []):
         """!Parse command selected from menu"""
@@ -799,8 +806,8 @@ class GMFrame(wx.Frame):
             if dlg.ShowModal() == wx.ID_YES:
                 SetAddOnPath(os.pathsep.join(addonPath), key = 'PATH')
         
-        self.goutput.WriteCmdLog(_("Launching script '%s'...") % filename)
-        self.goutput.RunCmd([filename], switchPage = True)
+        self._gconsole.WriteCmdLog(_("Launching script '%s'...") % filename)
+        self._gconsole.RunCmd([filename], switchPage = True)
         
     def OnChangeLocation(self, event):
         """Change current location"""
@@ -881,7 +888,7 @@ class GMFrame(wx.Frame):
 
     def OnNewVector(self, event):
         """!Create new vector map layer"""
-        dlg = CreateNewVector(self, log = self.goutput,
+        dlg = CreateNewVector(self, log = self._gconsole,
                               cmd = (('v.edit',
                                       { 'tool' : 'create' },
                                       'map')))
@@ -908,8 +915,8 @@ class GMFrame(wx.Frame):
         else:
             osgeo4w = ''
         
-        self.goutput.WriteCmdLog(_("System Info"))
-        self.goutput.WriteLog("%s: %s\n"
+        self._gconsole.WriteCmdLog(_("System Info"))
+        self._gconsole.WriteLog("%s: %s\n"
                               "%s: %s\n"
                               "%s: %s (%s)\n"
                               "GDAL/OGR: %s\n"
@@ -926,7 +933,7 @@ class GMFrame(wx.Frame):
                                            wx.__version__,
                                            _("Platform"), platform.platform(), osgeo4w),
                               switchPage = True)
-        self.goutput.WriteCmdLog(' ')
+        self._gconsole.WriteCmdLog(' ')
     
     def OnAboutGRASS(self, event):
         """!Display 'About GRASS' dialog"""
@@ -1364,7 +1371,7 @@ class GMFrame(wx.Frame):
     def OnHelp(self, event):
         """!Show help
         """
-        self.goutput.RunCmd(['g.manual','-i'])
+        self._gconsole.RunCmd(['g.manual','-i'])
         
     def OnIClass(self, event):
         """!Start wxIClass tool"""
@@ -1497,14 +1504,14 @@ class GMFrame(wx.Frame):
                     styles = ','.join(layers[layer])
                     if styles:
                         cmd.append('styles=%s' % styles)
-                    self.goutput.RunCmd(cmd, switchPage = True)
+                    self._gconsole.RunCmd(cmd, switchPage = True)
 
                     self.GetLayerTree().AddLayer(ltype = 'raster',
                                                     lname = layer,
                                                     lcmd = ['d.rast', 'map=%s' % layer],
                                                     multiple = False)
             else:
-                self.goutput.WriteWarning(_("Nothing to import. No WMS layer selected."))
+                self._gconsole.WriteWarning(_("Nothing to import. No WMS layer selected."))
                 
                 
         dlg.Destroy()
@@ -1546,7 +1553,7 @@ class GMFrame(wx.Frame):
         
         dbmanager = AttributeManager(parent = self, id = wx.ID_ANY,
                                      size = wx.Size(500, 300),
-                                     item = layer, log = self.goutput,
+                                     item = layer, log = self._gconsole,
                                      selection = selection)
         
         busy.Destroy()

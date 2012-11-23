@@ -27,6 +27,7 @@ sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 import wx
 from   wx import stc
+from wx.lib.newevent import NewEvent
 
 from core.gcmd       import GError, EncodeString
 from core.events     import gShowNotification
@@ -42,6 +43,11 @@ from core.modulesdata import ModulesData
 GC_EMPTY = 0
 GC_SEARCH = 1
 GC_PROMPT = 2
+
+
+# occurs when a content of console output window was changed
+# some similar event exists in GConsole this will be not neccessary
+gGcContentChanged, EVT_GC_CONTENT_CHANGED = NewEvent()
 
 
 class GConsoleWindow(wx.SplitterWindow):
@@ -103,6 +109,7 @@ class GConsoleWindow(wx.SplitterWindow):
         # text control for command output
         self.cmdOutput = GStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
                                wrap = None)
+        self.cmdOutput.Bind(stc.EVT_STC_CHANGE, self.OnStcChanged)
 
         # information about available modules
         modulesData = ModulesData()
@@ -471,6 +478,10 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.progressbar.SetValue(0) # reset progress bar on '0%'
         event.Skip()
+
+    def OnStcChanged(self, event):
+        newEvent = gGcContentChanged()
+        wx.PostEvent(self, newEvent)
 
     def ResetFocus(self):
         """!Reset focus"""

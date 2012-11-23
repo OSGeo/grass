@@ -651,7 +651,7 @@ class VDigitSettingsDialog(wx.Dialog):
         fileSettings['vdigit'] = UserSettings.Get(group = 'vdigit')
         
         file = UserSettings.SaveToFile(fileSettings)
-        self.parent.GetLayerManager().goutput.WriteLog(_('Vector digitizer settings saved to file <%s>.') % file)
+        self.parent.GetLayerManager().GetLogWindow().WriteLog(_('Vector digitizer settings saved to file <%s>.') % file)
         
         self.Destroy()
 

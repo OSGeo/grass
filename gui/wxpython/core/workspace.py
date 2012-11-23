@@ -1058,8 +1058,8 @@ class ProcessGrcFile(object):
                                     "Number of skipped lines: %(line)d") % \
                                         { 'file' : self.filename, 'line' : self.num_error },
                           caption=_("Warning"), style=wx.OK | wx.ICON_EXCLAMATION)
-            parent.goutput.WriteLog('Map layers loaded from GRC file <%s>' % self.filename)
-            parent.goutput.WriteLog('Skipped lines:\n%s' % self.error)
+            parent._gconsole.WriteLog('Map layers loaded from GRC file <%s>' % self.filename)
+            parent._gconsole.WriteLog('Skipped lines:\n%s' % self.error)
 
         return self.layers
 
