@@ -280,8 +280,7 @@ class MapFrame(SingleMapFrame):
         # erase map window
         self.MapWindow.EraseMap()
         
-        self._giface.WriteCmdLog(_("Starting 3D view mode..."),
-                                 switchPage = False)
+        self._giface.WriteCmdLog(_("Starting 3D view mode..."))
         self.SetStatusText(_("Please wait, loading data..."), 0)
         
         # create GL window
@@ -343,8 +342,7 @@ class MapFrame(SingleMapFrame):
                                                        key = 'statusbarMode',
                                                        subkey = 'selection'))
         self.SetStatusText(_("Please wait, unloading data..."), 0)
-        self._giface.WriteCmdLog(_("Switching back to 2D view mode..."),
-                                  switchPage = False)
+        self._giface.WriteCmdLog(_("Switching back to 2D view mode..."))
         if self.MapWindow3D:
             self.MapWindow3D.OnClose(event = None)
         # switch from MapWindowGL to MapWindow
