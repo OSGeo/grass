@@ -28,12 +28,13 @@ void define_options(struct params *params, struct flags *flags)
         _("Name for output PostGIS layer");
     params->olayer->description = 
         _("If not specified, input name is used");
+    params->olayer->guisection = _("Output settings");
 
     params->olink = G_define_standard_option(G_OPT_V_OUTPUT);
     params->olink->key = "olink";
     params->olink->required = NO;
     params->olink->label = 
-        _("Name for vector map defined as a link to the output PostGIS feature table");
+        _("Name for output vector map defined as a link to the PostGIS feature table");
     params->olink->description = 
         _("If not specified, the vector link is not created. "
           "The link can be also manually created by 'v.external' module.");
@@ -49,15 +50,18 @@ void define_options(struct params *params, struct flags *flags)
     params->opts->multiple = YES;
     params->opts->type = TYPE_STRING;
     params->opts->key_desc = "key=value";
+    params->opts->guisection = _("Output settings");
 
     flags->table = G_define_flag();
     flags->table->key = 't';
     flags->table->description =
         _("Don't export attribute table");
+    flags->table->guisection = _("Output settings");
 
     flags->topo = G_define_flag();
     flags->topo->key = 'l';
     flags->topo->description =
         _("Export PostGIS topology instead of simple features");
+    flags->topo->guisection = _("Output settings");
 }
 
