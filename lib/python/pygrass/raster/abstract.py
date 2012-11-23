@@ -21,7 +21,7 @@ import grass.lib.raster as libraster
 #
 # import pygrass modules
 #
-import pygrass as functions
+from pygrass import functions
 from pygrass.region import Region
 from pygrass.errors import must_be_open
 
