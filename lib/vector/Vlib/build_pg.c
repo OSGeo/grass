@@ -25,6 +25,9 @@
 
 static int build_topo(struct Map_info *, int);
 static int build_topogeom_stmt(const struct Format_info_pg *, int, int, char *);
+static int save_map_bbox(const struct Format_info_pg *, const struct bound_box*);
+static int create_topo_grass(const struct Format_info_pg *);
+static int has_topo_grass(const struct Format_info_pg *);
 #endif
 
 /*!
@@ -157,6 +160,9 @@ int build_topo(struct Map_info *Map, int build)
         Vect_build_nat(Map, build);
     }
     
+    /* store map boundig box in DB */
+    save_map_bbox(pg_info, &(plus->box));
+    
     i = 0;
     Vect_rewind(Map);
     if (Vect__execute_pg(pg_info->conn, "BEGIN"))
@@ -238,4 +244,139 @@ int build_topogeom_stmt(const struct Format_info_pg *pg_info,
 
     return 1;
 }
+
+/*!
+  \brief Store map bounding box in DB head table
+
+  \param pg_info pointer to Format_info_pg struct
+  \param box pointer to bounding box
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int save_map_bbox(const struct Format_info_pg *pg_info, const struct bound_box *box)
+{
+    char stmt[DB_SQL_MAX];
+    
+    /* create if not exists */
+    if (create_topo_grass(pg_info) == -1) {
+	G_warning(_("Unable to create <%s.%s>"), TOPO_SCHEMA, TOPO_TABLE);
+	return 0;
+    }
+    
+    /* update bbox */
+    if (has_topo_grass(pg_info)) {
+	/* -> update */
+	sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = "
+		"'BOX3D(%.12f %.12f %.12f, %.12f %.12f %.12f)'::box3d WHERE %s = %d",
+		TOPO_SCHEMA, TOPO_TABLE, TOPO_BBOX,
+		box->W, box->S, box->B, box->E, box->N, box->T,
+		TOPO_ID, pg_info->toposchema_id);
+    }
+    else {
+	/* -> insert */
+	sprintf(stmt, "INSERT INTO \"%s\".\"%s\" (%s, %s) "
+		"VALUES(%d, 'BOX3D(%.12f %.12f %.12f, %.12f %.12f %.12f)'::box3d)",
+		TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, TOPO_BBOX, pg_info->toposchema_id,
+		box->W, box->S, box->B, box->E, box->N, box->T);
+    }
+    
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+	return -1;
+    }
+    
+    return 1;
+}
+
+/*!
+  \brief Creates 'topology.grass' table if not exists
+
+  \return 0 table already exists
+  \return 1 table successfully added
+  \return -1 on error
+*/
+int create_topo_grass(const struct Format_info_pg *pg_info)
+{
+    char stmt[DB_SQL_MAX];
+
+    PGresult *result;
+    
+    /* check if table exists */
+    sprintf(stmt, "SELECT COUNT(*) FROM information_schema.tables "
+	    "WHERE table_schema = '%s' AND table_name = '%s'",
+	    TOPO_SCHEMA, TOPO_TABLE);
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        PQclear(result);
+        return -1;
+    }
+    
+    if (atoi(PQgetvalue(result, 0, 0)) == 1) {
+	/* table already exists */
+	PQclear(result);
+	return 1;
+    }
+    PQclear(result);
+    
+    G_debug(1, "<%s.%s> created", TOPO_SCHEMA, TOPO_TABLE);
+    
+    /* create table */
+    sprintf(stmt, "CREATE TABLE \"%s\".\"%s\" (%s INTEGER, %s box3d)",
+	    TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, TOPO_BBOX);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+	return -1;
+    }
+    /* add primary key */
+    sprintf(stmt, "ALTER TABLE \"%s\".\"%s\" ADD PRIMARY KEY (%s)",
+	    TOPO_SCHEMA, TOPO_TABLE, TOPO_ID);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+	return -1;
+    }
+
+    /* add constraint */
+    sprintf(stmt, "ALTER TABLE \"%s\".\"%s\" ADD CONSTRAINT \"%s_%s_fkey\" "
+	    "FOREIGN KEY (%s) REFERENCES topology.topology(id)",
+	    TOPO_SCHEMA, TOPO_TABLE, TOPO_TABLE, TOPO_ID, TOPO_ID);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+	return -1;
+    }
+    
+    return 1;
+}
+
+/*!
+  \brief Check if 'topology_id' exists in 'topology.grass'
+
+  \param pg_info pointer to Format_info_pg struct
+
+  \return TRUE if exists
+  \return FALSE otherwise
+  \return -1 on error
+*/
+int has_topo_grass(const struct Format_info_pg *pg_info)
+{
+    int has_topo;
+    char stmt[DB_SQL_MAX];
+    
+    PGresult *result;
+    
+    sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".\"%s\" "
+	    "WHERE %s = %d",
+	    TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, pg_info->toposchema_id);
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        PQclear(result);
+        return -1;
+    }
+    
+    has_topo = FALSE;
+    if (atoi(PQgetvalue(result, 0, 0)) == 1) {
+	/* table already exists */
+	has_topo = TRUE;
+    }
+    PQclear(result);
+
+    return has_topo;
+}
+
 #endif
