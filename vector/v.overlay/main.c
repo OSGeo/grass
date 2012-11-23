@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     snap_opt->label = _("Snapping threshold for boundaries");
     snap_opt->description = _("Disable snapping with snap <= 0");
     snap_opt->type = TYPE_DOUBLE;
-    snap_opt->answer = "0";
+    snap_opt->answer = "1e-8";
 
     table_flag = G_define_standard_flag(G_FLG_V_TABLE);
 
