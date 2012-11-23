@@ -23,6 +23,7 @@ import grass.lib.raster as libraster
 #
 import pygrass.env as env
 from pygrass.region import Region
+from pygrass.errors import must_be_open
 
 #
 # import raster classes
@@ -279,6 +280,21 @@ class RasterAbstractBase(object):
         # update rows and cols attributes
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
+
+    @must_be_open
+    def get_value(self, point, region=None):
+        """This method returns the pixel value of a given pair of coordinates:
+
+        Parameters
+        ------------
+
+        point = pair of coordinates in tuple object
+        """
+        if not region:
+            region = Region()
+        x, y = env.coor2pixel(point.coords(), region)
+        line = self.get_row(int(x))
+        return line[int(y)]
 
     def has_cats(self):
         """Return True if the raster map has categories"""
