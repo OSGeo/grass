@@ -121,6 +121,9 @@ int main(int argc, char *argv[])
     if (Vect_copy_map_lines_field(&In, field, &Out) != 0)
         G_fatal_error(_("Copying features failed"));
     
+    if (flags.topo->answer) 
+        Vect_build_partial(&Out, GV_BUILD_NONE); /* build from scratch */
+    
     Vect_close(&In);
     
     if (Vect_build(&Out) != 1)

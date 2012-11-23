@@ -24,6 +24,7 @@
 #include "pg_local_proto.h"
 
 static int build_topo(struct Map_info *, int);
+static int build_topogeom_stmt(const struct Format_info_pg *, int, int, char *);
 #endif
 
 /*!
@@ -118,9 +119,14 @@ int Vect_build_pg(struct Map_info *Map, int build)
 */
 int build_topo(struct Map_info *Map, int build)
 {
+    int i, type;
+    char stmt[DB_SQL_MAX];
+    
     struct Plus_head *plus;
+    struct Format_info_pg *pg_info;
     
     plus = &(Map->plus);
+    pg_info = &(Map->fInfo.pg);
     
     /* check if upgrade or downgrade */
     if (build < plus->built) { 
@@ -130,6 +136,7 @@ int build_topo(struct Map_info *Map, int build)
     }
     
     if (build != GV_BUILD_ALL) {
+        /* TODO: implement all build levels */
         G_warning(_("Only %s is supported for PostGIS topology"),
                   "GV_BUILD_ALL");
         return 0;
@@ -142,12 +149,93 @@ int build_topo(struct Map_info *Map, int build)
     }
     */
 
-    /* build GRASS-like topology from PostGIS topological
-       primitives */
-    if (Vect_build_nat(Map, build) != 1)
+    /* update TopoGeometry based on GRASS-like topology */
+    if (build < GV_BUILD_BASE)
+        return 1; /* nothing to print */
+    
+    if (plus->built < GV_BUILD_BASE) {
+        Vect_build_nat(Map, build);
+    }
+    
+    i = 0;
+    Vect_rewind(Map);
+    if (Vect__execute_pg(pg_info->conn, "BEGIN"))
         return 0;
     
-    /* update PostGIS topology based on GRASS-like topology */
+    G_message(_("Updating TopoGeometry data..."));
+    while (TRUE) {
+        type = Vect_read_next_line(Map, NULL, NULL);
+        if (type == -1) {
+            G_warning(_("Unable to read vector map"));
+            return 0;
+        }
+        else if (type == -2) {
+            break;
+        }
+        G_progress(++i, 1e3);
+        
+        /* update topogeometry elements in feature table */
+        if (type == GV_POINT || type == GV_LINE) {
+            if (build_topogeom_stmt(pg_info, i, type, stmt) &&
+                Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return 0;
+            }
+        }
+    }
+    G_progress(1, 1);
+    
+    if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
+        return 0;
+
+    return 1;
+}
+
+/*! 
+  \brief Build UPDATE statement for topo geometry element stored in
+  feature table
+
+  \param pg_info so pointer to Format_info_pg
+  \param type feature type (GV_POINT, ...)
+  \param id topology element id
+  \param[out] stmt string buffer
+  
+  \return 1 on success
+  \return 0 on failure
+*/
+int build_topogeom_stmt(const struct Format_info_pg *pg_info,
+                        int id, int type, char *stmt)
+{
+    int topogeom_type;
+    
+    if (type == GV_POINT)
+        topogeom_type = 1;
+    else if (type & GV_LINES)
+        topogeom_type = 2;
+    else {
+        G_warning(_("Unsupported topo geometry type %d"), type);
+        return 0;
+    }
+    
+    /* it's quite slow...
+       
+    sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = "
+            "topology.CreateTopoGeom('%s', %d, 1,"
+            "'{{%d, %d}}'::topology.topoelementarray) "
+            "WHERE %s = %d",
+            pg_info->schema_name, pg_info->table_name,
+            pg_info->topogeom_column, pg_info->toposchema_name,
+            topogeom_type, id, topogeom_type,
+            pg_info->fid_column, id);
+    */
+
+    sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = "
+            "'(%d, 1, %d, %d)'::topology.TopoGeometry "
+            "WHERE %s = %d",
+            pg_info->schema_name, pg_info->table_name,
+            pg_info->topogeom_column, pg_info->toposchema_id,
+            id, topogeom_type, pg_info->fid_column, id);
+
     return 1;
 }
 #endif
