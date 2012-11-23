@@ -21,7 +21,7 @@ import grass.lib.raster as libraster
 #
 # import pygrass modules
 #
-import pygrass.env as env
+import pygrass as functions
 from pygrass.region import Region
 from pygrass.errors import must_be_open
 
@@ -122,7 +122,7 @@ class RasterAbstractBase(object):
     def _set_name(self, newname):
         """Private method to change the Raster name"""
         #import pdb; pdb.set_trace()
-        cleanname = env.clean_map_name(newname)
+        cleanname = functions.clean_map_name(newname)
         if self.exist():
             self.rename(cleanname)
         self._name = cleanname
@@ -212,7 +212,7 @@ class RasterAbstractBase(object):
 
         call the C function `G_find_raster`."""
         if self.name:
-            self.mapset = env.get_mapset_raster(self.name, self.mapset)
+            self.mapset = functions.get_mapset_raster(self.name, self.mapset)
         else:
             return False
         if self.mapset:
@@ -258,7 +258,7 @@ class RasterAbstractBase(object):
     def rename(self, newname):
         """Rename the map"""
         if self.exist():
-            env.rename(self.name, newname, 'rast')
+            functions.rename(self.name, newname, 'rast')
         self._name = newname
 
     def set_from_rast(self, rastname='', mapset=''):
@@ -292,7 +292,7 @@ class RasterAbstractBase(object):
         """
         if not region:
             region = Region()
-        x, y = env.coor2pixel(point.coords(), region)
+        x, y = functions.coor2pixel(point.coords(), region)
         line = self.get_row(int(x))
         return line[int(y)]
 

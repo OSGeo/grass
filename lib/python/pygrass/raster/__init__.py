@@ -24,7 +24,7 @@ import grass.lib.rowio as librowio
 #
 from pygrass.errors import OpenError, must_be_open
 from pygrass.region import Region
-import pygrass.env as env
+from pygrass import functions
 
 #
 # import raster classes
@@ -661,7 +661,7 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         """
         if not region:
             region = Region()
-        x, y = env.coor2pixel(point.coords(), region)
+        x, y = functions.coor2pixel(point.coords(), region)
         return self[x][y]
 
 
