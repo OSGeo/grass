@@ -34,8 +34,9 @@ import wx.lib.flatnotebook    as FN
 
 from core                 import globalvar
 from gui_core.widgets     import GNotebook
-from gui_core.goutput     import GConsole, \
-    EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_OUTPUT_TEXT
+from core.gconsole        import GConsole, \
+    EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_CMD_RUN, EVT_CMD_DONE
+from gui_core.goutput     import GConsoleWindow
 from core.events          import EVT_MAP_CREATED, EVT_SHOW_NOTIFICATION
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
@@ -107,8 +108,15 @@ class ModelFrame(wx.Frame):
         
         self.pythonPanel = PythonPanel(parent = self)
         
-        self.goutput = GConsole(parent = self)
-        self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
+        self._gconsole = GConsole(guiparent = self)
+        self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole)
+        # here events are binded twice
+        self._gconsole.Bind(EVT_CMD_RUN,
+                                lambda event:
+                                    self._switchPageHandler(event = event, priority = 2))
+        self._gconsole.Bind(EVT_CMD_DONE,
+                                lambda event:
+                                    self._switchPageHandler(event = event, priority = 3))
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
@@ -481,7 +489,7 @@ class ModelFrame(wx.Frame):
         
     def OnRunModel(self, event):
         """!Run entire model"""
-        self.model.Run(self.goutput, self.OnDone, parent = self)
+        self.model.Run(self._gconsole, self.OnDone, parent = self)
         
     def OnDone(self, cmd, returncode):
         """!Computation finished"""
@@ -699,13 +707,17 @@ class ModelFrame(wx.Frame):
         
         self.canvas.Refresh()
 
-    def OnOutputText(self, event):
+    def _switchPageHandler(self, event, priority):
+        self._switchPage(priority = priority)
+        event.Skip()
+
+    def _switchPage(self, priority):
         """!Manages @c 'output' notebook page according to event priority."""
-        if event.priority == 1:
+        if priority == 1:
             self.notebook.HighlightPageByName('output')
-        if event.priority >= 2:
+        if priority >= 2:
             self.notebook.SetSelectionByName('output')
-        if event.priority >= 3:
+        if priority >= 3:
             self.SetFocus()
             self.Raise()
 

@@ -19,7 +19,7 @@ class LayerManagerGrassInterface:
         self.lmgr = lmgr
 
     def RunCmd(self, *args, **kwargs):
-        self.lmgr.goutput.RunCmd(*args, **kwargs)
+        self.lmgr._gconsole.RunCmd(*args, **kwargs)
 
     def Help(self, entry):
         cmdlist = ['g.manual', 'entry=%s' % entry]
@@ -27,17 +27,17 @@ class LayerManagerGrassInterface:
 
     def WriteLog(self, text, wrap = None,
                  switchPage = False, priority = 1):
-        self.lmgr.goutput.WriteLog(text = text, wrap = wrap, switchPage = switchPage,
+        self.lmgr._gconsole.WriteLog(text = text, wrap = wrap, switchPage = switchPage,
                                    priority = priority)
 
     def WriteCmdLog(self, line, pid = None, switchPage = True):
-        self.lmgr.goutput.WriteCmdLog(line = line, pid = pid, switchPage = switchPage)
+        self.lmgr._gconsole.WriteCmdLog(line = line, pid = pid, switchPage = switchPage)
 
     def WriteWarning(self, line):
-        self.lmgr.goutput.WriteWarning(line = line)
+        self.lmgr._gconsole.WriteWarning(line = line)
 
     def WriteError(self, line):
-        self.lmgr.goutput.WriteError(line = line)
+        self.lmgr._gconsole.WriteError(line = line)
 
     def GetLayerTree(self):
         return self.lmgr.GetLayerTree()

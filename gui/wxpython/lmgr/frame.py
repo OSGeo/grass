@@ -51,7 +51,9 @@ from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
-from gui_core.goutput      import GConsole, GC_SEARCH, GC_PROMPT, EVT_OUTPUT_TEXT, EVT_IGNORED_CMD_RUN
+from core.gconsole         import GConsole, \
+    EVT_CMD_OUTPUT, EVT_CMD_RUN, EVT_CMD_DONE, EVT_IGNORED_CMD_RUN
+from gui_core.goutput      import GConsoleWindow, GC_SEARCH, GC_PROMPT
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
@@ -208,7 +210,7 @@ class GMFrame(wx.Frame):
             mapdisp.Show()
         
         # redirect stderr to log area
-        self.goutput.Redirect()
+        self._gconsole.Redirect()
         
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * .8))
@@ -263,11 +265,20 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page = self.notebookLayers, text = _("Map layers"), name = 'layers')
         
         # create 'command output' text area
-        self.goutput = GConsole(self,
-                                gcstyle = GC_SEARCH | GC_PROMPT,
-                                ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$')
+        self._gconsole = GConsole(guiparent = self, lmgr = self,
+                                  ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$')
+        self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
+                                      gcstyle = GC_SEARCH | GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
-        self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
+        self._gconsole.Bind(EVT_CMD_OUTPUT,
+                                lambda event:
+                                    self._switchPageHandler(event = event, priority = 1))        
+        self._gconsole.Bind(EVT_CMD_RUN,
+                                lambda event:
+                                    self._switchPageHandler(event = event, priority = 2))
+        self._gconsole.Bind(EVT_CMD_DONE,
+                                lambda event:
+                                    self._switchPageHandler(event = event, priority = 3))
         self.goutput.Bind(EVT_IGNORED_CMD_RUN,
                           lambda event: self.RunSpecialCmd(event.cmd))
         self._setCopyingOfSelectedText()
@@ -530,13 +541,17 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
-    def OnOutputText(self, event):
+    def _switchPageHandler(self, event, priority):
+        self._switchPage(priority = priority)
+        event.Skip()
+
+    def _switchPage(self, priority):
         """!Manages @c 'output' notebook page according to event priority."""
-        if event.priority == 1:
+        if priority == 1:
             self.notebook.HighlightPageByName('output')
-        if event.priority >= 2:
+        if priority >= 2:
             self.notebook.SetSelectionByName('output')
-        if event.priority >= 3:
+        if priority >= 3:
             self.SetFocus()
             self.Raise()
 

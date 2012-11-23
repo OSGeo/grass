@@ -34,7 +34,7 @@ except ImportError:
 import grass.script as grass
 
 from gui_core.menu      import Menu
-from gui_core.goutput   import CmdThread, EVT_CMD_DONE
+from core.gconsole      import CmdThread, EVT_CMD_DONE
 from psmap.toolbars     import PsMapToolbar
 from core.gcmd          import RunCommand, GError, GMessage
 from core.settings      import UserSettings
