@@ -51,10 +51,10 @@ class BufferedWindow(MapWindow, wx.Window):
     can also save the drawing to file by calling the
     SaveToFile() method.
     """
-    def __init__(self, parent, Map, frame,
+    def __init__(self, parent, giface, Map, frame,
                  id = wx.ID_ANY, tree = None, lmgr = None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
-        MapWindow.__init__(self, parent = parent, id = id, Map = Map,
+        MapWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
                            frame = frame, tree = tree, lmgr = lmgr, **kwargs)
         wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
         

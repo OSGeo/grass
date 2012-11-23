@@ -28,10 +28,10 @@ from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplic
 class VDigitWindow(BufferedWindow):
     """!A Buffered window extended for vector digitizer.
     """
-    def __init__(self, parent, Map, frame,
+    def __init__(self, parent, giface, Map, frame,
                  id = wx.ID_ANY, tree = None, lmgr = None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
-        BufferedWindow.__init__(self, parent = parent, id = id, Map = Map,
+        BufferedWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
                                 frame = frame, tree = tree, lmgr = lmgr, style = style, **kwargs)
         
         self.pdcVector = wx.PseudoDC()

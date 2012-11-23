@@ -24,10 +24,10 @@ from core.settings        import UserSettings
 
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""
-    def __init__(self, parent, settings = UserSettings,
+    def __init__(self, parent, giface, settings = UserSettings,
                  title = _("Modeler settings")):
         
-        PreferencesBaseDialog.__init__(self, parent = parent, title = title,
+        PreferencesBaseDialog.__init__(self, parent = parent, giface = giface, title = title,
                                        settings = settings)
         
         # create notebook pages

@@ -45,7 +45,8 @@ import grass.script as grass
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
-from core.settings  import UserSettings
+from core.settings import UserSettings
+from core.giface import StandaloneGrassInterface
 from mapswipe.frame import SwipeMapFrame
 
 
@@ -72,7 +73,7 @@ def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
 
-    frame = SwipeMapFrame()
+    frame = SwipeMapFrame(parent = None, giface = StandaloneGrassInterface())
     
     if first:
         frame.SetFirstRaster(first)

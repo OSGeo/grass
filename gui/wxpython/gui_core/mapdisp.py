@@ -381,7 +381,7 @@ class SingleMapFrame(MapFrameBase):
     @note To access maps use getters only
     (when using class or when writing class itself).
     """
-    def __init__(self, parent = None, id = wx.ID_ANY, title = None,
+    def __init__(self, parent = None, giface = None, id = wx.ID_ANY, title = None,
                  style = wx.DEFAULT_FRAME_STYLE,
                  Map = None,
                  auimgr = None, name = None, **kwargs):

@@ -56,7 +56,7 @@ from gmodeler.pystc       import PyStc
 from grass.script import core as grass
 
 class ModelFrame(wx.Frame):
-    def __init__(self, parent, id = wx.ID_ANY,
+    def __init__(self, parent, giface, id = wx.ID_ANY,
                  title = _("GRASS GIS Graphical Modeler"), **kwargs):
         """!Graphical modeler main window
         
@@ -67,6 +67,7 @@ class ModelFrame(wx.Frame):
         @param kwargs wx.Frames' arguments
         """
         self.parent = parent
+        self._giface = giface
         self.searchDialog = None # module search dialog
         self.baseTitle = title
         self.modelFile = None    # loaded model
@@ -275,7 +276,7 @@ class ModelFrame(wx.Frame):
         
     def OnPreferences(self, event):
         """!Open preferences dialog"""
-        dlg = PreferencesDialog(parent = self)
+        dlg = PreferencesDialog(parent = self, giface = self._giface)
         dlg.CenterOnParent()
         
         dlg.ShowModal()
@@ -283,15 +284,8 @@ class ModelFrame(wx.Frame):
         
     def OnHelp(self, event):
         """!Show help"""
-        if self.parent and self.parent.GetName() == 'LayerManager':
-            log = self.parent.GetLogWindow()
-            log.RunCmd(['g.manual',
-                        'entry=wxGUI.Modeler'])
-        else:
-            RunCommand('g.manual',
-                       quiet = True,
-                       entry = 'wxGUI.Modeler')
-        
+        self._giface.Help(entry = 'wxGUI.Modeler')
+
     def OnModelProperties(self, event):
         """!Model properties dialog"""
         dlg = PropertiesDialog(parent = self)
@@ -714,11 +708,6 @@ class ModelFrame(wx.Frame):
         if event.priority >= 3:
             self.SetFocus()
             self.Raise()
-
-    def OnHelp(self, event):
-        """!Display manual page"""
-        grass.run_command('g.manual',
-                          entry = 'wxGUI.Modeler')
 
     def OnAbout(self, event):
         """!Display About window"""

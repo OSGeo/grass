@@ -66,6 +66,7 @@ from modules.extensions    import InstallExtensionWindow, UninstallExtensionWind
 from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow
+from lmgr.giface           import LayerManagerGrassInterface
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
@@ -90,6 +91,8 @@ class GMFrame(wx.Frame):
         self.SetName("LayerManager")
 
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+
+        self._giface = LayerManagerGrassInterface(self)
 
         self._auimgr = wx.aui.AuiManager(self)
 
@@ -390,11 +393,11 @@ class GMFrame(wx.Frame):
     def OnGCPManager(self, event):
         """!Launch georectifier module
         """
-        GCPWizard(self)
+        GCPWizard(self, self._giface)
 
     def OnGModeler(self, event):
         """!Launch Graphical Modeler"""
-        win = ModelFrame(parent = self)
+        win = ModelFrame(parent = self, giface = self._giface)
         win.CentreOnScreen()
         
         win.Show()
@@ -577,11 +580,11 @@ class GMFrame(wx.Frame):
             return
         
         if layertype == 'barscale':
-            self.GetLayerTree().GetMapDisplay().OnAddBarscale(None)
+            self.GetMapDisplay().OnAddBarscale(None)
         elif layertype == 'rastleg':
-            self.GetLayerTree().GetMapDisplay().OnAddLegend(None)
+            self.GetMapDisplay().OnAddLegend(None)
         elif layertype == 'redraw':
-            self.GetLayerTree().GetMapDisplay().OnRender(None)
+            self.GetMapDisplay().OnRender(None)
         else:
             # add layer into layer tree
             lname, found = GetLayerNameFromCmd(command, fullyQualified = True,
@@ -625,9 +628,7 @@ class GMFrame(wx.Frame):
                 mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
             
             return mlist
-        
-        return None
-    
+
     def GetLogWindow(self):
         """!Get widget for command output"""
         return self.goutput
@@ -1282,10 +1283,7 @@ class GMFrame(wx.Frame):
         """!Close all open map display windows
         """
         displays = list()
-        for page in range(0, self.notebookLayers.GetPageCount()):
-            displays.append(self.notebookLayers.GetPage(page).maptree.GetMapDisplay())
-        
-        for display in displays:
+        for display in self.GetMapDisplay(onlyCurrent = False):
             display.OnCloseWindow(event)
         
     def OnRenameDisplay(self, event):
@@ -1340,7 +1338,7 @@ class GMFrame(wx.Frame):
         """!General GUI preferences/settings
         """
         if not self.dialogs['preferences']:
-            dlg = PreferencesDialog(parent = self)
+            dlg = PreferencesDialog(parent = self, giface = self._giface)
             self.dialogs['preferences'] = dlg
             self.dialogs['preferences'].CenterOnScreen()
             
@@ -1436,31 +1434,31 @@ class GMFrame(wx.Frame):
     
     def OnImportDxfFile(self, event, cmd = None):
         """!Convert multiple DXF layers to GRASS vector map layers"""
-        dlg = DxfImportDialog(parent = self)
+        dlg = DxfImportDialog(parent = self, giface = self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnImportGdalLayers(self, event, cmd = None):
         """!Convert multiple GDAL layers to GRASS raster map layers"""
-        dlg = GdalImportDialog(parent = self)
+        dlg = GdalImportDialog(parent = self, giface = self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnLinkGdalLayers(self, event, cmd = None):
         """!Link multiple GDAL layers to GRASS raster map layers"""
-        dlg = GdalImportDialog(parent = self, link = True)
+        dlg = GdalImportDialog(parent = self, giface = self._giface, link = True)
         dlg.CentreOnScreen()
         dlg.Show()
         
     def OnImportOgrLayers(self, event, cmd = None):
         """!Convert multiple OGR layers to GRASS vector map layers"""
-        dlg = GdalImportDialog(parent = self, ogr = True)
+        dlg = GdalImportDialog(parent = self, giface = self._giface, ogr = True)
         dlg.CentreOnScreen()
         dlg.Show()
         
     def OnLinkOgrLayers(self, event, cmd = None):
         """!Links multiple OGR layers to GRASS vector map layers"""
-        dlg = GdalImportDialog(parent = self, ogr = True, link = True)
+        dlg = GdalImportDialog(parent = self, giface = self._giface, ogr = True, link = True)
         dlg.CentreOnScreen()
         dlg.Show()
         
@@ -1569,7 +1567,8 @@ class GMFrame(wx.Frame):
         self.currentPage = self.notebookLayers.GetCurrentPage()
         
         # create layer tree (tree control for managing GIS layers)  and put on new notebook page
-        self.currentPage.maptree = LayerTree(self.currentPage, id = wx.ID_ANY, pos = wx.DefaultPosition,
+        self.currentPage.maptree = LayerTree(self.currentPage, giface = self._giface,
+                                             id = wx.ID_ANY, pos = wx.DefaultPosition,
                                              size = wx.DefaultSize, style = wx.TR_HAS_BUTTONS |
                                              wx.TR_LINES_AT_ROOT| wx.TR_HIDE_ROOT |
                                              wx.TR_DEFAULT_STYLE| wx.NO_BORDER | wx.FULL_REPAINT_ON_RESIZE,
@@ -1678,7 +1677,7 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.AddMaps([mapName], grassType, check = True)
         else:
-            display = self.GetLayerTree().GetMapDisplay()
+            display = self.GetMapDisplay()
             mapLayers = map(lambda x: x.GetName(),
                             display.GetMap().GetListOfLayers(l_type = ltype))
             if mapName in mapLayers:
@@ -1784,12 +1783,12 @@ class GMFrame(wx.Frame):
     def OnAddRasterArrow(self, event):
         """!Add flow arrows raster map to the current layer tree"""
         self.notebook.SetSelectionByName('layers')
-        tree = self.GetLayerTree()
-        resolution = tree.GetMapDisplay().GetProperty('resolution')
+        mapdisplay = self.GetMapDisplay()
+        resolution = mapdisplay.GetProperty('resolution')
         if not resolution:
             dlg = self.MsgDisplayResolution()
             if dlg.ShowModal() == wx.ID_YES:
-                tree.GetMapDisplay().SetProperty('resolution', True)
+                mapdisplay.SetProperty('resolution', True)
             dlg.Destroy()
 
         self.GetLayerTree().AddLayer('rastarrow')
@@ -1797,14 +1796,14 @@ class GMFrame(wx.Frame):
     def OnAddRasterNum(self, event):
         """!Add cell number raster map to the current layer tree"""
         self.notebook.SetSelectionByName('layers')
-        tree = self.GetLayerTree()
-        resolution = tree.GetMapDisplay().GetProperty('resolution')
+        mapdisplay = self.GetMapDisplay()
+        resolution = mapdisplay.GetProperty('resolution')
         if not resolution:
             limitText = _("Note that cell values can only be displayed for "
                           "regions of less than 10,000 cells.")
             dlg = self.MsgDisplayResolution(limitText)
             if dlg.ShowModal() == wx.ID_YES:
-                tree.GetMapDisplay().SetProperty('resolution', True)
+                mapdisplay.SetProperty('resolution', True)
             dlg.Destroy()
 
         # region = tree.GetMap().GetCurrentRegion()

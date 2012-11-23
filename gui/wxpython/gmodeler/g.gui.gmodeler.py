@@ -41,6 +41,7 @@ import grass.script as grass
 
 sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
+from core.giface import StandaloneGrassInterface
 from gmodeler.frame import ModelFrame
 
 def main():
@@ -49,7 +50,7 @@ def main():
     
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
-    frame = ModelFrame(parent = None)
+    frame = ModelFrame(parent = None, giface = StandaloneGrassInterface())
     if options['file']:
         frame.LoadModelFile(options['file'])
     frame.Show()

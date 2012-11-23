@@ -1787,13 +1787,14 @@ class ImportDialog(wx.Dialog):
         pass
 
 class GdalImportDialog(ImportDialog):
-    def __init__(self, parent, ogr = False, link = False):
+    def __init__(self, parent, giface, ogr = False, link = False):
         """!Dialog for bulk import of various raster/vector data
 
         @param parent parent window
         @param ogr True for OGR (vector) otherwise GDAL (raster)
         @param link True for linking data otherwise importing data
         """
+        self._giface = giface
         self.link = link
         self.ogr  = ogr
         
@@ -1899,8 +1900,7 @@ class GdalImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self.parent.goutput.RunCmd(cmd, switchPage = True,
-                                       onDone = self.AddLayers)
+            self._giface.RunCmd(cmd, switchPage = True, onDone = self.AddLayers)
         
         if popOGR:
             os.environ.pop('GRASS_VECTOR_OGR')
@@ -2023,10 +2023,10 @@ class GdalOutputDialog(wx.Dialog):
         
 class DxfImportDialog(ImportDialog):
     """!Dialog for bulk import of DXF layers""" 
-    def __init__(self, parent):
+    def __init__(self, parent, giface):
         ImportDialog.__init__(self, parent, itype = 'dxf',
                               title = _("Import DXF layers"))
-        
+        self._giface = giface
         self.dsnInput = filebrowse.FileBrowseButton(parent = self.panel, id = wx.ID_ANY, 
                                                     size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
                                                     dialogTitle = _('Choose DXF file to import'),
@@ -2069,8 +2069,7 @@ class DxfImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self.parent.goutput.RunCmd(cmd, switchPage = True,
-                                       onDone = self.AddLayers)
+            self._giface.RunCmd(cmd, switchPage = True, onDone = self.AddLayers)
         
         self.OnCancel()
 

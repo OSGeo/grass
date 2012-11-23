@@ -62,7 +62,7 @@ class MapFrame(SingleMapFrame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
-    def __init__(self, parent = None, title = _("GRASS GIS - Map display"),
+    def __init__(self, parent, giface, title = _("GRASS GIS - Map display"),
                  toolbars = ["map"], tree = None, notebook = None, lmgr = None,
                  page = None, Map = None, auimgr = None, name = 'MapWindow', **kwargs):
         """!Main map display window with toolbars, statusbar and
@@ -81,6 +81,7 @@ class MapFrame(SingleMapFrame):
         SingleMapFrame.__init__(self, parent = parent, title = title,
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
         
+        self._giface = giface
         self._layerManager = lmgr   # Layer Manager object
         self.tree       = tree      # Layer Manager layer tree object
         self.page       = page      # Notebook page holding the layer tree
@@ -128,7 +129,7 @@ class MapFrame(SingleMapFrame):
         #
         # Init map display (buffered DC & set default cursor)
         #
-        self.MapWindow2D = BufferedWindow(self, id = wx.ID_ANY,
+        self.MapWindow2D = BufferedWindow(self, giface = self._giface, id = wx.ID_ANY,
                                           Map = self.Map, frame = self, tree = self.tree, lmgr = self._layerManager)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
@@ -208,7 +209,8 @@ class MapFrame(SingleMapFrame):
         
         if not self.MapWindowVDigit:
             from vdigit.mapwindow import VDigitWindow
-            self.MapWindowVDigit = VDigitWindow(self, id = wx.ID_ANY, frame = self,
+            self.MapWindowVDigit = VDigitWindow(parent = self, giface = self._giface,
+                                                id = wx.ID_ANY, frame = self,
                                                 Map = self.Map, tree = self.tree,
                                                 lmgr = self._layerManager)
             self.MapWindowVDigit.Show()
@@ -278,13 +280,13 @@ class MapFrame(SingleMapFrame):
         # erase map window
         self.MapWindow.EraseMap()
         
-        self._layerManager.goutput.WriteCmdLog(_("Starting 3D view mode..."),
-                                               switchPage = False)
+        self._giface.WriteCmdLog(_("Starting 3D view mode..."),
+                                 switchPage = False)
         self.SetStatusText(_("Please wait, loading data..."), 0)
         
         # create GL window
         if not self.MapWindow3D:
-            self.MapWindow3D = GLWindow(self, id = wx.ID_ANY, frame = self,
+            self.MapWindow3D = GLWindow(self, giface = self._giface, id = wx.ID_ANY, frame = self,
                                         Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self.MapWindow = self.MapWindow3D
             self.MapWindow.SetCursor(self.cursors["default"])
@@ -341,8 +343,8 @@ class MapFrame(SingleMapFrame):
                                                        key = 'statusbarMode',
                                                        subkey = 'selection'))
         self.SetStatusText(_("Please wait, unloading data..."), 0)
-        self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
-                                               switchPage = False)
+        self._giface.WriteCmdLog(_("Switching back to 2D view mode..."),
+                                  switchPage = False)
         if self.MapWindow3D:
             self.MapWindow3D.OnClose(event = None)
         # switch from MapWindowGL to MapWindow
@@ -731,12 +733,12 @@ class MapFrame(SingleMapFrame):
                 lmap = digitToolbar.GetLayer().GetName()
                 for name in vect:
                     if lmap == name:
-                        self._layerManager.goutput.WriteWarning(_("Vector map <%s> "
+                        self._giface.WriteWarning(_("Vector map <%s> "
                                                                   "opened for editing - skipped.") % map)
                         vect.remove(name)
             
             if len(vect) < 1:
-                self._layerManager.goutput.WriteCmdLog(_("Nothing to query."))
+                self._giface.WriteCmdLog(_("Nothing to query."))
                 return
             
             vcmd.append('-a')
@@ -750,12 +752,11 @@ class MapFrame(SingleMapFrame):
         # parse query command(s)
 
         if rast and not self.IsPaneShown('3d'):
-            self._layerManager.goutput.RunCmd(rcmd,
-                                              compReg = False,
-                                              onDone  =  self._QueryMapDone)
+            self._giface.RunCmd(rcmd,
+                                compReg = False,
+                                onDone  =  self._QueryMapDone)
         if vect:
-            self._layerManager.goutput.RunCmd(vcmd,
-                                              onDone = self._QueryMapDone)
+            self._giface.RunCmd(vcmd, onDone = self._QueryMapDone)
         
     def _QueryMapDone(self, cmd, returncode):
         """!Restore settings after querying (restore GRASS_REGION)
@@ -805,7 +806,7 @@ class MapFrame(SingleMapFrame):
                 self.dialogs['attributes'].UpdateDialog(query = ((east, north), qdist),
                                                         action = mode)
         if not self.dialogs['attributes'].IsFound():
-            self._layerManager.goutput.WriteLog(_('Nothing found.'))
+            self._giface.WriteLog(_('Nothing found.'))
         
         cats = self.dialogs['attributes'].GetCats()
         
@@ -936,16 +937,16 @@ class MapFrame(SingleMapFrame):
         
         # initiating output
         style = self._layerManager.goutput.cmdOutput.StyleWarning
-        self._layerManager.goutput.WriteLog(_('Click and drag with left mouse button '
+        self._giface.WriteLog(_('Click and drag with left mouse button '
                                               'to measure.%s'
                                               'Double click with left button to clear.') % \
                                                 (os.linesep), style)
         if self.Map.projinfo['proj'] != 'xy':
             units = self.Map.projinfo['units']
-            self._layerManager.goutput.WriteCmdLog(_('Measuring distance') + ' ('
-                                                   + units + '):')
+            self._giface.WriteCmdLog(_('Measuring distance') + ' ('
+                                      + units + '):')
         else:
-            self._layerManager.goutput.WriteCmdLog(_('Measuring distance:'))
+            self._giface.WriteCmdLog(_('Measuring distance:'))
         
         if self.Map.projinfo['proj'] == 'll':
             try:
@@ -955,7 +956,7 @@ class MapFrame(SingleMapFrame):
 
                 gislib.G_begin_distance_calculations()
             except ImportError, e:
-                self._layerManager.goutput.WriteWarning(_('Geodesic distance is not yet '
+                self._giface.WriteWarning(_('Geodesic distance is not yet '
                                                           'supported by this tool.\n'
                                                           'Reason: %s' % e))
         
@@ -993,7 +994,7 @@ class MapFrame(SingleMapFrame):
                    _('total distance'), strtotdist, tdunits,
                    '-' * 60)
         
-        self._layerManager.goutput.WriteLog(mstring)
+        self._giface.WriteLog(mstring)
         
         return dist
 

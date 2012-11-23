@@ -36,13 +36,14 @@ class MapWindow(object):
      - Pixel2Cell
      - Cell2Pixel (if it is possible)
     """
-    def __init__(self, parent, Map, frame,
+    def __init__(self, parent, giface, Map, frame,
                  id = wx.ID_ANY, tree = None, lmgr = None, **kwargs):
         self.parent = parent # MapFrame
         self.Map    = Map
         self.frame = frame
         self.tree   = tree
         self.lmgr   = lmgr
+        self._giface = giface
         
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing
