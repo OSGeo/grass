@@ -335,7 +335,7 @@ int create_topo_grass(const struct Format_info_pg *pg_info)
 
     /* add constraint */
     sprintf(stmt, "ALTER TABLE \"%s\".\"%s\" ADD CONSTRAINT \"%s_%s_fkey\" "
-	    "FOREIGN KEY (%s) REFERENCES topology.topology(id)",
+	    "FOREIGN KEY (%s) REFERENCES topology.topology(id) ON DELETE CASCADE",
 	    TOPO_SCHEMA, TOPO_TABLE, TOPO_TABLE, TOPO_ID, TOPO_ID);
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
 	return -1;
