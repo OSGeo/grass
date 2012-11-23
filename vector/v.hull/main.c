@@ -86,8 +86,10 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to open vector map <%s>"), sitefile);
     
     layer = Vect_get_field_number(&Map, field->answer);
-    cat_list = parse_filter_options(&Map, layer, where_opt->answer,
-                                  cats_opt->answer);
+    
+    if (layer > 0)
+	cat_list = Vect_cats_set_constraint(&Map, layer, where_opt->answer,
+                                            cats_opt->answer);
     
     /* load site coordinates */
     G_get_window(&window);
