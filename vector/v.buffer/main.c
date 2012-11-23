@@ -180,95 +180,6 @@ int buffer_cats(struct buf_contours *arr_bc, struct spatial_index *si,
     return inside;
 }
 
-static int cmp_int(const void *a, const void *b)
-{
-    int ai = *(int *)a;
-    int bi = *(int *)b;
-    
-    return (ai < bi ? -1 : (ai > bi));
-}
-
-/* parse filter options */
-/* return cat list or NULL */
-struct cat_list *parse_filter_options(struct Map_info *Map, int layer,
-                      char *where, char *catstr)
-{
-    struct cat_list *list = NULL;
-
-    if (where) {
-	struct field_info *Fi = NULL;
-	dbDriver *driver = NULL;
-	int ncats, *cats = NULL;
-	int i, j;
-	
-	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
-	if (catstr)
-	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
-
-	Fi = Vect_get_field(Map, layer);
-	if (!Fi) {
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  layer);
-	}
-
-	G_verbose_message(_("Loading categories from table <%s>..."), Fi->table);
-
-	driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	if (driver == NULL)
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Fi->database, Fi->driver);
-	
-	ncats = db_select_int(driver, Fi->table, Fi->key, where,
-			      &cats);
-	if (ncats == -1)
-		G_fatal_error(_("Unable select records from table <%s>"),
-			      Fi->table);
-	G_verbose_message(_("%d categories loaded"), ncats);
-	    
-	db_close_database_shutdown_driver(driver);
-
-	/* sort */
-	qsort(cats, ncats, sizeof(int), cmp_int);
-	
-	/* remove duplicates */
-	j = 1;
-	for (i = 1; i < ncats; i++) {
-	    if (cats[i] != cats[j - 1]) {
-		cats[j] = cats[i];
-		j++;
-	    }
-	}
-	ncats = j;
-	
-	/* convert to cat list */
-	list = Vect_new_cat_list();
-	
-	Vect_array_to_cat_list(cats, ncats, list);
-	
-	if (cats)
-	    G_free(cats);
-    }
-    else if (catstr) {
-	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", GV_KEY_COLUMN);
-	list = Vect_new_cat_list();
-
-	if (Vect_str_to_cat_list(catstr, list) > 0) {
-	    G_warning(_("Problem loading category values"));
-	}
-    }
-    
-    if (list) {
-	if (list->n_ranges < 1) {
-	    Vect_destroy_cat_list(list);
-	    list = NULL;
-	}
-    }
-	
-    return list;
-}
-
 
 int main(int argc, char *argv[])
 {
@@ -415,8 +326,10 @@ int main(int argc, char *argv[])
     else
 	field = -1;
 
-    cat_list = parse_filter_options(&In, field, where_opt->answer,
-                                  cats_opt->answer);
+    cat_list = NULL;
+    if (field > 0)
+	cat_list = Vect_cats_set_constraint(&In, field, where_opt->answer,
+                                            cats_opt->answer);
 	
     if (bufcol_opt->answer && field == -1)
 	G_fatal_error(_("The bufcol option requires a valid layer."));
@@ -566,21 +479,7 @@ int main(int argc, char *argv[])
 
 	    Vect_read_line(&In, NULL, Cats, centroid);
 
-	    if (cat_list) {
-		int found = 0;
-
-		for (i = 0; i < Cats->n_cats; i++) {
-		    if (Cats->field[i] == field &&
-			Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
-			
-			found = 1;
-			break;
-		    }
-		}
-		if (!found)
-		    continue;
-	    }
-	    else if (field > 0 && !Vect_cat_get(Cats, field, &cat))
+	    if (field > 0 && !Vect_cats_in_constraint(Cats, field, cat_list))
 		continue;
 
 	    Vect_reset_cats(CCats);
@@ -591,6 +490,8 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (bufcol_opt->answer) {
+		Vect_cat_get(Cats, field, &cat);
+
 		ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
 		if (ret != DB_OK) {
 		    G_warning(_("No record for category %d in table <%s>"),
@@ -684,21 +585,7 @@ int main(int argc, char *argv[])
 	    if (!(ltype & type))
 		continue;
 
-	    if (cat_list) {
-		int found = 0;
-
-		for (i = 0; i < Cats->n_cats; i++) {
-		    if (Cats->field[i] == field &&
-			Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
-			
-			found = 1;
-			break;
-		    }
-		}
-		if (!found)
-		    continue;
-	    }
-	    else if (field > 0 && !Vect_cat_get(Cats, field, &cat))
+	    if (field > 0 && !Vect_cats_in_constraint(Cats, field, cat_list))
 		continue;
 
 	    Vect_reset_cats(CCats);
@@ -709,6 +596,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (bufcol_opt->answer) {
+		Vect_cat_get(Cats, field, &cat);
 		ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
 		if (ret != DB_OK) {
 		    G_warning(_("No record for category %d in table <%s>"),
