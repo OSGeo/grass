@@ -53,7 +53,7 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
         int length;
         
         length = strlen(dsn);
-        conninfo = (char *) G_malloc(length - 3);
+        conninfo = (char *) G_malloc(length - 2);
         for (i = 3; i < length; i++)
             conninfo[i-3] = dsn[i];
         conninfo[length-3] = '\0';
