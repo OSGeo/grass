@@ -39,7 +39,7 @@ class StandaloneGrassInterface():
         grass.message(text)
 
     def WriteCmdLog(self, line, pid = None, switchPage = True):
-        grass.message(text)
+        grass.message(line)
 
     def WriteWarning(self, line):
         grass.warning(line)

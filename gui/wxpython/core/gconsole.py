@@ -315,9 +315,16 @@ gWriteCmdLog, EVT_WRITE_CMD_LOG = NewEvent()
 gWriteWarning, EVT_WRITE_WARNING = NewEvent()
 gWriteError, EVT_WRITE_ERROR = NewEvent()
 
-# Occurs when ignored command is called.
+# Occurs when an ignored command is called.
 # Attribute cmd contains command (as a list).
 gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
+
+# Occurs when important command is called.
+# Determined by switchPage and priority parameters of GConsole.RunCmd()
+# currently used only for Layer Manager
+# because others (forms and gmodeler) just wants to see all commands
+# (because commands are the main part of their work)
+gImportantCmdRun, EVT_IMPORTANT_CMD_RUN = NewEvent()
 
 
 class GConsole(wx.EvtHandler):
@@ -406,7 +413,7 @@ class GConsole(wx.EvtHandler):
         wx.PostEvent(self, event)
 
     def RunCmd(self, command, compReg=True, switchPage=False, skipInterface=False,
-               onDone=None, onPrepare=None, userData=None):
+               onDone=None, onPrepare=None, userData=None, priority=1):
         """!Run command typed into console command prompt (GPrompt).
 
         @todo Document the other event.
@@ -418,11 +425,13 @@ class GConsole(wx.EvtHandler):
         (according to ignoredCmdPattern) is run.
         For example, see layer manager which handles d.* on its own.
 
-        @todo all switchPage and priority params are currently broken in this class)
+        @todo replace swichPage and priority by parameter 'silent' or 'important'
+        also possible solution is RunCmdSilently and RunCmdWithoutNotifyingAUser
 
         @param command command given as a list (produced e.g. by utils.split())
         @param compReg True use computation region
         @param switchPage switch to output page
+        @param priority command importance - possible replacement for switchPage
         @param skipInterface True to do not launch GRASS interface
         parser when command has no arguments given
         @param onDone function to be called when command is finished
@@ -502,8 +511,10 @@ class GConsole(wx.EvtHandler):
 
                 # documenting old behavior/implementation:
                 # switch and focus if required
-                # TODO: this probably should be run command event
-                # TODO: this should be solved by the user using userData and onDone
+                # important commad
+                # TODO: add also user data, cmd, ... to the event?
+                importantEvent = gImportantCmdRun()
+                wx.PostEvent(self, importantEvent)
 
                 # activate computational region (set with g.region)
                 # for all non-display commands.

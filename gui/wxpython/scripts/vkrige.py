@@ -99,7 +99,9 @@ class KrigingPanel(wx.Panel):
             self.CreatePage(package = Rpackage, Rinstance = Rinstance, controller = controller)
         
         ## Command output. From menuform module, cmdPanel class
-        self.goutput = goutput.GConsole(parent = self, margin = False)
+        self._console = gconsole.GConsole(guiparent = self, lmgr = None)
+        self.goutput = goutput.GConsoleWindow(parent = self, gconsole = self._gconsole, margin = False,
+                                              gcstyle = goutput.GC_SEARCH | goutput.GC_PROMPT)
         self.goutputId = self.RPackagesBook.GetPageCount()
         self.outpage = self.RPackagesBook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         self._gconsole.Bind(gconsole.EVT_CMD_RUN,
@@ -229,7 +231,7 @@ class KrigingPanel(wx.Panel):
         SelectedPanel = self.RPackagesBook.GetCurrentPage()
         
         if self.RPackagesBook.GetPageText(self.RPackagesBook.GetSelection()) == 'Command output':
-            self.goutput.WriteError("No parameters for running. Please select \"gstat\" tab, check parameters and re-run.")
+            self._gconsole.WriteError("No parameters for running. Please select \"gstat\" tab, check parameters and re-run.")
             return False # no break invoked by above function
         
         # mount command string as it would have been written on CLI
@@ -255,7 +257,7 @@ class KrigingPanel(wx.Panel):
         # give it to the output console
         #@FIXME: it runs the command as a NEW instance. Reimports data, recalculates variogram fit..
         #otherwise I can use Controller() and mimic RunCmd behaviour.
-        self.goutput.RunCmd(command, switchPage = True)
+        self._gconsole.RunCmd(command, switchPage = True)
     
     def OnVarianceCBChecked(self, event):
         self.OutputVarianceMapName.Enable(event.IsChecked())
