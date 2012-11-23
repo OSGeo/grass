@@ -32,14 +32,14 @@
 int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 			double threshold, double alpha, double beta,
 			double gama, double delta, int iterations,
-			struct varray * varray)
+			struct cat_list *cat_list, int layer)
 {
 
     int n_points;
     int n_lines;
     int i, j, index, pindex, iter, type;
     int with_z = 0;
-    struct line_pnts *Points, *Write;
+    struct line_pnts *Points;
     struct line_cats *Cats;
     MATRIX k, dx, dy, fx, fy, kinv, dx_old, dy_old;
     POINT *parray;
@@ -51,14 +51,13 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 
     /* initialize structrures and read the number of points */
     Points = Vect_new_line_struct();
-    Write = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     n_lines = Vect_get_num_lines(In);
     n_points = 0;
 
     for (i = 1; i <= n_lines; i++) {
-	type = Vect_read_line(In, Points, NULL, i);
-	if (varray && !varray->c[i])
+	type = Vect_read_line(In, Points, Cats, i);
+	if (layer > 0 && !Vect_cats_in_constraint(Cats, layer, cat_list))
 	    continue;
 	if (type & GV_LINE)
 	    n_points += Points->n_points;
@@ -81,9 +80,12 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     pindex = 0;
     for (i = 1; i <= n_lines; i++) {
 	G_percent(i, n_lines, 1);
-	type = Vect_read_line(In, Points, NULL, i);
-	if (type != GV_LINE || (varray && !varray->c[i]))
+	type = Vect_read_line(In, Points, Cats, i);
+	if (type != GV_LINE)
 	    continue;
+	if (layer > 0 && !Vect_cats_in_constraint(Cats, layer, cat_list))
+	    continue;
+
 	for (j = 0; j < Points->n_points; j++) {
 	    int q, findex;
 	    POINT cur;
@@ -290,7 +292,8 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     for (i = 1; i <= n_lines; i++) {
 	int type = Vect_read_line(In, Points, Cats, i);
 
-	if (type != GV_LINE || (varray && !varray->c[i])) {
+	if (type != GV_LINE ||
+	    (layer > 0 && !Vect_cats_in_constraint(Cats, layer, cat_list))) {
 	    Vect_write_line(Out, type, Points, Cats);
 	    continue;
 	}
@@ -318,5 +321,6 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     matrix_free(fy);
     matrix_free(dx_old);
     matrix_free(dy_old);
+
     return 0;
 }

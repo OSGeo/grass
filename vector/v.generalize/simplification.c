@@ -225,7 +225,6 @@ int vertex_reduction(struct line_pnts *Points, double eps, int with_z)
  */
 int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
 {
-    int seg1, seg2;
     int i, count;
     POINT x0, x1, x2, sub, diff;
     double subd, diffd, sp, dist;
@@ -238,8 +237,6 @@ int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
 
     thresh *= thresh;
 
-    seg1 = 0;
-    seg2 = 1;
     count = 1;
 
     point_assign(Points, 0, with_z, &x1);

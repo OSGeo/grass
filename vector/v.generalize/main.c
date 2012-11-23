@@ -61,11 +61,10 @@ int main(int argc, char *argv[])
     double degree_thresh, closeness_thresh, betweeness_thresh;
     int method;
     int look_ahead, iterations;
-    int chcat;
     int layer;
     int n_lines;
     int simplification, mask_type;
-    struct varray *varray;
+    struct cat_list *cat_list = NULL;
     char *s, *descriptions;
 
     /* initialize GIS environment */
@@ -326,20 +325,18 @@ int main(int argc, char *argv[])
 
     total_input = total_output = 0;
 
-    chcat = 0;
-    varray = NULL;
     layer = Vect_get_field_number(&In, field_opt->answer);
-    /* parse filter option and select appropriate lines */
-    if (method == DISPLACEMENT)
-	varray = parse_filter_options(&In, layer, mask_type,
-			      where_opt->answer, cat_opt->answer, &chcat);
+    /* parse filter options */
+    if (layer > 0)
+	cat_list = Vect_cats_set_constraint(&In, layer, 
+			      where_opt->answer, cat_opt->answer);
 
     if (method == DISPLACEMENT) {
 	/* modifies only lines, all other features including boundaries are preserved */
 	/* options where, cats, and layer are respected */
 	G_message(_("Displacement..."));
 	snakes_displacement(&In, &Out, thresh, alpha, beta, 1.0, 10.0,
-			    iterations, varray);
+			    iterations, cat_list, layer);
     }
 
     /* TODO: rearrange code below. It's really messy */
@@ -373,11 +370,6 @@ int main(int argc, char *argv[])
 
 	Vect_copy_map_lines(&In, &Out);
 	Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
-	/* varray needs to be retrieved from Out vector and not from In vector
-	 * because identical lines can have different ids
-	 * if dead lines are still registered in topo of In */
-	varray = parse_filter_options(&Out, layer, mask_type,
-			      where_opt->answer, cat_opt->answer, &chcat);
 
 	if ((mask_type & GV_AREA) && !(mask_type & GV_BOUNDARY))
 	    mask_type |= GV_BOUNDARY;
@@ -398,28 +390,50 @@ int main(int argc, char *argv[])
 
 	    if (!(type & GV_LINES) || !(mask_type & type))
 		continue;
-		
-	    if ((type & GV_LINE) && chcat && !varray->c[i])
-		continue;
-	    else if ((type & GV_BOUNDARY) && chcat) {
-		int do_line = varray->c[i];
 
-		if ((mask_type & GV_AREA) && !do_line) {
+	    if (layer > 0) {
+		if ((type & GV_LINE) &&
+		    !Vect_cats_in_constraint(Cats, layer, cat_list))
+		    continue;
+		else if ((type & GV_BOUNDARY)) {
+		    int do_line = 0;
 		    int left, right;
 		    
-		    /* check if any of the centroids is selected */
-		    Vect_get_line_areas(&Out, i, &left, &right);
-		    if (left > 0) {
-			left = Vect_get_area_centroid(&Out, left);
-			do_line = varray->c[left];
+		    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
+
+		    if (!do_line) {
+			
+			/* check if any of the centroids is selected */
+			Vect_get_line_areas(&Out, i, &left, &right);
+			if (left > 0) {
+			    Vect_get_area_cats(&Out, left, Cats);
+			    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
+			}
+			else if (left < 0) {
+			    left = Vect_get_isle_area(&Out, abs(left));
+			    if (left > 0) {
+				Vect_get_area_cats(&Out, left, Cats);
+				do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
+			    }
+			}
+			
+			if (!do_line) {
+			    if (right > 0) {
+				Vect_get_area_cats(&Out, right, Cats);
+				do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
+			    }
+			    else if (right < 0) {
+				right = Vect_get_isle_area(&Out, abs(right));
+				if (right > 0) {
+				    Vect_get_area_cats(&Out, right, Cats);
+				    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
+				}
+			    }
+			}
 		    }
-		    if (!do_line && right > 0) {
-			right = Vect_get_area_centroid(&Out, right);
-			do_line = varray->c[right];
-		    }
+		    if (!do_line)
+			continue;
 		}
-		if (!do_line)
-		    continue;
 	    }
 
 	    Vect_line_prune(APoints);

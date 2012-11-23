@@ -29,4 +29,4 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 			double threshold, double alpha, double beta,
 			double gama, double delta, int iterations,
-			struct varray * varray);
+			struct cat_list *cat_list, int layer);
