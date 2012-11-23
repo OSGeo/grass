@@ -434,6 +434,7 @@ class TaskFrame(wx.Frame):
         # notebooks
         self.notebookpanel = CmdPanel(parent = self.panel, task = self.task,
                                       frame = self, lmgr = self.lmgr)
+        self._gconsole = self.notebookpanel._gconsole
         self.goutput = self.notebookpanel.goutput
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(item = self.notebookpanel, proportion = 1, flag = wx.EXPAND)
@@ -676,7 +677,7 @@ class TaskFrame(wx.Frame):
                 if self.task.path:
                     cmd[0] = self.task.path # full path
                 
-                ret = self.goutput.RunCmd(cmd, onDone = self.OnDone)
+                ret = self._gconsole.RunCmd(cmd, onDone = self.OnDone)
             except AttributeError, e:
                 print >> sys.stderr, "%s: Probably not running in wxgui.py session?" % (e)
                 print >> sys.stderr, "parent window is: %s" % (str(self.parent))
@@ -1619,16 +1620,24 @@ class CmdPanel(wx.Panel):
         # are we running from command line?
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
-            from gui_core.goutput import GConsole, EVT_OUTPUT_TEXT
-            self.goutput = GConsole(parent = self.notebook, margin = False)
-            self.goutput.Bind(EVT_OUTPUT_TEXT, self.OnOutputText)
+            from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE
+            from gui_core.goutput import GConsoleWindow
+            self._gconsole = GConsole(guiparent = self.notebook)
+            self.goutput = GConsoleWindow(parent = self.notebook, gconsole = self._gconsole, margin = False)
+            self._gconsole.Bind(EVT_CMD_RUN,
+                                lambda event:
+                                    self._switchPageHandler(event = event, priority = 2))
+            self._gconsole.Bind(EVT_CMD_DONE,
+                                lambda event:
+                                    self._switchPageHandler(event = event, priority = 3))
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
             index = self.AddBitmapToImageList(section = 'output', imageList = imageList)
             if index >= 0:
                 self.notebook.SetPageImage('output', index)
         else:
             self.goutput = None
-        
+            self._gconsole = None
+
         self.manualTab = HelpPanel(parent = self.notebook, command = self.task.name)
         if not self.manualTab.GetFile():
             self.manualTab.Hide()
@@ -1848,13 +1857,17 @@ class CmdPanel(wx.Panel):
             # event is somehow propagated?
             event.StopPropagation()
 
-    def OnOutputText(self, event):
+    def _switchPageHandler(self, event, priority):
+        self._switchPage(priority = priority)
+        event.Skip()
+
+    def _switchPage(self, priority):
         """!Manages @c 'output' notebook page according to event priority."""
-        if event.priority == 1:
+        if priority == 1:
             self.notebook.HighlightPageByName('output')
-        if event.priority >= 2:
+        if priority >= 2:
             self.notebook.SetSelectionByName('output')
-        if event.priority >= 3:
+        if priority >= 3:
             self.SetFocus()
             self.Raise()
 

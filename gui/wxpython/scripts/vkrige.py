@@ -38,6 +38,7 @@ sys.path.append(GUIModulesPath)
 
 from core import globalvar
 from gui_core import gselect
+from core import gconsole
 from gui_core import goutput
 from core.settings import UserSettings
 from gui_core.widgets import GNotebook
@@ -101,8 +102,12 @@ class KrigingPanel(wx.Panel):
         self.goutput = goutput.GConsole(parent = self, margin = False)
         self.goutputId = self.RPackagesBook.GetPageCount()
         self.outpage = self.RPackagesBook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
-        self.goutput.Bind(goutput.EVT_OUTPUT_TEXT, self.OnOutputText)
-        
+        self._gconsole.Bind(gconsole.EVT_CMD_RUN,
+                            lambda event:
+                                self._switchPageHandler(event = event, priority = 2))
+        self._gconsole.Bind(gconsole.EVT_CMD_DONE,
+                            lambda event:
+                                self._switchPageHandler(event = event, priority = 3))
         self.RPackagesBook.SetSelection(0)
         KrigingSizer.Add(self.RPackagesBook, proportion = 1, flag = wx.EXPAND)
         
@@ -255,13 +260,17 @@ class KrigingPanel(wx.Panel):
     def OnVarianceCBChecked(self, event):
         self.OutputVarianceMapName.Enable(event.IsChecked())
 
-    def OnOutputText(self, event):
-        """!Manages @c 'output' notebook page according to event priority."""
-        if event.priority == 1:
-            self.RPackagesBook.HighlightPageByName('output')
-        if event.priority >= 2:
-            self.RPackagesBook.SetSelectionByName('output')
-        if event.priority >= 3:
+    def _switchPageHandler(self, event, priority):
+        self._switchPage(priority = priority)
+        event.Skip()
+
+    def _switchPage(self, priority):
+        """!Manages @c 'output' notebook page according to priority."""
+        if priority == 1:
+            self.notebook.HighlightPageByName('output')
+        if priority >= 2:
+            self.notebook.SetSelectionByName('output')
+        if priority >= 3:
             self.SetFocus()
             self.Raise()
 

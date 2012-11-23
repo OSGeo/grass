@@ -66,6 +66,11 @@ available in GRASS 5 and GRASS 6.
  - gcmd::Popen
  - gcmd::Command
  - gcmd::CommandThread
+- core::gconsole
+ - goutput::CmdThread
+ - goutput::GStdout
+ - goutput::GStderr
+ - goutput::GConsole
 - core::menudata
  - menudata::MenuData
 - core::modulesdata
@@ -118,11 +123,8 @@ available in GRASS 5 and GRASS 6.
  - ghelp::HelpWindow
  - ghelp::HelpPanel
 - gui_core::goutput
- - goutput::CmdThread
- - goutput::GConsole
+ - goutput::GConsoleWindow
  - goutput::GStc
- - goutput::GStdout
- - goutput::GStderr
 - gui_core::gselect
  - gselect::Select
  - gselect::VectorSelect
