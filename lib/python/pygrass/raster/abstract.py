@@ -36,13 +36,6 @@ WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 INDXOUTRANGE = "The index (%d) is out of range, have you open the map?."
 
 
-def clean_map_name(name):
-    name.strip()
-    for char in ' @#^?°,;%&/':
-        name = name.replace(char, '')
-    return name
-
-
 class RasterAbstractBase(object):
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
@@ -128,7 +121,7 @@ class RasterAbstractBase(object):
     def _set_name(self, newname):
         """Private method to change the Raster name"""
         #import pdb; pdb.set_trace()
-        cleanname = clean_map_name(newname)
+        cleanname = env.clean_map_name(newname)
         if self.exist():
             self.rename(cleanname)
         self._name = cleanname
