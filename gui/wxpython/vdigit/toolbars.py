@@ -855,8 +855,7 @@ class VDigitToolbar(BaseToolbar):
                 lmgr.toolbars['tools'].Enable('vdigit', enable = True)
                 lmgr.GetLogWindow().GetProgressBar().SetValue(0)
                 lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
-                                                    self.mapLayer.GetName(),
-                                                switchPage = False)
+                                                    self.mapLayer.GetName())
             # re-active layer 
             item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
             if item and self.parent.tree.IsItemChecked(item):
