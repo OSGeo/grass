@@ -21,6 +21,8 @@
 
 #include "local_proto.h"
 
+static void link_handler(void *);
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -88,7 +90,10 @@ int main(int argc, char *argv[])
     if (ret == -1)
         G_fatal_error(_("Unable to open vector map <%s>"),
                       params.input->answer);
-    Vect_set_error_handler_io(&In, &Out);
+    Vect_set_error_handler_io(&In, NULL);
+    if (params.olink->answer)
+	G_add_error_handler(link_handler, params.olink->answer);
+
     if (ret < 2) 
         G_warning(_("Unable to open vector map <%s> on topological level"),
                   params.input->answer);
@@ -131,4 +136,12 @@ int main(int argc, char *argv[])
     G_remove("", pg_file);
     
     exit(EXIT_SUCCESS);
+}
+
+void link_handler(void *p) {
+    const char *link = (const char *) p;
+    
+    G_debug(1, "link_handler: %s", link);
+    if (G_find_vector2(link, G_mapset()))
+	Vect_delete(link);
 }
