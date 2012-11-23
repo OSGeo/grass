@@ -1350,19 +1350,30 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
     
     plus->off_t_size = -1;
     
-    /* get map bounding box */
+    /* fisrt try to get info from 'topology.grass */
     sprintf(stmt,
-            "SELECT ST_3DExtent(%s) FROM \"%s\".\"%s\"",
-            pg_info->topogeom_column, pg_info->schema_name, pg_info->table_name);
+            "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
+            TOPO_BBOX, TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, pg_info->toposchema_id);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
         PQntuples(res) != 1) {
-        G_warning(_("Unable to get map bounding box from topology"));
-        if (res)
+	PQclear(res);
+	
+	/* try to calculate bbox from TopoGeometry elements */
+	sprintf(stmt,
+		"SELECT ST_3DExtent(%s) FROM \"%s\".\"%s\"",
+		pg_info->topogeom_column, pg_info->schema_name, pg_info->table_name);
+	G_debug(2, "SQL: %s", stmt);
+	res = PQexec(pg_info->conn, stmt);
+	if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+	    PQntuples(res) != 1 || strlen(PQgetvalue(res, 0, 0)) < 1) {
+	    G_warning(_("Unable to get map bounding box from topology"));
             PQclear(res);
-        return -1;
+	    return -1;
+	}
     }
+    
     if (parse_bbox(PQgetvalue(res, 0, 0), &(plus->box)) != 0) {
         G_warning(_("Unable to parse map bounding box:\n%s"),
                   PQgetvalue(res, 0, 0));
