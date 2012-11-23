@@ -666,9 +666,10 @@ struct Format_info_pg
     */
     char    *topogeom_column;
     /*!
-      \brief Topology schema name
+      \brief Topology schema name and id
     */
     char    *toposchema_name;
+    int      toposchema_id;
 };
 
 /*!

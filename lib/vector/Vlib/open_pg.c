@@ -162,22 +162,39 @@ int V2_open_old_pg(struct Map_info *Map)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
-    
+
+    PGresult *res;
+
     G_debug(3, "V2_open_old_pg(): name = %s mapset = %s", Map->name,
             Map->mapset);
 
     pg_info = &(Map->fInfo.pg);
     
-    if (pg_info->toposchema_name)
-        /* no fidx file needed for PostGIS topology access */
-        return 0;
-    
-    if (Vect_open_fidx(Map, &(pg_info->offset)) != 0) {
-        G_warning(_("Unable to open feature index file for vector map <%s>"),
-                  Vect_get_full_name(Map));
-        G_zero(&(pg_info->offset), sizeof(struct Format_info_offset));
-    }
+    if (pg_info->toposchema_name) {
+        char stmt[DB_SQL_MAX];
 
+        /* get topo schema id */
+        sprintf(stmt, "SELECT id FROM topology.topology WHERE name = '%s'",
+                pg_info->toposchema_name);
+        res = PQexec(pg_info->conn, stmt);
+        if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
+            G_warning("%s\n%s", _("Topology schema not found."),
+                      PQresultErrorMessage(res));
+            if (res)
+                PQclear(res);
+            return -1;
+        }
+        pg_info->toposchema_id = atoi(PQgetvalue(res, 0, 0));
+        PQclear(res);
+    }
+    else {
+        /* fidx file needed only for simple features access */
+        if (Vect_open_fidx(Map, &(pg_info->offset)) != 0) {
+            G_warning(_("Unable to open feature index file for vector map <%s>"),
+                      Vect_get_full_name(Map));
+            G_zero(&(pg_info->offset), sizeof(struct Format_info_offset));
+        }
+    }
     return 0;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -918,7 +935,9 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
-    
+    /* store toposchema id */
+    pg_info->toposchema_id = atoi(PQgetvalue(result, 0, 0));
+
     /* add topo column to the feature table */
     G_verbose_message(_("Adding new topology column <%s>..."),
                       pg_info->topogeom_column);
@@ -985,7 +1004,7 @@ int check_topo(struct Format_info_pg *pg_info, struct Plus_head *plus)
     
     /* check if topology layer/schema exists */
     sprintf(stmt,
-            "SELECT t.name,t.hasz,l.feature_column FROM topology.layer "
+            "SELECT t.id,t.name,t.hasz,l.feature_column FROM topology.layer "
             "AS l JOIN topology.topology AS t ON l.topology_id = t.id "
             "WHERE schema_name = '%s' AND table_name = '%s'",
             pg_info->schema_name, pg_info->table_name);
@@ -1002,14 +1021,15 @@ int check_topo(struct Format_info_pg *pg_info, struct Plus_head *plus)
         return 1;
     }
 
-    pg_info->toposchema_name = G_store(PQgetvalue(res, 0, 0));
-    pg_info->topogeom_column = G_store(PQgetvalue(res, 0, 2));
+    pg_info->toposchema_id   = atoi(PQgetvalue(res, 0, 0));
+    pg_info->toposchema_name = G_store(PQgetvalue(res, 0, 1));
+    pg_info->topogeom_column = G_store(PQgetvalue(res, 0, 3));
 
     G_debug(1, "PostGIS topology detected: schema = %s column = %s",
             pg_info->toposchema_name, pg_info->topogeom_column);
     
     /* check for 3D */
-    if (strcmp(PQgetvalue(res, 0, 1), "t") == 0)
+    if (strcmp(PQgetvalue(res, 0, 2), "t") == 0)
         plus->with_z = WITH_Z;
     PQclear(res);
     
