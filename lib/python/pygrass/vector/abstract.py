@@ -10,17 +10,9 @@ import grass.lib.vector as libvect
 from vector_type import MAPTYPE
 
 import pygrass.env as env
-from pygrass.errors import GrassError, OpenError
+from pygrass.errors import GrassError, OpenError, must_be_open
 from table import DBlinks
 
-
-def must_be_open(method):
-    def wrapper(self):
-        if self.is_open():
-            return method(self)
-        else:
-            print "You must open the map."
-    return wrapper
 
 
 #=============================================
