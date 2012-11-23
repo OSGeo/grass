@@ -9,15 +9,14 @@ import datetime
 import grass.lib.vector as libvect
 from vector_type import MAPTYPE
 
-import pygrass.env as env
+from pygrass import functions
 from pygrass.errors import GrassError, OpenError, must_be_open
 from table import DBlinks
-
-
 
 #=============================================
 # VECTOR ABSTRACT CLASS
 #=============================================
+
 
 class Info(object):
     """Basic vector info.
@@ -201,7 +200,7 @@ class Info(object):
     def rename(self, newname):
         """Rename the map"""
         if self.exist():
-            env.rename(self.name, newname, 'vect')
+            functions.rename(self.name, newname, 'vect')
         self._name = newname
 
     def is_3D(self):
@@ -209,7 +208,7 @@ class Info(object):
 
     def exist(self):
         if self._name:
-            self.mapset = env.get_mapset_vector(self._name, self.mapset)
+            self.mapset = functions.get_mapset_vector(self._name, self.mapset)
         else:
             return False
         if self.mapset:
@@ -271,7 +270,7 @@ class Info(object):
         """Remove vector map"""
         if self.is_open():
             self.close()
-        env.remove(vect=self.name)
+        functions.remove(vect=self.name)
 
     def build(self):
         """Close the vector map and build vector Topology"""
