@@ -22,7 +22,7 @@ import grass.lib.rowio as librowio
 #
 # import pygrass modules
 #
-from pygrass.errors import OpenError
+from pygrass.errors import OpenError, must_be_open
 from pygrass.region import Region
 
 #
@@ -35,34 +35,6 @@ from segment import Segment
 from rowio import RowIO
 from category import Category
 from history import History
-
-
-def coor2pixel((north, east), region):
-    """Convert coordinates into a pixel row and col ::
-
-        >>> from pygrass import Region
-        >>> reg = Region()
-        >>> coor2pixel((reg.north, reg.west), reg)
-        (0.0, 0.0)
-        >>> coor2pixel((reg.south, reg.east), reg) == (reg.rows, reg.cols)
-        True
-    """
-    return (libraster.Rast_northing_to_row(north, region.c_region),
-            libraster.Rast_easting_to_col(east, region.c_region))
-
-
-def pixel2coor((row, col), region):
-    """Convert row and col of a pixel into a coordinates ::
-
-        >>> from pygrass import Region
-        >>> reg = Region()
-        >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
-        True
-        >>> pixel2coor((reg.rows, reg.cols), reg) == (reg.south, reg.east)
-        True
-    """
-    return (libraster.Rast_row_to_northing(row, region.c_region),
-            libraster.Rast_col_to_easting(col, region.c_region))
 
 
 class RasterRow(RasterAbstractBase):
@@ -134,6 +106,7 @@ class RasterRow(RasterAbstractBase):
         super(RasterRow, self).__init__(name, *args, **kargs)
 
     # mode = "r", method = "row",
+    @must_be_open
     def get_row(self, row, row_buffer=None):
         """Private method that return the row using the read mode
         call the `Rast_get_row` C function.
@@ -153,6 +126,7 @@ class RasterRow(RasterAbstractBase):
         libraster.Rast_get_row(self._fd, row_buffer.p, row, self._gtype)
         return row_buffer
 
+    @must_be_open
     def put_row(self, row):
         """Private method to write the row sequentially.
         """
@@ -223,24 +197,23 @@ class RasterRowIO(RasterRow):
         super(RasterRowIO, self).open(mode, mtype, overwrite)
         self.rowio.open(self._fd, self.rows, self.cols, self.mtype)
 
+    @must_be_open
     def close(self):
-        if self.is_open():
-            self.rowio.release()
-            libraster.Rast_close(self._fd)
-            # update rows and cols attributes
-            self._rows = None
-            self._cols = None
-            self._fd = None
-        else:
-            warning(_("The map is already close!"))
+        self.rowio.release()
+        libraster.Rast_close(self._fd)
+        # update rows and cols attributes
+        self._rows = None
+        self._cols = None
+        self._fd = None
 
+    @must_be_open
     def get_row(self, row, row_buffer=None):
-        """Private method that return the row using:
+        """This method returns the row using:
 
             * the read mode and
             * `rowcache` method
 
-        not implemented yet!"""
+        """
         if row_buffer is None:
             row_buffer = Buffer((self._cols,), self.mtype)
         rowio_buf = librowio.Rowio_get(ctypes.byref(self.rowio.crowio), row)
@@ -298,27 +271,28 @@ class RasterSegment(RasterAbstractBase):
         else:
             raise TypeError("Invalid argument type.")
 
+    @must_be_open
     def map2segment(self):
         """Transform an existing map to segment file.
         """
-        if self.is_open():
-            row_buffer = Buffer((self._cols), self.mtype)
-            for row in xrange(self._rows):
-                libraster.Rast_get_row(
-                    self._fd, row_buffer.p, row, self._gtype)
-                libseg.segment_put_row(ctypes.byref(self.segment.cseg),
-                                       row_buffer.p, row)
+        row_buffer = Buffer((self._cols), self.mtype)
+        for row in xrange(self._rows):
+            libraster.Rast_get_row(
+                self._fd, row_buffer.p, row, self._gtype)
+            libseg.segment_put_row(ctypes.byref(self.segment.cseg),
+                                   row_buffer.p, row)
 
+    @must_be_open
     def segment2map(self):
         """Transform the segment file to a map.
         """
-        if self.is_open():
-            row_buffer = Buffer((self._cols), self.mtype)
-            for row in xrange(self._rows):
-                libseg.segment_get_row(ctypes.byref(self.segment.cseg),
-                                       row_buffer.p, row)
-                libraster.Rast_put_row(self._fd, row_buffer.p, self._gtype)
+        row_buffer = Buffer((self._cols), self.mtype)
+        for row in xrange(self._rows):
+            libseg.segment_get_row(ctypes.byref(self.segment.cseg),
+                                   row_buffer.p, row)
+            libraster.Rast_put_row(self._fd, row_buffer.p, self._gtype)
 
+    @must_be_open
     def get_row(self, row, row_buffer=None):
         """Return the row using the `segment.get_row` method
 
@@ -336,6 +310,7 @@ class RasterSegment(RasterAbstractBase):
             ctypes.byref(self.segment.cseg), row_buffer.p, row)
         return row_buffer
 
+    @must_be_open
     def put_row(self, row, row_buffer):
         """Write the row using the `segment.put_row` method
 
@@ -350,6 +325,7 @@ class RasterSegment(RasterAbstractBase):
         libseg.segment_put_row(ctypes.byref(self.segment.cseg),
                                row_buffer.p, row)
 
+    @must_be_open
     def get(self, row, col):
         """Return the map value using the `segment.get` method
 
@@ -365,6 +341,7 @@ class RasterSegment(RasterAbstractBase):
                            ctypes.byref(self.segment.val), row, col)
         return self.segment.val.value
 
+    @must_be_open
     def put(self, row, col, val):
         """Write the value to the map using the `segment.put` method
 
@@ -445,6 +422,7 @@ class RasterSegment(RasterAbstractBase):
             self.segment.open(self)
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
 
+    @must_be_open
     def close(self, rm_temp_files=True):
         """Close the map, copy the segment files to the map.
 
@@ -454,21 +432,18 @@ class RasterSegment(RasterAbstractBase):
         rm_temp_files: bool
             If True all the segments file will be removed.
         """
-        if self.is_open():
-            if self.mode == "w" or self.mode == "rw":
-                self.segment.flush()
-                self.segment2map()
-            if rm_temp_files:
-                self.segment.close()
-            else:
-                self.segment.release()
-            libraster.Rast_close(self._fd)
-            # update rows and cols attributes
-            self._rows = None
-            self._cols = None
-            self._fd = None
+        if self.mode == "w" or self.mode == "rw":
+            self.segment.flush()
+            self.segment2map()
+        if rm_temp_files:
+            self.segment.close()
         else:
-            warning(_("The map is already close!"))
+            self.segment.release()
+        libraster.Rast_close(self._fd)
+        # update rows and cols attributes
+        self._rows = None
+        self._cols = None
+        self._fd = None
 
 
 FLAGS = {1: {'b': 'i', 'i': 'i', 'u': 'i'},

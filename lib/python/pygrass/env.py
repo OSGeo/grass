@@ -4,8 +4,11 @@ Created on Tue Jun 26 12:38:48 2012
 
 @author: pietro
 """
-import grass.lib.gis as libgis
+
 import fnmatch
+
+import grass.lib.gis as libgis
+import grass.lib.raster as libraster
 from grass.script import core as grasscore
 
 
@@ -55,3 +58,38 @@ def exist(mapname, mapset=''):
         if mapset:
             return True
     return False
+
+
+def clean_map_name(name):
+    name.strip()
+    for char in ' @#^?°,;%&/':
+        name = name.replace(char, '')
+    return name
+
+
+def coor2pixel((east, north), region):
+    """Convert coordinates into a pixel row and col ::
+
+        >>> from pygrass.region import Region
+        >>> reg = Region()
+        >>> coor2pixel((reg.west, reg.north), reg)
+        (0.0, 0.0)
+        >>> coor2pixel((reg.east, reg.south), reg) == (reg.cols, reg.rows)
+        True
+    """
+    return (libraster.Rast_northing_to_row(north, region.c_region),
+            libraster.Rast_easting_to_col(east, region.c_region))
+
+
+def pixel2coor((col, row), region):
+    """Convert row and col of a pixel into a coordinates ::
+
+        >>> from pygrass.region import Region
+        >>> reg = Region()
+        >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
+        True
+        >>> pixel2coor((reg.cols, reg.rows), reg) == (reg.east, reg.south)
+        True
+    """
+    return (libraster.Rast_row_to_northing(row, region.c_region),
+            libraster.Rast_col_to_easting(col, region.c_region))

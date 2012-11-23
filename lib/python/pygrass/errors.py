@@ -22,10 +22,11 @@ class OpenError(Exception):
     def __str__(self):
         return repr(self.value)
 
+
 def must_be_open(method):
-    def wrapper(self):
+    def wrapper(self, *args, **kargs):
         if self.is_open():
-            return method(self)
+            return method(self, *args, **kargs)
         else:
             warning(_("The map is close!"))
     return wrapper
