@@ -1056,6 +1056,14 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
         /* initialize spatial index */
         Plus->Spidx_new = FALSE;
 
+	if (mode == 0) {
+            /* free old indices */
+            dig_spidx_free(Plus);
+            /* initialize file based indices */
+            Plus->Spidx_file = 1;
+            dig_spidx_init(Plus);
+	}
+
         /* load head */
         if (dig_Rd_spidx_head(&(Plus->spidx_fp), Plus) == -1) {
             fclose(Plus->spidx_fp.file);
