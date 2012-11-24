@@ -1140,24 +1140,23 @@ int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
     if (!pg_info->toposchema_name) {
         /* simple feature access */
         sprintf(stmt,
-                "DECLARE %s_%s%p CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\"",
+                "DECLARE %s_%s%p CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" ORDER BY %s",
                 pg_info->schema_name, pg_info->table_name, pg_info->conn,
                 pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
-                pg_info->table_name);
+                pg_info->table_name, pg_info->fid_column);
     }
     else {
         /* topology access */
         sprintf(stmt,
                 "DECLARE %s_%s%p CURSOR FOR "
-                "SELECT geom,row_number() OVER "
-                "(ORDER BY ST_GeometryType(geom) DESC) AS fid,"
-                "left_face,right_face FROM ("
-                "SELECT geom,0 AS left_face, 0 AS right_face FROM "
+                "SELECT geom,fid,left_face,right_face FROM ("
+                "SELECT node_id AS fid,geom,0 AS left_face,0 AS right_face FROM "
                 "\"%s\".node WHERE node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"%s\".edge GROUP BY end_node) AS foo) "
-                "UNION ALL SELECT geom,left_face,right_face FROM \"%s\".edge) AS foo",
+                "UNION ALL SELECT edge_id AS fid,geom,left_face,right_face FROM \"%s\".edge "
+                "ORDER BY fid) AS foo",
                 pg_info->schema_name, pg_info->table_name, pg_info->conn,
                 pg_info->toposchema_name, pg_info->toposchema_name,
                 pg_info->toposchema_name, pg_info->toposchema_name); 
