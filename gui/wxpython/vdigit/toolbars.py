@@ -850,10 +850,11 @@ class VDigitToolbar(BaseToolbar):
                                       0)
             self.digit.CloseMap()
             
+            # TODO: replace by giface
             lmgr = self.parent.GetLayerManager()
             if lmgr:
                 lmgr.toolbars['tools'].Enable('vdigit', enable = True)
-                lmgr.GetLogWindow().GetProgressBar().SetValue(0)
+                lmgr._giface.GetProgress().SetValue(0)
                 lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
                                                     self.mapLayer.GetName())
             # re-active layer 
