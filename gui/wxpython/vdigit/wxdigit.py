@@ -137,10 +137,11 @@ class IVDigit:
         self.bgMapInfo   = Map_info()
         self.poBgMapInfo = self.popoBgMapInfo = None
         
+        # TODO: replace this by using giface
         if not mapwindow.parent.IsStandalone():
             goutput = mapwindow.parent.GetLayerManager().GetLogWindow()
             log = goutput.GetLog(err = True)
-            progress = goutput.GetProgressBar()
+            progress = mapwindow.parent._giface.GetProgress()
         else:
             log = sys.stderr
             progress = None

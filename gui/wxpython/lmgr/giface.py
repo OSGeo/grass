@@ -63,3 +63,6 @@ class LayerManagerGrassInterface:
             return self.lmgr.GetMapDisplay(onlyCurrent=True).GetMapWindow()
         else:
             return None
+
+    def GetProgress(self):
+        return self.lmgr.goutput.GetProgressBar()
