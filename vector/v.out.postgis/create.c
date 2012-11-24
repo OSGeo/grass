@@ -19,6 +19,7 @@ void create_table(struct Map_info *In, struct Map_info *Out)
     /* create PostGIS table if doesn't exist
        determine feature type from the first feature */
     Vect_rewind(In);
+    Vect_set_constraint_type(In, GV_POINT | GV_LINES);
     type = Vect_read_next_line(In, NULL, NULL);
     Vect_rewind(In);
     
