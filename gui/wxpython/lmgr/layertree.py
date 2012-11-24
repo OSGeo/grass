@@ -1718,10 +1718,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def __FindSubItemByData(self, item, key, value):
         """!Support method for FindItemByData"""
         while item and item.IsOk():
-            try:
-                itemValue = self.GetLayerInfo(item, key = 'key')
-            except KeyError:
-                return None
+            itemValue = self.GetLayerInfo(item, key = key)
             
             if value == itemValue:
                 return item

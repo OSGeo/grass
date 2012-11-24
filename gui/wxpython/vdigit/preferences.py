@@ -448,17 +448,17 @@ class VDigitSettingsDialog(wx.Dialog):
             
             # default values
             check.SetValue(False)
-            if item and tree.GetPyData(item)[0]['vdigit'] and \
-                    'geomAttr' in tree.GetPyData(item)[0]['vdigit'] and \
-                    attrb in tree.GetPyData(item)[0]['vdigit']['geomAttr']:
+            if item and tree.GetLayerInfo(item, key = 'vdigit') and \
+                    'geomAttr' in tree.GetLayerInfo(item, key = 'vdigit') and \
+                    attrb in tree.GetLayerInfo(item, key = 'vdigit')['geomAttr']:
                 check.SetValue(True)
-                column.SetStringSelection(tree.GetPyData(item)[0]['vdigit']['geomAttr'][attrb]['column'])
+                column.SetStringSelection(tree.GetLayerInfo(item, key = 'vdigit')['geomAttr'][attrb]['column'])
                 if attrb == 'area':
                     type = 'area'
                 else:
                     type = 'length'
                 unitsIdx = Units.GetUnitsIndex(type, 
-                                                tree.GetPyData(item)[0]['vdigit']['geomAttr'][attrb]['units'])
+                                                tree.GetLayerInfo(item, key = 'vdigit')['geomAttr'][attrb]['units'])
                 win_units.SetSelection(unitsIdx)
 
             if not vectorName:
@@ -722,8 +722,8 @@ class VDigitSettingsDialog(wx.Dialog):
             checked = self.FindWindowById(val['check']).IsChecked()
             column  = self.FindWindowById(val['column']).GetValue()
             unitsIdx = self.FindWindowById(val['units']).GetSelection()
-            if item and not tree.GetPyData(item)[0]['vdigit']: 
-                tree.GetPyData(item)[0]['vdigit'] = { 'geomAttr' : dict() }
+            if item and not tree.GetLayerInfo(item, key = 'vdigit'): 
+                tree.SetLayerInfo(item, key = 'vdigit', value = { 'geomAttr' : dict() })
             
             if checked: # enable
                 if key == 'area':
@@ -731,12 +731,12 @@ class VDigitSettingsDialog(wx.Dialog):
                 else:
                     type = 'length'
                 unitsKey = Units.GetUnitsKey(type, unitsIdx)
-                tree.GetPyData(item)[0]['vdigit']['geomAttr'][key] = { 'column' : column,
+                tree.GetLayerInfo(item, key = 'vdigit')['geomAttr'][key] = { 'column' : column,
                                                                        'units' : unitsKey }
             else:
-                if item and tree.GetPyData(item)[0]['vdigit'] and \
-                        key in tree.GetPyData(item)[0]['vdigit']['geomAttr']:
-                    del tree.GetPyData(item)[0]['vdigit']['geomAttr'][key]
+                if item and tree.GetLayerInfo(item, key = 'vdigit') and \
+                        key in tree.GetLayerInfo(item, key = 'vdigit')['geomAttr']:
+                    del tree.GetLayerInfo(item, key = 'vdigit')['geomAttr'][key]
         
         # query tool
         if self.queryLength.GetValue():

@@ -725,10 +725,10 @@ class TaskFrame(wx.Frame):
             # display decorations and 
             # pressing OK or cancel after setting layer properties
             if self.task.name in ['d.barscale','d.legend','d.histogram'] \
-                or len(self.parent.GetPyData(self.layer)[0]['cmd']) >=  1:
+                or len(self.parent.GetLayerInfo(self.layer, key = 'cmd')) >=  1:
                 self.Hide()
             # canceled layer with nothing set
-            elif len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
+            elif len(self.parent.GetLayerInfo(self.layer, key = 'cmd')) < 1:
                 self.parent.Delete(self.layer)
                 self.Destroy()
         else:

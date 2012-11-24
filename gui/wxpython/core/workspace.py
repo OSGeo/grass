@@ -661,15 +661,15 @@ class WriteWorkspaceFile(object):
         self.indent += 4
         itemSelected = mapTree.GetSelections()
         while item and item.IsOk():
-            type = mapTree.GetPyData(item)[0]['type']
+            type = mapTree.GetLayerInfo(item, key = 'type')
             if type != 'group':
-                maplayer = mapTree.GetPyData(item)[0]['maplayer']
+                maplayer = mapTree.GetLayerInfo(item, key = 'maplayer')
             else:
                 maplayer = None
 
             checked = int(item.IsChecked())
             if type == 'command':
-                cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string=True)
+                cmd = mapTree.GetLayerInfo(item, key = 'maplayer').GetCmd(string=True)
                 self.file.write('%s<layer type="%s" name="%s" checked="%d">\n' % \
                                (' ' * self.indent, type, EncodeString(cmd), checked));
                 self.file.write('%s</layer>\n' % (' ' * self.indent));
@@ -683,7 +683,7 @@ class WriteWorkspaceFile(object):
                 self.indent -= 4
                 self.file.write('%s</group>\n' % (' ' * self.indent));
             else:
-                cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string = False)
+                cmd = mapTree.GetLayerInfo(item, key = 'maplayer').GetCmd(string = False)
                 name = mapTree.GetItemText(item).replace(os.linesep, '\\n')
                 opacity = maplayer.GetOpacity(float = True)
                 # remove 'opacity' part
@@ -718,7 +718,7 @@ class WriteWorkspaceFile(object):
                 self.indent -= 4
                 self.file.write('%s</task>\n' % (' ' * self.indent));
                 # vector digitizer
-                vdigit = mapTree.GetPyData(item)[0]['vdigit']
+                vdigit = mapTree.GetLayerInfo(item, key = 'vdigit')
                 if vdigit:
                     self.file.write('%s<vdigit>\n' % (' ' * self.indent))
                     if 'geomAttr' in vdigit:
@@ -732,7 +732,7 @@ class WriteWorkspaceFile(object):
                         self.indent -= 4
                     self.file.write('%s</vdigit>\n' % (' ' * self.indent))
                 # nviz
-                nviz = mapTree.GetPyData(item)[0]['nviz']
+                nviz = mapTree.GetLayerInfo(item, key = 'nviz')
                 if nviz:
                     self.file.write('%s<nviz>\n' % (' ' * self.indent))
                     if maplayer.type == 'raster':

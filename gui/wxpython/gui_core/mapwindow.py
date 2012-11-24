@@ -272,7 +272,7 @@ class MapWindow(object):
         if not item:
             return None
         if dataType == 'nviz':
-            return self.tree.GetPyData(item)[0]['nviz']
+            return self.tree.GetLayerInfo(item, key = 'nviz')
         
         return item
         
@@ -309,9 +309,9 @@ class MapWindow(object):
         
             try:
                 if type == 'nviz':
-                    layer = self.tree.GetPyData(item)[0]['nviz']
+                    layer = self.tree.GetLayerInfo(item, key = 'nviz')
                 else:
-                    layer = self.tree.GetPyData(item)[0]['maplayer']
+                    layer = self.tree.GetLayerInfo(item, key = 'maplayer')
             except:
                 layer = None
 

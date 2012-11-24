@@ -436,9 +436,9 @@ class GMFrame(wx.Frame):
         tree = self.GetLayerTree()
         if tree:
             for layer in tree.GetSelections():
-                if tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
+                if tree.GetLayerInfo(layer, key = 'maplayer').GetType() != 'raster':
                     continue
-                rasters.append(tree.GetPyData(layer)[0]['maplayer'].GetName())
+                rasters.append(tree.GetLayerInfo(layer, key = 'maplayer').GetName())
 
         if len(rasters) >= 1:
             win.SetFirstRaster(rasters[0])
@@ -685,8 +685,8 @@ class GMFrame(wx.Frame):
 
         try:
             layer = self.GetLayerTree().layer_selected
-            name = self.GetLayerTree().GetPyData(layer)[0]['maplayer'].name
-            type = self.GetLayerTree().GetPyData(layer)[0]['type']
+            name = self.GetLayerTree().GetLayerInfo(layer, key = 'maplayer').name
+            type = self.GetLayerTree().GetLayerInfo(layer, key = 'type')
         except:
             layer = None
 
@@ -727,7 +727,7 @@ class GMFrame(wx.Frame):
         
         # available only for vector map layers
         try:
-            mapLayer = tree.GetPyData(layer)[0]['maplayer']
+            mapLayer = tree.GetLayerInfo(layer, key = 'maplayer')
         except:
             mapLayer = None
         
@@ -742,9 +742,9 @@ class GMFrame(wx.Frame):
                                  "current mapset."))
             return
         
-        if not tree.GetPyData(layer)[0]:
+        if not tree.GetLayerInfo(layer):
             return
-        dcmd = tree.GetPyData(layer)[0]['cmd']
+        dcmd = tree.GetLayerInfo(layer, key = 'cmd')
         if not dcmd:
             return
         
@@ -1531,7 +1531,7 @@ class GMFrame(wx.Frame):
         
         # available only for vector map layers
         try:
-            maptype = tree.GetPyData(layer)[0]['maplayer'].type
+            maptype = tree.GetLayerInfo(layer, key = 'maplayer').type
         except:
             maptype = None
         
@@ -1540,9 +1540,9 @@ class GMFrame(wx.Frame):
                      message = _("Selected map layer is not vector."))
             return
         
-        if not tree.GetPyData(layer)[0]:
+        if not tree.GetLayerInfo(layer):
             return
-        dcmd = tree.GetPyData(layer)[0]['cmd']
+        dcmd = tree.GetLayerInfo(layer, key = 'cmd')
         if not dcmd:
             return
         
@@ -1919,7 +1919,7 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
 
         for layer in self.GetLayerTree().GetSelections():
-            if self.GetLayerTree().GetPyData(layer)[0]['type'] == 'group':
+            if self.GetLayerTree().GetLayerInfo(layer, key = 'type') == 'group':
                 self.GetLayerTree().DeleteChildren(layer)
             self.GetLayerTree().Delete(layer)
         

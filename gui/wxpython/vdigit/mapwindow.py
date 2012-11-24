@@ -196,7 +196,7 @@ class VDigitWindow(BufferedWindow):
         mapLayer = self.toolbar.GetLayer()
         if self.tree:
             item = self.tree.FindItemByData('maplayer', mapLayer)
-            vdigit = self.tree.GetPyData(item)[0]['vdigit']
+            vdigit = self.tree.GetLayerInfo(item, key = 'vdigit')
         else:
             item = vdigit = None
         
@@ -232,7 +232,7 @@ class VDigitWindow(BufferedWindow):
         vectorName =  mapLayer.GetName()
         if self.tree:
             item = self.tree.FindItemByData('maplayer', mapLayer)
-            vdigit = self.tree.GetPyData(item)[0]['vdigit']
+            vdigit = self.tree.GetLayerInfo(item, key = 'vdigit')
         else:
             item = vdigit = None
         

@@ -359,14 +359,14 @@ class ColorTable(wx.Frame):
         # if not the right type, than select another
         try:
             sel = self.layerTree.layer_selected
-            if sel and self.layerTree.GetPyData(sel)[0]['type'] == self.mapType:
+            if sel and self.layerTree.GetLayerInfo(sel, key = 'type') == self.mapType:
                 layer = sel
             else:
                 layer = self.layerTree.FindItemByData(key = 'type', value = self.mapType)
         except:
             layer = None
         if layer:
-            mapLayer = self.layerTree.GetPyData(layer)[0]['maplayer']
+            mapLayer = self.layerTree.GetLayerInfo(layer, key = 'maplayer')
             name = mapLayer.GetName()
             type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
@@ -1594,9 +1594,9 @@ class VectorColorTable(ColorTable):
         if not layers:
             return
         for layer in layers:
-            if self.layerTree.GetPyData(layer)[0]['type'] != 'vector':
+            if self.layerTree.GetLayerInfo(layer, key = 'type') != 'vector':
                 continue
-            cmdlist = self.layerTree.GetPyData(layer)[0]['maplayer'].GetCmd()
+            cmdlist = self.layerTree.GetLayerInfo(layer, key = 'maplayer').GetCmd()
             
             if self.attributeType == 'color':
                 if useAttrColumn:
@@ -1610,7 +1610,7 @@ class VectorColorTable(ColorTable):
                 cmdlist[1].update({'size_column': self.properties['storeColumn']})
             elif self.attributeType == 'width':
                 cmdlist[1].update({'width_column' :self.properties['storeColumn']})
-            self.layerTree.GetPyData(layer)[0]['cmd'] = cmdlist
+            self.layerTree.SetLayerInfo(layer, key = 'cmd', value = cmdlist)
         
     def CreateColorTable(self, tmp = False):
         """!Create color rules (color table or color column)"""

@@ -103,3 +103,6 @@ class StandaloneGrassInterface():
 
     def GetMapWindow(self):
         return None
+
+    def GetProgress(self):
+        raise NotImplementedError
