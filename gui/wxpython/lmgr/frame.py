@@ -266,7 +266,7 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page = self.notebookLayers, text = _("Map layers"), name = 'layers')
         
         # create 'command output' text area
-        self._gconsole = GConsole(guiparent = self, lmgr = self,
+        self._gconsole = GConsole(guiparent = self, giface = self._giface,
                                   ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       gcstyle = GC_SEARCH | GC_PROMPT)

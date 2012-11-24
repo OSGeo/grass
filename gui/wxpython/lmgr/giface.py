@@ -14,6 +14,7 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
+
 class LayerManagerGrassInterface:
     def __init__(self, lmgr):
         self.lmgr = lmgr
@@ -48,11 +49,17 @@ class LayerManagerGrassInterface:
         @return MapFrame instance
         @return None no mapdisplay open
         """
-        return self.lmgr.GetMapDisplay(onlyCurrent = True)
+        return self.lmgr.GetMapDisplay(onlyCurrent=True)
 
     def GetAllMapDisplays(self):
         """!Get list of all map displays.
 
         @return list of MapFrame instances
         """
-        return self.lmgr.GetMapDisplay(onlyCurrent = False)
+        return self.lmgr.GetMapDisplay(onlyCurrent=False)
+
+    def GetMapWindow(self):
+        if self.lmgr.GetMapDisplay(onlyCurrent=True):
+            return self.lmgr.GetMapDisplay(onlyCurrent=True).GetMapWindow()
+        else:
+            return None

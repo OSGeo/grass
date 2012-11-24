@@ -330,7 +330,7 @@ gImportantCmdRun, EVT_IMPORTANT_CMD_RUN = NewEvent()
 class GConsole(wx.EvtHandler):
     """!
     """
-    def __init__(self, guiparent=None, lmgr=None, ignoredCmdPattern=None):
+    def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         """!
         @param guiparent parent window for created GUI objects
         @param lmgr layer manager window (TODO: replace by giface)
@@ -340,7 +340,7 @@ class GConsole(wx.EvtHandler):
         wx.EvtHandler.__init__(self)
 
         self._guiparent = guiparent
-        self._lmgr = lmgr
+        self._giface = giface
         self._ignoredCmdPattern = ignoredCmdPattern
 
         # create queues
@@ -504,7 +504,7 @@ class GConsole(wx.EvtHandler):
                         command[0] != 'v.krige':
                     # no arguments given
                     try:
-                        GUI(parent = self._guiparent, lmgr = self._lmgr).ParseCommand(command)
+                        GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
                     except GException, e:
                         print >> sys.stderr, e
                     return
@@ -548,7 +548,7 @@ class GConsole(wx.EvtHandler):
 
             if task:
                 # process GRASS command without argument
-                GUI(parent=self._guiparent, lmgr=self._lmgr).ParseCommand(command)
+                GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
             else:
                 self.cmdThread.RunCmd(command,
                                       stdout=self.cmdStdOut,
