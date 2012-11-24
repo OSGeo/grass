@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     opt.from = G_define_standard_option(G_OPT_V_INPUT);
     opt.from->key = "from";
-    opt.from->description = _("Name of existing vector map (from)");
+    opt.from->label = _("Name of existing vector map (from)");
     opt.from->guisection = _("From");
 
     opt.from_field = G_define_standard_option(G_OPT_V_FIELD);
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
     opt.to = G_define_standard_option(G_OPT_V_INPUT);
     opt.to->key = "to";
-    opt.to->description = _("Name of existing vector map (to)");
+    opt.to->label = _("Name of existing vector map (to)");
     opt.to->guisection = _("To");
 
     opt.to_field = G_define_standard_option(G_OPT_V_FIELD);
