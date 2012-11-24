@@ -874,9 +874,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             dx, dy = x2 - x1, y2 - y1
             # find raster and volume
             for item in self.layers:
-                mapLayer = self.tree.GetPyData(item)[0]['maplayer']
+                mapLayer = self.tree.GetLayerInfo(item, key = 'maplayer')
                   
-                data = self.tree.GetPyData(item)[0]['nviz']
+                data = self.tree.GetLayerInfo(item, key = 'nviz')
                 if mapLayer.GetType() == 'raster':
                     data['surface']['position']['x'] += dx
                     data['surface']['position']['y'] += dy
@@ -1009,10 +1009,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.log.WriteLog("%-30s: %.3f" % (_("Elevation"), result['z']))
             name = ''
             for item in self.layers:
-                self.tree.GetPyData(item)[0]['nviz']
-                if self.tree.GetPyData(item)[0]['maplayer'].type == 'raster' and\
-                    self.tree.GetPyData(item)[0]['nviz']['surface']['object']['id'] == result['id']:
-                    name = self.tree.GetPyData(item)[0]['maplayer'].name
+                if self.tree.GetLayerInfo(item, key = 'maplayer').type == 'raster' and\
+                    self.tree.GetLayerInfo(item, key = 'nviz')['surface']['object']['id'] == result['id']:
+                    name = self.tree.GetLayerInfo(item, key = 'maplayer').name
             self.log.WriteLog("%-30s: %s" % (_("Surface map name"), name))
             self.log.WriteLog("%-30s: %s" % (_("Surface map elevation"), result['elevation']))
             self.log.WriteLog("%-30s: %s" % (_("Surface map color"), result['color']))
@@ -1217,8 +1216,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         @param item layer item
         """
-        layer = self.tree.GetPyData(item)[0]['maplayer']
-        data = self.tree.GetPyData(item)[0]['nviz']
+        layer = self.tree.GetLayerInfo(item, key = 'maplayer')
+        data = self.tree.GetLayerInfo(item, key = 'nviz')
         
         if not data:
             return 0
@@ -1237,7 +1236,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Return get list of enabled map layers"""
         # load raster & vector maps
         while item and item.IsOk():
-            type = self.tree.GetPyData(item)[0]['type']
+            type = self.tree.GetLayerInfo(item, key = 'type')
             if type ==  'group':
                 subItem = self.tree.GetFirstChild(item)[0]
                 self._GetDataLayers(subItem, litems)
@@ -1268,12 +1267,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         while(len(listOfItems) > 0):
             item = listOfItems.pop()
-            type = self.tree.GetPyData(item)[0]['type']
+            type = self.tree.GetLayerInfo(item, key = 'type')
             if item in self.layers:
                 continue
             # "raster (double click to set properties)" - tries to load this 
             # layer - no idea how to fix it
-            if ' ' in self.tree.GetPyData(item)[0]['maplayer'].name:
+            if ' ' in self.tree.GetLayerInfo(item, key = 'maplayer').name:
                 return
             try:
                 if type ==  'raster':
@@ -1281,13 +1280,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 elif type ==  '3d-raster':
                     self.LoadRaster3d(item)
                 elif type ==  'vector':
-                    # data = self.tree.GetPyData(item)[0]['nviz']
+                    # data = self.tree.GetLayerInfo(item, key = 'nviz')
                     # vecType = []
                     # if data and 'vector' in data:
                     #     for v in ('lines', 'points'):
                     #         if data['vector'][v]:
                     #             vecType.append(v)
-                    layer = self.tree.GetPyData(item)[0]['maplayer']
+                    layer = self.tree.GetLayerInfo(item, key = 'maplayer')
                     npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(layer)
                     if npoints > 0:
                         self.LoadVector(item, points = True)
@@ -1322,14 +1321,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         for layer in layersTmp:
             if layer in listOfItems:
                 continue
-            ltype = self.tree.GetPyData(layer)[0]['type']
+            ltype = self.tree.GetLayerInfo(layer, key = 'type')
             try:
                 if ltype ==  'raster':
                     self.UnloadRaster(layer)
                 elif ltype ==  '3d-raster':
                     self.UnloadRaster3d(layer) 
                 elif ltype ==  'vector':
-                    maplayer = self.tree.GetPyData(layer)[0]['maplayer']
+                    maplayer = self.tree.GetLayerInfo(layer, key = 'maplayer')
                     npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(maplayer)
                     if npoints > 0:
                         self.UnloadVector(layer, points = True)
@@ -1366,7 +1365,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param item Layer Tree item
         @param nviz data
         """
-        cmd = self.tree.GetPyData(item)[0]['cmd']
+        cmd = self.tree.GetLayerInfo(item, key = 'cmd')
         if cmd[0] != 'd.vect':
             return
         for opt in cmd[1:]:
@@ -1389,9 +1388,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param nvizType nviz data type (surface, points, vector)
         """
         if nvizType != 'constant':
-            mapType = self.tree.GetPyData(item)[0]['maplayer'].type
+            mapType = self.tree.GetLayerInfo(item, key = 'maplayer').type
             # reference to original layer properties (can be None)
-            data = self.tree.GetPyData(item)[0]['nviz']
+            data = self.tree.GetLayerInfo(item, key = 'nviz')
         else:
             mapType = nvizType
             data = self.constants[item]
@@ -1399,8 +1398,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if not data:
             # init data structure
             if nvizType != 'constant':
-                self.tree.GetPyData(item)[0]['nviz'] = {}
-                data = self.tree.GetPyData(item)[0]['nviz']
+                self.tree.SetLayerInfo(item, key = 'nviz', value = {})
+                data = self.tree.GetLayerInfo(item, key = 'nviz')
             
             if mapType ==  'raster':
                 # reset to default properties
@@ -1480,7 +1479,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         @param layer item
         """
-        layer = self.tree.GetPyData(item)[0]['maplayer']
+        layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         
         if layer.type not in ('raster', '3d-raster'):
             return
@@ -1602,12 +1601,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         @param item layer item
         """
-        layer = self.tree.GetPyData(item)[0]['maplayer']
+        layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         
         if layer.type not in ('raster', '3d-raster'):
             return
         
-        data = self.tree.GetPyData(item)[0]['nviz']
+        data = self.tree.GetLayerInfo(item, key = 'nviz')
         
         if layer.type ==  'raster':
             nvizType = 'surface'
@@ -1657,7 +1656,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         to load both
         @param append append vector to layer list
         """
-        layer = self.tree.GetPyData(item)[0]['maplayer']
+        layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         if layer.type !=  'vector':
             return
         
@@ -1690,7 +1689,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.layers.append(item)
         
         # update properties
-        data = self.tree.GetPyData(item)[0]['nviz']
+        data = self.tree.GetLayerInfo(item, key = 'nviz')
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self, event)
         
@@ -1711,8 +1710,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param points,lines True to unload given feature type
         @param remove remove layer from list
         """
-        layer = self.tree.GetPyData(item)[0]['maplayer']
-        data = self.tree.GetPyData(item)[0]['nviz']['vector']
+        layer = self.tree.GetLayerInfo(item, key = 'maplayer')
+        data = self.tree.GetLayerInfo(item, key = 'nviz')['vector']
         
         # if vecType is None:
         #     vecType = []
@@ -2152,7 +2151,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 layerName.append(_("constant#") + str(item['constant']['object']['name']))
         else:    
             for item in self.layers:
-                mapLayer = self.tree.GetPyData(item)[0]['maplayer']
+                mapLayer = self.tree.GetLayerInfo(item, key = 'maplayer')
                 if type !=  mapLayer.GetType():
                     continue
                 
@@ -2172,12 +2171,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 
         
         for item in self.layers:
-            mapLayer = self.tree.GetPyData(item)[0]['maplayer']
+            mapLayer = self.tree.GetLayerInfo(item, key = 'maplayer')
             if type !=  mapLayer.GetType() or \
                     name !=  mapLayer.GetName():
                 continue
             
-            data = self.tree.GetPyData(item)[0]['nviz']
+            data = self.tree.GetLayerInfo(item, key = 'nviz')
             
             try:
                 if type ==  'raster':
@@ -2196,9 +2195,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def ReloadLayersData(self):
         """!Delete nviz data of all loaded layers and reload them from current settings"""
         for item in self.layers:
-            type = self.tree.GetPyData(item)[0]['type']
-            layer = self.tree.GetPyData(item)[0]['maplayer']
-            data = self.tree.GetPyData(item)[0]['nviz']
+            type = self.tree.GetLayerInfo(item, key = 'type')
+            layer = self.tree.GetLayerInfo(item, key = 'maplayer')
+            data = self.tree.GetLayerInfo(item, key = 'nviz')
             
             if type == 'raster':
                 self.nvizDefault.SetSurfaceDefaultProp(data['surface'])
@@ -2217,11 +2216,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         vectors = []
         volumes = []
         for item in self.layers:
-            if self.tree.GetPyData(item)[0]['type'] == 'raster':
+            if self.tree.GetLayerInfo(item, key = 'type') == 'raster':
                 rasters.append(item)
-            elif self.tree.GetPyData(item)[0]['type'] == '3d-raster':
+            elif self.tree.GetLayerInfo(item, key = 'type') == '3d-raster':
                 volumes.append(item)
-            elif self.tree.GetPyData(item)[0]['type'] == 'vector':
+            elif self.tree.GetLayerInfo(item, key = 'type') == 'vector':
                 vectors.append(item)
         if not rasters and not self.constants:
             return _("At least one raster map required")
@@ -2235,7 +2234,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if rasters:
             subcmd = "elevation_map="
             for item in rasters:
-                subcmd += "%s," % self.tree.GetPyData(item)[0]['maplayer'].GetName()
+                subcmd += "%s," % self.tree.GetLayerInfo(item, key = 'maplayer').GetName()
             subcmd = subcmd.strip(', ') + ' '
             cmd += subcmd
             #
@@ -2249,14 +2248,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cmdWire = "wire_color="
             # test -a flag
             flag_a = "-a "
-            nvizDataFirst = self.tree.GetPyData(rasters[0])[0]['nviz']['surface']['draw']
+            nvizDataFirst = self.tree.GetLayerInfo(rasters[0], key = 'nviz')['surface']['draw']
             for item in rasters:
-                nvizData = self.tree.GetPyData(item)[0]['nviz']['surface']['draw']
+                nvizData = self.tree.GetLayerInfo(item, key = 'nviz')['surface']['draw']
                 if nvizDataFirst != nvizData:
                     flag_a = ""
             cmd += flag_a
             for item in rasters:
-                nvizData = self.tree.GetPyData(item)[0]['nviz']['surface']['draw']
+                nvizData = self.tree.GetLayerInfo(item, key = 'nviz')['surface']['draw']
                 
                 cmdMode += "%s," % nvizData['mode']['desc']['mode']
                 cmdFine += "%s," % nvizData['resolution']['fine']
@@ -2299,9 +2298,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cmdColorMap = "color_map="
             cmdColorVal = "color="
             for item in rasters:
-                nvizData = self.tree.GetPyData(item)[0]['nviz']['surface']['attribute']
+                nvizData = self.tree.GetLayerInfo(item, key = 'nviz')['surface']['attribute']
                 if 'color' not in nvizData:
-                    cmdColorMap += "%s," % self.tree.GetPyData(item)[0]['maplayer'].GetName()
+                    cmdColorMap += "%s," % self.tree.GetLayerInfo(item, key = 'maplayer').GetName()
                 else:
                     if nvizData['color']['map']:
                         cmdColorMap += "%s," % nvizData['color']['value']
@@ -2326,17 +2325,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                        'dec_tree', 'con_tree', 'aster', 'gyro', 'histogram']
             for vector in vectors:
                 npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(
-                                                      self.tree.GetPyData(vector)[0]['maplayer'])
-                nvizData = self.tree.GetPyData(vector)[0]['nviz']['vector']
+                                                      self.tree.GetLayerInfo(vector, key = 'maplayer'))
+                nvizData = self.tree.GetLayerInfo(vector, key = 'nviz')['vector']
                 if nlines > 0:
-                    cmdLines += "%s," % self.tree.GetPyData(vector)[0]['maplayer'].GetName()
+                    cmdLines += "%s," % self.tree.GetLayerInfo(vector, key = 'maplayer').GetName()
                     cmdLWidth += "%d," % nvizData['lines']['width']['value']
                     cmdLHeight += "%d," % nvizData['lines']['height']['value']
                     cmdLColor += "%s," % nvizData['lines']['color']['value']
                     cmdLMode += "%s," % nvizData['lines']['mode']['type']
                     cmdLPos += "0,0,%d," % nvizData['lines']['height']['value']
                 if npoints > 0:    
-                    cmdPoints += "%s," % self.tree.GetPyData(vector)[0]['maplayer'].GetName()
+                    cmdPoints += "%s," % self.tree.GetLayerInfo(vector, key = 'maplayer').GetName()
                     cmdPWidth += "%d," % nvizData['points']['width']['value']
                     cmdPSize += "%d," % nvizData['points']['size']['value']
                     cmdPColor += "%s," % nvizData['points']['color']['value']
@@ -2368,8 +2367,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cmdIsoColorMap = cmdIsoColorVal = cmdIsoTrMap = cmdIsoTrVal = ""
             cmdSlice = cmdSliceTransp = cmdSlicePos = ""
             for i, volume in enumerate(volumes):
-                nvizData = self.tree.GetPyData(volume)[0]['nviz']['volume']
-                cmdName += "%s," % self.tree.GetPyData(volume)[0]['maplayer'].GetName()
+                nvizData = self.tree.GetLayerInfo(volume, key = 'nviz')['volume']
+                cmdName += "%s," % self.tree.GetLayerInfo(volume, key = 'maplayer').GetName()
                 cmdShade += "%s," % nvizData['draw']['shading']['isosurface']['desc']
                 cmdRes += "%d," % nvizData['draw']['resolution']['isosurface']['value']
                 if nvizData['position']:

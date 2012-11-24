@@ -643,7 +643,7 @@ class MapFrame(SingleMapFrame):
         num = 0
         filteredLayers = []
         for layer in layers:
-            ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+            ltype = self.tree.GetLayerInfo(layer, key = 'maplayer').GetType()
             if ltype in ('raster', 'rgb', 'his',
                          'vector', 'thememap', 'themechart'):
                 filteredLayers.append(layer)
@@ -665,7 +665,7 @@ class MapFrame(SingleMapFrame):
         nVectors = 0
         isDbConnection = False
         for l in layers:
-            maplayer = self.tree.GetPyData(l)[0]['maplayer']
+            maplayer = self.tree.GetLayerInfo(l, key = 'maplayer')
             if maplayer.GetType() == 'raster':
                 isRaster = True
                 break
@@ -699,8 +699,8 @@ class MapFrame(SingleMapFrame):
         vcmd = ['v.what', '--v']
         
         for layer in layers:
-            ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-            dcmd = self.tree.GetPyData(layer)[0]['cmd']
+            ltype = self.tree.GetLayerInfo(layer, key = 'maplayer').GetType()
+            dcmd = self.tree.GetLayerInfo(layer, key = 'cmd')
             name, found = GetLayerNameFromCmd(dcmd)
             
             if not found:
@@ -778,9 +778,9 @@ class MapFrame(SingleMapFrame):
         Attribute data of selected vector object are displayed in GUI dialog.
         Data can be modified (On Submit)
         """
-        mapName = self.tree.GetPyData(layer)[0]['maplayer'].name
+        mapName = self.tree.GetLayerInfo(layer, key = 'maplayer').name
         
-        if self.tree.GetPyData(layer)[0]['maplayer'].GetMapset() != \
+        if self.tree.GetLayerInfo(layer, key = 'maplayer').GetMapset() != \
                 grass.gisenv()['MAPSET']:
             mode = 'display'
         else:
@@ -826,7 +826,7 @@ class MapFrame(SingleMapFrame):
                     qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId = False)
                 
                 # set opacity based on queried layer
-                opacity = self.tree.GetPyData(layer)[0]['maplayer'].GetOpacity(float = True)
+                opacity = self.tree.GetLayerInfo(layer, key = 'maplayer').GetOpacity(float = True)
                 qlayer.SetOpacity(opacity)
                 
                 self.MapWindow.UpdateMap(render = False, renderVector = False)
@@ -873,7 +873,7 @@ class MapFrame(SingleMapFrame):
         # icon used in vector display and its size
         icon = ''
         size = 0
-        vparam = self.tree.GetPyData(self.tree.layer_selected)[0]['cmd']
+        vparam = self.tree.GetLayerInfo(self.tree.layer_selected, key = 'cmd')
         for p in vparam:
             if '=' in p:
                 parg,pval = p.split('=', 1)
@@ -1002,8 +1002,8 @@ class MapFrame(SingleMapFrame):
         """
         raster = []
         if self.tree.layer_selected and \
-                self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
-            raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
+                self.tree.GetLayerInfo(self.tree.layer_selected, key = 'type') == 'raster':
+            raster.append(self.tree.GetLayerInfo(self.tree.layer_selected, key = 'maplayer').name)
 
         win = ProfileFrame(parent = self, rasterList = raster)
         
@@ -1070,9 +1070,9 @@ class MapFrame(SingleMapFrame):
         raster = []
 
         for layer in self.tree.GetSelections():
-            if self.tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
+            if self.tree.GetLayerInfo(layer, key = 'maplayer').GetType() != 'raster':
                 continue
-            raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
+            raster.append(self.tree.GetLayerInfo(layer, key = 'maplayer').GetName())
 
         win = Histogram2Frame(parent = self, rasterList = raster)
         win.CentreOnParent
@@ -1087,9 +1087,9 @@ class MapFrame(SingleMapFrame):
         raster = []
 
         for layer in self.tree.GetSelections():
-            if self.tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
+            if self.tree.GetLayerInfo(layer, key = 'maplayer').GetType() != 'raster':
                 continue
-            raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
+            raster.append(self.tree.GetLayerInfo(layer, key = 'maplayer').GetName())
             
         win = ScatterFrame(parent = self, rasterList = raster)
         
@@ -1153,8 +1153,8 @@ class MapFrame(SingleMapFrame):
         cmd = ['d.legend', 'at=5,50,2,5']
         
         if self.tree and self.tree.layer_selected and \
-                self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
-            cmd.append('map=%s' % self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
+                self.tree.GetLayerInfo(self.tree.layer_selected, key = 'type') == 'raster':
+            cmd.append('map=%s' % self.tree.GetLayerInfo(self.tree.layer_selected, key = 'maplayer').name)
         
         # Decoration overlay control dialog
         self.dialogs['legend'] = \

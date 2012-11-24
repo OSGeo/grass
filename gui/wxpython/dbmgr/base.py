@@ -598,7 +598,7 @@ class DbMgrBase:
         elif self.mapdisplay.tree and \
            self.dbMgrData['treeItem'] and not self.dbMgrData['vectName']:
             maptree = self.mapdisplay.tree
-            name = maptree.GetPyData(self.dbMgrData['treeItem'])[0]['maplayer'].GetName()
+            name = maptree.GetLayerInfo(self.dbMgrData['treeItem'], key = 'maplayer').GetName()
             self.dbMgrData['vectName'] = name
         
         # vector attributes can be changed only if vector map is in
@@ -1563,7 +1563,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             if self.parent and self.mapdisplay.tree and \
                     self.dbMgrData['treeItem']:
                 maptree = self.mapdisplay.tree
-                opacity = maptree.GetPyData(self.dbMgrData['treeItem'])[0]['maplayer'].GetOpacity(float = True)
+                opacity = maptree.GetLayerInfo(self.dbMgrData['treeItem'], key = 'maplayer').GetOpacity(float = True)
                 self.qlayer.SetOpacity(opacity)
             if zoom:
                 keyColumn = self.dbMgrData['mapDBInfo'].layers[self.selLayer]['key']

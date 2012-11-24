@@ -287,8 +287,8 @@ class HistogramFrame(wx.Frame):
         if parent.GetName() == "MapWindow" and not parent.IsStandalone():
             tree = parent.GetLayerManager().GetLayerTree()
 
-            if tree.layer_selected and tree.GetPyData(tree.layer_selected)[0]['type'] == 'raster':
-                self.mapname = tree.GetPyData(tree.layer_selected)[0]['maplayer'].name
+            if tree.layer_selected and tree.GetLayerInfo(tree.layer_selected, key = 'type') == 'raster':
+                self.mapname = tree.GetLayerInfo(tree.layer_selected, key = 'maplayer').name
 
         # Add statusbar
         self.statusbar = self.CreateStatusBar(number = 1, style = 0)
