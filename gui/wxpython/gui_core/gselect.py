@@ -1969,14 +1969,14 @@ class OgrTypeSelect(wx.Panel):
             return 'boundary'
 
 class CoordinatesSelect(wx.Panel):
-    def __init__(self, parent, lmgr = None, multiple = False, **kwargs):
+    def __init__(self, parent, giface, multiple = False, **kwargs):
         """!Widget to get coordinates from map window  by mouse click
         
         @param parent parent window
-        @param lmgr layer manager 
+        @param giface GRASS interface
         @param multiple - True if it is possible to insert more coordinates
         """
-        self.lmgr     = lmgr
+        self._giface = giface
         self.multiple = multiple
         self.mapWin   = None
         
@@ -2003,8 +2003,8 @@ class CoordinatesSelect(wx.Panel):
         
     def _onClick(self, event):
         """!Button for interacitve inserting of coordinates clicked"""
-        if self.buttonInsCoords.GetToggle() and self.lmgr.GetLayerTree():   
-            self.mapWin = self.lmgr.GetLayerTree().GetMapDisplay().GetWindow()            
+        self.mapWin = self._giface.GetMapWindow()
+        if self.buttonInsCoords.GetToggle() and self.mapWin:
             if self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                      self._onMapClickHandler,
                                                      wx.StockCursor(wx.CURSOR_CROSS)) == False:
@@ -2012,7 +2012,7 @@ class CoordinatesSelect(wx.Panel):
                 return
             
             self.registered = True
-            self.lmgr.GetLayerTree().GetMapDisplay().Raise()
+            self._giface.GetMapDisplay().Raise()
         else:
             if self.mapWin and \
                     self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  

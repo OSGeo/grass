@@ -360,14 +360,14 @@ class TaskFrame(wx.Frame):
     The command is checked and sent to the clipboard when clicking
     'Copy'.
     """
-    def __init__(self, parent, task_description, id = wx.ID_ANY,
+    def __init__(self, parent, giface, task_description, id = wx.ID_ANY,
                  get_dcmd = None, layer = None,
-                 style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, lmgr = None, **kwargs):
+                 style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
         self.get_dcmd = get_dcmd
         self.layer    = layer
         self.task     = task_description
         self.parent   = parent             # LayerTree | Modeler | None | ...
-        self.lmgr     = lmgr  
+        self._giface  = giface
         if parent and parent.GetName() == 'Modeler':
             self.modeler = self.parent
         else:
@@ -432,8 +432,8 @@ class TaskFrame(wx.Frame):
         self.Layout()
         
         # notebooks
-        self.notebookpanel = CmdPanel(parent = self.panel, task = self.task,
-                                      frame = self, lmgr = self.lmgr)
+        self.notebookpanel = CmdPanel(parent = self.panel, giface = self._giface, task = self.task,
+                                      frame = self)
         self._gconsole = self.notebookpanel._gconsole
         self.goutput = self.notebookpanel.goutput
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
@@ -753,12 +753,13 @@ class CmdPanel(wx.Panel):
     """!A panel containing a notebook dividing in tabs the different
     guisections of the GRASS cmd.
     """
-    def __init__(self, parent, task, id = wx.ID_ANY, frame = None, lmgr = None, *args, **kwargs):
+    def __init__(self, parent, giface, task, id = wx.ID_ANY, frame = None, *args, **kwargs):
         if frame:
             self.parent = frame
         else:
             self.parent = parent
         self.task = task
+        self._giface = giface
         
         wx.Panel.__init__(self, parent, id = id, *args, **kwargs)
         
@@ -1444,9 +1445,9 @@ class CmdPanel(wx.Panel):
                 # interactive inserting of coordinates from map window
                 elif prompt == 'coords':
                     # interactive inserting if layer manager is accessible
-                    if lmgr:
-                        win = gselect.CoordinatesSelect(parent = which_panel, 
-                                                        lmgr = lmgr, 
+                    if self._giface:
+                        win = gselect.CoordinatesSelect(parent = which_panel,
+                                                        giface = self._giface,
                                                         multiple =  p.get('multiple', False),
                                                         param = p)
                         p['wxId'] = [win.GetTextWin().GetId()]
@@ -2057,15 +2058,15 @@ class CmdPanel(wx.Panel):
 
 
 class GUI:
-    def __init__(self, parent = None, show = True, modal = False,
-                 centreOnParent = False, checkError = False, lmgr = None):
+    def __init__(self, parent = None, giface = None, show = True, modal = False,
+                 centreOnParent = False, checkError = False):
         """!Parses GRASS commands when module is imported and used from
         Layer Manager.
         """
         self.parent = parent
         self.show   = show
         self.modal  = modal
-        self.lmgr   = lmgr
+        self._giface = giface
         self.centreOnParent = centreOnParent
         self.checkError     = checkError
         
@@ -2169,10 +2170,9 @@ class GUI:
             cmd = cmd_validated
         
         if self.show is not None:
-            self.mf = TaskFrame(parent = self.parent,
+            self.mf = TaskFrame(parent = self.parent, giface = self._giface,
                                 task_description = self.grass_task,
-                                get_dcmd = get_dcmd, layer = layer,
-                                lmgr = self.lmgr)
+                                get_dcmd = get_dcmd, layer = layer)
         else:
             self.mf = None
         
@@ -2244,7 +2244,7 @@ class GrassGUIApp(wx.App):
                         _('Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable.'))
             return True
         
-        self.mf = TaskFrame(parent = None, task_description = self.grass_task)
+        self.mf = TaskFrame(parent = None, giface = None, task_description = self.grass_task)
         self.mf.CentreOnScreen()
         self.mf.Show(True)
         self.SetTopWindow(self.mf)
