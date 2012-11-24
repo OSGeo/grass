@@ -122,7 +122,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.root = None                     # ID of layer tree root node
         self.groupnode = 0                   # index value for layers
         self.optpage = {}                    # dictionary of notebook option pages for each map layer
-        self.layer_selected = None           # ID of currently selected layer
         self.saveitem = {}                   # dictionary to preserve layer attributes for drag and drop
         self.first = True                    # indicates if a layer is just added or not
         self.flag = ''                       # flag for drag and drop hittest
@@ -242,6 +241,20 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
         self.Bind(wx.EVT_MOTION,                self.OnMotion)
+
+    def GetSelectedLayer(self):
+        """!Get selected layer.
+
+        @return None if no layer selected
+        @return first layer (GenericTreeItem instance) of all selected
+        """
+        layers = self.GetSelections()
+        if len(layers) >= 1:
+            return layers[0]
+        return None
+
+    layer_selected = property(fget = GetSelectedLayer)
+
 
     def _setGradient(self, iType = None):
         """!Set gradient for items
@@ -971,8 +984,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # select new item
         self.SelectItem(layer, select = True)
-        self.layer_selected = layer
-        
+
         # use predefined layer name if given
         if lname:
             if ltype == 'group':
@@ -1078,7 +1090,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """
         self.lmgr.WorkspaceChanged()
         layer = event.GetItem()
-        self.layer_selected = layer
         
         self.PropertiesDialog(layer)
         
@@ -1106,7 +1117,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # unselect item
         self.Unselect()
-        self.layer_selected = None
 
         try:
             if self.GetPyData(item)[0]['type'] != 'group':
@@ -1276,8 +1286,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             self._setGradient()
         
-        self.layer_selected = layer
-        
         try:
             if self.IsSelected(oldlayer):
                 self.SetItemWindowEnabled(oldlayer, True)
@@ -1338,7 +1346,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnExpandNode(self, event):
         """!Expand node
         """
-        self.layer_selected = event.GetItem()
         if self.GetPyData(self.layer_selected)[0]['type'] == 'group':
             self.SetItemImage(self.layer_selected, self.folder_open)
     
