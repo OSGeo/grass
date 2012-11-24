@@ -55,7 +55,7 @@ static int write_feature(struct Map_info *,
                          const struct P_line *,
                          int, const struct field_info *);
 static char *build_insert_stmt(const struct Format_info_pg *, const char *,
-                               int, const struct field_info *);
+                               int, int, const struct field_info *);
 static char *build_topo_stmt(struct Map_info *, int,
                              const struct P_line *, const char *);
 static int execute_topo(PGconn *, const char *);
@@ -834,6 +834,7 @@ int write_feature(struct Map_info *Map, int type,
                   const struct P_line *Line,
                   int cat, const struct field_info *Fi)
 {
+    int fid;
     int byte_order, nbytes, nsize;
     unsigned int sf_type;
     unsigned char *wkb_data;
@@ -932,7 +933,12 @@ int write_feature(struct Map_info *Map, int type,
     /* build INSERT statement
        simple feature geometry + attributes
     */
-    stmt = build_insert_stmt(pg_info, text_data, cat, Fi);
+    fid = -1;
+    if (pg_info->toposchema_name) {
+        /* use defined fid (=line) for topological access */
+        fid = Vect_get_num_primitives(Map, type); /* write next fid */
+    }
+    stmt = build_insert_stmt(pg_info, text_data, fid, cat, Fi);
     G_debug(2, "SQL: %s", stmt);
 
     if (!pg_info->inTransaction) {
@@ -981,13 +987,14 @@ int write_feature(struct Map_info *Map, int type,
    
    \param pg_info pointer to Format_info_pg structure
    \param geom_data geometry data
+   \param fid feature id (=line)
    \param cat category number (or -1 for no category)
    \param Fi pointer to field_info structure (NULL for no attributes)
 
    \return allocated string with INSERT statement
  */
 char *build_insert_stmt(const struct Format_info_pg *pg_info,
-                        const char *geom_data,
+                        const char *geom_data, int fid,
                         int cat, const struct field_info *Fi)
 {
     char *stmt, buf[DB_SQL_MAX];
@@ -1106,13 +1113,14 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                 else {
                     /* PostGIS topology access, write geometry in
                      * topology schema, skip geometry at this point */
-                    G_asprintf(&stmt, "%s) VALUES (%s)",
-                               buf, buf_val);
+                    G_asprintf(&stmt, "%s,%s) VALUES (%s,%d)",
+                               buf, pg_info->fid_column, buf_val, fid);
                 }
             }
         }
     }
     else {
+        /* no attributes */
         if (!pg_info->toposchema_name) {
             /* no attributes (simple features access) */
             G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES "
@@ -1122,9 +1130,9 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
         }
         else if (cat > 0)
             /* no attributes (topology elements) */
-            G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES (NULL)",
+            G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES (%d)",
                        pg_info->schema_name, pg_info->table_name,
-                       pg_info->geom_column); 
+                       pg_info->fid_column, fid); 
     }
     
     return stmt;
