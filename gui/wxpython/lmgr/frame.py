@@ -1144,7 +1144,6 @@ class GMFrame(wx.Frame):
         for maptree, layer in selected:
             if not maptree.IsSelected(layer):
                 maptree.SelectItem(layer, select = True)
-                maptree.layer_selected = layer
                 
         busy.Destroy()
             
