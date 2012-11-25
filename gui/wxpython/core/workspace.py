@@ -545,7 +545,7 @@ class ProcessWorkspaceFile:
         node_constants = node_state.find('constant_planes')
         constants = []
         if node_constants:
-            for i, node_plane in enumerate(node_constants.findall('plane')):
+            for node_plane in node_constants.findall('plane'):
                 plane = {}
                 plane['color'] = self.__processLayerNvizNode(node_plane, 'color', str)                
                 plane['resolution'] = self.__processLayerNvizNode(node_plane, 'fine_resolution', int)
@@ -671,12 +671,12 @@ class WriteWorkspaceFile(object):
             if type == 'command':
                 cmd = mapTree.GetLayerInfo(item, key = 'maplayer').GetCmd(string=True)
                 self.file.write('%s<layer type="%s" name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, type, EncodeString(cmd), checked));
-                self.file.write('%s</layer>\n' % (' ' * self.indent));
+                               (' ' * self.indent, type, EncodeString(cmd), checked))
+                self.file.write('%s</layer>\n' % (' ' * self.indent))
             elif type == 'group':
                 name = mapTree.GetItemText(item)
                 self.file.write('%s<group name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, EncodeString(name), checked));
+                               (' ' * self.indent, EncodeString(name), checked))
                 self.indent += 4
                 subItem = mapTree.GetFirstChild(item)[0]
                 self.__writeLayer(mapTree, subItem)
@@ -714,9 +714,9 @@ class WriteWorkspaceFile(object):
                         self.file.write('%s<value>%s</value>\n' %
                                         (' ' * self.indent, self.__filterValue(val)))
                         self.indent -= 4
-                        self.file.write('%s</parameter>\n' % (' ' * self.indent));
+                        self.file.write('%s</parameter>\n' % (' ' * self.indent))
                 self.indent -= 4
-                self.file.write('%s</task>\n' % (' ' * self.indent));
+                self.file.write('%s</task>\n' % (' ' * self.indent))
                 # vector digitizer
                 vdigit = mapTree.GetLayerInfo(item, key = 'vdigit')
                 if vdigit:
@@ -804,12 +804,10 @@ class WriteWorkspaceFile(object):
             # position
             elif attrb == 'position':
                 self.file.write('%s<%s>\n' %(' ' * self.indent, attrb))
-                i = 0
                 for tag in ('x', 'y', 'z'):
                     self.indent += 4
                     self.file.write('%s<%s>%d</%s>\n' % (' ' * self.indent, tag,
                                                         data[attrb][tag], tag))
-                    i += 1
                     self.indent -= 4
 
             if attrb != 'attribute':

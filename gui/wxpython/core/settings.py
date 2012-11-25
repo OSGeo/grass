@@ -23,7 +23,6 @@ import os
 import sys
 import copy
 import types
-import locale
 
 from core       import globalvar
 from core.gcmd  import GException, GError
@@ -54,8 +53,6 @@ class Settings:
     def _generateLocale(self):
         """!Generate locales
         """
-        import os
-        
         try:
             self.locs = os.listdir(os.path.join(os.environ['GISBASE'], 'locale'))
             self.locs.append('en') # GRASS doesn't ship EN po files
@@ -1168,8 +1165,8 @@ def GetDisplayVectSettings():
     settings.append('size=%s' % UserSettings.Get(group = 'vectorLayer', key = 'point', subkey = 'size'))
     types = []
     for ftype in ['point', 'line', 'boundary', 'centroid', 'area', 'face']:
-         if UserSettings.Get(group = 'vectorLayer', key = 'showType', subkey = [ftype, 'enabled']):
-             types.append(ftype)
+        if UserSettings.Get(group = 'vectorLayer', key = 'showType', subkey = [ftype, 'enabled']):
+            types.append(ftype)
     settings.append('type=%s' % ','.join(types))
 
     return settings

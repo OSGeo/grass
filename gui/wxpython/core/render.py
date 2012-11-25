@@ -127,8 +127,8 @@ class Layer(object):
                                  {'type' : self.type, 'name' : self.name})
         
         # start monitor
-	if self.mapfile:
-	    os.environ["GRASS_PNGFILE"] = self.mapfile
+        if self.mapfile:
+            os.environ["GRASS_PNGFILE"] = self.mapfile
         
         # execute command
         try:
@@ -482,7 +482,7 @@ class Map(object):
         # new values to use for saving to region file
         new = {}
         n = s = e = w = 0.0
-        nwres = ewres = 0.0
+        nsres = ewres = 0.0
         
         # Get current values for region and display
         reg = self.GetRegion()
@@ -540,7 +540,7 @@ class Map(object):
         try:
             self.width  = int(width)
             self.height = int(height)
-        except:
+        except ValueError:
             self.width  = 640
             self.height = 480
 
@@ -871,7 +871,7 @@ class Map(object):
         
         return maps, masks, opacities
         
-    def GetMapsMasksAndOpacities(self, force, guiFrame, windres):
+    def GetMapsMasksAndOpacities(self, force, guiFrame):
         """!
         Used by Render function.
         
@@ -907,23 +907,21 @@ class Map(object):
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
         
-        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, mapWindow, windres)
+        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, mapWindow)
         
         # ugly hack for MSYS
         if sys.platform != 'win32':
             mapstr = ",".join(maps)
             maskstr = ",".join(masks)
-            mapoutstr = self.mapfile
         else:
             mapstr = ""
             for item in maps:
-                mapstr += item.replace('\\', '/')		
+                mapstr += item.replace('\\', '/')
             mapstr = mapstr.rstrip(',')
             maskstr = ""
             for item in masks:
                 maskstr += item.replace('\\', '/')
             maskstr = maskstr.rstrip(',')
-            mapoutstr = self.mapfile.replace('\\', '/')
             
         # run g.pngcomp to get composite image
         bgcolor = ':'.join(map(str, UserSettings.Get(group = 'display', key = 'bgcolor',
@@ -1093,7 +1091,7 @@ class Map(object):
         
         if render and not layer.Render():
             raise GException(_("Unable to render map layer <%s>.") % 
-                             name)
+                             layer.GetName())
         
         return layer
 
@@ -1152,7 +1150,7 @@ class Map(object):
                     os.remove(layer.mapfile)
                     os.remove(layer.maskfile)
                     self.layers.remove(layer)
-                    return layer
+                    return retlayer
         # del by id
         elif id != None:
             return self.layers.pop(id)
@@ -1169,7 +1167,7 @@ class Map(object):
         @return -1 if layer not found
         """
         if overlay:
-            list = self.overlay
+            list = self.overlays
         else:
             list = self.layers
             
@@ -1202,7 +1200,7 @@ class Map(object):
         
         if l_render and command != '' and not overlay.Render():
             raise GException(_("Unable to render overlay <%s>.") % 
-                             name)
+                             type)
         
         return self.overlays[-1]
 
@@ -1241,7 +1239,7 @@ class Map(object):
         
         if render and overlay.GetCmd() != [] and not overlay.Render():
             raise GException(_("Unable to render overlay <%s>.") % 
-                             name)
+                             overlay.GetType())
         
         return overlay
 

@@ -188,7 +188,7 @@ class Popen(subprocess.Popen):
             import win32api
             handle = win32api.OpenProcess(1, 0, self.pid)
             return (0 != win32api.TerminateProcess(handle, 0))
-	else:
+        else:
             try:
                 os.kill(-self.pid, signal.SIGTERM) # kill whole group
             except OSError:
@@ -342,7 +342,7 @@ class Command:
         Debug.msg(1, "gcmd.Command(): %s" % ' '.join(cmd))
         self.cmd = cmd
         self.stderr = stderr
-	
+
         #
         # set verbosity level
         #
@@ -561,14 +561,14 @@ class CommandThread(Thread):
         if self.stdout:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
-	    if not subprocess.mswindows:
+            if not subprocess.mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
                 
         if self.stderr:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stderr.fileno()
-	    if not subprocess.mswindows:
+            if not subprocess.mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
         
