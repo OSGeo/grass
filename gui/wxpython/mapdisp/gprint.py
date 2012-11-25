@@ -95,21 +95,18 @@ class PrintOptions(wx.Object):
     def __init__(self, parent, mapwin):
         self.mapframe = parent
         self.mapwin = mapwin
-	#self.frame = frame
 
-	self.printData = None
-
-	#self.canvas = ScrolledWindow.MyCanvas(self)
+        self.printData = None
 
     def setup(self):
-	if self.printData:
-	    return
+        if self.printData:
+            return
         self.printData = wx.PrintData()
         self.printData.SetPaperId(wx.PAPER_LETTER)
         self.printData.SetPrintMode(wx.PRINT_MODE_PRINTER)
 
     def OnPageSetup(self, event):
-	self.setup()
+        self.setup()
         psdd = wx.PageSetupDialogData(self.printData)
         psdd.CalculatePaperSizeFromId()
         dlg = wx.PageSetupDialog(self.mapwin, psdd)
@@ -123,7 +120,7 @@ class PrintOptions(wx.Object):
         dlg.Destroy()
 
     def OnPrintPreview(self, event):
-	self.setup()
+        self.setup()
         data = wx.PrintDialogData(self.printData)
         printout = MapPrint(self.mapwin)
         printout2 = MapPrint(self.mapwin)
@@ -141,7 +138,7 @@ class PrintOptions(wx.Object):
         pfrm.Show(True)
 
     def OnDoPrint(self, event):
-	self.setup()
+        self.setup()
         pdd = wx.PrintDialogData(self.printData)
         # set number of pages/copies
         pdd.SetToPage(1)
