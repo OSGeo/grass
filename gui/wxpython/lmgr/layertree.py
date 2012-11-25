@@ -830,7 +830,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 item = self.GetNextVisible(item)
         
         self.first = True
-        params = {} # no initial options parameters
         
         # deselect active item
         if self.layer_selected:
@@ -1048,7 +1047,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             return
         
-        completed = ''
         params = self.GetLayerParams(layer)
         ltype  = self.GetLayerInfo(layer, key = 'type')
                 
@@ -1251,7 +1249,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnCmdChanged(self, event):
         """!Change command string"""
         ctrl = event.GetEventObject().GetId()
-        cmd = event.GetString()
         
         # find layer tree item by ctrl
         layer = self.GetFirstVisibleItem()
@@ -1413,7 +1410,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         elif self.GetLayerInfo(dragItem, key = 'type') == 'command':
             # recreate command layer
-            oldctrl = None
             newctrl = wx.TextCtrl(self, id = wx.ID_ANY, value = '',
                                   pos = wx.DefaultPosition, size = (250,25),
                                   style = wx.TE_MULTILINE|wx.TE_WORDWRAP)
@@ -1537,7 +1533,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
             mapWin = self.mapdisplay.MapWindow
             if len(mapLayer.GetCmd()) > 0:
-                id = -1
                 if mapLayer.type == 'raster':
                     if mapWin.IsLoaded(layer):
                         mapWin.UnloadRaster(layer)
@@ -1708,7 +1703,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 items.append(item)
             if self.GetLayerInfo(item, key = 'type') == 'group':
                 subItem = self.GetFirstChild(item)[0]
-                found = self.__FindSubItemByName(subItem, name)
+                found = self.__FindSubItemByName(subItem, value)
                 if found:
                     items.extend(found)
             item = self.GetNextSibling(item)
