@@ -161,7 +161,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if pdctype == 'image' and img:
                 drawid = self.imagedict[img]
             elif pdctype == 'clear':
-                drawid == None
+                drawid = None
             else:
                 drawid = wx.NewId()
         
@@ -582,7 +582,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # was if self.Map.cmdfile and ...
         if self.IsAlwaysRenderEnabled() and self.img is None:
-                render = True
+            render = True
         
         #
         # initialize process bar (only on 'render')
@@ -1429,7 +1429,6 @@ class BufferedWindow(MapWindow, wx.Window):
             y = begin[1]
         else:
             y = end[1]
-        screenRect = wx.Rect(x, y, w, h)
         screenSize = self.GetClientSizeTuple()
         at = [(screenSize[1] - (y + h)) / float(screenSize[1]) * 100,
               (screenSize[1] - y) / float(screenSize[1]) * 100,
@@ -1579,8 +1578,6 @@ class BufferedWindow(MapWindow, wx.Window):
         @param ignoreNulls True to ignore null-values (valid only for rasters)
         @param render True to re-render display
         """
-        zoomreg = {}
-        
         if not layers:
             layers = self.GetSelectedLayer(multi = True)
         
@@ -1610,6 +1607,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if not updated:
             self.Map.GetRegion(rast = rast,
                                vect = vect,
+                               zoom = ignoreNulls,
                                update = True)
         
         self.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
@@ -1969,7 +1967,7 @@ class GraphicsSet:
                               
         @return (GraphicsSetItem) - added item reference
         """
-        item = GraphicsSetItem(coords = coords, penName = None, label = None, hide = False)
+        item = GraphicsSetItem(coords = coords, penName = penName, label = label, hide = hide)
         self.itemsList.append(item)
         
         return item
@@ -1984,7 +1982,7 @@ class GraphicsSet:
         """
         try:
             self.itemsList.remove(item)
-        except:
+        except ValueError:
             return False
         
         return True
@@ -2097,7 +2095,7 @@ class GraphicsSet:
         """ 
         try:
             return self.itemsList.index(item)
-        except:
+        except ValueError:
             return None
 
 class GraphicsSetItem:
