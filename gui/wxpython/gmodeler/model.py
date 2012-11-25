@@ -494,7 +494,7 @@ class Model(object):
     def Run(self, log, onDone, parent = None):
         """!Run model
 
-        @param log logging window (see goutput.GConsole)
+        @param log logging window (see gconsole.GConsole)
         @param onDone on-done method
         @param parent window for messages or None
         """
