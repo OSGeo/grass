@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 import os
 import codecs
 import platform
+import re
 
 import wx
 from wx.html import HtmlWindow
@@ -629,7 +630,10 @@ class HelpWindow(HtmlWindow):
         super(HelpWindow, self).OnLinkClicked(linkinfo)
         
     def fillContentsFromFile(self, htmlFile, skipDescription = True):
-        """!Load content from file"""
+        """!Load content from file.
+        
+        Currently not used.        
+        """
         aLink = re.compile(r'(<a href="?)(.+\.html?["\s]*>)', re.IGNORECASE)
         imgLink = re.compile(r'(<img src="?)(.+\.[png|gif])', re.IGNORECASE)
         try:

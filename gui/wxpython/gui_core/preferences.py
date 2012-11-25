@@ -29,7 +29,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import locale
 try:
     import pwd
     havePwd = True
@@ -47,7 +46,7 @@ from grass.script import core as grass
 
 from core          import globalvar
 from core.gcmd     import RunCommand, GError
-from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, GetSettingsPath, StoreEnvVariable
+from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnvVariable
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
 
@@ -397,11 +396,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
         
-        panel.SetSizer(border)
-        
-        return panel
-    
-
         panel.SetSizer(border)
         
         return panel
@@ -1600,15 +1594,6 @@ class DefaultFontDialog(wx.Dialog):
         border.Fit(self)
         
         self.Layout()
-        
-    def EvtRadioBox(self, event):
-        if event.GetInt() == 0:
-            self.fonttype = 'grassfont'
-        elif event.GetInt() == 1:
-            self.fonttype = 'truetype'
-
-        self.fontlist = self.GetFonts(self.fonttype)
-        self.fontlb.SetItems(self.fontlist)
 
     def OnEncoding(self, event):
         self.encoding = event.GetString()
@@ -1630,23 +1615,19 @@ class DefaultFontDialog(wx.Dialog):
         parses fonts directory or fretypecap file to get a list of fonts for the listbox
         """
         fontlist = []
-
-        cmd = ["d.font", "-l"]
-
         ret = RunCommand('d.font',
                          read = True,
                          flags = 'l')
-
         if not ret:
             return fontlist
 
         dfonts = ret.splitlines()
         dfonts.sort(lambda x,y: cmp(x.lower(), y.lower()))
         for item in range(len(dfonts)):
-           # ignore duplicate fonts and those starting with #
-           if not dfonts[item].startswith('#') and \
+            # ignore duplicate fonts and those starting with #
+            if not dfonts[item].startswith('#') and \
                   dfonts[item] != dfonts[item-1]:
-              fontlist.append(dfonts[item])
+                fontlist.append(dfonts[item])
 
         return fontlist
 
@@ -1728,8 +1709,7 @@ class MapsetAccess(wx.Dialog):
 
 class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
     """!List of mapset/owner/group"""
-    def __init__(self, parent, pos = wx.DefaultPosition,
-                 log = None):
+    def __init__(self, parent, log = None):
         self.parent = parent
         
         wx.ListCtrl.__init__(self, parent, wx.ID_ANY,

@@ -16,8 +16,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import os
-import sys
 import platform
 
 import wx

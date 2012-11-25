@@ -221,8 +221,8 @@ class MapFrameBase(wx.Frame):
         raise NotImplementedError("GetWindow")
         
     def GetMapToolbar(self):
-       """!Returns toolbar with zooming tools"""
-       raise NotImplementedError("GetMapToolbar")
+        """!Returns toolbar with zooming tools"""
+        raise NotImplementedError("GetMapToolbar")
        
     def GetToolbar(self, name):
         """!Returns toolbar if exists else None.

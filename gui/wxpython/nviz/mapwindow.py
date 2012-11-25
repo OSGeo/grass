@@ -72,7 +72,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.parent = parent # MapFrame
         
         glcanvas.GLCanvas.__init__(self, parent, id)
-        MapWindow.__init__(self, parent = parent, giface = giface, id = id, frame = frame,
+        MapWindow.__init__(self, parent = parent, giface = giface, frame = frame,
                            Map = Map, tree = tree, lmgr = lmgr)
         self.Hide()
         
