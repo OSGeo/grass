@@ -174,7 +174,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # create image list to use with layer tree
         il = wx.ImageList(16, 16, mask = False)
         
-        trart = wx.ArtProvider.GetBitmap(wx.ART_FOLDER_OPEN, wx.ART_OTHER, (16, 16))
+        trart = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_OTHER, (16, 16))
         self.folder_open = il.Add(trart)
         trart = wx.ArtProvider.GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
         self.folder = il.Add(trart)
@@ -226,9 +226,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.cmd_icon = il.Add(trgif)
         
         self.AssignImageList(il)
-        
-        self.Bind(wx.EVT_TREE_ITEM_EXPANDING,   self.OnExpandNode)
-        self.Bind(wx.EVT_TREE_ITEM_COLLAPSED,   self.OnCollapseNode)
+
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED,   self.OnActivateLayer)
         self.Bind(wx.EVT_TREE_SEL_CHANGED,      self.OnChangeSel)
         self.Bind(wx.EVT_TREE_SEL_CHANGING,     self.OnChangingSel)
@@ -944,7 +942,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'command':
             self.SetItemImage(layer, self.cmd_icon)
         elif ltype == 'group':
-            self.SetItemImage(layer, self.folder)
+            self.SetItemImage(layer, self.folder, CT.TreeItemIcon_Normal)
+            self.SetItemImage(layer, self.folder_open, CT.TreeItemIcon_Expanded)
             self.SetItemText(layer, grouptext)
         
         self.first = False
@@ -1311,25 +1310,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self._setGradient()
         else:
             self._setGradient()
-        
-        try:
-            if self.IsSelected(oldlayer):
-                self.SetItemWindowEnabled(oldlayer, True)
-            else:
-                self.SetItemWindowEnabled(oldlayer, False)
 
-            if self.IsSelected(layer):
-                self.SetItemWindowEnabled(layer, True)
-            else:
-                self.SetItemWindowEnabled(layer, False)
-        except:
-            pass
-        
-        try:
-            self.RefreshLine(oldlayer)
-            self.RefreshLine(layer)
-        except:
-            pass
+        self.RefreshLine(layer)
         
         # update statusbar -> show command string
         if self.GetLayerInfo(layer, key = 'maplayer'):
@@ -1361,19 +1343,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif type == '3d-raster':
                     self.lmgr.nviz.UpdatePage('volume')
                     self.lmgr.nviz.SetPage('volume')
-        
-    def OnCollapseNode(self, event):
-        """!Collapse node
-        """
-        if self.GetLayerInfo(self.layer_selected, key = 'type') == 'group':
-            self.SetItemImage(self.layer_selected, self.folder)
 
-    def OnExpandNode(self, event):
-        """!Expand node
-        """
-        if self.GetLayerInfo(self.layer_selected, key = 'type') == 'group':
-            self.SetItemImage(self.layer_selected, self.folder_open)
-    
     def OnEndDrag(self, event):
         self.StopDragging()
         dropTarget = event.GetItem()
