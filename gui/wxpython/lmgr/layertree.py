@@ -240,24 +240,44 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
         self.Bind(wx.EVT_MOTION,                self.OnMotion)
 
-    def GetSelectedLayer(self):
+    def _getSelectedLayer(self):
         """!Get selected layer.
 
         @return None if no layer selected
         @return first layer (GenericTreeItem instance) of all selected
         """
-        layers = self.GetSelections()
-        if len(layers) >= 1:
-            return layers[0]
-        return None
+        return self.GetSelectedLayer(multi = False, checkedOnly = False)
 
     # for compatibility
-    layer_selected = property(fget = GetSelectedLayer)
+    layer_selected = property(fget = _getSelectedLayer)
 
-    def GetSelectedLayers(self):
+    def GetSelectedLayers(self, checkedOnly = False):
         """!Get selected layers as a list.
         """
-        return self.GetSelections()
+        return self.GetSelectedLayers(multi = True, checkedOnly = False)
+
+    def GetSelectedLayer(self, multi = False, checkedOnly = False):
+        """!Get selected layer from layer tree.
+        
+        @param multi return multiple selection as a list
+        @param checkedOnly return only the checked layers
+
+        @return None or [] for multi == True if no layer selected 
+        @return first layer (GenericTreeItem instance) of all selected or a list
+        """
+        ret = []
+        layers = self.GetSelections()
+
+        for layer in layers:
+            if not checkedOnly or (checkedOnly and layer.IsChecked()):
+                ret.append(layer)
+        if multi:
+            return ret
+
+        if ret:
+            return ret[0]
+
+        return None
 
     def _setGradient(self, iType = None):
         """!Set gradient for items

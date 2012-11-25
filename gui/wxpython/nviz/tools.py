@@ -126,7 +126,8 @@ class NvizToolWindow(FN.FlatNotebook):
     def SetInitialMaps(self):
         """!Set initial raster and vector map"""
         for l_type in ('raster', 'vector', '3d-raster'):
-            selectedLayer = self.mapWindow.GetSelectedLayer()
+            selectedLayer = self.parent.GetLayerTree().GetSelectedLayer(multi = False, checkedOnly = True)
+            selectedLayer = self.parent.GetLayerTree().GetLayerInfo(selectedLayer, key = 'maplayer')
             layers = self.mapWindow.Map.GetListOfLayers(l_type = l_type, l_active = True)
             if selectedLayer in layers:
                 selection = selectedLayer.GetName()

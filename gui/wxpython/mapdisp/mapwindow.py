@@ -54,7 +54,7 @@ class BufferedWindow(MapWindow, wx.Window):
     def __init__(self, parent, giface, Map, frame,
                  id = wx.ID_ANY, tree = None, lmgr = None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
-        MapWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
+        MapWindow.__init__(self, parent = parent, giface = giface, Map = Map,
                            frame = frame, tree = tree, lmgr = lmgr, **kwargs)
         wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
         
@@ -1174,7 +1174,7 @@ class BufferedWindow(MapWindow, wx.Window):
                          message = _("Querying is not implemented in standalone mode of Map Display"))
                 return
 
-            layers = self.GetSelectedLayer(type = 'item', multi = True)
+            layers = self.tree.GetSelectedLayer(multi = True, checkedOnly = True)
 
             self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1], layers)
         
@@ -1579,8 +1579,9 @@ class BufferedWindow(MapWindow, wx.Window):
         @param render True to re-render display
         """
         if not layers:
-            layers = self.GetSelectedLayer(multi = True)
-        
+            layers = self.tree.GetSelectedLayer(multi = True, checkedOnly = False)
+            layers = [self.tree.GetLayerInfo(layer, key = 'maplayer') for layer in layers]
+
         if not layers:
             return
         
