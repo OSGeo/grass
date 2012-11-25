@@ -5,12 +5,20 @@
 
 Put here only truly general events. Once you find that your event can be
 generated in more than one class, put your event here. Otherwise,
-leave it in your class file.
+leave it in your class file. Events are expected to be grass/gis related.
 
 General notice:
-Command events are propagated to parent windows. However they do not propagate 
+Command events are propagated to parent windows. However, they do not propagate 
 beyond dialogs. Events do not propagate at all.
+Command events works only with windows, not EvtHandlers, so for other objects
+than windows you need to have extra parameter - guiparent - which can be used
+for creating command events.
+\code
+mapEvent = gMapCreated(self._guiparent.GetId(), ...)
+wx.PostEvent(self._guiparent, mapEvent)
+\endcode
 
+@todo naming conventions for events
 
 (C) 2012 by the GRASS Development Team
 
