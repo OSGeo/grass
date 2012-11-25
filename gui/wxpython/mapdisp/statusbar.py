@@ -618,7 +618,7 @@ class SbGoTo(SbItem):
             format = UserSettings.Get(group = 'projection', key = 'format',
                                       subkey = 'll')
             if self.mapFrame.GetMap().projinfo['proj'] == 'll' and format == 'DMS':
-                    self.SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
+                self.SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
                                                                             region['center_northing'],
                                                                             precision = precision))
             else:
