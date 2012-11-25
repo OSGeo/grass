@@ -52,8 +52,7 @@ from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
 from core.gconsole         import GConsole, \
-    EVT_CMD_OUTPUT, EVT_CMD_RUN, EVT_CMD_DONE, \
-    EVT_IGNORED_CMD_RUN, EVT_IMPORTANT_CMD_RUN
+    EVT_CMD_OUTPUT, EVT_IGNORED_CMD_RUN, EVT_IMPORTANT_CMD_RUN
 from gui_core.goutput      import GConsoleWindow, EVT_GC_CONTENT_CHANGED, GC_SEARCH, GC_PROMPT
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
@@ -470,7 +469,7 @@ class GMFrame(wx.Frame):
         
         self.model = Model()
         self.model.LoadModel(filename)
-        self.model.Run(log = self._gconsole, onDone = self.OnDone, parent = self)
+        self.model.Run(log = self._goutput, onDone = self.OnDone, parent = self)
         
         dlg.Destroy()
         
@@ -944,7 +943,6 @@ class GMFrame(wx.Frame):
     def _popupMenu(self, data):
         """!Create popup menu
         """
-        point = wx.GetMousePosition()
         menu = wx.Menu()
         
         for key, handler in data:
@@ -1303,7 +1301,6 @@ class GMFrame(wx.Frame):
     def OnDisplayCloseAll(self, event = None):
         """!Close all open map display windows
         """
-        displays = list()
         for display in self.GetMapDisplay(onlyCurrent = False):
             display.OnCloseWindow(event)
         
