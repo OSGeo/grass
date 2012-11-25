@@ -36,9 +36,9 @@ class SwipeBufferedWindow(BufferedWindow):
     Special mouse events with changed coordinates are used.
     """
     def __init__(self, parent, giface, Map, frame,
-                 tree = None, lmgr = None, **kwargs):
+                 tree = None, **kwargs):
         BufferedWindow.__init__(self, parent = parent, giface = giface,
-                                Map = Map, frame = frame, tree = tree, lmgr = lmgr, **kwargs)
+                                Map = Map, frame = frame, tree = tree, **kwargs)
         Debug.msg(2, "SwipeBufferedWindow.__init__()")
 
         self.specialSize = super(SwipeBufferedWindow, self).GetClientSize()

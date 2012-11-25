@@ -32,8 +32,8 @@ class VDigitWindow(BufferedWindow):
                  id = wx.ID_ANY, tree = None, lmgr = None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         BufferedWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
-                                frame = frame, tree = tree, lmgr = lmgr, style = style, **kwargs)
-        
+                                frame = frame, tree = tree, style = style, **kwargs)
+        self.lmgr = lmgr
         self.pdcVector = wx.PseudoDC()
         self.toolbar   = self.parent.GetToolbar('vdigit')
         self.digit     = None # wxvdigit.IVDigit
