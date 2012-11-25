@@ -30,6 +30,7 @@ from core          import globalvar
 import wx
 
 from core          import utils
+from core.giface   import StandaloneGrassInterface
 from core.gcmd     import RunCommand
 from core.render   import Map
 from mapdisp.frame import MapFrame
@@ -239,8 +240,11 @@ class MapApp(wx.App):
         else:
             self.Map = None
 
+        # actual use of StandaloneGrassInterface not yet tested
+        # needed for adding functionality in future
         self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
-                               size = monSize)
+                                giface = StandaloneGrassInterface(),
+                                size = monSize)
         # self.SetTopWindow(Map)
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
         self.mapFrm.Show()
