@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>his</em> stands for hue, intensity, and saturation.
+<em>HIS</em> stands for hue, intensity, and saturation.
 This program produces a raster map layer providing a
 visually pleasing combination of hue, intensity, and
 saturation values from two or three user-specified raster
@@ -69,7 +69,6 @@ cell in the <em>INTENSITY</em> map layer.  This map layer
 should have an appropriate gray-scale color table
 associated with it. You can ensure this by using the color
 manipulation capabilities of
-<em><a href="d.colors.html">d.colors</a></em> or
 <em><a href="r.colors.html">r.colors</a></em>.
 
 Finally, the color is made somewhat gray-based on the
@@ -108,17 +107,15 @@ program <em><a href="r.his.html">r.his</a></em>.
 <h3>Spearfish dataset</h3>
 
 <div class="code"><pre>
-  g.region rast=elevation.dem
-  r.shaded.relief map=elevation.dem shad=elev.shad_relf
-  d.mon x1
-  d.his h=elevation.dem i=elev.shad_relf brighten=50
+g.region rast=elevation.dem
+r.shaded.relief map=elevation.dem shad=elev.shad_relf
+d.mon wx0
+d.his h=elevation.dem i=elev.shad_relf brighten=50
 </pre></div>
-<br>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="d.colors.html">d.colors</a>,
 <a href="d.colortable.html">d.colortable</a>,
 <a href="d.frame.html">d.frame</a>,
 <a href="d.rgb.html">d.rgb</a>,
