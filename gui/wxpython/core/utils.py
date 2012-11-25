@@ -61,13 +61,13 @@ def GetTempfile(pref=None):
     # FIXME
     # ugly hack for MSYS (MS Windows)
     if platform.system() == 'Windows':
-	tempfile = tempfile.replace("/", "\\")
+        tempfile = tempfile.replace("/", "\\")
     try:
         path, file = os.path.split(tempfile)
         if pref:
             return os.path.join(pref, file)
-	else:
-	    return tempfile
+        else:
+            return tempfile
     except:
         return None
 
@@ -147,7 +147,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                         else:
                             findType = layerType
                         mapset = grass.find_file(mapname, element = findType)['mapset']
-                    except AttributeError, e: # not found
+                    except AttributeError: # not found
                         return '', False
                     if not mapset:
                         found = False
@@ -292,7 +292,7 @@ def ListSortLower(list):
     """!Sort list items (not case-sensitive)"""
     list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
 
-def GetVectorNumberOfLayers(parent, vector):
+def GetVectorNumberOfLayers(vector):
     """!Get list of vector layers"""
     layers = list()
     if not vector:
@@ -536,8 +536,7 @@ def ReadEpsgCodes(path):
             f = open(path, "r")
         except IOError:
             return _("failed to open '%s'" % path)
-        
-        i = 0
+
         code = None
         for line in f.readlines():
             line = line.strip()
@@ -550,13 +549,12 @@ def ReadEpsgCodes(path):
                 code, params = line.split(" ", 1)
                 try:
                     code = int(code.replace('<', '').replace('>', ''))
-                except ValueError:
+                except ValueError, e:
                     return e
             
             if code is not None:
                 epsgCodeDict[code] = (descr, params)
                 code = None
-            i += 1
         
         f.close()
     except StandardError, e:
