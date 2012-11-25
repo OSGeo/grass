@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<i>his</i> stands for hue, intensity, and saturation. 
+<i>HIS</i> stands for hue, intensity, and saturation. 
 This program produces red, green and blue raster map layers
 providing a visually pleasing combination of hue,
 intensity, and saturation values from two or three
@@ -87,33 +87,37 @@ image without actually generating any layers should use the
 program <em><a href="d.his.html">d.his</a></em>.
 
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 Recreate the following <em>d.his</em> command using <em>r.his</em>:
 <div class="code"><pre>
-  r.shaded.relief map=elevation.dem shad=elev.shad_relf
-  d.his h=elevation.dem i=elev.shad_relf brighten=50
+g.regiopn rast=elevation
+r.shaded.relief map=elevation shad=elev.shad_relf
+d.his h=elevation i=elev.shad_relf brighten=50
 </pre></div>
 
 <div class="code"><pre>
-  r.mapcalc 'elev.shad_relf_bright50 = #elev.shad_relf * 1.5'
-  r.colors elev.shad_relf_bright50 color=grey255
-  r.his h_map=elevation.dem i_map=elev.shad_relf_bright50 r_map=esr.r g_map=esr.g bmap=esr.b
-  d.rgb red=esr.r green=esr.g blue=esr.b
+r.mapcalc "elev.shad_relf_bright50 = #elev.shad_relf * 1.5"
+r.colors elev.shad_relf_bright50 color=grey255
+r.his h_map=elevation i_map=elev.shad_relf_bright50 r_map=esr.r g_map=esr.g bmap=esr.b
+d.rgb red=esr.r green=esr.g blue=esr.b
 </pre></div>
 
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.his.html">d.his</a></em>,
-<em><a href="d.colors.html">d.colors</a></em>,
-<em><a href="d.colortable.html">d.colortable</a></em>,
-<em><a href="d.rgb.html">d.rgb</a></em>,
-<em><a href="r.blend.html">r.blend</a></em>,
-<em><a href="r.colors.html">r.colors</a></em>,
-<em><a href="r.composite.html">r.composite</a></em>
-<em><a href="i.his.rgb.html">i.his.rgb</a></em>,
-<em><a href="i.rgb.his.html">i.rgb.his</a></em>
+<em>
+<a href="d.his.html">d.his</a>,
+<a href="d.colors.html">d.colors</a>,
+<a href="d.colortable.html">d.colortable</a>,
+<a href="d.rgb.html">d.rgb</a>,
+<a href="r.blend.html">r.blend</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.composite.html">r.composite</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="i.his.rgb.html">i.his.rgb</a>,
+<a href="i.rgb.his.html">i.rgb.his</a>
+</em>
 
 <h2>AUTHOR</h2>
 
