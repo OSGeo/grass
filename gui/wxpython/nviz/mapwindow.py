@@ -358,8 +358,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.lmgr.nviz.UpdatePage('cplane')
                 self.lmgr.nviz.UpdatePage('decoration')
                 self.lmgr.nviz.UpdatePage('animation')
-                layer = self.GetSelectedLayer()
+                layer = self.tree.GetSelectedLayer(multi = False, checkedOnly = True)
                 if layer:
+                    layer = self.tree.GetLayerInfo(layer, key = 'maplayer')
                     if layer.type ==  'raster':
                         self.lmgr.nviz.UpdatePage('surface')
                         self.lmgr.nviz.UpdatePage('fringe')
@@ -766,7 +767,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                          message = _("Querying is not implemented in standalone mode of Map Display"))
                 return
 
-            layers = self.GetSelectedLayer(type = 'item', multi = True)
+            layers = self.tree.GetSelectedLayer(multi = True, checkedOnly = True)
 
             self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1], layers)
 
@@ -1512,7 +1513,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # update tools window
         if hasattr(self.lmgr, "nviz") and \
-                item ==  self.GetSelectedLayer(type = 'item'):
+                item == self.tree.GetSelectedLayer(multi = False, checkedOnly = True):
             toolWin = self.lmgr.nviz
             if layer.type ==  'raster':
                 win = toolWin.FindWindowById( \
@@ -1695,7 +1696,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # update tools window
         if hasattr(self.lmgr, "nviz") and \
-                item ==  self.GetSelectedLayer(type = 'item'):
+                item ==  self.tree.GetSelectedLayer(multi = False, checkedOnly = True):
             toolWin = self.lmgr.nviz
             
             toolWin.UpdatePage('vector')
