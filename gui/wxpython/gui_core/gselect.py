@@ -658,7 +658,6 @@ class VectorDBInfo:
         """!Reset"""
         for layer in self.layers:
             table = self.layers[layer]["table"] # get table desc
-            columns = self.tables[table]
             for name in self.tables[table].keys():
                 self.tables[table][name]['values'] = []
                 self.tables[table][name]['ids']    = []
@@ -2017,8 +2016,8 @@ class CoordinatesSelect(wx.Panel):
             if self.mapWin and \
                     self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
                                                             self._onMapClickHandler):
-                    self.registered = False
-                    return
+                self.registered = False
+                return
             
             self.buttonInsCoords.SetToggle(False)           
     

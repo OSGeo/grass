@@ -50,7 +50,7 @@ from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
 from gui_core.forms   import GUI
 from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED, GListCtrl
-from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
+from core.utils       import GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
 
@@ -1076,7 +1076,7 @@ class GroupDialog(wx.Dialog):
                                    caption = _("Unapplied changes"),
                                    style = wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
             if dlg.ShowModal() == wx.ID_YES:
-                self.ApplyChanges(showResult = True)
+                self.ApplyChanges()
                 
             dlg.Destroy()
             
@@ -1189,7 +1189,7 @@ class GroupDialog(wx.Dialog):
         """!Clear notification string"""
         self.infoLabel.SetLabel("")
        
-    def ApplyChanges(self, showResult):
+    def ApplyChanges(self):
         """!Create or edit group"""
         group = self.currentGroup
         if not group:
@@ -1212,11 +1212,11 @@ class GroupDialog(wx.Dialog):
         
     def OnApply(self, event):
         """!Apply changes"""
-        self.ApplyChanges(showResult = True)
+        self.ApplyChanges()
         
     def OnOk(self, event):
         """!Apply changes and close dialog"""
-        if self.ApplyChanges(showResult = False):
+        if self.ApplyChanges():
             self.OnClose(event)
         
     def OnClose(self, event):
@@ -1448,8 +1448,8 @@ class MapLayersDialogBase(wx.Dialog):
     def OnFilter(self, event):
         """!Apply filter for map names"""
         if len(event.GetString()) == 0:
-           self.layers.Set(self.map_layers) 
-           return 
+            self.layers.Set(self.map_layers) 
+            return 
         
         list = []
         for layer in self.map_layers:
@@ -2550,7 +2550,6 @@ class SymbolDialog(wx.Dialog):
         
         panels = []
         self.symbolPanels = []
-        maxImages = 0
         
         for folder in folders:
             panel = wx.Panel(parent, style = wx.BORDER_RAISED)

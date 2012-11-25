@@ -707,7 +707,7 @@ class GConsoleFrame(wx.Frame):
     """!Standalone GConsole for testing only"""
     def __init__(self, parent, id = wx.ID_ANY, title = "GConsole Test Frame",
                  style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
-        wx.Frame.__init__(self, parent = parent, id = id, title = title)
+        wx.Frame.__init__(self, parent = parent, id = id, title = title, style = style)
 
         panel = wx.Panel(self, id = wx.ID_ANY)
         

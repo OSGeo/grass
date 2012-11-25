@@ -50,11 +50,11 @@ import sys
 import string
 import textwrap
 import os
-import time
 import copy
 import locale
 from threading import Thread
 import Queue
+import re
 
 gisbase = os.getenv("GISBASE")
 if gisbase is None:
@@ -196,7 +196,7 @@ class UpdateThread(Thread):
                         self.data[win.GetParent().SetType] = {'etype': element_dict[type_param.get('value')]}
 
             map = layer = None
-            driver = db = table = None
+            driver = db = None
             if name in ('LayerSelect', 'ColumnSelect'):
                 if p.get('element', '') == 'vector': # -> vector
                     # get map name
@@ -336,8 +336,6 @@ class UpdateQThread(Thread):
         while True:
             requestId, callable, args, kwds = self.requestQ.get()
             
-            requestTime = time.time()
-            
             self.request = callable(*args, **kwds)
 
             self.resultQ.put((requestId, self.request.run()))
@@ -385,7 +383,7 @@ class TaskFrame(wx.Frame):
             pass
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title,
-                          name = "MainFrame", **kwargs)
+                          name = "MainFrame", style = style, **kwargs)
         
         self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
         
@@ -627,8 +625,8 @@ class TaskFrame(wx.Frame):
                     hasattr(self, "closebox") and \
                     self.closebox.IsChecked() and \
                     (returncode == 0):
-                # was closed also when aborted but better is leave it open
-                wx.FutureCall(2000, self.Close)
+            # was closed also when aborted but better is leave it open
+            wx.FutureCall(2000, self.Close)
 
     def OnMapCreated(self, event):
         if hasattr(self, "addbox") and self.addbox.IsChecked():
@@ -824,7 +822,6 @@ class CmdPanel(wx.Panel):
         #
         # flags
         #
-        text_style = wx.FONTWEIGHT_NORMAL
         visible_flags = [ f for f in self.task.flags if not f.get('hidden', False) == True ]
         for f in visible_flags:
             which_sizer = tabsizer[ f['guisection'] ]
@@ -897,7 +894,6 @@ class CmdPanel(wx.Panel):
             else:
                 title = text_beautify(p['description'])
                 tooltip = None
-            txt = None
             
             prompt = p.get('prompt', '')
             
@@ -1132,7 +1128,6 @@ class CmdPanel(wx.Panel):
                                                        isRaster = isRaster)
                         p['wxId'] = [ selection.GetId(), ]
                         selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                        formatSelector = False
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                     else:
                         elem = p.get('element', None)
@@ -1757,7 +1752,10 @@ class CmdPanel(wx.Panel):
             win.SetValue('')
         
     def OnVectorFormat(self, event):
-        """!Change vector format (native / ogr)"""
+        """!Change vector format (native / ogr).
+
+        Currently unused.        
+        """
         sel = event.GetSelection()
         idEvent = event.GetId()
         p = self.task.get_param(value = idEvent, element = 'wxId', raiseError = False)
@@ -2083,7 +2081,7 @@ class GUI:
         """!Get validated command"""
         return self.cmd
     
-    def ParseCommand(self, cmd, gmpath = None, completed = None):
+    def ParseCommand(self, cmd, completed = None):
         """!Parse command
         
         Note: cmd is given as list
@@ -2092,7 +2090,6 @@ class GUI:
          - add key name for first parameter if not given
          - change mapname to mapname@mapset
         """
-        start = time.time()
         dcmd_params = {}
         if completed == None:
             get_dcmd = None
@@ -2134,13 +2131,13 @@ class GUI:
                 else: # parameter
                     try:
                         key, value = option.split('=', 1)
-                    except:
+                    except ValueError:
                         if self.grass_task.firstParam:
                             if i == 0: # add key name of first parameter if not given
                                 key = self.grass_task.firstParam
                                 value = option
                             else:
-                                raise GException, _("Unable to parse command '%s'") % ' '.join(cmd)
+                                raise gcmd.GException, _("Unable to parse command '%s'") % ' '.join(cmd)
                         else:
                             continue
                     

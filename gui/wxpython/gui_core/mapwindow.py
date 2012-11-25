@@ -37,7 +37,7 @@ class MapWindow(object):
      - Cell2Pixel (if it is possible)
     """
     def __init__(self, parent, giface, Map, frame,
-                 id = wx.ID_ANY, tree = None, lmgr = None, **kwargs):
+                 tree = None, lmgr = None, **kwargs):
         self.parent = parent # MapFrame
         self.Map    = Map
         self.frame = frame
@@ -91,7 +91,7 @@ class MapWindow(object):
             self.Bind(ev, self.EventTypeHandler(handlers))
     
     def EventTypeHandler(self, evHandlers):
-         return lambda event:self.HandlersCaller(event, evHandlers)  
+        return lambda event:self.HandlersCaller(event, evHandlers)  
     
     def HandlersCaller(self, event, handlers):
         """!Hepler function which calls all handlers registered for
