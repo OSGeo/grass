@@ -510,7 +510,7 @@ class MapCalcFrame(wx.Frame):
         
     def OnDone(self, cmd, returncode):
         """!Add create map to the layer tree"""
-        if not self.addbox.IsChecked():
+        if not self.addbox.IsChecked() or returncode != 0:
             return
         name = self.newmaptxt.GetValue().strip(' "') + '@' + grass.gisenv()['MAPSET']
         mapTree = self.parent.GetLayerTree()
