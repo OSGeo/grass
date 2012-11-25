@@ -248,30 +248,3 @@ class MapWindow(object):
         @see OnMotion
         """
         return self.lastEN
-    
-    def GetLayerByName(self, name, mapType, dataType = 'layer'):
-        """!Get layer from layer tree by nam
-        
-        @param name layer name
-        @param type 'item' / 'layer' / 'nviz'
-
-        @return layer / map layer properties / nviz properties
-        @return None
-        """
-        if not self.tree:
-            return None
-        
-        try:
-            mapLayer = self.Map.GetListOfLayers(l_type = mapType, l_name = name)[0]
-        except IndexError:
-            return None
-        
-        if dataType == 'layer':
-            return mapLayer
-        item = self.tree.FindItemByData('maplayer', mapLayer)
-        if not item:
-            return None
-        if dataType == 'nviz':
-            return self.tree.GetLayerInfo(item, key = 'nviz')
-        
-        return item
