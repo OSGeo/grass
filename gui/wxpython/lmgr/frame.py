@@ -40,7 +40,7 @@ except ImportError:
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script          import core as grass
 
-from core.gcmd             import RunCommand, GError, GMessage
+from core.gcmd             import RunCommand, GError, GMessage, GException
 from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath, GetLayerNameFromCmd
 from core.events           import EVT_SHOW_NOTIFICATION, EVT_MAP_CREATED
@@ -566,6 +566,9 @@ class GMFrame(wx.Frame):
             self.RunDisplayCmd(command)
         elif re.compile('r[3]?\.mapcalc').search(command[0]):
             self.OnMapCalculator(event = None, cmd = command)
+        else:
+            raise ValueError('Layer Manger special command (%s)'
+                             ' not supported.' % ' '.join(command))
 
     def RunDisplayCmd(self, command):
         """!Handles display commands.
@@ -610,10 +613,9 @@ class GMFrame(wx.Frame):
             # add layer into layer tree
             lname, found = GetLayerNameFromCmd(command, fullyQualified = True,
                                                layerType = layertype)
-            if found:
-                self.GetLayerTree().AddLayer(ltype = layertype,
-                                             lname = lname,
-                                             lcmd = command)
+            self.GetLayerTree().AddLayer(ltype = layertype,
+                                         lname = lname,
+                                         lcmd = command)
 
     def GetLayerNotebook(self):
         """!Get Layers Notebook"""
@@ -1667,6 +1669,7 @@ class GMFrame(wx.Frame):
                                        lgroup = None)
 
     def OnMapCreated(self, event):
+        """!Decides wheter the map should be added to layer tree."""
         if event.add is None:
             if UserSettings.Get(group = 'cmd',
                                 key = 'addNewLayer', subkey = 'enabled'):

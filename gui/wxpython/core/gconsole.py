@@ -641,9 +641,9 @@ class GConsole(wx.EvtHandler):
                 name = p.get('value')
                 if '@' not in name:
                     name = name + '@' + grass.gisenv()['MAPSET']
-                mapEvent = gMapCreated(wx.ID_ANY,
+                mapEvent = gMapCreated(self._guiparent.GetId(),
                                        name=name, ltype=prompt, add=None)
-                wx.PostEvent(self, mapEvent)
+                wx.PostEvent(self._guiparent, mapEvent)
 
         event.Skip()
 
