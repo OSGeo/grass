@@ -871,7 +871,7 @@ class Map(object):
         
         return maps, masks, opacities
         
-    def GetMapsMasksAndOpacities(self, force, guiFrame):
+    def GetMapsMasksAndOpacities(self, force, guiFrame, windres):
         """!
         Used by Render function.
         
@@ -907,7 +907,7 @@ class Map(object):
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
         
-        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, mapWindow)
+        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, mapWindow, windres)
         
         # ugly hack for MSYS
         if sys.platform != 'win32':
