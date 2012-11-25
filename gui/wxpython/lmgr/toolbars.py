@@ -22,10 +22,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
-import sys
-
-from core               import globalvar
 from core.gcmd          import RunCommand
 from nviz.preferences   import NvizPreferencesDialog
 from gui_core.toolbars  import BaseToolbar, BaseIcons
