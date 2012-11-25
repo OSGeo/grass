@@ -39,7 +39,7 @@ from core.render        import EVT_UPDATE_PRGBAR
 from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions
-from core.gcmd          import GError, GMessage, RunCommand
+from core.gcmd          import GError, GMessage
 from dbmgr.dialogs      import DisplayAttributesDialog
 from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog
@@ -248,7 +248,7 @@ class MapFrame(SingleMapFrame):
     def AddNviz(self):
         """!Add 3D view mode window
         """
-        from nviz.main import haveNviz, GLWindow
+        from nviz.main import haveNviz, GLWindow, errorMsg
         
         # check for GLCanvas and OpenGL
         if not haveNviz:
@@ -256,7 +256,7 @@ class MapFrame(SingleMapFrame):
             GError(parent = self,
                    message = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
                                "was not found or loaded properly.\n"
-                               "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg))
+                               "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg))
             return
         
         # disable 3D mode for other displays
@@ -589,7 +589,6 @@ class MapFrame(SingleMapFrame):
         """
         Print options and output menu for map display
         """
-        point = wx.GetMousePosition()
         printmenu = wx.Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, wx.ID_ANY, _('Page setup'))
@@ -640,7 +639,6 @@ class MapFrame(SingleMapFrame):
         @param x,y coordinates
         @param layers selected tree item layers
         """
-        num = 0
         filteredLayers = []
         for layer in layers:
             ltype = self.tree.GetLayerInfo(layer, key = 'maplayer').GetType()
@@ -843,7 +841,6 @@ class MapFrame(SingleMapFrame):
         """!Query tools menu"""
         if self.GetMapToolbar():
             self.SwitchTool(self.toolbars['map'], event)
-            action = self.toolbars['map'].GetAction()
         
         self.toolbars['map'].action['desc'] = 'queryMap'
         self.MapWindow.mouse['use'] = "query"
@@ -1075,7 +1072,7 @@ class MapFrame(SingleMapFrame):
             raster.append(self.tree.GetLayerInfo(layer, key = 'maplayer').GetName())
 
         win = Histogram2Frame(parent = self, rasterList = raster)
-        win.CentreOnParent
+        win.CentreOnParent()
         win.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be histogrammed
@@ -1284,7 +1281,6 @@ class MapFrame(SingleMapFrame):
     def OnZoomMenu(self, event):
         """!Popup Zoom menu
         """
-        point = wx.GetMousePosition()
         zoommenu = wx.Menu()
         
         for label, handler in ((_('Zoom to computational region'), self.OnZoomToWind),
