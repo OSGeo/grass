@@ -310,7 +310,7 @@ class HistogramFrame(wx.Frame):
         self.printopt = PrintOptions(self, self.HistWindow)
         
         # Add layer to the map
-        self.layer = self.Map.AddLayer(type = "command", name = 'histogram', command = ['d.histogram'],
+        self.layer = self.Map.AddLayer(type = "command", name = 'histogram', command = [['d.histogram']],
                                        l_active = False, l_hidden = False, l_opacity = 1, l_render = False)
         if self.mapname:
             self.SetHistLayer(self.mapname, None)
