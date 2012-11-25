@@ -70,10 +70,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def __init__(self, parent, giface, id = wx.ID_ANY, frame = None,
                  Map = None, tree = None, lmgr = None):
         self.parent = parent # MapFrame
-        
+        self.tree = tree
+        self.lmgr = lmgr
+
         glcanvas.GLCanvas.__init__(self, parent, id)
         MapWindow.__init__(self, parent = parent, giface = giface, frame = frame,
-                           Map = Map, tree = tree, lmgr = lmgr)
+                           Map = Map)
         self.Hide()
         
         self.init = False

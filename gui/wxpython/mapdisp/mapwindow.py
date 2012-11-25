@@ -55,9 +55,10 @@ class BufferedWindow(MapWindow, wx.Window):
                  id = wx.ID_ANY, tree = None, lmgr = None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         MapWindow.__init__(self, parent = parent, giface = giface, Map = Map,
-                           frame = frame, tree = tree, lmgr = lmgr, **kwargs)
+                           frame = frame, **kwargs)
         wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
         
+        self.tree = tree
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
         self.dragimg = None # initialize variable for map panning

@@ -36,13 +36,10 @@ class MapWindow(object):
      - Pixel2Cell
      - Cell2Pixel (if it is possible)
     """
-    def __init__(self, parent, giface, Map, frame,
-                 tree = None, lmgr = None, **kwargs):
-        self.parent = parent # MapFrame
-        self.Map    = Map
+    def __init__(self, parent, giface, Map, frame, **kwargs):
+        self.parent = parent
+        self.Map = Map
         self.frame = frame
-        self.tree   = tree
-        self.lmgr   = lmgr
         self._giface = giface
         
         # mouse attributes -- position on the screen, begin and end of

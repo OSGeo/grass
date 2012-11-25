@@ -2057,6 +2057,8 @@ class NvizToolWindow(FN.FlatNotebook):
         """
         tree = self.parent.GetLayerTree()
         items = tree.FindItemByData(key = 'name', value = name)
+        if not items:
+            return None
         for item in items:
             if tree.GetLayerInfo(item, key = 'type') == mapType:
                 return tree.GetLayerInfo(item, key = 'nviz')
