@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2012-11-07 17:44+0100\n"
+"PO-Revision-Date: 2012-11-10 19:23+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -1179,7 +1179,7 @@ msgstr "Voulez-vous enregistrer les paramètres actuels dans un fichier ?"
 #: ../gui/wxpython/lmgr/frame.py:499
 #, python-format
 msgid "Close Map Display %s"
-msgstr "Fermer la fenêtre de carte %d"
+msgstr "Fermer la fenêtre de carte %s"
 
 #: ../gui/wxpython/lmgr/frame.py:607 ../gui/wxpython/lmgr/frame.py:1367
 msgid "Selected map layer is not vector."
@@ -5987,7 +5987,7 @@ msgstr "Convertir des tranches de cartes raster 2D en une carte volumique raster
 
 #: ../gui/wxpython/menustrings.py:369
 msgid "Horizon angle"
-msgstr "Angle d'hoziron"
+msgstr "Angle d'horizon"
 
 #: ../gui/wxpython/menustrings.py:370
 msgid "Horizon angle computation from a digital elevation model."
