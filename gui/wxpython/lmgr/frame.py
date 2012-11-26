@@ -1494,7 +1494,7 @@ class GMFrame(wx.Frame):
         dlg.CentreOnScreen()
         dlg.Show()
         
-    def OnImportWMS(self, event):
+    def OnImportWMS(self, event, cmd = None):
         """!Import data from OGC WMS server"""
         from ogc_services.wms import WMSDialog
         dlg = WMSDialog(parent = self)
