@@ -175,6 +175,21 @@ class Region(object):
                 return False
         return True
 
+    def iteritems(self):
+        return [('projection', self.proj),
+                ('zone', self.zone),
+                ('north', self.north),
+                ('south', self.south),
+                ('west', self.west),
+                ('east', self.east),
+                ('top', self.top),
+                ('bottom', self.bottom),
+                ('nsres', self.nsres),
+                ('ewres', self.ewres),
+                ('tbres', self.tbres),
+                ('rows', self.rows),
+                ('cols', self.cols),
+                ('cells', self.rows * self.cols)]
 
     #----------METHODS----------
     def zoom(self, raster_name):
