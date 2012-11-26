@@ -440,6 +440,7 @@ class ExtensionTree(ItemTree):
                     if prefix not in mdict:
                         mdict[prefix] = dict()
                     mdict[prefix][name] = dict()
+                    mdict[prefix][name]['command'] = value
                 else:
                     mdict[prefix][name][key] = value
             else:
