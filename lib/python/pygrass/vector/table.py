@@ -322,6 +322,10 @@ class Columns(object):
 
         ..
         """
+        valid_type = ('DOUBLE PRECISION', 'INT', 'DATE')
+        if 'VARCHAR' in col_type or col_type.upper() not in valid_type:
+            str_err = "Type is not supported, supported types are: %s"
+            raise TypeError(str_err % ", ".join(valid_type))
         cur = self.conn.cursor()
         cur.execute(sql.ADD_COL.format(tname=self.tname,
                                        cname=col_name,
