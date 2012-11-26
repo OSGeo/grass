@@ -1,0 +1,60 @@
+<!-- meta page description: wxGUI Animation tool -->
+<!-- meta page index: wxGUI -->
+<h2>DESCRIPTION</h2>
+
+The <b>Animation Tool</b> is a <em><a href="wxGUI.html">wxGUI</a></em> component
+for animating a series of GRASS raster maps or a space time raster dataset (created by t.* modules).
+
+<p>
+Animation Tool allows to:
+
+<ul>
+  <li>display up to 4 synchronized animations</li>
+  <li>control the animation speed</li>
+  <li>interactively change active frame using a slider</li>
+  <li>visualize space time datasets with unequally spaced intervals</li>
+  <li>animate 3d view (partially implemented)</li>
+</ul>
+
+<p>
+3D view animation enables to animate raster (as an elevation map or a color map)
+or vector map (points, lines). Internally, module m.nviz.image is used.
+To display 3D view animation follow these steps:
+<ul>
+  <li>open GRASS GUI, load maps and start 3D view</li>
+  <li>set view, light and other parameters as you like</li>
+  <li>save workspace file</li>
+  <li>add new animation in Animation Tool, choose 3D view mode</li>
+  <li>choose data (series of maps or space time dataset) used for animation</li>
+  <li>set workspace file</li>
+  <li>choose parameter (parameter of m.nviz.image) to animate (e.g. color_map)</li>
+
+</ul>
+
+<center>
+<br>
+<img src="wxGUI_animation_tool.jpg" border="1" alt="Animation Tool screenshot">
+<br>
+<br>
+</center>
+
+<h2>TODO</h2>
+<ul>
+  <li>export animation</li>
+  <li>...</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="wxGUI.html">wxGUI</a><br>
+  <a href="wxGUI.Components.html">wxGUI components</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Anna Kratochvilova,
+<a href="http://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic
+
+<p>
+<i>$Date$</i>
