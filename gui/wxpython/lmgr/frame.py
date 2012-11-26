@@ -1395,18 +1395,22 @@ class GMFrame(wx.Frame):
     def OnAnimationTool(self, event):
         """!Launch Animation tool
         """
-        try:
-            from animation.frame import AnimationFrame
-        except ImportError:
-            GError(_("Extension <%s> not available, run '%s' to install it.") % \
-                       ('wx.animation', 'g.extension -s extension=wx.animation'),
-                   parent = self, showTraceback = False)
-            return
-        
+        from animation.frame import AnimationFrame
+
         frame = AnimationFrame(parent = self)
         frame.CentreOnScreen()
         frame.Show()
-                
+
+        rasters = []
+        tree = self.GetLayerTree()
+        if tree:
+            for layer in tree.GetSelectedLayers(checkedOnly = False):
+                if tree.GetLayerInfo(layer, key = 'type') == 'raster':
+                    rasters.append(tree.GetLayerInfo(layer, key = 'maplayer').GetName())
+            if rasters:
+                frame.SetAnimations(raster = [rasters, None, None, None])
+
+
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
