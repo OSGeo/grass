@@ -13,6 +13,7 @@ from vector_type import VTYPE, GV_TYPE
 # import pygrass modules
 #
 from pygrass.errors import GrassError
+from pygrass.functions import getenv
 
 import geometry
 from abstract import Info
@@ -296,7 +297,8 @@ class VectorTopo(Vector):
         if vtype in _GEOOBJ.keys():
             if _GEOOBJ[vtype] is not None:
                 return (_GEOOBJ[vtype](v_id=indx, c_mapinfo=self.c_mapinfo,
-                                       table=self.table)
+                                       table=self.table,
+                                       write=self.write)
                         for indx in xrange(1, self.number_of(vtype) + 1))
         else:
             keys = "', '".join(sorted(_GEOOBJ.keys()))
@@ -364,7 +366,8 @@ class VectorTopo(Vector):
                                              c_mapinfo=self.c_mapinfo,
                                              c_points=c_points,
                                              c_cats=c_cats,
-                                             table=self.table)
+                                             table=self.table,
+                                             write=self.write)
         else:
             raise ValueError('The index must be >0, %r given.' % feature_id)
 
