@@ -29,7 +29,7 @@ is created:
 
 <div class="code"><pre>
 # example for storing DB in mapset directory (keep single quotes):
-db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 db.connect -p
 </pre></div>
 
@@ -51,9 +51,10 @@ To open a DB file stored within the current mapset,
 the following way is suggested (corresponds to above database connection):
 
 <div class="code"><pre>
+# fetch GRASS variables as shell environment variables:
 eval `g.gisenv`
 # use double quotes:
-sqlitebrowser "$GISDBASE/$LOCATION_NAME/$MAPSET"/sqlite.db
+sqlitebrowser "$GISDBASE/$LOCATION_NAME/$MAPSET"/sqlite/sqlite.db
 </pre></div>
 
 <!-- doesnt work yet, why?:
