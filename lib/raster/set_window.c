@@ -155,7 +155,7 @@ static void update_window_mappings(void)
 	    continue;
 
 	if (fcb->open_mode == OPEN_OLD)
-	    G_fatal_error(_("Input window changed while maps are open for read"));
+	    G_fatal_error(_("Input window changed while maps are open for read. Map name <%s>"), fcb->name);
     }
 
     /* turn masking (back) on if necessary */
@@ -171,7 +171,7 @@ static void check_write_window(void)
 
 	if (fcb->open_mode == OPEN_NEW_UNCOMPRESSED ||
 	    fcb->open_mode == OPEN_NEW_COMPRESSED)
-	    G_fatal_error(_("Output window changed while maps are open for write"));
+	    G_fatal_error(_("Output window changed while maps are open for write. Map name <%s>"), fcb->name);
     }
 }
 
