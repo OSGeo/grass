@@ -13,6 +13,8 @@ import numpy as np
 import grass.lib.gis as libgis
 import grass.lib.vector as libvect
 
+from pygrass.errors import GrassError
+
 from basic import Ilist, Bbox, Cats
 import sql
 
@@ -110,10 +112,11 @@ def get_xyz(pnt):
 
 
 class Attrs(object):
-    def __init__(self, v_id, table):
+    def __init__(self, v_id, table, write=False):
         self.id = v_id
         self.table = table
         self.cond = "%s=%d" % (self.table.key, self.id)
+        self.write = write
 
     def __getitem__(self, key):
         """Return the value stored in the attribute table. ::
@@ -136,12 +139,17 @@ class Attrs(object):
             >>> attrs['LABEL'] = 'New Label'
 
         .."""
-        #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
-        self.table.execute(sql.UPDATE_WHERE.format(tname=self.table.name,
-                                                   new_col=key,
-                                                   old_col=repr(value),
-                                                   condition=self.cond))
-        #self.table.conn.commit()
+        if self.write:
+            #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
+            self.table.execute(sql.UPDATE_WHERE.format(tname=self.table.name,
+                                                       new_col=key,
+                                                       old_col=repr(value),
+                                                       condition=self.cond))
+            #self.table.conn.commit()
+        else:
+            str_err = "You can only read the attributes if the map is \
+in another mapset"
+            raise GrassError(str_err)
 
     def __dict__(self):
         """Reurn a dict of the attribute table row."""
@@ -175,7 +183,7 @@ class Geo(object):
     >>> geo1 = Geo(c_points=points, c_cats=cats)
     """
     def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None,
-                 table=None):
+                 table=None, write=False):
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
 
@@ -193,7 +201,7 @@ class Geo(object):
 
         # set the attributes
         if table:
-            self.attrs = Attrs(self.id, table)
+            self.attrs = Attrs(self.id, table, write)
 
     def is_with_topology(self):
         if self.c_mapinfo is not None:
