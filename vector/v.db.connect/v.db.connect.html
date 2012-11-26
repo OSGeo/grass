@@ -71,10 +71,10 @@ v.db.connect map=vectormap table=table layer=2 key=ID
 Very similar to DBF driver example above.
 
 <div class="code"><pre>
-db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 db.tables -p
 v.db.connect map=vectormap table=table driver=sqlite \
-             database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+             database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 v.db.connect -p map=vectormap
 </pre></div>
 
