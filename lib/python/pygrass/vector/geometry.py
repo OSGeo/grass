@@ -6,13 +6,15 @@ Created on Wed Jul 18 10:46:25 2012
 
 """
 import ctypes
-import numpy as np
 import re
+
+import numpy as np
 
 import grass.lib.gis as libgis
 import grass.lib.vector as libvect
 
 from basic import Ilist, Bbox, Cats
+import sql
 
 
 WKT = {'POINT\((.*)\)': 'point',  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
@@ -107,6 +109,64 @@ def get_xyz(pnt):
     return x, y, z
 
 
+class Attrs(object):
+    def __init__(self, v_id, table):
+        self.id = v_id
+        self.table = table
+        self.cond = "%s=%d" % (self.table.key, self.id)
+
+    def __getitem__(self, key):
+        """Return the value stored in the attribute table. ::
+
+            >>> attrs = Attrs(v_id, table)
+            >>> attrs['LABEL']
+            .
+
+        .."""
+        #SELECT {cols} FROM {tname} WHERE {condition};
+        cur = self.table.execute(sql.SELECT_WHERE.format(cols=key,
+                                                         tname=self.table.name,
+                                                         condition=self.cond))
+        return cur.fetchone()[0]
+
+    def __setitem__(self, key, value):
+        """Set value of a given column of a table attribute. ::
+
+            >>> attrs = Attrs(v_id, table)
+            >>> attrs['LABEL'] = 'New Label'
+
+        .."""
+        #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
+        self.table.execute(sql.UPDATE_WHERE.format(tname=self.table.name,
+                                                   new_col=key,
+                                                   old_col=repr(value),
+                                                   condition=self.cond))
+        #self.table.conn.commit()
+
+    def __dict__(self):
+        """Reurn a dict of the attribute table row."""
+        dic = {}
+        for key, val in zip(self.keys(), self.values()):
+            dic[key] = val
+        return dic
+
+    def values(self):
+        """Return the values of the attribute table row."""
+        #SELECT {cols} FROM {tname} WHERE {condition}
+        cur = self.table.execute(sql.SELECT_WHERE.format(cols='*',
+                                                         tname=self.table.name,
+                                                         condition=self.cond))
+        return cur.fetchone()
+
+    def keys(self):
+        """Return the column name of the attribute table."""
+        return self.table.columns.names()
+
+    def commit(self):
+        """Save the changes"""
+        self.table.conn.commit()
+
+
 class Geo(object):
     """
     >>> geo0 = Geo()
@@ -114,7 +174,8 @@ class Geo(object):
     >>> cats = ctypes.pointer(libvect.line_cats())
     >>> geo1 = Geo(c_points=points, c_cats=cats)
     """
-    def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None):
+    def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None,
+                 table=None):
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
 
@@ -129,6 +190,10 @@ class Geo(object):
             self.c_cats = ctypes.pointer(libvect.line_cats())
         else:
             self.c_cats = c_cats
+
+        # set the attributes
+        if table:
+            self.attrs = Attrs(self.id, table)
 
     def is_with_topology(self):
         if self.c_mapinfo is not None:

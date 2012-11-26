@@ -72,7 +72,7 @@ class Info(object):
         >>> municip.close()
 
     """
-    def __init__(self, name, mapset=''):
+    def __init__(self, name, mapset='', link_id=None):
         # Set map name and mapset
         self._name = name
         self.mapset = mapset
@@ -81,6 +81,7 @@ class Info(object):
         self._class_name = 'Vector'
         self.overwrite = False
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
+        self.link_id = link_id
 
     def _get_name(self):
         if self.exist() and self.is_open():
@@ -259,6 +260,18 @@ class Info(object):
         if openvect == -1:
             str_err = "Not able to open the map, C function return %d."
             raise OpenError(str_err % openvect)
+        # istantiate the table
+        self.table = self.get_table(link_id=self.link_id)
+
+    def get_table(self, link_id=None, link_name=None,):
+        if link_id is None and link_name is None and len(self.dblinks) == 0:
+            return None
+        if link_id is not None:
+            return self.dblinks.by_number(link_id).table()
+        elif link_name is not None:
+            return self.dblinks.by_name(link_name).table()
+        else:
+            return self.dblinks.by_number(1).table()
 
     def close(self):
         if self.is_open():
