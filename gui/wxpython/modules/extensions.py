@@ -322,8 +322,6 @@ class InstallExtensionWindow(wx.Frame):
                 SetAddOnPath(key = 'BASE')
             
             globalvar.UpdateGRASSAddOnCommands()
-            log = self.parent.GetLogWindow()
-            log.GetPrompt().SetFilter(None)
 
     def OnItemSelected(self, event):
         """!Item selected"""
