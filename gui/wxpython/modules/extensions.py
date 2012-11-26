@@ -33,6 +33,7 @@ from grass.script import task as gtask
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.utils       import SetAddOnPath
+from core.events      import EVT_SHOW_NOTIFICATION
 from gui_core.forms   import GUI
 from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget, EVT_MODULE_SELECTED
 
@@ -200,6 +201,11 @@ class InstallExtensionWindow(wx.Frame):
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
         self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
         self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
+
+        # show text in statusbar when notification command event occurs
+        # propagation stops here, no need to show text twice
+        self.Bind(EVT_SHOW_NOTIFICATION,
+                  lambda event: self.SetStatusText(event.message))
 
         self._layout()
 
