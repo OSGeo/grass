@@ -13,59 +13,61 @@ settings are saved in <em>$LOCATION/vector_map/dbln</em>.
 
 <h3>DBF -> PG</h3>
 
-<em>Storing table 'markveggy.dbf' (in current directory) into PostgreSQL
+<em>Storing table 'geonames.dbf' (in current directory) into PostgreSQL
 through ODBC:</em><br>
 
 <div class="code"><pre>
-db.copy from_driver=dbf from_database=$HOME/grassdata/spearfish60/user1/dbf \
-  from_table=markveggy to_driver=pg to_database="host=pgserver,dbname=grass6test" \
-  to_table=markveggy 
+db.copy from_driver=dbf from_database=$HOME/grassdata/nc_spm_08/user1/dbf \
+  from_table=geonames to_driver=pg to_database="host=pgserver,dbname=testdb" \
+  to_table=geonames 
 </pre></div>
 
 
 <h3>PG -> DBF</h3>
 
 <div class="code"><pre>
-db.copy from_driver=pg  from_database="host=pgserver.itc.it,dbname=testdb" \
+db.copy from_driver=pg  from_database="host=pgserver.example.org,dbname=testdb" \
   from_table=origtable to_driver=dbf \
-  to_database=$HOME/grassdata/spearfish60/user1/dbf to_table=origtable
+  to_database=$HOME/grassdata/nc_spm_08/user1/dbf to_table=origtable
 </pre></div>
 
 
 <h3>PG -> PG with condition</h3>
 
 <div class="code"><pre>
-db.copy from_driver=pg  from_database="host=localhost,dbname=meteo" \
-  from_table=ukraine to_driver=pg to_database="host=localhost,dbname=meteo" \
-  to_table=selection where="cat < 500" 
+db.copy from_driver=pg  from_database="host=localhost,dbname=testdb" \
+  from_table=geonames to_driver=pg to_database="host=localhost,dbname=testdb" \
+  to_table=selection where="cat &lt; 500" 
 </pre></div>
 
 <h3>DBF -> SQLite</h3>
 
 <div class="code"><pre>
-db.copy from_driver=dbf from_database=$HOME/grassdata/spearfish60/user1/dbf \
-   from_table=ammprv to_driver=sqlite \
-   to_database=$HOME/grassdata/spearfish60/user1/sqlite.db to_table=ammprv
+db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/$MAPSET/PERMANENT/dbf \
+   from_table=geonames_features to_driver=sqlite \
+   to_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db' to_table=geonames_features
 
 # convenient viewer:
-sqlitebrowser $HOME/grassdata/spearfish60/user1/sqlite.db
+sqlitebrowser $HOME/grassdata/nc_spm_08/user1/sqlite/sqlite.db
 </pre></div>
 
 <h3>SQLite -> DBF</h3>
 <div class="code"><pre>
-db.copy from_driver=sqlite from_database=$HOME/grassdata/spearfish60/user1/sqlite.db \
-   from_table=ammprv to_driver=dbf to_database=$HOME/grassdata/spearfish60/user1/dbf \
+db.copy from_driver=sqlite from_database=$HOME/grassdata/nc_spm_08/user1/sqlite.db \
+   from_table=ammprv to_driver=dbf to_database=$HOME/grassdata/nc_spm_08/user1/dbf \
    to_table=ammprv
 </pre></div>
 
 
 <h2>SEE ALSO</h2>
 
-<em><a href="v.db.connect.html">v.db.connect</a>,
+<em>
+<a href="v.db.connect.html">v.db.connect</a>,
 <a href="db.drivers.html">db.drivers</a>,
 <a href="db.login.html">db.login</a>,
 <a href="v.clean.html">v.clean</a>,
-<a href="sql.html">GRASS SQL interface</a></em>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
 
