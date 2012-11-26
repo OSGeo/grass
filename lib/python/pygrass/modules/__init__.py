@@ -587,7 +587,7 @@ class Module(object):
                                       stderr=self.stderr_)
         if self.finish_:
             self.popen.wait()
-            self.stdout, self.stderr = self.popen.communicate()
+        self.stdout, self.stderr = self.popen.communicate()
 
 _CMDS = list(grass.script.core.get_commands()[0])
 _CMDS.sort()
