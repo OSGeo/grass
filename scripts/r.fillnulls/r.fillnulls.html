@@ -10,7 +10,8 @@ from the no data area boundaries buffer using <em>v.surf.rst</em>  or
 Each area boundary buffer is set to three times the map resolution to get nominally
 three points around the edge. This way the algorithm interpolates into the hole with
 a trained slope and curvature at the edges, in order to avoid that such a flat plane
-is generated in a hole.
+is generated in a hole. The widht of edge area can be adjusted by 
+changing the edge parameter.
 <p>During the interpolation following warning may occur when using the RST method:<p>
 <tt>
 Warning: strip exists with insufficient data<br>
@@ -21,6 +22,9 @@ This warning is generated if large data holes exist within the surface.
 As the idea of <em>r.fillnulls</em> is to fill such holes, the user may
 ignore the warning. The interpolation will be continued. However, the user
 may pay attention to below notes.
+<p>
+If interpolation fails, temporary raster and vector maps are left in place to allow
+unfilled map hole (NULL area) identification and manual repair.
 
 <h2>NOTES</h2>
 
@@ -43,6 +47,10 @@ boundary. The user will have to carefully check the result using
 <em>r.mapcalc</em> (generating a difference map to the
 input map and applying the "differences" color table with <em>r.colors</em>)
 and/or <em>d.what.rast</em> to query individual cell values.
+
+<h2>WARNING</h2>
+RST method stores temporary maps on hard disk. It will require at least as much
+free space as one extra input raster map takes.
 
 <h2>EXAMPLE</h2>
 
