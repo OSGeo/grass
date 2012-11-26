@@ -73,6 +73,7 @@ from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
 from mapswipe.frame        import SwipeMapFrame
+from rlisetup.frame        import RLiSetupFrame
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
@@ -445,6 +446,13 @@ class GMFrame(wx.Frame):
             win.SetSecondRaster(rasters[1])
 
         win.CentreOnScreen()
+        win.Show()
+
+    def OnRLiSetup(self, event):
+        """!Launch r.li Setup"""
+        win = RLiSetupFrame(parent = self)
+        win.CentreOnScreen()
+        
         win.Show()
 
     def OnDone(self, cmd, returncode):

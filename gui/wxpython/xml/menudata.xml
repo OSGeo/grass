@@ -1547,8 +1547,7 @@
               <label>Set up sampling and analysis framework</label>
               <help>Configuration editor for r.li.'index'</help>
               <keywords>raster,landscape structure analysis</keywords>
-              <handler>OnMenuCmd</handler>
-              <command>r.li.setup</command>
+              <handler>OnRLiSetup</handler>
             </menuitem>
             <separator />
             <menuitem>
