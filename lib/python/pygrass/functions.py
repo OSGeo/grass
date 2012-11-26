@@ -14,6 +14,7 @@ from grass.script import core as grasscore
 from pygrass.errors import GrassError
 from pygrass.region import Region
 
+
 def looking(filter_string, obj):
     """
     >>> import grass.lib.vector as libvect
@@ -41,6 +42,16 @@ def copy(existingmap, newmap, maptype):
     grasscore.run_command('g.copy',
                           **{maptype: '{old},{new}'.format(old=existingmap,
                                                            new=newmap), })
+
+
+def getenv(env):
+    """Return the current grass environment variables:
+
+        >>> getenv("MAPSET")
+        'user1'
+
+    .."""
+    return libgis.G__getenv(env)
 
 
 def get_mapset_raster(mapname, mapset=''):
