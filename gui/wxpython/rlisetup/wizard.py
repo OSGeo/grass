@@ -299,7 +299,7 @@ class FirstPage(TitledPage):
         #define sampling region
         self.sampling_reg = wx.RadioBox(parent=self, id=wx.ID_ANY,
                                       label=" %s " % _("Define sampling " \
-                                      " region(region for analysis)"),
+                                      " region (region for analysis)"),
                                       choices=[_('Whole map layer'),
                                                _('Keyboard setting'),
                                                _('Draw the sampling frame')],
@@ -314,6 +314,7 @@ class FirstPage(TitledPage):
         #bindings
         self.sampling_reg.Bind(wx.EVT_RADIOBOX, self.OnSampling)
         self.newconftxt.Bind(wx.EVT_KILL_FOCUS, self.OnName)
+        self.newconftxt.Bind(wx.EVT_TEXT, self.OnNameChanged)
         self.vectselect.Bind(wx.EVT_TEXT, self.OnVector)
         self.mapselect.Bind(wx.EVT_TEXT, self.OnRast)
         #self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -336,13 +337,16 @@ class FirstPage(TitledPage):
 
     def OnName(self, event):
         """!Sets the name of configuration file"""
-        self.conf_name = self.newconftxt.GetValue()
         if self.conf_name in self.parent.parent.listfiles:
             gcmd.GMessage(parent=self,
                           message=_("The configuration file %s "
                                     "already exists, please change name") % self.conf_name)
             self.newconftxt.SetValue('')
             self.conf_name = ''
+
+    def OnNameChanged(self, event):
+        """!Name of configuration file has changed"""
+        self.conf_name = self.newconftxt.GetValue()
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
