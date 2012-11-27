@@ -59,6 +59,7 @@ struct feat_parts
 
 /* functions used in *_pg.c files */
 int Vect__execute_pg(PGconn *, const char *);
+int Vect__execute_get_value_pg(PGconn *, const char *);
 SF_FeatureType Vect__cache_feature_pg(const char *, int, int,
                                       struct Format_info_cache *,
                                       struct feat_parts *);

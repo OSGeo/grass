@@ -46,7 +46,6 @@ static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
 static int error_corrupted_data(const char *);
 static void reallocate_cache(struct Format_info_cache *, int);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
-static int get_centroid_topo(struct Format_info_pg *, int, struct line_pnts *);
 static int get_centroid(struct Map_info *, int, struct line_pnts *);
 #endif
 
@@ -314,11 +313,9 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     if (line_c)
         Vect_cat_set(line_c, 1, (int) Line->offset);
     
-    if (Line->type == GV_CENTROID) {
-        if (pg_info->toposchema_name)
-            return get_centroid_topo(pg_info, line, line_p);
-        else
-            return get_centroid(Map, line, line_p);
+    if (Line->type == GV_CENTROID && !pg_info->toposchema_name) {
+        /* simple features access: get centroid from sidx */
+        return get_centroid(Map, line, line_p);
     }
     
     /* get feature id */
@@ -370,7 +367,7 @@ int read_next_line_pg(struct Map_info *Map,
                       struct line_pnts *line_p, struct line_cats *line_c,
                       int ignore_constraints)
 {
-    int line, itype;
+    int itype;
     SF_FeatureType sf_type;
 
     struct Format_info_pg *pg_info;
@@ -383,8 +380,6 @@ int read_next_line_pg(struct Map_info *Map,
         Vect_get_constraint_box(Map, &mbox);
 
     while (TRUE) {
-        line = Map->next_line++;        /* level 2 only */
-
         /* reset data structures */
         if (line_p != NULL)
             Vect_reset_line(line_p);
@@ -395,9 +390,9 @@ int read_next_line_pg(struct Map_info *Map,
         while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
             /* cache feature -> line_p & line_c */
             sf_type = get_feature(pg_info, -1, -1);
-
+            
             if (sf_type == SF_NONE) {
-                G_warning(_("Feature %d without geometry skipped"), line);
+                G_warning(_("Feature %d without geometry skipped"), pg_info->cache.fid);
                 return -1;
             }
 
@@ -411,6 +406,8 @@ int read_next_line_pg(struct Map_info *Map,
             }
 
             G_debug(4, "%d lines read to cache", pg_info->cache.lines_num);
+            /* store fid as offset to be used (used for topo access only */
+            Map->head.last_offset = pg_info->cache.fid;
         }
 
         /* get data from cache */
@@ -458,16 +455,16 @@ int read_next_line_pg(struct Map_info *Map,
 
    \param[in,out] pg_info pointer to Format_info_pg struct
    \param fid feature id to be read (-1 for next)
-   \param topotable_name table name for topological access (NULL for pseudo-topological access) - "node" or "edge"
-
+   \param type feature type (GV_POINT, GV_LINE, ...) - use only for topological access
+   
    \return simple feature type (SF_POINT, SF_LINESTRING, ...)
    \return -1 on error
  */
 SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
 {
+    int force_type; /* force type (GV_BOUNDARY or GV_CENTROID) for topo access only */
     char *data;
     char stmt[DB_SQL_MAX];
-    int left_face, right_face;
     
     if (!pg_info->geom_column && !pg_info->topogeom_column) {
         G_warning(_("No geometry or topo geometry column defined"));
@@ -481,6 +478,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
         }
     }
     else {
+        /* random access */
         if (!pg_info->fid_column) {
             G_warning(_("Random access not supported. "
                         "Primary key not defined."));
@@ -495,31 +493,33 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
             sprintf(stmt,
                     "DECLARE %s_%s%p CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
                     "WHERE %s = %d", pg_info->schema_name, pg_info->table_name,
-                    pg_info->conn, pg_info->geom_column, pg_info->schema_name,
-                    pg_info->table_name, pg_info->fid_column, fid);
+                    pg_info->conn, pg_info->geom_column,
+                    pg_info->schema_name, pg_info->table_name,
+                    pg_info->fid_column, fid);
         }
         else {
-            /* topological access */
-            char *topotable_name;
-            
-            if (type == GV_POINT)
-                topotable_name = "node";
-            else if (type & GV_LINES)
-                topotable_name = "edge";
-            else {
+            if (!(type & (GV_POINTS | GV_LINES))) {
                 G_warning(_("Unsupported feature type %d"), type);
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return -1;
             }
             
-            sprintf(stmt,
-                    "DECLARE %s_%s%p CURSOR FOR SELECT geom,left_face,right_face "
-                    " FROM \"%s\".\"%s\" "
-                    "WHERE %s_id = %d", pg_info->schema_name, pg_info->table_name,
-                    pg_info->conn, pg_info->toposchema_name,
-                    topotable_name, topotable_name, fid);
+            if (type & GV_POINTS) {
+                sprintf(stmt,
+                        "DECLARE %s_%s%p CURSOR FOR SELECT geom,containing_face "
+                        " FROM \"%s\".node WHERE node_id = %d",
+                        pg_info->schema_name, pg_info->table_name, pg_info->conn,
+                        pg_info->toposchema_name, fid);
+            }
+            else {
+                sprintf(stmt,
+                        "DECLARE %s_%s%p CURSOR FOR SELECT geom,left_face,right_face "
+                        " FROM \"%s\".edge WHERE edge_id = %d",
+                        pg_info->schema_name, pg_info->table_name, pg_info->conn,
+                        pg_info->toposchema_name, fid);
+            }
         }
-
+        G_debug(3, "SQL: %s", stmt);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1)
             return -1;
 
@@ -570,22 +570,45 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
         }
         return -2;
     }
-    data = (char *)PQgetvalue(pg_info->res, pg_info->next_line, 0);
-    left_face = right_face = 0;
-    if (pg_info->toposchema_name) { /* -> PostGIS topology access */
-        if (fid < 0) { /* sequential access */
-            left_face  = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
-            right_face = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 3));
+
+    force_type = -1;
+    if (pg_info->toposchema_name) {
+        if (fid < 0) {
+            /* sequatial access */
+            if (strcmp(PQgetvalue(pg_info->res, pg_info->next_line, 2), "b") == 0)
+                force_type = GV_BOUNDARY;
+            else if (strcmp(PQgetvalue(pg_info->res, pg_info->next_line, 2), "c") == 0)
+                force_type = GV_CENTROID;
         }
-        else {         /* random access */
-            left_face  = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
-            right_face = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
+        else {
+            /* random access: check topological elemenent type consistency */
+            if (type & GV_POINTS) {
+                if (type == GV_POINT &&
+                    strlen(PQgetvalue(pg_info->res, pg_info->next_line, 1)) != 0)
+                    G_warning(_("Inconsistency in topology: detected centroid (should be point)"));
+            }
+            else {
+                int left_face, right_face;
+                
+                left_face  = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
+                right_face = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
+                
+                if (type == GV_LINE &&
+                    (left_face != 0 || right_face != 0)) 
+                    G_warning(_("Inconsistency in topology: detected boundary (should be line)"));
+            }
         }
     }
-    pg_info->cache.sf_type =
-        Vect__cache_feature_pg(data, FALSE,
-                               left_face != 0 || right_face != 0 ? TRUE : FALSE,
-                               &(pg_info->cache), NULL);
+
+    /* get geometry data */
+    data = (char *)PQgetvalue(pg_info->res, pg_info->next_line, 0);
+    
+    /* load feature to the cache */
+    pg_info->cache.sf_type = Vect__cache_feature_pg(data,
+                                                    FALSE, force_type,
+                                                    &(pg_info->cache), NULL);
+    
+    /* set feature id */
     if (fid < 0) {
         pg_info->cache.fid =
             atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
@@ -607,7 +630,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
         if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
             return -1;
     }
-
+    
     return pg_info->cache.sf_type;
 }
 
@@ -659,7 +682,7 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
 
    \param data HEX data
    \param skip_polygon skip polygons (level 1)
-   \param force_boundary force GV_BOUNDARY feature type (for PostGIS topology)
+   \param force_type force GV_BOUNDARY or GV_CENTROID (used for PostGIS topology only)
    \param[out] cache lines cache
    \param[out] fparts used for building pseudo-topology (or NULL)
 
@@ -667,7 +690,7 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
    \return SF_UNKNOWN on error
  */
 SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
-                                      int force_boundary,
+                                      int force_type,
                                       struct Format_info_cache *cache,
                                       struct feat_parts * fparts)
 {
@@ -759,17 +782,14 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
     ret = -1;
     if (ftype == SF_POINT) {
         cache->lines_num = 1;
-        cache->lines_types[0] = GV_POINT;
+        cache->lines_types[0] = force_type == GV_CENTROID ? force_type : GV_POINT;
         ret = point_from_wkb(wkb_data, nbytes, byte_order,
                              is3D, cache->lines[0]);
         add_fpart(fparts, ftype, 0, 1);
     }
     else if (ftype == SF_LINESTRING) {
         cache->lines_num = 1;
-        if (force_boundary)
-            cache->lines_types[0] = GV_BOUNDARY;
-        else
-            cache->lines_types[0] = GV_LINE;
+        cache->lines_types[0] = force_type == GV_BOUNDARY ? force_type : GV_LINE;
         ret = linestring_from_wkb(wkb_data, nbytes, byte_order,
                                   is3D, cache->lines[0], FALSE);
         add_fpart(fparts, ftype, 0, 1);
@@ -1147,21 +1167,29 @@ int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
     }
     else {
         /* topology access */
+        /* TODO: optimize SQL statement (for points/centroids) */
         sprintf(stmt,
                 "DECLARE %s_%s%p CURSOR FOR "
-                "SELECT geom,fid,left_face,right_face FROM ("
-                "SELECT node_id AS fid,geom,0 AS left_face,0 AS right_face FROM "
-                "\"%s\".node WHERE node_id NOT IN "
+                "SELECT geom,fid,type FROM ("
+                "SELECT node_id AS fid,geom, 'p' AS type FROM \"%s\".node WHERE "
+                "containing_face IS NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-                "\"%s\".edge GROUP BY end_node) AS foo) "
-                "UNION ALL SELECT edge_id AS fid,geom,left_face,right_face FROM \"%s\".edge "
-                "ORDER BY fid) AS foo",
+                "\"%s\".edge GROUP BY end_node) AS foo) UNION ALL SELECT "
+                "node_id AS fid,geom, 'c' AS type FROM \"%s\".node WHERE "
+                "containing_face IS NOT NULL AND node_id NOT IN "
+                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+                "\"topo_bridges\".edge GROUP BY end_node) AS foo) "
+                "UNION ALL SELECT edge_id AS fid, geom, 'l' AS type FROM \"%s\".edge WHERE "
+                "left_face = 0 AND right_face = 0 UNION ALL SELECT edge_id AS fid, geom, 'b' AS type FROM "
+                "\"%s\".edge WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY fid, type",
                 pg_info->schema_name, pg_info->table_name, pg_info->conn,
                 pg_info->toposchema_name, pg_info->toposchema_name,
-                pg_info->toposchema_name, pg_info->toposchema_name); 
+                pg_info->toposchema_name, pg_info->toposchema_name,
+                pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name); 
     }
-    G_debug(2, "SQL: %s", stmt);
+    G_debug(3, "SQL: %s", stmt);
     
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -1213,6 +1241,38 @@ int Vect__execute_pg(PGconn * conn, const char *stmt)
 
     PQclear(result);
     return 0;
+}
+
+/*!
+   \brief Execute SQL statement and get value.
+
+   \param conn pointer to PGconn
+   \param stmt query
+
+   \return value on success
+   \return -1 on error
+ */
+int Vect__execute_get_value_pg(PGconn *conn, const char *stmt)
+{
+    int ret;
+    PGresult *result;
+
+    result = NULL;
+
+    G_debug(3, "Vect__execute_get_value_pg(): %s", stmt);
+    result = PQexec(conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK ||
+        PQntuples(result) != 1) {
+        PQclear(result);
+
+        G_warning(_("Execution failed: %s"), PQerrorMessage(conn));
+        return -1;
+    }
+
+    ret = atoi(PQgetvalue(result, 0, 0));
+    PQclear(result);
+    
+    return ret;
 }
 
 /*!
@@ -1277,49 +1337,6 @@ void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype,
     fparts->nlines[fparts->n_parts] = nlines;
 
     fparts->n_parts++;
-}
-
-/*
-  \brief Get centroid from PostGIS topology
-  
-  \param pg_info pointer to Format_info_pg
-  \param centroid centroid id
-  \param[out] line_p output geometry
-
-  \return GV_CENTROID on success
-  \return -1 on error
-*/
-int get_centroid_topo(struct Format_info_pg *pg_info,
-                      int centroid, struct line_pnts *line_p)
-{
-    char stmt[DB_SQL_MAX];
-    char *data;
-
-    PGresult *res;
-    
-    sprintf(stmt,
-            "SELECT ST_PointOnSurface(geom) AS geom FROM "
-            "ST_GetFaceGeometry('%s', %d) AS geom",
-            pg_info->toposchema_name, centroid);
-    res = PQexec(pg_info->conn, stmt);
-    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-        PQntuples(res) != 1) {
-        G_warning(_("Unable to read centroid %d: %s"),
-                  centroid, PQerrorMessage(pg_info->conn));
-        if (res)
-            PQclear(res);
-        return -1;
-    }
-    
-    data = (char *)PQgetvalue(res, 0, 0);
-    PQclear(res);
-    
-    if (GV_POINT != Vect__cache_feature_pg(data, FALSE, FALSE, &(pg_info->cache), NULL))
-        return -1;
-    
-    Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
-    
-    return GV_CENTROID;
 }
 
 /*

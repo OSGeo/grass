@@ -18,6 +18,17 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+/*!
+  \brief Copy topological elements
+
+  - simple features (None)
+  - native topo (GRASS)
+  - PostGIS Topo
+*/
+#define TOPO_NONE   -1
+#define TOPO_NATIVE  1
+#define TOPO_POSTGIS 2
+
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 #endif
@@ -60,37 +71,39 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
 int Vect_copy_map_lines_field(struct Map_info *In, int field,
                               struct Map_info *Out)
 {
-    int ret, native, pg_topo;
+    int ret, format, topo;
     
     if (Vect_level(In) < 1)
         G_fatal_error("Vect_copy_map_lines(): %s",
                       _("input vector map is not open"));
-    
-    /* check for external formats - copy areas/isles as polygons with holes */
-    native = Vect_maptype(Out) == GV_FORMAT_NATIVE;
-    /* check for PostGIS topology */
-    pg_topo = Vect_maptype(Out) == GV_FORMAT_POSTGIS && Out->fInfo.pg.toposchema_name;
+
+    format = Vect_maptype(Out);
+    topo = TOPO_NONE;
+    if (format == GV_FORMAT_NATIVE)
+        topo = TOPO_NATIVE;
+    else if (format == GV_FORMAT_POSTGIS && Out->fInfo.pg.toposchema_name)
+        topo = TOPO_POSTGIS;
     
     /* Note: sometimes is important to copy on level 2 (pseudotopo
-       centroids) and sometimes on level 1 if build take too
-       long time
+       centroids) and sometimes on level 1 if build take too long time
     */
     if (Vect_level(In) >= 2) {
         /* -> copy features on level 2 */
-        if (pg_topo)
+        if (topo == TOPO_POSTGIS)
             /* PostGIS topology - copy also nodes */
             copy_nodes(In, Out);
         
         /* copy features */
-        ret = copy_lines_2(In, field, native, Out);
+        ret = copy_lines_2(In, field, topo, Out);
         
-        if (!native) {
+        if (topo == TOPO_NONE) {
+            /* copy areas - external formats and simple features access only */
             copy_areas(In, field, Out);
         }
     }
     else {
         /* -> copy features on level 1 */
-        if (!native)
+        if (topo == TOPO_NONE)
             G_warning(_("Vector map <%s> not open on topological level. "
                         "Areas will be skipped!"), Vect_get_full_name(In));
         
@@ -157,12 +170,13 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
 
   \param In input vector map
   \param field layer number (-1 for all layers)
+  \param topo topo access (none, native, postgis)
   \param Out output vector map
   
   \return 0 on success
   \return 1 on error
 */
-int copy_lines_2(struct Map_info *In, int field, int native, struct Map_info *Out)
+int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
 {
     int i, type, nlines;
     int ret, left, rite, centroid;
@@ -177,11 +191,11 @@ int copy_lines_2(struct Map_info *In, int field, int native, struct Map_info *Ou
     
     ret = 0;
     nlines = Vect_get_num_lines(In);
-    if (native)
-        G_message(_("Copying features..."));
-    else
+    if (topo == TOPO_NONE)
         G_message(_("Copying features (%s)..."),
                       Vect_get_finfo_geometry_type(Out));
+    else
+        G_message(_("Copying features..."));    
     
     for (i = 1; i <= nlines; i++) {
         if (!Vect_line_alive(In, i))
@@ -198,11 +212,13 @@ int copy_lines_2(struct Map_info *In, int field, int native, struct Map_info *Ou
         if (type == 0)
             continue;       /* dead line */
         
-        if (!native && (type == GV_CENTROID || type == GV_BOUNDARY))
-            /* OGR/PostGIS layers: centroids are stored in topo */
-            /*             polygon defined by areas (topo required) */
+        if (topo == TOPO_NONE && (type == GV_CENTROID || type == GV_BOUNDARY)) {
+            /* OGR/PostGIS layers (simple features): centroids are
+               stored in topo polygon defined by areas (topo required)
+            */
             continue;
-        
+        }
+
         /* don't skips boundaries if field != -1 */
         if (field != -1) {
             if (type & GV_BOUNDARY) {
