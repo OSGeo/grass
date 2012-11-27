@@ -122,11 +122,13 @@ int Vect_build_pg(struct Map_info *Map, int build)
 */
 int build_topo(struct Map_info *Map, int build)
 {
-    int i, type;
+    int line, nlines, type;
     char stmt[DB_SQL_MAX];
     
     struct Plus_head *plus;
     struct Format_info_pg *pg_info;
+    struct P_line *Line;
+    struct P_topo_c *topo;
     
     plus = &(Map->plus);
     pg_info = &(Map->fInfo.pg);
@@ -163,33 +165,31 @@ int build_topo(struct Map_info *Map, int build)
     /* store map boundig box in DB */
     save_map_bbox(pg_info, &(plus->box));
     
-    i = 0;
-    Vect_rewind(Map);
     if (Vect__execute_pg(pg_info->conn, "BEGIN"))
         return 0;
     
     G_message(_("Updating TopoGeometry data..."));
-    while (TRUE) {
-        type = Vect_read_next_line(Map, NULL, NULL);
-        if (type == -1) {
-            G_warning(_("Unable to read vector map"));
-            return 0;
-        }
-        else if (type == -2) {
-            break;
-        }
-        G_progress(++i, 1e3);
+    nlines = Vect_get_num_lines(Map);
+    for(line = 1; line <= nlines; line++) {
+        type = Vect_read_line(Map, NULL, NULL, line);
+        G_percent(line, nlines, 3);
         
         /* update topogeometry elements in feature table */
-        if (type == GV_POINT || type == GV_LINE) {
-            if (build_topogeom_stmt(pg_info, i, type, stmt) &&
+        if (type == GV_POINT || type == GV_LINE || type == GV_CENTROID) {
+            Line = Map->plus.Line[line];
+            if (!Line) {
+                G_warning(_("Inconsistency in topology detected. "
+                            "Dead line found."));
+            }
+            topo = (struct P_topo_c *) Line->topo;
+            
+            if (build_topogeom_stmt(pg_info, topo->area, type, stmt) &&
                 Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return 0;
             }
         }
     }
-    G_progress(1, 1);
     
     if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
         return 0;
@@ -214,27 +214,22 @@ int build_topogeom_stmt(const struct Format_info_pg *pg_info,
 {
     int topogeom_type;
     
-    if (type == GV_POINT)
+    switch(type) {
+    case GV_POINT:
         topogeom_type = 1;
-    else if (type & GV_LINES)
+        break;
+    case GV_LINE:
+    case GV_BOUNDARY:
         topogeom_type = 2;
-    else {
+        break;
+    case GV_CENTROID:
+        topogeom_type = 3;
+        break;
+    default:
         G_warning(_("Unsupported topo geometry type %d"), type);
         return 0;
     }
     
-    /* it's quite slow...
-       
-    sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = "
-            "topology.CreateTopoGeom('%s', %d, 1,"
-            "'{{%d, %d}}'::topology.topoelementarray) "
-            "WHERE %s = %d",
-            pg_info->schema_name, pg_info->table_name,
-            pg_info->topogeom_column, pg_info->toposchema_name,
-            topogeom_type, id, topogeom_type,
-            pg_info->fid_column, id);
-    */
-
     sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = "
             "'(%d, 1, %d, %d)'::topology.TopoGeometry "
             "WHERE %s = %d",
