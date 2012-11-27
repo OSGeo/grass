@@ -298,6 +298,7 @@ int write_area(struct area_table *a_list,	/* list of areas */
 
     catNum = 1;
 
+    G_important_message(_("Writing areas..."));
     for (i = 0, p = a_list; i < n_areas; i++, p++) {
 	if (equivs[i] == i && p->width > 0 && !Rast_is_d_null_value(&(p->cat))) {
 	    char buf[1000];
@@ -310,6 +311,8 @@ int write_area(struct area_table *a_list,	/* list of areas */
 		catNum++;
 	    }
 
+            G_percent(i, n_areas, 3);
+            
 	    x = cell_head.west + (p->col +
 				  (p->width / 2.0)) * cell_head.ew_res;
 	    y = cell_head.north - (p->row + 0.5) * cell_head.ns_res;
@@ -372,6 +375,7 @@ int write_area(struct area_table *a_list,	/* list of areas */
 	    }
 	}
     }
-
+    G_percent(1, 1, 1);
+    
     return 0;
 }

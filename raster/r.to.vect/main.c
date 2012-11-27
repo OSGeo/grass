@@ -261,7 +261,8 @@ int main(int argc, char *argv[])
 	if (fidx >= 0) {
 	    ncats = Vect_cidx_get_num_cats_by_index(&Map, fidx);
 	    lastcat = -1;
-
+            
+            G_important_message(_("Updating attributes..."));
 	    for (c = 0; c < ncats; c++) {
 		Vect_cidx_get_cat_by_index(&Map, fidx, c, &cat, &tp, &id);
 
