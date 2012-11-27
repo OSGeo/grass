@@ -941,15 +941,15 @@ FunctionEnd
 Section /O "North Carolina (Wake County) Data Set" SecNorthCarolinaSDB
 
 	;Set the size (in KB)  of the archive file
-	StrCpy $ARCHIVE_SIZE_KB 138629
+	StrCpy $ARCHIVE_SIZE_KB 144213
 	
 	;Set the size (in KB) of the unpacked archive file
-	AddSize 293314
+	AddSize 254521
   
-  	StrCpy $HTTP_PATH "http://grass.osgeo.org/sampledata"
-	StrCpy $ARCHIVE_NAME "nc_spm_latest.tar.gz"
+  	StrCpy $HTTP_PATH "http://grass.osgeo.org/sampledata/north_carolina/"
+	StrCpy $ARCHIVE_NAME "nc_spm_08_grass7.tar.gz"
 	StrCpy $EXTENDED_ARCHIVE_NAME "North Carolina (Wake County)"
-	StrCpy $ORIGINAL_UNTAR_FOLDER "nc_spm_08"
+	StrCpy $ORIGINAL_UNTAR_FOLDER "nc_spm_08_grass7"
 	StrCpy $CUSTOM_UNTAR_FOLDER "North-Carolina"
 	
 	Call DownloadDataSet	
