@@ -56,7 +56,7 @@ static int write_feature(struct Map_info *, int, int,
 static char *build_insert_stmt(const struct Format_info_pg *, const char *,
                                int, const struct field_info *);
 static int insert_topo_element(struct Map_info *, int, int, const char *);
-static int update_next_edge(struct Map_info*, int, int, int*, int *);
+static int update_next_edge(struct Map_info*, int, int);
 static int insert_face(struct Map_info *, int);
 static int update_topo_edge(struct Map_info *, int);
 static int update_topo_face(struct Map_info *, int);
@@ -1260,13 +1260,12 @@ int insert_topo_element(struct Map_info *Map, int line, int type,
   \param[out] left left line
   \param[out] right right line
   
-  \return 0 on success
-  \return -1 on failure
+  \return left (line < 0) or right (line > 0) next edge
+  \return 0 on failure
 */
-int update_next_edge(struct Map_info* Map, int nlines, int line,
-                     int *left, int *right)
+int update_next_edge(struct Map_info* Map, int nlines, int line)
 {
-    int next_line, edge;
+    int ret, next_line, edge;
     char stmt[DB_SQL_MAX];
     
     const struct Format_info_pg *pg_info;
@@ -1284,30 +1283,30 @@ int update_next_edge(struct Map_info* Map, int nlines, int line,
     G_debug(3, "line=%d next_line=%d", line, next_line);
     if (next_line == 0) {
         G_warning(_("Invalid topology"));
-        return -1; 
+        return 0; 
     }
     
     Line      = Map->plus.Line[abs(line)];
     Line_next = Map->plus.Line[abs(next_line)];
     if (!Line || !Line_next) {
         G_warning(_("Invalid topology"));
-        return -1;
+        return 0;
     }
     
     if (line > 0) {
         edge = Line->offset;
-        *right = next_line > 0 ? Line_next->offset : -Line_next->offset;
+        ret = next_line > 0 ? Line_next->offset : -Line_next->offset;
     }
     else {
         edge = -Line->offset;
-        *left  = next_line > 0 ? Line_next->offset : -Line_next->offset;
+        ret = next_line > 0 ? Line_next->offset : -Line_next->offset;
     }
     
     if (next_line < 0) {
         sprintf(stmt, "UPDATE \"%s\".edge_data SET next_left_edge = %d, "
-                "abs_next_left_edge = %d WHERE edge_id = %lu",
-                pg_info->toposchema_name, edge, abs(edge), Line_next->offset);
-        G_debug(3, "update edge=%lu next_left_edge=%d", Line_next->offset, edge);
+                "abs_next_left_edge = %d WHERE edge_id = %lu AND abs_next_left_edge = %lu",
+                pg_info->toposchema_name, edge, abs(edge), Line_next->offset,  Line_next->offset);
+        G_debug(3, "update edge=%lu next_left_edge=%d (?)", Line_next->offset, edge);
     }
     else {
         sprintf(stmt, "UPDATE \"%s\".edge_data SET next_right_edge = %d, "
@@ -1318,7 +1317,7 @@ int update_next_edge(struct Map_info* Map, int nlines, int line,
     
     if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
-        return -1;
+        return 0;
     }
     
     if (nlines > 2) {
@@ -1338,18 +1337,18 @@ int update_next_edge(struct Map_info* Map, int nlines, int line,
         }
         else {
             sprintf(stmt, "UPDATE \"%s\".edge_data SET next_right_edge = %d, "
-                    "abs_next_right_edge = %d WHERE edge_id = %lu AND abs_next_right_edge = %lu",
-                    pg_info->toposchema_name, edge, abs(edge), Line_next->offset, Line_next->offset);
-            G_debug(3, "update edge=%lu next_right_edge=%d (?)", Line_next->offset, edge);
+                    "abs_next_right_edge = %d WHERE edge_id = %lu",
+                    pg_info->toposchema_name, edge, abs(edge), Line_next->offset);
+            G_debug(3, "update edge=%lu next_right_edge=%d", Line_next->offset, edge);
         }
      
         if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
-            return -1;
+            return 0;
         }
     }
     
-    return 0;
+    return ret;
 }
 
 /*!
@@ -1415,8 +1414,8 @@ int insert_face(struct Map_info *Map, int area)
 */ 
 int update_topo_edge(struct Map_info *Map, int line)
 {
-    int n1, n2;
-    int nle, nre;
+    int i, n;
+    int nle, nre, next_edge;
     char stmt[DB_SQL_MAX];
     
     struct Format_info_pg *pg_info;
@@ -1436,28 +1435,57 @@ int update_topo_edge(struct Map_info *Map, int line)
     
     struct P_topo_l *topo = (struct P_topo_l *) Line->topo;
     
-    /* get number of lines for each node */
-    n1 = Vect_get_node_n_lines(Map, topo->N1);
-    n2 = Vect_get_node_n_lines(Map, topo->N2);
-    
-    nre = nle = 0;
+    nre = nle = 0; /* edge = 0 is an illegal value */
     
     /* check for line connection */
-    if (n1 > 1) {
-        update_next_edge(Map, n1, line, &nle, &nre);
-    }
-    if (n2 > 1) {
-        update_next_edge(Map, n2, -line, &nle, &nre);
+    for (i = 0; i < 2; i++) {
+        /* first check start node then end node */
+        n = i == 0 ? Vect_get_node_n_lines(Map, topo->N1)
+            : Vect_get_node_n_lines(Map, topo->N2); 
+        
+        if (n < 2) /* no connection */
+            continue;
+        
+        next_edge = update_next_edge(Map, n,
+                                     i == 0 ? line : -line);
+        if (next_edge != 0) {
+            if (i == 0)
+                nre = next_edge; /* update next right edge for start node */
+            else
+                nle = next_edge; /* update next left edge for end node */
+        }
+        else {
+            G_warning(_("Inconsistency in topology detected. "
+                        "Unable to determine next left/right edge."));
+            return -1;
+        }
     }
 
     if (nle == 0 && nre == 0) /* nothing changed */
         return 0;
     
-    sprintf(stmt, "UPDATE \"%s\".edge_data SET "
-            "next_left_edge = %d, abs_next_left_edge = %d, "
-            "next_right_edge = %d, abs_next_right_edge = %d "
-            "WHERE edge_id = %lu", pg_info->toposchema_name,
-            nle, abs(nle), nre, abs(nre), Line->offset);
+    if (nle != 0 && nre != 0) {
+        /* update both next left and right edge */
+        sprintf(stmt, "UPDATE \"%s\".edge_data SET "
+                "next_left_edge = %d, abs_next_left_edge = %d, "
+                "next_right_edge = %d, abs_next_right_edge = %d "
+                "WHERE edge_id = %lu", pg_info->toposchema_name,
+                nle, abs(nle), nre, abs(nre), Line->offset);
+    }
+    else if (nle != 0) {
+        /* update next left edge only */
+        sprintf(stmt, "UPDATE \"%s\".edge_data SET "
+                "next_left_edge = %d, abs_next_left_edge = %d "
+                "WHERE edge_id = %lu", pg_info->toposchema_name,
+                nle, abs(nle), Line->offset);
+    }
+    else {
+        /* update next right edge only */
+        sprintf(stmt, "UPDATE \"%s\".edge_data SET "
+                "next_right_edge = %d, abs_next_right_edge = %d "
+                "WHERE edge_id = %lu", pg_info->toposchema_name,
+                nre, abs(nre), Line->offset);
+    }
     G_debug(3, "update edge=%lu next_left_edge=%d next_right_edge=%d",
             Line->offset, nle, nre);
     
