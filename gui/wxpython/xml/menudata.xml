@@ -311,7 +311,7 @@
             </menuitem>
             <menuitem>
               <label>Raw binary array 3D import</label>
-              <help>Import a binary raster file into a GRASS 3D raster map.</help>
+              <help>Imports a binary raster file into a GRASS 3D raster map.</help>
               <keywords>raster3d,import</keywords>
               <handler>OnMenuCmd</handler>
               <command>r3.in.bin</command>
@@ -490,6 +490,13 @@
               <keywords>vector,export,GPS</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.out.gps</command>
+            </menuitem>
+            <menuitem>
+              <label>PostGIS export</label>
+              <help>Exports a vector map layer to PostGIS feature table.</help>
+              <keywords>vector,export,PostGIS,simple features,topology</keywords>
+              <handler>OnMenuCmd</handler>
+              <command>v.out.postgis</command>
             </menuitem>
             <menuitem>
               <label>POV-Ray export</label>
