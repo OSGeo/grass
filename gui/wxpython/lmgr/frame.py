@@ -1401,13 +1401,13 @@ class GMFrame(wx.Frame):
         frame.CentreOnScreen()
         frame.Show()
 
-        rasters = []
         tree = self.GetLayerTree()
         if tree:
+            rasters = []
             for layer in tree.GetSelectedLayers(checkedOnly = False):
                 if tree.GetLayerInfo(layer, key = 'type') == 'raster':
                     rasters.append(tree.GetLayerInfo(layer, key = 'maplayer').GetName())
-            if rasters:
+            if len(rasters) >= 2:
                 frame.SetAnimations(raster = [rasters, None, None, None])
 
 
