@@ -1,17 +1,55 @@
 <h2>DESCRIPTION</h2>
 
 <b>r.surf.fractal</b> creates a fractal surface of a given fractal
-dimension. Uses spectral synthesis method. Can create intermediate layers
-showing the build up of different spectral coefficients (see Saupe,
-pp.106-107 for an example of this).
+dimension. It uses the spectral synthesis method. The module can create
+intermediate layers showing the build up of different spectral coefficients
+(see Saupe, pp.106-107 for an example of this).
 
-<p>Use this module to generate naturally looking synthetical elevation models
+<p>
+Use this module to generate naturally looking synthetical elevation models
 (DEM).
-
 
 <h2>NOTE</h2>
 This module requires the <a href="http://www.fftw.org">FFTW library</a>
 for computing Discrete Fourier Transforms.
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+# D=2.0005
+g.region -dp
+r.surf.fractal out=dem_d2_0005 dim=2.0005
+r.info -r dem_d2_0005
+r.mapcalc "dem_d2_0005_final = 1.0 * dem_d2_0005 + abs(min(dem_d2_0005))"
+r.colors dem_d2_0005_final color=terrain
+r.slope.aspect dem_d2_0005_final aspect=dem_d2_0005_final_as
+
+# D=2.90
+r.surf.fractal out=dem_d2_90 dim=2.90
+r.info -r dem_d2_90
+r.mapcalc "dem_d2_90_final = 1.0 * dem_d2_90 + abs(min(dem_d2_90))"
+r.colors dem_d2_90_final color=terrain
+r.slope.aspect dem_d2_90_final aspect=dem_d2_90_final_as
+
+d.mon x0
+d.erase -f
+d.split.frame
+d.frame -s uno
+d.rast dem_d2_0005_final
+d.frame -s dos
+d.rast dem_d2_0005_final_as
+d.frame -s tres
+d.rast dem_d2_90_final
+d.frame -s cuatro
+d.rast dem_d2_90_final_as
+</pre></div>
+
+<center>
+<img src="r_surf_fractal.jpg" alt="Artificial DEMs created with fractals"><br>
+Artificial DEMs created with fractals:<br>
+top: fractal dimension d=2.0005 (left: elevation map, right: aspect map)<br>
+top: fractal dimension d=2.90 (left: elevation map, right: aspect map)
+</center>
 
 
 <h2>REFERENCE</h2>
@@ -36,4 +74,5 @@ Jo Wood,
 Midlands Regional Research Laboratory (ASSIST),
 University of Leicester
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
