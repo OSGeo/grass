@@ -1410,7 +1410,8 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
     /* number of features group by type */
     /* points */
     sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".node WHERE node_id NOT IN "
+            "SELECT COUNT(*) FROM \"%s\".node WHERE containing_face "
+            "IS NULL AND node_id NOT IN "
             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
             "\"%s\".edge GROUP BY end_node) AS foo)",
@@ -1486,7 +1487,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
             "SELECT node_id,geom FROM \"%s\".node WHERE node_id IN "
             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-            "\"%s\".edge GROUP BY end_node) AS foo)",
+            "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
             pg_info->toposchema_name, pg_info->toposchema_name,
             pg_info->toposchema_name);
     G_debug(2, "SQL: %s", stmt);
@@ -1522,7 +1523,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
             "SELECT node_id,geom FROM \"%s\".node WHERE node_id NOT IN "
             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-            "\"%s\".edge GROUP BY end_node) AS foo)",
+            "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
             pg_info->toposchema_name, pg_info->toposchema_name,
             pg_info->toposchema_name);
     G_debug(2, "SQL: %s", stmt);
@@ -1551,7 +1552,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     */
     sprintf(stmt,
             "SELECT edge_id,start_node,end_node,left_face,right_face,geom "
-            "FROM \"%s\".edge",
+            "FROM \"%s\".edge ORDER BY edge_id",
             pg_info->toposchema_name);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
@@ -1610,14 +1611,18 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     }
     PQclear(res);
     
-    /* attach centroids */
+    /* read PostGIS Topo standalone nodes (containing_face is not null)
+       -> centroids
+    */
     if (plus->n_areas > 0) {
         sprintf(stmt,
-                "SELECT ST_PointOnSurface(geom) AS geom FROM "
-                "ST_GetFaceGeometry('%s',"
-                "(SELECT face_id FROM \"%s\".face WHERE face_id > 0)) "
-                "AS geom",
-                pg_info->toposchema_name, pg_info->toposchema_name);
+                "SELECT node_id,geom FROM \"%s\".node WHERE containing_face "
+                "IS NOT NULL AND node_id NOT IN "
+                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+                "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
+                pg_info->toposchema_name, pg_info->toposchema_name,
+                pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
         res = PQexec(pg_info->conn, stmt);
         if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||

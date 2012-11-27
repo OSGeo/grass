@@ -457,12 +457,12 @@ int dig_del_area(struct Plus_head *plus, int area)
  * of points and degenerated lines are set to -9 (ignored).
  *
  * \param[in] plus pointer to Plus_head structure
- * \param[in] current_line current line id, negative if request for node 2
+ * \param[in] current_line current line id, negative if request for end node
  * \param[in] side side GV_RIGHT or GV_LEFT
  * \param[in] type line type (GV_LINE, GV_BOUNDARY or both)
  * \param[in] angle
  *
- * \return line number of next angle to follow an line (negative if connected by node2)
+ * \return line number of next angle to follow an line (negative if connected by end node)
  *               (number of current line may be return if dangle - this is used in build)
  * \return 0 on error or not found
  */

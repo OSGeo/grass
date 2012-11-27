@@ -177,8 +177,8 @@ void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 	    if (n > 2) {
 		/* more than 2 boundaries at node ( >= 2 old + 1 new ) */
 		/* Line above (to the right), it is enough to check to
-		   the right, because if area/isle
-		   exists it is the same to the left */
+		   the right, because if area/isle exists it is the
+		   same to the left */
 		if (!s)
 		    next_line =
 			dig_angle_next_line(plus, line, GV_RIGHT,
