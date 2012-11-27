@@ -1123,6 +1123,12 @@ create_tmp()
 # Create the session grassrc file
 create_gisrc()
 
+# Set shell (needs to be called before load_env())
+check_shell()
+
+# Load environmental variables from the file
+load_env()
+
 # Ensure GUI is set
 read_gui()
 
@@ -1173,12 +1179,6 @@ else:
             non_interactive(args[0])
     else:
         non_interactive(args[0])
-
-# Set shell
-check_shell()
-
-# Load environmental variables from the file
-load_env()
 
 # Set language
 set_language()
