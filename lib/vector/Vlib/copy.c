@@ -291,7 +291,8 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
     with_z = Vect_is_3d(In);
     
     nnodes = Vect_get_num_nodes(In);
-    G_message(_("Exporting nodes..."));
+    if (nnodes > 0)
+        G_message(_("Exporting nodes..."));
     Vect_append_point(Points, 0., 0., 0.);
     for (node = 1; node <= nnodes; node++) {
         G_debug(3, "Exporting GRASS node %d", node);
