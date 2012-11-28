@@ -4,15 +4,6 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
-\par Table of contents
-
-- \ref vlibSpidx
- - \ref vlibSidxFileFormat
-- \ref vlibCidx
- - \ref vlibCidxFileFormat
-  - \ref vlibCidxFileHead
-
-
 \section vlibSpidx Vector library spatial index management
 
 Spatial index (based on R*-tree) is created with topology, see \ref

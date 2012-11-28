@@ -1,17 +1,10 @@
-/*! \page vlibOgr OGR interface
+/*! \page vlibOgr GRASS-OGR data provider
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-\par Table of contents
+\tableofcontents
 
-- \ref vlibOgrIface
- - \ref vlibFrmtFileFormat
- - \ref vlibFidxFileFormat
-
-
-\section vlibOgrIface OGR interface
-
-\subsection vLibPseudoTopo Pseudo-topology
+\section vLibPseudoTopo Pseudo-topology
 
 Reduced topology: each boundary is attached to one area only,
 i.e. smoothing, simplification, removing small areas etc. will not
@@ -21,7 +14,7 @@ Full topology is only available for native GRASS vectors or can only
 be built after all polygons are converted to areas and cleaned as done
 by <tt>v.in.ogr</tt>.
 
-\subsection vlibFrmtFileFormat Frmt file format specification
+\section vlibFrmtFileFormat Frmt file format specification
 
 Frmt is a plain text file which contains basic information about
 external format of linked vector map. Each line contains key, value
@@ -46,7 +39,7 @@ OGR layer pseudo-topology ('topo') is built including spatial index
 file ('sidx') and category index file ('cidx'). Additionally also
 feature index file (see \ref vlibFidxFileFormat) is created.
 
-\subsection vlibFidxFileFormat Fidx file format specification
+\section vlibFidxFileFormat Fidx file format specification
 
 Note: <tt>finfo</tt> is an instance of \ref Format_info structure.
 

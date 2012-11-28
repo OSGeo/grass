@@ -2,17 +2,7 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-\par Table of contents
-
-- \ref vlibTopoManagement
- - \ref vlibTopoFileFormat
-  - \ref vlibTopoFileHead
-  - \ref vlibTopoFileBody
- - \ref vlibTopoLevels
- - \ref vlibTopoExamples
- - \ref vlibTopoMemory
-
-
+\tableofcontents
 
 \section vlibTopoManagement Vector library topology management
 

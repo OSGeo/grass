@@ -4,11 +4,6 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
-\par Table of contents
-
-- \ref vlibsAboutIntro
-- \ref vlibsHistory
-
 \section vlibsAboutIntro Introduction
 
 Besides internal library functions there are two main libraries:

@@ -2,6 +2,8 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
+\tableofcontents
+
 \section vlibAsciiMain Vector ASCII Format Specifications
 
 The GRASS ASCII vector map format may contain a mix of primitives

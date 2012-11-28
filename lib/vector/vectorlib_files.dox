@@ -4,14 +4,6 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
-\par Table of contents
-
-- \ref vlibDirectoryStructure
-- \ref vlibDblnFileFormat
-- \ref vlibCoorFileFormat
- - \ref vlibCoorFileHead
- - \ref vlibCoorFileBody
-
 \section vlibDirectoryStructure Directory structure
 
 Vector map is stored in a number of data files. Vector map directory

@@ -2,6 +2,8 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
+\tableofcontents
+
 \section veditIntro Introduction to Vedit Library
 
 This library contains higher level functions for editing %vector
@@ -43,9 +45,6 @@ The library is used by <tt>v.edit</tt> module and wxGUI %vector digitizer.
  - Vedit_copy_lines()
 
 \subsection veditSelect Select features
-
-
-
 
  - Vedit_select_by_query()
 
