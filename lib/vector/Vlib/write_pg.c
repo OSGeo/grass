@@ -1487,12 +1487,12 @@ int update_topo_edge(struct Map_info *Map, int line)
     pg_info = &(Map->fInfo.pg);
     
     if (line < 1 || line > Vect_get_num_lines(Map)) {
-        G_warning(_("Inconsistency in topology detected"));
+        G_warning(_("Inconsistency in topology: invalid feature id"));
         return -1;
     }
     Line = Map->plus.Line[line];
     if (!Line) {
-        G_warning(_("Inconsistency in topology detected"));
+        G_warning(_("Inconsistency in topology: dead line found"));
         return -1;
     }
     
@@ -1518,8 +1518,8 @@ int update_topo_edge(struct Map_info *Map, int line)
                 nle = next_edge; /* update next left edge for end node */
         }
         else {
-            G_warning(_("Inconsistency in topology detected. "
-                        "Unable to determine next left/right edge."));
+            G_warning(_("Inconsistency in topology detected: "
+                        "unable to determine next left/right edge."));
             return -1;
         }
     }
@@ -1585,12 +1585,12 @@ int update_topo_face(struct Map_info *Map, int line)
     pg_info = &(Map->fInfo.pg);
     
     if (line < 1 || line > Vect_get_num_lines(Map)) {
-        G_warning(_("Inconsistency in topology detected"));
+        G_warning(_("Inconsistency in topology detected: invalid feature id"));
         return -1;
     }
     Line = Map->plus.Line[line];
     if (!Line) {
-        G_warning(_("Inconsistency in topology detected"));
+        G_warning(_("Inconsistency in topology detected: dead line found"));
         return -1;
     }
     
