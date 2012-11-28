@@ -570,7 +570,12 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 
 	line = abs(Node->lines[next]);
 	Line = plus->Line[line];
-
+        if (!Line) {
+            G_warning(_("Unable to find next line for %d. Dead line found."),
+                      current_line);
+            return 0;
+        }
+        
 	if (Line->type & type) {	/* line found */
 	    G_debug(3, "  this one");
 	    if (angle)
