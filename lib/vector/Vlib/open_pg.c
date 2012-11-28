@@ -43,7 +43,6 @@ static int create_topo_schema(struct Format_info_pg *, int);
 static void connect_db(struct Format_info_pg *);
 static int check_topo(struct Format_info_pg *, struct Plus_head *);
 static int parse_bbox(const char *, struct bound_box *);
-static int num_of_records(const struct Format_info_pg *, const char *);
 static struct P_node *read_p_node(struct Plus_head *, int, int,
                                   const char *, struct Format_info_pg *);
 static struct P_line *read_p_line(struct Plus_head *, int,
@@ -442,6 +441,7 @@ int Vect_open_topo_pg(struct Map_info *Map, int head_only)
     
     /* free and init plus structure */
     dig_init_plus(plus);
+    plus->Spidx_new = TRUE;
     
     return Vect__load_plus_pg(Map, head_only);
 #else
@@ -1104,35 +1104,6 @@ int parse_bbox(const char *value, struct bound_box *bbox)
 }
 
 /*!
-  \brief Get number of records for given SQL statement
-
-  \param stmt string buffer with SQL statement
-  
-  \return number of returned records
-  \return -1 on error
-*/
-int num_of_records(const struct Format_info_pg *pg_info,
-                   const char *stmt)
-{
-    int result;
-    PGresult *res;
-
-    G_debug(2, "SQL: %s", stmt);
-    res = PQexec(pg_info->conn, stmt);
-    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-        PQntuples(res) != 1) {
-        G_warning(_("Unable to get number of records for:\n%s"), stmt);
-        if (res)
-            PQclear(res);
-        return -1;
-    }
-    result = atoi(PQgetvalue(res, 0, 0));
-    PQclear(res);
-    
-    return result;
-}
-
-/*!
   \brief Read P_node structure
   
   See dig_Rd_P_node() for reference.
@@ -1172,7 +1143,7 @@ struct P_node *read_p_node(struct Plus_head *plus, int n,
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-        G_warning(_("Unable to read node %d"), id);
+        G_warning(_("Inconsistency in topology: unable to read node %d"), id);
         if (res)
             PQclear(res);
         return NULL;
@@ -1212,7 +1183,7 @@ struct P_node *read_p_node(struct Plus_head *plus, int n,
     /* get node coordinates */
     if (SF_POINT != Vect__cache_feature_pg(wkb_data, FALSE, FALSE,
                                            &(pg_info->cache), NULL))
-        G_warning(_("Node %d: unexpected feature type %d"),
+        G_warning(_("Inconsistency in topology: node %d - unexpected feature type %d"),
                   n, pg_info->cache.sf_type);
     
     points = pg_info->cache.lines[0];
@@ -1225,6 +1196,10 @@ struct P_node *read_p_node(struct Plus_head *plus, int n,
     
     /* update spatial index */
     dig_spidx_add_node(plus, n, node->x, node->y, node->z);
+    
+    if (plus->uplist.do_uplist)
+        /* collect updated nodes if requested */
+        dig_node_add_updated(plus, n);
     
     plus->Node[n] = node;
     
@@ -1315,7 +1290,6 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
             
             topo->area = data->left_face;
         }
-        /* TODO: faces | kernels */
     }
 
     /* update spatial index */
@@ -1323,11 +1297,17 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
     itype = cache->lines_types[0];
     if ((line->type & GV_POINTS && itype != GV_POINT) ||
         (line->type & GV_LINES  && itype != GV_LINE))
-        G_warning(_("Line %d: unexpected feature type"), n);
+        G_warning(_("Inconsistency in topology: line %d - unexpected feature type"), n);
     
     points = cache->lines[0];
     dig_line_box(points, &box);
     dig_spidx_add_line(plus, n, &box);
+
+    if (plus->uplist.do_uplist) {
+        /* collect updated lines if requested */
+        dig_line_add_updated(plus, n);
+        plus->uplist.uplines_offset[plus->uplist.n_uplines - 1] = line->offset;
+    }
     
     plus->Line[n] = line;
     
@@ -1335,7 +1315,7 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
 }
 
 /*!
-  \brief Read topo (from PostGIS topology schema) header info only
+  \brief Read topo from PostGIS topology schema -- header info only
 
   \param[in,out] plus pointer to Plus_head struct
 
@@ -1350,7 +1330,8 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
     
     plus->off_t_size = -1;
     
-    /* fisrt try to get info from 'topology.grass */
+    /* get map bounding box
+       fisrt try to get info from 'topology.grass' table */
     sprintf(stmt,
             "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
             TOPO_BBOX, TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, pg_info->toposchema_id);
@@ -1360,7 +1341,7 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
         PQntuples(res) != 1) {
 	PQclear(res);
 	
-	/* try to calculate bbox from TopoGeometry elements */
+	/* otherwise try to calculate bbox from TopoGeometry elements */
 	sprintf(stmt,
 		"SELECT ST_3DExtent(%s) FROM \"%s\".\"%s\"",
 		pg_info->topogeom_column, pg_info->schema_name, pg_info->table_name);
@@ -1381,7 +1362,8 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
     }
     PQclear(res);
     
-    /* number of topological primitives */
+    /* get number of topological elements */
+    
     /* nodes
        note: isolated nodes are registered in GRASS Topology model */
     sprintf(stmt,
@@ -1389,25 +1371,33 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
             "FROM \"%s\".edge GROUP BY start_node UNION ALL SELECT end_node "
             "AS node FROM \"%s\".edge GROUP BY end_node) AS foo",
             pg_info->toposchema_name, pg_info->toposchema_name);
-    plus->n_nodes = num_of_records(pg_info, stmt);
+    plus->n_nodes = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_nodes=%d", plus->n_nodes);
+    
     /* lines (edges in PostGIS Topology model) */
     sprintf(stmt,
             "SELECT COUNT(*) FROM \"%s\".edge",
             pg_info->toposchema_name);
     /* + isolated nodes as points
        + centroids */
-    plus->n_lines = num_of_records(pg_info, stmt); 
-    /* areas (faces in PostGIS Topology model)
-    sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".face WHERE mbr IS NOT NULL",
-            pg_info->toposchema_name);
-    plus->n_areas = num_of_records(pg_info, stmt);
-    G_debug(3, "Vect_open_topo_pg(): n_areas=%d", plus->n_areas);
-    */
-    /* TODO: n_isles | n_volumes | n_holes */
+    plus->n_lines = Vect__execute_get_value_pg(pg_info->conn, stmt); 
     
-    /* number of features group by type */
+    /* areas (faces with face_id > 0 in PostGIS Topology model) */
+    sprintf(stmt,
+            "SELECT COUNT(*) FROM \"%s\".face WHERE face_id > 0",
+            pg_info->toposchema_name);
+    plus->n_areas = Vect__execute_get_value_pg(pg_info->conn, stmt);
+    G_debug(3, "Vect_open_topo_pg(): n_areas=%d", plus->n_areas);
+
+    /* isles (faces with face_id <=0 in PostGIS Topology model) */
+    sprintf(stmt,
+            "SELECT COUNT(*) FROM \"%s\".face WHERE face_id < 1",
+            pg_info->toposchema_name);
+    plus->n_isles = Vect__execute_get_value_pg(pg_info->conn, stmt);
+    G_debug(3, "Vect_open_topo_pg(): n_isles=%d", plus->n_isles);
+    
+    /* number of features according the type */
+
     /* points */
     sprintf(stmt,
             "SELECT COUNT(*) FROM \"%s\".node WHERE containing_face "
@@ -1417,31 +1407,33 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
             "\"%s\".edge GROUP BY end_node) AS foo)",
             pg_info->toposchema_name, pg_info->toposchema_name,
             pg_info->toposchema_name);
-    plus->n_plines = num_of_records(pg_info, stmt);
+    plus->n_plines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_plines=%d", plus->n_plines);
+    
     /* lines */
     sprintf(stmt,
             "SELECT COUNT(*) FROM \"%s\".edge WHERE "
             "left_face = 0 AND right_face = 0",
             pg_info->toposchema_name);
-    plus->n_llines = num_of_records(pg_info, stmt);
+    plus->n_llines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_llines=%d", plus->n_llines);
+
     /* boundaries */
     sprintf(stmt,
             "SELECT COUNT(*) FROM \"%s\".edge WHERE "
             "left_face != 0 OR right_face != 0",
             pg_info->toposchema_name);
-    plus->n_blines = num_of_records(pg_info, stmt);
+    plus->n_blines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_blines=%d", plus->n_blines);
+
     /* centroids */
     sprintf(stmt,
             "SELECT COUNT(*) FROM \"%s\".face WHERE mbr IS NOT NULL",
             pg_info->toposchema_name);
-    plus->n_clines = num_of_records(pg_info, stmt);
+    plus->n_clines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_clines=%d", plus->n_clines);
-    /* TODO: nflines | n_klines */
 
-    /* lines - register isolated nodes as points and centroids */
+    /* update number of lines - add points and centroids */
     plus->n_lines += plus->n_plines + plus->n_clines;
     G_debug(3, "Vect_open_topo_pg(): n_lines=%d", plus->n_lines);
 
@@ -1449,7 +1441,7 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
 }
 
 /*!
-  \brief Read topo info (from PostGIS topology schema)
+  \brief Read topo info from PostGIS topology schema
 
   \param pg_info pointer to Format_info_pg
   \param[in,out] plus pointer to Plus_head struct
@@ -1460,14 +1452,16 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
 */
 int Vect__load_plus_pg(struct Map_info *Map, int head_only)
 {
-    int i, id, ntuples;
+    int i, side, line, id, ntuples, area;
     char stmt[DB_SQL_MAX];
     struct edge_data line_data;
     
     struct Format_info_pg *pg_info;
     struct Plus_head *plus;
-    struct P_line *line;
-    struct P_area *area;
+    struct P_line *Line;
+    struct P_area *Area;
+    struct line_pnts *Points;
+    struct ilist *List;
     
     PGresult *res;
   
@@ -1480,8 +1474,11 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     if (head_only)
         return 0;
     
+    Points = Vect_new_line_struct();
+    List = Vect_new_list();
+        
     /* read nodes (GRASS Topo)
-       note: standalone nodes are ignored
+       note: standalone nodes (ie. points/centroids) are ignored
     */
     sprintf(stmt,
             "SELECT node_id,geom FROM \"%s\".node WHERE node_id IN "
@@ -1494,7 +1491,9 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
         PQntuples(res) != plus->n_nodes) {
-        G_warning(_("Unable to read nodes"));
+        G_warning(_("Inconsistency in topology: number of "
+                    "nodes %d (should be %d)"),
+                  PQntuples(res), plus->n_nodes);
         if (res)
             PQclear(res);
         return -1;
@@ -1510,17 +1509,19 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     PQclear(res);
 
     /* read lines (GRASS Topo)
-       - standalone nodes -> points
+       - standalone nodes -> points|centroids
        - edges -> lines/boundaries
     */
     G_debug(3, "load_plus(): n_lines = %d", plus->n_lines);
     dig_alloc_lines(plus, plus->n_lines); 
+    G_zero(plus->Line, sizeof(struct P_line *) * (plus->n_lines + 1)); /* index starts at 1 */
     
-    /* read PostGIS Topo standalone nodes
+    /* read PostGIS Topo standalone nodes (containing_face is null)
        -> points
     */
     sprintf(stmt,
-            "SELECT node_id,geom FROM \"%s\".node WHERE node_id NOT IN "
+            "SELECT node_id,geom FROM \"%s\".node WHERE containing_face "
+            "IS NULL AND node_id NOT IN "
             "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
             "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
             "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
@@ -1530,7 +1531,9 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
         PQntuples(res) > plus->n_plines) {
-        G_warning(_("Unable to read lines"));
+        G_warning(_("Inconsistency in topology: number of "
+                    "points %d (should be %d)"),
+                  PQntuples(res), plus->n_plines);
         if (res)
             PQclear(res);
         return -1;
@@ -1558,15 +1561,17 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
         PQntuples(res) > plus->n_lines) {
-        G_warning(_("Unable to read lines"));
+        G_warning(_("Inconsistency in topology: number of "
+                    "lines %d (should be %d)"),
+                  PQntuples(res), plus->n_lines);
         if (res)
             PQclear(res);
         return -1;
     }
 
+    /* process edges (PostGIS Topo) */
     ntuples = PQntuples(res);
     for (i = 0; i < ntuples; i++) {
-        /* process edges (PostGIS Topo) */
         line_data.id         = atoi(PQgetvalue(res, i, 0));
         line_data.start_node = atoi(PQgetvalue(res, i, 1));
         line_data.end_node   = atoi(PQgetvalue(res, i, 2));
@@ -1575,77 +1580,92 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         line_data.wkb_geom   = (char *) PQgetvalue(res, i, 5);
         
         id = plus->n_plines + i + 1; /* points already registered */
-        line = read_p_line(plus, id, &line_data, &(pg_info->cache));
-        if (line_data.left_face != 0 || line_data.right_face != 0) {
-            /* boundary detected -> build area/isle on left and right*/
-            
-            int s, side;
-            for (s = 0; s < 2; s++) {
-                if (s == 0)
-                    side = GV_LEFT;
-                else
-                    side = GV_RIGHT;
-                
-                G_debug(3, "Build area for line = %d, side = %d",
-                        id, side);
-                Vect_build_line_area(Map, id, side);
-            }
-        }
-        if (line->type == GV_BOUNDARY) {
-            struct P_topo_b *topo;
-
-            if (line_data.left_face == 0)
-                line_data.left_face = -1;
-            if (line_data.right_face == 0)
-                line_data.right_face = -1;
-            
-            /* check topo - left / right areas */
-            topo = (struct P_topo_b *)line->topo;
-            if (topo->left != line_data.left_face)
-                G_warning(_("Left area detected as %d (should be %d"),
-                          topo->left, line_data.left_face);
-            if (topo->right != line_data.right_face)
-                G_warning(_("Right area detected as %d (should be %d"),
-                          topo->right, line_data.right_face);
-        }
+        read_p_line(plus, id, &line_data, &(pg_info->cache));
+        /* TODO: update category index */
     }
     PQclear(res);
-    
+
     /* read PostGIS Topo standalone nodes (containing_face is not null)
        -> centroids
     */
-    if (plus->n_areas > 0) {
-        sprintf(stmt,
-                "SELECT node_id,geom FROM \"%s\".node WHERE containing_face "
-                "IS NOT NULL AND node_id NOT IN "
-                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
-                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-                "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
-                pg_info->toposchema_name, pg_info->toposchema_name,
-                pg_info->toposchema_name);
-        G_debug(2, "SQL: %s", stmt);
-        res = PQexec(pg_info->conn, stmt);
-        if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-            PQntuples(res) > plus->n_areas) {
-            G_warning(_("Unable to attach centroids"));
-            if (res)
-                PQclear(res);
-            return -1;
-        }
+    sprintf(stmt,
+            "SELECT node_id,geom,containing_face FROM \"%s\".node WHERE containing_face "
+            "IS NOT NULL AND node_id NOT IN "
+            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+            "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+            "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
+            pg_info->toposchema_name, pg_info->toposchema_name,
+            pg_info->toposchema_name);
+    G_debug(2, "SQL: %s", stmt);
+    res = PQexec(pg_info->conn, stmt);
+    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+        PQntuples(res) > plus->n_clines) {
+        G_warning(_("Inconsistency in topology: number of "
+                    "centroids %d (should be %d)"),
+                  PQntuples(res), plus->n_clines);
+        if (res)
+            PQclear(res);
+        return -1;
+    }
+    
+    G_zero(&line_data, sizeof(struct edge_data));
+    id = plus->n_plines + plus->n_llines + plus->n_blines + 1;
+    for (i = 0; i < plus->n_clines; i++) {
+        line_data.id = atoi(PQgetvalue(res, i, 0)); 
+        line_data.wkb_geom = (char *)PQgetvalue(res, i, 1);
+        line_data.left_face = atoi(PQgetvalue(res, i, 2)); /* face id */
+        /* area id and face id can be different */
         
-        G_zero(&line_data, sizeof(struct edge_data));
-        for (i = 1; i <= plus->n_areas; i++) {
-            area = plus->Area[i];
+        read_p_line(plus, id + i, &line_data, &(pg_info->cache));
+    }
+    PQclear(res);
+
+    /* build areas for boundaries
+       reset values -> build from scratch */
+    plus->n_areas = plus->n_isles = 0;
+    for (line = 1; line <= plus->n_lines; line++) {
+        Line = plus->Line[line]; /* centroids: Line is NULL */
+        if (!Line || Line->type != GV_BOUNDARY)
+            continue;
+        
+        for (i = 0; i < 2; i++) { /* for both sides build an area/isle */
+            side = i == 0 ? GV_LEFT : GV_RIGHT;
             
-            id = plus->n_lines - plus->n_clines + i;
-            line_data.id = line_data.left_face = i;
-            line_data.wkb_geom = (char *)PQgetvalue(res, 0, 0);
-            
-            read_p_line(plus, id, &line_data, &(pg_info->cache));
-            area->centroid = line_data.id;
+            G_debug(3, "Build area for line = %d, side = %d",
+                    id, side);
+            Vect_build_line_area(Map, line, side);
         }
     }
+    plus->built = GV_BUILD_AREAS;
 
+    /* TODO: attach isles */
+    plus->built = GV_BUILD_ATTACH_ISLES;
+    
+    /* attach centroids */
+    if (plus->n_areas > 0) {
+        struct P_topo_c *topo;
+        
+        for (line = 1; line <= plus->n_lines; line++) {
+            Line = plus->Line[line];
+            if (Line->type != GV_CENTROID)
+                continue;
+            
+            Vect_read_line(Map, Points, NULL, line);
+            area = Vect_find_area(Map, Points->x[0], Points->y[0]);
+            topo = (struct P_topo_c *)Line->topo;
+            topo->area = area;
+            Area = plus->Area[topo->area];
+            Area->centroid = Line->offset;
+        }
+    }
+    plus->built = GV_BUILD_CENTROIDS;
+    
+    /* done */
+    plus->built = GV_BUILD_ALL;
+    
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_list(List);
+    
     return 0;
 }
 

@@ -137,8 +137,6 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         if (Line->type == GV_CENTROID) {
             G_debug(4, "Centroid");
 
-            Map->next_line++;
-
             if (line_p != NULL) {
                 int i, found;
                 struct bound_box box;
@@ -174,10 +172,10 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
             ret = GV_CENTROID;
         }
         else {
-            /* ignore constraints, Map->next_line incremented */
+            /* ignore constraints */
             ret = read_next_line_pg(Map, line_p, line_c, TRUE);
             if (ret != Line->type)
-                G_fatal_error(_("Unexpected feature type (%s) - should be (%d)"),
+                G_fatal_error(_("Unexpected feature type (%d) - should be (%d)"),
                               ret, Line->type);
         }
 
@@ -185,12 +183,15 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
             /* skip by region */
             Vect_line_box(line_p, &lbox);
             if (!Vect_box_overlap(&lbox, &mbox)) {
+                Map->next_line++;
                 continue;
             }
         }
 
         /* skip by field ignored */
-
+        
+        Map->next_line++; /* read next */
+                    
         return ret;
     }
 #else
@@ -479,7 +480,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     }
     else {
         /* random access */
-        if (!pg_info->fid_column) {
+        if (!pg_info->fid_column && !pg_info->toposchema_name) {
             G_warning(_("Random access not supported. "
                         "Primary key not defined."));
             return -1;
@@ -1189,7 +1190,7 @@ int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
                 pg_info->toposchema_name, pg_info->toposchema_name,
                 pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name); 
     }
-    G_debug(3, "SQL: %s", stmt);
+    G_debug(2, "SQL: %s", stmt);
     
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
