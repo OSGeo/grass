@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
 	       "snap;%s;"
 	       "rmdac;%s;"
 	       "bpol;%s;"
+	       "prune;%s;"
 	       "rmarea;%s;"
 	       "rmline;%s;"
 	       "rmsa;%s",
@@ -102,8 +103,8 @@ int main(int argc, char *argv[])
 	       _("remove duplicate area centroids ('type' option ignored)"),
 	       _("break (topologically clean) polygons (imported from "
 		 "non topological format, like ShapeFile). Boundaries are broken on each "
-		 "point shared between 2 and more polygons where angles of segments are different;"
-		 "prune;remove vertices in threshold from lines and boundaries, "
+		 "point shared between 2 and more polygons where angles of segments are different"),
+	       _("remove vertices in threshold from lines and boundaries, "
 		 "boundary is pruned only if topology is not damaged (new intersection, "
 		 "changed attachement of centroid), first and last segment of the boundary "
 		 "is never changed"),
