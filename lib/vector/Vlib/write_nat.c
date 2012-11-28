@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2010, 2012 by the GRASS Development Team
+   (C) 2001-2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -136,7 +136,8 @@ static void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
     \param cats pointer to line_cats structure (feature's categories)
 */
 void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
-                              const struct line_pnts *points, const struct line_cats *cats)
+                              const struct line_pnts *points, const struct line_cats *cats,
+                              int (*external_routine) (const struct Map_info *, int))
 {
     int first, s, n, i;
     int type, node, next_line, area, side, sel_area, new_area[2];
@@ -212,9 +213,13 @@ void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 			    V2__delete_area_cats_from_cidx_nat(Map, area);
 			}
 			dig_del_area(plus, area);
+                        if (external_routine) /* call external subroutine if defined */
+                            external_routine(Map, area);
 		    }
 		    else if (area < 0) {	/* is isle */
 			dig_del_isle(plus, -area);
+                        if (external_routine)  /* call external subroutine if defined */
+                            external_routine(Map, area);
 		    }
 		}
 	    }
@@ -374,7 +379,7 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
 	    Vect_box_extend(&(plus->box), &box);
     }
 
-    V2__add_line_to_topo_nat(Map, line, points, cats);
+    V2__add_line_to_topo_nat(Map, line, points, cats, NULL);
 
     G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
 	    plus->uplist.n_upnodes);
@@ -496,7 +501,7 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
 	    Vect_box_extend(&(plus->box), &box);
     }
 
-    V2__add_line_to_topo_nat(Map, line, points, cats);
+    V2__add_line_to_topo_nat(Map, line, points, cats, NULL);
 
     G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
 	    plus->uplist.n_upnodes);
@@ -966,8 +971,7 @@ int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
 	Vect_box_extend(&(plus->box), &box);
     }
     
-    V2__add_line_to_topo_nat(Map,
-		     line, points, cats);
+    V2__add_line_to_topo_nat(Map, line, points, cats, NULL);
 
     G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
 	    plus->uplist.n_upnodes);

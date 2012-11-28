@@ -3,12 +3,10 @@
 
    \brief Vector library - Building topology for native format
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
+   (C) 2001-2012 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.

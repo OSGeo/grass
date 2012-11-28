@@ -58,6 +58,7 @@ static char *build_insert_stmt(const struct Format_info_pg *, const char *,
 static int insert_topo_element(struct Map_info *, int, int, const char *);
 static int update_next_edge(struct Map_info*, int, int);
 static int insert_face(struct Map_info *, int);
+static int delete_face(const struct Map_info *, int);
 static int update_topo_edge(struct Map_info *, int);
 static int update_topo_face(struct Map_info *, int);
 #endif
@@ -970,7 +971,8 @@ int write_feature(struct Map_info *Map, int line, int type,
         
         /* update GRASS-like topo */
         if (line > 0) /* skip nodes */
-            V2__add_line_to_topo_nat(Map, line, points[0], NULL); /* TODO: cats */
+            V2__add_line_to_topo_nat(Map, line, points[0], NULL, /* TODO: cats */
+                                     delete_face);
         
         /* update PostGIS-line topo */
         if (type & GV_LINES)
@@ -1394,6 +1396,67 @@ int insert_face(struct Map_info *Map, int area)
     return area;
 }
 
+/*!
+  \brief Delete existing face
+
+  \todo Set foreign keys as DEFERRABLE INITIALLY DEFERRED and use SET
+  CONSTRAINTS ALL DEFERRED
+  
+  \param Map pointer to Map_info struct
+  \param area area id to delete
+
+  \return 0 on success
+  \return -1 on error
+*/
+int delete_face(const struct Map_info *Map, int area)
+{
+    char stmt[DB_SQL_MAX];
+
+    const struct Format_info_pg *pg_info;
+
+    pg_info = &(Map->fInfo.pg);
+    
+    /* update centroids first */
+    sprintf(stmt, "UPDATE \"%s\".node SET containing_face = 0 "
+            "WHERE containing_face = %d",
+            pg_info->toposchema_name, area);
+    G_debug(3, "SQL: %s", stmt);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    /* update also edges (left face) */
+    sprintf(stmt, "UPDATE \"%s\".edge_data SET left_face = 0 "
+            "WHERE left_face = %d",
+            pg_info->toposchema_name, area);
+    G_debug(3, "SQL: %s", stmt);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    /* update also edges (left face) */
+    sprintf(stmt, "UPDATE \"%s\".edge_data SET right_face = 0 "
+            "WHERE right_face = %d",
+            pg_info->toposchema_name, area);
+    G_debug(3, "SQL: %s", stmt);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    /* delete face */
+    sprintf(stmt, "DELETE FROM \"%s\".face WHERE face_id = %d",
+            pg_info->toposchema_name, area);
+    G_debug(3, "delete face id=%d", area);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    return 0;
+}
 
 /*!
   \brief Update lines (next left and right edges)
@@ -1511,13 +1574,13 @@ int update_topo_edge(struct Map_info *Map, int line)
 */  
 int update_topo_face(struct Map_info *Map, int line)
 {
-    int i, s, area, face;
+    int i, s, area, face[2];
     char stmt[DB_SQL_MAX];
     
     struct Format_info_pg *pg_info;
-    struct P_line *Line;
+    struct P_line *Line, *Line_i;
     struct P_area *Area;
-    struct P_topo_b *topo;
+    struct P_topo_b *topo, *topo_i;
     
     pg_info = &(Map->fInfo.pg);
     
@@ -1533,39 +1596,51 @@ int update_topo_face(struct Map_info *Map, int line)
     
     topo = (struct P_topo_b *)Line->topo;
     
+    /* for both side on the current boundary (line) */
+    /* create new faces */
     for (s = 0; s < 2; s++) { /* for each side */
         area = s == 0 ? topo->left : topo->right;
         if (area <= 0) /* no area - skip */
             continue;
+
+        face[s] = insert_face(Map, area);
+        if (face[s] < 1) {
+            G_warning(_("Unable to create new face"));
+            return -1;
+        }
+    }
+    
+    /* update edges forming faces */
+    for (s = 0; s < 2; s++) { /* for each side */
+        area = s == 0 ? topo->left : topo->right;
+        if (area <= 0) /* no area - skip */
+          continue;
+        
         Area = Map->plus.Area[area];
-        
-        face = insert_face(Map, area); /* TODO: update */
-        
-        for (i = 0; i < Area->n_lines; i++) { /* update all boundaries */
-            Line = Map->plus.Line[abs(Area->lines[i])];
-            topo = (struct P_topo_b *)Line->topo;
+        for (i = 0; i < Area->n_lines; i++) {
+            Line_i = Map->plus.Line[abs(Area->lines[i])];
+            topo_i = (struct P_topo_b *)Line_i->topo;
             
             sprintf(stmt, "UPDATE \"%s\".edge_data SET "
                     "left_face = %d, right_face = %d "
                     "WHERE edge_id = %lu", pg_info->toposchema_name,
-                    topo->left > 0 ? topo->left : 0,
-                    topo->right > 0 ? topo->right : 0,
-                    Line->offset);
+                    topo_i->left > 0 ? topo_i->left : 0,
+                    topo_i->right > 0 ? topo_i->right : 0,
+                    Line_i->offset);
             G_debug(2, "SQL: %s", stmt);
             
             if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
-                /* rollback transaction */
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return -1;
             }
         }
         
-        /* update also centroids */
+        /* update also centroids (stored as nodes) */
         if (Area->centroid > 0) {
-            Line = Map->plus.Line[Area->centroid];
+            Line_i = Map->plus.Line[Area->centroid];
             sprintf(stmt, "UPDATE \"%s\".node SET containing_face = %d "
                     "WHERE node_id = %lu", pg_info->toposchema_name,
-                    face, Line->offset);
+                    face[s], Line_i->offset);
             G_debug(2, "SQL: %s", stmt);
             
             if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
