@@ -7,9 +7,7 @@ MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTM
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
 	$(HTMLDIR)/grass_logo.png \
-	$(HTMLDIR)/grass_icon.png \
-	$(HTMLDIR)/nviz/grassdocs.css \
-	$(HTMLDIR)/nviz/grass_logo.png
+	$(HTMLDIR)/grass_icon.png
 
 categories = \
 	d:display \
@@ -75,18 +73,8 @@ $(foreach cat,$(categories),$(eval $(call category_rule,$(firstword $(subst :, ,
 $(HTMLDIR)/grassdocs.css: grassdocs.css
 	$(INSTALL_DATA) $< $@
 
-$(HTMLDIR)/nviz/grassdocs.css: grassdocs.css | $(HTMLDIR)/nviz
-	$(INSTALL_DATA) $< $@
-
 $(HTMLDIR)/grass_logo.png: grass_logo.png
-	$(INSTALL_DATA) $< $@
-
-$(HTMLDIR)/nviz/grass_logo.png: grass_logo.png | $(HTMLDIR)/nviz
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/grass_icon.png: grass_icon.png
 	$(INSTALL_DATA) $< $@
-
-$(HTMLDIR)/nviz:
-	$(MKDIR) $@
-
