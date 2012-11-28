@@ -4,29 +4,19 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
-\par Table of contents
-- \ref vlibBackground
-- \ref vlibIntro
-- \ref vlibVectorMap
-- \ref vlibVectorLevels
-- \ref vlibCategoriesLayers
-- \ref vlibAttributes
-- \ref vlibGeometry
- - \ref vlibFeatureTypes
-- \ref vlibStructures
-- \ref vlibFunc
-- \ref vlibAuthors
-- \ref vlibReferences
-- \ref vlibSeealso
-
-\par Subpages
+\par Related
 - \subpage vlibDescription
 - \subpage vlibFormat
 - \subpage vlibTopology
 - \subpage vlibIndices
 - \subpage vlibAscii
-- \subpage vlibOgr
 - \subpage vlibTin
+
+\par Data providers for external formats
+- \subpage vlibOgr
+- \subpage vlibPg
+
+\par Related libraries
 - \subpage veditlib
 - \subpage dglib
 - \subpage netalib

@@ -2,6 +2,8 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
+\tableofcontents
+
 This library is used for network-based analysis, see <tt>v.net.*</tt>
 modules for implementation issues.
 
