@@ -104,7 +104,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
        </ul>
 
        <ul>
-        <li><a href="nviz.html">nviz</a> 3D visualization and animation tool</li>
+        <li><a href="wxGUI.Nviz.html">nviz</a> 3D visualization and animation tool</li>
         <li><a href="xganim.html">xganim</a> tool  for animating a raster map series</li>
        </ul></td>
     </tr>
@@ -200,7 +200,7 @@ r""" ]
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#r3">r3.*</a> </td><td>raster3D commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#t">t.*</a> </td><td>temporal commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#v">v.*</a> </td><td>vector commands</td></tr>
-<tr><td>&nbsp;&nbsp;<a href="nviz.html">nviz</a> </td><td>visualization suite</td></tr>
+<tr><td>&nbsp;&nbsp;<a href="wxGUI.Nviz.html">nviz</a> </td><td>visualization suite</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="wxGUI.html">wxGUI</a> </td><td>wxPython-based GUI frontend</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="xganim.html">xganim</a> </td><td>raster map slideshow</td></tr>
 </table>
