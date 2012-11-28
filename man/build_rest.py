@@ -84,7 +84,7 @@ Display/Graphical User Interfaces
         wxGUI wxPython-based GUI frontend <wxGUI>
         Display commands manual <display>
         Display drivers <displaydrivers>
-        nviz 3D visualization and animation tool <nviz>
+        nviz 3D visualization and animation tool <wxGUI.Nviz>
         xganim tool for animating a raster map series <xganim>
 
 
@@ -214,7 +214,7 @@ r"""
 +-----------------------------+-------------------------------+
 |`v.* <full_index.html#v>`_   | `vector commands`             |
 +-----------------------------+-------------------------------+
-|`nviz <nviz.html>`_          | `visualization suite`         |
+|`nviz <wxGUI.Nviz.html>`_    | `visualization suite`         |
 +-----------------------------+-------------------------------+
 |`wxGUI <wxGUI.html>`_        | `wxPython-based GUI frontend` |
 +-----------------------------+-------------------------------+
