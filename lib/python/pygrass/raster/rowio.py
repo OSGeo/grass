@@ -19,7 +19,7 @@ CMPFUNC = ctypes.CFUNCTYPE(ctypes.c_int,
 
 
 def getmaprow_CELL(fd, buf, row, l):
-    librast.Rast_get_f_row(fd, ctypes.cast(buf, ctypes.POINTER(librast.CELL)),
+    librast.Rast_get_c_row(fd, ctypes.cast(buf, ctypes.POINTER(librast.CELL)),
                            row)
     return 1
 
@@ -31,7 +31,7 @@ def getmaprow_FCELL(fd, buf, row, l):
 
 
 def getmaprow_DCELL(fd, buf, row, l):
-    librast.Rast_get_f_row(fd, ctypes.cast(buf, ctypes.POINTER(librast.DCELL)),
+    librast.Rast_get_d_row(fd, ctypes.cast(buf, ctypes.POINTER(librast.DCELL)),
                            row)
     return 1
 
