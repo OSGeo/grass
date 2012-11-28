@@ -20,6 +20,7 @@ from xml.etree.ElementTree import fromstring
 
 import grass
 
+from pygrass.errors import GrassError
 
 #
 # this dictionary is used to extract the value of interest from the xml
@@ -384,9 +385,13 @@ class Module(object):
     """
     def __init__(self, cmd, *args, **kargs):
         self.name = cmd
-        # call the command with --interface-description
-        get_cmd_xml = subprocess.Popen([cmd, "--interface-description"],
-                                       stdout=subprocess.PIPE)
+        try:
+            # call the command with --interface-description
+            get_cmd_xml = subprocess.Popen([cmd, "--interface-description"],
+                                           stdout=subprocess.PIPE)
+        except OSError:
+            str_err = "Module %r not found, please check that the module exist"
+            raise GrassError(str_err % self.name)
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
