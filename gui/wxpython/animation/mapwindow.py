@@ -21,6 +21,7 @@ import wx
 
 import grass.script as grass
 from core.gcmd import RunCommand
+from core.debug import Debug
 from utils import ComputeScaledRect
 
 class BufferedWindow(wx.Window):
@@ -43,9 +44,9 @@ class BufferedWindow(wx.Window):
         kwargs['style'] = kwargs.setdefault('style', wx.NO_FULL_REPAINT_ON_RESIZE) | wx.NO_FULL_REPAINT_ON_RESIZE
         wx.Window.__init__(self, *args, **kwargs)
 
+        Debug.msg(2, "BufferedWindow.__init__()")
         wx.EVT_PAINT(self, self.OnPaint)
         wx.EVT_SIZE(self, self.OnSize)
-        self._Buffer = wx.EmptyBitmap(0, 0)
         # OnSize called to make sure the buffer is initialized.
         # This might result in OnSize getting called twice on some
         # platforms at initialization, but little harm done.
@@ -57,10 +58,12 @@ class BufferedWindow(wx.Window):
         pass
 
     def OnPaint(self, event):
+        Debug.msg(5, "BufferedWindow.OnPaint()")
         # All that is needed here is to draw the buffer to screen
         dc = wx.BufferedPaintDC(self, self._Buffer)
 
     def OnSize(self, event):
+        Debug.msg(5, "BufferedWindow.OnSize()")
         # The Buffer init is done here, to make sure the buffer is always
         # the same size as the Window
         #Size  = self.GetClientSizeTuple()
@@ -100,6 +103,8 @@ class BufferedWindow(wx.Window):
 class AnimationWindow(BufferedWindow):
     def __init__(self, parent, id = wx.ID_ANY, 
                  style = wx.DEFAULT_FRAME_STYLE | wx.FULL_REPAINT_ON_RESIZE | wx.BORDER_RAISED):
+        Debug.msg(2, "AnimationWindow.__init__()")
+
         self.bitmap = wx.EmptyBitmap(0, 0)
         self.x = self.y = 0
         self.text = ''
@@ -113,13 +118,17 @@ class AnimationWindow(BufferedWindow):
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
+
     def Draw(self, dc):
         """!Draws bitmap."""
+        Debug.msg(5, "AnimationWindow.Draw()")
+
         dc.Clear() # make sure you clear the bitmap!
         dc.DrawBitmap(self.bitmap, x = self.x, y = self.y)
         dc.DrawText(self.text, 0, 0)
 
     def OnSize(self, event):
+        Debug.msg(5, "AnimationWindow.OnSize()")
         self._computeBitmapCoordinates()
 
         self.DrawBitmap(self.bitmap, self.text)
