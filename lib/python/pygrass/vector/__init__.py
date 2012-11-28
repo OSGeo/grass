@@ -12,7 +12,7 @@ from vector_type import VTYPE, GV_TYPE
 #
 # import pygrass modules
 #
-from pygrass.errors import GrassError
+from pygrass.errors import GrassError, must_be_open
 from pygrass.functions import getenv
 
 import geometry
@@ -98,6 +98,7 @@ class Vector(Info):
         #return (self.read(f_id) for f_id in xrange(self.num_of_features()))
         return self
 
+    @must_be_open
     def next(self):
         """::
 
@@ -126,10 +127,12 @@ class Vector(Info):
                                      c_points=c_points,
                                      c_cats=c_cats)
 
+    @must_be_open
     def rewind(self):
         if libvect.Vect_rewind(self.c_mapinfo) == -1:
             raise GrassError("Vect_rewind raise an error.")
 
+    @must_be_open
     def write(self, geo_obj):
         """::
 
@@ -203,6 +206,7 @@ class VectorTopo(Vector):
         else:
             raise ValueError("Invalid argument type: %r." % key)
 
+    @must_be_open
     def num_primitive_of(self, primitive):
         """Primitive are:
 
@@ -212,6 +216,8 @@ class VectorTopo(Vector):
             * "kernel",
             * "line",
             * "point"
+            * "area"
+            * "volume"
 
         ::
 
@@ -232,6 +238,7 @@ class VectorTopo(Vector):
         return libvect.Vect_get_num_primitives(self.c_mapinfo,
                                                VTYPE[primitive])
 
+    @must_be_open
     def number_of(self, vtype):
         """
         vtype in ["areas", "dblinks", "faces", "holes", "islands", "kernels",
@@ -269,6 +276,16 @@ class VectorTopo(Vector):
             keys = "', '".join(sorted(_NUMOF.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
 
+    @must_be_open
+    def num_primitives(self):
+        """Return dictionary with the number of all primitives
+        """
+        output = {}
+        for prim in VTYPE.keys():
+            output[prim] = self.num_primitive_of(prim)
+        return output
+
+    @must_be_open
     def viter(self, vtype):
         """Return an iterator of vector features
 
@@ -304,6 +321,7 @@ class VectorTopo(Vector):
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
 
+    @must_be_open
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning. ::
 
@@ -324,6 +342,7 @@ class VectorTopo(Vector):
         """
         libvect.Vect_rewind(self.c_mapinfo)
 
+    @must_be_open
     def read(self, feature_id):
         """Return a geometry object given the feature id. ::
 
@@ -371,6 +390,19 @@ class VectorTopo(Vector):
         else:
             raise ValueError('The index must be >0, %r given.' % feature_id)
 
+    @must_be_open
+    def is_empty(self):
+        """Return if a vector map is empty or not
+        """
+        primitives = self.num_primitives()
+        output = True
+        for v in primitives.values():
+            if v != 0:
+                output = False
+                break
+        return output        
+
+    @must_be_open
     def rewrite(self, geo_obj):
         result = libvect.Vect_rewrite_line(self.c_mapinfo,
                                            geo_obj.id, geo_obj.gtype,
@@ -379,10 +411,12 @@ class VectorTopo(Vector):
         # return offset into file where the feature starts
         geo_obj.offset = result
 
+    @must_be_open
     def delete(self, feature_id):
         if libvect.Vect_rewrite_line(self.c_mapinfo, feature_id) == -1:
             raise GrassError("C funtion: Vect_rewrite_line.")
 
+    @must_be_open
     def restore(self, geo_obj):
         if hasattr(geo_obj, 'offset'):
             if libvect.Vect_restore_line(self.c_mapinfo, geo_obj.id,
@@ -391,6 +425,7 @@ class VectorTopo(Vector):
         else:
             raise ValueError("The value have not an offset attribute.")
 
+    @must_be_open
     def bbox(self):
         """Return the BBox of the vecor map
         """
