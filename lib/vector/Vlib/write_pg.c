@@ -94,12 +94,10 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
             return -1;
     }
 
-    if (pg_info->toposchema_name) {
-        G_warning(_("PostGIS topology not supported on level 1"));
-        return -1;
+    if (!pg_info->toposchema_name) { /* simple features */
+        return write_line_sf(Map, type, &points, 1, cats);
     }
-    
-    return write_line_sf(Map, type, &points, 1, cats);
+    return write_line_tp(Map, type, FALSE, points, cats);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
