@@ -169,10 +169,10 @@ char *get_option_pg(char **options, const char *key)
 
 void check_option_on_off(const char *key, char **value)
 {
-    if(G_strcasecmp(*value, "on") != 0 &&
-       G_strcasecmp(*value, "off") != 0) {
+    if(G_strcasecmp(*value, "yes") != 0 &&
+       G_strcasecmp(*value, "no") != 0) {
 	G_warning(_("Invalid option '%s=%s' ignored (allowed values: '%s', '%s')"),
-		  key, *value, "ON", "OFF");
+		  key, *value, "YES", "NO");
 	G_free(*value);
 	*value = NULL;
     }

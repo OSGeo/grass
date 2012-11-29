@@ -3,24 +3,27 @@
 <em>v.external.out</em> instructs GRASS to write vector maps in
 external data format (e.g. ESRI Shapefile, Mapinfo, and others)
 using <a href="http://gdal.org/ogr">OGR library</a>. PostGIS data can
-be also written by built-in <em>GRASS-PostGIS data driver</em>.
+be also written by
+built-in <a href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS
+data provider</a>.
 
 <h2>NOTES</h2>
 
 Number of available output formats (<tt>v.external.out -f</tt>)
-depends on OGR installation, 'PostgreSQL' format is presented also
-when GRASS comes with PostgreSQL support. For 'PostgreSQL' format
-GRASS uses native GRASS-PostGIS data driver to store geometry and
-attribute data directly in the database without using OGR
-library. This can be changed by <tt>GRASS_VECTOR_OGR</tt>
-environmental variable which forces GRASS to use PostgreSQL driver
-from OGR library. GRASS-OGR data driver is used for writing PostGIS
-data also when GRASS installation comes with no PostgreSQL support
-(check for '--with-postgres' in <tt>g.version -b</tt>).
+depends on OGR installation. 'PostgreSQL' format is presented also
+when GRASS comes with PostgreSQL support (check for '--with-postgres'
+in <tt>g.version -b</tt> output).
+
+<p>
+To store geometry and attribute data in PostGIS database ('PostgreSQL'
+format) GRASS uses built-in <em>GRASS-PostGIS data
+provider</em>. PostGIS data can be written also by OGR library
+when <tt>GRASS_VECTOR_OGR</tt> environmental variable is defined or
+GRASS is not compiled with PostgreSQL support.
 
 <p>
 Creation <b>options</b> refer to the given output format selected
-by <b>format</b> option. See list of available creation options
+by <b>format</b> option. See the list of valid creation options
 at <a href="http://www.gdal.org/ogr/ogr_formats.html">OGR formats
 specification page</a>, example
 for <a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI
@@ -29,13 +32,13 @@ or <a href="http://www.gdal.org/ogr/drv_pg.html">PostgreSQL/PostGIS</a>
 format (section &quot;Layer Creation Options&quot;).
 
 <p>
-Note that built-in <em>GRASS-PostGIS data driver</em> supports a limited
+Note that built-in <em>GRASS-PostGIS data provider</em> supports a limited
 number of creation <b>options</b> compared to PostgreSQL/PostGIS
-driver in OGR library:
+driver from OGR library:
 <ul>
   <li><tt>SCHEMA=&lt;name&gt;</tt> - name of schema where to create
   feature tables. If schema doesn't exists, it's automatically created
-  when writting PostGIS data.</li>
+  when writing PostGIS data.</li>
   <li><tt>FID=&lt;column&gt;</tt> - name of column which will be used as
   primary key (feature id), default: <tt>fid</tt></li>
   <li><tt>GEOMETRY_NAME=&lt;column&gt;</tt> name of column which will
@@ -43,7 +46,7 @@ driver in OGR library:
   <li><tt>SPATIAL_INDEX=YES|NO</tt> - enable/disable spatial index on geometry column, default: YES</li>
   <li><tt>PRIMARY_KEY=YES|NO</tt> - enable/disable primary key on FID column, default: YES</li>
   <li><tt>TOPOLOGY=YES|NO</tt> - enable/disable
-  native <a href="http://trac.osgeo.org/postgis/wiki/UsersWikiPostgisTopology">PostGIS
+  native <a href="http://grasswiki.osgeo.org/wiki/PostGIS_Topology">PostGIS
   topology</a>, default: NO</li>
 </ul>
 
@@ -80,24 +83,37 @@ dsn: /path/to/home/gisoutput
 format: ESRI Shapefile
 </pre></div>
 
-<h3>PostGIS</h3>
+<h3>PostGIS (simple features)</h3>
 
 PostGIS data can be accessed directly using <em>GRASS-PostGIS data
-driver</em> (GRASS must be compiled with PostgreSQL support).
+provider</em> (GRASS must be compiled with PostgreSQL support).
 
 <div class="code"><pre>
 # register PostGIS table in GRASS mapset:
 v.external dsn=PG:dbname=gisdb layer=cities
 
-# define output PostGIS database for GRASS calculation results:
+# define output PostGIS database for GRASS calculation results stored as simple features:
 v.external.out dsn=PG:dbname=gisdb format=PostgreSQL
 
 # do some processing...
 </pre></div>
 
-<i>Note:</i> If the environment variable <tt>GRASS_VECTOR_OGR</tt> exists, or
-GRASS is compiled without PostgreSQL support then GRASS will use
-OGR-PostgreSQL driver for reading and writing PostGIS data.
+<i>Note:</i> If the environment variable <tt>GRASS_VECTOR_OGR</tt>
+is defined, or GRASS is compiled without PostgreSQL support then GRASS
+will use PostgreSQL driver from OGR library for reading and writing
+PostGIS data.
+
+<h3>PostGIS Topology</h3>
+
+<div class="code"><pre>
+# define output PostGIS database for GRASS calculation results stored as topological elements:
+v.external.out dsn=PG:dbname=gisdb format=PostgreSQL options=topology=YES
+
+# do some processing...
+</pre></div>
+
+<i>Note:</i> PostGIS topological access is supported only in
+built-in <em>GRASS-PostGIS data provider</em>.
 
 <h3>GRASS native format</h3>
 
@@ -110,7 +126,9 @@ v.external.out -r
 <h2>REFERENCES</h2>
 
 <ul>
+  <li><a href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface">GRASS-OGR data provider</a></li>
   <li><a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation</li>
+  <li><a href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS data provider</a></li>
   <li><a href="http://www.postgresql.org/docs/9.1/static/libpq.html">libpq - C Library</a></li>
 </ul>
 
@@ -119,13 +137,9 @@ v.external.out -r
 <em>
   <a href="v.external.html">v.external</a>,
   <a href="v.in.ogr.html">v.in.ogr</a>,
-  <a href="v.out.ogr.html">v.out.ogr</a>
+  <a href="v.out.ogr.html">v.out.ogr</a>,
+  <a href="v.out.ogr.html">v.out.postgis</a>
 </em>
-
-<p>
-<a href="http://www.gdal.org/ogr/">OGR Library</a>
-<br>
-<a href="http://postgis.org/">PostGIS</a>
 
 <p>
 See
