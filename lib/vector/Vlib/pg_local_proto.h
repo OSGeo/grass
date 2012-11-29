@@ -71,6 +71,8 @@ off_t V2__write_area_pg(struct Map_info *, const struct line_pnts *,
                         const struct line_cats *,
                         const struct line_pnts **, int);
 
+int Vect__insert_face_pg(struct Map_info *, int);
+
 #endif /* HAVE_POSTGRES */
 
 #endif /* __PG_LOCAL_PROTO_H__ */

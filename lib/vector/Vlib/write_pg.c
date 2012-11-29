@@ -57,7 +57,6 @@ static char *build_insert_stmt(const struct Format_info_pg *, const char *,
                                int, const struct field_info *);
 static int insert_topo_element(struct Map_info *, int, int, const char *);
 static int update_next_edge(struct Map_info*, int, int);
-static int insert_face(struct Map_info *, int);
 static int delete_face(const struct Map_info *, int);
 static int update_topo_edge(struct Map_info *, int);
 static int update_topo_face(struct Map_info *, int);
@@ -132,7 +131,7 @@ off_t V2_write_line_pg(struct Map_info *Map, int type,
     }
     else {                          /* PostGIS topology */
         if (Map->plus.built < GV_BUILD_BASE)
-            Map->plus.built = GV_BUILD_ALL;
+            Map->plus.built = GV_BUILD_BASE; /* update build level */
         return write_line_tp(Map, type, FALSE, points, cats);
     }
 #else
@@ -1362,7 +1361,7 @@ int update_next_edge(struct Map_info* Map, int nlines, int line)
   \return 0 on error
   \return area id on success (>0)
 */
-int insert_face(struct Map_info *Map, int area)
+int Vect__insert_face_pg(struct Map_info *Map, int area)
 {
     char *stmt;
     
@@ -1603,7 +1602,7 @@ int update_topo_face(struct Map_info *Map, int line)
         if (area <= 0) /* no area - skip */
             continue;
 
-        face[s] = insert_face(Map, area);
+        face[s] = Vect__insert_face_pg(Map, area);
         if (face[s] < 1) {
             G_warning(_("Unable to create new face"));
             return -1;

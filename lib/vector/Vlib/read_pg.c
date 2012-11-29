@@ -174,9 +174,11 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         else {
             /* ignore constraints */
             ret = read_next_line_pg(Map, line_p, line_c, TRUE);
-            if (ret != Line->type)
-                G_fatal_error(_("Unexpected feature type (%d) - should be (%d)"),
-                              ret, Line->type);
+            if (ret != Line->type) {
+                G_warning(_("Unexpected feature type (%d) - should be (%d)"),
+                          ret, Line->type);
+                return -1;
+            }
         }
 
         if (Map->constraint.region_flag) {
@@ -463,6 +465,7 @@ int read_next_line_pg(struct Map_info *Map,
  */
 SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
 {
+    int seq_type;
     int force_type; /* force type (GV_BOUNDARY or GV_CENTROID) for topo access only */
     char *data;
     char stmt[DB_SQL_MAX];
@@ -576,9 +579,11 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     if (pg_info->toposchema_name) {
         if (fid < 0) {
             /* sequatial access */
-            if (strcmp(PQgetvalue(pg_info->res, pg_info->next_line, 2), "b") == 0)
+            seq_type = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
+            if (seq_type == GV_BOUNDARY ||
+                (seq_type == GV_LINE && pg_info->feature_type == SF_POLYGON))
                 force_type = GV_BOUNDARY;
-            else if (strcmp(PQgetvalue(pg_info->res, pg_info->next_line, 2), "c") == 0)
+            else if (seq_type == GV_CENTROID)
                 force_type = GV_CENTROID;
         }
         else {
@@ -1172,23 +1177,23 @@ int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
         sprintf(stmt,
                 "DECLARE %s_%s%p CURSOR FOR "
                 "SELECT geom,fid,type FROM ("
-                "SELECT node_id AS fid,geom, 'p' AS type FROM \"%s\".node WHERE "
+                "SELECT node_id AS fid,geom, %d AS type FROM \"%s\".node WHERE "
                 "containing_face IS NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"%s\".edge GROUP BY end_node) AS foo) UNION ALL SELECT "
-                "node_id AS fid,geom, 'c' AS type FROM \"%s\".node WHERE "
+                "node_id AS fid,geom, %d AS type FROM \"%s\".node WHERE "
                 "containing_face IS NOT NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"topo_bridges\".edge GROUP BY end_node) AS foo) "
-                "UNION ALL SELECT edge_id AS fid, geom, 'l' AS type FROM \"%s\".edge WHERE "
-                "left_face = 0 AND right_face = 0 UNION ALL SELECT edge_id AS fid, geom, 'b' AS type FROM "
-                "\"%s\".edge WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY fid, type",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn,
-                pg_info->toposchema_name, pg_info->toposchema_name,
-                pg_info->toposchema_name, pg_info->toposchema_name,
-                pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name); 
+                "UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM \"%s\".edge WHERE "
+                "left_face = 0 AND right_face = 0 UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM "
+                "\"%s\".edge WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,fid",
+                pg_info->schema_name, pg_info->table_name, pg_info->conn, GV_POINT,
+                pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name,
+                GV_CENTROID, pg_info->toposchema_name, pg_info->toposchema_name,
+                GV_LINE, pg_info->toposchema_name, GV_BOUNDARY, pg_info->toposchema_name); 
     }
     G_debug(2, "SQL: %s", stmt);
     

@@ -56,41 +56,40 @@ int Vect_build_pg(struct Map_info *Map, int build)
     pg_info = &(Map->fInfo.pg);
 
     G_debug(1, "Vect_build_pg(): db='%s' table='%s', build=%d",
-	    pg_info->db_name, pg_info->table_name, build);
+            pg_info->db_name, pg_info->table_name, build);
 
     if (build == plus->built)
-	return 1;		/* do nothing */
+        return 1;            /* do nothing */
 
     /* TODO move this init to better place (Vect_open_ ?), because in
        theory build may be reused on level2 */
     if (build >= plus->built && build > GV_BUILD_BASE) {
-	G_free((void *)pg_info->offset.array);
-	G_zero(&(pg_info->offset), sizeof(struct Format_info_offset));
+        G_free((void *)pg_info->offset.array);
+        G_zero(&(pg_info->offset), sizeof(struct Format_info_offset));
     }
 
     if (!pg_info->conn) {
-	G_warning(_("No DB connection"));
-	return 0;
+        G_warning(_("No DB connection"));
+        return 0;
     }
 
-    if (!pg_info->fid_column) {
-	G_warning(_("Feature table <%s> has no primary key defined"),
-		  pg_info->table_name);
-	G_warning(_("Random read is not supported for this layer. "
-		    "Unable to build topology."));
-	return 0;
+    if (!pg_info->fid_column && !pg_info->toposchema_name) {
+        G_warning(_("Feature table <%s> has no primary key defined"),
+                  pg_info->table_name);
+        G_warning(_("Random read is not supported for this layer. "
+                    "Unable to build topology."));
+        return 0;
     }
 
     /* commit transaction block (update mode only) */
     if (pg_info->inTransaction && Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
-	return 0;
-
+        return 0;
     pg_info->inTransaction = FALSE;
-
+    
     if (build > GV_BUILD_NONE) {
-	G_message(_("Using external data format '%s' (feature type '%s')"),
-		  Vect_get_finfo_format_info(Map),
-		  Vect_get_finfo_geometry_type(Map)); 
+        G_message(_("Using external data format '%s' (feature type '%s')"),
+                  Vect_get_finfo_format_info(Map),
+                  Vect_get_finfo_geometry_type(Map)); 
         if (!pg_info->toposchema_name)
             G_message(_("Building pseudo-topology over simple features..."));
         else
@@ -98,9 +97,10 @@ int Vect_build_pg(struct Map_info *Map, int build)
                       pg_info->toposchema_name);
     }
 
-    if (!pg_info->toposchema_name)
+    if (!pg_info->toposchema_name) /* pseudo-topology for simple features */
         return Vect__build_sfa(Map, build);
     
+    /* PostGIS Topology */
     return build_topo(Map, build);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -112,7 +112,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
 /*!
   \brief Build from PostGIS topology schema
 
-  Currently only GV_BUILD_ALL is supported
+  \todo Attach isles
 
   \param Map pointer to Map_info struct
   \param build build level
@@ -122,13 +122,17 @@ int Vect_build_pg(struct Map_info *Map, int build)
 */
 int build_topo(struct Map_info *Map, int build)
 {
-    int line, nlines, type;
+    int line, type, topo_id, area, nareas, s;
+    int face[2];
     char stmt[DB_SQL_MAX];
     
     struct Plus_head *plus;
     struct Format_info_pg *pg_info;
     struct P_line *Line;
-    struct P_topo_c *topo;
+    struct P_area *Area;
+    struct P_topo_c *topo_c;
+    struct P_topo_b *topo_b;
+    struct P_isle *Isle;
     
     plus = &(Map->plus);
     pg_info = &(Map->fInfo.pg);
@@ -139,55 +143,132 @@ int build_topo(struct Map_info *Map, int build)
         Vect__build_downgrade(Map, build);
         return 1;
     }
+    /*     -> upgrade */
     
-    if (build != GV_BUILD_ALL) {
-        /* TODO: implement all build levels */
-        G_warning(_("Only %s is supported for PostGIS topology"),
-                  "GV_BUILD_ALL");
-        return 0;
-    }
-    
-    /* read topology from PostGIS ???
-    if (plus->built < GV_BUILD_BASE) {
-        if (load_plus(Map, FALSE) != 0)
-            return 0;
-    }
-    */
-
-    /* update TopoGeometry based on GRASS-like topology */
     if (build < GV_BUILD_BASE)
         return 1; /* nothing to print */
     
-    if (plus->built < GV_BUILD_BASE) {
-        Vect_build_nat(Map, build);
-    }
+    /* update TopoGeometry based on GRASS-like topology */
+    Vect_build_nat(Map, build);
     
     /* store map boundig box in DB */
     save_map_bbox(pg_info, &(plus->box));
     
+    /* begin transaction */
     if (Vect__execute_pg(pg_info->conn, "BEGIN"))
         return 0;
     
-    G_message(_("Updating TopoGeometry data..."));
-    nlines = Vect_get_num_lines(Map);
-    for(line = 1; line <= nlines; line++) {
-        type = Vect_read_line(Map, NULL, NULL, line);
-        G_percent(line, nlines, 3);
+    /* update faces from GRASS Topology */
+    if (build >= GV_BUILD_AREAS) {
+        /* reset centroids to '0' (universal face) */
+        sprintf(stmt, "UPDATE \"%s\".node SET containing_face = 0 WHERE "
+                "containing_face IS NOT NULL", pg_info->toposchema_name);
+        G_debug(2, "SQL: %s", stmt);
+        if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+
+        /* reset left|right edges */
+        sprintf(stmt, "UPDATE \"%s\".edge_data SET left_face = 0, right_face = 0",
+                pg_info->toposchema_name);
+        G_debug(2, "SQL: %s", stmt);
+        if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+
+        /* delete faces */        
+        sprintf(stmt, "DELETE FROM \"%s\".face WHERE "
+                "face_id > 0", pg_info->toposchema_name);
+        G_debug(2, "SQL: %s", stmt);
+        if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
         
-        /* update topogeometry elements in feature table */
-        if (type == GV_POINT || type == GV_LINE || type == GV_CENTROID) {
-            Line = Map->plus.Line[line];
-            if (!Line) {
-                G_warning(_("Inconsistency in topology detected. "
-                            "Dead line found."));
-            }
-            topo = (struct P_topo_c *) Line->topo;
+        /* insert face from GRASS topology */
+        nareas = Vect_get_num_areas(Map);
+        for (area = 1; area <= nareas; area++) {
+            Vect__insert_face_pg(Map, area);
             
-            if (build_topogeom_stmt(pg_info, topo->area, type, stmt) &&
-                Vect__execute_pg(pg_info->conn, stmt) == -1) {
-                Vect__execute_pg(pg_info->conn, "ROLLBACK");
-                return 0;
+            if (build < GV_BUILD_CENTROIDS)
+                continue;
+            
+            /* update centroids */
+            Area = plus->Area[area];
+            if (Area->centroid < 1) {
+                G_warning(_("Area %d without centroid"), area);
+                continue;
             }
+            
+            Line = plus->Line[Area->centroid];
+            sprintf(stmt, "UPDATE \"%s\".node SET "
+                    "containing_face = %d WHERE node_id = %lu",
+                    pg_info->toposchema_name, area, Line->offset);
+            G_debug(2, "SQL: %s", stmt);
+            
+            if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return -1;
+            }
+        }
+    }
+    
+    G_message(_("Updating TopoGeometry data..."));
+    for (line = 1; line <= plus->n_lines; line++) {
+        type = Vect_read_line(Map, NULL, NULL, line); 
+        G_percent(line, plus->n_lines, 3);
+        
+        Line = Map->plus.Line[line];
+        if (!Line) {
+            G_warning(_("Inconsistency in topology detected. "
+                        "Dead line found."));
+            return 0;
+        }
+    
+        if (build >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
+            topo_b = (struct P_topo_b *) Line->topo;
+
+            for (s = 0; s < 2; s++) { /* for both sides */
+                face[s] = s == 0 ? topo_b->left : topo_b->right;
+                if (face[s] < 0) {
+                    Isle = plus->Isle[abs(face[s])];
+                    if (Isle->area > 0) {
+                        face[s] = Isle->area;
+                    }
+                    else { /* -> universal face */
+                        face[s] = 0;
+                    }
+                }
+            }
+            
+            sprintf(stmt, "UPDATE \"%s\".edge_data SET "
+                    "left_face = %d, right_face = %d "
+                    "WHERE edge_id = %lu", pg_info->toposchema_name,
+                    face[0], face[1], Line->offset);
+            G_debug(2, "SQL: %s", stmt);
+            
+            if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return -1;
+            }
+            continue;
+        }
+        
+        /* determine id */
+        if (type == GV_CENTROID) {
+            topo_c = (struct P_topo_c *) Line->topo;
+            topo_id = topo_c->area;
+        }
+        else {
+            topo_id = line; /* GV_POINT | GV_LINE */
+        }
+        
+        if (build_topogeom_stmt(pg_info, topo_id, type, stmt) &&
+            Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return 0;
         }
     }
     
