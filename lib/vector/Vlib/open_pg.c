@@ -1389,9 +1389,11 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
     plus->n_areas = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_areas=%d", plus->n_areas);
 
-    /* isles (faces with face_id <=0 in PostGIS Topology model) */
+    /* isles (faces with face_id <=0 in PostGIS Topology model)
+       note: universal face is represented in GRASS Topology model as isle (area=0)
+    */
     sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".face WHERE face_id < 1",
+            "SELECT COUNT(*) FROM \"%s\".face WHERE face_id < 0",
             pg_info->toposchema_name);
     plus->n_isles = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_isles=%d", plus->n_isles);
@@ -1428,7 +1430,12 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
 
     /* centroids */
     sprintf(stmt,
-            "SELECT COUNT(*) FROM \"%s\".face WHERE mbr IS NOT NULL",
+            "SELECT COUNT(*) FROM \"%s\".node WHERE containing_face "
+            "IS NOT NULL AND node_id NOT IN "
+            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+            "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
+            "\"%s\".edge GROUP BY end_node) AS foo)",
+            pg_info->toposchema_name, pg_info->toposchema_name,
             pg_info->toposchema_name);
     plus->n_clines = Vect__execute_get_value_pg(pg_info->conn, stmt);
     G_debug(3, "Vect_open_topo_pg(): n_clines=%d", plus->n_clines);
@@ -1599,7 +1606,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
-        PQntuples(res) > plus->n_clines) {
+        PQntuples(res) != plus->n_clines) {
         G_warning(_("Inconsistency in topology: number of "
                     "centroids %d (should be %d)"),
                   PQntuples(res), plus->n_clines);

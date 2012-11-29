@@ -1354,7 +1354,7 @@ int update_next_edge(struct Map_info* Map, int nlines, int line)
   \brief Insert new face to the 'face' table (topo only)
 
   \param Map pointer to Map_info struct
-  \param area area id
+  \param area area id (negative id for isles)
 
   \return 0 on error
   \return area id on success (>0)
@@ -1366,7 +1366,7 @@ int Vect__insert_face_pg(struct Map_info *Map, int area)
     struct Format_info_pg *pg_info;
     struct bound_box box;
     
-    if (area <= 0)
+    if (area == 0)
         return 0; /* universal face has id '0' in PostGIS Topology */
 
     stmt = NULL;
@@ -1375,7 +1375,10 @@ int Vect__insert_face_pg(struct Map_info *Map, int area)
     /* check if face exists */
     
     /* get mbr of the area */
-    Vect_get_area_box(Map, area, &box);
+    if (area > 0)
+        Vect_get_area_box(Map, area, &box);
+    else
+        Vect_get_isle_box(Map, abs(area), &box);
     
     /* insert face if not exists */
     G_asprintf(&stmt, "INSERT INTO \"%s\".face (face_id, mbr) VALUES "
