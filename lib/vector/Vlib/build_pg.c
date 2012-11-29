@@ -122,7 +122,8 @@ int Vect_build_pg(struct Map_info *Map, int build)
 */
 int build_topo(struct Map_info *Map, int build)
 {
-    int line, type, topo_id, area, nareas, s;
+    int line, type, topo_id, s;
+    int area, nareas, isle, nisles;
     int face[2];
     char stmt[DB_SQL_MAX];
     
@@ -180,7 +181,7 @@ int build_topo(struct Map_info *Map, int build)
 
         /* delete faces */        
         sprintf(stmt, "DELETE FROM \"%s\".face WHERE "
-                "face_id > 0", pg_info->toposchema_name);
+                "face_id != 0", pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
         if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -215,6 +216,15 @@ int build_topo(struct Map_info *Map, int build)
         }
     }
     
+    if (build >= GV_BUILD_ATTACH_ISLES) {
+        /* insert isles as faces with negative face_id */
+        nisles = Vect_get_num_islands(Map);
+        for(isle = 1; isle <= nisles; isle++) {
+            Isle = plus->Isle[isle];
+            Vect__insert_face_pg(Map, -isle);
+        }
+    }
+
     G_message(_("Updating TopoGeometry data..."));
     for (line = 1; line <= plus->n_lines; line++) {
         type = Vect_read_line(Map, NULL, NULL, line); 
