@@ -90,6 +90,9 @@ int main(int argc, char *argv[])
     if (ret == -1)
         G_fatal_error(_("Unable to open vector map <%s>"),
                       params.input->answer);
+    if (Vect_maptype(&In) != GV_FORMAT_NATIVE)
+        G_fatal_error(_("Vector map <%s> is not in native format. Export cancelled."),
+                      Vect_get_full_name(&In));
     Vect_set_error_handler_io(&In, NULL);
     if (params.olink->answer)
 	G_add_error_handler(link_handler, params.olink->answer);
