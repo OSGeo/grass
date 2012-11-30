@@ -15,7 +15,7 @@ void parse_args(int, char **,
 
 /* list.c */
 void list_formats();
-int list_layers(FILE *, const char *, const char *, int, int, int *);
+int list_layers(FILE *, const char *, const char *, int, int);
 void get_table_name(const char *, char **, char **);
 
 #endif

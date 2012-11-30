@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     
     FILE *fd;
     
-    int ilayer, is3D, use_ogr;
+    int ilayer, use_ogr;
     char buf[GPATH_MAX], *dsn;
     const char *output;
     
@@ -116,8 +116,7 @@ int main(int argc, char *argv[])
         if (!dsn)
             G_fatal_error(_("Required parameter <%s> not set"), options.dsn->key);
         list_layers(stdout, dsn, NULL,
-                    flags.tlist->answer ? TRUE : FALSE,
-                    use_ogr, NULL);
+                    flags.tlist->answer ? TRUE : FALSE, use_ogr);
         exit(EXIT_SUCCESS);
     }
 
@@ -130,7 +129,7 @@ int main(int argc, char *argv[])
 
     /* get layer index */
     ilayer = list_layers(NULL, dsn, options.layer->answer,
-                         FALSE, use_ogr, &is3D);
+                         FALSE, use_ogr);
     if (ilayer == -1) {
         G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
     }
@@ -143,7 +142,7 @@ int main(int argc, char *argv[])
     }
     
     /* create new vector map */
-    Vect_open_new(&Map, output, is3D);
+    Vect_open_new(&Map, output, WITHOUT_Z); /* dimension is set later from data source */
     Vect_set_error_handler_io(NULL, &Map);
     
     Vect_hist_command(&Map);

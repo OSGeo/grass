@@ -17,10 +17,10 @@ static int cmp(const void *, const void *);
 static char **format_list(int *, size_t *);
 static char *feature_type(const char *);
 #ifdef HAVE_OGR
-static int list_layers_ogr(FILE *, const char *, const char *, int, int *);
+static int list_layers_ogr(FILE *, const char *, const char *, int);
 #endif /* HAVE_OGR */
 #ifdef HAVE_POSTGRES
-static int list_layers_pg(FILE *, const char *, const char *, int, int *);
+static int list_layers_pg(FILE *, const char *, const char *, int);
 #endif /* HAVE_POSTGRES */
 
 int cmp(const void *a, const void *b)
@@ -101,17 +101,17 @@ void list_formats(void)
     G_free(list);
 }
 
-int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, int use_ogr, int *is3D)
+int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, int use_ogr)
 {
     if (!use_ogr) {
 #ifdef HAVE_POSTGRES
-	return list_layers_pg(fd, dsn, layer, print_types, is3D);
+	return list_layers_pg(fd, dsn, layer, print_types);
 #else
 	G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
 #endif
     }
 #ifdef HAVE_OGR
-    return list_layers_ogr(fd, dsn, layer, print_types, is3D);
+    return list_layers_ogr(fd, dsn, layer, print_types);
 #else
     G_fatal_error(_("GRASS is not compiled with OGR support"));
 #endif
@@ -138,7 +138,7 @@ void get_table_name(const char *table, char **table_name, char **schema_name)
 }
 
 #ifdef HAVE_POSTGRES
-int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_types, int *is3D)
+int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_types)
 {
     int   row, ntables, ret, print_schema;
     char *value_schema, *value_table;
@@ -214,7 +214,6 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 	if ((!schema_name || strcmp(value_schema, schema_name) == 0) &&
             table_name && strcmp(value_table, table_name) == 0) {
 	    ret = row;
-	    *is3D = WITHOUT_Z;
 	}
     }
     
@@ -232,7 +231,7 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 #endif /* HAVE_POSTGRES */
 
 #ifdef HAVE_OGR
-int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_types, int *is3D)
+int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_types)
 {
     int i, ret;
     int nlayers;
@@ -274,18 +273,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 	}
 	if (layer)
 	    if (strcmp(layer_name, layer) == 0) {
-		if (is3D) {
-		    switch(Ogr_geom_type) {
-		    case wkbPoint25D: case wkbLineString25D: case wkbPolygon25D:
-		    case wkbMultiPoint25D: case wkbMultiLineString25D: case wkbMultiPolygon25D:
-		    case wkbGeometryCollection25D:
-			*is3D = WITH_Z;
-			break;
-		    default:
-			*is3D = WITHOUT_Z;
-			break;
-		    }
-		}
 		ret = i;
 	    }
     }
