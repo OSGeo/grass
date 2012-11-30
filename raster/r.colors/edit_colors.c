@@ -72,7 +72,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         opt.maps = G_define_standard_option(G_OPT_R_MAPS);
     }
     opt.maps->required = NO;
-    opt.maps->guisection = _("Define");
+    opt.maps->guisection = _("Map");
 
     opt.file = G_define_standard_option(G_OPT_F_INPUT);
     opt.file->key = "file";
