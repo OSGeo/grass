@@ -38,6 +38,8 @@ import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
 
+from grass.script import core as grass
+
 from gui_core.ghelp import HelpFrame
 from core.gcmd      import GMessage, GError, DecodeString, RunCommand, GWarning
 from core.utils     import GetListOfLocations, GetListOfMapsets
@@ -409,11 +411,11 @@ class GRASSStartup(wx.Frame):
             self.lbmapsets.SetSelection(0)
             self.SetLocation(self.gisdbase, gWizard.location, 'PERMANENT')
             if gWizard.georeffile:
-                message = _("Do you want to import data source <%(name)s> to created location?"
-                            " Default region will be set to match imported map.") % {'name': gWizard.georeffile}
+                message = _("Do you want to import file <%(name)s> to created location? "
+                            "Default region will be set to match imported map.") % {'name': gWizard.georeffile}
                 dlg = wx.MessageDialog(parent = self,
                                        message = message,
-                                       caption = _("Import data"),
+                                       caption = _("Import data?"),
                                        style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                 dlg.CenterOnScreen()
                 if dlg.ShowModal() == wx.ID_YES:
@@ -448,45 +450,40 @@ class GRASSStartup(wx.Frame):
 
         If successfull sets default region from imported map.
         """
-        returncode, stdout, messagesIfVector = RunCommand('v.in.ogr', dsn = filePath, flags = 'l',
-                                                  read = True, getErrorMsg = True)
-        if returncode == 0:
-            wx.BeginBusyCursor()
-            wx.Yield()
-            returncode, messages = RunCommand('v.in.ogr', dsn = filePath, 
-                                              output = os.path.splitext(os.path.basename(filePath))[0],
-                                              getErrorMsg = True)
-            wx.EndBusyCursor()
-            if returncode != 0:
-                message = _("Import of vector data source <%(name)s> failed.") % {'name': filePath}
-                message += "\n" + messages
-                GError(message = message)
-            else:
-                GMessage(message = _("Vector data source <%(name)s> imported successfully.") % {'name': filePath})
-                stdout = RunCommand('g.list', type = 'vect', read = True)
-                maps = stdout.splitlines()
-                if maps:
-                    # TODO: what about resolution?
-                    RunCommand('g.region', flags = 's', vect = maps[0])
-                    
+        mapName = os.path.splitext(os.path.basename(filePath))[0]
+        vectors = RunCommand('v.in.ogr', dsn = filePath, flags = 'l',
+                             read = True)
+        
+        print vectors, mapName in vectors
+        wx.BeginBusyCursor()
+        wx.Yield()
+        if mapName in vectors:
+            # vector detected
+            returncode, error = RunCommand('v.in.ogr', dsn = filePath, output = mapName,
+                                           getErrorMsg = True)
         else:
-            wx.BeginBusyCursor()
-            wx.Yield()
-            returncode, messages = RunCommand('r.in.gdal', input = filePath,
-                                              output = os.path.splitext(os.path.basename(filePath))[0],
-                                              getErrorMsg = True)
-            wx.EndBusyCursor()
-            if returncode != 0:
-                message = _("Attempt to import data source <%(name)s> as raster or vector failed. ") % {'name': filePath}
-                message += "\n\n" +  messagesIfVector + "\n" + messages
-                GError(message = message)
-            else:
-                GMessage(message = _("Raster data source <%(name)s> imported successfully.") % {'name': filePath})
-                stdout = RunCommand('g.list', type = 'rast', read = True)
-                maps = stdout.splitlines()
-                if maps:
-                    RunCommand('g.region', flags = 's', rast = maps[0])
+            returncode, error = RunCommand('r.in.gdal', input = filePath, output = mapName,
+                                           getErrorMsg = True)
+        wx.EndBusyCursor()
 
+        if returncode != 0:
+            GError(parent = self,
+                   message = _("Import of <%(name)s> failed.\n"
+                               "Reason: %(msg)s") % ({'name': filePath, 'msg': error}))
+        else:
+            GMessage(message = _("Data <%(name)s> imported successfully.") % {'name': filePath},
+                     parent = self)
+            if not grass.find_file(element = 'cell', name = mapName)['fullname'] and \
+                    not grass.find_file(element = 'vector', name = mapName)['fullname']:
+                GError(parent = self,
+                       message = _("Map <%s> not found.") % mapName)
+            else:
+                if mapName in vectors:
+                    args = {'vect' : mapName}
+                else:
+                    args = {'rast' : mapName}
+                RunCommand('g.region', flags = 's', parent = self, **args)
+        
     def OnManageLoc(self, event):
         """!Location management choice control handler
         """
