@@ -111,9 +111,7 @@ int RTreeGetLeafMax(struct RTree *);
 /* io.c */
 struct RTree_Node *RTreeGetNode(off_t, int, struct RTree *);
 void RTreeNodeChanged(struct RTree_Node *, off_t , struct RTree *);
-void RTreePutNode(struct RTree_Node *, off_t, struct RTree *);
 size_t RTreeRewriteNode(struct RTree_Node *, off_t, struct RTree *);
-void RTreeUpdateRect(struct RTree_Rect *, struct RTree_Node *, off_t, int, struct RTree *);
 void RTreeAddNodePos(off_t, int, struct RTree *);
 
 #endif /* _INDEX_ */

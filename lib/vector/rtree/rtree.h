@@ -52,7 +52,7 @@ typedef double RectReal;
 #define MAXLEVEL 20        /* 8^MAXLEVEL items are guaranteed to fit into the tree */
 
 /* number of nodes buffered per level */
-#define NODE_BUFFER_SIZE 8
+#define NODE_BUFFER_SIZE 32
 
 struct RTree_Rect
 {
@@ -78,7 +78,7 @@ struct RTree_Node       /* node for spatial index */
 {
     int count;          /* number of branches */
     int level;		/* 0 is leaf, others positive */
-    struct RTree_Branch branch[MAXCARD];
+    struct RTree_Branch *branch;
 };
 
 /*
@@ -99,19 +99,12 @@ typedef int rt_delete_fn(struct RTree_Rect *, union RTree_Child, struct RTree *)
 typedef int rt_valid_child_fn(union RTree_Child *);
 
 /* temp vars for each tree */
-/* stacks used for non-recursive insertion/deletion */
-/* stack for file-based index */
-struct fstack
+/* node stack used for non-recursive insertion/deletion */
+struct nstack
 {
     struct RTree_Node *sn;	/* stack node */
     int branch_id;		/* branch number to follow down */
     off_t pos;			/* file position of stack node */
-};
-/* stack for memory-based index */
-struct mstack
-{
-    struct RTree_Node *sn;	/* stack node pointer */
-    int branch_id;		/* branch number to follow down */
 };
 
 /* node buffer for file-based index */
@@ -171,7 +164,7 @@ struct RTree
     /* usage order of buffered nodes per level
      * used[level][0] = most recently used
      * used[level][NODE_BUFFER_SIZE - 1] = least recently used */
-    int used[MAXLEVEL][NODE_BUFFER_SIZE];
+    int **used;
 
     /* insert, delete, search */
     rt_insert_fn *insert_rect;
@@ -183,13 +176,12 @@ struct RTree
 
     /* internal variables, specific for each tree,
      * allocated with tree initialization */
-    /* stacks for tree traversal */
-    struct mstack ms[MAXLEVEL];
-    struct fstack fs[MAXLEVEL];
+    /* node stack for tree traversal */
+    struct nstack *ns;
     
     /* variables for splitting / forced reinsertion */
     struct RTree_PartitionVars p;
-    struct RTree_Branch BranchBuf[MAXCARD + 1];
+    struct RTree_Branch *BranchBuf;
 
     struct RTree_Branch tmpb1, tmpb2, c;
     int BranchCount;

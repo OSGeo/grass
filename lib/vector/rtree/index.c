@@ -110,18 +110,18 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 	    new_rtree->nb[i] = new_rtree->nb[i - 1] + NODE_BUFFER_SIZE;
 	}
 
+	new_rtree->used = malloc(MAXLEVEL * sizeof(int *));
+	new_rtree->used[0] = malloc(MAXLEVEL * NODE_BUFFER_SIZE * sizeof(int));
 	for (i = 0; i < MAXLEVEL; i++) {
-
-	    /*
-	    for (j = 0; j < MAXCARD; j++) {
-		new_rtree->fs[i].sn.branch[j].rect.boundary = RTreeAllocBoundary(new_rtree);
-	    }
-	    */
+	    if (i)
+		new_rtree->used[i] = new_rtree->used[i - 1] + NODE_BUFFER_SIZE;
 	    for (j = 0; j < NODE_BUFFER_SIZE; j++) {
 		new_rtree->nb[i][j].dirty = 0;
 		new_rtree->nb[i][j].pos = -1;
 		/* usage order */
 		new_rtree->used[i][j] = j;
+
+		new_rtree->nb[i][j].n.branch = malloc(MAXCARD * sizeof(struct RTree_Branch));
 
 		/* alloc memory for rectangles */
 		for (k = 0; k < MAXCARD; k++) {
@@ -166,12 +166,16 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     new_rtree->n_leafs = 0;
 
     /* initialize temp variables */
+    new_rtree->ns = malloc(MAXLEVEL * sizeof(struct nstack));
+    
     new_rtree->p.cover[0].boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->p.cover[1].boundary = RTreeAllocBoundary(new_rtree);
     
     new_rtree->tmpb1.rect.boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->tmpb2.rect.boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->c.rect.boundary = RTreeAllocBoundary(new_rtree);
+
+    new_rtree->BranchBuf = malloc((MAXCARD + 1) * sizeof(struct RTree_Branch));
     for (i = 0; i <= MAXCARD; i++) {
 	new_rtree->BranchBuf[i].rect.boundary = RTreeAllocBoundary(new_rtree);
     }
@@ -226,11 +230,15 @@ void RTreeDestroyTree(struct RTree *t)
 	    free(t->free_nodes.pos);
 	free(t->nb[0]);
 	free(t->nb);
+	free(t->used[0]);
+	free(t->used);
     }
     else if (t->root)
 	RTreeDestroyNode(t->root, t->root->level ? t->nodecard : t->leafcard);
 
     /* free temp variables */
+    free(t->ns);
+    
     RTreeFreeBoundary(&(t->p.cover[0]));
     RTreeFreeBoundary(&(t->p.cover[1]));
     
@@ -240,6 +248,7 @@ void RTreeDestroyTree(struct RTree *t)
     for (i = 0; i <= MAXCARD; i++) {
         RTreeFreeBoundary(&(t->BranchBuf[i].rect));
     }
+    free(t->BranchBuf);
     RTreeFreeBoundary(&(t->rect_0));
     RTreeFreeBoundary(&(t->rect_1));
     RTreeFreeBoundary(&(t->upperrect));

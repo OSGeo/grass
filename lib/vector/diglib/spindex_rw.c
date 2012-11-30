@@ -615,12 +615,10 @@ static int rtree_dump_branch_file(FILE * fp, struct RTree_Branch *b, int with_z,
 int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
 {
     int i;
-    static struct RTree_Node n;
-    static int node_init = 0;
+    static struct RTree_Node *n = NULL;
     
-    if (!node_init) {
-	for (i = 0; i < MAXCARD; i++)
-	    n.branch[i].rect.boundary = RTreeAllocBoundary(t);
+    if (!n) {
+	n = RTreeAllocNode(t, 1);
     }
 
     /* recursive nearly-but-a-bit-messy depth-first pre-order traversal
@@ -628,21 +626,21 @@ int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
     /* TODO: change to non-recursive depth-first post-order traversal */
     /* left for comparison with GRASS6.x */
 
-    RTreeReadNode(&n, pos, t);
-    fprintf(fp, "Node level=%d  count=%d\n", n.level, n.count);
+    RTreeReadNode(n, pos, t);
+    fprintf(fp, "Node level=%d  count=%d\n", n->level, n->count);
 
-    if (n.level > 0)
+    if (n->level > 0)
 	for (i = 0; i < NODECARD; i++) {
-	    if (n.branch[i].child.pos >= 0) {
+	    if (n->branch[i].child.pos >= 0) {
 		fprintf(fp, "  Branch %d", i);
-		rtree_dump_branch_file(fp, &n.branch[i], with_z, n.level, t);
+		rtree_dump_branch_file(fp, &(n->branch[i]), with_z, n->level, t);
 	    }
 	}
     else
 	for (i = 0; i < LEAFCARD; i++) {
-	    if (n.branch[i].child.id) {
+	    if (n->branch[i].child.id) {
 		fprintf(fp, "  Branch %d", i);
-		rtree_dump_branch_file(fp, &n.branch[i], with_z, n.level, t);
+		rtree_dump_branch_file(fp, &(n->branch[i]), with_z, n->level, t);
 	    }
 	}
 
@@ -691,7 +689,7 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
     int sidx_nodesize, sidx_leafsize;
     struct RTree_Node *n;
     int i, j, writeout, maxcard;
-    struct spidxpstack s[MAXLEVEL];
+    struct spidxpstack *s = G_malloc(MAXLEVEL * sizeof(struct spidxstack));
     int top = 0;
 
     /* should be foolproof */
@@ -768,6 +766,8 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
 	    }
 	}
     }
+    
+    G_free(s);
 
     return nextfreepos;
 }
@@ -793,20 +793,18 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
     int sidx_nodesize, sidx_leafsize;
     struct RTree_Node *n;
     int i, j, writeout, maxcard;
-    static struct spidxstack s[MAXLEVEL];
-    static int stack_init = 0;
+    static struct spidxstack *s = NULL;
     int top = 0;
     
-    if (!stack_init) {
+    if (!s) {
+	s = G_malloc(MAXLEVEL * sizeof(struct spidxstack));
 	for (i = 0; i < MAXLEVEL; i++) {
+	    s[i].sn.branch = G_malloc(MAXCARD * sizeof(struct RTree_Branch));
 	    for (j = 0; j < MAXCARD; j++) {
 		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
 	    }
 	}
-	stack_init = 1;
     }
-
-
 
     /* write pending changes to file */
     RTreeFlushBuffer(t);
@@ -915,17 +913,17 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
     struct RTree_Node *newnode = NULL;
     int i, j, loadnode, maxcard;
     struct spidxstack *last;
-    static struct spidxstack s[MAXLEVEL];
-    static int stack_init = 0;
+    static struct spidxstack *s = NULL;
     int top = 0;
 
-    if (!stack_init) {
+    if (!s) {
+	s = G_malloc(MAXLEVEL * sizeof(struct spidxstack));
 	for (i = 0; i < MAXLEVEL; i++) {
+	    s[i].sn.branch = G_malloc(MAXCARD * sizeof(struct RTree_Branch));
 	    for (j = 0; j < MAXCARD; j++) {
 		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
 	    }
 	}
-	stack_init = 1;
     }
 
     /* stack size of t->rootlevel + 1 would be enough because of
@@ -1041,17 +1039,17 @@ static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
     off_t newnode_pos = -1;
     int i, j, loadnode, maxcard;
     struct spidxstack *last;
-    static struct spidxstack s[MAXLEVEL];
-    static int stack_init = 0;
+    static struct spidxstack *s = NULL;
     int top = 0;
 
-    if (!stack_init) {
+    if (!s) {
+	s = G_malloc(MAXLEVEL * sizeof(struct spidxstack));
 	for (i = 0; i < MAXLEVEL; i++) {
+	    s[i].sn.branch = G_malloc(MAXCARD * sizeof(struct RTree_Branch));
 	    for (j = 0; j < MAXCARD; j++) {
 		s[i].sn.branch[j].rect.boundary = G_malloc(6 * sizeof(RectReal));
 	    }
 	}
-	stack_init = 1;
     }
 	
     /* stack size of t->rootlevel + 1 would be enough because of
@@ -1343,10 +1341,12 @@ static struct RTree_Node *rtree_get_node(off_t nodepos, int level,
     int which, i = 0;
 
     /* check mru first */
+    /* t->used[level][i] */
     while (t->nb[level][t->used[level][i]].pos != nodepos &&
-           t->nb[level][t->used[level][i]].pos >= 0 &&
-	   i < NODE_BUFFER_SIZE - 1)
+	   t->nb[level][t->used[level][i]].pos >= 0 &&
+	   i < NODE_BUFFER_SIZE - 1) {
 	i++;
+    }
 
     which = t->used[level][i];
 
@@ -1355,6 +1355,8 @@ static struct RTree_Node *rtree_get_node(off_t nodepos, int level,
 	t->nb[level][which].pos = nodepos;
     }
     assert(t->nb[level][which].n.level == level);
+
+
     /* make it mru */
     if (i) { /* t->used[level][0] != which */
 #if 0

@@ -24,7 +24,7 @@
 #include <grass/config.h>
 #include "index.h"
 
-#define USAGE_SWAP
+/* #define USAGE_SWAP */
 
 /* add new free node position for recycling */
 void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
@@ -50,7 +50,6 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
     /* is it possible that this node is not in the buffer? */
     assert(i < NODE_BUFFER_SIZE);
     which = t->used[level][i];
-    assert(t->nb[level][which].n.level == level);
     t->nb[level][which].pos = -1;
     t->nb[level][which].dirty = 0;
     
@@ -123,8 +122,6 @@ struct RTree_Node *RTreeGetNode(off_t nodepos, int level, struct RTree *t)
     if (t->nb[level][which].pos != nodepos) {
 	/* rewrite node in buffer */
 	if (t->nb[level][which].dirty) {
-	    assert(t->nb[level][which].pos >= 0);
-	    assert(t->nb[level][which].n.level == level);
 	    RTreeRewriteNode(&(t->nb[level][which].n),
 	                     t->nb[level][which].pos, t);
 	    t->nb[level][which].dirty = 0;
@@ -132,7 +129,6 @@ struct RTree_Node *RTreeGetNode(off_t nodepos, int level, struct RTree *t)
 	RTreeReadNode(&(t->nb[level][which].n), nodepos, t);
 	t->nb[level][which].pos = nodepos;
     }
-    assert(t->nb[level][which].n.level == level);
     /* make it mru */
     if (i) { /* t->used[level][0] != which */
 #ifdef USAGE_SWAP
@@ -202,85 +198,6 @@ void RTreeNodeChanged(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     /* as it is used, it should always be mru */
     assert(i == 0);
     which = t->used[n->level][i];
-    assert(t->nb[n->level][which].n.level == n->level);
-
-    t->nb[n->level][which].dirty = 1;
-
-    /* make it mru */
-    if (i) { /* t->used[level][0] != which */
-#ifdef USAGE_SWAP
-	t->used[n->level][i] = t->used[n->level][0];
-	t->used[n->level][0] = which;
-#else
-	while (i) {
-	    t->used[n->level][i] = t->used[n->level][i - 1];
-	    i--;
-	}
-	t->used[n->level][0] = which;
-#endif
-    }
-}
-
-/* update node in buffer */
-void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
-{
-    int which, i = 0;
-
-    /* check mru first */
-    while (t->nb[n->level][t->used[n->level][i]].pos != nodepos &&
-           i < NODE_BUFFER_SIZE)
-	i++;
-
-    assert(i < NODE_BUFFER_SIZE);
-    /* as it is used, it should always be mru */
-    assert(i == 0);
-    which = t->used[n->level][i];
-
-    assert(t->nb[n->level][which].n.level == n->level);
-    /* copy node */
-    RTreeCopyNode(&(t->nb[n->level][which].n), n, t);
-    t->nb[n->level][which].dirty = 1;
-
-    /* make it mru */
-    if (i) { /* t->used[level][0] != which */
-#ifdef USAGE_SWAP
-	t->used[n->level][i] = t->used[n->level][0];
-	t->used[n->level][0] = which;
-#else
-	while (i) {
-	    t->used[n->level][i] = t->used[n->level][i - 1];
-	    i--;
-	}
-	t->used[n->level][0] = which;
-#endif
-    }
-}
-
-/* update rectangle */
-void RTreeUpdateRect(struct RTree_Rect *r, struct RTree_Node *n,
-                     off_t nodepos, int b, struct RTree *t)
-{
-    int i, j, k, which;
-
-    /* check mru first */
-    i = 0;
-    while (t->nb[n->level][t->used[n->level][i]].pos != nodepos &&
-           i < NODE_BUFFER_SIZE)
-	i++;
-
-    assert(i < NODE_BUFFER_SIZE);
-    /* as it is used, it should always be mru */
-    assert(i == 0);
-    which = t->used[n->level][i];
-
-    assert(t->nb[n->level][which].n.level == n->level);
-    for (j = 0; j < t->ndims_alloc; j++) {
-	t->nb[n->level][which].n.branch[b].rect.boundary[j] =
-	                  n->branch[b].rect.boundary[j] = r->boundary[j];
-	k = j + t->ndims_alloc;
-	t->nb[n->level][which].n.branch[b].rect.boundary[k] =
-	                  n->branch[b].rect.boundary[k] = r->boundary[k];
-    }
 
     t->nb[n->level][which].dirty = 1;
 
