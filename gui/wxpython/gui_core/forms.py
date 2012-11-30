@@ -1363,10 +1363,16 @@ class CmdPanel(wx.Panel):
                         fmode = wx.SAVE
                     else:
                         fmode = wx.OPEN
-                    fbb = filebrowse.FileBrowseButton(parent = which_panel, id = wx.ID_ANY, fileMask = '*',
+                    # check wildcard
+                    fExt = os.path.splitext(p.get('key_desc', ['*.*'])[0])[1]
+                    if not fExt:
+                        fMask = '*.*'
+                    else:
+                        fMask = '*' + fExt
+                    fbb = filebrowse.FileBrowseButton(parent = which_panel, id = wx.ID_ANY, fileMask = fMask,
                                                       size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
                                                       dialogTitle = _('Choose %s') % \
-                                                          p.get('description',_('File')),
+                                                          p.get('description', _('file')).lower(),
                                                       buttonText = _('Browse'),
                                                       startDirectory = os.getcwd(), fileMode = fmode,
                                                       changeCallback = self.OnSetValue)
