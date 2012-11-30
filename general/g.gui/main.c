@@ -51,20 +51,24 @@ int main(int argc, char *argv[])
 	        _("command line interface only"));
     type->descriptions = desc;
     type->options = "wxpython,text";
-
+    type->guisection = _("Type");
+    
     rc_file = G_define_standard_option(G_OPT_F_INPUT);
     rc_file->key = "workspace";
     rc_file->required = NO;
+    rc_file->key_desc = "name.gxw";
     rc_file->description = _("Name of workspace file to load on start-up (valid only for wxGUI)");
 
     update = G_define_flag();
     update->key = 'u';
     update->description = _("Update default GUI setting");
+    update->guisection = _("Default");
 
     nolaunch = G_define_flag();
     nolaunch->key = 'n';
     nolaunch->description =
 	_("Do not launch GUI after updating the default GUI setting");
+    nolaunch->guisection = _("Default");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
