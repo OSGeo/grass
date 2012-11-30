@@ -81,6 +81,8 @@ struct RTree_Node *RTreeAllocNode(struct RTree *t, int level)
 
     n->count = 0;
     n->level = level;
+    
+    n->branch = malloc(MAXCARD * sizeof(struct RTree_Branch));
 
     for (i = 0; i < MAXCARD; i++) {
 	n->branch[i].rect.boundary = RTreeAllocBoundary(t);
@@ -99,6 +101,7 @@ void RTreeFreeNode(struct RTree_Node *n)
     for (i = 0; i < MAXCARD; i++)
 	RTreeFreeBoundary(&(n->branch[i].rect));
 
+    free(n->branch);
     free(n);
 }
 

@@ -39,7 +39,7 @@ int RTreeSearchM(struct RTree *t, struct RTree_Rect *r,
     int hitCount = 0, notfound;
     int i;
     int top = 0;
-    struct mstack *s = t->ms;
+    struct nstack *s = t->ns;
 
     /* stack size of t->rootlevel + 1 is enough because of depth first search */
     /* only one node per level on stack at any given time */
@@ -111,7 +111,7 @@ static int RTreeInsertRect2M(struct RTree_Rect *r, union RTree_Child child, int 
     int top = 0, down = 0;
     int result;
     struct RTree_Branch *b = &(t->tmpb2);
-    struct mstack *s = t->ms;
+    struct nstack *s = t->ns;
 
     /* add root node to stack */
     s[top].sn = t->root;
@@ -270,7 +270,7 @@ RTreeDeleteRect2M(struct RTree_Rect *r, union RTree_Child child, struct RTree *t
     struct RTree_Node *n;
     int top = 0, down = 0;
     int minfill;
-    struct mstack *s = t->ms;
+    struct nstack *s = t->ns;
 
     assert(ee);
 
