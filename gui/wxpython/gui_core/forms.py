@@ -52,9 +52,11 @@ import textwrap
 import os
 import copy
 import locale
-from threading import Thread
 import Queue
 import re
+import codecs
+
+from threading import Thread
 
 gisbase = os.getenv("GISBASE")
 if gisbase is None:
@@ -1723,7 +1725,8 @@ class CmdPanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            f = open(path, "w")
+            enc = locale.getdefaultlocale()[1]
+            f = codecs.open(path, encoding = enc, mode = 'w', errors='replace')
             try:
                 f.write(text + os.linesep)
             finally:
@@ -1743,11 +1746,11 @@ class CmdPanel(wx.Panel):
         if text:
             filename = win.GetValue()
             if not filename:
-                # outFile = tempfile.NamedTemporaryFile(mode = 'w+b')
                 filename = grass.tempfile()
                 win.SetValue(filename)
                 
-            f = open(filename, "w")
+            enc = locale.getdefaultlocale()[1]
+            f = codecs.open(filename, encoding = enc, mode = 'w', errors='replace')
             try:
                 f.write(text)
                 if text[-1] != os.linesep:
