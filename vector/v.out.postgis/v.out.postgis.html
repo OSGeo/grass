@@ -198,11 +198,16 @@ v.out.postgis -t input=railroads dsn="PG:dbname=grass"
 By default <em>v.out.postgis</em> exports data as simple
 features. Flag <b>-l</b> allows to export data as topological elements
 instead of simple features. Export topological elements is stored in
-PostGIS Topology schema.
+<a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+Topology</a> schema.
 
 <div class="code"><pre>
 v.out.postgis -l input=busroutesall dsn="PG:dbname=grass"
 </pre></div>
+
+For more info about PostGIS Topology implementation in GRASS see
+the <a href="http://grasswiki.osgeo.org/wiki/PostGIS_Topology">wiki
+page</a>.
 
 <h2>TODO</h2>
 
@@ -217,6 +222,7 @@ v.out.postgis -l input=busroutesall dsn="PG:dbname=grass"
 <ul>
   <li><a href="http://www.opengeospatial.org/standards/sfa">OGC Simple Feature Access</a> specification</li>
   <li><a href="http://postgis.refractions.net/docs/Topology.html">PostGIS Topology</a> documentation</li>
+  <li><a href="http://grass.osgeo.org/programming7/vlibPg.html">GRASS-PostGIS data provider</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -227,6 +233,9 @@ v.out.postgis -l input=busroutesall dsn="PG:dbname=grass"
   <a href="v.external.out.html">v.external.out</a>,
   <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
+
+<p>
+See also <a href="http://grasswiki.osgeo.org/wiki/PostGIS">wiki page</a>.
 
 <h2>AUTHOR</h2>
 
