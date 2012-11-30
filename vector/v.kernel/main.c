@@ -497,6 +497,10 @@ int main(int argc, char **argv)
 	Vect_close(&Out);
     }
     else {
+	/* spatial index handling, borrowed from lib/vector/Vlib/find.c */
+	struct bound_box box;
+	struct boxlist *NList = Vect_new_boxlist(1);
+
 	G_message(_("\nWriting output raster map using smooth parameter=%f."),
 		  sigma);
 	G_message(_("\nNormalising factor=%f."),
@@ -517,8 +521,26 @@ int main(int argc, char **argv)
 		N = Rast_row_to_northing(row + 0.5, &window);
 		E = Rast_col_to_easting(col + 0.5, &window);
 
+		if ((col & 31) == 0) {
+
+		    /* create bounding box 32x2*dmax size from the current cell center */
+		    box.N = N + dmax;
+		    box.S = N - dmax;
+		    box.E = E + dmax + 32 * window.ew_res;
+		    box.W = E - dmax;
+		    box.T = HUGE_VAL;
+		    box.B = -HUGE_VAL;
+
+		    Vect_select_lines_by_box(&In, &box, GV_POINT, NList);		    
+		}
+		box.N = N + dmax;
+		box.S = N - dmax;
+		box.E = E + dmax;
+		box.W = E - dmax;
+		box.T = HUGE_VAL;
+		box.B = -HUGE_VAL;
 		/* compute_distance(N, E, &In, sigma, term, &gaussian, dmax); */
-		compute_distance(N, E, &In, sigma, term, &gaussian, dmax);
+		compute_distance(N, E, sigma, term, &gaussian, dmax, &box, NList);
 
 		output_cell[col] = multip * gaussian;
 		if (gaussian > gausmax)
@@ -791,35 +813,19 @@ void compute_net_distance(double x, double y, struct Map_info *In,
     }
 }
 
-void compute_distance(double N, double E, struct Map_info *In,
-		      double sigma, double term, double *gaussian,
-		      double dmax)
+void compute_distance(double N, double E, double sigma, double term,
+                      double *gaussian, double dmax, struct bound_box *box,
+		      struct boxlist *NList)
 {
     int line, nlines;
     double a[2], b[2];
     double dist;
 
-    /* spatial index handling, borrowed from lib/vector/Vlib/find.c */
-    struct bound_box box;
-    static struct boxlist *NList = NULL;
-
     a[0] = E;
     a[1] = N;
 
-    if (!NList) {
-	NList = Vect_new_boxlist(1);
-    }
-
-    /* create bounding box 2x2*dmax size from the current cell center */
-    box.N = N + dmax;
-    box.S = N - dmax;
-    box.E = E + dmax;
-    box.W = E - dmax;
-    box.T = HUGE_VAL;
-    box.B = -HUGE_VAL;
-
     /* number of lines within dmax box  */
-    nlines = Vect_select_lines_by_box(In, &box, GV_POINT, NList);
+    nlines = NList->n_values;
 
     *gaussian = .0;
 
@@ -828,10 +834,13 @@ void compute_distance(double N, double E, struct Map_info *In,
 	b[0] = NList->box[line].E;
 	b[1] = NList->box[line].N;
 
-	dist = euclidean_distance(a, b, 2);
+	if (b[0] <= box->E && b[0] >= box->W &&
+	    b[1] <= box->N && b[1] >= box->S)  {
+	    dist = euclidean_distance(a, b, 2);
 
-	if (dist <= dmax)
-	    /* *gaussian += gaussianKernel(dist / sigma, term); */
-	    *gaussian += kernelFunction(term, sigma, dist);
+	    if (dist <= dmax)
+		/* *gaussian += gaussianKernel(dist / sigma, term); */
+		*gaussian += kernelFunction(term, sigma, dist);
+	}
     }
 }
