@@ -52,7 +52,7 @@ from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
 from core.gconsole         import GConsole, \
-    EVT_CMD_OUTPUT, EVT_IGNORED_CMD_RUN, EVT_IMPORTANT_CMD_RUN
+    EVT_CMD_OUTPUT, EVT_IGNORED_CMD_RUN, EVT_IMPORTANT_CMD_RUN, EVT_WRITE_LOG
 from gui_core.goutput      import GConsoleWindow, EVT_GC_CONTENT_CHANGED, GC_SEARCH, GC_PROMPT
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
@@ -288,6 +288,9 @@ class GMFrame(wx.Frame):
         self.goutput.Bind(EVT_GC_CONTENT_CHANGED,
                           lambda event:
                               self._switchPageHandler(event = event, priority = 1))
+        self._gconsole.Bind(EVT_WRITE_LOG,
+                            lambda event:
+                                self._switchPageHandler(event = event, priority = event.priority))
         self._setCopyingOfSelectedText()
         
         # create 'search module' notebook page
@@ -941,7 +944,7 @@ class GMFrame(wx.Frame):
                                            platform.python_version(),
                                            wx.__version__,
                                            _("Platform"), platform.platform(), osgeo4w),
-                              switchPage = True)
+                              priority = 2)
         self._gconsole.WriteCmdLog(' ')
     
     def OnAboutGRASS(self, event):
