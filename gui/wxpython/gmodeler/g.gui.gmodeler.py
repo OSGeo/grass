@@ -27,8 +27,10 @@
 #%end
 #%option G_OPT_F_INPUT
 #% key: file
-#% description: Name of model file to be loaded (*.gxm)
+#% description: Name of model file to be loaded
+#% key_desc: name.gxm
 #% required: no
+#% guisection: Model
 #%end
 
 import os
