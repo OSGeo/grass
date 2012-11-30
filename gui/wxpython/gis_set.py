@@ -454,7 +454,6 @@ class GRASSStartup(wx.Frame):
         vectors = RunCommand('v.in.ogr', dsn = filePath, flags = 'l',
                              read = True)
         
-        print vectors, mapName in vectors
         wx.BeginBusyCursor()
         wx.Yield()
         if mapName in vectors:
