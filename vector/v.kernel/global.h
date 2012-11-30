@@ -36,8 +36,9 @@ double compute_all_distances(double **coordinate, double **dists, int n,
 			     double dmax);
 double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
 				 double netmax, double **dists, double dmax);
-void compute_distance(double N, double E, struct Map_info *In, double sigma,
-		      double term, double *gaussian, double dmax);
+void compute_distance(double N, double E, double sigma, double term,
+                      double *gaussian, double dmax, struct bound_box *box,
+		      struct boxlist *NList);
 void compute_net_distance(double x, double y, struct Map_info *In,
 			  struct Map_info *Net, double netmax, double sigma,
 			  double term, double *gaussian, double dmax, int node_method);
