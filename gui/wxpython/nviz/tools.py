@@ -39,7 +39,10 @@ except ImportError: # if it's not there locally, try the wxPython lib.
         import wx.lib.agw.foldpanelbar as fpb
     except ImportError:
         import wx.lib.foldpanelbar as fpb # versions <=2.5.5.1
-        
+try:
+    import wx.lib.agw.floatspin as fs
+except ImportError:
+    fs = None
 import grass.script as grass
 
 from core               import globalvar
@@ -1363,15 +1366,22 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_RIGHT)
         
-        isize = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                            initial = 1,
-                            min = 1,
-                            max = 1e6)
+        if fs:
+            isize = fs.FloatSpin(parent = panel, id = wx.ID_ANY,
+                                 min_val = 0, max_val = 1e6,
+                                 increment = 1, value = 1, style = fs.FS_RIGHT)
+            isize.SetFormat("%f")
+            isize.SetDigits(1)
+            isize.Bind(fs.EVT_FLOATSPIN, self.OnVectorPoints)
+        else:
+            isize = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                                initial = 1,
+                                min = 1,
+                                max = 1e6)
+            isize.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
         isize.SetName('value')
         isize.SetValue(100)
         self.win['vector']['points']['size'] = isize.GetId()
-        isize.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
-        isize.Bind(wx.EVT_TEXT, self.OnVectorPoints)
         gridSizer.Add(item = isize, pos = (0, 2),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         
