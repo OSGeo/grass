@@ -354,8 +354,8 @@ int Vect_line_check_duplicate(const struct line_pnts *,
 void Vect_snap_lines(struct Map_info *, int, double, struct Map_info *);
 void Vect_snap_lines_list(struct Map_info *, const struct ilist *, double,
                           struct Map_info *);
-void Vect_snap_lines_list2(struct Map_info *, struct ilist *, int,
-                           double, struct Map_info *);
+int Vect_snap_line(struct Map_info *, struct ilist *, struct line_pnts *,
+                   double, int, int *, int *);
 void Vect_remove_dangles(struct Map_info *, int, double, struct Map_info *);
 void Vect_chtype_dangles(struct Map_info *, double, struct Map_info *);
 void Vect_select_dangles(struct Map_info *, int, double, struct ilist *);
