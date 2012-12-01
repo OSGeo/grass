@@ -15,6 +15,15 @@
 #include <grass/glocale.h>
 #include "local.h"
 
+/* for ilist qsort'ing and bsearch'ing */
+static int cmp_int(const void *a, const void *b)
+{
+    int ai = *(int *)a;
+    int bi = *(int *)b;
+    
+    return (ai < bi ? -1 : (ai > bi));
+}
+
 int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	      struct field_info *Fi, dbDriver * driver, int operator,
 	      int *ofield, ATTRIBUTES * attr, struct ilist *BList, double snap)
@@ -34,13 +43,63 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    
+
     /* optional snap */
     if (snap > 0) {
-	G_message(_("Snapping lines..."));
+	int i, j, snapped_lines = 0;
+	struct bound_box box;
+	struct boxlist *boxlist = Vect_new_boxlist(0);
+	struct ilist *reflist = Vect_new_list();
+	
+	G_message(_("Snapping boundaries with %g ..."), snap);
+
 	/* snap boundaries in B to boundaries in A
 	 * not modifying boundaries in A */
-	Vect_snap_lines_list2(Out, BList, GV_BOUNDARY, snap, NULL);
+
+	if (BList->n_values > 1)
+	    qsort(BList->value, BList->n_values, sizeof(int), cmp_int);
+
+	snapped_lines = 0;
+	nlines = BList->n_values;
+	for (i = 0; i < nlines; i++) {
+	    line = BList->value[i];
+	    Vect_read_line(Out, Points, Cats, line);
+	    /* select lines by box */
+	    Vect_get_line_box(Out, line, &box);
+	    box.E += snap;
+	    box.W -= snap;
+	    box.N += snap;
+	    box.S -= snap;
+	    box.T = 0.0;
+	    box.B = 0.0;
+	    Vect_select_lines_by_box(Out, &box, GV_BOUNDARY, boxlist);
+	    
+	    if (boxlist->n_values > 0) {
+		Vect_reset_list(reflist);
+		for (j = 0; j < boxlist->n_values; j++) {
+		    int aline = boxlist->id[j];
+
+		    if (!bsearch(&aline, BList->value, BList->n_values,
+			sizeof(int), cmp_int)) {
+			G_ilist_add(reflist, aline);
+		    }
+		}
+		
+		/* snap bline to alines */
+		if (Vect_snap_line(Out, reflist, Points, snap, 0, NULL, NULL)) {
+		    /* rewrite bline*/
+		    Vect_delete_line(Out, line);
+		    ret = Vect_write_line(Out, GV_BOUNDARY, Points, Cats);
+		    G_ilist_add(BList, ret);
+		    snapped_lines++;
+		    G_debug(3, "line %d snapped", line);
+		}
+	    }
+	}
+	Vect_destroy_boxlist(boxlist);
+	Vect_destroy_list(reflist);
+
+	G_verbose_message(_("%d boundaries snapped"), snapped_lines);
     }
 
     /* same procedure like for v.in.ogr
@@ -49,7 +108,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
      * and Vect_clean_small_angles_at_nodes() until no more small dangles are found */
     do {
 	G_message(_("Breaking lines..."));
-	Vect_break_lines_list(Out, NULL, BList, GV_LINE | GV_BOUNDARY, NULL);
+	Vect_break_lines_list(Out, NULL, BList, GV_BOUNDARY, NULL);
 
 	/* Probably not necessary for LINE x AREA */
 	G_message(_("Removing duplicates..."));

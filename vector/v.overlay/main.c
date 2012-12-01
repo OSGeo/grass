@@ -9,6 +9,7 @@
  *               Markus Neteler <neteler itc.it>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  *               OGR support by Martin Landa <landa.martin gmail.com>
+ *               Markus Metz
  * PURPOSE:      
  * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
  *
@@ -228,6 +229,7 @@ int main(int argc, char *argv[])
 	nlines_out = 0;
 	for (line = 1; line <= nlines; line++) {
 	    int ltype;
+	    int vertices = 100; /* max number of vertices per line */
 
 	    G_percent(line, nlines, 1);	/* must be before any continue */
 
@@ -248,9 +250,10 @@ int main(int argc, char *argv[])
 		continue;
 
 	    /* TODO: figure out a reasonable threshold */
-	    if (Points->n_points > 100) {
-		int vertices = 100;
+	    if (Points->n_points > vertices) {
 		int start = 0;	/* number of coordinates written */
+		
+		vertices = Points->n_points / (Points->n_points / vertices + 1);
 		
 		/* split */
 		while (start < Points->n_points - 1) {
