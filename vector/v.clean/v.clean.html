@@ -1,59 +1,77 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.clean</em> allows the user to automatically fix topology of vector 
-maps.
+maps. Several tools may be listed to be executed sequentially. In this
+case, also the threshold parameter requires several values to be listed
+accordingly. An error map is optionally written which stores the errorneous
+geometries.
 
 <h3>Break lines/boundaries</h3>
 <em>tool=break</em>
-<p>Threshold does not apply, use dummy value if <em>v.clean</em> is 
-run with several tools.
-<p>The <em>break</em> tool breaks lines/boundaries at intersections and also 
-breaks lines/boundaries forming a collapsed loop, for example 0.0;1.0;0.0 
-is broken at 1.0.
-<p>Breaking lines should be followed by removing duplicates, e.g. 
-<em>v.clean tool=break,rmdupl</em>. If the <em>-c</em> flag is used with 
-<em>v.clean tool=break</em>, duplicates are automatically removed.
+<p>
+The <em>break</em> tool breaks lines/boundaries at intersections and it 
+<!-- TODO: what is a collapsed loop?? self-intersecting? -->
+also breaks lines/boundaries forming a collapsed loop. 
+<!-- TODO: this example is a complete mystery: -->
+For example, 0.0;1.0;0.0 is broken at 1.0.
+<p>
+Threshold does not apply (it is ignored), use an arbitrary value (e.g., 0)
+if <em>v.clean</em> is run with several tools.
+<p>
+Hint: Breaking lines should be followed by removing duplicates, e.g. 
+<em>v.clean ... tool=break,rmdupl</em>. If the <em>-c</em> flag is used with 
+<em>v.clean ... tool=break</em>, duplicates are automatically removed.
 
 <h3>Remove duplicate geometry features</h3>
 <em>tool=rmdupl</em>
-<p>Threshold does not apply, use dummy value if <em>v.clean</em> is 
-run with several tools.
-<p>The <em>rmdupl</em> tool removes geometry features with identical 
+<p>
+The <em>rmdupl</em> tool removes geometry features with identical 
 coordinates. Categories are merged. If a point and a centroid have 
 identical coordinates, one of them will be removed if both points and 
-centroids are selected with <em>v.clean type=point,centroid</em>. The 
-same applies for lines and boundaries.
-<p>The <em>rmdupl</em> tool should be used after breaking lines and 
+centroids are selected with <em>v.clean ... type=point,centroid</em>.
+The  same applies for lines and boundaries.
+<p>
+Threshold does not apply (it is ignored), use an arbitrary value (e.g., 0)
+if <em>v.clean</em> is run with several tools.
+<p>
+The <em>rmdupl</em> tool should be used after breaking lines and 
 breaking polygons.
 
 <h3>Remove dangles or change boundary dangles to type line</h3>
 <em>tool=rmdangle</em> and <em>tool=chdangle</em>
-<p>Threshold gives maximum line/boundary length in map units, degrees for 
-latlon. Dangles shorter than <em>thresh</em> are removed sequentially. 
-All dangles will be removed if <em>thresh</em> &lt; 0.
-<p>A line/boundary is considered to be a dangle if no other line of given 
+<p>
+A line/boundary is considered to be a dangle if no other line of given 
 <em>type</em> is on at least one end node. If a dangle is formed by 
 several lines, such a string of lines is taken as one dangle and line 
 lengths are summarized. The <em>rmdangle</em> tool deletes a dangle if 
-the (combined) length is shorter than <em>thres</em> or <em>thres</em> 
+the (combined) length is shorter than <em>thresh</em> or <em>thresh</em> 
 &lt; 0. If the combined length is larger than <em>thresh</em>, nothing 
 is deleted.
-<p>With <em>thresh</em> &lt; 0, only closed loops and lines connecting 
+<p>
+Threshold has to be given as maximum line/boundary length in map units; 
+for latitude-longitude locations in degree. Dangles shorter than
+<em>thresh</em> are removed sequentially. All dangles will be removed if
+<em>thresh</em> &lt; 0.
+<p>
+With <em>thresh</em> &lt; 0, only closed loops and lines connecting 
 loops will remain. This is useful to remove all incorrect boundaries 
 after other cleaning operations with <em>thres</em> is &lt; 0. Areas can 
 then be successfully built. 
-<p>To preferentially remove shortest dangles first, a first pass with a 
+<p>
+To preferentially remove shortest dangles first, a first pass with a 
 small <em>thresh</em> value can be followed by subsequent passes with 
-increasing <em>thresh</em> values.
-<p>The <em>chdangle</em> tool is similar to the <em>rmdangle</em> tool, but 
+higher <em>thresh</em> values. This can be done as one <em>v.clean</em>
+job by listing the tool several times and by defining a list of increasing
+<em>thresh</em> values.
+<p>
+The <em>chdangle</em> tool is similar to the <em>rmdangle</em> tool, but 
 works only on boundaries and changes dangling boundaries to lines 
-instead of removing dangles.
+instead of removing them.
 
 <h3>Remove or change bridges connecting an area and an island or two islands</h3>
 <em>tool=rmbridge</em> and <em>tool=chbridge</em>
-<p>Threshold does not apply, use dummy value if <em>v.clean</em> is 
-run with several tools.
-<p>A bridge is an area type connection of an island (polygon in a polygon) 
+<p>
+A bridge is an area type connection of an island (polygon in a polygon) 
 to the outer polygon. This is topologically incorrect (but OGC Simple 
 Features allow it). The <em>rmbridge</em> tool removes bridges and the 
 <em>chbridge</em> tool changes bridges to type line:
@@ -70,20 +88,28 @@ Features allow it). The <em>rmbridge</em> tool removes bridges and the
     |      |      |             |             |   |      .      |
     +------+------+             +-------------+   +-------------+
 </pre></div>
-<p>Islands and areas must be already clean, i.e. without dangles or small 
-angles, e.g. <em>v.clean type=boundary tool=rmdangle,rmsa,break,rmdupl,rmbridge 
+<p>
+Islands and areas must be already clean, i.e. without dangles or small 
+angles, e.g.
+<em>v.clean ... type=boundary tool=rmdangle,rmsa,break,rmdupl,rmbridge 
 thresh=-1,0,0,0,0</em>.
+<p>
+Threshold does not apply (it is ignored), use an arbitrary value (e.g., 0)
+if <em>v.clean</em> is run with several tools.
 
 <h3>Snap lines to vertex in threshold</h3>
 <em>tool=snap</em>
-<p>Threshold gives maximum distance to another vertex in map units, 
-degrees for latlon. 
-<p>The <em>snap</em> tool snaps vertices to another vertex not farther away 
+<p>
+The <em>snap</em> tool snaps vertices to another vertex not farther away 
 than <em>thresh</em>. If there is no other vertex within <em>thresh</em>, 
 no snapping will be done. The <em>type</em> option can have a strong 
 influence on the result. A too large threshold and <em>type=boundary</em>
 can severely damage area topology, beyond repair.
-<p>Snapped boundaries may need to be cleaned with <em>break,rmdupl,rmsa</em>. 
+<p>
+Threshold gives maximum distance to another vertex in map units, 
+for latitude-longitude locations in degree. 
+<p>
+Snapped boundaries may need to be cleaned with <em>break,rmdupl,rmsa</em>. 
 If the <em>-c</em> flag is used with <em>v.clean tool=snap</em>, the 
 sequence of <em>break,rmdupl,rmsa</em> is automatically repeated after 
 snapping until no more small angles a left. Additional cleaning with e.g.
@@ -91,69 +117,84 @@ snapping until no more small angles a left. Additional cleaning with e.g.
 
 <h3>Remove duplicate area centroids</h3>
 <em>tool=rmdac</em>
-<p>Threshold does not apply, use dummy value if <em>v.clean</em> is 
-run with several tools.
-<p>The <em>rmdac</em> tool removes duplicate area centroids that can result 
+<p>
+The <em>rmdac</em> tool removes duplicate area centroids that can result 
 from deleting boundaries.
+<p>
+Threshold does not apply (it is ignored), use an arbitrary value (e.g., 0)
+if <em>v.clean</em> is run with several tools.
 
 <h3>Break (topologically clean) areas (imported from a non topological 
 format like ShapeFile)</h3>
 <em>tool=bpol</em>
-<p>Threshold does not apply, use dummy value if <em>v.clean</em> is 
-run with several tools.
-<p>The <em>bpol</em> tool breaks boundaries on each point shared between 2 
+<p>
+The <em>bpol</em> tool breaks boundaries on each point shared between 2 
 and more areas where angles of boundary segments are different and on 
 all boundary nodes (start and end points of each boundary). The 
 <em>bpol</em> tool behaves similar to <em>break</em> for boundaries, but 
 does not break collapsed loops. The <em>bpol</em> tool is faster than 
 the <em>break</em> tool but needs more memory.
-<p>The <em>bpol</em> tool should be followed by <em>rmdupl</em>. If the 
-<em>-c</em> flag is used with <em>v.clean tool=bpol</em>, duplicates are 
+<p>
+Threshold does not apply (it is ignored), use an arbitrary value (e.g., 0)
+if <em>v.clean</em> is run with several tools.
+<p>
+The <em>bpol</em> tool should be followed by <em>rmdupl</em>. If the 
+<em>-c</em> flag is used with <em>v.clean ... tool=bpol</em>, duplicates are 
 automatically removed.
 
 <h3>Remove vertices in threshold from lines and boundaries</h3>
 <em>tool=prune</em>
-<p>The <em>prune</em> tool simplifies lines and boundaries by removing
+<p>
+The <em>prune</em> tool simplifies lines and boundaries by removing
 vertices according to threshold. This tool preserves area topology,
 areas are never deleted and centroid attachment is never changed.
-<em><a href=v.generalize.html>v.generalize</a></em> offers much more
+<em><a href="v.generalize.html">v.generalize</a></em> offers much more
 functionality for line simplification but does not preserve area
 topology.
 
 <h3>Remove small areas</h3>
 <em>tool=rmarea</em>
-<p>Threshold gives area size in map units, square meters for latlon.
-<p>The <em>rmarea</em> tool removes all areas &lt;= <em>thresh</em>. The 
+<p>
+The <em>rmarea</em> tool removes all areas &lt;= <em>thresh</em>. The 
 longest boundary with an adjacent area is removed or all boundaries if 
 there is no adjacent area. Area categories are not combined when a small 
 area is merged with a larger area.
+<p>
+Threshold gives area size in map units, for latitude-longitude locations
+in square meters.
 
 <h3>Remove all lines or boundaries of zero length</h3>
 <em>tool=rmline</em>
-<p>Threshold does not apply, use dummy value if <em>v.clean</em> is 
-run with several tools.
-<p>The <em>rmline</em> tool removes all lines or boundaries of zero length 
+<p>
+The <em>rmline</em> tool removes all lines or boundaries of zero length 
 that may have resulted from other cleaning operations. Zero length 
 boundaries are redundant and do not influence area topology.
+<p>
+Threshold does not apply (it is ignored), use an arbitrary value (e.g., 0)
+if <em>v.clean</em> is run with several tools.
 
 <h3>Remove small angles between lines at nodes</h3>
 <em>tool=rmsa</em>
-<p>Threshold does not apply, use dummy value if <em>v.clean</em> is 
-run with several tools.
-<p>The <em>rmsa</em> tool only concerns angles which are so small that the 
+<p>
+The <em>rmsa</em> tool only concerns angles which are so small that the 
 calculated angle is 0. The following figure should help demonstrate what 
 the tool does.
-<p><table><tr><td>
+<p>
+Threshold does not apply, use dummy value if <em>v.clean</em> is 
+run with several tools.
+<p>
+<table><tr><td>
 <img src="v_clean_rmsa.png" border=1>
 </td></tr>
 <tr><td align=center>
 <font size=-1><em>tool=rmsa</em></font>
 </td></tr>
 </table>
-<p>The <em>rmsa</em> tool should be followed by <em>break,rmdupl</em>. The 
+<p>
+The <em>rmsa</em> tool should be followed by <em>break,rmdupl</em>. The 
 <em>rmsa</em> tool followed by <em>break,rmdupl</em> may need to be run 
 more than once to remove all small angles. If the <em>-c</em> flag is 
-used with <em>v.clean tool=rmsa</em>, the sequence of 
+used with <em>v.clean ... tool=rmsa</em>, the sequence of 
 <em>rmsa,break,rmdupl</em> is automatically repeated until no more small 
 angles a left.
 
@@ -172,7 +213,7 @@ topology is always built for <em>error</em> vector.
 v.clean input=testmap output=cleanmap tool=snap thresh=1
 </pre></div>
 
-<h3>Cleaning OGR imported data (Simple Feature data)</h3>
+<h3>Cleaning OGR imported data (Simple Feature data) such as SHAPE file</h3>
 
 The import of areas with <em><a href="v.in.ogr.html">v.in.ogr</a> -c</em>
 (no cleaning) requires a subsequent run of <em>v.clean</em> to update 
@@ -235,7 +276,8 @@ v.clean type=boundary would remove nothing.
 <h3>Repeatedly remove dangling lines up to 50m length</h3>
 
 <div class="code"><pre>
-v.clean input=testmap output=cleanmap type=line tool=rmdangle,rmdangle,rmdangle,rmdangle thresh=5,10,20,50
+v.clean input=testmap output=cleanmap type=line \
+        tool=rmdangle,rmdangle,rmdangle,rmdangle thresh=5,10,20,50
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -251,6 +293,6 @@ v.clean input=testmap output=cleanmap type=line tool=rmdangle,rmdangle,rmdangle,
 
 David Gerdes, U.S. Army Construction Engineering Research Laboratory<br>
 Radim Blazek, ITC-irst, Trento, Italy<br>
-Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy<br>
+Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy
 
 <p><i>Last changed: $Date$</i>
