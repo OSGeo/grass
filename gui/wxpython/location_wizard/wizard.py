@@ -133,7 +133,7 @@ class DatabasePage(TitledPage):
                        wx.ALL, border = 5,
                        pos = (2, 2))
 
-        self.sizer.Add(item = self.MakeLabel("%s:" % _("Location Title"),
+        self.sizer.Add(item = self.MakeLabel("%s:" % _("Optional Location Title"),
                                              tooltip = _("Optional location title, "
                                                          "you can leave this field blank.")),
                        flag = wx.ALIGN_RIGHT |
