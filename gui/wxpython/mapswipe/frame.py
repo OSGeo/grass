@@ -279,7 +279,7 @@ class SwipeMapFrame(DoubleMapFrame):
         else:
             self.Render(self.GetSecondWindow())
 
-    def OnZoomToMap(self, event):
+    def ZoomToMap(self):
         """!
         Set display extents to match selected raster (including NULLs)
         or vector map.
@@ -289,11 +289,14 @@ class SwipeMapFrame(DoubleMapFrame):
         # needed again, don't know why
         self.firstMap.region = self.secondMap.region
 
+    def OnZoomToMap(self, event):
+        """!Zoom to map"""
+        self.ZoomToMap()
+
     def OnZoomBack(self, event):
         self.GetFirstWindow().ZoomBack()
         self.secondMap.region = self.firstMap.region
         self.Render(self.GetSecondWindow())
-
 
     def OnSelectRasters(self, event):
         """!Choose raster maps and rerender."""
@@ -311,6 +314,7 @@ class SwipeMapFrame(DoubleMapFrame):
                     message += _("Map <%s> not found.") % maps[1]
                 GError(parent = self, message = message)
                 dlg.Destroy()
+            self.ZoomToMap()
 
         dlg.Destroy()
         self.OnRender(event = None)
@@ -321,7 +325,6 @@ class SwipeMapFrame(DoubleMapFrame):
         if raster['fullname']:
             self.rasters['first'] = raster['fullname']
             self.SetLayer(name = raster['fullname'], mapInstance = self.GetFirstMap())
-            self.OnZoomToMap(event = None)
             return True
 
         return False
@@ -332,7 +335,6 @@ class SwipeMapFrame(DoubleMapFrame):
         if raster['fullname']:
             self.rasters['second'] = raster['fullname']
             self.SetLayer(name = raster['fullname'], mapInstance = self.GetSecondMap())
-            self.OnZoomToMap(event = None)
             return True
 
         return False
