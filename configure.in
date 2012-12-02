@@ -15,8 +15,9 @@
 #   	    	comes with GRASS for details.
 #
 # MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
+#               http://savannah.gnu.org/projects/autoconf/
 # Website for   config.guess, config.sub:
-#               http://savannah.gnu.org/cgi-bin/viewcvs/config/config/
+#               http://git.savannah.gnu.org/cgit/autoconf.git
 #               Note: use autoconf-2.13
 #############################################################################
 
