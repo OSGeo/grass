@@ -22,6 +22,10 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+/* translate segment to box and back */
+#define X1W 0x01	/* x1 is West, x2 East */
+#define Y1S 0x02	/* y1 is South, y2 North */
+#define Z1B 0x04	/* z1 is Bottom, z2 Top */
 
 /* Vertex */
 typedef struct
@@ -31,13 +35,6 @@ typedef struct
     /* >0  - index of anchor to which snap this point */
     /* -1  - init value */
 } XPNT;
-
-/* Segment */
-typedef struct
-{
-    double x1, y1, z1,  /* start point */
-           x2, y2, z2;  /* end point */
-} XSEG;
 
 typedef struct
 {
@@ -122,15 +119,6 @@ static int add_item_box(int id, const struct RTree_Rect *rect, void *list)
     dig_boxlist_add((struct boxlist *)list, id, &box);
 
     return 1;
-}
-
-/* for ilist qsort'ing and bsearch'ing */
-static int cmp_int(const void *a, const void *b)
-{
-    int ai = *(int *)a;
-    int bi = *(int *)b;
-    
-    return (ai < bi ? -1 : (ai > bi));
 }
 
 /*!
@@ -612,7 +600,7 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
     int segment;		/* index in segments array */
     int asegments;		/* number of allocated segments */
     int nvertices;		/* number of vertices */
-    XSEG *XSegs = NULL;		/* Array of segments */
+    char *XSegs = NULL;		/* Array of segments */
     NEW2 *New = NULL;		/* Array of new points */
     int anew = 0, nnew;		/* allocated new points , number of new points */
     struct boxlist *List;
@@ -703,10 +691,13 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 	    
 	    /* reference segments */
 	    if (v) {
+		char sides = 0;
+
 		/* Box */
 		if (LPoints->x[v - 1] < LPoints->x[v]) {
 		    rect.boundary[0] = LPoints->x[v - 1];
 		    rect.boundary[3] = LPoints->x[v];
+		    sides |= X1W;
 		}
 		else {
 		    rect.boundary[0] = LPoints->x[v];
@@ -715,6 +706,7 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 		if (LPoints->y[v - 1] < LPoints->y[v]) {
 		    rect.boundary[1] = LPoints->y[v - 1];
 		    rect.boundary[4] = LPoints->y[v];
+		    sides |= Y1S;
 		}
 		else {
 		    rect.boundary[1] = LPoints->y[v];
@@ -723,6 +715,7 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 		if (LPoints->z[v - 1] < LPoints->z[v]) {
 		    rect.boundary[2] = LPoints->z[v - 1];
 		    rect.boundary[5] = LPoints->z[v];
+		    sides |= Z1B;
 		}
 		else {
 		    rect.boundary[2] = LPoints->z[v];
@@ -736,27 +729,17 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 		if ((segment - 1) == asegments) {
 		    asegments += 1000;
 		    XSegs =
-			(XSEG *) G_realloc(XSegs,
-					   (asegments + 1) * sizeof(XSEG));
+			(char *) G_realloc(XSegs,
+					   (asegments + 1) * sizeof(char));
 		}
-		XSegs[segment].x1 = LPoints->x[v - 1];
-		XSegs[segment].x2 = LPoints->x[v];
-		XSegs[segment].y1 = LPoints->y[v - 1];
-		XSegs[segment].y2 = LPoints->y[v];
-		if (with_z) {
-		    XSegs[segment].z1 = LPoints->z[v - 1];
-		    XSegs[segment].z1 = LPoints->z[v];
-		}
-		else {
-		    XSegs[segment].z1 = 0;
-		    XSegs[segment].z2 = 0;
-		}
+		XSegs[segment] = sides;
 		segment++;
 	    }
 	}
     }
 
     /* go through all vertices of the line to snap */
+    /* find nearest reference vertex */
     for (v = 0; v < Points->n_points; v++) {
 	double dist2, tmpdist2;
 	double x, y, z;
@@ -776,7 +759,6 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 	    rect.boundary[5] = Points->z[v] + thresh;
 	}
 
-	/* find nearest reference vertex */
 	Vect_reset_boxlist(List);
 
 	RTreeSearch(pnt_tree, &rect, add_item_box, (void *)List);
@@ -812,6 +794,7 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
     }
 
     /* go through all vertices of the line to snap */
+    /* find nearest reference segment */
     for (v = 0; v < Points->n_points; v++) {
 	double dist2, tmpdist2;
 	double x, y, z;
@@ -831,28 +814,48 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 	    rect.boundary[5] = Points->z[v] + thresh;
 	}
 
-	/* find nearest reference segment */
 	Vect_reset_boxlist(List);
 
 	RTreeSearch(seg_tree, &rect, add_item_box, (void *)List);
 
 	for (i = 0; i < List->n_values; i++) {
+	    double x1, y1, z1, x2, y2, z2;
 	    double tmpx, tmpy, tmpz;
 	    int segment, status;
 	    
 	    segment = List->id[i];
-	    
+
+	    if (XSegs[segment] & X1W) {
+		x1 = List->box[i].W;
+		x2 = List->box[i].E;
+	    }
+	    else {
+		x1 = List->box[i].E;
+		x2 = List->box[i].W;
+	    }
+	    if (XSegs[segment] & Y1S) {
+		y1 = List->box[i].S;
+		y2 = List->box[i].N;
+	    }
+	    else {
+		y1 = List->box[i].N;
+		y2 = List->box[i].S;
+	    }
+	    if (XSegs[segment] & Z1B) {
+		z1 = List->box[i].B;
+		z2 = List->box[i].T;
+	    }
+	    else {
+		z1 = List->box[i].T;
+		z2 = List->box[i].B;
+	    }
+
 	    /* Check the distance */
 	    tmpdist2 =
 		dig_distance2_point_to_line(Points->x[v],
 					    Points->y[v],
 					    Points->z[v], 
-					    XSegs[segment].x1,
-					    XSegs[segment].y1,
-					    XSegs[segment].z1,
-					    XSegs[segment].x2,
-					    XSegs[segment].y2,
-					    XSegs[segment].z2,
+					    x1, y1, z1, x2, y2, z2,
 					    with_z, &tmpx, &tmpy, &tmpz,
 					    NULL, &status);
 
