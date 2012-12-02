@@ -680,7 +680,7 @@ int main(int argc, char *argv[])
 	    if (y <= pass_south || y > pass_north) {
 		continue;
 	    }
-	    if (x < region.west || x > region.east) {
+	    if (x < region.west || x >= region.east) {
 		continue;
 	    }
 
@@ -698,29 +698,6 @@ int main(int argc, char *argv[])
 	    /* find the bin in the current array box */
 	    arr_row = (int)((pass_north - y) / region.ns_res);
 	    arr_col = (int)((x - region.west) / region.ew_res);
-
-	    /*          G_debug(5, "arr_row: %d   arr_col: %d", arr_row, arr_col); */
-
-	    /* The range should be [0,cols-1]. We use (int) to round down,
-	       but if the point exactly on eastern edge arr_col will be /just/
-	       on the max edge .0000000 and end up on the next row.
-	       We could make above bounds check "if(x>=region.east) continue;"
-	       But instead we go to all sorts of trouble so that not one single
-	       data point is lost. GE is too small to catch them all.
-	       We don't try to make y happy as percent segmenting will make some
-	       points happen twice that way; so instead we use the y<= test above.
-	     */
-	    if (arr_col >= cols) {
-		if (((x - region.west) / region.ew_res) - cols <
-		    10 * GRASS_EPSILON)
-		    arr_col--;
-		else {		/* oh well, we tried. */
-		    G_debug(3,
-			    "skipping extraneous data point [%.3f], column %d of %d",
-			    x, arr_col, cols);
-		    continue;
-		}
-	    }
 
 	    if (bin_n)
 		update_n(n_array, cols, arr_row, arr_col);
