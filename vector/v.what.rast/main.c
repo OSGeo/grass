@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     CELL *cell;
     DCELL *dcell;
     int width;
-    double drow, dcol;
+    int row, col;
     char buf[2000];
     struct {
 	struct Option *vect, *rast, *field, *col, *where;
@@ -188,21 +188,11 @@ int main(int argc, char *argv[])
 	G_debug(4, "    cat = %d", cat);
 
 	/* Add point to cache */
-	drow = Rast_northing_to_row(Points->y[0], &window);
-	dcol = Rast_easting_to_col(Points->x[0], &window);
+	row = Rast_northing_to_row(Points->y[0], &window);
+	col = Rast_easting_to_col(Points->x[0], &window);
 
-	/* a special case.
-	 *   if north falls at southern edge, or east falls on eastern edge,
-	 *   the point will appear outside the window.
-	 *   So, for these edges, bring the point inside the window
-	 */
-	if (drow == window.rows)
-	    drow--;
-	if (dcol == window.cols)
-	    dcol--;
-
-	cache[point_cnt].row = (int)drow;
-	cache[point_cnt].col = (int)dcol;
+	cache[point_cnt].row = row;
+	cache[point_cnt].col = col;
 	cache[point_cnt].cat = cat;
 	cache[point_cnt].count = 1;
 	point_cnt++;
