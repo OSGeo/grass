@@ -30,9 +30,11 @@ typedef struct
 
 ATTR *find_attr(ATTRIBUTES * attributes, int cat);
 
-int area_area(struct Map_info *In, int *field, struct Map_info *Out,
-	      struct field_info *Fi, dbDriver * driver, int operator,
-	      int *ofield, ATTRIBUTES * attr, struct ilist *BList, double snap_thresh);
-int line_area(struct Map_info *In, int *field, struct Map_info *Out,
-	      struct field_info *Fi, dbDriver * driver, int operator,
-	      int *ofield, ATTRIBUTES * attr, struct ilist *BList);
+int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
+              struct Map_info *Out, struct field_info *Fi,
+	      dbDriver * driver, int operator, int *ofield,
+	      ATTRIBUTES * attr, struct ilist *BList, double snap_thresh);
+int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
+              struct Map_info *Out, struct field_info *Fi,
+	      dbDriver * driver, int operator, int *ofield,
+	      ATTRIBUTES * attr, struct ilist *BList);

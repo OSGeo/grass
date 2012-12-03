@@ -3,7 +3,7 @@
  *  
  *  MODULE: v.overlay 
  *
- *  AUTHOR(S): Radim Blazek
+ *  AUTHOR(S): Radim Blazek, Markus Metz
  *  
  ******************************************************************************/
 #include <stdlib.h>
@@ -18,22 +18,19 @@
 /* for ilist qsort'ing and bsearch'ing */
 static int cmp_int(const void *a, const void *b)
 {
-    int ai = *(int *)a;
-    int bi = *(int *)b;
-    
-    return (ai < bi ? -1 : (ai > bi));
+    return (*(int *)a - *(int *)b);
 }
 
-int area_area(struct Map_info *In, int *field, struct Map_info *Out,
-	      struct field_info *Fi, dbDriver * driver, int operator,
-	      int *ofield, ATTRIBUTES * attr, struct ilist *BList, double snap)
+int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
+	      struct Map_info *Out, struct field_info *Fi,
+	      dbDriver * driver, int operator, int *ofield,
+	      ATTRIBUTES * attr, struct ilist *BList, double snap)
 {
     int ret, input, line, nlines, area, nareas;
     int in_area, in_centr, out_cat;
     struct line_pnts *Points;
     struct line_cats *Cats;
     CENTR *Centr;
-    char *Del;
     char buf[1000];
     dbString stmt;
     int nmodif;
@@ -53,7 +50,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	
 	G_message(_("Snapping boundaries with %g ..."), snap);
 
-	/* snap boundaries in B to boundaries in A
+	/* snap boundaries in B to boundaries in A,
 	 * not modifying boundaries in A */
 
 	if (BList->n_values > 1)
@@ -63,16 +60,16 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	nlines = BList->n_values;
 	for (i = 0; i < nlines; i++) {
 	    line = BList->value[i];
-	    Vect_read_line(Out, Points, Cats, line);
+	    Vect_read_line(Tmp, Points, Cats, line);
 	    /* select lines by box */
-	    Vect_get_line_box(Out, line, &box);
+	    Vect_get_line_box(Tmp, line, &box);
 	    box.E += snap;
 	    box.W -= snap;
 	    box.N += snap;
 	    box.S -= snap;
 	    box.T = 0.0;
 	    box.B = 0.0;
-	    Vect_select_lines_by_box(Out, &box, GV_BOUNDARY, boxlist);
+	    Vect_select_lines_by_box(Tmp, &box, GV_BOUNDARY, boxlist);
 	    
 	    if (boxlist->n_values > 0) {
 		Vect_reset_list(reflist);
@@ -86,10 +83,10 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 		}
 		
 		/* snap bline to alines */
-		if (Vect_snap_line(Out, reflist, Points, snap, 0, NULL, NULL)) {
+		if (Vect_snap_line(Tmp, reflist, Points, snap, 0, NULL, NULL)) {
 		    /* rewrite bline*/
-		    Vect_delete_line(Out, line);
-		    ret = Vect_write_line(Out, GV_BOUNDARY, Points, Cats);
+		    Vect_delete_line(Tmp, line);
+		    ret = Vect_write_line(Tmp, GV_BOUNDARY, Points, Cats);
 		    G_ilist_add(BList, ret);
 		    snapped_lines++;
 		    G_debug(3, "line %d snapped", line);
@@ -102,70 +99,71 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	G_verbose_message(_("%d boundaries snapped"), snapped_lines);
     }
 
-    /* same procedure like for v.in.ogr
+    /* same procedure like for v.in.ogr:
      * Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
      * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
      * and Vect_clean_small_angles_at_nodes() until no more small dangles are found */
     do {
 	G_message(_("Breaking lines..."));
-	Vect_break_lines_list(Out, NULL, BList, GV_BOUNDARY, NULL);
+	Vect_break_lines_list(Tmp, NULL, BList, GV_BOUNDARY, NULL);
 
 	/* Probably not necessary for LINE x AREA */
 	G_message(_("Removing duplicates..."));
-	Vect_remove_duplicates(Out, GV_BOUNDARY, NULL);
+	Vect_remove_duplicates(Tmp, GV_BOUNDARY, NULL);
 
 	G_message(_("Cleaning boundaries at nodes..."));
 	nmodif =
-	    Vect_clean_small_angles_at_nodes(Out, GV_BOUNDARY, NULL);
+	    Vect_clean_small_angles_at_nodes(Tmp, GV_BOUNDARY, NULL);
     } while (nmodif > 0);
 
     /* ?: May be result of Vect_break_lines() + Vect_remove_duplicates() any dangle or bridge?
      * In that case, calls to Vect_remove_dangles() and Vect_remove_bridges() would be also necessary */
 
     G_set_verbose(0);
-    Vect_build_partial(Out, GV_BUILD_AREAS);
+    /* should be fast, be silent */
+    Vect_build_partial(Tmp, GV_BUILD_AREAS);
     G_set_verbose(verbose);
-    nlines = Vect_get_num_lines(Out);
+    nlines = Vect_get_num_lines(Tmp);
     ret = 0;
     for (line = 1; line <= nlines; line++) {
-	if (!Vect_line_alive(Out, line))
+	if (!Vect_line_alive(Tmp, line))
 	    continue;
-	if (Vect_get_line_type(Out, line) == GV_BOUNDARY) {
+	if (Vect_get_line_type(Tmp, line) == GV_BOUNDARY) {
 	    int left, rite;
 	    
-	    Vect_get_line_areas(Out, line, &left, &rite);
+	    Vect_get_line_areas(Tmp, line, &left, &rite);
 	    
 	    if (left == 0 || rite == 0) {
+		/* invalid boundary */
 		ret = 1;
 		break;
 	    }
 	}
     }
     if (ret) {
-	Vect_remove_dangles(Out, GV_BOUNDARY, -1, NULL);
-	Vect_remove_bridges(Out, NULL, NULL, NULL);
+	Vect_remove_dangles(Tmp, GV_BOUNDARY, -1, NULL);
+	Vect_remove_bridges(Tmp, NULL, NULL, NULL);
     }
 
     G_set_verbose(0);
-    Vect_build_partial(Out, GV_BUILD_NONE);
-    Vect_build_partial(Out, GV_BUILD_BASE);
+    Vect_build_partial(Tmp, GV_BUILD_NONE);
+    Vect_build_partial(Tmp, GV_BUILD_BASE);
     G_set_verbose(verbose);
     G_message(_("Merging lines..."));
-    Vect_merge_lines(Out, GV_BOUNDARY, NULL, NULL);
+    Vect_merge_lines(Tmp, GV_BOUNDARY, NULL, NULL);
 
     /* Attach islands */
     G_message(_("Attaching islands..."));
-    Vect_build_partial(Out, GV_BUILD_NONE);
-    Vect_build_partial(Out, GV_BUILD_ATTACH_ISLES);
-
+    /* can take some time, show messages */
+    Vect_build_partial(Tmp, GV_BUILD_ATTACH_ISLES);
 
     /* Calculate new centroids for all areas */
-    nareas = Vect_get_num_areas(Out);
+    nareas = Vect_get_num_areas(Tmp);
 
     Centr = (CENTR *) G_malloc((nareas + 1) * sizeof(CENTR));	/* index from 1 ! */
     for (area = 1; area <= nareas; area++) {
 	ret =
-	    Vect_get_point_in_area(Out, area, &(Centr[area].x),
+	    Vect_get_point_in_area(Tmp, area, &(Centr[area].x),
 				   &(Centr[area].y));
 	if (ret < 0) {
 	    G_warning(_("Cannot calculate area centroid"));
@@ -365,30 +363,30 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 	    }
 	}
 
+	Vect_write_line(Tmp, GV_CENTROID, Points, Cats);
 	Vect_write_line(Out, GV_CENTROID, Points, Cats);
     }
 
-    /* Build topology and remove boundaries with area without centroid on both sides */
-    G_message(_("Attaching centroids..."));
-    Vect_build_partial(Out, GV_BUILD_ALL);
-
-    /* Create a list of lines to be deleted */
-    nlines = Vect_get_num_lines(Out);
-    Del = (char *)G_calloc(nlines + 1, sizeof(char));	/* index from 1 ! */
+    G_set_verbose(0);
+    /* should be fast, be silent */
+    Vect_build_partial(Tmp, GV_BUILD_CENTROIDS);
+    G_set_verbose(verbose);
+    /* Copy valid boundaries to final output */
+    nlines = Vect_get_num_lines(Tmp);
 
     for (line = 1; line <= nlines; line++) {
 	int i, ltype, side[2], centr[2];
 
 	G_percent(line, nlines, 1);	/* must be before any continue */
 
-	if (!Vect_line_alive(Out, line))
+	if (!Vect_line_alive(Tmp, line))
 	    continue;
 
-	ltype = Vect_read_line(Out, NULL, NULL, line);
+	ltype = Vect_read_line(Tmp, Points, Cats, line);
 	if (!(ltype & GV_BOUNDARY))
 	    continue;
 
-	Vect_get_line_areas(Out, line, &side[0], &side[1]);
+	Vect_get_line_areas(Tmp, line, &side[0], &side[1]);
 
 	for (i = 0; i < 2; i++) {
 	    if (side[i] == 0) {	/* This should not happen ! */
@@ -400,29 +398,18 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Out,
 		area = side[i];
 	    }
 	    else {		/* island */
-		area = Vect_get_isle_area(Out, abs(side[i]));
+		area = Vect_get_isle_area(Tmp, abs(side[i]));
 	    }
 
 	    if (area > 0)
-		centr[i] = Vect_get_area_centroid(Out, area);
+		centr[i] = Vect_get_area_centroid(Tmp, area);
 	    else
 		centr[i] = 0;
 	}
 
-	if (!centr[0] && !centr[1])
-	    Del[line] = 1;
+	if (centr[0] || centr[1])
+	    Vect_write_line(Out, GV_BOUNDARY, Points, Cats);
     }
-
-    /* Delete boundaries */
-    G_set_verbose(0);
-    Vect_build_partial(Out, GV_BUILD_NONE);
-    Vect_build_partial(Out, GV_BUILD_BASE);
-    G_set_verbose(verbose);
-    for (line = 1; line <= nlines; line++) {
-	if (Del[line])
-	    Vect_delete_line(Out, line);
-    }
-    G_free(Del);
 
     return 0;
 }
