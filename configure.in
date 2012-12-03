@@ -17,7 +17,8 @@
 # MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
 # Website for   config.guess, config.sub:
-#               http://git.savannah.gnu.org/cgit/autoconf.git
+#               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
+#               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
 #               Note: use autoconf-2.13
 #############################################################################
 
