@@ -506,6 +506,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LD_LIBRARY_PATH_VAR="PATH"
 	    ;;
         *-pc-mingw32)
+        *-pc-msys)
             SHLIB_LD_LIBS='${LIBS}'
             SHLIB_SUFFIX=".dll"
             SHLIB_LD="${CC} -shared"
