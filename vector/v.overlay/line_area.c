@@ -2,7 +2,7 @@
  *
  *  MODULE: v.overlay 
  *
- *  AUTHOR(S): Radim Blazek
+ *  AUTHOR(S): Radim Blazek, Markus Metz
  *  
  ******************************************************************************/
 #include <stdlib.h>
@@ -49,9 +49,10 @@ int point_area(struct Map_info *Map, int field, double x, double y,
     return Cats->n_cats;
 }
 
-int line_area(struct Map_info *In, int *field, struct Map_info *Out,
-	      struct field_info *Fi, dbDriver * driver, int operator,
-	      int *ofield, ATTRIBUTES * attr, struct ilist *BList)
+int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
+	      struct Map_info *Out, struct field_info *Fi,
+	      dbDriver * driver, int operator, int *ofield,
+	      ATTRIBUTES * attr, struct ilist *BList)
 {
     int line, nlines, ncat;
     struct line_pnts *Points;
@@ -67,11 +68,11 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
     db_init_string(&stmt);
 
     G_message(_("Breaking lines..."));
-    Vect_break_lines_list(Out, NULL, BList, GV_LINE | GV_BOUNDARY, NULL);
+    Vect_break_lines_list(Tmp, NULL, BList, GV_LINE | GV_BOUNDARY, NULL);
     G_message(_("Merging lines..."));
-    Vect_merge_lines(Out, GV_LINE, NULL, NULL);
+    Vect_merge_lines(Tmp, GV_LINE, NULL, NULL);
 
-    nlines = Vect_get_num_lines(Out);
+    nlines = Vect_get_num_lines(Tmp);
 
     /* Warning!: cleaning process (break) creates new vertices which are usually slightly 
      * moved (RE), to compare such new vertex with original input is a problem?
@@ -87,13 +88,12 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
 
 	G_percent(line, nlines, 1);	/* must be before any continue */
 
-	if (!Vect_line_alive(Out, line))
+	if (!Vect_line_alive(Tmp, line))
 	    continue;
 
-	ltype = Vect_read_line(Out, Points, Cats, line);
+	ltype = Vect_read_line(Tmp, Points, Cats, line);
 
 	if (ltype == GV_BOUNDARY) {	/* No more needed */
-	    Vect_delete_line(Out, line);
 	    continue;
 	}
 
@@ -112,8 +112,9 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
 	 */
 
 	/* Note/TODO: the test done is quite simple, check the point in the middle of segment.
-	 * If the line overpals the boundary, the result may be both outside and inside
+	 * If the line overlaps the boundary, the result may be both outside and inside
 	 * this should be solved (check angles?)
+	 * This should not happen if Vect_break_lines_list() works correctly
 	 */
 
 	G_debug(3, "line = %d", line);
@@ -239,10 +240,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Out,
 		}
 	    }
 
-	    Vect_rewrite_line(Out, line, ltype, Points, OCats);
-	}
-	else {
-	    Vect_delete_line(Out, line);
+	    Vect_write_line(Out, ltype, Points, OCats);
 	}
     }
 

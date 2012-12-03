@@ -22,7 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-
+#include <sys/types.h>
+#include <unistd.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
@@ -39,7 +40,8 @@ int main(int argc, char *argv[])
     struct Option *in_opt[2], *out_opt, *type_opt[2], *field_opt[2],
 	*ofield_opt, *operator_opt, *snap_opt;
     struct Flag *table_flag;
-    struct Map_info In[2], Out;
+    struct Map_info In[2], Out, Tmp;
+    char *tmpname;
     struct line_pnts *Points, *Points2;
     struct line_cats *Cats;
     struct ilist *BList;
@@ -181,6 +183,9 @@ int main(int argc, char *argv[])
     Vect_set_map_name(&Out, "Output from v.overlay");
     Vect_set_person(&Out, G_whoami());
     Vect_hist_command(&Out);
+    
+    G_asprintf(&tmpname, "%s_tmp_%d", out_opt->answer, getpid());
+    Vect_open_new(&Tmp, tmpname, WITHOUT_Z);
 
     /* Create dblinks */
     if (ofield[0] > 0) {
@@ -212,7 +217,7 @@ int main(int argc, char *argv[])
     BList = Vect_new_list();
     verbose = G_verbose();
     G_set_verbose(0);
-    Vect_build_partial(&Out, GV_BUILD_BASE);
+    Vect_build_partial(&Tmp, GV_BUILD_BASE);
     G_set_verbose(verbose);
     for (input = 0; input < 2; input++) {
 	int ncats, index, nlines_out, newline;
@@ -269,7 +274,7 @@ int main(int argc, char *argv[])
 					  Points->z[v]);
 		    }
 
-		    newline = Vect_write_line(&Out, ltype, Points2, Cats);
+		    newline = Vect_write_line(&Tmp, ltype, Points2, Cats);
 		    if (input == 1)
 			G_ilist_add(BList, newline);
 
@@ -277,13 +282,16 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    else {
-		newline = Vect_write_line(&Out, ltype, Points, Cats);
+		newline = Vect_write_line(&Tmp, ltype, Points, Cats);
 		if (input == 1)
 		    G_ilist_add(BList, newline);
 	    }
 	    nlines_out++;
 	}
 	if (nlines_out == 0) {
+	    Vect_close(&Tmp);
+	    Vect_delete(tmpname);
+	    Vect_close(&Out);
 	    Vect_delete(out_opt->answer);
 	    G_fatal_error(_("No %s features found in vector map <%s>. Verify '%s' parameter."),
 		      type_opt[input]->answer, Vect_get_full_name(&(In[input])),
@@ -538,16 +546,18 @@ int main(int argc, char *argv[])
 
     /* AREA x AREA */
     if (type[0] == GV_AREA) {
-	area_area(In, field, &Out, Fi, driver, operator, ofield, attr, BList, snap_thresh);
+	area_area(In, field, &Tmp, &Out, Fi, driver, operator, ofield, attr, BList, snap_thresh);
     }
     else {			/* LINE x AREA */
-	line_area(In, field, &Out, Fi, driver, operator, ofield, attr, BList);
+	line_area(In, field, &Tmp, &Out, Fi, driver, operator, ofield, attr, BList);
     }
+    
+    Vect_close(&Tmp);
+    Vect_delete(tmpname);
 
-    G_message(_("Rebuilding topology..."));
-    Vect_build_partial(&Out, GV_BUILD_NONE);
-    Vect_build(&Out);
     /* Build topology to show the final result and prepare for Vect_close() */
+    G_message(_("Building topology..."));
+    Vect_build(&Out);
 
     if (driver) {
 	/* Close table */
