@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2012-11-10 19:23+0100\n"
+"PO-Revision-Date: 2012-12-01 19:00+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -6732,11 +6732,9 @@ msgstr "Re-projette une carte vecteur depuis un secteur dans le secteur courant.
 msgid "Updates vector map metadata."
 msgstr "Mettre à jour les métadonnées de la carte vecteur."
 
-# Pour désigner les support files, je propose la traduction fichiers de maintenance. Guère d'autre idée pour englober à la fois la dimension historique du fichier, méta-infos, lien vers un éventuel autre raster...
 #: ../gui/wxpython/menustrings.py:558
-#, fuzzy
 msgid "Topology maintenance"
-msgstr "Administration du fichier de maintenance"
+msgstr "Outils de topologie"
 
 #: ../gui/wxpython/menustrings.py:559
 msgid "Create or rebuild topology"
@@ -9353,9 +9351,8 @@ msgstr ""
 "en mode brouillon (seulement en mode aperçu"
 
 #: ../gui/wxpython/psmap/dialogs.py:4598 ../gui/wxpython/psmap/dialogs.py:4852
-#, fuzzy
 msgid "Outline color:"
-msgstr "Couleur de ligne"
+msgstr "Couleur de mise en valeur:"
 
 #: ../gui/wxpython/psmap/dialogs.py:4613 ../gui/wxpython/psmap/dialogs.py:4873
 msgid "Fill color:"
@@ -9640,9 +9637,8 @@ msgid "Type filename or click to choose file and save color table"
 msgstr "Entrer un nom de fichier ou cliquer sur Parcourir pour enregistrer une table de couleur"
 
 #: ../gui/wxpython/modules/colorrules.py:414
-#, fuzzy
 msgid "Reload default table"
-msgstr "Revenir à la vue par défaut"
+msgstr "Recharger la table par défaut"
 
 #: ../gui/wxpython/modules/colorrules.py:504
 #: ../gui/wxpython/iclass/toolbars.py:61
@@ -9748,9 +9744,9 @@ msgid "Import or export color table"
 msgstr "Importer ou exporter la table de couleurs"
 
 #: ../gui/wxpython/modules/colorrules.py:1100
-#, fuzzy, python-format
+#, python-format
 msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
-msgstr "La connexion à une base de données n'est pas définie dans le fichier DB pour la carte vecteur <%s>. Voulez-vous la créer et connecter la nouvelle table d'attributs ?"
+msgstr "La connexion à une base de données pour la carte vecteur <%s> n'est pas définie dans le fichier DB. Voulez-vous créer et connecter une nouvelle table d'attributs ?"
 
 #: ../gui/wxpython/modules/colorrules.py:1103
 msgid "No database connection defined"
@@ -9780,19 +9776,18 @@ msgid "Too many records"
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1462
-#, fuzzy, python-format
+#, python-format
 msgid "Enter vector attribute values or percents %s:"
-msgstr "Saisir les valeurs ou la plage (n ou n1 à n2) d'attributs vecteur "
+msgstr "Saisir les valeurs d'attributs ou les pourcentages %s :"
 
 #: ../gui/wxpython/modules/colorrules.py:1464
-#, fuzzy, python-format
+#, python-format
 msgid "Enter vector attribute values %s:"
-msgstr "Saisir les valeurs ou la plage (n ou n1 à n2) d'attributs vecteur "
+msgstr "Saisir les valeurs d'attributs %s :"
 
 #: ../gui/wxpython/modules/colorrules.py:1610
-#, fuzzy
 msgid "Please select column to save values to."
-msgstr "Merci de sélectionner un outil de nettoyage à ôter"
+msgstr "Sélectionner la colonne où enregistrer les valeurs."
 
 #: ../gui/wxpython/modules/colorrules.py:1646
 msgid "No color column defined. Operation canceled."
@@ -10028,36 +10023,36 @@ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
 msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:456
-#, fuzzy
 msgid "Name of input vector map"
-msgstr "Nom de la carte vecteur :"
+msgstr "Nom de la carte vecteur en entrée"
 
 #: ../gui/wxpython/modules/vclean.py:457
-#, fuzzy
 msgid "Name for output vector map"
-msgstr "Nom pour la nouvelle carte vecteur :"
+msgstr "Nom de la carte vecteur en sortie"
 
 #: ../gui/wxpython/modules/vclean.py:458 ../gui/wxpython/swipe/toolbars.py:25
 msgid "Tools"
 msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:459
-#, fuzzy
 msgid "Threshold"
-msgstr "Seuil de sélection"
+msgstr "Seuil"
 
 #: ../gui/wxpython/modules/vclean.py:461
-#, fuzzy, python-format
+#, python-format
 msgid "'%s' not defined"
-msgstr "<non défini>"
+msgstr "'%s' non défini"
 
 #: ../gui/wxpython/modules/vclean.py:463
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Some parameters not defined. Operation canceled.\n"
 "\n"
 "%s"
-msgstr "Région <%s> non trouvée. Opération annulée."
+msgstr ""
+"Certains paramètres ne sont pas définis. Opération annulée.\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/modules/vclean.py:468
 msgid "Executing selected cleaning operations..."
@@ -10104,9 +10099,8 @@ msgid "Project Location"
 msgstr "Secteur du projet"
 
 #: ../gui/wxpython/location_wizard/wizard.py:125
-#, fuzzy
 msgid "Name of location directory in GIS Data Directory"
-msgstr "Choisir le répertoire de données SIG"
+msgstr "Nom du répertoire du secteur dans le dossier GIS DATA"
 
 #: ../gui/wxpython/location_wizard/wizard.py:136
 msgid "Location Title"
@@ -10159,9 +10153,8 @@ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
 msgstr "Spécifier la projection et les termes du datum en utilisant des paramètres PROJ.4 personnalisés"
 
 #: ../gui/wxpython/location_wizard/wizard.py:224
-#, fuzzy
 msgid "Create a generic Cartesian coordinate system (XY)"
-msgstr "Créer un système de coordonnées non-terrestre arbitraire (XY)"
+msgstr "Créer un système de coordonnées cartésiennes arbitraire (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:325
 msgid "Choose projection"
@@ -10942,9 +10935,8 @@ msgid "Path and prefix (for raster name) to save profile values..."
 msgstr "Chemin et préfixe (du nom de carte raster) pour sauvegarder les valeurs du profil..."
 
 #: ../gui/wxpython/wxplot/profile.py:359
-#, fuzzy
 msgid "Statistics for Profile(s)"
-msgstr "Statistiques univariées pour les volumes"
+msgstr "Statistiques du profile"
 
 #: ../gui/wxpython/wxplot/histogram.py:40
 msgid "GRASS Histogramming Tool"
@@ -11035,23 +11027,20 @@ msgid "Draw transect in map display window to profile"
 msgstr "Dessiner la ligne de coupe sur la carte à profiler"
 
 #: ../gui/wxpython/wxplot/base.py:39
-#, fuzzy
 msgid "Plot options"
-msgstr "Modifier les options"
+msgstr "Options d'affichage"
 
 #: ../gui/wxpython/wxplot/base.py:41
-#, fuzzy
 msgid "Plot statistics"
-msgstr "Statistiques voxel"
+msgstr "Afficher les statistiques"
 
 #: ../gui/wxpython/wxplot/base.py:43
 msgid "Save profile data to CSV file"
 msgstr "Enregistrer les données de profil dans un fichier CSV"
 
 #: ../gui/wxpython/wxplot/base.py:44
-#, fuzzy
 msgid "Quit plot tool"
-msgstr "Quitter le module de digitalisation"
+msgstr "Quitter l'outil"
 
 #: ../gui/wxpython/wxplot/base.py:399
 #, fuzzy
@@ -11064,9 +11053,8 @@ msgstr "Réglages de texte"
 
 #: ../gui/wxpython/wxplot/base.py:432 ../gui/wxpython/wxplot/base.py:489
 #: ../gui/wxpython/wxplot/dialogs.py:802
-#, fuzzy
 msgid "Plot settings"
-msgstr "Réglages de police"
+msgstr "Paramètres d'affichage"
 
 #: ../gui/wxpython/wxplot/base.py:445
 msgid "This feature is not yet functional"
@@ -11077,19 +11065,16 @@ msgid "Under Construction"
 msgstr "En construction"
 
 #: ../gui/wxpython/wxplot/base.py:475
-#, fuzzy
 msgid "Histogram text settings"
-msgstr "Réglages de texte du profil"
+msgstr "Paramètre de texte"
 
 #: ../gui/wxpython/wxplot/dialogs.py:34
-#, fuzzy
 msgid "Select raster maps to profile"
-msgstr "Sélectionner la carte raster à profiler"
+msgstr "Sélectionner la carte raster à profiler :"
 
 #: ../gui/wxpython/wxplot/dialogs.py:63
-#, fuzzy
 msgid "Select raster map(s) to profile:"
-msgstr "Sélectionner la carte raster à profiler"
+msgstr "Sélectionner la carte raster à profiler :"
 
 #: ../gui/wxpython/wxplot/dialogs.py:106
 msgid "Select pairs of raster maps for scatterplots"
@@ -11104,23 +11089,20 @@ msgid "Number of bins (for FP maps)"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/dialogs.py:226
-#, fuzzy
 msgid "Statistics"
-msgstr "Statistiques voxel"
+msgstr "Statistiques"
 
 #: ../gui/wxpython/wxplot/dialogs.py:277
 msgid "C&opy"
 msgstr "C&opier"
 
 #: ../gui/wxpython/wxplot/dialogs.py:278
-#, fuzzy
 msgid "Copy regression statistics the clipboard (Ctrl+C)"
-msgstr "Copier la commande courante dans le presse-papier [Ctrl+C)"
+msgstr "Copier les statistiques de régression dans le presse-papier [Ctrl+C)"
 
 #: ../gui/wxpython/wxplot/dialogs.py:307
-#, fuzzy
 msgid "Regression statistics copied to clipboard"
-msgstr "'%s' copié dans le presse-papier"
+msgstr "Statistiques de régression copiées dans le presse-papier"
 
 #: ../gui/wxpython/wxplot/dialogs.py:316
 msgid "Select raster map or imagery group to histogram"
@@ -11191,9 +11173,8 @@ msgid "Plot text settings saved to file '%s'."
 msgstr "Paramètres du gestionnaire de points de contrôle enregistrés dans le fichier '%s'."
 
 #: ../gui/wxpython/wxplot/dialogs.py:780
-#, fuzzy
 msgid "No map or image group selected to plot."
-msgstr "Pas de couche sélectionnée"
+msgstr "Pas de carte ou d'image sélectionné."
 
 #: ../gui/wxpython/wxplot/dialogs.py:781
 #: ../gui/wxpython/mapdisp/mapwindow.py:1740
@@ -11708,9 +11689,8 @@ msgid "Please wait, loading data..."
 msgstr "Patientez, chargement des données ..."
 
 #: ../gui/wxpython/mapdisp/frame.py:349
-#, fuzzy
 msgid "Please wait, unloading data..."
-msgstr "Patientez, chargement des données ..."
+msgstr "Patientez, dé-chargement des données ..."
 
 #: ../gui/wxpython/mapdisp/frame.py:350
 msgid "Switching back to 2D view mode..."
@@ -11858,23 +11838,20 @@ msgid "Rotate 3D scene"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:56
-#, fuzzy
 msgid "Drag with mouse to rotate 3D scene"
-msgstr "Glisser avec la souris pour se déplacer"
+msgstr "Déplacer avec la souris pour faire tourner la scène 3D"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:59
 msgid "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:61
-#, fuzzy
 msgid "Click mouse to zoom"
-msgstr "Glisser ou cliquez pour zoomer"
+msgstr "Cliquez pour zoomer"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:62
-#, fuzzy
 msgid "Click mouse to unzoom"
-msgstr "Faites glisser la souris ou cliquez pour dé-zoomer"
+msgstr "Cliquez pour dé-zoomer"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:90
 msgid "3D view mode not available"
@@ -15258,11 +15235,9 @@ msgstr "Pas de couche sélectionnée"
 #~ msgid "Plot text sizes saved to file '%s'."
 #~ msgstr "Réglages sauvegardés dans le fichier '%s'."
 
-#, fuzzy
 #~ msgid "Settings for selected map"
-#~ msgstr "Définir la région calculée à partir de la(des) carte(s) sélectionnée(s)"
+#~ msgstr "Paramètres pour la carte sélectionnée"
 
-#, fuzzy
 #~ msgid "Scale"
 #~ msgstr "Échelle"
 
@@ -15299,18 +15274,15 @@ msgstr "Pas de couche sélectionnée"
 #~ msgid "Add simple graphics"
 #~ msgstr "Ajouter un graphique simple"
 
-#, fuzzy
 #~ msgid ""
 #~ "Click and drag with left mouse button to measure.\n"
 #~ "Double click with left button to clear."
-#~ msgstr "Cliquer et glisser avec le bouton gauche de la souris pour mesurer. %s Double-cliquer avec le bouton gauche pour annuler."
-
-#, fuzzy
-#~ msgid "Unable to open file '%s'\n"
 #~ msgstr ""
-#~ "Impossible d'ouvrir le fichier\n"
-#~ "%s"
+#~ "Cliquer et déplacer avec le bouton gauche de la souris pour mesurer.\n"
+#~ "Double-cliquer avec le bouton gauche pour annuler."
 
-#, fuzzy
+#~ msgid "Unable to open file '%s'\n"
+#~ msgstr "Impossible d'ouvrir le fichier '%s'\n"
+
 #~ msgid "Unable to create file '%s'\n"
-#~ msgstr "Impossible de lire le fichier %s."
+#~ msgstr "Impossible de créer le fichier '%s'\n"
