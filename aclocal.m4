@@ -506,6 +506,12 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LD_LIBRARY_PATH_VAR="PATH"
 	    ;;
         *-pc-mingw32)
+            SHLIB_LD_LIBS='${LIBS}'
+            SHLIB_SUFFIX=".dll"
+            SHLIB_LD="${CC} -shared"
+            LDFLAGS="-Wl,--export-dynamic,--enable-runtime-pseudo-reloc"
+            LD_LIBRARY_PATH_VAR="PATH"
+            ;;
         *-pc-msys)
             SHLIB_LD_LIBS='${LIBS}'
             SHLIB_SUFFIX=".dll"
