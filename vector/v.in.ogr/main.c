@@ -54,14 +54,14 @@ int main(int argc, char *argv[])
 	struct Option *snap, *type, *outloc, *cnames;
     } param;
     struct _flag {
-	struct Flag *list, *no_clean, *z, *notab,
+	struct Flag *list, *no_clean, *force2d, *notab,
 	    *region;
 	struct Flag *over, *extend, *formats, *tolower, *no_import;
     } flag;
 
     char *desc;
 
-    int i, j, layer, arg_s_num, nogeom, ncnames;
+    int i, j, layer, nogeom, ncnames;
     double xmin, ymin, xmax, ymax;
     int ncols = 0, type;
     double min_area, snap;
@@ -78,10 +78,10 @@ int main(int argc, char *argv[])
     int cat;
 
     /* Attributes */
-    struct field_info *Fi;
-    dbDriver *driver;
+    struct field_info *Fi = NULL;
+    dbDriver *driver = NULL;
     dbString sql, strval;
-    int dim, with_z;
+    int with_z, input3d;
 
     /* OGR */
     OGRDataSourceH Ogr_ds;
@@ -233,10 +233,11 @@ int main(int argc, char *argv[])
     flag.no_clean->description = _("Do not clean polygons (not recommended)");
     flag.no_clean->guisection = _("Output");
 
-    flag.z = G_define_flag();
-    flag.z->key = 'z';
-    flag.z->description = _("Create 3D output");
-    flag.z->guisection = _("Output");
+    flag.force2d = G_define_flag();
+    flag.force2d->key = '2';
+    flag.force2d->label = _("Force 2D output even if input is 3D");
+    flag.force2d->description = _("Useful if input is 3D but all z coordinates are identical");
+    flag.force2d->guisection = _("Output");
 
     flag.notab = G_define_standard_flag(G_FLG_V_TABLE);
     flag.notab->guisection = _("Attributes");
@@ -702,56 +703,65 @@ int main(int argc, char *argv[])
     db_init_string(&sql);
     db_init_string(&strval);
 
+    n_polygon_boundaries = 0;
+    input3d = 0;
+
+    /* check if input id 3D and if we need a tmp vector */
+    /* estimate distance for boundary splitting --> */
+    for (layer = 0; layer < nlayers; layer++) {
+	layer_id = layers[layer];
+
+	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
+	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+
+	n_features = feature_count = 0;
+
+	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
+	OGR_L_ResetReading(Ogr_layer);
+
+	/* count polygons and isles */
+	G_message(_("Counting polygons for %d features (OGR layer <%s>)..."),
+		  n_features, layer_names[layer]);
+	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
+	    G_percent(feature_count++, n_features, 1);	/* show something happens */
+	    /* Geometry */
+	    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+	    if (Ogr_geometry != NULL) {
+		if (!flag.no_clean->answer)
+		    poly_count(Ogr_geometry, (type & GV_BOUNDARY));
+		if (OGR_G_GetCoordinateDimension(Ogr_geometry) > 2)
+		    input3d = 1;
+	    }
+	    OGR_F_Destroy(Ogr_feature);
+	}
+    }
+
+    G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
+    if (n_polygon_boundaries > 50) {
+	split_distance =
+	    area_size / log(n_polygon_boundaries);
+	/* divisor is the handle: increase divisor to decrease split_distance */
+	split_distance = split_distance / 16.;
+	G_debug(1, "root of area size: %f", area_size);
+	G_verbose_message(_("Boundary splitting distance in map units: %G"),
+		  split_distance);
+    }
+    /* <-- estimate distance for boundary splitting */
+
+    use_tmp_vect = n_polygon_boundaries > 0;
+
+    G_debug(0, "3D ? %d", input3d);
+    with_z = input3d;
+    if (with_z)
+	with_z = !flag.force2d->answer;
+
     /* open output vector */
     /* strip any @mapset from vector output name */
     G_find_vector(output, G_mapset());
-    Vect_open_new(&Map, output, flag.z->answer != 0);
+    Vect_open_new(&Map, output, with_z);
     Out = &Map;
 
-    n_polygon_boundaries = 0;
     if (!flag.no_clean->answer) {
-	/* check if we need a tmp vector */
-
-	/* estimate distance for boundary splitting --> */
-	for (layer = 0; layer < nlayers; layer++) {
-	    layer_id = layers[layer];
-
-	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
-	    Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-
-	    n_features = feature_count = 0;
-
-	    n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
-	    OGR_L_ResetReading(Ogr_layer);
-
-	    /* count polygons and isles */
-	    G_message(_("Counting polygons for %d features (OGR layer <%s>)..."),
-		      n_features, layer_names[layer]);
-	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
-		G_percent(feature_count++, n_features, 1);	/* show something happens */
-		/* Geometry */
-		Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-		if (Ogr_geometry != NULL) {
-		    poly_count(Ogr_geometry, (type & GV_BOUNDARY));
-		}
-		OGR_F_Destroy(Ogr_feature);
-	    }
-	}
-
-	G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
-	if (n_polygon_boundaries > 50) {
-	    split_distance =
-		area_size / log(n_polygon_boundaries);
-	    /* divisor is the handle: increase divisor to decrease split_distance */
-	    split_distance = split_distance / 16.;
-	    G_debug(1, "root of area size: %f", area_size);
-	    G_verbose_message(_("Boundary splitting distance in map units: %G"),
-		      split_distance);
-	}
-	/* <-- estimate distance for boundary splitting */
-
-	use_tmp_vect = n_polygon_boundaries > 0;
-
 	if (use_tmp_vect) {
 	    /* open temporary vector, do the work in the temporary vector
 	     * at the end copy alive lines to output vector
@@ -759,7 +769,7 @@ int main(int argc, char *argv[])
 	     * only needed when cleaning polygons */
 	    sprintf(tempvect, "%s_tmp", output);
 	    G_verbose_message(_("Using temporary vector <%s>"), tempvect);
-	    Vect_open_new(&Tmp, tempvect, flag.z->answer != 0);
+	    Vect_open_new(&Tmp, tempvect, with_z);
 	    Out = &Tmp;
 	}
     }
@@ -771,7 +781,6 @@ int main(int argc, char *argv[])
      * Then second pass through finds all centroids in each polygon feature and adds its category
      * to the centroid. The result is that one centroids may have 0, 1 ore more categories
      * of one ore more (more input layers) fields. */
-    with_z = 0;
     for (layer = 0; layer < nlayers; layer++) {
 	layer_id = layers[layer];
 
@@ -956,10 +965,6 @@ int main(int argc, char *argv[])
 		nogeom++;
 	    }
 	    else {
-		dim = OGR_G_GetCoordinateDimension(Ogr_geometry);
-		if (dim > 2)
-		    with_z = 1;
-
 		geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
 		     flag.no_clean->answer);
 	    }
@@ -1070,7 +1075,7 @@ int main(int argc, char *argv[])
 
 	G_message("%s", separator);
 
-	G_warning(_("Cleaning polygons, result is not guaranteed!"));
+	G_message(_("Cleaning polygons"));
 
 	if (snap >= 0) {
 	    G_message("%s", separator);
@@ -1150,6 +1155,7 @@ int main(int argc, char *argv[])
 
 	/* Boundaries are hopefully clean, build areas */
 	G_message("%s", separator);
+	Vect_build_partial(&Tmp, GV_BUILD_NONE);
 	Vect_build_partial(&Tmp, GV_BUILD_ATTACH_ISLES);
 
 	/* Calculate new centroids for all areas, centroids have the same id as area */
@@ -1266,14 +1272,18 @@ int main(int argc, char *argv[])
 
 	sprintf(buf, _("Overlapping area: %G (%d areas)\n"), overlap_area,
 		n_overlaps);
-	G_message(_("Overlapping area: %G (%d areas)"), overlap_area,
-		  n_overlaps);
+	if (n_overlaps) {
+	    G_message(_("Overlapping area: %G (%d areas)"), overlap_area,
+		      n_overlaps);
+	}
 	Vect_hist_write(&Map, buf);
 
 	sprintf(buf, _("Area without category: %G (%d areas)\n"), nocat_area,
 		n_nocat);
-	G_message(_("Area without category: %G (%d areas)"), nocat_area,
-		  n_nocat);
+	if (n_nocat) {
+	    G_message(_("Area without category: %G (%d areas)"), nocat_area,
+		      n_nocat);
+	}
 	Vect_hist_write(&Map, buf);
 	G_message("%s", separator);
     }
@@ -1290,7 +1300,7 @@ int main(int argc, char *argv[])
     }
 
     Vect_build(&Map);
-    if (flag.no_clean->answer)
+    if (0 && flag.no_clean->answer)
 	Vect_topo_check(&Map, NULL);
     Vect_close(&Map);
 
@@ -1326,9 +1336,9 @@ int main(int argc, char *argv[])
 	G_message(_("Region for the current mapset updated"));
     }
 
-    if (with_z && !flag.z->answer)
+    if (input3d && flag.force2d->answer)
 	G_warning(_("Input data contains 3D features. Created vector is 2D only, "
-		   "use -z flag to import 3D vector."));
+		   "disable -2 flag to import 3D vector."));
 
     exit(EXIT_SUCCESS);
 }
