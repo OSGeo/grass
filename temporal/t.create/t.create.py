@@ -75,37 +75,8 @@ def main():
 
     tgis.init()
     
-    #Get the current mapset to create the id of the space time dataset
-
-    mapset = grass.gisenv()["MAPSET"]
-    id = name + "@" + mapset
-
-    sp = tgis.dataset_factory(type, id)
-
-    dbif = tgis.SQLDatabaseInterfaceConnection()
-    dbif.connect()
-
-    if sp.is_in_db(dbif) and grass.overwrite() == False:
-        dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> is already in the database. "
-                      "Use the overwrite flag.") %
-                    (sp.get_new_map_instance(None).get_type(), name))
-
-    if sp.is_in_db(dbif) and grass.overwrite() == True:
-        grass.info(_("Overwrite space time %s dataset <%s> "
-                     "and unregister all maps.") %
-                   (sp.get_new_map_instance(None).get_type(), name))
-        sp.delete(dbif)
-        sp = sp.get_new_instance(id)
-
-    grass.verbose(_("Create space time %s dataset.") %
-                  sp.get_new_map_instance(None).get_type())
-
-    sp.set_initial_values(temporal_type=temporaltype, semantic_type=semantic,
-                          title=title, description=descr)
-    sp.insert(dbif)
-
-    dbif.close()
+    tgis.create_space_time_dataset(name, type, temporaltype, title, descr, 
+                                   semantic, None, grass.overwrite())
 
 if __name__ == "__main__":
     options, flags = grass.parser()

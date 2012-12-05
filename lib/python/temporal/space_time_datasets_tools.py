@@ -606,9 +606,12 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 ###############################################################################
 
 
-def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, separator, method, spatial=False):
+def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, 
+                                 separator, method, spatial=False, 
+                                 print_only=True):
     """!Sample the input space time datasets with a sample 
-       space time dataset and print the result to stdout
+       space time dataset, return the created map matrix and optionally 
+       print the result to stdout
 
         In case multiple maps are located in the current granule, 
         the map names are separated by comma.
@@ -616,20 +619,29 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
         In case a layer is present, the names map ids are extended 
         in this form: name:layer@mapset
 
-        Attention: Do not use the comma as separator
+        Attention: Do not use the comma as separator for printing
 
         @param intype:  Type of the input space time dataset (strds, stvds or str3ds)
         @param samtype: Type of the sample space time dataset (strds, stvds or str3ds)
-        @param input: Name of a space time dataset
+        @param inputs: Name or comma separated names of space time datasets
         @param sampler: Name of a space time dataset used for temporal sampling
         @param header: Set True to print column names
         @param separator: The field separator character between the columns
         @param method: The method to be used for temporal sampling 
                        (start,during,contain,overlap,equal)
         @param spatial: Perform spatial overlapping check
+        @param print_only: If set True (default) then the result of the sampling will be 
+                    printed to stdout, if set to False the resulting map matrix 
+                    will be returned. 
+                    
+        @return The map matrix or None if nothing found
     """
     mapset = core.gisenv()["MAPSET"]
 
+    # Make a method list
+    method = method.split(",")
+
+    # Split the inputs
     input_list = inputs.split(",")
     sts = []
 
@@ -672,6 +684,11 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
             mapmatrizes.append(mapmatrix)
 
     if len(mapmatrizes) > 0:
+        
+        # Simply return the map matrix
+        if not print_only:
+            dbif.close()
+            return mapmatrizes
 
         if header:
             string = ""
@@ -726,6 +743,10 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, se
             print string
 
     dbif.close()
+    if len(mapmatrizes) > 0:
+        return mapmatrizes
+    
+    return None
 
 ###############################################################################
 
@@ -821,3 +842,60 @@ def tlist(type):
 
     return output
 
+###############################################################################
+
+def create_space_time_dataset(name, type, temporaltype, title, descr, semantic,
+                              dbif=None, overwrite=False):
+    """!Create a new space time dataset
+    
+       This function is sensitive to the settings in grass.core.overwrite to
+       overwrute existing space time datasets.
+    
+       @param name: The name of the new space time dataset
+       @param type: The type (strds, stvds, str3ds) of the new space time dataset
+       @param temporaltype: The temporal type (relative or absolute)
+       @param title: The title
+       @param descr: The dataset description
+       @param semantic: Semantical information
+       @param dbif: The temporal database interface to be used
+       
+       @return The new created space time dataset
+       
+       This function will raise a ScriptError in case of an error.
+    """
+    
+    #Get the current mapset to create the id of the space time dataset
+
+    mapset = core.gisenv()["MAPSET"]
+    id = name + "@" + mapset
+
+    sp = dataset_factory(type, id)
+
+    dbif, connect = init_dbif(dbif)
+
+    if sp.is_in_db(dbif) and overwrite == False:
+        if connect:
+            dbif.close()
+        core.fatal(_("Space time %s dataset <%s> is already in the database. "
+                      "Use the overwrite flag.") %
+                    (sp.get_new_map_instance(None).get_type(), name))
+        return None
+
+    if sp.is_in_db(dbif) and overwrite == True:
+        core.info(_("Overwrite space time %s dataset <%s> "
+                     "and unregister all maps.") %
+                   (sp.get_new_map_instance(None).get_type(), name))
+        sp.delete(dbif)
+        sp = sp.get_new_instance(id)
+
+    core.verbose(_("Create space time %s dataset.") %
+                  sp.get_new_map_instance(None).get_type())
+
+    sp.set_initial_values(temporal_type=temporaltype, semantic_type=semantic,
+                          title=title, description=descr)
+    sp.insert(dbif)
+
+    if connect:
+        dbif.close()
+        
+    return sp
