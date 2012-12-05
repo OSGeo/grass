@@ -80,7 +80,7 @@ class AnimationToolbar(BaseToolbar):
         self.Realize()
 
         self.isPlayingForward = True
-        self.EnableAllTools(False)
+        self.EnableAnimTools(False)
         
         
     def _toolbarData(self):
