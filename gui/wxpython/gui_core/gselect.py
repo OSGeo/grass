@@ -1274,7 +1274,7 @@ class GdalSelect(wx.Panel):
 
         # format
         self.format = FormatSelect(parent = self,
-                                   ogr = ogr)
+                                   ogr = ogr, size = (300, -1))
         self.format.Bind(wx.EVT_CHOICE, self.OnSetFormat)
         self.extension = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         self.extension.Bind(wx.EVT_TEXT, self.OnSetExtension)
@@ -1367,7 +1367,6 @@ class GdalSelect(wx.Panel):
         inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
         
         self.dsnSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        #self.dsnSizer.AddGrowableRow(0)
         self.dsnSizer.AddGrowableCol(3)
         
         row = 0
@@ -1643,7 +1642,8 @@ class GdalSelect(wx.Panel):
     def GetDsn(self):
         """!Get datasource name
         """
-        if self.format.GetStringSelection() == 'PostgreSQL':
+        if self.format.GetStringSelection() in ('PostgreSQL',
+                                                'PostGIS Raster driver'):
             dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
         else:
             dsn = self.input[self.dsnType][1].GetValue()
@@ -1779,16 +1779,17 @@ class GdalSelect(wx.Panel):
             pass
         
         else: # database
-            if format == 'SQLite' or format == 'Rasterlite':
+            if format in ('SQLite', 'Rasterlite'):
                 win = self.input['db-win']['file']
-            elif format == 'PostgreSQL' or format == 'PostGIS WKT Raster driver':
+            elif format in ('PostgreSQL', 'PostGIS WKT Raster driver',
+                            'PostGIS Raster driver'):
+                win = self.input['db-win']['choice']
                 # try to get list of PG databases
                 db = RunCommand('db.databases', quiet = True, read = True,
                                 driver = 'pg').splitlines()
                 if db is not None:
                     win.SetItems(sorted(db))
                 elif grass.find_program('psql', ['--help']):
-                    win = self.input['db-win']['choice']
                     if not win.GetItems():
                         p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
                         ret = p.communicate()[0]
