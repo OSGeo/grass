@@ -4,16 +4,12 @@
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/ScriptRules.make
+include $(MODULE_TOPDIR)/include/Make/HtmlRules.make
 
 MODULES  := $(patsubst g.gui.%.py,%,$(wildcard g.gui.*.py))
 CMDHTML  := $(patsubst %,$(HTMLDIR)/g.gui.%.html,$(MODULES))
 GUIHTML  := $(patsubst %,$(HTMLDIR)/wxGUI.%.html,$(MODULES))
 PYFILES  := $(patsubst %,$(SCRIPTDIR)/g.gui.%,$(MODULES))
-
-IMGSRC   := $(wildcard *.png) $(wildcard *.jpg)
-IMGDST   := $(patsubst %,$(HTMLDIR)/%,$(IMGSRC))
-
-htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2))
 
 guiscript: $(CMDHTML) $(GUIHTML) $(IMGDST) $(PYFILES)
 
@@ -29,9 +25,3 @@ g.gui.%.tmp.html: $(SCRIPTDIR)/g.gui.%
 
 $(SCRIPTDIR)/g.gui.%: g.gui.%.py | $(SCRIPTDIR)
 	$(INSTALL) $< $@
-
-$(HTMLDIR)/%.png: %.png | $(HTMLDIR)
-	$(INSTALL_DATA) $< $@
-
-$(HTMLDIR)/%.jpg: %.jpg | $(HTMLDIR)
-	$(INSTALL_DATA) $< $@
