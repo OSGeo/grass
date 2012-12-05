@@ -750,7 +750,7 @@ int main(int argc, char *argv[])
 
     use_tmp_vect = n_polygon_boundaries > 0;
 
-    G_debug(0, "3D ? %d", input3d);
+    G_debug(1, "Input is 3D ? %s", (input3d == 0 ? "yes" : "no"));
     with_z = input3d;
     if (with_z)
 	with_z = !flag.force2d->answer;
