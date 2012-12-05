@@ -1595,15 +1595,14 @@ class ImportDialog(wx.Dialog):
         
         self.layerBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY)
         if self.importType == 'gdal':
-            self.layerBox.SetLabel(" %s " % _("List of raster layers"))
+            label = _("List of raster layers")
         elif self.importType == 'ogr':
-            self.layerBox.SetLabel(" %s " % _("List of vector layers"))
+            label = _("List of vector layers")
         else:
-            self.layerBox.SetLabel(_(" List of %s layers ") % self.importType.upper())
+            label = _("List of %s layers") % self.importType.upper()
+        self.layerBox.SetLabel(" %s - %s " % (label, _("right click to (un)select all")))
         
-        #
         # list of layers
-        #
         columns = [_('Layer id'),
                    _('Layer name'),
                    _('Name for output GRASS map (editable)')]

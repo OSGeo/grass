@@ -710,6 +710,7 @@ def _parseFormats(output, writableOnly = False):
                     'ODBC', 'ESRI Personal GeoDatabase',
                     'Rasterlite',
                     'PostGIS WKT Raster driver',
+                    'PostGIS Raster driver',
                     'CouchDB'):
             formats['database'].append(name)
         elif name in ('GeoJSON',
