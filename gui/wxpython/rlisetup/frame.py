@@ -107,8 +107,8 @@ class RLiSetupFrame(wx.Frame):
         self.Destroy()
 
     def OnHelp(self, event):
-        """!Launches r.mapcalc help"""
-        gcmd.RunCommand('g.manual', parent=self, entry=self.cmd)
+        """!Launches help"""
+        gcmd.RunCommand('g.manual', parent = self, entry = 'wxGUI.rlisetup')
 
     def OnRemove(self, event):
         """!Remove configuration file from path and update the list"""
