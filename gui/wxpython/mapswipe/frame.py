@@ -464,7 +464,7 @@ class SwipeMapFrame(DoubleMapFrame):
         return True
 
     def OnHelp(self, event):
-        self._giface.Help(entry = 'wxGUI.MapSwipe')
+        self._giface.Help(entry = 'wxGUI.mapswipe')
 
     def OnCloseWindow(self, event):
         self.GetFirstMap().Clean()
