@@ -34,7 +34,7 @@ static char **tokenize(const char *, const char *, const char *);
   tokens = G_tokenize(buf, " |:,");
   ntok = G_number_of_tokens(tokens);
   for (i=0; i < ntok; i++) {
-     G_debug(0, "%d=[%s]", i, tokens[i]);
+     G_debug(1, "%d=[%s]", i, tokens[i]);
   }
   G_free_tokens(tokens);
   \endcode

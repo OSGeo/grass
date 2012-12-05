@@ -61,7 +61,7 @@ int display_label(struct Map_info *Map, int type,
 	list = Vect_new_boxlist(FALSE); /* bboxes not needed */
 	Vect_get_constraint_box(Map, &box);
 	nlines = Vect_select_lines_by_box(Map, &box, GV_CENTROID, list);
-	G_debug(0, "ncentroids (ogr) = %d", nlines);
+	G_debug(3, "ncentroids (ogr) = %d", nlines);
 	
 	for (line = 0; line < nlines; line++) {
 	    ltype = Vect_read_line(Map, Points, Cats, list->id[line]);

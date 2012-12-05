@@ -319,7 +319,7 @@ int main(int argc, char **argv)
     nlines = Vect_get_num_lines(&In);
     /* for ( line = 19; line <= 19; line++ ) { */
     for (line = 1; line <= nlines; line++) {
-	G_debug(0, "  line = %d / %d", line, nlines);
+	G_debug(3, "  line = %d / %d", line, nlines);
 	type = Vect_read_line(&In, LPoints, LCats, line);
 	if (!(type & GV_LINE))
 	    continue;
@@ -391,7 +391,7 @@ int main(int argc, char **argv)
 	    nrseg++;
 	}
 
-	G_debug(0, "    %d reference segments selected", nrseg);
+	G_debug(3, "    %d reference segments selected", nrseg);
 	if (nrseg == 0)
 	    continue;
 

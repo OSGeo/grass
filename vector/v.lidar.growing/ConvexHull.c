@@ -264,8 +264,8 @@ struct element_grow **P_alloc_element(int rows, int cols)
 void nrerror(char error_text[])
 /* standard error handler */
 {
-    G_debug(0, "run-time error...");
-    G_debug(0, "%s", error_text);
+    G_debug(1, "run-time error...");
+    G_debug(1, "%s", error_text);
     G_fatal_error(_("...now exiting to system..."));
     exit(EXIT_FAILURE);
 }
