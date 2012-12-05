@@ -25,10 +25,6 @@ int myrng(double *numbers, int n,
 	/* is this how to do transformation? */
 	for (i = 0; i < n; ++i)
 	    numbers[i] *= p2, numbers[i] += p1;
-
-    /*
-       for(i=0;i<n;++i)
-       G_debug(0,"%g",numbers[i]);
-     */
+    
     return 0;
 }

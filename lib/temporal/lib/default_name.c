@@ -60,8 +60,7 @@ int tgis_set_default_connection(void)
 {
     dbConnection connection;
 
-    G_debug(0,
-	    "Creating new default TGIS DB params with tgis_set_default_connection()");
+    G_verbose_message(_("Creating new default TGIS DB params"));
 
     if (strcmp(TGISDB_DEFAULT_DRIVER, "sqlite") == 0) {
 
@@ -71,7 +70,7 @@ int tgis_set_default_connection(void)
 	tgis_set_connection(&connection);
     }
     else
-	G_fatal_error(_("Programmer error"));
+	G_fatal_error(_("Programmer error - only SQLite driver is currently supported"));
 
     return DB_OK;
 }

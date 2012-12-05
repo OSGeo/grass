@@ -273,8 +273,8 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
                     Rast3d_set_null_value(&value, 1, DCELL_TYPE);
                 } else {
                     if (sscanf(buff, "%lf", &value) != 1) {
-                        G_warning(_("Invalid value detected."));
-                        G_debug(0, "invalid value at col=%d row=%d depth=%d last_value=[%s]",
+                        G_warning(_("Invalid value detected"));
+                        G_debug(1, "invalid value at col=%d row=%d depth=%d last_value=[%s]",
                                 x + 1, y + 1, z + 1, buff);
                         fatalError("asciiToG3d: read failed");
                     }
