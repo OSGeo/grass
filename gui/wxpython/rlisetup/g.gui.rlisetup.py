@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 ############################################################################
 #
-# MODULE:    RLi Setup
+# MODULE:    g.gui.rlisetup
 # AUTHOR(S): Luca Delucchi <lucadeluge gmail.com>
 # PURPOSE:   RLi Setup to create configuration file for r.li modules
-# COPYRIGHT: (C) 2012 by Luca, Delucchi, and the GRASS Development Team
+# COPYRIGHT: (C) 2012 by Luca Delucchi, and the GRASS Development Team
 #
 #  This program is free software; you can 1redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -19,26 +19,24 @@
 ############################################################################
 
 #%module
-#% description: Allows to interactively create, edit and manage models.
+#% description: Configuration tool for r.li modules.
 #% keywords: general
 #% keywords: gui
-#% keywords: graphical modeler
-#% keywords: workflow
+#% keywords: raster
+#% keywords: landscape structure analysis
 #%end
 
 import os
 import sys
-
-import  wx
 import gettext
 
+import  wx
 import grass.script as grass
 
 sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.giface import StandaloneGrassInterface
 from rlisetup.frame import RLiSetupFrame
-
 
 def main():
     import gettext
