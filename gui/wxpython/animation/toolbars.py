@@ -80,6 +80,7 @@ class AnimationToolbar(BaseToolbar):
         self.Realize()
 
         self.isPlayingForward = True
+        self.EnableAllTools(False)
         
         
     def _toolbarData(self):
@@ -143,8 +144,6 @@ class AnimationToolbar(BaseToolbar):
             self.EnableTool(self.playForward, not self.isPlayingForward)
             self.EnableTool(self.playBack, self.isPlayingForward)
 
-
-
     def OnStop(self, event):
         self.Stop()
         self.parent.OnStop(event)
@@ -179,6 +178,13 @@ class AnimationToolbar(BaseToolbar):
 
         self.ToggleTool(self.oneDirectionReplay, one)
         self.ToggleTool(self.bothDirectionReplay, both)
+
+    def EnableAnimTools(self, enable):
+        """!Enable or diable animation tools"""
+        self.EnableTool(self.playForward, enable)
+        self.EnableTool(self.playBack, enable)
+        self.EnableTool(self.pause, enable)
+        self.EnableTool(self.stop, enable)
 
 class MiscToolbar(BaseToolbar):
     """!Toolbar with miscellaneous tools related to app
