@@ -235,7 +235,7 @@ class AnimationFrame(wx.Frame):
     def OnHelp(self, event):
         RunCommand('g.manual',
                    quiet = True,
-                   entry = 'wxGUI.Animation')
+                   entry = 'wxGUI.animation')
 
     def OnCloseWindow(self, event):
         self.Destroy()
