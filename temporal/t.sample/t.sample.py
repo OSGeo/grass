@@ -77,14 +77,12 @@ def main():
     method = options["method"]
     header = flags["c"]
     spatial = flags["s"]
-
-    method = method.split(",")
-
+    
     # Make sure the temporal database exists
     tgis.init()
 
     tgis.sample_stds_by_stds_topology(intype, samtype, inputs, sampler,
-                                      header, separator, method, spatial)
+                                      header, separator, method, spatial, True)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

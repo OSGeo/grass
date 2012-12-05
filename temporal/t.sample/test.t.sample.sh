@@ -51,15 +51,18 @@ pnts8|2001-01-25|2001-01-30
 EOF
 
 
-t.create --o type=strds temporaltype=absolute output=precip_abs0 title="A test with raster input files" descr="A test with raster input files"
-t.create --o type=stvds temporaltype=absolute output=pnts_abs0 title="A test with vector input files" descr="A test with vector input files"
-t.create --o type=stvds temporaltype=absolute output=pnts_abs1 title="A test with vector input files" descr="A test with vector input files"
+t.create --o type=strds temporaltype=absolute output=precip_abs0 \
+	title="A test with raster input files" descr="A test with raster input files"
+t.create --o type=stvds temporaltype=absolute output=pnts_abs0 \
+	title="A test with vector input files" descr="A test with vector input files"
+t.create --o type=stvds temporaltype=absolute output=pnts_abs1 \
+	title="A test with vector input files" descr="A test with vector input files"
 
-t.register type=rast -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.register --o type=rast -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 t.rast.list precip_abs0 -h
-t.register type=vect    input=pnts_abs0 file="${n2}" start=file end=file
+t.register --o type=vect    input=pnts_abs0 file="${n2}"
 t.vect.list pnts_abs0 -h
-t.register type=vect    input=pnts_abs1 file="${n3}" start=file end=file
+t.register --o type=vect    input=pnts_abs1 file="${n3}"
 t.vect.list pnts_abs1 -h
 
 # The @test
@@ -74,7 +77,7 @@ t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -cs
 
 
 # Test with temporal point data
-t.register type=rast    input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.register --o type=rast input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 t.rast.list precip_abs0 -h
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs0 -cs
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs1 -cs
