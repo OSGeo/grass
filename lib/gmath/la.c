@@ -27,13 +27,9 @@
 #include <string.h>
 #include <math.h>
 
-
-/********
- ******** only compile this LAPACK/BLAS wrapper file if g2c.h is present!
- ********/
 #include <grass/config.h>
 
-#if defined(HAVE_LIBLAPACK) && defined(HAVE_LIBBLAS) && defined(HAVE_G2C_H)
+#if defined(HAVE_LIBLAPACK) && defined(HAVE_LIBBLAS)
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
