@@ -1593,15 +1593,20 @@ class ImportDialog(wx.Dialog):
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
-        self.layerBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                     label = _(" List of %s layers ") % self.importType.upper())
+        self.layerBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY)
+        if self.importType == 'gdal':
+            self.layerBox.SetLabel(" %s " % _("List of raster layers"))
+        elif self.importType == 'ogr':
+            self.layerBox.SetLabel(" %s " % _("List of vector layers"))
+        else:
+            self.layerBox.SetLabel(_(" List of %s layers ") % self.importType.upper())
         
         #
         # list of layers
         #
         columns = [_('Layer id'),
                    _('Layer name'),
-                   _('Name for GRASS map (editable)')]
+                   _('Name for output GRASS map (editable)')]
         if itype == 'ogr':
             columns.insert(2, _('Feature type'))
         self.list = LayersList(parent = self.panel, columns = columns)
@@ -1790,6 +1795,8 @@ class GdalImportDialog(ImportDialog):
     def __init__(self, parent, giface, ogr = False, link = False):
         """!Dialog for bulk import of various raster/vector data
 
+        @todo Split into GdalImportDialog and OgrImportDialog
+
         @param parent parent window
         @param ogr True for OGR (vector) otherwise GDAL (raster)
         @param link True for linking data otherwise importing data
@@ -1932,6 +1939,8 @@ class GdalOutputDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, ogr = False,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, *kwargs):
         """!Dialog for setting output format for rasters/vectors
+
+        @todo Split into GdalOutputDialog and OgrOutputDialog
 
         @param parent parent window
         @param id window id
