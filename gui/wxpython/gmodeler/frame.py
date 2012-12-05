@@ -292,7 +292,7 @@ class ModelFrame(wx.Frame):
         
     def OnHelp(self, event):
         """!Show help"""
-        self._giface.Help(entry = 'wxGUI.Modeler')
+        self._giface.Help(entry = 'wxGUI.gmodeler')
 
     def OnModelProperties(self, event):
         """!Model properties dialog"""
