@@ -79,8 +79,8 @@ def main():
         frame.SetFirstRaster(first)
     if second:
         frame.SetSecondRaster(second)
-
-    frame.SetRasterNames()
+    if first or second:
+        frame.SetRasterNames()
     frame.ZoomToMap()
     frame.Show()
 
