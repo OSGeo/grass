@@ -382,7 +382,7 @@ class PsMapFrame(wx.Frame):
             instrFile.close()   
             
     def OnLoadFile(self, event):
-        """!Load file and read instructions"""
+        """!Launch file dialog and load selected file"""
         #find file
         filename = ''
         dlg = wx.FileDialog(self, message = "Find instructions file", defaultDir = "", 
@@ -394,6 +394,10 @@ class PsMapFrame(wx.Frame):
         if not filename:
             return
         # load instructions
+        self.LoadFile(filename)
+
+    def LoadFile(self, filename):
+        """!Load file and read instructions"""
         readObjectId = []
         readInstruction = Instruction(parent = self, objectsToDraw = readObjectId)
         ok = readInstruction.Read(filename)
@@ -410,7 +414,7 @@ class PsMapFrame(wx.Frame):
             #self.canvas.ZoomAll()
             
             self.DialogDataChanged(self.objectId)
-            
+
     def OnPageSetup(self, event = None):
         """!Specify paper size, margins and orientation"""
         id = self.instruction.FindInstructionByType('page').id

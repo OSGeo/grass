@@ -6,7 +6,7 @@
 # PURPOSE:   Cartographic Composer
 # COPYRIGHT: (C) 2011-2012 by Anna Kratochvilova, and the GRASS Development Team
 #
-#  This program is free software; you can 1redistribute it and/or
+#  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
 #  published by the Free Software Foundation; either version 2 of the
 #  License, or (at your option) any later version.
@@ -51,11 +51,11 @@ def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
     frame = PsMapFrame(parent = None)
-    if options['file']:
-        grass.fatal(_("To be implemented"))
-    
     frame.Show()
-    
+
+    if options['file']:
+        frame.LoadFile(options['file'])
+
     app.MainLoop()
 
 if __name__ == "__main__":
