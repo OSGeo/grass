@@ -80,6 +80,8 @@ def main():
     if second:
         frame.SetSecondRaster(second)
 
+    frame.SetRasterNames()
+    frame.ZoomToMap()
     frame.Show()
 
     app.MainLoop()

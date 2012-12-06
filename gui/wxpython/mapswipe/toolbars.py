@@ -58,6 +58,9 @@ class SwipeMapToolbar(BaseToolbar):
                                      ("erase", icons["erase"],
                                       self.parent.OnErase),
                                      (None, ), # creates separator
+                                     ("pointer", icons["pointer"],
+                                      self.parent.OnPointer,
+                                      wx.ITEM_CHECK),
                                      ("pan", icons["pan"],
                                       self.parent.OnPan,
                                       wx.ITEM_CHECK), # toggle tool

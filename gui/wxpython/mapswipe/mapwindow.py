@@ -119,6 +119,38 @@ class SwipeBufferedWindow(BufferedWindow):
 
         return super(SwipeBufferedWindow, self).Draw(pdc, img, drawid, pdctype, coords)
         
+    def OnLeftDown(self, event):
+        """!Left mouse button pressed.
+
+        In case of 'pointer' mode, coordinates must be adjusted.
+        """
+        if self.mouse['use'] == 'pointer':
+            evX, evY = event.GetPositionTuple()[:]
+            imX, imY = self.GetImageCoords()
+            self.lastpos = evX + imX, evY + imY
+            # get decoration or text id
+            self.dragid = None
+            idlist = self.pdc.FindObjects(self.lastpos[0], self.lastpos[1],
+                                          self.hitradius)
+            if 99 in idlist:
+                idlist.remove(99)
+            if idlist:
+                self.dragid = idlist[0] #drag whatever is on top
+        else:
+            super(SwipeBufferedWindow, self).OnLeftDown(event)
+
+    def OnDragging(self, event):
+        """!Mouse dragging - overlay (text) is moving.
+
+        Coordinates must be adjusted.
+        """
+        if (self.mouse['use'] == 'pointer' and self.dragid != None):
+            evX, evY = event.GetPositionTuple()
+            imX, imY = self.GetImageCoords()
+            self.DragItem(self.dragid, (evX + imX, evY + imY))
+        else:
+            super(SwipeBufferedWindow, self).OnDragging(event)
+
     def TranslateImage(self, dx, dy):
         """!Translate image and redraw.
         """
@@ -126,7 +158,13 @@ class SwipeBufferedWindow(BufferedWindow):
 
         self.pdc.TranslateId(self.imageId, dx, dy)
         self.Refresh()
-        
+
+    def SetRasterNameText(self, name, textId):
+        """!Sets text label with map name."""
+        self.textdict[textId] = {'bbox': wx.Rect(), 'coords': [10, 10],
+                                 'font': self.GetFont(), 'color': wx.BLACK,
+                                 'rotation': 0, 'text': name,
+                                 'active': True}
 
     def MouseActions(self, event):
         """!Handle mouse events and if needed let parent frame know"""

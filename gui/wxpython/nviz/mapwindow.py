@@ -693,7 +693,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 
         if self.mouse['use'] == 'pointer':
             if self.dragid > 0:
-                self.DragItem(self.dragid, event)
+                self.DragItem(self.dragid, event.GetPositionTuple())
             
         if self.mouse['use'] == 'rotate':    
             dx, dy = event.GetX() - self.mouse['tmp'][0], event.GetY() - self.mouse['tmp'][1]
@@ -909,14 +909,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.render['quick'] = True
             self.Refresh(False)
             
-    def DragItem(self, id, event):
+    def DragItem(self, id, coords):
         """!Drag an overlay decoration item
         """
         if not id: return
         Debug.msg (5, "GLWindow.DragItem(): id=%d" % id)
         x, y = self.mouse['tmp']
-        dx = event.GetX() - x
-        dy = event.GetY() - y
+        dx = coords[0] - x
+        dy = coords[1] - y
         for texture in self.imagelist:
             if texture.id == id:
                 texture.MoveTexture(dx, dy)
@@ -925,7 +925,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.render['quick'] = True
         self.Refresh(False)
         
-        self.mouse['tmp'] = (event.GetX(), event.GetY()) 
+        self.mouse['tmp'] = coords
         
     def ZoomBack(self):
         """!Set previous view in history list

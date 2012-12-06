@@ -796,14 +796,14 @@ class BufferedWindow(MapWindow, wx.Window):
         self.dragimg.DoDrawImage(dc, moveto)
         self.dragimg.EndDrag()
         
-    def DragItem(self, id, event):
+    def DragItem(self, id, coords):
         """!Drag an overlay decoration item
         """
         if id == 99 or id == '' or id == None: return
         Debug.msg (5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
-        dx = event.GetX() - x
-        dy = event.GetY() - y
+        dx = coords[0] - x
+        dy = coords[1] - y
         self.pdc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         r = self.pdc.GetIdBounds(id)
         
@@ -826,7 +826,7 @@ class BufferedWindow(MapWindow, wx.Window):
         r = r.Union(r2)
         r.Inflate(4,4)
         self.RefreshRect(r, False)
-        self.lastpos = (event.GetX(), event.GetY())
+        self.lastpos = (coords[0], coords[1])
                 
     def MouseDraw(self, pdc = None, begin = None, end = None):
         """!Mouse box or line from 'begin' to 'end'
@@ -1083,7 +1083,8 @@ class BufferedWindow(MapWindow, wx.Window):
         elif (self.mouse['use'] == 'pointer' and 
                 not digitToolbar and 
                 self.dragid != None):
-            self.DragItem(self.dragid, event)
+            coords = event.GetPositionTuple()
+            self.DragItem(self.dragid, coords)
         
         # dragging anything else - rubber band box or line
         else:
@@ -1128,13 +1129,13 @@ class BufferedWindow(MapWindow, wx.Window):
         
         elif self.mouse['use'] == 'pointer':
             # get decoration or text id
-            self.idlist = []
+            idlist = []
             self.dragid = ''
             self.lastpos = self.mouse['begin']
             idlist = self.pdc.FindObjects(self.lastpos[0], self.lastpos[1],
                                           self.hitradius)
             if 99 in idlist:
-                idlist.remove(99)                             
+                idlist.remove(99)
             if idlist != []:
                 self.dragid = idlist[0] #drag whatever is on top
         else:
