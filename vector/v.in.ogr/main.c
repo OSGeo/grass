@@ -350,8 +350,7 @@ int main(int argc, char *argv[])
 	    G_store((char *)OGR_FD_GetName(Ogr_featuredefn));
 
 	if (flag.list->answer)
-	    fprintf(stdout, "%s (%s)\n", available_layer_names[i], 
-		    OGRGeometryTypeToName(Ogr_geom_type));
+	    fprintf(stdout, "%s\n", available_layer_names[i]);
     }
     if (flag.list->answer) {
 	fflush(stdout);
