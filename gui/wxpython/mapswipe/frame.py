@@ -284,8 +284,10 @@ class SwipeMapFrame(DoubleMapFrame):
         Set display extents to match selected raster (including NULLs)
         or vector map.
         """
-        self.GetFirstWindow().ZoomToMap(layers = self.Map.GetListOfLayers())
-        self.GetSecondWindow().ZoomToMap(layers = self.Map.GetListOfLayers())
+        if self.rasters['first']:
+            self.GetFirstWindow().ZoomToMap(layers = self.firstMap.GetListOfLayers())
+        if self.rasters['second']:
+            self.GetSecondWindow().ZoomToMap(layers = self.secondMap.GetListOfLayers())
         # needed again, don't know why
         self.firstMap.region = self.secondMap.region
 
