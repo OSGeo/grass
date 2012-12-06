@@ -21,9 +21,6 @@ import textwrap
 import Queue
 from math import sin, cos, pi, sqrt
 
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-from core             import globalvar
 import wx
 
 try:
@@ -33,6 +30,7 @@ except ImportError:
 
 import grass.script as grass
 
+from core               import globalvar
 from gui_core.menu      import Menu
 from core.gconsole      import CmdThread, EVT_CMD_DONE
 from psmap.toolbars     import PsMapToolbar
@@ -1008,11 +1006,11 @@ class PsMapFrame(wx.Frame):
         if self.parent and self.parent.GetName() == 'LayerManager':
             log = self.parent.GetLogWindow()
             log.RunCmd(['g.manual',
-                        'entry=wxGUI.PsMap'])
+                        'entry=wxGUI.psmap'])
         else:
             RunCommand('g.manual',
                        quiet = True,
-                       entry = 'wxGUI.PsMap')
+                       entry = 'wxGUI.psmap')
         
     def OnAbout(self, event):
         """!Display About window"""
@@ -2220,17 +2218,3 @@ def GhostscriptForWindows(tile, size, fp):
         except: pass
 
     return im
-
-def main():
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
-    app = wx.PySimpleApp()
-    wx.InitAllImageHandlers()
-    frame = PsMapFrame()
-    frame.Show()
-    
-    app.MainLoop()
-
-if __name__ == "__main__":
-    main()
