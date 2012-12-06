@@ -17,13 +17,12 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import locale
 
 import wx
 
 from core.utils     import normalize_whitespace
 from core.settings  import UserSettings
-from core.gcmd      import EncodeString
+from core.gcmd      import EncodeString, GetDefaultEncoding
 from nviz.main      import NvizSettings
 
 class ProcessWorkspaceFile:
@@ -562,8 +561,8 @@ class WriteWorkspaceFile(object):
         self.indent = 0
         
         # write header
-        enc = locale.getdefaultlocale()[1]
-        self.file.write('<?xml version="1.0" encoding="%s"?>\n' % enc)
+
+        self.file.write('<?xml version="1.0" encoding="%s"?>\n' % GetDefaultEncoding(forceUTF8 = True))
         self.file.write('<!DOCTYPE gxw SYSTEM "grass-gxw.dtd">\n')
         self.file.write('%s<gxw>\n' % (' ' * self.indent))
         
