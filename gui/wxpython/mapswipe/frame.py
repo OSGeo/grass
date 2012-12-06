@@ -314,6 +314,7 @@ class SwipeMapFrame(DoubleMapFrame):
                     message += _("Map <%s> not found.") % maps[1]
                 GError(parent = self, message = message)
                 dlg.Destroy()
+            self.SetRasterNames()
             self.ZoomToMap()
 
         dlg.Destroy()
@@ -452,6 +453,20 @@ class SwipeMapFrame(DoubleMapFrame):
         self._mgr.Update()
         splitter.OnSashChanged(None)
         self.OnSize(None)
+        self.SetRasterNames()
+
+    def OnAddText(self, event):
+        """!Double click on text overlay
+
+        So far not implemented.
+        """
+        pass
+
+    def SetRasterNames(self):
+        if self.rasters['first']:
+            self.GetFirstWindow().SetRasterNameText(self.rasters['first'], 101)
+        if self.rasters['second']:
+            self.GetSecondWindow().SetRasterNameText(self.rasters['second'], 102)
 
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""

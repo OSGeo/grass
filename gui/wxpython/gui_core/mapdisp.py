@@ -564,7 +564,14 @@ class DoubleMapFrame(MapFrameBase):
         self._preparePan(mapWindow = win)
         
     def OnPointer(self, event):
+        """!Set pointer mode (dragging overlays)"""
+        toolbar = self.GetMapToolbar()
+        self.SwitchTool(toolbar, event)
+
         self.GetFirstWindow().mouse['use'] = 'pointer'
+        self.GetFirstWindow().SetCursor(self.cursors["default"])
+        self.GetSecondWindow().mouse['use'] = 'pointer'
+        self.GetSecondWindow().SetCursor(self.cursors["default"])
 
     def OnRender(self, event):
         """!Re-render map composition (each map layer)
