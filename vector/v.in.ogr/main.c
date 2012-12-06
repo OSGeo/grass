@@ -222,8 +222,7 @@ int main(int argc, char *argv[])
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
-    flag.list->description = _("List available OGR layers including feature types " 
-				"in data source and exit"); 
+    flag.list->description = _("List available OGR layers in data source and exit"); 
     flag.list->guisection = _("Print");
     flag.list->suppress_required = YES;
 
