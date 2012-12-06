@@ -252,8 +252,8 @@ class SbManager:
                 x, y = rect.x + 3, rect.y - 1
                 w, h = wWin, rect.height + 2
             else: # choice || auto-rendering
-                x, y = rect.x, rect.y - 1
-                w, h = rect.width, rect.height + 2
+                x, y = rect.x, rect.y
+                w, h = rect.width, rect.height + 1
                 if idx == 2: # mask
                     x += 5
                     y += 4
