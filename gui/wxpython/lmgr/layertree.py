@@ -398,29 +398,25 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.popupMenu.Append(self.popupID['remove'], text = _("Remove"))
         self.Bind(wx.EVT_MENU, self.lmgr.OnDeleteLayer, id = self.popupID['remove'])
         
-        if ltype != "command":
+        if ltype != "command" and numSelected == 1:
             self.popupMenu.Append(self.popupID['rename'], text = _("Rename"))
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id = self.popupID['rename'])
-            if numSelected > 1:
-                self.popupMenu.Enable(self.popupID['rename'], False)
         
         # map layer items
         if ltype not in ("group", "command"):
-            self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID['opacity'], text = _("Change opacity level"))
-            self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id = self.popupID['opacity'])
-            self.popupMenu.Append(self.popupID['properties'], text = _("Properties"))
-            self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID['properties'])
+            if numSelected == 1:
+                self.popupMenu.AppendSeparator()
+                self.popupMenu.Append(self.popupID['opacity'], text = _("Change opacity level"))
+                self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id = self.popupID['opacity'])
+                self.popupMenu.Append(self.popupID['properties'], text = _("Properties"))
+                self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID['properties'])
             
-            if numSelected > 1:
-                self.popupMenu.Enable(self.popupID['opacity'], False)
-                self.popupMenu.Enable(self.popupID['properties'], False)
-            
-            if ltype in ('raster', 'vector', '3d-raster') and self.lmgr.IsPaneShown('toolbarNviz'):
-                self.popupMenu.Append(self.popupID['nviz'], _("3D view properties"))
-                self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID['nviz'])
+                if ltype in ('raster', 'vector', '3d-raster') and self.lmgr.IsPaneShown('toolbarNviz'):
+                    self.popupMenu.Append(self.popupID['nviz'], _("3D view properties"))
+                    self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID['nviz'])
             
             if ltype in ('raster', 'vector', 'rgb'):
+                self.popupMenu.AppendSeparator()
                 self.popupMenu.Append(self.popupID['zoom'], text = _("Zoom to selected map(s)"))
                 self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToMap, id = self.popupID['zoom'])
                 self.popupMenu.Append(self.popupID['region'], text = _("Set computational region from selected map(s)"))
@@ -433,7 +429,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mltype = None
         
         # vector layers (specific items)
-        if mltype and mltype == "vector":
+        if mltype and mltype == "vector" and numSelected == 1:
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID['export'], text = _("Export"))
             self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.ogr',
@@ -504,52 +500,33 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
-            if numSelected > 1:
-                self.popupMenu.Enable(self.popupID['attr'],   False)
-                self.popupMenu.Enable(self.popupID['edit0'],  False)
-                self.popupMenu.Enable(self.popupID['edit1'],  False)
-                self.popupMenu.Enable(self.popupID['meta'],   False)
-                self.popupMenu.Enable(self.popupID['bgmap'],  False)
-                self.popupMenu.Enable(self.popupID['topo'],   False)
-                self.popupMenu.Enable(self.popupID['export'], False)
-        
+            
         # raster layers (specific items)
         elif mltype and mltype == "raster":
             self.popupMenu.Append(self.popupID['zoom1'], text = _("Zoom to selected map(s) (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id = self.popupID['zoom1'])
             self.popupMenu.Append(self.popupID['region1'], text = _("Set computational region from selected map(s) (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id = self.popupID['region1'])
-            
-            self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID['export'], text = _("Export"))
-            self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.out.gdal',
-                                                                        'input=%s' % mapLayer.GetName()]),
-                      id = self.popupID['export'])
-            
-            self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID['color'], _("Set color table"))
-            self.Bind (wx.EVT_MENU, self.OnRasterColorTable, id = self.popupID['color'])
-            self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
-            self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
-            self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
-            self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
-            self.popupMenu.Append(self.popupID['prof'], _("Profile"))
-            self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
-            self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
-            self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
-            
-            if numSelected > 1:
-                self.popupMenu.Enable(self.popupID['zoom1'],   False)
-                self.popupMenu.Enable(self.popupID['region1'], False)
-                self.popupMenu.Enable(self.popupID['color'],   False)
-                self.popupMenu.Enable(self.popupID['hist'],    False)
-                self.popupMenu.Enable(self.popupID['univar'],  False)
-                self.popupMenu.Enable(self.popupID['prof'],    False)
-                self.popupMenu.Enable(self.popupID['meta'],    False)
-                self.popupMenu.Enable(self.popupID['export'],  False)
-                if self.lmgr.IsPaneShown('toolbarNviz'):
-                    self.popupMenu.Enable(self.popupID['nviz'], False)
 
+            if numSelected == 1:
+                self.popupMenu.AppendSeparator()
+                self.popupMenu.Append(self.popupID['export'], text = _("Export"))
+                self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.out.gdal',
+                                                                            'input=%s' % mapLayer.GetName()]),
+                          id = self.popupID['export'])
+            
+                self.popupMenu.AppendSeparator()
+                self.popupMenu.Append(self.popupID['color'], _("Set color table"))
+                self.Bind (wx.EVT_MENU, self.OnRasterColorTable, id = self.popupID['color'])
+                self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
+                self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
+                self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
+                self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
+                self.popupMenu.Append(self.popupID['prof'], _("Profile"))
+                self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
+                self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
+                self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
+        
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()
 
