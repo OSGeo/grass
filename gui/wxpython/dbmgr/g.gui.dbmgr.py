@@ -33,6 +33,7 @@ import sys
 
 import  wx
 import gettext
+gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
 import grass.script as grass
 
@@ -41,15 +42,17 @@ sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 from dbmgr.manager import AttributeManager
 
 def main():
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    # some applications might require image handlers
-    wx.InitAllImageHandlers()
+    mapName = grass.find_file(options['map'], element = 'vector')['fullname']
+    if not mapName:
+        grass.set_raise_on_error(False)
+        grass.fatal(_("Vector map <%s> not found") % options['map'])
     
     app = wx.PySimpleApp()
+    grass.message(_("Loading attribute data for vector map <%s>...") % mapName)
     f = AttributeManager(parent = None, id = wx.ID_ANY,
                          title = "%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
-                                              options['map']),
-                         size = (900, 600), vectorName = options['map'])
+                                                mapName),
+                         size = (900, 600), vectorName = mapName)
     f.Show()
     
     app.MainLoop()
