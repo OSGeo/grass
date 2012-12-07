@@ -447,6 +447,7 @@ class GMFrame(wx.Frame):
             win.SetFirstRaster(rasters[0])
         if len(rasters) >= 2:
             win.SetSecondRaster(rasters[1])
+            win.SetRasterNames()
 
         win.CentreOnScreen()
         win.Show()

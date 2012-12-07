@@ -527,9 +527,7 @@ class SwipeMapFrame(DoubleMapFrame):
         return self.toolbars['swipeMap']
 
     def IsStandalone(self):
-        if self.parent:
-            return False
-
+        """!Since we do not need layer manager, we are standalone"""
         return True
 
     def OnHelp(self, event):
