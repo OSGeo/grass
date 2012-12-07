@@ -68,6 +68,8 @@ class SwipeMapFrame(DoubleMapFrame):
         self.firstMap.region = self.secondMap.region
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
 
+        self._mode = 'swipe'
+
         self.splitter.SplitVertically(self.firstMapWindow, self.secondMapWindow, 0)
 
         self._addPanes()
@@ -153,6 +155,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self.GetFirstWindow().movingSash = True
         self.GetSecondWindow().movingSash = True
         pos = event.GetPosition()
+
         if pos > 0:
             self.splitter.SetSashPosition(pos)
             self.splitter.OnSashChanging(None)
@@ -375,28 +378,46 @@ class SwipeMapFrame(DoubleMapFrame):
         @todo specify size of the new image (problem is inaccurate scaling)
         @todo make dividing line width and color optional
         """
-        # get size paramteres
-        x, y = self.secondMapWindow.GetImageCoords()
-        width, height = self.splitter.GetClientSize()
+        w1 = self.splitter.GetWindow1()
+        w2 = self.splitter.GetWindow2()
         lineWidth = 1
         # render to temporary files
         filename1 = grass.tempfile(False) + '1'
         filename2 = grass.tempfile(False) + '2'
-        self.firstMapWindow.SaveToFile(filename1, fileType, width, height)
-        self.secondMapWindow.SaveToFile(filename2, fileType, width, height)
+        width, height = self.splitter.GetClientSize()
+        if self._mode == 'swipe':
+            x, y = w2.GetImageCoords()
+            w1.SaveToFile(filename1, fileType, width, height)
+            w2.SaveToFile(filename2, fileType, width, height)
+        else:
+            fw, fh = w1.GetClientSize()
+            w1.SaveToFile(filename1, fileType, fw, fh)
+            sw, sh = w2.GetClientSize()
+            w2.SaveToFile(filename2, fileType, sw, sh)
+
         # create empty white image  - needed for line
         im = wx.EmptyImage(width, height)
         im.Replace(0, 0, 0, 255, 255, 255)
 
         # paste images
-        if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
-            im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
-            im.Paste(im1, 0, 0)
-            im.Paste(wx.Image(filename2), -x, -y + lineWidth)
+        if self._mode == 'swipe':
+            if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+                im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
+                im.Paste(im1, 0, 0)
+                im.Paste(wx.Image(filename2), -x, -y + lineWidth)
+            else:
+                im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
+                im.Paste(im1, 0, 0)
+                im.Paste(wx.Image(filename2), -x + lineWidth, -y)
         else:
-            im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
-            im.Paste(im1, 0, 0)
-            im.Paste(wx.Image(filename2), -x + lineWidth, -y)
+            if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+                im1 = wx.Image(filename1)
+                im.Paste(im1, 0, 0)
+                im.Paste(wx.Image(filename2), 0, fh + lineWidth)
+            else:
+                im1 = wx.Image(filename1)
+                im.Paste(im1, 0, 0)
+                im.Paste(wx.Image(filename2), fw + lineWidth, 0)
         im.SaveFile(fileName, fileType)
 
         # remove temporary files
@@ -445,13 +466,15 @@ class SwipeMapFrame(DoubleMapFrame):
         if splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
             splitter.SplitVertically(self.firstMapWindow, self.secondMapWindow, 0)
             self.slider = self.sliderH
-            self._mgr.GetPane('sliderH').Show()
-            self._mgr.GetPane('sliderV').Hide()
+            if self._mode == 'swipe':
+                self._mgr.GetPane('sliderH').Show()
+                self._mgr.GetPane('sliderV').Hide()
         else:
             splitter.SplitHorizontally(self.firstMapWindow, self.secondMapWindow, 0)
             self.slider = self.sliderV
-            self._mgr.GetPane('sliderV').Show()
-            self._mgr.GetPane('sliderH').Hide()
+            if self._mode == 'swipe':
+                self._mgr.GetPane('sliderV').Show()
+                self._mgr.GetPane('sliderH').Hide()
         self._mgr.Update()
         splitter.OnSashChanged(None)
         self.OnSize(None)
@@ -463,6 +486,35 @@ class SwipeMapFrame(DoubleMapFrame):
         So far not implemented.
         """
         pass
+
+    def SetViewMode(self, mode):
+        """!Sets view mode.
+
+        @param mode view mode ('swipe', 'mirror')
+        """
+        if self._mode == mode:
+            return
+        self._mode = mode
+        self.toolbars['swipeMain'].SetMode(mode)
+        # set window mode
+        self.GetFirstWindow().SetMode(mode)
+        self.GetSecondWindow().SetMode(mode)
+        # hide/show slider
+        if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+            self._mgr.GetPane('sliderV').Show(mode == 'swipe')
+            size = self.splitter.GetSize()[1] / 2
+        else:
+            self._mgr.GetPane('sliderH').Show(mode == 'swipe')
+            size = self.splitter.GetSize()[0] / 2
+        # set sash in the middle
+        self.splitter.SetSashPosition(size)
+        self.slider.SetValue(size)
+        self._mgr.Update()
+        # enable / disable sash
+        self.splitter.EnableSash(mode == 'swipe')
+        # hack to make it work
+        self.splitter.OnSashChanged(None)
+        self.SendSizeEvent()
 
     def SetRasterNames(self):
         if self.rasters['first']:
@@ -501,8 +553,11 @@ class MapSplitter(wx.SplitterWindow):
         self.sashWidthMax = 10
         self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGED, self.OnSashChanged)
         self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGING, self.OnSashChanging)
-        
+        self._moveSash = True
         wx.CallAfter(self.Init)
+
+    def EnableSash(self, enable):
+        self._moveSash = enable
 
     def Init(self):
         self.OnSashChanged(evt = None)
@@ -535,7 +590,8 @@ class MapSplitter(wx.SplitterWindow):
 
     def OnSashChanged(self, evt):
         Debug.msg(5, "MapSplitter.OnSashChanged()")
-
+        if not self._moveSash:
+            return
         w1, w2 = self.GetWindow1(), self.GetWindow2()
         w1.movingSash = False
         w2.movingSash = False
@@ -562,7 +618,9 @@ class MapSplitter(wx.SplitterWindow):
 
     def OnSashChanging(self, event):
         Debug.msg(5, "MapSplitter.OnSashChanging()")
-
+        if not self._moveSash:
+            event.SetSashPosition(-1)
+            return
         if not (self.GetWindowStyle() & wx.SP_LIVE_UPDATE):
             if event:
                 event.Skip()

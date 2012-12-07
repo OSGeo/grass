@@ -45,6 +45,7 @@ class SwipeBufferedWindow(BufferedWindow):
         self.specialCoords = [0, 0]
         self.imageId = 99
         self.movingSash = False
+        self._mode = 'swipe'
 
     def _bindMouseEvents(self):
         """!Binds wx mouse events and custom mouse events"""
@@ -76,7 +77,10 @@ class SwipeBufferedWindow(BufferedWindow):
     def GetClientSize(self):
         """!Overriden method which returns simulated window size.
         """
-        return self.specialSize
+        if self._mode == 'swipe':
+            return self.specialSize
+        else:
+            return super(SwipeBufferedWindow, self).GetClientSize()
 
     def SetClientSize(self, size):
         """!Overriden method which sets simulated window size.
@@ -84,9 +88,19 @@ class SwipeBufferedWindow(BufferedWindow):
         Debug.msg(3, "SwipeBufferedWindow.SetClientSize(): size = %s" % size)
         self.specialSize = size
 
+    def SetMode(self, mode):
+        """!Sets mode of the window.
+
+        @param mode mode can be 'swipe' or 'mirror'
+        """
+        self._mode = mode
+
     def GetImageCoords(self):
         """!Returns coordinates of rendered image"""
-        return self.specialCoords
+        if self._mode == 'swipe':
+            return self.specialCoords
+        else:
+            return (0, 0)
 
     def SetImageCoords(self, coords):
         """!Sets coordinates of rendered image"""
