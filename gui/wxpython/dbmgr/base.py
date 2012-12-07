@@ -1027,7 +1027,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         whereSimpleSqlPanel = wx.Panel(parent = simpleSqlPanel, id = wx.ID_ANY, name = 'wherePanel')   
         sqlWhereColumn = wx.ComboBox(parent = whereSimpleSqlPanel, id = wx.ID_ANY,
-                                     size = (100,-1),
+                                     size = (150,-1),
                                      style = wx.CB_SIMPLE | wx.CB_READONLY,
                                      choices = self.dbMgrData['mapDBInfo'].GetColumns(self.dbMgrData['mapDBInfo'].layers[layer]['table']))
         sqlWhereColumn.SetSelection(0)
