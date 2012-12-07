@@ -181,9 +181,9 @@ def main():
                     create_index(new_driver, new_database, new_schema_table,
                                  table + '_' + key, key)
                 
-                # reconnect tables
+                # reconnect tables (don't use substituted new_database)
                 if 0 != grass.run_command('v.db.connect', flags = 'o', quiet = True, map = vect,
-                                          layer = layer, driver = new_driver, database = new_database,
+                                          layer = layer, driver = new_driver, database = options['new_database'],
                                           table = new_schema_table, key = key):
                     grass.warning(_("Operation canceled"))
                 
