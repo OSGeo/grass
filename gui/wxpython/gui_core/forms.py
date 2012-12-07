@@ -1366,11 +1366,14 @@ class CmdPanel(wx.Panel):
                     else:
                         fmode = wx.OPEN
                     # check wildcard
-                    fExt = os.path.splitext(p.get('key_desc', ['*.*'])[0])[1]
+                    try:
+                        fExt = os.path.splitext(p.get('key_desc', ['*.*'])[0])[1]
+                    except:
+                        fExt = None
                     if not fExt:
                         fMask = '*.*'
                     else:
-                        fMask = '*' + fExt
+                        fMask = '%s files (*%s)|*%s|Files (*.*)|*.*' % (fExt[1:].upper(), fExt, fExt)
                     fbb = filebrowse.FileBrowseButton(parent = which_panel, id = wx.ID_ANY, fileMask = fMask,
                                                       size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
                                                       dialogTitle = _('Choose %s') % \
