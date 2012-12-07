@@ -32,6 +32,14 @@
 #% description: Second (bottom/left) raster map
 #% required: no
 #%end
+#%option
+#% key: mode
+#% description: View mode
+#% options: swipe,mirror
+#% descriptions:swipe;swiping the upper map layer to show the map layer below ;mirror;synchronized maps side by side
+#% answer: swipe
+#% required: no
+#%end
 
 
 import os
@@ -63,6 +71,7 @@ def main():
 
     first = options['first']
     second = options['second']
+    mode = options['mode']
 
     for mapName in [first, second]:    
         if mapName:
@@ -81,6 +90,8 @@ def main():
         frame.SetSecondRaster(second)
     if first or second:
         frame.SetRasterNames()
+
+    frame.SetViewMode(mode)
     frame.ZoomToMap()
     frame.Show()
 

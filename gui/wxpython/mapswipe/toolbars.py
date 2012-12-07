@@ -95,7 +95,21 @@ class SwipeMainToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent)
         
         self.InitToolbar(self._toolbarData())
-        
+
+        # add tool to toggle active map window
+        self.toggleModeId = wx.NewId()
+        self.toggleMode = wx.Choice(parent = self, id = self.toggleModeId)
+        for label, cdata in zip([_('Swipe mode'), _('Mirror mode')], ['swipe', 'mirror']):
+            self.toggleMode.Append(label, cdata)
+        self.toggleMode.SetSelection(0)
+        self.toggleMode.SetSize(self.toggleMode.GetBestSize())
+        self.toggleMode.Bind(wx.EVT_CHOICE,
+                             lambda event: 
+                             self.parent.SetViewMode(self.toggleMode.GetClientData(event.GetSelection())))
+        self.InsertControl(3, self.toggleMode)
+
+        help = _("Choose view mode")
+        self.SetToolShortHelp(self.toggleModeId, help)
         # realize the toolbar
         self.Realize()
         
@@ -107,6 +121,11 @@ class SwipeMainToolbar(BaseToolbar):
                                      ("tools", swipeIcons['tools'],
                                       self.OnToolMenu)
                                     ))
+
+    def SetMode(self, mode):
+        for i in range(self.toggleMode.GetCount()):
+            if mode == self.toggleMode.GetClientData(i):
+                self.toggleMode.SetSelection(i)
 
     def OnToolMenu(self, event):
         """!Menu for additional tools"""
