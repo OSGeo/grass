@@ -9,10 +9,6 @@ Tutorial' on wxPython WIKI pages.
 It also uses some functions at
 http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/426407
 
-@code
-python dbm.py vector@mapset
-@endcode
-
 List of classes:
  - manager::AttributeManager
 
@@ -23,19 +19,18 @@ This program is free software under the GNU General Public License
 
 @author Jachym Cepicky <jachym.cepicky gmail.com>
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)"""
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+"""
 
 import sys
 import os
 
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-from core import globalvar
 import wx
 import wx.lib.flatnotebook    as FN
 
 import grass.script as grass
 
+from core             import globalvar
 from core.gcmd        import GMessage
 from core.debug       import Debug
 from dbmgr.base       import DbMgrBase
@@ -198,29 +193,3 @@ class AttributeManager(wx.Frame, DbMgrBase):
         DbMgrBase.UpdateDialog(self, layer = layer)
         # set current page selection
         self.notebook.SetSelectionByName('layers') 
-
-def main(argv = None):
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
-    if argv is None:
-        argv = sys.argv
-    
-    if len(argv) != 2:
-        print >> sys.stderr, __doc__
-        sys.exit()
-    
-    #some applications might require image handlers
-    wx.InitAllImageHandlers()
-    
-    app = wx.PySimpleApp()
-    f = AttributeManager(parent = None, id = wx.ID_ANY,
-                         title = "%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
-                                              argv[1]),
-                         size = (900,600), vectorName = argv[1])
-    f.Show()
-    
-    app.MainLoop()
-    
-if __name__ == '__main__':
-    main()
