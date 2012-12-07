@@ -95,7 +95,6 @@ int main(int argc, char *argv[])
     OGRSpatialReferenceH Ogr_projection;
     OGREnvelope oExt;
     int have_ogr_extent = 0;
-    OGRwkbGeometryType Ogr_geom_type; 
 
     int OFTIntegerListlength;
 
@@ -343,8 +342,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < navailable_layers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn); 
-	
+        
 	available_layer_names[i] =
 	    G_store((char *)OGR_FD_GetName(Ogr_featuredefn));
 
@@ -843,7 +841,7 @@ int main(int argc, char *argv[])
 		    G_str_to_lower(Ogr_fieldname);
 
 		if (strcmp(OGR_Fld_GetNameRef(Ogr_field), Ogr_fieldname) != 0) {
-		    G_warning(_("Column name changed: '%s' -> '%s'"),
+		    G_important_message(_("Column name <%s> renamed to <%s>"),
 			      OGR_Fld_GetNameRef(Ogr_field), Ogr_fieldname);
 		}
 
