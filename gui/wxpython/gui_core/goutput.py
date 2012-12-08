@@ -631,9 +631,9 @@ class GStc(stc.StyledTextCtrl):
             except UnicodeDecodeError:
                 enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
                 if enc:
-                    txt = unicode(txt, enc)
+                    txt = unicode(txt, enc, errors = 'replace')
                 elif 'GRASS_DB_ENCODING' in os.environ:
-                    txt = unicode(txt, os.environ['GRASS_DB_ENCODING'])
+                    txt = unicode(txt, os.environ['GRASS_DB_ENCODING'], errors = 'replace')
                 else:
                     txt = EncodeString(txt)
                 
