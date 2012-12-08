@@ -31,24 +31,13 @@ def unicodeValue(value):
         return value
     
     enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
-    if enc:
-        try:
-            value = unicode(value, enc)
-        except LookupError, e:
-            value = e
-    elif 'GRASS_DB_ENCODING' in os.environ:
-        try:
-            value = unicode(value, os.environ['GRASS_DB_ENCODING'])
-        except LookupError, e:
-            value = e
+    if not enc and 'GRASS_DB_ENCODING' in os.environ:
+        enc = os.environ['GRASS_DB_ENCODING']
     else:
-        try:
-            value = unicode(value, 'ascii')
-        except UnicodeDecodeError:
-            value = _("Unable to decode value. Set encoding in GUI preferences ('Attributes').")
+        enc = 'ascii'
     
-    return value
-
+    return unicode(value, enc, errors = 'replace')
+    
 def createDbInfoDesc(panel, mapDBInfo, layer):
     """!Create database connection information content"""
     infoFlexSizer = wx.FlexGridSizer (cols = 2, hgap = 1, vgap = 1)
