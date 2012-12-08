@@ -32,9 +32,15 @@ def unicodeValue(value):
     
     enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
     if enc:
-        value = unicode(value, enc)
+        try:
+            value = unicode(value, enc)
+        except LookupError, e:
+            value = e
     elif 'GRASS_DB_ENCODING' in os.environ:
-        value = unicode(value, os.environ['GRASS_DB_ENCODING'])
+        try:
+            value = unicode(value, os.environ['GRASS_DB_ENCODING'])
+        except LookupError, e:
+            value = e
     else:
         try:
             value = unicode(value, 'ascii')
