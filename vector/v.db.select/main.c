@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Print vector attributes
  *               
- * COPYRIGHT:    (C) 2005-2009, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2009, 2011-2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -58,9 +58,11 @@ int main(int argc, char **argv)
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
-
+    col_opt->guisection = _("Selection");
+    
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-
+    where_opt->guisection = _("Selection");
+    
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
     fs_opt->guisection = _("Format");
 
@@ -87,6 +89,7 @@ int main(int argc, char **argv)
     r_flag->key = 'r';
     r_flag->description =
 	_("Print minimal region extent of selected vector features instead of attributes");
+    r_flag->guisection = _("Region");
 
     c_flag = G_define_flag();
     c_flag->key = 'c';
