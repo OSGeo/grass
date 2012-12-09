@@ -84,7 +84,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         		" amount of maps must be specified. This option is mutual"
         		" exclusive to the map option.");
     opt.file->required = NO;
-    opt.file->guisection = _("Define");
+    opt.file->guisection = _("Map");
 
     opt.colr = G_define_standard_option(G_OPT_M_COLR);
     opt.colr->guisection = _("Define");
