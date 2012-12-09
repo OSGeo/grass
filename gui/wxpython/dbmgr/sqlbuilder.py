@@ -201,6 +201,7 @@ class SQLBuilder(wx.Frame):
         self.btn_unique.Enable(False)
         self.btn_uniquesample = wx.Button(parent = self.valuespanel, id = wx.ID_ANY,
                                           label = _("Get sample"))
+        self.btn_uniquesample.SetToolTipString(_("Get first 256 unique values as sample"))
         self.btn_uniquesample.Enable(False)
 
         buttonsizer3 = wx.BoxSizer(wx.HORIZONTAL)
