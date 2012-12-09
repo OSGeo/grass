@@ -109,7 +109,7 @@ class SQLBuilder(wx.Frame):
         self.btn_clear  = wx.Button(parent = self.panel, id = wx.ID_CLEAR)
         self.btn_clear.SetToolTipString(_("Set SQL statement to default"))
         self.btn_apply  = wx.Button(parent = self.panel, id = wx.ID_APPLY)
-        self.btn_apply.SetToolTipString(_("Apply SQL statement and close the dialog"))
+        self.btn_apply.SetToolTipString(_("Apply SQL statement in Attribute Table Manager"))
         self.btn_close  = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         self.btn_close.SetToolTipString(_("Close the dialog"))
         
@@ -365,7 +365,7 @@ class SQLBuilderSelect(SQLBuilder):
         self.evtHandler = evtHandler
 
         # set dialog title
-        title = _("GRASS SQL Builder (%(type)s): vector map <%(map)s>") % \
+        title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % \
                  { 'type' : "SELECT", 'map' : vectmap }
 
         modeChoices = [_("Column to show (SELECT clause)"), 
@@ -507,7 +507,7 @@ class SQLBuilderUpdate(SQLBuilder):
 
         self.column = column 
         # set dialog title
-        title = _("GRASS SQL Builder (%(type)s): vector map <%(map)s>") % \
+        title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % \
                  { 'type' : "UPDATE", 'map' : vectmap }
 
         modeChoices = [_("Column to set (SET clause)"), 
