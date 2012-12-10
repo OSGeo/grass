@@ -15,15 +15,15 @@ from pygrass.errors import GrassError
 from pygrass.region import Region
 
 
-def looking(filter_string, obj):
+def looking(obj, filter_string):
     """
     >>> import grass.lib.vector as libvect
-    >>> sorted(looking('*by_box*', libvect))  # doctest: +NORMALIZE_WHITESPACE
+    >>> sorted(looking(libvect, '*by_box*'))  # doctest: +NORMALIZE_WHITESPACE
     ['Vect_select_areas_by_box', 'Vect_select_isles_by_box',
      'Vect_select_lines_by_box', 'Vect_select_nodes_by_box']
 
     """
-    word_list = [i for i in dir(obj)]
+    word_list = dir(obj)
     word_list.sort()
     return fnmatch.filter(word_list, filter_string)
 
