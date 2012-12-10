@@ -195,10 +195,12 @@ class Region(object):
     def zoom(self, raster_name):
         """Shrink region until it meets non-NULL data from this raster map:"""
         self._set_param('zoom', str(raster_name))
+        self.get_current()
 
     def align(self, raster_name):
         """Adjust region cells to cleanly align with this raster map"""
         self._set_param('align', str(raster_name))
+        self.get_current()
 
     def adjust(self, rows=False, cols=False):
         """Adjust rows and cols number according with the nsres and ewres
