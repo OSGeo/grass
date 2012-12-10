@@ -5,35 +5,34 @@ map by features from another one.
 
 <p>Supported operators (without GEOS):
 <ul>
-  <li><tt>overlap</tt> - features partially or completely overlap
+  <li><b>overlap</b> - features partially or completely overlap
 </ul>
 
 Supported operators (with GEOS):
 <ul>
-  <li><tt>equals</tt> - features are spatially equals</li>
-  <li><tt>disjoint</tt> - features do not spatially intersect</li>
-  <li><tt>intersects</tt> - features spatially intersect</li>
-  <li><tt>touches</tt> - features spatially touches</li>
-  <li><tt>crosses</tt> - features spatially crosses</li>
-  <li><tt>within</tt> - feature A is completely inside feature B</li>
-  <li><tt>contains</tt> - feature B is completely inside feature A</li>
-  <li><tt>overlaps</tt> - features spatially overlap</li>
-  <li><tt>relate</tt> - feature A is spatially related to feature B</li>
+  <li><b>equals</b> - features are spatially equals</li>
+  <li><b>disjoint</b> - features do not spatially intersect</li>
+  <li><b>intersects</b> - features spatially intersect</li>
+  <li><b>touches</b> - features spatially touches</li>
+  <li><b>crosses</b> - features spatially crosses</li>
+  <li><b>within</b> - feature A is completely inside feature B</li>
+  <li><b>contains</b> - feature B is completely inside feature A</li>
+  <li><b>overlaps</b> - features spatially overlap</li>
+  <li><b>relate</b> - feature A is spatially related to feature B</li>
 </ul>
 
 <h2>NOTES</h2>
 
 Only features with category numbers will be considered. If required
-the <a href="v.category.html">v.category</a> module can be used to add
-them. Typically boundaries do not need to be given a category number,
-as an area's attributes are inherited from the centroid. Typically
-points, lines, and centroids will always want to have a cat number.
-
-<p>E.g. take a road which separates two farms. It is ambiguous as to which
-farm an attribute that is attached to the road belongs to. The boundary
-only needs a cat number if it will hold its own attributes, such as road
-name or pavement form. A centroid in each paddock holds the information
-with respect to ownership, area, etc.
+the <em><a href="v.category.html">v.category</a></em> module can be
+used to add them. Typically boundaries do not need to be given a
+category number, as an area's attributes are inherited from the
+centroid. Typically points, lines, and centroids will always want to
+have a cat number. E.g. take a road which separates two farms. It is
+ambiguous as to which farm an attribute that is attached to the road
+belongs to. The boundary only needs a cat number if it will hold its
+own attributes, such as road name or pavement form. A centroid in each
+paddock holds the information with respect to ownership, area, etc.
 
 
 <h2>EXAMPLES</h2>
@@ -62,18 +61,18 @@ speed-up is required.
 
 <em>
 <a href="v.category.html">v.category</a>,
-<a href="v.overlay.html">v.overlay</a>
+<a href="v.overlay.html">v.overlay</a>,
+<a href="v.extract.html">v.extract</a>
 </em>
 
-<p><em>
+<p>
 <a href="sql.html">GRASS SQL interface</a>
-</em>
-
 
 <h2>AUTHORS</h2>
 
 Radim Blazek<br>
 
-Updated by Martin Landa, CTU in Prague, Czech Republic (GEOS support)
+GEOS support by Martin Landa, Czech Technical University in Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
