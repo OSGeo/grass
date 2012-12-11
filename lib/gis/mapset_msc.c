@@ -88,6 +88,22 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
     return G__make_mapset_element(buf);
 }
 
+static int check_owner(const STRUCT_STAT *info)
+{
+#if defined(__MINGW32__) || defined(SKIP_MAPSET_OWN_CHK)
+    return 1;
+#else
+    const char *check = getenv("GRASS_SKIP_MAPSET_OWNER_CHECK");
+    if (check && *check)
+	return 1;
+    if (info->st_uid != getuid())
+	return 0;
+    if (info->st_uid != geteuid())
+	return 0;
+    return 1;
+#endif
+}
+
 /*!
    \brief Check for user mapset permission
 
@@ -109,12 +125,8 @@ int G__mapset_permissions(const char *mapset)
     if (!S_ISDIR(info.st_mode))
 	return -1;
 
-#ifndef __MINGW32__
-    if (info.st_uid != getuid())
+    if (!check_owner(&info))
 	return 0;
-    if (info.st_uid != geteuid())
-	return 0;
-#endif
 
     return 1;
 }
@@ -143,16 +155,8 @@ int G__mapset_permissions2(const char *gisdbase, const char *location,
     if (!S_ISDIR(info.st_mode))
 	return -1;
 
-#ifndef SKIP_MAPSET_OWN_CHK
-
-#ifndef __MINGW32__
-    if (info.st_uid != getuid())
+    if (!check_owner(&info))
 	return 0;
-    if (info.st_uid != geteuid())
-	return 0;
-#endif
-
-#endif
 
     return 1;
 }
