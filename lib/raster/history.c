@@ -295,6 +295,8 @@ int Rast_command_history(struct History *hist)
 	    Rast_append_history(hist, &cmdlin[j]);
     }
 
+    G_free(cmdlin);
+
     return 0;
 }
 
