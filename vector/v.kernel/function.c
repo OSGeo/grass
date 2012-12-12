@@ -103,9 +103,10 @@ double euclidean_distance(double *x, double *y, int n)
 
 /*****************kernel density functions******************************/
 
-double gaussianKernel2(double term, double bandwidth, double x)
+double gaussianKernel4(double term, double bandwidth, double x)
 {
     /* term is set by setKernelFunction */
+    /* bandwidth is here SD */
 
     /*
     double term =
@@ -114,7 +115,8 @@ double gaussianKernel2(double term, double bandwidth, double x)
 
     x /= bandwidth;
 
-    return (term * exp(-(x * x) / 2.));
+    /* SD = radius (bandwidth) / 4 */
+    return (term * exp((x * x) / -2.));
 }
 
 /* Note: these functions support currently only 1D and 2D, consider this for example 
@@ -290,7 +292,7 @@ void setKernelFunction(int function, int dimension, double bandwidth, double *te
 	*term *= (35. / 32);
 	break;
     case KERNEL_GAUSSIAN:
-	kernelfn = gaussianKernel2;
+	kernelfn = gaussianKernel4;
 	*term =
 	    1. / (pow(bandwidth, dimension) * pow((2. * M_PI), dimension / 2.));
 	break;

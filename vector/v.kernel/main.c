@@ -75,7 +75,7 @@ double L(double smooth)
 int main(int argc, char **argv)
 {
     struct Option *in_opt, *net_opt, *out_opt;
-    struct Option *stddev_opt, *dsize_opt, *segmax_opt, *netmax_opt,
+    struct Option *radius_opt, *dsize_opt, *segmax_opt, *netmax_opt,
 	*multip_opt, *node_opt, *kernel_opt;
     struct Flag *flag_o, *flag_q, *flag_normalize, *flag_multiply;
     char *desc;
@@ -125,11 +125,11 @@ int main(int argc, char **argv)
     out_opt->required = YES;
     out_opt->description = _("Output raster/vector map");
 
-    stddev_opt = G_define_option();
-    stddev_opt->key = "stddeviation";
-    stddev_opt->type = TYPE_DOUBLE;
-    stddev_opt->required = YES;
-    stddev_opt->description = _("Standard deviation in map units");
+    radius_opt = G_define_option();
+    radius_opt->key = "radius";
+    radius_opt->type = TYPE_DOUBLE;
+    radius_opt->required = YES;
+    radius_opt->description = _("Kernel radius in map units");
 
     dsize_opt = G_define_option();
     dsize_opt->key = "dsize";
@@ -206,7 +206,8 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     /*read options */
-    sigma = atof(stddev_opt->answer);
+    dmax = atof(radius_opt->answer);
+    sigma = dmax;
     dsize = atof(dsize_opt->answer);
     segmax = atof(segmax_opt->answer);
     netmax = atof(netmax_opt->answer);
@@ -374,9 +375,8 @@ int main(int argc, char **argv)
 	}
     }
 
-    dmax = sigma;
     if (kernel_function == KERNEL_GAUSSIAN)
-	dmax = sigma * 4.;  /* should be sigma /= 4.; */
+	sigma /= 4.;
 
     if (net_opt->answer) {
 	setKernelFunction(kernel_function, 1, sigma, &term);
