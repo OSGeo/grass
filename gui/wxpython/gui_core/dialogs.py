@@ -1024,6 +1024,7 @@ class GroupDialog(wx.Dialog):
         
         self.subGroup = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                     label = _("Define also sub-group (same name as group)"))
+        self.subGroup.SetValue(True) # most of imagery modules requires also subgroup
         bodySizer.Add(item = self.subGroup, flag = wx.BOTTOM | wx.EXPAND, border = 5)
 
         # bindings
