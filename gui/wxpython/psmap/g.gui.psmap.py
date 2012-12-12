@@ -26,7 +26,7 @@
 #%end
 #%option G_OPT_F_INPUT
 #% key: file
-#% label: File containing mapping instructions
+#% label: File containing mapping instructions to load
 #% description: See ps.map manual for details
 #% key_desc: name
 #% required: no
