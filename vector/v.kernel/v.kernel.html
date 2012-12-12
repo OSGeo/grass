@@ -16,7 +16,12 @@ and can be enabled with <em>node=split</em>.
 The <em>mult</em> option is needed to overcome the limitation that
 the resulting density in case of a vector map output is stored as category
 (Integer). The density result stored as category may be multiplied by this number.
-<p>With the <em>-o</em> flag (experimental) the command tries to calculate an 
+<p>
+For the <em>gaussian</em> kernel, standard deviation for the 
+<a href="http://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use">gaussian function</a> 
+is set to 1/4 of the radius.
+<p>
+With the <em>-o</em> flag (experimental) the command tries to calculate an 
 optimal standard deviation. The value of <em>stddeviation</em> is taken 
 as maximum value. Standard deviation is calculated using ALL points, 
 not just those in the current region.
