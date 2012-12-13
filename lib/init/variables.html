@@ -424,11 +424,6 @@ g.gisenv set=DEBUG=0
     be inherited by dependent modules as the script runs. Setting either the
     GRASS_OVERWRITE environment variable or the OVERWRITE gisenv variable detailed
     below will cause maps with identical names to be overwritten.</dd>
-
-  <dt>ADDON_PATH</dt>
-  <dd>[grass startup script]<br> allows to specify additional paths to
-    local GRASS modules or user scripts extra to standard GRASS
-    distribution.</dd>
 </dl>
 
 <h2>GRASS-related Files</h2>
@@ -436,6 +431,12 @@ g.gisenv set=DEBUG=0
 <dl>
   <dt><tt>$HOME/.grass7/rc</tt></dt>
   <dd>stores the GRASS gisenv variables (not shell environment variables)</dd>
+
+  <dt><tt>$HOME/.grass7/bashrc</tt></dt>
+  <dd>stores the shell environment variables (Bash only)</dd>
+
+  <dt><tt>$HOME/.grass7/env.bat</tt></dt>
+  <dd>stores the shell environment variables (MS Windows only)</dd>
   
   <dt><tt>$HOME/.grass7/login</tt></dt>
   <dd>stores the DBMI passwords in this hidden file.
