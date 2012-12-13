@@ -152,28 +152,24 @@ int G_lstat(const char *file_name, STRUCT_STAT *buf)
 }
 
 /**
- * \brief Get owner name of path
+ * \brief Get owner id of path
  *
  * Returns information about the specified file.
  *
  * \param path path to check
  *
- * \return Return owner name or anonymous
+ * \return Return owner id
  **/
 
-const char *G_owner(const char *path)
+int G_owner(const char *path)
 {
-    const char *name = NULL;
 
 #ifndef __MINGW32__
     STRUCT_STAT info;
-    struct passwd *p;
-    
-    G_stat(path, &info);
-    p = getpwuid(info.st_uid);
-    if (p && p->pw_name && *p->pw_name)
-	name = G_store(p->pw_name);
 
+    G_stat(path, &info);
+
+    return (int)info.st_uid;
 #else
 
     /* this code is taken from the official example to 
@@ -222,51 +218,6 @@ const char *G_owner(const char *path)
     }
     CloseHandle(hFile);
     
-    /* First call to LookupAccountSid to get the buffer sizes. */
-    bRtnBool = LookupAccountSid(
-		      NULL,			/* lpSystemName */
-		      pSidOwner,		/* lpSid */
-		      AcctName,			/* lpName */
-		      (LPDWORD)&dwAcctName,	/* cchName */
-		      DomainName,		/* lpReferencedDomainName */
-		      (LPDWORD)&dwDomainName,	/* cchReferencedDomainName */
-		      &eUse			/* peUse */
-		      );
-    
-    if (bRtnBool == FALSE)
-	G_fatal_error(_("Unable to look up account id"));
-
-
-    /* Reallocate memory for the buffers. */
-    AcctName = (LPTSTR)GlobalAlloc(GMEM_FIXED, dwAcctName);
-
-    if (AcctName == NULL) {
-	G_fatal_error(_("Unable to allocate memory for account name"));
-    }
-    
-    DomainName = (LPTSTR)GlobalAlloc(GMEM_FIXED, dwDomainName);
-
-    if (DomainName == NULL) {
-	G_fatal_error(_("Unable to allocate memory for domain name"));
-    }
-    
-    /* Second call to LookupAccountSid to get the account name. */
-    bRtnBool = LookupAccountSid(
-		      NULL,			/* lpSystemName */
-		      pSidOwner,		/* lpSid */
-		      AcctName,			/* lpName */
-		      (LPDWORD)&dwAcctName,	/* cchName */
-		      DomainName,		/* lpReferencedDomainName */
-		      (LPDWORD)&dwDomainName,	/* cchReferencedDomainName */
-		      &eUse			/* peUse */
-		      );
-    
-    if (bRtnBool == TRUE)
-	name = G_store(AcctName);
+    return (int)pSidOwner;
 #endif
-
-    if (!name || !*name)
-	name = "anonymous";
-
-    return name;
 }

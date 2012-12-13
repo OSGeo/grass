@@ -493,7 +493,7 @@ char *G_convert_dirseps_to_host(char *);
 char *G_convert_dirseps_from_host(char *);
 int G_lstat(const char *, STRUCT_STAT *);
 int G_stat(const char *, STRUCT_STAT *);
-const char *G_owner(const char *);
+int G_owner(const char *);
 
 /* percent.c */
 void G_percent(long, long, int);
