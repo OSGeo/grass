@@ -304,6 +304,9 @@ class MapFrame(SingleMapFrame):
     def OnPointer(self, event):
         """!Pointer button clicked
         """
+        self.toolbars['gcpdisp'].OnTool(event)
+        self.toolbars['gcpdisp'].action['desc'] = ''
+        
         # change the cursor
         self.SrcMapWindow.SetCursor(self.cursors["cross"])
         self.SrcMapWindow.mouse['use'] = "pointer"
