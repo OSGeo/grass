@@ -194,8 +194,8 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Lock file of mapset <%s> cannot be checked"),
 			   mapset_new);
 	else
-	    G_fatal_error(_("<%s> is currently running GRASS in selected mapset <%s>"),
-		      G_owner(path), mapset_new);
+	    G_fatal_error(_("There appears to be an active GRASS session in selected mapset <%s>"),
+		          mapset_new);
     }
 
     /* Clean temporary directory */
