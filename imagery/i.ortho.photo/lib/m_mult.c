@@ -11,7 +11,6 @@ int m_mult(MATRIX * a, MATRIX * b, MATRIX * c)
 {
     register int i, j, k, nr, nc, ncols;
     char message[256];
-    static MATRIX m;
 
     if (a->nrows == 0)
 	return error("*: arg1 not defined\n");
@@ -31,13 +30,12 @@ int m_mult(MATRIX * a, MATRIX * b, MATRIX * c)
     nc = b->ncols;
     for (i = 0; i < nr; i++)
 	for (j = 0; j < nc; j++) {
-	    m.x[i][j] = 0.0;
+	    c->x[i][j] = 0.0;
 	    for (k = 0; k < ncols; k++)
-		m.x[i][j] += (a->x[i][k] * b->x[k][j]);
+		c->x[i][j] += (a->x[i][k] * b->x[k][j]);
 	}
 
-    m.nrows = nr;
-    m.ncols = nc;
-    m_copy(c, &m);
+    c->nrows = nr;
+    c->ncols = nc;
     return 1;
 }

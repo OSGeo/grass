@@ -182,7 +182,7 @@ int I_convert_con_points(char *group, struct Ortho_Control_Points *con_cp,
 	n2 = con_cp->n2[i];
 	z2 = con_cp->z2[i];
 
-	I_georef(e1, n1, &e0, &n0, E12, N12);
+	I_georef(e1, n1, &e0, &n0, E12, N12, 1);
 	/* I_new_con_point (photo_cp, e0,n0,z1,e2,n2,z2,status); */
 	I_new_con_point(photo_cp, e0, n0, z1, e2, n2, z2, status);
     }
