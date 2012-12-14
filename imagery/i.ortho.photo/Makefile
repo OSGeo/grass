@@ -2,20 +2,14 @@
 MODULE_TOPDIR = ../..
 
 SUBDIRS1 = \
-	menu \
-	photo.2image \
-	photo.2target \
-	photo.camera \
-	photo.elev \
-	photo.init \
-	photo.rectify \
-	photo.target
+	i.ortho.elev \
+	i.photo.rectify
 
-SUBDIRS = libes $(SUBDIRS1)
+SUBDIRS = lib $(SUBDIRS1)
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-$(SUBDIRS1): libes
+$(SUBDIRS1): lib
 
 default: parsubdirs
 

@@ -1,0 +1,13 @@
+1/2002: Markus Neteler
+
+ - have updated write routines to GRASS 5 functions (taken from i.rectify2)
+ - have changed elev reading from CELL to raster_type to support
+   also FP elevations
+
+12/2010: Markus Metz
+
+ - sync'ed to i.rectify as far as possible
+ - the module is now non-interactive and stand-alone: 
+   typing i.photo.rectify on the commandline pops up a gui if GRASS is started with a gui
+ - i.ortho.photo has a new interactive part to set the options for i.photo.rectify 
+
