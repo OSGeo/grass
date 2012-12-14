@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     double dfCellMin, export_min;
     double dfCellMax, export_max;
     struct FPRange sRange;
-    int retval = 0, check_range;
+    int retval = 0;
 
     G_gisinit(argv[0]);
 
@@ -340,7 +340,6 @@ int main(int argc, char *argv[])
     /* get min/max values */
     int band;
 
-    check_range = 0;
     bHaveMinMax = TRUE;
     export_min = TYPE_FLOAT64_MIN;
     export_max = TYPE_FLOAT64_MAX;
@@ -560,7 +559,7 @@ int main(int argc, char *argv[])
 	G_warning(_("Unable to set geo transform"));
 
     /* Set Projection  */
-    CPLErr ret;
+    CPLErr ret = CE_None;
 
     if (srswkt)
 	ret = GDALSetProjection(hCurrDS, srswkt);
@@ -581,9 +580,9 @@ int main(int argc, char *argv[])
 	}
 
 	retval = export_band
-	    (hCurrDS, datatype, band + 1, ref.file[band].name,
+	    (hCurrDS, band + 1, ref.file[band].name,
 	     ref.file[band].mapset, &cellhead, maptype, nodataval,
-	     nodataopt->key, flag_c->answer, default_nodataval);
+	     flag_c->answer);
 
 	/* read/write error */
 	if (retval == -1) {

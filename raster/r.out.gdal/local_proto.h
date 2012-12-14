@@ -54,9 +54,9 @@
 #define GRASS_MAX_COLORS TYPE_UINT16_MAX    /* ok? */
 
 /* export_band.c */
-int export_band(GDALDatasetH, GDALDataType, int, const char *, 
+int export_band(GDALDatasetH, int, const char *, 
 		const char *, struct Cell_head *, RASTER_MAP_TYPE, 
-		double, const char *, int, int);
+		double, int);
 int exact_checks(GDALDataType, const char *, const char *,
                  struct Cell_head *, RASTER_MAP_TYPE, double,
 		 const char *, int);
