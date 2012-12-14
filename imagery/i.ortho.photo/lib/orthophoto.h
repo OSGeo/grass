@@ -1,5 +1,6 @@
 #include <grass/gis.h>
 #include <grass/imagery.h>
+#include "mat.h"
 
 /* #define DEBUG  1 */
 
@@ -15,8 +16,8 @@ struct Ortho_Image_Group_Ref
     int nfiles;
     struct Ortho_Image_Group_Ref_Files
     {
-	char name[30];
-	char mapset[30];
+	char name[GNAME_MAX];
+	char mapset[GMAPSET_MAX];
     } *file;
     struct Ortho_Ref_Color
     {
@@ -57,6 +58,8 @@ struct Ortho_Photo_Points
     int *status;
 };
 
+/* Ortho_Control_Points is identical to Ortho_Photo_Points
+ * Why ? */
 struct Ortho_Control_Points
 {
     int count;
@@ -104,6 +107,7 @@ struct Ortho_Image_Group
     int con_equation_stat;
     double E12[3], N12[3], E21[3], N21[3], Z12[3], Z21[3];
     double XC, YC, ZC, omega, phi, kappa;
+    MATRIX M, MI;
 };
 
 /* conz_points.c */
@@ -121,13 +125,13 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *,
 			      struct Ortho_Camera_File_Ref *,
 			      struct Ortho_Camera_Exp_Init *, double *,
 			      double *, double *, double *, double *,
-			      double *);
+			      double *, MATRIX *, MATRIX *);
 int I_ortho_ref(double, double, double, double *, double *, double *,
 		struct Ortho_Camera_File_Ref *, double, double, double,
-		double, double, double);
+		MATRIX);
 int I_inverse_ortho_ref(double, double, double, double *, double *, double *,
 			struct Ortho_Camera_File_Ref *, double, double,
-			double, double, double, double);
+			double, MATRIX);
 /* ref_points.c */
 int I_new_ref_point(struct Ortho_Photo_Points *, double, double, double,
 		    double, int);

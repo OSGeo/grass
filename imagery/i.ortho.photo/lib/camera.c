@@ -18,7 +18,7 @@ int I_put_group_camera(char *group, char *camera)
     if (!fd)
 	return 0;
 
-    fprintf(fd, "%s", camera);
+    fprintf(fd, "%s\n", camera);
 
     return 0;
 }
