@@ -731,6 +731,9 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     char outputReal[GNAME_MAX], outputImg[GNAME_MAX];
     char *nullFlags = NULL;
     struct History history;
+    char **GDALmetadata;
+    int have_colors = 0;
+    GDALRasterAttributeTableH gdal_rat;
 
     /* -------------------------------------------------------------------- */
     /*      Select a cell type for the new cell.                            */
@@ -930,8 +933,150 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
     /* -------------------------------------------------------------------- */
     /*      Transfer colormap, if there is one.                             */
+    /*      prefer color rules over color tables, search:                    */
+    /*      1. GRASS color rules in metadata                                */
+    /*      2. Raster attribute table with color rules                      */
+    /*      3. Raster color table                                           */
     /* -------------------------------------------------------------------- */
-    if (!complex && GDALGetRasterColorTable(hBand) != NULL) {
+
+    /* GRASS color rules in metadata? */
+    GDALmetadata = GDALGetMetadata(hBand, "");
+    
+    if (GDALmetadata) {
+	struct Colors colors;
+	DCELL val1, val2;
+	int r1, g1, b1, r2, g2, b2;
+
+	Rast_init_colors(&colors);
+	
+	while (GDALmetadata && GDALmetadata[0]) {
+	    G_debug(2, "%s", GDALmetadata[0]);
+
+	    if (!strncmp("COLOR_TABLE_RULE_RGB_", GDALmetadata[0], 21)) {
+		char *p;
+		
+		for (p = GDALmetadata[0]; *p != '=' && *p != '\0'; p++);
+		
+		if (*p == '=') {
+		    p++;
+		}
+		if (p && *p != '\0') {
+		    if (sscanf(p, "%lf %lf %d %d %d %d %d %d",
+			&val1, &val2, &r1, &g1, &b1, &r2, &g2, &b2) == 8) {
+
+			Rast_add_d_color_rule(&val1, r1, g1, b1,
+			                      &val2, r2, g2, b2,
+					      &colors);
+			have_colors = 1;
+		    }
+		}
+	    }
+	    GDALmetadata++;
+	}
+	if (have_colors)
+	    Rast_write_colors((char *)output, G_mapset(), &colors);
+
+	Rast_free_colors(&colors);
+    }
+
+    /* colors in raster attribute table? */
+    
+    if (!have_colors && (gdal_rat = GDALGetDefaultRAT(hBand)) != NULL) {
+	nrows = GDALRATGetRowCount(gdal_rat);
+	ncols = GDALRATGetColumnCount(gdal_rat);
+	
+	if (nrows > 0 && ncols > 0) {
+	    int minc, maxc, minmaxc;
+	    int rc, gc, bc, rminc, rmaxc, gminc, gmaxc, bminc, bmaxc;
+	    GDALRATFieldUsage field_use;
+	    struct Colors colors;
+	    DCELL val1, val2;
+	    int r1, g1, b1, r2, g2, b2;
+
+	    Rast_init_colors(&colors);
+	    
+	    minc = maxc = minmaxc = -1;
+	    rc = gc = bc = rminc = rmaxc = gminc = gmaxc = bminc = bmaxc = -1;
+
+	    for (indx = 0; indx < ncols; indx++) {
+		 field_use = GDALRATGetUsageOfCol(gdal_rat, indx);
+		 
+		 if (field_use == GFU_Min)
+		    minc = indx;
+		 else if (field_use == GFU_Max)
+		    maxc = indx;
+		 else if (field_use == GFU_MinMax)
+		    minmaxc = indx;
+		 else if (field_use == GFU_Red)
+		    rc = indx;
+		 else if (field_use == GFU_Green)
+		    gc = indx;
+		 else if (field_use == GFU_Blue)
+		    bc = indx;
+		 else if (field_use == GFU_RedMin)
+		    rminc = indx;
+		 else if (field_use == GFU_GreenMin)
+		    gminc = indx;
+		 else if (field_use == GFU_BlueMin)
+		    bminc = indx;
+		 else if (field_use == GFU_RedMax)
+		    rmaxc = indx;
+		 else if (field_use == GFU_GreenMax)
+		    gmaxc = indx;
+		 else if (field_use == GFU_BlueMax)
+		    bmaxc = indx;
+	    }
+
+	    if (minc >= 0 && maxc >= 0 && rminc >= 0 && rmaxc >= 0 &&
+		gminc >= 0 && gmaxc >= 0 && bminc >= 0 && bmaxc >= 0) {
+		
+		/* fetch color rules */
+		for (indx = 0; indx < nrows; indx++) {
+		    val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minc);
+		    val2 = GDALRATGetValueAsDouble(gdal_rat, indx, maxc);
+
+		    r1 = GDALRATGetValueAsDouble(gdal_rat, indx, rminc);
+		    g1 = GDALRATGetValueAsDouble(gdal_rat, indx, gminc);
+		    b1 = GDALRATGetValueAsDouble(gdal_rat, indx, bminc);
+
+		    r2 = GDALRATGetValueAsDouble(gdal_rat, indx, rmaxc);
+		    g2 = GDALRATGetValueAsDouble(gdal_rat, indx, gmaxc);
+		    b2 = GDALRATGetValueAsDouble(gdal_rat, indx, bmaxc);
+
+		    Rast_add_d_color_rule(&val1, r1, g1, b1,
+					  &val2, r2, g2, b2,
+					  &colors);
+		}
+	    }
+	    else if (minmaxc >= 0 && rc >= 0 && gc >= 0 && bc >= 0) {
+		    
+		if (minc < 0)
+		    minc = maxc;
+
+		/* fetch color table */
+		for (indx = 0; indx < nrows; indx++) {
+		    val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minmaxc);
+
+		    r1 = GDALRATGetValueAsDouble(gdal_rat, indx, rc);
+		    g1 = GDALRATGetValueAsDouble(gdal_rat, indx, gc);
+		    b1 = GDALRATGetValueAsDouble(gdal_rat, indx, bc);
+		    
+		    Rast_set_d_color(val1, r1, g1, b1, &colors);
+		}
+	    }
+	    
+	    have_colors = Rast_colors_count(&colors) > 0;
+	    
+	    if (have_colors)
+		Rast_write_colors((char *)output, G_mapset(), &colors);
+
+	    Rast_free_colors(&colors);
+	}
+    }
+
+    /* colors in raster color table? */
+
+    if (!have_colors && !complex && GDALGetRasterColorTable(hBand) != NULL) {
 	GDALColorTableH hCT;
 	struct Colors colors;
 	int iColor;
@@ -952,8 +1097,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	}
 
 	Rast_write_colors((char *)output, G_mapset(), &colors);
+	Rast_free_colors(&colors);
+	have_colors = 1;
     }
-    else {			/* no color table present */
+    if (!have_colors) {			/* no color table present */
 
 	/* types are defined in GDAL: ./core/gdal.h */
 	if ((GDALGetRasterDataType(hBand) == GDT_Byte)) {
@@ -966,6 +1113,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    Rast_init_colors(&colors);
 	    Rast_make_grey_scale_colors(&colors, 0, 255);	/* full range */
 	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_free_colors(&colors);
 	}
 	if ((GDALGetRasterDataType(hBand) == GDT_UInt16)) {
 	    /* found 0..65535 data: we set to grey scale: */
@@ -981,6 +1129,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    Rast_init_colors(&colors);
 	    Rast_make_grey_scale_colors(&colors, min, max);	/* image range */
 	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_free_colors(&colors);
 	}
     }
 
