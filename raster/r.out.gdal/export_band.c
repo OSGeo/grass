@@ -35,10 +35,8 @@ int exact_checks(GDALDataType export_datatype,
 		double nodataval, const char *nodatakey,
 		int default_nodataval)
 {
-    int bHaveMinMax;
     double dfCellMin;
     double dfCellMax;
-    struct FPRange sRange;
     int fd;
     int cols = cellhead->cols;
     int rows = cellhead->rows;
@@ -46,15 +44,6 @@ int exact_checks(GDALDataType export_datatype,
 
     /* Open GRASS raster */
     fd = Rast_open_old(name, mapset);
-
-    /* Get min/max values. */
-    if (Rast_read_fp_range(name, mapset, &sRange) == -1) {
-	bHaveMinMax = FALSE;
-    }
-    else {
-	bHaveMinMax = TRUE;
-	Rast_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
-    }
 
     /* Create GRASS raster buffer */
     void *bufer = Rast_allocate_buf(maptype);
@@ -207,11 +196,10 @@ int exact_checks(GDALDataType export_datatype,
  * returns 0 on success
  * -1 on raster data read/write error
  * */
-int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
+int export_band(GDALDatasetH hMEMDS, int band,
 		const char *name, const char *mapset,
 		struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
-		double nodataval, const char *nodatakey,
-		int suppress_main_colortable, int default_nodataval)
+		double nodataval, int suppress_main_colortable)
 {
     struct Colors sGrassColors;
     GDALColorTableH hCT;
@@ -224,6 +212,7 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     int cols = cellhead->cols;
     int rows = cellhead->rows;
     int ret = 0;
+    char value[200];
 
     /* Open GRASS raster */
     fd = Rast_open_old(name, mapset);
@@ -249,12 +238,15 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
     CPLPushErrorHandler(CPLQuietErrorHandler);
     GDALSetRasterColorInterpretation(hBand, GPI_RGB);
     CPLPopErrorHandler();
+    
+    sprintf(value, "GRASS %s", GRASS_VERSION_NUMBER);
+    GDALSetMetadataItem(hBand, "Generated_with", value, NULL);
 
     /* use default color rules if no color rules are given */
     if (Rast_read_colors(name, mapset, &sGrassColors) >= 0) {
 	int maxcolor, i;
 	CELL min, max;
-	char key[200], value[200];
+	char key[200];
 	int rcount;
 
 	Rast_get_c_color_range(&min, &max, &sGrassColors);
