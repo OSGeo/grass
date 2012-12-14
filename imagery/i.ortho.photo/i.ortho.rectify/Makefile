@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-PGM = i.photo.rectify
+PGM = i.ortho.rectify
 
 # for DEBUG3 see README!
 #EXTRA_CFLAGS = -I../libes -DDEBUG3

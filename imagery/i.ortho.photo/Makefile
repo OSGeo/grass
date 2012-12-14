@@ -3,7 +3,7 @@ MODULE_TOPDIR = ../..
 
 SUBDIRS1 = \
 	i.ortho.elev \
-	i.photo.rectify
+	i.ortho.rectify
 
 SUBDIRS = lib $(SUBDIRS1)
 
