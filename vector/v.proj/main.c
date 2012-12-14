@@ -363,7 +363,8 @@ int main(int argc, char *argv[])
     G_debug(1, "Open new: location: %s mapset : %s", G_location_path(),
 	    G_mapset());
     Vect_open_new(&Out_Map, omap_name, Vect_is_3d(&Map));
-
+    Vect_set_error_handler_io(NULL, &Out_Map); /* register standard i/o error handler */
+    
     Vect_copy_head_data(&Map, &Out_Map);
     Vect_hist_copy(&Map, &Out_Map);
     Vect_hist_command(&Out_Map);
