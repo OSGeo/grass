@@ -15,7 +15,8 @@ region, in the degenerate case, it may create tiles demanding up to
 twice the necessary information. Furthermore, generating a tiling near
 a divergant point of a source projection, such as the poles of a
 cylindrical source projections, results in divergence of the tile set.
-<p>Not generating "optimal" tilings may have another consequence; the
+<p>
+Not generating "optimal" tilings may have another consequence; the
 aspect ratio of cells in the destination region will not necessarily
 carry over to the source region and generated tiles may have cells of
 strange aspect ratios. This might be a problem for some map request
@@ -62,14 +63,16 @@ http services.
 Generates tiles in latitude longitude that cover the current
 region, each tile will be less than 1024 cells high and 2048 cells
 across. The bounds and sizes of tiles in the output are separated by | (pipe):
-<p><div class="code"><pre>
+<p>
+<div class="code"><pre>
 r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
 </pre></div>
 
 Generates tiles in latitude longitude projection that cover the
 named region "ne-rio". The tiles will have 2 cells of overlap. The
 output format will be strings like the bbox requests for WMS servers:
-<p><div class="code"><pre>
+<p>
+<div class="code"><pre>
 r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
 </pre></div>
 
@@ -79,15 +82,17 @@ cells of overlap in the top and right sides of each tile. The output
 is in a format where each line is in shell script style. The
 substitution <code>`g.proj -j location=IrishGrid`</code> will only
 work in a unix style shell:
-<p><div class="code"><pre>
-r.tileset sourceproj=`g.proj -j location=IrishGrid` maxrows=400 maxcols=300 overlap=3 -g
+<p>
+<div class="code"><pre>
+r.tileset sourceproj="`g.proj -j location=IrishGrid`" maxrows=400 maxcols=300 overlap=3 -g
 </pre></div>
 
 <h2>BUGS</h2>
 
 <ul>
 <li><em>r.tileset</em> does not know about meridians that
-"wrap-around" in projections.  </ul>
+"wrap-around" in projections.</li>
+</ul>
 
 
 <h2>AUTHORS</h2>
@@ -95,4 +100,5 @@ r.tileset sourceproj=`g.proj -j location=IrishGrid` maxrows=400 maxcols=300 over
 Cedric Shock<br>
 Updated for GRASS 7 by Martin Landa, CTU in Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
