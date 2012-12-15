@@ -29,11 +29,11 @@
 /* do_areas.c */
 int do_areas(struct Map_info *, struct line_pnts *, dbCatValArray *, int,
 	     int, double, int);
-int sort_areas(struct Map_info *, struct line_pnts *, int);
+int sort_areas(struct Map_info *, struct line_pnts *, int, struct cat_list *);
 
 /* do_lines.c */
 int do_lines(struct Map_info *, struct line_pnts *, dbCatValArray *, int, int,
-	     int, double, int, int, int *);
+	     struct cat_list *, int, double, int, int, int *);
 
 /* raster.c */
 int begin_rasterization(int, int);
@@ -51,6 +51,6 @@ int update_fcolors(const char *);
 
 /* vect2rast.c */
 int vect_to_rast(const char *, const char *, const char *, const char *, int, int,
-		 double, int, const char *, const char *, int);
+		 double, int, const char *, const char *, int, char *, char *);
 
 #endif
