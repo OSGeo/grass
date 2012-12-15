@@ -567,8 +567,8 @@ struct cat_list *Vect_cats_set_constraint(struct Map_info *Map, int layer,
 	list = Vect_new_cat_list();
 	
 	ret = Vect_array_to_cat_list(cats, ncats, list);
-	if (ret > 0)
-	    G_warning(_("%d errors in '%s' option"), ret, "where");
+	if (ret == 0)
+	    G_warning(_("No categories selected with '%s' option"), "where");
 	
 	if (cats)
 	    G_free(cats);
