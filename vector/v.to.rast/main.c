@@ -8,8 +8,9 @@
  *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>, Markus Neteler <neteler itc.it>
  *               OGR support by Martin Landa <landa.martin gmail.com>
+ *               Markus Metz (labelcol, cats, where options)
  * PURPOSE:      Converts vector map to raster map
- * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
