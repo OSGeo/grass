@@ -22,6 +22,7 @@
 #%end
 
 #%option G_OPT_STDS_INPUTS
+#% guisection: Input
 #% required: no
 #%end
 
@@ -30,6 +31,7 @@
 #% type: string
 #% description: Type of the space time dataset, default is strds
 #% guidependency: inputs
+#% guisection: Input
 #% required: no
 #% options: strds, str3ds, stvds
 #% answer: strds
@@ -38,6 +40,7 @@
 #%option G_OPT_F_INPUT
 #% key: file
 #% description: Input file with dataset names, one per line
+#% guisection: Input
 #% required: no
 #%end
 
