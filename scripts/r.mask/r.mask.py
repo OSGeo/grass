@@ -29,24 +29,27 @@
 #%option
 #% key: maskcats
 #% type: string
-#% description: Category values to use for mask (format: 1 2 3 thru 7 *)
+#% description: Category values to use for mask (raster; format: 1 2 3 thru 7 *)
 #% answer: *
 #% guisection: Raster
 #%end
 #%option G_OPT_V_INPUT
 #% key: vector
-#% description: Name of vector map to use as mask
+#% label: Name of vector map to use as mask
 #% required: NO
 #% guisection: Vector
 #%end
 #%option G_OPT_V_FIELD
+#% label: Layer number or name (vector)
 #% required: NO
 #% guisection: Vector
 #%end
 #%option G_OPT_V_CATS
+#% label: Category values (vector)
 #% guisection: Vector
 #%end
 #%option G_OPT_DB_WHERE
+#% label: WHERE conditions of SQL statement without 'where' keyword (vector)
 #% guisection: Vector
 #%end
 #%flag
