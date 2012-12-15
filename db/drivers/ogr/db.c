@@ -47,7 +47,14 @@ int db__driver_open_database(dbHandle * handle)
 
     OGRRegisterAll();
 
+    /* try read-write access */
     hDs = OGROpen(name, TRUE, NULL);
+    if (hDs == NULL) {
+        /* try read-only access */
+        hDs = OGROpen(name, FALSE, NULL);
+        if (hDs)
+            G_important_message(_("Had to open data source read-only"));
+    }
 
     if (hDs == NULL) {
 	db_d_append_error(_("Unable to open OGR data source"));
