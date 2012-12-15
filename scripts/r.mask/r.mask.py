@@ -6,7 +6,7 @@
 # AUTHOR(S):	Michael Barton, Arizona State University
 #               Markus Neteler
 #               Converted to Python by Glynn Clements
-#               Markus metz
+#               Markus Metz
 # PURPOSE:      Facilitates creation of raster MASK
 # COPYRIGHT:	(C) 2005-2012 by the GRASS Development Team
 #
