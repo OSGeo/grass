@@ -21,25 +21,43 @@
 #% keywords: mask
 #%end
 #%option G_OPT_R_INPUT
+#% key: raster
 #% description: Name of raster map to use as mask
+#% required: NO
+#% guisection: Raster
 #%end
 #%option
 #% key: maskcats
 #% type: string
 #% description: Category values to use for mask (format: 1 2 3 thru 7 *)
 #% answer: *
-#% guisection: Create
+#% guisection: Raster
+#%end
+#%option G_OPT_V_INPUT
+#% key: vector
+#% description: Name of vector map to use as mask
+#% required: NO
+#% guisection: Vector
+#%end
+#%option G_OPT_V_FIELD
+#% required: NO
+#% guisection: Vector
+#%end
+#%option G_OPT_V_CATS
+#% guisection: Vector
+#%end
+#%option G_OPT_DB_WHERE
+#% guisection: Vector
 #%end
 #%flag
 #% key: i
-#% description: Create inverse mask from specified 'maskcats' list
+#% description: Create inverse mask
 #% guisection: Create
 #%end
 #%flag
 #% key: r
 #% description: Remove existing mask (overrides other options)
 #% guisection: Remove
-#% suppress_required: yes
 #%end
 
 import sys
@@ -49,45 +67,63 @@ import atexit
 
 def cleanup():
     if tmp:
-	grass.run_command('g.remove', rast = tmp, quiet = True)
+        grass.run_command('g.remove', rast = tmp, quiet = True)
 
 def main():
-    input = options['input']
+    raster = options['raster']
     maskcats = options['maskcats']
+    vector = options['vector']
+    layer = options['layer']
+    cats = options['cats']
+    where = options['where']
     remove = flags['r']
     invert = flags['i']
 
-    if not remove and not input:
-	grass.fatal(_("Required parameter <input> not set"))
-
-    #check if input file exists
-    if not grass.find_file(input)['file'] and not remove:
-        grass.fatal(_("<%s> does not exist.") % input)
-
-    if maskcats != '*' and not remove:
-        if grass.raster_info(input)['datatype'] != "CELL":
-            grass.fatal(_("Raster map %s must be integer for maskcats parameter") % input)
+    if not remove and not raster and not vector:
+        grass.fatal(_("Either parameter <raster> ot parameter <vector> is required"))
 
     mapset = grass.gisenv()['MAPSET']
     exists = bool(grass.find_file('MASK', element = 'cell', mapset = mapset)['file'])
 
     if remove:
-	if exists:
-	    grass.run_command('g.remove', rast = 'MASK')
-	    grass.message(_("Raster MASK removed"))
- 	else:
-	    grass.fatal(_("No existing MASK to remove"))
+        if exists:
+            grass.run_command('g.remove', rast = 'MASK')
+            grass.message(_("Raster MASK removed"))
+        else:
+            grass.fatal(_("No existing MASK to remove"))
     else:
-	if exists:
+        if exists:
             if not grass.overwrite():
                 grass.fatal(_("MASK already found in current mapset. Delete first or overwrite."))
             else:
                 grass.warning(_("MASK already exists and will be overwritten"))
 
-	p = grass.feed_command('r.reclass', input = input, output = 'MASK', overwrite = True, rules = '-')
-	p.stdin.write("%s = 1" % maskcats)
-	p.stdin.close()
-	p.wait()
+        if raster:
+            #check if input raster exists
+            if not grass.find_file(raster)['file']:
+                grass.fatal(_("<%s> does not exist.") % raster)
+
+            if maskcats != '*' and not remove:
+                if grass.raster_info(raster)['datatype'] != "CELL":
+                    grass.fatal(_("Raster map %s must be integer for maskcats parameter") % raster)
+
+            p = grass.feed_command('r.reclass', input = raster, output = 'MASK', overwrite = True, rules = '-')
+            p.stdin.write("%s = 1" % maskcats)
+            p.stdin.close()
+            p.wait()
+        elif vector:
+            if not grass.find_file(vector, 'vector')['file']:
+                grass.fatal(_("<%s> does not exist.") % vector)
+
+            # parser bug?
+            if len(cats) == 0:
+                cats = None
+            if len(where) == 0:
+                where = None
+
+            grass.run_command('v.to.rast', input = vector, layer = layer,
+                              output = 'MASK', use = 'val', val = '1',
+                              type = 'area', cats = cats, where = where)
 
 	if invert:
 	    global tmp
@@ -98,9 +134,9 @@ def main():
 	else:
 	    grass.message(_("MASK created."))
 
-        grass.message(_("All subsequent raster operations will be limited to MASK area. ") +
-		      "Removing or renaming raster file named MASK will " +
-		      "restore raster operations to normal")
+    grass.message(_("All subsequent raster operations will be limited to MASK area. ") +
+          "Removing or renaming raster file named MASK will " +
+          "restore raster operations to normal")
 
 if __name__ == "__main__":
     options, flags = grass.parser()
