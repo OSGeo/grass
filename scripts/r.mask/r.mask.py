@@ -6,8 +6,9 @@
 # AUTHOR(S):	Michael Barton, Arizona State University
 #               Markus Neteler
 #               Converted to Python by Glynn Clements
-# PURPOSE:      Facilitates creation of raster MASK using r.reclass
-# COPYRIGHT:	(C) 2005, 2007-2009 by the GRASS Development Team
+#               Markus metz
+# PURPOSE:      Facilitates creation of raster MASK
+# COPYRIGHT:	(C) 2005-2012 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
