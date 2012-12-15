@@ -25,15 +25,24 @@
 #% key: type
 #% type: string
 #% description: Type of the space time dataset or map, default is strds
+#% guisection: Selection
 #% required: no
 #% options: strds, str3ds, stvds, rast, rast3d, vect
 #% answer: strds
 #%end
 
+#%option G_OPT_T_TYPE
+#% multiple: yes
+#% answer: absolute,relative
+#% guisection: Selection
+#%end
+
 #%option
 #% key: order
 #% type: string
-#% description: Sort the space time dataset by category. Columns number_of_maps and granularity only available fpr space time datasets
+#% description: Columns number_of_maps and granularity only available for space time datasets
+#% label: Sort the space time dataset by category
+#% guisection: Formatting
 #% required: no
 #% multiple: yes
 #% options: id, name, creator, mapset, number_of_maps, creation_time, start_time, end_time, interval, north, south, west, east, granularity
@@ -43,7 +52,9 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Columns to be printed to stdout. Columns number_of_maps and granularity only available for space time datasets
+#% description: Columns number_of_maps and granularity only available for space time datasets
+#% label: Columns to be printed to stdout
+#% guisection: Selection
 #% required: no
 #% multiple: yes
 #% options: id, name, creator, mapset, number_of_maps, creation_time, start_time, end_time, north, south, west, east, granularity, all
@@ -51,23 +62,21 @@
 #%end
 
 #%option G_OPT_T_WHERE
-#%end
-
-#%option G_OPT_T_TYPE
-#% multiple: yes
-#% answer: absolute,relative
+#% guisection: Selection
 #%end
 
 #%option
 #% key: fs
 #% type: string
 #% description: The field separator character between the columns, default is tabular "\t"
+#% guisection: Formatting
 #% required: no
 #%end
 
 #%flag
 #% key: c
 #% description: Print the column names as first row
+#% guisection: Formatting
 #%end
 
 import grass.script as grass

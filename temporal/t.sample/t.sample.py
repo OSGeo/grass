@@ -30,10 +30,12 @@
 
 #%option G_OPT_STDS_TYPE
 #% key: intype
+#% guisection: Required
 #%end
 
 #%option G_OPT_STDS_TYPE
 #% key: samtype
+#% guisection: Required
 #% description: Type of the sample space time dataset
 #%end
 

@@ -23,20 +23,24 @@
 
 #%option G_OPT_STDS_INPUT
 #% required: no
+#% guisection: Input
 #%end
 
 #%option G_OPT_MAP_INPUTS
 #% required: no
+#% guisection: Input
 #%end
 
 #%option G_OPT_MAP_TYPE
 #% guidependency: input,maps
+#% guisection: Input
 #%end
 
 #%option G_OPT_F_INPUT
 #% key: file
 #% required: no
 #% description: Input file with map names, one per line. Additionally the start time and the end time can be specified per line
+#% guisection: Input
 #%end
 
 #%option
@@ -45,6 +49,7 @@
 #% description: Valid start date and time of the first map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
 #% required: no
 #% multiple: no
+#% guisection: Time & Date
 #%end
 
 #%option
@@ -53,6 +58,7 @@
 #% description: Valid end date and time of all map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
 #% required: no
 #% multiple: no
+#% guisection: Time & Date
 #%end
 
 #%option
@@ -62,6 +68,7 @@
 #% required: no
 #% multiple: no
 #% options: years,months,days,hours,minutes,seconds
+#% guisection: Time & Date
 #%end
 
 #%option
@@ -70,6 +77,7 @@
 #% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative is integer: 5)
 #% required: no
 #% multiple: no
+#% guisection: Time & Date
 #%end
 
 #%option
@@ -78,11 +86,13 @@
 #% description: Field separator character of the input file
 #% required: no
 #% answer: |
+#% guisection: Input
 #%end
 
 #%flag
 #% key: i
 #% description: Create an interval (start and end time) in case an increment is provided
+#% guisection: Time & Date
 #%end
 
 import grass.script as grass

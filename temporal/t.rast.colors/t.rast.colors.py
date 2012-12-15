@@ -29,29 +29,34 @@
 #% description: Name of color table (see r.color help)
 #% required: no
 #% multiple: no
+#% guisection: Define
 #%end
 
 #%option G_OPT_R_INPUT
 #% key: raster
 #% description: Raster map from which to copy color table
 #% required: no
+#% guisection: Define
 #%end
 
 #%option G_OPT_R3_INPUT
 #% key: volume
 #% description: 3D raster map from which to copy color table
 #% required: no
+#% guisection: Define
 #%end
 
 #%option G_OPT_F_INPUT
 #% key: rules
 #% description: Path to rules file
 #% required: no
+#% guisection: Define
 #%end
 
 #%flag
 #% key: r
 #% description: Remove existing color tables
+#% guisection: Remove
 #%end
 
 #%flag
@@ -62,26 +67,31 @@
 #%flag
 #% key: l
 #% description: List available rules then exit
+#% guisection: Print
 #%end
 
 #%flag
 #% key: n
 #% description: Invert colors
+#% guisection: Define
 #%end
 
 #%flag
 #% key: g
 #% description: Logarithmic scaling
+#% guisection: Define
 #%end
 
 #%flag
 #% key: a
 #% description: Logarithmic-absolute scaling
+#% guisection: Define
 #%end
 
 #%flag
 #% key: e
 #% description: Histogram equalization
+#% guisection: Define
 #%end
 
 import grass.script as grass
