@@ -43,6 +43,7 @@ This program is free software under the GNU General Public License
 #% type: integer
 #% description: EPSG number of source projection for request 
 #% guisection: Request properties
+#% required: yes
 #%end
 
 #%option
