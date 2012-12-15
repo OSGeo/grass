@@ -10,11 +10,12 @@
 int vect_to_rast(const char *vector_map, const char *raster_map, const char *field_name,
 		 const char *column, int nrows, int use, double value,
 		 int value_type, const char *rgbcolumn, const char *labelcolumn,
-		 int ftype)
+		 int ftype, char *where, char *cats)
 {
     struct Map_info Map;
     struct line_pnts *Points;
     int i, field;
+    struct cat_list *cat_list = NULL;
     int fd;			/* for raster map */
     int nareas, nlines;		/* number of converted features */
     int nareas_all, nplines_all;	/* number of all areas, points/lines */
@@ -36,6 +37,10 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
     Vect_set_open_level(2);
     Vect_open_old2(&Map, vector_map, "", field_name);
     field = Vect_get_field_number(&Map, field_name);
+
+    if (field > 0)
+	cat_list = Vect_cats_set_constraint(&Map, field, where, cats);
+
 
     if ((use == USE_Z) && !(Vect_is_3d(&Map)))
 	G_fatal_error(_("Vector map <%s> is not 3D"),
@@ -129,8 +134,8 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
     Points = Vect_new_line_struct();
 
     if (use != USE_Z && use != USE_D && (ftype & GV_AREA)) {
-	if ((nareas = sort_areas(&Map, Points, field)) < 0)
-	    G_fatal_error(_("Unable to process areas from vector map <%s>"),
+	if ((nareas = sort_areas(&Map, Points, field, cat_list)) == 0)
+	    G_warning(_("No areas selected from vector map <%s>"),
 			  vector_map);
 
 	G_debug(1, "%d areas sorted", nareas);
@@ -163,8 +168,9 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
 	if (nlines) {
 	    if ((nlines =
-		 do_lines(&Map, Points, &cvarr, ctype, field, use, value,
-			  value_type, ftype, &nplines_all)) < 0) {
+		 do_lines(&Map, Points, &cvarr, ctype, field, cat_list, 
+		          use, value, value_type, ftype,
+			  &nplines_all)) < 0) {
 		G_warning(_("Problem processing lines from vector map <%s>, continuing..."),
 			  vector_map);
 		stat = -1;

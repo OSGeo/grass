@@ -29,8 +29,9 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *input, *output, *rows, *col, *field_opt, *use_opt,
-	*val_opt, *rgbcol_opt, *label_opt, *type_opt;
+    struct Option *input, *output, *rows, *col, *use_opt, *val_opt,
+		  *field_opt, *type_opt, *where_opt, *cats_opt,
+	          *rgbcol_opt, *label_opt;
     int nrows, use, value_type, type;
     double value;
     char *desc;
@@ -53,6 +54,12 @@ int main(int argc, char *argv[])
     type_opt->answer = "point,line,area";
     type_opt->guisection = _("Selection");
     
+    cats_opt = G_define_standard_option(G_OPT_V_CATS);
+    cats_opt->guisection = _("Selection");
+    
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    where_opt->guisection = _("Selection");
+
     output = G_define_standard_option(G_OPT_R_OUTPUT);
     
     use_opt = G_define_option();
@@ -146,7 +153,8 @@ int main(int argc, char *argv[])
 
     if (vect_to_rast(input->answer, output->answer, field_opt->answer,
 		     col->answer, nrows, use, value, value_type,
-		     rgbcol_opt->answer, label_opt->answer, type)) {
+		     rgbcol_opt->answer, label_opt->answer, type,
+		     where_opt->answer, cats_opt->answer)) {
 	exit(EXIT_FAILURE);
     }
 

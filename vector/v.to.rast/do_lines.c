@@ -14,8 +14,9 @@ static double deg_angle(double, double, double, double);
 
 
 int do_lines(struct Map_info *Map, struct line_pnts *Points,
-	     dbCatValArray * Cvarr, int ctype, int field, int use,
-	     double value, int value_type, int feature_type, int *count_all)
+	     dbCatValArray * Cvarr, int ctype, int field,
+	     struct cat_list *cat_list, int use, double value,
+	     int value_type, int feature_type, int *count_all)
 {
     double min = 0, max, u;
     int nlines, type, cat, no_contour = 0;
@@ -36,7 +37,14 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
     for (index = 1; index <= nlines; index++) {
 	G_percent(index, nlines, 2);
 	type = Vect_read_line(Map, Points, Cats, index);
-	Vect_cat_get(Cats, field, &cat);
+	cat = -1;
+	if (field > 0) {
+	    if (Vect_cats_in_constraint(Cats, field, cat_list)) {
+		Vect_cat_get(Cats, field, &cat);
+	    }
+	}
+	else
+	    cat = 0; /* categories do not matter */
 
 	if ((type & GV_POINT) || (type & GV_LINE))
 	    (*count_all)++;
