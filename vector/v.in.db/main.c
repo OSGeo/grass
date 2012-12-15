@@ -117,7 +117,8 @@ int main(int argc, char *argv[])
     db_init_string(&sql);
 
     Vect_open_new(&Map, outvect->answer, with_z);
-
+    Vect_set_error_handler_io(NULL, &Map);
+    
     Vect_hist_command(&Map);
 
     fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
