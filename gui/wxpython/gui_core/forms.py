@@ -942,10 +942,11 @@ class CmdPanel(wx.Panel):
                         p.get('gisprompt',False) == False and \
                         p.get('type', '') == 'string':
                     title_txt.SetLabel(" %s: (%s, %s) " % (title, p['name'], p['type']))
+                    stSizer = wx.StaticBoxSizer(box = title_txt, orient = wx.VERTICAL)
                     if valuelist_desc:
-                        hSizer = wx.StaticBoxSizer(box = title_txt, orient = wx.VERTICAL)
+                        hSizer = wx.FlexGridSizer(cols = 1, vgap = 1)
                     else:
-                        hSizer = wx.StaticBoxSizer(box = title_txt, orient = wx.HORIZONTAL)
+                        hSizer = wx.FlexGridSizer(cols = 5, vgap = 1, hgap = 1)
                     isEnabled = {}
                     # copy default values
                     if p['value'] == '':
@@ -968,12 +969,13 @@ class CmdPanel(wx.Panel):
                         p[ 'wxId' ].append(chkbox.GetId())
                         if val in isEnabled:
                             chkbox.SetValue(True)
-                        hSizer.Add(item = chkbox, proportion = 0,
-                                    flag = wx.ADJUST_MINSIZE | wx.ALL, border = 1)
+                        hSizer.Add(item = chkbox, proportion = 0)
                         chkbox.Bind(wx.EVT_CHECKBOX, self.OnCheckBoxMulti)
                         idx +=  1
                         
-                    which_sizer.Add(item = hSizer, proportion = 0,
+                    stSizer.Add(item = hSizer, proportion = 0,
+                                flag = wx.ADJUST_MINSIZE | wx.ALL, border = 1)
+                    which_sizer.Add(item = stSizer, proportion = 0,
                                     flag = wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border = 5)
                 elif p.get('gisprompt', False) == False:
                     if len(valuelist) == 1: # -> textctrl
