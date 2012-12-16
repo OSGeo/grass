@@ -1,6 +1,5 @@
 <h2>DESCRIPTION</h2>
 
-
 The <em>i.smap</em> program is used to segment
 multispectral images using a spectral class model known as
 a Gaussian mixture distribution.  Since Gaussian mixture
@@ -10,14 +9,13 @@ multispectral images based on simple spectral mean and
 covariance parameters.
 
 <p>
-<em>i.smap</em> has two modes of operation.  The first mode
+<em>i.smap</em> has two modes of operation. The first mode
 is the sequential maximum a posteriori (SMAP) mode
 [<a href="#ref1">1</a>,<a href="#ref2">2</a>].  The SMAP
 segmentation algorithm attempts to improve segmentation
 accuracy by segmenting the image into regions rather than
 segmenting each pixel separately 
 (see <a href="#notes">NOTES</a>).
-
 
 <p>
 The second mode is the more conventional maximum likelihood (ML)
@@ -30,21 +28,16 @@ the <b>-m</b> flag (see <a href="#mflag.html">below</a>).
 <h3>Flags:</h3>
 
 <dl>
-
 <dt><b>-m</b>
-
 <dd>Use maximum likelihood estimation (instead of smap).
 Normal operation is to use SMAP estimation (see
 <a href="#notes">NOTES</a>).
 
 <dt><b>-q</b> 
-
 <dd>Run quietly, without printing messages about program
 progress.  Without this flag, messages will be printed (to
 stderr) as the program progresses.
-
 </dl>
-
 
 <h3>Parameters:</h3>
 
@@ -118,7 +111,7 @@ If none of the arguments are specified on the command line,
 <em>i.smap</em> will interactively prompt for the names of
 the maps and files.
 
-<A NAME="notes"></a><h2>NOTES</h2>
+<a name="notes"></a><h2>NOTES</h2>
 
 The SMAP algorithm exploits the fact that nearby pixels in
 an image are likely to have the same class.  It works by
@@ -138,10 +131,42 @@ reduce the amount of smoothing.  This ensures that
 excessively large regions are not formed.
 
 <p>
-The module i.smap does not support MASKed or NULL cells. Therefore 
+The module <em>i.smap</em> does not support MASKed or NULL cells. Therefore 
 it might be necessary to create a copy of the classification results 
-using e.g. r.mapcalc. 
-<p>r.mapcalc  MASKed_map=classification results 
+using e.g. r.mapcalc:
+<p><div class="code"><pre>
+r.mapcalc "MASKed_map = classification_results"
+</pre></div>
+
+<h2>EXAMPLE</h2>
+
+Supervised classification of LANDSAT
+
+<div class="code"><pre>
+g.region rast=lsat7_2002_10 -p
+
+# store VIZ, NIR, MIR into group/subgroup
+i.group group=my_lsat7_2002 subgroup=my_lsat7_2002 \
+  input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
+
+# Now digitize training areas "training" with the digitizer
+# and convert to raster model with v.to.rast
+v.to.rast training out=training use=cat labelcolumn=label
+
+# calculate statistics
+i.gensigset trainingmap=training group=my_lsat7_2002 subgroup=my_lsat7_2002 \
+            signaturefile=my_smap_lsat7_2002 maxsig=5
+
+i.smap group=my_lsat7_2002 subgroup=my_lsat7_2002 signaturefile=my_smap_lsat7_2002 \
+       output=lsat7_2002_smap_classes
+
+# Visually check result
+d.mon wx0
+d.rast.leg lsat7_2002_smap_classes
+
+# Statistically check result
+r.kappa -w classification=lsat7_2002_smap_classes reference=training
+</pre></div>
 
 <h2>REFERENCES</h2>
 
@@ -179,9 +204,10 @@ to generate the signature file required by this program
 <a href="http://dynamo.ecn.purdue.edu/~bouman/software/segmentation/">Charles Bouman, 
 School of Electrical Engineering, Purdue University</a>
 
-<br>
+<p>
 Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
