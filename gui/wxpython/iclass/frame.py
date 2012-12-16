@@ -220,15 +220,15 @@ class IClassMapFrame(DoubleMapFrame):
         
     def RemoveTempRaster(self, raster):
         """!Removes temporary raster maps"""
-        self.trainingMapManager.RemoveTemporaryLayer(raster)
-        self.previewMapManager.RemoveTemporaryLayer(raster)
+        self.GetFirstMap().Clean()
+        self.GetSecondMap().Clean()
         ret = RunCommand(prog = 'g.remove',
                          parent = self,
                          rast = raster)
         if ret != 0:
             return False
         return True
-        
+
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
         
