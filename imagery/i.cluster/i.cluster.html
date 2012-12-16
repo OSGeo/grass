@@ -7,7 +7,8 @@ classification of imagery, while the GRASS program <em>
 the second pass. Both programs must be run to complete the unsupervised 
 classification.
 
-<p><em>i.cluster</em> is a clustering algorithm that reads
+<p>
+<em>i.cluster</em> is a clustering algorithm that reads
 through the (raster) imagery data and builds pixel clusters
 based on the spectral reflectances of the pixels (see Figure).
 The pixel clusters are imagery categories that can be related
@@ -17,7 +18,8 @@ spectral signatures) are influenced by six parameters set
 by the user.  The first parameter set by the user is the
 initial number of clusters to be discriminated.
 
-<p><center>
+<p>
+<center>
 <img src="landsat_cluster.png" border=1><br>
 <table border=0 width=590>
 <tr><td><center>
@@ -25,6 +27,7 @@ initial number of clusters to be discriminated.
 </center></td></tr>
 </table>
 </center>
+
 <p>
 <em>i.cluster</em> starts by generating spectral signatures
 for this number of clusters and "attempts" to end up with
@@ -36,7 +39,6 @@ and the other parameters set by the user.  These parameters
 are:  the minimum cluster size, minimum cluster separation,
 the percent convergence, the maximum number of iterations,
 and the row and column sampling intervals.
-
 
 <p>
 The cluster spectral signatures that result are composed of
@@ -71,24 +73,9 @@ The classes value is the initial number of clusters to be
 discriminated; any parameter values left unspecified are
 set to their default values.
 
-<h3>Flags:</h3>
-
-<dl>
-
-<dt><b>-q</b> 
-
-<dd>Run quietly.  Suppresses output of program
-percent-complete messages and the time elapsed from the
-beginning of the program. If this flag is not used, these
-messages are printed out.
-
-</dl>
-
 <h3>Parameters:</h3>
 
 <dl>
-
-
 <dt><b>group=</b><em>name</em> 
 
 <dd>The name of the group file which contains the imagery
@@ -156,7 +143,7 @@ rerun <em>i.cluster</em> with a higher number of iterations
 
 Default: 30
 
-<A NAME="convergence"></a>
+<a name="convergence"></a>
 <dt><b>convergence=</b><em>value</em>
 
 <dd>A high percent convergence is the point at which
@@ -197,7 +184,6 @@ convergence
 (see <a href="#convergence"><em>convergence</em></a>).
 
 <br>
-
 Default: 0.0
 
 <dt><b>min_size=</b><em>value</em> 
@@ -208,7 +194,6 @@ pixels for which means and covariance matrices will be
 calculated.
 
 <br>
-
 Default: 17
 
 <A NAME="reportfile"></a>
@@ -221,13 +206,30 @@ clusters, the number of iterations that was required to
 achieve the convergence, and the separability matrix.
 </dl>
 
-
 <h2>NOTES</h2>
 
 Running in command line mode, <em>i.cluster</em> will
 overwrite the output signature file and reportfile (if
 required by the user) without prompting if the files
 existed.
+
+<h2>EXAMPLE</h2>
+
+Preparing the statistics for unsupervised classification of
+a LANDSAT subscene in North Carolina:
+
+<div class="code"><pre>
+g.region rast=lsat7_2002_10 -p
+
+# store VIZ, NIR, MIR into group/subgroup
+i.group group=my_lsat7_2002 subgroup=my_lsat7_2002 \
+  input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
+
+i.cluster group=my_lsat7_2002 subgroup=my_lsat7_2002 sigfile=sig_clust_lsat2002 \
+          classes=10 report=rep_clust_lsat2002.txt
+</pre></div>
+
+To complete the unsupervised classification, <em>i.maxlik</em> is subsequently used.
 
 <h2>SEE ALSO</h2>
 
@@ -236,6 +238,7 @@ The GRASS 4 <em>
 Processing manual</a></em>
 
 <p>
+
 <em>
 <a href="i.class.html">i.class</a>,
 <a href="i.group.html">i.group</a>,
