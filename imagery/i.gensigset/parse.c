@@ -27,7 +27,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     maxsig->description = _("Maximum number of sub-signatures in any class");
     maxsig->required = NO;
     maxsig->type = TYPE_INTEGER;
-    maxsig->answer = "10";
+    maxsig->answer = "5";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
