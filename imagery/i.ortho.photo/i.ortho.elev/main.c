@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *group_opt, *elev_opt;
-    struct Flag *list_flag;
+    struct Flag *list_flag, *print_flag;
 
     char location[GMAPSET_MAX];
     char mapset[GMAPSET_MAX];
@@ -79,6 +79,11 @@ int main(int argc, char *argv[])
     list_flag->description =
 	_("List available raster maps in target mapset and exit");
 
+    print_flag = G_define_flag();
+    print_flag->key = 'p';
+    print_flag->description =
+	_("Print currently selected elevation map and exit");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -108,6 +113,13 @@ int main(int argc, char *argv[])
     if (access(buf, 0) != 0) {
 	G_fatal_error(_("Target location [%s] not found\n"), location);
     }
+
+    if (print_flag->answer) {
+	I_get_group_elev(group, elev_layer, mapset_elev, tl, math_exp, units, nd);
+	
+	exit(EXIT_SUCCESS);
+    }
+
 
     G__create_alt_env();
     G__setenv("LOCATION_NAME", location);
