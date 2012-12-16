@@ -69,8 +69,8 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
 
     category = statistics->cat;
 
-    /* region set to the first band */
-    Rast_get_cellhd(refer->file[0].name, refer->file[0].mapset, &band_region);
+    /* region set to current workin region */
+    G_get_set_window(&band_region);
 
     /* find perimeter points from vector map */
     ret =
