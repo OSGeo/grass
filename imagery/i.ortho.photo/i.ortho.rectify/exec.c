@@ -38,14 +38,14 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
 	    target_window.rows, target_window.cols, target_window.north,
 	    target_window.south, target_window.west, target_window.east);
 
-    elevfd = G_open_cell_old(elev_name, elev_mapset);
+    elevfd = Rast_open_old(elev_name, elev_mapset);
     if (elevfd < 0) {
 	G_fatal_error(_("Could not open elevation raster"));
 	return 1;
     }
     ebuffer = readcell(elevfd, seg_mb_elev, 1);
     select_target_env();
-    G_close_cell(elevfd);
+    Rast_close(elevfd);
 
     /* get an average elevation of the control points */
     /* this is used only if target cells have no elevation */
@@ -73,12 +73,12 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
 
 	select_current_env();
 
-	cats_ok = G_read_cats(name, mapset, &cats) >= 0;
-	colr_ok = G_read_colors(name, mapset, &colr) > 0;
+	cats_ok = Rast_read_cats(name, mapset, &cats) >= 0;
+	colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
 
 	/* Initialze History */
-	if (G_read_history(name, mapset, &hist) < 0)
-	    G_short_history(result, type, &hist);
+	if (Rast_read_history(name, mapset, &hist) < 0)
+	    Rast_short_history(result, type, &hist);
 	G_debug(2, "reading was fine...");
 
 	time(&start_time);
@@ -89,16 +89,16 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
 	    G_debug(2, "Done. Writing results...");
 	    select_target_env();
 	    if (cats_ok) {
-		G_write_cats(result, &cats);
-		G_free_cats(&cats);
+		Rast_write_cats(result, &cats);
+		Rast_free_cats(&cats);
 	    }
 	    if (colr_ok) {
-		G_write_colors(result, G_mapset(), &colr);
-		G_free_colors(&colr);
+		Rast_write_colors(result, G_mapset(), &colr);
+		Rast_free_colors(&colr);
 	    }
 	    /* Write out History */
-	    G_command_history(&hist);
-	    G_write_history(result, &hist);
+	    Rast_command_history(&hist);
+	    Rast_write_history(result, &hist);
 
 	    select_current_env();
 	    time(&rectify_time);

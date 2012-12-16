@@ -83,7 +83,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("imagery, orthorectify");
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("orthorectify"));
     module->description =
 	_("Orthorectifies an image by using the image to photo coordinate transformation matrix.");
 
@@ -201,7 +202,7 @@ int main(int argc, char *argv[])
 
 	for (m = 0; m < k; m++) {
 	    got_file = 0;
-	    if (G__name_is_fully_qualified(ifile->answers[m], xname, xmapset)) {
+	    if (G_name_is_fully_qualified(ifile->answers[m], xname, xmapset)) {
 		name = xname;
 		mapset = xmapset;
 	    }
@@ -277,7 +278,7 @@ int main(int argc, char *argv[])
 	    if (G_legal_filename(result) < 0)
 		G_fatal_error(_("Extension <%s> is illegal"), extension);
 		
-	    if (G_find_cell(result, G_mapset())) {
+	    if (G_find_raster2(result, G_mapset())) {
 		G_warning(_("The following raster map already exists in"));
 		G_warning(_("target LOCATION %s, MAPSET %s:"),
 			  G_location(), G_mapset());
@@ -286,7 +287,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (angle->answer) {
-	    if (G_find_cell(angle->answer, G_mapset())) {
+	    if (G_find_raster2(angle->answer, G_mapset())) {
 		G_warning(_("The following raster map already exists in"));
 		G_warning(_("target LOCATION %s, MAPSET %s:"),
 			  G_location(), G_mapset());
@@ -328,7 +329,7 @@ int main(int argc, char *argv[])
 
     /* get the elevation layer header in target location */
     select_target_env();
-    G_get_cellhd(elev_name, elev_mapset, &elevhd);
+    Rast_get_cellhd(elev_name, elev_mapset, &elevhd);
     select_current_env();
     
     /* determine memory for elevation and imagery */
@@ -342,7 +343,7 @@ int main(int argc, char *argv[])
 	max_rows = max_cols = 0;
 	for (i = 0; i < group.group_ref.nfiles; i++) {
 	    if (ref_list[i]) {
-		G_get_cellhd(group.group_ref.file[i].name,
+		Rast_get_cellhd(group.group_ref.file[i].name,
 			     group.group_ref.file[i].mapset, &cellhd);
 		if (max_rows < cellhd.rows)
 		    max_rows = cellhd.rows;

@@ -29,8 +29,8 @@ struct cache *readcell(int fdi, int size, int target_env)
     else
 	select_current_env();
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* Temporary file must be created in the same location/mapset 
      * where the module was called */
@@ -86,7 +86,7 @@ struct cache *readcell(int fdi, int size, int target_env)
 	    if (row + y >= nrows)
 		break;
 
-	    G_get_d_raster_row(fdi, &tmpbuf[y * nx * BDIM], row + y);
+	    Rast_get_d_row(fdi, &tmpbuf[y * nx * BDIM], row + y);
 	}
 
 	for (x = 0; x < nx; x++)
