@@ -1391,7 +1391,7 @@ class GMFrame(wx.Frame):
                      'Reason: %s') % errMsg)
             return
         
-        win = IClassMapFrame(parent = self)
+        win = IClassMapFrame(parent = self, giface = self._giface)
         win.CentreOnScreen()
         
         win.Show()
