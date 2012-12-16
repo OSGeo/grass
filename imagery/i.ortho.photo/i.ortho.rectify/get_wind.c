@@ -16,11 +16,11 @@ int get_ref_window(struct Cell_head *cellhd)
 	    continue;
 
 	if (count++ == 0) {
-	    G_get_cellhd(group.group_ref.file[i].name,
+	    Rast_get_cellhd(group.group_ref.file[i].name,
 			 group.group_ref.file[i].mapset, cellhd);
 	}
 	else {
-	    G_get_cellhd(group.group_ref.file[i].name,
+	    Rast_get_cellhd(group.group_ref.file[i].name,
 			 group.group_ref.file[i].mapset, &win);
 	    /* max extends */
 	    if (cellhd->north < win.north)
@@ -70,7 +70,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
 
     /* compute ortho ref of all corners */
 
-    I_georef(w1->west, w1->north, &e0, &n0, group.E12, group.N12);
+    I_georef(w1->west, w1->north, &e0, &n0, group.E12, group.N12, 1);
     I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
 			group.XC, group.YC, group.ZC, group.MI);
 
@@ -88,7 +88,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
     nw.n = n;
     nw.e = e;
 
-    I_georef(w1->east, w1->north, &e0, &n0, group.E12, group.N12);
+    I_georef(w1->east, w1->north, &e0, &n0, group.E12, group.N12, 1);
     I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
 			group.XC, group.YC, group.ZC, group.MI);
 
@@ -108,7 +108,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
     if (e < w2->west)
 	w2->west = e;
 
-    I_georef(w1->west, w1->south, &e0, &n0, group.E12, group.N12);
+    I_georef(w1->west, w1->south, &e0, &n0, group.E12, group.N12, 1);
     I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
 			group.XC, group.YC, group.ZC, group.MI);
 
@@ -128,7 +128,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
     if (e < w2->west)
 	w2->west = e;
 
-    I_georef(w1->east, w1->south, &e0, &n0, group.E12, group.N12);
+    I_georef(w1->east, w1->south, &e0, &n0, group.E12, group.N12, 1);
     I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
 			group.XC, group.YC, group.ZC, group.MI);
 

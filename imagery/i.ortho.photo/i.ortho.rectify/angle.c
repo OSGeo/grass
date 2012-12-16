@@ -40,13 +40,12 @@ int camera_angle(char *name)
     /* align target window to elevation map, otherwise we get artefacts
      * like in r.slope.aspect -a */
      
-    if (G_get_cellhd(elev_name, elev_mapset, &cellhd) < 0)
-	return 0;
+    Rast_get_cellhd(elev_name, elev_mapset, &cellhd);
 
-    G_align_window(&target_window, &cellhd);
-    G_set_window(&target_window);
+    Rast_align_window(&target_window, &cellhd);
+    Rast_set_window(&target_window);
     
-    elevfd = G_open_cell_old(elev_name, elev_mapset);
+    elevfd = Rast_open_old(elev_name, elev_mapset);
     if (elevfd < 0) {
 	G_fatal_error(_("Could not open elevation raster"));
 	return 1;
@@ -55,11 +54,11 @@ int camera_angle(char *name)
     nrows = target_window.rows;
     ncols = target_window.cols;
     
-    outfd = G_open_raster_new(name, FCELL_TYPE);
-    fbuf0 = G_allocate_raster_buf(FCELL_TYPE);
-    fbuf1 = G_allocate_raster_buf(FCELL_TYPE);
-    fbuf2 = G_allocate_raster_buf(FCELL_TYPE);
-    outbuf = G_allocate_raster_buf(FCELL_TYPE);
+    outfd = Rast_open_new(name, FCELL_TYPE);
+    fbuf0 = Rast_allocate_buf(FCELL_TYPE);
+    fbuf1 = Rast_allocate_buf(FCELL_TYPE);
+    fbuf2 = Rast_allocate_buf(FCELL_TYPE);
+    outbuf = Rast_allocate_buf(FCELL_TYPE);
     
     /* give warning if location units are different from meters and zfactor=1 */
     factor = G_database_units_to_meters_factor();
@@ -67,26 +66,26 @@ int camera_angle(char *name)
 	G_warning(_("Converting units to meters, factor=%.6f"), factor);
 
     G_begin_distance_calculations();
-    north = G_row_to_northing(0.5, &target_window);
-    ns_med = G_row_to_northing(1.5, &target_window);
-    south = G_row_to_northing(2.5, &target_window);
-    east = G_col_to_easting(2.5, &target_window);
-    west = G_col_to_easting(0.5, &target_window);
+    north = Rast_row_to_northing(0.5, &target_window);
+    ns_med = Rast_row_to_northing(1.5, &target_window);
+    south = Rast_row_to_northing(2.5, &target_window);
+    east = Rast_col_to_easting(2.5, &target_window);
+    west = Rast_col_to_easting(0.5, &target_window);
     V = G_distance(east, north, east, south) * 4;
     H = G_distance(east, ns_med, west, ns_med) * 4;
     
     c_angle_min = 90;
-    G_get_raster_row(elevfd, fbuf1, 0, FCELL_TYPE);
-    G_get_raster_row(elevfd, fbuf2, 1, FCELL_TYPE);
+    Rast_get_row(elevfd, fbuf1, 0, FCELL_TYPE);
+    Rast_get_row(elevfd, fbuf2, 1, FCELL_TYPE);
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	
-	G_set_null_value(outbuf, ncols, FCELL_TYPE);
+	Rast_set_null_value(outbuf, ncols, FCELL_TYPE);
 
 	/* first and last row */
 	if (row == 0 || row == nrows - 1) {
-	    G_put_raster_row(outfd, outbuf, FCELL_TYPE);
+	    Rast_put_row(outfd, outbuf, FCELL_TYPE);
 	    continue;
 	}
 	
@@ -95,38 +94,38 @@ int camera_angle(char *name)
 	fbuf1 = fbuf2;
 	fbuf2 = tmpbuf;
 	
-	G_get_raster_row(elevfd, fbuf2, row + 1, FCELL_TYPE);
+	Rast_get_row(elevfd, fbuf2, row + 1, FCELL_TYPE);
 
-	north = G_row_to_northing(row + 0.5, &target_window);
+	north = Rast_row_to_northing(row + 0.5, &target_window);
 
 	for (col = 1; col < ncols - 1; col++) {
 	    
 	    e1 = fbuf0[col - 1];
-	    if (G_is_d_null_value(&e1))
+	    if (Rast_is_d_null_value(&e1))
 		continue;
 	    e2 = fbuf0[col];
-	    if (G_is_d_null_value(&e2))
+	    if (Rast_is_d_null_value(&e2))
 		continue;
 	    e3 = fbuf0[col + 1];
-	    if (G_is_d_null_value(&e3))
+	    if (Rast_is_d_null_value(&e3))
 		continue;
 	    e4 = fbuf1[col - 1];
-	    if (G_is_d_null_value(&e4))
+	    if (Rast_is_d_null_value(&e4))
 		continue;
 	    e5 = fbuf1[col];
-	    if (G_is_d_null_value(&e5))
+	    if (Rast_is_d_null_value(&e5))
 		continue;
 	    e6 = fbuf1[col + 1];
-	    if (G_is_d_null_value(&e6))
+	    if (Rast_is_d_null_value(&e6))
 		continue;
 	    e7 = fbuf2[col - 1];
-	    if (G_is_d_null_value(&e7))
+	    if (Rast_is_d_null_value(&e7))
 		continue;
 	    e8 = fbuf2[col];
-	    if (G_is_d_null_value(&e8))
+	    if (Rast_is_d_null_value(&e8))
 		continue;
 	    e9 = fbuf2[col + 1];
-	    if (G_is_d_null_value(&e9))
+	    if (Rast_is_d_null_value(&e9))
 		continue;
 	    
 	    dx = ((e1 + e4 + e4 + e7) - (e3 + e6 + e6 + e9)) / H;
@@ -153,7 +152,7 @@ int camera_angle(char *name)
 	    }
 	    
 	    /* camera altitude angle in radians */
-	    east = G_col_to_easting(col + 0.5, &target_window);
+	    east = Rast_col_to_easting(col + 0.5, &target_window);
 	    dx = east - XC;
 	    dy = north - YC;
 	    dz = ZC - e5;
@@ -175,43 +174,43 @@ int camera_angle(char *name)
 	    if (c_angle_min > outbuf[col])
 		c_angle_min = outbuf[col];
 	}
-	G_put_raster_row(outfd, outbuf, FCELL_TYPE);
+	Rast_put_row(outfd, outbuf, FCELL_TYPE);
     }
     G_percent(row, nrows, 2);
 
-    G_close_cell(elevfd);
-    G_close_cell(outfd);
+    Rast_close(elevfd);
+    Rast_close(outfd);
     G_free(fbuf0);
     G_free(fbuf1);
     G_free(fbuf2);
     G_free(outbuf);
 
     type = "raster";
-    G_short_history(name, type, &hist);
-    G_command_history(&hist);
-    G_write_history(name, &hist);
+    Rast_short_history(name, type, &hist);
+    Rast_command_history(&hist);
+    Rast_write_history(name, &hist);
     
-    G_init_colors(&colr);
+    Rast_init_colors(&colr);
     if (c_angle_min < 0) {
 	clr_min = (FCELL)((int)(c_angle_min / 10 - 1)) * 10;
 	clr_max = 0;
-	G_add_f_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
+	Rast_add_f_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
 				  0, 0, &colr);
     }
     clr_min = 0;
     clr_max = 10;
-    G_add_f_raster_color_rule(&clr_min, 0, 0, 0, &clr_max, 255,
+    Rast_add_f_color_rule(&clr_min, 0, 0, 0, &clr_max, 255,
 			      0, 0, &colr);
     clr_min = 10;
     clr_max = 40;
-    G_add_f_raster_color_rule(&clr_min, 255, 0, 0, &clr_max, 255,
+    Rast_add_f_color_rule(&clr_min, 255, 0, 0, &clr_max, 255,
 			      255, 0, &colr);
     clr_min = 40;
     clr_max = 90;
-    G_add_f_raster_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+    Rast_add_f_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
 			      255, 0, &colr);
 
-    G_write_colors(name, G_mapset(), &colr);
+    Rast_write_colors(name, G_mapset(), &colr);
 
     select_current_env();
 

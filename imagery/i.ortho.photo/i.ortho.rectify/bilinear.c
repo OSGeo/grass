@@ -34,15 +34,15 @@ void p_bilinear(struct cache *ibuffer,	  /* input buffer                */
 
     /* check for out of bounds - if out of bounds set NULL value and return */
     if (row < 0 || row + 1 >= cellhd->rows || col < 0 || col + 1 >= cellhd->cols) {
-	G_set_null_value(obufptr, 1, cell_type);
+	Rast_set_null_value(obufptr, 1, cell_type);
 	return;
     }
 
     for (i = 0; i < 2; i++)
 	for (j = 0; j < 2; j++) {
 	    const DCELL *cellp = CPTR(ibuffer, row + i, col + j);
-	    if (G_is_d_null_value(cellp)) {
-		G_set_null_value(obufptr, 1, cell_type);
+	    if (Rast_is_d_null_value(cellp)) {
+		Rast_set_null_value(obufptr, 1, cell_type);
 		return;
 	    }
 	    c[i][j] = *cellp;
@@ -52,7 +52,7 @@ void p_bilinear(struct cache *ibuffer,	  /* input buffer                */
     t = *col_idx - 0.5 - col;
     u = *row_idx - 0.5 - row;
 
-    result = G_interp_bilinear(t, u, c[0][0], c[0][1], c[1][0], c[1][1]);
+    result = Rast_interp_bilinear(t, u, c[0][0], c[0][1], c[1][0], c[1][1]);
 
-    G_set_raster_value_d(obufptr, result, cell_type);
+    Rast_set_d_value(obufptr, result, cell_type);
 }

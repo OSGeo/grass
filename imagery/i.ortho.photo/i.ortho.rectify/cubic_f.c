@@ -30,24 +30,24 @@ void p_cubic_f(struct cache *ibuffer,	 /* input buffer                */
 
     /* check for out of bounds - if out of bounds set NULL value     */
     if (row < 0 || row >= cellhd->rows || col < 0 || col >= cellhd->cols) {
-        G_set_null_value(obufptr, 1, cell_type);
+        Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
 
     cellp = CPTR(ibuffer, row, col);
     /* if nearest is null, all the other interps will be null */
-    if (G_is_d_null_value(cellp)) {
-        G_set_null_value(obufptr, 1, cell_type);
+    if (Rast_is_d_null_value(cellp)) {
+        Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
     cell = *cellp;
     
     p_cubic(ibuffer, obufptr, cell_type, row_idx, col_idx, cellhd);
     /* fallback to bilinear if cubic is null */
-    if (G_is_d_null_value(obufptr)) {
+    if (Rast_is_d_null_value(obufptr)) {
         p_bilinear(ibuffer, obufptr, cell_type, row_idx, col_idx, cellhd);
         /* fallback to nearest if bilinear is null */
-	if (G_is_d_null_value(obufptr))
-	    G_set_raster_value_d(obufptr, cell, cell_type);
+	if (Rast_is_d_null_value(obufptr))
+	    Rast_set_d_value(obufptr, cell, cell_type);
     }
 }

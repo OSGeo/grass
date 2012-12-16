@@ -30,7 +30,7 @@ int Compute_ortho_equation(void)
 	z2 = group.control_points.z2[i];
 
 	/* image to photo transformation */
-	I_georef(e1, n1, &e0, &n0, group.E12, group.N12);
+	I_georef(e1, n1, &e0, &n0, group.E12, group.N12, 1);
 	I_new_con_point(&temp_points, e0, n0, z1, e2, n2, z2, status);
     }
 
