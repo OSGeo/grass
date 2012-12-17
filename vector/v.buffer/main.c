@@ -326,6 +326,12 @@ int main(int argc, char *argv[])
     else
 	field = -1;
 
+    if ((cats_opt->answer || where_opt->answer) && field == -1) {
+        G_warning(_("Invalid layer number (%d). Parameter '%s' or '%s' specified, assuming layer '1'."),
+                  field, cats_opt->key, where_opt->key);
+        field = 1;
+    }
+
     cat_list = NULL;
     if (field > 0)
 	cat_list = Vect_cats_set_constraint(&In, field, where_opt->answer,
@@ -343,7 +349,7 @@ int main(int argc, char *argv[])
 
     scale = atof(scale_opt->answer);
     if (scale <= 0.0)
-	G_fatal_error("Illegal scale value");
+        G_fatal_error(_("Illegal scale value"));
 
     da = db = dalpha = unit_tolerance = 0;
     if (dista_opt->answer) {
@@ -373,10 +379,7 @@ int main(int argc, char *argv[])
     /* open tmp vector for buffers, needed for cleaning */
     sprintf(bufname, "%s_tmp_%d", out_opt->answer, getpid());
     if (0 > Vect_open_new(&Buf, bufname, 0)) {
-	Vect_close(&In);
-	Vect_close(&Out);
-	Vect_delete(out_opt->answer);
-	exit(EXIT_FAILURE);
+        G_fatal_error(_("Unable to create vector map"));
     }
     Vect_build_partial(&Buf, GV_BUILD_BASE);
 
