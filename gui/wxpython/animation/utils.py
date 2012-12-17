@@ -18,6 +18,12 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 import wx
+try:
+    from PIL import Image
+    hasPIL = True
+except ImportError:
+    hasPIL = False
+
 import grass.temporal as tgis
 import grass.script as grass
 
@@ -131,3 +137,9 @@ def RenderText(text, font):
     dc.SelectObject(wx.NullBitmap)
 
     return bmp
+
+def WxImageToPil(image):
+    """!Converts wx.Image to PIL image"""
+    pilImage = Image.new( 'RGB', (image.GetWidth(), image.GetHeight()) )
+    pilImage.fromstring( image.GetData() )
+    return pilImage

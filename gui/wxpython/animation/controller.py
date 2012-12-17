@@ -16,12 +16,23 @@ This program is free software under the GNU General Public License
 import os
 import wx
 
+try:
+    import visvis.vvmovie as vv
+    hasVisvis = True
+except ImportError:
+    # if visvis.vvmovie is in grass python library
+    # import grass.visvis as vv
+    # 
+    # question: if integrate visvis, if integrate visvis.vvmovie or only 
+    # images2swf.py, images2gif.py?
+    hasVisvis = False
+
 from core.gcmd import GException, GError, GMessage
 import grass.script as grass
 
 from temporal_manager import TemporalManager
 from dialogs import InputDialog, EditDialog, AnimationData, ExportDialog
-from utils import TemporalMode, Orientation, RenderText
+from utils import TemporalMode, Orientation, RenderText, WxImageToPil
 
 class AnimationController(wx.EvtHandler):
     def __init__(self, frame, sliders, animations, mapwindows, providers, bitmapPool):
@@ -455,7 +466,8 @@ class AnimationController(wx.EvtHandler):
         if not self.animationData:
             GMessage(parent = self.frame, message = _("No animation to export."))
             return
-        dlg = ExportDialog(self.frame, temporal = self.temporalMode)
+        dlg = ExportDialog(self.frame, temporal = self.temporalMode,
+                           timeTick = self.timeTick, visvis = hasVisvis)
         if dlg.ShowModal() == wx.ID_OK:
             decorations = dlg.GetDecorations()
             exportInfo = dlg.GetExportInformation()
@@ -534,6 +546,29 @@ class AnimationController(wx.EvtHandler):
 
             busy.Destroy()
 
+        elif exportInfo['method'] in ('gif', 'swf', 'avi'):
+            pilImages = [WxImageToPil(image) for image in images]
+            
+
+            busy = wx.BusyInfo(message = _("Exporting animation, please wait..."), parent = self.frame)
+            wx.Yield()
+            try:
+                if exportInfo['method'] == 'gif':
+                    vv.writeGif(filename = exportInfo['file'], images = pilImages,
+                                duration = self.timeTick / float(1000), repeat = True)
+                elif exportInfo['method'] == 'swf':
+                    vv.writeSwf(filename = exportInfo['file'], images = pilImages,
+                                duration = self.timeTick / float(1000), repeat = True)
+                elif exportInfo['method'] == 'avi':
+                    vv.writeAvi(filename = exportInfo['file'], images = pilImages,
+                                duration = self.timeTick / float(1000),
+                                encoding = exportInfo['encoding'],
+                                inputOptions = '-sameq')
+            except Exception, e:
+                del busy
+                GError(parent = self.frame, message = str(e))
+                return
+            del busy
 
 
             # image.SaveFile('/home/anna/testy/grass/export/export_%s.png' % frameIndex, wx.BITMAP_TYPE_PNG)

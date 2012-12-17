@@ -8,6 +8,7 @@ Classes:
  - dialogs::InputDialog
  - dialogs::EditDialog
  - dialogs::AnimationData
+ - dialogs::ExportDialog
 
 
 (C) 2012 by the GRASS Development Team
@@ -784,15 +785,16 @@ class AnimationData(object):
 
 
 class ExportDialog(wx.Dialog):
-    def __init__(self, parent, temporal):
+    def __init__(self, parent, temporal, timeTick, visvis):
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = _("Export animation"),
                            style = wx.DEFAULT_DIALOG_STYLE)
         self.decorations = []
 
         self.temporal = temporal
+        self.timeTick = timeTick
+        self.visvis = visvis
         self._layout()
 
-        self.OnFormatRadio(event = None)
         wx.CallAfter(self._hideAll)
 
     def _layout(self):
@@ -939,70 +941,137 @@ class ExportDialog(wx.Dialog):
     def _createExportFormatPanel(self, notebook):
         panel = wx.Panel(notebook, id = wx.ID_ANY)
         borderSizer = wx.BoxSizer(wx.VERTICAL)
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        self.gifRadio = wx.RadioButton(panel, id = wx.ID_ANY, 
-                                       label = _("Export to animated GIF (not supported yet):"),
-                                       style = wx.RB_GROUP)
 
-        self.dirRadio = wx.RadioButton(panel, id = wx.ID_ANY, label = _("Export as image sequence:"))
-        self.dirRadio.SetValue(True)
-        self.gifRadio.Bind(wx.EVT_RADIOBUTTON, self.OnFormatRadio)
-        self.dirRadio.Bind(wx.EVT_RADIOBUTTON, self.OnFormatRadio)
+        if not self.visvis:
+            isVisvisText = wx.StaticText(panel, id = wx.ID_ANY,
+                                     label = _("To enable export to GIF and SWF, please install visvis library."))
+            isVisvisText.Wrap(400)
+            borderSizer.Add(item = isVisvisText, proportion = 0,
+                            flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.ALL, border = 5)
 
-        prefixLabel = wx.StaticText(panel, id = wx.ID_ANY, label = _("File prefix:"))
-        self.prefixCtrl = wx.TextCtrl(panel, id = wx.ID_ANY, value = _("animation"))
-        
-        formatLabel = wx.StaticText(panel, id = wx.ID_ANY, label = _("File format:"))
-        self.formatChoice = wx.Choice(panel, id = wx.ID_ANY)
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        if not self.visvis:
+            choices = [_("image sequence")]
+        else:
+            choices = [_("image sequence"), _("animated GIF"), _("SWF"), _("AVI")]
+        self.formatChoice = wx.Choice(parent = panel, id = wx.ID_ANY,
+                                      choices = choices)
+        self.formatChoice.Bind(wx.EVT_CHOICE, lambda event: self.ChangeFormat(event.GetSelection()))
+        hSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Export to:")),
+                   proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 2)
+        hSizer.Add(item = self.formatChoice, proportion = 1,
+                   flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.ALL, border = 2)
+        borderSizer.Add(item = hSizer, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
+
+        helpSizer = wx.BoxSizer(wx.HORIZONTAL)
+        helpSizer.AddStretchSpacer(1)
+        self.formatPanelSizer = wx.BoxSizer(wx.VERTICAL)
+        helpSizer.Add(self.formatPanelSizer, proportion = 5)
+        borderSizer.Add(helpSizer, proportion = 1, flag = wx.EXPAND)
+        self.formatPanels = []
+
+        # panel for image sequence
+        imSeqPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+        prefixLabel = wx.StaticText(imSeqPanel, id = wx.ID_ANY, label = _("File prefix:"))
+        self.prefixCtrl = wx.TextCtrl(imSeqPanel, id = wx.ID_ANY, value = _("animation"))
+        formatLabel = wx.StaticText(imSeqPanel, id = wx.ID_ANY, label = _("File format:"))
+        self.imSeqFormatChoice = wx.Choice(imSeqPanel, id = wx.ID_ANY)
         wildcard, ltype = GetImageHandlers(wx.EmptyImage(10, 10))
         formats = [format for format in wildcard.split('|') if 'file' in format]
         for format, cdata in zip(formats, ltype):
-            self.formatChoice.Append(format, cdata)
-
-        self.formatChoice.SetSelection(0)
-        
-        self.dirBrowse = filebrowse.DirBrowseButton(parent = panel, id = wx.ID_ANY,
-                                                    labelText = _("Export directory:"),
+            self.imSeqFormatChoice.Append(format, cdata)
+        self.imSeqFormatChoice.SetSelection(0)
+        self.dirBrowse = filebrowse.DirBrowseButton(parent = imSeqPanel, id = wx.ID_ANY,
+                                                    labelText = _("Directory:"),
                                                      dialogTitle = _("Choose directory for export"),
                                                      buttonText = _("Browse"),
                                                      startDirectory = os.getcwd())
-        self.gifBrowse = filebrowse.FileBrowseButton(parent = panel, id = wx.ID_ANY,
+
+        dirGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        dirGridSizer.AddGrowableCol(1)
+        dirGridSizer.Add(prefixLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        dirGridSizer.Add(self.prefixCtrl, pos = (0, 1), flag = wx.EXPAND)
+        dirGridSizer.Add(formatLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        dirGridSizer.Add(self.imSeqFormatChoice, pos = (1, 1), flag = wx.EXPAND)
+        dirGridSizer.Add(self.dirBrowse, pos = (2, 0), flag = wx.EXPAND, span = (1, 2))
+        imSeqPanel.SetSizer(dirGridSizer)
+        dirGridSizer.Fit(imSeqPanel)
+
+        self.formatPanelSizer.Add(item = imSeqPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanels.append(imSeqPanel)
+
+        # panel for gif
+        gifPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+
+        self.gifBrowse = filebrowse.FileBrowseButton(parent = gifPanel, id = wx.ID_ANY,
                                                      fileMask = "GIF file (*.gif)|*.gif",
                                                      labelText = _("GIF file:"),
-                                                     dialogTitle = _("Choose image file"),
+                                                     dialogTitle = _("Choose file to save animation"),
                                                      buttonText = _("Browse"),
                                                      startDirectory = os.getcwd(), fileMode = wx.SAVE)
+        gifGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        gifGridSizer.AddGrowableCol(0)
+        gifGridSizer.Add(self.gifBrowse, pos = (0, 0), flag = wx.EXPAND)
+        gifPanel.SetSizer(gifGridSizer)
+        gifGridSizer.Fit(gifPanel)
 
-        sizer.Add(self.gifRadio, proportion = 0, flag = wx.EXPAND)
-        gifSizer = wx.BoxSizer(wx.HORIZONTAL)
-        gifSizer.AddStretchSpacer(prop = 1)
-        gifSizer.Add(self.gifBrowse, proportion = 6, flag = wx.EXPAND)
-        sizer.Add(gifSizer, proportion = 0, flag = wx.EXPAND)
+        self.formatPanelSizer.Add(item = gifPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanels.append(gifPanel)
 
-        sizer.Add(self.dirRadio, proportion = 0, flag = wx.EXPAND)
+        # panel for swf
+        swfPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+        self.swfBrowse = filebrowse.FileBrowseButton(parent = swfPanel, id = wx.ID_ANY,
+                                                     fileMask = "SWF file (*.swf)|*.swf",
+                                                     labelText = _("SWF file:"),
+                                                     dialogTitle = _("Choose file to save animation"),
+                                                     buttonText = _("Browse"),
+                                                     startDirectory = os.getcwd(), fileMode = wx.SAVE)
+        swfGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        swfGridSizer.AddGrowableCol(0)
+        swfGridSizer.Add(self.swfBrowse, pos = (0, 0), flag = wx.EXPAND)
+        swfPanel.SetSizer(swfGridSizer)
+        swfGridSizer.Fit(swfPanel)
 
-        dirSizer = wx.BoxSizer(wx.HORIZONTAL)
-        dirSizer.AddStretchSpacer(prop = 1)
-        self.dirGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        self.dirGridSizer.AddGrowableCol(1)
-        self.dirGridSizer.Add(prefixLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        self.dirGridSizer.Add(self.prefixCtrl, pos = (0, 1), flag = wx.EXPAND)
-        self.dirGridSizer.Add(formatLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        self.dirGridSizer.Add(self.formatChoice, pos = (1, 1), flag = wx.EXPAND)
-        self.dirGridSizer.Add(self.dirBrowse, pos = (2, 0), flag = wx.EXPAND, span = (1, 2))
-        dirSizer.Add(self.dirGridSizer, proportion = 6, flag = wx.EXPAND)
+        self.formatPanelSizer.Add(item = swfPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanels.append(swfPanel)
 
-        sizer.Add(dirSizer, proportion = 0, flag = wx.EXPAND)
-        borderSizer.Add(sizer, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 10)
+        # panel for avi
+        aviPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+        self.aviBrowse = filebrowse.FileBrowseButton(parent = aviPanel, id = wx.ID_ANY,
+                                                     fileMask = "AVI file (*.avi)|*.avi",
+                                                     labelText = _("AVI file:"),
+                                                     dialogTitle = _("Choose file to save animation"),
+                                                     buttonText = _("Browse"),
+                                                     startDirectory = os.getcwd(), fileMode = wx.SAVE)
+        encodingLabel = wx.StaticText(parent = aviPanel, id = wx.ID_ANY, label = _("Video codec:"))
+        self.encodingText = wx.TextCtrl(parent = aviPanel, id = wx.ID_ANY, value = 'mpeg4')
+        aviGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        aviGridSizer.AddGrowableCol(1)
+        aviGridSizer.Add(self.aviBrowse, pos = (0, 0), span = (1, 2), flag = wx.EXPAND)
+        aviGridSizer.Add(encodingLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        aviGridSizer.Add(self.encodingText, pos = (1, 1), flag = wx.EXPAND)
+        aviPanel.SetSizer(aviGridSizer)
+        aviGridSizer.Fit(aviPanel)
+
+        self.formatPanelSizer.Add(item = aviPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanels.append(aviPanel)
+
+        fpsSizer = wx.BoxSizer(wx.HORIZONTAL)
+        fps = 1000 / self.timeTick
+        fpsSizer.Add(wx.StaticText(panel, id = wx.ID_ANY, label = _("Current frame rate: %.2f fps") % fps),
+                     proportion = 1, flag = wx.EXPAND)
+        borderSizer.Add(fpsSizer, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 5)
+
         panel.SetSizer(borderSizer)
         borderSizer.Fit(panel)
+        self.ChangeFormat(index = 0)
 
         return panel
 
-    def OnFormatRadio(self, event):
-        self.gifBrowse.Enable(self.gifRadio.GetValue())
-        for child in self.dirGridSizer.GetChildren():
-            child.GetWindow().Enable(self.dirRadio.GetValue())
+    def ChangeFormat(self, index):
+        for i, panel in enumerate(self.formatPanels):
+            self.formatPanelSizer.Show(item = panel, show = (i == index))
+        self.formatPanelSizer.Layout()
 
     def OnFont(self, event):
         index = self.listbox.GetSelection()
@@ -1113,7 +1182,7 @@ class ExportDialog(wx.Dialog):
                         GError(parent = self, message = _("Decoration image file is missing."))
                     return
 
-        if self.dirRadio.GetValue():
+        if self.formatChoice.GetSelection() == 0:
             name = self.dirBrowse.GetValue()
             if not os.path.exists(name):
                 if name:
@@ -1121,8 +1190,12 @@ class ExportDialog(wx.Dialog):
                 else:
                     GError(parent = self, message = _("Export directory is missing."))
                 return
-        elif self.gifRadio.GetValue():
+        elif self.formatChoice.GetSelection() == 1:
             if not self.gifBrowse.GetValue():
+                GError(parent = self, message = _("Export file is missing."))
+                return
+        elif self.formatChoice.GetSelection() == 2:
+            if not self.swfBrowse.GetValue():
                 GError(parent = self, message = _("Export file is missing."))
                 return
 
@@ -1133,14 +1206,25 @@ class ExportDialog(wx.Dialog):
 
     def GetExportInformation(self):
         info = {}
-        if self.gifRadio.GetValue():
-            info['method'] = 'gif'
-            info['file'] = self.gifBrowse.GetValue()
-        else:
+        if self.formatChoice.GetSelection() == 0:
             info['method'] = 'sequence'
             info['directory'] = self.dirBrowse.GetValue()
             info['prefix'] = self.prefixCtrl.GetValue()
-            info['format'] = self.formatChoice.GetClientData(self.formatChoice.GetSelection())
+            info['format'] = self.imSeqFormatChoice.GetClientData(self.imSeqFormatChoice.GetSelection())
+
+        elif self.formatChoice.GetSelection() == 1:
+            info['method'] = 'gif'
+            info['file'] = self.gifBrowse.GetValue()
+
+        elif self.formatChoice.GetSelection() == 2:
+            info['method'] = 'swf'
+            info['file'] = self.swfBrowse.GetValue()
+
+        elif self.formatChoice.GetSelection() == 3:
+            info['method'] = 'avi'
+            info['file'] = self.aviBrowse.GetValue()
+            info['encoding'] = self.encodingText.GetValue()
+
         return info
 
     def _updateListBox(self):
@@ -1188,7 +1272,8 @@ def testAnimEdit():
     dlg.Show()
 
 def testExport():
-    dlg = ExportDialog(parent = None, temporal = TemporalMode.TEMPORAL)
+    dlg = ExportDialog(parent = None, temporal = TemporalMode.TEMPORAL,
+                       timeTick = 200, visvis = True)
     if dlg.ShowModal() == wx.ID_OK:
         print dlg.GetDecorations()
         print dlg.GetExportInformation()
