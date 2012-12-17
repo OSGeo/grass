@@ -38,6 +38,7 @@
 #define __EMPQ_IMPL_H
 
 #include <ostream>
+#include <vector>
 using namespace std;
 
 #include "empq.h"
@@ -1374,7 +1375,7 @@ em_pqueue<T,Key>::merge_streams(ExtendedMergeStream** instreams,
   assert(arity> 1);
     
   //Pointers to current leading elements of streams
-  ExtendedEltMergeType<T,Key> in_objects[arity];
+  std::vector<ExtendedEltMergeType<T,Key> > in_objects(arity);
 
   AMI_err ami_err;
   //unsigned int i;
