@@ -15,7 +15,7 @@ static void print_N(double ***);
 static void print_alpha(double *);
 static void interp(unsigned char **, struct Region *, unsigned char **,
 		   LIKELIHOOD ***, int, double *, int, double ***, int, float **);
-void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int);
+void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int, float **);
 static int up_char(int, int, struct Region *, unsigned char **,
 		   unsigned char **);
 
@@ -46,7 +46,7 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 			    LIKELIHOOD **** ll_pym,	/* pyramid of class statistics */
 			    int M,	                /* number of classes */
 			    double *alpha_dec,	        /* decimation parameters returned by seq_MAP */
-			    float **goodness           /* goodness of fit */
+			    float **goodness            /* goodness of fit */
     )
 {
     int j, k;			/* loop index */
@@ -89,7 +89,7 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
     }
 
     /* Compute Maximum Likelihood estimate at coarsest resolution */
-    MLE(sf_pym[D], ll_pym[D], &(regionary[D]), M);
+    MLE(sf_pym[D], ll_pym[D], &(regionary[D]), M, NULL);
 
     /* Initialize the transition parameters */
     alpha[0] = 0.5 * (3.0 / 7.0);
@@ -201,7 +201,7 @@ static void interp(
 		      int period,	/* sampling period of interpolation */
 		      double ***N,	/* transition probability statistics; N[2][3][2] */
 		      int statflag,	/* compute transition statistics if == 1 */
-		      float **goodness /* cost of best class */
+		      float **goodness  /* cost of best class */
     )
 {
     int i, j;			/* pixel index */
@@ -292,7 +292,8 @@ void MLE(			/* computes maximum likelihood classification */
 	    unsigned char **sf,	/* segmentation classes */
 	    LIKELIHOOD *** ll,	/* texture statistics */
 	    struct Region *region,	/* image region */
-	    int M		/* number of classes */
+	    int M,		/* number of classes */
+	    float **goodness    /* goodness of fit */
     )
 {
     int i, j, m, best;
@@ -309,6 +310,8 @@ void MLE(			/* computes maximum likelihood classification */
 		}
 	    }
 	    sf[i][j] = best;
+	    if (goodness)
+		goodness[i][j] = max;
 	}
 }
 
