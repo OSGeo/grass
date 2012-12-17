@@ -210,7 +210,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     nvertices = 0;
     XPnts = NULL;
 
-    G_verbose_message(_("Snap vertices Pass 1: select points"));
+    G_important_message(_("Snap vertices Pass 1: select points"));
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
 	int v;
 
@@ -264,7 +264,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     /* Go through all registered points and if not yet marked mark it as anchor and assign this anchor
      * to all not yet marked points in threshold */
 
-    G_verbose_message(_("Snap vertices Pass 2: assign anchor vertices"));
+    G_important_message(_("Snap vertices Pass 2: assign anchor vertices"));
 
     nanchors = ntosnap = 0;
     for (point = 1; point <= npoints; point++) {
@@ -333,7 +333,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
 
     nsnapped = ncreated = 0;
 
-    G_verbose_message(_("Snap vertices Pass 3: snap to assigned points"));
+    G_important_message(_("Snap vertices Pass 3: snap to assigned points"));
 
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
 	int v, spoint, anchor;
@@ -543,6 +543,7 @@ Vect_snap_lines(struct Map_info *Map, int type, double thresh,
 
     nlines = Vect_get_num_lines(Map);
 
+    G_important_message(_("Reading features..."));
     for (line = 1; line <= nlines; line++) {
 	G_debug(3, "line =  %d", line);
 
