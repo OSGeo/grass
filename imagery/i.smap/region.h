@@ -22,7 +22,7 @@ int levels(int, int);
 /* interp.c */
 void seq_MAP(unsigned char ***, struct Region *, LIKELIHOOD ****, int,
 	     double *, float **);
-void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int);
+void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int, float **);
 
 /* reg_util.c */
 int levels_reg(struct Region *);

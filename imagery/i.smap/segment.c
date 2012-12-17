@@ -110,7 +110,7 @@ int segment(struct SigSet *S,	/* class parameters */
 	extract(img, &region, ll_pym[0], S);
 
 	if (ml)
-	    MLE(sf_pym[0], ll_pym[0], &region, nclasses);
+	    MLE(sf_pym[0], ll_pym[0], &region, nclasses, goodness);
 	else {
 	    for (i = 0; i < D; i++)
 		alpha_dec[i] = 1.0;
