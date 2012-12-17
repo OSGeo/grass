@@ -41,6 +41,7 @@ int segment(struct SigSet *S,	/* class parameters */
     LIKELIHOOD ****ll_pym;	/* pyramid of log likelihoods */
     unsigned char ***sf_pym;	/* pyramid of segmentations */
     int D;			/* number of levels in pyramid */
+    float **goodness;          /* goodness of fit */
     double *alpha_dec;		/* class transition probabilities */
     int i;
 
@@ -82,6 +83,16 @@ int segment(struct SigSet *S,	/* class parameters */
     /* allocate memory for segmentation pyramid */
     sf_pym = (unsigned char ***)get_pyramid(wd, ht, sizeof(char));
 
+    if (parms->goodness_map) {
+	goodness = G_malloc(ht * sizeof(float *));
+	goodness[0] = G_malloc(sizeof(float *) * ht * wd);
+	for (i = 1; i < ht; i++) {
+	    goodness[i] = goodness[i - 1] + wd;
+	}
+    }
+    else
+	goodness = NULL;
+
     /* tiled segmentation */
     init_reg(&region, wd, ht, block_size);
     extract_init(S);
@@ -103,13 +114,13 @@ int segment(struct SigSet *S,	/* class parameters */
 	else {
 	    for (i = 0; i < D; i++)
 		alpha_dec[i] = 1.0;
-	    seq_MAP(sf_pym, &region, ll_pym, nclasses, alpha_dec);
+	    seq_MAP(sf_pym, &region, ll_pym, nclasses, alpha_dec, goodness);
 	}
 
 
     } while (increment_reg(&region, wd, ht, block_size));
 
-    write_img(sf_pym[0], wd, ht, S, parms, files);
+    write_img(sf_pym[0], goodness, wd, ht, S, parms, files);
 
     return 0;
 }

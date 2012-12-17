@@ -9,12 +9,12 @@
 #define ML_PRECISION 1e-6
 
 static void seq_MAP_routine(unsigned char ***, struct Region *,
-			    LIKELIHOOD ****, int, double *);
+			    LIKELIHOOD ****, int, double *, float **);
 static double alpha_dec_max(double ***);
 static void print_N(double ***);
 static void print_alpha(double *);
 static void interp(unsigned char **, struct Region *, unsigned char **,
-		   LIKELIHOOD ***, int, double *, int, double ***, int);
+		   LIKELIHOOD ***, int, double *, int, double ***, int, float **);
 void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int);
 static int up_char(int, int, struct Region *, unsigned char **,
 		   unsigned char **);
@@ -23,8 +23,9 @@ static int up_char(int, int, struct Region *, unsigned char **,
 void seq_MAP(unsigned char ***sf_pym,	/* pyramid of segmentations */
 	     struct Region *region,	/* specifies image subregion */
 	     LIKELIHOOD **** ll_pym,	/* pyramid of class statistics */
-	     int M,		/* number of classes */
-	     double *alpha_dec	/* decimation parameters returned by seq_MAP */
+	     int M,		        /* number of classes */
+	     double *alpha_dec,	        /* decimation parameters returned by seq_MAP */
+	     float **goodness          /* goodness of fit */
     )
 {
     int repeat;
@@ -36,15 +37,16 @@ void seq_MAP(unsigned char ***sf_pym,	/* pyramid of segmentations */
 	G_debug(1, "Pyramid constructed");
 
 	/* Perform sequential MAP segmentation using EM algorithm */
-	seq_MAP_routine(sf_pym, region, ll_pym, M, alpha_dec);
+	seq_MAP_routine(sf_pym, region, ll_pym, M, alpha_dec, goodness);
     }
 }
 
 static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations */
 			    struct Region *region,	/* specifies image subregion */
 			    LIKELIHOOD **** ll_pym,	/* pyramid of class statistics */
-			    int M,	/* number of classes */
-			    double *alpha_dec	/* decimation parameters returned by seq_MAP */
+			    int M,	                /* number of classes */
+			    double *alpha_dec,	        /* decimation parameters returned by seq_MAP */
+			    float **goodness           /* goodness of fit */
     )
 {
     int j, k;			/* loop index */
@@ -105,7 +107,7 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 	 * fixed number of iterations or until convergence.   */
 	do {
 	    interp(sf_pym[D], &(regionary[D]), sf_pym[D + 1], ll_pym[D], M,
-		   alpha, period[D], N, 1);
+		   alpha, period[D], N, 1, NULL);
 	    print_N(N);
 	    G_debug(4, "log likelihood = %f", log_like(N, alpha, M));
 	    for (j = 0; j < 3; j++)
@@ -119,8 +121,13 @@ static void seq_MAP_routine(unsigned char ***sf_pym,	/* pyramid of segmentations
 		diff1 += fabs(tmp[j] - alpha[j]);
 	    diff2 = log_like(N, alpha, M) - log_like(N, tmp, M);
 	} while ((diff1 > EM_PRECISION) && (diff2 > 0));
-	interp(sf_pym[D], &(regionary[D]), sf_pym[D + 1], ll_pym[D], M, alpha,
-	       1, N, 0);
+	/* get goodness of fit for D == 0 */
+	if (D == 0)
+	    interp(sf_pym[D], &(regionary[D]), sf_pym[D + 1], ll_pym[D], M, alpha,
+		   1, N, 0, goodness);
+	else
+	    interp(sf_pym[D], &(regionary[D]), sf_pym[D + 1], ll_pym[D], M, alpha,
+		   1, N, 0, NULL);
 	alpha_dec[D] = alpha_dec_max(N);
 
 	print_N(N);
@@ -193,7 +200,8 @@ static void interp(
 		      double *alpha,	/* transition probability parameters; alpha[3] */
 		      int period,	/* sampling period of interpolation */
 		      double ***N,	/* transition probability statistics; N[2][3][2] */
-		      int statflag	/* compute transition statistics if == 1 */
+		      int statflag,	/* compute transition statistics if == 1 */
+		      float **goodness /* cost of best class */
     )
 {
     int i, j;			/* pixel index */
@@ -255,6 +263,9 @@ static void interp(
 		}
 	    }
 	    sf1[i][j] = best;
+	    /* save cost as best fit indicator */
+	    if (goodness)
+		goodness[i][j] = mincost;
 
 	    /* if not on boundary, compute expectation of N */
 	    if ((!bflag) && (statflag)) {
