@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
     char input[GNAME_MAX+8];
     char output[GNAME_MAX+8];
     char title[GPATH_MAX];
-    const char *args[5];
+    char rules[GNAME_MAX+8];
+    const char *args[6];
     struct Popen child;
     CELL old_min, old_max;
     CELL new_min, new_max;
@@ -130,11 +131,14 @@ int main(int argc, char *argv[])
     else
 	sprintf(title, "title=rescale of %s", old_name);
 
+    sprintf(rules, "rules=-");
+
     args[0] = "r.reclass";
     args[1] = input;
     args[2] = output;
     args[3] = title;
-    args[4] = NULL;
+    args[4] = rules; 
+    args[5] = NULL;
 
     fp = G_popen_write(&child, "r.reclass", args);
 
