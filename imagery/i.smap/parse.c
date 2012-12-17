@@ -7,7 +7,7 @@
 
 int parse(int argc, char *argv[], struct parms *parms)
 {
-    struct Option *group, *subgroup, *sigfile, *output;
+    struct Option *group, *subgroup, *sigfile, *output, *goodness;
     struct Option *blocksize;
     struct Flag *ml;
 
@@ -24,6 +24,11 @@ int parse(int argc, char *argv[], struct parms *parms)
     sigfile->type = TYPE_STRING;
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
+
+    goodness = G_define_standard_option(G_OPT_R_OUTPUT);
+    goodness->key = "goodness";
+    goodness->required = NO;
+    goodness->label = _("Name of goodness of fit map (lower is better)");
 
     blocksize = G_define_option();
     blocksize->key = "blocksize";
@@ -46,6 +51,8 @@ int parse(int argc, char *argv[], struct parms *parms)
     parms->group = group->answer;
     parms->subgroup = subgroup->answer;
     parms->sigfile = sigfile->answer;
+    
+    parms->goodness_map = goodness->answer;
 
     /* check all the inputs */
     if (!I_find_group(parms->group))

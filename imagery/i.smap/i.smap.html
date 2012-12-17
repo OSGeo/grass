@@ -131,6 +131,11 @@ reduce the amount of smoothing.  This ensures that
 excessively large regions are not formed.
 
 <p>
+The degree of misclassifications can be investigated with the goodness 
+of fit output map. Lower values indicate a better fit. The largest 5 to 
+15% of the goodness values may need some closer inspection.
+
+<p>
 The module <em>i.smap</em> does not support MASKed or NULL cells. Therefore 
 it might be necessary to create a copy of the classification results 
 using e.g. r.mapcalc:

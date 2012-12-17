@@ -39,5 +39,10 @@ int openfiles(struct parms *parms, struct files *files)
     /* open output map */
     files->output_fd = open_cell_new(parms->output_map);
 
+    if (parms->goodness_map)
+	files->goodness_fd = Rast_open_new(parms->goodness_map, FCELL_TYPE);
+    else
+	files->goodness_fd = -1;
+
     return 0;
 }

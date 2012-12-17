@@ -7,6 +7,7 @@
 struct files
 {
     int output_fd;
+    int goodness_fd;
     struct Categories output_labels;
 
     int *band_fd;
@@ -20,6 +21,7 @@ struct files
 struct parms
 {
     char *output_map;
+    char *goodness_map;
     char *group;
     char *subgroup;
     char *sigfile;
@@ -66,7 +68,7 @@ int read_signatures(struct parms *, struct SigSet *);
 int create_output_labels(struct SigSet *, struct files *);
 
 /* write_img.c */
-int write_img(unsigned char **, int, int, struct SigSet *, struct parms *,
+int write_img(unsigned char **, float **, int, int, struct SigSet *, struct parms *,
 	      struct files *);
 #endif
 
