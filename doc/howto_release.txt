@@ -106,7 +106,7 @@ Contents
 
 
  o Store the source tarball (twice) in (use scp -p FILES grass:):
-    SERVER1=grass.osgeo.org:/osgeo/grass/grass-web-public/grass$MAJOR$MINOR/source/
+    SERVER1=grass.osgeo.org:/osgeo/grass/grass-cms/grass$MAJOR$MINOR/source/
     SERVER2=download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/source/
     echo $SERVER1
     echo $SERVER2
@@ -120,24 +120,24 @@ Contents
          SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER2
     
 
- o update web site to new version (http://trac.osgeo.org/grass/browser/grass-web)
-      - rss.xml (for news section)
-      - download/software.inc
-      - grass$MAJOR$MINOR/main.inc
-      - devel/grasshist.html
-      - devel/grassreleases.html
-      - devel/svntags.inc (add tag): echo $RELEASETAG
+ o update web site to new version: CMS
+    - News section
+    - http://grass.osgeo.org/download/software/
+    - http://grass.osgeo.org/download/software/sources/
+    - http://grass.osgeo.org/grass64/ <- to be moved to CMS
+    - http://grass.osgeo.org/home/history/releases/
+    - http://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
 
      write announcement
       - store in trac: http://trac.osgeo.org/grass/wiki/Release/6.XX.YY-News
-      - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html
+      - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page?
 
  o upload user HTML manual in case of *final release* from compiled English
    version at (warning: needs stuff to be compiled).
       - download new source code package, compile with most settings
       -  cd dist.$ARCH/docs/html
          echo www/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
-         scp -r * neteler@grass.osgeo.org:/osgeo/grass/grass-web-public/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
+         scp -r * neteler@grass.osgeo.org:/osgeo/grass/grass-cms/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
          scp -r * neteler@download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
 
  o stable release: update cronjob 'cron_grass_HEAD_src_snapshot.sh' to next but one
