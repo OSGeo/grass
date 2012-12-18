@@ -578,8 +578,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         vect = []
         rast3d = []
         for layer in self.GetSelections():
-            mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
-            mltype = self.GetLayerInfo(self.layer_selected, key = 'type')
+            mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
+            mltype = self.GetLayerInfo(layer, key = 'type')
                 
             if mltype == 'raster':
                 rast.append(mapLayer.GetName())
