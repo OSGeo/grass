@@ -47,7 +47,7 @@
 #include <grass/iostream/ami_stream.h>
 
 
-char *ami_str_error[] = {
+const char *ami_str_error[] = {
   "AMI_ERROR_NO_ERROR",
   "AMI_ERROR_IO_ERROR",
   "AMI_ERROR_END_OF_STREAM",

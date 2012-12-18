@@ -1250,7 +1250,7 @@ em_pqueue<T,Key>::merge_buffer(em_buffer<T,Key> *buf,
   /* Pointers to current leading elements of streams */
   unsigned int arity = buf->get_nbstreams();
   AMI_STREAM<T>** instreams = buf->get_streams();
-  T* in_objects[arity];
+  std::vector<T*> in_objects(arity);
   AMI_err ami_err;
   unsigned int i, j;
 

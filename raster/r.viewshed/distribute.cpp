@@ -189,7 +189,7 @@ unsigned long distribute_sector(AMI_STREAM < AEvent > *eventList,
 
     G_debug(2, "***  DISTRIBUTE sector [%.4f, %.4f]  ***",
 			    start_angle, end_angle);
-    G_debug(2, "initial_gradient: %lf", SMALLEST_GRADIENT);
+    G_debug(2, "initial_gradient: %f", SMALLEST_GRADIENT);
     G_debug(2, "eventlist: %s", eventList->sprint());
     if (enterBndEvents)
 	G_debug(2, "BndEvents: %s", enterBndEvents->sprint());
