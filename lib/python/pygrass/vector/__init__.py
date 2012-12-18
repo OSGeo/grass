@@ -315,7 +315,7 @@ class VectorTopo(Vector):
             if _GEOOBJ[vtype] is not None:
                 return (_GEOOBJ[vtype](v_id=indx, c_mapinfo=self.c_mapinfo,
                                        table=self.table,
-                                       write=self.write)
+                                       writable=self.write)
                         for indx in xrange(1, self.number_of(vtype) + 1))
         else:
             keys = "', '".join(sorted(_GEOOBJ.keys()))
@@ -400,7 +400,7 @@ class VectorTopo(Vector):
             if v != 0:
                 output = False
                 break
-        return output        
+        return output
 
     @must_be_open
     def rewrite(self, geo_obj):

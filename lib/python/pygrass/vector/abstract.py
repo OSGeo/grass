@@ -262,7 +262,7 @@ class Info(object):
             raise OpenError(str_err % openvect)
         # istantiate the table
         self.table = self.get_table(link_id=self.link_id)
-        self.write = self.mapset == functions.getenv("MAPSET")
+        self.writable = self.mapset == functions.getenv("MAPSET")
 
     def get_table(self, link_id=None, link_name=None,):
         if link_id is None and link_name is None and len(self.dblinks) == 0:
