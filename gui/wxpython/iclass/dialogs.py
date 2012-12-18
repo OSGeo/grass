@@ -408,11 +408,11 @@ class IClassSignatureFileDialog(wx.Dialog):
         env = grass.gisenv()
         
         # inconsistent group and subgroup name
-        # path: grassdata/nc_spm_08/landsat/group/test_group/subgroup/test_group@landsat/sig/sigFile
+        # path: grassdata/nc_spm_08/landsat/group/test_group/subgroup/test_group/sig/sigFile
         self.baseFilePath = os.path.join(env['GISDBASE'],
                                          env['LOCATION_NAME'],
                                          env['MAPSET'],
-                                         'group', group.split('@')[0], # !
+                                         'group', group,
                                          'subgroup', group,
                                          'sig')
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)

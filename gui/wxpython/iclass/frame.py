@@ -421,8 +421,8 @@ class IClassMapFrame(DoubleMapFrame):
         dlg = IClassGroupDialog(self, group = self.group)
         if dlg.ShowModal() == wx.ID_OK:
             group = grass.find_file(name = dlg.GetGroup(), element = 'group')
-            if group['fullname']:
-                self.group = group['fullname']
+            if group['name']:
+                self.group = group['name']
                 
         dlg.Destroy()
         
