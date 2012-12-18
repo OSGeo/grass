@@ -988,7 +988,7 @@ AMI_err em_buffer<T,Key>::substream_merge(AMI_STREAM<T>** instreams,
 #endif
   }
 
-  T* in_objects[arity]; //pointers to current leading elements of streams
+  std::vector<T*> in_objects(arity); //pointers to current leading elements of streams
   AMI_err ami_err;
   
  
