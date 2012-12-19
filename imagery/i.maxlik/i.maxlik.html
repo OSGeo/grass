@@ -107,11 +107,13 @@ threshold results. This is the result of a chi square test
 on each discriminant result at various threshold levels of
 confidence to determine at what confidence level each cell
 classified (categorized). It is the reject threshold map
-layer, and contains one calculated confidence level for
-each classified cell in the classified image. One of the
-possible uses for this map layer is as a mask, to identify
-cells in the classified image that have the lowest
-probability of being assigned to the correct class.
+layer, and contains the index to one calculated confidence level for
+each classified cell in the classified image. 16 confidence intervals 
+are predefined, and the reject map is to be interpreted as 1 = keep and 
+16 = reject. One of the possible uses for this map layer is as a mask, 
+to identify cells in the classified image that have a low
+probability (high reject index) of being assigned to the correct 
+class.
 </dl>
 
 
