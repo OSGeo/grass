@@ -13,3 +13,7 @@ d.rast.num testascii
 
 r.drain testascii out=drain coord=638442.5,220548.5
 d.rast -o drain
+
+# for statistical test results:
+# - verify number of resulting pixels (r.univar -g)
+# - verify minimum and maximum of result (r.univar -g)
