@@ -946,7 +946,7 @@ class CmdPanel(wx.Panel):
                     if valuelist_desc:
                         hSizer = wx.FlexGridSizer(cols = 1, vgap = 1)
                     else:
-                        hSizer = wx.FlexGridSizer(cols = 5, vgap = 1, hgap = 1)
+                        hSizer = wx.FlexGridSizer(cols = 6, vgap = 1, hgap = 1)
                     isEnabled = {}
                     # copy default values
                     if p['value'] == '':
