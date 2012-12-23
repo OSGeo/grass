@@ -8,7 +8,7 @@ import ctypes
 import grass.lib.gis as libgis
 import grass.script as grass
 
-from errors import GrassError
+from pygrass.errors import GrassError
 
 
 class Region(object):
