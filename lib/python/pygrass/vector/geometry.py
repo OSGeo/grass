@@ -200,7 +200,7 @@ class Geo(object):
             self.c_cats = c_cats
 
         # set the attributes
-        if table:
+        if table and self.id:
             self.attrs = Attrs(self.id, table, writable)
 
     def is_with_topology(self):
@@ -1088,9 +1088,18 @@ class Area(Geo):
 
     def __init__(self, boundary=None, centroid=None, isles=[], **kargs):
         super(Area, self).__init__(**kargs)
-        self.boundary = self.points()
-        self.centroid = self.centroid()
-        self.isles = self.get_isles()
+        if self.id is not None and self.c_mapinfo:
+            self.boundary = self.points()
+            self.centroid = self.centroid()
+            self.isles = self.get_isles()
+        elif boundary and centroid:
+            self.boundary = boundary
+            self.centroid = centroid
+            self.isles = isles
+        else:
+            str_err = "To instantiate an Area you need at least: Boundary and Centroid"
+            raise GrassError(str_err)
+
         # geometry type
         self.gtype = libvect.GV_AREA
 
