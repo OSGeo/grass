@@ -127,7 +127,7 @@ GridHeader *read_header(char *rastName, Cell_head * region)
     hd->ns_res = region->ns_res;
     //store the null value of the map
     Rast_set_null_value(&(hd->nodata_value), 1, G_SURFACE_TYPE);
-    G_message("Nodata value set to %f", hd->nodata_value);
+    G_verbose_message("Nodata value set to %f", hd->nodata_value);
     
     
     
@@ -616,7 +616,7 @@ save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
 		   float (*fun) (float))
 {
 
-    G_message(_("Saving grid to <%s>"), filename);
+    G_important_message(_("Writing output raster map..."));
     assert(grid && filename);
 
     /*open the new raster  */
@@ -633,6 +633,7 @@ save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
     dimensionType i, j;
 
     for (i = 0; i < Rast_window_rows(); i++) {
+        G_percent(i, Rast_window_rows(), 5);
 	for (j = 0; j < Rast_window_cols(); j++) {
 
 	    if (is_visible(grid->grid_data[i][j])) {
@@ -653,7 +654,8 @@ save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
 	}			/* for j */
 	Rast_put_row(outfd, outrast, type);
     }				/* for i */
-
+    G_percent(1, 1, 1);
+    
     Rast_close(outfd);
     return;
 }
