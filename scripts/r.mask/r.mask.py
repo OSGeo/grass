@@ -73,6 +73,8 @@ import atexit
 def cleanup():
     if tmp:
         grass.run_command('g.remove', rast = tmp, quiet = True)
+    if tmp_hull:
+        grass.run_command('g.remove', vect = tmp_hull, quiet = True)
 
 def main():
     raster = options['raster']
@@ -91,20 +93,23 @@ def main():
     exists = bool(grass.find_file('MASK', element = 'cell', mapset = mapset)['file'])
 
     if remove:
+        # -> remove
         if exists:
-            grass.run_command('g.remove', rast = 'MASK')
+            grass.run_command('g.remove', quiet = True, rast = 'MASK')
             grass.message(_("Raster MASK removed"))
         else:
             grass.fatal(_("No existing MASK to remove"))
     else:
+        # -> create
         if exists:
             if not grass.overwrite():
                 grass.fatal(_("MASK already found in current mapset. Delete first or overwrite."))
             else:
                 grass.warning(_("MASK already exists and will be overwritten"))
-
+                grass.run_command('g.remove', quiet = True, rast = 'MASK')
+        
         if raster:
-            #check if input raster exists
+            # check if input raster exists
             if not grass.find_file(raster)['file']:
                 grass.fatal(_("<%s> does not exist.") % raster)
 
@@ -117,35 +122,54 @@ def main():
             p.stdin.close()
             p.wait()
         elif vector:
-            if not grass.find_file(vector, 'vector')['file']:
+            vector_name = grass.find_file(vector, 'vector')['fullname']
+            if not vector_name:
                 grass.fatal(_("<%s> does not exist.") % vector)
-
+            
             # parser bug?
             if len(cats) == 0:
                 cats = None
             if len(where) == 0:
                 where = None
-
-            grass.run_command('v.to.rast', input = vector, layer = layer,
+            
+            if grass.vector_info_topo(vector_name)['areas'] < 1:
+                grass.warning(_("No area found in vector map <%s>. "
+                                "Creating a convex hull for MASK.") % vector_name)
+                global tmp_hull
+                tmp_hull = "tmp_hull_%d" % os.getpid()
+                to_rast_input = tmp_hull
+                # force 'flat' convex hull for 3D vector maps
+                if 0 != grass.run_command('v.hull', flags = 'f', quiet = True,
+                                          input = vector_name, output = tmp_hull,
+                                          layer = layer, cats = cats, where = where):
+                    grass.fatal(_("Unable to create a convex hull for vector map <%s>") % vector_name)
+            else:
+                to_rast_input = vector_name
+            
+            env = os.environ.copy()
+            if grass.verbosity() > 1:
+                env['GRASS_VERBOSE'] = '1'
+            grass.run_command('v.to.rast', input = to_rast_input, layer = layer,
                               output = 'MASK', use = 'val', val = '1',
-                              type = 'area', cats = cats, where = where)
-
+                              type = 'area', cats = cats, where = where, env = env)
+        
 	if invert:
 	    global tmp
 	    tmp = "r_mask_%d" % os.getpid()
 	    grass.run_command('g.rename', rast = ('MASK', tmp), quiet = True)
+            grass.message(_("Creating inverted raster MASK..."))
 	    grass.mapcalc("MASK=if(isnull($tmp),1,null())", tmp = tmp)
-	    grass.message(_("Inverted MASK created."))
+	    grass.verbose(_("Inverted raster MASK created"))
 	else:
-	    grass.message(_("MASK created."))
+	    grass.verbose(_("Raster MASK created"))
 
-    grass.message(_("All subsequent raster operations will be limited to MASK area. ") +
-          "Removing or renaming raster file named MASK will " +
-          "restore raster operations to normal")
+        grass.message(_("All subsequent raster operations will be limited to MASK area. ") +
+                      "Removing or renaming raster map named MASK will " +
+                      "restore raster operations to normal.")
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    tmp = None
+    tmp = tmp_hull = None
     atexit.register(cleanup)
     main()
 
