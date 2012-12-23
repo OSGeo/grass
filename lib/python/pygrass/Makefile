@@ -19,6 +19,7 @@ default: $(PYFILES) $(PYCFILES) $(GDIR)/__init__.py $(GDIR)/__init__.pyc
 	-$(MAKE) -C modules || echo $(CURDIR)/modules >> $(ERRORLOG)
 	-$(MAKE) -C raster || echo $(CURDIR)/raster >> $(ERRORLOG)
 	-$(MAKE) -C vector || echo $(CURDIR)/vector >> $(ERRORLOG)
+	-$(MAKE) -C gis || echo $(CURDIR)/gis >> $(ERRORLOG)
 	-$(MAKE) -C tests || echo $(CURDIR)/tests >> $(ERRORLOG)
 
 $(PYDIR):
