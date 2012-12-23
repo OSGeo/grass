@@ -31,7 +31,7 @@ int do_areas(struct Map_info *Map, struct line_pnts *Points,
     if (nareas <= 0)
 	return 0;
 
-    G_message(_("Reading areas..."));
+    G_important_message(_("Reading areas..."));
     for (i = 0; i < nareas; i++) {
 	/* Note: in old version (grass5.0) there was a check here if the current area 
 	 *        is identical to previous one. I don't see any reason for this in topological vectors */
