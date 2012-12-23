@@ -12,7 +12,7 @@ import grass.lib.raster as libraster
 from grass.script import core as grasscore
 
 from pygrass.errors import GrassError
-from pygrass.region import Region
+from pygrass.gis.region import Region
 
 
 def looking(obj, filter_string):

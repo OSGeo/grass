@@ -20,8 +20,8 @@ from grass import script
 script.gisenv()
 
 import grass.lib.gis as libgis
-from grass.pygrass.functions import getenv
-from grass.pygrass.errors import GrassError
+from pygrass.functions import getenv
+from pygrass.errors import GrassError
 
 
 #write dec to check if user have permissions or not
