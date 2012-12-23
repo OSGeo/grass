@@ -125,7 +125,9 @@ class Vector(Info):
         return GV_TYPE[ftype]['obj'](v_id=v_id,
                                      c_mapinfo=self.c_mapinfo,
                                      c_points=c_points,
-                                     c_cats=c_cats)
+                                     c_cats=c_cats,
+                                     table=self.table,
+                                     writable=self.writable)
 
     @must_be_open
     def rewind(self):
@@ -315,7 +317,7 @@ class VectorTopo(Vector):
             if _GEOOBJ[vtype] is not None:
                 return (_GEOOBJ[vtype](v_id=indx, c_mapinfo=self.c_mapinfo,
                                        table=self.table,
-                                       writable=self.write)
+                                       writable=self.writable)
                         for indx in xrange(1, self.number_of(vtype) + 1))
         else:
             keys = "', '".join(sorted(_GEOOBJ.keys()))
@@ -386,7 +388,7 @@ class VectorTopo(Vector):
                                              c_points=c_points,
                                              c_cats=c_cats,
                                              table=self.table,
-                                             write=self.write)
+                                             writable=self.writable)
         else:
             raise ValueError('The index must be >0, %r given.' % feature_id)
 
