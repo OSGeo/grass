@@ -178,7 +178,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	    }
 	}
 
-	G_message(_("Writing raster map..."));
+	G_important_message(_("Writing raster map..."));
 
 	stat = output_raster(fd);
     } while (stat == 0);
