@@ -23,7 +23,7 @@ import grass.lib.rowio as librowio
 # import pygrass modules
 #
 from pygrass.errors import OpenError, must_be_open
-from pygrass.region import Region
+from pygrass.gis.region import Region
 from pygrass import functions
 
 #
