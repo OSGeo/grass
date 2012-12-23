@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ############################################################################
 #
-# MODULE:    Graphical Modeler
+# MODULE:    g.gui.gmodeler
 # AUTHOR(S): Martin Landa <landa.martin gmail.com>
 # PURPOSE:   Graphical Modeler to create, edit, and manage models
 # COPYRIGHT: (C) 2010-2012 by Martin Landa, and the GRASS Development Team
@@ -19,6 +19,7 @@
 ############################################################################
 
 #%module
+#% label: Graphical Modeler.
 #% description: Allows to interactively create, edit and manage models.
 #% keywords: general
 #% keywords: gui
