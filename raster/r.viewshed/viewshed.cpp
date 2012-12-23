@@ -320,7 +320,7 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader * hd,
     long nvis = 0;		/*number of visible cells */
     AEvent *e;
 
-    G_message(_("Determine visibility..."));
+    G_important_message(_("Computing visibility..."));
     G_percent(0, 100, 2);
 
     for (size_t i = 0; i < nevents; i++) {
