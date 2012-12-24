@@ -39,7 +39,7 @@ def print_error(msg, type):
     """!Redirect stderr"""
     global log
     if log:
-        log.write(msg)
+        log.write(msg + os.linesep)
     else:
         print msg
     global last_error
@@ -53,7 +53,7 @@ def print_progress(value):
     if progress:
         progress.SetValue(value)
     else:
-        print value
+        pass # discard progress info
     
     return 0
 
