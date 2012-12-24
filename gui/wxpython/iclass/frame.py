@@ -1027,10 +1027,20 @@ class IClassMapFrame(DoubleMapFrame):
         self.plotPanel.EnableZoom(type = -1)
         
     def OnPan(self, event):
-        """!Enable paanning for plots"""
+        """!Enable panning for plots"""
         super(IClassMapFrame, self).OnPan(event)
         self.plotPanel.EnablePan()
         
+    def OnPointer(self, event):
+        """!Set pointer mode.
+
+        @fixme: needs refactoring
+        """
+        toolbar = self.GetMapToolbar()
+        self.SwitchTool(toolbar, event)
+
+        self.GetFirstWindow().mouse['use'] = 'pointer'
+
 class MapManager:
     """! Class for managing map renderer.
     
