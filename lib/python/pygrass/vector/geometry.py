@@ -217,7 +217,7 @@ class Geo(object):
 
     def write(self):
         """Write the centroid to the Map."""
-        libvect.Vect_write_line(self.c_mapinfo, libvect.GV_CENTROID,
+        libvect.Vect_write_line(self.c_mapinfo, self.gtype,
                                 self.c_points, self.c_cats)
 
 
