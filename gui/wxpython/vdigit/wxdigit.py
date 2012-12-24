@@ -1401,9 +1401,11 @@ class IVDigit:
             # close boundary
             points = self.poPoints.contents
             last = points.n_points - 1
-            if Vect_points_distance(points.x[0], points.x[0], points.z[0],
-                                    points.x[last], points.x[last], points.z[last],
-                                    is3D) <= threshold:
+            if self._settings['closeBoundary']:
+                Vect_append_point(self.poPoints, points.x[0], points.y[0], points.z[0])
+            elif Vect_points_distance(points.x[0], points.x[0], points.z[0],
+                                      points.x[last], points.x[last], points.z[last],
+                                      is3D) <= threshold:
                 points.x[last] = points.x[0]
                 points.y[last] = points.y[0]
                 points.z[last] = points.z[0]
@@ -1577,8 +1579,10 @@ class IVDigit:
         """
         self._display.UpdateSettings()
         
-        self._settings['breakLines']  = bool(UserSettings.Get(group = 'vdigit', key = "breakLines",
+        self._settings['breakLines']   = bool(UserSettings.Get(group = 'vdigit', key = "breakLines",
                                                               subkey = 'enabled'))
+        self._settings['closeBoundary'] = bool(UserSettings.Get(group = 'vdigit', key = "closeBoundary",
+                                                                subkey = 'enabled'))
         
     def SetCategory(self):
         """!Update self.cats based on settings"""

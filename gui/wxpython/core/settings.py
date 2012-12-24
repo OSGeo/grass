@@ -456,6 +456,10 @@ class Settings:
                 'breakLines' : {
                     'enabled' : False,
                     },
+                # close boundary (snap to the first node)
+                'closeBoundary' : {
+                    'enabled' : False,
+                    }
                 },
              # 
              # plots for profiles, histograms, and scatterplots

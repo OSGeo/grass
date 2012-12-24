@@ -232,13 +232,26 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # digitize lines box
         #
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Digitize line features"))
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Digitize lines/boundaries"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         self.intersect = wx.CheckBox(parent = panel, label = _("Break lines at intersection"))
         self.intersect.SetValue(UserSettings.Get(group = 'vdigit', key = 'breakLines', subkey = 'enabled'))
         
         sizer.Add(item = self.intersect, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 1)
+
+        border.Add(item = sizer, proportion = 0, flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+
+        #
+        # digitize areas box
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Digitize areas"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        self.closeBoundary = wx.CheckBox(parent = panel, label = _("Close boundary (snap to the start node)"))
+        self.closeBoundary.SetValue(UserSettings.Get(group = 'vdigit', key = 'closeBoundary', subkey = 'enabled'))
+        
+        sizer.Add(item = self.closeBoundary, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 1)
 
         border.Add(item = sizer, proportion = 0, flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
 
