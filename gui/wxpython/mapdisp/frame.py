@@ -227,8 +227,8 @@ class MapFrame(SingleMapFrame):
             self._mgr.GetPane('3d').Hide()
         self._mgr.GetPane('vdigit').Show()
         self.toolbars['vdigit'] = VDigitToolbar(parent = self, MapWindow = self.MapWindow,
-                                                digitClass = VDigit, layerTree = self.tree,
-                                                log = log)
+                                                digitClass = VDigit, giface =  self._giface,
+                                                layerTree = self.tree, log = log)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
         
         self._mgr.AddPane(self.toolbars['vdigit'],

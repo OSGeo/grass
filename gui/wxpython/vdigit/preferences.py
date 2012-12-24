@@ -26,12 +26,14 @@ from core.units       import Units
 from core.settings    import UserSettings
 
 class VDigitSettingsDialog(wx.Dialog):
-    def __init__(self, parent, title, style = wx.DEFAULT_DIALOG_STYLE):
+    def __init__(self, parent, giface, title = _("Digitization settings"),
+                 style = wx.DEFAULT_DIALOG_STYLE):
         """!Standard settings dialog for digitization purposes
         """
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, style = style)
 
-        self.parent = parent # mapdisplay.MapFrame class instance
+        self._giface = giface
+        self.parent = parent                     # MapFrame
         self.digit = self.parent.MapWindow.digit
         
         # notebook
@@ -666,8 +668,8 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings = fileSettings)
         fileSettings['vdigit'] = UserSettings.Get(group = 'vdigit')
         
-        file = UserSettings.SaveToFile(fileSettings)
-        self.parent.GetLayerManager().GetLogWindow().WriteLog(_('Vector digitizer settings saved to file <%s>.') % file)
+        sfile = UserSettings.SaveToFile(fileSettings)
+        self._giface.WriteLog(_('Vector digitizer settings saved to file <%s>.') % sfile)
         
         self.Destroy()
 
@@ -690,7 +692,8 @@ class VDigitSettingsDialog(wx.Dialog):
     def UpdateSettings(self):
         """!Update digitizer settings
         """
-        self.parent.GetLayerManager().WorkspaceChanged() # geometry attributes
+        if self.parent.GetLayerManager():
+            self.parent.GetLayerManager().WorkspaceChanged() # geometry attributes
         # symbology
         for key, (enabled, color) in self.symbology.iteritems():
             if enabled:
@@ -732,8 +735,11 @@ class VDigitSettingsDialog(wx.Dialog):
 
         # geometry attributes (workspace)
         mapLayer = self.parent.toolbars['vdigit'].GetLayer()
-        tree = self.parent.tree
-        item = tree.FindItemByData('maplayer', mapLayer)
+        tree = self._giface.GetLayerTree()
+        if tree:
+            item = tree.FindItemByData('maplayer', mapLayer)
+        else:
+            item = None
         for key, val in self.geomAttrb.iteritems():
             checked = self.FindWindowById(val['check']).IsChecked()
             column  = self.FindWindowById(val['column']).GetValue()
