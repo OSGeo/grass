@@ -172,6 +172,8 @@ class IClassMapFrame(DoubleMapFrame):
         #self.dialogs['category'] = None
         
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        self.SendSizeEvent()
         
     def OnCloseWindow(self, event):
         self.GetFirstWindow().digit.GetDisplay().CloseMap()
