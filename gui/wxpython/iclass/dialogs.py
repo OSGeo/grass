@@ -544,7 +544,9 @@ class IClassExportAreasDialog(wx.Dialog):
         dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                            label = _("Enter name of new vector map:")),
                       proportion = 0, flag = wx.ALL, border = 3)
-        self.vectorNameCtrl = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY, size = (400, -1))
+        self.vectorNameCtrl = gselect.Select(parent = self.panel, type = 'vector',
+                                             mapsets = [grass.gisenv()['MAPSET']],
+                                             size = globalvar.DIALOG_GSELECT_SIZE)
         if self.vectorName:
             self.vectorNameCtrl.SetValue(self.vectorName)
         dataSizer.Add(item = self.vectorNameCtrl,
