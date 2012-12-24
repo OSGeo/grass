@@ -23,7 +23,7 @@ from gui_core.dialogs   import CreateNewVector
 from vdigit.preferences import VDigitSettingsDialog
 from core.debug         import Debug
 from core.settings      import UserSettings
-from core.gcmd          import GError
+from core.gcmd          import GError, RunCommand
 from icons.icon         import MetaIcon
 from iclass.digit       import IClassVDigit
 
@@ -321,7 +321,7 @@ class VDigitToolbar(BaseToolbar):
                         'id'   : self.addArea }
         self.MapWindow.mouse['box'] = 'line'
 
-    def OnExit (self, event=None):
+    def OnExit (self, event = None):
         """!Quit digitization tool"""
         # stop editing of the currently selected map layer
         if self.mapLayer:
@@ -330,15 +330,18 @@ class VDigitToolbar(BaseToolbar):
         # close dialogs if still open
         if self.settingsDialog:
             self.settingsDialog.OnCancel(None)
-            
+        
         # set default mouse settings
         self.MapWindow.mouse['use'] = "pointer"
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.polycoords = []
         
-        # disable the toolbar
-        self.parent.RemoveToolbar("vdigit")
-        
+        if not self.parent.IsStandalone():
+            # disable the toolbar
+            self.parent.RemoveToolbar("vdigit")
+        else:
+            self.parent.Close()
+                
     def OnMoveVertex(self, event):
         """!Move line vertex"""
         Debug.msg(2, "Digittoolbar.OnMoveVertex():")
@@ -454,10 +457,18 @@ class VDigitToolbar(BaseToolbar):
 
     def OnHelp(self, event):
         """!Show digitizer help page in web browser"""
-        log = self.parent.GetLayerManager().GetLogWindow()
-        log.RunCmd(['g.manual',
-                    'entry=wxGUI.Vector_Digitizer'])
-
+        try:
+            log = self.parent.GetLayerManager().GetLogWindow()
+        except:
+            log = None
+        
+        if log:
+            log.RunCmd(['g.manual',
+                        'entry = wxGUI.vdigit'])
+        else:
+            RunCommand('g.manual',
+                       entry = 'wxGUI.vdigit')
+        
     def OnAdditionalToolMenu(self, event):
         """!Menu for additional tools"""
         point = wx.GetMousePosition()
@@ -858,9 +869,10 @@ class VDigitToolbar(BaseToolbar):
                 lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
                                                     self.mapLayer.GetName())
             # re-active layer 
-            item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
-            if item and self.parent.tree.IsItemChecked(item):
-                self.Map.ChangeLayerActive(self.mapLayer, True)
+            if self.parent.tree:
+                item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
+                if item and self.parent.tree.IsItemChecked(item):
+                    self.Map.ChangeLayerActive(self.mapLayer, True)
         
         # change cursor
         self.MapWindow.SetCursor(self.parent.cursors["default"])

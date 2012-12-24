@@ -35,7 +35,7 @@ sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
 sys.path.append(os.path.join(globalvar.ETCDIR,   "python"))
 
 from core               import globalvar
-from core.render        import EVT_UPDATE_PRGBAR
+from core.render        import EVT_UPDATE_PRGBAR, Map
 from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions
@@ -64,7 +64,7 @@ class MapFrame(SingleMapFrame):
     """
     def __init__(self, parent, giface, title = _("GRASS GIS - Map display"),
                  toolbars = ["map"], tree = None, notebook = None, lmgr = None,
-                 page = None, Map = None, auimgr = None, name = 'MapWindow', **kwargs):
+                 page = None, Map = Map(), auimgr = None, name = 'MapWindow', **kwargs):
         """!Main map display window with toolbars, statusbar and
         BufferedWindow (map canvas)
         
@@ -360,13 +360,16 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.UpdateMap()
         self._mgr.Update()
         
-    def AddToolbar(self, name):
+    def AddToolbar(self, name, fixed = False):
         """!Add defined toolbar to the window
         
         Currently known toolbars are:
          - 'map'     - basic map toolbar
          - 'vdigit'  - vector digitizer
-         - 'gcpdisp' - GCP Manager Display
+         - 'gcpdisp' - GCP Manager 
+         
+        @param name toolbar to add
+        @param fixed fixed toolbar
         """
         # default toolbar
         if name == "map":
@@ -383,8 +386,12 @@ class MapFrame(SingleMapFrame):
             
         # vector digitizer
         elif name == "vdigit":
+            self.toolbars['map'].combo.SetValue(_("Digitize"))
             self._addToolbarVDigit()
         
+        if fixed:
+            self.toolbars['map'].combo.Disable()
+         
         self._mgr.Update()
         
     def RemoveToolbar (self, name):

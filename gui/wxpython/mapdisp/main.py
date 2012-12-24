@@ -292,6 +292,10 @@ class MapApp(wx.App):
             grass.warning("%s" % e)
             self.timer.Stop()
 
+    def GetMapFrame(self):
+        """!Get Map Frame instance"""
+        return self.mapFrm
+
 if __name__ == "__main__":
     # set command variable
     if len(sys.argv) < 5:

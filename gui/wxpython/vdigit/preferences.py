@@ -425,7 +425,10 @@ class VDigitSettingsDialog(wx.Dialog):
         layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
         mapLayer = self.parent.toolbars['vdigit'].GetLayer()
         tree = self.parent.tree
-        item = tree.FindItemByData('maplayer', mapLayer)
+        if tree:
+            item = tree.FindItemByData('maplayer', mapLayer)
+        else:
+            item = None
         row = 0
         for attrb in ['length', 'area', 'perimeter']:
             # checkbox
