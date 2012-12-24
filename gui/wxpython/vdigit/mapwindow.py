@@ -276,6 +276,9 @@ class VDigitWindow(BufferedWindow):
         
         @todo: use AddDataRow() instead
         """
+        if not self.lmgr:
+            return
+        
         # update ATM
         digitVector = self.toolbar.GetLayer().GetName()
                             
