@@ -30,7 +30,7 @@ from iclass.digit       import IClassVDigit
 class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
     """
-    def __init__(self, parent, MapWindow, digitClass, tools = [], layerTree = None, log = None):
+    def __init__(self, parent, MapWindow, digitClass, giface, tools = [], layerTree = None, log = None):
         self.MapWindow     = MapWindow
         self.Map           = MapWindow.GetMap() # Map class instance
         self.layerTree     = layerTree  # reference to layer tree associated to map display
@@ -39,6 +39,7 @@ class VDigitToolbar(BaseToolbar):
         self.digitClass    = digitClass
         BaseToolbar.__init__(self, parent)
         self.digit         = None
+        self._giface       = giface
         
         # currently selected map layer for editing (reference to MapLayer instance)
         self.mapLayer = None
@@ -451,8 +452,7 @@ class VDigitToolbar(BaseToolbar):
                 self.digit = self.MapWindow.digit = None
         
         if not self.settingsDialog:
-            self.settingsDialog = VDigitSettingsDialog(parent = self.parent, title = _("Digitization settings"),
-                                                       style = wx.DEFAULT_DIALOG_STYLE)
+            self.settingsDialog = VDigitSettingsDialog(parent = self.parent, giface = self._giface)
             self.settingsDialog.Show()
 
     def OnHelp(self, event):

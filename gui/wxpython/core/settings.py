@@ -990,8 +990,8 @@ class Settings:
             raise GException(_('Writing settings to file <%(file)s> failed.'
                                '\n\nDetails: %(detail)s') % { 'file' : self.filePath,
                                                               'detail' : e })
-        
         file.close()
+        return self.filePath
         
     def _parseValue(self, value, read = False):
         """!Parse value to be store in settings file"""
