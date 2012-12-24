@@ -737,7 +737,7 @@ class MapFrame(SingleMapFrame):
                 for name in vect:
                     if lmap == name:
                         self._giface.WriteWarning(_("Vector map <%s> "
-                                                                  "opened for editing - skipped.") % map)
+                                                                  "opened for editing - skipped.") % lmap)
                         vect.remove(name)
             
             if len(vect) < 1:
