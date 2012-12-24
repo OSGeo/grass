@@ -620,6 +620,12 @@ class IClassMapFrame(DoubleMapFrame):
         RunCommand('g.copy',
                     vect = ','.join([self.trainingAreaVector, vectorName]),
                     overwrite = True)
+        # remove connection if exists:
+        dbinfo = grass.vector_db(vectorName)
+        if dbinfo:
+            for layer in dbinfo.keys():
+                RunCommand('v.db.connect', flags = 'd', map = vectorName, layer = layer)
+
         mapset = grass.gisenv()['MAPSET']
         self.poMapInfo = displayDriver.OpenMap(name = self.trainingAreaVector, mapset = mapset)
             
