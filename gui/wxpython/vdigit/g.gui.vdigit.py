@@ -48,8 +48,8 @@ from vdigit.main   import haveVDigit, errorMsg
 
 class VDigitMapFrame(MapFrame):
     def __init__(self, vectorMap):
-        MapFrame.__init__(self, parent = None,  giface = StandaloneGrassInterface(),
-                          size = (850, 600))
+        MapFrame.__init__(self, parent = None, giface = StandaloneGrassInterface(),
+                          title = _("GRASS GIS Vector Digitizer"), size = (850, 600))
 
         # load vector map
         mapLayer = self.GetMap().AddLayer(type = 'vector',
