@@ -691,6 +691,8 @@ class VDigitSettingsDialog(wx.Dialog):
         
     def UpdateSettings(self):
         """!Update digitizer settings
+
+        @todo Needs refactoring 
         """
         if self.parent.GetLayerManager():
             self.parent.GetLayerManager().WorkspaceChanged() # geometry attributes
@@ -798,6 +800,10 @@ class VDigitSettingsDialog(wx.Dialog):
         # break lines
         UserSettings.Set(group = 'vdigit', key = "breakLines", subkey = 'enabled',
                          value = self.intersect.IsChecked())
+
+        # close boundary
+        UserSettings.Set(group = 'vdigit', key = "closeBoundary", subkey = 'enabled',
+                         value = self.closeBoundary.IsChecked())
         
         self.digit.UpdateSettings()
         
