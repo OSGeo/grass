@@ -275,6 +275,7 @@ class Info(object):
             return self.dblinks.by_number(1).table()
 
     def close(self):
+        self.table.conn.close()
         if self.is_open():
             if libvect.Vect_close(self.c_mapinfo) != 0:
                 str_err = 'Error when trying to close the map with Vect_close'
