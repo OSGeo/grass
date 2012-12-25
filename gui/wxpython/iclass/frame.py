@@ -45,7 +45,7 @@ from mapdisp.mapwindow  import BufferedWindow
 from vdigit.toolbars    import VDigitToolbar
 from gui_core.mapdisp   import DoubleMapFrame
 from core.render        import Map, MapLayer
-from core.gcmd          import RunCommand, GMessage
+from core.gcmd          import RunCommand, GMessage, GError
 from gui_core.dialogs   import SetOpacityDialog
 from dbmgr.vinfo        import VectorDBInfo
 import grass.script as grass
@@ -422,12 +422,17 @@ class IClassMapFrame(DoubleMapFrame):
         """!Add imagery group"""
         dlg = IClassGroupDialog(self, group = self.group)
         if dlg.ShowModal() == wx.ID_OK:
-            group = grass.find_file(name = dlg.GetGroup(), element = 'group')
-            if group['name']:
-                self.group = group['name']
-                
+            self.SetGroup(dlg.GetGroup())
         dlg.Destroy()
         
+    def SetGroup(self, name):
+        """!Set immagery group"""
+        group = grass.find_file(name = name, element = 'group')
+        if group['name']:
+            self.group = group['name']
+        else:
+            GError(_("Group <%s> not found") % name, parent = self)
+    
     def OnImportAreas(self, event):
         """!Import training areas"""
         # check if we have any changes

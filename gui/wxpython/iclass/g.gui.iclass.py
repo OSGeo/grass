@@ -28,6 +28,13 @@
 #% keywords: classification
 #% keywords: signatures
 #%end
+#%option G_OPT_I_GROUP
+#% required: no
+#%end
+#%option G_OPT_R_MAP
+#% description: Name of raster map to load
+#% required: no
+#%end
 
 import os
 import sys
@@ -45,6 +52,15 @@ from core.giface    import StandaloneGrassInterface
 from iclass.frame   import IClassMapFrame
 
 def main():
+    if options['group']:
+        group_name = grass.find_file(name = options['group'], element = 'group')['name']
+        if not group_name:
+            grass.fatal(_("Group <%s> not found") % options['group'])
+    if options['map']:
+        map_name = grass.find_file(name = options['map'], element = 'cell')['fullname']
+        if not map_name:
+            grass.fatal(_("Raster map <%s> not found") % options['map'])
+    
     # define display driver
     driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
     if driver == 'png':
@@ -57,12 +73,20 @@ def main():
     wx.InitAllImageHandlers()
     
     # show main frame
-    frame = IClassMapFrame(parent = None, giface = StandaloneGrassInterface())
+    giface = StandaloneGrassInterface()
+    frame = IClassMapFrame(parent = None, giface = giface)
+    if group_name:
+        frame.SetGroup(group_name) 
+    if map_name:
+        giface.WriteLog(_("Loading raster map <%s>...") % map_name)
+        frame.trainingMapManager.AddLayer(map_name)
+    
     frame.Show()
     
     app.MainLoop()
     
 if __name__ == '__main__':
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+    grass.set_raise_on_error(False)
     options, flags = grass.parser()
     main()
