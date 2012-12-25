@@ -7,7 +7,7 @@ Classes:
  - digit::IClassVDigit
  - digit::IClassVDigitWindow
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2012 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -84,6 +84,7 @@ class IClassVDigit(IVDigit):
     """! Class similar to IVDigit but specialized for wxIClass."""
     def __init__(self, mapwindow):
         IVDigit.__init__(self, mapwindow)
+        self._settings['closeBoundary'] = True # snap to the first node
         
     def _getNewFeaturesLayer(self):
         return 1
