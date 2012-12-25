@@ -426,7 +426,7 @@ class IClassMapFrame(DoubleMapFrame):
         dlg.Destroy()
         
     def SetGroup(self, name):
-        """!Set immagery group"""
+        """!Set imagery group"""
         group = grass.find_file(name = name, element = 'group')
         if group['name']:
             self.group = group['name']
