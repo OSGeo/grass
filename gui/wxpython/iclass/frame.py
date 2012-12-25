@@ -192,7 +192,7 @@ class IClassMapFrame(DoubleMapFrame):
             
     def OnHelp(self, event):
         """!Show help page"""
-        self._giface.Help(entry = 'wxGUI.IClass')
+        self._giface.Help(entry = 'wxGUI.iclass')
         
     def CreateTempVector(self):
         """!Create temporary vector map for training areas"""
