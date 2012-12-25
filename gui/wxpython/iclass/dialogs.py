@@ -150,8 +150,7 @@ class IClassCategoryManagerDialog(wx.Dialog):
         gridSizer.Add(item = self.catList, pos = (0, 0), span = (3, 1), flag = wx.EXPAND)
         gridSizer.Add(item = addButton, pos = (0, 1), flag = wx.EXPAND)
         gridSizer.Add(item = deleteButton, pos = (1, 1), flag = wx.EXPAND)
-        
-        
+                
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
         mainSizer.Add(item = sizer, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
         
@@ -335,7 +334,8 @@ class CategoryListCtrl(wx.ListCtrl,
                 color = ':'.join(map(str, color))
                 self.SetVirtualData(currentItem, currentCol, color)
             dlg.Destroy()
-            
+            wx.CallAfter(self.SetFocus)
+        
         event.Skip()
         
     def OnCategorySelected(self, event):
