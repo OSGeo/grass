@@ -69,7 +69,7 @@ class IClassMapFrame(DoubleMapFrame):
     
     It is wxGUI counterpart of old i.class module.
     """
-    def __init__(self, parent = None, giface = None, title = _("Supervised Classification Tool"),
+    def __init__(self, parent = None, giface = None, title = _("GRASS GIS Supervised Classification Tool"),
                  toolbars = ["iClassMisc", "iClassMap", "vdigit", "iClass"],
                  size = (875, 600), name = 'IClassWindow', **kwargs):
         """!
@@ -279,8 +279,8 @@ class IClassMapFrame(DoubleMapFrame):
                               BestSize((self.toolbars[name].GetBestSize())))
 
         if name == "vdigit":
-            self.toolbars[name] = VDigitToolbar(self, MapWindow = self.GetFirstWindow(),
-                                                digitClass = IClassVDigit,
+            self.toolbars[name] = VDigitToolbar(parent = self, MapWindow = self.GetFirstWindow(),
+                                                digitClass = IClassVDigit, giface = self._giface,
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
                                                          'removeVertex', 'editLine',
                                                          'moveLine', 'deleteArea', 'undo', 'redo'])
