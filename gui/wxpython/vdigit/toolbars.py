@@ -457,17 +457,7 @@ class VDigitToolbar(BaseToolbar):
 
     def OnHelp(self, event):
         """!Show digitizer help page in web browser"""
-        try:
-            log = self.parent.GetLayerManager().GetLogWindow()
-        except:
-            log = None
-        
-        if log:
-            log.RunCmd(['g.manual',
-                        'entry = wxGUI.vdigit'])
-        else:
-            RunCommand('g.manual',
-                       entry = 'wxGUI.vdigit')
+        self._giface.Help('wxGUI.vdigit')
         
     def OnAdditionalToolMenu(self, event):
         """!Menu for additional tools"""
