@@ -78,7 +78,6 @@ class ElementDialog(wx.Dialog):
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnOK     = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOK.SetDefault()
-        self.btnOK.Enable(False)
         
         if self.etype:
             self.typeSelect = ElementSelect(parent = self.panel,
@@ -92,7 +91,9 @@ class ElementDialog(wx.Dialog):
     def PostInit(self):
         self.element.SetFocus()
         self.element.Bind(wx.EVT_TEXT, self.OnElement)
-        
+        if not self.element.GetValue():
+            self.btnOK.Disable()
+            
     def OnType(self, event):
         """!Select element type"""
         if not self.etype:
