@@ -282,8 +282,9 @@ class IClassMapFrame(DoubleMapFrame):
             self.toolbars[name] = VDigitToolbar(parent = self, MapWindow = self.GetFirstWindow(),
                                                 digitClass = IClassVDigit, giface = self._giface,
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
-                                                         'removeVertex', 'editLine',
-                                                         'moveLine', 'deleteArea', 'undo', 'redo'])
+                                                         'removeVertex', 'editLine', 'moveLine',
+                                                         'deleteLine', 'deleteArea',
+                                                         'undo', 'redo'])
             
             self._mgr.AddPane(self.toolbars[name],
                               wx.aui.AuiPaneInfo().
