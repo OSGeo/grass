@@ -374,6 +374,17 @@ class IClassMapFrame(DoubleMapFrame):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['iClassMap']
 
+    def GetClassColor(self, cat):
+        """!Get class color as string
+
+        @param cat class category
+        
+        @return 'R:G:B'
+        """
+        if cat in self.statisticsDict:
+            return self.statisticsDict[cat].color
+        return '0:0:0'
+        
     def OnZoomMenu(self, event):
         """!Popup Zoom menu """
         zoommenu = wx.Menu()
