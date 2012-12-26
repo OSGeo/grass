@@ -19,9 +19,10 @@ for details.
 import wx
 
 from vdigit.mapwindow import VDigitWindow
-from vdigit.wxdigit import IVDigit
-
+from vdigit.wxdigit   import IVDigit
+from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
 try:
+    from grass.lib.vector import *
     from grass.lib.vedit  import *
 except ImportError:
     pass
@@ -79,11 +80,16 @@ class IClassVDigitWindow(VDigitWindow):
         It is taken from parent's toolbar.
         """
         return self.parent.GetToolbar("iClass").GetSelectedCategoryIdx()
+
+    def GetCategoryColor(self, cat):
+        """!Get color associated with given category"""
+        r, g, b = map(int, self.parent.GetClassColor(cat).split(':'))
+        return wx.Colour(r, g, b)
         
 class IClassVDigit(IVDigit):
     """! Class similar to IVDigit but specialized for wxIClass."""
     def __init__(self, mapwindow):
-        IVDigit.__init__(self, mapwindow)
+        IVDigit.__init__(self, mapwindow, driver = IClassDisplayDriver)
         self._settings['closeBoundary'] = True # snap to the first node
         
     def _getNewFeaturesLayer(self):
@@ -98,7 +104,36 @@ class IClassVDigit(IVDigit):
 
         @param cats list of categories
         """
-        
         for cat in cats:
             Vedit_delete_areas_cat(self.poMapInfo, 1, cat)
+       
+class IClassDisplayDriver(DisplayDriver):
+    """! Class similar to DisplayDriver but specialized for wxIClass
+
+    @todo needs refactoring (glog, gprogress)
+    """
+    def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
+        DisplayDriver.__init__(self, device, deviceTmp, mapObj, window, glog, gprogress)
+        self._cat = -1
         
+    def _drawObject(self, robj):
+        """!Draw given object to the device
+
+        @param robj object to draw
+        """
+        if robj.type == TYPE_AREA:
+            self._cat = Vect_get_area_cat(self.poMapInfo, robj.fid, 1)
+        DisplayDriver._drawObject(self, robj)
+        
+    def _definePen(self, rtype):
+        """!Define pen/brush based on rendered object)
+
+        @param rtype type of the object
+
+        @return pen, brush
+        """
+        pen, brush = DisplayDriver._definePen(self, rtype)
+        if self._cat > 0 and rtype == TYPE_AREA:
+            brush = wx.Brush(self.window.GetCategoryColor(self._cat), wx.SOLID)
+        
+        return pen, brush

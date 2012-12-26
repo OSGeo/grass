@@ -125,7 +125,7 @@ class VDigitError:
                caption = self.caption)
         
 class IVDigit:
-    def __init__(self, mapwindow):
+    def __init__(self, mapwindow, driver = DisplayDriver):
         """!Base class for vector digitizer (ctypes interface)
         
         @param mapwindow reference for map window (BufferedWindow)
@@ -150,12 +150,12 @@ class IVDigit:
         
         self._error   = VDigitError(parent = self.mapWindow)
         
-        self._display = DisplayDriver(device    = mapwindow.pdcVector,
-                                      deviceTmp = mapwindow.pdcTmp,
-                                      mapObj    = mapwindow.Map,
-                                      window    = mapwindow,
-                                      glog      = log,
-                                      gprogress = progress)
+        self._display = driver(device    = mapwindow.pdcVector,
+                               deviceTmp = mapwindow.pdcTmp,
+                               mapObj    = mapwindow.Map,
+                               window    = mapwindow,
+                               glog      = log,
+                               gprogress = progress)
         
         # GRASS lib
         self.poPoints = Vect_new_line_struct()
