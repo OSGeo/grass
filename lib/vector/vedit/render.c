@@ -467,7 +467,7 @@ void draw_area(struct Map_info *Map, int area, struct robject_list *list)
     /* get area's boundary */
     Vect_get_area_points(Map, area, state.Points);
     robj = robj_alloc(TYPE_AREA, state.Points->n_points);
-    robj->fid = centroid;
+    robj->fid = area;
     robj_points(robj, state.Points);
     list_append(list, robj);
 
