@@ -635,6 +635,9 @@ class IClassMapFrame(DoubleMapFrame):
         # close, build, copy and open again the temporary vector
         displayDriver = self.GetFirstWindow().digit.GetDisplay()
         displayDriver.CloseMap()
+
+        if '@' in vectorName:
+            vectorName = vectorName.split('@')[0]
         RunCommand('g.copy',
                     vect = ','.join([self.trainingAreaVector, vectorName]),
                     overwrite = True)
