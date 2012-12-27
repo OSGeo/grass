@@ -75,13 +75,13 @@ int I_write_cam_info(FILE * fd, struct Ortho_Camera_File_Ref *cam_info)
 
     fprintf(fd, "CAMERA NAME   %s \n", cam_info->cam_name);
     fprintf(fd, "CAMERA ID     %s \n", cam_info->cam_id);
-    fprintf(fd, "CAMERA XP     %f \n", cam_info->Xp);
-    fprintf(fd, "CAMERA YP     %f \n", cam_info->Yp);
-    fprintf(fd, "CAMERA CFL    %f \n", cam_info->CFL);
+    fprintf(fd, "CAMERA XP     %.17g \n", cam_info->Xp);
+    fprintf(fd, "CAMERA YP     %.17g \n", cam_info->Yp);
+    fprintf(fd, "CAMERA CFL    %.17g \n", cam_info->CFL);
     fprintf(fd, "NUM FID       %d \n", cam_info->num_fid);
 
     for (i = 0; i < cam_info->num_fid; i++)
-	fprintf(fd, "  %5s %15f %15f \n",
+	fprintf(fd, "  %5s %.17g %.17g \n",
 		cam_info->fiducials[i].fid_id,
 		cam_info->fiducials[i].Xf, cam_info->fiducials[i].Yf);
 
