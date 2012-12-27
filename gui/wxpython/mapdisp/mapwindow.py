@@ -34,6 +34,7 @@ from gui_core.dialogs   import SavedRegion
 from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
 from core.settings      import UserSettings
+from core.events        import gZoomChanged
 from gui_core.mapwindow import MapWindow
 try:
     import grass.lib.gis as gislib
@@ -1536,6 +1537,8 @@ class BufferedWindow(MapWindow, wx.Window):
         # update statusbar
         self.frame.StatusbarUpdate()
 
+        wx.PostEvent(self, gZoomChanged())
+
     def ZoomHistory(self, n, s, e, w):
         """!Manages a list of last 10 zoom extents
 
@@ -1565,6 +1568,8 @@ class BufferedWindow(MapWindow, wx.Window):
         toolbar = self.frame.GetMapToolbar()
         
         toolbar.Enable('zoomBack', enable)
+
+        wx.PostEvent(self, gZoomChanged())
         
         return removed
 

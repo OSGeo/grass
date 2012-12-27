@@ -113,16 +113,6 @@ class SwipeBufferedWindow(BufferedWindow):
         if not self.movingSash:
             super(SwipeBufferedWindow, self).OnSize(event)
 
-    def ZoomToMap(self, layers = None, ignoreNulls = False, render = True):
-        super(SwipeBufferedWindow, self).ZoomToMap(layers, ignoreNulls, render)
-        self.frame.UpdateRegion()
-
-    def ZoomBack(self):
-        """!Zoom last (previously stored position)
-        """
-        super(SwipeBufferedWindow, self).ZoomBack()
-        self.frame.UpdateRegion()
-
     def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0]):
         """!Draws image (map) with translated coordinates.
         """
@@ -180,17 +170,6 @@ class SwipeBufferedWindow(BufferedWindow):
                                  'rotation': 0, 'text': name,
                                  'active': True}
 
-    def MouseActions(self, event):
-        """!Handle mouse events and if needed let parent frame know"""
-        super(SwipeBufferedWindow, self).MouseActions(event)
-        if event.GetWheelRotation() != 0 or \
-           event.LeftUp() or \
-           event.MiddleUp():
-
-            self.frame.UpdateRegion()
-
-        event.Skip()
-        
     def MouseDraw(self, pdc = None, begin = None, end = None):
         """!Overriden method to recompute coordinates back to original values
         so that e.g. drawing of zoom box is done properly"""

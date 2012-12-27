@@ -25,8 +25,9 @@ import sys
 import wx
 import wx.aui
 
-from core       import globalvar
-from core.debug import Debug
+from core        import globalvar
+from core.debug  import Debug
+from core.events import EVT_ZOOM_CHANGED
 
 from grass.script import core as grass
 
@@ -468,12 +469,13 @@ class DoubleMapFrame(MapFrameBase):
         self.firstMap = firstMap
         self.secondMap = secondMap
         self.Map = firstMap
-                
+
         #
         # initialize region values
         #
         self._initMap(Map = self.firstMap)
         self._initMap(Map = self.secondMap)
+        self._bindRegions = False
     
     def _bindWindowsActivation(self):
         self.GetFirstWindow().Bind(wx.EVT_ENTER_WINDOW, self.ActivateFirstMap)
@@ -514,16 +516,62 @@ class DoubleMapFrame(MapFrameBase):
         return self.MapWindow
     
     def ActivateFirstMap(self, event = None):
-        """!Make first Map and MapWindow active"""
+        """!Make first Map and MapWindow active and (un)bind regions of the two Maps."""
         self.Map = self.firstMap
         self.MapWindow = self.firstMapWindow
         self.GetMapToolbar().SetActiveMap(0)
-        
+
+        # bind/unbind regions
+        if self._bindRegions:
+            self.firstMapWindow.Bind(EVT_ZOOM_CHANGED, self.OnZoomChangedFirstMap)
+        else:
+            self.firstMapWindow.Unbind(EVT_ZOOM_CHANGED)
+        self.secondMapWindow.Unbind(EVT_ZOOM_CHANGED)
+
     def ActivateSecondMap(self, event = None):
-        """!Make second Map and MapWindow active"""
+        """!Make second Map and MapWindow active and (un)bind regions of the two Maps."""
         self.Map = self.secondMap
         self.MapWindow = self.secondMapWindow
         self.GetMapToolbar().SetActiveMap(1)
+
+        if self._bindRegions:
+            self.secondMapWindow.Bind(EVT_ZOOM_CHANGED, self.OnZoomChangedSecondMap)
+        else:
+            self.secondMapWindow.Unbind(EVT_ZOOM_CHANGED)
+        self.firstMapWindow.Unbind(EVT_ZOOM_CHANGED)
+
+    def SetBindRegions(self, on):
+        """!Set or unset binding display regions."""
+        self._bindRegions = on
+
+        if on:
+            if self.MapWindow == self.firstMapWindow:
+                self.firstMapWindow.Bind(EVT_ZOOM_CHANGED, self.OnZoomChangedFirstMap)
+            else:
+                self.secondMapWindow.Bind(EVT_ZOOM_CHANGED, self.OnZoomChangedSecondMap)
+        else:
+            self.firstMapWindow.Unbind(EVT_ZOOM_CHANGED)
+            self.secondMapWindow.Unbind(EVT_ZOOM_CHANGED)
+
+    def OnZoomChangedFirstMap(self, event):
+        """!Display region of the first window (Map) changed.
+
+        Synchronize the region of the second map and re-render it.
+        This is the default implementation which can be overridden.
+        """
+        region = self.GetFirstMap().GetCurrentRegion()
+        self.GetSecondMap().region.update(region)
+        self.Render(mapToRender = self.GetSecondWindow())
+
+    def OnZoomChangedSecondMap(self, event):
+        """!Display region of the second window (Map) changed.
+
+        Synchronize the region of the second map and re-render it.
+        This is the default implementation which can be overridden.
+        """
+        region = self.GetSecondMap().GetCurrentRegion()
+        self.GetFirstMap().region.update(region)
+        self.Render(mapToRender = self.GetFirstWindow())
 
     def OnZoomIn(self, event):
         """!Zoom in the map.
