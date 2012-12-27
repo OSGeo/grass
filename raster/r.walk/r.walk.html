@@ -4,9 +4,10 @@
 cumulative cost of moving between each cell and the user-specified
 starting points and 2) a second raster map layer showing the movement 
 direction to the next cell on the path back to the start point (see 
-<a href="#move">Movement Direction</a>). It uses an input elevation raster map layer whose
-cell category values represent elevation, combined with a second input
-raster map layer whose cell values represent friction costs.
+<a href="#move">Movement Direction</a>). It uses an input elevation 
+raster map layer whose cell category values represent elevation, 
+combined with a second input raster map layer whose cell values 
+represent friction costs.
 
 This function is similar to <em>r.cost</em>, but in addiction to a
 friction map, it considers an anisotropic travel time due to the
@@ -70,16 +71,18 @@ algorithm, that find an optimum solution (for more details see
 <p>The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. Without it 
 <em>r.drain</em> would not correctly create a path from an end point 
-back to the start point. The direction shown in each cell points <b>away</b> 
-from the cell that came before it. The directions are recorded as
-GRASS standard directions:<div class="code"><pre>
-       112.5 90  67.5         i.e. a cell with the value 135 
-157.5  135   0   45   22.5    means the cell <b>before</b> it is 
-       180   x   0            to the south-east.
+back to the start point. The direction of each cell points towards 
+the next cell. The directions are recorded as degrees CCW from East:
+<div class="code"><pre>
+       112.5      67.5         i.e. a cell with the value 135 
+157.5  135   90   45   22.5    means the next cell is to the north-west
+       180   x   360           
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
-<p>Once <em>r.walk</em> computes the cumulative cost map as a linear
+
+<p>
+Once <em>r.walk</em> computes the cumulative cost map as a linear
 combination of friction cost (from friction map) and the altitude and
 distance covered (from the digital elevation model), <em>r.drain</em>
 can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
