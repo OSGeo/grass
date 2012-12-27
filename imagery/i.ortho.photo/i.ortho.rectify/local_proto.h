@@ -57,3 +57,8 @@ extern void p_bilinear_f(struct cache *, void *, int, double *, double *,
 /* cubic_f.c */
 extern void p_cubic_f(struct cache *, void *, int, double *, double *,
 		    struct Cell_head *);
+/* lanczos.c */
+extern void p_lanczos(struct cache *, void *, int, double *, double *,
+		    struct Cell_head *);
+extern void p_lanczos_f(struct cache *, void *, int, double *, double *,
+		    struct Cell_head *);
