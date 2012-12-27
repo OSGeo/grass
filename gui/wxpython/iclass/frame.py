@@ -1124,6 +1124,23 @@ class MapManager:
         self.toolbar.choice.Insert(name, 0)
         self.toolbar.choice.SetSelection(0)
         
+    def AddLayerRGB(self, cmd):
+        """!Adds RGB layer and update toolbar.
+
+        @param cmd d.rgb command as a list
+        """
+        name = []
+        for param in cmd:
+            if '=' in param:
+                name.append(param.split('=')[1])
+        name = ','.join(name)
+        self.map.AddLayer(type = 'rgb', command = cmd, l_active = True,
+                          name = name, l_hidden = False, l_opacity = 1.0, l_render = True)
+        self.frame.Render(self.mapWindow)
+        self.layerName[name] = name
+        self.toolbar.choice.Insert(name, 0)
+        self.toolbar.choice.SetSelection(0)
+
     def RemoveTemporaryLayer(self, name):
         """!Removes temporary layer (if exists) from Map and and updates toolbar.
         
@@ -1169,7 +1186,8 @@ class MapManager:
             
     def SelectLayer(self, name):
         """!Moves selected layer to top"""
-        layers = self.map.GetListOfLayers(l_type = 'raster')
+        layers = self.map.GetListOfLayers(l_type = 'raster') + \
+                 self.map.GetListOfLayers(l_type = 'rgb')
         idx = None
         for i, layer in enumerate(layers):
             if self.layerName[name] == layer.GetName():
