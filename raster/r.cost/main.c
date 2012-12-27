@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     double NS_fac, EW_fac, DIAG_fac, H_DIAG_fac, V_DIAG_fac;
     double fcost;
     double min_cost, old_min_cost;
-    double cur_dir;
+    FCELL cur_dir;
     double zero = 0.0;
     int at_percent = 0;
     int col, row, nrows, ncols;
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     } costs;
 
     void *ptr2;
-    RASTER_MAP_TYPE data_type, dir_data_type = DCELL_TYPE, nearest_data_type = CELL_TYPE;
+    RASTER_MAP_TYPE data_type, dir_data_type = FCELL_TYPE, nearest_data_type = CELL_TYPE;
     struct History history;
     double peak = 0.0;
     int dsize, nearest_size;
@@ -394,8 +394,8 @@ int main(int argc, char *argv[])
 
     /* report disk space and memory requirements */
     if (dir == TRUE) {
-	disk_mb = (double) nrows * ncols * 32. / 1048576.;
-	mem_mb  = (double) srows * scols * 32. / 1048576. * segments_in_memory;
+	disk_mb = (double) nrows * ncols * 28. / 1048576.;
+	mem_mb  = (double) srows * scols * 28. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
     }
     else {
@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
 
     if (dir == TRUE) {
 	if (segment_open(&dir_seg, G_tempfile(), nrows, ncols, srows, scols,
-		         sizeof(double), segments_in_memory) != 1)
+		         sizeof(FCELL), segments_in_memory) != 1)
 	    G_fatal_error(_("Can not create temporary file"));
 
     }
@@ -775,75 +775,97 @@ int main(int argc, char *argv[])
 	 *       16 8  4  7 15
 	 *         12    11
 	 */
+
+	/* drainage directions in degrees CCW from East
+	 * drainage directions are set for each neighbor and must be 
+	 * read as from neighbor to current cell
+	 * 
+	 * X = neighbor:
+	 * 
+	 *       112.5       67.5 
+	 * 157.5 135    90   45   22.5
+	 *       180     X  360
+	 * 202.5 225   270  315   337.5
+	 *       247.5      292.5
+	 * 
+	 * X = present cell, directions for neighbors:
+	 * 
+	 *       292.5      247.5 
+	 * 337.5 315   270  225    202.5
+	 *       360     X  180
+	 *  22.5  45    90  135    157.5
+	 *        67.5      112.5
+	 */
+
 	for (neighbor = 1; neighbor <= total_reviewed; neighbor++) {
 	    switch (neighbor) {
 	    case 1:
 		col = pres_cell->col - 1;
-		cur_dir = 180.0;
+		cur_dir = 360.0;
 		break;
 	    case 2:
 		col = pres_cell->col + 1;
-		cur_dir = 0.0;
+		cur_dir = 180.0;
 		break;
 	    case 3:
 		row = pres_cell->row - 1;
 		col = pres_cell->col;
-		cur_dir = 90.0;
+		cur_dir = 270.0;
 		break;
 	    case 4:
 		row = pres_cell->row + 1;
-		cur_dir = 270.0;
+		cur_dir = 90.0;
 		break;
 	    case 5:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 1;
-		cur_dir = 135.0;
+		cur_dir = 315.0;
 		break;
 	    case 6:
 		col = pres_cell->col + 1;
-		cur_dir = 45.0;
+		cur_dir = 225.0;
 		break;
 	    case 7:
 		row = pres_cell->row + 1;
-		cur_dir = 315.0;
+		cur_dir = 135.0;
 		break;
 	    case 8:
 		col = pres_cell->col - 1;
-		cur_dir = 225.0;
+		cur_dir = 45.0;
 		break;
 	    case 9:
 		row = pres_cell->row - 2;
 		col = pres_cell->col - 1;
-		cur_dir = 112.5;
+		cur_dir = 292.5;
 		break;
 	    case 10:
 		col = pres_cell->col + 1;
-		cur_dir = 67.5;
+		cur_dir = 247.5;
 		break;
 	    case 11:
 		row = pres_cell->row + 2;
-		cur_dir = 292.5;
+		cur_dir = 112.5;
 		break;
 	    case 12:
 		col = pres_cell->col - 1;
-		cur_dir = 247.5;
+		cur_dir = 67.5;
 		break;
 	    case 13:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 2;
-		cur_dir = 157.5;
+		cur_dir = 337.5;
 		break;
 	    case 14:
 		col = pres_cell->col + 2;
-		cur_dir = 22.5;
+		cur_dir = 202.5;
 		break;
 	    case 15:
 		row = pres_cell->row + 1;
-		cur_dir = 337.5;
+		cur_dir = 157.5;
 		break;
 	    case 16:
 		col = pres_cell->col - 2;
-		cur_dir = 202.5;
+		cur_dir = 22.5;
 		break;
 	    }
 
@@ -1101,7 +1123,8 @@ int main(int argc, char *argv[])
     }
 
     if (dir == TRUE) {
-	double *p;
+	void *p;
+	size_t dir_size = Rast_cell_size(dir_data_type);
 
 	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
 	dir_cell = Rast_allocate_buf(dir_data_type);
@@ -1111,7 +1134,8 @@ int main(int argc, char *argv[])
 	    p = dir_cell;
 	    for (col = 0; col < ncols; col++) {
 		segment_get(&dir_seg, &cur_dir, row, col);
-		*(p + col) = cur_dir;
+		*((FCELL *) p) = cur_dir;
+		p = G_incr_void_ptr(p, dir_size);
 	    }
 	    Rast_put_row(dir_fd, dir_cell, dir_data_type);
 	    G_percent(row, nrows, 2);
@@ -1123,7 +1147,7 @@ int main(int argc, char *argv[])
     segment_close(&cost_seg);	/* release memory  */
     if (dir == TRUE)
 	segment_close(&dir_seg);
-     Rast_close(cost_fd);
+    Rast_close(cost_fd);
     Rast_close(cum_fd);
     if (dir == TRUE)
 	Rast_close(dir_fd);
