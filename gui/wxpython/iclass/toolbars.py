@@ -23,6 +23,7 @@ import wx
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from iclass.dialogs import IClassMapDialog
+from gui_core.forms import GUI
 
 import grass.script as grass
 
@@ -43,6 +44,8 @@ iClassIcons = {
                             label = _('Export training areas')),
         'importAreas' : MetaIcon(img = 'layer-import',
                             label = _('Import training areas')),
+        'addRgb' : MetaIcon(img = 'layer-rgb-add',
+                            label = _('Add RGB map layer')),
         }
         
 class IClassMapToolbar(BaseToolbar):
@@ -250,10 +253,12 @@ class IClassMapManagerToolbar(BaseToolbar):
         """!Toolbar data"""
         return self._getToolbarData((("addRast", BaseIcons['addRast'],
                                       self.OnAddRast),
-                                      ("delRast", iClassIcons['delCmd'],
-                                      self.OnDelRast),
-                                      ("setOpacity", iClassIcons['opacity'],
-                                      self.OnSetOpacity),
+                                     ('addRgb', iClassIcons['addRgb'],
+                                      self.OnAddRGB),
+                                     ("delRast", iClassIcons['delCmd'],
+                                     self.OnDelRast),
+                                     ("setOpacity", iClassIcons['opacity'],
+                                     self.OnSetOpacity),
                                     ))
                                     
     def OnSelectLayer(self, event):
@@ -269,6 +274,14 @@ class IClassMapManagerToolbar(BaseToolbar):
                 
         dlg.Destroy()
         
+    def OnAddRGB(self, event):
+        cmd = ['d.rgb']
+        GUI(parent = self.parent).ParseCommand(cmd, completed = (self.GetOptData, '', ''))
+
+    def GetOptData(self, dcmd, layer, params, propwin):
+        if dcmd:
+            self.mapManager.AddLayerRGB(cmd = dcmd)
+
     def OnDelRast(self, event):
         layer = self.choice.GetStringSelection()
         idx = self.choice.GetSelection()
