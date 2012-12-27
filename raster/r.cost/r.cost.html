@@ -12,9 +12,9 @@ space between each cell and the user-specified points (diagonal
 costs are multiplied by a factor that depends on the dimensions of
 the cell) and 2) a second raster map layer showing the movement 
 direction to the next cell on the path back to the start point (see 
-<a href="#move">Movement Direction</a>). This program uses the current geographic region settings.
-The <b>output</b> map will be of the same data format as the <b>input</b>
-map, integer or floating point.
+<a href="#move">Movement Direction</a>). This module uses the current 
+geographic region settings. The <b>output</b> map will be of the same 
+data format as the <b>input</b> map, integer or floating point.
 
 <h2>OPTIONS</h2>
 
@@ -186,7 +186,7 @@ Output (using -k):                Output (not using -k):
 </pre></div>
 
 <p><!-- ??? are "starting" and "ending" swapped in the following text ??? -->
-The user-provided ending location in the above example is the boxed <b>3</b>
+The user-provided starting location in the above example is the boxed <b>3</b>
 in the above input map. The costs in the output map represent the total
 cost of moving from each box (&quot;cell&quot;) to one or more (here,
 only one) starting location(s). Cells surrounded by asterisks are
@@ -227,25 +227,21 @@ used. The calculation is done with <em>r.cost</em> as follows
 <p>The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. Without it 
 <em>r.drain</em> would not correctly create a path from an end point 
-back to the start point. The direction shown in each cell points <b>away</b> 
-from the cell that came before it. The directions are recorded as
-GRASS standard directions:<div class="code"><pre>
-       112.5 90  67.5         i.e. a cell with the value 135 
-157.5  135   0   45   22.5    means the cell <b>before</b> it is 
-       180   x   0            to the south-east.
+back to the start point. The direction of each cell points towards 
+the next cell. The directions are recorded as degrees CCW from East:
+<div class="code"><pre>
+       112.5      67.5         i.e. a cell with the value 135 
+157.5  135   90   45   22.5    means the next cell is to the north-west
+       180   x   360           
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
-<p>Once <em>r.cost</em> computes the cumulative cost map, <em>r.drain</em>
+
+<p>
+Once <em>r.cost</em> computes the cumulative cost map, <em>r.drain</em>
 can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
 and the movement direction raster map when running r.drain to ensure
 the path is computed according to the proper movement directions.
-
-<h2>BUGS</h2>
-
-The percentage done calculation reported in verbose mode is often not linear
-and ends well before 100%. This does not affect output.
-
 
 <h2>SEE ALSO</h2>
 
