@@ -21,7 +21,7 @@ Classes:
  - wizard::LocationWizard
  - wizard::WizardWithHelpButton
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2012 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1218,12 +1218,12 @@ class WKTPage(TitledPage):
     for setting coordinate system parameters"""
 
     def __init__(self, wizard, parent):
-        TitledPage.__init__(self, wizard, _("Select WKT file"))
+        TitledPage.__init__(self, wizard, _("Select WKT or PRJ file"))
 
         self.wktfile = ''
 
         # create controls
-        self.lfile= self.MakeLabel(_("WKT file:"))
+        self.lfile= self.MakeLabel(_("WKT or PRJ file:"))
         self.tfile = self.MakeTextCtrl(size = (300,-1))
         self.bbrowse = self.MakeButton(_("Browse"))
 
@@ -1274,9 +1274,9 @@ class WKTPage(TitledPage):
 
     def OnBrowse(self, event):
         """!Choose file"""
-        dlg = wx.FileDialog(self,
-                            _("Select WKT file"),
-                            os.getcwd(), "", "*.*", wx.OPEN)
+        dlg = wx.FileDialog(parent = self, message = _("Select WKT or PRJ file"),
+                            defaultDir = os.getcwd(), 
+                            wildcard = "PRJ files (*.prj)|*.prj|Files (*.*)|*.*", style = wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             self.tfile.SetValue(path)
