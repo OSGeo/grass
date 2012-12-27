@@ -682,69 +682,69 @@ struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
 	    G_message(_("direction read: %lf, neighbour found: %i"),
 		      direction, neighbour);
 	switch (neighbour) {
-	case 1800:
-	    next_row = list->row;
-	    next_col = list->col + 1;
-	    break;
-	case 0:
-	    next_row = list->row;
-	    next_col = list->col - 1;
-	    break;
-	case 900:
-	    next_row = list->row + 1;
-	    next_col = list->col;
-	    break;
-	case 2700:
+	case 225: /* ENE */
 	    next_row = list->row - 1;
-	    next_col = list->col;
+	    next_col = list->col + 2;
 	    break;
-	case 1350:
-	    next_col = list->col + 1;
-	    next_row = list->row + 1;
-	    break;
-	case 450:
-	    next_col = list->col - 1;
-	    next_row = list->row + 1;
-	    break;
-	case 3150:
-	    next_row = list->row - 1;
-	    next_col = list->col - 1;
-	    break;
-	case 2250:
+	case 450: /* NE */
 	    next_row = list->row - 1;
 	    next_col = list->col + 1;
 	    break;
-	case 1125:
-	    next_row = list->row + 2;
-	    next_col = list->col + 1;
-	    break;
-	case 675:
-	    next_row = list->row + 2;
-	    next_col = list->col - 1;
-	    break;
-	case 2925:
-	    next_row = list->row - 2;
-	    next_col = list->col - 1;
-	    break;
-	case 2475:
+	case 675: /* NNE */
 	    next_row = list->row - 2;
 	    next_col = list->col + 1;
 	    break;
-	case 1575:
-	    next_row = list->row + 1;
-	    next_col = list->col + 2;
+	case 900: /* N */
+	    next_row = list->row - 1;
+	    next_col = list->col;
 	    break;
-	case 225:
+	case 1125: /* NNW */
+	    next_row = list->row - 2;
+	    next_col = list->col - 1;
+	    break;
+	case 1350: /* NW */
+	    next_col = list->col - 1;
+	    next_row = list->row - 1;
+	    break;
+	case 1575: /* WNW */
+	    next_col = list->col - 2;
+	    next_row = list->row - 1;
+	    break;
+	case 1800: /* W*/
+	    next_row = list->row;
+	    next_col = list->col - 1;
+	    break;
+	case 2025: /* WSW */
 	    next_row = list->row + 1;
 	    next_col = list->col - 2;
 	    break;
-	case 3375:
-	    next_row = list->row - 1;
-	    next_col = list->col - 2;
+	case 2250: /* SW */
+	    next_row = list->row + 1;
+	    next_col = list->col - 1;
 	    break;
-	case 2025:
-	    next_row = list->row - 1;
+	case 2475: /* SSW */
+	    next_row = list->row + 2;
+	    next_col = list->col - 1;
+	    break;
+	case 2700: /* S */
+	    next_row = list->row + 1;
+	    next_col = list->col;
+	    break;
+	case 2925: /* SSE */
+	    next_row = list->row + 2;
+	    next_col = list->col + 1;
+	    break;
+	case 3150: /* SE */
+	    next_row = list->row + 1;
+	    next_col = list->col + 1;
+	    break;
+	case 3375: /* ESE */
+	    next_row = list->row + 1;
 	    next_col = list->col + 2;
+	    break;
+	case 3600: /* E */
+	    next_row = list->row;
+	    next_col = list->col + 1;
 	    break;
 	    /* default:
 	       break;
