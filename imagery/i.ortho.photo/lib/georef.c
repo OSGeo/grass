@@ -2,6 +2,8 @@
 #include <signal.h>
 #include "orthophoto.h"
 
+/* TODO: replace with imagery lib I_compute_georef_equations() */
+
 static int floating_exception;
 static void catch(int);
 static double determinant(double, double, double, double, double,

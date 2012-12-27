@@ -13,12 +13,8 @@ static int error(char *, char *, char *);
 FILE *I_fopen_cam_file_new(char *camera)
 {
     FILE *fd;
-    char element[100];
 
-    /* get group element name */
-    sprintf(element, "camera");
-
-    fd = G_fopen_new(element, camera);
+    fd = G_fopen_new("camera", camera);
     if (!fd)
 	error(camera, "can't create ", "");
     return fd;
@@ -27,12 +23,8 @@ FILE *I_fopen_cam_file_new(char *camera)
 FILE *I_fopen_cam_file_append(char *camera)
 {
     FILE *fd;
-    char element[100];
 
-    /* get group element name */
-    sprintf(element, "camera/%s", camera);
-
-    fd = G_fopen_append(element, camera);
+    fd = G_fopen_append("camera", camera);
     if (!fd)
 	error(camera, "unable to open ", "");
     return fd;
@@ -41,12 +33,8 @@ FILE *I_fopen_cam_file_append(char *camera)
 FILE *I_fopen_cam_file_old(char *camera)
 {
     FILE *fd;
-    char element[100];
 
-    /* get group element name */
-    sprintf(element, "camera");
-
-    fd = G_fopen_old(element, camera, G_mapset());
+    fd = G_fopen_old("camera", camera, G_mapset());
     if (!fd)
 	error(camera, "can't open ", "");
     return fd;
