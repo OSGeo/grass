@@ -65,8 +65,8 @@ class SwipeMapFrame(DoubleMapFrame):
         self.secondMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
                                                    Map = self.secondMap, frame = self)
         self.MapWindow = self.firstMapWindow # current by default
-        self.firstMap.region = self.secondMap.region
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
+        self.SetBindRegions(True)
 
         self._mode = 'swipe'
 
@@ -270,18 +270,6 @@ class SwipeMapFrame(DoubleMapFrame):
                   LeftDockable(True).RightDockable(True).
                   Right().Layer(1).BestSize((self.sliderV.GetBestSize())))
 
-    def UpdateRegion(self):
-        """!
-        Rerender the second window
-        when the region of the first changed.
-        """
-        Debug.msg(3, "SwipeMapFrame.UpdateRegion()")
-
-        if self.GetWindow() == self.GetSecondWindow():
-            self.Render(self.GetFirstWindow())
-        else:
-            self.Render(self.GetSecondWindow())
-
     def ZoomToMap(self):
         """!
         Set display extents to match selected raster (including NULLs)
@@ -291,8 +279,6 @@ class SwipeMapFrame(DoubleMapFrame):
             self.GetFirstWindow().ZoomToMap(layers = self.firstMap.GetListOfLayers())
         if self.rasters['second']:
             self.GetSecondWindow().ZoomToMap(layers = self.secondMap.GetListOfLayers())
-        # needed again, don't know why
-        self.firstMap.region = self.secondMap.region
 
     def OnZoomToMap(self, event):
         """!Zoom to map"""

@@ -30,6 +30,7 @@ This program is free software under the GNU General Public License
 
 
 from wx.lib.newevent import NewCommandEvent
+from wx.lib.newevent import NewEvent
 
 
 # Notification event intended to update statusbar.
@@ -41,3 +42,5 @@ gShowNotification, EVT_SHOW_NOTIFICATION = NewCommandEvent()
 # attributes: name: map name, ltype: map type,
 # add: if map should be added to layer tree (questionable attribute)
 gMapCreated, EVT_MAP_CREATED = NewCommandEvent()
+
+gZoomChanged, EVT_ZOOM_CHANGED = NewEvent()

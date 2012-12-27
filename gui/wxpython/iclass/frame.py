@@ -342,7 +342,7 @@ class IClassMapFrame(DoubleMapFrame):
     def IsStandalone(self):
         """!Check if Map display is standalone"""
         return True
-    
+
     def OnUpdateActive(self, event):
         """!
         @todo move to DoubleMapFrame?
@@ -370,7 +370,7 @@ class IClassMapFrame(DoubleMapFrame):
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
             mapTb.SetActiveMap((win == self.secondMapWindow))
         self.StatusbarUpdate() 
-        
+
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['iClassMap']
@@ -399,6 +399,16 @@ class IClassMapFrame(DoubleMapFrame):
         zoommenu.AppendItem(zoomtarget)
         self.Bind(wx.EVT_MENU, self.OnZoomToTraining, zoomtarget)
 
+        zoombind = wx.MenuItem(zoommenu, wx.ID_ANY, _("Display synchronization ON"))
+        zoommenu.AppendItem(zoombind)
+        self.Bind(wx.EVT_MENU, lambda event: self.SetBindRegions(True), zoombind)
+
+        zoomunbind = wx.MenuItem(zoommenu, wx.ID_ANY, _("Display synchronization OFF"))
+        zoommenu.AppendItem(zoomunbind)
+        self.Bind(wx.EVT_MENU, lambda event: self.SetBindRegions(False), zoomunbind)
+
+        zoomunbind.Enable(self._bindRegions)
+        zoombind.Enable(not self._bindRegions)
         # Popup the menu. If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
