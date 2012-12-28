@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     double stepN, stepE, lambda, mean;
     double N_extension, E_extension, edgeE, edgeN;
 
-    const char *mapset, *dvr, *db, *vector, *map;
+    const char *mapset, *drv, *db, *vector, *map;
     char table_name[GNAME_MAX], title[64];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
     struct bound_box general_box, overlap_box, original_box;
 
     struct Point *observ;
-    struct line_pnts *points;
     struct line_cats *Cats;
     dbCatValArray cvarr;
 
@@ -93,7 +92,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("LIDAR"));
     module->description =
-	_("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
+	_("Performs bicubic or bilinear spline interpolation with Tykhonov regularization.");
 
     cross_corr_flag = G_define_flag();
     cross_corr_flag->key = 'c';
@@ -112,18 +111,21 @@ int main(int argc, char *argv[])
     withz_flag->guisection = _("Settings");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
+    in_opt->label = _("Name of input vector point map");
+    
+    dfield_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     in_ext_opt = G_define_standard_option(G_OPT_V_INPUT);
-    in_ext_opt->key = "sparse";
+    in_ext_opt->key = "sparse_input";
     in_ext_opt->required = NO;
-    in_ext_opt->description =
-	_("Name of input vector map of sparse points");
+    in_ext_opt->label =
+	_("Name of input vector map with sparse points");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->required = NO;
 
     out_map_opt = G_define_standard_option(G_OPT_R_OUTPUT);
-    out_map_opt->key = "raster";
+    out_map_opt->key = "raster_output";
     out_map_opt->required = NO;
 
     mask_opt = G_define_standard_option(G_OPT_R_INPUT);
@@ -166,10 +168,6 @@ int main(int argc, char *argv[])
     lambda_f_opt->description = _("Tykhonov regularization parameter (affects smoothing)");
     lambda_f_opt->answer = "0.01";
     lambda_f_opt->guisection = _("Settings");
-
-    dfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    dfield_opt->answer = "1";
-    dfield_opt->guisection = _("Settings");
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->key = "column";
@@ -219,12 +217,13 @@ int main(int argc, char *argv[])
 
     flag_auxiliar = FALSE;
 
-    if (!(db = G__getenv2("DB_DATABASE", G_VAR_MAPSET)))
-	G_fatal_error(_("Unable to read name of database"));
-
-    if (!(dvr = G__getenv2("DB_DRIVER", G_VAR_MAPSET)))
-	G_fatal_error(_("Unable to read name of driver"));
-
+    drv = db_get_default_driver_name();
+    if (!drv)
+        G_fatal_error(_("No default DB driver defined"));
+    db = db_get_default_database_name();
+    if (!db)
+        G_fatal_error(_("No default DB defined"));
+    
     /* Set auxiliary table's name */
     if (vector) {
 	if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
@@ -235,12 +234,12 @@ int main(int argc, char *argv[])
     }
 
     /* Something went wrong in a previous v.surf.bspline execution */
-    if (db_table_exists(dvr, db, table_name)) {
+    if (db_table_exists(drv, db, table_name)) {
 	/* Start driver and open db */
-	driver = db_start_driver_open_database(dvr, db);
+	driver = db_start_driver_open_database(drv, db);
 	if (driver == NULL)
 	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
-			  dvr);
+			  drv);
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
 	    G_fatal_error(_("Old auxiliary table could not be dropped"));
 	db_close_database_shutdown_driver(driver);
@@ -254,7 +253,7 @@ int main(int argc, char *argv[])
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
 	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
-
+    
     bspline_field = Vect_get_field_number(&In, dfield_opt->answer);
     bspline_column = col_opt->answer;
 
@@ -263,7 +262,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Input vector is not 3D, can not use z coordinates"));
     }
     else if (!withz_flag->answer && (bspline_field <= 0 || bspline_column == NULL))
-	G_fatal_error(_("Both layer and column with z values must be given"));
+	G_fatal_error(_("Option '%s' with z values or '-%c' flag must be given"),
+                      col_opt->key, withz_flag->key);
 
     if (withz_flag->answer)
 	bspline_field = 0;
@@ -272,12 +272,13 @@ int main(int argc, char *argv[])
     if (spline_step_flag->answer) {
 	double dens, dist;
 	if (P_estimate_splinestep(&In, &dens, &dist) == 0) {
-	    G_message("Estimated point density: %.4g", dens);
-	    G_message("Estimated mean distance between points: %.4g", dist);
+	    fprintf(stdout, _("Estimated point density: %.4g"), dens);
+            fprintf(stdout, _("Estimated mean distance between points: %.4g"), dist);
 	}
-	else
-	    G_warning(_("No points in current region!"));
-	
+	else {
+	    fprintf(stdout, _("No points in current region"));
+	}
+        
 	Vect_close(&In);
 	exit(EXIT_SUCCESS);
     }
@@ -319,10 +320,10 @@ int main(int argc, char *argv[])
     /* Open output map */
     /* vector output */
     if (vector && !map) {
-	if (strcmp(dvr, "dbf") == 0)
+	if (strcmp(drv, "dbf") == 0)
 	    G_fatal_error(_("Sorry, the <%s> driver is not compatible with "
 			  "the vector output of this module. "
-			  "Try with raster output or another driver."), dvr);
+			  "Try with raster output or another driver."), drv);
 
 	Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				     G_FATAL_EXIT);
@@ -343,8 +344,8 @@ int main(int argc, char *argv[])
 	}
 	Vect_hist_command(&Out);
 
-	G_message(_("Points in input vector map <%s> will be interpolated"),
-		  vector);
+	G_verbose_message(_("Points in input vector map <%s> will be interpolated"),
+                          vector);
     }
 
     /* raster output */
@@ -354,8 +355,8 @@ int main(int argc, char *argv[])
 	grid = TRUE;
 	raster = Rast_open_fp_new(out_map_opt->answer);
 
-	G_message(_("Cells for raster map <%s> will be interpolated"),
-		  map);
+	G_verbose_message(_("Cells for raster map <%s> will be interpolated"),
+                          map);
     }
 
     /* read z values from attribute table */
@@ -394,10 +395,10 @@ int main(int argc, char *argv[])
     G_debug(1, "Interpolation()");
 
     /* Open driver and database */
-    driver = db_start_driver_open_database(dvr, db);
+    driver = db_start_driver_open_database(drv, db);
     if (driver == NULL)
 	G_fatal_error(_("No database connection for driver <%s> is defined. "
-			"Run db.connect."), dvr);
+			"Run db.connect."), drv);
 
     /* Create auxiliary table */
     if (vector) {
@@ -410,7 +411,7 @@ int main(int argc, char *argv[])
 	/* db_create_index2(driver, table_name, "ID"); */
 	/* sqlite likes that */
 	db_close_database_shutdown_driver(driver);
-	driver = db_start_driver_open_database(dvr, db);
+	driver = db_start_driver_open_database(drv, db);
     }
 
     /* Setting regions and boxes */
@@ -528,8 +529,8 @@ int main(int argc, char *argv[])
     P_get_edge(bilin, &dims, stepE, stepN);
     P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
-    G_verbose_message(_("adjusted EW splines %d"), nsplx_adj);
-    G_verbose_message(_("adjusted NS splines %d"), nsply_adj);
+    G_verbose_message(_("Adjusted EW splines %d"), nsplx_adj);
+    G_verbose_message(_("Adjusted NS splines %d"), nsply_adj);
 
     /* calculate number of subregions */
     edgeE = dims.ew_size - dims.overlap - 2 * dims.edge_v;
@@ -549,7 +550,6 @@ int main(int argc, char *argv[])
     nsubregions = nsubregion_row * nsubregion_col;
 
     /* Creating line and categories structs */
-    points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     Vect_cat_set(Cats, 1, 0);
 
@@ -601,8 +601,8 @@ int main(int argc, char *argv[])
 	    subregion_col++;
 	    subregion++;
 	    if (nsubregions > 1)
-		G_message(_("subregion %d of %d"), subregion, nsubregions);
-
+		G_message(_("Subregion %d of %d..."), subregion, nsubregions);
+            
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
 
@@ -684,7 +684,8 @@ int main(int argc, char *argv[])
 	    G_debug(1,
 		    "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d",
 		    subregion_row, subregion_col, npoints);
-
+            if (npoints > 0)
+                G_verbose_message(_("%d points found in this subregion"), npoints);
 	    /* only interpolate if there are any points in current subregion */
 	    if (npoints > 0 && npoints_ext > 0) {
 		int i;

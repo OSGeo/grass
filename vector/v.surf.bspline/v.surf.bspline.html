@@ -1,18 +1,25 @@
 <h2>DESCRIPTION</h2>
-<em>v.surf.bspline</em> performs a bilinear/bicubic spline interpolation with
-Tykhonov regularization. The input is a 2D or 3D vector points map. Values to
-interpolate can be the z values of 3D points or the values in a user-specified
-attribue column in a 2D or 3D map. Output can be a raster or vector map.
-Optionally, a "sparse point" vector map can be input which indicates the
-location of <b><i>output</i></b> vector points.
-<p>From a theoretical perspective, the interpolating procedure takes place in two
-parts: the first is an estimate of the linear coefficients of a spline function
-is derived from the observation points using a least squares regression; the
-second is the computation of the interpolated surface (or interpolated vector
-points). As used here, the splines are 2D piece-wise non-zero polynomial
-functions calculated within a limited, 2D area. The length of each spline step
-is defined by <b><i>sie</i></b> for the east-west direction and
-<b><i>sin</i></b> for the north-south direction. For optimum performance, the
+
+<em>v.surf.bspline</em> performs a bilinear/bicubic spline
+interpolation with Tykhonov regularization. The <b>input</b> is a 2D
+or 3D vector <em>points</em> map. Values to interpolate can be the z
+values of 3D points or the values in a user-specified attribute column
+in a 2D or 3D vector map. Output can be a raster
+(<b>raster_output</b>) or vector (<b>output</b>) map.  Optionally, a
+"sparse point" vector map can be input which indicates the location
+of <b>output</b> vector points.
+
+<h2>NOTES</h2>
+
+<p>From a theoretical perspective, the interpolating procedure takes
+place in two parts: the first is an estimate of the linear
+coefficients of a spline function is derived from the observation
+points using a least squares regression; the second is the computation
+of the interpolated surface (or interpolated vector points). As used
+here, the splines are 2D piece-wise non-zero polynomial functions
+calculated within a limited, 2D area. The length of each spline step
+is defined by <b>sie</b> for the east-west direction and
+<b>sin</b> for the north-south direction. For optimum performance, the
 length of spline step should be no less than the distance between observation
 points. Each vector point observation is modeled as a linear function of the
 non-zero splines in the area around the observation. The least squares
@@ -20,57 +27,66 @@ regression predicts the the coefficients of these linear functions.
 Regularization, avoids the need to have one one observation and one coefficient
 for each spline (in order to avoid instability). 
 
-<p>With regularly distributed data points, a spline step corresponding to the
-maximum distance between two points in both the east and north directions is
-sufficient. But often data points are not regularly distributed and require
-statistial regularization or estimation. In such cases, v.surf.bspline will
-attempt to minimize the gradient of bilinear splines or the curvature of bicubic
-splines in areas lacking point observations. As a general rule, spline step
-length should be greater than the mean distance between observation points
-(twice the distance between points is a good starting point). Separate east-west
-and north-south spline step length arguments allows the user to account for some
-degree of anisotropy in the distribution of observation points. Short spline
-step lengths--especially spline step lengths that are less than the distance
-between observation points--can greatly increase processing time.
+<p>With regularly distributed data points, a spline step corresponding
+to the maximum distance between two points in both the east and north
+directions is sufficient. But often data points are not regularly
+distributed and require statistial regularization or estimation. In
+such cases, v.surf.bspline will attempt to minimize the gradient of
+bilinear splines or the curvature of bicubic splines in areas lacking
+point observations. As a general rule, spline step length should be
+greater than the mean distance between observation points (twice the
+distance between points is a good starting point). Separate east-west
+and north-south spline step length arguments allows the user to
+account for some degree of anisotropy in the distribution of
+observation points. Short spline step lengths - especially spline step
+lengths that are less than the distance between observation points -
+can greatly increase processing time.
 
-<p>Moreover, the maximum number of splines for each direction at each time is
-fixed, regardless of the spline step length. As the total number of splines used
-increases (i.e., with small spline step lengths), the region is automatically split
-into subregions for interpolation. Each subregion can contain no more than
-150x150 splines. To avoid subregion boundary problems, subregions are created to
-partially overlap each other. A weighted mean of observations, based on point
-locations, is calculated within each subregion. 
+<p>Moreover, the maximum number of splines for each direction at each
+time is fixed, regardless of the spline step length. As the total
+number of splines used increases (i.e., with small spline step
+lengths), the region is automatically split into subregions for
+interpolation. Each subregion can contain no more than 150x150
+splines. To avoid subregion boundary problems, subregions are created
+to partially overlap each other. A weighted mean of observations,
+based on point locations, is calculated within each subregion.
 
-<p>The Tykhonov regularization parameter ("<b><i>lambda_i</i></b>") acts to smooth
-the interpolation. With a small <b><i>lambda_i</i></b>, the interpolated surface
-closely follows observation points; a larger value will produce a smoother
-interpolation.
+<p>The Tykhonov regularization parameter (<b>lambda_i</b>) acts to
+smooth the interpolation. With a small <b>lambda_i</b>, the
+interpolated surface closely follows observation points; a larger
+value will produce a smoother interpolation.
 
-<p>The input can be a 2D pr 3D vector points map. If "<b><i>layer =</i></b>" 0 the
-z-value of a 3D map is used for interpolation. If layer &gt; 0, the user must
-specify an attribute column to used for interpolation using the
-"<b><i>column=</i></b>" argument (2D or 3D map). 
+<p>The input can be a 2D or 3D vector points map. If <b>-z</b> is
+given or <b>layer</b> is 0 the z-value of a 3D map is used for
+interpolation. If <b>layer</b> &gt; 0, the user must specify an
+attribute column to used for interpolation using the <b>column</b>
+argument (2D or 3D map).
 
-<p>v.surf.bspline can produce a raster OR a vector output (NOT simultaneously).
+<p><em>v.surf.bspline</em> can produce a <b>raster_output</b> OR
+a <b>output</b> (but NOT simultaneously). Note that topology is not
+build for output vector point map. The topology can be built if
+required by <em><a href="v.build.html">v.build</a></em>.
 
-<p>If output is a vector points map and a "<b><i>sparse=</i></b>" vector points map
-is not specified, the output vector map will contain points at the same
-locations as observation points in the input map, but the values of the output
-points are interpolated values. If instead a "<b><i>sparse=</i></b>" vector points
-map is specified, the output vector map will contain points at the same locations as
-the sparse vector map points, and values will be those of the interpolated
-raster surface at those points.
+<p>If output is a vector points map and a <b>sparse</b> vector points
+map is not specified, the output vector map will contain points at the
+same locations as observation points in the input map, but the values
+of the output points are interpolated values. If instead
+a <b>sparse</b> vector points map is specified, the output vector map
+will contain points at the same locations as the sparse vector map
+points, and values will be those of the interpolated raster surface at
+those points.
 
-<p>A cross validation "leave-one-out" analysis is available to help to determine
-the optimal <b><i>lambda_i</i></b> value that produces an interpolation that
-best fits the original observation data. The more points used for
-cross-validation, the longer the time needed for computation. Empirical testing
-indicates a threshold of a maximum of 100 points is recommended. Note that cross
-validation can run very slowly if more than 100 observations are used. The
-cross-validation output reports <i>mean</i> and <i>rms</i> of the residuals from
-the true point value and the estimated from the interpolation for a fixed series
-of <b><i>lambda_i</i></b> values. No vector nor raster output will be created
-when cross-validation is selected. 
+<p>A cross validation "leave-one-out" analysis is available to help to
+determine the optimal <b>lambda_i</b> value that produces an
+interpolation that best fits the original observation data. The more
+points used for cross-validation, the longer the time needed for
+computation. Empirical testing indicates a threshold of a maximum of
+100 points is recommended. Note that cross validation can run very
+slowly if more than 100 observations are used. The cross-validation
+output reports <i>mean</i> and <i>rms</i> of the residuals from the
+true point value and the estimated from the interpolation for a fixed
+series of <b>lambda_i</b> values. No vector nor raster output will be
+created when cross-validation is selected.
 
 
 <h2>EXAMPLES</h2>
@@ -81,8 +97,8 @@ when cross-validation is selected.
 v.surf.bspline input=point_vector output=interpolate_surface method=bicubic
 </pre></div>
 
-A bicubic spline interpolation will be done and a vector points map with estimated
-(i.e., interpolated) values will be created. 
+A bicubic spline interpolation will be done and a vector points map
+with estimated (i.e., interpolated) values will be created.
 
 <h3>Basic interpolation and raster output with a longer spline step</h3>
 
@@ -90,10 +106,11 @@ A bicubic spline interpolation will be done and a vector points map with estimat
 v.surf.bspline input=point_vector raster=interpolate_surface sie=25 sin=25
 </pre></div>
 
-A bilinear spline interpolation will be done with a spline step length of 25 map
-units. An interpolated raster map will be created at the current region resolution.
+A bilinear spline interpolation will be done with a spline step length
+of 25 map units. An interpolated raster map will be created at the
+current region resolution.
 
-<h3>Estimation of <b><i>lambda_i</i></b> parameter with a cross validation proccess</h3>
+<h3>Estimation of lambda_i parameter with a cross validation proccess</h3>
 
 <div class="code"><pre>
 v.surf.bspline -c input=point_vector 
@@ -105,31 +122,54 @@ v.surf.bspline -c input=point_vector
 v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surface
 </pre></div>
 
-An output map of vector points will be created, corresponding to the sparse vector map, with interpolated values.
+An output map of vector points will be created, corresponding to the
+sparse vector map, with interpolated values.
 
 <h3>Using attribute values instead Z-coordinates</h3>
+
 <div class="code"><pre>
 v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attrib_column
 </pre></div>
 
-The interpolation will be done using the values in attrib_column, in the
-table associated with layer 1.
+The interpolation will be done using the values
+in <i>attrib_column</i>, in the table associated with layer 1.
 
 <h3>North carolina location example using Z-coordinates for interpolation</h3>
+
 <div class="code"><pre>
-v.surf.bspline --o --v input=elev_lid792_bepts@PERMANENT raster=elev_lid792_rast sie=5 sin=5 method=bicubic lambda_i=0.1 -z
+v.surf.bspline input=elev_lid792_bepts@PERMANENT raster=elev_lid792_rast sie=5 sin=5 method=bicubic lambda_i=0.1 -z
 </pre></div>
 
 
 <h2>BUGS</h2>
-Known issues:
-<p>In order to avoid RAM memory problems, an auxiliary table is needed for
-recording some intermediate calculations. This requires the "<b>GROUP BY</b>"
-SQL function is used, which is not supported by the "<b>dbf</b>" driver. For
-this reason, vector map output "<b><i>output=</i></b>" is not permitted with the
-DBF driver. There are no problems with the raster map output from the DBF
-driver.
 
+Known issues:
+
+<p>
+In order to avoid RAM memory problems, an auxiliary table is needed
+for recording some intermediate calculations. This requires
+the <i>GROUP BY</i> SQL function is used, which is not supported by
+the DBF driver. For this reason, vector map output
+(<b>output</b>) is not permitted with the DBF driver. There are
+no problems with the raster map output from the DBF driver.
+
+<h2>REFERENCES</h2>
+
+<ul>
+  <li>Brovelli M. A., Cannata M., and Longoni U.M., 2004, LIDAR Data
+    Filtering and DTM Interpolation Within GRASS, Transactions in GIS,
+    April 2004, vol. 8, iss. 2, pp. 155-174(20), Blackwell Publishing Ltd</li>
+  <li>Brovelli M. A. and Cannata M., 2004, Digital Terrain model
+    reconstruction in urban areas from airborne laser scanning data: the
+    method and an example for Pavia (Northern Italy). Computers and
+    Geosciences 30, pp.325-331</li>
+  <li>Brovelli M. A e Longoni U.M., 2003, Software per il filtraggio di
+    dati LIDAR, Rivista dell'Agenzia del Territorio, n. 3-2003, pp. 11-22
+    (ISSN 1593-2192)</li>
+  <li>Antolin R. and Brovelli M.A., 2007, LiDAR data Filtering with GRASS GIS for the 
+    Determination of Digital Terrain Models. Proceedings of Jornadas de SIG Libre,
+    Girona, Espa&ntilde;a. CD ISBN: 978-84-690-3886-9</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
@@ -138,32 +178,11 @@ driver.
 <a href="v.surf.rst.html">v.surf.rst</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
-Original version in GRASS 5.4: (s.bspline.reg)
-<br>
-Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni, Mirko Reguzzoni
-<p>Update for GRASS 6.X and improvements:
-<br>
-Roberto Antolin
-
-
-<h2>REFERENCES</h2>
-
-Brovelli M. A., Cannata M., and Longoni U.M., 2004, LIDAR Data
-Filtering and DTM Interpolation Within GRASS, Transactions in GIS,
-April 2004, vol. 8, iss. 2, pp. 155-174(20), Blackwell Publishing Ltd
-<p>Brovelli M. A. and Cannata M., 2004, Digital Terrain model
-reconstruction in urban areas from airborne laser scanning data: the
-method and an example for Pavia (Northern Italy). Computers and
-Geosciences 30, pp.325-331
-<p>Brovelli M. A e Longoni U.M., 2003, Software per il filtraggio di
-dati LIDAR, Rivista dell'Agenzia del Territorio, n. 3-2003, pp. 11-22
-(ISSN 1593-2192)
-<p>Antolin R. and Brovelli M.A., 2007, LiDAR data Filtering with GRASS GIS for the 
-Determination of Digital Terrain Models. Proceedings of Jornadas de SIG Libre,
-Girona, Espa&ntilde;a. CD ISBN: 978-84-690-3886-9 <br>
+Original version (s.bspline.reg) in GRASS 5.4:
+Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni, Mirko Reguzzoni<br>
+Update for GRASS 6 and improvements: Roberto Antolin
 
 <p>
 <i>Last changed: $Date$</i>
