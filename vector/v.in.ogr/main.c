@@ -393,7 +393,8 @@ int main(int argc, char *argv[])
 	if (nlayers < 1)
 	    G_fatal_error(_("No OGR layers available"));
 	output = G_store(layer_names[0]);
-	G_message(_("All available OGR layers will be imported into vector map <%s>"), output);
+	if (param.layer->answer == NULL)
+	    G_warning(_("All available OGR layers will be imported into vector map <%s>"), output);
     }
     
     if (!param.outloc->answer) {	/* Check if the map exists */
