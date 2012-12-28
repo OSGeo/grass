@@ -119,13 +119,14 @@ index_names = {
 
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
 if index:
-    index_name = index.group(2).strip()
+    index_name_cap = index_name = index.group(2).strip()
 else:
     mod_class = pgm.split('.', 1)[0]
     index_name = index_names.get(mod_class, '')
+    index_name_cap = index_name.title()
 
 if index_name:
-    sys.stdout.write(footer_index.substitute(INDEXNAME = index_name, INDEXNAMECAP = index_name.title(),
+    sys.stdout.write(footer_index.substitute(INDEXNAME = index_name, INDEXNAMECAP = index_name_cap,
                                              YEAR = year))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR = year))
