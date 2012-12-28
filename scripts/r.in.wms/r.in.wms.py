@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-MODULE:    r.in.wms
+MODULE:    r.in.wms2
 
 AUTHOR(S): Stepan Turek <stepan.turek AT seznam.cz>
 
@@ -13,14 +13,14 @@ This program is free software under the GNU General Public License
 """
 
 #%module
-#% description: Downloads and imports data from WMS servers.
+#% description: Downloads and imports data from WMS server.
 #% keywords: raster
 #% keywords: import
 #% keywords: wms
 #%end
 
 #%option
-#% key: mapserver
+#% key: url
 #% type: string
 #% description:URL of WMS server 
 #% required: yes
@@ -42,8 +42,8 @@ This program is free software under the GNU General Public License
 #% key: srs
 #% type: integer
 #% description: EPSG number of source projection for request 
+#% answer:4326 
 #% guisection: Request properties
-#% required: yes
 #%end
 
 #%option
@@ -99,7 +99,21 @@ This program is free software under the GNU General Public License
 #%option
 #% key: urlparams
 #% type:string
-#% description: Addition query parameters for server (only with 'd' flag)
+#% description: Additional query parameters for server
+#% guisection: Request properties
+#%end
+
+#%option
+#% key: username
+#% type:string
+#% description: Username for server connection
+#% guisection: Request properties
+#%end
+
+#%option
+#% key: password
+#% type:string
+#% description: Password for server connection
 #% guisection: Request properties
 #%end
 
@@ -114,7 +128,7 @@ This program is free software under the GNU General Public License
 #%option
 #% key: bgcolor
 #% type: string
-#% description: Color of map background (only with 'd' flag)
+#% description: Color of map background
 #% guisection: Map style
 #%end
 
@@ -131,23 +145,61 @@ This program is free software under the GNU General Public License
 #% suppress_required: yes
 #%end
 
-#%flag
-#% key: d
-#% description: Do not use GDAL WMS driver
+#%option
+#% key: driver
+#% type:string
+#% description: Driver for communication with server
+#% descriptions: WMS_GDAL;Download data using GDAL WMS driver;WMS_GRASS;Download data using native GRASS-WMS driver;WMTS_GRASS;Download data using native GRASS-WMTS driver;OnEarth_GRASS;Download data using native GRASS-OnEarth driver;
+#% options:WMS_GDAL, WMS_GRASS, WMTS_GRASS, OnEarth_GRASS
+#% answer:WMS_GRASS
+#%end
+
+#%option G_OPT_F_INPUT
+#% key: capfile
+#% required: no
+#% gisprompt: old,file,bin_input
+#% description: Capabilities file 
+#%end
+
+#%option G_OPT_F_OUTPUT
+#% key: capfile_output
+#% required: no
+#% gisprompt: old,file,bin_input
+#% description: File where capabilities will be saved (only with 'c' flag).
 #%end
 
 import os
 import sys
-sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms'))
+sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms2'))
 
 import grass.script as grass
 
+def GetRegionParams(opt_region):
+
+    # set region 
+    if opt_region:                 
+        if not grass.find_file(name = opt_region, element = 'windows', mapset = '.' )['name']:
+            grass.fatal(_("Region <%s> not found") % opt_region)
+        
+    if opt_region:
+        s = grass.read_command('g.region',
+                                quiet = True,
+                                flags = 'ug',
+                                region = opt_region)
+        region_params = grass.parse_key_val(s, val_type = float)
+    else:
+        region_params = grass.region()
+
+    return region_params
+
 def main():
-    if flags['d']:
-        grass.debug("Using own driver")
+
+
+    if 'GRASS' in options['driver']:
+        grass.debug("Using GRASS driver")
         from wms_drv import WMSDrv
         wms = WMSDrv()
-    else:
+    elif 'GDAL' in options['driver']:
         grass.debug("Using GDAL WMS driver")
         from wms_gdal_drv import WMSGdalDrv
         wms = WMSGdalDrv()
@@ -155,9 +207,14 @@ def main():
     if flags['c']:
         wms.GetCapabilities(options)
     else:
-        wms.GetMap(options, flags)  
-    
+        from wms_base import GRASSImporter
+        options['region'] = GetRegionParams(options['region'])
+        importer = GRASSImporter(options['output'])
+        fetched_map = wms.GetMap(options, flags)
+        importer.ImportMapIntoGRASS(fetched_map)
+
     return 0
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

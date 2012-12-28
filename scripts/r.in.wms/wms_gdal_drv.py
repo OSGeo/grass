@@ -1,4 +1,20 @@
+"""!
+@brief GDAL WMS driver. 
+
+List of classes:
+ - wms_drv::NullDevice
+ - wms_drv::WMSGdalDrv
+
+(C) 2012 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
+"""
+
 import os
+import grass.script as grass 
 
 try:
     from osgeo import gdal
@@ -7,8 +23,6 @@ except:
     grass.fatal(_("Unable to load GDAL Python bindings"))
 
 import xml.etree.ElementTree as etree
-
-import grass.script as grass
 
 from wms_base import WMSBase
 
@@ -30,25 +44,25 @@ class WMSGdalDrv(WMSBase):
         service.set("name","WMS")
         
         version = etree.SubElement(service, "Version")
-        version.text =self.o_wms_version
+        version.text =self.params['wms_version']
         
         server_url = etree.SubElement(service, "ServerUrl")
-        server_url.text =self.o_mapserver_url
+        server_url.text =self.params['url']
         
-        srs = etree.SubElement(service, self.projection_name)   
-        srs.text = 'EPSG:' + str(self.o_srs)
+        srs = etree.SubElement(service, self.params['proj_name'])   
+        srs.text = 'EPSG:' + str(self.params['srs'])
         
         image_format = etree.SubElement(service, "ImageFormat")
-        image_format.text = self.mime_format
+        image_format.text = self.params['format']
         
         image_format = etree.SubElement(service, "Transparent")
-        image_format.text = self.transparent
+        image_format.text = self.params['transparent']
         
         layers = etree.SubElement(service, "Layers")
-        layers.text = self.o_layers
+        layers.text = self.params['layers']
         
         styles = etree.SubElement(service, "Styles")
-        styles.text = self.o_styles
+        styles.text = self.params['styles']
         
         data_window = etree.SubElement(gdal_wms, "DataWindow")
         
@@ -76,10 +90,10 @@ class WMSGdalDrv(WMSBase):
         block_size_x.text = str(self.temp_map_bands_num)
         
         block_size_x = etree.SubElement(gdal_wms, "BlockSizeX")
-        block_size_x.text = str(self.tile_cols) 
+        block_size_x.text = str(self.tile_size['cols']) 
         
         block_size_y = etree.SubElement(gdal_wms, "BlockSizeY")
-        block_size_y.text = str(self.tile_rows)
+        block_size_y.text = str(self.tile_size['rows'])
         
         xml_file = self._tempfile()
         
@@ -98,9 +112,11 @@ class WMSGdalDrv(WMSBase):
 
         # GDAL WMS driver does not flip geographic coordinates 
         # according to WMS standard 1.3.0.
-        if self.flip_coords and self.o_wms_version == "1.3.0":
+        if ("+proj=latlong" in self.proj_srs or \
+            "+proj=longlat" in self.proj_srs) and \
+            self.params['wms_version'] == "1.3.0":
             grass.warning(_("If module will not be able to fetch the data in this\
-                           geographic projection, \n try flag -d or use WMS version 1.1.1."))
+                           geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."))
 
         self._debug("_download", "started")
         

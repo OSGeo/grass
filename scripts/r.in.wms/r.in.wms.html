@@ -1,61 +1,97 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.wms</em> handles all of downloading and importing raster
-data from an <a href="http://www.opengeospatial.org/standards/wms">OGC
-WMS</a> web mapping server. It need only be told the desired data to
-collect (bounds and resolution) via a region, the server to get the
-data from, and the layer or layers to get. It downloads the data in
-tiles, reprojects it, imports it, and patches it back together.
+<em>r.in.wms</em> handles all of downloading and importing raster data
+from an <a href="http://www.opengeospatial.org/standards/wms">OGC
+WMS</a>, <a href="http://www.opengeospatial.org/standards/wmts">OGC
+WMTS</a> and <a href="http://onearth.jpl.nasa.gov/tiled.html">NASA
+OnEarth Tiled WMS</a> web mapping servers. It needs only be told the
+desired data to collect (bounds and resolution) via a region, the
+server to get the data from, and the layer or layers to get. It
+downloads the data in tiles, reprojects it, imports it, and patches it
+back together.
 
 <h2>NOTES</h2>
 
-<!--
-By default data is downloaded to <tt>$GISDBASE/wms_download</tt>. This can be changed
-by setting the <b>folder</b> option when using <em>r.in.wms</em>.
--->
-
-<p>To understand the data you are getting it is necessary to look at the
-capabilities of the WMS server. This should be available via a capabilities
-request. This is an
+To understand the data you are getting it is necessary to look at the
+capabilities of the WMS server. This should be available via a
+capabilities request, an
 <a href="http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities">example
 capabilities request to NASA's OnEarth server</a>.
+
+<p>
+When using GDAL WMS driver (<b>driver=WMS_GDAL</b>), the GDAL library
+needs to be built with WMS support,
+see <a href="http://gdal.org/frmt_wms.html">GDAL WMS</a> manual page
+for details.
+
+<h3>NASA OnEarth Tiled WMS</h3>
+
+Into parameter <b>layers</b> insert name of <i>TiledGroup</i> from
+Tile Service file. Time variable is possible to specify
+in <b>urlparams</b> parameter,
+e.g: <tt>urlparams='time=2012-1-1'</tt>.
 
 <h2>EXAMPLES</h2>
 
 <h3>General Get Capabilities Request</h3>
 
 <div class="code"><pre>
-r.in.wms -c mapserver=http://wms.cuzk.cz/wms.asp
+r.in.wms -c url=http://wms.cuzk.cz/wms.asp
 </pre></div>
 
-<h3>CUZK download</h3>
+<h3>Download raster data from WMS server (GetMap request)</h3>
 
-
-World extend data:
+<h4>World extend data</h4>
 
 <div class="code"><pre>
-r.in.wms mapserver=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsat_1_01 styles=default,default output=landsat srs=4326 format=png 
+r.in.wms url=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsat_1_01 styles=default,default output=landsat srs=4326 format=png 
 </pre></div>
-* Server supports only WMS 1.1.1 <br>
+
+Note: server supports only WMS 1.1.1
 
 <div class="code"><pre>
-r.in.wms mapserver=http://132.156.97.59/cgi-bin/worldmin_en-ca_ows layers=GSC:WORLD_PrecambrianDomains output=pokus srs=4326 format=jpeg 
+r.in.wms url=http://132.156.97.59/cgi-bin/worldmin_en-ca_ows layers=GSC:WORLD_PrecambrianDomains output=pokus srs=4326 format=jpeg 
 </pre></div>
-* Server supports only WMS 1.1.1 
-<br>
-<br>
 
-Data in extend of Czech Republic:
+Note: server supports only WMS 1.1.1 
+
+<h4>OGC WMTS Example</h4>
 
 <div class="code"><pre>
-r.in.wms output=kn mapserver=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-linie srs=4326 format=png
+r.in.wms url=http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts layers=ORTHOIMAGERY.ORTHOPHOTOS output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password=* username=*
 </pre></div>
 
+Note: username, password and API key can be get from <a href="http://api.ign.fr/">IGN API</a> website
 
-<h2>TODO</h2>
+<h4>NASA OnEarth Tiled WMS Example</h4>
+
+<div class="code"><pre>
+r.in.wms output=global_mosaic url=http://onearth.jpl.nasa.gov/wms.cgi layers='Global Mosaic, visual' driver=OnEarth_GRASS 
+</pre></div>
+
+<h4>Data in extend of Czech Republic</h4>
+
+<div class="code"><pre>
+r.in.wms output=kn url=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-linie srs=4326 format=png
+</pre></div>
+
+<div class="code"><pre>
+r.in.wms url=http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx layers=orto output=ortofoto srs=3857 format=jpeg driver=WMTS_GRASS style=default
+</pre></div>
+
+Note: data are provided by <a href="http://cuzk.cz/Dokument.aspx?PRARESKOD=998&MENUID=10384&AKCE=DOC:10-ENGLISH">Czech office for surveying, mapping and cadastre</a>.
+
+<h2>REQUIREMENTS</h2>
+
+<em>r.in.wms</em>
+requires <a href="http://www.gdal.org/gdalwarp.html">gdalwarp</a>
+utility from GDAL/OGR library.
+
+<h2>REFERENCES</h2>
 
 <ul>
-  <li>Implement Tiled WMS</li>
+  <li><a href="http://www.opengeospatial.org/standards/wms">OGC WMS</a></li>
+  <li><a href="http://www.opengeospatial.org/standards/wmts">OGC WMTS</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -68,7 +104,7 @@ r.in.wms output=kn mapserver=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-l
   <a href="v.in.wfs.html">v.in.wfs</a>
 </em>
 
-<h2>AUTHORS</h2>
+<h2>AUTHOR</h2>
 
 Stepan Turek, Czech Technical University in Prague, Czech Republic (bachelor's final project 2012, mentor: Martin Landa) 
 
