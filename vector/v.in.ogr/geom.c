@@ -311,8 +311,8 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	/* Degenerate is not ignored because it may be useful to see where it is,
 	 * but may be eliminated by min_area option */
 	if (Points->n_points < 4)
-	    G_warning(_("Degenerate polygon (%d vertices)"),
-		      Points->n_points);
+	    G_warning(_("Feature (cat %d): degenerated polygon (%d vertices)"),
+		      cat, Points->n_points);
 
 	size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
 	if (size < min_area) {
