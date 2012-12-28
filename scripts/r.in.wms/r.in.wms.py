@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-MODULE:    r.in.wms2
+MODULE:    r.in.wms
 
 AUTHOR(S): Stepan Turek <stepan.turek AT seznam.cz>
 
