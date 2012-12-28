@@ -9,11 +9,15 @@ endif
 
 HTMLSRC = $(SCRIPT)
 
+ETCDIR = $(ETC)/$(PGM)
+ETCPYFILES := $(patsubst %,$(ETCDIR)/%.py,$(ETCFILES))
+ETCPYCFILES := $(patsubst %,$(ETCDIR)/%.pyc,$(ETCFILES))
+
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Html.make
 include $(MODULE_TOPDIR)/include/Make/ScriptRules.make
 
-SCRIPT_ACTIONS = $(SCRIPT) html scriptstrings
+SCRIPT_ACTIONS = $(SCRIPT) $(ETCPYFILES) $(ETCPYCFILES) html scriptstrings
 
 script: $(SCRIPT_ACTIONS)
 
