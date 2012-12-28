@@ -54,29 +54,21 @@
 #%description: Use gnuplot for display
 #%end
 
+import os
 import atexit
-import glob
 from grass.script import core as grass
 
 
 def cleanup():
-    grass.try_remove('spectrum.gnuplot')
-    for name in glob.glob('data_[0-9]*'):
-        if name[5:].isdigit():
-            grass.try_remove(name)
-
-    grass.try_remove('data_x')
-    for name in glob.glob('data_y_[0-9]*'):
-        if name[7:].isdigit():
-            grass.try_remove(name)
+    grass.try_rmdir(tmp_dir)
 
 
 def draw_gnuplot(what, xlabels, output, label):
     xrange = 0
 
     for i, row in enumerate(what):
-        outfile = 'data_%d' % i
-        outf = file(outfile, 'w')
+        outfile = os.path.join(tmp_dir, 'data_%d' % i)
+        outf = open(outfile, 'w')
         xrange = max(xrange, len(row) - 2)
         for j, val in enumerate(row[3:]):
             outf.write("%d %s\n" % (j + 1, val))
@@ -111,8 +103,8 @@ def draw_gnuplot(what, xlabels, output, label):
     cmd = ' '.join(['plot', cmd, "with linespoints pt 779"])
     lines.append(cmd)
 
-    plotfile = 'spectrum.gnuplot'
-    plotf = file(plotfile, 'w')
+    plotfile = os.path.join(tmp_dir, 'spectrum.gnuplot')
+    plotf = open(plotfile, 'w')
     for line in lines:
         plotf.write(line + '\n')
     plotf.close()
@@ -126,15 +118,16 @@ def draw_gnuplot(what, xlabels, output, label):
 def draw_linegraph(what):
     yfiles = []
 
-    xfile = 'data_x'
-    xf = file(xfile, 'w')
+    xfile = os.path.join(tmp_dir, 'data_x')
+
+    xf = open(xfile, 'w')
     for j, val in enumerate(what[0][3:]):
         xf.write("%d\n" % (j + 1))
     xf.close()
 
     for i, row in enumerate(what):
-        yfile = 'data_y_%d' % i
-        yf = file(yfile, 'w')
+        yfile = os.path.join(tmp_dir, 'data_y_%d' % i)
+        yf = open(yfile, 'w')
         for j, val in enumerate(row[3:]):
             yf.write("%s\n" % val)
         yf.close()
@@ -162,7 +155,10 @@ def main():
     coords = options['coordinates']
     label = flags['c']
     gnuplot = flags['g']
-
+    
+    global tmp_dir
+    tmp_dir = grass.tempdir()
+    
     if not group and not raster:
         grass.fatal(_("Either group= or raster= is required"))
 
