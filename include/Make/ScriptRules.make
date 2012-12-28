@@ -12,6 +12,12 @@ $(SCRIPTDIR)/%.py: %.py | $(SCRIPTDIR)
 $(SCRIPTDIR):
 	$(MKDIR) $(SCRIPTDIR)
 
+$(ETCDIR)/%: % | $(ETCDIR)
+	$(INSTALL_DATA) $< $@
+
+$(ETCDIR):
+	$(MKDIR) $(ETCDIR)
+
 # Make strings in a fake .c file so that they get picked up by the internationalizer stuff.
 # These are only the options (parser.c) type things.
 # See locale/scriptstrings/README for more information
