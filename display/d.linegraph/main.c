@@ -139,7 +139,8 @@ int main(int argc, char **argv)
     dir_opt->description = _("Path to file location");
     dir_opt->type = TYPE_STRING;
     dir_opt->required = NO;
-    dir_opt->answer = ".";
+    /* Remove answer because create problem with full path */
+    /* dir_opt->answer = "."; */
 
     y_color_opt = G_define_option();
     y_color_opt->key = "y_color";
@@ -193,7 +194,11 @@ int main(int argc, char **argv)
        notice that in[0] will be the X file, and in[1-10]
        will be the Y file(s) */
 
-    sprintf(in[0].full_name, "%s/%s", dir_opt->answer, x_opt->answer);
+    if (dir_opt->answer != NULL) {
+	sprintf(in[0].full_name, "%s/%s", dir_opt->answer, x_opt->answer);
+    } else {
+	sprintf(in[0].full_name, "%s", x_opt->answer);
+    }
     sprintf(in[0].name, "%s", x_opt->answer);
 
     if ((in[0].fp = fopen(in[0].full_name, "r")) == NULL)
@@ -204,7 +209,12 @@ int main(int argc, char **argv)
     /* open all Y data files */
 
     for (i = 0, j = 1; (name = y_opt->answers[i]); i++, j++) {
-	sprintf(in[j].full_name, "%s/%s", dir_opt->answer, name);
+      
+	if (dir_opt->answer != NULL) {
+	    sprintf(in[j].full_name, "%s/%s", dir_opt->answer, name);
+	} else {
+	    sprintf(in[j].full_name, "%s", name);
+	}
 	sprintf(in[j].name, "%s", name);
 
 	if ((in[j].fp = fopen(in[j].full_name, "r")) == NULL)
