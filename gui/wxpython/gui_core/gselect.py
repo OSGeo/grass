@@ -38,6 +38,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import glob
+import copy
 
 import wx
 import wx.combo
@@ -1126,13 +1127,11 @@ class FormatSelect(wx.Choice):
             'Geoconcept'     : 'gxt',
             'GeoRSS'         : 'xml',
             'GPSTrackMaker'  : 'gtm',
-            'VFK'            : 'vfk'
+            'VFK'            : 'vfk',
+            'SVG'            : 'svg',
             }
         
-        try:
-            return formatToExt[name]
-        except KeyError:
-            return ''
+        return formatToExt.get(name, '')
         
 class GdalSelect(wx.Panel):
     def __init__(self, parent, panel, ogr = False, link = False, dest = False, 
@@ -1564,7 +1563,8 @@ class GdalSelect(wx.Panel):
                 if not ext:
                     raise KeyError
                 format += ' (%s)|%s|%s (*.*)|*.*' % \
-                    (self._getExtPattern(ext), self._getExtPattern(ext), _('All files'))
+                    (self._getExtPattern(ext), self._getExtPattern(ext),
+                     _('All files'))
             except KeyError:
                 format += '%s (*.*)|*.*' % _('All files')
             
@@ -1616,7 +1616,11 @@ class GdalSelect(wx.Panel):
                     self.format.Enable(True)
                     self.creationOpt.Enable(True)
             self.dsnText.SetLabel(self.input[self.dsnType][0])
-            self.format.SetItems(self.input[self.dsnType][2])
+            items = copy.copy(self.input[self.dsnType][2])
+            if sel == self.sourceMap['file']:
+                items += ['ZIP', 'GZIP', 'TAR (tar.gz)']
+            self.format.SetItems(sorted(items))
+            
             if self.parent.GetName() == 'MultiImportDialog':
                 self.parent.list.DeleteAllItems()
         
@@ -1647,6 +1651,18 @@ class GdalSelect(wx.Panel):
             dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
         else:
             dsn = self.input[self.dsnType][1].GetValue()
+            # check compressed files
+            try:
+                ext = os.path.splitext(dsn)[1].lower()
+            except KeyError:
+                ext = None
+
+            if ext == '.zip':
+                dsn = '/vsizip/' + dsn
+            elif ext == '.gzip':
+                dsn = '/vsigzip/' + dsn
+            elif ext in ('.tar', '.tar.gz', '.tgz'):
+                dsn = '/vsitar/' + dsn
         
         return dsn
     
@@ -1762,10 +1778,19 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
-                format += ' (%s)|%s|%s (*.*)|*.*' % \
-                    (self._getExtPattern(ext), self._getExtPattern(ext), _('All files'))
+                wildcard = format + ' (%s)|%s|%s (*.*)|*.*' % \
+                    (self._getExtPattern(ext), self._getExtPattern(ext),
+                     _('All files'))
             except KeyError:
-                format += '%s (*.*)|*.*' % _('All files')
+                if format == 'ZIP':
+                    wildcard = '%s (*.zip;*.ZIP)|*.zip;*.ZIP' % _('ZIP files')
+                elif format == 'GZIP':
+                    wildcard = '%s (*.gz;*.GZ)|*.gz;*.GZ' % _('GZIP files')
+                elif format == 'TAR (tar.gz)':
+                    wildcard  = '%s (*.tar;*.TAR)|*.tar;*.TAR|' % _('TAR files')
+                    wildcard += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ' % _('TARGZ files')
+                else:
+                    wildcard = '%s (*.*)|*.*' % _('All files')
             
             win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
@@ -1773,7 +1798,7 @@ class GdalSelect(wx.Panel):
                                               buttonText=_('Browse'),
                                               startDirectory=os.getcwd(),
                                               changeCallback=self.OnSetDsn,
-                                              fileMask = format)
+                                              fileMask = wildcard)
             
         elif self.dsnType == 'dir':
             pass
@@ -1782,7 +1807,7 @@ class GdalSelect(wx.Panel):
             if format in ('SQLite', 'Rasterlite'):
                 win = self.input['db-win']['file']
             elif format in ('PostgreSQL', 'PostGIS WKT Raster driver',
-                            'PostGIS Raster driver'):
+                            'PostGIS Raster driver', 'MSSQLSpatial'):
                 win = self.input['db-win']['choice']
                 # try to get list of PG databases
                 db = RunCommand('db.databases', quiet = True, read = True,
