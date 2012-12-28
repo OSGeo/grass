@@ -27,6 +27,7 @@ SUBDIRS = \
 	i.latlong \
 	i.maxlik \
 	i.modis.qc \
+	i.ortho.photo \
 	i.rectify \
 	i.rgb.his \
 	i.smap \
