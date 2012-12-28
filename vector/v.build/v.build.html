@@ -1,31 +1,34 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.build</em> builds support files for (binary)
-GRASS vector data files.  These support files supply
-topology and category information that are needed by other
-GRASS modules.
-<p>GRASS is generating these support files automatically,
-only in rare cases the user has to (re)build them.
-<p>Refer to
-<em><a href="vectorintro.html">Vector data processing in GRASS GIS</a></em>
-for more information on GRASS GIS vector data model.
+<em>v.build</em> builds support files for GRASS vector maps. These
+support files supply topology and category information including
+spatial index that are needed by other GRASS modules.
+
+<p>
+GRASS is generating these support files automatically, only in rare
+cases the user has to (re)build them.
+
+<p>
+Refer to
+<a href="vectorintro.html">vector data processing in GRASS GIS</a> for
+more information on GRASS vector data model.
 
 <h2>NOTES</h2>
 
-<em>v.build</em> creates support files only for binary
-vector maps located in the user's current mapset. If vector map 
-is located in another mapset, you need to specify this:
+<em>v.build</em> creates support files only for vector maps located in
+the user's current mapset. It's not possible to rebuild support files
+(<b>option=build</b>) for vector maps from other mapsets.
 
-<p><div class="code"><pre>
-v.build map=geology@PERMANENT
-</pre></div>
-
-<p>In case of errors, the user can optionally generate an <em>error</em>
+<p>
+In case of errors, the user can optionally generate an <b>error</b>
 vector map containing the erroneous vectors for later inspection.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="v.build.polylines.html">v.build.polylines</a></em>
+<em>
+  <a href="v.build.all.html">v.build.all</a>,
+  <a href="v.build.polylines.html">v.build.polylines</a>
+</em>
 
 <h2>AUTHORS</h2>
 
@@ -36,4 +39,5 @@ U.S.Army Construction Engineering
 Research Laboratory,<br>
 Radim Blazek, ITC-irst, Trento, Italy
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
