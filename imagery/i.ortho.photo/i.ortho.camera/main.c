@@ -134,14 +134,14 @@ int main(int argc, char *argv[])
 	    strcpy(cam_info.cam_name, cam_name);
 	}
 
-	if (cam_id && strcmp(cam_id, cam_info,cam_id)) {
+	if (cam_id && strcmp(cam_id, cam_info.cam_id)) {
 	    G_message(_("Replacing camera cam_id '%s' with '%s'"),
 	              cam_info.cam_id, cam_id);
 	    strcpy(cam_info.cam_id, cam_id);
 	}
 	
-	if (clf_opt->answer) {
-	    cfl = atof(clf_opt->answer);
+	if (cfl_opt->answer) {
+	    cfl = atof(cfl_opt->answer);
 	    if (cfl != cam_info.CFL) {
 		G_message(_("Replacing calibrated focal length '%g' with '%g'"),
 			  cam_info.CFL, cfl);
