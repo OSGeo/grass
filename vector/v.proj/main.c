@@ -72,6 +72,8 @@ int main(int argc, char *argv[])
 
     mapopt = G_define_standard_option(G_OPT_V_INPUT);
     mapopt->required = NO;
+    mapopt->label = _("Name of input vector map to re-project");
+    mapopt->description = NULL;
     mapopt->guisection = _("Source");
     
     ilocopt = G_define_option();
@@ -82,20 +84,17 @@ int main(int argc, char *argv[])
     ilocopt->gisprompt = "old,location,location";
     ilocopt->key_desc = "name";
     
-    isetopt = G_define_option();
-    isetopt->key = "mapset";
-    isetopt->type = TYPE_STRING;
-    isetopt->required = NO;
-    isetopt->description = _("Mapset containing input vector map");
-    isetopt->gisprompt = "old,mapset,mapset";
-    isetopt->key_desc = "name";
+    isetopt = G_define_standard_option(G_OPT_M_MAPSET);
+    isetopt->label = _("Mapset containing input vector map");
+    isetopt->description = _("Default: name of current mapset");
     isetopt->guisection = _("Source");
 
     ibaseopt = G_define_option();
     ibaseopt->key = "dbase";
     ibaseopt->type = TYPE_STRING;
     ibaseopt->required = NO;
-    ibaseopt->description = _("Path to GRASS database of input location");
+    ibaseopt->label = _("Path to GRASS database of input location");
+    ibaseopt->description = _("Default: path to the current GRASS database");
     ibaseopt->gisprompt = "old,dbase,dbase";
     ibaseopt->key_desc = "path";
     ibaseopt->guisection = _("Source");
@@ -168,13 +167,7 @@ int main(int argc, char *argv[])
     G__setenv("GISDBASE", gbase);
     G__setenv("LOCATION_NAME", iloc_name);
     stat = G__mapset_permissions(iset_name);
-
-     /*DEBUG*/ {
-	char path[256];
-
-	G_file_name(path, "", "", iset_name);
-    }
-
+    
     if (stat >= 0) {		/* yes, we can access the mapset */
 	/* if requested, list the vector maps in source location - MN 5/2001 */
 	if (flag.list->answer) {
@@ -184,10 +177,15 @@ int main(int argc, char *argv[])
 			      iloc_name, iset_name);
 	    list = G_list(G_ELEMENT_VECTOR, G__getenv("GISDBASE"),
 			  G__getenv("LOCATION_NAME"), iset_name);
-	    for (i = 0; list[i]; i++) {
-		fprintf(stdout, "%s\n", list[i]);
+	    if (list[0]) {
+		for (i = 0; list[i]; i++) {
+		    fprintf(stdout, "%s\n", list[i]);
+		}
+		fflush(stdout);
 	    }
-	    fflush(stdout);
+	    else {
+		G_important_message(_("No vector maps found"));
+	    }
 	    exit(EXIT_SUCCESS);	/* leave v.proj after listing */
 	}
 
@@ -385,12 +383,10 @@ int main(int argc, char *argv[])
     /* Cycle through all lines */
     Vect_rewind(&Map);
     i = 0;
-    fprintf(stderr, _("Reprojecting primitives: "));
-    while (1) {
+    G_message(_("Reprojecting primitives ..."));
+    while (TRUE) {
 	++i;
-	if (i % 1000 == 0) {
-	    fprintf(stderr, "%7d\b\b\b\b\b\b\b", i);
-	}
+	G_progress(i, 1e3);
 	type = Vect_read_next_line(&Map, Points, Cats);	/* read line */
 	if (type == 0)
 	    continue;		/* Dead */
@@ -402,12 +398,13 @@ int main(int argc, char *argv[])
 	if (pj_do_transform(Points->n_points, Points->x, Points->y,
 			    flag.transformz->answer ? Points->z : NULL,
 			    &info_in, &info_out) < 0) {
-	    G_fatal_error(_("Error in pj_do_transform"));
+	  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
+			Vect_get_full_name(&Map), ilocopt->answer);
 	}
 
 	Vect_write_line(&Out_Map, type, Points, Cats);	/* write line */
     }				/* end lines section */
-    fprintf(stderr, "\r");
+    G_progress(1, 1);
 
     /* Copy tables */
     if (Vect_copy_tables(&Map, &Out_Map, 0))
@@ -419,7 +416,8 @@ int main(int argc, char *argv[])
     Vect_close(&Out_Map);
 
     if (recommend_nowrap)
-	G_important_message(_("Try to disable wrapping to -180,180 if topological errors occurred."));
+	G_important_message(_("Try to disable wrapping to -180,180 "
+			      "if topological errors occurred"));
 
     exit(EXIT_SUCCESS);
 }
