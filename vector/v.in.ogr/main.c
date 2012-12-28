@@ -731,6 +731,7 @@ int main(int argc, char *argv[])
 	    }
 	    OGR_F_Destroy(Ogr_feature);
 	}
+	G_percent(1, 1, 1);
     }
 
     G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
