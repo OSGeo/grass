@@ -692,8 +692,8 @@ int main(int argc, char *argv[])
 	    G_fatal_error(error_msg);
 	}
 	else {
-	    G_message(_("Projection of input dataset and current location "
-			"appear to match"));
+	    G_verbose_message(_("Projection of input dataset and current location "
+				"appear to match"));
 	}
     }
 
