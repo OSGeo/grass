@@ -473,7 +473,7 @@ class GRASSImporter:
                                  overwrite = True,
                                  maskcats = "0",
                                  flags = 'i',
-                                 input = self.opt_output + '.alpha') != 0: 
+                                 raster = self.opt_output + '.alpha') != 0: 
                 grass.fatal(_('%s failed') % 'r.mask')
         
         #TODO one band + alpha band?
