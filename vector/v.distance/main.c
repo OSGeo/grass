@@ -1384,28 +1384,28 @@ int main(int argc, char *argv[])
 		    sprintf(buf2, " %d", Near[i].to_cat);
 		    break;
 		case DIST:
-		    sprintf(buf2, " %f", Near[i].dist);
+		    sprintf(buf2, " %.17g", Near[i].dist);
 		    break;
 		case FROM_X:
-		    sprintf(buf2, " %f", Near[i].from_x);
+		    sprintf(buf2, " %.17g", Near[i].from_x);
 		    break;
 		case FROM_Y:
-		    sprintf(buf2, " %f", Near[i].from_y);
+		    sprintf(buf2, " %.17g", Near[i].from_y);
 		    break;
 		case TO_X:
-		    sprintf(buf2, " %f", Near[i].to_x);
+		    sprintf(buf2, " %.17g", Near[i].to_x);
 		    break;
 		case TO_Y:
-		    sprintf(buf2, " %f", Near[i].to_y);
+		    sprintf(buf2, " %.17g", Near[i].to_y);
 		    break;
 		case FROM_ALONG:
-		    sprintf(buf2, " %f", Near[i].from_along);
+		    sprintf(buf2, " %.17g", Near[i].from_along);
 		    break;
 		case TO_ALONG:
-		    sprintf(buf2, " %f", Near[i].to_along);
+		    sprintf(buf2, " %.17g", Near[i].to_along);
 		    break;
 		case TO_ANGLE:
-		    sprintf(buf2, " %f", Near[i].to_angle);
+		    sprintf(buf2, " %.17g", Near[i].to_angle);
 		    break;
 		case TO_ATTR:
 		    if (catval) {
@@ -1415,7 +1415,7 @@ int main(int argc, char *argv[])
 			    break;
 
 			case DB_C_TYPE_DOUBLE:
-			    sprintf(buf2, " %.15e", catval->val.d);
+			    sprintf(buf2, " %.17g", catval->val.d);
 			    break;
 
 			case DB_C_TYPE_STRING:
@@ -1482,28 +1482,28 @@ int main(int argc, char *argv[])
 			    sprintf(buf2, " null");
 			break;
 		    case DIST:
-			sprintf(buf2, " %f", Near[i].dist);
+			sprintf(buf2, " %.17g", Near[i].dist);
 			break;
 		    case FROM_X:
-			sprintf(buf2, " %f", Near[i].from_x);
+			sprintf(buf2, " %.17g", Near[i].from_x);
 			break;
 		    case FROM_Y:
-			sprintf(buf2, " %f", Near[i].from_y);
+			sprintf(buf2, " %.17g", Near[i].from_y);
 			break;
 		    case TO_X:
-			sprintf(buf2, " %f", Near[i].to_x);
+			sprintf(buf2, " %.17g", Near[i].to_x);
 			break;
 		    case TO_Y:
-			sprintf(buf2, " %f", Near[i].to_y);
+			sprintf(buf2, " %.17g", Near[i].to_y);
 			break;
 		    case FROM_ALONG:
-			sprintf(buf2, " %f", Near[i].from_along);
+			sprintf(buf2, " %.17g", Near[i].from_along);
 			break;
 		    case TO_ALONG:
-			sprintf(buf2, " %f", Near[i].to_along);
+			sprintf(buf2, " %.17g", Near[i].to_along);
 			break;
 		    case TO_ANGLE:
-			sprintf(buf2, " %f", Near[i].to_angle);
+			sprintf(buf2, " %.17g", Near[i].to_angle);
 			break;
 		    case TO_ATTR:
 			if (catval) {
@@ -1513,7 +1513,7 @@ int main(int argc, char *argv[])
 				break;
 
 			    case DB_C_TYPE_DOUBLE:
-				sprintf(buf2, " %.15e", catval->val.d);
+				sprintf(buf2, " %.17g", catval->val.d);
 				break;
 
 			    case DB_C_TYPE_STRING:
