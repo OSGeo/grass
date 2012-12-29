@@ -22,25 +22,25 @@ int print_upload(NEAR * Near, UPLOAD * Upload, int i,
 		    fprintf(stdout, "|null");
 		break;
 	    case DIST:
-		fprintf(stdout, "|%f", Near[i].dist);
+		fprintf(stdout, "|%.17g", Near[i].dist);
 		break;
 	    case FROM_X:
-		fprintf(stdout, "|%f", Near[i].from_x);
+		fprintf(stdout, "|%.17g", Near[i].from_x);
 		break;
 	    case FROM_Y:
-		fprintf(stdout, "|%f", Near[i].from_y);
+		fprintf(stdout, "|%.17g", Near[i].from_y);
 		break;
 	    case TO_X:
-		fprintf(stdout, "|%f", Near[i].to_x);
+		fprintf(stdout, "|%.17g", Near[i].to_x);
 		break;
 	    case TO_Y:
-		fprintf(stdout, "|%f", Near[i].to_y);
+		fprintf(stdout, "|%.17g", Near[i].to_y);
 		break;
 	    case FROM_ALONG:
-		fprintf(stdout, "|%f", Near[i].from_along);
+		fprintf(stdout, "|%.17g", Near[i].from_along);
 		break;
 	    case TO_ALONG:
-		fprintf(stdout, "|%f", Near[i].to_along);
+		fprintf(stdout, "|%.17g", Near[i].to_along);
 		break;
 	    case TO_ANGLE:
 		fprintf(stdout, "|%f", Near[i].to_angle);
@@ -53,7 +53,7 @@ int print_upload(NEAR * Near, UPLOAD * Upload, int i,
 			break;
 
 		    case DB_C_TYPE_DOUBLE:
-			fprintf(stdout, "|%.15e", catval->val.d);
+			fprintf(stdout, "|%.17g", catval->val.d);
 			break;
 
 		    case DB_C_TYPE_STRING:
