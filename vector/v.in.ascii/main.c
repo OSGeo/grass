@@ -227,6 +227,7 @@ int main(int argc, char *argv[])
     }
 
     Vect_open_new(&Map, new->answer, zcoor);
+    Vect_set_error_handler_io(NULL, &Map);
     Vect_hist_command(&Map);
 
     if (e_flag->answer) {
