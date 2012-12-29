@@ -3,6 +3,9 @@
 
 @brief Rendering map layers and overlays into map composition image.
 
+@todo Implement RenderManager also for other layers (see WMS
+implementation for details)
+
 Classes:
  - render::Layer
  - render::MapLayer
@@ -33,6 +36,7 @@ from wx.lib.newevent import NewEvent
 from grass.script import core as grass
 
 from core          import utils
+from core.ws       import RenderWMSMgr
 from core.gcmd     import GException, GError, RunCommand
 from core.debug    import Debug
 from core.settings import UserSettings
@@ -47,8 +51,10 @@ class Layer(object):
     
     - For map layer use MapLayer class.
     - For overlays use Overlay class.
+
+    @todo needs refactoring (avoid parent)
     """
-    def __init__(self, type, cmd, name = None,
+    def __init__(self, type, cmd, parent, name = None,
                  active = True, hidden = False, opacity = 1.0):
         """!Create new instance
         
@@ -62,7 +68,24 @@ class Layer(object):
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        self.type  = type
+        self.parent = parent
+        
+        # generated file for each layer
+        if USE_GPNMCOMP or type == 'overlay':
+            tmpfile = tempfile.mkstemp()[1]
+            self.maskfile = tmpfile + '.pgm'
+            if type == 'overlay':
+                self.mapfile  = tmpfile + '.png'
+            else:
+                self.mapfile  = tmpfile + '.ppm'
+            grass.try_remove(tmpfile)
+        else:
+            self.mapfile = self.maskfile = None
+        
+        # stores class which manages rendering instead of simple command - e. g. wms
+        self.renderMgr = None
+        
+        self.SetType(type)
         self.name  = name
         
         if self.type == 'command':
@@ -76,25 +99,13 @@ class Layer(object):
         self.hidden  = hidden
         self.opacity = opacity
         
-        self.force_render = True
+        self.forceRender = True
         
         Debug.msg (3, "Layer.__init__(): type=%s, cmd='%s', name=%s, " \
                        "active=%d, opacity=%d, hidden=%d" % \
                        (self.type, self.GetCmd(string = True), self.name, self.active,
                         self.opacity, self.hidden))
-        
-        # generated file for each layer
-        if USE_GPNMCOMP or self.type == 'overlay':
-            tmpfile = tempfile.mkstemp()[1]
-            self.maskfile = tmpfile + '.pgm'
-            if self.type == 'overlay':
-                self.mapfile  = tmpfile + '.png'
-            else:
-                self.mapfile  = tmpfile + '.ppm'
-            grass.try_remove(tmpfile)
-        else:
-            self.mapfile = self.maskfile = None
-        
+                
     def __del__(self):
         Debug.msg (3, "Layer.__del__(): layer=%s, cmd='%s'" %
                    (self.name, self.GetCmd(string = True)))
@@ -120,13 +131,12 @@ class Layer(object):
                       'vector','thememap','themechart',
                       'grid', 'geodesic', 'rhumb', 'labels',
                       'command', 'rastleg','maplegend',
-                      'overlay')
+                      'overlay', 'wms')
         
         if self.type not in layertypes:
             raise GException(_("<%(name)s>: layer type <%(type)s> is not supported") % \
                                  {'type' : self.type, 'name' : self.name})
         
-        # start monitor
         if self.mapfile:
             os.environ["GRASS_PNGFILE"] = self.mapfile
         
@@ -135,10 +145,7 @@ class Layer(object):
             if self.type == 'command':
                 read = False
                 for c in self.cmd:
-                    ret, msg = RunCommand(c[0],
-                                          getErrorMsg = True,
-                                          quiet = True,
-                                          **c[1])
+                    ret, msg = self._runCommand(c)
                     if ret != 0:
                         break
                     if not read:
@@ -146,11 +153,7 @@ class Layer(object):
                 
                 os.environ["GRASS_PNG_READ"] = "FALSE"
             else:
-                ret, msg = RunCommand(self.cmd[0],
-                                      getErrorMsg = True,
-                                      quiet = True,
-                                      **self.cmd[1])
-                
+                ret, msg = self._runCommand(self.cmd)
             if ret != 0:
                 sys.stderr.write(_("Command '%s' failed\n") % self.GetCmd(string = True))
                 if msg:
@@ -169,9 +172,26 @@ class Layer(object):
         if self.mapfile and "GRASS_PNGFILE" in os.environ:
             del os.environ["GRASS_PNGFILE"]
         
-        self.force_render = False
+        self.forceRender = False
         
         return self.mapfile
+    
+    def _runCommand(self, cmd):
+        """!Run command to render data
+
+        @todo catch error for wms (?)
+        """ 
+        if self.type == 'wms':
+            ret = 0
+            msg = ''
+            self.renderMgr.Render(cmd)
+        else:
+            ret, msg = RunCommand(self.cmd[0],
+                                  getErrorMsg = True,
+                                  quiet = True,
+                                  **self.cmd[1])
+        
+        return ret, msg
     
     def GetCmd(self, string = False):
         """!Get GRASS command as list of string.
@@ -238,16 +258,21 @@ class Layer(object):
         """!Check if layer is activated for rendering"""
         return self.active
     
-    def SetType(self, type):
+    def SetType(self, ltype):
         """!Set layer type"""
-        if type not in ('raster', '3d-raster', 'vector',
+        if ltype not in ('raster', '3d-raster', 'vector',
                         'overlay', 'command',
                         'shaded', 'rgb', 'his', 'rastarrow', 'rastnum','maplegend',
                         'thememap', 'themechart', 'grid', 'labels',
-                        'geodesic','rhumb'):
-            raise GException(_("Unsupported map layer type '%s'") % type)
+                        'geodesic','rhumb', 'wms'):
+            raise GException(_("Unsupported map layer type '%s'") % ltype)
         
-        self.type = type
+        if ltype == 'wms' and not isinstance(self.renderMgr, RenderWMSMgr):
+            self.renderMgr = RenderWMSMgr(self, self.mapfile, self.maskfile)
+        elif self.type == 'wms' and ltype != 'wms':
+            self.renderMgr = None
+        
+        self.type = ltype
 
     def SetName(self, name):
         """!Set layer name"""
@@ -281,10 +306,24 @@ class Layer(object):
         Debug.msg(3, "Layer.SetCmd(): cmd='%s'" % self.GetCmd(string = True))
         
         # for re-rendering
-        self.force_render = True
-        
+        self.forceRender = True
+
+    def IsDownloading(self):
+        """!Is data downloading from web server e. g. wms"""
+        if self.renderMgr is None:
+            return False
+        else:
+            return self.renderMgr.IsDownloading()
+
+    def AbortDownload(self):
+        """!Abort downloading data"""
+        if self.renderMgr is None:
+            return
+        else:
+            self.renderMgr.Abort()
+
 class MapLayer(Layer):
-    def __init__(self, type, cmd, name = None,
+    def __init__(self, type, cmd, parent, name = None,
                  active = True, hidden = False, opacity = 1.0): 
         """!Represents map layer in the map canvas
         
@@ -296,7 +335,7 @@ class MapLayer(Layer):
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        Layer.__init__(self, type, cmd, name,
+        Layer.__init__(self, type, cmd, parent, name,
                        active, hidden, opacity)
         
     def GetMapset(self):
@@ -314,7 +353,7 @@ class MapLayer(Layer):
             return self.name
         
 class Overlay(Layer):
-    def __init__(self, id, type, cmd,
+    def __init__(self, id, type, cmd, parent,
                  active = True, hidden = True, opacity = 1.0):
         """!Represents overlay displayed in map canvas
         
@@ -326,9 +365,8 @@ class Overlay(Layer):
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        Layer.__init__(self, 'overlay', cmd, type,
+        Layer.__init__(self, 'overlay', cmd, parent, type,
                        active, hidden, opacity)
-        
         self.id = id
         
 class Map(object):
@@ -362,6 +400,9 @@ class Map(object):
         self._initGisEnv() # g.gisenv
         self.GetWindow()
 
+        # reference to mapWindow, which contains this Map instance
+        self.mapWin = None
+
         # GRASS environment variable (for rendering)
         self.env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
                "GRASS_COMPRESSION"     : "0",
@@ -375,6 +416,9 @@ class Map(object):
 
         # projection info
         self.projinfo = self._projInfo()
+
+        # is some layer being downloaded?
+        self.downloading = False
 
     def _runCommand(self, cmd, **kwargs):
         """!Run command in environment defined by self.gisrc if
@@ -834,28 +878,37 @@ class Map(object):
         masks = list()
         opacities = list()
         # render map layers
-        ilayer = 1
         if overlaysOnly:
             layers = self.overlays
         else:
             layers = self.layers + self.overlays
         
+        self.downloading = False
+        #event = wxUpdateProgressBar(layer = None, map = self)
+        # When using Event for progress update, the event is handled after 
+        # rendering. Maybe there exists some better solution than calling 
+        # the method directly.
+        mapWindow.GetProgressBar().UpdateProgress(None, self)
+        #wx.PostEvent(mapWindow, event)
         for layer in layers:
             # skip non-active map layers
             if not layer or not layer.active:
                 continue
             
             # render
-            if force or layer.force_render:
+            if force or layer.forceRender:
                 if not layer.Render():
                     continue
-            
+
+            if layer.IsDownloading():
+                self.downloading = True     
             if mapWindow:
                 # update progress bar
                 ### wx.SafeYield(mapWindow)
-                event = wxUpdateProgressBar(value = ilayer)
-                wx.PostEvent(mapWindow, event)
-            
+                mapWindow.GetProgressBar().UpdateProgress(layer, self)
+                #event = wxUpdateProgressBar(layer = layer, map = self)
+                #wx.PostEvent(mapWindow, event)
+
             # skip map layers when rendering fails
             if not os.path.exists(layer.mapfile):
                 continue
@@ -867,7 +920,6 @@ class Map(object):
                 opacities.append(str(layer.opacity))
             
             Debug.msg(3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
-            ilayer += 1
         
         return maps, masks, opacities
         
@@ -985,7 +1037,7 @@ class Map(object):
             l_opacity = 0
         elif l_opacity > 1:
             l_opacity = 1
-        layer = MapLayer(type = type, name = name, cmd = command,
+        layer = MapLayer(type = type, name = name, cmd = command, parent = self,
                          active = l_active, hidden = l_hidden, opacity = l_opacity)
         
         # add maplayer to the list of layers
@@ -1052,8 +1104,8 @@ class Map(object):
         
         layerNameList = ""
         for layer in self.layers:
-            if layer.name:
-                layerNameList += layer.name + ','
+            if layer.GetName():
+                layerNameList += layer.GetName() + ','
         Debug.msg (4, "Map.ReoderLayers(): layers=%s" % \
                    (layerNameList))
         
@@ -1192,7 +1244,7 @@ class Map(object):
         @return None on failure
         """
         Debug.msg (2, "Map.AddOverlay(): cmd=%s, render=%d" % (command, l_render))
-        overlay = Overlay(id = id, type = type, cmd = command,
+        overlay = Overlay(id = id, type = type, cmd = command, parent = self,
                           active = l_active, hidden = l_hidden, opacity = l_opacity)
         
         # add maplayer to the list of layers
@@ -1300,5 +1352,17 @@ class Map(object):
     def RenderOverlays(self, force):
         """!Render overlays only (for nviz)"""
         for layer in self.overlays:
-            if force or layer.force_render:
+            if force or layer.forceRender:
                 layer.Render()
+
+    def SetParentMapWindow(self, mapWin):
+        """!Set reference to parent MapWindow"""
+        self.mapWin = mapWin
+
+    def GetParentMapWindow(self):
+        """!Get reference to parent MapWindow"""
+        return self.mapWin
+
+    def IsDownloading(self):
+        """!Is any layer downloading data from web server e. g. wms"""
+        return self.downloading

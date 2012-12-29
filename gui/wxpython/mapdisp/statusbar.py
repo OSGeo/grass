@@ -21,6 +21,8 @@ Classes:
  - statusbar::SbRegionExtent
  - statusbar::SbCompRegionExtent
  - statusbar::SbProgress
+ - statusbar::SbRMSError
+ - statusbar::SbGoToGCP
 
 (C) 2006-2011 by the GRASS Development Team
 
@@ -83,7 +85,7 @@ class SbManager:
         
         self._postInitialized = False
         
-        self.progressbar = SbProgress(self.mapFrame, self.statusbar)
+        self.progressbar = SbProgress(self.mapFrame, self.statusbar, self)
         
         self._hiddenItems = {}
     
@@ -116,7 +118,7 @@ class SbManager:
     def AddStatusbarItem(self, item):
         """!Adds item to statusbar
         
-        If item position is 0, item is managed by choice.
+        If item position is 0, item is managed by choice.        
         
         @see AddStatusbarItemsByClass
         """
@@ -180,7 +182,9 @@ class SbManager:
         
         @see Update
         """
-        self.statusbarItems[itemName].Show()
+        if self.statusbarItems[itemName].GetPosition() != 0 or \
+           not self.progressbar.IsShown():
+            self.statusbarItems[itemName].Show()
         
     def _postInit(self):
         """!Post-initialization method
@@ -208,16 +212,20 @@ class SbManager:
 
         It always updates mask.
         """
+        self.progressbar.Update()
+
         if not self._postInitialized:
             self._postInit()
-        
         for item in self.statusbarItems.values():
             if item.GetPosition() == 0:
-                item.Hide()
+                if not self.progressbar.IsShown():
+                    item.Hide()
             else:
                 item.Update() # mask, render
-        
-        if self.choice.GetCount() > 0:
+
+        if self.progressbar.IsShown():
+            pass
+        elif self.choice.GetCount() > 0:
             item = self.choice.GetClientData(self.choice.GetSelection())
             item.Update()
         
@@ -233,7 +241,7 @@ class SbManager:
             widgets.append((item.GetPosition(), item.GetWidget()))
             
         widgets.append((1, self.choice))
-        widgets.append((0, self.progressbar.GetWidget()))
+        widgets.append((1, self.progressbar.GetWidget()))
                 
         for idx, win in widgets:
             if not win:
@@ -242,8 +250,6 @@ class SbManager:
             if idx == 0: # show region / mapscale / process bar
                 # -> size
                 wWin, hWin = win.GetBestSize()
-                if win == self.progressbar.GetWidget():
-                    wWin = rect.width - 6
                 # -> position
                 # if win == self.statusbarWin['region']:
                 # x, y = rect.x + rect.width - wWin, rect.y - 1
@@ -254,6 +260,8 @@ class SbManager:
             else: # choice || auto-rendering
                 x, y = rect.x, rect.y
                 w, h = rect.width, rect.height + 1
+                if win == self.progressbar.GetWidget():
+                    wWin = rect.width - 6
                 if idx == 2: # mask
                     x += 5
                     y += 4
@@ -956,19 +964,21 @@ class SbCompRegionExtent(SbRegionExtent):
         return self.mapFrame.GetMap().GetRegion() # computational region
         
         
-class SbProgress(SbItem):
+class SbProgress(SbTextItem):
     """!General progress bar to show progress.
     
     Underlaying widget is wx.Gauge.
     """
-    def __init__(self, mapframe, statusbar, position = 0):
+    def __init__(self, mapframe, statusbar, sbManager, position = 0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'progress'
-
+        self.sbManager = sbManager
         # on-render gauge
         self.widget = wx.Gauge(parent = self.statusbar, id = wx.ID_ANY,
-                                      range = 0, style = wx.GA_HORIZONTAL)
+                               range = 0, style = wx.GA_HORIZONTAL)
         self.widget.Hide()
+
+        self.maps = {}
         
     def GetRange(self):
         """!Returns progress range."""
@@ -978,7 +988,86 @@ class SbProgress(SbItem):
         """!Sets progress range."""
         self.widget.SetRange(range)
     
+    def IsShown(self):
+        """!Is progress bar shown
+        """
+        return self.widget.IsShown()
+                
+    def UpdateProgress(self, layer, map):
+        """!Update progress"""
+        
+        if map not in self.maps or layer is None:
+            # self.map holds values needed for progress info for every Render instance in mapframe
+            self.maps[map] = {'progresVal' : 0, # current progress value
+                              'downloading' : [], # layers, which are downloading data
+                              'rendered' : [], # already rendered layers
+                              'range' : len(map.GetListOfLayers(l_active = True))}
+        else:
+            if layer not in self.maps[map]['rendered']:
+                self.maps[map]['rendered'].append(layer)
+            if layer.IsDownloading() and \
+                    layer not in self.maps[map]['downloading']:
+                self.maps[map]['downloading'].append(layer)
+            else:
+                self.maps[map]['progresVal'] += 1
+                if layer in self.maps[map]['downloading']:
+                    self.maps[map]['downloading'].remove(layer)
+        
+        self.Update(map)
+        self.sbManager.Update()
+        
+    def Update(self, map = None):      
+        """!Update statusbar"""
+        activeMap = self.mapFrame.GetMap()
+        if map is None:
+                map = activeMap
+        if map not in self.maps:
+            return
+        if map != activeMap:
+            return
 
+        # update progress bar
+        if self.maps[map]['range'] == self.maps[map]['progresVal']:
+            self.widget.Hide()
+            return
+        elif self.maps[map]['range'] > 0:
+            if self.widget.GetRange() != self.maps[map]['range']:
+                self.widget.SetRange(self.maps[map]['range'])
+            self.widget.Show()
+        else:
+            return
+        
+        self.widget.SetValue(self.maps[map]['progresVal'])
+        
+        # update statusbar text
+        st_text = ''
+        first = True
+        for layer in self.maps[map]['downloading']:
+            if first:
+                st_text += _("Downloading data...")
+                first = False
+            else:
+                st_text += ', '
+            st_text += layer.GetName()
+        
+        if  self.maps[map]['range'] != len(self.maps[map]['rendered']):
+            if st_text:
+                st_text = _('Rendering & ') + st_text
+            else:
+                st_text = _('Rendering...')
+
+        self.statusbar.SetStatusText(st_text, self.position)
+
+    def GetValue(self):
+        return self.widget.GetValue()
+    
+    def GetWidget(self):
+        """!Returns underlaying winget.
+        
+        @return widget or None if doesn't exist
+        """
+        return self.widget
+    
 class SbGoToGCP(SbItem):
     """!SpinCtrl to select GCP to focus on
     
@@ -1074,3 +1163,4 @@ class SbRMSError(SbTextItem):
                                    { 'forw' : self.mapFrame.GetFwdError(),
                                      'back' : self.mapFrame.GetBkwError() })
         SbTextItem.Show(self)
+        

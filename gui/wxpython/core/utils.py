@@ -462,32 +462,40 @@ def __ll_parts(value, reverse = False, precision = 3):
         return coef * (float(d) + fm + fs)
     
 def GetCmdString(cmd):
-    """
-    Get GRASS command as string.
+    """!Get GRASS command as string.
     
-    @param cmd GRASS command given as dictionary
+    @param cmd GRASS command given as tuple
     
     @return command string
     """
-    scmd = ''
-    if not cmd:
-        return scmd
+    return ' '.join(CmdTupleToList(cmd))
+
+def CmdTupleToList(cmd):
+    """!Convert command tuple to list.
     
-    scmd = cmd[0]
+    @param cmd GRASS command given as tuple
+    
+    @return command in list
+    """
+    cmdList = []
+    if not cmd:
+        return cmdList
+    
+    cmdList.append(cmd[0])
     
     if 'flags' in cmd[1]:
         for flag in cmd[1]['flags']:
-            scmd += ' -' + flag
+            cmdList.append('-' + flag)
     for flag in ('verbose', 'quiet', 'overwrite'):
         if flag in cmd[1] and cmd[1][flag] is True:
-            scmd += ' --' + flag
+            cmdList.append('--' + flag)
     
     for k, v in cmd[1].iteritems():
         if k in ('flags', 'verbose', 'quiet', 'overwrite'):
             continue
-        scmd += ' %s=%s' % (k, v)
+        cmdList.append('%s=%s' % (k, v))
             
-    return scmd
+    return cmdList
 
 def CmdToTuple(cmd):
     """!Convert command list to tuple for gcmd.RunCommand()"""

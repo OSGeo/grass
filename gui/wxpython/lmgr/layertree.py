@@ -91,8 +91,10 @@ LMIcons = {
     'addRast3d'  : MetaIcon(img = 'layer-raster3d-add',
                             label = _('Add 3D raster map layer'),
                             desc  =  _('Note that 3D raster data are rendered only in 3D view mode')),
+    'wsImport'  :  MetaIcon(img = 'layer-wms-add',
+                            label = _('Add WMS layer.')),
     'layerOptions'  : MetaIcon(img = 'options',
-                               label = _('Set options')),
+                               label = _('Set options'))
     }
 
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
@@ -224,6 +226,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         trgif = LMIcons["addCmd"].GetBitmap(bmpsize)
         self.cmd_icon = il.Add(trgif)
+
+        trgif = LMIcons["wsImport"].GetBitmap(bmpsize)
+        self.ws_icon = il.Add(trgif)
         
         self.AssignImageList(il)
 
@@ -941,7 +946,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetItemImage(layer, self.folder, CT.TreeItemIcon_Normal)
             self.SetItemImage(layer, self.folder_open, CT.TreeItemIcon_Expanded)
             self.SetItemText(layer, grouptext)
-        
+        elif ltype == 'wms':            
+            self.SetItemImage(layer, self.ws_icon)
+            self.SetItemText(layer, '%s %s' % (_('wms'), label))
+    
         self.first = False
         
         if ltype != 'group':
@@ -1022,11 +1030,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             if ltype == 'group':
                 self.OnRenameLayer(None)
-        
-        # updated progress bar range (mapwindow statusbar)
-        if checked:
-            self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
-        
+                
         return layer
 
     def PropertiesDialog(self, layer, show = True):
@@ -1104,7 +1108,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
         elif ltype == 'labels':
             cmd = ['d.labels']
-        
+
+        elif ltype == 'wms':
+            cmd = ['d.wms']
+
         if cmd:
             GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
                                                                     completed = (self.GetOptData,layer,params))
@@ -1156,9 +1163,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.mapdisplay.GetToolbar('vdigit'):
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool = True)
 
-        # update progress bar range (mapwindow statusbar)
-        self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
-
         # here was some dead code related to layer and nviz
         # however, in condition was rerender = False
         # but rerender is alway True
@@ -1205,9 +1209,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                        (digitToolbar and digitToolbar.GetLayer() != mapLayer):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
-        
-        # update progress bar range (mapwindow statusbar)
-        self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
         
         # nviz
         if self.lmgr.IsPaneShown('toolbarNviz') and \

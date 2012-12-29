@@ -608,7 +608,8 @@ class GMFrame(wx.Frame):
                          'd.rhumbline'    : 'rhumb',
                          'd.labels'       : 'labels',
                          'd.barscale'     : 'barscale',
-                         'd.redraw'       : 'redraw'}[command[0]]
+                         'd.redraw'       : 'redraw',
+                         'd.wms'          : 'wms'}[command[0]]
         except KeyError:
             GMessage(parent = self,
                      message = _("Command '%s' not yet implemented in the WxGUI. "
@@ -1502,8 +1503,7 @@ class GMFrame(wx.Frame):
         """!Import data from OGC WMS server"""
         from ogc_services.wms import WMSDialog
         dlg = WMSDialog(parent = self)
-        dlg.CenterOnScreen()
-        
+        dlg.CenterOnScreen()         
         if dlg.ShowModal() == wx.ID_OK: # -> import layers
             layers = dlg.GetLayers()
             
@@ -1529,7 +1529,7 @@ class GMFrame(wx.Frame):
                 
                 
         dlg.Destroy()
-        
+
     def OnShowAttributeTable(self, event, selection = None):
         """!Show attribute table of the given vector map layer
         """
