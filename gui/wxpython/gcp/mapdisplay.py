@@ -290,7 +290,7 @@ class MapFrame(SingleMapFrame):
         """
         # FIXME: remove qlayer code or use RemoveQueryLayer() now in mapdisp.frame
         # delete tmp map layers (queries)
-        qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)
+        qlayer = self.Map.GetListOfLayers(name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.Map.DeleteLayer(layer)
 

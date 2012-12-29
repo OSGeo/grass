@@ -342,9 +342,9 @@ class SwipeMapFrame(DoubleMapFrame):
         mapInstance.DeleteAllLayers()
         cmdlist = ['d.rast', 'map=%s' % name]
         # add layer to Map instance (core.render)
-        newLayer = mapInstance.AddLayer(type = 'raster', command = cmdlist, l_active = True,
-                                          name = name, l_hidden = False, l_opacity = 1.0,
-                                          l_render = True)
+        newLayer = mapInstance.AddLayer(ltype = 'raster', command = cmdlist, active = True,
+                                        name = name, hidden = False, opacity = 1.0,
+                                        render = True)
 
     def OnSwitchWindows(self, event):
         """!Switch windows position."""

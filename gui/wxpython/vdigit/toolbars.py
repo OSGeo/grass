@@ -899,8 +899,8 @@ class VDigitToolbar(BaseToolbar):
         
         # select vector map layer in the current mapset
         layerNameList = []
-        self.layers = self.Map.GetListOfLayers(l_type = "vector",
-                                                      l_mapset = grass.gisenv()['MAPSET'])
+        self.layers = self.Map.GetListOfLayers(ltype = "vector",
+                                               mapset = grass.gisenv()['MAPSET'])
         
         for layer in self.layers:
             if not layer.name in layerNameList: # do not duplicate layer

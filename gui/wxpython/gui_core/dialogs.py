@@ -665,9 +665,9 @@ class DecorationDialog(wx.Dialog):
     def _createOverlay(self):
         """!Creates overlay"""
         if not self.parent.GetMap().GetOverlay(self.ovlId):
-            self.newOverlay = self.parent.Map.AddOverlay(id = self.ovlId, type = self.name,
+            self.newOverlay = self.parent.Map.AddOverlay(id = self.ovlId, ltype = self.name,
                                                          command = self.cmd,
-                                                         l_active = False, l_render = False, l_hidden = True)
+                                                         active = False, render = False, hidden = True)
             prop = { 'layer' : self.newOverlay,
                      'params' : None,
                      'propwin' : None,
@@ -751,10 +751,10 @@ class DecorationDialog(wx.Dialog):
         except ValueError:
             pass
             
-        self.parent.Map.ChangeOverlay(id = self.ovlId, type = self.name,
+        self.parent.Map.ChangeOverlay(id = self.ovlId, ltype = self.name,
                                       command = self.parent.MapWindow.overlays[self.ovlId]['cmd'],
-                                      l_active = self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive(),
-                                      l_render = False, l_hidden = True)
+                                      active = self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive(),
+                                      render = False, hidden = True)
         if  self.name == 'legend':
             if params and not self.btnOK.IsEnabled():
                 self.btnOK.Enable()

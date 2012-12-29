@@ -52,10 +52,10 @@ class VDigitMapFrame(MapFrame):
                           title = _("GRASS GIS Vector Digitizer"), size = (850, 600))
 
         # load vector map
-        mapLayer = self.GetMap().AddLayer(type = 'vector',
+        mapLayer = self.GetMap().AddLayer(ltype = 'vector',
                                           command = ['d.vect', 'map=%s' % vectorMap],
-                                          l_active = True, name = vectorMap, l_hidden = False, l_opacity = 1.0,
-                                          l_render = True)
+                                          active = True, name = vectorMap, hidden = False, opacity = 1.0,
+                                          render = True)
         
         # switch toolbar
         self.AddToolbar('vdigit', fixed = True)

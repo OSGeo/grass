@@ -755,7 +755,7 @@ class VDigitWindow(BufferedWindow):
                             'width=2']
                 
                 if not self.layerTmp:
-                    self.layerTmp = self.Map.AddLayer(type = 'vector',
+                    self.layerTmp = self.Map.AddLayer(ltype = 'vector',
                                                       name = QUERYLAYER,
                                                       command = dVectTmp)
                 else:

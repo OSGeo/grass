@@ -528,7 +528,7 @@ class BufferedWindow(MapWindow, wx.Window):
         @return list of images
         """
         imgs = []
-        for overlay in self.Map.GetListOfLayers(l_type = "overlay", l_active = True):
+        for overlay in self.Map.GetListOfLayers(ltype = "overlay", active = True):
             if overlay.mapfile is not None \
                and os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
                 img = wx.Image(overlay.mapfile, wx.BITMAP_TYPE_ANY)
@@ -759,7 +759,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Draw(self.pdcDec, pdctype = 'clear')
         self.Draw(self.pdcTmp, pdctype = 'clear')
 
-        for layer in self.Map.GetListOfLayers(l_active = True):
+        for layer in self.Map.GetListOfLayers(active = True):
             layer.AbortDownload()
         
     def DragMap(self, moveto):

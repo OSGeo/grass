@@ -194,8 +194,8 @@ class GCPWizard(object):
             
             self.SwitchEnv('source')
             name, found = utils.GetLayerNameFromCmd(cmdlist)
-            self.SrcMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
-                                 name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+            self.SrcMap.AddLayer(ltype=rendertype, command=cmdlist, active=True,
+                                 name=name, hidden=False, opacity=1.0, render=False)
 
             self.SwitchEnv('target')
             if tgt_map['raster']:
@@ -206,8 +206,8 @@ class GCPWizard(object):
                 cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
                 
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
-                self.TgtMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
-                                     name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+                self.TgtMap.AddLayer(ltype=rendertype, command=cmdlist, active=True,
+                                     name=name, hidden=False, opacity=1.0, render=False)
             
             if tgt_map['vector']:
                 #
@@ -217,8 +217,8 @@ class GCPWizard(object):
                 cmdlist = ['d.vect', 'map=%s' % tgt_map['vector']]
                 
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
-                self.TgtMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
-                                     name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+                self.TgtMap.AddLayer(ltype=rendertype, command=cmdlist, active=True,
+                                     name=name, hidden=False, opacity=1.0, render=False)
             
             #
             # start GCP Manager
@@ -2765,8 +2765,8 @@ class GrSettingsDialog(wx.Dialog):
                 srcrenderVector = True
             self.parent.grwiz.SwitchEnv('source')
             name, found = utils.GetLayerNameFromCmd(cmdlist)
-            self.parent.grwiz.SrcMap.AddLayer(type=maptype, command=cmdlist, l_active=True,
-                              name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+            self.parent.grwiz.SrcMap.AddLayer(ltype=maptype, command=cmdlist, active=True,
+                              name=name, hidden=False, opacity=1.0, render=False)
 
             self.parent.grwiz.SwitchEnv('target')
 
@@ -2786,16 +2786,16 @@ class GrSettingsDialog(wx.Dialog):
             if tgt_map['raster'] != '':
                 cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
-                self.parent.grwiz.TgtMap.AddLayer(type='raster', command=cmdlist, l_active=True,
-                                  name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+                self.parent.grwiz.TgtMap.AddLayer(ltype='raster', command=cmdlist, active=True,
+                                  name=name, hidden=False, opacity=1.0, render=False)
 
                 tgtrender = True
 
             if tgt_map['vector'] != '':
                 cmdlist = ['d.vect', 'map=%s' % tgt_map['vector']]
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
-                self.parent.grwiz.TgtMap.AddLayer(type='vector', command=cmdlist, l_active=True,
-                                  name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+                self.parent.grwiz.TgtMap.AddLayer(ltype='vector', command=cmdlist, active=True,
+                                  name=name, hidden=False, opacity=1.0, render=False)
 
                 tgtrenderVector = True
 

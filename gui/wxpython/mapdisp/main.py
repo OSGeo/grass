@@ -98,7 +98,7 @@ class DMonMap(Map):
                 name = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
                                                  layerType = ltype)[0]
                 
-                self.AddLayer(type = ltype, command = cmd, l_active = False, name = name)
+                self.AddLayer(ltype = ltype, command = cmd, active = False, name = name)
                 nlayers += 1
         except IOError, e:
             grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \

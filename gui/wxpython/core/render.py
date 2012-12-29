@@ -54,13 +54,13 @@ class Layer(object):
 
     @todo needs refactoring (avoid parent)
     """
-    def __init__(self, type, cmd, parent, name = None,
+    def __init__(self, ltype, cmd, parent, name = None,
                  active = True, hidden = False, opacity = 1.0):
         """!Create new instance
         
         @todo pass cmd as tuple instead of list
         
-        @param type layer type ('raster', 'vector', 'overlay', 'command', etc.)
+        @param ltype layer type ('raster', 'vector', 'overlay', 'command', etc.)
         @param cmd GRASS command to render layer,
         given as list, e.g. ['d.rast', 'map=elevation@PERMANENT']
         @param name layer name, e.g. 'elevation@PERMANENT' (for layer tree)
@@ -71,10 +71,10 @@ class Layer(object):
         self.parent = parent
         
         # generated file for each layer
-        if USE_GPNMCOMP or type == 'overlay':
+        if USE_GPNMCOMP or ltype == 'overlay':
             tmpfile = tempfile.mkstemp()[1]
             self.maskfile = tmpfile + '.pgm'
-            if type == 'overlay':
+            if ltype == 'overlay':
                 self.mapfile  = tmpfile + '.png'
             else:
                 self.mapfile  = tmpfile + '.ppm'
@@ -84,8 +84,8 @@ class Layer(object):
         
         # stores class which manages rendering instead of simple command - e. g. wms
         self.renderMgr = None
-        
-        self.SetType(type)
+        self.type      = None
+        self.SetType(ltype)
         self.name  = name
         
         if self.type == 'command':
@@ -323,11 +323,11 @@ class Layer(object):
             self.renderMgr.Abort()
 
 class MapLayer(Layer):
-    def __init__(self, type, cmd, parent, name = None,
+    def __init__(self, ltype, cmd, parent, name = None,
                  active = True, hidden = False, opacity = 1.0): 
         """!Represents map layer in the map canvas
         
-        @param type layer type ('raster', 'vector', 'command', etc.)
+        @param ltype layer type ('raster', 'vector', 'command', etc.)
         @param cmd GRASS command to render layer,
         given as list, e.g. ['d.rast', 'map=elevation@PERMANENT']
         @param name layer name, e.g. 'elevation@PERMANENT' (for layer tree) or None
@@ -335,7 +335,7 @@ class MapLayer(Layer):
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        Layer.__init__(self, type, cmd, parent, name,
+        Layer.__init__(self, ltype, cmd, parent, name,
                        active, hidden, opacity)
         
     def GetMapset(self):
@@ -353,7 +353,7 @@ class MapLayer(Layer):
             return self.name
         
 class Overlay(Layer):
-    def __init__(self, id, type, cmd, parent,
+    def __init__(self, id, ltype, cmd, parent,
                  active = True, hidden = True, opacity = 1.0):
         """!Represents overlay displayed in map canvas
         
@@ -365,7 +365,7 @@ class Overlay(Layer):
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        Layer.__init__(self, 'overlay', cmd, parent, type,
+        Layer.__init__(self, 'overlay', cmd, parent, ltype,
                        active, hidden, opacity)
         self.id = id
         
@@ -797,27 +797,27 @@ class Map(object):
         except:
             return None
         
-    def GetListOfLayers(self, l_type = None, l_mapset = None, l_name = None,
-                        l_active = None, l_hidden = None):
+    def GetListOfLayers(self, ltype = None, mapset = None, name = None,
+                        active = None, hidden = None):
         """!Returns list of layers of selected properties or list of
         all layers.
 
-        @param l_type layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
-        @param l_mapset all layers from given mapset (only for maplayers)
-        @param l_name all layers with given name
-        @param l_active only layers with 'active' attribute set to True or False
-        @param l_hidden only layers with 'hidden' attribute set to True or False
+        @param ltype layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
+        @param mapset all layers from given mapset (only for maplayers)
+        @param name all layers with given name
+        @param active only layers with 'active' attribute set to True or False
+        @param hidden only layers with 'hidden' attribute set to True or False
         
         @return list of selected layers
         """
         selected = []
         
-        if type(l_type) == types.StringType:
+        if type(ltype) == types.StringType:
             one_type = True
         else:
             one_type = False
         
-        if one_type and l_type == 'overlay':
+        if one_type and ltype == 'overlay':
             llist = self.overlays
         else:
             llist = self.layers
@@ -825,36 +825,36 @@ class Map(object):
         # ["raster", "vector", "wms", ... ]
         for layer in llist:
             # specified type only
-            if l_type != None:
-                if one_type and layer.type != l_type:
+            if ltype != None:
+                if one_type and layer.type != ltype:
                     continue
-                elif not one_type and layer.type not in l_type:
+                elif not one_type and layer.type not in ltype:
                     continue
             
             # mapset
-            if (l_mapset != None and l_type != 'overlay') and \
-                    layer.GetMapset() != l_mapset:
+            if (mapset != None and ltype != 'overlay') and \
+                    layer.GetMapset() != mapset:
                 continue
             
             # name
-            if l_name != None and layer.name != l_name:
+            if name != None and layer.name != name:
                 continue
             
             # hidden and active layers
-            if l_active != None and \
-                   l_hidden != None:
-                if layer.active == l_active and \
-                       layer.hidden == l_hidden:
+            if active != None and \
+                   hidden != None:
+                if layer.active == active and \
+                       layer.hidden == hidden:
                     selected.append(layer)
             
             # active layers
-            elif l_active != None:
-                if layer.active == l_active:
+            elif active != None:
+                if layer.active == active:
                     selected.append(layer)
             
             # hidden layers
-            elif l_hidden != None:
-                if layer.hidden == l_hidden:
+            elif hidden != None:
+                if layer.hidden == hidden:
                     selected.append(layer)
             
             # all layers
@@ -1014,31 +1014,31 @@ class Map(object):
         
         return self.mapfile
 
-    def AddLayer(self, type, command, name = None,
-                 l_active = True, l_hidden = False, l_opacity = 1.0, l_render = False,
+    def AddLayer(self, ltype, command, name = None,
+                 active = True, hidden = False, opacity = 1.0, render = False,
                  pos = -1):
         """!Adds generic map layer to list of layers
         
-        @param type layer type ('raster', 'vector', etc.)
+        @param ltype layer type ('raster', 'vector', etc.)
         @param command  GRASS command given as list
         @param name layer name
-        @param l_active layer render only if True
-        @param l_hidden layer not displayed in layer tree if True
-        @param l_opacity opacity level range from 0(transparent) - 1(not transparent)
-        @param l_render render an image if True
+        @param active layer render only if True
+        @param hidden layer not displayed in layer tree if True
+        @param opacity opacity level range from 0(transparent) - 1(not transparent)
+        @param render render an image if True
         @param pos position in layer list (-1 for append)
         
         @return new layer on success
         @return None on failure
         """
         wx.BeginBusyCursor()
-        # l_opacity must be <0;1>
-        if l_opacity < 0:
-            l_opacity = 0
-        elif l_opacity > 1:
-            l_opacity = 1
-        layer = MapLayer(type = type, name = name, cmd = command, parent = self,
-                         active = l_active, hidden = l_hidden, opacity = l_opacity)
+        # opacity must be <0;1>
+        if opacity < 0:
+            opacity = 0
+        elif opacity > 1:
+            opacity = 1
+        layer = MapLayer(ltype = ltype, name = name, cmd = command, parent = self,
+                         active = active, hidden = hidden, opacity = opacity)
         
         # add maplayer to the list of layers
         if pos > -1:
@@ -1047,7 +1047,7 @@ class Map(object):
             self.layers.append(layer)
         
         Debug.msg (3, "Map.AddLayer(): layer=%s" % layer.name)
-        if l_render:
+        if render:
             if not layer.Render():
                 raise GException(_("Unable to render map layer <%s>.") % name)
         
@@ -1113,7 +1113,7 @@ class Map(object):
         """!Change map layer properties
 
         @param layer map layer instance
-        @param type layer type ('raster', 'vector', etc.)
+        @param ltype layer type ('raster', 'vector', etc.)
         @param command  GRASS command given as list
         @param name layer name
         @param active layer render only if True
@@ -1123,8 +1123,8 @@ class Map(object):
         """
         Debug.msg (3, "Map.ChangeLayer(): layer=%s" % layer.name)
         
-        if 'type' in kargs:
-            layer.SetType(kargs['type']) # check type
+        if 'ltype' in kargs:
+            layer.SetType(kargs['ltype']) # check type
         
         if 'command' in kargs:
             layer.SetCmd(kargs['command'])
@@ -1147,17 +1147,17 @@ class Map(object):
         
         return layer
 
-    def ChangeOpacity(self, layer, l_opacity):
+    def ChangeOpacity(self, layer, opacity):
         """!Changes opacity value of map layer
 
         @param layer layer instance in layer tree
-        @param l_opacity opacity level <0;1>
+        @param opacity opacity level <0;1>
         """
-        # l_opacity must be <0;1>
-        if l_opacity < 0: l_opacity = 0
-        elif l_opacity > 1: l_opacity = 1
+        # opacity must be <0;1>
+        if opacity < 0: opacity = 0
+        elif opacity > 1: opacity = 1
         
-        layer.opacity = l_opacity
+        layer.opacity = opacity
         Debug.msg (3, "Map.ChangeOpacity(): layer=%s, opacity=%f" % \
                    (layer.name, layer.opacity))
 
@@ -1228,31 +1228,31 @@ class Map(object):
         
         return -1
 
-    def AddOverlay(self, id, type, command,
-                   l_active = True, l_hidden = True, l_opacity = 1.0, l_render = False):
+    def AddOverlay(self, id, ltype, command,
+                   active = True, hidden = True, opacity = 1.0, render = False):
         """!Adds overlay (grid, barscale, legend, etc.) to list of
         overlays
         
         @param id overlay id (PseudoDC)
-        @param type overlay type (barscale, legend)
+        @param ltype overlay type (barscale, legend)
         @param command GRASS command to render overlay
-        @param l_active overlay activated (True) or disabled (False)
-        @param l_hidden overlay is not shown in layer tree (if True)
-        @param l_render render an image (if True)
+        @param active overlay activated (True) or disabled (False)
+        @param hidden overlay is not shown in layer tree (if True)
+        @param render render an image (if True)
         
         @return new layer on success
         @return None on failure
         """
-        Debug.msg (2, "Map.AddOverlay(): cmd=%s, render=%d" % (command, l_render))
-        overlay = Overlay(id = id, type = type, cmd = command, parent = self,
-                          active = l_active, hidden = l_hidden, opacity = l_opacity)
+        Debug.msg (2, "Map.AddOverlay(): cmd=%s, render=%d" % (command, render))
+        overlay = Overlay(id = id, ltype = ltype, cmd = command, parent = self,
+                          active = active, hidden = hidden, opacity = opacity)
         
         # add maplayer to the list of layers
         self.overlays.append(overlay)
         
-        if l_render and command != '' and not overlay.Render():
+        if render and command != '' and not overlay.Render():
             raise GException(_("Unable to render overlay <%s>.") % 
-                             type)
+                             ltype)
         
         return self.overlays[-1]
 
@@ -1262,20 +1262,20 @@ class Map(object):
         Add new overlay if overlay with 'id' doesn't exist.
         
         @param id overlay id (PseudoDC)
-        @param type overlay type (barscale, legend)
+        @param ltype overlay ltype (barscale, legend)
         @param command GRASS command to render overlay
-        @param l_active overlay activated (True) or disabled (False)
-        @param l_hidden overlay is not shown in layer tree (if True)
-        @param l_render render an image (if True)
+        @param active overlay activated (True) or disabled (False)
+        @param hidden overlay is not shown in layer tree (if True)
+        @param render render an image (if True)
         
         @return new layer on success
         """
         overlay = self.GetOverlay(id, list = False)
         if  overlay is None:
-            overlay = Overlay(id, type = None, cmd = None)
+            overlay = Overlay(id, ltype = None, cmd = None)
         
-        if 'type' in kargs:
-            overlay.SetName(kargs['type']) # type -> overlay
+        if 'ltype' in kargs:
+            overlay.SetName(kargs['ltype']) # ltype -> overlay
         
         if 'command' in kargs:
             overlay.SetCmd(kargs['command'])

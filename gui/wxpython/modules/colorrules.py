@@ -746,9 +746,9 @@ class ColorTable(wx.Frame):
         """!Update preview (based on computational region)"""
         
         if not self.layer:
-            self.layer = self.Map.AddLayer(type = ltype, name = 'preview', command = cmdlist,
-                                           l_active = True, l_hidden = False, l_opacity = 1.0,
-                                           l_render = False) 
+            self.layer = self.Map.AddLayer(ltype = ltype, name = 'preview', command = cmdlist,
+                                           active = True, hidden = False, opacity = 1.0,
+                                           render = False) 
         else:
             self.layer.SetCmd(cmdlist)
         
