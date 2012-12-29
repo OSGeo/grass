@@ -256,7 +256,7 @@ class MapFrame(SingleMapFrame):
         """
         Update progress bar info
         """
-        self.GetProgressBar().SetValue(event.value)
+        self.GetProgressBar().UpdateProgress(event.layer, event.map)
         
         event.Skip()
         

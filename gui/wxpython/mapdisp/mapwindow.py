@@ -579,20 +579,11 @@ class BufferedWindow(MapWindow, wx.Window):
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
         """
         start = time.clock()
-        
         self.resize = False
         
         # was if self.Map.cmdfile and ...
         if self.IsAlwaysRenderEnabled() and self.img is None:
             render = True
-        
-        #
-        # initialize process bar (only on 'render')
-        #
-        if render or renderVector:
-            self.frame.GetProgressBar().Show()
-            if self.frame.GetProgressBar().GetRange() > 0:
-                self.frame.GetProgressBar().SetValue(1)
         
         #
         # render background image if needed
@@ -707,18 +698,6 @@ class BufferedWindow(MapWindow, wx.Window):
             
         stop = time.clock()
         
-        #
-        # hide process bar
-        #
-        self.frame.GetProgressBar().Hide()
-
-        #
-        # update statusbar 
-        #
-        ### self.Map.SetRegion()
-        self.frame.StatusbarUpdate()
-        
-        
         Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
                    (render, renderVector, (stop-start)))
         
@@ -779,6 +758,9 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.Draw(self.pdcDec, pdctype = 'clear')
         self.Draw(self.pdcTmp, pdctype = 'clear')
+
+        for layer in self.Map.GetListOfLayers(l_active = True):
+            layer.AbortDownload()
         
     def DragMap(self, moveto):
         """!Drag the entire map image for panning.

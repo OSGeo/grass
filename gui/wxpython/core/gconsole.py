@@ -79,6 +79,8 @@ class CmdThread(threading.Thread):
 
         self.setDaemon(True)
 
+        self.requestCmd = None
+
         self.receiver = receiver
         self._want_abort_all = False
 
@@ -98,6 +100,10 @@ class CmdThread(threading.Thread):
         self.requestQ.put((CmdThread.requestId, args, kwds))
 
         return CmdThread.requestId
+
+    def GetId(self):
+         """!Get id for next command"""
+         return CmdThread.requestId + 1
 
     def SetId(self, id):
         """!Set starting id"""
@@ -135,7 +141,7 @@ class CmdThread(threading.Thread):
 
             time.sleep(.1)
             self.requestCmd = vars()['callable'](*args, **kwds)
-            if self._want_abort_all:
+            if self._want_abort_all and self.requestCmd is not None:
                 self.requestCmd.abort()
                 if self.requestQ.empty():
                     self._want_abort_all = False
@@ -197,10 +203,10 @@ class CmdThread(threading.Thread):
         """!Abort command(s)"""
         if abortall:
             self._want_abort_all = True
-        self.requestCmd.abort()
+        if self.requestCmd is not None:
+            self.requestCmd.abort()
         if self.requestQ.empty():
             self._want_abort_all = False
-
 
 class GStdout:
     """!GConsole standard output
