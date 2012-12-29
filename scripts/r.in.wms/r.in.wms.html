@@ -41,7 +41,21 @@ r.in.wms -c url=http://wms.cuzk.cz/wms.asp
 
 <h3>Download raster data from WMS server (GetMap request)</h3>
 
-<h4>World extend data</h4>
+<h4>Open Street Map</h4>
+
+<div class="code"><pre>
+r.in.wms url=http://watzmann-geog.urz.uni-heidelberg.de/cached/osm layers=osm_auto:all output=osm format=png
+</pre></div>
+Note: European coverage
+
+<div class="code"><pre>
+r.in.wms url=http://irs.gis-lab.info layers=osm output=osm format=png
+</pre></div>
+Note: European coverage
+
+More OSM WMS servers can be found at the OSM wiki <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">site</a>
+
+<h4>World data</h4>
 
 <div class="code"><pre>
 r.in.wms url=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsat_1_01 styles=default,default output=landsat srs=4326 format=png 
@@ -69,7 +83,7 @@ Note: username, password and API key can be get from <a href="http://api.ign.fr/
 r.in.wms output=global_mosaic url=http://onearth.jpl.nasa.gov/wms.cgi layers='Global Mosaic, visual' driver=OnEarth_GRASS 
 </pre></div>
 
-<h4>Data in extend of Czech Republic</h4>
+<h4>Data covering the Czech Republic</h4>
 
 <div class="code"><pre>
 r.in.wms output=kn url=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-linie srs=4326 format=png
