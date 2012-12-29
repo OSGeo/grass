@@ -205,7 +205,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
                     if cmp is not None:
                         cmp_text = cmp.text
                 
-                if cmpt_text is None or \
+                if cmp_text is None or \
                    cmp_text.lower() == parent_cmp_text.lower():
                     is_there = True
                     break
@@ -632,4 +632,4 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
         if end_i < 0:
             end_i = len(params_str)
 
-        return (start_i, end_i) 
+        return (start_i, end_i)
