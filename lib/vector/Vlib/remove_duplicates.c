@@ -35,11 +35,11 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 {
     struct line_pnts *APoints, *BPoints;
     struct line_cats *ACats, *BCats;
-    int i, j, c, atype, btype, bline;
-    int nlines, nbcats_orig, npoints;
+    int i, c, atype, btype, aline, bline;
+    int nlines, nacats_orig, npoints;
     struct bound_box ABox;
     struct boxlist *List;
-    int ndupl;
+    int ndupl, is_dupl;
 
 
     APoints = Vect_new_line_struct();
@@ -51,19 +51,21 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
     nlines = Vect_get_num_lines(Map);
 
     G_debug(1, "nlines =  %d", nlines);
-    /* Go through all lines in vector, for each select lines which overlap MBR of
-     *  this line and check if some of them is identical. If someone is identical
-     *  remove current line. (In each step just one line is deleted)
+    /* Go through all lines in vector, for each line select lines which
+     * overlap with the first vertex of this line and check if a 
+     * selected line is identical. If yes, remove the selected line.
+     * If the line vertices are identical with those of any other line, 
+     * merge categories and rewrite the current line.
      */
 
     ndupl = 0;
 
-    for (i = 1; i <= nlines; i++) {
-	G_percent(i, nlines, 1);
-	if (!Vect_line_alive(Map, i))
+    for (aline = 1; aline <= nlines; aline++) {
+	G_percent(aline, nlines, 1);
+	if (!Vect_line_alive(Map, aline))
 	    continue;
 
-	atype = Vect_read_line(Map, APoints, ACats, i);
+	atype = Vect_read_line(Map, APoints, ACats, aline);
 	if (!(atype & type))
 	    continue;
 	
@@ -71,15 +73,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	Vect_line_prune(APoints);
 	
 	if (npoints != APoints->n_points) {
-	    Vect_rewrite_line(Map, i, atype, APoints, ACats);
-	    nlines = Vect_get_num_lines(Map);
-	    continue;
-	}
-
-	npoints = APoints->n_points;
-	Vect_line_prune(APoints);
-	if (npoints != APoints->n_points) {
-	    Vect_rewrite_line(Map, i, atype, APoints, ACats);
+	    Vect_rewrite_line(Map, aline, atype, APoints, ACats);
 	    nlines = Vect_get_num_lines(Map);
 	    continue;
 	}
@@ -90,47 +84,51 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	ABox.T = ABox.B = APoints->z[0];
 	Vect_select_lines_by_box(Map, &ABox, type, List);
 	G_debug(3, "  %d lines selected by box", List->n_values);
+	
+	is_dupl = 0;
 
-	for (j = 0; j < List->n_values; j++) {
-	    bline = List->id[j];
-	    G_debug(3, "  j = %d bline = %d", j, bline);
+	for (i = 0; i < List->n_values; i++) {
+	    bline = List->id[i];
+	    G_debug(3, "  j = %d bline = %d", i, bline);
 
-	    /* check duplicate of bline only once */
-	    if (i <= bline)
+	    /* compare aline and bline only once */
+	    if (aline <= bline)
 		continue;
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
 	    Vect_line_prune(BPoints);
 
-	    /* check for duplicates */
+	    /* check for duplicate */
 	    if (!Vect_line_check_duplicate(APoints, BPoints, Vect_is_3d(Map)))
 		continue;
 
-	    /* Lines area identical -> remove current */
-	    if (Err) {
-		Vect_write_line(Err, atype, APoints, ACats);
+	    /* bline is identical to aline */
+	    if (!is_dupl) {
+		if (Err) {
+		    Vect_write_line(Err, atype, APoints, ACats);
+		}
+		is_dupl = 1;
 	    }
+	    Vect_delete_line(Map, bline);
 
-	    Vect_delete_line(Map, i);
+	    /* merge categories */
+	    nacats_orig = ACats->n_cats;
 
-	    /* Merge categories */
-	    nbcats_orig = BCats->n_cats;
+	    for (c = 0; c < BCats->n_cats; c++)
+		Vect_cat_set(ACats, BCats->field[c], BCats->cat[c]);
 
-	    for (c = 0; c < ACats->n_cats; c++)
-		Vect_cat_set(BCats, ACats->field[c], ACats->cat[c]);
-
-	    if (BCats->n_cats > nbcats_orig) {
-		G_debug(4, "cats merged: n_cats %d -> %d", nbcats_orig,
-			BCats->n_cats);
-		Vect_rewrite_line(Map, bline, btype, BPoints, BCats);
+	    if (ACats->n_cats > nacats_orig) {
+		G_debug(4, "cats merged: n_cats %d -> %d", nacats_orig,
+			ACats->n_cats);
 	    }
 
 	    ndupl++;
-
-	    break;		/* line was deleted -> take the next one */
 	}
-	nlines = Vect_get_num_lines(Map);	/* For future when lines with cats will be rewritten */
-	G_debug(3, "nlines =  %d\n", nlines);
+	if (is_dupl) {
+	    Vect_rewrite_line(Map, aline, atype, APoints, ACats);
+	    nlines = Vect_get_num_lines(Map);
+	    G_debug(3, "nlines =  %d\n", nlines);
+	}
     }
     G_verbose_message("Removed duplicates: %d", ndupl);
 }
