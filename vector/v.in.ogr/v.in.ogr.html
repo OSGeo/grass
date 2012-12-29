@@ -1,150 +1,217 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.in.ogr</em> converts 
-<a href="http://www.gdal.org/ogr/">OGR</a> vectors to GRASS. 
-OGR (Simple Features Library) is part of the 
+<em>v.in.ogr</em> imports vector data
+using <a href="http://www.gdal.org/ogr/">OGR</a> library to GRASS
+vector map. OGR (Simple Features Library) is part of the
 <a href="http://www.gdal.org">GDAL</a> library, so you need to
-install GDAL to use <em>v.in.ogr</em>. 
-<p>If the <b>layer</b> parameter is not given, all available layers 
+install GDAL to use <em>v.in.ogr</em>.
+ 
+<p>
+If the <b>layer</b> parameter is not given, all available OGR layers
 are imported as separate GRASS layers into one GRASS vector map. If
 several OGR layer names are given, all these layers are imported as
 separate GRASS layers into one GRASS vector map.
-<p>The optional <b>spatial</b> parameter defines spatial query extents.
-This parameter allows the user to restrict the region to a spatial subset
-while importing the data. All vector features completely or partially
-falling into this rectangle subregion are imported.
-The <b>-r</b> current region flag is identical, but uses the current region
-settings as the spatial bounds (see <em><a href="g.region.html">g.region</a></em>).
-<p>Topology cleaning on areas is automatically performed, but may fail in
-special cases (then use <a href="v.clean.html">v.clean</a>).
-<p>The <b>min_area</b> threshold value is being specified as area size
-in map units with the exception of latitude-longitude locations in which
+
+<p>
+The optional <b>spatial</b> parameter defines spatial query extents.
+This parameter allows the user to restrict the region to a spatial
+subset while importing the data. All vector features completely or
+partially falling into this rectangle subregion are imported.
+The <b>-r</b> current region flag is identical, but uses the current
+region settings as the spatial bounds
+(see <em><a href="g.region.html">g.region</a></em>).
+
+<p>
+Topology cleaning on areas is automatically performed, but may fail in
+special cases (then use <em><a href="v.clean.html">v.clean</a></em>).
+
+<p>
+The <b>min_area</b> threshold value is being specified as area size in
+map units with the exception of latitude-longitude locations in which
 it is being specified solely in square meters.
-<p>The <b>snap</b> threshold value is used to snap boundary vertices to 
-each other if the distance in map units between two vertices is not 
-larger than the threshold. Snapping is by default disabled with -1. See 
-also the <a href="v.clean.html">v.clean</a> manual.
+
+<p>
+The <b>snap</b> threshold value is used to snap boundary vertices to
+each other if the distance in map units between two vertices is not
+larger than the threshold. Snapping is by default disabled with
+-1. See also the <em><a href="v.clean.html">v.clean</a></em> manual.
 
 <h3>Supported OGR Vector Formats</h3>
 
-<a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI
-Shapefile</a><br>
-<a href="http://www.gdal.org/ogr/drv_mitab.html">Mapinfo File</a>
+OGR library supports various vector data formats
+including <a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI
+Shapefile</a>, <a href="http://www.gdal.org/ogr/drv_mitab.html">Mapinfo
+File</a>, UK .NTF, SDTS, TIGER, IHO S-57 (ENC), DGN, GML, AVCBin, REC,
+Memory, OGDI, and PostgreSQL depend on the local installation, for
+details see <a href="http://www.gdal.org/ogr/ogr_formats.html">OGR web
+site</a>.
 
-<p>Further available drivers such as UK .NTF, SDTS, TIGER, IHO S-57 (ENC),
-DGN, GML, AVCBin, REC, Memory, OGDI, and PostgreSQL depend on the local
-installation (OGR library), for details see
-<a href="http://www.gdal.org/ogr/ogr_formats.html">OGR web site</a>.
+<p>
+List of locally supported formats can be printed by <b>-f</b> flag.
 
 <h3>Overlapping polygons</h3>
-When importing overlapping polygons, the overlapping parts will become 
-new areas with multiple categories, one unique category for each original 
-polygon. An original polygon will thus be converted to multiple areas 
-with the same shared category. These multiple areas will therefore also 
-link to the same entry in the attribute table. A single category value 
-may thus refer to multiple non-overlapping areas which together represent 
-the original polygon overlapping with another polygon. The original 
-polygon can be recovered by using <em>v.extract</em> with the desired 
-category value or <em>where</em> statement and the <em>-d</em> flag to 
+
+When importing overlapping polygons, the overlapping parts will become
+new areas with multiple categories, one unique category for each
+original polygon. An original polygon will thus be converted to
+multiple areas with the same shared category. These multiple areas
+will therefore also link to the same entry in the attribute table. A
+single category value may thus refer to multiple non-overlapping areas
+which together represent the original polygon overlapping with another
+polygon. The original polygon can be recovered by
+using <em><a href="v.extract.html">v.extract</a></em> with the desired
+category value or <b>where</b> statement and the <b>-d</b> flag to
 dissolve common boundaries.
 
 <h2>Location Creation</h2>
 
-<em>v.in.ogr</em> attempts to preserve projection information when importing
-datasets if the source format includes projection information, and if
-the OGR driver supports it.  If the projection of the source dataset does
-not match the projection of the current location <em>v.in.ogr</em> will 
-report an error message ("<tt>Projection of dataset does not appear to 
-match current location</tt>") and then report the PROJ_INFO parameters of
-the source dataset.
+<em>v.in.ogr</em> attempts to preserve projection information when
+importing datasets if the source format includes projection
+information, and if the OGR driver supports it.  If the projection of
+the source dataset does not match the projection of the current
+location <em>v.in.ogr</em> will report an error message
+(&quot;Projection of dataset does not appear to match current
+location&quot;).
 
-<p>If the user wishes to ignore the difference between the apparent coordinate
-system of the source data and the current location, they may pass the 
+<p>
+If the user wishes to ignore the difference between the apparent
+coordinate system of the source data and the current location, they
+may pass the
 <b>-o</b> flag to override the projection check.
 
-<p>If the user wishes to import the data with the full projection definition,
-it is possible to have <em>v.in.ogr</em> automatically create a new location based
-on the projection and extents of the file being read.  This is accomplished
-by passing the name to be used for the new location via the <b>location</b>
-parameter.  Upon completion of the command, a new location will have been
-created (with only a PERMANENT mapset), and the vector map will have been
-imported with the indicated <b>output</b> name into the PERMANENT mapset.
+<p>
+If the user wishes to import the data with the full projection
+definition, it is possible to have <em>v.in.ogr</em> automatically
+create a new location based on the projection and extents of the file
+being read. This is accomplished by passing the name to be used for
+the new location via the <b>location</b> parameter.  Upon completion
+of the command, a new location will have been created (with only a
+PERMANENT mapset), and the vector map will have been imported with the
+indicated <b>output</b> name into the PERMANENT mapset.
 
+<h2>NOTES</h2>
+
+The characters used for table column names are limited. Supported are:
+
+<div class="code"><pre>
+[A-Za-z][A-Za-z0-9_]*
+</pre></div>
+
+This means that SQL neither supports '.' (dots) nor '-' (minus) nor
+'#' in table column names. Also a table name must start with a
+character, not a number.
+
+<p>
+<em>v.in.ogr</em> converts '.', '-' and '#' to '_' (underscore) during
+import. The <b>-w</b> flag changes capital column names to
+lowercase characters as a convenience for SQL usage (lowercase column
+names avoid the need to quote them if the attribute table is stored in
+a SQL DBMS such as PostgreSQL). The <b>cnames</b> parameter is used
+to define new column names during import.
+
+<p>
+The DBF database specification limits column names to 10 characters.
+If the default DB is set to DBF and the input data contains longer
+column/field names, they will be truncated. If this results in
+multiple columns with the same name then <em>v.in.ogr</em> will
+produce an error.  In this case you will either have to modify the
+input data or use
+<em>v.in.ogr</em>'s <b>cnames</b> parameter to rename columns to something
+unique. (hint: copy and modify the list given with the error message).
+Alternatively, change the local DB with
+<em><a href="db.connect.html">db.connect</a></em>.
 
 <h2>EXAMPLES</h2>
 
 The command imports various vector formats:
 
-<ul>
-<li><b>SHAPE files</b>
+<h3>SHAPE files</h3>
+
 <div class="code"><pre>
 v.in.ogr dsn=/home/user/shape_data/test_shape.shp output=grass_map 
 </pre></div>
 
 Alternate method:
+
 <div class="code"><pre>
 v.in.ogr dsn=/home/user/shape_data layer=test_shape output=grass_map 
 </pre></div>
-<br>
 
-<li><b>MapInfo files</b>
+<h3>MapInfo files</h3>
+
 <div class="code"><pre>
 v.in.ogr dsn=./ layer=mapinfo_test output=grass_map
 </pre></div>
-<br>
 
-<li><b>Arc Coverage</b><br>
- We import the Arcs and Label points, the module takes care to
- build areas:<br>
+<h3>Arc Coverage</h3>
+
+We import the Arcs and Label points, the module takes care to build
+areas.
+
 <div class="code"><pre>
 v.in.ogr dsn=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
-<br>
 
-<li><b>E00 file</b> (see also <em><a href="v.in.e00.html">v.in.e00</a></em>)<br>
- First we have to convert the E00 file to an Arc Coverage with 'avcimport' 
- (<a href="http://avce00.maptools.org/avce00/index.html">AVCE00 tools</a>,
- use <em>e00conv</em> first in case that <em>avcimport</em> fails):<br>
+<h3>E00 file</h3>
+
+See also <em><a href="v.in.e00.html">v.in.e00</a></em>.
+
+<p>
+First we have to convert the E00 file to an Arc Coverage with
+'avcimport'
+(<a href="http://avce00.maptools.org/avce00/index.html">AVCE00
+tools</a>, use <em>e00conv</em> first in case that <em>avcimport</em>
+fails):
+
 <div class="code"><pre>
 avcimport e00file coverage
 v.in.ogr dsn=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
-<br>
 
-<li><b>SDTS files</b> (you have to select the CATD file)<br>
+<h3>SDTS files</h3> 
+
+You have to select the CATD file.
+
 <div class="code"><pre>
 v.in.ogr dsn=CITXCATD.DDF output=cities
 </pre></div>
-<br>
 
-<li><b>TIGER files</b><br>
+<h3>TIGER files</h3>
+
 <div class="code"><pre>
 v.in.ogr dsn=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
 type=boundary,centroid snap=-1
 </pre></div>
-<br>
 
-<li><b>PostGIS maps</b> (area example)<br>
+<h3>PostGIS tables</h3>
+
+Area example:
+
 <div class="code"><pre>
 v.in.ogr dsn="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 </pre></div>
-<br>
 
-<li><b>Oracle Spatial maps </b><br>
+<h3>Oracle Spatial maps</h3>
+
 Note that you have to set the environment-variables <tt>ORACLE_BASE,
 ORACLE_SID, ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt> accordingly.
+
 <div class="code"><pre>
 v.in.ogr dsn=OCI:username/password@database_instance output=grasslayer layer=roads_oci
 </pre></div>
-</ul>
 
-<h3>Support of database schema:</h3>
+<h3>Support of database schema</h3>
 
-<p>For schema support, first set a default schema with 
-<em><a href="db.connect.html">db.connect</a></em>. If schema support is
-used the schema name must be specified whenever a db.* module is called.
-<p>Example:
+<p>
+For schema support, first set a default schema with 
+<em><a href="db.connect.html">db.connect</a></em>. If schema support
+is used the schema name must be specified whenever a db.* module is
+called.
+
+<p>
+Example:
+
 <div class="code"><pre>
 db.connect driver=pg database=test schema=user1 group=group1
 db.login driver=pg database=test user=user1 password=pwd1
@@ -153,6 +220,7 @@ db.select table=user1.river
 </pre></div>
 
 The user can ignore schemas, if desired:
+
 <div class="code"><pre>
 db.connect driver=pg database=test
 db.login driver=pg database=test user=user1 password=pwd1
@@ -160,62 +228,36 @@ v.in.ogr dsn=./ layer=river output=river     # -> table public.river
 db.select table=river
 </pre></div>
 
-
-<h2>NOTES</h2>
-
-The characters used for table column names are limited. Supported are:<br>
-<div class="code"><pre>
-[A-Za-z][A-Za-z0-9_]*
-</pre></div>
-
-This means that SQL neither supports '.' (dots) nor '-' (minus) nor '#' in table
-column names. Also a table name must start with a character, not a number.
-<br>
-<em>v.in.ogr</em> converts '.', '-' and '#' to '_' (underscore) during import.
-The <em>-w</em> flag changes capital column names to lowercase characters as
-a convenience for SQL usage (lowercase column names avoid the need to quote them
-if the attribute table is stored in a SQL DBMS such as PostgreSQL).
-The <b>cnames</b> parameter is used to define new column names during import.
-
-<p>The DBF database specification limits column names to 10 characters.
-If the default DB is set to DBF and the input data contains longer
-column/field names, they will be truncated. If this results in multiple
-columns with the same name then <em>v.in.ogr</em> will produce an error.
-In this case you will either have to modify the input data or use
-<em>v.in.ogr</em>'s <b>cnames</b> parameter to rename columns to something
-unique. (hint: copy and modify the list given with the error message).
-Alternatively, change the local DB with
-<em><a href="db.connect.html">db.connect</a></em>.
-
-
 <h2>WARNINGS</h2>
 
-If a message like "<tt>WARNING: Area size 1.3e-06, area not imported.</tt>"
-appears, the <b>min_area</b> may be adjusted to a smaller value so that all
-areas are imported. Otherwise tiny areas are filtered out during import
-(useful to polish digitization errors or non-topological data).
+If a message like &quot;WARNING: Area size 1.3e-06, area not
+imported.&quot; appears, the <b>min_area</b> may be adjusted to a
+smaller value so that all areas are imported. Otherwise tiny areas are
+filtered out during import (useful to polish digitization errors or
+non-topological data).
 
 <h2>ERROR MESSAGES</h2>
 
-<i>"ERROR: DBMI-DBF driver error:
-SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'"</i><br>
-
-indicates that a column name corresponds to a reserved SQL word (here: 'DESC').
-A different column name should be used. The <em>cnames</em> parameter can be used
-to assign different column names on the fly.
-
-<p><i>"ERROR: Projection of dataset does not appear to match the current location."</i><br>
-
-You need to create a location whose projection matches the data you
-wish to import. Try using <em>location</em> parameter to create a new location based
-upon the projection information in the file. If desired, you can then re-project
-it to another location with <em>v.proj</em>.
+<dl>
+<dt>DBMI-DBF driver error: SQL parser error: syntax error,
+unexpected DESC, expecting NAME processing 'DESC'</dt>
+<dd>indicates that a column name corresponds to a reserved SQL word (here: 'DESC').
+A different column name should be used. The <b>cnames</b> parameter can be used
+to assign different column names on the fly.</dd>
+<dt>Projection of dataset does not appear to match the current location.</dt>
+<dd>You need to create a location whose projection matches the data
+you wish to import. Try using <b>location</b> parameter to create a
+new location based upon the projection information in the file. If
+desired, you can then re-project it to another location
+with <em><a href="v.proj.html">v.proj</a></em>.</dd>
+</dl>
 
 <h2>REFERENCES</h2>
 
-<a href="http://www.gdal.org/ogr/">OGR vector library</a> <br>
-<a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation
-
+<ul>
+  <li><a href="http://www.gdal.org/ogr/">OGR vector library</a></li>
+  <li><a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
@@ -228,12 +270,10 @@ it to another location with <em>v.proj</em>.
 <a href="v.external.html">v.external</a>,
 <a href="v.in.db.html">v.in.db</a>,
 <a href="v.in.e00.html">v.in.e00</a>,
-<a href="v.out.ogr.html">v.out.ogr</a>,<br>
-<a href="grass-pg.html">PostGIS driver</a>
+<a href="v.out.ogr.html">v.out.ogr</a>
 </em>
 
-
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Radim Blazek, ITC-irst, Trento, Italy
 <br>
@@ -241,4 +281,5 @@ Location and spatial extent support by Markus Neteler and Paul Kelly
 <br>
 Markus Metz
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
