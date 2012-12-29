@@ -22,14 +22,14 @@ This program is free software under the GNU General Public License
 #%option
 #% key: url
 #% type: string
-#% description:URL of WMS server 
+#% description: URL of WMS server 
 #% required: yes
 #%end
 
 #%option
 #% key: layers
 #% type: string
-#% description: Layers to request from map server
+#% description: Layers to request from WMS server
 #% multiple: yes
 #% required: yes
 #%end
@@ -56,9 +56,9 @@ This program is free software under the GNU General Public License
 #%option
 #% key: wms_version
 #% type:string
-#% description:WMS standard
-#% options:1.1.1,1.3.0
-#% answer:1.1.1
+#% description: WMS standard
+#% options: 1.1.1,1.3.0
+#% answer: 1.1.1
 #% guisection: Request properties
 #%end
 
@@ -158,7 +158,7 @@ This program is free software under the GNU General Public License
 #% key: capfile
 #% required: no
 #% gisprompt: old,file,bin_input
-#% description: Capabilities file 
+#% description: Capabilities file to load
 #%end
 
 #%option G_OPT_F_OUTPUT
