@@ -257,10 +257,15 @@ int main(int argc, char *argv[])
 		       &nrows, &coltype, &collen, skip_lines, xcol, ycol,
 		       region_flag->answer);
 
-	G_message(_("Maximum input row length: %d"), rowlen);
-	G_message(_("Maximum number of columns: %d"), ncols);
-	G_message(_("Minimum number of columns: %d"), minncols);
-
+	G_verbose_message(_("Maximum input row length: %d"), rowlen);
+        if (ncols != minncols) {
+            G_message(_("Maximum number of columns: %d"), ncols);
+            G_message(_("Minimum number of columns: %d"), minncols);
+        }
+        else {
+               G_message(_("Number of columns: %d"), ncols);
+        }
+        
 	/* check column numbers */
 	if (xcol >= minncols) {
 	    Vect_delete(new->answer);
@@ -342,7 +347,7 @@ int main(int argc, char *argv[])
 
 		switch (coltype[i]) {
 		case DB_C_TYPE_INT:
-		    G_message("Column: %d  type: integer", i + 1);
+		    G_verbose_message("Column: %d  type: integer", i + 1);
 		    if (!columns_opt->answer) {
 			sprintf(buf, "int_%d integer", n_int + 1);
 			db_append_string(&sql, buf);
@@ -354,7 +359,7 @@ int main(int argc, char *argv[])
 		    n_int++;
 		    break;
 		case DB_C_TYPE_DOUBLE:
-		    G_message("Column: %d  type: double", i + 1);
+		    G_verbose_message("Column: %d  type: double", i + 1);
 		    if (!columns_opt->answer) {
 			sprintf(buf, "dbl_%d double precision", n_double + 1);
 			db_append_string(&sql, buf);
@@ -362,7 +367,7 @@ int main(int argc, char *argv[])
 		    n_double++;
 		    break;
 		case DB_C_TYPE_STRING:
-		    G_message("Column: %d  type: string length: %d",
+		    G_verbose_message("Column: %d  type: string length: %d",
 				      i + 1, collen[i]);
 		    if (!columns_opt->answer) {
 			sprintf(buf, "str_%d varchar(%d)", n_string + 1,
@@ -553,8 +558,6 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
 	Vect_close(&Map);
     }
-
-    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
