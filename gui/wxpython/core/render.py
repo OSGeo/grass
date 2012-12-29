@@ -884,12 +884,13 @@ class Map(object):
             layers = self.layers + self.overlays
         
         self.downloading = False
-        #event = wxUpdateProgressBar(layer = None, map = self)
+        ### event = wxUpdateProgressBar(layer = None, map = self)
         # When using Event for progress update, the event is handled after 
         # rendering. Maybe there exists some better solution than calling 
         # the method directly.
-        mapWindow.GetProgressBar().UpdateProgress(None, self)
-        #wx.PostEvent(mapWindow, event)
+        if mapWindow:
+            mapWindow.GetProgressBar().UpdateProgress(None, self)
+        ### wx.PostEvent(mapWindow, event)
         for layer in layers:
             # skip non-active map layers
             if not layer or not layer.active:
