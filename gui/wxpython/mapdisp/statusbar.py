@@ -1040,23 +1040,24 @@ class SbProgress(SbTextItem):
         self.widget.SetValue(self.maps[map]['progresVal'])
         
         # update statusbar text
-        st_text = ''
+        stText = ''
         first = True
         for layer in self.maps[map]['downloading']:
             if first:
-                st_text += _("Downloading data...")
+                stText += _("Downloading data ")
                 first = False
             else:
-                st_text += ', '
-            st_text += layer.GetName()
+                stText += ', '
+            stText += '<%s>' % layer.GetName()
+        stText += '...'
         
         if  self.maps[map]['range'] != len(self.maps[map]['rendered']):
-            if st_text:
-                st_text = _('Rendering & ') + st_text
+            if stText:
+                stText = _('Rendering & ') + stText
             else:
-                st_text = _('Rendering...')
+                stText = _('Rendering...')
 
-        self.statusbar.SetStatusText(st_text, self.position)
+        self.statusbar.SetStatusText(stText, self.position)
 
     def GetValue(self):
         return self.widget.GetValue()
