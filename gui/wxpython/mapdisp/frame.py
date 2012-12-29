@@ -444,7 +444,7 @@ class MapFrame(SingleMapFrame):
         
     def RemoveQueryLayer(self):
         """!Removes temporary map layers (queries)"""
-        qlayer = self.GetMap().GetListOfLayers(l_name = globalvar.QUERYLAYER)
+        qlayer = self.GetMap().GetListOfLayers(name = globalvar.QUERYLAYER)
         for layer in qlayer:
             self.GetMap().DeleteLayer(layer)
 
@@ -816,7 +816,7 @@ class MapFrame(SingleMapFrame):
         qlayer = None
         if not self.IsPaneShown('3d') and self.IsAutoRendered():
             try:
-                qlayer = self.Map.GetListOfLayers(l_name = globalvar.QUERYLAYER)[0]
+                qlayer = self.Map.GetListOfLayers(name = globalvar.QUERYLAYER)[0]
             except IndexError:
                 pass
         
@@ -908,11 +908,11 @@ class MapFrame(SingleMapFrame):
         
         if addLayer:
             if useId:
-                return self.Map.AddLayer(type = 'vector', name = globalvar.QUERYLAYER, command = cmd,
-                                         l_active = True, l_hidden = True, l_opacity = 1.0)
+                return self.Map.AddLayer(ltype = 'vector', name = globalvar.QUERYLAYER, command = cmd,
+                                         active = True, hidden = True, opacity = 1.0)
             else:
-                return self.Map.AddLayer(type = 'command', name = globalvar.QUERYLAYER, command = cmd,
-                                         l_active = True, l_hidden = True, l_opacity = 1.0)
+                return self.Map.AddLayer(ltype = 'command', name = globalvar.QUERYLAYER, command = cmd,
+                                         active = True, hidden = True, opacity = 1.0)
         else:
             return cmd
 
@@ -1244,7 +1244,7 @@ class MapFrame(SingleMapFrame):
         # Reset comand and rendering options in render.Map. Always render decoration.
         # Showing/hiding handled by PseudoDC
         self.Map.ChangeOverlay(ovltype = type, type = 'overlay', name = '', command = dcmd,
-                               l_active = True, l_render = False)
+                               active = True, render = False)
         self.params[type] = params
         self.propwin[type] = propwin
 
@@ -1254,7 +1254,7 @@ class MapFrame(SingleMapFrame):
         """
         layers = None
         if self.IsStandalone():
-            layers = self.MapWindow.GetMap().GetListOfLayers(l_active = False)
+            layers = self.MapWindow.GetMap().GetListOfLayers(active = False)
         
         self.MapWindow.ZoomToMap(layers = layers)
 

@@ -808,12 +808,12 @@ class IClassMapFrame(DoubleMapFrame):
         """!Add raster map to Map"""
         cmdlist = ['d.rast', 'map=%s' % name]
         if firstMap:
-            self.GetFirstMap().AddLayer(type='raster', command=cmdlist, l_active=True,
-                                        name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+            self.GetFirstMap().AddLayer(ltype='raster', command=cmdlist, active=True,
+                                        name=name, hidden=False, opacity=1.0, render=False)
             self.Render(self.GetFirstWindow())
         if secondMap:
-            self.GetSecondMap().AddLayer(type='raster', command=cmdlist, l_active=True,
-                                        name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+            self.GetSecondMap().AddLayer(ltype='raster', command=cmdlist, active=True,
+                                        name=name, hidden=False, opacity=1.0, render=False)
             self.Render(self.GetSecondWindow())
            
     def AddTrainingAreaMap(self):
@@ -826,9 +826,9 @@ class IClassMapFrame(DoubleMapFrame):
             GMessage(parent = self, message = _("Failed to create temporary vector map."))
             return
             
-        mapLayer = self.GetFirstMap().AddLayer(type = 'vector',
+        mapLayer = self.GetFirstMap().AddLayer(ltype = 'vector',
                                                command = ['d.vect', 'map=%s' % vname],
-                                               name = vname, l_active = False)
+                                               name = vname, active = False)
         
         self.toolbars['vdigit'].StartEditing(mapLayer)
         self.poMapInfo = self.GetFirstWindow().digit.GetDisplay().poMapInfo
@@ -1105,13 +1105,13 @@ class MapManager:
         @param resultsLayer True if layer is temp. raster showing the results of computation
         """
         if (resultsLayer and
-            name in [l.GetName() for l in self.map.GetListOfLayers(l_name = name)]):
+            name in [l.GetName() for l in self.map.GetListOfLayers(name = name)]):
             self.frame.Render(self.mapWindow)
             return
             
         cmdlist = ['d.rast', 'map=%s' % name]
-        self.map.AddLayer(type = 'raster', command = cmdlist, l_active = True,
-                          name = name, l_hidden = False, l_opacity = 1.0, l_render = True)
+        self.map.AddLayer(ltype = 'raster', command = cmdlist, active = True,
+                          name = name, hidden = False, opacity = 1.0, render = True)
         self.frame.Render(self.mapWindow)
         
         if alias is not None:
@@ -1134,8 +1134,8 @@ class MapManager:
             if '=' in param:
                 name.append(param.split('=')[1])
         name = ','.join(name)
-        self.map.AddLayer(type = 'rgb', command = cmd, l_active = True,
-                          name = name, l_hidden = False, l_opacity = 1.0, l_render = True)
+        self.map.AddLayer(ltype = 'rgb', command = cmd, active = True,
+                          name = name, hidden = False, opacity = 1.0, render = True)
         self.frame.Render(self.mapWindow)
         self.layerName[name] = name
         self.toolbar.choice.Insert(name, 0)
@@ -1147,7 +1147,7 @@ class MapManager:
         @param name real name of layer
         """
         # check if layer is loaded
-        layers = self.map.GetListOfLayers(l_type = 'raster')
+        layers = self.map.GetListOfLayers(ltype = 'raster')
         idx = None
         for i, layer in enumerate(layers):
             if name == layer.GetName():
@@ -1186,8 +1186,8 @@ class MapManager:
             
     def SelectLayer(self, name):
         """!Moves selected layer to top"""
-        layers = self.map.GetListOfLayers(l_type = 'raster') + \
-                 self.map.GetListOfLayers(l_type = 'rgb')
+        layers = self.map.GetListOfLayers(ltype = 'raster') + \
+                 self.map.GetListOfLayers(ltype = 'rgb')
         idx = None
         for i, layer in enumerate(layers):
             if self.layerName[name] == layer.GetName():
@@ -1210,7 +1210,7 @@ class MapManager:
     def SetOpacity(self, name):
         """!Sets opacity of layers."""
         name = self.layerName[name]
-        layers = self.map.GetListOfLayers(l_name = name)
+        layers = self.map.GetListOfLayers(name = name)
         if not layers:
             return
             
@@ -1219,7 +1219,7 @@ class MapManager:
         dlg = SetOpacityDialog(self.frame, opacity = oldOpacity)
         
         if dlg.ShowModal() == wx.ID_OK:
-            self.map.ChangeOpacity(layer = layers[0], l_opacity = dlg.GetOpacity())
+            self.map.ChangeOpacity(layer = layers[0], opacity = dlg.GetOpacity())
             
         dlg.Destroy()
         

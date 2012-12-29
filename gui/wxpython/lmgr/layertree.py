@@ -998,9 +998,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     pos = -1
             
             maplayer = self.Map.AddLayer(pos = pos,
-                                         type = ltype, command = self.GetLayerInfo(prevItem, key = 'cmd'), name = name,
-                                         l_active = checked, l_hidden = False,
-                                         l_opacity = lopacity, l_render = render)
+                                         ltype = ltype, command = self.GetLayerInfo(prevItem, key = 'cmd'), name = name,
+                                         active = checked, hidden = False,
+                                         opacity = lopacity, render = render)
             self.SetLayerInfo(layer, key = 'maplayer', value = maplayer)
             
             # run properties dialog if no properties given
@@ -1550,8 +1550,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     mapWin.LoadVector(layer)
 
                 # reset view when first layer loaded
-                nlayers = len(mapWin.Map.GetListOfLayers(l_type = ('raster', '3d-raster', 'vector'),
-                                                         l_active = True))
+                nlayers = len(mapWin.Map.GetListOfLayers(ltype = ('raster', '3d-raster', 'vector'),
+                                                         active = True))
                 if nlayers < 2:
                     mapWin.ResetView()
         
@@ -1616,7 +1616,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         maplayer = self.Map.ChangeLayer(layer = self.GetLayerInfo(item, key = 'maplayer'), type = type,
                                         command = cmdlist, name = layerName,
-                                        l_active = chk, l_hidden = hidden, l_opacity = opac, l_render = False)
+                                        active = chk, hidden = hidden, opacity = opac, render = False)
         
         self.SetLayerInfo(item, key = 'maplayer', value = maplayer)
         

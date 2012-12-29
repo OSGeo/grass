@@ -1716,7 +1716,7 @@ class GMFrame(wx.Frame):
         else:
             display = self.GetMapDisplay()
             mapLayers = map(lambda x: x.GetName(),
-                            display.GetMap().GetListOfLayers(l_type = ltype))
+                            display.GetMap().GetListOfLayers(ltype = ltype))
             if mapName in mapLayers:
                 display.GetWindow().UpdateMap(render = True)
             else:

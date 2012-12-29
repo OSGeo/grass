@@ -1001,7 +1001,7 @@ class SbProgress(SbTextItem):
             self.maps[map] = {'progresVal' : 0, # current progress value
                               'downloading' : [], # layers, which are downloading data
                               'rendered' : [], # already rendered layers
-                              'range' : len(map.GetListOfLayers(l_active = True))}
+                              'range' : len(map.GetListOfLayers(active = True))}
         else:
             if layer not in self.maps[map]['rendered']:
                 self.maps[map]['rendered'].append(layer)

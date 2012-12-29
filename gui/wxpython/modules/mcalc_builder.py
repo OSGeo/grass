@@ -514,7 +514,7 @@ class MapCalcFrame(wx.Frame):
             return
         name = self.newmaptxt.GetValue().strip(' "') + '@' + grass.gisenv()['MAPSET']
         mapTree = self.parent.GetLayerTree()
-        if not mapTree.GetMap().GetListOfLayers(l_name = name):
+        if not mapTree.GetMap().GetListOfLayers(name = name):
             mapTree.AddLayer(ltype = 'raster',
                              lname = name,
                              lcmd = ['d.rast', 'map=%s' % name],

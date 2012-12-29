@@ -128,10 +128,10 @@ class NvizToolWindow(FN.FlatNotebook):
         
     def SetInitialMaps(self):
         """!Set initial raster and vector map"""
-        for l_type in ('raster', 'vector', '3d-raster'):
+        for ltype in ('raster', 'vector', '3d-raster'):
             selectedLayer = self.parent.GetLayerTree().GetSelectedLayer(multi = False, checkedOnly = True)
             selectedLayer = self.parent.GetLayerTree().GetLayerInfo(selectedLayer, key = 'maplayer')
-            layers = self.mapWindow.Map.GetListOfLayers(l_type = l_type, l_active = True)
+            layers = self.mapWindow.Map.GetListOfLayers(ltype = ltype, active = True)
             if selectedLayer in layers:
                 selection = selectedLayer.GetName()
             else:
@@ -139,12 +139,12 @@ class NvizToolWindow(FN.FlatNotebook):
                     selection = layers[0].GetName()
                 except:
                     continue
-            if l_type == 'raster':
+            if ltype == 'raster':
                 self.FindWindowById(self.win['surface']['map']).SetValue(selection)
                 self.FindWindowById(self.win['fringe']['map']).SetValue(selection)
-            elif l_type == 'vector':
+            elif ltype == 'vector':
                 self.FindWindowById(self.win['vector']['map']).SetValue(selection)
-            elif l_type == '3d-raster':
+            elif ltype == '3d-raster':
                 self.FindWindowById(self.win['volume']['map']).SetValue(selection)
                
     def UpdateState(self, **kwargs):
@@ -1506,7 +1506,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def GselectOnPopup(self, ltype, exclude = False):
         """Update gselect.Select() items"""
         maps = list()
-        for layer in self.mapWindow.Map.GetListOfLayers(l_type = ltype, l_active = True):
+        for layer in self.mapWindow.Map.GetListOfLayers(ltype = ltype, active = True):
             maps.append(layer.GetName())
         return maps, exclude
     
@@ -2054,7 +2054,7 @@ class NvizToolWindow(FN.FlatNotebook):
         @param name layer name
         @param mapType map type (raster, vector, 3d-raster)
         """
-        layers = self.mapWindow.Map.GetListOfLayers(l_type = mapType, l_name = name)
+        layers = self.mapWindow.Map.GetListOfLayers(ltype = mapType, name = name)
         if layers:
             return layers[0]
         return None
