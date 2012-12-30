@@ -30,6 +30,7 @@ import string
 import subprocess
 import re
 import platform
+import tempfile
 
 # Variables substituted during build process
 if os.environ.has_key('GISBASE'):
@@ -103,12 +104,16 @@ def cleanup_dir(path):
     
 def cleanup():
     tmpdir, lockfile, remove_lockfile
-    # all exits after setting up $tmpdir should also tidy it up
-    cleanup_dir(tmpdir)
-    try_rmdir(tmpdir)
+    # all exits after setting up tmp dirs (system/location) should
+    # also tidy it up
+    for tmpd in [tmpdir, os.path.join(location, ".tmp")]:
+        cleanup_dir(tmpd)
+        try_rmdir(tmpd)
+    
+    # remove lock-file if requested
     if lockfile and remove_lockfile:
         try_remove(lockfile)
-
+    
 def fatal(msg):
     sys.exit(msg)
 
@@ -209,6 +214,8 @@ def create_tmp():
     tmp = os.getenv('TMPDIR')
     if not tmp:
         tmp = os.getenv('TEMP')
+    if not tmp:
+        tmp = tempfile.gettempdir()
     if not tmp:
         tmp = '/tmp'
     tmpdir = os.path.join(tmp, "grass7-%s-%s" % (user, gis_lock))
