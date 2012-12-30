@@ -43,17 +43,18 @@ r.in.wms -c url=http://wms.cuzk.cz/wms.asp
 
 <h4>Open Street Map</h4>
 
+Note: European coverage:
 <div class="code"><pre>
 r.in.wms url=http://watzmann-geog.urz.uni-heidelberg.de/cached/osm layers=osm_auto:all output=osm format=png
 </pre></div>
-Note: European coverage
 
 <div class="code"><pre>
 r.in.wms url=http://irs.gis-lab.info layers=osm output=osm format=png
 </pre></div>
-Note: European coverage
 
-More OSM WMS servers can be found at the OSM wiki <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">site</a>
+More OSM WMS servers can be found online, e.g. on the OSM wiki in a 
+<a href="http://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
+and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-EUROPE</a> page.
 
 <h4>World data</h4>
 
@@ -64,7 +65,7 @@ r.in.wms url=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsa
 Note: server supports only WMS 1.1.1
 
 <div class="code"><pre>
-r.in.wms url=http://132.156.97.59/cgi-bin/worldmin_en-ca_ows layers=GSC:WORLD_PrecambrianDomains output=pokus srs=4326 format=jpeg 
+r.in.wms url=http://apps1.gdr.nrcan.gc.ca/cgi-bin/worldmin_en-ca_ows layers=GSC:WORLD_PrecambrianDomains output=pokus srs=4326 format=jpeg 
 </pre></div>
 
 Note: server supports only WMS 1.1.1 
