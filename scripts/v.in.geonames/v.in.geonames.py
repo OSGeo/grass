@@ -62,8 +62,8 @@ def main():
     if dbfdriver:
 	grass.warning(_("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
 
-    #let's go
-    #change TAB to vertical bar
+    # let's go
+    # change TAB to vertical bar
     num_places = 0
     inf = file(infile)
     outf = file(tmpfile, 'wb')
@@ -75,7 +75,7 @@ def main():
     outf.close()
     inf.close()
 
-    grass.message(_("Converted %d place names.") % num_places)
+    grass.message(_("Converting %d place names...") % num_places)
 
     # pump data into GRASS:
     #  http://download.geonames.org/export/dump/readme.txt
