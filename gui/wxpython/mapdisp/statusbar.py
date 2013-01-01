@@ -1049,7 +1049,8 @@ class SbProgress(SbTextItem):
             else:
                 stText += ', '
             stText += '<%s>' % layer.GetName()
-        stText += '...'
+        if stText:
+            stText += '...'
         
         if  self.maps[map]['range'] != len(self.maps[map]['rendered']):
             if stText:
