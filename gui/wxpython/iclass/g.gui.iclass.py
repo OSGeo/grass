@@ -35,6 +35,12 @@
 #% description: Name of raster map to load
 #% required: no
 #%end
+#%option G_OPT_V_MAP
+#% key: trainingmap
+#% label: Ground truth training map to load
+#% description:
+#% required: no
+#%end
 
 import os
 import sys
@@ -61,6 +67,10 @@ def main():
         map_name = grass.find_file(name = options['map'], element = 'cell')['fullname']
         if not map_name:
             grass.fatal(_("Raster map <%s> not found") % options['map'])
+    if options['trainingmap']:
+        trainingmap_name = grass.find_file(name = options['trainingmap'], element = 'vector')['fullname']
+        if not trainingmap_name:
+            grass.fatal(_("Vector map <%s> not found") % options['trainingmap'])
     
     # define display driver
     driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
@@ -81,7 +91,11 @@ def main():
     if map_name:
         giface.WriteLog(_("Loading raster map <%s>...") % map_name)
         frame.trainingMapManager.AddLayer(map_name)
+    if trainingmap_name:
+        giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
+        frame.ImportAreas(trainingmap_name)
     
+    frame.CenterOnScreen()
     frame.Show()
     
     app.MainLoop()
