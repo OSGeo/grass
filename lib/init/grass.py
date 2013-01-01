@@ -106,9 +106,12 @@ def cleanup():
     tmpdir, lockfile, remove_lockfile
     # all exits after setting up tmp dirs (system/location) should
     # also tidy it up
-    for tmpd in [tmpdir, os.path.join(location, ".tmp")]:
-        cleanup_dir(tmpd)
-        try_rmdir(tmpd)
+    cleanup_dir(tmpdir)
+    try_rmdir(tmpdir)
+    if location:
+        tmpdir_loc = os.path.join(location, ".tmp")
+        cleanup_dir(tmpdir_loc)
+        try_rmdir(tmpdir_loc)
     
     # remove lock-file if requested
     if lockfile and remove_lockfile:
