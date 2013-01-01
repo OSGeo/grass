@@ -58,7 +58,7 @@ from core.giface    import StandaloneGrassInterface
 from iclass.frame   import IClassMapFrame
 
 def main():
-    group_name = map_name = None
+    group_name = map_name = trainingmap_name = None
     if options['group']:
         group_name = grass.find_file(name = options['group'], element = 'group')['name']
         if not group_name:
