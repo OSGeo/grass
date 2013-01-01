@@ -28,6 +28,10 @@
 #% keywords: classification
 #% keywords: signatures
 #%end
+#%flag
+#% key: m
+#% description: Maximize window
+#%end
 #%option G_OPT_I_GROUP
 #% required: no
 #%end
@@ -94,9 +98,13 @@ def main():
     if trainingmap_name:
         giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
         frame.ImportAreas(trainingmap_name)
-    
-    frame.CenterOnScreen()
-    frame.Show()
+
+    frame.Show()    
+    if flags['m']:
+        frame.Maximize()
+    else:
+        frame.CenterOnScreen()
+
     
     app.MainLoop()
     
