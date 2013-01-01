@@ -287,6 +287,25 @@ class UpdateThread(Thread):
             
             elif name == 'SubGroupSelect':
                 self.data[win.Insert] = { 'group' : p.get('value', '')}
+
+            elif name == 'SignatureSelect':
+                if p.get('prompt', 'group') == 'group':
+                    group = p.get('value', '')
+                    pSubGroup = self.task.get_param('subgroup', element = 'prompt', raiseError = False)
+                    if pSubGroup:
+                        subgroup = pSubGroup.get('value', '')
+                    else:
+                        subgroup = None
+                else:
+                    subgroup = p.get('value', '')
+                    pGroup = self.task.get_param('group', element = 'prompt', raiseError = False)
+                    if pGroup:
+                        group = pGroup.get('value', '')
+                    else:
+                        group = None
+                
+                self.data[win.Insert] = { 'group' : group,
+                                          'subgroup' : subgroup}
             
             elif name == 'LocationSelect':
                 pDbase = self.task.get_param('dbase', element = 'element', raiseError = False)
@@ -1106,6 +1125,7 @@ class CmdPanel(wx.Panel):
                 if p.get('prompt','') not in ('color',
                                               'color_none',
                                               'subgroup',
+                                              'sigfile',
                                               'dbdriver',
                                               'dbname',
                                               'dbtable',
@@ -1222,12 +1242,21 @@ class CmdPanel(wx.Panel):
                 elif prompt == 'subgroup':
                     selection = gselect.SubGroupSelect(parent = which_panel)
                     p['wxId'] = [ selection.GetId() ]
-                    selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                    selection.Bind(wx.EVT_TEXT,     self.OnSetValue)
+                    selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                    selection.Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(item = selection, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                     border = 5)
 
+                # sigrature file
+                elif prompt == 'sigfile':
+                    selection = gselect.SignatureSelect(parent = which_panel)
+                    p['wxId'] = [ selection.GetId() ]
+                    selection.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    which_sizer.Add(item = selection, proportion = 0,
+                                    flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                    border = 5)
+                
                 # layer, dbdriver, dbname, dbcolumn, dbtable entry
                 elif prompt in ('dbdriver',
                                 'dbname',
@@ -1553,6 +1582,8 @@ class CmdPanel(wx.Panel):
                 pGroup = p
             elif prompt == 'subgroup':
                 pSubGroup = p
+            elif prompt == 'sigfile':
+                pSigFile = p
             elif prompt == 'dbase':
                 pDbase = p
             elif prompt == 'location':
@@ -1587,8 +1618,11 @@ class CmdPanel(wx.Panel):
             pTable['wxId-bind'] = pColumnIds
         
         if pGroup and pSubGroup:
-            pGroup['wxId-bind'] = pSubGroup['wxId']
-
+            if pSigFile:
+                pGroup['wxId-bind'] = copy.copy(pSigFile['wxId'])
+                pSubGroup['wxId-bind'] = pSigFile['wxId']
+            pGroup['wxId-bind'] += pSubGroup['wxId']
+        
         if pDbase and pLocation:
             pDbase['wxId-bind'] = pLocation['wxId']
 

@@ -23,6 +23,7 @@ Classes:
  - gselect::ElementSelect
  - gselect::OgrTypeSelect
  - gselect::CoordinatesSelect
+ - gselect::SignatureSelect
 
 (C) 2007-2012 by the GRASS Development Team 
 
@@ -2074,3 +2075,42 @@ class CoordinatesSelect(wx.Panel):
     def GetTextWin(self):
         """!Get TextCtrl widget"""
         return self.coordsField
+
+class SignatureSelect(wx.ComboBox):
+    """!Widget for selecting signatures"""
+    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
+                 **kwargs):
+        super(SignatureSelect, self).__init__(parent, id, size = size, 
+                                              **kwargs)
+        self.SetName("SignatureSelect")
+
+    def Insert(self, group, subgroup = None):
+        """!Insert signatures for defined group/subgroup
+
+        @param group group name (can be fully-qualified)
+        @param subgroup non fully-qualified name of subgroup
+        """
+        if not group:
+            return
+        gisenv = grass.gisenv()
+        try:
+            name, mapset = group.split('@', 1)
+        except ValueError:
+            name = group
+            mapset = gisenv['MAPSET']
+        
+        path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'], mapset,
+                            'group', name)
+        
+        if subgroup:
+            path = os.path.join(path, 'subgroup', subgroup)
+        try:
+            items = list()
+            for element in os.listdir(path):
+                if element in ('subgroup', 'REF'):
+                    continue
+                items.append(element)
+            self.SetItems(items)
+        except OSError:
+            self.SetItems([])
+        self.SetValue('')
