@@ -1544,6 +1544,7 @@ class CmdPanel(wx.Panel):
         pColumn = []
         pGroup = None
         pSubGroup = None
+        pSigFile = None
         pDbase = None
         pLocation = None
         pMapset = None
@@ -1619,9 +1620,10 @@ class CmdPanel(wx.Panel):
         
         if pGroup and pSubGroup:
             if pSigFile:
-                pGroup['wxId-bind'] = copy.copy(pSigFile['wxId'])
+                pGroup['wxId-bind'] = copy.copy(pSigFile['wxId']) + pSubGroup['wxId']
                 pSubGroup['wxId-bind'] = pSigFile['wxId']
-            pGroup['wxId-bind'] += pSubGroup['wxId']
+            else:
+                pGroup['wxId-bind'] = pSubGroup['wxId']
         
         if pDbase and pLocation:
             pDbase['wxId-bind'] = pLocation['wxId']
