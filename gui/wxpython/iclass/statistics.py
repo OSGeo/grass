@@ -64,6 +64,7 @@ class Statistics:
         self.color = color
         
         rasterPath = grass.tempfile(create = False)
+        name = name.replace(' ', '_')
         self.rasterName = name + '_' + os.path.basename(rasterPath)
         
     def SetStatistics(self, cStatistics):

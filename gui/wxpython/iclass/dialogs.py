@@ -26,6 +26,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from core               import globalvar
 from core.settings      import UserSettings
+from core.gcmd          import GMessage
 from gui_core.dialogs   import ElementDialog, GroupDialog
 from gui_core           import gselect
 from iclass.statistics  import Statistics, BandStatistics
@@ -243,6 +244,12 @@ class CategoryListCtrl(wx.ListCtrl,
         
     def SetVirtualData(self, row, column, text):
         attr = self.columns[column][1]
+        if attr == 'name':
+            try:
+                text.encode('ascii')
+            except UnicodeEncodeError:
+                GMessage(parent = self, message = _("Please use only ASCII characters."))
+                return
         setattr(self.statisticsDict[self.statisticsList[row]], attr, text)
         
         self.UpdateChoice()
