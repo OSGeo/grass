@@ -1081,13 +1081,13 @@ class GroupDialog(wx.Dialog):
                 self.ApplyChanges()
                 
             dlg.Destroy()
-            
-            
         
+        maps = list()
         groups = self.GetExistGroups()
         if group in groups:
-            self.ShowGroupLayers(self.GetGroupLayers(group))
-            
+            maps = self.GetGroupLayers(group)
+        
+        self.ShowGroupLayers(maps)
         self.currentGroup = group
         self.groupChanged = False
         
@@ -1096,8 +1096,7 @@ class GroupDialog(wx.Dialog):
     def ShowGroupLayers(self, mapList):
         """!Show map layers in currently selected group"""
         self.layerBox.Set(mapList)
-        
-        
+                
     def EditGroup(self, group):
         """!Edit selected group"""
         layersNew = self.GetLayers()
@@ -1168,7 +1167,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Creating of new group <%s> failed.") % group
             else:
                 label = _("Changing of group <%s> failed.") % group
-                
+            
         self.infoLabel.SetLabel(label)
         wx.FutureCall(4000, self.ClearNotification)
         
