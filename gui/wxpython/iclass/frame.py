@@ -176,7 +176,10 @@ class IClassMapFrame(DoubleMapFrame):
         self.SendSizeEvent()
         
     def OnCloseWindow(self, event):
+        verbosity = os.getenv('GRASS_VERBOSE', '2')
+        os.environ['GRASS_VERBOSE'] = '0' # be silent
         self.GetFirstWindow().digit.GetDisplay().CloseMap()
+        os.environ['GRASS_VERBOSE'] = verbosity
         self.Destroy()
         
     def __del__(self):
@@ -391,24 +394,26 @@ class IClassMapFrame(DoubleMapFrame):
         zoommenu = wx.Menu()
         # Add items to the menu
 
-        zoomsource = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust Training Area Display to Preview Display'))
-        zoommenu.AppendItem(zoomsource)
-        self.Bind(wx.EVT_MENU, self.OnZoomToPreview, zoomsource)
-
-        zoomtarget = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust Preview display to Training Area Display'))
-        zoommenu.AppendItem(zoomtarget)
-        self.Bind(wx.EVT_MENU, self.OnZoomToTraining, zoomtarget)
-
-        zoombind = wx.MenuItem(zoommenu, wx.ID_ANY, _("Display synchronization ON"))
-        zoommenu.AppendItem(zoombind)
-        self.Bind(wx.EVT_MENU, lambda event: self.SetBindRegions(True), zoombind)
-
-        zoomunbind = wx.MenuItem(zoommenu, wx.ID_ANY, _("Display synchronization OFF"))
-        zoommenu.AppendItem(zoomunbind)
-        self.Bind(wx.EVT_MENU, lambda event: self.SetBindRegions(False), zoomunbind)
-
-        zoomunbind.Enable(self._bindRegions)
-        zoombind.Enable(not self._bindRegions)
+        i = 0
+        for label, handler in ((_('Zoom to computational region'), self.OnZoomToWind),
+                               (None, None),
+                               (_('Adjust Training Area Display to Preview Display'), self.OnZoomToPreview),
+                               (_('Adjust Preview display to Training Area Display'), self.OnZoomToTraining),
+                               (_("Display synchronization ON"), lambda event: self.SetBindRegions(True)),
+                               (_("Display synchronization OFF"), lambda event: self.SetBindRegions(False))):
+            if label is None:
+                zoommenu.AppendSeparator()
+                continue
+            
+            item = wx.MenuItem(zoommenu, wx.ID_ANY, label)
+            zoommenu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, handler, item)
+            if i == 3:
+                item.Enable(not self._bindRegions)
+            elif i == 4:
+                item.Enable(self._bindRegions)
+            i += 1
+        
         # Popup the menu. If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
@@ -875,7 +880,7 @@ class IClassMapFrame(DoubleMapFrame):
                                      stats.name,
                                      stats.color,
                                      stats.nstd)
-                                     
+            
             ret = I_iclass_analysis(statistics, self.refer, self.poMapInfo, "1",
                                  self.group, stats.rasterName)
             if ret > 0:
