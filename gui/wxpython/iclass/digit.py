@@ -123,6 +123,8 @@ class IClassDisplayDriver(DisplayDriver):
         """
         if robj.type == TYPE_AREA:
             self._cat = Vect_get_area_cat(self.poMapInfo, robj.fid, 1)
+        elif robj.type == TYPE_CENTROIDIN:
+            return # skip centroids
         DisplayDriver._drawObject(self, robj)
         
     def _definePen(self, rtype):
