@@ -998,7 +998,7 @@ class GroupDialog(wx.Dialog):
         
         bodySizer.AddSpacer(10)
         # layers in group
-        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Layers in selected group:")),
+        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Raster maps in selected group:")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5)
         
         buttonSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1072,7 +1072,7 @@ class GroupDialog(wx.Dialog):
     def GroupSelected(self):
         """!Group was selected, check if changes were apllied"""
         group = self.GetSelectedGroup()
-        if self.groupChanged:
+        if  self.currentGroup and self.groupChanged:
             dlg = wx.MessageDialog(self, message = _("Group <%s> was changed, "
                                                      "do you want to apply changes?") % self.currentGroup,
                                    caption = _("Unapplied changes"),
@@ -1137,6 +1137,10 @@ class GroupDialog(wx.Dialog):
     def CreateNewGroup(self, group):
         """!Create new group"""
         layers = self.GetLayers()
+        if not layers:
+            GMessage(parent = self,
+                     message = _("No raster maps selected."))
+            return 1
         
         kwargs = {}
         if self.subGroup.IsChecked():
@@ -1177,15 +1181,19 @@ class GroupDialog(wx.Dialog):
         
     def GetGroupLayers(self, group):
         """!Get layers in group"""
+        kwargs = dict()
+        kwargs['group'] = group
+        if self.subGroup.IsChecked():
+            kwargs['subgroup'] = group
+        
         res = RunCommand('i.group',
                          parent = self,
                          flags = 'g',
-                         group = group,
-                         read = True).strip()
-        if res.split('\n')[0]:
-            return res.split('\n')
-        return []
-        
+                         read = True, **kwargs)
+        if not res:
+            return []
+        return res.splitlines()
+    
     def ClearNotification(self):
         """!Clear notification string"""
         self.infoLabel.SetLabel("")
