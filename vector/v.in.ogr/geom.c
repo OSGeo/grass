@@ -179,13 +179,13 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
 
     if (eType == wkbPolygon) {
-	G_debug(3, "Polygon");
+	G_debug(5, "Polygon");
 	nr = OGR_G_GetGeometryCount(hGeom);
 	n_polygon_boundaries += nr;
 
     }
     else if (eType == wkbGeometryCollection || eType == wkbMultiPolygon) {
-	G_debug(3, "GeometryCollection or MultiPolygon");
+	G_debug(5, "GeometryCollection or MultiPolygon");
 	nr = OGR_G_GetGeometryCount(hGeom);
 	for (i = 0; i < nr; i++) {
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
@@ -201,12 +201,12 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
 	return 0;
 
     if (eType == wkbLineString) {
-	G_debug(3, "Polygon");
+	G_debug(5, "Polygon");
 	n_polygon_boundaries++;
 
     }
     else if (eType == wkbGeometryCollection || eType == wkbMultiLineString) {
-	G_debug(3, "GeometryCollection or MultiPolygon");
+	G_debug(5, "GeometryCollection or MultiPolygon");
 	nr = OGR_G_GetGeometryCount(hGeom);
 	for (i = 0; i < nr; i++) {
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
@@ -218,6 +218,7 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
 	}
     }
 
+    G_debug(1, "poly_count(): n_poly_boundaries=%d", n_polygon_boundaries);
     return 0;
 }
 
@@ -287,7 +288,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     }
 
     else if (eType == wkbPolygon) {
-	G_debug(3, "Polygon");
+	G_debug(4, "\tPolygon");
 
 	/* SFS: 1 exterior boundary and 0 or more interior boundaries.
 	 *  So I hope that exterior is the first one, even if it is not explicitly told  */
@@ -316,7 +317,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 
 	size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
 	if (size < min_area) {
-	    G_debug(2, "Area size [%.1e], area not imported", size);
+	    G_debug(2, "\tArea size [%.1e], area not imported", size);
 	    return 0;
 	}
 
@@ -336,7 +337,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 					  sizeof(struct line_pnts *));
 	valid_isles = 0;
 	for (i = 1; i < nr; i++) {
-	    G_debug(3, "Inner ring %d", i);
+	    G_debug(3, "\tInner ring %d", i);
 
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
 
@@ -362,7 +363,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 				      IPoints[valid_isles]->y,
 				      IPoints[valid_isles]->n_points);
 		if (size < min_area) {
-		    G_debug(2, "Island size [%.1e], island not imported",
+		    G_debug(2, "\tIsland size [%.1e], island not imported",
 			      size);
 		}
 		else {
@@ -433,7 +434,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     else if (eType == wkbGeometryCollection
 	     || eType == wkbMultiPolygon
 	     || eType == wkbMultiLineString || eType == wkbMultiPoint) {
-	G_debug(3, "GeometryCollection or MultiPolygon/LineString/Point");
+	G_debug(4, "\tGeometryCollection or MultiPolygon/LineString/Point");
 	nr = OGR_G_GetGeometryCount(hGeom);
 	for (i = 0; i < nr; i++) {
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
