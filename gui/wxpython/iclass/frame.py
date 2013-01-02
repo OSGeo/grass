@@ -45,7 +45,7 @@ from mapdisp.mapwindow  import BufferedWindow
 from vdigit.toolbars    import VDigitToolbar
 from gui_core.mapdisp   import DoubleMapFrame
 from core.render        import Map, MapLayer
-from core.gcmd          import RunCommand, GMessage, GError
+from core.gcmd          import RunCommand, GMessage, GError, GWarning
 from gui_core.dialogs   import SetOpacityDialog
 from dbmgr.vinfo        import VectorDBInfo
 import grass.script as grass
@@ -522,6 +522,14 @@ class IClassMapFrame(DoubleMapFrame):
             wx.EndBusyCursor()
             return False
 
+        # check if attribute table really exists (fix broken connections)
+        for layer in grass.vector_db(vector):
+            if 0 != RunCommand('v.db.select', map = vector, where = "0 = 1"):
+                GWarning(_("Vector map <%s>: no attribute table found") % vector,
+                         parent = self)
+                RunCommand('v.db.connect', flags = 'd', map = vector, layer = layer,
+                           quiet = True)
+        
         if 0 != RunCommand('g.copy',
                            vect = [vector, self.trainingAreaVector],
                            overwrite = True, quiet = True,
@@ -633,11 +641,13 @@ class IClassMapFrame(DoubleMapFrame):
             vName = dlg.GetVectorName()
             self.exportVector = vName
             withTable = dlg.WithTable()
+            dlg.Destroy()
             
-            self.ExportAreas(vectorName = vName, withTable = withTable)
-            
-        dlg.Destroy()
-        
+            if self.ExportAreas(vectorName = vName, withTable = withTable):
+                GMessage(_("%d training areas (%d classes) exported to vector map <%s>.") % \
+                             (self.GetAreasCount(), len(self.statisticsList),
+                              self.exportVector), parent = self)
+                    
     def ExportAreas(self, vectorName, withTable):
         """!Export training areas to new vector map (with attribute table).
         
@@ -657,7 +667,7 @@ class IClassMapFrame(DoubleMapFrame):
                            vect = [self.trainingAreaVector, vectorName],
                            overwrite = True, quiet = True, parent = self):
             wx.EndBusyCursor()
-            return
+            return False
         
         # remove connection if exists
         dbinfo = grass.vector_db(vectorName)
@@ -670,7 +680,7 @@ class IClassMapFrame(DoubleMapFrame):
             
         if not withTable:
             wx.EndBusyCursor()
-            return
+            return False
             
         # add new table
         columns = ["class varchar(30)",
@@ -690,7 +700,7 @@ class IClassMapFrame(DoubleMapFrame):
                            columns = columns,
                            parent = self):
             wx.EndBusyCursor()
-            return
+            return False
         
         # populate table
         for cat in self.statisticsList:
@@ -710,7 +720,8 @@ class IClassMapFrame(DoubleMapFrame):
                 self._runDBUpdate(map = vectorName, column = "band%d_max" % (i + 1), value = stat.bands[i].max, cat = cat)
                 
         wx.EndBusyCursor()
-        
+        return True
+    
     def _runDBUpdate(self, map, column, value, cat):
         """!Helper function for calling v.db.update.
         
