@@ -1001,23 +1001,23 @@ class GroupDialog(wx.Dialog):
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("Layers in selected group:")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5)
         
-        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        gridSizer.AddGrowableCol(0)
+        buttonSizer = wx.BoxSizer(wx.VERTICAL)
+        listSizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.layerBox = wx.ListBox(parent = self,  id = wx.ID_ANY, size = (-1, 150),
                                    style = wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
-        
-        gridSizer.Add(item = self.layerBox, pos = (0, 0), span = (2, 1), flag = wx.EXPAND)
+        listSizer.Add(item = self.layerBox, proportion = 1, flag = wx.EXPAND)
         
         self.addLayer = wx.Button(self, id = wx.ID_ADD)
         self.addLayer.SetToolTipString(_("Select map layers and add them to the list."))
-        gridSizer.Add(item = self.addLayer, pos = (0, 1), flag = wx.EXPAND)
+        buttonSizer.Add(item = self.addLayer, flag = wx.BOTTOM, border = 10)
         
         self.removeLayer = wx.Button(self, id = wx.ID_REMOVE)
         self.removeLayer.SetToolTipString(_("Remove selected layer(s) from list."))
-        gridSizer.Add(item = self.removeLayer, pos = (1, 1))
+        buttonSizer.Add(item = self.removeLayer)
+        listSizer.Add(item = buttonSizer, flag = wx.LEFT, border = 5)
         
-        bodySizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
+        bodySizer.Add(item = listSizer, proportion = 1, flag = wx.EXPAND)
         
         self.infoLabel = wx.StaticText(parent = self, id = wx.ID_ANY)
         bodySizer.Add(item = self.infoLabel, 
