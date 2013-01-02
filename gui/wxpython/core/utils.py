@@ -866,7 +866,11 @@ def SetAddOnPath(addonPath = None, key = 'PATH'):
     
     StoreEnvVariable(key = 'GRASS_ADDON_' + key, value = addonPath)
     os.environ['GRASS_ADDON_' + key] = addonPath
-
+    
+    # update path
+    if addonPath not in os.environ['PATH']:
+        os.environ['PATH'] = addonPath + os.pathsep + os.environ['PATH']
+    
 # From lib/gis/col_str.c, except purple which is mentioned
 # there but not given RGB values
 str2rgb = {'aqua': (100, 128, 255),
