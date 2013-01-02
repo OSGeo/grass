@@ -526,7 +526,7 @@ class IClassMapFrame(DoubleMapFrame):
 
         # check if attribute table really exists (fix broken connections)
         for layer in grass.vector_db(vector):
-            if 0 != RunCommand('v.db.select', map = vector, where = "0 = 1"):
+            if 0 != RunCommand('v.db.select', flags = 'c', map = vector, where = "0 = 1"):
                 GWarning(_("Vector map <%s>: no attribute table found") % vector,
                          parent = self)
                 RunCommand('v.db.connect', flags = 'd', map = vector, layer = layer,
