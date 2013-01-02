@@ -511,6 +511,13 @@ class IClassMapFrame(DoubleMapFrame):
         """
         wx.BeginBusyCursor()
         wx.Yield()
+
+        if 0 != RunCommand('g.copy',
+                           vect = [vector, self.trainingAreaVector],
+                           overwrite = True, quiet = True,
+                           parent = self):
+            wx.EndBusyCursor()
+            return False
         
         mapLayer = self.toolbars['vdigit'].mapLayer
         # set mapLayer temporarily to None
@@ -519,14 +526,6 @@ class IClassMapFrame(DoubleMapFrame):
         
         ret =  self.toolbars['vdigit'].StopEditing()
         if not ret:
-            wx.EndBusyCursor()
-            return False
-            
-        ret, msg = RunCommand('g.copy',
-                              vect = [vector, self.trainingAreaVector],
-                              overwrite = True,
-                              getErrorMsg = True)
-        if ret != 0:
             wx.EndBusyCursor()
             return False
             
@@ -654,15 +653,18 @@ class IClassMapFrame(DoubleMapFrame):
 
         if '@' in vectorName:
             vectorName = vectorName.split('@')[0]
-        RunCommand('g.copy',
-                    vect = ','.join([self.trainingAreaVector, vectorName]),
-                    overwrite = True)
-        # remove connection if exists:
+        if 0 != RunCommand('g.copy',
+                           vect = [self.trainingAreaVector, vectorName],
+                           overwrite = True, quiet = True, parent = self):
+            wx.EndBusyCursor()
+            return
+        
+        # remove connection if exists
         dbinfo = grass.vector_db(vectorName)
         if dbinfo:
             for layer in dbinfo.keys():
                 RunCommand('v.db.connect', flags = 'd', map = vectorName, layer = layer)
-
+        
         mapset = grass.gisenv()['MAPSET']
         self.poMapInfo = displayDriver.OpenMap(name = self.trainingAreaVector, mapset = mapset)
             
@@ -670,7 +672,7 @@ class IClassMapFrame(DoubleMapFrame):
             wx.EndBusyCursor()
             return
             
-        # add table
+        # add new table
         columns = ["class varchar(30)",
                    "color varchar(11)",
                    "n_cells integer",]
@@ -683,16 +685,13 @@ class IClassMapFrame(DoubleMapFrame):
                                                                     'stat' : statistic,
                                                                     'format' : format})
         
-        ret, msg = RunCommand('v.db.addtable',
-                         map = vectorName,
-                         columns = columns,
-                         getErrorMsg = True)
-        if ret != 0:
+        if 0 != RunCommand('v.db.addtable',
+                           map = vectorName,
+                           columns = columns,
+                           parent = self):
             wx.EndBusyCursor()
-            GMessage(parent = self, message = _("Failed to add attribute table. "
-                                                "Details:\n%s" % msg))
             return
-            
+        
         # populate table
         for cat in self.statisticsList:
             stat = self.statisticsDict[cat]
@@ -709,7 +708,7 @@ class IClassMapFrame(DoubleMapFrame):
                 self._runDBUpdate(map = vectorName, column = "band%d_min" % (i + 1), value = stat.bands[i].min, cat = cat)
                 self._runDBUpdate(map = vectorName, column = "band%d_mean" % (i + 1), value = stat.bands[i].mean, cat = cat)
                 self._runDBUpdate(map = vectorName, column = "band%d_max" % (i + 1), value = stat.bands[i].max, cat = cat)
-        
+                
         wx.EndBusyCursor()
         
     def _runDBUpdate(self, map, column, value, cat):

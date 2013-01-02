@@ -647,6 +647,10 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     if stdin:
         kwargs['stdin'] = subprocess.PIPE
 
+    if parent:
+        messageFormat = os.getenv('GRASS_MESSAGE_FORMAT', 'gui')
+        os.environ['GRASS_MESSAGE_FORMAT'] = 'standard'
+    
     Debug.msg(2, "gcmd.RunCommand(): command started")
     start = time.time()
     
@@ -659,6 +663,9 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     
     Debug.msg(3, "gcmd.RunCommand(): decoding string")
     stdout, stderr = map(DecodeString, ps.communicate())
+    
+    if parent: # restore previous settings
+        os.environ['GRASS_MESSAGE_FORMAT'] = messageFormat
     
     ret = ps.returncode
     Debug.msg(1, "gcmd.RunCommand(): get return code %d (%.6f sec)" % \
