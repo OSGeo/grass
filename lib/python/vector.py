@@ -47,7 +47,7 @@ def vector_db(map, **args):
     
     @return dictionary
     """
-    s = read_command('v.db.connect', flags = 'g', map = map, sep = ';', **args)
+    s = read_command('v.db.connect', quiet = True, flags = 'g', map = map, sep = ';', **args)
     result = {}
     
     for l in s.splitlines():
