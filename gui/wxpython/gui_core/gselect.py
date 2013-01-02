@@ -2106,9 +2106,7 @@ class SignatureSelect(wx.ComboBox):
             path = os.path.join(path, 'subgroup', subgroup)
         try:
             items = list()
-            for element in os.listdir(path):
-                if element in ('subgroup', 'REF'):
-                    continue
+            for element in os.listdir(os.path.join(path, 'sig')):
                 items.append(element)
             self.SetItems(items)
         except OSError:
