@@ -61,9 +61,8 @@ class IClassMapToolbar(BaseToolbar):
         # add tool to toggle active map window
         self.togglemapid = wx.NewId()
         self.togglemap = wx.Choice(parent = self, id = self.togglemapid,
-                                   choices = [_('Training'), _('Preview')],
-                                   style = wx.CB_READONLY)
-
+                                   choices = [_('Training'), _('Preview')])
+        
         self.InsertControl(9, self.togglemap)
 
         self.SetToolShortHelp(self.togglemapid, '%s %s %s' % (_('Set map canvas for '),
