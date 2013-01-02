@@ -41,9 +41,9 @@ iClassIcons = {
         'delCmd' : MetaIcon(img = 'layer-remove',
                             label = _('Delete selected map layer')),
         'exportAreas' : MetaIcon(img = 'layer-export',
-                            label = _('Export training areas')),
+                            label = _('Export training areas to vector map')),
         'importAreas' : MetaIcon(img = 'layer-import',
-                            label = _('Import training areas')),
+                            label = _('Import training areas from vector map')),
         'addRgb' : MetaIcon(img = 'layer-rgb-add',
                             label = _('Add RGB map layer')),
         }
