@@ -22,6 +22,7 @@ from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit   import IVDigit
 from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
 try:
+    from grass.lib.gis    import G_verbose, G_set_verbose
     from grass.lib.vector import *
     from grass.lib.vedit  import *
 except ImportError:
@@ -139,3 +140,10 @@ class IClassDisplayDriver(DisplayDriver):
             brush = wx.Brush(self.window.GetCategoryColor(self._cat), wx.SOLID)
         
         return pen, brush
+
+    def CloseMap(self):
+        """!Close training areas map - be quiet"""
+        verbosity = G_verbose()
+        G_set_verbose(0)
+        DisplayDriver.CloseMap(self)
+        G_set_verbose(verbosity)
