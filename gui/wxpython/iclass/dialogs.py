@@ -9,6 +9,7 @@ Classes:
  - dialogs::IClassCategoryManagerDialog
  - dialogs::CategoryListCtrl
  - dialogs::IClassSignatureFileDialog
+ - dialogs::IClassExportAreasDialog
 
 (C) 2006-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -530,7 +531,8 @@ class IClassExportAreasDialog(wx.Dialog):
         
         self.vectorNameCtrl.Bind(wx.EVT_TEXT, self.OnTextChanged)
         self.OnTextChanged(None)
-        
+        wx.CallAfter(self.vectorNameCtrl.SetFocus)
+
     def OnTextChanged(self, event):
         """!Name of new vector map given.
         
