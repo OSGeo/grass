@@ -678,6 +678,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
             Debug.msg(2, "gcmd.RunCommand(): nothing to print ???")
         else:
             GError(parent = parent,
+                   caption = _("Error in %s") % prog,
                    message = stderr)
     
     Debug.msg(3, "gcmd.RunCommand(): print read error")
