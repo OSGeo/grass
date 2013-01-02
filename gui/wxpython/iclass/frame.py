@@ -476,10 +476,7 @@ class IClassMapFrame(DoubleMapFrame):
         dlg = IClassMapDialog(self, title = _("Import vector map"), element = 'vector')
         if dlg.ShowModal() == wx.ID_OK:
             vName = dlg.GetMap()
-            warning = self._checkImportedTopo(vName)
-            if warning:
-                GMessage(parent = self, message = warning)
-                
+            
             self.ImportAreas(vName)
             
         dlg.Destroy()
@@ -509,6 +506,11 @@ class IClassMapFrame(DoubleMapFrame):
         
         @param vector vector map name
         """
+        warning = self._checkImportedTopo(vector)
+        if warning:
+             GMessage(parent = self, message = warning)
+             return
+        
         wx.BeginBusyCursor()
         wx.Yield()
 

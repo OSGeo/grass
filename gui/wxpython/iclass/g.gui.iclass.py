@@ -90,6 +90,8 @@ def main():
     # show main frame
     giface = StandaloneGrassInterface()
     frame = IClassMapFrame(parent = None, giface = giface)
+    if not flags['m']:
+        frame.CenterOnScreen()
     if group_name:
         frame.SetGroup(group_name) 
     if map_name:
@@ -99,8 +101,6 @@ def main():
         giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
         frame.ImportAreas(trainingmap_name)
 
-    if not flags['m']:
-        frame.CenterOnScreen()
     frame.Show()    
     if flags['m']:
         frame.Maximize()
