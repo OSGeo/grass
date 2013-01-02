@@ -729,25 +729,24 @@ class LayerSelect(wx.ComboBox):
             layers.append('-1')
 
         if vector:
-            # TODO: use Vect_get_field2() in C modules where possible
-            # currently the following is identical to
-            # layers = utils.GetVectorNumberOfLayers(self, vector)
-
-            ret = RunCommand('v.db.connect',
+            ret = RunCommand('v.category',
                              read = True,
                              quiet = True,
-                             sep = '|',
+                             option = 'report',
                              flags = 'g',
-                             map = vector)
+                             input = vector)
             if ret:
                 for line in ret.splitlines():
-                    layerinfo = line.split('|')
-                    layername = layerinfo[0].split('/')
+                    if 'all' not in line:
+                        continue
+                    try:
+                        layer = line.split(' ')[0]
+                    except IndexError:
+                        continue
                     # use this to get layer names
                     # but only when all modules use Vect_get_field2()
                     # which is not the case right now
-                    ### layers.append(layername[len(layername) - 1])
-                    layers.append(layername[0])
+                    layers.append(layer)
 
         elif dsn:
             ret = RunCommand('v.in.ogr',
