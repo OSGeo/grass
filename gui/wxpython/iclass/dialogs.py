@@ -168,9 +168,9 @@ class IClassCategoryManagerDialog(wx.Dialog):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
         panel.SetSizer(mainSizer)
-        mainSizer.Fit(panel)
+        mainSizer.Fit(self)
 
-        self.SetSize((-1, 250))
+        self.SetSize((400, 250))
 
         self.Layout()
 
