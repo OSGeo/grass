@@ -65,7 +65,7 @@ For nodes created using the <em>nodes</em> operation
 (method 2 above), it is possible to create an attribute table for the 
 new nodes in layer 2 using the attribute table manager and connect it to
 layer 2 ("manage layers" tab) or to create a table with
-<em><a href="v.db.addtable.html">v.db.addtable</a>, 
+<em><a href="v.db.addtable.html">v.db.addtable</a></em>, 
 connect it to layer 2 with <em><a href="v.db.connect.html">v.db.connect</a></em>,
 and update the new table with cat values with <em><a href="v.to.db.html">v.to.db</a></em>. 
 
@@ -106,10 +106,9 @@ represented by the grass-internal geometry type <em>node</em> and arcs
 by the geometry type <em>line</em>. 
 
 If vector editing is required to modify the
-graph, <em><a href="wxGUI.Vector_Digitizer.html">wxGUI vector
-digitizer</a></em> or <em><a href="v.edit.html">v.edit</a></em> can be
-used. 
-See also the <a href="lrs.html">Linear Referencing System</a> available in
+graph, <em><a href="g.gui.vdigit.html">g.gui.vdigit</a></em>
+or <em><a href="v.edit.html">v.edit</a></em> can be used.  See also
+the <a href="lrs.html">Linear Referencing System</a> available in
 GRASS GIS.
 
 <h3>EXAMPLES</h3>
@@ -145,8 +144,12 @@ v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net operation=arcs f
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="wxGUI.Vector_Digitizer.html">wxGUI vector digitizer</a>,
-<a href="v.edit.html">v.edit</a>,<br>
+<a href="g.gui.vdigit.html">g.gui.vdigit</a>,
+<a href="v.edit.html">v.edit</a>
+</em>
+
+<p>
+<em>
 <a href="v.net.alloc.html">v.net.alloc</a>,
 <a href="v.net.allpairs.html">v.net.allpairs</a>,
 <a href="v.net.bridge.html">v.net.bridge</a>,
