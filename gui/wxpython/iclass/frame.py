@@ -512,13 +512,6 @@ class IClassMapFrame(DoubleMapFrame):
         wx.BeginBusyCursor()
         wx.Yield()
 
-        if 0 != RunCommand('g.copy',
-                           vect = [vector, self.trainingAreaVector],
-                           overwrite = True, quiet = True,
-                           parent = self):
-            wx.EndBusyCursor()
-            return False
-        
         mapLayer = self.toolbars['vdigit'].mapLayer
         # set mapLayer temporarily to None
         # to avoid 'save changes' code in vdigit.toolbars
@@ -526,6 +519,13 @@ class IClassMapFrame(DoubleMapFrame):
         
         ret =  self.toolbars['vdigit'].StopEditing()
         if not ret:
+            wx.EndBusyCursor()
+            return False
+
+        if 0 != RunCommand('g.copy',
+                           vect = [vector, self.trainingAreaVector],
+                           overwrite = True, quiet = True,
+                           parent = self):
             wx.EndBusyCursor()
             return False
             
@@ -569,7 +569,7 @@ class IClassMapFrame(DoubleMapFrame):
             RunCommand('v.db.droptable',
                        flags = 'f',
                        map = self.trainingAreaVector)
-            
+        
         # we use first layer with table, TODO: user should choose
         layer = None
         for key in dbInfo.layers.keys():
