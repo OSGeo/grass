@@ -220,6 +220,10 @@ class MapFrameBase(wx.Frame):
     def GetWindow(self):
         """!Returns current map window"""
         raise NotImplementedError("GetWindow")
+
+    def GetWindows(self):
+        """!Returns list of map windows"""
+        raise NotImplementedError("GetWindows")
         
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
@@ -416,6 +420,10 @@ class SingleMapFrame(MapFrameBase):
         """!Returns map window"""
         return self.MapWindow
         
+    def GetWindows(self):
+        """!Returns list of map windows"""
+        return [self.MapWindow]
+
     def OnRender(self, event):
         """!Re-render map composition (each map layer)
         """
@@ -514,6 +522,10 @@ class DoubleMapFrame(MapFrameBase):
         @see GetMap()
         """
         return self.MapWindow
+    
+    def GetWindows(self):
+        """!Return list of all windows"""
+        return [self.firstMapWindow, self.secondMapWindow]
     
     def ActivateFirstMap(self, event = None):
         """!Make first Map and MapWindow active and (un)bind regions of the two Maps."""

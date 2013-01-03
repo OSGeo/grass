@@ -135,7 +135,8 @@ class IClassMapFrame(DoubleMapFrame):
         self.statusbarManager.AddStatusbarItem(sb.SbRender(self, statusbar = statusbar, position = 3))
         
         self.statusbarManager.Update()
-        
+        self.SetProperty('region', True) # show computation region by defaut
+
         self.trainingMapManager = MapManager(self, mapWindow = self.GetFirstWindow(),
                                              Map = self.GetFirstMap())
         self.previewMapManager = MapManager(self, mapWindow = self.GetSecondWindow(),
@@ -151,8 +152,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.dialogs['classManager'] = None
         # just to make digitizer happy
         self.dialogs['attributes'] = None
-        self.dialogs['category'] = None
-        
+        self.dialogs['category']   = None
         
         # PyPlot init
         self.plotPanel = PlotPanel(self, statDict = self.statisticsDict,
@@ -169,17 +169,12 @@ class IClassMapFrame(DoubleMapFrame):
         
         wx.CallAfter(self.AddTrainingAreaMap)
         
-        #self.dialogs['category'] = None
-        
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         self.SendSizeEvent()
         
     def OnCloseWindow(self, event):
-        verbosity = os.getenv('GRASS_VERBOSE', '2')
-        os.environ['GRASS_VERBOSE'] = '0' # be silent
         self.GetFirstWindow().digit.GetDisplay().CloseMap()
-        os.environ['GRASS_VERBOSE'] = verbosity
         self.Destroy()
         
     def __del__(self):

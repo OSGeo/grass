@@ -418,12 +418,16 @@ class SbShowRegion(SbItem):
         """!Shows/Hides extent (comp. region) in map canvas.
         
         Shows or hides according to checkbox value.
+
+        @todo needs refactoring
         """
         if self.widget.GetValue():
             # show extent
-            self.mapFrame.GetWindow().regionCoords = []
+            for mapWindow in self.mapFrame.GetWindows():
+                mapWindow.regionCoords = []
         elif hasattr(self.mapFrame.GetWindow(), 'regionCoords'):
-            del self.mapFrame.GetWindow().regionCoords
+            for mapWindow in self.mapFrame.GetWindows():
+                del mapWindow.regionCoords
 
         # redraw map if auto-rendering is enabled
         if self.mapFrame.IsAutoRendered():
@@ -432,10 +436,12 @@ class SbShowRegion(SbItem):
     def SetValue(self, value):
         SbItem.SetValue(self, value)
         if value:
-            self.mapFrame.GetWindow().regionCoords = []
+            for mapWindow in self.mapFrame.GetWindows():
+                mapWindow.regionCoords = []
         elif hasattr(self.mapFrame.GetWindow(), 'regionCoords'):
-            del self.mapFrame.GetWindow().regionCoords
-            
+            for mapWindow in self.mapFrame.GetWindows():
+                mapWindow.regionCoords
+        
 class SbAlignExtent(SbItem):
     """!Checkbox to select zoom behavior.
     
