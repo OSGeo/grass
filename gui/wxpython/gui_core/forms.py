@@ -74,6 +74,10 @@ try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
+try:
+    from wx.lib.agw.floatspin import FloatSpin, EVT_FLOATSPIN
+except ImportError:
+    FloatSpin = None
 import wx.lib.colourselect     as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
@@ -996,11 +1000,10 @@ class CmdPanel(wx.Panel):
                                 flag = wx.ADJUST_MINSIZE | wx.ALL, border = 1)
                     which_sizer.Add(item = stSizer, proportion = 0,
                                     flag = wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border = 5)
-                elif p.get('gisprompt', False) == False:
+                elif p.get('gisprompt', False) is False:
                     if len(valuelist) == 1: # -> textctrl
                         title_txt.SetLabel("%s (%s %s):" % (title, _('valid range'),
                                                             str(valuelist[0])))
-                        
                         if p.get('type', '') == 'integer' and \
                                 not p.get('multiple', False):
 
@@ -1012,17 +1015,15 @@ class CmdPanel(wx.Panel):
                                 maxValue = 1e6
                             txt2 = wx.SpinCtrl(parent = which_panel, id = wx.ID_ANY, size = globalvar.DIALOG_SPIN_SIZE,
                                                min = minValue, max = maxValue)
-                            txt2.SetName("SpinCtrl")
                             style = wx.BOTTOM | wx.LEFT
                         else:
                             txt2 = wx.TextCtrl(parent = which_panel, value = p.get('default',''))
-                            txt2.SetName("TextCtrl")
                             style = wx.EXPAND | wx.BOTTOM | wx.LEFT
                         
                         value = self._getValue(p)
                         # parameter previously set
                         if value:
-                            if txt2.GetName() == "SpinCtrl":
+                            if isinstance(txt2, wx.SpinCtrl):
                                 txt2.SetValue(int(value))
                             else:
                                 txt2.SetValue(value)
@@ -1090,17 +1091,25 @@ class CmdPanel(wx.Panel):
                 else:
                     minValue = -1e9
                     maxValue = 1e9
-                    if p.get('type', '') == 'integer':
-                        txt3 = wx.SpinCtrl(parent = which_panel, value = p.get('default',''),
-                                           size = globalvar.DIALOG_SPIN_SIZE,
-                                           min = minValue, max = maxValue)
-                        style = wx.BOTTOM | wx.LEFT | wx.RIGHT
-                        
+                    if p.get('type', '') == 'integer' or \
+                             p.get('type', '') == 'float' and FloatSpin:
                         value = self._getValue(p)
-                        if value:
-                            txt3.SetValue(int(value)) # parameter previously set
                         
-                        txt3.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
+                        if p.get('type', '') == 'integer':
+                            txt3 = wx.SpinCtrl(parent = which_panel, value = p.get('default', ''),
+                                               size = globalvar.DIALOG_SPIN_SIZE,
+                                               min = minValue, max = maxValue)
+                            if value:
+                                txt3.SetValue(int(value)) # parameter previously set
+                            txt3.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
+                        else:
+                            txt3 = FloatSpin(parent = which_panel, digits = 3,
+                                             size = globalvar.DIALOG_SPIN_SIZE,
+                                             min_val = minValue, max_val = maxValue)
+                            if value:
+                                txt3.SetValue(float(value)) # parameter previously set
+                            txt3.Bind(EVT_FLOATSPIN, self.OnSetValue)
+                            style = wx.BOTTOM | wx.LEFT | wx.RIGHT
                     else:
                         txt3 = wx.TextCtrl(parent = which_panel, value = p.get('default',''),
                                            validator = FloatValidator())
@@ -1109,7 +1118,7 @@ class CmdPanel(wx.Panel):
                         value = self._getValue(p)
                         if value:
                             txt3.SetValue(str(value)) # parameter previously set
-                    
+                
                 txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
                 
                 which_sizer.Add(item = txt3, proportion = 0,
