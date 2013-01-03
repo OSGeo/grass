@@ -139,7 +139,7 @@ class MainToolbar(BaseToolbar):
 
     def OnHelp(self, event) :
             RunCommand('g.manual',
-                       entry = 'wxGUI.VNet')
+                       entry = 'wxGUI.vnet')
 
 class AnalysisToolbar(BaseToolbar):
     """!Main toolbar

@@ -6,16 +6,10 @@
 <em>Vector Network Analysis Tool</em> is graphical front-end
 for <tt>v.net*</tt> modules. It allows perform network analysis
 directly in <em><a href="wxGUI.html">wxGUI</a></em> without need to
-use command line. The tool is available from GRASS AddOns repository
-and needs to be installed to GRASS GIS by command:
-
-<div class="code"><pre>
-g.extension -s extension=wx.vnet
-</pre></div>
-
-The tool can be launched from Map Display toolbar submenu
-of <em>Analyze Map</em> button where is <em>Vector network analysis
-(experimental, GSoC 2012)</em> item.
+use command line. The tool can be launched from Layer Manager
+menu <i>Vector &rarr; Network analysis &rarr; Vector network analysis
+tool</i> or from Map Display toolbar <i>Analyse map &rarr; Vector
+network analysis tool</i> <img src="icons/line-split.png" alt="icon">.
 
 <p>
 <em>Vector Network Analysis Tool</em> currently allows to:
@@ -47,36 +41,39 @@ of <em>Analyze Map</em> button where is <em>Vector network analysis
 
 The tool is split into tabs. Every tab represents some functionality:
 
-<ul>
-  <li> <tt>Parameters</tt> tab - It is used for setting vector map and
-  it's layer on which analysis will be done. Also it is possible to
-  set columns with cost values from attribute table connected 
-  to particular layer.</li>
-  <li> <tt>Points</tt> tab - It manages points, which are used for
-  analysis.</li>
-  <li> <tt>Output</tt> tab - There is a output console, which shows
-  information about running analysis. </li>
-  <li> <tt>Input tables</tt> tab - When existing vector map and it's
-  existing layers are set in <tt>Parameters</tt> tab, this tab is
-  dynamically added. It shows attribute tables of node and arc layers,
-  which were chosen for analysis. It is also possible to compute cost
-  values in this tab. This can be done by right mouse button click on
-  column label. Then from pop-up menu choose <tt>Add column</tt>,
-  where new column for cost values can be created. After that by right
-  mouse button click on the added column label can be chosen
-  item <tt>Field calculator</tt>. This tool allows to compute cost
-  values.</li>
-  <li> <tt>Result tables</tt> tab - Result of vector network analysis
-  is always vector map. Some vector network analysis results can also
-  include attribute tables. If such a table is connected to result
-  map, this tab is showed and allows to browse these data.</li>
-</ul>
+<dl>
+  <dt><b>Parameters</b> tab</dt>
+  <dd>It is used for setting vector map and
+    it's layer on which analysis will be done. Also it is possible to
+    set columns with cost values from attribute table connected 
+    to particular layer.</dd>
+  <dt><b>Points</b> tab</dt>
+  <dd>It manages points, which are used for analysis.</dd>
+  <dt><b>Output</b> tab</dt>
+  <dd>There is a output console, which shows information about running
+    analysis.</dd>
+  <dt><b>Input tables</b> tab</dt>
+  <dd>When existing vector map and it's existing layers are set
+  in <em>Parameters</em> tab, this tab is dynamically added. It shows
+  attribute tables of node and arc layers, which were chosen for
+  analysis. It is also possible to compute cost values in this
+  tab. This can be done by right mouse button click on column
+  label. Then from pop-up menu choose <em>Add column</em>, where new
+  column for cost values can be created. After that by right mouse
+  button click on the added column label can be chosen item <em>Field
+  calculator</em>. This tool allows to compute cost values.</dd>
+  <dt><b>Result tables</b> tab</dt>
+  <dd>Result of vector network analysis is always vector map. Some
+  vector network analysis results can also include attribute
+  tables. If such a table is connected to result map, this tab is
+  showed and allows to browse these data.</dd>
+</dl>
 
 <h2>KNOWN ISSUES</h2>
 
 When some change is done in layer tree of Map Display, temporary
-vector map representing result of analysis is not rendered 
-(use <tt>Show result</tt> button in toolbar to render it again).
+vector map representing result of analysis is not rendered
+(use <em>Show result</em> button in toolbar to render it again).
 
 <h2>SEE ALSO</h2>
 
