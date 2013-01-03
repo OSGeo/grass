@@ -1109,7 +1109,7 @@ class CmdPanel(wx.Panel):
                             if value:
                                 txt3.SetValue(float(value)) # parameter previously set
                             txt3.Bind(EVT_FLOATSPIN, self.OnSetValue)
-                            style = wx.BOTTOM | wx.LEFT | wx.RIGHT
+                        style = wx.BOTTOM | wx.LEFT | wx.RIGHT
                     else:
                         txt3 = wx.TextCtrl(parent = which_panel, value = p.get('default',''),
                                            validator = FloatValidator())
