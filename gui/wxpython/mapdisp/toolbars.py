@@ -46,7 +46,7 @@ MapIcons =  {
                             label = _('Add text layer')),
     'histogram'  : MetaIcon(img = 'layer-raster-histogram',
                             label = _('Create histogram of raster map')),
-    'vnet'       : MetaIcon(img = 'line-split',
+    'vnet'       : MetaIcon(img = 'vector-tools',
                             label = _('Vector network analysis tool')),
     }
 
