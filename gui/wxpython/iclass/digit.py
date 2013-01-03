@@ -39,7 +39,8 @@ class IClassVDigitWindow(VDigitWindow):
         @param map map renderer instance
         """
         VDigitWindow.__init__(self, parent = parent, giface = giface, Map = map, frame = frame)
-        
+        self.regionCoords = [] # show computation extent box
+
     def _onLeftDown(self, event):
         action = self.toolbar.GetAction()
         if not action:
