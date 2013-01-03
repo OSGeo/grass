@@ -2783,6 +2783,7 @@
               <help>Generates spectral signatures by allowing the user to outline training areas.</help>
               <keywords>imagery,classification,supervised</keywords>
               <handler>OnIClass</handler>
+              <command>g.gui.iclass</command>
             </menuitem>
             <separator />
             <menuitem>
