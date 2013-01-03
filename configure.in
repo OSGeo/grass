@@ -897,11 +897,12 @@ else
   fi
   
   LOC_CHECK_INCLUDES(geos_c.h,GEOS,$GEOS_CFLAGS)
-  if test "$MINGW32" = yes ; then
-    LOC_CHECK_LIBS(geos_c_i,initGEOS,GEOS,$GEOS_LIBS,GEOS_LIBS)
-  else
-    LOC_CHECK_LIBS(geos_c,initGEOS,GEOS,$GEOS_LIBS,GEOS_LIBS)
-  fi
+### geos 3.3.6 installs geos_c.lib, see http://osgeo-org.1560.n6.nabble.com/osgeo4w-329-update-geos-to-3-3-6-td5024605.html
+#  if test "$MINGW32" = yes ; then
+#    LOC_CHECK_LIBS(geos_c_i,initGEOS,GEOS,$GEOS_LIBS,GEOS_LIBS)
+#  else
+  LOC_CHECK_LIBS(geos_c,initGEOS,GEOS,$GEOS_LIBS,GEOS_LIBS)
+#  fi
   AC_DEFINE(HAVE_GEOS)
 fi
 

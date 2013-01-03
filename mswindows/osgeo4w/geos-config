@@ -34,7 +34,7 @@ case $1 in
     echo -I$OSGEO4W_ROOT_MSYS/include
       ;;
     --libs)
-      echo $OSGEO4W_ROOT_MSYS/lib/geos_c_i.lib
+      echo $OSGEO4W_ROOT_MSYS/lib/geos_c.lib
       ;;
     --ldflags)
       echo 
