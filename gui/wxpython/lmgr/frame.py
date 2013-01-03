@@ -725,6 +725,13 @@ class GMFrame(wx.Frame):
             cmd = self.GetMenuCmd(event)
         GUI(parent = self).ParseCommand(cmd)
         
+    def OnVNet(self, event):
+        """Vector network analysis tool"""
+        if self.GetMapDisplay():
+            self.GetMapDisplay().OnVNet(event)
+        else:
+            self.NewDisplay(show = True).OnVNet(event)
+        
     def OnVDigit(self, event):
         """!Start vector digitizer
         """
