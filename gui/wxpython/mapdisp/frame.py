@@ -1339,6 +1339,7 @@ class MapFrame(SingleMapFrame):
         """!Dialog for v.net* modules 
         """
         if self.dialogs['vnet']:
+            self.dialogs['vnet'].Raise()
             return
         
         from vnet.dialogs import VNETDialog
