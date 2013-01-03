@@ -273,10 +273,10 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 		    "segmentation is necessary, to run the program faster set "
 		    "segmax=%d (see manual)"), params->KMAX2, params->KMAX2);
 
-    G_message(_("Number of points from vector map %d"), k);
+    G_verbose_message(_("Number of points from vector map %d"), k);
     G_verbose_message(_("Number of points outside of 2D/3D region %d"),
 	      OUTRANGE);
-    G_message(_("Number of points being used %d"), npoint);
+    G_verbose_message(_("Number of points being used %d"), npoint);
     
     *n_points = npoint;
     return (totsegm);
