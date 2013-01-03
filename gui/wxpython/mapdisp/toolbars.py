@@ -47,7 +47,7 @@ MapIcons =  {
     'histogram'  : MetaIcon(img = 'layer-raster-histogram',
                             label = _('Create histogram of raster map')),
     'vnet'       : MetaIcon(img = 'line-split',
-                            label = _('Vector network analysis (experimental, GSoC 2012)')),
+                            label = _('Vector network analysis tool')),
     }
 
 NvizIcons = {
@@ -239,12 +239,12 @@ class MapToolbar(BaseToolbar):
     def OnAnalyze(self, event):
         """!Analysis tools menu
         """
-        self._onMenu(((MapIcons["measure"],    self.parent.OnMeasure),
-                      (MapIcons["profile"],    self.parent.OnProfile),
-                      (MapIcons["scatter"],    self.parent.OnScatterplot),
-                      (MapIcons["histogram"],  self.parent.OnHistogramPyPlot),
+        self._onMenu(((MapIcons["measure"],     self.parent.OnMeasure),
+                      (MapIcons["profile"],     self.parent.OnProfile),
+                      (MapIcons["scatter"],     self.parent.OnScatterplot),
+                      (MapIcons["histogram"],   self.parent.OnHistogramPyPlot),
                       (BaseIcons["histogramD"], self.parent.OnHistogram),
-                      (MapIcons["vnet"],        self.parent.OnVnet)))
+                      (MapIcons["vnet"],        self.parent.OnVNet)))
         
     def OnDecoration(self, event):
         """!Decorations overlay menu

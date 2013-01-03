@@ -2314,6 +2314,13 @@
         <menu>
           <label>Network analysis</label>
           <items>`
+           <menuitem>
+              <label>Vector network analysis tool</label>
+              <help>Tool for interactive vector network analysis.</help>
+              <keywords>gui,vector,network</keywords>
+              <handler>OnVNet</handler>
+            </menuitem>
+            <separator />
             <menuitem>
               <label>Network preparation</label>
               <help>Performs network maintenance.</help>

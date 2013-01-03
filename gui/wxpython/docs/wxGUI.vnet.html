@@ -1,0 +1,100 @@
+<!-- meta page description: wxGUI Vector Network Analysis Tool -->
+<!-- meta page index: wxGUI -->
+
+<h2>DESCRIPTION</h2>
+
+<em>Vector Network Analysis Tool</em> is graphical front-end
+for <tt>v.net*</tt> modules. It allows perform network analysis
+directly in <em><a href="wxGUI.html">wxGUI</a></em> without need to
+use command line. The tool is available from GRASS AddOns repository
+and needs to be installed to GRASS GIS by command:
+
+<div class="code"><pre>
+g.extension -s extension=wx.vnet
+</pre></div>
+
+The tool can be launched from Map Display toolbar submenu
+of <em>Analyze Map</em> button where is <em>Vector network analysis
+(experimental, GSoC 2012)</em> item.
+
+<p>
+<em>Vector Network Analysis Tool</em> currently allows to:
+
+<ul>
+  <li> perform these network analyses:
+  <ul>
+    <li> Shortest path
+    (<em><a href="v.net.path.html">v.net.path</a></em>)</li>
+    <li> Salesman
+    (<em><a href="v.net.salesman.html">v.net.salesman</a></em>)</li>
+    <li> Flow (<em><a href="v.net.flow.html">v.net.flow</a></em>)</li>
+    <li> Allocate subnets for nearest centers
+    (<em><a href="v.net.alloc.html">v.net.alloc</a></em>)</li>
+    <li> Steiner tree for the network and given terminals
+    (<em><a href="v.net.distance.html">v.net.distance</a></em>)</li>
+    <li> Splits net by cost isolines
+    (<em><a href="v.net.iso.html">v.net.iso</a></em>)</li>
+  </ul>
+  </li>
+  <li>show and set all data needed for the analysis (points, attribute
+  tables, compute costs)</li>
+  <li>show analysis results (maps and it's attribute tables)</li>
+  <li>snapping to nodes</li>
+  <li>browse previous analysis results</li>
+</ul>
+
+<h2>NOTES</h2>
+
+The tool is split into tabs. Every tab represents some functionality:
+
+<ul>
+  <li> <tt>Parameters</tt> tab - It is used for setting vector map and
+  it's layer on which analysis will be done. Also it is possible to
+  set columns with cost values from attribute table connected 
+  to particular layer.</li>
+  <li> <tt>Points</tt> tab - It manages points, which are used for
+  analysis.</li>
+  <li> <tt>Output</tt> tab - There is a output console, which shows
+  information about running analysis. </li>
+  <li> <tt>Input tables</tt> tab - When existing vector map and it's
+  existing layers are set in <tt>Parameters</tt> tab, this tab is
+  dynamically added. It shows attribute tables of node and arc layers,
+  which were chosen for analysis. It is also possible to compute cost
+  values in this tab. This can be done by right mouse button click on
+  column label. Then from pop-up menu choose <tt>Add column</tt>,
+  where new column for cost values can be created. After that by right
+  mouse button click on the added column label can be chosen
+  item <tt>Field calculator</tt>. This tool allows to compute cost
+  values.</li>
+  <li> <tt>Result tables</tt> tab - Result of vector network analysis
+  is always vector map. Some vector network analysis results can also
+  include attribute tables. If such a table is connected to result
+  map, this tab is showed and allows to browse these data.</li>
+</ul>
+
+<h2>KNOWN ISSUES</h2>
+
+When some change is done in layer tree of Map Display, temporary
+vector map representing result of analysis is not rendered 
+(use <tt>Show result</tt> button in toolbar to render it again).
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="wxGUI.html">wxGUI</a><br>
+  <a href="wxGUI.Components.html">wxGUI components</a>
+</em>
+
+<p>
+See also the
+user <a href="http://grass.osgeo.org/wiki/WxGUI_Vector_Network_Analysis_Tool">wiki</a>
+page.
+
+<h2>AUTHOR</h2>
+
+Stepan
+Turek, <a href="http://grass.osgeo.org/wiki/GRASS_GSoC_2012_WxGUI_front_end_for_vector_analysis_modules">Google
+Summer of Code 2012</a> (mentor: Martin Landa)
+
+<p>
+<i>$Date$</i>
