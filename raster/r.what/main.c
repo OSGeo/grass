@@ -347,9 +347,8 @@ int main(int argc, char *argv[])
 
 	    if (!in_window) {
 		if (tty)
-		    fprintf(stderr,
-			    "** note ** %s %s is outside your current window\n",
-			    cache[point].east_buf, cache[point].north_buf);
+		    G_warning(_("%s %s is outside your current region"),
+			      cache[point].east_buf, cache[point].north_buf);
 	    }
 
 	    if (cur_row != cache[point].row) {
