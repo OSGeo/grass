@@ -735,13 +735,12 @@ int main(int argc, char *argv[])
     /* Dangles and bridges don't seem to be necessary if snapping is small enough. */
     /* Still needed for larger buffer distances ? */
 
-    /*
+    Vect_build_partial(&Out, GV_BUILD_AREAS);
     G_message(_("Removing dangles..."));
     Vect_remove_dangles(&Out, GV_BOUNDARY, -1, NULL);
 
     G_message (_("Removing bridges..."));
-    Vect_remove_bridges(&Out, NULL);
-    */
+    Vect_remove_bridges(&Out, NULL, NULL, NULL);
 
     G_message(_("Attaching islands..."));
     Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
@@ -830,7 +829,7 @@ int main(int argc, char *argv[])
 		int side[2];
 
 		Vect_get_line_areas(&Out, line, &side[0], &side[1]);
-		
+
 		if (!side[0] && !side[1])
 		    Vect_delete_line(&Out, line);
 	    }
