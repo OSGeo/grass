@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 		  *where_opt, *cats_opt;
 
     struct cat_list *cat_list = NULL;
-    int verbose;
+    int verbose, use_geos;
     double da, db, dalpha, tolerance, unit_tolerance;
     int type;
     int i, ret, nareas, area, nlines, line;
@@ -308,6 +308,13 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+#if !defined HAVE_GEOS
+    use_geos = FALSE;
+#else
+    use_geos = getenv("GRASS_VECTOR_BUFFER") ? FALSE : TRUE;
+#endif
+    G_debug(1, "use_geos = %d", use_geos);
+    
     type = Vect_option_to_types(type_opt);
 
     if ((dista_opt->answer && bufcol_opt->answer) ||
@@ -454,14 +461,13 @@ int main(int argc, char *argv[])
 
 #ifdef HAVE_GEOS
     initGEOS(G_message, G_fatal_error);
-#else
-    if (da < 0. || db < 0.) {
+#endif
+    if(!use_geos && (da < 0. || db < 0.)) {
 	G_warning(_("Negative distances for internal buffers are not supported "
 	            "and converted to positive values."));
 	da = fabs(da);
 	db = fabs(db);
     }
-#endif
 
     /* Areas */
     if (nareas > 0) {
@@ -522,43 +528,39 @@ int main(int argc, char *argv[])
 	    }
 
 #ifdef HAVE_GEOS
-	    geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
-	                &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
-#else
-	    if (da < 0. || db < 0.) {
-		G_warning(_("Negative distances for internal buffers are not supported "
-			    "and converted to positive values."));
-		da = fabs(da);
-		db = fabs(db);
-	    }
-	    Vect_area_buffer2(&In, area, da, db, dalpha,
-			      !(straight_flag->answer),
-			      !(nocaps_flag->answer), unit_tolerance,
-			      &(arr_bc_pts.oPoints),
-			      &(arr_bc_pts.iPoints),
-			      &(arr_bc_pts.inner_count));
-
-	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
-	    Vect_destroy_line_struct(arr_bc_pts.oPoints);
-	    /* add buffer to spatial index */
-	    Vect_get_line_box(&Buf, line_id, &bbox);
-	    Vect_spatial_index_add_item(&si, buffers_count, &bbox);
-	    arr_bc[buffers_count].outer = line_id;
-
-	    arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
-	    if (arr_bc_pts.inner_count > 0) {
-		arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
-		for (i = 0; i < arr_bc_pts.inner_count; i++) {
-		    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-		    Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
-		    arr_bc[buffers_count].inner[i] = line_id;
-		}
-		G_free(arr_bc_pts.iPoints);
-	    }
-	    buffers_count++;
+	    if (use_geos)
+		geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
+			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #endif
+	    if (!use_geos) {
+		Vect_area_buffer2(&In, area, da, db, dalpha,
+				  !(straight_flag->answer),
+				  !(nocaps_flag->answer), unit_tolerance,
+				  &(arr_bc_pts.oPoints),
+				  &(arr_bc_pts.iPoints),
+				  &(arr_bc_pts.inner_count));
+		
+		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
+		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
+		Vect_destroy_line_struct(arr_bc_pts.oPoints);
+		/* add buffer to spatial index */
+		Vect_get_line_box(&Buf, line_id, &bbox);
+		Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+		arr_bc[buffers_count].outer = line_id;
+		
+		arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
+		if (arr_bc_pts.inner_count > 0) {
+		    arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
+		    for (i = 0; i < arr_bc_pts.inner_count; i++) {
+			Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+			line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+			Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
+			arr_bc[buffers_count].inner[i] = line_id;
+		    }
+		    G_free(arr_bc_pts.iPoints);
+		}
+		buffers_count++;
+	    } /* native buffer end */
 	}
     }
 
@@ -566,7 +568,7 @@ int main(int argc, char *argv[])
     if (nlines > 0) {
 	int ltype;
 
-	G_message(_("Buffering lines..."));
+	G_message(_("Buffering features..."));
 	
 	if (da < 0 || db < 0) {
 	    G_warning(_("Negative distances are only supported for areas"));
@@ -649,39 +651,40 @@ int main(int argc, char *argv[])
 
 	    }
 	    else {
-
 #ifdef HAVE_GEOS
-		geos_buffer(&In, &Out, &Buf, line, type, da,
-			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
-#else
-		Vect_line_buffer2(Points, da, db, dalpha,
-				  !(straight_flag->answer),
-				  !(nocaps_flag->answer), unit_tolerance,
-				  &(arr_bc_pts.oPoints),
-				  &(arr_bc_pts.iPoints),
-				  &(arr_bc_pts.inner_count));
-
-		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
-		Vect_destroy_line_struct(arr_bc_pts.oPoints);
-		/* add buffer to spatial index */
-		Vect_get_line_box(&Buf, line_id, &bbox);
-		Vect_spatial_index_add_item(&si, buffers_count, &bbox);
-		arr_bc[buffers_count].outer = line_id;
-
-		arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
-		if (arr_bc_pts.inner_count > 0) {
-		    arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
-		    for (i = 0; i < arr_bc_pts.inner_count; i++) {
-			Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-			line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
-			Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
-			arr_bc[buffers_count].inner[i] = line_id;
-		    }
-		    G_free(arr_bc_pts.iPoints);
-		}
-		buffers_count++;
+		if (use_geos)
+		    geos_buffer(&In, &Out, &Buf, line, type, da,
+				&si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
 #endif
+		if (!use_geos) {
+		    Vect_line_buffer2(Points, da, db, dalpha,
+				      !(straight_flag->answer),
+				      !(nocaps_flag->answer), unit_tolerance,
+				      &(arr_bc_pts.oPoints),
+				      &(arr_bc_pts.iPoints),
+				      &(arr_bc_pts.inner_count));
+		    
+		    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
+		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
+		    Vect_destroy_line_struct(arr_bc_pts.oPoints);
+		    /* add buffer to spatial index */
+		    Vect_get_line_box(&Buf, line_id, &bbox);
+		    Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+		    arr_bc[buffers_count].outer = line_id;
+		    
+		    arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
+		    if (arr_bc_pts.inner_count > 0) {
+			arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
+			for (i = 0; i < arr_bc_pts.inner_count; i++) {
+			    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+			    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+			    Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
+			    arr_bc[buffers_count].inner[i] = line_id;
+			}
+			G_free(arr_bc_pts.iPoints);
+		    }
+		    buffers_count++;
+		} /* native buffer end */
 	    }
 	}
     }
