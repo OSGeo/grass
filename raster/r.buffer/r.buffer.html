@@ -1,14 +1,14 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.buffer</em> creates a new raster map layer showing
+<em>r.buffer</em> creates a new raster map showing
 buffer (a.k.a. "distance" or "proximity") zones around all
 cells that contain non-NULL category values in an existing
-raster map layer.  The distances of buffer zones from cells
+raster map. The distances of buffer zones from cells
 with non-zero category values are user-chosen.  Suppose,
 for example, that you want to place buffer zones around
-roads.  This program could create the raster map layer
+roads.  This program could create the raster map 
 shown below on the right based on road information
-contained in the raster map layer shown on the left.
+contained in the raster map shown on the left.
 
 <div class="code"><pre>
       000000000000000000000000 222233333333333333444444 
@@ -27,20 +27,17 @@ contained in the raster map layer shown on the left.
       Category 3: Buffer Zone 2 around roads 
       Category 4: Buffer Zone 3 around roads 
 </pre></div>
-<br>
-
 
 <h2>NOTES</h2>
 
 The user has the option of identifying up to 250 continuous zones.
-The zones are identified by specifying the upper limit of each desired zone
-(<em>r.buffer</em> assumes that <tt>0</tt> is the starting point).
-("Continuous" is used in the sense that each category
-zone's lower value is the previous zone's upper value. The
-first buffer zone always has distance <tt>0</tt> as its lower
-bound.) Buffer distances can be specified using one of five units with the <em>
-units</em> parameter: <em>meters, kilometers, feet, miles</em>, and <em>nautmiles</em>
-(nautical miles).
+The zones are identified by specifying the upper limit of each desired
+zone (<em>r.buffer</em> assumes that <tt>0</tt> is the starting
+point).  "Continuous" is used in the sense that each category zone's
+lower value is the previous zone's upper value. The first buffer zone
+always has distance <tt>0</tt> as its lower bound. Buffer distances
+can be specified using one of five units with the <b>units</b> parameter.
+
 <p>
 <!-- ??? is this the real method used or some ancient option ??? -->
 Distances from cells containing the user-specified category values
@@ -57,10 +54,10 @@ center of cell using Euclidean distance measure for
 planimetric locations (like UTM) and using ellipsoidal
 geodesic distance measure for latitude/longitude locations.
 <p>
-<em>r.buffer</em> calculates distance zones from all cells having non-NULL 
-category values in the <em>input</em> map. If the user wishes to calculate
-distances from only selected <em>input</em> map layer 
-category values, the user should run (for example) 
+<em>r.buffer</em> calculates distance zones from all cells having
+non-NULL category values in the <b>input</b> map. If the user wishes
+to calculate distances from only selected <b>input</b> map category
+values, the user should run (for example)
 <em><a href="r.reclass.html">r.reclass</a></em> prior to 
 <em>r.buffer</em>, to reclass all categories from which distance zones 
 are not desired to be calculated into category NULL. 
@@ -68,12 +65,13 @@ are not desired to be calculated into category NULL.
 The <b>-z</b> flag can be used to ignore raster values of zero instead of NULL
 values in the input raster map.
 <p>
-When working with massive raster regions consider the <em>r.buffer.lowmem</em>
-module if RAM use becomes a problem. The lowmem version can be &gt; 40x slower,
-but will work with minimal memory requirements. The classic <em>r.buffer</em>
-should be able to deal with raster maps of 32000x32000 size on a system with
-1 GB RAM, and rasters of 90000x90000 on a system with 8 GB RAM without going
-into swap.
+When working with massive raster regions consider
+the <em><a href="r.buffer.lowmem.html">r.buffer.lowmem</a></em> module
+if RAM use becomes a problem. The lowmem version can be &gt; 40x
+slower, but will work with minimal memory requirements. The
+classic <em>r.buffer</em> should be able to deal with raster maps of
+32000x32000 size on a system with 1 GB RAM, and rasters of 90000x90000
+on a system with 8 GB RAM without going into swap.
 
 
 <h2>EXAMPLE</h2>
@@ -82,13 +80,13 @@ In the following example, the buffer zones would be (in the default units
 of meters):  0-100, 101-200, 201-300, 301-400 and 401-500.
 <br>
 <div class="code"><pre>
-<b>r.buffer input=</b>roads <b>output=</b>roads.buf <b>distances=</b>100,200,300,400,500
+r.buffer input=roads output=roads.buf distances=100,200,300,400,500
 </pre></div>
 
 Result:
 
 <div class="code"><pre>
-<b>r.category input=</b>roads.buf
+r.category input=roads.buf
 
       1       distances calculated from these locations
       2       0-100 meters
@@ -98,18 +96,16 @@ Result:
       6       400-500 meters
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="g.region.html">g.region</a><br>
-<a href="r.buffer.lowmem.html">r.buffer.lowmem</a><br>
-<a href="r.cost.html">r.cost</a><br>
-<a href="r.mapcalc.html">r.mapcalc</a><br>
-<a href="r.reclass.html">r.reclass</a><br>
+<a href="g.region.html">g.region</a>,
+<a href="r.buffer.lowmem.html">r.buffer.lowmem</a>,
+<a href="r.cost.html">r.cost</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.reclass.html">r.reclass</a>,
 <a href="v.buffer.html">v.buffer</a>
 </em>
-
 
 <h2>AUTHORS</h2>
 
@@ -119,4 +115,5 @@ Research Laboratory
 James Westervelt, U.S. Army Construction Engineering 
 Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("buffer"));
     module->description =
-	_("Creates a raster map layer showing buffer zones "
+	_("Creates a raster map showing buffer zones "
 	  "surrounding cells that contain non-NULL category values.");
 
     opt1 = G_define_standard_option(G_OPT_R_INPUT);

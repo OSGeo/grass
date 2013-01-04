@@ -15,7 +15,8 @@
 #############################################################################
 
 #%module
-#% description: Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.
+#% label: Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.
+#% description: This is the low-memory alternative to the classic r.buffer module.
 #% keywords: raster
 #% keywords: buffer
 #%end
