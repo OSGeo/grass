@@ -38,14 +38,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("random"));
-    module->description =
-	_("GRASS module to produce a raster map layer of "
-	  "gaussian deviates whose mean and standard deviation "
-	  "can be expressed by the user. It uses a gaussian "
+    module->label =
+	_("Generates a raster map using gaussian "
 	  "random number generator.");
-
+    module->description = _("Mean and standard deviation of gaussian deviates "
+			    "can be expressed by the user.");
+    
     out = G_define_standard_option(G_OPT_R_OUTPUT);
-    out->description = _("Name of the output random surface");
 
     mean = G_define_option();
     mean->key = "mean";
