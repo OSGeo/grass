@@ -1,21 +1,28 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.buffer</em> creates a buffer around features of given <b>type
-</b>, which have a category in the given <b>layer</b>. The <b>
-tolerance</b> controls the number of vector segments being generated 
-(the smaller the value, the more vector segments are generated).
+<em>v.buffer</em> creates a buffer around features of
+given <b>type</b>, which have a category in the
+given <b>layer</b>. The <b>tolerance</b> controls the number of vector
+segments being generated (the smaller the value, the more vector
+segments are generated).
 
 <h2>NOTES</h2>
 
 Internal buffers for areas can be generated with negative distiance 
 values (GRASS must be compiled with GEOS).
 <p>
-Categories and attributes can be transferred with the <em>t</em> flag. 
+Categories and attributes can be transferred with the <b>t</b> flag. 
 The resulting buffer areas can have multiple categories, and multiple 
 buffer areas can have the same category. The buffer for the input 
 feature with category X can thus be retrieved by selecting all buffer 
 areas with category X (see example below).
 
+<p>
+Buffers for lines and areas are generated using algorithm from GEOS
+library. If GRASS is not compiled with GEOS support or environmental
+variable <tt>GRASS_VECTOR_BUFFER</tt> is defined, then GRASS generates
+buffers using built-in buffering algorithm (which is still buggy for
+some input data).
 
 <h2>EXAMPLES</h2>
 
@@ -44,6 +51,11 @@ d.vect map=hospitals_circled type=area layer=1 cats=36
 v.extract in=hospitals_circled out=hospital_36_circled layer=1 cats=36 -d
 </pre></div>
 
+<h2>REFERENCE</h2>
+
+<ul>
+<li><a href="http://trac.osgeo.org/geos">GEOS Library</a></li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
@@ -55,11 +67,12 @@ v.extract in=hospitals_circled out=hospital_36_circled layer=1 cats=36 -d
 <a href="v.db.connect.html">v.db.connect</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Radim Blazek<br>
 Rewritten by Rosen Matev (with support through the
  Google Summer of Code program 2008)<br>
 Rewritten by Markus Metz (2011, 2012)
-<p><i>Last changed: $Date$</i>
+
+<p>
+<i>Last changed: $Date$</i>
