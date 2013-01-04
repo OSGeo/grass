@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 	write_cats = MULTI_CATS;
 
     if (type_opt->answer)
-	Vect_option_to_types(type_opt);
+	type = Vect_option_to_types(type_opt);
     else
 	type = GV_LINES;
 
@@ -223,10 +223,10 @@ int main(int argc, char **argv)
 	polyline++;
     }
 
-    G_message(_("%d lines or boundaries found in vector map <%s@%s>"),
-	      nlines, Vect_get_name(&map), Vect_get_mapset(&map));
-    G_message(_("%d polylines stored in vector map <%s@%s>"),
-	      polyline, Vect_get_name(&Out), Vect_get_mapset(&Out));
+    G_verbose_message(_("%d lines or boundaries found in input vector map"),
+		      nlines, Vect_get_name(&map), Vect_get_mapset(&map));
+    G_verbose_message(_("%d polylines stored in output vector map"),
+		      polyline, Vect_get_name(&Out), Vect_get_mapset(&Out));
 
     /* Copy (all linked) tables if needed */
     if (copy_tables) {
