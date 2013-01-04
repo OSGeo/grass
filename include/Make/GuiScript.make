@@ -2,6 +2,13 @@
 # common dependencies and rules for building GUI module
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
+
+ifdef MINGW
+SCRIPTEXT = .py
+else
+SCRIPTEXT = 
+endif
+
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/ScriptRules.make
 include $(MODULE_TOPDIR)/include/Make/HtmlRules.make
@@ -9,7 +16,7 @@ include $(MODULE_TOPDIR)/include/Make/HtmlRules.make
 MODULES  := $(patsubst g.gui.%.py,%,$(wildcard g.gui.*.py))
 CMDHTML  := $(patsubst %,$(HTMLDIR)/g.gui.%.html,$(MODULES))
 GUIHTML  := $(patsubst %,$(HTMLDIR)/wxGUI.%.html,$(MODULES))
-PYFILES  := $(patsubst %,$(SCRIPTDIR)/g.gui.%,$(MODULES))
+PYFILES  := $(patsubst %,$(SCRIPTDIR)/g.gui.%$(SCRIPTEXT),$(MODULES))
 
 guiscript: $(IMGDST) $(PYFILES)
 	$(MAKE) $(CMDHTML)
@@ -26,7 +33,7 @@ $(HTMLDIR)/wxGUI.%.html: g.gui.%.html | $(HTMLDIR)
 g.gui.%.tmp.html: $(SCRIPTDIR)/g.gui.%
 	$(call htmldesc,$<,$@)
 
-$(SCRIPTDIR)/g.gui.%: g.gui.%.py | $(SCRIPTDIR)
+$(SCRIPTDIR)/g.gui.%$(SCRIPTEXT): g.gui.%.py | $(SCRIPTDIR)
 	$(INSTALL) $< $@
 
 .PHONY: guiscript
