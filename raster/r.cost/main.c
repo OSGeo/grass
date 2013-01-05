@@ -514,8 +514,6 @@ int main(int argc, char *argv[])
 	struct start_pt *new_start_pt;
 	int cat, type, got_one = 0;
 
-	G_message(_("Reading vector map <%s> with start points..."), opt7->answer);
-
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
 
@@ -524,6 +522,9 @@ int main(int argc, char *argv[])
 	if (1 > Vect_open_old(&In, opt7->answer, ""))
 	    G_fatal_error(_("Unable to open vector map <%s>"), opt7->answer);
 
+	G_message(_("Reading vector map <%s> with start points..."),
+                  Vect_get_full_name(&In));
+        
 	Vect_rewind(&In);
 
 	Vect_region_box(&window, &box);
