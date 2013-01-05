@@ -1393,3 +1393,51 @@ static void append_error(const char *msg)
     st->error = G_realloc(st->error, sizeof(char *) * (st->n_errors + 1));
     st->error[st->n_errors++] = G_store(msg);
 }
+
+/*!
+  \brief Get separator from the option.
+
+  Calls G_fatal_error() on error.
+  
+  \code
+  char fs;
+  struct Option *opt_fs;
+  
+  opt_fs = G_define_standard_option(G_OPT_F_SEP);
+  
+  if (G_parser(argc, argv))
+      exit(EXIT_FAILURE);
+      
+  fs = G_option_to_separator(opt_fs);
+  \endcode
+
+  \param option pointer to separator option
+  
+  \return character to be used as separator
+*/
+char G_option_to_separator(const struct Option *option)
+{
+    char sep;
+    
+    if (option->answer == NULL)
+        G_fatal_error(_("No separator given"));
+
+    if (strcmp(option->answer, "space") == 0)
+        sep = ' ';
+    else if (strcmp(option->answer, "tab") == 0 ||
+             strcmp(option->answer, "\\t") == 0)
+        sep = '\t';
+    else if (strcmp(option->answer, "newline") == 0)
+        sep = '\n';
+    else if (strcmp(option->answer, "comma") == 0)
+        sep = ',';
+    else {
+        if (strlen(option->answer) > 1)
+            G_warning(_("Option <%s>: '%s' is too long, using only first character '%c'"),
+                      option->key, option->answer, option->answer[0]);
+        
+        sep = option->answer[0];
+    }
+
+    return sep;
+}

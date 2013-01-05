@@ -484,6 +484,7 @@ char *G_recreate_command(void);
 void G_add_keyword(const char *);
 void G_set_keywords(const char *);
 int G_get_overwrite();
+char G_option_to_separator(const struct Option *);
 
 /* paths.c */
 int G_mkdir(const char *);
