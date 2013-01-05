@@ -97,7 +97,6 @@ int main(int argc, char *argv[])
     double min_cost, old_min_cost;
     FCELL cur_dir;
     double zero = 0.0;
-    int at_percent = 0;
     int col, row, nrows, ncols;
     int maxcost;
     int nseg;
@@ -118,7 +117,7 @@ int main(int argc, char *argv[])
     struct Flag *flag2, *flag3, *flag4, *flag5;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
     struct Option *opt9, *opt10, *opt11, *opt12;
-    struct cost *pres_cell, *new_cell;
+    struct cost *pres_cell;
     struct start_pt *pres_start_pt = NULL;
     struct start_pt *pres_stop_pt = NULL;
     struct cc {
@@ -183,14 +182,14 @@ int main(int argc, char *argv[])
     opt9->guisection = _("Start");
 
     opt3 = G_define_standard_option(G_OPT_M_COORDS);
-    opt3->key = "start_coordinate";
+    opt3->key = "start_coordinates";
     opt3->multiple = YES;
     opt3->description =
 	_("Coordinates of starting point(s) (E,N)");
     opt3->guisection = _("Start");
 
     opt4 = G_define_standard_option(G_OPT_M_COORDS);
-    opt4->key = "stop_coordinate";
+    opt4->key = "stop_coordinates";
     opt4->multiple = YES;
     opt4->description =
 	_("Coordinates of stopping point(s) (E,N)");
@@ -674,15 +673,13 @@ int main(int argc, char *argv[])
 
 		    cellval = Rast_get_d_value(ptr2, data_type2);
 		    if (start_with_raster_vals == 1) {
-			new_cell = insert(cellval, row, col);
 			costs.cost_out = cellval;
 			costs.nearest = cellval;
 			segment_put(&cost_seg, &costs, row, col);
 		    }
 		    else {
 			value = &zero;
-			new_cell = insert(zero, row, col);
-			costs.cost_out = *value;
+                        costs.cost_out = *value;
 			costs.nearest = cellval;
 			segment_put(&cost_seg, &costs, row, col);
 		    }
@@ -712,7 +709,6 @@ int main(int argc, char *argv[])
 	    if (top_start_pt->row < 0 || top_start_pt->row >= nrows
 		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
 		G_fatal_error(_("Specified starting location outside database window"));
-	    new_cell = insert(zero, top_start_pt->row, top_start_pt->col);
 	    segment_get(&cost_seg, &costs, top_start_pt->row,
 			top_start_pt->col);
 
@@ -734,7 +730,6 @@ int main(int argc, char *argv[])
 
     G_message(_("Finding cost path..."));
     n_processed = 0;
-    at_percent = 0;
 
     pres_cell = get_lowest();
     while (pres_cell != NULL) {
@@ -983,7 +978,6 @@ int main(int argc, char *argv[])
 		costs.cost_out = min_cost;
 		costs.nearest = nearest;
 		segment_put(&cost_seg, &costs, row, col);
-		new_cell = insert(min_cost, row, col);
 		if (dir == TRUE) {
 		    segment_put(&dir_seg, &cur_dir, row, col);
 		}
@@ -993,7 +987,6 @@ int main(int argc, char *argv[])
 		costs.cost_out = min_cost;
 		costs.nearest = nearest;
 		segment_put(&cost_seg, &costs, row, col);
-		new_cell = insert(min_cost, row, col);
 		if (dir == TRUE) {
 		    segment_put(&dir_seg, &cur_dir, row, col);
 		}
@@ -1203,7 +1196,7 @@ int
 process_answers(char **answers, struct start_pt **points,
 		struct start_pt **top_start_pt)
 {
-    int col, row, n;
+    int col, row;
     double east, north;
     struct start_pt *new_start_pt;
     int got_one = 0;
@@ -1214,7 +1207,7 @@ process_answers(char **answers, struct start_pt **points,
     if (!answers)
 	return (0);
 
-    for (n = 0; *answers != NULL; answers += 2) {
+    for (; *answers != NULL; answers += 2) {
 	if (!G_scan_easting(*answers, &east, G_projection()))
 	    G_fatal_error(_("Illegal x coordinate <%s>"), *answers);
 	if (!G_scan_northing(*(answers + 1), &north, G_projection()))
