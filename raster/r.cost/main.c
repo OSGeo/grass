@@ -155,12 +155,14 @@ int main(int argc, char *argv[])
     opt12->required = NO;
     opt12->description =
 	_("Name for output raster map with nearest start point");
+    opt12->guisection = _("Optional outputs");
 
     opt11 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt11->key = "outdir";
     opt11->required = NO;
     opt11->description =
 	_("Name for output raster map to contain movement directions");
+    opt11->guisection = _("Optional outputs");
 
     opt7 = G_define_standard_option(G_OPT_V_INPUT);
     opt7->key = "start_points";
@@ -197,28 +199,30 @@ int main(int argc, char *argv[])
     opt5 = G_define_option();
     opt5->key = "max_cost";
     opt5->type = TYPE_INTEGER;
-    opt5->key_desc = "cost";
+    opt5->key_desc = "value";
     opt5->required = NO;
     opt5->multiple = NO;
     opt5->answer = "0";
-    opt5->description = _("Optional maximum cumulative cost");
+    opt5->description = _("Maximum cumulative cost");
 
     opt6 = G_define_option();
     opt6->key = "null_cost";
     opt6->type = TYPE_DOUBLE;
-    opt6->key_desc = "null cost";
+    opt6->key_desc = "value";
     opt6->required = NO;
     opt6->multiple = NO;
     opt6->description =
 	_("Cost assigned to null cells. By default, null cells are excluded");
+    opt6->guisection = _("NULL cells");
 
     opt10 = G_define_option();
     opt10->key = "percent_memory";
     opt10->type = TYPE_INTEGER;
-    opt10->key_desc = "percent memory";
+    opt10->key_desc = "value";
     opt10->required = NO;
     opt10->multiple = NO;
     opt10->answer = "40";
+    opt10->options = "0-100";
     opt10->description = _("Percent of map to keep in memory");
 
     flag2 = G_define_flag();
@@ -229,6 +233,7 @@ int main(int argc, char *argv[])
     flag3 = G_define_flag();
     flag3->key = 'n';
     flag3->description = _("Keep null values in output raster map");
+    flag3->guisection = _("NULL cells");
 
     flag4 = G_define_flag();
     flag4->key = 'r';
