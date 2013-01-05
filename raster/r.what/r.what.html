@@ -6,9 +6,12 @@ Locations are specified as geographic x,y coordinate pairs (i.e., pair of
 eastings and northings); the user can also (optionally) associate a label
 with each location.
 
-<p>The input coordinates can be entered directly on the command line, or
-redirected via <tt>stdin</tt> from an input text file, script, or piped from
-another program (like <em><a href="d.where.html">d.where</a></em>).
+<p>The input coordinates can be entered directly on the command line
+via <b>coordinates</b> paramater, or redirected via <tt>stdin</tt>
+from an input text file, script, or piped from another program
+(like <em><a href="v.out.ascii.html">v.out.ascii</a></em>). Coordinates
+can be given also as a vector points map (<b>points</b>).
+
 <p>If none of the above input methods are used and the module is run from the
 terminal prompt, the program will interactively query the user for point
 locations and labels.
@@ -23,10 +26,48 @@ the cell(s) at this geographic location.
 
 <h2>EXAMPLES</h2>
 
-<h3>Input from <tt>stdin</tt> on the command line</h3>
+<h3>Input coordinates given as an option</h3>
 
-Input coordinates may be given directly from <tt>stdin</tt>, for example:
-<br> (input data appears between the "<tt>EOF</tt>" markers)
+The module's <b>coordinates</b> parameter can be used to enter coordinate
+pairs directly. The maximum number of pairs will be limited by your system's
+maximum input line length (e.g. 4096 characters).
+
+<div class="code"><pre>
+g.region rast=soils,aspect
+r.what map=soils,aspect coordinates=635342.21,7654321.09,653324.88,7563412.42
+
+635342.21|7654321.09|45|21
+653324.88|7563412.42|44|20
+</pre></div>
+
+<h3>Input coordinates given as a vector points map</h3>
+
+Coordinates can be read from exising vector points map by
+specifing <b>points</b> option. Other features then points or
+centroids are ignored.
+
+<div class="code"><pre>
+r.what map=soils,aspect points=bugsites
+</pre></div>
+
+
+<h3>Input from a text file containing coordinates</h3>
+
+The contents of an ASCII text file can be redirected to <em>r.what</em>
+as follows. If we have a file called <i>input_coord.txt</i> containing the
+coordinates and labels given in the example above:
+
+<div class="code"><pre>
+r.what map=soils,aspect < input_coord.txt
+
+635342.21|7654321.09|site 1|45|21
+653324.88|7563412.42|site 2|44|20
+</pre></div>
+
+<h3>Input from standard input on the command line</h3>
+
+Input coordinates may be given directly from standard input (<tt>stdin</tt>), for example
+(input data appears between the "<tt>EOF</tt>" markers):
 
 <div class="code"><pre>
 r.what map=soils,aspect << EOF
@@ -44,63 +85,21 @@ echo "635342.21 7654321.09" | r.what map=soils,aspect
 635342.21|7654321.09|45|21
 </pre></div>
 
-
-<h3>Input from a text file containing coordinates</h3>
-
-The contents of an ASCII text file can be redirected to <em>r.what</em>
-as follows. If we have a file called <i>input_coord.txt</i> containing the
-coordinates and labels given in the example above:
-
-<div class="code"><pre>
-r.what map=soils,aspect < input_coord.txt
-
-635342.21|7654321.09|site 1|45|21
-653324.88|7563412.42|site 2|44|20
-</pre></div>
-
-
-<h3>Input coordinates given as a module option</h3>
-
-The module's <b>east_north</b> parameter can be used to enter coordinate
-pairs directly. The maximum number of pairs will be limited by your system's
-maximum input line length (e.g. 4096 characters).
-
-<div class="code"><pre>
-r.what map=soils,aspect coordinates=635342.21,7654321.09,653324.88,7563412.42
-
-635342.21|7654321.09|45|21
-653324.88|7563412.42|44|20
-</pre></div>
-
-
 <h3>Input coordinates piped from another program</h3>
 
-The input coordinates may be "piped" from the <tt>stdout</tt> of another
-program. 
-<!-- (d.where is still present in grass7, but not very useful in this context)
-For example:
-<div class="code"><pre>
-d.where | r.what map=soils,aspect
-
-635342.21|7654321.09|45|21
-653324.88|7563412.42|44|20
-</pre></div>
--->
-In the next example, vector point coordinates are piped from the
-<em>v.out.ascii</em> module. The standard UNIX program "<tt>tr</tt>" is
-used to convert the column separators in <em>v.out.ascii</em>'s output into
-spaces for <em>r.what</em>.
-
+The input coordinates may be "piped" from the standard output
+(<tt>stdout</tt>) of another program. In the next example, vector
+point coordinates are piped from the
+<em><a href="v.out.ascii.html">v.out.ascii</a></em> module. 
 
 <div class="code"><pre>
-v.out.ascii bugsites separator=' ' | r.what map=soils,aspect
+v.out.ascii bugsites separator=space | r.what map=soils,aspect
 </pre></div>
-
 
 <h3>Output containing raster map category labels</h3>
 
 Here we use the <b>-f</b> label flag to enable the output of category labels
-associated with the raster cell(s), as well as values. (categorical maps only)
+associated with the raster cell(s), as well as values (categorical maps only).
 
 <div class="code"><pre>
 r.what -f map=soils,aspect << EOF
@@ -112,18 +111,20 @@ EOF
 653324.88|7563412.42|site 2|44|NdC|20|15 degrees NW 
 </pre></div>
 
-
-
 <h2>NOTE</h2>
 
 The maximum number of raster map layers that can be queried at one time is 400.
 <!-- as given by raster/r.what/main.c "#define NFILES 400" -->
 
+<h2>TODO</h2>
+
+<ul>
+  <li>Add <b>file</b> option</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="d.where.html">d.where</a>,
 <a href="r.category.html">r.category</a>,
 <a href="r.report.html">r.report</a>,
 <a href="r.stats.html">r.stats</a>,
@@ -134,10 +135,9 @@ The maximum number of raster map layers that can be queried at one time is 400.
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
 
-
 <h2>AUTHOR</h2>
-Michael Shapiro,
-U.S. Army Construction Engineering Research Laboratory
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
+Vector point input added by Martin Landa, Czech Technical University in Prague, Czech Republic
 
 <p>
 <i>Last changed: $Date$</i>
