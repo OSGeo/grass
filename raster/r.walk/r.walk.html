@@ -1,31 +1,41 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.walk</em> outputs 1) a raster map layer showing the lowest
+<em>r.walk</em> outputs 1) a raster map showing the lowest
 cumulative cost of moving between each cell and the user-specified
-starting points and 2) a second raster map layer showing the movement 
+starting points and 2) a second raster map showing the movement 
 direction to the next cell on the path back to the start point (see 
 <a href="#move">Movement Direction</a>). It uses an input elevation 
-raster map layer whose cell category values represent elevation, 
-combined with a second input raster map layer whose cell values 
+raster map whose cell category values represent elevation, 
+combined with a second input raster map whose cell values 
 represent friction costs.
 
-This function is similar to <em>r.cost</em>, but in addiction to a
-friction map, it considers an anisotropic travel time due to the
-different walking speed associated with downhill and uphill movements.
+<p>
+This function is similar to <em><a href="r.cost.html">r.cost</a></em>,
+but in addiction to a friction map, it considers an anisotropic travel
+time due to the different walking speed associated with downhill and
+uphill movements.
+
+<h2>NOTES</h2>
+
 <p>
 The formula from Aitken 1977/Langmuir 1984 (based on Naismith's rule
 for walking times) has been used to estimate the cost parameters of
 specific slope intervals:
 
-<p>T= [(a)*(Delta S)] + [(b)*(Delta H uphill)] + [(c)*(Delta H moderate downhill)] + [(d)*(Delta H steep downhill)]
-<p>where:<br>
-T is time of movement in seconds,<br>
-Delta S is the distance covered in meters,<br>
-Delta H is the altitude difference in meter.
-<p> 
+<div class="code"><pre>
+T= [(a)*(Delta S)] + [(b)*(Delta H uphill)] + [(c)*(Delta H moderate downhill)] + [(d)*(Delta H steep downhill)]
+</pre></div>
 
-The a, b, c, d parameters take in account movement speed in the different
-conditions and are linked to:
+where:
+<ul>
+  <li><tt>T</tt> is time of movement in seconds,</li>
+  <li><tt>Delta S</tt> is the distance covered in meters,</li>
+  <li><tt>Delta H</tt> is the altitude difference in meter.</li>
+</ul>
+
+<p>
+The a, b, c, d <b>walk_coeff</b> parameters take in account
+movement speed in the different conditions and are linked to:
 
 <ul>
   <li>a: underfoot condition (a=1/walking_speed)</li>
@@ -36,16 +46,18 @@ conditions and are linked to:
 
 It has been proved that moving downhill is favourable up to a specific
 slope value threshold, after that it becomes unfavourable. The default
-slope value threshold (slope factor) is -0.2125, corresponding to
-tan(-12), calibrated on human behaviour (&gt;5 and &lt;12
-degrees: moderate downhill; &gt;12 degrees: steep downhill). The
-default values for a, b, c, d are those proposed by Langmuir (0.72, 6.0,
-1.9998, -1.9998), based on man walking effort in standard
-conditions.<p>
-The lambda parameter of the linear equation combining movement and
-friction costs:<br>
+slope value threshold (<b>slope_factor</b>) is -0.2125, corresponding
+to tan(-12), calibrated on human behaviour (&gt;5 and &lt;12 degrees:
+moderate downhill; &gt;12 degrees: steep downhill). The default values
+for a, b, c, d <b>walk_coeff</b> parameters are those proposed by
+Langmuir (0.72, 6.0, 1.9998, -1.9998), based on man walking effort in
+standard conditions.
 
-total cost = movement time cost + (lambda) * friction costs<br>
+<p>The <b>lambda</b> parameter of the linear equation
+combining movement and friction costs:<br>
+<div class="code"><pre>
+total cost = movement time cost + (lambda) * friction costs
+</pre></div>
 must be set in the option section of <em>r.walk</em>.
 <p>
 For a more accurate result, the "knight's move" option can be used
@@ -70,7 +82,7 @@ algorithm, that find an optimum solution (for more details see
 <h2>Movement Direction</h2>
 <p>The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. Without it 
-<em>r.drain</em> would not correctly create a path from an end point 
+<em><a href="r.drain.html">r.drain</a></em> would not correctly create a path from an end point 
 back to the start point. The direction of each cell points towards 
 the next cell. The directions are recorded as degrees CCW from East:
 <div class="code"><pre>
@@ -84,19 +96,12 @@ the next cell. The directions are recorded as degrees CCW from East:
 <p>
 Once <em>r.walk</em> computes the cumulative cost map as a linear
 combination of friction cost (from friction map) and the altitude and
-distance covered (from the digital elevation model), <em>r.drain</em>
-can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
-and the movement direction raster map when running r.drain to ensure
-the path is computed according to the proper movement directions.
-
-
-<h2>SEE ALSO</h2>
-
-<em><a href="r.cost.html">r.cost</a></em>,
-<em><a href="r.drain.html">r.drain</a></em>,
-<em><a href="r.in.ascii.html">r.in.ascii</a></em>,
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
-<em><a href="r.out.ascii.html">r.out.ascii</a></em>
+distance covered (from the digital elevation
+model), <em><a href="r.drain.html">r.drain</a></em> can be used to
+find the minimum cost path. Make sure to use the <b>-d</b> flag and
+the movement direction raster map when
+running <em><a href="r.drain.html">r.drain</a></em> to ensure the path
+is computed according to the proper movement directions.
 
 
 <h2>REFERENCES</h2>
@@ -112,29 +117,34 @@ the path is computed according to the proper movement directions.
  Sports Council/MLTB. Cordee, Leicester.
 </ul>
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.cost.html">r.cost</a>,
+<a href="r.drain.html">r.drain</a>,
+<a href="r.in.ascii.html">r.in.ascii</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.out.ascii.html">r.out.ascii</a>
+</em>
+
+
 <h2>AUTHORS</h2>
 
-<b>Based on r.cost written by :</b>
-<p>Antony Awaida,<br>
-Intelligent Engineering<br>
-Systems Laboratory,<br>
-M.I.T.<br>
-<br>
-James Westervelt,<br>
-U.S.Army Construction Engineering Research Laboratory
+<b>Based on r.cost written by :</b><br>
+Antony Awaida, Intelligent Engineering, Systems Laboratory, M.I.T.<br>
+James Westervelt, U.S.Army Construction Engineering Research Laboratory<br>
+Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com)
 
-<p>Updated for Grass 5<br>
-Pierre de Mouveaux (pmx@audiovu.com)
+<p><b>Initial version of r.walk:</b><br>
+Steno Fontanari, 2002
 
-<p><b>Initial version of r.walk:</b>
-<p>Steno Fontanari, 2002
-
-<p><b>Current version of r.walk:</b>
-<p>Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli Mattia<br>
+<p><b>Current version of r.walk:</b><br>
+Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli Mattia<br>
 Correction by: Fontanari Steno, Napolitano Maurizio and  Flor Roberto<br>
 In collaboration with: Franchi Matteo, Vaglia Beatrice, Bartucca Luisa, Fava Valentina and Tolotti Mathias, 2004
 
-<p><b>Updated for Grass 6.1</b>
-<p>Roberto Flor and Markus Neteler
+<p><b>Updated for Grass 6.1:</b><br>
+Roberto Flor and Markus Neteler
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

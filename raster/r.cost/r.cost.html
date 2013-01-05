@@ -25,17 +25,17 @@ name of the resultant raster map of movement directions (see <a href="#move">Mov
 
 <p><em>r.cost</em> can be run with three different methods of identifying the
 starting point(s). One or more points (geographic coordinate pairs) can be
-provided as specified <b>coordinate</b>s on the command line, from a vector
+provided as specified <b>start_coordinate</b> on the command line, from a vector
 points file, or from a raster map.
 All non-NULL cells are considered to be starting points.
 
-Each <em>x,y</em> <b>coordinate</b> pair gives the geographic location of a
+Each <em>x,y</em> <b>start_coordinate</b> pair gives the geographic location of a
 point from which the transportation cost should be figured. As many points as
 desired can be entered by the user. These starting points can also be read
 from a vector points file through the <b>start_points</b> option or from a
 raster map through the <b>start_rast</b> option.
 <p><em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
-or one of the stop points given with <b>stop_coordinates</b> is reached.
+or one of the stop points given with <b>stop_coordinate</b> is reached.
 Alternatively, the stop points can be read from a vector points file with the
 <b>stop_points</b> option. During execution, once the cumulative cost to all 
 stopping points has been determined, processing stops.
@@ -53,7 +53,7 @@ cells. By using the <b>-n</b> flag, the null cells of the input map are
 retained as null cells in the output map.
 
 <p>As <em>r.cost</em> can run for a very long time, it can be useful to 
-use the <b>-v</b> verbose flag to track progress.
+use the <b>--v</b> verbose flag to track progress.
 
 <p>The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
 the output. In the diagram below, the center location (<tt>O</tt>) represents a
@@ -226,7 +226,7 @@ used. The calculation is done with <em>r.cost</em> as follows
 <h2>Movement Direction</h2>
 <p>The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. Without it 
-<em>r.drain</em> would not correctly create a path from an end point 
+<em><a href="r.drain.html">r.drain</a></em> would not correctly create a path from an end point 
 back to the start point. The direction of each cell points towards 
 the next cell. The directions are recorded as degrees CCW from East:
 <div class="code"><pre>
@@ -238,31 +238,26 @@ the next cell. The directions are recorded as degrees CCW from East:
 </pre></div>
 
 <p>
-Once <em>r.cost</em> computes the cumulative cost map, <em>r.drain</em>
+Once <em>r.cost</em> computes the cumulative cost map, <em><a href="r.drain.html">r.drain</a></em>
 can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
 and the movement direction raster map when running r.drain to ensure
 the path is computed according to the proper movement directions.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.drain.html">r.drain</a></em>,
-<em><a href="r.walk.html">r.walk</a></em>,
-<em><a href="r.in.ascii.html">r.in.ascii</a></em>,
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
-<em><a href="r.out.ascii.html">r.out.ascii</a></em>
+<em>
+<a href="r.drain.html">r.drain</a>,
+<a href="r.walk.html">r.walk</a>,
+<a href="r.in.ascii.html">r.in.ascii</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.out.ascii.html">r.out.ascii</a>
+</em>
 
 <h2>AUTHOR</h2>
 
-Antony Awaida,<br>
-Intelligent Engineering<br>
-Systems Laboratory,<br>
-M.I.T.<br>
-<br>
-James Westervelt,<br>
-U.S.Army Construction Engineering Research Laboratory
+Antony Awaida, Intelligent Engineering Systems Laboratory, M.I.T.<br>
+James Westervelt, U.S.Army Construction Engineering Research Laboratory<br>
+Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com) 
 
-<p>Updated for Grass 5<br>
-Pierre de Mouveaux (pmx@audiovu.com) 
-
-
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

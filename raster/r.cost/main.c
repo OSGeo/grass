@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
     opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->description =
-	_("Name of raster map containing grid cell cost information");
+	_("Name of input raster map containing grid cell cost information");
 
     opt1 = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -154,15 +154,13 @@ int main(int argc, char *argv[])
     opt12->key = "nearest";
     opt12->required = NO;
     opt12->description =
-	_("Name of output raster map with nearest start point");
+	_("Name for output raster map with nearest start point");
 
-    opt11 = G_define_option();
+    opt11 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt11->key = "outdir";
-    opt11->type = TYPE_STRING;
     opt11->required = NO;
-    opt11->gisprompt = "new,cell,raster";
     opt11->description =
-	_("Name of output raster map to contain movement directions");
+	_("Name for output raster map to contain movement directions");
 
     opt7 = G_define_standard_option(G_OPT_V_INPUT);
     opt7->key = "start_points";
@@ -173,7 +171,7 @@ int main(int argc, char *argv[])
     opt8 = G_define_standard_option(G_OPT_V_INPUT);
     opt8->key = "stop_points";
     opt8->required = NO;
-    opt8->label = _("Name of stop vector points map");
+    opt8->label = _("Name of stopping vector points map");
     opt8->guisection = _("Stop");
 
     opt9 = G_define_standard_option(G_OPT_R_INPUT);
@@ -182,22 +180,18 @@ int main(int argc, char *argv[])
     opt9->description = _("Name of starting raster points map");
     opt9->guisection = _("Start");
 
-    opt3 = G_define_option();
-    opt3->key = "coordinate";
-    opt3->type = TYPE_STRING;
-    opt3->key_desc = "x,y";
+    opt3 = G_define_standard_option(G_OPT_M_COORDS);
+    opt3->key = "start_coordinate";
     opt3->multiple = YES;
     opt3->description =
-	_("Map grid coordinates of a starting point (E,N)");
+	_("Coordinates of starting point(s) (E,N)");
     opt3->guisection = _("Start");
 
-    opt4 = G_define_option();
+    opt4 = G_define_standard_option(G_OPT_M_COORDS);
     opt4->key = "stop_coordinate";
-    opt4->type = TYPE_STRING;
-    opt4->key_desc = "x,y";
     opt4->multiple = YES;
     opt4->description =
-	_("Map grid coordinates of a stopping point (E,N)");
+	_("Coordinates of stopping point(s) (E,N)");
     opt4->guisection = _("Stop");
 
     opt5 = G_define_option();
