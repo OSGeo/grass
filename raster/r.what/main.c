@@ -6,8 +6,9 @@
  *               Markus Neteler <neteler itc.it>,Brad Douglas <rez touchofmadness.com>,
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>, Soeren Gebbert <soeren.gebbert gmx.de>
+ *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -20,8 +21,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 struct order
@@ -56,16 +59,18 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE out_type[NFILES];
     CELL *cell[NFILES];
     DCELL *dcell[NFILES];
-
+    struct Map_info Map;
+    struct line_pnts *Points;
+    
     /*   int row, col; */
     double drow, dcol;
     int row_in_window, in_window;
     double east, north;
-    int line;
+    int line, ltype;
     char buffer[1024];
     char **ptr;
     struct _opt {
-	struct Option *input, *cache, *null, *coords, *fs;
+        struct Option *input, *cache, *null, *coords, *fs, *points;
     } opt;
     struct _flg {
 	struct Flag *label, *cache, *cat_int, *color, *header;
@@ -76,7 +81,6 @@ int main(int argc, char *argv[])
     int point, point_cnt;
     struct order *cache;
     int cur_row;
-    int projection;
     int cache_hit = 0, cache_miss = 0;
     int cache_hit_tot = 0, cache_miss_tot = 0;
     int pass = 0;
@@ -101,7 +105,13 @@ int main(int argc, char *argv[])
 
     opt.coords = G_define_standard_option(G_OPT_M_COORDS);
     opt.coords->description = _("Coordinates for query");
-    opt.coords->guisection = _("Required");
+    opt.coords->guisection = _("Query");
+
+    opt.points = G_define_standard_option(G_OPT_V_MAP);
+    opt.points->key = "points";
+    opt.points->label = _("Name of vector points map for query");
+    opt.points->required = NO;
+    opt.points->guisection = _("Query");
     
     opt.null = G_define_option();
     opt.null->key = "null";
@@ -151,28 +161,11 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-
     tty = isatty(0);
 
-    projection = G_projection();
-
-    /* see v.in.ascii for a better solution */
-    if (opt.fs->answer != NULL) {
-	if (strcmp(opt.fs->answer, "space") == 0)
-	    fs = ' ';
-	else if (strcmp(opt.fs->answer, "tab") == 0 ||
-		 strcmp(opt.fs->answer, "\\t") == 0)
-	    fs = '\t';
-	else if (strcmp(opt.fs->answer, "newline") == 0)
-	    fs = '\n';
-	else if (strcmp(opt.fs->answer, "comma") == 0)
-	    fs = ',';
-	else
-	    fs = opt.fs->answer[0];
-    }
-
+    fs = G_option_to_separator(opt.fs);
+    
     null_str = opt.null->answer;
-
 
     if (tty)
 	Cache_size = 1;
@@ -184,19 +177,19 @@ int main(int argc, char *argv[])
 
     cache = (struct order *)G_malloc(sizeof(struct order) * Cache_size);
 
-    /*enable cache report */
+    /* enable cache report */
     if (flg.cache->answer)
 	cache_report = TRUE;
 
-
+    /* open raster maps to query */
     ptr = opt.input->answers;
     nfiles = 0;
     for (; *ptr != NULL; ptr++) {
 	char name[GNAME_MAX];
 
 	if (nfiles >= NFILES)
-	    G_fatal_error(_("can only do up to %d raster maps"),
-			  NFILES);
+	    G_fatal_error(_("Can only do up to %d raster maps (%d given)"),
+			  NFILES, nfiles);
 
 	strcpy(name, *ptr);
 	fd[nfiles] = Rast_open_old(name, "");
@@ -216,6 +209,7 @@ int main(int argc, char *argv[])
 	nfiles++;
     }
 
+    /* allocate row buffers */
     for (i = 0; i < nfiles; i++) {
 	if (flg.cat_int->answer)
 	    out_type[i] = CELL_TYPE;
@@ -225,9 +219,16 @@ int main(int argc, char *argv[])
 	    dcell[i] = Rast_allocate_d_buf();
     }
 
+    /* open vector points map */
+    if (opt.points->answer) {
+        Vect_set_open_level(1); /* topology not required */
+        if (Vect_open_old(&Map, opt.points->answer, "") < 0)
+            G_fatal_error(_("Unable to open vector map <%s>"), opt.points->answer);
+    }
+    Points = Vect_new_line_struct();
     G_get_window(&window);
 
-
+    /* print header row */
     if(flg.header->answer) {
 	fprintf(stdout, "easting%cnorthing%csite_name", fs, fs);
 
@@ -248,7 +249,7 @@ int main(int argc, char *argv[])
     }
 
     line = 0;
-    if (!opt.coords->answers && tty)
+    if (!opt.coords->answers && !opt.points->answers && tty)
 	fprintf(stderr, "enter points, \"end\" to quit\n");
 
     j = 0;
@@ -260,57 +261,78 @@ int main(int argc, char *argv[])
 
 	cache_hit = cache_miss = 0;
 
-	if (!opt.coords->answers && tty) {
+	if (!opt.coords->answers && !opt.points->answers && tty) {
 	    fprintf(stderr, "\neast north [label] >  ");
 	    Cache_size = 1;
 	}
 	{
 	    point_cnt = 0;
 	    for (i = 0; i < Cache_size; i++) {
-		if (!opt.coords->answers && fgets(buffer, 1000, stdin) == NULL)
+		if (!opt.coords->answers && !opt.points->answers &&
+                    fgets(buffer, 1000, stdin) == NULL)
 		    done = TRUE;
 		else {
 		    line++;
-		    if ((!opt.coords->answers &&
+		    if ((!opt.coords->answers && !opt.points->answers &&
 			 (strncmp(buffer, "end\n", 4) == 0 ||
 			  strncmp(buffer, "exit\n", 5) == 0)) ||
-			(opt.coords->answers && !opt.coords->answers[j]))
+			(opt.coords->answers && !opt.coords->answers[j])) {
 			done = TRUE;
+                    }
 		    else {
-			*(cache[point_cnt].lab_buf) =
-			    *(cache[point_cnt].east_buf) =
-			    *(cache[point_cnt].north_buf) = 0;
-			if (!opt.coords->answers)
-			    sscanf(buffer, "%s %s %[^\n]",
-				   cache[point_cnt].east_buf,
-				   cache[point_cnt].north_buf,
-				   cache[point_cnt].lab_buf);
-			else {
-			    strcpy(cache[point_cnt].east_buf,
-				   opt.coords->answers[j++]);
-			    strcpy(cache[point_cnt].north_buf,
-				   opt.coords->answers[j++]);
-			}
-			if (*(cache[point_cnt].east_buf) == 0)
-			    continue;	/* skip blank lines */
-
-			if (*(cache[point_cnt].north_buf) == 0) {
-			    oops(line, buffer,
-				 "two coordinates (east north) required");
-			    continue;
-			}
-			if (!G_scan_northing
-			    (cache[point_cnt].north_buf, &north, window.proj)
-			    || !G_scan_easting(cache[point_cnt].east_buf,
-					       &east, window.proj)) {
-			    oops(line, buffer, "invalid coordinate(s)");
-			    continue;
-			}
-
+                        if (opt.points->answer) {
+                            ltype = Vect_read_next_line(&Map, Points, NULL);
+                            if (ltype == -1)
+                                G_fatal_error(_("Unable to read vector map <%s>"), Vect_get_full_name(&Map));
+                            else if (ltype == -2)
+                                done = TRUE;
+                            else if (!(ltype & GV_POINTS)) {
+                                G_warning(_("Line %d is not point or centroid, skipped"), line);
+                                continue;
+                            }
+                            else {
+                                east = Points->x[0];
+                                north = Points->y[0];
+                                sprintf(cache[point_cnt].east_buf, "%f", east);
+                                sprintf(cache[point_cnt].north_buf, "%f", north);
+                            }
+                        }
+                        else {
+                            *(cache[point_cnt].lab_buf) =
+                                *(cache[point_cnt].east_buf) =
+                                *(cache[point_cnt].north_buf) = 0;
+                            if (!opt.coords->answers)
+                                sscanf(buffer, "%s %s %[^\n]",
+                                       cache[point_cnt].east_buf,
+                                       cache[point_cnt].north_buf,
+                                       cache[point_cnt].lab_buf);
+                            else {
+                                strcpy(cache[point_cnt].east_buf,
+                                       opt.coords->answers[j++]);
+                                strcpy(cache[point_cnt].north_buf,
+                                       opt.coords->answers[j++]);
+                            }
+                            if (*(cache[point_cnt].east_buf) == 0)
+                                continue;	/* skip blank lines */
+                            
+                            if (*(cache[point_cnt].north_buf) == 0) {
+                                oops(line, buffer,
+                                     "two coordinates (east north) required");
+                                continue;
+                            }
+                        
+                            
+                            if (!G_scan_northing(cache[point_cnt].north_buf, &north, window.proj) ||
+                                !G_scan_easting(cache[point_cnt].east_buf, &east, window.proj)) {
+                                oops(line, buffer, "invalid coordinate(s)");
+                                continue;
+                            }
+                        }
+                        
 			/* convert north, east to row and col */
 			drow = Rast_northing_to_row(north, &window);
 			dcol = Rast_easting_to_col(east, &window);
-
+                        
 			/* a special case.
 			 *   if north falls at southern edge, or east falls on eastern edge,
 			 *   the point will appear outside the window.
@@ -455,12 +477,18 @@ int main(int argc, char *argv[])
 	cache_hit = cache_miss = 0;
     }
 
-    if (!opt.coords->answers && tty)
+    if (!opt.coords->answers && !opt.points->answers && tty)
 	fprintf(stderr, "\n");
     if (cache_report & !tty)
 	fprintf(stderr, "Total:    Cache  Hit: %6d  Miss: %6d\n",
 		cache_hit_tot, cache_miss_tot);
 
+    /* close vector points map */
+    if (opt.points->answer) {
+        Vect_close(&Map);
+    }
+    Vect_destroy_line_struct(Points);
+    
     exit(EXIT_SUCCESS);
 }
 
