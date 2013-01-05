@@ -870,11 +870,13 @@ int main(int argc, char *argv[])
 
 		    if (start_with_raster_vals == 1) {
 			cellval = Rast_get_d_value(ptr2, data_type2);
+			insert(cellval, row, col);
 			costs.cost_out = cellval;
 			segment_put(&cost_seg, &costs, row, col);
 		    }
 		    else {
 			value = &zero;
+			insert(zero, row, col);
 			costs.cost_out = *value;
 			segment_put(&cost_seg, &costs, row, col);
 		    }
@@ -905,6 +907,7 @@ int main(int argc, char *argv[])
 	    if (top_start_pt->row < 0 || top_start_pt->row >= nrows
 		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
 		G_fatal_error(_("Specified starting location outside database window"));
+	    insert(zero, top_start_pt->row, top_start_pt->col);
 	    segment_get(&cost_seg, &costs, top_start_pt->row,
 			top_start_pt->col);
 	    costs.cost_out = *value;
@@ -1372,12 +1375,14 @@ int main(int argc, char *argv[])
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
 		segment_put(&cost_seg, &costs, row, col);
+		insert(min_cost, row, col);
 		if (dir == 1)
 		    segment_put(&dir_seg, &cur_dir, row, col);
 	    }
 	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
 		segment_put(&cost_seg, &costs, row, col);
+		insert(min_cost, row, col);
 		if (dir == 1)
 		    segment_put(&dir_seg, &cur_dir, row, col);
 	    }
