@@ -112,11 +112,13 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd, struct metrics *m)
     lseek(fe, 0, SEEK_SET);
     lseek(fd, 0, SEEK_SET);
     advance_band3(fe, bnd);
-    for (i = 0; i < nl; i += 1) {
+    for (i = 0; i < nl; i++) {
+        G_percent(i, nl, 5);
 	advance_band3(fe, bnd);
 	build_one_row(i, nl, bnd->ns, bnd, dir, m[i]);
 	write(fd, dir, bufsz);
     }
+    G_percent(1, 1, 1);
     advance_band3(fe, bnd);
     build_one_row(i, nl, bnd->ns, bnd, dir, m[i]);
     write(fd, dir, bufsz);
