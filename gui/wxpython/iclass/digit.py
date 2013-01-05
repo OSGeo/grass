@@ -21,12 +21,15 @@ import wx
 from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit   import IVDigit
 from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
+from core.gcmd        import GWarning
 try:
     from grass.lib.gis    import G_verbose, G_set_verbose
     from grass.lib.vector import *
     from grass.lib.vedit  import *
 except ImportError:
     pass
+
+import grass.script as grass
 
 class IClassVDigitWindow(VDigitWindow):
     """! Class similar to VDigitWindow but specialized for wxIClass."""
@@ -44,7 +47,16 @@ class IClassVDigitWindow(VDigitWindow):
         action = self.toolbar.GetAction()
         if not action:
             return
-            
+
+        region = grass.region()
+        e, n = self.Pixel2Cell(event.GetPositionTuple())
+        if not ((region['s'] <= n <= region['n']) and (region['w'] <= e <= region['e'])):
+            GWarning(parent = self.parent, 
+                     message = _("You are trying to create a training area "
+                                 "outside the computational region. "
+                                 "Please, use g.region to set the appropriate region first."))
+            return
+
         cat = self.GetCurrentCategory()
         
         if cat is None and action == "addLine":
