@@ -9,14 +9,14 @@ the given directions. Such a movement direction map can be generated with
 <em><a href="r.slope.aspect.html">r.slope.aspect</a></em> or 
 <em><a href="r.watershed.html">r.watershed</a></em>.
 
-The <b>output</b> result (also a raster map layer) will show one or more 
-least-cost paths between each user-provided location(s) and the minima 
-(low category values) in the <b>input</b> map. If the -d flag is used the 
-output least-cost paths will be found using the direction layer.
-By default, the <b>output</b> will be an integer CELL map with <tt>1</tt> 
+The <b>output</b> raster map will show one or more least-cost paths
+between each user-provided location(s) and the minima (low category
+values) in the raster <b>input</b> map. If the -d flag is used the output
+least-cost paths will be found using the direction raster map.  By
+default, the <b>output</b> will be an integer CELL map with <tt>1</tt>
 along the least cost path, and null cells elsewhere.
 
-<p>With the <b>-c</b> (<em>copy</em>) flag, the input map cell values are
+<p>With the <b>-c</b> (<em>copy</em>) flag, the input raster map cell values are
 copied verbatim along the path. With the <b>-a</b> (<em>accumulate</em>)
 flag, the accumulated cell value from the starting point up to the current
 cell is written on output. With either the <b>-c</b> or the <b>-a</b> flags, the
@@ -26,34 +26,39 @@ With the <b>-n</b> (<em>number</em>) flag, the cells are numbered consecutively 
 starting point to the final point.
 The <b>-c</b>, <b>-a</b>, and <b>-n</b> flags are mutually incompatible.
 
-<p>For an elevation surface, the path is calculated by choosing the steeper 
-"slope" between adjacent cells. The slope calculation accurately acounts 
-for the variable scale in lat-lon projections. For a cost surface, the path
-is calculated by following the movement direction surface back to the start 
-point given in <em>r.walk</em> or <em>r.cost</em>. The path search stops 
+<p>For an elevation surface, the path is calculated by choosing the
+steeper "slope" between adjacent cells. The slope calculation
+accurately acounts for the variable scale in lat-lon projections. For
+a cost surface, the path is calculated by following the movement
+direction surface back to the start point given
+in <em><a href="r.walk.html">r.walk</a></em> or
+<em><a href="r.cost.html">r.cost</a></em>. The path search stops 
 as soon as a region border or a neighboring NULL cell is encountered, 
 because in these cases the direction can not be determined (the path 
 could continue outside the current region).
 
-<p>The <b>coordinate</b> parameter consists of map E and N grid coordinates of
+<p>The <b>start_coordinates</b> parameter consists of map E and N grid coordinates of
 a starting point. Each x,y pair is the easting and northing (respectively) of
 a starting point from which a least-cost corridor will be developed.
-The <b>vector_points</b> parameter can take multiple vector maps containing 
+The <b>start_points</b> parameter can take multiple vector maps containing 
 additional starting points.
 Up to 1024 starting points can be input from a combination of the
-<b>coordinate</b> and <b>vector_points</b> parameters.
+<b>start_coordinates</b> and <b>start_points</b> parameters.
 
 <h2>NOTES</h2>
 
-If no direction input map is given, <em>r.drain</em> currently finds 
-only the lowest point (the cell having the smallest category value) in 
-the input file that can be reached through directly adjacent cells 
-that are less than or equal in value to the cell reached immediately 
-prior to it; therefore, it will not necessarily reach the lowest point 
-in the input file. It currently finds <em>pits</em> in the data, rather 
-than the lowest point in the entire input map. The <em>r.fill.dir</em>,
-<em>r.terraflow</em>, and <em>r.basins.fill</em> modules can be used to
-fill in subbasins prior to processing with <em>r.drain</em>.
+If no direction input map is given, <em>r.drain</em> currently finds
+only the lowest point (the cell having the smallest category value) in
+the input file that can be reached through directly adjacent cells
+that are less than or equal in value to the cell reached immediately
+prior to it; therefore, it will not necessarily reach the lowest point
+in the input file. It currently finds <em>pits</em> in the data,
+rather than the lowest point in the entire input
+map. The <em><a href="r.fill.dir.html">r.fill.dir</a></em>,
+<em><a href="r.terraflow.html">r.terraflow</a></em>,
+and <em><a href="r.basins.fill.html">r.basins.fill</a></em> modules
+can be used to fill in subbasins prior to processing
+with <em>r.drain</em>.
 
 <p>
 <em>r.drain</em> will not give sane results at the region boundary. On outer rows
@@ -194,19 +199,22 @@ This problem doesn't arise with floating point maps.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.region.html">g.region</a></em>,
-<em><a href="r.cost.html">r.cost</a></em>,
-<em><a href="r.fill.dir.html">r.fill.dir</a></em>,
-<em><a href="r.basins.fill.html">r.basins.fill</a></em>,
-<em><a href="r.terraflow.html">r.terraflow</a></em>,
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
-<em><a href="r.walk.html">r.walk</a></em>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.cost.html">r.cost</a>,
+<a href="r.fill.dir.html">r.fill.dir</a>,
+<a href="r.basins.fill.html">r.basins.fill</a>,
+<a href="r.terraflow.html">r.terraflow</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.walk.html">r.walk</a>
+</em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Completely rewritten by Roger S. Miller, 2001
-<p>July 2004 at WebValley 2004, error checking and vector points added by
+Completely rewritten by Roger S. Miller, 2001<br>
+July 2004 at WebValley 2004, error checking and vector points added by
 Matteo Franchi (Liceo Leonardo Da Vinci, Trento) and
 Roberto Flor (ITC-irst, Trento, Italy)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

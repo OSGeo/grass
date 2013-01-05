@@ -78,9 +78,9 @@ int main(int argc, char **argv)
     struct Option *opt1, *opt2, *coordopt, *vpointopt, *opt3, *opt4;
     struct Flag *flag1, *flag2, *flag3, *flag4;
     struct GModule *module;
-    int in_type, dir_data_type;
+    int in_type;
     void *in_buf;
-	void *dir_buf;
+    void *dir_buf;
     CELL *out_buf;
     struct band3 bnd, bndC;
     struct metrics *m = NULL;
@@ -112,36 +112,29 @@ int main(int argc, char **argv)
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
     opt1->key = "input";
     
-    opt3 = G_define_option();
+    opt3 = G_define_standard_option(G_OPT_R_INPUT);
     opt3->key = "indir";
-    opt3->type = TYPE_STRING;
-    opt3->gisprompt = "old,cell,raster";
     opt3->description =
-	_("Name of movement direction map associated with the cost surface");
+	_("Name of input movement direction map associated with the cost surface");
     opt3->required = NO;
+    
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
     
-    opt4 = G_define_option();
-    opt4->key = "voutput";
-    opt4->type = TYPE_STRING;
-    opt4->gisprompt = "new,vector,vector";
+    opt4 = G_define_standard_option(G_OPT_V_OUTPUT);
+    opt4->key = "vector_output";
     opt4->required = NO;
     opt4->description =
-	_("Output drain vector map (recommended for cost surface made using knight's move)");
+	_("Name for output drain vector map (recommended for cost surface made using knight's move)");
     
-    coordopt = G_define_option();
-    coordopt->key = "coordinate";
-    coordopt->type = TYPE_STRING;
-    coordopt->required = NO;
-    coordopt->multiple = YES;
-    coordopt->key_desc = "x,y";
-    coordopt->description = _("Map coordinates of starting point(s) (E,N)");
+    coordopt = G_define_standard_option(G_OPT_M_COORDS);
+    coordopt->key = "start_coordinates";
+    coordopt->description = _("Coordinates of starting point(s) (E,N)");
     coordopt->guisection = _("Start");
 
     vpointopt = G_define_standard_option(G_OPT_V_INPUTS);
-    vpointopt->key = "vector_points";
+    vpointopt->key = "start_points";
     vpointopt->required = NO;
-    vpointopt->description = _("Name of vector map(s) containing starting point(s)");
+    vpointopt->label = _("Name of starting vector points map(s)");
     vpointopt->guisection = _("Start");
 
     flag1 = G_define_flag();
@@ -170,36 +163,29 @@ int main(int argc, char **argv)
 
     if (flag4->answer) {
 	costmode = 1;
-	G_message(_
-		  ("Directional drain selected... checking for direction raster"));
+	G_verbose_message(_("Directional drain selected... checking for direction raster"));
     }
     else {
-	G_message(_("Surface/Hydrology drain selected"));
+	G_verbose_message(_("Surface/Hydrology drain selected"));
     }
 
     if (costmode == 1) {
 	if (!opt3->answer) {
-	    G_fatal_error(_
-			  ("Direction raster not specified, if direction flag is on, a direction raster must be given"));
+	    G_fatal_error(_("Direction raster not specified, if direction flag is on, "
+                            "a direction raster must be given"));
 	}
 	strcpy(dir_name, opt3->answer);
-	dir_data_type = Rast_map_type(dir_name, "");
     }
     if (costmode == 0) {
 	if (opt3->answer) {
-	    G_fatal_error(_
-			  ("Direction map <%s> should not be specified for Surface/Hydrology drains"),
+	    G_fatal_error(_("Direction map <%s> should not be specified for Surface/Hydrology drains"),
 			  opt3->answer);
 	}
     }
 
     if (opt4->answer) {
-	G_message(_("Outputting a vector path"));
-	if (G_legal_filename(opt4->answer) < 0)
-	    G_fatal_error(_("<%s> is an illegal file name"), opt4->answer);
-	/*G_ask_vector_new("",vect); */
 	if (0 > Vect_open_new(&vout, opt4->answer, 0)) {
-	    G_fatal_error(_("Unable to create vector map <%s>"),
+            G_fatal_error(_("Unable to create vector map <%s>"),
 			  opt4->answer);
 	}
 	Vect_hist_command(&vout);
@@ -390,7 +376,7 @@ int main(int argc, char **argv)
 
     /* only necessary for non-dir drain */
     if (costmode == 0) {
-	G_verbose_message(_("Calculating flow directions..."));
+	G_message(_("Calculating flow directions..."));
 
 	/* fill one-cell pits and take a first stab at flow directions */
 	filldir(fe, fd, nrows, &bnd, m);
@@ -459,8 +445,7 @@ int main(int argc, char **argv)
 	}
 
 	/* build the output map */
-	G_message(_("Writing raster map <%s>..."),
-		  new_map_name);
+	G_message(_("Writing output raster map..."));
 	for (i = 0; i < nrows; i++) {
 	    G_percent(i, nrows, 2);
 	    Rast_set_c_null_value(out_buf, ncols);
@@ -585,7 +570,6 @@ int main(int argc, char **argv)
 	unlink(tempfile3);
 	G_free(dir_buf);
     }
-    G_done_msg(" ");
     
     exit(EXIT_SUCCESS);
 }
