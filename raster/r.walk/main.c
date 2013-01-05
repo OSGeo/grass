@@ -203,6 +203,7 @@ int main(int argc, char *argv[])
     opt11->required = NO;
     opt11->description =
 	_("Name for output raster map to contain movement directions");
+    opt11->guisection = _("Optional outputs");
 
     opt7 = G_define_standard_option(G_OPT_V_INPUT);
     opt7->key = "start_points";
@@ -251,13 +252,15 @@ int main(int argc, char *argv[])
     opt6->multiple = NO;
     opt6->description =
 	_("Cost assigned to null cells. By default, null cells are excluded");
-
+    opt6->guisection = _("NULL cells");
+    
     opt10 = G_define_option();
     opt10->key = "percent_memory";
     opt10->type = TYPE_INTEGER;
     opt10->required = NO;
     opt10->multiple = NO;
     opt10->answer = "100";
+    opt10->options = "0-100";
     opt10->description = _("Percent of map to keep in memory");
 
     opt15 = G_define_option();
@@ -269,6 +272,7 @@ int main(int argc, char *argv[])
     opt15->answer = "0.72,6.0,1.9998,-1.9998";
     opt15->description =
 	_("Coefficients for walking energy formula parameters a,b,c,d");
+    opt15->guisection = _("Settings");
 
     opt14 = G_define_option();
     opt14->key = "lambda";
@@ -278,6 +282,7 @@ int main(int argc, char *argv[])
     opt14->answer = "1.0";
     opt14->description =
 	_("Lambda coefficients for combining walking energy and friction cost");
+    opt14->guisection = _("Settings");
 
     opt13 = G_define_option();
     opt13->key = "slope_factor";
@@ -287,6 +292,7 @@ int main(int argc, char *argv[])
     opt13->answer = "-0.2125";
     opt13->description =
 	_("Slope factor determines travel energy cost per height step");
+    opt13->guisection = _("Settings");
 
     flag2 = G_define_flag();
     flag2->key = 'k';
@@ -296,11 +302,13 @@ int main(int argc, char *argv[])
     flag3 = G_define_flag();
     flag3->key = 'n';
     flag3->description = _("Keep null values in output map");
+    flag3->guisection = _("NULL cells");
 
     flag4 = G_define_flag();
     flag4->key = 'r';
     flag4->description = _("Start with values in raster map");
-
+    flag4->guisection = _("Start");
+ 
     flag5 = G_define_flag();
     flag5->key = 'i';
     flag5->description = _("Only print info about disk space and memory requirements");
