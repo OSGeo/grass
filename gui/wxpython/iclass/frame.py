@@ -1081,9 +1081,27 @@ class IClassMapFrame(DoubleMapFrame):
         @fixme: needs refactoring
         """
         toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
 
         self.GetFirstWindow().mouse['use'] = 'pointer'
+
+    def SwitchTool(self, toolbar, event):
+        """!Calls UpdateTools to manage connected toolbars"""
+        self.UpdateTools(event)
+        super(IClassMapFrame, self).SwitchTool(toolbar, event)
+
+    def UpdateTools(self, event):
+        """!Method deals with relations of toolbars and other
+        elements"""
+        # untoggles button in other toolbars
+        for toolbar in self.toolbars.itervalues():
+            if hasattr(event, 'GetEventObject') == True:
+                if event.GetEventObject() == toolbar:
+                    continue
+                if toolbar.action:
+                    toolbar.ToggleTool(toolbar.action['id'], False)
+                    toolbar.action['id'] = -1
+                    toolbar.OnTool(None)
+
 
 class MapManager:
     """! Class for managing map renderer.
