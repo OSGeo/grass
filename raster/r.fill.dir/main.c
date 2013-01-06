@@ -244,7 +244,9 @@ int main(int argc, char **argv)
 	close(fm);
     }
 
+    G_important_message(_("Writing output raster maps..."));
     for (i = 0; i < nrows; i++) {
+        G_percent(i, nrows, 5);
 	read(fe, in_buf, bnd.sz);
 	put_row(new_id, in_buf);
 
@@ -254,9 +256,9 @@ int main(int argc, char **argv)
 	    out_buf[j] = dir_type(type, out_buf[j]);
 
 	Rast_put_row(dir_id, out_buf, CELL_TYPE);
-
     }
-
+    G_percent(1, 1, 1);
+    
     Rast_close(new_id);
     close(fe);
 

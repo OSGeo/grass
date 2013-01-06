@@ -92,7 +92,7 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
     /* complete a downward pass */
     do {
-	G_message(_("wtrshed pass %d"), ++pass);
+	G_verbose_message(_("Watershed pass %d"), ++pass);
 	repeat = 0;
 
 	/* fill the buffer */

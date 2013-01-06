@@ -133,7 +133,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	pass += 1;
 
 	activity = 0;
-	G_message(_("Downward pass %d"), pass);
+	G_verbose_message(_("Downward pass %d"), pass);
 
 	lseek(fd, 0, SEEK_SET);
 	advance_band3(fd, bnd);
@@ -170,7 +170,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	}
 
 	activity = 0;
-	G_message(_("Upward pass %d"), pass);
+	G_verbose_message(_("Upward pass %d"), pass);
 
 	lseek(fd, (off_t) (nl - 1) * bnd->sz, SEEK_SET);
 	retreat_band3(fd, bnd);

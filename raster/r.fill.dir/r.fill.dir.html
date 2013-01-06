@@ -58,7 +58,7 @@ the program can be used to generate a flow direction map for any
 sub-area within the full map layer. Also, <em>r.fill.dir</em> is
 sensitive to any <em>mask</em> in effect.
 <p>
-In some cases it may be necessary to run r.fill.dir repeatedly (using output
+In some cases it may be necessary to run <em>r.fill.dir</em> repeatedly (using output
 from one run as input to the next run) before all of problem areas are
 filled.
 
@@ -68,26 +68,33 @@ filled.
 r.fill.dir input=ansi.elev elevation=ansi.fill.elev direction=ansi.asp
 </pre></div>
 
-<p>will create a depressionless (sinkless) elevation map ansi.fill.elev and a flow
-direction map ansi.asp for the type "grass".
+Will create a depressionless (sinkless) elevation
+map <i>ansi.fill.elev</i> and a flow direction map <i>ansi.asp</i> for the
+type &quot;grass&quot;.
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li>Beasley, D.B. and L.F. Huggins. 1982. ANSWERS (areal nonpoint source watershed environmental response simulation): User's manual. U.S. EPA-905/9-82-001, Chicago, IL, 54 p.
+<li>Jenson, S.K., and J.O. Domingue. 1988. Extracting topographic structure from
+digital elevation model data for geographic information system analysis. Photogram. Engr. and Remote Sens. 54: 1593-1600.
+<li>Young, R.A., C.A. Onstad, D.D. Bosch and W.P. Anderson. 1985. Agricultural nonpoint surface pollution models (AGNPS) I and II model documentation. St. Paul: Minn. Pollution control Agency and Washington D.C., USDA-Agricultural Research
+Service.
+</ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="r.fillnulls.html">r.fillnulls</a>,
-<a href="r.slope.aspect.html">r.slope.aspect</a></em>
+<a href="r.slope.aspect.html">r.slope.aspect</a>
+</em>
 
-<p>Beasley, D.B. and L.F. Huggins. 1982. ANSWERS (areal nonpoint source watershed environmental response simulation): User's manual. U.S. EPA-905/9-82-001, Chicago, IL, 54 p.
-<p>Jenson, S.K., and J.O. Domingue. 1988. Extracting topographic structure from
-digital elevation model data for geographic information system analysis. Photogram. Engr. and Remote Sens. 54: 1593-1600.
-<p>Young, R.A., C.A. Onstad, D.D. Bosch and W.P. Anderson. 1985. Agricultural nonpoint surface pollution models (AGNPS) I and II model documentation. St. Paul: Minn. Pollution control Agency and Washington D.C., USDA-Agricultural Research
-Service.
-<p>
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 Fortran version:
 Raghavan Srinivasan, Agricultural Engineering Department, Purdue
 University<br>
 Rewrite to C with enhancements:
 Roger S. Miller
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
