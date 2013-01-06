@@ -6,7 +6,7 @@
 # AUTHOR(S):	Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Display the HTML/MAN pages
-# COPYRIGHT:	(C) 2003, 2008, 2010 by the GRASS Development Team
+# COPYRIGHT:	(C) 2003, 2008, 2010-2012 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Display the HTML manual pages of GRASS modules
+#% description: Displays the manual pages of GRASS modules.
 #% keywords: general
 #% keywords: manual
 #% keywords: help
@@ -23,6 +23,11 @@
 #%flag
 #% key: i
 #% description: Display index
+#% suppress_required: yes
+#%end
+#%flag
+#% key: t
+#% description: Display topics
 #% suppress_required: yes
 #%end
 #%flag
@@ -70,13 +75,25 @@ def start_man(entry):
 def main():
     global gisbase, browser, browser_name
     
-    index  = flags['i']
-    manual = flags['m']
+    if flags['i'] and flags['t']:
+        grass.fatal(_("Flags -%c and -%c are mutually exclusive") % ('i', 't'))
+    
+    special = None
+    if flags['i']:
+        special = 'index'
+    elif flags ['t']:
+        special = 'topics'
+    
+    if flags['m']:
+        start = start_man
+    else:
+        start = start_browser
+    
     entry  = options['entry']
     
     gisbase = os.environ['GISBASE']
     
-    browser = os.getenv('GRASS_HTML_BROWSER')
+    browser = os.getenv('GRASS_HTML_BROWSER', '')
     
     if sys.platform == 'darwin':
         # hack for MacOSX
@@ -89,17 +106,11 @@ def main():
     
     # keep order!
     # first test for index...
-    if index:
-	if manual:
-	    start_man('index')
-	else:
-	    start_browser('index')
-        return 0
-    
-    if manual:
-	start_man(entry)
+    if special:
+        start(special)
     else:
-	start_browser(entry)
+        start(entry)
+    
     return 0
 
 if __name__ == "__main__":
