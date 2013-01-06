@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("viewshed"));
     G_add_keyword(_("line of sight"));
-    module->label = _("Computes the viewshed of a point on a raster terrain.");
+    module->label = _("Computes the viewshed of a point on an elevation raster map.");
     module->description = _("Default format: NULL (invisible), vertical angle wrt viewpoint (visible).");
 
     struct Cell_head region;
@@ -467,7 +467,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     booleanOutput = G_define_flag();
     booleanOutput->key = 'b';
     booleanOutput->description =
-	_("Output format is {0 (invisible) 1 (visible)}");
+	_("Output format is invisible = 0, visible = 1");
     booleanOutput->guisection = _("Output format");
 
     /* output mode = elevation flag */
@@ -483,7 +483,6 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     struct Option *viewLocOpt;
 
     viewLocOpt = G_define_standard_option(G_OPT_M_COORDS);
-    viewLocOpt->key = "coordinate";
     viewLocOpt->required = YES;
     viewLocOpt->description = _("Coordinates of viewing position");
 
@@ -520,7 +519,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     maxDistOpt->required = NO;
     maxDistOpt->key_desc = "value";
     maxDistOpt->description =
-	_("Maximum visibility radius. By default infinity (-1).");
+	_("Maximum visibility radius. By default infinity (-1)");
     char infdist[10];
 
     sprintf(infdist, "%d", INFINITY_DISTANCE);
