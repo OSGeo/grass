@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
 
     flag5 = G_define_flag();
     flag5->key = 'i';
-    flag5->description = _("Only print info about disk space and memory requirements");
+    flag5->description = _("Print info about disk space and memory requirements and exit");
 
     /* Parse options */
     if (G_parser(argc, argv))
@@ -401,17 +401,20 @@ int main(int argc, char *argv[])
 	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
     }
-    if (disk_mb > 200 || mem_mb > 200 || G_verbose() > G_verbose_std()) {
-	G_message("--------------------------------------------");
-	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
-	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
-	G_message("--------------------------------------------");
-    }	
     
     if (flag5->answer) {
+	fprintf(stdout, _("Will need at least %.2f MB of disk space"), disk_mb);
+        fprintf(stdout, "\n");
+	fprintf(stdout, _("Will need at least %.2f MB of memory"), mem_mb);
+        fprintf(stdout, "\n");
 	Rast_close(cost_fd);
 	exit(EXIT_SUCCESS);
     }
+
+    G_verbose_message("--------------------------------------------");
+    G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
+    G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
+    G_verbose_message("--------------------------------------------");
 
     /* Create segmented format files for cost layer and output layer */
     G_verbose_message(_("Creating some temporary files..."));
@@ -490,7 +493,7 @@ int main(int argc, char *argv[])
     if (dir == TRUE) {
 	int i;
 
-	G_message(_("Initializing directional output "));
+	G_message(_("Initializing directional output..."));
 
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
@@ -512,7 +515,7 @@ int main(int argc, char *argv[])
 	struct line_cats *Cats;
 	struct bound_box box;
 	struct start_pt *new_start_pt;
-	int cat, type, got_one = 0;
+	int cat, type, npoints = 0;
 
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
@@ -543,7 +546,7 @@ int main(int argc, char *argv[])
 	    }
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
-	    got_one = 1;
+            npoints++;
 
 	    col = (int)Rast_easting_to_col(Points->x[0], &window);
 	    row = (int)Rast_northing_to_row(Points->y[0], &window);
@@ -568,10 +571,12 @@ int main(int argc, char *argv[])
 	    }
 	}
 
+	if (npoints < 1)
+	    G_fatal_error(_("No start points found in vector map <%s>"), Vect_get_full_name(&In));
+        else
+            G_verbose_message(_("%d points found"), npoints);
+        
 	Vect_close(&In);
-
-	if (!got_one)
-	    G_fatal_error(_("No start points found in vector <%s>"), opt7->answer);
     }
 
     /* read vector with stop points */
@@ -1031,7 +1036,7 @@ int main(int argc, char *argv[])
     nearest_size = Rast_cell_size(nearest_data_type);
 
     /* Copy segmented map to output map */
-    G_message(_("Writing raster map <%s>..."), cum_cost_layer);
+    G_message(_("Writing output raster map <%s>..."), cum_cost_layer);
     if (nearest_layer) {
 	G_message(_("Writing raster map with nearest start point <%s>..."), nearest_layer);
     }
@@ -1127,7 +1132,7 @@ int main(int argc, char *argv[])
 	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
 	dir_cell = Rast_allocate_buf(dir_data_type);
 
-	G_message(_("Writing movement direction file %s..."), move_dir_layer);
+	G_message(_("Writing output movement direction raster map <%s>..."), move_dir_layer);
 	for (row = 0; row < nrows; row++) {
 	    p = dir_cell;
 	    for (col = 0; col < ncols; col++) {
