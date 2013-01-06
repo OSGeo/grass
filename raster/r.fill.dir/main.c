@@ -77,6 +77,7 @@ int main(int argc, char **argv)
     void *in_buf;
     CELL *out_buf;
     struct band3 bnd, bndC;
+    struct Colors colors; 
 
     /*  Initialize the GRASS environment variables */
     G_gisinit(argv[0]);
@@ -145,7 +146,9 @@ int main(int argc, char **argv)
     
     /* open the maps and get their file id  */
     map_id = Rast_open_old(map_name, "");
-
+    if (Rast_read_colors(map_name, "", &colors) < 0)
+        G_warning(_("Unable to read color table for raster map <%s>"), map_name);
+    
     /* allocate cell buf for the map layer */
     in_type = Rast_get_map_type(map_id);
 
@@ -181,7 +184,7 @@ int main(int argc, char **argv)
     fd = open(tempfile2, O_RDWR | O_CREAT, 0666);	/* dirn */
     fm = open(tempfile3, O_RDWR | O_CREAT, 0666);	/* problems */
 
-    G_message(_("Reading elevation map..."));
+    G_message(_("Reading input elevation raste map..."));
     for (i = 0; i < nrows; i++) {
 	G_percent(i, nrows, 2);
 	get_row(map_id, in_buf, i);
@@ -258,10 +261,13 @@ int main(int argc, char **argv)
 	Rast_put_row(dir_id, out_buf, CELL_TYPE);
     }
     G_percent(1, 1, 1);
-    
+
+    /* copy color table from input */
+    Rast_write_colors(new_map_name, G_mapset(), &colors);
+
     Rast_close(new_id);
     close(fe);
-
+    
     Rast_close(dir_id);
     close(fd);
 
