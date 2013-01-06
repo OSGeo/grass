@@ -746,6 +746,7 @@
           <help>Launch animation tool.</help>
           <keywords>visualization,raster,animation</keywords>
           <handler>OnAnimationTool</handler>
+          <command>g.gui.animation</command>
         </menuitem>
         <separator />
         <menuitem>
