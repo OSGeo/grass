@@ -106,25 +106,28 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
+    G_add_keyword(_("cost surface"));
     module->description =
-	_("Traces a flow through an elevation model on a raster map.");
+	_("Traces a flow through an elevation model or cost surface on a raster map.");
 
-    opt1 = G_define_standard_option(G_OPT_R_ELEV);
-    opt1->key = "input";
+    opt1 = G_define_standard_option(G_OPT_R_INPUT);
+    opt1->description = _("Name of input elevation or cost surface raster map");
     
     opt3 = G_define_standard_option(G_OPT_R_INPUT);
     opt3->key = "indir";
     opt3->description =
 	_("Name of input movement direction map associated with the cost surface");
     opt3->required = NO;
-    
+    opt3->guisection = _("Cost surface");
+
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
     
     opt4 = G_define_standard_option(G_OPT_V_OUTPUT);
     opt4->key = "vector_output";
     opt4->required = NO;
-    opt4->description =
-	_("Name for output drain vector map (recommended for cost surface made using knight's move)");
+    opt4->label =
+        _("Name for output drain vector map");
+    opt4->description = _("Recommended for cost surface made using knight's move");
     
     coordopt = G_define_standard_option(G_OPT_M_COORDS);
     coordopt->key = "start_coordinates";
@@ -135,6 +138,7 @@ int main(int argc, char **argv)
     vpointopt->key = "start_points";
     vpointopt->required = NO;
     vpointopt->label = _("Name of starting vector points map(s)");
+    vpointopt->description = NULL;
     vpointopt->guisection = _("Start");
 
     flag1 = G_define_flag();
@@ -144,15 +148,18 @@ int main(int argc, char **argv)
     flag2 = G_define_flag();
     flag2->key = 'a';
     flag2->description = _("Accumulate input values along the path");
+    flag2->guisection = _("Path settings");
 
     flag3 = G_define_flag();
     flag3->key = 'n';
     flag3->description = _("Count cell numbers along the path");
+    flag3->guisection = _("Path settings");
 
     flag4 = G_define_flag();
     flag4->key = 'd';
     flag4->description =
-	_("The input surface is a cost surface (if checked, a direction surface must also be specified");
+	_("The input raster map is a cost surface (direction surface must also be specified)");
+    flag4->guisection = _("Cost surface");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -163,7 +170,7 @@ int main(int argc, char **argv)
 
     if (flag4->answer) {
 	costmode = 1;
-	G_verbose_message(_("Directional drain selected... checking for direction raster"));
+	G_verbose_message(_("Directional drain selected... checking for direction raster map"));
     }
     else {
 	G_verbose_message(_("Surface/Hydrology drain selected"));
@@ -171,14 +178,14 @@ int main(int argc, char **argv)
 
     if (costmode == 1) {
 	if (!opt3->answer) {
-	    G_fatal_error(_("Direction raster not specified, if direction flag is on, "
-                            "a direction raster must be given"));
+	    G_fatal_error(_("Direction raster map <%s> not specified, if direction flag is on, "
+                            "a direction raster must be given"), opt3->key);
 	}
 	strcpy(dir_name, opt3->answer);
     }
     if (costmode == 0) {
 	if (opt3->answer) {
-	    G_fatal_error(_("Direction map <%s> should not be specified for Surface/Hydrology drains"),
+	    G_fatal_error(_("Direction raster map <%s> should not be specified for Surface/Hydrology drains"),
 			  opt3->answer);
 	}
     }
@@ -245,8 +252,6 @@ int main(int argc, char **argv)
 	    struct bound_box box;
 	    int type;
 
-	    G_message(_("Reading vector map <%s> with start points..."), vpointopt->answers[i]);
-
 	    Points = Vect_new_line_struct();
 	    Cats = Vect_new_cats_struct();
 
@@ -255,6 +260,9 @@ int main(int argc, char **argv)
 	    if (1 > Vect_open_old(&In, vpointopt->answers[i], ""))
 		G_fatal_error(_("Unable to open vector map <%s>"), vpointopt->answers[i]);
 
+	    G_message(_("Reading vector map <%s> with start points..."),
+                      Vect_get_full_name(&In));
+            
 	    Vect_rewind(&In);
 
 	    Vect_region_box(&window, &box);
