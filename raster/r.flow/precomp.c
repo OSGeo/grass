@@ -45,26 +45,26 @@ static void precompute_ew_dists(void);
 
 void precompute(void)
 {
-    G_message(_("Precomputing: e/w distances"));
+    G_verbose_message(_("Precomputing e/w distances..."));
     precompute_ew_dists();
-    G_message(_("Precomputing: quantization tolerances"));
+    G_verbose_message(_("Precomputing quantization tolerances..."));
     precompute_epsilons();
     if (parm.up) {
-	G_message(_("Precomputing: inverted elevations"));
+	G_verbose_message(_("Precomputing inverted elevations..."));
 	upslope_correction();
     }
     if (!parm.aspin) {
-	G_message(_("Precomputing: interpolated border elevations"));
+	G_verbose_message(_("Precomputing interpolated border elevations..."));
 	interpolate_border();
     }
 
     if (!parm.mem) {
 	if (parm.aspin) {
-	    G_message(_("Precomputing: re-oriented aspects"));
+	    G_verbose_message(_("Precomputing re-oriented aspects..."));
 	    reflect_and_sentinel();
 	}
 	else {
-	    G_message(_("Precomputing: aspects"));
+	    G_verbose_message(_("Precomputing aspects..."));
 	    precompute_aspects();
 	}
     }
