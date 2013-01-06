@@ -1,7 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.drain</em> traces a flow through a least-cost path in an elevation
-model. Alternatively, a movement direction map can be used with the 
+<em>r.drain</em> traces a flow through a least-cost path in an
+elevation model or cost surface. For cost surfaces, a movement
+direction map must be specified with the
 <b>indir</b> option and the <b>-d</b> flag to trace a flow path following 
 the given directions. Such a movement direction map can be generated with 
 <em><a href="r.walk.html">r.walk</a></em>, 
@@ -9,22 +10,24 @@ the given directions. Such a movement direction map can be generated with
 <em><a href="r.slope.aspect.html">r.slope.aspect</a></em> or 
 <em><a href="r.watershed.html">r.watershed</a></em>.
 
+<p>
 The <b>output</b> raster map will show one or more least-cost paths
 between each user-provided location(s) and the minima (low category
-values) in the raster <b>input</b> map. If the -d flag is used the output
-least-cost paths will be found using the direction raster map.  By
-default, the <b>output</b> will be an integer CELL map with <tt>1</tt>
-along the least cost path, and null cells elsewhere.
+values) in the raster <b>input</b> map. If the <b>-d</b> flag is used
+the output least-cost paths will be found using the direction raster
+map.  By default, the <b>output</b> will be an integer CELL map with
+category 1 along the least cost path, and null cells elsewhere.
 
 <p>With the <b>-c</b> (<em>copy</em>) flag, the input raster map cell values are
 copied verbatim along the path. With the <b>-a</b> (<em>accumulate</em>)
 flag, the accumulated cell value from the starting point up to the current
 cell is written on output. With either the <b>-c</b> or the <b>-a</b> flags, the
-<b>output</b> map is created with the same cell type as the <b>input</b> map (integer,
-float or double).
-With the <b>-n</b> (<em>number</em>) flag, the cells are numbered consecutively from the
-starting point to the final point.
-The <b>-c</b>, <b>-a</b>, and <b>-n</b> flags are mutually incompatible.
+<b>output</b> map is created with the same cell type as
+the <b>input</b> raster map (integer, float or double).  With
+the <b>-n</b> (<em>number</em>) flag, the cells are numbered
+consecutively from the starting point to the final point.
+The <b>-c</b>, <b>-a</b>, and <b>-n</b> flags are mutually
+incompatible.
 
 <p>For an elevation surface, the path is calculated by choosing the
 steeper "slope" between adjacent cells. The slope calculation
