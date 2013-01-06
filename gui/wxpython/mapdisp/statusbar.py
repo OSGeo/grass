@@ -970,7 +970,7 @@ class SbCompRegionExtent(SbRegionExtent):
         return self.mapFrame.GetMap().GetRegion() # computational region
         
         
-class SbProgress(SbTextItem):
+class SbProgress(SbItem):
     """!General progress bar to show progress.
     
     Underlaying widget is wx.Gauge.
