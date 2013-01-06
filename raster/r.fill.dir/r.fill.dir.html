@@ -5,7 +5,7 @@ elevation map and a flow direction map from a given raster elevation map.
 
 <h2>NOTES</h2>
 
-The <b>type</b> parameter is the type of format at which the user wishes to create
+The <b>format</b> parameter is the type of format at which the user wishes to create
 the flow direction map. The <i>agnps</i> format gives category values from
 1-8, with 1 facing north and increasing values in the clockwise direction.
 The <i>answers</i> format gives category values from 0-360 degrees, with 0
@@ -65,7 +65,7 @@ filled.
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-r.fill.dir input=ansi.elev elevation=ansi.fill.elev direction=ansi.asp
+r.fill.dir input=ansi.elev output=ansi.fill.elev outdir=ansi.asp
 </pre></div>
 
 Will create a depressionless (sinkless) elevation
