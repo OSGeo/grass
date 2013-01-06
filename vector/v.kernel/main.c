@@ -81,6 +81,7 @@ int main(int argc, char **argv)
     char *desc;
 
     struct Map_info In, Net, Out;
+    int overwrite;
     int fdout = -1, maskfd = -1;
     int node_method, kernel_function;
     int row, col;
@@ -106,24 +107,29 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("kernel density"));
-    module->description =
-	_("Generates a raster density map from vector point data using a moving kernel or "
-	 "optionally generates a vector density map on a vector network.");
+    module->label =
+        _("Generates a raster density map from vector points map.");
+    module->description = _("Density is computed using a moving kernel. "
+                            "Optionally generates a vector density map on a vector network.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    in_opt->description = _("Input vector with training points");
-
+    in_opt->label = _("Name of input vector map with training points");
+    in_opt->description = NULL;
+    
     net_opt = G_define_standard_option(G_OPT_V_INPUT);
     net_opt->key = "net";
-    net_opt->description = _("Input network vector map");
+    net_opt->label = _("Name of input network vector map");
+    net_opt->description = NULL;
     net_opt->required = NO;
+    net_opt->guisection = _("Network");
 
     out_opt = G_define_option();
     out_opt->key = "output";
     out_opt->type = TYPE_STRING;
     out_opt->key_desc = "name";
     out_opt->required = YES;
-    out_opt->description = _("Output raster/vector map");
+    out_opt->label = _("Name for output raster/vector map");
+    out_opt->description = _("Outputs vector map if network map is given, otherwise raster map");
 
     radius_opt = G_define_option();
     radius_opt->key = "radius";
@@ -144,6 +150,7 @@ int main(int argc, char **argv)
     segmax_opt->required = NO;
     segmax_opt->description = _("Maximum length of segment on network");
     segmax_opt->answer = "100.";
+    segmax_opt->guisection = _("Network");
 
     netmax_opt = G_define_option();
     netmax_opt->key = "distmax";
@@ -151,6 +158,7 @@ int main(int argc, char **argv)
     netmax_opt->required = NO;
     netmax_opt->description = _("Maximum distance from point to network");
     netmax_opt->answer = "100.";
+    netmax_opt->guisection = _("Network");
 
     multip_opt = G_define_option();
     multip_opt->key = "mult";
@@ -172,6 +180,7 @@ int main(int argc, char **argv)
 	       _("No method applied at nodes with more than 2 arcs"),
 	       _("Equal split (Okabe 2009) applied at nodes"));
     node_opt->descriptions = desc;
+    node_opt->guisection = _("Network");
 
     kernel_opt = G_define_option();
     kernel_opt->key = "kernel";
@@ -196,14 +205,36 @@ int main(int argc, char **argv)
     flag_normalize->key = 'n';
     flag_normalize->description =
 	_("In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult");
+    flag_normalize->guisection = _("Network");
 
     flag_multiply = G_define_flag();
     flag_multiply->key = 'm';
     flag_multiply->description =
-	_("In network mode, multiply the result by number of input points.");
-
+	_("In network mode, multiply the result by number of input points");
+    flag_multiply->guisection = _("Network");
+    
+    overwrite = G_check_overwrite(argc, argv);
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (net_opt->answer) {
+	if (G_find_vector2(out_opt->answer, G_mapset()))
+            if (overwrite)
+                G_warning(_("Vector map <%s> already exists and will be overwritten"),
+                          out_opt->answer);
+            else
+                G_fatal_error(_("Vector map <%s> already exists"),
+                              out_opt->answer);
+    }
+    else {
+	if (G_find_raster(out_opt->answer, G_mapset()))
+            if (overwrite)
+                G_warning(_("Raster map <%s> already exists and will be overwritten"),
+                          out_opt->answer);
+            else
+                G_fatal_error(_("Raster map <%s> already exists"),
+                              out_opt->answer);
+    }
 
     /*read options */
     dmax = atof(radius_opt->answer);
@@ -263,13 +294,13 @@ int main(int argc, char **argv)
 
     G_get_window(&window);
 
-    G_message("STDDEV: %f\nRES: %f\tROWS: %d\tCOLS: %d",
-	      sigma, window.ew_res, window.rows, window.cols);
-
+    G_verbose_message(_("Standard deviation: %f"), sigma);
+    G_verbose_message(_("Output raster map: res: %f\trows: %d\tcols: %d"),
+                      window.ew_res, window.rows, window.cols);
+    
     /* Open input vector */
     Vect_set_open_level(2);
     Vect_open_old(&In, in_opt->answer, "");
-
 
     if (net_opt->answer) {
 	int nlines, line;
@@ -391,10 +422,10 @@ int main(int argc, char **argv)
 	struct line_cats *SCats;
 	double total = 0.0;
 
-	G_message(_("Writing output vector map using smooth parameter=%f."),
-		  sigma);
-	G_message(_("Normalising factor=%f."),
-		  1. / gaussianFunction(sigma / 4., sigma, dimension));
+	G_verbose_message(_("Writing output vector map using smooth parameter %f"),
+                          sigma);
+	G_verbose_message(_("Normalising factor %f"),
+                          1. / gaussianFunction(sigma / 4., sigma, dimension));
 
 	/* Divide lines to segments and calculate gaussian for center of each segment */
 	Points = Vect_new_line_struct();
@@ -408,6 +439,7 @@ int main(int argc, char **argv)
 	    int seg, nseg, ltype;
 	    double llength, length, x, y;
 
+            G_percent(line, nlines, 5);
 	    ltype = Vect_read_line(&Net, Points, NULL, line);
 	    if (!(ltype & GV_LINES))
 		continue;
@@ -457,7 +489,6 @@ int main(int argc, char **argv)
 		    total += length * gaussian;
 		}
 	    }
-	    G_percent(line, nlines, 1);
 	}
 
 	if (flag_normalize->answer || flag_multiply->answer) {
@@ -501,10 +532,10 @@ int main(int argc, char **argv)
 	struct bound_box box;
 	struct boxlist *NList = Vect_new_boxlist(1);
 
-	G_message(_("\nWriting output raster map using smooth parameter=%f."),
-		  sigma);
-	G_message(_("\nNormalising factor=%f."),
-		  1. / gaussianFunction(sigma / 4., sigma, dimension));
+	G_verbose_message(_("Writing output raster map using smooth parameter %f"),
+                          sigma);
+	G_verbose_message(_("Normalising factor %f"),
+                          1. / gaussianFunction(sigma / 4., sigma, dimension));
 
 	for (row = 0; row < window.rows; row++) {
 	    G_percent(row, window.rows, 2);
@@ -548,11 +579,12 @@ int main(int argc, char **argv)
 	    }
 	    Rast_put_row(fdout, output_cell, DCELL_TYPE);
 	}
-
+        G_percent(1, 1, 1);
+        
 	Rast_close(fdout);
     }
 
-    G_message(_("Maximum value in output: %e."), multip * gausmax);
+    G_done_msg(_("Maximum value in output: %e."), multip * gausmax);
 
     Vect_close(&In);
 
