@@ -82,33 +82,36 @@ void read_input_files(void)
     int fd, row, col;
     struct Cell_head hd;
 
-    G_message(_("Reading input files: elevation"));
-
     fd = open_existing_cell_file(parm.elevin, &hd);
     if (!compare_regions(&region, &hd))
-	G_fatal_error(_("Elevation file's resolution differs from current region resolution"));
+	G_fatal_error(_("Elevation raster map resolution differs from current region resolution"));
 
+    G_important_message(_("Reading input raster map <%s>..."), parm.elevin);
     for (row = 0; row < region.rows; row++) {
+        G_percent(row, region.rows, 5);
 	Rast_get_d_row(fd, el.buf[row], row);
 	if (parm.seg)
 	    put_row_seg(el, row);
     }
+    G_percent(1, 1, 1);
     if (parm.seg)
 	segment_flush(el.seg);
     Rast_close(fd);
 
     if (parm.aspin) {
-	G_message(_("Reading input files: aspect"));
 	fd = open_existing_cell_file(parm.aspin, &hd);
 	if (!compare_regions(&region, &hd))
 	    G_fatal_error(_("Resolution of aspect file differs from "
 			    "current region resolution"));
 
+        G_important_message(_("Reading input raster map <%s>..."), parm.aspin);
 	for (row = 0; row < region.rows; row++) {
+            G_percent(row, region.rows, 5);
 	    Rast_get_d_row(fd, as.buf[row], row);
 	    if (parm.seg)
 		put_row_seg(as, row);
 	}
+        G_percent(1, 1, 1);
 	if (parm.seg)
 	    segment_flush(as.seg);
 	Rast_close(fd);
@@ -201,15 +204,17 @@ void write_density_file(void)
 
     Rast_set_output_window(&region);
 
-    G_message(_("Writing density file"));
+    G_message(_("Writing output raster map <%s>..."), parm.dsout);
     dsfd = Rast_open_new(parm.dsout, DCELL_TYPE);
 
     for (row = 0; row < region.rows; row++) {
+        G_percent(row, region.rows, 5);
 	Rast_put_row(dsfd, get_row(ds, row), DCELL_TYPE);
 	for (col = 0; col < region.cols; col++)
 	    if (ds.buf[row][col] > dsmax)
 		dsmax = ds.buf[row][col];
     }
+    G_percent(1, 1, 1);
     Rast_close(dsfd);
 
     Rast_init_colors(&colors);
@@ -234,7 +239,7 @@ void write_density_file(void)
     Rast_add_c_color_rule(&val1, 0, 0, 255, &val2, 0, 0, 0, &colors);
 
     if ((mapset = G_find_file("cell", parm.dsout, "")) == NULL)
-	G_fatal_error(_("Unable to find file %s"), parm.dsout);
+	G_fatal_error(_("Raster map <%s> not found"), parm.dsout);
 
     Rast_write_colors(parm.dsout, mapset, &colors);
     Rast_free_colors(&colors);

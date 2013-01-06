@@ -313,7 +313,7 @@ static void calculate(void)
     struct line_cats *cats = Vect_new_cats_struct();
     int loopstep = (!parm.dsout && !parm.lgout && parm.flout) ? parm.skip : 1;
 
-    G_message(_("Calculating maps ..."));
+    G_important_message(_("Calculating..."));
 
     fls.px = (double *)G_calloc(parm.bound, sizeof(double));
     fls.py = (double *)G_calloc(parm.bound, sizeof(double));
@@ -387,7 +387,8 @@ static void calculate(void)
 	if (parm.lgout)
 	    Rast_put_f_row(lgfd, lg);
     }
-
+    G_percent (1, 1, 1);
+    
     G_free(fls.px);
     G_free(fls.py);
     /*    G_free (fls); *//* commented 19/10/99 MN */
