@@ -90,13 +90,13 @@ int main(int argc, char **argv)
 	  "flow direction map from a given elevation raster map.");
     
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
+    opt1->key = "input";
     
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt2->key = "depressionless";
     opt2->description = _("Name for output depressionless elevation raster map");
     
     opt4 = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt4->key = "direction";
+    opt4->key = "outdir";
     opt4->description = _("Name for output flow direction map for depressionless elevation raster map");
 
     opt5 = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     opt5->description = _("Name for output raster map of problem areas");
 
     opt3 = G_define_option();
-    opt3->key = "type";
+    opt3->key = "format";
     opt3->type = TYPE_STRING;
     opt3->required = NO;
     opt3->description =
