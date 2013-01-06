@@ -726,6 +726,7 @@
           <label>Graphical modeler</label>
           <help>Launch Graphical modeler</help>
           <handler>OnGModeler</handler>
+          <command>g.gui.gmodeler</command>
         </menuitem>
         <menuitem>
           <label>Run model</label>
