@@ -129,6 +129,7 @@ class RasterAbstractBase(object):
 
     name = property(fget=_get_name, fset=_set_name)
 
+    @must_be_open
     def _get_rows(self):
         """Private method to return the Raster name"""
         return self._rows
@@ -139,12 +140,14 @@ class RasterAbstractBase(object):
 
     rows = property(fget=_get_rows, fset=_set_unchangeable)
 
+    @must_be_open
     def _get_cols(self):
         """Private method to return the Raster name"""
         return self._cols
 
     cols = property(fget=_get_cols, fset=_set_unchangeable)
 
+    @must_be_open
     def _get_range(self):
         if self.mtype == 'CELL':
             maprange = libraster.Range()
@@ -152,22 +155,26 @@ class RasterAbstractBase(object):
                                       ctypes.byref(maprange))
             self._min = libgis.CELL()
             self._max = libgis.CELL()
+            self._min.value = maprange.min
+            self._max.value = maprange.max
         else:
             maprange = libraster.FPRange()
             libraster.Rast_read_fp_range(self.name, self.mapset,
                                          ctypes.byref(maprange))
             self._min = libgis.DCELL()
             self._max = libgis.DCELL()
-        libraster.Rast_get_fp_range_min_max(ctypes.byref(maprange),
-                                            ctypes.byref(self._min),
-                                            ctypes.byref(self._max))
+            libraster.Rast_get_fp_range_min_max(ctypes.byref(maprange),
+                                                ctypes.byref(self._min),
+                                                ctypes.byref(self._max))
         return self._min.value, self._max.value
 
     range = property(fget=_get_range, fset=_set_unchangeable)
 
+    @must_be_open
     def _get_cats_title(self):
         return self.cats.title
 
+    @must_be_open
     def _set_cats_title(self, newtitle):
         self.cats.title = newtitle
 
@@ -224,16 +231,14 @@ class RasterAbstractBase(object):
         """Return True if the map is open False otherwise"""
         return True if self._fd is not None and self._fd >= 0 else False
 
+    @must_be_open
     def close(self):
         """Close the map"""
-        if self.is_open():
-            libraster.Rast_close(self._fd)
-            # update rows and cols attributes
-            self._rows = None
-            self._cols = None
-            self._fd = None
-        else:
-            warning(_("The map is already close!"))
+        libraster.Rast_close(self._fd)
+        # update rows and cols attributes
+        self._rows = None
+        self._cols = None
+        self._fd = None
 
     def remove(self):
         """Remove the map"""
@@ -298,58 +303,69 @@ class RasterAbstractBase(object):
         line = self.get_row(int(x))
         return line[int(y)]
 
+    @must_be_open
     def has_cats(self):
         """Return True if the raster map has categories"""
         if self.exist():
-            self.open()
             self.cats.read(self)
             self.close()
             if len(self.cats) != 0:
                 return True
         return False
 
+    @must_be_open
     def num_cats(self):
         """Return the number of categories"""
         return len(self.cats)
 
+    @must_be_open
     def copy_cats(self, raster):
         """Copy categories from another raster map object"""
         self.cats.copy(raster.cats)
 
+    @must_be_open
     def sort_cats(self):
         """Sort categories order by range"""
         self.cats.sort()
 
+    @must_be_open
     def read_cats(self):
         """Read category from the raster map file"""
         self.cats.read(self)
 
+    @must_be_open
     def write_cats(self):
         """Write category to the raster map file"""
         self.cats.write(self)
 
+    @must_be_open
     def read_cats_rules(self, filename, sep=':'):
         """Read category from the raster map file"""
         self.cats.read_rules(filename, sep)
 
+    @must_be_open
     def write_cats_rules(self, filename, sep=':'):
         """Write category to the raster map file"""
         self.cats.write_rules(filename, sep)
 
+    @must_be_open
     def get_cats(self):
         """Return a category object"""
         cat = Category()
         cat.read(self)
         return cat
 
+    @must_be_open
     def set_cats(self, category):
         """The internal categories are copied from this object."""
         self.cats.copy(category)
 
+    @must_be_open
     def get_cat(self, label):
         """Return a category given an index or a label"""
         return self.cats[label]
 
+    @must_be_open
     def set_cat(self, label, min_cat, max_cat=None, index=None):
         """Set or update a category"""
         self.cats.set_cat(index, (label, min_cat, max_cat))
