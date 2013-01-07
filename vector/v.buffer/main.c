@@ -302,7 +302,8 @@ int main(int argc, char *argv[])
     cats_flag = G_define_flag();
     cats_flag->key = 't';
     cats_flag->description = _("Transfer categories and attributes");
-
+    cats_flag->guisection = _("Attributes");
+    
     G_gisinit(argv[0]);
     
     if (G_parser(argc, argv))
