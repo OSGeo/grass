@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("database"));
-    module->description = _("Populates database values from vector features.");
+    module->description = _("Populates attribute values from vector features.");
 
     parse_command_line(argc, argv);
 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
     conv_units();
 
-    if (options.print) {
+    if (options.print || options.total) {
 	report();
     }
     else {
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     Vect_close(&Map);
 
-    if (!(options.print && options.total)) {
+    if (!(options.print || options.total)) {
 	print_stat();
     }
 

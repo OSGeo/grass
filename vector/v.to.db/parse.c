@@ -22,6 +22,7 @@ int parse_command_line(int argc, char *argv[])
 	struct Option *col;
 	struct Option *units;
 	struct Option *qcol;
+        struct Option *fs;
     } parms;
     struct
     {
@@ -41,12 +42,8 @@ int parse_command_line(int argc, char *argv[])
     parms.type->description =
 	_("For coor valid point/centroid, "
 	  "for length valid line/boundary");
+    parms.type->guisection = _("Selection");
     
-    parms.qfield = G_define_standard_option(G_OPT_V_FIELD);
-    parms.qfield->key = "qlayer";
-    parms.qfield->label = _("Query layer number or name (read from)");
-    parms.qfield->guisection = _("Query");
-
     parms.option = G_define_option();
     parms.option->key = "option";
     parms.option->type = TYPE_STRING;
@@ -93,12 +90,20 @@ int parse_command_line(int argc, char *argv[])
 	       _("line azimuth, calculated as angle between North direction and endnode direction at startnode"));
     parms.option->descriptions = desc;
 
+    parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
+    parms.col->label = _("Name of attribute column(s) to populate");
+    parms.col->required = YES;
+
     parms.units = G_define_standard_option(G_OPT_M_UNITS);
     parms.units->options =
 	"miles,feet,meters,kilometers,acres,hectares,radians,degrees";
     
-    parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
-
+    parms.qfield = G_define_standard_option(G_OPT_V_FIELD);
+    parms.qfield->key = "qlayer";
+    parms.qfield->label = _("Query layer number or name (read from)");
+    parms.qfield->guisection = _("Query");
+    parms.qfield->required = NO;
+    
     parms.qcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parms.qcol->key = "qcolumn";
     parms.qcol->label = _("Name of attribute column used for 'query' option");
@@ -106,11 +111,16 @@ int parse_command_line(int argc, char *argv[])
     parms.qcol->required = NO;
     parms.qcol->guisection = _("Query");
 
+    parms.fs = G_define_standard_option(G_OPT_F_SEP);
+    parms.fs->label = _("Field separator for print mode");
+    parms.fs->guisection = _("Print");
+    
     flags.p = G_define_flag();
     flags.p->key = 'p';
     flags.p->description = _("Print only");
     flags.p->guisection = _("Print");
-
+    flags.p->suppress_required = YES;
+    
     flags.s = G_define_flag();
     flags.s->key = 's';
     flags.s->description = _("Only print SQL statements");
@@ -119,11 +129,20 @@ int parse_command_line(int argc, char *argv[])
     flags.t = G_define_flag();
     flags.t->key = 'c';
     flags.t->description =
-	_("In print mode prints totals for options: length,area,count");
+	_("Prints also totals for options: length,area,count");
     flags.t->guisection = _("Print");
+    flags.t->suppress_required = YES;
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    /* check for required options */
+    if (!parms.vect->answer)
+        G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
+                      parms.vect->key, parms.vect->description);
+    if (!parms.option->answer)
+        G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
+                      parms.option->key, parms.option->description);
 
     options.print = flags.p->answer;
     options.sql = flags.s->answer;
@@ -138,6 +157,8 @@ int parse_command_line(int argc, char *argv[])
     options.option = parse_option(parms.option->answer);
     options.units = parse_units(parms.units->answer);
 
+    options.fs = G_option_to_separator(parms.fs);
+    
     /* Check number of columns */
     ncols = 0;
     options.col[0] = NULL;
@@ -148,7 +169,7 @@ int parse_command_line(int argc, char *argv[])
 	ncols++;
     }
 
-    if (!options.print) {
+    if (!options.print && ! options.total) {
 	if (options.option == O_AREA || options.option == O_LENGTH || options.option == O_COUNT ||
 	    options.option == O_QUERY || options.option == O_COMPACT || options.option == O_FD ||
 	    options.option == O_PERIMETER || options.option == O_SLOPE || options.option == O_SINUOUS ||
