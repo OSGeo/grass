@@ -559,6 +559,9 @@ class Module(object):
     def __str__(self):
         return ' '.join(self.make_cmd())
 
+    def __repr__(self):
+        return "Module(%r)" % self.name
+
     @property
     def __doc__(self):
         """{cmd_name}({cmd_params})
