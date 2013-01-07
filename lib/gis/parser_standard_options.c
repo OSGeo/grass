@@ -452,7 +452,7 @@ struct Option *G_define_standard_option(int opt)
     case G_OPT_V_FIELD:
 	Opt->key = "layer";
 	Opt->type = TYPE_STRING;
-	Opt->required = YES;
+	Opt->required = NO;
 	Opt->answer = "1";
 	Opt->label = _("Layer number or name");
 	Opt->description =
@@ -464,7 +464,7 @@ struct Option *G_define_standard_option(int opt)
     case G_OPT_V_FIELD_ALL:
 	Opt->key = "layer";
 	Opt->type = TYPE_STRING;
-	Opt->required = YES;
+	Opt->required = NO;
 	Opt->answer = "-1";
 	Opt->label = _("Layer number or name ('-1' for all layers)");
 	Opt->description =
