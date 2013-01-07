@@ -124,7 +124,9 @@ int main(int argc, char *argv[])
     ofield_opt->label = _("Output layer for new category, ainput and binput");
     ofield_opt->description = _("If 0 or not given, "
 				"the category is not written");
-
+    ofield_opt->required = NO;
+    ofield_opt->guisection = _("Attributes");
+    
     snap_opt = G_define_option();
     snap_opt->key = "snap";
     snap_opt->label = _("Snapping threshold for boundaries");
@@ -133,7 +135,8 @@ int main(int argc, char *argv[])
     snap_opt->answer = "1e-8";
 
     table_flag = G_define_standard_flag(G_FLG_V_TABLE);
-
+    table_flag->guisection = _("Attributes");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
