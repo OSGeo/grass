@@ -587,12 +587,18 @@ class Module(object):
 
     def run(self, node=None):
         cmd = self.make_cmd()
+        if self.stdin_:
+            self.stdin = self.stdin_
+            self.stdin_ = subprocess.PIPE
         self.popen = subprocess.Popen(cmd, stdin=self.stdin_,
                                       stdout=self.stdout_,
                                       stderr=self.stderr_)
-        if self.finish_:
-            self.popen.wait()
-        self.stdout, self.stderr = self.popen.communicate()
+        if self.stdin_:
+            self.stdout, self.stderr = self.popen.communicate(input=self.stdin)
+        else:
+            if self.finish_:
+                self.popen.wait()
+            self.stdout, self.stderr = self.popen.communicate()
 
 _CMDS = list(grass.script.core.get_commands()[0])
 _CMDS.sort()
