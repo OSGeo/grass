@@ -129,7 +129,7 @@ int parse_command_line(int argc, char *argv[])
     flags.t = G_define_flag();
     flags.t->key = 'c';
     flags.t->description =
-	_("Prints also totals for options: length,area,count");
+	_("Print also totals for option length, area, or count");
     flags.t->guisection = _("Print");
     flags.t->suppress_required = YES;
 
