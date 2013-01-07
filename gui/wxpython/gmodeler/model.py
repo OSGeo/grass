@@ -183,6 +183,16 @@ class Model(object):
         
         return None
 
+    def GetMaps(self, prompt):
+        """!Get list of maps of selected type
+
+        @param promt to filter maps"""
+        maps = list()
+        for data in self.GetData():
+            if prompt == data.GetPrompt():
+                maps.append(data.GetValue())
+        return maps
+
     def GetData(self):
         """!Get list of data items"""
         result = list()
