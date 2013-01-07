@@ -1176,12 +1176,16 @@ class CmdPanel(wx.Panel):
                                     element_dict = {'rast': 'strds', 'vect': 'stvds', 'rast3d': 'str3ds'}
                                     elem = element_dict[type_param.get('default')]
                         
-
+                        if self.parent.modeler:
+                            extraItems = {_('Graphical Modeler') : self.parent.modeler.GetModel().GetMaps(p.get('prompt'))}
+                        else:
+                            extraItems = None
                         selection = gselect.Select(parent = which_panel, id = wx.ID_ANY,
                                                    size = globalvar.DIALOG_GSELECT_SIZE,
-                                                   type = elem,
-                                                   multiple = multiple, nmaps = len(p.get('key_desc', [])),
-                                                   mapsets = mapsets, fullyQualified = p.get('age', 'old') == 'old')
+                                                   type = elem, multiple = multiple, nmaps = len(p.get('key_desc', [])),
+                                                   mapsets = mapsets, fullyQualified = p.get('age', 'old') == 'old',
+                                                   extraItems = extraItems)
+                        
                         value = self._getValue(p)
                         if value:
                             selection.SetValue(value)

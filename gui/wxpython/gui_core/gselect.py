@@ -66,7 +66,7 @@ class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                  type = None, multiple = False, nmaps = 1,
                  mapsets = None, updateOnPopup = True, onPopup = None,
-                 fullyQualified = True):
+                 fullyQualified = True, extraItems = {}):
         """!Custom control to create a ComboBox with a tree control to
         display and select GIS elements within acessible mapsets.
         Elements can be selected with mouse. Can allow multiple
@@ -80,6 +80,7 @@ class Select(wx.combo.ComboCtrl):
         @param updateOnPopup True for updating list of elements on popup
         @param onPopup function to be called on Popup
         @param fullyQualified True to provide fully qualified names (map@mapset)
+        @param extraItems extra items to add (given as dictionary) - see gmodeler for usage
         """
         wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size)
         self.GetChildren()[0].SetName("Select")
@@ -92,7 +93,7 @@ class Select(wx.combo.ComboCtrl):
             self.tcp.SetData(type = type, mapsets = mapsets,
                              multiple = multiple, nmaps = nmaps,
                              updateOnPopup = updateOnPopup, onPopup = onPopup,
-                             fullyQualified = fullyQualified)
+                             fullyQualified = fullyQualified, extraItems = extraItems)
         self.GetChildren()[0].Bind(wx.EVT_KEY_UP, self.OnKeyUp)
      
     def OnKeyUp(self, event):
@@ -165,6 +166,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.updateOnPopup = True
         self.onPopup = None
         self.fullyQualified = True
+        self.extraItems = dict()
         
         self.SetFilter(None)
         
@@ -342,12 +344,21 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                                                 check_search_path = False)
             else:
                 filesdict = grass.list_grouped(elementdict[element],
-                                           check_search_path = False)
+                                               check_search_path = False)
+        
+        # add extra items first
+        if self.extraItems:
+            for group, items in self.extraItems.iteritems():
+                node = self.AddItem(group, node = True)
+                self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
+                for item in items:
+                    self.AddItem(item, node = False, parent = node)
+                self.seltree.ExpandAllChildren(node)
         
         # list of mapsets in current location
         if mapsets is None:
             mapsets = grass.mapsets(search_path = True)
-        
+                        
         # current mapset first
         if curr_mapset in mapsets and mapsets[0] != curr_mapset:
             mapsets.remove(curr_mapset)
@@ -511,7 +522,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 self.value = []
             else:
                 fullName = self.seltree.GetItemText(item)
-                if self.fullyQualified:
+                if self.fullyQualified and self.seltree.GetPyData(item)['mapset']:
                     fullName += '@' + self.seltree.GetPyData(item)['mapset']
                 
                 if self.multiple:
@@ -548,7 +559,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 return
             
             fullName = self.seltree.GetItemText(item)
-            if self.fullyQualified:
+            if self.fullyQualified and self.seltree.GetPyData(item)['mapset']:
                 fullName += '@' + self.seltree.GetPyData(item)['mapset']
             
             if self.multiple:
@@ -584,6 +595,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.onPopup = kargs['onPopup']
         if 'fullyQualified' in kargs:
             self.fullyQualified = kargs['fullyQualified']
+        if 'extraItems' in kargs:
+            self.extraItems = kargs['extraItems']
         
     def GetType(self):
         """!Get element type
