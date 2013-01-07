@@ -31,6 +31,7 @@ struct options
     int total;			/* print totals */
     int units;
     int qfield;			/* query field */
+    char fs;
 };
 
 extern struct options options;
