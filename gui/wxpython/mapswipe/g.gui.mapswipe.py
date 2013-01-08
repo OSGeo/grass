@@ -21,6 +21,9 @@
 
 #%module
 #% description: Allows to interactively compare two maps by swiping.
+#% keywords: general
+#% keywords: gui
+#% keywords: display
 #%end
 #%option G_OPT_R_INPUT
 #% key: first

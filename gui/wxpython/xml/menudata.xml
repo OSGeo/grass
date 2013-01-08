@@ -744,7 +744,7 @@
         <menuitem>
           <label>Animation tool</label>
           <help>Launch animation tool.</help>
-          <keywords />
+          <keywords>general,gui,display</keywords>
           <handler>OnAnimationTool</handler>
           <command>g.gui.animation</command>
         </menuitem>
@@ -767,8 +767,9 @@
         <menuitem>
           <label>Map Swipe</label>
           <help>Launch Map Swipe</help>
-          <keywords>visualization,raster</keywords>
+          <keywords>general,gui,display</keywords>
           <handler>OnMapSwipe</handler>
+	  <command>g.gui.mapswipe</command>
         </menuitem>
         <separator />
         <menuitem>
