@@ -397,10 +397,7 @@ class TaskFrame(wx.Frame):
             self.modeler = None
         
         # module name + keywords
-        if self.task.name.split('.')[-1] in ('py', 'sh'):
-            title = str(self.task.name.rsplit('.',1)[0])
-        else:
-            title = self.task.name
+        title = self.task.get_name()
         try:
             if self.task.keywords !=  ['']:
                 title +=   " [" + ', '.join(self.task.keywords) + "]"

@@ -89,6 +89,13 @@ class grassTask:
     def get_name(self):
         """!Get task name
         """
+        if sys.platform == 'win32':
+            name, ext = os.path.splitext(self.name)
+            if ext in ('.py', '.sh'):
+                return name
+            else:
+                return self.name
+        
         return self.name
 
     def get_description(self, full = True):
@@ -205,7 +212,7 @@ class grassTask:
         '@<required@>' is shown
         @param ignoreDefault True to ignore parameters with default values
         """
-        cmd = [self.name]
+        cmd = [self.get_name()]
         
         suppress_required = False
         for flag in self.flags:
