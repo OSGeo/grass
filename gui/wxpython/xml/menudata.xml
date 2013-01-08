@@ -725,7 +725,7 @@
         <menuitem>
           <label>Graphical modeler</label>
           <help>Launch Graphical modeler</help>
-          <handler>OnGModeler</handler>
+          <keywords>general,gui,graphical modeler,workflow</keywords><handler>OnGModeler</handler>
           <command>g.gui.gmodeler</command>
         </menuitem>
         <menuitem>
@@ -744,7 +744,7 @@
         <menuitem>
           <label>Animation tool</label>
           <help>Launch animation tool.</help>
-          <keywords>visualization,raster,animation</keywords>
+          <keywords />
           <handler>OnAnimationTool</handler>
           <command>g.gui.animation</command>
         </menuitem>
@@ -1170,7 +1170,7 @@
         <separator />
         <menuitem>
           <label>Buffer rasters</label>
-          <help>Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values.</help>
+          <help>Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.</help>
           <keywords>raster,buffer</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.buffer</command>
@@ -1301,15 +1301,15 @@
             </menuitem>
             <menuitem>
               <label>Cumulative movement costs</label>
-              <help>Outputs a raster map layer showing the anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map layer whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost.</help>
+              <help>Outputs a raster map showing the anisotropic cumulative cost.</help>
               <keywords>raster,cost surface,cumulative costs</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.walk</command>
             </menuitem>
             <menuitem>
               <label>Least cost route or flow</label>
-              <help>Traces a flow through an elevation model on a raster map.</help>
-              <keywords>raster,hydrology</keywords>
+              <help>Traces a flow through an elevation model or cost surface on a raster map.</help>
+              <keywords>raster,hydrology,cost surface</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.drain</command>
             </menuitem>
@@ -1346,7 +1346,7 @@
             <separator />
             <menuitem>
               <label>Visibility</label>
-              <help>Computes the viewshed of a point on a raster terrain.</help>
+              <help>Computes the viewshed of a point on an elevation raster map.</help>
               <keywords>raster,viewshed,line of sight</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.viewshed</command>
@@ -1765,14 +1765,14 @@
             <separator />
             <menuitem>
               <label>Gaussian kernel density surface</label>
-              <help>Generates a raster density map from vector point data using a moving kernel or optionally generates a vector density map on a vector network.</help>
+              <help>Generates a raster density map from vector points map.</help>
               <keywords>vector,kernel density</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.kernel</command>
             </menuitem>
             <menuitem>
               <label>Gaussian deviates surface</label>
-              <help>GRASS module to produce a raster map layer of gaussian deviates whose mean and standard deviation can be expressed by the user. It uses a gaussian random number generator.</help>
+              <help>Generates a raster map using gaussian random number generator.</help>
               <keywords>raster,surface,random</keywords>
               <handler>OnMenuCmd</handler>
               <command>r.surf.gauss</command>
@@ -1807,7 +1807,7 @@
           <items>
             <menuitem>
               <label>Bilinear and bicubic from vector points</label>
-              <help>Bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
+              <help>Performs bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
               <keywords>vector,surface,interpolation,LIDAR</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.surf.bspline</command>
@@ -2506,7 +2506,7 @@
             </menuitem>
             <menuitem>
               <label>Update database values from vector</label>
-              <help>Populates database values from vector features.</help>
+              <help>Populates attribute values from vector features.</help>
               <keywords>vector,attribute table,database</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.to.db</command>
@@ -2541,8 +2541,8 @@
           <items>
             <menuitem>
               <label>Convex hull</label>
-              <help>Produces a convex hull for a given vector map.</help>
-              <keywords>vector,geometry</keywords>
+              <help>Produces a 2D/3D convex hull for a given vector map.</help>
+              <keywords>vector,geometry,3D</keywords>
               <handler>OnMenuCmd</handler>
               <command>v.hull</command>
             </menuitem>
@@ -2790,7 +2790,7 @@
             <menuitem>
               <label>Interactive input for supervised classification</label>
               <help>Generates spectral signatures by allowing the user to outline training areas.</help>
-              <keywords>imagery,classification,supervised</keywords>
+              <keywords>general,gui,imagery,classification,signatures</keywords>
               <handler>OnIClass</handler>
               <command>g.gui.iclass</command>
             </menuitem>
