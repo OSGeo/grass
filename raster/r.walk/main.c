@@ -974,6 +974,9 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
+	row = pres_cell->row;
+	col = pres_cell->col;
+
 	G_percent(n_processed++, total_cells, 1);
 
 	/*          9    10       Order in which neighbors 
