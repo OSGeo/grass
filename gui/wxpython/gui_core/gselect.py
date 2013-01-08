@@ -1309,6 +1309,7 @@ class GdalSelect(wx.Panel):
                                  dsnPro,
                                  GetFormats(writableOnly = dest)[fType]['protocol']],
                        'db-win' : { 'file'   : dsnDbFile,
+                                    'dir'    : dsnDir,
                                     'text'   : dsnDbText,
                                     'choice' : dsnDbChoice },
                        'native' : [_("Name:"), dsnDir, ''],
@@ -1819,8 +1820,10 @@ class GdalSelect(wx.Panel):
         else: # database
             if format in ('SQLite', 'Rasterlite'):
                 win = self.input['db-win']['file']
+            elif format in ('FileGDB'):
+                win = self.input['db-win']['dir']
             elif format in ('PostgreSQL', 'PostGIS WKT Raster driver',
-                            'PostGIS Raster driver', 'MSSQLSpatial'):
+                            'PostGIS Raster driver'):
                 win = self.input['db-win']['choice']
                 # try to get list of PG databases
                 db = RunCommand('db.databases', quiet = True, read = True,
