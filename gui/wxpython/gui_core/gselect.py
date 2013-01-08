@@ -1733,9 +1733,13 @@ class GdalSelect(wx.Panel):
             
             layerId = 1
             for line in ret.splitlines():
-                layerName, featureType = map(lambda x: x.strip(), line.split(' ', 1))
+                layerName, featureType, projection = map(lambda x: x.strip(), line.split(','))
+                if projection == '0':
+                    projectionMatch = _("No")
+                else:
+                    projectionMatch = _("Yes")
                 grassName = GetValidLayerName(layerName)
-                data.append((layerId, layerName, featureType, grassName))
+                data.append((layerId, layerName, featureType, projectionMatch, grassName))
                 layerId += 1
         else:
             if self.dsnType == 'file':

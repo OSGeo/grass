@@ -1617,6 +1617,8 @@ class ImportDialog(wx.Dialog):
                    _('Name for output GRASS map (editable)')]
         if itype == 'ogr':
             columns.insert(2, _('Feature type'))
+            columns.insert(3, _('Projection match'))
+
         self.list = LayersList(parent = self.panel, columns = columns)
         self.list.LoadData()
 
@@ -2140,7 +2142,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         if len(columns) == 3:
             width = (65, 200)
         else:
-            width = (65, 180, 110)
+            width = (65, 180, 90, 70)
         
         for i in range(len(width)):
             self.SetColumnWidth(col = i, width = width[i])
