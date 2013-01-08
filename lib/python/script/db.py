@@ -67,18 +67,25 @@ def db_describe(table, **args):
 # run "db.connect -g" and parse output
 
 def db_table_exist(table, **args):
-    """!Return True if database table exists, False otherwise
+    """!Check if table exists.
+
+    If no driver or database are given, then default settings is used
+    (check db_connection()).
 
     @param table table name
-    @param args
+    @param driver DB driver 
+    @param database DB to check
 
     @return True for success, False otherwise
     """
-    result = run_command('db.describe', flags = 'c', table = table, **args)
-    if result == 0:
-            return True
-    else:
-            return False
+    nuldev = file(os.devnull, 'w+')
+    ret = run_command('db.describe', flags = 'c', table = table,
+                      stdout = nuldev, stderr = nuldev, **args)
+    nuldev.close()
+    
+    if ret == 0:
+        return True
+    return False
 
 def db_connection():
     """!Return the current database connection parameters
