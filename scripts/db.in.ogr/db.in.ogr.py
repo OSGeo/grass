@@ -33,13 +33,14 @@
 #% key: db_table
 #% type: string
 #% key_desc : name
-#% description: Table name of SQL DB table
+#% description: Name of table from given DB to be imported
 #% required : no
 #%end
 
 #%option 
 #% key: output
 #% type: string
+#% key_desc : name
 #% description: Name for output table
 #% required : no
 #%end
@@ -92,9 +93,7 @@ def main():
 	    grass.fatal(_("Input table <%s> not found or not readable") % input)
 	else:
 	    grass.fatal(_("Input DSN <%s> not found or not readable") % input)
-
-    nuldev = file(os.devnull, 'w')
-
+    
     # rename ID col if requested from cat to new name
     if key:
 	grass.write_command('db.execute', quiet = True,
@@ -114,9 +113,11 @@ def main():
 	grass.run_command('g.remove', quiet = True, vect = output)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
+    nuldev = file(os.devnull, 'w+')
     grass.run_command('db.dropcolumn', quiet = True, flags = 'f', table = output,
 		      column = 'cat', stdout = nuldev, stderr = nuldev)
-
+    nuldev.close()
+    
     records = grass.db_describe(output)['nrows']
     grass.message(_("Imported table <%s> with %d rows") % (output, records))
 
