@@ -20,7 +20,10 @@
 ############################################################################
 
 #%module
-#% description: Tool for animating a series of GRASS raster maps or a space time raster dataset
+#% description: Tool for animating a series of raster maps or a space time raster dataset.
+#% keywords: general
+#% keywords: gui
+#% keywords: display
 #%end
 #%option G_OPT_R_INPUTS
 #% key: rast
