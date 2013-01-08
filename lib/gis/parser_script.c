@@ -19,7 +19,7 @@
 #include "parser_local_proto.h"
 
 /*!
-  \brief Generate script-like output
+  \brief Generate Python script-like output
 */
 void G__script(void)
 {
@@ -33,8 +33,8 @@ void G__script(void)
     fprintf(fp, "#\n");
     fprintf(fp, "# MODULE:       %s_wrapper\n", G_program_name());
     fprintf(fp, "# AUTHOR(S):    %s\n", G_whoami());
-    fprintf(fp, "# PURPOSE:      \n");
-    fprintf(fp, "# COPYRIGHT:    (C) %s by %s, and The GRASS Development Team\n",
+    fprintf(fp, "# PURPOSE:      Wrapper for %s\n", G_program_name());
+    fprintf(fp, "# COPYRIGHT:    (C) %s by %s, and the GRASS Development Team\n",
 	    GRASS_VERSION_DATE, G_whoami());
     fprintf(fp, "#\n");
     fprintf(fp,
@@ -131,4 +131,13 @@ void G__script(void)
 	    fprintf(fp, "#%%end\n");
 	}
     }
+
+    fprintf(fp, "\nimport sys\n");
+    fprintf(fp, "\nimport grass.script as grass\n");
+    fprintf(fp, "\ndef main():");
+    fprintf(fp, "\n    # put code here\n");
+    fprintf(fp, "\n    return 0\n");
+    fprintf(fp, "\nif __name__ == \"__main__\":");
+    fprintf(fp, "\n    options, flags = grass.parser()");
+    fprintf(fp, "\n    sys.exit(main())\n");
 }
