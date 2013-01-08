@@ -3,6 +3,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #ifdef HAVE_OGR
@@ -197,11 +198,11 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 	if (fd) {
 	    if (print_types) {
 		if (print_schema && G_strcasecmp(value_schema, "public") != 0)
-		    fprintf(fd, "%s.%s (%s)\n",
+		    fprintf(fd, "%s.%s,%s,0\n",
 			    value_schema, value_table,
 			    feature_type(PQgetvalue(res, row, 2)));
 		else 
-		    fprintf(fd, "%s (%s)\n", value_table,
+		    fprintf(fd, "%s,%s,0\n", value_table,
 			    feature_type(PQgetvalue(res, row, 2)));
 	    }
 	    else {
@@ -237,13 +238,19 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
     int nlayers;
     char *layer_name;
     
+    struct Key_Value *loc_proj_info, *loc_proj_units;
+    struct Key_Value *proj_info, *proj_units;
+    struct Cell_head loc_wind;
+
     OGRDataSourceH Ogr_ds;
     OGRLayerH Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
     OGRwkbGeometryType Ogr_geom_type;
     
     ret = -1;
-    
+    loc_proj_info = loc_proj_units = NULL;
+    proj_info = proj_units = NULL;
+
     /* open OGR DSN */
     Ogr_ds = OGROpen(dsn, FALSE, NULL);
     if (!Ogr_ds) {
@@ -258,6 +265,12 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 		  dsn, OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), nlayers);
     
 
+    G_get_default_window(&loc_wind);
+    if (print_types && loc_wind.proj != PROJECTION_XY) {
+	loc_proj_info = G_get_projinfo();
+	loc_proj_units = G_get_projunits();
+    }
+    
     for (i = 0; i < nlayers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
@@ -265,11 +278,34 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 	layer_name = (char *) OGR_FD_GetName(Ogr_featuredefn);
 
 	if (fd) {
-	    if (print_types)
-		fprintf(fd, "%s (%s)\n", layer_name,
-			feature_type(OGRGeometryTypeToName(Ogr_geom_type)));
-	    else
+	    if (print_types) {
+		int proj_same;
+		OGRSpatialReferenceH Ogr_projection;
+
+		/* projection check */
+		Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
+		proj_same = 0;
+		if (GPJ_osr_to_grass(&loc_wind, &proj_info,
+				     &proj_units, Ogr_projection, 0) < 0) {
+		    G_warning(_("Unable to convert input map projection to GRASS "
+				"format. Projection check cannot be provided for "
+				"OGR layer <%s>"), layer_name);
+		}
+		else {
+		    if (TRUE == G_compare_projections(loc_proj_info, loc_proj_units,
+						      proj_info, proj_units))
+			proj_same = 1;
+		    else
+			proj_same = 0;
+		}
+		
+		fprintf(fd, "%s,%s,%d\n", layer_name,
+			feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
+			proj_same);
+	    }
+	    else {
 		fprintf(fd, "%s\n", layer_name);
+	    }
 	}
 	if (layer)
 	    if (strcmp(layer_name, layer) == 0) {
