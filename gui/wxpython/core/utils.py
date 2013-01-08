@@ -720,7 +720,8 @@ def _parseFormats(output, writableOnly = False):
                     'PostGIS WKT Raster driver',
                     'PostGIS Raster driver',
                     'CouchDB',
-                    'MSSQLSpatial'):
+                    'MSSQLSpatial',
+                    'FileGDB'):
             formats['database'].append(name)
         elif name in ('GeoJSON',
                       'OGC Web Coverage Service',
