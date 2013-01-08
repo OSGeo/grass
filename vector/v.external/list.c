@@ -285,6 +285,7 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 		/* projection check */
 		Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
 		proj_same = 0;
+		G_suppress_warnings(TRUE);
 		if (GPJ_osr_to_grass(&loc_wind, &proj_info,
 				     &proj_units, Ogr_projection, 0) < 0) {
 		    G_warning(_("Unable to convert input map projection to GRASS "
@@ -298,7 +299,7 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 		    else
 			proj_same = 0;
 		}
-		
+		G_suppress_warnings(FALSE);
 		fprintf(fd, "%s,%s,%d\n", layer_name,
 			feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
 			proj_same);
