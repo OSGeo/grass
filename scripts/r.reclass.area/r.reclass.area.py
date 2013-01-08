@@ -101,11 +101,11 @@ def main():
     flags = 'aln'
     if grass.raster_info(infile)['datatype'] in ('FCELL', 'DCELL'):
         flags += 'i'
-    p1 = grass.pipe_command('r.stats', flags = flags, input = (clumpfile, infile), sep = '|')
+    p1 = grass.pipe_command('r.stats', flags = flags, input = (clumpfile, infile), sep = ';')
     p2 = grass.feed_command('r.reclass', input = clumpfile, output = recfile, rules = '-')
     rules = ''
     for line in p1.stdout:
-        f = line.rstrip('\r\n').split('|')
+        f = line.rstrip(os.linesep).split(';')
         if len(f) < 5:
             continue
         hectares = float(f[4]) * 0.0001
