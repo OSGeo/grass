@@ -1186,13 +1186,13 @@ int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
                 "containing_face IS NOT NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-                "\"topo_bridges\".edge GROUP BY end_node) AS foo) "
+                "\"%s\".edge GROUP BY end_node) AS foo) "
                 "UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM \"%s\".edge WHERE "
                 "left_face = 0 AND right_face = 0 UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM "
                 "\"%s\".edge WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,fid",
                 pg_info->schema_name, pg_info->table_name, pg_info->conn, GV_POINT,
                 pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_CENTROID, pg_info->toposchema_name, pg_info->toposchema_name,
+                GV_CENTROID, pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name,
                 GV_LINE, pg_info->toposchema_name, GV_BOUNDARY, pg_info->toposchema_name); 
     }
     G_debug(2, "SQL: %s", stmt);
