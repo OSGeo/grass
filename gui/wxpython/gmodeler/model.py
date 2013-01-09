@@ -2015,12 +2015,12 @@ r"""#!/usr/bin/env python
 # DATE:         %s
 #
 #%s
-""" % ('#' * 79,
+""" % ('#' * 77,
        EncodeString(properties['name']),
        EncodeString(properties['author']),
        EncodeString('\n# '.join(properties['description'].splitlines())),
        time.asctime(),
-       '#' * 79))
+       '#' * 77))
         
         self.fd.write(
 r"""
