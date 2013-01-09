@@ -77,6 +77,7 @@ int main(int argc, char **argv)
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    field_opt->guisection = _("Selection");
 
     display_opt = G_define_option();
     display_opt->key = "display";
