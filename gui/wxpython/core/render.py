@@ -186,10 +186,10 @@ class Layer(object):
             msg = ''
             self.renderMgr.Render(cmd)
         else:
-            ret, msg = RunCommand(self.cmd[0],
+            ret, msg = RunCommand(cmd[0],
                                   getErrorMsg = True,
                                   quiet = True,
-                                  **self.cmd[1])
+                                  **cmd[1])
         
         return ret, msg
     
