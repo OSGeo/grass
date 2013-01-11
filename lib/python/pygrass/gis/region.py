@@ -222,3 +222,9 @@ class Region(object):
         self.adjust()
         if libgis.G_put_window(self.c_region) < 0:
             raise GrassError("Cannot change region (WIND file).")
+
+    def bbox(self):
+        from pygrass.vector.basic import Bbox
+        return Bbox(north=self.north, south=self.south,
+                    east=self.east, west=self.west,
+                    top=self.top, bottom=self.bottom)
