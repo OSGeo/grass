@@ -118,7 +118,7 @@ class Attrs(object):
         self.cond = "%s=%d" % (self.table.key, self.line)
         self.writable = writable
 
-    def __getitem__(self, key):
+    def __getitem__(self, *args):
         """Return the value stored in the attribute table. ::
 
             >>> attrs = Attrs(v_id, table)
@@ -127,10 +127,12 @@ class Attrs(object):
 
         .."""
         #SELECT {cols} FROM {tname} WHERE {condition};
-        cur = self.table.execute(sql.SELECT_WHERE.format(cols=key,
+        cols = args if isinstance(args[0], str) else args[0]
+        cur = self.table.execute(sql.SELECT_WHERE.format(cols=','.join(cols),
                                                          tname=self.table.name,
                                                          condition=self.cond))
-        return cur.fetchone()[0]
+        results = cur.fetchone()
+        return results[0] if len(cols) == 1 else results
 
     def __setitem__(self, key, value):
         """Set value of a given column of a table attribute. ::
@@ -216,10 +218,6 @@ class Geo(object):
         libvect.Vect_read_line(self.c_mapinfo, self.c_points,
                                self.c_cats, self.id)
 
-    def write(self):
-        """Write the centroid to the Map."""
-        libvect.Vect_write_line(self.c_mapinfo, self.gtype,
-                                self.c_points, self.c_cats)
 
 
 class Point(Geo):
@@ -927,12 +925,12 @@ class Centroid(Point):
         >>> centroid = Centroid(x=0, y=10)
         >>> centroid
         Centoid(0.000000, 10.000000)
-        >>> import pygrass
-        >>> mun = pygrass.vector.VectorTopo('boundary_municp_sqlite')
-        >>> mun.open()
-        >>> centroid = Centroid(v_id=5129, c_mapinfo=mun.c_mapinfo)
+        >>> from grass.pygrass.vector import VectorTopo
+        >>> geo = VectorTopo('geology')
+        >>> geo.open()
+        >>> centroid = Centroid(v_id=1, c_mapinfo=mun.c_mapinfo)
         >>> centroid
-        Centoid(463784.493822, 311023.913274)
+        Centoid(893202.874416, 297339.312795)
 
         ..
         """
@@ -944,8 +942,6 @@ class Centroid(Point):
         elif self.c_mapinfo and self.area_id and self.id is None:
             self.id = self.get_centroid_id()
         if self.area_id is not None:
-            self.cats = Cats(c_mapinfo=self.c_mapinfo, v_id=self.area_id)
-            #TODO: why not pass the self.id?
             self.read()
 
         # geometry type
@@ -1211,7 +1207,9 @@ class Area(Geo):
         int Vect_get_area_cats (const struct Map_info *Map,
                                 int area, struct line_cats *Cats)
         """
-        return Cats(self.c_mapinfo, self.id)
+        cats = Cats()
+        libvect.Vect_get_area_cats(self.c_mapinfo, self.id, cats.c_cats)
+        return cats
 
     def get_first_cat(self):
         """Find FIRST category of given field and area.
