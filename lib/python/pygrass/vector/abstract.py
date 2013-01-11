@@ -72,7 +72,7 @@ class Info(object):
         >>> municip.close()
 
     """
-    def __init__(self, name, mapset='', link_id=None):
+    def __init__(self, name, mapset='', layer=None):
         # Set map name and mapset
         self._name = name
         self.mapset = mapset
@@ -81,7 +81,7 @@ class Info(object):
         self._class_name = 'Vector'
         self.overwrite = False
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
-        self.link_id = link_id
+        self.layer = layer
 
     def _get_name(self):
         if self.exist() and self.is_open():
@@ -223,8 +223,8 @@ class Info(object):
 
     def open(self, mode='r', layer='0', overwrite=None,
              # parameters valid only if mode == 'w'
-             tab_name='', tab_cols=['cat', ],
-             link_number=1, link_name=None, link_key='cat',
+             tab_name='', tab_cols=[('cat', 'INTEGER PRIMARY KEY'), ],
+             link_layer=1, link_name=None, link_key='cat',
              link_db='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
              link_driver='sqlite'):
         """::
@@ -257,7 +257,7 @@ class Info(object):
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name,
                                              libvect.WITHOUT_Z)
             # create a link
-            link = Link(link_number,
+            link = Link(link_layer,
                         link_name if link_name else self.name,
                         tab_name if tab_name else self.name,
                         link_key, link_db, link_driver)
@@ -268,6 +268,7 @@ class Info(object):
             table = link.table()
             # create the new columns
             table.columns.create(tab_cols)
+            self.n_lines = 0
         elif mode == 'rw':
             openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
                                                  self.mapset, layer)
@@ -278,18 +279,21 @@ class Info(object):
             str_err = "Not able to open the map, C function return %d."
             raise OpenError(str_err % openvect)
         # istantiate the table
-        self.table = self.get_table(link_id=self.link_id)
+        self.layer = self.dblinks[0].layer
+        self.table = self.get_table(layer=self.layer)
         self.writable = self.mapset == functions.getenv("MAPSET")
+        if mode != 'w':
+            self.n_lines = self.table.num_rows()
 
-    def get_table(self, link_id=None, link_name=None,):
-        if link_id is None and link_name is None and len(self.dblinks) == 0:
+    def get_table(self, layer=None, name=None,):
+        if layer is None and name is None and len(self.dblinks) == 0:
             return None
-        if link_id is not None:
-            return self.dblinks.by_number(link_id).table()
-        elif link_name is not None:
-            return self.dblinks.by_name(link_name).table()
+        if layer is not None:
+            return self.dblinks.by_layer(layer).table()
+        elif name is not None:
+            return self.dblinks.by_name(name).table()
         else:
-            return self.dblinks.by_number(1).table()
+            return self.dblinks.by_layer(1).table()
 
     def close(self):
         self.table.conn.close()
@@ -297,6 +301,9 @@ class Info(object):
             if libvect.Vect_close(self.c_mapinfo) != 0:
                 str_err = 'Error when trying to close the map with Vect_close'
                 raise GrassError(str_err)
+            if (self.c_mapinfo.contents.mode == libvect.GV_MODE_RW or
+                    self.c_mapinfo.contents.mode == libvect.GV_MODE_WRITE):
+                self.build()
 
     def remove(self):
         """Remove vector map"""
