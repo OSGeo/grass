@@ -11,7 +11,7 @@ from vector_type import MAPTYPE
 
 from pygrass import functions
 from pygrass.errors import GrassError, OpenError, must_be_open
-from table import DBlinks
+from table import DBlinks, Link
 
 #=============================================
 # VECTOR ABSTRACT CLASS
@@ -221,7 +221,12 @@ class Info(object):
         return (self.c_mapinfo.contents.open != 0 and
                 self.c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE)
 
-    def open(self, mode='r', layer='0', overwrite=None):
+    def open(self, mode='r', layer='0', overwrite=None,
+             # parameters valid only if mode == 'w'
+             tab_name='', tab_cols=['cat', ],
+             link_number=1, link_name=None, link_key='cat',
+             link_db='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
+             link_driver='sqlite'):
         """::
 
             >>> mun = Info('boundary_municp_sqlite')
@@ -251,6 +256,18 @@ class Info(object):
             #TODO: build topo if new
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name,
                                              libvect.WITHOUT_Z)
+            # create a link
+            link = Link(link_number,
+                        link_name if link_name else self.name,
+                        tab_name if tab_name else self.name,
+                        link_key, link_db, link_driver)
+            self.dblinks = DBlinks(self.c_mapinfo)
+            # add the new link
+            self.dblinks.add(link)
+            # get the table
+            table = link.table()
+            # create the new columns
+            table.columns.create(tab_cols)
         elif mode == 'rw':
             openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
                                                  self.mapset, layer)
