@@ -5,6 +5,7 @@ from __future__ import print_function
 from os import listdir
 from os.path import join
 import ctypes as ct
+import fnmatch
 
 from grass import script
 #from grass.script import setup
@@ -238,7 +239,7 @@ class Mapset(object):
     def __repr__(self):
         return 'Mapset(%r)' % self.name
 
-    def glist(self, type):
+    def glist(self, type, pattern=None):
         """Return a list of grass types like:
 
             * 'asciivect',
@@ -273,6 +274,8 @@ class Mapset(object):
             if el_name:
                 elist.append(el_name)
             else:
+                if pattern:
+                    return fnmatch.filter(elist, pattern)
                 return elist
 
 
