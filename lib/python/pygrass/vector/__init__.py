@@ -13,7 +13,6 @@ from vector_type import VTYPE, GV_TYPE
 # import pygrass modules
 #
 from pygrass.errors import GrassError, must_be_open
-from pygrass.functions import getenv
 
 import geometry
 from abstract import Info
@@ -135,33 +134,68 @@ class Vector(Info):
             raise GrassError("Vect_rewind raise an error.")
 
     @must_be_open
-    def write(self, geo_obj):
-        """::
+    def write(self, geo_obj, attrs=None, line=0, layer=None):
+        """Write geometry features and attributes
 
-            >>> mun = Vector('boundary_municp_sqlite')         #doctest: +SKIP
-            >>> mun.open(mode='rw')            #doctest: +SKIP
-            >>> feature1 = mun.read(1)                         #doctest: +SKIP
-            >>> feature1                                       #doctest: +SKIP
-            Boundary(v_id=1)
-            >>> feature1[:3]             #doctest: +SKIP +NORMALIZE_WHITESPACE
-            [Point(463718.874987, 310970.844494),
-             Point(463707.405987, 310989.499494),
-             Point(463714.593986, 311084.281494)]
-            >>> from geometry import Point                     #doctest: +SKIP
-            >>> feature1.insert(1, Point(463713.000000, 310980.000000))
-            ...                                                #doctest: +SKIP
-            >>> feature1[:4]             #doctest: +SKIP +NORMALIZE_WHITESPACE
-            [Point(463718.874987, 310970.844494),
-             Point(463713.000000, 310980.000000),
-             Point(463707.405987, 310989.499494),
-             Point(463714.593986, 311084.281494)]
-            >>> mun.write(feature1)                            #doctest: +SKIP
-            >>> feature1                                       #doctest: +SKIP
-            Boundary(v_id=8708)
-            >>> mun.close()                                    #doctest: +SKIP
+        Open a new vector map ::
+
+            >>> new = VectorTopo('newvect')
+            >>> new.exist()
+            False
+
+        define the new columns of the attribute table ::
+
+            >>> cols = [(u'cat',       'INTEGER PRIMARY KEY'),
+            ...         (u'name',      'TEXT')]
+
+        open the vector map in write mode
+
+            >>> new.open('w', tab_name='newvect', tab_cols=cols)
+
+        import a geometry feature ::
+            >>> from pygrass.vector.geometry import Point
+
+        create two points ::
+
+            >>> point0 = Point(636981.336043, 256517.602235)
+            >>> point1 = Point(637209.083058, 257970.129540)
+
+        then write the two points on the map, with ::
+
+            >>> new.write2(point0, ('pub', ))
+            >>> new.write2(point1, ('resturnat', ))
+
+        close the vector map ::
+
+            >>> new.close()
+            >>> new.exist()
+            True
+
+        then play with the map ::
+
+            >>> new.open()
+            >>> new.read(1)
+            Point(636981.336043, 256517.602235)
+            >>> new.read(2)
+            Point(637209.083058, 257970.129540)
+            >>> new.read(1).attrs['name']
+            u'pub'
+            >>> new.read(2).attrs['cat', 'name']
+            (2, u'resturnat')
+            >>> new.close()
+            >>> new.remove()
 
         ..
         """
+        if layer:
+            table = self.dblinks.by_layer(layer).table()
+        else:
+            table = self.table
+            layer = self.layer
+        line = line if line else table.num_rows() + 1
+        attr = [line, ]
+        attr.extend(attrs)
+        libvect.Vect_cat_set(geo_obj.c_cats, layer, line)
         result = libvect.Vect_write_line(self.c_mapinfo, geo_obj.gtype,
                                          geo_obj.c_points, geo_obj.c_cats)
         if result == -1:
@@ -172,6 +206,11 @@ class Vector(Info):
         else:
             # return offset into file where the feature starts (on level 1)
             geo_obj.offset = result
+
+        cur = table.conn.cursor()
+        cur.execute(table.columns.insert_str, attr)
+        table.conn.commit()
+        cur.close()
 
 
 #=============================================
@@ -204,7 +243,7 @@ class VectorTopo(Vector):
             return [self.read(indx + 1)
                     for indx in xrange(*key.indices(len(self)))]
         elif isinstance(key, int):
-            self.read(key)
+            return self.read(key)
         else:
             raise ValueError("Invalid argument type: %r." % key)
 
