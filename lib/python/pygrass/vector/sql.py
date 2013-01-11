@@ -34,6 +34,7 @@ DROP_COL_SQLITE = ';\n'.join([
 RENAME_COL = "ALTER TABLE {tname} RENAME COLUMN {old_name} TO {new_name};"
 CAST_COL = "ALTER TABLE {tname} ALTER COLUMN {col} SET DATA TYPE {ctype};"
 RENAME_TAB = "ALTER TABLE {old_name} RENAME TO {new_name};"
+INSERT = "INSERT INTO {tname} VALUES ({values})"
 
 #SELECT
 SELECT = "SELECT {cols} FROM {tname};"
