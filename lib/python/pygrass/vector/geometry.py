@@ -112,10 +112,10 @@ def get_xyz(pnt):
 
 
 class Attrs(object):
-    def __init__(self, v_id, table, writable=False):
-        self.id = v_id
+    def __init__(self, line, table, writable=False):
+        self.line = line
         self.table = table
-        self.cond = "%s=%d" % (self.table.key, self.id)
+        self.cond = "%s=%d" % (self.table.key, self.line)
         self.writable = writable
 
     def __getitem__(self, key):
@@ -185,6 +185,7 @@ class Geo(object):
     def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None,
                  table=None, writable=False):
         self.id = v_id  # vector id
+        self.line = self.id
         self.c_mapinfo = c_mapinfo
 
         # set c_points
@@ -200,8 +201,8 @@ class Geo(object):
             self.c_cats = c_cats
 
         # set the attributes
-        if table and self.id:
-            self.attrs = Attrs(self.id, table, writable)
+        if table and self.line:
+            self.attrs = Attrs(self.line, table, writable)
 
     def is_with_topology(self):
         if self.c_mapinfo is not None:
@@ -1092,6 +1093,9 @@ class Area(Geo):
             self.boundary = self.points()
             self.centroid = self.centroid()
             self.isles = self.get_isles()
+            libvect.Vect_read_line(self.c_mapinfo, None, self.c_cats,
+                                   self.centroid.id)
+            self.line = self.c_cats.contents.cat.contents.value
         elif boundary and centroid:
             self.boundary = boundary
             self.centroid = centroid
@@ -1099,6 +1103,11 @@ class Area(Geo):
         else:
             str_err = "To instantiate an Area you need at least: Boundary and Centroid"
             raise GrassError(str_err)
+
+        # set the attributes
+        if self.attrs.table and self.line:
+            self.attrs = Attrs(self.line,
+                               self.attrs.table, self.attrs.writable)
 
         # geometry type
         self.gtype = libvect.GV_AREA
