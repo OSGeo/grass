@@ -210,6 +210,8 @@ class Columns(object):
                 name, ctype = column[1:3]
                 odict[name] = ctype
             self.odict = odict
+        values = ','.join(['?', ] * self.__len__())
+        self.insert_str = sql.INSERT.format(tname=self.tname, values=values)
 
     def sql_descr(self, remove=None):
         """Return a string with description of columns.
@@ -463,7 +465,7 @@ class Link(object):
     """Define a Link between vector map and the attributes table.
 
     It is possible to define a Link object or given all the information
-    (number, name, table name, key, database, driver): ::
+    (layer, name, table name, key, database, driver): ::
 
         >>> link = Link(1, 'link0', 'boundary_municp_sqlite', 'cat',
         ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db', 'sqlite')
@@ -508,15 +510,15 @@ class Link(object):
 
     ..
     """
-    def _get_number(self):
+    def _get_layer(self):
         return self.c_fieldinfo.contents.number
 
-    def _set_number(self, number):
+    def _set_layer(self, number):
         if number <= 0:
             raise TypeError("Number must be positive and greater than 0.")
         self.c_fieldinfo.contents.number = number
 
-    number = property(fget=_get_number, fset=_set_number)
+    layer = property(fget=_get_layer, fset=_set_layer)
 
     def _get_name(self):
         return self.c_fieldinfo.contents.name
@@ -561,13 +563,13 @@ class Link(object):
 
     driver = property(fget=_get_driver, fset=_set_driver)
 
-    def __init__(self, number=None, name=None, table=None, key=None,
+    def __init__(self, layer=1, name=None, table=None, key=None,
                  database=None, driver=None, c_fieldinfo=None):
         if c_fieldinfo is not None:
             self.c_fieldinfo = c_fieldinfo
         else:
             self.c_fieldinfo = ctypes.pointer(libvect.field_info())
-            self.number = number
+            self.layer = layer
             self.name = name
             self.table_name = table
             self.key = key
@@ -575,7 +577,7 @@ class Link(object):
             self.driver = driver
 
     def __repr__(self):
-        return "Link(%d, %s, %s)" % (self.number, self.name, self.driver)
+        return "Link(%d, %s, %s)" % (self.layer, self.name, self.driver)
 
     def connection(self):
         """Return a connection object. ::
@@ -635,7 +637,7 @@ class Link(object):
             ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
             ...             'sqlite')
             >>> link.info()
-            number:    1
+            layer:    1
             name:      link0
             table:     boundary_municp_sqlite
             key:       cat
@@ -644,7 +646,7 @@ class Link(object):
 
         ..
         """
-        print "number:   ", self.number
+        print "layer:   ", self.layer
         print "name:     ", self.name
         print "table:    ", self.table_name
         print "key:      ", self.key
@@ -679,26 +681,27 @@ class DBlinks(object):
         return self.num_dblinks()
 
     def __iter__(self):
-        return (self.by_number(ilink)
-                for ilink in xrange(1, self.num_dblinks() + 1))
+        return (self.by_index(i)
+                for i in xrange(self.num_dblinks()))
 
-    def __getitem__(self, key):
+    def __getitem__(self, item):
         """
 
         """
-        if isinstance(key, int):
-            if key != 0:
-                return self.by_number(key)
-            else:
-                raise TypeError("The index must be != 0.")
+        if isinstance(item, int):
+                return self.by_index(item)
         else:
-            return self.by_name(key)
+            return self.by_name(item)
 
     def __repr__(self):
         return "DBlinks(%r)" % [link for link in self.__iter__()]
 
-    def by_number(self, number):
-        c_fieldinfo = libvect.Vect_get_field(self.c_mapinfo, number)
+    def by_index(self, indx):
+        c_fieldinfo = libvect.Vect_get_dblink(self.c_mapinfo, indx)
+        return Link(c_fieldinfo=c_fieldinfo)
+
+    def by_layer(self, layer):
+        c_fieldinfo = libvect.Vect_get_field(self.c_mapinfo, layer)
         return Link(c_fieldinfo=c_fieldinfo)
 
     def by_name(self, name):
@@ -727,7 +730,7 @@ class DBlinks(object):
         """
         #TODO: check if open in write mode or not.
         libvect.Vect_map_add_dblink(self.c_mapinfo,
-                                    link.number, link.name, link.table_name,
+                                    link.layer, link.name, link.table_name,
                                     link.key, link.database, link.driver)
 
     def remove(self, key):
@@ -841,12 +844,13 @@ class Table(object):
 
         ..
         """
-        if sql_code is not None:
+        try:
+            sqlc = sql_code if sql_code else self.filters.get_sql()
             cur = self.conn.cursor()
-            return cur.execute(sql_code)
+            return cur.execute(sqlc)
+        except:
+            raise ValueError("The SQL is not correct:\n%r" % sqlc)
 
-        # get the sql from filters
-        sql_code = self.filters.get_sql()
-        if sql_code is not None:
-            cur = self.conn.cursor()
-            return cur.execute(sql_code)
+    def insert(self, values):
+        cur = self.conn.cursor()
+        return cur.execute(self.columns.insert_str, values)
