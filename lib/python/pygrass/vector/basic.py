@@ -263,6 +263,9 @@ class Ilist(object):
     def __repr__(self):
         return "Ilist(%r)" % repr(self.__iter__())
 
+    def __contains__(self, item):
+        return item in self.__iter__()
+
     def append(self, value):
         """Append an integer to the list"""
         if libvect.Vect_list_append(self.c_ilist, value):
@@ -300,25 +303,157 @@ class Ilist(object):
 
 class Cats(object):
     """Instantiate a Category class that contains a ctypes pointer
-    to the Map_info C struct, and a ctypes pointer to that C cats struct,
-    that could be used by C functions.
+    to the C line_cats struct. ::
+
+        >>> cats = Cats()
+        >>> for cat in xrange(100, 110): cats.set(cat, layer=cat-50)
+        >>> cats.n_cats
+        10
+        >>> cats.cat
+        [100, 101, 102, 103, 104, 105, 106, 107, 108, 109]
+        >>> cats.layer
+        [50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+        >>> cats.get()  # default layer is 1
+        (-1, 0)
+        >>> cats.get(50)
+        (100, 1)
+        >>> cats.get(51)
+        (101, 1)
+        >>> cats.set(1001, 52)
+        >>> cats.cat
+        [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 1001]
+        >>> cats.layer
+        [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 52]
+        >>> cats.get(52)
+        (102, 2)
+        >>> cats.reset()
+        >>> cats.layer
+        []
+        >>> cats.cat
+        []
+
+
     """
+    @property
+    def layer(self):
+        field = self.c_cats.contents.field
+        return [field[i] for i in xrange(self.n_cats)]
 
-    def __init__(self, c_mapinfo, v_id, c_cats=None):
-        self.c_mapinfo = c_mapinfo
-        self.id = v_id
-        if c_cats is not None:
-            self.c_cats = c_cats
-        else:
-            self.c_cats = ctypes.pointer(libvect.line_cats())
-            self.get_area_cats()
+    @property
+    def cat(self):
+        cat = self.c_cats.contents.cat
+        return [cat[i] for i in xrange(self.n_cats)]
 
-    def get_area_cats(self):
-        """Get area categories, set the c_cats struct given an area, using the
-        ``Vect_get_area_cats`` function.
-        """
-        libvect.Vect_get_area_cats(self.c_mapinfo, self.id, self.c_cats)
+    @property
+    def n_cats(self):
+        return self.c_cats.contents.n_cats
+
+    def __init__(self, c_cats=None):
+        self.c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
 
     def reset(self):
         """Reset the C cats struct from previous values."""
         libvect.Vect_reset_cats(self.c_cats)
+
+    def get(self, layer=1):
+        """Return the first found category of given layer
+        and the number of category found. """
+        cat = ctypes.c_int()
+        n_cats = libvect.Vect_cat_get(self.c_cats, layer, ctypes.byref(cat))
+        return cat.value, n_cats
+
+    def set(self, cat, layer=1):
+        """Add new field/cat to category structure if doesn't exist yet."""
+        libvect.Vect_cat_set(self.c_cats, layer, cat)
+
+    def delete(self, cat=None, layer=1):
+        """If cat is given delete cat from line_cats structure
+        (using Vect_field_cat_del) else delete all categories of given layer
+        (using Vect_cat_del).
+        """
+        if cat:
+            self.n_del = libvect.Vect_field_cat_del(self.c_cats, layer, cat)
+            err_msg = "Layer(%d)/category(%d) number does not exist"
+            err_msg = err_msg % (layer, cat)
+        else:
+            self.n_del = libvect.Vect_cat_del(self.c_cats, layer)
+            err_msg = 'Layer: %r does not exist' % layer
+        if self.n_del == 0:
+            raise ValueError(err_msg)
+
+    def check_cats_constraints(self, cats_list, layer=1):
+        """Check if categories match with category constraints"""
+        return bool(libvect.Vect_cats_in_constraint(self.c_cats, layer,
+                                                    cats_list.c_cat_list))
+
+    def get_list(self, layer=1):
+        """Get list of categories of given field."""
+        ilist = Ilist()
+        if libvect.Vect_field_cat_get(self.c_cats, layer,
+                                      ilist.c_ilist) < 0:
+            raise ValueError('Layer: %r does not exist' % layer)
+        return ilist
+
+
+class CatsList(object):
+    """::
+
+        >>> cats_list = CatsList()
+        >>> cats_list.min
+        []
+        >>> cats_list.max
+        []
+        >>> cats_list.n_ranges
+        0
+        >>> cats_list.layer
+        0
+        >>> string = "2,3,5-9,20"
+        >>> cats_list.from_string(string)
+        >>> cats_list.min
+        [2, 3, 5, 20]
+        >>> cats_list.max
+        [2, 3, 9, 20]
+        >>> cats_list.n_ranges
+        4
+
+    """
+    @property
+    def layer(self):
+        return self.c_cat_list.contents.field
+
+    @property
+    def n_ranges(self):
+        return self.c_cat_list.contents.n_ranges
+
+    @property
+    def min(self):
+        min_values = self.c_cat_list.contents.min
+        return [min_values[i] for i in xrange(self.n_ranges)]
+
+    @property
+    def max(self):
+        max_values = self.c_cat_list.contents.max
+        return [max_values[i] for i in xrange(self.n_ranges)]
+
+    def __init__(self, c_cat_list=None):
+        self.c_cat_list = c_cat_list if c_cat_list \
+                                     else ctypes.pointer(libvect.cat_list())
+
+    def from_string(self, string):
+        """Converts string of categories and cat ranges separated by commas
+        to cat_list."""
+        num_errors = libvect.Vect_str_to_cat_list(string, self.c_cat_list)
+        if num_errors:
+            from grass.pygrass.errors import GrassError
+            raise GrassError("%d number of errors in ranges" % num_errors)
+
+    def from_array(self, array):
+        """Convert ordered array of integers to cat_list structure."""
+        # Vect_array_to_cat_list(const int *vals, int nvals, ***)
+        # TODO: it's not working
+        libvect.Vect_array_to_cat_list(array, len(array), self.c_cat_list)
+
+    def __contains__(self, cat):
+        """Check if category number is in list.
+        int 	Vect_cat_in_cat_list (int cat, const struct cat_list *list)"""
+        return bool(libvect.Vect_cat_in_cat_list(cat, self.c_cat_list))
