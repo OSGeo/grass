@@ -262,6 +262,8 @@ class Mapset(object):
             >>> rast.sort()
             >>> rast                                      # doctest: +ELLIPSIS
             ['basins', 'elevation', ...]
+            >>> mapset.glist('rast', pattern='el*')
+            ['elevation_shade', 'elevation']
         """
         if type not in ETYPE:
             str_err = "Type %s is not valid, valid types are: %s."
