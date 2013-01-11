@@ -302,6 +302,15 @@ class Columns(object):
         """
         return self.odict.items()
 
+    def create(self, cols):
+        """"""
+        cur = self.conn.cursor()
+        coldef = ',\n'.join(['%s %s' % col for col in cols])
+        cur.execute(sql.CREATE_TAB.format(tname=self.tname, coldef=coldef))
+        self.conn.commit()
+        cur.close()
+        self.update_odict()
+
     def add(self, col_name, col_type):
         """Add a new column to the table. ::
 
