@@ -97,6 +97,11 @@ class Bbox(object):
         return "Bbox({n}, {s}, {e}, {w})".format(n=self.north, s=self.south,
                                                  e=self.east, w=self.west)
 
+    def contains(self, point):
+        return bool(libvect.Vect_point_in_box(point.x, point.y,
+                                              point.z if point.z else 0,
+                                              self.c_bbox))
+
 
 class BoxList(object):
     def __init__(self, boxlist=None):
