@@ -1289,7 +1289,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         row = 0
         # ll format
         ll = wx.RadioBox(parent = panel, id = wx.ID_ANY,
-                         label = " %s " % _("LL projections"),
+                         label = " %s " % _("Lat/long projections"),
                          choices = ["DMS", "DEG"],
                          name = "GetStringSelection")
         self.winId['projection:format:ll'] = ll.GetId()
