@@ -474,11 +474,11 @@ class GConsole(wx.EvtHandler):
 
             if self._ignoredCmdPattern and \
               re.compile(self._ignoredCmdPattern).search(' '.join(command)) and \
-              '--help' not in command:
+              '--help' not in command and '--ui' not in command:
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
                 return
-
+            
             else:
                 # other GRASS commands (r|v|g|...)
                 try:

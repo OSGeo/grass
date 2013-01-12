@@ -267,7 +267,7 @@ class GMFrame(wx.Frame):
         
         # create 'command output' text area
         self._gconsole = GConsole(guiparent = self, giface = self._giface,
-                                  ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$')
+                                  ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       gcstyle = GC_SEARCH | GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
@@ -574,12 +574,15 @@ class GMFrame(wx.Frame):
             self.Raise()
 
     def RunSpecialCmd(self, command):
+        """!Run command from command line, check for GUI wrappers"""
         if re.compile('^d\..*').search(command[0]):
             self.RunDisplayCmd(command)
         elif re.compile('r[3]?\.mapcalc').search(command[0]):
             self.OnMapCalculator(event = None, cmd = command)
+        elif command[0] == 'i.group':
+            self.OnEditImageryGroups(event = None, cmd = command)
         else:
-            raise ValueError('Layer Manger special command (%s)'
+            raise ValueError('Layer Manager special command (%s)'
                              ' not supported.' % ' '.join(command))
 
     def RunDisplayCmd(self, command):
