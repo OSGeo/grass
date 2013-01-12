@@ -177,10 +177,15 @@ import grass.script as grass
 def GetRegionParams(opt_region):
 
     # set region 
-    if opt_region:                 
-        if not grass.find_file(name = opt_region, element = 'windows', mapset = '.' )['name']:
-            grass.fatal(_("Region <%s> not found") % opt_region)
-        
+    if opt_region:  
+        reg_spl = opt_region.strip().split('@', 1)
+        reg_mapset = '.'
+        if len(reg_spl) > 1:
+            reg_mapset = reg_spl[1]
+            
+        if not grass.find_file(name = reg_spl[0], element = 'windows', mapset = reg_mapset)['name']:
+             grass.fatal(_("Region <%s> not found") % opt_region)
+    
     if opt_region:
         s = grass.read_command('g.region',
                                 quiet = True,
@@ -209,8 +214,13 @@ def main():
     else:
         from wms_base import GRASSImporter
         options['region'] = GetRegionParams(options['region'])
-        importer = GRASSImporter(options['output'])
         fetched_map = wms.GetMap(options, flags)
+
+        grass.message(_("Importing raster map into GRASS..."))
+        if not fetched_map:
+            grass.warning(_("Nothing to import.\nNo data has been downloaded from wms server."))
+            return
+        importer = GRASSImporter(options['output'])
         importer.ImportMapIntoGRASS(fetched_map)
 
     return 0

@@ -430,16 +430,10 @@ class GRASSImporter:
     def ImportMapIntoGRASS(self, raster): 
         """!Import raster into GRASS.
         """
-
-        grass.message(_("Importing raster map into GRASS..."))
-
-        if not raster:
-            grass.warning(_("Nothing to import.\nNo data has been downloaded from wms server."))
-            return
-
         # importing temp_map into GRASS
         if grass.run_command('r.in.gdal',
                              quiet = True,
+                             overwrite = True,
                              input = raster,
                              output = self.opt_output) != 0:
             grass.fatal(_('%s failed') % 'r.in.gdal')
@@ -480,6 +474,7 @@ class GRASSImporter:
         if grass.find_file(self.opt_output + '.red', element = 'cell', mapset = '.')['file']:
             if grass.run_command('r.composite',
                                  quiet = True,
+                                 overwrite = True,
                                  red = self.opt_output + '.red',
                                  green = self.opt_output +  '.green',
                                  blue = self.opt_output + '.blue',
