@@ -54,6 +54,8 @@ import grass.script as grass
 import grass.temporal as tgis
 from   grass.script import task as gtask
 
+from gui_core.widgets  import ManageSettingsWidget, EVT_SETTINGS_CHANGED, EVT_SETTINGS_SAVING
+
 from core.gcmd     import RunCommand, GError, GMessage
 from core.utils    import GetListOfLocations, GetListOfMapsets, GetFormats
 from core.utils    import GetSettingsPath, GetValidLayerName, ListSortLower
@@ -1162,9 +1164,17 @@ class GdalSelect(wx.Panel):
         self.dest   = dest 
         wx.Panel.__init__(self, parent = panel, id = wx.ID_ANY)
 
-        self.settingsBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                        label = " %s " % _("Settings"))
+        if self.ogr:
+            settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
+        else:
+            settingsFile = os.path.join(GetSettingsPath(), 'wxGDAL')
         
+        self.settsManager = ManageSettingsWidget(parent = self, 
+                                                 id = wx.ID_ANY,
+                                                 settingsFile = settingsFile)
+        self.settsManager.Bind(EVT_SETTINGS_CHANGED, self.OnSettingsChanged)
+        self.settsManager.Bind(EVT_SETTINGS_SAVING, self.OnSettingsSaving)
+
         self.inputBox = wx.StaticBox(parent = self, id = wx.ID_ANY)
         if dest:
             self.inputBox.SetLabel(" %s " % _("Output settings"))
@@ -1207,21 +1217,6 @@ class GdalSelect(wx.Panel):
         if 'database' not in exclude and ogr and (link or dest):
             sources.append(_("PostGIS (PG)"))
             self.sourceMap['db-pg'] = idx
-        
-        if self.ogr:
-            self.settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
-        else:
-            self.settingsFile = os.path.join(GetSettingsPath(), 'wxGDAL')
-
-        self.settingsChoice = wx.Choice(parent = self, id = wx.ID_ANY)
-        self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsLoad)
-        self._settings = self._loadSettings() # -> self.settingsChoice.SetItems()
-        self.btnSettingsSave = wx.Button(parent = self, id = wx.ID_SAVE)
-        self.btnSettingsSave.Bind(wx.EVT_BUTTON, self.OnSettingsSave)
-        self.btnSettingsSave.SetToolTipString(_("Save current settings"))
-        self.btnSettingsDel = wx.Button(parent = self, id = wx.ID_REMOVE)
-        self.btnSettingsDel.Bind(wx.EVT_BUTTON, self.OnSettingsDelete)
-        self.btnSettingsSave.SetToolTipString(_("Delete currently selected settings"))
         
         self.source = wx.RadioBox(parent = self, id = wx.ID_ANY,
                                   style = wx.RA_SPECIFY_COLS,
@@ -1360,23 +1355,7 @@ class GdalSelect(wx.Panel):
     def _layout(self):
         """!Layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        
-        settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
-        settingsSizer.Add(item = wx.StaticText(parent = self,
-                                               id = wx.ID_ANY,
-                                               label = _("Load settings:")),
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
-                          border  = 5)
-        settingsSizer.Add(item = self.settingsChoice,
-                          proportion = 1,
-                          flag = wx.EXPAND)
-        settingsSizer.Add(item = self.btnSettingsSave,
-                          flag = wx.LEFT | wx.RIGHT,
-                          border = 5)
-        settingsSizer.Add(item = self.btnSettingsDel,
-                          flag = wx.RIGHT,
-                          border = 5)
-        
+                
         inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
         
         self.dsnSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
@@ -1417,7 +1396,7 @@ class GdalSelect(wx.Panel):
         inputSizer.Add(item=self.dsnSizer, proportion = 1,
                        flag=wx.EXPAND | wx.BOTTOM, border = 10)
         
-        mainSizer.Add(item=settingsSizer, proportion=0,
+        mainSizer.Add(item=self.settsManager, proportion=0,
                       flag=wx.ALL | wx.EXPAND, border=5)
         mainSizer.Add(item=self.source, proportion=0,
                       flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=5)
@@ -1426,6 +1405,33 @@ class GdalSelect(wx.Panel):
         
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
+
+    def OnSettingsChanged(self, event):
+        """!User changed setting"""
+        data = event.data
+
+        # data list: [type, dsn, format, options]
+        if len(data) == 3:
+            data.append('')
+        elif len < 3:
+            return        
+
+        self.OnSetType(event = None, sel = self.sourceMap[data[0]])
+        self.OnSetFormat(event = None, format = data[2])
+        self.OnSetDsn(event = None, path = data[1])
+        self.creationOpt.SetValue(data[3])
+
+    def OnSettingsSaving(self, event):
+        """!Saving data"""
+        if not self.GetDsn():
+            GMessage(parent = self,
+                     message = _("No data source defined, settings are not saved."))
+            return
+
+        self.settsManager.SetDataToSave((self.dsnType, self.GetDsn(),
+                                         self.format.GetStringSelection(),
+                                         self.creationOpt.GetValue()))
+        event.Skip()
 
     def _getExtPatternGlob(self, ext):
         """!Get pattern for case-insensitive globing"""
@@ -1438,122 +1444,6 @@ class GdalSelect(wx.Panel):
         """!Get pattern for case-insensitive file mask"""
         return '*.%s;*.%s' % (ext.lower(), ext.upper())
 
-    def OnSettingsLoad(self, event):
-        """!Load named settings"""
-        name = event.GetString()
-        if name not in self._settings:
-            GError(parent = self,
-                   message = _("Settings <%s> not found") % name)
-            return
-        data = self._settings[name]
-        self.OnSetType(event = None, sel = self.sourceMap[data[0]])
-        self.OnSetFormat(event = None, format = data[2])
-        self.OnSetDsn(event = None, path = data[1])
-        self.creationOpt.SetValue(data[3])
-        
-    def OnSettingsSave(self, event):
-        """!Save settings"""
-        dlg = wx.TextEntryDialog(parent = self,
-                                 message = _("Name:"),
-                                 caption = _("Save settings"))
-        if dlg.ShowModal() != wx.ID_OK:
-            return
-        
-        # check required params
-        if not dlg.GetValue():
-            GMessage(parent = self,
-                     message = _("Name not given, settings is not saved."))
-            return
-        
-        if not self.GetDsn():
-            GMessage(parent = self,
-                     message = _("No data source defined, settings is not saved."))
-            return
-        
-        name = dlg.GetValue()
-        
-        # check if settings item already exists
-        if name in self._settings:
-            dlgOwt = wx.MessageDialog(self, message = _("Settings <%s> already exists. "
-                                                        "Do you want to overwrite the settings?") % name,
-                                      caption = _("Save settings"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-            if dlgOwt.ShowModal() != wx.ID_YES:
-                dlgOwt.Destroy()
-                return
-        
-        self._settings[name] = (self.dsnType, self.GetDsn(),
-                                self.format.GetStringSelection(),
-                                self.creationOpt.GetValue())
-        
-        if self._saveSettings() == 0:
-            self._settings = self._loadSettings()
-            self.settingsChoice.SetStringSelection(name)
-        
-        dlg.Destroy()
- 
-    def OnSettingsDelete(self, event):
-        """!Save settings"""
-        name = self.settingsChoice.GetStringSelection()
-        if not name:
-            GMessage(parent = self,
-                     message = _("No settings is defined. Operation canceled."))
-            return
-        
-        self._settings.pop(name)
-        if self._saveSettings() == 0:
-            self._settings = self._loadSettings()
-        
-    def _saveSettings(self):
-        """!Save settings into the file
-
-        @return 0 on success
-        @return -1 on failure
-        """
-        try:
-            fd = open(self.settingsFile, 'w')
-            for key, value in self._settings.iteritems():
-                fd.write('%s;%s;%s;%s\n' % (key, value[0], value[1], value[2]))
-        except IOError:
-            GError(parent = self,
-                   message = _("Unable to save settings"))
-            return -1
-        else:
-            fd.close()
-        
-        return 0
-
-    def _loadSettings(self):
-        """!Load settings from the file
-
-        The file is defined by self.SettingsFile.
-        
-        @return parsed dict
-        @return empty dict on error
-        """
-        data = dict()
-        if not os.path.exists(self.settingsFile):
-            return data
-        
-        try:
-            fd = open(self.settingsFile, 'r')
-            for line in fd.readlines():
-                try:
-                    lineData = line.rstrip('\n').split(';')
-                    if len(lineData) > 4:
-                        # type, dsn, format, options
-                        data[lineData[0]] = (lineData[1], lineData[2], lineData[3], lineData[4])
-                    else:
-                        data[lineData[0]] = (lineData[1], lineData[2], lineData[3], '')
-                except ValueError:
-                    pass
-        except IOError:
-            return data
-        else:
-            fd.close()
-        
-        self.settingsChoice.SetItems(sorted(data.keys()))
-        
-        return data
 
     def OnSetType(self, event, sel = None):
         """!Datasource type changed"""

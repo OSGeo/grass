@@ -39,9 +39,9 @@ class MapWindow(object):
     def __init__(self, parent, giface, Map, frame, **kwargs):
         self.parent = parent
         self.Map = Map
-        self.Map.SetParentMapWindow(self)
         self.frame = frame
         self._giface = giface
+        self.Map.SetReceiver(self)
         
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing

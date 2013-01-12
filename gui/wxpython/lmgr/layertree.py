@@ -29,21 +29,23 @@ except ImportError:
 
 from grass.script import core as grass
 
-from core                import globalvar
-from gui_core.dialogs    import SqlQueryFrame, SetOpacityDialog, EVT_APPLY_OPACITY
-from gui_core.forms      import GUI
-from mapdisp.frame       import MapFrame
-from core.render         import Map
-from modules.histogram   import HistogramFrame
-from core.utils          import GetLayerNameFromCmd
-from wxplot.profile      import ProfileFrame
-from core.debug          import Debug
-from core.settings       import UserSettings, GetDisplayVectSettings
-from vdigit.main         import haveVDigit
-from core.gcmd           import GWarning, GError
-from gui_core.toolbars   import BaseIcons
-from icons.icon          import MetaIcon
-from modules.colorrules  import RasterColorTable
+from core                 import globalvar
+from gui_core.dialogs     import SqlQueryFrame, SetOpacityDialog, EVT_APPLY_OPACITY
+from gui_core.forms       import GUI
+from mapdisp.frame        import MapFrame
+from core.render          import Map
+from modules.histogram    import HistogramFrame
+from core.utils           import GetLayerNameFromCmd
+from wxplot.profile       import ProfileFrame
+from core.debug           import Debug
+from core.settings        import UserSettings, GetDisplayVectSettings
+from vdigit.main          import haveVDigit
+from core.gcmd            import GWarning, GError
+from gui_core.toolbars    import BaseIcons
+from icons.icon           import MetaIcon
+from modules.colorrules   import RasterColorTable
+from web_services.dialogs import SaveWMSLayerDialog
+
 
 TREE_ITEM_HEIGHT = 25
 
@@ -391,7 +393,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if not hasattr (self, "popupID"):
             self.popupID = dict()
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
-                        'region', 'export', 'attr', 'edit0', 'edit1',
+                        'region', 'export', 'attr', 'edit0', 'edit1', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
                         'color', 'hist', 'univar', 'prof', 'properties', 'sql'):
                 self.popupID[key] = wx.NewId()
@@ -532,8 +534,20 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
                 self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
         
+        # web service layers (specific item)
+        elif mltype and mltype == "wms":
+            self.popupMenu.Append(self.popupID['save_ws'], text = _("Save web service layer"))
+            self.Bind(wx.EVT_MENU, self.OnSaveWs, id = self.popupID['save_ws'])
+
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()
+
+    def OnSaveWs(self, event):
+        """!Show dialog for saving web service layer into GRASS vector/raster layer"""
+        mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
+        dlg = SaveWMSLayerDialog(parent = self, layer = mapLayer, ltree = self)
+        dlg.CentreOnScreen()
+        dlg.Show()
 
     def OnTopology(self, event):
         """!Rebuild topology of selected vector map"""
@@ -1035,12 +1049,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def PropertiesDialog(self, layer, show = True):
         """!Launch the properties dialog"""
+        ltype  = self.GetLayerInfo(layer, key = 'type')
         if 'propwin' in self.GetLayerInfo(layer) and \
                 self.GetLayerInfo(layer, key = 'propwin') is not None:
             # recycle GUI dialogs
             win = self.GetLayerInfo(layer, key = 'propwin')
-            # update properties (columns, layers)
-            win.notebookpanel.OnUpdateSelection(None)
+            if ltype != 'wms':
+                # update properties (columns, layers)
+                win.notebookpanel.OnUpdateSelection(None)
             if win.IsShown():
                 win.SetFocus()
             else:
@@ -1049,13 +1065,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             return
         
         params = self.GetLayerParams(layer)
-        ltype  = self.GetLayerInfo(layer, key = 'type')
                 
         Debug.msg (3, "LayerTree.PropertiesDialog(): ltype=%s" % \
                    ltype)
 
         cmd = None
         if self.GetLayerInfo(layer, key = 'cmd'):
+
             module = GUI(parent = self, show = show, centreOnParent = False)
             module.ParseCommand(self.GetLayerInfo(layer, key = 'cmd'),
                                 completed = (self.GetOptData,layer,params))

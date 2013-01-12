@@ -16,6 +16,7 @@ Classes:
  - widgets::ItemTree
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
+ - widgets::ManageSettingsWidget
 
 (C) 2008-2012 by the GRASS Development Team
 
@@ -25,6 +26,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
+@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
 """
 
 import os
@@ -48,12 +50,17 @@ except ImportError:
     import wx.lib.customtreectrl as CT
 
 from core        import globalvar
+from core.gcmd   import GMessage
 from core.debug  import Debug
 from core.events import gShowNotification
 
 from wx.lib.newevent import NewEvent
 wxSymbolSelectionChanged, EVT_SYMBOL_SELECTION_CHANGED  = NewEvent()
 
+# ManageSettingsWidget
+wxOnSettingsLoaded, EVT_SETTINGS_LOADED = NewEvent()
+wxOnSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
+wxOnSettingsSaving, EVT_SETTINGS_SAVING = NewEvent()
 
 class NotebookController:
     """!Provides handling of notebook page names.
@@ -874,3 +881,299 @@ class SearchModuleWidget(wx.Panel):
         self.search.SetValue('')
         if self.showTip:
             self.searchTip.SetLabel('')
+
+class ManageSettingsWidget(wx.Panel):
+    """!Widget which allows loading and saving settings into file."""
+    def __init__(self, parent, settingsFile, id = wx.ID_ANY):
+        """
+        Events:
+            EVT_SETTINGS_CHANGED - called when users changes setting
+                                - event object has attribute 'data', with chosen setting data
+            EVT_SETTINGS_SAVING - called when settings are saving
+                                - If you bind instance of ManageSettingsWidget with this event,
+                                  you can use SetDataToSave method to set data for save and then call 
+                                  Skip() to save the data.
+                                  If you do not call Skip(), the data will not be saved. 
+            EVT_SETTINGS_LOADED - called when settings are loaded
+                                - event object has attribute 'settings', which is dict with loaded settings
+                                  {nameofsetting : settingdata, ....}
+
+        @param settingsFile - path to file, where settings will be saved and loaded from
+        """
+        self.settingsFile = settingsFile
+
+        wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
+
+        self.settingsBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                        label = " %s " % _("Settings"))
+        
+        self.settingsChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+        self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsChanged)
+        self.btnSettingsSave = wx.Button(parent = self, id = wx.ID_SAVE)
+        self.btnSettingsSave.Bind(wx.EVT_BUTTON, self.OnSettingsSave)
+        self.btnSettingsSave.SetToolTipString(_("Save current settings"))
+        self.btnSettingsDel = wx.Button(parent = self, id = wx.ID_REMOVE)
+        self.btnSettingsDel.Bind(wx.EVT_BUTTON, self.OnSettingsDelete)
+        self.btnSettingsSave.SetToolTipString(_("Delete currently selected settings"))
+
+        self.Bind(EVT_SETTINGS_SAVING, self.OnSettingsSaving)
+
+        # escaping with '$' character - index in self.esc_chars
+        self.e_char_i = 0
+        self.esc_chars = ['$', ';']
+
+        self._settings = self._loadSettings() # -> self.settingsChoice.SetItems()
+        event = wxOnSettingsLoaded(settings = self._settings)
+        wx.PostEvent(self, event)
+
+        self.data_to_save = []
+
+        self._layout()
+
+    def _layout(self):
+
+        settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
+        settingsSizer.Add(item = wx.StaticText(parent = self,
+                                               id = wx.ID_ANY,
+                                               label = _("Load settings:")),
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+                          border  = 5)
+        settingsSizer.Add(item = self.settingsChoice,
+                          proportion = 1,
+                          flag = wx.EXPAND)
+        settingsSizer.Add(item = self.btnSettingsSave,
+                          flag = wx.LEFT | wx.RIGHT,
+                          border = 5)
+        settingsSizer.Add(item = self.btnSettingsDel,
+                          flag = wx.RIGHT,
+                          border = 5)
+
+        self.SetSizer(settingsSizer)
+        settingsSizer.Fit(self)
+
+    def OnSettingsChanged(self, event):
+        """!Load named settings"""
+        name = event.GetString()
+        if name not in self._settings:
+            GError(parent = self,
+                   message = _("Settings <%s> not found") % name)
+            return
+
+        data = self._settings[name]
+        event = wxOnSettingsChanged(data = data)
+        wx.PostEvent(self, event)
+
+    def OnSettingsSave(self, event):
+        """!Save settings"""
+        dlg = wx.TextEntryDialog(parent = self,
+                                 message = _("Name:"),
+                                 caption = _("Save settings"))
+        if dlg.ShowModal() != wx.ID_OK:
+            return
+        
+        # check required params
+        if not dlg.GetValue():
+            GMessage(parent = self,
+                     message = _("Name not given, settings is not saved."))
+            return
+
+        name = dlg.GetValue()
+
+        event = wxOnSettingsSaving(name = name, dlg = dlg)
+        wx.PostEvent(self, event)
+  
+    def OnSettingsSaving(self, event):
+        # check if settings item already exists
+        if event.name in self._settings:
+            dlgOwt = wx.MessageDialog(self, message = _("Settings <%s> already exists. "
+                                                        "Do you want to overwrite the settings?") % event.name,
+                                      caption = _("Save settings"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlgOwt.ShowModal() != wx.ID_YES:
+                dlgOwt.Destroy()
+                return
+
+        if self.data_to_save:
+            self._settings[event.name] = self.data_to_save
+
+        self.SaveSettings()
+        self.settingsChoice.SetStringSelection(event.name)
+
+        self.data_to_save = []
+        event.dlg.Destroy()
+ 
+    def SaveSettings(self):
+        """!Save settings"""
+        if self._saveSettings() == 0:
+            self._settings = self._loadSettings()
+
+    def SetDataToSave(self, data):
+        """!Set data for setting, which will be saved.
+
+        @param data - list of strings, which will be saved
+        """
+        self.data_to_save = data
+
+    def SetSettings(self, settings):
+        """!Set settings
+
+        @param settings - dict with all settigs {nameofsetting : settingdata, ....}
+        """
+        self._settings = settings
+        self.SaveSettings()
+
+    def OnSettingsDelete(self, event):
+        """!Save settings
+        """
+        name = self.settingsChoice.GetStringSelection()
+        if not name:
+            GMessage(parent = self,
+                     message = _("No settings is defined. Operation canceled."))
+            return
+        
+        self._settings.pop(name)
+        if self._saveSettings() == 0:
+            self._settings = self._loadSettings()
+        
+    def _saveSettings(self):
+        """!Save settings into the file
+
+        @return 0 on success
+        @return -1 on failure
+        """
+        try:
+            fd = open(self.settingsFile, 'w')
+            fd.write('format_version=2.0\n')
+            for key, values in self._settings.iteritems():
+                first = True
+                for v in values:
+                    # escaping characters
+                    for e_ch in self.esc_chars:
+                        v = v.replace(e_ch, self.esc_chars[self.e_char_i] + e_ch)
+                    if first:
+                        # escaping characters
+                        for e_ch in self.esc_chars:
+                            key = key.replace(e_ch, self.esc_chars[self.e_char_i] + e_ch)
+                        fd.write('%s;%s;' % (key, v))
+                        first = False
+                    else:
+                        fd.write('%s;' % (v))
+                fd.write('\n')
+
+        except IOError:
+            GError(parent = self,
+                   message = _("Unable to save settings"))
+            return -1
+        fd.close()
+        
+        return 0
+
+    def _loadSettings(self):
+        """!Load settings from the file
+
+        The file is defined by self.SettingsFile.
+        
+        @return parsed dict
+        @return empty dict on error
+        """
+
+        data = dict()
+        if not os.path.exists(self.settingsFile):
+            return data
+
+        try:
+            fd = open(self.settingsFile, 'r')
+        except IOError:
+            return data
+
+        fd_lines = fd.readlines()
+
+        if not fd_lines:
+            fd.close()
+            return data
+
+        if fd_lines[0].strip() == 'format_version=2.0':
+            data = self._loadSettings_v2(fd_lines)
+        else:
+            data = self._loadSettings_v1(fd_lines)
+
+        self.settingsChoice.SetItems(sorted(data.keys()))
+        fd.close()
+
+        event = wxOnSettingsLoaded(settings = data)
+        wx.PostEvent(self, event)
+
+        return data
+
+    def _loadSettings_v2(self, fd_lines):
+        """Load settings from the file in format version 2.0
+
+        The file is defined by self.SettingsFile.
+        
+        @return parsed dict
+        @return empty dict on error
+        """
+        data = dict()
+        
+        for line in fd_lines[1:]:
+            try:
+                lineData = []
+                line = line.rstrip('\n')
+                i_last_found = i_last = 0
+                key = ''
+                while True:
+                    idx = line.find(';', i_last)
+                    if idx < 0:
+                        break
+                    elif idx != 0:
+
+                        # find out whether it is separator
+                        # $$$$; - it is separator
+                        # $$$$$; - it is not separator
+                        i_esc_chars = 0
+                        while True:
+                            if line[idx - (i_esc_chars + 1)] == self.esc_chars[self.e_char_i]:
+                                i_esc_chars += 1
+                            else: 
+                                break
+                        if i_esc_chars%2 != 0:
+                            i_last = idx + 1
+                            continue
+
+                    lineItem = line[i_last_found : idx]
+                    # unescape characters
+                    for e_ch in self.esc_chars:
+                        lineItem = lineItem.replace(self.esc_chars[self.e_char_i] + e_ch, e_ch)
+                    if i_last_found == 0:
+                        key = lineItem
+                    else:
+                        lineData.append(lineItem)
+                    i_last_found = i_last = idx + 1
+                if key and lineData:
+                    data[key] = lineData
+            except ValueError:
+                pass
+
+        return data
+
+    def _loadSettings_v1(self, fd_lines):
+        """!Load settings from the file in format version 1.0 (backward compatibility)
+
+        The file is defined by self.SettingsFile.
+        
+        @return parsed dict
+        @return empty dict on error
+        """
+        data = dict()
+      
+        for line in fd_lines:
+            try:
+                lineData = line.rstrip('\n').split(';')
+                if len(lineData) > 4:
+                    # type, dsn, format, options
+                    data[lineData[0]] = (lineData[1], lineData[2], lineData[3], lineData[4])
+                else:
+                    data[lineData[0]] = (lineData[1], lineData[2], lineData[3], '')
+            except ValueError:
+                pass
+        
+        return data

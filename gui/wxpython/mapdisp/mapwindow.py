@@ -34,8 +34,11 @@ from gui_core.dialogs   import SavedRegion
 from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
 from core.settings      import UserSettings
-from core.events        import gZoomChanged
+from core.events        import gZoomChanged, EVT_UPDATE_MAP
 from gui_core.mapwindow import MapWindow
+from core.render        import EVT_UPDATE_PRGBAR
+from core.utils         import GetGEventAttribsForHandler
+
 try:
     import grass.lib.gis as gislib
     haveCtypes = True
@@ -76,9 +79,13 @@ class BufferedWindow(MapWindow, wx.Window):
         self.plineid = None
         
         # event bindings
-        self.Bind(wx.EVT_PAINT,        self.OnPaint)
-        self.Bind(wx.EVT_SIZE,         self.OnSize)
-        self.Bind(wx.EVT_IDLE,         self.OnIdle)
+        self.Bind(wx.EVT_PAINT,           self.OnPaint)
+        self.Bind(wx.EVT_SIZE,            self.OnSize)
+        self.Bind(wx.EVT_IDLE,            self.OnIdle)
+        self.Bind(EVT_UPDATE_MAP,         self.OnUpdateMap)
+        if self.frame and hasattr(self.frame, 'OnUpdateProgress'):
+            self.Bind(EVT_UPDATE_PRGBAR,   self.frame.OnUpdateProgress)
+
         self._bindMouseEvents()
         
         self.processMouse = True
@@ -571,10 +578,26 @@ class BufferedWindow(MapWindow, wx.Window):
     def IsAlwaysRenderEnabled(self):
         return self.alwaysRender
 
+    def OnUpdateMap(self, event):
+        """!Called when this class receives core.events.gUpdateMap event. 
+        """
+        kwargs, missing_args = GetGEventAttribsForHandler(self.UpdateMap, event)
+
+        if missing_args:
+            Debug.msg (1, "Invalid call of EVT_UPDATE_MAP event.")
+            return
+
+        self.UpdateMap(self, **kwargs)
+
     def UpdateMap(self, render = True, renderVector = True):
         """!Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
         
+        This method should not be called directly.
+        Post core.events.gUpdateMap event to instance of this class. 
+
+        @todo change direct calling of UpdateMap method to posting core.events.gUpdateMap
+
         @param render re-render map composition
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
         """
@@ -606,10 +629,10 @@ class BufferedWindow(MapWindow, wx.Window):
                 else:
                     windres = False
                 
-                self.mapfile = self.Map.Render(force = True, mapWindow = self.frame,
+                self.mapfile = self.Map.Render(force = True,
                                                windres = windres)
             else:
-                self.mapfile = self.Map.Render(force = False, mapWindow = self.frame)
+                self.mapfile = self.Map.Render(force = False)
             
         except GException, e:
             GError(message = e.value)
@@ -759,9 +782,8 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Draw(self.pdcDec, pdctype = 'clear')
         self.Draw(self.pdcTmp, pdctype = 'clear')
 
-        for layer in self.Map.GetListOfLayers(active = True):
-            layer.AbortDownload()
-        
+        self.Map.AbortAllThreads()
+
     def DragMap(self, moveto):
         """!Drag the entire map image for panning.
         

@@ -992,9 +992,7 @@ class GMFrame(wx.Frame):
                          (None, None),
                          ('vectImport',    self.OnImportOgrLayers),
                          ('vectLink',      self.OnLinkOgrLayers),
-                         ('vectOut',       self.OnVectorOutputFormat),
-                         (None, None),
-                         ('wmsImport',     self.OnImportWMS)))
+                         ('vectOut',       self.OnVectorOutputFormat)))
         
     def OnWorkspaceNew(self, event = None):
         """!Create new workspace file
@@ -1509,36 +1507,12 @@ class GMFrame(wx.Frame):
         dlg.CentreOnScreen()
         dlg.Show()
         
-    def OnImportWMS(self, event, cmd = None):
-        """!Import data from OGC WMS server"""
-        from ogc_services.wms import WMSDialog
-        dlg = WMSDialog(parent = self)
-        dlg.CenterOnScreen()         
-        if dlg.ShowModal() == wx.ID_OK: # -> import layers
-            layers = dlg.GetLayers()
-            
-            if len(layers.keys()) > 0:
-                for layer in layers.keys():
-                    cmd = ['r.in.wms',
-                           'mapserver=%s' % dlg.GetSettings()['server'],
-                           'layers=%s' % layer,
-                           'output=%s' % layer,
-                           'format=png',
-                           '--overwrite']
-                    styles = ','.join(layers[layer])
-                    if styles:
-                        cmd.append('styles=%s' % styles)
-                    self._gconsole.RunCmd(cmd, switchPage = True)
-
-                    self.GetLayerTree().AddLayer(ltype = 'raster',
-                                                    lname = layer,
-                                                    lcmd = ['d.rast', 'map=%s' % layer],
-                                                    multiple = False)
-            else:
-                self._gconsole.WriteWarning(_("Nothing to import. No WMS layer selected."))
-                
-                
-        dlg.Destroy()
+    def OnAddWS(self, event, cmd = None):
+        """!Add web services layer"""
+        from web_services.dialogs import AddWSDialog
+        dlg = AddWSDialog(parent = self, gmframe = self)
+        dlg.CentreOnScreen()
+        dlg.Show()
 
     def OnShowAttributeTable(self, event, selection = None):
         """!Show attribute table of the given vector map layer

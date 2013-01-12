@@ -19,6 +19,7 @@ import string
 import glob
 import shlex
 import re
+import inspect
 
 from core.globalvar import ETCDIR
 sys.path.append(os.path.join(ETCDIR, "python"))
@@ -907,3 +908,37 @@ def color_resolve(color):
             rgb = (200, 200, 200)
             label = _('Select Color')
     return (rgb, label)
+
+def GetGEventAttribsForHandler(method, event):
+    """!Get attributes from event, which can be used by handler method. 
+
+    Be aware of event class attributes.
+
+    @param method - handler method (including self arg)
+    @param event - event
+
+    @return (valid kwargs for method, 
+             list of method's args without default value 
+             which were not found among event attributes)
+    """
+    args_spec = inspect.getargspec(method)
+
+    args = args_spec[0]
+
+    defaults =[]
+    if args_spec[3]:
+        defaults =  args_spec[3]
+
+    # number of arguments without def value
+    req_args = len(args) - 1 - len(defaults)
+
+    kwargs = {}
+    missing_args = []
+
+    for i, a in enumerate(args):
+        if hasattr(event, a):
+            kwargs[a] = getattr(event, a)
+        elif i < req_args:
+            missing_args.append(a)
+
+    return kwargs, missing_args

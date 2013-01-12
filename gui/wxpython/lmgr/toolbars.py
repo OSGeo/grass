@@ -85,6 +85,8 @@ class LMDataToolbar(BaseToolbar):
             'addVect'    : BaseIcons['addVect'].SetLabel(_("Add vector map layer (Ctrl+Shift+V)")),
             'vectMisc'   : MetaIcon(img = 'layer-vector-more',
                                     label = _('Add various vector map layers (thematic, chart...)')),
+            'addWS'       : MetaIcon(img = 'layer-wms-add',
+                                     label = _('Add web service layer (WMS, WMTS, NASA OnEarth)')),
             'addGroup'   : MetaIcon(img = 'layer-group-add',
                                     label = _('Add group')),
             'addOverlay' : MetaIcon(img = 'layer-more',
@@ -107,6 +109,9 @@ class LMDataToolbar(BaseToolbar):
                                       self.parent.OnAddGroup),
                                      ('addovl',  icons["addOverlay"],
                                       self.parent.OnAddOverlay),
+                                     ('addWS',  icons["addWS"],
+                                      self.parent.OnAddWS),
+                                     (None, ),
                                      ('delcmd',  icons["delCmd"],
                                       self.parent.OnDeleteLayer),
                                      ))
