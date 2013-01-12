@@ -762,7 +762,7 @@
           <help>Launch Cartographic Composer</help>
           <keywords>postscript,printing</keywords>
           <handler>OnPsMap</handler>
-          <command>ps.map</command>
+          <command>g.gui.psmap</command>
         </menuitem>
         <menuitem>
           <label>Map Swipe</label>
