@@ -184,12 +184,6 @@
               <handler>OnMenuCmd</handler>
               <command>r.in.lidar</command>
             </menuitem>
-            <menuitem>
-              <label>WMS import</label>
-              <help>Download and import data from WMS servers.</help>
-              <keywords>raster,import,wms</keywords><handler>OnImportWMS</handler>
-              <command>r.in.wms</command>
-            </menuitem>
             <separator />
             <menuitem>
               <label>Unpack raster map</label>

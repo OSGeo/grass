@@ -126,11 +126,15 @@ class CmdThread(threading.Thread):
             requestTime = time.time()
 
             # prepare
+            if not self.receiver:
+                return
+
             event = wxCmdPrepare(cmd=args[0],
                                  time=requestTime,
                                  pid=requestId,
                                  onPrepare=vars()['onPrepare'],
                                  userData=vars()['userData'])
+
             wx.PostEvent(self.receiver, event)
 
             # run command
@@ -187,6 +191,9 @@ class CmdThread(threading.Thread):
                                     'color=%s' % colorTable]
                     self.requestCmdColor = vars()['callable'](*argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
+
+            if not self.receiver:
+                return
 
             event = wxCmdDone(cmd=args[0],
                               aborted=aborted,

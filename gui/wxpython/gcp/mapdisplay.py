@@ -23,7 +23,6 @@ from core import globalvar
 import wx
 import wx.aui
 
-from core.render       import EVT_UPDATE_PRGBAR
 from mapdisp.toolbars  import MapToolbar
 from gcp.toolbars      import GCPDisplayToolbar, GCPManToolbar
 from mapdisp.gprint    import PrintOptions
@@ -134,7 +133,6 @@ class MapFrame(SingleMapFrame):
         #
         # Bind various events
         #
-        self.Bind(EVT_UPDATE_PRGBAR, self.OnUpdateProgress)
         self.activemap.Bind(wx.EVT_CHOICE, self.OnUpdateActive)
         
         #

@@ -44,3 +44,14 @@ gShowNotification, EVT_SHOW_NOTIFICATION = NewCommandEvent()
 gMapCreated, EVT_MAP_CREATED = NewCommandEvent()
 
 gZoomChanged, EVT_ZOOM_CHANGED = NewEvent()
+
+# Post it to BufferedWindow instance, which you want to update.
+# For relevant attributes for the event see 
+# mapdisp.mapwindow.BufferedWindow UpdateMap method arguments.
+# If event does not contain attribute corresponding to argument with default
+# value, the default value will be used.
+# Arguments with no default value must be among event attributes
+# in order to be the event processed.
+# TODO implement to NVIZ GLWindow
+# TODO change direct calling of UpdateMap method to posting this event 
+gUpdateMap, EVT_UPDATE_MAP = NewEvent()

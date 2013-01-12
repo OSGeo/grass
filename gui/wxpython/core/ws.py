@@ -7,7 +7,6 @@ Note: Currently only WMS is implemented.
 
 Classes:
  - ws::RenderWMSMgr
- - ws::StdErr
  - ws::GDALRasterMerger
 
 (C) 2012 by the GRASS Development Team
@@ -25,9 +24,11 @@ import wx
 from grass.script import core as grass
 
 from core          import utils
+from core.events   import gUpdateMap
+from core.render   import wxUpdateProgressBar
 from core.debug    import Debug
 
-from core.gconsole import CmdThread, EVT_CMD_DONE
+from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 from core.gcmd     import GException
 
 try:
@@ -39,31 +40,35 @@ except ImportError:
 
 class RenderWMSMgr(wx.EvtHandler):
     """!Fetch and prepare WMS data for rendering.
-
-    @todo statusbar: updtade by event or call method ???
     """
-    def __init__(self, parent, mapfile, maskfile):
+    def __init__(self, receiver, layer, Map, mapfile, maskfile):
         if not haveGdal:
             sys.stderr.write(_("Unable to load GDAL Python bindings.\n"\
                                "WMS layers can not be displayed without the bindings.\n"))
-        
-        self.parent = parent
+    
+        self.Map = Map
+        self.receiver = receiver
+        self.layer = layer
+
+        wx.EvtHandler.__init__(self)
 
         # thread for d.wms commands
         self.thread = CmdThread(self)
-        wx.EvtHandler.__init__(self)
         self.Bind(EVT_CMD_DONE, self.OnDataFetched)
 
         self.downloading = False
         self.renderedRegion = None
         self.updateMap = True
+        self.fetched_data_cmd = None
 
-        self.cmdStdErr = StdErr()
+        self.cmdStdErr = GStderr(self)
 
         self.mapfile = mapfile
         self.maskfile = maskfile
         self.tempMap = grass.tempfile()
         self.dstSize = {}
+ 
+        self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
 
     def __del__(self):
         grass.try_remove(self.tempMap)
@@ -87,7 +92,8 @@ class RenderWMSMgr(wx.EvtHandler):
         fetchData = False
         zoomChanged = False
 
-        if self.renderedRegion is None:
+        if self.renderedRegion is None or \
+           cmd != self.fetched_data_cmd:
             fetchData = True
         else:
             for c in ['north', 'south', 'east', 'west']:
@@ -103,6 +109,7 @@ class RenderWMSMgr(wx.EvtHandler):
                     break
 
         if fetchData:
+            self.fetched_data_cmd = None
             self.renderedRegion = region
 
             grass.try_remove(self.mapfile)
@@ -112,12 +119,15 @@ class RenderWMSMgr(wx.EvtHandler):
             self.thread.abort()
             self.downloading = True
 
+            self.fetching_cmd = cmd
             cmdList = utils.CmdTupleToList(cmd)
 
             if Debug.GetLevel() < 3:
                 cmdList.append('--quiet')
-                
-            tempPngfile = os.environ["GRASS_PNGFILE"]
+            
+            tempPngfile = None
+            if "GRASS_PNGFILE" in os.environ:  
+                tempPngfile = os.environ["GRASS_PNGFILE"]
             os.environ["GRASS_PNGFILE"] = self.tempMap
 
             tempRegion = os.environ["GRASS_REGION"]
@@ -125,22 +135,34 @@ class RenderWMSMgr(wx.EvtHandler):
 
             self.thread.RunCmd(cmdList, env = os.environ.copy(), stderr = self.cmdStdErr)
 
-            os.environ["GRASS_PNGFILE"] = tempPngfile
+            os.environ.pop("GRASS_PNGFILE")
+            if tempPngfile:
+                os.environ["GRASS_PNGFILE"] = tempPngfile
+
             os.environ["GRASS_REGION"] = tempRegion
+
+    def OnCmdOutput(self, event):
+        """!Print cmd output according to debug level.
+        """
+        if Debug.GetLevel() == 0:
+            if event.type == 'error':
+                sys.stderr.write(event.text)
+                sys.stderr.flush()
+        else:
+            Debug.msg(1, event.text)
 
     def OnDataFetched(self, event):
         """!Fetch data
-
-        @todo ?
-        @todo needs refactoring -  self.parent.parent.mapWin.UpdateMap
         """
         if event.pid != self.currentPid:
             return
         self.downloading = False
         if not self.updateMap:
-            # TODO
-            self.parent.parent.GetParentMapWindow().frame.GetProgressBar().UpdateProgress(self.parent, self.parent.parent)
+            if self.receiver:
+                event = wxUpdateProgressBar(layer = self.layer, map = self.Map)
+                self.receiver.GetEventHandler().ProcessEvent(event) 
             self.renderedRegion = None
+            self.fetched_data_cmd = None
             return
 
         self.mapMerger = GDALRasterMerger(targetFile = self.mapfile, region = self.renderedRegion,
@@ -154,7 +176,11 @@ class RenderWMSMgr(wx.EvtHandler):
         self.maskMerger.AddRasterBands(self.tempMap, {4 : 1}) 
         del self.maskMerger
 
-        self.parent.parent.GetParentMapWindow().UpdateMap(render = True)
+        self.fetched_data_cmd = self.fetching_cmd
+
+        if self.receiver:
+            event = gUpdateMap()
+            wx.PostEvent(self.receiver, event)
 
     def _getRegionDict(self):
         """!Parse string from GRASS_REGION env variable into dict.
@@ -219,36 +245,12 @@ class RenderWMSMgr(wx.EvtHandler):
         self.updateMap = False
         self.thread.abort(abortall = True)        
 
-class StdErr:
-    """!Redirect error output according to debug mode.
+    def SetReceiver(self, receiver):
+        """!Set events receiver
 
-    @todo: replace or move to the other module (gconsole???)
-    """
-    def flush(self):
-        pass
-    
-    def write(self, s):
-        if "GtkPizza" in s:
-            return
-        if Debug.GetLevel() == 0:
-            message = ''
-            for line in s.splitlines():
-                if len(line) == 0:
-                    continue
-                if 'GRASS_INFO_ERROR' in line:
-                    message += line.split(':', 1)[1].strip() + '\n'
-                elif 'ERROR:' in line:
-                    message = line
-                if message:
-                    sys.stderr.write(message)
-                    message = ''
-            sys.stderr.flush()
-
-        elif Debug.GetLevel() >= 1:
-            for line in s.splitlines():
-                if len(line) == 0:
-                    continue
-                Debug.msg(3, line)
+        @todo  If it will be needed to change receiver, take care of running threads.
+        """        
+        self.receiver = receiver
 
 class GDALRasterMerger:
     """!Merge rasters.
@@ -341,7 +343,16 @@ class GDALRasterMerger:
         lrx = geoTrans[0] + size['cols'] * geoTrans[1]
         lry = geoTrans[3] + size['rows'] * geoTrans[5]
 
-        return ulx, uly, lrx, lry
+        return ulx, uly, lrx, lry 
+
+    def SetGeorefAndProj(self):
+        """!Set georeference and projection to target file
+        """
+        projection = grass.read_command('g.proj', 
+                                        flags = 'wf')
+        self.tDataset.SetProjection(projection)
+
+        self.tDataset.SetGeoTransform(self.tGeotransform)
 
     def __del__(self):
         self.tDataset = None

@@ -6,6 +6,8 @@
 @todo Implement RenderManager also for other layers (see WMS
 implementation for details)
 
+@todo Render classes should not care about updating statusbar (change emiting events).
+
 Classes:
  - render::Layer
  - render::MapLayer
@@ -36,12 +38,13 @@ from wx.lib.newevent import NewEvent
 from grass.script import core as grass
 
 from core          import utils
-from core.ws       import RenderWMSMgr
 from core.gcmd     import GException, GError, RunCommand
 from core.debug    import Debug
 from core.settings import UserSettings
 
 wxUpdateProgressBar, EVT_UPDATE_PRGBAR = NewEvent()
+
+from core.ws       import RenderWMSMgr
 
 USE_GPNMCOMP = True
 
@@ -51,10 +54,8 @@ class Layer(object):
     
     - For map layer use MapLayer class.
     - For overlays use Overlay class.
-
-    @todo needs refactoring (avoid parent)
     """
-    def __init__(self, ltype, cmd, parent, name = None,
+    def __init__(self, ltype, cmd, Map, name = None,
                  active = True, hidden = False, opacity = 1.0):
         """!Create new instance
         
@@ -63,12 +64,12 @@ class Layer(object):
         @param ltype layer type ('raster', 'vector', 'overlay', 'command', etc.)
         @param cmd GRASS command to render layer,
         given as list, e.g. ['d.rast', 'map=elevation@PERMANENT']
+        @param Map render.Map instance
         @param name layer name, e.g. 'elevation@PERMANENT' (for layer tree)
         @param active layer is active, will be rendered only if True
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        self.parent = parent
         
         # generated file for each layer
         if USE_GPNMCOMP or ltype == 'overlay':
@@ -84,6 +85,8 @@ class Layer(object):
         
         # stores class which manages rendering instead of simple command - e. g. wms
         self.renderMgr = None
+
+        self.Map = Map
         self.type      = None
         self.SetType(ltype)
         self.name  = name
@@ -178,8 +181,6 @@ class Layer(object):
     
     def _runCommand(self, cmd):
         """!Run command to render data
-
-        @todo catch error for wms (?)
         """ 
         if self.type == 'wms':
             ret = 0
@@ -268,7 +269,11 @@ class Layer(object):
             raise GException(_("Unsupported map layer type '%s'") % ltype)
         
         if ltype == 'wms' and not isinstance(self.renderMgr, RenderWMSMgr):
-            self.renderMgr = RenderWMSMgr(self, self.mapfile, self.maskfile)
+            self.renderMgr = RenderWMSMgr(receiver = self.Map.GetReceiver(),
+                                          layer = self, 
+                                          Map = self.Map, 
+                                          mapfile = self.mapfile, 
+                                          maskfile = self.maskfile)
         elif self.type == 'wms' and ltype != 'wms':
             self.renderMgr = None
         
@@ -315,27 +320,32 @@ class Layer(object):
         else:
             return self.renderMgr.IsDownloading()
 
-    def AbortDownload(self):
-        """!Abort downloading data"""
+    def AbortThread(self):
+        """!Abort running thread e. g. downloading data"""
         if self.renderMgr is None:
             return
         else:
             self.renderMgr.Abort()
 
+    def GetRenderMgr(self):
+        """!Get render manager """
+        return self.renderMgr
+
 class MapLayer(Layer):
-    def __init__(self, ltype, cmd, parent, name = None,
+    def __init__(self, ltype, cmd, Map, name = None,
                  active = True, hidden = False, opacity = 1.0): 
         """!Represents map layer in the map canvas
         
         @param ltype layer type ('raster', 'vector', 'command', etc.)
         @param cmd GRASS command to render layer,
         given as list, e.g. ['d.rast', 'map=elevation@PERMANENT']
+        @param Map render.Map instance
         @param name layer name, e.g. 'elevation@PERMANENT' (for layer tree) or None
         @param active layer is active, will be rendered only if True
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        Layer.__init__(self, ltype, cmd, parent, name,
+        Layer.__init__(self, ltype, cmd, Map, name,
                        active, hidden, opacity)
         
     def GetMapset(self):
@@ -353,7 +363,7 @@ class MapLayer(Layer):
             return self.name
         
 class Overlay(Layer):
-    def __init__(self, id, ltype, cmd, parent,
+    def __init__(self, id, ltype, cmd, Map,
                  active = True, hidden = True, opacity = 1.0):
         """!Represents overlay displayed in map canvas
         
@@ -361,11 +371,12 @@ class Overlay(Layer):
         @param type overlay type ('barscale', 'legend', etc.)
         @param cmd GRASS command to render overlay,
         given as list, e.g. ['d.legend', 'map=elevation@PERMANENT']
+        @param Map render.Map instance
         @param active layer is active, will be rendered only if True
         @param hidden layer is hidden, won't be listed in Layer Manager if True
         @param opacity layer opacity <0;1>
         """
-        Layer.__init__(self, 'overlay', cmd, parent, ltype,
+        Layer.__init__(self, 'overlay', cmd, Map, ltype,
                        active, hidden, opacity)
         self.id = id
         
@@ -400,8 +411,8 @@ class Map(object):
         self._initGisEnv() # g.gisenv
         self.GetWindow()
 
-        # reference to mapWindow, which contains this Map instance
-        self.mapWin = None
+        # receiver of events
+        self.receiver = None
 
         # GRASS environment variable (for rendering)
         self.env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
@@ -607,7 +618,7 @@ class Map(object):
         @param update if True update current display region settings
         @param add3d add 3d region settings
         
-        @return region settings as directory, e.g. {
+        @return region settings as dictionary, e.g. {
         'n':'4928010', 's':'4913700', 'w':'589980',...}
         
         @see GetCurrentRegion()
@@ -796,7 +807,7 @@ class Map(object):
         
         except:
             return None
-        
+    
     def GetListOfLayers(self, ltype = None, mapset = None, name = None,
                         active = None, hidden = None):
         """!Returns list of layers of selected properties or list of
@@ -865,11 +876,10 @@ class Map(object):
         
         return selected
 
-    def _renderLayers(self, force = False, mapWindow = None, overlaysOnly = False):
+    def _renderLayers(self, force = False, overlaysOnly = False):
         """!Render all map layers into files
 
         @param force True to force rendering
-        @param mapWindow GUI window or None (statusbar/progress bar)
         @param overlaysOnly True to render only overlays
 
         @return list of maps, masks and opacities
@@ -884,13 +894,9 @@ class Map(object):
             layers = self.layers + self.overlays
         
         self.downloading = False
-        ### event = wxUpdateProgressBar(layer = None, map = self)
-        # When using Event for progress update, the event is handled after 
-        # rendering. Maybe there exists some better solution than calling 
-        # the method directly.
-        if mapWindow:
-            mapWindow.GetProgressBar().UpdateProgress(None, self)
-        ### wx.PostEvent(mapWindow, event)
+        if self.receiver:
+            event = wxUpdateProgressBar(layer = None, map = self)
+            self.receiver.GetEventHandler().ProcessEvent(event)
         for layer in layers:
             # skip non-active map layers
             if not layer or not layer.active:
@@ -903,12 +909,9 @@ class Map(object):
 
             if layer.IsDownloading():
                 self.downloading = True     
-            if mapWindow:
-                # update progress bar
-                ### wx.SafeYield(mapWindow)
-                mapWindow.GetProgressBar().UpdateProgress(layer, self)
-                #event = wxUpdateProgressBar(layer = layer, map = self)
-                #wx.PostEvent(mapWindow, event)
+            if self.receiver:
+                event = wxUpdateProgressBar(layer = layer, map = self)
+                self.receiver.GetEventHandler().ProcessEvent(event) 
 
             # skip map layers when rendering fails
             if not os.path.exists(layer.mapfile):
@@ -924,22 +927,21 @@ class Map(object):
         
         return maps, masks, opacities
         
-    def GetMapsMasksAndOpacities(self, force, guiFrame, windres):
+    def GetMapsMasksAndOpacities(self, force, windres):
         """!
         Used by Render function.
         
         @return maps, masks, opacities
         """
-        return self._renderLayers(force, guiFrame)
+        return self._renderLayers(force)
     
-    def Render(self, force = False, mapWindow = None, windres = False):
+    def Render(self, force = False, windres = False):
         """!Creates final image composite
         
         This function can conditionaly use high-level tools, which
         should be avaliable in wxPython library
         
         @param force force rendering
-        @param mapWindow reference for MapFrame or similar instance for progress bar
         @param windres use region resolution (True) otherwise display resolution
         
         @return name of file with rendered image or None
@@ -960,7 +962,7 @@ class Map(object):
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
         
-        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, mapWindow, windres)
+        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, windres)
         
         # ugly hack for MSYS
         if sys.platform != 'win32':
@@ -1038,7 +1040,7 @@ class Map(object):
             opacity = 0
         elif opacity > 1:
             opacity = 1
-        layer = MapLayer(ltype = ltype, name = name, cmd = command, parent = self,
+        layer = MapLayer(ltype = ltype, name = name, cmd = command, Map = self,
                          active = active, hidden = hidden, opacity = opacity)
         
         # add maplayer to the list of layers
@@ -1189,7 +1191,7 @@ class Map(object):
         Layer is defined by name@mapset or id.
         
         @param name layer name (must be unique)
-        @param id layer index in layer list
+        @param id layer index in layer list    def __init__(self, targetFile, region, bandsNum, gdalDriver, fillValue = None):
 
         @return removed layer on success
         @return None on failure
@@ -1245,7 +1247,7 @@ class Map(object):
         @return None on failure
         """
         Debug.msg (2, "Map.AddOverlay(): cmd=%s, render=%d" % (command, render))
-        overlay = Overlay(id = id, ltype = ltype, cmd = command, parent = self,
+        overlay = Overlay(id = id, ltype = ltype, cmd = command, Map = self,
                           active = active, hidden = hidden, opacity = opacity)
         
         # add maplayer to the list of layers
@@ -1356,14 +1358,22 @@ class Map(object):
             if force or layer.forceRender:
                 layer.Render()
 
-    def SetParentMapWindow(self, mapWin):
-        """!Set reference to parent MapWindow"""
-        self.mapWin = mapWin
+    def GetReceiver(self):
+        """!Get event receiver"""
+        return self.receiver
 
-    def GetParentMapWindow(self):
-        """!Get reference to parent MapWindow"""
-        return self.mapWin
+    def SetReceiver(self, receiver):
+        """!Set events receiver
 
-    def IsDownloading(self):
-        """!Is any layer downloading data from web server e. g. wms"""
-        return self.downloading
+        @todo  If it will be needed to change receiver, take care of running threads.
+        """
+        self.receiver = receiver
+        for l in self.overlays + self.layers:
+            if l.GetRenderMgr():
+                l.GetRenderMgr().SetReceiver(self.receiver)
+
+    def AbortAllThreads(self, old_receiver = None):
+        """!Abort all layers threads e. g. donwloading data"""
+        for l in self.layers + self.overlays:
+            l.AbortThread(old_receiver)
+ 
