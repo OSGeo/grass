@@ -135,9 +135,6 @@ class MapCalcFrame(wx.Frame):
         self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
         self.btn_run.SetDefault()
         self.btn_close = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
-        self.btn_cmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                 label = _("Command dialog"))
-        self.btn_cmd.SetToolTipString(_('Open %s dialog') % self.cmd)
         self.btn_save = wx.Button(parent = self.panel, id = wx.ID_SAVE)
         self.btn_save.SetToolTipString(_('Save expression to file'))
         self.btn_load = wx.Button(parent = self.panel, id = wx.ID_ANY,
@@ -247,7 +244,6 @@ class MapCalcFrame(wx.Frame):
         self.btn_clear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnMCalcRun)
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
-        self.btn_cmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
         self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveExpression)
         self.btn_load.Bind(wx.EVT_BUTTON, self.OnLoadExpression)
         
@@ -328,9 +324,6 @@ class MapCalcFrame(wx.Frame):
 	                 span = (1,1), flag = wx.ALIGN_CENTER)
 
         buttonSizer4 = wx.BoxSizer(wx.HORIZONTAL)
-        buttonSizer4.Add(item = self.btn_cmd,
-                         flag = wx.ALL, border = 5)
-        buttonSizer4.AddSpacer(10)
         buttonSizer4.Add(item = self.btn_load,
                          flag = wx.ALL, border = 5)
         buttonSizer4.Add(item = self.btn_save,
@@ -594,18 +587,6 @@ class MapCalcFrame(wx.Frame):
         """!Close window"""
         self.Destroy()
 
-    def OnCmdDialog(self, event):
-        """!Shows command dialog"""
-        name = self.newmaptxt.GetValue().strip()
-        mctxt = self.text_mcalc.GetValue().strip().replace("\n"," ")
-        mctxt = mctxt.replace(" " , "")
-        expr = name
-        if expr:
-            expr += '='
-        expr += mctxt
-        
-        GUI(parent = self).ParseCommand(cmd = [self.cmd, 'expression=' + expr])
-        
 if __name__ == "__main__":
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
