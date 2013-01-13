@@ -20,12 +20,12 @@ import os
 import sys
 
 import wx
+from wx.lib.newevent import NewEvent
 
 from grass.script import core as grass
 
 from core          import utils
 from core.events   import gUpdateMap
-from core.render   import wxUpdateProgressBar
 from core.debug    import Debug
 
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
@@ -37,6 +37,8 @@ try:
     from osgeo import gdalconst 
 except ImportError:
     haveGdal = False
+
+wxUpdateProgressBar, EVT_UPDATE_PRGBAR = NewEvent()
 
 class RenderWMSMgr(wx.EvtHandler):
     """!Fetch and prepare WMS data for rendering.
