@@ -36,7 +36,7 @@ from core.debug         import Debug
 from core.settings      import UserSettings
 from core.events        import gZoomChanged, EVT_UPDATE_MAP
 from gui_core.mapwindow import MapWindow
-from core.render        import EVT_UPDATE_PRGBAR
+from core.ws            import EVT_UPDATE_PRGBAR
 from core.utils         import GetGEventAttribsForHandler
 
 try:

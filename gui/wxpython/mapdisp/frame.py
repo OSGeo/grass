@@ -35,7 +35,8 @@ sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
 sys.path.append(os.path.join(globalvar.ETCDIR,   "python"))
 
 from core               import globalvar
-from core.render        import EVT_UPDATE_PRGBAR, Map
+from core.render        import Map
+from core.ws            import EVT_UPDATE_PRGBAR
 from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions

@@ -33,18 +33,14 @@ import tempfile
 import types
 
 import wx
-from wx.lib.newevent import NewEvent
 
 from grass.script import core as grass
 
 from core          import utils
+from core.ws       import RenderWMSMgr, wxUpdateProgressBar
 from core.gcmd     import GException, GError, RunCommand
 from core.debug    import Debug
 from core.settings import UserSettings
-
-wxUpdateProgressBar, EVT_UPDATE_PRGBAR = NewEvent()
-
-from core.ws       import RenderWMSMgr
 
 USE_GPNMCOMP = True
 
@@ -1372,8 +1368,7 @@ class Map(object):
             if l.GetRenderMgr():
                 l.GetRenderMgr().SetReceiver(self.receiver)
 
-    def AbortAllThreads(self, old_receiver = None):
+    def AbortAllThreads(self):
         """!Abort all layers threads e. g. donwloading data"""
         for l in self.layers + self.overlays:
-            l.AbortThread(old_receiver)
- 
+            l.AbortThread()
