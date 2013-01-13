@@ -1670,10 +1670,6 @@ class ImportDialog(wx.Dialog):
         self.btn_run.SetDefault()
         self.btn_run.Enable(False)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-        # run command dialog
-        self.btn_cmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                 label = _("Command dialog"))
-        self.btn_cmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
         
     def doLayout(self):
         """!Do layout"""
@@ -1715,10 +1711,6 @@ class ImportDialog(wx.Dialog):
         #
         btnsizer = wx.BoxSizer(orient = wx.HORIZONTAL)
         
-        btnsizer.Add(item = self.btn_cmd, proportion = 0,
-                     flag = wx.RIGHT | wx.ALIGN_CENTER,
-                     border = 10)
-        
         btnsizer.Add(item = self.btn_close, proportion = 0,
                      flag = wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
                      border = 10)
@@ -1756,10 +1748,6 @@ class ImportDialog(wx.Dialog):
         """!Import/Link data (each layes as separate vector map)"""
         pass
 
-    def OnCmdDialog(self, event):
-        """!Show command dialog"""
-        pass
-    
     def AddLayers(self, returncode, cmd = None):
         """!Add imported/linked layers into layer tree"""
         if not self.add.IsChecked() or returncode != 0:
@@ -1841,17 +1829,9 @@ class GdalImportDialog(ImportDialog):
         if link:
             self.btn_run.SetLabel(_("&Link"))
             self.btn_run.SetToolTipString(_("Link selected layers"))
-            if ogr:
-                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'v.external')
-            else:
-                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'r.external')
         else:
             self.btn_run.SetLabel(_("&Import"))
             self.btn_run.SetToolTipString(_("Import selected layers"))
-            if ogr:
-                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'v.in.ogr')
-            else:
-                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'r.in.gdal')
         
         self.doLayout()
 
@@ -1939,11 +1919,6 @@ class GdalImportDialog(ImportDialog):
                 return 'r.in.gdal'
         
         return ''
-    
-    def OnCmdDialog(self, event):
-        """!Show command dialog"""
-        name = self._getCommand()
-        GUI(parent = self, modal = False).ParseCommand(cmd = [name])
 
 class GdalOutputDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, ogr = False,
@@ -1969,9 +1944,6 @@ class GdalOutputDialog(wx.Dialog):
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
         # buttons
-        self.btnCmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                label = _("Command dialog"))
-        self.btnCmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnCancel.SetToolTipString(_("Close dialog"))
         self.btnOk = wx.Button(parent = self.panel, id = wx.ID_OK)
@@ -1995,9 +1967,6 @@ class GdalOutputDialog(wx.Dialog):
                         flag = wx.EXPAND)
 
         btnSizer = wx.BoxSizer(orient = wx.HORIZONTAL)
-        btnSizer.Add(item = self.btnCmd, proportion = 0,
-                     flag = wx.RIGHT | wx.ALIGN_CENTER,
-                     border = 10)
         btnSizer.Add(item = self.btnCancel, proportion = 0,
                      flag = wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
                      border = 10)
@@ -2018,9 +1987,6 @@ class GdalOutputDialog(wx.Dialog):
         self.SetSize((size.width, size.height))
         self.Layout()
         
-    def OnCmdDialog(self, event):
-        GUI(parent = self, modal = True).ParseCommand(cmd = ['v.external.out'])
-    
     def OnCancel(self, event):
         self.Destroy()
         
@@ -2121,11 +2087,7 @@ class DxfImportDialog(ImportDialog):
             self.btn_run.Enable(True)
         else:
             self.btn_run.Enable(False)
-
-    def OnCmdDialog(self, event):
-        """!Show command dialog"""
-        GUI(parent = self, modal = True).ParseCommand(cmd = ['v.in.dxf'])
-                
+             
 class LayersList(GListCtrl, listmix.TextEditMixin):
     """!List of layers to be imported (dxf, shp...)"""
     def __init__(self, parent, columns, log = None):
