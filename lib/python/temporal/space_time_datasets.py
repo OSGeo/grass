@@ -631,7 +631,7 @@ class VectorDataset(AbstractMapDataset):
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
         """
-        if G_has_raster_timestamp(self.get_name(), self.get_layer(), 
+        if G_has_vector_timestamp(self.get_name(), self.get_layer(), 
                                   self.get_mapset()):
             return True
         else:

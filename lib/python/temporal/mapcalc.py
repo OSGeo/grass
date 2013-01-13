@@ -246,8 +246,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                 start, end, tz = sample_map_list[i].get_absolute_time()
                 new_map.set_absolute_time(start, end, tz)
             else:
-                start, end = sample_map_list[i].get_relative_time()
-                new_map.set_relative_time(start, end)
+                start, end, unit = sample_map_list[i].get_relative_time()
+                new_map.set_relative_time(start, end, unit)
 
             map_list.append(new_map)
 
