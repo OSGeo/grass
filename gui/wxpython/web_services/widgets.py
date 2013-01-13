@@ -7,7 +7,7 @@ List of classes:
  - widgets::WSPanel
  - widgets::LayersList
 
-(C) 2012 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -32,19 +32,16 @@ from   wx.gizmos              import TreeListCtrl
 
 from core              import globalvar
 from core.debug        import Debug
-from core.gcmd         import GWarning
+from core.gcmd         import GWarning, GMessage
 from core.gconsole     import CmdThread, EVT_CMD_DONE
 
-from web_services.cap_interface import WMSCapabilities, \
-                                       WMTSCapabilities, \
-                                       OnEarthCapabilities
+from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEarthCapabilities
 
 from gui_core.widgets  import GNotebook
 
 import grass.script as grass
 
-WMSLibPath = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
-sys.path.append(WMSLibPath)
+sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms"))
 
 from wms_base import WMSDriversInfo
 
@@ -158,11 +155,10 @@ class WSPanel(wx.Panel):
         self.params['srs'] = None
         if 'srs' not in  self.drv_props['ignored_params']:
             projText = wx.StaticText(parent = self.req_page_panel, id = wx.ID_ANY, label = _("Source projection:"))
-            self.params['srs'] =  wx.Choice(parent = self.req_page_panel, id = wx.ID_ANY, pos = wx.DefaultPosition,
-                                            choices = [], style = wx.RA_SPECIFY_COLS)
-
+            self.params['srs'] =  wx.Choice(parent = self.req_page_panel, id = wx.ID_ANY, style = wx.RA_SPECIFY_COLS)
+        
         self.list.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnListSelChanged)
-
+        
         # layout
         self.req_page_sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -170,24 +166,24 @@ class WSPanel(wx.Panel):
 
         layersSizer.Add(item = self.list, proportion = 1,
                         flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
-
         
         self.req_page_sizer.Add(item = layersSizer, proportion = 1,
                             flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
 
+        self.source_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
         if self.params['format'] is not None:
-            self.req_page_sizer.Add(item = self.params['format'],
-                                flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+            self.source_sizer.Add(item = self.params['format'],
+                                  flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
  
-        projSizer = wx.BoxSizer(wx.HORIZONTAL)
-
         if self.params['srs'] is not None:
-            projSizer.Add(item = projText, flag = wx.ALIGN_CENTER_VERTICAL)
-            projSizer.Add(item = self.params['srs'])
-
-        self.req_page_sizer.Add(item = projSizer,
+            self.source_sizer.Add(item = projText, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 5)
+            self.source_sizer.Add(item = self.params['srs'],
+                                  flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.TOP | wx.BOTTOM, border = 5)
+        
+        self.req_page_sizer.Add(item = self.source_sizer,
                                 flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
-         
+        
         self.req_page_panel.SetSizer(self.req_page_sizer)
     
     def enableButtons(self, enable = True):
@@ -751,9 +747,9 @@ class WSPanel(wx.Panel):
                                                  label = _("Source image format"), pos = wx.DefaultPosition, 
                                                  choices = formats_list,  majorDimension = 4, 
                                                  style = wx.RA_SPECIFY_COLS)
-            self.req_page_sizer.Insert(item = self.params['format'], before = 2,
-                                       flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
-
+            self.source_sizer.Insert(item = self.params['format'], before = 2,
+                                     flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+        
     def _getFormats(self, layer = None):
         """!Get formats 
 
@@ -795,11 +791,11 @@ class WSPanel(wx.Panel):
             show_war = True
 
         if not self.o_layer_name:
-            warning_str += _("Insert output layer name.\n")  
+            warning_str += _("Choose output layer name.\n")  
             show_war = True
 
         if show_war:
-            GWarning(parent = self.parent,
+            GMessage(parent = self.parent,
                      message = warning_str)
             return False
 
