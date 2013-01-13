@@ -115,6 +115,10 @@ class WSDialogBase(wx.Dialog):
 
         self.reqDataPanel = wx.Panel(parent = self, id = wx.ID_ANY)
 
+        self.layerNameBox = wx.StaticBox(parent = self.reqDataPanel, 
+                                         id = wx.ID_ANY,
+                                         label = _(" Layer Manager Settings "))
+
         self.layerNameText = wx.StaticText(parent = self.reqDataPanel, id = wx.ID_ANY, 
                                            label = _("Output layer name:"))
         self.layerName = wx.TextCtrl(parent = self.reqDataPanel, id = wx.ID_ANY)
@@ -178,10 +182,10 @@ class WSDialogBase(wx.Dialog):
 
         reqDataSizer = wx.BoxSizer(wx.VERTICAL)
 
-        layerNameSizer = wx.BoxSizer(wx.HORIZONTAL)
+        layerNameSizer = wx.StaticBoxSizer(self.layerNameBox, wx.HORIZONTAL)
 
         layerNameSizer.Add(item = self.layerNameText,
-                           flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border = 5)
+                           flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 5)
 
         layerNameSizer.Add(item = self.layerName, 
                            flag = wx.EXPAND, proportion = 1)
@@ -405,7 +409,7 @@ class WSDialogBase(wx.Dialog):
         
             self.Bind(wx.EVT_RADIOBOX, self.OnChooseWs, self.choose_ws_rb)
             self.ch_ws_sizer.Add(item = self.choose_ws_rb,
-                                 flag = wx.TOP | wx.LEFT | wx.RIGHT, border = 5)
+                                 flag = wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND, border = 5)
             self._showWsPanel(self.web_service_sel[self.choose_ws_rb.GetSelection()])
             self.statusbar.SetStatusText(_("Connected to <%s>" % self.server.GetValue().strip()))
             for btn in self.run_btns:
@@ -466,7 +470,7 @@ class AddWSDialog(WSDialogBase):
         WSDialogBase._createWidgets(self)
 
         self.btn_add = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Add layer"))
-        self.btn_add.SetToolTipString(_("Import selected layers"))        
+        self.btn_add.SetToolTipString(_("Add selected web service layers as map layer into layer tree"))        
         self.btn_add.Enable(False)
 
         self.run_btns.append(self.btn_add)
@@ -896,7 +900,7 @@ class SaveWMSLayerDialog(wx.Dialog):
             msg = _('Output map <%s> already exists' % self.output)
 
         if msg:
-            GWarning(parent = self,
+            GMessage(parent = self,
                      message = msg)
             return
 
