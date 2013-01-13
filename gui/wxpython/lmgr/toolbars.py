@@ -197,9 +197,9 @@ class LMVectorToolbar(BaseToolbar):
         """
         icons = {
             'vdigit'     : MetaIcon(img = 'edit',
-                                    label = _('Edit vector maps')),
+                                    label = _('Edit selected vector map')),
             'attrTable'  : MetaIcon(img = 'table',
-                                    label = _('Show attribute table')),
+                                    label = _('Show attribute data for selected vector map')),
             }
         
         return self._getToolbarData((('vdigit', icons["vdigit"],
