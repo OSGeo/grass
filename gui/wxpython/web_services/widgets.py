@@ -20,8 +20,11 @@ import os
 import sys
 import shutil
 
-from copy                  import deepcopy
-from xml.etree.ElementTree import ParseError
+from copy import deepcopy
+try:
+    from xml.etree.ElementTree import ParseError
+except ImportError: # < Python 2.7
+    from xml.parsers.expat import ExpatError as ParseError
 
 import wx
 import wx.lib.flatnotebook    as FN
