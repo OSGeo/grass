@@ -8,12 +8,11 @@
  * PURPOSE:      Draw the coordinate grid the user wants displayed on
  *               top of the current image
  *               
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008, 2013 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 
@@ -59,14 +58,13 @@ int main(int argc, char **argv)
     opt2->key_desc = "value";
     opt2->type = TYPE_STRING;
     opt2->required = YES;
-    opt2->label = _("Size of grid to be drawn (0: north-south resolution of the current region)");
-    opt2->description = _("In map units or DDD:MM:SS format. "
+    opt2->label = _("Size of grid to be drawn (in map units)");
+    opt2->description = _("0 for north-south resolution of the current region. "
+                          "In map units or DDD:MM:SS format. "
 			  "Example: \"1000\" or \"0:10\"");
 
-    opt3 = G_define_option();
+    opt3 = G_define_standard_option(G_OPT_M_COORDS);
     opt3->key = "origin";
-    opt3->type = TYPE_STRING;
-    opt3->key_desc = "easting,northing";
     opt3->answer = "0,0";
     opt3->multiple = NO;
     opt3->description = _("Lines of the grid pass through this coordinate");
@@ -109,24 +107,29 @@ int main(int argc, char **argv)
     geogrid->key = 'g';
     geogrid->description =
 	_("Draw geographic grid (referenced to current ellipsoid)");
+    geogrid->guisection = _("Draw");
 
     wgs84 = G_define_flag();
     wgs84->key = 'w';
     wgs84->description =
 	_("Draw geographic grid (referenced to WGS84 ellipsoid)");
+    wgs84->guisection = _("Draw");
 
     cross = G_define_flag();
     cross->key = 'c';
     cross->description = _("Draw '+' marks instead of grid lines");
+    cross->guisection = _("Draw");
 
     dot = G_define_flag();
     dot->key = 'd';
     dot->description = _("Draw '.' marks instead of grid lines");
+    dot->guisection = _("Draw");
 
     fiducial = G_define_flag();
     fiducial->key = 'f';
     fiducial->description = _("Draw fiducial marks instead of grid lines");
-
+    fiducial->guisection = _("Draw");
+    
     nogrid = G_define_flag();
     nogrid->key = 'n';
     nogrid->description = _("Disable grid drawing");
