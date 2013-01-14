@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     int thin;
     int i, j, k;
     int lines, steps;
-    int new_colr, fp;
+    int fp;
     double t, b, l, r;
     int hide_catnum, hide_catstr, hide_nodata, do_smooth;
     char *cstr;
@@ -91,12 +91,8 @@ int main(int argc, char **argv)
     opt_input = G_define_standard_option(G_OPT_R_MAP);
     opt_input->description = _("Name of raster map");
 
-    opt_color = G_define_option();
-    opt_color->key = "color";
-    opt_color->type = TYPE_STRING;
-    opt_color->answer = DEFAULT_FG_COLOR;
-    opt_color->gisprompt = "old_color,color,color";
-    opt_color->description = _("Sets the legend's text color");
+    opt_color = G_define_standard_option(G_OPT_C_FG);
+    opt_color->label = _("Text color");
 
     opt_lines = G_define_option();
     opt_lines->key = "lines";
@@ -161,6 +157,7 @@ int main(int argc, char **argv)
     opt_font->description = _("Font name");
     opt_font->guisection = _("Advanced");
 
+    /* HB: this option should become redundant as soon as the bug in trunk's D_text_size() is fixed. */
     opt_fontscale = G_define_option();
     opt_fontscale->key = "fontscale";
     opt_fontscale->type = TYPE_DOUBLE;
@@ -219,6 +216,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+
     map_name = opt_input->answer;
 
     hide_catstr = hidestr->answer;	/* note hide_catstr gets changed and re-read below */
@@ -231,13 +229,7 @@ int main(int argc, char **argv)
     fontscale = atof(opt_fontscale->answer);
     fontscale = 1.0 / (100.0/fontscale);
 
-    color = 0;			/* if only to get rid of the compiler warning  */
-    if (opt_color->answer != NULL) {
-	new_colr = D_translate_color(opt_color->answer);
-	if (new_colr == 0)
-	    G_fatal_error(_("Don't know the color %s"), opt_color->answer);
-	color = new_colr;
-    }
+    color = D_parse_color(opt_color->answer, TRUE);
 
     if (opt_lines->answer != NULL)
 	sscanf(opt_lines->answer, "%d", &lines);
@@ -734,7 +726,8 @@ int main(int argc, char **argv)
 			       y1 + 4 + txsiz);
 	    }
 
-	    D_text(buff);
+	    if(color)
+		D_text(buff);
 
 	}			/*for */
 
@@ -924,7 +917,9 @@ int main(int argc, char **argv)
 	    }
 
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
-	    D_text(buff);
+
+	    if(color)
+		D_text(buff);
 	}
 
 	if (0 == k)
@@ -946,7 +941,8 @@ int main(int argc, char **argv)
 	    }
 	    D_use_color(white);
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row));
-	    D_text(buff);
+	    if(color)
+		D_text(buff);
 	}
     }
 
