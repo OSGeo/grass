@@ -216,7 +216,7 @@ class DMonMap(Map):
         self._writeEnvFile({'GRASS_WIDTH' : self.width,
                             'GRASS_HEIGHT' : self.height})
     
-    def GetMapsMasksAndOpacities(self, force, guiFrame, windres):
+    def GetMapsMasksAndOpacities(self, force, windres):
         """!
         Used by Render function.
         
