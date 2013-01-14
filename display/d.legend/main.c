@@ -93,6 +93,7 @@ int main(int argc, char **argv)
 
     opt_color = G_define_standard_option(G_OPT_C_FG);
     opt_color->label = _("Text color");
+    opt_color->guisection = _("Font settings");
 
     opt_lines = G_define_option();
     opt_lines->key = "lines";
@@ -118,7 +119,7 @@ int main(int argc, char **argv)
     opt_labelnum->answer = "5";
     opt_labelnum->options = "2-100";
     opt_labelnum->description = _("Number of text labels for smooth gradient legend");
-    opt_labelnum->guisection = _("Advanced");
+    opt_labelnum->guisection = _("Gradient");
 
     opt_at = G_define_option();
     opt_at->key = "at";
@@ -133,13 +134,12 @@ int main(int argc, char **argv)
 
     opt_use = G_define_option();
     opt_use->key = "use";
-    opt_use->key_desc = "catnum";
     opt_use->type = TYPE_DOUBLE;	/* string as it is fed through the parser? */
     opt_use->required = NO;
     opt_use->description =
 	_("List of discrete category numbers/values for legend");
     opt_use->multiple = YES;
-    opt_use->guisection = _("Advanced");
+    opt_use->guisection = _("Subset");
 
     opt_range = G_define_option();
     opt_range->key = "range";
@@ -148,14 +148,14 @@ int main(int argc, char **argv)
     opt_range->required = NO;
     opt_range->description =
 	_("Use a subset of the map range for the legend (min,max)");
-    opt_range->guisection = _("Advanced");
+    opt_range->guisection = _("Subset");
 
     opt_font = G_define_option();
     opt_font->key = "font";
     opt_font->type = TYPE_STRING;
     opt_font->required = NO;
     opt_font->description = _("Font name");
-    opt_font->guisection = _("Advanced");
+    opt_font->guisection = _("Font settings");
 
     /* HB: this option should become redundant as soon as the bug in trunk's D_text_size() is fixed. */
     opt_fontscale = G_define_option();
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
     opt_fontscale->answer = "5";
     opt_fontscale->options = "0-100";
     opt_fontscale->description = _("Font scaling factor for floating point legends");
-    opt_fontscale->guisection = _("Advanced");
+    opt_fontscale->guisection = _("Font settings");
 
     opt_path = G_define_option();
     opt_path->key = "path";
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
     opt_path->required = NO;
     opt_path->description = _("Path to font file");
     opt_path->gisprompt = "old_file,file,font";
-    opt_path->guisection = _("Advanced");
+    opt_path->guisection = _("Font settings");
 
     opt_charset = G_define_option();
     opt_charset->key = "charset";
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
     opt_charset->required = NO;
     opt_charset->description =
 	_("Text encoding (only applicable to TrueType fonts)");
-    opt_charset->guisection = _("Advanced");
+    opt_charset->guisection = _("Font settings");
 
     hidestr = G_define_flag();
     hidestr->key = 'v';
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
     smooth = G_define_flag();
     smooth->key = 's';
     smooth->description = _("Draw smooth gradient");
-    smooth->guisection = _("Advanced");
+    smooth->guisection = _("Gradient");
 
     flipit = G_define_flag();
     flipit->key = 'f';
@@ -211,6 +211,7 @@ int main(int argc, char **argv)
     size = G_define_flag();
     size->key = 's';
     size->description = _("Font size is height in pixels");
+    size->guisection = _("Font settings");
 
     /* Check command line */
     if (G_parser(argc, argv))
