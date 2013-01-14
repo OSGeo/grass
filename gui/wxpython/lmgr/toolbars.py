@@ -11,7 +11,7 @@ Classes:
  - toolbars::LMVectorToolbar
  - toolbars::LMNvizToolbar
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -90,7 +90,7 @@ class LMDataToolbar(BaseToolbar):
             'addGroup'   : MetaIcon(img = 'layer-group-add',
                                     label = _('Add group')),
             'addOverlay' : MetaIcon(img = 'layer-more',
-                                    label = _('Add grid or vector labels overlay')),
+                                    label = _('Add various overlays')),
             'delCmd'     : MetaIcon(img = 'layer-remove',
                                     label = _('Remove selected map layer(s) from layer tree')),
             }
@@ -105,12 +105,13 @@ class LMDataToolbar(BaseToolbar):
                                       self.parent.OnAddVector),
                                      ('vectmisc', icons["vectMisc"],
                                       self.parent.OnAddVectorMisc),
-                                     ('addgrp',  icons["addGroup"],
-                                      self.parent.OnAddGroup),
                                      ('addovl',  icons["addOverlay"],
                                       self.parent.OnAddOverlay),
                                      ('addWS',  icons["addWS"],
                                       self.parent.OnAddWS),
+                                     (None, ),
+                                     ('addgrp',  icons["addGroup"],
+                                      self.parent.OnAddGroup),
                                      (None, ),
                                      ('delcmd',  icons["delCmd"],
                                       self.parent.OnDeleteLayer),
