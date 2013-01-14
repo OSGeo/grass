@@ -624,8 +624,9 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "Publisher" "${PUBLISHER}"
         
         ;File Association
-        ${registerExtension} "$INSTALL_DIR\extrabin\python.exe" ".py"  "Python File"
-        ${registerExtension} "$INSTALL_DIR\extrabin\python.exe" ".pyc" "Compiled Python File"
+        ${registerExtension} "$INSTALL_DIR\extrabin\python.exe"  ".py"  "Python File"
+        ${registerExtension} "$INSTALL_DIR\extrabin\python.exe"  ".pyc" "Compiled Python File"
+        ${registerExtension} "$INSTALL_DIR\extrabin\pythonw.exe" ".pyw" "Python File (no console)"
 
 	;Create the Desktop Shortcut
 	SetShellVarContext current
@@ -1010,6 +1011,7 @@ Section "Uninstall"
         ;File Association
         ${unregisterExtension} ".py"  "Python File"
         ${unregisterExtension} ".pyc" "Compiled Python File"
+        ${unregisterExtension} ".py"  "Python File (no console)"
 SectionEnd
 
 ;----------------------------------------------------------------------------------------------------------------------------
