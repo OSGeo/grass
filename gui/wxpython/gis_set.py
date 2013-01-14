@@ -11,7 +11,7 @@ Classes:
  - gis_set::GListBox
  - gis_set::StartUp
 
-(C) 2006-2012 by the GRASS Development Team
+(C) 2006-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -635,11 +635,10 @@ class GRASSStartup(wx.Frame):
         try:
             self.listOfLocations = GetListOfLocations(dbase)
         except UnicodeEncodeError:
-            wx.MessageBox(parent = self, caption = _("Error"),
-                          message = _("Unable to set GRASS database. "
-                                      "Check your locale settings."),
-                          style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
-        
+            GError(parent = self,
+                   message = _("Unable to set GRASS database. "
+                               "Check your locale settings."))
+                
         self.lblocations.Clear()
         self.lblocations.InsertItems(self.listOfLocations, 0)
 
@@ -647,7 +646,9 @@ class GRASSStartup(wx.Frame):
             self.lblocations.SetSelection(0)
         else:
             self.lblocations.SetSelection(wx.NOT_FOUND)
-
+            GWarning(_("No GRASS location found in '%s'.") % self.gisdbase,
+                     parent = self)
+        
         return self.listOfLocations
 
     def UpdateMapsets(self, location):
@@ -749,10 +750,15 @@ class GRASSStartup(wx.Frame):
 
     def OnSetDatabase(self, event):
         """!Database set"""
-        self.gisdbase = self.tgisdbase.GetValue()
+        gisdbase = self.tgisdbase.GetValue()
+        if not os.path.exists(gisdbase):
+            GError(_("Path '%s' doesn't exist.") % gisdbase,
+                   parent = self)
+            return
         
+        self.gisdbase = self.tgisdbase.GetValue()
         self.UpdateLocations(self.gisdbase)
-
+        
         self.OnSelectLocation(None)
 
     def OnBrowse(self, event):
