@@ -18,6 +18,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/glocale.h>
 
 static unsigned int width, height;
@@ -33,8 +34,8 @@ static void erase(unsigned char *buf, const char *color)
     unsigned char bg[3];
     unsigned int row, col, i;
 
-    if (sscanf(color, "%d:%d:%d", &r, &g, &b) != 3)
-	G_fatal_error(_("Invalid color: %s"), color);
+    if (G_str_to_color(color, &r, &g, &b) != 1)
+        G_fatal_error(_("Invalid color: %s"), color);
 
     bg[0] = (unsigned char)r;
     bg[1] = (unsigned char)g;
@@ -279,17 +280,20 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    G_add_keyword(_("support"));
-    G_add_keyword(_("gui"));
+    G_add_keyword(_("display"));
     
-    module->description = _("Overlays multiple PPM image files,");
+    module->description = _("Overlays multiple PPM image files.");
 
-    opt.in = G_define_standard_option(G_OPT_R_INPUTS);
+    opt.in = G_define_standard_option(G_OPT_F_INPUT);
+    opt.in->required = YES;
+    opt.in->multiple = YES;
+    opt.in->description = _("Name of input file(s)");
 
-    opt.mask = G_define_standard_option(G_OPT_R_INPUTS);
+    opt.mask = G_define_standard_option(G_OPT_F_INPUT);
     opt.mask->key = "mask";
     opt.mask->required = NO;
-    opt.mask->description = _("Name of mask files");
+    opt.mask->multiple = YES;
+    opt.mask->description = _("Name of input mask file(s)");
     
     opt.alpha = G_define_option();
     opt.alpha->key = "opacity";
@@ -317,6 +321,7 @@ int main(int argc, char *argv[])
     opt.height->description = _("Image height");
 
     opt.bg = G_define_standard_option(G_OPT_C_BG);
+    opt.bg->answer = NULL;
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
