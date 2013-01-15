@@ -43,7 +43,9 @@ SELECT_ORDERBY = "SELECT {cols} FROM {tname} ORDER BY {orderby};"
 
 #UPDATE
 UPDATE = "UPDATE {tname} SET {new_col} = {old_col};"
-UPDATE_WHERE = "UPDATE {tname} SET {new_col} = {old_col} WHERE {condition};"
+UPDATE_WHERE = "UPDATE {tname} SET {values} WHERE {condition};"
+UPDATE_COL_WHERE = "UPDATE {tname} SET {new_col} = {old_col} WHERE {condition};"
+
 
 # GET INFO
 PRAGMA = "PRAGMA table_info({tname});"
