@@ -223,7 +223,7 @@ class Info(object):
 
     def open(self, mode='r', layer='0', overwrite=None,
              # parameters valid only if mode == 'w'
-             tab_name='', tab_cols=[('cat', 'INTEGER PRIMARY KEY'), ],
+             tab_name='', tab_cols=None,
              link_layer=1, link_name=None, link_key='cat',
              link_db='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
              link_driver='sqlite'):
@@ -247,43 +247,54 @@ class Info(object):
         # check if the mode is valid
         if mode not in ('r', 'rw', 'w'):
             raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
+
         # check if the map exist
-        if self.exist() and mode == 'r':
-            openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
-                                              self.mapset, layer)
+        if self.exist() and mode in ('r', 'rw'):
+            # open in READ mode
+            if mode == 'r':
+                openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
+                                                  self.mapset, layer)
+            # open in READ and WRITE mode
+            elif mode == 'rw':
+                openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
+                                                     self.mapset, layer)
+
+            # instantiate class attributes
+            self.dblinks = DBlinks(self.c_mapinfo)
+
+
         # If it is opened in write mode
         if mode == 'w':
-            #TODO: build topo if new
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name,
                                              libvect.WITHOUT_Z)
-            # create a link
-            link = Link(link_layer,
-                        link_name if link_name else self.name,
-                        tab_name if tab_name else self.name,
-                        link_key, link_db, link_driver)
             self.dblinks = DBlinks(self.c_mapinfo)
-            # add the new link
-            self.dblinks.add(link)
-            # get the table
-            table = link.table()
-            # create the new columns
-            table.columns.create(tab_cols)
-            self.n_lines = 0
-        elif mode == 'rw':
-            openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
-                                                 self.mapset, layer)
-        # initialize the dblinks object
-        self.dblinks = DBlinks(self.c_mapinfo)
+            if tab_cols:
+                # create a link
+                link = Link(link_layer,
+                            link_name if link_name else self.name,
+                            tab_name if tab_name else self.name,
+                            link_key, link_db, link_driver)
+                # add the new link
+                self.dblinks.add(link)
+                # create the table
+                table = self.get_table()
+                table.columns.create(tab_cols)
+                table.conn.commit()
+
         # check the C function result.
         if openvect == -1:
             str_err = "Not able to open the map, C function return %d."
             raise OpenError(str_err % openvect)
-        # istantiate the table
-        self.layer = self.dblinks[0].layer
-        self.table = self.get_table(layer=self.layer)
+
+        if len(self.dblinks) == 0:
+            self.layer = 1
+            self.table = None
+            self.n_lines = 0
+        else:
+            self.layer = self.dblinks[0].layer
+            self.table = self.get_table(layer=self.layer)
+            self.n_lines = self.table.n_rows()
         self.writable = self.mapset == functions.getenv("MAPSET")
-        if mode != 'w':
-            self.n_lines = self.table.num_rows()
 
     def get_table(self, layer=None, name=None,):
         if layer is None and name is None and len(self.dblinks) == 0:
@@ -293,10 +304,11 @@ class Info(object):
         elif name is not None:
             return self.dblinks.by_name(name).table()
         else:
-            return self.dblinks.by_layer(1).table()
+            return self.dblinks[0].table()
 
     def close(self):
-        self.table.conn.close()
+        if self.table is not None:
+            self.table.conn.close()
         if self.is_open():
             if libvect.Vect_close(self.c_mapinfo) != 0:
                 str_err = 'Error when trying to close the map with Vect_close'
