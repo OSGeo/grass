@@ -211,7 +211,11 @@ class Columns(object):
                 odict[name] = ctype
             self.odict = odict
         values = ','.join(['?', ] * self.__len__())
+        kv = ','.join(['%s=?' % k for k in self.odict.keys()])
+        where = "%s=?" % self.key
         self.insert_str = sql.INSERT.format(tname=self.tname, values=values)
+        self.update_str = sql.UPDATE_WHERE.format(tname=self.tname,
+                                                  values=kv, condition=where)
 
     def sql_descr(self, remove=None):
         """Return a string with description of columns.
@@ -819,9 +823,9 @@ class Table(object):
 
     def __len__(self):
         """Return the nuber of rows"""
-        return self.num_rows()
+        return self.n_rows()
 
-    def num_rows(self):
+    def n_rows(self):
         cur = self.conn.cursor()
         cur.execute(sql.SELECT.format(cols='Count(*)', tname=self.name))
         number = cur.fetchone()[0]
@@ -851,6 +855,15 @@ class Table(object):
         except:
             raise ValueError("The SQL is not correct:\n%r" % sqlc)
 
-    def insert(self, values):
+    def insert(self, values, many=False):
         cur = self.conn.cursor()
+        if many:
+            return cur.executemany(self.columns.insert_str, values)
         return cur.execute(self.columns.insert_str, values)
+
+    def update(self, key, values):
+        cur = self.conn.cursor()
+        vals = list(values)
+        vals.append(key)
+        print self.columns.update_str, vals
+        return cur.execute(self.columns.update_str, vals)
