@@ -203,7 +203,7 @@ class Geo(object):
             self.c_cats = c_cats
 
         # set the attributes
-        if table and self.line:
+        if table is not None and self.line:
             self.attrs = Attrs(self.line, table, writable)
 
     def is_with_topology(self):
