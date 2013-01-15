@@ -14,10 +14,12 @@ os.chdir(html_dir)
 filename = "index.html"
 f = open(filename + ".tmp", 'wb')
 
+year = None
+if len(sys.argv) > 1:
+    year = sys.argv[1]
+
 write_html_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
 write_html_cmd_overview(f)
-write_html_footer(f, "index.html")
-
+write_html_footer(f, "index.html", year)
 f.close()
 replace_file(filename)
-

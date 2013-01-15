@@ -43,11 +43,11 @@ manpages:
 .PHONY: manpages
 
 define build
-GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_$(1).py $(2)
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_$(1).py $(2) $(GRASS_VERSION_DATE)
 endef
 
 define build_topics
-GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_topics.py $(HTMLDIR)
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" $(PYTHON) ./build_topics.py $(HTMLDIR) $(GRASS_VERSION_DATE)
 endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML)
