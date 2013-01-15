@@ -134,7 +134,7 @@ class Vector(Info):
             raise GrassError("Vect_rewind raise an error.")
 
     @must_be_open
-    def write(self, geo_obj, attrs=None, line=0, layer=None):
+    def write(self, geo_obj, attrs=None):
         """Write geometry features and attributes
 
         Open a new vector map ::
@@ -187,15 +187,15 @@ class Vector(Info):
 
         ..
         """
-        if layer:
-            table = self.dblinks.by_layer(layer).table()
-        else:
-            table = self.table
-            layer = self.layer
-        line = line if line else table.num_rows() + 1
-        attr = [line, ]
-        attr.extend(attrs)
-        libvect.Vect_cat_set(geo_obj.c_cats, layer, line)
+        self.n_lines += 1
+        if self.table is not None and attrs:
+            attr = [self.n_lines, ]
+            attr.extend(attrs)
+            cur = self.table.conn.cursor()
+            cur.execute(self.table.columns.insert_str, attr)
+            cur.close()
+
+        libvect.Vect_cat_set(geo_obj.c_cats, self.layer, self.n_lines)
         result = libvect.Vect_write_line(self.c_mapinfo, geo_obj.gtype,
                                          geo_obj.c_points, geo_obj.c_cats)
         if result == -1:
@@ -207,10 +207,7 @@ class Vector(Info):
             # return offset into file where the feature starts (on level 1)
             geo_obj.offset = result
 
-        cur = table.conn.cursor()
-        cur.execute(table.columns.insert_str, attr)
-        table.conn.commit()
-        cur.close()
+
 
 
 #=============================================
@@ -414,7 +411,7 @@ class VectorTopo(Vector):
         """
         if feature_id < 0:  # Handle negative indices
                 feature_id += self.__len__() + 1
-        if feature_id >= (self.__len__() + 1):
+        if feature_id > (self.__len__()):
             raise IndexError('Index out of range')
         if feature_id > 0:
             c_points = ctypes.pointer(libvect.line_pnts())
@@ -444,11 +441,22 @@ class VectorTopo(Vector):
         return output
 
     @must_be_open
-    def rewrite(self, geo_obj):
+    def rewrite(self, line, geo_obj, attrs=None, **kargs):
+        """Rewrite a geometry features
+        """
+        if self.table is not None and attrs:
+            attr = [line, ]
+            attr.extend(attrs)
+            self.table.update(key=line, values=attr)
+
+        libvect.Vect_cat_set(geo_obj.c_cats, self.layer, line)
         result = libvect.Vect_rewrite_line(self.c_mapinfo,
-                                           geo_obj.id, geo_obj.gtype,
+                                           line, geo_obj.gtype,
                                            geo_obj.c_points,
                                            geo_obj.c_cats)
+        if result == -1:
+            raise GrassError("Not able to write the vector feature.")
+
         # return offset into file where the feature starts
         geo_obj.offset = result
 
