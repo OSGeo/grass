@@ -159,7 +159,10 @@ class Parameter(object):
                 if isrange:
                     range_min, range_max = isrange.groups()
                     self.values = range(int(range_min), int(range_max) + 1)
-                self.isrange = diz['values'][0]
+                    self.isrange = diz['values'][0]
+                else:
+                    self.values = [self._type(i) for i in diz['values']]
+                    self.isrange = False
             except TypeError:
                 self.values = [self._type(i) for i in diz['values']]
                 self.isrange = False
