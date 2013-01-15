@@ -23,6 +23,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/glocale.h>
 
 static int width, height;
@@ -142,10 +143,12 @@ static void erase(const char *color)
 {
     int r, g, b, a;
     double fr, fg, fb, fa;
-
-    if (sscanf(color, "%d:%d:%d:%d", &r, &g, &b, &a) != 4)
+    
+    a = 255;
+    if (sscanf(color, "%d:%d:%d:%d", &r, &g, &b, &a) != 4 ||
+        G_str_to_color(color, &r, &g, &b) != 1)
 	G_fatal_error(_("Invalid color: %s"), color);
-
+    
     fr = r / 255.0;
     fg = g / 255.0;
     fb = b / 255.0;
@@ -191,23 +194,16 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    G_add_keyword(_("gui"));
-    module->description = _("Overlays multiple X Pixmaps");
+    G_add_keyword(_("display"));
+    module->description = _("Overlays multiple X Pixmaps.");
 
-    opt.in = G_define_option();
-    opt.in->key = "input";
-    opt.in->type = TYPE_STRING;
+    opt.in = G_define_standard_option(G_OPT_F_INPUT);
     opt.in->required = YES;
     opt.in->multiple = YES;
-    opt.in->description = _("Names of input files");
-    opt.in->gisprompt = "old_file,file,input";
+    opt.in->description = _("Name of input file(s)");
 
-    opt.out = G_define_option();
-    opt.out->key = "output";
-    opt.out->type = TYPE_STRING;
+    opt.out = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.out->required = YES;
-    opt.out->description = _("Name of output file");
-    opt.out->gisprompt = "new_file,file,output";
 
     opt.visual = G_define_option();
     opt.visual->key = "visual";
@@ -239,10 +235,9 @@ int main(int argc, char *argv[])
     opt.height->required = YES;
     opt.height->description = _("Image height");
 
-    opt.bg = G_define_option();
-    opt.bg->key = "background";
-    opt.bg->type = TYPE_STRING;
-    opt.bg->description = _("Background color");
+    opt.bg = G_define_standard_option(G_OPT_C_BG);
+    opt.bg->label = _("Background color (R:G:B:A)");
+    opt.bg->answer = NULL;
 
     flag_d = G_define_flag();
     flag_d->key = 'd';
