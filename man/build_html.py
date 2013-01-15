@@ -97,17 +97,18 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
         <li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
+        <li><a href="wxGUI.Components.html">wxGUI components</a></li>
+       </ul>
+
+       <ul>
+        <li><a href="topic_gui.html">GUI commands</li>
        </ul>
 
        <ul>
         <li><a href="display.html">Display commands manual</a></li>
         <li><a href="displaydrivers.html">Display drivers</a></li>
        </ul>
-
-       <ul>
-        <li><a href="wxGUI.Nviz.html">nviz</a> 3D visualization and animation tool</li>
-        <li><a href="xganim.html">xganim</a> tool  for animating a raster map series</li>
-       </ul></td>
+      </td>
     </tr>
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Raster and 3D raster processing</h3>
