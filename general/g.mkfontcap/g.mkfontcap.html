@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<p><em>g.mkfontcap</em> is a utilty to generate a GRASS font configuration file
+<em>g.mkfontcap</em> is a utilty to generate a GRASS font configuration file
 ("fontcap") containing details of the fonts available on the current system.
 If <a href="http://freetype.sourceforge.net/">Freetype</a> is not installed,
 the font list will be limited to the set of Hershey stroke fonts supplied
@@ -18,13 +18,13 @@ fonts. The list of directories scanned is currently:
 </pre></div>
 <p>These correspond to directories where fonts can be found on some common
 operating systems. Extra directories to search can easily by added using the
-<em>extradirs</em> parameter, which accepts a comma-separated list. An extra
+<b>extradirs</b> parameter, which accepts a comma-separated list. An extra
 directory may optionally contain an environment variable <em>at the start</em> 
 of the string, if enclosed in ${xxx} syntax (see examples above).
 
 <p>The module will normally write to the standard fontcap file location,
 <tt>$GISBASE/etc/fontcap</tt>. If the environment variable
-<strong>GRASS_FONT_CAP</strong> is set, the output will instead be written 
+<tt>GRASS_FONT_CAP</tt> is set, the output will instead be written 
 to the file specified by that variable. This is useful if you don't have
 permission to modify <tt>$GISBASE/etc/fontcap</tt>: in this case you can
 use e.g.
@@ -44,10 +44,13 @@ followed by Freetype) and within each type by the short name of the font.
 
 <h2>SEE ALSO</h2>
  
-<em><a href="d.font.html">d.font</a></em>
+<em>
+<a href="d.font.html">d.font</a>
+</em>
 
 <h2>AUTHOR</h2>
 
 Paul Kelly
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

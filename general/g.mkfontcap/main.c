@@ -68,10 +68,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    G_add_keyword(_("gui"));
     module->description =
 	_("Generates the font configuration file by scanning various directories "
-	  "for fonts");
+	  "for fonts.");
 
     overwrite = G_define_flag();
     overwrite->key = 'o';
@@ -88,6 +87,7 @@ int main(int argc, char *argv[])
     extradirs->key = "extradirs";
     extradirs->type = TYPE_STRING;
     extradirs->required = NO;
+    extradirs->label = _("List of extra directories to scan");
     extradirs->description =
 	_("Comma-separated list of extra directories to scan for "
 	  "Freetype-compatible fonts as well as the defaults (see documentation)");
