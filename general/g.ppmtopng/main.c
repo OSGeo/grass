@@ -31,10 +31,10 @@ static void read_ppm(const char *filename)
 
     input = fopen(filename, "rb");
     if (!input)
-	G_fatal_error(_("unable to open input file %s"), filename);
+	G_fatal_error(_("Unable to open input file %s"), filename);
 
     if (fscanf(input, "P6 %d %d %d", &width, &height, &maxval) != 3)
-	G_fatal_error(_("invalid input file %s"), filename);
+	G_fatal_error(_("Invalid input file %s"), filename);
 
     fgetc(input);
 
@@ -67,18 +67,18 @@ static void write_png(const char *filename)
 
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
     if (!png_ptr)
-	G_fatal_error(_("unable to allocate PNG structure"));
+	G_fatal_error(_("Unable to allocate PNG structure"));
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
-	G_fatal_error(_("unable to allocate PNG structure"));
+	G_fatal_error(_("Unable to allocate PNG structure"));
 
     if (setjmp(png_jmpbuf(png_ptr)))
-	G_fatal_error(_("error writing PNG file"));
+	G_fatal_error(_("Error writing PNG file"));
 
     output = fopen(filename, "wb");
     if (!output)
-	G_fatal_error(_("unable to open output file %s"), filename);
+	G_fatal_error(_("Unable to open output file %s"), filename);
 
     png_init_io(png_ptr, output);
 
@@ -115,23 +115,12 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    G_add_keyword(_("gui"));
-    module->description = "Converts between PPM/PGM and PNG image formats";
+    G_add_keyword(_("display"));
+    module->description = _("Converts between PPM/PGM and PNG image formats.");
 
-    opt.in = G_define_option();
-    opt.in->key = "input";
-    opt.in->type = TYPE_STRING;
-    opt.in->required = YES;
-    opt.in->multiple = YES;
-    opt.in->description = _("Name of input file");
-    opt.in->gisprompt = "old_file,file,input";
+    opt.in = G_define_standard_option(G_OPT_F_INPUT);
 
-    opt.out = G_define_option();
-    opt.out->key = "output";
-    opt.out->type = TYPE_STRING;
-    opt.out->required = YES;
-    opt.out->description = _("Name of output file");
-    opt.out->gisprompt = "new_file,file,output";
+    opt.out = G_define_standard_option(G_OPT_F_OUTPUT);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
