@@ -16,6 +16,9 @@ os.chdir(html_dir)
 #for all module groups:
 cls = sys.argv[1]
 modclass = sys.argv[2]
+year = None
+if len(sys.argv) > 3:
+    year = sys.argv[3]
 
 filename = modclass + ".html"
 
@@ -37,7 +40,7 @@ for cmd in html_files(cls):
     			      desc = desc))
 f.write("</table>\n")
 
-write_html_footer(f, "index.html")
+write_html_footer(f, "index.html", year)
 
 f.close()
 replace_file(filename)

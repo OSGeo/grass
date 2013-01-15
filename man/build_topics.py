@@ -10,8 +10,10 @@ import glob
 import string
 from build_html import *
 
-
 path = sys.argv[1]
+year = None
+if len(sys.argv) > 2:
+    year = sys.argv[2]
 
 keywords = {}
 
@@ -56,7 +58,7 @@ for key, values in sorted(keywords.iteritems()):
         keyfile.write(desc1_tmpl.substitute(cmd = mod, desc = desc, 
                                             basename = mod.replace('.html','')))
     keyfile.write("</table>\n")
-    write_html_footer(keyfile, "index.html")
+    write_html_footer(keyfile, "index.html", year)
 topicsfile.write("</ul>\n")
-write_html_footer(topicsfile, "index.html")  
+write_html_footer(topicsfile, "index.html", year)  
 topicsfile.close()

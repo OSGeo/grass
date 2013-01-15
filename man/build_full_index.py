@@ -9,6 +9,10 @@ import string
 
 from build_html import *
 
+year = None
+if len(sys.argv) > 1:
+    year = sys.argv[1]
+
 os.chdir(html_dir)
 
 classes = []
@@ -49,7 +53,7 @@ for cls in classes:
 				      desc = desc))
     f.write("</table>\n")
 
-write_html_footer(f, "index.html")
+write_html_footer(f, "index.html", year)
 
 f.close()
 replace_file(filename)

@@ -7,6 +7,7 @@
 import sys
 import os
 import string
+from datetime import datetime
 
 ## TODO: better fix this in include/Make/Html.make, see bug RT #5361
 
@@ -162,7 +163,7 @@ footer_tmpl = string.Template(\
 r"""<br><br>
 <hr>
 <p><a href="${index_url}">Help Index</a> | <a href="topics.html">Topics Index</a> | <a href="full_index.html">Full Index</a><br>
-&copy; 2003-2012 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
+&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 </body>
 </html>
 """)
@@ -329,9 +330,13 @@ def write_html_cmd_overview(f):
     box_color = "#e1ecd0"
     f.write(overview_tmpl.substitute(box_color = box_color))
 
-def write_html_footer(f, index_url):
+def write_html_footer(f, index_url, year = None):
+    if year is None:
+        cur_year = default_year
+    else:
+        cur_year = year
     f.write(footer_tmpl.substitute(grass_version = grass_version,
-                                   index_url = index_url))
+                                   index_url = index_url, year = cur_year))
 
 def get_desc(cmd):
     f = open(cmd, 'r')
@@ -369,5 +374,6 @@ except IndexError:
     grass_version = ver.split().strip()
 grass_mmver = '.'.join(ver.split('.')[0:2])
 macosx = "darwin" in os.environ['ARCH'].lower()
+default_year = "0000" # str(datetime.now().year)
 
 ############################################################################
