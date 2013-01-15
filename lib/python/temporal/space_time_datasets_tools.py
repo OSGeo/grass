@@ -65,7 +65,7 @@ def register_maps_in_space_time_dataset(
     end_time_in_file = False
 
     if maps and file:
-        core.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
+        core.fatal(_("%s= and %s= are mutually exclusive") % ("maps", "file"))
 
     if end and increment:
         core.fatal(_("%s= and %s= are mutually exclusive") % (
@@ -76,7 +76,7 @@ def register_maps_in_space_time_dataset(
                                                       "end_time"))
 
     if not maps and not file:
-        core.fatal(_("Please specify %s= or %s=") % ("input", "file"))
+        core.fatal(_("Please specify %s= or %s=") % ("maps", "file"))
 
     # We may need the mapset
     mapset = core.gisenv()["MAPSET"]
