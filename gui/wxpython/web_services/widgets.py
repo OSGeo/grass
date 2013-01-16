@@ -379,7 +379,7 @@ class WSPanel(wx.Panel):
     def _updateLayerOrderList(self, selected = None):
         """!Update order in list.
         """
-        def GetLayerCaption(layer):
+        def getlayercaption(layer):
             if l['title']:
                 cap = (l['title'])
             else:
@@ -392,7 +392,7 @@ class WSPanel(wx.Panel):
                     cap += ' / ' + l['style']['name']
             return cap
 
-        layer_capts = [GetLayerCaption(l) for l in self.sel_layers]
+        layer_capts = [getlayercaption(l) for l in self.sel_layers]
         self.l_odrder_list.Set(layer_capts)
         if self.l_odrder_list.IsEmpty():
             self.enableButtons(False)
@@ -466,9 +466,6 @@ class WSPanel(wx.Panel):
             self._postCapParsedEvt(error)
             return
 
-        if self.l_odrder_list:
-            self.l_odrder_list.Clear()
-
         self.is_connected = True
 
         # WMS standard has formats defined for all layers
@@ -477,9 +474,9 @@ class WSPanel(wx.Panel):
             self._updateFormatRadioBox(self.formats_list)
             self._setDefaultFormatVal()
 
+        self.list.LoadData(self.cap)
         self.OnListSelChanged(event = None)
 
-        self.list.LoadData(self.cap)
         self._postCapParsedEvt(None)
 
     def ParseCapFile(self, url, username, password, cap_file = None,):
@@ -503,9 +500,6 @@ class WSPanel(wx.Panel):
         dcmd = cmd[1]
 
         layers = []
-
-        if self.l_odrder_list:
-            self.l_odrder_list.Clear()
 
         if dcmd.has_key('layers'):
             layers = dcmd['layers']
@@ -648,11 +642,9 @@ class WSPanel(wx.Panel):
         """!Update widgets according to selected layer in list.
         """
         curr_sel_ls = self.list.GetSelectedLayers()
-
         # update self.sel_layers (selected layer list)
-
         if 'WMS' in self.ws:
-            for sel_l in self.sel_layers:
+            for sel_l in self.sel_layers[:]:
                 if sel_l not in curr_sel_ls:
                     self.sel_layers.remove(sel_l)
 
@@ -686,7 +678,7 @@ class WSPanel(wx.Panel):
             for proj in projs_list:
                 proj_spl = proj.strip().split(':')
 
-                if 'EPSG' in proj_spl[0]:
+                if 'epsg' in proj_spl[0].strip().lower():
                     try:
                         int(proj_spl[1])
                         self.projs_list.append(proj)
@@ -925,7 +917,6 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         sel_layers = self.GetSelections()
         sel_layers_dict = []
         for s in sel_layers:
-
             try:
                 layer = self.GetPyData(s)['layer']
             except ValueError:
