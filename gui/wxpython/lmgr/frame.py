@@ -1512,6 +1512,8 @@ class GMFrame(wx.Frame):
         from web_services.dialogs import AddWSDialog
         dlg = AddWSDialog(parent = self, gmframe = self)
         dlg.CentreOnScreen()
+        x, y = dlg.GetPosition()
+        dlg.SetPosition((x, y - 200))
         dlg.Show()
 
     def OnShowAttributeTable(self, event, selection = None):
