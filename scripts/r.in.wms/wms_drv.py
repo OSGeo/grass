@@ -30,8 +30,11 @@ Numeric.arrayrange = Numeric.arange
 from math import pi, floor
 from urllib2 import HTTPError
 from httplib import HTTPException
-from xml.etree.ElementTree import ParseError
-
+try:
+    from xml.etree.ElementTree import ParseError
+except ImportError: # < Python 2.7
+    from xml.parsers.expat import ExpatError as ParseError
+    
 from wms_base import WMSBase
 
 from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree

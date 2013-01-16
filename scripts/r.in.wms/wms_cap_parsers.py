@@ -16,6 +16,10 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
+try:
+    from xml.etree.ElementTree import ParseError
+except ImportError: # < Python 2.7
+    from xml.parsers.expat import ExpatError as ParseError
 
 import xml.etree.ElementTree as etree
 import grass.script as grass 
@@ -26,13 +30,13 @@ class BaseCapabilitiesTree(etree.ElementTree):
         """
         try:
             etree.ElementTree.__init__(self, file = cap_file)
-        except etree.ParseError:
-            raise etree.ParseError(_("Unable to parse XML file"))
+        except ParseError:
+            raise ParseError(_("Unable to parse XML file"))
         except IOError as error:
-            raise etree.ParseError(_("Unabble to open XML file '%s'.\n%s\n" % (cap_file, error)))
+            raise ParseError(_("Unable to open XML file '%s'.\n%s\n" % (cap_file, error)))
 
         if self.getroot() is None:
-            raise etree.ParseError(_("Root node was not found.")) 
+            raise ParseError(_("Root node was not found.")) 
         
 class WMSXMLNsHandler:
     def __init__(self, caps):
@@ -45,8 +49,8 @@ class WMSXMLNsHandler:
         elif caps.getroot().find(self.namespace + "Service") is not None:
             self.use_ns = True
         else:
-            raise etree.ParseError(_("Unable to parse capabilities file.\n\
-                                      Tag <%s> was not found.") % "Service")
+            raise ParseError(_("Unable to parse capabilities file.\n\
+                                Tag <%s> was not found.") % "Service")
     
     def Ns(self, tag_name):
         """!Add namespace to tag_name according to version
@@ -74,8 +78,8 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         grass.debug('Checking WMS capabilities tree.', 4)
         
         if not "version" in self.getroot().attrib:
-            raise etree.ParseError(_("Missing version attribute root node "
-                                     "in Capabilities XML file"))
+            raise ParseError(_("Missing version attribute root node "
+                                "in Capabilities XML file"))
         else:
             wms_version = self.getroot().attrib["version"]
         
@@ -86,7 +90,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
 
         if force_version is not None:
             if wms_version != force_version:
-                raise etree.ParseError(_("WMS server does not support '%s' version.") % wms_version)
+                raise ParseError(_("WMS server does not support '%s' version.") % wms_version)
 
         capability = self._find(self.getroot(), "Capability")
         root_layer = self._find(capability, "Layer")
@@ -220,8 +224,8 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         res = etreeElement.find(self.xml_ns.Ns(tag))
 
         if res is None:
-            raise etree.ParseError(_("Unable to parse capabilities file. \n\
-                                      Tag <%s> was not found.") % tag)
+            raise ParseError(_("Unable to parse capabilities file. \n\
+                                Tag <%s> was not found.") % tag)
 
         return res
 
@@ -232,8 +236,8 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         res = etreeElement.findall(self.xml_ns.Ns(tag))
 
         if not res:
-            raise etree.ParseError(_("Unable to parse capabilities file. \n\
-                                      Tag <%s> was not found.") % tag)
+            raise ParseError(_("Unable to parse capabilities file. \n\
+                                Tag <%s> was not found.") % tag)
 
         return res
 
@@ -462,8 +466,8 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
             res = etreeElement.find(ns(tag))
 
         if res is None:
-            raise etree.ParseError(_("Unable to parse capabilities file. \n\
-                                      Tag '%s' was not found.") % tag)
+            raise ParseError(_("Unable to parse capabilities file. \n\
+                                Tag '%s' was not found.") % tag)
 
         return res
 
@@ -477,8 +481,8 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
             res = etreeElement.findall(ns(tag))
 
         if not res:
-            raise etree.ParseError(_("Unable to parse capabilities file. \n\
-                                      Tag '%s' was not found.") % tag)
+            raise ParseError(_("Unable to parse capabilities file. \n\
+                                Tag '%s' was not found.") % tag)
 
         return res
 
@@ -531,8 +535,8 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
         res = etreeElement.find(tag)
 
         if res is None:
-            raise  etree.ParseError(_("Unable to parse tile service file. \n\
-                                       Tag <%s> was not found.") % tag)
+            raise  ParseError(_("Unable to parse tile service file. \n\
+                                 Tag <%s> was not found.") % tag)
 
         return res
 
