@@ -366,6 +366,8 @@ class WSDialogBase(wx.Dialog):
                                                         username = self.username.GetValue(),
                                                         password = self.password.GetValue())
             self.ws_panels[ws]['panel'].Hide()
+        
+        self.btn_add.SetDefault()
 
     def OnPanelCapParsed(self, event):
         """!Called when panel has downloaded and parsed capabilities file.
@@ -472,7 +474,7 @@ class AddWSDialog(WSDialogBase):
         self.btn_add = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Add layer"))
         self.btn_add.SetToolTipString(_("Add selected web service layers as map layer into layer tree"))        
         self.btn_add.Enable(False)
-
+        
         self.run_btns.append(self.btn_add)
 
     def _doLayout(self):
