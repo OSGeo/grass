@@ -67,9 +67,10 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("classification"));
     module->description =
-	_("Calculate error matrix and kappa "
-	  "parameter for accuracy assessment of classification " "result.");
+	_("Calculates error matrix and kappa "
+	  "parameter for accuracy assessment of classification result.");
 
     parms.map = G_define_standard_option(G_OPT_R_INPUT);
     parms.map->key = "classification";
@@ -83,8 +84,10 @@ int main(int argc, char **argv)
 
     parms.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parms.output->required = NO;
-    parms.output->description =
+    parms.output->label =
 	_("Name for output file containing error matrix and kappa");
+    parms.output->description = _("If not given, print to startdard output");
+    parms.output->guisection = _("Output settings");
 
     parms.titles = G_define_option();
     parms.titles->key = "title";
@@ -92,15 +95,18 @@ int main(int argc, char **argv)
     parms.titles->required = NO;
     parms.titles->description = _("Title for error matrix and kappa");
     parms.titles->answer = "ACCURACY ASSESSMENT";
+    parms.titles->guisection = _("Output settings");
 
     flags.w = G_define_flag();
     flags.w->key = 'w';
     flags.w->label = _("Wide report");
     flags.w->description = _("132 columns (default: 80)");
+    flags.w->guisection = _("Formatting");
 
     flags.h = G_define_flag();
     flags.h->key = 'h';
     flags.h->description = _("No header in the report");
+    flags.h->guisection = _("Formatting");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
