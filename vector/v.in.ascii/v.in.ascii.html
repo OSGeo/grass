@@ -94,8 +94,8 @@ e.g.:
 # Print out the column number for each field, supposing the file has a header
 head -1 input_file | tr '&lt;the_field_separator_character&gt;' '\n' | cat -n
 # From the listing, select the columns you want and feed them to v.in.ascii
-# do not use the input= option
-cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_columns&gt; input_file | v.in.ascii &lt;your_options&gt;
+# use input=- to read from stdin
+cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_columns&gt; input_file | v.in.ascii in=- &lt;your_options&gt;
 </pre></div>
 
 
@@ -132,7 +132,7 @@ B  4
  5959010.9323622 3401338.36037757
 C  1 1
  5959063.08352122 3401386.98533277
- 1 21" | v.in.ascii format=standard output=test_polygons
+ 1 21" | v.in.ascii in=- format=standard output=test_polygons
 </pre></div>
 
 <h3>Example 1b) - standard format mode</h3>
@@ -149,7 +149,7 @@ echo "L 5 1
 599356 4925162 1469
 602396 4926653 1235
 607524 4925431 1216
-1 321 " | v.in.ascii -zn out=line3d format=standard
+1 321 " | v.in.ascii -zn in=- out=line3d format=standard
 </pre></div>
 
 This can be used to create a vector line of a GPS track: the GPS points have
@@ -186,7 +186,7 @@ Generate a 2D points vector map 'points.dat' as ASCII file:
 
 <p>Import into GRASS:
 <div class="code"><pre>
-cat points.dat | v.in.ascii out=mypoints x=2 y=3 cat=1 \
+cat points.dat | v.in.ascii in=- out=mypoints x=2 y=3 cat=1 \
     columns='cat int, x double precision, y double precision, label varchar(20)'
 </pre></div>
 
@@ -196,10 +196,10 @@ cat points.dat | v.in.ascii out=mypoints x=2 y=3 cat=1 \
 
 Generating a 3D points vector map from DBMS (idcol must be an integer column):<br>
 <div class="code"><pre>
-echo "select east,north,elev,idcol from mytable" | db.select -c | v.in.ascii -z out=mymap
+echo "select east,north,elev,idcol from mytable" | db.select -c | v.in.ascii in=- -z out=mymap
 </pre></div>
 
-The module is reading from standard input, using the default '|' (pipe) delimiter.
+With <b>in=-</b>, the module is reading from standard input, using the default '|' (pipe) delimiter.
 <br>
 The import works for 2D maps as well (no elev column and no '-z' flag).
 
@@ -219,7 +219,7 @@ Generate a 3D points vector map 'points3d.dat' with attributes as ASCII file:
 <div class="code"><pre>
 #As the 'cat' option is set to 0 by default, an extra column 'cat'
 #containing the IDs will be auto-generated (no need to define that):
-cat points3d.dat | v.in.ascii -z z=3 cat=0 out=mypoints3D \
+cat points3d.dat | v.in.ascii in=- -z z=3 cat=0 out=mypoints3D \
     columns='x double precision, y double precision, z double precision, \
     label_cz varchar(20), label_en varchar(20)'
 v.info -c mypoints3D
@@ -232,11 +232,11 @@ v.info mypoints3D
 Generate points file by clicking onto the map:
 <div class="code"><pre>
 #For LatLong locations:
-d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii out=points \
+d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
     columns='x double precision, y double precision, label varchar(20)'
 
 #For other projections:
-d.where | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii out=points \
+d.where | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
     columns='x double precision, y double precision, label varchar(20)'
 </pre></div>
 
@@ -248,7 +248,7 @@ into <em>v.in.ascii</em>, only the vector map geometry will be generated.
 
 Convert ground control points into vector points:
 <div class="code"><pre>
-cat $MAPSET/group/$GROUP/POINTS | v.in.ascii out=$GROUP_gcp separator=space skip=3 \
+cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space skip=3 \
     col='x double precision, y double precision, x_target double precision, \
     y_target double precision, ok int'
 </pre></div>
