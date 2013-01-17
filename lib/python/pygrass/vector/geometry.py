@@ -203,6 +203,7 @@ class Geo(object):
             self.c_cats = c_cats
 
         # set the attributes
+        self.attrs = None
         if table is not None and self.line:
             self.attrs = Attrs(self.line, table, writable)
 
@@ -376,20 +377,56 @@ class Point(Geo):
 
     def buffer(self, dist=None, dist_x=None, dist_y=None, angle=0,
                round_=True, tol=0.1):
-        """Return an Area object using the ``Vect_point_buffer2`` C function.
-        Creates buffer around the point (px, py).
+        """Return the buffer area around the point, using the
+        ``Vect_point_buffer2`` C function.
+
+        Parameters
+        ----------
+        dist : numeric
+            The distance around the line.
+        dist_x: numeric, optional
+            The distance along x
+        dist_y: numeric, optional
+            The distance along y
+        angle: numeric, optional
+            The angle between 0x and major axis
+        round_: bool, optional
+            To make corners round
+        tol: float, optional
+            Fix the maximum distance between theoretical arc
+            and output segments
+
+        Returns
+        -------
+        buffer : Area
+            The buffer area around the line.
+
+        Example
+        ---------
+
+        ::
+            >>> pnt = Point(0, 0)
+            >>> area = point.buffer(10)
+            >>> area.boundary                              #doctest: +ELLIPSIS
+            Line([Point(-10.000000, 0.000000),...Point(-10.000000, 0.000000)])
+            >>> area.centroid
+            Point(0.000000, 0.000000)
+            >>> area.isles
+            []
+
         """
-        print "Not implemented yet"
-        raise
         if dist is not None:
             dist_x = dist
             dist_y = dist
-        area = Area()
+        elif not dist_x or not dist_y:
+            raise TypeError('TypeError: buffer expected 1 arguments, got 0')
+        bound = Line()
+        p_points = ctypes.pointer(bound.c_points)
         libvect.Vect_point_buffer2(self.x, self.y,
                                    dist_x, dist_y,
                                    angle, int(round_), tol,
-                                   area.c_points)
-        return area
+                                   p_points)
+        return Area(boundary=bound, centroid=self)
 
 
 class Line(Geo):
@@ -633,6 +670,16 @@ class Line(Geo):
             * distance of point from line
 
         The distance is compute using the ``Vect_line_distance`` C function.
+
+        Example
+        ---------
+
+        ::
+            >>> line = Line([(0, 0), (0, 2)])
+            >>> line.distance(Point(1, 1))
+            (Point(0.000000, 1.000000), 1.0, 1.0, 1.0)
+
+        ..
         """
         # instantite outputs
         cx = ctypes.c_double(0)
@@ -643,7 +690,8 @@ class Line(Geo):
         lp_dist = ctypes.c_double(0)
 
         libvect.Vect_line_distance(self.c_points,
-                                   pnt.x, pnt.y, pnt.z, 0 if self.is2D else 1,
+                                   pnt.x, pnt.y, 0 if pnt.is2D else pnt.z,
+                                   0 if self.is2D else 1,
                                    ctypes.byref(cx), ctypes.byref(cy),
                                    ctypes.byref(cz), ctypes.byref(dist),
                                    ctypes.byref(sp_dist),
@@ -651,7 +699,7 @@ class Line(Geo):
         # instantiate the Point class
         point = Point(cx.value, cy.value, cz.value)
         point.is2D = self.is2D
-        return point, dist, sp_dist, lp_dist
+        return point, dist.value, sp_dist.value, lp_dist.value
 
     def get_first_cat(self):
         """Fetches FIRST category number for given vector line and field, using
@@ -839,25 +887,65 @@ class Line(Geo):
         pass
 
     def buffer(self, dist=None, dist_x=None, dist_y=None,
-               angle=0, round_=True, tol=0.1):
+               angle=0, round_=True, caps=True, tol=0.1):
         """Return the buffer area around the line, using the
         ``Vect_line_buffer2`` C function.
 
-        .. warning::
+        Parameters
+        ----------
+        dist : numeric
+            The distance around the line.
+        dist_x: numeric, optional
+            The distance along x
+        dist_y: numeric, optional
+            The distance along y
+        angle: numeric, optional
+            The angle between 0x and major axis
+        round_: bool, optional
+            To make corners round
+        caps: bool, optional
+            To add caps at line ends
+        tol: float, optional
+            Fix the maximum distance between theoretical arc
+            and output segments
 
-            Not implemented yet.
+        Returns
+        -------
+        buffer : Area
+            The buffer area around the line.
+
+        Example
+        ---------
+
+        ::
+            >>> line = Line([(0, 0), (0, 2)])
+            >>> area = line.buffer(10)
+            >>> area.boundary                              #doctest: +ELLIPSIS
+            Line([Point(-10.000000, 0.000000),...Point(-10.000000, 0.000000)])
+            >>> area.centroid
+            Point(0.000000, 0.000000)
+            >>> area.isles
+            []
+
+        ..
         """
         if dist is not None:
             dist_x = dist
             dist_y = dist
-        area = Area()
+        elif not dist_x or not dist_y:
+            raise TypeError('TypeError: buffer expected 1 arguments, got 0')
+        p_bound = ctypes.pointer(ctypes.pointer(libvect.line_pnts()))
+        pp_isle = ctypes.pointer(ctypes.pointer(
+                                 ctypes.pointer(libvect.line_pnts())))
+        n_isles = ctypes.pointer(ctypes.c_int())
         libvect.Vect_line_buffer2(self.c_points,
-                                  dist_x, dist_y,
-                                  angle, int(round_), tol,
-                                  area.boundary.c_points,
-                                  area.isles.c_points,
-                                  area.num_isles)
-        return area
+                                  dist_x, dist_y, angle,
+                                  int(round_), int(caps), tol,
+                                  p_bound, pp_isle, n_isles)
+        return Area(boundary=Line(c_points=p_bound.contents),
+                    centroid=self[0],
+                    isles=[Line(c_points=pp_isle[i].contents)
+                           for i in xrange(n_isles.contents.value)])
 
     def reset(self):
         """Reset line, using `Vect_reset_line` C function. ::
@@ -1101,7 +1189,7 @@ class Area(Geo):
             raise GrassError(str_err)
 
         # set the attributes
-        if self.attrs.table and self.line:
+        if self.attrs and self.line:
             self.attrs = Attrs(self.line,
                                self.attrs.table, self.attrs.writable)
 
@@ -1109,7 +1197,7 @@ class Area(Geo):
         self.gtype = libvect.GV_AREA
 
     def __repr__(self):
-        return "Area(%d)" % self.id
+        return "Area(%d)" % self.id if self.id else "Area( )"
 
     def init_from_id(self, area_id=None):
         """Return an Area object"""
@@ -1161,35 +1249,52 @@ class Area(Geo):
         libvect.Vect_get_area_box(self.c_mapinfo, self.id, bbox.c_bbox)
         return bbox
 
-    def buffer(self):
-        """Creates buffer around area.
+    def buffer(self, dist=None, dist_x=None, dist_y=None,
+               angle=0, round_=True, caps=True, tol=0.1):
+        """Return the buffer area around the area, using the
+        ``Vect_area_buffer2`` C function.
 
-        Parameters:
-        Map	vector map
-        area	area id
-        da	distance along major axis
-        db	distance along minor axis
-        dalpha	angle between 0x and major axis
-        round	make corners round
-        caps	add caps at line ends
-        tol	maximum distance between theoretical arc and output segments
-        [out]	oPoints	output polygon outer border (ccw order)
-        [out]	inner_count	number of holes
-        [out]	iPoints	array of output polygon's holes (cw order)
+        Parameters
+        ----------
+        dist : numeric
+            The distance around the line.
+        dist_x: numeric, optional
+            The distance along x
+        dist_y: numeric, optional
+            The distance along y
+        angle: numeric, optional
+            The angle between 0x and major axis
+        round_: bool, optional
+            To make corners round
+        caps: bool, optional
+            To add caps at line ends
+        tol: float, optional
+            Fix the maximum distance between theoretical arc
+            and output segments
 
-        void Vect_area_buffer2(const struct Map_info * Map,
-                               int 	area,
-                               double 	da,
-                               double 	db,
-                               double 	dalpha,
-                               int 	round,
-                               int 	caps,
-                               double 	tol,
-                               struct line_pnts ** 	oPoints,
-                               struct line_pnts *** 	iPoints,
-                               int * 	inner_count)
+        Returns
+        -------
+        buffer : Area
+            The buffer area around the line.
+
         """
-        pass
+        if dist is not None:
+            dist_x = dist
+            dist_y = dist
+        elif not dist_x or not dist_y:
+            raise TypeError('TypeError: buffer expected 1 arguments, got 0')
+        p_bound = ctypes.pointer(ctypes.pointer(libvect.line_pnts()))
+        pp_isle = ctypes.pointer(ctypes.pointer(
+                                 ctypes.pointer(libvect.line_pnts())))
+        n_isles = ctypes.pointer(ctypes.c_int())
+        libvect.Vect_area_buffer2(self.c_mapinfo, self.id,
+                                  dist_x, dist_y, angle,
+                                  int(round_), int(caps), tol,
+                                  p_bound, pp_isle, n_isles)
+        return Area(boundary=Line(c_points=p_bound.contents),
+                    centroid=self.centroid,
+                    isles=[Line(c_points=pp_isle[i].contents)
+                           for i in xrange(n_isles.contents.value)])
 
     def boundaries(self):
         """Creates list of boundaries for given area.
