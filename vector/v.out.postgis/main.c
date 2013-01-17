@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
     
     int ret, field;
     char *schema, *olayer, *pg_file;
+    char *fid_column, *geom_column;
+    
     struct Map_info In, Out;
     
     G_gisinit(argv[0]);
@@ -101,9 +103,21 @@ int main(int argc, char *argv[])
         G_warning(_("Unable to open vector map <%s> on topological level"),
                   params.input->answer);
     
+    /* default columns */
+    fid_column  = GV_PG_FID_COLUMN;
+    geom_column = GV_PG_GEOMETRY_COLUMN;
+    
     /* create output for writing */
     pg_file = create_pgfile(params.dsn->answer, schema, params.olink->answer,
-                            params.opts->answers, flags.topo->answer ? TRUE : FALSE);
+                            params.opts->answers, flags.topo->answer ? TRUE : FALSE,
+			    &fid_column, &geom_column);
+    G_debug(1, "fid_column: %s", fid_column);
+    G_debug(1, "geom_column: %s", geom_column);
+    
+    if (!flags.table->answer) {
+	/* check fid column */
+	check_columns(&In, params.layer->answer, fid_column, geom_column);
+    }
     
     if (-1 == Vect_open_new(&Out, olayer, Vect_is_3d(&In)))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
