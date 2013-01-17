@@ -248,3 +248,8 @@ typedef enum
 } SF_FeatureType;
 
 #define HEADSTR	50
+
+/*! \brief GRASS-PostGIS data provider - default fid column */
+#define GV_PG_FID_COLUMN       "fid"
+/*! Simple features access */
+#define GV_PG_GEOMETRY_COLUMN "geom"
