@@ -8,7 +8,7 @@ Classes:
  - frame::IClassMapFrame
  - frame::MapManager
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -869,7 +869,9 @@ class IClassMapFrame(DoubleMapFrame):
         
         # init Ref struct with the files in group */
         I_free_group_ref(self.refer)
-        if (not I_iclass_init_group(self.group, self.refer)):
+        # we expect the subgroup name to be the same as the group name
+        subgroup = self.group
+        if (not I_iclass_init_group(self.group, subgroup, self.refer)):
             return False
         
         I_free_signatures(self.signatures)
@@ -1035,13 +1037,13 @@ class IClassMapFrame(DoubleMapFrame):
         return count
         
     def GetGroupLayers(self, group):
-        """! Get layers in group
+        """!Get layers in subgroup (expecting same name for group and subgroup)
     
         @todo consider moving this function to core module for convenient
         """
         res = RunCommand('i.group',
                          flags = 'g',
-                         group = group,
+                         group = group, subgroup = group,
                          read = True).strip()
         if res.split('\n')[0]:
             return res.split('\n')
