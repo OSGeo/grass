@@ -5,7 +5,7 @@
 # MODULE:       t.support
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:      Modify the metadata of a space time dataset
+# PURPOSE:      Renames a space time dataset
 # COPYRIGHT:    (C) 2011 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Modifies the metadata of a space time dataset.
+#% description: Renames a space time dataset
 #% keywords: temporal
 #% keywords: support
 #%end
