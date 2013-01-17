@@ -71,12 +71,12 @@ int main(int argc, char *argv[])
 
     r = G_define_flag();
     r->key = 'r';
-    r->description = _("Remove selected files from specified group");
+    r->description = _("Remove selected files from specified group or subgroup");
     r->guisection = _("Maps");
     
     l = G_define_flag();
     l->key = 'l';
-    l->description = _("List files from specified (sub)group (fancy)");
+    l->description = _("List files from specified (sub)group");
     l->guisection = _("Print");
 
     simple_flag = G_define_flag();
@@ -147,16 +147,21 @@ int main(int argc, char *argv[])
 	    if (sgrp->answer) {
 		/* list subgroup files */
 		I_get_subgroup_ref(group, sgrp->answer, &ref);
-		if (simple_flag->answer)
+		if (simple_flag->answer) {
+		    G_message(_("Subgroup <%s> of group <%s> references the following raster maps:"),
+			      sgrp->answer, group);
 		    I_list_subgroup_simple(&ref, stdout);
+		}
 		else
 		    I_list_subgroup(group, sgrp->answer, &ref, stdout);
 	    }
 	    else {
 		/* list group files */
 		I_get_group_ref(group, &ref);
-		if (simple_flag->answer)
+		if (simple_flag->answer) {
+		    G_message(_("Group <%s> references the following raster maps:"), group);
 		    I_list_group_simple(&ref, stdout);
+		}
 		else
 		    I_list_group(group, &ref, stdout);
 	    }
@@ -183,9 +188,7 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
-
-    G_done_msg(" ");
-
+    
     return EXIT_SUCCESS;
 }
 
