@@ -77,15 +77,16 @@ FILE *I_fopen_sigset_file_old(const char *group, const char *subgroup,
 			      const char *name)
 {
     char element[GPATH_MAX];
+    char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
     FILE *fd;
+
+    if (!G_name_is_fully_qualified(group, group_name, group_mapset)) {
+	strcpy(group_name, group);
+    }
 
     sprintf(element, "subgroup/%s/sigset/%s", subgroup, name);
 
-    fd = G_fopen_old_misc("group", element, group, G_mapset());
-    if (fd == NULL)
-	G_warning(_("Unable to open signature file <%s> for subgroup <%s> "
-		    "of group <%s@%s>"),
-		  name, subgroup, group, G_mapset());
+    fd = G_fopen_old_misc("group", element, group_name, G_mapset());
     
     return fd;
 }
