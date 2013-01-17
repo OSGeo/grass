@@ -242,9 +242,11 @@ int make_statistics(IClass_statistics * statistics,
 	    ncells++;		/* count interior points */
 	    for (b = 0; b < nbands; b++) {
 		value = band_buffer[b][x];
-		G_debug(5, "make_statistics() read value: %d", value);
+		G_debug(5, "make_statistics() band: %d, read value: %d (max: %d)",
+                        b, value, MAX_CATS);
 		if (value < 0 || value > MAX_CATS - 1) {
-		    G_warning(_("prepare_signature: data error."));
+                    G_warning(_("Data error preparing signatures: value (%d) > num of cats (%d)"),
+                              value, MAX_CATS);
 		    return 0;
 		}
 		statistics->band_sum[b] += value;	/* sum for means */

@@ -97,36 +97,39 @@ int I_iclass_analysis(IClass_statistics * statistics, struct Ref *refer,
 
 
 /*!
-   \brief Read files for the specified group into the Ref structure.
+   \brief Read files for the specified group subgroup into the Ref structure.
 
    \param group_name name of imagery group
+   \param subgroup_name name of imagery subgroup
    \param[out] refer pointer to band files structure
 
    \return 1 on success
    \return 0 on failure
  */
-int I_iclass_init_group(const char *group_name, struct Ref *refer)
+int I_iclass_init_group(const char *group_name, const char *subgroup_name,
+			struct Ref *refer)
 {
     int n;
 
-    G_debug(3, "init_group(): group = %s", group_name);
+    G_debug(3, "I_iclass_init_group(): group_name = %s, subgroup_name = %s",
+	    group_name, subgroup_name);
     I_init_group_ref(refer);	/* called in I_get_group_ref */
 
-    I_get_group_ref(group_name, refer);
+    I_get_subgroup_ref(group_name, subgroup_name, refer);
 
     for (n = 0; n < refer->nfiles; n++) {
 	if (G_find_raster(refer->file[n].name, refer->file[n].mapset) == NULL) {
-	    G_warning(_("Raster map <%s@%s> in group "
-			"<%s> do not exist"), refer->file[n].name,
-		      refer->file[n].mapset, group_name);
+	    G_warning(_("Raster map <%s@%s> in subgroup "
+			"<%s> does not exist"), refer->file[n].name,
+		      refer->file[n].mapset, subgroup_name);
 	    I_free_group_ref(refer);
 	    return 0;
 	}
     }
 
     if (refer->nfiles <= 1) {
-	G_warning(_("Group <%s> does not have enough files (it has %d files)"),
-		  group_name, refer->nfiles);
+	G_warning(_("Subgroup <%s> does not have enough files (it has %d files)"),
+		  subgroup_name, refer->nfiles);
 	I_free_group_ref(refer);
 	return 0;
     }

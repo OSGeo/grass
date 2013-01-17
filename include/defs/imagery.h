@@ -53,7 +53,7 @@ int I_free_group_ref(struct Ref *);
 /* iclass.c */
 struct Map_info;
 int I_iclass_analysis(IClass_statistics *, struct Ref *, struct Map_info *, const char *, const char *, const char *);
-int I_iclass_init_group(const char *, struct Ref *);
+int I_iclass_init_group(const char *, const char *, struct Ref *);
 void I_iclass_create_raster(IClass_statistics *, struct Ref *, const char *);
 
 /* iclass_statistics.c */
