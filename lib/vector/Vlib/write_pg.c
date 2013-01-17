@@ -1008,7 +1008,6 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
         int col, ncol, more;
         int sqltype, ctype, is_fid;
         char buf_val[DB_SQL_MAX], buf_tmp[DB_SQL_MAX];
-        char *str_val;
 
         const char *colname;
 
@@ -1091,10 +1090,7 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                                     db_get_value_double(value));
                             break;
                         case DB_C_TYPE_STRING:
-                            str_val = G_store(db_get_value_string(value));
-                            G_str_to_sql(str_val);
-                            sprintf(buf_tmp, "'%s'", str_val);
-                            G_free(str_val);
+			    sprintf(buf_tmp, "'%s'", db_get_value_string(value));
                             break;
                         case DB_C_TYPE_DATETIME:
                             db_convert_column_value_to_string(column,
