@@ -8,10 +8,6 @@
 
 #define CURSOR_PAGE 500
 
-#define FID_COLUMN       "fid"
-/*! Simple features access */
-#define GEOMETRY_COLUMN "geom"
-
 /*! Topological access */
 #define TOPO_SCHEMA "topology"
 #define TOPO_ID     "topology_id"

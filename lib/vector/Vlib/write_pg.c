@@ -1006,7 +1006,7 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
     stmt = NULL;
     if (Fi && cat > -1) { /* write attributes (simple features and topology elements) */
         int col, ncol, more;
-        int sqltype, ctype;
+        int sqltype, ctype, is_fid;
         char buf_val[DB_SQL_MAX], buf_tmp[DB_SQL_MAX];
         char *str_val;
 
@@ -1054,17 +1054,7 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                     column = db_get_table_column(table, col);
                     colname = db_get_column_name(column);
 
-                    /* skip fid column */
-                    if (strcmp(pg_info->fid_column, colname) == 0)
-                        continue;
-
-                    /* -> columns */
-                    sprintf(buf_tmp, "%s", colname);
-                    strcat(buf, buf_tmp);
-                    if (col < ncol - 1)
-                        strcat(buf, ",");
-                    
-                    /* -> values */
+		    /* -> values */
                     value = db_get_column_value(column);
                     /* for debug only */
                     db_convert_column_value_to_string(column, &dbstmt);
@@ -1074,6 +1064,22 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                     sqltype = db_get_column_sqltype(column);
                     ctype = db_sqltype_to_Ctype(sqltype);
 
+		    is_fid = strcmp(pg_info->fid_column, colname) == 0;
+		    
+		    /* check fid column (must be integer) */
+                    if (is_fid == TRUE &&
+			ctype != DB_C_TYPE_INT) {
+			G_warning(_("FID column must be integer, column <%s> ignored!"),
+				  colname);
+                        continue;
+		    }
+
+                    /* -> columns */
+                    sprintf(buf_tmp, "%s", colname);
+                    strcat(buf, buf_tmp);
+                    if (col < ncol - 1)
+                        strcat(buf, ",");
+		    
                     /* prevent writing NULL values */
                     if (!db_test_value_isnull(value)) {
                         switch (ctype) {
@@ -1102,6 +1108,8 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                         }
                     }
                     else {
+			if (is_fid == TRUE)
+			    G_warning(_("Invalid value for FID column: NULL"));
                         sprintf(buf_tmp, "NULL");
                     }
                     strcat(buf_val, buf_tmp);
@@ -1117,6 +1125,10 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                 else {
                     /* PostGIS topology access, write geometry in
                      * topology schema, skip geometry at this point */
+		    if (buf[strlen(buf)-1] == ',') { /* last column skipped */
+			buf[strlen(buf)-1] = '\0';
+			buf_val[strlen(buf_val)-1] = '\0';
+		    }
                     G_asprintf(&stmt, "%s) VALUES (%s)",
                                buf, buf_val);
                 }
@@ -1132,11 +1144,12 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                        pg_info->schema_name, pg_info->table_name,
                        pg_info->geom_column, geom_data);
         }
-        else if (cat > 0)
+        else if (cat > 0) {
             /* no attributes (topology elements) */
             G_asprintf(&stmt, "INSERT INTO \"%s\".\"%s\" (%s) VALUES (NULL)",
                        pg_info->schema_name, pg_info->table_name,
                        pg_info->geom_column); 
+	}
     }
     
     return stmt;

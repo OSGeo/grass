@@ -255,11 +255,11 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
 
     /* if fid_column not defined, use 'fid' */
     if (!pg_info->fid_column)
-        pg_info->fid_column = G_store(FID_COLUMN);
+        pg_info->fid_column = G_store(GV_PG_FID_COLUMN);
 
     /* if geom_column not defined, use 'geom' */
     if (!pg_info->geom_column)
-        pg_info->geom_column = G_store(GEOMETRY_COLUMN);
+        pg_info->geom_column = G_store(GV_PG_GEOMETRY_COLUMN);
     
     /* check if feature table already exists */
     sprintf(stmt, "SELECT * FROM pg_tables "

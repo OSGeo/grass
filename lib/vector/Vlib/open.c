@@ -1206,7 +1206,7 @@ int map_format(struct Map_info *Map)
                 pg_info->fid_column = G_store(p);
             else
 #ifdef HAVE_POSTGRES
-                pg_info->fid_column = G_store(FID_COLUMN);
+                pg_info->fid_column = G_store(GV_PG_FID_COLUMN);
 #endif
             G_debug(1, "PG: fid_column = '%s'", pg_info->fid_column);
             
@@ -1216,7 +1216,7 @@ int map_format(struct Map_info *Map)
                 pg_info->geom_column = G_store(p);
             else
 #ifdef HAVE_POSTGRES
-                pg_info->geom_column = G_store(GEOMETRY_COLUMN);
+                pg_info->geom_column = G_store(GV_PG_GEOMETRY_COLUMN);
 #endif
             G_debug(1, "PG: geom_column = '%s'", pg_info->geom_column);
             
