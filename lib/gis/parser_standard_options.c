@@ -3,7 +3,7 @@
   
   \brief GIS Library - Argument parsing functions (standard options)
   
-  (C) 2001-2011 by the GRASS Development Team
+  (C) 2001-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -471,7 +471,7 @@ struct Option *G_define_standard_option(int opt)
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
 	      "When used with direct OGR access this is the layer name.");
-	Opt->gisprompt = "old,layer,layer_all";
+	Opt->gisprompt = "old,layer_all,layer";
 	break;
     case G_OPT_V_CAT:
 	Opt->key = "cat";
@@ -508,7 +508,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = YES;
-	Opt->gisprompt = "old,file,input";
+	Opt->gisprompt = "old,file,file";
 	Opt->description = _("Name of input file");
 	break;
     case G_OPT_F_OUTPUT:
@@ -516,7 +516,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = YES;
-	Opt->gisprompt = "new,file,output";
+	Opt->gisprompt = "new,file,file";
 	Opt->description = _("Name for output file");
 	break;
     case G_OPT_F_SEP:
@@ -546,7 +546,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->answer = DEFAULT_BG_COLOR;
-	Opt->gisprompt = "old,color,color_none";
+	Opt->gisprompt = "old,color_none,color";
 	Opt->label = _("Background color");
 	Opt->description =
 	    _("Either a standard GRASS color, R:G:B triplet, or \"none\"");
@@ -559,7 +559,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->key_desc = "name";
         Opt->required = YES;
-        Opt->gisprompt = "old,dir,input";
+        Opt->gisprompt = "old,dir,dir";
         Opt->description = _("Name to input directory");
         break;
 
