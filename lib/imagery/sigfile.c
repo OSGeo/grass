@@ -1,9 +1,9 @@
-/**
-   \file sigfile.c
+/*!
+   \file lib/imagery/sigfile.c
    
-   \brief Imagery Library - Signature file functions.
+   \brief Imagery Library - Signature file functions (statistics for i.maxlik).
  
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2008, 2013 by the GRASS Development Team
    
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -14,7 +14,7 @@
 #include <string.h>
 #include <grass/imagery.h>
 
-/**
+/*!
    \brief Create signature file
 
    \param group group name
@@ -46,10 +46,10 @@ FILE *I_fopen_signature_file_new(const char *group,
     return fd;
 }
 
-/**
-   \brief Open signature file
+/*!
+   \brief Open existing signature file
 
-   \param group group name
+   \param group group name (may be fully qualified)
    \param subgroup subgroup name in given group
    \param name signature filename
 
@@ -63,13 +63,10 @@ FILE *I_fopen_signature_file_old(const char *group,
     char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
     FILE *fd;
 
-    if (!G_name_is_fully_qualified(group, group_name, group_mapset)) {
-	strcpy(group_name, group);
-    }
-    
+    G_unqualified_name(group, NULL, group_name, group_mapset);
     sprintf(element, "subgroup/%s/sig/%s", subgroup, name);
 
-    fd = G_fopen_old_misc("group", element, group_name, G_mapset());
+    fd = G_fopen_old_misc("group", element, group_name, group_mapset);
     
     return fd;
 }
