@@ -1987,10 +1987,11 @@ class CoordinatesSelect(wx.Panel):
 
 class SignatureSelect(wx.ComboBox):
     """!Widget for selecting signatures"""
-    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
+    def __init__(self, parent, element, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
                  **kwargs):
         super(SignatureSelect, self).__init__(parent, id, size = size, 
                                               **kwargs)
+        self.element = element
         self.SetName("SignatureSelect")
 
     def Insert(self, group, subgroup = None):
@@ -2015,7 +2016,7 @@ class SignatureSelect(wx.ComboBox):
             path = os.path.join(path, 'subgroup', subgroup)
         try:
             items = list()
-            for element in os.listdir(os.path.join(path, 'sig')):
+            for element in os.listdir(os.path.join(path, self.element)):
                 items.append(element)
             self.SetItems(items)
         except OSError:

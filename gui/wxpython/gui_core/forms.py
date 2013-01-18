@@ -32,7 +32,7 @@ pythonw on a Mac.
 @todo
  - verify option value types
 
-Copyright(C) 2000-2012 by the GRASS Development Team
+Copyright(C) 2000-2013 by the GRASS Development Team
 
 This program is free software under the GPL(>=v2) Read the file
 COPYING coming with GRASS for details.
@@ -1260,7 +1260,7 @@ class CmdPanel(wx.Panel):
 
                 # sigrature file
                 elif prompt == 'sigfile':
-                    selection = gselect.SignatureSelect(parent = which_panel)
+                    selection = gselect.SignatureSelect(parent = which_panel, element = p.get('element', 'sig'))
                     p['wxId'] = [ selection.GetId() ]
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(item = selection, proportion = 0,
@@ -1574,12 +1574,12 @@ class CmdPanel(wx.Panel):
             if p.get('gisprompt', False) == False:
                 continue
             
-            prompt = p.get('element', '')
-            if prompt in ('cell', 'vector'):
+            prompt = p.get('prompt', '')
+            if prompt in ('raster', 'vector'):
                 name = p.get('name', '')
                 if name in ('map', 'input'):
                     pMap = p
-            elif prompt == 'layer':
+            elif prompt in ('layer', 'layer_all'):
                 pLayer.append(p)
             elif prompt == 'dbcolumn':
                 pColumn.append(p)
