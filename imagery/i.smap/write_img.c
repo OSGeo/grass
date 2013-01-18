@@ -12,7 +12,7 @@ int write_img(unsigned char **img, float **goodness, int ncols, int nrows,
     int row, col;
     FCELL *fcellbuf = NULL;
 
-    G_message(_("Writing raster map <%s>..."), parms->output_map);
+    G_important_message(_("Writing output raster map(s)..."));
 
     /* write goodness of fit */
     if (parms->goodness_map)
@@ -33,7 +33,7 @@ int write_img(unsigned char **img, float **goodness, int ncols, int nrows,
 	if (parms->goodness_map)
 	    Rast_put_row(files->goodness_fd, fcellbuf, FCELL_TYPE);
     }
-    G_percent(nrows, nrows, 2);
+    G_percent(1, 1, 1);
 
     return 0;
 }
