@@ -1,14 +1,14 @@
 /*!
   \file lib/imagery/sigsetfile.c
  
-  \brief Imagery Library - Open/Create signiture files
+  \brief Imagery Library - Signature file functions (statistics for i.smap)
  
-  (C) 2001-2011 by the GRASS Development Team
+  (C) 2001-2011, 2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
   
-  \author GRASS GIS Development Team
+  \author USA CERL
 */
 
 #include <string.h>
@@ -62,15 +62,13 @@ FILE *I_fopen_sigset_file_new(const char *group, const char *subgroup,
 }
 
 /*!
-  \brief Open existing signiture file in given group/subgroup
+  \brief Open existing signiture file
 
-  Note: Prints warning on error and returns NULL.
-
-  \param group name of group
+  \param group name of group (may be fully qualified)
   \param subgroup name of subgroup
   \param name name of signiture file
 
-  \return pointer to FILE
+  \return pointer to FILE*
   \return NULL on error
 */
 FILE *I_fopen_sigset_file_old(const char *group, const char *subgroup,
@@ -80,13 +78,10 @@ FILE *I_fopen_sigset_file_old(const char *group, const char *subgroup,
     char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
     FILE *fd;
 
-    if (!G_name_is_fully_qualified(group, group_name, group_mapset)) {
-	strcpy(group_name, group);
-    }
-
+    G_unqualified_name(group, NULL, group_name, group_mapset);
     sprintf(element, "subgroup/%s/sigset/%s", subgroup, name);
 
-    fd = G_fopen_old_misc("group", element, group_name, G_mapset());
+    fd = G_fopen_old_misc("group", element, group_name, group_mapset);
     
     return fd;
 }
