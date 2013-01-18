@@ -20,7 +20,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->map->label = _("Name of vector map to edit");
 
     params->fld = G_define_standard_option(G_OPT_V_FIELD);
-    params->fld->gisprompt = "new_layer,layer,layer";
+    params->fld->gisprompt = "old,layer,layer";
     params->fld->guisection = _("Selection");
 
     params->type = G_define_standard_option(G_OPT_V_TYPE);

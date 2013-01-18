@@ -44,12 +44,10 @@ int main(int argc, char *argv[])
 
     raster = G_define_standard_option(G_OPT_R_INPUT);
 
-    conf = G_define_option();
+    conf = G_define_standard_option(G_OPT_F_INPUT);
     conf->key = "config";
     conf->description = _("Configuration file");
-    conf->type = TYPE_STRING;
     conf->required = YES;
-    conf->gisprompt = "old_file,file,input";
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 

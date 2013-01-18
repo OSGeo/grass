@@ -51,14 +51,14 @@ void define_options(struct opt *opt)
 
     opt->afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     opt->afield_opt->key = "alayer";
-    opt->afield_opt->gisprompt = "new_layer,layer,layer";
+    opt->afield_opt->gisprompt = "new,layer,layer";
     opt->afield_opt->label = _("Arc layer");
     opt->afield_opt->guisection = _("Arcs");
 
     opt->nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     opt->nfield_opt->key = "nlayer";
     opt->nfield_opt->answer = "2";
-    opt->nfield_opt->gisprompt = "new_layer,layer,layer";
+    opt->nfield_opt->gisprompt = "new,layer,layer";
     opt->nfield_opt->label = _("Node layer");
     opt->nfield_opt->guisection = _("Nodes");
 

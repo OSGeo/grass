@@ -61,14 +61,11 @@ int main(int argc, char **argv)
 	_("Program for generating and displaying simple graphics on the "
 	  "display monitor.");
 
-    opt1 = G_define_option();
-    opt1->key = "input";
-    opt1->type = TYPE_STRING;
+    opt1 = G_define_standard_option(G_OPT_F_INPUT);
     opt1->required = NO;
     opt1->description = _("Name of file containing graphics commands, "
 			  "if not given reads from standard input");
-    opt1->gisprompt = "old_file,file,input";
-
+    
     opt2 = G_define_option();
     opt2->key = "color";
     opt2->type = TYPE_STRING;

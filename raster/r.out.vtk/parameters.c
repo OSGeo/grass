@@ -33,21 +33,13 @@ void set_params()
     param.input->description =
         _("Raster map(s) to be converted to VTK-ASCII data format");
 
-    param.output = G_define_option();
-    param.output->key = "output";
-    param.output->type = TYPE_STRING;
-    param.output->gisprompt = "new_file,file,output";
+    param.output = G_define_standard_option(G_OPT_F_OUTPUT);
     param.output->required = NO;
     param.output->description = _("Name for VTK-ASCII output file");
 
-    param.elevationmap = G_define_option();
-    param.elevationmap->key = "elevation";
-    param.elevationmap->type = TYPE_STRING;
+    param.elevationmap = G_define_standard_option(G_OPT_R_ELEV);
     param.elevationmap->required = NO;
-    param.elevationmap->gisprompt = "old,cell,raster";
-    param.elevationmap->multiple = NO;
-    param.elevationmap->description = _("Elevation raster map");
-
+    
     param.null_val = G_define_option();
     param.null_val->key = "null";
     param.null_val->type = TYPE_DOUBLE;

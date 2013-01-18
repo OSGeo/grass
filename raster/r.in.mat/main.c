@@ -95,19 +95,13 @@ int main(int argc, char *argv[])
 
 
     /* Define the different options */
-    inputfile = G_define_option();
-    inputfile->key = "input";
-    inputfile->type = TYPE_STRING;
+    inputfile = G_define_standard_option(G_OPT_F_INPUT);
     inputfile->required = YES;
-    inputfile->gisprompt = "old_file,file,input";
-    inputfile->description = _("Name of an existing MAT-File(v4)");
+    inputfile->description = _("Name of input MAT-File(v4)");
 
-    outputfile = G_define_option();
-    outputfile->key = "output";
-    outputfile->type = TYPE_STRING;
+    outputfile = G_define_standard_option(G_OPT_R_OUTPUT);
     outputfile->required = NO;
-    outputfile->gisprompt = "new,cell,raster";
-    outputfile->description = _("Name for the output raster map (override)");
+    outputfile->description = _("Name for output raster map (override)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

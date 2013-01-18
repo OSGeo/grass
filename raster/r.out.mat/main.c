@@ -67,12 +67,10 @@ int main(int argc, char *argv[])
 
     inputfile = G_define_standard_option(G_OPT_R_INPUT);
 
-    outputfile = G_define_option();
-    outputfile->key = "output";
-    outputfile->type = TYPE_STRING;
+    outputfile = G_define_standard_option(G_OPT_F_OUTPUT);
     outputfile->required = YES;
-    outputfile->gisprompt = "new_file,file,output";
-    outputfile->description = _("Name for the output binary MAT-File");
+    outputfile->gisprompt = "new,bin,file";
+    outputfile->description = _("Name for output binary MAT file");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

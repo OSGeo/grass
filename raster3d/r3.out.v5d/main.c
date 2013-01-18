@@ -71,10 +71,7 @@ void setParams()
     param.input->description =
 	_("3D raster map to be converted to Vis5D (V5D) file");
 
-    param.output = G_define_option();
-    param.output->key = "output";
-    param.output->type = TYPE_STRING;
-    param.output->gisprompt = "new_file,file,output";
+    param.output = G_define_standard_option(G_OPT_F_OUTPUT);
     param.output->required = YES;
     param.output->description = _("Name for V5D output file");
 

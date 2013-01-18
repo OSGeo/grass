@@ -26,12 +26,8 @@
 #% key_desc: name
 #% required : yes
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new_file,file,output
+#%option G_OPT_F_OUTPUT
 #% description: Name for output file (default is <input>.pack)
-#% key_desc: path
 #% required : no
 #%end
 #%flag

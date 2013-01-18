@@ -250,7 +250,7 @@ int main(int argc, char *argv[]) {
 
 	parm.input = G_define_standard_option(G_OPT_F_INPUT);
 	parm.input->description = _("Name of binary 3D raster file to be imported");
-	parm.input->gisprompt = "old,file,bin_input";
+	parm.input->gisprompt = "old,bin,file";
 
 	parm.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 

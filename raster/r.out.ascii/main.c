@@ -70,11 +70,8 @@ int main(int argc, char *argv[])
     parm.map->gisprompt = "old,cell,raster";
     parm.map->description = _("Name of an existing raster map");
 
-    parm.output = G_define_option();
-    parm.output->key = "output";
-    parm.output->type = TYPE_STRING;
+    parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.output->required = NO;
-    parm.output->gisprompt = "new_file,file,output";
     parm.output->description =
 	_("Name for output ASCII grid map (use out=- for stdout)");
 

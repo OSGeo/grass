@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->description = _("Format: layer number[/layer name]");
-    field_opt->gisprompt = "new_layer,layer,layer";
+    field_opt->gisprompt = "new,layer,layer";
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
     sep_opt->description = _("Field separator for shell script style output");
