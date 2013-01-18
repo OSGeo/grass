@@ -36,14 +36,9 @@
 #% key: i
 #% description: Ignore broken lines
 #%End
-#%Option
-#% key: input
-#% type: string
+#%Option G_OPT_F_INPUT
 #% required: yes
-#% multiple: no
-#% key_desc: name
 #% description: ASCII file containing input data
-#% gisprompt: old_file,file,input
 #%End
 #%Option
 #% key: output

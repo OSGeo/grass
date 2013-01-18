@@ -66,9 +66,8 @@ int main(int argc, char *argv[])
     parm.map = G_define_standard_option(G_OPT_R_INPUT);
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.output->gisprompt = "new_file,file,output";
     parm.output->description =
-	_("Name of an output ARC-GRID map (use out=- for stdout)");
+	_("Name for output ARC-GRID file (use out=- for stdout)");
 
     parm.dp = G_define_option();
     parm.dp->key = "dp";

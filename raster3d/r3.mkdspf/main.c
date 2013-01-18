@@ -89,12 +89,10 @@ int main(int argc, char *argv[])
     /* should still find the DIRECTORY */
     name->description = _("Name of an existing 3d raster map");
 
-    out = G_define_option();
+    out = G_define_standard_option(G_OPT_F_OUTPUT);
     out->key = "dspf";
-    out->type = TYPE_STRING;
     out->required = YES;
-    out->gisprompt = "new_file,file,output";
-    out->description = _("Name of output display file");
+    out->description = _("Name for output display file");
 
     levels = G_define_option();
     levels->key = "levels";

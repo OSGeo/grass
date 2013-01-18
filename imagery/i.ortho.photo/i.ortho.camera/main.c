@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     camera_opt = G_define_standard_option(G_OPT_F_INPUT);
     camera_opt->key = "camera";
     camera_opt->required = YES;
-    camera_opt->gisprompt = "old_file,camera,camera";
+    camera_opt->gisprompt = "old,camera,file";
     camera_opt->label =
 	_("Name of camera reference file");
 

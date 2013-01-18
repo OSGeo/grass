@@ -20,11 +20,9 @@
 #%  keywords: attribute table
 #%End
 
-#%option
+#%option G_OPT_F_INPUT
 #% key: dsn
-#% type: string
-#% key_desc : name
-#% gisprompt: old_file,file,input
+#% gisprompt: old,bin,file
 #% description: Table file to be imported or DB connection string
 #% required : yes
 #%end

@@ -78,13 +78,9 @@ static paramType param;
 
 static void setParams()
 {
-    param.input = G_define_option();
-    param.input->key = "input";
-    param.input->type = TYPE_STRING;
+    param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->required = YES;
-    param.input->key_desc = "name";
-    param.input->gisprompt = "old_file,file,input";
-    param.input->description = _("ASCII raster map to be imported");
+    param.input->description = _("Name of input file to be imported");
 
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 

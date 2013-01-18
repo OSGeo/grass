@@ -95,12 +95,10 @@ int main(int argc, char *argv[])
 
     inopt = G_define_standard_option(G_OPT_R_INPUT);
 
-    outopt = G_define_option();
-    outopt->key = "output";
-    outopt->type = TYPE_STRING;
+    outopt = G_define_standard_option(G_OPT_F_OUTPUT);
     outopt->required = YES;
-    outopt->gisprompt = "new_file,tiff,tiff";
-    outopt->description = _("Name for new TIFF file");
+    outopt->gisprompt = "new,bin,file";
+    outopt->description = _("Name for output TIFF file");
 
     compopt = G_define_option();
     compopt->key = "compression";

@@ -118,7 +118,7 @@ int main(int argc, char **argv)
     color_opt->answer = DEFAULT_FG_COLOR;
     color_opt->label = _("Feature color");
     color_opt->guisection = _("Colors");
-    color_opt->gisprompt = "old_color,color,color_none";
+    color_opt->gisprompt = "old,color_none,color";
     color_opt->description =
 	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     fcolor_opt->answer = "200:200:200";
     fcolor_opt->label = _("Area fill color");
     fcolor_opt->guisection = _("Colors");
-    fcolor_opt->gisprompt = "old_color,color,color_none";
+    fcolor_opt->gisprompt = "old,color_none,color";
     fcolor_opt->description =
 	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
     bgcolor_opt->answer = "none";
     bgcolor_opt->guisection = _("Labels");
     bgcolor_opt->label = _("Label background color");
-    bgcolor_opt->gisprompt = "old_color,color,color_none";
+    bgcolor_opt->gisprompt = "old,color_none,color";
     bgcolor_opt->description =
 	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
     bcolor_opt->answer = "none";
     bcolor_opt->guisection = _("Labels");
     bcolor_opt->label = _("Label border color");
-    bcolor_opt->gisprompt = "old_color,color,color_none";
+    bcolor_opt->gisprompt = "old,color_none,color";
     bcolor_opt->description =
 	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 

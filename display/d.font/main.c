@@ -56,13 +56,12 @@ int main(int argc, char **argv)
     opt1->answer = "romans";
     opt1->description = _("Choose new current font");
 
-    opt2 = G_define_option();
+    opt2 = G_define_standard_option(G_OPT_F_INPUT);
     opt2->key = "path";
-    opt2->type = TYPE_STRING;
     opt2->required = NO;
     opt2->description =
 	_("Path to Freetype-compatible font including file name");
-    opt2->gisprompt = "old_file,file,font";
+    opt2->gisprompt = "old,font,file";
 
     opt3 = G_define_option();
     opt3->key = "charset";

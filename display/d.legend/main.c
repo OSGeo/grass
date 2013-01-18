@@ -167,12 +167,11 @@ int main(int argc, char **argv)
     opt_fontscale->description = _("Font scaling factor for floating point legends");
     opt_fontscale->guisection = _("Font settings");
 
-    opt_path = G_define_option();
+    opt_path = G_define_standard_option(G_OPT_F_INPUT);
     opt_path->key = "path";
-    opt_path->type = TYPE_STRING;
     opt_path->required = NO;
     opt_path->description = _("Path to font file");
-    opt_path->gisprompt = "old_file,file,font";
+    opt_path->gisprompt = "old_file,font,file";
     opt_path->guisection = _("Font settings");
 
     opt_charset = G_define_option();

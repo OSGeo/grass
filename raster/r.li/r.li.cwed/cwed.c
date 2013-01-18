@@ -51,20 +51,16 @@ int main(int argc, char *argv[])
 
     raster = G_define_standard_option(G_OPT_R_INPUT);
 
-    conf = G_define_option();
+    conf = G_define_standard_option(G_OPT_F_INPUT);
     conf->key = "config";
     conf->description = _("Configuration file");
-    conf->type = TYPE_STRING;
     conf->required = YES;
-    conf->gisprompt = "old_file,file,input";
 
-    path = G_define_option();
+    path = G_define_standard_option(G_OPT_F_INPUT);
     path->key = "path";
     path->description =
-	"Input file that contains the weight to calculate the index";
-    path->type = TYPE_STRING;
+        _("Name of file that contains the weight to calculate the index");
     path->required = YES;
-    path->gisprompt = "old_file,file,input";
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 

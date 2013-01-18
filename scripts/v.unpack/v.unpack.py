@@ -18,12 +18,9 @@
 #% description: Unpacks a vector map packed with r.pack.
 #% keywords: vector, import, copying
 #%end
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,file,input
+#%option G_OPT_F_INPUT
+#% gisprompt: old,bin,file
 #% description: Name of input pack file
-#% key_desc: path
 #% required : yes
 #%end
 #%option

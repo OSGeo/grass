@@ -71,12 +71,9 @@ int main(int argc, char *argv[])
     exag_opt->answer = "1.0";
     exag_opt->description = _("Vertical exaggeration");
 
-    out = G_define_option();
-    out->key = "output";
-    out->type = TYPE_STRING;
+    out = G_define_standard_option(G_OPT_F_OUTPUT);
     out->required = YES;
-    out->gisprompt = "new_file,file,output";
-    out->description = _("Name for new VRML file");
+    out->description = _("Name for output VRML file");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

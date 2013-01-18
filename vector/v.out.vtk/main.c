@@ -51,13 +51,9 @@ int main(int argc, char *argv[])
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
-    output = G_define_option();
-    output->key = "output";
-    output->type = TYPE_STRING;
+    output = G_define_standard_option(G_OPT_F_OUTPUT);
     output->required = NO;
-    output->multiple = NO;
-    output->gisprompt = "new_file,file,output";
-    output->description = _("Path to resulting VTK file");
+    output->description = _("Name for output VTK file");
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->answer = "point,kernel,centroid,line,boundary,area,face";

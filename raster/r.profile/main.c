@@ -54,12 +54,9 @@ int main(int argc, char *argv[])
 
     parm.opt1 = G_define_standard_option(G_OPT_R_INPUT);
 
-    parm.output = G_define_option();
-    parm.output->key = "output";
-    parm.output->type = TYPE_STRING;
+    parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.output->required = NO;
     parm.output->answer = "-";
-    parm.output->gisprompt = "new_file,file,output";
     parm.output->description =
 	_("Name of file for output (use output=- for stdout)");
 

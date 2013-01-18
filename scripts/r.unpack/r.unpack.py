@@ -21,7 +21,7 @@
 #%end
 #%option G_OPT_F_INPUT
 #% description: Name of input pack file
-#% gisprompt: old,file,bin_input
+#% gisprompt: old,bin,file
 #% key_desc: name.pack
 #%end
 #%option G_OPT_R_OUTPUT

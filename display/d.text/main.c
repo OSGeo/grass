@@ -218,12 +218,11 @@ int main(int argc, char **argv)
     opt.font->required = NO;
     opt.font->description = _("Font name");
 
-    opt.path = G_define_option();
+    opt.path = G_define_standard_option(G_OPT_F_INPUT);
     opt.path->key = "path";
-    opt.path->type = TYPE_STRING;
     opt.path->required = NO;
     opt.path->description = _("Path to font file");
-    opt.path->gisprompt = "old_file,file,font";
+    opt.path->gisprompt = "old,font,file";
 
     opt.charset = G_define_option();
     opt.charset->key = "charset";

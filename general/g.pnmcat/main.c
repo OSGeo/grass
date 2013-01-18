@@ -127,13 +127,9 @@ int main(int argc, char *argv[])
     opt.base->required = YES;
     opt.base->description = _("Base name of input files");
 
-    opt.out = G_define_option();
-    opt.out->key = "output";
-    opt.out->type = TYPE_STRING;
+    opt.out = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.out->required = YES;
-    opt.out->description = _("Name of output file");
-    opt.out->gisprompt = "new_file,file,output";
-
+    
     opt.rows = G_define_option();
     opt.rows->key = "rows";
     opt.rows->type = TYPE_INTEGER;
