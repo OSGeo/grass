@@ -1137,12 +1137,12 @@ class CmdPanel(wx.Panel):
                                               'dbtable',
                                               'dbcolumn',
                                               'layer',
-                                              'layer_all',
                                               'location',
                                               'mapset',
                                               'dbase',
-                                              'coords') and \
-                                              p.get('element', '') not in ('file', 'dir'):
+                                              'coords',
+                                              'file',
+                                              'dir'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
                         mapsets = [grass.gisenv()['MAPSET'],]
@@ -1273,7 +1273,6 @@ class CmdPanel(wx.Panel):
                                 'dbtable',
                                 'dbcolumn',
                                 'layer',
-                                'layer_all',
                                 'location',
                                 'mapset',
                                 'dbase'):
@@ -1284,8 +1283,8 @@ class CmdPanel(wx.Panel):
                     else:
                         value = self._getValue(p)
                         
-                        if prompt in ('layer', 'layer_all'):
-                            if prompt == 'layer_all':
+                        if prompt == 'layer':
+                            if p.get('element', 'layer') == 'layer_all':
                                 all = True
                             else:
                                 all = False
@@ -1401,7 +1400,7 @@ class CmdPanel(wx.Panel):
                     else:
                         p['wxId'].append(None)
                 # file selector
-                elif p.get('prompt','') !=  'color' and p.get('element', '') == 'file':
+                elif p.get('prompt','') !=  'color' and p.get('prompt', '') == 'file':
                     if p.get('age', 'new') == 'new':
                         fmode = wx.SAVE
                     else:
@@ -1433,7 +1432,7 @@ class CmdPanel(wx.Panel):
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
                     if p.get('age', 'new') == 'old' and \
-                            p.get('prompt', 'input') == 'input' and \
+                            p.get('prompt', '') == 'file' and \
                             UserSettings.Get(group = 'cmd', key = 'interactiveInput', subkey = 'enabled'):
                         # widget for interactive input
                         ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
@@ -1470,7 +1469,7 @@ class CmdPanel(wx.Panel):
                         p['wxId'].append(btnSave.GetId())
                 
                 # directory selector
-                elif p.get('prompt','') != 'color' and p.get('element', '') == 'dir':
+                elif p.get('prompt','') != 'color' and p.get('prompt', '') == 'dir':
                     fbb = filebrowse.DirBrowseButton(parent = which_panel, id = wx.ID_ANY,
                                                      size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
                                                      dialogTitle = _('Choose %s') % \
@@ -1579,7 +1578,7 @@ class CmdPanel(wx.Panel):
                 name = p.get('name', '')
                 if name in ('map', 'input'):
                     pMap = p
-            elif prompt in ('layer', 'layer_all'):
+            elif prompt == 'layer':
                 pLayer.append(p)
             elif prompt == 'dbcolumn':
                 pColumn.append(p)
