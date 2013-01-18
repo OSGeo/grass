@@ -1,9 +1,9 @@
 /*!
-  \file gis/nme_in_mps.c
+  \file lib/gis/nme_in_mps.c
 
   \brief GIS Library - check map name
 
-  (C) 2001-2009 by the GRASS Development Team
+  (C) 2001-2009, 2013 by the GRASS Development Team
 
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -123,25 +123,30 @@ char *G_fully_qualified_name(const char *name, const char *mapset)
    - <i>mapset, xmapset</i> are char array of size GMAPSET_MAX
 
   \param fullname map name
-  \param fullname map mapset
+  \param map mapset to check or NULL
   \param[out] name map name
   \param[out] mapset mapset name
 
   \return  1 if input map name is fully qualified
-  \return  0 if ...
-  \return -1 if input mapset invalid
+  \return  0 if name is not fully qualified
+  \return -1 if input mapset invalid (mapset != xmapset)
  */
 int G_unqualified_name(const char *name, const char *mapset,
 		       char *xname, char *xmapset)
 {
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
+        /* name is fully qualified */
 	if (mapset && *mapset && strcmp(mapset, xmapset) != 0)
 	    return -1;
 	return 1;
     }
 
+    /* name is not fully qualified */
     strcpy(xname, name);
-    strcpy(xmapset, mapset);
-
+    if (mapset)
+        strcpy(xmapset, mapset);
+    else
+        xmapset[0] = '\0';
+    
     return 0;
 }
