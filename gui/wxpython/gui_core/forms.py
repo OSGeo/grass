@@ -1129,7 +1129,6 @@ class CmdPanel(wx.Panel):
                 title_txt.SetLabel(title + ':')
                 # GIS element entry
                 if p.get('prompt','') not in ('color',
-                                              'color_none',
                                               'subgroup',
                                               'sigfile',
                                               'dbdriver',
@@ -1365,15 +1364,14 @@ class CmdPanel(wx.Panel):
                     which_sizer.Add(item = win, proportion = 0,
                                     flag = flags, border = 5)
                 # color entry
-                elif prompt in ('color',
-                                'color_none'):
+                elif prompt == 'color':
                     default_color = (200,200,200)
                     label_color = _("Select Color")
                     if p.get('default','') !=  '':
                         default_color, label_color = utils.color_resolve(p['default'])
                     if p.get('value','') !=  '' and p.get('value','') != 'none': # parameter previously set
                         default_color, label_color = utils.color_resolve(p['value'])
-                    if prompt == 'color_none':
+                    if p.get('element', '') == 'color_none':
                         this_sizer = wx.BoxSizer(orient = wx.HORIZONTAL)
                     else:
                         this_sizer = which_sizer
@@ -1386,7 +1384,7 @@ class CmdPanel(wx.Panel):
                     # the selector proper and either a "transparent" button or None
                     p['wxId'] = [btn_colour.GetId(),]
                     btn_colour.Bind(csel.EVT_COLOURSELECT,  self.OnColorChange)
-                    if prompt == 'color_none':
+                    if p.get('element', '') == 'color_none':
                         none_check = wx.CheckBox(which_panel, wx.ID_ANY, _("Transparent"))
                         if p.get('value','')  == "none":
                             none_check.SetValue(True)
@@ -1432,7 +1430,7 @@ class CmdPanel(wx.Panel):
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
                     if p.get('age', 'new') == 'old' and \
-                            p.get('prompt', '') == 'file' and \
+                            p.get('prompt', '') == 'file' and p.get('element', '') == 'file' and \
                             UserSettings.Get(group = 'cmd', key = 'interactiveInput', subkey = 'enabled'):
                         # widget for interactive input
                         ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
