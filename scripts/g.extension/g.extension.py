@@ -605,7 +605,7 @@ def install_extension_xml(url, mlist):
 
     if not data:
         grass.warning(_("No metadata available"))
-        return
+        return []
 
     fXML = os.path.join(options['prefix'], 'modules.xml')
     # create an empty file if not exists
