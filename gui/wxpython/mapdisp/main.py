@@ -90,14 +90,16 @@ class DMonMap(Map):
             for line in fd.readlines():
                 cmd = utils.split(line.strip())
                 ltype = None
-                if cmd[0] == 'd.rast':
-                    ltype = 'raster'
-                elif cmd[0] == 'd.vect':
-                    ltype = 'vector'
-                
+
+                try:
+                    ltype = utils.command2ltype[cmd[0]]
+                except KeyError:
+                    grass.warning(_("Unsupported command %s.") % cmd[0])
+                    continue
+
                 name = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
                                                  layerType = ltype)[0]
-                
+
                 self.AddLayer(ltype = ltype, command = cmd, active = False, name = name)
                 nlayers += 1
         except IOError, e:

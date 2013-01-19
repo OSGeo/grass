@@ -42,7 +42,7 @@ from grass.script          import core as grass
 
 from core.gcmd             import RunCommand, GError, GMessage, GException
 from core.settings         import UserSettings, GetDisplayVectSettings
-from core.utils            import SetAddOnPath, GetLayerNameFromCmd
+from core.utils            import SetAddOnPath, GetLayerNameFromCmd, command2ltype
 from core.events           import EVT_SHOW_NOTIFICATION, EVT_MAP_CREATED
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
@@ -594,25 +594,7 @@ class GMFrame(wx.Frame):
             self.NewDisplay(show = True)
         try:
             # display GRASS commands
-            layertype = {'d.rast'         : 'raster',
-                         'd.rast3d'       : '3d-raster',
-                         'd.rgb'          : 'rgb',
-                         'd.his'          : 'his',
-                         'd.shaded'       : 'shaded',
-                         'd.legend'       : 'rastleg',
-                         'd.rast.arrow'   : 'rastarrow',
-                         'd.rast.num'     : 'rastnum',
-                         'd.rast.leg'     : 'maplegend',
-                         'd.vect'         : 'vector',
-                         'd.thematic.area': 'thememap',
-                         'd.vect.chart'   : 'themechart',
-                         'd.grid'         : 'grid',
-                         'd.geodesic'     : 'geodesic',
-                         'd.rhumbline'    : 'rhumb',
-                         'd.labels'       : 'labels',
-                         'd.barscale'     : 'barscale',
-                         'd.redraw'       : 'redraw',
-                         'd.wms'          : 'wms'}[command[0]]
+            layertype = command2ltype[command[0]]
         except KeyError:
             GMessage(parent = self,
                      message = _("Command '%s' not yet implemented in the WxGUI. "

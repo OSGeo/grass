@@ -909,6 +909,34 @@ def color_resolve(color):
             label = _('Select Color')
     return (rgb, label)
 
+command2ltype = {'d.rast'         : 'raster',
+                 'd.rast3d'       : '3d-raster',
+                 'd.rgb'          : 'rgb',
+                 'd.his'          : 'his',
+                 'd.shadedmap'    : 'shaded',
+                 'd.legend'       : 'rastleg',
+                 'd.rast.arrow'   : 'rastarrow',
+                 'd.rast.num'     : 'rastnum',
+                 'd.rast.leg'     : 'maplegend',
+                 'd.vect'         : 'vector',
+                 'd.thematic.area': 'thememap',
+                 'd.vect.chart'   : 'themechart',
+                 'd.grid'         : 'grid',
+                 'd.geodesic'     : 'geodesic',
+                 'd.rhumbline'    : 'rhumb',
+                 'd.labels'       : 'labels',
+                 'd.barscale'     : 'barscale',
+                 'd.redraw'       : 'redraw',
+                 'd.wms'          : 'wms',
+                 'd.histogram'    : 'histogram',
+                 'd.colortable'   : 'colortable',
+                 'd.graph'        : 'graph'
+                 }
+ltype2command = {}
+for (cmd, ltype) in command2ltype.items():
+    ltype2command[ltype] = cmd
+
+
 def GetGEventAttribsForHandler(method, event):
     """!Get attributes from event, which can be used by handler method. 
 
