@@ -9,7 +9,7 @@ Classes:
  - extensions::UninstallExtensionWindow
  - extensions::CheckListExtension
 
-(C) 2008-2012 by the GRASS Development Team
+(C) 2008-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -139,7 +139,7 @@ class InstallExtensionWindow(wx.Frame):
         self.repoBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label = " %s " % _("Repository"))
         self.treeBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                    label = " %s " % _("List of extensions"))
+                                    label = " %s " % _("List of extensions - double-click to install"))
         
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
         self.fullDesc = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
@@ -189,14 +189,10 @@ class InstallExtensionWindow(wx.Frame):
                                     label = _("&Install"))
         self.btnInstall.SetToolTipString(_("Install selected add-ons GRASS module"))
         self.btnInstall.Enable(False)
-        self.btnCmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                label = _("Command dialog"))
-        self.btnCmd.SetToolTipString(_('Open %s dialog') % 'g.extension')
-
+        
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
         self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
-        self.btnCmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
         self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
         self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
@@ -235,9 +231,6 @@ class InstallExtensionWindow(wx.Frame):
             optionSizer.Add(item = self.options[key], proportion = 0)
         
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = self.btnCmd, proportion = 0,
-                     flag = wx.RIGHT, border = 5)
-        btnSizer.AddSpacer(10)
         btnSizer.Add(item = self.btnClose, proportion = 0,
                      flag = wx.RIGHT, border = 5)
         btnSizer.Add(item = self.btnInstall, proportion = 0)
@@ -349,10 +342,6 @@ class InstallExtensionWindow(wx.Frame):
         else:
             self.btnInstall.Enable(False)
 
-    def OnCmdDialog(self, event):
-        """!Shows command dialog"""
-        GUI(parent = self).ParseCommand(cmd = self._getCmd())
-        
 class ExtensionTree(ItemTree):
     """!List of available extensions"""
     def __init__(self, parent, log, id = wx.ID_ANY,
@@ -517,13 +506,9 @@ class UninstallExtensionWindow(wx.Frame):
         self.btnUninstall = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                     label = _("&Uninstall"))
         self.btnUninstall.SetToolTipString(_("Uninstall selected AddOns extensions"))
-        self.btnCmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                label = _("Command dialog"))
-        self.btnCmd.SetToolTipString(_('Open %s dialog') % 'g.extension')
         self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         
         self.btnUninstall.Bind(wx.EVT_BUTTON, self.OnUninstall)
-        self.btnCmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
         
         self._layout()
@@ -537,9 +522,6 @@ class UninstallExtensionWindow(wx.Frame):
                      flag = wx.ALL | wx.EXPAND, border = 1)
         
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = self.btnCmd, proportion = 0,
-                     flag = wx.RIGHT, border = 5)
-        btnSizer.AddSpacer(10)
         btnSizer.Add(item = self.btnClose, proportion = 0,
                      flag = wx.RIGHT, border = 5)
         btnSizer.Add(item = self.btnUninstall, proportion = 0)
@@ -589,10 +571,6 @@ class UninstallExtensionWindow(wx.Frame):
         log = self.parent.GetLogWindow()
         log.GetPrompt().SetFilter(None)
         
-    def OnCmdDialog(self, event):
-        """!Shows command dialog"""
-        GUI(parent = self).ParseCommand(cmd = ['g.extension'])
-
 class CheckListExtension(GListCtrl):
     """!List of mapset/owner/group"""
     def __init__(self, parent):
