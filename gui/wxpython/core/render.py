@@ -126,11 +126,7 @@ class Layer(object):
                        (self.type, self.name))
         
         # prepare command for each layer
-        layertypes = ('raster', 'rgb', 'his', 'shaded', 'rastarrow', 'rastnum',
-                      'vector','thememap','themechart',
-                      'grid', 'geodesic', 'rhumb', 'labels',
-                      'command', 'rastleg','maplegend',
-                      'overlay', 'wms')
+        layertypes = utils.command2ltype.values() + ['overlay', 'command']
         
         if self.type not in layertypes:
             raise GException(_("<%(name)s>: layer type <%(type)s> is not supported") % \
@@ -257,11 +253,7 @@ class Layer(object):
     
     def SetType(self, ltype):
         """!Set layer type"""
-        if ltype not in ('raster', '3d-raster', 'vector',
-                        'overlay', 'command',
-                        'shaded', 'rgb', 'his', 'rastarrow', 'rastnum','maplegend',
-                        'thememap', 'themechart', 'grid', 'labels',
-                        'geodesic','rhumb', 'wms'):
+        if ltype not in utils.command2ltype.values() + ['overlay', 'command']:
             raise GException(_("Unsupported map layer type '%s'") % ltype)
         
         if ltype == 'wms' and not isinstance(self.renderMgr, RenderWMSMgr):

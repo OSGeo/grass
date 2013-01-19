@@ -35,7 +35,7 @@ from gui_core.forms       import GUI
 from mapdisp.frame        import MapFrame
 from core.render          import Map
 from modules.histogram    import HistogramFrame
-from core.utils           import GetLayerNameFromCmd
+from core.utils           import GetLayerNameFromCmd, ltype2command
 from wxplot.profile       import ProfileFrame
 from core.debug           import Debug
 from core.settings        import UserSettings, GetDisplayVectSettings
@@ -1077,56 +1077,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                 completed = (self.GetOptData,layer,params))
             
             self.SetLayerInfo(layer, key = 'cmd', value = module.GetCmd())
-        elif ltype == 'raster':
-            cmd = ['d.rast']
-            if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
-                cmd.append('-n')
-                         
-        elif ltype == '3d-raster':
-            cmd = ['d.rast3d']
-                                        
-        elif ltype == 'rgb':
-            cmd = ['d.rgb']
-            if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
-                cmd.append('-n')
-            
-        elif ltype == 'his':
-            cmd = ['d.his']
-            
-        elif ltype == 'shaded':
-            cmd = ['d.shadedmap']
-            
-        elif ltype == 'rastarrow':
-            cmd = ['d.rast.arrow']
-            
-        elif ltype == 'rastnum':
-            cmd = ['d.rast.num']
-            
-        elif ltype == 'vector':
-            cmd = ['d.vect'] + GetDisplayVectSettings()
-            
-        elif ltype == 'thememap':
+        else:
+            cmd = [ltype2command[ltype]]
+            if ltype == 'raster':
+                if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
+                    cmd.append('-n')
+            elif ltype == 'rgb':
+                if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
+                    cmd.append('-n')
+            elif ltype == 'vector':
+                cmd.append(GetDisplayVectSettings())
+
+            # ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed
             # should be fixed by C-based d.thematic.* modules
-            cmd = ['d.thematic.area']
             
-        elif ltype == 'themechart':
-            cmd = ['d.vect.chart']
-            
-        elif ltype == 'grid':
-            cmd = ['d.grid']
-            
-        elif ltype == 'geodesic':
-            cmd = ['d.geodesic']
-            
-        elif ltype == 'rhumb':
-            cmd = ['d.rhumbline']
-            
-        elif ltype == 'labels':
-            cmd = ['d.labels']
-
-        elif ltype == 'wms':
-            cmd = ['d.wms']
 
         if cmd:
             GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
