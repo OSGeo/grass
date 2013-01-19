@@ -574,8 +574,12 @@ int Vect_build(struct Map_info *Map)
 /*!
    \brief Extensive tests for correct topology
 
+   - lines or boundaries of zero length
+   - intersecting boundaries, ie. overlapping areas
+   - areas without centroids that are not isles
+
    \param Map vector map
-   \param[out] Err vector map where errors will be written
+   \param[out] Err vector map where errors will be written or NULL
 
    \return 1 on success
    \return 0 on error
@@ -587,6 +591,7 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
     struct line_pnts *Points;
     struct line_cats *Cats;
 
+    /* rebuild topology if needed */
     if (Vect_get_built(Map) != GV_BUILD_ALL) {
 	Vect_build_partial(Map, GV_BUILD_NONE);
 	Vect_build(Map);
@@ -597,12 +602,12 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    /* boundaries of zero length */
+    /* lines or boundaries of zero length */
     n_zero_lines = n_zero_boundaries = 0;
     nlines = Vect_get_num_lines(Map);
     for (line = 1; line <= nlines; line++) {
 	int type;
-	
+
 	if (!Vect_line_alive(Map, line))
 	    continue;
 	    
@@ -625,6 +630,7 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
 	    }
 	}
     }
+    
     if (n_zero_lines)
 	G_warning(_("Number of lines of length zero: %d"), n_zero_lines);
     if (n_zero_boundaries)
@@ -639,7 +645,7 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
     if (nerrors)
 	G_warning(_("Number of boundary intersections: %d"), nerrors);
 
-    /* areas without centroids that are not holes
+    /* areas without centroids that are not isles
      * only makes sense if all boundaries are correct */
     nerrors = 0;
     for (line = 1; line <= nlines; line++) {
