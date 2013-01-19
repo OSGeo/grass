@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     opt->multiple = YES;
     opt->answer = "build";
     opt->description =
-	_("Build topology or dump topology or spatial index to stdout");
+	_("Build topology or dump topology or indeces to standard output");
     opt_desc = NULL;
     G_asprintf(&opt_desc,
 	       "build;%s;dump;%s;sdump;%s;cdump;%s;fdump;%s",
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 	       _("write topology to stdout"),
 	       _("write spatial index to stdout"),
 	       _("write category index to stdout"),
-	       _("write feature index to stdout (non-native formats only)"));
+	       _("write feature index to stdout (OGR simple-feature-based formats only)"));
     opt->descriptions = opt_desc;
     opt->required = YES;
     

@@ -23,6 +23,51 @@ the user's current mapset. It's not possible to rebuild support files
 In case of errors, the user can optionally generate an <b>error</b>
 vector map containing the erroneous vectors for later inspection.
 
+<p>
+If <b>error</b> vector map is specified, <em>v.build</em> checks:
+
+<ul>
+  <li>isolated bondaries (which are not forming any areas),</li>
+  <li>centroids outside of area,</li>
+  <li>duplicated centroids.</li>
+</ul>
+
+<p>
+Extensive checks for topological errors (flag <b>-e</b>) also
+includes:
+
+<ul>
+  <li>lines or boundaries of zero length,</li>
+  <li>intersecting boundaries, ie. overlapping areas,</li>
+  <li>areas without centroids that are not isles.</li>
+</ul>
+
+<h2>EXAMPLES</h2>
+
+<h3>Build topology</h3>
+
+Note that <b>option=build</b> recreates also spatial and category
+indeces, not only topology. For linked OGR layers
+(see <em><a href="v.external.html">v.external</a></em>) also feature
+index is created.
+
+<div class="code"><pre>
+v.build map=urbanareas option=build
+</pre></div>
+
+Note that the vector map <i>urbanarea</i> must be located in the
+current mapset.
+
+<h3>Dump topology or indeces</h3>
+
+Dump options print topology, spatial, category or feature index to
+standard output. Such information can be printed also for vector maps
+from other mapsets.
+
+<div class="code"><pre>
+v.build map=urbanareas@PERMANENT option=dump
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -32,11 +77,9 @@ vector map containing the erroneous vectors for later inspection.
 
 <h2>AUTHORS</h2>
 
-Dave Gerdes, U.S.Army Construction Engineering 
-Research Laboratory,<br>
-Michael Higgins,
-U.S.Army Construction Engineering 
-Research Laboratory,<br>
+Dave Gerdes, U.S.Army Construction Engineering Research
+Laboratory,<br>
+Michael Higgins, U.S.Army Construction Engineering Research Laboratory,<br>
 Radim Blazek, ITC-irst, Trento, Italy
 
 <p>
