@@ -193,12 +193,16 @@ class Columns(object):
             cur = self.conn.cursor()
             cur.execute("SELECT oid,typname FROM pg_type")
             diz = dict(cur.fetchall())
-            cur.execute(sql.SELECT.format(cols='*', tname=self.tname))
-            descr = cur.description
             odict = OrderedDict()
-            for column in descr:
-                name, ctype = column[:2]
-                odict[name] = diz[ctype]
+            import psycopg2 as pg
+            try:
+                cur.execute(sql.SELECT.format(cols='*', tname=self.tname))
+                descr = cur.description
+                for column in descr:
+                    name, ctype = column[:2]
+                    odict[name] = diz[ctype]
+            except pg.ProgrammingError:
+                pass
             self.odict = odict
         else:
             # is a sqlite connection
@@ -851,6 +855,8 @@ class Table(object):
         try:
             sqlc = sql_code if sql_code else self.filters.get_sql()
             cur = self.conn.cursor()
+            #if hasattr(self.cur, 'executescript'):
+            #    return cur.executescript(sqlc)
             return cur.execute(sqlc)
         except:
             raise ValueError("The SQL is not correct:\n%r" % sqlc)
@@ -865,5 +871,4 @@ class Table(object):
         cur = self.conn.cursor()
         vals = list(values)
         vals.append(key)
-        print self.columns.update_str, vals
         return cur.execute(self.columns.update_str, vals)
