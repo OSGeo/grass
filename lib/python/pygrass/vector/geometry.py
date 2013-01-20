@@ -1004,6 +1004,19 @@ class Boundary(Line):
                                     left, right)
         return left.contents.value, right.contents.value
 
+    def area(self):
+        """Return the area of the polygon.
+        ::
+            >>> bound = Boundary([(0, 0), (0, 2), (2, 2), (2, 0), (0, 0)])
+            >>> bound.area()
+            4
+
+        .."""
+        libgis.G_begin_polygon_area_calculations()
+        return libgis.G_area_of_polygon(self.c_points.contents.x,
+                                        self.c_points.contents.y,
+                                        self.c_points.contents.n_points)
+
 
 class Centroid(Point):
     """The Centroid class inherit from the Point class.
