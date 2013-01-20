@@ -148,7 +148,10 @@ int G_begin_polygon_area_calculations(void)
  * planimetric grids.  If the units for <i>x,y</i> are meters, then
  * the area is in square meters.  If the units are feet, then the area
  * is in square feet, and so on.
- * 
+ *
+ * You should call G_begin_polygon_area_calculations() function before
+ * calling this function.
+ *
  * <b>Note:</b> If the database is planimetric with the non-meter grid, 
  * this routine performs the required unit conversion to produce square 
  * meters.
