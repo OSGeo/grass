@@ -221,21 +221,41 @@ class Info(object):
         return (self.c_mapinfo.contents.open != 0 and
                 self.c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE)
 
-    def open(self, mode='r', layer='0', overwrite=None,
+    def open(self, mode='r', layer=1, overwrite=None,
              # parameters valid only if mode == 'w'
-             tab_name='', tab_cols=None,
-             link_layer=1, link_name=None, link_key='cat',
-             link_db='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
+             tab_name='', tab_cols=None, link_name=None, link_key='cat',
+             link_db='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
              link_driver='sqlite'):
-        """::
+        """Open a Vector map.
 
-            >>> mun = Info('boundary_municp_sqlite')
-            >>> mun.open()
-            >>> mun.is_open()
-            True
-            >>> mun.close()
+         Parameters
+        ----------
+        mode : string
+            Open a vector map in ``r`` in reading, ``w`` in writing and
+            in ``rw`` read and write mode
+        layer: int, optional
+            Specify the layer that you want to use
 
-        ..
+        Some parameters are valid only if we open use the writing mode (``w``)
+
+        overwrite: bool, optional
+            valid only for ``w`` mode
+        tab_name: string, optional
+            Define the name of the table that will be generate
+        tab_cols: list of pairs, optional
+            Define the name and type of the columns of the attribute table
+            of the vecto map
+        link_name: string, optional
+            Define the name of the link connecttion with the database
+        link_key: string, optional
+            Define the nema of the column that will be use as vector category
+        link_db: string, optional
+            Define the database connection parameters
+        link_driver: string, optional
+            Define witch database driver will be used
+
+        See more examples in the documentation of the ``read`` and ``write``
+        methods.
         """
         # check if map exists or not
         if not self.exist() and mode != 'w':
@@ -253,15 +273,14 @@ class Info(object):
             # open in READ mode
             if mode == 'r':
                 openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
-                                                  self.mapset, layer)
+                                                  self.mapset, str(layer))
             # open in READ and WRITE mode
             elif mode == 'rw':
                 openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
-                                                     self.mapset, layer)
+                                                     self.mapset, str(layer))
 
             # instantiate class attributes
             self.dblinks = DBlinks(self.c_mapinfo)
-
 
         # If it is opened in write mode
         if mode == 'w':
@@ -270,7 +289,7 @@ class Info(object):
             self.dblinks = DBlinks(self.c_mapinfo)
             if tab_cols:
                 # create a link
-                link = Link(link_layer,
+                link = Link(layer,
                             link_name if link_name else self.name,
                             tab_name if tab_name else self.name,
                             link_key, link_db, link_driver)
@@ -287,7 +306,7 @@ class Info(object):
             raise OpenError(str_err % openvect)
 
         if len(self.dblinks) == 0:
-            self.layer = 1
+            self.layer = layer
             self.table = None
             self.n_lines = 0
         else:
@@ -307,7 +326,7 @@ class Info(object):
             return self.dblinks[0].table()
 
     def close(self):
-        if self.table is not None:
+        if hasattr(self, 'table') and self.table is not None:
             self.table.conn.close()
         if self.is_open():
             if libvect.Vect_close(self.c_mapinfo) != 0:
