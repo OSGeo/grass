@@ -202,7 +202,9 @@ class InstallExtensionWindow(wx.Frame):
         # propagation stops here, no need to show text twice
         self.Bind(EVT_SHOW_NOTIFICATION,
                   lambda event: self.SetStatusText(event.message))
-
+        
+        wx.CallAfter(self._fetch)
+        
         self._layout()
 
     def _layout(self):
@@ -295,6 +297,10 @@ class InstallExtensionWindow(wx.Frame):
         self.Destroy()
 
     def OnFetch(self, event):
+        """!Fetch list of available extensions"""
+        self._fetch()
+
+    def _fetch(self):
         """!Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
