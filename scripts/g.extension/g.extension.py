@@ -572,7 +572,12 @@ def install_extension_xml(url, mlist):
     bList = []
     try:
         f = urlopen(url)
-        tree = etree.fromstring(f.read())
+        try:
+            tree = etree.fromstring(f.read())
+        except:
+            grass.warning(_("Unable to parse '%s'. Metadata file not updated.") % url)
+            return bList
+
         for mnode in tree.findall('task'):
             name = mnode.get('name')
             if name not in mlist:
