@@ -10,7 +10,8 @@ features
 Feature Access</a> specification for details). Flag <b>-l</b> allows
 to export vector features as topological elements stored
 in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
-Topology</a> schema.
+Topology</a> schema. Note that topological export requires PostGIS
+version 2 or later.
 
 <p>
 Additional creation options can be defined by <b>options</b> parameter:
@@ -215,6 +216,12 @@ page</a>.
   <li>Multi-feature export</li>
   <li>Allow mixed features (points, lines) - use
   GeometryCollection</li>
+</ul>
+
+<h2>REQUIREMENTS</h2>
+
+<ul>
+  <li>PostGIS 2.x or later for topological export (flag <b>-l</b>)
 </ul>
 
 <h2>REFERENCES</h2>
