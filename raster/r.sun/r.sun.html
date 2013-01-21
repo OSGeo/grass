@@ -86,7 +86,8 @@ is near the annual average for rural-city areas. The Linke
 factor for an absolutely clear atmosphere is <i>lin</i>=1.0. See notes below
 to learn more about this factor. The incidence solar angle is the angle between
 horizon and solar beam vector. 
-<p>The solar radiation maps for a given day are computed by integrating the
+<p>
+The solar radiation maps for a given day are computed by integrating the
 relevant irradiance between sunrise and sunset times for that day. The
 user can set a finer or coarser time step used for all-day radiation
 calculations with the <i>step</i> option. The default value of <i>step</i> is
@@ -144,7 +145,7 @@ reclassified into coarser categories. This could lead to incorrect results.
 <p>Currently, there are two modes of r.sun.
 In the first mode it calculates solar incidence angle and solar irradiance
 raster maps using the set local time. In the second mode daily sums of solar
-irradiation [Wh.m-2.day-1] are computed for a specified day. 
+irradiation [Wh.m-2.day-1] are computed for a specified day.
 
 <h2>NOTES</h2>
 
@@ -153,7 +154,8 @@ energy industry, landscape, vegetation, evapotranspiration, snowmelt or remote
 sensing. Solar rays incidence angle maps can be effectively used in radiometric
 and topographic corrections in mountainous and hilly terrain where very accurate
 investigations should be performed. 
-<p>The clear-sky solar radiation model applied in the r.sun is based on the
+<p>
+The clear-sky solar radiation model applied in the r.sun is based on the
 work undertaken for development of European Solar Radiation Atlas (Scharmer 
 and Greif 2000, Page et al. 2001, Rigollier 2001). The clear sky model estimates
 the global radiation from the sum of its beam, diffuse and reflected components.
@@ -163,11 +165,13 @@ this component is often the largest source of estimation error. Taking into
 consideration the existing models and their limitation the European Solar
 Radiation Atlas team selected the Muneer (1990) model as it has a sound theoretical
 basis and thus more potential for later improvement. 
-<p>Details of underlying equations used in this program can be found in the
+<p>
+Details of underlying equations used in this program can be found in the
 reference literature cited below or book published by Neteler and Mitasova: 
 Open Source GIS: A GRASS GIS Approach (published in Kluwer Academic Publishers 
 in 2002). 
-<p>Average monthly values of the Linke turbidity coefficient for a mild climate
+<p>
+Average monthly values of the Linke turbidity coefficient for a mild climate
 in the northern hemisphere (see reference literature for your study area):
 
 <table border="1">
@@ -289,44 +293,58 @@ d.rast.leg it172
 
 <h2>REFERENCES</h2>
 
-Hofierka, J., Suri, M. (2002): The solar radiation model for Open source
-GIS: implementation and applications. Manuscript submitted to the International
-GRASS users conference in Trento, Italy, September 2002. 
-<p>Hofierka, J. (1997). Direct solar radiation modelling within an open GIS
+<ul>
+<li> Hofierka, J., Suri, M. (2002): The solar radiation model for Open source
+GIS: implementation and applications. International
+GRASS users conference in Trento, Italy, September 2002.
+(<a href="http://skagit.meas.ncsu.edu/~jaroslav/trento/Hofierka_Jaroslav.pdf">PDF</a>)
+<li>
+Hofierka, J. (1997). Direct solar radiation modelling within an open GIS
 environment. Proceedings of JEC-GI'97 conference in Vienna, Austria, IOS
 Press Amsterdam, 575-584. 
-<p>Jenco, M. (1992). Distribution of direct solar radiation on georelief and
+<li>
+Jenco, M. (1992). Distribution of direct solar radiation on georelief and
 its modelling by means of complex digital model of terrain (in Slovak). Geograficky
 casopis, 44, 342-355. 
-<p>Kasten, F. (1996). The Linke turbidity factor based on improved values of
+<li>
+Kasten, F. (1996). The Linke turbidity factor based on improved values of
 the integral Rayleigh optical thickness. Solar Energy, 56 (3), 239-244. 
-<p>Kasten, F., Young, A. T. (1989). Revised optical air mass tables and approximation
+<li>
+Kasten, F., Young, A. T. (1989). Revised optical air mass tables and approximation
 formula. Applied Optics, 28, 4735-4738. 
-<p>Kittler, R., Mikler, J. (1986): Basis of the utilization of solar radiation 
+<li>
+Kittler, R., Mikler, J. (1986): Basis of the utilization of solar radiation 
 (in Slovak). VEDA, Bratislava, p. 150. 
-<p>Krcho, J. (1990). Morfometrická analza a digitálne modely georeliéfu
-(Morphometric analysis and digital models of georelief). VEDA,
-Bratislava (in Slovak). 
-<p>Muneer, T. (1990). Solar radiation model for Europe. Building services engineering
+<li>
+Krcho, J. (1990). Morfometrick&aacute; analza a digit&aacute;lne modely georeli&eacute;fu
+(Morphometric analysis and digital models of georelief, in Slovak).
+VEDA, Bratislava.
+<li>
+Muneer, T. (1990). Solar radiation model for Europe. Building services engineering
 research and technology, 11, 4, 153-163. 
-<p>Neteler, M., Mitasova, H. (2002): Open Source GIS: A GRASS GIS Approach, Kluwer
-Academic Publishers/Springer. 
-<p>Page, J. ed. (1986). Prediction of solar radiation on inclined surfaces. Solar
-energy R&amp;D in the European Community, series F -- Solar radiation data,
+<li>
+Neteler, M., Mitasova, H. (2002): Open Source GIS: A GRASS GIS Approach, Kluwer
+Academic Publishers. (Appendix explains formula;
+<a href="http://www.grassbook.org/">r.sun script download</a>)
+<li>
+Page, J. ed. (1986). Prediction of solar radiation on inclined surfaces. Solar
+energy R&amp;D in the European Community, series F &#8211; Solar radiation data,
 Dordrecht (D. Reidel), 3, 71, 81-83. 
-<p>Page, J., Albuisson, M., Wald, L. (2001). The European solar radiation atlas:
+<li>
+Page, J., Albuisson, M., Wald, L. (2001). The European solar radiation atlas:
 a valuable digital tool. Solar Energy, 71, 81-83. 
-<p>Rigollier, Ch., Bauer, O., Wald, L. (2000). On the clear sky model of the
+<li>
+Rigollier, Ch., Bauer, O., Wald, L. (2000). On the clear sky model of the
 ESRA - European Solar radiation Atlas - with respect to the Heliosat method.
 Solar energy, 68, 33-48. 
-<p>Scharmer, K., Greif, J., eds., (2000). The European solar radiation atlas,
-Vol. 2: Database and exploitation software. Paris (Les Presses de l'École
-des Mines). 
-<p>Suri, M., Hofierka, J. (2004): A new GIS-based solar radiation model and its
-application to photovoltaic assessments. Transactions in GIS 8, pp. 175-190.
-
-<p>Joint Research Centre: <a href="http://re.jrc.ec.europa.eu/pvgis/">GIS solar radiation database for Europe</a> and
+<li>
+Scharmer, K., Greif, J., eds., (2000). The European solar radiation atlas,
+Vol. 2: Database and exploitation software. Paris (Les Presses de l&#8217; &Eacute;cole
+des Mines).
+<li>
+Joint Research Centre: <a href="http://re.jrc.ec.europa.eu/pvgis/">GIS solar radiation database for Europe</a> and 
 <a href="http://re.jrc.ec.europa.eu/pvgis/solres/solmod3.htm">Solar radiation and GIS</a>
+</ul>
 
 <h2>AUTHORS</h2>
 
@@ -336,9 +354,9 @@ Marcel Suri, GeoModel, s.r.o. Bratislava, Slovakia <br>
 
 Thomas Huld, JRC, Italy <br>
 
-&copy; 2007, Jaroslav Hofierka, Marcel Suri 
+&copy; 2007, Jaroslav Hofierka, Marcel Suri. This program is free software under the GNU General Public License (&gt;=v2)
 <address>
-<a href="MAILTO:hofi@geomodel.sk">hofierka@geomodel.sk</a>
+<a href="MAILTO:hofierka@geomodel.sk">hofierka@geomodel.sk</a>
 <a href="MAILTO:suri@geomodel.sk">suri@geomodel.sk</a>
 </address>
 
