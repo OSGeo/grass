@@ -142,10 +142,7 @@ class InstallExtensionWindow(wx.Frame):
                                     label = " %s " % _("List of extensions - double-click to install"))
         
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
-        self.fullDesc = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
-                                    label = _("Fetch full info including description and keywords"))
-        self.fullDesc.SetValue(True)
-
+        
         self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
         
         self.modulesData = ExtensionModulesData(modulesDesc = self.tree.GetModules())
@@ -218,7 +215,6 @@ class InstallExtensionWindow(wx.Frame):
                       flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
         repoSizer.Add(item = repo1Sizer,
                       flag = wx.EXPAND)
-        repoSizer.Add(item = self.fullDesc)
         
         findSizer = wx.BoxSizer(wx.HORIZONTAL)
         findSizer.Add(item = self.search, proportion = 1)
@@ -304,7 +300,7 @@ class InstallExtensionWindow(wx.Frame):
         """!Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
-        self.tree.Load(url = self.repo.GetValue().strip(), full = self.fullDesc.IsChecked())
+        self.tree.Load(url = self.repo.GetValue().strip())
         modulesDesc = self.tree.GetModules()
         self.modulesData.SetData(modulesDesc)
         self.SetStatusText("", 0)
@@ -401,7 +397,7 @@ class ExtensionTree(ItemTree):
         
         return None
     
-    def Load(self, url, full = False):
+    def Load(self, url, full = True):
         """!Load list of extensions"""
         self.DeleteAllItems()
         self.root = self.AddRoot(_("Menu tree"))
