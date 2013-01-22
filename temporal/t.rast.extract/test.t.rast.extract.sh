@@ -23,7 +23,7 @@ t.rast.extract --o --v input=precip_abs1 output=precip_abs2 where="start_time > 
 t.info type=strds input=precip_abs2
 
 t.rast.extract --o --v -n input=precip_abs1 output=precip_abs3 where="start_time > '2001-06-01'" \
-           expression=" if(precip_abs1@PERMANENT > 400, precip_abs1@PERMANENT, null())" base=new_prec nprocs=4
+           expression=" if(precip_abs1 > 400, precip_abs1, null())" base=new_prec nprocs=4
 t.info type=strds input=precip_abs3
 
 t.rast.extract --o --v input=precip_abs1 output=precip_abs4 where="start_time > '2001-06-01'" 

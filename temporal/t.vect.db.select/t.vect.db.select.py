@@ -30,9 +30,9 @@
 #%end
 
 #%option
-#% key: fs
+#% key: separator
 #% type: string
-#% description: Field separator character between the output columns
+#% description: Separator character between the output columns
 #% required: no
 #% answer: |
 #%end
@@ -62,7 +62,7 @@ def main():
     columns = options["columns"]
     tempwhere = options["t_where"]
     layer = options["layer"]
-    fs = options["fs"]
+    fs = options["separator"]
 
     if where == "" or where == " " or where == "\n":
         where = None

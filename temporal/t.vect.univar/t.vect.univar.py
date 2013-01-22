@@ -45,9 +45,9 @@
 #%end
 
 #%option
-#% key: fs
+#% key: separator
 #% type: string
-#% description: Field separator character between the output columns
+#% description: Separator character between the output columns
 #% required: no
 #% answer: |
 #%end

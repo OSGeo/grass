@@ -59,9 +59,9 @@
 #%end
 
 #%option
-#% key: fs
+#% key: separator
 #% type: string
-#% description: Field separator character between the output columns, default is tabular "\t"
+#% description: Separator character between the output columns, default is tabular "\t"
 #% required: no
 #%end
 
@@ -83,7 +83,7 @@ def main():
     columns = options["columns"]
     order = options["order"]
     where = options["where"]
-    separator = options["fs"]
+    separator = options["separator"]
     method = options["method"]
     header = flags["h"]
 

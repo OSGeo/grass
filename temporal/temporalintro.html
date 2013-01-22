@@ -21,6 +21,7 @@ List of general management modules:
 <ul>
     <li><a href="t.connect.html">t.connect</a></li>
     <li><a href="t.create.html">t.create</a></li>
+    <li><a href="t.rename.html">t.rename</a></li>
     <li><a href="t.remove.html">t.remove</a></li>
     <li><a href="t.register.html">t.register</a></li>
     <li><a href="t.unregister.html">t.unregister</a></li>
@@ -36,7 +37,7 @@ List of general management modules:
 Space time datasets are stored in a temporal database. SQLite3 or 
 PostgreSQL are supported as SQL database back end. 
 Connection settings are performed with <a href="t.connect.html">t.connect</a>.
-<!-- todo: really always PERMANENT? -->
+<!-- todo: really always PERMANENT? -> Yes thats the default that can be modified -->
 As default a sqlite3 database will be created in the PERMANENT mapset that
 stores all space time datasets and registered time series maps from all
 mapsets in the location.
@@ -50,11 +51,15 @@ and semantic informations can be provided. The module
 from the temporal database. Use  <a href="t.support.html">t.support</a>
 to modify the metadata of space time datasets or to update the metadata
 that is derived from registered maps. This module also checks for removed
-and modified maps and updates the space time datasets accordingly.
+and modified maps and updates the space time datasets accordingly. 
+You can rename a space time dataset with <a href="t.rename.html">t.rename</a>. 
 <p>
 The module <a href="t.register.html">t.register</a> was designed to 
 register raster, 3D raster and vector maps in the temporal database and
-optionally in a space time dataset.
+optionally in a space time dataset. It supports different input options. Maps
+to register can be provided as a comma separated string on the command line, or
+in an input file. The module supports the definition of time stamps 
+(time instances or intervals) for each map in the input file.
 With  <a href="t.unregister.html">t.unregister</a> maps can be unregistered
 from space time datasets or the temporal database.
 <p>

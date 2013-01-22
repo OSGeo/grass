@@ -1,6 +1,14 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+<em>t.list</em> lists any dataset that is registered in the temporal database. 
+Datasets are raster, 3D raster and vector maps as well as their 
+corresponding space time datasets (STRDS, STR3DS and STVDS). The type of the dataset
+can be specified using the <em>type</em> option, default is STRDS. By default all datasets with
+relative and absolute time are listed. However, the user has the ability to specify
+a single temporal type with the <em>temporaltype</em> option.
+The user can define the columns that should 
+be printed for each dataset and the order of the datasets. In addition a SQL WHERE statement can
+be specified to select a subset of the requested datasets.
 
 <h2>SEE ALSO</h2>
 

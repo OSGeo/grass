@@ -241,8 +241,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                         start, end, tz = old_map.get_absolute_time()
                         new_map.set_absolute_time(start, end, tz)
                     else:
-                        start, end = old_map.get_relative_time()
-                        new_map.set_relative_time(start, end)
+                        start, end, unit = old_map.get_relative_time()
+                        new_map.set_relative_time(start, end, unit)
 
                     # Insert map in temporal database
                     new_map.insert(dbif)
