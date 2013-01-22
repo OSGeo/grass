@@ -87,8 +87,9 @@ class MapToolbar(BaseToolbar):
             self.toolId['3d'] = 1
         else:
             from nviz.main import errorMsg
-            log.WriteCmdLog(_('3D view mode not available'))
-            log.WriteWarning(_('Reason: %s') % str(errorMsg))
+            if self.parent.GetLayerManager():
+              log.WriteCmdLog(_('3D view mode not available'))
+              log.WriteWarning(_('Reason: %s') % str(errorMsg))
             
             self.toolId['3d'] = -1
 
@@ -100,12 +101,13 @@ class MapToolbar(BaseToolbar):
                 self.toolId['vdigit'] = 1
         else:
             from vdigit.main import errorMsg
-            log.WriteCmdLog(_('Vector digitizer not available'))
-            log.WriteWarning(_('Reason: %s') % errorMsg)
-            log.WriteLog(_('Note that the wxGUI\'s vector digitizer is currently disabled '
-                           '(hopefully this will be fixed soon). '
-                           'Please keep an eye out for updated versions of GRASS. '
-                           'In the meantime you can use "v.digit" from the Develop Vector menu.'), wrap = 60)
+            if self.parent.GetLayerManager():
+              log.WriteCmdLog(_('Vector digitizer not available'))
+              log.WriteWarning(_('Reason: %s') % errorMsg)
+              log.WriteLog(_('Note that the wxGUI\'s vector digitizer is currently disabled '
+                             '(hopefully this will be fixed soon). '
+                             'Please keep an eye out for updated versions of GRASS. '
+                             'In the meantime you can use "v.digit" from the Develop Vector menu.'), wrap = 60)
             
             self.toolId['vdigit'] = -1
         
