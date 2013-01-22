@@ -112,13 +112,13 @@ class AttributeManager(wx.Frame, DbMgrBase):
             wx.CallAfter(self.notebook.SetSelection, 0) # select browse tab
         
         # buttons
-        self.btnQuit   = wx.Button(parent = self.panel, id = wx.ID_EXIT)
-        self.btnQuit.SetToolTipString(_("Close Attribute Table Manager"))
+        self.btnClose   = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
+        self.btnClose.SetToolTipString(_("Close Attribute Table Manager"))
         self.btnReload = wx.Button(parent = self.panel, id = wx.ID_REFRESH)
         self.btnReload.SetToolTipString(_("Reload attribute data (selected layer only)"))
 
         # events
-        self.btnQuit.Bind(wx.EVT_BUTTON,   self.OnCloseWindow)
+        self.btnClose.Bind(wx.EVT_BUTTON,   self.OnCloseWindow)
         self.btnReload.Bind(wx.EVT_BUTTON, self.pages['browse'].OnDataReload)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
@@ -139,7 +139,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item = self.btnReload, proportion = 1,
                      flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
-        btnSizer.Add(item = self.btnQuit, proportion = 1,
+        btnSizer.Add(item = self.btnClose, proportion = 1,
                      flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
 
         mainSizer.Add(item = self.notebook, proportion = 1, flag = wx.EXPAND)
