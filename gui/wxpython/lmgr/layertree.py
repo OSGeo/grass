@@ -1086,13 +1086,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
                     cmd.append('-n')
             elif ltype == 'vector':
-                cmd.append(GetDisplayVectSettings())
-
+                cmd += GetDisplayVectSettings()
+            
             # ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed
             # should be fixed by C-based d.thematic.* modules
-            
-
+        
         if cmd:
             GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
                                                                     completed = (self.GetOptData,layer,params))
