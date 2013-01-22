@@ -110,11 +110,6 @@ void parse_flag(struct context *ctx, const char *cmd, const char *arg)
 	return;
     }
 
-    if (G_strcasecmp(cmd, "answer") == 0) {
-	ctx->flag->answer = atoi(arg);
-	return;
-    }
-
     /* Label, description, and guisection can all be internationalized */
     if (G_strcasecmp(cmd, "label") == 0) {
 	ctx->flag->label = translate(xstrdup(arg));
