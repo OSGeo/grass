@@ -45,9 +45,9 @@
 #%end
 
 #%option
-#% key: fs
+#% key: separator
 #% type: string
-#% description: Field separator character between the output columns, default is tabular " | ". Do not use "," as this char is reserved to list several map ids in a sample granule
+#% description: Separator character between the output columns, default is tabular " | ". Do not use "," as this char is reserved to list several map ids in a sample granule
 #% required: no
 #%end
 
@@ -75,7 +75,7 @@ def main():
     sampler = options["sample"]
     samtype = options["samtype"]
     intype = options["intype"]
-    separator = options["fs"]
+    separator = options["separator"]
     method = options["method"]
     header = flags["c"]
     spatial = flags["s"]

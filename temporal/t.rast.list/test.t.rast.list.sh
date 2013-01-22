@@ -69,49 +69,49 @@ t.create --o type=strds temporaltype=absolute output=precip_abs0 title="A test w
 
 # The @test
 t.register type=rast --o -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
-t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list    separator=" | " method=comma     input=precip_abs0
 t.rast.list -h input=precip_abs0
-t.rast.list -h fs=" | " method=cols      input=precip_abs0
-t.rast.list -h fs=" | " method=delta     input=precip_abs0
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
-t.rast.list -h fs=" | " method=gran      input=precip_abs0
+t.rast.list -h separator=" | " method=cols      input=precip_abs0
+t.rast.list -h separator=" | " method=delta     input=precip_abs0
+t.rast.list -h separator=" | " method=deltagaps input=precip_abs0
+t.rast.list -h separator=" | " method=gran      input=precip_abs0
 
 t.register type=rast --o input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
-t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list    separator=" | " method=comma     input=precip_abs0
 t.rast.list -h input=precip_abs0
-t.rast.list -h fs=" | " method=cols      input=precip_abs0
-t.rast.list -h fs=" | " method=delta     input=precip_abs0
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
+t.rast.list -h separator=" | " method=cols      input=precip_abs0
+t.rast.list -h separator=" | " method=delta     input=precip_abs0
+t.rast.list -h separator=" | " method=deltagaps input=precip_abs0
 # ERROR: no interval time   
-t.rast.list -h fs=" | " method=gran      input=precip_abs0
+t.rast.list -h separator=" | " method=gran      input=precip_abs0
 
 t.register type=rast --o -i input=precip_abs0 file="${n2}" 
-t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list    separator=" | " method=comma     input=precip_abs0
 t.rast.list -h input=precip_abs0
-t.rast.list -h fs=" | " method=cols      input=precip_abs0
-t.rast.list -h fs=" | " method=delta     input=precip_abs0
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
-t.rast.list -h fs=" | " method=gran      input=precip_abs0
+t.rast.list -h separator=" | " method=cols      input=precip_abs0
+t.rast.list -h separator=" | " method=delta     input=precip_abs0
+t.rast.list -h separator=" | " method=deltagaps input=precip_abs0
+t.rast.list -h separator=" | " method=gran      input=precip_abs0
 
 t.register type=rast --o -i input=precip_abs0 file="${n3}"
-t.rast.list    fs=" | " method=comma     input=precip_abs0
-t.rast.list -h fs=" | " method=delta     input=precip_abs0
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
-t.rast.list -h fs=" | " method=gran      input=precip_abs0
+t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.rast.list -h separator=" | " method=delta     input=precip_abs0
+t.rast.list -h separator=" | " method=deltagaps input=precip_abs0
+t.rast.list -h separator=" | " method=gran      input=precip_abs0
 
 t.register type=rast --o -i input=precip_abs0 file="${n4}"
-t.rast.list    fs=" | " method=comma     input=precip_abs0
-t.rast.list -h fs=" | " method=delta     input=precip_abs0
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
-t.rast.list -h fs=" | " method=gran      input=precip_abs0
+t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.rast.list -h separator=" | " method=delta     input=precip_abs0
+t.rast.list -h separator=" | " method=deltagaps input=precip_abs0
+t.rast.list -h separator=" | " method=gran      input=precip_abs0
 
 t.register type=rast --o -i input=precip_abs0 file="${n5}"
-t.rast.list    fs=" | " method=comma     input=precip_abs0
+t.rast.list    separator=" | " method=comma     input=precip_abs0
 t.rast.list -h input=precip_abs0
-t.rast.list -h fs=" | " method=cols      input=precip_abs0
-t.rast.list -h fs=" | " method=delta     input=precip_abs0
-t.rast.list -h fs=" | " method=deltagaps input=precip_abs0
-t.rast.list -h fs=" | " method=gran      input=precip_abs0
+t.rast.list -h separator=" | " method=cols      input=precip_abs0
+t.rast.list -h separator=" | " method=delta     input=precip_abs0
+t.rast.list -h separator=" | " method=deltagaps input=precip_abs0
+t.rast.list -h separator=" | " method=gran      input=precip_abs0
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs0

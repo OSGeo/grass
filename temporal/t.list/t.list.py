@@ -66,9 +66,9 @@
 #%end
 
 #%option
-#% key: fs
+#% key: separator
 #% type: string
-#% description: The field separator character between the columns, default is tabular "\t"
+#% description: Separator character between the columns, default is tabular "\t"
 #% guisection: Formatting
 #% required: no
 #%end
@@ -93,7 +93,7 @@ def main():
     columns = options["columns"]
     order = options["order"]
     where = options["where"]
-    separator = options["fs"]
+    separator = options["separator"]
     colhead = flags['c']
 
     # Make sure the temporal database exists

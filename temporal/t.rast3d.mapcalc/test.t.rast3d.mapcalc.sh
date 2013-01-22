@@ -16,7 +16,7 @@ r3.mapcalc --o expr="prec_6 = rand(0, 650)"
 t.create --o type=str3ds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.create --o type=str3ds temporaltype=absolute output=precip_abs2 title="A test" descr="A test"
 t.register -i type=rast3d input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
-t.register type=rast3d input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.register --o type=rast3d input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 
 t.info type=str3ds input=precip_abs1
 t.info type=str3ds input=precip_abs2
@@ -28,7 +28,7 @@ t.rast3d.mapcalc --o --v -n inputs=precip_abs1,precip_abs2 output=precip_abs3 \
 t.info type=str3ds input=precip_abs3
 
 t.rast3d.mapcalc --o --v -s inputs=precip_abs1,precip_abs2,precip_abs3 output=precip_abs4 \
-           expression=" (precip_abs1 + precip_abs2) / precip_abs3@PERMANENT " base=new_prec \
+           expression=" (precip_abs1 + precip_abs2) / precip_abs2" base=new_prec \
            method=equal nprocs=6
 t.info type=str3ds input=precip_abs4
 

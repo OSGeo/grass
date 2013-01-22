@@ -613,7 +613,7 @@ def test_compute_relative_time_granularity():
         end = start + fact
 
         map = RasterDataset(None)
-        map.set_relative_time(start, end)
+        map.set_relative_time(start, end, "years")
         maps.append(map)
 
     gran = round(compute_relative_time_granularity(maps))
@@ -632,7 +632,7 @@ def test_compute_relative_time_granularity():
         end = start * fact
         map = RasterDataset(None)
         if count % 2 == 0:
-            map.set_relative_time(start, end)
+            map.set_relative_time(start, end, "years")
         else:
             map.set_relative_time(start, None)
         maps.append(map)
@@ -653,7 +653,7 @@ def test_compute_relative_time_granularity():
     for i in range(10):
         point = (i + 1) * fact * start
         map = RasterDataset(None)
-        map.set_relative_time(point, None)
+        map.set_relative_time(point, None, years)
         maps.append(map)
 
     gran = round(compute_relative_time_granularity(maps) * 86400)
