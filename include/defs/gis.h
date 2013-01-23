@@ -116,7 +116,6 @@ int G_vasprintf(char **, const char *, va_list);
 int G_asprintf(char **, const char *, ...)
     __attribute__ ((format(printf, 2, 3)));
 
-int G_vsnprintf(char **, size_t *,const char *, va_list);
 int G_rasprintf(char **, size_t *,const char *, ...)
     __attribute__ ((format(printf, 3, 4)));
 
