@@ -17,7 +17,6 @@
  */
 
 #define _GNU_SOURCE		/* enable asprintf */
-#include <grass/config.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -50,6 +49,10 @@ int G_vasprintf(char **out, const char *fmt, va_list ap)
     int count;
 
     for (;;) {
+	/* BUG: according to man vsnprintf,
+	 * va_start() should be called immediately before vsnprintf(),
+	 * and va_end() immediately after vsnprintf()
+	 * otherwise there will be memory corruption */
 	count = vsnprintf(buf, size, fmt, ap);
 	if (count >= 0 && count < size)
 	    break;
@@ -95,40 +98,34 @@ int G_asprintf(char **out, const char *fmt, ...)
  * \return number of bytes written
  */
 
-int G_vsnprintf(char **out, size_t *osize, const char *fmt, va_list ap)
-{
-    char *buf = *out;
-    int count;
-    size_t size = *osize;
-    
-    if (size < strlen(fmt) + 50) {
-	size = strlen(fmt) + 50;
-	buf = G_realloc(buf, size);
-    }
-
-    for (;;) {
-	count = vsnprintf(buf, size, fmt, ap);
-	if (count >= 0 && count < size)
-	    break;
-	size *= 2;
-	buf = G_realloc(buf, size);
-    }
-
-    buf = G_realloc(buf, count + 1);
-    *out = buf;
-    *osize = size;
-
-    return count;
-}
-
 int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 {
     va_list ap;
     int count;
+    char *buf = *out;
+    size_t osize = *size;
 
-    va_start(ap, fmt);
-    count = G_vsnprintf(out, size, fmt, ap);
-    va_end(ap);
+    if (osize < strlen(fmt) + 50) {
+	osize = strlen(fmt) + 50;
+	buf = G_realloc(buf, osize);
+    }
+
+    for (;;) {
+	va_start(ap, fmt);
+	count = vsnprintf(buf, osize, fmt, ap);
+	va_end(ap);
+	if (count >= 0 && count < osize)
+	    break;
+	if (count > -1)
+	    osize = count + 1;
+	else
+	    osize *= 2;
+	
+	buf = G_realloc(buf, osize);
+    }
+
+    *out = buf;
+    *size = osize;
 
     return count;
 }
