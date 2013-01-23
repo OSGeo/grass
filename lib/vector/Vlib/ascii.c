@@ -26,7 +26,7 @@
 static int srch(const void *, const void *);
 static int check_cat(const struct line_cats *, const struct cat_list *,
 		     const int *, int);
-static void free_col_arrays(int *, char *, char**);
+static void free_col_arrays(int *, char *, char **);
 
 /*!
   \brief Read data in GRASS ASCII vector format
@@ -329,7 +329,8 @@ int Vect_write_ascii(FILE *ascii,
     dbString dbstring;
     dbColumn *Column;
     dbValue *Value;
-    char buf[2000];
+    char *buf;
+    size_t bufsize;
     dbCursor cursor;
     /* columns */
     char **columns;
@@ -345,14 +346,14 @@ int Vect_write_ascii(FILE *ascii,
     G_zero(&value, sizeof(dbValue));
     db_init_string(&dbstring);
 
-    /* TODO: free memory allocated by G_asprintf(),
-     * this is a bad memory leak */
     xstring = NULL;
     ystring = NULL;
     zstring = NULL;
     xsize = 0;
     ysize = 0;
     zsize = 0;
+    buf = NULL;
+    bufsize = 0;
 
     /* get the region */
     G_get_window(&window);
@@ -404,21 +405,35 @@ int Vect_write_ascii(FILE *ascii,
                 ncols = db_get_table_number_of_columns(Table);
                 /* key column skipped */
                 columns = (char **) G_malloc(ncols * sizeof(char *));
-                icol = i = 0;
+                icol = 0;
                 for (i = 0; i < ncols; i++) {
                     col_name = db_get_column_name(db_get_table_column(Table, i));
-                    if (strcmp(Fi->key, col_name) == 0)
-                        continue;
-                    columns[icol++] = G_store(col_name);
+                    if (strcmp(Fi->key, col_name) != 0)
+			columns[icol++] = G_store(col_name);
                 }
-                columns[ncols-1] = NULL;
+                columns[ncols - 1] = NULL;
                 
                 db_zero_string(&dbstring);
                 db_free_table(Table);
                 Table = NULL;
             }
             else {
-                columns = (char **)column_names;
+                int icol, ncols;
+                const char *col_name;
+
+		ncols = 0;
+		while (column_names[ncols])
+		    ncols++;
+
+                columns = (char **) G_malloc((ncols + 1) * sizeof(char *));
+		icol = 0;
+                for (i = 0; i < ncols; i++) {
+                    col_name = column_names[i];
+		    /* key column skipped */
+                    if (strcmp(Fi->key, col_name) != 0)
+			columns[icol++] = G_store(col_name);
+                }
+                columns[icol] = NULL;
             }
             
             /* selected columns only */
@@ -450,7 +465,7 @@ int Vect_write_ascii(FILE *ascii,
 	    }
 	}
     }
-    
+
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     ACats = Vect_new_cats_struct();
@@ -631,7 +646,7 @@ int Vect_write_ascii(FILE *ascii,
 		/* print attributes */
 		if (columns) {
 
-		    sprintf(buf, "SELECT %s FROM %s WHERE %s = %d",
+		    G_rasprintf(&buf, &bufsize, "SELECT %s FROM %s WHERE %s = %d",
 			    all_columns, Fi->table, Fi->key, fcats->value[0]);
 		    G_debug(2, "SQL: %s", buf);
 		    db_set_string(&dbstring, buf);
@@ -769,6 +784,7 @@ int Vect_write_ascii(FILE *ascii,
     if (format == GV_ASCII_FORMAT_WKT) {
 	/* process areas - topology required */
 	int i, area, nareas, isle, nisles;
+
 	if (Vect_level(Map) < 2) {
 	    G_warning(_("Topology not available, unable to process areas"));
 	    nareas = 0;
@@ -872,14 +888,14 @@ int check_cat(const struct line_cats *Cats, const struct cat_list *Clist,
 }
 
 /* free column arrays, see Vect_write_ascii() */
-void free_col_arrays(int *coltypes, char *all_columns, char**columns)
+void free_col_arrays(int *coltypes, char *all_columns, char **columns)
 {
     G_free(coltypes);
     G_free(all_columns);
     if (columns) {
-        int i;
-        i = 0;
-        while(columns[i])
+        int i = 0;
+
+        while (columns[i])
             G_free(columns[i++]);
         G_free(columns);
     }
