@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
 		   "Watershed accumulation: overland flow that traverses each cell",
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt17->answer)
-	write_hist(opt8->answer,
+	write_hist(opt17->answer,
 		   "Watershed accumulation: topographic index ln(a / tan b)",
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt9->answer)
