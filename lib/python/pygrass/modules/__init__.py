@@ -193,8 +193,7 @@ class Parameter(object):
         if isinstance(value, list) or isinstance(value, tuple):
             if self.multiple:
                 # check each value
-                self._value = [
-                    val for val in value if isinstance(value, self._type)]
+                self._value = [self._type(val) for val in value]
             else:
                 str_err = 'The Parameter <%s> does not accept multiple inputs'
                 raise TypeError(str_err % self.name)
