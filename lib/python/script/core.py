@@ -660,7 +660,7 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
 def compare_key_value_text_files(filename_a, filename_b, sep=":",
                                  val_sep=",", precision=0.000001):
     """
-        !Compare two key-value text files that may contain projection parameter
+        !Compare two key-value text files that contain projection parameter
 
         @param filename_a The name of the first key-value text file
         @param filenmae_b The name of the second key-value text file
@@ -685,6 +685,9 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
     """
     dict_a = _text_to_key_value_dict(filename_a, sep)
     dict_b = _text_to_key_value_dict(filename_b, sep)
+    
+    print dict_a
+    print dict_b
 
     missing_keys = 0
 
@@ -696,7 +699,13 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
                 if abs(dict_a[key] - dict_b[key]) > precision:
                     return False
             elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
-                return False
+                warning(_("Mixing value types. Will try to compare after "
+                          "integer conversion"))
+                return int(dict_a[key]) ==  int(dict_b[key])
+            elif key == "+towgs84":
+                # We compare the sum of the entries
+                if abs(sum(dict_a[key]) - sum(dict_b[key])) > precision:
+                    return False
             else:
                 if dict_a[key] != dict_b[key]:
                     return False
