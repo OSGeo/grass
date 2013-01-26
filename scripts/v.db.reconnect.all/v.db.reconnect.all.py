@@ -4,7 +4,7 @@
 # MODULE:       v.db.reconnect.all
 # AUTHOR(S):    Radim Blazek
 #               Converted to Python by Glynn Clements
-#               Update for GRASS 7 by Martin Landa <landa.martin gmail.com>
+#               Update for GRASS 7 by Markus Metz
 # PURPOSE:      Reconnect all vector maps from the current mapset
 # COPYRIGHT:    (C) 2004, 2012 by the GRASS Development Team
 #
@@ -31,7 +31,6 @@
 #%option G_OPT_DB_DATABASE
 #% key: old_database
 #% description: Name of source database
-#% required: yes
 #%end
 #%option G_OPT_DB_SCHEMA
 #% key: old_schema
@@ -44,7 +43,6 @@
 #%option G_OPT_DB_DATABASE
 #% key: new_database
 #% description: Name for target database
-#% required: yes
 #%end
 #%option G_OPT_DB_SCHEMA
 #% key: new_schema
@@ -68,13 +66,22 @@ def substitute_db(database):
 
 # create database if doesn't exist
 def create_db(driver, database):
+    if driver == 'dbf':
+        path = substitute_db(database)
+        # check if destination directory exists
+        if not os.path.isdir(path):
+	    # create dbf database
+            os.makedirs(path)
+	    return True
+        return False
+    
     if driver == 'sqlite':
-        path = os.path.dirname(database)
+        path = os.path.dirname(substitute_db(database))
         # check if destination directory exists
         if not os.path.isdir(path):
             os.makedirs(path)
     
-    if database in grass.read_command('db.databases', quiet = True,
+    if substitute_db(database) in grass.read_command('db.databases', quiet = True,
                                       driver = driver).splitlines():
         return False
 
@@ -96,8 +103,7 @@ def copy_tab(from_driver, from_database, from_table,
                                       stderr = nuldev).splitlines():
         return False
     
-    grass.info("Table <%s> in target database doesn't exist, "
-               "copying data..." % to_table)
+    grass.info("Copying table <%s> to target database..." % to_table)
     if 0 != grass.run_command('db.copy', from_driver = from_driver,
                               from_database = from_database,
                               from_table = from_table, to_driver = to_driver,
@@ -108,29 +114,50 @@ def copy_tab(from_driver, from_database, from_table,
     return True
 
 # drop tables if required (-d)
-def drop_tab(driver, database, table):
+def drop_tab(vector, layer, table, driver, database):
+    # disconnect
+    if 0 != grass.run_command('v.db.connect', flags = 'd', quiet = True, map = vector,
+			      layer = layer, table = table):
+	grass.warning(_("Unable to disconnect table <%s> from vector <%s>") % (table, vector))
+    # drop table
     if 0 != grass.run_command('db.droptable', quiet = True, flags = 'f',
                               driver = driver, database = database,
-                              table = table, stderr = nuldev):
+                              table = table):
         grass.fatal(_("Unable to drop table <%s>") % table)
         
 # create index on key column
 def create_index(driver, database, table, index_name, key):
+    if driver == 'dbf':
+	return False
+
     grass.info(_("Creating index <%s>...") % index_name)
     if 0 != grass.run_command('db.execute', quiet = True,
                               driver = driver, database = database,
-                              sql = "create index %s on %s(%s)" % (index_name, table, key)):
+                              sql = "create unique index %s on %s(%s)" % (index_name, table, key)):
         grass.warning(_("Unable to create index <%s>") % index_name)
 
 def main():
-    old_database = substitute_db(options['old_database'])
+    # old connection
+    old_database = options['old_database']
+    old_schema = options['old_schema']
+    # new connection
+    default_connection = grass.db_connection()
     if options['new_driver']:
         new_driver = options['new_driver']
     else:
-        new_driver = grass.parse_command('db.connect', flags = 'g')['driver']
-    new_database = substitute_db(options['new_database'])
-    old_schema = options['old_schema']
-    new_schema = options['new_schema']
+        new_driver = default_connection['driver']
+    if options['new_database']:
+        new_database = options['new_database']
+    else:
+        new_database = default_connection['database']
+    if options['new_schema']:
+        new_schema = options['new_schema']
+    else:
+        new_schema = default_connection['schema']
+
+    old_database_subst = None
+    if old_database is not None:
+	old_database_subst = substitute_db(old_database)
     
     mapset = grass.gisenv()['MAPSET']
         
@@ -165,8 +192,14 @@ def main():
             grass.debug("DATABASE = '%s' SCHEMA = '%s' TABLE = '%s' ->\n"
                         "      NEW_DATABASE = '%s' NEW_SCHEMA_TABLE = '%s'" % \
                             (old_database, schema, table, new_database, new_schema_table))
-            
-            if database == old_database and schema == old_schema:
+            do_reconnect = True
+	    if old_database_subst is not None:
+		if database != old_database_subst:
+		    do_reconnect = False
+	    if schema != old_schema:
+		do_reconnect = False
+		
+            if do_reconnect == True:
                 grass.verbose(_("Reconnecting layer %d...") % layer)
                                           
                 if flags['c']:
@@ -177,27 +210,22 @@ def main():
                     copy_tab(driver, database, schema_table,
                              new_driver, new_database, new_schema_table)
                 
-                    # try to build index on key column
-                    create_index(new_driver, new_database, new_schema_table,
-                                 table + '_' + key, key)
-                
-                # reconnect tables (don't use substituted new_database)
-                if 0 != grass.run_command('v.db.connect', flags = 'o', quiet = True, map = vect,
-                                          layer = layer, driver = new_driver, database = options['new_database'],
-                                          table = new_schema_table, key = key):
-                    grass.warning(_("Operation canceled"))
-                
                 # drop original table if required
                 if flags['d']:
-                    drop_tab(driver, database, schema_table)
+                    drop_tab(vect, layer, schema_table, driver, substitute_db(database))
+
+                # reconnect tables (don't use substituted new_database)
+		# NOTE: v.db.connect creates an index on the key column
+                if 0 != grass.run_command('v.db.connect', flags = 'o', quiet = True, map = vect,
+                                          layer = layer, driver = new_driver, database = new_database,
+                                          table = new_schema_table, key = key):
+                    grass.warning(_("Unable to connect table <%s> to vector <%s> on layer <%s>") %
+				  (table, vect))
 
             else:
-                grass.warning(_("Layer <%d> will not be reconnected, "
+                grass.warning(_("Layer <%d> will not be reconnected because "
                                 "database or schema do not match.") % layer)
-    
-    grass.info(_("It's recommended to change default DB connection settings. "
-                 "See 'db.connect' for details."))
-    
+	
     return 0
 
 if __name__ == "__main__":
