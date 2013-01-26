@@ -60,7 +60,7 @@ def main():
     else:
         database = kv['database']
     if options['driver']:
-        driver = kv['driver']
+        driver = options['driver']
     else:
         driver = kv['driver']
     # schema needed for PG?
@@ -70,7 +70,7 @@ def main():
     
     # check if table exists
     nuldev = file(os.devnull, 'w')
-    if not grass.db_table_exist(table, stdout = nuldev, stderr = nuldev):
+    if not grass.db_table_exist(table):
 	grass.fatal(_("Table <%s> not found in database <%s>") % \
                         (table, database))
     
@@ -84,10 +84,10 @@ def main():
 	    if f['table'] == table:
 		used.append(vect)
 		break
-    if used:
+    if len(used) > 0:
 	grass.warning(_("Deleting table <%s> which is attached to following map(s):") % table)
 	for vect in used:
-	    grass.message(vect)
+	    grass.warning("%s" % vect)
     
     if not force:
 	grass.message(_("The table <%s> would be deleted.") % table)
