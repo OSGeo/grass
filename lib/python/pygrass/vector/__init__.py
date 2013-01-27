@@ -18,8 +18,6 @@ import geometry
 from abstract import Info
 from basic import Bbox
 
-import grass.script.core as core
-_GRASSENV = core.gisenv()
 
 _NUMOF = {"areas": libvect.Vect_get_num_areas,
           "dblinks": libvect.Vect_get_num_dblinks,
@@ -68,7 +66,7 @@ class Vector(Info):
         False
 
     ..
-    """ % _GRASSENV['MAPSET']
+    """
     def __init__(self, name, mapset=''):
         # Set map name and mapset
         super(Vector, self).__init__(name, mapset)
