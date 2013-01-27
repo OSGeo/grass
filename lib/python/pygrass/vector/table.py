@@ -15,7 +15,7 @@ except:
     from pygrass.orderdict import OrderedDict
 
 import grass.lib.vector as libvect
-import grass.script.core as core
+from pygrass.gis import Mapset
 
 import sql
 
@@ -35,10 +35,10 @@ def get_path(path):
     if "$" not in path:
         return path
     else:
-        grassenv = core.gisenv()
-        path = path.replace('$GISDBASE', grassenv['GISDBASE'])
-        path = path.replace('$LOCATION_NAME', grassenv['LOCATION_NAME'])
-        path = path.replace('$MAPSET', grassenv['MAPSET'])
+        mapset = Mapset()
+        path = path.replace('$GISDBASE', mapset.gisdbase)
+        path = path.replace('$LOCATION_NAME', mapset.location)
+        path = path.replace('$MAPSET', mapset.name)
         return path
 
 
