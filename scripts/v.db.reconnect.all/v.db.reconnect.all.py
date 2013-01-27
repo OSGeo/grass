@@ -158,11 +158,20 @@ def main():
     old_database_subst = None
     if old_database is not None:
 	old_database_subst = substitute_db(old_database)
+
+    new_database_subst = substitute_db(new_database)
+    
+    if old_database_subst == new_database_subst and old_schema == new_schema:
+	grass.fatal(_("Old and new database connection is identical. Nothing to do."))
     
     mapset = grass.gisenv()['MAPSET']
         
     vectors = grass.list_grouped('vect')[mapset]
     num_vectors = len(vectors)
+
+    if flags['c']:
+	# create new database if not existing
+	create_db(new_driver, new_database)
     
     i = 0
     for vect in vectors:
@@ -192,10 +201,13 @@ def main():
             grass.debug("DATABASE = '%s' SCHEMA = '%s' TABLE = '%s' ->\n"
                         "      NEW_DATABASE = '%s' NEW_SCHEMA_TABLE = '%s'" % \
                             (old_database, schema, table, new_database, new_schema_table))
+
             do_reconnect = True
 	    if old_database_subst is not None:
 		if database != old_database_subst:
 		    do_reconnect = False
+	    if database == new_database_subst:
+		do_reconnect = False
 	    if schema != old_schema:
 		do_reconnect = False
 		
@@ -203,9 +215,6 @@ def main():
                 grass.verbose(_("Reconnecting layer %d...") % layer)
                                           
                 if flags['c']:
-                    # check if database exists
-                    create_db(new_driver, new_database)
-                    
                     # check if table exists in new database
                     copy_tab(driver, database, schema_table,
                              new_driver, new_database, new_schema_table)
@@ -223,8 +232,9 @@ def main():
 				  (table, vect))
 
             else:
-                grass.warning(_("Layer <%d> will not be reconnected because "
-                                "database or schema do not match.") % layer)
+		if database != substitute_db(new_database):
+		    grass.warning(_("Layer <%d> will not be reconnected because "
+				    "database or schema do not match.") % layer)
 	
     return 0
 
