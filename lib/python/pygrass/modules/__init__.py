@@ -50,21 +50,8 @@ _GETTYPE = {
     'integer': int,
     'float': float,
     'double': float,
+    'all': lambda x: x,
 }
-
-
-def stdout2dict(stdout, sep='=', default=None, val_type=None, vsep=None):
-    """Return a dictionary where entries are separated
-    by newlines and the key and value are separated by `sep' (default: `=').
-    Use the grass.core.parse_key_val function
-
-    sep: key/value separator
-    default: default value to be used
-    val_type: value type (None for no cast)
-    vsep: vertical separator (default os.linesep)
-    """
-    return grass.script.core.parse_key_val(stdout, sep, default,
-                                           val_type, vsep)
 
 
 class ParameterError(Exception):
@@ -197,6 +184,8 @@ class Parameter(object):
             else:
                 str_err = 'The Parameter <%s> does not accept multiple inputs'
                 raise TypeError(str_err % self.name)
+        elif self.typedesc == 'all':
+            self._value = value
         elif isinstance(value, self._type):
             if hasattr(self, 'values'):
                 if value in self.values:
@@ -435,8 +424,17 @@ class Module(object):
         self.run_ = True
         self.finish_ = True
         self.stdin_ = None
+        self.stdin = None
         self.stdout_ = None
         self.stderr_ = None
+        diz = {'name': 'stdin', 'required': False,
+               'multiple': False, 'type': 'all',
+               'value': None}
+        self.inputs['stdin'] = Parameter(diz=diz)
+        diz['name'] = 'stdout'
+        self.outputs['stdout'] = Parameter(diz=diz)
+        diz['name'] = 'stderr'
+        self.outputs['stderr'] = Parameter(diz=diz)
         self.popen = None
 
         if args or kargs:
@@ -482,13 +480,13 @@ class Module(object):
             self.run_ = kargs['run_']
             del(kargs['run_'])
         if 'stdin_' in kargs:
-            self.stdin_ = kargs['stdin_']
+            self.inputs['stdin'].value = kargs['stdin_']
             del(kargs['stdin_'])
         if 'stdout_' in kargs:
-            self.stdout_ = kargs['stdout_']
+            self.outputs['stdout'].value = kargs['stdout_']
             del(kargs['stdout_'])
         if 'stderr_' in kargs:
-            self.stderr_ = kargs['stderr_']
+            self.outputs['stdout'].value = kargs['stderr_']
             del(kargs['stderr_'])
         if 'finish_' in kargs:
             self.finish_ = kargs['finish_']
@@ -591,19 +589,25 @@ class Module(object):
         return args
 
     def run(self, node=None):
-        cmd = self.make_cmd()
-        if self.stdin_:
-            self.stdin = self.stdin_
+        if self.inputs['stdin'].value:
+            self.stdin = self.inputs['stdin'].value
             self.stdin_ = subprocess.PIPE
-        self.popen = subprocess.Popen(cmd, stdin=self.stdin_,
+        if self.outputs['stdout'].value:
+            self.stdout_ = self.outputs['stdout'].value
+        if self.outputs['stderr'].value:
+            self.stderr_ = self.outputs['stderr'].value
+        cmd = self.make_cmd()
+        self.popen = subprocess.Popen(cmd,
+                                      stdin=self.stdin_,
                                       stdout=self.stdout_,
                                       stderr=self.stderr_)
-        if self.stdin_:
-            self.stdout, self.stderr = self.popen.communicate(input=self.stdin)
-        else:
-            if self.finish_:
-                self.popen.wait()
-            self.stdout, self.stderr = self.popen.communicate()
+        if self.finish_:
+            self.popen.wait()
+
+        stdout, stderr = self.popen.communicate(input=self.stdin)
+        self.outputs['stdout'].value = stdout if stdout else ''
+        self.outputs['stderr'].value = stderr if stderr else ''
+
 
 _CMDS = list(grass.script.core.get_commands()[0])
 _CMDS.sort()
