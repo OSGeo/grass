@@ -6,9 +6,16 @@ of all vector maps in the current mapset from the source
 a link does not match the <b>old_database</b> it is left untouched.
 
 <p>
+If no new database is given, the default datase of the mapset is used as 
+printed by <tt>db.connect -g</tt>. If no old database is given, all 
+layers without a link in the new database will be liniked to the new 
+database. If an old database is given, only links in the old database 
+will be changed.
+
+<p>
 Optionally attribute tables in <b>new_database</b> can be created if
 not exist by <b>-c</b> flag. In this case <em>v.db.reconnect.all</em>
-also tries to create index on key column (usually &quot;cat&quot;
+also tries to create an index on key column (usually &quot;cat&quot;
 column).
  
 <h2>NOTES</h2>
@@ -67,6 +74,17 @@ vector maps in the current mapset must be defined also <b>-c</b> flag.
 <div class="code"><pre>
 v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
  new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+</pre></div>
+
+or alternatively
+
+<div class="code"><pre>
+# set default connection (sqlite)
+db.connect -d
+# verify default connection
+db.connect -g
+# reconnect
+v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 </pre></div>
 
 To automatically remove original DBF attribute tables after
