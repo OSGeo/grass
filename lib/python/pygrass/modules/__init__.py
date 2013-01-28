@@ -254,6 +254,20 @@ class TypeDict(OrderedDict):
         self.type = dict_type
         super(TypeDict, self).__init__(*args, **kargs)
 
+    def __getattr__(self, key):
+        if key in self:
+            return self[key].value
+        return OrderedDict.__getattr__(self, key)
+
+    def __setattr__(self, key, value):
+        if key in self:
+            self[key].value = value
+        else:
+            OrderedDict.__setattr__(self, key, value)
+
+    def __dir__(self):
+        return self.keys()
+
     def __setitem__(self, key, value):
         if isinstance(value, self.type):
             super(TypeDict, self).__setitem__(key, value)
