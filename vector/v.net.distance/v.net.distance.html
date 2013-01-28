@@ -24,6 +24,15 @@ lines with corresponding category number.
 The costs of arcs in forward and backward direction are specified by 
 <b>afcolumn</b> and <b>abcolumn</b> columns respectively. If 
 <b>abcolumn</b> is not given, the same cost is used in both directions.  
+<p>
+<em>v.net.distance</em> will not work if you are trying to find the nearest 
+neighbors within a group of nodes, i.e. where <em>to</em> and <em>from</em> 
+are the same set of nodes, as the closest node will be the node itself and 
+the result will be zero-length paths. In order to find nearest neighbors 
+within a group of nodes, you can either loop through each node as <em>to</em> 
+and all other nodes as <em>from</em> or create a complete distance matrix with 
+<a href="v.net.allpairs.html">v.net.allpairs</a> and select the lowest non-zero 
+distance for each node.
 
 <h2>EXAMPLES</h2>
 Find shortest path and distance from every school to the nearest hospital 
