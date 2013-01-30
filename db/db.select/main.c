@@ -9,7 +9,7 @@
  *               Markus Neteler <neteler itc.it>
  *               Stephan Holl
  * PURPOSE:      Process one sql select statement
- * COPYRIGHT:    (C) 2002-2010, 2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2010, 2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -141,7 +141,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    if (col)
-		fprintf(stdout, "%s", &parms.fs);
+		fprintf(stdout, "%c", parms.fs);
 	    fprintf(stdout, "%s", db_get_column_name(column));
 	}
 	fprintf(stdout, "\n");
@@ -159,9 +159,9 @@ int sel(dbDriver * driver, dbString * stmt)
 	    value = db_get_column_value(column);
 	    db_convert_column_value_to_string(column, &value_string);
 	    if (parms.c && !parms.h)
-		fprintf(stdout, "%s%s", db_get_column_name(column), &parms.fs);
+		fprintf(stdout, "%s%c", db_get_column_name(column), parms.fs);
 	    if (col && parms.h)
-		fprintf(stdout, "%s", &parms.fs);
+		fprintf(stdout, "%c", parms.fs);
 	    if (parms.nv && db_test_value_isnull(value))
 		fprintf(stdout, "%s", parms.nv);
 	    else
@@ -172,7 +172,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	if (parms.h)
 	    fprintf(stdout, "\n");
 	else if (parms.vs)
-	    fprintf(stdout, "%s\n", &parms.vs);
+	    fprintf(stdout, "%c\n", parms.vs);
     }
 
     return OK;
@@ -271,10 +271,9 @@ void parse_command_line(int argc, char **argv)
     parms.table = table->answer;
     parms.sql = sql->answer;
     parms.fs = G_option_to_separator(fs);
+    parms.vs = '\0';
     if (vs->answer)
 	parms.vs = G_option_to_separator(vs);
-    else
-	parms.vs = vs->answer;
     parms.nv = nv->answer;
     parms.input = input->answer;
     parms.output = output->answer;
