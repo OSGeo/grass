@@ -27,7 +27,7 @@
 #include "local_proto.h"
 
 struct {
-    char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
+    char *driver, *database, *table, *sql, fs, vs, *nv, *input, *output;
     int c, d, h, test_only;
 } parms;
 
@@ -141,7 +141,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    if (col)
-		fprintf(stdout, "%s", parms.fs);
+		fprintf(stdout, "%s", &parms.fs);
 	    fprintf(stdout, "%s", db_get_column_name(column));
 	}
 	fprintf(stdout, "\n");
@@ -159,9 +159,9 @@ int sel(dbDriver * driver, dbString * stmt)
 	    value = db_get_column_value(column);
 	    db_convert_column_value_to_string(column, &value_string);
 	    if (parms.c && !parms.h)
-		fprintf(stdout, "%s%s", db_get_column_name(column), parms.fs);
+		fprintf(stdout, "%s%s", db_get_column_name(column), &parms.fs);
 	    if (col && parms.h)
-		fprintf(stdout, "%s", parms.fs);
+		fprintf(stdout, "%s", &parms.fs);
 	    if (parms.nv && db_test_value_isnull(value))
 		fprintf(stdout, "%s", parms.nv);
 	    else
@@ -172,7 +172,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	if (parms.h)
 	    fprintf(stdout, "\n");
 	else if (parms.vs)
-	    fprintf(stdout, "%s\n", parms.vs);
+	    fprintf(stdout, "%s\n", &parms.vs);
     }
 
     return OK;
@@ -270,8 +270,11 @@ void parse_command_line(int argc, char **argv)
     parms.database = database->answer;
     parms.table = table->answer;
     parms.sql = sql->answer;
-    parms.fs = fs->answer;
-    parms.vs = vs->answer;
+    parms.fs = G_option_to_separator(fs);
+    if (vs->answer)
+	parms.vs = G_option_to_separator(vs);
+    else
+	parms.vs = vs->answer;
     parms.nv = nv->answer;
     parms.input = input->answer;
     parms.output = output->answer;
@@ -287,9 +290,6 @@ void parse_command_line(int argc, char **argv)
 	parms.h = FALSE;
 
     parms.test_only = flag_test->answer;
-
-    if (!parms.fs)
-	parms.fs = "";
     
     if (parms.input && *parms.input == 0) {
 	G_usage();
