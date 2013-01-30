@@ -109,16 +109,18 @@ int main(int argc, char *argv[])
     name = parm.map->answer;
 
     /* see v.in.ascii for a better solution */
-    if (parm.fs->answer != NULL) {
-	if (strcmp(parm.fs->answer, "space") == 0)
-	    fs = ' ';
-	else if (strcmp(parm.fs->answer, "tab") == 0)
-	    fs = '\t';
-	else if (strcmp(parm.fs->answer, "\\t") == 0)
-	    fs = '\t';
-	else
-	    fs = parm.fs->answer[0];
-    }
+    if (strcmp(parm.fs->answer, "space") == 0)
+	fs = ' ';
+    else if (strcmp(parm.fs->answer, "\\t") == 0)
+	fs = '\t';
+    else if (strcmp(parm.fs->answer, "newline") == 0)
+	fs = '\n';
+    else if (strcmp(parm.fs->answer, "comma") == 0)
+	fs = ',';
+    else if (strcmp(parm.fs->answer, "tab") == 0)
+	fs = '\t';
+    else
+	fs = parm.fs->answer[0];
 
     mapset = G_find_raster2(name, "");
     if (mapset == NULL)
