@@ -7,12 +7,9 @@ struct ncb			/* neighborhood control block */
     int nsize;			/* size of the neighborhood */
     int dist;			/* nsize/2 */
     struct Categories cats;
-    char title[1024];
-    FILE *out;
     char **mask;
     DCELL **weights;
     const char *oldcell;
-    const char *newcell;
 };
 
 extern struct ncb ncb;

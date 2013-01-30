@@ -45,52 +45,44 @@ void weights_mask(void)
 	    ncb.mask[i][j] = ncb.weights[i][j] != 0;
 }
 
-int gather(DCELL * values, int offset)
+int gather(DCELL *values, int offset)
 {
     int row, col;
     int n = 0;
 
     *values = 0;
 
-    for (row = 0; row < ncb.nsize; row++)
+    for (row = 0; row < ncb.nsize; row++) {
 	for (col = 0; col < ncb.nsize; col++) {
-	    DCELL *c = &ncb.buf[row][offset + col];
 
 	    if (ncb.mask && !ncb.mask[row][col])
 		continue;
 
-	    if (Rast_is_d_null_value(c))
-		Rast_set_d_null_value(&values[n], 1);
-	    else
-		values[n] = *c;
+	    values[n] = ncb.buf[row][offset + col];
 
 	    n++;
 	}
+    }
 
-    return n ? n : -1;
+    return n;
 }
 
-int gather_w(DCELL(*values)[2], int offset)
+int gather_w(DCELL *values, DCELL (*values_w)[2], int offset)
 {
     int row, col;
     int n = 0;
 
-    values[0][0] = 0;
-    values[0][1] = 1;
+    values_w[0][0] = 0;
+    values_w[0][1] = 1;
 
-    for (row = 0; row < ncb.nsize; row++)
+    for (row = 0; row < ncb.nsize; row++) {
 	for (col = 0; col < ncb.nsize; col++) {
-	    DCELL *c = &ncb.buf[row][offset + col];
-
-	    if (Rast_is_d_null_value(c))
-		Rast_set_d_null_value(&values[n][0], 1);
-	    else
-		values[n][0] = *c;
-
-	    values[n][1] = ncb.weights[row][col];
+	    values[n] = values_w[n][0] = ncb.buf[row][offset + col];
+	    values_w[n][1] = ncb.weights[row][col];
 
 	    n++;
 	}
+    }
 
-    return n ? n : -1;
+    return n;
 }
