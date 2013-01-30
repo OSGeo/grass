@@ -128,7 +128,7 @@ class AboutWindow(wx.Frame):
 
         row += 2
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = '%s:' % _('SVN Revision')),
+                                               label = '%s:' % _('Code Revision')),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         
@@ -139,15 +139,27 @@ class AboutWindow(wx.Frame):
         
         row += 1
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = '%s:' % _('GIS Library Revision')),
+                                               label = '%s:' % _('Build Date')),
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = vInfo['libgis_revision'] + ' (' +
-                                               vInfo['libgis_date'].split(' ')[0] + ')'),
+                                               label = vInfo['build_date']),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
+        
+        ### show only basic info
+        # row += 1
+        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+        #                                        label = '%s:' % _('GIS Library Revision')),
+        #                   pos = (row, 0),
+        #                   flag = wx.ALIGN_RIGHT)
+        
+        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+        #                                        label = vInfo['libgis_revision'] + ' (' +
+        #                                        vInfo['libgis_date'].split(' ')[0] + ')'),
+        #                   pos = (row, 1),
+        #                   flag = wx.ALIGN_LEFT)
 
         row += 2
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,

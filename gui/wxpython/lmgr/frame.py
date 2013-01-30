@@ -7,7 +7,7 @@ control for display management and access to command console.
 Classes:
  - frame::GMFrame
 
-(C) 2006-2012 by the GRASS Development Team
+(C) 2006-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -923,22 +923,24 @@ class GMFrame(wx.Frame):
         
         self._gconsole.WriteCmdLog(_("System Info"))
         self._gconsole.WriteLog("%s: %s\n"
-                              "%s: %s\n"
-                              "%s: %s (%s)\n"
-                              "GDAL/OGR: %s\n"
-                              "PROJ.4: %s\n"
-                              "GEOS: %s\n"
-                              "SQLite: %s\n"
-                              "Python: %s\n"
-                              "wxPython: %s\n"
-                              "%s: %s%s\n"% (_("GRASS version"), vInfo['version'],
-                                           _("GRASS SVN Revision"), vInfo['revision'],
-                                           _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
-                                           vInfo['gdal'], vInfo['proj4'], vInfo['geos'], vInfo['sqlite'],
-                                           platform.python_version(),
-                                           wx.__version__,
-                                           _("Platform"), platform.platform(), osgeo4w),
-                              priority = 2)
+                                "%s: %s\n"
+                                "%s: %s\n"
+                                "%s: %s (%s)\n"
+                                "GDAL/OGR: %s\n"
+                                "PROJ.4: %s\n"
+                                "GEOS: %s\n"
+                                "SQLite: %s\n"
+                                "Python: %s\n"
+                                "wxPython: %s\n"
+                                "%s: %s%s\n"% (_("GRASS version"), vInfo['version'],
+                                               _("GRASS SVN Revision"), vInfo['revision'],
+                                               _("Build Date"), vInfo['build_date'],
+                                               _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
+                                               vInfo['gdal'], vInfo['proj4'], vInfo['geos'], vInfo['sqlite'],
+                                               platform.python_version(),
+                                               wx.__version__,
+                                               _("Platform"), platform.platform(), osgeo4w),
+                                priority = 2)
         self._gconsole.WriteCmdLog(' ')
     
     def OnAboutGRASS(self, event):
