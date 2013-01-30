@@ -8,7 +8,7 @@
 *               Extended info by Martin Landa <landa.martin gmail.com>
 * PURPOSE: 	Output GRASS version number, date and copyright message.
 *             
-* COPYRIGHT:  	(C) 2000-2012 by the GRASS Development Team
+* COPYRIGHT:  	(C) 2000-2013 by the GRASS Development Team
 *
 *   	    	This program is free software under the GPL (>=v2)
 *   	    	Read the file COPYING that comes with GRASS for details.
@@ -20,6 +20,8 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+#include "local_proto.h"
 
 #include <proj_api.h>
 
@@ -56,8 +58,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    G_add_keyword(_("version"));
-    module->description = _("Displays GRASS version and copyright information.");
+    G_add_keyword(_("supporting"));
+    module->label = _("Displays GRASS version info.");
+    module->description = _("Optionally also print build or copyright information.");
 
     copyright = G_define_flag();
     copyright->key = 'c';
@@ -66,13 +69,13 @@ int main(int argc, char *argv[])
 
     build = G_define_flag();
     build->key = 'b';
-    build->description = _("Print also the GRASS build information");
+    build->description = _("Print also the build information");
     build->guisection = _("Additional info");
 
     gish_rev = G_define_flag();
     gish_rev->key = 'r';
     gish_rev->description =
-	_("Print also the GIS library revision number and time");
+	_("Print also the GIS library revision number and date");
     gish_rev->guisection = _("Additional info");
 
     extended = G_define_flag();
@@ -91,8 +94,9 @@ int main(int argc, char *argv[])
 
     if (shell->answer) {
 	fprintf(stdout, "version=%s\n", GRASS_VERSION_NUMBER);
-	fprintf(stdout, "revision=%s\n", GRASS_VERSION_SVN);
 	fprintf(stdout, "date=%s\n", GRASS_VERSION_DATE);
+	fprintf(stdout, "revision=%s\n", GRASS_VERSION_SVN);
+	fprintf(stdout, "build_date=%s\n", get_date());
     }
     else {
 	fprintf(stdout, "GRASS %s (%s)\n",
