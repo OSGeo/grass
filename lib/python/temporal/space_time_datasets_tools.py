@@ -666,7 +666,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
 
     for st in sts:
         if st.is_in_db(dbif) == False:
-            core.fatal(_("Dataset <%s> not found in temporal database") % (id))
+            core.fatal(_("Dataset <%s> not found in temporal database") % (st.get_id()))
         st.select(dbif)
 
     if sst.is_in_db(dbif) == False:
@@ -868,6 +868,9 @@ def create_space_time_dataset(name, type, temporaltype, title, descr, semantic,
 
     mapset = core.gisenv()["MAPSET"]
     id = name + "@" + mapset
+    
+    print id
+    print overwrite
 
     sp = dataset_factory(type, id)
 
