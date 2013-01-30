@@ -68,27 +68,48 @@ static struct menu menu[] = {
 
 struct ncb ncb;
 
+struct output
+{
+    const char *name;
+    char title[1024];
+    int fd;
+    DCELL *buf;
+    stat_func *method_fn;
+    stat_func_w *method_fn_w;
+    int copycolr;
+    int half;
+    ifunc cat_names;
+    int map_type;
+    double quantile;
+};
+
+static int find_method(const char *method_name)
+{
+    int i;
+
+    for (i = 0; menu[i].name; i++)
+	if (strcmp(menu[i].name, method_name) == 0)
+	    return i;
+
+    G_fatal_error(_("Unknown method <%s>"), method_name);
+
+    return -1;
+}
+
 int main(int argc, char *argv[])
 {
     char *p;
-    int method;
     int in_fd;
     int selection_fd;
-    int out_fd;
-    DCELL *result;
+    int num_outputs;
+    struct output *outputs = NULL;
+    int copycolr, weights, have_weights_mask;
     char *selection;
     RASTER_MAP_TYPE map_type;
     int row, col;
     int readrow;
     int nrows, ncols;
-    int n;
-    int copycolr;
-    int half;
-    stat_func *newvalue;
-    stat_func_w *newvalue_w;
-    ifunc cat_names;
-    double quantile;
-    const void *closure;
+    int i, n;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -109,8 +130,9 @@ int main(int argc, char *argv[])
     } flag;
 
     DCELL *values;		/* list of neighborhood values */
-
+    DCELL *values_tmp;		/* list of neighborhood values */
     DCELL(*values_w)[2];	/* list of neighborhood values and weights */
+    DCELL(*values_w_tmp)[2];	/* list of neighborhood values and weights */
 
     G_gisinit(argv[0]);
 
@@ -133,6 +155,7 @@ int main(int argc, char *argv[])
     parm.selection->description = _("Name of an input raster map to select the cells which should be processed");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.output->multiple = YES;
 
     parm.method = G_define_option();
     parm.method->key = "method";
@@ -149,6 +172,7 @@ int main(int argc, char *argv[])
     }
     parm.method->options = p;
     parm.method->description = _("Neighborhood operation");
+    parm.method->multiple = YES;
     parm.method->guisection = _("Neighborhood");
 
     parm.size = G_define_option();
@@ -181,6 +205,7 @@ int main(int argc, char *argv[])
     parm.quantile->key = "quantile";
     parm.quantile->type = TYPE_DOUBLE;
     parm.quantile->required = NO;
+    parm.quantile->multiple = YES;
     parm.quantile->description = _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
     parm.quantile->answer = "0.5";
@@ -211,7 +236,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("weight= and gauss= are mutually exclusive"));
 
     ncb.oldcell = parm.input->answer;
-    ncb.newcell = parm.output->answer;
 
     if (!flag.align->answer) {
 	Rast_get_cellhd(ncb.oldcell, "", &cellhd);
@@ -227,30 +251,88 @@ int main(int argc, char *argv[])
     in_fd = Rast_open_old(ncb.oldcell, "");
     map_type = Rast_get_map_type(in_fd);
 
-    /* get the method */
-    for (method = 0; (p = menu[method].name); method++)
-	if ((strcmp(p, parm.method->answer) == 0))
-	    break;
-    if (!p) {
-	G_warning(_("<%s=%s> unknown %s"),
-		  parm.method->key, parm.method->answer, parm.method->key);
-	G_usage();
-	exit(EXIT_FAILURE);
+    /* process the output maps */
+    for (i = 0; parm.output->answers[i]; i++)
+	;
+    num_outputs = i;
+
+    for (i = 0; parm.method->answers[i]; i++)
+	;
+    if (num_outputs != i)
+	G_fatal_error(_("output= and method= must have the same number of values"));
+
+    outputs = G_calloc(num_outputs, sizeof(struct output));
+
+    /* read the weights */
+    weights = 0;
+    ncb.weights = NULL;
+    ncb.mask = NULL;
+    if (parm.weight->answer) {
+	read_weights(parm.weight->answer);
+	weights = 1;
     }
-
-    if (menu[method].method == c_quant) {
-	quantile = atoi(parm.quantile->answer);
-	closure = &quantile;
+    else if (parm.gauss->answer) {
+	gaussian_weights(atof(parm.gauss->answer));
+	weights = 1;
     }
+    
+    copycolr = 0;
+    have_weights_mask = 0;
 
-    half = (map_type == CELL_TYPE) ? menu[method].half : 0;
+    for (i = 0; i < num_outputs; i++) {
+	struct output *out = &outputs[i];
+	const char *output_name = parm.output->answers[i];
+	const char *method_name = parm.method->answers[i];
+	int method = find_method(method_name);
 
-    /* establish the newvalue routine */
-    newvalue = menu[method].method;
-    newvalue_w = menu[method].method_w;
+	out->name = output_name;
+	if (weights) {
+	    if (menu[method].method_w) {
+		out->method_fn = NULL;
+		out->method_fn_w = menu[method].method_w;
+	    }
+	    else {
+		if (parm.weight->answer) {
+		    G_warning(_("Method %s not compatible with weighing window, using weight mask instead"),
+			      method_name);
+		    if (!have_weights_mask) {
+			weights_mask();
+			have_weights_mask = 1;
+		    }
+		}
+		else if (parm.gauss->answer) {
+		    G_warning(_("Method %s not compatible with Gaussian filter, using unweighed version instead"),
+			      method_name);
+		}
+		
+		out->method_fn = menu[method].method;
+		out->method_fn_w = NULL;
+	    }
+	}
+	else {
+	    out->method_fn = menu[method].method;
+	    out->method_fn_w = NULL;
+	}
+	out->half = menu[method].half;
+	out->copycolr = menu[method].copycolr;
+	out->cat_names = menu[method].cat_names;
+	if (out->copycolr)
+	    copycolr = 1;
+	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
+	    ? atof(parm.quantile->answers[i])
+	    : 0;
+	out->buf = Rast_allocate_d_buf();
+	out->fd = Rast_open_new(output_name, DCELL_TYPE);
+
+	/* get title, initialize the category and stat info */
+	if (parm.title->answer)
+	    strcpy(out->title, parm.title->answer);
+	else
+	    sprintf(out->title, "%dx%d neighborhood: %s of %s",
+		    ncb.nsize, ncb.nsize, menu[method].name, ncb.oldcell);
+    }
 
     /* copy color table? */
-    copycolr = menu[method].copycolr;
     if (copycolr) {
 	G_suppress_warnings(1);
 	copycolr =
@@ -258,34 +340,10 @@ int main(int argc, char *argv[])
 	G_suppress_warnings(0);
     }
 
-    /* read the weights */
-    if (parm.weight->answer) {
-	read_weights(parm.weight->answer);
-	if (!newvalue_w)
-	    weights_mask();
-    }
-    else if (parm.gauss->answer) {
-	if (!newvalue_w)
-	    G_fatal_error(_("Method %s not compatible with Gaussian filter"), parm.method->answer);
-	gaussian_weights(atof(parm.gauss->answer));
-    }
-    else
-	newvalue_w = NULL;
-
     /* allocate the cell buffers */
     allocate_bufs();
-    result = Rast_allocate_d_buf();
-
-    /* get title, initialize the category and stat info */
-    if (parm.title->answer)
-	strcpy(ncb.title, parm.title->answer);
-    else
-	sprintf(ncb.title, "%dx%d neighborhood: %s of %s",
-		ncb.nsize, ncb.nsize, menu[method].name, ncb.oldcell);
-
 
     /* initialize the cell bufs with 'dist' rows of the old cellfile */
-
     readrow = 0;
     for (row = 0; row < ncb.dist; row++)
 	readcell(in_fd, readrow++, nrows, ncols);
@@ -300,17 +358,19 @@ int main(int argc, char *argv[])
         selection = NULL;
     }
 
-    /*open the new raster map */
-    out_fd = Rast_open_new(ncb.newcell, map_type);
-
     if (flag.circle->answer)
 	circle_mask();
 
-    if (newvalue_w)
+    values_w = NULL;
+    values_w_tmp = NULL;
+    if (weights) {
 	values_w =
 	    (DCELL(*)[2]) G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
-    else
-	values = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+	values_w_tmp =
+	    (DCELL(*)[2]) G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+    }
+    values = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+    values_tmp = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
@@ -320,57 +380,73 @@ int main(int argc, char *argv[])
             Rast_get_null_value_row(selection_fd, selection, row);
 
 	for (col = 0; col < ncols; col++) {
-	    DCELL *rp = &result[col];
 
             if (selection && selection[col]) {
                 /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
                  * Thus original data start is shifted by ncb.dist! */
-		*rp = ncb.buf[ncb.dist][col+ncb.dist];
+		for (i = 0; i < num_outputs; i++)
+		    outputs[i].buf[col] = ncb.buf[ncb.dist][col + ncb.dist];
 		continue;
 	    }
 
-	    if (newvalue_w)
-		n = gather_w(values_w, col);
+	    if (weights)
+		n = gather_w(values, values_w, col);
 	    else
 		n = gather(values, col);
 
-	    if (n < 0)
-		Rast_set_d_null_value(rp, 1);
-	    else {
-		if (newvalue_w)
-		    newvalue_w(rp, values_w, n, closure);
-		else
-		    newvalue(rp, values, n, closure);
+	    for (i = 0; i < num_outputs; i++) {
+		struct output *out = &outputs[i];
+		DCELL *rp = &out->buf[col];
 
-		if (half && !Rast_is_d_null_value(rp))
-		    *rp += 0.5;
+		if (n == 0) {
+		    Rast_set_d_null_value(rp, 1);
+		}
+		else {
+		    if (out->method_fn_w) {
+			memcpy(values_w_tmp, values_w, n * 2 * sizeof(DCELL));
+			(*out->method_fn_w)(rp, values_w_tmp, n, &out->quantile);
+		    }
+		    else {
+			memcpy(values_tmp, values, n * sizeof(DCELL));
+			(*out->method_fn)(rp, values_tmp, n, &out->quantile);
+		    }
+
+		    if (out->half && !Rast_is_d_null_value(rp))
+			*rp += 0.5;
+		}
 	    }
 	}
 
-	Rast_put_d_row(out_fd, result);
+	for (i = 0; i < num_outputs; i++) {
+	    struct output *out = &outputs[i];
+
+	    Rast_put_d_row(out->fd, out->buf);
+	}
     }
     G_percent(row, nrows, 2);
 
-    Rast_close(out_fd);
     Rast_close(in_fd);
 
     if (selection)
         Rast_close(selection_fd);
 
-    /* put out category info */
-    null_cats();
-    if ((cat_names = menu[method].cat_names))
-	cat_names();
+    for (i = 0; i < num_outputs; i++) {
+	Rast_close(outputs[i].fd);
 
-    Rast_write_cats(ncb.newcell, &ncb.cats);
+	/* put out category info */
+	null_cats(outputs[i].title);
+	if (outputs[i].cat_names)
+	    outputs[i].cat_names();
 
-    if (copycolr)
-	Rast_write_colors(ncb.newcell, G_mapset(), &colr);
+	Rast_write_cats(outputs[i].name, &ncb.cats);
 
-    Rast_short_history(ncb.newcell, "raster", &history);
-    Rast_command_history(&history);
-    Rast_write_history(ncb.newcell, &history);
+	if (copycolr && outputs[i].copycolr)
+	    Rast_write_colors(outputs[i].name, G_mapset(), &colr);
 
+	Rast_short_history(outputs[i].name, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(outputs[i].name, &history);
+    }
 
     exit(EXIT_SUCCESS);
 }

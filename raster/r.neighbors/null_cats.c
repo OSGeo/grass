@@ -2,9 +2,9 @@
 #include <grass/raster.h>
 #include "ncb.h"
 
-int null_cats(void)
+int null_cats(const char *title)
 {
-    Rast_init_cats(ncb.title, &ncb.cats);
+    Rast_init_cats(title, &ncb.cats);
 
     return 0;
 }
