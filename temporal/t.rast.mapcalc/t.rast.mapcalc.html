@@ -23,8 +23,8 @@ The module <em>t.rast.mapcalc</em> supports parallel processing. The option
 <em>nprocs</em> specifies the number of processes that can be started in parallel. 
 <p>
 A mapcalc expression must be provided to process the temporal 
-sampled maps. Temporal operators are available in addition to 
-the <em>r.mapcalc</em> operators:
+sampled maps. Temporal functions are available in addition to 
+the <em>r.mapcalc</em> spatial operators and functions:
 <p>
 Supported functions for relative and absolute time:
 <ul>
@@ -113,6 +113,9 @@ r.mapcalc expr="c_5 = if(7 == 5 || 7 == 6, (a7 + b7), (a7 * b7))"
 r.mapcalc expr="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
 </pre></div>
 <p>
+
+<h2>EXAMPLE</h2>
+
 Here the full script to reproduce the example:
 <p>
 <div class="code"><pre>
