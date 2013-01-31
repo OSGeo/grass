@@ -1,11 +1,170 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+The purpose of <em>t.rast.mapcalc</em> is to perform spatio-temporal <em>mapcalc</em> expressions
+on maps of temporally sampled space time raster datasets (STRDS). Spatial and temporal 
+operators and functions are available in the expression string. The description of the spatial 
+operators and functions is available in the <a href="r.mapcalc.html">r.mapcalc</a> manual page.
+The temporal functions are described in detail below.
+<p>
+This module expects several parameter. All space time raster datasets that are referenced in 
+the <em>mapcalc expression</em> must be listed in the <em>input</em> option. The <em>first</em> space time raster
+dataset that is listed as input will be used to temporally sample all other
+space time raster datasets. The temporal sampling method can be chosen using
+the <em>method</em> option. The order of the STRDS's in the mapcalc expression can be different 
+to the order of the STRDS's in the input option. The resulting space time raster dataset
+must be specified in the <em>output</em> option together with the <em>base</em> name
+of generated raster maps that are registered in the resulting STRDS. Empty maps
+resulting from map-calculation are not registered by default. This behavior can be changed
+with the <em>-n</em> flag. The flag <em>-s</em> can be used to assure that only spatial related
+maps in the STRDS's are processed. Spatial related means that temporally related maps overlap
+in their spatial extent.
+<p>
+The module <em>t.rast.mapcalc</em> supports parallel processing. The option
+<em>nprocs</em> specifies the number of processes that can be started in parallel. 
+<p>
+A mapcalc expression must be provided to process the temporal 
+sampled maps. Temporal operators are available in addition to 
+the <em>r.mapcalc</em> operators:
+<p>
+Supported functions for relative and absolute time:
+<ul>
+  <li> <em>td()</em> - This function
+       represents the size of the current sample time interval
+       in days and fraction of days for absolute time,
+       and in relative units in case of relative time. </li>
+  <li> <em>start_time()</em> - This function represent 
+    the time difference between the start time of the sample space time
+    raster dataset and the start time of the current sample interval or instance. The time
+    is measured  in days and fraction of days for absolute time,
+    and in relative units in case of relative time. </li>
+  <li> <em>end_time()</em> - This function represent 
+    the time difference between the start time of the sample space time
+    raster dataset and the end time of the current sample interval. The time
+    is measured  in days and fraction of days for absolute time,
+    and in relative units in case of relative time. 
+    The end_time() will be represented by null() in case of a time instance.</li>
+</ul>
+<p>
+Supported functions for absolute time of the current sample interval or instance:
+<ul>
+  <li> <em>start_doy()</em> - Day of year (doy) from the start time [1 - 366] </li>
+  <li> <em>start_dow()</em> - Day of week (dow) from the start time [1 - 7], 
+         the start of the week is monday == 1 </li>
+  <li> <em>start_year()</em> - The year of the start time [0 - 9999] </li>
+  <li> <em>start_month()</em> - The month of the start time [1 - 12] </li>
+  <li> <em>start_week()</em> - Week of year of the start time [1 - 54] </li>
+  <li> <em>start_day()</em> - Day of month from the start time [1 - 31] </li>
+  <li> <em>start_hour()</em> - The hour of the start time [0 - 23] </li>
+  <li> <em>start_minute()</em> - The minute of the start time [0 - 59] </li>
+  <li> <em>start_second()</em> - The second of the start time [0 - 59] </li>
+       
+  <li> <em>end_doy()</em> - Day of year (doy) from the end time [1 - 366] </li>
+  <li> <em>end_dow()</em> - Day of week (dow) from the end time [1 - 7], 
+         the start of the week is monday == 1 </li>
+  <li> <em>end_year()</em> - The year of the end time [0 - 9999] </li>
+  <li> <em>end_month()</em> - The month of the end time [1 - 12] </li>
+  <li> <em>end_woy()</em> - Week of year (woy) of the end time [1 - 54] </li>
+  <li> <em>end_day()</em> - Day of month from the start time [1 - 31] </li>
+  <li> <em>end_hour()</em> - The hour of the end time [0 - 23] </li>
+  <li> <em>end_minute()</em> - The minute of the end time [0 - 59] </li>
+  <li> <em>end_second()</em> - The second of the end time [0 - 59] </li>
+</ul>
+The <em>end_*</em> functions are represented by the null() function in case of time instances.
+
+<h2>NOTE</h2>
+
+We will discuss the internal work of <em>t.rast.mapcalc</em> with an example.
+Imagine we have two STRDS as input, each with monthly granularity. The first one 
+<em>A</em> has 6 raster maps (a3 ... a8) with a temporal range from March to August. The second
+STRDS <em>B</em> has 12 raster maps (b1 ... b12) ranging from January to December. 
+The value of the raster maps is the number of the month from their interval start time.
+Dataset <em>A</em> will be used to sample dataset <em>B</em> to create a dataset <em>C</em>.
+We want to add all maps with equal time stamps if the month of the start time is May or June,
+otherwise we multiply the maps. The command will look as follows:
+<p>
+<div class="code"><pre>
+t.rast.mapcalc input=A,B output=C base=c method=equal \
+    expr="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
+</pre></div>
+<p>
+The resulting raster maps in dataset C can be listed with <em>t.rast.list</em>:
+<p>
+<div class="code"><pre>
+name    start_time              min     max
+c_1     2001-03-01 00:00:00     9.0     9.0
+c_2     2001-04-01 00:00:00     16.0    16.0
+c_3     2001-05-01 00:00:00     10.0    10.0
+c_4     2001-06-01 00:00:00     12.0    12.0
+c_5     2001-07-01 00:00:00     49.0    49.0
+c_6     2001-08-01 00:00:00     64.0    64.0
+</pre></div>
+<p>
+Internally the spatio-temporal expression will be analyzed for each time interval
+of the sample dataset A, the temporal functions will be replaced by numerical values,
+the names of the space time raster datasets will be replaced by the corresponding raster maps.
+The final expression will be passed to <em>r.mapcalc</em>, resulting in 6 runs:
+<p>
+<div class="code"><pre>
+r.mapcalc expr="c_1 = if(3 == 5 || 3 == 6, (a3 + b3), (a3 * b3))"
+r.mapcalc expr="c_2 = if(4 == 5 || 4 == 6, (a4 + b4), (a4 * b4))"
+r.mapcalc expr="c_3 = if(5 == 5 || 5 == 6, (a5 + b5), (a5 * b5))"
+r.mapcalc expr="c_4 = if(6 == 5 || 6 == 6, (a6 + b6), (a6 * b6))"
+r.mapcalc expr="c_5 = if(7 == 5 || 7 == 6, (a7 + b7), (a7 * b7))"
+r.mapcalc expr="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
+</pre></div>
+<p>
+Here the full script to reproduce the example:
+<p>
+<div class="code"><pre>
+g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
+# Lets create the raster maps
+r.mapcalc  expr="a3 = 3"
+r.mapcalc  expr="a4 = 4"
+r.mapcalc  expr="a5 = 5"
+r.mapcalc  expr="a6 = 6"
+r.mapcalc  expr="a7 = 7"
+r.mapcalc  expr="a8 = 8"
+
+r.mapcalc  expr="b1 = 1"
+r.mapcalc  expr="b2 = 2"
+r.mapcalc  expr="b3 = 3"
+r.mapcalc  expr="b4 = 4"
+r.mapcalc  expr="b5 = 5"
+r.mapcalc  expr="b6 = 6"
+r.mapcalc  expr="b7 = 7"
+r.mapcalc  expr="b8 = 8"
+r.mapcalc  expr="b9 = 8"
+r.mapcalc  expr="b10 = 10"
+r.mapcalc  expr="b11 = 11"
+r.mapcalc  expr="b12 = 12"
+
+t.create  type=strds temporaltype=absolute \
+    output=A title="Dataset A" descr="Dataset A"
+    
+t.create  type=strds temporaltype=absolute \
+    output=B title="Dataset B" descr="Dataset B"
+    
+t.register  -i type=rast input=A maps=a3,a4,a5,a6,a7,a8 \
+    start="2001-03-01" increment="1 months"
+    
+t.register  -i type=rast input=B maps=b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12 \
+    start="2001-01-01" increment="1 months"
+
+t.rast.mapcalc input=A,B output=C base=c method=equal \
+    expr="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
+
+t.info type=strds input=C
+
+t.rast.list -h input=C columns=name,start_time,min,max
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="t.create.html">t.create</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="t.register.html">t.register</a>,
+<a href="t.rast.list.html">t.rast.list</a>,
 <a href="t.info.html">t.info</a>
 </em>
 
