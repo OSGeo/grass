@@ -105,7 +105,7 @@ class AnimationWindow(BufferedWindow):
                  style = wx.DEFAULT_FRAME_STYLE | wx.FULL_REPAINT_ON_RESIZE | wx.BORDER_RAISED):
         Debug.msg(2, "AnimationWindow.__init__()")
 
-        self.bitmap = wx.EmptyBitmap(0, 0)
+        self.bitmap = wx.EmptyBitmap(1, 1)
         self.x = self.y = 0
         self.text = ''
         self.size = wx.Size()
