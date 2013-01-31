@@ -5,7 +5,7 @@
 # MODULE:	t.rast.mapcalc
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Perform r.mapcalc expressions on maps of sampled space time raster datasets
+# PURPOSE:	Perform spatio-temporal mapcalc expressions on temporal sampled maps of space time raster datasets
 # COPYRIGHT:	(C) 2012 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Performs r.mapcalc expressions on maps of sampled space time raster datasets.
+#% description: Perform spatio-temporal mapcalc expressions on temporal sampled maps of space time raster datasets.
 #% keywords: temporal
 #% keywords: algebra
 #%end
@@ -26,14 +26,14 @@
 #%option
 #% key: expression
 #% type: string
-#% description: r.mapcalc expression applied to each time step of the sampled data
+#% description: Spatio-temporal mapcalc expression
 #% required: yes
 #% multiple: no
 #%end
 
 #%option G_OPT_T_SAMPLE
 #% key: method
-#% answer: during,overlap,contain,equal
+#% answer: equal
 #%end
 
 #%option G_OPT_STRDS_OUTPUT

@@ -28,7 +28,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
        selected maps. Temporal operators are available in addition to 
        the r.mapcalc operators:
        
-       Supported operators for relative and absolute time:
+       Supported operators for relative and absolute time are:
        * td() - the time delta of the current interval in days 
          and fractions of days or the unit in case of relative time
        * start_time() - The start time of the interval from the begin of the time 
@@ -47,17 +47,17 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
        * start_hour() - The hour of the start time [0 - 23]
        * start_minute() - The minute of the start time [0 - 59]
        * start_second() - The second of the start time [0 - 59]
-       
-       * end_doy() - Day of year (doy) from the start time [1 - 366]
+
+       * end_doy() - Day of year (doy) from the end time [1 - 366]
        * end_dow() - Day of week (dow) from the end time [1 - 7], 
-         end is monday == 1
+         the start of the week is monday == 1
        * end_year() - The year of the end time [0 - 9999]
        * end_month() - The month of the end time [1 - 12]
-       * end_woy() - Week of year (woy) of the end time [1 - 54]
-       * end_day() - Day of month from the start time [1 - 31]
+       * end_week() - Week of year of the end time [1 - 54]
+       * end_day() - Day of month from the end time [1 - 31]
        * end_hour() - The hour of the end time [0 - 23]
        * end_minute() - The minute of the end time [0 - 59]
-       * end_second() - The second of the end time [0 - 59]
+       * end_second() - The minute of the end time [0 - 59]
        
 
        @param input The name of the input space time raster/raster3d dataset
@@ -416,17 +416,17 @@ def _operator_parser(expr, first, current):
        * start_hour() - The hour of the start time [0 - 23]
        * start_minute() - The minute of the start time [0 - 59]
        * start_second() - The second of the start time [0 - 59]
-       
-       * end_doy() - Day of year (doy) from the start time [1 - 366]
+
+       * end_doy() - Day of year (doy) from the end time [1 - 366]
        * end_dow() - Day of week (dow) from the end time [1 - 7], 
-         end is monday == 1
+         the start of the week is monday == 1
        * end_year() - The year of the end time [0 - 9999]
        * end_month() - The month of the end time [1 - 12]
-       * end_woy() - Week of year (woy) of the end time [1 - 54]
-       * end_day() - Day of month from the start time [1 - 31]
+       * end_week() - Week of year of the end time [1 - 54]
+       * end_day() - Day of month from the end time [1 - 31]
        * end_hour() - The hour of the end time [0 - 23]
        * end_minute() - The minute of the end time [0 - 59]
-       * end_second() - The second of the end time [0 - 59]
+       * end_second() - The minute of the end time [0 - 59]
        
        The modified expression is returned.
        
@@ -502,7 +502,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
        Supported operators for absolute time:
        * end_doy() - Day of year (doy) from the end time [1 - 366]
        * end_dow() - Day of week (dow) from the end time [1 - 7], 
-         the end of the week is monday == 1
+         the start of the week is monday == 1
        * end_year() - The year of the end time [0 - 9999]
        * end_month() - The month of the end time [1 - 12]
        * end_week() - Week of year of the end time [1 - 54]
@@ -582,7 +582,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 
 def _parse_td_operator(expr, is_time_absolute, first, current):
     """Parse the time delta operator td(). This operator
-       represents the size of the current time interval
+       represents the size of the current sample time interval
        in days and fraction of days for absolute time,
        and in relative units in case of relative time.
        
@@ -607,7 +607,7 @@ def _parse_td_operator(expr, is_time_absolute, first, current):
 def _parse_start_time_operator(expr, is_time_absolute, first, current):
     """Parse the start_time() operator. This operator represent 
     the time difference between the start time of the sample space time
-    raster dataset and the start time of the current interval or instance. The time
+    raster dataset and the start time of the current sample interval or instance. The time
     is measured  in days and fraction of days for absolute time,
     and in relative units in case of relative time."""
     if expr.find("start_time()") >= 0:
@@ -628,7 +628,7 @@ def _parse_start_time_operator(expr, is_time_absolute, first, current):
 def _parse_end_time_operator(expr, is_time_absolute, first, current):
     """Parse the end_time() operator. This operator represent 
     the time difference between the start time of the sample space time
-    raster dataset and the start time of the current interval. The time
+    raster dataset and the end time of the current sample interval. The time
     is measured  in days and fraction of days for absolute time,
     and in relative units in case of relative time.
     
