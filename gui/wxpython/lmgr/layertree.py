@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import sys
 import wx
 try:
     import wx.lib.agw.customtreectrl as CT
@@ -855,12 +856,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         if ltype == 'command':
             # generic command item
-            ctrl = wx.TextCtrl(self, id = wx.ID_ANY, value = '',
-                               pos = wx.DefaultPosition, size = (self.GetSize()[0]-100,25),
-                               # style = wx.TE_MULTILINE|wx.TE_WORDWRAP)
-                               style = wx.TE_PROCESS_ENTER | wx.TE_DONTWRAP)
+            ctrl = self._createCommandCtrl()
             ctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
-            # ctrl.Bind(wx.EVT_TEXT,       self.OnCmdChanged)
+
         elif ltype == 'group':
             # group item
             ctrl = None
@@ -1077,7 +1075,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                 completed = (self.GetOptData,layer,params))
             
             self.SetLayerInfo(layer, key = 'cmd', value = module.GetCmd())
-        else:
+        elif self.GetLayerInfo(layer, key = 'type') != 'command':
             cmd = [ltype2command[ltype]]
             if ltype == 'raster':
                 if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
@@ -1378,7 +1376,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         checked = self.IsItemChecked(dragItem)
         image   = self.GetItemImage(dragItem, 0)
         text    = self.GetItemText(dragItem)
-        if self.GetLayerInfo(dragItem, key = 'ctrl'):
+        if self.GetLayerInfo(dragItem, key = 'type') == 'command':
+            # recreate command layer
+            newctrl = self._createCommandCtrl()
+            try:
+                newctrl.SetValue(self.GetLayerInfo(dragItem, key = 'maplayer').GetCmd(string = True))
+            except:
+                pass
+            newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
+            data = self.GetPyData(dragItem)
+
+        elif self.GetLayerInfo(dragItem, key = 'ctrl'):
             # recreate data layer
             btnbmp = LMIcons["layerOptions"].GetBitmap((16,16))
             newctrl = buttons.GenBitmapButton(self, id = wx.ID_ANY, bitmap = btnbmp, size = (24, 24))
@@ -1386,18 +1394,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
             data = self.GetPyData(dragItem)
         
-        elif self.GetLayerInfo(dragItem, key = 'type') == 'command':
-            # recreate command layer
-            newctrl = wx.TextCtrl(self, id = wx.ID_ANY, value = '',
-                                  pos = wx.DefaultPosition, size = (250,25),
-                                  style = wx.TE_MULTILINE|wx.TE_WORDWRAP)
-            try:
-                newctrl.SetValue(self.GetLayerInfo(dragItem, key = 'maplayer').GetCmd(string = True))
-            except:
-                pass
-            newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
-            newctrl.Bind(wx.EVT_TEXT,       self.OnCmdChanged)
-            data = self.GetPyData(dragItem)
 
         elif self.GetLayerInfo(dragItem, key = 'type') == 'group':
             # recreate group
@@ -1689,3 +1685,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if items:
             return items
         return None
+
+    def _createCommandCtrl(self):
+        """!Creates text control for command layer"""
+        height = 25
+        if sys.platform in ('win32', 'darwin'):
+            height = 40
+        ctrl = wx.TextCtrl(self, id = wx.ID_ANY, value = '',
+                               pos = wx.DefaultPosition, size = (self.GetSize()[0]-100, height),
+                               style = wx.TE_PROCESS_ENTER | wx.TE_DONTWRAP)
+        return ctrl
