@@ -115,7 +115,7 @@ int db_driver(int argc, char *argv[])
 /**********************************************/
 
     db_clear_error();
-    db_auto_print_errors(0);
+    db_auto_print_errors(1);
     db_auto_print_protocol_errors(1);
     db__init_driver_state();
 
