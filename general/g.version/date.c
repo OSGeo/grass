@@ -22,14 +22,19 @@
 const char *get_date()
 {
     char *date = NULL;
-    char month[3];
+    char month[3], day[3];
     
     if (MONTH < 9)
 	sprintf(month, "0%d", MONTH + 1);
     else
 	sprintf(month, "%d", MONTH + 1);
     
-    G_asprintf(&date, "%d-%s-%d", YEAR, month, DAY);
+    if (DAY < 10)
+	sprintf(day, "0%d", DAY);
+    else
+	sprintf(day, "%d", DAY);
+        
+    G_asprintf(&date, "%d-%s-%s", YEAR, month, day);
     
     return date;
 }
