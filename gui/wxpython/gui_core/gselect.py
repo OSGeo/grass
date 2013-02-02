@@ -68,7 +68,8 @@ class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                  type = None, multiple = False, nmaps = 1,
                  mapsets = None, updateOnPopup = True, onPopup = None,
-                 fullyQualified = True, extraItems = {}):
+                 fullyQualified = True, extraItems = {},
+                 validator = wx.DefaultValidator):
         """!Custom control to create a ComboBox with a tree control to
         display and select GIS elements within acessible mapsets.
         Elements can be selected with mouse. Can allow multiple
@@ -83,8 +84,9 @@ class Select(wx.combo.ComboCtrl):
         @param onPopup function to be called on Popup
         @param fullyQualified True to provide fully qualified names (map@mapset)
         @param extraItems extra items to add (given as dictionary) - see gmodeler for usage
+        @param validator validator for TextCtrl
         """
-        wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size)
+        wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size, validator=validator)
         self.GetChildren()[0].SetName("Select")
         self.GetChildren()[0].type = type
         

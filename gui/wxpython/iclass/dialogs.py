@@ -28,13 +28,14 @@ import wx.lib.scrolledpanel as scrolled
 from core               import globalvar
 from core.settings      import UserSettings
 from core.gcmd          import GMessage
-from gui_core.dialogs   import ElementDialog, GroupDialog
+from gui_core.dialogs   import SimpleDialog, GroupDialog
 from gui_core           import gselect
+from gui_core.widgets   import SimpleValidator
 from iclass.statistics  import Statistics, BandStatistics
 
 import grass.script as grass
 
-class IClassGroupDialog(ElementDialog):
+class IClassGroupDialog(SimpleDialog):
     """!Dialog for imagery group selection"""
     def __init__(self, parent, group = None, title = _("Select imagery group"), id = wx.ID_ANY):
         """!
@@ -44,23 +45,28 @@ class IClassGroupDialog(ElementDialog):
         @param title dialog window title
         @param id wx id
         """
-        ElementDialog.__init__(self, parent, title, label = _("Name of imagery group:"))
+        SimpleDialog.__init__(self, parent, title)
         
         self.element = gselect.Select(parent = self.panel, type = 'group',
-                                          mapsets = [grass.gisenv()['MAPSET']],
-                                          size = globalvar.DIALOG_GSELECT_SIZE)
+                                      mapsets = [grass.gisenv()['MAPSET']],
+                                      size = globalvar.DIALOG_GSELECT_SIZE,
+                                      validator = SimpleValidator(callback = self.ValidatorCallback))
+        self.element.SetFocus()
         if group:
             self.element.SetValue(group)
         self.editGroup = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                    label = _("Create/edit group..."))
         self.editGroup.Bind(wx.EVT_BUTTON, self.OnEditGroup)
-        self.PostInit()
-        
-        self.__Layout()
+
+        self.warning = _("Name of imagery group is missing.")
+        self._layout()
         self.SetMinSize(self.GetSize())
 
-    def __Layout(self):
+    def _layout(self):
         """!Do layout"""
+        self.dataSizer.Add(wx.StaticText(self.panel, id = wx.ID_ANY,
+                                         label = _("Name of imagery group:")),
+                           proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
         self.dataSizer.Add(self.element, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 5)
         self.dataSizer.Add(self.editGroup, proportion = 0,
@@ -70,7 +76,7 @@ class IClassGroupDialog(ElementDialog):
 
     def GetGroup(self):
         """!Returns selected group"""
-        return self.GetElement()
+        return self.element.GetValue()
         
     def OnEditGroup(self, event):
         """!Launch edit group dialog"""
@@ -82,32 +88,37 @@ class IClassGroupDialog(ElementDialog):
             self.element.SetValue(gr)
         dlg.Destroy()
         
-class IClassMapDialog(ElementDialog):
+class IClassMapDialog(SimpleDialog):
     """!Dialog for adding raster/vector map"""
     def __init__(self, parent, title, element):
         """!
-        Does post init and layout.
         
-        @param gui parent
+        @param parent gui parent
+        @param title dialog title
         @param element element type ('raster', 'vector')
         """
-        if element == 'raster':
-            label = _("Name of raster map:")
-        elif element == 'vector':
-            label = _("Name of vector map:")
         
-        ElementDialog.__init__(self, parent, title = title, label = label)
-            
+        SimpleDialog.__init__(self, parent, title = title)
+        
+        self.elementType = element
         self.element = gselect.Select(parent = self.panel, type = element,
-                                      size = globalvar.DIALOG_GSELECT_SIZE)
-        
-        self.PostInit()
-        
-        self.__Layout()
+                                      size = globalvar.DIALOG_GSELECT_SIZE,
+                                      validator = SimpleValidator(callback = self.ValidatorCallback))
+        self.element.SetFocus()
+
+        self.warning = _("Name of map is missing.")
+        self._layout()
         self.SetMinSize(self.GetSize())
-        
-    def __Layout(self):
+
+    def _layout(self):
         """!Do layout"""
+        if self.elementType == 'raster':
+            label = _("Name of raster map:")
+        elif self.elementType == 'vector':
+            label = _("Name of vector map:")
+        self.dataSizer.Add(wx.StaticText(self.panel, id = wx.ID_ANY,
+                                         label = label),
+                           proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
         self.dataSizer.Add(self.element, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 5)
         
@@ -116,9 +127,9 @@ class IClassMapDialog(ElementDialog):
 
     def GetMap(self):
         """!Returns selected raster/vector map"""
-        return self.GetElement()
-        
-        
+        return self.element.GetValue()
+
+
 class IClassCategoryManagerDialog(wx.Dialog):
     """!Dialog for managing categories (classes).
     
