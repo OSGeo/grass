@@ -16,9 +16,9 @@ void sensor_MSS(lsat_data * lsat)
     /* green, red, near infrared, near infrared */
     int band[] = { 1, 2, 3, 4 };
     int code[] = { 4, 5, 6, 7 };
-    double wmax[] = { 0.6, 0.7, 0.8, 1.1 };
     double wmin[] = { 0.5, 0.6, 0.7, 0.8 };
-    /* 68x83, 68x83, 68x83, 68x83 */
+    double wmax[] = { 0.6, 0.7, 0.8, 1.1 };
+    /* original: 79x57, now all 60 */
 
     strcpy(lsat->sensor, "MSS");
 
@@ -41,9 +41,9 @@ void sensor_TM(lsat_data * lsat)
 
     /* blue, green red, near infrared, shortwave IR, thermal IR, shortwave IR */
     int band[] = { 1, 2, 3, 4, 5, 6, 7 };
-    double wmax[] = { 0.52, 0.60, 0.69, 0.90, 1.75, 12.50, 2.35 };
     double wmin[] = { 0.45, 0.52, 0.63, 0.76, 1.55, 10.40, 2.08 };
-    /* 30, 30, 30, 30, 30, 120, 30 */
+    double wmax[] = { 0.52, 0.60, 0.69, 0.90, 1.75, 12.50, 2.35 };
+    /* 30, 30, 30, 30, 30, 120 original, 60 resamples before Feb 25, 2010 and 30 after, 30 */
 
     if (!lsat->sensor)
       strcpy(lsat->sensor, "TM");
@@ -68,9 +68,9 @@ void sensor_ETM(lsat_data * lsat)
     /* blue, green red, near infrared, shortwave IR, thermal IR, shortwave IR, panchromatic */
     int band[] = { 1, 2, 3, 4, 5, 6, 6, 7, 8 };
     int code[] = { 1, 2, 3, 4, 5, 61, 62, 7, 8 };
-    double wmax[] = { 0.515, 0.605, 0.690, 0.90, 1.75, 12.50, 2.35, 0.90 };
     double wmin[] = { 0.450, 0.525, 0.630, 0.75, 1.55, 10.40, 2.09, 0.52 };
-    /* 30, 30, 30, 30, 30, 60, 30, 15 */
+    double wmax[] = { 0.515, 0.605, 0.690, 0.90, 1.75, 12.50, 2.35, 0.90 };
+    /* 30, 30, 30, 30, 30, 60 (after Feb. 25, 2010: 30), 30, 15 */
 
     strcpy(lsat->sensor, "ETM+");
 
@@ -87,6 +87,32 @@ void sensor_ETM(lsat_data * lsat)
     return;
 }
 
+void sensor_OLI(lsat_data * lsat)
+{
+    int i;
+
+    /* coastal aerosol, blue, green, red, near infrared, shortwave IR (SWIR) 1, SWIR 2, panchromatic,
+     * cirrus, thermal infrared (TIR) 1, TIR 2 */
+    int band[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+    int code[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+    double wmin[] = { 0.433, 0.450, 0.525, 0.630, 0.845, 1.560, 2.100, 0.500, 1.360, 10.3, 11.5 };
+    double wmax[] = { 0.453, 0.515, 0.600, 0.680, 0.885, 1.660, 2.300, 0.680, 1.390, 11.3, 12.5 };
+    /* 30, 30, 30, 30, 30, 30, 30, 15, 30, 100, 100 */
+
+    strcpy(lsat->sensor, "OLI/TIRS");
+
+    lsat->bands = 11;
+    for (i = 0; i < lsat->bands; i++) {
+        lsat->band[i].number = *(band + i);
+        lsat->band[i].code = *(code + i);
+        lsat->band[i].wavemax = *(wmax + i);
+        lsat->band[i].wavemin = *(wmin + i);
+        lsat->band[i].qcalmax = 255.;
+        lsat->band[i].qcalmin = 1.;
+        lsat->band[i].thermal = (lsat->band[i].number > 9 ? 1 : 0);
+    }
+    return;
+}
 
 /** **********************************************
  ** Before access to these functions ...
@@ -154,9 +180,10 @@ void set_MSS2(lsat_data * lsat)
 
     julian = julian_char(lsat->creation);
     if (julian < julian_char("1975-07-16"))
-	i = 0;
+        i = 0;
     else
-	i = 1;
+        i = 1;
+
     lmax = Lmax[i];
     lmin = Lmin[i];
 
@@ -205,6 +232,7 @@ void set_MSS3(lsat_data * lsat)
 	i = 0;
     else
 	i = 1;
+
     lmax = Lmax[i];
     lmin = Lmin[i];
 
@@ -256,6 +284,7 @@ void set_MSS4(lsat_data * lsat)
 	    i = 1;
     else
 	    i = 2;
+
     lmax = Lmax[i];
     lmin = Lmin[i];
 
@@ -305,6 +334,7 @@ void set_TM4(lsat_data * lsat)
 	    i = 1;
     else
 	    i = 2;
+
     lmax = Lmax[i];
     lmin = Lmin[i];
 
@@ -361,6 +391,7 @@ void set_MSS5(lsat_data * lsat)
 	i = 1;
     else
 	i = 2;
+
     lmax = Lmax[i];
     lmin = Lmin[i];
 
@@ -410,6 +441,7 @@ void set_TM5(lsat_data * lsat)
 	    i = 1;
     else
 	    i = 2;
+
     lmax = Lmax[i];
     lmin = Lmin[i];
     if (i == 2) {		/* in Chander, Markham and Barsi 2007 */
@@ -513,5 +545,49 @@ void set_ETM(lsat_data * lsat, char gain[])
 	}
     }
     G_debug(1, "Landsat-7 ETM+");
+    return;
+}
+
+/****************************************************************************
+ * PURPOSE:     Store values of Landsat-8 OLI/TIRS
+ *              February 14, 2013
+ *****************************************************************************/
+void set_OLI(lsat_data * lsat)
+{
+    int i, j;
+    double julian, *lmax, *lmin;
+
+    /* Spectral radiances at detector
+    double Lmax[][4] = {
+        {220., 175., 145., 147.},
+        {259., 179., 149., 128.}
+    };
+    double Lmin[][4] = {
+        {4., 3., 3., 1.},
+        {4., 3., 3., 1.}
+    };
+    * Solar exoatmospheric spectral irradiances
+    double esun[] = { 1824., 1570., 1249., 853.4 };
+
+    lmax = Lmax[i];
+    lmin = Lmin[i];
+
+    lsat->number = 3;
+    sensor_MSS(lsat);
+
+    lsat->dist_es = earth_sun(lsat->date);
+
+    for (i = 0; i < lsat->bands; i++) {
+        j = lsat->band[i].number - 1;
+        lsat->band[i].esun = *(esun + j);
+        lsat->band[i].lmax = *(lmax + j);
+        lsat->band[i].lmin = *(lmin + j);
+        if (lsat->band[i].thermal) {
+            lsat->band[i].K1 = 0;
+            lsat->band[i].K2 = 0;
+        }
+    }
+    */
+    G_debug(1, "Landsat-8 LDCM");
     return;
 }
