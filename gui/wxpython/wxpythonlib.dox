@@ -94,7 +94,7 @@ available in GRASS 5 and GRASS 6.
 \subsection gui_core GUI core modules
 
 - gui_core::dialogs
- - dialogs::ElementDialog
+ - dialogs::SimpleDialog
  - dialogs::LocationDialog
  - dialogs::MapsetDialog
  - dialogs::NewVectorDialog
@@ -166,6 +166,7 @@ available in GRASS 5 and GRASS 6.
 - gui_core::widgets
  - widgets::ScrolledPanel
  - widgets::NTCValidator
+ - widgets::SimpleValidator
  - widgets::NumTextCtrl
  - widgets::FloatSlider
  - widgets::SymbolButton

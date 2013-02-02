@@ -32,33 +32,36 @@ import wx.lib.mixins.listctrl as listmix
 from core                 import globalvar
 from core                 import utils
 from core.modulesdata     import ModulesData
-from gui_core.widgets     import SearchModuleWidget, EVT_MODULE_SELECTED
+from gui_core.widgets     import SearchModuleWidget, EVT_MODULE_SELECTED, SimpleValidator
 from core.gcmd            import GError, EncodeString
-from gui_core.dialogs     import ElementDialog, MapLayersDialogForModeler
+from gui_core.dialogs     import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt      import GPromptSTC, EVT_GPROMPT_RUN_CMD
 from gui_core.forms       import CmdPanel
-from gui_core.gselect     import Select
+from gui_core.gselect     import Select, ElementSelect
 from gmodeler.model       import *
 
 from grass.script import task as gtask
 
-class ModelDataDialog(ElementDialog):
+class ModelDataDialog(SimpleDialog):
     """!Data item properties dialog"""
-    def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Data properties"),
-                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+    def __init__(self, parent, shape, title = _("Data properties")):
         self.parent = parent
         self.shape = shape
         
         label, etype = self._getLabel()
-        ElementDialog.__init__(self, parent, title, label = label, etype = etype)
+        self.etype = etype
+        SimpleDialog.__init__(self, parent, title)
                 
-        self.element = Select(parent = self.panel)
+        self.element = Select(parent = self.panel,
+                              validator = SimpleValidator(callback = self.ValidatorCallback))
         self.element.SetValue(shape.GetValue())
         
         self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
-        
-        self.PostInit()
+        if self.etype:
+            self.typeSelect = ElementSelect(parent = self.panel,
+                                            size = globalvar.DIALOG_GSELECT_SIZE)
+            self.typeSelect.Bind(wx.EVT_CHOICE, self.OnType)
         
         if shape.GetValue():
             self.btnOK.Enable()
@@ -81,15 +84,35 @@ class ModelDataDialog(ElementDialog):
     
     def _layout(self):
         """!Do layout"""
+        if self.etype:
+            self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                    label = _("Type of element:")),
+                               proportion = 0, flag = wx.ALL, border = 1)
+            self.dataSizer.Add(item = self.typeSelect,
+                               proportion = 0, flag = wx.ALL, border = 1)
+        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = _("Name of element:")),
+                           proportion = 0, flag = wx.ALL, border = 1)
         self.dataSizer.Add(self.element, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=1)
         
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
+    def GetType(self):
+        """!Get element type"""
+        if not self.etype:
+            return
+        return self.element.tcp.GetType()
+
+    def OnType(self, event):
+        """!Select element type"""
+        evalue = self.typeSelect.GetValue(event.GetString())
+        self.element.SetType(evalue)
+
     def OnOK(self, event):
         """!Ok pressed"""
-        self.shape.SetValue(self.GetElement())
+        self.shape.SetValue(self.element.GetValue())
         if self.etype:
             elem = self.GetType()
             if elem == 'rast':

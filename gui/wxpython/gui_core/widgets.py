@@ -555,7 +555,52 @@ class NTCValidator(wx.PyValidator):
         # Returning without calling even.Skip eats the event before it
         # gets to the text control
         return  
-    
+
+class SimpleValidator(wx.PyValidator):
+    """ This validator is used to ensure that the user has entered something
+        into the text object editor dialog's text field.
+    """
+    def __init__(self, callback):
+        """ Standard constructor.
+        """
+        wx.PyValidator.__init__(self)
+        self.callback = callback
+
+    def Clone(self):
+        """ Standard cloner.
+
+        Note that every validator must implement the Clone() method.
+        """
+        return SimpleValidator(self.callback)
+
+    def Validate(self, win):
+        """ Validate the contents of the given text control.
+        """
+        ctrl = self.GetWindow()
+        text = ctrl.GetValue()
+        if len(text) == 0:
+            self.callback(ctrl)
+            return False
+        else:
+            return True
+
+    def TransferToWindow(self):
+        """ Transfer data from validator to window.
+
+        The default implementation returns False, indicating that an error
+        occurred.  We simply return True, as we don't do any data transfer.
+        """
+        return True # Prevent wxDialog from complaining.
+
+
+    def TransferFromWindow(self):
+        """ Transfer data from window to validator.
+
+            The default implementation returns False, indicating that an error
+            occurred.  We simply return True, as we don't do any data transfer.
+        """
+        return True # Prevent wxDialog from complaining.
+
 class ItemTree(CT.CustomTreeCtrl):
     def __init__(self, parent, id = wx.ID_ANY,
                  ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |

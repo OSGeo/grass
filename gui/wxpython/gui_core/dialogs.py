@@ -4,7 +4,7 @@
 @brief Various dialogs used in wxGUI.
 
 List of classes:
- - dialogs::ElementDialog
+ - dialogs::SimpleDialog
  - dialogs::LocationDialog
  - dialogs::MapsetDialog
  - dialogs::NewVectorDialog
@@ -47,9 +47,9 @@ from grass.script import task as gtask
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
-from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
+from gui_core.gselect import LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
 from gui_core.forms   import GUI
-from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED, GListCtrl
+from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED, GListCtrl, SimpleValidator
 from core.utils       import GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
@@ -57,74 +57,32 @@ from core.debug       import Debug
 wxApplyMapLayers, EVT_APPLY_MAP_LAYERS = NewEvent()
 wxApplyOpacity, EVT_APPLY_OPACITY = NewEvent()
 
-class ElementDialog(wx.Dialog):
-    def __init__(self, parent, title, label, id = wx.ID_ANY,
-                 etype = False, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+class SimpleDialog(wx.Dialog):
+    def __init__(self, parent, title, id = wx.ID_ANY,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
         """!General dialog to choose given element (location, mapset, vector map, etc.)
         
         @param parent window
         @param title window title
-        @param label element label
-        @param etype show also ElementSelect
         """
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
-        
-        self.etype = etype
-        self.label = label
-        
+        self.SetExtraStyle(wx.WS_EX_VALIDATE_RECURSIVELY)
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnOK     = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOK.SetDefault()
-        
-        if self.etype:
-            self.typeSelect = ElementSelect(parent = self.panel,
-                                            size = globalvar.DIALOG_GSELECT_SIZE)
-            self.typeSelect.Bind(wx.EVT_CHOICE, self.OnType)
-        
-        self.element = None # must be defined 
-        
         self.__layout()
-        
-    def PostInit(self):
-        self.element.SetFocus()
-        self.element.Bind(wx.EVT_TEXT, self.OnElement)
-        if not self.element.GetValue():
-            self.btnOK.Disable()
-            
-    def OnType(self, event):
-        """!Select element type"""
-        if not self.etype:
-            return
-        evalue = self.typeSelect.GetValue(event.GetString())
-        self.element.SetType(evalue)
-        
-    def OnElement(self, event):
-        """!Name for vector map layer given"""
-        if len(event.GetString()) > 0:
-            self.btnOK.Enable(True)
-        else:
-            self.btnOK.Enable(False)
-        
+        self.warning = _("Required item is not set.")
+
     def __layout(self):
         """!Do layout"""
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.dataSizer = wx.BoxSizer(wx.VERTICAL)
         
-        if self.etype:
-            self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                                    label = _("Type of element:")),
-                               proportion = 0, flag = wx.ALL, border = 1)
-            self.dataSizer.Add(item = self.typeSelect,
-                               proportion = 0, flag = wx.ALL, border = 1)
-        
-        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                                label = self.label),
-                           proportion = 0, flag = wx.ALL, border = 1)
-        
+        # self.informLabel = wx.StaticText(self.panel, id = wx.ID_ANY)
         # buttons
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
@@ -134,119 +92,119 @@ class ElementDialog(wx.Dialog):
         self.sizer.Add(item = self.dataSizer, proportion = 1,
                        flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
         
+        # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
         self.sizer.Add(item = btnSizer, proportion = 0,
                        flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
-        
-    def GetElement(self):
-        """!Return (mapName, overwrite)"""
-        return self.element.GetValue()
-    
-    def GetType(self):
-        """!Get element type"""
-        return self.element.tcp.GetType()
-        
-class LocationDialog(ElementDialog):
-    """!Dialog used to select location"""
-    def __init__(self, parent, title = _("Select GRASS location and mapset"), id =  wx.ID_ANY):
-        ElementDialog.__init__(self, parent, title, label = _("Name of GRASS location:"))
 
-        self.element = LocationSelect(parent = self.panel, id = wx.ID_ANY,
-                                      size = globalvar.DIALOG_GSELECT_SIZE)
-        
-        self.element1 = MapsetSelect(parent = self.panel, id = wx.ID_ANY,
+    def ValidatorCallback(self, win):
+        GMessage(parent = self, message = self.warning)
+        # self.informLabel.SetForegroundColour(wx.Color(255, 0, 0))
+        # self.informLabel.SetLabel(self.warning)
+
+
+class LocationDialog(SimpleDialog):
+    """!Dialog used to select location"""
+    def __init__(self, parent, title = _("Select GRASS location and mapset")):
+        SimpleDialog.__init__(self, parent, title)
+
+        self.element1 = LocationSelect(parent = self.panel, id = wx.ID_ANY,
+                                      size = globalvar.DIALOG_GSELECT_SIZE,
+                                      validator = SimpleValidator(callback = self.ValidatorCallback))
+        self.element1.Bind(wx.EVT_TEXT, self.OnLocation)
+        self.element2 = MapsetSelect(parent = self.panel, id = wx.ID_ANY,
                                      size = globalvar.DIALOG_GSELECT_SIZE,
-                                     setItems = False, skipCurrent = True)
-        
-        self.PostInit()
-        
+                                     setItems = False, skipCurrent = True,
+                                     validator = SimpleValidator(callback = self.ValidatorCallback))
+        self.element1.SetFocus()
+        self.warning = _("Location or mapset is missing.")
         self._layout()
         self.SetMinSize(self.GetSize())
 
     def _layout(self):
         """!Do layout"""
-        self.dataSizer.Add(self.element, proportion = 0,
+        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = _("Name of GRASS location:")),
+                           proportion = 0, flag = wx.ALL, border = 1)
+        self.dataSizer.Add(self.element1, proportion = 0,
                            flag = wx.EXPAND | wx.ALL, border = 1)
  
         self.dataSizer.Add(wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                          label = _("Name of mapset:")), proportion = 0,
                            flag = wx.EXPAND | wx.ALL, border = 1)
 
-        self.dataSizer.Add(self.element1, proportion = 0,
+        self.dataSizer.Add(self.element2, proportion = 0,
                            flag = wx.EXPAND | wx.ALL, border = 1)
        
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
-    def OnElement(self, event):
+    def OnLocation(self, event):
         """!Select mapset given location name"""
         location = event.GetString()
         
         if location:
             dbase = grass.gisenv()['GISDBASE']
-            self.element1.UpdateItems(dbase = dbase, location = location)
-            self.element1.SetSelection(0)
-            mapset = self.element1.GetStringSelection()
-        
-        if location and mapset:
-            self.btnOK.Enable(True)
-        else:
-            self.btnOK.Enable(False)
+            self.element2.UpdateItems(dbase = dbase, location = location)
+            self.element2.SetSelection(0)
+            mapset = self.element2.GetStringSelection()
 
     def GetValues(self):
         """!Get location, mapset"""
-        return (self.GetElement(), self.element1.GetStringSelection())
+        return (self.element1.GetValue(), self.element2.GetValue())
     
-class MapsetDialog(ElementDialog):
+class MapsetDialog(SimpleDialog):
     """!Dialog used to select mapset"""
     def __init__(self, parent, title = _("Select mapset in GRASS location"),
-                 location = None, id =  wx.ID_ANY):
-        ElementDialog.__init__(self, parent, title, label = _("Name of mapset:"))
+                 location = None):
+        SimpleDialog.__init__(self, parent, title)
+
         if location:
             self.SetTitle(self.GetTitle() + ' <%s>' % location)
         else:
             self.SetTitle(self.GetTitle() + ' <%s>' % grass.gisenv()['LOCATION_NAME'])
         
         self.element = MapsetSelect(parent = self.panel, id = wx.ID_ANY, skipCurrent = True,
-                                    size = globalvar.DIALOG_GSELECT_SIZE)
+                                    size = globalvar.DIALOG_GSELECT_SIZE,
+                                    validator = SimpleValidator(callback = self.ValidatorCallback))
         
-        self.PostInit()
+        self.element.SetFocus()
+        self.warning = _("Name of mapset is missing.")
         
-        self.__Layout()
+        self._layout()
         self.SetMinSize(self.GetSize())
 
-    def __Layout(self):
+    def _layout(self):
         """!Do layout"""
+        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = _("Name of mapset:")),
+                           proportion = 0, flag = wx.ALL, border = 1)
         self.dataSizer.Add(self.element, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL, border = 1)
-        
+                           flag = wx.EXPAND | wx.ALL, border = 1)
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
     def GetMapset(self):
-        return self.GetElement()
+        return self.element.GetValue()
     
-class NewVectorDialog(ElementDialog):
-    def __init__(self, parent, id = wx.ID_ANY, title = _('Create new vector map'),
-                 disableAdd = False, disableTable = False, showType = False,
-                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, *kwargs):
+class NewVectorDialog(SimpleDialog):
+    def __init__(self, parent, title = _("Create new vector map"),
+                 disableAdd = False, disableTable = False, showType = False):
         """!Dialog for creating new vector map
 
         @param parent parent window
-        @param id window id
         @param title window title
         @param disableAdd disable 'add layer' checkbox
         @param disableTable disable 'create table' checkbox
         @param showType True to show feature type selector (used for creating new empty OGR layers)
-        @param style window style
-        @param kwargs other argumentes for ElementDialog
         
-        @return dialog instance       
+        @return dialog instance
         """
-        ElementDialog.__init__(self, parent, title, label = _("Name for new vector map:"))
+        SimpleDialog.__init__(self, parent, title)
         
         self.element = Select(parent = self.panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
-                              type = 'vector', mapsets = [grass.gisenv()['MAPSET'],])
-        
+                              type = 'vector', mapsets = [grass.gisenv()['MAPSET'],],
+                              validator = SimpleValidator(callback = self.ValidatorCallback))
+        self.element.SetFocus()
         # determine output format
         if showType:
             self.ftype = OgrTypeSelect(parent = self, panel = self.panel)
@@ -278,14 +236,9 @@ class NewVectorDialog(ElementDialog):
 
         self.table.Bind(wx.EVT_CHECKBOX, self.OnTable)
         
-        self.PostInit()
-        
+        self.warning = _("Name of new vector map is missing.")
         self._layout()
         self.SetMinSize(self.GetSize())
-        
-    def OnMapName(self, event):
-        """!Name for vector map layer given"""
-        self.OnElement(event)
         
     def OnTable(self, event):
         if self.keycol:
@@ -293,6 +246,9 @@ class NewVectorDialog(ElementDialog):
         
     def _layout(self):
         """!Do layout"""
+        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = _("Name for new vector map:")),
+                           proportion = 0, flag = wx.ALL, border = 1)
         self.dataSizer.Add(item = self.element, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 1)
         if self.ftype:
@@ -327,7 +283,7 @@ class NewVectorDialog(ElementDialog):
 
         @param full True to get fully qualified name
         """
-        name = self.GetElement()
+        name = self.element.GetValue()
         if full:
             if '@' in name:
                 return name

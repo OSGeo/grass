@@ -17,24 +17,27 @@ This program is free software under the GNU General Public License
 import wx
 
 from core               import globalvar
-from gui_core.dialogs   import ElementDialog
+from gui_core.dialogs   import SimpleDialog
 from gui_core           import gselect
+from gui_core.widgets   import SimpleValidator
+from core.gcmd          import GMessage
 
-class SwipeMapDialog(ElementDialog):
+class SwipeMapDialog(SimpleDialog):
     """!Dialog used to select raster maps"""
-    def __init__(self, parent, title = _("Select raster maps"), id =  wx.ID_ANY, first = None, second = None):
-        ElementDialog.__init__(self, parent, title, id = id, label = _("Name of top/left raster map:"))
+    def __init__(self, parent, title = _("Select raster maps"), first = None, second = None):
+        SimpleDialog.__init__(self, parent, title)
 
-        self.element = gselect.Select(parent = self.panel, type = 'raster',
-                                      size = globalvar.DIALOG_GSELECT_SIZE)
+        self.element1 = gselect.Select(parent = self.panel, type = 'raster',
+                                      size = globalvar.DIALOG_GSELECT_SIZE,
+                                      validator = SimpleValidator(callback = self.ValidatorCallback))
         
         self.element2 = gselect.Select(parent = self.panel, type = 'raster',
-                                       size = globalvar.DIALOG_GSELECT_SIZE)
+                                       size = globalvar.DIALOG_GSELECT_SIZE,
+                                       validator = SimpleValidator(callback = self.ValidatorCallback))
         
-        self.PostInit()
-        
+        self.element1.SetFocus()
         if first:
-            self.element.SetValue(first)
+            self.element1.SetValue(first)
         if second:
             self.element2.SetValue(second)
             
@@ -43,7 +46,10 @@ class SwipeMapDialog(ElementDialog):
 
     def _layout(self):
         """!Do layout"""
-        self.dataSizer.Add(self.element, proportion = 0,
+        self.dataSizer.Add(wx.StaticText(self.panel, id = wx.ID_ANY,
+                                         label = _("Name of top/left raster map:")),
+                           proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.dataSizer.Add(self.element1, proportion = 0,
                            flag = wx.EXPAND | wx.ALL, border = 1)
  
         self.dataSizer.Add(wx.StaticText(parent = self.panel, id = wx.ID_ANY,
@@ -56,7 +62,13 @@ class SwipeMapDialog(ElementDialog):
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
+    def ValidatorCallback(self, win):
+        if win == self.element1.GetTextCtrl():
+            GMessage(parent = self, message = _("Name of the first map is missing."))
+        else:
+            GMessage(parent = self, message = _("Name of the second map is missing."))
+
     def GetValues(self):
         """!Get raster maps"""
-        return (self.GetElement(), self.element2.GetValue())
+        return (self.element1.GetValue(), self.element2.GetValue())
 
