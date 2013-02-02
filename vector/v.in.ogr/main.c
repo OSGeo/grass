@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     struct _param {
 	struct Option *dsn, *out, *layer, *spat, *where,
 	    *min_area;
-	struct Option *snap, *type, *outloc, *cnames;
+	struct Option *snap, *type, *outloc, *cnames, *encoding;
     } param;
     struct _flag {
 	struct Flag *list, *no_clean, *force2d, *notab,
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
-    module->description = _("Converts vector data into a GRASS vector map using OGR library.");
+    module->description = _("Imports vector data into a GRASS vector map using OGR library.");
 
     param.dsn = G_define_option();
     param.dsn->key = "dsn";
@@ -212,6 +212,16 @@ int main(int argc, char *argv[])
 	_("List of column names to be used instead of original names, "
 	  "first is used for category column");
     param.cnames->guisection = _("Attributes");
+
+    param.encoding = G_define_option();
+    param.encoding->key = "encoding";
+    param.encoding->type = TYPE_STRING;
+    param.encoding->required = NO;
+    param.encoding->label =
+        _("Encoding value for attribute data");
+    param.encoding->description = 
+        _("Overrides encoding interpretation, useful when importing ESRI Shapefile");
+    param.encoding->guisection = _("Attributes");
 
     flag.formats = G_define_flag();
     flag.formats->key = 'f';
@@ -322,15 +332,33 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /* Open OGR DSN */
+    /* set up encoding for attribute data */
+    if (param.encoding->answer) {
+        /* -> Esri Shapefile */
+        setenv("SHAPE_ENCODING", param.encoding->answer, 1);
+        /* -> DXF */
+        setenv("DXF_ENCODING", param.encoding->answer, 1);
+        /* todo: others ? */
+    }
+
+    /* open OGR DSN */
     Ogr_ds = NULL;
     if (strlen(param.dsn->answer) > 0)
 	Ogr_ds = OGROpen(param.dsn->answer, FALSE, NULL);
-
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open data source <%s>"), param.dsn->answer);
 
-    /* Make a list of available layers */
+    /* check encoding for given driver */
+    if (param.encoding->answer) {
+        const char *driver_name;
+
+        driver_name = OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds));
+        if (strcmp(driver_name, "ESRI Shapefile") != 0 &&
+            strcmp(driver_name, "DXF") != 0)
+            G_warning(_("Encoding value not supported by OGR driver <%s>"), driver_name);
+    }
+
+    /* make a list of available layers */
     navailable_layers = OGR_DS_GetLayerCount(Ogr_ds);
     available_layer_names =
 	(char **)G_malloc(navailable_layers * sizeof(char *));
@@ -402,7 +430,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Vector map <%s> already exists"),
 			  output);
     }
-    
+
     /* Get first imported layer to use for extents and projection check */
     Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[0]);
 
