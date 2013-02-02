@@ -213,10 +213,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Illegal date format: [%s] (yyyy-mm-dd)"),
 			  lsat.date);
     }
-    /* Unnecessary because G_zero filled
-    else
-	lsat.date[0] = '\0';
-	*/
 
     if (pdate->answer != NULL) {
 	strncpy(lsat.creation, pdate->answer, 11);
@@ -225,36 +221,21 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Illegal date format: [%s] (yyyy-mm-dd)"),
 			  lsat.creation);
     }
-    /* Unnecessary because G_zero filled
-    else
-	lsat.creation[0] = '\0';
-	*/
 
     lsat.sun_elev = elev->answer == NULL ? 0. : atof(elev->answer);
     percent = atof(perc->answer);
     pixel = atoi(dark->answer);
     rayleigh = atof(atmo->answer);
 
-    /* Unnecessary because G_zero filled
-    lsat.flag = NOMETADATAFILE;
-     */
     /* Data from metadata file */
+    /* Unnecessary because G_zero filled, but sanity */
+    lsat.flag = NOMETADATAFILE;
     if (met != NULL)
     {
         lsat.flag = METADATAFILE;
-        i = strlen(met);
-        if (strcmp(met + i - 7, "MTL.txt") == 0)
-        {
-            lsat_mtldata(met, &lsat);
-        }
-        else if (strcmp(met + i - 4, ".met") == 0)
-        {
-            if (strcmp(sensorname, "tm7") == 0)
-                lsat_mtldata(met, &lsat);  /* old .met of Landsat-7 = new MTL file */
-            else
-                lsat_metdata(met, &lsat);
-        }
+        lsat_metadata( met, &lsat );
         G_debug(1, "lsat.number = %d, lsat.sensor = [%s]", lsat.number, lsat.sensor);
+        
         if (!lsat.sensor || lsat.number > 7 || lsat.number < 1)
             G_fatal_error(_("Failed to identify satellite"));
 
@@ -270,17 +251,14 @@ int main(int argc, char *argv[])
 		      adate->key, elev->key);
     }
     else {
-	if (strcmp(sensorname, "tm7") == 0) {	/* Need gain */
-        if (bgain->answer != NULL && strlen(bgain->answer) == 9) {
+        /* Need gain */
+	if (strcmp(sensorname, "tm7") == 0) {
+            if (bgain->answer == NULL || strlen(bgain->answer) != 9)
+                G_fatal_error(_("Landsat-7 requires band gain with 9 (H/L) data"));
             set_ETM(&lsat, bgain->answer);
-            G_debug(1, "Landsat 7 ETM+");
         }
-        else {
-            G_fatal_error(_("Landsat-7 requires band gain with 9 (H/L) data"));
-        }
-    }
-	else {  /* Not need gain */
-        if (strcmp(sensorname, "tm5") == 0)
+        /* Not need gain */
+        else if (strcmp(sensorname, "tm5") == 0)
             set_TM5(&lsat);
         else if (strcmp(sensorname, "tm4") == 0)
             set_TM4(&lsat);
@@ -296,23 +274,22 @@ int main(int argc, char *argv[])
             set_MSS1(&lsat);
         else
             G_fatal_error(_("Unknown satellite type (defined by '%s')"), sensor->key);
-        }
     }
 
 	/*****************************************
 	* ------------ PREPARATION --------------
 	*****************************************/
-    if (G_strcasecmp(metho->answer, "corrected") == 0)
+    if (strcasecmp(metho->answer, "corrected") == 0)
 	method = CORRECTED;
-    else if (G_strcasecmp(metho->answer, "dos1") == 0)
+    else if (strcasecmp(metho->answer, "dos1") == 0)
 	method = DOS1;
-    else if (G_strcasecmp(metho->answer, "dos2") == 0)
+    else if (strcasecmp(metho->answer, "dos2") == 0)
 	method = DOS2;
-    else if (G_strcasecmp(metho->answer, "dos2b") == 0)
+    else if (strcasecmp(metho->answer, "dos2b") == 0)
 	method = DOS2b;
-    else if (G_strcasecmp(metho->answer, "dos3") == 0)
+    else if (strcasecmp(metho->answer, "dos3") == 0)
 	method = DOS3;
-    else if (G_strcasecmp(metho->answer, "dos4") == 0)
+    else if (strcasecmp(metho->answer, "dos4") == 0)
 	method = DOS4;
     else
 	method = UNCORRECTED;

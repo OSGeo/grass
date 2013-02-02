@@ -21,7 +21,7 @@
  * Esun in  W / (m^2 * µm)               -> Irradiance
  ****************************************************/
 
-#define MAX_BANDS   9
+#define MAX_BANDS   11
 
 typedef struct
 {
@@ -51,7 +51,7 @@ typedef struct
     double dist_es;		/* Distance Earth-Sun            */
     double sun_elev;		/* Solar elevation               */
 
-    char sensor[5];		/* Type of sensor: MSS, TM, ETM+ */
+    char sensor[10];		/* Type of sensor: MSS, TM, ETM+, OLI/TIRS */
     int bands;			/* Total number of bands         */
     band_data band[MAX_BANDS];	/* Data for each band            */
 } lsat_data;

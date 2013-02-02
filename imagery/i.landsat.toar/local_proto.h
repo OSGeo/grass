@@ -4,8 +4,7 @@
 #include <string.h>
 #include "landsat.h"
 
-void lsat_mtldata(char *, lsat_data *);
-void lsat_metdata(char *, lsat_data *);
+void lsat_metadata(char *, lsat_data *);
 
 void set_MSS1(lsat_data *);
 void set_MSS2(lsat_data *);
