@@ -8,7 +8,7 @@ List of classes:
  - dialogs::ModifyTableRecord
  - dialogs::AddColumnDialog
 
-(C) 2007-2012 by the GRASS Development Team
+(C) 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -27,7 +27,7 @@ import wx.lib.scrolledpanel as scrolled
 from core.gcmd        import RunCommand, GError
 from core.debug       import Debug
 from core.settings    import UserSettings
-from dbmgr.vinfo      import VectorDBInfo
+from dbmgr.vinfo      import VectorDBInfo, GetUnicodeValue
 from gui_core.widgets import IntegerValidator, FloatValidator
 
 class DisplayAttributesDialog(wx.Dialog):
@@ -692,17 +692,17 @@ class ModifyTableRecord(wx.Dialog):
         
         If columns is given (list), return only values of given columns.
         """
-        valueList = []
+        valueList = list()
         for labelId, ctypeId, valueId in self.widgets:
-            column = self.FindWindowById(labelId).GetLabel().replace(':', '')
+            column = self.FindWindowById(labelId).GetLabel()
             if columns is None or column in columns:
-                value = str(self.FindWindowById(valueId).GetValue())
+                value = GetUnicodeValue(self.FindWindowById(valueId).GetValue())
                 valueList.append(value)
         
         # add key value
         if self.usebox:
-            valueList.insert(self.keyId, str(self.cat))
-                             
+            valueList.insert(self.keyId, GetUnicodeValue(str(self.cat)))
+        
         return valueList
 
 class AddColumnDialog(wx.Dialog):

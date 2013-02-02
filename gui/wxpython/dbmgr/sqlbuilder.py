@@ -33,7 +33,7 @@ from core import globalvar
 import wx
 
 from core.gcmd   import RunCommand, GError, GMessage
-from dbmgr.vinfo import createDbInfoDesc, VectorDBInfo
+from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo
 
 import grass.script as grass
 
@@ -81,7 +81,7 @@ class SQLBuilder(wx.Frame):
         databasebox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                    label = " %s " % _("Database connection"))
         databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
-        databaseboxsizer.Add(item=createDbInfoDesc(self.panel, self.dbInfo, layer = self.layer),
+        databaseboxsizer.Add(item = CreateDbInfoDesc(self.panel, self.dbInfo, layer = self.layer),
                              proportion=1,
                              flag=wx.EXPAND | wx.ALL,
                              border=3)

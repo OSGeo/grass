@@ -45,7 +45,7 @@ from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd        import RunCommand, GException, GError, GMessage, GWarning
 from core.utils       import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
-from dbmgr.vinfo      import VectorDBInfo, unicodeValue, createDbInfoDesc
+from dbmgr.vinfo      import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
 from core.debug       import Debug
 from dbmgr.dialogs    import ModifyTableRecord, AddColumnDialog
 from core.settings    import UserSettings
@@ -289,7 +289,7 @@ class VirtualAttributeList(wx.ListCtrl,
             else:
                 # encode string values
                 try:
-                    self.itemDataMap[i].append(unicodeValue(value))
+                    self.itemDataMap[i].append(GetUnicodeValue(value))
                 except UnicodeDecodeError:
                     self.itemDataMap[i].append(_("Unable to decode value. "
                                                  "Set encoding in GUI preferences ('Attributes')."))
@@ -1298,10 +1298,6 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                 idx = i
                             
                             if column['ctype'] != types.StringType:
-                                if column['ctype'] == types.IntegerType:
-                                    value = float(values[i])
-                                else:
-                                    value = values[i]
                                 tlist.itemDataMap[item][idx] = column['ctype'] (value)
                             else: # -> string
                                 tlist.itemDataMap[item][idx] = values[i]
@@ -1949,7 +1945,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         dbBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
                                       label = " %s " % _("Database connection"))
         dbSizer = wx.StaticBoxSizer(dbBox, wx.VERTICAL)
-        dbSizer.Add(item = createDbInfoDesc(panel, self.dbMgrData['mapDBInfo'], layer),
+        dbSizer.Add(item = CreateDbInfoDesc(panel, self.dbMgrData['mapDBInfo'], layer),
                     proportion = 1,
                     flag = wx.EXPAND | wx.ALL,
                     border = 3)
