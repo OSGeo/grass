@@ -614,6 +614,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     int seg1, seg2, vert1, vert2;
     static struct RTree_Rect rect;
     static int rect_init = 0;
+    struct bound_box box, abbox;
 
     if (debug_level == -1) {
 	const char *dstr = G__getenv("DEBUG");
@@ -691,6 +692,35 @@ Vect_line_intersection(struct line_pnts *APoints,
      *  is build first for the second line and segments from the first line are broken by segments
      *  in bound box */
 
+    dig_line_box(APoints, &box);
+    dig_line_box(BPoints, &abbox);
+
+    if (!Vect_box_overlap(&box, &abbox)) {
+	*nalines = 0;
+	*nblines = 0;
+	return 0;
+    }
+    
+    if (abbox.N > box.N)
+	abbox.N = box.N;
+    if (abbox.S < box.S)
+	abbox.S = box.S;
+    if (abbox.E > box.E)
+	abbox.E = box.E;
+    if (abbox.W < box.W)
+	abbox.W = box.W;
+    if (abbox.T > box.T)
+	abbox.T = box.T;
+    if (abbox.B < box.B)
+	abbox.B = box.B;
+
+    abbox.N += rethresh;
+    abbox.S -= rethresh;
+    abbox.E += rethresh;
+    abbox.W -= rethresh;
+    abbox.T += rethresh;
+    abbox.B -= rethresh;
+    
     /* Create rtree for B line */
     MyRTree = RTreeCreateTree(-1, 0, 2);
     RTreeSetOverflow(MyRTree, 0);
@@ -698,31 +728,57 @@ Vect_line_intersection(struct line_pnts *APoints,
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
 	    rect.boundary[3] = BPoints->x[i + 1];
+
+	    box.W = BPoints->x[i];
+	    box.E = BPoints->x[i + 1];
 	}
 	else {
 	    rect.boundary[0] = BPoints->x[i + 1];
 	    rect.boundary[3] = BPoints->x[i];
+
+	    box.W = BPoints->x[i + 1];
+	    box.E = BPoints->x[i];
 	}
 
 	if (BPoints->y[i] <= BPoints->y[i + 1]) {
 	    rect.boundary[1] = BPoints->y[i];
 	    rect.boundary[4] = BPoints->y[i + 1];
+
+	    box.S = BPoints->y[i];
+	    box.N = BPoints->y[i + 1];
 	}
 	else {
 	    rect.boundary[1] = BPoints->y[i + 1];
 	    rect.boundary[4] = BPoints->y[i];
+
+	    box.S = BPoints->y[i + 1];
+	    box.N = BPoints->y[i];
 	}
 
 	if (BPoints->z[i] <= BPoints->z[i + 1]) {
 	    rect.boundary[2] = BPoints->z[i];
 	    rect.boundary[5] = BPoints->z[i + 1];
+
+	    box.B = BPoints->z[i];
+	    box.T = BPoints->z[i + 1];
 	}
 	else {
 	    rect.boundary[2] = BPoints->z[i + 1];
 	    rect.boundary[5] = BPoints->z[i];
-	}
 
-	RTreeInsertRect(&rect, i + 1, MyRTree);	/* B line segment numbers in rtree start from 1 */
+	    box.B = BPoints->z[i + 1];
+	    box.T = BPoints->z[i];
+	}
+	box.N += rethresh;
+	box.S -= rethresh;
+	box.E += rethresh;
+	box.W -= rethresh;
+	box.T += rethresh;
+	box.B -= rethresh;
+
+	if (Vect_box_overlap(&abbox, &box)) {
+	    RTreeInsertRect(&rect, i + 1, MyRTree);	/* B line segment numbers in rtree start from 1 */
+	}
     }
 
     /* Break segments in A by segments in B */
