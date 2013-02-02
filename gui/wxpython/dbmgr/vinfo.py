@@ -6,7 +6,7 @@
 List of classes:
  - vinfo::VectorDBInfo
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -34,7 +34,7 @@ def unicodeValue(value):
     if not enc and 'GRASS_DB_ENCODING' in os.environ:
         enc = os.environ['GRASS_DB_ENCODING']
     else:
-        enc = 'ascii'
+        enc = 'utf-8' # assuming UTF-8
     
     return unicode(value, enc, errors = 'replace')
     
