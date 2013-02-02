@@ -1238,7 +1238,6 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         item      = tlist.GetFirstSelected()
         if item == -1:
             return
-
         table     = self.dbMgrData['mapDBInfo'].layers[self.selLayer]['table']
         keyColumn = self.dbMgrData['mapDBInfo'].layers[self.selLayer]['key']
         cat       = tlist.itemCatsMap[tlist.itemIndexMap[item]]
@@ -1282,39 +1281,43 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if dlg.ShowModal() == wx.ID_OK:
             values = dlg.GetValues() # string
-            updateString = ''
+            updateList = list()
             try:
                 for i in range(len(values)): 
                     if i == keyId: # skip key column
                         continue
-                    if tlist.GetItem(item, i).GetText() != values[i]:
-                        if len(values[i]) > 0:
-                            try:
-                                if missingKey is True:
-                                    idx = i - 1
-                                else:
-                                    idx = i
-                                if tlist.columns[columnName[i]]['ctype'] != types.StringType:
-                                    if tlist.columns[columnName[i]]['ctype'] == int:
-                                        value = float(values[i])
-                                    else:
-                                        value = values[i]
-                                    tlist.itemDataMap[item][idx] = \
-                                        tlist.columns[columnName[i]]['ctype'] (value)
-                                else:
-                                    tlist.itemDataMap[item][idx] = values[i]
-                            except:
-                                raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") % \
-                                                     {'value' : str(values[i]),
-                                                      'type' : tlist.columns[columnName[i]]['type']})
-
-                            if tlist.columns[columnName[i]]['ctype'] == str:
-                                updateString += "%s='%s'," % (columnName[i], values[i])
+                    if tlist.GetItem(item, i).GetText() == values[i]:
+                        continue # no change
+                    
+                    column = tlist.columns[columnName[i]]
+                    if len(values[i]) > 0:
+                        try:
+                            if missingKey is True:
+                                idx = i - 1
                             else:
-                                updateString += "%s=%s," % (columnName[i], values[i])
-                        else: # NULL
-                            updateString += "%s=NULL," % (columnName[i])
+                                idx = i
                             
+                            if column['ctype'] != types.StringType:
+                                if column['ctype'] == types.IntegerType:
+                                    value = float(values[i])
+                                else:
+                                    value = values[i]
+                                tlist.itemDataMap[item][idx] = column['ctype'] (value)
+                            else: # -> string
+                                tlist.itemDataMap[item][idx] = values[i]
+                        except:
+                            raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") % \
+                                                 {'value' : str(values[i]),
+                                                  'type' : column['type']})
+                        
+                        if column['ctype'] == types.StringType:
+                            if "'" in values[i]: # replace "'" -> "''"
+                                values[i] = values[i].replace("'", "''")
+                            updateList.append("%s='%s'" % (columnName[i], values[i]))
+                        else:
+                            updateList.append("%s=%s" % (columnName[i], values[i]))
+                    else: # -> NULL
+                        updateList.append("%s=NULL" % (columnName[i]))
             except ValueError, err:
                 GError(parent = self,
                        message = _("Unable to update existing record.\n%s") % err,
@@ -1322,14 +1325,14 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 self.OnDataItemEdit(event)
                 return
             
-            if len(updateString) > 0:
+            if updateList:
                 self.listOfSQLStatements.append('UPDATE %s SET %s WHERE %s=%d' % \
-                                                    (table, updateString.strip(','),
+                                                    (table, ','.join(updateList),
                                                      keyColumn, cat))
                 self.ApplyCommands(self.listOfCommands, self.listOfSQLStatements)
-
+            
             tlist.Update(self.dbMgrData['mapDBInfo'])
-
+        
     def OnDataItemAdd(self, event):
         """!Add new record to the attribute table"""
         tlist      = self.FindWindowById(self.layerPage[self.selLayer]['data'])
