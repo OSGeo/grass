@@ -1089,9 +1089,13 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                             sprintf(buf_tmp, "%.14f",
                                     db_get_value_double(value));
                             break;
-                        case DB_C_TYPE_STRING:
-			    sprintf(buf_tmp, "'%s'", db_get_value_string(value));
+                        case DB_C_TYPE_STRING: {
+                            char *value_tmp;
+                            value_tmp = G_str_replace(db_get_value_string(value), "'", "''");
+                            sprintf(buf_tmp, "'%s'", value_tmp);
+                            G_free(value_tmp);
                             break;
+                        }
                         case DB_C_TYPE_DATETIME:
                             db_convert_column_value_to_string(column,
                                                               &dbstmt);
