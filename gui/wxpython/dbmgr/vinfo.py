@@ -22,11 +22,15 @@ import wx
 from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
 from core.gcmd        import RunCommand
 from core.settings    import UserSettings
-
 import grass.script as grass
 
-def unicodeValue(value):
-    """!Encode value"""
+def GetUnicodeValue(value):
+    """!Get unicode value
+
+    @param value value to be recoded
+
+    @return unicode value
+    """
     if type(value) == types.UnicodeType:
         return value
     
@@ -37,8 +41,8 @@ def unicodeValue(value):
         enc = 'utf-8' # assuming UTF-8
     
     return unicode(value, enc, errors = 'replace')
-    
-def createDbInfoDesc(panel, mapDBInfo, layer):
+
+def CreateDbInfoDesc(panel, mapDBInfo, layer):
     """!Create database connection information content"""
     infoFlexSizer = wx.FlexGridSizer (cols = 2, hgap = 1, vgap = 1)
     infoFlexSizer.AddGrowableCol(1)
@@ -111,7 +115,7 @@ class VectorDBInfo(VectorDBInfoBase):
                     if self.tables[table][key]['ctype'] != types.StringType:
                         value = self.tables[table][key]['ctype'] (value)
                     else:
-                        value = unicodeValue(value)
+                        value = GetUnicodeValue(value)
                 self.tables[table][key]['values'].append(value)
             
             for key, value in record.iteritems():
@@ -159,7 +163,7 @@ class VectorDBInfo(VectorDBInfoBase):
                     if self.tables[table][name]['ctype'] != type(''):
                         value = self.tables[table][name]['ctype'] (value)
                     else:
-                        value = unicodeValue(value)
+                        value = GetUnicodeValue(value)
                 else:
                     value = None
                 self.tables[table][name]['values'].append(value)
