@@ -121,6 +121,21 @@ unique. (hint: copy and modify the list given with the error message).
 Alternatively, change the local DB with
 <em><a href="db.connect.html">db.connect</a></em>.
 
+<p>
+When importing Esri Shapefiles the OGR library tries to read the
+LDID/codepage setting from the .dbf file and use it to translate
+string fields to UTF-8. LDID &quot;87 / 0x57&quot; is treated as
+ISO8859_1 which may not be appropriate for many
+languages. Unfortunately it is not clear what other values may be
+appropriate (see example bellow). To change encoding the user can set
+up <tt>SHAPE_ENCODING</tt> environmental variable or simply to define
+encoding value using <b>encoding</b> parameter. Note that recoding
+support is new for GDAL/OGR 1.9.0.
+
+<p>
+Value for <b>encoding</b> also affects text recoding when importing
+DXF files. For other formats has encoding value no effect.
+
 <h2>EXAMPLES</h2>
 
 The command imports various vector formats:
@@ -135,6 +150,16 @@ Alternate method:
 
 <div class="code"><pre>
 v.in.ogr dsn=/home/user/shape_data layer=test_shape output=grass_map 
+</pre></div>
+
+Define encoding value for attribute data (in this example we expect
+attribute data
+in <a href="http://en.wikipedia.org/wiki/Windows-1250">Windows-1250</a>
+encoding; ie. in Central/Eastern European languages that
+use Latin script, Microsoft Windows encoding).
+
+<div class="code"><pre>
+v.in.ogr dsn=/home/user/shape_data/test_shape.shp output=grass_map encoding=cp1250
 </pre></div>
 
 <h3>MapInfo files</h3>
