@@ -16,15 +16,22 @@ look at the source code to see how it works.
 Run Example Tool
 ----------------
 To run Example Tool can run as a standalone application (in GRASS environment)
-or it can be launched from Layer Manager menu.
+or it can be launched from the console.
 
 1. Go to GRASS root directory
 
 2. Copy directory ./doc/gui/wxpython/example to ./gui/wxpython/example
 
-3. Move file ./gui/wxpython/example/wxGUI.Example.html to ./gui/wxpython/docs/
+3. Now you should be able to run Example Tool as a standalone 
+application in GRASS environment. Start GRASS GIS and start application:
 
-4. Edit ./gui/wxpython/Makefile:
+    > python ./gui/wxpython/example/frame.py
+
+If you want to add Example Tool in the compilation.
+
+4. Move file ./gui/wxpython/example/wxGUI.Example.html to ./gui/wxpython/docs/
+
+5. Edit ./gui/wxpython/Makefile:
 
  SRCFILES := $(wildcard icons/*.* scripts/* xml/*) \
 -	$(wildcard core/* dbmgr/* gcp/* gmodeler/* ... \
@@ -33,13 +40,8 @@ or it can be launched from Layer Manager menu.
 -PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler ... \
 +PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr example gcp gmodeler ... \
 
-5. Run make (in ./gui/wxpython)
-
-6. Now you should be able to run Example Tool as a standalone 
-application in GRASS environment. Start GRASS GIS and start application:
-
-    > python ./gui/wxpython/example/frame.py
-
+6. Run make (in ./gui/wxpython)
+    
 If you want to access Example Tool from Layer Manager menu, there are
 a few more things to be done.
 

@@ -22,14 +22,13 @@ import wx
 # this enables to run application standalone (> python example/frame.py )
 if __name__ == "__main__":
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
-    
-from gui_core.mapdisp   import SingleMapFrame
-from gui_core.forms     import GUI
-from mapdisp.mapwindow  import BufferedWindow
-from mapdisp            import statusbar as sb
-from core.render        import Map
-from core.debug         import Debug
-from core.gcmd          import RunCommand
+
+from gui_core.mapdisp import SingleMapFrame
+from mapdisp.mapwindow import BufferedWindow
+from mapdisp import statusbar as sb
+from core.render import Map
+from core.debug import Debug
+from core.gcmd import RunCommand
 
 import grass.script as grass
 
@@ -117,7 +116,7 @@ class ExampleMapFrame(SingleMapFrame):
         
         
         # create map window
-        self.MapWindow = BufferedWindow(self, Map = self.GetMap(), frame = self)
+        self.MapWindow = BufferedWindow(self, Map = self.GetMap(), frame = self, giface = self)
         
         # create whatever you want, here it is a widget for displaying raster info
         self.info = ExampleInfoTextManager(self)
@@ -262,9 +261,9 @@ class ExampleMapFrame(SingleMapFrame):
         self.GetMap().DeleteAllLayers()
         cmdlist = ['d.rast', 'map=%s' % name]
         # add layer to Map instance (core.render)
-        newLayer = self.GetMap().AddLayer(type = 'raster', command = cmdlist, l_active = True,
-                                          name = name, l_hidden = False, l_opacity = 1.0,
-                                          l_render = True)
+        newLayer = self.GetMap().AddLayer(ltype = 'raster', command = cmdlist, active = True,
+                                          name = name, hidden = False, opacity = 1.0,
+                                          render = True)
         self.GetWindow().ZoomToMap(layers = [newLayer,], render = True)
         self.currentRaster = name
         
