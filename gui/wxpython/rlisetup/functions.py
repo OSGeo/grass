@@ -6,7 +6,7 @@ Created on Mon Nov 26 11:48:03 2012
 """
 import wx
 import os
-from grass.script import core as grass
+import sys
 
 
 def checkValue(value):
@@ -17,9 +17,17 @@ def checkValue(value):
 
 
 def retRLiPath():
-    major_version = int(grass.version()['version'].split('.', 1)[0])
-    rlipath = os.path.join(os.environ['HOME'], '.grass%d' % major_version,
-                           'r.li')
+    # configuration directory
+    if sys.platform == 'win32':
+        grass_config_dirname = "GRASS7"
+        grass_config_dir = os.path.join(os.getenv('APPDATA'),
+                                        grass_config_dirname)
+    else:
+        grass_config_dirname = ".grass7"
+        grass_config_dir = os.path.join(os.getenv('HOME'),
+                                        grass_config_dirname)
+
+    rlipath = os.path.join(grass_config_dir, 'r.li')
     if os.path.exists(rlipath):
         return rlipath
     else:
