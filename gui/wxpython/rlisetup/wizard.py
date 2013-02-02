@@ -140,7 +140,7 @@ class RLIWizard(object):
             self.per_x = float(self.SF_X) / float(self.rasterinfo['cols'])
             self.per_y = float(self.SF_Y) / float(self.rasterinfo['rows'])
             self.per_rl = float(self.SF_RL) / float(self.rasterinfo['rows'])
-            self.per_cl = float(self.SF_CL) / float(self.rasterinfo['cols'])            
+            self.per_cl = float(self.SF_CL) / float(self.rasterinfo['cols'])
         elif self.startpage.region == 'key':
             self._temp_region()
             self.SF_X = float(self.keyboardpage.col_up)

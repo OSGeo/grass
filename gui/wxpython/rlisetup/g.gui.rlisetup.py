@@ -38,17 +38,17 @@ sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 from core.giface import StandaloneGrassInterface
 from rlisetup.frame import RLiSetupFrame
 
+
 def main():
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'),
+                    unicode = True)
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
     frame = RLiSetupFrame(parent = None, giface = StandaloneGrassInterface())
     frame.Show()
-    
+
     app.MainLoop()
-    
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()

@@ -17,7 +17,7 @@ from rlisetup.wizard import RLIWizard
 class RLiSetupFrame(wx.Frame):
 
     def __init__(self, parent, giface = None, id=wx.ID_ANY, title=_("GRASS" \
-                 " GIS Setup for r.li modules"), 
+                 " GIS Setup for r.li modules"),
                  style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
         ###VARIABLES
         self.parent = parent
