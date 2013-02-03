@@ -334,11 +334,19 @@ int main(int argc, char *argv[])
 
     /* set up encoding for attribute data */
     if (param.encoding->answer) {
+	char *buf;
+	int len;
+	
+	len = strlen("SHAPE_ENCODING") + strlen(param.encoding->answer) + 2;
+	buf = G_malloc(len * sizeof(char));
         /* -> Esri Shapefile */
-        setenv("SHAPE_ENCODING", param.encoding->answer, 1);
+	sprintf(buf, "SHAPE_ENCODING=%s", param.encoding->answer);
+	putenv(buf);
         /* -> DXF */
-        setenv("DXF_ENCODING", param.encoding->answer, 1);
+	sprintf(buf, "DXF_ENCODING=%s", param.encoding->answer);
+	putenv(buf);
         /* todo: others ? */
+	G_free(buf);
     }
 
     /* open OGR DSN */
