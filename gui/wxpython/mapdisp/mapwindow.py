@@ -163,7 +163,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0]):
+    def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0], pen = None):
         """!Draws map and overlay decorations
         """
         if drawid == None:
@@ -174,6 +174,13 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 drawid = wx.NewId()
         
+        # TODO: find better solution
+        if not pen:
+            if pdctype == 'polyline':
+                pen = self.polypen
+            else:
+                pen = self.pen
+
         if img and pdctype == 'image':
             # self.imagedict[img]['coords'] = coords
             self.select[self.imagedict[img]['id']] = False # ?
@@ -212,9 +219,9 @@ class BufferedWindow(MapWindow, wx.Window):
             pdc.SetIdBounds(drawid, wx.Rect(coords[0],coords[1], w, h))
         
         elif pdctype == 'box': # draw a box on top of the map
-            if self.pen:
+            if pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
-                pdc.SetPen(self.pen)
+                pdc.SetPen(pen)
                 x2 = max(coords[0],coords[2])
                 x1 = min(coords[0],coords[2])
                 y2 = max(coords[1],coords[3])
@@ -226,16 +233,16 @@ class BufferedWindow(MapWindow, wx.Window):
                 pdc.SetIdBounds(drawid, rect)
                 
         elif pdctype == 'line': # draw a line on top of the map
-            if self.pen:
+            if pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
-                pdc.SetPen(self.pen)
+                pdc.SetPen(pen)
                 pdc.DrawLinePoint(wx.Point(coords[0], coords[1]),wx.Point(coords[2], coords[3]))
                 pdc.SetIdBounds(drawid, wx.Rect(coords[0], coords[1], coords[2], coords[3]))
         
         elif pdctype == 'polyline': # draw a polyline on top of the map
-            if self.polypen:
+            if pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
-                pdc.SetPen(self.polypen)
+                pdc.SetPen(pen)
                 if (len(coords) < 2):
                     return
                 i = 1
@@ -260,8 +267,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     # self.ovlcoords[drawid] = [x1,y1,x2,y2]
         
         elif pdctype == 'point': # draw point
-            if self.pen:
-                pdc.SetPen(self.pen)
+            if pen:
+                pdc.SetPen(pen)
                 pdc.DrawPoint(coords[0], coords[1])
                 coordsBound = (coords[0] - 5,
                                coords[1] - 5,
@@ -914,7 +921,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return -1
 
-    def DrawCross(self, pdc, coords, size, rotation = 0,
+    def DrawCross(self, pdc, coords, size, rotation = 0, pen = None,
                   text = None, textAlign = 'lr', textOffset = (5, 5)):
         """!Draw cross in PseudoDC
 
@@ -934,7 +941,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
         self.lineid = wx.NewId()
         for lineCoords in coordsCross:
-            self.Draw(pdc, drawid = self.lineid, pdctype = 'line', coords = lineCoords)
+            self.Draw(pdc, drawid = self.lineid, pdctype = 'line', coords = lineCoords, pen = pen)
         
         if not text:
             return self.lineid
@@ -949,7 +956,7 @@ class BufferedWindow(MapWindow, wx.Window):
             coord = [coords[0] - textOffset[0], coords[1] + textOffset[1], 0, 0]
         
         self.Draw(pdc, img = text,
-                  pdctype = 'text', coords = coord)
+                  pdctype = 'text', coords = coord, pen = pen)
         
         return self.lineid
 
