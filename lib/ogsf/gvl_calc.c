@@ -602,6 +602,13 @@ int gvl_isosurf_calc(geovol * gvol)
     for (i = 0; i < gvol->n_isosurfs; i++) {
 	isosurf = gvol->isosurf[i];
 
+	/* initialize read/write buffers */
+	dbuff[i].old = NULL;
+	dbuff[i].new = NULL;
+	dbuff[i].ndx_old = 0;
+	dbuff[i].ndx_new = 0;
+	dbuff[i].num_zero = 0;
+
 	need_update[i] = 0;
 	for (a = 1; a < MAX_ATTS; a++) {
 	    if (isosurf->att[a].changed) {
@@ -632,12 +639,8 @@ int gvl_isosurf_calc(geovol * gvol)
 	}
 
 	if (need_update[i]) {
-	    /* initialize read/write buffers */
+	    /* set data buffer */
 	    dbuff[i].old = isosurf->data;
-	    dbuff[i].new = NULL;
-	    dbuff[i].ndx_old = 0;
-	    dbuff[i].ndx_new = 0;
-	    dbuff[i].num_zero = 0;
 	}
     }
 
@@ -681,6 +684,8 @@ int gvl_isosurf_calc(geovol * gvol)
 		gvl_write_char(dbuff[i].ndx_new++, &(dbuff[i].new),
 			       dbuff[i].num_zero);
 
+	    if (dbuff[i].old == isosurf->data)
+		dbuff[i].old = NULL;
 	    G_free(isosurf->data);
 	    gvl_align_data(dbuff[i].ndx_new, dbuff[i].new);
 	    isosurf->data = dbuff[i].new;
@@ -716,6 +721,8 @@ int gvl_isosurf_calc(geovol * gvol)
 	    }
 	}
     }
+    
+    /* TODO: G_free() dbuff and need_update ??? */
 
     return (1);
 }
