@@ -66,8 +66,9 @@ def substitute_db(database):
 
 # create database if doesn't exist
 def create_db(driver, database):
+    subst_database = substitute_db(database)
     if driver == 'dbf':
-        path = substitute_db(database)
+        path = subst_database
         # check if destination directory exists
         if not os.path.isdir(path):
 	    # create dbf database
@@ -76,21 +77,21 @@ def create_db(driver, database):
         return False
     
     if driver == 'sqlite':
-        path = os.path.dirname(substitute_db(database))
+        path = os.path.dirname(subst_database)
         # check if destination directory exists
         if not os.path.isdir(path):
             os.makedirs(path)
     
-    if substitute_db(database) in grass.read_command('db.databases', quiet = True,
+    if subst_database in grass.read_command('db.databases', quiet = True,
                                       driver = driver).splitlines():
         return False
 
     grass.info(_("Target database doesn't exist, "
                  "creating a new database using <%s> driver...") % driver)
     if 0 != grass.run_command('db.createdb', driver = driver,
-                              database = database):
+                              database = subst_database):
         grass.fatal(_("Unable to create database <%s> by driver <%s>") % \
-                        (database, driver))
+                        (subst_database, driver))
         
     return False
 
