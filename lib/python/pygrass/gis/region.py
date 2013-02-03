@@ -8,7 +8,7 @@ import ctypes
 import grass.lib.gis as libgis
 import grass.script as grass
 
-from pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError
 
 
 class Region(object):
@@ -224,7 +224,7 @@ class Region(object):
             raise GrassError("Cannot change region (WIND file).")
 
     def bbox(self):
-        from pygrass.vector.basic import Bbox
+        from grass.pygrass.vector.basic import Bbox
         return Bbox(north=self.north, south=self.south,
                     east=self.east, west=self.west,
                     top=self.top, bottom=self.bottom)

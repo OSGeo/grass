@@ -12,7 +12,7 @@ from vector_type import VTYPE, GV_TYPE
 #
 # import pygrass modules
 #
-from pygrass.errors import GrassError, must_be_open
+from grass.pygrass.errors import GrassError, must_be_open
 
 import geometry
 from abstract import Info
@@ -52,7 +52,7 @@ _GEOOBJ = {"areas": geometry.Area,
 class Vector(Info):
     """ ::
 
-        >>> from pygrass.vector import Vector
+        >>> from grass.pygrass.vector import Vector
         >>> municip = Vector('boundary_municp_sqlite')
         >>> municip.is_open()
         False
@@ -151,7 +151,7 @@ class Vector(Info):
             >>> new.open('w', tab_name='newvect', tab_cols=cols)
 
         import a geometry feature ::
-            >>> from pygrass.vector.geometry import Point
+            >>> from grass.pygrass.vector.geometry import Point
 
         create two points ::
 

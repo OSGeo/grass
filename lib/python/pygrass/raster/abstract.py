@@ -8,6 +8,8 @@ Created on Fri Aug 17 16:05:25 2012
 
 import ctypes
 
+from numpy import isnan
+
 #
 # import GRASS modules
 #
@@ -21,9 +23,9 @@ import grass.lib.raster as libraster
 #
 # import pygrass modules
 #
-from pygrass import functions
-from pygrass.gis.region import Region
-from pygrass.errors import must_be_open
+from grass.pygrass import functions
+from grass.pygrass.gis.region import Region
+from grass.pygrass.errors import must_be_open
 
 #
 # import raster classes

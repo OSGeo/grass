@@ -13,14 +13,14 @@ import re
 try:
     from collections import OrderedDict
 except ImportError:
-    from pygrass.orderdict import OrderedDict
+    from grass.pygrass.orderdict import OrderedDict
 
 from itertools import izip_longest
 from xml.etree.ElementTree import fromstring
 
 import grass
 
-from pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError
 
 #
 # this dictionary is used to extract the value of interest from the xml

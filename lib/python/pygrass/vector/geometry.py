@@ -13,7 +13,7 @@ import numpy as np
 import grass.lib.gis as libgis
 import grass.lib.vector as libvect
 
-from pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError
 
 from basic import Ilist, Bbox, Cats
 import sql
