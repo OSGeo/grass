@@ -105,7 +105,8 @@ int db_d_get_num_rows(void);
 int db_d_grant_on_table(void);
 int db_d_insert(void);
 void db_d_init_error(const char *);
-void db_d_append_error(const char *, ...);
+void db_d_append_error(const char *, ...)
+    __attribute__ ((format(printf, 1, 2)));
 void db_d_report_error(void);
 dbDirent *db_dirent(const char *, int *);
 int db_d_list_databases(void);
