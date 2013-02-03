@@ -9,7 +9,7 @@ from operator import itemgetter
 
 import grass.lib.raster as libraster
 
-from pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError
 
 from raster_type import TYPE as RTYPE
 
@@ -53,7 +53,7 @@ class Category(list):
 
     >>> import grass.lib.raster as libraster
     >>> import ctypes
-    >>> import pygrass
+    >>> import grass.pygrass as pygrass
     >>> land = pygrass.raster.RasterRow('landcover_1m')
     >>> cats = pygrass.raster.Category()
     >>> cats.read(land) # or with cats.read(land.name, land.mapset, land.mtype)

@@ -12,10 +12,10 @@ import ctypes
 try:
     from collections import OrderedDict
 except:
-    from pygrass.orderdict import OrderedDict
+    from grass.pygrass.orderdict import OrderedDict
 
 import grass.lib.vector as libvect
-from pygrass.gis import Mapset
+from grass.pygrass.gis import Mapset
 
 import sql
 
@@ -665,7 +665,7 @@ class Link(object):
 class DBlinks(object):
     """Interface containing link to the table DB. ::
 
-        >>> from pygrass.vector import VectorTopo
+        >>> from grass.pygrass.vector import VectorTopo
         >>> municip = VectorTopo('boundary_municp_sqlite')
         >>> municip.open()
         >>> dblinks = DBlinks(municip.c_mapinfo)
@@ -722,7 +722,7 @@ class DBlinks(object):
     def add(self, link):
         """Add a new link. ::
 
-            >>> from pygrass.vector import VectorTopo
+            >>> from grass.pygrass.vector import VectorTopo
             >>> municip = VectorTopo('boundary_municp_sqlite')
             >>> municip.open()
             >>> dblinks = DBlinks(municip.c_mapinfo)
@@ -744,7 +744,7 @@ class DBlinks(object):
     def remove(self, key):
         """Remove a link. ::
 
-            >>> from pygrass.vector import VectorTopo
+            >>> from grass.pygrass.vector import VectorTopo
             >>> municip = VectorTopo('boundary_municp_sqlite')
             >>> municip.open()
             >>> dblinks = DBlinks(municip.c_mapinfo)

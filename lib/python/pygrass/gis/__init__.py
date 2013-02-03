@@ -21,8 +21,9 @@ from grass import script
 script.gisenv()
 
 import grass.lib.gis as libgis
-from pygrass.functions import getenv
-from pygrass.errors import GrassError
+from grass.pygrass.functions import getenv
+from grass.pygrass.errors import GrassError
+import region
 
 
 #write dec to check if user have permissions or not
@@ -279,8 +280,3 @@ class Mapset(object):
                 if pattern:
                     return fnmatch.filter(elist, pattern)
                 return elist
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=False)

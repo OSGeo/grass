@@ -11,8 +11,8 @@ import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 from grass.script import core as grasscore
 
-from pygrass.errors import GrassError
-from pygrass.gis.region import Region
+from grass.pygrass.errors import GrassError
+from grass.pygrass.gis.region import Region
 
 
 def looking(obj, filter_string):
@@ -83,7 +83,6 @@ def clean_map_name(name):
 def coor2pixel((east, north), region):
     """Convert coordinates into a pixel row and col ::
 
-        >>> from pygrass.region import Region
         >>> reg = Region()
         >>> coor2pixel((reg.west, reg.north), reg)
         (0.0, 0.0)
@@ -97,7 +96,6 @@ def coor2pixel((east, north), region):
 def pixel2coor((col, row), region):
     """Convert row and col of a pixel into a coordinates ::
 
-        >>> from pygrass.region import Region
         >>> reg = Region()
         >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
         True

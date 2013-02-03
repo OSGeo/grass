@@ -9,8 +9,8 @@ import datetime
 import grass.lib.vector as libvect
 from vector_type import MAPTYPE
 
-from pygrass import functions
-from pygrass.errors import GrassError, OpenError, must_be_open
+from grass.pygrass import functions
+from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from table import DBlinks, Link
 
 #=============================================

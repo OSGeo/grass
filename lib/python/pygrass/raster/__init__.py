@@ -22,9 +22,9 @@ import grass.lib.rowio as librowio
 #
 # import pygrass modules
 #
-from pygrass.errors import OpenError, must_be_open
-from pygrass.gis.region import Region
-from pygrass import functions
+from grass.pygrass.errors import OpenError, must_be_open
+from grass.pygrass.gis.region import Region
+from grass.pygrass import functions
 
 #
 # import raster classes
@@ -462,7 +462,7 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
     * Overrides the open and close methods
     * Be aware of the 2Gig file size limit
 
-    >>> import pygrass
+    >>> import grass.pygrass as pygrass
     >>> elev = pygrass.raster.RasterNumpy('elevation')
     >>> elev.open()
     >>> elev[:5, :3]
@@ -687,8 +687,3 @@ def random_map(mapname, mtype, overwrite=True, factor=100):
         random_map.put_row(row_buf)
     random_map.close()
     return random_map
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

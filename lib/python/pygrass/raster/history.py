@@ -15,7 +15,7 @@ class History(object):
 
     ::
 
-        >>> import pygrass
+        >>> import grass.pygrass as pygrass
         >>> hist = pygrass.raster.History()
         >>> hist.read('aspect')
         >>> hist.creator

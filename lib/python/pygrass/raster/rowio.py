@@ -9,7 +9,7 @@ import ctypes
 import grass.lib.rowio as librowio
 import grass.lib.raster as librast
 
-from pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError
 from raster_type import TYPE as RTYPE
 
 
