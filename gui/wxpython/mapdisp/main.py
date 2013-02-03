@@ -226,6 +226,54 @@ class DMonMap(Map):
         """
         return self._renderCmdFile(force, windres)
 
+
+class Layer(object):
+    def __init__(self, maplayer):
+        self._maplayer = maplayer
+
+    def __getattr__(self, name):
+        if name == 'cmd':
+            return utils.CmdTupleToList(self._maplayer.GetCmd())
+        elif hasattr(self._maplayer, name):
+            return getattr(self._maplayer, name)
+        elif name == 'maplayer':
+            return self._maplayer
+        elif name == 'type':
+            return self._maplayer.GetType()
+            #elif name == 'ctrl':
+        elif name == 'label':
+            return self._maplayer.GetName()
+            #elif name == 'maplayer' : None,
+            #elif name == 'propwin':
+
+
+class LayerList(object):
+    def __init__(self, map):
+        self._map = map
+
+#    def __iter__(self):
+#        for in :
+#            yield
+
+    def GetSelectedLayers(self, checkedOnly=True):
+        # hidden and selected vs checked and selected
+        items = self._map.GetListOfLayers()
+        layers = []
+        for item in items:
+            layer = Layer(item)
+            layers.append(layer)
+        return layers
+
+
+class DMonGrassInterface(StandaloneGrassInterface):
+    def __init__(self, mapframe):
+        StandaloneGrassInterface.__init__(self)
+        self._mapframe = mapframe
+
+    def GetLayerList(self):
+        return LayerList(self._mapframe.GetMap())
+
+
 class DMonFrame(MapFrame):
     def OnZoomToMap(self, event):
         layers = self.MapWindow.GetMap().GetListOfLayers()
@@ -244,9 +292,11 @@ class MapApp(wx.App):
 
         # actual use of StandaloneGrassInterface not yet tested
         # needed for adding functionality in future
+        giface = DMonGrassInterface(None)
         self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
-                                giface = StandaloneGrassInterface(),
-                                size = monSize)
+                                giface = giface, size = monSize)
+        # FIXME: hack to solve dependency
+        giface._mapframe = self.mapFrm
         # self.SetTopWindow(Map)
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
         self.mapFrm.Show()

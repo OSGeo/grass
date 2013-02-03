@@ -1175,15 +1175,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.frame.StatusbarUpdate()
             
         elif self.mouse["use"] == "query":
-            # querying
-            if self.frame.IsStandalone():
-                GMessage(parent = self.frame,
-                         message = _("Querying is not implemented in standalone mode of Map Display"))
-                return
-
-            layers = self.tree.GetSelectedLayer(multi = True, checkedOnly = True)
-
-            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1], layers)
+            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1])
         
         elif self.mouse["use"] in ["measure", "profile"]:
             # measure or profile

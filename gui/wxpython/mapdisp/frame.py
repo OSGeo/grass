@@ -638,7 +638,7 @@ class MapFrame(SingleMapFrame):
             if pgnum > -1:
                 self.layerbook.DeletePage(pgnum)
 
-    def Query(self, x, y, layers):
+    def Query(self, x, y):
         """!Query selected layers. 
 
         Calls QueryMap in case of raster or more vectors,
@@ -647,9 +647,10 @@ class MapFrame(SingleMapFrame):
         @param x,y coordinates
         @param layers selected tree item layers
         """
+        layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly = True)
         filteredLayers = []
         for layer in layers:
-            ltype = self.tree.GetLayerInfo(layer, key = 'maplayer').GetType()
+            ltype = layer.maplayer.GetType()
             if ltype in ('raster', 'rgb', 'his',
                          'vector', 'thememap', 'themechart'):
                 filteredLayers.append(layer)
@@ -662,7 +663,12 @@ class MapFrame(SingleMapFrame):
         layers = filteredLayers
         # set query snap distance for v.what at map unit equivalent of 10 pixels
         qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
-        east, north = self.MapWindow.Pixel2Cell((x, y))
+
+        # TODO: replace returning None by exception or so
+        try:
+            east, north = self.MapWindow.Pixel2Cell((x, y))
+        except TypeError:
+            return
 
         posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
                                          y + self.MapWindow.dialogOffset))
@@ -671,7 +677,7 @@ class MapFrame(SingleMapFrame):
         nVectors = 0
         isDbConnection = False
         for l in layers:
-            maplayer = self.tree.GetLayerInfo(l, key = 'maplayer')
+            maplayer = l.maplayer
             if maplayer.GetType() == 'raster':
                 isRaster = True
                 break
@@ -705,8 +711,8 @@ class MapFrame(SingleMapFrame):
         vcmd = ['v.what', '--v']
         
         for layer in layers:
-            ltype = self.tree.GetLayerInfo(layer, key = 'maplayer').GetType()
-            dcmd = self.tree.GetLayerInfo(layer, key = 'cmd')
+            ltype = layer.maplayer.GetType()
+            dcmd = layer.cmd
             name, found = GetLayerNameFromCmd(dcmd)
             
             if not found:
@@ -784,9 +790,9 @@ class MapFrame(SingleMapFrame):
         Attribute data of selected vector object are displayed in GUI dialog.
         Data can be modified (On Submit)
         """
-        mapName = self.tree.GetLayerInfo(layer, key = 'maplayer').name
+        mapName = layer.maplayer.name
         
-        if self.tree.GetLayerInfo(layer, key = 'maplayer').GetMapset() != \
+        if layer.maplayer.GetMapset() != \
                 grass.gisenv()['MAPSET']:
             mode = 'display'
         else:
@@ -832,7 +838,7 @@ class MapFrame(SingleMapFrame):
                     qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId = False)
                 
                 # set opacity based on queried layer
-                opacity = self.tree.GetLayerInfo(layer, key = 'maplayer').GetOpacity(float = True)
+                opacity = layer.maplayer.GetOpacity(float = True)
                 qlayer.SetOpacity(opacity)
                 
                 self.MapWindow.UpdateMap(render = False, renderVector = False)
