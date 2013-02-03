@@ -769,9 +769,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                          message = _("Querying is not implemented in standalone mode of Map Display"))
                 return
 
-            layers = self.tree.GetSelectedLayer(multi = True, checkedOnly = True)
-
-            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1], layers)
+            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1])
 
         elif self.mouse["use"] in ('arrow', 'scalebar'):
             self.lmgr.nviz.FindWindowById(

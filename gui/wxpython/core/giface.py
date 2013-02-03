@@ -88,9 +88,9 @@ class StandaloneGrassInterface():
         function(text)
         os.environ["GRASS_MESSAGE_FORMAT"] = orig
 
-    def GetLayerTree(self):
+    def GetLayerList(self):
         return None
-
+        
     def GetMapDisplay(self):
         """!Get current map display.
         """
