@@ -715,7 +715,7 @@ int gvl_isosurf_calc(geovol *);
 int gvl_slices_calc(geovol *);
 void gvl_write_char(int, unsigned char **, unsigned char);
 unsigned char gvl_read_char(int, const unsigned char *);
-void gvl_align_data(int, unsigned char *);
+void gvl_align_data(int, unsigned char **);
 
 /* gvld.c */
 int gvld_vol(geovol *);
