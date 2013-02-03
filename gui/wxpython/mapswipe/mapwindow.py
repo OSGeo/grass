@@ -46,6 +46,7 @@ class SwipeBufferedWindow(BufferedWindow):
         self.imageId = 99
         self.movingSash = False
         self._mode = 'swipe'
+        self.lineid = wx.NewId()
 
     def _bindMouseEvents(self):
         """!Binds wx mouse events and custom mouse events"""
@@ -113,7 +114,7 @@ class SwipeBufferedWindow(BufferedWindow):
         if not self.movingSash:
             super(SwipeBufferedWindow, self).OnSize(event)
 
-    def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0]):
+    def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0], pen = None):
         """!Draws image (map) with translated coordinates.
         """
         Debug.msg(2, "SwipeBufferedWindow.Draw()")
@@ -121,7 +122,7 @@ class SwipeBufferedWindow(BufferedWindow):
         if pdctype == 'image':
             coords = self.GetImageCoords()
 
-        return super(SwipeBufferedWindow, self).Draw(pdc, img, drawid, pdctype, coords)
+        return super(SwipeBufferedWindow, self).Draw(pdc, img, drawid, pdctype, coords, pen)
         
     def OnLeftDown(self, event):
         """!Left mouse button pressed.
@@ -179,6 +180,11 @@ class SwipeBufferedWindow(BufferedWindow):
         begin = (self.mouse['begin'][0] + offsetX, self.mouse['begin'][1] + offsetY)
         end = (self.mouse['end'][0] + offsetX, self.mouse['end'][1] + offsetY)
         super(SwipeBufferedWindow, self).MouseDraw(pdc, begin, end)
+
+    def DrawMouseCross(self, coords):
+        """!Draw moving cross."""
+        self.pdcTmp.ClearId(self.lineid)
+        self.lineid = self.DrawCross(pdc = self.pdcTmp, coords = coords, size = 10, pen = wx.BLACK_PEN)
 
 
 class _MouseEvent(wx.PyCommandEvent):
