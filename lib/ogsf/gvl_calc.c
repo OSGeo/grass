@@ -782,7 +782,7 @@ void gvl_align_data(int pos, unsigned char **data)
     
 
     /* realloc memory to fit in data length */
-    p = (char *)G_realloc(p, sizeof(char) * pos);	/* G_fatal_error */
+    p = (unsigned char *)G_realloc(p, sizeof(unsigned char) * pos);	/* G_fatal_error */
     if (!p) {
 	return;
     }
