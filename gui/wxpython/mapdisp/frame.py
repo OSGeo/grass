@@ -930,10 +930,7 @@ class MapFrame(SingleMapFrame):
         self.totaldist = 0.0 # total measured distance
         
         self.SwitchTool(self.toolbars['map'], event)
-        
-        # switch Layer Manager to output console to show measure results
-        self._layerManager.notebook.SetSelectionByName('output')
-        
+
         # change mouse to draw line for measurement
         self.MapWindow.mouse['use'] = "measure"
         self.MapWindow.mouse['box'] = "line"
@@ -944,9 +941,10 @@ class MapFrame(SingleMapFrame):
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["pencil"])
         
-        # initiating output
-        # TODO: this should be something like:
-        # write important message or write tip
+        # initiating output (and write a message)
+        # e.g., in Layer Manager switch to output console
+        # TODO: this should be something like: write important message or write tip
+        # TODO: mixed 'switching' and message? no, measuring handles 'swithing' on its own
         self._giface.WriteWarning(_('Click and drag with left mouse button '
                                               'to measure.%s'
                                               'Double click with left button to clear.') % \
@@ -974,7 +972,6 @@ class MapFrame(SingleMapFrame):
         """!Calculate map distance from screen distance
         and print to output window
         """
-        self._layerManager.notebook.SetSelectionByName('output')
         
         dist, (north, east) = self.MapWindow.Distance(beginpt, endpt)
         
@@ -1004,7 +1001,7 @@ class MapFrame(SingleMapFrame):
                    _('total distance'), strtotdist, tdunits,
                    '-' * 60)
         
-        self._giface.WriteLog(mstring)
+        self._giface.WriteLog(mstring, priority=2)
         
         return dist
 

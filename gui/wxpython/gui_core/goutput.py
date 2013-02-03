@@ -295,6 +295,7 @@ class GConsoleWindow(wx.SplitterWindow):
         (replace by priority: False=1, True=2)
         @param priority priority of this message
         (0=no priority, 1=normal, 2=medium, 3=high)
+        also not clear how deal with this
         """
 
         self.cmdOutput.SetStyle()
