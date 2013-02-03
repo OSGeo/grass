@@ -17,10 +17,10 @@ for details.
 import wx
 
 from core               import globalvar
-from gui_core.dialogs   import ElementDialog, GroupDialog
+from gui_core.dialogs   import SimpleDialog, GroupDialog
 from gui_core           import gselect
 
-class ExampleMapDialog(ElementDialog):
+class ExampleMapDialog(SimpleDialog):
     """!Dialog for adding raster map.
     
     Dialog can be easily changed to enable to choose vector, imagery groups or other elements.
@@ -32,27 +32,27 @@ class ExampleMapDialog(ElementDialog):
         @param title dialog window title
         @param id id
         """
-        ElementDialog.__init__(self, parent, title, label = _("Name of raster map:"))
+        SimpleDialog.__init__(self, parent, title)
         
         # here is the place to determine element type
         self.element = gselect.Select(parent = self.panel, type = 'raster',
                                       size = globalvar.DIALOG_GSELECT_SIZE)
         
-        self.PostInit()
-        
-        self.__Layout()
-        
+        self._layout()
+
         self.SetMinSize(self.GetSize())
 
-    def __Layout(self):
+    def _layout(self):
         """!Do layout"""
-        self.dataSizer.Add(item = self.element, proportion = 0,
-                           flag = wx.EXPAND | wx.ALL, border = 5)
-                            
+        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = _("Name of raster map:")),
+                           proportion = 0, flag = wx.ALL, border = 1)
+        self.dataSizer.Add(self.element, proportion = 0,
+                           flag = wx.EXPAND | wx.ALL, border = 1)
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
         
     def GetRasterMap(self):
         """!Returns selected raster map"""
-        return self.GetElement()
+        return self.element.GetValue()
 
