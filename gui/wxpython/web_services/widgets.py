@@ -158,7 +158,7 @@ class WSPanel(wx.Panel):
         self.params['srs'] = None
         if 'srs' not in  self.drv_props['ignored_params']:
             projText = wx.StaticText(parent = self.req_page_panel, id = wx.ID_ANY, label = _("Source projection:"))
-            self.params['srs'] =  wx.Choice(parent = self.req_page_panel, id = wx.ID_ANY, style = wx.RA_SPECIFY_COLS)
+            self.params['srs'] =  wx.Choice(parent = self.req_page_panel, id = wx.ID_ANY)
         
         self.list.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnListSelChanged)
         
