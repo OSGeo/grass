@@ -21,14 +21,21 @@
 #include <grass/glocale.h>
 
 /* initialize the global struct */
-struct state {
+struct error_state {
     char     *driver_name;
     dbString *errMsg;
-} state;
+};
 
-struct state *st = &state;
+static struct error_state state;
+static struct error_state *st = &state;
 
-static void init();
+static void init()
+{
+    db_set_string(st->errMsg, "");
+    db_d_append_error(_("DBMI-%s driver error:"), st->driver_name);
+    db_append_string(st->errMsg, "\n");
+}
+
 
 /*!
   \brief Init error message for DB driver
@@ -51,12 +58,6 @@ void db_d_init_error(const char *name)
     init();
 }
 
-void init()
-{
-    db_set_string(st->errMsg, "");
-    db_d_append_error(_("DBMI-%s driver error:"), st->driver_name);
-    db_append_string(st->errMsg, "\n");
-}
 /*!
   \brief Append error message for DB driver
 
