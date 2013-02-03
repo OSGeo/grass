@@ -13,7 +13,7 @@
  *               cross-validation -v flag by Jaro Hofierka 2004
  *
  * PURPOSE:      Surface interpolation from vector point data by splines
- * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2009, 2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     struct quaddata *data;
     struct multfunc *functions;
     struct multtree *tree;
-    int open_check;
+    int open_check, with_z;
     char buf[1024];
 
     struct GModule *module;
@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	struct Flag *deriv, *cprght, *cv, *withz;
+	struct Flag *deriv, *cprght, *cv;
     } flag;
 
 
@@ -142,7 +142,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
-    G_add_keyword(_("RST"));
+    G_add_keyword(_("3D"));
+    module->label = _("Performs surface interpolation from vector points map by splines.");
     module->description =
 	_("Spatial approximation and topographic analysis from given "
 	  "point or isoline data in vector format to floating point "
@@ -165,13 +166,8 @@ int main(int argc, char *argv[])
 	_("Output partial derivatives instead of topographic parameters");
     flag.deriv->guisection = _("Outputs");
 
-    flag.withz = G_define_flag();
-    flag.withz->key = 'z';
-    flag.withz->description = _("Use z coordinates for approximation (3D vector maps only)");
-    flag.withz->guisection = _("Parameters");
-    
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
-
+    
     parm.field = G_define_standard_option(G_OPT_V_FIELD);
     parm.field->answer = "1";
     parm.field->guisection = _("Selection");
@@ -179,17 +175,19 @@ int main(int argc, char *argv[])
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->key = "zcolumn";
     parm.zcol->required = NO;
-    parm.zcol->description =
+    parm.zcol->label =
 	_("Name of the attribute column with values to be used for approximation");
+    parm.zcol->description = _("If not given and input is 2D vector map then category values are used. "
+                               "If input is 3D vector map then z-coordinates are used.");
     parm.zcol->guisection = _("Parameters");
 
     parm.wheresql = G_define_standard_option(G_OPT_DB_WHERE);
     parm.wheresql->guisection = _("Selection");
 
     parm.elev = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.elev->key = "elev";
+    parm.elev->key = "elevation";
     parm.elev->required = NO;
-    parm.elev->description = _("Name for output surface raster map (elevation)");
+    parm.elev->description = _("Name for output surface elevation raster map");
     parm.elev->guisection = _("Outputs");
 
     parm.slope = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -236,21 +234,21 @@ int main(int argc, char *argv[])
     parm.cvdev->guisection = _("Outputs");
 
     parm.treefile = G_define_standard_option(G_OPT_V_OUTPUT);
-    parm.treefile->key = "treefile";
+    parm.treefile->key = "treeseg";
     parm.treefile->required = NO;
     parm.treefile->description =
 	_("Name for output vector map showing quadtree segmentation");
     parm.treefile->guisection = _("Outputs");
 
     parm.overfile = G_define_standard_option(G_OPT_V_OUTPUT);
-    parm.overfile->key = "overfile";
+    parm.overfile->key = "overwin";
     parm.overfile->required = NO;
     parm.overfile->description =
 	_("Name for output vector map showing overlapping windows");
     parm.overfile->guisection = _("Outputs");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
-    parm.maskmap->key = "maskmap";
+    parm.maskmap->key = "mask";
     parm.maskmap->required = NO;
     parm.maskmap->description = _("Name of raster map used as mask");
     parm.maskmap->guisection = _("Parameters");
@@ -527,15 +525,31 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Cannot create tree info"));
 
     open_check = Vect_open_old2(&Map, input, "", parm.field->answer);
-    field = Vect_get_field_number(&Map, parm.field->answer);
-    if (!flag.withz->answer && field < 1)
-	G_fatal_error(_("Layer <%s> not found"), parm.field->answer);
-    
     if (open_check < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), input);
     /*    if (open_check < 2)
-       G_fatal_error(_("You first need to run v.build on vector map <%s>"), input); */
+          G_fatal_error(_("You first need to run v.build on vector map <%s>"), input);
+    */
 
+    /* get value used for approximation */
+    with_z = !parm.zcol->answer && Vect_is_3d(&Map);
+    field = Vect_get_field_number(&Map, parm.field->answer);
+    if (!with_z && field < 1)
+	G_fatal_error(_("Layer <%s> not found"), parm.field->answer);
+
+    if (Vect_is_3d(&Map)) {
+        if (!with_z)
+            G_verbose_message(_("Input is 3D: using attribute values instead of z-coordinates for approximation"));
+        else
+            G_verbose_message(_("Input is 3D: using z-coordinates for approximation"));
+    }
+    else { /* 2D */
+        if (parm.zcol->answer)
+            G_verbose_message(_("Input is 2D: using attribute values for approximation"));
+        else
+            G_verbose_message(_("Input is 2D: using category values for approximation"));
+    }
+        
     /* we can't read the input file's timestamp as they don't exist in   */
     /*   the new vector format. Even so, a TimeStamp structure is needed */
     /*   for IL_init_params_2d(), so we set it to NULL.                  */
@@ -600,7 +614,7 @@ int main(int argc, char *argv[])
 		    IL_crstg, IL_write_temp_2d);
 
     totsegm =
-	IL_vector_input_data_2d(&params, &Map, flag.withz->answer ? 0 : field,
+	IL_vector_input_data_2d(&params, &Map, with_z ? 0 : field,
 				zcol, scol,
 				info, &xmin, &xmax,
 				&ymin, &ymax, &zmin, &zmax, &NPOINT, &dmax);
