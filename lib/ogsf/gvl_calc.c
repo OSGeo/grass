@@ -687,7 +687,7 @@ int gvl_isosurf_calc(geovol * gvol)
 	    if (dbuff[i].old == isosurf->data)
 		dbuff[i].old = NULL;
 	    G_free(isosurf->data);
-	    gvl_align_data(dbuff[i].ndx_new, dbuff[i].new);
+	    gvl_align_data(dbuff[i].ndx_new, &(dbuff[i].new));
 	    isosurf->data = dbuff[i].new;
 	    isosurf->data_desc = 0;
 	}
@@ -776,15 +776,23 @@ unsigned char gvl_read_char(int pos, const unsigned char *data)
    \param pos position index
    \param data data buffer
  */
-void gvl_align_data(int pos, unsigned char *data)
+void gvl_align_data(int pos, unsigned char **data)
 {
+    unsigned char *p = *data;
+    
+
     /* realloc memory to fit in data length */
-    data = (char *)G_realloc(data, sizeof(char) * pos);	/* G_fatal_error */
-    if (!data) {
+    p = (char *)G_realloc(p, sizeof(char) * pos);	/* G_fatal_error */
+    if (!p) {
 	return;
     }
 
     G_debug(3, "gvl_align_data(): reallocate memory finally to : %d B", pos);
+
+    if (pos == 0)
+	p = NULL;
+    
+    *data = p;
 
     return;
 }
@@ -1014,7 +1022,7 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
 
     /* end reading volume file */
     gvl_file_end_read(vf);
-    gvl_align_data(pos, slice->data);
+    gvl_align_data(pos, &(slice->data));
 
     return (1);
 }
