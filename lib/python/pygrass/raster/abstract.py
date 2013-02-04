@@ -26,7 +26,7 @@ import grass.lib.raster as libraster
 from grass.pygrass import functions
 from grass.pygrass.gis.region import Region
 from grass.pygrass.errors import must_be_open
-
+from grass.pygrass.gis import Mapset
 #
 # import raster classes
 #
@@ -123,11 +123,12 @@ class RasterAbstractBase(object):
 
     def _set_name(self, newname):
         """Private method to change the Raster name"""
-        #import pdb; pdb.set_trace()
-        cleanname = functions.clean_map_name(newname)
+        if not functions.is_clean_name(newname):
+            str_err = _("Map name {0} not valid")
+            raise ValueError(str_err.format(newname))
         if self.exist():
-            self.rename(cleanname)
-        self._name = cleanname
+            self.rename(newname)
+        self._name = newname
 
     name = property(fget=_get_name, fset=_set_name)
 
