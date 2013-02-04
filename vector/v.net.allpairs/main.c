@@ -25,9 +25,6 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-int remove_duplicates(struct Map_info *);
-int check_duplicate(const struct line_pnts *, const struct line_pnts *);
-
 struct _spnode {
     int cat, node;
 };
@@ -36,7 +33,7 @@ int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
     static struct line_pnts *Points, *aPoints;
-    struct line_cats *Cats;
+    struct line_cats *Cats, **FCats, **BCats;
     struct ilist *List;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
@@ -209,9 +206,15 @@ int main(int argc, char *argv[])
 
     G_message(_("Writing node points..."));
     nlines = Vect_get_num_lines(&In);
+
+    FCats = G_malloc((nlines + 1) * sizeof(struct line_cats *));
+    BCats = G_malloc((nlines + 1) * sizeof(struct line_cats *));
+
     nnodes = 0;
     for (i = 1; i <= nlines; i++) {
 	int node;
+
+	FCats[i] = BCats[i] = NULL;
 
 	if (Vect_get_line_type(&In, i) != GV_POINT)
 	    continue;
@@ -235,7 +238,7 @@ int main(int argc, char *argv[])
     if (Vect_get_field(&In, nfield))
 	Vect_copy_table(&In, &Out, nfield, nfield, NULL, GV_POINT);
 
-    G_message(_("Writing shortest paths..."));
+    G_message(_("Collecting shortest paths..."));
     G_percent_reset();
     cat = 1;
     List = Vect_new_list();
@@ -267,29 +270,21 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot insert new record: %s"),
 			      db_get_string(&sql));
 	    }
-	    Vect_reset_cats(Cats);
-	    Vect_cat_set(Cats, afield, cat);
-	    cat++;
-
-	    Vect_reset_line(aPoints);
 
 	    for (k = 0; k < List->n_values; k++) {
 		line = List->value[k];
-		Vect_read_line(&In, Points, NULL, abs(line));
-		if (line > 0)
-		    Vect_append_points(aPoints, Points,
-				       GV_FORWARD);
-		else
-		    Vect_append_points(aPoints, Points,
-				       GV_BACKWARD);
-		aPoints->n_points--;
+		if (line > 0) {
+		    if (!FCats[line])
+			FCats[line] = Vect_new_cats_struct();
+		    Vect_cat_set(FCats[line], afield, cat);
+		}
+		else {
+		    if (!BCats[line])
+			BCats[line] = Vect_new_cats_struct();
+		    Vect_cat_set(BCats[line], afield, cat);
+		}
 	    }
-	    aPoints->n_points++;
-	    
-	    Vect_line_prune(aPoints);
-
-	    Vect_write_line(&Out, GV_LINE, aPoints, Cats);
-
+	    cat++;
 	}
     }
     G_percent(1, 1, 1);
@@ -297,147 +292,33 @@ int main(int argc, char *argv[])
     db_commit_transaction(driver);
     db_close_database_shutdown_driver(driver);
 
+    G_message(_("Writing shortest paths..."));
+    for (i = 1; i <= nlines; i++) {
+
+	G_percent(i, nlines, 1);
+
+	if (!FCats[i] && !BCats[i])
+	    continue;
+
+	Vect_read_line(&In, Points, NULL, i);
+
+	if (FCats[i]) {
+	    Vect_write_line(&Out, GV_LINE, Points, FCats[i]);
+	}
+	if (BCats[i]) {
+	    Vect_reset_line(aPoints);
+	    Vect_append_points(aPoints, Points, GV_BACKWARD);
+	    Vect_write_line(&Out, GV_LINE, aPoints, BCats[i]);
+	}
+    }
+
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
     Vect_close(&In);
 
-    Vect_build_partial(&Out, GV_BUILD_BASE);
-    Vect_break_lines(&Out, GV_LINE, NULL);
-    remove_duplicates(&Out);
-    Vect_build_partial(&Out, GV_BUILD_NONE);
-    
     Vect_build(&Out);
-
     Vect_close(&Out);
 
     exit(EXIT_SUCCESS);
-}
-
-
-int remove_duplicates(struct Map_info *Map)
-{
-    struct line_pnts *APoints, *BPoints;
-    struct line_cats *ACats, *BCats;
-    int i, c, atype, btype, aline, bline;
-    int nlines, nacats_orig, npoints;
-    struct bound_box ABox;
-    struct boxlist *List;
-    int ndupl, is_dupl;
-
-
-    APoints = Vect_new_line_struct();
-    BPoints = Vect_new_line_struct();
-    ACats = Vect_new_cats_struct();
-    BCats = Vect_new_cats_struct();
-    List = Vect_new_boxlist(0);
-
-    nlines = Vect_get_num_lines(Map);
-
-    G_debug(1, "nlines =  %d", nlines);
-    /* Go through all lines in vector, for each line select lines which
-     * overlap with the first vertex of this line and check if a 
-     * selected line is identical. If yes, remove the selected line.
-     * If the line vertices are identical with those of any other line, 
-     * merge categories and rewrite the current line.
-     */
-
-    ndupl = 0;
-
-    for (aline = 1; aline <= nlines; aline++) {
-	G_percent(aline, nlines, 1);
-	if (!Vect_line_alive(Map, aline))
-	    continue;
-
-	atype = Vect_read_line(Map, APoints, ACats, aline);
-	if (!(atype & GV_LINE))
-	    continue;
-
-	npoints = APoints->n_points;
-	Vect_line_prune(APoints);
-	
-	if (npoints != APoints->n_points) {
-	    Vect_rewrite_line(Map, aline, atype, APoints, ACats);
-	    nlines = Vect_get_num_lines(Map);
-	    continue;
-	}
-
-	/* select potential duplicates */
-	ABox.E = ABox.W = APoints->x[0];
-	ABox.N = ABox.S = APoints->y[0];
-	ABox.T = ABox.B = APoints->z[0];
-	Vect_select_lines_by_box(Map, &ABox, GV_LINE, List);
-	G_debug(3, "  %d lines selected by box", List->n_values);
-	
-	is_dupl = 0;
-
-	for (i = 0; i < List->n_values; i++) {
-	    bline = List->id[i];
-	    G_debug(3, "  j = %d bline = %d", i, bline);
-
-	    /* compare aline and bline only once */
-	    if (aline <= bline)
-		continue;
-
-	    btype = Vect_read_line(Map, BPoints, BCats, bline);
-
-	    if (!(btype & GV_LINE))
-		continue;
-
-	    Vect_line_prune(BPoints);
-
-	    /* check for duplicate */
-	    if (!check_duplicate(APoints, BPoints))
-		continue;
-
-	    /* bline is identical to aline */
-	    is_dupl = 1;
-
-	    Vect_delete_line(Map, bline);
-
-	    /* merge categories */
-	    nacats_orig = ACats->n_cats;
-
-	    for (c = 0; c < BCats->n_cats; c++)
-		Vect_cat_set(ACats, BCats->field[c], BCats->cat[c]);
-
-	    if (ACats->n_cats > nacats_orig) {
-		G_debug(4, "cats merged: n_cats %d -> %d", nacats_orig,
-			ACats->n_cats);
-	    }
-
-	    ndupl++;
-	}
-	if (is_dupl) {
-	    Vect_rewrite_line(Map, aline, atype, APoints, ACats);
-	    nlines = Vect_get_num_lines(Map);
-	    G_debug(3, "nlines =  %d\n", nlines);
-	}
-    }
-    G_verbose_message("Removed duplicates: %d", ndupl);
-    
-    return ndupl;
-}
-
-int check_duplicate(const struct line_pnts *APoints,
-		    const struct line_pnts *BPoints)
-{
-    int k;
-    int npoints;
-
-    if (APoints->n_points != BPoints->n_points)
-	return 0;
-
-    npoints = APoints->n_points;
-
-    /* only forward */
-    for (k = 0; k < npoints; k++) {
-	if (APoints->x[k] != BPoints->x[k] ||
-	    APoints->y[k] != BPoints->y[k] ||
-	    APoints->z[k] != BPoints->z[k]) {
-	    return 0;
-	}
-    }
-
-    return 1;
 }
