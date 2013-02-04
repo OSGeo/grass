@@ -1078,10 +1078,9 @@ class MapFrame(SingleMapFrame):
         """
         raster = []
 
-        for layer in self.tree.GetSelections():
-            if self.tree.GetLayerInfo(layer, key = 'maplayer').GetType() != 'raster':
-                continue
-            raster.append(self.tree.GetLayerInfo(layer, key = 'maplayer').GetName())
+        for layer in self._giface.GetLayerList().GetSelectedLayers():
+            if layer.maplayer.GetType() == 'raster':
+                raster.append(layer.maplayer.GetName())
 
         win = Histogram2Frame(parent = self, rasterList = raster)
         win.CentreOnParent()

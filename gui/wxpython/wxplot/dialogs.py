@@ -360,7 +360,11 @@ class HistRasterDialog(wx.Dialog):
         if self.groupRadio.GetValue() == True: 
             self.rselection.Disable()
         else:
-            if len(self.rasterList) > 0: self.rselection.SetValue(self.rasterList[0])
+            rastText = ''
+            for r in self.rasterList:
+                rastText += '%s,' % r
+            rastText = rastText.rstrip(',')
+            self.rselection.SetValue(rastText)
         box.Add(item = self.rselection, pos = (1, 1))       
 
         #
