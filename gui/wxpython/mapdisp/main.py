@@ -32,7 +32,7 @@ import wx
 from core          import utils
 from core.giface   import StandaloneGrassInterface
 from core.gcmd     import RunCommand
-from core.render   import Map
+from core.render   import Map, MapLayer
 from mapdisp.frame import MapFrame
 from grass.script  import core as grass
 from core.debug    import Debug
@@ -87,6 +87,7 @@ class DMonMap(Map):
         nlayers = 0
         try:
             fd = open(self.cmdfile, 'r')
+            existingLayers = self.GetListOfLayers()
             for line in fd.readlines():
                 cmd = utils.split(line.strip())
                 ltype = None
@@ -99,6 +100,21 @@ class DMonMap(Map):
 
                 name = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
                                                  layerType = ltype)[0]
+
+                # creating temporary layer object to compare commands
+                # neccessary to get the same format
+                # supposing that there are no side effects
+                tmpMapLayer = MapLayer(ltype = ltype, name = name,
+                                       cmd = cmd, Map = None,
+                                       active = False, hidden = True,
+                                       opacity = 0)
+                exists = False
+                for layer in existingLayers:
+                    if layer.GetCmd(string=True) == tmpMapLayer.GetCmd(string=True):
+                        exists = True
+                        break
+                if exists:
+                    continue
 
                 self.AddLayer(ltype = ltype, command = cmd, active = False, name = name)
                 nlayers += 1
