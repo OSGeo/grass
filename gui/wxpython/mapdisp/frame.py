@@ -1008,12 +1008,13 @@ class MapFrame(SingleMapFrame):
     def OnProfile(self, event):
         """!Launch profile tool
         """
-        raster = []
-        if self.tree.layer_selected and \
-                self.tree.GetLayerInfo(self.tree.layer_selected, key = 'type') == 'raster':
-            raster.append(self.tree.GetLayerInfo(self.tree.layer_selected, key = 'maplayer').name)
+        rasters = []
+        layers = self._giface.GetLayerList().GetSelectedLayers()
+        for layer in layers:
+            if layer.type == 'raster':
+                rasters.append(layer.maplayer.name)
 
-        win = ProfileFrame(parent = self, rasterList = raster)
+        win = ProfileFrame(parent = self, rasterList = rasters)
         
         win.CentreOnParent()
         win.Show()
