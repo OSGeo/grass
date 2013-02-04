@@ -45,39 +45,52 @@ def copy(existingmap, newmap, maptype):
 
 
 def getenv(env):
-    """Return the current grass environment variables:
+    """Return the current grass environment variables ::
 
         >>> getenv("MAPSET")
         'user1'
 
-    .."""
+    """
     return libgis.G__getenv(env)
 
 
 def get_mapset_raster(mapname, mapset=''):
+    """Return the mapset of the raster map ::
+
+    >>> get_mapset_raster('elevation')
+    'PERMANENT'
+
+    """
     return libgis.G_find_raster(mapname, '')
 
 
 def get_mapset_vector(mapname, mapset=''):
+    """Return the mapset of the vector map ::
+
+    >>> get_mapset_vector('census')
+    'PERMANENT'
+
+    """
     return libgis.G_find_vector(mapname, '')
 
 
-def exist(mapname, mapset=''):
-    mapset = get_mapset_raster(mapname, mapset)
-    if mapset != '':
-        return True
-    else:
-        mapset = get_mapset_vector(mapname, mapset)
-        if mapset:
-            return True
-    return False
+def is_clean_name(name):
+    """Return if the name is valid ::
 
+    >>> is_clean_name('census')
+    True
+    >>> is_clean_name('0census')
+    False
+    >>> is_clean_name('census&')
+    False
 
-def clean_map_name(name):
-    name.strip()
+    """
+    if name[0].isdigit():
+        return False
     for char in ' @#^?°,;%&/':
-        name = name.replace(char, '')
-    return name
+        if name.find(char) != -1:
+            return False
+    return True
 
 
 def coor2pixel((east, north), region):
@@ -86,7 +99,7 @@ def coor2pixel((east, north), region):
         >>> reg = Region()
         >>> coor2pixel((reg.west, reg.north), reg)
         (0.0, 0.0)
-        >>> coor2pixel((reg.east, reg.south), reg) == (reg.cols, reg.rows)
+        >>> coor2pixel((reg.east, reg.south), reg) == (reg.rows, reg.cols)
         True
     """
     return (libraster.Rast_northing_to_row(north, region.c_region),
@@ -99,7 +112,7 @@ def pixel2coor((col, row), region):
         >>> reg = Region()
         >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
         True
-        >>> pixel2coor((reg.cols, reg.rows), reg) == (reg.east, reg.south)
+        >>> pixel2coor((reg.cols, reg.rows), reg) == (reg.south, reg.east)
         True
     """
     return (libraster.Rast_row_to_northing(row, region.c_region),

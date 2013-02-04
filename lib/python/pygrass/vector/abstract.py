@@ -90,7 +90,13 @@ class Info(object):
             return self._name
 
     def _set_name(self, newname):
-        self.rename(newname)
+        """Private method to change the Raster name"""
+        if not functions.is_clean_name(newname):
+            str_err = _("Map name {0} not valid")
+            raise ValueError(str_err.format(newname))
+        if self.exist():
+            self.rename(newname)
+        self._name = newname
 
     name = property(fget=_get_name, fset=_set_name)
 
