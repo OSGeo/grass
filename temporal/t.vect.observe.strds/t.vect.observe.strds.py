@@ -126,7 +126,6 @@ def main():
     vector_db = grass.vector.vector_db(input)
 
     # We copy the vector table and create the new layers
-
     if vector_db:
         # Use the first layer to copy the categories from
         layers = "1,"
