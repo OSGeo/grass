@@ -80,8 +80,8 @@ int process_line(int ltype, const struct line_pnts *Points,
 		 const struct line_cats *Cats, LATTR *lattr,
 		 int chcat, const struct cat_list *Clist)
 {
-    int i, cat;
-    char text[100];
+    int i, cat, len;
+    char *text = NULL, buf[100];
     
     D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
     D_text_size(lattr->size, lattr->size);
@@ -118,19 +118,29 @@ int process_line(int ltype, const struct line_pnts *Points,
     }
     
     if (Vect_cat_get(Cats, lattr->field, &cat)) {
-	text[0] = '\0';
 	for (i = 0; i < Cats->n_cats; i++) {
 	    G_debug(3, "cat lab: field = %d, cat = %d", Cats->field[i],
 		    Cats->cat[i]);
 	    if (Cats->field[i] == lattr->field) {	/* all cats of given lfield */
-		if (*text != '\0')
-		    sprintf(text, "%s/", text);
-		
-		sprintf(text, "%s%d", text, Cats->cat[i]);
+		if (!text) {
+		    sprintf(buf, "%d", Cats->cat[i]);
+		    text = G_calloc(strlen(buf), sizeof(char));
+		    text[0] = '\0';
+		    strcpy(text, buf);
+		}
+		else {
+		    sprintf(buf, "/%d", Cats->cat[i]);
+		    len = strlen(text) + strlen(buf) + 1;
+		    text = G_realloc(text, len * sizeof(char));
+		    strcat(text, buf);
+		}
 	    }
 	}
 	show_label_line(Points, ltype, lattr, text);
     }
+    
+    if (text)
+	G_free(text);
 
     return 1;
 }
