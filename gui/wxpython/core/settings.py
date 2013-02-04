@@ -541,6 +541,12 @@ class Settings:
                     'pfill' : 'solid',
                     'psize' : 1,
                     'ptype' : 'dot',
+                    # FIXME: this is only a quick fix
+                    # using also names used in a base class for compatibility
+                    # probably used only for initialization
+                    # base should be rewritten to not require this
+                    'pwidth' : 1,  # required by wxplot/base, maybe useless here
+                    'pstyle' : 'dot', # line pen style
                     'plegend' : _('Data point'),
                     0 : {'datatype' : 'CELL'},
                     1 : {'datatype' : 'CELL'},
