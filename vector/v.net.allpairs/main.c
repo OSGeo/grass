@@ -279,9 +279,9 @@ int main(int argc, char *argv[])
 		    Vect_cat_set(FCats[line], afield, cat);
 		}
 		else {
-		    if (!BCats[line])
-			BCats[line] = Vect_new_cats_struct();
-		    Vect_cat_set(BCats[line], afield, cat);
+		    if (!BCats[abs(line)])
+			BCats[abs(line)] = Vect_new_cats_struct();
+		    Vect_cat_set(BCats[abs(line)], afield, cat);
 		}
 	    }
 	    cat++;
