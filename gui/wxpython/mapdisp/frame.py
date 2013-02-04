@@ -884,7 +884,8 @@ class MapFrame(SingleMapFrame):
         # icon used in vector display and its size
         icon = ''
         size = 0
-        vparam = self.tree.GetLayerInfo(self.tree.layer_selected, key = 'cmd')
+        # here we know that there is one selected layer and it is vector
+        vparam = self._giface.GetLayerList().GetSelectedLayers()[0].cmd
         for p in vparam:
             if '=' in p:
                 parg,pval = p.split('=', 1)
@@ -1094,11 +1095,10 @@ class MapFrame(SingleMapFrame):
         """
         raster = []
 
-        for layer in self.tree.GetSelections():
-            if self.tree.GetLayerInfo(layer, key = 'maplayer').GetType() != 'raster':
-                continue
-            raster.append(self.tree.GetLayerInfo(layer, key = 'maplayer').GetName())
-            
+        for layer in self._giface.GetLayerList().GetSelectedLayers():
+            if layer.maplayer.GetType() == 'raster':
+                raster.append(layer.maplayer.GetName())
+
         win = ScatterFrame(parent = self, rasterList = raster)
         
         win.CentreOnParent()
