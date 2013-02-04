@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE in_data_type;
 
     struct Option *input_prefix, *output_prefix, *metfn, *sensor, *adate, *pdate, *elev,
-	*bgain, *metho, *perc, *dark, *atmo;
+	*bgain, *metho, *perc, *dark, *atmo, *lsatmet;
     char *inputname, *met, *outputname, *sensorname;
-    struct Flag *frad;
+    struct Flag *frad, *print_meta;
 
     lsat_data lsat;
     char band_in[GNAME_MAX], band_out[GNAME_MAX];
@@ -183,10 +183,36 @@ int main(int argc, char *argv[])
     atmo->answer = "0.0";
     atmo->guisection = _("Settings");
 
+    lsatmet = G_define_option();
+    lsatmet->key = "lsatmet";
+    lsatmet->type = TYPE_STRING;
+    lsatmet->required = NO;
+    lsatmet->label = 	_("return value stored for a given metadata");
+    lsatmet->description = _("Required only if 'metfile' and -p given");
+    lsatmet->options = "number,creation,date,sun_elev,sensor,bands,sunza,time";
+    desc = NULL;
+    G_asprintf(&desc,
+	        "number;%s;creation;%s;date;%s;sun_elev;%s;sensor;%s;bands;%s;sunza;%s;time;%s",
+	        _("Landsat Number"),
+	        _("Creation timestamp"),
+	        _("Date"),
+	        _("Sun Elevation"),
+	        _("Sensor"),
+	        _("Bands count"),
+	        _("Sun Zenith Angle"),
+		_("Time"));
+    lsatmet->descriptions = desc;
+    lsatmet->guisection = _("Settings");
+
     /* define the different flags */
     frad = G_define_flag();
     frad->key = 'r';
     frad->description = _("Output at-sensor radiance for all bands");
+
+    /* define the different flags */
+    print_meta = G_define_flag();
+    print_meta->key = 'p';
+    print_meta->description = _("Print output metadata info");
 
     /* options and afters parser */
     if (G_parser(argc, argv))
@@ -234,6 +260,36 @@ int main(int argc, char *argv[])
     {
         lsat.flag = METADATAFILE;
         lsat_metadata( met, &lsat );
+	if(print_meta) {
+		if (strcmp(lsatmet->answer, "number") == 0) {
+			fprintf(stdout,"%d\n",lsat.number);
+		}
+		else if (strcmp(lsatmet->answer, "creation") == 0) {
+			fprintf(stdout,"%s\n",lsat.creation);
+		}
+		else if (strcmp(lsatmet->answer, "date") == 0) {
+			fprintf(stdout,"%s\n",lsat.date);
+		}
+		else if (strcmp(lsatmet->answer, "sun_elev") == 0) {
+			fprintf(stdout,"%f\n",lsat.sun_elev);
+		}
+		else if (strcmp(lsatmet->answer, "sensor") == 0) {
+			fprintf(stdout,"%s\n",lsat.sensor);
+		}
+		else if (strcmp(lsatmet->answer, "bands") == 0) {
+			fprintf(stdout,"%d\n",lsat.bands);
+		}
+		else if (strcmp(lsatmet->answer, "sunza") == 0) {
+			fprintf(stdout,"%f\n",lsat.sunza);
+		}
+		else if (strcmp(lsatmet->answer, "time") == 0) {
+			fprintf(stdout,"%f\n",lsat.time);
+		}
+		else {
+			G_fatal_error(_("Please use a metadata keyword with -p"));
+		}
+    		exit(EXIT_SUCCESS);
+	}
         G_debug(1, "lsat.number = %d, lsat.sensor = [%s]", lsat.number, lsat.sensor);
         
         if (!lsat.sensor || lsat.number > 7 || lsat.number < 1)

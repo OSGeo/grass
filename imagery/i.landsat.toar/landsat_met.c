@@ -110,6 +110,11 @@ void lsat_metadata( char * metafile, lsat_data * lsat)
     }
     chrncpy(lsat->creation, value, 10);
 
+    get_mtldata(mtldata, "SUN_AZIMUTH", value);
+    lsat->sunza = atof(value);
+    if( lsat->sunza == 0. )
+        G_warning("Sun azimuth is %f", lsat->sunza);
+
     get_mtldata(mtldata, "SUN_ELEVATION", value);
     if( value[0] == '\0' )
     {
@@ -118,6 +123,19 @@ void lsat_metadata( char * metafile, lsat_data * lsat)
     lsat->sun_elev = atof(value);
     if( lsat->sun_elev == 0. )
         G_warning("Sun elevation is %f", lsat->sun_elev);
+
+    get_mtldata(mtldata, "SCENE_CENTER_TIME", value);
+    if( value[0] == '\0' )
+    {
+        get_mtldata(mtldata, "SCENE_CENTER_SCAN_TIME", value);
+    }
+    //Thanks Markus Metz !
+    //Remove trailing 'z'
+    value[strlen(value) - 1]='\0';
+    // Cast from hh:mm:ss into hh.hhh
+    G_llres_scan(value, &lsat->time);
+    if( lsat->time == 0. )
+        G_warning("Time is %f", lsat->time);
 
     /* Fill data with the basic sensor parameters */
     switch(lsat->number)
