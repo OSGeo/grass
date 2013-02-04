@@ -239,9 +239,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
             # Create the r.mapcalc statement for the current time step
             map_name = "%s_%i" % (base, count)
-            expr = "%s=%s" % (map_name, expression)
             # Remove spaces and new lines
-            expr = expr.replace(" ", "")
+            expr = expression.replace(" ", "")
             
             # Check that all maps are in the sample
             valid_maps = True
@@ -284,7 +283,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                 new_map.set_relative_time(start, end, unit)
             
             # Parse the temporal expressions
-            expr = _operator_parser(expr,  sample_map_list[0],  sample_map_list[i])
+            expr = _operator_parser(expr, sample_map_list[0], sample_map_list[i])
+            # Add the output map name
+            expr = "%s=%s" % (map_name, expr)
 
             map_list.append(new_map)
 
