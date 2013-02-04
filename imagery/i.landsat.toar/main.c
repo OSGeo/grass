@@ -261,32 +261,32 @@ int main(int argc, char *argv[])
         lsat.flag = METADATAFILE;
         lsat_metadata( met, &lsat );
 	if(print_meta) {
+		if (lsatmet->answer == NULL) {
+			G_fatal_error(_("Please use a metadata keyword with -p"));
+		}
 		if (strcmp(lsatmet->answer, "number") == 0) {
 			fprintf(stdout,"%d\n",lsat.number);
 		}
-		else if (strcmp(lsatmet->answer, "creation") == 0) {
+		if (strcmp(lsatmet->answer, "creation") == 0) {
 			fprintf(stdout,"%s\n",lsat.creation);
 		}
-		else if (strcmp(lsatmet->answer, "date") == 0) {
+		if (strcmp(lsatmet->answer, "date") == 0) {
 			fprintf(stdout,"%s\n",lsat.date);
 		}
-		else if (strcmp(lsatmet->answer, "sun_elev") == 0) {
+		if (strcmp(lsatmet->answer, "sun_elev") == 0) {
 			fprintf(stdout,"%f\n",lsat.sun_elev);
 		}
-		else if (strcmp(lsatmet->answer, "sensor") == 0) {
+		if (strcmp(lsatmet->answer, "sensor") == 0) {
 			fprintf(stdout,"%s\n",lsat.sensor);
 		}
-		else if (strcmp(lsatmet->answer, "bands") == 0) {
+		if (strcmp(lsatmet->answer, "bands") == 0) {
 			fprintf(stdout,"%d\n",lsat.bands);
 		}
-		else if (strcmp(lsatmet->answer, "sunza") == 0) {
+		if (strcmp(lsatmet->answer, "sunza") == 0) {
 			fprintf(stdout,"%f\n",lsat.sunza);
 		}
-		else if (strcmp(lsatmet->answer, "time") == 0) {
+		if (strcmp(lsatmet->answer, "time") == 0) {
 			fprintf(stdout,"%f\n",lsat.time);
-		}
-		else {
-			G_fatal_error(_("Please use a metadata keyword with -p"));
 		}
     		exit(EXIT_SUCCESS);
 	}
