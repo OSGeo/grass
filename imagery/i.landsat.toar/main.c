@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
     {
         lsat.flag = METADATAFILE;
         lsat_metadata( met, &lsat );
-	if(print_meta) {
+	if(print_meta->answer) {
 		if (lsatmet->answer == NULL) {
 			G_fatal_error(_("Please use a metadata keyword with -p"));
 		}
