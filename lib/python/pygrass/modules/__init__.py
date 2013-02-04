@@ -20,7 +20,7 @@ from xml.etree.ElementTree import fromstring
 
 import grass
 
-from grass.pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError, ParameterError, FlagError
 
 #
 # this dictionary is used to extract the value of interest from the xml
@@ -52,14 +52,6 @@ _GETTYPE = {
     'double': float,
     'all': lambda x: x,
 }
-
-
-class ParameterError(Exception):
-    pass
-
-
-class FlagError(Exception):
-    pass
 
 
 def _element2dict(xparameter):

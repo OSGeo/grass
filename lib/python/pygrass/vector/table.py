@@ -16,19 +16,12 @@ except:
 
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
+from grass.pygrass.errors import DBError
 
 import sql
 
 
 DRIVERS = ('sqlite', 'pg')
-
-
-class DBError(Exception):
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
 
 
 def get_path(path):

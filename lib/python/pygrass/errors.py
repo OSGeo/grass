@@ -8,7 +8,7 @@ Created on Wed Aug 15 17:33:27 2012
 from grass.script import warning
 
 
-class GrassError(Exception):
+class AbstractError(Exception):
     def __init__(self, value):
         self.value = value
 
@@ -16,12 +16,24 @@ class GrassError(Exception):
         return repr(self.value)
 
 
-class OpenError(Exception):
-    def __init__(self, value):
-        self.value = value
+class ParameterError(Exception):
+    pass
 
-    def __str__(self):
-        return repr(self.value)
+
+class FlagError(Exception):
+    pass
+
+
+class DBError(AbstractError):
+    pass
+
+
+class GrassError(AbstractError):
+    pass
+
+
+class OpenError(AbstractError):
+    pass
 
 
 def must_be_open(method):
