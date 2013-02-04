@@ -115,7 +115,12 @@ class Histogram2Frame(BasePlotFrame):
         if self.maptype == 'group':
             self.ptitle = _('Histogram of %s') % self.group.split('@')[0] 
         else: 
-            self.ptitle = _('Histogram of %s') % self.rasterList[0].split('@')[0] 
+            rastText = ''
+            for r in self.rasterList:
+                rs = r.split('@')[0]
+                rastText += '%s, ' % rs
+            rastText = rastText.rstrip(', ')
+            self.ptitle = _('Histogram of %s') % rastText
 
         
         #
