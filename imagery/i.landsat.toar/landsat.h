@@ -50,6 +50,8 @@ typedef struct
     char date[11];		/* Image acquisition date        */
     double dist_es;		/* Distance Earth-Sun            */
     double sun_elev;		/* Solar elevation               */
+    double sunza;		/* Solar Zenith Angle            */
+    double time;		/* Image Acquisition Time        */
 
     char sensor[10];		/* Type of sensor: MSS, TM, ETM+, OLI/TIRS */
     int bands;			/* Total number of bands         */
