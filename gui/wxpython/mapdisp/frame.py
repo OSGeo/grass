@@ -43,11 +43,13 @@ from mapdisp.gprint     import PrintOptions
 from core.gcmd          import GError, GMessage
 from dbmgr.dialogs      import DisplayAttributesDialog
 from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd
-from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog
+from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog, \
+                               DECOR_DIALOG_LEGEND, DECOR_DIALOG_BARSCALE
 from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapdisp   import SingleMapFrame
 from mapdisp.mapwindow  import BufferedWindow
+from mapdisp.overlays   import LegendController, BarscaleController
 from modules.histogram  import HistogramFrame
 from wxplot.histogram   import Histogram2Frame
 from wxplot.profile     import ProfileFrame
@@ -127,11 +129,19 @@ class MapFrame(SingleMapFrame):
         
         self.statusbarManager.Update()
 
+        # init decoration objects
+        self.decorations = {}
+        self.legend = LegendController(self.Map)
+        self.barscale = BarscaleController(self.Map)
+        self.decorations[self.legend.id] = self.legend
+        self.decorations[self.barscale.id] = self.barscale
+
         #
         # Init map display (buffered DC & set default cursor)
         #
         self.MapWindow2D = BufferedWindow(self, giface = self._giface, id = wx.ID_ANY,
-                                          Map = self.Map, frame = self, tree = self.tree, lmgr = self._layerManager)
+                                          Map = self.Map, frame = self, tree = self.tree,
+                                          lmgr = self._layerManager, overlays = self.decorations)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
         self.MapWindow.SetCursor(self.cursors["default"])
@@ -1117,68 +1127,80 @@ class MapFrame(SingleMapFrame):
         win.Refresh()
         win.Update()
        
-    def OnAddBarscale(self, event):
+    def AddBarscale(self, cmd = None, showDialog = True):
         """!Handler for scale/arrow map decoration menu selection.
         """
-        if self.dialogs['barscale']:
+        if cmd:
+            self.barscale.cmd = cmd
+
+        if not showDialog:
+            self.barscale.Show()
+            self.MapWindow.UpdateMap()
             return
-        self.SwitchTool(self.toolbars['map'], event)
-        
-        id = 0 # unique index for overlay layer
 
-        # If location is latlon, only display north arrow (scale won't work)
-        #        proj = self.Map.projinfo['proj']
-        #        if proj == 'll':
-        #            barcmd = 'd.barscale -n'
-        #        else:
-        #            barcmd = 'd.barscale'
+        # Decoration overlay control dialog
+        if self.dialogs['barscale']:
+            if self.dialogs['barscale'].IsShown():
+                self.dialogs['barscale'].SetFocus()
+            else:
+                self.dialogs['barscale'].Show()
+        else:
+            # If location is latlon, only display north arrow (scale won't work)
+            #        proj = self.Map.projinfo['proj']
+            #        if proj == 'll':
+            #            barcmd = 'd.barscale -n'
+            #        else:
+            #            barcmd = 'd.barscale'
 
-        # decoration overlay control dialog
-        self.dialogs['barscale'] = \
-            DecorationDialog(parent = self, title = _('Scale and North arrow'),
-                             size = (350, 200),
-                             style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
-                             cmd = ['d.barscale', 'at=0,95'],
-                             ovlId = id,
-                             name = 'barscale',
-                             checktxt = _("Show/hide scale and North arrow"),
-                             ctrltxt = _("scale object"))
+            # decoration overlay control dialog
+            self.dialogs['barscale'] = \
+                DecorationDialog(parent = self, title = _('Scale and North arrow'),
+                                     overlayController = self.barscale,
+                                     ddstyle = DECOR_DIALOG_BARSCALE,
+                                     size = (350, 200),
+                                     style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
 
-        self.dialogs['barscale'].CentreOnParent()
-        ### dialog cannot be show as modal - in the result d.barscale is not selectable
-        ### self.dialogs['barscale'].ShowModal()
-        self.dialogs['barscale'].Show()
+            self.dialogs['barscale'].CentreOnParent()
+            ### dialog cannot be show as modal - in the result d.barscale is not selectable
+            ### self.dialogs['barscale'].ShowModal()
+            self.dialogs['barscale'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
 
-    def OnAddLegend(self, event):
+    def AddLegend(self, cmd = None, showDialog = True):
         """!Handler for legend map decoration menu selection.
         """
-        if self.dialogs['legend']:
+        if cmd:
+            self.legend.cmd = cmd
+        else:
+            layers = self._giface.GetLayerList().GetSelectedLayers()
+            for layer in layers:
+                if layer.type == 'raster':
+                    self.legend.cmd.append('map=%s' % layer.maplayer.name)
+                    break
+
+        if not showDialog:
+            self.legend.Show()
+            self.MapWindow.UpdateMap()
             return
-        
-        id = 1 # index for overlay layer in render
-        
-        cmd = ['d.legend', 'at=5,50,2,5']
-        
-        if self.tree and self.tree.layer_selected and \
-                self.tree.GetLayerInfo(self.tree.layer_selected, key = 'type') == 'raster':
-            cmd.append('map=%s' % self.tree.GetLayerInfo(self.tree.layer_selected, key = 'maplayer').name)
-        
+
         # Decoration overlay control dialog
-        self.dialogs['legend'] = \
-            DecorationDialog(parent = self, title = ('Legend'),
-                             size = (350, 200),
-                             style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
-                             cmd = cmd,
-                             ovlId = id,
-                             name = 'legend',
-                             checktxt = _("Show/hide legend"),
-                             ctrltxt = _("legend object")) 
-            
-        self.dialogs['legend'].CentreOnParent() 
-        ### dialog cannot be show as modal - in the result d.legend is not selectable
-        ### self.dialogs['legend'].ShowModal()
-        self.dialogs['legend'].Show()
+        if self.dialogs['legend']:
+            if self.dialogs['legend'].IsShown():
+                self.dialogs['legend'].SetFocus()
+            else:
+                self.dialogs['legend'].Show()
+        else:
+            self.dialogs['legend'] = \
+                DecorationDialog(parent = self, title = _("Legend"),
+                                 overlayController = self.legend,
+                                 ddstyle = DECOR_DIALOG_LEGEND,
+                                 size = (350, 200),
+                                 style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
+
+            self.dialogs['legend'].CentreOnParent() 
+            ### dialog cannot be show as modal - in the result d.legend is not selectable
+            ### self.dialogs['legend'].ShowModal()
+            self.dialogs['legend'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
         
     def OnAddText(self, event):
@@ -1376,6 +1398,6 @@ class MapFrame(SingleMapFrame):
         if self.dialogs['legend']:
             if hasattr(event ,'GetEventObject'):
                 if event.GetEventObject().GetId() == \
-                        self.dialogs['legend'].FindWindowByName('resize').GetId():
+                        self.dialogs['legend'].resizeBtn.GetId():
                     return
             self.dialogs['legend'].FindWindowByName('resize').SetValue(0)

@@ -249,11 +249,11 @@ class MapToolbar(BaseToolbar):
         """
         if self.parent.IsPaneShown('3d'):
             self._onMenu(((MapIcons["addNorthArrow"], self.parent.OnAddArrow),
-                          (MapIcons["addLegend"],     self.parent.OnAddLegend),
+                          (MapIcons["addLegend"],     lambda evt: self.parent.AddLegend()),
                           (MapIcons["addText"],       self.parent.OnAddText)))
         else:
-            self._onMenu(((MapIcons["addBarscale"], self.parent.OnAddBarscale),
-                          (MapIcons["addLegend"],   self.parent.OnAddLegend),
+            self._onMenu(((MapIcons["addBarscale"], lambda evt: self.parent.AddBarscale()),
+                          (MapIcons["addLegend"],   lambda evt: self.parent.AddLegend()),
                           (MapIcons["addText"],     self.parent.OnAddText)))
         
     def ExitToolbars(self):
