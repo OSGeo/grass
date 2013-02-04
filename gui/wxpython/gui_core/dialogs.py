@@ -513,29 +513,34 @@ class SavedRegion(wx.Dialog):
         """!Return region name"""
         return self.wind
     
+DECOR_DIALOG_LEGEND = 0
+DECOR_DIALOG_BARSCALE = 1
+
 class DecorationDialog(wx.Dialog):
     """!Controls setting options and displaying/hiding map overlay
     decorations
     """
-    def __init__(self, parent, ovlId, title, cmd, name = None,
-                 pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE,
-                 checktxt = '', ctrltxt = ''):
+    def __init__(self, parent, title, overlayController,
+                 ddstyle, **kwargs):
         
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, title, **kwargs)
         
-        self.ovlId   = ovlId   # PseudoDC id
-        self.cmd     = cmd
-        self.name    = name    # overlay name
         self.parent  = parent  # MapFrame
+        self._overlay = overlayController
+        self._ddstyle = ddstyle
         
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
-        self.chkbox = wx.CheckBox(parent = self, id = wx.ID_ANY, label = checktxt)
-        if self.parent.Map.GetOverlay(self.ovlId) is None:
-            self.chkbox.SetValue(True)
+        self.chkbox = wx.CheckBox(parent = self, id = wx.ID_ANY)
+        self.chkbox.SetValue(True)
+
+        if self._ddstyle == DECOR_DIALOG_LEGEND:
+            self.chkbox.SetLabel("Show legend")
         else:
-            self.chkbox.SetValue(self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive())
+            self.chkbox.SetLabel("Show scale and North arrow")
+
+
         box.Add(item = self.chkbox, proportion = 0,
                 flag = wx.ALIGN_CENTRE|wx.ALL, border = 5)
         sizer.Add(item = box, proportion = 0,
@@ -546,24 +551,29 @@ class DecorationDialog(wx.Dialog):
         box.Add(item = optnbtn, proportion = 0, flag = wx.ALIGN_CENTRE|wx.ALL, border = 5)
         sizer.Add(item = box, proportion = 0,
                   flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 5)
-        if self.name == 'legend':
+        if self._ddstyle == DECOR_DIALOG_LEGEND:
             box = wx.BoxSizer(wx.HORIZONTAL)
-            resize = wx.ToggleButton(parent = self, id = wx.ID_ANY, label = _("Set size and position"))
-            resize.SetToolTipString(_("Click and drag on the map display to set legend"
-                                        " size and position and then press OK"))
-            resize.SetName('resize')
-            resize.Disable()
-            box.Add(item = resize, proportion = 0, flag = wx.ALIGN_CENTRE|wx.ALL, border = 5)
+            self.resizeBtn = wx.ToggleButton(parent = self, id = wx.ID_ANY, label = _("Set size and position"))
+            self.resizeBtn.SetToolTipString(_("Click and drag on the map display to set legend "
+                                              "size and position and then press OK"))
+            self.resizeBtn.Disable()
+            self.resizeBtn.Bind(wx.EVT_TOGGLEBUTTON, self.OnResize)
+            box.Add(item = self.resizeBtn, proportion = 0, flag = wx.ALIGN_CENTRE|wx.ALL, border = 5)
             sizer.Add(item = box, proportion = 0,
                       flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 5)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
+        if self._ddstyle == DECOR_DIALOG_LEGEND:
+            labelText = _("Drag legend object with mouse in pointer mode to position.\n"
+                          "Double-click to change options.\n"
+                          "Define raster map name for legend in properties dialog.")
+        else:
+            labelText = _("Drag scale object with mouse in pointer mode to position.\n"
+                          "Double-click to change options.")
+
         label = wx.StaticText(parent = self, id = wx.ID_ANY,
-                              label = _("Drag %s with mouse in pointer mode to position.\n"
-                                      "Double-click to change options." % ctrltxt))
-        if self.name == 'legend':
-            label.SetLabel(label.GetLabel() + _('\nDefine raster map name for legend in '
-                                                'properties dialog.'))
+                              label = labelText)
+
         box.Add(item = label, proportion = 0,
                 flag = wx.ALIGN_CENTRE|wx.ALL, border = 5)
         sizer.Add(item = box, proportion = 0,
@@ -578,8 +588,7 @@ class DecorationDialog(wx.Dialog):
 
         self.btnOK = wx.Button(parent = self, id = wx.ID_OK)
         self.btnOK.SetDefault()
-        if self.name == 'legend':
-            self.btnOK.Enable(False)
+        self.btnOK.Enable(self._ddstyle != DECOR_DIALOG_LEGEND)
         btnsizer.AddButton(self.btnOK)
 
         btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
@@ -592,70 +601,40 @@ class DecorationDialog(wx.Dialog):
         #
         # bindings
         #
-        self.Bind(wx.EVT_BUTTON,   self.OnOptions, optnbtn)
-        if self.name == 'legend':
-            self.Bind(wx.EVT_TOGGLEBUTTON,   self.OnResize, resize)
-        self.Bind(wx.EVT_BUTTON,   self.OnCancel,  btnCancel)
-        self.Bind(wx.EVT_BUTTON,   self.OnOK,      self.btnOK)
+        optnbtn.Bind(wx.EVT_BUTTON, self.OnOptions)
+        btnCancel.Bind(wx.EVT_BUTTON, lambda evt: self.CloseDialog())
+        self.btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
 
-        # create overlay if doesn't exist
-        self._createOverlay()
-        
-        if len(self.parent.MapWindow.overlays[self.ovlId]['cmd']) > 1:
-            if name == 'legend':
-                mapName, found = GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd'])
-                if found:
-                    # enable 'OK' and 'Resize' button
-                    self.btnOK.Enable()
-                    if not self.parent.IsPaneShown('3d'):
-                        self.FindWindowByName('resize').Enable()
-                    
-                    # set title
-                    self.SetTitle(_('Legend of raster map <%s>') % \
-                                      mapName)
+        mapName, found = GetLayerNameFromCmd(self._overlay.cmd)
+        if found:
+            # enable 'OK' and 'Resize' button
+            self.btnOK.Enable()
+            if not self.parent.IsPaneShown('3d'):
+                self.resizeBtn.Enable()
             
-        
-    def _createOverlay(self):
-        """!Creates overlay"""
-        if not self.parent.GetMap().GetOverlay(self.ovlId):
-            self.newOverlay = self.parent.Map.AddOverlay(id = self.ovlId, ltype = self.name,
-                                                         command = self.cmd,
-                                                         active = False, render = False, hidden = True)
-            prop = { 'layer' : self.newOverlay,
-                     'params' : None,
-                     'propwin' : None,
-                     'cmd' : self.cmd,
-                     'coords': (0, 0),
-                     'pdcType': 'image' }
-            self.parent.MapWindow2D.overlays[self.ovlId] = prop
-            if self.parent.MapWindow3D:
-                self.parent.MapWindow3D.overlays[self.ovlId] = prop
-                
-        else:
-            if self.parent.MapWindow.overlays[self.ovlId]['propwin'] == None:
-                return
-            
-            self.parent.MapWindow.overlays[self.ovlId]['propwin'].get_dcmd = self.GetOptData
+            # set title
+            self.SetTitle(_('Legend of raster map <%s>') % \
+                              mapName)
         
     def OnOptions(self, event):
         """!Sets option for decoration map overlays
         """
-        if self.parent.MapWindow.overlays[self.ovlId]['propwin'] is None:
+        if self._overlay.propwin is None:
             # build properties dialog
-            GUI(parent = self.parent).ParseCommand(cmd = self.cmd,
-                                                   completed = (self.GetOptData, self.name, ''))
+            GUI(parent = self.parent).ParseCommand(cmd = self._overlay.cmd,
+                                                   completed = (self.GetOptData, self._overlay.name, ''))
             
         else:
-            if self.parent.MapWindow.overlays[self.ovlId]['propwin'].IsShown():
-                self.parent.MapWindow.overlays[self.ovlId]['propwin'].SetFocus()
+            if self._overlay.propwin.IsShown():
+                self._overlay.propwin.SetFocus()
             else:
-                self.parent.MapWindow.overlays[self.ovlId]['propwin'].Show()
+                self._overlay.propwin.Show()
         
     def OnResize(self, event):
-        if self.FindWindowByName('resize').GetValue(): 
+        if event.GetInt(): 
             self.parent.SwitchTool(self.parent.toolbars['map'], event)
             self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
             self.parent.MapWindow.mouse['use'] = 'legend'
@@ -665,21 +644,18 @@ class DecorationDialog(wx.Dialog):
             self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
             self.parent.MapWindow.mouse['use'] = 'pointer'
             
-    def OnCancel(self, event):
-        """!Cancel dialog"""
-        if self.name == 'legend' and self.FindWindowByName('resize').GetValue():
-            self.FindWindowByName('resize').SetValue(False)
+    def CloseDialog(self):
+        """!Hide dialog"""
+        if self._ddstyle == DECOR_DIALOG_LEGEND and self.resizeBtn.GetValue():
+            self.resizeBtn.SetValue(False)
             self.OnResize(None)
-            
-        self.parent.dialogs['barscale'] = None
-        if event and hasattr(self, 'newOverlay'):
-            self.parent.Map.DeleteOverlay(self.newOverlay)
-        self.Destroy()
+
+        self.Hide()
 
     def OnOK(self, event):
         """!Button 'OK' pressed"""
         # enable or disable overlay
-        self.parent.Map.GetOverlay(self.ovlId).SetActive(self.chkbox.IsChecked())
+        self._overlay.Show(self.chkbox.IsChecked())
         
         # update map
         if self.parent.IsPaneShown('3d'):
@@ -687,36 +663,20 @@ class DecorationDialog(wx.Dialog):
         
         self.parent.MapWindow.UpdateMap()
         
-        # close dialog
-        self.OnCancel(None)
+        # hide dialog
+        self.CloseDialog()
         
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process decoration layer data"""
-        # update layer data
-        if params:
-            self.parent.MapWindow.overlays[self.ovlId]['params'] = params
         if dcmd:
-            self.parent.MapWindow.overlays[self.ovlId]['cmd'] = dcmd
-        self.parent.MapWindow.overlays[self.ovlId]['propwin'] = propwin
+            self._overlay.cmd = dcmd
+        self._overlay.propwin = propwin
+        if params:
+            self.btnOK.Enable()
+            if self._ddstyle == DECOR_DIALOG_LEGEND and not self.parent.IsPaneShown('3d'):
+                self.resizeBtn.Enable()
 
-        # change parameters for item in layers list in render.Map
-        # "Use mouse..." (-m) flag causes GUI freeze and is pointless here, trac #119
-        
-        try:
-            self.parent.MapWindow.overlays[self.ovlId]['cmd'].remove('-m')
-        except ValueError:
-            pass
-            
-        self.parent.Map.ChangeOverlay(id = self.ovlId, ltype = self.name,
-                                      command = self.parent.MapWindow.overlays[self.ovlId]['cmd'],
-                                      active = self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive(),
-                                      render = False, hidden = True)
-        if  self.name == 'legend':
-            if params and not self.btnOK.IsEnabled():
-                self.btnOK.Enable()
-                if not self.parent.IsPaneShown('3d'):
-                    self.FindWindowByName('resize').Enable()
-            
+
 class TextLayerDialog(wx.Dialog):
     """
     Controls setting options and displaying/hiding map overlay decorations

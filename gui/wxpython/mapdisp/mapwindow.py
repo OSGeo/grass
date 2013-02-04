@@ -56,7 +56,7 @@ class BufferedWindow(MapWindow, wx.Window):
     SaveToFile() method.
     """
     def __init__(self, parent, giface, Map, frame,
-                 id = wx.ID_ANY, tree = None, lmgr = None,
+                 id = wx.ID_ANY, tree = None, lmgr = None, overlays = None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         MapWindow.__init__(self, parent = parent, giface = giface, Map = Map,
                            frame = frame, **kwargs)
@@ -94,7 +94,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.mapfile = None   # image file to be rendered
         self.img     = None   # wx.Image object (self.mapfile)
         # decoration overlays
-        self.overlays = {}
+        self.overlays = overlays
         # images and their PseudoDC ID's for painting and dragging
         self.imagedict = {}   
         self.select = {}      # selecting/unselecting decorations for dragging
@@ -505,10 +505,10 @@ class BufferedWindow(MapWindow, wx.Window):
             # draw any active and defined overlays
             if self.imagedict[img]['layer'].IsActive():
                 id = self.imagedict[img]['id']
-                coords = int(ratio[0] * self.overlays[id]['coords'][0]),\
-                         int(ratio[1] * self.overlays[id]['coords'][1])
+                coords = int(ratio[0] * self.overlays[id].coords[0]),\
+                         int(ratio[1] * self.overlays[id].coords[1])
                 self.Draw(self.pdc, img = img, drawid = id,
-                          pdctype = self.overlays[id]['pdcType'], coords = coords)
+                          pdctype = self.overlays[id].pdcType, coords = coords)
                           
         # redraw text labels
         for id in self.textdict.keys():
@@ -682,7 +682,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if self.imagedict[img]['layer'].IsActive():
                 id = self.imagedict[img]['id']
                 self.Draw(self.pdc, img = img, drawid = id,
-                          pdctype = self.overlays[id]['pdcType'], coords = self.overlays[id]['coords'])
+                          pdctype = self.overlays[id].pdcType, coords = self.overlays[id].coords)
         
         for id in self.textdict.keys():
             self.Draw(self.pdc, img = self.textdict[id], drawid = id,
@@ -1216,7 +1216,7 @@ class BufferedWindow(MapWindow, wx.Window):
             # end drag of overlay decoration
             
             if self.dragid < 99 and self.dragid in self.overlays:
-                self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
+                self.overlays[self.dragid].coords = self.pdc.GetIdBounds(self.dragid)
             elif self.dragid > 100 and self.dragid in self.textdict:
                 self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
             else:
@@ -1225,9 +1225,10 @@ class BufferedWindow(MapWindow, wx.Window):
             self.currtxtid = None
             
         elif self.mouse['use'] == 'legend':
-            self.ResizeLegend(self.mouse["begin"], self.mouse["end"])
-            self.frame.dialogs['legend'].FindWindowByName("resize").SetValue(False)
-            self.Map.GetOverlay(1).SetActive(True)
+            self.frame.dialogs['legend'].resizeBtn.SetValue(False)
+            screenSize = self.GetClientSizeTuple()
+            self.overlays[1].ResizeLegend(self.mouse["begin"], self.mouse["end"], screenSize)
+
             self.frame.MapWindow.SetCursor(self.frame.cursors["default"])
             self.frame.MapWindow.mouse['use'] = 'pointer'
             
@@ -1264,9 +1265,9 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.currtxtid = self.dragid
                 self.frame.OnAddText(None)
             elif self.dragid == 0:
-                self.frame.OnAddBarscale(None)
+                self.frame.AddBarscale()
             elif self.dragid == 1:
-                self.frame.OnAddLegend(None)
+                self.frame.AddLegend()
         
     def OnRightDown(self, event):
         """!Right mouse button pressed
@@ -1423,29 +1424,7 @@ class BufferedWindow(MapWindow, wx.Window):
         y = (n - north) / res
         
         return (x, y)
-    
-    def ResizeLegend(self, begin, end):
-        w = abs(begin[0] - end[0])
-        h = abs(begin[1] - end[1])
-        if begin[0] < end[0]:
-            x = begin[0]
-        else:
-            x = end[0]
-        if begin[1] < end[1]:
-            y = begin[1]
-        else:
-            y = end[1]
-        screenSize = self.GetClientSizeTuple()
-        at = [(screenSize[1] - (y + h)) / float(screenSize[1]) * 100,
-              (screenSize[1] - y) / float(screenSize[1]) * 100,
-              x / float(screenSize[0]) * 100,
-              (x + w) / float(screenSize[0]) * 100]
-        for i, subcmd in enumerate(self.overlays[1]['cmd']):
-            if subcmd.startswith('at='):
-                self.overlays[1]['cmd'][i] = "at=%d,%d,%d,%d" % (at[0], at[1], at[2], at[3])
-        self.Map.ChangeOverlay(1, True, command = self.overlays[1]['cmd'])
-        self.overlays[1]['coords'] = (0,0)
-        
+
     def Zoom(self, begin, end, zoomtype):
         """!Calculates new region while (un)zoom/pan-ing
         """

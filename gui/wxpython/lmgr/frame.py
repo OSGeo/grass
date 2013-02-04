@@ -609,9 +609,15 @@ class GMFrame(wx.Frame):
             return
         
         if layertype == 'barscale':
-            self.GetMapDisplay().OnAddBarscale(None)
+            if len(command) > 1:
+                self.GetMapDisplay().AddBarscale(cmd = command, showDialog = False)
+            else:
+                self.GetMapDisplay().AddBarscale(showDialog = True)
         elif layertype == 'rastleg':
-            self.GetMapDisplay().OnAddLegend(None)
+            if len(command) > 1:
+                self.GetMapDisplay().AddLegend(cmd = command, showDialog = False)
+            else:
+                self.GetMapDisplay().AddLegend(showDialog = True)
         elif layertype == 'redraw':
             self.GetMapDisplay().OnRender(None)
         else:

@@ -390,15 +390,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Estimates legend size for dragging"""
         size = None
         if 1 in self.overlays:
-            for param in self.overlays[1]['cmd'][1:]:
+            for param in self.overlays[1].cmd[1:]:
                 if param.startswith("at="):
                     size = map(int, param.split("=")[-1].split(','))
                     break
         if size:
             wSize = self.GetClientSizeTuple()
             x, y = size[2]/100. * wSize[0], wSize[1] - (size[1]/100. * wSize[1])
-            x += self.overlays[1]['coords'][0]
-            y += self.overlays[1]['coords'][1]
+            x += self.overlays[1].coords[0]
+            y += self.overlays[1].coords[1]
             w = (size[3] - size[2])/100. * wSize[0]
             h = (size[1] - size[0])/100. * wSize[1]
             
@@ -445,7 +445,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         for texture in self.imagelist:
             # inactive overlays, remove text labels
             if texture.GetId() < 100:
-                if not self.overlays[texture.GetId()]['layer'].IsActive():
+                if not self.overlays[texture.GetId()].IsShown():
                     texture.SetActive(False)
                 else:
                     texture.SetActive(True)
@@ -455,19 +455,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     
         # update images (only legend so far)
         for oid, overlay in self.overlays.iteritems():
-            layer = overlay['layer']
-            if not layer.IsActive() or oid == 0: # 0 for barscale
+            if not overlay.IsShown() or oid == 0: # 0 for barscale
                 continue
             if oid not in [t.GetId() for t in self.imagelist]: # new
-                self.CreateTexture(overlay = layer)
+                self.CreateTexture(overlay = overlay.layer)
             else:
                 for t in self.imagelist:
                     if t.GetId() == oid: # check if it is the same
-                        if not t.Corresponds(layer):
+                        if not t.Corresponds(overlay):
                             self.imagelist.remove(t)
-                            t = self.CreateTexture(overlay = layer)
+                            t = self.CreateTexture(overlay = overlay.layer)
                         # always set coordinates, needed for synchr. 2D and 3D modes
-                        t.SetCoords(overlay['coords'])
+                        t.SetCoords(overlay.coords)
 
                     
         # update text labels
@@ -488,7 +487,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Create texture from overlay image or from textdict"""
         if overlay: # legend  
             texture = wxnviz.ImageTexture(filepath = overlay.mapfile, overlayId = overlay.id,
-                                          coords = list(self.overlays[overlay.id]['coords']),
+                                          coords = list(self.overlays[overlay.id].coords),
                                           cmd = overlay.GetCmd())
             if overlay.id == 1: # legend
                 texture.SetBounds(self.GetLegendRect())
@@ -788,8 +787,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 dx = self.mouse['end'][0] - self.mouse['begin'][0]
                 dy = self.mouse['end'][1] - self.mouse['begin'][1]
                 if self.dragid < 99:
-                    coords = self.overlays[self.dragid]['coords']
-                    self.overlays[self.dragid]['coords'] = [coords[0] + dx, coords[1] + dy]
+                    coords = self.overlays[self.dragid].coords
+                    self.overlays[self.dragid].coords = [coords[0] + dx, coords[1] + dy]
                 else: # text
                     coords = self.textdict[self.dragid]['coords']
                     self.textdict[self.dragid]['coords'] = [coords[0] + dx, coords[1] + dy]
@@ -833,7 +832,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.dragid = self.FindObjects(pos[0], pos[1], self.hitradius)
         
         if self.dragid == 1:
-            self.parent.OnAddLegend(None)
+            self.parent.AddLegend()
         elif self.dragid > 100:
             self.parent.OnAddText(None)
         else:
