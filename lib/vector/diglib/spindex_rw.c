@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <assert.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
@@ -881,6 +882,8 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
 	    }
 	}
     }
+    
+    close(t->fd);
     
     return nextfreepos;
 }

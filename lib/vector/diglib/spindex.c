@@ -68,6 +68,13 @@ int dig_spidx_init(struct Plus_head *Plus)
 	Plus->Face_spidx = NULL;
 	Plus->Volume_spidx = NULL;
 	Plus->Hole_spidx = NULL;
+	
+	if (!Plus->Spidx_new) {
+	    close(Plus->Node_spidx->fd);
+	    close(Plus->Line_spidx->fd);
+	    close(Plus->Area_spidx->fd);
+	    close(Plus->Isle_spidx->fd);
+	}
     }
     else {
 	Plus->Node_spidx = RTreeCreateTree(-1, 0, ndims);
@@ -108,12 +115,15 @@ void dig_spidx_free_nodes(struct Plus_head *Plus)
 	int fd;
 	char *filename;
 	
-	close(Plus->Node_spidx->fd);
+	if (Plus->Spidx_new)
+	    close(Plus->Node_spidx->fd);
 	RTreeDestroyTree(Plus->Node_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 	Plus->Node_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
+	if (!Plus->Spidx_new)
+	    close(Plus->Node_spidx->fd);
     }
     else {
 	RTreeDestroyTree(Plus->Node_spidx);
@@ -137,12 +147,15 @@ void dig_spidx_free_lines(struct Plus_head *Plus)
 	int fd;
 	char *filename;
 	
-	close(Plus->Line_spidx->fd);
+	if (Plus->Spidx_new)
+	    close(Plus->Line_spidx->fd);
 	RTreeDestroyTree(Plus->Line_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 	Plus->Line_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
+	if (!Plus->Spidx_new)
+	    close(Plus->Line_spidx->fd);
     }
     else {
 	RTreeDestroyTree(Plus->Line_spidx);
@@ -166,12 +179,15 @@ void dig_spidx_free_areas(struct Plus_head *Plus)
 	int fd;
 	char *filename;
 	
-	close(Plus->Area_spidx->fd);
+	if (Plus->Spidx_new)
+	    close(Plus->Area_spidx->fd);
 	RTreeDestroyTree(Plus->Area_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 	Plus->Area_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
+	if (!Plus->Spidx_new)
+	    close(Plus->Area_spidx->fd);
     }
     else {
 	RTreeDestroyTree(Plus->Area_spidx);
@@ -195,12 +211,15 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
 	int fd;
 	char *filename;
 	
-	close(Plus->Isle_spidx->fd);
+	if (Plus->Spidx_new)
+	    close(Plus->Isle_spidx->fd);
 	RTreeDestroyTree(Plus->Isle_spidx);
 	filename = G_tempfile();
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 	Plus->Isle_spidx = RTreeCreateTree(fd, 0, ndims);
 	remove(filename);
+	if (!Plus->Spidx_new)
+	    close(Plus->Isle_spidx->fd);
     }
     else {
 	RTreeDestroyTree(Plus->Isle_spidx);
@@ -215,24 +234,30 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
  */
 void dig_spidx_free(struct Plus_head *Plus)
 {
+    /* close tmp files */
+    if (Plus->Spidx_new) {
+	/* Node spidx */
+	if (Plus->Node_spidx->fd > -1)
+	    close(Plus->Node_spidx->fd);
+	/* Line spidx */
+	if (Plus->Spidx_new && Plus->Line_spidx->fd > -1)
+	    close(Plus->Line_spidx->fd);
+	/* Area spidx */
+	if (Plus->Area_spidx->fd > -1)
+	    close(Plus->Area_spidx->fd);
+	/* Isle spidx */
+	if (Plus->Isle_spidx->fd > -1)
+	    close(Plus->Isle_spidx->fd);
+    }
+    
+    /* destroy tree structures */
     /* Node spidx */
-    if (Plus->Node_spidx->fd > -1)
-	close(Plus->Node_spidx->fd);
     RTreeDestroyTree(Plus->Node_spidx);
-
     /* Line spidx */
-    if (Plus->Line_spidx->fd > -1)
-	close(Plus->Line_spidx->fd);
     RTreeDestroyTree(Plus->Line_spidx);
-
     /* Area spidx */
-    if (Plus->Area_spidx->fd > -1)
-	close(Plus->Area_spidx->fd);
     RTreeDestroyTree(Plus->Area_spidx);
-
     /* Isle spidx */
-    if (Plus->Isle_spidx->fd > -1)
-	close(Plus->Isle_spidx->fd);
     RTreeDestroyTree(Plus->Isle_spidx);
 
     /* 3D future : */
