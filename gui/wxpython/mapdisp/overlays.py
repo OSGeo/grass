@@ -105,7 +105,7 @@ class OverlayController(object):
 
     def _update(self):
         self._renderer.ChangeOverlay(id = self._id, command = self._cmd,
-                                     render = True)
+                                     render = False)
 
 
 class BarscaleController(OverlayController):
