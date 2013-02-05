@@ -234,6 +234,7 @@ void dig_free_plus(struct Plus_head *Plus)
     dig_free_plus_areas(Plus);
     dig_free_plus_isles(Plus);
 
+    dig_spidx_free(Plus);
     dig_cidx_free(Plus);
 }
 
@@ -258,6 +259,7 @@ int dig_load_plus(struct Plus_head *Plus, struct gvfile * plus, int head_only)
      */
 
     /* free and init old */
+    dig_free_plus(Plus);
     dig_init_plus(Plus);
 
     /* Now let's begin reading the Plus file nodes, lines, areas and isles */
