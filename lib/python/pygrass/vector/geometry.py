@@ -143,9 +143,9 @@ class Attrs(object):
         .."""
         if self.writable:
             #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
+            values = '%s=%r' % (key, value)
             self.table.execute(sql.UPDATE_WHERE.format(tname=self.table.name,
-                                                       new_col=key,
-                                                       old_col=repr(value),
+                                                       values=values,
                                                        condition=self.cond))
             #self.table.conn.commit()
         else:
