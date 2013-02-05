@@ -199,7 +199,7 @@ class RasterRowIO(RasterRow):
 
     def open(self, mode='r', mtype='CELL', overwrite=False):
         super(RasterRowIO, self).open(mode, mtype, overwrite)
-        self.rowio.open(self._fd, self.rows, self.cols, self.mtype)
+        self.rowio.open(self._fd, self._rows, self._cols, self.mtype)
 
     @must_be_open
     def close(self):
@@ -555,7 +555,7 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
     def __init__(self, name, *args, **kargs):
         ## Private attribute `_fd` that return the file descriptor of the map
         self._fd = None
-        rows, cols = self.rows, self.cols
+        rows, cols = self._rows, self._cols
         RasterAbstractBase.__init__(self, name)
         self._rows, self._cols = rows, cols
 

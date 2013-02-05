@@ -246,23 +246,6 @@ class RasterAbstractBase(object):
 
     name = property(fget=_get_name, fset=_set_name)
 
-    @must_be_open
-    def _get_rows(self):
-        """Private method to return the Raster name"""
-        return self._rows
-
-    def _set_unchangeable(self, new):
-        """Private method to change the Raster name"""
-        warning(_("Unchangeable attribute"))
-
-    rows = property(fget=_get_rows, fset=_set_unchangeable)
-
-    @must_be_open
-    def _get_cols(self):
-        """Private method to return the Raster name"""
-        return self._cols
-
-    cols = property(fget=_get_cols, fset=_set_unchangeable)
 
     @must_be_open
     def _get_cats_title(self):
