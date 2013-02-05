@@ -46,49 +46,61 @@ class Bbox(object):
         self.bottom = bottom
 
     def _get_n(self):
+        """Private method to obtain the north value"""
         return self.c_bbox.contents.N
 
     def _set_n(self, value):
+        """Private method to set the north value"""
         self.c_bbox.contents.N = value
 
     north = property(fget=_get_n, fset=_set_n)
 
     def _get_s(self):
+        """Private method to obtain the south value"""
         return self.c_bbox.contents.S
 
     def _set_s(self, value):
+        """Private method to set the south value"""
         self.c_bbox.contents.S = value
 
     south = property(fget=_get_s, fset=_set_s)
 
     def _get_e(self):
+        """Private method to obtain the east value"""
         return self.c_bbox.contents.E
 
     def _set_e(self, value):
+        """Private method to set the east value"""
         self.c_bbox.contents.E = value
 
     east = property(fget=_get_e, fset=_set_e)
 
     def _get_w(self):
+        """Private method to obtain the west value"""
         return self.c_bbox.contents.W
 
     def _set_w(self, value):
+        """Private method to set the west value"""
         self.c_bbox.contents.W = value
 
     west = property(fget=_get_w, fset=_set_w)
 
     def _get_t(self):
+        """Private method to obtain the top value"""
         return self.c_bbox.contents.T
 
     def _set_t(self, value):
+        """Private method to set the top value"""
         self.c_bbox.contents.T = value
 
     top = property(fget=_get_t, fset=_set_t)
 
     def _get_b(self):
+        """Private method to obtain the bottom value"""
         return self.c_bbox.contents.B
 
     def _set_b(self, value):
+        """Private method to set the bottom value"""
         self.c_bbox.contents.B = value
 
     bottom = property(fget=_get_b, fset=_set_b)
@@ -100,8 +112,10 @@ class Bbox(object):
     def contains(self, point):
         """Return True if the object is contained by the BoundingBox. ::
 
+            >>> from grass.pygrass.vector.geometry import Point
+            >>> poi = Point(5,5)
             >>> bbox = Bbox(north=10, south=0, west=0, east=10)
-            >>> bbox.contains(point)
+            >>> bbox.contains(poi)
             True
 
         ..
@@ -112,6 +126,7 @@ class Bbox(object):
 
 
 class BoxList(object):
+    """Instantiate a BoxList class to create a list of Bounding Box"""
     def __init__(self, boxlist=None):
         self.c_boxlist = ctypes.pointer(libvect.boxlist())
         # if set to 0, the list will hold only ids and no boxes
@@ -354,6 +369,7 @@ class Cats(object):
 
     @property
     def n_cats(self):
+        """Return the number of categories"""
         return self.c_cats.contents.n_cats
 
     def __init__(self, c_cats=None):
@@ -427,19 +443,23 @@ class CatsList(object):
     """
     @property
     def layer(self):
+        """Return the layer number"""
         return self.c_cat_list.contents.field
 
     @property
     def n_ranges(self):
+        """Return the ranges number"""
         return self.c_cat_list.contents.n_ranges
 
     @property
     def min(self):
+        """Return the minimum value"""
         min_values = self.c_cat_list.contents.min
         return [min_values[i] for i in xrange(self.n_ranges)]
 
     @property
     def max(self):
+        """Return the maximum value"""
         max_values = self.c_cat_list.contents.max
         return [max_values[i] for i in xrange(self.n_ranges)]
 
