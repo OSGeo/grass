@@ -53,6 +53,11 @@ void dig_cidx_free(struct Plus_head *Plus)
 	ci->cat = NULL;
 	ci->field = ci->n_cats = ci->a_cats = ci->n_types = 0;
     }
+    if (Plus->cidx) {
+	G_free(Plus->cidx);
+	Plus->cidx = NULL;
+    }
+    Plus->a_cidx = 0;
     Plus->n_cidx = 0;
     Plus->cidx_up_to_date = 0;
 }
