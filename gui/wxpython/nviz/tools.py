@@ -331,7 +331,6 @@ class NvizToolWindow(FN.FlatNotebook):
                       flag = wx.TOP|wx.BOTTOM|wx.RIGHT| wx.ALIGN_RIGHT,
                       border = 5)
         
-        gridSizer.AddGrowableCol(2)
         gridSizer.Add(item = viewSizer, pos = (4, 0), span = (1, 3),
                       flag = wx.EXPAND)
         
