@@ -224,7 +224,6 @@ class CoordinateSystemPage(TitledPage):
                                      label = _("Create a generic Cartesian coordinate system (XY)"))
         
         # layout
-        self.sizer.AddGrowableCol(1)
         self.sizer.SetVGap(10)
         self.sizer.Add(item = self.radio1,
                        flag = wx.ALIGN_LEFT, pos = (1, 1))
@@ -238,6 +237,7 @@ class CoordinateSystemPage(TitledPage):
                        flag = wx.ALIGN_LEFT, pos = (5, 1))
         self.sizer.Add(item = self.radio6,
                        flag = wx.ALIGN_LEFT, pos = (6, 1))
+        self.sizer.AddGrowableCol(1)
 
         # bindings
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio1.GetId())
