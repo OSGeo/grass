@@ -492,7 +492,7 @@ class Module(object):
             self.outputs['stdout'].value = kargs['stdout_']
             del(kargs['stdout_'])
         if 'stderr_' in kargs:
-            self.outputs['stdout'].value = kargs['stderr_']
+            self.outputs['stderr'].value = kargs['stderr_']
             del(kargs['stderr_'])
         if 'finish_' in kargs:
             self.finish_ = kargs['finish_']
