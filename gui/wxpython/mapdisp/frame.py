@@ -1400,4 +1400,4 @@ class MapFrame(SingleMapFrame):
                 if event.GetEventObject().GetId() == \
                         self.dialogs['legend'].resizeBtn.GetId():
                     return
-            self.dialogs['legend'].FindWindowByName('resize').SetValue(0)
+            self.dialogs['legend'].resizeBtn.SetValue(0)
