@@ -129,10 +129,10 @@ void lsat_metadata( char * metafile, lsat_data * lsat)
     {
         get_mtldata(mtldata, "SCENE_CENTER_SCAN_TIME", value);
     }
-    //Thanks Markus Metz !
-    //Remove trailing 'z'
+    /*Thanks Markus Metz !
+    Remove trailing 'z'*/
     value[strlen(value) - 1]='\0';
-    // Cast from hh:mm:ss into hh.hhh
+    /* Cast from hh:mm:ss into hh.hhh*/
     G_llres_scan(value, &lsat->time);
     if( lsat->time == 0. )
         G_warning("Time is %f", lsat->time);
