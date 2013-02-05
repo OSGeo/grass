@@ -17,6 +17,11 @@ This program is free software under the GNU General Public License
 
 
 class Layer(object):
+    """!@implements core::giface::Layer
+
+    @note Currently implemented without specifying the interface.
+    It only provides all attributes of existing layer as used in lmgr.
+    """
     def __init__(self, pydata):
         self._pydata = pydata
 
@@ -25,15 +30,18 @@ class Layer(object):
 
 
 class LayerList(object):
+    """!@implements core.giface.Layer"""
     def __init__(self, tree):
         self._tree = tree
 
 #    def __iter__(self):
+#    """!Iterates over the contents of the list."""
 #        for in :
-#            yield 
+#            yield
 
-    def GetSelectedLayers(self, checkedOnly = True):
-        items = self._tree.GetSelectedLayer(multi = True, checkedOnly = True)
+    def GetSelectedLayers(self, checkedOnly=True):
+        items = self._tree.GetSelectedLayer(multi=True,
+                                            checkedOnly=checkedOnly)
         layers = []
         for item in items:
             layer = Layer(self._tree.GetPyData(item))
@@ -41,11 +49,19 @@ class LayerList(object):
         return layers
 
     def GetLayerInfo(self, layer):
+        """!For compatibility only, will be removed."""
         return Layer(self._tree.GetPyData(layer))
 
 
-class LayerManagerGrassInterface:
+class LayerManagerGrassInterface(object):
+    """!@implements GrassInterface"""
     def __init__(self, lmgr):
+        """!Costructor is specific to the current implementation.
+
+        Uses Layer Manager object including its private attributes.
+        (It encapsulates existing Layer Manager so access to private members
+        is intention.)
+        """
         self.lmgr = lmgr
 
     def RunCmd(self, *args, **kwargs):
@@ -70,24 +86,15 @@ class LayerManagerGrassInterface:
         self.lmgr._gconsole.WriteError(line = line)
 
     def GetLayerTree(self):
-        return LayerList(self.lmgr.GetLayerTree())
+        return self.lmgr.GetLayerTree()
 
     def GetLayerList(self):
         return LayerList(self.lmgr.GetLayerTree())
 
     def GetMapDisplay(self):
-        """!Get current map display.
-
-        @return MapFrame instance
-        @return None no mapdisplay open
-        """
         return self.lmgr.GetMapDisplay(onlyCurrent=True)
 
     def GetAllMapDisplays(self):
-        """!Get list of all map displays.
-
-        @return list of MapFrame instances
-        """
         return self.lmgr.GetMapDisplay(onlyCurrent=False)
 
     def GetMapWindow(self):
