@@ -101,7 +101,7 @@ RectReal *RTreeAllocBoundary(struct RTree *t)
 void RTreeFreeBoundary(struct RTree_Rect *r)
 {
     assert(r);
-    if(r->boundary)
+    if (r->boundary)
         free(r->boundary);
     r->boundary = NULL;
 }
