@@ -29,7 +29,7 @@ from grass.pygrass import functions
 #
 # import raster classes
 #
-from abstract import RasterAbstractBase
+from abstract import RasterAbstractBase, Info
 from raster_type import TYPE as RTYPE, RTYPE_STR
 from buffer import Buffer
 from segment import Segment
@@ -162,6 +162,7 @@ class RasterRow(RasterAbstractBase):
 
         # check if exist and instantiate all the private attributes
         if self.exist():
+            self.info = Info(self.name, self.mapset)
             if self.mode == 'r':
                 # the map exist, read mode
                 self._fd = libraster.Rast_open_old(self.name, self.mapset)
@@ -387,6 +388,7 @@ class RasterSegment(RasterAbstractBase):
         self.mtype = mtype
 
         if self.exist():
+            self.info = Info(self.name, self.mapset)
             if ((self.mode == "w" or self.mode == "rw") and
                 self.overwrite is False):
                 str_err = _("Raster map <{0}> already exists. Use overwrite.")
