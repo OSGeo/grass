@@ -38,6 +38,116 @@ from history import History
 ## Define global variables to not exceed the 80 columns
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 INDXOUTRANGE = "The index (%d) is out of range, have you open the map?."
+INFO = """{name}@{mapset}
+rows: {rows}
+cols: {cols}
+north: {north} south: {south} nsres:{nsres}
+east:  {east} west: {west} ewres:{ewres}
+range: {min}, {max}
+proj: {proj}
+"""
+
+
+class Info(object):
+    def __init__(self, name, mapset=''):
+        """Read the information for a raster map. ::
+
+            >>> info = Info('elevation')
+            >>> info
+            elevation@
+            rows: 1350
+            cols: 1500
+            north: 228500.0 south: 215000.0 nsres:10.0
+            east:  645000.0 west: 630000.0 ewres:10.0
+            range: 56, 156
+            proj: 99
+
+        """
+        self.name = name
+        self.mapset = mapset
+        self.c_region = ctypes.pointer(libgis.Cell_head())
+        libraster.Rast_get_cellhd(name, mapset,
+                                  self.c_region)
+        self._get_range()
+
+    def _get_range(self):
+        self.c_range = ctypes.pointer(libraster.Range())
+        libraster.Rast_read_range(self.name, self.mapset, self.c_range)
+
+    @property
+    def north(self):
+        return self.c_region.contents.north
+
+    @property
+    def south(self):
+        return self.c_region.contents.south
+
+    @property
+    def east(self):
+        return self.c_region.contents.east
+
+    @property
+    def west(self):
+        return self.c_region.contents.west
+
+    @property
+    def top(self):
+        return self.c_region.contents.top
+
+    @property
+    def bottom(self):
+        return self.c_region.contents.bottom
+
+    @property
+    def rows(self):
+        return self.c_region.contents.rows
+
+    @property
+    def cols(self):
+        return self.c_region.contents.cols
+
+    @property
+    def nsres(self):
+        return self.c_region.contents.ns_res
+
+    @property
+    def ewres(self):
+        return self.c_region.contents.ew_res
+
+    @property
+    def tbres(self):
+        return self.c_region.contents.tb_res
+
+    @property
+    def zone(self):
+        return self.c_region.contents.zone
+
+    @property
+    def proj(self):
+        return self.c_region.contents.proj
+
+    @property
+    def min(self):
+        return self.c_range.contents.min
+
+    @property
+    def max(self):
+        return self.c_range.contents.max
+
+    @property
+    def range(self):
+        return self.c_range.contents.min, self.c_range.contents.max
+
+    def __repr__(self):
+        return INFO.format(name=self.name, mapset=self.mapset,
+                           rows=self.rows, cols=self.cols,
+                           north=self.north, south=self.south,
+                           east=self.east, west=self.west,
+                           top=self.top, bottom=self.bottom,
+                           nsres=self.nsres, ewres=self.ewres,
+                           tbres=self.tbres, zone=self.zone,
+                           proj=self.proj, min=self.min, max=self.max)
+
 
 
 class RasterAbstractBase(object):
@@ -82,6 +192,8 @@ class RasterAbstractBase(object):
         #self.region = Region()
         self.cats = Category()
         self.hist = History()
+        if self.exist():
+            self.info = Info(self.name, self.mapset)
 
 
     def _get_mtype(self):
@@ -151,29 +263,6 @@ class RasterAbstractBase(object):
         return self._cols
 
     cols = property(fget=_get_cols, fset=_set_unchangeable)
-
-    @must_be_open
-    def _get_range(self):
-        if self.mtype == 'CELL':
-            maprange = libraster.Range()
-            libraster.Rast_read_range(self.name, self.mapset,
-                                      ctypes.byref(maprange))
-            self._min = libgis.CELL()
-            self._max = libgis.CELL()
-            self._min.value = maprange.min
-            self._max.value = maprange.max
-        else:
-            maprange = libraster.FPRange()
-            libraster.Rast_read_fp_range(self.name, self.mapset,
-                                         ctypes.byref(maprange))
-            self._min = libgis.DCELL()
-            self._max = libgis.DCELL()
-            libraster.Rast_get_fp_range_min_max(ctypes.byref(maprange),
-                                                ctypes.byref(self._min),
-                                                ctypes.byref(self._max))
-        return self._min.value, self._max.value
-
-    range = property(fget=_get_range, fset=_set_unchangeable)
 
     @must_be_open
     def _get_cats_title(self):
