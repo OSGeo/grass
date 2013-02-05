@@ -347,7 +347,6 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
                         "cidx file for vector '%s' not available.",
                         Vect_get_full_name(Map));
                 dig_free_plus(&(Map->plus));    /* free topology */
-                dig_spidx_free(&(Map->plus));   /* free spatial index */
                 level = 1;
             }
             else if (ret == -1) {       /* file exists, but cannot be opened */
@@ -360,8 +359,6 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
         if (level == 2 && Map->format == GV_FORMAT_OGR) {
             if (V2_open_old_ogr(Map) < 0) {
                 dig_free_plus(&(Map->plus));
-                dig_spidx_free(&(Map->plus));
-                dig_cidx_free(&(Map->plus));
                 level = 1;
             }
         }
@@ -372,8 +369,6 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
         if (level == 2 && Map->format == GV_FORMAT_POSTGIS) {
             if (V2_open_old_pg(Map) < 0) {
                 dig_free_plus(&(Map->plus));
-                dig_spidx_free(&(Map->plus));
-                dig_cidx_free(&(Map->plus));
                 level = 1;
             }
         }
@@ -398,8 +393,6 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
         if (0 != (*Open_old_array[format][1]) (Map, update)) {  /* cannot open */
             if (level >= 2) {   /* support files opened */
                 dig_free_plus(&(Map->plus));
-                dig_spidx_free(&(Map->plus));
-                dig_cidx_free(&(Map->plus));
             }
             if (level_request == 0)
                 G_fatal_error(_("Unable to open vector map <%s>"),
@@ -428,8 +421,6 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
 	if (level < 2 && Map->head.with_z) {
 	    /* topo has been initialized as 2D, update to 3D */
 	    dig_free_plus(&(Map->plus));
-	    dig_spidx_free(&(Map->plus));
-	    dig_cidx_free(&(Map->plus));
 	    
 	    Map->plus.with_z = Map->head.with_z;
 	    dig_init_plus(&(Map->plus));

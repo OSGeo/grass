@@ -172,14 +172,8 @@ int Vect_close(struct Map_info *Map)
 	fclose(Map->plus.spidx_fp.file);
     }
     if (Map->level > 1 && Map->plus.release_support) {
-	G_debug(1, "free topology");
+	G_debug(1, "free topology, spatial index, and category index");
 	dig_free_plus(&(Map->plus));
-
-	G_debug(1, "free spatial index");
-	dig_spidx_free(&(Map->plus));
-
-	G_debug(1, "free category index");
-	dig_cidx_free(&(Map->plus));
     }
 
     G_debug(1, "close history file");
