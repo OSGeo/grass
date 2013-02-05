@@ -513,7 +513,6 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     }
 
     /* load category index to memory */
-    dig_cidx_init(Plus);
     ret = dig_read_cidx(&fp, Plus, head_only);
 
     fclose(fp.file);
