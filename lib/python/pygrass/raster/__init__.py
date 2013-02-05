@@ -167,6 +167,8 @@ class RasterRow(RasterAbstractBase):
                 self._fd = libraster.Rast_open_old(self.name, self.mapset)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
+                self.cats.read(self)
+                self.hist.read(self.name)
             elif self.overwrite:
                 if self._gtype is None:
                     raise OpenError(_("Raster type not defined"))
@@ -401,6 +403,8 @@ class RasterSegment(RasterAbstractBase):
                 self.segment.open(self)
                 self.map2segment()
                 self.segment.flush()
+                self.cats.read(self)
+                self.hist.read(self.name)
 
                 if self.mode == "rw":
                     warning(_(WARN_OVERWRITE.format(self)))
