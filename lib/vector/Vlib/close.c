@@ -171,14 +171,12 @@ int Vect_close(struct Map_info *Map)
 
 	fclose(Map->plus.spidx_fp.file);
     }
-    /* always needed to close tmp files
-     * TODO: do better */
-    G_debug(1, "free spatial index");
-    dig_spidx_free(&(Map->plus));
-
     if (Map->level > 1 && Map->plus.release_support) {
 	G_debug(1, "free topology");
 	dig_free_plus(&(Map->plus));
+
+	G_debug(1, "free spatial index");
+	dig_spidx_free(&(Map->plus));
 
 	G_debug(1, "free category index");
 	dig_cidx_free(&(Map->plus));
