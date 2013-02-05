@@ -188,9 +188,11 @@ int dig_read_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 	return (-1);
 
     /* alloc space */
-    plus->a_cidx = plus->n_cidx;
-    plus->cidx =
-	(struct Cat_index *)G_malloc(plus->a_cidx * sizeof(struct Cat_index));
+    if (plus->a_cidx < plus->n_cidx) {
+	plus->a_cidx = plus->n_cidx;
+	plus->cidx =
+	    (struct Cat_index *)G_realloc(plus->cidx, plus->a_cidx * sizeof(struct Cat_index));
+    }
 
     for (i = 0; i < plus->n_cidx; i++) {
 	int t;
@@ -292,6 +294,7 @@ int dig_read_cidx(struct gvfile * fp, struct Plus_head *plus, int head_only)
 
     G_debug(3, "dig_read_cidx()");
 
+    dig_cidx_free(plus);
     dig_cidx_init(plus);
 
     dig_rewind(fp);
