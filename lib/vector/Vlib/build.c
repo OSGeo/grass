@@ -1256,7 +1256,6 @@ int Vect_save_sidx(struct Map_info *Map)
 	    G_warning(_("Error writing out spatial index file"));
 	    return 0;
 	}
-	dig_spidx_free(plus);
 	Map->plus.Spidx_new = FALSE;
     }
 

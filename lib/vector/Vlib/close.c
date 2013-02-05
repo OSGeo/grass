@@ -161,27 +161,27 @@ int Vect_close(struct Map_info *Map)
 	else if (Map->format == GV_FORMAT_POSTGIS)
             V2_close_pg(Map);
     }
-    else {
-	/* spatial index must also be closed when opened with topo but
-	 * not modified */
-	/* NOTE: also close sidx for GV_FORMAT_OGR if not direct OGR access */
-	if (Map->format != GV_FORMAT_OGR_DIRECT &&
-	    Map->plus.Spidx_built == TRUE &&
-	    Map->plus.built == GV_BUILD_ALL &&
-            create_link)
-	    fclose(Map->plus.spidx_fp.file);
+    /* spatial index must also be closed when opened with topo but
+     * not modified */
+    /* NOTE: also close sidx for GV_FORMAT_OGR if not direct OGR access */
+    if (Map->format != GV_FORMAT_OGR_DIRECT &&
+	Map->plus.Spidx_built == TRUE &&
+	!Map->support_updated &&
+	create_link) {
+
+	fclose(Map->plus.spidx_fp.file);
     }
+    /* always needed to close tmp files
+     * TODO: do better */
+    G_debug(1, "free spatial index");
+    dig_spidx_free(&(Map->plus));
 
     if (Map->level > 1 && Map->plus.release_support) {
 	G_debug(1, "free topology");
 	dig_free_plus(&(Map->plus));
 
-	G_debug(1, "free spatial index");
-	dig_spidx_free(&(Map->plus));
-
 	G_debug(1, "free category index");
 	dig_cidx_free(&(Map->plus));
-
     }
 
     G_debug(1, "close history file");
