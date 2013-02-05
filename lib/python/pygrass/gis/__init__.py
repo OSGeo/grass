@@ -62,10 +62,10 @@ def _check(value, path, type):
 class Gisdbase(object):
     """Return Gisdbase object. ::
 
+        >>> from grass.script.core import gisenv
         >>> gisdbase = Gisdbase()
-        >>> gisdbase.name          # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-        '/home/...'
-
+        >>> gisdbase.name == gisenv()['GISDBASE']
+        True
 
     """
     def __init__(self, gisdbase=''):
@@ -88,9 +88,12 @@ class Gisdbase(object):
     def __getitem__(self, location):
         """Return a Location object. ::
 
+            >>> from grass.script.core import gisenv
+            >>> loc_env = gisenv()['LOCATION_NAME']
             >>> gisdbase = Gisdbase()
-            >>> gisdbase['nc_basic_spm_grass7']
-            Location('nc_basic_spm_grass7')
+            >>> loc_py = gisdbase[loc_env]
+            >>> loc_env == loc_py.name
+            True
 
         ..
         """
@@ -127,13 +130,14 @@ class Gisdbase(object):
 class Location(object):
     """Location object ::
 
+        >>> from grass.script.core import gisenv
         >>> location = Location()
         >>> location                                      # doctest: +ELLIPSIS
         Location(...)
-        >>> location.gisdbase                              # doctest: +ELLIPSIS
-        '/home/...'
-        >>> location.name
-        'nc_basic_spm_grass7'
+        >>> location.gisdbase == gisenv()['GISDBASE']
+        True
+        >>> location.name == gisenv()['LOCATION_NAME']
+        True
     """
     def __init__(self, location='', gisdbase=''):
         self.gisdbase = gisdbase
