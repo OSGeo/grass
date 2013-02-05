@@ -98,6 +98,14 @@ class Bbox(object):
                                                  e=self.east, w=self.west)
 
     def contains(self, point):
+        """Return True if the object is contained by the BoundingBox. ::
+
+            >>> bbox = Bbox(north=10, south=0, west=0, east=10)
+            >>> bbox.contains(point)
+            True
+
+        ..
+        """
         return bool(libvect.Vect_point_in_box(point.x, point.y,
                                               point.z if point.z else 0,
                                               self.c_bbox))
