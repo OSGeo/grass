@@ -41,6 +41,7 @@ import wx
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
+from core.globalvar import CheckWxVersion
 from mapdisp.frame import MapFrame
 from core.giface   import StandaloneGrassInterface
 from core.settings import UserSettings
@@ -79,7 +80,8 @@ def main():
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
     
     app = wx.PySimpleApp()
-    wx.InitAllImageHandlers()
+    if not CheckWxVersion([2, 9]):
+        wx.InitAllImageHandlers()
     frame = VDigitMapFrame(options['map'])
     frame.Show()
 

@@ -1810,7 +1810,8 @@ class BufferedWindow(wx.Window):
         dc = wx.BufferedPaintDC(self, self._Buffer)
         
         # use PrepareDC to set position correctly
-        self.PrepareDC(dc)
+        # probably does nothing, removed from wxPython 2.9
+        # self.PrepareDC(dc)
         
         # we need to clear the dc BEFORE calling PrepareDC
         bg = wx.Brush(self.GetBackgroundColour())

@@ -51,7 +51,8 @@ class GMApp(wx.App):
         
         @return True
         """
-        wx.InitAllImageHandlers()
+        if not globalvar.CheckWxVersion([2, 9]):
+            wx.InitAllImageHandlers()
         
         # create splash screen
         introImagePath = os.path.join(globalvar.ETCIMGDIR, "silesia_splash.png")

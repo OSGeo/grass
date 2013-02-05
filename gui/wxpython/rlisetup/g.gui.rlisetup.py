@@ -36,6 +36,7 @@ import grass.script as grass
 sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.giface import StandaloneGrassInterface
+from core.globalvar import CheckWxVersion
 from rlisetup.frame import RLiSetupFrame
 
 
@@ -43,7 +44,8 @@ def main():
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'),
                     unicode = True)
     app = wx.PySimpleApp()
-    wx.InitAllImageHandlers()
+    if not CheckWxVersion([2, 9]):
+        wx.InitAllImageHandlers()
     frame = RLiSetupFrame(parent = None, giface = StandaloneGrassInterface())
     frame.Show()
 

@@ -1241,7 +1241,8 @@ class PsMapBufferedWindow(wx.Window):
             return
         dc = wx.BufferedPaintDC(self, self._buffer)
         # use PrepareDC to set position correctly
-        self.PrepareDC(dc)
+        # probably does nothing, removed from wxPython 2.9
+        # self.PrepareDC(dc)
         
         dc.SetBackground(wx.LIGHT_GREY_BRUSH)
         dc.Clear()

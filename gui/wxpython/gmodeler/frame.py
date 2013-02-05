@@ -1062,7 +1062,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape = self.GetShape()
         canvas = shape.GetCanvas()
         dc = wx.ClientDC(canvas)
-        canvas.PrepareDC(dc)
+        # probably does nothing, removed from wxPython 2.9
+        # canvas.PrepareDC(dc)
         
         if hasattr(self.frame, 'defineRelation'):
             drel = self.frame.defineRelation
