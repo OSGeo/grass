@@ -48,7 +48,7 @@ void dig_cidx_free(struct Plus_head *Plus)
 
     G_debug(2, "dig_cidx_free()");
     for (i = 0; i < Plus->n_cidx; i++) {
-	ci = &(Plus->cidx[0]);
+	ci = &(Plus->cidx[i]);
 	G_free(ci->cat);
 	ci->cat = NULL;
 	ci->field = ci->n_cats = ci->a_cats = ci->n_types = 0;
