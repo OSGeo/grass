@@ -317,7 +317,8 @@ class PsMapFrame(wx.Frame):
 
                 # hack for Windows, change method for loading EPS
                 if sys.platform == 'win32':
-                    im.load = loadPSForWindows(im)
+                    import types
+                    im.load = types.MethodType(loadPSForWindows, im)
                 im.save(self.imgName, format = 'PNG')
                 
             except IOError, e:
@@ -2188,7 +2189,7 @@ def GhostscriptForWindows(tile, size, fp):
 
     import tempfile, os
 
-    file = tempfile.mktemp()
+    file = tempfile.mkstemp()[1]
 
     # Build ghostscript command - for Windows
     command = ["gswin32c",
@@ -2217,7 +2218,8 @@ def GhostscriptForWindows(tile, size, fp):
         status = gs.close()
         if status:
             raise IOError("gs failed (status %d)" % status)
-        im = Image.core.open_ppm(file)
+        im = PILImage.core.open_ppm(file)
+
     finally:
         try: os.unlink(file)
         except: pass
