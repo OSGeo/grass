@@ -16,7 +16,7 @@ class Segment(object):
         self.srows = srows
         self.scols = scols
         self.maxmem = maxmem
-        self.cseg = libseg.SEGMENT()
+        self.c_seg = ctypes.pointer(libseg.SEGMENT())
 
     def rows(self):
         return libraster.Rast_window_rows()
@@ -48,7 +48,7 @@ class Segment(object):
         size = ctypes.sizeof(RTYPE[mapobj.mtype]['ctypes'])
         file_name = libgis.G_tempfile()
         #import pdb; pdb.set_trace()
-        libseg.segment_open(ctypes.byref(self.cseg), file_name,
+        libseg.segment_open(self.c_seg, file_name,
                             self.rows(), self.cols(),
                             self.srows, self.scols,
                             size,
@@ -78,29 +78,29 @@ class Segment(object):
         if file_name == '':
             file_name = mapobj.temp_file.name
         mapobj.temp_file = open(file_name, 'w')
-        libseg.segment_init(ctypes.byref(self.cseg), mapobj.temp_file.fileno(),
+        libseg.segment_init(self.c_seg, mapobj.temp_file.fileno(),
                             self.segments_in_mem)
 
     def get_row(self, row_index, buf):
         """Return the row using, the `segment` method"""
-        libseg.segment_get_row(ctypes.byref(self.cseg), buf.p, row_index)
+        libseg.segment_get_row(self.c_seg, buf.p, row_index)
         return buf
 
     def put_row(self, row_index, buf):
         """Write the row using the `segment` method"""
-        libseg.segment_put_row(ctypes.byref(self.cseg), buf.p, row_index)
+        libseg.segment_put_row(self.c_seg, buf.p, row_index)
 
     def get(self, row_index, col_index):
         """Return the value of the map
         """
-        libseg.segment_get(ctypes.byref(self.cseg),
+        libseg.segment_get(self.c_seg,
                            ctypes.byref(self.val), row_index, col_index)
         return self.val.value
 
     def put(self, row_index, col_index):
         """Write the value to the map
         """
-        libseg.segment_put(ctypes.byref(self.cseg),
+        libseg.segment_put(self.c_seg,
                            ctypes.byref(self.val), row_index, col_index)
 
     def get_seg_number(self, row_index, col_index):
@@ -115,15 +115,15 @@ class Segment(object):
         the segment file seg. Must be called after the final segment_put()
         to force all pending updates to disk. Must also be called before the
         first call to segment_get_row."""
-        libseg.segment_flush(ctypes.byref(self.cseg))
+        libseg.segment_flush(self.c_seg)
 
     def close(self):
         """Free memory allocated to segment and delete temp file.  """
-        libseg.segment_close(ctypes.byref(self.cseg))
+        libseg.segment_close(self.c_seg)
 
     def release(self):
         """Free memory allocated to segment.
         Releases the allocated memory associated with the segment file seg.
         Note: Does not close the file. Does not flush the data which may be
         pending from previous segment_put() calls."""
-        libseg.segment_release(ctypes.byref(self.cseg))
+        libseg.segment_release(self.c_seg)

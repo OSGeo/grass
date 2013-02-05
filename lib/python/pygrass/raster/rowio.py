@@ -45,7 +45,7 @@ get_row = {
 class RowIO(object):
 
     def __init__(self):
-        self.crowio = librowio.ROWIO()
+        self.c_rowio = librowio.ROWIO()
         self.fd = None
         self.rows = None
         self.cols = None
@@ -58,7 +58,7 @@ class RowIO(object):
         self.cols = cols
         self.mtype = mtype
         self.row_size = ctypes.sizeof(RTYPE[mtype]['grass def'] * cols)
-        if (librowio.Rowio_setup(ctypes.byref(self.crowio), self.fd,
+        if (librowio.Rowio_setup(ctypes.byref(self.c_rowio), self.fd,
                                  self.rows,
                                  self.row_size,
                                  get_row[self.mtype],
@@ -66,13 +66,13 @@ class RowIO(object):
             raise GrassError('Fatal error, Rowio not setup correctly.')
 
     def release(self):
-        librowio.Rowio_release(ctypes.byref(self.crowio))
+        librowio.Rowio_release(ctypes.byref(self.c_rowio))
         self.fd = None
         self.rows = None
         self.cols = None
         self.mtype = None
 
     def get(self, row_index, buf):
-        rowio_buf = librowio.Rowio_get(ctypes.byref(self.crowio), row_index)
+        rowio_buf = librowio.Rowio_get(ctypes.byref(self.c_rowio), row_index)
         ctypes.memmove(buf.p, rowio_buf, self.row_size)
         return buf
