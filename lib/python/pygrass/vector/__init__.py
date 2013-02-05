@@ -53,16 +53,16 @@ class Vector(Info):
     """ ::
 
         >>> from grass.pygrass.vector import Vector
-        >>> municip = Vector('boundary_municp_sqlite')
-        >>> municip.is_open()
+        >>> cens = Vector('census')
+        >>> cens.is_open()
         False
-        >>> municip.mapset
+        >>> cens.mapset
         ''
-        >>> municip.exist()
+        >>> cens.exist()
         True
-        >>> municip.mapset
-        '%s'
-        >>> municip.overwrite
+        >>> cens.mapset
+        'PERMANENT'
+        >>> cens.overwrite
         False
 
     ..
@@ -83,7 +83,7 @@ class Vector(Info):
     def __iter__(self):
         """::
 
-            >>> mun = Vector('boundary_municp_sqlite')
+            >>> mun = Vector('census')
             >>> mun.open()
             >>> features = [feature for feature in mun]
             >>> features[:3]
@@ -99,7 +99,7 @@ class Vector(Info):
     def next(self):
         """::
 
-            >>> mun = Vector('boundary_municp_sqlite')
+            >>> mun = Vector('census')
             >>> mun.open()
             >>> mun.next()
             Boundary(v_id=None)
@@ -224,7 +224,7 @@ class VectorTopo(Vector):
     def __getitem__(self, key):
         """::
 
-            >>> mun = VectorTopo('boundary_municp_sqlite')
+            >>> mun = VectorTopo('census')
             >>> mun.open()
             >>> mun[:3]
             [Boundary(v_id=1), Boundary(v_id=2), Boundary(v_id=3)]
@@ -257,17 +257,17 @@ class VectorTopo(Vector):
 
         ::
 
-            >>> municip = VectorTopo('boundary_municp_sqlite')
-            >>> municip.open()
-            >>> municip.num_primitive_of('point')
+            >>> cens = VectorTopo('boundary_municp_sqlite')
+            >>> cens.open()
+            >>> cens.num_primitive_of('point')
             0
-            >>> municip.num_primitive_of('line')
+            >>> cens.num_primitive_of('line')
             0
-            >>> municip.num_primitive_of('centroid')
+            >>> cens.num_primitive_of('centroid')
             3579
-            >>> municip.num_primitive_of('boundary')
+            >>> cens.num_primitive_of('boundary')
             5128
-            >>> municip.close()
+            >>> cens.close()
 
         ..
         """
@@ -281,19 +281,19 @@ class VectorTopo(Vector):
                   "line_points", "lines", "nodes", "update_lines",
                   "update_nodes", "volumes"]
 
-            >>> municip = VectorTopo('boundary_municp_sqlite')
-            >>> municip.open()
-            >>> municip.number_of("areas")
+            >>> cens = VectorTopo('boundary_municp_sqlite')
+            >>> cens.open()
+            >>> cens.number_of("areas")
             3579
-            >>> municip.number_of("islands")
+            >>> cens.number_of("islands")
             2629
-            >>> municip.number_of("holes")
+            >>> cens.number_of("holes")
             0
-            >>> municip.number_of("lines")
+            >>> cens.number_of("lines")
             8707
-            >>> municip.number_of("nodes")
+            >>> cens.number_of("nodes")
             4178
-            >>> municip.number_of("pizza")
+            >>> cens.number_of("pizza")
             ...                     # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Traceback (most recent call last):
                 ...
@@ -301,7 +301,7 @@ class VectorTopo(Vector):
             'areas', 'dblinks', 'faces', 'holes', 'islands', 'kernels',
             'line_points', 'lines', 'nodes', 'updated_lines', 'updated_nodes',
             'volumes'
-            >>> municip.close()
+            >>> cens.close()
 
 
         ..
@@ -326,9 +326,9 @@ class VectorTopo(Vector):
         """Return an iterator of vector features
 
         ::
-            >>> municip = VectorTopo('boundary_municp_sqlite')
-            >>> municip.open()
-            >>> big = [area for area in municip.viter('areas')
+            >>> cens = VectorTopo('census')
+            >>> cens.open()
+            >>> big = [area for area in cens.viter('areas')
             ...        if area.alive() and area.area >= 10000]
             >>> big[:3]
             [Area(1), Area(2), Area(3)]
@@ -343,7 +343,7 @@ class VectorTopo(Vector):
             Area(3102) 697521857.848
             Area(2682) 320224369.66
             Area(2552) 298356117.948
-            >>> municip.close()
+            >>> cens.close()
 
         ..
         """
