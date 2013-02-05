@@ -71,6 +71,21 @@ def read_WKB(buff):
     pass
 
 
+def intersects(lineA, lineB, with_z=False):
+    """Return a list of points ::
+
+        >>> lineA = Line([(0, 0), (4, 0)])
+        >>> lineB = Line([(2, 2), (2, -2)])
+        >>> intersects(lineA, lineB)
+        Line([Point(2.000000, 0.000000)])
+    """
+    line = Line()
+    if libvect.Vect_line_get_intersections(lineA.c_points, lineB.c_points,
+                                           line.c_points, int(with_z)):
+        return line
+    else:
+        return []
+
 #=============================================
 # GEOMETRY
 #=============================================
@@ -121,11 +136,16 @@ class Attrs(object):
     def __getitem__(self, *args):
         """Return the value stored in the attribute table. ::
 
-            >>> attrs = Attrs(v_id, table)
-            >>> attrs['LABEL']
-            .
+            >>> from grass.pygrass.vector import VectorTopo
+            >>> schools = VectorTopo('schools')
+            >>> schools.open('r')
+            >>> school = schools[1]
+            >>> attrs = Attrs(school.line, schools.table)
+            >>> attrs['TAG']
+            u'568'
 
-        .."""
+
+        """
         #SELECT {cols} FROM {tname} WHERE {condition};
         cols = args if isinstance(args[0], str) else args[0]
         cur = self.table.execute(sql.SELECT_WHERE.format(cols=','.join(cols),
@@ -137,10 +157,17 @@ class Attrs(object):
     def __setitem__(self, key, value):
         """Set value of a given column of a table attribute. ::
 
-            >>> attrs = Attrs(v_id, table)
-            >>> attrs['LABEL'] = 'New Label'
-
-        .."""
+            >>> from grass.pygrass.vector import VectorTopo
+            >>> from grass.pygrass.functions import copy
+            >>> copy('schools', 'schools', 'vect')
+            >>> schools = VectorTopo('schools')
+            >>> schools.open('r')
+            >>> school = schools[1]
+            >>> attrs = Attrs(school.line, schools.table)
+            >>> attrs['TAG'] = 'New Label'
+            >>> attrs['TAG']
+            'New Label'
+        """
         if self.writable:
             #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
             values = '%s=%r' % (key, value)
@@ -185,10 +212,12 @@ class Geo(object):
     >>> geo1 = Geo(c_points=points, c_cats=cats)
     """
     def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None,
-                 table=None, writable=False):
+                 table=None, writable=False, is2D=True):
         self.id = v_id  # vector id
         self.line = self.id
         self.c_mapinfo = c_mapinfo
+        self.is2D = is2D
+        self.gtype = None
 
         # set c_points
         if c_points is None:
@@ -220,7 +249,6 @@ class Geo(object):
                                self.c_cats, self.id)
 
 
-
 class Point(Geo):
     """Instantiate a Point object that could be 2 or 3D, default
     parameters are 0.
@@ -247,11 +275,10 @@ class Point(Geo):
 
     ..
     """
-    def __init__(self, x=0, y=0, z=None, is2D=True, **kargs):
+    def __init__(self, x=0, y=0, z=None, **kargs):
         super(Point, self).__init__(**kargs)
         if self.id is not None:
             self.read()
-            self.is2D = is2D
         else:
             self.is2D = True if z is None else False
             z = z if z is not None else 0
@@ -441,13 +468,12 @@ class Line(Geo):
 
     ..
     """
-    def __init__(self, points=None, is2D=True, **kargs):
+    def __init__(self, points=None, **kargs):
         super(Line, self).__init__(**kargs)
         if points is not None:
             for pnt in points:
                 self.append(pnt)
 
-        self.is2D = is2D
         # geometry type
         self.gtype = libvect.GV_LINE
 
@@ -966,7 +992,6 @@ class Line(Geo):
 
 class Node(object):
     pass
-
 
 class Boundary(Line):
     """
