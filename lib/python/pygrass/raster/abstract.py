@@ -32,6 +32,7 @@ from grass.pygrass.gis import Mapset
 #
 from raster_type import TYPE as RTYPE
 from category import Category
+from history import History
 
 
 ## Define global variables to not exceed the 80 columns
@@ -67,9 +68,6 @@ class RasterAbstractBase(object):
         ..
         """
         self.mapset = mapset
-        #self.region = Region()
-        self.cats = Category()
-
         self._name = name
         ## Private attribute `_fd` that return the file descriptor of the map
         self._fd = None
@@ -81,6 +79,10 @@ class RasterAbstractBase(object):
         # in active window, When the class is instanced is empty and it is set
         # when you open the file, using Rast_window_cols()
         self._cols = None
+        #self.region = Region()
+        self.cats = Category()
+        self.hist = History()
+
 
     def _get_mtype(self):
         return self._mtype
