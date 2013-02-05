@@ -104,7 +104,6 @@ class DatabasePage(TitledPage):
         self.tlocTitle = self.MakeTextCtrl(size = (400, -1))
         
         # layout
-        self.sizer.AddGrowableCol(3)
         self.sizer.Add(item = self.MakeLabel(_("GIS Data Directory:")),
                        flag = wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -145,6 +144,7 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5,
                        pos = (3, 2), span  =  (1, 2))
+        self.sizer.AddGrowableCol(3)
         
         # bindings
         self.Bind(wx.EVT_BUTTON,                self.OnBrowse, self.bbrowse)
