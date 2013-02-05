@@ -22,54 +22,51 @@ class Info(object):
     """Basic vector info.
     To get access to the vector info the map must be opened. ::
 
-        >>> municip = Info('boundary_municp', 'PERMANENT')
-        >>> municip.full_name
-        You must open the map.
-
-        >>> municip.open()
+        >>> cens = Info('census')
+        >>> cens.open()
 
     Then it is possible to read and write the following map attributes: ::
 
-        >>> municip.organization
+        >>> cens.organization
         'NC OneMap'
-        >>> municip.person
-        'helena'
-        >>> municip.title
-        'North Carolina municipality boundaries (polygon map)'
-        >>> municip.map_date
-        datetime.datetime(2006, 11, 7, 0, 1, 27)
-        >>> municip.date
+        >>> cens.person
+        'hmitaso'
+        >>> cens.title
+        'Wake County census blocks with attributes, clipped (polygon map)'
+        >>> cens.map_date
+        datetime.datetime(2007, 3, 19, 22, 1, 37)
+        >>> cens.date
         ''
-        >>> municip.scale
+        >>> cens.scale
         1
-        >>> municip.comment
+        >>> cens.comment
         ''
-        >>> municip.comment = "One useful comment!"
-        >>> municip.comment
+        >>> cens.comment = "One useful comment!"
+        >>> cens.comment
         'One useful comment!'
-        >>> municip.zone
+        >>> cens.zone
         0
-        >>> municip.proj
+        >>> cens.proj
         99
 
     There are some read only attributes: ::
 
-        >>> municip.full_name
-        'boundary_municp@PERMANENT'
-        >>> municip.proj_name
+        >>> cens.full_name
+        'census@PERMANENT'
+        >>> cens.proj_name
         'Lambert Conformal Conic'
-        >>> municip.maptype
+        >>> cens.maptype
         'native'
 
     And some basic methods: ::
 
-        >>> municip.is_3D()
+        >>> cens.is_3D()
         False
-        >>> municip.exist()
+        >>> cens.exist()
         True
-        >>> municip.is_open()
+        >>> cens.is_open()
         True
-        >>> municip.close()
+        >>> cens.close()
 
     """
     def __init__(self, name, mapset='', layer=None):
@@ -84,13 +81,14 @@ class Info(object):
         self.layer = layer
 
     def _get_name(self):
+        """Private method to obtain the Vector name"""
         if self.exist() and self.is_open():
             return libvect.Vect_get_name(self.c_mapinfo)
         else:
             return self._name
 
     def _set_name(self, newname):
-        """Private method to change the Raster name"""
+        """Private method to change the Vector name"""
         if not functions.is_clean_name(newname):
             str_err = _("Map name {0} not valid")
             raise ValueError(str_err.format(newname))
@@ -105,83 +103,103 @@ class Info(object):
 #        return libvect.Vect_get_mapset(self.c_mapinfo)
 
     def _get_organization(self):
+        """Private method to obtain the Vector organization"""
         return libvect.Vect_get_organization(self.c_mapinfo)
 
     def _set_organization(self, org):
+        """Private method to change the Vector organization"""
         libvect.Vect_get_organization(self.c_mapinfo, ctypes.c_char_p(org))
 
     organization = property(fget=_get_organization, fset=_set_organization)
 
     def _get_date(self):
+        """Private method to obtain the Vector date"""
         return libvect.Vect_get_date(self.c_mapinfo)
 
     def _set_date(self, date):
+        """Private method to change the Vector date"""
         return libvect.Vect_set_date(self.c_mapinfo, ctypes.c_char_p(date))
 
     date = property(fget=_get_date, fset=_set_date)
 
     def _get_person(self):
+        """Private method to obtain the Vector person"""
         return libvect.Vect_get_person(self.c_mapinfo)
 
     def _set_person(self, person):
+        """Private method to change the Vector person"""
         libvect.Vect_set_person(self.c_mapinfo, ctypes.c_char_p(person))
 
     person = property(fget=_get_person, fset=_set_person)
 
     def _get_title(self):
+        """Private method to obtain the Vector title"""
         return libvect.Vect_get_map_name(self.c_mapinfo)
 
     def _set_title(self, title):
+        """Private method to change the Vector title"""
         libvect.Vect_set_map_name(self.c_mapinfo, ctypes.c_char_p(title))
 
     title = property(fget=_get_title, fset=_set_title)
 
     def _get_map_date(self):
+        """Private method to obtain the Vector map date"""
         date_str = libvect.Vect_get_map_date(self.c_mapinfo)
         return datetime.datetime.strptime(date_str, self.date_fmt)
 
     def _set_map_date(self, datetimeobj):
+        """Private method to change the Vector map date"""
         date_str = datetimeobj.strftime(self.date_fmt)
         libvect.Vect_set_map_date(self.c_mapinfo, ctypes.c_char_p(date_str))
 
     map_date = property(fget=_get_map_date, fset=_set_map_date)
 
     def _get_scale(self):
+        """Private method to obtain the Vector scale"""
         return libvect.Vect_get_scale(self.c_mapinfo)
 
     def _set_scale(self, scale):
+        """Private method to set the Vector scale"""
         return libvect.Vect_set_scale(self.c_mapinfo, ctypes.c_int(scale))
 
     scale = property(fget=_get_scale, fset=_set_scale)
 
     def _get_comment(self):
+        """Private method to obtain the Vector comment"""
         return libvect.Vect_get_comment(self.c_mapinfo)
 
     def _set_comment(self, comm):
+        """Private method to set the Vector comment"""
         return libvect.Vect_set_comment(self.c_mapinfo, ctypes.c_char_p(comm))
 
     comment = property(fget=_get_comment, fset=_set_comment)
 
     def _get_zone(self):
+        """Private method to obtain the Vector projection zone"""
         return libvect.Vect_get_zone(self.c_mapinfo)
 
     def _set_zone(self, zone):
+        """Private method to set the Vector projection zone"""
         return libvect.Vect_set_zone(self.c_mapinfo, ctypes.c_int(zone))
 
     zone = property(fget=_get_zone, fset=_set_zone)
 
     def _get_proj(self):
+        """Private method to obtain the Vector projection code"""
         return libvect.Vect_get_proj(self.c_mapinfo)
 
     def _set_proj(self, proj):
+        """Private method to set the Vector projection code"""
         libvect.Vect_set_proj(self.c_mapinfo, ctypes.c_int(proj))
 
     proj = property(fget=_get_proj, fset=_set_proj)
 
     def _get_thresh(self):
+        """Private method to obtain the Vector threshold"""
         return libvect.Vect_get_thresh(self.c_mapinfo)
 
     def _set_thresh(self, thresh):
+        """Private method to set the Vector threshold"""
         return libvect.Vect_set_thresh(self.c_mapinfo, ctypes.c_double(thresh))
 
     thresh = property(fget=_get_thresh, fset=_set_thresh)
@@ -189,31 +207,36 @@ class Info(object):
     @property
     @must_be_open
     def full_name(self):
+        """Return the full name of Vector"""
         return libvect.Vect_get_full_name(self.c_mapinfo)
 
     @property
     @must_be_open
     def maptype(self):
+        """Return the map type of Vector"""
         return MAPTYPE[libvect.Vect_maptype(self.c_mapinfo)]
 
     @property
     @must_be_open
     def proj_name(self):
+        """Return the project name of Vector"""
         return libvect.Vect_get_proj_name(self.c_mapinfo)
 
     def _write_header(self):
         libvect.Vect_write_header(self.c_mapinfo)
 
     def rename(self, newname):
-        """Rename the map"""
+        """Method to rename the Vector map"""
         if self.exist():
             functions.rename(self.name, newname, 'vect')
         self._name = newname
 
     def is_3D(self):
+        """Return if the Vector is 3D"""
         return bool(libvect.Vect_is_3d(self.c_mapinfo))
 
     def exist(self):
+        """Return if the Vector exists or not"""
         if self._name:
             self.mapset = functions.get_mapset_vector(self._name, self.mapset)
         else:
@@ -224,6 +247,7 @@ class Info(object):
             return False
 
     def is_open(self):
+        """Return if the Vector is open"""
         return (self.c_mapinfo.contents.open != 0 and
                 self.c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE)
 
@@ -316,22 +340,13 @@ class Info(object):
             self.table = None
             self.n_lines = 0
         else:
-            self.layer = self.dblinks[0].layer
-            self.table = self.get_table(layer=self.layer)
+            self.layer = self.dblinks.by_layer(layer)
+            self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
         self.writable = self.mapset == functions.getenv("MAPSET")
 
-    def get_table(self, layer=None, name=None,):
-        if layer is None and name is None and len(self.dblinks) == 0:
-            return None
-        if layer is not None:
-            return self.dblinks.by_layer(layer).table()
-        elif name is not None:
-            return self.dblinks.by_name(name).table()
-        else:
-            return self.dblinks[0].table()
-
     def close(self):
+        """Method to close the Vector"""
         if hasattr(self, 'table') and self.table is not None:
             self.table.conn.close()
         if self.is_open():
