@@ -226,6 +226,17 @@ void RTreeDestroyTree(struct RTree *t)
     assert(t);
 
     if (t->fd > -1) {
+	int j, k;
+
+	for (i = 0; i < MAXLEVEL; i++) {
+	    for (j = 0; j < NODE_BUFFER_SIZE; j++) {
+		for (k = 0; k < MAXCARD; k++) {
+		    RTreeFreeBoundary(&t->nb[i][j].n.branch[k].rect);
+		}
+		free(t->nb[i][j].n.branch);
+	    }
+	}
+
 	if (t->free_nodes.alloc)
 	    free(t->free_nodes.pos);
 	free(t->nb[0]);
