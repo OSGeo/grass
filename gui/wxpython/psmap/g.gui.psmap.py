@@ -49,7 +49,8 @@ def main():
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     app = wx.PySimpleApp()
-    wx.InitAllImageHandlers()
+    if not CheckWxVersion([2, 9]):
+        wx.InitAllImageHandlers()
     frame = PsMapFrame(parent = None)
     frame.Show()
 

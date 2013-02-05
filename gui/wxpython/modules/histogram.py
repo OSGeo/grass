@@ -124,7 +124,8 @@ class BufferedWindow(wx.Window):
         dc = wx.BufferedPaintDC(self, self._buffer)
         
         # use PrepareDC to set position correctly
-        self.PrepareDC(dc)
+        # probably does nothing, removed from wxPython 2.9
+        # self.PrepareDC(dc)
         # we need to clear the dc BEFORE calling PrepareDC
         bg = wx.Brush(self.GetBackgroundColour())
         dc.SetBackground(bg)
@@ -184,7 +185,8 @@ class BufferedWindow(wx.Window):
         self.Draw(self.pdc, img, drawid = 99)
         dc = wx.BufferedPaintDC(self, ibuffer)
         dc.Clear()
-        self.PrepareDC(dc)
+        # probably does nothing, removed from wxPython 2.9
+        # self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
         ibuffer.SaveFile(FileName, FileType)
         

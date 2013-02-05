@@ -51,6 +51,7 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.settings import UserSettings
+from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
 from animation.frame import AnimationFrame, MAX_COUNT
 
@@ -76,7 +77,8 @@ def main():
         strds = None
 
     app = wx.PySimpleApp()
-    wx.InitAllImageHandlers()
+    if not CheckWxVersion([2, 9]):
+        wx.InitAllImageHandlers()
 
     frame = AnimationFrame(parent = None)
     frame.CentreOnScreen()

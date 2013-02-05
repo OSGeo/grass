@@ -5056,7 +5056,8 @@ class PositionWindow(wx.Window):
         dc.SetBackground(wx.Brush("White"))
         dc.Clear()
         
-        self.PrepareDC(dc)
+        # probably does nothing, removed from wxPython 2.9
+        # self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
         
     def UpdatePos(self, xcoord, ycoord):
