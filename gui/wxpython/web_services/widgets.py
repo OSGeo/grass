@@ -35,8 +35,8 @@ from   wx.gizmos              import TreeListCtrl
 
 from core              import globalvar
 from core.debug        import Debug
-from core.gcmd         import GWarning, GMessage
-from core.gconsole     import CmdThread, EVT_CMD_DONE
+from core.gcmd         import GWarning, GMessage, GError
+from core.gconsole     import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEarthCapabilities
 
@@ -107,6 +107,7 @@ class WSPanel(wx.Panel):
                                       }
                       }
 
+        self.cmdStdErr = GStderr(self)
         self.cmd_thread = CmdThread(self)
         self.cap_file = grass.tempfile()
 
@@ -119,6 +120,7 @@ class WSPanel(wx.Panel):
         self._layout()
 
         self.Bind(EVT_CMD_DONE, self.OnCapDownloadDone)
+        self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
 
     def __del__(self):
         self.cmd_thread.abort(abortall =True)
@@ -417,10 +419,18 @@ class WSPanel(wx.Panel):
         @param password - password for connection
         """
         self._prepareForNewConn(url, username, password)
-        cap_cmd = ['r.in.wms', '-c', ('capfile_output=%s' % self.cap_file)] + self.ws_cmdl
+        cap_cmd = ['r.in.wms', '-c', ('capfile_output=%s' % self.cap_file), '--overwrite'] + self.ws_cmdl
 
         self.currentPid = self.cmd_thread.GetId()
-        self.cmd_thread.RunCmd(cap_cmd)
+        self.cmd_thread.RunCmd(cap_cmd, stderr = self.cmdStdErr)
+
+    def OnCmdOutput(self, event):
+        """!Print cmd output according to debug level.
+
+        @todo Replace with error dialog
+        """
+        if Debug.GetLevel() != 0:
+            Debug.msg(1, event.text)
 
     def _prepareForNewConn(self, url, username, password):
         """!Prepare panel for new connection

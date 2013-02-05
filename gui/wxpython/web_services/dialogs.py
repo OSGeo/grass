@@ -97,7 +97,6 @@ class WSDialogBase(wx.Dialog):
         self.btn_connect = wx.Button(parent = self, 
                                      id = wx.ID_ANY, label = _("&Connect"))
         self.btn_connect.SetToolTipString(_("Connect to the server"))
-        self.btn_connect.SetDefault()
         if not self.server.GetValue():
             self.btn_connect.Enable(False)
 
@@ -367,8 +366,6 @@ class WSDialogBase(wx.Dialog):
                                                         password = self.password.GetValue())
             self.ws_panels[ws]['panel'].Hide()
         
-        self.btn_add.SetDefault()
-
     def OnPanelCapParsed(self, event):
         """!Called when panel has downloaded and parsed capabilities file.
         """
@@ -381,14 +378,25 @@ class WSDialogBase(wx.Dialog):
             self.Layout()
             self.Fit()
 
+    def _getConnectedWS(self):
+        """
+        @return list of found web services on server (identified as keys in self.ws_panels) 
+        """
+        conn_ws = []
+        for ws, data in self.ws_panels.iteritems():
+            if data['panel'].IsConnected():
+                conn_ws.append(ws)
+
+        return conn_ws
+
     def UpdateDialogAfterConnection(self):
         """!Update dialog after all web service panels downloaded and parsed capabilities data.
         """
-        avail_ws = {}
-        for ws, data in self.ws_panels.iteritems():
+        avail_ws = {}        
+        conn_ws = self._getConnectedWS()
 
-            if data['panel'].IsConnected():
-                avail_ws[ws] = data
+        for ws in conn_ws:
+            avail_ws[ws] = self.ws_panels[ws]
 
         self.web_service_sel = []
         self.rb_choices = []
@@ -466,6 +474,7 @@ class AddWSDialog(WSDialogBase):
         self.SetTitle(_("Add web service layer"))
 
         self.gmframe = gmframe
+        self.btn_connect.SetDefault()
 
     def _createWidgets(self):
 
@@ -487,6 +496,16 @@ class AddWSDialog(WSDialogBase):
 
         # bindings
         self.btn_add.Bind(wx.EVT_BUTTON, self.OnAddLayer)
+
+    def UpdateDialogAfterConnection(self):
+        """!Connect to the server
+        """
+        WSDialogBase.UpdateDialogAfterConnection(self)
+
+        if self._getConnectedWS():
+            self.btn_add.SetDefault()
+        else:
+            self.btn_connect.SetDefault()
 
     def OnAddLayer(self, event):
         """!Add web service layer.
@@ -569,6 +588,7 @@ class WSPropertiesDialog(WSDialogBase):
         self._setRevertCapFiles(ws_cap_files)
 
         self.LoadCapFiles(ws_cap_files = self.revert_ws_cap_files, cmd = cmd)
+        self.btn_ok.SetDefault()
 
     def __del__(self):
         for f in self.revert_ws_cap_files.itervalues():
@@ -593,10 +613,10 @@ class WSPropertiesDialog(WSDialogBase):
         self.btn_apply.Enable(False)
         self.run_btns.append(self.btn_apply)
 
-        self.btn_save = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Save"))
-        self.btn_save.SetToolTipString(_("Revert changes"))
-        self.btn_save.Enable(False)
-        self.run_btns.append(self.btn_save)
+        self.btn_ok = wx.Button(parent = self, id = wx.ID_ANY, label = _("&OK"))
+        self.btn_ok.SetToolTipString(_("Apply changes and close dialog"))
+        self.btn_ok.Enable(False)
+        self.run_btns.append(self.btn_ok)
 
     def _doLayout(self):
 
@@ -606,13 +626,13 @@ class WSPropertiesDialog(WSDialogBase):
                           flag = wx.ALL | wx.ALIGN_CENTER,
                           border = 10)
 
-        self.btnsizer.Add(item = self.btn_save, proportion = 0,
+        self.btnsizer.Add(item = self.btn_ok, proportion = 0,
                           flag = wx.ALL | wx.ALIGN_CENTER,
                           border = 10)
 
         # bindings
         self.btn_apply.Bind(wx.EVT_BUTTON, self.OnApply)
-        self.btn_save.Bind(wx.EVT_BUTTON, self.OnSave)
+        self.btn_ok.Bind(wx.EVT_BUTTON, self.OnSave)
 
     def LoadCapFiles(self, ws_cap_files, cmd):
         """!Parse cap files and update dialog.
@@ -677,6 +697,15 @@ class WSPropertiesDialog(WSDialogBase):
         display = self.ltree.GetMapDisplay().GetMapWindow()
         event = gUpdateMap()
         wx.PostEvent(display, event)
+
+    def UpdateDialogAfterConnection(self):
+        """!Connect to the server
+        """
+        WSDialogBase.UpdateDialogAfterConnection(self)
+        if self._getConnectedWS():
+            self.btn_ok.SetDefault()
+        else:
+            self.btn_connect.SetDefault()
 
     def OnApply(self, event):   
         self._apply()
@@ -775,8 +804,8 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.btn_close = wx.Button(parent = self, id = wx.ID_CLOSE)
         self.btn_close.SetToolTipString(_("Close dialog"))
         
-        self.btn_save = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Save layer"))
-        self.btn_save.SetToolTipString(_("Add web service layer"))     
+        self.btn_ok = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Save layer"))
+        self.btn_ok.SetToolTipString(_("Add web service layer"))     
 
         # statusbar
         self.statusbar = wx.StatusBar(parent = self, id = wx.ID_ANY)
@@ -817,7 +846,7 @@ class SaveWMSLayerDialog(wx.Dialog):
                           flag = wx.ALL | wx.ALIGN_CENTER,
                           border = 10)
         
-        self.btnsizer.Add(item = self.btn_save, proportion = 0,
+        self.btnsizer.Add(item = self.btn_ok, proportion = 0,
                           flag = wx.ALL | wx.ALIGN_CENTER,
                           border = 10)
 
@@ -835,7 +864,7 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         # bindings
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
-        self.btn_save.Bind(wx.EVT_BUTTON, self.OnSave)
+        self.btn_ok.Bind(wx.EVT_BUTTON, self.OnSave)
 
         self.Bind(EVT_CMD_DONE,   self.OnCmdDone)
         self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
