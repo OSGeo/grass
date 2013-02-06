@@ -1395,12 +1395,13 @@ static void append_error(const char *msg)
 }
 
 /*!
-  \brief Get separator from the option.
+  \brief Get separator string from the option.
 
-  Calls G_fatal_error() on error.
+  Calls G_fatal_error() on error. Allocated string can be later freed
+  by G_free().
   
   \code
-  char fs;
+  char *fs;
   struct Option *opt_fs;
   
   opt_fs = G_define_standard_option(G_OPT_F_SEP);
@@ -1413,31 +1414,30 @@ static void append_error(const char *msg)
 
   \param option pointer to separator option
   
-  \return character to be used as separator
+  \return allocated string with separator
 */
-char G_option_to_separator(const struct Option *option)
+char* G_option_to_separator(const struct Option *option)
 {
-    char sep;
+    char* sep;
     
     if (option->answer == NULL)
         G_fatal_error(_("No separator given"));
 
     if (strcmp(option->answer, "space") == 0)
-        sep = ' ';
+	sep = G_store(" ");
     else if (strcmp(option->answer, "tab") == 0 ||
              strcmp(option->answer, "\\t") == 0)
-        sep = '\t';
+        sep = G_store("\t");
     else if (strcmp(option->answer, "newline") == 0)
-        sep = '\n';
+        sep = G_store("\n");
     else if (strcmp(option->answer, "comma") == 0)
-        sep = ',';
+        sep = G_store(",");
     else {
-        if (strlen(option->answer) > 1)
-            G_warning(_("Option <%s>: '%s' is too long, using only first character '%c'"),
-                      option->key, option->answer, option->answer[0]);
-        
-        sep = option->answer[0];
+        sep = G_store(option->answer);
     }
-
+    
+    G_debug(1, "G_option_to_separator(): key = %s -> sep = '%s'",
+	    option->key, sep);
+    
     return sep;
 }
