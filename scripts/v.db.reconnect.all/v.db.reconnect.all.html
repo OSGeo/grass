@@ -92,6 +92,22 @@ reconnecting the vector maps use <b>-d</b> flag. Note that attribute
 tables will be deleted <i>permanently</i> from the source
 database. This option should be used very carefully!
 
+
+<h3>Convert GRASS 6 vector map to GRASS 7 including attribute transfer from DBF to SQLite</h3>
+
+To become usable in GRASS 7, all vector maps in a mapset need to be updated:
+
+<div class="code"><pre>
+# first build new topology
+v.build.all
+
+# set new default db connection (to SQLite default)
+db.connect -d
+
+# copy attribute tables from old db to new db, delete old tables in DBF format
+v.db.reconnect.all -cd
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
