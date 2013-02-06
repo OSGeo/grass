@@ -5,7 +5,8 @@ Dear (new) GRASS developer,
 when submitting Python code to GRASS SVN repository, please take
 care of following rules:
 
-[ see SUBMITTING      for C hints ]
+[ see SUBMITTING for C hints ]
+[ see SUBMITTING_WXGUI for wxPython GUI code hints ]
 [ see SUBMITTING_DOCS for documentation ]
 
 See also http://www.python.org/dev/peps/pep-0008/
@@ -148,58 +149,27 @@ COPYRIGHT: (C) 2007 John Doe, and by the GRASS Development Team
       svn:ignore : *.pyc
 
     or e.g. for Python file
-    
+
       svn:mime-type : text/python
       svn:keywords : Author Date Id
       svn:eol-style : native
+
+      svn propset svn:mime-type text/python new/file.py
+      svn propset svn:keywords "Author Date Id" new/file.py
+      svn propset svn:eol-style native new/file.py
 
     See
     http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html
 
 
-13. wxGUI (gui/wxpython)
-
-    See http://wiki.wxpython.org/wxPython_Style_Guide
-
-    Major rules:
-
-    - use named parameters in functions, e.g. 
-
-    dlg = wx.FileDialog(parent = self, message = _("Choose file to save current workspace"),
-                        wildcard = _("GRASS Workspace File (*.gxw)|*.gxw"), style = wx.FD_SAVE)
-
-    instead of
-
-    dlg = wx.FileDialog(self, _("Choose file to save current workspace"),
-                        _("GRASS Workspace File (*.gxw)|*.gxw"), wx.FD_SAVE)
-
-    - use wx.ID_ANY instead of `-1`
-
-    - use gcmd.GError(), gcmd.GWarning and gcmd.GMessage instead of wx.MessageBox()
-
-    - use gcmd.RunCommand() instead of grass.run_command() or grass.read_command() 
-
-    - use full strings, eg.
-
-      if ...:
-          win.SetLabel(_('Name for new 3D raster map to create'))
-      else:
-          win.SetLabel(_('Name for new raster map to create'))
-
-      instead of
-
-      _('Name for new %s to create') % maplabel
-
-      where `maplabel` can be 'raster map' or '3D raster map'
-
-14. Tell the other developers about the new code using the following e-mail:
+13. Tell the other developers about the new code using the following e-mail:
     grass-dev@lists.osgeo.org
  
     To subscribe to this mailing list, see
     http://lists.osgeo.org/mailman/listinfo/grass-dev
 
 
-15. In case of questions feel free to contact the developers at the above
+14. In case of questions feel free to contact the developers at the above
     mailing list.
     http://grass.osgeo.org/devel/index.php#submission
 

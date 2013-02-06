@@ -5,7 +5,8 @@ Dear (new) GRASS developer,
 when submitting documentation to GRASS SVN repository, please take
 care of following rules:
 
-[ see SUBMITTING        for C hints ]
+[ see SUBMITTING for C hints ]
+[ see SUBMITTING_WXGUI for wxPython GUI code hints ]
 [ see SUBMITTING_PYTHON for Python code hints ]
 
 

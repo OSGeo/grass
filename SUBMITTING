@@ -5,8 +5,9 @@ Dear (new) GRASS developer,
 when submitting C code to GRASS SVN repository, please take care of
 following rules:
 
-[ see also SUBMITTING_PYTHON for Python code hints ]
-[ see alse SUBMITTING_DOCS   for documentation ]
+[ see SUBMITTING_PYTHON for Python code hints ]
+[ see SUBMITTING_WXGUI for wxPython GUI code hints ]
+[ see SUBMITTING_DOCS for documentation ]
 
 1.  Get and read the GRASS Programmer's Manual here:
     http://grass.osgeo.org/programming7/
