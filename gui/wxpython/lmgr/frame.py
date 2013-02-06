@@ -87,33 +87,32 @@ class GMFrame(wx.Frame):
         self.parent    = parent
         self.baseTitle = title
         self.iconsize  = (16, 16)
-        
-        wx.Frame.__init__(self, parent = parent, id = id, size = size,
-                          style = style, **kwargs)
-                          
-        self.SetTitle(self.baseTitle)
-        self.SetName("LayerManager")
 
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
-
-        self._giface = LayerManagerGrassInterface(self)
-
-        self._auimgr = wx.aui.AuiManager(self)
-
-        # initialize variables
-        self.displayIndex      = 0            # index value for map displays and layer trees
-        self.currentPage     = None         # currently selected page for layer tree notebook
-        self.currentPageNum  = None         # currently selected page number for layer tree notebook
+        self.displayIndex    = 0          # index value for map displays and layer trees
+        self.currentPage     = None       # currently selected page for layer tree notebook
+        self.currentPageNum  = None       # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
         self.workspaceChanged = False     # track changes in workspace
         self.gcpmanagement = None         # reference to GCP class or None
+        
+        wx.Frame.__init__(self, parent = parent, id = id, size = size,
+                          style = style, **kwargs)
+        self._setTitle()
+        self.SetName("LayerManager")
+        
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        
+        self._giface = LayerManagerGrassInterface(self)
+        
+        self._auimgr = wx.aui.AuiManager(self)
+        
         
         # list of open dialogs
         self.dialogs        = dict()
         self.dialogs['preferences'] = None
         self.dialogs['atm'] = list()
         
-        # creating widgets
+        # create widgets
         self._createMenuBar()
         self.statusbar = self.CreateStatusBar(number = 1)
         self.notebook  = self._createNoteBook()
@@ -199,7 +198,7 @@ class GMFrame(wx.Frame):
         if self.workspaceFile:
             # load given workspace file
             if self.LoadWorkspaceFile(self.workspaceFile):
-                self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile))
+                self._setTitle()
             else:
                 self.workspaceFile = None
         else:
@@ -223,6 +222,13 @@ class GMFrame(wx.Frame):
         if self.currentPage:
             self.GetMapDisplay().Raise()
         wx.CallAfter(self.Raise)
+
+    def _setTitle(self):
+        """!Set frame title"""
+        if self.workspaceFile:
+            self.SetTitle(self.baseTitle + " - " +  os.path.splitext(os.path.basename(self.workspaceFile))[0])
+        else:
+            self.SetTitle(self.baseTitle)
         
     def _createMenuBar(self):
         """!Creates menu bar"""
@@ -362,7 +368,7 @@ class GMFrame(wx.Frame):
             self.workspaceChanged = True
         
         if self.workspaceFile:
-            self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile) + '*')
+            self._setTitle()
         
     def OnLocationWizard(self, event):
         """!Launch location wizard"""
@@ -1033,7 +1039,7 @@ class GMFrame(wx.Frame):
         # no workspace file loaded
         self.workspaceFile = None
         self.workspaceChanged = False
-        self.SetTitle(self.baseTitle)
+        self._setTitle()
         
     def OnWorkspaceOpen(self, event = None):
         """!Open file with workspace definition"""
@@ -1055,7 +1061,7 @@ class GMFrame(wx.Frame):
         self.LoadWorkspaceFile(filename)
 
         self.workspaceFile = filename
-        self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile))
+        self._setTitle()
 
     def LoadWorkspaceFile(self, filename):
         """!Load layer tree definition stored in GRASS Workspace XML file (gxw)
@@ -1251,7 +1257,7 @@ class GMFrame(wx.Frame):
 
         self.SaveToWorkspaceFile(filename)
         self.workspaceFile = filename
-        self.SetTitle(self.baseTitle + " - " + os.path.basename(self.workspaceFile))
+        self._setTitle()
 
     def OnWorkspaceSave(self, event = None):
         """!Save file with workspace definition"""
@@ -1265,7 +1271,7 @@ class GMFrame(wx.Frame):
             else:
                 Debug.msg(4, "GMFrame.OnWorkspaceSave(): filename=%s" % self.workspaceFile)
                 self.SaveToWorkspaceFile(self.workspaceFile)
-                self.SetTitle(self.baseTitle + " - " + os.path.basename(self.workspaceFile))
+                self._setTitle()
                 self.workspaceChanged = False
         else:
             self.OnWorkspaceSaveAs()
@@ -1308,7 +1314,7 @@ class GMFrame(wx.Frame):
         self.OnDisplayCloseAll()
         self.workspaceFile = None
         self.workspaceChanged = False
-        self.SetTitle(self.baseTitle)
+        self._setTitle()
         self.displayIndex = 0
         self.currentPage = None
         
