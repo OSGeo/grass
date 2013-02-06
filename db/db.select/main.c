@@ -27,7 +27,7 @@
 #include "local_proto.h"
 
 struct {
-    char *driver, *database, *table, *sql, fs, vs, *nv, *input, *output;
+    char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
     int c, d, h, test_only;
 } parms;
 
@@ -141,7 +141,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    if (col)
-		fprintf(stdout, "%c", parms.fs);
+		fprintf(stdout, "%s", parms.fs);
 	    fprintf(stdout, "%s", db_get_column_name(column));
 	}
 	fprintf(stdout, "\n");
@@ -159,9 +159,9 @@ int sel(dbDriver * driver, dbString * stmt)
 	    value = db_get_column_value(column);
 	    db_convert_column_value_to_string(column, &value_string);
 	    if (parms.c && !parms.h)
-		fprintf(stdout, "%s%c", db_get_column_name(column), parms.fs);
+		fprintf(stdout, "%s%s", db_get_column_name(column), parms.fs);
 	    if (col && parms.h)
-		fprintf(stdout, "%c", parms.fs);
+		fprintf(stdout, "%s", parms.fs);
 	    if (parms.nv && db_test_value_isnull(value))
 		fprintf(stdout, "%s", parms.nv);
 	    else
@@ -172,7 +172,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	if (parms.h)
 	    fprintf(stdout, "\n");
 	else if (parms.vs)
-	    fprintf(stdout, "%c\n", parms.vs);
+	    fprintf(stdout, "%s\n", parms.vs);
     }
 
     return OK;
