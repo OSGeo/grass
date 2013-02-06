@@ -191,6 +191,11 @@ class GConsoleWindow(wx.SplitterWindow):
             promptSizer = wx.BoxSizer(wx.VERTICAL)
             promptSizer.Add(item = self.cmdPrompt, proportion = 1,
                         flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
+            helpText = wx.StaticText(self.panelPrompt, id = wx.ID_ANY,
+                                 label = "Press Tab to display command help, Ctrl+Space to autocomplete")
+            helpText.SetForegroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+            promptSizer.Add(item = helpText,
+                            proportion = 0, flag = wx.EXPAND | wx.LEFT, border = 5)
         
         if self._gcstyle & GC_SEARCH:
             outputSizer.Add(item = self.searchPane, proportion = 0,
