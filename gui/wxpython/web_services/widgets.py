@@ -641,7 +641,7 @@ class WSPanel(wx.Panel):
             lcmd.append('-o')
 
             c = self.params['bgcolor'].GetColour()
-            hex_color = wx.Color(c[0], c[1], c[2]).GetAsString(wx.C2S_HTML_SYNTAX)
+            hex_color = wx.Colour(c[0], c[1], c[2]).GetAsString(wx.C2S_HTML_SYNTAX)
             lcmd.append("bgcolor=" + '0x' + hex_color[1:]) 
 
         lcmd.append("map=" + self.o_layer_name)

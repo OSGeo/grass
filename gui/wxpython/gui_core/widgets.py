@@ -402,7 +402,7 @@ class SymbolButton(BitmapTextButton):
         
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
-        maskColor = wx.Color(255, 255, 255)
+        maskColor = wx.Colour(255, 255, 255)
         dc.SetBrush(wx.Brush(maskColor))
         dc.Clear()
         
@@ -422,23 +422,23 @@ class SymbolButton(BitmapTextButton):
         
     def DrawRecord(self, dc, size):
         """!Draw record symbol"""
-        dc.SetBrush(wx.Brush(wx.Color(255, 0, 0)))
+        dc.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
         dc.DrawCircle(size[0]/2, size[1] / 2, size[0] / 2)
         
     def DrawStop(self, dc, size):
         """!Draw stop symbol"""
-        dc.SetBrush(wx.Brush(wx.Color(50, 50, 50)))
+        dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
         dc.DrawRectangle(0, 0, size[0], size[1])
         
     def DrawPlay(self, dc, size):
         """!Draw play symbol"""
-        dc.SetBrush(wx.Brush(wx.Color(0, 255, 0)))
+        dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0)))
         points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
         dc.DrawPolygon(points)
         
     def DrawPause(self, dc, size):
         """!Draw pause symbol"""
-        dc.SetBrush(wx.Brush(wx.Color(50, 50, 50)))
+        dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
         dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
         dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
 

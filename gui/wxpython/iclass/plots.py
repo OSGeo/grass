@@ -170,7 +170,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         minim = bandValues.min
         maxim = bandValues.max
         points = [(minim, level), (maxim, level)]
-        color = wx.Color(*map(int, color.split(':')))
+        color = wx.Colour(*map(int, color.split(':')))
         return plot.PolyLine(points, colour = color, width = 4)
         
     def DrawInvisibleLine(self, level):

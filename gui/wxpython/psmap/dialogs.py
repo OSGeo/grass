@@ -4344,7 +4344,7 @@ class ImageDialog(PsmapDialog):
         buffer = wx.EmptyBitmap(*self.previewSize)
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
-        dc.SetBrush(wx.Brush(wx.Color(250, 250, 250)))
+        dc.SetBrush(wx.Brush(wx.Colour(250, 250, 250)))
         dc.Clear()
         extent = dc.GetTextExtent(warning)
         posX = self.previewSize[0] / 2 - extent[0] / 2

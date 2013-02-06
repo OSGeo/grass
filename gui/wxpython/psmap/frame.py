@@ -89,15 +89,15 @@ class PsMapFrame(wx.Frame):
         self.pen = {
             'paper': wx.Pen(colour = "BLACK", width = 1),
             'margins': wx.Pen(colour = "GREY", width = 1),
-            'map': wx.Pen(colour = wx.Color(86, 122, 17), width = 2),
-            'rasterLegend': wx.Pen(colour = wx.Color(219, 216, 4), width = 2),
-            'vectorLegend': wx.Pen(colour = wx.Color(219, 216, 4), width = 2),
-            'mapinfo': wx.Pen(colour = wx.Color(5, 184, 249), width = 2),
-            'scalebar': wx.Pen(colour = wx.Color(150, 150, 150), width = 2),
-            'image': wx.Pen(colour = wx.Color(255, 150, 50), width = 2),
-            'northArrow': wx.Pen(colour = wx.Color(200, 200, 200), width = 2),
-            'point': wx.Pen(colour = wx.Color(100, 100, 100), width = 2),
-            'line': wx.Pen(colour = wx.Color(0, 0, 0), width = 2),
+            'map': wx.Pen(colour = wx.Colour(86, 122, 17), width = 2),
+            'rasterLegend': wx.Pen(colour = wx.Colour(219, 216, 4), width = 2),
+            'vectorLegend': wx.Pen(colour = wx.Colour(219, 216, 4), width = 2),
+            'mapinfo': wx.Pen(colour = wx.Colour(5, 184, 249), width = 2),
+            'scalebar': wx.Pen(colour = wx.Colour(150, 150, 150), width = 2),
+            'image': wx.Pen(colour = wx.Colour(255, 150, 50), width = 2),
+            'northArrow': wx.Pen(colour = wx.Colour(200, 200, 200), width = 2),
+            'point': wx.Pen(colour = wx.Colour(100, 100, 100), width = 2),
+            'line': wx.Pen(colour = wx.Colour(0, 0, 0), width = 2),
             'box': wx.Pen(colour = 'RED', width = 2, style = wx.SHORT_DASH),
             'select': wx.Pen(colour = 'BLACK', width = 1, style = wx.SHORT_DASH),
             'resize': wx.Pen(colour = 'BLACK', width = 1)
@@ -105,14 +105,14 @@ class PsMapFrame(wx.Frame):
         self.brush = {
             'paper': wx.WHITE_BRUSH,
             'margins': wx.TRANSPARENT_BRUSH,
-            'map': wx.Brush(wx.Color(151, 214, 90)),
-            'rasterLegend': wx.Brush(wx.Color(250, 247, 112)),
-            'vectorLegend': wx.Brush(wx.Color(250, 247, 112)),
-            'mapinfo': wx.Brush(wx.Color(127, 222, 252)),
-            'scalebar': wx.Brush(wx.Color(200, 200, 200)),
-            'image': wx.Brush(wx.Color(255, 200, 50)),
-            'northArrow': wx.Brush(wx.Color(255, 255, 255)),
-            'point': wx.Brush(wx.Color(200, 200, 200)),
+            'map': wx.Brush(wx.Colour(151, 214, 90)),
+            'rasterLegend': wx.Brush(wx.Colour(250, 247, 112)),
+            'vectorLegend': wx.Brush(wx.Colour(250, 247, 112)),
+            'mapinfo': wx.Brush(wx.Colour(127, 222, 252)),
+            'scalebar': wx.Brush(wx.Colour(200, 200, 200)),
+            'image': wx.Brush(wx.Colour(255, 200, 50)),
+            'northArrow': wx.Brush(wx.Colour(255, 255, 255)),
+            'point': wx.Brush(wx.Colour(200, 200, 200)),
             'line': wx.TRANSPARENT_BRUSH,
             'box': wx.TRANSPARENT_BRUSH,
             'select':wx.TRANSPARENT_BRUSH,
@@ -1914,7 +1914,7 @@ class PsMapBufferedWindow(wx.Window):
                 pdc.SetFont(font)
                 textExtent = dc.GetTextExtent(text)
                 textRect = wx.Rect(0, 0, *textExtent).CenterIn(bb)
-            pdc.SetTextForeground(wx.Color(100,100,100,200)) 
+            pdc.SetTextForeground(wx.Colour(100,100,100,200)) 
             pdc.SetBackgroundMode(wx.TRANSPARENT)
             pdc.DrawText(text = text, x = textRect.x, y = textRect.y)
                 

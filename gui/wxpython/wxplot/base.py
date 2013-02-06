@@ -110,7 +110,7 @@ class BasePlotFrame(wx.Frame):
 
 
     def _createColorDict(self):
-        """!Create color dictionary to return wx.Color tuples
+        """!Create color dictionary to return wx.Colour tuples
         for assigning colors to images in imagery groups"""
                 
         self.colorDict = {}
@@ -350,7 +350,7 @@ class BasePlotFrame(wx.Frame):
         #
         self.client.SetEnableGrid(self.properties['grid']['enabled'])
                 
-        self.client.SetGridColour(wx.Color(self.properties['grid']['color'][0],
+        self.client.SetGridColour(wx.Colour(self.properties['grid']['color'][0],
                                            self.properties['grid']['color'][1],
                                            self.properties['grid']['color'][2],
                                            255))
