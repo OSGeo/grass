@@ -46,6 +46,7 @@ from gui_core.toolbars    import BaseIcons
 from icons.icon           import MetaIcon
 from modules.colorrules   import RasterColorTable
 from web_services.dialogs import SaveWMSLayerDialog
+from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 
 
 TREE_ITEM_HEIGHT = 25
@@ -155,7 +156,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # init associated map display
         pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
-        self.mapdisplay = MapFrame(self, giface = self._giface, id = wx.ID_ANY, pos = pos,
+        gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(self.lmgr,
+                                                                   self)
+        self.mapdisplay = MapFrame(self, giface = gifaceForDisplay,
+                                   id = wx.ID_ANY, pos = pos,
                                    size = globalvar.MAP_WINDOW_SIZE,
                                    style = wx.DEFAULT_FRAME_STYLE,
                                    tree = self, notebook = self.notebook,
