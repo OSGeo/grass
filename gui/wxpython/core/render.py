@@ -14,7 +14,7 @@ Classes:
  - render::Overlay
  - render::Map
 
-(C) 2006-2012 by the GRASS Development Team
+(C) 2006-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -578,15 +578,18 @@ class Map(object):
     def ChangeMapSize(self, (width, height)):
         """!Change size of rendered map.
         
-        @param width,height map size
+        @param width,height map size given as tuple
         """
         try:
             self.width  = int(width)
             self.height = int(height)
+            if self.width < 1 or self.height < 1:
+                sys.stderr.write(_("Invalid map size %d,%d\n") % (self.width, self.height))
+                raise ValueError
         except ValueError:
             self.width  = 640
             self.height = 480
-
+        
         Debug.msg(2, "Map.ChangeMapSize(): width=%d, height=%d" % \
                       (self.width, self.height))
         
