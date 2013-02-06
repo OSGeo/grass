@@ -31,6 +31,7 @@ int execute_random(struct rr_state *theState)
     struct line_cats *Cats;
     int cat;
     RASTER_MAP_TYPE type;
+    int do_check;
 
     G_get_window(&window);
 
@@ -130,9 +131,17 @@ int execute_random(struct rr_state *theState)
 	}
 
 	for (col = 0; col < ncols && nt; col++) {
-	    if ((theState->use_nulls || !is_null_value(theState->buf, col)) &&
-		(!theState->docover || theState->use_nulls || !is_null_value(theState->cover, col)) &&
-		(make_rand() % nc < nt)) {
+	    do_check = 0;
+
+	    if (theState->use_nulls || !is_null_value(theState->buf, col))
+		do_check = 1;
+	    if (do_check && theState->docover == TRUE) {	/* skip no data cover points */
+		if (!theState->use_nulls &&
+		    is_null_value(theState->cover, col))
+		    do_check = 0;
+	    }
+
+	    if (do_check && make_rand() % nc < nt) {
 		nt--;
 		if (is_null_value(theState->buf, col))
 		    cpvalue(&theState->nulls, 0, &theState->buf, col);
@@ -184,14 +193,15 @@ int execute_random(struct rr_state *theState)
 		    cat++;
 		}
 		G_percent((theState->nRand - nt), theState->nRand, 2);
-
-		nc--;
 	    }
 	    else {
 		set_to_null(&theState->buf, col);
 		if (theState->docover == 1)
 		    set_to_null(&theState->cover, col);
 	    }
+
+	    if (do_check)
+		nc--;
 	}
 
 	while (col < ncols) {
