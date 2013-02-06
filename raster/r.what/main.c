@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     struct _flg {
 	struct Flag *label, *cache, *cat_int, *color, *header;
     } flg;
-    char fs;
+    char *fs;
     int Cache_size;
     int done = FALSE;
     int point, point_cnt;
@@ -230,19 +230,19 @@ int main(int argc, char *argv[])
 
     /* print header row */
     if(flg.header->answer) {
-	fprintf(stdout, "easting%cnorthing%csite_name", fs, fs);
+	fprintf(stdout, "easting%snorthing%ssite_name", fs, fs);
 
 	ptr = opt.input->answers;
 	for (; *ptr != NULL; ptr++) {
 	    char name[GNAME_MAX];
 	    strcpy(name, *ptr);
 
-	    fprintf(stdout, "%c%s", fs, name);
+	    fprintf(stdout, "%s%s", fs, name);
 
 	    if (flg.label->answer)
-		fprintf(stdout, "%c%s_label", fs, name);
+		fprintf(stdout, "%s%s_label", fs, name);
 	    if (flg.color->answer)
-		fprintf(stdout, "%c%s_color", fs, name);
+		fprintf(stdout, "%s%s_color", fs, name);
 	}
 
 	fprintf(stdout, "\n");
@@ -427,29 +427,29 @@ int main(int argc, char *argv[])
 		    cache[point].col, cache[point].row);
 
 
-	    fprintf(stdout, "%s%c%s%c%s", cache[point].east_buf, fs,
+	    fprintf(stdout, "%s%s%s%s%s", cache[point].east_buf, fs,
 		    cache[point].north_buf, fs, cache[point].lab_buf);
 
 	    for (i = 0; i < nfiles; i++) {
 		if (out_type[i] == CELL_TYPE) {
 		    if (Rast_is_c_null_value(&cache[point].value[i])) {
-			fprintf(stdout, "%c%s", fs, null_str);
+			fprintf(stdout, "%s%s", fs, null_str);
 			if (flg.label->answer)
-			    fprintf(stdout, "%c", fs);
+			    fprintf(stdout, "%s", fs);
 			if (flg.color->answer)
-			    fprintf(stdout, "%c", fs);
+			    fprintf(stdout, "%s", fs);
 			continue;
 		    }
-		    fprintf(stdout, "%c%ld", fs, (long)cache[point].value[i]);
+		    fprintf(stdout, "%s%ld", fs, (long)cache[point].value[i]);
 		}
 		else {		/* FCELL or DCELL */
 
 		    if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
-			fprintf(stdout, "%c%s", fs, null_str);
+			fprintf(stdout, "%s%s", fs, null_str);
 			if (flg.label->answer)
-			    fprintf(stdout, "%c", fs);
+			    fprintf(stdout, "%s", fs);
 			if (flg.color->answer)
-			    fprintf(stdout, "%c", fs);
+			    fprintf(stdout, "%s", fs);
 			continue;
 		    }
 		    if (out_type[i] == FCELL_TYPE)
@@ -457,13 +457,13 @@ int main(int argc, char *argv[])
 		    else /* DCELL */
 			sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
 		    G_trim_decimal(tmp_buf); /* not needed with %g? */
-		    fprintf(stdout, "%c%s", fs, tmp_buf);
+		    fprintf(stdout, "%s%s", fs, tmp_buf);
 		}
 		if (flg.label->answer)
-		    fprintf(stdout, "%c%s", fs,
+		    fprintf(stdout, "%s%s", fs,
 			    Rast_get_c_cat(&(cache[point].value[i]), &cats[i]));
 		if (flg.color->answer)
-		    fprintf(stdout, "%c%s", fs, cache[point].clr_buf[i]);
+		    fprintf(stdout, "%s%s", fs, cache[point].clr_buf[i]);
 	    }
 	    fprintf(stdout, "\n");
 	}

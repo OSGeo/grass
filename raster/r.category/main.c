@@ -25,14 +25,14 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-static char fs = '\t';
 static struct Categories cats;
-
+static char *fs;
 
 int main(int argc, char *argv[])
 {
     const char *name;
     const char *mapset;
+
     long x, y;
     double dx;
     RASTER_MAP_TYPE map_type;
@@ -287,7 +287,7 @@ int print_label(long x)
     char *label;
 
     G_squeeze(label = Rast_get_c_cat((CELL *) &x, &cats));
-    fprintf(stdout, "%ld%c%s\n", x, fs, label);
+    fprintf(stdout, "%ld%s%s\n", x, fs, label);
 
     return 0;
 }
@@ -301,7 +301,7 @@ int print_d_label(double x)
     G_squeeze(label = Rast_get_d_cat(&dtmp, &cats));
     sprintf(tmp, "%.10f", x);
     G_trim_decimal(tmp);
-    fprintf(stdout, "%s%c%s\n", tmp, fs, label);
+    fprintf(stdout, "%s%s%s\n", tmp, fs, label);
 
     return 0;
 }

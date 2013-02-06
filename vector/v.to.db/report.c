@@ -25,9 +25,9 @@ int report(void)
     case O_COUNT:
         if (options.print) {
             if (G_verbose() > G_verbose_min())
-                fprintf(stdout, "cat%ccount\n", options.fs);
+                fprintf(stdout, "cat%scount\n", options.fs);
             for (i = 0; i < vstat.rcat; i++)
-                fprintf(stdout, "%d%c%d\n", Values[i].cat, options.fs, Values[i].count1);
+                fprintf(stdout, "%d%s%d\n", Values[i].cat, options.fs, Values[i].count1);
         }
 	if (options.total) {
 	    int sum = 0;
@@ -35,16 +35,16 @@ int report(void)
 	    for (i = 0; i < vstat.rcat; i++) {
 		sum += Values[i].count1;
 	    }
-	    fprintf(stdout, "total count%c%d\n", options.fs, sum);
+	    fprintf(stdout, "total count%s%d\n", options.fs, sum);
 	}
 	break;
 
     case O_AREA:
         if (options.print) {
             if (G_verbose() > G_verbose_min())
-                fprintf(stdout, "cat%carea\n", options.fs);
+                fprintf(stdout, "cat%sarea\n", options.fs);
             for (i = 0; i < vstat.rcat; i++)
-                fprintf(stdout, "%d%c%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+                fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
         }
 	if (options.total) {
 	    double sum = 0.0;
@@ -52,30 +52,30 @@ int report(void)
 	    for (i = 0; i < vstat.rcat; i++) {
 		sum += Values[i].d1;
 	    }
-	    fprintf(stdout, "total area%c%.15g\n", options.fs, sum);
+	    fprintf(stdout, "total area%s%.15g\n", options.fs, sum);
 	}
 	break;
 
     case O_COMPACT:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%ccompact\n", options.fs);
+	    fprintf(stdout, "cat%scompact\n", options.fs);
 	for (i = 0; i < vstat.rcat; i++)
-	    fprintf(stdout, "%d%c%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
 	break;
 
     case O_PERIMETER:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%cperimeter\n", options.fs);
+	    fprintf(stdout, "cat%sperimeter\n", options.fs);
 	for (i = 0; i < vstat.rcat; i++)
-	    fprintf(stdout, "%d%c%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
 	break;
 
     case O_LENGTH:
         if (options.print) {
             if (G_verbose() > G_verbose_min())
-                fprintf(stdout, "cat%clength\n", options.fs);
+                fprintf(stdout, "cat%slength\n", options.fs);
             for (i = 0; i < vstat.rcat; i++)
-                fprintf(stdout, "%d%c%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+                fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
         }
 	if (options.total) {
 	    double sum = 0.0;
@@ -83,38 +83,38 @@ int report(void)
 	    for (i = 0; i < vstat.rcat; i++) {
 		sum += Values[i].d1;
 	    }
-	    fprintf(stdout, "total length%c%.15g\n", options.fs, sum);
+	    fprintf(stdout, "total length%s%.15g\n", options.fs, sum);
 	}
 	break;
     case O_SLOPE:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%cslope\n", options.fs);
+	    fprintf(stdout, "cat%sslope\n", options.fs);
 	for (i = 0; i < vstat.rcat; i++)
-	    fprintf(stdout, "%d%c%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
 
 
 	break;
     case O_SINUOUS:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%csinuous\n", options.fs);
+	    fprintf(stdout, "cat%ssinuous\n", options.fs);
 	for (i = 0; i < vstat.rcat; i++)
-	    fprintf(stdout, "%d%c%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
 	break;
     case O_COOR:
     case O_START:
     case O_END:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%cx%cy%cz\n", options.fs, options.fs, options.fs);
+	    fprintf(stdout, "cat%sx%sy%sz\n", options.fs, options.fs, options.fs);
 	for (i = 0; i < vstat.rcat; i++) {
 	    if (Values[i].count1 == 1)
-		fprintf(stdout, "%d%c%.15g%c%.15g%c%.15g\n", Values[i].cat, options.fs,
+		fprintf(stdout, "%d%s%.15g%s%.15g%s%.15g\n", Values[i].cat, options.fs,
 			Values[i].d1, options.fs, Values[i].d2, options.fs, Values[i].d3);
 	}
 	break;
 
     case O_SIDES:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%cleft%cright\n", options.fs, options.fs);
+	    fprintf(stdout, "cat%sleft%sright\n", options.fs, options.fs);
 	for (i = 0; i < vstat.rcat; i++) {
 	    if (Values[i].count1 == 1) {
 		if (Values[i].i1 >= 0)
@@ -145,13 +145,13 @@ int report(void)
 		sprintf(right, "-");
 	    }
 
-	    fprintf(stdout, "%d%c%s%c%s\n", Values[i].cat, options.fs, left, options.fs, right);
+	    fprintf(stdout, "%d%s%s%s%s\n", Values[i].cat, options.fs, left, options.fs, right);
 	}
 	break;
 
     case O_QUERY:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%cquery\n", options.fs);
+	    fprintf(stdout, "cat%squery\n", options.fs);
 	for (i = 0; i < vstat.rcat; i++) {
 	    if (Values[i].null) {
 		fprintf(stdout, "%d|-\n", Values[i].cat);
@@ -159,13 +159,13 @@ int report(void)
 	    else {
 		switch (vstat.qtype) {
 		case (DB_C_TYPE_INT):
-		    fprintf(stdout, "%d%c%d\n", Values[i].cat, options.fs, Values[i].i1);
+		    fprintf(stdout, "%d%s%d\n", Values[i].cat, options.fs, Values[i].i1);
 		    break;
 		case (DB_C_TYPE_DOUBLE):
-		    fprintf(stdout, "%d%c%15g\n", Values[i].cat, options.fs, Values[i].d1);
+		    fprintf(stdout, "%d%s%15g\n", Values[i].cat, options.fs, Values[i].d1);
 		    break;
 		case (DB_C_TYPE_STRING):
-		    fprintf(stdout, "%d%c%s\n", Values[i].cat, options.fs, Values[i].str1);
+		    fprintf(stdout, "%d%s%s\n", Values[i].cat, options.fs, Values[i].str1);
 		    break;
 		}
 	    }
@@ -173,9 +173,9 @@ int report(void)
 	break;
     case O_AZIMUTH:
 	if (G_verbose() > G_verbose_min())
-	    fprintf(stdout, "cat%cazimuth\n", options.fs);
+	    fprintf(stdout, "cat%sazimuth\n", options.fs);
 	for (i = 0; i < vstat.rcat; i++)
-		fprintf(stdout, "%d%c%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+		fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
 	break;
     }
 
