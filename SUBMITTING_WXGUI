@@ -1,0 +1,156 @@
+NOTE: Please improve this list!
+
+Dear (new) GRASS developer,
+
+when submitting Python code to GRASS SVN repository, please take
+care of following rules:
+
+[ see SUBMITTING for C hints ]
+[ see SUBMITTING_PYTHON for Python code hints ]
+[ see SUBMITTING_DOCS for documentation ]
+
+
+0.  Introduction
+
+    For general GRASS, svn and Python issues and module related issues see
+    SUBMITTING_PYTHON and SUBMITTING.
+
+    GUI is divided into components. One component is usually placed in one
+    directory.
+
+
+1.  GRASS documentation
+
+    GRASS Programming manual for API and existing classes
+    http://grass.osgeo.org/programming7/wxpythonlib.html
+
+    GRASS wiki has pages about how to develop wxGUI
+    http://grasswiki.osgeo.org
+
+    GRASS Trac wiki has pages about the state of wxGUI development
+    http://trac.osgeo.org/grass/wiki/wxGUIDevelopment
+
+
+2.  External documentation
+
+    Style Guide for Python Code
+    http://www.python.org/dev/peps/pep-0008/
+
+    Python Style Guide by Guido van Rossum
+    http://www.python.org/doc/essays/styleguide.html
+
+    wxPython Style Guide
+    http://wiki.wxpython.org/wxPython_Style_Guide
+
+    Additional info on Python docstrings
+    http://epydoc.sourceforge.net/docstrings.html
+
+
+3.  Remember that functionality such as generating plots should be primarily
+    provided by modules not GUI.
+
+
+4.  Try to create create also g.gui.* module for the new GUI component. It helps
+    advanced users to access functionality and developers to test it. Moreover,
+    it helps to keep components separated and thus, supports re-usability.
+
+
+5.  Add a header section to each file you submit and make sure you
+    include the copyright. The purpose section is meant to contain a
+    general over view of the code in the file to assist other
+    programmers that will need to make changes to your code. For this
+    purpose use Python docstring.
+
+    The copyright protects your rights according to GNU General Public
+    License (www.gnu.org).
+
+    Please use the following docstring template:
+
+    """!
+    @package dir.example
+
+    @brief Short example package description
+
+    Classes:
+     - example::ExampleClass
+
+    (C) 2012 by the GRASS Development Team
+
+    This program is free software under the GNU General Public License
+    (>=v2). Read the file COPYING that comes with GRASS for details.
+
+    @author First Author <first somewhere.com>
+    @author Second Author <second somewhere.com>
+    @author Some Other <third somewhere.com> (some particular change)
+    """
+
+
+6.  Comment your classes and functions with docstrings. Use Doxygen syntax,
+    particularly, use commands which begins with @
+    (www.doxygen.org/manual/commands.html).
+
+    Comment also the code itself such as the meaning of variables,
+    conditions etc.
+
+
+7.  Make sure a new line is at the end of each file. Non empty line breaks the
+    build process.
+
+
+8.  Basic rules
+
+    Do not use print command unless you know what are you doing.
+
+    Use named parameters in functions, e.g.
+
+    dlg = wx.FileDialog(parent=self, message=_("Choose file to save current workspace"),
+                        wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"), style = wx.FD_SAVE)
+
+    instead of
+
+    dlg = wx.FileDialog(self, _("Choose file to save current workspace"),
+                        _("GRASS Workspace File (*.gxw)|*.gxw"), wx.FD_SAVE)
+
+    Use wx.ID_ANY instead of `-1`.
+
+    Use GError, GWarning and GMessage instead of wx.MessageBox()
+
+    Do not use grass.run_command() or grass.read_command(). Use functions and
+    classes which uses threads such as RunCommand.
+
+    Use full strings, e.g.
+
+      if ...:
+          win.SetLabel(_('Name for new 3D raster map to create'))
+      else:
+          win.SetLabel(_('Name for new raster map to create'))
+
+      instead of
+
+      _('Name for new %s to create') % maplabel
+
+      where `maplabel` can be 'raster map' or '3D raster map'
+
+
+9.  Use tools such as pylint and pep8 to check your code (both style and
+    correctness). Just note that default settings of these tools is not fully
+    compatible with wxGUI/wxPython style and that some of the reported errors
+    may not apply to your code.
+
+
+14. Tell the other developers about the new code using the following e-mail:
+    grass-dev@lists.osgeo.org
+ 
+    To subscribe to this mailing list, see
+    http://lists.osgeo.org/mailman/listinfo/grass-dev
+
+
+15. In case of questions feel free to contact the other developers at the above
+    mailing list.
+    http://grass.osgeo.org/devel/index.php#submission
+
+
+[please add further hints if required]
+
+
+"Your attention to detail is appreciated."
