@@ -909,7 +909,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'invalid'))
         
-        wxColor = wx.Color(color[0], color[1], color[2])
+        wxColor = wx.Colour(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
         
     def _setPen(self):
@@ -1211,7 +1211,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         else:
             color = UserSettings.Get(group = 'modeler', key = 'action',
                                      subkey = ('color', 'invalid'))
-        wxColor = wx.Color(color[0], color[1], color[2])
+        wxColor = wx.Colour(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
         
     def _setPen(self):
@@ -1403,7 +1403,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
             color = UserSettings.Get(group='modeler', key='loop',
                                      subkey=('color', 'valid'))
         
-        wxColor = wx.Color(color[0], color[1], color[2])
+        wxColor = wx.Colour(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
 
     def Enable(self, enabled = True):

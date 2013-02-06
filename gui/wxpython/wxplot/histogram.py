@@ -191,7 +191,7 @@ class Histogram2Frame(BasePlotFrame):
 
         for r in self.rasterList:
             if len(self.raster[r]['datalist']) > 0:
-                col = wx.Color(self.raster[r]['pcolor'][0],
+                col = wx.Colour(self.raster[r]['pcolor'][0],
                                self.raster[r]['pcolor'][1],
                                self.raster[r]['pcolor'][2],
                                255)

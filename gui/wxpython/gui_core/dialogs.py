@@ -98,7 +98,7 @@ class SimpleDialog(wx.Dialog):
 
     def ValidatorCallback(self, win):
         GMessage(parent = self, message = self.warning)
-        # self.informLabel.SetForegroundColour(wx.Color(255, 0, 0))
+        # self.informLabel.SetForegroundColour(wx.Colour(255, 0, 0))
         # self.informLabel.SetLabel(self.warning)
 
 

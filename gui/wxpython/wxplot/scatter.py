@@ -215,7 +215,7 @@ class ScatterFrame(BasePlotFrame):
                 self.raster[rpair]['datalist'] == None: return
             
             if len(self.raster[rpair]['datalist']) > 0:
-                col = wx.Color(self.raster[rpair]['pcolor'][0],
+                col = wx.Colour(self.raster[rpair]['pcolor'][0],
                                self.raster[rpair]['pcolor'][1],
                                self.raster[rpair]['pcolor'][2],
                                255)

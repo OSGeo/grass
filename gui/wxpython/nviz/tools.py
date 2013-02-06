@@ -3227,14 +3227,14 @@ class NvizToolWindow(FN.FlatNotebook):
         return str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
     
     def _getColorFromString(self, color, delim = ':'):
-        """!Convert color string (R:G:B) to wx.Color
+        """!Convert color string (R:G:B) to wx.Colour
 
         @param color string
         @param delim delimiter
 
-        @return wx.Color instance
+        @return wx.Colour instance
         """
-        return wx.Color(*map(int, color.split(delim)))
+        return wx.Colour(*map(int, color.split(delim)))
     
     def _get3dRange(self, name):
         """!Gelper func for getting range of 3d map"""
