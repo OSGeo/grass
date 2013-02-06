@@ -133,7 +133,7 @@ class Attrs(object):
         self.cond = "%s=%d" % (self.table.key, self.line)
         self.writable = writable
 
-    def __getitem__(self, *args):
+    def __getitem__(self, key):
         """Return the value stored in the attribute table. ::
 
             >>> from grass.pygrass.vector import VectorTopo
@@ -147,12 +147,11 @@ class Attrs(object):
 
         """
         #SELECT {cols} FROM {tname} WHERE {condition};
-        cols = args if isinstance(args[0], str) else args[0]
-        cur = self.table.execute(sql.SELECT_WHERE.format(cols=','.join(cols),
+        cur = self.table.execute(sql.SELECT_WHERE.format(key,
                                                          tname=self.table.name,
                                                          condition=self.cond))
         results = cur.fetchone()
-        return results[0] if len(cols) == 1 else results
+        return results[0]
 
     def __setitem__(self, key, value):
         """Set value of a given column of a table attribute. ::
