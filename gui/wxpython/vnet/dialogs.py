@@ -359,11 +359,11 @@ class VNETDialog(wx.Dialog):
         selPanels = {}
         for dataSel in dataSelects:
             selPanels[dataSel[0]] = wx.Panel(parent = dataPanel)
-            if dataSel[0] == 'input' and self.mapWin.tree:
-                self.inputData[dataSel[0]] = dataSel[2](parent = selPanels[dataSel[0]],  
+            if dataSel[0] == 'input':
+                self.inputData[dataSel[0]] = dataSel[2](parent = selPanels[dataSel[0]],
                                                         size = (-1, -1), 
                                                         type = 'vector')
-
+            if dataSel[0] == 'input' and self.mapWin.tree:
                 icon = wx.Image(os.path.join(globalvar.ETCICONDIR, "grass", "layer-vector-add.png"))
                 icon.Rescale(18, 18)
                 icon = wx.BitmapFromImage(icon) 
@@ -373,7 +373,7 @@ class VNETDialog(wx.Dialog):
                 self.addToTreeBtn.SetToolTipString(_("Add vector map into layer tree"))
                 self.addToTreeBtn.Disable()
                 self.addToTreeBtn.Bind(wx.EVT_BUTTON, self.OnToTreeBtn)
-            else:
+            elif dataSel[0] != 'input':
                 self.inputData[dataSel[0]] = dataSel[2](parent = selPanels[dataSel[0]],  
                                                         size = (-1, -1))
             label[dataSel[0]] =  wx.StaticText(parent =  selPanels[dataSel[0]], 
@@ -2444,10 +2444,10 @@ class VectMap:
         if self.renderLayer:       
              self.DeleteRenderLayer()
 
-        self.renderLayer = self.parent.mapWin.Map.AddLayer(type = "vector",  command = cmd,
-                                                           l_active=True,    name = self.fullName, 
-                                                           l_hidden = True,  l_opacity = 1.0, 
-                                                           l_render = False,  pos = -1)
+        self.renderLayer = self.parent.mapWin.Map.AddLayer(ltype = "vector",     command = cmd,
+                                                           name = self.fullName, active = True,
+                                                           opacity = 1.0,        render = True,       
+                                                           pos = -1)
         return True
 
     def DeleteRenderLayer(self):
