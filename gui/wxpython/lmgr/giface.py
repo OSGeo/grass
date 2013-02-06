@@ -105,3 +105,25 @@ class LayerManagerGrassInterface(object):
 
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()
+
+
+class LayerManagerGrassInterfaceForMapDisplay(LayerManagerGrassInterface):
+    """!Provides reference only to the given layer list (according to tree),
+        not to the current.
+    """
+    def __init__(self, lmgr, tree):
+        """!
+        @lmgr layer manager
+        @tree tree which will be used instead of the lmgr.tree
+        """
+        LayerManagerGrassInterface.__init__(self, lmgr)
+        self.tree = tree
+
+    def GetLayerTree(self):
+        return self.tree
+
+    def GetLayerList(self):
+        return LayerList(self.tree)
+
+    def GetMapWindow(self):
+        return self.tree.GetMapDisplay()
