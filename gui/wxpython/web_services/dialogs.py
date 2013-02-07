@@ -32,7 +32,7 @@ from core             import globalvar
 from core.debug       import Debug
 from core.ws          import RenderWMSMgr
 from core.events      import gUpdateMap
-from core.gcmd        import GMessage, RunCommand, GWarning
+from core.gcmd        import GMessage, GWarning, GError, RunCommand
 from core.utils       import GetSettingsPath, CmdToTuple, CmdTupleToList
 from core.gconsole    import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
@@ -74,6 +74,9 @@ class WSDialogBase(wx.Dialog):
 
         # buttons which are disabled when the dialog is not connected
         self.run_btns = []
+
+        # stores error messages for GError dialog showed when all web service connections were unsuccessful
+        self.error_msgs = ''
 
         self._createWidgets()
         self._doLayout()
@@ -372,9 +375,18 @@ class WSDialogBase(wx.Dialog):
         # how many web service panels are finished
         self.finished_panels_num +=  1
 
+        if event.error_msg:
+            self.error_msgs += '\n' + event.error_msg
+
         # if all are finished, show panels, which succeeded in connection
         if self.finished_panels_num == len(self.ws_panels):
             self.UpdateDialogAfterConnection()
+
+            # show error dialog only if connections to all web services were unsuccessful
+            if not self._getConnectedWS() and self.error_msgs:
+                GError(self.error_msgs, parent = self)
+            self.error_msgs = ''
+
             self.Layout()
             self.Fit()
 
@@ -464,7 +476,7 @@ class WSDialogBase(wx.Dialog):
         self.Fit()
 
 class AddWSDialog(WSDialogBase):
-    """!Show web service layer."""
+    """!Dialog for adding web service layer."""
     def __init__(self, parent, gmframe, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
 
@@ -548,7 +560,7 @@ class AddWSDialog(WSDialogBase):
                          params = None, propwin = prop_win)
 
 class WSPropertiesDialog(WSDialogBase):
-    """!Show web service property."""
+    """!Dialog for editing web service properties."""
     def __init__(self, parent, layer, ltree, ws_cap_files, cmd, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """

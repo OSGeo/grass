@@ -6,7 +6,7 @@ List of classes:
  - wms_base::GRASSImporter
  - wms_base::WMSDriversInfo
 
-(C) 2012 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -195,9 +195,14 @@ class WMSBase:
             cap = self._fetchDataFromServer(cap_url, options['username'], options['password'])
         except (IOError, HTTPException), e:
             if urllib2.HTTPError == type(e) and e.code == 401:
-                grass.fatal(_("Authorization failed to '%s' when fetching capabilities.") % options['url'])
+                grass.fatal(_("Authorization failed to <%s> when fetching capabilities") % options['url'])
             else:
-                grass.fatal(_("Unable to fetch capabilities from: '%s'") % options['url'])
+                msg = _("Unable to fetch capabilities from <%s>") % (options['url'])
+                
+                if hasattr(e, 'reason'):
+                    msg += _("\nReason: ") + e.reason
+                
+                grass.fatal(msg)
         
         return cap
 
@@ -208,7 +213,11 @@ class WMSBase:
         if username and password:
                     base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
                     request.add_header("Authorization", "Basic %s" % base64string)
-        return urllib2.urlopen(request)
+        
+        try:
+            return urllib2.urlopen(request)
+        except ValueError as error:
+            grass.fatal("%s" % error)
 
     def GetCapabilities(self, options): 
         """!Get capabilities from WMS server
