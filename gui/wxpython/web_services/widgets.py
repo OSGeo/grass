@@ -35,7 +35,7 @@ from   wx.gizmos              import TreeListCtrl
 
 from core              import globalvar
 from core.debug        import Debug
-from core.gcmd         import GWarning, GMessage, GError
+from core.gcmd         import GWarning, GMessage
 from core.gconsole     import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEarthCapabilities
@@ -72,6 +72,9 @@ class WSPanel(wx.Panel):
         self.flags = {}
 
         self.o_layer_name = ''
+
+        # stores err output from r.in.wms during getting capabilities
+        self.cmd_err_str = ''
 
         # stores selected layer from layer list
         self.sel_layers = []
@@ -425,12 +428,12 @@ class WSPanel(wx.Panel):
         self.cmd_thread.RunCmd(cap_cmd, stderr = self.cmdStdErr)
 
     def OnCmdOutput(self, event):
-        """!Print cmd output according to debug level.
-
-        @todo Replace with error dialog
+        """!Manage cmd output.
         """
         if Debug.GetLevel() != 0:
-            Debug.msg(1, event.text)
+          Debug.msg(1, event.text)
+        elif event.type != 'message' and event.type != 'warning':
+          self.cmd_err_str += event.text + os.linesep
 
     def _prepareForNewConn(self, url, username, password):
         """!Prepare panel for new connection
@@ -461,8 +464,11 @@ class WSPanel(wx.Panel):
             return
 
         if event.returncode != 0:
-            msg = "Downloading of capabilities file failed."
-            self._postCapParsedEvt(IOError(msg))
+            if self.cmd_err_str:
+                self.cmd_err_str = _("Unable to download %s capabilities file\nfrom <%s>:\n" %  \
+                                         (self.ws.replace('_', ' '), self.conn['url'])) + self.cmd_err_str
+            self._postCapParsedEvt(error_msg = self.cmd_err_str)
+            self.cmd_err_str = ''
             return
 
         self._parseCapFile(self.cap_file)
@@ -473,7 +479,13 @@ class WSPanel(wx.Panel):
         try:
             self.cap = self.ws_drvs[self.ws]['cap_parser'](cap_file)
         except (IOError, ParseError) as error:
-            self._postCapParsedEvt(error)
+            error_msg = _("%s web service was not found in fetched capabilities file from <%s>:\n%s\n" % \
+                        (self.ws, self.conn['url'], str(error)))
+            if Debug.GetLevel() != 0:
+              Debug.msg(1, error_msg)
+              self._postCapParsedEvt(None)
+            else:
+              self._postCapParsedEvt(error_msg = error_msg)
             return
 
         self.is_connected = True
@@ -576,16 +588,10 @@ class WSPanel(wx.Panel):
         """
         return self.is_connected
 
-    def _postCapParsedEvt(self, error):
+    def _postCapParsedEvt(self, error_msg):
         """!Helper function
         """
-        if error:
-            msg = "%s web service was not found in fetched capabilities from '%s'.\n%s\n" % \
-                  (self.ws, self.conn['url'], str(error))
-            Debug.msg(3, msg)
-
-        cap_parsed_event = wxOnCapParsed()
-        cap_parsed_event.SetEventObject(self)
+        cap_parsed_event = wxOnCapParsed(error_msg = error_msg)
         wx.PostEvent(self.receiver, cap_parsed_event)
 
     def CreateCmd(self):
