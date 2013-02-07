@@ -74,7 +74,7 @@ db.execute input=fields_stats_sqlcmd.txt
 
 #### convert text file table to a database table
 # not safe for commas in the label
-tr '|' ',' < fields_stats.txt > fields_stats.csv
+tr '|' ',' &lt; fields_stats.txt > fields_stats.csv
 echo '"Integer","String","Real","Real","Real"' > fields_stats.csvt
 
 # import table

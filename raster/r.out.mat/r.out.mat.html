@@ -34,7 +34,7 @@ copied between different system architectures without binary translation.
 As there is no IEEE value for <tt>NaN</tt> for integer maps, GRASS's null 
 value is used to represent it within these maps. You'll have to do something 
 like this to clean them once the map is loaded into Matlab:
-<pre>    map_data(find(map_data < -1e9)) = NaN;</pre>
+<pre>    map_data(find(map_data &lt; -1e9)) = NaN;</pre>
 
 Null values in maps containing either floating point or double-precision 
 floating point data should translate into <tt>NaN</tt> values as expected.
