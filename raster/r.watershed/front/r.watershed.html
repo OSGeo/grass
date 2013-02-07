@@ -310,7 +310,7 @@ Zero (0) and negative values will be treated as elevation data (not no_data).
 Problem areas, i.e. those parts of a basin with a likely underestimate of
 flow accumulation, can be easily identified with e.g.
 <div class="code"><pre>
-  r.mapcalc "problems = if(flow_acc < 0, basin, null())"
+  r.mapcalc "problems = if(flow_acc &lt; 0, basin, null())"
 </pre></div>
 If the region of interest contains such problem areas, and this is not
 desired, the computational region must be expanded until the catchment
@@ -374,7 +374,7 @@ Set a different color table for the accumulation map:
   stddev_x_2=`echo $stddev | awk '{print $1 * 2}'`
   stddev_div_2=`echo $stddev | awk '{print $1 / 2}'`
 
-  r.colors $MAP col=rules << EOF
+  r.colors $MAP col=rules &lt;&lt; EOF
     0% red
     -$stddev_x_2 red
     -$stddev yellow

@@ -70,7 +70,7 @@ cat mypoints.txt | v.segment myrailroads out=myrailroads_mypoints
 
 # create parallel 1km long line segments along first 8km of track,
 # offset 500m to the left of the tracks.
-v.segment myrailroads out=myrailroads_segl_side << EOF
+v.segment myrailroads out=myrailroads_segl_side &lt;&lt; EOF
 L 1 1 1000 2000 -500
 L 2 1 3000 4000 -500
 L 3 1 5000 6000 -500
@@ -81,7 +81,7 @@ d.vect myrailroads disp=shape,dir
 d.vect -c myrailroads_segl_side width=2
 
 # A series of points, spaced every 2km along the tracks
-v.segment myrailroads out=myrailroads_pt2km << EOF
+v.segment myrailroads out=myrailroads_pt2km &lt;&lt; EOF
 P 1 1 1000
 P 2 1 3000
 P 3 1 5000
@@ -90,7 +90,7 @@ EOF
 d.vect myrailroads_pt2km icon=basic/circle color=blue fcolor=blue size=5
 
 # A series of points, spaced every 2km along the tracks, offset 500m to the right
-v.segment myrailroads out=myrailroads_pt2kmO500m << EOF
+v.segment myrailroads out=myrailroads_pt2kmO500m &lt;&lt; EOF
 P 1 1 1000 500
 P 2 1 3000 500
 P 3 1 5000 500

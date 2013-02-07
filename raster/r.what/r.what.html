@@ -58,7 +58,7 @@ as follows. If we have a file called <i>input_coord.txt</i> containing the
 coordinates and labels given in the example above:
 
 <div class="code"><pre>
-r.what map=soils,aspect < input_coord.txt
+r.what map=soils,aspect &lt; input_coord.txt
 
 635342.21|7654321.09|site 1|45|21
 653324.88|7563412.42|site 2|44|20
@@ -70,7 +70,7 @@ Input coordinates may be given directly from standard input (<tt>stdin</tt>), fo
 (input data appears between the "<tt>EOF</tt>" markers):
 
 <div class="code"><pre>
-r.what map=soils,aspect << EOF
+r.what map=soils,aspect &lt;&lt; EOF
 635342.21 7654321.09 site 1
 653324.88 7563412.42 site 2
 EOF
@@ -102,7 +102,7 @@ Here we use the <b>-f</b> label flag to enable the output of category labels
 associated with the raster cell(s), as well as values (categorical maps only).
 
 <div class="code"><pre>
-r.what -f map=soils,aspect << EOF
+r.what -f map=soils,aspect &lt;&lt; EOF
 635342.21 7654321.09 site 1
 653324.88 7563412.42 site 2
 EOF

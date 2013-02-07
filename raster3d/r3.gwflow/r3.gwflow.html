@@ -108,9 +108,9 @@ r3.mapcalc expression="status = if(col() == 1 && depth() == 33, 2, 1)"
 r3.mapcalc expression="well = if(row() == 20 && col() == 20 && depth() == 3, -0.25, 0)"
 r3.mapcalc expression="well = if(row() == 50 && col() == 50 && depth() == 3, -0.25, well)"
 r3.mapcalc expression="hydcond = 0.0025"
-r3.mapcalc expression="hydcond = if(depth() < 30 && depth() > 23 && col() < 60, 0.000025, hydcond)"
-r3.mapcalc expression="hydcond = if(depth() < 20 && depth() > 13 && col() >  7, 0.000025, hydcond)"
-r3.mapcalc expression="hydcond = if(depth() < 10 && depth() >  7 && col() < 60, 0.000025, hydcond)"
+r3.mapcalc expression="hydcond = if(depth() &lt; 30 && depth() > 23 && col() &lt; 60, 0.000025, hydcond)"
+r3.mapcalc expression="hydcond = if(depth() &lt; 20 && depth() > 13 && col() >  7, 0.000025, hydcond)"
+r3.mapcalc expression="hydcond = if(depth() &lt; 10 && depth() >  7 && col() &lt; 60, 0.000025, hydcond)"
 r3.mapcalc expression="syield = 0.0001"
 
 r3.gwflow solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \

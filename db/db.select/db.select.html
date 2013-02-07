@@ -60,7 +60,7 @@ db.select sql="SELECT x(geo),y(geo) FROM localizzazione"
 <div class="code"><pre>
 cat file.sql
 SELECT * FROM busstopsall WHERE cat = 1
-SELECT cat FROM busstopsall WHERE cat > 4 AND cat < 8
+SELECT cat FROM busstopsall WHERE cat > 4 AND cat &lt; 8
 
 db.select input=file.sql
 </pre></div>
