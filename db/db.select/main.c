@@ -218,8 +218,8 @@ void parse_command_line(int argc, char **argv)
     fs->guisection = _("Format");
 
     vs = G_define_standard_option(G_OPT_F_SEP);
-    vs->key = "vs";
-    vs->label = _("Output vertical record separator");
+    vs->key = "vseparator";
+    vs->label = _("Vertical record separator (requires -v flag)");
     vs->answer = NULL;
     vs->guisection = _("Format");
 
