@@ -181,7 +181,6 @@ class WMSBase:
     def _fetchCapabilities(self, options): 
         """!Download capabilities from WMS server
         """
-        grass.debug('Fetching capabilities file.')
         cap_url = options['url']
 
         if 'WMTS' in options['driver']:
@@ -190,7 +189,7 @@ class WMSBase:
             cap_url += "?REQUEST=GetTileService"
         else:
             cap_url += "?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=" + options['wms_version'] 
-            
+        grass.debug('Fetching capabilities file.\n%s' % cap_url)
         try:
             cap = self._fetchDataFromServer(cap_url, options['username'], options['password'])
         except (IOError, HTTPException), e:
