@@ -48,6 +48,7 @@ from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDial
 from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapdisp   import SingleMapFrame
+from gui_core.query     import QueryDialog
 from mapdisp.mapwindow  import BufferedWindow
 from mapdisp.overlays   import LegendController, BarscaleController
 from modules.histogram  import HistogramFrame
@@ -193,6 +194,7 @@ class MapFrame(SingleMapFrame):
         self.dialogs['barscale'] = None
         self.dialogs['legend'] = None
         self.dialogs['vnet'] = None
+        self.dialogs['query'] = None
 
         self.decorationDialog = None # decoration/overlays
         
@@ -651,82 +653,17 @@ class MapFrame(SingleMapFrame):
     def Query(self, x, y):
         """!Query selected layers. 
 
-        Calls QueryMap in case of raster or more vectors,
-        or QueryVector in case of one vector with db connection.
-
         @param x,y coordinates
         @param layers selected tree item layers
         """
         layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly = True)
-        filteredLayers = []
+        rast = []
+        vect = []
         for layer in layers:
-            ltype = layer.maplayer.GetType()
-            if ltype in ('raster', 'rgb', 'his',
-                         'vector', 'thememap', 'themechart'):
-                filteredLayers.append(layer)
-
-        if not filteredLayers:
-            GMessage(parent = self,
-                     message = _('No raster or vector map layer selected for querying.'))
-            return
-            
-        layers = filteredLayers
-        # set query snap distance for v.what at map unit equivalent of 10 pixels
-        qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
-
-        # TODO: replace returning None by exception or so
-        try:
-            east, north = self.MapWindow.Pixel2Cell((x, y))
-        except TypeError:
-            return
-
-        posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
-                                         y + self.MapWindow.dialogOffset))
-
-        isRaster = False
-        nVectors = 0
-        isDbConnection = False
-        for l in layers:
-            maplayer = l.maplayer
-            if maplayer.GetType() == 'raster':
-                isRaster = True
-                break
-            if maplayer.GetType() == 'vector':
-                nVectors += 1
-                isDbConnection = grass.vector_db(maplayer.GetName())
-
-        if not self.IsPaneShown('3d'):
-            if isRaster or nVectors > 1 or not isDbConnection:
-                self.QueryMap(east, north, qdist, layers)
-            else:
-                self.QueryVector(east, north, qdist, posWindow, layers[0])
-        else:
-            if isRaster:
-                self.MapWindow.QuerySurface(x, y)
-            if nVectors > 1 or not isDbConnection:
-                self.QueryMap(east, north, qdist, layers)
-            elif nVectors == 1:
-                self.QueryVector(east, north, qdist, posWindow, layers[0])
-
-    def QueryMap(self, east, north, qdist, layers):
-        """!Query raster or vector map layers by r/v.what
-        
-        @param east,north coordinates
-        @param qdist query distance
-        @param layers selected tree items
-        """
-        rast = list()
-        vect = list()
-        rcmd = ['r.what', '--v']
-        vcmd = ['v.what', '--v']
-        
-        for layer in layers:
-            ltype = layer.maplayer.GetType()
-            dcmd = layer.cmd
-            name, found = GetLayerNameFromCmd(dcmd)
-            
+            name, found = GetLayerNameFromCmd(layer.cmd)
             if not found:
                 continue
+            ltype = layer.maplayer.GetType()
             if ltype == 'raster':
                 rast.append(name)
             elif ltype in ('rgb', 'his'):
@@ -734,18 +671,6 @@ class MapFrame(SingleMapFrame):
                     rast.append(iname)
             elif ltype in ('vector', 'thememap', 'themechart'):
                 vect.append(name)
-
-        # use display region settings instead of computation region settings
-        self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres = False)
-        
-        # build query commands for any selected rasters and vectors
-        if rast:
-            rcmd.append('-f')
-            rcmd.append('-n')
-            rcmd.append('map=%s' % ','.join(rast))
-            rcmd.append('coordinates=%f,%f' % (float(east), float(north)))
-        
         if vect:
             # check for vector maps open to be edited
             digitToolbar = self.GetToolbar('vdigit')
@@ -756,32 +681,96 @@ class MapFrame(SingleMapFrame):
                         self._giface.WriteWarning(_("Vector map <%s> "
                                                                   "opened for editing - skipped.") % lmap)
                         vect.remove(name)
-            
-            if len(vect) < 1:
-                self._giface.WriteCmdLog(_("Nothing to query."))
-                return
-            
-            vcmd.append('-a')
-            vcmd.append('map=%s' % ','.join(vect))
-            vcmd.append('layer=%s' % ','.join(['-1'] * len(vect)))
-            vcmd.append('coordinates=%f,%f' % (float(east), float(north)))
-            vcmd.append('distance=%f' % float(qdist))
+
+        if not (rast + vect):
+            GMessage(parent = self,
+                     message = _('No raster or vector map layer selected for querying.'))
+            return
+
+        # set query snap distance for v.what at map unit equivalent of 10 pixels
+        qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
+
+        # TODO: replace returning None by exception or so
+        try:
+            east, north = self.MapWindow.Pixel2Cell((x, y))
+        except TypeError:
+            return
+
+        if not self.IsPaneShown('3d'):
+            self.QueryMap(east, north, qdist, rast, vect)
+        else:
+            if rast:
+                self.MapWindow.QuerySurface(x, y)
+            if vect:
+                self.QueryMap(east, north, qdist, rast = [], vect = vect)
+
+    def QueryMap(self, east, north, qdist, rast, vect):
+        """!Query raster or vector map layers by r/v.what
         
+        @param east,north coordinates
+        @param qdist query distance
+        @param rast raster map names
+        @param vect vector map names
+        """
         Debug.msg(1, "QueryMap(): raster=%s vector=%s" % (','.join(rast),
                                                           ','.join(vect)))
-        # parse query command(s)
 
-        if rast and not self.IsPaneShown('3d'):
-            self._giface.RunCmd(rcmd,
-                                compReg = False,
-                                onDone  =  self._QueryMapDone)
+        # use display region settings instead of computation region settings
+        self.tmpreg = os.getenv("GRASS_REGION")
+        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres = False)
+
+        rastQuery = []
+        vectQuery = []
+        if rast:
+            rastQuery = grass.raster_what(map=rast, coord=(east, north))
         if vect:
-            self._giface.RunCmd(vcmd, onDone = self._QueryMapDone)
-        
-    def _QueryMapDone(self, cmd, returncode):
+            vectQuery = grass.vector_what(map=vect, coord=(east, north), distance=qdist)
+        self._QueryMapDone()
+        self._queryHighlight(vectQuery)
+
+        result = rastQuery + vectQuery
+        if self.dialogs['query']:
+            self.dialogs['query'].Raise()
+            self.dialogs['query'].SetData(result)
+        else:
+            self.dialogs['query'] = QueryDialog(parent = self, data = result)
+            self.dialogs['query'].Show()
+
+    def _queryHighlight(self, vectQuery):
+        """!Highlight category from query."""
+        cats = name = None
+        for res in vectQuery:
+            cats = {res['Layer']: [res['Category']]}
+            name = res['Map']
+        try:
+            qlayer = self.Map.GetListOfLayers(name = globalvar.QUERYLAYER)[0]
+        except IndexError:
+            qlayer = None
+
+        if not (cats and name):
+            if qlayer:
+                self.Map.DeleteLayer(qlayer)
+                self.MapWindow.UpdateMap(render = False, renderVector = False)
+            return
+
+        if not self.IsPaneShown('3d') and self.IsAutoRendered():
+            # highlight feature & re-draw map
+            if qlayer:
+                qlayer.SetCmd(self.AddTmpVectorMapLayer(name, cats,
+                                                        useId = False,
+                                                        addLayer = False))
+            else:
+                qlayer = self.AddTmpVectorMapLayer(name, cats, useId = False)
+            
+            # set opacity based on queried layer
+            # TODO fix
+            # opacity = layer.maplayer.GetOpacity(float = True)
+            # qlayer.SetOpacity(opacity)
+            
+            self.MapWindow.UpdateMap(render = False, renderVector = False)
+
+    def _QueryMapDone(self):
         """!Restore settings after querying (restore GRASS_REGION)
-        
-        @param returncode command return code
         """
         if hasattr(self, "tmpreg"):
             if self.tmpreg:
@@ -793,73 +782,6 @@ class MapFrame(SingleMapFrame):
         
         if hasattr(self, "tmpreg"):
             del self.tmpreg
-        
-    def QueryVector(self, east, north, qdist, posWindow, layer):
-        """!Query vector map layer features
-
-        Attribute data of selected vector object are displayed in GUI dialog.
-        Data can be modified (On Submit)
-        """
-        mapName = layer.maplayer.name
-        
-        if layer.maplayer.GetMapset() != \
-                grass.gisenv()['MAPSET']:
-            mode = 'display'
-        else:
-            mode = 'update'
-        
-        if self.dialogs['attributes'] is None:
-            dlg = DisplayAttributesDialog(parent = self.MapWindow,
-                                                      map = mapName,
-                                                      query = ((east, north), qdist),
-                                                      pos = posWindow,
-                                                      action = mode)
-            self.dialogs['attributes'] = dlg
-        
-        else:
-            # selection changed?
-            if not self.dialogs['attributes'].mapDBInfo or \
-                    self.dialogs['attributes'].mapDBInfo.map != mapName:
-                self.dialogs['attributes'].UpdateDialog(map = mapName, query = ((east, north), qdist),
-                                                        action = mode)
-            else:
-                self.dialogs['attributes'].UpdateDialog(query = ((east, north), qdist),
-                                                        action = mode)
-        if not self.dialogs['attributes'].IsFound():
-            self._giface.WriteLog(_('Nothing found.'))
-        
-        cats = self.dialogs['attributes'].GetCats()
-        
-        qlayer = None
-        if not self.IsPaneShown('3d') and self.IsAutoRendered():
-            try:
-                qlayer = self.Map.GetListOfLayers(name = globalvar.QUERYLAYER)[0]
-            except IndexError:
-                pass
-        
-        if self.dialogs['attributes'].mapDBInfo and cats:
-            if not self.IsPaneShown('3d') and self.IsAutoRendered():
-                # highlight feature & re-draw map
-                if qlayer:
-                    qlayer.SetCmd(self.AddTmpVectorMapLayer(mapName, cats,
-                                                            useId = False,
-                                                            addLayer = False))
-                else:
-                    qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId = False)
-                
-                # set opacity based on queried layer
-                opacity = layer.maplayer.GetOpacity(float = True)
-                qlayer.SetOpacity(opacity)
-                
-                self.MapWindow.UpdateMap(render = False, renderVector = False)
-            if not self.dialogs['attributes'].IsShown():
-                self.dialogs['attributes'].Show()
-        else:
-            if qlayer:
-                self.Map.DeleteLayer(qlayer)
-                self.MapWindow.UpdateMap(render = False, renderVector = False)
-            if self.dialogs['attributes'].IsShown():
-                self.dialogs['attributes'].Hide()
         
     def OnQuery(self, event):
         """!Query tools menu"""
@@ -923,7 +845,7 @@ class MapFrame(SingleMapFrame):
                 lcats = cats[layer]
                 cmd[-1].append("layer=%d" % layer)
                 cmd[-1].append("cats=%s" % ListOfCatsToRange(lcats))
-        
+
         if addLayer:
             if useId:
                 return self.Map.AddLayer(ltype = 'vector', name = globalvar.QUERYLAYER, command = cmd,
