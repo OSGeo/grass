@@ -105,6 +105,7 @@ class SwipeMapFrame(DoubleMapFrame):
         Only for mirror mode.
         """
         if self._mode == 'swipe':
+            event.Skip()
             return
         coords = event.GetPosition()
         if showInFirst:
