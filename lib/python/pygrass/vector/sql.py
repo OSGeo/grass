@@ -18,7 +18,7 @@ It is a collection of strings to avoid to repeat the code. ::
 # SQL
 #
 CREATE_TAB = "CREATE TABLE {tname}({coldef})"
-
+DROP_TAB = "DROP TABLE {tname}"
 #ALTER TABLE
 ADD_COL = "ALTER TABLE {tname} ADD COLUMN {cname} {ctype};"
 DROP_COL = "ALTER TABLE {tname} DROP COLUMN {cname};"
