@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 import wx
+import tempfile
 
 from dbmgr.dialogs  import DisplayAttributesDialog
 from core.gcmd      import RunCommand, GMessage, GError
@@ -24,6 +25,7 @@ from core.settings  import UserSettings
 from core.utils     import ListOfCatsToRange
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
+from gui_core       import gselect
 
 class VDigitWindow(BufferedWindow):
     """!A Buffered window extended for vector digitizer.
