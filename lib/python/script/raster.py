@@ -24,6 +24,7 @@ for details.
 
 import os
 import string
+import types
 
 from core import *
 
@@ -135,3 +136,43 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwar
                         verbose = verbose,
                         overwrite = overwrite)
 
+# interface to r.what
+def raster_what(map, coord):
+    """!TODO"""
+    if type(map) in (types.StringType, types.UnicodeType):
+        map_list = [map]
+    else:
+        map_list = map
+
+    coord_list = list()
+    if type(coord) is types.TupleType:
+        coord_list.append('%f,%f' % (coord[0], coord[1]))
+    else:
+        for e, n in coord:
+            coord_list.append('%f,%f' % (e, n))
+    
+    sep = '|'
+    cmdParams = dict(quiet = True,
+                     flags = 'rf',
+                     separator = sep,
+                     map = ','.join(map_list),
+                     coordinates = ','.join(coord_list))
+
+    ret = read_command('r.what',
+                       **cmdParams)
+    data = list()
+    if not ret:
+        return data
+
+    labels = (_("value"), _("label"), _("color"))
+    for item in ret.splitlines():
+        line = item.split(sep)[3:]
+        for i, map_name in enumerate(map_list):
+            tmp_dict = {}
+            tmp_dict[map_name] = {}
+            for j in range(len(labels)):
+                tmp_dict[map_name][labels[j]] = line[i*len(labels)+j]
+
+            data.append(tmp_dict)
+
+    return data
