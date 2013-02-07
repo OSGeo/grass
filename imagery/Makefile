@@ -30,6 +30,7 @@ SUBDIRS = \
 	i.ortho.photo \
 	i.rectify \
 	i.rgb.his \
+	i.segment \
 	i.smap \
 	i.sunhours \
 	i.target \
