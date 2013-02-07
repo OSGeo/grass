@@ -25,6 +25,18 @@ DRIVERS = ('sqlite', 'pg')
 
 
 def get_path(path):
+    """Return the full path to the database; replacing environment variable
+    with real values ::
+
+    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+    >>> new_path = get_path(path)
+    >>> from grass.script.core import gisenv
+    >>> import os
+    >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
+    ...                          gisenv()['MAPSET'], 'sqlite', sqlite.db)
+    >>> new_path == new_path2
+    True
+    """
     if "$" not in path:
         return path
     else:
@@ -61,22 +73,26 @@ class Filters(object):
         return "Filters(%r)" % self.get_sql()
 
     def select(self, *args):
+        """Create the select query"""
         cols = ', '.join(args) if args else '*'
         select = sql.SELECT[:-1]
         self._select = select.format(cols=cols, tname=self.tname)
         return self
 
     def where(self, condition):
+        """Create the where condition"""
         self._where = 'WHERE {condition}'.format(condition=condition)
         return self
 
     def order_by(self, orderby):
+        """Create the order by condition"""
         if not isinstance(orderby, str):
             orderby = ', '.join(orderby)
         self._orderby = 'ORDER BY {orderby}'.format(orderby=orderby)
         return self
 
     def limit(self, number):
+        """Create the limit condition"""
         if not isinstance(number, int):
             raise ValueError("Must be an integer.")
         else:
@@ -84,6 +100,7 @@ class Filters(object):
         return self
 
     def get_sql(self):
+        """Return the SQL query"""
         sql_list = list()
         if self._select is None:
             self.select()
@@ -98,6 +115,7 @@ class Filters(object):
         return "%s;" % ' '.join(sql_list)
 
     def reset(self):
+        """Clean internal variables"""
         self._select = None
         self._where = None
         self._orderby = None
@@ -113,19 +131,19 @@ class Columns(object):
     For a sqlite table: ::
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-        >>> cols_sqlite = Columns('boundary_municp_sqlite',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns('census',
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.tname
-        'boundary_municp_sqlite'
+        'census'
 
     For a postgreSQL table: ::
 
-        >>> import psycopg2 as pg
-        >>> cols_pg = Columns('boundary_municp_pg',
-        ...                   pg.connect('host=localhost dbname=grassdb'))
-        >>> cols_pg.tname
-        'boundary_municp_pg'
+        >>> import psycopg2 as pg                              #doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg', 
+        ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
+        >>> cols_pg.tname #doctest: +SKIP
+        'boundary_municp_pg'                                   #doctest: +SKIP
 
     ..
     """
@@ -162,15 +180,15 @@ class Columns(object):
         """Return True if is a psycopg connection. ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.is_pg()
             False
-            >>> import psycopg2 as pg
+            >>> import psycopg2 as pg #doctest: +SKIP
             >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb'))
-            >>> cols_pg.is_pg()
+            ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
+            >>> cols_pg.is_pg() #doctest: +SKIP
             True
 
         ..
@@ -219,8 +237,8 @@ class Columns(object):
            Remove it is used to remove a columns.::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
             u'cat integer, OBJECTID integer, AREA double precision, ...'
@@ -241,8 +259,8 @@ class Columns(object):
         """Return a list with the column types. ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
             [u'integer', u'integer', ...]
@@ -262,8 +280,8 @@ class Columns(object):
            Remove it is used to remove a columns.::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.names()                      # doctest: +ELLIPSIS
             [u'cat', u'OBJECTID', u'AREA', u'PERIMETER', ...]
@@ -290,8 +308,8 @@ class Columns(object):
         """Return a list of tuple with column name and column type.  ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
             [(u'cat', u'integer'), ...]
@@ -305,21 +323,12 @@ class Columns(object):
         """
         return self.odict.items()
 
-    def create(self, cols):
-        """"""
-        cur = self.conn.cursor()
-        coldef = ',\n'.join(['%s %s' % col for col in cols])
-        cur.execute(sql.CREATE_TAB.format(tname=self.tname, coldef=coldef))
-        self.conn.commit()
-        cur.close()
-        self.update_odict()
-
     def add(self, col_name, col_type):
         """Add a new column to the table. ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.add('n_pizza', 'int4')
             >>> 'n_pizza' in cols_sqlite
@@ -350,8 +359,8 @@ class Columns(object):
         """Rename a column of the table. ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.rename('n_pizza', 'n_pizzas')  # doctest: +ELLIPSIS
             >>> 'n_pizza' in cols_sqlite
@@ -394,8 +403,8 @@ class Columns(object):
         """Change the column type. ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
             Traceback (most recent call last):
@@ -428,8 +437,8 @@ class Columns(object):
         """Drop a column from the table. ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> cols_sqlite = Columns('boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.drop('n_pizzas')  # doctest: +ELLIPSIS
             >>> 'n_pizzas' in cols_sqlite
@@ -468,18 +477,18 @@ class Link(object):
     It is possible to define a Link object or given all the information
     (layer, name, table name, key, database, driver): ::
 
-        >>> link = Link(1, 'link0', 'boundary_municp_sqlite', 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db', 'sqlite')
+        >>> link = Link(1, 'link0', 'census', 'cat',
+        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'sqlite')
         >>> link.number
         1
         >>> link.name
         'link0'
         >>> link.table_name
-        'boundary_municp_sqlite'
+        'census'
         >>> link.key
         'cat'
         >>> link.database
-        '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+        '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
         >>> link.driver
         'sqlite'
         >>> link
@@ -583,8 +592,8 @@ class Link(object):
     def connection(self):
         """Return a connection object. ::
 
-            >>> link = Link(1, 'link0', 'boundary_municp_sqlite', 'cat',
-            ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
+            >>> link = Link(1, 'link0', 'census', 'cat',
+            ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
             ...             'sqlite')
             >>> conn = link.connection()
             >>> cur = conn.cursor()
@@ -616,12 +625,12 @@ class Link(object):
     def table(self):
         """Return a Table object. ::
 
-            >>> link = Link(1, 'link0', 'boundary_municp_sqlite', 'cat',
-            ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
+            >>> link = Link(1, 'link0', 'census', 'cat',
+            ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
             ...             'sqlite')
             >>> table = link.table()
             >>> table.filters.select('cat', 'COUNTY', 'PERIMETER')
-            Filters('SELECT cat, COUNTY, PERIMETER FROM boundary_municp_sqlite;')
+            Filters('SELECT cat, COUNTY, PERIMETER FROM census;')
             >>> cur = table.execute()
             >>> cur.fetchone()
             (1, u'SURRY', 1415.331)
@@ -634,15 +643,15 @@ class Link(object):
     def info(self):
         """Print information of the link. ::
 
-            >>> link = Link(1, 'link0', 'boundary_municp_sqlite', 'cat',
-            ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
+            >>> link = Link(1, 'link0', 'census', 'cat',
+            ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
             ...             'sqlite')
             >>> link.info()
             layer:    1
             name:      link0
-            table:     boundary_municp_sqlite
+            table:     census
             key:       cat
-            database:  $GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db
+            database:  $GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db
             driver:    sqlite
 
         ..
@@ -659,19 +668,15 @@ class DBlinks(object):
     """Interface containing link to the table DB. ::
 
         >>> from grass.pygrass.vector import VectorTopo
-        >>> municip = VectorTopo('boundary_municp_sqlite')
-        >>> municip.open()
-        >>> dblinks = DBlinks(municip.c_mapinfo)
+        >>> cens = VectorTopo('census')
+        >>> cens.open()
+        >>> dblinks = DBlinks(cens.c_mapinfo)
         >>> dblinks
-        DBlinks([Link(1, boundary_municp, sqlite)])
-        >>> dblinks[1]
-        Link(1, boundary_municp, sqlite)
-        >>> dblinks[0]                                    # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-            ...
-        TypeError: The index must be != 0.
-        >>> dblinks['boundary_municp']
-        Link(1, boundary_municp, sqlite)
+        DBlinks([Link(1, census, sqlite)])
+        >>> dblinks[0]
+        Link(1, census, sqlite)
+        >>> dblinks['census']
+        Link(1, census, sqlite)
 
     ..
     """
@@ -716,7 +721,7 @@ class DBlinks(object):
         """Add a new link. ::
 
             >>> from grass.pygrass.vector import VectorTopo
-            >>> municip = VectorTopo('boundary_municp_sqlite')
+            >>> municip = VectorTopo('census')
             >>> municip.open()
             >>> dblinks = DBlinks(municip.c_mapinfo)
             >>> dblinks
@@ -734,11 +739,11 @@ class DBlinks(object):
                                     link.layer, link.name, link.table_name,
                                     link.key, link.database, link.driver)
 
-    def remove(self, key):
-        """Remove a link. ::
+    def remove(self, key, force=False):
+        """Remove a link. If force set to true remove also the table ::
 
             >>> from grass.pygrass.vector import VectorTopo
-            >>> municip = VectorTopo('boundary_municp_sqlite')
+            >>> municip = VectorTopo('census')
             >>> municip.open()
             >>> dblinks = DBlinks(municip.c_mapinfo)
             >>> dblinks
@@ -749,6 +754,10 @@ class DBlinks(object):
 
         ..
         """
+        if force:
+            link = self.by_name(key)
+            table = link.table()
+            table._drop()
         if isinstance(key, str):
             key = self.from_name_to_num(key)
         libvect.Vect_map_del_dblink(self.c_mapinfo, key)
@@ -764,11 +773,11 @@ class Table(object):
     """::
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-        >>> tab_sqlite = Table(name='boundary_municp_sqlite',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> tab_sqlite = Table(name='census',
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite.name
-        'boundary_municp_sqlite'
+        'census'
         >>> import psycopg2
         >>> tab_pg = Table('boundary_municp_pg',
         ...                psycopg2.connect('host=localhost dbname=grassdb',
@@ -779,9 +788,11 @@ class Table(object):
     ..
     """
     def _get_name(self):
+        """Private method to return the name of table"""
         return self._name
 
     def _set_name(self, new_name):
+        """Private method to set the name of table"""
         old_name = self._name
         cur = self.conn.cursor()
         cur.execute(sql.RENAME_TAB.format(old_name=old_name,
@@ -804,11 +815,11 @@ class Table(object):
         """::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> tab_sqlite = Table(name='boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> tab_sqlite = Table(name='census',
             ...                    connection=sqlite3.connect(get_path(path)))
             >>> tab_sqlite
-            Table('boundary_municp_sqlite')
+            Table('census')
 
         ..
         """
@@ -819,10 +830,28 @@ class Table(object):
         return (cur.fetchone() for _ in xrange(self.__len__()))
 
     def __len__(self):
-        """Return the nuber of rows"""
+        """Return the number of rows"""
         return self.n_rows()
 
+    def _drop(self, name=None):
+        """Private method to drop table from database"""
+        if name:
+            name = name
+        else:
+            name = self.name
+        cur = self.conn.cursor()
+        cur.execute(sql.DROP_TAB.format(tname=name))
+
     def n_rows(self):
+        """Return the number of rows
+        
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> tab_sqlite = Table(name='census',
+        ...                    connection=sqlite3.connect(get_path(path)))
+        >>> tab_sqlite.n_rows()
+        2537
+        """
         cur = self.conn.cursor()
         cur.execute(sql.SELECT.format(cols='Count(*)', tname=self.name))
         number = cur.fetchone()[0]
@@ -834,11 +863,11 @@ class Table(object):
         return a cursor object. ::
 
             >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
-            >>> tab_sqlite = Table(name='boundary_municp_sqlite',
+            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+            >>> tab_sqlite = Table(name='census',
             ...                    connection=sqlite3.connect(get_path(path)))
             >>> tab_sqlite.filters.select('cat', 'COUNTY').order_by('AREA')
-            Filters('SELECT cat, COUNTY FROM boundary_municp_sqlite ORDER BY AREA;')
+            Filters('SELECT cat, COUNTY FROM census ORDER BY AREA;')
             >>> cur = tab_sqlite.execute()
             >>> cur.fetchone()
             (1, u'SURRY')
@@ -855,13 +884,28 @@ class Table(object):
             raise ValueError("The SQL is not correct:\n%r" % sqlc)
 
     def insert(self, values, many=False):
+        """Insert a new row"""
         cur = self.conn.cursor()
         if many:
             return cur.executemany(self.columns.insert_str, values)
         return cur.execute(self.columns.insert_str, values)
 
     def update(self, key, values):
+        """Update a """
         cur = self.conn.cursor()
         vals = list(values)
         vals.append(key)
         return cur.execute(self.columns.update_str, vals)
+
+    def create(self, cols, name=None):
+        """Create a new table"""
+        cur = self.conn.cursor()
+        coldef = ',\n'.join(['%s %s' % col for col in cols])
+        if name:
+            newname = name
+        else:
+            newname = self.name
+        cur.execute(sql.CREATE_TAB.format(tname=newname, coldef=coldef))
+        self.conn.commit()
+        cur.close()
+        self.columns.update_odict()
