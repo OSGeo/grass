@@ -127,10 +127,10 @@ def get_xyz(pnt):
 
 
 class Attrs(object):
-    def __init__(self, line, table, writable=False):
-        self.line = line
+    def __init__(self, cat, table, writable=False):
+        self.cat = cat
         self.table = table
-        self.cond = "%s=%d" % (self.table.key, self.line)
+        self.cond = "%s=%d" % (self.table.key, self.cat)
         self.writable = writable
 
     def __getitem__(self, key):
@@ -140,7 +140,7 @@ class Attrs(object):
             >>> schools = VectorTopo('schools')
             >>> schools.open('r')
             >>> school = schools[1]
-            >>> attrs = Attrs(school.line, schools.table)
+            >>> attrs = Attrs(school.cat, schools.table)
             >>> attrs['TAG']
             u'568'
 
@@ -213,7 +213,7 @@ class Geo(object):
     def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None,
                  table=None, writable=False, is2D=True):
         self.id = v_id  # vector id
-        self.line = self.id
+        self.cat = self.id
         self.c_mapinfo = c_mapinfo
         self.is2D = is2D
         self.gtype = None
@@ -232,8 +232,8 @@ class Geo(object):
 
         # set the attributes
         self.attrs = None
-        if table is not None and self.line:
-            self.attrs = Attrs(self.line, table, writable)
+        if table is not None and self.cat:
+            self.attrs = Attrs(self.cat, table, writable)
 
     def is_with_topology(self):
         if self.c_mapinfo is not None:
