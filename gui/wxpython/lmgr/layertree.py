@@ -265,8 +265,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def GetSelectedLayers(self, checkedOnly = False):
         """!Get selected layers as a list.
+
+        @todo somewhere we have checkedOnly default True and elsewhere False
         """
-        return self.GetSelectedLayer(multi = True, checkedOnly = False)
+        return self.GetSelectedLayer(multi = True, checkedOnly = checkedOnly)
 
     def GetSelectedLayer(self, multi = False, checkedOnly = False):
         """!Get selected layer from layer tree.

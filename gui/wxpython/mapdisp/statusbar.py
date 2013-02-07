@@ -439,8 +439,9 @@ class SbShowRegion(SbItem):
             for mapWindow in self.mapFrame.GetWindows():
                 mapWindow.regionCoords = []
         elif hasattr(self.mapFrame.GetWindow(), 'regionCoords'):
+            # TODO: this maybe never happends
             for mapWindow in self.mapFrame.GetWindows():
-                mapWindow.regionCoords
+                mapWindow.regionCoords = []
         
 class SbAlignExtent(SbItem):
     """!Checkbox to select zoom behavior.
