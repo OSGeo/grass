@@ -50,7 +50,7 @@ monSize = list(globalvar.MAP_WINDOW_SIZE)
 
 
 class DMonMap(Map):
-    def __init__(self, gisrc = None, cmdfile = None, mapfile = None, envfile = None, monitor = None):
+    def __init__(self, cmdfile=None, mapfile=None, envfile=None, monitor=None):
         """!Map composition (stack of map layers and overlays)
 
         @param cmdline full path to the cmd file (defined by d.mon)
@@ -282,6 +282,7 @@ class LayerList(object):
 
 
 class DMonGrassInterface(StandaloneGrassInterface):
+    """!@implements GrassInterface"""
     def __init__(self, mapframe):
         StandaloneGrassInterface.__init__(self)
         self._mapframe = mapframe

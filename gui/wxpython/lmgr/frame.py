@@ -1072,7 +1072,7 @@ class GMFrame(wx.Frame):
         @return False on error
         """
         # dtd
-        dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxw.dtd")
+        # dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxw.dtd")
         
         # parse workspace file
         try:
@@ -1437,17 +1437,7 @@ class GMFrame(wx.Frame):
         win.Show()
         win.Refresh()
         win.Update()
-        
-    def OnProfile(self, event):
-        """!Launch profile tool
-        """
-        win = profile.ProfileFrame(parent = self)
-        
-        win.CentreOnParent()
-        win.Show()
-        win.Refresh()
-        win.Update()
-        
+
     def OnMapCalculator(self, event, cmd = ''):
         """!Init map calculator for interactive creation of mapcalc statements
         """

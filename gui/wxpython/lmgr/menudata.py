@@ -24,7 +24,6 @@ from core.menudata  import MenuData
 class LayerManagerMenuData(MenuData):
     def __init__(self, filename = None):
         if not filename:
-            gisbase = os.getenv('GISBASE')
             global etcwxdir
             filename = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
         
