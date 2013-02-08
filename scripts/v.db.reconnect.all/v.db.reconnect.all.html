@@ -98,13 +98,13 @@ database. This option should be used very carefully!
 To become usable in GRASS 7, all vector maps in a mapset need to be updated:
 
 <div class="code"><pre>
-# first build new topology
+# first rebuild topology for all vector maps
 v.build.all
 
 # set new default db connection (to SQLite default)
 db.connect -d
 
-# copy attribute tables from old db to new db, delete old tables in DBF format
+# copy attribute tables from old DB to new SQLite DB, delete old tables in DBF format
 v.db.reconnect.all -cd
 </pre></div>
 
