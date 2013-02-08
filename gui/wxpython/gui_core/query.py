@@ -35,7 +35,7 @@ class QueryDialog(wx.Dialog):
         self.tree.AddColumn("Feature")
         self.tree.AddColumn("Value")
         self.tree.SetMainColumn(0)
-        self.tree.SetColumnWidth(0, 180)
+        self.tree.SetColumnWidth(0, 220)
         self.tree.SetColumnWidth(1, 400)
 
         self.mainSizer.Add(item = self.tree, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
@@ -62,9 +62,16 @@ class QueryDialog(wx.Dialog):
         # TODO: move elsewhere
         for part in self.data:
             if 'Map' in part:
-                item = self.tree.AppendItem(self.root, text = part['Map'])
+                itemText = part['Map']
+                if 'Mapset' in part:
+                    itemText += '@' + part['Mapset']
+                    del part['Mapset']
+                item = self.tree.AppendItem(self.root, text = itemText)
                 del part['Map']
-                self._addItem(item, part)
+                if part:
+                    self._addItem(item, part)
+                else:
+                    self.tree.AppendItem(item, text = _("Nothing found"))
             else:
                 self._addItem(self.root, part)
         self.tree.UnselectAll()
@@ -115,8 +122,9 @@ def test():
     testdata1 = grast.raster_what(map = ('elevation_shade@PERMANENT','landclass96'),
                                   coord = [(638509.051416,224742.348346)])
 
-    testdata2 = gvect.vector_what(map=('firestations','firestations'),
-                                 coord=(633177.897487,221352.921257), distance=10)
+    testdata2 = gvect.vector_what(map=('firestations','bridges'),
+                                  coord=(633177.897487,221352.921257), distance=10)
+    
     testdata = testdata1 + testdata2
     frame = QueryDialog(parent = None, data = testdata)
     frame.ShowModal()

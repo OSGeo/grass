@@ -726,7 +726,8 @@ class MapFrame(SingleMapFrame):
         if vect:
             vectQuery = grass.vector_what(map=vect, coord=(east, north), distance=qdist)
         self._QueryMapDone()
-        self._queryHighlight(vectQuery)
+        if 'Id' in vectQuery:
+            self._queryHighlight(vectQuery)
 
         result = rastQuery + vectQuery
         if self.dialogs['query']:

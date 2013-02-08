@@ -371,9 +371,10 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
         
         if key == 'Map':
             # attach the last one from the previous map
-            if dict_layer is not None:
+            if dict_map is not None:
                 dict_main = copy.copy(dict_map)
-                dict_main.update(dict_layer)
+                if dict_layer is not None:
+                    dict_main.update(dict_layer)
                 data.append(dict_main)
             dict_map  = { key : value }
             dict_layer = None
@@ -403,9 +404,10 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
             # examples: Sq_Meters, Hectares, Acres, Sq_Miles
     
     # attach the last one
-    if dict_layer is not None:
+    if dict_map is not None:
         dict_main = copy.copy(dict_map)
-        dict_main.update(dict_layer)
+        if dict_layer:
+            dict_main.update(dict_layer)
         data.append(dict_main)
     
     return data
