@@ -147,7 +147,7 @@ class Attrs(object):
 
         """
         #SELECT {cols} FROM {tname} WHERE {condition};
-        cur = self.table.execute(sql.SELECT_WHERE.format(key,
+        cur = self.table.execute(sql.SELECT_WHERE.format(cols=key,
                                                          tname=self.table.name,
                                                          condition=self.cond))
         results = cur.fetchone()
@@ -1216,7 +1216,7 @@ class Area(Geo):
             self.isles = self.get_isles()
             libvect.Vect_read_line(self.c_mapinfo, None, self.c_cats,
                                    self.centroid.id)
-            self.line = self.c_cats.contents.cat.contents.value
+            self.cat = self.c_cats.contents.cat.contents.value
         elif boundary and centroid:
             self.boundary = boundary
             self.centroid = centroid
@@ -1226,8 +1226,8 @@ class Area(Geo):
             raise GrassError(str_err)
 
         # set the attributes
-        if self.attrs and self.line:
-            self.attrs = Attrs(self.line,
+        if self.attrs and self.cat:
+            self.attrs = Attrs(self.cat,
                                self.attrs.table, self.attrs.writable)
 
         # geometry type
