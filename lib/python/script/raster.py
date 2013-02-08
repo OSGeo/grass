@@ -156,8 +156,9 @@ def raster_what(map, coord):
                      flags = 'rf',
                      separator = sep,
                      map = ','.join(map_list),
-                     coordinates = ','.join(coord_list))
-
+                     coordinates = ','.join(coord_list),
+                     null = _("No data"))
+    
     ret = read_command('r.what',
                        **cmdParams)
     data = list()
