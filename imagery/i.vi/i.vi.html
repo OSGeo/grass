@@ -7,6 +7,7 @@ parameters.
   <li>ARVI: atmospherically resistant vegetation indices</li>
   <li>DVI: Difference Vegetation Index</li>
   <li>EVI: Enhanced Vegetation Index</li>
+  <li>EVI2: Enhanced Vegetation Index 2</li>
   <li>GARI: Green atmospherically resistant vegetation index</li>
   <li>GEMI: Global Environmental Monitoring Index</li>
   <li>GVI: Green Vegetation Index</li>
@@ -53,12 +54,33 @@ dvi( redchan, nirchan )
 <div class="code"><pre>
 EVI: Enhanced Vegetation Index
 
+The enhanced vegetation index (EVI) is an optimized index designed to enhance
+the vegetation signal with improved sensitivity in high biomass regions and
+improved vegetation monitoring through a de-coupling of the canopy background
+signal and a reduction in atmosphere influences.
+
 Huete A.R., Liu H.Q., Batchily K., vanLeeuwen W. (1997). 
 A comparison of vegetation indices global set of TM images for 
 EOS-MODIS. Remote Sensing of Environment, 59:440-451.
+
 EVI = 2.5 * ( nirchan - redchan ) / 
 ( nirchan + 6.0 * redchan - 7.5 * bluechan + 1.0 )
 evi( bluechan, redchan, nirchan )
+</pre></div>
+
+<div class="code"><pre>
+EVI2: Enhanced Vegetation Index 2
+
+A 2-band EVI (EVI2), without a blue band, which has the best
+similarity with the 3-band EVI, particularly when atmospheric
+effects are insignificant and data quality is good. 
+
+Zhangyan Jiang ; Alfredo R. Huete ; Youngwook Kim and Kamel Didan
+2-band enhanced vegetation index without a blue band and its application to AVHRR data.
+Proc. SPIE 6679, Remote Sensing and Modeling of Ecosystems for Sustainability IV, 667905 (october 09, 2007) <a href="http://dx.doi.org/10.1117/12.734933">doi:10.1117/12.734933</a>
+EVI2 = 2.5 * ( nirchan - redchan ) / 
+( nirchan + 2.4 * redchan + 1.0 )
+evi2 ( redchan, nirchan )
 </pre></div>
 
 <div class="code"><pre>
