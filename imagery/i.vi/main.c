@@ -4,10 +4,11 @@
  * MODULE:       i.vi
  * AUTHOR(S):    Baburao Kamble baburaokamble@gmail.com
  *		 Yann Chemin - yann.chemin@gmail.com
- * PURPOSE:      Calculates 14 vegetation indices
+ *		 Nikos Alexandris - nik@nikosalexandris.net
+ * PURPOSE:      Calculates 15 vegetation indices
  * 		 based on biophysical parameters.
  *
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -22,6 +23,7 @@
  *
  * Changelog:	 Added EVI on 20080718 (Yann)
  * 		 Added VARI on 20081014 (Yann)
+ * 		 Added EVI2 on 20130208 (NikosA)
  *
  *****************************************************************************/
 
@@ -38,6 +40,7 @@ double nd_vi(double redchan, double nirchan);
 double ip_vi(double redchan, double nirchan);
 double d_vi(double redchan, double nirchan);
 double e_vi(double bluechan, double redchan, double nirchan);
+double e_vi2(double redchan, double nirchan);
 double p_vi(double redchan, double nirchan);
 double wd_vi(double redchan, double nirchan);
 double sa_vi(double redchan, double nirchan);
@@ -97,11 +100,12 @@ int main(int argc, char *argv[])
     input1->description = _("Name of vegetation index");
     desc = NULL;
     G_asprintf(&desc,
-	       "arvi;%s;dvi;%s;evi;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
+	       "arvi;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
 	       "msavi2;%s;ndvi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
 	       _("Atmospherically Resistant Vegetation Indices"),
 	       _("Difference Vegetation Index"),
 	       _("Enhanced Vegetation Index"),
+	       _("Enhanced Vegetation Index 2"),
 	       _("Green Vegetation Index"),
 	       _("Green atmospherically resistant vegetation index"),
 	       _("Global Environmental Monitoring Index"),
@@ -115,7 +119,7 @@ int main(int argc, char *argv[])
 	       _("Visible Atmospherically Resistant Index"),
 	       _("Weighted Difference Vegetation Index"));
     input1->descriptions = desc;
-    input1->options = "arvi,dvi,evi,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
+    input1->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
     input1->answer = "ndvi";
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
@@ -245,6 +249,9 @@ int main(int argc, char *argv[])
                 || !(input5->answer)) )
 	G_fatal_error(_("evi index requires blue, red and nir maps"));
 
+	if (!strcasecmp(viflag, "evi2") && (!(input2->answer) || !(input3->answer) ) )
+	G_fatal_error(_("evi2 index requires red and nir maps"));
+	
     if (!strcasecmp(viflag, "vari") && (!(input2->answer) || !(input4->answer)
                 || !(input5->answer)) )
 	G_fatal_error(_("vari index requires blue, green and red maps"));
@@ -450,6 +457,9 @@ int main(int argc, char *argv[])
 		if (!strcasecmp(viflag, "evi"))
 		    outrast[col] = e_vi(d_bluechan, d_redchan, d_nirchan);
 
+		if (!strcasecmp(viflag, "evi2"))
+		    outrast[col] = e_vi2(d_redchan, d_nirchan);
+
 		if (!strcasecmp(viflag, "pvi"))
 		    outrast[col] = p_vi(d_redchan, d_nirchan);
 
@@ -521,4 +531,3 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
-
