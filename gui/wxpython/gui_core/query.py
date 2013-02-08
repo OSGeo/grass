@@ -31,12 +31,12 @@ class QueryDialog(wx.Dialog):
         self.tree = gizmos.TreeListCtrl(self.panel, id = wx.ID_ANY,
                                         style = wx.TR_DEFAULT_STYLE |
                                         wx.TR_HIDE_ROOT)
-
+        
         self.tree.AddColumn("Feature")
         self.tree.AddColumn("Value")
         self.tree.SetMainColumn(0)
         self.tree.SetColumnWidth(0, 180)
-        self.tree.SetColumnWidth(1, 200)
+        self.tree.SetColumnWidth(1, 400)
 
         self.mainSizer.Add(item = self.tree, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
         if self.data:
