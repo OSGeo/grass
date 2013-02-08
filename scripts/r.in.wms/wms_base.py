@@ -196,7 +196,7 @@ class WMSBase:
             if urllib2.HTTPError == type(e) and e.code == 401:
                 grass.fatal(_("Authorization failed to <%s> when fetching capabilities") % options['url'])
             else:
-                msg = _("Unable to fetch capabilities from <%s>") % (options['url'])
+                msg = _("Unable to fetch capabilities from <%s>: %s") % (options['url'], e)
                 
                 if hasattr(e, 'reason'):
                     msg += _("\nReason: ") + e.reason
