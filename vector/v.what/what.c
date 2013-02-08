@@ -13,6 +13,7 @@
 static int nlines = 50;
 
 #define WDTH 5
+#define SEP "------------------------------------------------------------------"
 
 static void F_generate(const char *drvname, const char *dbname,
 		       const char *tblname, const char *key, int keyval,
@@ -110,7 +111,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
     char east_buf[40], north_buf[40];
     double sq_meters, sqm_to_sqft, acres, hectares, sq_miles;
     double z, l;
-    int notty = 0;
     int getz;
     struct field_info *Fi;
     plus_t line, area, centroid;
@@ -176,9 +176,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, "East: %s\nNorth: %s\n", east_buf,
 			    north_buf);
 		}
-		if (notty)
-		    fprintf(stderr, "East: %s\nNorth: %s\n", east_buf,
-			    north_buf);
 	    }
 	    nlines++;
 	}
@@ -187,26 +184,21 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 	if ((str = strchr(buf, '@')))
 	    *str = 0;
 
-	if (line + area > 0 || G_verbose() >= G_verbose_std()) {
-	    if (script) {
-		fprintf(stdout, "\nMap=%s\nMapset=%s\n", Map[i].name,
-			Map[i].mapset);
-	    }
-	    else {
-		fprintf(stdout, "\nMap: %s \nMapset: %s\n", Map[i].name,
-			Map[i].mapset);
-	    }
-	    if (notty)
-		fprintf(stderr, "\nMap: %s \nMapset: %s\n", Map[i].name,
-			Map[i].mapset);
+	if (script) {
+	    fprintf(stdout, "\nMap=%s\nMapset=%s\n", Map[i].name,
+		    Map[i].mapset);
 	}
+	else {
+	    fprintf(stdout, "%s", SEP);
+	    fprintf(stdout, "\nMap: %s \nMapset: %s\n", Map[i].name,
+		    Map[i].mapset);
+	}
+	
 	nlines++;
 
 	if (line + area == 0) {
-	    if (G_verbose() >= G_verbose_std()) {
+	    if (!script) {
 		fprintf(stdout, _("Nothing Found.\n"));
-		if (notty)
-		    fprintf(stderr, _("Nothing Found.\n"));
 	    }
 	    nlines++;
 	    continue;
@@ -449,14 +441,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, _("Sq Meters: %.3f\nHectares: %.3f\n"),
 			    sq_meters, hectares);
 		    fprintf(stdout, _("Acres: %.3f\nSq Miles: %.4f\n"),
-			    acres, sq_miles);
-		}
-		if (notty) {
-		    fprintf(stderr,
-			    _("Sq Meters: %.3f\nHectares: %.3f\n"),
-			    sq_meters, hectares);
-		    fprintf(stderr,
-			    _("Acres: %.3f\nSq Miles: %.4f\n"),
 			    acres, sq_miles);
 		}
 		nlines += 3;
