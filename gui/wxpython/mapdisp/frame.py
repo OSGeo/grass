@@ -9,7 +9,7 @@ Can be used either from Layer Manager or as d.mon backend.
 Classes:
  - mapdisp::MapFrame
 
-(C) 2006-2012 by the GRASS Development Team
+(C) 2006-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -790,11 +790,6 @@ class MapFrame(SingleMapFrame):
         
         self.toolbars['map'].action['desc'] = 'queryMap'
         self.MapWindow.mouse['use'] = "query"
-
-        if not self.IsStandalone():
-            # switch to output console to show query results
-            self._layerManager.notebook.SetSelectionByName('output')
-        
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.zoomtype = 0
         
