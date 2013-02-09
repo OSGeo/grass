@@ -61,8 +61,10 @@ int main(int argc, char *argv[])
     char *viflag;		/*Switch for particular index */
     char *desc;
     struct GModule *module;
-    struct Option *input1, *input2, *input3, *input4, *input5, *input6,
-	*input7, *input8, *input9, *input10, *input11, *output;
+    struct {
+        struct Option *viname, *red, *nir, *green, *blue, *chan5,
+            *chan7, *sl_slope, *sl_int, *sl_red, *bits, *output;
+    } opt;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
@@ -93,11 +95,17 @@ int main(int argc, char *argv[])
 			    "and some indices require additional bands.");
 
     /* Define the different options */
-    input1 = G_define_option();
-    input1->key = _("viname");
-    input1->type = TYPE_STRING;
-    input1->required = YES;
-    input1->description = _("Name of vegetation index");
+    opt.red = G_define_standard_option(G_OPT_R_INPUT);
+    opt.red->key = "red";
+    opt.red->label =
+	_("Name of input red channel surface reflectance map");
+    opt.red->description = _("Range: [0.0;1.0]");
+
+    opt.viname = G_define_option();
+    opt.viname->key = "viname";
+    opt.viname->type = TYPE_STRING;
+    opt.viname->required = YES;
+    opt.viname->description = _("Type of vegetation index");
     desc = NULL;
     G_asprintf(&desc,
 	       "arvi;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
@@ -118,151 +126,157 @@ int main(int argc, char *argv[])
 	       _("Simple Ratio"),
 	       _("Visible Atmospherically Resistant Index"),
 	       _("Weighted Difference Vegetation Index"));
-    input1->descriptions = desc;
-    input1->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
-    input1->answer = "ndvi";
+    opt.viname->descriptions = desc;
+    opt.viname->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
+    opt.viname->answer = "ndvi";
+    opt.viname->key_desc = _("type");
 
-    input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = "red";
-    input2->label =
-	_("Name of the red channel surface reflectance map");
-    input2->description = _("Range: [0.0;1.0]");
+    opt.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = "nir";
-    input3->required = NO;
-    input3->label =
-	_("Name of the nir channel surface reflectance map");
-    input3->description = _("Range: [0.0;1.0]");
+    opt.nir = G_define_standard_option(G_OPT_R_INPUT);
+    opt.nir->key = "nir";
+    opt.nir->required = NO;
+    opt.nir->label =
+	_("Name of input nir channel surface reflectance map");
+    opt.nir->description = _("Range: [0.0;1.0]");
+    opt.nir->guisection = _("Optional inputs");
 
-    input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = "green";
-    input4->required = NO;
-    input4->label =
-	_("Name of the green channel surface reflectance map");
-    input4->description = _("Range: [0.0;1.0]");
+    opt.green = G_define_standard_option(G_OPT_R_INPUT);
+    opt.green->key = "green";
+    opt.green->required = NO;
+    opt.green->label =
+	_("Name of input green channel surface reflectance map");
+    opt.green->description = _("Range: [0.0;1.0]");
+    opt.green->guisection = _("Optional inputs");
 
-    input5 = G_define_standard_option(G_OPT_R_INPUT);
-    input5->key = "blue";
-    input5->required = NO;
-    input5->label =
-	_("Name of the blue channel surface reflectance map");
-    input5->description = _("Range: [0.0;1.0]");
+    opt.blue = G_define_standard_option(G_OPT_R_INPUT);
+    opt.blue->key = "blue";
+    opt.blue->required = NO;
+    opt.blue->label =
+	_("Name of input blue channel surface reflectance map");
+    opt.blue->description = _("Range: [0.0;1.0]");
+    opt.blue->guisection = _("Optional inputs");
 
-    input6 = G_define_standard_option(G_OPT_R_INPUT);
-    input6->key = "chan5";
-    input6->required = NO;
-    input6->label =
-	_("Name of the chan5 channel surface reflectance map");
-    input6->description = _("Range: [0.0;1.0]");
+    opt.chan5 = G_define_standard_option(G_OPT_R_INPUT);
+    opt.chan5->key = "chan5";
+    opt.chan5->required = NO;
+    opt.chan5->label =
+	_("Name of input 5th channel surface reflectance map");
+    opt.chan5->description = _("Range: [0.0;1.0]");
+    opt.chan5->guisection = _("Optional inputs");
 
-    input7 = G_define_standard_option(G_OPT_R_INPUT);
-    input7->key = "chan7";
-    input7->required = NO;
-    input7->label =
-	_("Name of the chan7 channel surface reflectance map");
-    input7->description = _("Range: [0.0;1.0]");
+    opt.chan7 = G_define_standard_option(G_OPT_R_INPUT);
+    opt.chan7->key = "chan7";
+    opt.chan7->required = NO;
+    opt.chan7->label =
+	_("Name of input 7th channel surface reflectance map");
+    opt.chan7->description = _("Range: [0.0;1.0]");
+    opt.chan7->guisection = _("Optional inputs");
 
-    input8 = G_define_option();
-    input8->key = "soil_line_slope";
-    input8->type = TYPE_DOUBLE;
-    input8->required = NO;
-    input8->description = _("MSAVI2: Value of the slope of the soil line");
+    opt.sl_slope = G_define_option();
+    opt.sl_slope->key = "soil_line_slope";
+    opt.sl_slope->type = TYPE_DOUBLE;
+    opt.sl_slope->required = NO;
+    opt.sl_slope->description = _("Value of the slope of the soil line (MSAVI2 only)");
+    opt.sl_slope->guisection = _("MSAVI2 seetings");
 
-    input9 = G_define_option();
-    input9->key = "soil_line_intercept";
-    input9->type = TYPE_DOUBLE;
-    input9->required = NO;
-    input9->description = _("MSAVI2: Value of the intercept of the soil line");
+    opt.sl_int = G_define_option();
+    opt.sl_int->key = "soil_line_intercept";
+    opt.sl_int->type = TYPE_DOUBLE;
+    opt.sl_int->required = NO;
+    opt.sl_int->description = _("Value of the intercept of the soil line (MSAVI2 only)");
+    opt.sl_int->guisection = _("MSAVI2 seetings");
 
-    input10 = G_define_option();
-    input10->key = "soil_noise_reduction_factor";
-    input10->type = TYPE_DOUBLE;
-    input10->required = NO;
-    input10->description = _("MSAVI2: Value of the factor of reduction of soil noise");
+    opt.sl_red = G_define_option();
+    opt.sl_red->key = "soil_noise_reduction";
+    opt.sl_red->type = TYPE_DOUBLE;
+    opt.sl_red->required = NO;
+    opt.sl_red->description = _("Value of the factor of reduction of soil noise (MSAVI2 only)");
+    opt.sl_red->guisection = _("MSAVI2 seetings");
 
-    input11 = G_define_option();
-    input11->key = "DN_storage_bit";
-    input11->type = TYPE_INTEGER;
-    input11->required = NO;
-    input11->description = _("If your data is in Digital Numbers (i.e. integer type), give the max bits (i.e. 8 for Landsat -> [0-255])");
-    input11->options = "7,8,10,16";
-    input11->answer = "8";
-
-    output = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt.bits = G_define_option();
+    opt.bits->key = "storage_bit";
+    opt.bits->type = TYPE_INTEGER;
+    opt.bits->required = NO;
+    opt.bits->label = _("Maximum bits for digital numbers");
+    opt.bits->description = _("If data is in Digital Numbers (i.e. integer type), give the max bits (i.e. 8 for Landsat -> [0-255])");
+    opt.bits->options = "7,8,10,16";
+    opt.bits->answer = "8";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    viflag = input1->answer;
-    redchan = input2->answer;
-    nirchan = input3->answer;
-    greenchan = input4->answer;
-    bluechan = input5->answer;
-    chan5chan = input6->answer;
-    chan7chan = input7->answer;
-    if(input8->answer)
-        msavip1 = atof(input8->answer);
-    if(input9->answer)
-        msavip2 = atof(input9->answer);
-    if(input10->answer)
-        msavip3 = atof(input10->answer);
-    if(input11->answer)
-        dnbits = atof(input11->answer);
-    result = output->answer;
+    viflag = opt.viname->answer;
+    redchan = opt.red->answer;
+    nirchan = opt.nir->answer;
+    greenchan = opt.green->answer;
+    bluechan = opt.blue->answer;
+    chan5chan = opt.chan5->answer;
+    chan7chan = opt.chan7->answer;
+    if(opt.sl_slope->answer)
+        msavip1 = atof(opt.sl_slope->answer);
+    if(opt.sl_int->answer)
+        msavip2 = atof(opt.sl_int->answer);
+    if(opt.sl_red->answer)
+        msavip3 = atof(opt.sl_red->answer);
+    if(opt.bits->answer)
+        dnbits = atof(opt.bits->answer);
+    result = opt.output->answer;
 
-    if (!strcasecmp(viflag, "sr") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "sr") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("sr index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "ndvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "ndvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("ndvi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "ipvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "ipvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("ipvi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "dvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "dvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("dvi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "pvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "pvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("pvi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "wdvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "wdvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("wdvi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "savi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "savi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("savi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "msavi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "msavi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("msavi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "msavi2") && (!(input2->answer) || !(input3->answer)||!(input8->answer) ||!(input9->answer)||!(input10->answer)) )
+    if (!strcasecmp(viflag, "msavi2") && (!(opt.red->answer) || !(opt.nir->answer) || 
+                                          !(opt.sl_slope->answer) || !(opt.sl_int->answer) || 
+                                          !(opt.sl_red->answer)) )
 	G_fatal_error(_("msavi2 index requires red and nir maps, and 3 parameters related to soil line"));
 
-    if (!strcasecmp(viflag, "gemi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "gemi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("gemi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "arvi") && (!(input2->answer) || !(input3->answer)
-                || !(input5->answer)) )
+    if (!strcasecmp(viflag, "arvi") && (!(opt.red->answer) || !(opt.nir->answer)
+                || !(opt.blue->answer)) )
 	G_fatal_error(_("arvi index requires blue, red and nir maps"));
 
-    if (!strcasecmp(viflag, "evi") && (!(input2->answer) || !(input3->answer)
-                || !(input5->answer)) )
+    if (!strcasecmp(viflag, "evi") && (!(opt.red->answer) || !(opt.nir->answer)
+                || !(opt.blue->answer)) )
 	G_fatal_error(_("evi index requires blue, red and nir maps"));
 
-	if (!strcasecmp(viflag, "evi2") && (!(input2->answer) || !(input3->answer) ) )
+	if (!strcasecmp(viflag, "evi2") && (!(opt.red->answer) || !(opt.nir->answer) ) )
 	G_fatal_error(_("evi2 index requires red and nir maps"));
 	
-    if (!strcasecmp(viflag, "vari") && (!(input2->answer) || !(input4->answer)
-                || !(input5->answer)) )
+    if (!strcasecmp(viflag, "vari") && (!(opt.red->answer) || !(opt.green->answer)
+                || !(opt.blue->answer)) )
 	G_fatal_error(_("vari index requires blue, green and red maps"));
 
-    if (!strcasecmp(viflag, "gari") && (!(input2->answer) || !(input3->answer)
-                || !(input4->answer) || !(input5->answer)) )
+    if (!strcasecmp(viflag, "gari") && (!(opt.red->answer) || !(opt.nir->answer)
+                || !(opt.green->answer) || !(opt.blue->answer)) )
 	G_fatal_error(_("gari index requires blue, green, red and nir maps"));
 
-    if (!strcasecmp(viflag, "gvi") && (!(input2->answer) || !(input3->answer)
-                || !(input4->answer) || !(input5->answer)
-                || !(input6->answer) || !(input7->answer)) )
+    if (!strcasecmp(viflag, "gvi") && (!(opt.red->answer) || !(opt.nir->answer)
+                || !(opt.green->answer) || !(opt.blue->answer)
+                || !(opt.chan5->answer) || !(opt.chan7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
     infd_redchan = Rast_open_old(redchan, "");
@@ -341,7 +355,7 @@ int main(int argc, char *argv[])
 	    switch(data_type_redchan){
 		    case CELL_TYPE:
 			d_redchan   = (double) ((CELL *) inrast_redchan)[col];
-			if(input11->answer)
+			if(opt.bits->answer)
 				d_redchan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
@@ -355,7 +369,7 @@ int main(int argc, char *argv[])
 		switch(data_type_nirchan){
 		    case CELL_TYPE:
 			d_nirchan   = (double) ((CELL *) inrast_nirchan)[col];
-			if(input11->answer)
+			if(opt.bits->answer)
 				d_nirchan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
@@ -370,7 +384,7 @@ int main(int argc, char *argv[])
 		switch(data_type_greenchan){
 		    case CELL_TYPE:
 			d_greenchan   = (double) ((CELL *) inrast_greenchan)[col];
-			if(input11->answer)
+			if(opt.bits->answer)
 				d_greenchan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
@@ -385,7 +399,7 @@ int main(int argc, char *argv[])
 		switch(data_type_bluechan){
 		    case CELL_TYPE:
 			d_bluechan   = (double) ((CELL *) inrast_bluechan)[col];
-			if(input11->answer)
+			if(opt.bits->answer)
 				d_bluechan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
@@ -400,7 +414,7 @@ int main(int argc, char *argv[])
 		switch(data_type_chan5chan){
 		    case CELL_TYPE:
 			d_chan5chan   = (double) ((CELL *) inrast_chan5chan)[col];
-			if(input11->answer)
+			if(opt.bits->answer)
 				d_chan5chan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
@@ -415,7 +429,7 @@ int main(int argc, char *argv[])
 		switch(data_type_chan7chan){
 		    case CELL_TYPE:
 			d_chan7chan   = (double) ((CELL *) inrast_chan7chan)[col];
-			if(input11->answer)
+			if(opt.bits->answer)
 				d_chan7chan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
