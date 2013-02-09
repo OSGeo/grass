@@ -222,7 +222,7 @@ class Histogram2Frame(BasePlotFrame):
         title = _('Statistics for Map(s) Histogrammed')
 
         for rast in self.rasterList:
-            ret = grass.read_command('r.univar', map = r, flags = 'e', quiet = True)
+            ret = grass.read_command('r.univar', map = rast, flags = 'e', quiet = True)
             stats = _('Statistics for raster map <%s>') % rast + ':\n%s\n' % ret
             message.append(stats)
         
