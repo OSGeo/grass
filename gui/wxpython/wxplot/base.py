@@ -365,9 +365,9 @@ class BasePlotFrame(wx.Frame):
         """!Draw line and point plot from list plot elements.
         """
         self.plot = plot.PlotGraphics(plotlist,
-                                         self.ptitle,
-                                         self.xlabel,
-                                         self.ylabel)
+                                      self.ptitle,
+                                      self.xlabel,
+                                      self.ylabel)
 
         if self.properties['x-axis']['prop']['type'] == 'custom':
             self.client.SetXSpec('min')
