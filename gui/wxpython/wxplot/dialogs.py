@@ -206,9 +206,8 @@ class ScatterRasterDialog(wx.Dialog):
     def OnSelection(self, event):
         """!Select raster maps for scatterplot. Must select maps in pairs.
         """
-        self.rasterList = []
-        self.rasterList = event.GetString().split(',')
-            
+        self.rasterList = event.GetString().split(',', 1)
+        
     def OnSetBins(self, event):
         """!Bins for histogramming FP maps (=nsteps in r.stats)
         """
@@ -217,6 +216,22 @@ class ScatterRasterDialog(wx.Dialog):
     def OnSetScattertypes(self, event):
         self.scattertype = event.GetString()
         
+    def GetRasterPairs(self):
+        """!Get raster pairs"""
+        pairsList = list()
+        pair = list()
+        for r in self.rasterList:
+            pair.append(r)
+            if len(pair) == 2:
+                pairsList.append(tuple(pair))
+                pair = list()
+        
+        return list(pairsList)
+    
+    def GetSettings(self):
+        """!Get type and bins"""
+        return self.scattertype, self.bins
+    
 class PlotStatsFrame(wx.Frame):
     def __init__(self, parent, id, message = '', title = '',
                  style = wx.DEFAULT_FRAME_STYLE, **kwargs):
