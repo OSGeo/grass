@@ -98,15 +98,17 @@ class Select(wx.combo.ComboCtrl):
                              multiple = multiple, nmaps = nmaps,
                              updateOnPopup = updateOnPopup, onPopup = onPopup,
                              fullyQualified = fullyQualified, extraItems = extraItems)
-        self.GetChildren()[0].Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-     
-    def OnKeyUp(self, event):
-        """!Shows popupwindow if down arrow key is released"""
-        if event.GetKeyCode() == wx.WXK_DOWN and not self.IsPopupShown():
-            self.ShowPopup() 
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+
+    def OnKeyDown(self, event):
+        """!Open popup and send key events to the tree."""
+        if self.IsPopupShown():
+            self.tcp.OnKeyDown(event)
         else:
+            if event.GetKeyCode() == wx.WXK_DOWN:
+                self.ShowPopup()
             event.Skip()
-        
+
     def SetElementList(self, type, mapsets = None):
         """!Set element list
 
@@ -181,7 +183,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                                    |wx.TR_LINES_AT_ROOT
                                    |wx.SIMPLE_BORDER
                                    |wx.TR_FULL_ROW_HIGHLIGHT)
-        self.seltree.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.seltree.Bind(wx.EVT_MOTION, self.OnMotion)
         self.seltree.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.seltree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.mapsetExpanded)
@@ -474,9 +475,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         data = {'node': node, 'mapset': mapset}
         item = self.seltree.AppendItem(parent, text = value, data = wx.TreeItemData(data))
         return item
-    
-    # able to recieve only wx.EVT_KEY_UP
-    def OnKeyUp(self, event):
+
+    def OnKeyDown(self, event):
         """!Enables to select items using keyboard"""
         
         item = self.seltree.GetSelection()
