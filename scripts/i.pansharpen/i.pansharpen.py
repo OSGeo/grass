@@ -148,21 +148,21 @@ def main():
         if sproc:
             # serial processing
             e = '''eval(k = "$ms1" + "$ms2" + "$ms3")
-                "$outr" = "$ms3" * "$panmatch3" / k
-                "$outg" = "$ms2" * "$panmatch2" / k
-                "$outb" = "$ms1" * "$panmatch1" / k'''
+                "$outr" = 1.0 * "$ms3" * "$panmatch3" / k
+                "$outg" = 1.0 * "$ms2" * "$panmatch2" / k
+                "$outb" = 1.0 * "$ms1" * "$panmatch1" / k'''
             grass.mapcalc(e, outr=outr, outg=outg, outb=outb, 
                           panmatch1=panmatch1, panmatch2=panmatch2, panmatch3=panmatch3, 
                           ms1=ms1, ms2=ms2, ms3=ms3, overwrite=True)
         else:
             # parallel processing
-            pb = grass.mapcalc_start('%s_blue = (%s * %s) / (%s + %s + %s)' %
+            pb = grass.mapcalc_start('%s_blue = (1.0 * %s * %s) / (%s + %s + %s)' %
                                 (out, ms1, panmatch1, ms1, ms2, ms3),
                                 overwrite=True)   
-            pg = grass.mapcalc_start('%s_green = (%s * %s) / (%s + %s + %s)' %
+            pg = grass.mapcalc_start('%s_green = (1.0 * %s * %s) / (%s + %s + %s)' %
                                 (out, ms2, panmatch2, ms1, ms2, ms3),
                                 overwrite=True)   
-            pr = grass.mapcalc_start('%s_red = (%s * %s) / (%s + %s + %s)' %
+            pr = grass.mapcalc_start('%s_red = (1.0 * %s * %s) / (%s + %s + %s)' %
                                 (out, ms3, panmatch3, ms1, ms2, ms3),
                                 overwrite=True)   
                
@@ -256,17 +256,17 @@ def main():
         if sproc: 
             # serial processing
             e = '''eval(k = "$ms1" + "$ms2" + "$ms3")
-                "$outr" = "$ms3" * "$panmatch3" / k
-                "$outg" = "$ms2" * "$panmatch2" / k
-                "$outb" = "$ms1" * "$panmatch1" / k'''
+                "$outr" = 1.0 * "$ms3" * "$panmatch3" / k
+                "$outg" = 1.0 * "$ms2" * "$panmatch2" / k
+                "$outb" = 1.0* "$ms1" * "$panmatch1" / k'''
 
             outr = '%s_red' % out
             outg = '%s_green' % out
             outb = '%s_blue' % out
 
-            cmd1 = "$outb = ($panmatch * $b1evect1) + ($pca2 * $b2evect1) + ($pca3 * $b3evect1) + $b1mean"
-            cmd2 = "$outg = ($panmatch * $b1evect2) + ($pca2 * $b2evect1) + ($pca3 * $b3evect2) + $b2mean"
-            cmd3 = "$outr = ($panmatch * $b1evect3) + ($pca2 * $b2evect3) + ($pca3 * $b3evect3) + $b3mean"
+            cmd1 = "$outb = (1.0 * $panmatch * $b1evect1) + ($pca2 * $b2evect1) + ($pca3 * $b3evect1) + $b1mean"
+            cmd2 = "$outg = (1.0 * $panmatch * $b1evect2) + ($pca2 * $b2evect1) + ($pca3 * $b3evect2) + $b2mean"
+            cmd3 = "$outr = (1.0 * $panmatch * $b1evect3) + ($pca2 * $b2evect3) + ($pca3 * $b3evect3) + $b3mean"
             
             cmd =  '\n'.join([cmd1, cmd2, cmd3])
             
