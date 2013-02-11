@@ -43,9 +43,10 @@ class QueryDialog(wx.Dialog):
             self._load()
 
         close = wx.Button(self.panel, id = wx.ID_CLOSE)
-        close.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
+        close.Bind(wx.EVT_BUTTON, lambda event: self.Close())
         copy = wx.Button(self.panel, id = wx.ID_ANY, label = _("Copy to clipboard"))
         copy.Bind(wx.EVT_BUTTON, self.Copy)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddStretchSpacer(1)
@@ -113,6 +114,11 @@ class QueryDialog(wx.Dialog):
             do.SetText(text)
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
+
+    def OnClose(self, event):
+        self.Destroy()
+        event.Skip()
+
 
 def test():
     app = wx.PySimpleApp()

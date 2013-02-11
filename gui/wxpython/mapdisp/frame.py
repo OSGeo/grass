@@ -735,7 +735,12 @@ class MapFrame(SingleMapFrame):
             self.dialogs['query'].SetData(result)
         else:
             self.dialogs['query'] = QueryDialog(parent = self, data = result)
+            self.dialogs['query'].Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
             self.dialogs['query'].Show()
+
+    def _oncloseQueryDialog(self, event):
+        self.dialogs['query'] = None
+        event.Skip()
 
     def _queryHighlight(self, vectQuery):
         """!Highlight category from query."""
