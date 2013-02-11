@@ -56,6 +56,8 @@ class QueryDialog(wx.Dialog):
         self.mainSizer.Add(item = hbox, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
         self.panel.SetSizer(self.mainSizer)
         self.mainSizer.Fit(self.panel)
+        # for Windows
+        self.SendSizeEvent()
 
     def _load(self):
         self.tree.DeleteAllItems()
