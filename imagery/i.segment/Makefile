@@ -1,0 +1,10 @@
+MODULE_TOPDIR = ../..
+
+PGM = i.segment.xl
+
+LIBES = $(IMAGERYLIB) $(RASTERLIB) $(SEGMENTLIB) $(GISLIB) $(BTREE2LIB)
+DEPENDENCIES = $(IMAGERYDEP) $(RASTERDEP) $(SEGMENTDEP) $(GISDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
