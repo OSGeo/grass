@@ -152,9 +152,11 @@ def raster_what(map, coord):
             coord_list.append('%f,%f' % (e, n))
     
     sep = '|'
+    # separator '|' not included in command
+    # because | is causing problems on Windows
+    # change separator?
     cmdParams = dict(quiet = True,
                      flags = 'rf',
-                     separator = sep,
                      map = ','.join(map_list),
                      coordinates = ','.join(coord_list),
                      null = _("No data"))
