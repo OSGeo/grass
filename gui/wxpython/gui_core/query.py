@@ -62,21 +62,9 @@ class QueryDialog(wx.Dialog):
     def _load(self):
         self.tree.DeleteAllItems()
         self.root = self.tree.AddRoot("The Root Item")
-        # TODO: move elsewhere
         for part in self.data:
-            if 'Map' in part:
-                itemText = part['Map']
-                if 'Mapset' in part:
-                    itemText += '@' + part['Mapset']
-                    del part['Mapset']
-                item = self.tree.AppendItem(self.root, text = itemText)
-                del part['Map']
-                if part:
-                    self._addItem(item, part)
-                else:
-                    self.tree.AppendItem(item, text = _("Nothing found"))
-            else:
-                self._addItem(self.root, part)
+            self._addItem(self.root, part)
+
         self.tree.UnselectAll()
         self.tree.ExpandAll(self.root)
 
@@ -122,6 +110,29 @@ class QueryDialog(wx.Dialog):
         event.Skip()
 
 
+def PrepareQueryResults(coordinates, result):
+    """!Prepare query results as a Query dialog input.
+
+    Adds coordinates, improves vector results tree structure.
+    """
+    data = []
+    data.append({_("east"): coordinates[0]})
+    data.append({_("north"): coordinates[1]})
+    for part in result:
+        if 'Map' in part:
+            itemText = part['Map']
+            if 'Mapset' in part:
+                itemText += '@' + part['Mapset']
+                del part['Mapset']
+            del part['Map']
+            if part:
+                data.append({itemText: part})
+            else:
+                data.append({itemText: _("Nothing found")})
+        else:
+            data.append(part)
+    return data
+
 def test():
     app = wx.PySimpleApp()
     import pprint
@@ -134,7 +145,8 @@ def test():
                                   coord=(633177.897487,221352.921257), distance=10)
     
     testdata = testdata1 + testdata2
-    frame = QueryDialog(parent = None, data = testdata)
+    data = PrepareQueryResults(coordinates = (638509.051416,224742.348346), result = testdata)
+    frame = QueryDialog(parent = None, data = data)
     frame.ShowModal()
     frame.Destroy()
     app.MainLoop()
