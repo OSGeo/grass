@@ -3,7 +3,8 @@
 <em>db.connect</em> allows the user to set database connection parameters.
 These parameters are then taken as default values by modules so that the
 user does not need to enter the parameters each time.
-
+<p>
+The default database backend in GRASS 7 is SQLite.
 
 <h2>NOTES</h2>
 
@@ -19,27 +20,16 @@ or <em>v.db.addtable</em>.
 
 <h2>EXAMPLES</h2>
 
-<h3>DBF</h3>
-
-Local storage (the dbf/ subdirectory in the mapset must exist or must be
-created by the user):
-<br>
-<div class="code"><pre>
-db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
-db.tables -p
-</pre></div>
-
-
-<h3>SQLite</h3>
+<h3>SQLite (default backend)</h3>
 
 Local storage:
 <br>
 <div class="code"><pre>
-db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+db.connect -d
 db.connect -p
 db.tables -p
 </pre></div>
-<p>The SQLite database is created automatically when used the first time.
+<p>The SQLite database file is created automatically when used the first time.
 
 
 <h3>ODBC</h3>
@@ -101,11 +91,21 @@ db.connect -p
 db.tables -p
 </pre></div>
 
+<h3>DBF (not recommended)</h3>
+
+Local storage (the dbf/ subdirectory in the mapset must exist or must be
+created by the user):
+<br>
+<div class="code"><pre>
+db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+db.tables -p
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="db.columns.html">db.columns</a>,
+<a href="db.copy.html">db.copy</a>,
 <a href="db.drivers.html">db.drivers</a>,
 <a href="db.login.html">db.login</a>,
 <a href="db.tables.html">db.tables</a>,
@@ -116,9 +116,10 @@ db.tables -p
 <p>
 <a href="sql.html">GRASS SQL interface</a>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Radim Blazek, ITC-Irst, Trento, Italy
+Main author: Radim Blazek, ITC-Irst, Trento, Italy<br>
+GRASS 7 improvements: Martin Landa, Markus Metz
 
 <p>
 <i>Last changed: $Date$</i>

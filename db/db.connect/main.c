@@ -9,7 +9,7 @@
  *               Hamish Bowman <hamish_b yahoo com>
  *               Martin Landa <landa.martin gmail.com> ('d' flag)
  * PURPOSE:      set parameters for connection to database
- * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     def = G_define_flag();
     def->key = 'd';
     def->label = _("Set from default settings and exit");
-    def->description = _("Overwrite current settings if initialized");
+    def->description = _("Overwrite current settings if already initialized");
     def->guisection = _("Set");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
