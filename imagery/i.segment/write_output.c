@@ -172,6 +172,8 @@ int close_files(struct globals *globals)
 
     flag_destroy(globals->null_flag);
     flag_destroy(globals->candidate_flag);
+    
+    rgtree_destroy(globals->reg_tree);
 
     /* anything else left to clean up? */
 

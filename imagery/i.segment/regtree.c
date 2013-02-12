@@ -44,7 +44,7 @@ static int is_red(struct RG_NODE *);
 
 int compare_regstat(struct reg_stats *a, struct reg_stats *b)
 {
-    return (a->id < b->id ? -1 : (a->id > b->id));
+    return (a->id - b->id);
 }
 
 
@@ -221,14 +221,16 @@ int rgtree_remove(struct RG_TREE *tree, struct reg_stats *data)
 
     /* Replace and remove if found */
     if (f != NULL) {
-	f->data.id = q->data.id;
-	f->data.count = q->data.count;
-	memcpy(f->data.sum, q->data.sum, tree->datasize);
-	memcpy(f->data.mean, q->data.mean, tree->datasize);
-	/* unused:
-	memcpy(f->data.min, q->data.min, tree->datasize);
-	memcpy(f->data.max, q->data.max, tree->datasize);
-	*/
+	if (f != q) {
+	    f->data.id = q->data.id;
+	    f->data.count = q->data.count;
+	    memcpy(f->data.sum, q->data.sum, tree->datasize);
+	    memcpy(f->data.mean, q->data.mean, tree->datasize);
+	    /* unused:
+	    memcpy(f->data.min, q->data.min, tree->datasize);
+	    memcpy(f->data.max, q->data.max, tree->datasize);
+	    */
+	}
 	p->link[p->link[1] == q] = q->link[q->link[0] == NULL];
 	
 	free(q->data.sum);

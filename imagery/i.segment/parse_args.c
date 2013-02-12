@@ -97,7 +97,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     endt->key = "iterations";
     endt->type = TYPE_INTEGER;
     endt->required = NO;
-    endt->answer = "100";
+    endt->answer = "20";
     endt->description = _("Maximum number of iterations");
     endt->guisection = _("Settings");
 

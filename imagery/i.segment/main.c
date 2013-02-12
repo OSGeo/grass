@@ -2,9 +2,9 @@
 /****************************************************************************
  *
  * MODULE:       i.segment
- * AUTHOR(S):    Eric Momsen <eric.momsen at gmail com> (Google Summer of Code 2012)
- *               Optimized by Markus Metz
- * PURPOSE:      Segments an image group.
+ * AUTHOR(S):    Markus Metz
+ *               based on the the GSoC project by Eric Momsen <eric.momsen at gmail com>
+ * PURPOSE:      Object recognition, segments an image group.
  * COPYRIGHT:    (C) 2012 by Eric Momsen, and the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -34,8 +34,13 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("segmentation"));
+    G_add_keyword(_("object recognition"));
     module->description =
+<<<<<<< .mine
+	_("Identify segments (objects) from imagery.");
+=======
 	_("Outputs a single segmented raster map based on input values in an image group.");
+>>>>>>> .r55021
 
     parse_args(argc, argv, &globals);
 	

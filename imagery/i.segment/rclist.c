@@ -22,7 +22,7 @@ void rclist_add(struct rclist *list, int row, int col)
     
     if (list->head) {
 	list->head->next = new;
-	list->head = list->head->next;
+	list->head = new;
     }
     else {
 	list->head = list->tail = new;

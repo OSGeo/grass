@@ -14,7 +14,7 @@
 #include <grass/rbtree.h>	/* Red Black Tree library functions */
 #include "iseg.h"
 
-#define EPSILON 1.0e-12
+#define EPSILON 1.0e-8
 
 #define MAX(a,b) ( ((a)>(b)) ? (a) : (b) )
 #define MIN(a,b) ( ((a)<(b)) ? (a) : (b) )
@@ -218,9 +218,9 @@ int region_growing(struct globals *globals)
     /* make the divisor a constant ? */
     divisor = globals->nrows + globals->ncols;
 
-    while (t++ < globals->end_t && n_merges > 0) {
+    while (t < globals->end_t && n_merges > 0) {
 
-	G_message(_("Pass %d:"), t);
+	G_message(_("Pass %d:"), ++t);
 
 	n_merges = 0;
 	globals->candidate_count = 0;
@@ -540,7 +540,7 @@ int region_growing(struct globals *globals)
 		/* get segment id */
 		segment_get(&globals->rid_seg, (void *) &Ri.id, row, col);
 		
-		if (Ri.id < 0)		
+		if (Ri.id < 0)
 		    continue;
 
 		Ri_rs.id = Ri.id;
@@ -563,9 +563,6 @@ int region_growing(struct globals *globals)
 		    Ri_similarity = 2;
 
 		    if (do_merge) {
-
-			segment_get(&globals->bands_seg, (void *)Ri.mean,
-				    Ri.row, Ri.col);
 
 			/* find Ri's best neighbor, clear candidate flag */
 			Ri_nn = find_best_neighbor(&Ri, &Ri_rs, Ri_ngbrs,
@@ -648,6 +645,14 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
     n_ngbrs = 0;
     /* TODO: add size of largest region to reg_tree, use this as min */
     Rk->count = globals->ncells;
+    Rk->id = Rk_rs->id = 0;
+    
+    if (Ri->id != Ri_rs->id)
+	G_fatal_error("Ri = %d but Ri_rs = %d", Ri->id, Ri_rs->id);
+    if (Ri->id <= 0)
+	G_fatal_error("Ri is %d", Ri->id);
+    if (Ri_rs->id <= 0)
+	G_fatal_error("Ri_rs is %d", Ri_rs->id);
 
     /* go through segment, spreading outwards from head */
     rclist_init(&rilist);
@@ -1039,10 +1044,10 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 
     /* Ri ID must always be positive */
     if (Ri_rs->id < 1)
-	G_fatal_error("Ri id is negative: %d", Ri_rs->id);
+	G_fatal_error("Ri id is not positive: %d", Ri_rs->id);
     /* if Rk ID is negative (no seed), Rk count must be 1  */
     if (Rk_rs->id < 1 && Rk_rs->count > 1)
-	G_fatal_error("Rk id is negative: %d, but count is > 1: %d",
+	G_fatal_error("Rk id is not positive: %d, but count is > 1: %d",
 	              Rk_rs->id, Rk_rs->count);
 
     /* update segment id and clear candidate flag */
@@ -1156,6 +1161,7 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 		}
 	    } while (n--);
 	}
+	rclist_destroy(&rlist);
     }
     else {
 	/* Rk was larger than Ri */
@@ -1204,6 +1210,8 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 		}
 	    } while (n--);
 	}
+	rclist_destroy(&rlist);
+
 	Ri->id = Ri_rs->id;   /* == Rk->id */
 	if (Ri->id != Rk->id)
 	    G_fatal_error("Ri ID should be set to Rk ID");
@@ -1215,6 +1223,78 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
     /* disable Rk */
     Rk->id = Rk_rs->id = 0;
     Rk->count = Rk_rs->count = 0;
+    
+    /* update Ri */
+    Ri->id = Ri_rs->id;
+
+    if (Ri_rs->count < globals->min_reg_size) {
+	/* update band values with sum */
+	/* rs->id must be set */
+	struct RB_TREE *rc_check_tree;	/* cells already checked */
+	int rid;
+	int no_check;
+	
+	/* go through region, spreading outwards from head */
+	rclist_init(&rlist);
+
+	rc_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
+	ngbr_rc.row = Ri->row;
+	ngbr_rc.col = Ri->col;
+	rbtree_insert(rc_check_tree, &ngbr_rc);
+
+	/* update region stats */
+	segment_put(&globals->bands_seg, (void *)Ri_rs->sum,
+		    ngbr_rc.row, ngbr_rc.col);
+
+	next.row = Ri->row;
+	next.col = Ri->col;
+	do {
+	    G_debug(5, "find_pixel_neighbors for row: %d , col %d",
+		    next.row, next.col);
+
+	    globals->find_neighbors(next.row, next.col, neighbors);
+
+	    n = globals->nn - 1;
+	    do {
+
+		ngbr_rc.row = neighbors[n][0];
+		ngbr_rc.col = neighbors[n][1];
+
+		no_check = (ngbr_rc.row < 0 || ngbr_rc.row >= globals->nrows ||
+		    ngbr_rc.col < 0 || ngbr_rc.col >= globals->ncols);
+
+		if (!no_check) {
+		    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
+		    
+			/* already checked ? */
+			if (!rbtree_find(rc_check_tree, &ngbr_rc)) {
+
+			    /* not yet checked, don't check it again */
+			    rbtree_insert(rc_check_tree, &ngbr_rc);
+
+			    segment_get(&globals->rid_seg, (void *) &rid,
+					ngbr_rc.row, ngbr_rc.col);
+			    
+			    if (rid == Ri_rs->id) {
+
+				/* want to check this neighbor's neighbors */
+				rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
+
+				/* update region stats */
+				segment_put(&globals->bands_seg,
+					    (void *)Ri_rs->sum,
+					    ngbr_rc.row, ngbr_rc.col);
+			    }
+			}
+		    }
+		}
+	    } while (n--);
+	} while (rclist_drop(&rlist, &next));
+
+	/* clean up */
+	rbtree_destroy(rc_check_tree);
+	rclist_destroy(&rlist);
+    }
 
     return TRUE;
 }
@@ -1294,6 +1374,9 @@ int fetch_reg_stats(int row, int col, struct reg_stats *rs,
                            struct globals *globals)
 {
     struct reg_stats *rs_found;
+    
+    if (rs->id <= 0)
+	G_fatal_error("Invalid region id %d", rs->id);
 
     if ((rs_found = rgtree_find(globals->reg_tree, rs)) != NULL) {
 
@@ -1312,31 +1395,35 @@ int fetch_reg_stats(int row, int col, struct reg_stats *rs,
 static int calculate_reg_stats(int row, int col, struct reg_stats *rs, 
                          struct globals *globals)
 {
+    int ret = 0;
+
     G_debug(4, "calculate_reg_stats()");
+
+    if (rs->id <= 0)
+	G_fatal_error("Invalid region id %d", rs->id);
 
     segment_get(&globals->bands_seg, (void *)globals->bands_val,
 		row, col);
     rs->count = 1;
-    memcpy(rs->mean, globals->bands_val, globals->datasize);
     memcpy(rs->sum, globals->bands_val, globals->datasize);
 
     if (globals->min_reg_size < 3)
-	return 1;
-
-    if (globals->min_reg_size == 3) {
-	int n, i, rid;
+	ret = 1;
+    else if (globals->min_reg_size == 3) {
+	int n, rid;
 	struct rc ngbr_rc;
 	int neighbors[8][2];
 
 	globals->find_neighbors(row, col, neighbors);
 
-	for (n = 0; n < globals->nn; n++) {
+	n = globals->nn - 1;
+	do {
 
 	    ngbr_rc.row = neighbors[n][0];
 	    ngbr_rc.col = neighbors[n][1];
 
-	    if (ngbr_rc.row < 0 || ngbr_rc.row >= globals->nrows ||
-		ngbr_rc.col < 0 || ngbr_rc.col >= globals->ncols) {
+	    if (ngbr_rc.row < globals->row_min || ngbr_rc.row >= globals->row_max ||
+		ngbr_rc.col < globals->col_min || ngbr_rc.col >= globals->col_max) {
 		continue;
 	    }
 
@@ -1348,34 +1435,22 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 		if (rid == rs->id) {
 
 		    /* update region stats */
-		    segment_get(&globals->bands_seg, (void *)globals->bands_val,
-				ngbr_rc.row, ngbr_rc.col);
-
-		    i = globals->nbands - 1;
-		    do {
-			rs->sum[i] += globals->bands_val[i];
-		    } while (i--);
 		    rs->count++;
 
 		    /* only one other neighbor can have the same ID */
-		    break;
+		    /* break; */
 		}
 	    }
-	}
+	} while (n--);
+	if (rs->count > 2)
+	    G_fatal_error(_("Region size is larger than 2: %d"), rs->count);
 
-	/* band mean */
-	i = globals->nbands - 1;
-	do {
-	    rs->mean[i] = rs->sum[i] / rs->count;
-	} while (i--);
-	
-	return 2;
+	ret = 2;
     }
-
-    if (globals->min_reg_size > 3) {
+    else if (globals->min_reg_size > 3) {
 	/* rs->id must be set */
 	struct RB_TREE *rc_check_tree;	/* cells already checked */
-	int n, i, rid;
+	int n, rid;
 	struct rc ngbr_rc, next;
 	struct rclist rilist;
 	int neighbors[8][2];
@@ -1398,14 +1473,15 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 	    globals->find_neighbors(next.row, next.col, neighbors);
 
 	    n = globals->nn - 1;
-	    n = 0;
 	    do {
 
 		ngbr_rc.row = neighbors[n][0];
 		ngbr_rc.col = neighbors[n][1];
 
-		no_check = (ngbr_rc.row < 0 || ngbr_rc.row >= globals->nrows ||
-		    ngbr_rc.col < 0 || ngbr_rc.col >= globals->ncols);
+		no_check = (ngbr_rc.row < globals->row_min ||
+			    ngbr_rc.row >= globals->row_max ||
+			    ngbr_rc.col < globals->col_min ||
+			    ngbr_rc.col >= globals->col_max);
 
 		if (!no_check) {
 		    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
@@ -1425,32 +1501,31 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 				rclist_add(&rilist, ngbr_rc.row, ngbr_rc.col);
 
 				/* update region stats */
-				segment_get(&globals->bands_seg,
-					    (void *)globals->bands_val,
-					    ngbr_rc.row, ngbr_rc.col);
-
-				i = globals->nbands - 1;
-				do {
-				    rs->sum[i] += globals->bands_val[i];
-				} while (i--);
 				rs->count++;
 			    }
 			}
 		    }
 		}
-	    } while (n++ < globals->nn - 1); /* (n--); */
+	    } while (n--);
 	} while (rclist_drop(&rilist, &next));
-	/* band mean */
-	i = globals->nbands - 1;
-	do {
-	    rs->mean[i] = rs->sum[i] / rs->count;
-	} while (i--);
 
 	/* clean up */
 	rbtree_destroy(rc_check_tree);
-	
-	return 3;
+	rclist_destroy(&rilist);
+
+	ret = 3;
+    }
+
+    /* band mean */
+    if (rs->count == 1)
+	memcpy(rs->mean, rs->sum, globals->datasize);
+    else {
+	int i = globals->nbands - 1;
+
+	do {
+	    rs->mean[i] = rs->sum[i] / rs->count;
+	} while (i--);
     }
     
-    return 0;
+    return ret;
 }

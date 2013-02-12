@@ -44,7 +44,7 @@ static int is_red(struct NB_NODE *);
 
 int cmp_ngbr(struct ngbr_stats *a, struct ngbr_stats *b)
 {
-    return (a->id < b->id ? -1 : (a->id > b->id));
+    return (a->id - b->id);
 }
 
 
@@ -220,11 +220,13 @@ int nbtree_remove(struct NB_TREE *tree, struct ngbr_stats *data)
 
     /* Replace and remove if found */
     if (f != NULL) {
-	f->data.id = q->data.id;
-	f->data.row = q->data.row;
-	f->data.col = q->data.col;
-	f->data.count = q->data.count;
-	memcpy(f->data.mean, q->data.mean, tree->datasize);
+	if (f != q) {
+	    f->data.id = q->data.id;
+	    f->data.row = q->data.row;
+	    f->data.col = q->data.col;
+	    f->data.count = q->data.count;
+	    memcpy(f->data.mean, q->data.mean, tree->datasize);
+	}
 	p->link[p->link[1] == q] = q->link[q->link[0] == NULL];
 	
 	free(q->data.mean);
