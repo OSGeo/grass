@@ -424,7 +424,6 @@ class ColorTable(wx.Frame):
         
         # layout
         gridSizer =  wx.GridBagSizer(hgap = 2, vgap = 2)
-        gridSizer.AddGrowableCol(1)
         
         gridSizer.Add(item = wx.StaticText(parent, label = _("Load color table:")),
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
@@ -437,6 +436,7 @@ class ColorTable(wx.Frame):
                       pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(item = self.saveRules, pos = (2, 1), span = (1, 2), flag = wx.EXPAND)
         
+        gridSizer.AddGrowableCol(1)
         inputSizer.Add(gridSizer, proportion = 1, flag = wx.EXPAND | wx.ALL,
                        border = 5)
         

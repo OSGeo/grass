@@ -171,7 +171,6 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                            label = " %s " % (_("Image Appearance")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        gridSizer.AddGrowableCol(0)
         
         # background color
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -186,6 +185,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         self.winId['nviz:view:background:color'] = color.GetId()
         gridSizer.Add(item = color, pos = (0, 1))
         
+        gridSizer.AddGrowableCol(0)
         boxSizer.Add(item = gridSizer, proportion = 1,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         pageSizer.Add(item = boxSizer, proportion = 0,
@@ -208,7 +208,6 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                            label = " %s " % (_("Fly-through mode")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        gridSizer.AddGrowableCol(0)
         
         # move exag
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -234,6 +233,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         self.winId['nviz:fly:exag:turn'] = turnExag.GetId()
         gridSizer.Add(item = turnExag, pos = (1, 1))
         
+        gridSizer.AddGrowableCol(0)
         boxSizer.Add(item = gridSizer, proportion = 1,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         pageSizer.Add(item = boxSizer, proportion = 0,

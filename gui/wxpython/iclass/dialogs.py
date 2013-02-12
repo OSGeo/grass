@@ -153,8 +153,6 @@ class IClassCategoryManagerDialog(wx.Dialog):
                            label = " %s " % _("Classes"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        gridSizer.AddGrowableCol(0)
-        gridSizer.AddGrowableRow(2)
         self.catList = CategoryListCtrl(panel, mapwindow = parent, statistics = parent.statisticsDict,
                                          statisticsList = parent.statisticsList)
         addButton = wx.Button(panel, id = wx.ID_ADD)
@@ -164,6 +162,8 @@ class IClassCategoryManagerDialog(wx.Dialog):
         gridSizer.Add(item = addButton, pos = (0, 1), flag = wx.EXPAND)
         gridSizer.Add(item = deleteButton, pos = (1, 1), flag = wx.EXPAND)
                 
+        gridSizer.AddGrowableCol(0)
+        gridSizer.AddGrowableRow(2)
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
         mainSizer.Add(item = sizer, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
         

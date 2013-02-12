@@ -2412,7 +2412,6 @@ class GrSettingsDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         rmsgridSizer = wx.GridBagSizer(vgap=5, hgap=5)
-        rmsgridSizer.AddGrowableCol(1)
 
         # highlight only highest forward RMS error
         self.highlighthighest = wx.CheckBox(parent=panel, id=wx.ID_ANY,
@@ -2436,13 +2435,13 @@ class GrSettingsDialog(wx.Dialog):
 
         self.symbol['sdfactor'] = self.rmsWin.GetId()
         rmsgridSizer.Add(item=self.rmsWin, flag=wx.ALIGN_RIGHT, pos=(1, 1))
+        rmsgridSizer.AddGrowableCol(1)
         sizer.Add(item=rmsgridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
         box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
                            label=" %s " % _("Symbol settings"))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
-        gridSizer.AddGrowableCol(1)
 
         #
         # general symbol color
@@ -2549,6 +2548,7 @@ class GrSettingsDialog(wx.Dialog):
         gridSizer.Add(item=widWin,
                       flag=wx.ALIGN_RIGHT,
                       pos=(row, 1))
+        gridSizer.AddGrowableCol(1)
         
         boxSizer.Add(item=gridSizer, flag=wx.EXPAND)
         sizer.Add(item=boxSizer, flag=wx.EXPAND | wx.ALL, border=5)

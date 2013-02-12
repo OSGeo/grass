@@ -274,7 +274,6 @@ class WSPanel(wx.Panel):
 
             boxSizer = wx.StaticBoxSizer(labels['l_order'], wx.VERTICAL)
             gridSizer  =  wx.GridBagSizer (hgap = 3, vgap = 3)
-            gridSizer.AddGrowableCol(0)
 
             gridSizer.Add(self.l_odrder_list, 
                           pos = (0,0), 
@@ -292,6 +291,7 @@ class WSPanel(wx.Panel):
                           flag = wx.ALIGN_CENTER_VERTICAL,
                           border = 0)
         
+            gridSizer.AddGrowableCol(0)
             boxSizer.Add(gridSizer,
                          flag = wx.EXPAND | wx.ALL,
                          border = 5)
@@ -301,7 +301,6 @@ class WSPanel(wx.Panel):
                        border = 5)
 
         gridSizer  =  wx.GridBagSizer (hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
 
         row = 0
         for k in ['method', 'maxcols', 'maxrows', 'o', 'bgcolor']:
@@ -332,6 +331,7 @@ class WSPanel(wx.Panel):
                               pos = (row, 1))
             row += 1
 
+        gridSizer.AddGrowableCol(0)
         border.Add(item = gridSizer,
                    flag = wx.LEFT | wx.RIGHT | wx.TOP | wx.EXPAND, 
                    border = 5)
