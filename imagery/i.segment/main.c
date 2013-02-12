@@ -2,19 +2,20 @@
 /****************************************************************************
  *
  * MODULE:       i.segment
- * AUTHOR(S):    Eric Momsen <eric.momsen at gmail com>
+ * AUTHOR(S):    Eric Momsen <eric.momsen at gmail com> (Google Summer of Code 2012)
+ *               Optimized by Markus Metz
  * PURPOSE:      Segments an image group.
  * COPYRIGHT:    (C) 2012 by Eric Momsen, and the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the COPYING file that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the COPYING file that
+ *               comes with GRASS for details.
  * 
  *
- *               NOTE: the word "segment" is already used by the Segmentation
- *               Library for the data files/tiling, so iseg (image segmentation)
- *               will be used to refer to the image segmentation.
- * 
+ *               NOTE: the word "segment" is already used by the
+ *               Segmentation Library for the data files/tiling, so
+ *               iseg (image segmentation) will be used to refer to
+ *               the image segmentation.
  * 
  *****************************************************************************/
 
@@ -25,7 +26,7 @@
 
 int main(int argc, char *argv[])
 {
-    struct globals globals;		/* input and output file descriptors, data structure, buffers */
+    struct globals globals; /* input and output file descriptors, data structure, buffers */
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -34,22 +35,21 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("segmentation"));
     module->description =
-	_("Outputs a single segmented map (raster) based on input values in an image group.");
+	_("Outputs a single segmented raster map based on input values in an image group.");
 
-    if (parse_args(argc, argv, &globals) != TRUE)
-	G_fatal_error(_("Error in parse_args()"));
-
+    parse_args(argc, argv, &globals);
+	
     G_debug(1, "Main: starting open_files()");
     if (open_files(&globals) != TRUE)
-	G_fatal_error(_("Error in open_files()"));
+	G_fatal_error(_("Error in reading data"));
 
     G_debug(1, "Main: starting create_isegs()");
     if (create_isegs(&globals) != TRUE)
-	G_fatal_error(_("Error in create_isegs()"));
+	G_fatal_error(_("Error in creating segments"));
 
     G_debug(1, "Main: starting write_output()");
     if (write_output(&globals) != TRUE)
-	G_fatal_error(_("Error in write_output()"));
+	G_fatal_error(_("Error in writing data"));
 
     G_debug(1, "Main: starting close_files()");
     close_files(&globals);

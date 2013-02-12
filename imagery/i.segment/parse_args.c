@@ -27,8 +27,8 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     threshold->key = "threshold";
     threshold->type = TYPE_DOUBLE;
     threshold->required = YES;
-    threshold->label = _("Difference threshold between 0 and 1.");
-    threshold->description = _("Threshold = 0 merges only identical segments; threshold = 1 merges all.");
+    threshold->label = _("Difference threshold between 0 and 1");
+    threshold->description = _("Threshold = 0 merges only identical segments; threshold = 1 merges all");
 
     /* optional parameters */
 
@@ -37,7 +37,8 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     method->type = TYPE_STRING;
     method->required = NO;
     method->answer = "region_growing";
-    method->description = _("Segmentation method.");
+    method->options = "region_growing";
+    method->description = _("Segmentation method");
     method->guisection = _("Settings");
 
     similarity = G_define_option();
@@ -45,8 +46,8 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     similarity->type = TYPE_STRING;
     similarity->required = YES;
     similarity->answer = "euclidean";
-    similarity->options = "euclidean, manhattan";
-    similarity->description = _("Similarity calculation method.");
+    similarity->options = "euclidean,manhattan";
+    similarity->description = _("Similarity calculation method");
     similarity->guisection = _("Settings");
 
     min_segment_size = G_define_option();
@@ -55,9 +56,9 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     min_segment_size->required = NO;
     min_segment_size->answer = "1";
     min_segment_size->options = "1-100000";
-    min_segment_size->label = _("Minimum number of cells in a segment.");
+    min_segment_size->label = _("Minimum number of cells in a segment");
     min_segment_size->description =
-	_("The final step will merge small segments with their best neighbor.");
+	_("The final step will merge small segments with their best neighbor");
     min_segment_size->guisection = _("Settings");
 
 #ifdef _OR_SHAPE_
@@ -68,7 +69,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     radio_weight->answer = "1";
     radio_weight->options = "0-1";
     radio_weight->label =
-	_("Importance of radiometric (input raster) values relative to shape.");
+	_("Importance of radiometric (input raster) values relative to shape");
     radio_weight->guisection = _("Settings");
 
     smooth_weight = G_define_option();
@@ -78,31 +79,16 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     smooth_weight->answer = "0.5";
     smooth_weight->options = "0-1";
     smooth_weight->label =
-	_("Importance of smoothness relative to compactness.");
+	_("Importance of smoothness relative to compactness");
     smooth_weight->guisection = _("Settings");
 #endif
-
-    /* Using raster for seeds
-     * Low priority TODO: allow vector points/centroids seed input. */
-    seeds = G_define_standard_option(G_OPT_R_INPUT);
-    seeds->key = "seeds";
-    seeds->required = NO;
-    seeds->description = _("Optional raster map with starting seeds.");
-
-    /* Polygon constraints. */
-    bounds = G_define_standard_option(G_OPT_R_INPUT);
-    bounds->key = "bounds";
-    bounds->required = NO;
-    bounds->label = _("Optional bounding/constraining raster map");
-    bounds->description =
-	_("Must be integer values, each area will be segmented independent of the others.");
 
     mem = G_define_option();
     mem->key = "memory";
     mem->type = TYPE_INTEGER;
     mem->required = NO;
     mem->answer = "300";
-    mem->description = _("Memory in MB.");
+    mem->description = _("Memory in MB");
 
     /* TODO input for distance function */
 
@@ -112,23 +98,44 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     endt->type = TYPE_INTEGER;
     endt->required = NO;
     endt->answer = "100";
-    endt->description = _("Maximum number of iterations.");
+    endt->description = _("Maximum number of iterations");
+    endt->guisection = _("Settings");
+
+    /* Using raster for seeds
+     * Low priority TODO: allow vector points/centroids seed input. */
+    seeds = G_define_standard_option(G_OPT_R_INPUT);
+    seeds->key = "seeds";
+    seeds->required = NO;
+    seeds->description = _("Name for output raster map with starting seeds");
+    seeds->guisection = _("Optional outputs");
+
+    /* Polygon constraints. */
+    bounds = G_define_standard_option(G_OPT_R_INPUT);
+    bounds->key = "bounds";
+    bounds->required = NO;
+    bounds->label = _("Name for output bounding/constraining raster map");
+    bounds->description =
+	_("Must be integer values, each area will be segmented independent of the others");
+    bounds->guisection = _("Optional outputs");
 
     outband = G_define_standard_option(G_OPT_R_OUTPUT);
     outband->key = "goodness";
     outband->required = NO;
     outband->description =
-	_("Goodness of fit estimate.");
+	_("Name for output goodness of fit estimate");
+    outband->guisection = _("Optional outputs");
 
     diagonal = G_define_flag();
     diagonal->key = 'd';
     diagonal->description =
-	_("Use 8 neighbors (3x3 neighborhood) instead of the default 4 neighbors for each pixel.");
+	_("Use 8 neighbors (3x3 neighborhood) instead of the default 4 neighbors for each pixel");
+    diagonal->guisection = _("Settings");
 
     weighted = G_define_flag();
     weighted->key = 'w';
     weighted->description =
-	_("Weighted input, don't perform the default scaling of input maps.");
+	_("Weighted input, don't perform the default scaling of input raster maps");
+    weighted->guisection = _("Settings");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -140,19 +147,19 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     if (G_legal_filename(output->answer) == TRUE)
 	globals->out_name = output->answer;
     else
-	G_fatal_error("Invalid output raster name.");
+	G_fatal_error("Invalid output raster name");
 
     /* Note: this threshold is scaled after we know more at the beginning of create_isegs() */
     globals->alpha = atof(threshold->answer);
 
     if (globals->alpha <= 0 || globals->alpha >= 1)
-	G_fatal_error(_("threshold should be >= 0 and <= 1"));
+	G_fatal_error(_("Threshold should be >= 0 and <= 1"));
 
     /* segmentation methods:  1 = region growing */
     if (strcmp(method->answer, "region_growing") == 0)
 	globals->method = 1;
     else
-	G_fatal_error("Couldn't assign segmentation method.");
+	G_fatal_error(_("Unable to assign segmentation method"));
 
     G_debug(1, "segmentation method: %d", globals->method);
 
@@ -162,7 +169,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     else if (strcmp(similarity->answer, "manhattan") == 0)
 	globals->calculate_similarity = calculate_manhattan_similarity;
     else
-	G_fatal_error(_("Invalid similarity method."));
+	G_fatal_error(_("Invalid similarity method"));
 
 #ifdef _OR_SHAPE_
     /* consider shape */
@@ -201,11 +208,11 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     globals->seeds = seeds->answer;
     if (globals->seeds) {
 	if (G_find_raster(globals->seeds, "") == NULL) {
-	    G_fatal_error(_("Seeds map not found."));
+	    G_fatal_error(_("Seeds raster map not found"));
 	}
 	if (Rast_map_type(globals->seeds, "") !=
 	    CELL_TYPE) {
-	    G_fatal_error(_("Seeeds map must be CELL type (integers)"));
+	    G_fatal_error(_("Seeeds raster map must be CELL type (integers)"));
 	}
     }
 
@@ -215,11 +222,11 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     else {
 	globals->bounds_map = bounds->answer;
 	if ((globals->bounds_mapset = G_find_raster(globals->bounds_map, "")) == NULL) {
-	    G_fatal_error(_("Segmentation constraint/boundary map not found."));
+	    G_fatal_error(_("Segmentation constraint/boundary raster map not found"));
 	}
 	if (Rast_map_type(globals->bounds_map, globals->bounds_mapset) !=
 	    CELL_TYPE) {
-	    G_fatal_error(_("Segmentation constraint map must be CELL type (integers)"));
+	    G_fatal_error(_("Segmentation constraint raster map must be CELL type (integers)"));
 	}
     }
 
@@ -234,7 +241,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 	if (G_legal_filename(outband->answer) == TRUE)
 	    globals->out_band = outband->answer;
 	else
-	    G_fatal_error("Invalid output raster name for goodness of fit.");
+	    G_fatal_error(_("Invalid output raster name for goodness of fit"));
     }
 
     if (endt->answer) {
@@ -242,7 +249,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 	    globals->end_t = atoi(endt->answer);
 	else {
 	    globals->end_t = 100;
-	    G_warning(_("Invalid number of iterations, 100 will be used."));
+	    G_warning(_("Invalid number of iterations, 100 will be used"));
 	}
     }
     else
@@ -252,7 +259,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 	globals->mb = atoi(mem->answer);
     else {
 	globals->mb = 300;
-	G_warning(_("Invalid number of MB, 300 will be used."));
+	G_warning(_("Invalid number of MB, 300 will be used"));
     }
 
     return TRUE;
