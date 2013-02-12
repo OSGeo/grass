@@ -1319,8 +1319,9 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.mouse['use'] = 'pointer'
         
         # untoggles button in add legend dialog
+        # FIXME: remove this mess
         if self.dialogs['legend']:
-            if hasattr(event ,'GetEventObject'):
+            if hasattr(event ,'GetEventObject') and hasattr(event.GetEventObject() ,'GetId'):
                 if event.GetEventObject().GetId() == \
                         self.dialogs['legend'].resizeBtn.GetId():
                     return
