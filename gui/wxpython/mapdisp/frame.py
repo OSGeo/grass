@@ -48,7 +48,7 @@ from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDial
 from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapdisp   import SingleMapFrame
-from gui_core.query     import QueryDialog
+from gui_core.query     import QueryDialog, PrepareQueryResults
 from mapdisp.mapwindow  import BufferedWindow
 from mapdisp.overlays   import LegendController, BarscaleController
 from modules.histogram  import HistogramFrame
@@ -730,6 +730,7 @@ class MapFrame(SingleMapFrame):
             self._queryHighlight(vectQuery)
 
         result = rastQuery + vectQuery
+        result = PrepareQueryResults(coordinates = (east, north), result = result)
         if self.dialogs['query']:
             self.dialogs['query'].Raise()
             self.dialogs['query'].SetData(result)
