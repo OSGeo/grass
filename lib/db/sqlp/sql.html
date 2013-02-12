@@ -30,7 +30,7 @@ distributions of GRASS.
 <tr><td><a href="grass-dbf.html">dbf</a></td><td>DBF files. Data are stored in DBF files.</td>
 <td><a href="http://shapelib.maptools.org/dbf_api.html">http://shapelib.maptools.org/dbf_api.html</a></td></tr>
 
-<tr><td><a href="grass-sqlite.html">sqlite</a></td><td>SQLite embedded database.</td>
+<tr><td><a href="grass-sqlite.html">sqlite</a></td><td>SQLite embedded database (GRASS 7 default DB backend).</td>
 <td><a href="http://sqlite.org/">http://sqlite.org/</a></td></tr>
 
 <tr><td><a href="grass-pg.html">pg</a></td><td>PostgreSQL RDBMS.</td>
@@ -154,9 +154,16 @@ v.db.update mygeodetic_pts col=zval \
             where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
+<p><b>Example</b> of concatenating fields (does not work for DBF driver):
+<div class="code"><pre>
+v.db.update vectormap column=column3 qcolumn="column1 || column2"
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.db.update.html">v.db.update</a>
+<p>
 <a href="databaseintro.html">Database management in GRASS GIS</a>,
 <a href="database.html">Help pages for database modules</a>
 </em>
