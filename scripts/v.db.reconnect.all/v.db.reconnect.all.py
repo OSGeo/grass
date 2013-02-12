@@ -156,6 +156,8 @@ def main():
     else:
         new_schema = default_connection['schema']
 
+    if old_database == '':
+    	old_database = None
     old_database_subst = None
     if old_database is not None:
 	old_database_subst = substitute_db(old_database)
@@ -230,10 +232,10 @@ def main():
                                           layer = layer, driver = new_driver, database = new_database,
                                           table = new_schema_table, key = key):
                     grass.warning(_("Unable to connect table <%s> to vector <%s> on layer <%s>") %
-				  (table, vect))
+				  (table, vect, str(layer)))
 
             else:
-		if database != substitute_db(new_database):
+		if database != new_database_subst:
 		    grass.warning(_("Layer <%d> will not be reconnected because "
 				    "database or schema do not match.") % layer)
 	
