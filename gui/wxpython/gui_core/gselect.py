@@ -1361,7 +1361,6 @@ class GdalSelect(wx.Panel):
         inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
         
         self.dsnSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        self.dsnSizer.AddGrowableCol(3)
         
         row = 0
         self.dsnSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
@@ -1395,6 +1394,7 @@ class GdalSelect(wx.Panel):
                               pos = (row, 1), span = (1, 3))
             row += 1
         
+        self.dsnSizer.AddGrowableCol(3)
         inputSizer.Add(item=self.dsnSizer, proportion = 1,
                        flag=wx.EXPAND | wx.BOTTOM, border = 10)
         

@@ -1366,7 +1366,6 @@ class VariablePanel(wx.Panel):
         
         addSizer = wx.StaticBoxSizer(self.addBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        gridSizer.AddGrowableCol(1)
         gridSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                            label = "%s:" % _("Name")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
@@ -1394,6 +1393,7 @@ class VariablePanel(wx.Panel):
         gridSizer.Add(item = self.desc,
                       pos = (2, 1), span = (1, 3),
                       flag = wx.EXPAND)
+        gridSizer.AddGrowableCol(1)
         addSizer.Add(item = gridSizer,
                      flag = wx.EXPAND)
         addSizer.Add(item = self.btnAdd, proportion = 0,

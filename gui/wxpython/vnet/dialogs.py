@@ -2123,7 +2123,6 @@ class SettingsDialog(wx.Dialog):
         styleBoxSizer = wx.StaticBoxSizer(styleBox, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(vgap = 1, hgap = 1)
-        gridSizer.AddGrowableCol(1)
 
         row = 0
         gridSizer.Add(item =  settsLabels["line_color"], flag = wx.ALIGN_CENTER_VERTICAL, pos =(row, 0))
@@ -2145,6 +2144,7 @@ class SettingsDialog(wx.Dialog):
         row += 1
         gridSizer.Add(item = self.settings["invert_colors"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
 
+        gridSizer.AddGrowableCol(1)
         styleBoxSizer.Add(item = gridSizer, flag = wx.EXPAND)
 
         # Point style layout
@@ -2153,7 +2153,6 @@ class SettingsDialog(wx.Dialog):
         ptsStyleBoxSizer = wx.StaticBoxSizer(ptsStyleBox, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(vgap = 1, hgap = 1)
-        gridSizer.AddGrowableCol(1)
 
         row = 0
         setts = dict(self.colorsSetts.items() + self.sizeSetts.items())
@@ -2167,6 +2166,7 @@ class SettingsDialog(wx.Dialog):
                           pos =(row, 1))  
             row += 1
 
+        gridSizer.AddGrowableCol(1)
         ptsStyleBoxSizer.Add(item = gridSizer, flag = wx.EXPAND)
 
         # Other settings layout
@@ -2175,7 +2175,6 @@ class SettingsDialog(wx.Dialog):
         otherBoxSizer = wx.StaticBoxSizer(otherBox, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(vgap = 1, hgap = 1)
-        gridSizer.AddGrowableCol(1)
 
         row = 0 
         for otherSettName in ["snap_tresh", "max_hist_steps"]:
@@ -2185,6 +2184,7 @@ class SettingsDialog(wx.Dialog):
                           pos = (row, 1))
             row += 1
 
+        gridSizer.AddGrowableCol(1)
         otherBoxSizer.Add(item = gridSizer, flag = wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)

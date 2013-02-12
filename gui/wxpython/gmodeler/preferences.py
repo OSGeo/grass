@@ -51,7 +51,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
         
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -70,6 +69,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
 
@@ -89,7 +89,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
         
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -142,6 +141,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         
@@ -151,7 +151,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
-        gridSizer.AddGrowableCol(0)
 
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -189,6 +188,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
                 
@@ -208,7 +208,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
         
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -261,6 +260,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
 
@@ -270,7 +270,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
-        gridSizer.AddGrowableCol(0)
         
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -308,6 +307,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
         
@@ -327,7 +327,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
         
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -346,6 +345,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         
@@ -355,7 +355,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
-        gridSizer.AddGrowableCol(0)
 
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -393,6 +392,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
                 
@@ -458,8 +458,6 @@ class PropertiesDialog(wx.Dialog):
     def _layout(self):
         metaSizer = wx.StaticBoxSizer(self.metaBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(1)
-        gridSizer.AddGrowableRow(1)
         gridSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                          label = _("Name:")),
                       flag = wx.ALIGN_LEFT |
@@ -487,6 +485,8 @@ class PropertiesDialog(wx.Dialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (2, 1))
+        gridSizer.AddGrowableCol(1)
+        gridSizer.AddGrowableRow(1)
         metaSizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
         
         cmdSizer = wx.StaticBoxSizer(self.cmdBox, wx.VERTICAL)

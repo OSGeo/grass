@@ -619,7 +619,6 @@ class TextDialog(wx.Dialog):
                            label = " %s " % _("Font settings"))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        gridSizer.AddGrowableCol(1)
 
         #
         # font family
@@ -664,6 +663,7 @@ class TextDialog(wx.Dialog):
 
         gridSizer.Add(item = self.fwtcb, pos = (2, 1), flag = wx.ALIGN_RIGHT)
                       
+        gridSizer.AddGrowableCol(1)
         boxSizer.Add(item = gridSizer, flag = wx.EXPAND)
         sizer.Add(item = boxSizer, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
 

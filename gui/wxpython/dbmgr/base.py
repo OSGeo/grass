@@ -1059,7 +1059,6 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         # Simple tab layout
         simpleSqlSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
-        simpleSqlSizer.AddGrowableCol(1)
 
         sqlSimpleWhereSizer= wx.BoxSizer(wx.HORIZONTAL)
 
@@ -1079,6 +1078,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                            flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.EXPAND)     
         simpleSqlSizer.Add(item = btnApply, border = 5, pos = (0, 2),
                            flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP)
+        simpleSqlSizer.AddGrowableCol(1)
 
         simpleSqlPanel.SetSizer(simpleSqlSizer)
 
@@ -2709,7 +2709,6 @@ class LayerBook(wx.Notebook):
                 
         # data area
         dataSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        dataSizer.AddGrowableCol(1)
         row = 0
         for key in ('layer', 'driver', 'database', 'table', 'key', 'addCat'):
             label, value = self.addLayerWidgets[key]
@@ -2735,6 +2734,7 @@ class LayerBook(wx.Notebook):
             
             row += 1
         
+        dataSizer.AddGrowableCol(1)
         layerSizer.Add(item = dataSizer,
                        proportion = 1,
                        flag = wx.ALL | wx.EXPAND,

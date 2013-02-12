@@ -427,7 +427,6 @@ class VDigitSettingsDialog(wx.Dialog):
                               label = " %s " % _("Geometry attributes"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
         self.geomAttrb = { 'length' : { 'label' : _('length') },
                            'area' : { 'label' : _('area') },
                            'perimeter' : { 'label' : _('perimeter') } }
@@ -506,6 +505,7 @@ class VDigitSettingsDialog(wx.Dialog):
                                            label = note),
                       pos = (3, 0), span = (1, 3))
                       
+        gridSizer.AddGrowableCol(0)
         sizer.Add(item = gridSizer, proportion = 1,
                   flag = wx.ALL | wx.EXPAND, border = 1)
         border.Add(item = sizer, proportion = 0,

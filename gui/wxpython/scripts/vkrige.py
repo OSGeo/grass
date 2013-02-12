@@ -117,7 +117,6 @@ class KrigingPanel(wx.Panel):
         OutputSizer = wx.StaticBoxSizer(wx.StaticBox(self, id = wx.ID_ANY, label = _("Output")), wx.HORIZONTAL)
         
         OutputParameters = wx.GridBagSizer(hgap = 5, vgap = 5)
-        OutputParameters.AddGrowableCol(1)
         OutputParameters.Add(item = wx.StaticText(self, id = wx.ID_ANY, label = _("Name for the output raster map:")),
                              flag = wx.ALIGN_CENTER_VERTICAL,
                              pos = (0, 0))
@@ -144,6 +143,7 @@ class KrigingPanel(wx.Panel):
         OutputParameters.Add(item = self.OverwriteCheckBox,
                              pos = (2, 0), span = (1, 2))
         
+        OutputParameters.AddGrowableCol(1)
         OutputSizer.Add(OutputParameters, proportion = 0, flag = wx.EXPAND | wx.ALL, border = self.border)
         
         #    4. Run Button and Quit Button
