@@ -74,7 +74,8 @@ class BufferedWindow(wx.Window):
         self.imagedict = {} # images and their PseudoDC ID's for painting and dragging
         
         self.pdc = wx.PseudoDC()
-        self._buffer = '' # will store an off screen empty bitmap for saving to file
+        # will store an off screen empty bitmap for saving to file
+        self._buffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
         
         # make sure that extents are updated at init
         self.Map.region = self.Map.GetRegion()
