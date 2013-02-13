@@ -36,18 +36,16 @@
 #include <grass/raster.h>
 #include <grass/site.h>
 #include <grass/vector.h>
-#include "userglobs.h"
-
-/* include G3d defs */
+#include <grass/bitmap.h>
+#include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include <grass/raster3d.h>
 
+#include "userglobs.h"
 #include "oct.h"
 #include "surf.h"
 #include "dataoct.h"
 #include "user.h"
-#include <grass/bitmap.h>
-#include <grass/dbmi.h>
-#include <grass/glocale.h>
 
 double /* pargr */ xmin, xmax, ymin, ymax, zmin, zmax, wmin, wmax;
 double /* norm */ xmin0, xmax0, ymin0, ymax0, zmin0, zmax0, wmin0, wmax0,
@@ -207,7 +205,7 @@ int main(int argc, char *argv[])
     double amin1(double, double);
     int max1();
     int min1();
-    int per, npmin;
+    int npmin;
     int ii, i, n_rows, n_cols, n_levs;
     double x_orig, y_orig, z_orig;
     char dminchar[64];
@@ -246,29 +244,24 @@ int main(int argc, char *argv[])
 	_("Interpolates point data to a 3D raster map using "
 	  "regularized spline with tension (RST) algorithm.");
 
-    parm.input = G_define_option();
-    parm.input->key = "input";
-    parm.input->type = TYPE_STRING;
+    parm.input = G_define_standard_option(G_OPT_V_INPUT);
     parm.input->required = YES;
-    parm.input->gisprompt = "old,vector,vector";
-    parm.input->description = _("Name of the vector map with input x,y,z,w");
-
-    parm.cellinp = G_define_option();
+    parm.input->label = _("Name of input 3D vector points map");
+    parm.input->description = NULL; /* no OGR support */
+    
+    parm.cellinp = G_define_standard_option(G_OPT_R_INPUT);
     parm.cellinp->key = "cellinp";
-    parm.cellinp->type = TYPE_STRING;
     parm.cellinp->required = NO;
-    parm.cellinp->gisprompt = "old,cell,raster";
     parm.cellinp->description =
-	_("Name of the surface raster map for cross-section");
-
-    parm.colnum = G_define_option();
+	_("Name of input surface raster map for cross-section");
+    parm.cellinp->guisection = _("Optional inputs");
+    
+    parm.colnum = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.colnum->key = "wcolumn";
-    parm.colnum->type = TYPE_STRING;
     parm.colnum->required = NO;
     parm.colnum->description =
-	_("Name of the column containing w attribute to interpolate");
-    parm.colnum->answer = "flt1";
-
+	_("Name of column containing w attribute to interpolate");
+    
     parm.fi = G_define_option();
     parm.fi->key = "tension";
     parm.fi->type = TYPE_DOUBLE;
@@ -285,38 +278,32 @@ int main(int argc, char *argv[])
     parm.rsm->description = _("Smoothing parameter");
     parm.rsm->guisection = _("Settings");
 
-    parm.scol = G_define_option();
+    parm.scol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.scol->key = "scolumn";
-    parm.scol->type = TYPE_STRING;
     parm.scol->required = NO;
     parm.scol->description =
-	_("Name of the column with smoothing parameters");
+	_("Name of column with smoothing parameters");
     parm.scol->guisection = _("Settings");
 
     parm.wheresql = G_define_standard_option(G_OPT_DB_WHERE);
 
-    parm.devi = G_define_option();
+    parm.devi = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.devi->key = "devi";
-    parm.devi->type = TYPE_STRING;
     parm.devi->required = NO;
-    parm.devi->gisprompt = "new,vector,vector";
-    parm.devi->description = _("Output deviations vector point file");
-    parm.devi->guisection = _("Analysis");
+    parm.devi->description = _("Name for output deviations vector map");
+    parm.devi->guisection = _("Outputs");
 
-    parm.cvdev = G_define_option();
+    parm.cvdev = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.cvdev->key = "cvdev";
-    parm.cvdev->type = TYPE_STRING;
     parm.cvdev->required = NO;
-    parm.cvdev->gisprompt = "new,vector,vector";
-    parm.cvdev->description = _("Output cross-validation vector map");
-    parm.cvdev->guisection = _("Analysis");
+    parm.cvdev->description = _("Name for output cross-validation vector map");
+    parm.cvdev->guisection = _("Outputs");
 
-    parm.maskmap = G_define_option();
+    parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
     parm.maskmap->key = "maskmap";
-    parm.maskmap->type = TYPE_STRING;
     parm.maskmap->required = NO;
-    parm.maskmap->gisprompt = "old,cell,raster";
-    parm.maskmap->description = _("Name of the raster map used as mask");
+    parm.maskmap->description = _("Name of input raster map used as mask");
+    parm.maskmap->guisection = _("Optional inputs");
 
     parm.segmax = G_define_option();
     parm.segmax->key = "segmax";
@@ -369,76 +356,54 @@ int main(int argc, char *argv[])
     parm.zmult->description = _("Conversion factor for z-values");
     parm.zmult->guisection = _("Settings");
 
-    parm.cellout = G_define_option();
+    parm.cellout = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.cellout->key = "cellout";
-    parm.cellout->type = TYPE_STRING;
     parm.cellout->required = NO;
-    parm.cellout->gisprompt = "new,cell,raster";
-    parm.cellout->description = _("Output cross-section raster map");
-    parm.cellout->guisection = _("Output_options");
+    parm.cellout->description = _("Name for output cross-section raster map");
+    parm.cellout->guisection = _("Outputs");
 
-    parm.outz = G_define_option();
+    parm.outz = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.outz->key = "elev";
-    parm.outz->type = TYPE_STRING;
     parm.outz->required = NO;
-    parm.outz->multiple = NO;
-    parm.outz->gisprompt = "new,grid3,3d raster";
-    parm.outz->description = _("Output elevation g3d-file");
+    parm.outz->description = _("Name for output elevation 3D raster map");
+    parm.outz->guisection = _("Outputs");
 
-    parm.gradient = G_define_option();
+    parm.gradient = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.gradient->key = "gradient";
-    parm.gradient->type = TYPE_STRING;
     parm.gradient->required = NO;
-    parm.gradient->multiple = NO;
-    parm.gradient->gisprompt = "new,grid3,3d raster";
-    parm.gradient->description = _("Output gradient magnitude g3d-file");
-    parm.gradient->guisection = _("Output_options");
+    parm.gradient->description = _("Name for output gradient magnitude 3D raster map");
+    parm.gradient->guisection = _("Outputs");
 
-    parm.aspect1 = G_define_option();
+    parm.aspect1 = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.aspect1->key = "aspect1";
-    parm.aspect1->type = TYPE_STRING;
     parm.aspect1->required = NO;
-    parm.aspect1->multiple = NO;
-    parm.aspect1->gisprompt = "new,grid3,3d raster";
     parm.aspect1->description =
-	_("Output gradient horizontal angle g3d-file");
-    parm.aspect1->guisection = _("Output_options");
+	_("Name for output gradient horizontal angle 3D raster map");
+    parm.aspect1->guisection = _("Outputs");
 
-    parm.aspect2 = G_define_option();
+    parm.aspect2 = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.aspect2->key = "aspect2";
-    parm.aspect2->type = TYPE_STRING;
     parm.aspect2->required = NO;
-    parm.aspect2->multiple = NO;
-    parm.aspect2->gisprompt = "new,grid3,3d raster";
-    parm.aspect2->description = _("Output gradient vertical angle g3d-file");
-    parm.aspect2->guisection = _("Output_options");
+    parm.aspect2->description = _("Name for output gradient vertical angle 3D raster map");
+    parm.aspect2->guisection = _("Outputs");
 
-    parm.ncurv = G_define_option();
+    parm.ncurv = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.ncurv->key = "ncurv";
-    parm.ncurv->type = TYPE_STRING;
     parm.ncurv->required = NO;
-    parm.ncurv->multiple = NO;
-    parm.ncurv->gisprompt = "new,grid3,3d raster";
-    parm.ncurv->description = _("Output change of gradient g3d-file");
-    parm.ncurv->guisection = _("Output_options");
+    parm.ncurv->description = _("Name for output change of gradient 3D raster map");
+    parm.ncurv->guisection = _("Outputs");
 
-    parm.gcurv = G_define_option();
+    parm.gcurv = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.gcurv->key = "gcurv";
-    parm.gcurv->type = TYPE_STRING;
     parm.gcurv->required = NO;
-    parm.gcurv->multiple = NO;
-    parm.gcurv->gisprompt = "new,grid3,3d raster";
-    parm.gcurv->description = _("Output gaussian curvature g3d-file");
-    parm.gcurv->guisection = _("Output_options");
+    parm.gcurv->description = _("Name for output gaussian curvature 3D raster map");
+    parm.gcurv->guisection = _("Outputs");
 
-    parm.mcurv = G_define_option();
+    parm.mcurv = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.mcurv->key = "mcurv";
-    parm.mcurv->type = TYPE_STRING;
     parm.mcurv->required = NO;
-    parm.mcurv->multiple = NO;
-    parm.mcurv->gisprompt = "new,grid3,3d raster";
-    parm.mcurv->description = _("Output mean curvature g3d-file");
-    parm.mcurv->guisection = _("Output_options");
+    parm.mcurv->description = _("Name for output mean curvature 3D raster map");
+    parm.mcurv->guisection = _("Outputs");
 
     flag.cv = G_define_flag();
     flag.cv->key = 'c';
@@ -475,7 +440,6 @@ int main(int argc, char *argv[])
     if (!parm.dmin1->answer)
 	parm.dmin1->answer = dminchar;
 
-    per = 1;			/*flag.per->answer; */
     iw2 = 1;
     sig1 = 0;
     input = parm.input->answer;
@@ -513,9 +477,10 @@ int main(int argc, char *argv[])
 	rsm = -1;		/* used in InterpLib to indicate variable smoothing */
 
     if (cv != (cvdev != NULL))
-	G_fatal_error(_("Both crossvalidation options (-c, cvdev) must be specified"));
+        G_fatal_error(_("Both crossvalidation options (-%c, %s) must be specified"),
+                      flag.cv->key, parm.cvdev->key);
     if (cv && devi != NULL)
-	G_fatal_error(_("Both crossvalidation and deviations file specified"));
+	G_fatal_error(_("Both crossvalidation and deviations must be specified"));
     if (cellinp == NULL && outz == NULL && cellout == NULL && gradient == NULL
 	&& aspect1 == NULL && aspect2 == NULL && ncurv == NULL &&
 	gcurv == NULL && mcurv == NULL) {
@@ -526,8 +491,8 @@ int main(int argc, char *argv[])
 	(cellinp != NULL || outz != NULL || cellout != NULL ||
 	 gradient != NULL || aspect1 != NULL || aspect2 != NULL ||
 	 ncurv != NULL || gcurv != NULL || mcurv != NULL || devi != NULL))
-	G_fatal_error
-	    ("The crossvalidation cannot be computed simultanuously with output grids or devi file");
+	G_fatal_error("Crossvalidation cannot be computed simultanuously "
+                      "with output grids or devi file");
 
     z_orig_in = z_orig;
     tb_res_in = tb_res;
@@ -574,14 +539,14 @@ int main(int argc, char *argv[])
 
     if ((data =
 	 data_new(x_orig, y_orig, z_orig, n_rows, n_cols, n_levs, 0)) == NULL)
-	G_fatal_error("cannot create octdata");
+	G_fatal_error("Unable to create octdata");
     if ((functions =
 	 OT_functions_new(oct_compare, oct_divide_data, oct_add_data,
 			  oct_intersect, oct_division_check,
 			  oct_get_points)) == NULL)
-	G_fatal_error("cannot create octfunc");
+	G_fatal_error("Unable to create octfunc");
     if ((tree = OT_tree_new(data, NULL, NULL, functions, 0)) == NULL)
-	G_fatal_error("cannot create octtree");
+	G_fatal_error("Unable to create octtree");
 
     root = tree;
 
@@ -590,7 +555,7 @@ int main(int argc, char *argv[])
      */
     if (TESTOUT) {
 	if ((fd4 = fopen("testout", "w+")) == NULL)
-	    G_fatal_error("Cannot open testout");
+	    G_fatal_error("Unable To open testout");
     }
 
     Vect_set_open_level(1);
@@ -637,7 +602,7 @@ int main(int argc, char *argv[])
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
-	    G_fatal_error(_("Cannot create table: %s"), db_get_string(&sql));
+	    G_fatal_error(_("Unable To create table: %s"), db_get_string(&sql));
 	}
 	count = 1;
     }
@@ -665,14 +630,11 @@ int main(int argc, char *argv[])
 		if (!
 		    (fwrite
 		     (zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_cell)))
-		    clean_fatal_error
-			("Not enough disk space--cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	ertot = 0.;
-	if (per)
-	    fprintf(stderr, "Percent complete: ");
-
+        
 	out_cond1 = (outz != NULL) || (gradient != NULL) || (aspect1 != NULL)
 	    || (aspect2 != NULL) || (gcurv != NULL) || (mcurv != NULL) ||
 	    (ncurv != NULL);
@@ -681,133 +643,126 @@ int main(int argc, char *argv[])
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array1 = (float *)G_malloc(sizeof(float) * n_cols);
 	    if (!zero_array1)
-		clean_fatal_error("Not enough memory for zero_array1\n");
+		clean_fatal_error(_("Not enough memory"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array1[i] = 0.;
 	    Tmp_file_z = G_tempfile();
 	    if (NULL == (Tmp_fd_z = fopen(Tmp_file_z, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_z);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_z);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
 		if (!(fwrite(zero_array1, sizeof(float), n_cols, Tmp_fd_z)))
-		    clean_fatal_error
-			("Not enough disk space -- cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	if (gradient != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array2 = (float *)G_malloc(sizeof(float) * n_cols);
 	    if (!zero_array2)
-		clean_fatal_error("Not enough memory for zero_array2\n");
+		clean_fatal_error(_("Not enough memory"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array2[i] = 0.;
 	    Tmp_file_dx = G_tempfile();
 	    if (NULL == (Tmp_fd_dx = fopen(Tmp_file_dx, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_dx);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_dx);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
 		if (!(fwrite(zero_array2, sizeof(float), n_cols, Tmp_fd_dx)))
-		    clean_fatal_error
-			("Not enough disk space -- cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	if (aspect1 != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array3 = (float *)G_malloc(sizeof(float) * n_cols);
 	    if (!zero_array3)
-		clean_fatal_error("Not enough memory for zero_array3\n");
+		clean_fatal_error(_("Not enough memory"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array3[i] = 0.;
 	    Tmp_file_dy = G_tempfile();
 	    if (NULL == (Tmp_fd_dy = fopen(Tmp_file_dy, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_dy);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_dy);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
 		if (!(fwrite(zero_array3, sizeof(float), n_cols, Tmp_fd_dy)))
-		    clean_fatal_error
-			("Not enough disk space -- cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	if (aspect2 != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array4 = (float *)G_malloc(sizeof(float) * n_cols);
 	    if (!zero_array4)
-		clean_fatal_error("Not enough memory for zero_array4\n");
+		clean_fatal_error(_("Not enough memory"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array4[i] = 0.;
 	    Tmp_file_dz = G_tempfile();
 	    if (NULL == (Tmp_fd_dz = fopen(Tmp_file_dz, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_dz);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_dz);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
 		if (!(fwrite(zero_array4, sizeof(float), n_cols, Tmp_fd_dz)))
-		    clean_fatal_error
-			("Not enough disk space -- cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	if (ncurv != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array5 = (float *)G_malloc(sizeof(float) * n_cols);
 	    if (!zero_array5)
-		clean_fatal_error("Not enough memory for zero_array5\n");
+		clean_fatal_error(_("Not enough memory"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array5[i] = 0.;
 	    Tmp_file_xx = G_tempfile();
 	    if (NULL == (Tmp_fd_xx = fopen(Tmp_file_xx, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_xx);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_xx);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
 		if (!(fwrite(zero_array5, sizeof(float), n_cols, Tmp_fd_xx)))
-		    clean_fatal_error
-			("Not enough disk space -- cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	if (gcurv != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array6 = (float *)G_malloc(sizeof(float) * n_cols);
 	    if (!zero_array6)
-		clean_fatal_error("Not enough memory for zero_array6\n");
+		clean_fatal_error(_("Not enough memory"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array6[i] = 0.;
 	    Tmp_file_yy = G_tempfile();
 	    if (NULL == (Tmp_fd_yy = fopen(Tmp_file_yy, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_yy);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_yy);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
 		if (!(fwrite(zero_array6, sizeof(float), n_cols, Tmp_fd_yy)))
-		    clean_fatal_error
-			("Not enough disk space -- cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	if (mcurv != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array7 = (float *)G_malloc(sizeof(float) * n_cols);
 	    if (!zero_array7)
-		clean_fatal_error("Not enough memory for zero_array7\n");
+		clean_fatal_error(_("Not enough memory"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array7[i] = 0.;
 	    Tmp_file_xy = G_tempfile();
 	    if (NULL == (Tmp_fd_xy = fopen(Tmp_file_xy, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_xy);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_xy);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
 		if (!(fwrite(zero_array7, sizeof(float), n_cols, Tmp_fd_xy)))
-		    clean_fatal_error
-			("Not enough disk space -- cannot write temp files");
+		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	}
 	cursegm = 0;
@@ -914,12 +869,12 @@ int main(int argc, char *argv[])
 
 	}
 	else
-	    clean_fatal_error("Interp_call failed!");
+	    clean_fatal_error(_("Interpolation failed"));
     }
     else
-	clean_fatal_error("input failed!");
+	clean_fatal_error(_("Input failed"));
     if (fd4 != NULL)
 	fclose(fd4);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
