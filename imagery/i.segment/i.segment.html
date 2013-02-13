@@ -11,17 +11,22 @@ The image segmentation results can be useful on their own, or used as a
 preprocessing step for image classification. The segmentation 
 preprocessing step can reduce noise and speed up the classification.
 
-<H2>NOTES</h2>
+<h2>NOTES</h2>
 
 <h3>Region Growing and Merging</h3>
-This segmentation algorithm sequentially examines all current 
-segments in the map. The similarity between the current segment and 
-each of its neighbors is calculated according to the given distance 
-formula. Segments will be merged if they meet a number of criteria, 
-including: 1. The pair is mutually most similar to each other (the 
-similarity distance will be smaller than to any other neighbor), and 
-2. The similarity must be lower than the input threshold. The process 
-is repeated until no merges are made during a complete pass.
+
+This segmentation algorithm sequentially examines all current segments
+in the raster map. The similarity between the current segment and each
+of its neighbors is calculated according to the given distance
+formula. Segments will be merged if they meet a number of criteria,
+including:
+
+<ol>
+  <li>The pair is mutually most similar to each other (the similarity
+distance will be smaller than to any other neighbor), and</li>
+  <li>The similarity must be lower than the input threshold. The
+process is repeated until no merges are made during a complete pass.</li>
+</ol>
 
 <h3>Similarity and Threshold</h3>
 The similarity between segments and unmerged objects is used to 
@@ -29,9 +34,9 @@ determine which objects are merged. Smaller distance values indicate a
 closer match, with a similarity score of zero for identical pixels.
 <p>
 During normal processing, merges are only allowed when the 
-similarity between two segments is lower than the givem 
+similarity between two segments is lower than the given 
 threshold value. During the final pass, however, if a minimum 
-segment size of 2 or larger is given with the <em>minsize</em> 
+segment size of 2 or larger is given with the <b>minsize</b> 
 parameter, segments with a smaller pixel count will be merged with 
 their most similar neighbor even if the similarity is greater than 
 the threshold.
@@ -48,13 +53,13 @@ run as seeds for the next run.
 Both Euclidean and Manhattan distances use the normal definition, 
 considering each raster in the image group as a dimension.
 
-In future , the distance calculation will also take into account the 
+In future, the distance calculation will also take into account the 
 shape characteristics of the segments. The normal distances are then
 multiplied by the input radiometric weight. Next an additional 
 contribution is added: (1-radioweight) * {smoothness * smoothness 
 weight + compactness * (1-smoothness weight)}, where compactness = 
-the Perimeter Length / sqrt( Area ) and smoothness = Perimeter 
-Length / the Bounding Box. The perimeter length is estimated as the 
+Perimeter Length / sqrt( Area ) and smoothness = Perimeter 
+Length / Bounding Box. The perimeter length is estimated as the 
 number of pixel sides the segment has.
 
 <h3>Seeds</h3>
@@ -66,32 +71,33 @@ different approaches are automatically detected by the program: any
 pixels that have identical seed values and are contiguous will be 
 assigned a unique segment ID.
 <p>
-It is expected that the <em>minsize</em> will be set to 1 if a seed 
+It is expected that the <b>minsize</b> will be set to 1 if a seed 
 map is used, but the program will allow other values to be used. If 
 both options are used, the final iteration that ignores the 
-threshold also will ignore the seed map and force merges for all 
+threshold will also ignore the seed map and force merges for all 
 pixels (not just segments that have grown/merged from the seeds).
 
 <h3>Maximum number of starting segments</h3>
-For the region growing algorithm without starting seeds, each pixel 
-is sequentially numbered. The current limit with CELL storage is 2 
-billion starting segment IDs. If the initial map has a larger 
-number of non-null pixels, there are two workarounds:
-<p>
-1.  Use starting seed pixels. (Maximum 2 billion pixels can be 
-labeled with positive integers.)
-<p>
-2.  Use starting seed segments. (By initial classification or other 
-methods.)
+
+For the region growing algorithm without starting seeds, each pixel is
+sequentially numbered.  The current limit with CELL storage is 2
+billion starting segment IDs.  If the initial map has a larger number
+of non-null pixels, there are two workarounds:
+<ol>
+  <li>Use starting seed pixels. (Maximum 2 billion pixels can be 
+labeled with positive integers.)</li>
+  <li>Use starting seed segments. (By initial classification or other 
+methods.)</li>
+</ol>
 
 <h3>Boundary Constraints</h3>
 Boundary constraints limit the adjacency of pixels and segments. 
-Each unique value present in the <em>bounds</em> raster are 
+Each unique value present in the <b>bounds</b> raster are 
 considered as a MASK. Thus no segments in the final segmentated map 
 will cross a boundary, even if their spectral data is very similar.
 
 <h3>Minimum Segment Size</h3>
-To reduce the salt and pepper affect, a <em>minsize</em> greater 
+To reduce the salt and pepper affect, a <b>minsize</b> greater 
 than 1 will add one additional pass to the processing. During the 
 final pass, the threshold is ignored for any segments smaller then 
 the set size, thus forcing very small segments to merge with their 
@@ -99,25 +105,25 @@ most similar neighbor.
 
 <h2>EXAMPLES</h2>
 This example uses the ortho photograph included in the NC Sample 
-Dataset. Set up an imagery group:<br>
+Dataset. Set up an imagery group:
 <div class="code"><pre>
 i.group group=ortho_group input=ortho_2001_t792_1m@PERMANENT
 </pre></div>
 
-<p>Set the region to a smaller test region. <br>
+<p>Set the region to a smaller test region.
 
 <div class="code"><pre>
 g.region -p n=220446 s=220075 e=639151 w=638592
 </pre></div>
 
-Try out a low threshold and check the results.<br>
+Try out a low threshold and check the results.
 <div class="code"><pre>
 i.segment group=ortho_group output=ortho_segs_l1 threshold=0.02
 </pre></div>
 <p></p>
 From a visual inspection, it seems this results in too many segments. 
 Increasing the threshold, using the previous results as seeds, 
-and setting a minimum size of 2: <br>
+and setting a minimum size of 2:
 <div class="code"><pre>
 i.segment group=ortho_group output=ortho_segs_l2 threshold=0.05 \
           seeds=ortho_segs_l1 min=2
@@ -137,20 +143,21 @@ but the output with threshold=0.3 has too few segments. A threshold
 value of 0.25 seems to be a good choice. There is also some noise in 
 the image, lets next force all segments smaller than 10 pixels to be 
 merged into their most similar neighbor (even if they are less similar 
-than required by our threshold):<br>
+than required by our threshold):
 
-<p>Set the region to match the entire map(s) in the group. <br>
+<p>Set the region to match the entire map(s) in the group.
 <div class="code"><pre>
 g.region -p rast=ortho_2001_t792_1m@PERMANENT
 </pre></div>
 
+<p>
 Run i.segment on the full map:
 
 <div class="code"><pre>
 i.segment group=ortho_group output=ortho_segs_final \
           threshold=0.25 min=10
 </pre></div>
-<p></p>
+<p>
 Processing the entire ortho image with nearly 10 million pixels took 
 about 20 minutes for the final run.
 
@@ -166,15 +173,18 @@ compactness), if it looks good it should be added.
 <ul>
 <li>Improve the optional output from this module, or better yet, add a 
 module for <em>i.segment.metrics</em>.</li>
-<li>Providing updates to i.maxlik to ensure the segmentation output can 
-be used as input for the existing classification functionality.</li>
-<li>Integration/workflow for <em>r.fuzzy</em>.</li>
+<li>Providing updates to <em><a href="i.maxlik.html">i.maxlik</a></em>
+to ensure the segmentation output can be used as input for the
+existing classification functionality.</li>
+<li>Integration/workflow for <em>r.fuzzy</em> (Addon).</li>
 </ul>
+
 <h3>Speed</h3>
 <ul>
 <li>See create_isegs.c</li>
 </ul>
-<H2>REFERENCES</h2>
+
+<h2>REFERENCES</h2>
 This project was first developed during GSoC 2012. Project documentation, 
 Image Segmentation references, and other information is at the 
 <a href="http://grass.osgeo.org/wiki/GRASS_GSoC_2012_Image_Segmentation">project wiki</a>.
@@ -182,7 +192,7 @@ Image Segmentation references, and other information is at the
 Information about 
 <a href="http://grass.osgeo.org/wiki/Image_classification">classification in GRASS</a> 
 is at available on the wiki.
-</p>
+
 <h2>SEE ALSO</h2>
 <em>
 <a href="i.group.html">i.group</a>, 

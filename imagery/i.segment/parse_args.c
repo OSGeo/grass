@@ -51,7 +51,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     similarity->guisection = _("Settings");
 
     min_segment_size = G_define_option();
-    min_segment_size->key = "min";
+    min_segment_size->key = "minsize";
     min_segment_size->type = TYPE_INTEGER;
     min_segment_size->required = NO;
     min_segment_size->answer = "1";
