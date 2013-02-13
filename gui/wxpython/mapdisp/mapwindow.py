@@ -1184,7 +1184,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.frame.StatusbarUpdate()
             
         elif self.mouse["use"] == "query":
-            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1])
+            self.frame.Query(self.mouse['end'][0], self.mouse['end'][1])
         
         elif self.mouse["use"] in ["measure", "profile"]:
             # measure or profile
