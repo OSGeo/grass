@@ -53,7 +53,7 @@ class Info(object):
         """Read the information for a raster map. ::
 
             >>> info = Info('elevation')
-            >>> info
+            >>> info                                      # doctest: +ELLIPSIS
             elevation@
             rows: 1350
             cols: 1500
@@ -61,7 +61,8 @@ class Info(object):
             east:  645000.0 west: 630000.0 ewres:10.0
             range: 56, 156
             proj: 99
-
+            ...
+            
         """
         self.name = name
         self.mapset = mapset
@@ -165,14 +166,12 @@ class RasterAbstractBase(object):
         """The constructor need at least the name of the map
         *optional* field is the `mapset`. ::
 
-            >>> land = RasterAbstractBase('landcover_1m')
-            >>> land.name
-            'landcover_1m'
-            >>> land.mapset
-            ''
-            >>> land.exist()
+            >>> ele = RasterAbstractBase('elevation')
+            >>> ele.name
+            'elevation'
+            >>> ele.exist()
             True
-            >>> land.mapset
+            >>> ele.mapset
             'PERMANENT'
 
         ..
@@ -197,9 +196,11 @@ class RasterAbstractBase(object):
 
 
     def _get_mtype(self):
+        """Private method to get the Raster type"""
         return self._mtype
 
     def _set_mtype(self, mtype):
+        """Private method to change the Raster type"""
         if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
             #fatal(_("Raser type: {0} not supported".format(mtype) ) )
             str_err = "Raster type: {0} not supported ('CELL','FCELL','DCELL')"
@@ -292,9 +293,14 @@ class RasterAbstractBase(object):
 
     def exist(self):
         """Return True if the map already exist, and
-        set the mapset if were not set.
+           set the mapset if were not set.
 
-        call the C function `G_find_raster`."""
+           call the C function `G_find_raster`.
+
+           >>> ele = RasterAbstractBase('elevation')
+           >>> ele.exist()
+           True
+        """
         if self.name:
             self.mapset = functions.get_mapset_raster(self.name, self.mapset)
         else:
@@ -305,7 +311,13 @@ class RasterAbstractBase(object):
             return False
 
     def is_open(self):
-        """Return True if the map is open False otherwise"""
+        """Return True if the map is open False otherwise
+
+           >>> ele = RasterAbstractBase('elevation')
+           >>> ele.is_open()
+           False
+
+        """
         return True if self._fd is not None and self._fd >= 0 else False
 
     @must_be_open
@@ -321,9 +333,16 @@ class RasterAbstractBase(object):
         """Remove the map"""
         if self.is_open():
             self.close()
-        grasscore.run_command('g.remove', rast=self.name)
+        functions.remove(self.name, 'rast')
 
     def name_mapset(self, name=None, mapset=None):
+        """Return the full name of the Raster
+
+           >>> ele = RasterAbstractBase('elevation')
+           >>> ele.name_mapset()
+           'elevation@PERMANENT'
+
+        """
         if name is None:
             name = self.name
         if mapset is None:
