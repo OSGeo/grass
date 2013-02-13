@@ -1,15 +1,19 @@
 <!-- meta page description: SQL support in GRASS GIS -->
 
-GRASS can use various RDBMS and embedded databases.  SQL queries are
-directly passed to the underlying database system.  The set of
-supported SQL commands depends on the RDMBS and driver selected.
+GRASS can use various RDBMS
+(<a href="http://en.wikipedia.org/wiki/Relational_database_management_system">Relational
+database management system</a>) and embedded databases. SQL
+(<a href="http://en.wikipedia.org/wiki/Sql">Structured Query
+Language</a>) queries are directly passed to the underlying database
+system. The set of supported SQL commands depends on the RDMBS and
+database driver selected.
 
-<h2>Drivers</h2>  
+<h2>Database drivers</h2>  
 
-The list of available drivers can vary in various binary distributions
-of GRASS.
+The list of available database drivers can vary in various binary
+distributions of GRASS:<br><br>
 
-<table border=1 >
+<table class="border">
 <tr><td><a href="grass-dbf.html">dbf</a></td><td>DBF files. Data are stored in DBF files.</td>
 <td><a href="http://shapelib.maptools.org/dbf_api.html">http://shapelib.maptools.org/dbf_api.html</a></td></tr>
 
@@ -27,16 +31,14 @@ of GRASS.
 
 <tr><td><a href="grass-odbc.html">odbc</a></td><td>UnixODBC. (PostgreSQL, Oracle, etc.)</td>
 <td><a href="http://www.unixodbc.org/">http://www.unixodbc.org/</a></td></tr>
-
 </table>
-
 
 <h2>NOTES</h2>
 
 <ul>
 <li> SQL does not support '.' (dots) in table names.
-<li> Supported table name characters are only:<br>
-    [A-Za-z][A-Za-z0-9_]*
+<li> Supported table name characters are only: <br>
+<div class="code"><pre>[A-Za-z][A-Za-z0-9_]*</pre></div>
 <li> A table name must start with a character, not a number.
 <li> Text-string matching requires the text part to be 'single quoted'.
 When run from the command line multiple queries should be contained 
@@ -44,16 +46,19 @@ in "double quotes". e.g.<br>
 <div class="code"><pre>
 d.vect map where="individual='juvenile' and area='beach'"
 </pre></div>
-<li> An error message such as "dbmi: Protocol error" either indicates an invalid column name
-     or an unsupported column type (then the GRASS SQL parser needs to be extended).
+<li> An error message such as &quot;<tt>dbmi: Protocol
+     error</tt>&quot; either indicates an invalid column name or an
+     unsupported column type (then the GRASS SQL parser needs to be
+     extended).
 <li> DBF column names are limited to 10 characters (DBF API definition)
 </ul>
 
 
 <h2>EXAMPLES</h2>
 
-Display all vector points except for LAMAR valley and <i>extensive
-trapping</i> (brackets are superfluous in this example):
+Display all vector points except for <i>LAMAR</i> valley
+and <i>extensive trapping</i> (brackets are superfluous in this
+example):
 
 <div class="code"><pre>
 d.vect trapping_sites_points fcol=black icon=basic/diamond col=white size=13 \
@@ -61,7 +66,7 @@ d.vect trapping_sites_points fcol=black icon=basic/diamond col=white size=13 \
 </pre></div>
 
 <p>
-Select all attributes from table where str1 column values are not 'No
+Select all attributes from table where <i>str1</i> column values are not 'No
 Name':
 
 <div class="code"><pre>
@@ -69,16 +74,14 @@ echo "SELECT * FROM archsites WHERE str1 &lt;&gt; 'No Name'" | db.select
 </pre></div>
 <p>
 
-
-<p><b>Example</b> of subquery expressions from a list (does not work
+<p>Example of subquery expressions from a list (does not work
 for DBF driver):
 
 <div class="code"><pre>
 v.db.select mysites where="id IN ('P04', 'P05')"
 </pre></div>
 
-
-<p><b>Example</b> of pattern matching:
+<p>Example of pattern matching:
 
 <div class="code"><pre>
 
@@ -95,7 +98,7 @@ v.db.select mysites where="id LIKE 'P__'"
 v.db.select mysites where="id LIKE 'P%'"
 </pre></div>
 
-<p><b>Example</b> of null handling:
+<p>Example of null handling:
 
 <div class="code"><pre>
 v.db.addcolumn map=roads col="nulltest int"
@@ -104,8 +107,7 @@ d.vect roads where="nulltest is null"
 v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
 </pre></div>
 
-
-<p><b>Examples</b> of complex expressions in updates (using v.db.*
+<p>Examples of complex expressions in updates (using <tt>v.db.*</tt>
 modules):
 
 <div class="code"><pre>
@@ -114,8 +116,7 @@ v.db.update map=roads col=exprtest value=cat/nulltest
 v.db.update map=roads col=exprtest value=cat/nulltest+cat where=cat=1
 </pre></div>
 
-
-<p><b>Examples</b> of complex expressions in updates (using db.*
+<p>Examples of complex expressions in updates (using <tt>db.*</tt>
 modules):
 
 <div class="code"><pre>
@@ -126,7 +127,6 @@ echo "UPDATE roads SET exprtest=NULL WHERE cat&gt;2" | db.execute
 echo "UPDATE roads SET exprtest=cat/3*(cat+1) WHERE exprtest IS NULL" | db.execute"
 </pre></div>
 
-
 <p>
 Instead of creating and updating new columns with an expression, you
 can use the expression directly in a command:
@@ -136,8 +136,7 @@ d.vect roads where="(cat/3*(cat+1))&gt;8"
 d.vect roads where="cat&gt;exprtest"
 </pre></div>
 
-
-<p><b>Example</b> of changing a SQL type (type casting, does not work
+<p>Example of changing a SQL type (type casting, does not work
 for DBF driver):
 
 <div class="code"><pre>
@@ -152,7 +151,7 @@ v.db.update mygeodetic_pts col=zval \
             where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
-<p><b>Example</b> of concatenating fields (does not work for DBF
+<p>Example of concatenating fields (does not work for DBF
 driver):
 
 <div class="code"><pre>
@@ -162,6 +161,9 @@ v.db.update vectormap column=column3 qcolumn="column1 || column2"
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="db.select.html">db.select</a>,
+<a href="db.execute.html">db.execute</a>,
+<a href="v.db.select.html">v.db.select</a>,
 <a href="v.db.update.html">v.db.update</a>
 </em>
 
