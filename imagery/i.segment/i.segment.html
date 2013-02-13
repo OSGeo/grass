@@ -60,10 +60,11 @@ number of pixel sides the segment has.
 <h3>Seeds</h3>
 The seeds map can be used to provide either seed pixels (random or 
 selected points from which to start the segmentation process) or 
-seed segments (results of previous segmentations or 
-classifications). The different approaches are automatically 
-detected by the program: any pixels that have identical seed values 
-and are contiguous will be assigned a unique segment ID.
+seed segments. If the seeds are the results of a previous segmentation 
+with lower threshold, hierarchical segmentation can be performed. The 
+different approaches are automatically detected by the program: any 
+pixels that have identical seed values and are contiguous will be 
+assigned a unique segment ID.
 <p>
 It is expected that the <em>minsize</em> will be set to 1 if a seed 
 map is used, but the program will allow other values to be used. If 
@@ -131,10 +132,12 @@ i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 \
           seeds=ortho_segs_l4
 </pre></div>
 <p>
-The output ortho_segs_l4 with threshold=0.2 looks best. There is some 
-noise in the image, lets next force all segments smaller than 5 pixels 
-to be merged into their most similar neighbor (even if they are less 
-similar then required by our threshold):<br>
+The output ortho_segs_l4 with threshold=0.2 still has too many segments, 
+but the output with threshold=0.3 has too few segments. A threshold 
+value of 0.25 seems to be a good choice. There is also some noise in 
+the image, lets next force all segments smaller than 10 pixels to be 
+merged into their most similar neighbor (even if they are less similar 
+than required by our threshold):<br>
 
 <p>Set the region to match the entire map(s) in the group. <br>
 <div class="code"><pre>
@@ -145,11 +148,11 @@ Run i.segment on the full map:
 
 <div class="code"><pre>
 i.segment group=ortho_group output=ortho_segs_final \
-          threshold=0.2 min=5
+          threshold=0.25 min=10
 </pre></div>
 <p></p>
-Processing the entire ortho image with nearly 10 million pixels took about 
-15 minutes for the first run.
+Processing the entire ortho image with nearly 10 million pixels took 
+about 20 minutes for the final run.
 
 <h2>TODO</h2>
 <h3>Functionality</h3>

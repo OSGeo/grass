@@ -44,7 +44,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     similarity = G_define_option();
     similarity->key = "similarity";
     similarity->type = TYPE_STRING;
-    similarity->required = YES;
+    similarity->required = NO;
     similarity->answer = "euclidean";
     similarity->options = "euclidean,manhattan";
     similarity->description = _("Similarity calculation method");
@@ -65,7 +65,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     radio_weight = G_define_option();
     radio_weight->key = "radio_weight";
     radio_weight->type = TYPE_DOUBLE;
-    radio_weight->required = YES;
+    radio_weight->required = NO;
     radio_weight->answer = "1";
     radio_weight->options = "0-1";
     radio_weight->label =
@@ -75,7 +75,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     smooth_weight = G_define_option();
     smooth_weight->key = "smooth_weight";
     smooth_weight->type = TYPE_DOUBLE;
-    smooth_weight->required = YES;
+    smooth_weight->required = NO;
     smooth_weight->answer = "0.5";
     smooth_weight->options = "0-1";
     smooth_weight->label =
@@ -106,24 +106,21 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     seeds = G_define_standard_option(G_OPT_R_INPUT);
     seeds->key = "seeds";
     seeds->required = NO;
-    seeds->description = _("Name for output raster map with starting seeds");
-    seeds->guisection = _("Optional outputs");
+    seeds->description = _("Name for input raster map with starting seeds");
 
     /* Polygon constraints. */
     bounds = G_define_standard_option(G_OPT_R_INPUT);
     bounds->key = "bounds";
     bounds->required = NO;
-    bounds->label = _("Name for output bounding/constraining raster map");
+    bounds->label = _("Name for input bounding/constraining raster map");
     bounds->description =
 	_("Must be integer values, each area will be segmented independent of the others");
-    bounds->guisection = _("Optional outputs");
 
     outband = G_define_standard_option(G_OPT_R_OUTPUT);
     outband->key = "goodness";
     outband->required = NO;
     outband->description =
 	_("Name for output goodness of fit estimate");
-    outband->guisection = _("Optional outputs");
 
     diagonal = G_define_flag();
     diagonal->key = 'd';
