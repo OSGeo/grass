@@ -361,7 +361,7 @@ class Info(object):
         """Remove vector map"""
         if self.is_open():
             self.close()
-        functions.remove(vect=self.name)
+        functions.remove(self.name,'vect')
 
     def build(self):
         """Close the vector map and build vector Topology"""
