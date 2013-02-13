@@ -76,7 +76,7 @@ span.code {
     -moz-border-radius: 6px ;
 }
 
-table {
+table.border {
     border-collapse:collapse;
 }
 
