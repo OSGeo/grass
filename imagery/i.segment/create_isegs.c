@@ -1031,8 +1031,6 @@ static int search_neighbors(struct ngbr_stats *Ri,
 
 int update_band_vals(int row, int col, struct reg_stats *rs,
                      struct globals *globals) {
-    /* update band values with sum */
-    /* rs->id must be set */
     struct RB_TREE *rc_check_tree;	/* cells already checked */
     struct rclist rlist;
     struct rc next, ngbr_rc;
@@ -1040,6 +1038,8 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
     int rid, count, n;
     int no_check;
     
+    /* update band values with sum */
+    /* rs->id must be set */
     G_debug(4, "update_band_vals()");
 
     if (rs->count >= globals->min_reg_size) {
@@ -1052,6 +1052,8 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
     if (rid != rs->id) {
 	G_fatal_error(_("Region ids are different"));
     }
+
+    /* TODO: add fast version for globals->min_reg_size == 3 */
 
     /* go through region, spreading outwards from head */
     rclist_init(&rlist);
