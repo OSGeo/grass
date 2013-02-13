@@ -1,30 +1,13 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<title>SQL support in GRASS GIS</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-</head>
+<!-- meta page description: SQL support in GRASS GIS -->
 
-<!-- This file is lib/db/sqlp/description.html -->
-
-<body bgcolor="white">
-
-<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
-
-<!-- meta page description: SQL support introduction -->
-<h2>SQL support in GRASS GIS</h2>
-
-GRASS can use various RDBMS and embedded databases. 
-SQL queries are directly passed to the underlying 
-database system. 
-The set of supported SQL commands depends on the RDMBS 
-and driver selected.  
+GRASS can use various RDBMS and embedded databases.  SQL queries are
+directly passed to the underlying database system.  The set of
+supported SQL commands depends on the RDMBS and driver selected.
 
 <h2>Drivers</h2>  
-The list of available drivers can vary in various binary 
-distributions of GRASS. 
-<p>
+
+The list of available drivers can vary in various binary distributions
+of GRASS.
 
 <table border=1 >
 <tr><td><a href="grass-dbf.html">dbf</a></td><td>DBF files. Data are stored in DBF files.</td>
@@ -69,27 +52,34 @@ d.vect map where="individual='juvenile' and area='beach'"
 
 <h2>EXAMPLES</h2>
 
-Display all vector points except for LAMAR valley and <i>extensive trapping</i> (brackets are superfluous in this example):
+Display all vector points except for LAMAR valley and <i>extensive
+trapping</i> (brackets are superfluous in this example):
+
 <div class="code"><pre>
 d.vect trapping_sites_points fcol=black icon=basic/diamond col=white size=13 \
     where="valley &lt;&gt; 'LAMAR' OR (valley = 'LAMAR' AND description = 'extensive trapping')"
 </pre></div>
 
 <p>
-Select all attributes from table where str1 column values are not 'No Name':
+Select all attributes from table where str1 column values are not 'No
+Name':
+
 <div class="code"><pre>
 echo "SELECT * FROM archsites WHERE str1 &lt;&gt; 'No Name'" | db.select
 </pre></div>
 <p>
 
 
-<p><b>Example</b> of subquery expressions from a list (does not work for DBF driver):
+<p><b>Example</b> of subquery expressions from a list (does not work
+for DBF driver):
+
 <div class="code"><pre>
 v.db.select mysites where="id IN ('P04', 'P05')"
 </pre></div>
 
 
 <p><b>Example</b> of pattern matching:
+
 <div class="code"><pre>
 
 # field contains string:
@@ -106,6 +96,7 @@ v.db.select mysites where="id LIKE 'P%'"
 </pre></div>
 
 <p><b>Example</b> of null handling:
+
 <div class="code"><pre>
 v.db.addcolumn map=roads col="nulltest int"
 v.db.update map=roads col=nulltest value=1 where="cat &gt; 2"
@@ -114,7 +105,9 @@ v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
 </pre></div>
 
 
-<p><b>Examples</b> of complex expressions in updates (using v.db.* modules):
+<p><b>Examples</b> of complex expressions in updates (using v.db.*
+modules):
+
 <div class="code"><pre>
 v.db.addcolumn map=roads col="exprtest double precision"
 v.db.update map=roads col=exprtest value=cat/nulltest
@@ -122,7 +115,9 @@ v.db.update map=roads col=exprtest value=cat/nulltest+cat where=cat=1
 </pre></div>
 
 
-<p><b>Examples</b> of complex expressions in updates (using db.* modules):
+<p><b>Examples</b> of complex expressions in updates (using db.*
+modules):
+
 <div class="code"><pre>
 echo "UPDATE roads SET exprtest=null"
 echo "UPDATE roads SET exprtest=cat/2" | db.execute
@@ -133,15 +128,18 @@ echo "UPDATE roads SET exprtest=cat/3*(cat+1) WHERE exprtest IS NULL" | db.execu
 
 
 <p>
-Instead of creating and updating new columns with an expression,
-you can use the expression directly in a command:
+Instead of creating and updating new columns with an expression, you
+can use the expression directly in a command:
+
 <div class="code"><pre>
 d.vect roads where="(cat/3*(cat+1))&gt;8"
 d.vect roads where="cat&gt;exprtest"
 </pre></div>
 
 
-<p><b>Example</b> of changing a SQL type (type casting, does not work for DBF driver):
+<p><b>Example</b> of changing a SQL type (type casting, does not work
+for DBF driver):
+
 <div class="code"><pre>
 # North Carolina data set: convert string column to double precision
 #  copy map into current mapset
@@ -154,7 +152,9 @@ v.db.update mygeodetic_pts col=zval \
             where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
-<p><b>Example</b> of concatenating fields (does not work for DBF driver):
+<p><b>Example</b> of concatenating fields (does not work for DBF
+driver):
+
 <div class="code"><pre>
 v.db.update vectormap column=column3 qcolumn="column1 || column2"
 </pre></div>
@@ -171,11 +171,3 @@ v.db.update vectormap column=column3 qcolumn="column1 || column2"
 
 <p>
 <i>Last changed: $Date$</i>
-<hr>
-<br>
-<a href="index.html">Main index</a> -
-<a href="database.html">database index</a> -
-<a href="full_index.html">full index</a>
-<p>&copy; 2008-2012 <a href="http://grass.osgeo.org">GRASS Development Team</a>
-</body>
-</html>
