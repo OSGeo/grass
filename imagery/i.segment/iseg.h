@@ -117,6 +117,7 @@ double calculate_shape(struct reg_stats *, struct reg_stats *,
                        int, struct globals *);
 int fetch_reg_stats(int , int , struct reg_stats *, 
                            struct globals *);
+int update_band_vals(int, int, struct reg_stats *, struct globals *);
 
 /* void calculate_reg_stats(int, int, struct reg_stats *, 
                          struct globals *); */

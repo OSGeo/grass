@@ -208,7 +208,7 @@ int region_growing(struct globals *globals)
     Rk_bestn_rs.sum = G_malloc(globals->datasize);
     
     t = 0;
-    n_merges = 1;
+    n_merges = 2;
 
     /* threshold calculation */
     alpha2 = globals->alpha * globals->alpha;
@@ -218,7 +218,7 @@ int region_growing(struct globals *globals)
     /* make the divisor a constant ? */
     divisor = globals->nrows + globals->ncols;
 
-    while (t < globals->end_t && n_merges > 0) {
+    while (t < globals->end_t && n_merges > 1) {
 
 	G_message(_("Pass %d:"), ++t);
 
@@ -489,7 +489,7 @@ int region_growing(struct globals *globals)
     }
 
     /*end t loop *//*TODO, should there be a max t that it can iterate for?  Include t in G_message? */
-    if (n_merges > 0)
+    if (n_merges > 1)
 	G_message(_("Segmentation processes stopped at %d due to reaching max iteration limit, more merges may be possible"), t);
     else
 	G_message(_("Segmentation converged after %d iterations."), t);
@@ -571,7 +571,7 @@ int region_growing(struct globals *globals)
 						   globals);
 		    }
 
-		    if (do_merge) {
+		    if (Ri_nn > 0) {
 
 			nbtree_clear(Ri_ngbrs);
 			
@@ -1029,6 +1029,102 @@ static int search_neighbors(struct ngbr_stats *Ri,
     return 1;
 }
 
+int update_band_vals(int row, int col, struct reg_stats *rs,
+                     struct globals *globals) {
+    /* update band values with sum */
+    /* rs->id must be set */
+    struct RB_TREE *rc_check_tree;	/* cells already checked */
+    struct rclist rlist;
+    struct rc next, ngbr_rc;
+    int neighbors[8][2];
+    int rid, count, n;
+    int no_check;
+    
+    G_debug(4, "update_band_vals()");
+
+    if (rs->count >= globals->min_reg_size) {
+	G_fatal_error(_("Region stats should go in tree, %d >= %d"),
+	              rs->count, globals->min_reg_size);
+    }
+
+    segment_get(&globals->rid_seg, (void *) &rid, row, col);
+    
+    if (rid != rs->id) {
+	G_fatal_error(_("Region ids are different"));
+    }
+
+    /* go through region, spreading outwards from head */
+    rclist_init(&rlist);
+
+    rc_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
+    ngbr_rc.row = row;
+    ngbr_rc.col = col;
+    rbtree_insert(rc_check_tree, &ngbr_rc);
+    count = 1;
+
+    /* update region stats */
+    segment_put(&globals->bands_seg, (void *)rs->sum,
+		ngbr_rc.row, ngbr_rc.col);
+
+    next.row = row;
+    next.col = col;
+    do {
+	G_debug(5, "find_pixel_neighbors for row: %d , col %d",
+		next.row, next.col);
+
+	globals->find_neighbors(next.row, next.col, neighbors);
+
+	n = globals->nn - 1;
+	do {
+
+	    ngbr_rc.row = neighbors[n][0];
+	    ngbr_rc.col = neighbors[n][1];
+
+	    no_check = (ngbr_rc.row < 0 || ngbr_rc.row >= globals->nrows ||
+		ngbr_rc.col < 0 || ngbr_rc.col >= globals->ncols);
+
+	    if (!no_check) {
+		if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
+		
+		    /* already checked ? */
+		    if (!rbtree_find(rc_check_tree, &ngbr_rc)) {
+
+			/* not yet checked, don't check it again */
+			rbtree_insert(rc_check_tree, &ngbr_rc);
+
+			segment_get(&globals->rid_seg, (void *) &rid,
+				    ngbr_rc.row, ngbr_rc.col);
+			
+			if (rid == rs->id) {
+
+			    /* want to check this neighbor's neighbors */
+			    rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
+
+			    /* update region stats */
+			    segment_put(&globals->bands_seg,
+					(void *)rs->sum,
+					ngbr_rc.row, ngbr_rc.col);
+			    count++;
+			}
+		    }
+		}
+	    }
+	} while (n--);
+    } while (rclist_drop(&rlist, &next));
+
+    /* clean up */
+    rbtree_destroy(rc_check_tree);
+    rclist_destroy(&rlist);
+    
+    if (count != rs->count) {
+	G_fatal_error(_("Region size is %d, should be %d"),
+	              count, rs->count);
+    }
+
+    return count;
+}
+
+
 static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 		         struct ngbr_stats *Rk, struct reg_stats *Rk_rs,
 		         int do_cand, struct globals *globals)
@@ -1228,72 +1324,7 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
     Ri->id = Ri_rs->id;
 
     if (Ri_rs->count < globals->min_reg_size) {
-	/* update band values with sum */
-	/* rs->id must be set */
-	struct RB_TREE *rc_check_tree;	/* cells already checked */
-	int rid;
-	int no_check;
-	
-	/* go through region, spreading outwards from head */
-	rclist_init(&rlist);
-
-	rc_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
-	ngbr_rc.row = Ri->row;
-	ngbr_rc.col = Ri->col;
-	rbtree_insert(rc_check_tree, &ngbr_rc);
-
-	/* update region stats */
-	segment_put(&globals->bands_seg, (void *)Ri_rs->sum,
-		    ngbr_rc.row, ngbr_rc.col);
-
-	next.row = Ri->row;
-	next.col = Ri->col;
-	do {
-	    G_debug(5, "find_pixel_neighbors for row: %d , col %d",
-		    next.row, next.col);
-
-	    globals->find_neighbors(next.row, next.col, neighbors);
-
-	    n = globals->nn - 1;
-	    do {
-
-		ngbr_rc.row = neighbors[n][0];
-		ngbr_rc.col = neighbors[n][1];
-
-		no_check = (ngbr_rc.row < 0 || ngbr_rc.row >= globals->nrows ||
-		    ngbr_rc.col < 0 || ngbr_rc.col >= globals->ncols);
-
-		if (!no_check) {
-		    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
-		    
-			/* already checked ? */
-			if (!rbtree_find(rc_check_tree, &ngbr_rc)) {
-
-			    /* not yet checked, don't check it again */
-			    rbtree_insert(rc_check_tree, &ngbr_rc);
-
-			    segment_get(&globals->rid_seg, (void *) &rid,
-					ngbr_rc.row, ngbr_rc.col);
-			    
-			    if (rid == Ri_rs->id) {
-
-				/* want to check this neighbor's neighbors */
-				rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
-
-				/* update region stats */
-				segment_put(&globals->bands_seg,
-					    (void *)Ri_rs->sum,
-					    ngbr_rc.row, ngbr_rc.col);
-			    }
-			}
-		    }
-		}
-	    } while (n--);
-	} while (rclist_drop(&rlist, &next));
-
-	/* clean up */
-	rbtree_destroy(rc_check_tree);
-	rclist_destroy(&rlist);
+	update_band_vals(Ri->row, Ri->col, Ri_rs, globals);
     }
 
     return TRUE;
@@ -1526,6 +1557,10 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 	    rs->mean[i] = rs->sum[i] / rs->count;
 	} while (i--);
     }
+    
+    if (rs->count >= globals->min_reg_size)
+	G_fatal_error(_("Region of size %d should be in search tree"),
+		      rs->count);
     
     return ret;
 }

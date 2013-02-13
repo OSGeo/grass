@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("segmentation"));
     G_add_keyword(_("object recognition"));
     module->description =
-	_("Identifies segments (objects) from imagery data.");
+	_("Identify segments (objects) from imagery.");
 
     parse_args(argc, argv, &globals);
 	
