@@ -36,11 +36,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("segmentation"));
     G_add_keyword(_("object recognition"));
     module->description =
-<<<<<<< .mine
-	_("Identify segments (objects) from imagery.");
-=======
-	_("Outputs a single segmented raster map based on input values in an image group.");
->>>>>>> .r55021
+	_("Identifies segments (objects) from imagery data.");
 
     parse_args(argc, argv, &globals);
 	
