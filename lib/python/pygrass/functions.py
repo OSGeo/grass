@@ -28,17 +28,26 @@ def looking(obj, filter_string):
     return fnmatch.filter(word_list, filter_string)
 
 
-def remove(**kargs):
-    grasscore.run_command('g.remove', **kargs)
+def remove(oldname, maptype):
+    """Remove a map"""
+    grasscore.run_command('g.remove', **{maptype: '{old}'.format(old=oldname)})
 
 
 def rename(oldname, newname, maptype):
+    """Rename a map"""
     grasscore.run_command('g.rename',
                           **{maptype: '{old},{new}'.format(old=oldname,
                                                            new=newname), })
 
 
 def copy(existingmap, newmap, maptype):
+    """Copy a map
+
+    >>> copy('census', 'mycensus', 'vect')
+    >>> rename('mycensus', 'mynewcensus', 'vect')
+    >>> remove('mynewcensus', 'vect')
+
+    """
     grasscore.run_command('g.copy',
                           **{maptype: '{old},{new}'.format(old=existingmap,
                                                            new=newmap), })
