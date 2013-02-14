@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 15:57+0200\n"
-"PO-Revision-Date: 2013-02-03 12:30+0100\n"
+"PO-Revision-Date: 2013-02-14 18:46+0100\n"
 "Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -394,7 +394,7 @@ msgstr "Intestazione BMP non valida"
 
 #: ../visualization/ximgview/main.c:270
 msgid "Unable to map image file"
-msgstr ""
+msgstr "Impossibile creare una mappa del file immagine"
 
 #: ../visualization/ximgview/main.c:295
 msgid "View BMP images from the PNG driver."
@@ -412,11 +412,11 @@ msgstr "Percentuale of tempo CPU da usare"
 #: ../visualization/ximgview/color.c:90 ../visualization/ximgview/color.c:288
 #, c-format
 msgid "Unknown visual class [%d]."
-msgstr ""
+msgstr "Classe visuale [%d] sconosciuta."
 
 #: ../visualization/ximgview/color.c:239
 msgid "Unable to get sufficient gray shades."
-msgstr ""
+msgstr "Impossibile ottenere un numero sufficiente di scale di grigio."
 
 #: ../visualization/ximgview/color.c:256
 msgid "Unable to get sufficient colors."
@@ -1031,7 +1031,7 @@ msgstr "tabella delle categorie per [%s] impostata a %s"
 
 #: ../raster3d/r3.gwflow/main.c:54
 msgid "Input 3D raster map with initial piezometric heads in [m]"
-msgstr ""
+msgstr "Mappa raster 3D di partenza con quote piezometriche iniziali in [m]"
 
 #: ../raster3d/r3.gwflow/main.c:60
 msgid "Input 3D raster map providing the status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet"
@@ -1923,11 +1923,11 @@ msgstr "Valore(i) della brillantezza"
 
 #: ../misc/m.nviz.image/args.c:204
 msgid "Name of raster map(s) for emission"
-msgstr ""
+msgstr "Nome della mappa(e) raster per l'emissione"
 
 #: ../misc/m.nviz.image/args.c:214
 msgid "Emission value(s)"
-msgstr ""
+msgstr "Valore(i) di emissione"
 
 #: ../misc/m.nviz.image/args.c:228
 msgid "Draw mode"
@@ -2044,7 +2044,7 @@ msgstr "Colore dell'icona"
 
 #: ../misc/m.nviz.image/args.c:470
 msgid "Icon marker"
-msgstr ""
+msgstr "Indicatore di icona"
 
 #: ../misc/m.nviz.image/args.c:479
 #, fuzzy
@@ -2223,15 +2223,15 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:833 ../misc/m.nviz.image/args.c:839
 #: ../misc/m.nviz.image/args.c:848
 msgid "Fringe"
-msgstr ""
+msgstr "Margine"
 
 #: ../misc/m.nviz.image/args.c:838
 msgid "Fringe color"
-msgstr ""
+msgstr "Colore del margine"
 
 #: ../misc/m.nviz.image/args.c:847
 msgid "Fringe elevation"
-msgstr ""
+msgstr "Elevazione del margine"
 
 #: ../misc/m.nviz.image/args.c:860
 msgid "Place north arrow at given position \t(in screen coordinates from bottom left corner)"
@@ -2240,7 +2240,7 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:862 ../misc/m.nviz.image/args.c:871
 #: ../misc/m.nviz.image/args.c:878
 msgid "Decoration"
-msgstr ""
+msgstr "Decorazione"
 
 #: ../misc/m.nviz.image/args.c:870
 msgid "North arrow size (in map units)"
@@ -3648,7 +3648,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:259
 #, c-format
 msgid "name for %s to send the output to."
-msgstr ""
+msgstr "nome a cui mandare il risultato per %s."
 
 #: ../raster/r.watershed/shed/com_line.c:277
 #, c-format
@@ -3834,6 +3834,8 @@ msgid ""
 "\n"
 "Your choice: "
 msgstr ""
+"\n"
+"La tua scelta:"
 
 #: ../raster/r.watershed/shed/basin_maps.c:69
 #: ../raster/r.watershed/shed/basin_maps.c:73
@@ -3843,6 +3845,9 @@ msgid ""
 "OK, %s should start running now using the following form:\n"
 "%s"
 msgstr ""
+"\n"
+"OK, %s ora dovrebbe iniziare a funzionare usando la seguente forma:\n"
+"%s"
 
 #: ../raster/r.watershed/shed/read.c:23
 msgid "unable to open basin/half basin map"
@@ -3851,32 +3856,32 @@ msgstr "impossibile aprire la mappa bacini/semibacini"
 #: ../raster/r.watershed/shed/intro.c:8
 #, c-format
 msgid "%s provides a text-based user-interface to the %s program."
-msgstr ""
+msgstr "%s fornisce un'interfaccia utente text-based al programma %s."
 
 #: ../raster/r.watershed/shed/intro.c:10
 #, c-format
 msgid "%s also allows the user to prepare a report of map layers for each"
-msgstr ""
+msgstr "%s permette all'utente anche di preparare un report dei layer della mappa per ogni"
 
 #: ../raster/r.watershed/shed/intro.c:12
 #, c-format
 msgid "watershed basin determined in %s.\n"
-msgstr ""
+msgstr "bacino idrologico determinato in %s. \n"
 
 #: ../raster/r.watershed/shed/intro.c:14
 #, c-format
 msgid "%s will help the user determine which options to use for the"
-msgstr ""
+msgstr "%s aiuterà l'utente a determinare quali opzioni usare per il"
 
 #: ../raster/r.watershed/shed/intro.c:16
 #, c-format
 msgid "%s program.  %s will then ask for map layers that will be"
-msgstr ""
+msgstr "%s programma. %s poi richiederà i layer della mappa che saranno"
 
 #: ../raster/r.watershed/shed/intro.c:18
 #, c-format
 msgid "divided by basin. %s will then run %s and create the report."
-msgstr ""
+msgstr "divisi per bacino. %s quindi eseguirà %s e crea il report."
 
 #: ../raster/r.watershed/shed/valid.c:24
 msgid "accum file missing in valid_basins()"
@@ -4631,16 +4636,16 @@ msgstr "Nome di  2-%d mappe raster in input"
 
 #: ../raster/r.cross/main.c:94
 msgid "Non-zero data only"
-msgstr ""
+msgstr "Solo dati non-zero"
 
 #: ../raster/r.cross/main.c:107
 #, c-format
 msgid "More than %d files not allowed"
-msgstr ""
+msgstr "Non sono permessi più di %d file"
 
 #: ../raster/r.cross/main.c:123
 msgid "Must specify 2 or more input maps"
-msgstr ""
+msgstr "E' necessario specificare 2 o più mappe di input"
 
 #: ../raster/r.cross/main.c:140
 #, c-format
@@ -6604,7 +6609,7 @@ msgstr "File ASCII contenente i dati di input (o \"-\" per leggere dallo stdin)"
 #: ../raster/r.in.xyz/main.c:176 ../raster/r.in.lidar/main.c:176
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:8
 msgid "Statistic to use for raster values"
-msgstr ""
+msgstr "Statistica da usare per i valori raster"
 
 #: ../raster/r.in.xyz/main.c:180 ../raster/r.in.xyz/main.c:278
 #: ../raster/r.in.xyz/main.c:287 ../raster/r.in.lidar/main.c:180
@@ -6613,7 +6618,7 @@ msgstr ""
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
 msgid "Statistic"
-msgstr ""
+msgstr "Statistica"
 
 #: ../raster/r.in.xyz/main.c:188 ../raster/r.in.arc/main.c:77
 #: ../raster/r.in.lidar/main.c:188 ../raster/r.in.ascii/main.c:88
@@ -8190,7 +8195,7 @@ msgstr "Inserisci un'etichetta per la categoria %ld [%s] "
 
 #: ../raster/r.digit/get_label.c:68
 msgid "Look ok? "
-msgstr ""
+msgstr "Sembra ok?"
 
 #: ../raster/r.digit/main.c:46
 msgid "Interactive tool used to draw and save vector features on a graphics monitor using a pointing device (mouse) and save to a raster map."
@@ -9231,7 +9236,7 @@ msgstr "Impossibile aprire il file dei risultati <%s>"
 
 #: ../raster/r.report/label.c:13
 msgid "Page width is too small"
-msgstr ""
+msgstr "La larghezza della pagina è troppo piccola"
 
 #: ../raster/r.out.pov/main.c:124
 #, fuzzy
@@ -12453,7 +12458,7 @@ msgstr ""
 
 #: ../raster/r.horizon/main.c:296
 msgid "Write output in degrees (default is radians)"
-msgstr ""
+msgstr "Scrivere l'output in gradi (predefinito in radianti)"
 
 #: ../raster/r.horizon/main.c:344
 msgid "Can't read the coordinates from the \"coord\" option."
@@ -15654,7 +15659,7 @@ msgstr "Il raster di input <%s> non esiste nel gruppo <%s>"
 
 #: ../imagery/i.rectify/main.c:326
 msgid "Try:"
-msgstr ""
+msgstr "Prova:"
 
 #: ../imagery/i.rectify/main.c:331
 msgid "Exit!"
@@ -20691,12 +20696,12 @@ msgstr "Nome del file di output"
 #: ../general/g.pnmcat/main.c:153 ../general/g.cairocomp/main.c:234
 #: ../general/g.pnmcomp/main.c:311
 msgid "Image width"
-msgstr ""
+msgstr "Larghezza dell'immagine"
 
 #: ../general/g.pnmcat/main.c:159 ../general/g.cairocomp/main.c:240
 #: ../general/g.pnmcomp/main.c:317
 msgid "Image height"
-msgstr ""
+msgstr "Altezza dell'immagine"
 
 #: ../general/g.pnmcat/main.c:185
 #, c-format
@@ -22389,7 +22394,7 @@ msgstr ""
 
 #: ../vector/v.overlay/main.c:266
 msgid "Collecting input attributes..."
-msgstr ""
+msgstr "Raccogliendo gli attributi di input..."
 
 #: ../vector/v.overlay/main.c:301 ../vector/v.label/main.c:318
 #: ../vector/v.label.sa/labels.c:160
@@ -22775,7 +22780,7 @@ msgstr "Si sta usando il vettore temporaneo <%s>"
 #: ../vector/v.in.ogr/main.c:839
 #, c-format
 msgid "Column name changed: '%s' -> '%s'"
-msgstr ""
+msgstr "Nome della colonna cambiato: '%s' -> '%s'"
 
 #: ../vector/v.in.ogr/main.c:863
 #, c-format
@@ -23240,7 +23245,7 @@ msgstr "Angolo di rotazione (in gradi antiorari)"
 
 #: ../vector/v.label/main.c:166
 msgid "Border width"
-msgstr ""
+msgstr "Larghezza del bordo"
 
 #: ../vector/v.label/main.c:174 ../vector/v.lrs/v.lrs.label/main.c:211
 #: ../vector/v.label.sa/main.c:107
@@ -24957,7 +24962,7 @@ msgstr ""
 
 #: ../vector/v.extract/main.c:287
 msgid "Please specify random number larger than 0"
-msgstr ""
+msgstr "Prego specifica un numero casuale maggiore di 0"
 
 #: ../vector/v.extract/main.c:291
 #, c-format
@@ -26378,7 +26383,7 @@ msgstr "%d errori nell'opzione id"
 
 #: ../vector/v.category/main.c:191
 msgid "Output vector wasn't entered"
-msgstr ""
+msgstr "Il vettore di output non è stato inserito"
 
 #: ../vector/v.category/main.c:212 ../vector/v.category/main.c:220
 #, fuzzy, c-format
@@ -26387,11 +26392,11 @@ msgstr "Non riesco a trovare il file raster %s"
 
 #: ../vector/v.category/main.c:237
 msgid "Too many layers for this operation"
-msgstr ""
+msgstr "Troppi layer per questa operazione"
 
 #: ../vector/v.category/main.c:240 ../vector/v.category/main.c:243
 msgid "2 layers must be specified"
-msgstr ""
+msgstr "Devono essere specificati 2 layer"
 
 #: ../vector/v.category/main.c:251
 #, fuzzy, c-format
@@ -26530,7 +26535,7 @@ msgstr "Crea un nuovo vettoriale poligonale dalla estensione della regione corre
 
 #: ../vector/v.in.region/main.c:48
 msgid "Select type: line or area"
-msgstr ""
+msgstr "Seleziona il tipo: linea o area"
 
 #: ../vector/v.buffer/geos.c:19
 #, fuzzy
@@ -28294,12 +28299,12 @@ msgstr ""
 #: ../vector/v.convert/read.c:249
 #, c-format
 msgid "Error: %s"
-msgstr ""
+msgstr "Errore: %s"
 
 #: ../vector/v.convert/read.c:270
 #, c-format
 msgid "Unknown type: %c"
-msgstr ""
+msgstr "Tipo sconosciuto: %c"
 
 #: ../vector/v.convert/read.c:293
 #, c-format
@@ -30103,7 +30108,7 @@ msgstr "Non è possibile trovare la matrice inversa"
 
 #: ../vector/v.generalize/smoothing.c:488
 msgid "Unable to calculate the output vectors"
-msgstr ""
+msgstr "Impossibile calcolare i vettori di output"
 
 #: ../vector/v.generalize/misc.c:158
 #, c-format
@@ -30322,11 +30327,11 @@ msgstr ""
 
 #: ../vector/v.generalize/main.c:531
 msgid "reduced"
-msgstr ""
+msgstr "ridotto"
 
 #: ../vector/v.generalize/main.c:531
 msgid "changed"
-msgstr ""
+msgstr "cambiato"
 
 #: ../vector/v.vol.rst/main.c:246
 msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
@@ -39065,3 +39070,80 @@ msgstr "Riempi aree senza dati di un raster usando interpolazione spline v.surf.
 
 #~ msgid "Name of raster map to print in legend"
 #~ msgstr "Nome della mappa raster da stampare nella legenda"
+
+# non sono sicura, cioe' forse 'keyword' e' un parametro specifico richiesto in una funzione
+#~ msgid "raster, keyword2, keyword3"
+#~ msgstr "raster, parola chiave 2, parola chiave 3"
+
+#~ msgid "vector, keyword2, keyword3"
+#~ msgstr "vettore, parola chiave 2, parola chiave 3"
+
+#~ msgid "Recharge raster map in m^3/s"
+#~ msgstr "Ricarica la mappa raster in m^3/s"
+
+#~ msgid "The piezometric head result of the numerical calculation will be written to this map"
+#~ msgstr "La quota piezometrica risultata dai calcoli numerici sarà scritta su questa mappa"
+
+#~ msgid "Unknown icon marker"
+#~ msgstr "Indicatore di icona non conosciuto"
+
+#~ msgid "The initial piezometric head in [m]"
+#~ msgstr "La seguente mappa raster esiste già in"
+
+#~ msgid "Break polygons:"
+#~ msgstr "Separa i poligoni:"
+
+#~ msgid "Remove duplicates:"
+#~ msgstr "Rimuove i duplicati:"
+
+#~ msgid "Break boundaries:"
+#~ msgstr "Separa i confini:"
+
+#~ msgid "Clean boundaries at nodes:"
+#~ msgstr "Pulisce i confini ai nodi:"
+
+#~ msgid "Merge boundaries:"
+#~ msgstr "Fonde i confini:"
+
+#~ msgid "vector, category"
+#~ msgstr "vettore, categoria"
+
+#~ msgid "vector, network, flow"
+#~ msgstr "vettore, network, flusso"
+
+#~ msgid "Attribute column to use for buffer distances"
+#~ msgstr "Colonna attributo da usare per le distanze di buffer"
+
+#~ msgid "vector, interpolation"
+#~ msgstr "vettore, interpolazione"
+
+#~ msgid "You need to enter at least %d points."
+#~ msgstr "Devi inserire almeno %d punti."
+
+#~ msgid " Number of points that have been entered: %d\n"
+#~ msgstr "Numero di punti inseriti: %d\n"
+
+#~ msgid "Please answer yes or no"
+#~ msgstr "Prego rispondere sì o no"
+
+#~ msgid "vector, transformation"
+#~ msgstr "vettore, trasformazione"
+
+# parametrO o parametrI ?
+#~ msgid "Please specify a valid layer with '%s' parameter."
+#~ msgstr "Spacificare un layer valido con '%s' parametri."
+
+#~ msgid "Name of table and name for output vector map must be different. Otherwise the table is overwritten."
+#~ msgstr "Il nome della tabella e il nome della mappa vettoriale di output devono essere diversi. Altrimenti la tabella viene sovrascritta."
+
+#~ msgid "vector, LIDAR"
+#~ msgstr "vettore, LIDAR"
+
+#~ msgid "Output vector name was not specified"
+#~ msgstr "Il nome del vettore di output non è stato specificato"
+
+#~ msgid "Organization:    %s"
+#~ msgstr "Organizzazione:  %s"
+
+#~ msgid "  Comments:"
+#~ msgstr "Commenti:"
