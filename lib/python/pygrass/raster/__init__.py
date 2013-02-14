@@ -220,7 +220,7 @@ class RasterRowIO(RasterRow):
         """
         if row_buffer is None:
             row_buffer = Buffer((self._cols,), self.mtype)
-        rowio_buf = librowio.Rowio_get(ctypes.byref(self.rowio.crowio), row)
+        rowio_buf = librowio.Rowio_get(ctypes.byref(self.rowio.c_rowio), row)
         ctypes.memmove(row_buffer.p, rowio_buf, self.rowio.row_size)
         return row_buffer
 
