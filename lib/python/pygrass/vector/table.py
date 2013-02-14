@@ -17,7 +17,9 @@ except:
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
 from grass.pygrass.errors import DBError
-
+from grass.script.db import db_table_in_vector
+from grass.script.core import warning
+import sys
 import sql
 
 
@@ -773,7 +775,7 @@ class DBlinks(object):
         if force:
             link = self.by_name(key)
             table = link.table()
-            table._drop()
+            table.drop()
         if isinstance(key, str):
             key = self.from_name_to_num(key)
         libvect.Vect_map_del_dblink(self.c_mapinfo, key)
@@ -849,14 +851,26 @@ class Table(object):
         """Return the number of rows"""
         return self.n_rows()
 
-    def _drop(self, name=None):
+    def drop(self, name=None, force=False):
         """Private method to drop table from database"""
         if name:
             name = name
         else:
             name = self.name
-        cur = self.conn.cursor()
-        cur.execute(sql.DROP_TAB.format(tname=name))
+        used = db_table_in_vector(name)
+        if len(used) > 0:
+            warning(_("Deleting table <%s> which is attached to following map(s):") % table)
+            for vect in used:
+                warning("%s" % vect)
+            if not force:
+                warning(_("You must use the force flag to actually remove it. Exiting."))
+                sys.exit(0)
+            else:
+                cur = self.conn.cursor()
+                cur.execute(sql.DROP_TAB.format(tname=name))
+        else:
+            cur = self.conn.cursor()
+            cur.execute(sql.DROP_TAB.format(tname=name))
 
     def n_rows(self):
         """Return the number of rows
