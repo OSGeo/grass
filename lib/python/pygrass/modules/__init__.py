@@ -20,7 +20,7 @@ from xml.etree.ElementTree import fromstring
 
 import grass
 
-from grass.pygrass.errors import GrassError, ParameterError, FlagError
+from grass.pygrass.errors import GrassError, ParameterError
 
 #
 # this dictionary is used to extract the value of interest from the xml
@@ -243,7 +243,7 @@ class Parameter(object):
 
 class TypeDict(OrderedDict):
     def __init__(self, dict_type, *args, **kargs):
-        self.type = dict_type
+        self._type = dict_type
         super(TypeDict, self).__init__(*args, **kargs)
 
     def __getattr__(self, key):
@@ -261,10 +261,10 @@ class TypeDict(OrderedDict):
         return self.keys()
 
     def __setitem__(self, key, value):
-        if isinstance(value, self.type):
+        if isinstance(value, self._type):
             super(TypeDict, self).__setitem__(key, value)
         else:
-            cl = repr(self.type).translate(None, "'<> ").split('.')
+            cl = repr(self._type).translate(None, "'<> ").split('.')
             str_err = 'The value: %r is not a %s object'
             raise TypeError(str_err % (value, cl[-1].title()))
 
@@ -276,10 +276,17 @@ class TypeDict(OrderedDict):
     def __call__(self):
         return [self.__getitem__(obj) for obj in self.__iter__()]
 
+    def used(self):
+        key_dict = {}
+        for key in self:
+            if self.__getattr__(key):
+                key_dict[key] = self.__getattr__(key)
+        return key_dict
+
 
 class Flag(object):
     def __init__(self, xflag=None, diz=None):
-        self.value = None
+        self.value = False
         diz = _element2dict(xflag) if xflag is not None else diz
         self.name = diz['name']
         self.special = True if self.name in (
@@ -420,9 +427,9 @@ class Module(object):
         # extract flags from the xml
         #
         flags_list = [Flag(f) for f in tree.findall("flag")]
-        self.flags_dict = TypeDict(Flag)
+        self.flags = TypeDict(Flag)
         for flag in flags_list:
-            self.flags_dict[flag.name] = flag
+            self.flags[flag.name] = flag
 
         #
         # Add new attributes to the class
@@ -445,32 +452,6 @@ class Module(object):
 
         if args or kargs:
             self.__call__(*args, **kargs)
-
-    def _get_flags(self):
-        return ''.join([flg.get_python() for flg in self.flags_dict.values()
-                        if not flg.special])
-
-    def _set_flags(self, value):
-        if isinstance(value, str):
-            if value == '':
-                for  flg in self.flags_dict.values():
-                    if not flg.special:
-                        flg.value = False
-            else:
-                flgs = [flg.name for flg in self.flags_dict.values()
-                        if not flg.special]
-                # we need to check if the flag is valid, special flags are not
-                # allow
-                for val in value:
-                    if val in flgs:
-                        self.flags_dict[val].value = True
-                    else:
-                        str_err = 'Flag not valid: %r, valid flag are: %r'
-                        raise ValueError(str_err % (val, flgs))
-        else:
-            raise TypeError('The flags attribute must be a string')
-
-    flags = property(fget=_get_flags, fset=_set_flags)
 
     def __call__(self, *args, **kargs):
         if not args and not kargs:
@@ -508,10 +489,10 @@ class Module(object):
                 self.inputs[key].value = val
             elif key in self.outputs:
                 self.outputs[key].value = val
-            elif key in self.flags_dict:
+            elif key in self.flags:
                 # we need to add this, because some parameters (overwrite,
                 # verbose and quiet) work like parameters
-                self.flags_dict[key].value = val
+                self.flags[key].value = val
             else:
                 raise ParameterError('%s is not a valid parameter.' % key)
 
@@ -522,17 +503,6 @@ class Module(object):
             if par.value is None:
                 raise ParameterError(
                     "Required parameter <%s> not set." % par.name)
-
-        #
-        # check flags parameters
-        #
-        if self.flags:
-            # check each character in flags
-            for flag in self.flags:
-                if flag in self.flags_dict:
-                    self.flags_dict[flag].value = True
-                else:
-                    raise FlagError('Flag "%s" not valid.' % flag)
 
         #
         # check if execute
@@ -549,7 +519,7 @@ class Module(object):
         params = ', '.join([par.get_python() for par in self.params_list
                            if par.get_python() != ''])
         special = ', '.join([flg.get_python()
-                             for flg in self.flags_dict.values()
+                             for flg in self.flags.values()
                              if flg.special and flg.get_python() != ''])
         #     pre name par flg special
         if self.flags and special:
@@ -581,7 +551,7 @@ class Module(object):
              # make a list of parameters with only 3 param per line
              for line in izip_longest(*[iter(self.params_list)] * 3)]),)
         params = '\n'.join([par.__doc__ for par in self.params_list])
-        flags = self.flags_dict.__doc__
+        flags = self.flags.__doc__
         return '\n'.join([head, params, _DOC['flag_head'], flags])
 
     def make_cmd(self):
@@ -589,9 +559,9 @@ class Module(object):
         for par in self.params_list:
             if par.value is not None:
                 args.append(str(par))
-        for flg in self.flags_dict:
-            if self.flags_dict[flg].value:
-                args.append(str(self.flags_dict[flg]))
+        for flg in self.flags:
+            if self.flags[flg].value:
+                args.append(str(self.flags[flg]))
         return args
 
     def run(self, node=None):
@@ -620,6 +590,27 @@ _CMDS.sort()
 
 
 class MetaModule(object):
+    """Example how to use MetaModule
+    
+       >>> g = MetaModule('g')
+       >>> g_mlist = g.mlist
+       >>> g_mlist.name
+       'g.mlist'
+       >>> g_mlist.required
+       [Parameter <type> (required:yes, type:string, multiple:yes)]
+       >>> g_mlist.inputs.type = 'rast'
+       >>> g_mlist.stdout_ = -1
+       >>> g_mlist.run()
+       >>> g_mlist.outputs.stdout                         # doctest: +ELLIPSIS
+       'basins...soils...'
+       >>> r = MetaModule('r')
+       >>> what = r.what
+       >>> what.description
+       'Queries raster maps on their category values and category labels.'
+       >>> what.inputs.map = 'elevation'
+       >>> what.inputs.coordinates = [640000,220500]          # doctest: +SKIP
+       >>> what.run()                                         # doctest: +SKIP
+    """
     def __init__(self, prefix):
         self.prefix = prefix
 
