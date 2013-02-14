@@ -160,3 +160,26 @@ def db_select(sql = None, filename = None, table = None, **args):
     try_remove(fname)
         
     return tuple(result)
+
+
+def db_table_in_vector(table):
+    """Return the name of vector connected to the table.
+       It returns False if no vectors are connected to the table.
+
+       Example
+
+       @params table name of table to query
+
+    """
+    from vector import vector_db
+    nuldev = file(os.devnull, 'w')
+    used = []
+    vects = list_strings('vect')
+    for vect in vects:
+        for f in vector_db(vect, stderr=nuldev).itervalues():
+            if not f:
+                continue
+            if f['table'] == table:
+                used.append(vect)
+                break
+    return used
