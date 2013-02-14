@@ -22,6 +22,14 @@ import grass
 
 from grass.pygrass.errors import GrassError, ParameterError
 
+
+def _read_keydesc(par):
+    name = par.text.strip()
+    items = [e.text.strip() for e in par.findall('item')]
+    #import ipdb; ipdb.set_trace()
+    return name, tuple(items) if len(items) > 1 else None
+
+
 #
 # this dictionary is used to extract the value of interest from the xml
 # the lambda experssion is used to define small simple functions,
@@ -34,7 +42,7 @@ from grass.pygrass.errors import GrassError, ParameterError
 #
 _GETFROMTAG = {
     'description': lambda p: p.text.strip(),
-    'keydesc': lambda p: p.text.strip(),
+    'keydesc': _read_keydesc,
     'gisprompt': lambda p: dict(p.items()),
     'default': lambda p: p.text.strip(),
     'values': lambda p: [e.text.strip() for e in p.findall('value/name')],
@@ -52,7 +60,6 @@ _GETTYPE = {
     'double': float,
     'all': lambda x: x,
 }
-
 
 def _element2dict(xparameter):
     diz = dict(xparameter.items())
@@ -76,7 +83,7 @@ Parameters
     #------------------------------------------------------------
     # param
     'param': """{name}: {default}{required}{multi}{ptype}
-    {description}{values}""",
+    {description}{values}{keydescvalues}""",
     #------------------------------------------------------------
     # flag_head
     'flag_head': """
@@ -125,7 +132,7 @@ class Parameter(object):
             raise TypeError('New type: %s, ignored' % diz['type'])
 
         self.description = diz.get('description', None)
-        self.keydesc = diz.get('keydesc', None)
+        self.keydesc, self.keydescvalues = diz.get('keydesc', (None, None))
 
         #
         # values
@@ -170,7 +177,7 @@ class Parameter(object):
 
     def _set_value(self, value):
         if isinstance(value, list) or isinstance(value, tuple):
-            if self.multiple:
+            if self.multiple or self.keydescvalues:
                 # check each value
                 self._value = [self._type(val) for val in value]
             else:
@@ -233,12 +240,14 @@ class Parameter(object):
                 vals = ', '.join([repr(val) for val in self.values])
         else:
             vals = False
+        keydescvals = "\n    (%s)" % ', '.join(self.keydescvalues)
         return _DOC['param'].format(name=self.name,
                 default=repr(self.default) + ', ' if self.default else '',
                 required='required, ' if self.required else 'optional, ',
                 multi='multi' if self.multiple else '',
                 ptype=self.typedesc, description=self.description,
-                values='\n    Values: {0}'.format(vals)  if vals else '')
+                values='\n    Values: {0}'.format(vals)  if vals else '',
+                keydescvalues= keydescvals if self.keydescvalues else '')
 
 
 class TypeDict(OrderedDict):
@@ -591,7 +600,7 @@ _CMDS.sort()
 
 class MetaModule(object):
     """Example how to use MetaModule
-    
+
        >>> g = MetaModule('g')
        >>> g_mlist = g.mlist
        >>> g_mlist.name
