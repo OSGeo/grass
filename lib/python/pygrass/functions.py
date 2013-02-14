@@ -30,12 +30,13 @@ def looking(obj, filter_string):
 
 def remove(oldname, maptype):
     """Remove a map"""
-    grasscore.run_command('g.remove', **{maptype: '{old}'.format(old=oldname)})
+    grasscore.run_command('g.remove', quiet=True,
+                          **{maptype: '{old}'.format(old=oldname)})
 
 
 def rename(oldname, newname, maptype):
     """Rename a map"""
-    grasscore.run_command('g.rename',
+    grasscore.run_command('g.rename', quiet=True,
                           **{maptype: '{old},{new}'.format(old=oldname,
                                                            new=newname), })
 
@@ -48,7 +49,7 @@ def copy(existingmap, newmap, maptype):
     >>> remove('mynewcensus', 'vect')
 
     """
-    grasscore.run_command('g.copy',
+    grasscore.run_command('g.copy', quiet=True,
                           **{maptype: '{old},{new}'.format(old=existingmap,
                                                            new=newmap), })
 
