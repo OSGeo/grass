@@ -127,10 +127,14 @@ def get_xyz(pnt):
 
 
 class Attrs(object):
-    def __init__(self, cat, table, writable=False):
+    def __init__(self, cat, table, writable=None):
         self.cat = cat
         self.table = table
         self.cond = "%s=%d" % (self.table.key, self.cat)
+        # TODO add 
+        #if writable == None:
+        #    self.writable
+        #else:
         self.writable = writable
 
     def __getitem__(self, key):
@@ -157,15 +161,17 @@ class Attrs(object):
         """Set value of a given column of a table attribute. ::
 
             >>> from grass.pygrass.vector import VectorTopo
-            >>> from grass.pygrass.functions import copy
-            >>> copy('schools', 'schools', 'vect')
-            >>> schools = VectorTopo('schools')
+            >>> from grass.pygrass.functions import copy, remove
+            >>> copy('schools', 'myschools', 'vect')
+            >>> schools = VectorTopo('myschools')
             >>> schools.open('r')
             >>> school = schools[1]
-            >>> attrs = Attrs(school.line, schools.table)
+            >>> attrs = Attrs(school.cat, schools.table, True)
             >>> attrs['TAG'] = 'New Label'
             >>> attrs['TAG']
-            'New Label'
+            u'New Label'
+            >>> attrs.table.conn.close()
+            >>> remove('myschools','vect')
         """
         if self.writable:
             #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
@@ -180,14 +186,25 @@ in another mapset"
             raise GrassError(str_err)
 
     def __dict__(self):
-        """Reurn a dict of the attribute table row."""
+        """Return a dict of the attribute table row."""
         dic = {}
         for key, val in zip(self.keys(), self.values()):
             dic[key] = val
         return dic
 
     def values(self):
-        """Return the values of the attribute table row."""
+        """Return the values of the attribute table row.
+           >>> from grass.pygrass.vector import VectorTopo
+           >>> schools = VectorTopo('schools')
+           >>> schools.open('r')
+           >>> school = schools[1]
+           >>> attrs = Attrs(school.cat, schools.table)
+           >>> attrs.values()                             # doctest: +ELLIPSIS
+           (1,
+           ...
+           None)
+
+        """
         #SELECT {cols} FROM {tname} WHERE {condition}
         cur = self.table.execute(sql.SELECT_WHERE.format(cols='*',
                                                          tname=self.table.name,
@@ -195,7 +212,17 @@ in another mapset"
         return cur.fetchone()
 
     def keys(self):
-        """Return the column name of the attribute table."""
+        """Return the column name of the attribute table.
+           >>> from grass.pygrass.vector import VectorTopo
+           >>> schools = VectorTopo('schools')
+           >>> schools.open('r')
+           >>> school = schools[1]
+           >>> attrs = Attrs(school.cat, schools.table)
+           >>> attrs.keys()                             # doctest: +ELLIPSIS
+           (u'cat',
+           ...
+           u'NOTES')        
+        """
         return self.table.columns.names()
 
     def commit(self):
@@ -432,9 +459,9 @@ class Point(Geo):
 
         ::
             >>> pnt = Point(0, 0)
-            >>> area = point.buffer(10)
+            >>> area = pnt.buffer(10)
             >>> area.boundary                              #doctest: +ELLIPSIS
-            Line([Point(-10.000000, 0.000000),...Point(-10.000000, 0.000000)])
+            Line([Point(10.000000, 0.000000),...Point(10.000000, 0.000000)])
             >>> area.centroid
             Point(0.000000, 0.000000)
             >>> area.isles
@@ -1031,9 +1058,10 @@ class Boundary(Line):
     def area(self):
         """Return the area of the polygon.
         ::
-            >>> bound = Boundary([(0, 0), (0, 2), (2, 2), (2, 0), (0, 0)])
+            >>> bound = Boundary(points=[(0, 0), (0, 2), (2, 2), (2, 0),
+            ...                          (0, 0)])
             >>> bound.area()
-            4
+            4.0
 
         .."""
         libgis.G_begin_polygon_area_calculations()
@@ -1053,7 +1081,7 @@ class Centroid(Point):
         >>> from grass.pygrass.vector import VectorTopo
         >>> geo = VectorTopo('geology')
         >>> geo.open()
-        >>> centroid = Centroid(v_id=1, c_mapinfo=mun.c_mapinfo)
+        >>> centroid = Centroid(v_id=1, c_mapinfo=geo.c_mapinfo)
         >>> centroid
         Centoid(893202.874416, 297339.312795)
 
