@@ -272,7 +272,7 @@ static void make_list(
 	fprintf(stdout, "%s", name);
 
 	if (!add_mapset) {
-	    const char *mapset2 = G_find_raster2(name, "");
+	    const char *mapset2 = G_find_file2(element, name, "");
 	    need_mapset = strcmp(mapset, mapset2) != 0;
 	}
 	if (add_mapset || need_mapset)
