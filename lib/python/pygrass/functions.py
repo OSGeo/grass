@@ -128,8 +128,30 @@ def pixel2coor((col, row), region):
             libraster.Rast_col_to_easting(col, region.c_region))
 
 
-def get_raster_for_points(point, raster):
+def get_raster_for_points(poi_vector, raster, column=None):
     """Query a raster map for each point feature of a vector
+
+    Example ::
+        
+        >>> from grass.pygrass.vector import VectorTopo
+        >>> from grass.pygrass.raster import RasterRow
+        >>> ele = RasterRow('elevation')
+        >>> copy('schools','myschools','vect')
+        >>> sch = VectorTopo('myschools')
+        >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
+        [(1, 633649.2856743174, 221412.94434781274, 145.06602)...
+        >>> sch.table.columns.add('elevation','double precision')
+        >>> 'elevation' in sch.table.columns
+        True
+        >>> get_raster_for_points(sch, ele, 'elevation')
+        True
+        >>> sch.table.filters.select('NAMESHORT','elevation')
+        Filters('SELECT NAMESHORT, elevation FROM myschools;')
+        >>> cur = sch.table.execute()
+        >>> cur.fetchall()                                # doctest: +ELLIPSIS
+        [(u'SWIFT CREEK', 145.06602), ... (u'9TH GRADE CTR', None)]
+        >>> remove('myschools','vect')
+
 
     Parameters
     -------------
@@ -137,11 +159,31 @@ def get_raster_for_points(point, raster):
     point: point vector object
 
     raster: raster object
+
+    column: column name to update
     """
+    from math import isnan
+    if not column:
+        result = []
     reg = Region()
-    if not point.is_open():
-        point.open()
-    if point.num_primitive_of('point') == 0:
+    if not poi_vector.is_open():
+        poi_vector.open()
+    if not raster.is_open():
+        raster.open()
+    if poi_vector.num_primitive_of('point') == 0:
         raise GrassError(_("Vector doesn't contain points"))
-    values = [raster.get_value(poi.coords, reg) for poi in point.viter('point')]
-    return values
+    for poi in poi_vector.viter('points'):
+        val = raster.get_value(poi, reg)
+        if column:
+            if val is not None and not isnan(val):
+                poi.attrs[column] = val
+        else:
+            if val is not None and not isnan(val):
+                result.append((poi.id, poi.x, poi.y, val))
+            else:
+                result.append((poi.id, poi.x, poi.y, None))
+    if not column:
+        return result
+    else:
+        poi.attrs.commit()
+        return True
