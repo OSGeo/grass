@@ -261,6 +261,7 @@ static void make_list(
     
     for (i = 0; i < count; i++) {
 	char *name = list[i];
+	int need_mapset = 0;
 
 	if (any && i != 0)
 	    fprintf(stdout, "%s", separator);
@@ -270,7 +271,11 @@ static void make_list(
 
 	fprintf(stdout, "%s", name);
 
-	if (add_mapset)
+	if (!add_mapset) {
+	    const char *mapset2 = G_find_raster2(name, "");
+	    need_mapset = strcmp(mapset, mapset2) != 0;
+	}
+	if (add_mapset || need_mapset)
 	    fprintf(stdout, "@%s", mapset);
 
 	G_free(name);
