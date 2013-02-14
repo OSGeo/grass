@@ -62,7 +62,7 @@ class Info(object):
             range: 56, 156
             proj: 99
             ...
-            
+
         """
         self.name = name
         self.mapset = mapset
@@ -334,6 +334,10 @@ class RasterAbstractBase(object):
         if self.is_open():
             self.close()
         functions.remove(self.name, 'rast')
+
+    def fullname(self):
+        """Return the full name of a raster map: name@mapset"""
+        return "{name}@{mapset}".format(name=self.name, mapset=self.mapset)
 
     def name_mapset(self, name=None, mapset=None):
         """Return the full name of the Raster
