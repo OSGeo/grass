@@ -111,9 +111,9 @@ void lsat_metadata( char * metafile, lsat_data * lsat)
     chrncpy(lsat->creation, value, 10);
 
     get_mtldata(mtldata, "SUN_AZIMUTH", value);
-    lsat->sunza = atof(value);
-    if( lsat->sunza == 0. )
-        G_warning("Sun azimuth is %f", lsat->sunza);
+    lsat->sunaz = atof(value);
+    if( lsat->sunaz == 0. )
+        G_warning("Sun azimuth is %f", lsat->sunaz);
 
     get_mtldata(mtldata, "SUN_ELEVATION", value);
     if( value[0] == '\0' )
