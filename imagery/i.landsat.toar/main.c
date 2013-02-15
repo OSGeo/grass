@@ -189,10 +189,10 @@ int main(int argc, char *argv[])
     lsatmet->required = NO;
     lsatmet->label = 	_("return value stored for a given metadata");
     lsatmet->description = _("Required only if 'metfile' and -p given");
-    lsatmet->options = "number,creation,date,sun_elev,sensor,bands,sunza,time";
+    lsatmet->options = "number,creation,date,sun_elev,sensor,bands,sunaz,time";
     desc = NULL;
     G_asprintf(&desc,
-	        "number;%s;creation;%s;date;%s;sun_elev;%s;sensor;%s;bands;%s;sunza;%s;time;%s",
+	        "number;%s;creation;%s;date;%s;sun_elev;%s;sensor;%s;bands;%s;sunaz;%s;time;%s",
 	        _("Landsat Number"),
 	        _("Creation timestamp"),
 	        _("Date"),
@@ -282,8 +282,8 @@ int main(int argc, char *argv[])
 		if (strcmp(lsatmet->answer, "bands") == 0) {
 			fprintf(stdout,"%d\n",lsat.bands);
 		}
-		if (strcmp(lsatmet->answer, "sunza") == 0) {
-			fprintf(stdout,"%f\n",lsat.sunza);
+		if (strcmp(lsatmet->answer, "sunaz") == 0) {
+			fprintf(stdout,"%f\n",lsat.sunaz);
 		}
 		if (strcmp(lsatmet->answer, "time") == 0) {
 			fprintf(stdout,"%f\n",lsat.time);
