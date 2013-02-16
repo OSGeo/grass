@@ -182,6 +182,7 @@ Contents
    editor-geo@geoconnexion.com
 
  Web:
+   https://plus.google.com/u/0/communities/111147786674687562495 (G+ GRASS GIS community)
    http://slashgeo.org/submit.pl
    http://freshmeat.net/projects/grass/?highlight=GRASS (update, MN)
    http://linuxtoday.com/contribute.php3
