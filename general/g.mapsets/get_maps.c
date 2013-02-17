@@ -30,3 +30,11 @@ int cmp(const void *a, const void *b)
 {
     return (strcmp(*(char **)a, *(char **)b));
 }
+
+const char *substitute_mapset(const char *mapset)
+{
+    if (strcmp(mapset, ".") == 0)
+        return G_mapset();
+
+    return mapset;
+}
