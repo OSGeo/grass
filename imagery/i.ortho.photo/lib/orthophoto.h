@@ -92,7 +92,7 @@ struct Ortho_Camera_Exp_Init
 
 struct Ortho_Image_Group
 {
-    char name[100];
+    char name[GNAME_MAX];
     /* Ortho_Image_Group_Ref is identical to Ortho_Group_Ref, and
        we assume this is so in the code.  If Ortho_Image_Group_Ref
        is ever different, then there will have to be a new set of
