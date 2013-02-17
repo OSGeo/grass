@@ -25,6 +25,7 @@
 #include <grass/gis.h>
 #include <grass/spawn.h>
 #include <grass/glocale.h>
+
 #include "local_proto.h"
 
 #define OP_UKN 0
@@ -38,13 +39,13 @@ int main(int argc, char *argv[])
 {
     int n, i;
     int skip;
-    const char *cur_mapset;
+    const char *cur_mapset, *mapset;
     char **ptr;
     char **tokens;
     int no_tokens;
     FILE *fp;
     char path_buf[GPATH_MAX];
-    char *path;
+    char *path, *fs;
     int operation, nchoices;
     
     char **mapset_name;
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
     opt.mapset->type = TYPE_STRING;
     opt.mapset->required = YES;
     opt.mapset->multiple = YES;
-    opt.mapset->description = _("Name(s) of existing mapset(s)");
+    opt.mapset->description = _("Name(s) of existing mapset(s) to add/remove or set");
     opt.mapset->guisection = _("Search path");
     
     opt.op = G_define_option();
@@ -131,6 +132,8 @@ int main(int argc, char *argv[])
         }
     }
     
+    fs = G_option_to_separator(opt.fs);
+
     /* list available mapsets */
     if (opt.list->answer) {
         if (opt.print->answer)
@@ -140,7 +143,7 @@ int main(int argc, char *argv[])
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
         mapset_name = get_available_mapsets(&nmapsets);
-        list_available_mapsets((const char **)mapset_name, nmapsets, opt.fs->answer);
+        list_available_mapsets((const char **)mapset_name, nmapsets, fs);
         exit(EXIT_SUCCESS);
     }
 
@@ -149,7 +152,7 @@ int main(int argc, char *argv[])
             G_warning(_("Flag -%c ignored"), opt.dialog->key);
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        list_accessible_mapsets(opt.fs->answer);
+        list_accessible_mapsets(fs);
         exit(EXIT_SUCCESS);
     }
     
@@ -166,12 +169,11 @@ int main(int argc, char *argv[])
     
     /* modify search path */
     if (operation == OP_SET) {
-        const char *mapset;
         int cur_found;
         
         cur_found = FALSE;
         for (ptr = opt.mapset->answers; *ptr != NULL; ptr++) {
-            mapset = *ptr;
+            mapset = substitute_mapset(*ptr);
             if (G__mapset_permissions(mapset) < 0)
                 G_fatal_error(_("Mapset <%s> not found"), mapset);
             if (strcmp(mapset, cur_mapset) == 0)
@@ -198,9 +200,8 @@ int main(int argc, char *argv[])
 
         /* fetch and add new mapsets from param list */
         for (ptr = opt.mapset->answers; *ptr != NULL; ptr++) {
-            char *mapset;
 
-            mapset = *ptr;
+            mapset = substitute_mapset(*ptr);
 
             if (G_is_mapset_in_search_path(mapset))
                 continue;
@@ -230,21 +231,24 @@ int main(int argc, char *argv[])
             found = FALSE;
             
             for (ptr = opt.mapset->answers; *ptr && !found; ptr++)
-                if (strcmp(oldname, *ptr) == 0)
+
+                mapset = substitute_mapset(*ptr);
+            
+                if (strcmp(oldname, mapset) == 0)
                     found = TRUE;
             
-            if (found) {
-                if (strcmp(oldname, cur_mapset) == 0)
-                    G_warning(_("Current mapset (<%s>) must always included in the search path"),
-                              cur_mapset);
-                else
-                    G_verbose_message(_("Mapset <%s> removed from search path"),
-                                      oldname);
-                continue;
-            }
-            
-            nchoices++;
-            append_mapset(&path, oldname);
+                if (found) {
+                    if (strcmp(oldname, cur_mapset) == 0)
+                        G_warning(_("Current mapset (<%s>) must always included in the search path"),
+                                  cur_mapset);
+                    else
+                        G_verbose_message(_("Mapset <%s> removed from search path"),
+                                          oldname);
+                    continue;
+                }
+                
+                nchoices++;
+                append_mapset(&path, oldname);
         }
     }
     /* stuffem sets nchoices */
