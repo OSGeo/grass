@@ -294,7 +294,7 @@ def ListSortLower(list):
     list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
 
 def GetVectorNumberOfLayers(vector):
-    """!Get list of vector layers"""
+    """!Get list of vector layers connected to database"""
     layers = list()
     if not vector:
         return layers
@@ -316,7 +316,7 @@ def GetVectorNumberOfLayers(vector):
     else:
         Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
     
-    for line in ret.splitlines():
+    for line in out.splitlines():
         try:
             layer = line.split(';')[0]
             if '/' in layer:
