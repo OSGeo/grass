@@ -42,6 +42,7 @@ import grass.script as grass
 
 sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
+from core.globalvar import CheckWxVersion
 from psmap.frame        import PsMapFrame
 from psmap.instructions import Instruction
 
