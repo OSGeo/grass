@@ -1208,7 +1208,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
 
-        # note + button
+        # note for users expecting on-the-fly data reprojection
         row = 0
         note0 = wx.StaticText(parent = panel, id = wx.ID_ANY,
                              label = _("\nNote: This only controls the coordinates "
