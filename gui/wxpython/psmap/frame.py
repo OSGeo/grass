@@ -999,6 +999,11 @@ class PsMapFrame(wx.Frame):
     def OnPageChanged(self, event):
         """!Flatnotebook page has changed"""
         self.currentPage = self.book.GetPageIndex(self.book.GetCurrentPage())
+        if self.currentPage == 1:
+            self.SetStatusText(_("Press button with green triangle icon to generate preview."))
+        else:
+            self.SetStatusText('')
+
         
         
     def OnPageChanging(self, event):
@@ -1324,6 +1329,9 @@ class PsMapBufferedWindow(wx.Window):
 
         Change cursor when moving over resize marker.
         """
+        if self.preview:
+            return
+
         if self.mouse['use'] in ('pointer', 'resize'):
             pos = event.GetPosition()
             foundResize = self.pdcTmp.FindObjects(pos[0], pos[1])
