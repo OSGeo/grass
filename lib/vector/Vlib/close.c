@@ -167,6 +167,7 @@ int Vect_close(struct Map_info *Map)
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
 	Map->plus.Spidx_built == TRUE &&
 	!Map->support_updated &&
+	Map->plus.built == GV_BUILD_ALL &&
 	create_link) {
 
 	fclose(Map->plus.spidx_fp.file);
