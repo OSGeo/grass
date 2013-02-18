@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-29 15:57+0200\n"
+"POT-Creation-Date: 2013-02-18 14:05+0100\n"
 "PO-Revision-Date: 2009-01-27 22:58-0600\n"
 "Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
 "Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
@@ -133,18 +133,18 @@ msgstr ""
 
 #: ../lib/sites/sites.c:279 ../lib/ogsf/Gv3.c:342 ../lib/ogsf/Gp3.c:206
 #: ../lib/vector/neta/utils.c:119 ../lib/vector/neta/timetables.c:133
-#: ../lib/vector/Vlib/open_pg.c:712 ../lib/vector/Vlib/map.c:204
+#: ../lib/vector/Vlib/open_pg.c:728 ../lib/vector/Vlib/map.c:204
 #: ../lib/vector/Vlib/map.c:344 ../lib/vector/Vlib/net.c:180
-#: ../lib/vector/Vlib/net.c:351 ../lib/vector/Vlib/open_ogr.c:458
-#: ../lib/vector/Vlib/array.c:282 ../lib/vector/Vlib/copy.c:443
-#: ../lib/vector/Vlib/ascii.c:369 ../lib/rst/interp_float/vinput2d.c:88
-#: ../lib/db/dbmi_client/db.c:46 ../lib/db/dbmi_client/copy_tab.c:112
-#: ../lib/db/dbmi_client/copy_tab.c:133
+#: ../lib/vector/Vlib/net.c:357 ../lib/vector/Vlib/open_ogr.c:458
+#: ../lib/vector/Vlib/cats.c:541 ../lib/vector/Vlib/array.c:282
+#: ../lib/vector/Vlib/copy.c:476 ../lib/vector/Vlib/ascii.c:380
+#: ../lib/rst/interp_float/vinput2d.c:88 ../lib/db/dbmi_client/db.c:46
+#: ../lib/db/dbmi_client/copy_tab.c:112 ../lib/db/dbmi_client/copy_tab.c:133
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Невозможно открыть БД <%s> с помощью драйвера <%s>"
 
-#: ../lib/sites/sites.c:288 ../lib/vector/Vlib/open_pg.c:726
+#: ../lib/sites/sites.c:288 ../lib/vector/Vlib/open_pg.c:742
 #: ../lib/vector/Vlib/open_ogr.c:471 ../lib/db/dbmi_client/copy_tab.c:218
 #: ../lib/db/dbmi_client/copy_tab.c:295 ../lib/db/dbmi_client/table.c:110
 #, c-format
@@ -217,7 +217,7 @@ msgid "Bitmap mismatch"
 msgstr "Несовпадение битмэпов"
 
 #: ../lib/ogsf/Gv3.c:60 ../lib/ogsf/Gv3.c:325 ../lib/ogsf/Gp3.c:56
-#: ../lib/ogsf/Gp3.c:189 ../lib/python/temporal/space_time_datasets.py:688
+#: ../lib/ogsf/Gp3.c:189 ../lib/python/temporal/space_time_datasets.py:700
 #: ../lib/manage/do_remove.c:57 ../lib/manage/do_rename.c:54
 #: ../lib/vector/Vlib/legal_vname.c:121 ../lib/vector/Vlib/legal_vname.c:124
 #: ../lib/vector/Vlib/map.c:267 ../lib/vector/Vlib/open.c:228
@@ -226,8 +226,8 @@ msgid "Vector map <%s> not found"
 msgstr "Векторный слой <%s> не найден"
 
 #: ../lib/ogsf/Gv3.c:66 ../lib/ogsf/Gv3.c:330 ../lib/ogsf/Gp3.c:62
-#: ../lib/ogsf/Gp3.c:194 ../lib/python/temporal/space_time_datasets.py:706
-#: ../lib/vector/Vlib/open.c:266 ../lib/vector/Vlib/open.c:405
+#: ../lib/ogsf/Gp3.c:194 ../lib/python/temporal/space_time_datasets.py:718
+#: ../lib/vector/Vlib/open.c:266 ../lib/vector/Vlib/open.c:398
 #, c-format, python-format
 msgid "Unable to open vector map <%s>"
 msgstr "Невозможно открыть векторный слой <%s>"
@@ -244,10 +244,10 @@ msgstr "Векторный слой <%s> загружен (%d объектов)"
 
 #: ../lib/ogsf/Gv3.c:336 ../lib/ogsf/Gp3.c:200 ../lib/vector/Vlib/map.c:175
 #: ../lib/vector/Vlib/map.c:303 ../lib/vector/Vlib/map.c:417
-#: ../lib/vector/Vlib/net.c:174 ../lib/vector/Vlib/net.c:346
-#: ../lib/vector/Vlib/array.c:276 ../lib/vector/Vlib/copy.c:410
-#: ../lib/vector/Vlib/copy.c:507 ../lib/vector/Vlib/ascii.c:357
-#: ../lib/rst/interp_float/vinput2d.c:79
+#: ../lib/vector/Vlib/net.c:174 ../lib/vector/Vlib/net.c:352
+#: ../lib/vector/Vlib/cats.c:533 ../lib/vector/Vlib/array.c:276
+#: ../lib/vector/Vlib/copy.c:443 ../lib/vector/Vlib/copy.c:540
+#: ../lib/vector/Vlib/ascii.c:368 ../lib/rst/interp_float/vinput2d.c:79
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "Для слоя %d не определено соединение с базой данных"
@@ -274,8 +274,8 @@ msgid ""
 "without category."
 msgstr ""
 
-#: ../lib/ogsf/Gp3.c:92 ../lib/vector/Vlib/copy.c:125
-#: ../lib/vector/Vlib/copy.c:189
+#: ../lib/ogsf/Gp3.c:92 ../lib/vector/Vlib/copy.c:142
+#: ../lib/vector/Vlib/copy.c:207
 #, c-format
 msgid "Unable to read vector map <%s>"
 msgstr "Невозможно прочитать векторный слой <%s>"
@@ -340,56 +340,56 @@ msgstr ""
 msgid "Unable to process vector map - out of memory"
 msgstr "Невозможно обработать векторный слой - нет памяти"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:62
+#: ../lib/ogsf/gsd_img_mpeg.c:66
 msgid "Unable to allocate stream"
 msgstr "Невозможно выделить поток"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:155
+#: ../lib/ogsf/gsd_img_mpeg.c:165
 msgid "Video codec not found"
 msgstr "Не найден видео кодэк"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:161
+#: ../lib/ogsf/gsd_img_mpeg.c:175
 msgid "Unable to open codec"
 msgstr "Невозможно открыть кодэк"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:180
+#: ../lib/ogsf/gsd_img_mpeg.c:194
 msgid "Unable to allocate picture"
 msgstr "Невозможно разместить изображение"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:191
+#: ../lib/ogsf/gsd_img_mpeg.c:205
 msgid "Unable to allocate temporary picture"
 msgstr "Невозможно разместить временное изображение"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:251
+#: ../lib/ogsf/gsd_img_mpeg.c:265
 msgid "Error while writing video frame"
 msgstr "Ошибка записи видео фрэйма"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:297
+#: ../lib/ogsf/gsd_img_mpeg.c:311
 #, c-format
 msgid "Opening MPEG stream <%s>..."
 msgstr "Открыть поток MPEG <%s>..."
 
-#: ../lib/ogsf/gsd_img_mpeg.c:305
+#: ../lib/ogsf/gsd_img_mpeg.c:319
 msgid "Unable to deduce output format from file extension: using MPEG"
 msgstr ""
 "Невозможно определить выходной формат по расширению файла: использую MPEG"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:309
+#: ../lib/ogsf/gsd_img_mpeg.c:323
 msgid "Unable to find suitable output format"
 msgstr "Невозможно найти подходящий выходной формат"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:316 ../lib/segment/open.c:97
+#: ../lib/ogsf/gsd_img_mpeg.c:330 ../lib/segment/open.c:97
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
 #: ../lib/vector/neta/centrality.c:63 ../lib/vector/neta/centrality.c:145
 #: ../lib/vector/neta/path.c:134 ../lib/vector/neta/components.c:46
 #: ../lib/vector/neta/components.c:113 ../lib/vector/neta/bridge.c:58
-#: ../lib/vector/neta/flow.c:64 ../lib/vector/neta/flow.c:178
+#: ../lib/vector/neta/flow.c:64 ../lib/vector/neta/flow.c:179
 #: ../lib/vector/neta/timetables.c:69 ../lib/vector/neta/timetables.c:168
 #: ../lib/vector/neta/timetables.c:178 ../lib/vector/neta/timetables.c:191
 #: ../lib/vector/neta/timetables.c:278 ../lib/vector/neta/timetables.c:413
 #: ../lib/vector/neta/timetables.c:425 ../lib/vector/neta/spanningtree.c:99
 #: ../lib/vector/neta/articulation_point.c:60 ../lib/vector/Vlib/line.c:50
-#: ../lib/vector/Vlib/line.c:154 ../lib/vector/Vlib/ascii.c:201
+#: ../lib/vector/Vlib/line.c:154 ../lib/vector/Vlib/ascii.c:202
 #: ../lib/rst/interp_float/segmen2d.c:182
 #: ../lib/rst/interp_float/segmen2d.c:188
 #: ../lib/rst/interp_float/segmen2d.c:194
@@ -399,17 +399,18 @@ msgstr "Невозможно найти подходящий выходной ф
 msgid "Out of memory"
 msgstr "Нет памяти"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:336
+#: ../lib/ogsf/gsd_img_mpeg.c:354
 msgid "Invalid output format parameters"
 msgstr "Неправильные параметры выходного формата"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:350
+#: ../lib/ogsf/gsd_img_mpeg.c:376
 #, c-format
 msgid "Unable to open <%s>"
 msgstr "Невозможно открыть <%s>"
 
-#: ../lib/ogsf/gsd_img_mpeg.c:360
-msgid "NVIZ has not been built with MPEG output support"
+#: ../lib/ogsf/gsd_img_mpeg.c:389
+#, fuzzy
+msgid "OGSF library has not been built with MPEG output support"
 msgstr "NVIZ был собран без поддержки выходного формата MPEG"
 
 #: ../lib/ogsf/GP2.c:705
@@ -421,7 +422,7 @@ msgstr ""
 #: ../lib/ogsf/Gs3.c:529 ../lib/ogsf/Gs3.c:588 ../lib/ogsf/Gs3.c:645
 #: ../lib/ogsf/Gs3.c:716 ../lib/ogsf/Gs3.c:786 ../lib/raster/open.c:175
 #: ../lib/raster/open.c:744 ../lib/raster/open.c:781 ../lib/raster/open.c:833
-#: ../lib/python/temporal/space_time_datasets.py:251
+#: ../lib/python/temporal/space_time_datasets.py:253
 #: ../lib/manage/do_remove.c:73 ../lib/manage/do_rename.c:71
 #: ../lib/rst/interp_float/output2d.c:236
 #: ../lib/rst/interp_float/output2d.c:317
@@ -484,7 +485,7 @@ msgid "Maximum number of datafiles exceeded"
 msgstr "Превышено максимальное количество файлов!"
 
 #: ../lib/ogsf/gvl_file.c:436
-#: ../lib/python/temporal/space_time_datasets.py:495
+#: ../lib/python/temporal/space_time_datasets.py:502
 #: ../lib/gpde/N_arrays_io.c:281
 #, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
@@ -497,7 +498,7 @@ msgstr "Невозможно прочесть диапазон растрово�
 
 #: ../lib/ogsf/gvl_file.c:470 ../lib/raster3d/close.c:120
 #: ../lib/raster3d/close.c:130 ../lib/raster3d/close.c:159
-#: ../lib/python/temporal/space_time_datasets.py:523
+#: ../lib/python/temporal/space_time_datasets.py:530
 #, c-format, python-format
 msgid "Unable to close 3D raster map <%s>"
 msgstr "Невозможно закрыть растровый 3D слой <%s>"
@@ -536,7 +537,7 @@ msgstr "Превышено максимальное число наборов д
 msgid "Loading 3d raster map <%s>..."
 msgstr "Загрузка растрового 3d слоя <%s>..."
 
-#: ../lib/proj/convert.c:82 ../lib/vector/Vlib/close.c:205
+#: ../lib/proj/convert.c:82 ../lib/vector/Vlib/close.c:245
 #: ../lib/vector/Vlib/build_ogr.c:94 ../lib/vector/Vlib/build_ogr.c:169
 #: ../lib/vector/Vlib/open_ogr.c:126 ../lib/vector/Vlib/open_ogr.c:156
 #: ../lib/vector/Vlib/open_ogr.c:232 ../lib/vector/Vlib/open_ogr.c:341
@@ -544,7 +545,7 @@ msgstr "Загрузка растрового 3d слоя <%s>..."
 #: ../lib/vector/Vlib/header_finfo.c:39 ../lib/vector/Vlib/header_finfo.c:78
 #: ../lib/vector/Vlib/header_finfo.c:111 ../lib/vector/Vlib/header_finfo.c:150
 #: ../lib/vector/Vlib/build_sfa.c:702 ../lib/vector/Vlib/close_ogr.c:82
-#: ../lib/vector/Vlib/close_ogr.c:116 ../lib/vector/Vlib/field.c:659
+#: ../lib/vector/Vlib/close_ogr.c:116 ../lib/vector/Vlib/field.c:660
 #: ../lib/vector/Vlib/read_ogr.c:56 ../lib/vector/Vlib/read_ogr.c:157
 #: ../lib/vector/Vlib/read_ogr.c:242 ../lib/vector/Vlib/write_ogr.c:210
 #: ../lib/vector/Vlib/write_ogr.c:246 ../lib/vector/Vlib/write_ogr.c:286
@@ -658,44 +659,44 @@ msgstr "pj_transform() неудачен: %s"
 msgid "Invalid ellipsoid <%s> in file"
 msgstr "Неправильный эллипсоид <%s> в файле"
 
-#: ../lib/proj/ellipse.c:100
+#: ../lib/proj/ellipse.c:103
 msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
 msgstr "В файле отсутствует второй параметр описания эллипсоида (rf, es или b)"
 
-#: ../lib/proj/ellipse.c:104
+#: ../lib/proj/ellipse.c:107
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
 msgstr "Неправильные параметры эллипсоида (a, rf, es или b) в файле"
 
-#: ../lib/proj/ellipse.c:117
+#: ../lib/proj/ellipse.c:120
 msgid "No ellipsoid info given in file"
 msgstr "В файле нет информации об эллипсоиде"
 
-#: ../lib/proj/ellipse.c:217 ../lib/gis/get_ellipse.c:263
+#: ../lib/proj/ellipse.c:220 ../lib/gis/get_ellipse.c:263
 #, c-format
 msgid "Unable to open ellipsoid table file <%s>"
 msgstr "Невозможно открыть файл таблицы эллипсоидов <%s>"
 
-#: ../lib/proj/ellipse.c:270 ../lib/gis/get_ellipse.c:322
+#: ../lib/proj/ellipse.c:273 ../lib/gis/get_ellipse.c:322
 #, c-format
 msgid "Line%s of ellipsoid table file <%s> is invalid"
 msgstr "Неверная строка %s в файле таблицы эллипсоидов <%s>"
 
-#: ../lib/proj/ellipse.c:271 ../lib/gis/get_ellipse.c:321
+#: ../lib/proj/ellipse.c:274 ../lib/gis/get_ellipse.c:321
 #, c-format
 msgid "Lines%s of ellipsoid table file <%s> are invalid"
 msgstr "Неверные строки %s в файле таблицы эллипсоидов <%s>"
 
-#: ../lib/raster3d/range.c:76
+#: ../lib/raster3d/range.c:73
 #, fuzzy, c-format
 msgid "Unable to open range file for [%s in %s]"
 msgstr "Невозможно создать файл заголовка для [%s в %s]"
 
-#: ../lib/raster3d/range.c:91 ../lib/raster3d/range.c:100
+#: ../lib/raster3d/range.c:88
 #, fuzzy, c-format
 msgid "Error reading range file for [%s in %s]"
 msgstr "невозможно прочитать файл диапазона для [%s в %s]"
 
-#: ../lib/raster3d/range.c:165
+#: ../lib/raster3d/range.c:155
 #, fuzzy, c-format
 msgid "Unable to open range file for <%s>"
 msgstr "Невозможно открыть файл заголовка вектора <%s>"
@@ -745,7 +746,7 @@ msgid "Unable to position file"
 msgstr "Невозможно открыть файл %s"
 
 #: ../lib/raster3d/close.c:99 ../lib/raster3d/close.c:105
-#: ../lib/raster3d/close.c:191 ../lib/raster3d/header.c:211
+#: ../lib/raster3d/close.c:191 ../lib/raster3d/header.c:209
 #, fuzzy, c-format
 msgid "Unable to write header for 3D raster map <%s>"
 msgstr "Невозможно прочесть диапазон растрового 3D слоя <%s>"
@@ -814,7 +815,7 @@ msgstr ""
 "\n"
 "-- Тестирование единицы solver завершено успешно --"
 
-#: ../lib/raster3d/test/test_put_get_value_large_file.c:31
+#: ../lib/raster3d/test/test_put_get_value_large_file.c:36
 #, fuzzy
 msgid ""
 "\n"
@@ -823,7 +824,7 @@ msgstr ""
 "\n"
 "++ Запуск тестирования единицы solver ++"
 
-#: ../lib/raster3d/test/test_put_get_value_large_file.c:37
+#: ../lib/raster3d/test/test_put_get_value_large_file.c:45
 #, fuzzy
 msgid ""
 "\n"
@@ -832,7 +833,7 @@ msgstr ""
 "\n"
 "-- Тестирование единицы solver окончилось неудачно --"
 
-#: ../lib/raster3d/test/test_put_get_value_large_file.c:39
+#: ../lib/raster3d/test/test_put_get_value_large_file.c:47
 #, fuzzy
 msgid ""
 "\n"
@@ -853,34 +854,51 @@ msgid "Choose the integration tests to run"
 msgstr "Выберите интеграционные тесты "
 
 #: ../lib/raster3d/test/test_main.c:57
-msgid "The number of depths to be used for the large file put value test"
+msgid "The number of depths to be used for the large file put/get value test"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:64
-msgid "The number of rows to be used for the large file put value test"
+msgid "The number of rows to be used for the large file put/get value test"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:71
-msgid "The number of columns to be used for the large file put value test"
+msgid "The number of columns to be used for the large file put/get value test"
 msgstr ""
 
-#: ../lib/raster3d/test/test_main.c:75 ../lib/gmath/test/test_main.c:79
+#: ../lib/raster3d/test/test_main.c:78
+msgid ""
+"The tile size in kilo bytes to be used for the large file put/get value "
+"test. Set the tile size to 2048 and the number of row*cols*depths > 130000 "
+"to reproduce the tile rle error."
+msgstr ""
+
+#: ../lib/raster3d/test/test_main.c:82 ../lib/gmath/test/test_main.c:79
 #: ../lib/gpde/test/test_main.c:62 ../lib/db/dbmi_base/test/test_main.c:58
 #, fuzzy
 msgid "Run all unit tests"
 msgstr "Выполнить все тесты единиц"
 
-#: ../lib/raster3d/test/test_main.c:79 ../lib/gmath/test/test_main.c:83
+#: ../lib/raster3d/test/test_main.c:86 ../lib/gmath/test/test_main.c:83
 #: ../lib/gpde/test/test_main.c:66 ../lib/db/dbmi_base/test/test_main.c:62
 msgid "Run all integration tests"
 msgstr "Выполнить все интеграционные тесты "
 
-#: ../lib/raster3d/test/test_main.c:83 ../lib/gmath/test/test_main.c:87
+#: ../lib/raster3d/test/test_main.c:90 ../lib/gmath/test/test_main.c:87
 #: ../lib/gpde/test/test_main.c:70 ../lib/db/dbmi_base/test/test_main.c:66
 msgid "Run all unit and integration tests"
 msgstr "Выполнить все тесты единиц и интеграции"
 
-#: ../lib/raster3d/test/test_main.c:101
+#: ../lib/raster3d/test/test_main.c:94
+msgid "Switch lzw compression on"
+msgstr ""
+
+#: ../lib/raster3d/test/test_main.c:98
+msgid ""
+"Use run length encoding RLE to encode/decode single tiles. Attention RLE is "
+"buggy in case of large tiles or files."
+msgstr ""
+
+#: ../lib/raster3d/test/test_main.c:118
 #, fuzzy
 msgid "Performs unit and integration tests for the g3d library"
 msgstr "Выполнить тесты единиц и интеграционные тесты для библиотеки gdpe"
@@ -965,12 +983,12 @@ msgstr "Растрового слоя <%s> нет в текущем наборе
 msgid "Rast3d_open_cell_new: could not open file"
 msgstr "Rast3d_openCellNew: невозможно открыть файл"
 
-#: ../lib/raster3d/open.c:285 ../lib/raster3d/open.c:290
+#: ../lib/raster3d/open.c:284 ../lib/raster3d/open.c:289
 #, fuzzy
 msgid "Rast3d_open_cell_new: can't write header"
 msgstr "Rast3d_openCellNew: невозможно создать заголовок"
 
-#: ../lib/raster3d/open.c:313
+#: ../lib/raster3d/open.c:312
 #, fuzzy
 msgid "Rast3d_open_cell_new: error in Rast3d_fill_header"
 msgstr "Rast3d_openCellNew: ошибка в Rast3d_fillHeader"
@@ -985,7 +1003,7 @@ msgstr ""
 msgid "%s: illegal value spec"
 msgstr "%s - ** невозможное имя **"
 
-#: ../lib/raster3d/color.c:333
+#: ../lib/raster3d/color.c:331
 #, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
 msgstr "Растрового слоя <%s> нет в текущем наборе (%s)"
@@ -1012,16 +1030,16 @@ msgid "Concurrent mapset locking is not supported on Windows"
 msgstr ""
 
 #: ../lib/init/lock.c:60
-#, c-format
-msgid "Unable to write lockfile %s (disk full? Permissions?)"
-msgstr ""
+#, fuzzy, c-format
+msgid "Unable to write lockfile %s (%s)"
+msgstr "Невозможно открыть файл статистики <%s>"
 
-#: ../lib/init/grass.py:69
+#: ../lib/init/grass.py:72
 #, fuzzy
 msgid "WARNING"
 msgstr "ПРЕДУПРЕЖДЕНИЕ: "
 
-#: ../lib/init/grass.py:173
+#: ../lib/init/grass.py:183
 #, fuzzy
 msgid "Usage"
 msgstr ""
@@ -1029,120 +1047,120 @@ msgstr ""
 "Использование:\n"
 " "
 
-#: ../lib/init/grass.py:174 ../lib/gis/parser_html.c:140
+#: ../lib/init/grass.py:184 ../lib/gis/parser_html.c:140
 #: ../lib/gis/parser_rest.c:146
 msgid "Flags"
 msgstr "Флаги"
 
-#: ../lib/init/grass.py:175
+#: ../lib/init/grass.py:185
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:176
+#: ../lib/init/grass.py:186
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:177
+#: ../lib/init/grass.py:187
 msgid "create given database, location or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:178
+#: ../lib/init/grass.py:188
 msgid "use text based interface"
 msgstr ""
 
-#: ../lib/init/grass.py:179 ../lib/init/grass.py:181
+#: ../lib/init/grass.py:189 ../lib/init/grass.py:191
 #, fuzzy
 msgid "and set as default"
 msgstr "чтобы установить по умолчанию"
 
-#: ../lib/init/grass.py:180
+#: ../lib/init/grass.py:190
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr ""
 
-#: ../lib/init/grass.py:182
+#: ../lib/init/grass.py:192
 msgid "print GRASS configuration parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:183
+#: ../lib/init/grass.py:193
 msgid "options: arch,build,compiler,path,revision"
 msgstr ""
 
-#: ../lib/init/grass.py:184 ../lib/gis/parser_html.c:180
+#: ../lib/init/grass.py:194 ../lib/gis/parser_html.c:180
 #: ../lib/gis/parser_rest.c:179
 msgid "Parameters"
 msgstr "Параметры"
 
-#: ../lib/init/grass.py:185
+#: ../lib/init/grass.py:195
 msgid "initial database (path to GIS data)"
 msgstr ""
 
-#: ../lib/init/grass.py:186
+#: ../lib/init/grass.py:196
 #, fuzzy
 msgid "initial location"
 msgstr ""
 "\n"
 "неверная проекция\n"
 
-#: ../lib/init/grass.py:187
+#: ../lib/init/grass.py:197
 msgid "initial mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:188
+#: ../lib/init/grass.py:198
 msgid "fully qualified initial mapset directory"
 msgstr ""
 
-#: ../lib/init/grass.py:189
+#: ../lib/init/grass.py:199
 msgid "Environment variables relevant for startup"
 msgstr ""
 
-#: ../lib/init/grass.py:190
+#: ../lib/init/grass.py:200
 msgid "select GUI (text, gui)"
 msgstr ""
 
-#: ../lib/init/grass.py:191
+#: ../lib/init/grass.py:201
 msgid "set wish shell name to override 'wish'"
 msgstr ""
 
-#: ../lib/init/grass.py:192
+#: ../lib/init/grass.py:202
 msgid "set html web browser for help pages"
 msgstr ""
 
-#: ../lib/init/grass.py:193
+#: ../lib/init/grass.py:203
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 
-#: ../lib/init/grass.py:194
+#: ../lib/init/grass.py:204
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 
-#: ../lib/init/grass.py:195
+#: ../lib/init/grass.py:205
 msgid "shell script to be processed as batch job"
 msgstr ""
 
-#: ../lib/init/grass.py:196
+#: ../lib/init/grass.py:206
 msgid "set python shell name to override 'python'"
 msgstr ""
 
-#: ../lib/init/grass.py:216
+#: ../lib/init/grass.py:228
 #, fuzzy, python-format
 msgid "Unable to create temporary directory <%s>! Exiting."
 msgstr "Невозможно разместить временное изображение"
 
-#: ../lib/init/grass.py:294
+#: ../lib/init/grass.py:306
 #, fuzzy, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr "Запрашиваемый формат для этой версии не скомпилирован."
 
-#: ../lib/init/grass.py:430
+#: ../lib/init/grass.py:444
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:454
+#: ../lib/init/grass.py:468
 #, fuzzy
 msgid "Hit RETURN to continue"
 msgstr "нажмите RETURN для продолжения -->"
 
-#: ../lib/init/grass.py:483
+#: ../lib/init/grass.py:497
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -1152,7 +1170,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:495
+#: ../lib/init/grass.py:509
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -1161,34 +1179,34 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:537 ../lib/init/grass.py:568
+#: ../lib/init/grass.py:551 ../lib/init/grass.py:582
 #, fuzzy, python-format
 msgid "<%s> is not a valid GRASS location"
 msgstr "Извините, опция <%s> неверна\n"
 
-#: ../lib/init/grass.py:549
+#: ../lib/init/grass.py:563
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:566
+#: ../lib/init/grass.py:580
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:580
+#: ../lib/init/grass.py:594
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:594
+#: ../lib/init/grass.py:608
 #, python-format
 msgid ""
 "Invalid user interface specified - <%s>.\n"
 "Use the --help option to see valid interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:607
+#: ../lib/init/grass.py:621
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS "
 "developers.\n"
@@ -1197,20 +1215,20 @@ msgid ""
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:617
+#: ../lib/init/grass.py:631
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:620
+#: ../lib/init/grass.py:634
 #, fuzzy
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr "Сообщите разработчикам GRASS об этой ошибке.\n"
 
-#: ../lib/init/grass.py:630
+#: ../lib/init/grass.py:644
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -1220,36 +1238,36 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:697
+#: ../lib/init/grass.py:727
 #, fuzzy, python-format
 msgid "Path '%s' doesn't exist"
 msgstr "%s: Полигон %d не существует"
 
-#: ../lib/init/grass.py:708
+#: ../lib/init/grass.py:738
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:712
+#: ../lib/init/grass.py:742
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:726
+#: ../lib/init/grass.py:756
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "Построение графа..."
 
-#: ../lib/init/grass.py:755
+#: ../lib/init/grass.py:790
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - переменная не установлена"
 
-#: ../lib/init/grass.py:765
+#: ../lib/init/grass.py:800
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -1258,90 +1276,90 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:770
+#: ../lib/init/grass.py:805
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:772
+#: ../lib/init/grass.py:807
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:777
+#: ../lib/init/grass.py:812
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:782
+#: ../lib/init/grass.py:817
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:810
+#: ../lib/init/grass.py:845
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:819
+#: ../lib/init/grass.py:854
 msgid "GRASS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:820
+#: ../lib/init/grass.py:855
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:822
+#: ../lib/init/grass.py:857
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "Нет справки для команды [%s]\n"
 
-#: ../lib/init/grass.py:823
+#: ../lib/init/grass.py:858
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:826
+#: ../lib/init/grass.py:861
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:828
+#: ../lib/init/grass.py:863
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:830
+#: ../lib/init/grass.py:865
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:929
+#: ../lib/init/grass.py:969
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Невозможен запуск драйвера <%s>"
 
-#: ../lib/init/grass.py:933
+#: ../lib/init/grass.py:973
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:934 ../lib/init/grass.py:939
+#: ../lib/init/grass.py:974 ../lib/init/grass.py:979
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:937
+#: ../lib/init/grass.py:977
 #, fuzzy
 msgid "Done."
 msgstr "нет"
 
-#: ../lib/init/grass.py:943
+#: ../lib/init/grass.py:983
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Невозможно открыть временный файл"
 
-#: ../lib/init/grass.py:985
+#: ../lib/init/grass.py:1025
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "тип данных OGR %d не поддерживается"
 
-#: ../lib/init/grass.py:1123
+#: ../lib/init/grass.py:1166
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -1351,11 +1369,11 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1132
+#: ../lib/init/grass.py:1175
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1189
+#: ../lib/init/grass.py:1233
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -1424,7 +1442,7 @@ msgstr "невозможно записать категории для [%s] в 
 msgid "Rast_make_random_colors: min (%d) > max (%d)"
 msgstr ""
 
-#: ../lib/raster/init.c:62
+#: ../lib/raster/init.c:61
 #, fuzzy
 msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
 msgstr ""
@@ -1611,11 +1629,13 @@ msgstr ""
 "G_set_window(): проекция/зона отличается от текущих открытых растровых карт"
 
 #: ../lib/raster/set_window.c:158
-msgid "Input window changed while maps are open for read"
+#, c-format
+msgid "Input window changed while maps are open for read. Map name <%s>"
 msgstr ""
 
-#: ../lib/raster/set_window.c:176
-msgid "Output window changed while maps are open for write"
+#: ../lib/raster/set_window.c:174
+#, c-format
+msgid "Output window changed while maps are open for write. Map name <%s>"
 msgstr ""
 
 #: ../lib/raster/color_write.c:81 ../lib/vector/Vlib/color_write.c:71
@@ -1656,7 +1676,7 @@ msgstr "Невозможно создать файл заголовка для [
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr "Невозможно создать файл зависимости для [%s в %s]"
 
-#: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:841
+#: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:838
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr "Чтение растрового слоя <%s@%s> ряд %d находится вне диапазона"
@@ -1673,7 +1693,7 @@ msgstr "Ошибка чтения растрового слоя"
 msgid "Error reading raster data via GDAL"
 msgstr "Ошибка загрузки растрового 3d слоя <%s>"
 
-#: ../lib/raster/get_row.c:825 ../lib/raster/get_row.c:828
+#: ../lib/raster/get_row.c:822 ../lib/raster/get_row.c:825
 #, c-format
 msgid "Error reading null row %d"
 msgstr "Ошибка чтения нулевого ряда %d"
@@ -1909,7 +1929,7 @@ msgstr "категории векторного слоя [%s] в наборе [%
 msgid "Category support for vector map <%s@%s> invalid"
 msgstr "категории векторного слоя [%s] в наборе [%s] %s"
 
-#: ../lib/raster/cats.c:964
+#: ../lib/raster/cats.c:968
 #, fuzzy, c-format
 msgid "Unable to open %s file for map <%s>"
 msgstr "Невозможно открыть файл заголовка вектора <%s>"
@@ -2062,24 +2082,25 @@ msgstr ""
 msgid "signature: perimeter points out of order."
 msgstr ""
 
-#: ../lib/imagery/iclass_statistics.c:247
-msgid "prepare_signature: data error."
+#: ../lib/imagery/iclass_statistics.c:248
+#, c-format
+msgid "Data error preparing signatures: value (%d) > num of cats (%d)"
 msgstr ""
 
-#: ../lib/imagery/iclass_statistics.c:559
-#: ../lib/imagery/iclass_statistics.c:582
-#: ../lib/imagery/iclass_statistics.c:605
-#: ../lib/imagery/iclass_statistics.c:628
-#: ../lib/imagery/iclass_statistics.c:651
-#: ../lib/imagery/iclass_statistics.c:678
-#: ../lib/imagery/iclass_statistics.c:710
-#: ../lib/imagery/iclass_statistics.c:733
-#: ../lib/imagery/iclass_statistics.c:756
+#: ../lib/imagery/iclass_statistics.c:561
+#: ../lib/imagery/iclass_statistics.c:584
+#: ../lib/imagery/iclass_statistics.c:607
+#: ../lib/imagery/iclass_statistics.c:630
+#: ../lib/imagery/iclass_statistics.c:653
+#: ../lib/imagery/iclass_statistics.c:680
+#: ../lib/imagery/iclass_statistics.c:712
+#: ../lib/imagery/iclass_statistics.c:735
+#: ../lib/imagery/iclass_statistics.c:758
 #, fuzzy
 msgid "Band index out of range"
 msgstr "Индекс слоя вне диапазона"
 
-#: ../lib/imagery/iclass_statistics.c:682
+#: ../lib/imagery/iclass_statistics.c:684
 #, fuzzy
 msgid "Cell category value out of range"
 msgstr "Индекс слоев или категорий вне диапазона"
@@ -2110,11 +2131,6 @@ msgstr "Невозможно создать файл [%s] для подгруп�
 #, fuzzy, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
 msgstr "Невозможно создать файл [%s] для подгруппы [%s] или группы [%s в %s]"
-
-#: ../lib/imagery/sigsetfile.c:86
-#, fuzzy, c-format
-msgid "Unable to open signature file <%s> for subgroup <%s> of group <%s@%s>"
-msgstr "Невозможно открыть файл [%s] для подгруппы [%s] или группы [%s в %s]"
 
 #: ../lib/imagery/fopen.c:23
 #, c-format
@@ -2151,14 +2167,14 @@ msgstr "Невозможно найти файл [%s] или подгруппу 
 msgid "No areas in category %d"
 msgstr "Невозможно удалить слой/категорию %d/%d линии %d"
 
-#: ../lib/imagery/iclass.c:119
+#: ../lib/imagery/iclass.c:122
 #, fuzzy, c-format
-msgid "Raster map <%s@%s> in group <%s> do not exist"
+msgid "Raster map <%s@%s> in subgroup <%s> does not exist"
 msgstr "Таблица <%s> связанная с векторным слоем <%s> не существует"
 
-#: ../lib/imagery/iclass.c:128
+#: ../lib/imagery/iclass.c:131
 #, c-format
-msgid "Group <%s> does not have enough files (it has %d files)"
+msgid "Subgroup <%s> does not have enough files (it has %d files)"
 msgstr ""
 
 #: ../lib/imagery/list_subgp.c:36
@@ -2191,160 +2207,160 @@ msgstr "Невозможно открыть файл [%s] группы [%s в %s
 msgid "Unable to create control point file for group [%s in %s]"
 msgstr "Невозможно создать файл [%s] группы [%s в %s]"
 
-#: ../lib/gmath/la.c:64 ../lib/gmath/la.c:120
+#: ../lib/gmath/la.c:60 ../lib/gmath/la.c:116
 msgid "Matrix dimensions out of range"
 msgstr "Размеры матрицы вне диапазона"
 
-#: ../lib/gmath/la.c:153
+#: ../lib/gmath/la.c:149
 msgid "Matrix is not initialised fully."
 msgstr "Матрица не полностью иннициализирована."
 
-#: ../lib/gmath/la.c:158
+#: ../lib/gmath/la.c:154
 msgid "Unable to allocate space for matrix copy"
 msgstr "Невозможно выделить память для копии матрицы"
 
-#: ../lib/gmath/la.c:247
+#: ../lib/gmath/la.c:243
 msgid "First scalar multiplier must be non-zero"
 msgstr "Первый скалярный множитель должен быть не равен нулю"
 
-#: ../lib/gmath/la.c:253 ../lib/gmath/la.c:261 ../lib/gmath/la.c:326
+#: ../lib/gmath/la.c:249 ../lib/gmath/la.c:257 ../lib/gmath/la.c:322
 msgid "One or both input matrices uninitialised"
 msgstr "Одна или обе матрицы не иннициализированы"
 
-#: ../lib/gmath/la.c:266 ../lib/gmath/la.c:331
+#: ../lib/gmath/la.c:262 ../lib/gmath/la.c:327
 msgid "Matrix order does not match"
 msgstr "Порядок матрицы не совпадает"
 
-#: ../lib/gmath/la.c:272
+#: ../lib/gmath/la.c:268
 msgid "Unable to allocate space for matrix sum"
 msgstr "Невозможно выделить память для суммы матрицы"
 
-#: ../lib/gmath/la.c:336
+#: ../lib/gmath/la.c:332
 msgid "Unable to allocate space for matrix product"
 msgstr "Невозможно выделить память для продукта матрицы"
 
-#: ../lib/gmath/la.c:448
+#: ../lib/gmath/la.c:444
 msgid "Input: one or both data matrices uninitialised"
 msgstr "Ввод: одна или обе матрицы не иннициализированы"
 
-#: ../lib/gmath/la.c:453
+#: ../lib/gmath/la.c:449
 msgid "Principal matrix is not properly dimensioned"
 msgstr "Заданы неправильные размеры главной матрицы"
 
-#: ../lib/gmath/la.c:458
+#: ../lib/gmath/la.c:454
 msgid "Input: you must have at least one array to solve"
 msgstr "Ввод: для решение необходимо не меньше одного массива"
 
-#: ../lib/gmath/la.c:464
+#: ../lib/gmath/la.c:460
 msgid "Could not allocate space for solution matrix"
 msgstr "Невозможно найти место для матрицы решения"
 
-#: ../lib/gmath/la.c:470 ../lib/gmath/la.c:478
+#: ../lib/gmath/la.c:466 ../lib/gmath/la.c:474
 msgid "Could not allocate space for working matrix"
 msgstr "Невозможно найти место для рабочей матрицы"
 
-#: ../lib/gmath/la.c:531
+#: ../lib/gmath/la.c:527
 msgid "Matrix (or submatrix is singular). Solution undetermined"
 msgstr "Матрица (или субматрица вырождена). Невозможно найти решение"
 
-#: ../lib/gmath/la.c:535
+#: ../lib/gmath/la.c:531
 msgid "Problem in LA routine."
 msgstr "Проблема в LA процедуре."
 
-#: ../lib/gmath/la.c:542
+#: ../lib/gmath/la.c:538
 msgid "Procedure not yet available for selected matrix type"
 msgstr "Для выбранного типа матрицы процедура еще не доступна"
 
-#: ../lib/gmath/la.c:576
+#: ../lib/gmath/la.c:572
 msgid "Matrix is not square. Cannot determine inverse"
 msgstr "Матрица не прямоугольная, невозможно найти обратную матрицу."
 
-#: ../lib/gmath/la.c:581
+#: ../lib/gmath/la.c:577
 msgid "Unable to allocate space for matrix"
 msgstr "Невозможно выделить память для матрицы"
 
-#: ../lib/gmath/la.c:598
+#: ../lib/gmath/la.c:594
 msgid "Matrix is singular"
 msgstr "Матрица вырождена."
 
-#: ../lib/gmath/la.c:603
+#: ../lib/gmath/la.c:599
 msgid "Problem in LA procedure."
 msgstr "Проблема в LA процедуре."
 
-#: ../lib/gmath/la.c:691
+#: ../lib/gmath/la.c:687
 msgid "Element array has not been allocated"
 msgstr "Массив элементов не создан"
 
-#: ../lib/gmath/la.c:696
+#: ../lib/gmath/la.c:692
 msgid "Specified element is outside array bounds"
 msgstr "Указанный элемент выходит за границы массива"
 
-#: ../lib/gmath/la.c:750
+#: ../lib/gmath/la.c:746
 msgid "Specified matrix column index is outside range"
 msgstr "Указанный индекс столбца матрицы находится вне диапазона"
 
-#: ../lib/gmath/la.c:755 ../lib/gmath/la.c:796 ../lib/gmath/la.c:1109
-#: ../lib/gmath/la.c:1161 ../lib/gmath/la.c:1236
+#: ../lib/gmath/la.c:751 ../lib/gmath/la.c:792 ../lib/gmath/la.c:1105
+#: ../lib/gmath/la.c:1157 ../lib/gmath/la.c:1232
 msgid "Matrix is not initialised"
 msgstr "Матрица не иннициализирована"
 
-#: ../lib/gmath/la.c:760 ../lib/gmath/la.c:801
+#: ../lib/gmath/la.c:756 ../lib/gmath/la.c:797
 msgid "Could not allocate space for vector structure"
 msgstr "Невозможно найти место для структуры векта"
 
-#: ../lib/gmath/la.c:791
+#: ../lib/gmath/la.c:787
 msgid "Specified matrix row index is outside range"
 msgstr "Указанный индекс ряда матрицы находится вне диапазона"
 
-#: ../lib/gmath/la.c:831
+#: ../lib/gmath/la.c:827
 msgid "Specified row index is outside range"
 msgstr "Указанный индекс ряда находится вне диапазона"
 
-#: ../lib/gmath/la.c:836
+#: ../lib/gmath/la.c:832
 msgid "Specified column index is outside range"
 msgstr "Указанный индекс столбца находится вне диапазона"
 
-#: ../lib/gmath/la.c:856
+#: ../lib/gmath/la.c:852
 msgid "Unknown vector type."
 msgstr "Неизвестный тип вектора."
 
-#: ../lib/gmath/la.c:981
+#: ../lib/gmath/la.c:977
 msgid "Output vector is uninitialized"
 msgstr "Выходной вектор не иннициализирован"
 
-#: ../lib/gmath/la.c:986
+#: ../lib/gmath/la.c:982
 msgid "Vectors are not of the same type"
 msgstr "Векторы относятся к разным типам"
 
-#: ../lib/gmath/la.c:991
+#: ../lib/gmath/la.c:987
 msgid "Output vector is of incorrect type"
 msgstr "Выходной вектор неправильного типа"
 
-#: ../lib/gmath/la.c:996
+#: ../lib/gmath/la.c:992
 msgid "Matrices not allowed"
 msgstr "Матрицы не разрешены"
 
-#: ../lib/gmath/la.c:1002
+#: ../lib/gmath/la.c:998
 msgid "Vectors have differing dimensions"
 msgstr "Векторы имеют разные размеры"
 
-#: ../lib/gmath/la.c:1008
+#: ../lib/gmath/la.c:1004
 msgid "Output vector has incorrect dimension"
 msgstr "Выходной вектор имеет неправильные размеры"
 
-#: ../lib/gmath/la.c:1054
+#: ../lib/gmath/la.c:1050
 msgid "Vector dimensions out of range"
 msgstr "Размеры вектора вне диапазона"
 
-#: ../lib/gmath/la.c:1059
+#: ../lib/gmath/la.c:1055
 msgid "Row/column out of range"
 msgstr "Ряд/столбец вне диапазона"
 
-#: ../lib/gmath/la.c:1274
+#: ../lib/gmath/la.c:1270
 msgid "Vector structure is not initialised"
 msgstr "Векторная структура не иннициализирована"
 
-#: ../lib/gmath/la.c:1395 ../lib/gmath/la.c:1403 ../lib/gmath/la.c:1408
+#: ../lib/gmath/la.c:1391 ../lib/gmath/la.c:1399 ../lib/gmath/la.c:1404
 msgid "Input format error"
 msgstr "Ошибка исходного формата"
 
@@ -2710,11 +2726,13 @@ msgstr ""
 msgid "Please recompile with Large File Support (LFS)"
 msgstr ""
 
-#: ../lib/temporal/lib/default_name.c:74
-#: ../lib/db/dbmi_base/default_name.c:136
-#, fuzzy
-msgid "Programmer error"
-msgstr "Возможная программная ошибка."
+#: ../lib/temporal/lib/default_name.c:63
+msgid "Creating new default TGIS DB params"
+msgstr ""
+
+#: ../lib/temporal/lib/default_name.c:73
+msgid "Programmer error - only SQLite driver is currently supported"
+msgstr ""
 
 #: ../lib/temporal/t.connect/main.c:34
 #, fuzzy
@@ -2791,7 +2809,7 @@ msgstr "Драйвер по умолчанию не установлен"
 msgid "Default TGIS database is not set"
 msgstr "База данных по умолчанию не установлена "
 
-#: ../lib/temporal/t.connect/main.c:133 ../lib/vector/Vlib/field.c:342
+#: ../lib/temporal/t.connect/main.c:133 ../lib/vector/Vlib/field.c:343
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -2967,46 +2985,110 @@ msgstr ""
 msgid "%s: No font definition file"
 msgstr "%s: Отсутствует файл описания шрифта"
 
-#: ../lib/python/raster.py:46
-#, fuzzy, python-format
-msgid ""
-"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
-"current mapset."
-msgstr ""
-"Невозможно восстановить объект %d, векторный слой <%s> не открыт в режиме "
-"записи"
-
-#: ../lib/python/raster.py:101
-msgid "An error occurred while running r.mapcalc"
-msgstr ""
-
-#: ../lib/python/core.py:665
-#, python-format
-msgid "Several keys (%i out of %i) are missing in the target file"
-msgstr ""
-
-#: ../lib/python/core.py:845
-#, python-format
-msgid "Element type should be \"cell\" and not \"%s\""
-msgstr ""
-
-#: ../lib/python/core.py:870 ../lib/python/core.py:953
-#: ../lib/python/core.py:1001
-#, python-format
-msgid "Element type should be \"rast\" and not \"%s\""
-msgstr ""
-
-#: ../lib/python/core.py:1014
-#, python-format
-msgid "Invalid element '%s'"
-msgstr ""
-
-#: ../lib/python/core.py:1184
+#: ../lib/python/pygrass/raster/category.py:81
 #, fuzzy
-msgid "Unable to list mapsets"
-msgstr "Невозможно закрыть исходный слой"
+msgid "Raser type: {0} not supported"
+msgstr "тип данных OGR %d не поддерживается"
 
-#: ../lib/python/temporal/mapcalc.py:65 ../lib/python/temporal/extract.py:70
+#: ../lib/python/pygrass/raster/category.py:166
+msgid "Error executing: Rast_get_ith_cat"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/category.py:194
+#, fuzzy
+msgid "Null value detected"
+msgstr "Имя поля"
+
+#: ../lib/python/pygrass/raster/category.py:196
+#, fuzzy
+msgid "Error executing: Rast_set_cat"
+msgstr "Ошибка чтения растрового слоя"
+
+#: ../lib/python/pygrass/raster/category.py:248
+msgid "Mapset and maptype must be specify"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/abstract.py:218
+#, fuzzy
+msgid "Mode type: {0} not supported ('r', 'w')"
+msgstr "тип данных OGR %d не поддерживается"
+
+#: ../lib/python/pygrass/raster/abstract.py:229
+#, fuzzy
+msgid "Overwrite type: {0} not supported (True/False)"
+msgstr "тип данных OGR %d не поддерживается"
+
+#: ../lib/python/pygrass/raster/abstract.py:242
+#: ../lib/python/pygrass/vector/abstract.py:93
+msgid "Map name {0} not valid"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:175
+#, fuzzy
+msgid "Raster type not defined"
+msgstr "OGR объект без ID проигнорирован"
+
+#: ../lib/python/pygrass/raster/__init__.py:178
+#, fuzzy
+msgid "Raster map <{0}> already exists"
+msgstr "Слой номер %d или имя <%s> уже существует"
+
+#: ../lib/python/pygrass/raster/__init__.py:184
+msgid "The map does not exist, I can't open in 'r' mode"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:254
+msgid "Mode type: {0} not supported ('r', 'w','rw')"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:273
+#, fuzzy, python-format
+msgid "Index out of range: %r."
+msgstr "Индекс вне диапазона в"
+
+#: ../lib/python/pygrass/raster/__init__.py:394
+#, fuzzy
+msgid "Raster map <{0}> already exists. Use overwrite."
+msgstr "Векторный слой <%s> уже существует и будет перезаписан"
+
+#: ../lib/python/pygrass/raster/__init__.py:425
+#, fuzzy
+msgid "Raster map <{0}> does not exists"
+msgstr "Таблица <%s> связанная с векторным слоем <%s> не существует"
+
+#: ../lib/python/pygrass/raster/__init__.py:539
+#, fuzzy
+msgid "Mode type: {0} not supported."
+msgstr "тип данных OGR %d не поддерживается"
+
+#: ../lib/python/pygrass/raster/__init__.py:573
+#, fuzzy
+msgid "Invalid type {0}"
+msgstr "Неправильное имя векторного слоя <%s>"
+
+#: ../lib/python/pygrass/raster/__init__.py:575
+#, fuzzy
+msgid "Invalid size {0}"
+msgstr "Неправильное имя векторного слоя <%s>"
+
+#: ../lib/python/pygrass/errors.py:44
+msgid "The map is close!"
+msgstr ""
+
+#: ../lib/python/pygrass/vector/table.py:862
+#, python-format
+msgid "Deleting table <%s> which is attached to following map(s):"
+msgstr ""
+
+#: ../lib/python/pygrass/vector/table.py:866
+msgid "You must use the force flag to actually remove it. Exiting."
+msgstr ""
+
+#: ../lib/python/pygrass/functions.py:175
+msgid "Vector doesn't contain points"
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:97 ../lib/python/temporal/extract.py:70
 #: ../lib/python/temporal/univar_statistics.py:57
 #: ../lib/python/temporal/univar_statistics.py:148
 #: ../lib/python/temporal/stds_export.py:250
@@ -3014,64 +3096,77 @@ msgstr "Невозможно закрыть исходный слой"
 msgid "Space time %s dataset <%s> not found"
 msgstr "Растровый слой <%s> не найден"
 
-#: ../lib/python/temporal/mapcalc.py:88
+#: ../lib/python/temporal/mapcalc.py:120
 #, fuzzy, python-format
 msgid "Space time %s dataset <%s> not found in temporal database"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/mapcalc.py:107 ../lib/python/temporal/extract.py:89
+#: ../lib/python/temporal/mapcalc.py:139 ../lib/python/temporal/extract.py:89
 #, fuzzy, python-format
 msgid ""
 "Space time %s dataset <%s> is already in database, use overwrite flag to "
 "overwrite"
 msgstr "Векторный слой <%s> уже существует и будет перезаписан"
 
-#: ../lib/python/temporal/mapcalc.py:112
+#: ../lib/python/temporal/mapcalc.py:144
 msgid "Start spatio-temporal sampling"
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:114
+#: ../lib/python/temporal/mapcalc.py:146
 msgid "Start temporal sampling"
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:131
+#: ../lib/python/temporal/mapcalc.py:163
 msgid "No samples found for map calculation"
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:158
+#: ../lib/python/temporal/mapcalc.py:190
 msgid ""
 "Found more than a single map in a sample granule. Only the first map is used "
 "for computation. Use t.rast.aggregate.ds to create synchronous raster "
 "datasets."
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:176
+#: ../lib/python/temporal/mapcalc.py:208
 msgid "No maps in input dataset"
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:192
+#: ../lib/python/temporal/mapcalc.py:224
 msgid "Start mapcalc computation"
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:240 ../lib/python/temporal/extract.py:137
+#: ../lib/python/temporal/mapcalc.py:273 ../lib/python/temporal/extract.py:137
 #, fuzzy, python-format
 msgid ""
 "Map <%s> is already in temporal database, use overwrite flag to overwrite"
 msgstr "Векторный слой <%s> уже существует и будет перезаписан"
 
-#: ../lib/python/temporal/mapcalc.py:255
+#: ../lib/python/temporal/mapcalc.py:293
 #, python-format
 msgid "Apply mapcalc expression: \"%s\""
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:273
+#: ../lib/python/temporal/mapcalc.py:311
 msgid "Error while mapcalc computation"
 msgstr ""
 
-#: ../lib/python/temporal/mapcalc.py:279
+#: ../lib/python/temporal/mapcalc.py:317
 #, fuzzy
 msgid "Start map registration in temporal database"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
+
+#: ../lib/python/temporal/mapcalc.py:466 ../lib/python/temporal/mapcalc.py:471
+#: ../lib/python/temporal/mapcalc.py:476 ../lib/python/temporal/mapcalc.py:481
+#: ../lib/python/temporal/mapcalc.py:486 ../lib/python/temporal/mapcalc.py:491
+#: ../lib/python/temporal/mapcalc.py:496 ../lib/python/temporal/mapcalc.py:501
+#: ../lib/python/temporal/mapcalc.py:506 ../lib/python/temporal/mapcalc.py:537
+#: ../lib/python/temporal/mapcalc.py:545 ../lib/python/temporal/mapcalc.py:553
+#: ../lib/python/temporal/mapcalc.py:561 ../lib/python/temporal/mapcalc.py:569
+#: ../lib/python/temporal/mapcalc.py:577 ../lib/python/temporal/mapcalc.py:585
+#: ../lib/python/temporal/mapcalc.py:593 ../lib/python/temporal/mapcalc.py:601
+#, python-format
+msgid "The temporal operators <%s> supports only absolute time."
+msgstr ""
 
 #: ../lib/python/temporal/extract.py:47
 msgid "You need to specify the base name of new created maps"
@@ -3103,147 +3198,150 @@ msgstr ""
 msgid "Error while computation"
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:77
+#: ../lib/python/temporal/stds_import.py:78
 #, fuzzy, python-format
 msgid "Unable to import/link raster map <%s>."
 msgstr "Невозможно открыть растровый слой <%s>"
 
-#: ../lib/python/temporal/stds_import.py:86
+#: ../lib/python/temporal/stds_import.py:87
 #, fuzzy, python-format
 msgid "Unable to set the color rules for raster map <%s>."
 msgstr "Невозможно прочитать цветовой файл для растрового слоя <%s>"
 
-#: ../lib/python/temporal/stds_import.py:105
+#: ../lib/python/temporal/stds_import.py:106
 #, fuzzy, python-format
 msgid "Unable to unpack raster map <%s>."
 msgstr "Невозможно открыть растровый слой <%s>"
 
-#: ../lib/python/temporal/stds_import.py:123
+#: ../lib/python/temporal/stds_import.py:124
 #, fuzzy, python-format
 msgid "Unable to import vector map <%s>."
 msgstr "Невозможно создать векторный слой <%s>"
 
-#: ../lib/python/temporal/stds_import.py:145
+#: ../lib/python/temporal/stds_import.py:146
 #, fuzzy, python-format
 msgid "Unable to unpack vector map <%s>."
 msgstr "Невозможно открыть векторный слой <%s>"
 
-#: ../lib/python/temporal/stds_import.py:177
+#: ../lib/python/temporal/stds_import.py:180
 #, fuzzy, python-format
 msgid "Space time raster dataset archive <%s> not found"
 msgstr "Растровый слой <%s> не найден"
 
-#: ../lib/python/temporal/stds_import.py:180
+#: ../lib/python/temporal/stds_import.py:183
 #, fuzzy, python-format
 msgid "Extraction directory <%s> not found"
 msgstr "Векторный слой <%s> не найден"
 
-#: ../lib/python/temporal/stds_import.py:188
+#: ../lib/python/temporal/stds_import.py:191
 #, fuzzy, python-format
 msgid "Unable to find init file <%s>"
 msgstr "Невозможно открыть файл статистики <%s>"
 
-#: ../lib/python/temporal/stds_import.py:190
+#: ../lib/python/temporal/stds_import.py:193
 #, fuzzy, python-format
 msgid "Unable to find list file <%s>"
 msgstr "Невозможно открыть файл статистики <%s>"
 
-#: ../lib/python/temporal/stds_import.py:192
+#: ../lib/python/temporal/stds_import.py:195
 #, fuzzy, python-format
 msgid "Unable to find projection file <%s>"
 msgstr "Невозможно открыть файл статистики <%s>"
 
-#: ../lib/python/temporal/stds_import.py:215
+#: ../lib/python/temporal/stds_import.py:218
 msgid "Projection information does not match. Proceeding..."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:218
+#: ../lib/python/temporal/stds_import.py:221
 msgid "Projection information does not match. Aborting."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:233
+#: ../lib/python/temporal/stds_import.py:236
 #, fuzzy, python-format
 msgid "Unable to create location %s. Reason: %s"
 msgstr "Невозможно удалить папку '%s'"
 
-#: ../lib/python/temporal/stds_import.py:240
+#: ../lib/python/temporal/stds_import.py:243
 #, fuzzy, python-format
 msgid "Unable to switch to location %s"
 msgstr "невозможно записать историю для [%s]"
 
-#: ../lib/python/temporal/stds_import.py:244
+#: ../lib/python/temporal/stds_import.py:247
 #, fuzzy, python-format
 msgid "Unable to create default temporal database in new location %s"
 msgstr "Невозможно открыть файл определений векторной базы данных '%s'"
 
-#: ../lib/python/temporal/stds_import.py:296
+#: ../lib/python/temporal/stds_import.py:299
 #, python-format
 msgid "Key words %s, %s or %s not found in init file."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:300
+#: ../lib/python/temporal/stds_import.py:303
 msgid "Number of maps mismatch in init and list file."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:311
+#: ../lib/python/temporal/stds_import.py:314
 msgid "The archive file is of wrong space time dataset type"
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:318
+#: ../lib/python/temporal/stds_import.py:321
 #, fuzzy, python-format
 msgid "Unable to find geotiff raster file <%s> in archive."
 msgstr "невозможно найти временный null-файл %s"
 
-#: ../lib/python/temporal/stds_import.py:324
+#: ../lib/python/temporal/stds_import.py:327
 #, fuzzy, python-format
 msgid "Unable to find GML vector file <%s> in archive."
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/stds_import.py:333
+#: ../lib/python/temporal/stds_import.py:336
 #, fuzzy, python-format
 msgid "Unable to find GRASS package file <%s> in archive."
 msgstr "Невозможно открыть cidx файл <%s> для записи"
 
-#: ../lib/python/temporal/stds_import.py:336
+#: ../lib/python/temporal/stds_import.py:339
 #, fuzzy
 msgid "Unsupported input format"
 msgstr "Тип объекта"
 
-#: ../lib/python/temporal/stds_import.py:342
+#: ../lib/python/temporal/stds_import.py:345
+#: ../lib/python/temporal/space_time_datasets_tools.py:882
 #, fuzzy, python-format
 msgid ""
 "Space time %s dataset <%s> is already in the database. Use the overwrite "
 "flag."
 msgstr "Векторный слой <%s> уже существует и будет перезаписан"
 
-#: ../lib/python/temporal/stds_import.py:362
+#: ../lib/python/temporal/stds_import.py:365
+#: ../lib/python/temporal/space_time_datasets_tools.py:888
 #, fuzzy, python-format
 msgid "Overwrite space time %s dataset <%s> and unregister all maps."
 msgstr "Невозможно создать файл заголовка для [%s]"
 
-#: ../lib/python/temporal/stds_import.py:370
+#: ../lib/python/temporal/stds_import.py:373
+#: ../lib/python/temporal/space_time_datasets_tools.py:894
 #, fuzzy, python-format
 msgid "Create space time %s dataset."
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/python/temporal/core.py:55
-msgid ""
-"Unable to initialize the temporal DBMI interface. Use t.connect to specify "
-"the driver and the database string"
-msgstr ""
-
-#: ../lib/python/temporal/core.py:76 ../lib/python/temporal/core.py:84
+#: ../lib/python/temporal/core.py:82 ../lib/python/temporal/core.py:90
 msgid ""
 "Unable to initialize the temporal GIS DBMI interface. Use t.connect to "
 "specify the driver and the database string"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:132
+#: ../lib/python/temporal/core.py:161
+msgid ""
+"Unable to initialize the temporal DBMI interface. Use t.connect to specify "
+"the driver and the database string"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:201
 #, fuzzy, python-format
 msgid "Create temporal database: %s"
 msgstr "Невозможно открыть базу данных %s"
 
-#: ../lib/python/temporal/core.py:355
+#: ../lib/python/temporal/core.py:429
 #, fuzzy, python-format
 msgid ""
 "Unable to execute transaction:\n"
@@ -3287,18 +3385,18 @@ msgid ""
 "set for %s maps"
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:180
+#: ../lib/python/temporal/space_time_datasets_tools.py:182
 msgid "Gathering map informations"
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:203
+#: ../lib/python/temporal/space_time_datasets_tools.py:205
 #, python-format
 msgid ""
 "Unable to register %s map <%s> with layer %s. The map has no valid time and "
 "the start time is not set."
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:207
+#: ../lib/python/temporal/space_time_datasets_tools.py:209
 #, python-format
 msgid ""
 "Unable to register %s map <%s>. The map has no valid time and the start time "
@@ -3306,88 +3404,108 @@ msgid ""
 msgstr ""
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:224
-#, python-format
-msgid ""
-"Unable to register %s map <%s> with layer. The temporal types are different."
-msgstr ""
-
-#: ../lib/python/temporal/space_time_datasets_tools.py:228
 #, fuzzy, python-format
-msgid "Unable to register %s map <%s>. The temporal types are different."
+msgid ""
+"Map is already registered in temporal database. Unable to update %s map <%s> "
+"with layer %s. Overwrite flag is not set."
+msgstr "Векторный слой <%s> уже существует и будет перезаписан"
+
+#: ../lib/python/temporal/space_time_datasets_tools.py:229
+#, fuzzy, python-format
+msgid ""
+"Map is already registered in temporal database. Unable to update %s map <"
+"%s>. Overwrite flag is not set."
+msgstr "Векторный слой <%s> уже существует и будет перезаписан"
+
+#: ../lib/python/temporal/space_time_datasets_tools.py:252
+#, fuzzy, python-format
+msgid ""
+"Unable to update %s map <%s> with layer. The temporal types are different."
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
 #: ../lib/python/temporal/space_time_datasets_tools.py:256
+#, fuzzy, python-format
+msgid "Unable to update %s map <%s>. The temporal types are different."
+msgstr "Невозможно найти векторный слой <%s> в <%s>"
+
+#: ../lib/python/temporal/space_time_datasets_tools.py:284
 #, fuzzy
 msgid "Registering maps in the temporal database"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:268
+#: ../lib/python/temporal/space_time_datasets_tools.py:296
 #, fuzzy
 msgid "Register maps in the temporal database"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:276
+#: ../lib/python/temporal/space_time_datasets_tools.py:304
 #, fuzzy
 msgid "Register maps in the space time raster dataset"
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:284
+#: ../lib/python/temporal/space_time_datasets_tools.py:312
 msgid "Update space time raster dataset"
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:321
-#: ../lib/python/temporal/space_time_datasets_tools.py:329
+#: ../lib/python/temporal/space_time_datasets_tools.py:360
+#: ../lib/python/temporal/space_time_datasets_tools.py:368
 #, python-format
 msgid "Unable to convert string \"%s\"into a datetime object"
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:337
-#: ../lib/python/temporal/space_time_datasets_tools.py:342
+#: ../lib/python/temporal/space_time_datasets_tools.py:376
+#: ../lib/python/temporal/space_time_datasets_tools.py:381
 #, fuzzy
 msgid "Error in increment computation"
 msgstr "  формат: %s\n"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:344
+#: ../lib/python/temporal/space_time_datasets_tools.py:383
 #, fuzzy, python-format
 msgid ""
 "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
 "%(end)s"
 msgstr "Невозможно скопировать векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:349
+#: ../lib/python/temporal/space_time_datasets_tools.py:388
 #, python-format
 msgid "Set absolute valid time for map <%s> to %s - %s"
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:366
+#: ../lib/python/temporal/space_time_datasets_tools.py:405
 #, fuzzy, python-format
 msgid ""
 "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr "Невозможно скопировать векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:371
+#: ../lib/python/temporal/space_time_datasets_tools.py:410
 #, fuzzy, python-format
 msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
 msgstr "Невозможно скопировать векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:400
+#: ../lib/python/temporal/space_time_datasets_tools.py:439
 #, fuzzy, python-format
 msgid "Unknown dataset type: %s"
 msgstr "Неизвестный тип вектора."
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:442
-#: ../lib/python/temporal/space_time_datasets_tools.py:619
-#: ../lib/python/temporal/space_time_datasets_tools.py:623
+#: ../lib/python/temporal/space_time_datasets_tools.py:481
+#: ../lib/python/temporal/space_time_datasets_tools.py:669
+#: ../lib/python/temporal/space_time_datasets_tools.py:673
 #, fuzzy, python-format
 msgid "Dataset <%s> not found in temporal database"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:482
+#: ../lib/python/temporal/space_time_datasets_tools.py:520
 msgid "Empty map list."
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets_tools.py:493
-msgid "Empty entry in map list, continue to next entry"
+#: ../lib/python/temporal/space_time_datasets_tools.py:531
+msgid "Empty entry in map list, this should not happen."
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets_tools.py:787
+#: ../lib/python/script/core.py:1068
+#, python-format
+msgid "Invalid element '%s'"
 msgstr ""
 
 #: ../lib/python/temporal/aggregation.py:117
@@ -3411,98 +3529,98 @@ msgstr ""
 msgid "Error while r.series computation"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_map_dataset.py:651
+#: ../lib/python/temporal/abstract_map_dataset.py:652
 #, fuzzy, python-format
 msgid "Start time must be of type datetime for %s map <%s> with layer: %s"
 msgstr "Невозможно создать файл временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:656
+#: ../lib/python/temporal/abstract_map_dataset.py:657
 #, fuzzy, python-format
 msgid "Start time must be of type datetime for %s map <%s>"
 msgstr "Неверный формат файла временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:662
+#: ../lib/python/temporal/abstract_map_dataset.py:663
 #, fuzzy, python-format
 msgid "End time must be of type datetime for %s map <%s> with layer: %s"
 msgstr "Неверный формат файла временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:667
+#: ../lib/python/temporal/abstract_map_dataset.py:668
 #, fuzzy, python-format
 msgid "End time must be of type datetime for %s map <%s>"
 msgstr "Неверный формат файла временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:674
+#: ../lib/python/temporal/abstract_map_dataset.py:675
 #, fuzzy, python-format
 msgid "End time must be greater than start time for %s map <%s> with layer: %s"
 msgstr "Восток должен быть больше Запада"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:679
-#: ../lib/python/temporal/abstract_map_dataset.py:747
+#: ../lib/python/temporal/abstract_map_dataset.py:680
+#: ../lib/python/temporal/abstract_map_dataset.py:748
 #, fuzzy, python-format
 msgid "End time must be greater than start time for %s map <%s>"
 msgstr "Восток должен быть больше Запада"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:728
+#: ../lib/python/temporal/abstract_map_dataset.py:729
 #, fuzzy, python-format
 msgid "Unsupported relative time unit type for %s map <%s> with layer %s: %s"
 msgstr "Невозможно создать файл временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:734
+#: ../lib/python/temporal/abstract_map_dataset.py:735
 #, fuzzy, python-format
 msgid "Unsupported relative time unit type for %s map <%s>: %s"
 msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/python/temporal/abstract_map_dataset.py:742
+#: ../lib/python/temporal/abstract_map_dataset.py:743
 #, fuzzy, python-format
 msgid "End time must be greater than start time for %s map <%s> with layer %s"
 msgstr "Восток должен быть больше Запада"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:812
+#: ../lib/python/temporal/abstract_map_dataset.py:813
 #, python-format
 msgid ""
 "Map <%s> with layer %s has incorrect time interval, start time is greater "
 "than end time"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_map_dataset.py:817
+#: ../lib/python/temporal/abstract_map_dataset.py:818
 #, python-format
 msgid ""
 "Map <%s> has incorrect time interval, start time is greater than end time"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_map_dataset.py:822
+#: ../lib/python/temporal/abstract_map_dataset.py:823
 #, python-format
 msgid "Map <%s> has incorrect start time"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_map_dataset.py:865
+#: ../lib/python/temporal/abstract_map_dataset.py:866
 #, python-format
 msgid "Delete %s dataset <%s> from temporal database"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_map_dataset.py:905
+#: ../lib/python/temporal/abstract_map_dataset.py:906
 #, fuzzy, python-format
 msgid ""
 "Unregister %(type)s map <%(map)s> with layer %(layer)s from space time "
 "datasets"
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:910
+#: ../lib/python/temporal/abstract_map_dataset.py:911
 #, fuzzy, python-format
 msgid "Unregister %(type)s map <%(map)s> from space time datasets"
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/python/temporal/abstract_map_dataset.py:968
+#: ../lib/python/temporal/abstract_map_dataset.py:969
 #, fuzzy, python-format
 msgid "Unable to select space time dataset register table <%s>"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/python/temporal/base.py:363
+#: ../lib/python/temporal/base.py:364
 #, fuzzy, python-format
 msgid "Object <%s> not found in the temporal database"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
-#: ../lib/python/temporal/base.py:578
+#: ../lib/python/temporal/base.py:598
 #, fuzzy
 msgid "Wrong identifier, the mapset is missing"
 msgstr "Невозможно открыть файл заголовка для растрового слоя <%s@%s>"
@@ -3577,271 +3695,329 @@ msgstr "Невозможно удалить векторный слой <%s>"
 msgid "Unable to export raster map <%s> with r3.pack"
 msgstr "Невозможно создать растровый слой <%s>"
 
-#: ../lib/python/temporal/datetime_math.py:134
-#: ../lib/python/temporal/datetime_math.py:151
+#: ../lib/python/temporal/datetime_math.py:133
+#: ../lib/python/temporal/datetime_math.py:150
 #, fuzzy, python-format
 msgid "Wrong increment format: %s"
 msgstr "  формат: %s\n"
 
-#: ../lib/python/temporal/datetime_math.py:296
+#: ../lib/python/temporal/datetime_math.py:295
 #, fuzzy, python-format
 msgid "Wrong granularity format: %s"
 msgstr "  формат: %s\n"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:124
-#: ../lib/python/temporal/abstract_space_time_dataset.py:181
+#: ../lib/python/temporal/abstract_space_time_dataset.py:138
+#: ../lib/python/temporal/abstract_space_time_dataset.py:195
 #, fuzzy, python-format
 msgid "Unknown temporal type \"%s\""
 msgstr "Неизвестный тип вектора."
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:195
+#: ../lib/python/temporal/abstract_space_time_dataset.py:209
 #, fuzzy, python-format
 msgid "Unsupported temporal unit: %s"
 msgstr "Тип объекта"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:526
+#: ../lib/python/temporal/abstract_space_time_dataset.py:540
 msgid "The space time datasets must be of the same temporal type"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:531
+#: ../lib/python/temporal/abstract_space_time_dataset.py:545
 msgid "The temporal map type of the sample dataset must be interval"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:633
-#, python-format
-msgid "The space time %(type)s dataset <%(name)s> must have interval time"
-msgstr ""
-
-#: ../lib/python/temporal/abstract_space_time_dataset.py:655
+#: ../lib/python/temporal/abstract_space_time_dataset.py:679
 msgid ""
 "More than one map found in a granule. Temporal granularity seems to be "
 "invalid or the chosen granularity is not a greatest common divider of all "
 "intervals and gaps in the dataset."
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:830
+#: ../lib/python/temporal/abstract_space_time_dataset.py:711
+msgid ""
+"More than one map found in a granule. Temporal granularity seems to be "
+"invalid or the chosen granularity is not a greatest common divider of all "
+"time instances in the dataset."
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:910
 #, fuzzy, python-format
 msgid "Unable to get map ids from register table <%s>"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:856
+#: ../lib/python/temporal/abstract_space_time_dataset.py:987
 #, python-format
 msgid "Delete space time %s  dataset <%s> from temporal database"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:868
+#: ../lib/python/temporal/abstract_space_time_dataset.py:999
 #, fuzzy, python-format
 msgid "Drop map register table: %s"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:918
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1050
 msgid "Only maps with absolute or relative valid time can be registered"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:921
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1053
 #, fuzzy, python-format
 msgid "Register %s map <%s> with layer %s in space time %s dataset <%s>"
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:928
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1060
 #, fuzzy, python-format
 msgid "Register %s map <%s> in space time %s dataset <%s>"
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:937
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1069
 #, python-format
 msgid "Map <%s> with layer %s has invalid time"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:940
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1072
 #, python-format
 msgid "Map <%s> has invalid time"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:963
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1095
 #, python-format
 msgid ""
 "Temporal type of space time dataset <%s> and map <%s> with layer %s are "
 "different"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:967
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1099
 #, python-format
 msgid "Temporal type of space time dataset <%s> and map <%s> are different"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:980
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1112
 #, fuzzy, python-format
 msgid "Set temporal unit for space time %s dataset <%s> to %s"
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:989
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1121
 #, python-format
 msgid ""
 "Relative time units of space time dataset <%s> and map <%s> with layer %s "
 "are different"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:993
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1125
 #, python-format
 msgid ""
 "Relative time units of space time dataset <%s> and map <%s> are different"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1001
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1133
 msgid "Only maps from the same mapset can be registered"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1016
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1148
 msgid "Error in strds_register_table request"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1024
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1156
 #, python-format
 msgid "Map <%s> with layer %s is already registered."
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1028
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1160
 #, python-format
 msgid "Map <%s> is already registered."
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1061
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1193
 #, fuzzy, python-format
 msgid "Created register table <%s> for %s map <%s> with layer %s"
 msgstr "Невозможно записать правила разбиения значений для слоя %s"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1066
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1198
 #, fuzzy, python-format
 msgid "Created register table <%s> for %s map <%s>"
 msgstr "Невозможно записать правила разбиения значений для слоя %s"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1090
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1221
 #, python-format
 msgid "Created register table <%s> for space time %s  dataset <%s>"
 msgstr ""
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1172
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1303
 #, fuzzy, python-format
 msgid "Unregister %s map <%s> with layer %s"
 msgstr "Чтение растрового слоя <%s>..."
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1175
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1306
 #, fuzzy, python-format
 msgid "Unregister %s map <%s>"
 msgstr "Чтение растрового слоя <%s>..."
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1193
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1324
 #, fuzzy, python-format
 msgid "Map <%s> with layer %s is not registered in space time dataset <%s>"
 msgstr "Растрового слоя <%s> нет в текущем наборе (%s)"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1198
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1329
 #, fuzzy, python-format
 msgid "Map <%s> is not registered in space time dataset <%s>"
 msgstr "Растрового слоя <%s> нет в текущем наборе (%s)"
 
-#: ../lib/python/temporal/abstract_space_time_dataset.py:1255
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1386
 #, python-format
 msgid ""
 "Update metadata, spatial and temporal extent from all registered maps of <%s>"
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets.py:206
+#: ../lib/python/temporal/space_time_datasets.py:208
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
 msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:210
+#: ../lib/python/temporal/space_time_datasets.py:212
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for raster map <%s>"
 msgstr "Неверный формат файла временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:222
+#: ../lib/python/temporal/space_time_datasets.py:224
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for raster map <%s>"
 msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:281
-#: ../lib/python/temporal/space_time_datasets.py:297
+#: ../lib/python/temporal/space_time_datasets.py:283
+#: ../lib/python/temporal/space_time_datasets.py:299
 #, fuzzy
 msgid "Unable to read range file"
 msgstr "Не могу открыть файл заголовка"
 
-#: ../lib/python/temporal/space_time_datasets.py:422
+#: ../lib/python/temporal/space_time_datasets.py:429
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for raster3d map <%s>"
 msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:426
+#: ../lib/python/temporal/space_time_datasets.py:433
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for raster3d map <%s>"
 msgstr "Неверный формат файла временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:437
+#: ../lib/python/temporal/space_time_datasets.py:444
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for raster3d map <%s>"
 msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:466
+#: ../lib/python/temporal/space_time_datasets.py:473
 #, fuzzy, python-format
 msgid "Raster3d map <%s> not found"
 msgstr "Растровый слой <%s> не найден"
 
-#: ../lib/python/temporal/space_time_datasets.py:509
+#: ../lib/python/temporal/space_time_datasets.py:516
 #, fuzzy, python-format
 msgid "Unable to load range of 3D raster map <%s>"
 msgstr "Невозможно прочесть диапазон растрового 3D слоя <%s>"
 
-#: ../lib/python/temporal/space_time_datasets.py:642
+#: ../lib/python/temporal/space_time_datasets.py:654
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for vector map <%s>"
 msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:646
+#: ../lib/python/temporal/space_time_datasets.py:658
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for vector map <%s>"
 msgstr "Неверный формат файла временной метки для %s карты %s в наборе %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:659
+#: ../lib/python/temporal/space_time_datasets.py:671
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for vector map <%s>"
 msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:704
+#: ../lib/python/temporal/space_time_datasets.py:716
 msgid "Open map without topology support"
 msgstr ""
 
-#: ../lib/python/raster3d.py:86
+#: ../lib/python/script/raster.py:47
+#, fuzzy, python-format
+msgid ""
+"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
+"current mapset."
+msgstr ""
+"Невозможно восстановить объект %d, векторный слой <%s> не открыт в режиме "
+"записи"
+
+#: ../lib/python/script/raster.py:105
+msgid "An error occurred while running r.mapcalc"
+msgstr ""
+
+#: ../lib/python/script/raster.py:162
+#, fuzzy
+msgid "No data"
+msgstr "Имя исходного векторного слоя"
+
+#: ../lib/python/script/raster.py:170
+msgid "value"
+msgstr ""
+
+#: ../lib/python/script/raster.py:170
+msgid "label"
+msgstr ""
+
+#: ../lib/python/script/raster.py:170
+#, fuzzy
+msgid "color"
+msgstr "Цвет"
+
+#: ../lib/python/script/core.py:702
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr ""
+
+#: ../lib/python/script/core.py:717
+#, python-format
+msgid "Several keys (%i out of %i) are missing in the target file"
+msgstr ""
+
+#: ../lib/python/script/core.py:899
+#, python-format
+msgid "Element type should be \"cell\" and not \"%s\""
+msgstr ""
+
+#: ../lib/python/script/core.py:924 ../lib/python/script/core.py:1007
+#: ../lib/python/script/core.py:1055
+#, python-format
+msgid "Element type should be \"rast\" and not \"%s\""
+msgstr ""
+
+#: ../lib/python/script/core.py:1238
+#, fuzzy
+msgid "Unable to list mapsets"
+msgstr "Невозможно закрыть исходный слой"
+
+#: ../lib/python/script/raster3d.py:89
 msgid "An error occurred while running r3.mapcalc"
 msgstr ""
 
-#: ../lib/python/task.py:52
+#: ../lib/python/script/task.py:52
 #, fuzzy
 msgid "unknown"
 msgstr "неизвестно"
 
-#: ../lib/python/task.py:155
+#: ../lib/python/script/task.py:166
 #, python-format
 msgid "Parameter element '%(element)s' not found: '%(value)s'"
 msgstr ""
 
-#: ../lib/python/task.py:170
+#: ../lib/python/script/task.py:181
 #, fuzzy, python-format
 msgid "Flag not found: %s"
 msgstr "%s не найден"
 
-#: ../lib/python/task.py:189
+#: ../lib/python/script/task.py:200
 #, python-format
 msgid "Parameter '%(name)s' (%(desc)s) is missing."
 msgstr ""
 
-#: ../lib/python/task.py:220
+#: ../lib/python/script/task.py:231
 #, fuzzy
 msgid "<required>"
 msgstr "необходимо: %s\n"
 
-#: ../lib/python/task.py:449 ../lib/python/task.py:453
+#: ../lib/python/script/task.py:460 ../lib/python/script/task.py:464
 #, python-format
 msgid ""
 "Unable to fetch interface description for command '%(cmd)s'.\n"
@@ -3849,33 +4025,34 @@ msgid ""
 "Details: %(det)s"
 msgstr ""
 
-#: ../lib/python/db.py:48 ../lib/db/dbmi_client/column.c:136
+#: ../lib/python/script/db.py:48 ../lib/vector/Vlib/ascii.c:401
+#: ../lib/db/dbmi_client/column.c:136
 #, c-format, python-format
 msgid "Unable to describe table <%s>"
 msgstr "Невозможно описать таблицу <%s>"
 
-#: ../lib/python/db.py:135
+#: ../lib/python/script/db.py:142
 #, python-format
 msgid ""
 "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
 msgstr ""
 
-#: ../lib/python/db.py:147
+#: ../lib/python/script/db.py:154
 #, fuzzy
 msgid "Fetching data failed"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/python/vector.py:88
+#: ../lib/python/script/vector.py:88
 #, fuzzy, python-format
 msgid "Database connection not defined for layer %s"
 msgstr "Для слоя %d не определено соединение с базой данных"
 
-#: ../lib/python/vector.py:238
+#: ../lib/python/script/vector.py:238
 #, fuzzy, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
 msgstr "Ошибка загрузки векторного слоя <%s>"
 
-#: ../lib/python/vector.py:254
+#: ../lib/python/script/vector.py:254
 msgid "vector_db_select() failed"
 msgstr ""
 
@@ -4391,7 +4568,7 @@ msgstr "Невозможно связь с базой данных"
 msgid "Problem loading category values"
 msgstr "Ошибка чтения растрового слоя"
 
-#: ../lib/vector/neta/flow.c:309 ../lib/vector/Vlib/net.c:428
+#: ../lib/vector/neta/flow.c:310 ../lib/vector/Vlib/net.c:443
 #: ../lib/vector/Vlib/graph.c:105
 msgid "GngFlatten error"
 msgstr "ошибка GngFlatten"
@@ -4437,12 +4614,12 @@ msgstr "Невозможно открыть временный файл"
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex_rw.c:97 ../lib/vector/diglib/spindex_rw.c:105
+#: ../lib/vector/diglib/spindex_rw.c:98 ../lib/vector/diglib/spindex_rw.c:106
 #, fuzzy
 msgid "Topology file must be written before spatial index file"
 msgstr "Ошибка записи файл пространственного индекса"
 
-#: ../lib/vector/diglib/spindex_rw.c:301
+#: ../lib/vector/diglib/spindex_rw.c:302
 #, fuzzy, c-format
 msgid ""
 "This version of GRASS (%d.%d) is too old to read this spatial index format. "
@@ -4451,7 +4628,7 @@ msgstr ""
 "Формат объектного индекса %d.%d не поддерживается этим выпуском. Попробуйте "
 "перестроить топологию или обновить GRASS"
 
-#: ../lib/vector/diglib/spindex_rw.c:307
+#: ../lib/vector/diglib/spindex_rw.c:308
 #, fuzzy, c-format
 msgid ""
 "Your GRASS version does not fully support spatial index format %d.%d of the "
@@ -4460,7 +4637,7 @@ msgstr ""
 "Ваша версия GRASS полностью не поддерживает формат объектного индекса %d.%d "
 "вектора. Попробуйте перестроить топологию или обновить GRASS"
 
-#: ../lib/vector/diglib/spindex_rw.c:316
+#: ../lib/vector/diglib/spindex_rw.c:317
 #, fuzzy, c-format
 msgid ""
 "Spatial index format version %d.%d is not supported by this release. Please "
@@ -4469,7 +4646,7 @@ msgstr ""
 "Формат объектного индекса %d.%d не поддерживается этим выпуском. Попробуйте "
 "перестроить топологию или обновить GRASS"
 
-#: ../lib/vector/diglib/spindex_rw.c:857
+#: ../lib/vector/diglib/spindex_rw.c:858
 msgid "Writing sidx: wrong node position in file"
 msgstr ""
 
@@ -4488,59 +4665,59 @@ msgstr "тип данных OGR %d не поддерживается"
 msgid "Format definition is not correct: %s"
 msgstr ""
 
-#: ../lib/vector/diglib/plus.c:275
+#: ../lib/vector/diglib/plus.c:277
 msgid "Unable read topology for nodes"
 msgstr "Невозможно прочесть топологию для узлов"
 
-#: ../lib/vector/diglib/plus.c:280
+#: ../lib/vector/diglib/plus.c:282
 #, c-format
 msgid "Unable to read topology for node %d"
 msgstr "Невозможно прочесть топологию для узла %d"
 
-#: ../lib/vector/diglib/plus.c:285
+#: ../lib/vector/diglib/plus.c:287
 msgid "Unable read topology for lines"
 msgstr "Невозможно прочесть топологию для линий"
 
-#: ../lib/vector/diglib/plus.c:290
+#: ../lib/vector/diglib/plus.c:292
 #, c-format
 msgid "Unable to read topology for line %d"
 msgstr "Невозможно прочесть топологию для линии %d"
 
-#: ../lib/vector/diglib/plus.c:295
+#: ../lib/vector/diglib/plus.c:297
 msgid "Unable to read topo for areas"
 msgstr "Невозможно прочитать топологию для полигонов"
 
-#: ../lib/vector/diglib/plus.c:300
+#: ../lib/vector/diglib/plus.c:302
 #, c-format
 msgid "Unable read topology for area %d"
 msgstr "Невозможно прочесть топологию для полигона %d"
 
-#: ../lib/vector/diglib/plus.c:305
+#: ../lib/vector/diglib/plus.c:307
 msgid "Unable to read topology for isles"
 msgstr "Невозможно прочитать топологию для островов"
 
-#: ../lib/vector/diglib/plus.c:310
+#: ../lib/vector/diglib/plus.c:312
 #, c-format
 msgid "Unable to read topology for isle %d"
 msgstr "Невозможно прочесть гистограмму для острова %d"
 
-#: ../lib/vector/diglib/plus.c:332 ../lib/vector/diglib/plus.c:358
+#: ../lib/vector/diglib/plus.c:334 ../lib/vector/diglib/plus.c:360
 msgid "Unable to write head to plus file"
 msgstr "Невозможно записать заголовок для плюс-файла"
 
-#: ../lib/vector/diglib/plus.c:337
+#: ../lib/vector/diglib/plus.c:339
 msgid "Unable to write nodes to plus file"
 msgstr "Невозможно записать узлы в плюс-файл"
 
-#: ../lib/vector/diglib/plus.c:342
+#: ../lib/vector/diglib/plus.c:344
 msgid "Unable to write lines to plus file"
 msgstr "Невозможно записать линии в плюс-файл"
 
-#: ../lib/vector/diglib/plus.c:347
+#: ../lib/vector/diglib/plus.c:349
 msgid "Unable to write areas to plus file"
 msgstr "Невозможно записать полигоны в плюс-файл"
 
-#: ../lib/vector/diglib/plus.c:352
+#: ../lib/vector/diglib/plus.c:354
 msgid "Unable to write isles to plus file"
 msgstr "Невозможно записать острова в плюс-файл"
 
@@ -4549,81 +4726,81 @@ msgstr "Невозможно записать острова в плюс-фай�
 msgid "Unable to find '%x' in %s"
 msgstr "Невозможно найти '%s' в '%s'"
 
-#: ../lib/vector/diglib/spindex.c:421
+#: ../lib/vector/diglib/spindex.c:446
 #, c-format
 msgid "Unable to delete node %d from spatial index"
 msgstr "Невозможно удалить узел %d из пространственного индекса"
 
-#: ../lib/vector/diglib/spindex.c:463
+#: ../lib/vector/diglib/spindex.c:489
 #, c-format
 msgid "Unable to delete line %d from spatial index"
 msgstr "Невозможно удалить линию %d из пространственного индекса"
 
-#: ../lib/vector/diglib/spindex.c:499
+#: ../lib/vector/diglib/spindex.c:525
 msgid "Attempt to delete sidx for dead area"
 msgstr "Попытка удалить sidx для уже удаленного полигона"
 
-#: ../lib/vector/diglib/spindex.c:516
+#: ../lib/vector/diglib/spindex.c:542
 #, c-format
 msgid "Unable to delete area %d from spatial index"
 msgstr "Невозможно удалить полигон %d из пространственного индекса"
 
-#: ../lib/vector/diglib/spindex.c:565
+#: ../lib/vector/diglib/spindex.c:591
 #, c-format
 msgid "Unable to delete isle %d from spatial index"
 msgstr "Невозможно удалить остров %d из пространственного индекса"
 
-#: ../lib/vector/diglib/plus_area.c:216 ../lib/vector/diglib/plus_area.c:716
+#: ../lib/vector/diglib/plus_area.c:217 ../lib/vector/diglib/plus_area.c:719
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr "У линии %d уже есть полигон/остров %d слева"
 
-#: ../lib/vector/diglib/plus_area.c:226 ../lib/vector/diglib/plus_area.c:724
+#: ../lib/vector/diglib/plus_area.c:227 ../lib/vector/diglib/plus_area.c:727
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr "У линии %d уже есть полигон/остров %d справа"
 
-#: ../lib/vector/diglib/plus_area.c:280
+#: ../lib/vector/diglib/plus_area.c:281
 msgid "Isle already registered in area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:314
+#: ../lib/vector/diglib/plus_area.c:315
 msgid "Attempt to delete isle from dead area"
 msgstr "Попытка удалить остров из уже удаленного полигона"
 
-#: ../lib/vector/diglib/plus_area.c:331
+#: ../lib/vector/diglib/plus_area.c:332
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr "Попытка удалить незарегистрированный остров %d из полигона %d"
 
-#: ../lib/vector/diglib/plus_area.c:370
+#: ../lib/vector/diglib/plus_area.c:371
 msgid "Attempt to delete dead area"
 msgstr "Попытка удалить уже удаленный полигон"
 
-#: ../lib/vector/diglib/plus_area.c:411
+#: ../lib/vector/diglib/plus_area.c:412
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 "Для полигона зарегистрирован удаленный центроид %d (баг в векторной "
 "библиотеке)"
 
-#: ../lib/vector/diglib/plus_area.c:436
+#: ../lib/vector/diglib/plus_area.c:437
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr "Попытка удалить информацию о полигоне %d из уже удаленного острова %d"
 
-#: ../lib/vector/diglib/plus_area.c:784
+#: ../lib/vector/diglib/plus_area.c:787
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "Попытка удалить информацию об острове %d из уже удаленного полигона %d"
 
-#: ../lib/vector/diglib/struct_alloc.c:488
+#: ../lib/vector/diglib/struct_alloc.c:491
 #, fuzzy
 msgid "Out of memmory"
 msgstr "Нет памяти"
 
 #: ../lib/vector/diglib/portable.c:210 ../lib/vector/diglib/portable.c:243
-#: ../lib/vector/diglib/portable.c:690 ../lib/vector/diglib/plus_struct.c:563
+#: ../lib/vector/diglib/portable.c:691 ../lib/vector/diglib/plus_struct.c:563
 msgid "Vector exceeds supported file size limit"
 msgstr ""
 
@@ -4701,21 +4878,21 @@ msgstr ""
 "Формат объектного индекса %d.%d не поддерживается этим выпуском. Попробуйте "
 "перестроить топологию или обновить GRASS"
 
-#: ../lib/vector/Vlib/write_nat.c:47 ../lib/vector/Vlib/write_nat.c:83
+#: ../lib/vector/Vlib/write_nat.c:49 ../lib/vector/Vlib/write_nat.c:85
 #, c-format
 msgid "%s: Area %d does not exist"
 msgstr "%s: Полигон %d не существует"
 
-#: ../lib/vector/Vlib/write_nat.c:675 ../lib/vector/Vlib/write_sfa.c:191
+#: ../lib/vector/Vlib/write_nat.c:684 ../lib/vector/Vlib/write_sfa.c:191
 msgid "Attempt to delete dead feature"
 msgstr "Попытка удалить уже удаленный объект"
 
-#: ../lib/vector/Vlib/write_nat.c:786
+#: ../lib/vector/Vlib/write_nat.c:795
 #, fuzzy, c-format
 msgid "Attempt to access dead area (%d)"
 msgstr "Попытка удалить уже удаленный объект"
 
-#: ../lib/vector/Vlib/write_nat.c:926
+#: ../lib/vector/Vlib/write_nat.c:935
 msgid "Attempt to restore alive feature"
 msgstr "Попытка восстановить нормальный объект"
 
@@ -4753,58 +4930,65 @@ msgstr "Неправильное имя выходного векторного 
 msgid "Output vector map <%s> is used as input"
 msgstr "Выходной векторный слой <%s> используется как исходный"
 
-#: ../lib/vector/Vlib/rewind_pg.c:58 ../lib/vector/Vlib/read_pg.c:566
-#: ../lib/vector/Vlib/read_pg.c:603 ../lib/vector/Vlib/close_pg.c:65
+#: ../lib/vector/Vlib/rewind_pg.c:58 ../lib/vector/Vlib/read_pg.c:570
+#: ../lib/vector/Vlib/read_pg.c:632 ../lib/vector/Vlib/close_pg.c:63
 #, fuzzy
 msgid "Unable to close cursor"
 msgstr "Невозможно установить фокус"
 
-#: ../lib/vector/Vlib/rewind_pg.c:66 ../lib/vector/Vlib/rewind_pg.c:90
-#: ../lib/vector/Vlib/open_pg.c:148 ../lib/vector/Vlib/open_pg.c:183
-#: ../lib/vector/Vlib/open_pg.c:291 ../lib/vector/Vlib/open_pg.c:397
-#: ../lib/vector/Vlib/open_pg.c:434 ../lib/vector/Vlib/close.c:196
-#: ../lib/vector/Vlib/read_pg.c:83 ../lib/vector/Vlib/read_pg.c:198
-#: ../lib/vector/Vlib/read_pg.c:282 ../lib/vector/Vlib/read_pg.c:349
+#: ../lib/vector/Vlib/rewind_pg.c:66 ../lib/vector/Vlib/rewind_pg.c:91
+#: ../lib/vector/Vlib/open_pg.c:147 ../lib/vector/Vlib/open_pg.c:199
+#: ../lib/vector/Vlib/open_pg.c:304 ../lib/vector/Vlib/open_pg.c:410
+#: ../lib/vector/Vlib/open_pg.c:448 ../lib/vector/Vlib/close.c:236
+#: ../lib/vector/Vlib/read_pg.c:82 ../lib/vector/Vlib/read_pg.c:200
+#: ../lib/vector/Vlib/read_pg.c:284 ../lib/vector/Vlib/read_pg.c:349
 #: ../lib/vector/Vlib/header_finfo.c:45 ../lib/vector/Vlib/header_finfo.c:84
 #: ../lib/vector/Vlib/header_finfo.c:121 ../lib/vector/Vlib/header_finfo.c:166
-#: ../lib/vector/Vlib/build_sfa.c:709 ../lib/vector/Vlib/close_pg.c:98
-#: ../lib/vector/Vlib/close_pg.c:146 ../lib/vector/Vlib/write_pg.c:83
-#: ../lib/vector/Vlib/write_pg.c:118 ../lib/vector/Vlib/write_pg.c:176
-#: ../lib/vector/Vlib/write_pg.c:221 ../lib/vector/Vlib/build_pg.c:102
+#: ../lib/vector/Vlib/build_sfa.c:709 ../lib/vector/Vlib/close_pg.c:96
+#: ../lib/vector/Vlib/close_pg.c:144 ../lib/vector/Vlib/write_pg.c:102
+#: ../lib/vector/Vlib/write_pg.c:136 ../lib/vector/Vlib/write_pg.c:171
+#: ../lib/vector/Vlib/write_pg.c:229 ../lib/vector/Vlib/write_pg.c:255
+#: ../lib/vector/Vlib/write_pg.c:300 ../lib/vector/Vlib/build_pg.c:106
+#: ../lib/vector/Vlib/copy.c:393
 msgid "GRASS is not compiled with PostgreSQL support"
 msgstr ""
 
-#: ../lib/vector/Vlib/merge_lines.c:246
+#: ../lib/vector/Vlib/merge_lines.c:301
 #, c-format
 msgid "%d boundaries merged"
 msgstr ""
 
-#: ../lib/vector/Vlib/merge_lines.c:247
+#: ../lib/vector/Vlib/merge_lines.c:302
 #, c-format
 msgid "%d new boundaries"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:140
+#: ../lib/vector/Vlib/snap.c:213
 msgid "Snap vertices Pass 1: select points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:194
+#: ../lib/vector/Vlib/snap.c:267
 msgid "Snap vertices Pass 2: assign anchor vertices"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:263
+#: ../lib/vector/Vlib/snap.c:336
 msgid "Snap vertices Pass 3: snap to assigned points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:445
+#: ../lib/vector/Vlib/snap.c:518
 #, fuzzy, c-format
 msgid "Snapped vertices: %d"
 msgstr "Прилепленные вершины"
 
-#: ../lib/vector/Vlib/snap.c:446
+#: ../lib/vector/Vlib/snap.c:519
 #, fuzzy, c-format
 msgid "New vertices: %d"
 msgstr "Новые узлы"
+
+#: ../lib/vector/Vlib/snap.c:546
+#, fuzzy
+msgid "Reading features..."
+msgstr "Построение полигонов..."
 
 #: ../lib/vector/Vlib/build.c:31 ../lib/vector/Vlib/close.c:35
 #: ../lib/vector/Vlib/rewind.c:29 ../lib/vector/Vlib/read.c:32
@@ -4833,137 +5017,137 @@ msgstr "Запрос найти полигон вне несуществующе
 msgid "Larger bbox but smaller area!!!"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:595
+#: ../lib/vector/Vlib/build.c:600
 msgid "Checking for topological errors..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:629
+#: ../lib/vector/Vlib/build.c:635
 #, fuzzy, c-format
 msgid "Number of lines of length zero: %d"
 msgstr "Количество линий: %d"
 
-#: ../lib/vector/Vlib/build.c:631
+#: ../lib/vector/Vlib/build.c:637
 #, fuzzy, c-format
 msgid "Number of boundaries of length zero: %d"
 msgstr "Количество границ: %d"
 
-#: ../lib/vector/Vlib/build.c:640
+#: ../lib/vector/Vlib/build.c:646
 #, fuzzy, c-format
 msgid "Number of boundary intersections: %d"
 msgstr "Количество границ: %d"
 
-#: ../lib/vector/Vlib/build.c:664
+#: ../lib/vector/Vlib/build.c:670
 #, fuzzy
 msgid "Skipping further checks because of incorrect boundaries"
 msgstr "Количество неправильных границ: %d"
 
-#: ../lib/vector/Vlib/build.c:714
+#: ../lib/vector/Vlib/build.c:720
 #, fuzzy, c-format
 msgid "Number of redundant holes: %d"
 msgstr "Количество границ: %d"
 
-#: ../lib/vector/Vlib/build.c:852
+#: ../lib/vector/Vlib/build.c:859
 #, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr "Построение топологии для векторного слоя  <%s>..."
 
-#: ../lib/vector/Vlib/build.c:870
+#: ../lib/vector/Vlib/build.c:877
 msgid "Topology was built"
 msgstr "Топология построена"
 
-#: ../lib/vector/Vlib/build.c:882
+#: ../lib/vector/Vlib/build.c:889
 #, c-format
 msgid "Number of nodes: %d"
 msgstr "Количество узлов: %d"
 
-#: ../lib/vector/Vlib/build.c:883
+#: ../lib/vector/Vlib/build.c:890
 #, c-format
 msgid "Number of primitives: %d"
 msgstr "Количество примитивов: %d"
 
-#: ../lib/vector/Vlib/build.c:884
+#: ../lib/vector/Vlib/build.c:891
 #, c-format
 msgid "Number of points: %d"
 msgstr "Количество точек: %d"
 
-#: ../lib/vector/Vlib/build.c:885
+#: ../lib/vector/Vlib/build.c:892
 #, c-format
 msgid "Number of lines: %d"
 msgstr "Количество линий: %d"
 
-#: ../lib/vector/Vlib/build.c:886
+#: ../lib/vector/Vlib/build.c:893
 #, c-format
 msgid "Number of boundaries: %d"
 msgstr "Количество границ: %d"
 
-#: ../lib/vector/Vlib/build.c:887
+#: ../lib/vector/Vlib/build.c:894
 #, c-format
 msgid "Number of centroids: %d"
 msgstr "Количество центроидов: %d"
 
-#: ../lib/vector/Vlib/build.c:890
+#: ../lib/vector/Vlib/build.c:897
 #, c-format
 msgid "Number of faces: %d"
 msgstr "Количество граней: %d"
 
-#: ../lib/vector/Vlib/build.c:893
+#: ../lib/vector/Vlib/build.c:900
 #, c-format
 msgid "Number of kernels: %d"
 msgstr "Количество ядер: %d"
 
-#: ../lib/vector/Vlib/build.c:939
+#: ../lib/vector/Vlib/build.c:946
 #, c-format
 msgid "Number of areas: %d"
 msgstr "Количество полигонов: %d"
 
-#: ../lib/vector/Vlib/build.c:940
+#: ../lib/vector/Vlib/build.c:947
 #, c-format
 msgid "Number of isles: %d"
 msgstr "Количество островов: %d"
 
-#: ../lib/vector/Vlib/build.c:945
+#: ../lib/vector/Vlib/build.c:952
 #, c-format
 msgid "Number of areas without centroid: %d"
 msgstr "Количество полигонов без центроидов: %d"
 
-#: ../lib/vector/Vlib/build.c:950
+#: ../lib/vector/Vlib/build.c:957
 #, fuzzy, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
 msgstr "Количество центроидов вне полигонов: %d"
 
-#: ../lib/vector/Vlib/build.c:954
+#: ../lib/vector/Vlib/build.c:961
 #, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr "Количество неправильных границ: %d"
 
-#: ../lib/vector/Vlib/build.c:958
+#: ../lib/vector/Vlib/build.c:965
 #, c-format
 msgid "Number of centroids outside area: %d"
 msgstr "Количество центроидов вне полигонов: %d"
 
-#: ../lib/vector/Vlib/build.c:962
+#: ../lib/vector/Vlib/build.c:969
 #, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr "Количество центроидов-дупликатов: %d"
 
-#: ../lib/vector/Vlib/build.c:966
+#: ../lib/vector/Vlib/build.c:973
 msgid "Number of areas: -"
 msgstr "Количество полигонов: -"
 
-#: ../lib/vector/Vlib/build.c:967
+#: ../lib/vector/Vlib/build.c:974
 msgid "Number of isles: -"
 msgstr "Количество островов: -"
 
-#: ../lib/vector/Vlib/build.c:997
-#, c-format
-msgid "Unable to open topo file for write <%s>"
-msgstr " Невозможно открыть топо-файл для записи <%s>"
+#: ../lib/vector/Vlib/build.c:1002
+#, fuzzy, c-format
+msgid "Unable to create topo file for vector map <%s>"
+msgstr "Невозможно прочитать файл заголовка для растрового слоя <%s@%s>."
 
-#: ../lib/vector/Vlib/build.c:1005
+#: ../lib/vector/Vlib/build.c:1010
 msgid "Error writing out topo file"
 msgstr "Ошибка записи топо файла"
 
-#: ../lib/vector/Vlib/build.c:1183
+#: ../lib/vector/Vlib/build.c:1188
 #, fuzzy
 msgid ""
 "Unable to build spatial index from topology, vector map is not opened at "
@@ -4972,232 +5156,224 @@ msgstr ""
 "Невозможно построить пространственный индекс из топологии, векторный слой не "
 "открыт на втором топо уровне"
 
-#: ../lib/vector/Vlib/build.c:1206
+#: ../lib/vector/Vlib/build.c:1211
 #, fuzzy, c-format
 msgid "%s is no longer supported"
 msgstr "Ошибка (Vect_build_sidx_from_topo): узел не существует"
 
-#: ../lib/vector/Vlib/build.c:1229
+#: ../lib/vector/Vlib/build.c:1234
 msgid "Spatial index not available, can not be saved"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1242
+#: ../lib/vector/Vlib/build.c:1247
 #, c-format
 msgid "Unable open spatial index file for write <%s>"
 msgstr "Невозможно открыть для записи пространственный индекс <%s>"
 
-#: ../lib/vector/Vlib/build.c:1251
+#: ../lib/vector/Vlib/build.c:1256
 msgid "Error writing out spatial index file"
 msgstr "Ошибка записи файл пространственного индекса"
 
-#: ../lib/vector/Vlib/open_pg.c:83 ../lib/vector/Vlib/open_pg.c:214
-#: ../lib/vector/Vlib/open_pg.c:324
+#: ../lib/vector/Vlib/open_pg.c:82 ../lib/vector/Vlib/open_pg.c:230
+#: ../lib/vector/Vlib/open_pg.c:337
 #, fuzzy
 msgid "Connection string not defined"
 msgstr "Ошибка соединения."
 
-#: ../lib/vector/Vlib/open_pg.c:88 ../lib/vector/Vlib/open_pg.c:219
-#: ../lib/vector/Vlib/open_pg.c:329 ../lib/vector/Vlib/write_pg.c:249
-#: ../lib/vector/Vlib/write_pg.c:366
+#: ../lib/vector/Vlib/open_pg.c:87 ../lib/vector/Vlib/open_pg.c:235
+#: ../lib/vector/Vlib/open_pg.c:342 ../lib/vector/Vlib/write_pg.c:334
+#: ../lib/vector/Vlib/write_pg.c:474
 #, fuzzy
 msgid "PostGIS feature table not defined"
 msgstr "OGR объект без ID проигнорирован"
 
-#: ../lib/vector/Vlib/open_pg.c:102 ../lib/vector/Vlib/open_pg.c:232
+#: ../lib/vector/Vlib/open_pg.c:101 ../lib/vector/Vlib/open_pg.c:248
 #, fuzzy
 msgid "Unable to get database name"
 msgstr "Невозможно связь с базой данных"
 
-#: ../lib/vector/Vlib/open_pg.c:114 ../lib/vector/Vlib/open_pg.c:259
+#: ../lib/vector/Vlib/open_pg.c:113 ../lib/vector/Vlib/open_pg.c:272
 #, fuzzy
 msgid "No feature tables found in database."
 msgstr "Таблица <%s> уже есть в базе данных <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:138
+#: ../lib/vector/Vlib/open_pg.c:137
 #, fuzzy, c-format
 msgid "Feature table <%s> not found in 'geometry_columns'"
 msgstr "Растровый слой <%s> не найден в наборе <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:176 ../lib/vector/Vlib/open_ogr.c:147
+#: ../lib/vector/Vlib/open_pg.c:180
+msgid "Topology schema not found."
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:192 ../lib/vector/Vlib/open_ogr.c:147
 #, fuzzy, c-format
 msgid "Unable to open feature index file for vector map <%s>"
 msgstr "Невозможно открыть файл индекса категорий для векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:265
+#: ../lib/vector/Vlib/open_pg.c:278
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
 msgstr "Векторный слой <%s> уже существует и будет перезаписан"
 
-#: ../lib/vector/Vlib/open_pg.c:268
+#: ../lib/vector/Vlib/open_pg.c:281
 #, fuzzy, c-format
 msgid "Unable to delete PostGIS layer <%s>"
 msgstr "Невозможно открыть слой <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:274
+#: ../lib/vector/Vlib/open_pg.c:287
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists in database '%s'"
 msgstr "Таблица <%s> уже есть в базе данных <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:356 ../lib/vector/Vlib/open_ogr.c:292
+#: ../lib/vector/Vlib/open_pg.c:369 ../lib/vector/Vlib/open_ogr.c:292
 #, fuzzy, c-format
 msgid "Unsupported geometry type (%d)"
 msgstr "Тип объекта"
 
-#: ../lib/vector/Vlib/open_pg.c:369 ../lib/vector/Vlib/open_ogr.c:326
+#: ../lib/vector/Vlib/open_pg.c:382 ../lib/vector/Vlib/open_ogr.c:326
 #, c-format
 msgid "More layers defined, using driver <%s> and database <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:373 ../lib/vector/Vlib/open_ogr.c:332
+#: ../lib/vector/Vlib/open_pg.c:386 ../lib/vector/Vlib/open_ogr.c:332
 #, fuzzy
 msgid "Database connection not defined. Unable to write attributes."
 msgstr "Для слоя %d не определено соединение с базой данных"
 
-#: ../lib/vector/Vlib/open_pg.c:380
+#: ../lib/vector/Vlib/open_pg.c:393
 #, fuzzy
 msgid "Unable to create new PostGIS feature table"
 msgstr "Невозможно перезаписать объект %d"
 
-#: ../lib/vector/Vlib/open_pg.c:387
+#: ../lib/vector/Vlib/open_pg.c:400
 #, fuzzy
 msgid "Unable to create new PostGIS topology schema"
 msgstr "Невозможно создать новый процесс"
 
-#: ../lib/vector/Vlib/open_pg.c:475
+#: ../lib/vector/Vlib/open_pg.c:489
 #, fuzzy
 msgid "No key column detected."
 msgstr "Имя поля"
 
-#: ../lib/vector/Vlib/open_pg.c:544 ../lib/vector/Vlib/open_pg.c:556
-#: ../lib/vector/Vlib/open_pg.c:918 ../lib/vector/Vlib/open_pg.c:934
-#: ../lib/vector/Vlib/read_pg.c:1211 ../lib/vector/Vlib/write_pg.c:1108
+#: ../lib/vector/Vlib/open_pg.c:558 ../lib/vector/Vlib/open_pg.c:570
+#: ../lib/vector/Vlib/open_pg.c:934 ../lib/vector/Vlib/open_pg.c:952
+#: ../lib/vector/Vlib/read_pg.c:1244 ../lib/vector/Vlib/read_pg.c:1274
 #, fuzzy, c-format
 msgid "Execution failed: %s"
 msgstr "Ошибка соединения."
 
-#: ../lib/vector/Vlib/open_pg.c:558
+#: ../lib/vector/Vlib/open_pg.c:572
 #, c-format
 msgid "PostGIS topology schema <%s> dropped"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:617
+#: ../lib/vector/Vlib/open_pg.c:631
 #, fuzzy, c-format
 msgid "Schema <%s> doesn't exist, created"
 msgstr "%s: Полигон %d не существует"
 
-#: ../lib/vector/Vlib/open_pg.c:653 ../lib/vector/Vlib/open_pg.c:883
-#: ../lib/vector/Vlib/open.c:1174
+#: ../lib/vector/Vlib/open_pg.c:667 ../lib/vector/Vlib/open_pg.c:899
+#: ../lib/vector/Vlib/open.c:1173
 #, fuzzy
 msgid "Unable to open PG file"
 msgstr "Невозможно открыть файл %s"
 
-#: ../lib/vector/Vlib/open_pg.c:707 ../lib/vector/Vlib/open_ogr.c:453
-#: ../lib/vector/Vlib/ascii.c:363 ../lib/db/dbmi_client/db.c:41
+#: ../lib/vector/Vlib/open_pg.c:723 ../lib/vector/Vlib/open_ogr.c:453
+#: ../lib/vector/Vlib/ascii.c:374 ../lib/db/dbmi_client/db.c:41
 #: ../lib/db/dbmi_client/copy_tab.c:107 ../lib/db/dbmi_client/copy_tab.c:127
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Невозможен запуск драйвера <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:806 ../lib/vector/Vlib/open_pg.c:1651
-#: ../lib/vector/Vlib/read_pg.c:510 ../lib/vector/Vlib/read_pg.c:791
-#: ../lib/vector/Vlib/read_pg.c:1095 ../lib/vector/Vlib/write_pg.c:717
-#: ../lib/vector/Vlib/write_pg.c:1028
+#: ../lib/vector/Vlib/open_pg.c:822 ../lib/vector/Vlib/open_pg.c:1713
+#: ../lib/vector/Vlib/read_pg.c:506 ../lib/vector/Vlib/read_pg.c:817
+#: ../lib/vector/Vlib/read_pg.c:1121 ../lib/vector/Vlib/write_pg.c:388
+#: ../lib/vector/Vlib/write_pg.c:886 ../lib/vector/Vlib/write_pg.c:1253
 #, fuzzy, c-format
 msgid "Unsupported feature type %d"
 msgstr "Тип объекта"
 
-#: ../lib/vector/Vlib/open_pg.c:828
+#: ../lib/vector/Vlib/open_pg.c:844
 #, fuzzy, c-format
 msgid "Building spatial index on <%s>..."
 msgstr "Построение топологии для векторного слоя  <%s>..."
 
-#: ../lib/vector/Vlib/open_pg.c:907
+#: ../lib/vector/Vlib/open_pg.c:923
 #, fuzzy, c-format
 msgid "Creating topology schema <%s>..."
 msgstr "Построение топологии для векторного слоя  <%s>..."
 
-#: ../lib/vector/Vlib/open_pg.c:924
+#: ../lib/vector/Vlib/open_pg.c:942
 #, fuzzy, c-format
 msgid "Adding new topology column <%s>..."
 msgstr "Построение топологии для векторного слоя  <%s>..."
 
-#: ../lib/vector/Vlib/open_pg.c:958
+#: ../lib/vector/Vlib/open_pg.c:976
 #, fuzzy
 msgid "Connection ton PostgreSQL database failed."
 msgstr "Ошибка соединения."
 
-#: ../lib/vector/Vlib/open_pg.c:1036
+#: ../lib/vector/Vlib/open_pg.c:1055
 msgid "Empty bounding box"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1105
-#, fuzzy, c-format
-msgid ""
-"Unable to get number of records for:\n"
-"%s"
-msgstr "Невозможно перезаписать объект %d"
+#: ../lib/vector/Vlib/open_pg.c:1146
+#, c-format
+msgid "Inconsistency in topology: unable to read node %d"
+msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1156
+#: ../lib/vector/Vlib/open_pg.c:1186
 #, fuzzy, c-format
-msgid "Unable to read node %d"
-msgstr "Невозможно прочитать линию %d"
-
-#: ../lib/vector/Vlib/open_pg.c:1196
-#, fuzzy, c-format
-msgid "Node %d: unexpected feature type %d"
+msgid "Inconsistency in topology: node %d - unexpected feature type %d"
 msgstr "Тип объекта"
 
-#: ../lib/vector/Vlib/open_pg.c:1307
+#: ../lib/vector/Vlib/open_pg.c:1300
 #, fuzzy, c-format
-msgid "Line %d: unexpected feature type"
+msgid "Inconsistency in topology: line %d - unexpected feature type"
 msgstr "Тип объекта"
 
-#: ../lib/vector/Vlib/open_pg.c:1342
+#: ../lib/vector/Vlib/open_pg.c:1352
 #, fuzzy
 msgid "Unable to get map bounding box from topology"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:1348
+#: ../lib/vector/Vlib/open_pg.c:1359
 #, fuzzy, c-format
 msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
 msgstr "Невозможно открыть файл статистики <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:1466
-#, fuzzy
-msgid "Unable to read nodes"
-msgstr "Невозможно прочитать линию %d"
-
-#: ../lib/vector/Vlib/open_pg.c:1502 ../lib/vector/Vlib/open_pg.c:1530
-#, fuzzy
-msgid "Unable to read lines"
-msgstr "Невозможно прочитать линию %d"
-
-#: ../lib/vector/Vlib/open_pg.c:1574
+#: ../lib/vector/Vlib/open_pg.c:1501
 #, c-format
-msgid "Left area detected as %d (should be %d"
+msgid "Inconsistency in topology: number of nodes %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1577
+#: ../lib/vector/Vlib/open_pg.c:1541
 #, c-format
-msgid "Right area detected as %d (should be %d"
+msgid "Inconsistency in topology: number of points %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1595
-#, fuzzy
-msgid "Unable to attach centroids"
-msgstr "Невозможно рассчитать центроид для полигона %d"
+#: ../lib/vector/Vlib/open_pg.c:1571
+#, c-format
+msgid "Inconsistency in topology: number of lines %d (should be %d)"
+msgstr ""
 
-#: ../lib/vector/Vlib/overlay.c:70
+#: ../lib/vector/Vlib/open_pg.c:1610
+#, c-format
+msgid "Inconsistency in topology: number of centroids %d (should be %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/overlay.c:72
 msgid "unknown operator"
 msgstr "неизвестный оператор"
 
-#: ../lib/vector/Vlib/overlay.c:120
+#: ../lib/vector/Vlib/overlay.c:124
 msgid "Overlay: line/boundary types not supported by AND operator"
 msgstr "Оверлей: типы линия/граница не поддерживаются оператором AND"
 
-#: ../lib/vector/Vlib/overlay.c:123
+#: ../lib/vector/Vlib/overlay.c:127
 msgid "Overlay: area x area types not supported by AND operator"
 msgstr "Оверлей: типы полигон x полигон не поддерживаются оператором AND"
 
@@ -5218,29 +5394,34 @@ msgstr "Индекс вне диапазона в"
 msgid "Segment outside line, no segment created"
 msgstr "Сегмент вне линии, сегмент не создан"
 
-#: ../lib/vector/Vlib/close.c:147
+#: ../lib/vector/Vlib/close.c:104
+#, fuzzy, c-format
+msgid "Unable to open %s file"
+msgstr "Невозможно открыть файл %s"
+
+#: ../lib/vector/Vlib/close.c:187
 #, c-format
 msgid "Unable to close vector <%s>"
 msgstr "Невозможно закрыть векторный слой <%s>"
 
-#: ../lib/vector/Vlib/close.c:178
+#: ../lib/vector/Vlib/close.c:218
 #, c-format
 msgid "Invalid request for writing frmt file - map format is %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/close.c:210
+#: ../lib/vector/Vlib/close.c:250
 #, fuzzy, c-format
 msgid "Link to vector map <%s> created"
 msgstr "Невозможно открыть векторный слой <%s>"
 
-#: ../lib/vector/Vlib/read_nat.c:147 ../lib/vector/Vlib/read_pg.c:299
+#: ../lib/vector/Vlib/read_nat.c:147 ../lib/vector/Vlib/read_pg.c:301
 #: ../lib/vector/Vlib/read_sfa.c:49
 #, fuzzy, c-format
 msgid "Attempt to read dead feature %d"
 msgstr "Попытка удалить уже удаленный объект"
 
 #: ../lib/vector/Vlib/map.c:104 ../lib/vector/Vlib/map.c:249
-#: ../lib/vector/Vlib/open.c:733
+#: ../lib/vector/Vlib/open.c:724
 msgid "Vector map name is not SQL compliant"
 msgstr "Имя векторного слоя не SQL-совместимо"
 
@@ -5250,12 +5431,12 @@ msgid "Unable to find vector map <%s> in <%s>"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
 
 #: ../lib/vector/Vlib/map.c:120 ../lib/vector/Vlib/map.c:253
-#: ../lib/vector/Vlib/open.c:755
+#: ../lib/vector/Vlib/open.c:746
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "Векторный слой <%s> уже существует и будет перезаписан"
 
-#: ../lib/vector/Vlib/map.c:124 ../lib/vector/Vlib/open.c:760
+#: ../lib/vector/Vlib/map.c:124 ../lib/vector/Vlib/open.c:751
 #, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr "Невозможно удалить векторный слой <%s>"
@@ -5266,13 +5447,13 @@ msgid "Unable to copy vector map <%s> to <%s>"
 msgstr "Невозможно скопировать векторный слой <%s> в <%s>"
 
 #: ../lib/vector/Vlib/map.c:193 ../lib/vector/Vlib/map.c:320
-#: ../lib/vector/Vlib/copy.c:435 ../lib/vector/Vlib/copy.c:541
+#: ../lib/vector/Vlib/copy.c:468 ../lib/vector/Vlib/copy.c:574
 #, c-format
 msgid "Unable to copy table <%s>"
 msgstr "Невозможно скопировать таблицу <%s>"
 
 #: ../lib/vector/Vlib/map.c:209 ../lib/vector/Vlib/map.c:349
-#: ../lib/vector/Vlib/copy.c:448
+#: ../lib/vector/Vlib/copy.c:481
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
 msgstr "Невозможно создать индекс для таблицы <%s>, ключ <%s>"
@@ -5322,72 +5503,75 @@ msgstr "Невозможно переименовать папку '%s' в '%s'"
 msgid "Unable to remove directory '%s'"
 msgstr "Невозможно удалить папку '%s'"
 
-#: ../lib/vector/Vlib/read_pg.c:181
+#: ../lib/vector/Vlib/read_pg.c:178 ../lib/vector/Vlib/read_sfa.c:110
 #, fuzzy, c-format
-msgid "Unexpected feature type (%s) - should be (%d)"
+msgid "Unexpected feature type (%d) - should be (%d)"
 msgstr "Тип объекта"
 
-#: ../lib/vector/Vlib/read_pg.c:256 ../lib/vector/Vlib/read_pg.c:333
-#: ../lib/vector/Vlib/read_pg.c:400 ../lib/vector/Vlib/build_sfa.c:350
+#: ../lib/vector/Vlib/read_pg.c:258 ../lib/vector/Vlib/read_pg.c:333
+#: ../lib/vector/Vlib/read_pg.c:398 ../lib/vector/Vlib/build_sfa.c:350
 #: ../lib/vector/Vlib/build_sfa.c:360 ../lib/vector/Vlib/build_sfa.c:633
 #, fuzzy, c-format
 msgid "Feature %d without geometry skipped"
 msgstr "Объект %d без геометрии проигнорирован"
 
-#: ../lib/vector/Vlib/read_pg.c:408 ../lib/vector/Vlib/read_ogr.c:382
+#: ../lib/vector/Vlib/read_pg.c:406 ../lib/vector/Vlib/read_ogr.c:382
 #, fuzzy
 msgid "Feature without geometry. Skipped."
 msgstr "Объект %d без геометрии проигнорирован"
 
-#: ../lib/vector/Vlib/read_pg.c:473
+#: ../lib/vector/Vlib/read_pg.c:474
 msgid "No geometry or topo geometry column defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:485
+#: ../lib/vector/Vlib/read_pg.c:487
 msgid "Random access not supported. Primary key not defined."
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:534
+#: ../lib/vector/Vlib/read_pg.c:538
 #, fuzzy, c-format
 msgid "Reading failed: %s"
 msgstr "Загрузка не выполнена"
 
-#: ../lib/vector/Vlib/read_pg.c:695
+#: ../lib/vector/Vlib/read_pg.c:594
+msgid "Inconsistency in topology: detected centroid (should be point)"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:604
+msgid "Inconsistency in topology: detected boundary (should be line)"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:724
 #, c-format
 msgid "Invalid WKB content: %d bytes"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:711
+#: ../lib/vector/Vlib/read_pg.c:740
 msgid "Reading EWKB with 4-dimensional coordinates (XYZM) is not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:901 ../lib/vector/Vlib/read_pg.c:969
-#: ../lib/vector/Vlib/read_pg.c:1040
+#: ../lib/vector/Vlib/read_pg.c:927 ../lib/vector/Vlib/read_pg.c:995
+#: ../lib/vector/Vlib/read_pg.c:1066
 msgid "Length of input WKB is too small"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:980
+#: ../lib/vector/Vlib/read_pg.c:1006
 #, c-format
 msgid "Invalid cache index %d (max: %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:1118
+#: ../lib/vector/Vlib/read_pg.c:1144
 #, fuzzy, c-format
 msgid "Corrupted data. %s."
 msgstr "Испорченная строка в заголовке  %s"
 
-#: ../lib/vector/Vlib/read_pg.c:1120
+#: ../lib/vector/Vlib/read_pg.c:1146
 msgid "Corrupted data"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:1181
+#: ../lib/vector/Vlib/read_pg.c:1214
 #, fuzzy
 msgid "Unable to get features"
-msgstr "Невозможно перезаписать объект %d"
-
-#: ../lib/vector/Vlib/read_pg.c:1308
-#, fuzzy, c-format
-msgid "Unable to read centroid %d: %s"
 msgstr "Невозможно перезаписать объект %d"
 
 #: ../lib/vector/Vlib/poly.c:222
@@ -5416,7 +5600,7 @@ msgstr ""
 msgid "only native format supported"
 msgstr "для этого формата/уровня не поддерживается "
 
-#: ../lib/vector/Vlib/geos.c:65 ../lib/vector/Vlib/geos.c:255
+#: ../lib/vector/Vlib/geos.c:65 ../lib/vector/Vlib/geos.c:256
 msgid "Attempt to read dead line"
 msgstr "Попытка считать информацию об удаленной линии"
 
@@ -5430,17 +5614,17 @@ msgstr "Невозможно перезаписать объект %d"
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/geos.c:202
+#: ../lib/vector/Vlib/geos.c:203
 #, fuzzy, c-format
 msgid "Unable to read line offset %ld"
 msgstr "Невозможно прочитать линию %d"
 
-#: ../lib/vector/Vlib/geos.c:409
+#: ../lib/vector/Vlib/geos.c:410
 #, fuzzy, c-format
 msgid "Attempt to read points of nonexistent area id %d"
 msgstr "Попытка считать точки из несуществующего полигона"
 
-#: ../lib/vector/Vlib/geos.c:469
+#: ../lib/vector/Vlib/geos.c:470
 #, fuzzy, c-format
 msgid "Unable to read feature id %d"
 msgstr "Невозможно перезаписать объект %d"
@@ -5485,7 +5669,7 @@ msgstr ""
 msgid "Empty OGR layer, nothing to build"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:80 ../lib/vector/Vlib/build_pg.c:73
+#: ../lib/vector/Vlib/build_ogr.c:80 ../lib/vector/Vlib/build_pg.c:77
 #, c-format
 msgid "Feature table <%s> has no primary key defined"
 msgstr ""
@@ -5496,7 +5680,7 @@ msgid ""
 "Random read is not supported by OGR for this layer. Unable to build topology."
 msgstr "Для этого слоя OGR не поддерживается cлучайное чтение"
 
-#: ../lib/vector/Vlib/build_ogr.c:88 ../lib/vector/Vlib/build_pg.c:87
+#: ../lib/vector/Vlib/build_ogr.c:88 ../lib/vector/Vlib/build_pg.c:90
 #, c-format
 msgid "Using external data format '%s' (feature type '%s')"
 msgstr ""
@@ -5523,13 +5707,13 @@ msgid "Arc field < 1"
 msgstr "поле Arc < 1"
 
 #: ../lib/vector/Vlib/net.c:185 ../lib/vector/Vlib/net.c:202
-#: ../lib/vector/Vlib/net.c:356 ../lib/vector/Vlib/ascii.c:639
+#: ../lib/vector/Vlib/net.c:362 ../lib/vector/Vlib/ascii.c:696
 #, c-format
 msgid "Column <%s> not found in table <%s>"
 msgstr "Поле <%s> не найдено в таблице <%s>"
 
 #: ../lib/vector/Vlib/net.c:191 ../lib/vector/Vlib/net.c:208
-#: ../lib/vector/Vlib/net.c:362
+#: ../lib/vector/Vlib/net.c:368
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
 msgstr "Тип данных поля <%s> не поддерживается (должен быть числовым)"
@@ -5560,29 +5744,29 @@ msgstr ""
 msgid "Cannot add network arc"
 msgstr "Невозможно добавить сетевую дугу "
 
-#: ../lib/vector/Vlib/net.c:342
+#: ../lib/vector/Vlib/net.c:348
 msgid "Setting node costs..."
 msgstr "Устанавливается стоимость для узлов..."
 
-#: ../lib/vector/Vlib/net.c:398
+#: ../lib/vector/Vlib/net.c:411
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
 msgstr "Запись в БД для узла  %d (cat = %d) не найдена (стоимость = 0)"
 
-#: ../lib/vector/Vlib/net.c:425
+#: ../lib/vector/Vlib/net.c:440
 msgid "Flattening the graph..."
 msgstr "Выпрямление графа"
 
-#: ../lib/vector/Vlib/net.c:434
+#: ../lib/vector/Vlib/net.c:449
 msgid "Graph was built"
 msgstr "Граф построен"
 
-#: ../lib/vector/Vlib/net.c:517 ../lib/vector/Vlib/graph.c:226
+#: ../lib/vector/Vlib/net.c:532 ../lib/vector/Vlib/graph.c:226
 #, c-format
 msgid "dglShortestPath error: %s"
 msgstr "ошибка dglShortestPath : %s"
 
-#: ../lib/vector/Vlib/net.c:600
+#: ../lib/vector/Vlib/net.c:616
 msgid "Wrong line direction in Vect_net_get_line_cost()"
 msgstr "Неправильное направление линии в Vect_net_get_line_cost()"
 
@@ -5609,46 +5793,46 @@ msgstr "Количество линий: %d"
 msgid "%s dangles: %d"
 msgstr "Удаленные висящие узлы"
 
-#: ../lib/vector/Vlib/build_nat.c:74 ../lib/vector/Vlib/build_sfa.c:339
+#: ../lib/vector/Vlib/build_nat.c:72 ../lib/vector/Vlib/build_sfa.c:339
 #: ../lib/vector/Vlib/build_sfa.c:625
 msgid "Registering primitives..."
 msgstr "Регистрируются примитивы..."
 
-#: ../lib/vector/Vlib/build_nat.c:83
+#: ../lib/vector/Vlib/build_nat.c:82
 msgid "Unable to read vector map"
 msgstr "Невозможно прочитать векторный слой"
 
-#: ../lib/vector/Vlib/build_nat.c:116 ../lib/vector/Vlib/build_sfa.c:381
+#: ../lib/vector/Vlib/build_nat.c:115 ../lib/vector/Vlib/build_sfa.c:381
 #: ../lib/vector/Vlib/build_sfa.c:655
 #, c-format
 msgid "%d primitives registered"
 msgstr "%d примитивов зарегистрировано"
 
-#: ../lib/vector/Vlib/build_nat.c:117 ../lib/vector/Vlib/build_sfa.c:382
+#: ../lib/vector/Vlib/build_nat.c:116 ../lib/vector/Vlib/build_sfa.c:382
 #: ../lib/vector/Vlib/build_sfa.c:656
 #, c-format
 msgid "%d vertices registered"
 msgstr "%d узлов зарегистрировано"
 
-#: ../lib/vector/Vlib/build_nat.c:128
+#: ../lib/vector/Vlib/build_nat.c:127
 msgid "Building areas..."
 msgstr "Построение полигонов..."
 
-#: ../lib/vector/Vlib/build_nat.c:151
+#: ../lib/vector/Vlib/build_nat.c:150
 #, c-format
 msgid "%d areas built"
 msgstr "%d полигонов построено"
 
-#: ../lib/vector/Vlib/build_nat.c:152
+#: ../lib/vector/Vlib/build_nat.c:151
 #, c-format
 msgid "%d isles built"
 msgstr "%d островов создано"
 
-#: ../lib/vector/Vlib/build_nat.c:161
+#: ../lib/vector/Vlib/build_nat.c:160
 msgid "Attaching islands..."
 msgstr "Назначаются острова..."
 
-#: ../lib/vector/Vlib/build_nat.c:177
+#: ../lib/vector/Vlib/build_nat.c:176
 msgid "Attaching centroids..."
 msgstr "Назначаются центроиды..."
 
@@ -5686,7 +5870,7 @@ msgstr "OGR объект без ID проигнорирован"
 msgid "OGR layer not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:82 ../lib/vector/Vlib/field.c:674
+#: ../lib/vector/Vlib/open_ogr.c:82 ../lib/vector/Vlib/field.c:675
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr "Невозможно открыть OGR источник данных '%s'"
@@ -5781,13 +5965,13 @@ msgstr "Невозможно рассчитать центроид для пол
 msgid "GRASS is not compiled with OGR/PostgreSQL support"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_sfa.c:148 ../lib/vector/Vlib/write_pg.c:109
+#: ../lib/vector/Vlib/write_sfa.c:148 ../lib/vector/Vlib/write_pg.c:162
 #: ../lib/vector/Vlib/write_ogr.c:237
 #, fuzzy
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr "Невозможно записать объект (отрицательное смещение)"
 
-#: ../lib/vector/Vlib/write_sfa.c:281 ../lib/vector/Vlib/write_pg.c:319
+#: ../lib/vector/Vlib/write_sfa.c:281 ../lib/vector/Vlib/write_pg.c:404
 #: ../lib/vector/Vlib/write_ogr.c:149
 msgid "Boundary is not closed. Skipping."
 msgstr ""
@@ -5824,12 +6008,12 @@ msgstr "Невозможно открыть файл топологии для �
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "Невозможно открыть файл индекса категорий для векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/open.c:354 ../lib/vector/Vlib/cindex.c:510
+#: ../lib/vector/Vlib/open.c:353 ../lib/vector/Vlib/cindex.c:510
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr "Невозможно открыть файл индекса категорий для векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/open.c:384 ../lib/vector/Vlib/open.c:408
+#: ../lib/vector/Vlib/open.c:379 ../lib/vector/Vlib/open.c:401
 #, c-format
 msgid ""
 "Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
@@ -5838,63 +6022,63 @@ msgstr ""
 "Невозможно открыть векторный слой <%s> на уровне %d. Попробуйте перестроить "
 "векторную топологию с помощью v.build."
 
-#: ../lib/vector/Vlib/open.c:417
+#: ../lib/vector/Vlib/open.c:410
 #, fuzzy, c-format
 msgid "Building topology for OGR layer <%s> from datasource '%s'..."
 msgstr "Построение топологии для векторного слоя  <%s>..."
 
-#: ../lib/vector/Vlib/open.c:425
+#: ../lib/vector/Vlib/open.c:418
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> on level %d"
 msgstr "Невозможно открыть векторный слой <%s>"
 
-#: ../lib/vector/Vlib/open.c:483
+#: ../lib/vector/Vlib/open.c:474
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
 msgstr "Невозможно открыть файл истории для векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/open.c:724
+#: ../lib/vector/Vlib/open.c:715
 #, fuzzy, c-format
 msgid "<%s> is not the current mapset (%s)"
 msgstr "в текущем наборе (%s) файлов %s нет"
 
-#: ../lib/vector/Vlib/open.c:779
+#: ../lib/vector/Vlib/open.c:770
 #, fuzzy, c-format
 msgid "Unable to open history file of vector map <%s>"
 msgstr "Невозможно открыть файл истории для векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/open.c:839
+#: ../lib/vector/Vlib/open.c:830
 #, fuzzy, c-format
 msgid "Unable to stat file <%s>"
 msgstr "Невозможно открыть файл статистики <%s>"
 
-#: ../lib/vector/Vlib/open.c:903
+#: ../lib/vector/Vlib/open.c:894
 #, c-format
 msgid "unknown %d (update Vect_maptype_info)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:980
+#: ../lib/vector/Vlib/open.c:971
 msgid "Size of 'coor' file differs from value saved in topology file"
 msgstr ""
 "Размер файла 'coor' отличается от значения сохраненного в файле топологии"
 
-#: ../lib/vector/Vlib/open.c:991 ../lib/vector/Vlib/open.c:1082
+#: ../lib/vector/Vlib/open.c:982 ../lib/vector/Vlib/open.c:1081
 #, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "Пожалуйста, перестройте топологию для векторного слоя <%s@%s>"
 
-#: ../lib/vector/Vlib/open.c:1071
+#: ../lib/vector/Vlib/open.c:1070
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr ""
 "Размер файла 'coor' отличается от значения сохраненного в файле топологии"
 
-#: ../lib/vector/Vlib/open.c:1135
+#: ../lib/vector/Vlib/open.c:1134
 #, fuzzy
 msgid "Unable to open OGR file"
 msgstr "Невозможно открыть файл %s"
 
-#: ../lib/vector/Vlib/open.c:1161
+#: ../lib/vector/Vlib/open.c:1160
 msgid "OGR output also detected, using OGR"
 msgstr ""
 
@@ -5924,22 +6108,57 @@ msgstr "Невозможно прочесть гистограмму для уд
 msgid "Attempt to read topo for dead isle (%d)"
 msgstr "Невозможно прочесть гистограмму для удаленного острова  (%d)"
 
-#: ../lib/vector/Vlib/cats.c:44
+#: ../lib/vector/Vlib/cats.c:45
 msgid "Vect_new_cats_struct(): Out of memory"
 msgstr "Vect_new_cats_struct(): Не хватает памяти"
 
-#: ../lib/vector/Vlib/cats.c:126
+#: ../lib/vector/Vlib/cats.c:127
 #, c-format
 msgid "Too many categories (%d), unable to set cat %d (layer %d)"
 msgstr ""
 "Слишком много категорий (%d), невозможно установить категорию %d (слой %d)"
 
-#: ../lib/vector/Vlib/cats.c:424
+#: ../lib/vector/Vlib/cats.c:423
 #, c-format
 msgid "Unable to convert category string '%s' (from '%s') to category range"
 msgstr ""
 "Невозможно сконвертировать строку категории '%s' (из '%s') в диапазон "
 "категорий"
+
+#: ../lib/vector/Vlib/cats.c:516 ../lib/vector/Vlib/cats.c:610
+#, fuzzy
+msgid "Layer number must be > 0 for category constraints"
+msgstr "Номер слоя должен быть 1 или больше"
+
+#: ../lib/vector/Vlib/cats.c:529
+#, c-format
+msgid "'%s' and '%s' parameters were supplied, cats will be ignored"
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:537
+#, fuzzy, c-format
+msgid "Loading categories from table <%s>..."
+msgstr "Чтение растрового слоя <%s>..."
+
+#: ../lib/vector/Vlib/cats.c:547 ../lib/db/dbmi_client/select.c:317
+#, c-format
+msgid "Unable select records from table <%s>"
+msgstr "Невозможно выбрать записи из таблицы <%s>"
+
+#: ../lib/vector/Vlib/cats.c:549
+#, c-format
+msgid "%d categories loaded"
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:571
+#, c-format
+msgid "No categories selected with '%s' option"
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:581
+#, fuzzy, c-format
+msgid "%d errors in '%s' option"
+msgstr "%d ошибок в строке категории."
 
 #: ../lib/vector/Vlib/graph.c:138
 msgid "Unable to add network arc"
@@ -5959,10 +6178,10 @@ msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
 msgstr ""
 "Ошибка Vect_segment_intersection() (коллинеарные не вертикальные сегменты)"
 
-#: ../lib/vector/Vlib/intersect.c:1118 ../lib/vector/Vlib/intersect.c:1124
-#: ../lib/vector/Vlib/intersect.c:1126 ../lib/vector/Vlib/intersect.c:1180
-#: ../lib/vector/Vlib/intersect.c:1189 ../lib/vector/Vlib/intersect.c:1210
-#: ../lib/vector/Vlib/intersect.c:1227
+#: ../lib/vector/Vlib/intersect.c:1179 ../lib/vector/Vlib/intersect.c:1185
+#: ../lib/vector/Vlib/intersect.c:1187 ../lib/vector/Vlib/intersect.c:1241
+#: ../lib/vector/Vlib/intersect.c:1250 ../lib/vector/Vlib/intersect.c:1271
+#: ../lib/vector/Vlib/intersect.c:1288
 msgid "Error while adding point to array. Out of memory"
 msgstr "Ошибка добавления точки в массив. Нет памяти"
 
@@ -5979,11 +6198,6 @@ msgstr "Невозможно рассчитать центроид для пол
 #, c-format
 msgid "Centroid %d: invalid area %d"
 msgstr ""
-
-#: ../lib/vector/Vlib/read_sfa.c:110
-#, fuzzy, c-format
-msgid "Unexpected feature type (%d) - should be (%d)"
-msgstr "Тип объекта"
 
 #: ../lib/vector/Vlib/header_finfo.c:50 ../lib/vector/Vlib/header_finfo.c:90
 #: ../lib/vector/Vlib/header_finfo.c:214
@@ -6159,12 +6373,12 @@ msgstr "для этого формата/уровня не поддержива�
 msgid "Feature index is built only for non-native formats. Nothing to dump."
 msgstr ""
 
-#: ../lib/vector/Vlib/break_lines.c:439
+#: ../lib/vector/Vlib/break_lines.c:473
 #, fuzzy, c-format
 msgid "Intersections: %d"
 msgstr "Пересечения: %5d"
 
-#: ../lib/vector/Vlib/close_pg.c:139 ../lib/vector/Vlib/close_ogr.c:109
+#: ../lib/vector/Vlib/close_pg.c:137 ../lib/vector/Vlib/close_ogr.c:109
 #, fuzzy, c-format
 msgid "Unable to save feature index file for vector map <%s>"
 msgstr "Невозможно открыть файл индекса категорий для векторного слоя <%s>"
@@ -6235,39 +6449,39 @@ msgid ""
 "output."
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:258
+#: ../lib/vector/Vlib/field.c:259
 #, c-format
 msgid "Layer number %d or name <%s> already exists"
 msgstr "Слой номер %d или имя <%s> уже существует"
 
-#: ../lib/vector/Vlib/field.c:349
+#: ../lib/vector/Vlib/field.c:350
 msgid "Default driver is not set"
 msgstr "Драйвер по умолчанию не установлен"
 
-#: ../lib/vector/Vlib/field.c:352
+#: ../lib/vector/Vlib/field.c:353
 msgid "Default database is not set"
 msgstr "База данных по умолчанию не установлена "
 
-#: ../lib/vector/Vlib/field.c:409
+#: ../lib/vector/Vlib/field.c:410
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "Запрашиваемый dblink %d, максимальное число связей %d"
 
-#: ../lib/vector/Vlib/field.c:599 ../lib/vector/Vlib/field.c:607
+#: ../lib/vector/Vlib/field.c:600 ../lib/vector/Vlib/field.c:608
 #, fuzzy, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr "Ошибка в правиле для ряда %d в %s"
 
-#: ../lib/vector/Vlib/field.c:689
+#: ../lib/vector/Vlib/field.c:690
 #, fuzzy, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr "Невозможно открыть слой <%s>"
 
-#: ../lib/vector/Vlib/field.c:715
+#: ../lib/vector/Vlib/field.c:716
 msgid "Unable to open OGR DBMI driver"
 msgstr "Невозможно открыть драйвер OGR DBMI"
 
-#: ../lib/vector/Vlib/field.c:754
+#: ../lib/vector/Vlib/field.c:755
 msgid ""
 "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
 "available in OGR DB table"
@@ -6275,27 +6489,27 @@ msgstr ""
 "Все тесты FID окончены неудачно. Ни  'FID' ни 'ogc_fid' ни 'ogr_fid' ни "
 "'gid' недоступны в таблице OGR DB"
 
-#: ../lib/vector/Vlib/field.c:821
+#: ../lib/vector/Vlib/field.c:822
 #, c-format
 msgid ""
 "Feature table <%s> has no primary key defined. Unable to define DB links."
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:841
+#: ../lib/vector/Vlib/field.c:842
 msgid "GRASS not compiled with PostgreSQL support"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:873
+#: ../lib/vector/Vlib/field.c:874
 #, fuzzy
 msgid "Unknown vector map format"
 msgstr "неизвестный оператор"
 
-#: ../lib/vector/Vlib/field.c:910
+#: ../lib/vector/Vlib/field.c:911
 #, c-format
 msgid "Unable to open vector database definition file '%s'"
 msgstr "Невозможно открыть файл определений векторной базы данных '%s'"
 
-#: ../lib/vector/Vlib/field.c:1005
+#: ../lib/vector/Vlib/field.c:1006
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "Ошибка: попытка обновить слой не содержащийся в текущем наборе ."
 
@@ -6322,85 +6536,145 @@ msgstr "OGR объект без ID"
 msgid "OGR feature type '%s' not supported"
 msgstr "тип данных OGR %d не поддерживается"
 
-#: ../lib/vector/Vlib/write_pg.c:143 ../lib/vector/Vlib/write_pg.c:244
-#: ../lib/vector/Vlib/write_pg.c:361
+#: ../lib/vector/Vlib/write_pg.c:196 ../lib/vector/Vlib/write_pg.c:330
+#: ../lib/vector/Vlib/write_pg.c:470
 #, fuzzy
 msgid "No connection defined"
 msgstr "Ошибка соединения."
 
-#: ../lib/vector/Vlib/write_pg.c:148 ../lib/vector/Vlib/write_ogr.c:275
+#: ../lib/vector/Vlib/write_pg.c:201 ../lib/vector/Vlib/write_ogr.c:275
 #, fuzzy, c-format
 msgid "Invalid offset (%d)"
 msgstr "Неправильное имя векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/write_pg.c:169 ../lib/vector/Vlib/write_ogr.c:281
+#: ../lib/vector/Vlib/write_pg.c:222 ../lib/vector/Vlib/write_ogr.c:281
 #, fuzzy
 msgid "Unable to delete feature"
 msgstr "Невозможно перезаписать объект %d"
 
-#: ../lib/vector/Vlib/write_pg.c:266 ../lib/vector/Vlib/write_ogr.c:89
+#: ../lib/vector/Vlib/write_pg.c:351 ../lib/vector/Vlib/write_pg.c:501
+#: ../lib/vector/Vlib/write_ogr.c:89
 #, fuzzy, c-format
 msgid "No category defined for layer %d"
 msgstr "Для слоя %d не определено соединение с базой данных"
 
-#: ../lib/vector/Vlib/write_pg.c:268 ../lib/vector/Vlib/write_ogr.c:91
+#: ../lib/vector/Vlib/write_pg.c:353 ../lib/vector/Vlib/write_pg.c:503
+#: ../lib/vector/Vlib/write_ogr.c:91
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_pg.c:280 ../lib/vector/Vlib/write_ogr.c:105
+#: ../lib/vector/Vlib/write_pg.c:365 ../lib/vector/Vlib/write_ogr.c:105
 msgid "Feature is not a point. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_pg.c:286 ../lib/vector/Vlib/write_ogr.c:113
+#: ../lib/vector/Vlib/write_pg.c:371 ../lib/vector/Vlib/write_ogr.c:113
 msgid "Feature is not a line. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_pg.c:292 ../lib/vector/Vlib/write_ogr.c:120
+#: ../lib/vector/Vlib/write_pg.c:377 ../lib/vector/Vlib/write_ogr.c:120
 msgid "Feature is not a polygon. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_pg.c:298 ../lib/vector/Vlib/write_ogr.c:127
+#: ../lib/vector/Vlib/write_pg.c:383 ../lib/vector/Vlib/write_ogr.c:127
 msgid "Feature is not a face. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_pg.c:303 ../lib/vector/Vlib/write_ogr.c:133
+#: ../lib/vector/Vlib/write_pg.c:464
 #, fuzzy, c-format
-msgid "Unsupported feature type (%d)"
-msgstr "Тип объекта"
+msgid "Invalid type (%d) for nodes"
+msgstr "Неправильное имя векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/write_pg.c:685
+#: ../lib/vector/Vlib/write_pg.c:478
+#, fuzzy
+msgid "PostGIS topology schema not defined"
+msgstr "OGR объект без ID проигнорирован"
+
+#: ../lib/vector/Vlib/write_pg.c:854
 msgid "Trying to insert 3D data into feature table which store 2D data only"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_pg.c:690
+#: ../lib/vector/Vlib/write_pg.c:859
 msgid "Trying to insert 2D data into feature table which store 3D data only"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_pg.c:870 ../lib/vector/Vlib/write_ogr.c:324
+#: ../lib/vector/Vlib/write_pg.c:965
+#, fuzzy
+msgid "Unable to insert topological element into PostGIS Topology schema"
+msgstr "Невозможно создать новый процесс"
+
+#: ../lib/vector/Vlib/write_pg.c:1036 ../lib/vector/Vlib/write_ogr.c:324
 #, fuzzy, c-format
 msgid "Unable to select attributes for category %d"
 msgstr "Невозможно удалить слой/категорию %d/%d линии %d"
 
-#: ../lib/vector/Vlib/write_pg.c:874 ../lib/vector/Vlib/write_ogr.c:329
+#: ../lib/vector/Vlib/write_pg.c:1040 ../lib/vector/Vlib/write_ogr.c:329
 #: ../lib/db/dbmi_client/copy_tab.c:314
 #, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/vector/Vlib/write_pg.c:879 ../lib/vector/Vlib/write_ogr.c:334
+#: ../lib/vector/Vlib/write_pg.c:1045 ../lib/vector/Vlib/write_ogr.c:334
 #, fuzzy, c-format
 msgid "No database record for category %d, no attributes will be written"
 msgstr "Для категории %d не найдена запись в БД"
 
-#: ../lib/vector/Vlib/write_pg.c:932 ../lib/vector/Vlib/write_ogr.c:396
+#: ../lib/vector/Vlib/write_pg.c:1071
+#, c-format
+msgid "FID column must be integer, column <%s> ignored!"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1105 ../lib/vector/Vlib/write_ogr.c:396
 #, fuzzy, c-format
 msgid "Unsupported column type %d"
 msgstr "Тип объекта"
 
-#: ../lib/vector/Vlib/write_pg.c:1062
+#: ../lib/vector/Vlib/write_pg.c:1112
+msgid "Invalid value for FID column: NULL"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1202
+#, fuzzy
+msgid "Topology not available. Unable to insert new edge."
+msgstr "Нет справки для команды [%s]\n"
+
+#: ../lib/vector/Vlib/write_pg.c:1230
+msgid "Topology not available. Unable to insert new node (centroid)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1297 ../lib/vector/Vlib/write_pg.c:1304
+msgid "Invalid topology"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1503
+msgid "Inconsistency in topology: invalid feature id"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1508
+msgid "Inconsistency in topology: dead line found"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1534
+msgid ""
+"Inconsistency in topology detected: unable to determine next left/right edge."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1601
+msgid "Inconsistency in topology detected: invalid feature id"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1606
+msgid "Inconsistency in topology detected: dead line found"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1621
+#, fuzzy
+msgid "Unable to create new face"
+msgstr "Невозможно создать новый процесс"
+
+#: ../lib/vector/Vlib/write_ogr.c:133
 #, fuzzy, c-format
-msgid "Unsupported topo geometry type %d"
+msgid "Unsupported feature type (%d)"
 msgstr "Тип объекта"
 
 #: ../lib/vector/Vlib/write_ogr.c:310
@@ -6413,30 +6687,48 @@ msgstr "Объект %d без геометрии проигнорирован"
 msgid "Unable to create field <%s>"
 msgstr "Невозможно создать таблицу <%s>"
 
-#: ../lib/vector/Vlib/build_pg.c:68
+#: ../lib/vector/Vlib/build_pg.c:72
 #, fuzzy
 msgid "No DB connection"
 msgstr "Плохое соединение с сервером"
 
-#: ../lib/vector/Vlib/build_pg.c:75
+#: ../lib/vector/Vlib/build_pg.c:79
 #, fuzzy
 msgid "Random read is not supported for this layer. Unable to build topology."
 msgstr "Для этого слоя OGR не поддерживается cлучайное чтение"
 
-#: ../lib/vector/Vlib/build_pg.c:91
+#: ../lib/vector/Vlib/build_pg.c:94
 #, fuzzy
 msgid "Building pseudo-topology over simple features..."
 msgstr "Построение топологии для векторного слоя  <%s>..."
 
-#: ../lib/vector/Vlib/build_pg.c:93
+#: ../lib/vector/Vlib/build_pg.c:96
 #, fuzzy, c-format
 msgid "Building topology from PostGIS topology schema <%s>..."
 msgstr "Построение топологии для векторного слоя  <%s>..."
 
-#: ../lib/vector/Vlib/build_pg.c:133
-#, c-format
-msgid "Only %s is supported for PostGIS topology"
+#: ../lib/vector/Vlib/build_pg.c:202 ../lib/vector/vedit/delete.c:105
+#, fuzzy, c-format
+msgid "Area %d without centroid"
+msgstr "Количество полигонов без центроидов: %d"
+
+#: ../lib/vector/Vlib/build_pg.c:228
+msgid "Updating TopoGeometry data..."
 msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:235
+msgid "Inconsistency in topology detected. Dead line found."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:320
+#, fuzzy, c-format
+msgid "Unsupported topo geometry type %d"
+msgstr "Тип объекта"
+
+#: ../lib/vector/Vlib/build_pg.c:349
+#, fuzzy, c-format
+msgid "Unable to create <%s.%s>"
+msgstr "Невозможно создать таблицу <%s>"
 
 #: ../lib/vector/Vlib/header.c:87
 #, fuzzy, c-format
@@ -6462,159 +6754,164 @@ msgstr "Неизвестное ключевое слово %s в заголов�
 msgid "Unknown projection"
 msgstr "Неизвестная проекция"
 
-#: ../lib/vector/Vlib/copy.c:63
+#: ../lib/vector/Vlib/copy.c:78
 msgid "input vector map is not open"
 msgstr "исходный векторный слой не открыт"
 
-#: ../lib/vector/Vlib/copy.c:90
+#: ../lib/vector/Vlib/copy.c:107
 #, fuzzy, c-format
 msgid "Vector map <%s> not open on topological level. Areas will be skipped!"
 msgstr "Векторный слой <%s> не открыт на уровне >= 2"
 
-#: ../lib/vector/Vlib/copy.c:177
-#, fuzzy
-msgid "Copying features..."
-msgstr "Построение полигонов..."
-
-#: ../lib/vector/Vlib/copy.c:179
+#: ../lib/vector/Vlib/copy.c:195
 #, c-format
 msgid "Copying features (%s)..."
 msgstr ""
 
-#: ../lib/vector/Vlib/copy.c:241
+#: ../lib/vector/Vlib/copy.c:198
+#, fuzzy
+msgid "Copying features..."
+msgstr "Построение полигонов..."
+
+#: ../lib/vector/Vlib/copy.c:261
 msgid "Writing new feature failed"
 msgstr ""
 
-#: ../lib/vector/Vlib/copy.c:274
+#: ../lib/vector/Vlib/copy.c:295
 #, fuzzy
 msgid "Exporting nodes..."
 msgstr "Устанавливается стоимость для узлов..."
 
-#: ../lib/vector/Vlib/copy.c:287
+#: ../lib/vector/Vlib/copy.c:309
 #, fuzzy, c-format
-msgid "Unable to export node %d. Exiting."
-msgstr "Невозможно разместить временное изображение"
+msgid "Writing node %d failed"
+msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/vector/Vlib/copy.c:321
+#: ../lib/vector/Vlib/copy.c:346
 #, fuzzy
 msgid "Exporting areas..."
 msgstr "Построение полигонов..."
 
-#: ../lib/vector/Vlib/copy.c:332
+#: ../lib/vector/Vlib/copy.c:357
 #, fuzzy, c-format
 msgid "No category defined for area %d. Area not exported."
 msgstr "Для слоя %d не определено соединение с базой данных"
 
-#: ../lib/vector/Vlib/copy.c:426 ../lib/vector/Vlib/copy.c:526
+#: ../lib/vector/Vlib/copy.c:389
+#, fuzzy, c-format
+msgid "Writing area %d failed"
+msgstr "Невозможно получить данные из таблицы <%s>"
+
+#: ../lib/vector/Vlib/copy.c:459 ../lib/vector/Vlib/copy.c:559
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
 msgstr "Невозможно добавить связь с базой данных для векторного слоя <%s>"
 
-#: ../lib/vector/Vlib/ascii.c:81
+#: ../lib/vector/Vlib/ascii.c:82
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (bad type) [%s]"
 msgstr "невозможно прочитать файл диапазона для [%s в %s]"
 
-#: ../lib/vector/Vlib/ascii.c:119
+#: ../lib/vector/Vlib/ascii.c:120
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (unknown type) [%s]"
 msgstr "невозможно прочитать файл диапазона для [%s в %s]"
 
-#: ../lib/vector/Vlib/ascii.c:132
+#: ../lib/vector/Vlib/ascii.c:133
 msgid "End of ASCII file reached before end of coordinates"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:143
+#: ../lib/vector/Vlib/ascii.c:144
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (bad point) [%s]"
 msgstr "невозможно прочитать файл диапазона для [%s в %s]"
 
-#: ../lib/vector/Vlib/ascii.c:147
+#: ../lib/vector/Vlib/ascii.c:148
 #, fuzzy, c-format
 msgid "Unparsable longitude value: [%s]"
 msgstr "Невозможно инициализировать pj причину: %s"
 
-#: ../lib/vector/Vlib/ascii.c:150
+#: ../lib/vector/Vlib/ascii.c:151
 #, c-format
 msgid "Unparsable latitude value: [%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:183
+#: ../lib/vector/Vlib/ascii.c:184
 msgid "End of ASCII file reached before end of categories"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:193
+#: ../lib/vector/Vlib/ascii.c:194
 #, fuzzy, c-format
 msgid "Error reading categories: [%s]"
 msgstr "невозможно прочитать файл диапазона для [%s в %s]"
 
-#: ../lib/vector/Vlib/ascii.c:205
+#: ../lib/vector/Vlib/ascii.c:206
 #, fuzzy
 msgid "Unable to write new feature"
 msgstr "Невозможно перезаписать объект %d"
 
-#: ../lib/vector/Vlib/ascii.c:243
+#: ../lib/vector/Vlib/ascii.c:244
 #, c-format
 msgid ""
 "Unexpected data in vector head:\n"
 "[%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:277
+#: ../lib/vector/Vlib/ascii.c:278
 #, fuzzy, c-format
 msgid "Unknown keyword <%s> in vector head"
 msgstr "Неизвестное ключевое слово %s в заголовке вектора"
 
-#: ../lib/vector/Vlib/ascii.c:399
+#: ../lib/vector/Vlib/ascii.c:456
 #, fuzzy, c-format
 msgid "Unknown type of column <%s>, export cancelled"
 msgstr "Неизвестный тип поля (поле <%s>)"
 
-#: ../lib/vector/Vlib/ascii.c:519
+#: ../lib/vector/Vlib/ascii.c:576
 #, fuzzy, c-format
 msgid "Unknown feature type %d"
 msgstr "Неизвестный тип вектора."
 
-#: ../lib/vector/Vlib/ascii.c:554
+#: ../lib/vector/Vlib/ascii.c:611
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr "Невозможно выбрать записи из таблицы <%s> (ключ %s, где %s)"
 
-#: ../lib/vector/Vlib/ascii.c:584
+#: ../lib/vector/Vlib/ascii.c:641
 #, c-format
 msgid "Feature has more categories. Only first category (%d) is exported."
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:601
+#: ../lib/vector/Vlib/ascii.c:658
 #, fuzzy, c-format
 msgid "Cannot select attributes for cat = %d"
 msgstr "Невозможно выбрать атрибуты"
 
-#: ../lib/vector/Vlib/ascii.c:607
+#: ../lib/vector/Vlib/ascii.c:664
 #, fuzzy
 msgid "Unable to fetch data from table"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/vector/Vlib/ascii.c:641
+#: ../lib/vector/Vlib/ascii.c:698
 #, fuzzy, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr "Nviz_new_map_obj(): тип данных не поддерживается"
 
-#: ../lib/vector/Vlib/ascii.c:722
+#: ../lib/vector/Vlib/ascii.c:779
 #, fuzzy
 msgid "Unknown format"
 msgstr "неизвестный оператор"
 
-#: ../lib/vector/Vlib/ascii.c:731
+#: ../lib/vector/Vlib/ascii.c:789
 msgid "Topology not available, unable to process areas"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:744
+#: ../lib/vector/Vlib/ascii.c:802
 #, fuzzy, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr "Невозможно перезаписать объект %d"
 
-#: ../lib/vector/Vlib/ascii.c:756
+#: ../lib/vector/Vlib/ascii.c:814
 #, fuzzy, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr "Невозможно установить категорию %d для (id объекта %d)"
@@ -6639,11 +6936,6 @@ msgstr "Количество полигонов без центроидов: %d"
 msgid "Duplicate centroid %d, unable to delete area"
 msgstr ""
 
-#: ../lib/vector/vedit/delete.c:105
-#, fuzzy, c-format
-msgid "Area %d without centroid"
-msgstr "Количество полигонов без центроидов: %d"
-
 #: ../lib/vector/vedit/delete.c:121
 #, fuzzy, c-format
 msgid "Area %d has no boundaries"
@@ -6658,7 +6950,7 @@ msgstr "Невозможно установить категорию %d для (
 msgid "Unknown query tool"
 msgstr "Неизвестный инструмент запроса"
 
-#: ../lib/cluster/c_exec.c:42
+#: ../lib/cluster/c_exec.c:44
 #, c-format
 msgid "Not enough data points (%d) in cluster"
 msgstr ""
@@ -7087,7 +7379,7 @@ msgstr "Неправильное имя выходного растрового 
 msgid "Output raster map <%s> is used as input"
 msgstr "Выходной растровый слой <%s> используется как исходный"
 
-#: ../lib/gis/ls.c:99
+#: ../lib/gis/ls.c:103
 #, c-format
 msgid "Unable to open directory %s"
 msgstr "Невозможно открыть папку %s"
@@ -7101,23 +7393,23 @@ msgstr "GISRC - переменная не установлена"
 msgid "Variable '%s' not set"
 msgstr "G_getenv(): Переменная %s не установлена"
 
-#: ../lib/gis/gisinit.c:50 ../lib/gis/gisinit.c:82
+#: ../lib/gis/gisinit.c:51 ../lib/gis/gisinit.c:83
 msgid ""
 "Incompatible library version for module. You need to rebuild GRASS or "
 "untangle multiple installations."
 msgstr ""
 
-#: ../lib/gis/gisinit.c:60
+#: ../lib/gis/gisinit.c:61
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "НАБОР %s - доступ запрещен"
 
-#: ../lib/gis/gisinit.c:63
-#, c-format
-msgid "MAPSET %s not found"
+#: ../lib/gis/gisinit.c:64
+#, fuzzy, c-format
+msgid "MAPSET %s not found at %s"
 msgstr "НАБОР %s не найден"
 
-#: ../lib/gis/gisinit.c:96
+#: ../lib/gis/gisinit.c:97
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr ""
 "Система не инициализирована. Программистов не выполнен вызов G_gisinit()."
@@ -7132,91 +7424,91 @@ msgstr "Невозможно установить фокус"
 msgid "Seek offset out of range"
 msgstr "Индекс слоя вне диапазона"
 
-#: ../lib/gis/adj_cellhd.c:44 ../lib/gis/adj_cellhd.c:192
+#: ../lib/gis/adj_cellhd.c:42 ../lib/gis/adj_cellhd.c:191
 msgid "Illegal n-s resolution value"
 msgstr "Неверно задано разрешение север-юг"
 
-#: ../lib/gis/adj_cellhd.c:48 ../lib/gis/adj_cellhd.c:198
+#: ../lib/gis/adj_cellhd.c:46 ../lib/gis/adj_cellhd.c:197
 msgid "Illegal row value"
 msgstr "Неправильная величина строки"
 
-#: ../lib/gis/adj_cellhd.c:52 ../lib/gis/adj_cellhd.c:204
+#: ../lib/gis/adj_cellhd.c:50 ../lib/gis/adj_cellhd.c:203
 msgid "Illegal e-w resolution value"
 msgstr "Неверно задано разрешение восток-запад"
 
-#: ../lib/gis/adj_cellhd.c:56 ../lib/gis/adj_cellhd.c:210
+#: ../lib/gis/adj_cellhd.c:54 ../lib/gis/adj_cellhd.c:209
 msgid "Illegal col value"
 msgstr "Неправильная величина столбца"
 
-#: ../lib/gis/adj_cellhd.c:76 ../lib/gis/adj_cellhd.c:240
+#: ../lib/gis/adj_cellhd.c:74 ../lib/gis/adj_cellhd.c:239
 #, c-format
 msgid "Fixing subtle input data rounding error of north boundary (%g>%g)"
 msgstr "Исправление ошибки округления для северной границы (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:245
+#: ../lib/gis/adj_cellhd.c:79 ../lib/gis/adj_cellhd.c:244
 msgid "Illegal latitude for North"
 msgstr "Неправильная широта для Севера"
 
-#: ../lib/gis/adj_cellhd.c:87 ../lib/gis/adj_cellhd.c:251
+#: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:250
 #, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
 msgstr "Исправление ошибки округления для южной границы (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:92 ../lib/gis/adj_cellhd.c:256
+#: ../lib/gis/adj_cellhd.c:90 ../lib/gis/adj_cellhd.c:255
 msgid "Illegal latitude for South"
 msgstr "Неправильная широта для Юга"
 
-#: ../lib/gis/adj_cellhd.c:104 ../lib/gis/adj_cellhd.c:268
+#: ../lib/gis/adj_cellhd.c:102 ../lib/gis/adj_cellhd.c:267
 #, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
 msgstr "Исправление ошибки округления для западной границы (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:279
+#: ../lib/gis/adj_cellhd.c:113 ../lib/gis/adj_cellhd.c:278
 #, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
 msgstr "Исправление ошибки округления для восточной границы (%g>%g)"
 
-#: ../lib/gis/adj_cellhd.c:128 ../lib/gis/adj_cellhd.c:292
+#: ../lib/gis/adj_cellhd.c:126 ../lib/gis/adj_cellhd.c:291
 msgid "North must be north of South"
 msgstr "Север должен быть к северу от Юга"
 
-#: ../lib/gis/adj_cellhd.c:130 ../lib/gis/adj_cellhd.c:294
+#: ../lib/gis/adj_cellhd.c:128 ../lib/gis/adj_cellhd.c:293
 msgid "North must be larger than South"
 msgstr "Север должен быть больше Юга"
 
-#: ../lib/gis/adj_cellhd.c:133 ../lib/gis/adj_cellhd.c:297
+#: ../lib/gis/adj_cellhd.c:131 ../lib/gis/adj_cellhd.c:296
 msgid "East must be larger than West"
 msgstr "Восток должен быть больше Запада"
 
-#: ../lib/gis/adj_cellhd.c:152 ../lib/gis/adj_cellhd.c:341
+#: ../lib/gis/adj_cellhd.c:150 ../lib/gis/adj_cellhd.c:340
 msgid "Invalid coordinates"
 msgstr "Неверные координаты"
 
-#: ../lib/gis/adj_cellhd.c:194
+#: ../lib/gis/adj_cellhd.c:193
 msgid "Illegal n-s3 resolution value"
 msgstr "Неправильное разрешение n-s3"
 
-#: ../lib/gis/adj_cellhd.c:200
+#: ../lib/gis/adj_cellhd.c:199
 msgid "Illegal row3 value"
 msgstr "Неправильное значение row3"
 
-#: ../lib/gis/adj_cellhd.c:206
+#: ../lib/gis/adj_cellhd.c:205
 msgid "Illegal e-w3 resolution value"
 msgstr "Неправильное разрешение e-w3"
 
-#: ../lib/gis/adj_cellhd.c:212
+#: ../lib/gis/adj_cellhd.c:211
 msgid "Illegal col3 value"
 msgstr "Неправильное значение col3"
 
-#: ../lib/gis/adj_cellhd.c:216
+#: ../lib/gis/adj_cellhd.c:215
 msgid "Illegal t-b3 resolution value"
 msgstr "Неправильное разрешение t-b3"
 
-#: ../lib/gis/adj_cellhd.c:220
+#: ../lib/gis/adj_cellhd.c:219
 msgid "Illegal depths value"
 msgstr "Неправильное значение глубины"
 
-#: ../lib/gis/adj_cellhd.c:300
+#: ../lib/gis/adj_cellhd.c:299
 msgid "Top must be larger than Bottom"
 msgstr "Верх должен быть больше Низа"
 
@@ -7353,6 +7645,11 @@ msgstr ""
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "Ошибка: опция <%s>: <%s> существует.\n"
+
+#: ../lib/gis/parser.c:1424
+#, fuzzy
+msgid "No separator given"
+msgstr "Разделитель полей"
 
 #: ../lib/gis/home.c:35
 #, fuzzy
@@ -7686,34 +7983,19 @@ msgstr "невозможно прочитать файл диапазона дл
 msgid "Error closing input file <%s>"
 msgstr "Ошибка закрытия g3d файла"
 
-#: ../lib/gis/paths.c:205
+#: ../lib/gis/paths.c:201
 #, fuzzy, c-format
 msgid "Unable to open file <%s> for reading"
 msgstr "Невозможно открыть файл <%s> для записи"
 
-#: ../lib/gis/paths.c:221
+#: ../lib/gis/paths.c:217
 #, fuzzy, c-format
 msgid "Unable to fetch security info for <%s>"
 msgstr "невозможно записать историю для [%s]"
 
-#: ../lib/gis/paths.c:237
-#, fuzzy
-msgid "Unable to look up account id"
-msgstr "Невозможно открыть кодэк"
-
-#: ../lib/gis/paths.c:244
-#, fuzzy
-msgid "Unable to allocate memory for account name"
-msgstr "Невозможно выделить память для нулевого буфера"
-
-#: ../lib/gis/paths.c:250
-#, fuzzy
-msgid "Unable to allocate memory for domain name"
-msgstr "Невозможно выделить память для нулевого буфера"
-
-#: ../lib/gis/location.c:58
-#, c-format
-msgid "LOCATION << %s >> not available"
+#: ../lib/gis/location.c:61
+#, fuzzy, c-format
+msgid "LOCATION <%s> not available"
 msgstr "Область << %s >> недоступна"
 
 #: ../lib/gis/myname.c:46
@@ -7968,6 +8250,20 @@ msgid "Layer number or name"
 msgstr "Номер слоя"
 
 #: ../lib/gis/parser_standard_options.c:459
+#, fuzzy
+msgid ""
+"Vector features can have category values in different layers. This number "
+"determines which layer to use. When used with direct OGR access this is the "
+"layer name."
+msgstr ""
+"Единственная векторная карта может быть подключена к нескольким таблицами "
+"базы данных. Это число определяет какую таблицу использовать."
+
+#: ../lib/gis/parser_standard_options.c:469
+#, fuzzy
+msgid "Layer number or name ('-1' for all layers)"
+msgstr "Слой номер %d или имя <%s> уже существует"
+
 #: ../lib/gis/parser_standard_options.c:471
 #, fuzzy
 msgid ""
@@ -7977,11 +8273,6 @@ msgid ""
 msgstr ""
 "Единственная векторная карта может быть подключена к нескольким таблицами "
 "базы данных. Это число определяет какую таблицу использовать."
-
-#: ../lib/gis/parser_standard_options.c:469
-#, fuzzy
-msgid "Layer number or name ('-1' for all layers)"
-msgstr "Слой номер %d или имя <%s> уже существует"
 
 #: ../lib/gis/parser_standard_options.c:480
 msgid "Category value"
@@ -8230,9 +8521,14 @@ msgstr "Опции"
 msgid "Default"
 msgstr "По умолчанию"
 
-#: ../lib/gis/mapset.c:37
+#: ../lib/gis/mapset.c:38
 msgid "MAPSET is not set"
 msgstr "НАБОР не задан"
+
+#: ../lib/gis/mapset.c:80
+#, fuzzy, c-format
+msgid "MAPSET <%s> not available"
+msgstr "Область << %s >> недоступна"
 
 #: ../lib/gis/distance.c:154
 #, fuzzy, c-format
@@ -8241,7 +8537,7 @@ msgstr ""
 "G_distance_point_to_line_segment: не должно быть: code=%d P=(%f,%f) S=(%f,%f)"
 "(%f,%f)"
 
-#: ../lib/gis/debug.c:81
+#: ../lib/gis/debug.c:80
 #, c-format
 msgid "Cannot open debug file '%s'"
 msgstr "Невозможно открыть debug-файл '%s'"
@@ -8305,26 +8601,21 @@ msgstr "Невозможно создать таблицу <%s>"
 msgid "Unknown column type (column <%s>)"
 msgstr "Неизвестный тип поля (поле <%s>)"
 
-#: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:220
-#: ../lib/db/dbmi_client/select.c:286
+#: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
+#: ../lib/db/dbmi_client/select.c:288
 msgid "Missing column name"
 msgstr ""
 
-#: ../lib/db/dbmi_client/select.c:215 ../lib/db/dbmi_client/select.c:281
+#: ../lib/db/dbmi_client/select.c:216 ../lib/db/dbmi_client/select.c:283
 msgid "Missing key column name"
 msgstr ""
 
-#: ../lib/db/dbmi_client/select.c:314
-#, c-format
-msgid "Unable select records from table <%s>"
-msgstr "Невозможно выбрать записи из таблицы <%s>"
-
-#: ../lib/db/dbmi_client/select.c:330
+#: ../lib/db/dbmi_client/select.c:333
 #, fuzzy
 msgid "Key column type is not integer"
 msgstr "Поле <%s> не целочисленное"
 
-#: ../lib/db/dbmi_driver/d_error.c:57
+#: ../lib/db/dbmi_driver/d_error.c:35
 #, c-format
 msgid "DBMI-%s driver error:"
 msgstr ""
@@ -8463,9 +8754,69 @@ msgstr "Неправильное имя таблицы <%s>. Должно нач
 msgid "Illegal table map name <%s>. Character <%c> not allowed."
 msgstr "Неправильное имя таблицы <%s>. Символ <%c> использовать нельзя.\n"
 
+#: ../lib/db/dbmi_base/default_name.c:136
+#, fuzzy
+msgid "Programmer error"
+msgstr "Возможная программная ошибка."
+
 #: ../lib/db/dbmi_base/xdrvalue.c:82
 msgid "send data: invalid C-type"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to open signature file <%s> for subgroup <%s> of group <%s@%s>"
+#~ msgstr ""
+#~ "Невозможно открыть файл [%s] для подгруппы [%s] или группы [%s в %s]"
+
+#~ msgid "Unable to open topo file for write <%s>"
+#~ msgstr " Невозможно открыть топо-файл для записи <%s>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to get number of records for:\n"
+#~ "%s"
+#~ msgstr "Невозможно перезаписать объект %d"
+
+#, fuzzy
+#~ msgid "Unable to read node %d"
+#~ msgstr "Невозможно прочитать линию %d"
+
+#, fuzzy
+#~ msgid "Unable to read nodes"
+#~ msgstr "Невозможно прочитать линию %d"
+
+#, fuzzy
+#~ msgid "Unable to read lines"
+#~ msgstr "Невозможно прочитать линию %d"
+
+#, fuzzy
+#~ msgid "Unable to attach centroids"
+#~ msgstr "Невозможно рассчитать центроид для полигона %d"
+
+#, fuzzy
+#~ msgid "Unexpected feature type (%s) - should be (%d)"
+#~ msgstr "Тип объекта"
+
+#, fuzzy
+#~ msgid "Unable to read centroid %d: %s"
+#~ msgstr "Невозможно перезаписать объект %d"
+
+#, fuzzy
+#~ msgid "Unable to export node %d. Exiting."
+#~ msgstr "Невозможно разместить временное изображение"
+
+#, fuzzy
+#~ msgid "Unable to look up account id"
+#~ msgstr "Невозможно открыть кодэк"
+
+#, fuzzy
+#~ msgid "Unable to allocate memory for account name"
+#~ msgstr "Невозможно выделить память для нулевого буфера"
+
+#, fuzzy
+#~ msgid "Unable to allocate memory for domain name"
+#~ msgstr "Невозможно выделить память для нулевого буфера"
 
 #~ msgid "cell_values_float: xdr_float failed for index %d"
 #~ msgstr "cell_values_float: xdr_float завершен неудачно для индекса %d"
