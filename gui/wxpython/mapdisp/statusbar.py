@@ -955,7 +955,7 @@ class SbCompRegionExtent(SbRegionExtent):
     def __init__(self, mapframe, statusbar, position = 0):
         SbRegionExtent.__init__(self, mapframe, statusbar, position)
         self.name = 'computationalRegion'
-        self.label = _("Comp. region")
+        self.label = _("Computational region")
         
     def _formatRegion(self, w, e, s, n, ewres, nsres, precision = None):
         """!Format computational region string for statusbar"""
