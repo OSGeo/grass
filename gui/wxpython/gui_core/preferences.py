@@ -1208,8 +1208,23 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
 
-        # epsg
+        # note + button
         row = 0
+        note0 = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                             label = _("\nNote: This only controls the coordinates "
+                                       "displayed in the lower-left of the Map "
+                                       "Display\nwindow's status bar. It is purely "
+                                       "cosmetic and does not affect the working "
+                                       "location's\nprojection in any way. You will "
+                                       "need to enable the Projection check box in "
+                                       "the drop-down\nmenu located at the bottom "
+                                       "of the Map Display window."))
+        gridSizer.Add(item = note0,
+                      span = (1, 2),
+                      pos = (row, 0))
+
+        # epsg
+        row += 1
         label = wx.StaticText(parent = panel, id = wx.ID_ANY,
                               label = _("EPSG code:"))
         epsgCode = wx.ComboBox(parent = panel, id = wx.ID_ANY,
@@ -1224,7 +1239,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(item = epsgCode,
                       pos = (row, 1), span = (1, 2))
-        
+
         # proj
         row += 1
         label = wx.StaticText(parent = panel, id = wx.ID_ANY,
