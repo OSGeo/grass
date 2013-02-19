@@ -110,11 +110,10 @@ parse_args(int argc, char *argv[]) {
   d8cut->key  = "d8cut";
   d8cut->type = TYPE_DOUBLE;
   d8cut->required = NO;
-  d8cut->answer = G_store("infinity"); /* default value */
   d8cut->label = _("Routing using SFD (D8) direction");
   d8cut->description = 
     _("If flow accumulation is larger than this value it is routed using "
-      "SFD (D8) direction (meaningfull only  for MFD flow)");
+      "SFD (D8) direction (meaningfull only  for MFD flow). No answer for infinity.");
   
   /* main memory */
   struct Option *mem;
@@ -122,7 +121,7 @@ parse_args(int argc, char *argv[]) {
   mem->key         = "memory";
   mem->type        = TYPE_INTEGER;
   mem->required    = NO;
-  mem->answer      = G_store("300"); /* 300MB default value */
+  mem->answer      = "300"; /* 300MB default value */
   mem->description = _("Maximum runtime memory size (in MB)");
 
   /* temporary STREAM path */
@@ -160,7 +159,7 @@ parse_args(int argc, char *argv[]) {
 #endif
 
   opt->d8 = sfd_flag->answer;
-  if (strcmp(d8cut->answer, "infinity") == 0) {
+  if (!d8cut->answer) {
     opt->d8cut = MAX_ACCU;
   } else {
     opt->d8cut = atof(d8cut->answer);
