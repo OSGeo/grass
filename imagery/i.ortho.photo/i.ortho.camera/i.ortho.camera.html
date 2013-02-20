@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>i.photo.camera</EM> creates or modifies entries in a camera reference
+<em>i.ortho.camera</em> creates or modifies entries in a camera reference
 file. For ortho-photo rectification, a camera reference file is required for
 computation of scanned image to photo-coordinate transformation parameters.
 There are two coordinate systems: The image coordinate system (in pixels)
@@ -8,24 +8,24 @@ and the photo coordinate system (in milli-meters). The inner orientation
 establishes a relation between the pixels and the image coordinates with
 help of fiducial marks.
 
-<P>
+<p>
 
 The first prompt in the program will ask you for the name of 
 the camera reference file to be created or modified.  You may
 create a new camera reference file by entering a new name, or modify an
 existing camera reference file by entering the name of an existing camera file.
 
-<P>
+<p>
 After entering the camera file name, following menu is displayed:
-<P>
+<p>
 Please provide the following information
 
 
-<P>
-<PRE>
+<p>
+<pre>
 
-	CAMERA NAME:               <EM>camera name</EM>______
-	CAMERA IDENTIFICATION:     <EM>identification</EM>___
+	CAMERA NAME:               <em>camera name</em>______
+	CAMERA IDENTIFICATION:     <em>identification</em>___
 	CALIBRATED FOCAL LENGTH mm.:_________________
 	POINT OF SYMMETRY (X)   mm.:_________________
 	POINT OF SYMMETRY (Y)   mm.:_________________
@@ -33,7 +33,7 @@ Please provide the following information
 
    AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
                (OR &lt;Ctrl-C&gt; TO CANCEL)
-</PRE>
+</pre>
 
 The camera name and identification describe the camera reference file.
 The calibrated focal length and the point of symmetry are used in computing 
@@ -54,7 +54,7 @@ fiducial marks. In the ideal case of no deviations in the camera (see camera
 calibration certificate) the center is the origin and the values are 0 for
 both X and Y of Point of Symmetry. But usually the principal point does not
 fall on the intersection of the radii at the center of the picture. This
-excentricity is usually of the order of a few micrometers. <P>
+excentricity is usually of the order of a few micrometers. <p>
 
 You are then asked to enter the X and Y photo coordinates of each fiducial
 as follows.
@@ -64,15 +64,15 @@ determine the number of fiducial or reseau coordinate pairs to be entered
 below. The origin is the center of the image (or the point of symmetry) and
 X and Y are left-right and up-down. The order is up to the user, but must be
 kept consistent throughout the rectification process.
-<P>
+<p>
 
 On this screen you should enter the fiducial or
 reseau photo-coordinates as given in the camera calibration report. The X,
 and Y coordinates are in milli-meters from the principle point.
 
-<P>
+<p>
 Please provide the following information
-<PRE>
+<pre>
 	Fid#	FID ID		  X          Y
 
 	1__	_____		0.0___	0.0___
@@ -90,22 +90,22 @@ Please provide the following information
 
      AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
                     (OR &lt;Ctrl-C&gt; TO CANCEL)
-</PRE>
+</pre>
 The input display is repeated until the number of MAXIMUM FIDUCIALS 
 is reached.  
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="i.ortho.photo.html">i.ortho.photo</A>,
-<A HREF="i.photo.2image.html">i.photo.2image</A>,
-<A HREF="i.photo.2target.html">i.photo.2target</A>,
-<A HREF="i.photo.init.html">i.photo.init</A>
-</EM>
+<em>
+<a href="i.ortho.photo.html">i.ortho.photo</a>,
+<a href="i.photo.2image.html">i.photo.2image</a>,
+<a href="i.photo.2target.html">i.photo.2target</a>,
+<a href="i.ortho.init.html">i.ortho.init</a>
+</em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Mike Baba, DBA Systems, Inc.
 
