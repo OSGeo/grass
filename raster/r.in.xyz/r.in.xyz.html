@@ -4,12 +4,14 @@ The <em>r.in.xyz</em> module will load and bin ungridded x,y,z ASCII data
 into a new raster map. The user may choose from a variety of statistical
 methods in creating the new raster. Gridded data provided as a stream of
 x,y,z points may also be imported.
+
 <p>
-Please note that the current region extents and resolution are used for 
-the import. It is therefore recommended to first use the <em>-s</em> 
-flag to get the extents of the input points to be imported, then 
-adjust the current region accordingly and only now proceed with the 
+Please note that the current region extents and resolution are used for
+the import. It is therefore recommended to first use the <em>-s</em>
+flag to get the extents of the input points to be imported, then
+adjust the current region accordingly, and only then proceed with the
 actual import.
+
 <p>
 <em>r.in.xyz</em> is designed for processing massive point cloud datasets,
 for example raw LIDAR or sidescan sonar swath data. It has been tested with
