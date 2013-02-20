@@ -3,17 +3,20 @@
 The <em>r.in.lidar</em> module will load and bin LAS LiDAR point clouds
 into a new raster map. The user may choose from a variety of statistical
 methods in creating the new raster.
+
 <p>
-Please note that the current region extents and resolution are used for 
-the import. It is therefore recommended to first use the <em>-s</em> 
-flag to get the extents of the LiDAR point cloud to be imported, then 
-adjust the current region accordingly and only now proceed with the 
+Please note that the current region extents and resolution are used for
+the import. It is therefore recommended to first use the <em>-s</em>
+flag to get the extents of the LiDAR point cloud to be imported, then
+adjust the current region accordinglyi, and only then proceed with the
 actual import.
+
 <p>
 <em>r.in.lidar</em> is designed for processing massive point cloud datasets,
-for example raw LIDAR or sidescan sonar swath data. It has been tested with
+for example raw LiDAR or sidescan sonar swath data. It has been tested with
 datasets as large as tens of billion of points (705GB in a single file).
  <!-- Doug Newcomb, US Fish & Wildlife Service -->
+
 <p>
 Available statistics for populating the raster are:<br>
 <ul>
