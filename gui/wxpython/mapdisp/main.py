@@ -4,12 +4,17 @@
 @brief Start Map Display as standalone application
 
 Classes:
+ - mapdisp::DMonMap
+ - mapdisp::Layer
+ - mapdisp::LayerList
+ - mapdisp::DMonGrassInterface
+ - mapdisp::DMonFrame
  - mapdisp::MapApp
 
 Usage:
 python mapdisp/main.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
