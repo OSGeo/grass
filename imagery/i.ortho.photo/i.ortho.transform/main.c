@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       i.ortho.transform   (cloned from m.tranform nee g.transform)
+ * MODULE:       i.ortho.transform   (cloned from m.transform and g.transform)
  * AUTHOR(S):    Brian J. Buckley
  *               Glynn Clements
  *               Hamish Bowman

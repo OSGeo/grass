@@ -1,32 +1,32 @@
 <H2>DESCRIPTION</H2>
 
-<EM>i.photo.rectify</EM> rectifies an image by using the image to photo
-coordinate transformation matrix created by <A HREF="i.photo.2image.html">i.photo.2image</A>
-and the rectification parameters created by <A HREF="i.photo.2target.html">i.photo.2target</A>.
+<em>i.photo.rectify</em> rectifies an image by using the image to photo
+coordinate transformation matrix created by <a href="i.photo.2image.html">i.photo.2image</a>
+and the rectification parameters created by <a href="i.photo.2target.html">i.photo.2target</a>.
 Rectification is the process by which the geometry of an image is made
 planimetric.  This is accomplished by mapping an image from one coordinate
-system to another. In <EM>i.photo.rectify</EM> the parameters computed by
-<A HREF="i.photo.2image.html">i.photo.2image</A> and
-<A HREF="i.photo.2target.html">i.photo.2target</A> are used in equations to
+system to another. In <em>i.photo.rectify</em> the parameters computed by
+<a href="i.photo.2image.html">i.photo.2image</a> and
+<a href="i.photo.2target.html">i.photo.2target</a> are used in equations to
 convert x,y image coordinates to standard map coordinates for each pixel in
 the image.  The result is an image with a standard map coordinate system,
 compensated for relief distortions and photographic tilt. Upon completion of
 the program the rectified image is deposited in a previously targeted GRASS
 LOCATION.
-<P>
+<p>
 Images can be resampled with various different interpolation methods: 
 nearest neighbor assignment, bilinear and bicubic interpolation. The 
 bilinear and bicubic interpolation methods are also available with a
 fallback option. These methods "fall back" to simpler interpolation 
 methods along NULL borders. That is, from bicubic to bilinear to nearest.
-<P>
+<p>
 The process may take an hour or more depending on the size of the image,
 the speed of the computer, the number files, and the size and resolution
 of the selected window.
-<P>
+<p>
 The rectified image will be located in the target LOCATION when the program
 is completed. The original unrectified files are not modified or removed.
-<P>
+<p>
 The optional <em>angle</em> output holds the camera angle in degrees to
 the local surface, considering local slope and aspect. A value of 90 
 degrees indicates that the camera angle was orthogonal to the local 
@@ -37,46 +37,46 @@ degrees indicate problem areas where the orthorectified output will
 appear blurred. Because terrain shadowing effects are not considered, 
 areas with high camera angles may also appear blurred if they are located
 (viewed from the camera position) behind mountain ridges or peaks.
-<P>
-<EM>i.photo.rectify</EM> can be run directly, specifying options in the 
+<p>
+<em>i.photo.rectify</em> can be run directly, specifying options in the 
 command line or the GUI, or it can be invoked as OPTION 8 through 
-<A HREF="i.ortho.photo.html">i.ortho.photo</A>. If invoked though 
-<A HREF="i.ortho.photo.html">i.ortho.photo</A>, an interactive terminal 
+<a href="i.ortho.photo.html">i.ortho.photo</a>. If invoked though 
+<a href="i.ortho.photo.html">i.ortho.photo</a>, an interactive terminal 
 is used to determine the options.
 
 <H4>Interactive mode</H4>
-<P> You are first asked if all images within the imagery group should 
+<p> You are first asked if all images within the imagery group should 
 be rectified. If this option is not chosen, you are asked to specify for 
 each image within the imagery group whether it should be rectified or not.
-<P>
+<p>
 More than one file may be rectified at a time. Each file
 should have a unique output file name. The next prompt asks you for an 
 extension to be appended to the rectified images.
-<P>
+<p>
 The next prompt will ask you whether a camera angle map should be 
 produced and if yes, what should be its name.
-<P>
+<p>
 After that you are asked if overwriting existing maps in the target 
 location and mapset should be allowed.
-<P>
+<p>
 The next prompt asks you to select one of two windows:
-<P>
-<PRE>
+<p>
+<pre>
       Please select one of the following options
       1.   Use the current window in the target location
       2.   Determine the smallest window which covers the image
       &gt;
-</PRE>
-<P>
+</pre>
+<p>
 If you choose option 2, you can also specify a desired target resolution.
-<P>
-<EM>i.photo.rectify</EM> will only rectify that portion of the
+<p>
+<em>i.photo.rectify</em> will only rectify that portion of the
 image that occurs within the chosen window.  Only that portion will be
 relocated in the target database. It is therefore important to check the
 current window in the target LOCATION if choice number one is selected.
-<P>
+<p>
 Next you are asked to select an interpolation method.
-<PRE>
+<pre>
       Please select one of the following interpolation methods
       1. nearest neighbor
       2. bilinear
@@ -84,21 +84,21 @@ Next you are asked to select an interpolation method.
       4. bilinear with fallback
       5. bicubic with fallback
       &gt;
-</PRE>
-<P>
+</pre>
+<p>
 The last prompt will ask you about the amount of memory to be used by
-<EM>i.photo.rectify</EM>.
+<em>i.photo.rectify</em>.
 
 <H2>SEE ALSO</H2>
 
-<EM>
-<A HREF="i.ortho.photo.html">i.ortho.photo</A><br>
-<A HREF="i.photo.camera.html">i.photo.camera</A><br>
-<A HREF="i.photo.2image.html">i.photo.2image</A><br>
-<A HREF="i.photo.2target.html">i.photo.2target</A><br>
-<A HREF="i.photo.init.html">i.photo.init</A><br>
-<A HREF="i.rectify.html">i.rectify</A><br>
-</EM>
+<em>
+<a href="i.ortho.photo.html">i.ortho.photo</a><br>
+<a href="i.ortho.camera.html">i.ortho.camera</a><br>
+<a href="i.photo.2image.html">i.photo.2image</a><br>
+<a href="i.photo.2target.html">i.photo.2target</a><br>
+<a href="i.ortho.init.html">i.ortho.init</a><br>
+<a href="i.rectify.html">i.rectify</a>
+</em>
 
 
 <H2>AUTHOR</H2>

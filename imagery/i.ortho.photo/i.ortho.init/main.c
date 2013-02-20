@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       i.photo.init
+ * MODULE:       i.ortho.init (former i.photo.init)
  * AUTHOR(S):    Mike Baba,  DBA Systems, Inc. (original contributor)
  *               Markus Neteler <neteler itc.it>, 
  *               Roberto Flor <flor itc.it>, 

@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 Aerial photographs may be either vertical or oblique. Vertical photographs
 can be truly vertical (nadir), or slightly tilted (less than 3 degree
@@ -7,26 +7,26 @@ refer to the term <i>vertical photograph</i> up to a tilt of 3 degree.
 <br>
 Oblique aerial photographs are purposely taken with an
 angle between 3 and 90 degree from the nadir direction.
-<P>
-<b>The use of <EM>i.photo.init</EM> (menu 6) is only required when rectifying a
+<p>
+<b>The use of <em>i.ortho.init</em> (menu 6) is only required when rectifying a
 tilted or oblique aerial photo.</b>
-<P>
-<EM>i.photo.init</EM> creates or modifies entries in a camera initial exposure
+<p>
+<em>i.ortho.init</em> creates or modifies entries in a camera initial exposure
 station file for imagery group referenced by a sub-block.  These entries
 include: the (XC,YC,ZC) standard (e.g. UTM) approximate coordinates of the camera exposure
 station; initial roll, pitch, and yaw angles (in degrees) of the cameras
-attitude; and the <EM>a priori</EM> standard deviations for these
-parameters. During the imagery program, <EM>i.photo.rectify</EM>, the initial camera
+attitude; and the <em>a priori</em> standard deviations for these
+parameters. During the imagery program, <em>i.photo.rectify</em>, the initial camera
 exposure station file is used for computation of the ortho-rectification
 parameters.  If no initial camera exposure station file exist, the default
-values are computed from the control points file created in <EM><A
-HREF="i.photo.2target.html">i.photo.2target</A></EM>.
+values are computed from the control points file created in <em><A
+HREF="i.photo.2target.html">i.photo.2target</a></em>.
 
 
-<P>
+<p>
 
 The following menu is displayed:
-<PRE>
+<pre>
         Please provide the following information
 
 	INITIAL XC: Meters                __________
@@ -47,9 +47,9 @@ The following menu is displayed:
 
      AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
                   (OR &lt;Ctrl-C&gt; TO CANCEL)
-</PRE>
+</pre>
 
-<P>
+<p>
 The INITIAL values for (XC,YC,ZC) are expressed in standard (e.g. UTM) coordinates, and
 represent an approximation for the location of the camera at the time of 
 exposure.
@@ -60,7 +60,7 @@ exposure.
 <li> Z: Flight altitude above sea level
 </ul>
 
-<P>
+<p>
 
 The INITIAL values for (omega,phi,kappa) are expressed in degrees, and
 represent an approximation for the cameras attitude  at the time of 
@@ -75,34 +75,34 @@ exposure.
   needs to be denoted as +90 degree for clockwise turn and -90 degree for
   a counterclockwise turn.
 </ul>
-<P>
+<p>
 
 The standard deviations for (XC,YC,ZC) are expressed in meters, and
-are used as <EM>a priori</EM> values for the standard deviations used in 
+are used as <em>a priori</em> values for the standard deviations used in 
 computation of the ortho rectification parameters.
-<P>
+<p>
 
 The standard deviations for (omega,phi,kappa) are expressed in degrees, and
-are used as <EM>a priori</EM> values for the standard deviations used in 
+are used as <em>a priori</em> values for the standard deviations used in 
 computation of the ortho rectification parameters.
 
-<P>
+<p>
 If <i>Use these values at run time? (1=yes, 0=no)</i> is set to 0, the
 values in this menu are not used.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="i.ortho.photo.html">i.ortho.photo</A>,
-<A HREF="i.photo.camera.html">i.photo.camera</A>,
-<A HREF="i.photo.2image.html">i.photo.2image</A>,
-<A HREF="i.photo.2target.html">i.photo.2target</A>,
-<A HREF="i.photo.rectify.html">i.photo.rectify</A>
-</EM>
+<em>
+<a href="i.ortho.photo.html">i.ortho.photo</a>,
+<a href="i.ortho.camera.html">i.ortho.camera</a>,
+<a href="i.photo.2image.html">i.photo.2image</a>,
+<a href="i.photo.2target.html">i.photo.2target</a>,
+<a href="i.photo.rectify.html">i.photo.rectify</a>
+</em>
 
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Mike Baba,  DBA Systems, Inc.
 <p>
