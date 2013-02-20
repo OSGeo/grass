@@ -238,7 +238,7 @@ r"""Go <a href="index.html">back to help overview</a><br>
 message_tmpl = string.Template(\
 r"""Generated HTML docs in ${html_dir}/index.html
 ----------------------------------------------------------------------
-Following modules are missing the 'description.html' file in src code:
+Following modules are missing the 'modulename.html' file in src code:
 """)
 #"
 
