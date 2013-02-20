@@ -261,7 +261,7 @@ Full command index:
 message_tmpl = string.Template(\
 r"""Generated HTML docs in ${rest_dir}/index.txt
 ----------------------------------------------------------------------
-Following modules are missing the 'description.txt' file in src code:
+Following modules are missing the 'modulename.txt' file in src code:
 """)
 
 def check_for_desc_override(basename):
