@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     /* Define the different options */
     parm.map = G_define_standard_option(G_OPT_R_INPUT);
 
-    parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.output->description =
 	_("Name for output ARC-GRID file (use out=- for stdout)");
 
