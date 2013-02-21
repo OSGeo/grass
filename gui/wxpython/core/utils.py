@@ -304,11 +304,11 @@ def GetVectorNumberOfLayers(vector):
         Debug.msg(5, "utils.GetVectorNumberOfLayers(): vector map '%s' not found" % vector)
         return layers
     
-    ret, out, msg = RunCommand('v.db.connect',
+    ret, out, msg = RunCommand('v.category',
                                getErrorMsg = True,
                                read = True,
-                               flags = 'g',
-                               map = fullname,
+                               input = fullname,
+                               option = 'layers',
                                sep = ';')
     if ret != 0:
         sys.stderr.write(_("Vector map <%(map)s>: %(msg)s\n") % { 'map' : fullname, 'msg' : msg })
@@ -316,14 +316,8 @@ def GetVectorNumberOfLayers(vector):
     else:
         Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
     
-    for line in out.splitlines():
-        try:
-            layer = line.split(';')[0]
-            if '/' in layer:
-                layer = layer.split('/')[0]
-            layers.append(layer)
-        except IndexError:
-            pass
+    for layer in out.splitlines():
+        layers.append(layer)
     
     Debug.msg(3, "utils.GetVectorNumberOfLayers(): vector=%s -> %s" % \
                   (fullname, ','.join(layers)))
