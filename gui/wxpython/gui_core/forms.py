@@ -1371,19 +1371,34 @@ class CmdPanel(wx.Panel):
                         default_color, label_color = utils.color_resolve(p['default'])
                     if p.get('value','') !=  '' and p.get('value','') != 'none': # parameter previously set
                         default_color, label_color = utils.color_resolve(p['value'])
-                    if p.get('element', '') == 'color_none':
+                    if p.get('element', '') == 'color_none' or p.get('multiple', False):
                         this_sizer = wx.BoxSizer(orient = wx.HORIZONTAL)
                     else:
                         this_sizer = which_sizer
+                    colorSize = 150
+                    # For color selectors, this is a three-member array, holding the IDs of
+                    # the text control for multiple colors (or None),
+                    # the selector proper and either a "transparent" checkbox or None
+                    if p.get('multiple', False):
+                        txt = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY)
+                        this_sizer.Add(item = txt, proportion = 1,
+                                       flag = wx.ADJUST_MINSIZE | wx.LEFT | wx.TOP, border = 5)
+                        txt.Bind(wx.EVT_TEXT, self.OnSetValue)
+                        colorSize = 40
+                        label_color = ''
+                        p['wxId'] = [txt.GetId(),]
+                        which_sizer.Add(this_sizer, flag = wx.EXPAND | wx.RIGHT, border = 5)
+                    else:
+                        p['wxId'] = [None,]
+
                     btn_colour = csel.ColourSelect(parent = which_panel, id = wx.ID_ANY,
                                                    label = label_color, colour = default_color,
-                                                   pos = wx.DefaultPosition, size = (150,-1))
+                                                   pos = wx.DefaultPosition, size = (colorSize,-1))
                     this_sizer.Add(item = btn_colour, proportion = 0,
                                    flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
-                    # For color selectors, this is a two-member array, holding the IDs of
-                    # the selector proper and either a "transparent" button or None
-                    p['wxId'] = [btn_colour.GetId(),]
                     btn_colour.Bind(csel.EVT_COLOURSELECT,  self.OnColorChange)
+                    p['wxId'].append(btn_colour.GetId())
+
                     if p.get('element', '') == 'color_none':
                         none_check = wx.CheckBox(which_panel, wx.ID_ANY, _("Transparent"))
                         if p.get('value','')  == "none":
@@ -1397,6 +1412,7 @@ class CmdPanel(wx.Panel):
                         p['wxId'].append(none_check.GetId())
                     else:
                         p['wxId'].append(None)
+
                 # file selector
                 elif p.get('prompt','') !=  'color' and p.get('prompt', '') == 'file':
                     if p.get('age', 'new') == 'new':
@@ -1931,11 +1947,25 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
         for p in self.task.params:
             if 'wxId' in p and myId in p['wxId']:
-                has_button = p['wxId'][1] is not None
-                if has_button and wx.FindWindowById(p['wxId'][1]).GetValue() == True:
+                multiple = p['wxId'][0] is not None # multiple colors
+                hasTansp = p['wxId'][2] is not None
+                if multiple:
+                    # selected color is added at the end of textCtrl
+                    colorchooser = wx.FindWindowById(p['wxId'][1])
+                    new_color = colorchooser.GetValue()[:]
+                    new_label = utils.rgb2str.get(new_color, ':'.join(map(str, new_color)))
+                    textCtrl = wx.FindWindowById(p['wxId'][0])
+                    val = textCtrl.GetValue()
+                    sep = ','
+                    if val and val[-1] != sep:
+                        val += sep
+                    val += new_label
+                    textCtrl.SetValue(val)
+                    p[ 'value' ] = val
+                elif hasTansp and wx.FindWindowById(p['wxId'][2]).GetValue():
                     p[ 'value' ] = 'none'
                 else:
-                    colorchooser = wx.FindWindowById(p['wxId'][0])
+                    colorchooser = wx.FindWindowById(p['wxId'][1])
                     new_color = colorchooser.GetValue()[:]
                     # This is weird: new_color is a 4-tuple and new_color[:] is a 3-tuple
                     # under wx2.8.1
