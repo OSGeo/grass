@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
     if (open_level > 1) {
 	Vect_set_open_level(open_level);
 	if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < open_level) {
-	    G_warning(_("Can not open vector <%s> on level %d"),
+	    G_warning(_("Unable to open vector map <%s> at topological level %d"),
 			  Vect_get_full_name(&In), open_level);
 	    open_level = 1;
 	}
@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
     if (open_level == 1) {
 	Vect_set_open_level(open_level);
 	if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < open_level) {
-	    G_fatal_error(_("Can not open vector <%s> on level %d"),
+	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 			  Vect_get_full_name(&In), open_level);
 	}
     }
