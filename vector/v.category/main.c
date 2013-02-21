@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 	 * the input vector */
 	Vect_set_open_level(2);
 	if (Vect_open_old_head2(&In, in_opt->answer, "", field_opt->answer) < 2) {
-	    G_fatal_error(_("Can not open vector <%s> on level %d"),
+	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 			  Vect_get_full_name(&In), 2);
 	}
 	if (In.format == GV_FORMAT_NATIVE) {
