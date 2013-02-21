@@ -27,6 +27,7 @@ if __name__ == "__main__":
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
+from core.events      import gMapCreated
 from gui_core.gselect import Select
 from gui_core.forms   import GUI
 from core.settings    import UserSettings
@@ -503,20 +504,16 @@ class MapCalcFrame(wx.Frame):
         
     def OnDone(self, cmd, returncode):
         """!Add create map to the layer tree"""
-        if not self.addbox.IsChecked() or returncode != 0:
+        if returncode != 0:
             return
         name = self.newmaptxt.GetValue().strip(' "') + '@' + grass.gisenv()['MAPSET']
-        mapTree = self.parent.GetLayerTree()
-        if not mapTree.GetMap().GetListOfLayers(name = name):
-            mapTree.AddLayer(ltype = 'raster',
-                             lname = name,
-                             lcmd = ['d.rast', 'map=%s' % name],
-                             multiple = False)
-        
-        display = self.parent.GetLayerTree().GetMapDisplay()
-        if display and display.IsAutoRendered():
-            display.GetWindow().UpdateMap(render = True)
-        
+        ltype = 'rast'
+        if self.rast3d:
+            ltype = 'rast3d'
+        mapEvent = gMapCreated(self.GetId(),
+                               name=name, ltype=ltype, add=self.addbox.IsChecked())
+        wx.PostEvent(self, mapEvent)
+
     def OnSaveExpression(self, event):
         """!Saves expression to file
         """
