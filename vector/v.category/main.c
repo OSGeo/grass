@@ -29,6 +29,7 @@
 #define O_CHFIELD 6
 #define O_TYPE_REP 7		/* report number of features for each type */
 #define O_TRANS 8
+#define O_LYR 9
 
 #define FRTYPES 9		/* number of field report types */
 
@@ -97,7 +98,7 @@ int main(int argc, char *argv[])
     option_opt->type = TYPE_STRING;
     option_opt->required = YES;
     option_opt->multiple = NO;
-    option_opt->options = "add,del,chlayer,sum,report,print,transfer";
+    option_opt->options = "add,del,chlayer,sum,report,print,layers,transfer";
     option_opt->description = _("Action to be done");
     desc = NULL;
     G_asprintf(&desc,
@@ -107,14 +108,16 @@ int main(int argc, char *argv[])
 	       "sum;%s;"
 	       "transfer;%s;"
 	       "report;%s;"
-	       "print;%s",
+	       "print;%s;"
+	       "layers;%s",
 	       _("add a new category"),
 	       _("delete category (-1 to delete all categories of given layer)"),
 	       _("change layer number (e.g. layer=3,1 changes layer 3 to layer 1)"),
 	       _("add the value specified by cat option to the current category value"),
 	       _("copy values from one layer to another (e.g. layer=1,2,3 copies values from layer 1 to layer 2 and 3)"),
 	       _("print report (statistics), in shell style: layer type count min max"),
-	       _("print category values, more cats in the same layer are separated by '/'"));
+	       _("print category values, more cats in the same layer are separated by '/'"),
+	       _("print only layer numbers"));
     option_opt->descriptions = desc;
     
     cat_opt = G_define_standard_option(G_OPT_V_CAT);
@@ -163,6 +166,33 @@ int main(int argc, char *argv[])
     case ('p'):
 	option = O_PRN;
 	break;
+    case ('l'):
+	option = O_LYR;
+	break;
+    }
+
+    if (option == O_LYR) {
+	/* print vector layer numbers */
+	/* open vector on level 2 head only, this is why this option
+	 * is processed here, all other options need (?) to fully open 
+	 * the input vector */
+	Vect_set_open_level(2);
+	if (Vect_open_old_head2(&In, in_opt->answer, "", field_opt->answer) < 2) {
+	    G_fatal_error(_("Can not open vector <%s> on level %d"),
+			  Vect_get_full_name(&In), 2);
+	}
+	if (In.format == GV_FORMAT_NATIVE) {
+	    nfields = Vect_cidx_get_num_fields(&In);
+	    for (i = 0; i < nfields; i++) {
+		if ((field = Vect_cidx_get_field_number(&In, i)) > 0)
+		    fprintf(stdout, "%d\n", field);
+	    }
+	}
+	else
+	    fprintf(stdout, "%s\n", field_opt->answer);
+
+	Vect_close(&In);
+	exit(EXIT_SUCCESS);
     }
 
     cat = atoi(cat_opt->answer);
@@ -186,7 +216,7 @@ int main(int argc, char *argv[])
 	Clist = NULL;
     }
 
-    if ((option != O_REP) && (option != O_PRN)) {
+    if ((option != O_REP) && (option != O_PRN) && (option != O_LYR)) {
 	if (out_opt->answer == NULL)
 	    G_fatal_error(_("Output vector wasn't entered"));
 
@@ -200,7 +230,8 @@ int main(int argc, char *argv[])
     /* do we need topology ? */
     if ((option == O_ADD && (otype & GV_AREA)) ||
 	(option == O_REP && (otype & GV_AREA)) ||
-        (option == O_TRANS)) /* topo for cidx check */
+        (option == O_TRANS) || /* topo for cidx check */
+        (option == O_LYR)) /* topo for cidx check */
 	open_level = 2;
     else
 	open_level = 1;
