@@ -101,16 +101,19 @@ class WMSBase:
         # read projection info
         self.proj_location = grass.read_command('g.proj', 
                                                 flags ='jf').rstrip('\n')
+        self.proj_location = self._modifyProj(self.proj_location)
 
         if self.params['srs'] in [3857, 900913]:
             # HACK: epsg 3857 def: http://spatialreference.org/ref/sr-org/7483/
             # g.proj can return: ...+a=6378137 +rf=298.257223563... (WGS84 elipsoid def instead of sphere), it can make 20km shift in Y, when raster is transformed
             # needed to be tested on more servers
-            self.proj_srs = '+proj=merc +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +no_defs +a=6378137 +b=6378137 +nadgrids=@null +to_meter=1 +wktext'
+            self.proj_srs = '+proj=merc +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +no_defs +a=6378137 +b=6378137 +nadgrids=@null +to_meter=1'
         else:
             self.proj_srs = grass.read_command('g.proj', 
                                                flags = 'jf', 
                                                epsg = str(self.params['srs']) ).rstrip('\n')
+        
+        self.proj_srs = self._modifyProj(self.proj_srs)
 
         if not self.proj_srs or not self.proj_location:
             grass.fatal(_("Unable to get projection info"))
@@ -134,6 +137,15 @@ class WMSBase:
         self.gdal_drv_format = "GTiff"
         
         self._debug("_initialize_parameters", "finished")
+
+    def _modifyProj(self, proj):
+        """!Modify proj.4 string for usage in this module"""
+
+        # add +wktext parameter to avoid droping of +nadgrids parameter (if presented) in gdalwarp
+        if '+nadgrids=' in proj and ' +wktext' not in proj:
+            proj += ' +wktext'
+
+        return proj
 
     def _checkIgnoeredParams(self, options, flags, driver_props):
         """!Write warnings for set parameters and flags, which chosen driver does not use."""
