@@ -1924,8 +1924,8 @@ class PsMapBufferedWindow(wx.Window):
                 textRect = wx.Rect(0, 0, *textExtent).CenterIn(bb)
             pdc.SetTextForeground(wx.Colour(100,100,100,200)) 
             pdc.SetBackgroundMode(wx.TRANSPARENT)
-            pdc.DrawText(text = text, x = textRect.x, y = textRect.y)
-                
+            pdc.DrawLabel(text = text, rect = textRect)
+
         elif pdctype == 'point':
             pdc.DrawCircle(x = bb[0] + bb[2] / 2,
                            y = bb[1] + bb[3] / 2,
