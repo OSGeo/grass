@@ -2246,6 +2246,13 @@
           <label>Lidar analysis</label>
           <items>
             <menuitem>
+              <label>Identify and remove outliers</label>
+              <help>Removes outlier points from a LIDAR data set.</help>
+              <keywords>vector,LIDAR,outliers</keywords>
+              <handler>OnMenuCmd</handler>
+              <command>v.outlier</command>
+            </menuitem>
+            <menuitem>
               <label>Detect edges</label>
               <help>Detects the object's edges from a LIDAR data set.</help>
               <keywords>vector,LIDAR,edges</keywords>
