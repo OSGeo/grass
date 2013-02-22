@@ -378,13 +378,13 @@ int main(int argc, char **argv)
 		min_ind =
 		    UserRangeMin <
 		    min_colr ? min_colr : (int)ceil(UserRangeMin);
-		G_warning(_("Color range exceeds lower limit of actual data"));
+		G_warning(_("Requested range exceeds lower limit of actual data"));
 	    }
 	    if (max_ind < UserRangeMax) {
 		max_ind =
 		    UserRangeMax >
 		    max_colr ? max_colr : (int)floor(UserRangeMax);
-		G_warning(_("Color range exceeds upper limit of actual data"));
+		G_warning(_("Requested range exceeds upper limit of actual data"));
 	    }
 	}
 
