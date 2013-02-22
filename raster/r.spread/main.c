@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     parm.max->type = TYPE_STRING;
     parm.max->required = YES;
     parm.max->gisprompt = "old,cell,raster";
-    parm.max->guisection = _("Input_maps");
+    parm.max->guisection = _("Input maps");
     parm.max->description =
 	_("Name of raster map containing MAX rate of spread (ROS) (cm/min)");
 
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     parm.dir->type = TYPE_STRING;
     parm.dir->required = YES;
     parm.dir->gisprompt = "old,cell,raster";
-    parm.dir->guisection = _("Input_maps");
+    parm.dir->guisection = _("Input maps");
     parm.dir->description =
 	_("Name of raster map containing DIRections of max ROS (degree)");
 
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     parm.base->type = TYPE_STRING;
     parm.base->required = YES;
     parm.base->gisprompt = "old,cell,raster";
-    parm.base->guisection = _("Input_maps");
+    parm.base->guisection = _("Input maps");
     parm.base->description =
 	_("Name of raster map containing BASE ROS (cm/min)");
 
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     parm.start->type = TYPE_STRING;
     parm.start->required = YES;
     parm.start->gisprompt = "old,cell,raster";
-    parm.start->guisection = _("Input_maps");
+    parm.start->guisection = _("Input maps");
     parm.start->description =
 	_("Name of raster map containing STARTing sources");
 
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
     parm.spotdist->key = "spot_dist";
     parm.spotdist->type = TYPE_STRING;
     parm.spotdist->gisprompt = "old,cell,raster";
-    parm.spotdist->guisection = _("Input_maps");
+    parm.spotdist->guisection = _("Input maps");
     parm.spotdist->description =
 	_("Name of raster map containing max SPOTting DISTance (m) (required w/ -s)");
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     parm.velocity->key = "w_speed";
     parm.velocity->type = TYPE_STRING;
     parm.velocity->gisprompt = "old,cell,raster";
-    parm.velocity->guisection = _("Input_maps");
+    parm.velocity->guisection = _("Input maps");
     parm.velocity->description =
 	_("Name of raster map containing midflame Wind SPEED (ft/min) (required w/ -s)");
 
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     parm.mois->key = "f_mois";
     parm.mois->type = TYPE_STRING;
     parm.mois->gisprompt = "old,cell,raster";
-    parm.mois->guisection = _("Input_maps");
+    parm.mois->guisection = _("Input maps");
     parm.mois->description =
 	_("Name of raster map containing fine Fuel MOISture of the cell receiving a spotting firebrand (%) (required w/ -s)");
 
@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
     parm.out->type = TYPE_STRING;
     parm.out->required = YES;
     parm.out->gisprompt = "new,cell,raster";
-    parm.out->guisection = _("Output_maps");
+    parm.out->guisection = _("Output maps");
     parm.out->description =
 	_("Name of raster map to contain OUTPUT spread time (min)");
 
@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
     parm.x_out->key = "x_output";
     parm.x_out->type = TYPE_STRING;
     parm.x_out->gisprompt = "new,cell,raster";
-    parm.x_out->guisection = _("Output_maps");
+    parm.x_out->guisection = _("Output maps");
     parm.x_out->description =
 	_("Name of raster map to contain X_BACK coordinates");
 
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
     parm.y_out->key = "y_output";
     parm.y_out->type = TYPE_STRING;
     parm.y_out->gisprompt = "new,cell,raster";
-    parm.y_out->guisection = _("Output_maps");
+    parm.y_out->guisection = _("Output maps");
     parm.y_out->description =
 	_("Name of raster map to contain Y_BACK coordinates");
 
