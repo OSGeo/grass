@@ -7,7 +7,6 @@
 #include <string.h>
 #include <grass/raster.h>
 #include "header.h"
-
 #include "local_proto.h"
 
 static double x, y, dy, fontsize;
