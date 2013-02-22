@@ -5,7 +5,7 @@
 # AUTHOR(S):	Hamish Bowman, Otago University, New Zealand
 #               Converted to Python by Martin Landa <landa.martin gmail.com>
 # PURPOSE:	Pack up a raster map, collect raster map elements => gzip
-# COPYRIGHT:	(C) 2004-2008, 2010 by the GRASS Development Team
+# COPYRIGHT:	(C) 2004-2013 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -97,7 +97,7 @@ def main():
     # copy projection info
     # (would prefer to use g.proj*, but this way is 5.3 and 5.7 compat)
     gisenv = grass.gisenv()
-    for support in ['INFO', 'UNITS']:
+    for support in ['INFO', 'UNITS', 'EPSG']:
         path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'],
                             'PERMANENT', 'PROJ_' + support)
         if os.path.exists(path):
@@ -119,7 +119,8 @@ def main():
     os.chdir(olddir)
     
     grass.verbose(_("Raster map saved to '%s'" % outfile))
-    
+
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     atexit.register(cleanup)
