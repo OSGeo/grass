@@ -98,6 +98,8 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
         mapname = 'geodesic'
     elif 'd.rhumbline' in dcmd[0]:
         mapname = 'rhumb'
+    elif 'd.graph' in dcmd[0]:
+        mapname = 'graph'
     else:
         params = list()
         for idx in range(len(dcmd)):
