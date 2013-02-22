@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
     parm.elevin->gisprompt = "old,cell,raster";
     parm.elevin->description =
 	_("Name of the input elevation raster map [meters]");
-    parm.elevin->guisection = _("Input_options");
+    parm.elevin->guisection = _("Input options");
 
 
     parm.direction = G_define_option();
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
     parm.direction->required = NO;
     parm.direction->description =
 	_("Direction in which you want to know the horizon height");
-    parm.direction->guisection = _("Input_options");
+    parm.direction->guisection = _("Input options");
 
     parm.step = G_define_option();
     parm.step->key = "horizonstep";
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
     parm.step->required = NO;
     parm.step->description =
 	_("Angle step size for multidirectional horizon [degrees]");
-    parm.step->guisection = _("Input_options");
+    parm.step->guisection = _("Input options");
 
     parm.bufferzone = G_define_option();
     parm.bufferzone->key = "bufferzone";
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
     parm.bufferzone->required = NO;
     parm.bufferzone->description =
 	_("For horizon rasters, read from the DEM an extra buffer around the present region");
-    parm.bufferzone->guisection = _("Input_options");
+    parm.bufferzone->guisection = _("Input options");
 
     parm.e_buff = G_define_option();
     parm.e_buff->key = "e_buff";
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
     parm.e_buff->required = NO;
     parm.e_buff->description =
 	_("For horizon rasters, read from the DEM an extra buffer eastward the present region");
-    parm.e_buff->guisection = _("Input_options");
+    parm.e_buff->guisection = _("Input options");
 
     parm.w_buff = G_define_option();
     parm.w_buff->key = "w_buff";
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     parm.w_buff->required = NO;
     parm.w_buff->description =
 	_("For horizon rasters, read from the DEM an extra buffer westward the present region");
-    parm.w_buff->guisection = _("Input_options");
+    parm.w_buff->guisection = _("Input options");
 
     parm.n_buff = G_define_option();
     parm.n_buff->key = "n_buff";
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
     parm.n_buff->required = NO;
     parm.n_buff->description =
 	_("For horizon rasters, read from the DEM an extra buffer northward the present region");
-    parm.n_buff->guisection = _("Input_options");
+    parm.n_buff->guisection = _("Input options");
 
     parm.s_buff = G_define_option();
     parm.s_buff->key = "s_buff";
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
     parm.s_buff->required = NO;
     parm.s_buff->description =
 	_("For horizon rasters, read from the DEM an extra buffer southward the present region");
-    parm.s_buff->guisection = _("Input_options");
+    parm.s_buff->guisection = _("Input options");
 
     parm.maxdistance = G_define_option();
     parm.maxdistance->key = "maxdistance";
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
     parm.maxdistance->required = NO;
     parm.maxdistance->description =
 	_("The maximum distance to consider when finding the horizon height");
-    parm.maxdistance->guisection = _("Input_options");
+    parm.maxdistance->guisection = _("Input options");
 
 
     parm.horizon = G_define_option();
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
     parm.horizon->required = NO;
     parm.horizon->gisprompt = "old,cell,raster";
     parm.horizon->description = _("Prefix of the horizon raster output maps");
-    parm.horizon->guisection = _("Output_options");
+    parm.horizon->guisection = _("Output options");
 
 
     parm.coord = G_define_option();
@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
     parm.coord->required = NO;
     parm.coord->description =
 	_("Coordinate for which you want to calculate the horizon");
-    parm.coord->guisection = _("Output_options");
+    parm.coord->guisection = _("Output options");
 
     parm.dist = G_define_option();
     parm.dist->key = "dist";
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
     parm.dist->answer = DIST;
     parm.dist->required = NO;
     parm.dist->description = _("Sampling distance step coefficient (0.5-1.5)");
-    parm.dist->guisection = _("Output_options");
+    parm.dist->guisection = _("Output options");
 
 
     flag.degreeOutput = G_define_flag();
