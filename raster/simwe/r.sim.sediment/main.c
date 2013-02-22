@@ -165,14 +165,14 @@ int main(int argc, char *argv[])
     parm.outwalk->required = NO;
     parm.outwalk->description =
 	_("Base name of the output walkers vector points map");
-    parm.outwalk->guisection = _("Output_options");
+    parm.outwalk->guisection = _("Output options");
     
     parm.observation = G_define_standard_option(G_OPT_V_INPUT);
     parm.observation->key = "observation";
     parm.observation->required = NO;
     parm.observation->description =
 	_("Name of the sampling locations vector points map");
-    parm.observation->guisection = _("Input_options");
+    parm.observation->guisection = _("Input options");
 
     parm.logfile = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.logfile->key = "logfile";
