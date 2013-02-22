@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     opt.column->multiple = YES;
     opt.column->description =
 	_("Column name(s) where values specified by 'upload' option will be uploaded");
-    opt.column->guisection = _("From_map");
+    opt.column->guisection = _("From");
 
     opt.to_column = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.to_column->key = "to_column";
