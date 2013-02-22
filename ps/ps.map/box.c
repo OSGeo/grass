@@ -16,7 +16,7 @@ int box_clip(double t, double b, double l, double r)
 {
     box_path(t, b, l, r);
     fprintf(PS.fp, "clip newpath\n");
-    
+
     return 0;
 }
 

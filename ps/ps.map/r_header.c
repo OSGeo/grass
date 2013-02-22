@@ -58,13 +58,13 @@ int read_header(void)
 
 	if (KEY("color")) {
 	    ret = G_str_to_color(data, &r, &g, &b);
-            if (ret == 1)
-                set_color(&color, r, g, b);
-            else if (ret == 2)  /* i.e. "none" */
-                /* unset_color(&color); */
-                error(key, data, _("Unsupported color request"));
-            else
-                error(key, data, _("illegal color request")); 
+	    if (ret == 1)
+		set_color(&color, r, g, b);
+	    else if (ret == 2)  /* i.e. "none" */
+		/* unset_color(&color); */
+		error(key, data, _("Unsupported color request"));
+	    else
+		error(key, data, _("illegal color request"));
 
 	    continue;
 	}

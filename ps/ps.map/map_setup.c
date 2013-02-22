@@ -106,7 +106,7 @@ int map_setup(void)
 
     /* save original graphics state */
     fprintf(PS.fp, "gsave ");
-    
+
     /* compute conversion factor from meters to PostScript window coordinates */
     /*
        G_begin_distance_calculations();

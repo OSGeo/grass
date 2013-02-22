@@ -6,7 +6,6 @@
  */
 #include <string.h>
 #include <math.h>
-
 #include "local_proto.h"
 
 #define LEFT 0
