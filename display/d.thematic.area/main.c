@@ -126,8 +126,7 @@ int main(int argc, char **argv)
     colors_opt->required = YES;
     colors_opt->multiple = YES;
     colors_opt->description = _("Colors (one per class).");
-    /* This won't work. We would need multiple color prompt.
-     * colors_opt->gisprompt = "old_color,color,color"; */
+    colors_opt->gisprompt = "old_color,color,color";
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->description =
