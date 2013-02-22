@@ -118,14 +118,14 @@ int main(int argc, char *argv[])
 	_("Describe map-box's position on the page and exit (inches from top-left of paper)");
     bflag->suppress_required = YES;
     bflag->guisection = _("Utility");
-    
+
     input_file = G_define_standard_option(G_OPT_F_INPUT);
     input_file->label = _("File containing mapping instructions");
     input_file->description = _("Use '-' to enter instructions from keyboard)");
-    
+
     output_file = G_define_standard_option(G_OPT_F_OUTPUT);
     output_file->description = _("Name for PostScript output file");
-    
+
     copies = G_define_option();
     copies->key = "copies";
     copies->type = TYPE_INTEGER;
@@ -133,16 +133,17 @@ int main(int argc, char *argv[])
     copies->description = _("Number of copies to print");
     copies->required = NO;
     copies->guisection = _("Output settings");
-    
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     /* PS.map_* variables are set to 0 (not defined) and then may be
      * reset by 'maploc'.  When script is read, main() should call
      * reset_map_location() to reset map size to fit to paper */
 
     G_zero(&PS, sizeof(struct PS_data));
-    
+
     /* Print paper sizes to stdout */
     if (pflag->answer) {
 	print_papers();
@@ -201,7 +202,7 @@ int main(int argc, char *argv[])
 	if (strcmp(input_file->answer, "-")) {
 	    inputfd = fopen(input_file->answer, "r");
 	    if (!inputfd)
-		G_fatal_error(_("Unable to open file '%s': %s"), 
+		G_fatal_error(_("Unable to open file '%s': %s"),
 			      input_file->answer, strerror(errno));
 	}
 	else {
@@ -212,7 +213,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
 		      input_file->key, input_file->label);
     }
-    
+
     if (copies->answer) {
 	if (sscanf(copies->answer, "%d", &ps_copies) != 1) {
 	    ps_copies = 1;
@@ -224,7 +225,7 @@ int main(int argc, char *argv[])
     if (!bflag->answer) {
 	if (output_file->answer) {
 	    if ((PS.fp = fopen(output_file->answer, "w")) == NULL)
-		G_fatal_error("Unable to create file '%s': %s", 
+		G_fatal_error("Unable to create file '%s': %s",
 			      output_file->answer, strerror(errno));
 	}
 	else {
@@ -242,10 +243,10 @@ int main(int argc, char *argv[])
     Rast_get_window(&PS.w);
 
     read_instructions(copies_set, can_reset_scale);
-    
+
     /* reset map location base on 'paper' on 'location' */
     reset_map_location();
-    
+
     if (bflag->answer) {
 	map_setup();
 	fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left / 72.0,
