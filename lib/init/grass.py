@@ -148,7 +148,9 @@ def Popen(cmd, **kwargs):
 def gfile(*args):
     return os.path.join(gisbase, *args)
 
-help_text = r"""
+help_text = r"""GRASS GIS %s
+Geographic Resources Analysis Support System (GRASS GIS).
+
 %s:
   $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code]
           [-text | -gui] [--config param]
@@ -180,7 +182,8 @@ help_text = r"""
   GRASS_ADDON_BASE               %s
   GRASS_BATCH_JOB                %s
   GRASS_PYTHON                   %s
-""" % (_("Usage"),
+""" % (grass_version,
+       _("Usage"),
        _("Flags"),
        _("print this help message"),
        _("show version information and exit"),
