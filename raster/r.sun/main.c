@@ -7,6 +7,7 @@ See manual pages for details.
 (C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia, 
               and GeoModel, s.r.o., Bratislava, Slovakia
 email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk Thomas.Huld@jrc.it
+(c) 2003-2013 by The GRASS Development Team
 *******************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
@@ -88,7 +89,6 @@ const char *refl_rad = NULL;
 const char *glob_rad = NULL;
 const char *mapset = NULL;
 const char *per;
-const char *shade;
 
 struct Cell_head cellhd;
 struct pj_info iproj;
@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
 
     struct
     {
-	struct Flag *shade, *saveMemory;
+	struct Flag *noshade, *saveMemory;
     }
     flag;
 
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 	 "the topography is optionally incorporated.");
 
     parm.elevin = G_define_option();
-    parm.elevin->key = "elevin";
+    parm.elevin->key = "elev_in";
     parm.elevin->type = TYPE_STRING;
     parm.elevin->required = YES;
     parm.elevin->gisprompt = "old,cell,raster";
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
     parm.elevin->guisection = _("Input options");
 
     parm.aspin = G_define_option();
-    parm.aspin->key = "aspin";
+    parm.aspin->key = "asp_in";
     parm.aspin->type = TYPE_STRING;
     parm.aspin->required = NO;
     parm.aspin->gisprompt = "old,cell,raster";
@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
     parm.aspect->guisection = _("Input options");
 
     parm.slopein = G_define_option();
-    parm.slopein->key = "slopein";
+    parm.slopein->key = "slope_in";
     parm.slopein->type = TYPE_STRING;
     parm.slopein->required = NO;
     parm.slopein->gisprompt = "old,cell,raster";
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
     parm.slope->guisection = _("Input options");
 
     parm.linkein = G_define_option();
-    parm.linkein->key = "linkein";
+    parm.linkein->key = "linke_in";
     parm.linkein->type = TYPE_STRING;
     parm.linkein->required = NO;
     parm.linkein->gisprompt = "old,cell,raster";
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
     }
 
     parm.latin = G_define_option();
-    parm.latin->key = "latin";
+    parm.latin->key = "lat_in";
     parm.latin->type = TYPE_STRING;
     parm.latin->required = NO;
     parm.latin->gisprompt = "old,cell,raster";
@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
     parm.latin->guisection = _("Input options");
 
     parm.longin = G_define_option();
-    parm.longin->key = "longin";
+    parm.longin->key = "long_in";
     parm.longin->type = TYPE_STRING;
     parm.longin->required = NO;
     parm.longin->gisprompt = "old,cell,raster";
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
     parm.longin->guisection = _("Input options");
 
     parm.coefbh = G_define_option();
-    parm.coefbh->key = "coefbh";
+    parm.coefbh->key = "coef_bh";
     parm.coefbh->type = TYPE_STRING;
     parm.coefbh->required = NO;
     parm.coefbh->gisprompt = "old,cell,raster";
@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
     parm.coefbh->guisection = _("Input options");
 
     parm.coefdh = G_define_option();
-    parm.coefdh->key = "coefdh";
+    parm.coefdh->key = "coef_dh";
     parm.coefdh->type = TYPE_STRING;
     parm.coefdh->required = NO;
     parm.coefdh->gisprompt = "old,cell,raster";
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
     parm.horizon->guisection = _("Input options");
 
     parm.horizonstep = G_define_option();
-    parm.horizonstep->key = "horizonstep";
+    parm.horizonstep->key = "horizon_step";
     parm.horizonstep->type = TYPE_DOUBLE;
     parm.horizonstep->required = NO;
     parm.horizonstep->description =
@@ -445,7 +445,7 @@ int main(int argc, char *argv[])
 	_("Time step when computing all-day radiation sums [decimal hours]");
 
     parm.declin = G_define_option();
-    parm.declin->key = "declin";
+    parm.declin->key = "declination";
     parm.declin->type = TYPE_DOUBLE;
     parm.declin->required = NO;
     parm.declin->description =
@@ -462,20 +462,20 @@ int main(int argc, char *argv[])
 
     /*
      * parm.startTime = G_define_option();
-     * parm.startTime->key = "starttime";
+     * parm.startTime->key = "start_time";
      * parm.startTime->type = TYPE_DOUBLE;
      * parm.startTime->required = NO;
      * parm.startTime->description = _("Starting time for calculating results for several different times.");
      * 
      * parm.endTime = G_define_option();
-     * parm.endTime->key = "endtime";
+     * parm.endTime->key = "end_time";
      * parm.endTime->type = TYPE_DOUBLE;
      * parm.endTime->required = NO;
      * parm.endTime->description = _("End time for calculating results for several different times.)";
      */
 
     parm.dist = G_define_option();
-    parm.dist->key = "dist";
+    parm.dist->key = "distance_step";
     parm.dist->type = TYPE_DOUBLE;
     parm.dist->answer = DIST;
     parm.dist->required = NO;
@@ -483,7 +483,7 @@ int main(int argc, char *argv[])
 	_("Sampling distance step coefficient (0.5-1.5)");
 
     parm.numPartitions = G_define_option();
-    parm.numPartitions->key = "numpartitions";
+    parm.numPartitions->key = "num_partitions";
     parm.numPartitions->type = TYPE_INTEGER;
     parm.numPartitions->answer = NUM_PARTITIONS;
     parm.numPartitions->required = NO;
@@ -491,17 +491,17 @@ int main(int argc, char *argv[])
 	_("Read the input files in this number of chunks");
 
     parm.civilTime = G_define_option();
-    parm.civilTime->key = "civiltime";
+    parm.civilTime->key = "civil_time";
     parm.civilTime->type = TYPE_DOUBLE;
     parm.civilTime->required = NO;
     parm.civilTime->description =
 	_("Civil time zone value, if none, the time will be local solar time");
 
 
-    flag.shade = G_define_flag();
-    flag.shade->key = 's';
-    flag.shade->description =
-	_("Incorporate the shadowing effect of terrain");
+    flag.noshade = G_define_flag();
+    flag.noshade->key = 'p';
+    flag.noshade->description =
+	_("Do not incorporate the shadowing effect of terrain");
 
     flag.saveMemory = G_define_flag();
     flag.saveMemory->key = 'm';
@@ -528,14 +528,8 @@ int main(int argc, char *argv[])
     gridGeom.deltx = fabs(cellhd.east - cellhd.west);
     gridGeom.delty = fabs(cellhd.north - cellhd.south);
 
-    setUseShadow(flag.shade->answer);
+    setUseShadow(!flag.noshade->answer);
 
-    /*
-     * if(shd)
-     * {
-     * 
-     * }
-     */
     saveMemory = flag.saveMemory->answer;
 
     elevin = parm.elevin->answer;

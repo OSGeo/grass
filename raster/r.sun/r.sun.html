@@ -43,14 +43,15 @@ model accounts for sky obstruction by local relief features. Several solar
 parameters are saved in the resultant maps' history files, which may be viewed
 with the <a href="r.info.html">r.info</a> command.
 
-<p>The solar incidence angle raster map <i>incidout</i> is computed specifying 
-elevation raster map <i>elevin</i>, aspect raster map <i>aspin</i>, slope 
-steepness raster map <i>slopin,</i> given the day <i>day</i> and local time
+<p>
+The solar incidence angle raster map <i>incidout</i> is computed specifying 
+elevation raster map <i>elev_in</i>, aspect raster map <i>asp_in</i>, slope 
+steepness raster map <i>slope_in,</i> given the day <i>day</i> and local time
 <i>time</i>. There is no need to define latitude for locations with known
 and defined projection/coordinate system (check it with the <a href="g.proj.html">
 g.proj</a>
  command). If you have undefined projection, (x,y) system, etc. then the latitude
-can be defined explicitly for large areas by input raster map <i>latin</i>
+can be defined explicitly for large areas by input raster map <i>lat_in</i>
  with interpolated latitude values. All input raster maps must
 be floating point (FCELL) raster maps. Null data in maps are excluded from
 the computation (and also speeding-up the computation), so each output raster
@@ -61,23 +62,28 @@ The specified day <i>day</i> is the number of the day of the general year
 where January 1 is day no.1 and December 31 is 365. Time <i>time</i> must
 be a local (solar) time (i.e. NOT a zone time, e.g. GMT, CET) in decimal system,
 e.g. 7.5 (= 7h 30m A.M.), 16.1 = 4h 6m P.M.. 
-<p>Setting the solar declination <i>declin</i> by user is an option to override
+
+<p>
+The solar <i>declination</i> parameter is an option to override
 the value computed by the internal routine for the day of the year. The value
 of geographical latitude can be set as a constant for the whole computed
 region or, as an option, a grid representing spatially distributed values
 over a large region. The geographical latitude must be also in decimal system
 with positive values for northern hemisphere and negative for southern one.
-In similar principle the Linke turbidity factor (<i>linkein</i>, <i>lin</i>
+In similar principle the Linke turbidity factor (<i>linke_in</i>, <i>lin</i>
 ) and ground albedo (<i>albedo</i>, <i>alb</i>) can be set. 
 <p>Besides clear-sky radiations, the user can compute a real-sky radiation (beam,
-diffuse) using <i>coefbh</i> and <i>coefdh </i>input raster maps defining
+diffuse) using <i>coef_bh</i> and <i>coef_dh</i> input raster maps defining
 the fraction of the respective clear-sky radiations reduced by atmospheric
 factors (e.g. cloudiness). The value is between 0-1. Usually these
 coefficients can be obtained from a long-terms meteorological measurements
 provided as raster maps with spatial distribution of these coefficients separately
-for beam and diffuse radiation (see Suri and Hofierka, 2004, section 3.2).<p>The solar irradiation or irradiance raster maps <i>beam_rad</i>, <i>diff_rad</i>,
-<i>refl_rad</i> are computed for a given day <i>day,</i> latitude <i>latin</i>,
-elevation <i>elevin</i>, slope <i>slopein</i> and aspect <i>aspin</i> raster maps.
+for beam and diffuse radiation (see Suri and Hofierka, 2004, section 3.2).
+
+<p>
+The solar irradiation or irradiance raster maps <i>beam_rad</i>, <i>diff_rad</i>,
+<i>refl_rad</i> are computed for a given day <i>day,</i> latitude <i>lat_in</i>,
+elevation <i>elev_in</i>, slope <i>slope_in</i> and aspect <i>asp_in</i> raster maps.
 For convenience, the output raster given as <i>glob_rad</i>
 will output the sum of the three radiation components. The program uses 
 the Linke atmosphere turbidity factor and ground albedo coefficient. 
@@ -86,6 +92,7 @@ is near the annual average for rural-city areas. The Linke
 factor for an absolutely clear atmosphere is <i>lin</i>=1.0. See notes below
 to learn more about this factor. The incidence solar angle is the angle between
 horizon and solar beam vector. 
+
 <p>
 The solar radiation maps for a given day are computed by integrating the
 relevant irradiance between sunrise and sunset times for that day. The
@@ -100,30 +107,34 @@ sun placed for every degree of movement in the sky you should set the
 to every 3 minutes. Of course setting the time step to be very fine
 proportionally increases the module's running time.
 <p>The output units are in Wh per squared meter per given
-day [Wh/(m*m)/day]. The incidence angle and irradiance/irradiation maps can
-be computed without shadowing influence of relief by default or they can
-be computed with this influence using the flag <i>-s</i>. In mountainous areas
-this can lead to very different results! The user should be aware that taken
-into account the shadowing effect of relief can slow
-down the speed of computing especially when the sun altitude is low.
- When considering shadowing effect (flag <i>-s</i>) speed and precision computing
-can be controlled by a parameter <i>dist</i> which defines the sampling density
+day [Wh/(m*m)/day]. The incidence angle and irradiance/irradiation maps are
+computed with the shadowing influence of relief by default. It is also possible
+for them to be computed without this influence using the planar flag (<i>-p</i>).
+In mountainous areas this can lead to very different results! The user should be
+aware that taking into account the shadowing effect of relief can slow
+down the speed of computation, especially when the sun altitude is low.
+
+<p>
+When considering the shadowing effect, speed and precision of computation
+can be controlled by the <i>distance_step</i> parameter, which defines the sampling density
 at which the visibility of a grid cell is computed in the direction of a
 path of the solar flow. It also defines the method by which the obstacle's
-altitude is computed. When choosing <i>dist</i> less than 1.0 (i.e. sampling
-points will be computed at <i>dist</i> * cellsize distance), r.sun takes
-altitude from the nearest grid point. Values above 1.0 will use the maximum
+altitude is computed. When choosing a <i>distance_step</i> less than 1.0 (i.e. sampling
+points will be computed at <i>distance_step</i> * cellsize distance), <em>r.sun</em> takes
+the altitude from the nearest grid point. Values above 1.0 will use the maximum
 altitude value found in the nearest 4 surrounding grid points. The default
-value <i>dist</i>=1.0 should give reasonable results for most cases (e.g.
-on DEM). <i>Dist</i> value defines a multiplying coefficient for sampling
+value <i>distance_step</i>=1.0 should give reasonable results for most cases (e.g.
+on DEM). The <i>distance_step</i> value defines a multiplying coefficient for sampling
 distance. This basic sampling distance equals to the arithmetic average of
 both cell sizes. The reasonable values are in the range 0.5-1.5.  The values
 below 0.5 will decrease and values above 1.0 will increase the computing
 speed. Values greater than 2.0 may produce estimates with lower accuracy
 in highly dissected relief. The fully shadowed areas are written to the output
 maps as zero values. Areas with NULL data are considered as no barrier with
-shadowing effect .
-<p>The maps' history files are generated containing the following listed 
+shadowing effect.
+
+<p>
+The maps' history files are generated containing the following listed 
 parameters used in the computation: <br>
 - Solar constant 1367 W.m-2 <br>
 - Extraterrestrial irradiance on a plane perpendicular to the solar beam [W.m-2] <br>
@@ -194,13 +205,13 @@ differences of up to an hour, in some cases (like Western Spain) even more.
 On top of this, the offset varies during the year according to the Equation
 of Time.
 <p>
-To overcome this problem, the user can use the option <em>civiltime=&lt;timezone_offset&gt;</em>
+To overcome this problem, the user can use the option <em>civil_time=&lt;timezone_offset&gt;</em>
 in r.sun to make it use real-world (wall clock) time. For example, for Central 
 Europe the timezone offset is +1, +2 when daylight saving time is in effect.
 <p>
 <!-- WE DON'T KNOW, check source code:
-If the user use the <em>civiltime</em> parameter, also the longitude needs to
-be supplied as a raster map with the <em>longin</em> parameter. Within a
+If the user use the <em>civil_time</em> parameter, also the longitude needs to
+be supplied as a raster map with the <em>long_in</em> parameter. Within a
 latlon location, such a map can be easily made with:
 
 <div class="code"><pre>
@@ -212,18 +223,18 @@ END OF WE DON'T KNOW
 
 <h3>Shadow maps</h3>
 A map of shadows can be extracted from the solar incidence angle map
-(incidout). Areas with zero values are shadowed. The <em>-s</em> flag
-has to be used.
+(incidout). Areas with zero values are shadowed. This will not work
+if the <em>-p</em> flag has been used.
 
 <h3>Large maps and out of memory problems</h3>
 
 With a large number or columns and rows, <b>r.sun</b> can consume
 significant amount of memory. While output raster maps are not
-partitionable, the input raster maps are using the <em>numpartitions</em>
+partitionable, the input raster maps are using the <em>num_partitions</em>
 parameter.
 
 In case of out of memory error (<tt>ERROR: G_malloc: out of memory</tt>), the
-<em>numpartitions</em> parameter can be used to run a segmented calculation
+<em>num_partitions</em> parameter can be used to run a segmented calculation
 which consumes less memory during the computations.
 
 The amount of memory by <b>r.sun</b> is estimated as follows:
@@ -234,10 +245,10 @@ The amount of memory by <b>r.sun</b> is estimated as follows:
 #  rows,cols: rows and columns of current region (find out with g.region)
 #  IR: number of input raster maps without horizon maps
 #  OR: number of output raster maps
-memory_bytes = rows*cols*(IR*4 + horizonsteps + OR*4)
+memory_bytes = rows*cols*(IR*4 + horizon_steps + OR*4)
 
 # with input raster map partitioning:
-memory_bytes = rows*cols*((IR*4+horizonsteps)/numpartitions  + OR*4)
+memory_bytes = rows*cols*((IR*4+horizon_steps)/num_partitions  + OR*4)
 </pre></div>
 
 <h2>EXAMPLES</h2>
@@ -248,14 +259,14 @@ g.region rast=elevation.dem -p
 
 # calculate horizons
 # (we put a bufferzone of 10% of maxdistance around the study area)
-r.horizon elevin=elevation.dem horizonstep=30 bufferzone=200 horizon=horangle dist=0.7 maxdistance=2000
+r.horizon elev_in=elevation.dem horizon_step=30 bufferzone=200 horizon=horangle distance_step=0.7 maxdistance=2000
 
 # slope + aspect
 r.slope.aspect elevation=elevation.dem aspect=aspect.dem slope=slope.dem
 
 # calculate global radiation for day 180 at 14:00hs
-r.sun -s elevation.dem horizon=horangle horizonstep=30 aspin=aspect.dem \
-          slopein=slope.dem glob_rad=global_rad day=180 time=14
+r.sun elevation.dem horizon=horangle horizon_step=30 asp_in=aspect.dem \
+          slope_in=slope.dem glob_rad=global_rad day=180 time=14
 </pre></div>
 
 <p>
@@ -267,8 +278,8 @@ in non-leap years):
 <div class="code"><pre>
 g.region rast=elev_ned_30m -p
 
-# considering cast shadows (-s)
-r.sun -s elev_ned_30m lin=2.5 alb=0.2 day=172 \
+# considering cast shadows
+r.sun elev_ned_30m lin=2.5 alb=0.2 day=172 \
       beam_rad=b172 diff_rad=d172 \
       refl_rad=r172 insol_time=it172
 
