@@ -1400,9 +1400,15 @@ def debug_level():
         _debug_level = int(gisenv().get('DEBUG', 0))
 
 def legal_name(s):
+    """!Checks if the string contains only allowed characters.
+
+    This is the Python implementation of G_legal_filename() function.
+
+    @note It is not clear when to use this function.
+    """
     if not s or s[0] == '.':
-	warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with '.'.") % s)
-	return False
+        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with '.'.") % s)
+        return False
 
     illegal = [c
                for c in s
