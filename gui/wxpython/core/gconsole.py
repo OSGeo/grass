@@ -126,22 +126,20 @@ class CmdThread(threading.Thread):
             requestTime = time.time()
 
             # prepare
-            if not self.receiver:
-                return
+            if self.receiver:
+                event = wxCmdPrepare(cmd=args[0],
+                                     time=requestTime,
+                                     pid=requestId,
+                                     onPrepare=vars()['onPrepare'],
+                                     userData=vars()['userData'])
 
-            event = wxCmdPrepare(cmd=args[0],
-                                 time=requestTime,
-                                 pid=requestId,
-                                 onPrepare=vars()['onPrepare'],
-                                 userData=vars()['userData'])
+                wx.PostEvent(self.receiver, event)
 
-            wx.PostEvent(self.receiver, event)
+                # run command
+                event = wxCmdRun(cmd=args[0],
+                                 pid=requestId)
 
-            # run command
-            event = wxCmdRun(cmd=args[0],
-                             pid=requestId)
-
-            wx.PostEvent(self.receiver, event)
+                wx.PostEvent(self.receiver, event)
 
             time.sleep(.1)
             self.requestCmd = vars()['callable'](*args, **kwds)
@@ -192,19 +190,17 @@ class CmdThread(threading.Thread):
                     self.requestCmdColor = vars()['callable'](*argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
 
-            if not self.receiver:
-                return
+            if self.receiver:
+                event = wxCmdDone(cmd=args[0],
+                                  aborted=aborted,
+                                  returncode=returncode,
+                                  time=requestTime,
+                                  pid=requestId,
+                                  onDone=vars()['onDone'],
+                                  userData=vars()['userData'])
 
-            event = wxCmdDone(cmd=args[0],
-                              aborted=aborted,
-                              returncode=returncode,
-                              time=requestTime,
-                              pid=requestId,
-                              onDone=vars()['onDone'],
-                              userData=vars()['userData'])
-
-            # send event
-            wx.PostEvent(self.receiver, event)
+                # send event
+                wx.PostEvent(self.receiver, event)
 
     def abort(self, abortall=True):
         """!Abort command(s)"""
