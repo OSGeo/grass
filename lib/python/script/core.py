@@ -1398,3 +1398,18 @@ def debug_level():
     _debug_level = 0
     if find_program('g.gisenv', ['--help']):
         _debug_level = int(gisenv().get('DEBUG', 0))
+
+def legal_name(s):
+    if not s or s[0] == '.':
+	warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with '.'.") % s)
+	return False
+
+    illegal = [c
+               for c in s
+               if c in '/"\'@,=*~' or c <= ' ' or c >= '\177']
+    if illegal:
+        illegal = ''.join(sorted(set(illegal)))
+        warning(_("Illegal filename <%s>. <%s> not allowed.\n") % (s, repr(illegal)[1:-1]))
+        return False
+
+    return True
