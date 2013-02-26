@@ -38,6 +38,7 @@ from core          import utils
 from core.giface   import StandaloneGrassInterface
 from core.gcmd     import RunCommand
 from core.render   import Map, MapLayer
+from core.events   import gUpdateMap
 from mapdisp.frame import MapFrame
 from grass.script  import core as grass
 from core.debug    import Debug
@@ -55,13 +56,11 @@ monSize = list(globalvar.MAP_WINDOW_SIZE)
 
 
 class DMonMap(Map):
-    def __init__(self, cmdfile=None, mapfile=None, envfile=None, monitor=None):
+    def __init__(self, cmdfile=None, mapfile=None):
         """!Map composition (stack of map layers and overlays)
 
         @param cmdline full path to the cmd file (defined by d.mon)
         @param mapfile full path to the map file (defined by d.mon)
-        @param envfile full path to the env file (defined by d.mon)
-        @param monitor name of monitor (defined by d.mon)
         """
 
         Map.__init__(self)
@@ -70,18 +69,13 @@ class DMonMap(Map):
         self.env   = dict()
 
         self.cmdfile = cmdfile
-        self.envfile = envfile
-        self.monitor = monitor
 
         if mapfile:
             self.mapfileCmd = mapfile
             self.maskfileCmd = os.path.splitext(mapfile)[0] + '.pgm'
 
         # generated file for g.pnmcomp output for rendering the map
-        self.mapfile = grass.tempfile(create = False) + '.ppm'
-
-        self._writeEnvFile(self.env) # self.env is expected to be defined in parent class
-        self._writeEnvFile({"GRASS_PNG_READ" : "TRUE"})
+        self.mapfile = monFile['map'] + '.ppm'
 
     def GetLayersFromCmdFile(self):
         """!Get list of map layers from cmdfile
@@ -121,132 +115,64 @@ class DMonMap(Map):
                 if exists:
                     continue
 
-                self.AddLayer(ltype = ltype, command = cmd, active = False, name = name)
+                Map.AddLayer(self, ltype = ltype, command = cmd, active = True, name = name)
                 nlayers += 1
         except IOError, e:
             grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
                               { 'cmd' : self.cmdfile, 'det' : e })
             return
-        
+
         fd.close()
+
+        if nlayers:
+            event = gUpdateMap()
+            wx.PostEvent(self.receiver, event)
 
         Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s" % self.cmdfile)
         Debug.msg(1, "                            nlayers=%d" % nlayers)
                 
-    def _parseCmdFile(self):
-        """!Parse cmd file for standalone application
+    def Render(self, *args, **kwargs):
+        """!Render layer to image.
+
+        For input params and returned data see overridden method in Map class.
         """
-        nlayers = 0
-        try:
-            fd = open(self.cmdfile, 'r')
-            grass.try_remove(self.mapfile)
-            cmdLines = fd.readlines()
-            RunCommand('g.gisenv',
-                       set = 'MONITOR_%s_CMDFILE=' % self.monitor)
-
-            for cmd in cmdLines:
-                cmdStr = utils.split(cmd.strip())
-                cmd = utils.CmdToTuple(cmdStr)
-                RunCommand(cmd[0], **cmd[1])
-                nlayers += 1
-            
-            RunCommand('g.gisenv',
-                       set = 'MONITOR_%s_CMDFILE=%s' % (self.monitor, self.cmdfile))
-        except IOError, e:
-            grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
-                              { 'cmd' : self.cmdfile, 'det' : e })
-            return
-        
-        fd.close()
-
-        Debug.msg(1, "Map.__parseCmdFile(): cmdfile=%s" % self.cmdfile)
-        Debug.msg(1, "                      nlayers=%d" % nlayers)
-        
-        return nlayers
-
-    def _renderCmdFile(self, force, windres):
-        if not force:
-            return ([self.mapfileCmd],
-                    [self.maskfileCmd],
-                    ['1.0'])
-        
-        region = os.environ["GRASS_REGION"] = self.SetRegion(windres)
-        self._writeEnvFile({'GRASS_REGION' : region})
         currMon = grass.gisenv()['MONITOR']
-        if currMon != self.monitor:
-            RunCommand('g.gisenv',
-                       set = 'MONITOR=%s' % self.monitor)
-        
-        grass.try_remove(self.mapfileCmd) # GRASS_PNG_READ is TRUE
-        
-        nlayers = self._parseCmdFile()
-        if self.overlays:
-            RunCommand('g.gisenv',
-                       unset = 'MONITOR') # GRASS_RENDER_IMMEDIATE doesn't like monitors
-            driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
-            if driver == 'png':
-                os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
-            else:
-                os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
-            self._renderLayers(overlaysOnly = True)
-            del os.environ["GRASS_RENDER_IMMEDIATE"]
-            RunCommand('g.gisenv',
-                       set = 'MONITOR=%s' % currMon)
-        
-        if currMon != self.monitor:
-            RunCommand('g.gisenv',
-                       set = 'MONITOR=%s' % currMon)
-            
-        if nlayers > 0:
-            return ([self.mapfileCmd],
-                    [self.maskfileCmd],
-                    ['1.0'])
-        else:
-            return ([], [], [])
-    
-    def _writeEnvFile(self, data):
-        """!Write display-related variable to the file (used for
-        standalone app)
-        """
-        if not self.envfile:
-            return
-        
-        try:
-            fd = open(self.envfile, "r")
-            for line in fd.readlines():
-                key, value = line.split('=')
-                if key not in data.keys():
-                    data[key] = value
-            fd.close()
-            
-            fd = open(self.envfile, "w")
-            for k, v in data.iteritems():
-                fd.write('%s=%s\n' % (k.strip(), str(v).strip()))
-        except IOError, e:
-            grass.warning(_("Unable to open file '%(file)s' for writting. Details: %(det)s") % \
-                              { 'cmd' : self.envfile, 'det' : e })
-            return
-        
-        fd.close()
-    
-    def ChangeMapSize(self, (width, height)):
-        """!Change size of rendered map.
-        
-        @param width,height map size
-        """
-        Map.ChangeMapSize(self, (width, height))
-        
-        self._writeEnvFile({'GRASS_WIDTH' : self.width,
-                            'GRASS_HEIGHT' : self.height})
-    
-    def GetMapsMasksAndOpacities(self, force, windres):
-        """!
-        Used by Render function.
-        
-        @return maps, masks, opacities
-        """
-        return self._renderCmdFile(force, windres)
 
+        RunCommand('g.gisenv',
+                   unset = 'MONITOR') # GRASS_RENDER_IMMEDIATE doesn't like monitors
+
+        ret = Map.Render(self, *args, **kwargs)
+
+        RunCommand('g.gisenv',
+                    set = 'MONITOR=%s' % currMon)
+        
+        return ret
+    
+    def AddLayer(self, *args, **kwargs):
+        """!Adds generic map layer to list of layers.
+
+        For input params and returned data see overridden method in Map class.
+        """
+        currMon = grass.gisenv()['MONITOR']
+
+        RunCommand('g.gisenv',
+                   unset = 'MONITOR') # GRASS_RENDER_IMMEDIATE doesn't like monitors
+
+        driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
+    
+        if driver == 'png':
+            os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
+        else:
+            os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
+
+        layer = Map.AddLayer(self, *args, **kwargs)
+
+        del os.environ["GRASS_RENDER_IMMEDIATE"]
+
+        RunCommand('g.gisenv',
+                    set = 'MONITOR=%s' % currMon)
+        
+        return layer
 
 class Layer(object):
     def __init__(self, maplayer):
@@ -308,8 +234,7 @@ class MapApp(wx.App):
             wx.InitAllImageHandlers()
         if __name__ == "__main__":
             self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            self.Map = DMonMap(cmdfile = monFile['cmd'], mapfile = monFile['map'],
-                           envfile = monFile['env'], monitor = monName)
+            self.Map = DMonMap(cmdfile = monFile['cmd'], mapfile = monFile['map'])
         else:
             self.Map = None
 
@@ -360,7 +285,6 @@ class MapApp(wx.App):
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime
-                self.mapFrm.OnDraw(None)
                 self.mapFrm.GetMap().GetLayersFromCmdFile()
                 self.timer.Start(mtime)
         except OSError, e:
