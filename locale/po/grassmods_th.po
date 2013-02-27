@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-18 14:05+0100\n"
+"POT-Creation-Date: 2013-02-26 14:45+0100\n"
 "PO-Revision-Date: 2008-01-05 15:19+0700\n"
 "Last-Translator: man <mansv68@yahoo.co.th>\n"
 "Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
@@ -228,7 +228,7 @@ msgstr "แผนที่เชิงภาพ"
 #: ../vector/v.distance/main.c:87 ../vector/v.to.db/main.c:36
 #: ../vector/v.mkgrid/main.c:70 ../vector/v.net.bridge/main.c:47
 #: ../vector/v.build.polylines/main.c:112 ../vector/v.delaunay/main.c:85
-#: ../vector/v.qcount/main.c:60 ../vector/v.category/main.c:74
+#: ../vector/v.qcount/main.c:60 ../vector/v.category/main.c:75
 #: ../vector/v.net.flow/main.c:58 ../vector/v.in.region/main.c:38
 #: ../vector/v.buffer/main.c:223 ../vector/v.surf.rst/main.c:142
 #: ../vector/v.transform/main.c:70 ../vector/v.reclass/main.c:67
@@ -474,7 +474,7 @@ msgid "Database connection not defined for layer %d"
 msgstr "การติดต่อฐานข้อมูลไม่ได้ถูกกำหนด ใน ชั้นข้อมูล %d"
 
 #: ../doc/vector/v.example/main.c:126 ../display/d.vect/opt.c:147
-#: ../display/d.thematic.area/main.c:205 ../vector/v.edit/select.c:506
+#: ../display/d.thematic.area/main.c:204 ../vector/v.edit/select.c:506
 #: ../vector/v.db.connect/main.c:215 ../vector/v.db.connect/main.c:281
 #: ../vector/v.out.svg/main.c:137 ../vector/v.in.sites/main.c:160
 #: ../vector/v.drape/main.c:250 ../vector/v.out.vtk/writeVTK.c:644
@@ -3586,7 +3586,7 @@ msgstr "ค่าพิกัดจุดจบ อยู่นอก ขอบ�
 msgid "One coordinate pair per line, please"
 msgstr "ค่าพิกัด 1 คู่ ต่อ บรรทัด,ได้โปรด"
 
-#: ../raster/r.category/main.c:53 ../vector/v.category/main.c:75
+#: ../raster/r.category/main.c:53 ../vector/v.category/main.c:76
 #, fuzzy
 msgid "category"
 msgstr "แผนที่เชิงเส้น, geometry"
@@ -5659,7 +5659,8 @@ msgstr ""
 #: ../raster/r.spread/main.c:136 ../raster/r.spread/main.c:145
 #: ../raster/r.spread/main.c:153 ../raster/r.spread/main.c:161
 #: ../raster/r.spread/main.c:169
-msgid "Input_maps"
+#, fuzzy
+msgid "Input maps"
 msgstr "Input_maps"
 
 #: ../raster/r.spread/main.c:120
@@ -5718,8 +5719,9 @@ msgstr "ชื่อของแผนที่เชิงภาพที่ใ
 
 #: ../raster/r.spread/main.c:214 ../raster/r.spread/main.c:222
 #: ../raster/r.spread/main.c:230
-msgid "Output_maps"
-msgstr "Output_maps"
+#, fuzzy
+msgid "Output maps"
+msgstr "แผนที่ผลลัพธ์"
 
 #: ../raster/r.spread/main.c:216
 msgid "Name of raster map to contain OUTPUT spread time (min)"
@@ -8869,7 +8871,8 @@ msgstr "ชื่อของ แผนที่ความสูงเชิ�
 #: ../raster/r.horizon/main.c:255 ../raster/r.horizon/main.c:263
 #: ../raster/simwe/r.sim.sediment/main.c:175
 #: ../raster/simwe/r.sim.water/main.c:184
-msgid "Input_options"
+#, fuzzy
+msgid "Input options"
 msgstr "Input_options"
 
 #: ../raster/r.sun/main.c:257
@@ -8957,7 +8960,8 @@ msgstr "แผนที่เชิงภาพผลลัพธ์  incidence 
 #: ../raster/r.horizon/main.c:272 ../raster/r.horizon/main.c:282
 #: ../raster/r.horizon/main.c:290 ../raster/simwe/r.sim.sediment/main.c:168
 #: ../raster/simwe/r.sim.water/main.c:216
-msgid "Output_options"
+#, fuzzy
+msgid "Output options"
 msgstr "Output_options"
 
 #: ../raster/r.sun/main.c:393
@@ -9027,62 +9031,63 @@ msgid "Civil time zone value, if none, the time will be local solar time"
 msgstr ""
 
 #: ../raster/r.sun/main.c:504
-msgid "Incorporate the shadowing effect of terrain"
+#, fuzzy
+msgid "Do not incorporate the shadowing effect of terrain"
 msgstr "Incorporate the Shadowing Effect ของ terrain"
 
 #: ../raster/r.sun/main.c:509
 msgid "Use the low-memory version of the program"
 msgstr ""
 
-#: ../raster/r.sun/main.c:556
+#: ../raster/r.sun/main.c:550
 msgid "You must give the longitude raster if you use civil time"
 msgstr ""
 
-#: ../raster/r.sun/main.c:559
+#: ../raster/r.sun/main.c:553
 #, fuzzy
 msgid "Error reading civil time zone value"
 msgstr "ผิดพลาดขณะอ่าน ไฟล์ชั่วคราว"
 
-#: ../raster/r.sun/main.c:562
+#: ../raster/r.sun/main.c:556
 #, fuzzy
 msgid "Invalid civil time zone value"
 msgstr "ค่า scalex ไม่ถูกต้อง"
 
-#: ../raster/r.sun/main.c:587
+#: ../raster/r.sun/main.c:581
 msgid "insol_time and incidout are incompatible options"
 msgstr "insol_time และ incidout คือ เงื่อนไขที่ใช้ไม่ได้"
 
-#: ../raster/r.sun/main.c:592
+#: ../raster/r.sun/main.c:586
 #, fuzzy
 msgid "Error reading time step size"
 msgstr "ผิดพลาดขณะอ่าน ไฟล์ชั่วคราว"
 
-#: ../raster/r.sun/main.c:594
+#: ../raster/r.sun/main.c:588
 #, fuzzy
 msgid "Invalid time step size"
 msgstr "timestamp ไม่ถูกต้อง"
 
-#: ../raster/r.sun/main.c:598
+#: ../raster/r.sun/main.c:592
 #, fuzzy
 msgid "Error reading horizon step size"
 msgstr "ผิดพลาด ขณะอ่านแผนที่เชิงภาพ [%s]."
 
-#: ../raster/r.sun/main.c:602
+#: ../raster/r.sun/main.c:596
 #, fuzzy
 msgid "The horizon step size must be greater than 0."
 msgstr "%s = %s -- ต้องมากกว่า 0"
 
-#: ../raster/r.sun/main.c:605
+#: ../raster/r.sun/main.c:599
 msgid ""
 "If you use the horizon option you must also set the 'horizonstep' parameter."
 msgstr ""
 
-#: ../raster/r.sun/main.c:611
+#: ../raster/r.sun/main.c:605
 #, fuzzy
 msgid "Time and insol_time are incompatible options"
 msgstr "time และ insol_time คือ เงื่อนไขที่ใช้ไม่ได้"
 
-#: ../raster/r.sun/main.c:613
+#: ../raster/r.sun/main.c:607
 #, fuzzy
 msgid ""
 "Mode 1: instantaneous solar incidence angle & irradiance using a set local "
@@ -9090,55 +9095,55 @@ msgid ""
 msgstr ""
 "โหมด 1: instantaneous solar incidence angle & irradiance ใช้กำหนด เวลาท้องถิ่น"
 
-#: ../raster/r.sun/main.c:618
+#: ../raster/r.sun/main.c:612
 msgid "incidout requires time parameter to be set"
 msgstr "incidout ต้องการตัวแปร time เพื่อกำหนด"
 
-#: ../raster/r.sun/main.c:620
+#: ../raster/r.sun/main.c:614
 msgid "Mode 2: integrated daily irradiation for a given day of the year"
 msgstr "โหมด 2:integrated daily irradiation สำหรับ วันที่กำหนดของปี"
 
-#: ../raster/r.sun/main.c:666
+#: ../raster/r.sun/main.c:660
 msgid "If you use -s and no horizon rasters, numpartitions must be =1"
 msgstr ""
 
-#: ../raster/r.sun/main.c:679
+#: ../raster/r.sun/main.c:673
 msgid ""
 "If you want to save memory and to use shadows, you must use pre-calculated "
 "horizons."
 msgstr ""
 
-#: ../raster/r.sun/main.c:724 ../display/d.where/main.c:107
+#: ../raster/r.sun/main.c:718 ../display/d.where/main.c:107
 #: ../general/g.region/printwindow.c:247 ../general/g.region/printwindow.c:503
 #: ../general/g.region/printwindow.c:622
 msgid "Can't get projection info of current location"
 msgstr "ไม่สามารถอ่าน ข้อมูลการฉายแผนที่สำหรับ ตำแหน่งปัจจุบัน"
 
-#: ../raster/r.sun/main.c:728 ../raster/r.horizon/main.c:476
+#: ../raster/r.sun/main.c:722 ../raster/r.horizon/main.c:476
 #: ../display/d.where/main.c:110 ../general/g.region/printwindow.c:250
 #: ../general/g.region/printwindow.c:506 ../general/g.region/printwindow.c:625
 msgid "Can't get projection units of current location"
 msgstr "ไม่สามารถอ่าน หน่วยการฉายแผนที่สำหรับ ตำแหน่งปัจจุบัน"
 
-#: ../raster/r.sun/main.c:732 ../raster/r.horizon/main.c:480
+#: ../raster/r.sun/main.c:726 ../raster/r.horizon/main.c:480
 #: ../ps/ps.map/do_geogrid.c:272 ../display/d.where/main.c:113
 #: ../display/d.grid/plot.c:335 ../general/g.region/printwindow.c:253
 #: ../general/g.region/printwindow.c:509 ../general/g.region/printwindow.c:628
 msgid "Can't get projection key values of current location"
 msgstr "ไม่สามารถอ่าน  ค่า key การฉายแผนที่ ของ ตำแหน่งปัจจุบัน"
 
-#: ../raster/r.sun/main.c:742 ../raster/r.horizon/main.c:490
+#: ../raster/r.sun/main.c:736 ../raster/r.horizon/main.c:490
 #: ../imagery/i.latlong/main.c:114 ../ps/ps.map/do_geogrid.c:278
 #: ../display/d.where/main.c:120 ../display/d.where/main.c:146
 #: ../display/d.grid/plot.c:342 ../display/d.grid/plot.c:369
 msgid "Unable to set up lat/long projection parameters"
 msgstr "ไม่สามารถกำหนด ค่าตัวแปร แลต/ลอง ของการฉายแผนที่"
 
-#: ../raster/r.sun/main.c:746
+#: ../raster/r.sun/main.c:740
 msgid "latin and longin raster maps have no effect when in a Lat/Lon location"
 msgstr ""
 
-#: ../raster/r.sun/main.c:751
+#: ../raster/r.sun/main.c:745
 msgid "Both latin and longin raster maps must be given, or neither"
 msgstr ""
 
@@ -19590,7 +19595,7 @@ msgstr "ไม่สามารถเปิด MASK"
 msgid "illegal maploc request"
 msgstr "คำร้องขอให้ลบ ไม่ถูกต้อง"
 
-#: ../ps/ps.map/r_instructions.c:129 ../ps/ps.map/main.c:219
+#: ../ps/ps.map/r_instructions.c:129 ../ps/ps.map/main.c:220
 #, fuzzy
 msgid "illegal copies request"
 msgstr "คำร้องขอให้ลบ ไม่ถูกต้อง"
@@ -19937,12 +19942,12 @@ msgstr "ไฟล์ผลลัพธ์ PostScript"
 msgid "Number of copies to print"
 msgstr "จำนวน ชุด ที่จะพิมพ์"
 
-#: ../ps/ps.map/main.c:204
+#: ../ps/ps.map/main.c:205
 #, fuzzy, c-format
 msgid "Unable to open file '%s': %s"
 msgstr "ไม่สามารถเปิดไฟล์: <%s>"
 
-#: ../ps/ps.map/main.c:212 ../ps/ps.map/main.c:231
+#: ../ps/ps.map/main.c:213 ../ps/ps.map/main.c:232
 #: ../vector/v.univar/main.c:139 ../vector/v.to.db/parse.c:141
 #: ../vector/v.to.db/parse.c:144
 #, fuzzy, c-format
@@ -19951,7 +19956,7 @@ msgid ""
 "\t(%s)"
 msgstr "ตัวแปร <%s> ที่ต้องการ  ไม่ได้กำหนด"
 
-#: ../ps/ps.map/main.c:272
+#: ../ps/ps.map/main.c:273
 #, fuzzy, c-format
 msgid "PostScript file '%s' successfully written."
 msgstr "เขียน PostScript ไฟล์ [%s] สำเร็จ"
@@ -20071,7 +20076,7 @@ msgstr "ช่วง สำหรับ <%s> ใช้ไม่ได้"
 #: ../display/d.grid/main.c:233 ../display/d.his/main.c:118
 #: ../display/d.geodesic/main.c:96 ../display/d.labels/main.c:117
 #: ../display/d.colortable/main.c:141 ../display/d.rast/main.c:97
-#: ../display/d.thematic.area/main.c:371 ../display/d.fontlist/main.c:54
+#: ../display/d.thematic.area/main.c:370 ../display/d.fontlist/main.c:54
 #: ../display/d.graph/main.c:98 ../display/d.rgb/main.c:82
 #: ../display/d.path/main.c:154 ../display/d.rast.arrow/main.c:224
 #: ../display/d.legend/main.c:294 ../display/d.font/main.c:86
@@ -20084,12 +20089,12 @@ msgid "Unknown color: '%s'"
 msgstr "ไม่ทราบสี: [%s]"
 
 #: ../display/d.vect/opt.c:143 ../display/d.what.vect/what.c:413
-#: ../display/d.thematic.area/main.c:201 ../vector/v.db.connect/main.c:175
+#: ../display/d.thematic.area/main.c:200 ../vector/v.db.connect/main.c:175
 #, c-format
 msgid "Database connection not defined"
 msgstr "การติดต่อกับฐานข้อมูล ไม่ถูกกำหนด"
 
-#: ../display/d.vect/opt.c:152 ../display/d.thematic.area/main.c:210
+#: ../display/d.vect/opt.c:152 ../display/d.thematic.area/main.c:209
 #: ../vector/v.convert/att.c:74 ../db/db.select/main.c:73
 #: ../db/db.execute/main.c:76 ../db/db.tables/main.c:47
 #: ../db/db.describe/main.c:56
@@ -20165,8 +20170,8 @@ msgstr ""
 #: ../display/d.vect/main.c:80 ../display/d.vect/main.c:105
 #: ../display/d.vect/main.c:108 ../display/d.vect/main.c:111
 #: ../display/d.vect/main.c:314 ../display/d.rast/main.c:70
-#: ../display/d.rast/main.c:87 ../display/d.thematic.area/main.c:135
-#: ../display/d.thematic.area/main.c:138 ../vector/v.net.centrality/main.c:121
+#: ../display/d.rast/main.c:87 ../display/d.thematic.area/main.c:134
+#: ../display/d.thematic.area/main.c:137 ../vector/v.net.centrality/main.c:121
 #: ../vector/v.net.centrality/main.c:123 ../vector/v.in.ogr/main.c:146
 #: ../vector/v.in.ogr/main.c:159 ../vector/v.in.ogr/main.c:164
 #: ../vector/v.in.ogr/main.c:173 ../vector/v.in.ogr/main.c:189
@@ -20181,8 +20186,8 @@ msgstr ""
 #: ../vector/v.extract/main.c:100 ../vector/v.extract/main.c:106
 #: ../vector/v.extract/main.c:109 ../vector/v.extract/main.c:112
 #: ../vector/v.extract/main.c:122 ../vector/v.extract/main.c:132
-#: ../vector/v.to.db/parse.c:45 ../vector/v.category/main.c:83
-#: ../vector/v.category/main.c:86 ../vector/v.category/main.c:90
+#: ../vector/v.to.db/parse.c:45 ../vector/v.category/main.c:84
+#: ../vector/v.category/main.c:87 ../vector/v.category/main.c:91
 #: ../vector/v.buffer/main.c:232 ../vector/v.buffer/main.c:235
 #: ../vector/v.buffer/main.c:238 ../vector/v.buffer/main.c:243
 #: ../vector/v.surf.rst/main.c:173 ../vector/v.surf.rst/main.c:185
@@ -21157,7 +21162,7 @@ msgstr "จุดกลางของแผนภูมิแท่ง รอ�
 msgid "Maximum value used for bar plot reference"
 msgstr "ค่ามากสุดที่ใช้วาดแท่งอ้างอิง"
 
-#: ../display/d.vect.chart/main.c:149 ../display/d.thematic.area/main.c:164
+#: ../display/d.vect.chart/main.c:149 ../display/d.thematic.area/main.c:163
 msgid "Create legend information and send to stdout"
 msgstr "สร้างรายละเอียดสัญลักษณ์ และ ส่งไปที่ stdout"
 
@@ -21906,126 +21911,126 @@ msgstr "จำนวน ชุด ที่จะพิมพ์"
 msgid "Colors (one per class)."
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:134
+#: ../display/d.thematic.area/main.c:133
 msgid "Layer number. If -1, all layers are displayed."
 msgstr "จำนวนของชั้นข้อมูล ถ้าเป็น -1,แสดงชั้นข้อมูลทั้งหมด"
 
-#: ../display/d.thematic.area/main.c:144 ../display/d.thematic.area/main.c:152
+#: ../display/d.thematic.area/main.c:143 ../display/d.thematic.area/main.c:151
 #, fuzzy
 msgid "Boundaries"
 msgstr "ส้นขอบเขต "
 
-#: ../display/d.thematic.area/main.c:145
+#: ../display/d.thematic.area/main.c:144
 #, fuzzy
 msgid "Boundary width"
 msgstr "ความกว้างของขอบ"
 
-#: ../display/d.thematic.area/main.c:151
+#: ../display/d.thematic.area/main.c:150
 #, fuzzy
 msgid "Boundary color"
 msgstr "สีเส้นขอบ"
 
-#: ../display/d.thematic.area/main.c:158
+#: ../display/d.thematic.area/main.c:157
 msgid "File in which to save d.graph instructions for legend display"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:169
+#: ../display/d.thematic.area/main.c:168
 msgid ""
 "When printing legend info , include extended statistical info from "
 "classification algorithm"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:173
+#: ../display/d.thematic.area/main.c:172
 #, fuzzy
 msgid "Do not draw map, only output the legend"
 msgstr "อย่า วาง ผลลัพธ์ ด้วย ตัวตั้งต้น"
 
-#: ../display/d.thematic.area/main.c:192
+#: ../display/d.thematic.area/main.c:191
 #, fuzzy, c-format
 msgid "%s: You must build topology on vector map. Run v.build."
 msgstr "%s: คุณต้องสร้าง topology ของข้อมูลแผนที่เชิงเส้น"
 
-#: ../display/d.thematic.area/main.c:199
+#: ../display/d.thematic.area/main.c:198
 #, fuzzy
 msgid "'layer' must be > 0"
 msgstr "'layer' ต้อง > 0 สำหรับ 'cats'."
 
-#: ../display/d.thematic.area/main.c:225
+#: ../display/d.thematic.area/main.c:224
 #, fuzzy, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
 msgstr "ชนิดข้อมูล ของ key column จะต้องเป็น integer"
 
-#: ../display/d.thematic.area/main.c:229
+#: ../display/d.thematic.area/main.c:228
 #: ../display/d.thematic.area/plot1.c:134
 #: ../display/d.thematic.area/plot1.c:162
 #, c-format
 msgid "Cannot select data (%s) from table"
 msgstr "ไม่สามารถเลือกข้อมูล (%s) จากตาราง"
 
-#: ../display/d.thematic.area/main.c:292
+#: ../display/d.thematic.area/main.c:291
 #, c-format
 msgid "Unknown color: [%s]"
 msgstr "ไม่ทราบสี: [%s]"
 
-#: ../display/d.thematic.area/main.c:303
+#: ../display/d.thematic.area/main.c:302
 msgid ""
 "You gave both manual breaks and a classification algorithm or a number of "
 "classes. The manual breaks have precedence and will thus be used."
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:340
+#: ../display/d.thematic.area/main.c:339
 msgid "You must either give classbreaks or a classification algorithm"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:353
+#: ../display/d.thematic.area/main.c:352
 #, c-format
 msgid ""
 "Not enough colors or error in color specifications.\n"
 "Need %i colors."
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:358
+#: ../display/d.thematic.area/main.c:357
 #, fuzzy, c-format
 msgid "Error interpreting color %s"
 msgstr "ข้อผิดพลาดขณะ อ่าน ไฟล์สี สำหรับ <%s>"
 
-#: ../display/d.thematic.area/main.c:377
+#: ../display/d.thematic.area/main.c:376
 msgid "Plotting ..."
 msgstr "กำลังวาด"
 
-#: ../display/d.thematic.area/main.c:384
+#: ../display/d.thematic.area/main.c:383
 msgid ""
 "The bounding box of the map is outside the current region, nothing drawn."
 msgstr "ขอบเขตของแผนที่อย่านอกขอบเขตที่กำลังทำงาน,ไม่มีอะไรต้องวาด"
 
-#: ../display/d.thematic.area/main.c:434
+#: ../display/d.thematic.area/main.c:433
 #, fuzzy, c-format
 msgid ""
 "\n"
 "Total number of records: %.0f\n"
 msgstr "จำนวนขั้นไม่ถูกต้อง: %s"
 
-#: ../display/d.thematic.area/main.c:436
+#: ../display/d.thematic.area/main.c:435
 #, c-format
 msgid "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:438 ../vector/v.class/main.c:202
+#: ../display/d.thematic.area/main.c:437 ../vector/v.class/main.c:202
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:440 ../vector/v.class/main.c:203
+#: ../display/d.thematic.area/main.c:439 ../vector/v.class/main.c:203
 #, fuzzy, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr "ค่าเบี่ยงเบน มาตรฐาน"
 
-#: ../display/d.thematic.area/main.c:444
+#: ../display/d.thematic.area/main.c:443
 #, c-format
 msgid "Last chi2 = %f\n"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:447 ../vector/v.class/main.c:210
+#: ../display/d.thematic.area/main.c:446 ../vector/v.class/main.c:210
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr ""
@@ -22466,12 +22471,14 @@ msgstr "ช่วงข้อมูล <%s>ไม่สามารถใช้�
 msgid "Input map contains no data"
 msgstr "กลุ่มข้อมูล ไม่มีข้อมูล"
 
-#: ../display/d.legend/main.c:381 ../display/d.legend/main.c:541
-msgid "Color range exceeds lower limit of actual data"
+#: ../display/d.legend/main.c:381
+#, fuzzy
+msgid "Requested range exceeds lower limit of actual data"
 msgstr "ช่วงสี เลยขอบล่าง ของข้อมูลจริง"
 
-#: ../display/d.legend/main.c:387 ../display/d.legend/main.c:545
-msgid "Color range exceeds upper limit of actual data"
+#: ../display/d.legend/main.c:387
+#, fuzzy
+msgid "Requested range exceeds upper limit of actual data"
 msgstr "ช่วงสี เลยขอบบน ของข้อมูลจริง"
 
 #: ../display/d.legend/main.c:446
@@ -22487,6 +22494,14 @@ msgstr "ไม่มีอะไรจะวาด! (ไม่มีหมวด
 #, fuzzy
 msgid "Forcing a smooth legend: too many categories for current window height"
 msgstr "บังคับใช้สัญลักษณืแบบเรียบ: มีหมวดหมู่ มากเกินไปสำหรับความสูงของหน้าต่างที่ใช้งานอยู่.\n"
+
+#: ../display/d.legend/main.c:541
+msgid "Color range exceeds lower limit of actual data"
+msgstr "ช่วงสี เลยขอบล่าง ของข้อมูลจริง"
+
+#: ../display/d.legend/main.c:545
+msgid "Color range exceeds upper limit of actual data"
+msgstr "ช่วงสี เลยขอบบน ของข้อมูลจริง"
 
 #: ../display/d.legend/main.c:552
 #, fuzzy, c-format
@@ -24827,7 +24842,7 @@ msgstr "ชนิดไม่เหมาะสม"
 
 #: ../vector/v.type/main.c:148 ../vector/v.net/main.c:152
 #: ../vector/v.proj/main.c:411 ../vector/v.kcv/main.c:142
-#: ../vector/v.build.polylines/main.c:234 ../vector/v.category/main.c:719
+#: ../vector/v.build.polylines/main.c:234 ../vector/v.category/main.c:750
 #: ../vector/v.transform/main.c:286 ../vector/v.rectify/main.c:285
 #, fuzzy
 msgid "Failed to copy attribute table to output map"
@@ -25750,7 +25765,7 @@ msgid "Removing bridges..."
 msgstr "เอา bridges ออก"
 
 #: ../vector/v.in.ogr/main.c:1208 ../vector/v.delaunay/main.c:171
-#: ../vector/v.category/main.c:326
+#: ../vector/v.category/main.c:357
 #, fuzzy
 msgid "Unable to calculate area centroid"
 msgstr "ไม่สามารถ คำนวน จุดศูนย์ถ่วง ของพื้นที่"
@@ -26322,6 +26337,7 @@ msgstr "จำนวนชั้นข้อมูล"
 #: ../vector/v.net.distance/main.c:98 ../vector/v.net.distance/main.c:103
 #: ../vector/v.net.distance/main.c:109 ../vector/v.distance/main.c:97
 #: ../vector/v.distance/main.c:102 ../vector/v.distance/main.c:109
+#: ../vector/v.distance/main.c:188
 #, fuzzy
 msgid "From"
 msgstr "From_map"
@@ -27892,7 +27908,8 @@ msgstr "ใช้  drand48()"
 msgid "Use drand48() (ignored)"
 msgstr "ใช้  drand48()"
 
-#: ../vector/v.kcv/main.c:119
+#: ../vector/v.kcv/main.c:119 ../vector/v.category/main.c:181
+#: ../vector/v.category/main.c:243 ../vector/v.category/main.c:251
 #, c-format
 msgid "Unable to open vector map <%s> at topological level %d"
 msgstr "ไม่สามารถเปิด แผนที่เชิงเส้น  <%s> ที่ระดับ  topological  %d"
@@ -28972,10 +28989,6 @@ msgid ""
 "Column name(s) where values specified by 'upload' option will be uploaded"
 msgstr "ชื่อ Column ที่ค่าระบุโดยเงื่อนไข 'upload' จะถูก upload"
 
-#: ../vector/v.distance/main.c:188
-msgid "From_map"
-msgstr "From_map"
-
 #: ../vector/v.distance/main.c:193
 msgid "Column name of nearest feature (used with upload=to_attr)"
 msgstr "ชื่อ Column ของข้อมูลที่ใกล้ที่สุด (ใช้กับ upload=to_attr)"
@@ -29630,178 +29643,178 @@ msgstr "กำลังหา quadrats ..."
 msgid "Counting points quadrats..."
 msgstr "กำลังนับ sites ใน quadrats ..."
 
-#: ../vector/v.category/main.c:77
+#: ../vector/v.category/main.c:78
 #, fuzzy
 msgid "Attaches, deletes or reports vector categories to map geometry."
 msgstr "แนบ, ลบ หรือ รายงาน หมวดหมู่ ของ แผนที่เชิงเส้น  ไปที่  map geometry."
 
-#: ../vector/v.category/main.c:89
+#: ../vector/v.category/main.c:90
 msgid "Feature ids (by default all features are processed)"
 msgstr ""
 
-#: ../vector/v.category/main.c:101
+#: ../vector/v.category/main.c:102
 msgid "Action to be done"
 msgstr "การทำงาน ที่จะทำ"
 
-#: ../vector/v.category/main.c:111
+#: ../vector/v.category/main.c:113
 #, fuzzy
 msgid "add a new category"
 msgstr "เส้น %d ไม่มีหมวดหมู่"
 
-#: ../vector/v.category/main.c:112
+#: ../vector/v.category/main.c:114
 msgid "delete category (-1 to delete all categories of given layer)"
 msgstr ""
 
-#: ../vector/v.category/main.c:113
+#: ../vector/v.category/main.c:115
 msgid "change layer number (e.g. layer=3,1 changes layer 3 to layer 1)"
 msgstr ""
 
-#: ../vector/v.category/main.c:114
+#: ../vector/v.category/main.c:116
 msgid "add the value specified by cat option to the current category value"
 msgstr ""
 
-#: ../vector/v.category/main.c:115
+#: ../vector/v.category/main.c:117
 msgid ""
 "copy values from one layer to another (e.g. layer=1,2,3 copies values from "
 "layer 1 to layer 2 and 3)"
 msgstr ""
 
-#: ../vector/v.category/main.c:116
+#: ../vector/v.category/main.c:118
 #, fuzzy
 msgid "print report (statistics), in shell style: layer type count min max"
 msgstr "รูปแบบ: จำนวนชนิดของชั้นข้อมูล min max"
 
-#: ../vector/v.category/main.c:117
+#: ../vector/v.category/main.c:119
 msgid "print category values, more cats in the same layer are separated by '/'"
 msgstr ""
 
-#: ../vector/v.category/main.c:129
+#: ../vector/v.category/main.c:120
+#, fuzzy
+msgid "print only layer numbers"
+msgstr "ไม่ต้องแสดง ตัวเลข ของหมวดหมู่"
+
+#: ../vector/v.category/main.c:132
 #: ../locale/scriptstrings/v.centroids_to_translate.c:7
 msgid "Category increment"
 msgstr "การเพิ่มขึ้นของ หมวดหมู่"
 
-#: ../vector/v.category/main.c:133
+#: ../vector/v.category/main.c:136
 msgid "Shell script style, currently only for report"
 msgstr "แบบ Shell script , สำหรับ รายงานเท่านั้น"
 
-#: ../vector/v.category/main.c:134
+#: ../vector/v.category/main.c:137
 msgid "Format: layer type count min max"
 msgstr "รูปแบบ: จำนวนชนิดของชั้นข้อมูล min max"
 
-#: ../vector/v.category/main.c:152
+#: ../vector/v.category/main.c:155
 msgid ""
 "Database connection and attribute tables for concerned layers are not changed"
 msgstr "การติดต่อฐานข้อมูล และ ตารางรายละเอียด สำหรับ ชั้นข้อมูลที่กำลังทำงาน ไม่ถูกเปลี่ยน"
 
-#: ../vector/v.category/main.c:173
+#: ../vector/v.category/main.c:203
 msgid ""
 "Invalid category number (must be equal to or greater than 0). Normally "
 "category number starts at 1."
 msgstr ""
 
-#: ../vector/v.category/main.c:182
+#: ../vector/v.category/main.c:212
 #, fuzzy, c-format
 msgid "%d errors in id option"
 msgstr "%d ข้อผิดพลาด ในเงื่อนไข cat"
 
-#: ../vector/v.category/main.c:191
+#: ../vector/v.category/main.c:221
 msgid "Output vector wasn't entered"
 msgstr "ไม่ได้ใส่ แผนที่ผลลัพธ์ เชิงเส้น"
 
-#: ../vector/v.category/main.c:212 ../vector/v.category/main.c:220
-#, fuzzy, c-format
-msgid "Can not open vector <%s> on level %d"
-msgstr "ไม่สามารถปิด แผนที่เชิงเส้น <%s> ที่ topology ระดับ %d"
-
-#: ../vector/v.category/main.c:237
+#: ../vector/v.category/main.c:268
 msgid "Too many layers for this operation"
 msgstr "ชั้นข้อมูลมากเกินไป สำหรับ การทำงานนี้"
 
-#: ../vector/v.category/main.c:240 ../vector/v.category/main.c:243
+#: ../vector/v.category/main.c:271 ../vector/v.category/main.c:274
 msgid "2 layers must be specified"
 msgstr "จะต้องระบุ 2 ชั้นข้อมูล"
 
-#: ../vector/v.category/main.c:251
+#: ../vector/v.category/main.c:282
 #, fuzzy, c-format
 msgid "Categories already exist in layer %d"
 msgstr "%d หมวดหมู่ อ่านจากแผนที่"
 
-#: ../vector/v.category/main.c:294 ../vector/v.select/select.c:40
+#: ../vector/v.category/main.c:325 ../vector/v.select/select.c:40
 #, fuzzy
 msgid "Processing features..."
 msgstr "กำลังทำงาน  ainput areas  ..."
 
-#: ../vector/v.category/main.c:340
+#: ../vector/v.category/main.c:371
 #, c-format
 msgid "%d new centroids placed in output map"
 msgstr "%d จุดศูนย์ถ่วงใหม่ ใส่ไปในแผนที่ผลลัพธ์"
 
-#: ../vector/v.category/main.c:629
+#: ../vector/v.category/main.c:660
 #, fuzzy
 msgid "Layer/table"
 msgstr "ชั้นข้อมูล / ตาราง"
 
-#: ../vector/v.category/main.c:633
+#: ../vector/v.category/main.c:664
 msgid "Layer"
 msgstr "ชั้นข้อมูล"
 
-#: ../vector/v.category/main.c:635
+#: ../vector/v.category/main.c:666
 #, fuzzy, c-format
 msgid "type       count        min        max\n"
 msgstr "ช่วง:     น้อยสุด         มากสุด\n"
 
-#: ../vector/v.category/main.c:636
+#: ../vector/v.category/main.c:667
 #, fuzzy
 msgid "point"
 msgstr "จุด"
 
-#: ../vector/v.category/main.c:640
+#: ../vector/v.category/main.c:671
 #, fuzzy
 msgid "line"
 msgstr "เส้น"
 
-#: ../vector/v.category/main.c:644
+#: ../vector/v.category/main.c:675
 #, fuzzy
 msgid "boundary"
 msgstr "ส้นขอบเขต "
 
-#: ../vector/v.category/main.c:648
+#: ../vector/v.category/main.c:679
 #: ../locale/scriptstrings/v.centroids_to_translate.c:3
 msgid "centroid"
 msgstr ""
 
-#: ../vector/v.category/main.c:652
+#: ../vector/v.category/main.c:683
 #: ../locale/scriptstrings/v.centroids_to_translate.c:4
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:4
 #, fuzzy
 msgid "area"
 msgstr "Break"
 
-#: ../vector/v.category/main.c:656
+#: ../vector/v.category/main.c:687
 #, fuzzy
 msgid "face"
 msgstr "Sum Variance"
 
-#: ../vector/v.category/main.c:660
+#: ../vector/v.category/main.c:691
 #, fuzzy
 msgid "kernel"
 msgstr "ทั่วไป"
 
-#: ../vector/v.category/main.c:664
+#: ../vector/v.category/main.c:695
 msgid "all"
 msgstr ""
 
-#: ../vector/v.category/main.c:717 ../vector/v.rectify/main.c:283
+#: ../vector/v.category/main.c:748 ../vector/v.rectify/main.c:283
 #, fuzzy
 msgid "Copying attribute table(s)..."
 msgstr "คัดลอก ตารางรายละเอียดด้วย"
 
-#: ../vector/v.category/main.c:725
+#: ../vector/v.category/main.c:756
 #, fuzzy, c-format
 msgid "Categories copied from layer %d to layer %d"
 msgstr "%d หมวดหมู่ อ่านจากแผนที่"
 
-#: ../vector/v.category/main.c:727
+#: ../vector/v.category/main.c:758
 #, fuzzy, c-format
 msgid "%d features modified."
 msgstr "%d ข้อมูล ถูกเปลี่ยนแปลง"
@@ -39006,6 +39019,16 @@ msgstr "ชื่อของภาพที่จะสร้าความส
 #: ../locale/scriptstrings/d.shadedmap_to_translate.c:6
 msgid "Percent to brighten"
 msgstr "เปอร์เซ็นต์ ความสว่าง"
+
+#~ msgid "Output_maps"
+#~ msgstr "Output_maps"
+
+#~ msgid "From_map"
+#~ msgstr "From_map"
+
+#, fuzzy
+#~ msgid "Can not open vector <%s> on level %d"
+#~ msgstr "ไม่สามารถปิด แผนที่เชิงเส้น <%s> ที่ topology ระดับ %d"
 
 #, fuzzy
 #~ msgid "nviz - Visualization and animation tool for GRASS data."
