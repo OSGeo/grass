@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-18 14:06+0100\n"
+"POT-Creation-Date: 2013-02-26 14:45+0100\n"
 "PO-Revision-Date: 2012-11-20 19:03+0100\n"
 "Last-Translator: Jan Trochta <j.trochta@gmail.com>\n"
 "Language-Team:  <cs@li.org>\n"
@@ -148,7 +148,7 @@ msgid "Iso lines:"
 msgstr "Linie toku"
 
 #: ../gui/wxpython/vnet/dialogs.py:330
-#: ../gui/wxpython/modules/mcalc_builder.py:123
+#: ../gui/wxpython/modules/mcalc_builder.py:124
 #: ../gui/wxpython/scripts/vkrige.py:117
 msgid "Output"
 msgstr "Výstup"
@@ -692,8 +692,8 @@ msgstr "Vyberte vstupní adresář"
 #: ../gui/wxpython/gui_core/gselect.py:1263
 #: ../gui/wxpython/gui_core/gselect.py:1480
 #: ../gui/wxpython/gui_core/gselect.py:1708
-#: ../gui/wxpython/gui_core/forms.py:1419
-#: ../gui/wxpython/gui_core/forms.py:1475
+#: ../gui/wxpython/gui_core/forms.py:1435
+#: ../gui/wxpython/gui_core/forms.py:1491
 #: ../gui/wxpython/gui_core/dialogs.py:1934
 #: ../gui/wxpython/psmap/dialogs.py:1970 ../gui/wxpython/psmap/dialogs.py:2159
 #: ../gui/wxpython/psmap/dialogs.py:4121
@@ -961,7 +961,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1092 ../gui/wxpython/menustrings.py:4
-#: ../gui/wxpython/menustrings.py:924
+#: ../gui/wxpython/menustrings.py:926
 msgid "New"
 msgstr "Nový"
 
@@ -2698,7 +2698,7 @@ msgid "Set computational region from selected map(s) (ignore NULLs)"
 msgstr ""
 "Nastavit výpočetní region podle podle vybrané mapy (ignoruje NULL hodnoty)"
 
-#: ../gui/wxpython/lmgr/layertree.py:535 ../gui/wxpython/menustrings.py:740
+#: ../gui/wxpython/lmgr/layertree.py:535 ../gui/wxpython/menustrings.py:742
 msgid "Histogram"
 msgstr "Histogram"
 
@@ -4159,7 +4159,7 @@ msgstr "Sloupce"
 msgid "Length"
 msgstr "délka"
 
-#: ../gui/wxpython/dbmgr/base.py:2020 ../gui/wxpython/menustrings.py:902
+#: ../gui/wxpython/dbmgr/base.py:2020 ../gui/wxpython/menustrings.py:904
 msgid "Rename column"
 msgstr "Přejmenovat sloupec"
 
@@ -4368,7 +4368,7 @@ msgstr ""
 "Nelze přidat novou vrstvu k vektorové mapě <%(vector)s>. Vrstva %(layer)d "
 "již existuje."
 
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:94 ../gui/wxpython/menustrings.py:884
+#: ../gui/wxpython/dbmgr/sqlbuilder.py:94 ../gui/wxpython/menustrings.py:886
 msgid "Query"
 msgstr "Dotaz"
 
@@ -4509,7 +4509,7 @@ msgstr "Zavřít dialog při zápis"
 msgid "No attributes found"
 msgstr "Nenalezeny žásndé atributy"
 
-#: ../gui/wxpython/dbmgr/dialogs.py:114 ../gui/wxpython/menustrings.py:671
+#: ../gui/wxpython/dbmgr/dialogs.py:114 ../gui/wxpython/menustrings.py:673
 msgid "Update attributes"
 msgstr "Modifikovat atributy"
 
@@ -4773,7 +4773,7 @@ msgstr "Dialog nastavení příkazů"
 
 #: ../gui/wxpython/gui_core/preferences.py:818
 #: ../gui/wxpython/gui_core/dialogs.py:1568
-#: ../gui/wxpython/modules/mcalc_builder.py:228
+#: ../gui/wxpython/modules/mcalc_builder.py:229
 #: ../gui/wxpython/modules/vclean.py:135 ../gui/wxpython/scripts/vkrige.py:141
 #: ../gui/wxpython/gmodeler/preferences.py:442
 msgid "Allow output files to overwrite existing files"
@@ -4830,7 +4830,7 @@ msgstr "barva sítě"
 
 #: ../gui/wxpython/gui_core/preferences.py:975
 #: ../gui/wxpython/gui_core/preferences.py:997
-#: ../gui/wxpython/gui_core/forms.py:1388
+#: ../gui/wxpython/gui_core/forms.py:1403
 msgid "Transparent"
 msgstr "Průhledný"
 
@@ -5012,7 +5012,7 @@ msgid "Menu tree (double-click or Ctrl-Enter to run command)"
 msgstr "Nabídka (dvojklikem spustíte příkaz)"
 
 #: ../gui/wxpython/gui_core/menu.py:148 ../gui/wxpython/gui_core/forms.py:494
-#: ../gui/wxpython/modules/mcalc_builder.py:134
+#: ../gui/wxpython/modules/mcalc_builder.py:135
 #: ../gui/wxpython/modules/vclean.py:156 ../gui/wxpython/scripts/vkrige.py:155
 #: ../gui/wxpython/gmodeler/frame.py:1510
 #: ../gui/wxpython/gmodeler/model.py:2189
@@ -5147,7 +5147,7 @@ msgid "File"
 msgstr "Soubor"
 
 #: ../gui/wxpython/gui_core/gselect.py:1208
-#: ../gui/wxpython/gui_core/forms.py:1474
+#: ../gui/wxpython/gui_core/forms.py:1490
 msgid "Directory"
 msgstr "Adresář"
 
@@ -5377,8 +5377,8 @@ msgstr "Přiložit mapové prvky jako měřítko a legendu do mapy"
 msgid "Create histogram with d.histogram"
 msgstr "Vytvořit histogram obrazu nebo rastrového souboru"
 
-#: ../gui/wxpython/gui_core/ghelp.py:44 ../gui/wxpython/menustrings.py:919
-#: ../gui/wxpython/menustrings.py:920
+#: ../gui/wxpython/gui_core/ghelp.py:44 ../gui/wxpython/menustrings.py:921
+#: ../gui/wxpython/menustrings.py:922
 msgid "About GRASS GIS"
 msgstr "O GIS GRASS"
 
@@ -5430,7 +5430,7 @@ msgid "Language"
 msgstr "Jazyk"
 
 #: ../gui/wxpython/gui_core/ghelp.py:200 ../gui/wxpython/gmodeler/model.py:935
-#: ../gui/wxpython/gmodeler/model.py:1002 ../gui/wxpython/core/gconsole.py:615
+#: ../gui/wxpython/gmodeler/model.py:1002 ../gui/wxpython/core/gconsole.py:611
 msgid "unknown"
 msgstr "neznámý"
 
@@ -5547,12 +5547,12 @@ msgid "Required"
 msgstr "Požadováno"
 
 #: ../gui/wxpython/gui_core/forms.py:801 ../gui/wxpython/gui_core/forms.py:811
-#: ../gui/wxpython/gui_core/forms.py:2105
+#: ../gui/wxpython/gui_core/forms.py:2135
 msgid "Optional"
 msgstr "Volitelné"
 
 #: ../gui/wxpython/gui_core/forms.py:877
-#: ../gui/wxpython/gui_core/forms.py:1513
+#: ../gui/wxpython/gui_core/forms.py:1529
 msgid "Parameterized in model"
 msgstr "Parametrizace v modelu"
 
@@ -5564,75 +5564,75 @@ msgstr "[mnohonásobné]"
 msgid "valid range"
 msgstr "platný rozsah"
 
-#: ../gui/wxpython/gui_core/forms.py:1369 ../gui/wxpython/core/utils.py:909
+#: ../gui/wxpython/gui_core/forms.py:1369 ../gui/wxpython/core/utils.py:905
 msgid "Select Color"
 msgstr "Zvolit barvu"
 
-#: ../gui/wxpython/gui_core/forms.py:1417
-#: ../gui/wxpython/gui_core/forms.py:1473
+#: ../gui/wxpython/gui_core/forms.py:1433
+#: ../gui/wxpython/gui_core/forms.py:1489
 #, python-format
 msgid "Choose %s"
 msgstr "Vybrat %s"
 
-#: ../gui/wxpython/gui_core/forms.py:1418
+#: ../gui/wxpython/gui_core/forms.py:1434
 #: ../gui/wxpython/gmodeler/frame.py:1343
 #, fuzzy
 msgid "file"
 msgstr "Profil"
 
-#: ../gui/wxpython/gui_core/forms.py:1446
-#: ../gui/wxpython/modules/mcalc_builder.py:141
+#: ../gui/wxpython/gui_core/forms.py:1462
+#: ../gui/wxpython/modules/mcalc_builder.py:142
 msgid "&Load"
 msgstr "&Nahrát"
 
-#: ../gui/wxpython/gui_core/forms.py:1452
+#: ../gui/wxpython/gui_core/forms.py:1468
 msgid "or enter values interactively"
 msgstr "nebo vložte hodnoty interaktivně"
 
-#: ../gui/wxpython/gui_core/forms.py:1685
+#: ../gui/wxpython/gui_core/forms.py:1701
 #: ../gui/wxpython/scripts/vkrige.py:106 ../gui/wxpython/gmodeler/frame.py:131
 msgid "Command output"
 msgstr "Výstup příkazů"
 
-#: ../gui/wxpython/gui_core/forms.py:1697
+#: ../gui/wxpython/gui_core/forms.py:1713
 msgid "Manual"
 msgstr "Manuálová stránka"
 
-#: ../gui/wxpython/gui_core/forms.py:1738
+#: ../gui/wxpython/gui_core/forms.py:1754
 #, fuzzy
 msgid "Nothing to load."
 msgstr "Není co uložit"
 
-#: ../gui/wxpython/gui_core/forms.py:1766
+#: ../gui/wxpython/gui_core/forms.py:1782
 #: ../gui/wxpython/modules/colorrules.py:606
 msgid "Nothing to save."
 msgstr "Není co uložit"
 
-#: ../gui/wxpython/gui_core/forms.py:1770
+#: ../gui/wxpython/gui_core/forms.py:1786
 #, fuzzy
 msgid "Save input as..."
 msgstr "Uložit soubor jako..."
 
-#: ../gui/wxpython/gui_core/forms.py:2081 ../gui/wxpython/core/gcmd.py:681
+#: ../gui/wxpython/gui_core/forms.py:2111 ../gui/wxpython/core/gcmd.py:681
 #, python-format
 msgid "Error in %s"
 msgstr "Chyba v %s"
 
-#: ../gui/wxpython/gui_core/forms.py:2197
+#: ../gui/wxpython/gui_core/forms.py:2227
 #, fuzzy, python-format
 msgid "Unable to parse command '%s'"
 msgstr "Nelze spustit příkaz %s"
 
-#: ../gui/wxpython/gui_core/forms.py:2203
+#: ../gui/wxpython/gui_core/forms.py:2233
 #, python-format
 msgid "%(cmd)s: parameter '%(key)s' not available"
 msgstr "%(cmd)s: parametr '%(key)s' není dostupný"
 
-#: ../gui/wxpython/gui_core/forms.py:2298
+#: ../gui/wxpython/gui_core/forms.py:2328
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2313
+#: ../gui/wxpython/gui_core/forms.py:2343
 #, python-format
 msgid "usage: %s <grass command>"
 msgstr "použití: %s <grass příkaz>"
@@ -5747,7 +5747,7 @@ msgid "Commands output saved into '%s'"
 msgstr "Výstup příkazů"
 
 #: ../gui/wxpython/gui_core/goutput.py:441
-#: ../gui/wxpython/core/gconsole.py:467
+#: ../gui/wxpython/core/gconsole.py:463
 #, fuzzy, python-format
 msgid ""
 "Unable to write file '%(filePath)s'.\n"
@@ -6193,7 +6193,7 @@ msgstr "Velikost symbolu:"
 msgid "Symbol name:"
 msgstr "Velikost symbolu:"
 
-#: ../gui/wxpython/menustrings.py:2 ../gui/wxpython/menustrings.py:923
+#: ../gui/wxpython/menustrings.py:2 ../gui/wxpython/menustrings.py:925
 msgid "&File"
 msgstr "&Soubor"
 
@@ -6205,7 +6205,7 @@ msgstr "Pracovní oblast"
 msgid "Create new workspace"
 msgstr "Vytvořit nový soubor pracovní oblasti"
 
-#: ../gui/wxpython/menustrings.py:6 ../gui/wxpython/menustrings.py:926
+#: ../gui/wxpython/menustrings.py:6 ../gui/wxpython/menustrings.py:928
 msgid "Open"
 msgstr "Otevřít"
 
@@ -6213,12 +6213,12 @@ msgstr "Otevřít"
 msgid "Load workspace from file"
 msgstr "Načíst soubor workspace"
 
-#: ../gui/wxpython/menustrings.py:8 ../gui/wxpython/menustrings.py:928
+#: ../gui/wxpython/menustrings.py:8 ../gui/wxpython/menustrings.py:930
 #: ../gui/wxpython/modules/colorrules.py:414
 msgid "Save"
 msgstr "Uložit"
 
-#: ../gui/wxpython/menustrings.py:10 ../gui/wxpython/menustrings.py:930
+#: ../gui/wxpython/menustrings.py:10 ../gui/wxpython/menustrings.py:932
 msgid "Save as"
 msgstr "Uložit jako"
 
@@ -6226,7 +6226,7 @@ msgstr "Uložit jako"
 msgid "Save workspace to file"
 msgstr "Uložit pracovní oblast do souboru"
 
-#: ../gui/wxpython/menustrings.py:12 ../gui/wxpython/menustrings.py:932
+#: ../gui/wxpython/menustrings.py:12 ../gui/wxpython/menustrings.py:934
 msgid "Close"
 msgstr "Zavřít"
 
@@ -6969,7 +6969,7 @@ msgid ""
 msgstr "Maže datové soubory z aktuálního mapsetu"
 
 #: ../gui/wxpython/menustrings.py:179 ../gui/wxpython/menustrings.py:313
-#: ../gui/wxpython/menustrings.py:597 ../gui/wxpython/menustrings.py:831
+#: ../gui/wxpython/menustrings.py:597 ../gui/wxpython/menustrings.py:833
 msgid "Map type conversions"
 msgstr "Konverze typu mapové vrstvy"
 
@@ -7035,11 +7035,11 @@ msgstr "Vytvoření vektorové vrstvy z bodů (sites, GRASS 5.x)"
 msgid "Converts a GRASS site_lists file into a vector map."
 msgstr "Převede starý GRASS vektorový formát do vektorové mapy."
 
-#: ../gui/wxpython/menustrings.py:194 ../gui/wxpython/menustrings.py:832
+#: ../gui/wxpython/menustrings.py:194 ../gui/wxpython/menustrings.py:834
 msgid "Volume to raster series"
 msgstr "Převod volume na řadu rastrových vrstev"
 
-#: ../gui/wxpython/menustrings.py:195 ../gui/wxpython/menustrings.py:833
+#: ../gui/wxpython/menustrings.py:195 ../gui/wxpython/menustrings.py:835
 msgid "Converts 3D raster maps to 2D raster maps"
 msgstr "Převede 3D rastrové mapy na 2D rastrové mapy"
 
@@ -7059,7 +7059,7 @@ msgstr "Grafické modelování"
 msgid "Launch Graphical modeler"
 msgstr "Spustit grafické modelování"
 
-#: ../gui/wxpython/menustrings.py:200 ../gui/wxpython/menustrings.py:960
+#: ../gui/wxpython/menustrings.py:200 ../gui/wxpython/menustrings.py:962
 msgid "Run model"
 msgstr "Spustit model"
 
@@ -7123,7 +7123,7 @@ msgstr "Konec grafického prostředí"
 msgid "Quit wxGUI session"
 msgstr "Ukončit WxGUI sezení"
 
-#: ../gui/wxpython/menustrings.py:216 ../gui/wxpython/menustrings.py:940
+#: ../gui/wxpython/menustrings.py:216 ../gui/wxpython/menustrings.py:942
 msgid "&Settings"
 msgstr "&Nastavení"
 
@@ -7293,7 +7293,7 @@ msgstr "Seznam rozšíření"
 msgid "Removes installed GRASS AddOns extension."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:259 ../gui/wxpython/menustrings.py:941
+#: ../gui/wxpython/menustrings.py:259 ../gui/wxpython/menustrings.py:943
 msgid "Preferences"
 msgstr "Vlastnosti"
 
@@ -7510,7 +7510,7 @@ msgstr ""
 "Kombinuje červenou, zelenou a modrou mapovou vrstvu do jedinné mapové "
 "kompozice."
 
-#: ../gui/wxpython/menustrings.py:306 ../gui/wxpython/menustrings.py:736
+#: ../gui/wxpython/menustrings.py:306 ../gui/wxpython/menustrings.py:738
 msgid "RGB to HIS"
 msgstr "Transformace RGB -> HIS"
 
@@ -7977,7 +7977,7 @@ msgstr ""
 msgid "Computes USLE R factor, Rainfall erosivity index."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:412 ../gui/wxpython/menustrings.py:844
+#: ../gui/wxpython/menustrings.py:412 ../gui/wxpython/menustrings.py:846
 msgid "Groundwater modeling"
 msgstr "Modelování povrchového odtku"
 
@@ -8214,7 +8214,7 @@ msgstr ""
 "Reklasifikuje rastrovou mapu na větší nebo menší než uživatelem zadané "
 "hraniční velikosti ploch (v hektarech)."
 
-#: ../gui/wxpython/menustrings.py:463 ../gui/wxpython/menustrings.py:669
+#: ../gui/wxpython/menustrings.py:463 ../gui/wxpython/menustrings.py:671
 msgid "Reclassify"
 msgstr "Reklasifikovat"
 
@@ -8411,7 +8411,7 @@ msgstr ""
 "V rastrových mapách vyplní plochy s prázdnými hodnotami za použití v.surf."
 "rst spline interpolace"
 
-#: ../gui/wxpython/menustrings.py:506 ../gui/wxpython/menustrings.py:818
+#: ../gui/wxpython/menustrings.py:506 ../gui/wxpython/menustrings.py:820
 msgid "Report and statistics"
 msgstr "Zprávy a statistiky"
 
@@ -8776,11 +8776,11 @@ msgstr "Souřadnicový dotaz"
 msgid "Queries a vector map at given locations."
 msgstr "Dotazovat vektorovou mapu v daných locations."
 
-#: ../gui/wxpython/menustrings.py:590 ../gui/wxpython/menustrings.py:887
+#: ../gui/wxpython/menustrings.py:590 ../gui/wxpython/menustrings.py:889
 msgid "Query vector attribute data"
 msgstr "Atributový dotaz"
 
-#: ../gui/wxpython/menustrings.py:591 ../gui/wxpython/menustrings.py:888
+#: ../gui/wxpython/menustrings.py:591 ../gui/wxpython/menustrings.py:890
 msgid "Prints vector map attributes."
 msgstr "Vypsat vektorové atributy"
 
@@ -8829,18 +8829,27 @@ msgid "Lidar analysis"
 msgstr "Analýza LIDAR dat"
 
 #: ../gui/wxpython/menustrings.py:609
-msgid "Detect edges"
-msgstr "Detekce hran"
+msgid "Identify and remove outliers"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:610
-msgid "Detects the object's edges from a LIDAR data set."
+#, fuzzy
+msgid "Removes outlier points from a LIDAR data set."
 msgstr "Detekovat hrany objektů z LIDAR dat."
 
 #: ../gui/wxpython/menustrings.py:611
+msgid "Detect edges"
+msgstr "Detekce hran"
+
+#: ../gui/wxpython/menustrings.py:612
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr "Detekovat hrany objektů z LIDAR dat."
+
+#: ../gui/wxpython/menustrings.py:613
 msgid "Detect interiors"
 msgstr "Detekovat vnitřní plochy"
 
-#: ../gui/wxpython/menustrings.py:612
+#: ../gui/wxpython/menustrings.py:614
 msgid ""
 "Building contour determination and Region Growing algorithm for determining "
 "the building inside"
@@ -8848,11 +8857,11 @@ msgstr ""
 "Hledání linií a algoritmus růstu regionu (Region Growing) pro nalezení "
 "vnitřků budov"
 
-#: ../gui/wxpython/menustrings.py:613
+#: ../gui/wxpython/menustrings.py:615
 msgid "Correct and reclassify objects"
 msgstr "Spravit a reklasifikovat prvky"
 
-#: ../gui/wxpython/menustrings.py:614
+#: ../gui/wxpython/menustrings.py:616
 msgid ""
 "Correction of the v.lidar.growing output. It is the last of the three "
 "algorithms for LIDAR filtering."
@@ -8860,33 +8869,33 @@ msgstr ""
 "Výstup korekce v.lidar.growing. Jedná se o poslední ze tří algoritmů LIDAR "
 "filtrace"
 
-#: ../gui/wxpython/menustrings.py:615
+#: ../gui/wxpython/menustrings.py:617
 msgid "Linear referencing"
 msgstr "Lineární referencování pro vektorové vrstvy"
 
-#: ../gui/wxpython/menustrings.py:616
+#: ../gui/wxpython/menustrings.py:618
 msgid "Create LRS"
 msgstr "Vytvořit LRS"
 
-#: ../gui/wxpython/menustrings.py:617
+#: ../gui/wxpython/menustrings.py:619
 #, fuzzy
 msgid "Creates a linear reference system."
 msgstr "vytvořit lineární referenční systém"
 
-#: ../gui/wxpython/menustrings.py:618
+#: ../gui/wxpython/menustrings.py:620
 msgid "Create stationing"
 msgstr "vytvořit staničení"
 
-#: ../gui/wxpython/menustrings.py:619
+#: ../gui/wxpython/menustrings.py:621
 #, fuzzy
 msgid "Creates stationing from input lines, and linear reference system."
 msgstr "Vytváří staničení ze vstupních linií, a lineární referenční systém "
 
-#: ../gui/wxpython/menustrings.py:620
+#: ../gui/wxpython/menustrings.py:622
 msgid "Create points/segments"
 msgstr "Vytvořit body/segmenty"
 
-#: ../gui/wxpython/menustrings.py:621
+#: ../gui/wxpython/menustrings.py:623
 msgid ""
 "Creates points/segments from input lines, linear reference system and "
 "positions read from stdin or a file."
@@ -8894,11 +8903,11 @@ msgstr ""
 "Vytvoří body/segmenty ze vstupních linií, lineární referenční systém a "
 "umístění jsou čteny ze standartního vstupu nebo souboru."
 
-#: ../gui/wxpython/menustrings.py:622
+#: ../gui/wxpython/menustrings.py:624
 msgid "Find line id and offset"
 msgstr "Nalézt ID linie a odchylku"
 
-#: ../gui/wxpython/menustrings.py:623
+#: ../gui/wxpython/menustrings.py:625
 msgid ""
 "Finds line id and real km+offset for given points in vector map using linear "
 "reference system."
@@ -8906,11 +8915,11 @@ msgstr ""
 "Nalezne id linie a skutečnou délku + odchylku pro dané body ve vektorové "
 "mapě používající lineární referenční systém."
 
-#: ../gui/wxpython/menustrings.py:624
+#: ../gui/wxpython/menustrings.py:626
 msgid "Nearest features"
 msgstr "Nejbližší prvky"
 
-#: ../gui/wxpython/menustrings.py:625
+#: ../gui/wxpython/menustrings.py:627
 msgid ""
 "Finds the nearest element in vector map 'to' for elements in vector map "
 "'from'."
@@ -8918,193 +8927,193 @@ msgstr ""
 "Hledá nejbližší prvek ve vektorové vrstvě 'do_mapy' pro prvky ve vektorové "
 "vrstvě 'z_mapy'"
 
-#: ../gui/wxpython/menustrings.py:626
+#: ../gui/wxpython/menustrings.py:628
 msgid "Network analysis"
 msgstr "Síťová analýza"
 
-#: ../gui/wxpython/menustrings.py:627 ../gui/wxpython/mapdisp/toolbars.py:50
+#: ../gui/wxpython/menustrings.py:629 ../gui/wxpython/mapdisp/toolbars.py:50
 #, fuzzy
 msgid "Vector network analysis tool"
 msgstr "Síťová analýza"
 
-#: ../gui/wxpython/menustrings.py:628
+#: ../gui/wxpython/menustrings.py:630
 msgid "Tool for interactive vector network analysis."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:629
+#: ../gui/wxpython/menustrings.py:631
 #, fuzzy
 msgid "Network preparation"
 msgstr "Síťová analýza"
 
-#: ../gui/wxpython/menustrings.py:630
+#: ../gui/wxpython/menustrings.py:632
 msgid "Performs network maintenance."
 msgstr "Provádí údržbu síťě."
 
-#: ../gui/wxpython/menustrings.py:631
+#: ../gui/wxpython/menustrings.py:633
 msgid "Allocate subnets"
 msgstr "Přidělit podsítě"
 
-#: ../gui/wxpython/menustrings.py:632
+#: ../gui/wxpython/menustrings.py:634
 #, fuzzy
 msgid "Allocate subnets for nearest centers (direction from center)."
 msgstr "Přidělí podsítě nejbližšímu centru (ve směru od středu)."
 
-#: ../gui/wxpython/menustrings.py:633
+#: ../gui/wxpython/menustrings.py:635
 msgid "Split net"
 msgstr "Rozdělit síť"
 
-#: ../gui/wxpython/menustrings.py:634
+#: ../gui/wxpython/menustrings.py:636
 msgid "Splits net by cost isolines."
 msgstr "Rozdělit síť podle isolinií."
 
-#: ../gui/wxpython/menustrings.py:635
+#: ../gui/wxpython/menustrings.py:637
 msgid "Shortest path"
 msgstr "Nejkratší cesta"
 
-#: ../gui/wxpython/menustrings.py:636
+#: ../gui/wxpython/menustrings.py:638
 msgid "Finds shortest path on vector network."
 msgstr "Nalézá nejkratší cestu ve vektorové síti."
 
-#: ../gui/wxpython/menustrings.py:637
+#: ../gui/wxpython/menustrings.py:639
 msgid "Shortest path for sets of features"
 msgstr "Nejkratší cesta pro skupinu prvků"
 
-#: ../gui/wxpython/menustrings.py:638
+#: ../gui/wxpython/menustrings.py:640
 msgid ""
 "Computes shortest distance via the network between the given sets of "
 "features."
 msgstr "Vypočítá nejkratší vzdálenost v síti mezi zadanými body."
 
-#: ../gui/wxpython/menustrings.py:639
+#: ../gui/wxpython/menustrings.py:641
 msgid "Shortest path using timetables"
 msgstr "Nejkratší cesta pomocí časového rozvrhu"
 
-#: ../gui/wxpython/menustrings.py:640
+#: ../gui/wxpython/menustrings.py:642
 msgid "Finds shortest path using timetables."
 msgstr "Hledá nejkratší cestu pomocí časového rozvrhu."
 
-#: ../gui/wxpython/menustrings.py:641
+#: ../gui/wxpython/menustrings.py:643
 msgid "Shortest path for all pairs"
 msgstr "Nejkratší cesta pro všechny dvojice"
 
-#: ../gui/wxpython/menustrings.py:642
+#: ../gui/wxpython/menustrings.py:644
 msgid "Computes the shortest path between all pairs of nodes in the network."
 msgstr "Vypočítá nejkratší cestu mezi páry bodů v síti."
 
-#: ../gui/wxpython/menustrings.py:643
+#: ../gui/wxpython/menustrings.py:645
 msgid "Visibility network"
 msgstr "Viditelnost/linie viditelnosti"
 
-#: ../gui/wxpython/menustrings.py:644
+#: ../gui/wxpython/menustrings.py:646
 msgid "Visibility graph construction."
 msgstr "Tvorba grafu viditelnosti."
 
-#: ../gui/wxpython/menustrings.py:645
+#: ../gui/wxpython/menustrings.py:647
 msgid "Bridges and articulation points"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:646
+#: ../gui/wxpython/menustrings.py:648
 #, fuzzy
 msgid "Computes bridges and articulation points in the network."
 msgstr "Vypočítá silně a slabě připojené součásti v síti"
 
-#: ../gui/wxpython/menustrings.py:647
+#: ../gui/wxpython/menustrings.py:649
 msgid "Maximum flow"
 msgstr "Maximální tok"
 
-#: ../gui/wxpython/menustrings.py:648
+#: ../gui/wxpython/menustrings.py:650
 #, fuzzy
 msgid "Computes the maximum flow between two sets of nodes in the network."
 msgstr "Vypočítá nejkratší cestu mezi páry bodů v síti."
 
-#: ../gui/wxpython/menustrings.py:649
+#: ../gui/wxpython/menustrings.py:651
 msgid "Vertex connectivity"
 msgstr "Spojení vrcholů"
 
-#: ../gui/wxpython/menustrings.py:650
+#: ../gui/wxpython/menustrings.py:652
 #, fuzzy
 msgid "Computes vertex connectivity between two sets of nodes in the network."
 msgstr "Vypočítá nejkratší cestu mezi páry bodů v síti."
 
-#: ../gui/wxpython/menustrings.py:651
+#: ../gui/wxpython/menustrings.py:653
 msgid "Components"
 msgstr "Součásti"
 
-#: ../gui/wxpython/menustrings.py:652
+#: ../gui/wxpython/menustrings.py:654
 msgid "Computes strongly and weakly connected components in the network."
 msgstr "Vypočítá silně a slabě připojené součásti v síti"
 
-#: ../gui/wxpython/menustrings.py:653
+#: ../gui/wxpython/menustrings.py:655
 #, fuzzy
 msgid "Centrality"
 msgstr "Test normality"
 
-#: ../gui/wxpython/menustrings.py:654
+#: ../gui/wxpython/menustrings.py:656
 msgid ""
 "Computes degree, centrality, betweeness, closeness and eigenvector "
 "centrality measures in the network."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:655
+#: ../gui/wxpython/menustrings.py:657
 msgid "Steiner tree"
 msgstr "Steinerův strom"
 
-#: ../gui/wxpython/menustrings.py:656
+#: ../gui/wxpython/menustrings.py:658
 msgid "Create Steiner tree for the network and given terminals"
 msgstr "vytvoří Steinerův strom pro síť a zadané terminály"
 
-#: ../gui/wxpython/menustrings.py:657
+#: ../gui/wxpython/menustrings.py:659
 msgid "Minimum spanning tree"
 msgstr "Strom nejkratší vzdálenosti"
 
-#: ../gui/wxpython/menustrings.py:658
+#: ../gui/wxpython/menustrings.py:660
 msgid "Computes minimum spanning tree for the network."
 msgstr "Vypočítá nejkratší vzdálenosti pro síť"
 
-#: ../gui/wxpython/menustrings.py:659
+#: ../gui/wxpython/menustrings.py:661
 msgid "Traveling salesman analysis"
 msgstr "Problém obchodního cestujícího"
 
-#: ../gui/wxpython/menustrings.py:660
+#: ../gui/wxpython/menustrings.py:662
 msgid "Creates a cycle connecting given nodes (Traveling salesman problem)."
 msgstr ""
 "Vytvoří zacyklený průběh sítí podle daných uzlů (problém obchodního "
 "cestujícího)."
 
-#: ../gui/wxpython/menustrings.py:661 ../gui/wxpython/menustrings.py:662
+#: ../gui/wxpython/menustrings.py:663 ../gui/wxpython/menustrings.py:664
 msgid "Overlay vector maps"
 msgstr "Překrýt vektorové mapy"
 
-#: ../gui/wxpython/menustrings.py:663
+#: ../gui/wxpython/menustrings.py:665
 msgid "Overlays two vector maps."
 msgstr "Překrytí dvou vektorových map."
 
-#: ../gui/wxpython/menustrings.py:664
+#: ../gui/wxpython/menustrings.py:666
 msgid "Patch vector maps"
 msgstr "Spojit vektorové mapy"
 
-#: ../gui/wxpython/menustrings.py:665
+#: ../gui/wxpython/menustrings.py:667
 #, fuzzy
 msgid "Creates a new vector map by combining other vector maps."
 msgstr ""
 "Vytvoří nový binární vektorovou mapu kombinací více vektorových vrstev."
 
-#: ../gui/wxpython/menustrings.py:666
+#: ../gui/wxpython/menustrings.py:668
 #, fuzzy
 msgid "Manage categories"
 msgstr "Upravit nebo vypsat kategorie"
 
-#: ../gui/wxpython/menustrings.py:667
+#: ../gui/wxpython/menustrings.py:669
 #, fuzzy
 msgid "Change or report categories"
 msgstr "Upravit nebo vypsat kategorie"
 
-#: ../gui/wxpython/menustrings.py:668
+#: ../gui/wxpython/menustrings.py:670
 #, fuzzy
 msgid "Attaches, deletes or reports vector categories to map geometry."
 msgstr "Přilož, smaž nebo vypiš vektorové kategorie do mapové geometrie."
 
-#: ../gui/wxpython/menustrings.py:670
+#: ../gui/wxpython/menustrings.py:672
 msgid ""
 "Changes vector category values for an existing vector map according to "
 "results of SQL queries or a value in attribute table column."
@@ -9112,11 +9121,11 @@ msgstr ""
 "Změnit hodnoty kategorií pro existující vektorovou vrstvu podle výsledků SQL "
 "dotazu nebo podle hodnot sloupce v tabulce."
 
-#: ../gui/wxpython/menustrings.py:672
+#: ../gui/wxpython/menustrings.py:674
 msgid "Update area attributes from raster"
 msgstr "Aktualizovat atributy plochy z rastru"
 
-#: ../gui/wxpython/menustrings.py:673
+#: ../gui/wxpython/menustrings.py:675
 #, fuzzy
 msgid ""
 "Calculates univariate statistics from a raster map based on vector polygon "
@@ -9125,79 +9134,79 @@ msgstr ""
 "Spočítá jednorozměrnou statistiku z rastrové mapy zalžené na vektorových "
 "polygonech a uloží výsledek do nového stributového sloupce."
 
-#: ../gui/wxpython/menustrings.py:674
+#: ../gui/wxpython/menustrings.py:676
 #, fuzzy
 msgid "Update area attributes from vector"
 msgstr "Aktualizovat atributy plochy z rastru"
 
-#: ../gui/wxpython/menustrings.py:675
+#: ../gui/wxpython/menustrings.py:677
 #, fuzzy
 msgid "Count points in areas, calculate statistics from point attributes."
 msgstr "Spočítá univariantní statistiku z ne-nullových buněk rastrové mapy."
 
-#: ../gui/wxpython/menustrings.py:676
+#: ../gui/wxpython/menustrings.py:678
 msgid "Update point attributes from areas"
 msgstr "Aktualizovat bodové atributy z ploch"
 
-#: ../gui/wxpython/menustrings.py:677
+#: ../gui/wxpython/menustrings.py:679
 msgid "Uploads vector values at positions of vector points to the table."
 msgstr ""
 "Uloží hodnoty rastrové mapy na pozicích bodů překryvné vektorové mapy do "
 "atributové tabulky."
 
-#: ../gui/wxpython/menustrings.py:678
+#: ../gui/wxpython/menustrings.py:680
 #, fuzzy
 msgid "Update database values from vector"
 msgstr "Nahraje data do databáze na základě vektorových prvků."
 
-#: ../gui/wxpython/menustrings.py:679
+#: ../gui/wxpython/menustrings.py:681
 #, fuzzy
 msgid "Populates attribute values from vector features."
 msgstr "Nahraje data do databáze na základě vektorových prvků."
 
-#: ../gui/wxpython/menustrings.py:680
+#: ../gui/wxpython/menustrings.py:682
 msgid "Sample raster maps at point locations"
 msgstr "příklad rastrových map v cílové location"
 
-#: ../gui/wxpython/menustrings.py:681
+#: ../gui/wxpython/menustrings.py:683
 msgid "Uploads raster values at positions of vector points to the table."
 msgstr ""
 "Uloží hodnoty rastru pod vektorovými body do jejich atributové tabulky."
 
-#: ../gui/wxpython/menustrings.py:682
+#: ../gui/wxpython/menustrings.py:684
 msgid "Sample raster neighborhood around points"
 msgstr "Vzorkovat okolí v rastrové vrstvě v okolí daného bodu"
 
-#: ../gui/wxpython/menustrings.py:683
+#: ../gui/wxpython/menustrings.py:685
 msgid "Samples a raster map at vector point locations."
 msgstr "Získává vzorky z rastrové mapy místech vektorových bodů"
 
-#: ../gui/wxpython/menustrings.py:684
+#: ../gui/wxpython/menustrings.py:686
 msgid "Generate area for current region"
 msgstr "Vytvořit plochu pokrývající aktuální region"
 
-#: ../gui/wxpython/menustrings.py:685
+#: ../gui/wxpython/menustrings.py:687
 #, fuzzy
 msgid "Creates a vector polygon from the current region extent."
 msgstr "Vytvořit novou vektorovou mapu pokrývající současný region"
 
-#: ../gui/wxpython/menustrings.py:686
+#: ../gui/wxpython/menustrings.py:688
 msgid "Generate areas from points"
 msgstr "Vytvořit plochy z bodových dat"
 
-#: ../gui/wxpython/menustrings.py:687
+#: ../gui/wxpython/menustrings.py:689
 msgid "Convex hull"
 msgstr "Konvexní obal"
 
-#: ../gui/wxpython/menustrings.py:688
+#: ../gui/wxpython/menustrings.py:690
 msgid "Produces a 2D/3D convex hull for a given vector map."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:689
+#: ../gui/wxpython/menustrings.py:691
 msgid "Delaunay triangles"
 msgstr "Vytvořit Delaunayovu triangulační síť bodové vrstvy"
 
-#: ../gui/wxpython/menustrings.py:690
+#: ../gui/wxpython/menustrings.py:692
 msgid ""
 "Creates a Delaunay triangulation from an input vector map containing points "
 "or centroids."
@@ -9205,11 +9214,11 @@ msgstr ""
 "Vytváří Delaunayovu triangulaci ze vstupní vektorové mapy obsahující body "
 "nebo centroidy."
 
-#: ../gui/wxpython/menustrings.py:691
+#: ../gui/wxpython/menustrings.py:693
 msgid "Voronoi diagram/Thiessen polygons"
 msgstr "Vytvořit Voronoi diagram/Thiessenovy polygony bodové vrstvy"
 
-#: ../gui/wxpython/menustrings.py:692
+#: ../gui/wxpython/menustrings.py:694
 #, fuzzy
 msgid ""
 "Creates a Voronoi diagram in current region from an input vector map "
@@ -9218,194 +9227,194 @@ msgstr ""
 "Vytvořit Voronoi diagram ze vstupní vektorové vrstvy obsahující body nebo "
 "centroidy."
 
-#: ../gui/wxpython/menustrings.py:693
+#: ../gui/wxpython/menustrings.py:695
 msgid "Generate grid"
 msgstr "Vytvořit mřížku"
 
-#: ../gui/wxpython/menustrings.py:694
+#: ../gui/wxpython/menustrings.py:696
 #, fuzzy
 msgid "Creates a vector map of a user-defined grid."
 msgstr "Vytvoří GRASS vektorovou mapu podle uživatelem definované mřížky"
 
-#: ../gui/wxpython/menustrings.py:695
+#: ../gui/wxpython/menustrings.py:697
 msgid "Generate points"
 msgstr "Vytvořit bodovou vrstvu"
 
-#: ../gui/wxpython/menustrings.py:696
+#: ../gui/wxpython/menustrings.py:698
 msgid "Generate from database"
 msgstr "Vytvořit z databáze"
 
-#: ../gui/wxpython/menustrings.py:697
+#: ../gui/wxpython/menustrings.py:699
 msgid ""
 "Creates new vector (points) map from database table containing coordinates."
 msgstr ""
 "Vytvoří novou vektorovou (bodovou) mapu na základě databázové takulky "
 "obsahující souřadnice."
 
-#: ../gui/wxpython/menustrings.py:698
+#: ../gui/wxpython/menustrings.py:700
 msgid "Generate points along lines"
 msgstr "Vytvořit body podél linií"
 
-#: ../gui/wxpython/menustrings.py:699
+#: ../gui/wxpython/menustrings.py:701
 #, fuzzy
 msgid "Creates points along input lines in new vector map with 2 layers."
 msgstr ""
 "Vytvoří body podél vstupních linií a uloží do nového souboru o dvou vrstvách."
 
-#: ../gui/wxpython/menustrings.py:700
+#: ../gui/wxpython/menustrings.py:702
 msgid "Generate random points"
 msgstr "Vytvořit náhodnou bodovou vrstvu"
 
-#: ../gui/wxpython/menustrings.py:701
+#: ../gui/wxpython/menustrings.py:703
 #, fuzzy
 msgid "Generates randomly 2D/3D vector points map."
 msgstr "Náhodně vytvořit 2D/3D bodovou vektorovou vrstvu."
 
-#: ../gui/wxpython/menustrings.py:702
+#: ../gui/wxpython/menustrings.py:704
 msgid "Perturb points"
 msgstr "Rozházet body"
 
-#: ../gui/wxpython/menustrings.py:703
+#: ../gui/wxpython/menustrings.py:705
 #, fuzzy
 msgid "Random location perturbations of vector points."
 msgstr "Náhodná odchylka location vektorových bodů"
 
-#: ../gui/wxpython/menustrings.py:704
+#: ../gui/wxpython/menustrings.py:706
 msgid "Remove outliers in point sets"
 msgstr "Odstranit body mimo sadu bodů"
 
-#: ../gui/wxpython/menustrings.py:705
+#: ../gui/wxpython/menustrings.py:707
 msgid "Removes outliers from vector point data."
 msgstr "Vyjme outsidery z bodových vektorových dat"
 
-#: ../gui/wxpython/menustrings.py:706
+#: ../gui/wxpython/menustrings.py:708
 msgid "Test/training point sets"
 msgstr "Testovací/trénovací sada bodů"
 
-#: ../gui/wxpython/menustrings.py:707
+#: ../gui/wxpython/menustrings.py:709
 msgid "Randomly partition points into test/train sets."
 msgstr "Náhodně rozdělit body do testovacích množin."
 
-#: ../gui/wxpython/menustrings.py:708
+#: ../gui/wxpython/menustrings.py:710
 msgid "Reports and statistics"
 msgstr "Zprávy, výpisy a statistiky"
 
-#: ../gui/wxpython/menustrings.py:709
+#: ../gui/wxpython/menustrings.py:711
 msgid "Basic vector metadata"
 msgstr "Základní metadata vektorové mapy"
 
-#: ../gui/wxpython/menustrings.py:710
+#: ../gui/wxpython/menustrings.py:712
 #, fuzzy
 msgid "Outputs basic information about a vector map."
 msgstr "Vypíše základní informace o uživatelem vybrané rastrové mapě."
 
-#: ../gui/wxpython/menustrings.py:711
+#: ../gui/wxpython/menustrings.py:713
 msgid "Classify attribute data"
 msgstr "Klasifikovat atributové data"
 
-#: ../gui/wxpython/menustrings.py:712
+#: ../gui/wxpython/menustrings.py:714
 msgid "Classifies attribute data, e.g. for thematic mapping"
 msgstr "Klasifikuje atributové data, například pro tématické mapy"
 
-#: ../gui/wxpython/menustrings.py:713
+#: ../gui/wxpython/menustrings.py:715
 msgid "Report topology by category"
 msgstr "Zpráva o topologii podle kategorií"
 
-#: ../gui/wxpython/menustrings.py:714
+#: ../gui/wxpython/menustrings.py:716
 #, fuzzy
 msgid "Reports geometry statistics for vector maps."
 msgstr "Vypíše údaje o geometrii vektorové mapy."
 
-#: ../gui/wxpython/menustrings.py:715
+#: ../gui/wxpython/menustrings.py:717
 msgid "Univariate attribute statistics for points"
 msgstr "Univariantní statistika vektorových bodů a jejich atributů"
 
-#: ../gui/wxpython/menustrings.py:716
+#: ../gui/wxpython/menustrings.py:718
 #, fuzzy
 msgid "Calculates univariate statistics for attribute."
 msgstr "Spočítá univariantní statistiku z ne-nullových buněk rastrové mapy."
 
-#: ../gui/wxpython/menustrings.py:717
+#: ../gui/wxpython/menustrings.py:719
 msgid "Univariate statistics for attribute columns"
 msgstr "Univariantní statistika atributových sloupců"
 
-#: ../gui/wxpython/menustrings.py:718
+#: ../gui/wxpython/menustrings.py:720
 msgid ""
 "Calculates univariate statistics on selected table column for a GRASS vector "
 "map."
 msgstr ""
 "Spočítá univariantní statistiku pro vybraný sloupec tabulky vektorové vrstvy."
 
-#: ../gui/wxpython/menustrings.py:719
+#: ../gui/wxpython/menustrings.py:721
 msgid "Quadrat indices"
 msgstr "Ukazatel zkusné plochy"
 
-#: ../gui/wxpython/menustrings.py:720
+#: ../gui/wxpython/menustrings.py:722
 msgid "Indices for quadrat counts of sites lists."
 msgstr "Indexy pro kvadratické počty pro seznam bodů"
 
-#: ../gui/wxpython/menustrings.py:721
+#: ../gui/wxpython/menustrings.py:723
 msgid "Test normality"
 msgstr "Test normality"
 
-#: ../gui/wxpython/menustrings.py:722
+#: ../gui/wxpython/menustrings.py:724
 #, fuzzy
 msgid "Tests for normality for vector points."
 msgstr "Test normality bodů"
 
-#: ../gui/wxpython/menustrings.py:723
+#: ../gui/wxpython/menustrings.py:725
 msgid "&Imagery"
 msgstr "&Obraz"
 
-#: ../gui/wxpython/menustrings.py:724
+#: ../gui/wxpython/menustrings.py:726
 msgid "Develop images and groups"
 msgstr "Vytvořit obrazový soubor a skupiny"
 
-#: ../gui/wxpython/menustrings.py:725
+#: ../gui/wxpython/menustrings.py:727
 msgid "Create/edit group"
 msgstr "Vytvořit/upravit skupinu"
 
-#: ../gui/wxpython/menustrings.py:726
+#: ../gui/wxpython/menustrings.py:728
 #, fuzzy
 msgid "Creates, edits, and lists groups of imagery files."
 msgstr "Vytváří, edituje a vypisuje skupiny a podskupiny obrazových dat."
 
-#: ../gui/wxpython/menustrings.py:727
+#: ../gui/wxpython/menustrings.py:729
 msgid "Target group"
 msgstr "Cílová obrazová skupina"
 
-#: ../gui/wxpython/menustrings.py:728
+#: ../gui/wxpython/menustrings.py:730
 msgid "Targets an imagery group to a GRASS location and mapset."
 msgstr "Určí cíl obrazové skupiny jako location a mapset GRASSu."
 
-#: ../gui/wxpython/menustrings.py:729
+#: ../gui/wxpython/menustrings.py:731
 msgid "Mosaic images"
 msgstr "Vytvořit mozaiku více jak 4 sousední obrazové soubory"
 
-#: ../gui/wxpython/menustrings.py:730
+#: ../gui/wxpython/menustrings.py:732
 #, fuzzy
 msgid "Mosaics several images and extends colormap."
 msgstr ""
 "Vytvoří mozaiku ze 4 a více snímků, roztáhne barevnou paletu a vytvoří mapu "
 "*.mosaic"
 
-#: ../gui/wxpython/menustrings.py:731
+#: ../gui/wxpython/menustrings.py:733
 msgid "Manage image colors"
 msgstr "Správa barevné škály obrazových dat"
 
-#: ../gui/wxpython/menustrings.py:732
+#: ../gui/wxpython/menustrings.py:734
 msgid "Color balance for RGB"
 msgstr "Vyvážení barev pro RGB"
 
-#: ../gui/wxpython/menustrings.py:733
+#: ../gui/wxpython/menustrings.py:735
 msgid "Performs auto-balancing of colors for LANDSAT images."
 msgstr "Provádí automatické vyvážení barev pro snímky z družice LANDSAT."
 
-#: ../gui/wxpython/menustrings.py:734
+#: ../gui/wxpython/menustrings.py:736
 msgid "HIS to RGB"
 msgstr "Transformace HIS -> RGB"
 
-#: ../gui/wxpython/menustrings.py:735
+#: ../gui/wxpython/menustrings.py:737
 msgid ""
 "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
 "RGB (Red-Green-Blue) color space."
@@ -9413,7 +9422,7 @@ msgstr ""
 "Převede rastrové mapy z HIS (odstín-intenzita-sytost) do RGB (červená-zelená-"
 "modrá)"
 
-#: ../gui/wxpython/menustrings.py:737
+#: ../gui/wxpython/menustrings.py:739
 msgid ""
 "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-"
 "Intensity-Saturation) color space."
@@ -9421,11 +9430,11 @@ msgstr ""
 "Převede rastrové mapy z RGB (červená-zelená-modrá) do HIS (odstín-intenzita-"
 "sytost)"
 
-#: ../gui/wxpython/menustrings.py:738
+#: ../gui/wxpython/menustrings.py:740
 msgid "Rectify image or raster"
 msgstr "Rektifikovat obraz nebo rastrovou mapu"
 
-#: ../gui/wxpython/menustrings.py:739
+#: ../gui/wxpython/menustrings.py:741
 msgid ""
 "Rectifies an image by computing a coordinate transformation for each pixel "
 "in the image based on the control points."
@@ -9433,27 +9442,27 @@ msgstr ""
 "Rektifikuje obrazová data výpočtem transformace každého pixelu obrazu pomocí "
 "vlicovacích bodů (GCP)"
 
-#: ../gui/wxpython/menustrings.py:741
+#: ../gui/wxpython/menustrings.py:743
 msgid "Generate histogram of image"
 msgstr "Vytvořit histogram obrazu"
 
-#: ../gui/wxpython/menustrings.py:742
+#: ../gui/wxpython/menustrings.py:744
 msgid "Spectral response"
 msgstr "Spektrální odezva"
 
-#: ../gui/wxpython/menustrings.py:743
+#: ../gui/wxpython/menustrings.py:745
 msgid ""
 "Displays spectral response at user specified locations in group or images."
 msgstr ""
 "Zobrazí spektrální odrazivost na uživatelem zadaných místech ve skupině "
 "obrazů."
 
-#: ../gui/wxpython/menustrings.py:744
+#: ../gui/wxpython/menustrings.py:746
 #, fuzzy
 msgid "Pan sharpening"
 msgstr "Broveyovo ostření obrazu"
 
-#: ../gui/wxpython/menustrings.py:745
+#: ../gui/wxpython/menustrings.py:747
 #, fuzzy
 msgid ""
 "Image fusion algorithms to sharpen multispectral with high-res panchromatic "
@@ -9462,15 +9471,15 @@ msgstr ""
 "Broveyova transformace pro sloučení multispektrálních kanálů s "
 "panchromatickými kanály vyššího rozlišení"
 
-#: ../gui/wxpython/menustrings.py:746
+#: ../gui/wxpython/menustrings.py:748
 msgid "Classify image"
 msgstr "Klasifikace obrazových dat"
 
-#: ../gui/wxpython/menustrings.py:747
+#: ../gui/wxpython/menustrings.py:749
 msgid "Clustering input for unsupervised classification"
 msgstr "Metoda shlukování pro neřízenou klasifikaci"
 
-#: ../gui/wxpython/menustrings.py:748
+#: ../gui/wxpython/menustrings.py:750
 msgid ""
 "Generates spectral signatures for land cover types in an image using a "
 "clustering algorithm."
@@ -9478,27 +9487,27 @@ msgstr ""
 "Vytvoří spektrální signatury pro typy povrchu v obraze použitím metody "
 "shlukování."
 
-#: ../gui/wxpython/menustrings.py:749
+#: ../gui/wxpython/menustrings.py:751
 msgid "Input for supervised MLC"
 msgstr "Vstup pro řízenou klasifikaci MLC"
 
-#: ../gui/wxpython/menustrings.py:750
+#: ../gui/wxpython/menustrings.py:752
 msgid "Generates statistics for i.maxlik from raster map."
 msgstr "Vytvoří statistiku pro výstupní rastrovou mapu z i.maxlik"
 
-#: ../gui/wxpython/menustrings.py:751
+#: ../gui/wxpython/menustrings.py:753
 msgid "Maximum likelihood classification (MLC)"
 msgstr "Klasifikátor MLC (Maximum likelihood classification)"
 
-#: ../gui/wxpython/menustrings.py:752
+#: ../gui/wxpython/menustrings.py:754
 msgid "Classifies the cell spectral reflectances in imagery data."
 msgstr "Klasifikuje spektrální odrazivost pro každou buňku obrazových dat."
 
-#: ../gui/wxpython/menustrings.py:753
+#: ../gui/wxpython/menustrings.py:755
 msgid "Interactive input for supervised classification"
 msgstr "Interaktivní vstup pro řízenou klasifikaci"
 
-#: ../gui/wxpython/menustrings.py:754
+#: ../gui/wxpython/menustrings.py:756
 #, fuzzy
 msgid ""
 "Generates spectral signatures by allowing the user to outline training areas."
@@ -9506,19 +9515,19 @@ msgstr ""
 "Vytvoří spektrální signatury pro obrazová data povolením uživateli načrtnout "
 "oblasti zájmu."
 
-#: ../gui/wxpython/menustrings.py:755
+#: ../gui/wxpython/menustrings.py:757
 msgid "Input for supervised SMAP"
 msgstr "Vstup pro řízenou klasifikaci SMAP"
 
-#: ../gui/wxpython/menustrings.py:756
+#: ../gui/wxpython/menustrings.py:758
 msgid "Generates statistics for i.smap from raster map."
 msgstr "Vytvoří statistiku pro výstupní rastrovou mapu z i.smap"
 
-#: ../gui/wxpython/menustrings.py:757
+#: ../gui/wxpython/menustrings.py:759
 msgid "Sequential maximum a posteriori classification (SMAP)"
 msgstr "Klasifikátor SMAP (Sequential maximum a posterior)"
 
-#: ../gui/wxpython/menustrings.py:758
+#: ../gui/wxpython/menustrings.py:760
 msgid ""
 "Performs contextual image classification using sequential maximum a "
 "posteriori (SMAP) estimation."
@@ -9526,371 +9535,371 @@ msgstr ""
 "Provede kontextuální klasifikaci obrazu s využitím metody SMAP (sequential "
 "maximum a posterior)."
 
-#: ../gui/wxpython/menustrings.py:759
+#: ../gui/wxpython/menustrings.py:761
 msgid "Filter image"
 msgstr "Filrace obrazu"
 
-#: ../gui/wxpython/menustrings.py:760
+#: ../gui/wxpython/menustrings.py:762
 msgid "Edge detection"
 msgstr "Detekce hran"
 
-#: ../gui/wxpython/menustrings.py:761
+#: ../gui/wxpython/menustrings.py:763
 msgid "Zero-crossing \"edge detection\" raster function for image processing."
 msgstr "Žádné-křížení \"detekce hran\" rastrová funkce zpracování obrazu."
 
-#: ../gui/wxpython/menustrings.py:762
+#: ../gui/wxpython/menustrings.py:764
 msgid "Matrix/convolving filter"
 msgstr "Uživatelská definice maticového filtru"
 
-#: ../gui/wxpython/menustrings.py:763
+#: ../gui/wxpython/menustrings.py:765
 msgid "Performs raster map matrix filter."
 msgstr "Maticový filtr na rastrové mapě."
 
-#: ../gui/wxpython/menustrings.py:764
+#: ../gui/wxpython/menustrings.py:766
 msgid "Transform image"
 msgstr "Transformace obrazu"
 
-#: ../gui/wxpython/menustrings.py:765
+#: ../gui/wxpython/menustrings.py:767
 msgid "Canonical correlation"
 msgstr "Kanonické komponenty"
 
-#: ../gui/wxpython/menustrings.py:766
+#: ../gui/wxpython/menustrings.py:768
 msgid "Canonical components analysis (cca) program for image processing."
 msgstr ""
 "Program pro zpracování obrazových dat - kónickou transformaci komponent "
 "(cca)."
 
-#: ../gui/wxpython/menustrings.py:767
+#: ../gui/wxpython/menustrings.py:769
 msgid "Principal components"
 msgstr "Hlavní komponenty"
 
-#: ../gui/wxpython/menustrings.py:768
+#: ../gui/wxpython/menustrings.py:770
 #, fuzzy
 msgid "Principal components analysis (PCA) for image processing."
 msgstr "Program pro analýzu hlavních komponent (pca) snímků."
 
-#: ../gui/wxpython/menustrings.py:769
+#: ../gui/wxpython/menustrings.py:771
 msgid "Fast Fourier"
 msgstr "Fourierova transformace"
 
-#: ../gui/wxpython/menustrings.py:770
+#: ../gui/wxpython/menustrings.py:772
 msgid "Fast Fourier Transform (FFT) for image processing."
 msgstr "Rychlá Fourierova transformace (FFT) pro zpracování obrazových dat."
 
-#: ../gui/wxpython/menustrings.py:771
+#: ../gui/wxpython/menustrings.py:773
 msgid "Inverse Fast Fourier"
 msgstr "Inverzní Fourierova transformace"
 
-#: ../gui/wxpython/menustrings.py:772
+#: ../gui/wxpython/menustrings.py:774
 msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
 msgstr ""
 "Rychlá inverzní Fourierova transformace (IFFT) pro zpracování obrazových dat."
 
-#: ../gui/wxpython/menustrings.py:773
+#: ../gui/wxpython/menustrings.py:775
 #, fuzzy
 msgid "Satellite images tools"
 msgstr "Nastavit velikost obrazu"
 
-#: ../gui/wxpython/menustrings.py:774
+#: ../gui/wxpython/menustrings.py:776
 msgid "Aster DN to radiance/reflectance"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:775
+#: ../gui/wxpython/menustrings.py:777
 msgid ""
 "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature "
 "from ASTER DN."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:776
+#: ../gui/wxpython/menustrings.py:778
 msgid "Landsat DN to radiance/reflectance"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:777
+#: ../gui/wxpython/menustrings.py:779
 msgid ""
 "Calculates top-of-atmosphere radiance or reflectance and temperature for "
 "Landsat MSS/TM/ETM+."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:778
+#: ../gui/wxpython/menustrings.py:780
 msgid "Landsat cloud cover assessment"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:779
+#: ../gui/wxpython/menustrings.py:781
 msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:780
+#: ../gui/wxpython/menustrings.py:782
 msgid "Modis quality control"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:781
+#: ../gui/wxpython/menustrings.py:783
 #, fuzzy
 msgid "Extracts quality control parameters from Modis QC layers."
 msgstr "Definujte parametry pro "
 
-#: ../gui/wxpython/menustrings.py:782
+#: ../gui/wxpython/menustrings.py:784
 msgid "Atmospheric correction"
 msgstr "Atmosférické korekce"
 
-#: ../gui/wxpython/menustrings.py:783
+#: ../gui/wxpython/menustrings.py:785
 msgid "Performs atmospheric correction using the 6S algorithm."
 msgstr "Proveď atmosferické korekce pomocí 6S algoritmu."
 
-#: ../gui/wxpython/menustrings.py:784
+#: ../gui/wxpython/menustrings.py:786
 msgid "LatLong map"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:785
+#: ../gui/wxpython/menustrings.py:787
 #, fuzzy
 msgid "Creates a latitude/longitude raster map."
 msgstr "Vytvořit novou vektorovou mapu"
 
-#: ../gui/wxpython/menustrings.py:786
+#: ../gui/wxpython/menustrings.py:788
 #, fuzzy
 msgid "Sunshine hours"
 msgstr "Vytvořit novou vektorovou mapu"
 
-#: ../gui/wxpython/menustrings.py:787
+#: ../gui/wxpython/menustrings.py:789
 #, fuzzy
 msgid "Creates a sunshine hours map."
 msgstr "Vytvořit novou vektorovou mapu"
 
-#: ../gui/wxpython/menustrings.py:788
+#: ../gui/wxpython/menustrings.py:790
 msgid "Satellite images products"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:789
+#: ../gui/wxpython/menustrings.py:791
 #, fuzzy
 msgid "Vegetation indices"
 msgstr "Hranice regionu"
 
-#: ../gui/wxpython/menustrings.py:790
+#: ../gui/wxpython/menustrings.py:792
 msgid "Calculates different types of vegetation indices."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:791
+#: ../gui/wxpython/menustrings.py:793
 msgid "Tasseled cap vegetation index"
 msgstr "Vegetační index (tassled cap)"
 
-#: ../gui/wxpython/menustrings.py:792
+#: ../gui/wxpython/menustrings.py:794
 #, fuzzy
 msgid ""
 "Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data."
 msgstr "Transformace Cap (Kauth Thomas) pro data LANDSAT-TM"
 
-#: ../gui/wxpython/menustrings.py:793
+#: ../gui/wxpython/menustrings.py:795
 msgid "Albedo"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:794
+#: ../gui/wxpython/menustrings.py:796
 msgid "Computes broad band albedo from surface reflectance."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:795
+#: ../gui/wxpython/menustrings.py:797
 #, fuzzy
 msgid "Emissivity"
 msgstr "Emise"
 
-#: ../gui/wxpython/menustrings.py:796
+#: ../gui/wxpython/menustrings.py:798
 msgid "Computes emissivity from NDVI, generic method for sparse land."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:797
+#: ../gui/wxpython/menustrings.py:799
 msgid "Biomass growth"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:798
+#: ../gui/wxpython/menustrings.py:800
 msgid "Computes biomass growth, precursor of crop yield calculation."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:799
+#: ../gui/wxpython/menustrings.py:801
 msgid "Evapotranspiration calculation"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:800
+#: ../gui/wxpython/menustrings.py:802
 msgid "Instantaneaous Net Radiation"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:801
+#: ../gui/wxpython/menustrings.py:803
 msgid "Net radiation approximation (Bastiaanssen, 1995)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:802
+#: ../gui/wxpython/menustrings.py:804
 msgid "Soil heat flux"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:803
+#: ../gui/wxpython/menustrings.py:805
 msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:804
+#: ../gui/wxpython/menustrings.py:806
 msgid "Sensible heat flux"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:805
+#: ../gui/wxpython/menustrings.py:807
 msgid "Computes sensible heat flux iteration SEBAL 01."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:806
+#: ../gui/wxpython/menustrings.py:808
 msgid "Evaporative fraction"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:807
+#: ../gui/wxpython/menustrings.py:809
 msgid ""
 "Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil "
 "moisture (Makin, Molden and Bastiaanssen, 2001)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:808
+#: ../gui/wxpython/menustrings.py:810
 msgid "Actual Evapotranspiration"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:809
+#: ../gui/wxpython/menustrings.py:811
 msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:810
+#: ../gui/wxpython/menustrings.py:812
 msgid "Temporal integration of ETa"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:811
+#: ../gui/wxpython/menustrings.py:813
 msgid ""
 "Computes temporal integration of satellite ET actual (ETa) following the "
 "daily ET reference (ETo) from meteorological station(s)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:812
+#: ../gui/wxpython/menustrings.py:814
 msgid "Hargreaves methods Evapotranspiration"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:813
+#: ../gui/wxpython/menustrings.py:815
 msgid ""
 "Computes evapotranspiration calculation modified or original Hargreaves "
 "formulation, 2001."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:814
+#: ../gui/wxpython/menustrings.py:816
 msgid "Penman-Monteith Evapotranspiration"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:815
+#: ../gui/wxpython/menustrings.py:817
 msgid ""
 "Computes potential evapotranspiration calculation with hourly Penman-"
 "Monteith."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:816
+#: ../gui/wxpython/menustrings.py:818
 msgid "Priestley-Taylor Evapotranspiration"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:817
+#: ../gui/wxpython/menustrings.py:819
 msgid ""
 "Computes evapotranspiration calculation Prestley and Taylor formulation, "
 "1972."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:819
+#: ../gui/wxpython/menustrings.py:821
 msgid "Bit pattern comparison "
 msgstr "Korelace (bit pattern comparsion) pro ID pixelů s nízkou kvalitou"
 
-#: ../gui/wxpython/menustrings.py:820
+#: ../gui/wxpython/menustrings.py:822
 msgid "Compares bit patterns with a raster map."
 msgstr "Porovnává bitové vzory s rastrovou mapou."
 
-#: ../gui/wxpython/menustrings.py:821
+#: ../gui/wxpython/menustrings.py:823
 msgid "Kappa analysis"
 msgstr "Kappa analýza "
 
-#: ../gui/wxpython/menustrings.py:822
+#: ../gui/wxpython/menustrings.py:824
 msgid ""
 "Calculate error matrix and kappa parameter for accuracy assessment of "
 "classification result."
 msgstr ""
 "Spočítá chybovou matici a parametr kappa pro evaluaci výsledků klasifikace."
 
-#: ../gui/wxpython/menustrings.py:823
+#: ../gui/wxpython/menustrings.py:825
 msgid "OIF for LandSat TM"
 msgstr "Faktor optimálního indexu pro LandSat TM"
 
-#: ../gui/wxpython/menustrings.py:824
+#: ../gui/wxpython/menustrings.py:826
 msgid "Calculates Optimum-Index-Factor table for LANDSAT TM bands 1-5, & 7"
 msgstr ""
 "Spočítá tabulku optimálního faktoru indexu pro kanály 1-5 a 7 družice "
 "LANDSAT TM"
 
-#: ../gui/wxpython/menustrings.py:825
+#: ../gui/wxpython/menustrings.py:827
 msgid "V&olumes"
 msgstr "&3D rastr"
 
-#: ../gui/wxpython/menustrings.py:826
+#: ../gui/wxpython/menustrings.py:828
 msgid "Develop volumes"
 msgstr "Vytvořit 3D rastrové mapy"
 
-#: ../gui/wxpython/menustrings.py:827
+#: ../gui/wxpython/menustrings.py:829
 msgid "Manage 3D NULL values"
 msgstr "Upravit 3D NULL hodnoty"
 
-#: ../gui/wxpython/menustrings.py:828
+#: ../gui/wxpython/menustrings.py:830
 msgid "Explicitly create the 3D NULL-value bitmap file."
 msgstr "Vytvořit výlučně soubor s bitmapou 3D NULL-hodnota"
 
-#: ../gui/wxpython/menustrings.py:829
+#: ../gui/wxpython/menustrings.py:831
 msgid "Manage timestamp"
 msgstr "Správa časového razítka"
 
-#: ../gui/wxpython/menustrings.py:830
+#: ../gui/wxpython/menustrings.py:832
 msgid "Print/add/remove a timestamp for a 3D raster map"
 msgstr "Vytiskni/přidej/smaž časové razítko pro 3D rastrovou mapu"
 
-#: ../gui/wxpython/menustrings.py:834
+#: ../gui/wxpython/menustrings.py:836
 #, fuzzy
 msgid "3D color tables"
 msgstr "Tabulka barev"
 
-#: ../gui/wxpython/menustrings.py:835
+#: ../gui/wxpython/menustrings.py:837
 #, fuzzy
 msgid "Creates/modifies the color table associated with a 3D raster map."
 msgstr "Vytvoří/upraví tabulku barev spojenou s rastrovou mapou."
 
-#: ../gui/wxpython/menustrings.py:836
+#: ../gui/wxpython/menustrings.py:838
 #, fuzzy
 msgid "Export 3D color table"
 msgstr "Exportovat barevnou tabulku"
 
-#: ../gui/wxpython/menustrings.py:837
+#: ../gui/wxpython/menustrings.py:839
 #, fuzzy
 msgid "Exports the color table associated with a 3D raster map."
 msgstr "Exportuje tabulku barev spojenou s rastrovou mapou."
 
-#: ../gui/wxpython/menustrings.py:838
+#: ../gui/wxpython/menustrings.py:840
 msgid "3D Mask"
 msgstr "3D Maska"
 
-#: ../gui/wxpython/menustrings.py:839
+#: ../gui/wxpython/menustrings.py:841
 msgid "Establishes the current working 3D raster mask."
 msgstr "Vytvoří aktuální pracovní 3D rastrovou masku."
 
-#: ../gui/wxpython/menustrings.py:840
+#: ../gui/wxpython/menustrings.py:842
 msgid "Volume calculator"
 msgstr "3D mapový kalkulátor"
 
-#: ../gui/wxpython/menustrings.py:841
+#: ../gui/wxpython/menustrings.py:843
 #, fuzzy
 msgid "3D raster map calculator."
 msgstr "3D rastrový kalkulátor"
 
-#: ../gui/wxpython/menustrings.py:842
+#: ../gui/wxpython/menustrings.py:844
 msgid "Cross section"
 msgstr "Průřez"
 
-#: ../gui/wxpython/menustrings.py:843
+#: ../gui/wxpython/menustrings.py:845
 #, fuzzy
 msgid ""
 "Creates cross section 2D raster map from 3D raster map based on 2D elevation "
 "map"
 msgstr "Vytvoří průniky 2D mapy z g3d rastru objemů na základ 2D mapy elevace"
 
-#: ../gui/wxpython/menustrings.py:845
+#: ../gui/wxpython/menustrings.py:847
 #, fuzzy
 msgid ""
 "Numerical calculation program for transient, confined groundwater flow in "
@@ -9899,11 +9908,11 @@ msgstr ""
 "Numerický výpočetní program pro přechodné, omezené a neohraničenéproudění "
 "podzemních vod ve třech rozměrech."
 
-#: ../gui/wxpython/menustrings.py:846
+#: ../gui/wxpython/menustrings.py:848
 msgid "Interpolate volume from points"
 msgstr "Interpolovat 3D rastrovou vrstvu z vektorových bodů "
 
-#: ../gui/wxpython/menustrings.py:847
+#: ../gui/wxpython/menustrings.py:849
 msgid ""
 "Interpolates point data to a 3D raster map using regularized spline with "
 "tension (RST) algorithm."
@@ -9911,220 +9920,220 @@ msgstr ""
 "Interpoluje bodová data do G3D 3D rastrové grid vrstvy za použití "
 "regularized spline with tension (RST)"
 
-#: ../gui/wxpython/menustrings.py:848
+#: ../gui/wxpython/menustrings.py:850
 msgid "Report and Statistics"
 msgstr "Zprávy,výpisy a statistiky"
 
-#: ../gui/wxpython/menustrings.py:849
+#: ../gui/wxpython/menustrings.py:851
 msgid "Basic volume metadata"
 msgstr "Základní metadata 3D rastrové vrstvy"
 
-#: ../gui/wxpython/menustrings.py:850
+#: ../gui/wxpython/menustrings.py:852
 msgid "Outputs basic information about a user-specified 3D raster map layer."
 msgstr "Vypíše základní informace o uživatelem vybrané 3D rastrové vrstvě."
 
-#: ../gui/wxpython/menustrings.py:851
+#: ../gui/wxpython/menustrings.py:853
 msgid "Voxel statistics"
 msgstr "Základní statistiky 3D pixelu (voxel)"
 
-#: ../gui/wxpython/menustrings.py:852
+#: ../gui/wxpython/menustrings.py:854
 #, fuzzy
 msgid "Generates volume statistics for 3D raster maps."
 msgstr "Vytvoří objemové statistiky pro 3D rastrové vrstvy."
 
-#: ../gui/wxpython/menustrings.py:853
+#: ../gui/wxpython/menustrings.py:855
 msgid "Univariate statistics for volumes"
 msgstr "Univariantní statistika 3D rastrové vrstvyy"
 
-#: ../gui/wxpython/menustrings.py:854
+#: ../gui/wxpython/menustrings.py:856
 msgid ""
 "Calculates univariate statistics from the non-null 3d cells of a raster3d "
 "map."
 msgstr ""
 "Spočítá univariantní statistiku z ne-nullových 3D buněk 3D rastrové vrstvy."
 
-#: ../gui/wxpython/menustrings.py:855
+#: ../gui/wxpython/menustrings.py:857
 msgid "&Database"
 msgstr "&Databáze"
 
-#: ../gui/wxpython/menustrings.py:856
+#: ../gui/wxpython/menustrings.py:858
 msgid "Database information"
 msgstr "Informace o databázi"
 
-#: ../gui/wxpython/menustrings.py:857
+#: ../gui/wxpython/menustrings.py:859
 #, fuzzy
 msgid "List databases"
 msgstr "Seznam tabulek"
 
-#: ../gui/wxpython/menustrings.py:858
+#: ../gui/wxpython/menustrings.py:860
 #, fuzzy
 msgid "Lists all databases for a given driver and location."
 msgstr "Vypíše všechny tabulky pro danou databázi."
 
-#: ../gui/wxpython/menustrings.py:859
+#: ../gui/wxpython/menustrings.py:861
 msgid "List drivers"
 msgstr "Seznam ovladačů"
 
-#: ../gui/wxpython/menustrings.py:860
+#: ../gui/wxpython/menustrings.py:862
 #, fuzzy
 msgid "Lists all database drivers."
 msgstr "Vypiš všechny databázové ovladače."
 
-#: ../gui/wxpython/menustrings.py:861
+#: ../gui/wxpython/menustrings.py:863
 msgid "List tables"
 msgstr "Seznam tabulek"
 
-#: ../gui/wxpython/menustrings.py:862
+#: ../gui/wxpython/menustrings.py:864
 msgid "Lists all tables for a given database."
 msgstr "Vypíše všechny tabulky pro danou databázi."
 
-#: ../gui/wxpython/menustrings.py:863
+#: ../gui/wxpython/menustrings.py:865
 msgid "Describe table"
 msgstr "Popsat tabulku"
 
-#: ../gui/wxpython/menustrings.py:864
+#: ../gui/wxpython/menustrings.py:866
 msgid "Describes a table in detail."
 msgstr "Popiš tabulku (detailně)."
 
-#: ../gui/wxpython/menustrings.py:865
+#: ../gui/wxpython/menustrings.py:867
 msgid "List columns"
 msgstr "Seznam sloupců"
 
-#: ../gui/wxpython/menustrings.py:866
+#: ../gui/wxpython/menustrings.py:868
 msgid "List all columns for a given table."
 msgstr "vypíše všechny sloupce pro zadanou tabulku."
 
-#: ../gui/wxpython/menustrings.py:867
+#: ../gui/wxpython/menustrings.py:869
 msgid "Manage databases"
 msgstr "Správa tabulek"
 
-#: ../gui/wxpython/menustrings.py:868
+#: ../gui/wxpython/menustrings.py:870
 msgid "Connect"
 msgstr "Spojení "
 
-#: ../gui/wxpython/menustrings.py:869
+#: ../gui/wxpython/menustrings.py:871
 #, fuzzy
 msgid "Prints/sets general DB connection for current mapset."
 msgstr ""
 "Vytisknout/nastavit obecné DB připojení aktuálního mapsetu a ukončit se."
 
-#: ../gui/wxpython/menustrings.py:870
+#: ../gui/wxpython/menustrings.py:872
 msgid "Login"
 msgstr "Přihlášení"
 
-#: ../gui/wxpython/menustrings.py:871
+#: ../gui/wxpython/menustrings.py:873
 #, fuzzy
 msgid "Sets user/password for DB driver/database."
 msgstr "Nastavit uživatele/heslo pro ovladač/databázi"
 
-#: ../gui/wxpython/menustrings.py:872
+#: ../gui/wxpython/menustrings.py:874
 #, fuzzy
 msgid "Create database"
 msgstr "Vytvořit tabulku"
 
-#: ../gui/wxpython/menustrings.py:873
+#: ../gui/wxpython/menustrings.py:875
 #, fuzzy
 msgid "Creates an empty database."
 msgstr "Vytvořit z databáze"
 
-#: ../gui/wxpython/menustrings.py:874
+#: ../gui/wxpython/menustrings.py:876
 #, fuzzy
 msgid "Drop database"
 msgstr "Databáze"
 
-#: ../gui/wxpython/menustrings.py:875
+#: ../gui/wxpython/menustrings.py:877
 #, fuzzy
 msgid "Removes an existing database."
 msgstr "Vytvořit z databáze"
 
-#: ../gui/wxpython/menustrings.py:876
+#: ../gui/wxpython/menustrings.py:878
 msgid "Drop table"
 msgstr "Smazat tabulku"
 
-#: ../gui/wxpython/menustrings.py:877
+#: ../gui/wxpython/menustrings.py:879
 msgid "Drops an attribute table."
 msgstr "Vyjmout atributovou tabulku."
 
-#: ../gui/wxpython/menustrings.py:878
+#: ../gui/wxpython/menustrings.py:880
 msgid "Copy table"
 msgstr "Kopírovat tabulku"
 
-#: ../gui/wxpython/menustrings.py:879
+#: ../gui/wxpython/menustrings.py:881
 msgid "Copy a table."
 msgstr "Kopíruje tabulku."
 
-#: ../gui/wxpython/menustrings.py:880 ../gui/wxpython/menustrings.py:900
+#: ../gui/wxpython/menustrings.py:882 ../gui/wxpython/menustrings.py:902
 msgid "Drop column"
 msgstr "Odstranit sloupec"
 
-#: ../gui/wxpython/menustrings.py:881
+#: ../gui/wxpython/menustrings.py:883
 #, fuzzy
 msgid "Drops a column from selected attribute table."
 msgstr "Vyjmout atributovou tabulku."
 
-#: ../gui/wxpython/menustrings.py:882
+#: ../gui/wxpython/menustrings.py:884
 msgid "Test"
 msgstr "Test"
 
-#: ../gui/wxpython/menustrings.py:883
+#: ../gui/wxpython/menustrings.py:885
 msgid "Test database driver, database must exist and set by db.connect."
 msgstr ""
 "Otestuj ovladač databáze, databáze musí existovat a nastavena pomocí db."
 "connect"
 
-#: ../gui/wxpython/menustrings.py:885
+#: ../gui/wxpython/menustrings.py:887
 msgid "Query any table"
 msgstr "Dotazovat jakoukoliv tabulku"
 
-#: ../gui/wxpython/menustrings.py:886
+#: ../gui/wxpython/menustrings.py:888
 #, fuzzy
 msgid "Selects data from attribute table."
 msgstr "Vyber data z tabulky."
 
-#: ../gui/wxpython/menustrings.py:889
+#: ../gui/wxpython/menustrings.py:891
 msgid "SQL statement"
 msgstr "SQL příkaz"
 
-#: ../gui/wxpython/menustrings.py:890
+#: ../gui/wxpython/menustrings.py:892
 msgid "Executes any SQL statement."
 msgstr "Vykoná jakýkoliv příkaz SQL."
 
-#: ../gui/wxpython/menustrings.py:891
+#: ../gui/wxpython/menustrings.py:893
 msgid "Vector database connections"
 msgstr "Databázové spojení"
 
-#: ../gui/wxpython/menustrings.py:892
+#: ../gui/wxpython/menustrings.py:894
 msgid "New table"
 msgstr "Vytvořit tabulku"
 
-#: ../gui/wxpython/menustrings.py:893
+#: ../gui/wxpython/menustrings.py:895
 msgid ""
 "Creates and connects a new attribute table to a given layer of an existing "
 "vector map."
 msgstr ""
 "Vytvoří a připojí novou atributovou tabulku k dané vrstvě vektorové mapy."
 
-#: ../gui/wxpython/menustrings.py:894
+#: ../gui/wxpython/menustrings.py:896
 msgid "Remove table"
 msgstr "Odstranit tabulku"
 
-#: ../gui/wxpython/menustrings.py:895
+#: ../gui/wxpython/menustrings.py:897
 msgid "Removes existing attribute table of a vector map."
 msgstr "Odstraní existující atributovou tabulu z vektorové mapy."
 
-#: ../gui/wxpython/menustrings.py:896
+#: ../gui/wxpython/menustrings.py:898
 msgid "Join table"
 msgstr "Spojit tabulky"
 
-#: ../gui/wxpython/menustrings.py:897
+#: ../gui/wxpython/menustrings.py:899
 msgid "Allows to join a table to a vector map table."
 msgstr "Umožní připojení tabulky k vektorové mapě."
 
-#: ../gui/wxpython/menustrings.py:898
+#: ../gui/wxpython/menustrings.py:900
 msgid "Add columns"
 msgstr "Přidat nový sloupec"
 
-#: ../gui/wxpython/menustrings.py:899
+#: ../gui/wxpython/menustrings.py:901
 msgid ""
 "Adds one or more columns to the attribute table connected to a given vector "
 "map."
@@ -10132,232 +10141,232 @@ msgstr ""
 "Přidává jeden nebo více sloupečků k atributové tabulce připojené k zadané "
 "vektorové mapě."
 
-#: ../gui/wxpython/menustrings.py:901
+#: ../gui/wxpython/menustrings.py:903
 msgid ""
 "Drops a column from the attribute table connected to a given vector map."
 msgstr "Odstraní soupec z atributové tabulky připojené k dané vektorové mapě."
 
-#: ../gui/wxpython/menustrings.py:903
+#: ../gui/wxpython/menustrings.py:905
 msgid ""
 "Renames a column in the attribute table connected to a given vector map."
 msgstr ""
 "Přejmenuje sloupec v atributové tabulce připojené k zadané vektorové mapě."
 
-#: ../gui/wxpython/menustrings.py:904
+#: ../gui/wxpython/menustrings.py:906
 msgid "Change values"
 msgstr "Změnit atributy"
 
-#: ../gui/wxpython/menustrings.py:905
+#: ../gui/wxpython/menustrings.py:907
 msgid ""
 "Allows to update a column in the attribute table connected to a vector map."
 msgstr ""
 "Umožní přiřadit novou hodnotu sloupci v atributové tabulce připojené k "
 "zadané mapě."
 
-#: ../gui/wxpython/menustrings.py:906
+#: ../gui/wxpython/menustrings.py:908
 msgid "Drop row"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:907
+#: ../gui/wxpython/menustrings.py:909
 #, fuzzy
 msgid "Removes a vector feature from a vector map through attribute selection."
 msgstr ""
 "Nastavit pravidla barev vektorových prvků použitím číselného atributového "
 "sloupce."
 
-#: ../gui/wxpython/menustrings.py:908
+#: ../gui/wxpython/menustrings.py:910
 msgid "Reconnect vectors to database"
 msgstr "Znovu navázat spojení vetoru s databází"
 
-#: ../gui/wxpython/menustrings.py:909
+#: ../gui/wxpython/menustrings.py:911
 #, fuzzy
 msgid ""
 "Reconnects attribute tables for all vector maps from the current mapset to a "
 "new database."
 msgstr "Přebuduje topologii všech vektorových map v současném mapsetu."
 
-#: ../gui/wxpython/menustrings.py:910
+#: ../gui/wxpython/menustrings.py:912
 msgid "Set vector map - database connection"
 msgstr "Databázové spojení"
 
-#: ../gui/wxpython/menustrings.py:911
+#: ../gui/wxpython/menustrings.py:913
 msgid "Prints/sets DB connection for a vector map to attribute table."
 msgstr ""
 "Vytiskne/nastaví připojení databáze pro vektorovou mapu k atributové tabulce"
 
-#: ../gui/wxpython/menustrings.py:912 ../gui/wxpython/menustrings.py:964
+#: ../gui/wxpython/menustrings.py:914 ../gui/wxpython/menustrings.py:966
 msgid "&Help"
 msgstr "&Nápověda"
 
-#: ../gui/wxpython/menustrings.py:913
+#: ../gui/wxpython/menustrings.py:915
 msgid "GRASS help"
 msgstr "Nápověda GRASS GIS"
 
-#: ../gui/wxpython/menustrings.py:914 ../gui/wxpython/menustrings.py:916
+#: ../gui/wxpython/menustrings.py:916 ../gui/wxpython/menustrings.py:918
 #, fuzzy
 msgid "Display the HTML man pages of GRASS GIS"
 msgstr "Zobrazuje manuálové stránky GRASSu ve formátu HTML"
 
-#: ../gui/wxpython/menustrings.py:915
+#: ../gui/wxpython/menustrings.py:917
 msgid "GUI help"
 msgstr "Nápověda wxGUI"
 
-#: ../gui/wxpython/menustrings.py:917
+#: ../gui/wxpython/menustrings.py:919
 msgid "About system"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:918
+#: ../gui/wxpython/menustrings.py:920
 #, fuzzy
 msgid "Prints system information"
 msgstr "Informace o databázi"
 
-#: ../gui/wxpython/menustrings.py:925
+#: ../gui/wxpython/menustrings.py:927
 msgid "Create new model"
 msgstr "Vytvořit nový model"
 
-#: ../gui/wxpython/menustrings.py:927
+#: ../gui/wxpython/menustrings.py:929
 msgid "Load model from file"
 msgstr "Načíst model ze souboru"
 
-#: ../gui/wxpython/menustrings.py:929 ../gui/wxpython/gmodeler/frame.py:410
+#: ../gui/wxpython/menustrings.py:931 ../gui/wxpython/gmodeler/frame.py:410
 msgid "Save model"
 msgstr "Uložit model"
 
-#: ../gui/wxpython/menustrings.py:931
+#: ../gui/wxpython/menustrings.py:933
 msgid "Save model to file"
 msgstr "Uložit model do souboru"
 
-#: ../gui/wxpython/menustrings.py:933
+#: ../gui/wxpython/menustrings.py:935
 msgid "Close model file"
 msgstr "Zavřít soubor modelu"
 
-#: ../gui/wxpython/menustrings.py:934
+#: ../gui/wxpython/menustrings.py:936
 msgid "Export to image"
 msgstr "Export do obrazu"
 
-#: ../gui/wxpython/menustrings.py:935
+#: ../gui/wxpython/menustrings.py:937
 msgid "Export model to image"
 msgstr "Export modelu do obrázku"
 
-#: ../gui/wxpython/menustrings.py:936
+#: ../gui/wxpython/menustrings.py:938
 msgid "Export to Python"
 msgstr "Export do Python"
 
-#: ../gui/wxpython/menustrings.py:937
+#: ../gui/wxpython/menustrings.py:939
 msgid "Export model to Python script"
 msgstr "Exportovat model do Python skriptu"
 
-#: ../gui/wxpython/menustrings.py:938
+#: ../gui/wxpython/menustrings.py:940
 msgid "Quit modeler"
 msgstr "Ukončit modelování"
 
-#: ../gui/wxpython/menustrings.py:939
+#: ../gui/wxpython/menustrings.py:941
 msgid "Close modeler window"
 msgstr "Zavřít okno modelování"
 
-#: ../gui/wxpython/menustrings.py:942
+#: ../gui/wxpython/menustrings.py:944
 #: ../gui/wxpython/gmodeler/preferences.py:28
 msgid "Modeler settings"
 msgstr "Nastavení modelování"
 
-#: ../gui/wxpython/menustrings.py:943
+#: ../gui/wxpython/menustrings.py:945
 msgid "&Model"
 msgstr "&Modelování"
 
-#: ../gui/wxpython/menustrings.py:944
+#: ../gui/wxpython/menustrings.py:946
 #, fuzzy
 msgid "Add command"
 msgstr "Přidat vrstvu s příkazem"
 
-#: ../gui/wxpython/menustrings.py:945
+#: ../gui/wxpython/menustrings.py:947
 #, fuzzy
 msgid "Add action (GRASS command) to model"
 msgstr "Přidat akci do modelu"
 
-#: ../gui/wxpython/menustrings.py:946
+#: ../gui/wxpython/menustrings.py:948
 msgid "Add data"
 msgstr "Přidata data"
 
-#: ../gui/wxpython/menustrings.py:947
+#: ../gui/wxpython/menustrings.py:949
 msgid "Add data item to model"
 msgstr "Přidat data do modelu"
 
-#: ../gui/wxpython/menustrings.py:948
+#: ../gui/wxpython/menustrings.py:950
 msgid "Define relation"
 msgstr "Definovat vztah"
 
-#: ../gui/wxpython/menustrings.py:949
+#: ../gui/wxpython/menustrings.py:951
 msgid "Define relation between data and action items"
 msgstr "Definovat vztah mezi daty a akcemi"
 
-#: ../gui/wxpython/menustrings.py:950
+#: ../gui/wxpython/menustrings.py:952
 #, fuzzy
 msgid "Add loop / series"
 msgstr "Přidat smyčku"
 
-#: ../gui/wxpython/menustrings.py:951
+#: ../gui/wxpython/menustrings.py:953
 #, fuzzy
 msgid "Adds loop (series) to model"
 msgstr "Přidat smyčku do modelu"
 
-#: ../gui/wxpython/menustrings.py:952
+#: ../gui/wxpython/menustrings.py:954
 msgid "Add condition"
 msgstr "Přidat podmínku"
 
-#: ../gui/wxpython/menustrings.py:953
+#: ../gui/wxpython/menustrings.py:955
 msgid "Adds condition (if/else) to model"
 msgstr "Přidá podmínky (if/else) do modelu"
 
-#: ../gui/wxpython/menustrings.py:954
+#: ../gui/wxpython/menustrings.py:956
 msgid "Remove item"
 msgstr "Odstranit prvek"
 
-#: ../gui/wxpython/menustrings.py:955
+#: ../gui/wxpython/menustrings.py:957
 msgid "Remove action/data from model"
 msgstr "Odstranit data/akce z modelu"
 
-#: ../gui/wxpython/menustrings.py:956
+#: ../gui/wxpython/menustrings.py:958
 #: ../gui/wxpython/gmodeler/preferences.py:421
 msgid "Model properties"
 msgstr "Vlastnosti modelu"
 
-#: ../gui/wxpython/menustrings.py:957
+#: ../gui/wxpython/menustrings.py:959
 msgid "Model properties (name, purpose, etc.)"
 msgstr "Vlastnosti modelu (jméno, účel, atd.)"
 
-#: ../gui/wxpython/menustrings.py:958
+#: ../gui/wxpython/menustrings.py:960
 msgid "Delete intermediate data"
 msgstr "Smazat dočasná data"
 
-#: ../gui/wxpython/menustrings.py:959
+#: ../gui/wxpython/menustrings.py:961
 msgid "Delete intermediate data defined in the model"
 msgstr "Smazat průběžná data definována v modellu"
 
-#: ../gui/wxpython/menustrings.py:961
+#: ../gui/wxpython/menustrings.py:963
 msgid "Run entire model"
 msgstr "Sopustit celý model"
 
-#: ../gui/wxpython/menustrings.py:962
+#: ../gui/wxpython/menustrings.py:964
 msgid "Validate model"
 msgstr "Vyhodnotit model"
 
-#: ../gui/wxpython/menustrings.py:963
+#: ../gui/wxpython/menustrings.py:965
 msgid "Validate entire model"
 msgstr "Vyhodnotit celý model"
 
-#: ../gui/wxpython/menustrings.py:965
+#: ../gui/wxpython/menustrings.py:967
 msgid "Help"
 msgstr "Nápověda"
 
-#: ../gui/wxpython/menustrings.py:966
+#: ../gui/wxpython/menustrings.py:968
 msgid "Display the HTML man pages of Graphical modeler"
 msgstr "Zobrazit manuálové HTML stránky Grafického modelování"
 
-#: ../gui/wxpython/menustrings.py:967
+#: ../gui/wxpython/menustrings.py:969
 msgid "About Graphical Modeler"
 msgstr "O grafickém modelování"
 
-#: ../gui/wxpython/menustrings.py:968
+#: ../gui/wxpython/menustrings.py:970
 msgid "Display information about Graphical Modeler"
 msgstr "Zobrazit informace o Grafickém modelování"
 
@@ -10445,12 +10454,16 @@ msgstr ""
 msgid "Scalebar is not appropriate for this projection"
 msgstr "Definujte parametry pro %s projekci"
 
-#: ../gui/wxpython/psmap/frame.py:1025
+#: ../gui/wxpython/psmap/frame.py:1003
+msgid "Press button with green triangle icon to generate preview."
+msgstr ""
+
+#: ../gui/wxpython/psmap/frame.py:1030
 #, fuzzy
 msgid "wxGUI Cartographic Composer"
 msgstr "wxGUI Grafické modelování"
 
-#: ../gui/wxpython/psmap/frame.py:1027
+#: ../gui/wxpython/psmap/frame.py:1032
 #, fuzzy
 msgid ""
 "(C) 2011 by the GRASS Development Team\n"
@@ -10459,7 +10472,7 @@ msgstr ""
 "(C) 2010 by the GRASS Development Team\n"
 "\n"
 
-#: ../gui/wxpython/psmap/frame.py:1028 ../gui/wxpython/gmodeler/frame.py:733
+#: ../gui/wxpython/psmap/frame.py:1033 ../gui/wxpython/gmodeler/frame.py:733
 msgid ""
 "This program is free software under the GNU General Public License(>=v2). "
 "Read the file COPYING that comes with GRASS for details."
@@ -10468,7 +10481,7 @@ msgstr ""
 "(>=v2). Pro více detailů si prosím přeštěte soubor COPYING který je přiložen "
 "k instalaci."
 
-#: ../gui/wxpython/psmap/frame.py:1332
+#: ../gui/wxpython/psmap/frame.py:1340
 msgid "Click and drag to resize object"
 msgstr ""
 
@@ -11716,184 +11729,184 @@ msgstr "vybrat font pro text histogramu"
 msgid "Print preview"
 msgstr "Náhled tisku"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:51
+#: ../gui/wxpython/modules/mcalc_builder.py:52
 msgid "GRASS GIS Raster Map Calculator"
 msgstr "GRASS GIS rastrový mapový kalkulátor"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:54
+#: ../gui/wxpython/modules/mcalc_builder.py:55
 msgid "GRASS GIS 3D Raster Map Calculator"
 msgstr "GRASS GIS 3D rastrový mapový kalkulátor"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:65
+#: ../gui/wxpython/modules/mcalc_builder.py:66
 msgid "mapcalc statement"
 msgstr "mapcalc formule"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:121
+#: ../gui/wxpython/modules/mcalc_builder.py:122
 msgid "Operators"
 msgstr "Operátory"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:125
+#: ../gui/wxpython/modules/mcalc_builder.py:126
 msgid "Operands"
 msgstr "Operandy"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:127
+#: ../gui/wxpython/modules/mcalc_builder.py:128
 msgid "Expression"
 msgstr "výraz"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:139
+#: ../gui/wxpython/modules/mcalc_builder.py:140
 msgid "Save expression to file"
 msgstr "Uložit výraz do souboru"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:142
+#: ../gui/wxpython/modules/mcalc_builder.py:143
 msgid "Load expression from file"
 msgstr "Načíst výraz ze souboru"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:146
+#: ../gui/wxpython/modules/mcalc_builder.py:147
 msgid "exponent"
 msgstr "exponent"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:148
+#: ../gui/wxpython/modules/mcalc_builder.py:149
 msgid "divide"
 msgstr "dělění"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:150
+#: ../gui/wxpython/modules/mcalc_builder.py:151
 msgid "add"
 msgstr "sečíst"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:152
+#: ../gui/wxpython/modules/mcalc_builder.py:153
 msgid "subtract"
 msgstr "odečíst"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:154
+#: ../gui/wxpython/modules/mcalc_builder.py:155
 msgid "modulus"
 msgstr ""
 
-#: ../gui/wxpython/modules/mcalc_builder.py:156
+#: ../gui/wxpython/modules/mcalc_builder.py:157
 msgid "multiply"
 msgstr "násobit"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:161
+#: ../gui/wxpython/modules/mcalc_builder.py:162
 msgid "left shift"
 msgstr "posun doleva"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:163
+#: ../gui/wxpython/modules/mcalc_builder.py:164
 msgid "right shift"
 msgstr "posun doprava"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:165
+#: ../gui/wxpython/modules/mcalc_builder.py:166
 msgid "right shift (unsigned)"
 msgstr ""
 
-#: ../gui/wxpython/modules/mcalc_builder.py:167
+#: ../gui/wxpython/modules/mcalc_builder.py:168
 msgid "greater than"
 msgstr "více než"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:169
+#: ../gui/wxpython/modules/mcalc_builder.py:170
 msgid "greater than or equal to"
 msgstr "více než nebo rovno"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:171
+#: ../gui/wxpython/modules/mcalc_builder.py:172
 msgid "less than"
 msgstr "méně než"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:173
+#: ../gui/wxpython/modules/mcalc_builder.py:174
 msgid "less than or equal to"
 msgstr "méně než nebo rovno"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:175
+#: ../gui/wxpython/modules/mcalc_builder.py:176
 msgid "equal to"
 msgstr "rovno"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:177
+#: ../gui/wxpython/modules/mcalc_builder.py:178
 msgid "not equal to"
 msgstr "není rovno"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:180
+#: ../gui/wxpython/modules/mcalc_builder.py:181
 #, fuzzy
 msgid "one's complement"
 msgstr "Zobr. výpoč. region"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:182
+#: ../gui/wxpython/modules/mcalc_builder.py:183
 msgid "NOT"
 msgstr "NOT"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:184
+#: ../gui/wxpython/modules/mcalc_builder.py:185
 msgid "bitwise AND"
 msgstr ""
 
-#: ../gui/wxpython/modules/mcalc_builder.py:186
+#: ../gui/wxpython/modules/mcalc_builder.py:187
 msgid "bitwise OR"
 msgstr ""
 
-#: ../gui/wxpython/modules/mcalc_builder.py:188
+#: ../gui/wxpython/modules/mcalc_builder.py:189
 msgid "logical AND"
 msgstr "Logické AND"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:190
+#: ../gui/wxpython/modules/mcalc_builder.py:191
 msgid "logical AND (ignores NULLs)"
 msgstr "logické AND (ignoruje NULL hodnoty)"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:192
+#: ../gui/wxpython/modules/mcalc_builder.py:193
 msgid "logical OR"
 msgstr "logické OR"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:194
+#: ../gui/wxpython/modules/mcalc_builder.py:195
 msgid "logical OR (ignores NULLs)"
 msgstr "logické OR (ignoruje NULL hodnoty)"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:196
+#: ../gui/wxpython/modules/mcalc_builder.py:197
 #, fuzzy
 msgid "conditional"
 msgstr "Volitelné"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:209
+#: ../gui/wxpython/modules/mcalc_builder.py:210
 #, fuzzy
 msgid "Name for new 3D raster map to create"
 msgstr "Jméno pro nově vytvářenou %s"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:211
+#: ../gui/wxpython/modules/mcalc_builder.py:212
 #, fuzzy
 msgid "Name for new raster map to create"
 msgstr "Jméno pro nově vytvářenou %s"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:215
+#: ../gui/wxpython/modules/mcalc_builder.py:216
 #, fuzzy
 msgid "Insert existing 3D raster map"
 msgstr "Vložit existující %s"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:217
+#: ../gui/wxpython/modules/mcalc_builder.py:218
 #, fuzzy
 msgid "Insert existing raster map"
 msgstr "Vložit existující %s"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:221
+#: ../gui/wxpython/modules/mcalc_builder.py:222
 msgid "Insert mapcalc function"
 msgstr "Vložit funkci mapcalc"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:232
+#: ../gui/wxpython/modules/mcalc_builder.py:233
 msgid "Add created raster map into layer tree"
 msgstr "Přidat vytvořenou rastrovou mapu do stromu vrstev"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:475
+#: ../gui/wxpython/modules/mcalc_builder.py:476
 #, fuzzy
 msgid "You must enter the name of a new raster map to create."
 msgstr "Musíte vložit jméno nově vytvářené mapy"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:485
+#: ../gui/wxpython/modules/mcalc_builder.py:486
 #, fuzzy
 msgid "You must enter an expression to create a new raster map."
 msgstr "Musíte vložit mapcalc formuli pro vytvoření nové mapy"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:527
+#: ../gui/wxpython/modules/mcalc_builder.py:524
 msgid "Choose a file name to save the expression"
 msgstr "Vyberte jméno souboru pro uložení výrazu"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:528
-#: ../gui/wxpython/modules/mcalc_builder.py:549
+#: ../gui/wxpython/modules/mcalc_builder.py:525
+#: ../gui/wxpython/modules/mcalc_builder.py:546
 msgid "Expression file (*)|*"
 msgstr "SOubor s výrazem (*)|*"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:548
+#: ../gui/wxpython/modules/mcalc_builder.py:545
 msgid "Choose a file name to load the expression"
 msgstr "Vyberte soubor pro načtení výrazu"
 
@@ -14502,31 +14515,26 @@ msgstr "Soubor regionu <%s> již existuje. Přejete si tento soubor přepsat?"
 msgid "Property does not exist: %s"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/main.py:98
+#: ../gui/wxpython/mapdisp/main.py:97
 #, fuzzy, python-format
 msgid "Unsupported command %s."
 msgstr "Nepodporovaný typ vrstvy '%s'"
 
-#: ../gui/wxpython/mapdisp/main.py:122 ../gui/wxpython/mapdisp/main.py:151
+#: ../gui/wxpython/mapdisp/main.py:121
 #, fuzzy, python-format
 msgid "Unable to read cmdfile '%(cmd)s'. Details: %(det)s"
 msgstr "Nelze načíst seznam EPSG kódů: %s"
 
-#: ../gui/wxpython/mapdisp/main.py:221
-#, fuzzy, python-format
-msgid "Unable to open file '%(file)s' for writting. Details: %(det)s"
-msgstr "Nelze otevřít soubor <%s> pro zápis."
-
-#: ../gui/wxpython/mapdisp/main.py:395
+#: ../gui/wxpython/mapdisp/main.py:324
 #, fuzzy, python-format
 msgid "Starting map display <%s>..."
 msgstr "Spustit nový displej"
 
-#: ../gui/wxpython/mapdisp/main.py:402
+#: ../gui/wxpython/mapdisp/main.py:331
 msgid "GRASS GIS Map Display: "
 msgstr "GRASS GIS Mapové okno: "
 
-#: ../gui/wxpython/mapdisp/main.py:408
+#: ../gui/wxpython/mapdisp/main.py:337
 #, fuzzy, python-format
 msgid "Stopping map display <%s>..."
 msgstr "Spustit nový displej"
@@ -16348,44 +16356,44 @@ msgstr "Nelze provést nastavení '%s'"
 msgid "Unknow tag"
 msgstr "Neznámý"
 
-#: ../gui/wxpython/core/utils.py:314
+#: ../gui/wxpython/core/utils.py:316
 #, fuzzy, python-format
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr "Nová vektorová mapa <%s> byla vytvořena"
 
-#: ../gui/wxpython/core/utils.py:547
+#: ../gui/wxpython/core/utils.py:543
 #, python-format
 msgid "failed to open '%s'"
 msgstr "Nelze otevřít  '%s'"
 
-#: ../gui/wxpython/core/utils.py:773
+#: ../gui/wxpython/core/utils.py:769
 #, python-format
 msgid "ERROR: Unable to determine GRASS version. Details: %s"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:808
+#: ../gui/wxpython/core/utils.py:804
 #, fuzzy, python-format
 msgid "Unable to open file '%s'\n"
 msgstr "Nelze otevřít soubor <%s> pro zápis."
 
-#: ../gui/wxpython/core/utils.py:815
+#: ../gui/wxpython/core/utils.py:811
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:820
+#: ../gui/wxpython/core/utils.py:816
 #, fuzzy, python-format
 msgid "Duplicated key: %s\n"
 msgstr "Duplicitní atributy"
 
-#: ../gui/wxpython/core/utils.py:835
+#: ../gui/wxpython/core/utils.py:831
 #, fuzzy, python-format
 msgid "Unable to create file '%s'\n"
 msgstr "Nelze načíst seznam EPSG kódů: %s"
 
-#: ../gui/wxpython/core/gconsole.py:510
+#: ../gui/wxpython/core/gconsole.py:506
 #, python-format
 msgid ""
 "Unable to run command:\n"
@@ -16394,26 +16402,26 @@ msgid ""
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:608
+#: ../gui/wxpython/core/gconsole.py:604
 #, python-format
 msgid "%d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:611
+#: ../gui/wxpython/core/gconsole.py:607
 #, python-format
 msgid "%(min)d min %(sec)d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:619
+#: ../gui/wxpython/core/gconsole.py:615
 msgid ""
 "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr "Data jsou ponechána v nevhodném stavu a mohou být porušena"
 
-#: ../gui/wxpython/core/gconsole.py:621
+#: ../gui/wxpython/core/gconsole.py:617
 msgid "Command aborted"
 msgstr "Příkaz přerušen"
 
-#: ../gui/wxpython/core/gconsole.py:623
+#: ../gui/wxpython/core/gconsole.py:619
 msgid "Command finished"
 msgstr "Příkaz ukončen"
 
@@ -16462,6 +16470,10 @@ msgstr "Chyba:"
 #, python-format
 msgid "Unable to exectute command: '%s'"
 msgstr "Nelze vykonat příkaz: '%s'"
+
+#, fuzzy
+#~ msgid "Unable to open file '%(file)s' for writting. Details: %(det)s"
+#~ msgstr "Nelze otevřít soubor <%s> pro zápis."
 
 #~ msgid "WMS import"
 #~ msgstr "WMS import"

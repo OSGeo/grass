@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-18 14:05+0100\n"
+"POT-Creation-Date: 2013-02-26 14:45+0100\n"
 "PO-Revision-Date: 2012-01-27 14:24+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -235,7 +235,7 @@ msgstr ""
 #: ../vector/v.distance/main.c:87 ../vector/v.to.db/main.c:36
 #: ../vector/v.mkgrid/main.c:70 ../vector/v.net.bridge/main.c:47
 #: ../vector/v.build.polylines/main.c:112 ../vector/v.delaunay/main.c:85
-#: ../vector/v.qcount/main.c:60 ../vector/v.category/main.c:74
+#: ../vector/v.qcount/main.c:60 ../vector/v.category/main.c:75
 #: ../vector/v.net.flow/main.c:58 ../vector/v.in.region/main.c:38
 #: ../vector/v.buffer/main.c:223 ../vector/v.surf.rst/main.c:142
 #: ../vector/v.transform/main.c:70 ../vector/v.reclass/main.c:67
@@ -482,7 +482,7 @@ msgid "Database connection not defined for layer %d"
 msgstr "Datubāzes konekcija nav definēta"
 
 #: ../doc/vector/v.example/main.c:126 ../display/d.vect/opt.c:147
-#: ../display/d.thematic.area/main.c:205 ../vector/v.edit/select.c:506
+#: ../display/d.thematic.area/main.c:204 ../vector/v.edit/select.c:506
 #: ../vector/v.db.connect/main.c:215 ../vector/v.db.connect/main.c:281
 #: ../vector/v.out.svg/main.c:137 ../vector/v.in.sites/main.c:160
 #: ../vector/v.drape/main.c:250 ../vector/v.out.vtk/writeVTK.c:644
@@ -3538,7 +3538,7 @@ msgstr "Drukāt tekošo reģionu pēc platuma/garuma"
 msgid "One coordinate pair per line, please"
 msgstr "Vienu koordinātu pāri uz līniju, lūdzu"
 
-#: ../raster/r.category/main.c:53 ../vector/v.category/main.c:75
+#: ../raster/r.category/main.c:53 ../vector/v.category/main.c:76
 #, fuzzy
 msgid "category"
 msgstr ""
@@ -5535,7 +5535,7 @@ msgstr ""
 #: ../raster/r.spread/main.c:153 ../raster/r.spread/main.c:161
 #: ../raster/r.spread/main.c:169
 #, fuzzy
-msgid "Input_maps"
+msgid "Input maps"
 msgstr "Ieejas fails"
 
 #: ../raster/r.spread/main.c:120
@@ -5593,7 +5593,7 @@ msgstr ""
 #: ../raster/r.spread/main.c:214 ../raster/r.spread/main.c:222
 #: ../raster/r.spread/main.c:230
 #, fuzzy
-msgid "Output_maps"
+msgid "Output maps"
 msgstr "Izejas rastra kartes nosaukums"
 
 #: ../raster/r.spread/main.c:216
@@ -8706,8 +8706,9 @@ msgstr ""
 #: ../raster/r.horizon/main.c:255 ../raster/r.horizon/main.c:263
 #: ../raster/simwe/r.sim.sediment/main.c:175
 #: ../raster/simwe/r.sim.water/main.c:184
-msgid "Input_options"
-msgstr ""
+#, fuzzy
+msgid "Input options"
+msgstr "nevar atvērt %s"
 
 #: ../raster/r.sun/main.c:257
 msgid ""
@@ -8787,8 +8788,9 @@ msgstr ""
 #: ../raster/r.horizon/main.c:272 ../raster/r.horizon/main.c:282
 #: ../raster/r.horizon/main.c:290 ../raster/simwe/r.sim.sediment/main.c:168
 #: ../raster/simwe/r.sim.water/main.c:216
-msgid "Output_options"
-msgstr ""
+#, fuzzy
+msgid "Output options"
+msgstr "Izejas rastra kartes nosaukums"
 
 #: ../raster/r.sun/main.c:393
 msgid ""
@@ -8847,114 +8849,114 @@ msgid "Civil time zone value, if none, the time will be local solar time"
 msgstr ""
 
 #: ../raster/r.sun/main.c:504
-msgid "Incorporate the shadowing effect of terrain"
+msgid "Do not incorporate the shadowing effect of terrain"
 msgstr ""
 
 #: ../raster/r.sun/main.c:509
 msgid "Use the low-memory version of the program"
 msgstr ""
 
-#: ../raster/r.sun/main.c:556
+#: ../raster/r.sun/main.c:550
 msgid "You must give the longitude raster if you use civil time"
 msgstr ""
 
-#: ../raster/r.sun/main.c:559
+#: ../raster/r.sun/main.c:553
 #, fuzzy
 msgid "Error reading civil time zone value"
 msgstr "Kļūda meiģinot nolasīt dbmscap failu\n"
 
-#: ../raster/r.sun/main.c:562
+#: ../raster/r.sun/main.c:556
 #, fuzzy
 msgid "Invalid civil time zone value"
 msgstr "Summē visas rastra šūnu vērtības."
 
-#: ../raster/r.sun/main.c:587
+#: ../raster/r.sun/main.c:581
 msgid "insol_time and incidout are incompatible options"
 msgstr ""
 
-#: ../raster/r.sun/main.c:592
+#: ../raster/r.sun/main.c:586
 #, fuzzy
 msgid "Error reading time step size"
 msgstr "Kļūda meiģinot nolasīt dbmscap failu\n"
 
-#: ../raster/r.sun/main.c:594
+#: ../raster/r.sun/main.c:588
 #, fuzzy
 msgid "Invalid time step size"
 msgstr "nederīgs reģions: %s"
 
-#: ../raster/r.sun/main.c:598
+#: ../raster/r.sun/main.c:592
 #, fuzzy
 msgid "Error reading horizon step size"
 msgstr "Nevarēja atrast rastra failu %s"
 
-#: ../raster/r.sun/main.c:602
+#: ../raster/r.sun/main.c:596
 msgid "The horizon step size must be greater than 0."
 msgstr ""
 
-#: ../raster/r.sun/main.c:605
+#: ../raster/r.sun/main.c:599
 msgid ""
 "If you use the horizon option you must also set the 'horizonstep' parameter."
 msgstr ""
 
-#: ../raster/r.sun/main.c:611
+#: ../raster/r.sun/main.c:605
 msgid "Time and insol_time are incompatible options"
 msgstr ""
 
-#: ../raster/r.sun/main.c:613
+#: ../raster/r.sun/main.c:607
 msgid ""
 "Mode 1: instantaneous solar incidence angle & irradiance using a set local "
 "time"
 msgstr ""
 
-#: ../raster/r.sun/main.c:618
+#: ../raster/r.sun/main.c:612
 msgid "incidout requires time parameter to be set"
 msgstr ""
 
-#: ../raster/r.sun/main.c:620
+#: ../raster/r.sun/main.c:614
 msgid "Mode 2: integrated daily irradiation for a given day of the year"
 msgstr ""
 
-#: ../raster/r.sun/main.c:666
+#: ../raster/r.sun/main.c:660
 msgid "If you use -s and no horizon rasters, numpartitions must be =1"
 msgstr ""
 
-#: ../raster/r.sun/main.c:679
+#: ../raster/r.sun/main.c:673
 msgid ""
 "If you want to save memory and to use shadows, you must use pre-calculated "
 "horizons."
 msgstr ""
 
-#: ../raster/r.sun/main.c:724 ../display/d.where/main.c:107
+#: ../raster/r.sun/main.c:718 ../display/d.where/main.c:107
 #: ../general/g.region/printwindow.c:247 ../general/g.region/printwindow.c:503
 #: ../general/g.region/printwindow.c:622
 msgid "Can't get projection info of current location"
 msgstr ""
 
-#: ../raster/r.sun/main.c:728 ../raster/r.horizon/main.c:476
+#: ../raster/r.sun/main.c:722 ../raster/r.horizon/main.c:476
 #: ../display/d.where/main.c:110 ../general/g.region/printwindow.c:250
 #: ../general/g.region/printwindow.c:506 ../general/g.region/printwindow.c:625
 msgid "Can't get projection units of current location"
 msgstr ""
 
-#: ../raster/r.sun/main.c:732 ../raster/r.horizon/main.c:480
+#: ../raster/r.sun/main.c:726 ../raster/r.horizon/main.c:480
 #: ../ps/ps.map/do_geogrid.c:272 ../display/d.where/main.c:113
 #: ../display/d.grid/plot.c:335 ../general/g.region/printwindow.c:253
 #: ../general/g.region/printwindow.c:509 ../general/g.region/printwindow.c:628
 msgid "Can't get projection key values of current location"
 msgstr ""
 
-#: ../raster/r.sun/main.c:742 ../raster/r.horizon/main.c:490
+#: ../raster/r.sun/main.c:736 ../raster/r.horizon/main.c:490
 #: ../imagery/i.latlong/main.c:114 ../ps/ps.map/do_geogrid.c:278
 #: ../display/d.where/main.c:120 ../display/d.where/main.c:146
 #: ../display/d.grid/plot.c:342 ../display/d.grid/plot.c:369
 msgid "Unable to set up lat/long projection parameters"
 msgstr ""
 
-#: ../raster/r.sun/main.c:746
+#: ../raster/r.sun/main.c:740
 msgid "latin and longin raster maps have no effect when in a Lat/Lon location"
 msgstr ""
 
-#: ../raster/r.sun/main.c:751
+#: ../raster/r.sun/main.c:745
 msgid "Both latin and longin raster maps must be given, or neither"
 msgstr ""
 
@@ -19348,7 +19350,7 @@ msgstr "neiespējami atvērt <%s>"
 msgid "illegal maploc request"
 msgstr "Nederīgs izvades faila nosaukums"
 
-#: ../ps/ps.map/r_instructions.c:129 ../ps/ps.map/main.c:219
+#: ../ps/ps.map/r_instructions.c:129 ../ps/ps.map/main.c:220
 msgid "illegal copies request"
 msgstr ""
 
@@ -19707,12 +19709,12 @@ msgstr "PostScript izvades fails"
 msgid "Number of copies to print"
 msgstr "Drukājamo kopiju sakits"
 
-#: ../ps/ps.map/main.c:204
+#: ../ps/ps.map/main.c:205
 #, fuzzy, c-format
 msgid "Unable to open file '%s': %s"
 msgstr "Neiespējami atvērt šūnu failu[%s]"
 
-#: ../ps/ps.map/main.c:212 ../ps/ps.map/main.c:231
+#: ../ps/ps.map/main.c:213 ../ps/ps.map/main.c:232
 #: ../vector/v.univar/main.c:139 ../vector/v.to.db/parse.c:141
 #: ../vector/v.to.db/parse.c:144
 #, c-format
@@ -19721,7 +19723,7 @@ msgid ""
 "\t(%s)"
 msgstr ""
 
-#: ../ps/ps.map/main.c:272
+#: ../ps/ps.map/main.c:273
 #, c-format
 msgid "PostScript file '%s' successfully written."
 msgstr ""
@@ -19841,7 +19843,7 @@ msgstr "rastra karte <%s> nav atrasta"
 #: ../display/d.grid/main.c:233 ../display/d.his/main.c:118
 #: ../display/d.geodesic/main.c:96 ../display/d.labels/main.c:117
 #: ../display/d.colortable/main.c:141 ../display/d.rast/main.c:97
-#: ../display/d.thematic.area/main.c:371 ../display/d.fontlist/main.c:54
+#: ../display/d.thematic.area/main.c:370 ../display/d.fontlist/main.c:54
 #: ../display/d.graph/main.c:98 ../display/d.rgb/main.c:82
 #: ../display/d.path/main.c:154 ../display/d.rast.arrow/main.c:224
 #: ../display/d.legend/main.c:294 ../display/d.font/main.c:86
@@ -19854,12 +19856,12 @@ msgid "Unknown color: '%s'"
 msgstr "Nenosakāms tips: %c"
 
 #: ../display/d.vect/opt.c:143 ../display/d.what.vect/what.c:413
-#: ../display/d.thematic.area/main.c:201 ../vector/v.db.connect/main.c:175
+#: ../display/d.thematic.area/main.c:200 ../vector/v.db.connect/main.c:175
 #, c-format
 msgid "Database connection not defined"
 msgstr "Datubāzes konekcija nav definēta"
 
-#: ../display/d.vect/opt.c:152 ../display/d.thematic.area/main.c:210
+#: ../display/d.vect/opt.c:152 ../display/d.thematic.area/main.c:209
 #: ../vector/v.convert/att.c:74 ../db/db.select/main.c:73
 #: ../db/db.execute/main.c:76 ../db/db.tables/main.c:47
 #: ../db/db.describe/main.c:56
@@ -19933,8 +19935,8 @@ msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
 #: ../display/d.vect/main.c:80 ../display/d.vect/main.c:105
 #: ../display/d.vect/main.c:108 ../display/d.vect/main.c:111
 #: ../display/d.vect/main.c:314 ../display/d.rast/main.c:70
-#: ../display/d.rast/main.c:87 ../display/d.thematic.area/main.c:135
-#: ../display/d.thematic.area/main.c:138 ../vector/v.net.centrality/main.c:121
+#: ../display/d.rast/main.c:87 ../display/d.thematic.area/main.c:134
+#: ../display/d.thematic.area/main.c:137 ../vector/v.net.centrality/main.c:121
 #: ../vector/v.net.centrality/main.c:123 ../vector/v.in.ogr/main.c:146
 #: ../vector/v.in.ogr/main.c:159 ../vector/v.in.ogr/main.c:164
 #: ../vector/v.in.ogr/main.c:173 ../vector/v.in.ogr/main.c:189
@@ -19949,8 +19951,8 @@ msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
 #: ../vector/v.extract/main.c:100 ../vector/v.extract/main.c:106
 #: ../vector/v.extract/main.c:109 ../vector/v.extract/main.c:112
 #: ../vector/v.extract/main.c:122 ../vector/v.extract/main.c:132
-#: ../vector/v.to.db/parse.c:45 ../vector/v.category/main.c:83
-#: ../vector/v.category/main.c:86 ../vector/v.category/main.c:90
+#: ../vector/v.to.db/parse.c:45 ../vector/v.category/main.c:84
+#: ../vector/v.category/main.c:87 ../vector/v.category/main.c:91
 #: ../vector/v.buffer/main.c:232 ../vector/v.buffer/main.c:235
 #: ../vector/v.buffer/main.c:238 ../vector/v.buffer/main.c:243
 #: ../vector/v.surf.rst/main.c:173 ../vector/v.surf.rst/main.c:185
@@ -20921,7 +20923,7 @@ msgstr ""
 msgid "Maximum value used for bar plot reference"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:149 ../display/d.thematic.area/main.c:164
+#: ../display/d.vect.chart/main.c:149 ../display/d.thematic.area/main.c:163
 msgid "Create legend information and send to stdout"
 msgstr ""
 
@@ -21662,126 +21664,126 @@ msgstr "Drukājamo kopiju sakits"
 msgid "Colors (one per class)."
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:134
+#: ../display/d.thematic.area/main.c:133
 msgid "Layer number. If -1, all layers are displayed."
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:144 ../display/d.thematic.area/main.c:152
+#: ../display/d.thematic.area/main.c:143 ../display/d.thematic.area/main.c:151
 #, fuzzy
 msgid "Boundaries"
 msgstr "neiespējami atjaunot robežas"
 
-#: ../display/d.thematic.area/main.c:145
+#: ../display/d.thematic.area/main.c:144
 msgid "Boundary width"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:151
+#: ../display/d.thematic.area/main.c:150
 #, fuzzy
 msgid "Boundary color"
 msgstr "Malu krāsa"
 
-#: ../display/d.thematic.area/main.c:158
+#: ../display/d.thematic.area/main.c:157
 msgid "File in which to save d.graph instructions for legend display"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:169
+#: ../display/d.thematic.area/main.c:168
 msgid ""
 "When printing legend info , include extended statistical info from "
 "classification algorithm"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:173
+#: ../display/d.thematic.area/main.c:172
 msgid "Do not draw map, only output the legend"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:192
+#: ../display/d.thematic.area/main.c:191
 #, fuzzy, c-format
 msgid "%s: You must build topology on vector map. Run v.build."
 msgstr "neiespējami atvērt <%s>"
 
-#: ../display/d.thematic.area/main.c:199
+#: ../display/d.thematic.area/main.c:198
 #, fuzzy
 msgid "'layer' must be > 0"
 msgstr "2 līmeņiem jābūt norādītiem"
 
-#: ../display/d.thematic.area/main.c:225
+#: ../display/d.thematic.area/main.c:224
 #, fuzzy, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
 msgstr "vektora karte <%s> nav atrasta"
 
-#: ../display/d.thematic.area/main.c:229
+#: ../display/d.thematic.area/main.c:228
 #: ../display/d.thematic.area/plot1.c:134
 #: ../display/d.thematic.area/plot1.c:162
 #, fuzzy, c-format
 msgid "Cannot select data (%s) from table"
 msgstr "Nevar iatlasīt datus no tabulas"
 
-#: ../display/d.thematic.area/main.c:292
+#: ../display/d.thematic.area/main.c:291
 #, fuzzy, c-format
 msgid "Unknown color: [%s]"
 msgstr "Nenosakāms tips: %c"
 
-#: ../display/d.thematic.area/main.c:303
+#: ../display/d.thematic.area/main.c:302
 msgid ""
 "You gave both manual breaks and a classification algorithm or a number of "
 "classes. The manual breaks have precedence and will thus be used."
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:340
+#: ../display/d.thematic.area/main.c:339
 msgid "You must either give classbreaks or a classification algorithm"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:353
+#: ../display/d.thematic.area/main.c:352
 #, c-format
 msgid ""
 "Not enough colors or error in color specifications.\n"
 "Need %i colors."
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:358
+#: ../display/d.thematic.area/main.c:357
 #, fuzzy, c-format
 msgid "Error interpreting color %s"
 msgstr "Kļūda rakstot krāsu failu priekš <%s@%s>!"
 
-#: ../display/d.thematic.area/main.c:377
+#: ../display/d.thematic.area/main.c:376
 #, fuzzy
 msgid "Plotting ..."
 msgstr "Drukā ... "
 
-#: ../display/d.thematic.area/main.c:384
+#: ../display/d.thematic.area/main.c:383
 #, fuzzy
 msgid ""
 "The bounding box of the map is outside the current region, nothing drawn."
 msgstr "Kartes robežas kvadrāts ārpus tekošā reģiona neko neuzrāda.\n"
 
-#: ../display/d.thematic.area/main.c:434
+#: ../display/d.thematic.area/main.c:433
 #, fuzzy, c-format
 msgid ""
 "\n"
 "Total number of records: %.0f\n"
 msgstr "Nederīgs soļu skaits: %s"
 
-#: ../display/d.thematic.area/main.c:436
+#: ../display/d.thematic.area/main.c:435
 #, c-format
 msgid "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:438 ../vector/v.class/main.c:202
+#: ../display/d.thematic.area/main.c:437 ../vector/v.class/main.c:202
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:440 ../vector/v.class/main.c:203
+#: ../display/d.thematic.area/main.c:439 ../vector/v.class/main.c:203
 #, fuzzy, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr "Maksimālā distance starp punktiem kartes vienībās"
 
-#: ../display/d.thematic.area/main.c:444
+#: ../display/d.thematic.area/main.c:443
 #, c-format
 msgid "Last chi2 = %f\n"
 msgstr ""
 
-#: ../display/d.thematic.area/main.c:447 ../vector/v.class/main.c:210
+#: ../display/d.thematic.area/main.c:446 ../vector/v.class/main.c:210
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr ""
@@ -22222,12 +22224,12 @@ msgstr ""
 msgid "Input map contains no data"
 msgstr "Ieejošā karte satur līnijas"
 
-#: ../display/d.legend/main.c:381 ../display/d.legend/main.c:541
-msgid "Color range exceeds lower limit of actual data"
+#: ../display/d.legend/main.c:381
+msgid "Requested range exceeds lower limit of actual data"
 msgstr ""
 
-#: ../display/d.legend/main.c:387 ../display/d.legend/main.c:545
-msgid "Color range exceeds upper limit of actual data"
+#: ../display/d.legend/main.c:387
+msgid "Requested range exceeds upper limit of actual data"
 msgstr ""
 
 #: ../display/d.legend/main.c:446
@@ -22241,6 +22243,14 @@ msgstr ""
 
 #: ../display/d.legend/main.c:497
 msgid "Forcing a smooth legend: too many categories for current window height"
+msgstr ""
+
+#: ../display/d.legend/main.c:541
+msgid "Color range exceeds lower limit of actual data"
+msgstr ""
+
+#: ../display/d.legend/main.c:545
+msgid "Color range exceeds upper limit of actual data"
 msgstr ""
 
 #: ../display/d.legend/main.c:552
@@ -24560,7 +24570,7 @@ msgstr "Nezināms/nepazīstms tips"
 
 #: ../vector/v.type/main.c:148 ../vector/v.net/main.c:152
 #: ../vector/v.proj/main.c:411 ../vector/v.kcv/main.c:142
-#: ../vector/v.build.polylines/main.c:234 ../vector/v.category/main.c:719
+#: ../vector/v.build.polylines/main.c:234 ../vector/v.category/main.c:750
 #: ../vector/v.transform/main.c:286 ../vector/v.rectify/main.c:285
 #, fuzzy
 msgid "Failed to copy attribute table to output map"
@@ -25491,7 +25501,7 @@ msgid "Removing bridges..."
 msgstr "Rakstu jaunu failu... \n"
 
 #: ../vector/v.in.ogr/main.c:1208 ../vector/v.delaunay/main.c:171
-#: ../vector/v.category/main.c:326
+#: ../vector/v.category/main.c:357
 #, fuzzy
 msgid "Unable to calculate area centroid"
 msgstr "Nevar noteikt laukuma centroīdu"
@@ -26054,6 +26064,7 @@ msgstr "Nevajag taisīt atribūtu tabulu"
 #: ../vector/v.net.distance/main.c:98 ../vector/v.net.distance/main.c:103
 #: ../vector/v.net.distance/main.c:109 ../vector/v.distance/main.c:97
 #: ../vector/v.distance/main.c:102 ../vector/v.distance/main.c:109
+#: ../vector/v.distance/main.c:188
 #, fuzzy
 msgid "From"
 msgstr "No tipa"
@@ -27637,7 +27648,8 @@ msgstr ""
 msgid "Use drand48() (ignored)"
 msgstr ""
 
-#: ../vector/v.kcv/main.c:119
+#: ../vector/v.kcv/main.c:119 ../vector/v.category/main.c:181
+#: ../vector/v.category/main.c:243 ../vector/v.category/main.c:251
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> at topological level %d"
 msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
@@ -28720,10 +28732,6 @@ msgid ""
 "Column name(s) where values specified by 'upload' option will be uploaded"
 msgstr ""
 
-#: ../vector/v.distance/main.c:188
-msgid "From_map"
-msgstr ""
-
 #: ../vector/v.distance/main.c:193
 msgid "Column name of nearest feature (used with upload=to_attr)"
 msgstr ""
@@ -29384,184 +29392,184 @@ msgstr "Drukā ... "
 msgid "Counting points quadrats..."
 msgstr "Drukā ... "
 
-#: ../vector/v.category/main.c:77
+#: ../vector/v.category/main.c:78
 msgid "Attaches, deletes or reports vector categories to map geometry."
 msgstr ""
 
-#: ../vector/v.category/main.c:89
+#: ../vector/v.category/main.c:90
 msgid "Feature ids (by default all features are processed)"
 msgstr ""
 
-#: ../vector/v.category/main.c:101
+#: ../vector/v.category/main.c:102
 #, fuzzy
 msgid "Action to be done"
 msgstr "%s fails(i) kuri tiks attālināti"
 
-#: ../vector/v.category/main.c:111
+#: ../vector/v.category/main.c:113
 #, fuzzy
 msgid "add a new category"
 msgstr ""
 "Līmenis: %d\n"
 "kategorija: %d\n"
 
-#: ../vector/v.category/main.c:112
+#: ../vector/v.category/main.c:114
 msgid "delete category (-1 to delete all categories of given layer)"
 msgstr ""
 
-#: ../vector/v.category/main.c:113
+#: ../vector/v.category/main.c:115
 msgid "change layer number (e.g. layer=3,1 changes layer 3 to layer 1)"
 msgstr ""
 
-#: ../vector/v.category/main.c:114
+#: ../vector/v.category/main.c:116
 msgid "add the value specified by cat option to the current category value"
 msgstr ""
 
-#: ../vector/v.category/main.c:115
+#: ../vector/v.category/main.c:117
 msgid ""
 "copy values from one layer to another (e.g. layer=1,2,3 copies values from "
 "layer 1 to layer 2 and 3)"
 msgstr ""
 
-#: ../vector/v.category/main.c:116
+#: ../vector/v.category/main.c:118
 msgid "print report (statistics), in shell style: layer type count min max"
 msgstr ""
 
-#: ../vector/v.category/main.c:117
+#: ../vector/v.category/main.c:119
 msgid "print category values, more cats in the same layer are separated by '/'"
 msgstr ""
 
-#: ../vector/v.category/main.c:129
+#: ../vector/v.category/main.c:120
+#, fuzzy
+msgid "print only layer numbers"
+msgstr "Nerādīt kategoriju nummurus"
+
+#: ../vector/v.category/main.c:132
 #: ../locale/scriptstrings/v.centroids_to_translate.c:7
 msgid "Category increment"
 msgstr ""
 
-#: ../vector/v.category/main.c:133
+#: ../vector/v.category/main.c:136
 msgid "Shell script style, currently only for report"
 msgstr ""
 
-#: ../vector/v.category/main.c:134
+#: ../vector/v.category/main.c:137
 msgid "Format: layer type count min max"
 msgstr ""
 
-#: ../vector/v.category/main.c:152
+#: ../vector/v.category/main.c:155
 msgid ""
 "Database connection and attribute tables for concerned layers are not changed"
 msgstr ""
 
-#: ../vector/v.category/main.c:173
+#: ../vector/v.category/main.c:203
 msgid ""
 "Invalid category number (must be equal to or greater than 0). Normally "
 "category number starts at 1."
 msgstr ""
 
-#: ../vector/v.category/main.c:182
+#: ../vector/v.category/main.c:212
 #, fuzzy, c-format
 msgid "%d errors in id option"
 msgstr "Neveiksme atverot ieejas dig ieejas failu"
 
-#: ../vector/v.category/main.c:191
+#: ../vector/v.category/main.c:221
 #, fuzzy
 msgid "Output vector wasn't entered"
 msgstr "Izejas vektors netika reģistrēts."
 
-#: ../vector/v.category/main.c:212 ../vector/v.category/main.c:220
-#, fuzzy, c-format
-msgid "Can not open vector <%s> on level %d"
-msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
-
-#: ../vector/v.category/main.c:237
+#: ../vector/v.category/main.c:268
 msgid "Too many layers for this operation"
 msgstr "Pārāk dayudz līmeņu šai operācijai"
 
-#: ../vector/v.category/main.c:240 ../vector/v.category/main.c:243
+#: ../vector/v.category/main.c:271 ../vector/v.category/main.c:274
 msgid "2 layers must be specified"
 msgstr "2 līmeņiem jābūt norādītiem"
 
-#: ../vector/v.category/main.c:251
+#: ../vector/v.category/main.c:282
 #, fuzzy, c-format
 msgid "Categories already exist in layer %d"
 msgstr "%d kategorijas ielādētas no tabulas\n"
 
-#: ../vector/v.category/main.c:294 ../vector/v.select/select.c:40
+#: ../vector/v.category/main.c:325 ../vector/v.select/select.c:40
 #, fuzzy
 msgid "Processing features..."
 msgstr "Izveidot punktus visā garumā ilīniju garumā"
 
-#: ../vector/v.category/main.c:340
+#: ../vector/v.category/main.c:371
 #, fuzzy, c-format
 msgid "%d new centroids placed in output map"
 msgstr "%-5d centroīdi ierakstīti izejas failā. \n"
 
-#: ../vector/v.category/main.c:629
+#: ../vector/v.category/main.c:660
 #, fuzzy
 msgid "Layer/table"
 msgstr ""
 "Līmenis: %d\n"
 "kategorija: %d\n"
 
-#: ../vector/v.category/main.c:633
+#: ../vector/v.category/main.c:664
 #, fuzzy
 msgid "Layer"
 msgstr ""
 "Līmenis: %d\n"
 "kategorija: %d\n"
 
-#: ../vector/v.category/main.c:635
+#: ../vector/v.category/main.c:666
 #, fuzzy, c-format
 msgid "type       count        min        max\n"
 msgstr "                Tekošā karte                 Jaunā karte\n"
 
-#: ../vector/v.category/main.c:636
+#: ../vector/v.category/main.c:667
 #, fuzzy
 msgid "point"
 msgstr "Drukāt"
 
-#: ../vector/v.category/main.c:640
+#: ../vector/v.category/main.c:671
 msgid "line"
 msgstr ""
 
-#: ../vector/v.category/main.c:644
+#: ../vector/v.category/main.c:675
 #, fuzzy
 msgid "boundary"
 msgstr "neiespējami atjaunot robežas"
 
-#: ../vector/v.category/main.c:648
+#: ../vector/v.category/main.c:679
 #: ../locale/scriptstrings/v.centroids_to_translate.c:3
 #, fuzzy
 msgid "centroid"
 msgstr "%-5d centroīdi nolasīti\n"
 
-#: ../vector/v.category/main.c:652
+#: ../vector/v.category/main.c:683
 #: ../locale/scriptstrings/v.centroids_to_translate.c:4
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:4
 #, fuzzy
 msgid "area"
 msgstr "Laukums\n"
 
-#: ../vector/v.category/main.c:656
+#: ../vector/v.category/main.c:687
 #, fuzzy
 msgid "face"
 msgstr "Aizvēršana neizdevās."
 
-#: ../vector/v.category/main.c:660
+#: ../vector/v.category/main.c:691
 msgid "kernel"
 msgstr ""
 
-#: ../vector/v.category/main.c:664
+#: ../vector/v.category/main.c:695
 msgid "all"
 msgstr ""
 
-#: ../vector/v.category/main.c:717 ../vector/v.rectify/main.c:283
+#: ../vector/v.category/main.c:748 ../vector/v.rectify/main.c:283
 #, fuzzy
 msgid "Copying attribute table(s)..."
 msgstr "Nevajag taisīt atribūtu tabulu"
 
-#: ../vector/v.category/main.c:725
+#: ../vector/v.category/main.c:756
 #, fuzzy, c-format
 msgid "Categories copied from layer %d to layer %d"
 msgstr "%d kategorijas ielādētas no tabulas\n"
 
-#: ../vector/v.category/main.c:727
+#: ../vector/v.category/main.c:758
 #, fuzzy, c-format
 msgid "%d features modified."
 msgstr "%d punkti ierakstīti izejas kartē\n"
@@ -38796,6 +38804,10 @@ msgstr "Eksistējošas rastra kartes nosaukums"
 #, fuzzy
 msgid "Percent to brighten"
 msgstr "Pabeigts: "
+
+#, fuzzy
+#~ msgid "Can not open vector <%s> on level %d"
+#~ msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
 
 #~ msgid "nviz - Visualization and animation tool for GRASS data."
 #~ msgstr "nviz - GRASS vizualizācijas un animācijas rīks"

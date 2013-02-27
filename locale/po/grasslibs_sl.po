@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-18 14:05+0100\n"
+"POT-Creation-Date: 2013-02-26 14:45+0100\n"
 "PO-Revision-Date: 2005-04-26 09:38+0200\n"
 "Last-Translator: Miha Staut <mihastaut@yahoo.co.uk>\n"
 "Language-Team: Sloven¹èina <grass-translations@lists.osgeo.org>\n"
@@ -1006,7 +1006,7 @@ msgstr "Nezmo¾en odpreti datoteko %s v %s"
 msgid "WARNING"
 msgstr "OPOZORILO: "
 
-#: ../lib/init/grass.py:183
+#: ../lib/init/grass.py:186
 #, fuzzy
 msgid "Usage"
 msgstr ""
@@ -1014,7 +1014,7 @@ msgstr ""
 "Uporaba:\n"
 " "
 
-#: ../lib/init/grass.py:184 ../lib/gis/parser_html.c:140
+#: ../lib/init/grass.py:187 ../lib/gis/parser_html.c:140
 #: ../lib/gis/parser_rest.c:146
 #, fuzzy
 msgid "Flags"
@@ -1022,40 +1022,40 @@ msgstr ""
 "\n"
 "Izbire:\n"
 
-#: ../lib/init/grass.py:185
+#: ../lib/init/grass.py:188
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:186
+#: ../lib/init/grass.py:189
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:187
+#: ../lib/init/grass.py:190
 msgid "create given database, location or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:188
+#: ../lib/init/grass.py:191
 msgid "use text based interface"
 msgstr ""
 
-#: ../lib/init/grass.py:189 ../lib/init/grass.py:191
+#: ../lib/init/grass.py:192 ../lib/init/grass.py:194
 #, fuzzy
 msgid "and set as default"
 msgstr "za izbrati privzeto"
 
-#: ../lib/init/grass.py:190
+#: ../lib/init/grass.py:193
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr ""
 
-#: ../lib/init/grass.py:192
+#: ../lib/init/grass.py:195
 msgid "print GRASS configuration parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:193
+#: ../lib/init/grass.py:196
 msgid "options: arch,build,compiler,path,revision"
 msgstr ""
 
-#: ../lib/init/grass.py:194 ../lib/gis/parser_html.c:180
+#: ../lib/init/grass.py:197 ../lib/gis/parser_html.c:180
 #: ../lib/gis/parser_rest.c:179
 #, fuzzy
 msgid "Parameters"
@@ -1063,77 +1063,77 @@ msgstr ""
 "\n"
 "Parametri:\n"
 
-#: ../lib/init/grass.py:195
+#: ../lib/init/grass.py:198
 msgid "initial database (path to GIS data)"
 msgstr ""
 
-#: ../lib/init/grass.py:196
+#: ../lib/init/grass.py:199
 #, fuzzy
 msgid "initial location"
 msgstr ""
 "\n"
 "neveljavna projekcija\n"
 
-#: ../lib/init/grass.py:197
+#: ../lib/init/grass.py:200
 msgid "initial mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:198
+#: ../lib/init/grass.py:201
 msgid "fully qualified initial mapset directory"
 msgstr ""
 
-#: ../lib/init/grass.py:199
+#: ../lib/init/grass.py:202
 msgid "Environment variables relevant for startup"
 msgstr ""
 
-#: ../lib/init/grass.py:200
+#: ../lib/init/grass.py:203
 msgid "select GUI (text, gui)"
 msgstr ""
 
-#: ../lib/init/grass.py:201
+#: ../lib/init/grass.py:204
 msgid "set wish shell name to override 'wish'"
 msgstr ""
 
-#: ../lib/init/grass.py:202
+#: ../lib/init/grass.py:205
 msgid "set html web browser for help pages"
 msgstr ""
 
-#: ../lib/init/grass.py:203
+#: ../lib/init/grass.py:206
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 
-#: ../lib/init/grass.py:204
+#: ../lib/init/grass.py:207
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 
-#: ../lib/init/grass.py:205
+#: ../lib/init/grass.py:208
 msgid "shell script to be processed as batch job"
 msgstr ""
 
-#: ../lib/init/grass.py:206
+#: ../lib/init/grass.py:209
 msgid "set python shell name to override 'python'"
 msgstr ""
 
-#: ../lib/init/grass.py:228
+#: ../lib/init/grass.py:231
 #, fuzzy, python-format
 msgid "Unable to create temporary directory <%s>! Exiting."
 msgstr "Nezmo¾en dodeliti spomin\n"
 
-#: ../lib/init/grass.py:306
+#: ../lib/init/grass.py:309
 #, fuzzy, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr "Zahtevani format ni bil preveden v tej verziji"
 
-#: ../lib/init/grass.py:444
+#: ../lib/init/grass.py:447
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:468
+#: ../lib/init/grass.py:471
 #, fuzzy
 msgid "Hit RETURN to continue"
 msgstr "pritisnite RETURN za nadaljevanje -->"
 
-#: ../lib/init/grass.py:497
+#: ../lib/init/grass.py:500
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -1143,7 +1143,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:509
+#: ../lib/init/grass.py:512
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -1152,34 +1152,34 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:551 ../lib/init/grass.py:582
+#: ../lib/init/grass.py:554 ../lib/init/grass.py:585
 #, fuzzy, python-format
 msgid "<%s> is not a valid GRASS location"
 msgstr "Oprostite <%s> ni veljavna mo¾nost\n"
 
-#: ../lib/init/grass.py:563
+#: ../lib/init/grass.py:566
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:580
+#: ../lib/init/grass.py:583
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:594
+#: ../lib/init/grass.py:597
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:608
+#: ../lib/init/grass.py:611
 #, python-format
 msgid ""
 "Invalid user interface specified - <%s>.\n"
 "Use the --help option to see valid interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:621
+#: ../lib/init/grass.py:624
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS "
 "developers.\n"
@@ -1188,20 +1188,20 @@ msgid ""
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:631
+#: ../lib/init/grass.py:634
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:634
+#: ../lib/init/grass.py:637
 #, fuzzy
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr "Prosim sporoèite razvijalcem GRASS-a o tej napaki.\n"
 
-#: ../lib/init/grass.py:644
+#: ../lib/init/grass.py:647
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -1211,36 +1211,36 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:727
+#: ../lib/init/grass.py:730
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:738
+#: ../lib/init/grass.py:741
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:742
+#: ../lib/init/grass.py:745
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:756
+#: ../lib/init/grass.py:759
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "Gradim topologijo ...\n"
 
-#: ../lib/init/grass.py:790
+#: ../lib/init/grass.py:793
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - spremenljivka ni nastavljena"
 
-#: ../lib/init/grass.py:800
+#: ../lib/init/grass.py:803
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -1249,90 +1249,90 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:805
+#: ../lib/init/grass.py:808
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:807
+#: ../lib/init/grass.py:810
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:812
+#: ../lib/init/grass.py:815
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:817
+#: ../lib/init/grass.py:820
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:845
+#: ../lib/init/grass.py:848
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:854
+#: ../lib/init/grass.py:857
 msgid "GRASS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:855
+#: ../lib/init/grass.py:858
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:857
+#: ../lib/init/grass.py:860
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "Za ukaz [%s] ni na voljo pomoèi\n"
 
-#: ../lib/init/grass.py:858
+#: ../lib/init/grass.py:861
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:861
+#: ../lib/init/grass.py:864
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:863
+#: ../lib/init/grass.py:866
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:865
+#: ../lib/init/grass.py:868
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:969
+#: ../lib/init/grass.py:972
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Nezmo¾en odpreti datoteko %s v %s"
 
-#: ../lib/init/grass.py:973
+#: ../lib/init/grass.py:976
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:974 ../lib/init/grass.py:979
+#: ../lib/init/grass.py:977 ../lib/init/grass.py:982
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:977
+#: ../lib/init/grass.py:980
 #, fuzzy
 msgid "Done."
 msgstr "ga ni"
 
-#: ../lib/init/grass.py:983
+#: ../lib/init/grass.py:986
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Ne morem odpreti temp datoteke"
 
-#: ../lib/init/grass.py:1025
+#: ../lib/init/grass.py:1028
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Vneseni vektor '%s' ni bil najden"
 
-#: ../lib/init/grass.py:1166
+#: ../lib/init/grass.py:1169
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -1342,11 +1342,11 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1175
+#: ../lib/init/grass.py:1178
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1233
+#: ../lib/init/grass.py:1236
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -3915,6 +3915,16 @@ msgstr ""
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Ne morem odpreti %s"
+
+#: ../lib/python/script/core.py:1410
+#, fuzzy, python-format
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr "Neveljavno ime datoteke. Ne more biti '.' ali 'NULL'\n"
+
+#: ../lib/python/script/core.py:1418
+#, fuzzy, python-format
+msgid "Illegal filename <%s>. <%s> not allowed.\n"
+msgstr "Neveljavno ime. Znak <%c> je prepovedan."
 
 #: ../lib/python/script/raster3d.py:89
 msgid "An error occurred while running r3.mapcalc"
