@@ -120,7 +120,7 @@ static int cmp(const void *a, const void *b)
     int ai = *(int *)a;
     int bi = *(int *)b;
     
-    return (ai < bi ? -1 : ai > bi);
+    return (ai - bi);
 }
 
 static void sort_ilist(struct ilist *List, int (*cmp_ilist)(const void *, const void *))
@@ -146,10 +146,11 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
     struct line_pnts *APoints, *BPoints, *Points;
     struct line_pnts **AXLines, **BXLines;
     struct line_cats *ACats, *BCats, *Cats;
-    int j, k, l, ret, atype, btype, aline, bline, found, iline, nlines;
+    int j, k, l, ret, atype, btype, aline, bline, found, iline;
+    int nlines, nlines_org;
     int naxlines, nbxlines, nx;
     double *xx = NULL, *yx = NULL, *zx = NULL;
-    struct bound_box ABox, BBox;
+    struct bound_box ABox, *BBox;
     struct boxlist *List;
     int nbreaks;
     int touch1_n = 0, touch1_s = 0, touch1_e = 0, touch1_w = 0;	/* other vertices except node1 touching box */
@@ -170,14 +171,26 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 
     if (List_break) {
 	nlines = List_break->n_values;
+	nlines_org = 0;
+	for (i = 0; i < List_break->n_values; i++) {
+	    if (nlines_org < List_break->value[i])
+		nlines_org = List_break->value[i];
+	}
     }
     else {
 	nlines = Vect_get_num_lines(Map);
+	nlines_org = nlines;
     }
     G_debug(3, "nlines =  %d", nlines);
+    
 
-    /* TODO: It seems that lines/boundaries are not broken at intersections
-     * with points/centroids. Check if true, if yes, skip GV_POINTS
+    /* TODO:
+     * 1. It seems that lines/boundaries are not broken at intersections
+     *    with points/centroids. Check if true, if yes, skip GV_POINTS
+     * 2. list of lines to break and list of reference lines
+     *    aline: line to break, if List_break == NULL, break all
+     *    bline: reference line, if List_ref == NULL, use all
+     *           break bline only if it is in the list of lines to break
      */
 
     /* To find intersection of two lines (Vect_line_intersection) is quite slow.
@@ -253,17 +266,15 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 	G_debug(3, "  %d lines selected by box", List->n_values);
 
 	for (j = 0; j < List->n_values; j++) {
+	    
 	    bline = List->id[j];
-	    if (List_break && !Vect_val_in_list(List_break, bline)) {
-		continue;
-	    }
 
 	    /* check intersection of aline with bline only once */
 	    if (bline > aline) {
 		if (!List_ref)
 		    continue;
 		else if (bsearch(&bline, List_ref->value, List_ref->n_values,
-		            sizeof(int), cmp))
+			    sizeof(int), cmp))
 		    continue;
 	    }
 
@@ -271,11 +282,12 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
 
+	    BBox = &List->box[j];
+
 	    /* Check if touch by end node only */
 	    if (!is3d) {
 		Vect_get_line_nodes(Map, aline, &anode1, &anode2);
 		Vect_get_line_nodes(Map, bline, &bnode1, &bnode2);
-		BBox = List->box[j];
 
 		node = 0;
 		if (anode1 == bnode1 || anode1 == bnode2)
@@ -286,21 +298,21 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 		if (node) {
 		    Vect_get_node_coor(Map, node, &nodex, &nodey, NULL);
 		    if ((node == anode1 && nodey == ABox.N &&
-		         !touch1_n && nodey == BBox.S) ||
+		         !touch1_n && nodey == BBox->S) ||
 		        (node == anode2 && nodey == ABox.N &&
-			 !touch2_n && nodey == BBox.S) ||
+			 !touch2_n && nodey == BBox->S) ||
 			(node == anode1 && nodey == ABox.S &&
-			 !touch1_s && nodey == BBox.N) ||
+			 !touch1_s && nodey == BBox->N) ||
 			(node == anode2 && nodey == ABox.S &&
-			 !touch2_s && nodey == BBox.N) ||
+			 !touch2_s && nodey == BBox->N) ||
 			(node == anode1 && nodex == ABox.E &&
-			 !touch1_e && nodex == BBox.W) ||
+			 !touch1_e && nodex == BBox->W) ||
 			(node == anode2 && nodex == ABox.E &&
-			 !touch2_e && nodex == BBox.W) ||
+			 !touch2_e && nodex == BBox->W) ||
 			(node == anode1 && nodex == ABox.W &&
-			 !touch1_w && nodex == BBox.E) ||
+			 !touch1_w && nodex == BBox->E) ||
 			(node == anode2 && nodex == ABox.W &&
-			 !touch2_w && nodex == BBox.E)) {
+			 !touch2_w && nodex == BBox->E)) {
 
 			G_debug(3,
 				"lines %d and %d touching by end nodes only -> no intersection",
@@ -312,7 +324,8 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 
 	    AXLines = NULL;
 	    BXLines = NULL;
-	    Vect_line_intersection(APoints, BPoints, &AXLines, &BXLines,
+	    Vect_line_intersection(APoints, BPoints, &ABox, BBox,
+	                           &AXLines, &BXLines,
 				   &naxlines, &nbxlines, 0);
 	    G_debug(3, "  naxlines = %d nbxlines = %d", naxlines, nbxlines);
 
@@ -398,7 +411,15 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 		G_free(AXLines);
 
 	    if (nbxlines > 0) {
-		if (aline != bline) {	/* Self intersection, do not write twice, TODO: is it OK? */
+		int break_bline = 1;
+
+		if (List_break && !Vect_val_in_list(List_break, bline)) {
+		    break_bline = 0;
+		}
+		if (aline == bline) {	/* Self intersection, do not write twice, TODO: is it OK? */
+		    break_bline = 0;
+		}
+		if (break_bline) {
 		    if (!check)
 			Vect_delete_line(Map, bline);
 		    for (k = 0; k < nbxlines; k++) {
