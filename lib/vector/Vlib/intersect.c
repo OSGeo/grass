@@ -600,6 +600,8 @@ static int cross_seg(int id, const struct RTree_Rect *rect, int *arg)
 int
 Vect_line_intersection(struct line_pnts *APoints,
 		       struct line_pnts *BPoints,
+		       struct bound_box *ABox,
+		       struct bound_box *BBox,
 		       struct line_pnts ***ALines,
 		       struct line_pnts ***BLines,
 		       int *nalines, int *nblines, int with_z)
@@ -692,27 +694,25 @@ Vect_line_intersection(struct line_pnts *APoints,
      *  is build first for the second line and segments from the first line are broken by segments
      *  in bound box */
 
-    dig_line_box(APoints, &box);
-    dig_line_box(BPoints, &abbox);
-
-    if (!Vect_box_overlap(&box, &abbox)) {
+    if (!Vect_box_overlap(ABox, BBox)) {
 	*nalines = 0;
 	*nblines = 0;
 	return 0;
     }
     
-    if (abbox.N > box.N)
-	abbox.N = box.N;
-    if (abbox.S < box.S)
-	abbox.S = box.S;
-    if (abbox.E > box.E)
-	abbox.E = box.E;
-    if (abbox.W < box.W)
-	abbox.W = box.W;
-    if (abbox.T > box.T)
-	abbox.T = box.T;
-    if (abbox.B < box.B)
-	abbox.B = box.B;
+    abbox = *BBox;
+    if (abbox.N > ABox->N)
+	abbox.N = ABox->N;
+    if (abbox.S < ABox->S)
+	abbox.S = ABox->S;
+    if (abbox.E > ABox->E)
+	abbox.E = ABox->E;
+    if (abbox.W < ABox->W)
+	abbox.W = ABox->W;
+    if (abbox.T > ABox->T)
+	abbox.T = ABox->T;
+    if (abbox.B < ABox->B)
+	abbox.B = ABox->B;
 
     abbox.N += rethresh;
     abbox.S -= rethresh;
