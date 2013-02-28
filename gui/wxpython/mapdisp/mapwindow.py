@@ -596,7 +596,7 @@ class BufferedWindow(MapWindow, wx.Window):
             Debug.msg (1, "Invalid call of EVT_UPDATE_MAP event.")
             return
 
-        self.UpdateMap(self, **kwargs)
+        self.UpdateMap(**kwargs)
 
     def UpdateMap(self, render = True, renderVector = True):
         """!Updates the canvas anytime there is a change to the
