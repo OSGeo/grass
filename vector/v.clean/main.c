@@ -219,47 +219,47 @@ int main(int argc, char *argv[])
     for (i = 0; i < ntools; i++) {
 	switch (tools[i]) {
 	case (TOOL_BREAK):
-	    G_message("%s: %13e", _("Break"), threshs[i]);
+	    G_message("%s: %.15g", _("Break"), threshs[i]);
 	    break;
 	case (TOOL_RMDUPL):
-	    G_message("%s: %13e", _("Remove duplicates"), threshs[i]);
+	    G_message("%s: %.15g", _("Remove duplicates"), threshs[i]);
 	    break;
 	case (TOOL_RMDANGLE):
-	    G_message("%s: %13e", _("Remove dangles"), threshs[i]);
+	    G_message("%s: %.15g", _("Remove dangles"), threshs[i]);
 	    break;
 	case (TOOL_CHDANGLE):
-	    G_message("%s: %13e", _("Change type of boundary dangles"),
+	    G_message("%s: %.15g", _("Change type of boundary dangles"),
 		      threshs[i]);
 	    break;
 	case (TOOL_RMBRIDGE):
-	    G_message("%s: %13e", _("Remove bridges"), threshs[i]);
+	    G_message("%s: %.15g", _("Remove bridges"), threshs[i]);
 	    break;
 	case (TOOL_CHBRIDGE):
-	    G_message("%s: %13e", _("Change type of boundary bridges"),
+	    G_message("%s: %.15g", _("Change type of boundary bridges"),
 		      threshs[i]);
 	    break;
 	case (TOOL_SNAP):
-	    G_message("%s: %13e", _("Snap vertices"), threshs[i]);
+	    G_message("%s: %.15g", _("Snap vertices"), threshs[i]);
 	    break;
 	case (TOOL_RMDAC):
-	    G_message("%s: %13e", _("Remove duplicate area centroids"),
+	    G_message("%s: %.15g", _("Remove duplicate area centroids"),
 		      threshs[i]);
 	    break;
 	case (TOOL_BPOL):
-	    G_message("%s: %13e", _("Break polygons"), threshs[i]);
+	    G_message("%s: %.15g", _("Break polygons"), threshs[i]);
 	    break;
 	case (TOOL_PRUNE):
-	    G_message("%s: %13e", _("Prune"), threshs[i]);
+	    G_message("%s: %.15g", _("Prune"), threshs[i]);
 	    break;
 	case (TOOL_RMAREA):
-	    G_message("%s: %13e", _("Remove small areas"), threshs[i]);
+	    G_message("%s: %.15g", _("Remove small areas"), threshs[i]);
 	    break;
 	case (TOOL_RMSA):
-	    G_message("%s: %13e", _("Remove small angles at nodes"),
+	    G_message("%s: %.15g", _("Remove small angles at nodes"),
 		      threshs[i]);
 	    break;
 	case (TOOL_RMLINE):
-	    G_message("%s: %13e",
+	    G_message("%s: %.15g",
 		      _("Remove all lines or boundaries of zero length"),
 		      threshs[i]);
 	    break;

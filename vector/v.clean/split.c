@@ -49,8 +49,9 @@ int split_lines(struct Map_info *Map, int otype, struct Map_info *Err)
     area_size = sqrt((box.E - box.W) * (box.N - box.S));
 
     split_distance = area_size / log(n_split_lines);
-    /* divisor is the handle: increase divisor to decrease split_distance */
-    split_distance = split_distance / 10.;
+    /* divisor is the handle: increase divisor to decrease split_distance
+     * see also v.in.ogr */
+    split_distance = split_distance / 16.;
     G_debug(1, "area size: %f", area_size);
     G_debug(1, "split distance: %f", split_distance);
 
@@ -102,7 +103,7 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
 
     /* can't split boundaries with only 2 vertices */
     if (Points->n_points == 2) {
-	Vect_write_line(Map, otype, Points, Cats);
+	/* Vect_write_line(Map, otype, Points, Cats); */
 	return 0;
     }
 
