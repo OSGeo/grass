@@ -49,7 +49,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
     TPoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    List = Vect_new_boxlist(0);
+    List = Vect_new_boxlist(1);
 
     nlines = Vect_get_num_lines(Out);
 
@@ -132,7 +132,8 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 		 * intersections should be found if any */
 
 		AXLines = BXLines = NULL;
-		Vect_line_intersection(TPoints, BPoints, &AXLines, &BXLines,
+		Vect_line_intersection(TPoints, BPoints, &box, &List->box[i],
+		                       &AXLines, &BXLines,
 				       &naxlines, &nbxlines, 0);
 
 		G_debug(4,
