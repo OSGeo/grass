@@ -201,7 +201,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     if (!BPoints)
 	BPoints = Vect_new_line_struct();
     if (!List)
-	List = Vect_new_boxlist(0);
+	List = Vect_new_boxlist(1);
 
     /* Check intersection of the modified boundary with other boundaries */
     Vect_line_box(Points, &box);
@@ -223,7 +223,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	 * intersections should be found if any */
 
 	AXLines = BXLines = NULL;
-	Vect_line_intersection(Points, BPoints, &AXLines, &BXLines,
+	Vect_line_intersection(Points, BPoints, &box, &List->box[i], &AXLines, &BXLines,
 			       &naxlines, &nbxlines, 0);
 
 	G_debug(4,
