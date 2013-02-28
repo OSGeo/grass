@@ -620,7 +620,7 @@ class VNETDialog(wx.Dialog):
 
         vectMapName, mapSet = self._parseMapStr(self.inputData['input'].GetValue())
         vectorMap = vectMapName + '@' + mapSet
-cd .
+
         self.inputData['alayer'].Clear()
         self.inputData['nlayer'].Clear()
 
