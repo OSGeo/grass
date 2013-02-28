@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     struct Option *vold, *vnew, *xshift, *yshift, *zshift,
 	*xscale, *yscale, *zscale, *zrot, *columns, *field_opt;
-    struct Flag *tozero_flag, *print_mat_flag, *swap_flag, *no_topo;
+    struct Flag *tozero_flag, *swap_flag, *no_topo;
 
     char mon[4], date[40], buf[1000];
     struct Map_info Old, New;
@@ -70,18 +70,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("transformation"));
     module->description =
-	_("Performs an affine transformation (shift, scale and rotate, "
-	  "or GPCs) on vector map.");
+	_("Performs an affine transformation (shift, scale and rotate) "
+	  "on vector map.");
     
     tozero_flag = G_define_flag();
     tozero_flag->key = 't';
     tozero_flag->description = _("Shift all z values to bottom=0");
 
-    print_mat_flag = G_define_flag();
-    print_mat_flag->key = 'm';
-    print_mat_flag->description =
-	_("Print the transformation matrix to stdout");
-    
     swap_flag = G_define_flag();
     swap_flag->key = 'w';
     swap_flag->description =
