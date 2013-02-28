@@ -40,8 +40,9 @@ import wx.lib.flatnotebook  as FN
 import wx.lib.colourselect as csel
 
 from core             import globalvar, utils
-from core.settings    import UserSettings
 from core.gcmd        import RunCommand, GMessage
+from core.events      import gUpdateMap
+from core.settings    import UserSettings
 
 from dbmgr.base       import DbMgrBase 
 
@@ -197,9 +198,11 @@ class VNETDialog(wx.Dialog):
             self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                   self.OnMapClickHandler)
         if update:
-            self.mapWin.UpdateMap(render=True, renderVector=True)
+            up_map_evt = gUpdateMap(render = True, renderVector = True)
+            wx.PostEvent(self.mapWin, up_map_evt)
         else:
-            self.mapWin.UpdateMap(render=False, renderVector=False)
+            up_map_evt = gUpdateMap(render = True, renderVector = True)
+            wx.PostEvent(self.mapWin, up_map_evt)
 
 
     def _addPanes(self):
@@ -321,7 +324,8 @@ class VNETDialog(wx.Dialog):
             cmd = self.GetLayerStyle()
             self.tmp_result.AddRenderLayer(cmd)
 
-        self.mapWin.UpdateMap(render = True, renderVector = True)
+        up_map_evt = gUpdateMap(render = True, renderVector = True)
+        wx.PostEvent(self.mapWin, up_map_evt)
 
     def _createOutputPage(self):
         """!Tab with output console"""
@@ -363,7 +367,6 @@ class VNETDialog(wx.Dialog):
                 self.inputData[dataSel[0]] = dataSel[2](parent = selPanels[dataSel[0]],
                                                         size = (-1, -1), 
                                                         type = 'vector')
-            if dataSel[0] == 'input' and self.mapWin.tree:
                 icon = wx.Image(os.path.join(globalvar.ETCICONDIR, "grass", "layer-vector-add.png"))
                 icon.Rescale(18, 18)
                 icon = wx.BitmapFromImage(icon) 
@@ -393,7 +396,7 @@ class VNETDialog(wx.Dialog):
                       flag = wx.EXPAND  | wx.TOP | wx.LEFT | wx.RIGHT, border = 5) 
 
         for sel in ['input', 'alayer', 'nlayer']:
-            if sel== 'input' and self.mapWin.tree:
+            if sel== 'input':
                 btn = self.addToTreeBtn
             else:
                 btn = None
@@ -594,11 +597,21 @@ class VNETDialog(wx.Dialog):
         cmd = ['d.vect', 
                'map=' + vectorMap]
 
-        if self.mapWin.tree.FindItemByData(key = 'name', value = vectorMap) is None: 
+        if self.mapWin.tree and \
+           self.mapWin.tree.FindItemByData(key = 'name', value = vectorMap) is None: 
             self.mapWin.tree.AddLayer(ltype = "vector", 
                                       lcmd = cmd,
                                       lname =vectorMap,
-                                      lchecked = True)           
+                                      lchecked = True)
+        #d.mon case
+        else:
+            self.renderLayer = self.mapWin.Map.AddLayer(ltype = "vector", command = cmd,
+                                                        name = vectorMap, active = True,
+                                                        opacity = 1.0,    render = True,       
+                                                        pos = -1)         
+
+            up_map_evt = gUpdateMap(render = True, renderVector = True)
+            wx.PostEvent(self.mapWin, up_map_evt)
 
     def OnVectSel(self, event):
         """!When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
@@ -607,7 +620,7 @@ class VNETDialog(wx.Dialog):
 
         vectMapName, mapSet = self._parseMapStr(self.inputData['input'].GetValue())
         vectorMap = vectMapName + '@' + mapSet
-
+cd .
         self.inputData['alayer'].Clear()
         self.inputData['nlayer'].Clear()
 
@@ -617,8 +630,7 @@ class VNETDialog(wx.Dialog):
         items = self.inputData['alayer'].GetItems()
         itemsLen = len(items)
         if itemsLen < 1:
-            if self.mapWin.tree:
-                self.addToTreeBtn.Disable()
+            self.addToTreeBtn.Disable()
             if hasattr(self, 'inpDbMgrData'):
                 self._updateInputDbMgrPage(show = False)
             self.inputData['alayer'].SetValue("")
@@ -638,8 +650,7 @@ class VNETDialog(wx.Dialog):
                 iItem = items.index(unicode("2")) 
                 self.inputData['nlayer'].SetSelection(iItem)
 
-        if self.mapWin.tree:
-            self.addToTreeBtn.Enable()
+        self.addToTreeBtn.Enable()
         if hasattr(self, 'inpDbMgrData'):
             self._updateInputDbMgrPage(show = True)
 
@@ -994,7 +1005,10 @@ class VNETDialog(wx.Dialog):
 
         cmd = self.GetLayerStyle()
         self.tmp_result.AddRenderLayer(cmd)
-        self.mapWin.UpdateMap(render=True, renderVector=True)
+
+        up_map_evt = gUpdateMap(render = True, renderVector = True)
+        wx.PostEvent(self.mapWin, up_map_evt)
+
         mainToolbar = self.toolbars['mainToolbar']
         id = vars(mainToolbar)['showResult']
         mainToolbar.ToggleTool(id =id,
@@ -1119,7 +1133,10 @@ class VNETDialog(wx.Dialog):
 
         cmd = self.GetLayerStyle()
         self.tmp_result.AddRenderLayer(cmd)
-        self.mapWin.UpdateMap(render=True, renderVector=True)
+
+        up_map_evt = gUpdateMap(render = True, renderVector = True)
+        wx.PostEvent(self.mapWin, up_map_evt)
+
         mainToolbar = self.toolbars['mainToolbar']
         id = vars(mainToolbar)['showResult']
         mainToolbar.ToggleTool(id =id,
@@ -1246,7 +1263,8 @@ class VNETDialog(wx.Dialog):
             cmd = self.GetLayerStyle()
             self.tmp_result.DeleteRenderLayer()
 
-        self.mapWin.UpdateMap(render=True, renderVector=True)
+        up_map_evt = gUpdateMap(render = True, renderVector = True)
+        wx.PostEvent(self.mapWin, up_map_evt)
 
     def OnInsertPoint(self, event):
         """!Registers/unregisters mouse handler into map window"""
@@ -1324,7 +1342,8 @@ class VNETDialog(wx.Dialog):
                                           lcmd = cmd,
                                           lchecked = True)
             else:
-                self.mapWin.UpdateMap(render=True, renderVector=True) 
+                up_map_evt = gUpdateMap(render = True, renderVector = True)
+                wx.PostEvent(self.mapWin, up_map_evt)
 
     def OnSettings(self, event):
         """!Displays vnet settings dialog"""
@@ -1407,7 +1426,9 @@ class VNETDialog(wx.Dialog):
                                          toggle = False)
             if self.tmpMaps.HasTmpVectMap("vnet_snap_points"):
                 self.snapPts.DeleteRenderLayer() 
-                self.mapWin.UpdateMap(render = False, renderVector = False)
+                
+                up_map_evt = gUpdateMap(render = False, renderVector = False)
+                wx.PostEvent(self.mapWin, up_map_evt)
 
             if self.snapData.has_key('cmdThread'):
                 self.snapData['cmdThread'].abort()
@@ -1487,9 +1508,10 @@ class VNETDialog(wx.Dialog):
             self.snapData["inputMapNlayer"] = self.inputData["nlayer"].GetValue()
         # map is already created and up to date for input data
         else:
-            self.snapPts.AddRenderLayer()           
-            self.mapWin.UpdateMap(render = True, renderVector = True)
-        
+            self.snapPts.AddRenderLayer()
+
+            up_map_evt = gUpdateMap(render = True, renderVector = True)
+            wx.PostEvent(self.mapWin, up_map_evt)
 
     def _onToPointsDone(self, event):
         """!Update map window, when map with nodes to snap is created"""
@@ -1497,7 +1519,9 @@ class VNETDialog(wx.Dialog):
         if not event.aborted:
             self.snapPts.SaveVectMapState()
             self.snapPts.AddRenderLayer() 
-            self.mapWin.UpdateMap(render = True, renderVector = True)
+
+            up_map_evt = gUpdateMap(render = True, renderVector = True)
+            wx.PostEvent(self.mapWin, up_map_evt)
 
     def OnUndo(self, event):
         """!Step back in history"""
@@ -1684,8 +1708,10 @@ class VNETDialog(wx.Dialog):
 
         self.OnAnalysisChanged(None)
         self.list.SetUpdateMap(updateMap = True)
-        self.mapWin.UpdateMap(render=True, renderVector=True)
 
+        up_map_evt = gUpdateMap(render = True, renderVector = True)
+        wx.PostEvent(self.mapWin, up_map_evt)
+    
     def _checkResultMapChanged(self, resultVectMap):
         """!Check if map was modified outside"""
         if resultVectMap.VectMapState() == 0:
@@ -1953,7 +1979,8 @@ class PtsList(PointsList):
         PointsList.OnItemSelected(self, event)
 
         if self.updateMap:
-            self.dialog.mapWin.UpdateMap(render=False, renderVector=False)
+            up_map_evt = gUpdateMap(render = False, renderVector = False)
+            wx.PostEvent(self.dialog.mapWin, up_map_evt)
 
     def AdaptPointsList(self, currParamsCats):
         """Rename category values when module is changed. Expample: Start point -> Sink point"""
@@ -1979,7 +2006,8 @@ class PtsList(PointsList):
         cats = self.dialog.vnetParams[currModule]["cmdParams"]["cats"]
 
         if self.updateMap:
-            self.dialog.mapWin.UpdateMap(render=False, renderVector=False)
+            up_map_evt = gUpdateMap(render = False, renderVector = False)
+            wx.PostEvent(self.dialog.mapWin, up_map_evt)
 
         if len(cats) <= 1:
             return 
@@ -2235,13 +2263,17 @@ class SettingsDialog(wx.Dialog):
         self.parent.SetPointDrawSettings()
         if not self.parent.tmp_result  or \
            not self.parent.tmpMaps.HasTmpVectMap(self.parent.tmp_result.GetVectMapName()):
-            self.parent.mapWin.UpdateMap(render=False, renderVector=False)
+            up_map_evt = gUpdateMap(render = False, renderVector = False)
+            wx.PostEvent(self.parent.mapWin, up_map_evt)
         elif self.parent.tmp_result.GetRenderLayer():
             cmd = self.parent.GetLayerStyle()
             self.parent.tmp_result.AddRenderLayer(cmd)
-            self.parent.mapWin.UpdateMap(render=True, renderVector=True)#TODO optimization
+            
+            up_map_evt = gUpdateMap(render = True, renderVector = True)
+            wx.PostEvent(self.parent.mapWin, up_map_evt)#TODO optimization
         else:
-            self.parent.mapWin.UpdateMap(render=False, renderVector=False)
+            up_map_evt = gUpdateMap(render = False, renderVector = False)
+            wx.PostEvent(self.parent.mapWin, up_map_evt)
 
     def OnApply(self, event):
         """!Button 'Apply' pressed"""
