@@ -40,6 +40,7 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
 
     struct line_cats *Cats;
     struct line_pnts *Points, *Points_se;	/* start - end */
+    struct bound_box box, box_se;
 
     /* for intersection */
     struct line_pnts **Points_a, **Points_b;
@@ -68,6 +69,8 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
     if (temp_line < 0) {
 	return -1;
     }
+    
+    Vect_line_box(Points_se, &box_se);
 
     /* determine order of lines */
     cv_i = 0;
@@ -82,8 +85,9 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
 	if (!(type & GV_LINE))
 	    continue;
 
+	Vect_line_box(Points, &box);
 	if (Vect_line_check_intersection(Points_se, Points, WITH_Z)) {
-	    Vect_line_intersection(Points_se, Points,
+	    Vect_line_intersection(Points_se, Points, &box_se, &box,
 				   &Points_a, &Points_b, &nlines_a, &nlines_b,
 				   WITHOUT_Z);
 
@@ -108,7 +112,7 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
     /* z bulk-labeling */
     for (cv_i = 0; cv_i < cv.n_values; cv_i++) {
 	line = cv.value[cv_i].cat;
-	Vect_read_line(Map, Points, Cats, line);
+	type = Vect_read_line(Map, Points, Cats, line);
 
 	for (p_i = 0; p_i < Points->n_points; p_i++) {
 	    Points->z[p_i] = value;
