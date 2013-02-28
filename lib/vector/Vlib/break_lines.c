@@ -146,7 +146,7 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
     struct line_pnts *APoints, *BPoints, *Points;
     struct line_pnts **AXLines, **BXLines;
     struct line_cats *ACats, *BCats, *Cats;
-    int j, k, l, ret, atype, btype, aline, bline, found, iline;
+    int i, j, k, l, ret, atype, btype, aline, bline, found, iline;
     int nlines, nlines_org;
     int naxlines, nbxlines, nx;
     double *xx = NULL, *yx = NULL, *zx = NULL;
@@ -335,7 +335,6 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 	    if (aline == bline && naxlines == 0 && nbxlines == 0 &&
 		APoints->n_points >= 3) {
 		int centre;
-		int i;
 
 		G_debug(3, "  Check collapsed loop");
 		if (APoints->n_points % 2) {	/* odd number of vertices */
