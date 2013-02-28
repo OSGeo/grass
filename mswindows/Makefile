@@ -10,6 +10,8 @@ OSGEO4W_DIR_POSTFIX = '_g7'
 
 ifneq ($(MINGW),)
 default: GRASS-Packager.bat GRASS-Installer.nsi
+else
+default:
 endif	
 
 GRASS-Packager.bat: GRASS-Packager.bat.tmpl
