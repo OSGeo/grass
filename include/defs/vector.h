@@ -423,6 +423,7 @@ int Vect_segment_intersection(double, double, double, double, double, double,
                               double *, double *, double *, double *,
                               double *, double *, int);
 int Vect_line_intersection(struct line_pnts *, struct line_pnts *,
+                           struct bound_box *, struct bound_box *,
                            struct line_pnts ***, struct line_pnts ***, int *,
                            int *, int);
 int Vect_line_check_intersection(struct line_pnts *, struct line_pnts *, int);
