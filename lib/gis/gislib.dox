@@ -1143,12 +1143,13 @@ make up the valid command line input of a GRASS command.
 
 The parser routines behave in one of three ways:
 
- # If no command line arguments are entered by the user, the parser
+<ul>
+<li> If no command line arguments are entered by the user, the parser
 searches for a completely interactive version of the command. If the
 interactive version is found, control is passed over to this
-version. 
+version.
 
- # If command line arguments are entered but they are a subset of the
+<li> If command line arguments are entered but they are a subset of the
 options and flags that the programmer has defined as required
 arguments, three things happen. The parser will pass an error message
 to the user indicating which required options and/or flags were
@@ -1156,9 +1157,10 @@ missing from the command line, the parser will then display a complete
 usage message for that command, and finally the parser cancels
 execution of the command.
 
- # If all necessary options and flags are entered on the command line
+<li> If all necessary options and flags are entered on the command line
 by the user, the parser executes the command with the given options
 and flags.
+</ul>
 
 \subsection Structures Structures
 
