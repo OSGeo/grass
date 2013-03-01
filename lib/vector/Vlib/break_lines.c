@@ -123,12 +123,12 @@ static int cmp(const void *a, const void *b)
     return (ai - bi);
 }
 
-static void sort_ilist(struct ilist *List, int (*cmp_ilist)(const void *, const void *))
+static void sort_ilist(struct ilist *List)
 {
-    int i, is_sorted = 1;
+    int i, j, is_sorted = 1;
     
     for (i = 1; i < List->n_values; i++) {
-	if (cmp_ilist(&List->value[i - 1], &List->value[i]) == 1) {
+	if (List->value[i - 1] > List->value[i]) {
 	    is_sorted = 0;
 	    break;
 	}
@@ -136,6 +136,17 @@ static void sort_ilist(struct ilist *List, int (*cmp_ilist)(const void *, const 
     
     if (!is_sorted)
 	qsort(List->value, List->n_values, sizeof(int), cmp);
+    
+    if (List->n_values > 1) {
+	j = 1;
+	for (i = 1; i < List->n_values; i++) {
+	    if (List->value[j - 1] != List->value[i]) {
+		List->value[j] = List->value[i];
+		j++;
+	    }
+	}
+	List->n_values = j;
+    }
 }
 
 int
@@ -158,6 +169,7 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
     int is3d;
     int node, anode1, anode2, bnode1, bnode2;
     double nodex, nodey;
+    int a_is_ref, b_is_ref, break_a, break_b;
 
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
@@ -169,13 +181,18 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 
     is3d = Vect_is_3d(Map);
 
-    if (List_break) {
+    if (List_ref)
+	sort_ilist(List_ref);
+    if (List_break)
+	sort_ilist(List_break);
+
+    if (List_ref) {
+	nlines = List_ref->n_values;
+	nlines_org = List_ref->value[List_ref->n_values - 1];
+    }
+    else if (List_break) {
 	nlines = List_break->n_values;
-	nlines_org = 0;
-	for (i = 0; i < List_break->n_values; i++) {
-	    if (nlines_org < List_break->value[i])
-		nlines_org = List_break->value[i];
-	}
+	nlines_org = List_break->value[List_break->n_values - 1];
     }
     else {
 	nlines = Vect_get_num_lines(Map);
@@ -188,9 +205,9 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
      * 1. It seems that lines/boundaries are not broken at intersections
      *    with points/centroids. Check if true, if yes, skip GV_POINTS
      * 2. list of lines to break and list of reference lines
-     *    aline: line to break, if List_break == NULL, break all
-     *    bline: reference line, if List_ref == NULL, use all
-     *           break bline only if it is in the list of lines to break
+     *    aline: reference line, if List_ref == NULL, use all
+     *           break aline only if it is in the list of lines to break
+     *    bline: line to break, if List_break == NULL, break all
      */
 
     /* To find intersection of two lines (Vect_line_intersection) is quite slow.
@@ -206,30 +223,42 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
      */
     nbreaks = 0;
     
-    if (List_ref)
-	sort_ilist(List_ref, cmp);
-
     for (iline = 0; iline < nlines; iline++) {
 	G_percent(iline, nlines, 1);
-	if (List_break) {
+	
+	/* aline: reference line */
+	if (List_ref) {
+	    aline = List_ref->value[iline];
+	}
+	else if (List_break) {
 	    aline = List_break->value[iline];
 	}
 	else {
 	    aline = iline + 1;
 	}
 
-	if (List_ref &&
-	    !bsearch(&aline, List_ref->value, List_ref->n_values, sizeof(int), cmp))
-	    continue;
-
 	G_debug(3, "aline =  %d", aline);
 	if (!Vect_line_alive(Map, aline))
 	    continue;
+
+	a_is_ref = 0;
+	break_a = 1;
+	if (List_ref) {
+	    a_is_ref = 1;
+	}
+
+	if (List_break) {
+	    break_a = 0;
+	    if (bsearch(&aline, List_break->value, List_break->n_values, sizeof(int), cmp)) {
+		break_a = 1;
+	    }
+	}
 
 	atype = Vect_read_line(Map, APoints, ACats, aline);
 	if (!(atype & type))
 	    continue;
 
+	Vect_line_prune(APoints);
 	Vect_line_box(APoints, &ABox);
 
 	/* Find which sides of the box are touched by intermediate (non-end) points of line */
@@ -267,20 +296,37 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 
 	for (j = 0; j < List->n_values; j++) {
 	    
+	    /* bline: line to break */
 	    bline = List->id[j];
 
+	    b_is_ref = 0;
+	    break_b = 1;
+	    if (List_ref && 
+		bsearch(&bline, List_ref->value, List_ref->n_values, sizeof(int), cmp)) {
+		b_is_ref = 1;
+		/* reference bline will be broken when it is aline */
+		break_b = 0;
+	    }
+
+	    if (List_break) {
+		break_b = 0;
+		if (bsearch(&bline, List_break->value, List_break->n_values, sizeof(int), cmp)) {
+		    break_b = 1;
+		}
+	    }
+	    
+	    if (!break_a && !break_b)
+		continue;
+
 	    /* check intersection of aline with bline only once */
-	    if (bline > aline) {
-		if (!List_ref)
-		    continue;
-		else if (bsearch(&bline, List_ref->value, List_ref->n_values,
-			    sizeof(int), cmp))
-		    continue;
+	    if (break_a && break_b && aline < bline && (!List_ref || b_is_ref)) {
+		continue;
 	    }
 
 	    G_debug(3, "  j = %d bline = %d", j, bline);
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
+	    Vect_line_prune(BPoints);
 
 	    BBox = &List->box[j];
 
@@ -333,7 +379,7 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 	     * and the line is forming collapsed loop, for example  0,0;1,0;0,0 should be broken at 1,0.
 	     * ---> */
 	    if (aline == bline && naxlines == 0 && nbxlines == 0 &&
-		APoints->n_points >= 3) {
+		APoints->n_points >= 3 && break_a) {
 		int centre;
 
 		G_debug(3, "  Check collapsed loop");
@@ -372,23 +418,23 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 	    }
 	    nx = 0;		/* number of intersections to be written to Err */
 	    if (naxlines > 0) {	/* intersection -> write out */
-		if (!check)
+		if (!check && break_a)
 		    Vect_delete_line(Map, aline);
 		for (k = 0; k < naxlines; k++) {
 		    /* Write new line segments */
 		    /* line may collapse, don't write zero length lines */
 		    Vect_line_prune(AXLines[k]);
 		    if ((atype & GV_POINTS) || AXLines[k]->n_points > 1) {
-			if (!check) {
+			if (!check && break_a) {
 			    ret = Vect_write_line(Map, atype, AXLines[k],
 			                          ACats);
-			    if (List_ref) {
-				G_ilist_add(List_ref, ret);
-			    }
 			    G_debug(3, "Line %d written, npoints = %d", ret,
 				    AXLines[k]->n_points);
-			    if (List_break) {
-				Vect_list_append(List_break, ret);
+			    if (List_ref && a_is_ref) {
+				G_ilist_add(List_ref, ret);
+			    }
+			    if (List_break && break_a) {
+				G_ilist_add(List_break, ret);
 			    }
 			}
 		    }
@@ -410,29 +456,24 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 		G_free(AXLines);
 
 	    if (nbxlines > 0) {
-		int break_bline = 1;
-
-		if (List_break && !Vect_val_in_list(List_break, bline)) {
-		    break_bline = 0;
-		}
-		if (aline == bline) {	/* Self intersection, do not write twice, TODO: is it OK? */
-		    break_bline = 0;
-		}
-		if (break_bline) {
-		    if (!check)
+		if (aline != bline) {	/* Self intersection, do not write twice, TODO: is it OK? */
+		    if (!check && break_b)
 			Vect_delete_line(Map, bline);
 		    for (k = 0; k < nbxlines; k++) {
 			/* Write new line segments */
 			/* line may collapse, don't write zero length lines */
 			Vect_line_prune(BXLines[k]);
 			if ((btype & GV_POINTS) || BXLines[k]->n_points > 1) {
-			    if (!check) {
+			    if (!check && break_b) {
 				ret =
 				    Vect_write_line(Map, btype, BXLines[k],
 						    BCats);
 				G_debug(5, "Line %d written", ret);
+				if (List_ref && b_is_ref) {
+				    G_ilist_add(List_ref, ret);
+				}
 				if (List_break) {
-				    Vect_list_append(List_break, ret);
+				    G_ilist_add(List_break, ret);
 				}
 			    }
 			}
@@ -476,11 +517,16 @@ break_lines(struct Map_info *Map, struct ilist *List_break,
 		G_free(yx);
 		G_free(zx);
 	    }
-	    if (naxlines > 0)
+	    if (naxlines > 0 && !check && break_a) {
+		G_debug(3, "aline was broken, use next one");
 		break;		/* first line was broken and deleted -> take the next one */
+	    }
 	}
 
-	if (List_break) {
+	if (List_ref) {
+	    nlines = List_ref->n_values;
+	}
+	else if (List_break) {
 	    nlines = List_break->n_values;
 	}
 	else {
