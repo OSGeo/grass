@@ -34,11 +34,4 @@ int renumber(int, int);
 /* store.c */
 int store_reclass(CELL, int, CELL *);
 
-/* tree.c */
-int plant_tree(void);
-int first_node(CELL **, CELL **);
-int next_node(int, CELL **, CELL **);
-CELL index_cat(register CELL);
-int uproot_tree(void);
-
 #endif /* __R_CROSS_LOCAL_PROTO_H__ */
