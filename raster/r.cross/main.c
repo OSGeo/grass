@@ -27,12 +27,8 @@
 int nfiles;
 int nrows;
 int ncols;
-int NCATS = 1 << SHIFT;
 const char *names[NFILES];
 struct Categories labels[NFILES];
-NODE *tree;		/* tree of values */
-int tlen;		/* allocate tree size */
-int N;			/* number of actual nodes in tree */
 RECLASS *reclass;
 CELL *table;
 

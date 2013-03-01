@@ -36,7 +36,8 @@ int renumber(int in, int out)
 	Rast_get_c_row(in, c = cell, row);
 	col = ncols;
 	while (col-- > 0) {
-	    *c = table[*c];
+	    if (!Rast_is_c_null_value(c))
+		*c = table[*c];
 	    c++;
 	}
 	Rast_put_row(out, cell, CELL_TYPE);
