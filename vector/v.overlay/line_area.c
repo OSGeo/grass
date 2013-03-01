@@ -14,6 +14,193 @@
 #include <grass/glocale.h>
 #include "local.h"
 
+/* compare category structures
+ * return 0 identical
+ * return 1 not identical
+ */
+static int compare_cats(struct line_cats *ACats, struct line_cats *BCats)
+{
+    int i, j;
+
+    if (ACats->n_cats == 0 || BCats->n_cats == 0) {
+	if (ACats->n_cats == 0 && BCats->n_cats == 0)
+	    return 0;
+
+	if (ACats->n_cats == 0 && BCats->n_cats > 0)
+	    return 1;
+
+	if (ACats->n_cats > 0 && BCats->n_cats == 0)
+	    return 1;
+    }
+
+    for (i = 0; i < ACats->n_cats; i++) {
+	int found = 0;
+
+	for (j = 0; j < BCats->n_cats; j++) {
+	    if (ACats->cat[i] == BCats->cat[j] &&
+	        ACats->field[i] == BCats->field[j]) {
+		found = 1;
+		break;
+	    }
+	}
+	if (!found)
+	    return 1;
+    }
+    
+    return 0;
+}
+
+/* merge a given line with all other lines of the same type and 
+ * with the same categories */
+static int merge_line(struct Map_info *Map, int line,
+		      struct line_pnts *MPoints)
+{
+    int nlines, i, first, last, next_line, curr_line;
+    int merged = 0, newl = 0;
+    int next_node, direction, node_n_lines, type, ltype, lines_type;
+    static struct ilist *List = NULL;
+    static struct line_pnts *Points = NULL;
+    static struct line_cats *MCats = NULL, *Cats = NULL;
+    type = GV_LINE;
+
+    nlines = Vect_get_num_lines(Map);
+
+    if (!Points)
+	Points = Vect_new_line_struct();
+    if (!Cats)
+	Cats = Vect_new_cats_struct();
+    if (!MCats)
+	MCats = Vect_new_cats_struct();
+    if (!List)
+	List = Vect_new_list();
+
+    Vect_reset_line(Points);
+    Vect_reset_cats(Cats);
+    Vect_reset_cats(MCats);
+    Vect_reset_list(List);
+
+    if (!Vect_line_alive(Map, line))
+	return 0;
+
+    ltype = Vect_get_line_type(Map, line);
+
+    if (!(ltype & type))
+	return 0;
+	
+    Vect_read_line(Map, NULL, MCats, line);
+
+    /* special cases:
+     *  - loop back to start boundary via several other boundaries
+     *  - one boundary forming closed loop
+     *  - node with 3 entries but only 2 boundaries, one of them connecting twice,
+     *    the other one must then be topologically incorrect in case of boundary */
+
+    /* go backward as long as there is only one other line/boundary at the current node */
+    G_debug(3, "go backward");
+    Vect_get_line_nodes(Map, line, &next_node, NULL);
+
+    first = -line;
+    while (1) {
+	node_n_lines = Vect_get_node_n_lines(Map, next_node);
+	/* count lines/boundaries at this node */
+	lines_type = 0;
+	next_line = first;
+	for (i = 0; i < node_n_lines; i++) {
+	    curr_line = Vect_get_node_line(Map, next_node, i);
+	    if ((Vect_get_line_type(Map, abs(curr_line)) & GV_LINES))
+		lines_type++;
+	    if ((Vect_get_line_type(Map, abs(curr_line)) == ltype)) {
+		if (abs(curr_line) != abs(first)) {
+		    Vect_read_line(Map, NULL, Cats, abs(curr_line));
+		    
+		    /* catgories must be identical */
+		    if (compare_cats(MCats, Cats) == 0)
+			next_line = curr_line;
+		}
+	    }
+	}
+	if (lines_type == 2 && abs(next_line) != abs(first) &&
+	    abs(next_line) != line) {
+	    first = next_line;
+
+	    if (first < 0) {
+		Vect_get_line_nodes(Map, -first, &next_node, NULL);
+	    }
+	    else {
+		Vect_get_line_nodes(Map, first, NULL, &next_node);
+	    }
+	}
+	else
+	    break;
+    }
+
+    /* go forward as long as there is only one other line/boundary at the current node */
+    G_debug(3, "go forward");
+
+    /* reverse direction */
+    last = -first;
+
+    if (last < 0) {
+	Vect_get_line_nodes(Map, -last, &next_node, NULL);
+    }
+    else {
+	Vect_get_line_nodes(Map, last, NULL, &next_node);
+    }
+
+    Vect_reset_list(List);
+    while (1) {
+	G_ilist_add(List, last);
+	node_n_lines = Vect_get_node_n_lines(Map, next_node);
+	lines_type = 0;
+	next_line = last;
+	for (i = 0; i < node_n_lines; i++) {
+	    curr_line = Vect_get_node_line(Map, next_node, i);
+	    if ((Vect_get_line_type(Map, abs(curr_line)) & GV_LINES))
+		lines_type++;
+	    if ((Vect_get_line_type(Map, abs(curr_line)) == ltype)) {
+		if (abs(curr_line) != abs(last)) {
+		    Vect_read_line(Map, NULL, Cats, abs(curr_line));
+		    
+		    if (compare_cats(MCats, Cats) == 0)
+			next_line = curr_line;
+		}
+	    }
+	}
+
+	if (lines_type == 2 && abs(next_line) != abs(last) &&
+	    abs(next_line) != abs(first)) {
+	    last = next_line;
+
+	    if (last < 0) {
+		Vect_get_line_nodes(Map, -last, &next_node, NULL);
+	    }
+	    else {
+		Vect_get_line_nodes(Map, last, NULL, &next_node);
+	    }
+	}
+	else
+	    break;
+    }
+
+    /* merge lines */
+    G_debug(3, "merge %d lines", List->n_values);
+    Vect_reset_line(MPoints);
+
+    for (i = 0; i < List->n_values; i++) {
+	Vect_reset_line(Points);
+	Vect_read_line(Map, Points, Cats, abs(List->value[i]));
+	direction = (List->value[i] < 0 ? GV_BACKWARD : GV_FORWARD);
+	Vect_append_points(MPoints, Points, direction);
+	MPoints->n_points--;
+	Vect_delete_line(Map, abs(List->value[i]));
+    }
+    MPoints->n_points++;
+    merged += List->n_values;
+    newl++;
+
+    return merged;
+}
+
 /* Check if point is inside area with category of given field. All cats are set in 
  * Cats with original field.
  * returns number of cats.
@@ -69,8 +256,11 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 
     G_message(_("Breaking lines..."));
     Vect_break_lines_list(Tmp, NULL, BList, GV_LINE | GV_BOUNDARY, NULL);
+
+    /*
     G_message(_("Merging lines..."));
     Vect_merge_lines(Tmp, GV_LINE, NULL, NULL);
+    */
 
     nlines = Vect_get_num_lines(Tmp);
 
@@ -116,6 +306,9 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	 * this should be solved (check angles?)
 	 * This should not happen if Vect_break_lines_list() works correctly
 	 */
+
+	/* merge here */
+	merge_line(Tmp, line, Points);
 
 	G_debug(3, "line = %d", line);
 
