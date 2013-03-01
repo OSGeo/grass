@@ -124,17 +124,8 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 
 	/* go backward as long as there is only one other line/boundary at the current node */
 	G_debug(3, "go backward");
-	next_node = 0;
-	if (ltype == GV_LINE) {
-	    struct P_topo_l *topo = (struct P_topo_l *)Line->topo;
+	Vect_get_line_nodes(Map, line, &next_node, NULL);
 
-	    next_node = topo->N1;
-	}
-	else if (ltype == GV_BOUNDARY) {
-	    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
-
-	    next_node = topo->N1;
-	}
 	first = -line;
 	while (1) {
 	    node_n_lines = Vect_get_node_n_lines(Map, next_node);
@@ -160,28 +151,10 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 		first = next_line;
 
 		if (first < 0) {
-		    if (ltype == GV_LINE) {
-			struct P_topo_l *topo = (struct P_topo_l *)Plus->Line[-first]->topo;
-
-			next_node = topo->N1;
-		    }
-		    else if (ltype == GV_BOUNDARY) {
-			struct P_topo_b *topo = (struct P_topo_b *)Plus->Line[-first]->topo;
-
-			next_node = topo->N1;
-		    }
+		    Vect_get_line_nodes(Map, -first, &next_node, NULL);
 		}
 		else {
-		    if (ltype == GV_LINE) {
-			struct P_topo_l *topo = (struct P_topo_l *)Plus->Line[first]->topo;
-
-			next_node = topo->N2;
-		    }
-		    else if (ltype == GV_BOUNDARY) {
-			struct P_topo_b *topo = (struct P_topo_b *)Plus->Line[first]->topo;
-
-			next_node = topo->N2;
-		    }
+		    Vect_get_line_nodes(Map, first, NULL, &next_node);
 		}
 	    }
 	    else
@@ -195,28 +168,10 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 	last = -first;
 
 	if (last < 0) {
-	    if (ltype == GV_LINE) {
-		struct P_topo_l *topo = (struct P_topo_l *)Plus->Line[-last]->topo;
-
-		next_node = topo->N1;
-	    }
-	    else if (ltype == GV_BOUNDARY) {
-		struct P_topo_b *topo = (struct P_topo_b *)Plus->Line[-last]->topo;
-
-		next_node = topo->N1;
-	    }
+	    Vect_get_line_nodes(Map, -last, &next_node, NULL);
 	}
 	else {
-	    if (ltype == GV_LINE) {
-		struct P_topo_l *topo = (struct P_topo_l *)Plus->Line[last]->topo;
-
-		next_node = topo->N2;
-	    }
-	    else if (ltype == GV_BOUNDARY) {
-		struct P_topo_b *topo = (struct P_topo_b *)Plus->Line[last]->topo;
-
-		next_node = topo->N2;
-	    }
+	    Vect_get_line_nodes(Map, last, NULL, &next_node);
 	}
 
 	Vect_reset_list(List);
@@ -244,28 +199,10 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 		last = next_line;
 
 		if (last < 0) {
-		    if (ltype == GV_LINE) {
-			struct P_topo_l *topo = (struct P_topo_l *)Plus->Line[-last]->topo;
-
-			next_node = topo->N1;
-		    }
-		    else if (ltype == GV_BOUNDARY) {
-			struct P_topo_b *topo = (struct P_topo_b *)Plus->Line[-last]->topo;
-
-			next_node = topo->N1;
-		    }
+		    Vect_get_line_nodes(Map, -last, &next_node, NULL);
 		}
 		else {
-		    if (ltype == GV_LINE) {
-			struct P_topo_l *topo = (struct P_topo_l *)Plus->Line[last]->topo;
-
-			next_node = topo->N2;
-		    }
-		    else if (ltype == GV_BOUNDARY) {
-			struct P_topo_b *topo = (struct P_topo_b *)Plus->Line[last]->topo;
-
-			next_node = topo->N2;
-		    }
+		    Vect_get_line_nodes(Map, last, NULL, &next_node);
 		}
 	    }
 	    else
@@ -295,7 +232,7 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 	    newl++;
 	}
 
-	nlines = Vect_get_num_lines(Map);
+	/* nlines = Vect_get_num_lines(Map); */
     }
 
     G_verbose_message(_("%d boundaries merged"), merged);
