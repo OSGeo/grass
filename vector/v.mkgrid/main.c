@@ -28,9 +28,6 @@
 #include "grid_structs.h"
 #include "local_proto.h"
 
-/* Write attribute data in batches per 20 */
-#define BATCH_SIZE 20
-
 int main(int argc, char *argv[])
 {
 
@@ -41,7 +38,6 @@ int main(int argc, char *argv[])
     char *dig_file;
     
     char buf[2000];
-    int batch_fill;
 
     /* Other local variables */
     int attCount, nbreaks;
@@ -269,8 +265,8 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Creating centroids..."));
 
     /* Write out centroids and attributes */
+    db_begin_transaction(Driver);
     attCount = 0;
-    batch_fill = 0;
     for (i = 0; i < grid_info.num_rows; ++i) {
 	for (j = 0; j < grid_info.num_cols; ++j) {
 	    double x, y;
@@ -289,16 +285,10 @@ int main(int argc, char *argv[])
 	    Vect_cat_set(Cats, 1, attCount + 1);
 	    Vect_write_line(&Map, point_type, Points, Cats);
 
-            if (batch_fill == 0) {
-                sprintf(buf, "insert into %s values ", Fi->table);
-                if (db_set_string(&sql, buf) != DB_OK)
-                    G_fatal_error(_("Unable to fill attribute table"));
-            }
-            
-            if (batch_fill > 0)
-                if (db_append_string(&sql, ", ") != DB_OK)
-                    G_fatal_error(_("Unable to fill attribute table"));
-            
+	    sprintf(buf, "insert into %s values ", Fi->table);
+	    if (db_set_string(&sql, buf) != DB_OK)
+		G_fatal_error(_("Unable to fill attribute table"));
+
             if (grid_info.num_rows < 27 && grid_info.num_cols < 27) {
 		sprintf(buf,
 			"( %d, %d, %d, '%c', '%c' )",
@@ -311,29 +301,17 @@ int main(int argc, char *argv[])
 	    }
             if (db_append_string(&sql, buf) != DB_OK)
                     G_fatal_error(_("Unable to fill attribute table"));
-	    batch_fill++;
-	    
-            if (batch_fill == BATCH_SIZE) {
-                G_debug(3, "SQL: %s", db_get_string(&sql));
 
-                if (db_execute_immediate(Driver, &sql) != DB_OK) {
-                    G_fatal_error(_("Unable to insert new record: %s"),
-                                db_get_string(&sql));
-                }
-                batch_fill = 0;
-            }
+	    G_debug(3, "SQL: %s", db_get_string(&sql));
+
+	    if (db_execute_immediate(Driver, &sql) != DB_OK) {
+		G_fatal_error(_("Unable to insert new record: %s"),
+			    db_get_string(&sql));
+	    }
 	    attCount++;
 	}
     }
-    
-    if (batch_fill > 0) {
-        G_debug(3, "SQL: %s", db_get_string(&sql));
-
-        if (db_execute_immediate(Driver, &sql) != DB_OK) {
-            G_fatal_error(_("Unable to insert new record: %s"),
-                db_get_string(&sql));
-        }
-    }
+    db_commit_transaction(Driver);
 
     db_close_database_shutdown_driver(Driver);
 
