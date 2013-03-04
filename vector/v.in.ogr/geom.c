@@ -276,6 +276,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    Vect_append_point(Points, OGR_G_GetX(hGeom, i),
 			      OGR_G_GetY(hGeom, i), OGR_G_GetZ(hGeom, i));
 	}
+	Vect_line_prune(Points);
 	if (type & GV_BOUNDARY)
 	    otype = GV_BOUNDARY;
 	else
@@ -308,6 +309,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    Vect_append_point(Points, OGR_G_GetX(hRing, j),
 			      OGR_G_GetY(hRing, j), OGR_G_GetZ(hRing, j));
 	}
+	Vect_line_prune(Points);
 
 	/* Degenerate is not ignored because it may be useful to see where it is,
 	 * but may be eliminated by min_area option */
@@ -353,6 +355,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 				      OGR_G_GetY(hRing, j),
 				      OGR_G_GetZ(hRing, j));
 		}
+		Vect_line_prune(IPoints[valid_isles]);
 
 		if (IPoints[valid_isles]->n_points < 4)
 		    G_warning(_("Degenerate island ([%d] vertices)"),
