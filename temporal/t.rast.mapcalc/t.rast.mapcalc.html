@@ -2,8 +2,8 @@
 
 The purpose of <em>t.rast.mapcalc</em> is to perform spatio-temporal <em>mapcalc</em> expressions
 on maps of temporally sampled space time raster datasets (STRDS). Spatial and temporal 
-operators and functions are available in the expression string. The description of the spatial 
-operators and functions is available in the <a href="r.mapcalc.html">r.mapcalc</a> manual page.
+operators and internal variables are available in the expression string. The description of the spatial 
+operators, functions and internal variables is available in the <a href="r.mapcalc.html">r.mapcalc</a> manual page.
 The temporal functions are described in detail below.
 <p>
 This module expects several parameter. All space time raster datasets that are referenced in 
@@ -23,21 +23,21 @@ The module <em>t.rast.mapcalc</em> supports parallel processing. The option
 <em>nprocs</em> specifies the number of processes that can be started in parallel. 
 <p>
 A mapcalc expression must be provided to process the temporal 
-sampled maps. Temporal functions are available in addition to 
+sampled maps. Temporal internal variables are available in addition to 
 the <em>r.mapcalc</em> spatial operators and functions:
 <p>
-Supported functions for relative and absolute time:
+Supported internal variables for relative and absolute time:
 <ul>
-  <li> <em>td()</em> - This function
+  <li> <em>td()</em> - This internal variable
        represents the size of the current sample time interval
        in days and fraction of days for absolute time,
        and in relative units in case of relative time. </li>
-  <li> <em>start_time()</em> - This function represent 
+  <li> <em>start_time()</em> - This internal variable represent 
     the time difference between the start time of the sample space time
     raster dataset and the start time of the current sample interval or instance. The time
     is measured  in days and fraction of days for absolute time,
     and in relative units in case of relative time. </li>
-  <li> <em>end_time()</em> - This function represent 
+  <li> <em>end_time()</em> - This internal variable represent 
     the time difference between the start time of the sample space time
     raster dataset and the end time of the current sample interval. The time
     is measured  in days and fraction of days for absolute time,
@@ -45,7 +45,7 @@ Supported functions for relative and absolute time:
     The end_time() will be represented by null() in case of a time instance.</li>
 </ul>
 <p>
-Supported functions for absolute time of the current sample interval or instance:
+Supported internal variables for absolute time of the current sample interval or instance:
 <ul>
   <li> <em>start_doy()</em> - Day of year (doy) from the start time [1 - 366] </li>
   <li> <em>start_dow()</em> - Day of week (dow) from the start time [1 - 7], 
@@ -69,7 +69,8 @@ Supported functions for absolute time of the current sample interval or instance
   <li> <em>end_minute()</em> - The minute of the end time [0 - 59] </li>
   <li> <em>end_second()</em> - The second of the end time [0 - 59] </li>
 </ul>
-The <em>end_*</em> functions are represented by the null() function in case of time instances.
+The <em>end_*</em> functions are represented by the null() internal variables 
+in case of time instances.
 
 <h2>NOTE</h2>
 
