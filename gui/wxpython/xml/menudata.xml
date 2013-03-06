@@ -2811,6 +2811,14 @@
               <handler>OnMenuCmd</handler>
               <command>i.smap</command>
             </menuitem>
+            <separator />
+            <menuitem>
+              <label>Object segmentation</label>
+              <help>Generates object segmentation map from raster group.</help>
+              <keywords>imagery,classification,segmentation,object</keywords>
+              <handler>OnMenuCmd</handler>
+              <command>i.segment</command>
+            </menuitem>
           </items>
         </menu>
         <menu>
