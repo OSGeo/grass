@@ -62,7 +62,7 @@ msgstr "Erreur au chargement de la carte raster 3D <%s>"
 
 #: ../lib/nviz/map_obj.c:160
 msgid "Nviz_new_map_obj(): unsupported data type"
-msgstr "Nviz_new_map_obj() : type de données non pris en charge"
+msgstr "Nviz_new_map_obj(): type de données non pris en charge"
 
 #: ../lib/nviz/nviz.c:128
 #, c-format
@@ -76,23 +76,23 @@ msgstr "Impossible de définir la nouvelle lumière"
 #: ../lib/symbol/read.c:211
 #, c-format
 msgid "Cannot read symbol line coordinates: %s"
-msgstr "Impossible de lire les coordonnées du symbole ligne : %s"
+msgstr "Impossible de lire les coordonnées du symbole ligne: %s"
 
 #: ../lib/symbol/read.c:260
 #, c-format
 msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr "Nom du symbole incorrect : '%s' (devrait être group/nom ou groupe/nom@jeudedonnées)"
+msgstr "Nom du symbole incorrect: '%s' (devrait être group/nom ou groupe/nom@jeudedonnées)"
 
 #: ../lib/symbol/read.c:284
 #, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "Impossible de trouver/ouvrir le symbole : '%s'"
+msgstr "Impossible de trouver/ouvrir le symbole: '%s'"
 
 #: ../lib/symbol/read.c:389 ../lib/symbol/read.c:407 ../lib/symbol/read.c:417
 #: ../lib/symbol/read.c:435
 #, c-format
 msgid "Incorrect symbol color: '%s', using default."
-msgstr "Couleur de symbole incorrect : '%s', on utilise la couleur par défaut"
+msgstr "Couleur de symbole incorrect: '%s', on utilise la couleur par défaut"
 
 #: ../lib/htmldriver/Graph_Set.c:97
 #, fuzzy, c-format
@@ -149,7 +149,7 @@ msgstr "Impossible d'ouvrir la base de données <%s> avec le driver <%s>"
 #: ../lib/db/dbmi_client/copy_tab.c:295 ../lib/db/dbmi_client/table.c:110
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr "Impossible d'ouvrir le curseur de sélection : '%s'"
+msgstr "Impossible d'ouvrir le curseur de sélection: '%s'"
 
 #: ../lib/sites/sites.c:304
 msgid "Cannot fetch row"
@@ -194,7 +194,7 @@ msgstr "La carte raster <%s> est en dehors de la région courante. Chargement é
 #: ../lib/ogsf/GS2.c:1756 ../lib/ogsf/GS2.c:1764 ../lib/ogsf/GS2.c:1774
 #: ../lib/ogsf/GS2.c:1822
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
-msgstr "GS_load_att_map() : Mémoire saturée. Impossible de charger la carte"
+msgstr "GS_load_att_map(): Mémoire saturée. Impossible de charger la carte"
 
 #: ../lib/ogsf/GS2.c:1850
 msgid "Loading failed"
@@ -305,7 +305,7 @@ msgstr ""
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
 msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
-msgstr "gsd_rot() : %c est une spécification d'axe non valide. Rotation ignorée. Merci d'avertir les développeurs GRASS de cette erreur"
+msgstr "gsd_rot(): %c est une spécification d'axe non valide. Rotation ignorée. Merci d'avertir les développeurs GRASS de cette erreur"
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/GK2.c:216
 #: ../lib/ogsf/gsd_img_ppm.c:52 ../lib/ogsf/gsd_img_ppm.c:95
@@ -363,7 +363,7 @@ msgstr "Ouverture du flux MPEG <%s>..."
 
 #: ../lib/ogsf/gsd_img_mpeg.c:319
 msgid "Unable to deduce output format from file extension: using MPEG"
-msgstr "Impossible de déduire le format de sortie de l'extension du fichier : utilisation de MPEG"
+msgstr "Impossible de déduire le format de sortie de l'extension du fichier: utilisation de MPEG"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:323
 msgid "Unable to find suitable output format"
@@ -553,7 +553,7 @@ msgstr "Impossible d'obtenir la chaîne de paramètre PROJ.4"
 #: ../lib/proj/convert.c:139
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr "OGR ne peut pas analyser la chaîne de paramètre PROJ.4 : %s (Le code erreur OGR était %d)"
+msgstr "OGR ne peut pas analyser la chaîne de paramètre PROJ.4: %s (Le code erreur OGR était %d)"
 
 #: ../lib/proj/convert.c:146
 #, c-format
@@ -601,7 +601,7 @@ msgstr "Impossible d'initialiser proj.4 avec la liste de paramètres suivants :"
 #: ../lib/proj/get_proj.c:236
 #, c-format
 msgid "The error message: %s"
-msgstr "Message d'erreur : %s"
+msgstr "Message d'erreur: %s"
 
 #: ../lib/proj/get_proj.c:294
 msgid "Option input overflowed option table"
@@ -610,7 +610,7 @@ msgstr "Les options d'entrée débordent les options du tableau"
 #: ../lib/proj/get_proj.c:325
 #, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr "Impossible d'initialiser pj cause : %s"
+msgstr "Impossible d'initialiser pj cause: %s"
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
@@ -631,7 +631,7 @@ msgstr "Facteur unité de sortie"
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
 msgid "pj_transform() failed: %s"
-msgstr "pj_transform() a échoué : %s"
+msgstr "pj_transform() a échoué: %s"
 
 #: ../lib/proj/ellipse.c:76
 #, c-format
@@ -995,7 +995,7 @@ msgstr ""
 #: ../lib/init/lock.c:38
 #, c-format
 msgid "Usage: %s file pid"
-msgstr "Usage : pid du fichier %s"
+msgstr "Usage: pid du fichier %s"
 
 #: ../lib/init/lock.c:42
 msgid "Concurrent mapset locking is not supported on Windows"
@@ -1567,7 +1567,7 @@ msgstr "Erreur inconnue"
 #: ../lib/raster/color_rules.c:181
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr "mauvaise règle (%s) : [%s]"
+msgstr "mauvaise règle (%s): [%s]"
 
 #: ../lib/raster/color_rules.c:326
 #, c-format
@@ -1671,7 +1671,7 @@ msgstr "Erreur à l'ouverture de la couche matricielle %s"
 #: ../lib/raster/open.c:214
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
-msgstr "Carte raster <%s@%s> : format de champ invalide dans le fichier d'en-tête"
+msgstr "Carte raster <%s@%s>: format de champ invalide dans le fichier d'en-tête"
 
 #: ../lib/raster/open.c:219
 #, fuzzy, c-format
@@ -1747,7 +1747,7 @@ msgstr "Impossible de trouve '%s'"
 #: ../lib/raster/open.c:850
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
-msgstr "type invalide : champ '%s' dans le fichier '%s'"
+msgstr "type invalide: champ '%s' dans le fichier '%s'"
 
 #: ../lib/raster/open.c:855
 #, fuzzy, c-format
@@ -1757,7 +1757,7 @@ msgstr "type invalide : champ %s dans le fichier %s"
 #: ../lib/raster/open.c:860
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
-msgstr "La carte raster <%s> n'est pas xdr : byte_order : %s"
+msgstr "La carte raster <%s> n'est pas xdr: byte_order: %s"
 
 #: ../lib/raster/open.c:929
 msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
@@ -2178,7 +2178,7 @@ msgstr "Allocation d'espace mémoire impossible pour le produit matriciel"
 
 #: ../lib/gmath/la.c:444
 msgid "Input: one or both data matrices uninitialised"
-msgstr "Entrée : une ou deux matrices de données non initialisées"
+msgstr "Entrée: une ou deux matrices de données non initialisées"
 
 #: ../lib/gmath/la.c:449
 msgid "Principal matrix is not properly dimensioned"
@@ -2186,7 +2186,7 @@ msgstr "La matrice principale n'est pas correctement dimensionnée"
 
 #: ../lib/gmath/la.c:454
 msgid "Input: you must have at least one array to solve"
-msgstr "Entrée : vous devez disposer d'au moins un tableau à résoudre"
+msgstr "Entrée: vous devez disposer d'au moins un tableau à résoudre"
 
 #: ../lib/gmath/la.c:460
 msgid "Could not allocate space for solution matrix"
@@ -2753,7 +2753,7 @@ msgid ""
 "database: %s"
 msgstr ""
 "Pilote / base de données par défaut définis à :\n"
-"pilote : %s\n"
+"pilote: %s\n"
 "base de données: %s"
 
 #: ../lib/display/icon.c:80
@@ -2784,7 +2784,7 @@ msgstr "Impossible d'ouvrir le fichier %s"
 #: ../lib/display/tran_colr.c:107 ../lib/display/tran_colr.c:109
 #, c-format
 msgid "[%s]: No such color"
-msgstr "[%s] : cette couleur n'existe pas"
+msgstr "[%s]: cette couleur n'existe pas"
 
 #: ../lib/cairodriver/Raster.c:68
 msgid "Cairo_begin_raster: Failed to create surface"
@@ -2911,12 +2911,12 @@ msgstr ""
 #: ../lib/driver/parse_ftcap.c:84
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr "%s : Impossible de lire le fichier de définition de police, utilisation de celle par défaut"
+msgstr "%s: Impossible de lire le fichier de définition de police, utilisation de celle par défaut"
 
 #: ../lib/driver/parse_ftcap.c:90
 #, c-format
 msgid "%s: No font definition file"
-msgstr "%s : Aucun fichier de définition de police"
+msgstr "%s: Aucun fichier de définition de police"
 
 #: ../lib/python/pygrass/raster/category.py:81
 #, fuzzy
@@ -4411,12 +4411,12 @@ msgstr ""
 #: ../lib/arraystats/class.c:23
 #, c-format
 msgid "%s: Unknown algorithm"
-msgstr "%s : algorithme inconnu"
+msgstr "%s: algorithme inconnu"
 
 #: ../lib/arraystats/class.c:26
 #, c-format
 msgid "%s: Error in classification algorithm"
-msgstr "%s : Erreur dans l'algorithme de classification"
+msgstr "%s: Erreur dans l'algorithme de classification"
 
 #: ../lib/arraystats/class.c:221
 #, c-format
@@ -4454,7 +4454,7 @@ msgstr "Erreur GngFlatten"
 #: ../lib/vector/neta/timetables.c:244 ../lib/vector/neta/timetables.c:286
 #, c-format
 msgid "Unable to open select cursor: %s"
-msgstr "Impossible d'ouvrir le curseur de sélection : %s"
+msgstr "Impossible d'ouvrir le curseur de sélection: %s"
 
 #: ../lib/vector/neta/spanningtree.c:104
 msgid "Computing minimum spanning tree..."
@@ -4463,7 +4463,7 @@ msgstr ""
 #: ../lib/vector/diglib/plus_node.c:214
 #, c-format
 msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
-msgstr "Tentative de lire l'angle d'une ligne qui n'est pas connectée au noeud : noeud %d, ligne %d"
+msgstr "Tentative de lire l'angle d'une ligne qui n'est pas connectée au noeud: noeud %d, ligne %d"
 
 #: ../lib/vector/diglib/cindex_rw.c:156
 #, c-format
@@ -4814,7 +4814,7 @@ msgstr ""
 #: ../lib/vector/Vlib/snap.c:519
 #, fuzzy, c-format
 msgid "New vertices: %d"
-msgstr "Nombre de primitives : %d"
+msgstr "Nombre de primitives: %d"
 
 #: ../lib/vector/Vlib/snap.c:546
 #, fuzzy
@@ -4889,17 +4889,17 @@ msgstr "La topologie a bien été construite"
 #: ../lib/vector/Vlib/build.c:889
 #, c-format
 msgid "Number of nodes: %d"
-msgstr "Nombre de nœuds : %d"
+msgstr "Nombre de nœuds: %d"
 
 #: ../lib/vector/Vlib/build.c:890
 #, c-format
 msgid "Number of primitives: %d"
-msgstr "Nombre de primitives : %d"
+msgstr "Nombre de primitives: %d"
 
 #: ../lib/vector/Vlib/build.c:891
 #, c-format
 msgid "Number of points: %d"
-msgstr "Nombre de points : %d"
+msgstr "Nombre de points: %d"
 
 #: ../lib/vector/Vlib/build.c:892
 #, c-format
@@ -4909,37 +4909,37 @@ msgstr "Nombre de lignes :%d"
 #: ../lib/vector/Vlib/build.c:893
 #, c-format
 msgid "Number of boundaries: %d"
-msgstr "Nombre de contours : %d"
+msgstr "Nombre de contours: %d"
 
 #: ../lib/vector/Vlib/build.c:894
 #, c-format
 msgid "Number of centroids: %d"
-msgstr "Nombre de centroïdes : %d"
+msgstr "Nombre de centroïdes: %d"
 
 #: ../lib/vector/Vlib/build.c:897
 #, c-format
 msgid "Number of faces: %d"
-msgstr "Nombre de faces : %d"
+msgstr "Nombre de faces: %d"
 
 #: ../lib/vector/Vlib/build.c:900
 #, c-format
 msgid "Number of kernels: %d"
-msgstr "Nombre de noyaux : %d"
+msgstr "Nombre de noyaux: %d"
 
 #: ../lib/vector/Vlib/build.c:946
 #, c-format
 msgid "Number of areas: %d"
-msgstr "Nombre de surfaces : %d"
+msgstr "Nombre de surfaces: %d"
 
 #: ../lib/vector/Vlib/build.c:947
 #, c-format
 msgid "Number of isles: %d"
-msgstr "Nombre d'îles : %d"
+msgstr "Nombre d'îles: %d"
 
 #: ../lib/vector/Vlib/build.c:952
 #, c-format
 msgid "Number of areas without centroid: %d"
-msgstr "Nombre de surfaces sans centroïde : %d"
+msgstr "Nombre de surfaces sans centroïde: %d"
 
 #: ../lib/vector/Vlib/build.c:957
 #, fuzzy, c-format
@@ -4949,25 +4949,25 @@ msgstr "Nombre de centroïdes en dehors de surfaces : %d"
 #: ../lib/vector/Vlib/build.c:961
 #, c-format
 msgid "Number of incorrect boundaries: %d"
-msgstr "Nombre de contours incorrects : %d"
+msgstr "Nombre de contours incorrects: %d"
 
 #: ../lib/vector/Vlib/build.c:965
 #, c-format
 msgid "Number of centroids outside area: %d"
-msgstr "Nombre de centroïdes en dehors de surfaces : %d"
+msgstr "Nombre de centroïdes en dehors de surfaces: %d"
 
 #: ../lib/vector/Vlib/build.c:969
 #, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr "Nombre de centroïdes dupliqués :   %d"
+msgstr "Nombre de centroïdes dupliqués:   %d"
 
 #: ../lib/vector/Vlib/build.c:973
 msgid "Number of areas: -"
-msgstr "Nombre de surfaces : -"
+msgstr "Nombre de surfaces: -"
 
 #: ../lib/vector/Vlib/build.c:974
 msgid "Number of isles: -"
-msgstr "Nombre d'îles : -"
+msgstr "Nombre d'îles: -"
 
 #: ../lib/vector/Vlib/build.c:1002
 #, fuzzy, c-format
@@ -5434,7 +5434,7 @@ msgstr "Vect_read_area_geos(): impossible de lire l'id de surface %d"
 #: ../lib/vector/Vlib/geos.c:104
 #, c-format
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
-msgstr "Vect_read_area_geos() : impossible de lire l'île d'id %d de la surface d'id %d"
+msgstr "Vect_read_area_geos(): impossible de lire l'île d'id %d de la surface d'id %d"
 
 #: ../lib/vector/Vlib/geos.c:203
 #, c-format
@@ -5573,7 +5573,7 @@ msgstr "Le graphique a été construit"
 #: ../lib/vector/Vlib/net.c:532 ../lib/vector/Vlib/graph.c:226
 #, c-format
 msgid "dglShortestPath error: %s"
-msgstr "erreur de dglShortestPath : %s"
+msgstr "erreur de dglShortestPath: %s"
 
 #: ../lib/vector/Vlib/net.c:616
 msgid "Wrong line direction in Vect_net_get_line_cost()"
@@ -5892,7 +5892,7 @@ msgstr "Tentative de lire la topologie d'une île morte (%d)"
 
 #: ../lib/vector/Vlib/cats.c:45
 msgid "Vect_new_cats_struct(): Out of memory"
-msgstr "Vect_new_cats_struct() : allocation mémoire impossible"
+msgstr "Vect_new_cats_struct(): allocation mémoire impossible"
 
 #: ../lib/vector/Vlib/cats.c:127
 #, c-format
@@ -6262,7 +6262,7 @@ msgstr "impossible d'ouvrir le fichier '%s', définition de la base de données 
 
 #: ../lib/vector/Vlib/field.c:1006
 msgid "Bug: attempt to update map which is not in current mapset"
-msgstr "Bug : tentative de mise à jour d'une couche qui n'est pas dans le jeu de cartes courant"
+msgstr "Bug: tentative de mise à jour d'une couche qui n'est pas dans le jeu de cartes courant"
 
 #: ../lib/vector/Vlib/remove_areas.c:89
 msgid "Area is composed of dead boundary"
@@ -6493,7 +6493,7 @@ msgstr "Impossible d'ouvrir le fichier d'historique pour la couche vectorielle <
 #: ../lib/vector/Vlib/header.c:146
 #, c-format
 msgid "Corrupted row in head: %s"
-msgstr "Ligne corrompue dans l'en-tête : %s"
+msgstr "Ligne corrompue dans l'en-tête: %s"
 
 #: ../lib/vector/Vlib/header.c:184
 #, fuzzy, c-format
@@ -6794,7 +6794,7 @@ msgstr "L'enregistrement de la base de données pour cat %d n'a pas été trouv�
 #: ../lib/rst/interp_float/vinput2d.c:171
 #, fuzzy
 msgid "Negative value of smoothing detected: sm must be >= 0"
-msgstr "Valeur négative détectée pour le smoothing : sm doit être >= 0"
+msgstr "Valeur négative détectée pour le smoothing: sm doit être >= 0"
 
 #: ../lib/rst/interp_float/vinput2d.c:235
 #, fuzzy
@@ -6823,7 +6823,7 @@ msgstr "Zéro point dans la région donnée"
 #: ../lib/rst/interp_float/vinput2d.c:266
 #, c-format
 msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
-msgstr "Paramètres de segmentation invalides : npmin= %d, segmax= %d pour une bonne connexion des segments, npmin > segmax (voir le manuel)"
+msgstr "Paramètres de segmentation invalides: npmin= %d, segmax= %d pour une bonne connexion des segments, npmin > segmax (voir le manuel)"
 
 #: ../lib/rst/interp_float/vinput2d.c:272
 #, c-format
@@ -7046,17 +7046,17 @@ msgstr "Drapeaux"
 #: ../lib/gis/parser_help.c:194 ../lib/gis/parser_interface.c:329
 #: ../lib/gis/parser_html.c:163 ../lib/gis/parser_rest.c:164
 msgid "Allow output files to overwrite existing files"
-msgstr "Autoriser les fichiers de sortie à écraser les fichiers existants"
+msgstr "Autoriser la sortie à écraser les fichiers existants"
 
 #: ../lib/gis/parser_help.c:196 ../lib/gis/parser_interface.c:337
 #: ../lib/gis/parser_html.c:167 ../lib/gis/parser_rest.c:168
 msgid "Verbose module output"
-msgstr "Module de sortie en mode bavard"
+msgstr "Sortie du module en mode bavard"
 
 #: ../lib/gis/parser_help.c:197 ../lib/gis/parser_interface.c:344
 #: ../lib/gis/parser_html.c:170 ../lib/gis/parser_rest.c:171
 msgid "Quiet module output"
-msgstr "Moduel de sortie en mode silence"
+msgstr "Sortie du module en mode silence"
 
 #: ../lib/gis/parser_help.c:205
 #, fuzzy
@@ -7066,17 +7066,17 @@ msgstr "Paramètres"
 #: ../lib/gis/parser_help.c:228
 #, c-format
 msgid "  %*s   default: %s\n"
-msgstr "  %*s   par défaut : %s\n"
+msgstr "  %*s   par défaut: %s\n"
 
 #: ../lib/gis/parser_help.c:254
 #, c-format
 msgid "  %*s   options: "
-msgstr "  %*s   options : "
+msgstr "  %*s   options: "
 
 #: ../lib/gis/get_ellipse.c:343 ../lib/gis/get_ellipse.c:366
 #, c-format
 msgid "Invalid a: field '%s' in file %s in <%s>"
-msgstr "a invalide : champ '%s' dans le fichier %s de <%s>"
+msgstr "a invalide: champ '%s' dans le fichier %s de <%s>"
 
 #: ../lib/gis/get_ellipse.c:355
 #, c-format
@@ -7086,7 +7086,7 @@ msgstr "ellipsoïde '%s' invalide dans le fichier %s de <%s>"
 #: ../lib/gis/get_ellipse.c:369
 #, c-format
 msgid "Invalid es: field '%s' in file %s in <%s>"
-msgstr "es invalide : champ '%s' dans le fichier %s de <%s>"
+msgstr "es invalide: champ '%s' dans le fichier %s de <%s>"
 
 #: ../lib/gis/get_ellipse.c:382
 #, c-format
@@ -7253,7 +7253,7 @@ msgstr ""
 
 #: ../lib/gis/error.c:344
 msgid "WARNING: "
-msgstr "ATTENTION : "
+msgstr "ATTENTION: "
 
 #: ../lib/gis/error.c:345
 msgid "ERROR: "
@@ -7267,7 +7267,7 @@ msgstr "ne peut pas fabriquer l'élément %s (%s) du jeu de données (mapset)"
 #: ../lib/gis/mapset_msc.c:65
 #, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr "Impossible d'accéder à l'élément %s du jeu de données (%s) : %s"
+msgstr "Impossible d'accéder à l'élément %s du jeu de données (%s): %s"
 
 #: ../lib/gis/parser.c:376
 #, c-format
@@ -7372,7 +7372,7 @@ msgstr ""
 #: ../lib/gis/parser.c:1340
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
-msgstr "ERREUR : option <%s> : <%s> existe.\n"
+msgstr "ERREUR: option <%s>: <%s> existe.\n"
 
 #: ../lib/gis/parser.c:1424
 #, fuzzy
@@ -7406,7 +7406,7 @@ msgstr "%s fichiers disponibles dans le jeu de données <%s> :\n"
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
-msgstr "G_list : type d'élément inconnu"
+msgstr "G_list: type d'élément inconnu"
 
 #: ../lib/gis/timestamp.c:292
 #, fuzzy, c-format
@@ -7451,7 +7451,7 @@ msgstr "L'étiquette date&heure (timestamp) spécifiée pour la couche %s %s est
 #: ../lib/gis/datum.c:160
 #, c-format
 msgid "unable to open datum table file: %s"
-msgstr "impossible d'ouvrir le fichier de datums : %s"
+msgstr "impossible d'ouvrir le fichier de datums: %s"
 
 #: ../lib/gis/datum.c:182
 #, c-format
@@ -7636,17 +7636,17 @@ msgstr ""
 #: ../lib/gis/spawn.c:386
 #, c-format
 msgid "CreateProcess() failed: error = %d"
-msgstr "CreateProcess() a échoué : erreur = %d"
+msgstr "CreateProcess() a échoué: erreur = %d"
 
 #: ../lib/gis/spawn.c:421
 #, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr "G_spawn : impossible de rediriger le descripteur %d"
+msgstr "G_spawn: impossible de rediriger le descripteur %d"
 
 #: ../lib/gis/spawn.c:429 ../lib/gis/spawn.c:619
 #, c-format
 msgid "G_spawn: unable to open file %s"
-msgstr "G_spawn : impossible d'ouvrir le fichier %s"
+msgstr "G_spawn: impossible d'ouvrir le fichier %s"
 
 #: ../lib/gis/spawn.c:503 ../lib/gis/spawn.c:689
 msgid "Unable to execute command"
@@ -7655,32 +7655,32 @@ msgstr "Impossible d'exécuter la commande"
 #: ../lib/gis/spawn.c:528 ../lib/gis/spawn.c:536
 #, c-format
 msgid "G_spawn: unable to restore signal %d"
-msgstr "G_spawn : impossible de restaurer le signal %d"
+msgstr "G_spawn: impossible de restaurer le signal %d"
 
 #: ../lib/gis/spawn.c:567
 #, c-format
 msgid "G_spawn: unable to reset signal %d"
-msgstr "G_spawn : impossible de réinitialiser le signal %d"
+msgstr "G_spawn: impossible de réinitialiser le signal %d"
 
 #: ../lib/gis/spawn.c:576
 #, c-format
 msgid "G_spawn: unable to ignore signal %d"
-msgstr "G_spawn : impossible d'ignorer le signal %d"
+msgstr "G_spawn: impossible d'ignorer le signal %d"
 
 #: ../lib/gis/spawn.c:587
 #, c-format
 msgid "G_spawn: unable to block signal %d"
-msgstr "G_spawn : impossible d'ignorer le signal %d"
+msgstr "G_spawn: impossible d'ignorer le signal %d"
 
 #: ../lib/gis/spawn.c:595
 #, c-format
 msgid "G_spawn: unable to unblock signal %d"
-msgstr "G_spawn : impossible de débloquer le signal %d"
+msgstr "G_spawn: impossible de débloquer le signal %d"
 
 #: ../lib/gis/spawn.c:624 ../lib/gis/spawn.c:633
 #, c-format
 msgid "G_spawn: unable to duplicate descriptor %d to %d"
-msgstr "G_spawn : impossible de dupliquer le descripteur %d vers %d"
+msgstr "G_spawn: impossible de dupliquer le descripteur %d vers %d"
 
 #: ../lib/gis/spawn.c:666
 msgid "Unable to create a new process"
@@ -7750,27 +7750,27 @@ msgstr "Région actuelle %d lignes, %d colonnes"
 #: ../lib/gis/alloc.c:47
 #, c-format
 msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr "G_malloc : impossible d'allouer %lu octets de mémoire à %s:%d"
+msgstr "G_malloc: impossible d'allouer %lu octets de mémoire à %s:%d"
 
 #: ../lib/gis/alloc.c:89
 #, c-format
 msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
-msgstr "G_calloc : impossible d'allouer %lu * %lu octets de mémoire à %s:%d"
+msgstr "G_calloc: impossible d'allouer %lu * %lu octets de mémoire à %s:%d"
 
 #: ../lib/gis/alloc.c:135
 #, c-format
 msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr "G_realloc : impossible d'allouer %lu octets de mémoire à %s:%d"
+msgstr "G_realloc: impossible d'allouer %lu octets de mémoire à %s:%d"
 
 #: ../lib/gis/open_misc.c:45
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr "G__open_misc(read) : mapset <%s> ne correspond pas à xmapset <%s>"
+msgstr "G__open_misc(read): mapset <%s> ne correspond pas à xmapset <%s>"
 
 #: ../lib/gis/open_misc.c:67
 #, c-format
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
-msgstr "G__open_misc(write) : xmapset <%s> != G_mapset() <%s>"
+msgstr "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
 
 #: ../lib/gis/get_window.c:117
 #, fuzzy, c-format
@@ -7796,7 +7796,7 @@ msgstr "WHERE conditions d'une clause SQL sans le mot-clef 'where'"
 
 #: ../lib/gis/parser_standard_options.c:142
 msgid "Example: income < 1000 and inhab >= 10000"
-msgstr "Exemple : revenu < 1000  et hab >= 10000"
+msgstr "Exemple: revenu < 1000  et hab >= 10000"
 
 #: ../lib/gis/parser_standard_options.c:150
 #, fuzzy
@@ -7999,7 +7999,7 @@ msgstr "Valeurs de catégorie"
 #: ../lib/gis/parser_standard_options.c:488
 #: ../lib/gis/parser_standard_options.c:502
 msgid "Example: 1,3,7-9,13"
-msgstr "Exemple : 1,3,7-9,13"
+msgstr "Exemple: 1,3,7-9,13"
 
 #: ../lib/gis/parser_standard_options.c:494
 #, fuzzy
@@ -8025,7 +8025,7 @@ msgstr "Séparateur de champ"
 
 #: ../lib/gis/parser_standard_options.c:529
 msgid "Special characters: newline, space, comma, tab"
-msgstr "Caractères spéciaux : nouvelle ligne, espace, virgule, tabulation"
+msgstr "Caractères spéciaux: nouvelle ligne, espace, virgule, tabulation"
 
 #: ../lib/gis/parser_standard_options.c:540
 msgid "Color"
@@ -8273,7 +8273,7 @@ msgstr "Impossible d'ouvrir la base de données <%s> avec le driver <%s>"
 #: ../lib/db/dbmi_client/delete_tab.c:53
 #, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "Impossible de dupprimer la table : '%s'"
+msgstr "Impossible de dupprimer la table: '%s'"
 
 #: ../lib/db/dbmi_client/copy_tab.c:91
 #, c-format
@@ -9144,10 +9144,10 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Impossible d'ouvrir le fichier topo en écriture <%s>"
 
 #~ msgid "cell_values_float: xdr_float failed for index %d"
-#~ msgstr "cell_values_float : xdr_float échec de l'indice %d"
+#~ msgstr "cell_values_float: xdr_float échec de l'indice %d"
 
 #~ msgid "cell_values_double: xdr_double failed for index %d"
-#~ msgstr "cell_values_double : xdr_double a échoué pour l'index %d"
+#~ msgstr "cell_values_double: xdr_double a échoué pour l'index %d"
 
 #~ msgid "xdr_float failed for index %d of row %d"
 #~ msgstr "xdr_float a échoué pour l'index %d de la ligne %d"
@@ -9231,10 +9231,10 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Précision utilisée dans le fichier de sortie (par défaut, max, ou 0 à 52)"
 
 #~ msgid "       Presented as: %s\n"
-#~ msgstr "       Présenté comme : %s\n"
+#~ msgstr "       Présenté comme: %s\n"
 
 #~ msgid "       Legal range: %s\n"
-#~ msgstr "       Intervalle : %s\n"
+#~ msgstr "       Intervalle: %s\n"
 
 #~ msgid "       You provided %d items:\n"
 #~ msgstr "       Vous avez fourni %d éléments :\n"
@@ -9293,7 +9293,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Nom de(s) couche(s) matricielle(s) 3D en sortie"
 
 #~ msgid "line %d: <%s>"
-#~ msgstr "ligne %d : <%s>"
+#~ msgstr "ligne %d: <%s>"
 
 #~ msgid "is not set"
 #~ msgstr "n'est pas définie"
@@ -9312,7 +9312,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Impossible de créer l'en-tête de fichier pour [%s dans %s]"
 
 #~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
-#~ msgstr "G_put_map_row : %s n'est pas un entier! Utiliser G_put_[f/d]_raster_row() !"
+#~ msgstr "G_put_map_row: %s n'est pas un entier! Utiliser G_put_[f/d]_raster_row() !"
 
 #~ msgid "can't read f_range file for [%s in %s]"
 #~ msgstr "impossible de lire le fichier f_range pour [%s dans %s]"
@@ -9330,14 +9330,14 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ "closecell: can't move %s\n"
 #~ "to null file %s"
 #~ msgstr ""
-#~ "closecell : impossible de se déplacer %s\n"
+#~ "closecell: impossible de se déplacer %s\n"
 #~ "jusqu'au fichier nul %s"
 
 #~ msgid ""
 #~ "closecell: can't move %s\n"
 #~ "to cell file %s"
 #~ msgstr ""
-#~ "closecell : impossible de se déplacer %s\n"
+#~ "closecell: impossible de se déplacer %s\n"
 #~ "à la cellule du fichier %s"
 
 #~ msgid "Can't open timestamp file for %s map %s in mapset %s"
@@ -9528,23 +9528,23 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ "FLAG: Set the following flag?\n"
 #~ msgstr ""
 #~ "\n"
-#~ "DRAPEAU : Avez-vous placé ce drapeau?\n"
+#~ "DRAPEAU: Avez-vous placé ce drapeau?\n"
 
 #~ msgid ""
 #~ "\n"
 #~ "OPTION:   %s\n"
 #~ msgstr ""
 #~ "\n"
-#~ "OPTION :   %s\n"
+#~ "OPTION:   %s\n"
 
 #~ msgid "     key: %s\n"
-#~ msgstr "     clé : %s\n"
+#~ msgstr "     clé: %s\n"
 
 #~ msgid " default: %s\n"
-#~ msgstr " par défaut : %s\n"
+#~ msgstr " par défaut: %s\n"
 
 #~ msgid "multiple: %s\n"
-#~ msgstr "multiple : %s\n"
+#~ msgstr "multiple: %s\n"
 
 #~ msgid "enter option > "
 #~ msgstr "entrez une option > "
@@ -9630,16 +9630,16 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ "** %s - existe, sélectionnez un autre nom **\n"
 
 #~ msgid "ask: can't happen"
-#~ msgstr "demande : ne peut pas survenir"
+#~ msgstr "demande: ne peut pas survenir"
 
 #~ msgid "<%s>: bad mapset"
-#~ msgstr "<%s> : mauvais jeu de données"
+#~ msgstr "<%s>: mauvais jeu de données"
 
 #~ msgid "Unknown command: %d last: %d"
-#~ msgstr "Commande inconnue : %d dernière : %d"
+#~ msgstr "Commande inconnue: %d dernière: %d"
 
 #~ msgid "Monitor: get_command: Premature EOF"
-#~ msgstr "Moniteur : get_command : Fermeture de fichier prématurée"
+#~ msgstr "Moniteur: get_command: Fermeture de fichier prématurée"
 
 #~ msgid "Graphics driver [%s] started"
 #~ msgstr "Pilote graphique [%s] commencé"
@@ -9657,10 +9657,10 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Exécuter en silence"
 
 #~ msgid "%s: map [%s] not open for random write - request ignored"
-#~ msgstr "%s : couche [%s] non ouverte en écriture aléatoire - demande ignorée"
+#~ msgstr "%s: couche [%s] non ouverte en écriture aléatoire - demande ignorée"
 
 #~ msgid "%s: map [%s] not open for sequential write - request ignored"
-#~ msgstr "%s : couche [%s] non ouverte en écriture séquentielle - demande ignorée"
+#~ msgstr "%s: couche [%s] non ouverte en écriture séquentielle - demande ignorée"
 
 #~ msgid "Connect attempt timed out."
 #~ msgstr "Le temps d'attente de connexion a expiré."
@@ -9681,10 +9681,10 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "La couche raster %s@%s est vide"
 
 #~ msgid "Cannot write quant rules: map %s is integer"
-#~ msgstr "Impossible d'écrire les règles de quantité : la couche %s est un entier"
+#~ msgstr "Impossible d'écrire les règles de quantité: la couche %s est un entier"
 
 #~ msgid "G_set_window(): projection/zone differs from that of currently open raster maps"
-#~ msgstr "G_set_window() : projection/zone diffèrent de ceux présents dans le fichier matriciel actuellement ouvert"
+#~ msgstr "G_set_window(): projection/zone diffèrent de ceux présents dans le fichier matriciel actuellement ouvert"
 
 #~ msgid "The floating data range for %s@%s is empty"
 #~ msgstr "L'intervalle de nombre en virgule flottante pour %s@%s est vide"
@@ -9693,10 +9693,10 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "L'intervalle des données entières pour %s@%s est vide"
 
 #~ msgid "%s: map [%s] not open for write - request ignored"
-#~ msgstr "%s : couche [%s] non ouverte en écriture - demande ignorée"
+#~ msgstr "%s: couche [%s] non ouverte en écriture - demande ignorée"
 
 #~ msgid "%s: unopened file descriptor - request ignored"
-#~ msgstr "%s : descripteur de fichier non ouvert - demande ignorée"
+#~ msgstr "%s: descripteur de fichier non ouvert - demande ignorée"
 
 #~ msgid "map [%s] - unable to write row %d"
 #~ msgstr "couche [%s] - impossible d'écrire la ligne %d"
@@ -9724,13 +9724,13 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ "projection invalide\n"
 
 #~ msgid "EmbedGivenNulls: wrong data type!"
-#~ msgstr "EmbedGivenNulls : mauvais type de donnée!"
+#~ msgstr "EmbedGivenNulls: mauvais type de donnée!"
 
 #~ msgid "Please advise GRASS developers of this error.\n"
 #~ msgstr "Veuillez avertir les développeurs GRASS de cette erreur.\n"
 
 #~ msgid "G_set_null_value: wrong data type!"
-#~ msgstr "G_set_null_value : mauvais type de donnée!"
+#~ msgstr "G_set_null_value: mauvais type de donnée!"
 
 #~ msgid "Name of elevation raster map"
 #~ msgstr "Nom de la couche matricielle d'élévation"
@@ -9768,7 +9768,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ " "
 
 #~ msgid " options: %s\n"
-#~ msgstr " options : %s\n"
+#~ msgstr " options: %s\n"
 
 #~ msgid "to accept the default"
 #~ msgstr "pour accepter le choix par défaut"
@@ -9826,7 +9826,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Carte raster <%s@%s> est dans une zone différentes (%d) de la région courante (%d)"
 
 #~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
-#~ msgstr "Carte raster <%s@%s> : octets par cellule (%d) trop grands"
+#~ msgstr "Carte raster <%s@%s>: octets par cellule (%d) trop grands"
 
 #~ msgid "Unable to find '%s' in '%s'"
 #~ msgstr "Ompossible de trouver '%s' dans '%s'"
@@ -9847,7 +9847,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Erreur dans la règle à la ligne %d dans %s"
 
 #~ msgid "Intersections: %5d"
-#~ msgstr "Intersections : %5d"
+#~ msgstr "Intersections: %5d"
 
 #~ msgid "Programmer requested unknown open level %d"
 #~ msgstr "Le programmeur a demandé un open level inconnu %d"
@@ -9878,27 +9878,27 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ "ERROR: illegal range syntax for parameter <%s>\n"
 #~ msgstr ""
 #~ "\n"
-#~ "ERREUR : syntaxe de l'intervalle illégale pour le paramètre <%s>\n"
+#~ "ERREUR: syntaxe de l'intervalle illégale pour le paramètre <%s>\n"
 
 #~ msgid ""
 #~ "\n"
 #~ "ERROR: value <%s> out of range for parameter <%s>\n"
 #~ msgstr ""
 #~ "\n"
-#~ "ERREUR : valeur <%s> en dehors de l'intervalle pour le paramètre <%s>\n"
+#~ "ERREUR: valeur <%s> en dehors de l'intervalle pour le paramètre <%s>\n"
 
 #~ msgid ""
 #~ "\n"
 #~ "ERROR: Missing value for parameter <%s>\n"
 #~ msgstr ""
 #~ "\n"
-#~ "ERREUR : Valeur manquante pour le paramètre <%s>\n"
+#~ "ERREUR: Valeur manquante pour le paramètre <%s>\n"
 
 #~ msgid ""
 #~ "ERROR: Required parameter <%s> not set:\n"
 #~ "\t(%s)\n"
 #~ msgstr ""
-#~ "ERREUR : Le paramètre obligatoire <%s> n'est pas définit :\n"
+#~ "ERREUR: Le paramètre obligatoire <%s> n'est pas définit :\n"
 #~ "\t(%s)\n"
 
 #~ msgid ""
@@ -9906,7 +9906,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ "ERROR: option <%s> must be provided in multiples of %d\n"
 #~ msgstr ""
 #~ "\n"
-#~ "ERREUR : l'option <%s> doit être un multiple de %d\n"
+#~ "ERREUR: l'option <%s> doit être un multiple de %d\n"
 
 #~ msgid "Unknown keyword %s in vector head"
 #~ msgstr "Mot-clef %s inconnu dans l'en-tête du vecteur"
@@ -9933,67 +9933,67 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Les dimensions des dalles utilisées dans le fichier de sortie"
 
 #~ msgid "G3d_getStandard3dParams: precision value invalid"
-#~ msgstr "G3d_getStandard3dParams : valeur de précision invalide"
+#~ msgstr "G3d_getStandard3dParams: valeur de précision invalide"
 
 #~ msgid "G3d_getStandard3dParams: tile dimension value invalid"
-#~ msgstr "G3d_getStandard3dParams : valeur de dimension de tuile invalide"
+#~ msgstr "G3d_getStandard3dParams: valeur de dimension de tuile invalide"
 
 #~ msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
-#~ msgstr "G3d_openCellOldNoHeader : erreur dans G3d_maskOpenOld"
+#~ msgstr "G3d_openCellOldNoHeader: erreur dans G3d_maskOpenOld"
 
 #~ msgid "G3d_openCellOldNoHeader: error in G3d_malloc"
-#~ msgstr "G3d_openCellOldNoHeader : erreur dans G3d_malloc"
+#~ msgstr "G3d_openCellOldNoHeader: erreur dans G3d_malloc"
 
 #~ msgid "G3d_openCellOldNoHeader: error in G_open_old"
-#~ msgstr "G3d_openCellOldNoHeader : erreur dans G_open_old"
+#~ msgstr "G3d_openCellOldNoHeader: erreur dans G_open_old"
 
 #~ msgid "G3d_openCellOld: error in G3d_openCellOldNoHeader"
-#~ msgstr "G3d_openCellOld : erreur dans G3d_openCellOldNoHeader"
+#~ msgstr "G3d_openCellOld: erreur dans G3d_openCellOldNoHeader"
 
 #~ msgid "G3d_openCellOld: can't rewind file"
-#~ msgstr "G3d_openCellOld : impossible de recharger le fichier"
+#~ msgstr "G3d_openCellOld: impossible de recharger le fichier"
 
 #~ msgid "G3d_openCellOld: error in G3d_readHeader"
-#~ msgstr "G3d_openCellOld : erreur dans G3d_readHeader"
+#~ msgstr "G3d_openCellOld: erreur dans G3d_readHeader"
 
 #~ msgid "G3d_openCellOld: projection does not match window projection"
-#~ msgstr "G3d_openCellOld : la projection ne correspond pas à la projection de la fenêtre"
+#~ msgstr "G3d_openCellOld: la projection ne correspond pas à la projection de la fenêtre"
 
 #~ msgid "G3d_openCellOld: zone does not match window zone"
-#~ msgstr "G3d_openCellOld : la zone ne correspond pas à la zone de la fenêtre"
+#~ msgstr "G3d_openCellOld: la zone ne correspond pas à la zone de la fenêtre"
 
 #~ msgid "G3d_openCellOld: can't read header"
-#~ msgstr "G3d_openCellOld : impossible de lire l'en-tête"
+#~ msgstr "G3d_openCellOld: impossible de lire l'en-tête"
 
 #~ msgid "G3d_openCellOld: index does not fit into long"
-#~ msgstr "G3d_openCellOld : l'index ne loge pas dans un champ long"
+#~ msgstr "G3d_openCellOld: l'index ne loge pas dans un champ long"
 
 #~ msgid "G3d_openCellOld: error in G3d_malloc"
-#~ msgstr "G3d_openCellOld : erreur dans G3d_malloc"
+#~ msgstr "G3d_openCellOld: erreur dans G3d_malloc"
 
 #~ msgid "G3d_openCellOld: error in G3d_fillHeader"
-#~ msgstr "G3d_openCellOld : erreur dans G3d_fillHeader"
+#~ msgstr "G3d_openCellOld: erreur dans G3d_fillHeader"
 
 #~ msgid "G3d_openCellNew: error in G3d_maskOpenOld"
-#~ msgstr "G3d_openCellNew : erreur dans G3d_maskOpenOld"
+#~ msgstr "G3d_openCellNew: erreur dans G3d_maskOpenOld"
 
 #~ msgid "G3d_openCellNew: error in G3d_malloc"
-#~ msgstr "G3d_openCellNew : erreur dans G3d_malloc"
+#~ msgstr "G3d_openCellNew: erreur dans G3d_malloc"
 
 #~ msgid "G3d_openCellNew: could not open file"
-#~ msgstr "G3d_openCellNew : impossible d'ouvrir le fichier"
+#~ msgstr "G3d_openCellNew: impossible d'ouvrir le fichier"
 
 #~ msgid "G3d_openCellNew: can't write header"
-#~ msgstr "G3d_openCellNew : impossible d'écrire l'en-tête"
+#~ msgstr "G3d_openCellNew: impossible d'écrire l'en-tête"
 
 #~ msgid "G3d_openCellNew: error in G3d_fillHeader"
-#~ msgstr "G3d_openCellNew : erreur dans G3d_fillHeader"
+#~ msgstr "G3d_openCellNew: erreur dans G3d_fillHeader"
 
 #~ msgid "Unable to open file %s"
 #~ msgstr "Impossible d'ouvrir le fichier %s"
 
 #~ msgid "Cairo_draw_bitmap: Failed to create source"
-#~ msgstr "Cairo_draw_bitmap : échec à la création de la source"
+#~ msgstr "Cairo_draw_bitmap: échec à la création de la source"
 
 #~ msgid "Could not get raster row"
 #~ msgstr "Impossible d'obtenir la ligne matricielle"
@@ -10062,13 +10062,13 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "multiples occurrences pour le champ compressed"
 
 #~ msgid "G_getenv(): Variable %s not set"
-#~ msgstr "G_getenv() : variable %s non définie"
+#~ msgstr "G_getenv(): variable %s non définie"
 
 #~ msgid "  format: %s\n"
-#~ msgstr "  format : %s\n"
+#~ msgstr "  format: %s\n"
 
 #~ msgid "required: %s\n"
-#~ msgstr "obligatoire : %s\n"
+#~ msgstr "obligatoire: %s\n"
 
 #~ msgid "%s not found"
 #~ msgstr "%s introuvable"
@@ -10112,16 +10112,16 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Impossible de construire l'index spatial à partir de la topologie, la carte vecteur n'est pas ouverte au niveau topo 2"
 
 #~ msgid "BUG (Vect_build_sidx_from_topo): node does not exist"
-#~ msgstr "BUG (Vect_build_sidx_from_topo) : le nœud n'existe pas"
+#~ msgstr "BUG (Vect_build_sidx_from_topo): le nœud n'existe pas"
 
 #~ msgid "BUG (Vect_build_sidx_from_topo): line does not exist"
-#~ msgstr "BUG (Vect_build_sidx_from_topo) : la ligne n'existe pas"
+#~ msgstr "BUG (Vect_build_sidx_from_topo): la ligne n'existe pas"
 
 #~ msgid "BUG (Vect_build_sidx_from_topo): area does not exist"
-#~ msgstr "BUG (Vect_build_sidx_from_topo) : la surface n'existe pas"
+#~ msgstr "BUG (Vect_build_sidx_from_topo): la surface n'existe pas"
 
 #~ msgid "BUG (Vect_build_sidx_from_topo): isle does not exist"
-#~ msgstr "BUG (Vect_build_sidx_from_topo) : l'île n'existe pas"
+#~ msgstr "BUG (Vect_build_sidx_from_topo): l'île n'existe pas"
 
 #~ msgid "Partial build for OGR is not supported"
 #~ msgstr "La construction partielle pour OGR n'est pas prise en charge"
@@ -10196,10 +10196,10 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "la carte <%s@%s> est un lien GDAL mais GRASS est compilé sans le support GDAL"
 
 #~ msgid "G__open_raster_new(): no temp files available"
-#~ msgstr "G__open_raster_new() : pas de fichiers temporaires disponibles"
+#~ msgstr "G__open_raster_new(): pas de fichiers temporaires disponibles"
 
 #~ msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
-#~ msgstr "G_set_fp_type() : ne peut être appellé que pour des FCELL_TYPE ou des DCELL_TYPE"
+#~ msgstr "G_set_fp_type(): ne peut être appellé que pour des FCELL_TYPE ou des DCELL_TYPE"
 
 #~ msgid "G_set_quant_rules() can be called only for raster maps opened for reading"
 #~ msgstr "G_set_quant_rules() ne peut être appellé que pour des cartes raster ouvertes en lecture"
@@ -10215,7 +10215,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "pas en mesure d'écrire le fichier!"
 
 #~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
-#~ msgstr "G_distance_point_to_line_segment : ne devrait pas arriver : code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+#~ msgstr "G_distance_point_to_line_segment: ne devrait pas arriver: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
 
 #~ msgid "%d errors in category string."
 #~ msgstr "%d erreurs dans la chaîne des catégories"
