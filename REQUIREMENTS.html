@@ -12,9 +12,9 @@
 A workstation running some flavor of UNIX like Solaris, IRIX,
 GNU/Linux, BSD, Mac OS X, Cygwin or MinGW (on Win32). Ideally, you
 should have at least 500 Mb. The source code package needs around 80
-MB uncompressed.  The resulting binaries may need between 20 MB and
-180 MB depending on your platform. During a full compilation you may
-need temporarily up to 550MB including the source code.
+MB compressed. The resulting binaries may need between 20 MB and 180
+MB depending on your platform. During a full compilation you may need
+temporarily up to 550MB including the source code.
 <p>
 To disable features please read the <a href="INSTALL">INSTALL</a> file.
 
@@ -26,164 +26,150 @@ to install some of them.)
 <ul>
 <li><b>C-compiler</b> (cc, gcc, egcs, ...)
 <br>gcc: <a href="http://www.gnu.org/software/gcc/gcc.html">http://www.gnu.org/software/gcc/gcc.html</a>
-<br>
+</li>
 
 <li><b>GNU make</b> is recommended (at least version 3.81)
 <br><a href="http://www.gnu.org/software/make/make.html">http://www.gnu.org/software/make/make.html</a>
-<br>
+</li>
 
 <li><b>zlib</b> compression library (already installed on most modern systems)
-<br>It is used to internally compress GRASS raster maps:
+<br>It is used to internally compress GRASS raster maps.
 <br>libz: <a href="http://www.zlib.net">http://www.zlib.net</a>
-<br>
+</li>
 
-<li><b>flex</b> lexical analyzer generator (flex) - note: lex is no longer supported, please use flex instead:
+<li><b>flex</b> lexical analyzer generator (flex)
+<br>Note: lex is no longer supported, please use flex instead.
 <br>flex: <a href="http://www.gnu.org/software/flex/flex.html">http://www.gnu.org/software/flex/flex.html</a>
-<br>
+</li>
 
 <li><b>parser generator</b> (yacc, bison)
 <br>bison: <a href="http://www.gnu.org/software/bison/bison.html">http://www.gnu.org/software/bison/bison.html</a>
-<br>
+</li>
 
-<li><b>libncurses4.x/5.x</b> (already installed on modern systems)
-<br><a href="http://www.gnu.org/software/ncurses/ncurses.html">http://www.gnu.org/software/ncurses/ncurses.html</a>
-<br><a href="ftp://ftp.gnu.org/pub/gnu/ncurses/">ftp://ftp.gnu.org/pub/gnu/ncurses</a>
-<br>
-
-<li><b>X Window</b>  system for graphical output, development libraries (X development
-libraries, in some linux distributions they are separate packages, e.g. xlibs-dev or x11-server-devel)
-<br><a href="http://www.xfree.org">http://www.xfree.org</a>
-<br><a href="http://www.x.org">http://www.x.org</a>
-<br>winGRASS note: As alternative a generic MS-Windows driver is under
-construction which does not require X11
-<br>
-
-<li><b>PROJ4</b> - Projection Library<br>
+<li><b>PROJ4</b> - Cartographic Projection Library<br>
 <a href="http://trac.osgeo.org/proj">http://trac.osgeo.org/proj</a>
-<br>
+</li>
 
-<li><b>GDAL and OGR</b> for import and export of most external raster and vector
+<li><b>GDAL/OGR</b> for import and export of most external raster and vector
 map formats<br>
-<a href="http://gdal.osgeo.org">http://gdal.osgeo.org</a>
+<a href="http://gdal.org">http://gdal.org</a>
+</li>
 
 <li><b>XDR</b> for raster I/O management (commonly provided on *NIX systems)<br>
 <a href="https://svn.r-project.org/R/trunk/src/extra/xdr">https://svn.r-project.org/R/trunk/src/extra/xdr</a>
+</li>
 
 </ul>
 
-<h3>
-Optional requirements:</h3>
+<h3>Optional requirements:</h3>
 
 <ul>
-<li><b>Tcl/Tk 8.x libraries</b> (including the 'wish' program) to use the GRASS GUI
-menu system and the NVIZ visualization suite<br>
-Some features of the new <em>gis.m</em> GIS manager may depend on version 8.4 or newer.
-<br>
-see <a href="http://tcl.sourceforge.net">http://tcl.sourceforge.net</a>
 
-
-<li>If hardware openGL support is missing in the X Server, <b>Mesa-3.x</b>
-(openGL clone) may be required for NVIZ<br>
-<a href="http://mesa3d.sourceforge.net">http://mesa3d.sourceforge.net</a>
-
-
-<li><b>C++ Compiler</b> (required for the r.terraflow module)<br>
+<li><b>C++ Compiler</b> (required for the various C++ GRASS module)<br>
 gcc: <a href="http://www.gnu.org/software/gcc/gcc.html">http://www.gnu.org/software/gcc/gcc.html</a>
-
+</li>
 
 <li><b>FFTW 2.x or 3.x</b> (library for computing the Discrete Fourier Transform), required
 for i.fft and i.ifft and other modules<br>
 <a href="http://www.fftw.org">http://www.fftw.org</a>
+</li>
 
-
-<li><b>GEOS 3.x(?)</b> (Geometry Engine library), adds extended options
-to the v.select module<br>
+<li><b>GEOS</b> (Geometry Engine library), adds extended options to the v.select module<br>
 <a href="http://trac.osgeo.org/geos">http://trac.osgeo.org/geos</a>
+</li>
 
-
-<li><b>LAPACK / BLAS</b> (libraries for numerical computing) for GMATH library (GRASS numerical lib)<br>
+<li><b>LAPACK / BLAS</b> (libraries for numerical computing) for GMATH library (GRASS Numerical Library)<br>
 <a href="http://www.netlib.org/lapack">http://www.netlib.org/lapack</a> (usually available on Linux distros)
 <br>
-<I>Note: LAPACK/BLAS support is intended for future module implementations, no need to
-use it at time!</I>
+<i>Note:</i> LAPACK/BLAS support is intended for future module
+implementations, no need to use it at time!
 
-<li><b>NetCDF</b> (for 3d raster netcdf export)<br>
+<li><b>NetCDF</b> (for 3D raster netcdf export)<br>
 <a href="http://www.unidata.ucar.edu/software/netcdf/">http://www.unidata.ucar.edu/software/netcdf/</a>
+</li>
 
+<li>If hardware openGL support is missing in the X
+Server, <b>Mesa-3.x</b> (openGL clone) may be required for wxNVIZ<br>
+<a href="http://mesa3d.sourceforge.net">http://mesa3d.sourceforge.net</a>
+</li>
 
 <li><b>libpng</b> (for r.out.png and the PNG driver), usually already installed.<br>
 <a href="http://www.libpng.org/pub/png/libpng.html">http://www.libpng.org/pub/png/libpng.html</a>
-
+</li>
 
 <li><b>libtiff</b> (for r.out.tiff), usually already installed.<br>
 <a href="http://www.remotesensing.org/libtiff">http://www.remotesensing.org/libtiff</a>
-
+</li>
 
 <li><b>readline</b> for extra command prompt functionality
 <br><a href="http://tiswww.case.edu/~chet/readline/rltop.html">http://tiswww.case.edu/~chet/readline/rltop.html</a>
 <br><a href="ftp://ftp.gnu.org/gnu/readline">ftp://ftp.gnu.org/gnu/readline</a>
+</li>
 
-<li><b>PostgreSQL libraries</b> (for the PostgreSQL database interface)<br>
+<li><b>PostgreSQL libraries</b> (for the PostgreSQL database interface and PostGIS support)<br>
 <a href="http://www.postgresql.org">http://www.postgresql.org</a>
+</li>
 
-
-<li><b>mySQL libraries</b> (for the mySQL database interface)<br>
+<li><b>MySQL libraries</b> (for the MySQL database interface)<br>
 <a href="http://www.mysql.org">http://www.mysql.org</a>
+</li>
 
-
-<li><b>sqlite libraries</b> (for the sqlite database interface)<br>
+<li><b>SQLite libraries</b> (for the SQLite database interface)<br>
 <a href="http://www.sqlite.org">http://www.sqlite.org</a>
-
+</li>
 
 <li><b>unixODBC</b> (for the ODBC database interface)<br>
 <a href="http://www.unixodbc.org">http://www.unixodbc.org</a>
-
+</li>
 
 <li><b>Motif or Lesstif libraries</b> (for the "xganim" <!-- and ogl3d -->
 module)<br>
 <a href="http://www.lesstif.org">http://www.lesstif.org</a>
-
+</li>
 
 <li><b>R language</b> (for the R statistical language interface)<br>
 <a href="http://cran.r-project.org">http://cran.r-project.org</a>
-
+</li>
 
 <li><b>FreeType2</b> (for TrueType font support and d.text.freetype)<br>
-<a href="http://www.freetype.org">http://www.freetype.org</a>
-
+  <a href="http://freetype.sourceforge.net">http://freetype.sourceforge.net</a>
+</li>
 
 <li><b>Python &gt;= 2.4</b> (for wxGUI and ctypes interface)<br>
-Note: Python 3 is not supported<br>
+<i>Note:</i> Python 3 is not supported<br>
 <a href="http://www.python.org">http://www.python.org</a>
+</li>
 
 <li><b>Ctypes</b> (for ctypes interface)<br>
 Ctypes can be added as a third-party module in Python 2.3 and 2.4
 - <a href="http://pypi.python.org/pypi/ctypes/1.0.2">http://pypi.python.org/pypi/ctypes/1.0.2</a><br>
 <a href="http://docs.python.org/library/ctypes.html">http://docs.python.org/library/ctypes.html</a>
+</li>
 
-<li><b>wxPython &gt;= 2.8.1.1</b> (for wxGUI, see file
-gui/wxpython/README)<br>
+<li><b>wxPython &gt;= 2.8.1.1</b> (for wxGUI)<br>
 <a href="http://www.wxpython.org">http://www.wxpython.org</a>
+</li>
 
-<li><b>NumPy &gt;= 1.0.4</b> (for various wxGUI components, see
- file gui/wxpython/README)<br>
-<a href="http://numpy.scipy.org">http://numpy.scipy.org</a>
+<li><b>NumPy &gt;= 1.0.4</b> (for various wxGUI components and pyGRASS)<br>
+<a href="http://numpy.org">http://numpy.org</a>
+</li>
 
-<li><b>Python Imaging Library</b> (for wxGUI Cartographic Composer (preview mode), see
- file gui/wxpython/README)<br>
+<li><b>Python Imaging Library</b> (for wxGUI Cartographic Composer)<br>
 <a href="http://www.pythonware.com/products/pil">http://www.pythonware.com/products/pil</a>
+</li>
 
-<li><b>FFMPEG</b> (for direct rendering of animations from NVIZ),
-    including libavcodec, libavformat, libswscale <BR>
-<a href="http://ffmpeg.org">http://ffmpeg.org</a><BR>
+<li><b>FFMPEG</b> (for direct rendering of animations from wxNVIZ),
+    including libavcodec, libavformat, libswscale <br>
+<a href="http://ffmpeg.org">http://ffmpeg.org</a>
+</li>
 
+<li><b>Cairo &gt;= 1.5.8</b> (for Cairo driver)<br>
+<a href="http://cairographics.org">http://cairographics.org</a>
+</li>
 
-<li><b>Cairo &gt;= 1.5.8</b> (Cairo graphics library<BR>
-<a href="http://cairographics.org">http://cairographics.org</a><BR>
-
-
-<li><b>AVCE00 and E00Compr Libraries</b> (avcimport)<BR>
-<a href="http://avce00.maptools.org">http://avce00.maptools.org</a><BR>
+<li><b>AVCE00 and E00Compr Libraries</b> (avcimport)<br>
+<a href="http://avce00.maptools.org">http://avce00.maptools.org</a>
+</li>
 
 </ul>
 
@@ -203,10 +189,10 @@ MacOSX users may go here to download precompiled libraries etc.:
 
 <p>
 
-<hr WIDTH="100%">
-<br><i>&copy; GRASS Development Team 2001-2011</i>
+<hr width="100%">
+<i>&copy; GRASS Development Team 2001-2013</i>
 <p>Please report bugs here:
-<br><a href="http://grass.osgeo.org/bugtracking/index.php">http://grass.osgeo.org/bugtracking/index.php</a>
+<br><a href="http://grass.osgeo.org/development/bug-tracking/">http://grass.osgeo.org/development/bug-tracking/</a>
 
 <p>
 <i>Last changed: $Date$</i>
