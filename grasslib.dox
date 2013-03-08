@@ -4,8 +4,8 @@
      * updated 8/2005, 2006-2008, 2010-2011
   -->
 
-<a href="http://grass.osgeo.org">GRASS GIS</a> (<i>Geographic
-Resources Analysis Support System</i>) is an open source, free
+<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
+Resources Analysis Support System</b>) is an open source, free
 software <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
 functionality that operates on various platforms through a graphical
@@ -18,44 +18,24 @@ Analysis Support System</i> from the programming perspective. Design
 theory, system support libraries, system maintenance, and system
 enhancement are all presented. This work is part of ongoing research
 being performed by the <a
-href="http://grass.osgeo.org/community/team.php">GRASS Development
+href="http://grasswiki.osgeo.org/wiki/Team">GRASS Development
 Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2012 by the GRASS Development Team
+&copy; 2000-2013 by the GRASS Development Team
 
-Published under <a href="http://www.fsf.org/copyleft/fdl.html">GNU
-Free Documentation License</a> (GFDL).
-
-
-This manual comes with ABSOLUTELY NO WARRANTY. The development of
-GRASS software and this manual is kindly supported by the <a
-href="http://www.osgeo.org">Open Source Geospatial Foundation</a>, who
-provides the GRASS main infrastructure.
+This manual is published under <a
+href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
+License</a> (GFDL), and comes with ABSOLUTELY NO WARRANTY. The
+development of GRASS software and this manual is kindly supported by
+the <a href="http://www.osgeo.org">Open Source Geospatial
+Foundation</a>, who provides the GRASS main infrastructure.
 
 Main web site: <a
 href="http://grass.osgeo.org">http://grass.osgeo.org</a>
-<!--
-<b>Table of contents</b>
-
-- \subpage libsOverview
- - \subpage corelibs
- - \subpage libs
-- \subpage interfaces
-- \subpage gui
-- \subpage location
-- \subpage Compiling_and_Installing_GRASS_Modules
- - \subpage Makefile_Variables
- - \subpage Constructing_a_Makefile
- - \subpage Multiple_Architecture_Conventions
-- \subpage vectmodules
- - \subpage vectmodules_oper
--->
 
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
-
-<i>Note: Diagram below needs to be updated for GRASS 7</i>
 
 <!-- original:
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
