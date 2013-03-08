@@ -23,10 +23,6 @@ import re
 from datetime import datetime
 
 pgm = sys.argv[1]
-if len(sys.argv) > 1:
-    year = sys.argv[2]
-else:
-    year = str(datetime.now().year)
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
@@ -52,7 +48,7 @@ header_pgm = """<h2>NAME</h2>
 footer_index = string.Template(\
 """<hr>
 <p><a href="index.html">Main index</a> - <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> - <a href="topics.html">Topics index</a> - <a href="full_index.html">Full index</a></p>
-<p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+<p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </body>
 </html>
 """)
@@ -60,7 +56,7 @@ footer_index = string.Template(\
 footer_noindex = string.Template(\
 """<hr>
 <p><a href="index.html">Main index</a> - <a href="topics.html">Topics index</a> - <a href="full_index.html">Full index</a></p>
-<p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+<p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </body>
 </html>
 """)
@@ -75,7 +71,6 @@ def read_file(name):
         return ""
 
 src_data = read_file(src_file)
-
 name = re.search('(<!-- meta page name:)(.*)(-->)', src_data, re.IGNORECASE)
 if name:
     pgm = name.group(2).strip().split('-', 1)[0].strip()
@@ -125,8 +120,13 @@ else:
     index_name = index_names.get(mod_class, '')
     index_name_cap = index_name.title()
 
+grass_version = os.getenv("VERSION_NUMBER", "unknown") 
+year = os.getenv("VERSION_DATE")
+if not year:
+    year = str(datetime.now().year)
+
 if index_name:
     sys.stdout.write(footer_index.substitute(INDEXNAME = index_name, INDEXNAMECAP = index_name_cap,
-                                             YEAR = year))
+                                             YEAR = year, GRASS_VERSION = grass_version))
 else:
-    sys.stdout.write(footer_noindex.substitute(YEAR = year))
+    sys.stdout.write(footer_noindex.substitute(YEAR = year, GRASS_VERSION = grass_version))

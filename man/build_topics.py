@@ -11,9 +11,7 @@ import string
 from build_html import *
 
 path = sys.argv[1]
-year = None
-if len(sys.argv) > 2:
-    year = sys.argv[2]
+year = os.getenv("VERSION_DATE")
 
 keywords = {}
 

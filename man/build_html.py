@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) 2003-2006, 2009-2012 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (c) 2003-2006, 2009-2013 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
 
 import sys
 import os
@@ -161,10 +161,9 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
 #"
 
 footer_tmpl = string.Template(\
-r"""<br><br>
-<hr>
-<p><a href="${index_url}">Help Index</a> | <a href="topics.html">Topics Index</a> | <a href="full_index.html">Full Index</a><br>
-&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
+r"""<hr>
+<p><a href="${index_url}">Help Index</a> | <a href="topics.html">Topics Index</a> | <a href="full_index.html">Full Index</a></p>
+<p>&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 </body>
 </html>
 """)
@@ -176,7 +175,7 @@ r"""<b><a href="#${cmd}">${cmd}.*</a></b>""")
 
 cmd2_tmpl = string.Template(\
 r"""<a name="${cmd}"></a>
-<br><br><h3>${cmd}.* commands:</h3>
+<h3>${cmd}.* commands:</h3>
 <table>
 """)
 #"
@@ -188,8 +187,6 @@ r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td><
 
 sections = \
 r""" ]
-<br><br>
-
 <table border=0>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#d">d.*</a> </td><td>display commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#db">db.*</a> </td><td>database commands</td></tr>
@@ -215,8 +212,8 @@ r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a> | <
 #"
 
 modclass_tmpl = string.Template(\
-r"""Go <a href="index.html">back to help overview</a><br><br><br>
-<b>${modclass} commands:</b>
+r"""Go <a href="index.html">back to help overview</a>
+<h3>${modclass} commands:</h3>
 <table>
 """)
 #"
@@ -228,8 +225,8 @@ r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td><
 
 
 full_index_header = \
-r"""Go <a href="index.html">back to help overview</a><br>
-<br><h3>Full command index:</h3>
+r"""Go <a href="index.html">back to help overview</a>
+<h3>Full command index:</h3>
 [ 
 """
 #"
@@ -368,13 +365,11 @@ def get_desc(cmd):
 arch_dist_dir = os.environ['ARCH_DISTDIR']
 html_dir = os.path.join(arch_dist_dir, "docs", "html")
 gisbase = os.environ['GISBASE']
-ver = read_file(os.path.join(gisbase, "etc", "VERSIONNUMBER"))
-try:
-    grass_version = ver.split()[0].strip()
-except IndexError:
-    grass_version = ver.split().strip()
-grass_mmver = '.'.join(ver.split('.')[0:2])
+grass_version = os.getenv("VERSION_NUMBER", "unknown")
+grass_mmver = '.'.join(grass_version.split('.')[0:2])
 macosx = "darwin" in os.environ['ARCH'].lower()
-default_year = "0000" # str(datetime.now().year)
+default_year = os.getenv("VERSION_DATE")
+if not default_year:
+    default_year = str(datetime.now().year)
 
 ############################################################################
