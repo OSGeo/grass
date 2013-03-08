@@ -4,7 +4,8 @@
 include $(MODULE_TOPDIR)/include/Make/HtmlRules.make
 
 $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) $(IMGDST) | $(HTMLDIR)
-	$(PYTHON) $(GISBASE)/tools/mkhtml.py $* $(GRASS_VERSION_DATE) > $@
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+        $(PYTHON) $(GISBASE)/tools/mkhtml.py $* > $@
 
 $(MANDIR)/%.$(MANSECT): $(HTMLDIR)/%.html
 	$(HTML2MAN) $< $@
