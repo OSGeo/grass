@@ -167,7 +167,7 @@ int build_topo(struct Map_info *Map, int build)
         G_debug(2, "SQL: %s", stmt);
         if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
-            return -1;
+            return 0;
         }
 
         /* reset left|right edges */
@@ -176,7 +176,7 @@ int build_topo(struct Map_info *Map, int build)
         G_debug(2, "SQL: %s", stmt);
         if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
-            return -1;
+            return 0;
         }
 
         /* delete faces */        
@@ -185,13 +185,16 @@ int build_topo(struct Map_info *Map, int build)
         G_debug(2, "SQL: %s", stmt);
         if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
-            return -1;
+            return 0;
         }
         
         /* insert face from GRASS topology */
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
-            Vect__insert_face_pg(Map, area);
+            if (0 == Vect__insert_face_pg(Map, area)) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return 0;
+            }
             
             if (build < GV_BUILD_CENTROIDS)
                 continue;
@@ -211,7 +214,7 @@ int build_topo(struct Map_info *Map, int build)
             
             if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
-                return -1;
+                return 0;
             }
         }
     }
@@ -261,7 +264,7 @@ int build_topo(struct Map_info *Map, int build)
             
             if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
-                return -1;
+                return 0;
             }
             continue;
         }
