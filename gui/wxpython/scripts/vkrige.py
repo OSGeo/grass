@@ -99,7 +99,7 @@ class KrigingPanel(wx.Panel):
             self.CreatePage(package = Rpackage, Rinstance = Rinstance, controller = controller)
         
         ## Command output. From menuform module, cmdPanel class
-        self._console = gconsole.GConsole(guiparent = self)
+        self._gconsole = gconsole.GConsole(guiparent = self)
         self.goutput = goutput.GConsoleWindow(parent = self, gconsole = self._gconsole, margin = False,
                                               gcstyle = goutput.GC_SEARCH | goutput.GC_PROMPT)
         self.goutputId = self.RPackagesBook.GetPageCount()
