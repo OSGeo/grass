@@ -1395,10 +1395,10 @@ int Vect__insert_face_pg(struct Map_info *Map, int area)
     
     /* insert face if not exists */
     G_asprintf(&stmt, "INSERT INTO \"%s\".face (face_id, mbr) VALUES "
-               "(%d, 'POLYGON((%.12f %.12f, %.12f %.12f, %.12f %.12f, %.12f %.12f, "
-               "%.12f %.12f))'::GEOMETRY)", pg_info->toposchema_name, area,
+               "(%d, ST_GeomFromText('POLYGON((%.12f %.12f, %.12f %.12f, %.12f %.12f, %.12f %.12f, "
+               "%.12f %.12f))', %d))", pg_info->toposchema_name, area,
                box.W, box.S, box.W, box.N, box.E, box.N,
-               box.E, box.S, box.W, box.S);
+               box.E, box.S, box.W, box.S, pg_info->srid);
     G_debug(3, "new face id=%d", area);
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
