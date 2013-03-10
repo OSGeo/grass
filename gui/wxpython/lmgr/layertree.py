@@ -44,7 +44,6 @@ from vdigit.main          import haveVDigit
 from core.gcmd            import GWarning, GError
 from gui_core.toolbars    import BaseIcons
 from icons.icon           import MetaIcon
-from modules.colorrules   import RasterColorTable
 from web_services.dialogs import SaveWMSLayerDialog
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 
@@ -655,10 +654,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnRasterColorTable(self, event):
         """!Set color table for raster map"""
         name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
-        ctable = RasterColorTable(self, layerTree = self)
-        ctable.SetMap(name)
-        ctable.Show()
-        ctable.CentreOnScreen()
+        GUI(parent = self).ParseCommand(['r.colors',
+                                         'map=%s' % name])
 
     def OnVectorColorTable(self, event):
         """!Set color table for vector map"""
