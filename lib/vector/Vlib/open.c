@@ -1211,6 +1211,12 @@ int map_format(struct Map_info *Map)
 #endif
             G_debug(1, "PG: geom_column = '%s'", pg_info->geom_column);
             
+            /* srid (default: 0) */
+            p = G_find_key_value("srid", key_val);
+            if (p)
+                pg_info->srid = atoi(p);
+            G_debug(1, "PG: srid = %d", pg_info->srid);
+            
             /* table name */
             Map->fInfo.pg.table_name = G_store(Map->name);
         }
