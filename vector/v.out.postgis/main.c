@@ -19,9 +19,12 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+#include <libpq-fe.h>
+
 #include "local_proto.h"
 
 static void link_handler(void *);
+static void output_handler(void *);
 
 int main(int argc, char *argv[])
 {
@@ -122,6 +125,7 @@ int main(int argc, char *argv[])
     if (-1 == Vect_open_new(&Out, olayer, Vect_is_3d(&In)))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
                       olayer);
+    G_add_error_handler(output_handler, &Out);
     
     /* define attributes */
     field = Vect_get_field_number(&In, params.layer->answer);
@@ -158,10 +162,40 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-void link_handler(void *p) {
+void link_handler(void *p)
+{
     const char *link = (const char *) p;
     
     G_debug(1, "link_handler: %s", link);
     if (G_find_vector2(link, G_mapset()))
 	Vect_delete(link);
+}
+
+void output_handler(void *p)
+{
+    char stmt[DB_SQL_MAX];
+       
+    struct Map_info *Map;
+    struct Format_info_pg *pg_info;
+    PGresult *result;
+    
+    Map = (struct Map_info *) p;
+    pg_info = &Map->fInfo.pg;
+    
+    G_debug(1, "output_handler(): schema = %s; olayer = %s", pg_info->schema_name, pg_info->table_name);
+    sprintf(stmt, "SELECT DropGeometryTable('%s', '%s')", pg_info->schema_name, pg_info->table_name);
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning(_("Unable to drop table <%s.%s>"), pg_info->schema_name, pg_info->table_name);
+    }
+    PQclear(result);
+
+    if (pg_info->toposchema_name) {
+        sprintf(stmt, "SELECT topology.DropTopology('%s')", pg_info->toposchema_name);
+        result = PQexec(pg_info->conn, stmt);
+        if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+            G_warning(_("Unable to drop topology schema <%s>"), pg_info->toposchema_name);
+        }
+    }
+    PQclear(result);
 }
