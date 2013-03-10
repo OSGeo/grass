@@ -328,7 +328,6 @@ int V2_open_new_pg(struct Map_info *Map, int type)
 
     struct Format_info_pg *pg_info;
     struct field_info *Fi;
-    struct Key_Value *projinfo, *projunits;
 
     Fi = NULL;
 
@@ -345,14 +344,6 @@ int V2_open_new_pg(struct Map_info *Map, int type)
 
     G_debug(1, "V2_open_new_pg(): conninfo='%s' table='%s' -> type = %d",
             pg_info->conninfo, pg_info->table_name, type);
-
-    /* get spatial reference */
-    projinfo = G_get_projinfo();
-    projunits = G_get_projunits();
-    pg_info->srid = 0;          /* TODO */
-    // Ogr_spatial_ref = GPJ_grass_to_osr(projinfo, projunits);
-    G_free_key_value(projinfo);
-    G_free_key_value(projunits);
 
     /* determine geometry type */
     switch (type) {
@@ -833,6 +824,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     result = PQexec(pg_info->conn, stmt);
     
     if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning("%s", PQresultErrorMessage(result));
         PQclear(result);
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
