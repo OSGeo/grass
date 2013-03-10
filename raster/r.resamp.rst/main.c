@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
     ns_res = outhd.ns_res;
     nsizc = outhd.cols;
     nsizr = outhd.rows;
-    disk = nsizc * nsizr * sizeof(int);
+    disk = (off_t)nsizc * nsizr * sizeof(int);
 
     az = G_alloc_vector(nsizc + 1);
 
