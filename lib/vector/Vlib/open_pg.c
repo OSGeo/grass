@@ -704,7 +704,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 
     if (Fi) {
         /* append attributes */
-        int col, ncols, sqltype, length, ctype;
+        int col, ncols, sqltype, length;
         char stmt_col[DB_SQL_MAX];
         const char *colname;
 
@@ -757,7 +757,6 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
             column = db_get_table_column(table, col);
             colname = db_get_column_name(column);
             sqltype = db_get_column_sqltype(column);
-            ctype = db_sqltype_to_Ctype(sqltype);
             length = db_get_column_length(column);
 
             G_debug(3, "\tcolumn = %d name = %s type = %d length = %d",
@@ -772,7 +771,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
             /* append column */
             sprintf(stmt_col, ",%s %s", colname, db_sqltype_name(sqltype));
             strcat(stmt, stmt_col);
-            if (ctype == DB_C_TYPE_STRING) {
+            if (sqltype == DB_SQL_TYPE_CHARACTER) {
                 /* length only for string columns */
                 sprintf(stmt_col, "(%d)", length);
                 strcat(stmt, stmt_col);
