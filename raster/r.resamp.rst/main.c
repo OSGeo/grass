@@ -96,7 +96,7 @@ static char *tcurv;
 static char *mcurv;
 static char *maskmap;
 
-static int sdisk, disk;
+static off_t sdisk, disk;
 
 static char *Tmp_file_z;
 static char *Tmp_file_dx;
@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
 	    G_message(_("%.2f KB of disk space for temp files."), sdisk / 1024.);
     }
     else
-	G_message(_("%d bytes of disk space for temp files."), sdisk);
+	G_message(_("%d bytes of disk space for temp files."), (int)sdisk);
 
 
     fstar2 = fi * fi / 4.;
