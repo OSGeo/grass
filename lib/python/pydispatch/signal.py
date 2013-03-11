@@ -19,10 +19,66 @@ def _islambda(function):
 
 
 class Signal(object):
+    """
+    >>> signal1 = Signal('signal1')
+    >>> def handler1():
+    ...     print "from handler1"
+    >>> signal1.connect(handler1)
+
+    >>> signal2 = Signal('signal2')
+    >>> def handler2(text):
+    ...     print "handler2: %s" % text
+    >>> signal2.connect(handler2)
+
+    >>> signal1.emit()
+    from handler1
+
+    >>> signal2.emit(text="Hello")
+    handler2: Hello
+
+    >>> import sys
+    >>> signal2.connect(lambda text: sys.stdout.write('lambda handler: %s\\n' % text))
+    >>> signal2.emit(text="Hi")
+    handler2: Hi
+    lambda handler: Hi
+
+    >>> def handler3():
+    ...     print "from handler3"
+    >>> signal2.connect(handler3)
+    >>> signal2.emit(text="Ciao")
+    handler2: Ciao
+    lambda handler: Ciao
+    from handler3
+
+    >>> signal3 = Signal('signal3')
+    >>> signal3.connect(handler3)
+    >>> signal1.connect(signal3)
+    >>> signal1.emit()
+    from handler1
+    from handler3
+
+    >>> signal3.disconnect(handler3)
+    >>> signal1.emit()
+    from handler1
+    >>> signal2.disconnect(handler2)
+    >>> signal2.disconnect(handler3)
+    >>> signal2.emit(text='Hello')
+    lambda handler: Hello
+    """
     def __init__(self, name):
         self._name = name
 
     def connect(self, handler, weak=None):
+        """
+        >>> signal1 = Signal('signal1')
+        >>> import sys
+        >>> signal1.connect(lambda: sys.stdout.write('will print\\n'))
+        >>> signal1.connect(lambda: sys.stdout.write('will print\\n'), weak=False)
+        >>> signal1.connect(lambda: sys.stdout.write('will not print'), weak=True)
+        >>> signal1.emit()
+        will print
+        will print
+        """
         if weak is None:
             if _islambda(handler):
                 weak = False
@@ -30,8 +86,8 @@ class Signal(object):
                 weak = True
         dispatcher.connect(receiver=handler, signal=self, weak=weak)
 
-    def disconnect(self, handler):
-        dispatcher.disconnect(receiver=handler, signal=self, weak=None)
+    def disconnect(self, handler, weak=True):
+        dispatcher.disconnect(receiver=handler, signal=self, weak=weak)
 
     def emit(self, *args, **kwargs):
         dispatcher.send(signal=self, *args, **kwargs)
@@ -43,32 +99,5 @@ class Signal(object):
 
 
 if __name__ == '__main__':
-    def handler1():
-        print "handler1"
-    def handler2(text):
-        print "handler2: %s" % text
-    class A(object):
-        def showText(self, text):
-            print "showing text:", text
-        def showMessage(self):
-            print "showing message"
-
-    def test():
-        import sys
-        signal1 = Signal('signal1')
-        signal2 = Signal('signal2')
-        signal3 = Signal('signal3')
-        signal1.connect(handler1)
-        signal2.connect(handler2)
-        signal2.connect(lambda text: sys.stdout.write('lambda handler 1: %s\n' % text))
-        signal2.connect(signal3)
-        signal3.connect(handler2)
-
-        a = A()
-        signal2.connect(a.showText)
-        signal2.connect(a.showMessage)
-
-        signal1.emit()
-        signal2.emit(text="Hello")
-
-    test()
+    import doctest
+    doctest.testmod()
