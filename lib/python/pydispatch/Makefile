@@ -8,7 +8,7 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/pydispatch
 
-MODULES = dispatcher errors robustapply robust saferef signals
+MODULES = dispatcher errors robustapply robust saferef signal
 
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)

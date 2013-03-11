@@ -27,11 +27,11 @@ Internal attributes:
 """
 from __future__ import generators
 import weakref
-from pydispatch import saferef, robustapply, errors
+from grass.pydispatch import saferef, robustapply, errors
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
-__cvsid__ = "$Id: dispatcher.py,v 1.1 2010/03/30 15:45:55 mcfletch Exp $"
-__version__ = "$Revision: 1.1 $"[11:-2]
+__cvsid__ = "Id: dispatcher.py,v 1.1 2010/03/30 15:45:55 mcfletch Exp"
+__version__ = "Revision: 1.1"
 
 class _Parameter:
 	"""Used to represent default parameter values."""
@@ -367,7 +367,7 @@ def sendExact( signal=Any, sender=Anonymous, *arguments, **named ):
 
 def _removeReceiver(receiver):
 	"""Remove receiver from connections."""
-	if not sendersBack:
+	if not sendersBack or not connections:
 		# During module cleanup the mapping will be replaced with None
 		return False
 	backKey = id(receiver)
