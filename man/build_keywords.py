@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# generates topics.html and topic_*.html
+# generates keywords.html
 # (c) 2013 by the GRASS Development Team, Luca Delucchi
 
 import os
@@ -47,10 +47,10 @@ for black in blacklist:
     except:
         continue
 
-topicsfile = open(os.path.join(path, 'keywords.html'), 'w')
-topicsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
-                        "%s Reference Manual: Topics index" % grass_version))
-topicsfile.write(headertopics_tmpl)
+keywordsfile = open(os.path.join(path, 'keywords.html'), 'w')
+keywordsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
+                        "%s Reference Manual: Keyword index" % grass_version))
+keywordsfile.write(headerkeywords_tmpl)
 for key, values in sorted(keywords.iteritems()):
     keyword_line = "<li><b>%s</b>:" % key
     for value in values:
@@ -58,9 +58,9 @@ for key, values in sorted(keywords.iteritems()):
                                                                         ''))
     keyword_line = keyword_line.rstrip(',')
     keyword_line += '</li>\n'
-    topicsfile.write(keyword_line)
+    keywordsfile.write(keyword_line)
 
-topicsfile.write("</ul>\n")
-write_html_footer(topicsfile, "index.html", year)  
-topicsfile.close()
+keywordsfile.write("</ul>\n")
+write_html_footer(keywordsfile, "index.html", year)  
+keywordsfile.close()
     
