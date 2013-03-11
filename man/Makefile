@@ -23,7 +23,7 @@ categories = \
 
 IDXCATS := $(foreach cat,$(categories),$(lastword $(subst :, ,$(cat))))
 
-IDXSRC = full_index index topics $(IDXCATS)
+IDXSRC = full_index index topics keywords $(IDXCATS)
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
@@ -54,6 +54,12 @@ GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	$(PYTHON) ./build_topics.py $(HTMLDIR)
 endef
 
+define build_keywords
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	$(PYTHON) ./build_keywords.py $(HTMLDIR)
+endef
+
 $(HTMLDIR)/topics.html: $(ALL_HTML)
 	$(call build_topics)
 	touch $@
@@ -64,6 +70,10 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 
 $(HTMLDIR)/index.html: build_index.py build_html.py
 	$(call build,index)
+	touch $@
+
+$(HTMLDIR)/keywords.html: $(ALL_HTML)
+	$(call build_keywords)
 	touch $@
 
 define category_rule
