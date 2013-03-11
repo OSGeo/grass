@@ -2516,3 +2516,35 @@ class SymbolDialog(wx.Dialog):
         """!Returns currently selected symbol full path.
         """
         return os.path.join(self.symbolPath, self.selectedDir, self.selected)
+
+
+class TextEntryDialog(wx.Dialog):
+    """!Simple dialog with text field. 
+
+    It differs from wx.TextEntryDialog because it allows adding validator.
+    """
+    def __init__(self, parent, message, caption='',
+                 defaultValue='', pos=wx.DefaultPosition, validator=wx.DefaultValidator,
+                 style=wx.OK | wx.CANCEL):
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=caption, pos=pos)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        stline = wx.StaticText(self, id=wx.ID_ANY, label=message)
+        vbox.Add(item=stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
+
+        self._textCtrl = wx.TextCtrl(self, id=wx.ID_ANY, size = (300, -1),
+                                     value=defaultValue, validator=validator)
+        vbox.Add(item=self._textCtrl, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
+        self._textCtrl.SetFocus()
+
+        sizer = self.CreateSeparatedButtonSizer(style)
+        vbox.Add(item=sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
+
+        self.SetSizerAndFit(vbox)
+        
+    def GetValue(self):
+        return self._textCtrl.GetValue()
+
+    def SetValue(self, value):
+        self._textCtrl.SetValue(value)
