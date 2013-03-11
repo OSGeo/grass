@@ -601,6 +601,51 @@ class SimpleValidator(wx.PyValidator):
         """
         return True # Prevent wxDialog from complaining.
 
+
+class GenericValidator(wx.PyValidator):
+    """ This validator checks condition and calls callback
+    in case the condition is not fulfilled.
+    """
+    def __init__(self, condition, callback):
+        """ Standard constructor.
+
+        @param condition function which accepts string value and returns T/F
+        @param callback function which is called when condition is not fulfilled
+        """
+        wx.PyValidator.__init__(self)
+        self._condition = condition
+        self._callback = callback
+
+    def Clone(self):
+        """ Standard cloner.
+
+        Note that every validator must implement the Clone() method.
+        """
+        return GenericValidator(self._condition, self._callback)
+
+    def Validate(self, win):
+        """ Validate the contents of the given text control.
+        """
+        ctrl = self.GetWindow()
+        text = ctrl.GetValue()
+        if not self._condition(text):
+            self._callback(ctrl)
+            return False
+        else:
+            return True
+
+    def TransferToWindow(self):
+        """ Transfer data from validator to window.
+        """
+        return True # Prevent wxDialog from complaining.
+
+
+    def TransferFromWindow(self):
+        """ Transfer data from window to validator.
+        """
+        return True # Prevent wxDialog from complaining.
+
+
 class ItemTree(CT.CustomTreeCtrl):
     def __init__(self, parent, id = wx.ID_ANY,
                  ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |

@@ -26,6 +26,7 @@ import shutil
 import copy
 import platform
 import codecs
+import getpass
 
 ### i18N
 import gettext
@@ -44,6 +45,8 @@ from gui_core.ghelp import HelpFrame
 from core.gcmd      import GMessage, GError, DecodeString, RunCommand, GWarning
 from core.utils     import GetListOfLocations, GetListOfMapsets
 from location_wizard.dialogs import RegionDef
+from gui_core.dialogs import TextEntryDialog
+from gui_core.widgets import GenericValidator
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -426,7 +429,17 @@ class GRASSStartup(wx.Frame):
             else:
                 self.SetDefaultRegion(location = gWizard.location)
 
-            self.ExitSuccessfully()
+            dlg = TextEntryDialog(parent=self,
+                                  message=_("Do you want to create new mapset?"),
+                                  caption=_("Create new mapset"),
+                                  defaultValue=self._getDefaultMapsetName(),
+                                  validator=GenericValidator(grass.legal_name, self._nameValidationFailed),
+                                  style=wx.OK | wx.CANCEL | wx.HELP)
+            help = dlg.FindWindowById(wx.ID_HELP)
+            help.Bind(wx.EVT_BUTTON, self.OnHelp)
+            if dlg.ShowModal() == wx.ID_OK:
+                mapsetName = dlg.GetValue()
+                self.CreateNewMapset(mapsetName)
 
     def SetDefaultRegion(self, location):
         """!Asks to set default region."""
@@ -509,9 +522,10 @@ class GRASSStartup(wx.Frame):
                                  'This mapset cannot be renamed.'))
             return
         
-        dlg = wx.TextEntryDialog(parent = self,
-                                 message = _('Current name: %s\n\nEnter new name:') % mapset,
-                                 caption = _('Rename selected mapset'))
+        dlg = TextEntryDialog(parent = self,
+                              message = _('Current name: %s\n\nEnter new name:') % mapset,
+                              caption = _('Rename selected mapset'),
+                              validator = GenericValidator(grass.legal_name, self._nameValidationFailed))
         
         if dlg.ShowModal() ==  wx.ID_OK:
             newmapset = dlg.GetValue()
@@ -544,9 +558,10 @@ class GRASSStartup(wx.Frame):
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
 
-        dlg = wx.TextEntryDialog(parent = self,
-                                 message = _('Current name: %s\n\nEnter new name:') % location,
-                                 caption = _('Rename selected location'))
+        dlg = TextEntryDialog(parent = self,
+                              message = _('Current name: %s\n\nEnter new name:') % location,
+                              caption = _('Rename selected location'),
+                              validator = GenericValidator(grass.legal_name, self._nameValidationFailed))
 
         if dlg.ShowModal() ==  wx.ID_OK:
             newlocation = dlg.GetValue()
@@ -778,54 +793,56 @@ class GRASSStartup(wx.Frame):
         
         dlg.Destroy()
 
-    def OnCreateMapset(self,event):
+    def OnCreateMapset(self, event):
         """!Create new mapset"""
-        self.gisdbase = self.tgisdbase.GetValue()
-        location = self.listOfLocations[self.lblocations.GetSelection()]
-        
-        dlg = wx.TextEntryDialog(parent = self,
-                                 message = _('Enter name for new mapset:'),
-                                 caption = _('Create new mapset'))
-        
-        if dlg.ShowModal() ==  wx.ID_OK:
+        dlg = TextEntryDialog(parent = self,
+                              message = _('Enter name for new mapset:'),
+                              caption = _('Create new mapset'),
+                              defaultValue = self._getDefaultMapsetName(),
+                              validator = GenericValidator(grass.legal_name, self._nameValidationFailed))
+        if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
-            if mapset in self.listOfMapsets:
-                GMessage(parent = self,
-                         message = _("Mapset <%s> already exists.") % mapset)
-                return
-            
-            if mapset.lower() == 'ogr':
-                dlg1 = wx.MessageDialog(parent = self,
-                                        message = _("Mapset <%s> is reserved for direct "
-                                                    "read access to OGR layers. Please consider to use "
-                                                    "another name for your mapset.\n\n"
-                                                    "Are you really sure that you want to create this mapset?") % mapset,
-                                        caption = _("Reserved mapset name"),
-                                        style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-                ret = dlg1.ShowModal()
-                dlg1.Destroy()
-                if ret == wx.ID_NO:
-                    dlg.Destroy()
-                    return
-            
-            try:
-                os.mkdir(os.path.join(self.gisdbase, location, mapset))
-                # copy WIND file and its permissions from PERMANENT and set permissions to u+rw,go+r
-                shutil.copy(os.path.join(self.gisdbase, location, 'PERMANENT', 'WIND'),
-                            os.path.join(self.gisdbase, location, mapset))
-                # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
-            except StandardError, e:
-                GError(parent = self,
-                       message = _("Unable to create new mapset: %s") % e,
-                       showTraceback = False)
+            return self.CreateNewMapset(mapset = mapset)
+        else:
+            return False
+
+    def CreateNewMapset(self, mapset):
+        if mapset in self.listOfMapsets:
+            GMessage(parent = self,
+                     message = _("Mapset <%s> already exists.") % mapset)
+            return False
+
+        if mapset.lower() == 'ogr':
+            dlg1 = wx.MessageDialog(parent = self,
+                                    message = _("Mapset <%s> is reserved for direct "
+                                                "read access to OGR layers. Please consider to use "
+                                                "another name for your mapset.\n\n"
+                                                "Are you really sure that you want to create this mapset?") % mapset,
+                                    caption = _("Reserved mapset name"),
+                                    style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+            ret = dlg1.ShowModal()
+            dlg1.Destroy()
+            if ret == wx.ID_NO:
+                dlg.Destroy()
                 return False
         
-        dlg.Destroy()
-        self.bstart.SetFocus()
-        
-        return True
+        try:
+            self.gisdbase = self.tgisdbase.GetValue()
+            location = self.listOfLocations[self.lblocations.GetSelection()]
+            os.mkdir(os.path.join(self.gisdbase, location, mapset))
+            # copy WIND file and its permissions from PERMANENT and set permissions to u+rw,go+r
+            shutil.copy(os.path.join(self.gisdbase, location, 'PERMANENT', 'WIND'),
+                        os.path.join(self.gisdbase, location, mapset))
+            # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+            self.bstart.SetFocus()
+            return True
+        except StandardError, e:
+            GError(parent = self,
+                   message = _("Unable to create new mapset: %s") % e,
+                   showTraceback = False)
+            return False
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""
@@ -881,7 +898,16 @@ class GRASSStartup(wx.Frame):
                    set = "LOCATION_NAME=%s" % location)
         RunCommand("g.gisenv",
                    set = "MAPSET=%s" % mapset)
-        
+
+    def _getDefaultMapsetName(self):
+        """!Returns default name for mapset."""
+        try:
+            defaultName = getpass.getuser()
+            defaultName.encode('ascii') # raise error if not ascii (not valid mapset name)
+        except: # whatever might go wrong
+            defaultName = 'user'
+
+        return defaultName
 
     def ExitSuccessfully(self):
         self.Destroy()
@@ -902,6 +928,13 @@ class GRASSStartup(wx.Frame):
         """!Close window event"""
         event.Skip()
         sys.exit(2)
+
+    def _nameValidationFailed(self, ctrl):
+        message = _("Name <%(name)s> is not a valid name for location or mapset. "
+                    "Please use only ASCII characters excluding %(chars)s "
+                    "and space.") % {'name': ctrl.GetValue(), 'chars': '/"\'@,=*~'}
+        GError(parent=self, message=message, caption=_("Invalid name"))
+
 
 class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """!Use wx.ListCtrl instead of wx.ListBox, different style for

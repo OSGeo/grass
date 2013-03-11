@@ -41,6 +41,7 @@ import wx.lib.scrolledpanel as scrolled
 from core                    import globalvar
 from core                    import utils
 from core.gcmd               import RunCommand, GError, GMessage, GWarning
+from gui_core.widgets        import GenericValidator
 from location_wizard.base    import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -101,6 +102,7 @@ class DatabasePage(TitledPage):
         # text controls
         self.tgisdbase = self.MakeTextCtrl(grassdatabase, size = (300, -1))
         self.tlocation = self.MakeTextCtrl("newLocation", size = (300, -1))
+        self.tlocation.SetValidator(GenericValidator(grass.legal_name, self._nameValidationFailed))
         self.tlocTitle = self.MakeTextCtrl(size = (400, -1))
         
         # layout
@@ -151,7 +153,13 @@ class DatabasePage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.tgisdbase.Bind(wx.EVT_TEXT,        self.OnChangeName)
         self.tlocation.Bind(wx.EVT_TEXT,        self.OnChangeName)
-        
+
+    def _nameValidationFailed(self, ctrl):
+        message = _("Name <%(name)s> is not a valid name for location. "
+                    "Please use only ASCII characters excluding %(chars)s "
+                    "and space.") % {'name': ctrl.GetValue(), 'chars': '/"\'@,=*~'}
+        GError(parent=self, message=message, caption=_("Invalid location name"))
+
     def OnChangeName(self, event):
         """!Name for new location was changed"""
         nextButton = wx.FindWindowById(wx.ID_FORWARD)

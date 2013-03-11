@@ -1415,7 +1415,7 @@ def legal_name(s):
                if c in '/"\'@,=*~' or c <= ' ' or c >= '\177']
     if illegal:
         illegal = ''.join(sorted(set(illegal)))
-        warning(_("Illegal filename <%s>. <%s> not allowed.\n") % (s, repr(illegal)[1:-1]))
+        warning(_("Illegal filename <%s>. <%s> not allowed.\n") % (s, illegal))
         return False
 
     return True
