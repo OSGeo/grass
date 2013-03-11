@@ -4,10 +4,14 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \section pydispachIntro Introduction
 
-TODO
+Files dispatcher.py, errors.py, robustapply.py, robust.py and saferef.py are
+part of the original PyDispacher.
+File signal.py is the object-based easy to use interface created for GRASS.
 
 \section pydispachAuthors Authors
 
 Patrick K. O'Brien, Mike C. Fletcher and Contributors (original authors, see pydispatch/license.txt and pydispatch/PKG-INFO for details)
+Vaclav Petras (signal.py)
+Anna Kratochilova (signal.py)
 
 */
