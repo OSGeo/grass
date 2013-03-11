@@ -258,6 +258,18 @@ r"""
 """
 #"
 
+headerkeywords_tmpl = \
+r"""
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade> 
+<h2>Keywords - Index of GRASS GIS modules</h2>
+<ul>
+"""
+#"
+
 headerkey_tmpl = string.Template(\
 r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
