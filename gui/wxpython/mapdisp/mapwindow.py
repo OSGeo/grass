@@ -28,13 +28,15 @@ from copy import copy
 
 import wx
 
+from grass.pydispatch.signal import Signal
+
 import grass.script as grass
 
 from gui_core.dialogs   import SavedRegion
 from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
 from core.settings      import UserSettings
-from core.events        import gZoomChanged, EVT_UPDATE_MAP
+from core.events        import EVT_UPDATE_MAP
 from gui_core.mapwindow import MapWindow
 from core.ws            import EVT_UPDATE_PRGBAR
 from core.utils         import GetGEventAttribsForHandler
@@ -77,7 +79,12 @@ class BufferedWindow(MapWindow, wx.Window):
         self.lineid = None
         # ID of poly line resulting from cumulative rubber band lines (e.g. measurement)
         self.plineid = None
-        
+
+        # Emitted when zoom of a window is changed
+        self.zoomChanged = Signal('BufferedWindow.zoomChanged')
+
+        self._giface.updateMap.connect(self.UpdateMap)
+
         # event bindings
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
         self.Bind(wx.EVT_SIZE,            self.OnSize)
@@ -603,9 +610,9 @@ class BufferedWindow(MapWindow, wx.Window):
         underlaying images or to the geometry of the canvas.
         
         This method should not be called directly.
-        Post core.events.gUpdateMap event to instance of this class. 
 
-        @todo change direct calling of UpdateMap method to posting core.events.gUpdateMap
+        @todo change direct calling of UpdateMap method to emittig grass
+        interface updateMap signal
 
         @param render re-render map composition
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
@@ -1521,7 +1528,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # update statusbar
         self.frame.StatusbarUpdate()
 
-        wx.PostEvent(self, gZoomChanged())
+        self.zoomChanged.emit()
 
     def ZoomHistory(self, n, s, e, w):
         """!Manages a list of last 10 zoom extents
@@ -1553,7 +1560,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         toolbar.Enable('zoomBack', enable)
 
-        wx.PostEvent(self, gZoomChanged())
+        self.zoomChanged.emit()
         
         return removed
 

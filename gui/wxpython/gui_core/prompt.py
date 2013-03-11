@@ -29,10 +29,11 @@ from wx.lib.newevent import NewEvent
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from grass.pydispatch.signal import Signal
+
 from core          import globalvar
 from core          import utils
 from core.gcmd     import EncodeString, DecodeString, GetRealCmd
-from core.events   import gShowNotification
 
 gPromptRunCmd, EVT_GPROMPT_RUN_CMD = NewEvent()
 
@@ -197,7 +198,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnItemSelected)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
         self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
-        
+
+        # signal which requests showing of a notification
+        self.showNotification = Signal('GPromptSTC.showNotification')
+
     def OnTextSelectionChanged(self, event):
         """!Copy selected text to clipboard and skip event.
         The same function is in GStc class (goutput.py).
@@ -586,12 +590,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             event.Skip()
 
     def ShowStatusText(self, text):
-        """!Sets statusbar text, if it's too long, it is cut off"""
-        # event is not propagated beyond dialog
-        # thus when GPrompt in Modeler is inside a dialog, 
-        # it does not show text in modeler statusbar which is probably
-        # the right behaviour. The dialog itself should display the text.
-        wx.PostEvent(self, gShowNotification(self.GetId(), message = text))
+        """!Requests showing of notification, e.g. showing in a statusbar."""
+        self.showNotification.emit(message=text)
         
     def GetTextLeft(self):
         """!Returns all text left of the caret"""

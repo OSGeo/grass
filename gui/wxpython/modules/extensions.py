@@ -33,7 +33,6 @@ from grass.script import task as gtask
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.utils       import SetAddOnPath
-from core.events      import EVT_SHOW_NOTIFICATION
 from gui_core.forms   import GUI
 from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget, EVT_MODULE_SELECTED
 
@@ -150,7 +149,9 @@ class InstallExtensionWindow(wx.Frame):
                                          showChoice = False)
         self.search.SetSelection(0)
         self.search.Bind(EVT_MODULE_SELECTED, self.OnShowItem)
-        
+        # show text in statusbar when notification appears
+        self.search.showNotification.connect(lambda message: self.SetStatusText(message))
+
         self.optionBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                       label = " %s " % _("Options"))
         if sys.platform == 'win32':
@@ -193,13 +194,7 @@ class InstallExtensionWindow(wx.Frame):
         self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
         self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
-        self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
 
-        # show text in statusbar when notification command event occurs
-        # propagation stops here, no need to show text twice
-        self.Bind(EVT_SHOW_NOTIFICATION,
-                  lambda event: self.SetStatusText(event.message))
-        
         wx.CallAfter(self._fetch)
         
         self._layout()
@@ -271,7 +266,10 @@ class InstallExtensionWindow(wx.Frame):
                                           'svnurl=' + self.repo.GetValue().strip()]
     
     def OnUpdateStatusBar(self, event):
-        """!Update statusbar text"""
+        """!Update statusbar text
+
+        @todo This method is a dead code. Is it useful?
+        """
         element = self.search.GetSelection()
         if not self.tree.IsLoaded():
             self.SetStatusText(_("Fetch list of available extensions by clicking on 'Fetch' button"), 0)

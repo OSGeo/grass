@@ -27,7 +27,6 @@ if __name__ == "__main__":
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
-from core.events      import gMapCreated
 from gui_core.gselect import Select
 from gui_core.forms   import GUI
 from core.settings    import UserSettings
@@ -36,9 +35,11 @@ class MapCalcFrame(wx.Frame):
     """!Mapcalc Frame class. Calculator-style window to create and run
     r(3).mapcalc statements.
     """
-    def __init__(self, parent, cmd, id = wx.ID_ANY,
+    def __init__(self, parent, giface, cmd, id = wx.ID_ANY,
                  style = wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
         self.parent = parent
+        self._giface = giface
+
         if self.parent:
             self.log = self.parent.GetLogWindow()
         else:
@@ -59,7 +60,7 @@ class MapCalcFrame(wx.Frame):
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         self.CreateStatusBar()
-        
+
         #
         # variables
         #
@@ -503,16 +504,17 @@ class MapCalcFrame(wx.Frame):
                        overwrite = overwrite)
         
     def OnDone(self, cmd, returncode):
-        """!Add create map to the layer tree"""
+        """!Add create map to the layer tree
+
+        Sends the mapCreated signal from the grass interface.
+        """
         if returncode != 0:
             return
         name = self.newmaptxt.GetValue().strip(' "') + '@' + grass.gisenv()['MAPSET']
         ltype = 'rast'
         if self.rast3d:
             ltype = 'rast3d'
-        mapEvent = gMapCreated(self.GetId(),
-                               name=name, ltype=ltype, add=self.addbox.IsChecked())
-        wx.PostEvent(self, mapEvent)
+        self._giface.mapCreated.emit(name=name, ltype=ltype, add=self.addbox.IsChecked())
 
     def OnSaveExpression(self, event):
         """!Saves expression to file

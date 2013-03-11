@@ -38,7 +38,6 @@ from core          import utils
 from core.giface   import StandaloneGrassInterface
 from core.gcmd     import RunCommand
 from core.render   import Map, MapLayer
-from core.events   import gUpdateMap
 from mapdisp.frame import MapFrame
 from grass.script  import core as grass
 from core.debug    import Debug
@@ -56,7 +55,7 @@ monSize = list(globalvar.MAP_WINDOW_SIZE)
 
 
 class DMonMap(Map):
-    def __init__(self, cmdfile=None, mapfile=None):
+    def __init__(self, giface, cmdfile=None, mapfile=None):
         """!Map composition (stack of map layers and overlays)
 
         @param cmdline full path to the cmd file (defined by d.mon)
@@ -64,6 +63,8 @@ class DMonMap(Map):
         """
 
         Map.__init__(self)
+
+        self._giface = giface
 
         # environment settings
         self.env   = dict()
@@ -125,8 +126,7 @@ class DMonMap(Map):
         fd.close()
 
         if nlayers:
-            event = gUpdateMap()
-            wx.PostEvent(self.receiver, event)
+            self._giface.updateMap.emit()
 
         Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s" % self.cmdfile)
         Debug.msg(1, "                            nlayers=%d" % nlayers)
@@ -232,15 +232,18 @@ class MapApp(wx.App):
     def OnInit(self):
         if not globalvar.CheckWxVersion([2, 9]):
             wx.InitAllImageHandlers()
-        if __name__ == "__main__":
-            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            self.Map = DMonMap(cmdfile = monFile['cmd'], mapfile = monFile['map'])
-        else:
-            self.Map = None
 
         # actual use of StandaloneGrassInterface not yet tested
         # needed for adding functionality in future
         giface = DMonGrassInterface(None)
+
+        if __name__ == "__main__":
+            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
+            self.Map = DMonMap(giface=giface, cmdfile=monFile['cmd'],
+                               mapfile = monFile['map'])
+        else:
+            self.Map = None
+
         self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
                                 giface = giface, size = monSize)
         # FIXME: hack to solve dependency

@@ -49,10 +49,11 @@ try:
 except ImportError:
     import wx.lib.customtreectrl as CT
 
+from grass.pydispatch.signal import Signal
+
 from core        import globalvar
 from core.gcmd   import GMessage
 from core.debug  import Debug
-from core.events import gShowNotification
 
 from wx.lib.newevent import NewEvent
 wxSymbolSelectionChanged, EVT_SYMBOL_SELECTION_CHANGED  = NewEvent()
@@ -861,7 +862,10 @@ class SearchModuleWidget(wx.Panel):
         self._searchDict = { _('description') : 'description',
                              _('command') : 'command',
                              _('keywords') : 'keywords' }
-        
+
+        # signal which requests showing of a notification
+        self.showNotification = Signal('SearchModuleWidget.showNotification')
+
         self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                 label = " %s " % _("Find module - (press Enter for next match)"))
 
@@ -949,8 +953,7 @@ class SearchModuleWidget(wx.Panel):
         if self.showTip:
             self.searchTip.SetLabel(label)
 
-        newEvent = gShowNotification(self.GetId(), message = label)
-        wx.PostEvent(self, newEvent)
+        self.showNotification.emit(message=label)
 
         event.Skip()
 

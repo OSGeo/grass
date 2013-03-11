@@ -1293,7 +1293,7 @@ class MapFrame(SingleMapFrame):
             return
         
         from vnet.dialogs import VNETDialog
-        self.dialogs['vnet'] = VNETDialog(parent = self)
+        self.dialogs['vnet'] = VNETDialog(parent=self, giface=self._giface)
         self.dialogs['vnet'].CenterOnScreen()
         self.dialogs['vnet'].Show()
             
