@@ -155,7 +155,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # init associated map display
         pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
-        gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(self.lmgr,
+        gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(self._giface,
                                                                    self)
         self.mapdisplay = MapFrame(self, giface = gifaceForDisplay,
                                    id = wx.ID_ANY, pos = pos,

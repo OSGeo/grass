@@ -43,7 +43,6 @@ from grass.script          import core as grass
 from core.gcmd             import RunCommand, GError, GMessage, GException
 from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath, GetLayerNameFromCmd, command2ltype
-from core.events           import EVT_SHOW_NOTIFICATION, EVT_MAP_CREATED
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import LayerManagerMenuData
@@ -162,9 +161,8 @@ class GMFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        self.Bind(EVT_SHOW_NOTIFICATION,
-                  lambda event: self.SetStatusText(event.message))
-        self.Bind(EVT_MAP_CREATED, self.OnMapCreated)
+
+        self._giface.mapCreated.connect(self.OnMapCreated)
 
         # minimal frame size
         self.SetMinSize((globalvar.GM_WINDOW_SIZE[0], 400))
@@ -278,6 +276,11 @@ class GMFrame(wx.Frame):
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       gcstyle = GC_SEARCH | GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
+
+        self.goutput.showNotification.connect(lambda message: self.SetStatusText(message))
+
+        self._gconsole.mapCreated.connect(self.OnMapCreated)
+
         # EVT_CMD_OUTPUT and EVT_GC_CONTENT_CHANGED are similar but should be distinct
         # (logging/messages may be splited from GConsole commad running interface)
         # thus, leaving this bind here
@@ -1448,6 +1451,7 @@ class GMFrame(wx.Frame):
                 cmd = ['r.mapcalc']
         
         win = MapCalcFrame(parent = self,
+                           giface = self._giface,
                            cmd = cmd[0])
         win.CentreOnScreen()
         win.Show()
@@ -1663,14 +1667,14 @@ class GMFrame(wx.Frame):
                                        lcmd = cmd,
                                        lgroup = None)
 
-    def OnMapCreated(self, event):
+    def OnMapCreated(self, name, ltype, add=None):
         """!Decides wheter the map should be added to layer tree."""
-        if event.add is None:
+        if add is None:
             if UserSettings.Get(group = 'cmd',
                                 key = 'addNewLayer', subkey = 'enabled'):
-                self.AddOrUpdateMap(event.name, event.ltype)
-        elif event.add:
-            self.AddOrUpdateMap(event.name, event.ltype)
+                self.AddOrUpdateMap(name, ltype)
+        elif add:
+            self.AddOrUpdateMap(name, ltype)
 
     def AddOrUpdateMap(self, mapName, ltype):
         """!Add map layer or update"""

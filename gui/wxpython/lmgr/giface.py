@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
+from grass.pydispatch.signal import Signal
 
 class Layer(object):
     """!@implements core::giface::Layer
@@ -64,6 +65,14 @@ class LayerManagerGrassInterface(object):
         """
         self.lmgr = lmgr
 
+        # Signal when some map is created or updated by a module.
+        # attributes: name: map name, ltype: map type,
+        # add: if map should be added to layer tree (questionable attribute)
+        self.mapCreated = Signal('LayerManagerGrassInterface.mapCreated')
+
+        # Signal emitted to request updating of map
+        self.updateMap = Signal('LayerManagerGrassInterface.updateMap')
+
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
 
@@ -107,17 +116,20 @@ class LayerManagerGrassInterface(object):
         return self.lmgr.goutput.GetProgressBar()
 
 
-class LayerManagerGrassInterfaceForMapDisplay(LayerManagerGrassInterface):
+class LayerManagerGrassInterfaceForMapDisplay(object):
     """!Provides reference only to the given layer list (according to tree),
         not to the current.
     """
-    def __init__(self, lmgr, tree):
+    def __init__(self, giface, tree):
         """!
-        @lmgr layer manager
-        @tree tree which will be used instead of the lmgr.tree
+        @giface original grass interface
+        @tree tree which will be used instead of the tree from giface
         """
-        LayerManagerGrassInterface.__init__(self, lmgr)
+        self._giface = giface
         self.tree = tree
+
+        # Signal emitted to request updating of map
+        self.updateMap = Signal('LayerManagerGrassInterfaceForMapDisplay.updateMap')
 
     def GetLayerTree(self):
         return self.tree
@@ -127,3 +139,6 @@ class LayerManagerGrassInterfaceForMapDisplay(LayerManagerGrassInterface):
 
     def GetMapWindow(self):
         return self.tree.GetMapDisplay()
+
+    def __getattr__(self, name):
+        return getattr(self._giface, name)

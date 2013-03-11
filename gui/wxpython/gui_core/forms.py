@@ -87,6 +87,8 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
+from grass.pydispatch.signal import Signal
+
 from grass.script import core as grass
 from grass.script import task as gtask
 
@@ -96,7 +98,6 @@ from gui_core         import gselect
 from core             import gcmd
 from core             import utils
 from core.settings    import UserSettings
-from core.events      import EVT_MAP_CREATED
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
@@ -456,6 +457,9 @@ class TaskFrame(wx.Frame):
                                       frame = self)
         self._gconsole = self.notebookpanel._gconsole
         self.goutput = self.notebookpanel.goutput
+        if self._gconsole:
+            self._gconsole.mapCreated.connect(self.OnMapCreated)
+
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(item = self.notebookpanel, proportion = 1, flag = wx.EXPAND)
         
@@ -558,7 +562,6 @@ class TaskFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE,  self.OnCancel)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-        self.Bind(EVT_MAP_CREATED, self.OnMapCreated)
         
         # do layout
         # called automatically by SetSizer()
@@ -650,12 +653,12 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.FutureCall(2000, self.Close)
 
-    def OnMapCreated(self, event):
+    def OnMapCreated(self, name, ltype):
         if hasattr(self, "addbox") and self.addbox.IsChecked():
-            event.add = True
+            add = True
         else:
-            event.add = False
-        event.Skip()
+            add = False
+        self._giface.mapCreated.emit(name=name, ltype=ltype, add=add)
     
     def OnOK(self, event):
         """!OK button pressed"""
@@ -782,7 +785,9 @@ class CmdPanel(wx.Panel):
         self._giface = giface
         
         wx.Panel.__init__(self, parent, id = id, *args, **kwargs)
-        
+
+        self.mapCreated = Signal
+
         # Determine tab layout
         sections = []
         is_section = {}

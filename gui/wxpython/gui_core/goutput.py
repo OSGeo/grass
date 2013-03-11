@@ -29,8 +29,9 @@ import wx
 from   wx import stc
 from wx.lib.newevent import NewEvent
 
+from grass.pydispatch.signal import Signal
+
 from core.gcmd       import GError, EncodeString
-from core.events     import gShowNotification
 from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
     EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
@@ -80,6 +81,9 @@ class GConsoleWindow(wx.SplitterWindow):
         self._gcstyle = gcstyle
         self.lineWidth       = 80
 
+        # signal which requests showing of a notification
+        self.showNotification = Signal("GConsoleWindow.showNotification")
+
         # progress bar
         self.progressbar = wx.Gauge(parent = self.panelOutput, id = wx.ID_ANY,
                                     range = 100, pos = (110, 50), size = (-1, 25),
@@ -121,6 +125,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.cmdPrompt.Bind(EVT_GPROMPT_RUN_CMD, 
                             lambda event:
                                 self._gconsole.RunCmd(command = event.cmd))
+        self.cmdPrompt.showNotification.connect(self.showNotification)
 
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
@@ -259,7 +264,9 @@ class GConsoleWindow(wx.SplitterWindow):
         
         self.search = SearchModuleWidget(parent = pane,
                                          modulesData = modulesData)
-        
+
+        self.search.showNotification.connect(self.showNotification)
+
         border.Add(item = self.search, proportion = 0,
                    flag = wx.EXPAND | wx.ALL, border = 1)
         
@@ -391,7 +398,7 @@ class GConsoleWindow(wx.SplitterWindow):
             finally:
                 output.close()
             message = _("Commands output saved into '%s'") % path
-            wx.PostEvent(self, gShowNotification(self.GetId(), message = message))
+            self.showNotification.emit(message = message)
         
         dlg.Destroy()
 
@@ -444,7 +451,7 @@ class GConsoleWindow(wx.SplitterWindow):
             output.close()
         
         message = _("Commands protocol saved into '%s'") % self.cmdFileProtocol
-        wx.PostEvent(self, gShowNotification(self.GetId(), message = message))
+        self.showNotification.emit(message = message)
         del self.cmdFileProtocol
         
     def OnCmdProtocol(self, event = None):

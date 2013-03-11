@@ -27,7 +27,6 @@ from core              import utils
 from core.modulesdata  import ModulesData
 from core.gcmd         import EncodeString
 from core.settings     import UserSettings
-from core.events       import EVT_SHOW_NOTIFICATION
 from gui_core.widgets  import ItemTree, SearchModuleWidget
 from lmgr.menudata     import LayerManagerMenuData
 
@@ -155,14 +154,13 @@ class SearchModuleWindow(wx.Panel):
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
         self.search.GetCtrl().Bind(wx.EVT_TEXT,    self.OnUpdateStatusBar)
         self.search.GetCtrl().Bind(wx.EVT_KEY_UP,  self.OnKeyUp)
-        
-        # stop propagation of event
+
         # because number of matched items differs
         # from number of matched items in tree
         # TODO: find the reason for this difference
-        # TODO: use this event for updating statusbar (i.e., don't do this bind)
-        self.Bind(EVT_SHOW_NOTIFICATION, lambda event: None)
-        
+        # TODO: use this event for updating statusbar
+        # TODO: some showNotification usage?
+
         self._layout()
         
         self.search.SetFocus()

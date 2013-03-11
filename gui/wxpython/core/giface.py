@@ -22,6 +22,7 @@ from core.gconsole import GConsole, \
 
 import grass.script as grass
 
+from grass.pydispatch.signal import Signal
 
 # to disable Abstract class not referenced
 #pylint: disable=R0921
@@ -136,6 +137,15 @@ class GrassInterface:
 class StandaloneGrassInterface():
     """!@implements GrassInterface"""
     def __init__(self):
+
+        # Signal when some map is created or updated by a module.
+        # attributes: name: map name, ltype: map type,
+        # add: if map should be added to layer tree (questionable attribute)
+        self.mapCreated = Signal('StandaloneGrassInterface.mapCreated')
+
+        # Signal emitted to request updating of map
+        self.updateMap = Signal('StandaloneGrassInterface.updateMap')
+
         self._gconsole = GConsole()
         self._gconsole.Bind(EVT_CMD_PROGRESS, self._onCmdProgress)
         self._gconsole.Bind(EVT_CMD_OUTPUT, self._onCmdOutput)

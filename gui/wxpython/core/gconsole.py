@@ -35,9 +35,10 @@ from wx.lib.newevent import NewEvent
 import grass.script as grass
 from   grass.script import task as gtask
 
+from grass.pydispatch.signal import Signal
+
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
-from core.events import gMapCreated
 from gui_core.forms import GUI
 from core.debug import Debug
 from core.settings import UserSettings
@@ -348,6 +349,10 @@ class GConsole(wx.EvtHandler):
         """
         wx.EvtHandler.__init__(self)
 
+        # Signal when some map is created or updated by a module.
+        # attributes: name: map name, ltype: map type,
+        self.mapCreated = Signal('GConsole.mapCreated')
+
         self._guiparent = guiparent
         self._giface = giface
         self._ignoredCmdPattern = ignoredCmdPattern
@@ -595,7 +600,7 @@ class GConsole(wx.EvtHandler):
     def OnCmdDone(self, event):
         """!Command done (or aborted)
 
-        Posts event EVT_MAP_CREATED.
+        Sends signal mapCreated if map is recognized in output parameters.
         """
         # Process results here
         try:
@@ -650,9 +655,7 @@ class GConsole(wx.EvtHandler):
                 name = p.get('value')
                 if '@' not in name:
                     name = name + '@' + grass.gisenv()['MAPSET']
-                mapEvent = gMapCreated(self._guiparent.GetId(),
-                                       name=name, ltype=prompt, add=None)
-                wx.PostEvent(self._guiparent, mapEvent)
+                self.mapCreated.emit(name=name, ltype=prompt)
 
         event.Skip()
 

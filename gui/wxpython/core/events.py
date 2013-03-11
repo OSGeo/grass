@@ -33,18 +33,6 @@ from wx.lib.newevent import NewCommandEvent
 from wx.lib.newevent import NewEvent
 
 
-# Notification event intended to update statusbar.
-# The message attribute contains the text of the message (plain text)
-gShowNotification, EVT_SHOW_NOTIFICATION = NewCommandEvent()
-
-
-# Occurs event when some map is created or updated by a module.
-# attributes: name: map name, ltype: map type,
-# add: if map should be added to layer tree (questionable attribute)
-gMapCreated, EVT_MAP_CREATED = NewCommandEvent()
-
-gZoomChanged, EVT_ZOOM_CHANGED = NewEvent()
-
 # Post it to BufferedWindow instance, which you want to update.
 # For relevant attributes for the event see 
 # mapdisp.mapwindow.BufferedWindow UpdateMap method arguments.

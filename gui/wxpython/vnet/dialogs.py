@@ -62,7 +62,7 @@ from vnet.toolbars    import MainToolbar, PointListToolbar, AnalysisToolbar
 #   it's destructor is not called
 
 class VNETDialog(wx.Dialog):
-    def __init__(self, parent,
+    def __init__(self, parent, giface,
                  id = wx.ID_ANY, title = _("GRASS GIS Vector Network Analysis Tool"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """!Dialog for vector network analysis"""
@@ -72,6 +72,7 @@ class VNETDialog(wx.Dialog):
 
         self.parent  = parent  # mapdisp.frame MapFrame class
         self.mapWin = parent.MapWindow 
+        self._giface = giface
 
         # contains current analysis result (do not have to be last one, when history is browsed), 
         # it is instance of VectMap class
