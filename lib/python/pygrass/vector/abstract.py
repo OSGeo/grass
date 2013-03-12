@@ -70,8 +70,10 @@ class Info(object):
 
     """
     def __init__(self, name, mapset='', layer=None):
+        self._name = None
+        self._mapset = None
         # Set map name and mapset
-        self._name = name
+        self.name = name
         self.mapset = mapset
         self.c_mapinfo = ctypes.pointer(libvect.Map_info())
         self._topo_level = 1
@@ -98,9 +100,18 @@ class Info(object):
 
     name = property(fget=_get_name, fset=_set_name)
 
-#    @property
-#    def mapset(self):
-#        return libvect.Vect_get_mapset(self.c_mapinfo)
+    def _get_mapset(self):
+        """Private method to obtain the Vector name"""
+        return self._mapset
+
+    def _set_mapset(self, mapset):
+        """Private method to change the Vector name"""
+        if mapset:
+            self._mapset = mapset
+        else:
+            self._mapset = ''
+
+    mapset = property(fget=_get_mapset, fset=_set_mapset)
 
     def _get_organization(self):
         """Private method to obtain the Vector organization"""
