@@ -85,8 +85,8 @@ int main(int argc, char **argv)
 	stat = sel(driver, &stmt);
     }
     else { /* -> parms.input */
-        stat = OK;
-        while (stat == OK && get_stmt(fd, &stmt)) {
+        stat = DB_OK;
+        while (stat == DB_OK && get_stmt(fd, &stmt)) {
             if (!stmt_is_empty(&stmt))
                 stat = sel(driver, &stmt);
         }
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     db_close_database(driver);
     db_shutdown_driver(driver);
 
-    exit(stat == OK ? EXIT_SUCCESS : EXIT_FAILURE);
+    exit(stat == DB_OK ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 
@@ -113,9 +113,9 @@ int sel(dbDriver * driver, dbString * stmt)
     int more;
 
     if (db_open_select_cursor(driver, stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
-	return ERROR;
+	return DB_FAILED;
     if (parms.test_only)
-	return OK;
+	return DB_OK;
 
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
@@ -125,7 +125,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	    print_column_definition(column);
 	}
 
-	return OK;
+	return DB_OK;
     }
 
     if (parms.output && strcmp(parms.output, "-") != 0) { 
@@ -150,7 +150,7 @@ int sel(dbDriver * driver, dbString * stmt)
     /* fetch the data */
     while (TRUE) {
 	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-	    return ERROR;
+	    return DB_FAILED;
 	if (!more)
 	    break;
 
@@ -175,7 +175,7 @@ int sel(dbDriver * driver, dbString * stmt)
 	    fprintf(stdout, "%s\n", parms.vs);
     }
 
-    return OK;
+    return DB_OK;
 }
 
 
