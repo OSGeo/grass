@@ -87,7 +87,6 @@ WINDRES = windres
 FMODE_OBJ = $(BASE_LIBDIR)/fmode.o
 MANIFEST_OBJ = $(OBJDIR)/$(basename $(notdir $@)).manifest.res
 MANIFEST = internal
-LDFLAGS += -lxdr -liberty -lws2_32
 endif
 
 # lexical analyzer and default options
