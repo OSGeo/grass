@@ -34,7 +34,8 @@ for fname in htmlfiles:
     except:
         continue
     for key in keys:
-        key = key.strip().title()
+        key = key.strip()
+        key = "%s%s" % (key[0].upper(), key[1:])
         if key not in keywords.keys():
             keywords[key] = []
             keywords[key].append(fname)
@@ -49,11 +50,11 @@ for black in blacklist:
 
 keywordsfile = open(os.path.join(path, 'keywords.html'), 'w')
 keywordsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
-                        "%s Reference Manual: Keyword index" % grass_version))
+                        "%s Reference Manual: Keywords index" % grass_version))
 keywordsfile.write(headerkeywords_tmpl)
 for key, values in sorted(keywords.iteritems()):
     keyword_line = "<li><b>%s</b>:" % key
-    for value in values:
+    for value in sorted(values):
         keyword_line += ' <a href="%s">%s</a>,' % (value, value.replace('.html',
                                                                         ''))
     keyword_line = keyword_line.rstrip(',')

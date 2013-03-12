@@ -162,7 +162,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
 
 footer_tmpl = string.Template(\
 r"""<hr>
-<p><a href="${index_url}">Help Index</a> | <a href="topics.html">Topics Index</a> | <a href="full_index.html">Full Index</a></p>
+<p><a href="${index_url}">Help Index</a> | <a href="topics.html">Topics Index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full Index</a></p>
 <p>&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 </body>
 </html>
