@@ -52,16 +52,17 @@ keywordsfile = open(os.path.join(path, 'keywords.html'), 'w')
 keywordsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
                         "%s Reference Manual: Keywords index" % grass_version))
 keywordsfile.write(headerkeywords_tmpl)
+keywordsfile.write('<dl>')
 for key, values in sorted(keywords.iteritems()):
-    keyword_line = "<li><b>%s</b>:" % key
+    keyword_line = "<dt><b>%s</b></dt><dd>" % key
     for value in sorted(values):
         keyword_line += ' <a href="%s">%s</a>,' % (value, value.replace('.html',
                                                                         ''))
     keyword_line = keyword_line.rstrip(',')
-    keyword_line += '</li>\n'
+    keyword_line += '</dd>\n'
     keywordsfile.write(keyword_line)
 
-keywordsfile.write("</ul>\n")
+keywordsfile.write("</dl>\n")
 write_html_footer(keywordsfile, "index.html", year)  
 keywordsfile.close()
     

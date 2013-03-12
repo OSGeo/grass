@@ -266,7 +266,6 @@ r"""
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade> 
 <h2>Keywords - Index of GRASS GIS modules</h2>
-<ul>
 """
 #"
 
