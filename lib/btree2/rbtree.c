@@ -37,7 +37,9 @@
 static struct RB_NODE *rbtree_single(struct RB_NODE *, int);
 static struct RB_NODE *rbtree_double(struct RB_NODE *, int);
 static void *rbtree_first(struct RB_TRAV *);
+static void *rbtree_last(struct RB_TRAV *trav);
 static void *rbtree_next(struct RB_TRAV *);
+static void *rbtree_previous(struct RB_TRAV *);
 static struct RB_NODE *rbtree_make_node(size_t, void *);
 static int is_red(struct RB_NODE *);
 
@@ -297,6 +299,32 @@ void *rbtree_traverse(struct RB_TRAV *trav)
     }
 }
 
+/* traverse the tree in descending order
+ * useful to get all items in the tree non-recursively
+ * struct RB_TRAV *trav needs to be initialized first
+ * returns pointer to data, NULL when finished
+ */
+void *rbtree_traverse_backwd(struct RB_TRAV *trav)
+{
+    assert(trav);
+
+    if (trav->curr_node == NULL) {
+	if (trav->first)
+	    G_debug(1, "RB tree: empty tree");
+	else
+	    G_debug(1, "RB tree: finished traversing");
+
+	return NULL;
+    }
+
+    if (!trav->first)
+	return rbtree_previous(trav);
+    else {
+	trav->first = 0;
+	return rbtree_last(trav);
+    }
+}
+
 /* find start point to traverse the tree in ascending order
  * useful to get a selection of items in the tree
  * magnitudes faster than traversing the whole tree
@@ -359,12 +387,26 @@ void *rbtree_traverse_start(struct RB_TRAV *trav, const void *data)
 /* start traversing the tree
  * returns pointer to smallest data item
  */
-void *rbtree_first(struct RB_TRAV *trav)
+static void *rbtree_first(struct RB_TRAV *trav)
 {
     /* get smallest item */
     while (trav->curr_node->link[0] != NULL) {
 	trav->up[trav->top++] = trav->curr_node;
 	trav->curr_node = trav->curr_node->link[0];
+    }
+
+    return trav->curr_node->data;	/* return smallest item */
+}
+
+/* start traversing the tree
+ * returns pointer to largest data item
+ */
+static void *rbtree_last(struct RB_TRAV *trav)
+{
+    /* get smallest item */
+    while (trav->curr_node->link[1] != NULL) {
+	trav->up[trav->top++] = trav->curr_node;
+	trav->curr_node = trav->curr_node->link[1];
     }
 
     return trav->curr_node->data;	/* return smallest item */
@@ -398,6 +440,43 @@ void *rbtree_next(struct RB_TRAV *trav)
 	    last = trav->curr_node;
 	    trav->curr_node = trav->up[--trav->top];
 	} while (last == trav->curr_node->link[1]);
+    }
+
+    if (trav->curr_node != NULL) {
+	return trav->curr_node->data;
+    }
+    else
+	return NULL;		/* finished traversing */
+}
+
+/* continue traversing the tree in descending order
+ * returns pointer to data item, NULL when finished
+ */
+void *rbtree_previous(struct RB_TRAV *trav)
+{
+    if (trav->curr_node->link[0] != NULL) {
+	/* something on the left side: smaller item */
+	trav->up[trav->top++] = trav->curr_node;
+	trav->curr_node = trav->curr_node->link[0];
+
+	/* go down, find largest item in this branch */
+	while (trav->curr_node->link[1] != NULL) {
+	    trav->up[trav->top++] = trav->curr_node;
+	    trav->curr_node = trav->curr_node->link[1];
+	}
+    }
+    else {
+	/* at largest item in this branch, go back up */
+	struct RB_NODE *last;
+
+	do {
+	    if (trav->top == 0) {
+		trav->curr_node = NULL;
+		break;
+	    }
+	    last = trav->curr_node;
+	    trav->curr_node = trav->up[--trav->top];
+	} while (last == trav->curr_node->link[0]);
     }
 
     if (trav->curr_node != NULL) {
