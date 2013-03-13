@@ -1301,10 +1301,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                 idx = i
                             
                             if column['ctype'] != types.StringType:
-                                tlist.itemDataMap[item][idx] = column['ctype'] (value)
+                                tlist.itemDataMap[item][idx] = column['ctype'] (values[i])
                             else: # -> string
                                 tlist.itemDataMap[item][idx] = values[i]
-                        except:
+                        except ValueError:
                             raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") % \
                                                  {'value' : str(values[i]),
                                                   'type' : column['type']})
