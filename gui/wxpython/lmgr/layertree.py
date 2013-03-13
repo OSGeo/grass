@@ -31,7 +31,7 @@ except ImportError:
 from grass.script import core as grass
 
 from core                 import globalvar
-from gui_core.dialogs     import SqlQueryFrame, SetOpacityDialog, EVT_APPLY_OPACITY
+from gui_core.dialogs     import SqlQueryFrame, SetOpacityDialog
 from gui_core.forms       import GUI
 from mapdisp.frame        import MapFrame
 from core.render          import Map
@@ -759,16 +759,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         dlg = SetOpacityDialog(self, opacity = current_opacity,
                                title = _("Set opacity of <%s>") % maplayer.GetName())
+        dlg.applyOpacity.connect(lambda value:
+                                 self.ChangeLayerOpacity(layer=self.layer_selected, value=value))
         dlg.CentreOnParent()
-        dlg.Bind(EVT_APPLY_OPACITY, self.OnApplyLayerOpacity)
 
         if dlg.ShowModal() == wx.ID_OK:
             self.ChangeLayerOpacity(layer = self.layer_selected, value = dlg.GetOpacity())
         dlg.Destroy()
-
-    def OnApplyLayerOpacity(self, event):
-        """!Handles EVT_APPLY_OPACITY event."""
-        self.ChangeLayerOpacity(layer = self.layer_selected, value = event.value)
 
     def ChangeLayerOpacity(self, layer, value):
         """!Change opacity value of layer

@@ -45,6 +45,8 @@ from wx.lib.newevent import NewEvent
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from grass.pydispatch.signal import Signal
+
 from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
@@ -53,9 +55,6 @@ from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED, GL
 from core.utils       import GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
-
-wxApplyMapLayers, EVT_APPLY_MAP_LAYERS = NewEvent()
-wxApplyOpacity, EVT_APPLY_OPACITY = NewEvent()
 
 class SimpleDialog(wx.Dialog):
     def __init__(self, parent, title, id = wx.ID_ANY,
@@ -1162,6 +1161,9 @@ class MapLayersDialogBase(wx.Dialog):
                            style = style, **kwargs)
         
         self.parent = parent # GMFrame or ?
+        
+        self.applyAddingMapLayers = Signal('MapLayersDialogBase.applyAddingMapLayers')
+        
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
         
         # dialog body
@@ -1447,8 +1449,8 @@ class MapLayersDialog(MapLayersDialogBase):
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
 
     def OnApply(self, event):
-        event = wxApplyMapLayers(mapLayers = self.GetMapLayers(), ltype = self.GetLayerType(cmd = True))
-        wx.PostEvent(self, event)
+        self.applyAddingMapLayers.emit(mapLayers = self.GetMapLayers(),
+                                       ltype = self.GetLayerType(cmd = True))
 
 class MapLayersDialogForGroups(MapLayersDialogBase):
     """!Subclass of MapLayersDialogBase used for specyfying maps in an imagery group. 
@@ -2088,6 +2090,7 @@ class SetOpacityDialog(wx.Dialog):
         super(SetOpacityDialog, self).__init__(parent, id = id, pos = pos,
                                                size = size, style = style, title = title)
 
+        self.applyOpacity = Signal('SetOpacityDialog.applyOpacity')
         panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -2149,8 +2152,8 @@ class SetOpacityDialog(wx.Dialog):
         return opacity
 
     def OnApply(self, event):
-        event = wxApplyOpacity(value = self.GetOpacity())
-        wx.PostEvent(self, event)
+        self.applyOpacity.emit(value = self.GetOpacity())
+
 
 def GetImageHandlers(image):
     """!Get list of supported image handlers"""
