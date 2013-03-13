@@ -398,7 +398,7 @@ class VirtualAttributeList(wx.ListCtrl,
             self.popupID14 = wx.NewId()
             popupMenu.Append(self.popupID14, text = _("Add column"))
             if not self.dbMgrData['editable']:
-              popupMenu.Enable(self.popupID14, False)
+                popupMenu.Enable(self.popupID14, False)
 
         if not self.dbMgrData['editable']:
             popupMenu.Enable(self.popupID13, False)
@@ -596,7 +596,7 @@ class DbMgrBase:
         if not self.mapdisplay:
             pass
         elif self.mapdisplay.tree and \
-           self.dbMgrData['treeItem'] and not self.dbMgrData['vectName']:
+            self.dbMgrData['treeItem'] and not self.dbMgrData['vectName']:
             maptree = self.mapdisplay.tree
             name = maptree.GetLayerInfo(self.dbMgrData['treeItem'], key = 'maplayer').GetName()
             self.dbMgrData['vectName'] = name
@@ -607,9 +607,9 @@ class DbMgrBase:
         if self.dbMgrData['vectName']:
             mapInfo = grass.find_file(name = self.dbMgrData['vectName'], element = 'vector')
         if not mapInfo or mapInfo['mapset'] != grass.gisenv()['MAPSET']:
-             self.dbMgrData['editable'] = False
+            self.dbMgrData['editable'] = False
         else:
-             self.dbMgrData['editable'] = True
+            self.dbMgrData['editable'] = True
         
         self.cmdLog = log    # self.parent.goutput
 
@@ -646,9 +646,9 @@ class DbMgrBase:
         # the current mapset
         mapInfo = grass.find_file(name = self.dbMgrData['vectName'], element = 'vector')
         if not mapInfo or mapInfo['mapset'] != grass.gisenv()['MAPSET']:
-             self.dbMgrData['editable'] = False
+            self.dbMgrData['editable'] = False
         else:
-             self.dbMgrData['editable'] = True
+            self.dbMgrData['editable'] = True
 
         # 'manage layers page
         if self.pages['manageLayer']:
@@ -1139,8 +1139,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlReduce = self.sqlBestSize[0] > size[0] 
         if (sqlReduce and self.layerPage[layer]['sqlIsReduced']) or \
            (not sqlReduce and not self.layerPage[layer]['sqlIsReduced']):
-           event.Skip()
-           return
+            event.Skip()
+            return
 
         wherePanel = sqlNtb.FindWindowByName('wherePanel')
         btnApply = sqlNtb.FindWindowByName('btnApply')
