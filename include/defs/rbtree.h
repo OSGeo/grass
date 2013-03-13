@@ -12,6 +12,7 @@ void *rbtree_find(struct RB_TREE *, const void *);
 /* tree traversal functions */
 int rbtree_init_trav(struct RB_TRAV *, struct RB_TREE *);
 void* rbtree_traverse(struct RB_TRAV *);
+void *rbtree_traverse_backwd(struct RB_TRAV *trav);
 void *rbtree_traverse_start(struct RB_TRAV *, const void *);
 
 /* debug tree from given node downwards */
