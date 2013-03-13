@@ -53,14 +53,14 @@ static int compare_cats(struct line_cats *ACats, struct line_cats *BCats)
 /* merge a given line with all other lines of the same type and 
  * with the same categories */
 static int merge_line(struct Map_info *Map, int line,
-		      struct line_pnts *MPoints)
+		      struct line_pnts *MPoints, struct line_cats *MCats)
 {
     int nlines, i, first, last, next_line, curr_line;
     int merged = 0, newl = 0;
     int next_node, direction, node_n_lines, type, ltype, lines_type;
     static struct ilist *List = NULL;
     static struct line_pnts *Points = NULL;
-    static struct line_cats *MCats = NULL, *Cats = NULL;
+    static struct line_cats *Cats = NULL;
     type = GV_LINE;
 
     nlines = Vect_get_num_lines(Map);
@@ -69,8 +69,6 @@ static int merge_line(struct Map_info *Map, int line,
 	Points = Vect_new_line_struct();
     if (!Cats)
 	Cats = Vect_new_cats_struct();
-    if (!MCats)
-	MCats = Vect_new_cats_struct();
     if (!List)
 	List = Vect_new_list();
 
@@ -87,7 +85,7 @@ static int merge_line(struct Map_info *Map, int line,
     if (!(ltype & type))
 	return 0;
 	
-    Vect_read_line(Map, NULL, MCats, line);
+    Vect_read_line(Map, MPoints, MCats, line);
 
     /* special cases:
      *  - loop back to start boundary via several other boundaries
@@ -281,7 +279,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	if (!Vect_line_alive(Tmp, line))
 	    continue;
 
-	ltype = Vect_read_line(Tmp, Points, Cats, line);
+	ltype = Vect_get_line_type(Tmp, line);
 
 	if (ltype == GV_BOUNDARY) {	/* No more needed */
 	    continue;
@@ -308,7 +306,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	 */
 
 	/* merge here */
-	merge_line(Tmp, line, Points);
+	merge_line(Tmp, line, Points, Cats);
 
 	G_debug(3, "line = %d", line);
 
