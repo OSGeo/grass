@@ -470,7 +470,8 @@ class Module(object):
         # check for extra kargs, set attribute and remove from dictionary
         #
         if 'flags' in kargs:
-            self.flags = kargs['flags']
+            for flg in kargs['flags']:
+                self.flags[flg].value = True
             del(kargs['flags'])
         if 'run_' in kargs:
             self.run_ = kargs['run_']
