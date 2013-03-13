@@ -115,7 +115,7 @@ def main():
 	grass.verbose(_("Creating table with columns (%s)...") % column_def)
         
         sql = "CREATE TABLE %s (%s)" % (table, column_def)
-        if grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql) != 0:
+        if grass.run_command('db.execute', database = database, driver = driver, sql = sql) != 0:
             grass.fatal(_("Unable to create table <%s>") % table)
     
     # connect the map to the DB:
