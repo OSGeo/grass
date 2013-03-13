@@ -337,8 +337,8 @@ class Info(object):
                 # add the new link
                 self.dblinks.add(link)
                 # create the table
-                table = self.get_table()
-                table.columns.create(tab_cols)
+                table = link.table()
+                table.create(tab_cols)
                 table.conn.commit()
 
         # check the C function result.
@@ -351,7 +351,7 @@ class Info(object):
             self.table = None
             self.n_lines = 0
         else:
-            self.layer = self.dblinks.by_layer(layer)
+            self.layer = self.dblinks.by_layer(layer).layer
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
         self.writable = self.mapset == functions.getenv("MAPSET")
