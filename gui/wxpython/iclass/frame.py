@@ -1249,12 +1249,16 @@ class MapManager:
         # works for first layer only
         oldOpacity = layers[0].GetOpacity()
         dlg = SetOpacityDialog(self.frame, opacity = oldOpacity)
+        dlg.applyOpacity.connect(lambda value:
+                                 self._changeOpacity(layer=layers[0], opacity=value))
         
         if dlg.ShowModal() == wx.ID_OK:
-            self.map.ChangeOpacity(layer = layers[0], opacity = dlg.GetOpacity())
+            self._changeOpacity(layer=layers[0], opacity=dlg.GetOpacity())
             
         dlg.Destroy()
-        
+
+    def _changeOpacity(self, layer, opacity):
+        self.map.ChangeOpacity(layer=layer, opacity=opacity)
         self.frame.Render(self.mapWindow)
         
     def _addSuffix(self, name):

@@ -34,7 +34,7 @@ import grass.temporal as tgis
 from core.gcmd import GMessage, GError, GException
 from core import globalvar
 from gui_core import gselect
-from gui_core.dialogs import MapLayersDialog, EVT_APPLY_MAP_LAYERS, GetImageHandlers
+from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from core.settings import UserSettings
 
 from utils import TemporalMode, validateTimeseriesName, validateMapNames
@@ -457,7 +457,8 @@ class InputDialog(wx.Dialog):
             index = 2
             
         dlg = MapLayersDialog(self, title = _("Select raster maps for animation"))
-        dlg.Bind(EVT_APPLY_MAP_LAYERS, self.OnApplyMapLayers)
+        dlg.applyAddingMapLayers.connect(lambda mapLayers:
+                                         self.dataSelect.SetValue(','.join(mapLayers)))
         dlg.layerType.SetSelection(index)
         dlg.LoadMapLayers(dlg.GetLayerType(cmd = True),
                            dlg.mapset.GetStringSelection())
@@ -465,9 +466,6 @@ class InputDialog(wx.Dialog):
             self.dataSelect.SetValue(','.join(dlg.GetMapLayers()))
 
         dlg.Destroy()
-
-    def OnApplyMapLayers(self, event):
-        self.dataSelect.SetValue(','.join(event.mapLayers))
 
     def _update(self):
         self.animationData.name = self.nameCtrl.GetValue()

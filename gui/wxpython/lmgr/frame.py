@@ -55,7 +55,6 @@ from core.gconsole         import GConsole, \
     EVT_WRITE_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
 from gui_core.goutput      import GConsoleWindow, EVT_GC_CONTENT_CHANGED, GC_SEARCH, GC_PROMPT
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
-from gui_core.dialogs      import EVT_APPLY_MAP_LAYERS
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
 from gui_core.menu         import Menu, SearchModuleWindow
@@ -1621,15 +1620,12 @@ class GMFrame(wx.Frame):
     def OnAddMaps(self, event = None):
         """!Add selected map layers into layer tree"""
         dialog = MapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
-        dialog.Bind(EVT_APPLY_MAP_LAYERS, self.OnApplyMapLayers)
+        dialog.applyAddingMapLayers.connect(self.AddMaps)
         val = dialog.ShowModal()
         
         if val == wx.ID_OK:
             self.AddMaps(dialog.GetMapLayers(), dialog.GetLayerType(cmd = True))
         dialog.Destroy()
-        
-    def OnApplyMapLayers(self, event):
-        self.AddMaps(mapLayers = event.mapLayers, ltype = event.ltype)
 
     def AddMaps(self, mapLayers, ltype, check = False):
         """!Add map layers to layer tree.
