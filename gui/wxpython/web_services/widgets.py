@@ -48,24 +48,24 @@ sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms"))
 
 from wms_base import WMSDriversInfo
 
-wxOnCapParsed, EVT_CAP_PARSED = NewEvent()
+from grass.pydispatch.signal import Signal
 
 class WSPanel(wx.Panel):
-    def __init__(self, parent, receiver, web_service, **kwargs):
+    def __init__(self, parent, web_service, **kwargs):
         """!Show data from capabilities file.
 
-        Events: EVT_CAP_PARSED - this event is released when capabilities file is downloaded 
-                                 (after ConnectToServer method was called)
+        Signal: capParsed - this signal is emitted when capabilities file is downloaded 
+                            (after ConnectToServer method was called)
 
         @param parent       - parent widget
-        @param receiver     - receives EVT_CAP_PARSED event
         @param web_service  - web service to be panel generated for
         """
         wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
 
         self.parent = parent
         self.ws = web_service
-        self.receiver = receiver
+        
+        self.capParsed = Signal('WSPanel.capParsed')
 
         # stores widgets, which represents parameters/flags of d.wms
         self.params = {}
@@ -458,7 +458,7 @@ class WSPanel(wx.Panel):
         self.ws_cmdl = self.ws_drvs[self.ws]['cmd'] + conn_cmd
 
     def OnCapDownloadDone(self, event):
-        """!Process donwloaded capabilities file and emits EVT_CAP_PARSED (see class constructor).
+        """!Process donwloaded capabilities file and emits capParsed signal (see class constructor).
         """
         if event.pid != self.currentPid:
             return
@@ -474,7 +474,7 @@ class WSPanel(wx.Panel):
         self._parseCapFile(self.cap_file)
 
     def _parseCapFile(self, cap_file):
-        """!Parse capabilities data and emits EVT_CAP_PARSED (see class constructor).
+        """!Parse capabilities data and emits capParsed signal (see class constructor).
         """ 
         try:
             self.cap = self.ws_drvs[self.ws]['cap_parser'](cap_file)
@@ -502,7 +502,7 @@ class WSPanel(wx.Panel):
         self._postCapParsedEvt(None)
 
     def ParseCapFile(self, url, username, password, cap_file = None,):
-        """!Parse capabilities data and emits EVT_CAP_PARSED (see class constructor).
+        """!Parse capabilities data and emits capParsed signal (see class constructor).
         """ 
         self._prepareForNewConn(url, username, password)
 
@@ -591,8 +591,7 @@ class WSPanel(wx.Panel):
     def _postCapParsedEvt(self, error_msg):
         """!Helper function
         """
-        cap_parsed_event = wxOnCapParsed(error_msg = error_msg)
-        wx.PostEvent(self.receiver, cap_parsed_event)
+        self.capParsed.emit(error_msg=error_msg)
 
     def CreateCmd(self):
         """!Create d.wms cmd from values of panels widgets 
