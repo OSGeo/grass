@@ -32,7 +32,7 @@ import wx.lib.mixins.listctrl as listmix
 from core                 import globalvar
 from core                 import utils
 from core.modulesdata     import ModulesData
-from gui_core.widgets     import SearchModuleWidget, EVT_MODULE_SELECTED, SimpleValidator
+from gui_core.widgets     import SearchModuleWidget, SimpleValidator
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt      import GPromptSTC, EVT_GPROMPT_RUN_CMD
@@ -165,9 +165,8 @@ class ModelSearchDialog(wx.Dialog):
         self.search = SearchModuleWidget(parent = self.panel,
                                          modulesData = modulesData,
                                          showTip = True)
-        self.search.Bind(EVT_MODULE_SELECTED,
-                             lambda event:
-                                 self.cmd_prompt.SetTextAndFocus(event.name + ' '))
+        self.search.moduleSelected.connect(lambda name:
+                                           self.cmd_prompt.SetTextAndFocus(name + ' '))
         wx.CallAfter(self.cmd_prompt.SetFocus)
         
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)

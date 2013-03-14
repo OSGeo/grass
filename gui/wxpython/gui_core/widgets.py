@@ -845,16 +845,18 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCt
         event.Skip()
 
 
-gModuleSelected, EVT_MODULE_SELECTED = NewEvent()
-
-
 class SearchModuleWidget(wx.Panel):
-    """!Search module widget (used in SearchModuleWindow)"""
+    """!Search module widget (used in SearchModuleWindow)
+        
+    Signal moduleSelected - attribute 'name' is module name
+    """
     def __init__(self, parent, modulesData, id = wx.ID_ANY,
                  showChoice = True, showTip = False, **kwargs):
         self.showTip = showTip
         self.showChoice = showChoice
         self.modulesData = modulesData
+        
+        self.moduleSelected = Signal('SearchModuleWidget.moduleSelected')
 
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
 
@@ -960,8 +962,7 @@ class SearchModuleWidget(wx.Panel):
         """!Module selected from choice, update command prompt"""
         cmd  = event.GetString().split(' ', 1)[0]
 
-        moduleEvent = gModuleSelected(name = cmd)
-        wx.PostEvent(self, moduleEvent)
+        self.moduleSelected.emit(name = cmd)
 
         desc = self.modulesData.GetCommandDesc(cmd)
         if self.showTip:

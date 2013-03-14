@@ -34,7 +34,7 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.utils       import SetAddOnPath
 from gui_core.forms   import GUI
-from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget, EVT_MODULE_SELECTED
+from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget
 
 
 class ExtensionModulesData(object):
@@ -148,7 +148,7 @@ class InstallExtensionWindow(wx.Frame):
         self.search = SearchModuleWidget(parent = self.panel, modulesData = self.modulesData,
                                          showChoice = False)
         self.search.SetSelection(0)
-        self.search.Bind(EVT_MODULE_SELECTED, self.OnShowItem)
+        self.search.moduleSelected.connect(lambda name: self.OnShowItem(None))
         # show text in statusbar when notification appears
         self.search.showNotification.connect(lambda message: self.SetStatusText(message))
 
