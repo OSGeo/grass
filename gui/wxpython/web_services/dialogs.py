@@ -37,8 +37,7 @@ from core.utils       import GetSettingsPath, CmdToTuple, CmdTupleToList
 from core.gconsole    import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from gui_core.gselect import Select
-from gui_core.widgets import ManageSettingsWidget,\
-                             EVT_SETTINGS_CHANGED, EVT_SETTINGS_SAVING, EVT_SETTINGS_LOADED
+from gui_core.widgets import ManageSettingsWidget
 
 from web_services.widgets import WSPanel, EVT_CAP_PARSED
 
@@ -145,9 +144,9 @@ class WSDialogBase(wx.Dialog):
         self.server.Bind(wx.EVT_TEXT, self.OnServer)
         self.layerName.Bind(wx.EVT_TEXT, self.OnOutputLayerName)
 
-        self.settsManager.Bind(EVT_SETTINGS_CHANGED, self.OnSettingsChanged)
-        self.settsManager.Bind(EVT_SETTINGS_SAVING, self.OnSettingsSaving)
-        self.settsManager.Bind(EVT_SETTINGS_LOADED, self.OnSettingsLoaded)
+        self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
+        self.settsManager.settingsLoaded.connect(self.OnSettingsLoaded)
+        self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
 
         self.Bind(EVT_CAP_PARSED, self.OnPanelCapParsed)
 
@@ -273,7 +272,7 @@ class WSDialogBase(wx.Dialog):
         pane.SetSizer(adv_conn_sizer)
         adv_conn_sizer.Fit(pane)
 
-    def OnSettingsSaving(self, event):
+    def OnSettingsSaving(self, name):
         """!Check if required data are filled before setting save is performed.
         """
         server = self.server.GetValue().strip()
@@ -285,12 +284,10 @@ class WSDialogBase(wx.Dialog):
         self.settsManager.SetDataToSave((server,
                                          self.username.GetValue(),
                                          self.password.GetValue()))
-        event.Skip()
+        self.settsManager.SaveSettings(name)
 
-    def OnSettingsChanged(self, event):
+    def OnSettingsChanged(self, data):
         """!Update widgets according to chosen settings"""
-        data = event.data
-
         # data list: [server, username, password]
         if len < 3:
             return
@@ -305,10 +302,10 @@ class WSDialogBase(wx.Dialog):
         else:
             self.adv_conn.Collapse(True)
 
-    def OnSettingsLoaded(self, event):
+    def OnSettingsLoaded(self, settings):
         """!If settings are empty set default servers
         """
-        if not event.settings:
+        if not settings:
             self.settsManager.SetSettings(self.default_servers)
 
     def OnClose(self, event):

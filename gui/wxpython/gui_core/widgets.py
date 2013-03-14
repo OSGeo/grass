@@ -52,16 +52,12 @@ except ImportError:
 from grass.pydispatch.signal import Signal
 
 from core        import globalvar
-from core.gcmd   import GMessage
+from core.gcmd   import GMessage, GError
 from core.debug  import Debug
 
 from wx.lib.newevent import NewEvent
 wxSymbolSelectionChanged, EVT_SYMBOL_SELECTION_CHANGED  = NewEvent()
 
-# ManageSettingsWidget
-wxOnSettingsLoaded, EVT_SETTINGS_LOADED = NewEvent()
-wxOnSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
-wxOnSettingsSaving, EVT_SETTINGS_SAVING = NewEvent()
 
 class NotebookController:
     """!Provides handling of notebook page names.
@@ -979,21 +975,22 @@ class ManageSettingsWidget(wx.Panel):
     """!Widget which allows loading and saving settings into file."""
     def __init__(self, parent, settingsFile, id = wx.ID_ANY):
         """
-        Events:
-            EVT_SETTINGS_CHANGED - called when users changes setting
-                                - event object has attribute 'data', with chosen setting data
-            EVT_SETTINGS_SAVING - called when settings are saving
-                                - If you bind instance of ManageSettingsWidget with this event,
-                                  you can use SetDataToSave method to set data for save and then call 
-                                  Skip() to save the data.
-                                  If you do not call Skip(), the data will not be saved. 
-            EVT_SETTINGS_LOADED - called when settings are loaded
-                                - event object has attribute 'settings', which is dict with loaded settings
-                                  {nameofsetting : settingdata, ....}
+        Signals:
+            settingsChanged - called when users changes setting
+                            - attribute 'data' with chosen setting data
+            settingsSaving - called when settings are saving
+                           - attribute 'name' with chosen settings name
+            settingsLoaded - called when settings are loaded
+                           - attribute 'settings' is dict with loaded settings
+                             {nameofsetting : settingdata, ....}
 
         @param settingsFile - path to file, where settings will be saved and loaded from
         """
         self.settingsFile = settingsFile
+
+        self.settingsChanged = Signal('ManageSettingsWidget.settingsChanged')
+        self.settingsSaving = Signal('ManageSettingsWidget.settingsSaving')
+        self.settingsLoaded = Signal('ManageSettingsWidget.settingsLoaded')
 
         wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
 
@@ -1009,15 +1006,12 @@ class ManageSettingsWidget(wx.Panel):
         self.btnSettingsDel.Bind(wx.EVT_BUTTON, self.OnSettingsDelete)
         self.btnSettingsSave.SetToolTipString(_("Delete currently selected settings"))
 
-        self.Bind(EVT_SETTINGS_SAVING, self.OnSettingsSaving)
-
         # escaping with '$' character - index in self.esc_chars
         self.e_char_i = 0
         self.esc_chars = ['$', ';']
 
         self._settings = self._loadSettings() # -> self.settingsChoice.SetItems()
-        event = wxOnSettingsLoaded(settings = self._settings)
-        wx.PostEvent(self, event)
+        self.settingsLoaded.emit(settings=self._settings)
 
         self.data_to_save = []
 
@@ -1053,50 +1047,44 @@ class ManageSettingsWidget(wx.Panel):
             return
 
         data = self._settings[name]
-        event = wxOnSettingsChanged(data = data)
-        wx.PostEvent(self, event)
+        self.settingsChanged.emit(data=data)
 
     def OnSettingsSave(self, event):
         """!Save settings"""
         dlg = wx.TextEntryDialog(parent = self,
                                  message = _("Name:"),
                                  caption = _("Save settings"))
-        if dlg.ShowModal() != wx.ID_OK:
-            return
-        
-        # check required params
-        if not dlg.GetValue():
-            GMessage(parent = self,
-                     message = _("Name not given, settings is not saved."))
-            return
-
-        name = dlg.GetValue()
-
-        event = wxOnSettingsSaving(name = name, dlg = dlg)
-        wx.PostEvent(self, event)
+        if dlg.ShowModal() == wx.ID_OK:
+            name = dlg.GetValue()
+            if not name:
+                GMessage(parent = self,
+                         message = _("Name not given, settings is not saved."))
+            else:
+                self.settingsSaving.emit(name=name)
+                
+            dlg.Destroy()
   
-    def OnSettingsSaving(self, event):
+    def SaveSettings(self, name):
         # check if settings item already exists
-        if event.name in self._settings:
+        if name in self._settings:
             dlgOwt = wx.MessageDialog(self, message = _("Settings <%s> already exists. "
-                                                        "Do you want to overwrite the settings?") % event.name,
+                                                        "Do you want to overwrite the settings?") % name,
                                       caption = _("Save settings"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlgOwt.ShowModal() != wx.ID_YES:
                 dlgOwt.Destroy()
                 return
 
         if self.data_to_save:
-            self._settings[event.name] = self.data_to_save
+            self._settings[name] = self.data_to_save
 
-        self.SaveSettings()
-        self.settingsChoice.SetStringSelection(event.name)
+        self._saveSettings()
+        self.settingsChoice.SetStringSelection(name)
 
         self.data_to_save = []
-        event.dlg.Destroy()
  
-    def SaveSettings(self):
-        """!Save settings"""
-        if self._saveSettings() == 0:
+    def _saveSettings(self):
+        """!Save settings and reload if successful"""
+        if self._writeSettings() == 0:
             self._settings = self._loadSettings()
 
     def SetDataToSave(self, data):
@@ -1112,7 +1100,7 @@ class ManageSettingsWidget(wx.Panel):
         @param settings - dict with all settigs {nameofsetting : settingdata, ....}
         """
         self._settings = settings
-        self.SaveSettings()
+        self._saveSettings()
 
     def OnSettingsDelete(self, event):
         """!Save settings
@@ -1124,10 +1112,10 @@ class ManageSettingsWidget(wx.Panel):
             return
         
         self._settings.pop(name)
-        if self._saveSettings() == 0:
+        if self._writeSettings() == 0:
             self._settings = self._loadSettings()
         
-    def _saveSettings(self):
+    def _writeSettings(self):
         """!Save settings into the file
 
         @return 0 on success
@@ -1192,8 +1180,7 @@ class ManageSettingsWidget(wx.Panel):
         self.settingsChoice.SetItems(sorted(data.keys()))
         fd.close()
 
-        event = wxOnSettingsLoaded(settings = data)
-        wx.PostEvent(self, event)
+        self.settingsLoaded.emit(settings=data)
 
         return data
 

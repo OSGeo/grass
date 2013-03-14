@@ -40,7 +40,7 @@ import wx.lib.colourselect    as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
 
-from wx.lib.newevent import NewEvent
+from grass.pydispatch.signal import Signal
 
 from grass.script import core as grass
 
@@ -49,8 +49,6 @@ from core.gcmd     import RunCommand, GError
 from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnvVariable
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
-
-wxSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
 
 class PreferencesBaseDialog(wx.Dialog):
     """!Base preferences dialog"""
@@ -65,6 +63,8 @@ class PreferencesBaseDialog(wx.Dialog):
         
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
                            style = style)
+        
+        self.settingsChanged = Signal('PreferencesBaseDialog.settingsChanged')
         
         # notebook
         self.notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
@@ -145,12 +145,11 @@ class PreferencesBaseDialog(wx.Dialog):
         
     def OnApply(self, event):
         """!Button 'Apply' pressed
-        Posts event EVT_SETTINGS_CHANGED.
+        Emits signal settingsChanged.
         """
         if self._updateSettings():
             self._giface.WriteLog(_('Settings applied to current session but not saved'))
-            event = wxSettingsChanged()
-            wx.PostEvent(self, event)
+            self.settingsChanged.emit()
             self.Close()
 
     def OnCloseWindow(self, event):
@@ -162,7 +161,7 @@ class PreferencesBaseDialog(wx.Dialog):
     
     def OnSave(self, event):
         """!Button 'Save' pressed
-        Posts event EVT_SETTINGS_CHANGED.
+        Emits signal settingsChanged.
         """
         if self._updateSettings():
             lang = self.settings.Get(group = 'language', key = 'locale', subkey = 'lc_all')
@@ -180,8 +179,7 @@ class PreferencesBaseDialog(wx.Dialog):
                 StoreEnvVariable(key = 'LANG', value = lang)
             else:
                 StoreEnvVariable(key = 'LANG')
-            event = wxSettingsChanged()
-            wx.PostEvent(self, event)
+            self.settingsChanged.emit()
             self.Close()
 
     def _updateSettings(self):
