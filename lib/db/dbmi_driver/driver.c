@@ -88,6 +88,9 @@ int db_driver(int argc, char *argv[])
 	    cfd++;
 	}
     }
+
+    _setmode(_fileno(stdin), _O_BINARY);
+    _setmode(_fileno(stdout), _O_BINARY);
 #endif
 
     send = stdout;
