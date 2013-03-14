@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include "procs.h"
