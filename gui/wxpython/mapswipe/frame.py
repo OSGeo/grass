@@ -26,8 +26,7 @@ from gui_core.dialogs   import GetImageHandlers
 from core.render        import Map
 from mapdisp            import statusbar as sb
 from core.debug         import Debug
-from core.gcmd          import RunCommand, GError, GMessage
-from mapdisp.statusbar  import EVT_AUTO_RENDER
+from core.gcmd          import GError, GMessage
 
 from mapswipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
 from mapswipe.mapwindow import SwipeBufferedWindow
@@ -82,7 +81,6 @@ class SwipeMapFrame(DoubleMapFrame):
         self.InitStatusbar()
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.Bind(EVT_AUTO_RENDER, self.OnAutoRenderChanged)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -160,7 +158,9 @@ class SwipeMapFrame(DoubleMapFrame):
         # fill statusbar manager
         self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
         self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
-        self.statusbarManager.AddStatusbarItem(sb.SbRender(self, statusbar = statusbar, position = 3))
+        sbRender = sb.SbRender(self, statusbar = statusbar, position = 3)
+        sbRender.autoRender.connect(self.OnAutoRenderChanged)
+        self.statusbarManager.AddStatusbarItem(sbRender)
         
         self.statusbarManager.Update()
 
@@ -233,7 +233,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self.ResetSlider()
             self.resize = False
 
-    def OnAutoRenderChanged(self, event):
+    def OnAutoRenderChanged(self, state):
         """!Auto rendering state changed."""
         style = self.splitter.GetWindowStyle()
         style ^= wx.SP_LIVE_UPDATE

@@ -44,7 +44,7 @@ from core.settings import UserSettings
 
 from grass.script  import core as grass
 
-wxAutoRender, EVT_AUTO_RENDER = NewEvent()
+from grass.pydispatch.signal import Signal
 
 class SbException:
     """! Exception class used in SbManager and SbItems"""
@@ -374,16 +374,10 @@ class SbRender(SbItem):
                                               subkey = 'enabled'))
         self.widget.Hide()
         self.widget.SetToolTip(wx.ToolTip (_("Enable/disable auto-rendering")))
-                                            
-        self.widget.Bind(wx.EVT_CHECKBOX, self.OnToggleRender)
-        
-    def OnToggleRender(self, event):
-        # (other items should call self.mapFrame.IsAutoRendered())
-        event = wxAutoRender(state = self.GetValue())
-        wx.PostEvent(self.mapFrame, event)
-        
-        if self.GetValue():
-            self.mapFrame.OnRender(None)
+                                           
+        self.autoRender = Signal('SbRender.autoRender')
+        self.widget.Bind(wx.EVT_CHECKBOX, lambda evt: 
+                                          self.autoRender.emit(state = self.GetValue()))
 
     def Update(self):
         self.Show()

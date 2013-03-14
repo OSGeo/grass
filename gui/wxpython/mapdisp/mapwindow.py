@@ -83,8 +83,6 @@ class BufferedWindow(MapWindow, wx.Window):
         # Emitted when zoom of a window is changed
         self.zoomChanged = Signal('BufferedWindow.zoomChanged')
 
-        self._giface.updateMap.connect(self.UpdateMap)
-
         # event bindings
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
         self.Bind(wx.EVT_SIZE,            self.OnSize)
