@@ -126,7 +126,10 @@ class MapFrame(SingleMapFrame):
         # fill statusbar manager
         self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
         self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
-        self.statusbarManager.AddStatusbarItem(sb.SbRender(self, statusbar = statusbar, position = 3))
+        sbRender = sb.SbRender(self, statusbar = statusbar, position = 3)
+        sbRender.autoRender.connect(lambda state: self.OnRender(None) if state else None)
+
+        self.statusbarManager.AddStatusbarItem(sbRender)
         
         self.statusbarManager.Update()
 
@@ -143,6 +146,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow2D = BufferedWindow(self, giface = self._giface, id = wx.ID_ANY,
                                           Map = self.Map, frame = self, tree = self.tree,
                                           lmgr = self._layerManager, overlays = self.decorations)
+        self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
         self.MapWindow.SetCursor(self.cursors["default"])
