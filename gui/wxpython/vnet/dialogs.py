@@ -217,7 +217,7 @@ class VNETDialog(wx.Dialog):
  
         self._mgr.AddPane(self.toolbars['analysisToolbar'],
                               wx.aui.AuiPaneInfo().
-                              Name("pointlisttools").Caption(_("Point list toolbar")).
+                              Name("analysisTools").Caption(_("Analysis toolbar")).
                               ToolbarPane().Top().Row(1).
                               Dockable(False).
                               CloseButton(False).Layer(0))
