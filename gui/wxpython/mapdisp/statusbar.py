@@ -36,8 +36,6 @@ This program is free software under the GNU General Public License
 import copy
 import wx
 
-from wx.lib.newevent import NewEvent
-
 from core          import utils
 from core.gcmd     import GMessage, RunCommand
 from core.settings import UserSettings
