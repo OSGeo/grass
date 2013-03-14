@@ -46,8 +46,6 @@ import wx.combo
 import wx.lib.buttons          as  buttons
 import wx.lib.filebrowsebutton as filebrowse
 
-from wx.lib.newevent import NewEvent
-
 from core import globalvar
 
 import grass.script as grass
@@ -61,8 +59,6 @@ from core.utils    import GetListOfLocations, GetListOfMapsets, GetFormats
 from core.utils    import GetSettingsPath, GetValidLayerName, ListSortLower
 from core.settings import UserSettings
 from core.debug    import Debug
-
-wxGdalSelect, EVT_GDALSELECT = NewEvent()
 
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
@@ -1149,7 +1145,10 @@ class FormatSelect(wx.Choice):
             }
         
         return formatToExt.get(name, '')
-        
+
+# unused code since r47938
+# wxGdalSelect, EVT_GDALSELECT = NewEvent()
+
 class GdalSelect(wx.Panel):
     def __init__(self, parent, panel, ogr = False, link = False, dest = False, 
                  default = 'file', exclude = [], envHandler = None):
@@ -1643,12 +1642,13 @@ class GdalSelect(wx.Panel):
                     grassName = GetValidLayerName(baseName.split('.', -1)[0])
                     data.append((layerId, baseName, grassName))
                     layerId += 1
-        if self.ogr:
-            dsn += '@OGR'
-        
-        evt = wxGdalSelect(dsn = dsn)
-        evt.SetId(self.input[self.dsnType][1].GetId())
-        wx.PostEvent(self.parent, evt)
+# unused code since r47938
+#        if self.ogr:
+#            dsn += '@OGR'
+#        
+#        evt = wxGdalSelect(dsn = dsn)
+#        evt.SetId(self.input[self.dsnType][1].GetId())
+#        wx.PostEvent(self.parent, evt)
         
         if self.parent.GetName() == 'MultiImportDialog':
             self.parent.list.LoadData(data)

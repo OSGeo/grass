@@ -37,7 +37,7 @@ from core.gconsole   import GConsole, \
     EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
 from gui_core.prompt import GPromptSTC, EVT_GPROMPT_RUN_CMD
 from core.settings   import UserSettings
-from gui_core.widgets import SearchModuleWidget, EVT_MODULE_SELECTED
+from gui_core.widgets import SearchModuleWidget
 from core.modulesdata import ModulesData
 
 
@@ -141,9 +141,8 @@ class GConsoleWindow(wx.SplitterWindow):
             self.MakeSearchPaneContent(self.searchPane.GetPane(), modulesData)
             self.searchPane.Collapse(True)
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
-            self.search.Bind(EVT_MODULE_SELECTED,
-                             lambda event:
-                                 self.cmdPrompt.SetTextAndFocus(event.name + ' '))
+            self.search.moduleSelected.connect(lambda name:
+                                               self.cmdPrompt.SetTextAndFocus(name + ' '))
         else:
             self.search = None
 
