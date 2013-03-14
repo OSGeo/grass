@@ -56,7 +56,6 @@ from core.gcmd   import GMessage, GError
 from core.debug  import Debug
 
 from wx.lib.newevent import NewEvent
-wxSymbolSelectionChanged, EVT_SYMBOL_SELECTION_CHANGED  = NewEvent()
 
 
 class NotebookController:
@@ -731,9 +730,15 @@ class SingleSymbolPanel(wx.Panel):
     def __init__(self, parent, symbolPath):
         """!Panel constructor
         
+        Signal symbolSelectionChanged - symbol selected
+                                      - attribute 'name' (symbol name)
+                                      - attribute 'doubleClick' (underlying cause)
+
         @param parent parent (gui_core::dialog::SymbolDialog)
         @param symbolPath absolute path to symbol
         """
+        self.symbolSelectionChanged = Signal('SingleSymbolPanel.symbolSelectionChanged')
+
         wx.Panel.__init__(self, parent, id = wx.ID_ANY, style = wx.BORDER_RAISED)
         self.SetName(os.path.splitext(os.path.basename(symbolPath))[0])
         self.sBmp = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap(symbolPath))
@@ -760,12 +765,10 @@ class SingleSymbolPanel(wx.Panel):
         self.SetBackgroundColour(self.selectColor)
         event.Skip()
         
-        event = wxSymbolSelectionChanged(name = self.GetName(), doubleClick = False)
-        wx.PostEvent(self.GetParent(), event)
+        self.symbolSelectionChanged.emit(name=self.GetName(), doubleClick=False)
         
     def OnDoubleClick(self, event):
-        event = wxSymbolSelectionChanged(name = self.GetName(), doubleClick = True)
-        wx.PostEvent(self.GetParent(), event)
+        self.symbolSelectionChanged.emit(name=self.GetName(), doubleClick=True)
         
     def Deselect(self):
         """!Panel deselected, background changes back to default"""
