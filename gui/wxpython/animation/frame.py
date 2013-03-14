@@ -34,7 +34,7 @@ from mapwindow import AnimationWindow, BitmapProvider, BitmapPool
 from controller import AnimationController
 from anim import Animation
 from toolbars import MainToolbar, AnimationToolbar, MiscToolbar
-from dialogs import SpeedDialog, EVT_SPEED_CHANGED
+from dialogs import SpeedDialog
 from utils import Orientation, ReplayMode, TemporalType
 
 
@@ -217,11 +217,8 @@ class AnimationFrame(wx.Frame):
                               timeGranularity = self.controller.GetTimeGranularity(),
                               initialSpeed = self.controller.timeTick)
             self.dialogs['speed'] = win
-            win.Bind(EVT_SPEED_CHANGED, self.OnChangeSpeed)
+            win.speedChanged.connect(self.ChangeSpeed)
             win.Show()
-
-    def OnChangeSpeed(self, event):
-        self.ChangeSpeed(ms = event.ms)
 
     def ChangeSpeed(self, ms):
         self.controller.timeTick = ms

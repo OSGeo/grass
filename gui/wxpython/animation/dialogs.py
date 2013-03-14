@@ -40,7 +40,7 @@ from core.settings import UserSettings
 from utils import TemporalMode, validateTimeseriesName, validateMapNames
 from nviztask import NvizTask
 
-SpeedChangedEvent, EVT_SPEED_CHANGED = NewEvent()
+from grass.pydispatch.signal import Signal
 
 class SpeedDialog(wx.Dialog):
     def __init__(self, parent, title = _("Adjust speed of animation"),
@@ -48,7 +48,8 @@ class SpeedDialog(wx.Dialog):
                  initialSpeed = 200):#, framesCount = None
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
                            style = wx.DEFAULT_DIALOG_STYLE)
-
+        # signal emitted when speed has changed; has attribute 'ms'
+        self.speedChanged = Signal('SpeedDialog.speedChanged')
         self.minimumDuration = minimumDuration
         # self.framesCount = framesCount
         self.defaultSpeed = initialSpeed
@@ -235,8 +236,7 @@ class SpeedDialog(wx.Dialog):
         else:
             return
 
-        event = SpeedChangedEvent(ms = ms)
-        wx.PostEvent(self, event)
+        self.speedChanged.emit(ms = ms)
 
     def _timedelta(self, unit, number):
         if unit == "years":
