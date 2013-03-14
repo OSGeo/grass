@@ -39,7 +39,7 @@ from core.gconsole    import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 from gui_core.gselect import Select
 from gui_core.widgets import ManageSettingsWidget
 
-from web_services.widgets import WSPanel, EVT_CAP_PARSED
+from web_services.widgets import WSPanel
 
 class WSDialogBase(wx.Dialog):
     """!Base class for web service dialogs. 
@@ -126,8 +126,8 @@ class WSDialogBase(wx.Dialog):
 
         for ws in self.ws_panels.iterkeys():
             self.ws_panels[ws]['panel'] =  WSPanel(parent = self.reqDataPanel,
-                                                   web_service = ws,
-                                                   receiver = self)
+                                                   web_service = ws)
+            self.ws_panels[ws]['panel'].capParsed.connect(self.OnPanelCapParsed)
 
         # buttons
         self.btn_close = wx.Button(parent = self, id = wx.ID_CLOSE)
@@ -147,8 +147,6 @@ class WSDialogBase(wx.Dialog):
         self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
         self.settsManager.settingsLoaded.connect(self.OnSettingsLoaded)
         self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
-
-        self.Bind(EVT_CAP_PARSED, self.OnPanelCapParsed)
 
     def _doLayout(self):
 
@@ -366,14 +364,14 @@ class WSDialogBase(wx.Dialog):
                                                         password = self.password.GetValue())
             self.ws_panels[ws]['panel'].Hide()
         
-    def OnPanelCapParsed(self, event):
+    def OnPanelCapParsed(self, error_msg):
         """!Called when panel has downloaded and parsed capabilities file.
         """
         # how many web service panels are finished
         self.finished_panels_num +=  1
 
-        if event.error_msg:
-            self.error_msgs += '\n' + event.error_msg
+        if error_msg:
+            self.error_msgs += '\n' + error_msg
 
         # if all are finished, show panels, which succeeded in connection
         if self.finished_panels_num == len(self.ws_panels):
@@ -733,10 +731,10 @@ class WSPropertiesDialog(WSDialogBase):
         self.LoadCapFiles(cmd = self.revert_cmd,
                           ws_cap_files = self.revert_ws_cap_files)
 
-    def OnPanelCapParsed(self, event):
+    def OnPanelCapParsed(self, error_msg):
         """!Called when panel has downloaded and parsed capabilities file.
         """
-        WSDialogBase.OnPanelCapParsed(self, event)
+        WSDialogBase.OnPanelCapParsed(self, error_msg)
 
         if self.finished_panels_num == len(self.ws_panels):
             if self.cmd_to_set:
