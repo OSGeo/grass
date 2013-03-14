@@ -43,7 +43,7 @@ from grass.script          import core as grass
 from core.gcmd             import RunCommand, GError, GMessage, GException
 from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath, GetLayerNameFromCmd, command2ltype
-from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
+from gui_core.preferences  import MapsetAccess, PreferencesDialog
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import LayerManagerMenuData
 from gui_core.widgets      import GNotebook
@@ -419,8 +419,9 @@ class GMFrame(wx.Frame):
                 else:
                     dlg.Destroy()
         
-    def OnSettingsChanged(self, event):
-        """!Here can be functions which have to be called after EVT_SETTINGS_CHANGED. 
+    def OnSettingsChanged(self):
+        """!Here can be functions which have to be called
+        after receiving settingsChanged signal. 
         Now only set copying of selected text to clipboard (in goutput).
         """
         ### self._createMenuBar() # bug when menu is re-created on the fly
@@ -1388,7 +1389,7 @@ class GMFrame(wx.Frame):
             self.dialogs['preferences'] = dlg
             self.dialogs['preferences'].CenterOnScreen()
             
-            dlg.Bind(EVT_SETTINGS_CHANGED, self.OnSettingsChanged)
+            dlg.settingsChanged.connect(self.OnSettingsChanged)
         
         self.dialogs['preferences'].ShowModal()
         

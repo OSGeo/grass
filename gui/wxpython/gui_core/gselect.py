@@ -54,7 +54,7 @@ import grass.script as grass
 import grass.temporal as tgis
 from   grass.script import task as gtask
 
-from gui_core.widgets  import ManageSettingsWidget, EVT_SETTINGS_CHANGED, EVT_SETTINGS_SAVING
+from gui_core.widgets  import ManageSettingsWidget
 
 from core.gcmd     import RunCommand, GError, GMessage
 from core.utils    import GetListOfLocations, GetListOfMapsets, GetFormats
@@ -1174,8 +1174,8 @@ class GdalSelect(wx.Panel):
         self.settsManager = ManageSettingsWidget(parent = self, 
                                                  id = wx.ID_ANY,
                                                  settingsFile = settingsFile)
-        self.settsManager.Bind(EVT_SETTINGS_CHANGED, self.OnSettingsChanged)
-        self.settsManager.Bind(EVT_SETTINGS_SAVING, self.OnSettingsSaving)
+        self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
+        self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
 
         self.inputBox = wx.StaticBox(parent = self, id = wx.ID_ANY)
         if dest:
@@ -1408,10 +1408,8 @@ class GdalSelect(wx.Panel):
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
 
-    def OnSettingsChanged(self, event):
+    def OnSettingsChanged(self, data):
         """!User changed setting"""
-        data = event.data
-
         # data list: [type, dsn, format, options]
         if len(data) == 3:
             data.append('')
@@ -1423,7 +1421,7 @@ class GdalSelect(wx.Panel):
         self.OnSetDsn(event = None, path = data[1])
         self.creationOpt.SetValue(data[3])
 
-    def OnSettingsSaving(self, event):
+    def OnSettingsSaving(self, name):
         """!Saving data"""
         if not self.GetDsn():
             GMessage(parent = self,
@@ -1433,7 +1431,7 @@ class GdalSelect(wx.Panel):
         self.settsManager.SetDataToSave((self.dsnType, self.GetDsn(),
                                          self.format.GetStringSelection(),
                                          self.creationOpt.GetValue()))
-        event.Skip()
+        self.settsManager.SaveSettings(name)
 
     def _getExtPatternGlob(self, ext):
         """!Get pattern for case-insensitive globing"""
