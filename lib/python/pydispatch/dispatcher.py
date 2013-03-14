@@ -368,7 +368,9 @@ def sendExact( signal=Any, sender=Anonymous, *arguments, **named ):
 def _removeReceiver(receiver):
 	"""Remove receiver from connections."""
 	if not sendersBack or not connections:
-		# During module cleanup the mapping will be replaced with None
+		# During module cleanup the objects will be replaced with None
+           # The order of replacing many chnage, so both variables need
+           # to be checked.
 		return False
 	backKey = id(receiver)
 	try:

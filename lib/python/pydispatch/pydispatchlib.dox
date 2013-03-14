@@ -1,4 +1,4 @@
-/*! \page pydispatch Customized pydispatcher library
+/*! \page pydispatch Customized PyDispatcher library
 
 by GRASS Development Team (http://grass.osgeo.org)
 
@@ -8,7 +8,7 @@ by GRASS Development Team (http://grass.osgeo.org)
 \section pydispatchIntro Introduction
 
 Files dispatcher.py, errors.py, robustapply.py, robust.py and saferef.py are
-part of the original pydispatcher library.
+part of the original PyDispatcher library.
 File signal.py is the object-based easy-to-use interface created for GRASS.
 
 Signals as a concept (API) does not depend on PyDispatcher,
@@ -188,9 +188,9 @@ because if you don't rely on these features, you usually write a less tangled co
 
 \section pydispatchAlternatives Alternatives
 
-There is wxPython' pubsub module which provides similar functionality to pydispatcher. However, it has two incompatible APIs which depends on the wxPython version and in the time of writing, GRASS would have to support both these APIs. The only possibility is to include pubsub into GRASS. Whether to use pydispatcher or pubsub usually depends on personal taste.
+There is wxPython's pubsub module which provides similar functionality to PyDispatcher. However, it has two incompatible APIs which depends on the wxPython version and in the time of writing, GRASS would have to support both these APIs. The only possibility is to include pubsub into GRASS. Whether to use PyDispatcher or pubsub usually depends on personal taste.
 
-There are several forks of pydispatcher, e.g. the fork in Django framework.
+There are several forks of PyDispatcher, e.g. the fork in Django framework.
 They provide the same or similar functionality.
 
 Of course it is also possible to implement this system from the scratch using e.g., observer pattern.
