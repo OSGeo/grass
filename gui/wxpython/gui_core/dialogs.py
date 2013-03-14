@@ -40,7 +40,6 @@ from bisect import bisect
 import wx
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
-from wx.lib.newevent import NewEvent
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -51,7 +50,7 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
 from gui_core.forms   import GUI
-from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED, GListCtrl, SimpleValidator
+from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator
 from core.utils       import GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
@@ -2398,7 +2397,6 @@ class SymbolDialog(wx.Dialog):
         self.panels = self._createSymbolPanels(mainPanel)
         for panel in self.panels:
             vSizer.Add(panel, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
-            panel.Bind(EVT_SYMBOL_SELECTION_CHANGED, self.SelectionChanged)
         
         mainSizer.Add(vSizer, proportion = 1, flag = wx.ALL| wx.EXPAND, border = 5)
         self.btnCancel = wx.Button(parent = mainPanel, id = wx.ID_CANCEL)
@@ -2459,6 +2457,7 @@ class SymbolDialog(wx.Dialog):
             symbolPanels = []
             for img in images:
                 iP = SingleSymbolPanel(parent = panel, symbolPath = img)
+                iP.symbolSelectionChanged.connect(self.SelectionChanged)
                 sizer.Add(item = iP, proportion = 0, flag = wx.ALIGN_CENTER)
                 symbolPanels.append(iP)
             
@@ -2492,22 +2491,22 @@ class SymbolDialog(wx.Dialog):
             self.btnOK.Disable()
             self.infoLabel.SetLabel('')
         
-    def SelectionChanged(self, event):
+    def SelectionChanged(self, name, doubleClick):
         """!Selected symbol changed."""
-        if event.doubleClick:
+        if doubleClick:
             self.EndModal(wx.ID_OK)
         # deselect all
         for i in range(len(self.panels)):
             for panel in self.symbolPanels[i]:
-                if panel.GetName() != event.name:
+                if panel.GetName() != name:
                     panel.Deselect()
                 
         self.btnOK.Enable()
         
-        self.selected = event.name
+        self.selected = name
         self.selectedDir = self.folderChoice.GetStringSelection()
         
-        self.infoLabel.SetLabel(event.name)
+        self.infoLabel.SetLabel(name)
         
     def GetSelectedSymbolName(self):
         """!Returns currently selected symbol name (e.g. 'basic/x').
