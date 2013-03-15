@@ -50,7 +50,6 @@ from gui_core.gselect   import VectorDBInfo
 from core.gcmd          import GMessage, RunCommand
 from modules.colorrules import ThematicVectorTable
 from core.settings      import UserSettings
-from nviz.animation     import EVT_ANIM_FIN, EVT_ANIM_UPDATE_IDX
 from gui_core.widgets   import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
 from gui_core.gselect   import Select
 from core.debug         import Debug
@@ -115,8 +114,8 @@ class NvizToolWindow(FN.FlatNotebook):
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         
-        self.Bind(EVT_ANIM_FIN, self.OnAnimationFinished)
-        self.Bind(EVT_ANIM_UPDATE_IDX, self.OnAnimationUpdateIndex)
+        self.mapWindow.GetAnimation().animationFinished.connect(self.OnAnimationFinished)
+        self.mapWindow.GetAnimation().animationUpdateIndex.connect(self.OnAnimationUpdateIndex)
         
         Debug.msg(3, "NvizToolWindow.__init__()")
         
@@ -2202,7 +2201,7 @@ class NvizToolWindow(FN.FlatNotebook):
         count = anim.GetFrameCount()
         self.FindWindowById(self.win['anim']['info']).SetLabel(str(count))
         
-    def OnAnimationFinished(self, event):
+    def OnAnimationFinished(self, mode):
         """!Animation finished"""
         anim = self.mapWindow.GetAnimation()
         self.UpdateFrameIndex(index = 0)
@@ -2210,7 +2209,7 @@ class NvizToolWindow(FN.FlatNotebook):
         slider = self.FindWindowById(self.win['anim']['frameIndex']['slider'])
         text = self.FindWindowById(self.win['anim']['frameIndex']['text'])
         
-        if event.mode == 'record':
+        if mode == 'record':
             count = anim.GetFrameCount()
             slider.SetMax(count)
             self.UpdateFrameCount()
@@ -2226,12 +2225,12 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
         
-    def OnAnimationUpdateIndex(self, event):
+    def OnAnimationUpdateIndex(self, index, mode):
         """!Animation: frame index changed"""
-        if event.mode == 'record':
+        if mode == 'record':
             self.UpdateFrameCount()
-        elif event.mode == 'play':
-            self.UpdateFrameIndex(index = event.index, goToFrame = False)
+        elif mode == 'play':
+            self.UpdateFrameIndex(index = index, goToFrame = False)
         
     def OnSaveAnimation(self, event):
         """!Save animation as a sequence of images"""
