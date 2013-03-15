@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     db_set_string(&table_name, parms.table);
 
     if (db_describe_table(driver, &table_name, &table) != DB_OK)
-	G_fatal_error(_("Unable to describe table <%s>"), table_name);
+	G_fatal_error(_("Unable to describe table <%s>"), db_get_string(&table_name));
 
     if (!parms.printcolnames)
 	print_table_definition(driver, table);
