@@ -24,8 +24,6 @@ import codecs
 import wx
 import wx.stc
 
-from wx.lib.newevent import NewEvent
-
 from grass.script import core as grass
 from grass.script import task as gtask
 
@@ -35,16 +33,20 @@ from core          import globalvar
 from core          import utils
 from core.gcmd     import EncodeString, DecodeString, GetRealCmd
 
-gPromptRunCmd, EVT_GPROMPT_RUN_CMD = NewEvent()
 
 class GPrompt(object):
     """!Abstract class for interactive wxGUI prompt
+    
+    Signal promptRunCmd - emitted to run command from prompt
+                        - attribute 'cmd'
 
     See subclass GPromptPopUp and GPromptSTC.
     """
     def __init__(self, parent, modulesData, updateCmdHistory):
         self.parent = parent                 # GConsole
         self.panel  = self.parent.GetPanel()
+
+        self.promptRunCmd = Signal('GPrompt.promptRunCmd')
 
         # probably only subclasses need this
         self.modulesData = modulesData
@@ -112,7 +114,7 @@ class GPrompt(object):
             cmd = utils.split(EncodeString((cmdString)))
         cmd = map(DecodeString, cmd)
 
-        wx.PostEvent(self, gPromptRunCmd(cmd = cmd))
+        self.promptRunCmd.emit(cmd=cmd)
 
         # add command to history & clean prompt
         self.UpdateCmdHistory(cmd)

@@ -35,7 +35,7 @@ from core.gcmd       import GError, EncodeString
 from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
     EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
-from gui_core.prompt import GPromptSTC, EVT_GPROMPT_RUN_CMD
+from gui_core.prompt import GPromptSTC
 from core.settings   import UserSettings
 from gui_core.widgets import SearchModuleWidget
 from core.modulesdata import ModulesData
@@ -122,9 +122,8 @@ class GConsoleWindow(wx.SplitterWindow):
         # move to the if below
         # search depends on cmd prompt
         self.cmdPrompt = GPromptSTC(parent = self, modulesData = modulesData)
-        self.cmdPrompt.Bind(EVT_GPROMPT_RUN_CMD, 
-                            lambda event:
-                                self._gconsole.RunCmd(command = event.cmd))
+        self.cmdPrompt.promptRunCmd.connect(lambda cmd:
+                                            self._gconsole.RunCmd(command=cmd))
         self.cmdPrompt.showNotification.connect(self.showNotification)
 
         if not self._gcstyle & GC_PROMPT:
