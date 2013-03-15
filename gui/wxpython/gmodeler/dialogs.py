@@ -35,7 +35,7 @@ from core.modulesdata     import ModulesData
 from gui_core.widgets     import SearchModuleWidget, SimpleValidator
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import SimpleDialog, MapLayersDialogForModeler
-from gui_core.prompt      import GPromptSTC, EVT_GPROMPT_RUN_CMD
+from gui_core.prompt      import GPromptSTC
 from gui_core.forms       import CmdPanel
 from gui_core.gselect     import Select, ElementSelect
 from gmodeler.model       import *
@@ -161,7 +161,7 @@ class ModelSearchDialog(wx.Dialog):
 
         modulesData = ModulesData()
         self.cmd_prompt = GPromptSTC(parent = self, modulesData = modulesData, updateCmdHistory = False)
-        self.cmd_prompt.Bind(EVT_GPROMPT_RUN_CMD, self.OnCommand)
+        self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
         self.search = SearchModuleWidget(parent = self.panel,
                                          modulesData = modulesData,
                                          showTip = True)
@@ -239,10 +239,10 @@ class ModelSearchDialog(wx.Dialog):
             return False
         return True
 
-    def OnCommand(self, event):
+    def OnCommand(self, cmd):
         """!Command in prompt confirmed"""
-        if self.ValidateCmd(event.cmd):
-            self._command = event.cmd
+        if self.ValidateCmd(cmd):
+            self._command = cmd
             self.EndModal(wx.ID_OK)
 
     def OnOk(self, event):
