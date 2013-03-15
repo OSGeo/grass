@@ -18,10 +18,8 @@ import os
 import copy
 
 import wx
-from wx.lib.newevent import NewEvent
 
-wxAnimationFinished,    EVT_ANIM_FIN        = NewEvent()
-wxAnimationUpdateIndex, EVT_ANIM_UPDATE_IDX = NewEvent()
+from grass.pydispatch.signal import Signal
 
 class Animation:
     """!Class represents animation as a sequence of states (views).
@@ -32,9 +30,17 @@ class Animation:
     def __init__(self, mapWindow, timer):
         """!Animation constructor
         
+        Signals:
+            animationFinished - emitted when animation finished
+                              - attribute 'mode'
+            animationUpdateIndex - emitted during animation to update gui
+                                 - attributes 'index' and 'mode'
+        
         @param mapWindow glWindow where rendering takes place
         @param timer timer for recording and replaying
         """
+        self.animationFinished = Signal('Animation.animationFinished')
+        self.animationUpdateIndex = Signal('Animation.animationUpdateIndex')
         
         self.animationList = []         # view states
         self.timer = timer
@@ -149,15 +155,11 @@ class Animation:
         
     def PostFinishedEvent(self):
         """!Animation ends"""
-        toolWin = self.mapWindow.GetToolWin()
-        event = wxAnimationFinished(mode = self.mode)
-        wx.PostEvent(toolWin, event)
+        self.animationFinished.emit(mode=self.mode)
         
     def PostUpdateIndexEvent(self, index):
         """!Frame index changed, update tool window"""
-        toolWin = self.mapWindow.GetToolWin()
-        event = wxAnimationUpdateIndex(index = index, mode = self.mode)
-        wx.PostEvent(toolWin, event)
+        self.animationUpdateIndex(index=index, mode=self.mode)
         
     def StopSaving(self):
         """!Abort image files generation"""
