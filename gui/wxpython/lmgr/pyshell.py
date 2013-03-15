@@ -24,6 +24,8 @@ from wx.py.shell   import Shell as PyShell
 from wx.py.version import VERSION
 
 import grass.script as grass
+import grass.pygrass as pygrass
+import grass.pygrass.modules as pgmodules
 
 class PyShellWindow(wx.Panel):
     """!Python Shell Window"""
@@ -36,8 +38,19 @@ class PyShellWindow(wx.Panel):
             _("Type %s for more GRASS scripting related information.") % "\"help(grass)\"" + "\n" + \
             _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
         self.shell = PyShell(parent = self, id = wx.ID_ANY,
-                             introText = self.intro, locals = {'grass' : grass,
-                                                               'AddLayer' : self.AddLayer})
+                             introText = self.intro,
+                             locals={'grass': grass,
+                                     'pygrass': pygrass,
+                                     'r': pgmodules.raster,
+                                     'r3': pgmodules.raster3D,
+                                     'v': pgmodules.vector,
+                                     'i': pgmodules.imagery,
+                                     'db': pgmodules.database,
+                                     'g': pgmodules.general,
+                                     'ps': pgmodules.postscript,
+                                     't': pgmodules.temporal,
+                                     'giface': self.parent._giface,  # for experimetal reasons only
+                                     'AddLayer': self.AddLayer})
         
         sys.displayhook = self._displayhook
         
