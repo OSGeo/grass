@@ -1,4 +1,4 @@
-/*! \page pydispatch Customized PyDispatcher library
+/*! \page pydispatch PyDispatcher library and Signal API
 
 by GRASS Development Team (http://grass.osgeo.org)
 
@@ -6,6 +6,8 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 
 \section pydispatchIntro Introduction
+
+Simple function calls are not sufficient in the GUI, event driven and large environment with many persistent objects because using simple function calls would lead to tightly coupled code. Thus, some better mechanism is needed such as Observer design pattern. We decided to use Signal system which is similar to Signals used in PyQt and other frameworks. As the underlying library, we have chosen PyDispatcher because it provides very general API which enables to implement Signal API, wide and robust functionality which makes implementation and use of Signals easier.
 
 Files dispatcher.py, errors.py, robustapply.py, robust.py and saferef.py are
 part of the original PyDispatcher library.
@@ -17,8 +19,6 @@ Of course, the API of underling library has to be general enough and some small 
 Nevertheless, it is important that Signals as a concept can be used with other library.
 
 Signals and PyDispatcher do not depend on wxPython, so it can be used even for non-GUI code (this allows to use controller classes to create command line tools).
-
-The purpose of the Signals and PyDispather is to avoid tight bindings between classes.
 
 
 \section pydispatchSignal Signal addition to the original PyDispatcher
