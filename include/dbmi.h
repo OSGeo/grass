@@ -15,10 +15,6 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
-/* exit codes */
-#define OK 0
-#define ERROR 1
-
 #define DB_VERSION "0"
 
 #define DB_DEFAULT_DRIVER "sqlite"
