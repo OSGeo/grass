@@ -237,6 +237,13 @@ PERMANENT
     consumption will be reduced when building vector topology
     support structures. Recommended for creating large vectors.</dd>
 
+  <dt>GRASS_VECTOR_OGR</dt>
+  <dd>[vectorlib, v.external.out]<br> If the environment variable
+    GRASS_VECTOR_OGR exists and vector output format defined
+    by <em><a href="v.external.out.html">v.external.out</a></em> is
+    PostgreSQL, vector data is written by OGR data provider even
+    the native PostGIS data provider is available.</dd>
+
   <dt>GRASS_WXBUNDLED</dt>
   <dd>[wxGUI]<br>
     set to tell wxGUI that a bundled wxPython will be used.<br>
