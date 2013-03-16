@@ -61,7 +61,7 @@ static char *convert(const char *in)
 	unsigned char *p2 = (unsigned char *) out;
 	int i, j;
 
-	for (i = j = 0; i < len; i++) {
+	for (i = j = 0; i < ilen; i++) {
 	    int c = p1[i];
 	    if (c < 0x80)
 		p2[j++] = c;
