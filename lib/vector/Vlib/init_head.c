@@ -30,30 +30,26 @@ void Vect__init_head(struct Map_info *Map)
 {
     char buf[64];
 
+    G_zero(&(Map->head), sizeof(struct dig_head *));
+
     /* organization */
-    Map->head.organization = NULL;
     Vect_set_organization(Map, "");
     
     /* date */
-    Map->head.date = NULL;
     Vect_set_date(Map, "");
 
     /* user name */
-    Map->head.user_name = NULL;
     sprintf(buf, "%s", G_whoami());
     Vect_set_person(Map, buf);
 
     /* map name */
-    Map->head.map_name = NULL;
     Vect_set_map_name(Map, "");
 
     /* source date */
-    Map->head.source_date = NULL;
     sprintf(buf, "%s", G_date());
     Vect_set_map_date(Map, buf);
 
     /* comments */
-    Map->head.comment = NULL;
     Vect_set_comment(Map, "");
 
     /* scale, threshold */

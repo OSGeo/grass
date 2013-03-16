@@ -24,6 +24,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 static int clo_dummy()
 {
     return -1;
@@ -75,8 +77,8 @@ int Vect_close(struct Map_info *Map)
     int create_link; /* used for external formats only */
     struct Coor_info CInfo;
     
-    G_debug(1, "Vect_close(): name = %s, mapset = %s, format = %d, level = %d",
-	    Map->name, Map->mapset, Map->format, Map->level);
+    G_debug(1, "Vect_close(): name = %s, mapset = %s, format = %d, level = %d, is_tmp = %d",
+	    Map->name, Map->mapset, Map->format, Map->level, Map->temporary);
     
     /* check for external formats whether to create a link */
     create_link = TRUE;
@@ -190,6 +192,10 @@ int Vect_close(struct Map_info *Map)
 	}
     }
 
+    if (Map->temporary) {
+        Vect__delete(Map->name, TRUE);
+    }
+
     G_free(Map->name);
     G_free(Map->mapset);
     G_free(Map->location);
@@ -257,13 +263,14 @@ int Vect_save_frmt(struct Map_info *Map)
 
 void unlink_file(const struct Map_info *Map, const char *name)
 {
-    char buf[GPATH_MAX];
-    char file_path[GPATH_MAX];
+    char *path;
 
     /* delete old support files if available */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+    path = Vect__get_element_path(Map, name);
+    if (access(path, F_OK) == 0) { /* file exists? */
+        G_debug(2, "\t%s: unlink", path);
+        unlink(path);
+    }
 
-    G_file_name(file_path, buf, name, G_mapset());
-    if (access(file_path, F_OK) == 0) /* file exists? */
-        unlink(file_path);
+    G_free(path);
 }

@@ -27,6 +27,8 @@
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 
+#include "local_proto.h"
+
 #ifdef HAVE_GDAL
 #include <gdal_version.h>	/* needed for FID detection */
 #endif	/* HAVE_GDAL */
@@ -558,7 +560,7 @@ static int read_dblinks_nat(struct Map_info *Map)
     char file[1024], buf[2001];
     char tab[1024], col[1024], db[1024], drv[1024], fldstr[1024], *fldname;
     int fld;
-    char *c;
+    char *c, *path;
     int row, rule;
     struct dblinks *dbl;
     char **tokens;
@@ -567,15 +569,12 @@ static int read_dblinks_nat(struct Map_info *Map)
     dbl = Map->dblnk;
 
     /* Read dblink for native format */
-    sprintf(file, "%s/%s/%s/%s/%s/%s", Map->gisdbase, Map->location,
-	    Map->mapset, GV_DIRECTORY, Map->name,
-	    GV_DBLN_ELEMENT);
-    G_debug(1, "dbln file: %s", file);
-
-    fd = fopen(file, "r");
+    path = Vect__get_path(Map);
+    fd = G_fopen_old(path, GV_DBLN_ELEMENT, Map->mapset);
+    G_free(path);
     if (fd == NULL) {		/* This may be correct, no tables defined */
 	G_debug(1, "Cannot open vector database definition file");
-	return (-1);
+	return -1;
     }
 
     row = 0;
@@ -889,7 +888,7 @@ int Vect_write_dblinks(struct Map_info *Map)
 {
     int i;
     FILE *fd;
-    char file[GPATH_MAX], buf[GPATH_MAX];
+    char *path, buf[1024];
     struct dblinks *dbl;
 
     if (Map->format != GV_FORMAT_NATIVE)
@@ -901,16 +900,13 @@ int Vect_write_dblinks(struct Map_info *Map)
 
     dbl = Map->dblnk;
 
-    sprintf(file, "%s/%s/%s/%s/%s/%s", Map->gisdbase, Map->location,
-	    Map->mapset, GV_DIRECTORY, Map->name,
-	    GV_DBLN_ELEMENT);
-    G_debug(1, "dbln file: %s", file);
-
-    fd = fopen(file, "w");
+    path = Vect__get_path(Map);
+    fd = G_fopen_new(path, GV_DBLN_ELEMENT);
+    G_free(path);
     if (fd == NULL) {		/* This may be correct, no tables defined */
-	G_warning(_("Unable to open vector database definition file '%s'"),
-		  file);
-	return (-1);
+	G_warning(_("Unable to create database definition file for vector map <%s>"),
+		  Vect_get_name(Map));
+	return -1;
     }
 
     for (i = 0; i < dbl->n_fields; i++) {

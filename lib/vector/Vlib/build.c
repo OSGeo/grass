@@ -23,6 +23,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 #define SEP "-----------------------------------\n"
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
@@ -987,17 +989,18 @@ int Vect_build_partial(struct Map_info *Map, int build)
 int Vect_save_topo(struct Map_info *Map)
 {
     struct Plus_head *plus;
-    char buf[GPATH_MAX];
+    char *path;
     struct gvfile fp;
 
     G_debug(1, "Vect_save_topo()");
 
-    plus = &(Map->plus);
-
     /*  write out all the accumulated info to the plus file  */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+    plus = &(Map->plus);
     dig_file_init(&fp);
-    fp.file = G_fopen_new(buf, GV_TOPO_ELEMENT);
+
+    path = Vect__get_path(Map);
+    fp.file = G_fopen_new(path, GV_TOPO_ELEMENT);
+    G_free(path);
     if (fp.file == NULL) {
 	G_warning(_("Unable to create topo file for vector map <%s>"), Map->name);
 	return 0;
@@ -1224,7 +1227,7 @@ int Vect_build_sidx_from_topo(const struct Map_info *Map)
 int Vect_save_sidx(struct Map_info *Map)
 {
     struct Plus_head *plus;
-    char fname[GPATH_MAX], buf[GPATH_MAX];
+    char *file_path;
 
     G_debug(1, "Vect_save_spatial_index()");
 
@@ -1238,14 +1241,14 @@ int Vect_save_sidx(struct Map_info *Map)
     /* new or update mode ? */
     if (plus->Spidx_new == TRUE) {
 	/*  write out rtrees to sidx file  */
-	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-	G_file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
-	G_debug(1, "Open sidx: %s", fname);
+        file_path = Vect__get_element_path(Map, GV_SIDX_ELEMENT);
+	G_debug(1, "Open sidx: %s", file_path);
 	dig_file_init(&(plus->spidx_fp));
-	plus->spidx_fp.file = fopen(fname, "w+");
+	plus->spidx_fp.file = fopen(file_path, "w+");
+        G_free(file_path);
 	if (plus->spidx_fp.file == NULL) {
-	    G_warning(_("Unable open spatial index file for write <%s>"),
-		      fname);
+	    G_warning(_("Unable to create spatial index file for vector map <%s>"),
+		      Vect_get_name(Map));
 	    return 0;
 	}
 

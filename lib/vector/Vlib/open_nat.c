@@ -21,7 +21,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static char name_buf[GPATH_MAX];
+#include "local_proto.h"
+
 static int check_coor(struct Map_info *Map);
 
 /*!
@@ -90,44 +91,45 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 */
 int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 {
-    char buf[GPATH_MAX];
+    char *path, file_path[GPATH_MAX];
 
-    G_debug(1, "V1_open_new_nat(): name = %s", name);
+    G_debug(1, "V1_open_new_nat(): name = %s with_z = %d is_tmp = %d",
+            name, with_z, Map->temporary);
 
-    sprintf(buf, "%s/%s", GV_DIRECTORY, name);
+    path = Vect__get_path(Map);
 
     /* Set the 'coor' file version */
     Map->head.Version_Major = GV_COOR_VER_MAJOR;
     Map->head.Version_Minor = GV_COOR_VER_MINOR;
-    Map->head.Back_Major = GV_COOR_EARLIEST_MAJOR;
-    Map->head.Back_Minor = GV_COOR_EARLIEST_MINOR;
+    Map->head.Back_Major    = GV_COOR_EARLIEST_MAJOR;
+    Map->head.Back_Minor    = GV_COOR_EARLIEST_MINOR;
 
     /* TODO: open better */
     dig_file_init(&(Map->dig_fp));
-    Map->dig_fp.file = G_fopen_new(buf, GV_COOR_ELEMENT);
+    Map->dig_fp.file = G_fopen_new(path, GV_COOR_ELEMENT);
     if (Map->dig_fp.file == NULL)
-	return (-1);
+	return -1;
     fclose(Map->dig_fp.file);
 
     dig_file_init(&(Map->dig_fp));
-    Map->dig_fp.file = G_fopen_modify(buf, GV_COOR_ELEMENT);
+    Map->dig_fp.file = G_fopen_modify(path, GV_COOR_ELEMENT);
     if (Map->dig_fp.file == NULL)
-	return (-1);
+	return -1;
 
     /* if overwrite OK, any existing files have already been deleted by
      * Vect_open_new(): remove this check ? */
     /* check to see if dig_plus file exists and if so, remove it */
-    G_file_name(name_buf, buf, GV_TOPO_ELEMENT, G_mapset());
-    if (access(name_buf, F_OK) == 0)	/* file exists? */
-	unlink(name_buf);
-
-    G_file_name(name_buf, buf, GV_COOR_ELEMENT, G_mapset());
-
+    G_file_name(file_path, path, GV_TOPO_ELEMENT, G_mapset());
+    G_free(path);
+    if (access(file_path, F_OK) == 0)
+        unlink(file_path); /* remove topo file if exists */
+    
     /* set conversion matrices */
     dig_init_portable(&(Map->head.port), dig__byte_order_out());
 
+    /* write coor header */
     if (!(dig__write_head(Map)))
-	return (-1);
+	return -1;
 
     return 0;
 }
