@@ -56,6 +56,9 @@ char *G_file_name(char *path,
 
     G_free(location);
 
+    if (!element && !pname)
+        return path;
+    
     if (element && *element) {
 	strcat(path, "/");
 	strcat(path, element);
@@ -66,6 +69,8 @@ char *G_file_name(char *path,
 	strcat(path, pname);
     }
 
+    G_debug(2, "G_file_name(): path = %s", path);
+    
     return path;
 }
 

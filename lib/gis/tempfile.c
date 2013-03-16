@@ -1,5 +1,5 @@
 /*!
- * \file gis/tempfile.c
+ * \file lib/gis/tempfile.c
  *
  * \brief GIS Library - Temporary file functions.
  *
