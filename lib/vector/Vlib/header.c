@@ -20,7 +20,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int lookup(const char *file, const char *key, char *value, size_t len);
+#include "local_proto.h"
 
 /*!
    \brief Print vector map header to stdout
@@ -77,12 +77,12 @@ int Vect_write_header(const struct Map_info *Map)
  */
 int Vect__write_head(const struct Map_info *Map)
 {
-    char buf[GPATH_MAX];
+    char *path;
     FILE *head_fp;
 
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-
-    head_fp = G_fopen_new(buf, GV_HEAD_ELEMENT);
+    path = Vect__get_path(Map);
+    head_fp = G_fopen_new(path, GV_HEAD_ELEMENT);
+    G_free(path);
     if (head_fp == NULL) {
 	G_warning(_("Unable to create header file for vector map <%s>"),
 		  Vect_get_full_name(Map));
@@ -117,23 +117,16 @@ int Vect__write_head(const struct Map_info *Map)
 int Vect__read_head(struct Map_info *Map)
 {
     FILE *head_fp;
-    char buff[GPATH_MAX];
-    char *ptr;
+    char buff[2000];
+    char *path, *ptr;
 
     /* Reset / init */
-    Vect_set_organization(Map, "");
-    Vect_set_date(Map, "");
-    Vect_set_person(Map, "");
-    Vect_set_map_name(Map, "");
-    Vect_set_map_date(Map, "");
-    Vect_set_scale(Map, 1);
-    Vect_set_comment(Map, "");
-    Vect_set_zone(Map, -1);
-    Vect_set_thresh(Map, 0.);
-
+    Vect__init_head(Map);
+    
     G_debug(1, "Vect__read_head(): vector = %s@%s", Map->name, Map->mapset);
-    sprintf(buff, "%s/%s", GV_DIRECTORY, Map->name);
-    head_fp = G_fopen_old(buff, GV_HEAD_ELEMENT, Map->mapset);
+    path = Vect__get_path(Map);
+    head_fp = G_fopen_old(path, GV_HEAD_ELEMENT, Map->mapset);
+    G_free(path);
     if (head_fp == NULL) {
 	G_warning(_("Unable to open header file of vector <%s>"),
 		  Vect_get_full_name(Map));
@@ -589,6 +582,5 @@ int Vect_set_thresh(struct Map_info *Map, double thresh)
  */
 double Vect_get_thresh(const struct Map_info *Map)
 {
-    G_debug(1, "Vect_get_thresh(): thresh = %f", Map->head.digit_thresh);
     return Map->head.digit_thresh;
 }

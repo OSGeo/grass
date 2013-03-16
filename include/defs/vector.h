@@ -223,6 +223,7 @@ int Vect_open_old2(struct Map_info *, const char *, const char *, const char *);
 int Vect_open_old_head(struct Map_info *, const char *, const char *);
 int Vect_open_old_head2(struct Map_info *, const char *, const char *, const char *);
 int Vect_open_new(struct Map_info *, const char *, int);
+int Vect_open_tmp_new(struct Map_info *, const char *, int);
 int Vect_open_update(struct Map_info *, const char *, const char *);
 int Vect_open_update2(struct Map_info *, const char *, const char *, const char *);
 int Vect_open_update_head(struct Map_info *, const char *, const char *);

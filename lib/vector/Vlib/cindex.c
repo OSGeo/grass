@@ -21,6 +21,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 static int cmp_cat(const void *pa, const void *pb);
 
 static void check_status(const struct Map_info *Map)
@@ -443,21 +445,22 @@ int Vect_cidx_dump(const struct Map_info *Map, FILE * out)
 int Vect_cidx_save(struct Map_info *Map)
 {
     struct Plus_head *plus;
-    char fname[1024], buf[1024];
+    char *path;
     struct gvfile fp;
 
     G_debug(2, "Vect_cidx_save()");
     check_status(Map);
 
     plus = &(Map->plus);
-
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G_file_name(fname, buf, GV_CIDX_ELEMENT, Map->mapset);
-    G_debug(2, "Open cidx: %s", fname);
+    
     dig_file_init(&fp);
-    fp.file = fopen(fname, "w");
+    
+    path = Vect__get_path(Map);
+    fp.file = G_fopen_new(path, GV_CIDX_ELEMENT);
+    G_free(path);
     if (fp.file == NULL) {
-	G_warning(_("Unable to open cidx file <%s> for write"), fname);
+	G_warning(_("Unable to create category index file for vector map <%s>"),
+                  Vect_get_name(Map));
 	return 1;
     }
 
@@ -465,7 +468,7 @@ int Vect_cidx_save(struct Map_info *Map)
     dig_init_portable(&(plus->cidx_port), dig__byte_order_out());
 
     if (0 > dig_write_cidx(&fp, plus)) {
-	G_warning(_("Error writing out category index file <%s>"), fname);
+	G_warning(_("Error writing out category index file"));
 	return 1;
     }
 

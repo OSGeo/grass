@@ -6,7 +6,7 @@
   
   Higher level functions for reading/writing/manipulating vectors.
   
-  (C) 2001-2009, 2012 by the GRASS Development Team
+  (C) 2001-2009, 2012-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -25,6 +25,8 @@
 
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
+#include "local_proto.h"
 
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
@@ -107,8 +109,7 @@ static int (*Open_new_array[][2]) () = {
 #endif
 };
 
-static int open_old(struct Map_info *, const char *, const char *,
-                    const char *, int, int);
+static int open_new(struct Map_info *, const char *, int, int);
 static int map_format(struct Map_info *);
 
 /*!
@@ -153,23 +154,25 @@ int Vect_set_open_level(int level)
  \param update non-zero to open for update otherwise read-only mode
  \param head_only read only header info from 'head', 'dbln', 'topo',
  'cidx' is not opened. The header may be opened on level 2 only.
- 
+ \param is_tmp TRUE for temporary maps
+
  \return level of openness (1, 2)
  \return -1 in error
 */
-int open_old(struct Map_info *Map, const char *name, const char *mapset,
-             const char *layer, int update, int head_only)
+int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
+                   const char *layer, int update, int head_only, int is_tmp)
 {
-    char buf[GNAME_MAX + 10], buf2[GMAPSET_MAX + 10], xname[GNAME_MAX],
-        xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char *path;
     FILE *fp;
     int level, level_request;
     int format, ret;
     int ogr_mapset;
     const char *fmapset;
 
-    G_debug(1, "Vect__open_old(): name='%s' mapset='%s' layer='%s' update=%d",
-            name, mapset, layer, update);
+    G_debug(1, "Vect__open_old(): name = %s, mapset = %s, layer = %s, update = %d, "
+            "head_only = %d, is_tmp = %d", name, mapset, layer ? layer : "", update, head_only,
+            is_tmp);
 
     /* zero Map_info structure */
     G_zero(Map, sizeof(struct Map_info));
@@ -199,37 +202,48 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
                 Map->fInfo.ogr.layer_name = G_store(layer); /* no layer to be open */
             }
         }
-        else {
-            sprintf(buf,  "%s/%s", GV_DIRECTORY, xname);
-            sprintf(buf2, "%s@%s", GV_COOR_ELEMENT, xmapset);
-        }
         Map->name = G_store(xname);
         Map->mapset = G_store(xmapset);
     }
     else {
-        sprintf(buf, "%s/%s", GV_DIRECTORY, name);
-        sprintf(buf2, "%s",   GV_COOR_ELEMENT);
         Map->name = G_store(name);
 
+        Map->temporary = is_tmp;
+        /* temporary maps can be accessed only in the current mapset */
         if (mapset)
             Map->mapset = G_store(mapset);
         else
             Map->mapset = G_store("");
     }
 
+    path = Vect__get_path(Map);
+
     if (!ogr_mapset) {
         /* try to find vector map (not for OGR mapset) */
-        fmapset = G_find_vector2(Map->name, Map->mapset);
-        if (fmapset == NULL) {
-            if (mapset && strcmp(mapset, G_mapset()) == 0)
-                G_fatal_error(_("Vector map <%s> not found in current mapset"),
+        if (!Map->temporary) {
+            fmapset = G_find_vector2(Map->name, Map->mapset);
+            if (fmapset == NULL) {
+                if (mapset && strcmp(mapset, G_mapset()) == 0)
+                    G_warning(_("Vector map <%s> not found in current mapset"),
                               Vect_get_name(Map));
-            else
-                G_fatal_error(_("Vector map <%s> not found"),
+                else
+                    G_warning(_("Vector map <%s> not found"),
                               Vect_get_full_name(Map));
-            return -1;
+                return -1;
+            }
+            Map->mapset = G_store(fmapset);
         }
-        Map->mapset = G_store(fmapset);
+        else {
+            char file_path[GPATH_MAX];
+            
+            if (strcmp(Map->mapset, G_mapset()) != 0) {
+                G_warning(_("Temporary vector maps can be accessed only in the current mapset"));
+                return -1;
+            }
+            G_file_name(file_path, path, GV_HEAD_ELEMENT, Map->mapset);
+            if (access(file_path, F_OK) != 0)
+                return -1;
+        }
     }
     
     Map->location = G_store(G_location());
@@ -240,8 +254,8 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
         return -1;
     }
 
-    G_debug(1, "Map name: %s", Map->name);
-    G_debug(1, "Map mapset: %s", Map->mapset);
+    G_debug(1, "Map: name = %s, mapset = %s, temporary = %d", Map->name, Map->mapset,
+            Map->temporary);
 
     /* read vector format information */
     if (ogr_mapset) {
@@ -249,10 +263,7 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     }
     else {
         format = 0;
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-        G_debug(1, "open format file: '%s/%s/%s'", Map->mapset, buf,
-                GV_FRMT_ELEMENT);
-        fp = G_fopen_old(buf, GV_FRMT_ELEMENT, Map->mapset);
+        fp = G_fopen_old(path, GV_FRMT_ELEMENT, Map->mapset);
         if (fp == NULL) {
             G_debug(1, "Vector format: %d (native)", format);
             format = GV_FORMAT_NATIVE;
@@ -451,7 +462,7 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
         Map->head_only = FALSE;
     }
 
-    G_debug(1, "Vect_open_old(): vector opened on level %d", level);
+    G_debug(1, "Vect__open_old(): vector opened on level %d", level);
 
     if (level == 1) {           /* without topology */
         Map->plus.built = GV_BUILD_NONE;
@@ -467,9 +478,8 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     Vect_read_dblinks(Map);
 
     /* open history file */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
     if (update && !ogr_mapset) {                /* native only */
-        Map->hist_fp = G_fopen_modify(buf, GV_HIST_ELEMENT);
+        Map->hist_fp = G_fopen_modify(path, GV_HIST_ELEMENT);
         if (Map->hist_fp == NULL) {
             G_warning(_("Unable to open history file for vector map <%s>"),
                       Vect_get_full_name(Map));
@@ -483,7 +493,7 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     else {
         if (Map->format == GV_FORMAT_NATIVE || Map->format == GV_FORMAT_OGR ||
             Map->format == GV_FORMAT_POSTGIS) {
-            Map->hist_fp = G_fopen_old(buf, GV_HIST_ELEMENT, Map->mapset);
+            Map->hist_fp = G_fopen_old(path, GV_HIST_ELEMENT, Map->mapset);
             /* If NULL (does not exist) then Vect_hist_read() handle that */
         }
         else {
@@ -499,27 +509,26 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
     if (update && !head_only) {
         char file_path[GPATH_MAX];
 
-        sprintf(buf, "%s/%s", GV_DIRECTORY, name);
-
-        G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
+        G_file_name(file_path, path, GV_TOPO_ELEMENT, G_mapset());
         if (access(file_path, F_OK) == 0)       /* topo file exists? */
             unlink(file_path);
 
-        G_file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
+        G_file_name(file_path, path, GV_SIDX_ELEMENT, G_mapset());
         if (access(file_path, F_OK) == 0)       /* sidx file exists? */
             unlink(file_path);
 
-        G_file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
+        G_file_name(file_path, path, GV_CIDX_ELEMENT, G_mapset());
         if (access(file_path, F_OK) == 0)       /* cidx file exists? */
             unlink(file_path);
 
         if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
-            G_file_name(file_path, buf, GV_FIDX_ELEMENT, G_mapset());
+            G_file_name(file_path, path, GV_FIDX_ELEMENT, G_mapset());
             if (access(file_path, F_OK) == 0)   /* fidx file exists? */
                 unlink(file_path);
         }
     }
-
+    G_free(path);
+    
     return level;
 }
 
@@ -541,7 +550,7 @@ int open_old(struct Map_info *Map, const char *name, const char *mapset,
 */
 int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
 {
-    return open_old(Map, name, mapset, NULL, 0, 0);
+    return Vect__open_old(Map, name, mapset, NULL, FALSE, FALSE, FALSE);
 }
 
 /*!
@@ -561,7 +570,7 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
 int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset,
                    const char *layer)
 {
-    return open_old(Map, name, mapset, layer, 0, 0);
+    return Vect__open_old(Map, name, mapset, layer, FALSE, FALSE, FALSE);
 }
 
 /*!
@@ -585,7 +594,7 @@ int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset,
 */
 int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 {
-    return open_old(Map, name, mapset, NULL, 1, 0);
+    return Vect__open_old(Map, name, mapset, NULL, TRUE, FALSE, FALSE);
 }
 
 /*!
@@ -607,7 +616,7 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 */
 int Vect_open_update2(struct Map_info *Map, const char *name, const char *mapset, const char *layer)
 {
-    return open_old(Map, name, mapset, layer, 1, 0);
+    return Vect__open_old(Map, name, mapset, layer, TRUE, FALSE, FALSE);
 }
 
 /*! 
@@ -630,7 +639,7 @@ int Vect_open_update2(struct Map_info *Map, const char *name, const char *mapset
 */
 int Vect_open_old_head(struct Map_info *Map, const char *name, const char *mapset)
 {
-    return open_old(Map, name, mapset, NULL, 0, 1);
+    return Vect__open_old(Map, name, mapset, NULL, FALSE, TRUE, FALSE);
 }
 
 /*! 
@@ -657,7 +666,7 @@ int Vect_open_old_head(struct Map_info *Map, const char *name, const char *mapse
 int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *mapset,
                         const char *layer)
 {
-    return open_old(Map, name, mapset, layer, 0, 1);
+    return Vect__open_old(Map, name, mapset, layer, FALSE, TRUE, FALSE);
 }
 
 /*!  \brief Open header file of existing vector map for updating
@@ -674,34 +683,16 @@ int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *maps
 int Vect_open_update_head(struct Map_info *Map, const char *name,
                           const char *mapset)
 {
-    return open_old(Map, name, mapset, NULL, 1, 1);
+    return Vect__open_old(Map, name, mapset, NULL, TRUE, TRUE, FALSE);
 }
 
-/*!
-  \brief Create new vector map for reading/writing
- 
-  By default list of updated features is not maintained, see
-  Vect_set_updated() for details.
-  
-  By default map format is native (GV_FORMAT_NATIVE). If OGR file is
-  found in the current mapset then the map (ie. OGR layer) is created
-  in given OGR datasource (GV_FORMAT_OGR). Similarly if PG file exists
-  then the map (ie. PostGIS table) is created using PostGIS interface
-  (GV_FORMAT_POSTGIS). The format of map is stored in Map->format.
-
-  \param[out] Map pointer to Map_info structure
-  \param name name of vector map to be created
-  \param with_z WITH_Z for 3D vector data otherwise WITHOUT_Z
-  
-  \return 1 on success
-  \return -1 on error
-*/
-int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
+int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 {
     int ret;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX], buf[GPATH_MAX];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-    G_debug(2, "Vect_open_new(): name = %s with_z = %d", name, with_z);
+    G_debug(1, "Vect_open_new(): name = %s with_z = %d is_tmp = %d",
+            name, with_z, is_tmp);
 
     /* zero Map_info structure */
     G_zero(Map, sizeof(struct Map_info));
@@ -712,8 +703,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     /* check for fully-qualified map name */
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
         if (strcmp(xmapset, G_mapset()) != 0) {
-            G_fatal_error(_("<%s> is not the current mapset (%s)"), name,
-                          G_mapset());
+            G_warning(_("Unable to create new vector map: <%s> is not the current mapset (%s)"),
+                      name, G_mapset());
             return -1;
         }
         name = xname;
@@ -721,15 +712,17 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
     if (Vect_legal_filename(name) < 0) {
-        G_fatal_error(_("Vector map name is not SQL compliant"));
+        G_warning(_("Unable to create vector map <%s>: name is not SQL compliant"),
+            name);
         return -1;
     }
 
-    /* store basic info (map@mapset) */
-    Map->name = G_store(name);
-    Map->mapset = G_store(G_mapset());
-    Map->location = G_store(G_location());
-    Map->gisdbase = G_store(G_gisdbase());
+    /* store basic info */
+    Map->name      = G_store(name);
+    Map->mapset    = G_store(G_mapset());
+    Map->location  = G_store(G_location());
+    Map->gisdbase  = G_store(G_gisdbase());
+    Map->temporary = is_tmp;
     
     /* determine output format */
     if (strcmp(G_program_name(), "v.external") != 0)
@@ -739,17 +732,29 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
         getenv("GRASS_VECTOR_PGFILE") == NULL) { /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
+        char *path;
+        
         G_debug(2, " using non-direct format");
 
-        /* check if map already exists */
-        if (G_find_vector2(name, G_mapset()) != NULL) {
-            G_warning(_("Vector map <%s> already exists and will be overwritten"),
-                      name);
-            
-            ret = Vect_delete(name);
-            if (ret == -1) {
+        /* check if map already exists
+           temporary maps are automatically overwritten
+         */
+        if (Map->temporary) {
+            if (-1 == Vect__delete(name, Map->temporary)) {
                 G_warning(_("Unable to delete vector map <%s>"), name);
                 return -1;
+            }
+        }
+        else {
+            if (G_find_vector2(name, G_mapset()) != NULL) {
+                G_warning(_("Vector map <%s> already exists and will be overwritten"),
+                          name);
+                
+                ret = Vect_delete(name);
+                if (ret == -1) {
+                    G_warning(_("Unable to delete vector map <%s>"), name);
+                    return -1;
+                }
             }
         }
 
@@ -764,8 +769,9 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
         Vect__write_head(Map);
 
         /* create history file */
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-        Map->hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
+        path = Vect__get_path(Map);
+        Map->hist_fp = G_fopen_new(path, GV_HIST_ELEMENT);
+        G_free(path);
         if (Map->hist_fp == NULL) {
             G_warning(_("Unable to open history file of vector map <%s>"),
                       name);
@@ -808,6 +814,63 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 }
 
 /*!
+  \brief Create new vector map for reading/writing
+ 
+  By default list of updated features is not maintained, see
+  Vect_set_updated() for details.
+  
+  By default map format is native (GV_FORMAT_NATIVE). If OGR file is
+  found in the current mapset then the map (ie. OGR layer) is created
+  in given OGR datasource (GV_FORMAT_OGR). Similarly if PG file exists
+  then the map (ie. PostGIS table) is created using PostGIS interface
+  (GV_FORMAT_POSTGIS). The format of map is stored in Map->format.
+
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to be created
+  \param with_z WITH_Z for 3D vector data otherwise WITHOUT_Z
+  
+  \return 1 on success
+  \return -1 on error
+*/
+int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
+{
+    return open_new(Map, name, with_z, FALSE);
+}
+
+/*!
+  \brief Create new temporary vector map
+
+  Temporary vector maps are stored in the current mapset (directory
+  <tt>.tmp/<hostname>/vector</tt>).
+
+  Temporary vector maps are automatically deleted when closing the map
+  (see Vect_close() for details).
+
+  If <em>name</em> is not given (is NULL), then the name is determined
+  by process id (<tt>tmp_<pid></tt>).
+
+  \param[out] Map pointer to output Map_info struct
+  \param name name for new vector map (or NULL)
+  \param with_z WITH_Z for 3D vector data
+
+  \return 1 on success
+  \return -1 on error
+*/
+int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
+{
+    char tmp_name[GNAME_MAX];
+
+    if (!name) {
+        sprintf(tmp_name, "tmp_%d", getpid());
+    }
+    else {
+        sprintf(tmp_name, "%s", name);
+    }
+    
+    return open_new(Map, tmp_name, with_z, TRUE); /* temporary map */
+}
+
+/*!
   \brief Update Coor_info structure
   
   \param Map pointer to Map_info structure
@@ -818,16 +881,17 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 */
 int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 {
-    char buf[GPATH_MAX], path[GPATH_MAX];
+    char *path, file_path[GPATH_MAX];
     STRUCT_STAT stat_buf;
     
     switch (Map->format) {
     case GV_FORMAT_NATIVE:
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-        G_file_name(path, buf, GV_COOR_ELEMENT, Map->mapset);
-        G_debug(1, "get coor info: %s", path);
-        if (0 != stat(path, &stat_buf)) {
-            G_warning(_("Unable to stat file <%s>"), path);
+        path = Vect__get_path(Map);
+        G_file_name(file_path, path, GV_COOR_ELEMENT, Map->mapset);
+        G_free(path);
+        G_debug(1, "get coor info: %s", file_path);
+        if (0 != stat(file_path, &stat_buf)) {
+            G_warning(_("Unable to stat file <%s>"), file_path);
             Info->size = -1L;
             Info->mtime = -1L;
         }
@@ -853,7 +917,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
         Info->mtime = 0L;
         break;
     }
-    G_debug(1, "Info->size = %lu, Info->mtime = %ld",
+    G_debug(1, "Vect_coor_info(): Info->size = %lu, Info->mtime = %ld",
             (unsigned long)Info->size, Info->mtime);
 
     return 1;
@@ -1007,7 +1071,6 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
 */
 int Vect_open_sidx(struct Map_info *Map, int mode)
 {
-    char buf[GPATH_MAX], file_path[GPATH_MAX];
     int err;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
@@ -1025,15 +1088,17 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     dig_file_init(&(Plus->spidx_fp));
 
     if (mode < 2) {
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-        G_file_name(file_path, buf, GV_SIDX_ELEMENT, Map->mapset);
+        char *path, file_path[GPATH_MAX];
+        
+        path = Vect__get_path(Map);
+        G_file_name(file_path, path, GV_SIDX_ELEMENT, Map->mapset);
 
         if (access(file_path, F_OK) != 0)       /* does not exist */
             return 1;
 
-        Plus->spidx_fp.file =
-            G_fopen_old(buf, GV_SIDX_ELEMENT, Map->mapset);
-
+        Plus->spidx_fp.file = G_fopen_old(path, GV_SIDX_ELEMENT, Map->mapset);
+        G_free(path);
+        
         if (Plus->spidx_fp.file == NULL) {  /* sidx file is not available */
             G_debug(1, "Cannot open spatial index file for vector '%s@%s'.",
                     Map->name, Map->mapset);
@@ -1222,5 +1287,52 @@ int map_format(struct Map_info *Map)
         }
     }
     
+    G_debug(2, "map_format = %d", Map->format);
     return Map->format;
+}
+
+/*!
+  \brief Get map directory name (internal use only)
+
+  Allocate string should be freed by G_free().
+
+  \param Map pointer to Map_info struct
+
+  \return allocated buffer containing path
+*/
+char *Vect__get_path(const struct Map_info *Map)
+{
+    char path[GPATH_MAX];
+    
+    if (Map->temporary) {
+        char path_tmp[GPATH_MAX];
+        G__temp_element(path_tmp);
+        sprintf(path, "%s/%s/%s", path_tmp, GV_DIRECTORY, Map->name);
+    }
+    else {
+        sprintf(path, "%s/%s", GV_DIRECTORY, Map->name);
+    }
+    
+    return G_store(path);
+}
+
+/*!
+  \brief Get map element full path (internal use only)
+
+  Allocate string should be freed by G_free().
+
+  \param Map pointer to Map_info struct
+  \param element element name, eg. GV_TOPO_ELEMENT
+
+  \return allocated buffer containing path
+*/
+char *Vect__get_element_path(const struct Map_info *Map, const char *element)
+{
+    char file_path[GPATH_MAX], *path;
+    
+    path = Vect__get_path(Map);
+    G_file_name(file_path, path, element, Map->mapset);
+    G_free(path);
+
+    return G_store(file_path);
 }

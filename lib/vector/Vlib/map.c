@@ -28,6 +28,8 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 /*!
    \brief Copy file
 
@@ -371,19 +373,38 @@ int Vect_rename(const char *in, const char *out)
  */
 int Vect_delete(const char *map)
 {
-    int i, n, ret;
+    return Vect__delete(map, FALSE);
+}
+
+/*!
+  \brief Delete vector map (internal use only)
+  
+  \param map name of vector map to be delete 
+  \param is_tmp TRUE for temporary maps
+
+  \return -1 error
+  \return 0 success
+*/
+int Vect__delete(const char *map, int is_tmp)
+{
+    int ret;
+    char *path, path_buf[GPATH_MAX];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    const char *tmp, *mapset;
+    
     struct Map_info Map;
-    struct field_info *Fi;
-    char buf[GPATH_MAX];
+    
     DIR *dir;
     struct dirent *ent;
-    const char *tmp;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-    G_debug(3, "Delete vector '%s'", map);
+    G_debug(3, "Delete vector '%s' (is_tmp = %d)", map, is_tmp);
 
+    mapset = G_mapset();
+    
     /* remove mapset from fully qualified name */
     if (G_name_is_fully_qualified(map, xname, xmapset)) {
+        if (strcmp(mapset, xmapset) != 0)
+            G_warning(_("Ignoring invalid mapset: %s"), xmapset);
         map = xname;
     }
 
@@ -392,24 +413,27 @@ int Vect_delete(const char *map)
         return -1;
     }
 
-    sprintf(buf, "%s/%s/%s/%s/%s/%s", G_gisdbase(), G_location(),
-            G_mapset(), GV_DIRECTORY, map, GV_DBLN_ELEMENT);
-
-    G_debug(1, "dbln file: %s", buf);
-
-    if (access(buf, F_OK) == 0) {
-        /* Open input */
-        Vect_set_open_level(1); /* Topo not needed */
-        ret = Vect_open_old_head(&Map, map, G_mapset());
-        if (ret < 1) {
+    Vect_set_open_level(1); /* Topo not needed */
+    ret = Vect__open_old(&Map, map, mapset, NULL, FALSE, TRUE, is_tmp);
+    if (ret < 1) {
+        if (is_tmp)
+            return 0; /* temporary vector map doesn't exist */
+        else {
             G_warning(_("Unable to open header file for vector map <%s>"),
                       map);
             return -1;
         }
+    }
+        
+    path = Vect__get_element_path(&Map, GV_DBLN_ELEMENT);
+    G_debug(1, "dbln file: %s", path);
 
+    if (access(path, F_OK) == 0) {
+        int i, n;
+        struct field_info *Fi;
+        
         /* Delete all tables, NOT external (OGR) */
         if (Map.format == GV_FORMAT_NATIVE) {
-
             n = Vect_get_num_dblinks(&Map);
             for (i = 0; i < n; i++) {
                 Fi = Vect_get_dblink(&Map, i);
@@ -446,15 +470,15 @@ int Vect_delete(const char *map)
                 }
             }
         }
-        Vect_close(&Map);
     }
-
+    G_free(path);
+    
     /* Delete all files from vector/name directory */
-    sprintf(buf, "%s/%s/vector/%s", G_location_path(), G_mapset(), map);
-    G_debug(3, "opendir '%s'", buf);
-    dir = opendir(buf);
+    path = Vect__get_element_path(&Map, NULL);
+    G_debug(3, "opendir '%s'", path);
+    dir = opendir(path);
     if (dir == NULL) {
-        G_warning(_("Unable to open directory '%s'"), buf);
+        G_warning(_("Unable to open directory '%s'"), path);
         return -1;
     }
 
@@ -463,29 +487,28 @@ int Vect_delete(const char *map)
         if ((strcmp(ent->d_name, ".") == 0) ||
             (strcmp(ent->d_name, "..") == 0))
             continue;
-        sprintf(buf, "%s/%s/vector/%s/%s", G_location_path(), G_mapset(), map,
-                ent->d_name);
-        G_debug(3, "delete file '%s'", buf);
-        ret = unlink(buf);
+        
+        sprintf(path_buf, "%s/%s", path, ent->d_name);
+        G_debug(3, "delete file '%s'", path_buf);
+        ret = unlink(path_buf);
         if (ret == -1) {
-            G_warning(_("Unable to delete file '%s'"), buf);
+            G_warning(_("Unable to delete file '%s'"), path_buf);
             closedir(dir);
             return -1;
         }
     }
     closedir(dir);
-
+    G_free(path);
+    
     /* NFS can create .nfsxxxxxxxx files for those deleted 
      *  -> we have to move the directory to ./tmp before it is deleted */
-    sprintf(buf, "%s/%s/vector/%s", G_location_path(), G_mapset(), map);
-
+    path = Vect__get_element_path(&Map, NULL);
     tmp = G_tempfile();
 
-    G_debug(3, "rename '%s' to '%s'", buf, tmp);
-    ret = rename(buf, tmp);
-
+    G_debug(3, "rename '%s' to '%s'", path, tmp);
+    ret = rename(path, tmp);
     if (ret == -1) {
-        G_warning(_("Unable to rename directory '%s' to '%s'"), buf, tmp);
+        G_warning(_("Unable to rename directory '%s' to '%s'"), path, tmp);
         return -1;
     }
 

@@ -75,7 +75,7 @@ int dig__write_head(struct Map_info *Map)
     }
 
     G_debug(2, "coor body offset %"PRI_OFF_T, dig_ftell(&(Map->dig_fp)));
-    return (1);
+    return 1;
 }
 
 
