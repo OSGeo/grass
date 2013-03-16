@@ -42,7 +42,7 @@ int G__make_mapset_element(const char *p_element)
     if (*element == 0)
 	return 0;
 
-    G_file_name(p = path, "", "", G_mapset());
+    G_file_name(p = path, NULL, NULL, G_mapset());
     while (*p)
 	p++;
     /* add trailing slash if missing */
