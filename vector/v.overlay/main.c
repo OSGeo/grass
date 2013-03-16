@@ -11,7 +11,7 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2009, 2012-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -41,7 +41,6 @@ int main(int argc, char *argv[])
 	*ofield_opt, *operator_opt, *snap_opt;
     struct Flag *table_flag;
     struct Map_info In[2], Out, Tmp;
-    char *tmpname;
     struct line_pnts *Points, *Points2;
     struct line_cats *Cats;
     struct ilist *BList;
@@ -49,7 +48,7 @@ int main(int argc, char *argv[])
     int verbose;
 
     struct field_info *Fi = NULL;
-    char buf[1000];
+    char buf[DB_SQL_MAX];
     dbString stmt;
     dbString sql, value_string, col_defs;
     dbDriver *driver;
@@ -187,8 +186,7 @@ int main(int argc, char *argv[])
     Vect_set_person(&Out, G_whoami());
     Vect_hist_command(&Out);
     
-    G_asprintf(&tmpname, "%s_tmp_%d", out_opt->answer, getpid());
-    Vect_open_new(&Tmp, tmpname, WITHOUT_Z);
+    Vect_open_tmp_new(&Tmp, NULL, WITHOUT_Z);
 
     /* Create dblinks */
     if (ofield[0] > 0) {
@@ -293,7 +291,6 @@ int main(int argc, char *argv[])
 	}
 	if (nlines_out == 0) {
 	    Vect_close(&Tmp);
-	    Vect_delete(tmpname);
 	    Vect_close(&Out);
 	    Vect_delete(out_opt->answer);
 	    G_fatal_error(_("No %s features found in vector map <%s>. Verify '%s' parameter."),
@@ -556,10 +553,8 @@ int main(int argc, char *argv[])
     }
     
     Vect_close(&Tmp);
-    Vect_delete(tmpname);
-
+    
     /* Build topology to show the final result and prepare for Vect_close() */
-    G_message(_("Building topology..."));
     Vect_build(&Out);
 
     if (driver) {
