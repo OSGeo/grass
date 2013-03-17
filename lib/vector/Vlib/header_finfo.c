@@ -180,8 +180,8 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
         res = PQexec(pg_info->conn, stmt);
         if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
             PQntuples(res) != 1) {
-            G_warning("%s\n%s", _("Unable to get feature type"),
-                      PQresultErrorMessage(res));
+            G_debug(1, "Unable to get feature type: %s",
+                    PQresultErrorMessage(res));
             return NULL;
         }
         ftype_tmp = G_store(PQgetvalue(res, 0, 0));

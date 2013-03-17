@@ -1200,7 +1200,7 @@ int map_format(struct Map_info *Map)
         struct Format_info_ogr *ogr_info;
         
         G_debug(2, " using OGR format");
-        if (getenv("GRASS_VECTOR_OGR_DIRECT")) {
+        if (getenv("GRASS_VECTOR_EXTERNAL_DIRECT")) {
             /* vector features are written directly to OGR layer */
             format = GV_FORMAT_OGR;
         }
@@ -1242,6 +1242,7 @@ int map_format(struct Map_info *Map)
             G_warning(_("OGR output also detected, using OGR"));
         }
         else {
+            int topology;
             FILE *fp;
             const char *p;
             
@@ -1249,7 +1250,6 @@ int map_format(struct Map_info *Map)
             struct Format_info_pg *pg_info;
             
             G_debug(2, " using PostGIS format");
-            format = GV_FORMAT_POSTGIS;
             fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
             if (!fp) {
                 G_fatal_error(_("Unable to open PG file"));
@@ -1301,6 +1301,21 @@ int map_format(struct Map_info *Map)
             
             /* table name */
             Map->fInfo.pg.table_name = G_store(Map->name);
+
+            p = G_find_key_value("topology", key_val);
+            topology = p && G_strcasecmp(p, "yes") == 0;
+        
+            if (topology || getenv("GRASS_VECTOR_EXTERNAL_DIRECT")) {
+                /* vector features are written directly to PostGIS layer */
+                format = GV_FORMAT_POSTGIS;
+            }
+            else {
+                /* vector features are written to the temporary vector map
+                 * in the native format and when closing the map
+                 * transfered to output PostGIS layer */
+                format = GV_FORMAT_NATIVE;
+                Map->temporary = TRUE;
+            }
         }
     }
     
