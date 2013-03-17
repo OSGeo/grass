@@ -186,7 +186,6 @@ int main(int argc, char *argv[])
     struct Map_info In, Out, Buf;
     struct line_pnts *Points;
     struct line_cats *Cats, *BCats, *CCats;
-    char bufname[GNAME_MAX];
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *dista_opt, *distb_opt,
 	          *angle_opt;
@@ -385,8 +384,7 @@ int main(int argc, char *argv[])
     CCats = Vect_new_cats_struct();
     
     /* open tmp vector for buffers, needed for cleaning */
-    sprintf(bufname, "%s_tmp_%d", out_opt->answer, getpid());
-    if (0 > Vect_open_new(&Buf, bufname, 0)) {
+    if (0 > Vect_open_tmp_new(&Buf, NULL, 0)) {
         G_fatal_error(_("Unable to create vector map"));
     }
     Vect_build_partial(&Buf, GV_BUILD_BASE);
@@ -875,8 +873,7 @@ int main(int argc, char *argv[])
 
     Vect_spatial_index_destroy(&si);
     Vect_close(&Buf);
-    Vect_delete(bufname);
-
+    
     G_set_verbose(verbose);
 
     if (cats_flag->answer)
