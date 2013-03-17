@@ -1183,7 +1183,13 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 /* check for external formats definition */
 int map_format(struct Map_info *Map)
 {
+    int format;
     char *def_file;
+    
+    format = GV_FORMAT_NATIVE;
+    /* temporary maps can be stored only in native format */
+    if (Map->temporary)
+        return format;
     
     if (G_find_file2("", "OGR", G_mapset())) {
         /* OGR */
@@ -1194,7 +1200,17 @@ int map_format(struct Map_info *Map)
         struct Format_info_ogr *ogr_info;
         
         G_debug(2, " using OGR format");
-        Map->format = GV_FORMAT_OGR_DIRECT;
+        if (getenv("GRASS_VECTOR_OGR_DIRECT")) {
+            /* vector features are written directly to OGR layer */
+            format = GV_FORMAT_OGR;
+        }
+        else {
+            /* vector features are written to the temporary vector map
+             * in the native format and when closing the map
+             * transfered to output OGR layer */
+            format = GV_FORMAT_NATIVE;
+            Map->temporary = TRUE;
+        }
         fp = G_fopen_old("", "OGR", G_mapset());
         if (!fp) {
             G_fatal_error(_("Unable to open OGR file"));
@@ -1233,7 +1249,7 @@ int map_format(struct Map_info *Map)
             struct Format_info_pg *pg_info;
             
             G_debug(2, " using PostGIS format");
-            Map->format = GV_FORMAT_POSTGIS;
+            format = GV_FORMAT_POSTGIS;
             fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
             if (!fp) {
                 G_fatal_error(_("Unable to open PG file"));
@@ -1288,8 +1304,8 @@ int map_format(struct Map_info *Map)
         }
     }
     
-    G_debug(2, "map_format = %d", Map->format);
-    return Map->format;
+    G_debug(2, "map_format = %d", format);
+    return format;
 }
 
 /*!

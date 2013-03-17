@@ -79,6 +79,32 @@ int Vect_close(struct Map_info *Map)
     
     G_debug(1, "Vect_close(): name = %s, mapset = %s, format = %d, level = %d, is_tmp = %d",
 	    Map->name, Map->mapset, Map->format, Map->level, Map->temporary);
+
+    if (Map->temporary &&
+        (Map->fInfo.ogr.dsn || Map->fInfo.pg.db_name)) {
+        /* transfer features for external output format */
+        struct Map_info Out;
+        
+        putenv("GRASS_VECTOR_OGR_DIRECT=1");
+        if (-1 == Vect_open_new(&Out, Vect_get_name(Map), Vect_is_3d(Map))) {
+            G_warning(_("Unable to create vector map <%s>"),
+                      Vect_get_name(Map));
+            return 1;
+        }
+
+        Vect_hist_command(&Out);
+            
+        /* TODO: how to determine field ? */
+        if (0 != Vect_copy_map_lines_field(Map, 1, &Out)) {
+            G_warning(_("Saving OGR data failed"));
+            return -1;
+        }
+        
+        Vect_build(&Out);
+        
+        Vect_close(&Out);
+        putenv("GRASS_VECTOR_OGR_DIRECT="); /* unset variable */
+    }
     
     /* check for external formats whether to create a link */
     create_link = TRUE;

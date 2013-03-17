@@ -191,9 +191,16 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     
     ret = 0;
     nlines = Vect_get_num_lines(In);
-    if (topo == TOPO_NONE)
-        G_message(_("Copying features (%s)..."),
-                      Vect_get_finfo_geometry_type(Out));
+    if (topo == TOPO_NONE) {
+        const char *ftype;
+
+        ftype = Vect_get_finfo_geometry_type(Out);
+        G_debug(2, "feature type: %s", ftype ? ftype : "?");
+        if (!ftype)
+            G_message(_("Copying features..."));
+        else 
+            G_message(_("Copying features (%s)..."), ftype);
+    }
     else
         G_message(_("Copying features..."));    
     
@@ -334,7 +341,7 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
     struct line_pnts *Points, **IPoints;
     struct line_cats *Cats;
     
-    ogr = Vect_maptype(Out) == GV_FORMAT_OGR_DIRECT;
+    ogr = Vect_maptype(Out) == (GV_FORMAT_OGR || GV_FORMAT_OGR_DIRECT);
     
     IPoints = NULL;
     nisles_alloc = 0;
