@@ -1200,7 +1200,7 @@ int map_format(struct Map_info *Map)
         struct Format_info_ogr *ogr_info;
         
         G_debug(2, " using OGR format");
-        if (getenv("GRASS_VECTOR_EXTERNAL_DIRECT")) {
+        if (getenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE")) {
             /* vector features are written directly to OGR layer */
             format = GV_FORMAT_OGR;
         }
@@ -1305,7 +1305,7 @@ int map_format(struct Map_info *Map)
             p = G_find_key_value("topology", key_val);
             topology = p && G_strcasecmp(p, "yes") == 0;
         
-            if (topology || getenv("GRASS_VECTOR_EXTERNAL_DIRECT")) {
+            if (topology || getenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE")) {
                 /* vector features are written directly to PostGIS layer */
                 format = GV_FORMAT_POSTGIS;
             }

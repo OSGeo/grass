@@ -85,7 +85,7 @@ int Vect_close(struct Map_info *Map)
         /* transfer features for external output format */
         struct Map_info Out;
         
-        putenv("GRASS_VECTOR_EXTERNAL_DIRECT=1");
+        putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=1");
         if (-1 == Vect_open_new(&Out, Vect_get_name(Map), Vect_is_3d(Map))) {
             G_warning(_("Unable to create vector map <%s>"),
                       Vect_get_name(Map));
@@ -103,7 +103,7 @@ int Vect_close(struct Map_info *Map)
         Vect_build(&Out);
         
         Vect_close(&Out);
-        putenv("GRASS_VECTOR_EXTERNAL_DIRECT="); /* unset variable */
+        putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE="); /* unset variable */
     }
     
     /* check for external formats whether to create a link */
