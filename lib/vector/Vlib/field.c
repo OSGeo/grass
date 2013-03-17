@@ -649,6 +649,7 @@ static int read_dblinks_nat(struct Map_info *Map)
     return rule;
 }
 
+/* return -1 on error */
 static int read_dblinks_ogr(struct Map_info *Map)
 {
     struct dblinks *dbl;
@@ -670,9 +671,11 @@ static int read_dblinks_ogr(struct Map_info *Map)
 	
 	/* data source handle */
 	Map->fInfo.ogr.ds = OGROpen(Map->fInfo.ogr.dsn, FALSE, NULL);
-	if (Map->fInfo.ogr.ds == NULL)
-	    G_fatal_error(_("Unable to open OGR data source '%s'"),
-			  Map->fInfo.ogr.dsn);
+	if (Map->fInfo.ogr.ds == NULL) {
+            G_warning(_("Unable to open OGR data source '%s'"),
+                      Map->fInfo.ogr.dsn);
+            return -1;
+        }
     }
     if (Map->fInfo.ogr.layer == NULL) {
 	/* get layer number */
@@ -686,8 +689,9 @@ static int read_dblinks_ogr(struct Map_info *Map)
 	    if (Map->fInfo.ogr.layer == NULL) {
 		OGR_DS_Destroy(Map->fInfo.ogr.ds);
 		Map->fInfo.ogr.ds = NULL;
-		G_fatal_error(_("Unable to open OGR layer <%s>"),
-			      Map->fInfo.ogr.layer_name);
+		G_warning(_("Unable to open OGR layer <%s>"),
+                          Map->fInfo.ogr.layer_name);
+                return -1;
 	    }
 	}
     }
