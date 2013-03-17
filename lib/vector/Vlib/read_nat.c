@@ -140,7 +140,6 @@ int V2_read_line_nat(struct Map_info *Map,
 
     G_debug(3, "V2_read_line_nat(): line = %d", line);
 
-
     Line = Map->plus.Line[line];
 
     if (Line == NULL) {
