@@ -263,17 +263,22 @@ int Vect_get_line_type(const struct Map_info *Map, int line)
    \brief Get node coordinates
 
    \param Map pointer to Map_info struct
-   \param num node id
-   \param x,y,z coordinates values (for 2D coordinates z is NULL)
+   \param num node id (starts at 1)
+   \param[out] x,y,z coordinates values (for 2D coordinates z is NULL)
 
-   \return 0
+   \return 0 on success
+   \return -1 on error
  */
-int
-Vect_get_node_coor(const struct Map_info *Map, int num, double *x, double *y,
-		   double *z)
+int Vect_get_node_coor(const struct Map_info *Map, int num, double *x, double *y,
+                       double *z)
 {
     struct P_node *Node;
 
+    if (num < 1 || num > Map->plus.n_nodes) {
+        G_warning(_("Invalid node id: %d"), num);
+        return -1;
+    }
+    
     Node = Map->plus.Node[num];
     *x = Node->x;
     *y = Node->y;
@@ -281,7 +286,7 @@ Vect_get_node_coor(const struct Map_info *Map, int num, double *x, double *y,
     if (z != NULL)
 	*z = Node->z;
 
-    return (0);
+    return 0;
 }
 
 /*!
