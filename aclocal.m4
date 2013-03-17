@@ -475,38 +475,31 @@ AC_DEFUN([SC_ENABLE_SHARED], [
 AC_DEFUN([SC_CONFIG_CFLAGS], [
     SHLIB_CFLAGS=""
     SHLIB_LD_FLAGS=""
-    SHLIB_LD_LIBS=""
     SHLIB_SUFFIX=""
     SHLIB_LD=""
     STLIB_LD='${AR} cr'
     STLIB_SUFFIX='.a'
     LDFLAGS=""
-    CC_SEARCH_FLAGS=""
     LD_SEARCH_FLAGS=""
     LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
-    PLAT_OBJS=""
 
     case $host in
         *-linux-*)
 	    SHLIB_CFLAGS="-fPIC"
             SHLIB_LD_FLAGS=""
-	    SHLIB_LD_LIBS='${LIBS}'
 	    SHLIB_SUFFIX=".so"
 	    SHLIB_LD="${CC} -shared"
             LDFLAGS="-Wl,--export-dynamic"
-            CC_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
-            LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
+            LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
             ;;
         *-pc-cygwin)
-	    SHLIB_LD_LIBS='${LIBS}'
             SHLIB_SUFFIX=".dll"
             SHLIB_LD="${CC} -shared"
             LDFLAGS="-Wl,--export-dynamic"
 	    LD_LIBRARY_PATH_VAR="PATH"
 	    ;;
         *-pc-mingw32 | *-pc-msys)
-            SHLIB_LD_LIBS='${LIBS}'
             SHLIB_SUFFIX=".dll"
             SHLIB_LD="${CC} -shared"
             LDFLAGS="-Wl,--export-dynamic,--enable-runtime-pseudo-reloc"
@@ -514,7 +507,6 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             ;;
 	*-apple-darwin*)
 	    SHLIB_CFLAGS="-fno-common"
-	    SHLIB_LD_LIBS='${LIBS}'
 	    SHLIB_SUFFIX=".dylib"
 	    SHLIB_LD="cc -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name \${INST_DIR}/lib/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
 	    LD_LIBRARY_PATH_VAR="DYLD_LIBRARY_PATH"
@@ -529,15 +521,13 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             if test "$GCC" = "yes" ; then
                 SHLIB_CFLAGS="-fPIC"
                 SHLIB_LD="$CC -shared"
-                CC_SEARCH_FLAGS='-Wl,-R,${LIB_RUNTIME_DIR}'
+                LD_SEARCH_FLAGS='-Wl,-R,${LIB_RUNTIME_DIR}'
             else
                 SHLIB_CFLAGS="-KPIC"
                 SHLIB_LD="/usr/ccs/bin/ld -G -z text"
-                CC_SEARCH_FLAGS='-R ${LIB_RUNTIME_DIR}'
+                LD_SEARCH_FLAGS='-R ${LIB_RUNTIME_DIR}'
             fi
             SHLIB_SUFFIX=".so"
-            SHLIB_LD_LIBS='${LIBS}'
-            LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
 	    ;;
         *)
@@ -545,15 +535,12 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             ;;
     esac
 
-    AC_SUBST(PLAT_OBJS)
     AC_SUBST(LDFLAGS)
-    AC_SUBST(CC_SEARCH_FLAGS)
     AC_SUBST(LD_SEARCH_FLAGS)
     AC_SUBST(LD_LIBRARY_PATH_VAR)
 
     AC_SUBST(SHLIB_LD)
     AC_SUBST(SHLIB_LD_FLAGS)
-    AC_SUBST(SHLIB_LD_LIBS)
     AC_SUBST(SHLIB_CFLAGS)
     AC_SUBST(SHLIB_SUFFIX)
 
