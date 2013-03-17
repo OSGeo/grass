@@ -341,7 +341,7 @@ off_t V1_write_line_nat(struct Map_info *Map,
 }
 
 /*!
-  \brief Writes feature to 'coor' file (topology level) - internal use only
+  \brief Writes feature to 'coor' file at topological level (internal use only)
   
   \param Map pointer to Map_info structure
   \param type feature type (GV_POINT, GV_LINE, ...)
@@ -457,7 +457,7 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset
 }
 
 /*!
-  \brief Rewrites feature to 'coor' file (topology level) - internal use only
+  \brief Rewrites feature to 'coor' file at topological level (internal use only)
   
   \param Map pointer to Map_info structure
   \param type feature type  (GV_POINT, GV_LINE, ...)
@@ -652,7 +652,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 }
 
 /*!
-  \brief Deletes feature (topology level) -- internal use only
+  \brief Deletes feature at topological level (internal use only)
   
   \param pointer to Map_info structure
   \param line feature id
@@ -902,7 +902,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
 }
 
 /*!
-  \brief Restores feature (topology level)
+  \brief Restores feature at topological level (internal use only)
   
   \param Map pointer to Map_info structure
   \param line feature id
