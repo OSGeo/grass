@@ -162,6 +162,7 @@ class GMFrame(wx.Frame):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
         self._giface.mapCreated.connect(self.OnMapCreated)
+        self._giface.updateMap.connect(self._updateCurrentMap)
 
         # minimal frame size
         self.SetMinSize((globalvar.GM_WINDOW_SIZE[0], 400))
@@ -1663,6 +1664,10 @@ class GMFrame(wx.Frame):
                                        lopacity = 1.0,
                                        lcmd = cmd,
                                        lgroup = None)
+
+    def _updateCurrentMap(self):
+        """!Updates map of the current map window."""
+        self.GetMapDisplay().GetWindow().UpdateMap()
 
     def OnMapCreated(self, name, ltype, add=None):
         """!Decides wheter the map should be added to layer tree."""
