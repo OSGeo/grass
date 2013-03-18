@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 from grass.pydispatch.signal import Signal
 
+
 class Layer(object):
     """!@implements core::giface::Layer
 
@@ -29,16 +30,30 @@ class Layer(object):
     def __getattr__(self, name):
         return self._pydata[0][name]
 
+    def __dir__(self):
+        return self._pydata[0].keys()
+
+    def __repr__(self):
+        return self.maplayer.name
+
 
 class LayerList(object):
     """!@implements core.giface.Layer"""
     def __init__(self, tree):
         self._tree = tree
 
-#    def __iter__(self):
-#    """!Iterates over the contents of the list."""
-#        for in :
-#            yield
+    def __iter__(self):
+        """!Iterates over the contents of the list."""
+        for item in self._tree.GetSelectedLayer(multi=True):
+            yield Layer(self._tree.GetPyData(item))
+
+    def __getitem__(self, index):
+        """!Select a layer from the LayerList using the index."""
+        return [l for l in self][index]
+
+    def __repr__(self):
+        """!Return a representation of the object."""
+        return "LayerList(%r)" % [layer for layer in self]
 
     def GetSelectedLayers(self, checkedOnly=True):
         items = self._tree.GetSelectedLayer(multi=True,
