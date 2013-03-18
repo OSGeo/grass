@@ -425,6 +425,15 @@ int main(int argc, char *argv[])
 		    case -5:
 			strcat(error_msg, "zone\n");
 			break;
+		    case -6:
+			strcat(error_msg, "south\n");
+			break;
+		    case -7:
+			strcat(error_msg, "x_0\n");
+			break;
+		    case -8:
+			strcat(error_msg, "y_0\n");
+			break;
 		    }
 		}
 		else {
