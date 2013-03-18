@@ -819,8 +819,9 @@ def StoreEnvVariable(key, value = None, envFile = None):
         fd.close()
     
     # update environmental variables
-    if value is None and key in environ:
-        del environ[key]
+    if value is None:
+        if key in environ:
+            del environ[key]
     else:
         environ[key] = value
     
