@@ -89,7 +89,7 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 \subsection vectoribs Vector Libraries
 
  - %vector: \ref vectorlib
-  - dglib: \ref dglib
+  - dglib (internal library)
   - vedit: \ref veditlib - %vector editing
   - neta: \ref netalib
  - sites:	Old Sites library, now interfaced to \ref vectorlib - \ref sites

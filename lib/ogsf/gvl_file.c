@@ -412,7 +412,7 @@ int gvl_file_free_datah(int id)
    \param[out] min min value
    \param[out] max max value
 
-   \pointer to data
+   \returns pointer to data
  */
 void *open_g3d_file(const char *filename, IFLAG * type, double *min,
 		    double *max)

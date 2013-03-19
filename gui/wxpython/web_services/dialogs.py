@@ -644,7 +644,7 @@ class WSPropertiesDialog(WSDialogBase):
     def LoadCapFiles(self, ws_cap_files, cmd):
         """!Parse cap files and update dialog.
 
-        @params for description see constructor
+        For parameters description, see the constructor.
         """
         self.ch_ws_sizer.Clear(deleteWindows = True)
 

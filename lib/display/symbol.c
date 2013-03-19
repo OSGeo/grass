@@ -131,13 +131,16 @@ static void symbol(const SYMBOL *Symb, double x0, double y0,
  * The symbol must be pre-processed with S_stroke() before being sent
  * to this function.
  *
- * example:
+ * \par Example
+ * \code
  *   #include <grass/display.h>
  *   #include <grass/symbol.h>
+ *   ...
  *   SYMBOL *Symb;
  *   Symb = S_read( symbol_name );
  *   S_stroke( Symb, size, rotation, tolerance );
  *   D_symbol( Symb, x0, y0, line_color, fill_color );
+ * \endcode
  *
  *  \param Symb The symbol name (e.g. basic/circle)
  *  \param x0   The starting x display coordinate (pixel)

@@ -1058,13 +1058,13 @@ plotting vector areas with interior islands.
  - G_plot_where_en()
 
 The pixel coordinates <i>x,y</i> are converted to map coordinates
-east,north</i>. See G_setup_plot() for the required coordinate
+<i>east,north</i>. See G_setup_plot() for the required coordinate
 initialization procedure.
 
  - G_plot_where_xy()
 
 The map coordinates <i>east,north</i> are converted to pixel
-coordinates <i>x,y.</i>. See G_setup_plot() for the required
+coordinates <i>x,y</i>. See G_setup_plot() for the required
 coordinate initialization procedure.
 
  - G_plot_fx()

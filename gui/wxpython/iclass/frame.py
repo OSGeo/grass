@@ -1080,7 +1080,7 @@ class IClassMapFrame(DoubleMapFrame):
     def OnPointer(self, event):
         """!Set pointer mode.
 
-        @fixme: needs refactoring
+        @todo: pointers need refactoring
         """
         toolbar = self.GetMapToolbar()
 

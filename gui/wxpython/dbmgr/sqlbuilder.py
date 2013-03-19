@@ -20,7 +20,7 @@ This program is free software under the GNU General Public License
 
 @author Jachym Cepicky <jachym.cepicky gmail.com> (original author)
 @author Martin Landa <landa.martin gmail.com>
-@author Hamish Bowman <hamish_b yahoo com>
+@author Hamish Bowman <hamish_b yahoo.com>
 @author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
