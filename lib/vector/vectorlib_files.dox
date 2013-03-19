@@ -148,108 +148,15 @@ river.backup* 1 NONE
 could be used to say that tables should not be copied for backups of
 map river because table is stored in a reliable RDBMS.
 
-\section vlibs Vector libraries
 
-Besides internal library functions there are two main libraries:
-
-- Vlib (Vector library), see \ref vlibIntro
-- DGLib (Directed Graph Library), see \ref dglib
-
-For historical reasons, there are two internal libraries:
-
-- diglib (with dig_*() functions), GRASS 3.x/4.x
-- Vlib (with V1_*(), V2_*() and Vect_*() functions), since GRASS 4.x
-  (except for the 5.7 interim version)
-
-The vector library was introduced in GRASS 4.0 to hide internal vector
-files' formats and structures.  In GRASS 6/7, everything is accessed via
-Vect_*() functions, for example:
-
-Old 4.x code:
-
-\code
-    xx = Map.Att[Map.Area[area_num].att].x;
-\endcode
-
-New 6.x/7.x functions:
-
-\code
-    centroid = Vect_get_area_centroid(Map, area_num);
-    Vect_read_line(Map, line_p, NULL, centroid);
-    Vect_line_get_point(line_p, 0, &xx, NULL, NULL);
-\endcode
-
-In GRASS 6/7, all internal, mostly non-topological vector functions are
-hidden from the modules' API (mainly dig_*(), V1_*() and V2_*()
-functions). All available Vect_*() functions are topological vector
-functions.
-
-
-The following include file contains definitions and structures
-required by some of the routines in this library. The programmer
-should therefore include this file in any code that uses the vector
-library:
-
-\code
-#include <grass/vector.h>
-\endcode
-
-<i>Note: For details please read Blazek et al. 2002 (see below) as
-well as the references in this document.</i>
-
-\subsection vlibHistory Historical notes
-
-The vector library in GRASS 4.0 changed significantly from the
-<em>Digit Library</em> (diglib) used in GRASS 3.1. Below is an
-overview of why the changes were made.
-
-The Digit Library was a collage of subroutines created for developing
-the map development programs. Few of these subroutines were actually
-designed as a user access library. They required individuals to assume
-too much responsibility and control over what happened to the data
-file. Thus when it came time to change vector data file formats for
-GRASS 4.0, many modules also required modification. The two different
-access levels for 3.0 vector files provided very different ways of
-calling the library; they offered little consistency for the user.
-
-The Digit Library was originally designed to only have one file open
-for read or write at a time. Although it was possible in some cases to
-get around this, one restriction was the global head structure. Since
-there was only one instance of this, there could only be one copy of
-that information, and thus, only one open vector file.
-
-The solution to these problems was to design a new user library as an
-interface to the vector data files. This new library was designed to
-provide a simple consistent interface, which hides as much of the
-details of the data format as possible. It also could be extended for
-future enhancements without the need to change existing programs.
-
-The new vector library in GRASS 4 provided routines for opening,
-closing, reading, and writing vector files, as well as several support
-functions. The Digit Library has been replaced, so that all existing
-modules was converted to use the new library. Those routines that
-existed in the Digit Library and were not affected by these changes
-continue to exist in unmodified form, and were included in the vector
-library. Most of the commonly used routines have been discarded, and
-replaced by the new vector routines.
-
-Instead the global head structure was used own local version of
-it. The structure that replaced structure head is structure \ref
-dig_head. There were still two levels of interface to the vector files
-(future releases may include more). Level one provided access only to
-arc (i.e. polyline) information and to the type of line (AREA, LINE,
-DOT). Level two provided access to polygons (areas), attributes, and
-network topology.
-
-
-\subsection vlibCoorFileFormat Coor file format specification
+\section vlibCoorFileFormat Coor file format specification
 
 In the coor file the following is stored: 'line' (element) type,
 number of attributes and layer number for each category. Coordinates
 in binary file are stored as double (8 bytes). See \ref Coor_info data
 structure.
 
-\subsubsection vlibCoorFileHead Header
+\subsection vlibCoorFileHead Header
 
 <table border="1" style="border-collapse: collapse" cellpadding="5">
 <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
@@ -263,7 +170,7 @@ structure.
 <tr><td>size</td>          <td>L</td> <td>1</td> <td>coor file size</td></tr>
 </table>
 
-\section vlibCoorFileBody Body
+\subsection vlibCoorFileBody Body
 
 The body consists of line records:
 

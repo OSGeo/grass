@@ -6,8 +6,7 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \section vlibSpidx Vector library spatial index management
 
-Spatial index (based on R*-tree) is created with topology, see \ref
-RTree data structure.
+Spatial index (based on R*-tree) is created with topology.
 
 Spatial index occupies a lot of memory but it is necessary for 
 topology building. Also, it takes some time to release the memory
