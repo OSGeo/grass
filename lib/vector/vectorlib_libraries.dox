@@ -9,7 +9,7 @@ by GRASS Development Team (http://grass.osgeo.org)
 Besides internal library functions there are two main libraries:
 
 - Vlib (Vector library), see \ref vlibIntro
-- DGLib (Directed Graph Library), see \ref dglib
+- DGLib (Directed Graph Library)
 
 For historical reasons, there are two internal libraries:
 

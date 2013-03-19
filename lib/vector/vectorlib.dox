@@ -19,7 +19,6 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \par Related libraries
 - \subpage veditlib
-- \subpage dglib
 - \subpage netalib
 
 \section vlibBackground Background
@@ -64,7 +63,7 @@ The current implementation includes:
   OGR sources etc.)
 - <em>portability</em>: platform independent internal format, read- and
       writable on 32bit, 64bit etc. computer architectures
-- integrated \ref dglib - support for vector network analysis
+- <em>network analysis</em> using integrated dglib library
 - <em>spatial index</em>: based on R-tree method for fast vector
   geometry access (see \ref vlibSpidx)
 - <em>multi-attribute</em>: attributes saved in external Relational
@@ -1206,8 +1205,6 @@ Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
  
 \section vlibSeealso See Also
 
- - \ref dglib
- 
  - \ref dbmilib
  
  - \ref veditlib
