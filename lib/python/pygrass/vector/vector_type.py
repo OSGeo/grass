@@ -22,11 +22,3 @@ VTYPE = {'point':    libvect.GV_POINT,  # 1
          'area':     libvect.GV_AREA,  # 7
          'volume':   libvect.GV_VOLUME}  # 8
 
-GV_TYPE = {libvect.GV_POINT:    {'label': 'point',    'obj': geo.Point},
-           libvect.GV_LINE:     {'label': 'line',     'obj': geo.Line},
-           libvect.GV_BOUNDARY: {'label': 'boundary', 'obj': geo.Boundary},
-           libvect.GV_CENTROID: {'label': 'centroid', 'obj': geo.Centroid},
-           libvect.GV_FACE:     {'label': 'face',     'obj': None},
-           libvect.GV_KERNEL:   {'label': 'kernel',   'obj': None},
-           libvect.GV_AREA:     {'label': 'area',     'obj': geo.Area},
-           libvect.GV_VOLUME:   {'label': 'volume',   'obj': None}, }
