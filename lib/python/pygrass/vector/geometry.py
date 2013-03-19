@@ -128,8 +128,10 @@ def get_xyz(pnt):
 
 class Attrs(object):
     def __init__(self, cat, table, writable=False):
-        self.cat = cat
+        self._cat = None
+        self.cond = ''
         self.table = table
+        self.cat = cat
         self.writable = writable
 
     def _get_cat(self):
@@ -139,7 +141,7 @@ class Attrs(object):
         self._cat = value
         if value:
             # update condition
-            self.cond = "%s=%d" % (self.table.key, self.cat)
+            self.cond = "%s=%d" % (self.table.key, value)
 
     cat = property(fget=_get_cat, fset=_set_cat)
 
@@ -1060,8 +1062,8 @@ class Boundary(Line):
 
     def get_left_right(self):
         """Return left and right value"""
-        left = ctypes.poiter(ctypes.c_int())
-        right = ctypes.poiter(ctypes.c_int())
+        left = ctypes.pointer(ctypes.c_int())
+        right = ctypes.pointer(ctypes.c_int())
         libvect.Vect_get_line_areas(self.c_mapinfo, self.id,
                                     left, right)
         return left.contents.value, right.contents.value
@@ -1247,18 +1249,18 @@ class Area(Geo):
      'Vect_select_areas_by_polygon']
     """
 
-    def __init__(self, boundary=None, centroid=None, isles=[], **kargs):
+    def __init__(self, boundary=None, centroid=None, isles=None, **kargs):
         super(Area, self).__init__(**kargs)
         if self.id is not None and self.c_mapinfo:
-            self.boundary = self.points()
-            self.centroid = self.centroid()
+            self.boundary = self.get_points()
+            self.centroid = self.get_centroid()
             self.isles = self.get_isles()
             libvect.Vect_read_line(self.c_mapinfo, None, self.c_cats,
                                    self.centroid.id)
         elif boundary and centroid:
             self.boundary = boundary
             self.centroid = centroid
-            self.isles = isles
+            self.isles = isles if isles else []
         else:
             str_err = "To instantiate an Area you need at least: Boundary and Centroid"
             raise GrassError(str_err)
@@ -1279,18 +1281,17 @@ class Area(Geo):
             raise ValueError("You need to give or set the area_id")
         self.id = area_id if area_id is not None else self.id
         # get boundary
-        self.get_boundary()
+        self.get_points()
         # get isles
         self.get_isles()
-        pass
 
-    def points(self):
+    def get_points(self):
         """Return a Line object with the outer ring"""
         line = Line()
         libvect.Vect_get_area_points(self.c_mapinfo, self.id, line.c_points)
         return line
 
-    def centroid(self):
+    def get_centroid(self):
         centroid_id = libvect.Vect_get_area_centroid(self.c_mapinfo, self.id)
         #import pdb; pdb.set_trace()
         return Centroid(v_id=centroid_id, c_mapinfo=self.c_mapinfo,
@@ -1414,7 +1415,7 @@ class Area(Geo):
         double Vect_area_perimeter (const struct line_pnts *Points)
 
         """
-        border = self.points()
+        border = self.get_points()
         return libvect.Vect_area_perimeter(border.c_points)
 
 
@@ -1466,7 +1467,7 @@ def read_line(feature_id, c_mapinfo, table=None, writable=False):
     """
     nmax = libvect.Vect_get_num_lines(c_mapinfo)
     if feature_id < 0:  # Handle negative indices
-            feature_id += nmax + 1
+        feature_id += nmax + 1
     if feature_id > nmax:
         raise IndexError('Index out of range')
     if feature_id > 0:
