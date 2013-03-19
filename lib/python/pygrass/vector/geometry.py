@@ -130,8 +130,18 @@ class Attrs(object):
     def __init__(self, cat, table, writable=False):
         self.cat = cat
         self.table = table
-        self.cond = "%s=%d" % (self.table.key, self.cat)
         self.writable = writable
+
+    def _get_cat(self):
+        return self._cat
+
+    def _set_cat(self, value):
+        self._cat = value
+        if value:
+            # update condition
+            self.cond = "%s=%d" % (self.table.key, self.cat)
+
+    cat = property(fget=_get_cat, fset=_set_cat)
 
     def __getitem__(self, key):
         """Return the value stored in the attribute table. ::
@@ -236,7 +246,6 @@ class Geo(object):
     def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None,
                  table=None, writable=False, is2D=True):
         self.id = v_id  # vector id
-        self.cat = self.id
         self.c_mapinfo = c_mapinfo
         self.is2D = is2D
         self.gtype = None
@@ -255,8 +264,13 @@ class Geo(object):
 
         # set the attributes
         self.attrs = None
-        if table is not None and self.cat:
+        if table is not None:
             self.attrs = Attrs(self.cat, table, writable)
+
+    @property
+    def cat(self):
+        if self.c_cats.contents.cat:
+            return self.c_cats.contents.cat.contents.value
 
     def is_with_topology(self):
         if self.c_mapinfo is not None:
@@ -1241,7 +1255,6 @@ class Area(Geo):
             self.isles = self.get_isles()
             libvect.Vect_read_line(self.c_mapinfo, None, self.c_cats,
                                    self.centroid.id)
-            self.cat = self.c_cats.contents.cat.contents.value
         elif boundary and centroid:
             self.boundary = boundary
             self.centroid = centroid
@@ -1252,8 +1265,7 @@ class Area(Geo):
 
         # set the attributes
         if self.attrs and self.cat:
-            self.attrs = Attrs(self.cat,
-                               self.attrs.table, self.attrs.writable)
+            self.attrs.cat = self.cat
 
         # geometry type
         self.gtype = libvect.GV_AREA
