@@ -281,7 +281,7 @@ class Ilist(object):
         return self.c_ilist.contents.n_values
 
     def __iter__(self):
-        return [self.c_ilist.contents.value[i] for i in xrange(self.__len__())]
+        return (self.c_ilist.contents.value[i] for i in xrange(self.__len__()))
 
     def __repr__(self):
         return "Ilist(%r)" % repr(self.__iter__())
