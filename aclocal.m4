@@ -530,6 +530,72 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             SHLIB_SUFFIX=".so"
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
 	    ;;
+	*-solaris2*)
+	    # Note: Solaris is as of 2010 Oracle Solaris, not Sun Solaris
+	    #       Oracle Solaris derives from Solaris 2 
+	    #       derives from SunOS 5 
+	    #       derives from UNIX System V Release 4
+	    # Note: If _REENTRANT isn't defined, then Solaris
+	    # won't define thread-safe library routines.
+	    AC_DEFINE(_REENTRANT)
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
+	    # symbols when dynamically loaded into tclsh.
+            if test "$GCC" = "yes" ; then
+                SHLIB_CFLAGS="-fPIC"
+                SHLIB_LD="$CC -shared"
+                LD_SEARCH_FLAGS='-Wl,-R,${LIB_RUNTIME_DIR}'
+            else
+                SHLIB_CFLAGS="-KPIC"
+                SHLIB_LD="/usr/ccs/bin/ld -G -z text"
+                LD_SEARCH_FLAGS='-R ${LIB_RUNTIME_DIR}'
+            fi
+            SHLIB_SUFFIX=".so"
+            LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
+	    ;;
+	*-freebsd*)
+		# NOTE: only FreeBSD 4+ is supported
+	    # FreeBSD 3.* and greater have ELF.
+	    SHLIB_CFLAGS="-fPIC"
+	    SHLIB_LD="ld -Bshareable -x"
+	    SHLIB_SUFFIX=".so"
+	    LDFLAGS="-export-dynamic"
+	    LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+	    # TODO: add optional pthread support with any combination of: 
+	    # CFLAGS="$CFLAGS -pthread"
+	    # LDFLAGS="$LDFLAGS -lpthread"
+	    # AC_DEFINE(_REENTRANT)
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    ;;
+	*aix*)
+		# NOTE: do we need to support aix < 6 ?
+	    LIBS="$LIBS -lc"
+	    SHLIB_CFLAGS=""
+	    SHLIB_SUFFIX=".so"
+	    LDFLAGS=""
+	    LD_SEARCH_FLAGS='-L${LIB_RUNTIME_DIR}'
+	    LD_LIBRARY_PATH_VAR="LIBPATH"
+	    GRASS_NEEDS_EXP_FILE=1
+	    GRASS_EXPORT_FILE_SUFFIX='${LIB_VER}.exp'
+
+	    # On AIX <=v4 systems, libbsd.a has to be linked in to support
+	    # non-blocking file IO.  This library has to be linked in after
+	    # the MATH_LIBS or it breaks the pow() function.  The way to
+	    # insure proper sequencing, is to add it to the tail of MATH_LIBS.
+	    # This library also supplies gettimeofday.
+	    #
+	    # AIX does not have a timezone field in struct tm. When the AIX
+	    # bsd library is used, the timezone global and the gettimeofday
+	    # methods are to be avoided for timezone deduction instead, we
+	    # deduce the timezone by comparing the localtime result on a
+	    # known GMT value.
+
+	    AC_CHECK_LIB(bsd, gettimeofday, libbsd=yes, libbsd=no)
+	    if test $libbsd = yes; then
+	    	MATH_LIBS="$MATH_LIBS -lbsd"
+	    	AC_DEFINE(USE_DELTA_FOR_TZ)
+	    fi
+	    ;;
         *)
             AC_MSG_ERROR([***Unknown platform: $host***])
             ;;
