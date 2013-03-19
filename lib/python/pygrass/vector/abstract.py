@@ -12,6 +12,7 @@ from vector_type import MAPTYPE
 from grass.pygrass import functions
 from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from table import DBlinks, Link
+from find import Finder
 
 
 def is_open(c_mapinfo):
@@ -361,6 +362,7 @@ class Info(object):
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
         self.writable = self.mapset == functions.getenv("MAPSET")
+        self.find = Finder(self.c_mapinfo, self.table, self.writable)
 
     def close(self):
         """Method to close the Vector"""

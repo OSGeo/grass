@@ -9,7 +9,7 @@ GDIR = $(PYDIR)/grass
 PGDIR = $(GDIR)/pygrass
 DSTDIR= $(PGDIR)/vector
 
-MODULES = abstract basic geometry sql table vector_type
+MODULES = abstract basic find geometry sql table vector_type
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
