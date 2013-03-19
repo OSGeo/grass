@@ -127,14 +127,10 @@ def get_xyz(pnt):
 
 
 class Attrs(object):
-    def __init__(self, cat, table, writable=None):
+    def __init__(self, cat, table, writable=False):
         self.cat = cat
         self.table = table
         self.cond = "%s=%d" % (self.table.key, self.cat)
-        # TODO add 
-        #if writable == None:
-        #    self.writable
-        #else:
         self.writable = writable
 
     def __getitem__(self, key):
@@ -221,7 +217,7 @@ in another mapset"
            >>> attrs.keys()                             # doctest: +ELLIPSIS
            (u'cat',
            ...
-           u'NOTES')        
+           u'NOTES')
         """
         return self.table.columns.names()
 
@@ -1019,6 +1015,7 @@ class Line(Geo):
 class Node(object):
     pass
 
+
 class Boundary(Line):
     """
     """
@@ -1407,3 +1404,68 @@ class Area(Geo):
         """
         border = self.points()
         return libvect.Vect_area_perimeter(border.c_points)
+
+
+#
+# Define a dictionary to convert the feature type to name and or object
+#
+
+GV_TYPE = {libvect.GV_POINT:    {'label': 'point',    'obj': Point},
+           libvect.GV_LINE:     {'label': 'line',     'obj': Line},
+           libvect.GV_BOUNDARY: {'label': 'boundary', 'obj': Boundary},
+           libvect.GV_CENTROID: {'label': 'centroid', 'obj': Centroid},
+           libvect.GV_FACE:     {'label': 'face',     'obj': None},
+           libvect.GV_KERNEL:   {'label': 'kernel',   'obj': None},
+           libvect.GV_AREA:     {'label': 'area',     'obj': Area},
+           libvect.GV_VOLUME:   {'label': 'volume',   'obj': None}, }
+
+GEOOBJ = {"areas": Area,
+          "dblinks": None,
+          "faces": None,
+          "holes": None,
+          "islands": Isle,
+          "kernels": None,
+          "line_points": None,
+          "points": Point,
+          "lines": Line,
+          "nodes": Node,
+          "volumes": None}
+
+
+def read_next_line(c_mapinfo, table=None, writable=False):
+    """Return the next geometry feature of a vector map."""
+    v_id = c_mapinfo.contents.next_line
+    v_id = v_id if v_id != 0 else None
+    c_points = ctypes.pointer(libvect.line_pnts())
+    c_cats = ctypes.pointer(libvect.line_cats())
+    ftype = libvect.Vect_read_next_line(c_mapinfo, c_points, c_cats)
+    if ftype == -2:
+        raise StopIteration()
+    if ftype == -1:
+        raise
+    #if  GV_TYPE[ftype]['obj'] is not None:
+    return GV_TYPE[ftype]['obj'](v_id=v_id, c_mapinfo=c_mapinfo,
+                                 c_points=c_points, c_cats=c_cats,
+                                 table=table, writable=writable)
+
+
+def read_line(feature_id, c_mapinfo, table=None, writable=False):
+    """Return a geometry object given the feature id and the c_mapinfo.
+    """
+    nmax = libvect.Vect_get_num_lines(c_mapinfo)
+    if feature_id < 0:  # Handle negative indices
+            feature_id += nmax + 1
+    if feature_id > nmax:
+        raise IndexError('Index out of range')
+    if feature_id > 0:
+        c_points = ctypes.pointer(libvect.line_pnts())
+        c_cats = ctypes.pointer(libvect.line_cats())
+        ftype = libvect.Vect_read_line(c_mapinfo, c_points, c_cats, feature_id)
+        if  GV_TYPE[ftype]['obj'] is not None:
+            return GV_TYPE[ftype]['obj'](v_id=feature_id, c_mapinfo=c_mapinfo,
+                                         c_points=c_points, c_cats=c_cats,
+                                         table=table, writable=writable)
+    else:
+        raise ValueError('The index must be >0, %r given.' % feature_id)
+
+

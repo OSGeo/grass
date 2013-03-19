@@ -4,17 +4,16 @@ Created on Tue Jul 17 08:51:53 2012
 
 @author: pietro
 """
-import ctypes
-
 import grass.lib.vector as libvect
-from vector_type import VTYPE, GV_TYPE
+from vector_type import VTYPE
 
 #
 # import pygrass modules
 #
 from grass.pygrass.errors import GrassError, must_be_open
 
-import geometry
+from geometry import GEOOBJ as _GEOOBJ
+from geometry import read_line, read_next_line
 from abstract import Info
 from basic import Bbox
 
@@ -31,18 +30,6 @@ _NUMOF = {"areas": libvect.Vect_get_num_areas,
           "updated_lines": libvect.Vect_get_num_updated_lines,
           "updated_nodes": libvect.Vect_get_num_updated_nodes,
           "volumes": libvect.Vect_get_num_volumes}
-
-_GEOOBJ = {"areas": geometry.Area,
-           "dblinks": None,
-           "faces": None,
-           "holes": None,
-           "islands": geometry.Isle,
-           "kernels": None,
-           "line_points": None,
-           "points": geometry.Point,
-           "lines": geometry.Line,
-           "nodes": geometry.Node,
-           "volumes": None}
 
 
 #=============================================
@@ -109,22 +96,7 @@ class Vector(Info):
 
         ..
         """
-        v_id = self.c_mapinfo.contents.next_line
-        v_id = v_id if v_id != 0 else None
-        c_points = ctypes.pointer(libvect.line_pnts())
-        c_cats = ctypes.pointer(libvect.line_cats())
-        ftype = libvect.Vect_read_next_line(self.c_mapinfo, c_points, c_cats)
-        if ftype == -2:
-            raise StopIteration()
-        if ftype == -1:
-            raise
-        #if  GV_TYPE[ftype]['obj'] is not None:
-        return GV_TYPE[ftype]['obj'](v_id=v_id,
-                                     c_mapinfo=self.c_mapinfo,
-                                     c_points=c_points,
-                                     c_cats=c_cats,
-                                     table=self.table,
-                                     writable=self.writable)
+        return read_next_line(self.c_mapinfo, self.table, self.writable)
 
     @must_be_open
     def rewind(self):
@@ -204,8 +176,6 @@ class Vector(Info):
         else:
             # return offset into file where the feature starts (on level 1)
             geo_obj.offset = result
-
-
 
 
 #=============================================
@@ -407,24 +377,7 @@ class VectorTopo(Vector):
 
         ..
         """
-        if feature_id < 0:  # Handle negative indices
-                feature_id += self.__len__() + 1
-        if feature_id > (self.__len__()):
-            raise IndexError('Index out of range')
-        if feature_id > 0:
-            c_points = ctypes.pointer(libvect.line_pnts())
-            c_cats = ctypes.pointer(libvect.line_cats())
-            ftype = libvect.Vect_read_line(self.c_mapinfo, c_points,
-                                           c_cats, feature_id)
-            if  GV_TYPE[ftype]['obj'] is not None:
-                return GV_TYPE[ftype]['obj'](v_id=feature_id,
-                                             c_mapinfo=self.c_mapinfo,
-                                             c_points=c_points,
-                                             c_cats=c_cats,
-                                             table=self.table,
-                                             writable=self.writable)
-        else:
-            raise ValueError('The index must be >0, %r given.' % feature_id)
+        return read_line(feature_id, self.c_mapinfo, self.table, self.writable)
 
     @must_be_open
     def is_empty(self):
