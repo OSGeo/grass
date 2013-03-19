@@ -4,13 +4,14 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
-\par Related
+\par Related pages
 - \subpage vlibDescription
 - \subpage vlibFormat
 - \subpage vlibTopology
 - \subpage vlibIndices
 - \subpage vlibAscii
 - \subpage vlibTin
+- \subpage vlibFAQ
 
 \par Data providers for external formats
 - \subpage vlibOgr
