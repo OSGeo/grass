@@ -31,7 +31,7 @@
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-/**-----------------------------------------------------------------------------
+/*!
  \brief Create a new rectangle for a given tree
 
  This method allocates a new rectangle and initializes
@@ -39,9 +39,9 @@
 
  Hence a call to RTreeNewBoundary() is not necessary.
 
- \param t: The pointer to a RTree struct
+ \param t The pointer to a RTree struct
  \return A new allocated RTree_Rect struct
------------------------------------------------------------------------------*/
+*/
 struct RTree_Rect *RTreeAllocRect(struct RTree *t)
 {
     struct RTree_Rect *r;
@@ -56,13 +56,13 @@ struct RTree_Rect *RTreeAllocRect(struct RTree *t)
     return r;
 }
 
-/**----------------------------------------------------------------------------
+/*!
  \brief Delete a rectangle
 
  This method deletes (free) the allocated memory of a rectangle.
 
- \param r: The pointer to the rectangle to be deleted
------------------------------------------------------------------------------*/
+ \param r The pointer to the rectangle to be deleted
+*/
 void RTreeFreeRect(struct RTree_Rect *r)
 {
     assert(r);
@@ -70,17 +70,17 @@ void RTreeFreeRect(struct RTree_Rect *r)
     free(r);
 }
 
-/**----------------------------------------------------------------------------
+/*!
  \brief Allocate the boundary array of a rectangle for a given tree
 
  This method allocated the boundary coordinates array in
  provided rectangle. It does not release previously allocated memory.
 
- \param r: The  pointer to rectangle to initialize the boundary coordinates.
+ \param r The  pointer to rectangle to initialize the boundary coordinates.
            This is usually a rectangle that was created on the stack or
            self allocated.
- \param t: The pointer to a RTree struct
------------------------------------------------------------------------------*/
+ \param t The pointer to a RTree struct
+*/
 RectReal *RTreeAllocBoundary(struct RTree *t)
 {
     RectReal *boundary = (RectReal *)malloc(t->rectsize);
@@ -90,14 +90,14 @@ RectReal *RTreeAllocBoundary(struct RTree *t)
     return boundary;
 }
 
-/**----------------------------------------------------------------------------
+/*!
  \brief Delete the boundary of a rectangle
 
  This method deletes (free) the memory of the boundary of a rectangle
  and sets the boundary pointer to NULL.
 
- \param r: The pointer to the rectangle to delete the boundary from.
------------------------------------------------------------------------------*/
+ \param r The pointer to the rectangle to delete the boundary from.
+*/
 void RTreeFreeBoundary(struct RTree_Rect *r)
 {
     assert(r);
@@ -106,9 +106,9 @@ void RTreeFreeBoundary(struct RTree_Rect *r)
     r->boundary = NULL;
 }
 
-/**-----------------------------------------------------------------------------
+/*!
  \brief Initialize a rectangle to have all 0 coordinates.
------------------------------------------------------------------------------*/
+*/
 void RTreeInitRect(struct RTree_Rect *r, struct RTree *t)
 {
     register int i;
@@ -117,17 +117,17 @@ void RTreeInitRect(struct RTree_Rect *r, struct RTree *t)
 	r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal) 0;
 }
 
-/**-----------------------------------------------------------------------------
+/*!
  \brief Set one dimensional coordinates of a rectangle for a given tree.
 
  All coordinates of the rectangle will be initialized to 0 before
  the x coordinates are set.
 
- \param r: The pointer to the rectangle
- \param t: The pointer to the RTree
- \param x_min: The lower x coordinate
- \param x_max: The higher x coordinate
------------------------------------------------------------------------------*/
+ \param r The pointer to the rectangle
+ \param t The pointer to the RTree
+ \param x_min The lower x coordinate
+ \param x_max The higher x coordinate
+*/
 void RTreeSetRect1D(struct RTree_Rect *r, struct RTree *t, double x_min,
                    double x_max)
 {
@@ -136,19 +136,19 @@ void RTreeSetRect1D(struct RTree_Rect *r, struct RTree *t, double x_min,
     r->boundary[t->ndims_alloc] = (RectReal)x_max;
 }
 
-/**-----------------------------------------------------------------------------
+/*!
  \brief Set two dimensional coordinates of a rectangle for a given tree.
 
  All coordinates of the rectangle will be initialized to 0 before
  the x and y coordinates are set.
 
- \param r: The pointer to the rectangle
- \param t: The pointer to the RTree
- \param x_min: The lower x coordinate
- \param x_max: The higher x coordinate
- \param y_min: The lower y coordinate
- \param y_max: The higher y coordinate
------------------------------------------------------------------------------*/
+ \param r The pointer to the rectangle
+ \param t The pointer to the RTree
+ \param x_min The lower x coordinate
+ \param x_max The higher x coordinate
+ \param y_min The lower y coordinate
+ \param y_max The higher y coordinate
+*/
 void RTreeSetRect2D(struct RTree_Rect *r, struct RTree *t, double x_min,
                    double x_max, double y_min, double y_max)
 {
@@ -159,21 +159,21 @@ void RTreeSetRect2D(struct RTree_Rect *r, struct RTree *t, double x_min,
     r->boundary[1 + t->ndims_alloc] = (RectReal)y_max;
 }
 
-/**-----------------------------------------------------------------------------
+/*!
  \brief Set three dimensional coordinates of a rectangle for a given tree.
 
  All coordinates of the rectangle will be initialized to 0 before
  the x,y and z coordinates are set.
 
- \param r: The pointer to the rectangle
- \param t: The pointer to the RTree
- \param x_min: The lower x coordinate
- \param x_max: The higher x coordinate
- \param y_min: The lower y coordinate
- \param y_max: The higher y coordinate
- \param z_min: The lower z coordinate
- \param z_max: The higher z coordinate
------------------------------------------------------------------------------*/
+ \param r The pointer to the rectangle
+ \param t The pointer to the RTree
+ \param x_min The lower x coordinate
+ \param x_max The higher x coordinate
+ \param y_min The lower y coordinate
+ \param y_max The higher y coordinate
+ \param z_min The lower z coordinate
+ \param z_max The higher z coordinate
+*/
 void RTreeSetRect3D(struct RTree_Rect *r, struct RTree *t, double x_min,
                    double x_max, double y_min, double y_max, double z_min,
                    double z_max)
@@ -187,23 +187,23 @@ void RTreeSetRect3D(struct RTree_Rect *r, struct RTree *t, double x_min,
     r->boundary[2 + t->ndims_alloc] = (RectReal)z_max;
 }
 
-/**-----------------------------------------------------------------------------
+/*!
  \brief Set 4 dimensional coordinates of a rectangle for a given tree.
 
  All coordinates of the rectangle will be initialized to 0 before
  the x,y,z and t coordinates are set.
 
- \param r: The pointer to the rectangle
- \param t: The pointer to the RTree
- \param x_min: The lower x coordinate
- \param x_max: The higher x coordinate
- \param y_min: The lower y coordinate
- \param y_max: The higher y coordinate
- \param z_min: The lower z coordinate
- \param z_max: The higher z coordinate
- \param t_min: The lower t coordinate
- \param t_max: The higher t coordinate
------------------------------------------------------------------------------*/
+ \param r The pointer to the rectangle
+ \param t The pointer to the RTree
+ \param x_min The lower x coordinate
+ \param x_max The higher x coordinate
+ \param y_min The lower y coordinate
+ \param y_max The higher y coordinate
+ \param z_min The lower z coordinate
+ \param z_max The higher z coordinate
+ \param t_min The lower t coordinate
+ \param t_max The higher t coordinate
+*/
 void RTreeSetRect4D(struct RTree_Rect *r, struct RTree *t, double x_min,
                    double x_max, double y_min, double y_max, double z_min,
                    double z_max, double t_min, double t_max)
@@ -220,10 +220,10 @@ void RTreeSetRect4D(struct RTree_Rect *r, struct RTree *t, double x_min,
     r->boundary[3] = (RectReal)t_min;
     r->boundary[3 + t->ndims_alloc] = (RectReal)t_max;
 }
-/*-----------------------------------------------------------------------------
-| Return a rect whose first low side is higher than its opposite side -
-| interpreted as an undefined rect.
------------------------------------------------------------------------------*/
+/*
+ Return a rect whose first low side is higher than its opposite side -
+ interpreted as an undefined rect.
+*/
 void RTreeNullRect(struct RTree_Rect *r, struct RTree *t)
 {
     register int i;
@@ -241,10 +241,10 @@ void RTreeNullRect(struct RTree_Rect *r, struct RTree *t)
 
 #if 0
 
-/*-----------------------------------------------------------------------------
-| Fills in random coordinates in a rectangle.
-| The low side is guaranteed to be less than the high side.
------------------------------------------------------------------------------*/
+/*
+ Fills in random coordinates in a rectangle.
+ The low side is guaranteed to be less than the high side.
+*/
 void RTreeRandomRect(struct RTree_Rect *R)
 {
     register struct RTree_Rect *r = R;
@@ -264,14 +264,14 @@ void RTreeRandomRect(struct RTree_Rect *R)
 }
 
 
-/*-----------------------------------------------------------------------------
-| Fill in the boundaries for a random search rectangle.
-| Pass in a pointer to a rect that contains all the data,
-| and a pointer to the rect to be filled in.
-| Generated rect is centered randomly anywhere in the data area,
-| and has size from 0 to the size of the data area in each dimension,
-| i.e. search rect can stick out beyond data area.
------------------------------------------------------------------------------*/
+/*
+ Fill in the boundaries for a random search rectangle.
+ Pass in a pointer to a rect that contains all the data,
+ and a pointer to the rect to be filled in.
+ Generated rect is centered randomly anywhere in the data area,
+ and has size from 0 to the size of the data area in each dimension,
+ i.e. search rect can stick out beyond data area.
+*/
 void RTreeSearchRect(struct RTree_Rect *Search, struct RTree_Rect *Data)
 {
     register struct RTree_Rect *search = Search, *data = Data;
@@ -301,9 +301,9 @@ void RTreeSearchRect(struct RTree_Rect *Search, struct RTree_Rect *Data)
 
 #endif
 
-/*-----------------------------------------------------------------------------
-| Print out the data for a rectangle.
------------------------------------------------------------------------------*/
+/*
+ Print out the data for a rectangle.
+*/
 void RTreePrintRect(struct RTree_Rect *R, int depth, struct RTree *t)
 {
     register struct RTree_Rect *r = R;
@@ -319,9 +319,9 @@ void RTreePrintRect(struct RTree_Rect *R, int depth, struct RTree *t)
     }
 }
 
-/*-----------------------------------------------------------------------------
-| Calculate the n-dimensional volume of a rectangle
------------------------------------------------------------------------------*/
+/*
+ Calculate the n-dimensional volume of a rectangle
+*/
 RectReal RTreeRectVolume(struct RTree_Rect *R, struct RTree *t)
 {
     register struct RTree_Rect *r = R;
@@ -341,14 +341,14 @@ RectReal RTreeRectVolume(struct RTree_Rect *R, struct RTree *t)
 }
 
 
-/*-----------------------------------------------------------------------------
-| Define the NUMDIMS-dimensional volume the unit sphere in that dimension into
-| the symbol "UnitSphereVolume"
-| Note that if the gamma function is available in the math library and if the
-| compiler supports static initialization using functions, this is
-| easily computed for any dimension. If not, the value can be precomputed and
-| taken from a table. The following code can do it either way.
------------------------------------------------------------------------------*/
+/*
+ Define the NUMDIMS-dimensional volume the unit sphere in that dimension into
+ the symbol "UnitSphereVolume"
+ Note that if the gamma function is available in the math library and if the
+ compiler supports static initialization using functions, this is
+ easily computed for any dimension. If not, the value can be precomputed and
+ taken from a table. The following code can do it either way.
+*/
 
 #ifdef gamma
 
@@ -399,9 +399,9 @@ const double UnitSphereVolumes[] = {
 #endif
 
 
-/*-----------------------------------------------------------------------------
-| Calculate the n-dimensional volume of the bounding sphere of a rectangle
------------------------------------------------------------------------------*/
+/*
+ Calculate the n-dimensional volume of the bounding sphere of a rectangle
+*/
 
 #if 0
 /*
@@ -453,9 +453,9 @@ RectReal RTreeRectSphericalVolume(struct RTree_Rect *r, struct RTree *t)
 }
 
 
-/*-----------------------------------------------------------------------------
-| Calculate the n-dimensional surface area of a rectangle
------------------------------------------------------------------------------*/
+/*
+ Calculate the n-dimensional surface area of a rectangle
+*/
 RectReal RTreeRectSurfaceArea(struct RTree_Rect *r, struct RTree *t)
 {
     int i, j;
@@ -480,10 +480,10 @@ RectReal RTreeRectSurfaceArea(struct RTree_Rect *r, struct RTree *t)
 }
 
 
-/*-----------------------------------------------------------------------------
-| Calculate the n-dimensional margin of a rectangle
-| the margin is the sum of the lengths of the edges
------------------------------------------------------------------------------*/
+/*
+ Calculate the n-dimensional margin of a rectangle
+ the margin is the sum of the lengths of the edges
+*/
 RectReal RTreeRectMargin(struct RTree_Rect *r, struct RTree *t)
 {
     int i;
@@ -499,9 +499,9 @@ RectReal RTreeRectMargin(struct RTree_Rect *r, struct RTree *t)
 }
 
 
-/*-----------------------------------------------------------------------------
-| Combine two rectangles, make one that includes both.
------------------------------------------------------------------------------*/
+/*
+ Combine two rectangles, make one that includes both.
+*/
 void RTreeCombineRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
 		      struct RTree_Rect *r3, struct RTree *t)
 {
@@ -536,9 +536,9 @@ void RTreeCombineRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
 }
 
 
-/*-----------------------------------------------------------------------------
-| Expand first rectangle to cover second rectangle.
------------------------------------------------------------------------------*/
+/*
+ Expand first rectangle to cover second rectangle.
+*/
 int RTreeExpandRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
 		     struct RTree *t)
 {
@@ -571,9 +571,9 @@ int RTreeExpandRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
 }
 
 
-/*-----------------------------------------------------------------------------
-| Decide whether two rectangles are identical.
------------------------------------------------------------------------------*/
+/*
+ Decide whether two rectangles are identical.
+*/
 int RTreeCompareRect(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j;
@@ -591,9 +591,9 @@ int RTreeCompareRect(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t
 }
 
 
-/*-----------------------------------------------------------------------------
-| Decide whether two rectangles overlap or touch.
------------------------------------------------------------------------------*/
+/*
+ Decide whether two rectangles overlap or touch.
+*/
 int RTreeOverlap(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j;
@@ -611,9 +611,9 @@ int RTreeOverlap(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 }
 
 
-/*-----------------------------------------------------------------------------
-| Decide whether rectangle s is contained in rectangle r.
------------------------------------------------------------------------------*/
+/*
+ Decide whether rectangle s is contained in rectangle r.
+*/
 int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j;
@@ -638,9 +638,9 @@ int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 }
 
 
-/*-----------------------------------------------------------------------------
-| Decide whether rectangle s fully contains rectangle r.
------------------------------------------------------------------------------*/
+/*
+ Decide whether rectangle s fully contains rectangle r.
+*/
 int RTreeContains(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j;
