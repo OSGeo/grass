@@ -2,23 +2,57 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-\par What is the difference between line and boundary?
-Only boundaries are used to construct areas. Boundaries know the areas to their left and right.
+<dl>
 
-\par What is the difference between feature id and category?
-A category, as the name implies, is used to assign a feature to a certain category. A category is thus not a unique id, even though it can be used as such. Unique feature id's are created automatically be the vector lib and can change when the vector is modified (features added, deleted, topology rebuilt).
+<dt>What is the difference between line and boundary?</dt>
+<dd>
+Only boundaries are used to construct areas. Boundaries know the areas to their
+left and right.
+</dd>
 
-\par In my module I need a unique identifier for feature. The identifier is for internal use only, i.e values will be used to identify features only when module is running. Can I use (internal) feature id for this?
+<dt>What is the difference between feature id and category?</dt>
+<dd>
+A category, as the name implies, is used to assign a feature to a certain
+category. A category is thus not a unique id, even though it can be used as
+such. Unique feature id's are created automatically be the vector lib and can
+change when the vector is modified (features added, deleted, topology rebuilt).
+</dd>
 
-If you want to be sure that feature number x is always the same, it is safer to set categories such that they can be used as feature ids.
+<dt>In my module I need a unique identifier for feature. The identifier is for
+internal use only, i.e values will be used to identify features only when
+module is running. Can I use (internal) feature id for this?</dt>
+<dd>
+</dd>
 
-\par I need a unique identifier of a feature. I'm using category for this. How should I check and handle states when number of categories for one line is not equal to 1?
-A category always belongs to a given layer. Check if there is one and only one category for the desired layer. If there is no category value set, skip this feature. If there are more categories set for the desired layer, the procedure depends on the purpose of the module. For example, \gmod{v.extract} would extract a feature if any of the categories set for the given layer is in the list of categories to be selected.
+If you want to be sure that feature number x is always the same, it is safer to
+set categories such that they can be used as feature ids.
+</dd>
 
-\par I'm using category as a unique identifier of a feature. Thus, the case when number of categories is zero or more than one, I cannot continue in processing. Should I print warning or should I call G_fatal_error()?
-Both cases are generaly valid in GRASS. Do not print a warning, maybe a verbose message. It is the responsibility of a module to make a reasonable plan how to handle these cases.
+<dt>I need a unique identifier of a feature. I'm using category for this. How
+should I check and handle states when number of categories for one line is not
+equal to 1?</dt>
+<dd>
+A category always belongs to a given layer. Check if there is one and only one
+category for the desired layer. If there is no category value set, skip this
+feature. If there are more categories set for the desired layer, the procedure
+depends on the purpose of the module. For example, \gmod{v.extract} would
+extract a feature if any of the categories set for the given layer is in the
+list of categories to be selected.
+</dd>
 
-\par My module requires using categories. When iterating over features, my algorithm have to bother with checking of input. It is possible to check categories in some other way i.g., for the whole map at once?
+<dt>I'm using category as a unique identifier of a feature. Thus, the case when
+number of categories is zero or more than one, I cannot continue in processing.
+Should I print warning or should I call G_fatal_error()?</dt>
+<dd>
+Both cases are generaly valid in GRASS. Do not print a warning, maybe a verbose
+message. It is the responsibility of a module to make a reasonable plan how to
+handle these cases.
+</dd>
+
+<dt>My module requires using categories. When iterating over features, my
+algorithm have to bother with checking of input. It is possible to check
+categories in some other way i.g., for the whole map at once?</dt>
+<dd>
 \code{.py}
 # Python example using ctypes
 # checking category for each feature
@@ -26,88 +60,199 @@ if areaCats.contents.n_cats == 0:
     # skip processing
     continue
 \endcode
+</dd>
 
-\par What is feature and what is line (not particular geometry type GV_LINE but thing read by Vect_read_line() function)?
+<dt>What is feature and what is line (not particular geometry type GV_LINE but
+thing read by Vect_read_line() function)?</dt>
+<dd>
 Vect_read_line() reads, GV_POINT, GV_LINE, GV_BOUNDARY, GV_CENTROID, GV_FACE.
+</dd>
 
-\par Can one feature have several categories? Do these categories have to be assigned to one feature in different layers (i.e. can I assign two or more categories to one feature in one layer)?
-GRASS supports M:N mapping of categories. Several features can share the same category, and one feature can have several categories. Further more, one feature can have several categories in the same layer. See manual of \gmod{v.buffer} (GRASS 7 only) for an example.
+<dt>Can one feature have several categories? Do these categories have to be
+assigned to one feature in different layers (i.e. can I assign two or more
+categories to one feature in one layer)?</dt>
+<dd>
+GRASS supports M:N mapping of categories. Several features can share the same
+category, and one feature can have several categories. Further more, one
+feature can have several categories in the same layer. See manual of
+\gmod{v.buffer} (GRASS 7 only) for an example.
+</dd>
 
-\par What can I expect to get from function Vect_read_line() according to various combinations of features and categories in vector map?
-The return value of Vect_read_line() is the feature type, which must be positive, otherwise the read request was illegal. Vect_read_line() fills the Points and Cats structures with coordinates and categories. 
+<dt>What can I expect to get from function Vect_read_line() according to
+various combinations of features and categories in vector map?</dt>
+<dd>
+The return value of Vect_read_line() is the feature type, which must be
+positive, otherwise the read request was illegal. Vect_read_line() fills the
+Points and Cats structures with coordinates and categories.
+</dd>
 
-\par Why there is no function such as Vect_get_point() or Vect_get_boundary_points()?
-The GRASS-internal feature id refers to primitives (points, lines, boundaries, centroids, faces). These are all lumped together. That means that something like Vect_get_point() would use as arguments map and id, but this id can refer to any of points, lines, boundaries, centroids, faces. The coordinates of these primitives are stored in one file, and this file does not have separate sections for points, lines, boundaries, centroids, faces. The equivalent of Vect_get_point() is done on module level by checking the return type of Vect_read_line(). Further on, sometimes it is desired to work with more than one type at the same time. That's the reason for
+<dt>Why there is no function such as Vect_get_point() or
+Vect_get_boundary_points()?</dt>
+<dd>
+The GRASS-internal feature id refers to primitives (points, lines, boundaries,
+centroids, faces). These are all lumped together. That means that something
+like Vect_get_point() would use as arguments map and id, but this id can refer
+to any of points, lines, boundaries, centroids, faces. The coordinates of these
+primitives are stored in one file, and this file does not have separate
+sections for points, lines, boundaries, centroids, faces. The equivalent of
+Vect_get_point() is done on module level by checking the return type of
+Vect_read_line(). Further on, sometimes it is desired to work with more than
+one type at the same time. That's the reason for
 \code{.c}
 if (!(ltype & type))
     continue;
 \endcode
+</dd>
 
-\par Can I read areas with Vect_read_next_line()?
+<dt>Can I read areas with Vect_read_next_line()?</dt>
+<dd>
 No. An area is constructed from boundaries and centroids.
+</dd>
 
-\par What are the standard options for module which has a vector map without attribute table as an input?
+<dt>What are the standard options for module which has a vector map without
+attribute table as an input?</dt>
+<dd>
 Input, output, type. Sometimes layer and category lists.
+</dd>
 
-\par What are the standard options for module which has a vector map with attribute table as an input?
+<dt>What are the standard options for module which has a vector map with
+attribute table as an input?</dt>
+<dd>
 The above plus where for SQL where option.
+</dd>
 
-\par When should be layer number taken into account if user requires to do so?
-If the user requires it, you have to take it into account if you read features from a map or data from attribute table. More generally, whenever you work with categories.
+<dt>When should be layer number taken into account if user requires to do
+so?</dt>
+<dd>
+If the user requires it, you have to take it into account if you read features
+from a map or data from attribute table. More generally, whenever you work with
+categories.
+</dd>
 
-\par After reading feature by Vect_read_line() function you should loop over categories in line_cats structure?
-It depends. If the feature should only be processed if it belongs to a certain category, yes.
+<dt>After reading feature by Vect_read_line() function you should loop over
+categories in line_cats structure?</dt>
+<dd>
+It depends. If the feature should only be processed if it belongs to a certain
+category, yes.
+</dd>
 
-\par My module reads some data from attribute table columns specified by user. What should I check before I can read from attribute table?
-If the columns exist. But sometimes column can be an expression of columns, e.g. col_a/col_b. Otherwise nothing unusual.
+<dt>My module reads some data from attribute table columns specified by user.
+What should I check before I can read from attribute table?</dt>
+<dd>
+If the columns exist. But sometimes column can be an expression of columns,
+e.g. col_a/col_b. Otherwise nothing unusual.
+</dd>
 
-\par My module writes some data to attribute table columns specified by user.
+<dt>My module writes some data to attribute table columns specified by
+user.</dt>
+<dd>
 What should I check before I can write to attribute table?
 If the specified table doesn't exists, should I create one?
-If the module does not create a new vector, and a table exists, check if the column exists and is of the correct type, if not, create the column. If the module does create a new vector, a new table must also be created.
+If the module does not create a new vector, and a table exists, check if the
+column exists and is of the correct type, if not, create the column. If the
+module does create a new vector, a new table must also be created.
+</dd>
 
-\par I should add features to vector map, add tables or columns only if \c \-\-overwrite was specified, right?
-The behaviour for db operations is not cleary defined in GRASS. Quite a lot works without \c \-\-overwrite. Try \gmod{v.db.update} or \gmod{v.to.db}.
+<dt>I should add features to vector map, add tables or columns only if \c
+\-\-overwrite was specified, right?</dt>
+<dd>
+The behaviour for db operations is not cleary defined in GRASS. Quite a lot
+works without \c \-\-overwrite. Try \gmod{v.db.update} or \gmod{v.to.db}.
+</dd>
 
-\par Checking user input is tedious are there any functions which makes it easier?
-Not really. There is G_legal_filename(), Vect_legal_filename() and Vect_check_input_output_name(). Module-specific options must be checked by the module.
+<dt>Checking user input is tedious are there any functions which makes it
+easier?</dt>
+<dd>
+Not really. There is G_legal_filename(), Vect_legal_filename() and
+Vect_check_input_output_name(). Module-specific options must be checked by the
+module.
+</dd>
 
-\par How can I handle memory correctly?
+<dt>How can I handle memory correctly?</dt>
+<dd>
 <ul>
 <li>
-Memory allocated by Vect_new_line_struct() and Vect_new_cats_struct() can be automatically reallocated many times by various library functions. However at the end of your work you have to deallocate memory by calling functions Vect_destroy_line_struct() and Vect_destroy_cats_struct().
+Memory allocated by Vect_new_line_struct() and Vect_new_cats_struct() can be
+automatically reallocated many times by various library functions. However at
+the end of your work you have to deallocate memory by calling functions
+Vect_destroy_line_struct() and Vect_destroy_cats_struct().
 <li>
-Structure Map_info is usually created on stack so no need for deallocating. Structure Map_info is used by modules like this:
+Structure Map_info is usually created on stack so no need for deallocating.
+Structure Map_info is used by modules like this:
 \code{.c}
 struct Map_info In, Out;
 \endcode
 So, no pointers, no allocation, no deallocation.
 </ul>
-As a rule of thumb, whenever you use some \c Vect_new_*() function, there should also be a corresponding \c Vect_destroy_*() function. These deallocating functions need only be used if the \c Vect_new_*() functions are called in a loop. A one-time call does not matter, memory is freed by the system when the module exits.
+As a rule of thumb, whenever you use some \c Vect_new_*() function, there
+should also be a corresponding \c Vect_destroy_*() function. These deallocating
+functions need only be used if the \c Vect_new_*() functions are called in a
+loop. A one-time call does not matter, memory is freed by the system when the
+module exits.
+</dd>
 
-\par What is the purpose of cat_list and ilist structures?
-A cat_list is used to store a list of cats, e.g. from a cats option. The ilist struct is a list of integers.
+<dt>What is the purpose of cat_list and ilist structures?</dt>
+<dd>
+A cat_list is used to store a list of cats, e.g. from a cats option. The ilist
+struct is a list of integers.
+</dd>
 
-\par How can I handle data without topology or data which are topologically incorrect?
+<dt>How can I handle data without topology or data which are topologically
+incorrect?</dt>
+<dd>
 Use Vect_read_next_line() function.
+</dd>
 
-\par How can I handle overlapping areas? Can I use boundaries (GV_BOUNDARY) instead of areas (GV_AREA)?
-Overlapping boundaries are not topologically correct either. Either break boundaries, or (internal use only) do not build areas, or use lines if lines can hold all the info you need.
+<dt>How can I handle overlapping areas? Can I use boundaries (GV_BOUNDARY)
+instead of areas (GV_AREA)?</dt>
+<dd>
+Overlapping boundaries are not topologically correct either. Either break
+boundaries, or (internal use only) do not build areas, or use lines if lines
+can hold all the info you need.
+</dd>
 
-\par Can I use boundaries or lines to represent topologically incorrect (i.e. overlapping) areas?
-In general, overlapping areas must be broken up into non-overlapping components. Some of the new areas will have several categories, one for each original area. For internal use, lines may be ok. Use lines instead of boundaries if you don't want to break into non-overlapping components.
+<dt>Can I use boundaries or lines to represent topologically incorrect (i.e.
+overlapping) areas?</dt>
+<dd>
+In general, overlapping areas must be broken up into non-overlapping
+components. Some of the new areas will have several categories, one for each
+original area. For internal use, lines may be ok. Use lines instead of
+boundaries if you don't want to break into non-overlapping components.
+</dd>
 
-\par Region is not taken into account by vector library functions. Should my module do the same or it should do its work only in current region?
-It depends what your module is supposed to do. See \gmod{v.in.ogr}, \gmod{v.in.region} or \gmod{v.to.rast} for examples where the current region is considered.
+<dt>Region is not taken into account by vector library functions. Should my
+module do the same or it should do its work only in current region?</dt>
+<dd>
+It depends what your module is supposed to do. See \gmod{v.in.ogr},
+\gmod{v.in.region} or \gmod{v.to.rast} for examples where the current region is
+considered.
+</dd>
 
-\par When should I use the digitization threshold value from vector map metadata?
+<dt>When should I use the digitization threshold value from vector map
+metadata?</dt>
+<dd>
+</dd>
 
-\par What is the advantage of automatically attaching centroids to areas? How can one be sure that connecting will be successful?
-This question is unclear. What would be the alternative? The method to attach centroids to areas is well tested and has been working reliably for many years.
+<dt>What is the advantage of automatically attaching centroids to areas? How
+can one be sure that connecting will be successful?</dt>
+<dd>
+This question is unclear. What would be the alternative? The method to attach
+centroids to areas is well tested and has been working reliably for many years.
+</dd>
 
-\par Are there any functions providing functionality of \gmod{v.to.rast} and \gmod{r.to.vect} modules?
-No. Considering the large code base of these two modules, this would require new libraries which in turn would depend on both the vector and the raster libraries.
+<dt>Are there any functions providing functionality of \gmod{v.to.rast} and
+\gmod{r.to.vect} modules?</dt>
+<dd>
+No. Considering the large code base of these two modules, this would require
+new libraries which in turn would depend on both the vector and the raster
+libraries.
+</dd>
 
-\par What is Vector Simple Feature Access API? Is it related to OGC standard (like ST_ functions in Postgis)?
+<dt>What is Vector Simple Feature Access API? Is it related to OGC standard
+(like ST_ functions in Postgis)?</dt>
+<dd>
+</dd>
 
-*/
+</dl>
+
+
