@@ -137,8 +137,8 @@ class LayerManagerGrassInterfaceForMapDisplay(object):
     """
     def __init__(self, giface, tree):
         """!
-        @giface original grass interface
-        @tree tree which will be used instead of the tree from giface
+        @param giface original grass interface
+        @param tree tree which will be used instead of the tree from giface
         """
         self._giface = giface
         self.tree = tree

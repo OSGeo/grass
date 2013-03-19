@@ -848,8 +848,8 @@ def StoreEnvVariable(key, value = None, envFile = None):
 def SetAddOnPath(addonPath = None, key = 'PATH'):
     """!Set default AddOn path
 
-    @addonPath path to addons (None for default)
-    @key env key - 'PATH' or 'BASE'
+    @param addonPath path to addons (None for default)
+    @param key env key - 'PATH' or 'BASE'
     """
     gVersion = grass.version()['version'].split('.', 1)[0]
     # update env file
