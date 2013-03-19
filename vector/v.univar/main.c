@@ -51,7 +51,7 @@ static void select_from_database(void);
 static void summary(void);
 
 struct Option *field_opt, *where_opt, *col_opt;
-struct Flag *shell_flag, *extended, *geometry;
+struct Flag *shell_flag, *ext_flag, *geometry;
 struct Map_info Map;
 struct line_cats *Cats;
 struct field_info *Fi;
@@ -121,9 +121,9 @@ int main(int argc, char *argv[])
     shell_flag->key = 'g';
     shell_flag->description = _("Print the stats in shell script style");
 
-    extended = G_define_flag();
-    extended->key = 'e';
-    extended->description = _("Calculate extended statistics");
+    ext_flag = G_define_flag();
+    ext_flag->key = 'e';
+    ext_flag->description = _("Calculate extended statistics");
 
     geometry = G_define_flag();
     geometry->key = 'd';
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 		   "can be calculated"));
     }
 
-    if (extended->answer && (!(otype & GV_POINTS) || geometry->answer)) {
+    if (ext_flag->answer && (!(otype & GV_POINTS) || geometry->answer)) {
 	G_warning(_("Extended statistics is currently supported only for points/centroids"));
     }
 
@@ -571,7 +571,7 @@ static void summary(void)
 
     /* TODO: mode, skewness, kurtosis */
     /* Not possible to calculate for point distance, since we don't collect the population */
-    if (extended->answer && compatible && (otype & GV_POINTS) && !geometry->answer && count > 0) {
+    if (ext_flag->answer && compatible && (otype & GV_POINTS) && !geometry->answer && count > 0) {
 	double quartile_25 = 0.0, quartile_75 = 0.0, quartile_perc = 0.0;
 	double median = 0.0;
 	int qpos_25, qpos_75, qpos_perc;
