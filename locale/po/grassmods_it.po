@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2013-03-04 08:05+0100\n"
-"Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
+"PO-Revision-Date: 2013-03-13 12:57+0100\n"
+"Last-Translator: anna\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -3692,12 +3692,12 @@ msgid ""
 "This set of questions will organize the command line for the"
 msgstr ""
 "\n"
-"Questa serie di domande prepara la linea di comando del programma %spermettendogli di girare in modo proprio ai tuoi bisogni. "
+"Questa serie di domande preparerà la linea di comando del "
 
 #: ../raster/r.watershed/shed/com_line.c:24
 #, c-format
 msgid "%s program to run properly for your application."
-msgstr ""
+msgstr "programma %s per lavorare in maniera propria alla tua applicazione. "
 
 #: ../raster/r.watershed/shed/com_line.c:26
 #, c-format
@@ -3813,41 +3813,41 @@ msgstr " %s per definire un unico bacino. Quest'area può essere definita solo i
 
 #: ../raster/r.watershed/shed/com_line.c:105
 msgid "`exterior drainage basins'.  An exterior drainage basin does not have any"
-msgstr ""
+msgstr "`bacini di drenaggio esterno'.  Un bacino di drenaggio esterno non ha alcun"
 
 #: ../raster/r.watershed/shed/com_line.c:106
 msgid "drainage basins flowing into it.  Interior drainage basin size is determined"
-msgstr ""
+msgstr "bacino di drenaggio che fluisce in esso. La dimensione del bacino di drenaggio interiore è determinata"
 
 #: ../raster/r.watershed/shed/com_line.c:107
 msgid "by the surface flow going into stream segments between stream interceptions."
-msgstr ""
+msgstr "dal flusso superficiale che entra nei segmenti di corrente tra le intersezioni della corrente."
 
 #: ../raster/r.watershed/shed/com_line.c:108
 #, c-format
 msgid "Thus interior drainage basins can be of any size.  The %s program"
-msgstr ""
+msgstr "Perciò i bacini di drenaggio interiore non possono essere di qualsiasi dimensione. Il programma %s"
 
 #: ../raster/r.watershed/shed/com_line.c:110
 msgid "also allows the user to relate basin size to potential overland flow"
-msgstr ""
+msgstr "permette all'utente anche di legare la dimenesione del bacino al deflusso superficiale potenziale"
 
 #: ../raster/r.watershed/shed/com_line.c:111
 msgid "(i.e., areas with low infiltration capacities will need smaller areas to"
-msgstr ""
+msgstr "(cioè: aree con basse capacità di infiltrazione avranno bisogno di aree più piccole per"
 
 #: ../raster/r.watershed/shed/com_line.c:112
 msgid "develop stream channels than neighboring areas with high infiltration rates)."
-msgstr ""
+msgstr "sviluppare canali di corrente rispetto alle aree confinanti con coefficienti di infiltrazione elevati)."
 
 #: ../raster/r.watershed/shed/com_line.c:113
 msgid "The user can create a map layer with potential overland flow values, and"
-msgstr ""
+msgstr "L'utente può creare un layer con valori potenziali di deflusso superficiale, e"
 
 #: ../raster/r.watershed/shed/com_line.c:114
 #, c-format
 msgid "%s will accumulate those values instead of area.\n"
-msgstr ""
+msgstr "%s accumulerà quei valori invece che l'area.\n"
 
 #: ../raster/r.watershed/shed/com_line.c:116
 msgid "What unit of measure will you use for the basin threshold:"
@@ -3859,7 +3859,7 @@ msgstr "1) acri,          2) metri quadri, 3) miglia quadrate, 4) ettari,"
 
 #: ../raster/r.watershed/shed/com_line.c:120
 msgid " 5) kilometers sq., 6) map cells,  7) overland flow units"
-msgstr ""
+msgstr " 5) chilometri quadrati, 6) celle della mappa,  7) unità di deflusso superficiale"
 
 #: ../raster/r.watershed/shed/com_line.c:121
 #, c-format
@@ -3871,11 +3871,13 @@ msgid ""
 "\n"
 "How large an area (or how many overland flow units) must a drainage basin"
 msgstr ""
+"\n"
+"Quanto dev'essere grande un'area (o quante unità di deflusso superficiale) di un bacino di drenaggio"
 
 #: ../raster/r.watershed/shed/com_line.c:132
 #, c-format
 msgid "be for it to be an exterior drainage basin: "
-msgstr ""
+msgstr "per essere un bacino di drenaggio esterno:"
 
 #: ../raster/r.watershed/shed/com_line.c:201
 #, c-format
@@ -3883,12 +3885,14 @@ msgid ""
 "\n"
 "%s must create a map layer of watershed basins"
 msgstr ""
+"\n"
+"%s deve creare un layer di bacino di drenaggio"
 
 #: ../raster/r.watershed/shed/com_line.c:203
 #: ../raster/r.watershed/shed/com_line.c:224
 #, c-format
 msgid "before %s can run properly."
-msgstr ""
+msgstr "prima che %s possa funzionare correttamente."
 
 #: ../raster/r.watershed/shed/com_line.c:222
 #, c-format
@@ -3896,6 +3900,8 @@ msgid ""
 "\n"
 "%s must create a file of watershed basin relationships"
 msgstr ""
+"\n"
+"%s deve screare un file di relazioni di bacino di drenaggio"
 
 #: ../raster/r.watershed/shed/com_line.c:228
 #: ../raster/r.watershed/shed/com_line.c:263
@@ -3904,6 +3910,8 @@ msgid ""
 "\n"
 "Please name this file:"
 msgstr ""
+"\n"
+"Dai un nome a questo file:"
 
 #: ../raster/r.watershed/shed/com_line.c:231
 #: ../raster/r.watershed/shed/com_line.c:266
@@ -3920,11 +3928,13 @@ msgid ""
 "\n"
 "%s will generate a lot of output.  Indicate a file"
 msgstr ""
+"\n"
+"%s genererà divsi output. Indica il nome"
 
 #: ../raster/r.watershed/shed/com_line.c:259
 #, c-format
 msgid "name for %s to send the output to."
-msgstr ""
+msgstr "di un file per %s  a cui mandare l'output."
 
 #: ../raster/r.watershed/shed/com_line.c:277
 #, c-format
@@ -3932,11 +3942,13 @@ msgid ""
 "\n"
 "The accumulation map from %s must be present for"
 msgstr ""
+"\n"
+"Dev'essere presente la mappa di accumulazione per %s"
 
 #: ../raster/r.watershed/shed/com_line.c:279
 #, c-format
 msgid "%s to work properly."
-msgstr ""
+msgstr "perchè %s possa funzionare correttamente."
 
 #: ../raster/r.watershed/shed/com_line.c:290
 #, c-format
@@ -3944,39 +3956,43 @@ msgid ""
 "\n"
 "%s can produce several maps not necessary for"
 msgstr ""
+"\n"
+"%s può produrre diverse mappe perchè"
 
 #: ../raster/r.watershed/shed/com_line.c:292
 #, c-format
 msgid "%s to function (stream channels, overland flow aspect, and"
-msgstr ""
+msgstr "%s funzioni (canali di flusso, aspetto del deflusso superficiale, e"
 
 #: ../raster/r.watershed/shed/com_line.c:294
 #, c-format
 msgid "a display version of the accumulation map).  %s also has the"
-msgstr ""
+msgstr "una versionedi display della mappa di accumulazione).  %s ha anche la"
 
 #: ../raster/r.watershed/shed/com_line.c:296
 msgid "ability to generate several variables in the Revised Universal Soil Loss"
-msgstr ""
+msgstr "possibilità di generare diverse variabili di variabili nell'Equazione Universale Rivisitata di Erosione "
 
 #: ../raster/r.watershed/shed/com_line.c:297
 msgid "Equation (Rusle): Slope Length (LS), and Slope Steepness (S).\n"
-msgstr ""
+msgstr "del Suolo (RUSLE): Lunghezza del pendio (LS), e pendenza del pendio (S). \n"
 
 #: ../raster/r.watershed/shed/com_line.c:348
 msgid ""
 "\n"
 "The Slope Length factor (LS) and Slope Steepness (S) are influenced by"
 msgstr ""
+"\n"
+"Il fattore di lunghezza del pendio (LS) and la pendenza del pendio (S) sono influenzati dal"
 
 #: ../raster/r.watershed/shed/com_line.c:349
 #, c-format
 msgid "disturbed land.  %s reflects this with an optional map layer or value"
-msgstr ""
+msgstr "terreno disturbato. %s evidenzia questo con un layer o un valore opzionale"
 
 #: ../raster/r.watershed/shed/com_line.c:351
 msgid "where the value indicates the percent of disturbed (barren) land in that cell."
-msgstr ""
+msgstr "dove il valore indica la percentuale di terreno disturbato (scoperto) in quella cella."
 
 #: ../raster/r.watershed/shed/com_line.c:352
 msgid "Type <return> if you do not have a disturbed land map layer."
@@ -4604,11 +4620,11 @@ msgstr "Scrittura della mappa raster <%s> in corso..."
 #: ../raster/r.drain/main.c:674
 #, c-format
 msgid "direction read: %lf, neighbour found: %i"
-msgstr ""
+msgstr "direzione letta> %lf, vicini trovati: %i"
 
 #: ../raster/r.param.scale/process.c:74
 msgid "E-W and N-S grid resolutions are different. Taking average."
-msgstr ""
+msgstr "Risoluzioni di griglia E-O e N-S diverse. Prendo la media."
 
 #: ../raster/r.param.scale/main.c:42
 #, fuzzy
@@ -4630,20 +4646,20 @@ msgstr ""
 
 #: ../raster/r.param.scale/interface.c:75
 msgid "Output raster layer containing morphometric parameter"
-msgstr ""
+msgstr "Raster di output contenente il parametro morfometrico"
 
 #: ../raster/r.param.scale/interface.c:79
 msgid "Slope tolerance that defines a 'flat' surface (degrees)"
-msgstr ""
+msgstr "Tollerenza per la pendenza che definisce una superfice 'piatta (gradi)"
 
 #: ../raster/r.param.scale/interface.c:86
 msgid "Curvature tolerance that defines 'planar' surface"
-msgstr ""
+msgstr "Tolleranza per la curvatura che definisce una superficie 'planareà"
 
 #: ../raster/r.param.scale/interface.c:91
 #, c-format
 msgid "Size of processing window (odd number only, max: %i)"
-msgstr ""
+msgstr "Dimensione della finestra di elaborazione (solo numeri dispari, massimo: %i)"
 
 #: ../raster/r.param.scale/interface.c:101
 msgid "Morphometric parameter in 'size' window to calculate"
@@ -4667,7 +4683,7 @@ msgstr ""
 
 #: ../raster/r.param.scale/interface.c:172
 msgid "Inappropriate window size (too big or even)"
-msgstr ""
+msgstr "Dimensione della finestra inappropriata (troppo grande o pari)"
 
 #: ../raster/r.in.gridatb/main.c:48
 msgid "Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map"
@@ -4690,7 +4706,7 @@ msgstr "File non trovato: %s"
 
 #: ../raster/r.in.gridatb/file_io.c:35
 msgid "Setting window header failed"
-msgstr ""
+msgstr "Impostazione dell'intestazione di finestra non riuscita"
 
 #: ../raster/r.in.gridatb/file_io.c:38
 msgid "Rows changed"
@@ -5049,7 +5065,7 @@ msgstr "Includi le etichette di categoria nell'output"
 
 #: ../raster/r.distance/parse.c:45
 msgid "Report zero distance if rasters are overlapping"
-msgstr ""
+msgstr "Riporta distanza zero se i raster si sovrappongono"
 
 #: ../raster/r.distance/report.c:43
 msgid "Processing..."
@@ -5058,7 +5074,7 @@ msgstr "Elaborazione in corso ..."
 #: ../raster/r.distance/distance.c:101
 #, c-format
 msgid "Reading maps  <%s,%s> while finding 0 distance ..."
-msgstr ""
+msgstr "Leggendo  <%s,%s> finchè trovo distanza 0 ..."
 
 #: ../raster/r.out.mpeg/main.c:104
 #, fuzzy
@@ -6588,7 +6604,7 @@ msgstr "Scrittura delle isoipse vettoriali in corso (isoipse totali %d)..."
 #: ../raster/r.contour/cont.c:212
 #, c-format
 msgid "%d crossings founds"
-msgstr ""
+msgstr "trovati %d incroci"
 
 #: ../raster/r.contour/cont.c:263
 msgid "Illegal edge number"
@@ -6966,7 +6982,7 @@ msgstr "File ASCII contenente i dati di input (o \"-\" per leggere dallo stdin)"
 #: ../raster/r.in.xyz/main.c:176 ../raster/r.in.lidar/main.c:176
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:8
 msgid "Statistic to use for raster values"
-msgstr ""
+msgstr "Statistica da usare per i valori raster"
 
 #: ../raster/r.in.xyz/main.c:180 ../raster/r.in.xyz/main.c:278
 #: ../raster/r.in.xyz/main.c:287 ../raster/r.in.lidar/main.c:180
@@ -6975,7 +6991,7 @@ msgstr ""
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
 msgid "Statistic"
-msgstr ""
+msgstr "Statistica"
 
 #: ../raster/r.in.xyz/main.c:188 ../raster/r.in.arc/main.c:77
 #: ../raster/r.in.lidar/main.c:188 ../raster/r.in.ascii/main.c:88
@@ -7088,7 +7104,7 @@ msgstr ""
 
 #: ../raster/r.in.xyz/main.c:537
 msgid "If input is not from a file it is only possible to perform a single pass."
-msgstr ""
+msgstr "Se l'input non è da un file, è possibile eseguire solo un unico passaggio."
 
 #: ../raster/r.in.xyz/main.c:543
 msgid "Range filters will not be taken into account during scan"
@@ -7421,7 +7437,7 @@ msgstr ""
 
 #: ../raster/r.gwflow/main.c:86
 msgid "Recharge"
-msgstr ""
+msgstr "Ricarica"
 
 #: ../raster/r.gwflow/main.c:88
 #, fuzzy
@@ -7460,7 +7476,7 @@ msgstr "Mostra il titolo del file raster"
 
 #: ../raster/r.gwflow/main.c:126
 msgid "The type of groundwater flow"
-msgstr ""
+msgstr "Il tipo di flusso sotterraneo"
 
 #: ../raster/r.gwflow/main.c:132
 #, fuzzy
@@ -7539,7 +7555,7 @@ msgstr "Crea una mappa dell'indice topografico da una mappa dell'elevatione"
 #: ../raster/r.topidx/file_io.c:35
 #, c-format
 msgid "The current region resolution [%s x %s] is finer than the input map's resolution [%s x %s]. The current region resolution must be identical to, or coarser than, the input map's resolution."
-msgstr ""
+msgstr "La risoluzione corrente della regione [%s x %s] è più alta della risoluzione della mappa iniziale [%s x %s]. La risoluzione corrente della regione deve essere identica, o più grossolana, della risoluzione della mappa iniziale."
 
 #: ../raster/r.topidx/file_io.c:42
 msgid "Reading elevation map..."
@@ -7721,7 +7737,7 @@ msgstr ""
 
 #: ../raster/r.fill.dir/main.c:89
 msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
-msgstr ""
+msgstr "Filtra e genera un mappa di elevazione senza depressioni a una mappa di direzione di flusso da un dato raster di elevazione."
 
 #: ../raster/r.fill.dir/main.c:105
 #, fuzzy
@@ -7757,11 +7773,11 @@ msgstr ""
 
 #: ../raster/r.fill.dir/main.c:201
 msgid "Determining flow directions for ambiguous cases..."
-msgstr ""
+msgstr "Determinado le direzioni di flusso per casi ambigui..."
 
 #: ../raster/r.fill.dir/main.c:214
 msgid "Repeat to get the final directions..."
-msgstr ""
+msgstr "Ripeti per avere le direzioni finali..."
 
 #: ../raster/r.fill.dir/main.c:250 ../raster/r.grow.distance/main.c:303
 msgid "Writing output raster maps..."
@@ -7775,12 +7791,12 @@ msgstr "Trovate %d aree non risolte"
 #: ../raster/r.fill.dir/resolve.c:136
 #, c-format
 msgid "Downward pass %d"
-msgstr ""
+msgstr "Passagigo verso il basso %d"
 
 #: ../raster/r.fill.dir/resolve.c:173
 #, c-format
 msgid "Upward pass %d"
-msgstr ""
+msgstr "Passaggio verso l'alto %d"
 
 #: ../raster/r.mfilter/getrow.c:23
 msgid "Error reading temporary file"
@@ -8604,7 +8620,7 @@ msgstr "Contiene una serie di misure per attributi, diversità, tessitura, giust
 #: ../raster/r.digit/get_label.c:31
 #, c-format
 msgid "Enter the category number for this %s: "
-msgstr ""
+msgstr "Inserisci il numero di categoria per questo %s: "
 
 #: ../raster/r.digit/get_label.c:46
 #, c-format
@@ -9554,7 +9570,7 @@ msgstr "Impossibile aprire il file dei risultati <%s>"
 
 #: ../raster/r.report/label.c:13
 msgid "Page width is too small"
-msgstr ""
+msgstr "La larghezza della pagina è troppo piccola"
 
 #: ../raster/r.out.pov/main.c:124
 #, fuzzy
@@ -14229,7 +14245,7 @@ msgstr ""
 
 #: ../raster/r.flow/main.c:535
 msgid "You must select one or more output maps (flout, lgout, dsout)"
-msgstr ""
+msgstr "Devi selezionare uno o più mappe di output (flout, lgout, dsout)"
 
 #: ../raster/r.flow/main.c:551
 msgid "lat/long projection not supported by r.flow. Please use 'r.watershed' for calculating flow accumulation."
@@ -14242,7 +14258,7 @@ msgstr "La risoluzione della mappa è diversa da quella della regione corrente"
 
 #: ../raster/r.flow/io.c:104
 msgid "Resolution of aspect file differs from current region resolution"
-msgstr ""
+msgstr "La risoluzione del file di esposizione è diversa da quella della regione corrente"
 
 #: ../raster/r.flow/io.c:121
 msgid "Reading input files: barrier"
@@ -14251,7 +14267,7 @@ msgstr ""
 #: ../raster/r.flow/io.c:149
 #, c-format
 msgid "Cannot create segment file %s"
-msgstr ""
+msgstr "Cannot create segment file %s"
 
 #: ../raster/r.flow/io.c:154
 #, c-format
@@ -14366,7 +14382,7 @@ msgstr "Nessun dispositivo grafico selezionato"
 #: ../imagery/i.points/main.c:131 ../imagery/i.vpoints/main.c:128
 #, c-format
 msgid "[%s] Only local groups may be used"
-msgstr ""
+msgstr "[%s] Possono essere usati solo gruppi locali"
 
 #: ../imagery/i.points/main.c:140 ../imagery/i.points/main.c:144
 #: ../imagery/i.vpoints/main.c:137 ../imagery/i.vpoints/main.c:141
@@ -14426,11 +14442,11 @@ msgstr ""
 
 #: ../imagery/i.zc/main.c:88
 msgid "Sensitivity of Gaussian filter"
-msgstr ""
+msgstr "Sensibilità del filtro gaussiano"
 
 #: ../imagery/i.zc/main.c:96
 msgid "Number of azimuth directions categorized"
-msgstr ""
+msgstr "Numero di direzioni di azimut categorizzate"
 
 #: ../imagery/i.zc/main.c:108
 msgid "Threshold less than or equal to zero not allowed"
@@ -14438,11 +14454,11 @@ msgstr "Non sono permesse soglie minori o uguali a zero"
 
 #: ../imagery/i.zc/main.c:114
 msgid "Width less than or equal to zero not allowed"
-msgstr ""
+msgstr "Non è permessa una larghezza minore o uguale a zero"
 
 #: ../imagery/i.zc/main.c:118
 msgid "Fewer than 1 orientation classes not allowed"
-msgstr ""
+msgstr "Non sono permesse meno di una classe di orientazione"
 
 #: ../imagery/i.zc/main.c:132
 #, c-format
@@ -14451,11 +14467,11 @@ msgstr ""
 
 #: ../imagery/i.zc/main.c:142
 msgid "Initializing data..."
-msgstr ""
+msgstr "Inizializzando i dati..."
 
 #: ../imagery/i.zc/main.c:172
 msgid "Writing transformed data to file..."
-msgstr ""
+msgstr "Scrivendo i dati trasformati su file..."
 
 #: ../imagery/i.zc/main.c:192
 msgid "Transform successful"
@@ -19037,7 +19053,7 @@ msgstr "Fattore di scala per l'elevazione"
 #: ../display/d.vect/main.c:191 ../display/d.vect/main.c:197
 #: ../display/d.vect/main.c:328
 msgid "Symbols"
-msgstr ""
+msgstr "Simboli"
 
 #: ../display/d.vect/main.c:178
 msgid "Point and centroid symbol"
@@ -19073,7 +19089,7 @@ msgstr "Etichette"
 
 #: ../display/d.vect/main.c:209
 msgid "Layer number for labels (default: the given layer number)"
-msgstr ""
+msgstr "Numero del layer per le etichette (default: il numero del layer definito)"
 
 #: ../display/d.vect/main.c:215
 msgid "Name of column to be displayed"
@@ -19089,15 +19105,15 @@ msgstr "O un nome di colore standard o una tripletta R:G:B"
 
 #: ../display/d.vect/main.c:231
 msgid "Label background color"
-msgstr ""
+msgstr "Colore di sottofondo dell'etichetta"
 
 #: ../display/d.vect/main.c:241
 msgid "Label border color"
-msgstr ""
+msgstr "Colore del bordo dell'etichetta"
 
 #: ../display/d.vect/main.c:251
 msgid "Label size (pixels)"
-msgstr ""
+msgstr "Dimensione dell'etichetta (pixel)"
 
 #: ../display/d.vect/main.c:257 ../display/d.text/main.c:219
 #: ../display/d.legend/main.c:157 ../vector/v.label/main.c:122
@@ -19111,19 +19127,19 @@ msgstr "Codifica carattere"
 
 #: ../display/d.vect/main.c:271
 msgid "Label horizontal justification"
-msgstr ""
+msgstr "Giustificazione orizzontale dell'etichetta"
 
 #: ../display/d.vect/main.c:279
 msgid "Label vertical justification"
-msgstr ""
+msgstr "Giustificazione verticale dell'etichetta"
 
 #: ../display/d.vect/main.c:286
 msgid "Minimum region size (average from height and width) when map is displayed"
-msgstr ""
+msgstr "Dimensione minima della regione (media tra altezza e larghezza) quando viene visualizzata la mappa"
 
 #: ../display/d.vect/main.c:294
 msgid "Maximum region size (average from height and width) when map is displayed"
-msgstr ""
+msgstr "Dimensione massima della regione (media di altezza e larghezza) quando viene visualizzata la mappa"
 
 #: ../display/d.vect/main.c:302
 msgid "Get colors from attribute table (see 'rgb_column' option)"
@@ -41335,3 +41351,42 @@ msgstr "Creazione dell'indice spaziale in corso..."
 
 #~ msgid "Column names are not defined. Please use '%s' parameter."
 #~ msgstr "I nomi delle colonne non sono definiti. Prego usa il parametro '%s'."
+
+#~ msgid "Failed to guess site file format"
+#~ msgstr "Impossible determinare il formato del file"
+
+#~ msgid "For what layer shall the header file be edited? "
+#~ msgstr "Per quale layer dovrebbe essere modificato il file di intestazione?"
+
+#~ msgid "Most likely the header is wrong, but I want you to decide.\n"
+#~ msgstr "Molto probabilmente l'intestazione è sbagliato, ma voglia che sia tu a decidere. \n"
+
+#~ msgid "If you need help figuring them out, just hit ESC"
+#~ msgstr "Se hai bisogno di aiuto per fartene un'idea, schiaccia semplicemente ESC"
+
+#~ msgid "Water sources and sinks in [m^3/s]"
+#~ msgstr "Sorgenti d'acqua e pozzi in [m^3/s]"
+
+#~ msgid "Specific yield in [1/m]"
+#~ msgstr "Portata specifica in [1/m]"
+
+#~ msgid "Recharge map e.g: 6*10^-9 per cell in [m^3/s*m^2]"
+#~ msgstr "Mappa di "
+
+#~ msgid "The map storing the numerical result [m]"
+#~ msgstr "La mappa che contiente il risultato numero [m]"
+
+#~ msgid "Can't set window"
+#~ msgstr "Impossibile impostare la finestra"
+
+#~ msgid "Name of existing raster map containing contours"
+#~ msgstr "Nome del raster esistente che contienne le curve di livello"
+
+#~ msgid "Unable to get header for %s"
+#~ msgstr "Impossibile ottenere un'intestazione per %s"
+
+#~ msgid "Elevation file's resolution differs from current region resolution"
+#~ msgstr "La risoluzione del file di elevazione è diversa da quella della regione corrente"
+
+#~ msgid "Error while reading input raster map."
+#~ msgstr "Errore durante la lettura del raster di input."
