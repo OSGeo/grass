@@ -13,6 +13,13 @@ from grass.pygrass import functions
 from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from table import DBlinks, Link
 
+
+def is_open(c_mapinfo):
+    """Return if the Vector is open"""
+    return (c_mapinfo.contents.open != 0 and
+            c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE)
+
+
 #=============================================
 # VECTOR ABSTRACT CLASS
 #=============================================
@@ -259,8 +266,7 @@ class Info(object):
 
     def is_open(self):
         """Return if the Vector is open"""
-        return (self.c_mapinfo.contents.open != 0 and
-                self.c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE)
+        return is_open(self.c_mapinfo)
 
     def open(self, mode='r', layer=1, overwrite=None,
              # parameters valid only if mode == 'w'
