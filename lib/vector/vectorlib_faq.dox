@@ -39,7 +39,7 @@ The return value of Vect_read_line() is the feature type, which must be positive
 \par Why there is no function such as Vect_get_point() or Vect_get_boundary_points()?
 The GRASS-internal feature id refers to primitives (points, lines, boundaries, centroids, faces). These are all lumped together. That means that something like Vect_get_point() would use as arguments map and id, but this id can refer to any of points, lines, boundaries, centroids, faces. The coordinates of these primitives are stored in one file, and this file does not have separate sections for points, lines, boundaries, centroids, faces. The equivalent of Vect_get_point() is done on module level by checking the return type of Vect_read_line(). Further on, sometimes it is desired to work with more than one type at the same time. That's the reason for
 \code{.c}
-if ((ltype & type))
+if (!(ltype & type))
     continue;
 \endcode
 
@@ -64,7 +64,7 @@ If the columns exist. But sometimes column can be an expression of columns, e.g.
 \par My module writes some data to attribute table columns specified by user.
 What should I check before I can write to attribute table?
 If the specified table doesn't exists, should I create one?
-If the module does not create a new vector, and a table exists, check if the column exists, if not, create the column. If the module does create a new vector, a new table must also be created.
+If the module does not create a new vector, and a table exists, check if the column exists and is of the correct type, if not, create the column. If the module does create a new vector, a new table must also be created.
 
 \par I should add features to vector map, add tables or columns only if \c \-\-overwrite was specified, right?
 The behaviour for db operations is not cleary defined in GRASS. Quite a lot works without \c \-\-overwrite. Try \gmod{v.db.update} or \gmod{v.to.db}.
@@ -85,7 +85,7 @@ So, no pointers, no allocation, no deallocation.
 </ul>
 As a rule of thumb, whenever you use some \c Vect_new_*() function, there should also be a corresponding \c Vect_destroy_*() function. These deallocating functions need only be used if the \c Vect_new_*() functions are called in a loop. A one-time call does not matter, memory is freed by the system when the module exits.
 
-\par What is the propose of cat_list and ilist structures?
+\par What is the purpose of cat_list and ilist structures?
 A cat_list is used to store a list of cats, e.g. from a cats option. The ilist struct is a list of integers.
 
 \par How can I handle data without topology or data which are topologically incorrect?
@@ -95,15 +95,18 @@ Use Vect_read_next_line() function.
 Overlapping boundaries are not topologically correct either. Either break boundaries, or (internal use only) do not build areas, or use lines if lines can hold all the info you need.
 
 \par Can I use boundaries or lines to represent topologically incorrect (i.e. overlapping) areas?
-In general, overlapping areas must be broken up into non-overlapping components. For internal use, lines may be ok. Use lines instead of boundaries if you don't want to break into non-overlapping components.
+In general, overlapping areas must be broken up into non-overlapping components. Some of the new areas will have several categories, one for each original area. For internal use, lines may be ok. Use lines instead of boundaries if you don't want to break into non-overlapping components.
 
 \par Region is not taken into account by vector library functions. Should my module do the same or it should do its work only in current region?
+It depends what your module is supposed to do. See \gmod{v.in.ogr}, \gmod{v.in.region} or \gmod{v.to.rast} for examples where the current region is considered.
 
 \par When should I use the digitization threshold value from vector map metadata?
 
-\par What is the advantage of automatic attaching centroid to boundary to create area? How can be one sure that connecting it will be successful?
+\par What is the advantage of automatically attaching centroids to areas? How can one be sure that connecting will be successful?
+This question is unclear. What would be the alternative? The method to attach centroids to areas is well tested and has been working reliably for many years.
 
 \par Are there any functions providing functionality of \gmod{v.to.rast} and \gmod{r.to.vect} modules?
+No. Considering the large code base of these two modules, this would require new libraries which in turn would depend on both the vector and the raster libraries.
 
 \par What is Vector Simple Feature Access API? Is it related to OGC standard (like ST_ functions in Postgis)?
 
