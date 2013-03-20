@@ -88,7 +88,7 @@ Rast3d_xdrTile2tile(RASTER3D_Map * map, void *tile, int rows, int cols, int dept
 
 static int Rast3d_readTileUncompressed(RASTER3D_Map * map, int tileIndex, int nofNum)
 {
-    int nofBytes;
+    size_t nofBytes;
 
     nofBytes = nofNum * map->numLengthExtern;
     nofBytes = RASTER3D_MIN(nofBytes, map->fileEndPtr - map->index[tileIndex]);
@@ -139,7 +139,7 @@ static int Rast3d_readTileCompressed(RASTER3D_Map * map, int tileIndex, int nofN
  *  \param tile
  *  \param type
  *  \return 1 ... if successful,
- *          0 ... otherwise.
+ *          0 ... otherwise
  */
 
 int Rast3d_read_tile(RASTER3D_Map * map, int tileIndex, void *tile, int type)

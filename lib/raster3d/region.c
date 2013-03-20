@@ -207,7 +207,23 @@ void Rast3d_adjust_region_res(RASTER3D_Region * region)
 
 void Rast3d_region_copy(RASTER3D_Region * regionDest, RASTER3D_Region * regionSrc)
 {
-    *regionDest = *regionSrc;
+	regionDest->proj = regionSrc->proj;
+	regionDest->zone = regionSrc->zone;
+
+	regionDest->north = regionSrc->north;
+	regionDest->south = regionSrc->south;
+	regionDest->east = regionSrc->east;
+	regionDest->west = regionSrc->west;
+	regionDest->top = regionSrc->top;
+	regionDest->bottom = regionSrc->bottom;
+
+	regionDest->rows = regionSrc->rows;
+	regionDest->cols = regionSrc->cols;
+	regionDest->depths = regionSrc->depths;
+
+	regionDest->ns_res = regionSrc->ns_res;
+	regionDest->ew_res = regionSrc->ew_res;
+	regionDest->tb_res = regionSrc->tb_res;
 }
 
 

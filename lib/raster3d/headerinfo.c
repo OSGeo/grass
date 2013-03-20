@@ -333,8 +333,9 @@ void Rast3d_print_header(RASTER3D_Map * map)
     double rangeMin, rangeMax;
 
     printf("File %s open for %sing:\n", map->fileName,
-	   (map->operation == RASTER3D_WRITE_DATA ? "writ" :
-	    (map->operation == RASTER3D_READ_DATA ? "read" : "unknown")));
+	   (map->operation == RASTER3D_WRITE_DATA ? "writing" :
+	    (map->operation == RASTER3D_READ_DATA ? "reading" : "unknown")));
+    printf("Version %i\n", map->version);
     printf("  Fd = %d, Unit %s, Vertical Unit %s, Type: %s, ", map->data_fd,
 	   map->unit, G_get_units_name(map->vertical_unit, 1, 0),
 	   (map->type == FCELL_TYPE ? "float" :
@@ -345,7 +346,7 @@ void Rast3d_print_header(RASTER3D_Map * map)
     if (map->compression == RASTER3D_NO_COMPRESSION)
 	printf("  Compression: none\n");
     else {
-	printf("  Compression:%s%s Precision: %s",
+	printf("  Compression:%s (%s%s) Precision: %s", (map->compression ? "on" : "off"),
 	       (map->useLzw ? " lzw," : ""), (map->useRle ? " rle," : ""),
 	       (map->precision == -1 ? "all bits used\n" : "using"));
 	if (map->precision != -1)
@@ -364,9 +365,10 @@ void Rast3d_print_header(RASTER3D_Map * map)
     printf("  Region: (%f %f) (%f %f) (%f %f)\n",
 	   map->region.south, map->region.north, map->region.west,
 	   map->region.east, map->region.bottom, map->region.top);
-    printf("          (%d %d %d)\n", map->region.rows, map->region.cols,
+    printf("            (cols %5d rows %5d depths %5d)\n", map->region.cols, map->region.rows,
 	   map->region.depths);
-    printf("  Tile size (%d %d %d)\n", map->tileX, map->tileY, map->tileZ);
+    printf("  Num tiles (X    %5d Y    %5d Z      %5d)\n", map->nx, map->ny, map->nz);
+    printf("  Tile size (X    %5d Y    %5d Z      %5d)\n", map->tileX, map->tileY, map->tileZ);
     printf("  Range (");
     if (Rast3d_is_null_value_num(&rangeMin, DCELL_TYPE))
 	printf("NULL, ");

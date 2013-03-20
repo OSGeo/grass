@@ -84,8 +84,7 @@ static int Rast3d_writeTileUncompressed(RASTER3D_Map * map, int nofNum)
 static int Rast3d_writeTileCompressed(RASTER3D_Map * map, int nofNum)
 {
     if (!Rast3d_fpcompress_write_xdr_nums(map->data_fd, xdr, nofNum, map->precision,
-				   tmpCompress, map->type == FCELL_TYPE,
-				   map->useRle, map->useLzw)) {
+				   tmpCompress, map->type == FCELL_TYPE)) {
 	Rast3d_error
 	    ("Rast3d_writeTileCompressed: error in Rast3d_fpcompress_write_xdr_nums");
 	return 0;
@@ -130,7 +129,7 @@ int Rast3d_write_tile(RASTER3D_Map * map, int tileIndex, const void *tile, int t
     int rows, cols, depths, xRedundant, yRedundant, zRedundant, nofNum;
 
     /* valid tileIndex ? */
-    if ((tileIndex >= map->nTiles) || (tileIndex < 0))
+    if ((tileIndex > map->nTiles) || (tileIndex < 0))
 	Rast3d_fatal_error("Rast3d_write_tile: tileIndex out of range");
 
     /* already written ? */
@@ -155,7 +154,7 @@ int Rast3d_write_tile(RASTER3D_Map * map, int tileIndex, const void *tile, int t
 
     if (!Rast3d_tile2xdrTile(map, tile, rows, cols, depths,
 			  xRedundant, yRedundant, zRedundant, nofNum, type)) {
-	Rast3d_error("Rast3d_writeTileCompressed: error in Rast3d_tile2xdrTile");
+	Rast3d_error("Rast3d_write_tile: error in Rast3d_tile2xdrTile");
 	return 0;
     }
 
@@ -165,9 +164,10 @@ int Rast3d_write_tile(RASTER3D_Map * map, int tileIndex, const void *tile, int t
 	    return 0;
 	}
     }
-    else if (!Rast3d_writeTileCompressed(map, nofNum)) {
-	Rast3d_error("Rast3d_write_tile: error in Rast3d_writeTileCompressed");
-	return 0;
+    else { if (!Rast3d_writeTileCompressed(map, nofNum)) {
+			Rast3d_error("Rast3d_write_tile: error in Rast3d_writeTileCompressed");
+			return 0;
+    	}
     }
 
     /* compute the length */

@@ -11,12 +11,6 @@
 #define XDR_FLOAT_LENGTH 4
 #define XDR_FLOAT_NOF_EXP_BYTES 1
 
-/*************
- * Only needed for transition */
-/* #define USE_LZW_COMPRESSION */
-
-/**************/
-
 /*--------------------------------------------------------------------------*/
 
 void Rast3d_fpcompress_print_binary(char *c, int numBits)
@@ -692,94 +686,25 @@ G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
 
 /*--------------------------------------------------------------------------*/
 
-/* IMPORTANT!!! this function modifies "src" in case of run length encoding RLE. */
-
 int
 Rast3d_fpcompress_write_xdr_nums(int fd, char *src, int nofNum, int precision,
-			  char *compressBuf, int isFloat, int useRle,
-			  int useLzw)
+			  char *compressBuf, int isFloat)
 {
-    /* this table is used to determine the number of bits that should be used */
-    /* with G_lzw_write (), since a too large number of bits may reduce the */
-    /* compression. the values in the table are either based on experience for */
-    /* the small values, or guesses for the larger values. */
-
-    int status, rleLength, nBytes, offsetMantissa;
-    char *dst, *srcStop;
+    int status;
+    int nBytes;
+    int offsetMantissa;
 
     if (isFloat)
-	G_fpcompress_rearrangeEncodeFloats(src, nofNum, precision,
-					   compressBuf + 1,
+	G_fpcompress_rearrangeEncodeFloats((unsigned char *)src, nofNum, precision,
+			(unsigned char *)(compressBuf + 1),
 					   &nBytes, &offsetMantissa);
     else
-	G_fpcompress_rearrangeEncodeDoubles(src, nofNum, precision,
-					    compressBuf + 1,
+	G_fpcompress_rearrangeEncodeDoubles((unsigned char *)src, nofNum, precision,
+				(unsigned char *)(compressBuf + 1),
 					    &nBytes, &offsetMantissa);
 
-#ifdef USE_LZW_COMPRESSION
-    G_lzw_set_bits(9);
-#endif
-
-    if (useRle == RASTER3D_USE_RLE)
-	rleLength = Rast3d_rle_count_only(compressBuf + 1, offsetMantissa, 1);
-
-    if ((useRle == RASTER3D_USE_RLE) && (rleLength < offsetMantissa)) {
-
-	Rast3d_rle_encode(compressBuf + 1, src, offsetMantissa, 1);
-	srcStop = src + rleLength;
-	dst = compressBuf + 1 + offsetMantissa - rleLength;
-	while (src != srcStop)
-	    *dst++ = *src++;
-
-	*(compressBuf + offsetMantissa - rleLength) = 1;
-
-	if (useLzw == RASTER3D_USE_LZW)
-#ifdef USE_LZW_COMPRESSION
-	    status = G_lzw_write(fd, compressBuf + offsetMantissa - rleLength,
-				 nBytes - offsetMantissa + rleLength + 1);
-#else
-	    status = G_zlib_write(fd,
-				  (unsigned char *)(compressBuf +
-						    offsetMantissa -
-						    rleLength),
-				  nBytes - offsetMantissa + rleLength + 1);
-#endif
-	else
-#ifdef USE_LZW_COMPRESSION
-	    status =
-		G_lzw_write_noCompress(fd,
-				       compressBuf + offsetMantissa -
-				       rleLength,
-				       nBytes - offsetMantissa + rleLength +
-				       1);
-#else
-	    status = G_zlib_write_noCompress(fd,
-					     (unsigned char *)(compressBuf +
-							       offsetMantissa
-							       - rleLength),
-					     nBytes - offsetMantissa +
-					     rleLength + 1);
-#endif
-    }
-    else {
-
 	*compressBuf = 0;
-	if (useLzw == RASTER3D_USE_LZW)
-#ifdef USE_LZW_COMPRESSION
-	    status = G_lzw_write(fd, compressBuf, nBytes + 1);
-#else
-	    status =
-		G_zlib_write(fd, (unsigned char *)compressBuf, nBytes + 1);
-#endif
-	else
-#ifdef USE_LZW_COMPRESSION
-	    status = G_lzw_write_noCompress(fd, compressBuf, nBytes + 1);
-#else
-	    status =
-		G_zlib_write_noCompress(fd, (unsigned char *)compressBuf,
-					nBytes + 1);
-#endif
-    }
+	status = G_zlib_write(fd, (unsigned char *)compressBuf, nBytes + 1);
 
     if (status < 0) {
 	Rast3d_error("Rast3d_fpcompress_write_xdr_nums: write error");
@@ -792,58 +717,24 @@ Rast3d_fpcompress_write_xdr_nums(int fd, char *src, int nofNum, int precision,
 /*--------------------------------------------------------------------------*/
 
 int
-Rast3d_fpcompress_write_xdr_floats(int fd, char *src, int nofNum, int precision,
-			    char *compressBuf, int useRle, int useLzw)
-{
-    if (!Rast3d_fpcompress_write_xdr_nums(fd, src, nofNum, precision, compressBuf, 1,
-				   useRle, useLzw)) {
-	Rast3d_error
-	    ("Rast3d_fpcompress_write_xdr_floats: error in Rast3d_fpcompress_write_xdr_nums");
-	return 0;
-    }
-
-    return 1;
-}
-
-/*--------------------------------------------------------------------------*/
-
-int
-Rast3d_fpcompress_write_xdr_double(int fd, char *src, int nofNum, int precision,
-			    char *compressBuf, int useRle, int useLzw)
-{
-    if (!Rast3d_fpcompress_write_xdr_nums(fd, src, nofNum, precision, compressBuf, 0,
-				   useRle, useLzw)) {
-	Rast3d_error
-	    ("Rast3d_fpcompress_write_xdr_double: error in Rast3d_fpcompress_write_xdr_nums");
-	return 0;
-    }
-
-    return 1;
-}
-
-/*--------------------------------------------------------------------------*/
-
-int
 Rast3d_fpcompress_read_xdr_nums(int fd, char *dst, int nofNum, int fileBytes,
 			 int precision, char *compressBuf, int isFloat)
 {
-    int status, lengthEncode, lengthDecode;
+    int status;
+    int lengthEncode, lengthDecode;
     int nBytes;
     char *src, *dest, *srcStop;
-
     nBytes = (isFloat ? XDR_FLOAT_LENGTH : XDR_DOUBLE_LENGTH);
 
-#ifdef USE_LZW_COMPRESSION
-    status = G_lzw_read2(fd, compressBuf, nofNum * nBytes + 1, fileBytes);
-#else
     status = G_zlib_read(fd, fileBytes, (unsigned char *)compressBuf,
 			 nofNum * nBytes + 1);
-#endif
+
     if (status < 0) {
 	Rast3d_error("Rast3d_fpcompress_read_xdr_nums: read error");
 	return 0;
     }
 
+    /* This code is kept for backward compatibility */
     if (*compressBuf++ == 1) {
 	status--;
 	Rast3d_rle_decode(compressBuf, dst, nofNum * nBytes, 1,
@@ -868,43 +759,11 @@ Rast3d_fpcompress_read_xdr_nums(int fd, char *dst, int nofNum, int fileBytes,
     }
 
     if (isFloat)
-	G_fpcompress_rearrangeDecodeFloats(compressBuf, nofNum, precision,
-					   dst);
+	G_fpcompress_rearrangeDecodeFloats((unsigned char *)compressBuf, nofNum, precision,
+			(unsigned char *)dst);
     else
-	G_fpcompress_rearrangeDecodeDoubles(compressBuf, nofNum, precision,
-					    dst);
-
-    return 1;
-}
-
-/*--------------------------------------------------------------------------*/
-
-int
-Rast3d_fpcompress_read_xdr_floats(int fd, char *dst, int nofNum, int fileBytes,
-			   int precision, char *compressBuf)
-{
-    if (!Rast3d_fpcompress_read_xdr_nums(fd, dst, nofNum, fileBytes, precision,
-				  compressBuf, 1)) {
-	Rast3d_error
-	    ("Rast3d_fpcompress_read_xdr_floats: error in Rast3d_fpcompress_read_xdr_nums");
-	return 0;
-    }
-
-    return 1;
-}
-
-/*--------------------------------------------------------------------------*/
-
-int
-Rast3d_fpcompress_read_xdr_doubles(int fd, char *dst, int nofNum, int fileBytes,
-			    int precision, char *compressBuf)
-{
-    if (!Rast3d_fpcompress_read_xdr_nums(fd, dst, nofNum, fileBytes, precision,
-				  compressBuf, 0)) {
-	Rast3d_error
-	    ("G_fpcompress_readXdrDouble: error in Rast3d_fpcompress_read_xdr_nums");
-	return 0;
-    }
+	G_fpcompress_rearrangeDecodeDoubles((unsigned char *)compressBuf, nofNum, precision,
+			(unsigned char *)dst);
 
     return 1;
 }

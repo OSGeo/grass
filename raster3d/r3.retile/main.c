@@ -32,13 +32,8 @@ typedef struct {
 paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
-void set_params(); /*Fill the paramType structure */
-void g3d_to_raster(void *map, RASTER3D_Region region, int *fd); /*Write the raster */
-int open_output_map(const char *name, int res_type); /*opens the outputmap */
-void close_output_map(int fd); /*close the map */
-
-
+static void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
+static void set_params(); /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Error handling ********************************************************** */

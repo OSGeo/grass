@@ -39,3 +39,9 @@ r3.info -g map=test_retile_map_10 > test_retile_map_10_info.txt
 for map in `g.mlist type=rast3d pattern=test_retile_map_*` ; do
   r3.out.ascii input=${map} output=${map}.txt dp=0
 done
+
+# Comparison of references and text files
+for i in `ls *.ref` ; do 
+    diff $i "`basename $i .ref`.txt" ; 
+done
+rm *.txt

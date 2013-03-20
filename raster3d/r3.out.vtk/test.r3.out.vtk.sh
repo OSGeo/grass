@@ -36,3 +36,9 @@ r3.out.vtk -p --o rgbmaps=volume_rgb,volume_rgb,volume_rgb vectormaps=volume_nul
 # The maximum elevation should be in the south. Reference @files are present for validation.
 r3.out.vtk -s --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_cells_elevation.vtk dp=3 null=0
 r3.out.vtk -sp --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_points_elevation.vtk dp=3 null=0
+
+# Comparison of references and vtk files
+for i in `ls *.ref` ; do 
+    diff $i "`basename $i .ref`.vtk" ; 
+done
+rm *.vtk

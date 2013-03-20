@@ -29,7 +29,7 @@ static int test_resampling_fcell(RASTER3D_Map *map, double north, double east, d
                                  top, int col, int row, int depth, int fact);
 
 /* *************************************************************** */
-/* Perfrome the coordinate transformation tests ****************** */
+/* Perform the coordinate transformation tests ******************* */
 /* *************************************************************** */
 int unit_test_put_get_value()
 {
@@ -37,8 +37,8 @@ int unit_test_put_get_value()
 
     G_message(_("\n++ Running g3d put/get value unit tests ++"));
 
-    sum += test_put_get_value_dcell();
-    sum += test_put_get_value_fcell();
+    //sum += test_put_get_value_dcell();
+    //sum += test_put_get_value_fcell();
     sum += test_put_get_value_resampling();
 
 
@@ -113,8 +113,12 @@ int test_put_get_value_dcell(void)
             }
         }
     }
+
     /* Write everything to the disk */
     Rast3d_flush_all_tiles(map);
+    Rast3d_close(map);
+
+    map = Rast3d_open_cell_old("test_put_get_value_dcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
     
     /* Reread the map and compare the expected results */
     
@@ -223,7 +227,7 @@ int test_put_get_value_fcell(void)
         
     Rast3d_adjust_region(&region);
         
-    map = Rast3d_open_new_opt_tile_size("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
+    map = Rast3d_open_new_opt_tile_size("test_put_get_value_fcell", RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
     
     /* The window is the same as the map region ... of course */
     Rast3d_set_window_map(map, &region);
@@ -237,8 +241,12 @@ int test_put_get_value_fcell(void)
             }
         }
     }
+
     /* Write everything to the disk */
     Rast3d_flush_all_tiles(map);
+    Rast3d_close(map);
+
+    map = Rast3d_open_cell_old("test_put_get_value_fcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
     
        /* Reread the map and compare the expected results */
     
@@ -346,19 +354,6 @@ int test_put_get_value_resampling(void)
     Rast3d_adjust_region(&region);
     
     map = Rast3d_open_new_opt_tile_size("test_put_get_value_resample", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
-    
-    /* We modify the window for resampling tests */
-    Rast3d_region_copy(&window, &region);
-        
-    /* Double the cols, rows and depths -> 8x resolution window */
-    window.rows = 30;
-    window.cols = 20;
-    window.depths = 10;
-    
-    Rast3d_adjust_region(&window);
-    
-    /* The window is the same as the map region ... of course */
-    Rast3d_set_window_map(map, &window);
     /*
      ROWS
   1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6500 7000 7500 8000 8500 9000 north
@@ -390,8 +385,25 @@ int test_put_get_value_resampling(void)
             }
         }
     }
+
     /* Write everything to the disk */
     Rast3d_flush_all_tiles(map);
+    Rast3d_close(map);
+
+    /* We modify the window for resampling tests */
+    Rast3d_region_copy(&window, &region);
+
+    /* Double the cols, rows and depths -> 8x resolution window */
+    window.rows = 30;
+    window.cols = 20;
+    window.depths = 10;
+
+    Rast3d_adjust_region(&window);
+
+    map = Rast3d_open_cell_old("test_put_get_value_resample", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+
+    /* The window has the 8x resolution as the map region */
+    Rast3d_set_window_map(map, &window);
     
     /* Reread the map and compare the expected results */
     
@@ -440,7 +452,7 @@ int test_put_get_value_resampling(void)
     
     Rast3d_close(map);
     
-    G_remove("grid3", "test_put_get_value_dcell");
+    G_remove("grid3", "test_put_get_value_resample");
     
     return sum;
 }

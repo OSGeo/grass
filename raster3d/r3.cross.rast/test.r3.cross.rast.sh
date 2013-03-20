@@ -33,5 +33,13 @@ r3.cross.rast --o input=volume_null elevation=elev_5 output=test_cross_section_s
 r3.cross.rast --o input=volume_null elevation=elev_NAN output=test_cross_section_slice_NAN
 r3.cross.rast --o input=volume_null elevation=elev_cross output=test_cross_section_result
 
-# Export of the references
-for i in `g.mlist type=rast pattern=test_cross_section_*` ; do r.out.ascii input=$i output=${i}.txt; done
+# Export of the text files
+for i in `g.mlist type=rast pattern=test_cross_section_*` ; do 
+    r.out.ascii input=$i output=${i}.txt; 
+done
+
+# Comparison of references and text files
+for i in `ls *.ref` ; do 
+    diff $i "`basename $i .ref`.txt" ; 
+done
+rm *.txt

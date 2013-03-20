@@ -31,11 +31,11 @@ r3.null map=test_volume_double_null_1 null=-1.5
 r3.null map=test_volume_double_null_2 null=-10.5
 
 # Commands to export the references 
-# r3.out.ascii dp=3 input=test_volume_float_1 output=test_volume_float_1.ref
-# r3.out.ascii dp=3 input=test_volume_float_2 output=test_volume_float_2.ref
-# r3.out.ascii dp=3 input=test_volume_float_null_1 output=test_volume_float_null_1.ref
-# r3.out.ascii dp=3 input=test_volume_float_null_2 output=test_volume_float_null_2.ref
-# r3.out.ascii dp=3 input=test_volume_double_1 output=test_volume_double_1.ref
-# r3.out.ascii dp=3 input=test_volume_double_2 output=test_volume_double_2.ref
-# r3.out.ascii dp=3 input=test_volume_double_null_1 output=test_volume_double_null_1.ref
-# r3.out.ascii dp=3 input=test_volume_double_null_2 output=test_volume_double_null_2.ref
+r3.out.ascii dp=3 input=test_volume_float_1 output=test_volume_float_1.txt
+r3.out.ascii dp=3 input=test_volume_float_2 output=test_volume_float_2.txt
+r3.out.ascii dp=3 input=test_volume_float_null_1 output=test_volume_float_null_1.txt
+r3.out.ascii dp=3 input=test_volume_float_null_2 output=test_volume_float_null_2.txt
+r3.out.ascii dp=3 input=test_volume_double_1 output=test_volume_double_1.txt
+r3.out.ascii dp=3 input=test_volume_double_2 output=test_volume_double_2.txt
+r3.out.ascii dp=3 input=test_volume_double_null_1 output=test_volume_double_null_1.txt
+r3.out.ascii dp=3 input=test_volume_double_null_2 output=test_volume_double_null_2.txt

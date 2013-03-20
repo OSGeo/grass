@@ -21,7 +21,7 @@ r3.to.rast --o input=volume_null output=test_raster_slice_1
 r3.to.rast --o input=volume_null_float output=test_raster_slice_float
 
 # Export of the references
-# for i in `g.mlist type=rast pattern=test_raster_slice_1*` ; do r.out.ascii input=$i output=${i}.ref; done
+for i in `g.mlist type=rast pattern=test_raster_slice_1*` ; do r.out.ascii input=$i output=${i}.txt; done
 for i in `g.mlist type=rast pattern=test_raster_slice_float*` ; do r.out.ascii input=$i output=${i}.txt; done
 
 # The next @preprocess step adjusts the raster region to increase the resolution by 2
@@ -43,3 +43,9 @@ r3.to.rast --o input=volume_null output=test_raster_slice_3
 
 # Export of the references
 for i in `g.mlist type=rast pattern=test_raster_slice_3*` ; do r.out.ascii input=$i output=${i}.txt; done
+
+# Comparison of references and text files
+for i in `ls *.ref` ; do 
+    diff $i "`basename $i .ref`.txt" ; 
+done
+rm *.txt

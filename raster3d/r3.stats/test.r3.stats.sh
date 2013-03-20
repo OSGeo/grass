@@ -28,3 +28,9 @@ r3.stats input=volume_double_null nsteps=9  > test_volume_double_stats_9.txt
 r3.stats input=volume_double_null nsteps=18 > test_volume_double_stats_18.txt
 r3.stats input=volume_double_null nsteps=22 > test_volume_double_stats_22.txt
 r3.stats -e input=volume_double_null > test_volume_double_stats_e.txt
+
+# Comparison of references and text files
+for i in `ls *.ref` ; do 
+    diff $i "`basename $i .ref`.txt" ; 
+done
+rm *.txt

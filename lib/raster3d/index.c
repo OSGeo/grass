@@ -33,6 +33,14 @@ static int Rast3d_readIndex(RASTER3D_Map * map)
 	return 0;
     }
 
+	/* The size of the tile index array in the map file */
+	if(indexLength == map->indexLongNbytes * map->nTiles) {
+		if (read(map->data_fd, tmp, indexLength) != indexLength) {
+		Rast3d_error("Rast3d_readIndex: can't read file");
+		return 0;
+		}
+	} else
+    /* ATTENTION: RLE encoded reading is only supported for backward compatibility */
     if (indexLength < map->indexLongNbytes * map->nTiles) {	/* RLE encoded? */
 
 	if (indexLength > sizeof(long) * map->nTiles) {
@@ -56,11 +64,7 @@ static int Rast3d_readIndex(RASTER3D_Map * map)
 
 	if (indexLength > sizeof(long) * map->nTiles)
 	    Rast3d_free(tmp2);
-    }
-    else /* NO RLE */ if (read(map->data_fd, tmp, indexLength) != indexLength) {
-	Rast3d_error("Rast3d_readIndex: can't read file");
-	return 0;
-    }
+    } /* END RLE */
 
     Rast3d_long_decode(tmp, map->index, map->nTiles, map->indexLongNbytes);
 
@@ -77,7 +81,7 @@ static int Rast3d_readIndex(RASTER3D_Map * map)
 
 int Rast3d_flush_index(RASTER3D_Map * map)
 {
-    int sizeCompressed, indexLength, tileIndex;
+    int indexLength, tileIndex;
     unsigned char *tmp;
     long ldummy;
 
@@ -105,23 +109,11 @@ int Rast3d_flush_index(RASTER3D_Map * map)
 
     (void)Rast3d_long_encode(map->index, tmp, map->nTiles);
 
-    sizeCompressed = Rast3d_rle_count_only(tmp, sizeof(long) * map->nTiles, 1);
-
-    if (sizeCompressed >= map->nTiles * sizeof(long)) {
 	indexLength = map->nTiles * sizeof(long);
 	if (write(map->data_fd, tmp, indexLength) != indexLength) {
 	    Rast3d_error("Rast3d_flush_index: can't write file");
 	    return 0;
 	}
-    }
-    else {
-	indexLength = sizeCompressed;
-	Rast3d_rle_encode(tmp, (char *)map->index, sizeof(long) * map->nTiles, 1);
-	if (write(map->data_fd, map->index, sizeCompressed) != sizeCompressed) {
-	    Rast3d_error("Rast3d_flush_index: can't write file");
-	    return 0;
-	}
-    }
 
     Rast3d_free(tmp);
     if (!Rast3d_readIndex(map)) {
@@ -140,8 +132,8 @@ static int indexSortCompare(const void *a, const void *b)
 {
     long offset1, offset2;
 
-    offset1 = cmpIndex[*((const int *)a)];
-    offset2 = cmpIndex[*((const int *)b)];
+    offset1 = cmpIndex[*((const long *)a)];
+    offset2 = cmpIndex[*((const long *)b)];
 
     if (offset1 > offset2)
 	return 1;
@@ -155,8 +147,9 @@ static int indexSortCompare(const void *a, const void *b)
 int Rast3d_init_index(RASTER3D_Map * map, int hasIndex)
 {
     int tile;
-    int i0, i1, i2, i3, i4, i5, offset, nofElts;
-    int *offsetP;
+    int i0, i1, i2, i3, i4, i5, nofElts;
+    long offset;
+    long *offsetP;
 
     map->hasIndex = hasIndex;
     map->index = Rast3d_malloc(sizeof(long) * map->nTiles);
@@ -190,7 +183,7 @@ int Rast3d_init_index(RASTER3D_Map * map, int hasIndex)
 	return 0;
     }
 
-    offsetP = Rast3d_malloc(sizeof(int) * map->nTiles);
+    offsetP = Rast3d_malloc(sizeof(long) * map->nTiles);
     if (offsetP == NULL) {
 	Rast3d_error("Rast3d_init_index: error in Rast3d_malloc");
 	return 0;
@@ -199,7 +192,7 @@ int Rast3d_init_index(RASTER3D_Map * map, int hasIndex)
     for (tile = 0; tile < map->nTiles; tile++)
 	offsetP[tile] = tile;
     cmpIndex = map->index;
-    qsort(offsetP, map->nTiles, sizeof(int), indexSortCompare);
+    qsort(offsetP, map->nTiles, sizeof(long), indexSortCompare);
 
     for (tile = 0; tile < map->nTiles - 1; tile++) {
 	if (map->index[offsetP[tile]] == -1) {

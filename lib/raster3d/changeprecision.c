@@ -23,7 +23,7 @@
 void Rast3d_change_precision(void *map, int precision, const char *nameOut)
 {
     void *map2;
-    int x, y, z, savePrecision, saveCompression, saveLzw, saveRle;
+    int x, y, z, savePrecision, saveCompression;
     char *data;
     RASTER3D_Region region;
     int typeIntern;
@@ -32,9 +32,8 @@ void Rast3d_change_precision(void *map, int precision, const char *nameOut)
 
     saveType = Rast3d_get_file_type();
     /*   Rast3d_set_file_type (Rast3d_file_type_map (map)); */
-    Rast3d_get_compression_mode(&saveCompression, &saveLzw, &saveRle,
-			   &savePrecision);
-    Rast3d_set_compression_mode(RASTER3D_COMPRESSION, saveLzw, saveRle, precision);
+    Rast3d_get_compression_mode(&saveCompression, &savePrecision);
+    Rast3d_set_compression_mode(RASTER3D_COMPRESSION, precision);
     Rast3d_get_tile_dimension(&tileXsave, &tileYsave, &tileZsave);
     Rast3d_get_tile_dimensions_map(map, &tileX, &tileY, &tileZ);
     Rast3d_set_tile_dimension(tileX, tileY, tileZ);
@@ -48,7 +47,7 @@ void Rast3d_change_precision(void *map, int precision, const char *nameOut)
 	Rast3d_fatal_error("Rast3d_change_precision: error in Rast3d_open_cell_new");
 
     Rast3d_set_file_type(saveType);
-    Rast3d_set_compression_mode(saveCompression, saveLzw, saveRle, savePrecision);
+    Rast3d_set_compression_mode(saveCompression, savePrecision);
     Rast3d_set_tile_dimension(tileXsave, tileYsave, tileZsave);
 
     data = Rast3d_alloc_tiles(map, 1);

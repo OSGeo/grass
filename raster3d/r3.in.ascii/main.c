@@ -278,11 +278,6 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
                 /* Write the data */
                 Rast3d_put_double(map, col, row, depth, value);
             }
-
-        if (!Rast3d_flush_tiles_in_cube(map,
-                                  0, 0, MAX(0, depth - tileZ),
-                                  region->rows - 1, region->cols - 1, depth))
-            fatalError("asciiTog3d: error flushing tiles");
     }
 
     if (fscanf(fp, "%lf", &value) == 1) {
@@ -306,7 +301,7 @@ int main(int argc, char *argv[])
     char *input, *output;
     int convertNull;
     char nullValue[256];
-    int useTypeDefault, type, useLzwDefault, doLzw, useRleDefault, doRle;
+    int useTypeDefault, type, useCompressionDefault, doCompression;
     int usePrecisionDefault, precision, useDimensionDefault, tileX, tileY,
         tileZ;
     RASTER3D_Region region;
@@ -332,8 +327,7 @@ int main(int argc, char *argv[])
 
     getParams(&input, &output, &convertNull, nullValue);
     if (!Rast3d_get_standard3d_params(&useTypeDefault, &type,
-                                 &useLzwDefault, &doLzw,
-                                 &useRleDefault, &doRle,
+                                 &useCompressionDefault, &doCompression,
                                  &usePrecisionDefault, &precision,
                                  &useDimensionDefault, &tileX, &tileY,
                                  &tileZ))
@@ -346,7 +340,7 @@ int main(int argc, char *argv[])
     /*Open the new RASTER3D map */
     map = Rast3d_open_new_param(output, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_XY,
                            &region,
-                           type, doLzw, doRle, precision, tileX, tileY,
+                           type, doCompression, precision, tileX, tileY,
                            tileZ);
 
     if (map == NULL)

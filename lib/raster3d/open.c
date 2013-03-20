@@ -85,6 +85,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
     int nofHeaderBytes, dataOffset, useXdr, hasIndex;
     char *ltmp, *unit;
     int vertical_unit;
+    int version;
     double north, south, east, west, top, bottom;
 
     map = Rast3d_open_cell_old_no_header(name, mapset);
@@ -105,7 +106,8 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 			&ew_res, &ns_res, &tb_res,
 			&tileX, &tileY, &tileZ,
 			&type, &compression, &useRle, &useLzw,
-			&precision, &dataOffset, &useXdr, &hasIndex, &unit, &vertical_unit)) {
+			&precision, &dataOffset, &useXdr, &hasIndex, &unit, &vertical_unit,
+			&version)) {
 	Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_read_header"));
 	return 0;
     }
@@ -165,7 +167,8 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 			nofHeaderBytes, tileX, tileY, tileZ,
 			proj, zone,
 			north, south, east, west, top, bottom,
-			rows, cols, depths, ew_res, ns_res, tb_res, unit, vertical_unit)) {
+			rows, cols, depths, ew_res, ns_res, tb_res, unit, vertical_unit,
+			version)) {
 	Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_fill_header"));
 	return (void *)NULL;
     }
@@ -297,8 +300,7 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
     Rast3d_range_init(map);
     Rast3d_adjust_region(region);
 
-    if (!Rast3d_fill_header(map, RASTER3D_WRITE_DATA, compression,
-			g3d_do_rle_compression, g3d_do_lzw_compression,
+    if (!Rast3d_fill_header(map, RASTER3D_WRITE_DATA, compression, 0, 0,
 			g3d_file_type, precision, cache, RASTER3D_HAS_INDEX,
 			map->useXdr, typeIntern, nofHeaderBytes,
 			g3d_tile_dimension[0], g3d_tile_dimension[1],
@@ -308,7 +310,7 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 			region->west, region->top, region->bottom,
 			region->rows, region->cols, region->depths,
 			region->ew_res, region->ns_res, region->tb_res,
-			g3d_unit_default, g3d_vertical_unit_default)) {
+			g3d_unit_default, g3d_vertical_unit_default, RASTER3D_MAP_VERSION)) {
 	Rast3d_error(_("Rast3d_open_cell_new: error in Rast3d_fill_header"));
 	return (void *)NULL;
     }

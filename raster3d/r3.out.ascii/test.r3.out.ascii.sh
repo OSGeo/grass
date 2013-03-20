@@ -63,7 +63,7 @@ r3.in.ascii --o output=test_double_nsbt_null input=test_double_sntb_null.txt nv=
 # Different precision and null values than default
 r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null_prec5.txt nv=-1000
 r3.in.ascii --o output=test_double_nsbt_null input=test_double_sntb_null_prec8.txt nv=-2000
-# AImport grass6 legacy data
+# Import grass6 legacy data
 r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null_grass6_comp_1.txt
 
 # In this @preprocess step for the last test we create a large region and 
@@ -78,3 +78,9 @@ r3.out.ascii --o input=volume_double_null_large output=test_double_nsbt_null_lar
 r3.in.ascii --o output=test_double_nsbt_null_large input=test_double_nsbt_null_large.txt nv=*
 # Just for the logs
 r3.info test_double_nsbt_null_large
+
+# Show differences between references and created text files
+for i in `ls *.ref` ; do 
+    diff $i "`basename $i .ref`.txt" ; 
+done
+rm *.txt

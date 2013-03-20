@@ -5,9 +5,9 @@
 
 #define RASTER3D_LONG_LENGTH sizeof (long)
 
-#define RASTER3D_XDR_INT_LENGTH 4
-#define RASTER3D_XDR_DOUBLE_LENGTH 8
-#define RASTER3D_XDR_FLOAT_LENGTH 4
+#define RASTER3D_XDR_INT_LENGTH 4		/* Only kept for backward compatibility */
+#define RASTER3D_XDR_DOUBLE_LENGTH 8	/* Only kept for backward compatibility */
+#define RASTER3D_XDR_FLOAT_LENGTH 4		/* Only kept for backward compatibility */
 
 #define RASTER3D_IS_CORRECT_TYPE(t) (((t) == FCELL_TYPE) || ((t) == DCELL_TYPE))
 
@@ -23,9 +23,9 @@
 #define RASTER3D_HAS_INDEX 1
 #define RASTER3D_NO_INDEX 0
 
-#define RASTER3D_USE_XDR 1
-#define RASTER3D_NO_XDR 0
-
+#define RASTER3D_USE_XDR 1	/* Only kept for backward compatibility */
+#define RASTER3D_NO_XDR 0	/* Only kept for backward compatibility */
+/* Only kept for backward compatibility */
 #define RASTER3D_VALID_XDR_OPTION(o) (((o) == RASTER3D_USE_XDR) || ((o) == RASTER3D_NO_XDR))
 
 /*---------------------------------------------------------------------------*/
@@ -41,9 +41,8 @@ extern int xdrLength;		/* in bytes */
 
 /* global variables */
 
+extern int g3d_version; /* RASTER3D_MAP_VERSION */
 extern int g3d_do_compression;	/* RASTER3D_NO_COMPRESSION or RASTER3D_COMPRESSION */
-extern int g3d_do_lzw_compression;	/* RASTER3D_USE_LZW or RASTER3D_NO_LZW */
-extern int g3d_do_rle_compression;	/* RASTER3D_USE_RLE or RASTER3D_NO_RLE */
 extern int g3d_precision;	/* RASTER3D_ALLOW_PRECISION or RASTER3D_NO_PRECISION */
 extern int g3d_cache_default;	/* in number of tiles; 0 ==> no cache */
 extern int g3d_cache_max;	/* in bytes */
