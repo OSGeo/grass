@@ -8,7 +8,7 @@ $Date$
  GRASS GIS >= 6.4
  Python    >= 2.4 (Python 3 not supported)
  	Python ElementTree (only for Python 2.4)
- wxPython  >= 2.8.1.1
+ wxPython  >= 2.8.10.1
  NumPy     >= 1.0.4
 
 

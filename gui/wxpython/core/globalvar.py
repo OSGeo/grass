@@ -44,7 +44,7 @@ def CheckForWx():
     if 'wx' in sys.modules.keys():
         return
 
-    minVersion = [2, 8, 1, 1]
+    minVersion = [2, 8, 10, 1]
     try:
         try:
             import wxversion
