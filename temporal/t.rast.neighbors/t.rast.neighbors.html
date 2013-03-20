@@ -1,0 +1,178 @@
+<h2>DESCRIPTION</h2>
+
+<em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a> computations
+on the maps of a space time raster dataset (STRDS). This module supports a subset of options
+that are available in <a href="r.neighbors.html">r.neighbors</a>.
+The size of the neighborhood and the aggregation method can be chosen.
+<p>
+The user must provide an input and an output space time raster dataset and the basename 
+of the resulting raster maps. The resulting STRDS will have
+the same temporal resolution as the input dataset. 
+All maps will be processed using the current region settings.
+<p>
+The user can select a subset of the input space time raster dataset for processing 
+using a SQL WHERE statement. The number of CPU's to be used for parallel processing can be specified
+with the <em>nprocs</em> option, to speedup the computation on multicore system.
+
+
+
+<h2>EXAMPLE</h2>
+
+In this example we create 7 raster maps that will be registered in a single space time
+raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
+The names of the raster maps are stored in a text file that is used for raster map registration. 
+<p>
+A neighborhood average smoothing with a window size of 5 cells will be performed on 
+the space time raster dataset <em>precipitation_daily</em> resulting in the output space time raster dataset
+<em>precipitation_daily_smooth</em>. The base name of the new generated raster maps is <em>prec_smooth</em>. 
+The temporal resolution of the resulting STRDS is identical to the input STRDS.
+
+
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+
+count=1
+for map in ${MAPS} ; do
+    export GRASS_RND_SEED=${count}
+    r.mapcalc --o expr="${map} = rand(0, 550)" 
+    echo ${map} >> map_list.txt 
+    count=$((count+1))
+done
+
+t.create --o type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i --o type=rast input=precipitation_daily \
+           file=map_list.txt start="2012-08-20" increment="1 days"
+
+t.info type=strds input=precipitation_daily
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily@PERMANENT
+ | Name: ...................... precipitation_daily
+ | Mapset: .................... PERMANENT
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-03-20 18:47:25.867658
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-27 00:00:00
+ | Granularity:................ 1 days
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Number of registered maps:.. 7
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
+ | Minimum value min:.......... 0.0
+ | Minimum value max:.......... 8.0
+ | Maximum value min:.......... 533.0
+ | Maximum value max:.......... 549.0
+ | Raster register table:...... precipitation_daily_PERMANENT_raster_register
+ +----------------------------------------------------------------------------+
+
+
+t.rast.list input=precipitation_daily columns=name,start_time,min,max
+
+map_1   2012-08-20 00:00:00     2.0     549.0
+map_2   2012-08-21 00:00:00     4.0     549.0
+map_3   2012-08-22 00:00:00     8.0     548.0
+map_4   2012-08-23 00:00:00     3.0     549.0
+map_5   2012-08-24 00:00:00     0.0     533.0
+map_6   2012-08-25 00:00:00     2.0     543.0
+map_7   2012-08-26 00:00:00     1.0     539.0
+
+
+t.rast.neighbors --o input=precipitation_daily \
+    output=precipitation_daily_smooth base=prec_smooth \
+    size=5 method=average nprocs=3
+    
+t.info type=strds input=precipitation_daily_smooth
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily_smooth@PERMANENT
+ | Name: ...................... precipitation_daily_smooth
+ | Mapset: .................... PERMANENT
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-03-20 18:47:28.697990
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-27 00:00:00
+ | Granularity:................ 1 days
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Number of registered maps:.. 7
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
+ | Minimum value min:.......... 140.166667
+ | Minimum value max:.......... 215.166667
+ | Maximum value min:.......... 293.3
+ | Maximum value max:.......... 373.388889
+ | Raster register table:...... precipitation_daily_smooth_PERMANENT_raster_register
+ +----------------------------------------------------------------------------+
+
+
+t.rast.list input=precipitation_daily_smooth columns=name,start_time,min,max
+
+prec_smooth_1   2012-08-20 00:00:00     172.388889      360.566667
+prec_smooth_2   2012-08-21 00:00:00     215.166667      322.833333
+prec_smooth_3   2012-08-22 00:00:00     140.166667      373.388889
+prec_smooth_4   2012-08-23 00:00:00     184.3           356.583333
+prec_smooth_5   2012-08-24 00:00:00     163.966667      293.3
+prec_smooth_6   2012-08-25 00:00:00     204.98          324.611111
+prec_smooth_7   2012-08-26 00:00:00     154.25          340.366667
+
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.neighbors.html">r.neighbors</a><br>
+<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a><br>
+<a href="t.rast.extract.html">t.rast.extract</a><br>
+<a href="t.info.html">t.info</a><br>
+<a href="g.region.html">g.region</a><br>
+<a href="r.mask.html">r.mask</a><br>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert
+
+<p><i>Last changed: $Date: 2012-08-29 14:55:21 +0200 (Mi, 29. Aug 2012) $</i>
