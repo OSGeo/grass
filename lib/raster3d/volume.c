@@ -8,11 +8,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-static int verifyVolumeVertices(map, v)
-
-     void *map;
-     double v[2][2][2][3];
-
+static int verifyVolumeVertices(void *map, double v[2][2][2][3])
 {
     if (!(Rast3d_is_valid_location(map, v[0][0][0][0], v[0][0][0][1],
 			      v[0][0][0][2]) &&
@@ -37,10 +33,7 @@ static int verifyVolumeVertices(map, v)
 
 /*---------------------------------------------------------------------------*/
 
-static int verifyVolumeEdges(nx, ny, nz)
-
-     int nx, ny, nz;
-
+static int verifyVolumeEdges(int nx, int ny, int nz)
 {
     if ((nx <= 0) || (ny <= 0) || (nz <= 0))
 	Rast3d_fatal_error("verifyCubeEdges: Volume edge out of range");
