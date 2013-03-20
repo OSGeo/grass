@@ -17,6 +17,7 @@ SUBDIRS = \
 	t.rast.univar \
 	t.rast.list \
 	t.rast.mapcalc \
+	t.rast.neighbors \
 	t.rast.series \
 	t.rast.export \
 	t.rast.out.vtk \

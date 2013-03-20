@@ -59,7 +59,7 @@ t.create type=strds temporaltype=absolute \
          description="Test dataset with daily precipitation"
 
 t.register -i type=rast input=precipitation_daily \
-           file=map_list.txt start=20-08-2012 increment="1 days"
+           file=map_list.txt start="2012-08-20" increment="1 days"
 
 t.info type=strds input=precipitation_daily
 
