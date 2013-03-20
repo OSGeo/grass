@@ -4,16 +4,15 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
+#define RASTER3D_MAP_VERSION 2 /* Second version of the raster 3D map layout.
+                                * Old maps withput version information are
+                                * defined as version == 1 when reading the header.
+                                */
+
 #define RASTER3D_TILE_SAME_AS_FILE 2
 
 #define RASTER3D_NO_COMPRESSION 0
 #define RASTER3D_COMPRESSION 1
-
-#define RASTER3D_USE_LZW 1
-#define RASTER3D_NO_LZW 0
-
-#define RASTER3D_USE_RLE 1
-#define RASTER3D_NO_RLE 0
 
 #define RASTER3D_MAX_PRECISION -1
 
@@ -72,6 +71,7 @@ typedef void resample_fn(struct RASTER3D_Map *, int, int, int, void *, int);
 
 typedef struct RASTER3D_Map
 {
+	int version; /* The version of the raster 3D map layout */
 
     char *fileName;
     char *tempName;
@@ -110,10 +110,10 @@ typedef struct RASTER3D_Map
     /* data concering the compression */
     int precision;		/* RASTER3D_MAX_PRECISION or, 0 .. 23 for float, 
 				   0 .. 52 for double */
-    int compression;		/* RASTER3D_NO_COMPRESSION or RASTER3D_USE_COMPRESSION */
-    int useLzw;			/* RASTER3D_USE_LZW or RASTER3D_NO_LZW */
-    int useRle;			/* RASTER3D_USE_RLE or RASTER3D_NO_RLE */
-    int useXdr;			/* RASTER3D_USE_XDR or RASTER3D_NO_XDR */
+    int compression;		/* RASTER3D_NO_COMPRESSION or RASTER3D_COMPRESSION */
+    int useLzw;			/* RASTER3D_USE_LZW or RASTER3D_NO_LZW !!! only kept for backward compatibility */
+    int useRle;			/* RASTER3D_USE_RLE or RASTER3D_NO_RLE !!! only kept for backward compatibility */
+    int useXdr;			/* RASTER3D_USE_XDR or RASTER3D_NO_XDR !!! only kept for backward compatibility */
 
     /* pointer to first tile in file */
     int offset;
@@ -158,7 +158,7 @@ typedef struct RASTER3D_Map
 
     int useCache;		/* 1 if cache is used */
     void *cache;		/* pointer to cache structure */
-    int cacheFD;		/* file discriptor of cache file -- write mode only */
+    int cacheFD;		/* file descriptor of cache file -- write mode only */
     char *cacheFileName;	/* filename of cache file -- write mode only */
     long cachePosLast;		/* position of last entry in cache file -- write */
     /* mode only */
