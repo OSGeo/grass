@@ -28,6 +28,7 @@ int xdrLength;
 #define RASTER3D_HEADER_HASINDEX "hasIndex"
 #define RASTER3D_HEADER_UNIT "Units"
 #define RASTER3D_HEADER_VERTICAL_UNIT "VerticalUnits"
+#define RASTER3D_HEADER_VERSION "Version"
 
 /*---------------------------------------------------------------------------*/
 
@@ -39,7 +40,7 @@ Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
 		    double *tb_res, int *tileX, int *tileY, int *tileZ,
 		    int *type, int *compression, int *useRle, int *useLzw,
 		    int *precision, int *dataOffset, int *useXdr,
-		    int *hasIndex, char **unit, int *vertical_unit)
+		    int *hasIndex, char **unit, int *vertical_unit, int *version)
 {
     int returnVal;
     int (*headerInt) (), (*headerDouble) (), (*headerValue) ();
@@ -102,7 +103,11 @@ Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
     if(!headerInt(headerKeys, RASTER3D_HEADER_VERTICAL_UNIT, vertical_unit))
         G_warning("You are using an old raster3d data format, the vertical unit is undefined. "
                   "Please use r3.support to define the vertical unit to avoid this warning.");
-
+    /* New format and API changes */
+    if(!headerInt(headerKeys, RASTER3D_HEADER_VERSION, version)) {
+        G_warning("You are using an old raster3d data format, the version is undefined.");
+        *version = 1;
+    }
 
     if (returnVal)
 	return 1;
@@ -120,7 +125,8 @@ Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
 	       double *ew_res, double *ns_res, double *tb_res, int *tileX,
 	       int *tileY, int *tileZ, int *type, int *compression,
 	       int *useRle, int *useLzw, int *precision, int *dataOffset,
-	       int *useXdr, int *hasIndex, char **unit, int *vertical_unit)
+	       int *useXdr, int *hasIndex, char **unit, int *vertical_unit,
+	       int *version)
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
@@ -140,7 +146,7 @@ Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
 			     ew_res, ns_res, tb_res,
 			     tileX, tileY, tileZ,
 			     type, compression, useRle, useLzw, precision,
-			     dataOffset, useXdr, hasIndex, unit, vertical_unit)) {
+			     dataOffset, useXdr, hasIndex, unit, vertical_unit, version)) {
 	Rast3d_error("Rast3d_read_header: error extracting header key(s) of file %s",
 		  path);
 	return 0;
@@ -158,7 +164,8 @@ Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north, double
 		int cols, int depths, double ew_res, double ns_res,
 		double tb_res, int tileX, int tileY, int tileZ, int type,
 		int compression, int useRle, int useLzw, int precision,
-		int dataOffset, int useXdr, int hasIndex, char *unit, int vertical_unit)
+		int dataOffset, int useXdr, int hasIndex, char *unit, int vertical_unit,
+		int version)
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
@@ -173,7 +180,7 @@ Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north, double
 			     &tileX, &tileY, &tileZ,
 			     &type, &compression, &useRle, &useLzw,
 			     &precision, &dataOffset, &useXdr, &hasIndex,
-			     &unit, &vertical_unit)) {
+			     &unit, &vertical_unit, &version)) {
 	Rast3d_error("Rast3d_write_header: error adding header key(s) for file %s",
 		  path);
 	return 0;
@@ -205,7 +212,8 @@ Rast3d_rewrite_header(RASTER3D_Map * map)
                          map->type,
                          map->compression, map->useRle, map->useLzw,
                          map->precision, map->offset, map->useXdr,
-                         map->hasIndex, map->unit, map->vertical_unit)) {
+                         map->hasIndex, map->unit, map->vertical_unit,
+                         map->version)) {
         G_warning(_("Unable to write header for 3D raster map <%s>"), map->fileName);
         return 0;
     }
@@ -301,10 +309,13 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression, int useRl
 	       int tileY, int tileZ, int proj, int zone, double north,
 	       double south, double east, double west, double top,
 	       double bottom, int rows, int cols, int depths, double ew_res,
-	       double ns_res, double tb_res, char *unit, int vertical_unit)
+	       double ns_res, double tb_res, char *unit, int vertical_unit,
+	       int version)
 {
     if (!RASTER3D_VALID_OPERATION(operation))
 	Rast3d_fatal_error("Rast3d_fill_header: operation not valid\n");
+
+    map->version = version;
 
     map->operation = operation;
 
@@ -366,7 +377,7 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression, int useRl
 
     if (!RASTER3D_VALID_XDR_OPTION(useXdr))
 	Rast3d_fatal_error("Rast3d_fill_header: invalid xdr option");
-    map->useXdr = useXdr;
+    map->useXdr = useXdr; 	/* Only kept for backward compatibility */
 
     map->offset = nofHeaderBytes;
 
@@ -381,8 +392,8 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression, int useRl
     map->numLengthExtern = Rast3d_extern_length(map->type);
 
     map->compression = compression;
-    map->useRle = useRle;
-    map->useLzw = useLzw;
+    map->useRle = useRle;	/* Only kept for backward compatibility */
+    map->useLzw = useLzw;	/* Only kept for backward compatibility */
     map->precision = precision;
 
 #define RLE_STATUS_BYTES 2

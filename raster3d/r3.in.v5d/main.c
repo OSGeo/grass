@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     char *input, *output;
     int convertNull;
     double nullValue;
-    int useTypeDefault, type, useLzwDefault, doLzw, useRleDefault, doRle;
+    int useTypeDefault, type, useCompressionDefault, doCompression;
     int usePrecisionDefault, precision, useDimensionDefault, tileX, tileY,
 	tileZ;
     RASTER3D_Region region;
@@ -202,8 +202,7 @@ int main(int argc, char *argv[])
 
     getParams(&input, &output, &convertNull, &nullValue);
     if (!Rast3d_get_standard3d_params(&useTypeDefault, &type,
-				 &useLzwDefault, &doLzw,
-				 &useRleDefault, &doRle,
+				 &useCompressionDefault, &doCompression,
 				 &usePrecisionDefault, &precision,
 				 &useDimensionDefault, &tileX, &tileY,
 				 &tileZ))

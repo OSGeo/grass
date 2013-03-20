@@ -29,7 +29,8 @@ Rast3d_nearest_neighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
     int row, col, depth;
 
     /* convert (x, y, z) window coordinates into (north, east, top) */
-    Rast3d_coord2location(&(map->window), (double)x + 0.5, (double)y + 0.5, (double)z + 0.5, &north, &east, &top);
+    Rast3d_coord2location(&(map->window), (double)x + 0.5, (double)y + 0.5,
+    		(double)z + 0.5, &north, &east, &top);
 
     /* convert (north, east, top) into map region coordinates (row, col, depth) */
     Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);

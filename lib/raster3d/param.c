@@ -54,15 +54,13 @@ void Rast3d_set_standard3d_input_params()
 /*----------------------------------------------------------------------------*/
 
 int Rast3d_get_standard3d_params(int *useTypeDefault, int *type,
-			    int *useLzwDefault, int *doLzw,
-			    int *useRleDefault, int *doRle,
+			    int *useCompressionDefault, int *doCompression,
 			    int *usePrecisionDefault, int *precision,
 			    int *useDimensionDefault, int *tileX, int *tileY,
 			    int *tileZ)
 {
-    int doCompress;
 
-    *useTypeDefault = *useLzwDefault = *useRleDefault = 0;
+    *useTypeDefault = *useCompressionDefault = 0;
     *usePrecisionDefault = *useDimensionDefault = 0;
 
     Rast3d_init_defaults();
@@ -76,7 +74,7 @@ int Rast3d_get_standard3d_params(int *useTypeDefault, int *type,
 	*useTypeDefault = 1;
     }
 
-    Rast3d_get_compression_mode(&doCompress, doLzw, doRle, precision);
+    Rast3d_get_compression_mode(doCompression, precision);
 
     if (strcmp(param->precision->answer, "default") != 0) {
 	if (strcmp(param->precision->answer, "max") == 0)
@@ -86,31 +84,19 @@ int Rast3d_get_standard3d_params(int *useTypeDefault, int *type,
 	    Rast3d_error(_("Rast3d_get_standard3d_params: precision value invalid"));
 	    return 0;
 	}
-    }
-    else
+	}
+	else
 	*usePrecisionDefault = 1;
 
 
-    if (strcmp(param->compression->answer, "default") != 0) {
-	if (strcmp(param->compression->answer, "rle") == 0) {
-	    *doRle = RASTER3D_USE_RLE;
-	    *doLzw = RASTER3D_NO_LZW;
+	if (strcmp(param->compression->answer, "default") != 0) {
+ 		if (strcmp(param->compression->answer, "zip") == 0)
+			*doCompression = RASTER3D_COMPRESSION;
+		else
+			*doCompression = RASTER3D_NO_COMPRESSION;
+	} else {
+		*useCompressionDefault = 1;
 	}
-	else if (strcmp(param->compression->answer, "lzw") == 0) {
-	    *doRle = RASTER3D_NO_RLE;
-	    *doLzw = RASTER3D_USE_LZW;
-	}
-	else if (strcmp(param->compression->answer, "rle+lzw") == 0) {
-	    *doRle = RASTER3D_USE_RLE;
-	    *doLzw = RASTER3D_USE_LZW;
-	}
-	else {
-	    *doRle = RASTER3D_NO_RLE;
-	    *doLzw = RASTER3D_NO_LZW;
-	}
-    }
-    else
-	*useLzwDefault = *useRleDefault = 1;
 
     Rast3d_get_tile_dimension(tileX, tileY, tileZ);
     if (strcmp(param->dimension->answer, "default") != 0) {

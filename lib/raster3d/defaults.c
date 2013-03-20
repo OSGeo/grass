@@ -8,8 +8,6 @@
 #define RASTER3D_NO_DEFAULT -10
 
 #define RASTER3D_COMPRESSION_DEFAULT RASTER3D_COMPRESSION
-#define RASTER3D_USE_LZW_DEFAULT RASTER3D_USE_LZW
-#define RASTER3D_USE_RLE_DEFAULT RASTER3D_NO_RLE
 #define RASTER3D_PRECISION_DEFAULT RASTER3D_MAX_PRECISION
 #define RASTER3D_CACHE_SIZE_DEFAULT 1000
 #define RASTER3D_CACHE_SIZE_MAX_DEFAULT 16777216
@@ -25,12 +23,6 @@
 
 #define RASTER3D_COMPRESSION_ENV_VAR_YES "RASTER3D_USE_COMPRESSION"
 #define RASTER3D_COMPRESSION_ENV_VAR_NO "RASTER3D_NO_COMPRESSION"
-
-#define RASTER3D_LZW_ENV_VAR_YES "RASTER3D_USE_LZW"
-#define RASTER3D_LZW_ENV_VAR_NO "RASTER3D_NO_LZW"
-
-#define RASTER3D_RLE_ENV_VAR_YES "RASTER3D_USE_RLE"
-#define RASTER3D_RLE_ENV_VAR_NO "RASTER3D_NO_RLE"
 
 #define RASTER3D_PRECISION_ENV_VAR "RASTER3D_PRECISION"
 #define RASTER3D_PRECISION_ENV_VAR_MAX "RASTER3D_MAX_PRECISION"
@@ -52,9 +44,8 @@
 
 /*---------------------------------------------------------------------------*/
 
+int g3d_version = RASTER3D_MAP_VERSION;
 int g3d_do_compression = RASTER3D_NO_DEFAULT;
-int g3d_do_lzw_compression = RASTER3D_NO_DEFAULT;
-int g3d_do_rle_compression = RASTER3D_NO_DEFAULT;
 int g3d_precision = RASTER3D_NO_DEFAULT;
 int g3d_cache_default = RASTER3D_NO_DEFAULT;
 int g3d_cache_max = RASTER3D_NO_DEFAULT;
@@ -84,7 +75,7 @@ int g3d_vertical_unit_default = U_UNDEFINED;
  */
 
 void
-Rast3d_set_compression_mode(int doCompress, int doLzw, int doRle, int precision)
+Rast3d_set_compression_mode(int doCompress, int precision)
 {
     if ((doCompress != RASTER3D_NO_COMPRESSION) && (doCompress != RASTER3D_COMPRESSION))
 	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for doCompress.");
@@ -94,17 +85,9 @@ Rast3d_set_compression_mode(int doCompress, int doLzw, int doRle, int precision)
     if (doCompress == RASTER3D_NO_COMPRESSION)
 	return;
 
-    if ((doLzw != RASTER3D_NO_LZW) && (doLzw != RASTER3D_USE_LZW))
-	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for doLzw.");
-
-    if ((doRle != RASTER3D_NO_RLE) && (doRle != RASTER3D_USE_RLE))
-	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for doRle.");
-
     if (precision < -1)
 	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for precision.");
 
-    g3d_do_lzw_compression = doLzw;
-    g3d_do_rle_compression = doRle;
     g3d_precision = precision;
 }
 
@@ -122,15 +105,10 @@ Rast3d_set_compression_mode(int doCompress, int doLzw, int doRle, int precision)
  */
 
 void
-Rast3d_get_compression_mode(int *doCompress, int *doLzw, int *doRle,
-		       int *precision)
+Rast3d_get_compression_mode(int *doCompress, int *precision)
 {
     if (doCompress != NULL)
 	*doCompress = g3d_do_compression;
-    if (doLzw != NULL)
-	*doLzw = g3d_do_lzw_compression;
-    if (doRle != NULL)
-	*doRle = g3d_do_rle_compression;
     if (precision != NULL)
 	*precision = g3d_precision;
 }
@@ -324,34 +302,6 @@ void Rast3d_init_defaults(void)
 	    }
 	    else {
 		g3d_do_compression = RASTER3D_COMPRESSION_DEFAULT;
-	    }
-	}
-    }
-
-    if (g3d_do_lzw_compression == RASTER3D_NO_DEFAULT) {
-	if (NULL != getenv(RASTER3D_LZW_ENV_VAR_YES)) {
-	    g3d_do_lzw_compression = RASTER3D_USE_LZW;
-	}
-	else {
-	    if (NULL != getenv(RASTER3D_LZW_ENV_VAR_NO)) {
-		g3d_do_lzw_compression = RASTER3D_NO_LZW;
-	    }
-	    else {
-		g3d_do_lzw_compression = RASTER3D_USE_LZW_DEFAULT;
-	    }
-	}
-    }
-
-    if (g3d_do_rle_compression == RASTER3D_NO_DEFAULT) {
-	if (NULL != getenv(RASTER3D_RLE_ENV_VAR_YES)) {
-	    g3d_do_rle_compression = RASTER3D_USE_RLE;
-	}
-	else {
-	    if (NULL != getenv(RASTER3D_RLE_ENV_VAR_NO)) {
-		g3d_do_rle_compression = RASTER3D_NO_RLE;
-	    }
-	    else {
-		g3d_do_rle_compression = RASTER3D_USE_RLE_DEFAULT;
 	    }
 	}
     }

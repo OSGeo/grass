@@ -93,6 +93,7 @@ void *Rast3d_get_tile_ptr(RASTER3D_Map * map, int tileIndex)
 	return ptr;
     }
 
+
     if (map->currentIndex == tileIndex)
 	return map->data;
 
@@ -101,6 +102,7 @@ void *Rast3d_get_tile_ptr(RASTER3D_Map * map, int tileIndex)
 	Rast3d_error("Rast3d_get_tile_ptr: error in Rast3d_read_tile");
 	return NULL;
     }
+
 
     return map->data;
 }

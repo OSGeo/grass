@@ -111,11 +111,11 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     Rast3d_get_region_struct_map(map, &region);
     Rast3d_get_tile_dimensions_map(map, &tileX, &tileY, &tileZ);
 
-    Rast3d_get_compression_mode(&doCompress, &doLzw, &doRle, &precision);
+    Rast3d_get_compression_mode(&doCompress, &precision);
 
     mapOut = Rast3d_open_new_param(name, DCELL_TYPE, RASTER3D_USE_CACHE_XY,
 			      &region, Rast3d_file_type_map(map),
-			      doLzw, doRle, Rast3d_tile_precision_map(map), tileX,
+			      doCompress, Rast3d_tile_precision_map(map), tileX,
 			      tileY, tileZ);
     if (mapOut == NULL)
 	Rast3d_fatal_error(_("modifyNull: error opening tmp file"));

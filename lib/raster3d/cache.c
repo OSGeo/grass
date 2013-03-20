@@ -56,8 +56,8 @@ static int initCacheRead(RASTER3D_Map * map, int nCached)
 static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 {
     RASTER3D_Map *map = closure;
-    int index, nBytes;
-    long pos, offs, offsLast;
+    size_t index, nBytes;
+    size_t pos, offs, offsLast;
 
     pos = map->index[tileIndex];
 
@@ -135,8 +135,8 @@ static int
 cacheWrite_writeFun(int tileIndex, const void *tileBuf, void *closure)
 {
     RASTER3D_Map *map = closure;
-    int nBytes;
-    long offs;
+    size_t nBytes;
+    size_t offs;
 
     if (map->index[tileIndex] != -1)
 	return 1;
@@ -277,8 +277,8 @@ static int cacheFlushFun(int tileIndex, const void *tileBuf, void *closure)
 
 int Rast3d_flush_all_tiles(RASTER3D_Map * map)
 {
-    int tileIndex, nBytes;
-    long offs;
+    size_t tileIndex, nBytes;
+    size_t offs;
 
     if (map->operation == RASTER3D_READ_DATA) {
 	if (!Rast3d_cache_remove_all(map->cache)) {

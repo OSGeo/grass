@@ -52,7 +52,7 @@ retileNocache(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     }
     
     G_percent(1, 1, 1);
-        
+
     Rast3d_free_tiles(data);
     Rast3d_close(map2);
 }

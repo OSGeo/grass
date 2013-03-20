@@ -39,18 +39,18 @@
 
 
 void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
-		       RASTER3D_Region * region, int type, int doLzw, int doRle,
+		       RASTER3D_Region * region, int type, int compression,
 		       int precision, int tileX, int tileY, int tileZ)
 {
     void *map;
-    int oldCompress, oldLzw, oldRle, oldPrecision, oldTileX, oldTileY,
+    int oldCompress, oldPrecision, oldTileX, oldTileY,
 	oldTileZ;
     int oldType;
 
     Rast3d_init_defaults();
 
-    Rast3d_get_compression_mode(&oldCompress, &oldLzw, &oldRle, &oldPrecision);
-    Rast3d_set_compression_mode(oldCompress, doLzw, doRle, precision);
+    Rast3d_get_compression_mode(&oldCompress, &oldPrecision);
+    Rast3d_set_compression_mode(compression, precision);
 
     Rast3d_get_tile_dimension(&oldTileX, &oldTileY, &oldTileZ);
     Rast3d_set_tile_dimension(tileX, tileY, tileZ);
@@ -60,7 +60,7 @@ void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
 
     map = Rast3d_open_cell_new(name, typeIntern, cache, region);
 
-    Rast3d_set_compression_mode(oldCompress, oldLzw, oldRle, oldPrecision);
+    Rast3d_set_compression_mode(oldCompress, oldPrecision);
     Rast3d_set_tile_dimension(oldTileX, oldTileY, oldTileZ);
     Rast3d_set_file_type(oldType);
 

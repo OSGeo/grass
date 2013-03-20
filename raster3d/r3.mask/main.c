@@ -67,7 +67,7 @@ static void makeMask(char *name, d_Mask * maskRules)
     Rast3d_get_tile_dimensions_map(map, &tileX, &tileY, &tileZ);
 
     mask = Rast3d_open_new_param(Rast3d_mask_file(), FCELL_TYPE, cacheSize,
-			    &region, FCELL_TYPE, RASTER3D_NO_LZW, RASTER3D_USE_RLE, 0,
+			    &region, FCELL_TYPE, RASTER3D_COMPRESSION, 0,
 			    tileX, tileY, tileZ);
 
     if (mask == NULL)

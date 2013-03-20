@@ -91,12 +91,7 @@ void set_params(void) {
 
     param.compression = G_define_flag();
     param.compression->key = 'l';
-    param.compression->description = _("Switch lzw compression on");
-
-    param.rle = G_define_flag();
-    param.rle->key = 'r';
-    param.rle->description = _("Use run length encoding RLE to encode/decode single tiles. Attention RLE is buggy in case of large tiles or files.");
-}
+    param.compression->description = _("Switch zip compression on");}
 
 /* ************************************************************************* */
 /* ************************************************************************* */
@@ -107,8 +102,6 @@ int main(int argc, char *argv[]) {
     int returnstat = 0, i;
     int depths, rows, cols, tile_size;
     int doCompress = RASTER3D_COMPRESSION;
-    int doLzw = RASTER3D_USE_LZW;
-    int doRle = RASTER3D_NO_RLE;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -130,19 +123,12 @@ int main(int argc, char *argv[]) {
 
     if(param.compression->answer) {
         doCompress = RASTER3D_COMPRESSION;
-        doLzw = RASTER3D_USE_LZW;
     } else {
         doCompress = RASTER3D_NO_COMPRESSION;
-        doLzw = RASTER3D_NO_LZW;
     }
-    if(param.rle->answer) {
-        doCompress = RASTER3D_COMPRESSION;
-        doRle = RASTER3D_USE_RLE;
-    } else
-        doRle = RASTER3D_NO_RLE;
 
     /* Set the compression mode that should be used */
-    Rast3d_set_compression_mode(doCompress, doLzw, doRle, RASTER3D_MAX_PRECISION);
+    Rast3d_set_compression_mode(doCompress, RASTER3D_MAX_PRECISION);
    
     /* Initiate the defaults for testing */
     Rast3d_init_defaults();
