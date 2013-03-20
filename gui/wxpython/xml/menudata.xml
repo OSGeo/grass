@@ -1081,7 +1081,7 @@
               <command>r.colors.stddev</command>
             </menuitem>
             <menuitem>
-              <label>Create color rules</label>
+              <label>Manage color rules interactively</label>
               <help>Interactive management of raster color tables.</help>
               <keywords>raster,color table</keywords>
               <handler>OnRasterRules</handler>
@@ -2149,7 +2149,7 @@
               <command>v.colors</command>
             </menuitem>
             <menuitem>
-              <label>Color rules</label>
+              <label>Manage color rules interactively</label>
               <help>Interactive management of vector color tables.</help>
               <handler>OnVectorRules</handler>
               <keywords>vector,color table</keywords>
