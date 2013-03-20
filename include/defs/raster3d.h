@@ -48,12 +48,8 @@ void Rast3d_filename(char *, const char *, const char *, const char *);
 /* fpcompress.c */
 void Rast3d_fpcompress_print_binary(char *, int);
 void Rast3d_fpcompress_dissect_xdr_double(unsigned char *);
-int Rast3d_fpcompress_write_xdr_nums(int, char *, int, int, char *, int, int, int);
-int Rast3d_fpcompress_write_xdr_floats(int, char *, int, int, char *, int, int);
-int Rast3d_fpcompress_write_xdr_double(int, char *, int, int, char *, int, int);
+int Rast3d_fpcompress_write_xdr_nums(int, char *, int, int, char *, int);
 int Rast3d_fpcompress_read_xdr_nums(int, char *, int, int, int, char *, int);
-int Rast3d_fpcompress_read_xdr_floats(int, char *, int, int, int, char *);
-int Rast3d_fpcompress_read_xdr_doubles(int, char *, int, int, int, char *);
 
 /* alloc.c */
 void *Rast3d_malloc(int);
@@ -78,8 +74,8 @@ int Rast3d_read_colors(const char *, const char *, struct Colors *);
 int Rast3d_write_colors(const char *, const char *, struct Colors *);
 
 /* defaults.c */
-void Rast3d_set_compression_mode(int, int, int, int);
-void Rast3d_get_compression_mode(int *, int *, int *, int *);
+void Rast3d_set_compression_mode(int, int);
+void Rast3d_get_compression_mode(int *, int *);
 void Rast3d_set_cache_size(int);
 int Rast3d_get_cache_size(void);
 void Rast3d_set_cache_limit(int);
@@ -177,7 +173,7 @@ int Rast3d_is_null_value_num(const void *, int);
 void Rast3d_set_null_value(void *, int, int);
 
 /* open2.c */
-void *Rast3d_open_new_param(const char *, int , int, RASTER3D_Region *, int, int, int, int, int, int, int);
+void *Rast3d_open_new_param(const char *, int , int, RASTER3D_Region *, int, int, int, int, int, int);
 /* open.c */
 void *Rast3d_open_cell_old_no_header(const char *, const char *);
 void *Rast3d_open_cell_old(const char *, const char *, RASTER3D_Region *, int, int);
@@ -186,7 +182,7 @@ void *Rast3d_open_new_opt_tile_size(const char *, int , RASTER3D_Region * , int 
 
 /* param.c */
 void Rast3d_set_standard3d_input_params(void);
-int Rast3d_get_standard3d_params(int *, int *, int *, int *, int *, int *, int *,
+int Rast3d_get_standard3d_params(int *, int *, int *, int *, int *,
 			    int *, int *, int *, int *, int *);
 void Rast3d_set_window_params(void);
 char *Rast3d_get_window_params(void);
@@ -255,18 +251,18 @@ void Rast3d_get_block(RASTER3D_Map *, int, int, int, int, int, int, void *, int)
 int Rast3d_read_header(RASTER3D_Map *, int *, int *, double *, double *, double *,
 		   double *, double *, double *, int *, int *, int *,
 		   double *, double *, double *, int *, int *, int *, int *,
-		   int *, int *, int *, int *, int *, int *, int *, char **, int *);
+		   int *, int *, int *, int *, int *, int *, int *, char **, int *, int *);
 int Rast3d_write_header(RASTER3D_Map *, int, int, double, double, double, double,
 		    double, double, int, int, int, double, double, double,
 		    int, int, int, int, int, int, int, int, int, int, int,
-		    char *, int);
+		    char *, int, int);
 int Rast3d_rewrite_header(RASTER3D_Map * map);
 int Rast3d_cache_size_encode(int, int);
 int Rast3d__compute_cache_size(RASTER3D_Map *, int);
 int Rast3d_fill_header(RASTER3D_Map *, int, int, int, int, int, int, int, int, int,
 		   int, int, int, int, int, int, int, double, double, double,
 		   double, double, double, int, int, int, double, double,
-		   double, char *, int);
+		   double, char *, int, int);
 /* headerinfo.c */
 void Rast3d_get_coords_map(RASTER3D_Map *, int *, int *, int *);
 void Rast3d_get_coords_map_window(RASTER3D_Map *, int *, int *, int *);
