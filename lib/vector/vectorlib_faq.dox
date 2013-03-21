@@ -62,10 +62,14 @@ if areaCats.contents.n_cats == 0:
 \endcode
 </dd>
 
-<dt>What is feature and what is line (not particular geometry type GV_LINE but
-thing read by Vect_read_line() function)?</dt>
+<dt>What is feature and what is line (not particular geometry type GV_LINE 
+but the object read by Vect_read_line() function)?</dt>
 <dd>
-Vect_read_line() reads, GV_POINT, GV_LINE, GV_BOUNDARY, GV_CENTROID, GV_FACE.
+Vect_read_line() reads a feature from the coor file or from external 
+datasources which can be for native GRASS vectors of type GV_POINT, 
+GV_LINE, GV_BOUNDARY, GV_CENTROID or GV_FACE. In the code of the 
+vector library and modules, the word 'line' often refers to a feature in 
+general, not only to features of type GV_LINE.
 </dd>
 
 <dt>Can one feature have several categories? Do these categories have to be
@@ -89,13 +93,11 @@ Points and Cats structures with coordinates and categories.
 <dt>Why there is no function such as Vect_get_point() or
 Vect_get_boundary_points()?</dt>
 <dd>
-The GRASS-internal feature id refers to primitives (points, lines, boundaries,
-centroids, faces). These are all lumped together. That means that something
-like Vect_get_point() would use as arguments map and id, but this id can refer
-to any of points, lines, boundaries, centroids, faces. The coordinates of these
-primitives are stored in one file, and this file does not have separate
+Because Vect_read_line() does that, i.e. it can read points, lines, 
+boundaries, centroids, faces. The coordinates of these primitive features 
+are stored in one file, and this file does not have separate
 sections for points, lines, boundaries, centroids, faces. The equivalent of
-Vect_get_point() is done on module level by checking the return type of
+Vect_get_point() etc is done on module level by checking the return type of
 Vect_read_line(). Further on, sometimes it is desired to work with more than
 one type at the same time. That's the reason for
 \code{.c}
