@@ -29,7 +29,7 @@ const char *db_sqltype_name(int sqltype)
 
     switch (sqltype) {
     case DB_SQL_TYPE_CHARACTER:
-	return "CHARACTER VARYING";
+	return "CHARACTER";
     case DB_SQL_TYPE_NUMERIC:
 	return "NUMERIC";
     case DB_SQL_TYPE_DECIMAL:
