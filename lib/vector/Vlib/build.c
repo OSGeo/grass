@@ -857,7 +857,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	Vect_open_sidx(Map, 2);
 
     plus = &(Map->plus);
-    if (build > GV_BUILD_NONE) {
+    if (build > GV_BUILD_NONE && !Map->temporary) {
 	G_message(_("Building topology for vector map <%s>..."),
 		  Vect_get_full_name(Map));
     }
