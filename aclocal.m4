@@ -479,6 +479,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     SHLIB_LD=""
     STLIB_LD='${AR} cr'
     STLIB_SUFFIX='.a'
+    GRASS_TRIM_DOTS='`echo ${LIB_VER} | tr -d .`'
+    GRASS_LIB_VERSIONS_OK=ok
     LDFLAGS=""
     LD_SEARCH_FLAGS=""
     LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
@@ -567,6 +569,24 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # AC_DEFINE(_REENTRANT)
 	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
 	    ;;
+	*-netbsd*)
+	    # NetBSD has ELF.
+	    SHLIB_CFLAGS="-fPIC"
+	    SHLIB_LD="ld -Bshareable -x"
+	    SHLIB_LD_LIBS="${LIBS}"
+	    LDFLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
+	    SHLIB_LD_FLAGS='-rpath ${LIB_RUNTIME_DIR} -export-dynamic'
+	    LD_SEARCH_FLAGS='-L${LIB_RUNTIME_DIR} -rpath ${LIB_RUNTIME_DIR}'
+	    # NetBSD doesn't handle version numbers with dots.
+	    STLIB_SUFFIX='${GRASS_TRIM_DOTS}.a'
+	    SHLIB_SUFFIX='${GRASS_TRIM_DOTS}.so',
+	    GRASS_LIB_VERSIONS_OK=nodots
+	    # TODO: add optional pthread support with any combination of: 
+	    # CFLAGS="$CFLAGS -pthread"
+	    # LDFLAGS="$LDFLAGS -lpthread"
+	    # AC_DEFINE(_REENTRANT)
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    ;;
 	*aix*)
 		# NOTE: do we need to support aix < 6 ?
 	    LIBS="$LIBS -lc"
@@ -577,24 +597,6 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LD_LIBRARY_PATH_VAR="LIBPATH"
 	    GRASS_NEEDS_EXP_FILE=1
 	    GRASS_EXPORT_FILE_SUFFIX='${LIB_VER}.exp'
-
-	    # On AIX <=v4 systems, libbsd.a has to be linked in to support
-	    # non-blocking file IO.  This library has to be linked in after
-	    # the MATH_LIBS or it breaks the pow() function.  The way to
-	    # insure proper sequencing, is to add it to the tail of MATH_LIBS.
-	    # This library also supplies gettimeofday.
-	    #
-	    # AIX does not have a timezone field in struct tm. When the AIX
-	    # bsd library is used, the timezone global and the gettimeofday
-	    # methods are to be avoided for timezone deduction instead, we
-	    # deduce the timezone by comparing the localtime result on a
-	    # known GMT value.
-
-	    AC_CHECK_LIB(bsd, gettimeofday, libbsd=yes, libbsd=no)
-	    if test $libbsd = yes; then
-	    	MATH_LIBS="$MATH_LIBS -lbsd"
-	    	AC_DEFINE(USE_DELTA_FOR_TZ)
-	    fi
 	    ;;
         *)
             AC_MSG_ERROR([***Unknown platform: $host***])
