@@ -4,18 +4,18 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
-\section vlibStructures Vector library data structures
+\section vlibStructures List of vector library data structures
 
 All data structure used by the vector library are defined in
-include/vect/dig_structs.h. See the list bellow:
+include/vect/dig_structs.h. See the lists bellow.
 
-Major:
+\subsection vlibStructuresMajor Major
 
 - \ref Map_info
 - \ref Plus_head
 - \ref dig_head
 
-Supporting:
+\subsection vlibStructuresSupporting Supporting
 
 - \ref bound_box
 - \ref gvfile
@@ -23,39 +23,39 @@ Supporting:
 - \ref Coor_info
 - \ref spatial_index
 
-Format-related:
+\subsection vlibStructuresFormat-related Format-related
 
 - \ref Format_info
 - \ref Format_info_ogr
 
-DB-related:
+\subsection vlibStructuresDB-related DB-related
 
 - \ref field_info
 - \ref dblinks
 
-Geometry-related:
+\subsection vlibStructuresGeometry-related Geometry-related
 
 - \ref line_pnts
 
-Category-related:
+\subsection vlibStructuresCategory-related Category-related
 
 - \ref line_cats
 - \ref cat_list
 - \ref Cat_index
 
-Topology-related:
+\subsection vlibStructuresTopology-related Topology-related
 
 - \ref P_node
 - \ref P_line
 - \ref P_area
 - \ref P_isle
 
-Misc:
+\subsection vlibStructuresMisc Misc
 
 - \ref ilist
 - \ref varray
 
-Obsolete:
+\subsection vlibStructuresObsolete Obsolete
 
 - \ref site_att
 - \ref recycle
@@ -79,7 +79,7 @@ variables or routines in their own modules which use this prefix.
 The Vect_*() functions are the programmer's API for GRASS vector
 programming. The programmer should use only routines with this prefix.
 
-\section vlibArea Vector area functions
+\subsection vlibArea Vector area functions
 
  - Vect_get_area_area()
 
@@ -104,7 +104,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_point_in_area()
 
 
-\section vlibArray Vector array functions
+\subsection vlibArray Vector array functions
 
  - Vect_new_varray()
 
@@ -115,7 +115,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_set_varray_from_db()
 
 
-\section vlibBox Vector bounding box functions
+\subsection vlibBox Vector bounding box functions
 
  - Vect_box_copy()
 
@@ -138,33 +138,35 @@ programming. The programmer should use only routines with this prefix.
  - Vect_region_box()
 
 
-\section vlibBreakLines Vector break lines functions
+\subsection vlibBreakLines Vector break lines functions
 
  - Vect_break_lines()
 
  - Vect_break_lines_list()
 
 
-\section vlibBreakPolygons Vector break polygons functions
+\subsection vlibBreakPolygons Vector break polygons functions
 
  - Vect_break_polygons()
 
 
-\section vlibBridges Vector bridges functions
+\subsection vlibBridges Vector bridges functions
 
  - Vect_chtype_bridges()
 
  - Vect_remove_bridges()
 
 
-\section vlibBuffer Vector buffer functions
+\subsection vlibBuffer Vector buffer functions
 
  - Vect_line_buffer()
 
  - Vect_line_parallel()
 
 
-\section vlibBuild Vector build functions
+\subsection vlibBuild Vector build functions
+
+\subsubsection vlibBuildMain Main build functions
 
  - Vect_build()
 
@@ -185,7 +187,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_topo_dump()
 
 
-\subsection vlibBuildNat Vector build (native) functions
+\subsubsection vlibBuildNat Native build functions
 
  - Vect_attach_centroids()
 
@@ -200,12 +202,12 @@ programming. The programmer should use only routines with this prefix.
  - Vect_isle_find_area()
 
 
-\subsection vlibBuildOgr Vector build (OGR) functions
+\subsubsection vlibBuildOgr OGR build functions
 
  - Vect_build_ogr()
 
 
-\section vlibCats Vector categories functions
+\subsection vlibCats Vector categories functions
 
  - Vect_array_to_cat_list()
 
@@ -240,52 +242,17 @@ programming. The programmer should use only routines with this prefix.
  - Vect_str_to_cat_list()
 
 
-\section vlibCindex Vector category index functions
-
-(note: vector layer is historically called "field")
-
- - Vect_cidx_dump()
-
- - Vect_cidx_find_next()
-
- - Vect_cidx_find_all()
-
- - Vect_cidx_get_cat_by_index()
-
- - Vect_cidx_get_field_index()
-
- - Vect_cidx_get_field_number()
-
- - Vect_cidx_get_num_cats_by_index()
-
- - Vect_cidx_get_num_fields()
-
- - Vect_cidx_get_num_types_by_index()
-
- - Vect_cidx_get_num_unique_cats_by_index()
-
- - Vect_cidx_get_type_count()
-
- - Vect_cidx_get_type_count_by_index()
-
- - Vect_cidx_open()
-
- - Vect_cidx_save()
-
- - Vect_set_category_index_update()
-
-
-\section vlibCleanNodes Vector clean nodes functions
+\subsection vlibCleanNodes Vector clean nodes functions
 
  - Vect_clean_small_angles_at_nodes()
 
 
-\section vlibClose Vector close functions
+\subsection vlibClose Vector close functions
 
  - Vect_close()
 
 
-\section vlibConstraint Vector constraint functions
+\subsection vlibConstraint Vector constraint functions
 
  - Vect_get_constraint_box()
 
@@ -305,7 +272,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_select_dangles()
 
 
-\section vlibDbcolumns Vector dbcolumns functions
+\subsection vlibDbcolumns Vector dbcolumns functions
 
  - Vect_get_column_names()
 
@@ -314,14 +281,14 @@ programming. The programmer should use only routines with this prefix.
  - Vect_get_column_types()
 
 
-\section vlibError Vector error functions
+\subsection vlibError Vector error functions
 
  - Vect_get_fatal_error()
 
  - Vect_set_fatal_error()
 
 
-\section vlibField Vector field functions
+\subsection vlibField Vector layer (field) functions
 
 (note: vector layer is historically called "field")
 
@@ -356,7 +323,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_write_dblinks()
 
 
-\section vlibFind Vector find functions
+\subsection vlibFind Vector find functions
 
  - Vect_find_area()
 
@@ -369,7 +336,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_find_node()
 
 
-\section vlibGraph Vector graph functions
+\subsection vlibGraph Vector graph functions
 
  - Vect_graph_add_edge()
 
@@ -382,7 +349,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_graph_shortest_path()
 
 
-\section vlibHeader Vector header functions
+\subsection vlibHeader Vector header functions
 
  - Vect_get_comment()
 
@@ -441,7 +408,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_write_header()
 
 
-\section vlibHist Vector history functions
+\subsection vlibHist Vector history functions
 
  - Vect_hist_command()
 
@@ -454,12 +421,12 @@ programming. The programmer should use only routines with this prefix.
  - Vect_hist_write()
 
 
-\section vlibInitHead Vector header functions
+\subsection vlibInitHead Vector header functions
 
  - Vect_copy_head_data()
 
 
-\section vlibIntersect Vector intersection functions
+\subsection vlibIntersect Vector intersection functions
 
  - Vect_line_check_intersection()
 
@@ -468,19 +435,19 @@ programming. The programmer should use only routines with this prefix.
  - Vect_segment_intersection()
 
 
-\section vlibLegalVname Vector valid map name functions
+\subsection vlibLegalVname Vector valid map name functions
 
  - Vect_check_input_output_name()
 
  - Vect_legal_filename()
 
 
-\section vlibLevel Vector level functions
+\subsection vlibLevel Vector level functions
 
  - Vect_level()
 
 
-\section vlibLevelTwo Vector topological (level 2) functions
+\subsection vlibLevelTwo Vector topological (level 2) functions
 
  - Vect_get_centroid_area()
 
@@ -521,7 +488,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_set_release_support()
 
 
-\section vlibLine Vector feature functions
+\subsection vlibLine Vector feature functions
 
  - Vect_append_point()
 
@@ -566,7 +533,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_reset_line()
 
 
-\section vlibList Vector list functions
+\subsection vlibList Vector list functions
 
  - Vect_destroy_list()
 
@@ -601,7 +568,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_val_in_boxlist()
 
 
-\section vlibMap Vector map functions
+\subsection vlibMap Vector map functions
 
  - Vect_copy()
 
@@ -618,12 +585,12 @@ programming. The programmer should use only routines with this prefix.
  - Vect_rename()
 
 
-\section vlibMergeLines Vector merge line functions
+\subsection vlibMergeLines Vector merge line functions
 
  - Vect_merge_lines()
 
 
-\section vlibNet Vector network functions
+\subsection vlibNet Vector network functions
 
  - Vect_net_build_graph()
 
@@ -638,7 +605,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_net_shortest_path_coor()
 
 
-\section vlibOpen Vector open functions
+\subsection vlibOpen Vector open functions
 
  - Vect_coor_info()
 
@@ -664,14 +631,14 @@ programming. The programmer should use only routines with this prefix.
 
  - Vect_set_open_level()
 
-\section vlibOverlay Vector overlay functions
+\subsection vlibOverlay Vector overlay functions
 
  - Vect_overlay()
 
  - Vect_overlay_str_to_operator()
 
 
-\section vlibVpoly Vector polygon functions
+\subsection vlibVpoly Vector polygon functions
 
  - Vect_find_poly_centroid()
 
@@ -686,13 +653,13 @@ programming. The programmer should use only routines with this prefix.
  - Vect_get_point_in_poly_isl()
 
 
-\section vlibRead Vector read functions
+\subsection vlibRead Vector read functions
 
-\subsection vlibread1_2 Level 1 and 2
+\subsubsection vlibread1_2 Level 1 and 2
 
  - Vect_read_next_line()
 
-\subsection vlibRead2 Level 2 only
+\subsubsection vlibRead2 Level 2 only
 
  - Vect_area_alive()
 
@@ -705,24 +672,26 @@ programming. The programmer should use only routines with this prefix.
  - Vect_read_line()
 
 
-\section vlibRemoveAreas Vector remove areas functions
+\subsection vlibRemoveAreas Vector remove functions
+
+\subsubsection vlibRemoveAreas Vector remove areas functions
 
  - Vect_remove_small_areas()
 
 
-\section vlibRemoveDuplicates Vector remove duplicates functions
+\subsubsection vlibRemoveDuplicates Vector remove duplicates functions
 
  - Vect_line_check_duplicate()
 
  - Vect_remove_duplicates()
 
 
-\section vlibRewind Vector rewind functions
+\subsection vlibRewind Vector rewind functions
 
  - Vect_rewind()
 
 
-\section vlibSelect Vector select functions
+\subsection vlibSelect Vector select functions
 
  - Vect_select_areas_by_box()
 
@@ -737,7 +706,10 @@ programming. The programmer should use only routines with this prefix.
  - Vect_select_nodes_by_box()
 
 
-\section vlibSindex Vector spatial index functions
+\subsection vlibIndex Vector index functions
+
+
+\subsubsection vlibSindex Vector spatial index functions
 
  - Vect_spatial_index_add_item()
 
@@ -750,36 +722,71 @@ programming. The programmer should use only routines with this prefix.
  - Vect_spatial_index_select()
 
 
-\section vlibSnap Vector snap functions
+\subsection vlibCindex Vector category index functions
+
+(note: vector layer is historically called "field")
+
+ - Vect_cidx_dump()
+
+ - Vect_cidx_find_next()
+
+ - Vect_cidx_find_all()
+
+ - Vect_cidx_get_cat_by_index()
+
+ - Vect_cidx_get_field_index()
+
+ - Vect_cidx_get_field_number()
+
+ - Vect_cidx_get_num_cats_by_index()
+
+ - Vect_cidx_get_num_fields()
+
+ - Vect_cidx_get_num_types_by_index()
+
+ - Vect_cidx_get_num_unique_cats_by_index()
+
+ - Vect_cidx_get_type_count()
+
+ - Vect_cidx_get_type_count_by_index()
+
+ - Vect_cidx_open()
+
+ - Vect_cidx_save()
+
+ - Vect_set_category_index_update()
+
+
+\subsection vlibSnap Vector snap functions
 
  - Vect_snap_lines()
 
  - Vect_snap_lines_list()
 
 
-\section vlibTinFuns Vector TIN functions
+\subsection vlibTinFuns Vector TIN functions
 
  - Vect_tin_get_z()
 
 
-\section vlibType Vector type option functions
+\subsection vlibType Vector type option functions
 
  - Vect_option_to_types()
 
 
-\section vlibDelete Vector delete functions
+\subsection vlibDelete Vector delete functions
 
-\subsection vlibDelete2 Level 2 only
+\subsubsection vlibDelete2 Level 2 only
 
  - Vect_delete_line()
 
-\section vlibWrite Vector write functions
+\subsection vlibWrite Vector write functions
 
-\subsection vlibWrite1_2 Level 1 and 2
+\subsubsection vlibWrite1_2 Level 1 and 2
 
  - Vect_write_line()
 
-\subsection vlibWrite2 Level 2 only
+\subsubsection vlibWrite2 Level 2 only
 
  - Vect_rewrite_line()
 
@@ -811,7 +818,7 @@ Functions from GRASS Simple Feature API (in progress, incomplete).
 
  - Vect_sfa_is_line_closed()
 
-\section vlibGeosFn Vector GEOS functions
+\subsection vlibGeosFn Vector GEOS functions
 
 Note: The functions are available only if GRASS is compiled with
 <tt>--with-geos</tt> switch.
@@ -826,7 +833,7 @@ Note: The functions are available only if GRASS is compiled with
 
  - Vect_get_isle_points_geos()
 
-\section vlibPgFn Vector PostgreSQL/PostGIS functions
+\subsection vlibPgFn Vector PostgreSQL/PostGIS functions
 
 Note: The functions are available only if GRASS is compiled with
 <tt>--with-postgres</tt> switch.
@@ -855,6 +862,7 @@ Note: The functions are available only if GRASS is compiled with
 
  - V1_rewrite_line_pg(), V2_rewrite_line_sfa() called by Vect_rewrite_line()
 
- - V2_write_area_pg(), see <tt>v.out.postgis</tt> for implementation issues
+ - V2_write_area_pg(), see \gmod{v.out.postgis} for implementation issues
+
 
 */
