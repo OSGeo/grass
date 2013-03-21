@@ -429,7 +429,7 @@ static int parse_type(const char *declared, int *length)
 	if (streq(word[0], "double") && streq(word[1], "precision"))
 	    return DB_SQL_TYPE_DOUBLE_PRECISION;
 	if (streq(word[0], "character") && streq(word[1], "varying"))
-	    return DB_SQL_TYPE_CHARACTER;
+	    return DB_SQL_TYPE_TEXT;
     }
 
     if (sscanf(buf, "%s %s %s %s", word[0], word[1], word[2], word[3]) == 4 &&
