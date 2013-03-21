@@ -24,8 +24,8 @@
 #define BUFFSIZE 128
 
 static int srch(const void *, const void *);
-static int check_cat(const struct line_cats *, const struct cat_list *,
-		     const int *, int);
+static int get_cat(const struct line_cats *, const struct cat_list *,
+		   const int *, int, int, int *);
 static void free_col_arrays(int *, char *, char **);
 
 /*!
@@ -511,7 +511,7 @@ int Vect_write_ascii(FILE *ascii,
 	if (format == GV_ASCII_FORMAT_POINT && !(ltype & GV_POINTS))
 	    continue;
 
-	found = check_cat(Cats, Clist, cats, ncats);
+	found = get_cat(Cats, Clist, cats, ncats, field, &cat);
 
 	if (!found && ltype == GV_BOUNDARY &&
 	    type & GV_AREA && Vect_level(Map) > 1) {
@@ -520,13 +520,13 @@ int Vect_write_ascii(FILE *ascii,
 		left = Vect_get_isle_area(Map, abs(left));
 	    if (left > 0) {
 		Vect_get_area_cats(Map, left, ACats);
-		found = check_cat(ACats, Clist, cats, ncats);
+		found = get_cat(ACats, Clist, cats, ncats, field, &cat);
 	    }
 	    if (right < 0)
 		right = Vect_get_isle_area(Map, abs(right));
 	    if (!found && right > 0) {
 		Vect_get_area_cats(Map, right, ACats);
-		found = check_cat(ACats, Clist, cats, ncats);
+		found = get_cat(ACats, Clist, cats, ncats, field, &cat);
 	    }
 	}
 	
@@ -606,7 +606,7 @@ int Vect_write_ascii(FILE *ascii,
 		if (columns) {
 		    for (i = 0; columns[i]; i++) {
 			if (db_select_value
-			    (driver, Fi->table, Fi->key, fcats->value[0],
+			    (driver, Fi->table, Fi->key, cat,
 			     columns[i], &value) < 0)
 			    G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
 					  Fi->table, Fi->key, columns[i]);
@@ -636,18 +636,18 @@ int Vect_write_ascii(FILE *ascii,
 	    }
 
 	    
-	    if (fcats->n_values > 0) {
+	    if (fcats->n_values > 0 && cat > -1) {
 		if (fcats->n_values > 1) {
-		    G_warning(_("Feature has more categories. Only first category (%d) "
-				"is exported."), fcats->value[0]);
+		    G_warning(_("Feature has more categories. Only one category (%d) "
+				"is exported."), cat);
 		}
-		fprintf(ascii, "%s%d", fs, fcats->value[0]);
+		fprintf(ascii, "%s%d", fs, cat);
 		
 		/* print attributes */
 		if (columns) {
 
 		    G_rasprintf(&buf, &bufsize, "SELECT %s FROM %s WHERE %s = %d",
-			    all_columns, Fi->table, Fi->key, fcats->value[0]);
+			    all_columns, Fi->table, Fi->key, cat);
 		    G_debug(2, "SQL: %s", buf);
 		    db_set_string(&dbstring, buf);
 
@@ -656,7 +656,7 @@ int Vect_write_ascii(FILE *ascii,
 			db_close_database(driver);
 			db_shutdown_driver(driver);
 			G_fatal_error(_("Cannot select attributes for cat = %d"),
-			  fcats->value[0]);
+			  cat);
 		    }
 		    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
 			db_close_database(driver);
@@ -667,7 +667,7 @@ int Vect_write_ascii(FILE *ascii,
 		    Table = db_get_cursor_table(&cursor);
 
 
-		    for(i = 0; columns[i]; i++) {
+		    for (i = 0; columns[i]; i++) {
 			Column = db_get_table_column(Table, i);
 			Value = db_get_column_value(Column);
 
@@ -748,7 +748,7 @@ int Vect_write_ascii(FILE *ascii,
 		}
 	    }
 	    else {
-		if (cat > 0) {
+		if (cat > -1) {
 		    if (ltype == GV_POINT) {
 			G_rasprintf(&xstring, &xsize, "%.*f", dp, Points->x[0]);
 			G_trim_decimal(xstring);
@@ -861,30 +861,46 @@ void Vect_write_ascii_head(FILE *dascii, struct Map_info *Map)
 }
 
 /* check category */
-int check_cat(const struct line_cats *Cats, const struct cat_list *Clist,
-	      const int *cats, int ncats)
+int get_cat(const struct line_cats *Cats, const struct cat_list *Clist,
+	      const int *cats, int ncats, int field, int *cat)
 {
-    int i, cat;
+    int i;
     
-    if (Clist) {
-	Vect_cat_get(Cats, Clist->field, &cat);
-	if (!Vect_cat_in_cat_list(cat, Clist))
-	    return FALSE;
-    }
-    if (cats) {
+    *cat = -1;
+    
+    if (Clist && Clist->field == field) {
 	for (i = 0; i < Cats->n_cats; i++) {
-	    if ((int *)bsearch((void *) &(Cats->cat[i]), cats, ncats, sizeof(int),
-			       srch)) {
-		/* found */
-		break;
+	    if (Cats->field[i] == field &&
+		Vect_cat_in_cat_list(Cats->cat[i], Clist)) {
+		*cat = Cats->cat[i];
+		return TRUE;
 	    }
 	}
-	
-	if (i == Cats->n_cats)
-	    return FALSE;
+	return FALSE;
+    }
+    if (cats) {
+	int *found;
+
+	for (i = 0; i < Cats->n_cats; i++) {
+	    if (Cats->field[i] == field) {
+		found = (int *)bsearch((void *) &(Cats->cat[i]), cats, 
+		                       ncats, sizeof(int), srch);
+		if (found) {
+		    /* found */
+		    *cat = *found;
+		    return TRUE;
+		}
+	    }
+	}
+	return FALSE;
+    }
+    if (!Clist && !cats && field > 0) {
+	Vect_cat_get(Cats, field, cat);
+	if (*cat > -1)
+	    return TRUE;
     }
     
-    return TRUE;
+    return FALSE;
 }
 
 /* free column arrays, see Vect_write_ascii() */
