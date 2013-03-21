@@ -107,9 +107,9 @@
 
 /*! \brief Vector level - without topology */
 #define LEVEL_1  1
-/*! \brief Vector level - with topology */
+/*! \brief Vector level - with 2D topology */
 #define LEVEL_2  2
-/*! \brief Vector level - ? */
+/*! \brief Vector level - with 3D topology (not implemented yet) */
 #define LEVEL_3  3
 
 /*! \brief Topology levels - nothing to build */
