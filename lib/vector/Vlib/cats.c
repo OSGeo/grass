@@ -586,6 +586,8 @@ struct cat_list *Vect_cats_set_constraint(struct Map_info *Map, int layer,
 	    Vect_destroy_cat_list(list);
 	    list = NULL;
 	}
+	else
+	    list->field = layer;
     }
 	
     return list;
