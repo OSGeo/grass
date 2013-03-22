@@ -121,7 +121,10 @@ int main(int argc, char *argv[])
 	/* check fid column */
 	check_columns(&In, params.layer->answer, fid_column, geom_column);
     }
-    
+
+    /* don't use temporary maps, writes vector features immediately to
+       the output PostGIS layer */
+    putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=1");
     if (-1 == Vect_open_new(&Out, olayer, Vect_is_3d(&In)))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
                       olayer);
