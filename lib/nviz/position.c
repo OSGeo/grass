@@ -125,8 +125,8 @@ int Nviz_get_focus(nv_data * data, float *x, float *y, float *z)
     *x = realto[0];
     *y = realto[1];
     *z = realto[2];
-    // old nviz code is more complicated and it doesn't work properly,
-    // no idea why
+    /* old nviz code is more complicated and it doesn't work properly, */
+    /* no idea why */
 
     return 1;
 
@@ -146,8 +146,8 @@ int Nviz_set_focus(nv_data * data, float x, float y, float z)
     realto[1] = y;
     realto[2] = z;
     GS_set_focus(realto);
-    // old nviz code is more complicated and it doesn't work properly,
-    // no idea why
+    /* old nviz code is more complicated and it doesn't work properly, */
+    /* no idea why */
 
     return 1;
 

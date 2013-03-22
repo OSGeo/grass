@@ -3,7 +3,6 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
-//#include <grass/vector.h>
 
 /* File/directory name lengths */
 #define INAME_LEN GNAME_MAX	/* coupled to raster map name length */

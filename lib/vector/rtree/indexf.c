@@ -23,7 +23,6 @@
 #include <assert.h>
 #include <grass/gis.h>
 #include "index.h"
-//#include "card.h"
 
 int RTreeValidChildF(union RTree_Child *child)
 {

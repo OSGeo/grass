@@ -56,7 +56,6 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
     Points_se = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    //cv = (dbCatValArray *) G_malloc (sizeof (dbCatValArray));
     db_CatValArray_alloc(&cv, List->n_values);
     cv.ctype = DB_C_TYPE_DOUBLE;
     cv.n_values = 0;

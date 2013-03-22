@@ -9,22 +9,19 @@ extern CELL f_c(CELL);
 extern FCELL f_f(FCELL);
 extern DCELL f_d(DCELL);
 
-//#define TRUE 0
-//#define FALSE 1
-
 /* constant definition */
-//#define k_sb 4.903    //[MJ/m2*h]             Stefan Bolzman constant 
-#define cp 1.013		//[kJ/kg*°C]    specific heat of moist air
-#define epsilon 0.622		//[-]                   ratio of molecular weigth of water to dry air
-#define Po 101.3		//[kPa]                 atmospheric pressure at sea level
-#define Tko 293.16		//[K]                   reference temperature at sea level
-#define eta 0.0065		//[K/m]                 constant lapse rate
-#define Ao 0			//[m]                   altitude at sea level
-#define g 9.81			//[m/s]                 gravitational accelleration
-#define R 287			//[J/kg*K]              specific gas constant
-#define Zw 2			//[m]                   height of  wind measurements
-#define Zh 2			//[m]                   height of  humidity measurements
-#define k 0.41			//[-]                   Von Karman constant
+/* #define k_sb 4.903    //[MJ/m2*h]             Stefan Bolzman constant  */
+#define cp 1.013		/* [kJ/kg*°C]    specific heat of moist air */
+#define epsilon 0.622		/* [-]                   ratio of molecular weigth of water to dry air */
+#define Po 101.3		/* [kPa]                 atmospheric pressure at sea level */
+#define Tko 293.16		/* [K]                   reference temperature at sea level */
+#define eta 0.0065		/* [K/m]                 constant lapse rate */
+#define Ao 0			/* [m]                   altitude at sea level */
+#define g 9.81			/* [m/s]                 gravitational accelleration */
+#define R 287			/* [J/kg*K]              specific gas constant */
+#define Zw 2			/* [m]                   height of  wind measurements */
+#define Zh 2			/* [m]                   height of  humidity measurements */
+#define k 0.41			/* [-]                   Von Karman constant */
 
 
 
@@ -122,10 +119,10 @@ DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day,
     /* calculus: di psichiometric constant [kPa/°C] */
     gamma = ((cp * P) / (epsilon * lambda)) * 0.001;
 
-    /*calculus: net radiation [MJ/m2*h] */
-    /*Rn derived from r.sun
+    /* calculus: net radiation [MJ/m2*h] */
+    /* Rn derived from r.sun */
 
-       /*calculus: actual vapoure pressure [kPa] */
+    /*calculus: actual vapoure pressure [kPa] */
     ed = Rh * ea / 100;
 
     /*calculus: aerodynamic term [mm/h] */
@@ -141,25 +138,23 @@ DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day,
 
 }
 
-/*
+#if 0
    DCELL calc_ETp_WaSiM(){
 
 
-   //calculus of saturation vapour pressure at the temperature T: es[hPa] 
-   //with T[°C]
+   /* calculus of saturation vapour pressure at the temperature T: es[hPa]  */
+   /* with T[°C] */
    es   =       6.1078*exp((17.27*T)/(237.3+T);
 
-   //tangent of the saturated vapour pressure curve: D[hPa/K] with T[°C]
+   /* tangent of the saturated vapour pressure curve: D[hPa/K] with T[°C] */
    D    =       (25029/pow((273.3+T),2))*exp((17.27*T)/(237.3+T);
 
-   //air pressure at level hM
+   /* air pressure at level hM */
    P    =       1013*exp(-hM/(7991+29.33*Tv));
 
-   //calculus of lambda [KJ/Kg] with T[°C]
+   /* calculus of lambda [KJ/Kg] with T[°C] */
    lambda       =       2500.8 - 2.372*T;
 
-   //calculus psichiometric constant gamma [hPa/°C] with cp=1.005[KJ/(Kg*K)]
+   /* calculus psichiometric constant gamma [hPa/°C] with cp=1.005[KJ/(Kg*K)] */
    gamma        = ((1.005*P)/(0.622*lambda))*0.001; 
-
-   //
- */
+#endif

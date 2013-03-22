@@ -163,15 +163,15 @@ int main(int argc, char *argv[])
 	    d_Z = ((DCELL *) inrast_DEM)[col];
 	    d_hc = ((DCELL *) inrast_hc)[col];
 
-	    //calculate evapotranspiration
+	    /* calculate evapotranspiration */
 	    if (d_hc < 0) {
-		//calculate evaporation
+		/* calculate evaporation */
 		d_EPo =
 		    calc_openwaterETp(d_T, d_Z, d_u2, d_Rn, d_night, d_RH,
 				      d_hc);
 	    }
 	    else {
-		//calculate evapotranspiration
+		/* calculate evapotranspiration */
 		d_EPo = calc_ETp(d_T, d_Z, d_u2, d_Rn, d_night, d_RH, d_hc);
 	    }
 

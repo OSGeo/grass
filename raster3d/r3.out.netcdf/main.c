@@ -505,7 +505,7 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
     }
 
     for (i = 0; i < region->rows; i++) {
-	//c = region->south + i * region->ns_res + 0.5 * region->ns_res;
+	/* c = region->south + i * region->ns_res + 0.5 * region->ns_res; */
 	c = region->north - i * region->ns_res - 0.5 * region->ns_res;
 	nc_put_var1_float(ncid, lat_varid, &i, &c);
     }

@@ -49,7 +49,7 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
     G_debug(3, "I_iclass_init_signatures()");
 
     if (!I_init_signatures(sigs, refer->nfiles))
-	return 1;		// success
+	return 1;		/* success */
 
     return 0;
 }

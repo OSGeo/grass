@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
  				int k=i-1;
 				while (d1[k]>=startperiod )
 				{
-					if (d1[k]<0)	 // case were d1[k] is null
+					if (d1[k]<0)	 /* case were d1[k] is null */
 						k=k-1;					
 					else
 					{
@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
 				int k=i+1;
 				while (d1[k]<=endperiod)
 				{
-					if (d1[k]<0)   // case were d1[k] is null
+					if (d1[k]<0)   /* case were d1[k] is null */
 						k=k+1;
 					else
 					{

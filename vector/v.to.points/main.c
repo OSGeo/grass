@@ -335,7 +335,7 @@ int main(int argc, char **argv)
 		continue;
             if (!Vect_cat_get(LCats, field, &cat) && field != -1)
 		continue;
-            // Assign CAT for layer 0 objects (i.e. boundaries)
+            /* Assign CAT for layer 0 objects (i.e. boundaries) */
             if (field == -1)
                 cat = -1;
 
