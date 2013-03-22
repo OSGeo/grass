@@ -216,7 +216,7 @@ int close_maps(void)
 	afbuf = G_malloc(ncols * sizeof(ASP_FLAG));
 	seg_flush(&aspflag);
 
-	fd = Rast_open_new(wat_name, DCELL_TYPE);
+	fd = Rast_open_new(asp_name, CELL_TYPE);
 
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 1);
