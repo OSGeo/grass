@@ -572,15 +572,18 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	*-netbsd*)
 	    # NetBSD has ELF.
 	    SHLIB_CFLAGS="-fPIC"
-	    SHLIB_LD="ld -Bshareable -x"
+	    SHLIB_LD="${CC} -shared"
 	    SHLIB_LD_LIBS="${LIBS}"
 	    LDFLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
-	    SHLIB_LD_FLAGS='-rpath ${LIB_RUNTIME_DIR} -export-dynamic'
-	    LD_SEARCH_FLAGS='-L${LIB_RUNTIME_DIR} -rpath ${LIB_RUNTIME_DIR}'
-	    # NetBSD doesn't handle version numbers with dots.
-	    STLIB_SUFFIX='${GRASS_TRIM_DOTS}.a'
-	    SHLIB_SUFFIX='${GRASS_TRIM_DOTS}.so',
-	    GRASS_LIB_VERSIONS_OK=nodots
+	    SHLIB_LD_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
+	    LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -L${LIB_RUNTIME_DIR}'
+	    # some older NetBSD versions do not handle version numbers with dots.
+	    #STLIB_SUFFIX='${GRASS_TRIM_DOTS}.a'
+	    #SHLIB_SUFFIX='${GRASS_TRIM_DOTS}.so'
+	    #GRASS_LIB_VERSIONS_OK=nodots
+	    # NetBSD 6 does handle version numbers with dots.
+	    STLIB_SUFFIX=".a"
+	    SHLIB_SUFFIX=".so"
 	    # TODO: add optional pthread support with any combination of: 
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
