@@ -120,7 +120,7 @@ int sort_surfs_max(int *surf, int *id_sort, int *indices, int num)
  */
 int Nviz_draw_all_vect()
 {
-    // GS_set_cancel(0);
+    /* GS_set_cancel(0); */
 
     /* in case transparency is set */
     GS_set_draw(GSD_BOTH);
@@ -133,7 +133,7 @@ int Nviz_draw_all_vect()
 
     GS_set_draw(GSD_BACK);
 
-    // GS_set_cancel(0);
+    /* GS_set_cancel(0); */
 
     return 1;
 }
@@ -354,14 +354,14 @@ int Nviz_load_image(GLubyte *image_data, int width, int height, int alpha)
 */
 void Nviz_set_2D(int width, int height)
 {
-    glEnable(GL_BLEND); // images are transparent
+    glEnable(GL_BLEND); /* images are transparent */
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, width, 0, height, -1, 1);
     
-    // set coordinate system from upper left corner
+    /* set coordinate system from upper left corner */
     glScalef(1, -1, 1);
     glTranslatef(0, -height, 0);
 

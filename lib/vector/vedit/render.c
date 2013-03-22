@@ -98,7 +98,7 @@ struct robject_list *Vedit_render_map(struct Map_info *Map,
     }
 
     /* draw lines inside of current display region */
-    nfeat = Vect_select_lines_by_box(Map, box, GV_POINTS | GV_LINES,	// fixme
+    nfeat = Vect_select_lines_by_box(Map, box, GV_POINTS | GV_LINES,	/* fixme */
 				     list);
     G_debug(1, "Vedit_render_map(): region: w=%f, e=%f, s=%f, n=%f nlines=%d",
 	    box->W, box->E, box->S, box->N, nfeat);
@@ -193,7 +193,7 @@ struct robject *draw_line(struct Map_info *Map, int line, int draw_flag)
 	else if (state.type == GV_CENTROID) {
 	    int cret = Vect_get_centroid_area(Map, line);
 
-	    if (cret > 0) {	// -> area
+	    if (cret > 0) {	/* -> area */
 		obj->type = TYPE_CENTROIDIN;
 		draw = draw_flag & DRAW_CENTROIDIN;
 	    }
@@ -348,7 +348,7 @@ int draw_line_dir(struct robject_list *list, int line)
 
     narrows = 0;
     size = 5;
-    limit = 5;			// 5px for line segment
+    limit = 5;			/* 5px for line segment */
 
     dist = Vect_line_length(state.Points);
     G_debug(5, "  draw_line_dir() line=%d", line);
@@ -374,13 +374,13 @@ int draw_line_dir(struct robject_list *list, int line)
 
 	    draw_arrow(x0, y0, x1, y1, angle, size, line, list);
 
-	    if (narrows > 1e2)	// low resolution, break
+	    if (narrows > 1e2)	/* low resolution, break */
 		break;
 
 	    narrows++;
 	}
 
-	// draw at least one arrow in the middle of line
+	/* draw at least one arrow in the middle of line */
 	if (narrows < 1) {
 	    dist /= 2.;
 	    if (Vect_point_on_line(state.Points, dist,

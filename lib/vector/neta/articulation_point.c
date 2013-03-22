@@ -100,7 +100,7 @@ int NetA_articulation_points(dglGraph_s * graph,
 			min_tin[node_id] = min_tin[to];
 		    current_edge[node_id] = dglEdgeset_T_Next(&current[node_id]);	/*proceed to the next edge */
 		}
-		for (; current_edge[node_id]; current_edge[node_id] = dglEdgeset_T_Next(&current[node_id])) {	//try next edges
+		for (; current_edge[node_id]; current_edge[node_id] = dglEdgeset_T_Next(&current[node_id])) {	/* try next edges */
 		    dglInt32_t *to =
 			dglEdgeGet_Tail(graph, current_edge[node_id]);
 		    if (to == parent[node_id])

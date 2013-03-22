@@ -76,7 +76,7 @@ void quickSort(struct Point a[], int l, int r)
     int j;
 
     if (l < r) {
-	// divide and conquer
+	/* divide and conquer */
 	j = partition(a, l, r);
 	quickSort(a, l, j - 1);
 	quickSort(a, j + 1, r);

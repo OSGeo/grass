@@ -246,7 +246,7 @@ double class_discont(double *data, int count, int nbreaks,
 {
     int *num, nbclass;
     double *no, *zz, *nz, *xn, *co;
-    double *x;			//Vecteur des observations standardisées
+    double *x;			/* Vecteur des observations standardisées */
     int i, j, k;
     double min = 0, max = 0, rangemax = 0;
     int n = 0;
@@ -337,12 +337,12 @@ double class_discont(double *data, int count, int nbreaks,
 		dmax = d;
 		nmax = k;
 	    }
-	    nd--;		//A VERIFIER!
+	    nd--;		/* A VERIFIER! */
 	    if (x[nf] != x[nd]) {
 		if (nd != 0)
 		    co[j] = (xn[nf] - xn[nd]) / (x[nf] - x[nd]);
 		else
-		    co[j] = (xn[nf]) / (x[nf]);	//A VERIFIER!
+		    co[j] = (xn[nf]) / (x[nf]);	/* A VERIFIER! */
 	    }
 	}
 	if (i == 1)

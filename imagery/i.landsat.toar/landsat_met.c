@@ -186,7 +186,7 @@ void lsat_metadata( char * metafile, lsat_data * lsat)
     }
 
     /* Update the information from metadata file, if infile */
-//     if( format == NEW_FORMAT )
+    /* if( format == NEW_FORMAT ) */
     if( get_mtldata == get_newformat )
     {
         char * fmt_lmax[]     = { "LMAX_BAND%d",    "RADIANCE_MAXIMUM_BAND_%d" };

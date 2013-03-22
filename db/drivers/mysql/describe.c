@@ -205,8 +205,8 @@ void field_info(MYSQL_FIELD * field, int *sqltype, int *length)
 	break;
 
     case MYSQL_TYPE_DATETIME:
-	//*sqltype = DB_SQL_TYPE_DATETIME;
-	//*sqltype |= DB_DATETIME_MASK;
+	/* *sqltype = DB_SQL_TYPE_DATETIME; */
+	/* *sqltype |= DB_DATETIME_MASK; */
 	*sqltype = DB_SQL_TYPE_TIMESTAMP;
 	break;
 

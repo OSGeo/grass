@@ -104,4 +104,4 @@ void free_perimeters(IClass_perimeter_list * perimeters);
 /* iclass.c */
 int init_group(const char *group_name, struct Ref *refer);
 
-#endif // ICLASS_LOCAL_PROTO_H
+#endif /* ICLASS_LOCAL_PROTO_H */

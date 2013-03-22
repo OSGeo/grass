@@ -76,7 +76,7 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 	    continue;
 	cat = Vect_get_area_cat(Map, i, layer);
 	if (cat < 0) {
-	    // no centroid, no category
+	    /* no centroid, no category */
 	}
 	else if (cat == category) {
 	    nareas_cat++;
@@ -89,18 +89,18 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
     perimeters->perimeters =
 	(IClass_perimeter *) G_calloc(nareas_cat, sizeof(IClass_perimeter));
 
-    j = 0;			// area with cat
+    j = 0;			/* area with cat */
     for (i = 1; i <= nareas; i++) {
 	if (!Vect_area_alive(Map, i))
 	    continue;
 	cat = Vect_get_area_cat(Map, i, layer);
 	if (cat < 0) {
-	    // no centroid, no category
+	    /* no centroid, no category */
 	}
 	else if (cat == category) {
 	    j++;
 
-	    points = Vect_new_line_struct();	// Vect_destroy_line_struct
+	    points = Vect_new_line_struct();	/* Vect_destroy_line_struct */
 	    ret = Vect_get_area_points(Map, i, points);
 
 	    if (ret <= 0) {
@@ -121,7 +121,7 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 
     }
 
-    //Vect_close(&Map);
+    /* Vect_close(&Map); */
 
     return nareas_cat;
 }
