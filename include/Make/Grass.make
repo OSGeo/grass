@@ -92,7 +92,7 @@ MANIFEST = internal
 endif
 
 # lexical analyzer and default options
-LFLAGS      = -s
+LFLAGS      = 
 
 # parser generator and default options
 YFLAGS      = -d -v
