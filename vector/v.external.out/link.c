@@ -138,6 +138,14 @@ void make_link(const char *dsn_opt,
 	G_fatal_error(_("Error writing <%s> file"), filename);
 
     fclose(fp);
+
+    if (use_ogr)
+        G_verbose_message(_("Switched to OGR format (%s)"),
+                          G_find_key_value("format", key_val));
+    else
+        G_verbose_message(_("Switched to PostGIS format"));
+
+    G_free_key_value(key_val);
 }
 
 char *get_option_pg(char **options, const char *key)

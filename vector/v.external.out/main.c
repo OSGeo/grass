@@ -3,11 +3,12 @@
  *
  * MODULE:       v.external.out
  * 
- * AUTHOR(S):    Martin Landa <landa.martin gmail.com> (based on r.external.out code)
+ * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
  *               
  * PURPOSE:      Make GRASS write vector maps utilizing the OGR library.
+ *               (Partly based on r.external.out code)
  *               
- * COPYRIGHT:    (C) 2010 by Martin Landa and the GRASS Development Team
+ * COPYRIGHT:    (C) 2010-2013 by Martin Landa and the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -58,9 +59,14 @@ int main(int argc, char *argv[])
     }
 
     if (flags.r->answer) {
-	if (G_remove("", "OGR") == 0)
-	    G_remove("", "PG");
-	exit(EXIT_SUCCESS);
+        if (G_remove("", "OGR") == 1) {
+            G_verbose_message(_("Switched from OGR to native format"));
+        }
+        else {
+            if (G_remove("", "PG") == 1)
+                G_verbose_message(_("Switched from PostGIS to native format"));
+        }
+        exit(EXIT_SUCCESS);
     }
 
     format = NULL;
@@ -75,7 +81,7 @@ int main(int argc, char *argv[])
     }
     
     if (flags.p->answer || flags.g->answer) {
-	print_status(flags.g->answer ? 1 : 0);
+	print_status(flags.g->answer ? TRUE : FALSE);
     }
 
     exit(EXIT_SUCCESS);
