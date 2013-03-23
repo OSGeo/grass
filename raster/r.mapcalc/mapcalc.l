@@ -213,6 +213,11 @@ F		[fF]
 ";"		|
 "\n"		{	return ';';	}
 
+
+.		{
+			fprintf(stderr, "syntax error: '%*s'\n", yyleng, yytext);
+			yyterminate();
+		}
 %%
 
 int yywrap(void)
