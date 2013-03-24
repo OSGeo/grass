@@ -28,9 +28,9 @@ from gui_core.preferences import PreferencesBaseDialog
 
 class NvizPreferencesDialog(PreferencesBaseDialog):
     """!Nviz preferences dialog"""
-    def __init__(self, parent, title = _("3D view settings"),
+    def __init__(self, parent, giface, title = _("3D view default settings"),
                  settings = UserSettings):
-        PreferencesBaseDialog.__init__(self, parent = parent, title = title,
+        PreferencesBaseDialog.__init__(self, parent = parent, title = title, giface = giface,
                                        settings = settings)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_nviz.ico'), wx.BITMAP_TYPE_ICO))
 

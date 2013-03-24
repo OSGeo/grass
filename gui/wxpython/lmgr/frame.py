@@ -71,6 +71,7 @@ from lmgr.giface           import LayerManagerGrassInterface
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
+from nviz.preferences      import NvizPreferencesDialog
 from mapswipe.frame        import SwipeMapFrame
 from rlisetup.frame        import RLiSetupFrame
 
@@ -108,6 +109,7 @@ class GMFrame(wx.Frame):
         # list of open dialogs
         self.dialogs        = dict()
         self.dialogs['preferences'] = None
+        self.dialogs['nvizPreferences'] = None
         self.dialogs['atm'] = list()
         
         # create widgets
@@ -1393,6 +1395,15 @@ class GMFrame(wx.Frame):
         
         self.dialogs['preferences'].ShowModal()
         
+    def OnNvizPreferences(self, event):
+        """!Show nviz preferences"""
+        if not self.dialogs['nvizPreferences']:
+            dlg = NvizPreferencesDialog(parent = self, giface = self._giface)
+            self.dialogs['nvizPreferences'] = dlg
+            self.dialogs['nvizPreferences'].CenterOnScreen()
+
+        self.dialogs['nvizPreferences'].Show()
+
     def OnHelp(self, event):
         """!Show help
         """
