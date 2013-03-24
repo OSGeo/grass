@@ -23,7 +23,6 @@ This program is free software under the GNU General Public License
 """
 
 from core.gcmd          import RunCommand
-from nviz.preferences   import NvizPreferencesDialog
 from gui_core.toolbars  import BaseToolbar, BaseIcons
 from icons.icon         import MetaIcon
 
@@ -242,7 +241,7 @@ class LMNvizToolbar(BaseToolbar):
                                       self.OnNvizCmd),
                                      (None, ),
                                      ("settings", icons["settings"],
-                                      self.OnSettings),
+                                      self.parent.OnNvizPreferences),
                                      ("help", icons["help"],
                                       self.OnHelp))
                                     )
@@ -260,9 +259,3 @@ class LMNvizToolbar(BaseToolbar):
             log = self.lmgr.GetLogWindow()
             log.RunCmd(['g.manual',
                         'entry=wxGUI.Nviz'])
-        
-    def OnSettings(self, event):
-        """!Show nviz notebook page"""
-        if not self.settingsDialog:
-            self.settingsDialog = NvizPreferencesDialog(parent = self.parent)
-        self.settingsDialog.Show()
