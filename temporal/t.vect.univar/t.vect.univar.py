@@ -79,13 +79,13 @@ def main():
     where = options["where"]
     extended = flags["e"]
     header = flags["h"]
-    fs = options["fs"]
+    separator = options["separator"]
 
     # Make sure the temporal database exists
     tgis.init()
 
     tgis.print_vector_dataset_univar_statistics(
-        input, twhere, layer, type, column, where, extended, header, fs)
+        input, twhere, layer, type, column, where, extended, header, separator)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
