@@ -1144,6 +1144,7 @@ class GMFrame(wx.Frame):
                                                 region['w'])
             
             displayId += 1
+            mapdisp.Show() # show mapdisplay
     
         maptree = None 
         selected = [] # list of selected layers
@@ -1191,8 +1192,6 @@ class GMFrame(wx.Frame):
                 self.nviz.UpdateSettings()
                 mdisp.toolbars['map'].combo.SetSelection(1)
             
-            mdisp.Show() # show mapdisplay
-        
         return True
     
     def OnWorkspaceLoadGrcFile(self, event):
