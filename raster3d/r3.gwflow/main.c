@@ -409,7 +409,7 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
     if (!Rast3d_flush_all_tiles(map))
 	Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
     if (!Rast3d_close(map))
-	Rast3d_fatal_error(map, NULL, 0, _("Error closing g3d file"));
+	Rast3d_fatal_error(map, NULL, 0, _("Unable to close 3D raster map"));
 
     return;
 }

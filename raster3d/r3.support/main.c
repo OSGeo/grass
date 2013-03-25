@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     infile = raster->answer;
     mapset = G_find_raster3d(infile, G_mapset());	/* current mapset only for editing */
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_("Raster3d map <%s> not found in current mapset"), infile);
+	G_fatal_error(_("3D raster map <%s> not found"), infile);
 
     if (title_opt->answer) {
 	strncpy(title, title_opt->answer, MAX_TITLE_LEN);

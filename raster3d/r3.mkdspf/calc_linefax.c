@@ -30,12 +30,12 @@ int viz_calc_tvals(cmndln_info * linefax, char **a_levels, char *a_min,
 	sscanf(a_max, "%f", &max);
     datarange = max - min;
     if (datarange <= 0.0)
-	G_fatal_error("range error: %f", datarange);
+	G_fatal_error("Range error: %f", datarange);
 
     if (a_levels) {
 	for (i = 0; a_levels[i]; i++) {
 	    if (i == MAXTHRESH) {
-		G_warning("maximum no. of thresholds is %d", MAXTHRESH);
+		G_warning("Maximum no. of thresholds is %d", MAXTHRESH);
 		break;
 	    }
 	    if (1 != sscanf(a_levels[i], "%f", &(linefax->tvalue[i]))) {
@@ -66,7 +66,7 @@ int viz_calc_tvals(cmndln_info * linefax, char **a_levels, char *a_min,
     if (do_interval) {
 	for (i = 0, tval = min; tval <= max; i++, tval = min + (i * interval)) {
 	    if (i == MAXTHRESH) {
-		G_warning("maximum no. of thresholds is %d", MAXTHRESH);
+		G_warning("Maximum no. of thresholds is %d", MAXTHRESH);
 		break;
 	    }
 	    linefax->tvalue[i] = tval;
@@ -79,7 +79,7 @@ int viz_calc_tvals(cmndln_info * linefax, char **a_levels, char *a_min,
 	fprintf(stderr, "threshold values: ");
 	for (i = 0; i < linefax->nthres; i++)
 	    fprintf(stderr, "%f ", linefax->tvalue[i]);
-	G_message("\nNo. of thresholds: %i", linefax->nthres + 1);
+	G_message("No. of thresholds: %i", linefax->nthres + 1);
 
     }
 

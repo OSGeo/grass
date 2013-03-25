@@ -67,8 +67,7 @@ int main(int argc, char *argv[])
 	mapset = G_find_raster3d(name, "");
 
     if (mapset == NULL) {
-	G_fatal_error(_("Raster3d map <%s> not found %s"), name,
-		      modify ? "in current mapset" : "");
+	G_fatal_error(_("3D raster map <%s> not found"), name);
 	exit(EXIT_FAILURE);
     }
 
@@ -86,7 +85,7 @@ int main(int argc, char *argv[])
     }
 
     if(G_scan_timestamp(&ts, date->answer) != 1)
-        G_fatal_error("Timestamp format is invalid");
+        G_fatal_error(_("Timestamp format is invalid"));
 
     G_write_raster3d_timestamp(name, &ts);
     exit(EXIT_SUCCESS);

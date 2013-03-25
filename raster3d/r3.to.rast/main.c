@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_debug(3, _("Open 3D raster map <%s>"), param.input->answer);
+    G_debug(3, "Open 3D raster map <%s>", param.input->answer);
 
     if (NULL == G_find_raster3d(param.input->answer, ""))
         Rast3d_fatal_error(_("3D raster map <%s> not found"),
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
                               RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE,
                               RASTER3D_USE_CACHE_DEFAULT);
         if (map == NULL)
-            Rast3d_fatal_error(_("Error opening 3D raster map <%s>"),
+            Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                            param.input->answer);
 
 
@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
                               RASTER3D_USE_CACHE_DEFAULT);
 
         if (map == NULL)
-            Rast3d_fatal_error(_("Error opening 3D raster map <%s>"),
+            Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                            param.input->answer);
     }
 

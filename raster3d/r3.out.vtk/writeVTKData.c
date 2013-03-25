@@ -438,7 +438,7 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
                                                        0.0);
                     /*Test of value range, the data should be 1 byte gray values */
                     if (value > 255 || value < 0) {
-                        G_warning(_("Wrong 3d raster map values! Values should in between 0 and 255!\n"));
+                        G_warning(_("Wrong 3D raster map values! Values should in between 0 and 255!"));
                         fprintf(fp, "0 ");
                     } else {
 

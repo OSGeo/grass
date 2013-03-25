@@ -164,10 +164,10 @@ int main(int argc, char *argv[])
      */
 
     if (NULL == g3map)
-	G_fatal_error(_("Error opening grid3 file [%s]"), name->answer);
+	G_fatal_error(_("Unable to open 3D raster map <%s>"), name->answer);
 
     if (0 == Rast3d_range_load(g3map))
-	G_fatal_error(_("Error reading range for [%s]"), name->answer);
+	G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name->answer);
 
     /* TODO: look at this - should use current 3dregion rather than
        region represented by original 3dgrid file */
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
     /* open display file for writing */
     sprintf(element, "grid3/%s/dsp", name->answer);
     if ((Headfax.dspfoutfp = G_fopen_new(element, dspout)) == NULL)
-	G_fatal_error(_("Error opening display file [%s]"), dspout);
+	G_fatal_error(_("Unable to open display file <%s>"), dspout);
 
     /* write display file header info */
     /* have to adjust dimensions  -dpg */

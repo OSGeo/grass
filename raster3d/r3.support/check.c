@@ -17,7 +17,7 @@ int check_stats(const char *name)
     struct FPRange fprange;
     int cats_ok;
 
-    G_message(_("\n  Updating statistics for [%s]"), name);
+    G_message(_("Updating statistics for <%s>"), name);
     
     /* Get category status and max */
     cats_ok = (Rast3d_read_cats(name, "", &cats) >= 0);
@@ -33,8 +33,7 @@ int check_stats(const char *name)
 
     /* Update categories if needed */
     if (!cats_ok) {
-	G_message(_("   Updating the number of categories for "
-		    "[%s]\n\n"), name);
+	G_message(_("Updating the number of categories for <%s>"), name);
 	Rast3d_write_cats(name, &cats);
     }
     Rast_free_cats(&cats);

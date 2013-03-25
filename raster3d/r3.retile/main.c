@@ -11,8 +11,8 @@
  * COPYRIGHT:    (C) 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 #include <stdio.h>
@@ -46,7 +46,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
     /* Close files and exit */
     if (map != NULL) {
         if (!Rast3d_close(map))
-            Rast3d_fatal_error(_("Unable to close the 3d raster map"));
+            Rast3d_fatal_error(_("Unable to close the 3D raster map"));
     }
 
     if (fd != NULL) {
@@ -105,12 +105,12 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_debug(3, "Open 3d raster map <%s>", param.input->answer);
+    G_debug(3, "Open 3D raster map <%s>", param.input->answer);
 
     mapset = G_find_raster3d(param.input->answer, "");
     
     if (mapset == NULL)
-        Rast3d_fatal_error(_("3d raster map <%s> not found"),
+        Rast3d_fatal_error(_("3D raster map <%s> not found"),
                        param.input->answer);
 
     /*Set the defaults */
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 
     if (map == NULL)
-        Rast3d_fatal_error(_("Unable to open 3d raster map <%s>"),
+        Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                        param.input->answer);
 
     /* Get the tile dimension */
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 
     /* Close files and exit */
     if (!Rast3d_close(map))
-        fatal_error(map, NULL, 0, _("Error closing 3d raster map"));
+        fatal_error(map, NULL, 0, _("Error closing 3D raster map"));
 
     map = NULL;
 
