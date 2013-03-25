@@ -29,12 +29,8 @@
 #%option G_OPT_DB_COLUMNS
 #%end
 
-#%option
-#% key: separator
-#% type: string
+#%option G_OPT_F_SEP
 #% description: Separator character between the output columns
-#% required: no
-#% answer: |
 #%end
 
 #%option G_OPT_V_FIELD

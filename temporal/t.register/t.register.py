@@ -80,12 +80,8 @@
 #% guisection: Time & Date
 #%end
 
-#%option
-#% key: fs
-#% type: string
+#%option G_OPT_F_SEP
 #% description: Field separator character of the input file
-#% required: no
-#% answer: |
 #% guisection: Input
 #%end
 
@@ -108,7 +104,7 @@ def main():
     maps = options["maps"]
     type = options["type"]
     file = options["file"]
-    fs = options["fs"]
+    fs = options["separator"]
     start = options["start"]
     end = options["end"]
     unit = options["unit"]
