@@ -29,18 +29,73 @@ ordering in the ASCII input file:
 </center></td></tr>
 </table>
 </center>
-<p>
-The version and order information in the header of the input file 
-are not mandatory. In case no version and
-order information was specified, the default GRASS 6 3D ASCII format is assumed.
-<p>
+
+<h2>NOTES</h2>
+
+The format of the 3D ASCII file:
+<div class="code"><pre>
+version: <i>"grass7"</i>
+order:   <i>"nsbt" or "nstb" or "snbt" or "sntb"</i>
+north:   <i>floating point</i>
+south:   <i>floating point</i>
+east:    <i>floating point</i>
+west:    <i>floating point</i>
+top:     <i>floating point</i>
+bottom:  <i>floating point</i>
+rows:    <i>integer</i>
+cols:    <i>integer</i>
+levels:  <i>integer</i>
+</pre></div>
+
+The version and order option have been introduced in GRASS 7 in June 2011.
+The version option is self explaining. The order option specifies the row
+and depth order of the data in the input file.
+The supported row/depth ordering is documented in the <em>r3.out.ascii</em>
+manual page. The order of the data in the input file does not specifiy the
+data order in the generated output 3D raster map which is in any case 
+<em>north -> south, west -> east, bottom -> top</em> order.
+So dependent on the order information the data is automatically imported
+into the correct internal coordinate system.
+<p>The version and order options are not mandatory. In case no version and
+order option is specified, the default GRASS 6 ASCII format is assumed.
+<p>This header is followed by the cell values in <em>floating point</em> format 
+organized in rows with constant <em>col</em> and <em>level</em> coordinate.
+The rows are organized by constant <em>level</em> coordinate. Individual cell
+values are separated by <em>space</em> or <em>CR</em>.
+
+<h2>EXAMPLES</h2>
+
+4x3x2 sample. Note in case no specific ordering is specified in the input
+file the upper-left (NW) corner of the bottom level comes first. The according
+order option is: nsbt for north -> south, bottom -> top ordering. This is
+identical with <em>r.in.ascii</em> for single level data. So the y coordinate
+is 0 at the northern edge.
+
+<div class="code"><pre>
+north: 3.0
+south: 0.0
+east: 4.0
+west: 0.0
+top: 2.0
+bottom: 0.0
+rows: 3
+cols: 4
+levels: 2
+w<sub>111</sub>x1,y1,z1  w<sub>211</sub>x2,y1,z1  w<sub>311</sub>x3,y1,z1  w<sub>411</sub>x4,y1,z1
+w<sub>121</sub>x1,y2,z1  w<sub>221</sub>x2,y2,z1  w<sub>321</sub>x3,y2,z1  w<sub>421</sub>x4,y2,z1
+w<sub>131</sub>x1,y3,z1  w<sub>231</sub>x2,y3,z1  w<sub>331</sub>x3,y3,z1  w<sub>431</sub>x4,y3,z1
+w<sub>112</sub>x1,y1,z2  w<sub>212</sub>x2,y1,z2  w<sub>312</sub>x3,y1,z2  w<sub>412</sub>x4,y1,z2
+w<sub>122</sub>x1,y2,z2  w<sub>222</sub>x2,y2,z2  w<sub>322</sub>x3,y2,z2  w<sub>422</sub>x4,y2,z2
+w<sub>132</sub>x1,y3,z2  w<sub>232</sub>x2,y3,z2  w<sub>332</sub>x3,y3,z2  w<sub>432</sub>x4,y3,z2
+</pre></div>
+
 Note that unit tests for <em>r3.in.ascii</em> are implemented in the
 <em>test.r3.out.ascii.sh</em> script located in the
 <em>r3.out.ascii</em> directory.
 
 <h2>EXAMPLES</h2>
 
-Please have a look at the detailed examples in 
+Please refer to the detailed examples in 
 <a href="r3.out.ascii.html">r3.out.ascii</a>.
 
 <h2>AUTHORS</h2>
@@ -52,7 +107,8 @@ Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka, S&ouml;ren Gebbert
 <em>
 <a href="r.in.ascii.html">r.in.ascii</a>,
 <a href="r3.out.ascii.html">r3.out.ascii</a>,
-<a href="v.to.rast3.html">v.to.rast3</a>
+<a href="v.to.rast3.html">v.to.rast3</a>,
+<a href="g.region.html">g.region</a>
 </em>
 
 <p><i>Last changed: $Date$</i>
