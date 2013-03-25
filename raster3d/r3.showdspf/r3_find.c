@@ -36,7 +36,7 @@ char *check_get_any_dspname(dspf, g3f, mset)
     static char dspout[200];
 
     if (!G_find_raster3d(g3f, "")) {
-	fprintf(stderr, "[%s] 3D raster map not found\n", g3f);
+	fprintf(stderr, "3D raster map <%s> not found", g3f);
 	return (NULL);
     }
 

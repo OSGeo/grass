@@ -165,7 +165,7 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     Rast3d_unlock_all(mapOut);
 
     if (!Rast3d_close(map))
-	Rast3d_fatal_error(_("Unable to close raster map"));
+	Rast3d_fatal_error(_("Unable to close 3D raster map <%s>"), name);
     if (!Rast3d_close(mapOut))
 	Rast3d_fatal_error(_("modifyNull: Unable to close tmp file"));
 }

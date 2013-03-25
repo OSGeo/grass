@@ -613,7 +613,7 @@ int main(int argc, char *argv[])
 			     RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	G_fatal_error(_("Error opening 3d raster map <%s>"),
+	G_fatal_error(_("Unable to open 3D raster map <%s>"),
 		      param.input->answer);
 
     /* Create netCDF file */

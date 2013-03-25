@@ -31,7 +31,7 @@ int g3_find_dsp_file(const char *cell, const char *file, const char *mset)
 const char *check_get_any_dspname(const char *dspf, const char *g3f, const char *mset)
 {
     if (!G_find_raster3d(g3f, ""))
-	G_fatal_error("[%s] 3D raster map not found", g3f);
+	G_fatal_error("3D raster map <%s> not found", g3f);
 
     if (mset) {			/* otherwise must be reading only  */
 	if (g3_find_dsp_file(g3f, dspf, mset)) {	/* already exists */

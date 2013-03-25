@@ -311,7 +311,7 @@ int main(int argc, char *argv[]) {
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (map == NULL)
-		Rast3d_fatal_error(_("Error opening 3d raster map <%s>"),
+		Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
 				parm.input->answer);
 
 	/* open bin file for writing */
