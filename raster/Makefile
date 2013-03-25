@@ -110,6 +110,7 @@ SUBDIRS = \
 	r.terraflow \
 	r.texture \
 	r.thin \
+	r.tile \
 	r.timestamp \
 	r.to.rast3 \
 	r.to.rast3elev \
