@@ -3,7 +3,7 @@
  *
  * MODULE:       r.tile
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
- * PURPOSE:      
+ * PURPOSE:      Retiles an existing raster map with user defined x and y tile size
  * COPYRIGHT:    (C) 2013 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("retile"));
+    G_add_keyword(_("tiling"));
     module->description =
 	_("Splits a raster map into tiles.");
 
