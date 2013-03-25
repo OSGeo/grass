@@ -27,12 +27,8 @@
 #%option G_OPT_T_WHERE
 #%end
 
-#%option
-#% key: fs
-#% type: string
+#%option G_OPT_F_SEP
 #% description: Field separator character between the output columns
-#% required: no
-#% answer: |
 #%end
 
 #%flag
@@ -58,7 +54,7 @@ def main():
     where = options["where"]
     extended = flags["e"]
     header = flags["h"]
-    fs = options["fs"]
+    fs = options["separator"]
 
     # Make sure the temporal database exists
     tgis.init()
