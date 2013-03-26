@@ -330,13 +330,16 @@ int Vect_get_line_nodes(const struct Map_info *Map, int line, int *n1, int *n2)
 }
 
 /*!
-   \brief Get area/isle ids on the left and right
+   \brief Get area id on the left and right side of the boundary
 
+   Negative area id indicates an isle.
+   
    \param Map pointer to Map_info struct
    \param line line id
-   \param[out] left,right area/isle id on the left and right
+   \param[out] left,right area id on the left and right side
 
-   \return 1
+   \return 1 on success
+   \return -1 on failure (topology not available, line is not a boundary)
  */
 int Vect_get_line_areas(const struct Map_info *Map, int line, int *left, int *right)
 {
@@ -344,19 +347,23 @@ int Vect_get_line_areas(const struct Map_info *Map, int line, int *left, int *ri
 
     check_level(Map);
     
-    if (!Map->plus.Line[line]->topo)
-	G_fatal_error(_("Areas not available for line %d"), line);
+    if (!Map->plus.Line[line]->topo) {
+        G_warning(_("Areas not available for line %d"), line);
+        return -1;
+    }
 
-    if (Vect_get_line_type(Map, line) != GV_BOUNDARY)
-	G_fatal_error(_("Line %d is not a boundary"), line);
+    if (Vect_get_line_type(Map, line) != GV_BOUNDARY) {
+	G_warning(_("Line %d is not a boundary"), line);
+        return -1;
+    }
 
     topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
     if (left != NULL)
 	*left = topo->left;
-
+                  
     if (right != NULL)
 	*right = topo->right;
-
+    
     return 1;
 }
 
