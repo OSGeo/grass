@@ -556,13 +556,15 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
 	    ;;
 	*-freebsd*)
-		# NOTE: only FreeBSD 4+ is supported
+	    # NOTE: only FreeBSD 4+ is supported
 	    # FreeBSD 3.* and greater have ELF.
 	    SHLIB_CFLAGS="-fPIC"
-	    SHLIB_LD="ld -Bshareable -x"
+	    #SHLIB_LD="ld -Bshareable -x"
+	    SHLIB_LD="${CC} -shared"
 	    SHLIB_SUFFIX=".so"
 	    LDFLAGS="-export-dynamic"
-	    LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
+	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
 	    # TODO: add optional pthread support with any combination of: 
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
