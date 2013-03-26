@@ -37,7 +37,19 @@
 # ifdef __MINGW32__
 #  include <malloc.h>
 # else
-#  include <alloca.h>
+#  if (defined(__unix__) || defined(unix)) && !defined(USG)
+#   include <sys/param.h>
+#  endif
+#  if (defined(BSD))
+    /* no malloc.h, no alloca.h ? 
+     * TODO: better 
+     * check if alloca.h exists, 
+     * if not, check if malloc.h exists,
+     * if not use stdlib.h */
+#   include <stdlib.h>
+#  else
+#   include <alloca.h>
+#  endif
 # endif
 # define G__alloca(n) alloca(n)
 # define G__freea(p)
