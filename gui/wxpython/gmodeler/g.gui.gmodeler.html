@@ -4,13 +4,22 @@
 
 <p>
 The <b>Graphical Modeler</b> is
-a <em><a href="wxGUI.html">wxGUI</a></em> compoment which allows the
-user to create, edit, and manage models. The modeler can be launched
-from the menu <tt>File -> Graphical modeler</tt> or by
-clicking on icon <img src="icons/modeler-main.png" alt="icon"> in the toolbar. It's also available as stand-alone module <em>g.gui.gmodeler</em>.
+a <em><a href="wxGUI.html">wxGUI</a></em> component which allows to
+create, edit, and manage complex models using easy-to-use
+interface. When performing analytical operations in GRASS, the
+operations are not isolated, but part of a chain of operations. Using
+Graphical Modeler, that chain of processes (ie. GRASS modules)
+can be wrapped into one process (ie. model). So it's easier to execute
+the model later with slightly different inputs or parameters.
 
 <p>
-The modeler currently allows to:
+The modeler can be launched from the Layer Manager menu <tt>File ->
+Graphical modeler</tt> or from the main
+toolbar <img src="icons/modeler-main.png" alt="icon">. It's also
+available as stand-alone module <em>g.gui.gmodeler</em>.
+
+<p>
+The Graphical Modeler allows to:
 
 <ul>
   <li>define data items (raster, vector, 3D raster maps)</li>
@@ -18,7 +27,7 @@ The modeler currently allows to:
   <li>define relations between data and action items</li>
   <li>define loops (eg. map series) and conditions (if-else statements)</li>
   <li>define model variables</li>
-  <li>parameterize commands</li>
+  <li>parameterize GRASS commands</li>
   <li>define intermediate data</li>
   <li>validate and run model</li>
   <li>store model properties to the file (<tt>GRASS Model File|*.gxm</tt>)</li>
