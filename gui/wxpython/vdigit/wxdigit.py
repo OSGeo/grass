@@ -1403,8 +1403,8 @@ class IVDigit:
             last = points.n_points - 1
             if self._settings['closeBoundary']:
                 Vect_append_point(self.poPoints, points.x[0], points.y[0], points.z[0])
-            elif Vect_points_distance(points.x[0], points.x[0], points.z[0],
-                                      points.x[last], points.x[last], points.z[last],
+            elif Vect_points_distance(points.x[0], points.y[0], points.z[0],
+                                      points.x[last], points.y[last], points.z[last],
                                       is3D) <= threshold:
                 points.x[last] = points.x[0]
                 points.y[last] = points.y[0]
