@@ -55,7 +55,9 @@ int main(int argc, char **argv)
     module->description = _("Prints vector map attributes.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
+
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->guisection = _("Selection");
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
     col_opt->guisection = _("Selection");
