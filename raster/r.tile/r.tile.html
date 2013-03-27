@@ -1,11 +1,38 @@
 <h2>DESCRIPTION</h2>
 
+<em>r.tile</em> retiles an existing raster map with user defined 
+x and y tile size.
+
 <h2>NOTES</h2>
+
+<em>r.tile</em> generates a separate raster for each tile.
+This is equivalent to running <em>g.region</em> along with
+<em>r.resample</em> in a double loop.
+<p>
+The module can be used to split a large raster map into smaller
+tiles, e.g. for further parallelized analysis on a cluster.
+
+<h2>EXAMPLE</h2>
+
+Retiling example for the North Carolina DEM:
+
+<div class="code"><pre>
+g.region rast=elevation -p
+# rows:       1350
+# cols:       1500
+
+r.tile input=elevation output=elev_tile width=135 height=150
+</pre></div>
+
+creates 108 tiles with the prefix <em>elev_tile</em> (named:
+elev_tile-000-000, elev_tile-000-001, elev_tile-000-002, ...).
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.region.html">g.region</a></em>,
-<em><a href="r3.retile.html">r3.retile</a></em>,
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r3.retile.html">r3.retile</a>
+</em>
 
 <h2>AUTHOR</h2>
 
