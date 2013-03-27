@@ -31,7 +31,7 @@
 static void fastline(double, double, double, double);
 static void slowline(double, double, double, double);
 static void plot_line(double, double, double, double, void (*)());
-static double nearest(double, double);
+static double wrap_east(double, double);
 static int edge(double, double, double, double);
 static int edge_point(double, int);
 
@@ -344,7 +344,7 @@ static void plot_line(double east1, double north1, double east2, double north2,
     }
 }
 
-static double nearest(double e0, double e1)
+static double wrap_east(double e0, double e1)
 {
     while (e0 - e1 > 180)
 	e1 += 360.0;
@@ -408,7 +408,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
 	    return NO_MEMORY;
 
 	for (i = 0; i < n; i++) {
-	    e1 = nearest(e0, x[i]);
+	    e1 = wrap_east(e0, x[i]);
 	    if (e1 > E)
 		E = e1;
 	    if (e1 < W)
@@ -453,7 +453,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
 	return OUT_OF_SYNC;
 
     /* sort the edge points by col(x) and then by row(y) */
-    qsort(st->P, st->np, sizeof(POINT), &edge_order);
+    qsort(st->P, st->np, sizeof(POINT), edge_order);
 
     /* plot */
     for (i = 1; i < st->np; i += 2) {
@@ -539,7 +539,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 		return NO_MEMORY;
 
 	    for (i = 0; i < n; i++) {
-		e1 = nearest(e0, x[i]);
+		e1 = wrap_east(e0, x[i]);
 		if (e1 > E)
 		    E = e1;
 		if (e1 < W)
@@ -620,11 +620,12 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 static int edge(double x0, double y0, double x1, double y1)
 {
     double m;
-    double dy, x;
+    double dx, dy, x;
     int ystart, ystop;
 
 
     /* tolerance to avoid FPE */
+    dx = x0 - x1;
     dy = y0 - y1;
     if (fabs(dy) < 1e-10)
 	return 1;
@@ -643,6 +644,7 @@ static int edge(double x0, double y0, double x1, double y1)
 	if (ystop == y0)
 	    ystop--;		/* if line stops at row center, don't include point */
     }
+
     if (ystart > ystop)
 	return 1;		/* does not cross center line of row */
 
