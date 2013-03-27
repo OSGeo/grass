@@ -1,14 +1,14 @@
-/*
- * \file gis/plot.c
+/*!
+ * \file lib/gis/plot.c
  *
  * \brief GIS Library - Plotting functions.
  *
- * Plot lines and filled polygons. Input space is database window.
- * Output space and output functions are user defined.
- * Converts input east,north lines and polygons to output x,y
+ * Plot lines and filled polygons. Input space is current
+ * window. Output space and output functions are user
+ * defined. Converts input east,north lines and polygons to output x,y
  * and calls user supplied line drawing routines to do the plotting.
  *
- * Handles global wrap-around for lat-lon databases.
+ * Handles global wrap-around for lat-lon locations.
  *
  * Does not perform window clipping.
  * Clipping must be done by the line draw routines supplied by the user.
@@ -16,7 +16,7 @@
  * Note:
  *  Hopefully, cartographic style projection plotting will be added later.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2008, 2013 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
