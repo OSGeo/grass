@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     module->label = _("Computes shortest distance via the network between "
 		      "the given sets of features.");
     module->description =
-	_("Finds the shortest paths from a point 'from' to every feature 'to' "
+	_("Finds the shortest paths from each 'from' point to the nearest 'to' feature "
 	 "and various information about this relation are uploaded to the attribute table.");
 
     /* Define the different options as defined in gis.h */
