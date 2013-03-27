@@ -65,7 +65,7 @@ def main():
             grass.try_remove(outfile)
         else:
             grass.fatal(_("option <output>: <%s> exists.") % outfile)
-    grass.message(_("Packing <%s> to <%s>...") % (gfile['fullname'], outfile))
+    grass.verbose(_("Packing <%s>...") % (gfile['fullname']))
     basedir = os.path.sep.join(gfile['file'].split(os.path.sep)[:-2])
     olddir  = os.getcwd()
     #check if exist a db connection for the vector 
@@ -74,7 +74,7 @@ def main():
     #db not exist and skip the db copy
     sqlitedb = None
     if not db_vect:
-        grass.message(_('There is not database connected with vector %s') % gfile['fullname'])
+        grass.verbose(_('There is not database connected with vector map <%s>') % gfile['fullname'])
     else:
         # for each layer connection save a table
         for i, dbconn in db_vect.iteritems():
@@ -101,7 +101,7 @@ def main():
     #remove the db from the vector directory #ONLY THE DB FOR THE COPY NOT DB OF GRASS
     if db_vect and sqlitedb:
         os.remove(sqlitedb)
-    grass.verbose(_("Vector map saved to '%s'" % os.path.join(olddir, outfile)))
+    grass.message(_("Pack file <%s> created") % os.path.join(olddir, outfile))
             
 if __name__ == "__main__":
     options, flags = grass.parser()
