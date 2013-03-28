@@ -5,7 +5,7 @@
   
   Higher level functions for reading/writing/manipulating vectors.
   
-  (C) 2001-2009, 2012 by the GRASS Development Team
+  (C) 2001-2009, 2012-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -36,6 +36,7 @@
 static int copy_lines_1(struct Map_info *, int, struct Map_info *);
 static int copy_lines_2(struct Map_info *, int, int, struct Map_info *);
 static int copy_nodes(const struct Map_info *, struct Map_info *);
+static int is_isle(const struct Map_info *, int);
 static int copy_areas(const struct Map_info *, int, struct Map_info *);
 
 /*!
@@ -325,6 +326,45 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
 }
 
 /*!
+  \brief Check if area forms an isle
+
+  Check for areas that are part of isles which in turn are inside
+  another area.
+
+  \param Map pointer to Map_info struct
+  \param area area id
+
+  \return TRUE if area forms an isle otherwise FALSE
+*/
+int is_isle(const struct Map_info *Map, int area)
+{
+    int i, line, left, right, isle, is_isle;
+    
+    struct ilist *List;
+    
+    List = Vect_new_list();
+    Vect_get_area_boundaries(Map, area, List);
+
+    is_isle = FALSE;
+    /* do we need to check all boundaries ? */
+    for (i = 0; i < List->n_values && !is_isle; i++) {
+        line = abs(List->value[i]);
+        if (1 != Vect_get_line_areas(Map, line, &left, &right))
+            continue;
+        
+        isle = abs(left == area ? right : left);
+        
+        if (Vect_get_isle_area(Map, isle) > 0)
+            is_isle = TRUE;
+    }
+
+    G_debug(3, "is_isle(): area %d skip? -> %s", area, is_isle ? "yes" : "no");
+    Vect_destroy_list(List);
+    
+    return is_isle;
+}
+
+/*!
   \brief Copy areas as polygons (OGR/PostGIS simple features access only)
 
   \param In input vector map
@@ -354,19 +394,21 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
     for (area = 1; area <= nareas; area++) {
         G_debug(3, "area = %d", area);
         G_percent(area, nareas, 3);
-        
-        /* get outer ring (area) geometry */
-        Vect_get_area_points(In, area, Points);
-        
+
         /* get area category */
         cat = Vect_get_area_cat(In, area, field);
         if (cat < 0) {
-            G_warning(_("No category defined for area %d. "
-                        "Area not exported."),
-                      area);
+            /* no category - check if area forms an isle */
+            if (!is_isle(In, area))
+                G_warning(_("No category defined for area %d. "
+                            "Area not exported."),
+                          area);
             continue;
         }
-        G_debug(3, " -> cat %d", cat);
+        
+        /* get outer ring (area) geometry */
+        Vect_get_area_points(In, area, Points);
+
         Vect_reset_cats(Cats);
         Vect_cat_set(Cats, field, cat);
         
@@ -381,7 +423,7 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
                 IPoints[i] = Vect_new_line_struct();
             nisles_alloc = nisles;
         }
-        G_debug(3, " -> nisles=%d", nisles);
+        G_debug(3, "\tcat=%d, nisles=%d", cat, nisles);
         for (i = 0; i < nisles; i++) {
             isle = Vect_get_area_isle(In, area, i);
             Vect_get_isle_points(In, isle, IPoints[i]);
