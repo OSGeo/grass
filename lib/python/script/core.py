@@ -660,35 +660,32 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
 def compare_key_value_text_files(filename_a, filename_b, sep=":",
                                  val_sep=",", precision=0.000001):
     """
-        !Compare two key-value text files that contain projection parameter
+    !Compare two key-value text two files 
 
-        @param filename_a The name of the first key-value text file
-        @param filenmae_b The name of the second key-value text file
-        @param sep The character that separates the keys and values, default is ":"
-        @param val_sep The character that separates the values of a single key, default is ","
-        @param precision The precision with which the floating point values are compares
-           if abs(a - b) > precision : return False
-        @return True if full or almost identical, False if different
+    This method will print a warning in case keys that are present in the first file
+    are not present in the second one.
+    The comparison method tries to convert the values into there native format (float, int or string)
+    to allow correct comparison.
 
-        This method will print a warning in case keys that are present in the first file
-        are not present in the second one.
-        The comparison method tries to convert the values into there native format (float, int or string)
-        to allow correct comparison.
+    An example key-value text file may have this content:
+    \code
+    a: Hello
+    b: 1.0
+    c: 1,2,3,4,5
+    d : hello,8,0.1
+    \endcode
+    
+    @param filename_a name of the first key-value text file
+    @param filenmae_b name of the second key-value text file
+    @param sep character that separates the keys and values, default is ":"
+    @param val_sep character that separates the values of a single key, default is ","
+    @param precision precision with which the floating point values are compares
 
-        An example key-value text file may have this content:
-        \code
-        a: Hello
-        b: 1.0
-        c: 1,2,3,4,5
-        d : hello,8,0.1
-        \endcode
+    @return True if full or almost identical, False if different
     """
     dict_a = _text_to_key_value_dict(filename_a, sep)
     dict_b = _text_to_key_value_dict(filename_b, sep)
     
-    print dict_a
-    print dict_b
-
     missing_keys = 0
 
     # We compare matching keys
