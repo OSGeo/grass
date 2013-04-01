@@ -32,6 +32,7 @@ void dig_line_reset_updated(struct Plus_head *Plus)
 
    \param Plus pointer to Plus_head structure
    \param line line id
+   \param offset line offset (negative offset is ignored)
  */
 void dig_line_add_updated(struct Plus_head *Plus, int line)
 {
@@ -42,6 +43,7 @@ void dig_line_add_updated(struct Plus_head *Plus, int line)
 	if (Plus->uplist.uplines[i] == line)
 	    return;
     */
+
     /* Alloc space if needed */
     if (Plus->uplist.n_uplines == Plus->uplist.alloc_uplines) {
 	Plus->uplist.alloc_uplines += 1000;

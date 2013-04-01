@@ -19,7 +19,7 @@
 #include <grass/vector.h>
 
 static int add_line(struct Plus_head *plus, int lineid, int type, const struct line_pnts *Points,
-		    struct bound_box *box, off_t offset)
+		    const struct bound_box *box, off_t offset)
 {
     int node, lp;
     struct P_line *line;
@@ -117,17 +117,17 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
  * \brief Add new line to Plus_head structure.
  *
  * \param[in,out] plus pointer to Plus_head structure
- * \param[in] type feature type
- * \param[in] Points line geometry
- * \param[in] offset line offset
- * \param[in] box bounding box
+ * \param type feature type
+ * \param Points line geometry
+ * \param box bounding box
+ * \param offset line offset
  *
  * \return -1 on error      
  * \return line id
  */
 int
 dig_add_line(struct Plus_head *plus, int type, const struct line_pnts *Points,
-             struct bound_box *box, off_t offset)
+             const struct bound_box *box, off_t offset)
 {
     int ret;
     
@@ -173,18 +173,18 @@ dig_add_line(struct Plus_head *plus, int type, const struct line_pnts *Points,
  * \brief Restore line in Plus_head structure.
  *
  * \param[in,out] plus pointer to Plus_head structure
- * \param[in] type feature type
- * \param[in] Points line geometry
- * \param[in] offset line offset
- * \param[in] box bounding box
+ * \param type feature type
+ * \param Points line geometry
+ * \param box bounding box
+ * \param offset line offset
  *
  * \return -1 on error      
  * \return line id
  */
 int
 dig_restore_line(struct Plus_head *plus, int lineid,
-		 int type, struct line_pnts *Points,
-		 struct bound_box *box, off_t offset)
+		 int type, const struct line_pnts *Points,
+		 const struct bound_box *box, off_t offset)
 {
     if (lineid < 1 || lineid > plus->n_lines) {
 	return -1;
@@ -268,11 +268,10 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 	dig_free_node(Node);
 	plus->Node[N1] = NULL;
     }
-    else {
-	if (plus->uplist.do_uplist)
-	    dig_node_add_updated(plus, N1);
+    if (plus->uplist.do_uplist) {
+        dig_node_add_updated(plus, Node->n_lines > 0 ? N1 : -N1);
     }
-
+    
     if (Line->type == GV_LINE) {
 	struct P_topo_l *topo = (struct P_topo_l *)Line->topo;
 
@@ -304,9 +303,8 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 	dig_free_node(Node);
 	plus->Node[N2] = NULL;
     }
-    else {
-	if (plus->uplist.do_uplist)
-	    dig_node_add_updated(plus, N2);
+    if (plus->uplist.do_uplist) {
+        dig_node_add_updated(plus, Node->n_lines > 0 ? N2 : -N2);
     }
 
     /* Delete line */

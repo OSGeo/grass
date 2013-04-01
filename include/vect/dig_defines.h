@@ -5,12 +5,12 @@
 */
 
 /*! \brief Name of vector directory */
-#define GV_DIRECTORY    "vector"	
+#define GV_DIRECTORY    "vector"
 /*! \brief Format description, data location (OGR) */
 #define GV_FRMT_ELEMENT "frmt"
 /*! \brief Native format, coordinates */
 #define GV_COOR_ELEMENT "coor"
-/*! \brief Native format, header information */	
+/*! \brief Native format, header information */
 #define GV_HEAD_ELEMENT "head"
 /*! \brief Native format, link to database */
 #define GV_DBLN_ELEMENT "dbln"
@@ -163,15 +163,15 @@
 #define WITHOUT_Z	0
 #define WITH_Z		1
 
-/*! \brief Side indicator left/right */
+/*! \brief Boundary side indicator left/right */
 #define GV_LEFT	 1
 #define GV_RIGHT 2
 
-/*! \brief Direction indicator forward/backward */
+/*! \brief Line direction indicator forward/backward */
 #define GV_FORWARD  1
 #define GV_BACKWARD 2
 
-/*! \brief Types used in memory on run time (may change) */
+/*! \brief Feature types used in memory on run time (may change) */
 #define GV_POINT      0x01
 #define GV_LINE	      0x02
 #define GV_BOUNDARY   0x04
@@ -184,7 +184,7 @@
 #define GV_POINTS (GV_POINT | GV_CENTROID )
 #define GV_LINES (GV_LINE | GV_BOUNDARY )
 
-/*! \brief Types used in store like 'coor' file or postgis type column (must not change) */
+/*! \brief Feature types used in store like 'coor' file or postgis type column (must not change) */
 #define GV_STORE_POINT    1
 #define GV_STORE_LINE     2
 #define GV_STORE_BOUNDARY 3
@@ -251,5 +251,5 @@ typedef enum
 
 /*! \brief GRASS-PostGIS data provider - default fid column */
 #define GV_PG_FID_COLUMN       "fid"
-/*! Simple features access */
+/*! \brief GRASS-PostGIS data provider - default geometry column */
 #define GV_PG_GEOMETRY_COLUMN "geom"
