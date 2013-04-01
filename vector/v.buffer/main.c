@@ -308,6 +308,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    verbose = G_verbose();
 #if !defined HAVE_GEOS
     use_geos = FALSE;
 #else
@@ -387,7 +388,9 @@ int main(int argc, char *argv[])
     if (0 > Vect_open_tmp_new(&Buf, NULL, WITHOUT_Z)) {
         G_fatal_error(_("Unable to create vector map"));
     }
+    G_set_verbose(0);
     Vect_build_partial(&Buf, GV_BUILD_BASE); /* switch to level 2 */
+    G_set_verbose(verbose);
 
     /* check and load attribute column data */
     if (bufcol_opt->answer) {
@@ -692,8 +695,6 @@ int main(int argc, char *argv[])
     finishGEOS();
 #endif
 
-    verbose = G_verbose();
-
     G_message(_("Cleaning buffers..."));
     
     /* Break lines */
@@ -876,8 +877,6 @@ int main(int argc, char *argv[])
     Vect_spatial_index_destroy(&si);
     Vect_close(&Buf);
     
-    G_set_verbose(verbose);
-
     if (cats_flag->answer)
 	Vect_copy_tables(&In, &Out, field);
 
