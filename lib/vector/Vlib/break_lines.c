@@ -29,12 +29,8 @@ static int break_lines(struct Map_info *, struct ilist *, struct ilist *,
    \param Map input vector map 
    \param type feature type
    \param[out] Err vector map where points at intersections will be written or NULL
-
-   \return
- */
-
-void
-Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
+*/
+void Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
 {
     break_lines(Map, NULL, NULL, type, Err, 0);
 
@@ -61,12 +57,11 @@ Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
    \param[out] Err vector map where points at intersections will be written or NULL
 
    \return number of intersections
- */
+*/
 
-int
-Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
-		      struct ilist *List_ref, int type,
-		      struct Map_info *Err)
+int Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
+                          struct ilist *List_ref, int type,
+                          struct Map_info *Err)
 {
     return break_lines(Map, List_break, List_ref, type, Err, 0);
 }
@@ -74,17 +69,15 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 /*!
    \brief Check for and count intersecting lines, do not break.
 
-   For details see Vect_break_lines_list().
+   For details see Vect_check_line_breaks_list().
 
    \param Map input vector map 
    \param type feature type
    \param[out] Err vector map where points at intersections will be written or NULL
 
-   \return
- */
-
-int
-Vect_check_line_breaks(struct Map_info *Map, int type, struct Map_info *Err)
+   \return number for intersections
+*/
+int Vect_check_line_breaks(struct Map_info *Map, int type, struct Map_info *Err)
 {
     return break_lines(Map, NULL, NULL, type, Err, 1);
 }
@@ -105,10 +98,8 @@ Vect_check_line_breaks(struct Map_info *Map, int type, struct Map_info *Err)
    \param[out] Err vector map where points at intersections will be written or NULL
 
    \return number of intersections
- */
-
-int
-Vect_check_line_breaks_list(struct Map_info *Map, struct ilist *List_break,
+*/
+int Vect_check_line_breaks_list(struct Map_info *Map, struct ilist *List_break,
 		      struct ilist *List_ref, int type,
 		      struct Map_info *Err)
 {
@@ -149,10 +140,9 @@ static void sort_ilist(struct ilist *List)
     }
 }
 
-int
-break_lines(struct Map_info *Map, struct ilist *List_break,
-		      struct ilist *List_ref, int type,
-		      struct Map_info *Err, int check)
+int break_lines(struct Map_info *Map, struct ilist *List_break,
+                struct ilist *List_ref, int type,
+                struct Map_info *Err, int check)
 {
     struct line_pnts *APoints, *BPoints, *Points;
     struct line_pnts **AXLines, **BXLines;

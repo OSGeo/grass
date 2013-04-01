@@ -133,9 +133,8 @@ static int _add_item(int id, const struct RTree_Rect *rect, struct ilist *list)
 
    \return number of selected items
  */
-int
-Vect_spatial_index_select(const struct spatial_index * si, const struct bound_box * box,
-			  struct ilist *list)
+int Vect_spatial_index_select(const struct spatial_index * si, const struct bound_box * box,
+                              struct ilist *list)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -144,8 +143,6 @@ Vect_spatial_index_select(const struct spatial_index * si, const struct bound_bo
 	rect.boundary = G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
 	rect_init = si->si_tree->nsides_alloc;
     }
-
-    G_debug(3, "Vect_spatial_index_select()");
 
     Vect_reset_list(list);
 
@@ -157,7 +154,7 @@ Vect_spatial_index_select(const struct spatial_index * si, const struct bound_bo
     rect.boundary[5] = box->T;
     RTreeSearch(si->si_tree, &rect, (void *)_add_item, list);
 
-    G_debug(3, "  %d items selected", list->n_values);
+    G_debug(3, "Vect_spatial_index_select(): %d items selected", list->n_values);
 
-    return (list->n_values);
+    return list->n_values;
 }

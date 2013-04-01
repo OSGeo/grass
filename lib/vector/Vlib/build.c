@@ -543,7 +543,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 		topo->area = sel_area;
 
 		if (sel_area != orig_area && plus->uplist.do_uplist)
-		    dig_line_add_updated(plus, centr);
+                  dig_line_add_updated(plus, centr);
 	    }
 	    else if (Area->centroid != centr) {	/* duplicate centroid */
 		/* Note: it cannot happen that Area->centroid == centr, because the centroid
@@ -552,7 +552,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 		topo->area = -sel_area;
 
 		if (-sel_area != orig_area && plus->uplist.do_uplist)
-		    dig_line_add_updated(plus, centr);
+                  dig_line_add_updated(plus, centr);
 	    }
 	}
     }
@@ -848,8 +848,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     /* If topology is already build (map on > level 2), set level to 1
      * so that lines will be read by V1_read_ (all lines) */
-    Map->level = 1; /* may be not needed, because V1_read is used
-		       directly by Vect_build_ */
+    Map->level = LEVEL_1; /* may be not needed, because V1_read is used
+                             directly by Vect_build_ */
     if (Map->format != GV_FORMAT_OGR_DIRECT)
 	Map->support_updated = TRUE;
 
@@ -870,7 +870,6 @@ int Vect_build_partial(struct Map_info *Map, int build)
     }
 
     ret = ((*Build_array[Map->format]) (Map, build));
-
     if (ret == 0) {
 	return 0;
     }
