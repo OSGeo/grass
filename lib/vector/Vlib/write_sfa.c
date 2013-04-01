@@ -126,7 +126,9 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
 /*!
   \brief Rewrites feature at the given offset on level 2 (OGR/PostGIS
   interface, pseudo-topological level)
-  
+
+  Note: Topology must be built at level >= GV_BUILD_BASE
+
   \param Map pointer to Map_info structure
   \param line feature id to be rewritten
   \param type feature type (see V1_write_line_ogr() for supported types)
@@ -143,13 +145,19 @@ off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type, off_t offset
     G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d offset=%lu",
 	    line, type, offset);
 
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+
 #if defined HAVE_OGR || defined HAVE_POSTGRES
     if (type != V2_read_line_sfa(Map, NULL, NULL, line)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
 	return -1;
     }
 
-    V2_delete_line_sfa(Map, line);
+    if (V2_delete_line_sfa(Map, line) != 0)
+        return -1;
 
     return V2_write_line_sfa(Map, type, points, cats);
 #else
@@ -160,6 +168,8 @@ off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type, off_t offset
 
 /*!
   \brief Deletes feature on level 2 (OGR/PostGIS interface)
+
+  Note: Topology must be built at level >= GV_BUILD_BASE
   
   \todo Update fidx
   
@@ -178,11 +188,16 @@ int V2_delete_line_sfa(struct Map_info *Map, int line)
     static struct line_cats *Cats = NULL;
     static struct line_pnts *Points = NULL;
 
-    G_debug(3, "V2_delete_line_sfa(), line = %d", line);
+    G_debug(3, "V2_delete_line_sfa(): line = %d", line);
 
     type = first = 0;
     Line = NULL;
     plus = &(Map->plus);
+
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
 
     if (plus->built >= GV_BUILD_BASE) {
 	Line = Map->plus.Line[line];
@@ -200,7 +215,9 @@ int V2_delete_line_sfa(struct Map_info *Map, int line)
     }
 
     type = V2_read_line_sfa(Map, Points, Cats, line);
-
+    if (type < 0)
+        return -1;
+    
     /* Update category index */
     if (plus->update_cidx) {
       for (i = 0; i < Cats->n_cats; i++) {

@@ -5,20 +5,19 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   Operations:
-    - Write new feature
-    - Rewrite feature
-    - Delete feature
+   Supported operations:
+    - Write a new feature
+    - Rewrite existing feature
+    - Delete existing feature
     - Restore deleted feature
 
-   (C) 2001-2010, 2012 by the GRASS Development Team
+   (C) 2001-2010, 2012-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-   \author Updated by Martin Landa <landa.martin gmail.com>
-   (restore lines, OGR & PostGIS support)
+   \author Updated by Martin Landa <landa.martin gmail.com> (restore lines, OGR & PostGIS support)
  */
 
 #include <sys/types.h>
@@ -104,7 +103,7 @@ static off_t (*Vect_rewrite_line_array[][3]) () = {
 #endif
 #ifdef HAVE_POSTGRES
     , {
-	rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_sfa}
+	rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_pg}
 #else
     , {
 	rewrite_dummy, format_l, format_l}
@@ -127,7 +126,7 @@ static int (*Vect_delete_line_array[][3]) () = {
 #endif
 #ifdef HAVE_POSTGRES
     , {
-	delete_dummy, V1_delete_line_pg, V2_delete_line_sfa}
+	delete_dummy, V1_delete_line_pg, V2_delete_line_pg}
 #else
     , {
 	delete_dummy, format, format}
@@ -157,20 +156,22 @@ static int (*Vect_restore_line_array[][3]) () = {
 #endif
 };
 
+static int check_map(const struct Map_info *);
+
 /*!
-   \brief Writes new feature
+   \brief Writes a new feature
 
    New feature is written to the end of file (in the case of native
-   format). Vector map topology is not required.
+   format). Topological level is not required.
 
-   Calls G_fatal_error() when vector map is not opened.
+   A warning is printed on error.
    
    \param Map pointer to Map_info structure
    \param type feature type (see dig_defines.h for supported types)
-   \param points ointer to line_pnts structure (feature geometry)
+   \param points pointer to line_pnts structure (feature geometry)
    \param cats pointer to line_cats structure (feature categories)
 
-   \return new feature id (on level 2)
+   \return new feature id (on level 2) (or 0 when build level < GV_BUILD_BASE)
    \return offset into file where the feature starts (on level 1)
    \return -1 on error
  */
@@ -182,36 +183,34 @@ off_t Vect_write_line(struct Map_info *Map, int type,
     G_debug(3, "Vect_write_line(): name = %s, format = %d, level = %d",
 	    Map->name, Map->format, Map->level);
 
-    if (!VECT_OPEN(Map))
-	G_fatal_error(_("Unable to write feature, vector map is not opened"));
-
+    if (!VECT_OPEN(Map)) {
+	G_warning(_("Vector map <%s> is not opened"), Vect_get_name(Map));
+        return -1;
+    }
+    
     if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = FALSE;
+	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     offset = 
 	(*Vect_write_line_array[Map->format][Map->level]) (Map, type, points,
 							   cats);
     
-    /*
-    if (offset == -1)
-	G_fatal_error(_("Unable to write feature (negative offset)"));
-    */
+    if (offset < 0)
+	G_warning(_("Unable to write feature in vector map <%s>"), Vect_get_name(Map));
     
-    /* note: returns new feature id on level 2 and file offset on
-       level 1 */
     return offset;
 }
 
 /*!
-   \brief Rewrites feature info at the given offset.
+   \brief Rewrites existing feature (topological level required)
 
-   Vector map must be opened with full topology (level 2).
+   Note: Topology must be built at level >= GV_BUILD_BASE
+   
+   A warning is printed on error.
 
    The number of points or cats or type may change. If necessary, the
    old feature is deleted and new is written.
-
-   This function calls G_fatal_error() on error.
 
    \param Map pointer to Map_info structure
    \param line feature id
@@ -219,7 +218,7 @@ off_t Vect_write_line(struct Map_info *Map, int type,
    \param points feature geometry
    \param cats feature categories
 
-   \return feature offset
+   \return new feature offset
    \return -1 on error
  */
 off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
@@ -227,32 +226,38 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
 {
     off_t ret, offset;
     
-    if (!VECT_OPEN(Map))
-	G_fatal_error(_("Unable to rewrite feature, vector map is not opened"));
+    if (!check_map(Map))
+        return -1;
 
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+    
     if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = FALSE;
+	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     offset = Map->plus.Line[line]->offset;
-    G_debug(3, "Vect_rewrite_line(): name = %s, line = %d offset = %lu",
+    
+    G_debug(3, "Vect_rewrite_line(): name = %s, line = %d, offset = %lu",
 	    Map->name, line, offset);
+    
     ret = (*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type,
 							       offset,
 							       points, cats);
-    /*
     if (ret == -1)
-	G_fatal_error(_("Unable to rewrite feature %d"), line);
-    */
+        G_warning(_("Unable to rewrite feature %d in vector map <%s>"), line, Vect_get_name(Map));
+
     return ret;
 }
 
 /*!
-   \brief Delete feature
+   \brief Delete existing feature (topological level required)
 
-   Vector map must be opened with full topology (level 2).
-
-   This function calls G_fatal_error() on error.
+   Note: Topology must be built at level >= GV_BUILD_BASE
+   
+   A warning is printed on error.
 
    \param Map pointer to Map_info structure
    \param line feature id
@@ -266,41 +271,37 @@ int Vect_delete_line(struct Map_info *Map, int line)
 
     G_debug(3, "Vect_delete_line(): name = %s, line = %d", Map->name, line);
 
-    if (Map->level < 2) {
-	G_fatal_error(_("Unable to delete feature %d, "
-			"vector map <%s> is not opened on topology level"),
-		      line, Map->name);
-    }
-
-    if (Map->mode != GV_MODE_RW && Map->mode != GV_MODE_WRITE) {
-	G_fatal_error(_("Unable to delete feature %d, "
-			"vector map <%s> is not opened in 'write' mode"),
-		      line, Map->name);
+    if (!check_map(Map))
+        return -1;
+    
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
     }
 
     if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = FALSE;
+	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     ret = (*Vect_delete_line_array[Map->format][Map->level]) (Map, line);
 
-    /*
     if (ret == -1)
-	G_fatal_error(_("Unable to delete feature id %d from vector map <%s>"),
-		      line, Vect_get_full_name(Map));
-    */
+	G_warning(_("Unable to delete feature %d from vector map <%s>"),
+                  line, Vect_get_name(Map));
+
     return ret;
 }
 
 /*!
-   \brief Restore previously deleted feature
+   \brief Restore previously deleted feature (topological level required)
 
-   Vector map must be opened with full topology (level 2).
-
-   This function calls G_fatal_error() on error.
+   Note: Topology must be built at level >= GV_BUILD_BASE
+   
+   A warning is printed on error.
 
    \param Map pointer to Map_info structure
    \param line feature id to be restored
+   \param offset feature offset
 
    \return 0 on success
    \return -1 on error
@@ -311,16 +312,12 @@ int Vect_restore_line(struct Map_info *Map, int line, off_t offset)
 
     G_debug(3, "Vect_restore_line(): name = %s, line = %d", Map->name, line);
 
-    if (Map->level < 2) {
-	G_fatal_error(_("Unable to restore feature %d, "
-			"vector map <%s> is not opened on topology level"),
-		      line, Map->name);
-    }
+    if (!check_map(Map))
+        return -1;
 
-    if (Map->mode != GV_MODE_RW && Map->mode != GV_MODE_WRITE) {
-	G_fatal_error(_("Unable to restore feature %d, "
-			"vector map <%s> is not opened in 'write' mode"),
-		      line, Map->name);
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
     }
 
     if (!(Map->plus.update_cidx)) {
@@ -329,10 +326,31 @@ int Vect_restore_line(struct Map_info *Map, int line, off_t offset)
 
     ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, line, offset);
 
-    /*
     if (ret == -1)
-	G_fatal_error(_("Unable to restore feature %d from vector map <%s>"),
-		      line, Map->name);
-    */
+	G_warning(_("Unable to restore feature %d in vector map <%s>"),
+                  line, Vect_get_name(Map));
+
     return ret;
+}
+
+int check_map(const struct Map_info *Map)
+{
+    if (!VECT_OPEN(Map)) {
+	G_warning(_("Vector map <%s> is not opened"), Vect_get_name(Map));
+        return 0;
+    }
+    
+    if (Map->level < 2) {
+	G_warning(_("Vector map <%s> is not opened on topology level"),
+                  Vect_get_name(Map));
+        return 0;
+    }
+
+    if (Map->mode != GV_MODE_RW && Map->mode != GV_MODE_WRITE) {
+	G_warning(_("Vector map <%s> is not opened in write mode"),
+                  Vect_get_name(Map));
+        return 0;
+    }
+    
+    return 1;
 }

@@ -28,9 +28,8 @@ static int cmp_int(const void *a, const void *b)
     return (*ai < *bi ? -1 : (*ai > *bi));
 }
 
-static void
-remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err, 
-               int *lrm, int *brm);
+static void remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err, 
+                           int *lrm, int *brm);
 
 /*!
    \brief Remove bridges from vector map.
@@ -45,12 +44,9 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
    \param Err vector map where deleted bridges are written or NULL
    \param lines_removed number of lines removed
    \param bridges_removed Err number of bridges removed
-
-   \return
- */
-void
-Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err,
-                    int *lines_removed, int *bridges_removed)
+*/
+void Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err,
+                         int *lines_removed, int *bridges_removed)
 {
     remove_bridges(Map, 0, Err, lines_removed, bridges_removed);
 }
@@ -69,12 +65,8 @@ Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err,
    \param Err vector map where changed bridges are written or NULL
    \param lines_changed number of lines changed
    \param bridges_changed Err number of bridges changed
-
-   \return
- */
-
-void
-Vect_chtype_bridges(struct Map_info *Map, struct Map_info *Err,
+*/
+void Vect_chtype_bridges(struct Map_info *Map, struct Map_info *Err,
                     int *lines_changed, int *bridges_changed)
 {
     remove_bridges(Map, 1, Err, lines_changed, bridges_changed);
@@ -93,11 +85,10 @@ Vect_chtype_bridges(struct Map_info *Map, struct Map_info *Err,
 
    List of all lines in chain is created during the cycle.
  */
-void
-remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
-               int *lrm, int *brm)
+void remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
+                    int *lrm, int *brm)
 {
-    int i, type, nlines, line, *bline;
+    int type, nlines, line, *bline;
     int left, right, node1, node2, current_line, next_line, abs_line;
     int bridges_removed = 0;	/* number of removed bridges */
     int lines_removed = 0;	/* number of lines removed */
@@ -219,6 +210,6 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
     if (brm)
 	*brm = bridges_removed;
 
-    G_verbose_message("Removed lines: %d", lines_removed);
-    G_verbose_message("Removed bridges: %d", bridges_removed);
+    G_verbose_message(_("Removed lines: %d"), lines_removed);
+    G_verbose_message(_("Removed bridges: %d"), bridges_removed);
 }

@@ -24,6 +24,8 @@
  
   This function implements random access on level 2.
   
+  Note: Topology must be built at level >= GV_BUILD_BASE
+  
   \param Map pointer to Map_info structure
   \param[out] line_p container used to store line points within
   (pointer to line_pnts struct)
@@ -44,9 +46,14 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
     
     G_debug(4, "V2_read_line_sfa() line = %d", line);
     
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+
     Line = Map->plus.Line[line];
     if (Line == NULL) {
-        G_warning(_("Attempt to read dead feature %d"), line);
+        G_warning(_("Attempt to access dead feature %d"), line);
         return -1;
     }
     
@@ -106,9 +113,11 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
     else
         type = V1_read_line_ogr(Map, line_p, line_c, Line->offset);
 
-    if (type != Line->type)
-        G_fatal_error(_("Unexpected feature type (%d) - should be (%d)"),
-                      type, Line->type);
+    if (type != Line->type) {
+        G_warning(_("Unexpected feature type (%d) - should be (%d)"),
+                  type, Line->type);
+        return -1;
+    }
 
     return type;
 #else
