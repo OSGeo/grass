@@ -122,11 +122,11 @@ int V1_read_next_line_nat(struct Map_info *Map,
   This function implements random access for native format,
   constraints are ignored!
   
+  Note: Topology must be built at level >= GV_BUILD_BASE
+  
   \param Map pointer to Map_info struct 
-  \param[out] Points container used to store line points within
-  (pointer to line_pnts struct)
-  \param[out] Cats container used to store line categories within
-  (pointer to line_cats struct)
+  \param[out] Points container used to store line points within (pointer to line_pnts struct)
+  \param[out] Cats container used to store line categories within (pointer to line_cats struct)
   \param line feature id to read (starts at 1)
   
   \return feature type (GV_POINT, GV_LINE, ...)
@@ -140,10 +140,14 @@ int V2_read_line_nat(struct Map_info *Map,
 
     G_debug(3, "V2_read_line_nat(): line = %d", line);
 
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+    
     Line = Map->plus.Line[line];
-
     if (Line == NULL) {
-	G_warning(_("Attempt to read dead feature %d"), line);
+	G_warning(_("Attempt to access dead feature %d"), line);
 	return -1;
     }
 

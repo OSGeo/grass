@@ -782,6 +782,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     /* set 2D/3D */
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = (with_z != 0);
 
+    Map->level = LEVEL_1;
+    
     if ((*Open_new_array[Map->format][1]) (Map, name, with_z) < 0) {
         if (getenv("GRASS_VECTOR_PGFILE") == NULL)  /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
             Vect_delete(name); /* clean up */
@@ -798,7 +800,6 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     Vect_open_sidx(Map, 2);
 
     Map->open = VECT_OPEN_CODE;
-    Map->level = 1;
     Map->head_only = FALSE;
     Map->support_updated = FALSE;
     Map->plus.built = GV_BUILD_NONE;
