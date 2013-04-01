@@ -128,9 +128,7 @@ int Vect_box_extend(struct bound_box *A, const struct bound_box *B)
  *  \return 1 if any clipping occured
  *  \return 0 otherwise
  */
-
-int
-Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound_box *Box)
+int Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound_box *Box)
 {
     int mod;
 
@@ -192,12 +190,16 @@ Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound
 /*!
    \brief Get bounding box of given feature
 
+   Vector map must be open at topological level and built with level
+   >= GV_BUILD_BASE.
+
    \param Map vector map
    \param line feature id
    \param[out] Box bounding box
 
    \return 1 on success
    \return 0 line is dead
+   \return -1 on error
  */
 int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box *Box)
 {
@@ -206,9 +208,13 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box *Bo
     int type;
     static struct line_pnts *Points = NULL;
 
-    Plus = (struct Plus_head *)&(Map->plus);
+    Plus = (struct Plus_head *) &(Map->plus);
+    if (line < 1 || line > Plus->n_lines) {
+      G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+      return -1;
+    }
+    
     Line = Plus->Line[line];
-
     if (Line == NULL) {		/* dead */
 	Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
 	return 0;
@@ -218,10 +224,11 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box *Bo
 
     /* GV_LINES: retrieve box from spatial index */
     if (type & GV_LINES) {
-	
-	if (dig_find_line_box(Plus, line, Box) == 0)
-	    G_fatal_error(_("Unable to find bbox for feature %d"), line);
-
+	if (dig_find_line_box(Plus, line, Box) == 0) {
+	    G_warning(_("Unable to determine bbox for feature %d"), line);
+            return -1;
+        }
+        
 	if (!Vect_is_3d(Map)) {
 	    Box->T =  PORT_DOUBLE_MAX;
 	    Box->B = -PORT_DOUBLE_MAX;
@@ -249,19 +256,28 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box *Bo
 /*!
    \brief Get bounding box of area
 
+   Vector map must be open at topological level and built with level
+   >= GV_BUILD_AREAS.
+
    \param Map vector map
    \param area area id
    \param[out] Box bounding box
 
    \return 1 on success
    \return 0 area is dead
+   \return -1 on error
  */
 int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_area *Area;
 
-    Plus = (struct Plus_head *)&(Map->plus);
+    Plus = (struct Plus_head *) &(Map->plus);
+    if (area < 1 || area > Plus->n_areas) {
+        G_warning(_("Attempt to access area with invalid id (%d)"), area);
+        return -1;
+    }
+
     Area = Plus->Area[area];
 
     if (Area == NULL) {		/* dead */
@@ -269,8 +285,10 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box *Bo
 	return 0;
     }
 
-    if (dig_find_area_box(Plus, area, Box) == 0)
-	G_fatal_error(_("Unable to get bounding box for area %d"), area);
+    if (dig_find_area_box(Plus, area, Box) == 0) {
+        G_warning(_("Unable to determine bbox for area %d"), area);
+        return -1;
+    }
 
     if (!Vect_is_3d(Map)) {
 	Box->T =  PORT_DOUBLE_MAX;
@@ -283,19 +301,29 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box *Bo
 /*!
    \brief Get bounding box of isle
 
+   Vector map must be open at topological level and built with level
+   >= GV_BUILD_AREAS.
+
    \param Map vector map
    \param isle isle id
    \param[out] Box bounding box
 
    \return 1 on success
    \return 0 isle is dead / bounding box not found
+   \return -1 on error
  */
 int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box *Box)
 {
     struct Plus_head *Plus;
     struct P_isle *Isle;
 
-    Plus = (struct Plus_head *)&(Map->plus);
+    Plus = (struct Plus_head *) &(Map->plus);
+
+    if (isle < 1 || isle > Plus->n_isles) {
+        G_warning(_("Attempt to access area with invalid id (%d)"), isle);
+        return -1;
+    }
+
     Isle = Plus->Isle[isle];
 
     if (Isle == NULL) {		/* dead */
@@ -303,8 +331,10 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box *Bo
 	return 0;
     }
 
-    if (dig_find_isle_box(Plus, isle, Box) == 0)
-	G_fatal_error(_("Could not find isle box"));
+    if (dig_find_isle_box(Plus, isle, Box) == 0) {
+	G_warning(_("Unable to determine bbox for isle %d"), isle);
+        return -1;
+    }
 
     if (!Vect_is_3d(Map)) {
 	Box->T =  PORT_DOUBLE_MAX;
