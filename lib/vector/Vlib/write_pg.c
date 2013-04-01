@@ -13,7 +13,7 @@
    \todo OGR version of V2__add_area_cats_to_cidx_nat
    \todo OGR version of V2__add_line_to_topo_nat
 
-   (C) 2012 by Martin Landa, and the GRASS Development Team
+   (C) 2012-2013 by Martin Landa, and the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -50,9 +50,10 @@ static unsigned char *linestring_to_wkb(int, const struct line_pnts *,
                                         int, int *);
 static unsigned char *polygon_to_wkb(int, const struct line_pnts **, int,
                                      int, int *);
+static char *line_to_wkb(struct Format_info_pg *, const struct line_pnts **,
+                         int, int, int);
 static int write_feature(struct Map_info *, int, int,
-                         const struct line_pnts **, int, int,
-                         int, const struct field_info *);
+                         const struct line_pnts **, int, int, const struct field_info *);
 static char *build_insert_stmt(const struct Format_info_pg *, const char *,
                                int, const struct field_info *);
 static int insert_topo_element(struct Map_info *, int, int, const char *);
@@ -62,14 +63,20 @@ static int update_topo_edge(struct Map_info *, int);
 static int update_topo_face(struct Map_info *, int);
 #endif
 
+static struct line_pnts *Points;
+
 /*!
    \brief Writes feature on level 1 (PostGIS interface)
 
-   Note:
+   Notes for simple feature access:
    - centroids are not supported in PostGIS, pseudotopo holds virtual
    centroids
    - boundaries are not supported in PostGIS, pseudotopo treats polygons
    as boundaries
+
+   Notes for PostGIS Topology access:
+   - centroids are stored as isolated nodes
+   - boundaries are stored as edges
 
    \param Map pointer to Map_info structure
    \param type feature type (GV_POINT, GV_LINE, ...)
@@ -94,9 +101,11 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
             return -1;
     }
 
-    if (!pg_info->toposchema_name) { /* simple features */
+    if (!pg_info->toposchema_name) { /* simple features access */
         return write_line_sf(Map, type, &points, 1, cats);
     }
+
+    /* PostGIS Topology access */
     return write_line_tp(Map, type, FALSE, points, cats);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -105,8 +114,10 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
 }
 
 /*!
-   \brief Writes feature on level 2 (PostGIS interface)
+   \brief Writes feature on topological level (PostGIS interface)
 
+   Calls V2_write_line_sfa() for simple features access.
+   
    \param Map pointer to Map_info structure
    \param type feature type (GV_POINT, GV_LINE, ...)
    \param points pointer to line_pnts structure (feature geometry) 
@@ -127,11 +138,9 @@ off_t V2_write_line_pg(struct Map_info *Map, int type,
     if (!pg_info->toposchema_name) { /* pseudo-topology */
         return V2_write_line_sfa(Map, type, points, cats);
     }
-    else {                          /* PostGIS topology */
-        if (Map->plus.built < GV_BUILD_BASE)
-            Map->plus.built = GV_BUILD_BASE; /* update build level */
-        return write_line_tp(Map, type, FALSE, points, cats);
-    }
+
+    /* PostGIS Topology */
+    return write_line_tp(Map, type, FALSE, points, cats);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -139,8 +148,12 @@ off_t V2_write_line_pg(struct Map_info *Map, int type,
 }
 
 /*!
-   \brief Rewrites feature at the given offset (level 1) (PostGIS interface)
+   \brief Rewrites feature at the given offset (level 1) (PostGIS interface, internal use only)
 
+   Only for simple feature access. PostGIS Topology requires level 2.
+   
+   \todo Use UPDATE statement ?
+   
    \param Map pointer to Map_info structure
    \param offset feature offset
    \param type feature type (GV_POINT, GV_LINE, ...)
@@ -174,7 +187,85 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
 }
 
 /*!
+  \brief Rewrites feature at topological level (PostGIS interface, internal use only)
+
+  Note: Topology must be built at level >= GV_BUILD_BASE
+   
+  \todo Handle also categories
+  \todo Store original geometry in tmp table for restore
+  
+  \param Map pointer to Map_info structure
+  \param type feature type  (GV_POINT, GV_LINE, ...)
+  \param line feature id
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return offset where feature was rewritten
+  \return -1 on error
+*/
+off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_offset,
+			  const struct line_pnts *points, const struct line_cats *cats)
+{
+    G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d offset=%lu",
+            line, type, old_offset);
+#ifdef HAVE_POSTGRES
+    const char *schema_name, *table_name, *keycolumn;
+    char *stmt, *geom_data;
+    
+    struct Format_info_pg *pg_info;
+    
+    geom_data = NULL;
+    stmt = NULL;
+    pg_info = &(Map->fInfo.pg);
+  
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+  
+    if (type != V2_read_line_pg(Map, NULL, NULL, line)) {
+	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
+	return -1;
+    }
+
+    if (pg_info->toposchema_name) { /* PostGIS Topology */
+        schema_name = pg_info->toposchema_name;
+        if (type & GV_POINTS) {
+            table_name = keycolumn = "node";
+        }
+        else {
+            table_name = "edge_data";
+            keycolumn = "edge";
+        }
+    }
+    else { /* simple features access */
+        schema_name = pg_info->schema_name;
+        table_name  = pg_info->table_name;
+        keycolumn   = pg_info->fid_column;
+    }
+    
+    geom_data = line_to_wkb(pg_info, &points, 1, type, Map->head.with_z);
+    G_asprintf(&stmt, "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = %d",
+               schema_name, table_name, geom_data, keycolumn, line);
+    G_free(geom_data);
+
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        G_warning(_("Unable to rewrite feature %d"), line);
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    return old_offset; /* offset not changed */
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
    \brief Deletes feature at the given offset (level 1)
+
+   Only for simple feature access. PostGIS Topology requires level 2.
 
    \param Map pointer Map_info structure
    \param offset feature offset
@@ -204,7 +295,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
 
     fid = pg_info->offset.array[offset];
 
-    G_debug(3, "V1_delete_line_pg(), offset = %lu -> fid = %ld",
+    G_debug(3, "V1_delete_line_pg(): offset = %lu -> fid = %ld",
             (unsigned long)offset, fid);
 
     if (!pg_info->inTransaction) {
@@ -232,7 +323,135 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
 }
 
 /*!
-   \brief Writes node on level 2 (PostGIS Topology interface) - internal use only
+  \brief Deletes feature on topological level (PostGIS interface)
+
+  Note: Topology must be built at level >= GV_BUILD_BASE
+  
+  Calls V2_delete_line_sfa() for simple feature access.
+  
+  \param Map pointer to Map_info structure
+  \param line feature id to be deleted
+  
+  \return 0 on success
+  \return -1 on error
+*/
+int V2_delete_line_pg(struct Map_info *Map, int line)
+{
+#ifdef HAVE_POSTGRES
+    struct Format_info_pg *pg_info;
+
+    pg_info = &(Map->fInfo.pg);
+
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+    
+    if (!pg_info->toposchema_name) { /* pseudo-topology */
+        return V2_delete_line_sfa(Map, line);
+    }
+    else {                          /* PostGIS topology */
+        int type, n_nodes;
+        char stmt[DB_SQL_MAX];
+        const char *table_name, *keycolumn;
+        
+        struct P_line *Line;
+        
+        if (line < 1 || line > Map->plus.n_lines) {
+            G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+            return -1;
+        }
+        
+        Line = Map->plus.Line[line];
+        if (!Line) {
+            G_warning(_("Attempt to access dead feature %d"), line);
+            return -1;
+        }
+            
+        if (Line->type & GV_POINTS) {
+            table_name = keycolumn = "node";
+        }
+        else {
+            table_name = "edge_data";
+            keycolumn = "edge";
+
+            /* first remove references to this edge */
+            /* (1) left next edge */
+            sprintf(stmt, "UPDATE \"%s\".\"%s\" SET abs_next_left_edge = edge_id, "
+                    "next_left_edge = -edge_id WHERE abs_next_left_edge = %ld",
+                    pg_info->toposchema_name, table_name, Line->offset);
+            if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return -1;
+            }
+
+            /* (2) right next edge */
+            sprintf(stmt, "UPDATE \"%s\".\"%s\" SET abs_next_right_edge = edge_id, "
+                    "next_right_edge = edge_id WHERE abs_next_right_edge = %ld",
+                    pg_info->toposchema_name, table_name, Line->offset);
+            if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return -1;
+            }
+
+        }
+       
+        /* read the line */    
+        if (!Points) {
+            Points = Vect_new_line_struct();
+        }
+        type = V2_read_line_pg(Map, Points, NULL, line);
+        if (type < 0)
+            return -1;
+
+        /* delete record from topology table */
+        sprintf(stmt, "DELETE FROM \"%s\".\"%s\" WHERE %s_id = %ld",
+                pg_info->toposchema_name, table_name, keycolumn, Line->offset);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            G_warning(_("Unable to delete feature (%s) %d"), keycolumn,
+                      line);
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+        
+        /* update topology */
+        Vect_reset_updated(Map);
+        if (0 != V2__delete_line_from_topo_nat(Map, line, type, Points, NULL))
+            return -1;
+     
+        /* delete nodes from 'nodes' table */
+        n_nodes = Vect_get_num_updated_nodes(Map);
+        if (n_nodes > 0) {
+            int i, node;
+            
+            for (i = 0; i < n_nodes; i++) {
+                node = Vect_get_updated_node(Map, i);
+                if (node > 0)
+                    continue; /* node was updated, not deleted */
+                
+                node = abs(node);
+                G_debug(3, "delete node %d from 'node' table", node);
+                
+                sprintf(stmt, "DELETE FROM \"%s\".\"node\" WHERE node_id = %d",
+                        pg_info->toposchema_name, node);
+                if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                    G_warning(_("Unable to delete node %d"), node);
+                    Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                    return -1;
+                }
+            }
+        }
+        
+        return 0;
+    }
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return -1;
+#endif
+}
+
+/*!
+   \brief Writes node on topological level (PostGIS Topology interface, internal use only)
 
    \param Map pointer to Map_info structure
    \param points pointer to line_pnts structure
@@ -258,7 +477,7 @@ off_t V2__write_node_pg(struct Map_info *Map, const struct line_pnts *points)
 }
 
 /*!
-   \brief Writes area on level 2 (PostGIS Simple Features interface) - internal use only
+   \brief Writes area on topological level (PostGIS Simple Features interface, internal use only)
 
    \param Map pointer to Map_info structure
    \param type feature type (GV_POINT, GV_LINE, ...)
@@ -408,8 +627,7 @@ off_t write_line_sf(struct Map_info *Map, int type,
     }
 
     /* write feature's geometry and fid */
-    if (-1 == write_feature(Map, -1, type, points, nparts,
-                            Vect_is_3d(Map) ? WITH_Z : WITHOUT_Z, cat, Fi)) {
+    if (-1 == write_feature(Map, -1, type, points, nparts, cat, Fi)) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
@@ -461,7 +679,7 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
     
     /* check type for nodes */
     if (is_node && type != GV_POINT) {
-        G_warning(_("Invalid type (%d) for nodes"), type);
+        G_warning(_("Invalid feature type (%d) for nodes"), type);
         return -1;
     }
 
@@ -510,15 +728,14 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
         Vect_cat_get(cats, 1, &cat);
     }
 
-    /* update GRASS-like topology before writing feature */
+    /* update GRASS topology before writing PostGIS feature */
     if (is_node) {
         dig_add_node(plus, points->x[0], points->y[0], points->z[0]);
     }
     else {
+        int n_nodes;
         off_t offset;
-        struct bound_box box;
         
-        dig_line_box(points, &box);
         /* better is probably to check nextval directly */
         if (type & GV_POINTS) {
             offset = Vect_get_num_primitives(Map, GV_POINTS) + 1; /* next */
@@ -527,26 +744,49 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
         else { /* LINES */
             offset = Vect_get_num_primitives(Map, GV_LINES) + 1; /* next */
         }
-        line = dig_add_line(plus, type, points, &box, offset);
-        G_debug(3, "  line added to topo with id = %d", line);
         
-        if (line == 1)
-            Vect_box_copy(&(plus->box), &box);
-        else
-            Vect_box_extend(&(plus->box), &box);
+        Vect_reset_updated(Map);
+        line = V2__add_line_to_topo_nat(Map, offset, type, points, NULL, /* TODO: handle categories */
+                                        -1, NULL);
+        
+        /* insert new nodes into 'nodes' table */
+        n_nodes = Vect_get_num_updated_nodes(Map);
+        if (n_nodes > 0) {
+            int i, node;
+            double x, y, z;
+            
+            if (!Points)
+                Points = Vect_new_line_struct();
+            
+            for (i = 0; i < n_nodes; i++) {
+                node = Vect_get_updated_node(Map, i);
+                G_debug(3, "  new node: %d", node);
+
+                Vect_get_node_coor(Map, node, &x, &y, &z);
+                Vect_reset_line(Points);
+                Vect_append_point(Points, x, y, z);
+                
+                write_feature(Map, -1, GV_POINT, (const struct line_pnts **) &Points, 1,
+                              -1, NULL);
+            }
+        }
     }
     
     /* write new feature to PostGIS
        - feature table for simple features
        - feature table and topo schema for topological access 
     */
-    if (-1 == write_feature(Map, line, type, &points, 1,
-                            Vect_is_3d(Map) ? WITH_Z : WITHOUT_Z,
-                            cat, Fi)) {
+    if (-1 == write_feature(Map, line, type, &points, 1, cat, Fi)) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
 
+    /* update PostGIS-line topo */
+    if (plus->built >= GV_BUILD_BASE && (type & GV_LINES))
+        update_topo_edge(Map, line);
+    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY)
+        update_topo_face(Map, line);
+    
     return 0;
 }
 
@@ -581,7 +821,7 @@ char *binary_to_hex(int nbytes, const unsigned char *wkb_data)
 }
 
 /*!
-   \bried Write point into WKB buffer
+   \brief Write point into WKB buffer
 
    See OGRPoint::exportToWkb from GDAL/OGR library
 
@@ -823,50 +1063,34 @@ unsigned char *polygon_to_wkb(int byte_order,
 }
 
 /*!
-   \brief Insert feature into table
+  \brief Write feature to WKB buffer
 
-   \param Map pointer to Map_info structure
-   \param line feature id (topo access only)
-   \param type feature type (GV_POINT, GV_LINE, ...)
-   \param points pointer to line_pnts struct
-   \param nparts number of parts (rings for polygon)
-   \param with_z WITH_Z for 3D data
-   \param cat category number (-1 for no category)
-   \param Fi pointer to field_info (attributes to copy, NULL for no attributes)
+  Allocated string buffer should be freed by G_free().
 
-   \return -1 on error
-   \retirn 0 on success
- */
-int write_feature(struct Map_info *Map, int line, int type,
-                  const struct line_pnts **points, int nparts, int with_z,
-                  int cat, const struct field_info *Fi)
+  \param pg_info pointer to Format_info_pg struct
+  \param points array of geometries which form feature
+  \param nparts number of geometries in array
+  \param type feature type (GV_POINT, GV_LINE, ...)
+  \param with_z WITH_Z for 3D data
+
+  \return allocated string buffer
+  \return NULL on error
+*/
+char *line_to_wkb(struct Format_info_pg *pg_info,
+                  const struct line_pnts **points, int nparts, int type, int with_z)
 {
     int byte_order, nbytes, nsize;
     unsigned int sf_type;
+    
     unsigned char *wkb_data;
-    char *stmt, *text_data, *text_data_p, *hex_data;
-
-    struct Format_info_pg *pg_info;
+    char *text_data, *text_data_p, *hex_data;
     
-    pg_info = &(Map->fInfo.pg);
-    
-    if (with_z && pg_info->coor_dim != 3) {
-        G_warning(_("Trying to insert 3D data into feature table "
-                    "which store 2D data only"));
-        return -1;
-    }
-    if (!with_z && pg_info->coor_dim != 2) {
-        G_warning(_("Trying to insert 2D data into feature table "
-                    "which store 3D data only"));
-        return -1;
-    }
-
     byte_order = dig__byte_order_out();
 
     /* get wkb data */
     nbytes = -1;
     wkb_data = NULL;
-    if (type == GV_POINT || type == GV_CENTROID)
+    if (type & GV_POINTS) /* point or centroid */
         wkb_data = point_to_wkb(byte_order, points[0], with_z, &nbytes);
     else if (type == GV_LINE)
         wkb_data = linestring_to_wkb(byte_order, points[0], with_z, &nbytes);
@@ -884,7 +1108,7 @@ int write_feature(struct Map_info *Map, int line, int type,
     
     if (!wkb_data || nbytes < 1) {
         G_warning(_("Unsupported feature type %d"), type);
-        return -1;
+        return NULL;
     }
 
     /* When converting to hex, each byte takes 2 hex characters. In
@@ -936,24 +1160,74 @@ int write_feature(struct Map_info *Map, int line, int type,
     strcpy(text_data_p, hex_data);
     G_free(hex_data);
 
+    return text_data;
+}
+
+/*!
+   \brief Insert feature into table
+
+   \param Map pointer to Map_info structure
+   \param line feature id (topo access only)
+   \param type feature type (GV_POINT, GV_LINE, ...)
+   \param points pointer to line_pnts struct
+   \param nparts number of parts (rings for polygon)
+   \param cat category number (-1 for no category)
+   \param Fi pointer to field_info (attributes to copy, NULL for no attributes)
+
+   \return -1 on error
+   \retirn 0 on success
+ */
+int write_feature(struct Map_info *Map, int line, int type,
+                  const struct line_pnts **points, int nparts,
+                  int cat, const struct field_info *Fi)
+{
+    int with_z;
+    char *stmt, *geom_data;
+
+    struct Format_info_pg *pg_info;
+    
+    pg_info = &(Map->fInfo.pg);
+    with_z  = Map->head.with_z;
+    
+    if (with_z && pg_info->coor_dim != 3) {
+        G_warning(_("Trying to insert 3D data into feature table "
+                    "which store 2D data only"));
+        return -1;
+    }
+    if (!with_z && pg_info->coor_dim != 2) {
+        G_warning(_("Trying to insert 2D data into feature table "
+                    "which store 3D data only"));
+        return -1;
+    }
+
+    /* build WKB geometry from line_pnts structures */
+    geom_data = line_to_wkb(pg_info, points, nparts, type, with_z);
+    if (!geom_data)
+        return -1;
+    
     /* build INSERT statement
        simple feature geometry + attributes
     */
-    stmt = build_insert_stmt(pg_info, text_data, cat, Fi);
+    stmt = build_insert_stmt(pg_info, geom_data, cat, Fi);
     G_debug(2, "SQL: %s", stmt);
 
     if (!pg_info->inTransaction) {
         /* start transaction */
         pg_info->inTransaction = TRUE;
-        if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
+        if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1) {
+            G_free(geom_data);
+            
             return -1;
+        }
     }
 
     /* stmt can NULL when writing PostGIS topology with no attributes
      * attached */
     if (stmt && Vect__execute_pg(pg_info->conn, stmt) == -1) {
         /* rollback transaction */
-        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        Vect__execute_pg(pg_info->conn, "ROLLBACK"); 
+        G_free(geom_data);
+        
         return -1;
     }
     G_free(stmt);
@@ -961,25 +1235,14 @@ int write_feature(struct Map_info *Map, int line, int type,
     /* write feature in PostGIS topology schema if enabled */
     if (pg_info->toposchema_name) {
         /* insert feature into topology schema (node or edge) */
-        if (insert_topo_element(Map, line, type, text_data) != 0) {
+        if (insert_topo_element(Map, line, type, geom_data) != 0) {
             G_warning(_("Unable to insert topological element into PostGIS Topology schema"));
+            G_free(geom_data);
+            
             return -1;
         }
-        
-        /* update GRASS-like topo */
-        if (line > 0) /* skip nodes */
-            V2__add_line_to_topo_nat(Map, line, points[0], NULL, /* TODO: cats */
-                                     delete_face);
-        
-        /* update PostGIS-line topo */
-        if (type & GV_LINES)
-            update_topo_edge(Map, line);
-        if (type == GV_BOUNDARY)
-            update_topo_face(Map, line);
     }
-
-    G_free(wkb_data);
-    G_free(text_data);
+    G_free(geom_data);
     
     return 0;
 }
@@ -1499,13 +1762,13 @@ int update_topo_edge(struct Map_info *Map, int line)
 
     pg_info = &(Map->fInfo.pg);
     
-    if (line < 1 || line > Vect_get_num_lines(Map)) {
-        G_warning(_("Inconsistency in topology: invalid feature id"));
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access non-existing feature %d"), line);
         return -1;
     }
     Line = Map->plus.Line[line];
     if (!Line) {
-        G_warning(_("Inconsistency in topology: dead line found"));
+        G_warning(_("Attempt to access dead feature %d"), line);
         return -1;
     }
     
@@ -1531,8 +1794,7 @@ int update_topo_edge(struct Map_info *Map, int line)
                 nle = next_edge; /* update next left edge for end node */
         }
         else {
-            G_warning(_("Inconsistency in topology detected: "
-                        "unable to determine next left/right edge."));
+            G_warning(_("Unable to determine next left/right edge"));
             return -1;
         }
     }
@@ -1597,13 +1859,13 @@ int update_topo_face(struct Map_info *Map, int line)
     
     pg_info = &(Map->fInfo.pg);
     
-    if (line < 1 || line > Vect_get_num_lines(Map)) {
-        G_warning(_("Inconsistency in topology detected: invalid feature id"));
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access non-existing feature %d"), line);
         return -1;
     }
     Line = Map->plus.Line[line];
     if (!Line) {
-        G_warning(_("Inconsistency in topology detected: dead line found"));
+        G_warning(_("Attempt to access dead feature %d"), line);
         return -1;
     }
     
@@ -1666,5 +1928,4 @@ int update_topo_face(struct Map_info *Map, int line)
     
     return 0;
 }
-
 #endif

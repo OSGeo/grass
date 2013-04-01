@@ -286,6 +286,22 @@ int V1_read_line_pg(struct Map_info *Map,
 #endif
 }
 
+/*!
+   \brief Read feature from PostGIS layer on topological level
+
+   This function implements random access on level 2.
+
+   Note: Topology must be built at level >= GV_BUILD_BASE
+    
+   \param Map pointer to Map_info structure 
+   \param[out] line_p container used to store line points within (pointer line_pnts struct)
+   \param[out] line_c container used to store line categories within (pointer line_cats struct)
+   \param line feature id to read
+
+   \return feature type
+   \return 0 dead feature
+   \return -1 on error
+ */
 int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
                     struct line_cats *line_c, int line)
 {
@@ -296,10 +312,16 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     struct P_line *Line;
 
     pg_info = &(Map->fInfo.pg);
+    
+    if (line < 1 || line > Map->plus.n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+    
     Line = Map->plus.Line[line];
     if (Line == NULL) {
-        G_warning(_("Attempt to read dead feature %d"), line);
-        return -1;
+        G_warning(_("Attempt to access dead feature %d"), line);
+        return 0;
     }
     
     G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %lu",
@@ -330,7 +352,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     get_feature(pg_info, fid, Line->type);
     
     if (pg_info->cache.sf_type == SF_NONE) {
-        G_warning(_("Feature %d without geometry skipped"), Line->offset);
+        G_warning(_("Feature %d without geometry skipped"), line);
         return -1;
     }
     
@@ -339,7 +361,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         return type;
     
     if (Line->type == GV_BOUNDARY && type == GV_LINE)
-        type = GV_BOUNDARY;
+        type = GV_BOUNDARY; /* feature is read as GV_LINE (linestring), force GV_BOUNDARY */
     
     if (line_p)
         Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);

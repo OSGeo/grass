@@ -386,7 +386,14 @@ int V2_open_new_pg(struct Map_info *Map, int type)
     }
     
     /* create new topology schema (if PostGIS topology support is enabled) */
-    if(pg_info->toposchema_name) {
+    if (pg_info->toposchema_name) {
+        /* force topological level */
+        Map->level = LEVEL_2;
+        Map->plus.built = GV_BUILD_BASE;
+
+        /* track updated features, used in V2__add_line_to_topo_nat() */
+        Vect_set_updated(Map, TRUE);
+        
         if (create_topo_schema(pg_info, Vect_is_3d(Map)) == -1) {
             G_warning(_("Unable to create new PostGIS topology schema"));
             return -1;
@@ -692,7 +699,11 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     /* prepare CREATE TABLE statement */
     sprintf(stmt, "CREATE TABLE \"%s\".\"%s\" (%s SERIAL",
             pg_info->schema_name, pg_info->table_name, pg_info->fid_column);
-
+    
+    /* add primary key ? */
+    if (primary_key)
+        strcat(stmt, " PRIMARY KEY");
+    
     if (Fi) {
         /* append attributes */
         int col, ncols, sqltype, length;
@@ -783,18 +794,6 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
-    }
-
-    /* add primary key ? */
-    if (primary_key) {
-        sprintf(stmt, "ALTER TABLE \"%s\".\"%s\" ADD PRIMARY KEY (%s)",
-                pg_info->schema_name, pg_info->table_name,
-                pg_info->fid_column);
-        G_debug(2, "SQL: %s", stmt);
-        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-            Vect__execute_pg(pg_info->conn, "ROLLBACK");
-            return -1;
-        }
     }
 
     /* determine geometry type (string) */
