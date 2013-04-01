@@ -384,10 +384,10 @@ int main(int argc, char *argv[])
     CCats = Vect_new_cats_struct();
     
     /* open tmp vector for buffers, needed for cleaning */
-    if (0 > Vect_open_tmp_new(&Buf, NULL, 0)) {
+    if (0 > Vect_open_tmp_new(&Buf, NULL, WITHOUT_Z)) {
         G_fatal_error(_("Unable to create vector map"));
     }
-    Vect_build_partial(&Buf, GV_BUILD_BASE);
+    Vect_build_partial(&Buf, GV_BUILD_BASE); /* switch to level 2 */
 
     /* check and load attribute column data */
     if (bufcol_opt->answer) {
@@ -829,8 +829,10 @@ int main(int argc, char *argv[])
 
 		Vect_get_line_areas(&Out, line, &side[0], &side[1]);
 
-		if (!side[0] && !side[1])
+		if (!side[0] && !side[1]) {
+                    G_debug(3, " delete line %d", line);
 		    Vect_delete_line(&Out, line);
+                }
 	    }
 	}
 
@@ -855,7 +857,7 @@ int main(int argc, char *argv[])
 
 	ret = Vect_get_point_in_area(&Out, area, &x, &y);
 	if (ret < 0) {
-	    G_warning(_("Cannot calculate area centroid"));
+            G_warning(_("Unable to calculate centroid for area %d"), area);
 	    continue;
 	}
 
