@@ -1174,7 +1174,7 @@ struct Plus_head
     */
     struct {
 	/*!
-	  \brief Used internaly in diglib to know if list is maintained
+	  \brief Indicates if the list of updated features is maintained
 	*/
 	int do_uplist;
 	
@@ -1220,7 +1220,7 @@ struct Plus_head
   Vector map info
 
   Maintains all information about an individual open vector map. The
-structure must be passed to the mosy vector library routines.
+  structure must be passed to the most vector library routines. 
 */
 struct Map_info
 {

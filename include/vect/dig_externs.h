@@ -121,9 +121,9 @@ int dig_isle_get_box(struct Plus_head *, plus_t, struct bound_box *);
 
 /* plus_line.c */
 int dig_add_line(struct Plus_head *, int, const struct line_pnts *,
-		 struct bound_box *, off_t);
-int dig_restore_line(struct Plus_head *, int, int, struct line_pnts *,
-		     struct bound_box *, off_t);
+		 const struct bound_box *, off_t);
+int dig_restore_line(struct Plus_head *, int, int, const struct line_pnts *,
+		     const struct bound_box *, off_t);
 int dig_del_line(struct Plus_head *, int, double, double, double);
 plus_t dig_line_get_area(struct Plus_head *, plus_t, int);
 int dig_line_set_area(struct Plus_head *, plus_t, int, plus_t);
@@ -250,15 +250,11 @@ int dig_type_to_store(int);
 int dig_type_from_store(int);
 
 /* update.c */
-/* unused */
 /* list of updated */
-void dig_line_reset_updated(struct Plus_head *Plus);
-void dig_line_add_updated(struct Plus_head *Plus, int line);
-void dig_node_reset_updated(struct Plus_head *Plus);
-void dig_node_add_updated(struct Plus_head *Plus, int node);
-
-
-
+void dig_line_reset_updated(struct Plus_head *);
+void dig_line_add_updated(struct Plus_head *, int);
+void dig_node_reset_updated(struct Plus_head *);
+void dig_node_add_updated(struct Plus_head *, int);
 
 /*********************************************************************
  *		    unused/removed functions
