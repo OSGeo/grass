@@ -1,8 +1,15 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.out.ogr</em> exports GRASS attribute tables into various formats as
+<em>db.out.ogr</em> exports GRASS GIS attribute tables into various formats as
 supported by the OGR driver on the local system (CSV, DBF,
 PostgreSQL, SQLite, MySQL, ODBC, etc.).
+<p>
+The <em>dsn</em> parameter is commonly the output file name (if the path is not
+defined, too, the module will attempt write to the current directory). In case
+of a database connection as output, the connection string has to be specified.
+<p>
+The <em>layer</em> parameter is needed if the attribute table to be exported
+is linked as non-default layer to a vector map.
 
 <h2>EXAMPLES</h2>
 
