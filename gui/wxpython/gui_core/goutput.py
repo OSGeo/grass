@@ -38,7 +38,6 @@ from core.gconsole   import GConsole, \
 from gui_core.prompt import GPromptSTC
 from core.settings   import UserSettings
 from gui_core.widgets import SearchModuleWidget
-from core.modulesdata import ModulesData
 
 
 GC_EMPTY = 0
@@ -54,19 +53,19 @@ gGcContentChanged, EVT_GC_CONTENT_CHANGED = NewEvent()
 class GConsoleWindow(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
-    def __init__(self, parent, gconsole, margin = False,
+    def __init__(self, parent, gconsole, menuModel = None, margin = False,
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  gcstyle = GC_EMPTY,
                  **kwargs):
         """!
         @param parent gui parent
+        @param gconsole console logic
+        @param menuModel tree model of modules (from menu)
         @param margin use margin in output pane (GStc)
         @param style wx.SplitterWindow style
         @param gcstyle GConsole style
         (GC_EMPTY, GC_PROMPT to show command prompt,
         GC_SEARCH to show search widget)
-        @param ignoredCmdPattern regular expression specifying commads
-        to be ignored (e.g. @c '^d\..*' for display commands)
         """
         wx.SplitterWindow.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
         self.SetName("GConsole")
@@ -77,6 +76,7 @@ class GConsoleWindow(wx.SplitterWindow):
         # initialize variables
         self.parent = parent # GMFrame | CmdPanel | ?
         self._gconsole = gconsole
+        self._menuModel = menuModel
 
         self._gcstyle = gcstyle
         self.lineWidth       = 80
@@ -115,13 +115,10 @@ class GConsoleWindow(wx.SplitterWindow):
                                wrap = None)
         self.cmdOutput.Bind(stc.EVT_STC_CHANGE, self.OnStcChanged)
 
-        # information about available modules
-        modulesData = ModulesData()
-
         # search & command prompt
         # move to the if below
         # search depends on cmd prompt
-        self.cmdPrompt = GPromptSTC(parent = self, modulesData = modulesData)
+        self.cmdPrompt = GPromptSTC(parent=self, menuModel=self._menuModel)
         self.cmdPrompt.promptRunCmd.connect(lambda cmd:
                                             self._gconsole.RunCmd(command=cmd))
         self.cmdPrompt.showNotification.connect(self.showNotification)
@@ -137,7 +134,7 @@ class GConsoleWindow(wx.SplitterWindow):
                                                  label = self.infoCollapseLabelExp,
                                                  style = wx.CP_DEFAULT_STYLE |
                                                  wx.CP_NO_TLW_RESIZE | wx.EXPAND)
-            self.MakeSearchPaneContent(self.searchPane.GetPane(), modulesData)
+            self.MakeSearchPaneContent(self.searchPane.GetPane(), self._menuModel)
             self.searchPane.Collapse(True)
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
             self.search.moduleSelected.connect(lambda name:
@@ -256,12 +253,12 @@ class GConsoleWindow(wx.SplitterWindow):
         self.SetAutoLayout(True)
         self.Layout()
 
-    def MakeSearchPaneContent(self, pane, modulesData):
+    def MakeSearchPaneContent(self, pane, model):
         """!Create search pane"""
         border = wx.BoxSizer(wx.VERTICAL)
         
         self.search = SearchModuleWidget(parent = pane,
-                                         modulesData = modulesData)
+                                         model = model)
 
         self.search.showNotification.connect(self.showNotification)
 
@@ -722,8 +719,11 @@ class GConsoleFrame(wx.Frame):
 
         panel = wx.Panel(self, id = wx.ID_ANY)
         
+        from lmgr.menudata import LayerManagerMenuData
+        menuTreeBuilder = LayerManagerMenuData()
         self.gconsole = GConsole(guiparent=self)
         self.goutput = GConsoleWindow(parent = panel, gconsole = self.gconsole,
+                                      menuModel=menuTreeBuilder.GetModel(),
                                       gcstyle = GC_SEARCH | GC_PROMPT)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)

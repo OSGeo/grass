@@ -103,6 +103,7 @@ class GMFrame(wx.Frame):
         
         self._giface = LayerManagerGrassInterface(self)
         
+        self._menuTreeBuilder = LayerManagerMenuData()
         self._auimgr = wx.aui.AuiManager(self)
         
         
@@ -232,7 +233,7 @@ class GMFrame(wx.Frame):
         
     def _createMenuBar(self):
         """!Creates menu bar"""
-        self.menubar = Menu(parent = self, data = LayerManagerMenuData())
+        self.menubar = Menu(parent=self, model=self._menuTreeBuilder.GetModel(separators=True))
         self.SetMenuBar(self.menubar)
         self.menucmd = self.menubar.GetCmd()
         
@@ -276,6 +277,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(guiparent = self, giface = self._giface,
                                   ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
+                                      menuModel=self._menuTreeBuilder.GetModel(),
                                       gcstyle = GC_SEARCH | GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
 
@@ -313,7 +315,8 @@ class GMFrame(wx.Frame):
         
         # create 'search module' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'):
-            self.search = SearchModuleWindow(parent = self)
+            self.search = SearchModuleWindow(parent = self, model=self._menuTreeBuilder.GetModel())
+            self.search.showNotification.connect(lambda message: self.SetStatusText(message))
             self.notebook.AddPage(page = self.search, text = _("Search module"), name = 'search')
         else:
             self.search = None
@@ -691,12 +694,11 @@ class GMFrame(wx.Frame):
 
         Return command as a list"""
         layer = None
-        
         if event:
             cmd = self.menucmd[event.GetId()]
         else:
             cmd = ''
-        
+
         try:
             cmdlist = cmd.split(' ')
         except: # already list?
@@ -725,13 +727,13 @@ class GMFrame(wx.Frame):
 
     def RunMenuCmd(self, event = None, cmd = []):
         """!Run command selected from menu"""
-        if event:
+        if event:       
             cmd = self.GetMenuCmd(event)
         self._gconsole.RunCmd(cmd)
 
     def OnMenuCmd(self, event = None, cmd = []):
         """!Parse command selected from menu"""
-        if event:
+        if event:       
             cmd = self.GetMenuCmd(event)
         GUI(parent = self).ParseCommand(cmd)
         

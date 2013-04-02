@@ -42,14 +42,14 @@ class GPrompt(object):
 
     See subclass GPromptPopUp and GPromptSTC.
     """
-    def __init__(self, parent, modulesData, updateCmdHistory):
+    def __init__(self, parent, menuModel, updateCmdHistory):
         self.parent = parent                 # GConsole
         self.panel  = self.parent.GetPanel()
 
         self.promptRunCmd = Signal('GPrompt.promptRunCmd')
 
         # probably only subclasses need this
-        self.modulesData = modulesData
+        self._menuModel = menuModel
 
         self.mapList    = self._getListOfMaps()
         self.mapsetList = utils.ListOfMapsets()
@@ -121,29 +121,6 @@ class GPrompt(object):
         self.OnCmdErase(None)
         self.ShowStatusText('')
         
-    def GetPanel(self):
-        """!Get main widget panel"""
-        return self.panel
-
-    def GetInput(self):
-        """!Get main prompt widget"""
-        return self.input
-    
-    def SetFilter(self, data, module = True):
-        """!Set filter
-
-        @param data data dict
-        @param module True to filter modules, otherwise data
-        """
-        if module:
-            # TODO: remove this and module param
-            raise NotImplementedError("Replace by call to common ModulesData object (SetFilter with module=True)")
-        else:
-            if data:
-                self.dataList = data
-            else:
-                self.dataList = self._getListOfMaps()
-        
     def GetCommands(self):
         """!Get list of launched commands"""
         return self.commands
@@ -155,9 +132,9 @@ class GPrompt(object):
 
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     """!Styled wxGUI prompt with autocomplete and calltips"""    
-    def __init__(self, parent, modulesData, updateCmdHistory = True, margin = False):
+    def __init__(self, parent, menuModel, updateCmdHistory = True, margin = False):
         GPrompt.__init__(self, parent = parent, 
-                         modulesData = modulesData, updateCmdHistory = updateCmdHistory)
+                         menuModel = menuModel, updateCmdHistory = updateCmdHistory)
         wx.stc.StyledTextCtrl.__init__(self, self.panel, id = wx.ID_ANY)
         
         #
@@ -218,7 +195,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if self.toComplete['entity'] == 'command':
             item = self.toComplete['cmd'].rpartition('.')[0] + '.' + self.autoCompList[event.GetIndex()] 
             try:
-                desc = self.modulesData.GetCommandDesc(item)
+                nodes = self._menuModel.SearchNodes(key='command', value=item)
+                desc = ''
+                if nodes:
+                    desc = nodes[0].data['description']
             except KeyError:
                 desc = '' 
             self.ShowStatusText(desc)
@@ -406,9 +386,14 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.InsertText(pos, '.')
             self.CharRight()
             self.toComplete = self.EntityToComplete()
+            if self.toComplete is None:
+                return
             try:
                 if self.toComplete['entity'] == 'command': 
-                    self.autoCompList = self.modulesData.GetDictOfModules()[entry.strip()]
+                    for command in globalvar.grassCmd:
+                        if command.find(self.toComplete['cmd']) == 0:
+                            dotNumber = list(self.toComplete['cmd']).count('.') 
+                            self.autoCompList.append(command.split('.',dotNumber)[-1])
             except (KeyError, TypeError):
                 return
             self.ShowList()
@@ -559,7 +544,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             
             try:
                 txt = self.cmdbuffer[self.cmdindex]
-            except:
+            except KeyError:
                 txt = ''
             
             # clear current line and insert command history    

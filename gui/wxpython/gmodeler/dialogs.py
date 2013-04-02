@@ -31,7 +31,6 @@ import wx.lib.mixins.listctrl as listmix
 
 from core                 import globalvar
 from core                 import utils
-from core.modulesdata     import ModulesData
 from gui_core.widgets     import SearchModuleWidget, SimpleValidator
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import SimpleDialog, MapLayersDialogForModeler
@@ -39,6 +38,7 @@ from gui_core.prompt      import GPromptSTC
 from gui_core.forms       import CmdPanel
 from gui_core.gselect     import Select, ElementSelect
 from gmodeler.model       import *
+from lmgr.menudata        import LayerManagerMenuData
 
 from grass.script import task as gtask
 
@@ -138,7 +138,7 @@ class ModelDataDialog(SimpleDialog):
             self.Destroy()
 
 class ModelSearchDialog(wx.Dialog):
-    def __init__(self, parent, id = wx.ID_ANY, title = _("Add new GRASS module to the model"),
+    def __init__(self, parent, title = _("Add new GRASS module to the model"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """!Graphical modeler module search window
         
@@ -149,7 +149,7 @@ class ModelSearchDialog(wx.Dialog):
         """
         self.parent = parent
         
-        wx.Dialog.__init__(self, parent = parent, id = id, title = title, **kwargs)
+        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, **kwargs)
         self.SetName("ModelerDialog")
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
@@ -158,12 +158,14 @@ class ModelSearchDialog(wx.Dialog):
         
         self.cmdBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                    label=" %s " % _("Command"))
-
-        modulesData = ModulesData()
-        self.cmd_prompt = GPromptSTC(parent = self, modulesData = modulesData, updateCmdHistory = False)
+        
+        # menu data for search widget and prompt
+        menuModel = LayerManagerMenuData()
+        
+        self.cmd_prompt = GPromptSTC(parent = self, menuModel = menuModel.GetModel(), updateCmdHistory = False)
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
         self.search = SearchModuleWidget(parent = self.panel,
-                                         modulesData = modulesData,
+                                         model = menuModel.GetModel(),
                                          showTip = True)
         self.search.moduleSelected.connect(lambda name:
                                            self.cmd_prompt.SetTextAndFocus(name + ' '))
@@ -172,10 +174,7 @@ class ModelSearchDialog(wx.Dialog):
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
         self.btnOk     = wx.Button(self.panel, wx.ID_OK)
         self.btnOk.SetDefault()
-        self.btnOk.Enable(False)
 
-        self.cmd_prompt.Bind(wx.EVT_KEY_UP, self.OnText)
-        self.search.searchChoice.Bind(wx.EVT_CHOICE, self.OnText)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btnOk)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
         
@@ -256,31 +255,10 @@ class ModelSearchDialog(wx.Dialog):
         """Cancel pressed, close window"""
         self.Hide()
         
-    def OnText(self, event):
-        """!Text in prompt changed"""
-        if self.cmd_prompt.AutoCompActive():
-            event.Skip()
-            return
-        
-        if isinstance(event, wx.KeyEvent):
-            entry = self.cmd_prompt.GetTextLeft()
-        elif isinstance(event, wx.stc.StyledTextEvent):
-            entry = event.GetText()
-        else:
-            entry = event.GetString()
-        
-        if entry:
-            self.btnOk.Enable()
-        else:
-            self.btnOk.Enable(False)
-            
-        event.Skip()
-        
     def Reset(self):
         """!Reset dialog"""
         self.search.Reset()
         self.cmd_prompt.OnCmdErase(None)
-        self.btnOk.Enable(False)
         self.cmd_prompt.SetFocus()
 
 class ModelRelationDialog(wx.Dialog):
