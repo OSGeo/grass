@@ -32,6 +32,10 @@
 #% required : yes
 #%end
 
+#%option G_OPT_V_FIELD
+#% required: no
+#%end
+
 #%option
 #% key: format
 #% type: string
@@ -55,6 +59,7 @@ from grass.script import core as grass
 
 def main():
     input = options['input']
+    layer = options['layer']
     format = options['format']
     dsn = options['dsn']
     table = options['table']
@@ -73,12 +78,13 @@ def main():
 	grass.fatal(_("File <%s> already exists") % dbffile)
 
     if olayer:
-	if grass.run_command('v.out.ogr', quiet = True, input = input, dsn = dsn,
-			     format = format, type = 'point', olayer = olayer) != 0:
+	if grass.run_command('v.out.ogr', flags = 'c', quiet = True, input = input, layer = layer,
+			     dsn = dsn,
+			     format = format, type = 'point,line,area', olayer = olayer) != 0:
 	    sys.exit(1)
     else:
-	if grass.run_command('v.out.ogr', quiet = True, input = input, dsn = dsn,
-			     format = format, type = 'point') != 0:
+	if grass.run_command('v.out.ogr', flags = 'c', quiet = True, input = input, layer = layer,
+			     dsn = dsn, format = format, type = 'point,line,area') != 0:
 	    sys.exit(1)
 
     if format == "ESRI_Shapefile":
