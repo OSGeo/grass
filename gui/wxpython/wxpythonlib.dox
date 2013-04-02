@@ -71,12 +71,11 @@ available in GRASS 5 and GRASS 6.
  - goutput::GStdout
  - goutput::GStderr
  - goutput::GConsole
-- core::menudata
- - menudata::MenuData
+- core::menutree
+ - menutree::MenuTreeModelBuilder
 - core::modulesdata
  - modulesdata::ModulesData
 - core::render
- - render::Layer
  - render::Layer
  - render::MapLayer
  - render::Overlay
@@ -152,7 +151,6 @@ available in GRASS 5 and GRASS 6.
 - gui_core::menu
  - menu::Menu
  - menu::SearchModuleWindow
- - menu::MenuTree
 - gui_core::preferences
  - preferences::PreferencesBaseDialog
  - preferences::PreferencesDialog
@@ -161,8 +159,12 @@ available in GRASS 5 and GRASS 6.
 - gui_core::prompt
  - prompt::GPrompt
  - prompt::GPromptSTC
+- gui_core::query
+ - query::QueryDialog
 - gui_core::toolbars
  - toolbars::BaseToolbar
+- gui_core::treeview
+ - treeview::TreeView
 - gui_core::widgets
  - widgets::ScrolledPanel
  - widgets::NTCValidator
@@ -175,7 +177,6 @@ available in GRASS 5 and GRASS 6.
  - widgets::IntegerValidator
  - widgets::FloatValidator
  - widgets::NTCValidator
- - widgets::ItemTree
  - widgets::SearchModuleWidget
 
 \subsection lmgr Layer Manager

@@ -100,8 +100,7 @@ class KrigingPanel(wx.Panel):
         
         ## Command output. From menuform module, cmdPanel class
         self._gconsole = gconsole.GConsole(guiparent = self)
-        self.goutput = goutput.GConsoleWindow(parent = self, gconsole = self._gconsole, margin = False,
-                                              gcstyle = goutput.GC_SEARCH | goutput.GC_PROMPT)
+        self.goutput = goutput.GConsoleWindow(parent = self, gconsole = self._gconsole, margin = False)
         self.goutputId = self.RPackagesBook.GetPageCount()
         self.outpage = self.RPackagesBook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         self._gconsole.Bind(gconsole.EVT_CMD_RUN,

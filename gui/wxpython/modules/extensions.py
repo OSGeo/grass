@@ -5,7 +5,7 @@
 
 Classes:
  - extensions::InstallExtensionWindow
- - extensions::ExtensionTree
+ - extensions::ExtensionTreeModelBuilder
  - extensions::UninstallExtensionWindow
  - extensions::CheckListExtension
 
@@ -15,114 +15,23 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Anna Petrasova <kratochanna gmail.com>
 """
 
 import os
 import sys
 
 import wx
-try:
-    import wx.lib.agw.customtreectrl as CT
-except ImportError:
-    import wx.lib.customtreectrl as CT
-import wx.lib.flatnotebook as FN
 
-import grass.script as grass
 from grass.script import task as gtask
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.utils       import SetAddOnPath
-from gui_core.forms   import GUI
-from gui_core.widgets import ItemTree, GListCtrl, SearchModuleWidget
+from core.menutree    import TreeModel, ModuleNode
+from gui_core.widgets import GListCtrl, SearchModuleWidget
+from gui_core.treeview import CTreeView
 
-
-class ExtensionModulesData(object):
-    """!Holds information about modules.
-
-    @todo add some test
-    @todo this class has some common methods with core::modulesdata::ModulesData
-    """
-    def __init__(self, modulesDesc):
-
-        self.moduleDesc = modulesDesc
-        self.moduleDescOriginal = modulesDesc
-
-    def GetCommandDesc(self, cmd):
-        """!Gets the description for a given module (command).
-
-        If the given module is not available, an empty string is returned.
-        
-        \code
-        print data.GetCommandDesc('r.info')
-        Outputs basic information about a raster map.
-        \endcode
-        """
-        if cmd in self.moduleDesc:
-            return self.moduleDesc[cmd]['description']
-
-        return ''
-
-    def GetCommandItems(self):
-        """!Gets list of available modules (commands).
-
-        The list contains available module names.
-
-        \code
-        print data.GetCommandItems()[0:4]
-        ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate']
-        \endcode
-        """
-        items = self.moduleDesc.keys()
-        items.sort()
-
-        return items
-
-    def FindModules(self, text, findIn):
-        """!Finds modules according to given text.
-
-        @param text string to search
-        @param findIn where to search for text
-        (allowed values are 'description', 'keywords' and 'command')
-        """
-        modules = dict()
-        iFound = 0
-        for module, data in self.moduleDescOriginal.iteritems():
-            found = False
-            if findIn == 'description':
-                if text in data['description']:
-                    found = True
-            elif findIn == 'keywords':
-                if text in data['keywords']:
-                    found = True
-            elif findIn == 'command':
-                if module[:len(text)] == text:
-                    found = True
-            else:
-                raise ValueError("Parameter findIn is not valid")
-
-            if found:
-                iFound += 1
-                modules[module] = data
-        return modules, iFound
-
-    def SetFilter(self, data = None):
-        """!Sets filter modules
-
-        If @p data is not specified, module dictionary is derived
-        from an internal data structures.
-        
-        @todo Document this method.
-
-        @param data data dict
-        """
-        if data:
-            self.moduleDesc = data
-        else:
-            self.moduleDesc = self.moduleDescOriginal
-
-    def SetData(self, data):
-        self.moduleDesc = self.moduleDescOriginal = data
 
 class InstallExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
@@ -142,13 +51,15 @@ class InstallExtensionWindow(wx.Frame):
         
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
         
-        self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
+        # modelBuilder loads data into tree model
+        self.modelBuilder = ExtensionTreeModelBuilder()
+        # tree view displays model data
+        self.tree = CTreeView(parent=self.panel, model=self.modelBuilder.GetModel())
         
-        self.modulesData = ExtensionModulesData(modulesDesc = self.tree.GetModules())
-        self.search = SearchModuleWidget(parent = self.panel, modulesData = self.modulesData,
+        self.search = SearchModuleWidget(parent=self.panel, model=self.modelBuilder.GetModel(),
                                          showChoice = False)
         self.search.SetSelection(0)
-        self.search.moduleSelected.connect(lambda name: self.OnShowItem(None))
+        self.search.showSearchResult.connect(lambda result: self.tree.Select(result))
         # show text in statusbar when notification appears
         self.search.showNotification.connect(lambda message: self.SetStatusText(message))
 
@@ -174,26 +85,26 @@ class InstallExtensionWindow(wx.Frame):
                 continue
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
-        self.repo.SetValue(task.get_param(value = 'svnurl').get('default',
-                                                                'http://svn.osgeo.org/grass/grass-addons/grass7'))
+        defaultUrl = 'http://svn.osgeo.org/grass/grass-addons/grass7'
+        self.repo.SetValue(task.get_param(value = 'svnurl').get('default', defaultUrl))
         
         self.statusbar = self.CreateStatusBar(number = 1)
         
         self.btnFetch = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                   label = _("&Fetch"))
-        self.btnFetch.SetToolTipString(_("Fetch list of available modules from GRASS Addons SVN repository"))
+        self.btnFetch.SetToolTipString(_("Fetch list of available modules "
+                                         "from GRASS Addons SVN repository"))
         self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         self.btnInstall = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                     label = _("&Install"))
         self.btnInstall.SetToolTipString(_("Install selected add-ons GRASS module"))
         self.btnInstall.Enable(False)
         
-        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
+        self.btnClose.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
         self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
-        self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
-        self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
-        self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
+        self.tree.selectionChanged.connect(self.OnItemSelected)
+        self.tree.itemActivated.connect(self.OnItemActivated)
 
         wx.CallAfter(self._fetch)
         
@@ -246,13 +157,11 @@ class InstallExtensionWindow(wx.Frame):
 
     def _getCmd(self):
         item = self.tree.GetSelected()
-        if not item or not item.IsOk():
-            return ['g.extension']
-        
-        name = self.tree.GetItemText(item)
-        if not name:
+        if not item or 'command' not in item[0].data:
             GError(_("Extension not defined"), parent = self)
             return
+
+        name = item[0].data['command']
         
         flags = list()
         for key in self.options.keys():
@@ -264,31 +173,6 @@ class InstallExtensionWindow(wx.Frame):
         
         return ['g.extension'] + flags + ['extension=' + name,
                                           'svnurl=' + self.repo.GetValue().strip()]
-    
-    def OnUpdateStatusBar(self, event):
-        """!Update statusbar text
-
-        @todo This method is a dead code. Is it useful?
-        """
-        element = self.search.GetSelection()
-        if not self.tree.IsLoaded():
-            self.SetStatusText(_("Fetch list of available extensions by clicking on 'Fetch' button"), 0)
-            return
-        
-        self.tree.SearchItems(element = element,
-                              value = event.GetEventObject().GetValue())
-
-        nItems = len(self.tree.itemsMarked)
-        if event.GetString():
-            self.SetStatusText(_("%d items match") % nItems, 0)
-        else:
-            self.SetStatusText("", 0)
-        
-        event.Skip()
-    
-    def OnCloseWindow(self, event):
-        """!Close window"""
-        self.Destroy()
 
     def OnFetch(self, event):
         """!Fetch list of available extensions"""
@@ -298,22 +182,22 @@ class InstallExtensionWindow(wx.Frame):
         """!Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
-        self.tree.Load(url = self.repo.GetValue().strip())
-        modulesDesc = self.tree.GetModules()
-        self.modulesData.SetData(modulesDesc)
+        self.modelBuilder.Load(url = self.repo.GetValue().strip())
+        self.tree.RefreshItems()
         self.SetStatusText("", 0)
         wx.EndBusyCursor()
 
-    def OnItemActivated(self, event):
-        item = event.GetItem()
-        data = self.tree.GetPyData(item)
+    def OnItemActivated(self, node):
+        data = node.data
         if data and 'command' in data:
-            self.OnInstall(event = None)
+            self.OnInstall(event=None)
         
     def OnInstall(self, event):
         """!Install selected extension"""
         log = self.parent.GetLogWindow()
-        log.RunCmd(self._getCmd(), onDone = self.OnDone)
+        cmd = self._getCmd()
+        if cmd:
+            log.RunCmd(cmd, onDone = self.OnDone)
         
     def OnDone(self, cmd, returncode):
         if returncode == 0:
@@ -322,11 +206,9 @@ class InstallExtensionWindow(wx.Frame):
             
             globalvar.UpdateGRASSAddOnCommands()
 
-    def OnItemSelected(self, event):
+    def OnItemSelected(self, node):
         """!Item selected"""
-        item = event.GetItem()
-        self.tree.itemSelected = item
-        data = self.tree.GetPyData(item)
+        data = node.data
         if data is None:
             self.SetStatusText('', 0)
             self.btnInstall.Enable(False)
@@ -334,35 +216,27 @@ class InstallExtensionWindow(wx.Frame):
             self.SetStatusText(data.get('description', ''), 0)
             self.btnInstall.Enable(True)
 
-    def OnShowItem(self, event):
-        """!Show selected item"""
-        self.tree.OnShowItem(event)
-        if self.tree.GetSelected():
-            self.btnInstall.Enable()
-        else:
-            self.btnInstall.Enable(False)
 
-class ExtensionTree(ItemTree):
-    """!List of available extensions"""
-    def __init__(self, parent, log, id = wx.ID_ANY,
-                 ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |
-                 CT.TR_LINES_AT_ROOT | CT.TR_SINGLE,
-                 **kwargs):
-        self.parent = parent # GMFrame
-        self.log    = log
-        
-        super(ExtensionTree, self).__init__(parent, id, ctstyle = ctstyle, **kwargs)
-        
-        self._initTree()
-        
-    def _initTree(self):
+class ExtensionTreeModelBuilder:
+    """!Tree model of available extensions."""
+    def __init__(self):
+        self.mainNodes = dict()
+        self.model = TreeModel(ModuleNode)
         for prefix in ('display', 'database',
                        'general', 'imagery',
                        'misc', 'postscript', 'paint',
                        'raster', 'raster3D', 'sites', 'vector', 'wxGUI', 'other'):
-            self.AppendItem(parentId = self.root,
-                            text = prefix)
-        self._loaded = False
+            node = self.model.AppendNode(parent=self.model.root, label=prefix)
+            self.mainNodes[prefix] = node
+        
+    def GetModel(self):
+        return self.model
+
+    def _emptyTree(self):
+        """!Remove modules from tree keeping the main structure"""
+        for node in self.mainNodes.values():
+            for child in reversed(node.children):
+                self.model.RemoveNode(child)
         
     def _expandPrefix(self, c):
         name = { 'd'  : 'display',
@@ -384,22 +258,9 @@ class ExtensionTree(ItemTree):
         
         return c
     
-    def _findItem(self, text):
-        """!Find item"""
-        item = self.GetFirstChild(self.root)[0]
-        while item and item.IsOk():
-            if text == self.GetItemText(item):
-                return item
-            
-            item = self.GetNextSibling(item)
-        
-        return None
-    
     def Load(self, url, full = True):
         """!Load list of extensions"""
-        self.DeleteAllItems()
-        self.root = self.AddRoot(_("Menu tree"))
-        self._initTree()
+        self._emptyTree()
         
         if full:
             flags = 'g'
@@ -411,7 +272,7 @@ class ExtensionTree(ItemTree):
         if not ret:
             return
         
-        mdict = dict()
+        currentNode = None
         for line in ret.splitlines():
             if full:
                 try:
@@ -419,73 +280,35 @@ class ExtensionTree(ItemTree):
                 except ValueError:
                     key = 'name'
                     value = line
-                
+
                 if key == 'name':
                     try:
                         prefix, name = value.split('.', 1)
                     except ValueError:
                         prefix = ''
                         name = value
-                    if prefix not in mdict:
-                        mdict[prefix] = dict()
-                    mdict[prefix][name] = dict()
-                    mdict[prefix][name]['command'] = value
+                    mainNode = self.mainNodes[self._expandPrefix(prefix)]
+                    currentNode = self.model.AppendNode(parent=mainNode, label=value)
+                    currentNode.data = {'command': value}
                 else:
-                    mdict[prefix][name][key] = value
+                    if currentNode is not None:
+                        currentNode.data[key] = value
             else:
                 try:
                     prefix, name = line.strip().split('.', 1)
-                except:
+                except ValueError:
                     prefix = ''
                     name = line.strip()
                 
                 if self._expandPrefix(prefix) == prefix:
                     prefix = ''
-                    
-                if prefix not in mdict:
-                    mdict[prefix] = dict()
-                    
-                mdict[prefix][name] = { 'command' : prefix + '.' + name }
-        
-        for prefix in mdict.keys():
-            prefixName = self._expandPrefix(prefix)
-            item = self._findItem(prefixName)
-            names = mdict[prefix].keys()
-            names.sort()
-            for name in names:
-                if prefix:
-                    text = prefix + '.' + name
-                else:
-                    text = name
-                new = self.AppendItem(parentId = item,
-                                      text = text)
-                data = dict()
-                for key in mdict[prefix][name].keys():
-                    data[key] = mdict[prefix][name][key]
-                
-                self.SetPyData(new, data)
-        
-        self._loaded = True
+                module = prefix + '.' + name
+                mainNode = self.mainNodes[self._expandPrefix(prefix)]
+                currentNode = self.model.AppendNode(parent=mainNode, label=module)
+                currentNode.data = {'command': module,
+                                    'keywords': '',
+                                    'description': ''}        
 
-    def IsLoaded(self):
-        """Check if items are loaded"""
-        return self._loaded
-
-    def GetModules(self):
-        modules = {}
-        root = self.GetRootItem()
-        child, cookie = self.GetFirstChild(root)
-        while child and child.IsOk():
-            if self.ItemHasChildren(child):
-                subChild, subCookie = self.GetFirstChild(child)
-                while subChild and subChild.IsOk():
-                    name = self.GetItemText(subChild)
-                    data = self.GetPyData(subChild)
-                    modules[name] = data
-                    subChild, subCookie = self.GetNextChild(child, subCookie)
-            child, cookie = self.GetNextChild(root, cookie)
-
-        return modules
 
 class UninstallExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
@@ -509,7 +332,7 @@ class UninstallExtensionWindow(wx.Frame):
         self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         
         self.btnUninstall.Bind(wx.EVT_BUTTON, self.OnUninstall)
-        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
+        self.btnClose.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
         
         self._layout()
         
@@ -536,13 +359,8 @@ class UninstallExtensionWindow(wx.Frame):
         
         self.Layout()
 
-    def OnCloseWindow(self, event):
-        """!Close window"""
-        self.Destroy()
-
     def OnUninstall(self, event):
         """!Uninstall selected extensions"""
-        log = self.parent.GetLogWindow()
         eList = self.extList.GetExtensions()
         if not eList:
             GError(_("No extension selected for removal. "
@@ -568,8 +386,7 @@ class UninstallExtensionWindow(wx.Frame):
         
         # update prompt
         globalvar.UpdateGRASSAddOnCommands(eList)
-        log = self.parent.GetLogWindow()
-        log.GetPrompt().SetFilter(None)
+
         
 class CheckListExtension(GListCtrl):
     """!List of mapset/owner/group"""

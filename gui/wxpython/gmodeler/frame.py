@@ -42,7 +42,6 @@ from core.gcmd            import GMessage, GException, GWarning, GError, RunComm
 from gui_core.dialogs     import GetImageHandlers
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings        import UserSettings
-from core.menudata        import MenuData
 from gui_core.menu        import Menu
 from gmodeler.menudata    import ModelerMenuData
 from gui_core.forms       import GUI
@@ -82,8 +81,7 @@ class ModelFrame(wx.Frame):
         self.SetName("Modeler")
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
-        self.menubar = Menu(parent = self, data = ModelerMenuData())
-        
+        self.menubar = Menu(parent = self, model = ModelerMenuData().GetModel())        
         self.SetMenuBar(self.menubar)
         
         self.toolbar = ModelerToolbar(parent = self)

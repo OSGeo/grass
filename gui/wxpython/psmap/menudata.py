@@ -16,10 +16,10 @@ This program is free software under the GNU General Public License
 
 import os
 
-from core                 import globalvar
-from core.menudata        import MenuData
+from core import globalvar
+from core.menutree import MenuTreeModelBuilder
 
-class PsMapMenuData(MenuData):
+class PsMapMenuData(MenuTreeModelBuilder):
     def __init__(self, path = None):
         """!Menu for Cartographic Composer (psmap.py)
         
@@ -28,4 +28,4 @@ class PsMapMenuData(MenuData):
         if not path:
             path = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata_psmap.xml')
         
-        MenuData.__init__(self, path)
+        MenuTreeModelBuilder.__init__(self, path)

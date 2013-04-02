@@ -26,9 +26,10 @@ default: $(DSTFILES)
 $(ETCDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
 
-menustrings.py: core/menudata.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml 
+menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml $(ETCDIR)/xml/menudata_psmap.xml
 	$(call run_grass,$(PYTHON) $< > $@)
 	$(call run_grass,$(PYTHON) $< "modeler" >> $@)
+	$(call run_grass,$(PYTHON) $< "psmap" >> $@)
 
 $(PYDSTDIRS): %: | $(ETCDIR)
 	$(MKDIR) $@

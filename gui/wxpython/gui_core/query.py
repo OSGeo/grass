@@ -13,9 +13,16 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
-
+import os
+import sys
+import random
 import wx
-import wx.gizmos as gizmos
+
+if __name__ == '__main__':
+    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+
+from gui_core.treeview import TreeListView
+from core.treemodel import TreeModel, DictNode
 
 class QueryDialog(wx.Dialog):
     def __init__(self, parent, data = None):
@@ -27,20 +34,17 @@ class QueryDialog(wx.Dialog):
 
         self.panel = wx.Panel(self, id = wx.ID_ANY)
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
+        self._colNames = [_("Feature"), _("Value")]
+        self._model = QueryTreeBuilder(self.data, column=self._colNames[1])
+        self.tree = TreeListView(model=self._model, parent=self.panel,
+                                 columns=self._colNames,
+                                 style=wx.TR_DEFAULT_STYLE | 
+                                 wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_MULTIPLE)
 
-        self.tree = gizmos.TreeListCtrl(self.panel, id = wx.ID_ANY,
-                                        style = wx.TR_DEFAULT_STYLE |
-                                        wx.TR_HIDE_ROOT)
-        
-        self.tree.AddColumn("Feature")
-        self.tree.AddColumn("Value")
-        self.tree.SetMainColumn(0)
         self.tree.SetColumnWidth(0, 220)
         self.tree.SetColumnWidth(1, 400)
-
+        self.tree.ExpandAll(self._model.root)
         self.mainSizer.Add(item = self.tree, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
-        if self.data:
-            self._load()
 
         close = wx.Button(self.panel, id = wx.ID_CLOSE)
         close.Bind(wx.EVT_BUTTON, lambda event: self.Close())
@@ -59,46 +63,15 @@ class QueryDialog(wx.Dialog):
         # for Windows
         self.SendSizeEvent()
 
-    def _load(self):
-        self.tree.DeleteAllItems()
-        self.root = self.tree.AddRoot("The Root Item")
-        for part in self.data:
-            self._addItem(self.root, part)
-
-        self.tree.UnselectAll()
-        self.tree.ExpandAll(self.root)
-
-    def _print(self):
-        string = []
-        for part in self.data:
-            self._printItem(string, '', part)
-            string.append('')
-        return '\n'.join(string)
-
-    def _addItem(self, parent, data):
-        for k, v in data.iteritems():
-            if isinstance(v, dict):
-                item = self.tree.AppendItem(parent, text = k)
-                self.tree.SetItemText(item, '', 1)
-                self._addItem(item, v)
-            else:
-                item = self.tree.AppendItem(parent, text = k)
-                self.tree.SetItemText(item, str(v), 1)
-
-    def _printItem(self, string, indent, data):
-        for k, v in data.iteritems():
-            if isinstance(v, dict):
-                string.append(indent + k)
-                self._printItem(string, indent + '    ', v)
-            else:
-                string.append(indent + k + ': ' + str(v))
-
     def SetData(self, data):
+        state = self.tree.GetExpansionState()
         self.data = data
-        self._load()
+        self._model = QueryTreeBuilder(self.data, column=self._colNames[1])
+        self.tree.SetModel(self._model)
+        self.tree.SetExpansionState(state)
 
     def Copy(self, event):
-        text = self._print()
+        text = printResults(self._model, self._colNames[1])
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
             do.SetText(text)
@@ -108,6 +81,47 @@ class QueryDialog(wx.Dialog):
     def OnClose(self, event):
         self.Destroy()
         event.Skip()
+
+
+def QueryTreeBuilder(data, column):
+    """!Builds tree model from query results.
+    
+    @param data query results as a dictionary
+    @param column column name
+    
+    @returns tree model
+    """
+    def addNode(parent, data, model):
+        for k, v in data.iteritems():
+            if isinstance(v, dict):
+                node = model.AppendNode(parent=parent, label=k)
+                addNode(parent=node, data=v, model=model)
+            else:
+                node = model.AppendNode(parent=parent, label=k,
+                                        data={column: str(v)})
+
+    model = TreeModel(DictNode)
+    for part in data:
+        addNode(parent=model.root, data=part, model=model)
+
+    return model
+
+
+def printResults(model, valueCol):
+    """!Print all results to string.
+    
+    @param model results tree model
+    @param valueCol column name with value to be printed
+    """
+    def printTree(node, textList, valueCol, indent=0):
+        textList.append(indent*' ' + node.label + ': ' + node.data.get(valueCol, ''))
+        for child in node.children:
+            printTree(node=child, textList=textList, valueCol=valueCol, indent=indent + 2)
+    
+    textList=[]
+    for child in model.root.children:
+        printTree(node=child, textList=textList, valueCol=valueCol)
+    return '\n'.join(textList)
 
 
 def PrepareQueryResults(coordinates, result):
@@ -133,9 +147,9 @@ def PrepareQueryResults(coordinates, result):
             data.append(part)
     return data
 
+
 def test():
     app = wx.PySimpleApp()
-    import pprint
     from grass.script import vector as gvect
     from grass.script import raster as grast
     testdata1 = grast.raster_what(map = ('elevation_shade@PERMANENT','landclass96'),

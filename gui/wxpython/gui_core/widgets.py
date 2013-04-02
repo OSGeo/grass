@@ -13,7 +13,6 @@ Classes:
  - widgets::BaseValidator
  - widgets::IntegerValidator
  - widgets::FloatValidator
- - widgets::ItemTree
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
@@ -54,8 +53,6 @@ from grass.pydispatch.signal import Signal
 from core        import globalvar
 from core.gcmd   import GMessage, GError
 from core.debug  import Debug
-
-from wx.lib.newevent import NewEvent
 
 
 class NotebookController:
@@ -642,85 +639,6 @@ class GenericValidator(wx.PyValidator):
         return True # Prevent wxDialog from complaining.
 
 
-class ItemTree(CT.CustomTreeCtrl):
-    def __init__(self, parent, id = wx.ID_ANY,
-                 ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |
-                 CT.TR_LINES_AT_ROOT | CT.TR_SINGLE, **kwargs):
-        if globalvar.hasAgw:
-            super(ItemTree, self).__init__(parent, id, agwStyle = ctstyle, **kwargs)
-        else:
-            super(ItemTree, self).__init__(parent, id, style = ctstyle, **kwargs)
-        
-        self.root = self.AddRoot(_("Menu tree"))
-        self.itemsMarked = [] # list of marked items
-        self.itemSelected = None
-
-    def SearchItems(self, element, value):
-        """!Search item 
-
-        @param element element index (see self.searchBy)
-        @param value
-
-        @return list of found tree items
-        """
-        items = list()
-        if not value:
-            return items
-        
-        item = self.GetFirstChild(self.root)[0]
-        self._processItem(item, element, value, items)
-        
-        self.itemsMarked  = items
-        self.itemSelected = None
-        
-        return items
-    
-    def _processItem(self, item, element, value, listOfItems):
-        """!Search items (used by SearchItems)
-        
-        @param item reference item
-        @param listOfItems list of found items
-        """
-        while item and item.IsOk():
-            subItem = self.GetFirstChild(item)[0]
-            if subItem:
-                self._processItem(subItem, element, value, listOfItems)
-            data = self.GetPyData(item)
-            
-            if data and element in data and \
-                    value.lower() in data[element].lower():
-                listOfItems.append(item)
-            
-            item = self.GetNextSibling(item)
-            
-    def GetSelected(self):
-        """!Get selected item"""
-        return self.itemSelected
-
-    def OnShowItem(self, event):
-        """!Highlight first found item in menu tree"""
-        if len(self.itemsMarked) > 0:
-            if self.GetSelected():
-                self.ToggleItemSelection(self.GetSelected())
-                idx = self.itemsMarked.index(self.GetSelected()) + 1
-            else:
-                idx = 0
-            try:
-                self.ToggleItemSelection(self.itemsMarked[idx])
-                self.itemSelected = self.itemsMarked[idx]
-                self.EnsureVisible(self.itemsMarked[idx])
-            except IndexError:
-                self.ToggleItemSelection(self.itemsMarked[0]) # reselect first item
-                self.EnsureVisible(self.itemsMarked[0])
-                self.itemSelected = self.itemsMarked[0]
-        else:
-            for item in self.root.GetChildren():
-                self.Collapse(item)
-            itemSelected = self.GetSelection()
-            if itemSelected:
-                self.ToggleItemSelection(itemSelected)
-            self.itemSelected = None
-
 class SingleSymbolPanel(wx.Panel):
     """!Panel for displaying one symbol.
     
@@ -846,68 +764,75 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCt
 
 
 class SearchModuleWidget(wx.Panel):
-    """!Search module widget (used in SearchModuleWindow)
+    """!Search module widget (used e.g. in SearchModuleWindow)
         
-    Signal moduleSelected - attribute 'name' is module name
+    Signals:
+        moduleSelected - attribute 'name' is module name
+        showSearchResult - attribute 'result' is a node (representing module)
+        showNotification - attribute 'message'
     """
-    def __init__(self, parent, modulesData, id = wx.ID_ANY,
+    def __init__(self, parent, model,
                  showChoice = True, showTip = False, **kwargs):
-        self.showTip = showTip
-        self.showChoice = showChoice
-        self.modulesData = modulesData
+        self._showTip = showTip
+        self._showChoice = showChoice
+        self._model = model
+        self._results = [] # list of found nodes
+        self._resultIndex = -1
         
         self.moduleSelected = Signal('SearchModuleWidget.moduleSelected')
+        self.showSearchResult = Signal('SearchModuleWidget.showSearchResult')
+        self.showNotification = Signal('SearchModuleWidget.showNotification')
 
-        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
+        wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY, **kwargs)
 
         self._searchDict = { _('description') : 'description',
                              _('command') : 'command',
                              _('keywords') : 'keywords' }
 
-        # signal which requests showing of a notification
-        self.showNotification = Signal('SearchModuleWidget.showNotification')
 
-        self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
+        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                 label = " %s " % _("Find module - (press Enter for next match)"))
 
-        self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY)
+        self._searchBy = wx.Choice(parent = self, id = wx.ID_ANY)
         items = [_('description'), _('keywords'), _('command')]
         datas = ['description', 'keywords', 'command']
         for item, data in zip(items, datas):
-            self.searchBy.Append(item = item, clientData = data)
-        self.searchBy.SetSelection(0)
+            self._searchBy.Append(item = item, clientData = data)
+        self._searchBy.SetSelection(0)
+        self._searchBy.Bind(wx.EVT_CHOICE, self.OnSearchModule)
 
-        self.search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
+        self._search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
                                     size = (-1, 25), style = wx.TE_PROCESS_ENTER)
-        self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
+        self._search.Bind(wx.EVT_TEXT, self.OnSearchModule)
+        self._search.Bind(wx.EVT_KEY_UP,  self.OnKeyUp)
 
-        if self.showTip:
-            self.searchTip = StaticWrapText(parent = self, id = wx.ID_ANY,
-                                            size = (-1, 35))
+        if self._showTip:
+            self._searchTip = StaticWrapText(parent = self, id = wx.ID_ANY,
+                                             size = (-1, 35))
 
-        if self.showChoice:
-            self.searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
-            self.searchChoice.SetItems(self.modulesData.GetCommandItems())
-            self.searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
+        if self._showChoice:
+            self._searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+            self._searchChoice.SetItems(self._searchModule(key='command', value=''))
+            self._searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
 
         self._layout()
 
     def _layout(self):
         """!Do layout"""
-        sizer = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
+        sizer = wx.StaticBoxSizer(self._box, wx.HORIZONTAL)
         gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
         
-        gridSizer.Add(item = self.searchBy,
+        gridSizer.Add(item = self._searchBy,
                       flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
-        gridSizer.Add(item = self.search,
+        gridSizer.Add(item = self._search,
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
         row = 1
-        if self.showChoice:
-            gridSizer.Add(item = self.searchChoice,
+        if self._showChoice:
+            gridSizer.Add(item = self._searchChoice,
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
             row += 1
-        if self.showTip:
-            gridSizer.Add(item = self.searchTip,
+        if self._showTip:
+            gridSizer.Add(item = self._searchTip,
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
             row += 1
 
@@ -918,62 +843,65 @@ class SearchModuleWidget(wx.Panel):
         self.SetSizer(sizer)
         sizer.Fit(self)
 
-    def GetCtrl(self):
-        """!Get SearchCtrl widget"""
-        return self.search
+    def OnKeyUp(self, event):
+        """!Key or key combination pressed"""
+        if event.GetKeyCode() == wx.WXK_RETURN and not event.ControlDown():
+            if self._results:
+                self._resultIndex += 1
+                if self._resultIndex == len(self._results):
+                    self._resultIndex = 0
+                self.showSearchResult.emit(result=self._results[self._resultIndex])
+        event.Skip()
 
     def GetSelection(self):
         """!Get selected element"""
-        selection = self.searchBy.GetStringSelection()
+        selection = self._searchBy.GetStringSelection()
 
         return self._searchDict[selection]
 
     def SetSelection(self, i):
         """!Set selection element"""
-        self.searchBy.SetSelection(i)
+        self._searchBy.SetSelection(i)
 
     def OnSearchModule(self, event):
         """!Search module by keywords or description"""
+        commands = self._searchModule(key=self.GetSelection(), value=self._search.GetValue())
+        if self._showChoice:
+            self._searchChoice.SetItems(commands)
+            if commands:
+                self._searchChoice.SetSelection(0)
 
-        text = event.GetEventObject().GetValue()
-        if not text:
-            self.modulesData.SetFilter()
-            mList = self.modulesData.GetCommandItems()
-            if self.showChoice:
-                self.searchChoice.SetItems(mList)
-            label = _("%d modules found") % len(mList)
-        else:
-            findIn = self.searchBy.GetClientData(self.searchBy.GetSelection())
-            modules, nFound = self.modulesData.FindModules(text = text, findIn = findIn)
-            self.modulesData.SetFilter(modules)
-            if self.showChoice:
-                self.searchChoice.SetItems(self.modulesData.GetCommandItems())
-                self.searchChoice.SetSelection(0)
-            label = _("%d modules match") % nFound
-
-        if self.showTip:
-            self.searchTip.SetLabel(label)
+        label = _("%d modules match") % len(commands)
+        if self._showTip:
+            self._searchTip.SetLabel(label)
 
         self.showNotification.emit(message=label)
 
         event.Skip()
 
+    def _searchModule(self, key, value):
+        nodes = self._model.SearchNodes(key=key, value=value)
+        self._results = nodes
+        self._resultIndex = -1
+        return [node.data['command'] for node in nodes if node.data['command']]
+        
     def OnSelectModule(self, event):
         """!Module selected from choice, update command prompt"""
-        cmd  = event.GetString().split(' ', 1)[0]
-
+        cmd  = self._searchChoice.GetStringSelection()
         self.moduleSelected.emit(name = cmd)
 
-        desc = self.modulesData.GetCommandDesc(cmd)
-        if self.showTip:
-            self.searchTip.SetLabel(desc)
+        if self._showTip:
+            for module in self._results:
+                if cmd == module.data['command']:
+                    self._searchTip.SetLabel(module.data['description'])
+                    break
 
     def Reset(self):
         """!Reset widget"""
-        self.searchBy.SetSelection(0)
-        self.search.SetValue('')
-        if self.showTip:
-            self.searchTip.SetLabel('')
+        self._searchBy.SetSelection(0)
+        self._search.SetValue('')
+        if self._showTip:
+            self._searchTip.SetLabel('')
 
 class ManageSettingsWidget(wx.Panel):
     """!Widget which allows loading and saving settings into file."""
