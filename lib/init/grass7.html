@@ -218,15 +218,24 @@ script. The script file must have its executable bit set.
 <dd> Start GRASS using the text-based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<dt><b>grass70 ~/grassdata/spearfish60/user1</b>
+<dt><b>grass70 $HOME/grassdata/spearfish60/user1</b>
 <dd> Start GRASS using the default user interface and automatically
-   launch into the given mapset, bypassing the mapset selection menu.
+    launch into the given mapset, bypassing the mapset selection menu.
 
 <dt><b>grass70 -gui -</b>
 <dd> Start GRASS using the graphical user interface and try to
     obtain the location and mapset from environment variables.
-</dl>
 
+<dt><b>grass70 -c EPSG:4326 $HOME/grassdata/mylocation</b>
+<dd> Creates new GRASS location with EPSG code 4326 (latitude-longitude, WGS84)
+    in the specified GISDBASE
+
+<dt><b>grass70 -c myvector.shp $HOME/grassdata/mylocation</b>
+<dd> Creates new GRASS location based on georeferenced Shapefile
+
+<dt><b>grass70 -c myraster.tif $HOME/grassdata/mylocation</b>
+<dd> Creates new GRASS location based on georeferenced GeoTIFF file
+</dl>
 
 <h3>Other examples</h3>
 
