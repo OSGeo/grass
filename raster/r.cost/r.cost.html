@@ -1,7 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-
-<p><em>r.cost</em> determines the cumulative cost of moving to each
+<em>r.cost</em> determines the cumulative cost of moving to each
 cell on a <em>cost surface</em> (the <b>input</b> raster map) from
 other user-specified cell(s) whose locations are specified by their
 geographic coordinate(s). Each cell in the original cost surface map
@@ -22,40 +21,38 @@ The <b>input</b> <em>name</em> is the name of a raster map whose category values
 represent the surface cost. The <b>output</b> <em>name</em> is the name of the
 resultant raster map of cumulative cost. The <b>outdir</b> <em>name</em> is the 
 name of the resultant raster map of movement directions (see <a href="#move">Movement Direction</a>).
-
-<p><em>r.cost</em> can be run with three different methods of identifying the
+<p>
+<em>r.cost</em> can be run with three different methods of identifying the
 starting point(s). One or more points (geographic coordinate pairs) can be
 provided as specified <b>start_coordinate</b> on the command line, from a vector
 points file, or from a raster map.
 All non-NULL cells are considered to be starting points.
-
+<p>
 Each <em>x,y</em> <b>start_coordinate</b> pair gives the geographic location of a
 point from which the transportation cost should be figured. As many points as
 desired can be entered by the user. These starting points can also be read
 from a vector points file through the <b>start_points</b> option or from a
 raster map through the <b>start_rast</b> option.
-<p><em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
+<p>
+<em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
 or one of the stop points given with <b>stop_coordinate</b> is reached.
 Alternatively, the stop points can be read from a vector points file with the
 <b>stop_points</b> option. During execution, once the cumulative cost to all 
-stopping points has been determined, processing stops.
-
+stopping points has been determined, processing stops.<br>
 Both sites read from a vector points file and those given on the command line
 will be processed.
-
-
-<p>The null cells in the <b>input</b> map can be assigned a (positive floating
-point) cost with the <b>null_cost</b> option.
-<br>
+<p>
+The null cells in the <b>input</b> map can be assigned a (positive floating
+point) cost with the <b>null_cost</b> option.<br>
 When input map null cells are given a cost with the <b>null_cost</b>
 option, the corresponding cells in the output map are no longer null
 cells. By using the <b>-n</b> flag, the null cells of the input map are
 retained as null cells in the output map.
-
-<p>As <em>r.cost</em> can run for a very long time, it can be useful to 
+<p>
+As <em>r.cost</em> can run for a very long time, it can be useful to 
 use the <b>--v</b> verbose flag to track progress.
-
-<p>The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
+<p>
+The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
 the output. In the diagram below, the center location (<tt>O</tt>) represents a
 grid cell from which cumulative distances are calculated. Those
 neighbors marked with an <tt>X</tt> are always considered for cumulative cost
@@ -75,7 +72,7 @@ also considered.
  .   .   . K .   . K .   .   .
  . . . . . . . . . . . . . . .
 </pre></div>
-<br>
+<p>
 Knight's move example:
 <center>
 <img src="rcost_knightsmove.png" border="1"><br>
@@ -88,19 +85,24 @@ Using the knight's move grows it outwards in 16 directions.</i>
 </table>
 </center>
 
+<p>
+If the <em>nearest</em> output parameter is specified, the module will calculate 
+for each cell its nearest starting point based on the minimized accumulative cost
+while moving over the cost map.
 
 <h2>NULL CELLS</h2>
 
-<p>By default null cells in the input raster map are excluded from
+By default null cells in the input raster map are excluded from
 the algorithm, and thus retained in the output map.
-<p>If one wants <b>r.cost</b> to transparently cross any region of null cells,
+<p>
+If one wants <b>r.cost</b> to transparently cross any region of null cells,
 the <b>null_cost</b>=<tt>0.0</tt> option should be used. Then null cells just
 propagate the adjacent costs. These cells can be retained as null cells in the
 output map by using the <b>-n</b> flag.
 
 <h2>NOTES</h2>
 
-<p>Sometimes, when the differences among integer cell category values in the
+Sometimes, when the differences among integer cell category values in the
 <em>r.cost</em> cumulative cost surface output are small, this
 cumulative cost output cannot accurately be used as input to <em><a href="r.drain.html">r.drain</a></em>
 (<em><a href="r.drain.html">r.drain</a></em> will output bad
@@ -118,7 +120,9 @@ This problem doesn't arise with floating point maps.
 <h3>Algorithm notes</h3>
 
 The fundamental approach to calculating minimum travel cost is as
-follows:<p> The user generates a raster map indicating the cost of
+follows:
+<p>
+The user generates a raster map indicating the cost of
 traversing each cell in the north-south and east-west directions.
 This map, along with a set of starting points are submitted to
 <em>r.cost</em>. The starting points are put into a list cells from which
@@ -129,12 +133,14 @@ on the list and the originating cell is finalized. This process
 of selecting the lowest cumulative cost cell, computing costs to the
 neighbors, putting the neighbors on the list and removing the
 originating cell from the list continues until the list is empty.
-<p>The most time consuming aspect of this algorithm is the management of
+<p>
+The most time consuming aspect of this algorithm is the management of
 the list of cells for which cumulative costs have been at least
 initially computed. <em>r.cost</em> uses a binary tree with an linked list
 at each node in the tree for efficiently holding cells with identical
 cumulative costs.
-<p><em>r.cost</em>, like most all GRASS raster programs, is also made to be run on
+<p>
+<em>r.cost</em>, like most all GRASS raster programs, is also made to be run on
 maps larger that can fit in available computer memory. As the
 algorithm works through the dynamic list of cells it can move almost
 randomly around the entire area. <em>r.cost</em> divides the entire area
@@ -224,11 +230,12 @@ used. The calculation is done with <em>r.cost</em> as follows
 
 <a name="move"></a>
 <h2>Movement Direction</h2>
-<p>The movement direction surface is created to record the sequence of
+The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. Without it 
 <em><a href="r.drain.html">r.drain</a></em> would not correctly create a path from an end point 
 back to the start point. The direction of each cell points towards 
 the next cell. The directions are recorded as degrees CCW from East:
+
 <div class="code"><pre>
        112.5      67.5         i.e. a cell with the value 135 
 157.5  135   90   45   22.5    means the next cell is to the north-west
@@ -237,7 +244,18 @@ the next cell. The directions are recorded as degrees CCW from East:
        247.5     292.5
 </pre></div>
 
-<p>
+<h3>Cost allocation</h3>
+
+Example: calculation of the cost allocation map "costalloc" and the cumulative
+cost map "costsurf" for given starting points (map "sources") and given
+cost raster map "costs":
+
+<div class="code"><pre>
+r.cost input=costs start_rast=sources output=costsurf nearest=costalloc
+</pre></div>
+
+
+<h3>Find the minimum cost path</h3>
 Once <em>r.cost</em> computes the cumulative cost map, <em><a href="r.drain.html">r.drain</a></em>
 can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
 and the movement direction raster map when running r.drain to ensure
