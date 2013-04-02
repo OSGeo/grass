@@ -42,7 +42,7 @@
 #% description: Table format
 #% required: yes
 #% options: CSV,DBF,GML,MySQL,PostgreSQL,SQLite
-#% answer: DBF
+#% answer: CSV
 #%end
 
 #%option
