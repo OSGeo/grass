@@ -137,6 +137,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("cost surface"));
     G_add_keyword(_("cumulative costs"));
+    G_add_keyword(_("cost allocation"));
     module->description =
 	_("Creates a raster map showing the "
 	  "cumulative cost of moving between different "
