@@ -1,9 +1,9 @@
 /*!
- * \file gis/legal_name.c
+ * \file lib/gis/legal_name.c
  *
  * \brief GIS Library - Functions to handle file name legality.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2009, 2013 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -16,7 +16,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
 /*!
  * \brief Check for legal database file name.
  *
@@ -24,6 +23,8 @@
  * not contain the characters, ' ' (space), '/', '"'. '\'' (single
  * quote), '@', ',', '=', '*', and all other non-alphanumeric
  * characters within.
+ *
+ * The function prints a warning on error.
  *
  * \param s file name to check
  *
@@ -52,8 +53,10 @@ int G_legal_filename(const char *s)
 /*!
  * \brief Check input and output file names.
  *
- * Check: 1) output is legal map name, 2) if can find input map, and
- * 3) if input was found in current mapset, check if input != output.
+ * Check: 
+ *  1) output is legal map name,
+ *  2) if can find input map, and
+ *  3) if input was found in current mapset, check if input != output.
  *
  * \param input input map name
  * \param output output map name
