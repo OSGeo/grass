@@ -10,14 +10,14 @@ void create_location(char *location)
 {
     int ret;
 
-    ret = G__make_location(location, &cellhd, projinfo, projunits, NULL);
+    ret = G_make_location(location, &cellhd, projinfo, projunits);
     if (ret == 0)
 	G_message(_("Location <%s> created"), location);
     else if (ret == -1)
 	G_fatal_error(_("Unable to create location <%s>: %s"),
-		    location, strerror(errno));
+                      location, strerror(errno));
     else if (ret == -2)
-	G_fatal_error(_("Unable to create projection files: %s"),
+        G_fatal_error(_("Unable to create projection files: %s"),
 		    strerror(errno));
     else
 	/* Shouldn't happen */
