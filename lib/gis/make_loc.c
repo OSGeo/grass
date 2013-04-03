@@ -43,8 +43,10 @@
  * \param proj_units    projection units suitable to write to the PROJ_UNITS
  *                      file, or NULL.
  *
- * \returns 0 on success
- * \returns -1 to indicate a system error (check errno).
+ * \return 0 on success
+ * \return -1 to indicate a system error (check errno).
+ * \return -2 failed to create projection file (currently not used)
+ * \return -3 illegal name 
  */
 int G_make_location(const char *location_name,
                     struct Cell_head *wind,
@@ -52,6 +54,10 @@ int G_make_location(const char *location_name,
                     const struct Key_Value *proj_units)
 {
     char path[GPATH_MAX];
+
+    /* check if location name is legal */
+    if (G_legal_filename(location_name) != 1)
+        return -3;
 
     /* Try to create the location directory, under the gisdbase. */
     sprintf(path, "%s/%s", G_gisdbase(), location_name);
@@ -61,7 +67,6 @@ int G_make_location(const char *location_name,
     /* Make the PERMANENT mapset. */
     sprintf(path, "%s/%s/%s", G_gisdbase(), location_name, "PERMANENT");
     if (G_mkdir(path) != 0) {
-        perror("G_make_location");
 	return -1;
     }
 

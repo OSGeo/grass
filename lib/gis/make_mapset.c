@@ -36,6 +36,7 @@
  *
  * \return 0 on success
  * \return -1 to indicate a system error (check errno).
+ * \return -2 illegal name 
  */
 int G_make_mapset(const char *gisdbase_name, const char *location_name,
                   const char *mapset_name)
@@ -53,8 +54,9 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
 
     /* TODO: Should probably check that user specified location and gisdbase are valid */
 
+    /* check if mapset name is legal */
     if (G_legal_filename(mapset_name) != 1)
-        return -1;
+        return -2;
     
     /* Make the mapset. */
     sprintf(path, "%s/%s/%s", gisdbase_name, location_name, mapset_name);
