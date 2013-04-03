@@ -25,7 +25,18 @@ import os
 import sys
 import tempfile as tmpfile
 
-def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
+
+def write_gisrc(dbase, location, mapset):
+    """Write the gisrc file and return the gisrc path."""
+    fd, gisrc = tmpfile.mkstemp()
+    os.write(fd, "GISDBASE: %s\n" % dbase)
+    os.write(fd, "LOCATION_NAME: %s\n" % location)
+    os.write(fd, "MAPSET: %s\n" % mapset)
+    os.close(fd)
+    return gisrc
+
+
+def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     """!Initialize system variables to run scripts without starting
     GRASS explicitly.
 
@@ -40,32 +51,27 @@ def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
     # define PATH
     os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'bin')
     os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'scripts')
-    if sys.platform.startswith('win'): # added for winGRASS
-         os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'extralib')
+    if sys.platform.startswith('win'):  # added for winGRASS
+        os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'extralib')
+
     # define LD_LIBRARY_PATH
     if '@LD_LIBRARY_PATH_VAR@' not in os.environ:
         os.environ['@LD_LIBRARY_PATH_VAR@'] = ''
     os.environ['@LD_LIBRARY_PATH_VAR@'] += os.pathsep + os.path.join(gisbase, 'lib')
     
     os.environ['GIS_LOCK'] = str(os.getpid())
-    
+
     # Set PYTHONPATH to find GRASS Python modules
     path = os.getenv('PYTHONPATH')
-    dir  = os.path.join(gisbase, 'etc', 'python')
+    etcpy = os.path.join(gisbase, 'etc', 'python')
     if path:
-        path = dir + os.pathsep + path
+        path = etcpy + os.pathsep + path
     else:
-        path = dir
+        path = etcpy
     os.environ['PYTHONPATH'] = path
-    
+
     if not dbase:
         dbase = gisbase
-    
-    fd, gisrc = tmpfile.mkstemp()
-    os.environ['GISRC'] = gisrc
-    os.write(fd, "GISDBASE: %s\n" % dbase)
-    os.write(fd, "LOCATION_NAME: %s\n" % location)
-    os.write(fd, "MAPSET: %s\n" % mapset)
-    os.close(fd)
-    
-    return gisrc
+
+    os.environ['GISRC'] = write_gisrc(dbase, location, mapset)
+    return os.environ['GISRC']
