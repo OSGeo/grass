@@ -168,7 +168,7 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
                          const struct line_pnts * points,
                          const struct line_cats * cats)
 {
-    G_debug(3, "V1_rewrite_line_pg(): line=%d type=%d offset=%lu",
+    G_debug(3, "V1_rewrite_line_pg(): line=%d type=%d offset=%"PRI_OFF_T,
             line, type, offset);
 #ifdef HAVE_POSTGRES
     if (type != V1_read_line_pg(Map, NULL, NULL, offset)) {
@@ -206,7 +206,7 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
 off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
-    G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d offset=%lu",
+    G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d offset=%"PRI_OFF_T,
             line, type, old_offset);
 #ifdef HAVE_POSTGRES
     const char *schema_name, *table_name, *keycolumn;
@@ -378,8 +378,8 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
             /* first remove references to this edge */
             /* (1) left next edge */
             sprintf(stmt, "UPDATE \"%s\".\"%s\" SET abs_next_left_edge = edge_id, "
-                    "next_left_edge = -edge_id WHERE abs_next_left_edge = %ld",
-                    pg_info->toposchema_name, table_name, Line->offset);
+                    "next_left_edge = -edge_id WHERE abs_next_left_edge = %d",
+                    pg_info->toposchema_name, table_name, (int)Line->offset);
             if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return -1;
@@ -387,8 +387,8 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
 
             /* (2) right next edge */
             sprintf(stmt, "UPDATE \"%s\".\"%s\" SET abs_next_right_edge = edge_id, "
-                    "next_right_edge = edge_id WHERE abs_next_right_edge = %ld",
-                    pg_info->toposchema_name, table_name, Line->offset);
+                    "next_right_edge = edge_id WHERE abs_next_right_edge = %d",
+                    pg_info->toposchema_name, table_name, (int)Line->offset);
             if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return -1;
@@ -405,8 +405,8 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
             return -1;
 
         /* delete record from topology table */
-        sprintf(stmt, "DELETE FROM \"%s\".\"%s\" WHERE %s_id = %ld",
-                pg_info->toposchema_name, table_name, keycolumn, Line->offset);
+        sprintf(stmt, "DELETE FROM \"%s\".\"%s\" WHERE %s_id = %d",
+                pg_info->toposchema_name, table_name, keycolumn, (int)Line->offset);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to delete feature (%s) %d"), keycolumn,
                       line);
@@ -450,6 +450,7 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
 #endif
 }
 
+#ifdef HAVE_POSTGRES
 /*!
    \brief Writes node on topological level (PostGIS Topology interface, internal use only)
 
@@ -461,7 +462,6 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
 */
 off_t V2__write_node_pg(struct Map_info *Map, const struct line_pnts *points)
 {
-#ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
 
     pg_info = &(Map->fInfo.pg);
@@ -470,63 +470,38 @@ off_t V2__write_node_pg(struct Map_info *Map, const struct line_pnts *points)
         return -1; /* PostGIS Topology required */
     
     return write_line_tp(Map, GV_POINT, TRUE, points, NULL);
-#else
-    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
-    return -1;
-#endif
 }
 
 /*!
-   \brief Writes area on topological level (PostGIS Simple Features interface, internal use only)
+   \brief Writes area on topological level (PostGIS Simple Features
+   interface, internal use only)
 
    \param Map pointer to Map_info structure
-   \param type feature type (GV_POINT, GV_LINE, ...)
-   \param points pointer to line_pnts structure (boundary geometry) 
-   \param cats pointer to line_cats structure (feature categories)
-   \param ipoints pointer to line_pnts structure (isles geometry) 
-   \param nisles number of isles
+   \param points feature geometry (exterior + interior rings)
+   \param nparts number of parts including exterior ring
+   \param cats feature categories
    
-   \return feature offset into file
+   \return feature offset
    \return -1 on error
 */
 off_t V2__write_area_pg(struct Map_info *Map, 
-                        const struct line_pnts *bpoints,
-                        const struct line_cats *cats,
-                        const struct line_pnts **ipoints, int nisles)
+                        const struct line_pnts **points, int nparts,
+                        const struct line_cats *cats)
 {
-#ifdef HAVE_POSTGRES
-    int i;
-    off_t ret;
-    const struct line_pnts **points;
-
-    if (nisles > 0) {
-        points = (const struct line_pnts **) G_calloc(nisles + 1, sizeof(struct line_pnts *));
-        points[0] = bpoints;
-        for (i = 0; i < nisles; i++)
-            points[i + 1] = ipoints[i];
-    }
-    else {
-        points = &bpoints;
-    }
-    
-    ret = write_line_sf(Map, GV_BOUNDARY, points, nisles + 1, cats);
-
-    if (nisles > 0)
-        G_free(points);
-
-    return ret;
-#else
-    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
-    return -1;
-#endif
+    return write_line_sf(Map, GV_BOUNDARY, points, nparts, cats);
 }
 
-#ifdef HAVE_POSTGRES
 /*!
   \brief Write vector features as PostGIS simple feature element
   
-  \return 0 on success
-  \return -1 on error
+   \param Map pointer to Map_info structure
+   \param type feature type (GV_POINT, GV_LINE, ...)
+   \param points feature geometry (exterior + interior rings for polygonsx)
+   \param nparts number of parts
+   \param cats feature categories
+
+   \return feature offset
+   \return -1 on error
 */
 off_t write_line_sf(struct Map_info *Map, int type,
                     const struct line_pnts **points, int nparts,
@@ -544,6 +519,9 @@ off_t write_line_sf(struct Map_info *Map, int type,
     pg_info = &(Map->fInfo.pg);
     offset_info = &(pg_info->offset);
 
+    if (nparts < 1)
+        return -1;
+    
     /* check required PG settings */
     if (!pg_info->conn) {
         G_warning(_("No connection defined"));
@@ -1472,8 +1450,8 @@ int insert_topo_element(struct Map_info *Map, int line, int type,
         nle = -Line->offset;
         nre = Line->offset;
         
-        G_debug(3, "new edge: id=%lu next_left_edge=%d next_right_edge=%d",
-                Line->offset, nle, nre);
+        G_debug(3, "new edge: id=%d next_left_edge=%d next_right_edge=%d",
+                (int)Line->offset, nle, nre);
         
         G_asprintf(&stmt, "INSERT INTO \"%s\".edge_data (geom, start_node, end_node, "
                    "next_left_edge, abs_next_left_edge, next_right_edge, abs_next_right_edge, "
@@ -1579,15 +1557,15 @@ int update_next_edge(struct Map_info* Map, int nlines, int line)
     
     if (next_line < 0) {
         sprintf(stmt, "UPDATE \"%s\".edge_data SET next_left_edge = %d, "
-                "abs_next_left_edge = %d WHERE edge_id = %lu AND abs_next_left_edge = %lu",
-                pg_info->toposchema_name, edge, abs(edge), Line_next->offset,  Line_next->offset);
-        G_debug(3, "update edge=%lu next_left_edge=%d (?)", Line_next->offset, edge);
+                "abs_next_left_edge = %d WHERE edge_id = %d AND abs_next_left_edge = %d",
+                pg_info->toposchema_name, edge, abs(edge), (int)Line_next->offset, (int)Line_next->offset);
+        G_debug(3, "update edge=%d next_left_edge=%d (?)", (int)Line_next->offset, edge);
     }
     else {
         sprintf(stmt, "UPDATE \"%s\".edge_data SET next_right_edge = %d, "
-                "abs_next_right_edge = %d WHERE edge_id = %lu AND abs_next_right_edge = %lu",
-                pg_info->toposchema_name, edge, abs(edge), Line_next->offset, Line_next->offset);
-        G_debug(3, "update edge=%lu next_right_edge=%d (?)", Line_next->offset, edge);
+                "abs_next_right_edge = %d WHERE edge_id = %d AND abs_next_right_edge = %d",
+                pg_info->toposchema_name, edge, abs(edge), (int)Line_next->offset, (int)Line_next->offset);
+        G_debug(3, "update edge=%d next_right_edge=%d (?)", (int)Line_next->offset, edge);
     }
     
     if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -1606,15 +1584,15 @@ int update_next_edge(struct Map_info* Map, int nlines, int line)
         
         if (next_line < 0) {
             sprintf(stmt, "UPDATE \"%s\".edge_data SET next_left_edge = %d, "
-                    "abs_next_left_edge = %d WHERE edge_id = %lu",
-                    pg_info->toposchema_name, edge, abs(edge), Line_next->offset);
-            G_debug(3, "update edge=%lu next_left_edge=%d", Line_next->offset, edge);
+                    "abs_next_left_edge = %d WHERE edge_id = %d",
+                    pg_info->toposchema_name, edge, abs(edge), (int)Line_next->offset);
+            G_debug(3, "update edge=%d next_left_edge=%d", (int)Line_next->offset, edge);
         }
         else {
             sprintf(stmt, "UPDATE \"%s\".edge_data SET next_right_edge = %d, "
-                    "abs_next_right_edge = %d WHERE edge_id = %lu",
-                    pg_info->toposchema_name, edge, abs(edge), Line_next->offset);
-            G_debug(3, "update edge=%lu next_right_edge=%d", Line_next->offset, edge);
+                    "abs_next_right_edge = %d WHERE edge_id = %d",
+                    pg_info->toposchema_name, edge, abs(edge), (int)Line_next->offset);
+            G_debug(3, "update edge=%d next_right_edge=%d", (int)Line_next->offset, edge);
         }
      
         if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -1807,25 +1785,25 @@ int update_topo_edge(struct Map_info *Map, int line)
         sprintf(stmt, "UPDATE \"%s\".edge_data SET "
                 "next_left_edge = %d, abs_next_left_edge = %d, "
                 "next_right_edge = %d, abs_next_right_edge = %d "
-                "WHERE edge_id = %lu", pg_info->toposchema_name,
-                nle, abs(nle), nre, abs(nre), Line->offset);
+                "WHERE edge_id = %d", pg_info->toposchema_name,
+                nle, abs(nle), nre, abs(nre), (int)Line->offset);
     }
     else if (nle != 0) {
         /* update next left edge only */
         sprintf(stmt, "UPDATE \"%s\".edge_data SET "
                 "next_left_edge = %d, abs_next_left_edge = %d "
-                "WHERE edge_id = %lu", pg_info->toposchema_name,
-                nle, abs(nle), Line->offset);
+                "WHERE edge_id = %d", pg_info->toposchema_name,
+                nle, abs(nle), (int)Line->offset);
     }
     else {
         /* update next right edge only */
         sprintf(stmt, "UPDATE \"%s\".edge_data SET "
                 "next_right_edge = %d, abs_next_right_edge = %d "
-                "WHERE edge_id = %lu", pg_info->toposchema_name,
-                nre, abs(nre), Line->offset);
+                "WHERE edge_id = %d", pg_info->toposchema_name,
+                nre, abs(nre), (int)Line->offset);
     }
-    G_debug(3, "update edge=%lu next_left_edge=%d next_right_edge=%d",
-            Line->offset, nle, nre);
+    G_debug(3, "update edge=%d next_left_edge=%d next_right_edge=%d",
+            (int)Line->offset, nle, nre);
     
     if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
         /* rollback transaction */
@@ -1898,10 +1876,10 @@ int update_topo_face(struct Map_info *Map, int line)
             
             sprintf(stmt, "UPDATE \"%s\".edge_data SET "
                     "left_face = %d, right_face = %d "
-                    "WHERE edge_id = %lu", pg_info->toposchema_name,
+                    "WHERE edge_id = %d", pg_info->toposchema_name,
                     topo_i->left > 0 ? topo_i->left : 0,
                     topo_i->right > 0 ? topo_i->right : 0,
-                    Line_i->offset);
+                    (int) Line_i->offset);
             G_debug(2, "SQL: %s", stmt);
             
             if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -1914,8 +1892,8 @@ int update_topo_face(struct Map_info *Map, int line)
         if (Area->centroid > 0) {
             Line_i = Map->plus.Line[Area->centroid];
             sprintf(stmt, "UPDATE \"%s\".node SET containing_face = %d "
-                    "WHERE node_id = %lu", pg_info->toposchema_name,
-                    face[s], Line_i->offset);
+                    "WHERE node_id = %d", pg_info->toposchema_name,
+                    face[s], (int)Line_i->offset);
             G_debug(2, "SQL: %s", stmt);
             
             if(Vect__execute_pg(pg_info->conn, stmt) == -1) {

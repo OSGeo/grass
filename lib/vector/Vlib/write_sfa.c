@@ -24,9 +24,15 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
+#ifdef HAVE_POSTGRES
+#include "pg_local_proto.h"
+#endif
+
 #if defined HAVE_OGR || defined HAVE_POSTGRES
-void V2__add_line_to_topo_sfa(struct Map_info *, int, const struct line_pnts *,
-			      const struct line_cats *);
+static void V2__add_line_to_topo_sfa(struct Map_info *, int, const struct line_pnts *,
+                                     const struct line_cats *);
 #endif
 
 /*!
@@ -142,7 +148,7 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
 off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type, off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
-    G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d offset=%lu",
+    G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d offset=%"PRI_OFF_T,
 	    line, type, offset);
 
     if (line < 1 || line > Map->plus.n_lines) {
@@ -260,6 +266,44 @@ int V2_delete_line_sfa(struct Map_info *Map, int line)
     G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
     return -1;
 #endif
+}
+
+/*!
+   \brief Writes area on topological level (Simple Features interface,
+   internal use only)
+
+   \param Map pointer to Map_info structure
+   \param points feature geometry (exterior + interior rings)
+   \param nparts number of parts including exterior ring
+   \param cats feature categories
+   
+   \return feature offset
+   \return -1 on error
+*/
+off_t V2__write_area_sfa(struct Map_info *Map, 
+                         const struct line_pnts **points, int nparts,
+                         const struct line_cats *cats)
+{
+    if (Map->format == GV_FORMAT_OGR) {
+#ifdef HAVE_OGR
+        return V2__write_area_ogr(Map, points, nparts, cats);
+#else
+        G_fatal_error(_("GRASS is not compiled with OGR support"));
+        return -1;
+#endif
+    }
+    else if (Map->format == GV_FORMAT_POSTGIS) {
+#ifdef HAVE_POSTGRES
+        return V2__write_area_pg(Map, points, nparts, cats);
+#else
+        G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+        return -1;
+#endif
+    }
+    else {
+        G_warning(_("Unsupported vector map format (%d)"), Map->format);
+    }
+    return -1;
 }
 
 #if defined HAVE_OGR || defined HAVE_POSTGRES
