@@ -19,20 +19,20 @@
 
 static struct
 {
-    struct Option *rastin, *rastout, *width, *height;
+    struct Option *rastin, *rastout, *width, *height, *overlap;
 } parm;
-static struct Cell_head dst_w, src_w;
+static struct Cell_head dst_w, src_w, ovl_w;
 static int xtiles, ytiles;
 static RASTER_MAP_TYPE map_type;
 
-static void write_support_files(int xtile, int ytile);
+static void write_support_files(int xtile, int ytile, int overlap);
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
     int infile;
-    size_t xtile_size;
-    int ytile, xtile, y;
+    size_t xtile_size, cell_size;
+    int ytile, xtile, y, overlap;
     int *outfiles;
     void *inbuf;
 
@@ -67,10 +67,18 @@ int main(int argc, char *argv[])
     parm.height->multiple = NO;
     parm.height->description = _("Height of tiles");
 
+    parm.overlap = G_define_option();
+    parm.overlap->key = "overlap";
+    parm.overlap->type = TYPE_INTEGER;
+    parm.overlap->required = NO;
+    parm.overlap->multiple = NO;
+    parm.overlap->description = _("Overlap of tiles");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     G_get_set_window(&src_w);
+    overlap = parm.overlap->answer ? atoi(parm.overlap->answer) : 0;
 
     /* set window to old map */
     Rast_get_cellhd(parm.rastin->answer, "", &src_w);
@@ -85,17 +93,26 @@ int main(int argc, char *argv[])
     G_debug(1, "X: %d * %d, Y: %d * %d",
 	    xtiles, dst_w.cols, ytiles, dst_w.rows);
 
-    src_w.cols = xtiles * dst_w.cols;
-    src_w.rows = ytiles * dst_w.rows;
-    src_w.east = src_w.west + src_w.cols * src_w.ew_res;
-    src_w.south = src_w.north - src_w.rows * src_w.ns_res;
+    src_w.cols = xtiles * dst_w.cols + 2 * overlap;
+    src_w.rows = ytiles * dst_w.rows + 2 * overlap;
+    src_w.west = src_w.west - overlap * src_w.ew_res;
+    src_w.east = src_w.west + (src_w.cols + 2 * overlap) * src_w.ew_res;
+    src_w.north = src_w.north + overlap * src_w.ns_res;
+    src_w.south = src_w.north - (src_w.rows + 2 * overlap) * src_w.ns_res;
 
     Rast_set_input_window(&src_w);
-    Rast_set_output_window(&dst_w);
+
+    /* set the output region */
+    ovl_w = dst_w;
+    ovl_w.cols = ovl_w.cols + 2 * overlap;
+    ovl_w.rows = ovl_w.rows + 2 * overlap;
+
+    G_adjust_Cell_head(&ovl_w, 1, 1);
+    Rast_set_output_window(&ovl_w);
 
     infile = Rast_open_old(parm.rastin->answer, "");
     map_type = Rast_get_map_type(infile);
-    xtile_size = dst_w.cols * Rast_cell_size(map_type);
+    cell_size = Rast_cell_size(map_type);
 
     inbuf = Rast_allocate_input_buf(map_type);
 
@@ -111,20 +128,22 @@ int main(int argc, char *argv[])
 	    sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
 	    outfiles[xtile] = Rast_open_new(name, map_type);
 	}
-
-	for (y = 0; y < dst_w.rows; y++) {
+	
+	for (y = 0; y < ovl_w.rows; y++) {
 	    int row = ytile * dst_w.rows + y;
 	    G_debug(1, "reading row: %d", row);
 	    Rast_get_row(infile, inbuf, row, map_type);
+	    
 	    for (xtile = 0; xtile < xtiles; xtile++) {
-		void *ptr = G_incr_void_ptr(inbuf, xtile * xtile_size);
+		int cells = xtile * dst_w.cols;
+		void *ptr = G_incr_void_ptr(inbuf, cells * cell_size);
 		Rast_put_row(outfiles[xtile], ptr, map_type);
 	    }
 	}
 
 	for (xtile = 0; xtile < xtiles; xtile++) {
 	    Rast_close(outfiles[xtile]);
-	    write_support_files(xtile, ytile);
+	    write_support_files(xtile, ytile, overlap);
 	}
     }
 
@@ -133,27 +152,33 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
-static void write_support_files(int xtile, int ytile)
+static void write_support_files(int xtile, int ytile, int overlap)
 {
     char name[GNAME_MAX];
     struct Cell_head cellhd;
     char title[64];
     struct History history;
     struct Colors colors;
+    struct Categories cats;
 
     sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
 
     cellhd.north = src_w.north - ytile * dst_w.rows * src_w.ns_res;
-    cellhd.south = cellhd.north - dst_w.rows * src_w.ns_res;
+    cellhd.south = cellhd.north - (dst_w.rows + 2 * overlap) * src_w.ns_res;
     cellhd.west = src_w.west + xtile * dst_w.cols * src_w.ew_res;
-    cellhd.east = cellhd.west + dst_w.cols * src_w.ew_res;
+    cellhd.east = cellhd.west + (dst_w.cols + 2 * overlap) * src_w.ew_res;
 
     Rast_put_cellhd(name, &cellhd);
 
-    /* record map metadata/history info */
+    /* copy cats from source map */
+    if (Rast_read_cats(parm.rastin->answer, "", &cats) < 0)
+	G_fatal_error(_("Unable to read cats for %s"),
+		      parm.rastin->answer);
+    Rast_write_cats(name, &cats);
 
+    /* record map metadata/history info */
     sprintf(title, "Tile %d,%d of %s", xtile, ytile, parm.rastin->answer);
     Rast_put_cell_title(parm.rastout->answer, title);
 
