@@ -1328,8 +1328,11 @@ static int check_overwrite(void)
                         if (access(opt->answers[i], F_OK) == 0)
                             found = TRUE;
 		    }
-                    else if (G_find_file(element, opt->answers[i], G_mapset())) {
-			found = TRUE;
+                    else if (strcmp(element, "mapset") != 0) {
+                        /* TOD0: other elements should be probably skipped */
+                        if (G_find_file(element, opt->answers[i], G_mapset())) {
+                            found = TRUE;
+                        }
 		    }
                     
 		    if (found) {	/* found */
