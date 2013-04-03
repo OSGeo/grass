@@ -59,6 +59,11 @@ def _check(value, path, type):
                                                  join(path, value)))
 
 
+def make_mapset(mapset, location=None, gisdbase=None):
+    if libgis.G__make_mapset(gisdbase, location, mapset) != 0:
+        raise GrassError("I cannot create a new mapset.")
+
+
 class Gisdbase(object):
     """Return Gisdbase object. ::
 
@@ -190,10 +195,6 @@ class Location(object):
             ['PERMANENT', 'user1']
         """
         return [mapset for mapset in self]
-
-    def new_mapset(self, mapset):
-        if libgis.G__make_mapset(self.gisdbase, self.location, mapset) != 0:
-            raise GrassError("I cannot create a new mapset.")
 
 
 class Mapset(object):
