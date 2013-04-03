@@ -402,10 +402,8 @@ void G_free_ls_filter(void *);
 const char *G__machine_name(void);
 
 /* make_loc.c */
-int G__make_location(const char *, struct Cell_head *, struct Key_Value *,
-		     struct Key_Value *, FILE *);
-int G_make_location(const char *, struct Cell_head *, struct Key_Value *,
-		    struct Key_Value *, FILE *);
+int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
+		    const struct Key_Value *);
 int G_compare_projections(const struct Key_Value *, const struct Key_Value *,
 			  const struct Key_Value *, const struct Key_Value *);
 
