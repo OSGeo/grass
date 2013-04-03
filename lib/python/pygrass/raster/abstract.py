@@ -302,11 +302,11 @@ class RasterAbstractBase(object):
            True
         """
         if self.name:
-            self.mapset = functions.get_mapset_raster(self.name, self.mapset)
-        else:
-            return False
-        if self.mapset:
-            return True
+            if self.mapset == '':
+                mapset = functions.get_mapset_raster(self.name, self.mapset)
+                self.mapset = mapset
+                return True
+            return bool(functions.get_mapset_raster(self.name, self.mapset))
         else:
             return False
 

@@ -103,8 +103,8 @@ class RasterRow(RasterAbstractBase):
 
 
     """
-    def __init__(self, name, *args, **kargs):
-        super(RasterRow, self).__init__(name, *args, **kargs)
+    def __init__(self, name, mapset='', *args, **kargs):
+        super(RasterRow, self).__init__(name, mapset, *args, **kargs)
 
     # mode = "r", method = "row",
     @must_be_open
