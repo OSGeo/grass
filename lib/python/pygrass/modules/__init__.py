@@ -8,7 +8,7 @@ Created on Thu Jul 12 10:23:15 2012
 import interface
 from interface import Module
 
-#import grid
-#from grid.grid import GridModule
+import grid
+from grid.grid import GridModule
 
 import shortcuts
