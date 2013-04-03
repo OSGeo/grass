@@ -124,6 +124,11 @@ class Bbox(object):
                                               point.z if point.z else 0,
                                               self.c_bbox))
 
+    def items(self):
+        return [('north', self.north), ('south', self.south),
+                ('east', self.east), ('west', self.west),
+                ('top', self.top), ('bottom', self.bottom)]
+
 
 class BoxList(object):
     """Instantiate a BoxList class to create a list of Bounding Box"""
