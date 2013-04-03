@@ -162,7 +162,8 @@ int main(int argc, char *argv[])
 	if (flag.add->answer == TRUE) {
 	    G_debug(2, "Mapset <%s> doesn't exist, attempting to create it",
 		    mapset_new);
-	    G_make_mapset(gisdbase_new, location_new, mapset_new);
+	    if (G_make_mapset(gisdbase_new, location_new, mapset_new) != 0)
+                G_fatal_error(_("Unable to create new mapset <%s>"), mapset_new);
 	}
 	else
 	    G_fatal_error(_("Mapset <%s> does not exist. Use -c flag to create it."),
