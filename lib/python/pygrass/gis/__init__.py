@@ -4,6 +4,7 @@ from __future__ import print_function
 #import os
 from os import listdir
 from os.path import join
+import shutil
 import ctypes as ct
 import fnmatch
 
@@ -57,6 +58,14 @@ def _check(value, path, type):
     else:
         raise GrassError("%s <%s> not found." % (type.title(),
                                                  join(path, value)))
+
+
+def set_current_mapset(mapset, location=None, gisdbase=None):
+    libgis.G_setenv('MAPSET', mapset)
+    if location:
+        libgis.G_setenv('LOCATION_NAME', location)
+    if gisdbase:
+        libgis.G_setenv('GISDBASEE', gisdbase)
 
 
 def make_mapset(mapset, location=None, gisdbase=None):
@@ -187,14 +196,17 @@ class Location(object):
     def __repr__(self):
         return 'Location(%r)' % self.name
 
-    def mapsets(self):
+    def mapsets(self, pattern=None):
         """Return a list of the available mapsets. ::
 
             >>> location = Location()
             >>> location.mapsets()
             ['PERMANENT', 'user1']
         """
-        return [mapset for mapset in self]
+        mapsets = [mapset for mapset in self]
+        if pattern:
+            return fnmatch.filter(mapsets, pattern)
+        return mapsets
 
 
 class Mapset(object):
@@ -285,3 +297,18 @@ class Mapset(object):
                 if pattern:
                     return fnmatch.filter(elist, pattern)
                 return elist
+
+    def is_current(self):
+        return (self.name == libgis.G_getenv('MAPSET') and
+                self.location == libgis.G_getenv('LOCATION_NAME') and
+                self.gisdbase == libgis.G_getenv('GISDBASE'))
+
+    def current(self):
+        """Set the mapset as current"""
+        set_current_mapset(self.name, self.location, self.gisdbase)
+
+    def delete(self):
+        """Delete the mapset"""
+        if self.is_current():
+            raise GrassError('The mapset is in use.')
+        shutil.rmtree(join(self.gisdbase, self.location, self.name))
