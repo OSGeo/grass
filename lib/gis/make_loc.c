@@ -1,29 +1,17 @@
-
-/******************************************************************************
+/*!
+ * \file lib/gis/make_loc.c
  *
- * Project:  libgrass
- * Purpose:  Function to create a new location automatically given a 
- *           "Cell_head", PROJ_INFO and PROJ_UNITS information.
- * Author:   Frank Warmerdam, warmerda@pobox.com
+ * \brief GIS Library - Functions to create a new location
  *
- ******************************************************************************
- * Copyright (c) 2000, Frank Warmerdam
+ * Creates a new location automatically given a "Cell_head", PROJ_INFO
+ * and PROJ_UNITS information.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * (C) 2000-2013 by the GRASS Development Team
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- ******************************************************************************
- *
+ * \author Frank Warmerdam
  */
 
 #include <grass/gis.h>
@@ -34,16 +22,34 @@
 #include <sys/stat.h>
 #include <math.h>
 
-/*
- * Returns 0 on success.
- * Returns -1 to indicate a system error (check errno).
+/*!
+ * \brief Create a new location
+ * 
+ * This function creates a new location in the current database,
+ * initializes the projection, default window and current window.
+ *
+ * \param location_name Name of the new location. Should not include
+ *                      the full path, the location will be created within
+ *                      the current database.
+ * \param wind          default window setting for the new location.
+ *                      All fields should be set in this
+ *                      structure, and care should be taken to ensure that
+ *                      the proj/zone fields match the definition in the
+ *                      proj_info parameter(see G_set_cellhd_from_projinfo()).
+ *
+ * \param proj_info     projection definition suitable to write to the
+ *                      PROJ_INFO file, or NULL for PROJECTION_XY.
+ *
+ * \param proj_units    projection units suitable to write to the PROJ_UNITS
+ *                      file, or NULL.
+ *
+ * \returns 0 on success
+ * \returns -1 to indicate a system error (check errno).
  */
-
-
-int G__make_location(const char *location_name,
-		     struct Cell_head *wind,
-		     struct Key_Value *proj_info,
-		     struct Key_Value *proj_units, FILE * report_file)
+int G_make_location(const char *location_name,
+                    struct Cell_head *wind,
+                    const struct Key_Value *proj_info,
+                    const struct Key_Value *proj_units)
 {
     char path[GPATH_MAX];
 
@@ -54,8 +60,10 @@ int G__make_location(const char *location_name,
 
     /* Make the PERMANENT mapset. */
     sprintf(path, "%s/%s/%s", G_gisdbase(), location_name, "PERMANENT");
-    if (G_mkdir(path) != 0)
+    if (G_mkdir(path) != 0) {
+        perror("G_make_location");
 	return -1;
+    }
 
     /* make these the new current location and mapset */
     G__setenv("LOCATION_NAME", location_name);
@@ -79,89 +87,27 @@ int G__make_location(const char *location_name,
     return 0;
 }
 
-
 /*!
- * \brief  create a new location
- * 
- * This function creates a new location in the current database,
- * initializes the projection, default window and current window.  
+ * \brief Compare projections including units
  *
- * \param location_name
- *                      The name of the new location.  Should not include
- *                      the full path, the location will be created within
- *                      the current database.
- * \param wind
- *                      Contains the default window setting for the
- *                      new location.  All fields should be set in this
- *                      structure, and care should be taken to ensure that
- *                      the proj/zone fields match the definition in the
- *                      proj_info parameter (see G_set_cellhd_from_projinfo()).
- *
- * \param proj_info
- *                      Projection definition suitable to write to the
- *                      PROJ_INFO file, or NULL for PROJECTION_XY.
- *
- * \param proj_units
- *                      Projection units suitable to write to the PROJ_UNITS
- *                      file, or NULL.
- *
- * \param report_file 
- *                      File to which creation information should be written
- *                      (can be stdout).  Currently not used.
- *
- * \return Returns 0 on success, or generates a fatal error on failure.  
- *         The G__make_location() function operates the same, but returns a
- *         non-zero error code on failure, instead of terminating. 
+ *  \param proj_info1   projection info to compare
+ *  \param proj_units1  projection units to compare
+ *  \param proj_info2   projection info to compare
+ *  \param proj_units2  projection units to compare
+
+ *  \return -1 if not the same projection
+ *  \return -2 if linear unit translation to meters fails
+ *  \return -4 if not the same ellipsoid,
+ *  \return -5 if UTM zone differs
+ *  \return -6 if UTM hemisphere differs,
+ *  \return -7 if false easting differs
+ *  \return -8 if false northing differs,
+ *  \return 1  if projections match.
  */
-
-int G_make_location(const char *location_name,
-		    struct Cell_head *wind,
-		    struct Key_Value *proj_info,
-		    struct Key_Value *proj_units, FILE * report_file)
-{
-    int err;
-
-    err = G__make_location(location_name, wind, proj_info, proj_units,
-			   report_file);
-
-    if (err == 0)
-	return 0;
-
-    if (err == -1) {
-	perror("G_make_location");
-    }
-
-    G_fatal_error("G_make_location failed.");
-
-    return 1;
-}
-
-
-/************************************************************************/
-/*                       G_compare_projections()                        */
-
-/************************************************************************/
-
-/*!
- * \brief compare projections
- *
- *  \param proj_info1
- *  \param proj_units1
- *  \param proj_info2
- *  \param proj_units2
- *  \return -1 if not the same projection, -2 if linear unit translation to 
- *          meters fails, -4 if not the same ellipsoid,
- *          -5 if UTM zone differs, -6 if UTM hemisphere differs,
- *          -7 if false easting differs, -8 if false northing differs,
- *          else TRUE if projections match.
- *          
- */
-
-int
-G_compare_projections(const struct Key_Value *proj_info1,
-		      const struct Key_Value *proj_units1,
-		      const struct Key_Value *proj_info2,
-		      const struct Key_Value *proj_units2)
+int G_compare_projections(const struct Key_Value *proj_info1,
+                          const struct Key_Value *proj_units1,
+                          const struct Key_Value *proj_info2,
+                          const struct Key_Value *proj_units2)
 {
     const char *proj1, *proj2;
 
@@ -186,7 +132,7 @@ G_compare_projections(const struct Key_Value *proj_info1,
     /* -------------------------------------------------------------------- */
     /* prevent seg fault in G_find_key_value */
     if (proj_units1 == NULL && proj_units2 == NULL)
-	return TRUE;
+	return 1;
 
     if (proj_units1 == NULL || proj_units2 == NULL)
 	return -2;
@@ -268,5 +214,5 @@ G_compare_projections(const struct Key_Value *proj_info1,
     /*      Add more details in later.                                      */
     /* -------------------------------------------------------------------- */
 
-    return TRUE;
+    return 1;
 }
