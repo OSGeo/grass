@@ -410,10 +410,7 @@ int G_compare_projections(const struct Key_Value *, const struct Key_Value *,
 			  const struct Key_Value *, const struct Key_Value *);
 
 /* make_mapset.c */
-int G__make_mapset(const char *gisdbase_name, const char *location_name,
-		   const char *mapset_name);
-int G_make_mapset(const char *gisdbase_name, const char *location_name,
-		  const char *mapset_name);
+int G_make_mapset(const char *, const char *, const char *);
 
 /* mapcase.c */
 char *G_tolcase(char *);

@@ -1,45 +1,44 @@
-
-/******************************************************************************
+/*!
+ * \file lib/gis/make_mapset.c
  *
- * Project:  libgrass
- * Purpose:  Function to create a new mapset within an existing location
- * Author(s): Joel Pitt, joel.pitt@gmail.com
+ * \brief GIS Library - Functions to create a new mapset within an
+ * existing location
  *
- ******************************************************************************
- * Copyright (c) 2006, Joel Pitt
+ * (C) 2006-2013 by the GRASS Development Team
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- ******************************************************************************
- *
+ * \author Joel Pitt, joel.pitt@gmail.com
  */
-
-#include <grass/gis.h>
 
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
-/*
- * Returns 0 on success.
- * Returns -1 to indicate a system error (check errno).
+#include <grass/gis.h>
+#include <grass/glocale.h>
+
+/*!
+ * \brief Create a new mapset
+ * 
+ * This function creates a new mapset in the given location,
+ * initializes default window and the current window.
+ *
+ * \param gisdbase_name full path of GISDBASE to create mapset in
+ *                      (NULL for the current GISDBASE)
+ * \param location_name name of location to create mapset in
+ *                      (NULL for the current location)
+ * \param mapset_name   Name of the new mapset. Should not include
+ *                      the full path, the mapset will be created within
+ *                      the specified database and location.
+ *
+ * \return 0 on success
+ * \return -1 to indicate a system error (check errno).
  */
-
-
-int G__make_mapset(const char *gisdbase_name, const char *location_name,
-		   const char *mapset_name)
+int G_make_mapset(const char *gisdbase_name, const char *location_name,
+                  const char *mapset_name)
 {
     char path[GPATH_MAX];
     struct Cell_head default_window;
@@ -54,11 +53,15 @@ int G__make_mapset(const char *gisdbase_name, const char *location_name,
 
     /* TODO: Should probably check that user specified location and gisdbase are valid */
 
+    if (G_legal_filename(mapset_name) != 1)
+        return -1;
+    
     /* Make the mapset. */
     sprintf(path, "%s/%s/%s", gisdbase_name, location_name, mapset_name);
-    if (G_mkdir(path) != 0)
+    if (G_mkdir(path) != 0) {
+        perror("G_make_mapset");
 	return -1;
-
+    }
     G__create_alt_env();
 
     /* Get PERMANENT default window */
@@ -79,44 +82,3 @@ int G__make_mapset(const char *gisdbase_name, const char *location_name,
     return 0;
 }
 
-
-/*!
- * \brief  create a new mapset
- * 
- * This function creates a new mapset in the current location,
- * initializes default window and current window.
- *
- * \param gisdbase_name
- *                      The full path of GISDBASE to create mapset in.
- *                      If NULL then current GISDBASE is used.
- * \param location_name
- *                      The name location to create mapset in.
- *                      If NULL then current location is used.
- * \param mapset_name
- *                      The name of the new mapset.  Should not include
- *                      the full path, the mapset will be created within
- *                      the current database and location.
- *
- * \return Returns 0 on success, or generates a fatal error on failure.  
- *         The G__make_mapset() function operates the same, but returns a
- *         non-zero error code on failure, instead of terminating. 
- */
-
-int G_make_mapset(const char *gisdbase_name, const char *location_name,
-		  const char *mapset_name)
-{
-    int err;
-
-    err = G__make_mapset(gisdbase_name, location_name, mapset_name);
-
-    if (err == 0)
-	return 0;
-
-    if (err == -1) {
-	perror("G_make_mapset");
-    }
-
-    G_fatal_error("G_make_mapset failed.");
-
-    return 1;
-}
