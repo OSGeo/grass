@@ -1,14 +1,12 @@
 /*!
-   \file file_name.c
+   \file lib/gis/file_name.c
 
-   \brief GIS library - Determice GRASS data base file name
+   \brief GIS library - Determine GRASS data base file name
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2008, 2013 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL
  */
@@ -21,16 +19,16 @@
 /*!
   \brief Builds full path names to GIS data files
 
-  If name is of the form "nnn@ppp" then path is set
-  as if name had been nnn and mapset had been ppp
-  (mapset parameter itself is ignored in this case)
+  If name is of the form "nnn@ppp" then path is set as if name had
+  been nnn and mapset had been ppp (mapset parameter itself is ignored
+  in this case).
   
   \param[out] path buffer to hold resultant full path to file
   \param element database element (eg, "cell", "cellhd", etc)
   \param name name of file to build path to (fully qualified names allowed)
   \param mapset mapset name
 
-  \return pointer to <i>path</i>
+  \return pointer to <i>path</i> buffer
 */
 char *G_file_name(char *path,
 		   const char *element, const char *name, const char *mapset)
