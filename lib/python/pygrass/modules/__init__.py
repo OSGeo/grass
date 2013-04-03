@@ -445,6 +445,7 @@ class Module(object):
         #
         self.run_ = True
         self.finish_ = True
+        self.env_ = None
         self.stdin_ = None
         self.stdin = None
         self.stdout_ = None
@@ -485,6 +486,9 @@ class Module(object):
         if 'stderr_' in kargs:
             self.outputs['stderr'].value = kargs['stderr_']
             del(kargs['stderr_'])
+        if 'env_' in kargs:
+            self.env_ = kargs['env_']
+            del(kargs['env_'])
         if 'finish_' in kargs:
             self.finish_ = kargs['finish_']
             del(kargs['finish_'])
@@ -564,6 +568,16 @@ class Module(object):
         flags = self.flags.__doc__
         return '\n'.join([head, params, _DOC['flag_head'], flags])
 
+    def get_dict(self):
+        dic = {}
+        dic['name'] = self.name
+        dic['inputs'] = [(k, v.value) for k, v in self.inputs.items()
+                         if v.value]
+        dic['outputs'] = [(k, v.value) for k, v in self.outputs.items()
+                          if v.value]
+        dic['flags'] = [flg for flg in self.flags if self.flags[flg].value]
+        return dic
+
     def make_cmd(self):
         args = [self.name, ]
         for par in self.params_list:
@@ -586,7 +600,8 @@ class Module(object):
         self.popen = subprocess.Popen(cmd,
                                       stdin=self.stdin_,
                                       stdout=self.stdout_,
-                                      stderr=self.stderr_)
+                                      stderr=self.stderr_,
+                                      env=self.env_)
         if self.finish_:
             self.popen.wait()
 
