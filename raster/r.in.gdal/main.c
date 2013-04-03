@@ -344,8 +344,11 @@ int main(int argc, char *argv[])
 			    "format; cannot create new location."));
 	}
 	else {
-	    G_make_location(parm.outloc->answer, &cellhd,
-			    proj_info, proj_units, NULL);
+            if (0 != G_make_location(parm.outloc->answer, &cellhd,
+                                     proj_info, proj_units)) {
+                G_fatal_error(_("Unable to create new location <%s>"),
+                              parm.outloc->answer);
+            }
 	    G_message(_("Location <%s> created"), parm.outloc->answer);
 	}
 
