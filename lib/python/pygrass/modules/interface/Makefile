@@ -1,4 +1,4 @@
-MODULE_TOPDIR = ../../../..
+MODULE_TOPDIR = ../../../../..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
@@ -7,18 +7,14 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 PGDIR = $(GDIR)/pygrass
-DSTDIR= $(PGDIR)/modules
+DSTDIR= $(PGDIR)/modules/interface
 
-MODULES = shortcuts
-
-CLEAN_SUBDIRS = interface
+MODULES = read typedict flag parameter module
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
 default: $(PYFILES) $(PYCFILES) $(GDIR)/__init__.py $(GDIR)/__init__.pyc
-	-$(MAKE) -C interface || echo $(CURDIR)/interface >> $(ERRORLOG)
-	-$(MAKE) -C grid || echo $(CURDIR)/grid >> $(ERRORLOG)
 
 $(PYDIR):
 	$(MKDIR) $@

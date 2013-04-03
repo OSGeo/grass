@@ -41,14 +41,14 @@ class PyShellWindow(wx.Panel):
                              introText = self.intro,
                              locals={'grass': grass,
                                      'pygrass': pygrass,
-                                     'r': pgmodules.raster,
-                                     'r3': pgmodules.raster3D,
-                                     'v': pgmodules.vector,
-                                     'i': pgmodules.imagery,
-                                     'db': pgmodules.database,
-                                     'g': pgmodules.general,
-                                     'ps': pgmodules.postscript,
-                                     't': pgmodules.temporal,
+                                     'r': pgmodules.shortcuts.raster,
+                                     'r3': pgmodules.shortcuts.raster3D,
+                                     'v': pgmodules.shortcuts.vector,
+                                     'i': pgmodules.shortcuts.imagery,
+                                     'db': pgmodules.shortcuts.database,
+                                     'g': pgmodules.shortcuts.general,
+                                     'ps': pgmodules.shortcuts.postscript,
+                                     't': pgmodules.shortcuts.temporal,
                                      'giface': self.parent._giface,  # for experimetal reasons only
                                      'AddLayer': self.AddLayer})
         
