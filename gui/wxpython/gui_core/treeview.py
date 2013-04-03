@@ -27,6 +27,7 @@ import wx.gizmos as gizmos
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
+from core.globalvar import hasAgw
 from core.treemodel import TreeModel, DictNode
 
 from grass.pydispatch.signal import Signal
@@ -124,9 +125,14 @@ class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
 class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
     """!Tree view class inheriting from wx.TreeCtrl"""
     def __init__(self, model, parent, **kw):
-        if 'agwStyle' not in kw:
-            kw['agwStyle'] = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT |\
-                             CT.TR_HAS_BUTTONS | CT.TR_LINES_AT_ROOT | CT.TR_SINGLE
+        if hasAgw:
+            style = 'agwStyle'
+        else:
+            style = 'style'
+        
+        if style not in kw:
+            kw[style] = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT |\
+                CT.TR_HAS_BUTTONS | CT.TR_LINES_AT_ROOT | CT.TR_SINGLE
         super(CTreeView, self).__init__(parent=parent, model=model, **kw)
         
 class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
