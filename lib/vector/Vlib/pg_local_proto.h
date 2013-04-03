@@ -63,9 +63,8 @@ int Vect__set_initial_query_pg(struct Format_info_pg *, int);
 int Vect__load_plus_pg(struct Map_info *, int);
 
 off_t V2__write_node_pg(struct Map_info *, const struct line_pnts *);
-off_t V2__write_area_pg(struct Map_info *, const struct line_pnts *,
-                        const struct line_cats *,
-                        const struct line_pnts **, int);
+off_t V2__write_area_pg(struct Map_info *, const struct line_pnts **, int,
+                        const struct line_cats *);
 
 int Vect__insert_face_pg(struct Map_info *, int);
 

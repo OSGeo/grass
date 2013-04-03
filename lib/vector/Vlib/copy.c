@@ -18,6 +18,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 /*!
   \brief Copy topological elements
 
@@ -59,8 +61,6 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
    vector map to output vector map
 
    Note: Try to copy on level 2 otherwise level 1 is used.
-   
-   \todo Implement V2__write_area_ogr()
    
    \param In input vector map
    \param field layer number (-1 for all layers)
@@ -317,6 +317,9 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
             G_warning(_("Writing node %d failed"), node);
             return 1;
         }
+#else
+        G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+        return 1;
 #endif
     }
 
@@ -376,19 +379,20 @@ int is_isle(const struct Map_info *Map, int area)
 */
 int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
 {
-    int i, area, nareas, cat, isle, nisles, nisles_alloc;
+    int i, area, nareas, cat, isle, nisles, nparts_alloc;
     int ogr;
-    struct line_pnts *Points, **IPoints;
+    struct line_pnts **Points;
     struct line_cats *Cats;
     
     ogr = Vect_maptype(Out) == (GV_FORMAT_OGR || GV_FORMAT_OGR_DIRECT);
     
-    IPoints = NULL;
-    nisles_alloc = 0;
-    Points  = Vect_new_line_struct();
-    Cats    = Vect_new_cats_struct();
+    /* allocate points & cats */
+    Points    = (struct line_pnts **) G_malloc(sizeof(struct line_pnts *));
+    Points[0] = Vect_new_line_struct();
+    nparts_alloc = 1;
+    Cats      = Vect_new_cats_struct();
 
-    /* copy areas/polygons */
+    /* copy areas */
     nareas = Vect_get_num_areas(In);
     G_message(_("Exporting areas..."));
     for (area = 1; area <= nareas; area++) {
@@ -406,49 +410,40 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
             continue;
         }
         
-        /* get outer ring (area) geometry */
-        Vect_get_area_points(In, area, Points);
+        /* get outer ring (area) */
+        Vect_get_area_points(In, area, Points[0]);
 
+        /* get category */
         Vect_reset_cats(Cats);
         Vect_cat_set(Cats, field, cat);
         
-        /* get inner rings (isles) geometry */
+        /* get inner rings (isles) */
         nisles = Vect_get_area_num_isles(In, area);
-        if (nisles > nisles_alloc) {
+        if (nisles + 1 > nparts_alloc) {
             /* reallocate space for isles */
-            IPoints = (struct line_pnts **) G_realloc(IPoints,
-                                                      nisles *
-                                                      sizeof(struct line_pnts *));
-            for (i = nisles_alloc; i < nisles; i++)
-                IPoints[i] = Vect_new_line_struct();
-            nisles_alloc = nisles;
+            Points = (struct line_pnts **) G_realloc(Points,
+                                                     (nisles + 1) *
+                                                     sizeof(struct line_pnts *));
+            for (i = nparts_alloc; i < nisles + 1; i++)
+                Points[i] = Vect_new_line_struct();
+            nparts_alloc = nisles + 1;
         }
         G_debug(3, "\tcat=%d, nisles=%d", cat, nisles);
         for (i = 0; i < nisles; i++) {
             isle = Vect_get_area_isle(In, area, i);
-            Vect_get_isle_points(In, isle, IPoints[i]);
+            Vect_get_isle_points(In, isle, Points[i + 1]);
         }
         
-        if (ogr)
-            Vect_write_line(Out, GV_BOUNDARY, Points, Cats);
-        else {
-#if HAVE_POSTGRES
-            if (-1 == V2__write_area_pg(Out, Points, Cats,
-                                        (const struct line_pnts **) IPoints, nisles)) {
-                G_warning(_("Writing area %d failed"), area);
-                return 1;
-            }
-#else
-            G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
-#endif
+        if (0 > V2__write_area_sfa(Out, (const struct line_pnts **) Points,
+                                   nisles + 1, Cats)) {
+            G_warning(_("Writing area %d failed"), area);
+            return -1;
         }
     }
     
     /* free allocated space for isles */
-    for (i = 0; i < nisles_alloc; i++)
-        Vect_destroy_line_struct(IPoints[i]);
-
-    Vect_destroy_line_struct(Points);
+    for (i = 0; i < nparts_alloc; i++)
+        Vect_destroy_line_struct(Points[i]);
     Vect_destroy_cats_struct(Cats);
 
     return 0;

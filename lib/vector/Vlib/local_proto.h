@@ -22,4 +22,14 @@ int V2__add_line_to_topo_nat(struct Map_info *, off_t, int,
 int V2__delete_line_from_topo_nat(struct Map_info *, int, int,
                                   const struct line_pnts *, const struct line_cats *);
 
+/* write_sfa.c */
+off_t V2__write_area_sfa(struct Map_info *, const struct line_pnts **, int,
+                         const struct line_cats *);
+
+/* write_ogr.c */
+#ifdef HAVE_OGR
+off_t V2__write_area_ogr(struct Map_info *, const struct line_pnts **, int,
+                         const struct line_cats *);
+#endif /* HAVE_OGR */
+
 #endif /* PG_LOCAL_PROTO_H__ */

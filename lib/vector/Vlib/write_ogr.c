@@ -9,7 +9,7 @@
 
    \todo How to deal with OGRNullFID
    
-   (C) 2009-2011, 2012 by Martin Landa, and the GRASS Development Team
+   (C) 2009-2013 by Martin Landa, and the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -24,9 +24,11 @@
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
-static int sqltype_to_ogrtype(int);
+static off_t write_feature(struct Map_info *, int, const struct line_pnts **, int,
+                           const struct line_cats *);
 static int write_attributes(dbDriver *, int, const struct field_info *,
 			    OGRLayerH, OGRFeatureH);
+static int sqltype_to_ogrtype(int);
 #endif
 
 /*!
@@ -58,9 +60,130 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 			const struct line_cats *cats)
 {
 #ifdef HAVE_OGR
+    return write_feature(Map, type, &points, 1, cats);
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
+}
+
+/*!
+  \brief Rewrites feature at the given offset on level 1 (OGR interface)
+  
+  This function simply calls V1_delete_line_ogr() and V1_write_line_ogr().
+  
+  \param Map pointer to Map_info structure
+  \param offset feature offset
+  \param type feature type (see V1_write_line_ogr() for supported types)
+  \param points pointer to line_pnts structure (feature geometry)
+  \param cats pointer to line_cats structure (feature categories)
+  
+  \return feature offset (rewriten feature)
+  \return -1 on error
+*/
+off_t V1_rewrite_line_ogr(struct Map_info *Map,
+			  int line, int type, off_t offset,
+			  const struct line_pnts *points, const struct line_cats *cats)
+{
+    G_debug(3, "V1_rewrite_line_ogr(): line=%d type=%d offset=%"PRI_OFF_T,
+	    line, type, offset);
+#ifdef HAVE_OGR
+    if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
+	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
+	return -1;
+    }
+
+    /* delete old */
+    V1_delete_line_ogr(Map, offset);
+
+    return V1_write_line_ogr(Map, type, points, cats);
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
+}
+
+/*!
+  \brief Deletes feature at the given offset on level 1 (OGR interface)
+  
+  \param Map pointer Map_info structure
+  \param offset offset of feature to be deleted
+  
+  \return  0 on success
+  \return -1 on error
+*/
+int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
+{
+#ifdef HAVE_OGR
+    struct Format_info_ogr *ogr_info;
+    
+    G_debug(3, "V1_delete_line_ogr(), offset = %lu", (unsigned long) offset);
+
+    ogr_info = &(Map->fInfo.ogr);
+    
+    if (!ogr_info->layer) {
+	G_warning(_("OGR layer not defined"));
+	return -1;
+    }
+    
+    if (offset >= ogr_info->offset.array_num) {
+	G_warning(_("Invalid offset (%d)"), offset);
+	return -1;
+    }
+    
+    if (OGR_L_DeleteFeature(ogr_info->layer,
+			    ogr_info->offset.array[offset]) != OGRERR_NONE)
+	G_warning(_("Unable to delete feature"));
+	return -1;
+    
+    return 0;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
+}
+
+#ifdef HAVE_OGR
+/*!
+   \brief Writes area on topological level (OGR Simple Features
+   interface, internal use only)
+
+   \param Map pointer to Map_info structure
+   \param points feature geometry (exterior + interior rings)
+   \param nparts number of parts including exterior ring
+   \param cats feature categories
+   
+   \return feature offset
+   \return -1 on error
+*/
+off_t V2__write_area_ogr(struct Map_info *Map,
+                         const struct line_pnts **points, int nparts,
+                         const struct line_cats *cats)
+{
+    return write_feature(Map, GV_BOUNDARY, points, nparts, cats);
+}
+
+/*!
+  \brief Write OGR feature
+
+   \param Map pointer to Map_info structure
+   \param type feature type (GV_POINT, GV_LINE, ...)
+   \param bpoints feature geometry
+   \param cats feature categories
+   \param ipoints isle geometry for polygons on NULL
+   \param nisles number of isles
+   
+   \return feature offset into file
+   \return -1 on error
+*/
+off_t write_feature(struct Map_info *Map, int type,
+                    const struct line_pnts **p_points, int nparts,
+                    const struct line_cats *cats)
+{
     int i, cat, ret;
 
     struct field_info *Fi;
+    const struct line_pnts *points;
     struct Format_info_ogr *ogr_info;
     struct Format_info_offset *offset_info;
     
@@ -73,6 +196,11 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 
     ogr_info = &(Map->fInfo.ogr);
     offset_info = &(ogr_info->offset);
+    
+    if (nparts < 1)
+        return -1;
+    
+    points = p_points[0]; /* feature geometry */
     
     if (!ogr_info->layer) {
 	/* create OGR layer if doesn't exist */
@@ -137,43 +265,48 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     G_debug(3, "V1_write_line_ogr(): type = %d", type);
 
     if (Ogr_geom_type == wkbPolygon || Ogr_geom_type == wkbPolygon25D) {
-	/* create exterior ring */
-	OGRGeometryH Ogr_ring;
-	int npoints;
+	int iring, npoints;
 	
-	npoints = points->n_points - 1;
-	Ogr_ring = OGR_G_CreateGeometry(wkbLinearRing);
-	if (points->x[0] != points->x[npoints] ||
-	    points->y[0] != points->y[npoints] ||
-	    points->z[0] != points->z[npoints]) {
-	    G_warning(_("Boundary is not closed. Skipping."));
-	    return -1;
-	}
+        /* add rings (first is exterior ring) */
+        for (iring = 0; iring < nparts; iring++) {
+            OGRGeometryH Ogr_ring;
+            
+            points = p_points[iring];
+            npoints = points->n_points - 1;
+            Ogr_ring = OGR_G_CreateGeometry(wkbLinearRing);
+            if (points->x[0] != points->x[npoints] ||
+                points->y[0] != points->y[npoints] ||
+                points->z[0] != points->z[npoints]) {
+                G_warning(_("Boundary is not closed. Feature skipped."));
+                return -1;
+            }
 	
-	/* add points */
-	for (i = 0; i < points->n_points; i++) {
-	    OGR_G_AddPoint(Ogr_ring, points->x[i], points->y[i],
-			   points->z[i]);
-	}
-	OGR_G_AddGeometry(Ogr_geometry, Ogr_ring);
+            /* add points */
+            for (i = 0; i < npoints; i++) {
+                OGR_G_AddPoint(Ogr_ring, points->x[i], points->y[i],
+                               points->z[i]);
+            }
+            G_debug(4, "   ring(%d): n_points = %d", iring, npoints);
+            OGR_G_AddGeometry(Ogr_geometry, Ogr_ring);
+        }
     }
     else {
 	for (i = 0; i < points->n_points; i++) {
 	    OGR_G_AddPoint(Ogr_geometry, points->x[i], points->y[i],
 			   points->z[i]);
 	}
+        G_debug(4, "   n_points = %d", points->n_points);
     }
     
-    G_debug(4, "   n_points = %d", points->n_points);
-
     /* create feature & set geometry */
     Ogr_feature = OGR_F_Create(Ogr_featuredefn);
     OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
     /* write attributes */
     if (cat > -1 && ogr_info->dbdriver) {
-	write_attributes(ogr_info->dbdriver,
-			 cat, Fi, ogr_info->layer, Ogr_feature);
+	if (0 > write_attributes(ogr_info->dbdriver,
+                                 cat, Fi, ogr_info->layer, Ogr_feature))
+            G_warning(_("Unable to writes feature attributes"));
 	G_free(Fi);
     }
     /* write feature into layer */
@@ -202,93 +335,24 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     if (ret != OGRERR_NONE)
 	return -1;
     
-    G_debug(3, "V1_write_line_ogr(): -> offset = %lu offset_num = %d cat = %d",
+    G_debug(3, "write_feature(): -> offset = %lu offset_num = %d cat = %d",
 	    (unsigned long) offset, offset_info->array_num, cat);
 
     return offset;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
-  \brief Rewrites feature at the given offset on level 1 (OGR interface)
-  
-  This function simply calls V1_delete_line_ogr() and V1_write_line_ogr().
-  
-  \param Map pointer to Map_info structure
-  \param offset feature offset
-  \param type feature type (see V1_write_line_ogr() for supported types)
-  \param points pointer to line_pnts structure (feature geometry)
-  \param cats pointer to line_cats structure (feature categories)
-  
-  \return feature offset (rewriten feature)
+  \brief Writes attributes
+
+  \param driver pointer to dbDriver
+  \param Fi pointer to field_info struct
+  \param[in,out] Ogr_layer OGR layer
+  \param[in,out] Ogr_feature OGR feature to modify
+
+  \return 1 on success
+  \return 0 no attributes
   \return -1 on error
 */
-off_t V1_rewrite_line_ogr(struct Map_info *Map,
-			  int line, int type, off_t offset,
-			  const struct line_pnts *points, const struct line_cats *cats)
-{
-    G_debug(3, "V1_rewrite_line_ogr(): line=%d type=%d offset=%lu",
-	    line, type, offset);
-#ifdef HAVE_OGR
-    if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
-	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
-	return -1;
-    }
-
-    /* delete old */
-    V1_delete_line_ogr(Map, offset);
-
-    return V1_write_line_ogr(Map, type, points, cats);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
-}
-
-/*!
-  \brief Deletes feature at the given offset on level 1 (OGR interface)
-  
-  \param Map pointer Map_info structure
-  \param offset offset of feature to be deleted
-  
-  \return  0 on success
-  \return -1 on error
-*/
-int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
-{
-#ifdef HAVE_OGR
-    struct Format_info_ogr *ogr_info;
-    
-    G_debug(3, "V1_delete_line_ogr(), offset = %lu", (unsigned long) offset);
-
-    ogr_info = &(Map->fInfo.ogr);
-    
-    if (!ogr_info->layer) {
-	G_warning(_("OGR layer not defined"));
-	return -1;
-    }
-    
-    if (offset >= ogr_info->offset.array_num) {
-	G_warning(_("Invalid offset (%d)"), offset);
-	return -1;
-    }
-    
-    if (OGR_L_DeleteFeature(ogr_info->layer,
-			    ogr_info->offset.array[offset]) != OGRERR_NONE)
-	G_warning(_("Unable to delete feature"));
-	return -1;
-    
-    return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
-}
-
-#ifdef HAVE_OGR
 int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 		     OGRLayerH Ogr_layer, OGRFeatureH Ogr_feature)
 {
@@ -321,13 +385,15 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 
     /* select data */
     if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
-	G_fatal_error(_("Unable to select attributes for category %d"),
-		      cat);
+        G_warning(_("Unable to select attributes for category %d"),
+                  cat);
+        return -1;
     }
     
     if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-	G_fatal_error(_("Unable to fetch data from table <%s>"),
-		      Fi->table);
+	G_warning(_("Unable to fetch data from table <%s>"),
+                  Fi->table);
+        return -1;
     }
     
     if (!more) {
