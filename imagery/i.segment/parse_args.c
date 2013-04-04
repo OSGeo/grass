@@ -112,7 +112,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     bounds = G_define_standard_option(G_OPT_R_INPUT);
     bounds->key = "bounds";
     bounds->required = NO;
-    bounds->label = _("Name for input bounding/constraining raster map");
+    bounds->label = _("Name of input bounding/constraining raster map");
     bounds->description =
 	_("Must be integer values, each area will be segmented independent of the others");
 
