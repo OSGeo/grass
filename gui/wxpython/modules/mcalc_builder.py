@@ -82,7 +82,7 @@ class MapCalcFrame(wx.Frame):
             'if(x,a)':'if( , )',
             'if(x,a,b)':'if( , , )',
             'if(x,a,b,c)':'if( , , , )',
-            'int(x)':'if()',
+            'int(x)':'int()',
             'isnull(x)':'isnull()',
             'log(x)':'log(',
             'log(x,b)':'log( , )',
