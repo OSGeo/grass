@@ -60,6 +60,7 @@ struct cache *readcell(int fdi, const char *size)
 	c->fd = -1;
 	c->fname = NULL;
     }
+    G_message("%.2f percent are kept in memory", 100.0 * nblocks / (nx * ny));
 
     G_important_message(_("Allocating memory and reading input map..."));
     G_percent(0, nrows, 5);
