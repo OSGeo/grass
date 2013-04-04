@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
 	}
 	else {
             if (0 != G_make_location(parm.outloc->answer, &cellhd,
-                                     proj_info, proj_units)) {
+                                     proj_info, proj_units, NULL)) {
                 G_fatal_error(_("Unable to create new location <%s>"),
                               parm.outloc->answer);
             }
@@ -737,8 +737,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     int row, nrows, ncols, complex;
     int cf, cfR, cfI, bNoDataEnabled;
     int indx;
-    CELL *cell, *cellReal, *cellImg;
-    float *bufComplex;
+    void *cell, *cellReal, *cellImg;
+    void *bufComplex;
     double dfNoData;
     char outputReal[GNAME_MAX], outputImg[GNAME_MAX];
     char *nullFlags = NULL;
@@ -754,9 +754,14 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     
     switch (eRawGDT) {
     case GDT_Float32:
-    case GDT_Float64:
 	data_type = FCELL_TYPE;
 	eGDT = GDT_Float32;
+	complex = FALSE;
+	break;
+
+    case GDT_Float64:
+	data_type = DCELL_TYPE;
+	eGDT = GDT_Float64;
 	complex = FALSE;
 	break;
 
@@ -798,7 +803,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	cellReal = Rast_allocate_buf(data_type);
 	cellImg = Rast_allocate_buf(data_type);
-	bufComplex = (float *)G_malloc(sizeof(float) * ncols * 2);
+	if (eGDT == GDT_Float64)
+	    bufComplex = (double *)G_malloc(sizeof(double) * ncols * 2);
+	else
+	    bufComplex = (float *)G_malloc(sizeof(float) * ncols * 2);
 
 	if (group_ref != NULL) {
 	    I_add_file_to_group_ref(outputReal, G_mapset(), group_ref);
@@ -836,16 +844,22 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 		for (indx = ncols - 1; indx >= 0; indx--) {	/* CEOS: flip east-west during import - MN */
 		    if (eGDT == GDT_Int32) {
-			((GInt32 *) cellReal)[ncols - indx] =
+			((CELL *) cellReal)[ncols - indx] =
 			    ((GInt32 *) bufComplex)[indx * 2];
-			((GInt32 *) cellImg)[ncols - indx] =
+			((CELL *) cellImg)[ncols - indx] =
 			    ((GInt32 *) bufComplex)[indx * 2 + 1];
 		    }
-		    else {
-			((float *)cellReal)[ncols - indx] =
-			    bufComplex[indx * 2];
-			((float *)cellImg)[ncols - indx] =
-			    bufComplex[indx * 2 + 1];
+		    else if (eGDT == GDT_Float32) {
+			((FCELL *)cellReal)[ncols - indx] =
+			    ((float *)bufComplex)[indx * 2];
+			((FCELL *)cellImg)[ncols - indx] =
+			    ((float *)bufComplex)[indx * 2 + 1];
+		    }
+		    else if (eGDT == GDT_Float64) {
+			((DCELL *)cellReal)[ncols - indx] =
+			    ((double *)bufComplex)[indx * 2];
+			((DCELL *)cellImg)[ncols - indx] =
+			    ((double *)bufComplex)[indx * 2 + 1];
 		    }
 		}
 		Rast_put_row(cfR, cellReal, data_type);
@@ -860,14 +874,21 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 		    if (eGDT == GDT_Int32) {
 			for (indx = 0; indx < ncols; indx++) {
-			    if (((GInt32 *) cell)[indx] == (GInt32) dfNoData) {
+			    if (((CELL *) cell)[indx] == (GInt32) dfNoData) {
 				nullFlags[indx] = 1;
 			    }
 			}
 		    }
 		    else if (eGDT == GDT_Float32) {
 			for (indx = 0; indx < ncols; indx++) {
-			    if (((float *)cell)[indx] == (float)dfNoData) {
+			    if (((FCELL *)cell)[indx] == (float)dfNoData) {
+				nullFlags[indx] = 1;
+			    }
+			}
+		    }
+		    else if (eGDT == GDT_Float64) {
+			for (indx = 0; indx < ncols; indx++) {
+			    if (((DCELL *)cell)[indx] == dfNoData) {
 				nullFlags[indx] = 1;
 			    }
 			}
@@ -879,7 +900,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		Rast_put_row(cf, cell, data_type);
 	    }			/* end of not complex */
 
-	    G_percent(row, nrows, 2);
+	    G_percent(row - 1, nrows, 2);
 	}			/* for loop */
     }				/* end of not AVHRR */
     else {
@@ -893,14 +914,21 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 		if (eGDT == GDT_Int32) {
 		    for (indx = 0; indx < ncols; indx++) {
-			if (((GInt32 *) cell)[indx] == (GInt32) dfNoData) {
+			if (((CELL *) cell)[indx] == (CELL) dfNoData) {
 			    nullFlags[indx] = 1;
 			}
 		    }
 		}
 		else if (eGDT == GDT_Float32) {
 		    for (indx = 0; indx < ncols; indx++) {
-			if (((float *)cell)[indx] == (float)dfNoData) {
+			if (((FCELL *)cell)[indx] == (FCELL)dfNoData) {
+			    nullFlags[indx] = 1;
+			}
+		    }
+		}
+		else if (eGDT == GDT_Float64) {
+		    for (indx = 0; indx < ncols; indx++) {
+			if (((DCELL *)cell)[indx] == dfNoData) {
 			    nullFlags[indx] = 1;
 			}
 		    }
@@ -931,6 +959,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	Rast_write_history((char *)outputImg, &history);
 
 	G_free(bufComplex);
+	G_free(cellReal);
+	G_free(cellImg);
     }
     else {
 	G_debug(1, "Creating support files for %s", output);
@@ -938,6 +968,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	Rast_short_history((char *)output, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history((char *)output, &history);
+	
+	G_free(cell);
     }
 
     if (nullFlags != NULL)
