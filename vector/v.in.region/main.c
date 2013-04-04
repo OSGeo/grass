@@ -19,12 +19,15 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 int main(int argc, char **argv)
 {
-    int type, cat;
+    int type, cat, r, c;
+    double e, n;
     struct Option *out_opt, *type_opt, *cat_opt;
+    struct Flag *dense_flag;
     struct GModule *module;
     struct Map_info Out;
     struct Cell_head window;
@@ -50,6 +53,10 @@ int main(int argc, char **argv)
     cat_opt = G_define_standard_option(G_OPT_V_CAT);
     cat_opt->answer = "1";
 
+    dense_flag = G_define_flag();
+    dense_flag->key = 'd';
+    dense_flag->description = _("Densify lines using region resolution");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -70,15 +77,42 @@ int main(int argc, char **argv)
     /* Rectangle */
 
     Vect_append_point(Points, window.west, window.south, 0.0);
-    if (window.proj == PROJECTION_LL && diff_long >= 179)
+    if (dense_flag->answer) {
+	/* south: west to east */
+	for (c = 1; c < window.cols; c++) {
+	    e = Rast_col_to_easting(c, &window);
+	    Vect_append_point(Points, e, window.south, 0.0);
+	}
+    }
+    else if (window.proj == PROJECTION_LL && diff_long >= 179)
 	Vect_append_point(Points, mid_long, window.south, 0.0);
     Vect_append_point(Points, window.east, window.south, 0.0);
+    if (dense_flag->answer) {
+	/* east: south to north */
+	for (r = window.rows - 1; r > 0; r--) {
+	    n = Rast_row_to_northing(r, &window);
+	    Vect_append_point(Points, window.east, n, 0.0);
+	}
+    }
     Vect_append_point(Points, window.east, window.north, 0.0);
-    if (window.proj == PROJECTION_LL && diff_long >= 179)
+    if (dense_flag->answer) {
+	/* north: east to west */
+	for (c = window.cols - 1; c > 0 ; c--) {
+	    e = Rast_col_to_easting(c, &window);
+	    Vect_append_point(Points, e, window.north, 0.0);
+	}
+    }
+    else if (window.proj == PROJECTION_LL && diff_long >= 179)
 	Vect_append_point(Points, mid_long, window.north, 0.0);
     Vect_append_point(Points, window.west, window.north, 0.0);
+    if (dense_flag->answer) {
+	/* west: north to south */
+	for (r = 1; r < window.rows; r++) {
+	    n = Rast_row_to_northing(r, &window);
+	    Vect_append_point(Points, window.west, n, 0.0);
+	}
+    }
     Vect_append_point(Points, window.west, window.south, 0.0);
-
 
     if (type == GV_AREA) {
 	Vect_write_line(&Out, GV_BOUNDARY, Points, Cats);
