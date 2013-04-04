@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
 	}
 	else {
             if (0 != G_make_location(parm.outloc->answer, &cellhd,
-                                     proj_info, proj_units, NULL)) {
+                                     proj_info, proj_units)) {
                 G_fatal_error(_("Unable to create new location <%s>"),
                               parm.outloc->answer);
             }
