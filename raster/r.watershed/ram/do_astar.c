@@ -3,7 +3,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-double get_slope2(CELL, CELL, double);
+static double get_slope2(CELL, CELL, double);
 
 int do_astar(void)
 {
@@ -151,23 +151,25 @@ int do_astar(void)
 		    }
 		}
 
-		/* add neighbour as new point if not in the list */
-		if (is_in_list == 0 && skip_diag == 0) {
-		    add_pt(upr, upc, alt_nbr[ct_dir]);
-		    /* set flow direction */
-		    asp[index_up] = drain[upr - r + 1][upc - c + 1];
-		}
-		else if (is_in_list && is_worked == 0) {
-		    /* neighbour is edge in list, not yet worked */
-		    if (asp[index_up] < 0) {
+		if (!skip_diag) {
+		    /* add neighbour as new point if not in the list */
+		    if (is_in_list == 0) {
+			add_pt(upr, upc, alt_nbr[ct_dir]);
+			/* set flow direction */
 			asp[index_up] = drain[upr - r + 1][upc - c + 1];
-
-			if (wat[index_doer] > 0)
-			    wat[index_doer] = -1.0 * wat[index_doer];
 		    }
-		    /* neighbour is inside real depression, not yet worked */
-		    else if (asp[index_up] == 0) {
-			asp[index_up] = drain[upr - r + 1][upc - c + 1];
+		    else if (is_in_list && is_worked == 0) {
+			/* neighbour is edge in list, not yet worked */
+			if (asp[index_up] < 0) {
+			    asp[index_up] = drain[upr - r + 1][upc - c + 1];
+
+			    if (wat[index_doer] > 0)
+				wat[index_doer] = -1.0 * wat[index_doer];
+			}
+			/* neighbour is inside real depression, not yet worked */
+			else if (asp[index_up] == 0) {
+			    asp[index_up] = drain[upr - r + 1][upc - c + 1];
+			}
 		    }
 		}
 	    }    /* end if in region */
@@ -197,14 +199,46 @@ int do_astar(void)
 
 /* compare two heap points */
 /* return 1 if a < b else 0 */
-int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
+static int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
 {
-    if (elea < eleb)
-	return 1;
-    else if (elea == eleb) {
-	if (addeda < addedb)
-	    return 1;
+    if (elea == eleb) {
+	return (addeda < addedb);
     }
+    return (elea < eleb);
+}
+
+/* standard sift-up routine for d-ary min heap */
+static int sift_up(int start, CELL ele)
+{
+    register int parent, child, child_idx, child_added;
+    CELL elep;
+
+    child = start;
+    child_added = heap_index[child];
+    child_idx = astar_pts[child];
+
+    while (child > 1) {
+	GET_PARENT(parent, child);
+
+	elep = alt[astar_pts[parent]];
+	/* child smaller */
+	if (cmp_pnt(ele, elep, child_added, heap_index[parent])) {
+	    /* push parent point down */
+	    heap_index[child] = heap_index[parent];
+	    astar_pts[child] = astar_pts[parent];
+	    child = parent;
+	}
+	else
+	    /* no more sifting up, found new slot for child */
+	    break;
+    }
+
+    /* put point in new slot */
+    if (child < start) {
+	heap_index[child] = child_added;
+	astar_pts[child] = child_idx;
+    }
+
     return 0;
 }
 
@@ -250,25 +284,19 @@ int drop_pt(void)
 	/* select child with lower ele, if both are equal, older child
 	 * older child is older startpoint for flow path, important */
 	ele = alt[astar_pts[child]];
-	if (child < heap_size) {
-	    childr = child + 1;
-	    i = child + 3;
-	    while (childr <= heap_size && childr < i) {
-		eler = alt[astar_pts[childr]];
-		if (cmp_pnt(eler, ele, heap_index[childr], heap_index[child])) {
-		    child = childr;
-		    ele = eler;
-		}
-		childr++;
+	i = child + 3;
+	for (childr = child + 1; childr <= heap_size && childr < i; childr++) {
+	    eler = alt[astar_pts[childr]];
+	    if (cmp_pnt(eler, ele, heap_index[childr], heap_index[child])) {
+		child = childr;
+		ele = eler;
 	    }
 	}
 
 	/* move hole down */
-
 	heap_index[parent] = heap_index[child];
 	astar_pts[parent] = astar_pts[child];
 	parent = child;
-
     }
 
     /* hole is in lowest layer, move to heap end */
@@ -285,42 +313,6 @@ int drop_pt(void)
     heap_size--;
 
     return 0;
-}
-
-/* standard sift-up routine for d-ary min heap */
-int sift_up(int start, CELL ele)
-{
-    register int parent, child, child_idx, child_added;
-    CELL elep;
-
-    child = start;
-    child_added = heap_index[child];
-    child_idx = astar_pts[child];
-
-    while (child > 1) {
-	GET_PARENT(parent, child);
-
-	elep = alt[astar_pts[parent]];
-	/* child smaller */
-	if (cmp_pnt(ele, elep, child_added, heap_index[parent])) {
-	    /* push parent point down */
-	    heap_index[child] = heap_index[parent];
-	    astar_pts[child] = astar_pts[parent];
-	    child = parent;
-	}
-	else
-	    /* no more sifting up, found new slot for child */
-	    break;
-    }
-
-    /* put point in new slot */
-    if (child < start) {
-	heap_index[child] = child_added;
-	astar_pts[child] = child_idx;
-    }
-
-    return 0;
-
 }
 
 double
@@ -341,37 +333,10 @@ get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
     return (slope);
 }
 
-double get_slope2(CELL ele, CELL up_ele, double dist)
+static double get_slope2(CELL ele, CELL up_ele, double dist)
 {
     if (ele >= up_ele)
 	return 0.0;
     else
 	return (double)(up_ele - ele) / dist;
-}
-
-/* replace is unused */
-int replace(			/* ele was in there */
-	       int upr, int upc, int r, int c)
-/* CELL ele;  */
-{
-    int now, heap_run;
-    int r2, c2;
-
-    /* find the current neighbour point and 
-     * set flow direction to focus point */
-
-    heap_run = 0;
-
-    while (heap_run <= heap_size) {
-	now = heap_index[heap_run];
-	/* if (astar_pts[now].r == upr && astar_pts[now].c == upc) { */
-	seg_index_rc(alt_seg, astar_pts[now], &r2, &c2);
-	if (r2 == upr && c2 == upc) {
-	    /* astar_pts[now].downr = r;
-	    astar_pts[now].downc = c; */
-	    return 0;
-	}
-	heap_run++;
-    }
-    return 0;
 }
