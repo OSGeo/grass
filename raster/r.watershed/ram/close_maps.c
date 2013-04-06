@@ -214,7 +214,7 @@ int close_maps(void)
 	}
 	Rast_close(fd);
 	Rast_init_colors(&colors);
-	Rast_make_aspect_colors(&colors, 0, 8);
+	Rast_make_aspect_colors(&colors, -8, 8);
 	Rast_write_colors(asp_name, this_mapset, &colors);
     }
     G_free(asp);
