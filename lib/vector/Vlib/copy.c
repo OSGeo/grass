@@ -349,16 +349,18 @@ int is_isle(const struct Map_info *Map, int area)
     Vect_get_area_boundaries(Map, area, List);
 
     is_isle = FALSE;
-    /* do we need to check all boundaries ? */
+    /* do we need to check all boundaries ? no */
     for (i = 0; i < List->n_values && !is_isle; i++) {
-        line = abs(List->value[i]);
-        if (1 != Vect_get_line_areas(Map, line, &left, &right))
+        line = List->value[i];
+        if (1 != Vect_get_line_areas(Map, abs(line), &left, &right))
             continue;
         
-        isle = abs(left == area ? right : left);
+        isle = line > 0 ? right : left;
         
-        if (Vect_get_isle_area(Map, isle) > 0)
+        if (isle < 0 && Vect_get_isle_area(Map, abs(isle)) > 0) {
             is_isle = TRUE;
+	    break;
+	}
     }
 
     G_debug(3, "is_isle(): area %d skip? -> %s", area, is_isle ? "yes" : "no");
