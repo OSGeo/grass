@@ -16,7 +16,6 @@ static struct bound_box ext, dxf_ext;
 int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
-
     int bounds = 0;
 
     if (dxf_find_header(dxf)) {
