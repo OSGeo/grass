@@ -9,6 +9,7 @@
 #endif
 
 static void make_head(struct Map_info *);
+static int find_next_header_variable(struct dxf_file *);
 
 static struct bound_box ext, dxf_ext;
 
