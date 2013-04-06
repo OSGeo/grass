@@ -97,9 +97,7 @@ CELL def_basin(int, int, CELL, double, CELL);
 int do_astar(void);
 int add_pt(int, int, CELL);
 int drop_pt(void);
-int sift_up(int, CELL);
 double get_slope(int, int, int, int, CELL, CELL);
-int replace(int, int, int, int);
 
 /* do_flatarea.c */
 int do_flatarea(int, CELL, CELL *, CELL *);
