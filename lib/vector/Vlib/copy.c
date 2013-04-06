@@ -329,7 +329,7 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
 }
 
 /*!
-  \brief Check if area forms an isle
+  \brief Check if area is part of an isle
 
   Check for areas that are part of isles which in turn are inside
   another area.
@@ -405,6 +405,10 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
         cat = Vect_get_area_cat(In, area, field);
         if (cat < 0) {
             /* no category - check if area forms an isle */
+	    /* this check does not make sense because the area
+	     * is also not exported if it is part of an isle
+	     * inside another area: the isle gets exported
+	     * as an inner ring */
             if (!is_isle(In, area))
                 G_warning(_("No category defined for area %d. "
                             "Area not exported."),
