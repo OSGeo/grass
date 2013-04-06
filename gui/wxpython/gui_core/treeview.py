@@ -42,6 +42,7 @@ class AbstractTreeViewMixin(VirtualTree):
     Signals:
         selectionChanged - attribute 'node'
         itemActivated - attribute 'node'
+        contextMenu - attribute 'node'
     """
     def __init__(self, model, parent, *args, **kw):
         self._model = model
@@ -50,11 +51,14 @@ class AbstractTreeViewMixin(VirtualTree):
 
         self.selectionChanged = Signal('TreeView.selectionChanged')
         self.itemActivated = Signal('TreeView.itemActivated')
+        self.contextMenu = Signal('TreeView.contextMenu')
 
         self.Bind(wx.EVT_TREE_SEL_CHANGED, lambda evt:
                                            self._emitSignal(evt.GetItem(), self.selectionChanged))
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, lambda evt:
                                            self._emitSignal(evt.GetItem(), self.itemActivated))
+        self.Bind(wx.EVT_TREE_ITEM_MENU, lambda evt:
+                                           self._emitSignal(evt.GetItem(), self.contextMenu))
 
     def SetModel(self, model):
         """!Set tree model and refresh.
@@ -144,6 +148,10 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
         self.SetMainColumn(0)
         # refresh again
         self.RefreshItems()
+        # to solve events inconsitency
+        self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK,  lambda evt:
+                                           self._emitSignal(evt.GetItem(), self.contextMenu))
+        self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnRightClick)
 
     def OnGetItemText(self, index, column=0):
         """!Overridden method necessary to communicate with tree model.
@@ -159,6 +167,15 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
             label = node.label.replace('&', '')
             return label
 
+    def OnRightClick(self, event):
+        """!Select item on right click.
+        
+        With multiple selection we don't want to deselect all items        
+        """
+        item = event.GetItem()
+        if not self.IsSelected(item):
+            self.SelectItem(item)
+        event.Skip()
 
 class TreeFrame(wx.Frame):
     """!Frame for testing purposes only."""
