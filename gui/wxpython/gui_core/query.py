@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 """
 import os
 import sys
-import random
 import wx
 
 if __name__ == '__main__':
@@ -34,6 +33,12 @@ class QueryDialog(wx.Dialog):
 
         self.panel = wx.Panel(self, id = wx.ID_ANY)
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
+
+        helpText = wx.StaticText(self.panel, wx.ID_ANY,
+                                 label=_("Right click to copy selected values to clipboard."))
+        helpText.SetForegroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        self.mainSizer.Add(item=helpText, proportion=0, flag=wx.ALL, border=5)
+
         self._colNames = [_("Feature"), _("Value")]
         self._model = QueryTreeBuilder(self.data, column=self._colNames[1])
         self.tree = TreeListView(model=self._model, parent=self.panel,
@@ -44,11 +49,13 @@ class QueryDialog(wx.Dialog):
         self.tree.SetColumnWidth(0, 220)
         self.tree.SetColumnWidth(1, 400)
         self.tree.ExpandAll(self._model.root)
+        self.tree.contextMenu.connect(self.ShowContextMenu)
         self.mainSizer.Add(item = self.tree, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
 
+        
         close = wx.Button(self.panel, id = wx.ID_CLOSE)
         close.Bind(wx.EVT_BUTTON, lambda event: self.Close())
-        copy = wx.Button(self.panel, id = wx.ID_ANY, label = _("Copy to clipboard"))
+        copy = wx.Button(self.panel, id = wx.ID_ANY, label = _("Copy all to clipboard"))
         copy.Bind(wx.EVT_BUTTON, self.Copy)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
@@ -72,6 +79,60 @@ class QueryDialog(wx.Dialog):
 
     def Copy(self, event):
         text = printResults(self._model, self._colNames[1])
+        self._copyText(text)
+
+    def ShowContextMenu(self, node):
+        """!Show context menu.
+        
+        Menu for copying distinguishes single and multiple selection.
+        """
+        nodes = self.tree.GetSelected()
+        if not nodes:
+            return
+            
+        menu = wx.Menu()
+        texts = []
+        if len(nodes) > 1:
+            values = []
+            for node in nodes:
+                values.append((node.label, node.data[self._colNames[1]] if node.data else ''))
+            col1 = '\n'.join([val[1] for val in values if val[1]])
+            col2 = '\n'.join([val[0] for val in values if val[0]])
+            table = '\n'.join([val[0] + ': ' + val[1] for val in values])
+            texts.append((_("Copy from '%s' column") % self._colNames[1], col1))
+            texts.append((_("Copy from '%s' column") % self._colNames[0], col2))
+            texts.append((_("Copy selected lines"), table))
+        else:
+            label1 = nodes[0].label
+            texts.append((_("Copy '%s'" % self._cutLabel(label1)), label1))
+            if nodes[0].data and nodes[0].data[self._colNames[1]]:
+                label2 = nodes[0].data[self._colNames[1]]
+                texts.insert(0, (_("Copy '%s'" % self._cutLabel(label2)), label2))
+                texts.append((_("Copy line"), label1 + ': ' + label2))
+
+        ids = []
+        for text in texts:
+            id = wx.NewId()
+            ids.append(id)
+            self.Bind(wx.EVT_MENU, lambda evt, t=text[1], id=id: self._copyText(t), id=id)
+ 
+            menu.Append(id, text[0])
+ 
+        # show the popup menu
+        self.PopupMenu(menu)
+        menu.Destroy()
+        for id in ids:
+            self.Unbind(wx.EVT_MENU, id=id)
+
+    def _cutLabel(self, label):
+        limit = 15
+        if len(label) > limit:
+            return label[:limit] + '...'
+            
+        return label
+
+    def _copyText(self, text):
+        """!Helper function for copying"""
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
             do.SetText(text)
