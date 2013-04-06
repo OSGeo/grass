@@ -16,18 +16,21 @@ static struct bound_box ext, dxf_ext;
 int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
+
     int bounds = 0;
 
     if (dxf_find_header(dxf)) {
 	/* code == 0: end of the header section */
 	code = dxf_get_code(dxf);
-	while (code != 0) {
+	while (code != 0) {	/* ENDSEC */
 	    if (code == -2)	/* EOF */
 		return 0;
 
 	    /* only looking for header groups (code == 9) */
-	    if (code != 9)
+	    if (code != 9) {
+		code = find_next_header_variable(dxf);
 		continue;
+	    }
 
 	    if (strcmp(dxf_buf, "$EXTMAX") == 0) {
 		/* read in lines and process information until a 9
@@ -78,12 +81,8 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
 		    }
 		}
 	    }
-	    else {
-		while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
-		    if (code == -2)	/* EOF */
-			return 0;
-		}
-	    }
+	    else
+		code = find_next_header_variable(dxf);
 
 	    if (bounds == 6)
 		break;
@@ -151,6 +150,19 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
     }
 
     return 0;
+}
+
+int find_next_header_variable(struct dxf_file *dxf)
+{
+    int code;
+
+    /* code  9: header variable
+     * code  0: ENDSEC
+     * code -2: EOF
+     */
+    while ((code = dxf_get_code(dxf)) != 9 && code != 0 && code != -2) ;
+
+    return code;
 }
 
 int check_ext(double x, double y, double z)
