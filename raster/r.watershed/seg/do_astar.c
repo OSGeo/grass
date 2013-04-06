@@ -4,9 +4,7 @@
 #include "do_astar.h"
 
 HEAP_PNT drop_pt(void);
-int sift_up(GW_LARGE_INT, HEAP_PNT);
-int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b);
-double get_slope2(CELL, CELL, double);
+static double get_slope2(CELL, CELL, double);
 
 int do_astar(void)
 {
@@ -106,31 +104,33 @@ int do_astar(void)
 		    }
 		}
 
-		/* add neighbour as new point if not in the list */
-		if (is_in_list == 0 && skip_diag == 0) {
-		    /* set flow direction */
-		    af.asp = drain[upr - r + 1][upc - c + 1];
-		    add_pt(upr, upc, alt_nbr[ct_dir]);
-		    FLAG_SET(af.flag, INLISTFLAG);
-		    seg_put(&aspflag, (char *)&af, upr, upc);
-		}
-		else if (is_in_list && is_worked == 0 &&
-			 FLAG_GET(af.flag, EDGEFLAG)) {
-		    /* neighbour is edge in list, not yet worked */
-		    if (af.asp < 0) {
-			/* adjust flow direction for edge cell */
+		if (!skip_diag) {
+		    /* add neighbour as new point if not in the list */
+		    if (is_in_list == 0) {
+			/* set flow direction */
 			af.asp = drain[upr - r + 1][upc - c + 1];
+			add_pt(upr, upc, alt_nbr[ct_dir]);
+			FLAG_SET(af.flag, INLISTFLAG);
 			seg_put(&aspflag, (char *)&af, upr, upc);
-			seg_get(&watalt, (char *)&wa, r, c);
-			if (wa.wat > 0) {
-			    wa.wat = -wa.wat;
-			    seg_put(&watalt, (char *)&wa, r, c);
-			}
 		    }
-		    /* neighbour is inside real depression, not yet worked */
-		    else if (af.asp == 0) {
-			af.asp = drain[upr - r + 1][upc - c + 1];
-			seg_put(&aspflag, (char *)&af, upr, upc);
+		    else if (is_in_list && is_worked == 0 &&
+			     FLAG_GET(af.flag, EDGEFLAG)) {
+			/* neighbour is edge in list, not yet worked */
+			if (af.asp < 0) {
+			    /* adjust flow direction for edge cell */
+			    af.asp = drain[upr - r + 1][upc - c + 1];
+			    seg_put(&aspflag, (char *)&af, upr, upc);
+			    seg_get(&watalt, (char *)&wa, r, c);
+			    if (wa.wat > 0) {
+				wa.wat = -wa.wat;
+				seg_put(&watalt, (char *)&wa, r, c);
+			    }
+			}
+			/* neighbour is inside real depression, not yet worked */
+			else if (af.asp == 0) {
+			    af.asp = drain[upr - r + 1][upc - c + 1];
+			    seg_put(&aspflag, (char *)&af, upr, upc);
+			}
 		    }
 		}
 	    }
@@ -155,14 +155,42 @@ int do_astar(void)
 
 /* compare two heap points */
 /* return 1 if a < b else 0 */
-int cmp_pnt(HEAP_PNT * a, HEAP_PNT * b)
+static int cmp_pnt(HEAP_PNT * a, HEAP_PNT * b)
 {
     if (a->ele < b->ele)
 	return 1;
     else if (a->ele == b->ele) {
-	if (a->added < b->added)
-	    return 1;
+	return (a->added < b->added);
     }
+
+    return 0;
+}
+
+/* standard sift-up routine for d-ary min heap */
+static int sift_up(GW_LARGE_INT start, HEAP_PNT child_p)
+{
+    GW_LARGE_INT parent, child;
+    HEAP_PNT heap_p;
+
+    child = start;
+
+    while (child > 1) {
+	parent = GET_PARENT(child);
+	seg_get(&search_heap, (char *)&heap_p, 0, parent);
+
+	/* push parent point down if child is smaller */
+	if (cmp_pnt(&child_p, &heap_p)) {
+	    seg_put(&search_heap, (char *)&heap_p, 0, child);
+	    child = parent;
+	}
+	/* no more sifting up, found slot for child */
+	else
+	    break;
+    }
+
+    /* add child to heap */
+    seg_put(&search_heap, (char *)&child_p, 0, child);
+
     return 0;
 }
 
@@ -235,36 +263,8 @@ HEAP_PNT drop_pt(void)
     return root_p;
 }
 
-/* standard sift-up routine for d-ary min heap */
-int sift_up(GW_LARGE_INT start, HEAP_PNT child_p)
-{
-    GW_LARGE_INT parent, child;
-    HEAP_PNT heap_p;
-
-    child = start;
-
-    while (child > 1) {
-	parent = GET_PARENT(child);
-	seg_get(&search_heap, (char *)&heap_p, 0, parent);
-
-	/* push parent point down if child is smaller */
-	if (cmp_pnt(&child_p, &heap_p)) {
-	    seg_put(&search_heap, (char *)&heap_p, 0, child);
-	    child = parent;
-	}
-	/* no more sifting up, found slot for child */
-	else
-	    break;
-    }
-
-    /* add child to heap */
-    seg_put(&search_heap, (char *)&child_p, 0, child);
-
-    return 0;
-}
-
-double
-get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
+double get_slope(int r, int c, int downr, int downc, CELL ele,
+                        CELL downe)
 {
     double slope;
 
@@ -279,7 +279,7 @@ get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
     return (slope);
 }
 
-double get_slope2(CELL ele, CELL up_ele, double dist)
+static double get_slope2(CELL ele, CELL up_ele, double dist)
 {
     if (ele >= up_ele)
 	return 0.0;
