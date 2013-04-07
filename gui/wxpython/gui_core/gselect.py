@@ -6,6 +6,7 @@
 Classes:
  - gselect::Select
  - gselect::VectorSelect
+ - gselect::ListCtrlComboPopup
  - gselect::TreeCrtlComboPopup
  - gselect::VectorDBInfo
  - gselect::LayerSelect
@@ -25,7 +26,7 @@ Classes:
  - gselect::CoordinatesSelect
  - gselect::SignatureSelect
 
-(C) 2007-2012 by the GRASS Development Team 
+(C) 2007-2013 by the GRASS Development Team 
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -33,7 +34,7 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
-@author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
+@author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect, ListCtrlComboPopup)
 """
 
 import os
@@ -153,25 +154,16 @@ class VectorSelect(Select):
         
         return True
 
-class TreeCtrlComboPopup(wx.combo.ComboPopup):
-    """!Create a tree ComboBox for selecting maps and other GIS elements
-    in accessible mapsets within the current location
-    """
+class ListCtrlComboPopup(wx.combo.ComboPopup):
+    """!Create a list ComboBox using TreeCtrl with hidden root.
+    """    
     # overridden ComboPopup methods
     def Init(self):
         self.value = [] # for multiple is False -> len(self.value) in [0,1]
         self.curitem = None
         self.multiple = False
-        self.nmaps = 1
-        self.type = None
-        self.mapsets = None
         self.updateOnPopup = True
-        self.onPopup = None
-        self.fullyQualified = True
-        self.extraItems = dict()
-        
-        self.SetFilter(None)
-        
+
     def Create(self, parent):
         self.seltree = wx.TreeCtrl(parent, style=wx.TR_HIDE_ROOT
                                    |wx.TR_HAS_BUTTONS
@@ -181,24 +173,24 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                                    |wx.TR_FULL_ROW_HIGHLIGHT)
         self.seltree.Bind(wx.EVT_MOTION, self.OnMotion)
         self.seltree.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
-        self.seltree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.mapsetExpanded)
-        self.seltree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.mapsetCollapsed)
-        self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.mapsetActivated)
-        self.seltree.Bind(wx.EVT_TREE_SEL_CHANGED, self.mapsetSelected)
+        self.seltree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.OnExpanded)
+        self.seltree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnCollapsed)
+        self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
+        self.seltree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelected)
         self.seltree.Bind(wx.EVT_TREE_DELETE_ITEM, lambda x: None)
         
     # the following dummy handler are needed to keep tree events from propagating up to
     # the parent GIS Manager layer tree
-    def mapsetExpanded(self, event):
+    def OnExpanded(self, event):
         pass
 
-    def mapsetCollapsed(self, event):
+    def OnCollapsed(self, event):
         pass
 
-    def mapsetActivated(self, event):
+    def OnActivated(self, event):
         pass
 
-    def mapsetSelected(self, event):
+    def OnSelected(self, event):
         pass
     # end of dummy events
 
@@ -206,8 +198,140 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         return self.seltree
 
     def GetStringValue(self):
-        """!Get value as a string separated by commas"""
+        """!Get value as a string separated by commas
+        """
         return ','.join(self.value)
+
+    def SetStringValue(self, value):
+        # this assumes that item strings are unique...
+        root = self.seltree.GetRootItem()
+        if not root:
+            return
+        winValue = self.GetCombo().GetValue().strip(',')
+        self.value = []
+        if winValue:
+            self.value = winValue.split(',')
+
+    def OnPopup(self, force = False):
+        """!Limited only for first selected
+        """
+        if not force and not self.updateOnPopup:
+            return
+
+        # selects map starting according to written text
+        inputText = self.GetCombo().GetValue().strip()
+        if inputText:
+            root = self.seltree.GetRootItem()
+            match = self.FindItem(root, inputText, startLetters = True)
+            self.seltree.EnsureVisible(match)
+            self.seltree.SelectItem(match)
+
+    def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
+        """!Reads UserSettings to get height (which was 200 in old implementation).
+        """
+        height = UserSettings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'value')
+        return wx.Size(minWidth, min(height, maxHeight))
+
+    def FindItem(self, parentItem, text, startLetters = False):
+        """!Finds item with given name or starting with given text
+        """
+        startletters = startLetters
+        item, cookie = self.seltree.GetFirstChild(parentItem)
+        while wx.TreeItemId.IsOk(item):
+            if self.seltree.GetItemText(item) == text:
+                return item
+            if self.seltree.ItemHasChildren(item):
+                item = self.FindItem(item, text, startLetters = startletters)
+                if wx.TreeItemId.IsOk(item):
+                    return item
+            elif startletters and self.seltree.GetItemText(item).startswith(text.split('@', 1)[0]):
+                return item
+            item, cookie = self.seltree.GetNextChild(parentItem, cookie)
+        return wx.TreeItemId()
+
+    def AddItem(self, value):
+        root = self.seltree.GetRootItem()
+        if not root:
+            root = self.seltree.AddRoot("<hidden root>")
+        self.seltree.AppendItem(root, text = value)
+
+    def OnKeyUp(self, event):
+        """!Enable to select items using keyboard
+        """
+        item = self.seltree.GetSelection()
+        if event.GetKeyCode() == wx.WXK_DOWN:
+            self.seltree.SelectItem(self.seltree.GetNextVisible(item))
+            
+        elif event.GetKeyCode() == wx.WXK_UP: 
+            itemPrev = self.seltree.GetPrevSibling(item)
+            self.seltree.SelectItem(itemPrev)
+
+        elif event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.Dismiss()
+
+        elif event.GetKeyCode() == wx.WXK_RETURN:
+            self.seltree.SelectItem(item)
+            self.curitem = item
+            item_str = self.seltree.GetItemText(self.curitem)
+            if self.multiple:
+                if item_str not in self.value: 
+                    self.value.append(item_str)
+            else:   
+                self.value = [item_str]
+            self.Dismiss()
+
+    def OnMotion(self, evt):
+        """!Have the selection follow the mouse, like in a real combobox
+        """
+        item, flags = self.seltree.HitTest(evt.GetPosition())
+        if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
+            self.seltree.SelectItem(item)
+            self.curitem = item
+        evt.Skip()
+
+    def OnLeftDown(self, evt):
+        """!Do the combobox selection
+        """
+        if self.curitem is None:
+            return
+
+        item_str = self.seltree.GetItemText(self.curitem)
+        if self.multiple:
+            if item_str not in self.value: 
+                self.value.append(item_str)
+        else:
+            self.value = [item_str]
+        self.Dismiss()
+        
+        evt.Skip()
+
+    def SetData(self, **kargs):
+        """!Set object properties"""
+        if 'multiple' in kargs:
+            self.multiple = kargs['multiple']
+        if 'onPopup' in kargs:
+            self.onPopup = kargs['onPopup']
+
+    def DeleteAllItems(self):
+        """!Delete all items in popup"""
+        self.seltree.DeleteAllItems()
+
+class TreeCtrlComboPopup(ListCtrlComboPopup):
+    """!Create a tree ComboBox for selecting maps and other GIS elements
+    in accessible mapsets within the current location
+    """
+    # overridden ComboPopup methods
+    def Init(self):
+
+        ListCtrlComboPopup.Init(self)
+        self.nmaps = 1
+        self.type = None
+        self.mapsets = None
+        self.onPopup = None
+        self.fullyQualified = True
+        self.extraItems = dict()
+        
+        self.SetFilter(None)
     
     def SetFilter(self, filter):
         """!Set filter for GIS elements, see e.g. VectorSelect"""
@@ -225,14 +349,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
  
         self.GetElementList(selected, exclude)
         
-        # selects map starting according to written text
-        inputText = self.GetCombo().GetValue().strip()
-        if inputText:
-            root = self.seltree.GetRootItem()
-            match = self.FindItem(root, inputText, startLetters = True)
-            self.seltree.EnsureVisible(match)
-            self.seltree.SelectItem(match)
-            
+        ListCtrlComboPopup.OnPopup(self, force)
       
     def GetElementList(self, elements = None, exclude = False):
         """!Get filtered list of GIS elements in accessible mapsets
@@ -253,23 +370,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 self.seltree.SelectItem(item)
             except:
                 pass
-            
-    def SetStringValue(self, value):
-        # this assumes that item strings are unique...
-        root = self.seltree.GetRootItem()
-        if not root:
-            return
-        winValue = self.GetCombo().GetValue().strip(',')
-        self.value = []
-        if winValue:
-            self.value = winValue.split(',')
-        
-    def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
-        """!Reads UserSettings to get height (which was 200 in old implementation).
-        """
-        height = UserSettings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'value')
-        return wx.Size(minWidth, min(height, maxHeight))
-
+                    
     def _getElementList(self, element, mapsets = None, elements = None, exclude = False):
         """!Get list of GIS elements in accessible mapsets and display as tree
         with all relevant elements displayed beneath each mapset branch
@@ -444,22 +545,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                         self.AddItem(elem, mapset = mapset, node = False, parent = node)
                 else:
                     self.AddItem(elem, mapset = mapset, node = False, parent = node)
-
-    def FindItem(self, parentItem, text, startLetters = False):
-        """!Finds item with given name or starting with given text"""
-        startletters = startLetters
-        item, cookie = self.seltree.GetFirstChild(parentItem)
-        while wx.TreeItemId.IsOk(item):
-            if self.seltree.GetItemText(item) == text:
-                return item
-            if self.seltree.ItemHasChildren(item):
-                item = self.FindItem(item, text, startLetters = startletters)
-                if wx.TreeItemId.IsOk(item):
-                    return item
-            elif startletters and self.seltree.GetItemText(item).startswith(text.split('@', 1)[0]):
-                return item
-            item, cookie = self.seltree.GetNextChild(parentItem, cookie)
-        return wx.TreeItemId()
     
     def AddItem(self, value, mapset = None, node = True, parent = None):
         if not parent:
@@ -537,16 +622,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                         self.value = [fullName]
             
             self.Dismiss()
-        
-    def OnMotion(self, evt):
-        """!Have the selection follow the mouse, like in a real combobox
-        """
-        item, flags = self.seltree.HitTest(evt.GetPosition())
-        if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
-            self.seltree.SelectItem(item)
-            self.curitem = item
-        evt.Skip()
-
+    
     def OnLeftDown(self, evt):
         """!Do the combobox selection
         """
@@ -579,20 +655,17 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
     def SetData(self, **kargs):
         """!Set object properties"""
+        ListCtrlComboPopup.SetData(self, **kargs)
         if 'type' in kargs:
             self.type = kargs['type']
             if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
                 tgis.init()
         if 'mapsets' in kargs:
             self.mapsets = kargs['mapsets']
-        if 'multiple' in kargs:
-            self.multiple = kargs['multiple']
         if 'nmaps' in kargs:
             self.nmaps = kargs['nmaps']
         if 'updateOnPopup' in kargs:
             self.updateOnPopup = kargs['updateOnPopup']
-        if 'onPopup' in kargs:
-            self.onPopup = kargs['onPopup']
         if 'fullyQualified' in kargs:
             self.fullyQualified = kargs['fullyQualified']
         if 'extraItems' in kargs:
@@ -602,7 +675,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         """!Get element type
         """
         return self.type
-    
+
 class VectorDBInfo:
     """!Class providing information about attribute tables
     linked to a vector map"""
@@ -836,8 +909,8 @@ class TableSelect(wx.ComboBox):
         
         self.SetItems(items)
         self.SetValue('')
-        
-class ColumnSelect(wx.ComboBox):
+
+class ColumnSelect(wx.combo.ComboCtrl):
     """!Creates combo box for selecting columns in the attribute table
     for a vector map.
 
@@ -847,21 +920,36 @@ class ColumnSelect(wx.ComboBox):
     @param size window size
     @param vector vector map name
     @param layer layer number
+    @param multiple - True if it is possible to add multiple columns
     @param param parameters list (see menuform.py)
     @param **kwags wx.ComboBox parameters
     """
     def __init__(self, parent, id = wx.ID_ANY, value = '', 
                  size = globalvar.DIALOG_COMBOBOX_SIZE,
-                 vector = None, layer = 1, param = None, **kwargs):
+                 vector = None, layer = 1, multiple = False, 
+                 param = None, **kwargs):
         self.defaultValue = value
         self.param = param
         
-        super(ColumnSelect, self).__init__(parent, id, value, size = size, **kwargs)
-        self.SetName("ColumnSelect")
-        
+        wx.combo.ComboCtrl.__init__(self, parent, id, size = size, **kwargs)
+        self.GetChildren()[0].SetName("ColumnSelect")
+        self.GetChildren()[0].type = type
+
+        self.tcp = ListCtrlComboPopup()
+        self.SetPopupControl(self.tcp)
+        self.tcp.SetData(multiple = multiple)
+
         if vector:
             self.InsertColumns(vector, layer)
-    
+        self.GetChildren()[0].Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+     
+    def OnKeyUp(self, event):
+        """!Shows popupwindow if down arrow key is released"""
+        if event.GetKeyCode() == wx.WXK_DOWN and not self.IsPopupShown():
+            self.ShowPopup() 
+        else:
+            event.Skip()
+
     def InsertColumns(self, vector, layer, excludeKey = False, excludeCols = None, type = None, dbInfo = None):
         """!Insert columns for a vector attribute table into the columns combobox
 
@@ -896,8 +984,12 @@ class ColumnSelect(wx.ComboBox):
                             pass
         except (KeyError, ValueError):
             columns = list()
-            
-        self.SetItems(columns)
+
+        # update list
+        self.tcp.DeleteAllItems()
+        for col in columns:
+            self.tcp.AddItem(col)
+
         self.SetValue(self.defaultValue)
         
         if self.param:
@@ -923,9 +1015,12 @@ class ColumnSelect(wx.ComboBox):
         if ret:
             columns = ret.splitlines()
         
-        self.SetItems(columns)
+        # update list
+        self.tcp.DeleteAllItems()
         self.SetValue(self.defaultValue)
         
+        for col in columns:
+            self.tcp.AddItem(col)
         if self.param:
             value = self.param.get('value', '')
             if value != '' and value in columns:
