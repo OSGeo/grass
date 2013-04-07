@@ -71,6 +71,10 @@ class DMonMap(Map):
 
         self.cmdfile = cmdfile
 
+        # list of layers for rendering added from cmd file
+        # TODO temporary solution, layer managment by different tools in GRASS should be resovled
+        self.ownedLayers = []
+
         if mapfile:
             self.mapfileCmd = mapfile
             self.maskfileCmd = os.path.splitext(mapfile)[0] + '.pgm'
@@ -83,11 +87,19 @@ class DMonMap(Map):
         """
         if not self.cmdfile:
             return
-        
+
         nlayers = 0
+
         try:
             fd = open(self.cmdfile, 'r')
             existingLayers = self.GetListOfLayers()
+
+            # holds new rendreing order for every layer in existingLayers
+            layersOrder = [-1] * len(self.GetListOfLayers())
+
+            # next number in rendering order
+            next_layer = 0;
+
             for line in fd.readlines():
                 cmd = utils.split(line.strip())
                 ltype = None
@@ -109,15 +121,53 @@ class DMonMap(Map):
                                        active = False, hidden = True,
                                        opacity = 0)
                 exists = False
-                for layer in existingLayers:
+                for i, layer in enumerate(existingLayers):
                     if layer.GetCmd(string=True) == tmpMapLayer.GetCmd(string=True):
                         exists = True
+
+                        if layersOrder[i] == -1: 
+                            layersOrder[i] = next_layer;
+                            next_layer += 1
+                        # layer must be put higher in render order (same cmd was insered more times)
+                        # TODO delete rendurant cmds from cmd file?
+                        else:
+                            for j, l_order in enumerate(layersOrder):
+                                if l_order > layersOrder[i]:
+                                    layersOrder[j] -= 1;
+                            layersOrder[i] = next_layer - 1;
+
                         break
                 if exists:
                     continue
 
-                Map.AddLayer(self, ltype = ltype, command = cmd, active = True, name = name)
+                newLayer = Map.AddLayer(self, ltype = ltype, command = cmd, active = True, name = name)
+                
+                existingLayers.append(newLayer)
+                self.ownedLayers.append(newLayer)
+
+                layersOrder.append(next_layer)
+                next_layer += 1
+
                 nlayers += 1
+
+            reorderedLayers = [-1] * next_layer
+            for i, layer in enumerate(existingLayers):
+
+                # owned layer was not found in cmd file -> is deleted 
+                if layersOrder[i] == -1 and layer in self.ownedLayers:
+                    self.ownedLayers.remove(layer)
+                    self.DeleteLayer(layer)
+
+                # other layer e. g. added by wx.vnet are added to the top
+                elif layersOrder[i] == -1 and layer not in self.ownedLayers:
+                    reorderedLayers.append(layer)
+                
+                # owned layer found in cmd file is added into proper rendering position
+                else:
+                    reorderedLayers[layersOrder[i]] = layer
+
+            self.ReorderLayers(reorderedLayers)
+
         except IOError, e:
             grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
                               { 'cmd' : self.cmdfile, 'det' : e })
@@ -125,8 +175,7 @@ class DMonMap(Map):
 
         fd.close()
 
-        if nlayers:
-            self._giface.updateMap.emit()
+        self._giface.updateMap.emit()
 
         Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s" % self.cmdfile)
         Debug.msg(1, "                            nlayers=%d" % nlayers)
