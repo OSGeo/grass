@@ -276,15 +276,15 @@ class UpdateThread(Thread):
                     if map in cparams:
                         if not cparams[map]['dbInfo']:
                             cparams[map]['dbInfo'] = gselect.VectorDBInfo(map)
-                        self.data[win.InsertColumns] = { 'vector' : map, 'layer' : layer,
-                                                         'dbInfo' : cparams[map]['dbInfo'] }
+                        self.data[win.GetParent().InsertColumns] = { 'vector' : map, 'layer' : layer,
+                                                                     'dbInfo' : cparams[map]['dbInfo'] }
                 else: # table
                     if driver and db:
-                        self.data[win.InsertTableColumns] = { 'table' : pTable.get('value'),
-                                                              'driver' : driver,
-                                                              'database' : db }
+                        self.data[win.GetParent().InsertTableColumns] = { 'table' : pTable.get('value'),
+                                                                          'driver' : driver,
+                                                                          'database' : db }
                     elif pTable:
-                        self.data[win.InsertTableColumns] = { 'table'  : pTable.get('value') }
+                        self.data[win.GetParent().InsertTableColumns] = { 'table'  : pTable.get('value') }
             
             elif name == 'SubGroupSelect':
                 self.data[win.Insert] = { 'group' : p.get('value', '')}
@@ -1179,7 +1179,7 @@ class CmdPanel(wx.Panel):
                             selection.SetValue(value)
                         
                         formatSelector = True
-                        # A select.Select is a combobox with two children: a textctl and a popupwindow;
+                        # A gselect.Select is a combobox with two children: a textctl and a popupwindow;
                         # we target the textctl here
                         textWin = selection.GetTextCtrl()
                         p['wxId'] = [ textWin.GetId(), ]
@@ -1317,9 +1317,16 @@ class CmdPanel(wx.Panel):
                         elif prompt == 'dbcolumn':
                             win = gselect.ColumnSelect(parent = which_panel,
                                                        value = value,
-                                                       param = p)
-                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                            win.Bind(wx.EVT_TEXT,     self.OnSetValue)
+                                                       param = p,
+                                                       multiple =  p.get('multiple', False))
+                        
+                            # A gselect.ColumnSelect is a combobox with two children: a textctl and a popupwindow;
+                            # we target the textctl here
+                            textWin = win.GetTextCtrl()
+                            p['wxId'] = [ textWin.GetId(), ]
+                            
+                            textWin.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
 
                         elif prompt == 'location':
                             win = gselect.LocationSelect(parent = which_panel,
