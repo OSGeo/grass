@@ -34,7 +34,8 @@ cat file.sql | db.select input=-
 <p>
 Select all from table roads:
 <div class="code"><pre>
-db.select -c driver=odbc database=g51test table=roads input=file.sql output=result.csv
+db.select -c driver=odbc database=mydb table=roads \
+          input=file.sql output=result.csv
 </pre></div>
 
 <p>
@@ -65,6 +66,16 @@ SELECT cat FROM busstopsall WHERE cat > 4 AND cat &lt; 8
 db.select input=file.sql
 </pre></div>
 
+<p>
+
+<em>Count number of cases falling into same position:</em><br>
+When multiple observation have the spatial coordinates, they can still be counted
+(if needed, coordinates can be uploaded to the attribute table by <em>v.to.db</em>:
+<div class="code"><pre> 
+db.select sql="SELECT long,lat,site_id,department,obs,COUNT(long) as count_cases \
+               FROM diseases GROUP BY long,lat"
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -72,15 +83,15 @@ db.select input=file.sql
 </em>
 
 <p>
-  <em>
-    <a href="db.connect.html">db.connect</a>,
-    <a href="db.describe.html">db.describe</a>,
-    <a href="db.drivers.html">db.drivers</a>,
-    <a href="db.droptable.html">db.droptable</a>,
-    <a href="db.execute.html">db.execute</a>,
-    <a href="db.login.html">db.login</a>,
-    <a href="db.tables.html">db.tables</a>
-  </em>
+<em>
+<a href="db.connect.html">db.connect</a>,
+<a href="db.describe.html">db.describe</a>,
+<a href="db.drivers.html">db.drivers</a>,
+<a href="db.droptable.html">db.droptable</a>,
+<a href="db.execute.html">db.execute</a>,
+<a href="db.login.html">db.login</a>,
+<a href="db.tables.html">db.tables</a>
+</em>
 
 <h2>AUTHOR</h2>
 
