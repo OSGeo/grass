@@ -223,7 +223,7 @@ class IVDigit:
         
         self.poBgMapInfo = pointer(self.bgMapInfo)
         self.popoBgMapInfo = pointer(self.poBgMapInfo)
-	if Vect_open_old(self.poBgMapInfo, name, mapset) == -1:
+        if Vect_open_old(self.poBgMapInfo, name, mapset) == -1:
             self.poBgMapInfo = self.popoBgMapInfo = None
             self._error.NoMap(bgmap)
             return
@@ -304,7 +304,7 @@ class IVDigit:
         for i in range(listLine.contents.n_values):
             lineBreak = listLine.contents.id[i]
             if lineBreak == line:
-		continue
+                continue
             
             ltype = Vect_read_line(self.poMapInfo, pointsCheck, None, lineBreak)
             if not (ltype & GV_LINES):
@@ -1016,7 +1016,7 @@ class IVDigit:
             Vect_append_point(self.poPoints, x2, y2, z1)
             Vect_append_point(self.poPoints, x1, y2, z2)
             Vect_append_point(self.poPoints, x1, y1, z1)
-	
+
             Vect_select_lines_by_polygon(self.poMapInfo, self.poPoints, 0, None,
                                          ftype, poList)
             
@@ -1148,7 +1148,7 @@ class IVDigit:
         if line == -1:
             update = True
             line = self._display.selected['ids'][0]
-	
+
         if not Vect_line_alive(self.poMapInfo, line):
             return -1
         
@@ -1349,7 +1349,7 @@ class IVDigit:
         for field, cat in self.cats.iteritems():
             if cat == None:
                 self.cats[field] = 0 # first category 1
-	    Debug.msg(3, "wxDigit.InitCats(): layer=%d, cat=%d", field, self.cats[field])
+            Debug.msg(3, "wxDigit.InitCats(): layer=%d, cat=%d", field, self.cats[field])
         
     def _checkMap(self):
         """!Check if map is open

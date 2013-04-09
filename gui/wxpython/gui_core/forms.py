@@ -588,7 +588,7 @@ class TaskFrame(wx.Frame):
                              min(height, 500)))
         
         # fix goutput's pane size (required for Mac OSX)
-        if self.goutput:  	 	 
+        if self.goutput:
             self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
         
     def updateValuesHook(self, event = None):

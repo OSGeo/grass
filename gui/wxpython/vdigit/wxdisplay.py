@@ -621,24 +621,24 @@ class DisplayDriver:
         pz = c_double()
         if not self._validLine(lineNearest):
             return { 'line' : -1, 'point': None }
-	ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
-	Vect_line_distance (self.poPoints, point[0], point[1], 0.0, self.is3D,
-			    byref(px), byref(py), byref(pz),
-			    None, None, None)
-        
-	# check for duplicates 
-	if self.settings['highlightDupl']['enabled']:
+        ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
+        Vect_line_distance(self.poPoints, point[0], point[1], 0.0, self.is3D,
+                           byref(px), byref(py), byref(pz),
+                           None, None, None)
+
+        # check for duplicates
+        if self.settings['highlightDupl']['enabled']:
             found = poFound.contents
-	    for i in range(found.n_values):
-		line = found.value[i]
-		if line != lineNearest:
+            for i in range(found.n_values):
+                line = found.value[i]
+                if line != lineNearest:
                     self.selected['ids'].append(line)
-	    
+
             self.GetDuplicates()
-	    
-	    for i in range(found.n_values):
-		line = found.value[i]
-		if line != lineNearest and not self._isDuplicated(line):
+
+            for i in range(found.n_values):
+                line = found.value[i]
+                if line != lineNearest and not self._isDuplicated(line):
                     self.selected['ids'].remove(line)
         
         Vect_destroy_list(poFound)
@@ -804,7 +804,7 @@ class DisplayDriver:
 
     def GetRegionSelected(self):
         """!Get minimal region extent of selected features
-	
+
         @return n,s,w,e
         """
         regionBox = bound_box()
@@ -1002,7 +1002,7 @@ class DisplayDriver:
                     continue
                 
                 Vect_read_line(self.poMapInfo, BPoints, None, line2)
-	    
+
                 if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
                     if i not in ids:
                         ids[i] = list()
