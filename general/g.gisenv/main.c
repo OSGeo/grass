@@ -7,26 +7,31 @@
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Neteler <neteler itc.it>
+ *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2006, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2006, 2011-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+static char *parse_variable(const char *, char **);
 
 int main(int argc, char *argv[])
 {
     int n, store, nopts;
-    const char *name, *value;
-    char *ptr;
+    const char *name, *u_name;
+    char *value;
     struct Option *get_opt, *set_opt, *unset_opt, *store_opt;
     struct Flag *flag_s, *flag_n;
     struct GModule *module;
@@ -111,7 +116,7 @@ int main(int argc, char *argv[])
 	    quote = !isatty(fileno(stdout));
 	
 	for (n = 0; (name = G__env_name(n)); n++) {
-	    value = G__getenv(name);
+	    value = (char *)G__getenv(name);
 	    if (value) {
 		if (!quote)
 		    fprintf(stdout, "%s=%s\n", name, value);
@@ -131,43 +136,74 @@ int main(int argc, char *argv[])
 	store = G_VAR_MAPSET;
 
     if (get_opt->answer) {
-	value = G_getenv2(get_opt->answer, store);
+        u_name = parse_variable(get_opt->answer, NULL);
+	value = (char *)G_getenv2(u_name, store);
 	fprintf(stdout, "%s\n", value);
 	exit(EXIT_SUCCESS);
     }
 
+    u_name = NULL;
     if (set_opt->answer) {
-	value = NULL;
-	name = set_opt->answer;
-	ptr = strchr(name, '=');
-	if (ptr != NULL) {
-	    *ptr = '\0';
-	    value = ptr + 1;
-	}
-	/* Allow unset without '=' sign */
-	if (value != NULL && *value == '\0')
-	    value = NULL;
-	
-	if (value) {
-	    G_setenv2(name, value, store);
+        u_name = parse_variable(set_opt->answer, &value);
+        if (value) {
+	    G_setenv2(u_name, value, store);
 	}
 	else {
-	    G_getenv2(name, store); /* G_fatal_error() if not defined */
-	    G_unsetenv2(name, store);
+            /* unset */
+	    G_getenv2(u_name, store); /* G_fatal_error() if not defined */
+	    G_unsetenv2(u_name, store);
 	}
-	
-	exit(EXIT_SUCCESS);
+    }
+    
+    if (unset_opt->answer) {
+        u_name = parse_variable(unset_opt->answer, &value);
+        if (value)
+            G_warning(_("Value '%s' ignored when unsetting the GRASS variable"),
+                      value);
+        
+	G_getenv2(u_name, store); /* G_fatal_error() if not defined */
+	G_unsetenv2(u_name, store);
     }
 
-    if (unset_opt->answer) {
-	G_getenv2(unset_opt->answer, store); /* G_fatal_error() if not defined */
-	G_unsetenv2(unset_opt->answer, store);
-	
-	exit(EXIT_SUCCESS);
-    }
+    if (u_name)
+        exit(EXIT_SUCCESS);
 
     /* Something's wrong if we got this far */
     G_usage();
 
     exit(EXIT_FAILURE);
+}
+
+char *parse_variable(const char *v_name, char **value)
+{
+    char *u_name; /* uppercase variable name */
+    char *name, *ptr;
+
+    name  = G_store(v_name);
+    if (value)
+        *value = NULL;
+
+    ptr = strchr(name, '=');
+    if (ptr != NULL) {
+        *ptr = '\0';
+        if (value)
+            *value = ptr + 1;
+    }
+    /* Allow unset without '=' sign */
+    if (value) {
+        if (*value != NULL && **value == '\0')
+            *value = NULL;
+    }
+    if (strlen(name) < 1)
+        G_fatal_error(_("GRASS variable not defined"));
+
+    /* Check variable uppercase */
+    u_name = G_store(name);
+    G_str_to_upper(u_name);
+    if (strcmp(name, u_name) != 0) {
+        G_verbose_message(_("GRASS variable must be uppercase. Using '%s'."),
+                          u_name);
+    }
+
+    return u_name;
 }
