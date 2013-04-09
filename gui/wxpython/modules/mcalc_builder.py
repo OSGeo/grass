@@ -260,8 +260,8 @@ class MapCalcFrame(wx.Frame):
         self.SetMinSize(self.GetBestSize())
     
     def _return_funct(self,event):
-	i = event.GetString()
-	self._addSomething(self.funct_dict[i])
+        i = event.GetString()
+        self._addSomething(self.funct_dict[i])
     
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -323,7 +323,7 @@ class MapCalcFrame(wx.Frame):
         threebutton.Add(item = self.btn_clear, pos = (0,2),
                          span = (1,1), flag = wx.ALIGN_RIGHT)
         buttonSizer3.Add(item = threebutton, pos = (4,0),
-	                 span = (1,1), flag = wx.ALIGN_CENTER)
+                         span = (1,1), flag = wx.ALIGN_CENTER)
 
         buttonSizer4 = wx.BoxSizer(wx.HORIZONTAL)
         buttonSizer4.Add(item = self.btn_load,

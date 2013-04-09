@@ -1972,7 +1972,7 @@ class GCPList(wx.ListCtrl,
 
         self.ResizeColumns()
         self.render = True
-	
+
         self.EnsureVisible(self.selected)
 
     def OnCheckItem(self, index, flag):
