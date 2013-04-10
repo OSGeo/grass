@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2011-2012 by the GRASS Development Team
+   (C) 2011-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -48,9 +48,8 @@ static void notice_processor(void *, const char *);
 #endif
 
 /*!
-   \brief Open vector map - PostGIS feature table (level 1 - without topology)
-
-   \todo Check database instead of geometry_columns
+   \brief Open vector map - PostGIS feature table on non-topological
+   level
 
    \param[in,out] Map pointer to Map_info structure
    \param update TRUE for write mode, otherwise read-only
@@ -144,8 +143,13 @@ int V1_open_old_pg(struct Map_info *Map, int update)
 }
 
 /*!
-   \brief Open vector map - PostGIS feature table (level 2 - feature index)
+   \brief Open vector map - PostGIS feature table on topological level
 
+   Simple feature access:
+    - open feature index file
+   PostGIS Topology:
+    - check if topological schema exists
+   
    \param[in,out] Map pointer to Map_info structure
 
    \return 0 success
@@ -199,7 +203,8 @@ int V2_open_old_pg(struct Map_info *Map)
    \brief Prepare PostGIS database for creating new feature table
    (level 1)
 
-   \todo To implement
+   New PostGIS table is created when writing features by
+   Vect_wrile_line().
 
    \param[out] Map pointer to Map_info structure
    \param name name of PostGIS feature table to create
