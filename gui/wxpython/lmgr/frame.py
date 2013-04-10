@@ -735,7 +735,7 @@ class GMFrame(wx.Frame):
         """!Parse command selected from menu"""
         if event:       
             cmd = self.GetMenuCmd(event)
-        GUI(parent = self).ParseCommand(cmd)
+        GUI(parent=self, giface=self._giface).ParseCommand(cmd)
         
     def OnVNet(self, event):
         """Vector network analysis tool"""
