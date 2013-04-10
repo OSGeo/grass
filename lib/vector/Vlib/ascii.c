@@ -362,7 +362,7 @@ int Vect_write_ascii(FILE *ascii,
     xstring = ystring = zstring = NULL;
     cats = NULL;
     
-    if (where || column_names) {
+    if (field > 0 && (where || column_names)) {
 	Fi = Vect_get_field(Map, field);
 	if (!Fi) {
 	    G_fatal_error(_("Database connection not defined for layer %d"),
@@ -513,7 +513,7 @@ int Vect_write_ascii(FILE *ascii,
 
 	found = get_cat(Cats, Clist, cats, ncats, field, &cat);
 
-	if (!found && ltype == GV_BOUNDARY &&
+	if (!found && field > 0 && ltype == GV_BOUNDARY &&
 	    type & GV_AREA && Vect_level(Map) > 1) {
 	    Vect_get_line_areas(Map, line, &left, &right);
 	    if (left < 0)
@@ -867,6 +867,9 @@ int get_cat(const struct line_cats *Cats, const struct cat_list *Clist,
     int i;
     
     *cat = -1;
+    
+    if (field < 1)
+	return TRUE;
     
     if (Clist && Clist->field == field) {
 	for (i = 0; i < Cats->n_cats; i++) {
