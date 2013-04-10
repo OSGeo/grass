@@ -47,7 +47,6 @@ class AbstractTreeViewMixin(VirtualTree):
     def __init__(self, model, parent, *args, **kw):
         self._model = model
         super(AbstractTreeViewMixin, self).__init__(parent=parent, *args, **kw)
-        self.RefreshItems()
 
         self.selectionChanged = Signal('TreeView.selectionChanged')
         self.itemActivated = Signal('TreeView.itemActivated')
@@ -125,6 +124,7 @@ class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
     """!Tree view class inheriting from wx.TreeCtrl"""
     def __init__(self, model, parent, *args, **kw):
         super(TreeView, self).__init__(parent=parent, model=model, *args, **kw)
+        self.RefreshItems()
 
 class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
     """!Tree view class inheriting from wx.TreeCtrl"""
@@ -138,6 +138,7 @@ class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
             kw[style] = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT |\
                 CT.TR_HAS_BUTTONS | CT.TR_LINES_AT_ROOT | CT.TR_SINGLE
         super(CTreeView, self).__init__(parent=parent, model=model, **kw)
+        self.RefreshItems()
         
 class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
     def __init__(self, model, parent, columns, **kw):
@@ -146,7 +147,6 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
         for column in columns:
             self.AddColumn(column)
         self.SetMainColumn(0)
-        # refresh again
         self.RefreshItems()
         # to solve events inconsitency
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK,  lambda evt:
