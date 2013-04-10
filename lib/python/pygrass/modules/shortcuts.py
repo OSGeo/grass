@@ -9,8 +9,7 @@ import fnmatch
 
 
 from grass.script.core import get_commands
-from grass.pygrass.modules.interface.module import Module
-
+from interface import Module
 
 _CMDS = list(get_commands()[0])
 _CMDS.sort()
@@ -47,7 +46,7 @@ class MetaModule(object):
                 for mod in fnmatch.filter(_CMDS, "%s.*" % self.prefix)]
 
     def __getattr__(self, name):
-        return self.class_('%s.%s' % (self.prefix, name.replace('_', '.')))
+        return self.cls('%s.%s' % (self.prefix, name.replace('_', '.')))
 
 
 # http://grass.osgeo.org/grass70/manuals/html70_user/full_index.html
