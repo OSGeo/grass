@@ -1097,8 +1097,6 @@ class PsMapBufferedWindow(wx.Window):
         self.pdcPaper = wx.PseudoDC()
         self.pdcTmp = wx.PseudoDC()
         self.pdcImage = wx.PseudoDC()
-        dc = wx.ClientDC(self)
-        self.font = dc.GetFont()
         
         self.SetClientSize((700,510))#?
         self._buffer = wx.EmptyBitmap(*self.GetClientSize())
@@ -1904,7 +1902,7 @@ class PsMapBufferedWindow(wx.Window):
             
         if pdctype == 'rectText':
             dc = wx.ClientDC(self) # dc created because of method GetTextExtent, which pseudoDC lacks
-            font = self.font
+            font = dc.GetFont()
             size = 10
             font.SetPointSize(size)
             font.SetStyle(wx.ITALIC)
