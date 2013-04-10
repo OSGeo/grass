@@ -320,7 +320,6 @@ class LocationPage(TitledPage):
         #
         # layout
         #
-        self.sizer.AddGrowableCol(2)
         # map type
         self.rb_maptype = wx.RadioBox(parent=self, id=wx.ID_ANY,
                                       label=' %s ' % _("Map type to georectify"),
@@ -348,6 +347,7 @@ class LocationPage(TitledPage):
         self.sizer.Add(item=self.cb_mapset,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(3,2))
+        self.sizer.AddGrowableCol(2)
 
         #
         # bindings
@@ -442,7 +442,6 @@ class GroupPage(TitledPage):
         #
         # layout
         #
-        self.sizer.AddGrowableCol(2)
         # group
         self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Select group:')),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
@@ -481,6 +480,7 @@ class GroupPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(3, 2))
 
+        self.sizer.AddGrowableCol(2)
         #
         # bindings
         #
@@ -527,7 +527,7 @@ class GroupPage(TitledPage):
         self.OnEnterPage()
         
     def OnExtension(self, event):
-        self.extension = event.GetString()
+        self.extension = self.ext_txt.GetValue()
 
     def OnPageChanging(self, event=None):
         if event.GetDirection() and self.xygroup == '':
@@ -655,12 +655,12 @@ class DispMapPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wx.EVT_CLOSE, self.parent.Cleanup)
 
-    def OnSrcSelection(self,event):
+    def OnSrcSelection(self, event):
         """!Source map to display selected"""
         global src_map
         global maptype
 
-        src_map = event.GetString()
+        src_map = self.srcselection.GetValue()
 
         if src_map == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -680,17 +680,17 @@ class DispMapPage(TitledPage):
         except:
             pass
 
-    def OnTgtRastSelection(self,event):
+    def OnTgtRastSelection(self, event):
         """!Source map to display selected"""
         global tgt_map
 
-        tgt_map['raster'] = event.GetString()
+        tgt_map['raster'] = self.tgtrastselection.GetValue()
 
     def OnTgtVectSelection(self,event):
         """!Source map to display selected"""
         global tgt_map
 
-        tgt_map['vector'] = event.GetString()
+        tgt_map['vector'] = self.tgtvectselection.GetValue()
 
     def OnPageChanging(self, event=None):
         global src_map
@@ -2622,7 +2622,6 @@ class GrSettingsDialog(wx.Dialog):
 
         # interpolation method
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
-        gridSizer.AddGrowableCol(1)
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY, label=_('Select interpolation method:')),
                        pos=(0,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
         self.grmethod = wx.Choice(parent=panel, id=wx.ID_ANY,
@@ -2630,6 +2629,7 @@ class GrSettingsDialog(wx.Dialog):
         gridSizer.Add(item=self.grmethod, pos=(0,1),
                        flag=wx.ALIGN_RIGHT, border=5)
         self.grmethod.SetStringSelection(self.parent.gr_method)
+        gridSizer.AddGrowableCol(1)
         sizer.Add(item=gridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
         # clip to region
@@ -2668,9 +2668,10 @@ class GrSettingsDialog(wx.Dialog):
 
     def OnSDFactor(self,event):
         """!New factor for RMS threshold = M + SD * factor"""
-
-        self.sdfactor = float(event.GetString())
-
+        try:
+            self.sdfactor = float(self.rmsWin.GetValue())
+        except ValueError:
+            return
         if self.sdfactor <= 0:
             GError(parent = self,
                    message=_('RMS threshold factor must be > 0'))
@@ -2683,7 +2684,7 @@ class GrSettingsDialog(wx.Dialog):
         """!Source map to display selected"""
         global src_map
 
-        tmp_map = event.GetString()
+        tmp_map = self.srcselection.GetValue()
         
         if not tmp_map == '' and not tmp_map == src_map:
             self.new_src_map = tmp_map
@@ -2692,17 +2693,13 @@ class GrSettingsDialog(wx.Dialog):
         """!Target map to display selected"""
         global tgt_map
 
-        self.new_tgt_map['raster'] = event.GetString()
-        if self.new_tgt_map['raster'] is None:
-            self.new_tgt_map['raster'] = ''
+        self.new_tgt_map['raster'] = self.tgtrastselection.GetValue()
 
     def OnTgtVectSelection(self,event):
         """!Target map to display selected"""
         global tgt_map
 
-        self.new_tgt_map['vector'] = event.GetString()
-        if self.new_tgt_map['vector'] is None:
-            self.new_tgt_map['vector'] = ''
+        self.new_tgt_map['vector'] = self.tgtvectselection.GetValue()
 
     def OnMethod(self, event):
         self.parent.gr_method = self.methods[event.GetSelection()]
@@ -2711,7 +2708,7 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.clip_to_region = event.IsChecked()
         
     def OnExtension(self, event):
-        self.parent.extension = event.GetString()
+        self.parent.extension = self.ext_txt.GetValue()
 
     def UpdateSettings(self):
         global src_map
