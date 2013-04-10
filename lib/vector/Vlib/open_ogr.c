@@ -26,8 +26,6 @@
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
-
-static int sqltype_to_ogrtype(int);
 #endif
 
 /*!
@@ -161,7 +159,8 @@ int V2_open_old_ogr(struct Map_info *Map)
 /*!
    \brief Prepare OGR datasource for creating new OGR layer (level 1)
 
-   New OGR layer is created by Vect__open_new_ogr().
+   New OGR layer is created when writing features by
+   Vect_wrile_line().
    
    \param[out] Map pointer to Map_info structure
    \param name name of OGR layer to create
@@ -317,32 +316,3 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 
     return 0;
 }
-
-#ifdef HAVE_OGR
-int sqltype_to_ogrtype(int sqltype)
-{
-    int ctype, ogrtype;
-
-    ctype = db_sqltype_to_Ctype(sqltype);
-    
-    switch(ctype) {
-    case DB_C_TYPE_INT:
-	ogrtype = OFTInteger;
-	break;
-    case DB_C_TYPE_DOUBLE:
-	ogrtype = OFTReal;
-	break;
-    case DB_C_TYPE_STRING:
-	ogrtype = OFTString;
-	break;
-    case DB_C_TYPE_DATETIME:
-	ogrtype = OFTString;
-	break;
-    default:
-	ogrtype = OFTString;
-	break;
-    }
-    
-    return ogrtype;
-}
-#endif
