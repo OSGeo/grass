@@ -58,46 +58,47 @@ If the <b>-m</b> flag is given, geographic coordinates will be used instead.
 
 
 <dl>
-<dt><a name="comment"></a><b>#</b> <em>comment</em> 
-<dd>A line of comment which is ignored in the processing. 
+<dt><a name="comment"></a><b>#</b> <em>comment</em></dt>
+<dd>A line of comment which is ignored in the processing.</dd>
 
-<dt><a name="move"></a><b>move</b> <em>xpos ypos</em> 
+<dt><a name="move"></a><b>move</b> <em>xpos ypos</em></dt>
 <dd>The current location is updated to <em>xpos ypos</em>. 
 
 Unless the <b>-m</b> flag is used,
 values are stated as a percent of the active display frame's 
 horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size, 
 and may be floating point values. Values are between 0-100. 
-<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>.
+<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>.</dd>
 
-<dt><a name="draw"></a><b>draw</b> <em>xpos ypos</em> 
+<dt><a name="draw"></a><b>draw</b> <em>xpos ypos</em></dt>
 <dd>A line is drawn in the current color from the current location to the new 
 location <em>xpos ypos</em>, which then becomes the current location. 
 Unless the <b>-m</b> flag is used,
 values are stated as a percent of the active display frame's 
 horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size, 
 and may be floating point values. Values are between 0-100. 
-<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>. 
+<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>.</dd>
 
 <dt><a name="polygon"></a><b>polygon</b> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
-<br>&nbsp;&nbsp;... 
+<br>&nbsp;&nbsp;...</dt>
 
 <dd>The coordinates appearing beneath the word <em>polygon</em>, 
 one pair per line, 
-circumscribe a polygon that is to be filled with the current color. 
+circumscribe a polygon that is to be filled with the current color.</dd>
 
 <dt><a name="polyline"></a><b>polyline</b> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
-<br>&nbsp;&nbsp;... 
+<br>&nbsp;&nbsp;...</dt>
 
 <dd>The coordinates appearing beneath the word <em>polyline</em>, 
 one pair per line, 
-circumscribe a polygon that is not to be filled with color. 
+circumscribe a polygon that is not to be filled with color.</dd>
 
-<dt><a name="color"></a><b>color</b> <em>color</em> 
+<dt><a name="color"></a><b>color</b> <em>color</em></dt>
+
 <dd>Sets the current color to that stated; subsequent graphics will be drawn 
 in the stated color, until the current color is set to a different color. 
 Options are <em>red</em>, 
@@ -113,14 +114,13 @@ Options are <em>red</em>,
 <em>white</em>,
 <em>black</em>,
 an R:G:B triplet (separated by colons),
-or the word "none" (draws in the default background color).
+or the word "none" (draws in the default background color).</dd>
 
-<dt><a name="text"></a><b>text</b> <em>line-of-text</em> 
+<dt><a name="text"></a><b>text</b> <em>line-of-text</em></dt>
 <dd>The stated text is drawn at the current location using the current color, 
-and the new current location is then positioned at the end of the text string. 
+and the new current location is then positioned at the end of the text string.</dd>
 
-<a name="size"></a>
-<dt><b>size</b> <em>xper yper</em> 
+<dt><a name="size"></a><b>size</b> <em>xper yper</em></dt>
 <dd>Subsequent text will be drawn such that the text is 
 <em>xper</em> percent of the graphics monitor display frame wide and 
 <em>yper</em> percent of the frame high. By default, the text size is set to
@@ -128,9 +128,9 @@ and the new current location is then positioned at the end of the text string.
 If only one value is given, then that value will be used for both x and y 
 scaling.
 <br>
-<b>Note.</b> A space must separate <em>xper</em> and <em>yper</em>.
+<b>Note.</b> A space must separate <em>xper</em> and <em>yper</em>.</dd>
 
-<dt><a name="symbol"></a><b>symbol</b> <em>type size xper yper [line_color [fill_color]]</em>
+<dt><a name="symbol"></a><b>symbol</b> <em>type size xper yper [line_color [fill_color]]</em></dt>
 <dd>A symbol is drawn at the given size on the display monitor. The
 <em>xper</em> and <em>yper</em> options define the center of the icon and
 are given as a percentage of the display frame (<tt>0,0</tt> is lower left).
@@ -140,22 +140,21 @@ form <tt>$MAPSET/symbol/</tt><em>type/name</em>.
 The colors may be either a standard color name, an R:G:B triplet,
 or "none". If using an R:G:B triplet, each color value can range from 0-255.
 If not specified the default <em>line_color</em> is black and the default 
-<em>fill_color</em> is grey.
+<em>fill_color</em> is grey.</dd>
 
-<dt><a name="rotation"></a><b>rotation</b> <em>angle</em> 
+<dt><a name="rotation"></a><b>rotation</b> <em>angle</em></dt>
 <dd>Subsequent text and symbols will be drawn such that they are rotated 
-<em>angle</em> degrees counter-clockwise from east.
+<em>angle</em> degrees counter-clockwise from east.</dd>
 
-<dt><a name="icon"></a><b>icon</b> <em>type size x y</em> 
+<dt><a name="icon"></a><b>icon</b> <em>type size x y</em></dt>
 <dd>Draws an icon of types <em>o</em>, <em>x</em>, or <em>+</em> 
 with specified <em>size</em> (in %) at location <em>x,y</em>. 
-Note: type <em>o</em> designates a square.
-<br>
+Note: type <em>o</em> designates a square.</dd>
 
-<dt><a name="width"></a><b>width</b> <em>value</em> 
+<dt><a name="width"></a><b>width</b> <em>value</em></dt>
 <dd>Subsequent lines (including non-FreeType text) will be drawn with
 the given pixel thickness.
-<br>The default value is 0.
+<br>The default value is 0.</dd>
 
 </dl>
 
@@ -217,16 +216,18 @@ graphics editor into GRASS <em>d.graph</em> format.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.font.html">d.font</a></em><br>
-<em><a href="d.frame.html">d.frame</a></em><br>
-<em><a href="d.labels.html">d.labels</a></em><br>
-<!-- <em><a href="d.mapgraph.html">d.mapgraph</a></em><br> superseded by -m -->
-<em><a href="d.polar.html">d.polar</a></em><br>
-<em><a href="d.text.html">d.text</a></em><br>
-<em><a href="d.where.html">d.where</a></em><br>
-<!-- <em><a href="grass.logo.sh.html">grass.logo.sh</a></em><br> -->
+<em>
+<a href="d.font.html">d.font</a>,
+<a href="d.labels.html">d.labels</a>,
+<!-- <a href="d.mapgraph.html">d.mapgraph</a>, superseded by -m -->
+<a href="d.polar.html">d.polar</a>,
+<a href="d.text.html">d.text</a>,
+<a href="d.where.html">d.where</a>
+</em>
 
 <h2>AUTHOR</h2>
 
 James Westervelt, U.S. Army Construction Engineering Research Laboratory
-<br><i>Last changed: $Date$</i>
+
+<p>
+<i>Last changed: $Date$</i>
