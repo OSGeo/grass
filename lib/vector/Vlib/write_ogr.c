@@ -19,11 +19,15 @@
 
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
+#include <cpl_string.h>
 
+static dbDriver *create_table(OGRLayerH, const struct field_info *);
+static int create_ogr_layer(struct Map_info *, int);
 static off_t write_feature(struct Map_info *, int, const struct line_pnts **, int,
                            const struct line_cats *);
 static int write_attributes(dbDriver *, int, const struct field_info *,
@@ -163,6 +167,190 @@ off_t V2__write_area_ogr(struct Map_info *Map,
     return write_feature(Map, GV_BOUNDARY, points, nparts, cats);
 }
 
+dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
+{
+    int col, ncols;
+    int sqltype, ogrtype, length;
+    
+    const char *colname;
+    
+    dbDriver *driver;
+    dbHandle handle;
+    dbCursor cursor;
+    dbTable *table;
+    dbColumn *column;
+    dbString sql;
+    
+    OGRFieldDefnH hFieldDefn;
+    OGRFeatureDefnH hFeatureDefn;
+
+    db_init_string(&sql);
+    db_init_handle(&handle);
+    
+    driver = db_start_driver(Fi->driver);
+    if (!driver) {
+	G_warning(_("Unable to start driver <%s>"), Fi->driver);
+	return NULL;
+    }
+    db_set_handle(&handle, Fi->database, NULL);
+    if (db_open_database(driver, &handle) != DB_OK) {
+	G_warning(_("Unable to open database <%s> by driver <%s>"),
+		  Fi->database, Fi->driver);
+	db_close_database_shutdown_driver(driver);
+	return NULL;
+    }
+ 
+    /* to get no data */
+    db_set_string(&sql, "select * from ");
+    db_append_string(&sql, Fi->table);
+    db_append_string(&sql, " where 0 = 1");	
+    
+    if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
+	DB_OK) {
+	G_warning(_("Unable to open select cursor: '%s'"),
+		  db_get_string(&sql));
+	db_close_database_shutdown_driver(driver);
+	return NULL;
+    }
+
+    table = db_get_cursor_table(&cursor);
+    ncols = db_get_table_number_of_columns(table);
+
+    hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
+    
+    for (col = 0; col < ncols; col++) {
+	column = db_get_table_column(table, col);
+	colname = db_get_column_name(column);	
+	sqltype = db_get_column_sqltype(column);
+	ogrtype = sqltype_to_ogrtype(sqltype);
+	length = db_get_column_length(column);
+	
+	if (strcmp(OGR_L_GetFIDColumn(hLayer), colname) == 0 ||
+	    OGR_FD_GetFieldIndex(hFeatureDefn, colname) > -1) {
+	    /* field already exists */
+	    continue;
+	}
+
+	hFieldDefn = OGR_Fld_Create(colname, ogrtype);
+	/* GDAL 1.9.0 (r22968) uses VARCHAR instead of CHAR */
+	if (ogrtype == OFTString && length > 0)
+	    OGR_Fld_SetWidth(hFieldDefn, length);
+	if (OGR_L_CreateField(hLayer, hFieldDefn, TRUE) != OGRERR_NONE) {
+	    G_warning(_("Creating field <%s> failed"), colname);
+	    db_close_database_shutdown_driver(driver);
+	    return NULL;
+	}
+	
+	OGR_Fld_Destroy(hFieldDefn);
+    }
+
+    return driver;
+}
+
+/*!
+   \brief Create new OGR layer in given OGR datasource (internal use only)
+
+   V1_open_new_ogr() is required to be called before this function.
+
+   List of currently supported types:
+    - GV_POINT     (wkbPoint)
+    - GV_LINE      (wkbLineString)
+    - GV_BOUNDARY  (wkb_Polygon)
+   \param[in,out] Map pointer to Map_info structure
+   \param type feature type (GV_POINT, GV_LINE, ...)
+
+   \return 0 success
+   \return -1 error 
+*/
+int create_ogr_layer(struct Map_info *Map, int type)
+{
+    int ndblinks;
+    OGRLayerH            Ogr_layer;
+    OGRSpatialReferenceH Ogr_spatial_ref;
+    
+    struct field_info *Fi;
+    struct Key_Value *projinfo, *projunits;
+    struct Format_info_ogr *ogr_info;
+    
+    OGRwkbGeometryType Ogr_geom_type;
+    char             **Ogr_layer_options;
+    
+    ogr_info = &(Map->fInfo.ogr);
+    
+    if (!ogr_info->driver_name ||
+	!ogr_info->layer_name ||
+	!ogr_info->ds)
+	return -1;
+    
+    /* get spatial reference */
+    projinfo  = G_get_projinfo();
+    projunits = G_get_projunits();
+    Ogr_spatial_ref = GPJ_grass_to_osr(projinfo, projunits);
+    G_free_key_value(projinfo);
+    G_free_key_value(projunits);
+    
+    /* determine geometry type */
+    switch(type) {
+    case GV_POINT:
+	Ogr_geom_type = wkbPoint;
+	break;
+    case GV_LINE:
+	Ogr_geom_type = wkbLineString;
+	break;
+    case GV_BOUNDARY:
+	Ogr_geom_type = wkbPolygon;
+	break;
+    default:
+	G_warning(_("Unsupported geometry type (%d)"), type);
+	return -1;
+    }
+    
+    /* check creation options */
+    Ogr_layer_options = ogr_info->layer_options;
+    if (Vect_is_3d(Map)) {
+	if (strcmp(ogr_info->driver_name, "PostgreSQL") == 0) {
+	    Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "3");
+	}
+    }
+    else {
+	if (strcmp(ogr_info->driver_name, "PostgreSQL") == 0) {
+	    Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "2");
+	}
+    }
+
+    /* create new OGR layer */
+    Ogr_layer = OGR_DS_CreateLayer(ogr_info->ds, ogr_info->layer_name,
+				   Ogr_spatial_ref, Ogr_geom_type, Ogr_layer_options);
+    CSLDestroy(Ogr_layer_options);
+    if (!Ogr_layer) {
+	G_warning(_("Unable to create OGR layer <%s> in '%s'"),
+		  ogr_info->layer_name, ogr_info->dsn);
+	return -1;
+    }
+    ogr_info->layer = Ogr_layer;
+
+    ndblinks = Vect_get_num_dblinks(Map);
+    if (ndblinks > 0) {
+	/* write also attributes */
+	Fi = Vect_get_dblink(Map, 0);
+	if (Fi) {
+	    if (ndblinks > 1)
+		G_warning(_("More layers defined, using driver <%s> and "
+			    "database <%s>"), Fi->driver, Fi->database);
+	    ogr_info->dbdriver = create_table(ogr_info->layer, Fi);
+	    G_free(Fi);
+	}
+	else
+	  G_warning(_("Database connection not defined. "
+		      "Unable to write attributes."));
+    }
+    
+    if (OGR_L_TestCapability(ogr_info->layer, OLCTransactions))
+	OGR_L_StartTransaction(ogr_info->layer);
+
+    return 0;
+}
+
 /*!
   \brief Write OGR feature
 
@@ -204,9 +392,12 @@ off_t write_feature(struct Map_info *Map, int type,
     
     if (!ogr_info->layer) {
 	/* create OGR layer if doesn't exist */
-	if (V2_open_new_ogr(Map, type) < 0)
+	if (create_ogr_layer(Map, type) < 0)
 	    return -1;
     }
+
+    if (!points)
+        return 0;
 
     cat = -1; /* no attributes to be written */
     if (cats->n_cats > 0 && Vect_get_num_dblinks(Map) > 0) {

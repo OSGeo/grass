@@ -33,11 +33,18 @@
 
 #define WKBSRIDFLAG 0x20000000
 
+#define TOPOGEOM_COLUMN "topo"
+
 /*! Use SQL statements from PostGIS Topology extension (this options
   is quite slow. By default are used simple SQL statements (INSERT, UPDATE)
 */
 #define USE_TOPO_STMT 0
 
+static int create_table(struct Format_info_pg *, const struct field_info *);
+static int check_schema(const struct Format_info_pg *);
+static int create_topo_schema(struct Format_info_pg *, int);
+static int create_pg_layer(struct Map_info *, int);
+static char *get_sftype(SF_FeatureType);
 static off_t write_line_sf(struct Map_info *, int,
                            const struct line_pnts **, int,
                            const struct line_cats *);
@@ -97,10 +104,13 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
     
     if (pg_info->feature_type == SF_UNKNOWN) {
         /* create PostGIS table if doesn't exist */
-        if (V2_open_new_pg(Map, type) < 0)
+        if (create_pg_layer(Map, type) < 0)
             return -1;
     }
 
+    if (!points)
+        return 0;
+    
     if (!pg_info->toposchema_name) { /* simple features access */
         return write_line_sf(Map, type, &points, 1, cats);
     }
@@ -213,6 +223,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_off
     char *stmt, *geom_data;
     
     struct Format_info_pg *pg_info;
+    struct P_line *Line;
     
     geom_data = NULL;
     stmt = NULL;
@@ -223,10 +234,23 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_off
         return -1;
     }
   
-    if (type != V2_read_line_pg(Map, NULL, NULL, line)) {
+    Line = Map->plus.Line[line];
+    if (Line == NULL) {
+        G_warning(_("Attempt to access dead feature %d"), line);
+        return -1;
+    }
+
+    if (!Points)
+        Points = Vect_new_line_struct();
+    
+    if (type != V2_read_line_pg(Map, Points, NULL, line)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
 	return -1;
     }
+
+    /* remove line from topology */
+    if (0 != V2__delete_line_from_topo_nat(Map, line, type, Points, NULL))
+        return -1;
 
     if (pg_info->toposchema_name) { /* PostGIS Topology */
         schema_name = pg_info->toposchema_name;
@@ -255,7 +279,9 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_off
         return -1;
     }
 
-    return old_offset; /* offset not changed */
+    /* update topology
+       note: offset is not changed */
+    return V2__add_line_to_topo_nat(Map, old_offset, type, points, cats, -1, NULL);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -397,9 +423,9 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
         }
        
         /* read the line */    
-        if (!Points) {
+        if (!Points)
             Points = Vect_new_line_struct();
-        }
+        
         type = V2_read_line_pg(Map, Points, NULL, line);
         if (type < 0)
             return -1;
@@ -492,6 +518,503 @@ off_t V2__write_area_pg(struct Map_info *Map,
 }
 
 /*!
+  \brief Create new feature table
+
+  \param pg_info pointer to Format_info_pg
+  \param Fi pointer to field_info
+
+  \return -1 on error
+  \return 0 on success
+*/
+int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
+{
+    int spatial_index, primary_key;
+    char stmt[DB_SQL_MAX];
+    char *geom_type, *def_file;
+    
+    PGresult *result;
+
+    def_file = getenv("GRASS_VECTOR_PGFILE");
+    
+    /* by default create spatial index & add primary key */
+    spatial_index = primary_key = TRUE;
+    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
+        FILE *fp;
+        const char *p;
+
+        struct Key_Value *key_val;
+
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
+        if (!fp) {
+            G_warning(_("Unable to open PG file"));
+        }
+        else {
+            key_val = G_fread_key_value(fp);
+            fclose(fp);
+            
+            /* disable spatial index ? */
+            p = G_find_key_value("spatial_index", key_val);
+            if (p && G_strcasecmp(p, "no") == 0)
+                spatial_index = FALSE;
+            
+            /* disable primary key ? */
+            p = G_find_key_value("primary_key", key_val);
+            if (p && G_strcasecmp(p, "no") == 0)
+                primary_key = FALSE;
+            
+            /* PostGIS topology enabled ? */
+            p = G_find_key_value("topology", key_val);
+            if (p && G_strcasecmp(p, "yes") == 0) {
+                /* define topology name
+                   this should be configurable by the user
+                */
+                G_asprintf(&(pg_info->toposchema_name), "topo_%s",
+                           pg_info->table_name);
+            }
+        }
+    }
+    
+    /* create schema if not exists */
+    if (G_strcasecmp(pg_info->schema_name, "public") != 0) {
+        if (check_schema(pg_info) != 0)
+            return -1;
+    }
+
+    /* prepare CREATE TABLE statement */
+    sprintf(stmt, "CREATE TABLE \"%s\".\"%s\" (%s SERIAL",
+            pg_info->schema_name, pg_info->table_name, pg_info->fid_column);
+    
+    /* add primary key ? */
+    if (primary_key)
+        strcat(stmt, " PRIMARY KEY");
+    
+    if (Fi) {
+        /* append attributes */
+        int col, ncols, sqltype, length;
+        char stmt_col[DB_SQL_MAX];
+        const char *colname;
+
+        dbString dbstmt;
+        dbHandle handle;
+        dbDriver *driver;
+        dbCursor cursor;
+        dbTable *table;
+        dbColumn *column;
+
+        db_init_string(&dbstmt);
+        db_init_handle(&handle);
+
+        pg_info->dbdriver = driver = db_start_driver(Fi->driver);
+        if (!driver) {
+            G_warning(_("Unable to start driver <%s>"), Fi->driver);
+            return -1;
+        }
+        db_set_handle(&handle, Fi->database, NULL);
+        if (db_open_database(driver, &handle) != DB_OK) {
+            G_warning(_("Unable to open database <%s> by driver <%s>"),
+                      Fi->database, Fi->driver);
+            db_close_database_shutdown_driver(driver);
+            pg_info->dbdriver = NULL;
+            return -1;
+        }
+
+        /* describe table */
+        db_set_string(&dbstmt, "select * from ");
+        db_append_string(&dbstmt, Fi->table);
+        db_append_string(&dbstmt, " where 0 = 1");
+
+        if (db_open_select_cursor(driver, &dbstmt,
+                                  &cursor, DB_SEQUENTIAL) != DB_OK) {
+            G_warning(_("Unable to open select cursor: '%s'"),
+                      db_get_string(&dbstmt));
+            db_close_database_shutdown_driver(driver);
+            pg_info->dbdriver = NULL;
+            return -1;
+        }
+
+        table = db_get_cursor_table(&cursor);
+        ncols = db_get_table_number_of_columns(table);
+
+        G_debug(3,
+                "copying attributes: driver = %s database = %s table = %s cols = %d",
+                Fi->driver, Fi->database, Fi->table, ncols);
+
+        for (col = 0; col < ncols; col++) {
+            column = db_get_table_column(table, col);
+            colname = db_get_column_name(column);
+            sqltype = db_get_column_sqltype(column);
+            length = db_get_column_length(column);
+
+            G_debug(3, "\tcolumn = %d name = %s type = %d length = %d",
+                    col, colname, sqltype, length);
+
+            if (strcmp(pg_info->fid_column, colname) == 0) {
+                /* skip fid column if exists */
+                G_debug(3, "\t%s skipped", pg_info->fid_column);
+                continue;
+            }
+
+            /* append column */
+            sprintf(stmt_col, ",%s %s", colname, db_sqltype_name(sqltype));
+            strcat(stmt, stmt_col);
+            if (sqltype == DB_SQL_TYPE_CHARACTER) {
+                /* length only for string columns */
+                sprintf(stmt_col, "(%d)", length);
+                strcat(stmt, stmt_col);
+            }
+        }
+
+        db_free_string(&dbstmt);
+    }
+    strcat(stmt, ")");          /* close CREATE TABLE statement */
+
+    /* begin transaction (create table) */
+    if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1) {
+        return -1;
+    }
+
+    /* create table */
+    G_debug(2, "SQL: %s", stmt);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    /* determine geometry type (string) */
+    switch (pg_info->feature_type) {
+    case (SF_POINT):
+        geom_type = "POINT";
+        break;
+    case (SF_LINESTRING):
+        geom_type = "LINESTRING";
+        break;
+    case (SF_POLYGON):
+        geom_type = "POLYGON";
+        break;
+    default:
+        G_warning(_("Unsupported feature type %d"), pg_info->feature_type);
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+    
+    /* add geometry column */
+    sprintf(stmt, "SELECT AddGeometryColumn('%s', '%s', "
+            "'%s', %d, '%s', %d)",
+            pg_info->schema_name, pg_info->table_name,
+            pg_info->geom_column, pg_info->srid,
+            geom_type, pg_info->coor_dim);
+    G_debug(2, "SQL: %s", stmt);
+    result = PQexec(pg_info->conn, stmt);
+    
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning("%s", PQresultErrorMessage(result));
+        PQclear(result);
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+    
+    /* create index ? */
+    if (spatial_index) {
+        G_verbose_message(_("Building spatial index on <%s>..."),
+                          pg_info->geom_column);
+        sprintf(stmt,
+                "CREATE INDEX %s_%s_idx ON \"%s\".\"%s\" USING GIST (%s)",
+                pg_info->table_name, pg_info->geom_column,
+                pg_info->schema_name, pg_info->table_name,
+                pg_info->geom_column);
+        G_debug(2, "SQL: %s", stmt);
+        
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+    }
+
+    /* close transaction (create table) */
+    if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1) {
+        return -1;
+    }
+
+    return 0;
+}
+
+/*!
+  \brief Creates new schema for feature table if not exists
+
+  \param pg_info pointer to Format_info_pg
+
+  \return -1 on error
+  \return 0 on success
+*/
+int check_schema(const struct Format_info_pg *pg_info)
+{
+    int i, found, nschema;
+    char stmt[DB_SQL_MAX];
+
+    PGresult *result;
+
+    /* add geometry column */
+    sprintf(stmt, "SELECT nspname FROM pg_namespace");
+    G_debug(2, "SQL: %s", stmt);
+    result = PQexec(pg_info->conn, stmt);
+
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        PQclear(result);
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    found = FALSE;
+    nschema = PQntuples(result);
+    for (i = 0; i < nschema && !found; i++) {
+        if (strcmp(pg_info->schema_name, PQgetvalue(result, i, 0)) == 0)
+            found = TRUE;
+    }
+
+    PQclear(result);
+
+    if (!found) {
+        sprintf(stmt, "CREATE SCHEMA %s", pg_info->schema_name);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+        G_warning(_("Schema <%s> doesn't exist, created"),
+                  pg_info->schema_name);
+    }
+
+    return 0;
+}
+
+/*!
+  \brief Create new PostGIS topology schema
+
+  - create topology schema
+  - add topology column to the feature table
+  
+  \param pg_info pointer to Format_info_pg
+
+  \return 0 on success
+  \return 1 topology disable, nothing to do
+  \return -1 on failure
+*/
+int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
+{
+    double tolerance;
+    char stmt[DB_SQL_MAX];
+    char *def_file;
+    
+    PGresult *result;
+    
+    def_file = getenv("GRASS_VECTOR_PGFILE");
+    
+    /* read default values from PG file*/
+    tolerance = 0.;
+    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
+        FILE *fp;
+        const char *p;
+
+        struct Key_Value *key_val;
+
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
+        if (!fp) {
+            G_fatal_error(_("Unable to open PG file"));
+        }
+        key_val = G_fread_key_value(fp);
+        fclose(fp);
+
+        /* tolerance */
+        p = G_find_key_value("tolerance", key_val);
+        if (p)
+            tolerance = atof(p);
+
+        /* topogeom column */
+        p = G_find_key_value("topogeom_column", key_val);
+        if (p)
+            pg_info->topogeom_column = G_store(p);
+        else
+            pg_info->topogeom_column = G_store(TOPOGEOM_COLUMN);
+    }
+
+    /* begin transaction (create topo schema) */
+    if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1) {
+        return -1;
+    }
+
+    /* create topology schema */
+    G_verbose_message(_("Creating topology schema <%s>..."),
+                      pg_info->toposchema_name);
+    sprintf(stmt, "SELECT topology.createtopology('%s', "
+            "find_srid('%s', '%s', '%s'), %f, '%s')",
+            pg_info->toposchema_name, pg_info->schema_name,
+            pg_info->table_name, pg_info->geom_column, tolerance,
+            with_z == WITH_Z ? "t" : "f");
+    G_debug(2, "SQL: %s", stmt);
+
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+    /* store toposchema id */
+    pg_info->toposchema_id = atoi(PQgetvalue(result, 0, 0));
+
+    /* add topo column to the feature table */
+    G_verbose_message(_("Adding new topology column <%s>..."),
+                      pg_info->topogeom_column);
+    sprintf(stmt, "SELECT topology.AddTopoGeometryColumn('%s', '%s', '%s', "
+            "'%s', '%s')", pg_info->toposchema_name, pg_info->schema_name,
+            pg_info->table_name, pg_info->topogeom_column,
+            get_sftype(pg_info->feature_type));
+    G_debug(2, "SQL: %s", stmt);
+
+    result = PQexec(pg_info->conn, stmt);
+    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    /* close transaction (create topo schema) */
+    if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1) {
+        return -1;
+    }
+
+    return 0;
+}
+
+/*!
+   \brief Create new PostGIS layer in given database (internal use only)
+
+   V1_open_new_pg() must be called before this function.
+
+   List of currently supported types:
+   - GV_POINT     (SF_POINT)
+   - GV_LINE      (SF_LINESTRING)
+   - GV_BOUNDARY  (SF_POLYGON)
+
+   When PostGIS Topology the map level is updated to topological level
+   and build level set to GV_BUILD_BASE.
+
+   \param[in,out] Map pointer to Map_info structure
+   \param type feature type (GV_POINT, GV_LINE, ...)
+
+   \return 0 success
+   \return -1 error 
+ */
+int create_pg_layer(struct Map_info *Map, int type)
+{
+    int ndblinks;
+
+    struct Format_info_pg *pg_info;
+    struct field_info *Fi;
+
+    Fi = NULL;
+
+    pg_info = &(Map->fInfo.pg);
+    if (!pg_info->conninfo) {
+        G_warning(_("Connection string not defined"));
+        return -1;
+    }
+
+    if (!pg_info->table_name) {
+        G_warning(_("PostGIS feature table not defined"));
+        return -1;
+    }
+
+    G_debug(1, "Vect__open_new_pg(): conninfo='%s' table='%s' -> type = %d",
+            pg_info->conninfo, pg_info->table_name, type);
+
+    /* determine geometry type */
+    switch (type) {
+    case GV_POINT:
+        pg_info->feature_type = SF_POINT;
+        break;
+    case GV_LINE:
+        pg_info->feature_type = SF_LINESTRING;
+        break;
+    case GV_BOUNDARY:
+        pg_info->feature_type = SF_POLYGON;
+        break;
+    default:
+        G_warning(_("Unsupported geometry type (%d)"), type);
+        return -1;
+    }
+
+    /* coordinate dimension */
+    pg_info->coor_dim = Vect_is_3d(Map) ? 3 : 2;
+
+    /* create new PostGIS table */
+    ndblinks = Vect_get_num_dblinks(Map);
+    if (ndblinks > 0) {
+        Fi = Vect_get_dblink(Map, 0);
+        if (Fi) {
+            if (ndblinks > 1)
+                G_warning(_("More layers defined, using driver <%s> and "
+                            "database <%s>"), Fi->driver, Fi->database);
+        }
+        else {
+            G_warning(_("Database connection not defined. "
+                        "Unable to write attributes."));
+        }
+    }
+
+    /* create new feature table */
+    if (create_table(pg_info, Fi) == -1) {
+        G_warning(_("Unable to create new PostGIS feature table"));
+        return -1;
+    }
+    
+    /* create new topology schema (if PostGIS topology support is enabled) */
+    if (pg_info->toposchema_name) {
+        /* force topological level */
+        Map->level = LEVEL_2;
+        Map->plus.built = GV_BUILD_BASE;
+        
+        /* track updated features, used in V2__add_line_to_topo_nat() */
+        Vect_set_updated(Map, TRUE);
+        
+        if (create_topo_schema(pg_info, Vect_is_3d(Map)) == -1) {
+            G_warning(_("Unable to create new PostGIS topology schema"));
+            return -1;
+        }
+    }
+    
+    if (Fi)
+        G_free(Fi);
+
+    return 0;
+}
+
+/*!
+  \brief Get simple feature type as a string
+
+  Used for AddTopoGeometryColumn().
+
+  Valid types:
+   - SF_POINT
+   - SF_LINESTRING
+   - SF_POLYGON
+
+  \return string with feature type
+  \return empty string
+*/
+char *get_sftype(SF_FeatureType sftype)
+{
+    if (sftype == SF_POINT)
+        return "POINT";
+    else if (sftype == SF_LINESTRING)
+        return "LINE";
+    else if (sftype == SF_POLYGON)
+        return "POLYGON";
+    else
+        G_warning(_("Unsupported feature type %d"), sftype);
+    
+    return "";
+}
+
+/*!
   \brief Write vector features as PostGIS simple feature element
   
    \param Map pointer to Map_info structure
@@ -534,7 +1057,7 @@ off_t write_line_sf(struct Map_info *Map, int type,
 
     /* create PostGIS table if doesn't exist */
     if (pg_info->feature_type == SF_UNKNOWN) {
-        if (V2_open_new_pg(Map, type) < 0)
+        if (create_pg_layer(Map, type) < 0)
             return -1;
     }
     
@@ -639,7 +1162,7 @@ off_t write_line_sf(struct Map_info *Map, int type,
   \param points feature geometry
   \param is_node TRUE for nodes (written as points)
   
-  \return 0 on success
+  \return 0 feature offset
   \return -1 on error
 */
 off_t write_line_tp(struct Map_info *Map, int type, int is_node,
@@ -677,7 +1200,7 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
     
     /* create PostGIS table if doesn't exist */
     if (pg_info->feature_type == SF_UNKNOWN) {
-        if (V2_open_new_pg(Map, type) < 0)
+        if (create_pg_layer(Map, type) < 0)
             return -1;
     }
     
@@ -765,7 +1288,7 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
     if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY)
         update_topo_face(Map, line);
     
-    return 0;
+    return line;
 }
 
 /*!
