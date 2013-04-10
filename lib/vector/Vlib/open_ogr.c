@@ -22,21 +22,18 @@
 
 #include <grass/vector.h>
 #include <grass/dbmi.h>
-#include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
-#include <cpl_string.h>
 
 static int sqltype_to_ogrtype(int);
-static dbDriver *create_table(OGRLayerH, const struct field_info *);
 #endif
 
 /*!
-   \brief Open existing OGR layer (level 1 - without feature index file)
+   \brief Open existing OGR layer on non-topological level
 
-   Map->name, Map->mapset, Map->fInfo.ogr.dsn and
+   Note: Map->name, Map->mapset, Map->fInfo.ogr.dsn and
    Map->fInfo.ogr.layer_name must be set before.
 
    \param[in,out] Map pointer to Map_info structure
@@ -129,7 +126,10 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
 }
 
 /*!
-   \brief Open existing OGR layer (level 2 - feature index)
+   \brief Open existing OGR layer on topological level
+
+   This functions reads feature index (fidx) file required for
+   pseudo-topology.
 
    \param[in,out] Map pointer to Map_info structure
    
@@ -149,7 +149,7 @@ int V2_open_old_ogr(struct Map_info *Map)
 	G_zero(&(Map->fInfo.ogr.offset), sizeof(struct Format_info_offset));
     }
     
-    Map->fInfo.ogr.next_line = 1;
+    Map->fInfo.ogr.next_line = 1; /* reset feature cache */
 
     return 0;
 #else
@@ -161,7 +161,7 @@ int V2_open_old_ogr(struct Map_info *Map)
 /*!
    \brief Prepare OGR datasource for creating new OGR layer (level 1)
 
-   New OGR layer can be created by V2_open_new_ogr().
+   New OGR layer is created by Vect__open_new_ogr().
    
    \param[out] Map pointer to Map_info structure
    \param name name of OGR layer to create
@@ -235,116 +235,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 }
 
 /*!
-   \brief Create new OGR layer in given OGR datasource (level 2)
-
-   V1_open_new_ogr() is required to be called before this function.
-
-   List of currently supported types:
-    - GV_POINT     (wkbPoint)
-    - GV_LINE      (wkbLineString)
-    - GV_BOUNDARY  (wkb_Polygon)
-   \param[in,out] Map pointer to Map_info structure
-   \param type feature type (GV_POINT, GV_LINE, ...)
-
-   \return 0 success
-   \return -1 error 
-*/
-int V2_open_new_ogr(struct Map_info *Map, int type)
-{
-#ifdef HAVE_OGR
-    int ndblinks;
-    OGRLayerH            Ogr_layer;
-    OGRSpatialReferenceH Ogr_spatial_ref;
-    
-    struct field_info *Fi;
-    struct Key_Value *projinfo, *projunits;
-    struct Format_info_ogr *ogr_info;
-    
-    OGRwkbGeometryType Ogr_geom_type;
-    char             **Ogr_layer_options;
-    
-    ogr_info = &(Map->fInfo.ogr);
-    
-    if (!ogr_info->driver_name ||
-	!ogr_info->layer_name ||
-	!ogr_info->ds)
-	return -1;
-    
-    /* get spatial reference */
-    projinfo  = G_get_projinfo();
-    projunits = G_get_projunits();
-    Ogr_spatial_ref = GPJ_grass_to_osr(projinfo, projunits);
-    G_free_key_value(projinfo);
-    G_free_key_value(projunits);
-    
-    /* determine geometry type */
-    switch(type) {
-    case GV_POINT:
-	Ogr_geom_type = wkbPoint;
-	break;
-    case GV_LINE:
-	Ogr_geom_type = wkbLineString;
-	break;
-    case GV_BOUNDARY:
-	Ogr_geom_type = wkbPolygon;
-	break;
-    default:
-	G_warning(_("Unsupported geometry type (%d)"), type);
-	return -1;
-    }
-    
-    /* check creation options */
-    Ogr_layer_options = ogr_info->layer_options;
-    if (Vect_is_3d(Map)) {
-	if (strcmp(ogr_info->driver_name, "PostgreSQL") == 0) {
-	    Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "3");
-	}
-    }
-    else {
-	if (strcmp(ogr_info->driver_name, "PostgreSQL") == 0) {
-	    Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "2");
-	}
-    }
-
-    /* create new OGR layer */
-    Ogr_layer = OGR_DS_CreateLayer(ogr_info->ds, ogr_info->layer_name,
-				   Ogr_spatial_ref, Ogr_geom_type, Ogr_layer_options);
-    CSLDestroy(Ogr_layer_options);
-    if (!Ogr_layer) {
-	G_warning(_("Unable to create OGR layer <%s> in '%s'"),
-		  ogr_info->layer_name, ogr_info->dsn);
-	return -1;
-    }
-    ogr_info->layer = Ogr_layer;
-
-    ndblinks = Vect_get_num_dblinks(Map);
-    if (ndblinks > 0) {
-	/* write also attributes */
-	Fi = Vect_get_dblink(Map, 0);
-	if (Fi) {
-	    if (ndblinks > 1)
-		G_warning(_("More layers defined, using driver <%s> and "
-			    "database <%s>"), Fi->driver, Fi->database);
-	    ogr_info->dbdriver = create_table(ogr_info->layer, Fi);
-	    G_free(Fi);
-	}
-	else
-	  G_warning(_("Database connection not defined. "
-		      "Unable to write attributes."));
-    }
-    
-    if (OGR_L_TestCapability(ogr_info->layer, OLCTransactions))
-	OGR_L_StartTransaction(ogr_info->layer);
-
-    return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
-}
-
-/*!
-  \brief Open feature index file for vector map
+  \brief Open feature index file
   
   \param[in,out] Map pointer to Map_info struct
   \param[out] offset pointer to Format_info_offset (OGR or PG)
@@ -428,86 +319,6 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 }
 
 #ifdef HAVE_OGR
-dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
-{
-    int col, ncols;
-    int sqltype, ogrtype, length;
-    
-    const char *colname;
-    
-    dbDriver *driver;
-    dbHandle handle;
-    dbCursor cursor;
-    dbTable *table;
-    dbColumn *column;
-    dbString sql;
-    
-    OGRFieldDefnH hFieldDefn;
-    OGRFeatureDefnH hFeatureDefn;
-
-    db_init_string(&sql);
-    db_init_handle(&handle);
-    
-    driver = db_start_driver(Fi->driver);
-    if (!driver) {
-	G_warning(_("Unable to start driver <%s>"), Fi->driver);
-	return NULL;
-    }
-    db_set_handle(&handle, Fi->database, NULL);
-    if (db_open_database(driver, &handle) != DB_OK) {
-	G_warning(_("Unable to open database <%s> by driver <%s>"),
-		  Fi->database, Fi->driver);
-	db_close_database_shutdown_driver(driver);
-	return NULL;
-    }
- 
-    /* to get no data */
-    db_set_string(&sql, "select * from ");
-    db_append_string(&sql, Fi->table);
-    db_append_string(&sql, " where 0 = 1");	
-    
-    if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
-	DB_OK) {
-	G_warning(_("Unable to open select cursor: '%s'"),
-		  db_get_string(&sql));
-	db_close_database_shutdown_driver(driver);
-	return NULL;
-    }
-
-    table = db_get_cursor_table(&cursor);
-    ncols = db_get_table_number_of_columns(table);
-
-    hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
-    
-    for (col = 0; col < ncols; col++) {
-	column = db_get_table_column(table, col);
-	colname = db_get_column_name(column);	
-	sqltype = db_get_column_sqltype(column);
-	ogrtype = sqltype_to_ogrtype(sqltype);
-	length = db_get_column_length(column);
-	
-	if (strcmp(OGR_L_GetFIDColumn(hLayer), colname) == 0 ||
-	    OGR_FD_GetFieldIndex(hFeatureDefn, colname) > -1) {
-	    /* field already exists */
-	    continue;
-	}
-
-	hFieldDefn = OGR_Fld_Create(colname, ogrtype);
-	/* GDAL 1.9.0 (r22968) uses VARCHAR instead of CHAR */
-	if (ogrtype == OFTString && length > 0)
-	    OGR_Fld_SetWidth(hFieldDefn, length);
-	if (OGR_L_CreateField(hLayer, hFieldDefn, TRUE) != OGRERR_NONE) {
-	    G_warning(_("Creating field <%s> failed"), colname);
-	    db_close_database_shutdown_driver(driver);
-	    return NULL;
-	}
-	
-	OGR_Fld_Destroy(hFieldDefn);
-    }
-
-    return driver;
-}
-
 int sqltype_to_ogrtype(int sqltype)
 {
     int ctype, ogrtype;

@@ -491,8 +491,6 @@ int V2_open_old_pg(struct Map_info *);
 int V1_open_new_nat(struct Map_info *, const char *, int);
 int V1_open_new_ogr(struct Map_info *, const char *, int);
 int V1_open_new_pg(struct Map_info *, const char *, int);
-int V2_open_new_ogr(struct Map_info *, int);
-int V2_open_new_pg(struct Map_info *, int);
 int V1_rewind_nat(struct Map_info *);
 int V1_rewind_ogr(struct Map_info *);
 int V1_rewind_pg(struct Map_info *);
