@@ -475,6 +475,7 @@ int Vect__delete(const char *map, int is_tmp)
     
     /* Delete all files from vector/name directory */
     path = Vect__get_element_path(&Map, NULL);
+    Vect_close(&Map);
     G_debug(3, "opendir '%s'", path);
     dir = opendir(path);
     if (dir == NULL) {
@@ -498,11 +499,9 @@ int Vect__delete(const char *map, int is_tmp)
         }
     }
     closedir(dir);
-    G_free(path);
     
     /* NFS can create .nfsxxxxxxxx files for those deleted 
      *  -> we have to move the directory to ./tmp before it is deleted */
-    path = Vect__get_element_path(&Map, NULL);
     tmp = G_tempfile();
 
     G_debug(3, "rename '%s' to '%s'", path, tmp);
@@ -511,6 +510,7 @@ int Vect__delete(const char *map, int is_tmp)
         G_warning(_("Unable to rename directory '%s' to '%s'"), path, tmp);
         return -1;
     }
+    G_free(path);
 
     G_debug(3, "remove directory '%s'", tmp);
     /* Warning: remove() fails on Windows */
