@@ -1540,14 +1540,17 @@ class GdalSelect(wx.Panel):
 
 
     def OnSetType(self, event, sel = None):
-        """!Datasource type changed"""
+        """!Datasource type changed.
+
+        @todo improve showing/hiding widgets        
+        """
         if event:
             sel = event.GetSelection()
         else:
             self.source.SetSelection(sel)
         win = self.input[self.dsnType][1]
         if win:
-            self.dsnSizer.Remove(win)
+            self.dsnSizer.Detach(win)
             win.Hide()
         
         if sel == self.sourceMap['file']:   # file
@@ -1764,7 +1767,7 @@ class GdalSelect(wx.Panel):
             return
         
         win = self.input[self.dsnType][1]
-        self.dsnSizer.Remove(win)
+        self.dsnSizer.Detach(win)
         
         if self.dsnType == 'file':
             win.Destroy()
