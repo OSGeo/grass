@@ -23,7 +23,7 @@ void create_table(struct Map_info *In, struct Map_info *Out)
     type = Vect_read_next_line(In, NULL, NULL);
     Vect_rewind(In);
     
-    if (V2_open_new_pg(Out, type) < 0)
+    if (Vect_write_line(Out, type, NULL, NULL) < 0)
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
                       Vect_get_finfo_layer_name(Out));
 }
