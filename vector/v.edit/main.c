@@ -3,13 +3,13 @@
  *
  * MODULE:     v.edit
  *
- * PURPOSE:    Editing vector map.
+ * PURPOSE:    Non-interactive editing vector map.
  *
  * AUTHOR(S):  Wolf Bergenheim
  *             Jachym Cepicky
- *             Update for GRASS 7 by Martin Landa <landa.martin gmail.com>
+ *             Major updates by Martin Landa <landa.martin gmail.com>
  *
- * COPYRIGHT:  (C) 2006-2011 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2006-2011, 2013 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2). Read the file COPYING that comes
@@ -96,27 +96,25 @@ int main(int argc, char *argv[])
 	}
 
 	/* 3D vector maps? */
+        putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=1");
 	ret = Vect_open_new(&Map, params.map->answer, WITHOUT_Z);
 	if (ret == -1) {
 	    G_fatal_error(_("Unable to create vector map <%s>"),
 			  params.map->answer);
 	}
-	
+	Vect_set_error_handler_io(NULL, &Map);
+
 	/* native or external data source ? */
 	map_type = Vect_maptype(&Map);
 	if (map_type != GV_FORMAT_NATIVE) {
 	    int type;
 	    type = Vect_option_to_types(params.type);
-	    if (type != GV_POINT && type != GV_LINE &&
-		type != GV_BOUNDARY)
-		G_fatal_error(_("Supported feature type for OGR layer: "
-				"%s, %s or %s"), "point", "line", "boundary");
-	    if (map_type == GV_FORMAT_POSTGIS)
-		ret = V2_open_new_pg(&Map, type);
-	    else
-		ret = V2_open_new_ogr(&Map, type);
-	    if (ret != 0)
-		G_fatal_error(_("Unable to create vector map <%s>"),
+	    if (type != GV_POINT && !(type & GV_LINES))
+		G_fatal_error("%s: point,line,boundary",
+                              _("Supported feature types for non-native formats:"));
+            /* create OGR or PostGIS layer */
+            if (Vect_write_line(&Map, type, NULL, NULL) < 0)
+                G_fatal_error(_("Unable to create vector map <%s>"),
 			      params.map->answer);
 	}
 	
