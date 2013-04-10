@@ -246,6 +246,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Sorry, you must choose an output map."));
     }
 
+    /* basin threshold */
+    if (opt6->answer) {
+	if (atoi(opt6->answer) <= 0)
+	    G_fatal_error(_("The basin threshold must be a positive number."));
+    }
+
     err = 0;
     /* basin and basin threshold */
     err += (opt10->answer != NULL && opt6->answer == NULL);
