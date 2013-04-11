@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -216,10 +217,6 @@ int Vect_close(struct Map_info *Map)
 		      Vect_get_full_name(Map));
 	    return 1;
 	}
-    }
-
-    if (Map->temporary) {
-        Vect__delete(Map->name, TRUE);
     }
 
     G_free(Map->name);
