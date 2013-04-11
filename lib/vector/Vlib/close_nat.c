@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -15,10 +15,13 @@
 */
 
 #include <stdlib.h>
+
 #include <grass/vector.h>
 
+#include "local_proto.h"
+
 /*!
-  \brief Close vector map file
+  \brief Close vector map
 
   \param Map vector map to be closed
   
@@ -46,6 +49,11 @@ int V1_close_nat(struct Map_info *Map)
     /* close coor file */
     fclose(Map->dig_fp.file);
     dig_file_free(&(Map->dig_fp));
+
+    /* delete temporary map */
+    if (Map->temporary) {
+        Vect__delete(Map->name, TRUE);
+    }
 
     return 0;
 }
