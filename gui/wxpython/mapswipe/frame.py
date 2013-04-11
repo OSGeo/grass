@@ -69,8 +69,6 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self._mode = 'swipe'
 
-        self.splitter.SplitVertically(self.firstMapWindow, self.secondMapWindow, 0)
-
         self._addPanes()
         self._bindWindowsActivation()
     
@@ -133,6 +131,8 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def CallAfterInit(self):
         self.InitSliderBindings()
+        self.splitter.SplitVertically(self.firstMapWindow, self.secondMapWindow, 0)
+        self.splitter.Init()
         if not (self.rasters['first'] and self.rasters['second']):
             self.OnSelectRasters(event = None)
         
@@ -326,6 +326,7 @@ class SwipeMapFrame(DoubleMapFrame):
     def OnSelectRasters(self, event):
         """!Choose raster maps and rerender."""
         dlg = SwipeMapDialog(self, first = self.rasters['first'], second = self.rasters['second'])
+        dlg.CentreOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             maps = dlg.GetValues()
             res1 = self.SetFirstRaster(name = maps[0])
@@ -572,7 +573,6 @@ class MapSplitter(wx.SplitterWindow):
         self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGED, self.OnSashChanged)
         self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGING, self.OnSashChanging)
         self._moveSash = True
-        wx.CallAfter(self.Init)
 
     def EnableSash(self, enable):
         self._moveSash = enable
