@@ -7,11 +7,9 @@
 
    Write subroutine inspired by OGR PostgreSQL driver.
 
-   \todo PostGIS version of V2__add_line_to_topo_nat()
-   \todo OGR version of V2__delete_area_cats_from_cidx_nat()
+   \todo PostGIS version of V2__delete_area_cats_from_cidx_nat()
    \todo function to delete corresponding entry in fidx
-   \todo OGR version of V2__add_area_cats_to_cidx_nat
-   \todo OGR version of V2__add_line_to_topo_nat
+   \todo PostGIS version of V2__add_area_cats_to_cidx_nat
 
    (C) 2012-2013 by Martin Landa, and the GRASS Development Team
 
@@ -68,6 +66,8 @@ static int update_next_edge(struct Map_info*, int, int);
 static int delete_face(const struct Map_info *, int);
 static int update_topo_edge(struct Map_info *, int);
 static int update_topo_face(struct Map_info *, int);
+static int add_line_to_topo_pg(struct Map_info *, off_t, int, const struct line_pnts *);
+static int delete_line_from_topo_pg(struct Map_info *, int, int, const struct line_pnts *);
 #endif
 
 static struct line_pnts *Points;
@@ -214,7 +214,7 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
   \return -1 on error
 */
 off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_offset,
-			  const struct line_pnts *points, const struct line_cats *cats)
+                         const struct line_pnts *points, const struct line_cats *cats)
 {
     G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d offset=%"PRI_OFF_T,
             line, type, old_offset);
@@ -249,7 +249,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_off
     }
 
     /* remove line from topology */
-    if (0 != V2__delete_line_from_topo_nat(Map, line, type, Points, NULL))
+    if (0 != delete_line_from_topo_pg(Map, line, type, Points))
         return -1;
 
     if (pg_info->toposchema_name) { /* PostGIS Topology */
@@ -281,7 +281,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_off
 
     /* update topology
        note: offset is not changed */
-    return V2__add_line_to_topo_nat(Map, old_offset, type, points, cats, -1, NULL);
+    return add_line_to_topo_pg(Map, old_offset, type, points);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -377,7 +377,7 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
         return V2_delete_line_sfa(Map, line);
     }
     else {                          /* PostGIS topology */
-        int type, n_nodes;
+        int type;
         char stmt[DB_SQL_MAX];
         const char *table_name, *keycolumn;
         
@@ -441,34 +441,7 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
         }
         
         /* update topology */
-        Vect_reset_updated(Map);
-        if (0 != V2__delete_line_from_topo_nat(Map, line, type, Points, NULL))
-            return -1;
-     
-        /* delete nodes from 'nodes' table */
-        n_nodes = Vect_get_num_updated_nodes(Map);
-        if (n_nodes > 0) {
-            int i, node;
-            
-            for (i = 0; i < n_nodes; i++) {
-                node = Vect_get_updated_node(Map, i);
-                if (node > 0)
-                    continue; /* node was updated, not deleted */
-                
-                node = abs(node);
-                G_debug(3, "delete node %d from 'node' table", node);
-                
-                sprintf(stmt, "DELETE FROM \"%s\".\"node\" WHERE node_id = %d",
-                        pg_info->toposchema_name, node);
-                if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-                    G_warning(_("Unable to delete node %d"), node);
-                    Vect__execute_pg(pg_info->conn, "ROLLBACK");
-                    return -1;
-                }
-            }
-        }
-        
-        return 0;
+        return delete_line_from_topo_pg(Map, line, type, Points);
     }
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -1234,7 +1207,6 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
         dig_add_node(plus, points->x[0], points->y[0], points->z[0]);
     }
     else {
-        int n_nodes;
         off_t offset;
         
         /* better is probably to check nextval directly */
@@ -1246,31 +1218,7 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
             offset = Vect_get_num_primitives(Map, GV_LINES) + 1; /* next */
         }
         
-        Vect_reset_updated(Map);
-        line = V2__add_line_to_topo_nat(Map, offset, type, points, NULL, /* TODO: handle categories */
-                                        -1, NULL);
-        
-        /* insert new nodes into 'nodes' table */
-        n_nodes = Vect_get_num_updated_nodes(Map);
-        if (n_nodes > 0) {
-            int i, node;
-            double x, y, z;
-            
-            if (!Points)
-                Points = Vect_new_line_struct();
-            
-            for (i = 0; i < n_nodes; i++) {
-                node = Vect_get_updated_node(Map, i);
-                G_debug(3, "  new node: %d", node);
-
-                Vect_get_node_coor(Map, node, &x, &y, &z);
-                Vect_reset_line(Points);
-                Vect_append_point(Points, x, y, z);
-                
-                write_feature(Map, -1, GV_POINT, (const struct line_pnts **) &Points, 1,
-                              -1, NULL);
-            }
-        }
+        line = add_line_to_topo_pg(Map, offset, type, points);
     }
     
     /* write new feature to PostGIS
@@ -1922,25 +1870,53 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
 /*!
   \brief Insert topological element into 'node' or 'edge' table
 
+  Negative id for nodes.
+  
   \param Map pointer to Map_info struct
-  \param line feature id (-1 for nodes/points)
+  \param id feature id (-1 for nodes/points)
   \param type feature type (GV_POINT, GV_LINE, ...)
   \param geom_data geometry in wkb
 
   \return 0 on success
   \return -1 on error
 */
-int insert_topo_element(struct Map_info *Map, int line, int type,
+int insert_topo_element(struct Map_info *Map, int id, int type,
                         const char *geom_data)
 {
+    int ret;
     char *stmt;
     struct Format_info_pg *pg_info;
     struct P_line *Line;
-    
+    struct P_node *Node;
+
     pg_info = &(Map->fInfo.pg);
-    
-    if (line > 0)
+
+    Line = NULL;
+    Node = NULL;
+    if (id > 0) {
+        int line;
+
+        line = id;
+        if (line > Map->plus.n_lines) {
+            G_warning(_("Invalid line %d (%d)"), line, Map->plus.n_lines);
+            return -1;
+        }
         Line = Map->plus.Line[line];
+    }
+    else {
+        int node;
+        
+        node = abs(id);
+        if (type != GV_POINT) {
+            G_warning(_("Invalid feature type (%d) for node"), type);
+            return -1;
+        }
+        if (node > Map->plus.n_nodes) {
+            G_warning(_("Invalid node %d (%d)"), node, Map->plus.n_nodes);
+            return -1;
+        }
+        Node = Map->plus.Node[node];
+    }
 
     stmt = NULL;
     switch(type) {
@@ -1949,8 +1925,8 @@ int insert_topo_element(struct Map_info *Map, int line, int type,
         G_asprintf(&stmt, "SELECT topology.AddNode('%s', '%s'::GEOMETRY)",
                    pg_info->toposchema_name, geom_data);
 #else
-        G_asprintf(&stmt, "INSERT INTO \"%s\".node (geom) VALUES ('%s'::GEOMETRY)",
-                   pg_info->toposchema_name, geom_data);
+        G_asprintf(&stmt, "INSERT INTO \"%s\".node (node_id, geom) VALUES (%d, '%s'::GEOMETRY)",
+                   pg_info->toposchema_name, abs(id), geom_data);
 #endif
         break;
     }
@@ -1976,12 +1952,12 @@ int insert_topo_element(struct Map_info *Map, int line, int type,
         G_debug(3, "new edge: id=%d next_left_edge=%d next_right_edge=%d",
                 (int)Line->offset, nle, nre);
         
-        G_asprintf(&stmt, "INSERT INTO \"%s\".edge_data (geom, start_node, end_node, "
+        G_asprintf(&stmt, "INSERT INTO \"%s\".edge_data (edge_id, start_node, end_node, "
                    "next_left_edge, abs_next_left_edge, next_right_edge, abs_next_right_edge, "
-                   "left_face, right_face) "
-                   "VALUES ('%s'::GEOMETRY, %d, %d, %d, %d, %d, %d, 0, 0)",
-                   pg_info->toposchema_name, geom_data, topo->N1, topo->N2, nle, abs(nle),
-                   nre, abs(nre));
+                   "left_face, right_face, geom) "
+                   "VALUES (%d, %d, %d, %d, %d, %d, %d, 0, 0, '%s'::GEOMETRY)",
+                   pg_info->toposchema_name, (int) Line->offset, topo->N1, topo->N2,
+                   nle, abs(nle), nre, abs(nre), geom_data);
 #endif
         break;
     }
@@ -2007,9 +1983,9 @@ int insert_topo_element(struct Map_info *Map, int line, int type,
             return NULL;
         }
         */
-        G_asprintf(&stmt, "INSERT INTO \"%s\".node (containing_face, geom) "
-                   "VALUES (%d, '%s'::GEOMETRY)",
-                   pg_info->toposchema_name, topo->area, geom_data);
+        G_asprintf(&stmt, "INSERT INTO \"%s\".node (node_id, containing_face, geom) "
+                   "VALUES (%d, %d, '%s'::GEOMETRY)",
+                   pg_info->toposchema_name, (int)Line->offset, topo->area, geom_data);
 #endif
         break;
     }
@@ -2018,7 +1994,10 @@ int insert_topo_element(struct Map_info *Map, int line, int type,
         break;
     }
     
-    if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+    ret = Vect__execute_pg(pg_info->conn, stmt);
+    G_free(stmt);
+    
+    if (ret == -1) {
         /* rollback transaction */
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
@@ -2174,7 +2153,7 @@ int Vect__insert_face_pg(struct Map_info *Map, int area)
 }
 
 /*!
-  \brief Delete existing face
+  \brief Delete existing face (currently unused)
 
   \todo Set foreign keys as DEFERRABLE INITIALLY DEFERRED and use SET
   CONSTRAINTS ALL DEFERRED
@@ -2429,4 +2408,117 @@ int update_topo_face(struct Map_info *Map, int line)
     
     return 0;
 }
+
+/*!
+  \brief Add line to native and PostGIS topology
+
+  \param Map vector map
+  \param line feature id to remove from topo
+  \param type feature type
+  \param Points feature vertices
+
+  \return feature id
+  \return -1 on error
+*/
+int add_line_to_topo_pg(struct Map_info *Map, off_t offset, int type,
+                          const struct line_pnts *points)
+{
+    int line, n_nodes;
+    
+    struct Plus_head *plus;
+
+    plus    = &(Map->plus);
+
+    Vect_reset_updated(Map);
+    line = V2__add_line_to_topo_nat(Map, offset, type, points, NULL, 
+                                    -1, NULL);
+    
+    /* insert new nodes into 'node' table */
+    n_nodes = Vect_get_num_updated_nodes(Map);
+    if (n_nodes > 0) {
+        int i, node;
+        double x, y, z;
+        
+        if (!Points)
+            Points = Vect_new_line_struct();
+        
+        for (i = 0; i < n_nodes; i++) {
+            node = Vect_get_updated_node(Map, i);
+            /* skip updated and deleted nodes */
+            if (node > 0 || plus->Node[abs(node)] == NULL)
+                continue;
+            
+            G_debug(3, "  new node: %d", node);
+            
+            Vect_get_node_coor(Map, abs(node), &x, &y, &z);
+            Vect_reset_line(Points);
+            Vect_append_point(Points, x, y, z);
+            
+            write_feature(Map, node, GV_POINT, (const struct line_pnts **) &Points, 1,
+                          -1, NULL);
+        }
+    }
+
+    return line;
+}
+
+/*!
+  \brief Delete line from native and PostGIS topology
+
+  \todo Implement deleting nodes on request
+  
+  \param Map vector map
+  \param line feature id to remove from topo
+  \param type feature type
+  \param Points feature vertices
+
+  \return 0 on success
+  \return -1 on error
+*/
+int delete_line_from_topo_pg(struct Map_info *Map, int line, int type,
+                             const struct line_pnts *Points)
+{
+    int n_nodes;
+    char stmt[DB_SQL_MAX];
+    
+    struct Format_info_pg *pg_info;
+    struct Plus_head *plus;
+
+    pg_info = &(Map->fInfo.pg);
+    plus    = &(Map->plus);
+    
+    Vect_reset_updated(Map);
+    if (0 != V2__delete_line_from_topo_nat(Map, line, type, Points, NULL))
+        return -1;
+    
+    /* disabled: remove isolated nodes when closing the map
+       note: node id cannot be used as node_id
+       
+       delete nodes from 'node' table
+    n_nodes = Vect_get_num_updated_nodes(Map);
+    if (n_nodes > 0) {
+        int i, node;
+        
+        for (i = 0; i < n_nodes; i++) {
+            node = Vect_get_updated_node(Map, i);
+            if (node > 0 || plus->Node[abs(node)] != NULL)
+                continue; 
+            
+            node = abs(node);
+            G_debug(3, "delete node %d from 'node' table", node);
+            
+            sprintf(stmt, "DELETE FROM \"%s\".\"node\" WHERE node_id = %d",
+                    pg_info->toposchema_name, node);
+            if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                G_warning(_("Unable to delete node %d"), node);
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return -1;
+            }
+        }
+    }
+    */
+
+    return 0;
+}
+
 #endif

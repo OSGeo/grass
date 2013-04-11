@@ -7,10 +7,8 @@
 
    (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
    \author Update for GRASS 7 Markus Metz
@@ -651,27 +649,24 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type, struct Map_info *Er
 }
 
 /*!
-   \brief Break polygons in vector map.
+   \brief Break polygons in vector map
 
    Breaks lines specified by type in vector map. Points at
-   intersections may be optionally written to error map. Input map
-   must be opened on level 2 for update at least on GV_BUILD_BASE.
+   intersections may be optionally written to error map. Input vector
+   map must be opened on level 2 for update at least on GV_BUILD_BASE.
 
-   Function is optimized for closed polygons rigs (e.g. imported from
+   Function is optimized for closed polygons rings (e.g. imported from
    OGR) but with clean geometry - adjacent polygons mostly have
    identical boundary. Function creates database of ALL points in the
-   map, and then is looking for those where polygons should be broken.
-   Lines may be broken only at points existing in input map!
+   vector map, and then is looking for those where polygons should be
+   broken.  Lines may be broken only at points existing in input
+   vector map!
 
    \param Map input map where polygons will be broken
-   \param type type of line to be broken
+   \param type type of line to be broken (GV_LINE or GV_BOUNDARY)
    \param Err vector map where points at intersections will be written or NULL
-
-   \return
  */
-
-void
-Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
+void Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 {
     if (getenv("GRASS_VECTOR_LOWMEM"))
 	return Vect_break_polygons_file(Map, type, Err);

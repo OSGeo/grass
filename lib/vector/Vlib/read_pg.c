@@ -8,7 +8,12 @@
    \todo Currently only points, linestrings and polygons are supported,
    implement also other types
 
-   (C) 2011-2012 by the GRASS Development Team
+   \todo Support multigeometries
+
+   \todo PostGIS Topology - fix category handling (read categories
+   from feature table)
+
+   (C) 2011-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -324,7 +329,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         return 0;
     }
     
-    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %lu",
+    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %"PRI_OFF_T,
             line, Line->type, Line->offset);
     
     if (!line_p && !line_c)
@@ -335,7 +340,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     if (line_c != NULL)
         Vect_reset_cats(line_c);
 
-    if (line_c)
+    if (line_c) 
         Vect_cat_set(line_c, 1, (int) Line->offset);
     
     if (Line->type == GV_CENTROID && !pg_info->toposchema_name) {

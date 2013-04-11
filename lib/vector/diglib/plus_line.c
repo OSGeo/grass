@@ -21,7 +21,7 @@
 static int add_line(struct Plus_head *plus, int lineid, int type, const struct line_pnts *Points,
 		    const struct bound_box *box, off_t offset)
 {
-    int node, lp;
+    int node, lp, node_new;
     struct P_line *line;
 
     plus->Line[lineid] = dig_alloc_line();
@@ -54,15 +54,19 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
     G_debug(3, "Register node: type = %d,  %f,%f", type, Points->x[0],
 	    Points->y[0]);
 
+    /* Start node */
     node = dig_find_node(plus, Points->x[0], Points->y[0], Points->z[0]);
     G_debug(3, "node = %d", node);
     if (node == 0) {
 	node = dig_add_node(plus, Points->x[0], Points->y[0], Points->z[0]);
 	G_debug(3, "Add new node: %d", node);
+        node_new = TRUE;
     }
     else {
-	G_debug(3, "Old node found: %d", node);
+        G_debug(3, "Old node found: %d", node);
+        node_new = FALSE;
     }
+    
     if (type == GV_LINE) {
 	struct P_topo_l *topo = (struct P_topo_l *)line->topo;
 
@@ -80,8 +84,9 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
 
     dig_node_add_line(plus, node, lineid, Points, type);
     if (plus->uplist.do_uplist)
-	dig_node_add_updated(plus, node);
+	dig_node_add_updated(plus, node_new ? -node : node);
 
+    /* End node */
     lp = Points->n_points - 1;
     G_debug(3, "Register node %f,%f", Points->x[lp], Points->y[lp]);
     node = dig_find_node(plus, Points->x[lp], Points->y[lp],
@@ -91,9 +96,11 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
 	node = dig_add_node(plus, Points->x[lp], Points->y[lp],
 			    Points->z[lp]);
 	G_debug(3, "Add new node: %d", node);
+        node_new = TRUE;
     }
     else {
 	G_debug(3, "Old node found: %d", node);
+        node_new = FALSE;
     }
     if (type == GV_LINE) {
 	struct P_topo_l *topo = (struct P_topo_l *)line->topo;
@@ -108,7 +115,7 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
 
     dig_node_add_line(plus, node, -lineid, Points, type);
     if (plus->uplist.do_uplist)
-	dig_node_add_updated(plus, node);
+	dig_node_add_updated(plus, node_new ? -node : node);
 
     return (lineid);
 }
