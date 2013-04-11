@@ -355,7 +355,7 @@ int is_isle(const struct Map_info *Map, int area)
         if (1 != Vect_get_line_areas(Map, abs(line), &left, &right))
             continue;
         
-        isle = line > 0 ? right : left;
+        isle = line > 0 ? left : right;
         
         if (isle < 0 && Vect_get_isle_area(Map, abs(isle)) > 0) {
             is_isle = TRUE;
