@@ -2838,7 +2838,6 @@ class LayerBook(wx.Notebook):
         dataSizer = wx.BoxSizer(wx.VERTICAL)
 
         flexSizer = wx.FlexGridSizer(cols = 2, hgap = 5, vgap = 5)
-        flexSizer.AddGrowableCol(2)
 
         flexSizer.Add(item = label,
                       flag = wx.ALIGN_CENTER_VERTICAL)
