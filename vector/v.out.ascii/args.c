@@ -20,17 +20,18 @@ void parse_args(int argc, char **argv,
     
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     field_opt->guisection = _("Selection");
-
+    field_opt->answer = "1";
+    
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     type_opt->guisection = _("Selection");
     
     output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     output_opt->label = _("Name for output ASCII file "
 			  "or ASCII vector name if '-o' is defined");
-    output_opt->description = _("'-' for standard output");
-    output_opt->answer = "-";
+    output_opt->description = _("If not given or '-' then standard output");
+    output_opt->required = NO;
 
     column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
     column_opt->label = _("Name of attribute column(s) to be exported (point mode)");
@@ -92,7 +93,10 @@ void parse_args(int argc, char **argv,
 	exit(EXIT_FAILURE);
 
     *input = G_store(input_opt->answer);
-    *output = G_store(output_opt->answer);
+    if (output_opt->answer)
+        *output = G_store(output_opt->answer);
+    else
+        *output = G_store("-"); /* standard output */
     if (format_opt->answer[0] == 'p')
 	*format = GV_ASCII_FORMAT_POINT;
     else if (format_opt->answer[0] == 's')
