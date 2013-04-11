@@ -1306,7 +1306,7 @@ int map_format(struct Map_info *Map)
             p = G_find_key_value("topology", key_val);
             topology = p && G_strcasecmp(p, "yes") == 0;
         
-            if (topology || getenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE")) {
+            if (getenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE")) {
                 /* vector features are written directly to PostGIS layer */
                 format = GV_FORMAT_POSTGIS;
             }
