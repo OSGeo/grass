@@ -32,7 +32,8 @@ void parse_args(int argc, char **argv,
 			  "or ASCII vector name if '-o' is defined");
     output_opt->description = _("If not given or '-' then standard output");
     output_opt->required = NO;
-
+    output_opt->guisection = _("Output");
+    
     column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
     column_opt->label = _("Name of attribute column(s) to be exported (point mode)");
     column_opt->description = _("\"*\" for all columns");
@@ -77,6 +78,7 @@ void parse_args(int argc, char **argv,
     old_flag = G_define_flag();
     old_flag->key = 'o';
     old_flag->description = _("Create old (version 4) ASCII file");
+    old_flag->guisection = _("Output");
 
     header_flag = G_define_flag();
     header_flag->key = 'c';

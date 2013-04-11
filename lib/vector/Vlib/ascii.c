@@ -5,7 +5,7 @@
  
   Higher level functions for reading/writing/manipulating vectors.
   
-  (C) 2001-2009, 2011-2012 by the GRASS Development Team
+  (C) 2001-2009, 2011-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -284,6 +284,8 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 /*!
   \brief Write data to GRASS ASCII vector format
 
+  Prints message if some features without category are skipped.
+
   \param[out] ascii  pointer to the output ASCII file
   \param[out] att    att file (< version 5 only)
   \param Map    pointer to Map_info structure
@@ -317,7 +319,7 @@ int Vect_write_ascii(FILE *ascii,
     size_t xsize, ysize, zsize;
     struct Cell_head window;
     struct ilist *fcats;
-    int count;
+    int count, n_skipped;
 
     /* where || columns */
     struct field_info *Fi;
@@ -477,7 +479,7 @@ int Vect_write_ascii(FILE *ascii,
 
     Vect_rewind(Map);
 
-    line = 0;
+    n_skipped = line = 0;
     while (TRUE) {
 	ltype = Vect_read_next_line(Map, Points, Cats);
 	if (ltype == -1 ) {      /* failure */
@@ -530,9 +532,13 @@ int Vect_write_ascii(FILE *ascii,
 	    }
 	}
 	
-	if (!found)
+	if (!found) {
+            if (Cats->n_cats < 1)
+                n_skipped++;
+            
 	    continue;
-	
+	}
+
 	if (ver < 5) {
 	    Vect_cat_get(Cats, 1, &cat);
 	}
@@ -822,6 +828,10 @@ int Vect_write_ascii(FILE *ascii,
 	}
     }
 
+    if (n_skipped > 0)
+        G_important_message(_("%d features without category skipped. To export also "
+                              "features without category use '%s=-1'."), n_skipped, "layer");
+    
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(ACats);
