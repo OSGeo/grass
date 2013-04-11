@@ -226,17 +226,21 @@ int Vect_get_num_updated_nodes(const struct Map_info *Map)
 }
 
 /*!
-   \brief Get updated node by index
+   \brief Get updated (modified) node by index
 
    Note: Vect_set_updated() must be called to maintain list of updated
    features
 
-   Negative id indicates deleted node.
+   Negative id:
+    - if Node[id] is not NULL then the node was added
+    - if Node[id] is NULL then the node was deleted
+   Positive id:
+    - node was updated
 
    \param Map pointer to Map_info struct
    \param idx index
 
-   \return updated node
+   \return id of modified node
  */
 int Vect_get_updated_node(const struct Map_info *Map, int idx)
 {
