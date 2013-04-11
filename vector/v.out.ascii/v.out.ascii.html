@@ -5,24 +5,26 @@ GRASS vector map in <a href="vectorascii.html">ASCII format</a>. Using
 flag <b>-o</b> <em>v.out.ascii</em> output will be in old (version 4)
 ASCII format.
 
-<p>If the <b>output</b> parameter is not given then the coordinates of any 
-<em>point</em> data within the vector map is sent to stdout.
+<p>If the <b>output</b> parameter is not given then the data is sent
+to standard output.
 
 <h2>NOTES</h2>
 
 The <em><a href="v.in.ascii.html">v.in.ascii</a></em> module performs
 the function of <em>v.out.ascii</em> in reverse; i.e. it converts
-vector maps in ASCII format to their binary format.  These two
+vector maps in ASCII format to their binary format. These two
 companion module are useful both for importing and exporting vector
 maps between GRASS and other software, and for transferring data
 between machines.
 
-<p>If old version is requested, the <b>output</b> files from <em>v.out.ascii</em> is placed 
-in the <tt>$LOCATION/$MAPSET/dig_ascii/</tt> and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
+<p>If old version is requested, the <b>output</b> files
+from <em>v.out.ascii</em> is placed in
+the <tt>$LOCATION/$MAPSET/dig_ascii/</tt>
+and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
 
-<p>Only features with a category number will be
-exported. Use <em><a href="v.category.html">v.category</a></em> to add
-them if needed.
+<p>If <b>layer &gt; 0</b> then only features with a category number
+will be exported. Use <em><a href="v.category.html">v.category</a></em> to add
+them if needed or define <b>layer=-1</b> to export also features without category.
 
 <p><em>v.out.ascii</em> in the old version mode (<b>-o</b>) does not
 copy the <tt>dig_cats</tt> file associated with the binary
@@ -147,4 +149,5 @@ Radim Blazek, ITC-Irst, Trento, Italy
 Attribute selection added by Martin Landa, Czech Technical University
 in Prague, Czech Republic (2008/12)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

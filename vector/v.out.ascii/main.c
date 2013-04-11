@@ -47,15 +47,17 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
     G_add_keyword(_("ascii"));
-    module->description =
+    module->label =
 	_("Exports a vector map to a GRASS ASCII vector representation.");
+    module->description = _("By default only features with category are exported. "
+                            "To export all features use 'layer=-1'.");
 
     parse_args(argc, argv, &input, &output, &format, &dp, &delim,
 	       &field_name, &columns, &where, &region, &old_format, &header,
 	       &cats, &type);
     
     if (format == GV_ASCII_FORMAT_STD && columns) {
-	G_warning(_("Parameter 'column' ignored in standard mode"));
+      G_warning(_("Parameter '%s' ignored in standard mode"), "column");
     }
 
     ver = 5;
@@ -64,11 +66,11 @@ int main(int argc, char *argv[])
 	ver = 4;
     
     if (ver == 4 && format == GV_ASCII_FORMAT_POINT) {
-	G_fatal_error(_("Format 'point' is not supported for old version"));
+      G_fatal_error(_("Format '%s' is not supported for old version"), "point");
     }
     
     if (ver == 4 && strcmp(output, "-") == 0) {
-	G_fatal_error(_("'output' must be given for old version"));
+        G_fatal_error(_("Parameter '%s' must be given for old version"), "output");
     }
 
     /* open with topology only if needed */
