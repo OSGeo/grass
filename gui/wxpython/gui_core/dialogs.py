@@ -2550,3 +2550,36 @@ class TextEntryDialog(wx.Dialog):
 
     def SetValue(self, value):
         self._textCtrl.SetValue(value)
+
+
+class HyperlinkDialog(wx.Dialog):
+    """!Dialog for displaying message with hyperlink."""
+    def __init__(self, parent, title, message, hyperlink,
+                hyperlinkLabel=None, style=wx.OK):
+        """!Constructor
+
+        @param parent gui parent         
+        @param title dialog title
+        @param message message
+        @param hyperlink url
+        @param hyperlinkLabel label shown instead of url
+        @param style button style
+        """
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title,
+                           style=wx.DEFAULT_DIALOG_STYLE)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        label = wx.StaticText(self, label=message)
+        sizer.Add(item=label, proportion=0, flag=wx.ALIGN_CENTRE|wx.ALL, border=10)
+        hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
+        hyperlinkCtrl = wx.HyperlinkCtrl(self, id=wx.ID_ANY,
+                                         label=hyperlinkLabel, url=hyperlink,
+                                         style=wx.HL_ALIGN_LEFT|wx.HL_CONTEXTMENU)
+        sizer.Add(item=hyperlinkCtrl, proportion=0, flag=wx.EXPAND|wx.ALL, border=10)        
+
+        btnsizer = self.CreateSeparatedButtonSizer(style)
+        sizer.Add(item=btnsizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
+    
+        self.SetSizer(sizer)
+        sizer.Fit(self)
