@@ -311,14 +311,14 @@ class TemporalManager(object):
         sp.select()
         # Get ordered map list
         maps = sp.get_registered_maps_as_objects()
-	if not sp.check_temporal_topology(maps):
+        if not sp.check_temporal_topology(maps):
             raise GException(_("Topology of Space time dataset %s is invalid." % id))
 
         timeseriesList.append(id)
         infoDict[id] = {}
         infoDict[id]['etype'] = etype
         infoDict[id]['temporal_type'] = sp.get_temporal_type()
-	if sp.is_time_relative():
+        if sp.is_time_relative():
             infoDict[id]['unit'] = sp.get_relative_time_unit()
         infoDict[id]['granularity'] = sp.get_granularity()
         infoDict[id]['map_time'] = sp.get_map_time()
