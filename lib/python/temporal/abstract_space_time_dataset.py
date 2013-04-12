@@ -196,7 +196,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         return temporal_type, semantic_type, title, description
 
     def get_granularity(self):
-        """!Return the granularity
+        """!Return the granularity of the space time dataset
         
            Granularity can be of absolute time or relative time.
            In case of absolute time a string containing an integer
@@ -341,7 +341,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             maps = self.get_registered_maps_as_objects(
                 where=None, order="start_time", dbif=dbif)
 
-        print_temporal_topology_relationships(maps, maps)
+        print_temporal_topology_relationships(maps)
 
     def count_temporal_relations(self, maps=None, dbif=None):
         """!Count the temporal relations between the registered maps.
@@ -359,16 +359,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             maps = self.get_registered_maps_as_objects(
                 where=None, order="start_time", dbif=dbif)
 
-        return count_temporal_topology_relationships(maps, maps)
+        return count_temporal_topology_relationships(maps)
 
     def check_temporal_topology(self, maps=None, dbif=None):
-        """!Check the temporal topology
+        """!Check the temporal topology of all maps of the current space time dataset or
+           of an optional list of maps
 
            Correct topology means, that time intervals are not overlap or
            that intervals does not contain other intervals. 
            Equal time intervals  are not allowed.
 
-           The map list must be ordered by start time
+           The optional map list must be ordered by start time
 
            Allowed and not allowed temporal relationships for correct topology:
            @verbatim
@@ -388,7 +389,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            - finished   -> not allowed
            @endverbatim
 
-           @param maps: A sorted (start_time) list of AbstractDataset objects
+           @param maps: An optional list of AbstractDataset objects, in case of None all maps of the space time dataset are checked
            @param dbif: The database interface to be used
            @return True if topology is correct
         """
@@ -396,31 +397,34 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             maps = self.get_registered_maps_as_objects(
                 where=None, order="start_time", dbif=dbif)
 
-        relations = count_temporal_topology_relationships(maps, maps)
+        relations = count_temporal_topology_relationships(maps)
+        
+        if relations == None:
+            return False
 
         map_time = self.get_map_time()
 
         if map_time == "interval" or map_time == "mixed":
-            if "equivalent" in relations:
+            if "equal" in relations and relations["equal"] > 0:
                 return False
-            if "during" in relations:
+            if "during" in relations and relations["during"] > 0:
                 return False
-            if "contains" in relations:
+            if "contains" in relations and relations["contains"] > 0:
                 return False
-            if "overlaps" in relations:
+            if "overlaps" in relations and relations["overlaps"] > 0:
                 return False
-            if "overlapped" in relations:
+            if "overlapped" in relations and relations["overlapped"] > 0:
                 return False
-            if "starts" in relations:
+            if "starts" in relations and relations["starts"] > 0:
                 return False
-            if "finishes" in relations:
+            if "finishes" in relations and relations["finishes"] > 0:
                 return False
-            if "started" in relations:
+            if "started" in relations and relations["started"] > 0:
                 return False
-            if "finished" in relations:
+            if "finished" in relations and relations["finished"] > 0:
                 return False
         elif map_time == "point":
-            if "equivalent" in relations:
+            if "equal" in relations and relations["equal"] > 0:
                 return False
         else:
             return False
