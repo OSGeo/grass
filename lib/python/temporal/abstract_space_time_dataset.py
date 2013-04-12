@@ -12,6 +12,7 @@ for details.
 
 @author Soeren Gebbert
 """
+import sys
 from abstract_dataset import *
 from temporal_granularity import *
 from temporal_relationships import *
@@ -121,7 +122,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     def set_initial_values(self, temporal_type, semantic_type,
                            title=None, description=None):
-        """!Set the initial values of the space time dataset
+        """!Set the initial values of the space time dataset and
+            the command creation string
 
            @param temporal_type: The temporal type of this space 
                                  time dataset (absolute or relative)
@@ -140,6 +142,43 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.base.set_semantic_type(semantic_type)
         self.metadata.set_title(title)
         self.metadata.set_description(description)
+        self.metadata.set_command(self.create_command_string())
+        
+    def create_command_string(self):
+        """!Create the command string that was used to create this
+           space time dataset.
+           
+           The command string should be set with self.metadata.set_command()
+           
+           @return The command history string
+           """
+        # The grass module
+        command = os.path.basename(sys.argv[0])
+        
+        # We will wrap the command line to fit into 80 character
+        length = len(command)
+        for token in sys.argv[1:]:
+            
+            # We need to remove specific characters
+            token = token.replace("\'", " ")
+            token = token.replace("\"", " ")
+            
+            # Check for sub strings
+            if token.find("=") > 0:
+                first = token.split("=")[0]
+                second = token.split("=")[1]
+                
+                if second.find(" ") >= 0:
+                    token = "%s=\"%s\""%(first, second)
+            
+            if length + len(token) >= 76:
+                command += "\n    %s"%(token)
+                length = len(token) + 4
+            else:
+                command += " %s"%(token)
+                length += len(token) + 1
+
+        return command
 
     def get_semantic_type(self):
         """!Return the semantic type of this dataset"""
@@ -615,10 +654,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
         """!Return all registered maps as ordered (by start_time) object list with
-           "gap" map objects (id==None) for temporal topological operations using 
-           the granularity of the space time dataset as increment. 
+           "gap" map objects (id==None) for temporal topological operations 
+           that require the temporal extent only.
+           
            Each list entry is a list of map objects
            which are potentially located in the actual granule.
+           
+           The granularity of the space time dataset is used as increment in case 
+           the granule is not user defined.
 
            A valid temporal topology (no overlapping or inclusion allowed) 
            is needed to get correct results.
@@ -761,8 +804,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         return None
 
     def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
-        """!Return all registered maps as ordered (by start_time) object list with
-           "gap" map objects (id==None) for temporal topological operations
+        """!Return all or a subset of the registered maps as 
+           ordered (by start_time) object list with
+           "gap" map objects (id==None) for temporal topological operations 
+           that require the temporal extent only.
 
            Gaps between maps are identified as maps with id==None
 
@@ -813,12 +858,42 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
+    def get_registered_maps_as_objects_with_temporal_topology(self, where=None, order="start_time", 
+                                       dbif=None):
+        """!Return all or a subset of the registered maps as ordered object list with 
+           temporal topological relationship informations.
+
+           The objects are initialized with their id's' and the temporal extent 
+           (temporal type, start time, end time) and the temmporal topological information.
+           In case more map information are needed, use the select() 
+           method for each listed object.
+
+           @param where: The SQL where statement to select a subset of 
+                         the registered maps without "WHERE"
+           @param order: The SQL order statement to be used to order the 
+                         objects in the list without "ORDER BY"
+           @param dbif: The database interface to be used
+           @return The ordered map object list, 
+                   In case nothing found None is returned
+        """
+
+        dbif, connect = init_dbif(dbif)
+        obj_list = self.get_registered_maps_as_objects(where, order, dbif)
+
+        tb = TemporalTopologyBuilder()
+        tb.build(obj_list)
+    
+        if connect:
+            dbif.close()
+
+        return obj_list
+
     def get_registered_maps_as_objects(self, where=None, order="start_time", 
                                        dbif=None):
-        """!Return all registered maps as ordered object list for 
-           temporal topological operations
+        """!Return all or a subset of the registered maps as ordered object list for 
+           temporal topological operations that require the temporal extent only
 
-           The objects are initialized with the id and the temporal extent 
+           The objects are initialized with their id's' and the temporal extent 
            (temporal type, start time, end time).
            In case more map information are needed, use the select() 
            method for each listed object.
@@ -839,10 +914,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         rows = self.get_registered_maps(
             "id,start_time,end_time", where, order, dbif)
 
-        count = 0
         if rows is not None:
             for row in rows:
-                core.percent(count, len(rows), 1)
                 map = self.get_new_map_instance(row["id"])
                 if self.is_time_absolute():
                     map.set_absolute_time(row["start_time"], row["end_time"])
@@ -850,9 +923,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     map.set_relative_time(row["start_time"], row["end_time"],
                                           self.get_relative_time_unit())
                 obj_list.append(copy.copy(map))
-                count += 1
-
-        core.percent(1, 1, 1)
 
         if connect:
             dbif.close()
@@ -1567,221 +1637,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connect:
             dbif.close()
-
-###############################################################################
-
-def create_temporal_relation_sql_where_statement(
-    start, end, use_start=True, use_during=False,
-                                        use_overlap=False, use_contain=False, use_equal=False,
-                                        use_follows=False, use_precedes=False):
-    """!Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
-
-        @param start: The start time
-        @param end: The end time
-        @param use_start: Select maps of which the start time is located in the selection granule
-                         @verbatim
-                         map    :        s
-                         granule:  s-----------------e
-
-                         map    :        s--------------------e
-                         granule:  s-----------------e
-
-                         map    :        s--------e
-                         granule:  s-----------------e
-                         @endverbatim
-
-        @param use_during: during: Select maps which are temporal during the selection granule
-                         @verbatim
-                         map    :     s-----------e
-                         granule:  s-----------------e
-                         @endverbatim
-
-        @param use_overlap: Select maps which temporal overlap the selection granule
-                         @verbatim
-                         map    :     s-----------e
-                         granule:        s-----------------e
-
-                         map    :     s-----------e
-                         granule:  s----------e
-                         @endverbatim
-
-        @param use_contain: Select maps which temporally contain the selection granule
-                         @verbatim
-                         map    :  s-----------------e
-                         granule:     s-----------e
-                         @endverbatim
-
-        @param use_equal: Select maps which temporally equal to the selection granule
-                         @verbatim
-                         map    :  s-----------e
-                         granule:  s-----------e
-                         @endverbatim
-
-        @param use_follows: Select maps which temporally follow the selection granule
-                         @verbatim
-                         map    :              s-----------e
-                         granule:  s-----------e
-                         @endverbatim
-
-        @param use_precedes: Select maps which temporally precedes the selection granule
-                         @verbatim
-                         map    :  s-----------e
-                         granule:              s-----------e
-                         @endverbatim
-
-        Usage:
-        
-        @code
-        
-        >>> # Relative time
-        >>> start = 1
-        >>> end = 2
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False)
-        >>> create_temporal_relation_sql_where_statement(start, end)
-        '((start_time >= 1 and start_time < 2) )'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=True)
-        '((start_time >= 1 and start_time < 2) )'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_during=True)
-        '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_overlap=True)
-        '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_contain=True)
-        '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_equal=True)
-        '((start_time = 1 and end_time = 2))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_follows=True)
-        '((start_time = 2))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_precedes=True)
-        '((end_time = 1))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
-        ... use_equal=True, use_follows=True, use_precedes=True)
-        '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
-
-        >>> # Absolute time
-        >>> start = datetime(2001, 1, 1, 12, 30)
-        >>> end = datetime(2001, 3, 31, 14, 30)
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False)
-        >>> create_temporal_relation_sql_where_statement(start, end)
-        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=True)
-        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_during=True)
-        "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_overlap=True)
-        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_contain=True)
-        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_equal=True)
-        "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_follows=True)
-        "((start_time = '2001-03-31 14:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=False, use_precedes=True)
-        "((end_time = '2001-01-01 12:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
-        ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
-        ... use_equal=True, use_follows=True, use_precedes=True)
-        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
-        
-        @endcode
-        """
-
-    where = "("
-
-    if use_start:
-        if isinstance(start, datetime):
-            where += "(start_time >= '%s' and start_time < '%s') " % (start, end)
-        else:
-            where += "(start_time >= %i and start_time < %i) " % (start, end)
-
-    if use_during:
-        if use_start:
-            where += " OR "
-            
-        if isinstance(start, datetime):
-            where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
-            where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
-            where += "(start_time > '%s' and end_time <= '%s'))" % (start, end)
-        else:
-            where += "((start_time > %i and end_time < %i) OR " % (start, end)
-            where += "(start_time >= %i and end_time < %i) OR " % (start, end)
-            where += "(start_time > %i and end_time <= %i))" % (start, end)
-
-    if use_overlap:
-        if use_start or use_during:
-            where += " OR "
-
-        if isinstance(start, datetime):
-            where += "((start_time < '%s' and end_time > '%s' and end_time < '%s') OR " % (start, start, end)
-            where += "(start_time < '%s' and start_time > '%s' and end_time > '%s'))" % (end, start, end)
-        else:
-            where += "((start_time < %i and end_time > %i and end_time < %i) OR " % (start, start, end)
-            where += "(start_time < %i and start_time > %i and end_time > %i))" % (end, start, end)
-
-    if use_contain:
-        if use_start or use_during or use_overlap:
-            where += " OR "
-
-        if isinstance(start, datetime):
-            where += "((start_time < '%s' and end_time > '%s') OR " % (start, end)
-            where += "(start_time <= '%s' and end_time > '%s') OR " % (start, end)
-            where += "(start_time < '%s' and end_time >= '%s'))" % (start, end)
-        else:
-            where += "((start_time < %i and end_time > %i) OR " % (start, end)
-            where += "(start_time <= %i and end_time > %i) OR " % (start, end)
-            where += "(start_time < %i and end_time >= %i))" % (start, end)
-
-    if use_equal:
-        if use_start or use_during or use_overlap or use_contain:
-            where += " OR "
-
-        if isinstance(start, datetime):
-            where += "(start_time = '%s' and end_time = '%s')" % (start, end)
-        else:
-            where += "(start_time = %i and end_time = %i)" % (start, end)
-
-    if use_follows:
-        if use_start or use_during or use_overlap or use_contain or use_equal:
-            where += " OR "
-
-        if isinstance(start, datetime):
-            where += "(start_time = '%s')" % (end)
-        else:
-            where += "(start_time = %i)" % (end)
-
-    if use_precedes:
-        if use_start or use_during or use_overlap or use_contain or use_equal \
-           or use_follows:
-            where += " OR "
-
-        if isinstance(start, datetime):
-            where += "(end_time = '%s')" % (start)
-        else:
-            where += "(end_time = %i)" % (start)
-
-    where += ")"
-
-    # Catch empty where statement
-    if where == "()":
-        where = None
-
-    return where
 
 ###############################################################################
 

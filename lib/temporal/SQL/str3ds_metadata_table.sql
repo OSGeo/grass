@@ -1,5 +1,5 @@
 --#############################################################################
--- This SQL script generates the space time raster3d dataset metadata table,
+-- This SQL script generates the space time 3D raster dataset metadata table,
 -- view and trigger
 --
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
@@ -8,21 +8,22 @@
 --PRAGMA foreign_keys = ON;
 
 CREATE TABLE  str3ds_metadata (
-  id VARCHAR NOT NULL,          -- Id of the space-time raster3d dataset, this is the primary foreign key
-  raster3d_register VARCHAR,    -- The id of the table in which the raster3d maps are registered for this dataset
-  number_of_maps INTEGER,       -- The number of registered raster3d maps
-  max_min DOUBLE PRECISION,     -- The minimal maximum of the registered raster3d maps
-  min_min DOUBLE PRECISION,     -- The minimal minimum of the registered raster3d maps
-  max_max DOUBLE PRECISION,     -- The maximal maximum of the registered raster3d maps
-  min_max DOUBLE PRECISION,     -- The maximal minimum of the registered raster3d maps
-  nsres_min DOUBLE PRECISION,   -- The lowest north-south resolution of the registered raster3d maps
-  nsres_max DOUBLE PRECISION,   -- The highest north-south resolution of the registered raster3d maps
-  ewres_min DOUBLE PRECISION,   -- The lowest east-west resolution of the registered raster3d maps
-  ewres_max DOUBLE PRECISION,   -- The highest east-west resolution of the registered raster3d maps
-  tbres_min DOUBLE PRECISION,   -- The lowest top-bottom resolution of the registered raster3d maps
-  tbres_max DOUBLE PRECISION,   -- The highest top-bottom resolution of the registered raster3d maps
-  title VARCHAR,                -- Title of the space-time raster3d dataset
-  description VARCHAR,          -- Detailed description of the space-time raster3d dataset
+  id VARCHAR NOT NULL,          -- Id of the space time 3D raster dataset, this is the primary foreign key
+  raster3d_register VARCHAR,    -- The id of the table in which the 3D raster maps are registered for this dataset
+  number_of_maps INTEGER,       -- The number of registered 3D raster maps
+  max_min DOUBLE PRECISION,     -- The minimal maximum of the registered 3D raster maps
+  min_min DOUBLE PRECISION,     -- The minimal minimum of the registered 3D raster maps
+  max_max DOUBLE PRECISION,     -- The maximal maximum of the registered 3D raster maps
+  min_max DOUBLE PRECISION,     -- The maximal minimum of the registered 3D raster maps
+  nsres_min DOUBLE PRECISION,   -- The lowest north-south resolution of the registered 3D raster maps
+  nsres_max DOUBLE PRECISION,   -- The highest north-south resolution of the registered 3D raster maps
+  ewres_min DOUBLE PRECISION,   -- The lowest east-west resolution of the registered 3D raster maps
+  ewres_max DOUBLE PRECISION,   -- The highest east-west resolution of the registered 3D raster maps
+  tbres_min DOUBLE PRECISION,   -- The lowest top-bottom resolution of the registered 3D raster maps
+  tbres_max DOUBLE PRECISION,   -- The highest top-bottom resolution of the registered 3D raster maps
+  title VARCHAR,                -- Title of the space time 3D raster dataset
+  description VARCHAR,          -- Detailed description of the space time 3D raster dataset
+  command VARCHAR,              -- The command that was used to create the space time 3D raster dataset
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  str3ds_base (id) ON DELETE CASCADE
 );
@@ -44,7 +45,7 @@ CREATE VIEW str3ds_view_abs_time AS SELECT
             A4.tbres_min, A4.tbres_max, 
 	    A4.min_min, A4.min_max,
 	    A4.max_min, A4.max_max,
-            A4.title, A4.description	
+            A4.title, A4.description, A4.command
 	    FROM str3ds_base A1, str3ds_absolute_time A2,  
             str3ds_spatial_extent A3, str3ds_metadata A4 WHERE A1.id = A2.id AND 
 	    A1.id = A3.id AND A1.id = A4.id;
@@ -65,7 +66,7 @@ CREATE VIEW str3ds_view_rel_time AS SELECT
             A4.tbres_min, A4.tbres_max, 
 	    A4.min_min, A4.min_max,
 	    A4.max_min, A4.max_max,
-            A4.title, A4.description	
+            A4.title, A4.description, A4.command
 	    FROM str3ds_base A1, str3ds_relative_time A2,  
             str3ds_spatial_extent A3, str3ds_metadata A4 WHERE A1.id = A2.id AND 
 	    A1.id = A3.id AND A1.id = A4.id;

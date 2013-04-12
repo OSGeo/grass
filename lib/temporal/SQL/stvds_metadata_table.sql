@@ -8,11 +8,12 @@
 --PRAGMA foreign_keys = ON;
 
 CREATE TABLE  stvds_metadata (
-  id VARCHAR NOT NULL,                -- Name of the space-time vector dataset, this is the primary foreign key
-  vector_register VARCHAR,                    -- The id of the table in which the vector maps are registered for this dataset
-  number_of_maps INTEGER,          -- The number of registered vector maps
-  title VARCHAR,                              -- Title of the space-time vector dataset
-  description VARCHAR,                        -- Detailed description of the space-time vector dataset
+  id VARCHAR NOT NULL,    -- Name of the space-time vector dataset, this is the primary foreign key
+  vector_register VARCHAR,-- The id of the table in which the vector maps are registered for this dataset
+  number_of_maps INTEGER, -- The number of registered vector maps
+  title VARCHAR,          -- Title of the space-time vector dataset
+  description VARCHAR,    -- Detailed description of the space-time vector dataset
+  command VARCHAR,        -- The command that was used to create the space time vector dataset
   points INTEGER,         -- The number of points accumulated from all registered maps
   lines INTEGER,          -- The number of lines accumulated from all registered maps
   boundaries INTEGER,     -- The number of boundaries accumulated from all registered maps
@@ -42,7 +43,7 @@ CREATE VIEW stvds_view_abs_time AS SELECT
 	    A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.vector_register,
 	    A4.number_of_maps, 
-            A4.title, A4.description, A4.points, A4.lines,
+            A4.title, A4.description, A4.command, A4.points, A4.lines,
             A4.boundaries, A4.centroids, A4.faces, A4.kernels,
             A4.primitives, A4.nodes, A4.areas, A4.islands,
             A4.holes, A4.volumes
@@ -61,7 +62,7 @@ CREATE VIEW stvds_view_rel_time AS SELECT
 	    A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.vector_register,
 	    A4.number_of_maps, 
-            A4.title, A4.description, A4.points, A4.lines,
+            A4.title, A4.description, A4.command, A4.points, A4.lines,
             A4.boundaries, A4.centroids, A4.faces, A4.kernels,
             A4.primitives, A4.nodes, A4.areas, A4.islands,
             A4.holes, A4.volumes

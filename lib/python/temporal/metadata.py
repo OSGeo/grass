@@ -891,13 +891,14 @@ class STDSMetadataBase(SQLDatabaseInterface):
         
         @endcode
     """
-    def __init__(self, table=None, ident=None, title=None, description=None):
+    def __init__(self, table=None, ident=None, title=None, description=None, command=None):
 
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
         self.set_title(title)
         self.set_description(description)
+        self.set_command(command)
         # No setter for this
         self.D["number_of_maps"] = None
 
@@ -914,6 +915,10 @@ class STDSMetadataBase(SQLDatabaseInterface):
         """!Set the number of cols"""
         self.D["description"] = description
 
+    def set_command(self, command):
+        """!Set the number of cols"""
+        self.D["command"] = command
+        
     def get_id(self):
         """!Convenient method to get the unique identifier (primary key)
            @return None if not found
@@ -939,6 +944,14 @@ class STDSMetadataBase(SQLDatabaseInterface):
         else:
             return None
 
+    def get_command(self):
+        """!Get command
+           @return None if not found"""
+        if "command" in self.D:
+            return self.D["command"]
+        else:
+            return None
+            
     def get_number_of_maps(self):
         """!Get the number of registered maps, 
            this value is set in the database
@@ -963,6 +976,11 @@ class STDSMetadataBase(SQLDatabaseInterface):
         print " | " + str(self.get_title())
         print " | Description:"
         print " | " + str(self.get_description())
+        print " | Command of creation:"
+        command = self.get_command()
+        if command:
+            for token in command.split("\n"):
+                print " | " + str(token)
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""

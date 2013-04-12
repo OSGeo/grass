@@ -1,5 +1,5 @@
 #!/bin/sh
-# Tests the temporaly topology module of space time datasets 
+# Tests the temporal topology module of space time datasets 
 
 # We need to set a specific region in the
 # @preprocess step of this test. 
@@ -44,10 +44,10 @@ EOF
 
 cat > "${n3}" << EOF
 prec_1|2001-01-01|2001-04-01
-prec_2|2001-05-01|2001-07-01
+prec_2|2001-05-01|2001-10-01
 prec_3|2001-08-01|2001-10-01
 prec_4|2001-11-01|2002-01-01
-prec_5|2002-02-01|2002-04-01
+prec_5|2001-11-01|2002-04-01
 prec_6|2002-05-01|2002-07-01
 EOF
 

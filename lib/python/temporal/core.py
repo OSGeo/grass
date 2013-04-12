@@ -110,7 +110,7 @@ def set_use_ctypes_map_access(use_ctype = True):
 
 ###############################################################################
 
-def get_use_ctypes_map_access(use_ctype = True):
+def get_use_ctypes_map_access():
     """!Return true if ctypes is used for map access """
     global use_ctypes_map_access
     return use_ctypes_map_access
@@ -135,6 +135,7 @@ def init():
     """
     # We need to set the correct database backend from the environment variables
     global tgis_backed
+    global has_command_column
     
 
     core.run_command("t.connect", flags="c")
@@ -182,8 +183,24 @@ def init():
             name = cursor.fetchone()[0]
             if name == "raster_base":
                 db_exists = True
+            
+                # Try to add the command column to the space time dataset metadata tables
+                try:
+                    c.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
+                except:
+                    pass
+                try:
+                    c.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
+                except:
+                    pass
+                try:
+                    c.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
+                except:
+                    pass
+                
             connection.commit()
             cursor.close()
+            
     elif tgis_backed == "pg":
         # Connect to database
         connection = dbmi.connect(database)
@@ -192,6 +209,22 @@ def init():
         cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
                        "WHERE table_name=%s)", ('raster_base',))
         db_exists = cursor.fetchone()[0]
+    
+        if db_exists:
+            # Try to add the command column to the space time dataset metadata tables
+            try:
+                c.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
+            except:
+                pass
+            try:
+                c.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
+            except:
+                pass
+            try:
+                c.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
+            except:
+                pass
+        
         connection.commit()
         cursor.close()
 
@@ -229,11 +262,17 @@ def init():
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    # Connect to database
-    connection = dbmi.connect(database)
-    cursor = connection.cursor()
 
     if tgis_backed == "sqlite":
+        
+        # We need to create the sqlite3 database path if it does not exists
+        tgis_dir = os.path.dirname(database)
+        if not os.path.exists(tgis_dir):
+            os.makedirs(tgis_dir)
+            
+        # Connect to database
+        connection = dbmi.connect(database)
+        cursor = connection.cursor()
 
         sqlite3_delete_trigger_sql = open(os.path.join(get_sql_template_path(
         ), "sqlite3_delete_trigger.sql"), 'r').read()
@@ -255,6 +294,9 @@ def init():
         cursor.executescript(str3ds_metadata_sql)
         cursor.executescript(sqlite3_delete_trigger_sql)
     elif tgis_backed == "pg":
+        # Connect to database
+        connection = dbmi.connect(database)
+        cursor = connection.cursor()
         # Execute the SQL statements for postgresql
         # Create the global tables for the native grass datatypes
         cursor.execute(raster_tables_sql)
@@ -275,7 +317,6 @@ def init():
     cursor.close()
 
 ###############################################################################
-
 
 class SQLDatabaseInterfaceConnection():
     """!This class represents the database interface connection
