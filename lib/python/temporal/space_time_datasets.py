@@ -397,6 +397,28 @@ class Raster3DDataset(AbstractMapDataset):
         else:
             return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
+    def get_np_array(self):
+        """!Return this 3D raster map as memmap numpy style array to access the 3D raster
+           values in numpy style without loading the whole map in the RAM.
+
+           In case this 3D raster map does exists in the grass spatial database, 
+           the map will be exported using r3.out.bin to a temporary location 
+           and assigned to the memmap object that is returned by this function.
+
+           In case the 3D raster map does not exists, an empty temporary 
+           binary file will be created and assigned to the memap object.
+
+           You need to call the write function to write the memmap 
+           array back into grass.
+        """
+
+        a = garray.array3d()
+
+        if self.map_exists():
+            a.read(self.get_map_id())
+
+        return a
+        
     def reset(self, ident):
         """!Reset the internal structure and set the identifier"""
         self.base = Raster3DBase(ident=ident)
