@@ -307,30 +307,20 @@ class TemporalManager(object):
         """!Get info about timeseries and check topology (raises GException)"""
         id = validateTimeseriesName(timeseries, etype)
         sp = tgis.dataset_factory(etype, id)
-        # sp = tgis.SpaceTimeRasterDataset(ident = id)
-
         # Insert content from db
         sp.select()
         # Get ordered map list
         maps = sp.get_registered_maps_as_objects()
-        # check topology
-        check = sp.check_temporal_topology(maps)
-        if not check:
+	if not sp.check_temporal_topology(maps):
             raise GException(_("Topology of Space time dataset %s is invalid." % id))
 
         timeseriesList.append(id)
         infoDict[id] = {}
         infoDict[id]['etype'] = etype
-        # compute granularity
         infoDict[id]['temporal_type'] = sp.get_temporal_type()
-        if infoDict[id]['temporal_type'] == 'absolute':
-            gran = tgis.compute_absolute_time_granularity(maps)
-        else:
-            start, end, infoDict[id]['unit'] = sp.get_relative_time()
-            gran = tgis.compute_relative_time_granularity(maps)
-
-        infoDict[id]['granularity'] = gran
-
+	if sp.is_time_relative():
+            infoDict[id]['unit'] = sp.get_relative_time_unit()
+        infoDict[id]['granularity'] = sp.get_granularity()
         infoDict[id]['map_time'] = sp.get_map_time()
         infoDict[id]['maps'] = maps
 
