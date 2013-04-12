@@ -1626,19 +1626,18 @@ def test_1d_rtree():
 
     for i in xrange(10):
         
-        rect = vector.RTree_Rect()
-        # Allocate the boundary
-        vector.RTreeAllocBoundary(byref(rect), tree)
-        vector.RTreeSetRect1D(byref(rect), tree, float(i - 2), float(i + 2))
-        vector.RTreeInsertRect(byref(rect), i + 1, tree)
+        rect = vector.RTreeAllocRect(tree)
+        vector.RTreeSetRect1D(rect, tree, float(i - 2), float(i + 2))
+        vector.RTreeInsertRect(rect, i + 1, tree)
 
-    rect = vector.RTree_Rect()
-    vector.RTreeAllocBoundary(byref(rect), tree)
-    vector.RTreeSetRect1D(byref(rect), tree, 2.0, 7.0)
+    rect = vector.RTreeAllocRect(tree)
+    vector.RTreeSetRect1D(rect, tree, 2.0, 7.0)
 
     list_ = gis.ilist()
 
-    num = vector.RTreeSearch2(tree, byref(rect), byref(list_))
+    num = vector.RTreeSearch2(tree, rect, byref(list_))
+    
+    vector.RTreeFreeRect(rect)
 
     # print rectangle ids
     print "Number of overlapping rectangles", num
@@ -1656,22 +1655,21 @@ def test_2d_rtree():
 
     for i in xrange(10):
         
-        rect = vector.RTree_Rect()
-        # Allocate the boundary
-        vector.RTreeAllocBoundary(byref(rect), tree)
+        
+        rect = vector.RTreeAllocRect(tree)
 
-        vector.RTreeSetRect2D(byref(rect), tree, 
+        vector.RTreeSetRect2D(rect, tree, 
                               float(i - 2), float(i + 2), 
                               float(i - 2), float(i + 2))
-        vector.RTreeInsertRect(byref(rect), i + 1, tree)
-
-    rect = vector.RTree_Rect()
-    vector.RTreeAllocBoundary(byref(rect), tree)
-    vector.RTreeSetRect2D(byref(rect), tree, 2.0, 7.0, 2.0, 7.0)
+        vector.RTreeInsertRect(rect, i + 1, tree)
+    
+    rect = vector.RTreeAllocRect(tree)
+    vector.RTreeSetRect2D(rect, tree, 2.0, 7.0, 2.0, 7.0)
 
     list_ = gis.ilist()
 
-    num = vector.RTreeSearch2(tree, byref(rect), byref(list_))
+    num = vector.RTreeSearch2(tree, rect, byref(list_))
+    vector.RTreeFreeRect(rect)
 
     # print rectangle ids
     print "Number of overlapping rectangles", num
@@ -1689,26 +1687,24 @@ def test_3d_rtree():
 
     for i in xrange(10):
         
-        rect = vector.RTree_Rect()
-        # Allocate the boundary
-        vector.RTreeAllocBoundary(byref(rect), tree)
-        vector.RTreeSetRect3D(byref(rect), tree, 
+        rect = vector.RTreeAllocRect(tree)
+        vector.RTreeSetRect3D(rect, tree, 
                               float(i - 2), float(i + 2), 
                               float(i - 2), float(i + 2), 
                               float(i - 2), float(i + 2))
-        vector.RTreeInsertRect(byref(rect), i + 1, tree)
+        vector.RTreeInsertRect(rect, i + 1, tree)
         print i + 1
-        vector.RTreePrintRect(byref(rect), 1, tree)
+        vector.RTreePrintRect(rect, 1, tree)
 
-    rect = vector.RTree_Rect()
-    vector.RTreeAllocBoundary(byref(rect), tree)
-    vector.RTreeSetRect3D(byref(rect), tree, 2.0, 7.0, 2.0, 7.0, 2.0, 7.0)
+    rect = vector.RTreeAllocRect(tree)
+    vector.RTreeSetRect3D(rect, tree, 2.0, 7.0, 2.0, 7.0, 2.0, 7.0)
     print "Select"
-    vector.RTreePrintRect(byref(rect), 1, tree)
+    vector.RTreePrintRect(rect, 1, tree)
         
     list_ = gis.ilist()
 
-    num = vector.RTreeSearch2(tree, byref(rect), byref(list_))
+    num = vector.RTreeSearch2(tree, rect, byref(list_))
+    vector.RTreeFreeRect(rect)
 
     # print rectangle ids
     print "Number of overlapping rectangles", num
@@ -1758,7 +1754,7 @@ if __name__ == "__main__":
     test_increment_datetime_by_string()
     test_adjust_datetime_to_granularity()
     test_spatial_extent_intersection()
-    #test_compute_relative_time_granularity()
+    test_compute_relative_time_granularity()
     test_compute_absolute_time_granularity()
     test_compute_datetime_delta()
     test_spatial_extent_intersection()

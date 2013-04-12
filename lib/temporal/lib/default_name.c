@@ -66,7 +66,7 @@ int tgis_set_default_connection(void)
 
 	connection.driverName = "sqlite";
 	connection.databaseName =
-	    "$GISDBASE/$LOCATION_NAME/PERMANENT/tgis.db";
+	    "$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db";
 	tgis_set_connection(&connection);
     }
     else

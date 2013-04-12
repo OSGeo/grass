@@ -94,16 +94,16 @@ def main():
         #      0123456789012345678901234567890
         print " | Temporal topology is: ...... invalid"
 
-    dict = sp.count_temporal_types(maps)
+    dict_ = sp.count_temporal_types(maps)
 
-    for key in dict.keys():
+    for key in dict_.keys():
         if key == "interval":
             #      0123456789012345678901234567890
-            print " | Number of intervals: ....... %s" % (dict[key])
+            print " | Number of intervals: ....... %s" % (dict_[key])
         if key == "point":
-            print " | Number of points: .......... %s" % (dict[key])
+            print " | Number of points: .......... %s" % (dict_[key])
         if key == "invalid":
-            print " | Invalid time stamps: ....... %s" % (dict[key])
+            print " | Invalid time stamps: ....... %s" % (dict_[key])
 
     #      0123456789012345678901234567890
     print " | Number of gaps: ............ %i" % sp.count_gaps(maps)
@@ -115,36 +115,37 @@ def main():
     print " | Granularity: ............... %s" % str(gran)
 
     print " +-------------------- Topological relations ---------------------------------+"
-    dict = sp.count_temporal_relations(maps)
+    dict_ = sp.count_temporal_relations(maps)
 
-    for key in dict.keys():
-        if key == "equivalent":
-            #      0123456789012345678901234567890
-            print " | Equivalent: ................ %s" % (dict[key])
-        if key == "during":
-            print " | During: .................... %s" % (dict[key])
-        if key == "contains":
-            print " | Contains: .................. %s" % (dict[key])
-        if key == "overlaps":
-            print " | Overlaps: .................. %s" % (dict[key])
-        if key == "overlapped":
-            print " | Overlapped: ................ %s" % (dict[key])
-        if key == "after":
-            print " | After: ..................... %s" % (dict[key])
-        if key == "before":
-            print " | Before: .................... %s" % (dict[key])
-        if key == "starts":
-            print " | Starts: .................... %s" % (dict[key])
-        if key == "finishes":
-            print " | Finishes: .................. %s" % (dict[key])
-        if key == "started":
-            print " | Started: ................... %s" % (dict[key])
-        if key == "finished":
-            print " | Finished: .................. %s" % (dict[key])
-        if key == "follows":
-            print " | Follows: ................... %s" % (dict[key])
-        if key == "precedes":
-            print " | Precedes: .................. %s" % (dict[key])
+    if dict_:
+        for key in dict_.keys():
+            if key == "equivalent":
+                #      0123456789012345678901234567890
+                print " | Equivalent: ................ %s" % (dict_[key])
+            if key == "during":
+                print " | During: .................... %s" % (dict_[key])
+            if key == "contains":
+                print " | Contains: .................. %s" % (dict_[key])
+            if key == "overlaps":
+                print " | Overlaps: .................. %s" % (dict_[key])
+            if key == "overlapped":
+                print " | Overlapped: ................ %s" % (dict_[key])
+            if key == "after":
+                print " | After: ..................... %s" % (dict_[key])
+            if key == "before":
+                print " | Before: .................... %s" % (dict_[key])
+            if key == "starts":
+                print " | Starts: .................... %s" % (dict_[key])
+            if key == "finishes":
+                print " | Finishes: .................. %s" % (dict_[key])
+            if key == "started":
+                print " | Started: ................... %s" % (dict_[key])
+            if key == "finished":
+                print " | Finished: .................. %s" % (dict_[key])
+            if key == "follows":
+                print " | Follows: ................... %s" % (dict_[key])
+            if key == "precedes":
+                print " | Precedes: .................. %s" % (dict_[key])
     print " +----------------------------------------------------------------------------+"
 
 if __name__ == "__main__":

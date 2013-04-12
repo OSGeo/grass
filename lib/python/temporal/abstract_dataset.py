@@ -46,6 +46,8 @@ class ImplementationError(Exception):
     def __str__(self):
         return repr(self.msg)
     
+###############################################################################
+
 class AbstractDataset(object):
     """!This is the base class for all datasets 
        (raster, vector, raster3d, strds, stvds, str3ds)"""
@@ -114,8 +116,10 @@ class AbstractDataset(object):
         return self.base.get_mapset()
 
     def get_valid_time(self):
-        """!Returns a tuple of the start, the end valid time, 
-           this can be either datetime or double values
+        """!Returns a tuple of the valid start and end time
+        
+           Start and end time can be either of type datetime or of type double
+           depending on the temporal type
            @return A tuple of (start_time, end_time)
         """
 
@@ -145,7 +149,7 @@ class AbstractDataset(object):
         return (start, end, tz)
 
     def get_relative_time(self):
-        """!Returns the relative time interval (start_time, end_time, unit) 
+        """!Returns the valid relative time interval (start_time, end_time, unit) 
            or None if not present"""
 
         start = self.relative_time.get_start_time()
@@ -352,6 +356,102 @@ class AbstractDataset(object):
 
 ###############################################################################
 
+class AbstractDatasetComparisonKeyStartTime(object):
+    """!This comparison key can be used to sort lists of abstract datasets 
+       by start time
+
+        Example:
+
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
+
+        # Sort the maps in the list by start time
+        sorted_map_list = sorted(
+            map_list, key=AbstractDatasetComparisonKeyStartTime)
+    """
+    def __init__(self, obj, *args):
+        self.obj = obj
+
+    def __lt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA < startB
+
+    def __gt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA > startB
+
+    def __eq__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA == startB
+
+    def __le__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA <= startB
+
+    def __ge__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA >= startB
+
+    def __ne__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return startA != startB
+
+###############################################################################
+
+class AbstractDatasetComparisonKeyEndTime(object):
+    """!This comparison key can be used to sort lists of abstract datasets 
+       by end time
+
+        Example:
+
+        # Return all maps in a space time raster dataset as map objects
+        map_list = strds.get_registered_maps_as_objects()
+
+        # Sort the maps in the list by end time
+        sorted_map_list = sorted(
+            map_list, key=AbstractDatasetComparisonKeyEndTime)
+    """
+    def __init__(self, obj, *args):
+        self.obj = obj
+
+    def __lt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA < endB
+
+    def __gt__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA > endB
+
+    def __eq__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA == endB
+
+    def __le__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA <= endB
+
+    def __ge__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA >= endB
+
+    def __ne__(self, other):
+        startA, endA = self.obj.get_valid_time()
+        startB, endB = other.obj.get_valid_time()
+        return endA != endB
+
+###############################################################################
+        
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

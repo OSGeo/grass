@@ -21,6 +21,7 @@ CREATE TABLE  strds_metadata (
   ewres_max DOUBLE PRECISION,   -- The highest east-west resolution of the registered raster maps
   title VARCHAR,                -- Title of the space-time raster dataset
   description VARCHAR,          -- Detailed description of the space-time raster dataset
+  command VARCHAR,              -- The command that was used to create the space time raster dataset
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  strds_base (id) ON DELETE CASCADE
 );
@@ -41,7 +42,7 @@ CREATE VIEW strds_view_abs_time AS SELECT
             A4.nsres_max, A4.ewres_max, 
 	    A4.min_min, A4.min_max,
 	    A4.max_min, A4.max_max,
-            A4.title, A4.description	
+            A4.title, A4.description, A4.command	
 	    FROM strds_base A1, strds_absolute_time A2,  
             strds_spatial_extent A3, strds_metadata A4 WHERE A1.id = A2.id AND 
 	    A1.id = A3.id AND A1.id = A4.id;
@@ -61,7 +62,7 @@ CREATE VIEW strds_view_rel_time AS SELECT
             A4.nsres_max, A4.ewres_max, 
 	    A4.min_min, A4.min_max,
 	    A4.max_min, A4.max_max,
-            A4.title, A4.description	
+            A4.title, A4.description, A4.command
 	    FROM strds_base A1, strds_relative_time A2,  
             strds_spatial_extent A3, strds_metadata A4 WHERE A1.id = A2.id AND 
 	    A1.id = A3.id AND A1.id = A4.id;

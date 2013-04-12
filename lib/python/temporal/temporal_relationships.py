@@ -22,13 +22,17 @@ for details.
 """
 from abstract_map_dataset import *
 from datetime_math import *
+import grass.lib.vector as vector
+import grass.lib.gis as gis
+from ctypes import *
 
 ###############################################################################
 
-
-class temporal_topology_builder(object):
+class TemporalTopologyBuilder(object):
     """!This class is designed to build the temporal topology 
-       based on a lists of maps
+       of temporally related abstract dataset objects.
+       
+       The abstract dataset objects must be provided as a single list, or in two lists.
 
         Example:
         @code
@@ -37,15 +41,17 @@ class temporal_topology_builder(object):
         maps = strds.get_registered_maps_as_objects()
 
         # Now lets build the temporal topology of the maps in the list
-        tb = temporal_topology_builder()
+        
+        identical = False
+        tb = TemporalTopologyBuilder()
+        
         tb.build(maps)
 
+        dbif, connected = init_dbif(None)
+            
         for _map in tb:
-            _map.print_temporal_topology_info()
-            _follows = _map.get_follows()
-            if _follows:
-                for f in _follows:
-                    f.print_temporal_topology_info()
+            _map.select(dbif)
+            _map.print_info()
 
         # Using the next and previous methods, we can iterate over the
         # topological related maps in this way
@@ -53,7 +59,7 @@ class temporal_topology_builder(object):
         _first = tb.get_first()
 
         while _first:
-            _first.print_temporal_topology_info()
+            _first.print_topology_info()
             _first = _first.next()
 
         # Dictionary like accessed
@@ -63,11 +69,13 @@ class temporal_topology_builder(object):
     """
     def __init__(self):
         self._reset()
+        # 0001-01-01 00:00:00
+        self._timeref = datetime(1,1,1)
 
     def _reset(self):
         self._store = {}
         self._first = None
-        self._temporal_iteratable = False
+        self._iteratable = False
 
     def _set_first(self, first):
         self._first = first
@@ -78,7 +86,7 @@ class temporal_topology_builder(object):
             prev_ = self._store.values()[0]
             while prev_ is not None:
                 self._first = prev_
-                prev_ = prev_.temporal_prev()
+                prev_ = prev_.prev()
 
     def _insert(self, t):
         self._store[t.get_id()] = t
@@ -120,26 +128,62 @@ class temporal_topology_builder(object):
            @param maps: A sorted (by start_time)list of abstract_dataset 
                         objects with initiated temporal extent
         """
-        for i in xrange(len(maps)):
-            offset = i + 1
-            for j in xrange(offset, len(maps)):
-                # Get the temporal relationship
-                relation = maps[j].temporal_relation(maps[i])
+#        for i in xrange(len(maps)):
+#            offset = i + 1
+#            for j in xrange(offset, len(maps)):
+#                # Get the temporal relationship
+#                relation = maps[j].temporal_relation(maps[i])
+#
+#                # Build the next reference
+#                if relation != "equivalent" and relation != "started":
+#                    maps[i].set_next(maps[j])
+#                    break
 
-                # Build the next reference
-                if relation != "equivalent" and relation != "started":
-                    maps[i].set_temporal_next(maps[j])
-                    break
+        # First we need to order the map list chronologically 
+        sorted_maps = sorted(
+            maps, key=AbstractDatasetComparisonKeyStartTime)
+            
+        for i in xrange(len(sorted_maps) - 1):
+            sorted_maps[i].set_next(sorted_maps[i + 1])
 
-        for map_ in maps:
-            next_ = map_.temporal_next()
+        for map_ in sorted_maps:
+            next_ = map_.next()
             if next_:
-                next_.set_temporal_prev(map_)
-            map_.set_temporal_topology_build_true()
+                next_.set_prev(map_)
+            map_.set_topology_build_true()
+        
+    def _map_to_rect(self, tree, map_):
+        """Use the temporal extent of a map to create and return a RTree rectange"""
+        rect = vector.RTreeAllocRect(tree)
+        
+        start, end = map_.get_valid_time()
+        
+        if not end:
+            end = start
+        
+        if map_.is_time_absolute():
+            start = time_delta_to_relative_time(start - self._timeref)
+            end = time_delta_to_relative_time(end - self._timeref)
+                
+        vector.RTreeSetRect1D(rect, tree, float(start), float(end))
+        
+        return rect
+        
+    def _build_1d_rtree(self, maps):
+        """Build and return the one dimensional R*-Tree"""
 
-    def build2(self, mapsA, mapsB):
+        tree = vector.RTreeCreateTree(-1, 0, 4)
+
+        for i in xrange(len(maps)):
+            
+            rect = self._map_to_rect(tree, maps[i])
+            vector.RTreeInsertRect(rect, i + 1, tree)
+            
+        return tree
+
+    def build(self, mapsA, mapsB=None):
         """!Build the temporal topology structure between 
-           two ordered lists of maps
+           one or two unordered lists of abstract dataset objects
 
            This method builds the temporal topology from mapsA to 
            mapsB and vice verse. The temporal topology structure of each map, 
@@ -152,133 +196,150 @@ class temporal_topology_builder(object):
            The implemented iterator assures
            the chronological iteration over the mapsA.
 
-           @param mapsA: A sorted list (by start_time) of abstract_dataset 
+           @param mapsA: A list of abstract_dataset 
                          objects with initiated temporal extent
-           @param mapsB: A sorted list (by start_time) of abstract_dataset 
+           @param mapsB: An optional list of abstract_dataset 
                          objects with initiated temporal extent
         """
 
+        identical = False
         if mapsA == mapsB:
-            self.build(mapsA, True)
-            return
+            identical = True
+            
+        if mapsB == None:
+            mapsB = mapsA
+            idetnical = True
 
         for map_ in mapsA:
-            map_.reset_temporal_topology()
+            map_.reset_topology()
 
-        for map_ in mapsB:
-            map_.reset_temporal_topology()
+        if not identical:
+            for map_ in mapsB:
+                map_.reset_topology()
 
-        for i in xrange(len(mapsA)):
-            for j in xrange(len(mapsB)):
+        tree = self. _build_1d_rtree(mapsA)
+            
+        for j in xrange(len(mapsB)):            
+        
+            list_ = gis.ilist()
+            rect = self._map_to_rect(tree, mapsB[j])
+            num = vector.RTreeSearch2(tree, rect, byref(list_))
+            vector.RTreeFreeRect(rect)
+
+            for k in xrange(list_.n_values):
+                i = list_.value[k] - 1
 
                 # Get the temporal relationship
                 relation = mapsB[j].temporal_relation(mapsA[i])
-
-                if relation == "before":
-                    continue
-
+                
                 if relation == "equivalent":
-                    mapsB[j].append_temporal_equivalent(mapsA[i])
-                    mapsA[i].append_temporal_equivalent(mapsB[j])
+                    if mapsB[j].get_id() != mapsA[i].get_id():
+                        mapsB[j].append_equivalent(mapsA[i])
+                        mapsA[i].append_equivalent(mapsB[j])
                 elif relation == "follows":
-                    mapsB[j].append_temporal_follows(mapsA[i])
-                    mapsA[i].append_temporal_precedes(mapsB[j])
+                    if not mapsB[j].get_follows() or \
+                       (mapsB[j].get_follows() and \
+                       mapsA[i] not in mapsB[j].get_follows()):
+                        mapsB[j].append_follows(mapsA[i])
+                    if not mapsA[i].get_precedes() or \
+                       (mapsA[i].get_precedes() and
+                       mapsB[j] not in mapsA[i].get_precedes()):
+                        mapsA[i].append_precedes(mapsB[j])
                 elif relation == "precedes":
-                    mapsB[j].append_temporal_precedes(mapsA[i])
-                    mapsA[i].append_temporal_follows(mapsB[j])
+                    if not mapsB[j].get_precedes() or \
+                       (mapsB[j].get_precedes() and \
+                       mapsA[i] not in mapsB[j].get_precedes()):
+                        mapsB[j].append_precedes(mapsA[i])
+                    if not mapsA[i].get_follows() or \
+                       (mapsA[i].get_follows() and \
+                       mapsB[j] not in mapsA[i].get_follows()):
+                        mapsA[i].append_follows(mapsB[j])
                 elif relation == "during" or relation == "starts" or \
                      relation == "finishes":
-                    mapsB[j].append_temporal_during(mapsA[i])
-                    mapsA[i].append_temporal_contains(mapsB[j])
+                    if not mapsB[j].get_during() or \
+                       (mapsB[j].get_during() and \
+                       mapsA[i] not in mapsB[j].get_during()):
+                        mapsB[j].append_during(mapsA[i])
+                    if not mapsA[i].get_contains() or \
+                       (mapsA[i].get_contains() and \
+                       mapsB[j] not in mapsA[i].get_contains()):
+                        mapsA[i].append_contains(mapsB[j])
+                    if relation == "starts":
+                        if not mapsB[j].get_starts() or \
+                        (mapsB[j].get_starts() and \
+                        mapsA[i] not in mapsB[j].get_starts()):
+                            mapsB[j].append_starts(mapsA[i])
+                        if not mapsA[i].get_started() or \
+                        (mapsA[i].get_started() and \
+                        mapsB[j] not in mapsA[i].get_started()):
+                            mapsA[i].append_started(mapsB[j])
+                    if relation == "finishes":
+                        if not mapsB[j].get_finishes() or \
+                        (mapsB[j].get_finishes() and \
+                        mapsA[i] not in mapsB[j].get_finishes()):
+                            mapsB[j].append_finishes(mapsA[i])
+                        if not mapsA[i].get_finished() or \
+                        (mapsA[i].get_finished() and \
+                        mapsB[j] not in mapsA[i].get_finished()):
+                            mapsA[i].append_finished(mapsB[j])
                 elif relation == "contains" or relation == "started" or \
                      relation == "finished":
-                    mapsB[j].append_temporal_contains(mapsA[i])
-                    mapsA[i].append_temporal_during(mapsB[j])
+                    if not mapsB[j].get_contains() or \
+                       (mapsB[j].get_contains() and \
+                       mapsA[i] not in mapsB[j].get_contains()):
+                        mapsB[j].append_contains(mapsA[i])
+                    if not mapsA[i].get_during() or \
+                       (mapsA[i].get_during() and \
+                       mapsB[j] not in mapsA[i].get_during()):
+                        mapsA[i].append_during(mapsB[j])
+                    if relation == "started":
+                        if not mapsB[j].get_started() or \
+                        (mapsB[j].get_started() and \
+                        mapsA[i] not in mapsB[j].get_started()):
+                            mapsB[j].append_started(mapsA[i])
+                        if not mapsA[i].get_starts() or \
+                        (mapsA[i].get_starts() and \
+                        mapsB[j] not in mapsA[i].get_starts()):
+                            mapsA[i].append_starts(mapsB[j])
+                    if relation == "finished":
+                        if not mapsB[j].get_finished() or \
+                        (mapsB[j].get_finished() and \
+                        mapsA[i] not in mapsB[j].get_finished()):
+                            mapsB[j].append_finished(mapsA[i])
+                        if not mapsA[i].get_finishes() or \
+                        (mapsA[i].get_finishes() and \
+                        mapsB[j] not in mapsA[i].get_finishes()):
+                            mapsA[i].append_finishes(mapsB[j])
                 elif relation == "overlaps":
-                    mapsB[j].append_temporal_overlaps(mapsA[i])
-                    mapsA[i].append_temporal_overlapped(mapsB[j])
+                    if not mapsB[j].get_overlaps() or \
+                       (mapsB[j].get_overlaps() and \
+                       mapsA[i] not in mapsB[j].get_overlaps()):
+                        mapsB[j].append_overlaps(mapsA[i])
+                    if not mapsA[i].get_overlapped() or \
+                       (mapsA[i].get_overlapped() and \
+                       mapsB[j] not in mapsA[i].get_overlapped()):
+                        mapsA[i].append_overlapped(mapsB[j])
                 elif relation == "overlapped":
-                    mapsB[j].append_temporal_overlapped(mapsA[i])
-                    mapsA[i].append_temporal_overlaps(mapsB[j])
-
-                # Break if the next map follows and the over-next maps is after
-                if relation == "follows":
-                    if j < len(mapsB) - 1:
-                        relation = mapsB[j + 1].temporal_relation(mapsA[i])
-                        if relation == "after":
-                            break
-                # Break if the the next map is after
-                if relation == "after":
-                    break
+                    if not mapsB[j].get_overlapped() or \
+                       (mapsB[j].get_overlapped() and \
+                       mapsA[i] not in mapsB[j].get_overlapped()):
+                        mapsB[j].append_overlapped(mapsA[i])
+                    if not mapsA[i].get_overlaps() or \
+                       (mapsA[i].get_overlaps() and \
+                       mapsB[j] not in mapsA[i].get_overlaps()):
+                        mapsA[i].append_overlaps(mapsB[j])
 
         self._build_internal_iteratable(mapsA)
-        self._build_iteratable(mapsB)
-
-    def build(self, maps):
-        """!Build the temporal topology structure
-
-           This method builds the temporal topology based on 
-           all maps in the provided map list.
-           The temporal topology structure of each map, 
-           defined in class temporal_map_relations,
-           will be reseted and rebuild.
-
-           After building the temporal topology the 
-           modified map objects can be accessed
-           in the same way as a dictionary using there id. 
-           The implemented iterator assures
-           the chronological iteration over the maps.
-
-           @param maps: A sorted list (by start_time) of abstract_dataset 
-                        objects with initiated temporal extent
-        """
-        for map_ in maps:
-            map_.reset_temporal_topology()
-
-        for i in xrange(len(maps)):
-            offset = i + 1
-            for j in xrange(offset, len(maps)):
-
-                # Get the temporal relationship
-                relation = maps[j].temporal_relation(maps[i])
-
-                # The start time of map j is equal or later than map i
-                if relation == "equivalent":
-                    maps[j].append_temporal_equivalent(maps[i])
-                    maps[i].append_temporal_equivalent(maps[j])
-                elif relation == "follows":
-                    maps[j].append_temporal_follows(maps[i])
-                    maps[i].append_temporal_precedes(maps[j])
-                elif relation == "during" or relation == "starts" or \
-                     relation == "finishes":
-                    maps[j].append_temporal_during(maps[i])
-                    maps[i].append_temporal_contains(maps[j])
-                elif relation == "started":
-                    # Consider equal start time, in case 
-                    # "started" map j contains map i
-                    maps[j].append_temporal_contains(maps[i])
-                    maps[i].append_temporal_during(maps[j])
-                elif relation == "overlaps":
-                    maps[j].append_temporal_overlaps(maps[i])
-                    maps[i].append_temporal_overlapped(maps[j])
-
-                # Break if the last map follows
-                if relation == "follows":
-                    if j < len(maps) - 1:
-                        relation = maps[j + 1].temporal_relation(maps[i])
-                        if relation == "after":
-                            break
-                # Break if the the next map is after
-                if relation == "after":
-                    break
-
-        self._build_internal_iteratable(maps)
+        if not identical and mapsB != None:
+            self._build_iteratable(mapsB)
+        
+        vector.RTreeDestroyTree(tree)
 
     def __iter__(self):
         start_ = self._first
         while start_ is not None:
             yield start_
-            start_ = start_.temporal_next()
+            start_ = start_.next()
 
     def __getitem__(self, index):
         return self._store[index.get_id()]
@@ -289,97 +350,280 @@ class temporal_topology_builder(object):
     def __contains__(self, _map):
         return _map in self._store.values()
 
-
 ###############################################################################
 
-def print_temporal_topology_relationships(maps1, maps2):
-    """!Print the temporal relation matrix of the temporal ordered 
+def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
+    """!Print the temporal relationships of the 
        map lists maps1 and maps2 to stdout.
 
-        @param maps1: A sorted (by start_time) list of abstract_dataset 
+        @param maps1: A list of abstract_dataset 
                       objects with initiated temporal extent
-        @param maps2: A sorted (by start_time) list of abstract_dataset 
+        @param maps2: An optional list of abstract_dataset 
                       objects with initiated temporal extent
+        @param dbif: The database interface to be used
     """
+                    
+    tb = TemporalTopologyBuilder()
 
-    identical = False
-    use_id = True
+    tb.build(maps1, maps2)
 
-    if maps1 == maps2:
-        identical = True
-        use_id = False
-
-    for i in range(len(maps1)):
-        if identical == True:
-            start = i + 1
-        else:
-            start = 0
-        for j in range(start, len(maps2)):
-            relation = maps1[j].temporal_relation(maps2[i])
-
-            if use_id == False:
-                print maps2[j].base.get_name(
-                ), relation, maps1[i].base.get_name()
-            else:
-                print maps2[j].base.get_id(), relation, maps1[i].base.get_id()
-
-            # Break if the last map follows
-            if relation == "follows":
-                if j < len(maps1) - 1:
-                    relation = maps1[j + 1].temporal_relation(maps2[i])
-                    if relation == "after":
-                        break
-            # Break if the the next map is after
-            if relation == "after":
-                break
+    dbif, connected = init_dbif(dbif)
+        
+    for _map in tb:
+        _map.select(dbif)
+        _map.print_info()
+        
+    if connected:
+        dbif.close()
+        
+    return
 
 ###############################################################################
 
+def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
+    """!Count the temporal relations of a single list of maps or between two lists of maps
 
-def count_temporal_topology_relationships(maps1, maps2):
-    """!Count the temporal relations between the two lists of maps
 
-        The map lists must be ordered by start time. 
-        Temporal relations are counted by analyzing the sparse 
-        (upper right side in case maps1 == maps2) temporal relationships matrix.
-
-        @param maps1: A sorted (by start_time) list of abstract_dataset 
+        @param maps1: A list of abstract_dataset 
                       objects with initiated temporal extent
-        @param maps2: A sorted (by start_time) list of abstract_dataset 
+        @param maps2: A list of abstract_dataset 
                       objects with initiated temporal extent
+        @param dbif: The database interface to be used
         @return A dictionary with counted temporal relationships
     """
 
-    tcount = {}
-    identical = False
+    
+    tb = TemporalTopologyBuilder()
+    tb.build(maps1, maps2)
 
-    if maps1 == maps2:
-        identical = True
-
-    for i in range(len(maps1)):
-        if identical:
-            start = i + 1
+    dbif, connected = init_dbif(dbif)
+    
+    relations = None
+        
+    for _map in tb:
+        if relations != None:
+            r = _map.get_number_of_relations()
+            for k in r.keys():
+                relations[k] += r[k]
         else:
-            start = 0
-        for j in range(start, len(maps2)):
-            relation = maps1[j].temporal_relation(maps2[i])
+            relations = _map.get_number_of_relations()
 
-            if relation == "before":
-                continue
+    if connected:
+        dbif.close()
+        
+    return relations
 
-            if relation in tcount:
-                tcount[relation] = tcount[relation] + 1
-            else:
-                tcount[relation] = 1
+###############################################################################
 
-            # Break if the last map follows
-            if relation == "follows":
-                if j < len(maps1) - 1:
-                    relation = maps1[j + 1].temporal_relation(maps2[i])
-                    if relation == "after":
-                        break
-            # Break if the the next map is after
-            if relation == "after":
-                break
+def create_temporal_relation_sql_where_statement(
+                        start, end, use_start=True, use_during=False,
+                        use_overlap=False, use_contain=False, use_equal=False,
+                        use_follows=False, use_precedes=False):
+    """!Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
 
-    return tcount
+        @param start: The start time
+        @param end: The end time
+        @param use_start: Select maps of which the start time is located in the selection granule
+                         @verbatim
+                         map    :        s
+                         granule:  s-----------------e
+
+                         map    :        s--------------------e
+                         granule:  s-----------------e
+
+                         map    :        s--------e
+                         granule:  s-----------------e
+                         @endverbatim
+
+        @param use_during: during: Select maps which are temporal during the selection granule
+                         @verbatim
+                         map    :     s-----------e
+                         granule:  s-----------------e
+                         @endverbatim
+
+        @param use_overlap: Select maps which temporal overlap the selection granule
+                         @verbatim
+                         map    :     s-----------e
+                         granule:        s-----------------e
+
+                         map    :     s-----------e
+                         granule:  s----------e
+                         @endverbatim
+
+        @param use_contain: Select maps which temporally contain the selection granule
+                         @verbatim
+                         map    :  s-----------------e
+                         granule:     s-----------e
+                         @endverbatim
+
+        @param use_equal: Select maps which temporally equal to the selection granule
+                         @verbatim
+                         map    :  s-----------e
+                         granule:  s-----------e
+                         @endverbatim
+
+        @param use_follows: Select maps which temporally follow the selection granule
+                         @verbatim
+                         map    :              s-----------e
+                         granule:  s-----------e
+                         @endverbatim
+
+        @param use_precedes: Select maps which temporally precedes the selection granule
+                         @verbatim
+                         map    :  s-----------e
+                         granule:              s-----------e
+                         @endverbatim
+
+        Usage:
+        
+        @code
+        
+        >>> # Relative time
+        >>> start = 1
+        >>> end = 2
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False)
+        >>> create_temporal_relation_sql_where_statement(start, end)
+        '((start_time >= 1 and start_time < 2) )'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=True)
+        '((start_time >= 1 and start_time < 2) )'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_during=True)
+        '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_overlap=True)
+        '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_contain=True)
+        '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_equal=True)
+        '((start_time = 1 and end_time = 2))'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_follows=True)
+        '((start_time = 2))'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_precedes=True)
+        '((end_time = 1))'
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
+        ... use_equal=True, use_follows=True, use_precedes=True)
+        '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
+
+        >>> # Absolute time
+        >>> start = datetime(2001, 1, 1, 12, 30)
+        >>> end = datetime(2001, 3, 31, 14, 30)
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False)
+        >>> create_temporal_relation_sql_where_statement(start, end)
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=True)
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_during=True)
+        "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_overlap=True)
+        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_contain=True)
+        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_equal=True)
+        "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_follows=True)
+        "((start_time = '2001-03-31 14:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=False, use_precedes=True)
+        "((end_time = '2001-01-01 12:30:00'))"
+        >>> create_temporal_relation_sql_where_statement(start, end, 
+        ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
+        ... use_equal=True, use_follows=True, use_precedes=True)
+        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
+        
+        @endcode
+        """
+
+    where = "("
+
+    if use_start:
+        if isinstance(start, datetime):
+            where += "(start_time >= '%s' and start_time < '%s') " % (start, end)
+        else:
+            where += "(start_time >= %i and start_time < %i) " % (start, end)
+
+    if use_during:
+        if use_start:
+            where += " OR "
+            
+        if isinstance(start, datetime):
+            where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
+            where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
+            where += "(start_time > '%s' and end_time <= '%s'))" % (start, end)
+        else:
+            where += "((start_time > %i and end_time < %i) OR " % (start, end)
+            where += "(start_time >= %i and end_time < %i) OR " % (start, end)
+            where += "(start_time > %i and end_time <= %i))" % (start, end)
+
+    if use_overlap:
+        if use_start or use_during:
+            where += " OR "
+
+        if isinstance(start, datetime):
+            where += "((start_time < '%s' and end_time > '%s' and end_time < '%s') OR " % (start, start, end)
+            where += "(start_time < '%s' and start_time > '%s' and end_time > '%s'))" % (end, start, end)
+        else:
+            where += "((start_time < %i and end_time > %i and end_time < %i) OR " % (start, start, end)
+            where += "(start_time < %i and start_time > %i and end_time > %i))" % (end, start, end)
+
+    if use_contain:
+        if use_start or use_during or use_overlap:
+            where += " OR "
+
+        if isinstance(start, datetime):
+            where += "((start_time < '%s' and end_time > '%s') OR " % (start, end)
+            where += "(start_time <= '%s' and end_time > '%s') OR " % (start, end)
+            where += "(start_time < '%s' and end_time >= '%s'))" % (start, end)
+        else:
+            where += "((start_time < %i and end_time > %i) OR " % (start, end)
+            where += "(start_time <= %i and end_time > %i) OR " % (start, end)
+            where += "(start_time < %i and end_time >= %i))" % (start, end)
+
+    if use_equal:
+        if use_start or use_during or use_overlap or use_contain:
+            where += " OR "
+
+        if isinstance(start, datetime):
+            where += "(start_time = '%s' and end_time = '%s')" % (start, end)
+        else:
+            where += "(start_time = %i and end_time = %i)" % (start, end)
+
+    if use_follows:
+        if use_start or use_during or use_overlap or use_contain or use_equal:
+            where += " OR "
+
+        if isinstance(start, datetime):
+            where += "(start_time = '%s')" % (end)
+        else:
+            where += "(start_time = %i)" % (end)
+
+    if use_precedes:
+        if use_start or use_during or use_overlap or use_contain or use_equal \
+           or use_follows:
+            where += " OR "
+
+        if isinstance(start, datetime):
+            where += "(end_time = '%s')" % (start)
+        else:
+            where += "(end_time = %i)" % (start)
+
+    where += ")"
+
+    # Catch empty where statement
+    if where == "()":
+        where = None
+
+    return where
