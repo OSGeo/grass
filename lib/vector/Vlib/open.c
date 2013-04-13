@@ -975,10 +975,22 @@ const char *Vect_maptype_info(const struct Map_info *Map)
    
   \param Map pointer to Map_info structure
   
-  \return maptype code
+  \return map format code
 */
 int Vect_maptype(const struct Map_info *Map)
 {
+    if (Map->temporary) {
+        const struct Format_info *finfo;
+        
+        finfo = &(Map->fInfo);
+        if (finfo->ogr.driver_name) {
+            return GV_FORMAT_OGR;
+        }
+        if (finfo->pg.conninfo) {
+            return GV_FORMAT_POSTGIS;
+        }
+    }
+    
     return Map->format;
 }
 
@@ -1243,7 +1255,6 @@ int map_format(struct Map_info *Map)
             G_warning(_("OGR output also detected, using OGR"));
         }
         else {
-            int topology;
             FILE *fp;
             const char *p;
             
@@ -1303,9 +1314,16 @@ int map_format(struct Map_info *Map)
             /* table name */
             Map->fInfo.pg.table_name = G_store(Map->name);
 
+            /* PostGIS topology enabled ? */
             p = G_find_key_value("topology", key_val);
-            topology = p && G_strcasecmp(p, "yes") == 0;
-        
+            if (p && G_strcasecmp(p, "yes") == 0) {
+                /* define topology name
+                   this should be configurable by the user
+                */
+                G_asprintf(&(pg_info->toposchema_name), "topo_%s",
+                           pg_info->table_name);
+            }
+            
             if (getenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE")) {
                 /* vector features are written directly to PostGIS layer */
                 format = GV_FORMAT_POSTGIS;

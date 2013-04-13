@@ -8,7 +8,7 @@
   (C) 2001-2009, 2012-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  (>=v2). Read the file COPYING that comes with GRASS for details.
   
   \author Original author CERL, probably Dave Gerdes or Mike Higgins.
   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -75,31 +75,46 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
     int ret, format, topo;
     
     if (Vect_level(In) < 1)
-        G_fatal_error("Vect_copy_map_lines(): %s",
-                      _("input vector map is not open"));
+        G_fatal_error(_("Unable to copy features. Input vector map <%s> is not open"),
+                      Vect_get_full_name(In));
 
     format = Vect_maptype(Out);
     topo = TOPO_NONE;
-    if (format == GV_FORMAT_NATIVE)
+    if (format == GV_FORMAT_NATIVE) {
         topo = TOPO_NATIVE;
-    else if (format == GV_FORMAT_POSTGIS && Out->fInfo.pg.toposchema_name)
+    }
+    else if (format == GV_FORMAT_POSTGIS && Out->fInfo.pg.toposchema_name) {
+        int type;
+        
         topo = TOPO_POSTGIS;
-    
+        
+        /* get type of first feature from input vector map */
+        Vect_rewind(In);
+        type = Vect_read_next_line(In, NULL, NULL);
+        if (!(type & (GV_POINTS | GV_LINES)))
+            G_fatal_error(_("Unsupported feature type %d"), type);
+            
+         /* create feature table with given feature type */
+        Vect_write_line(Out, type, NULL, NULL);
+    }
+  
     /* Note: sometimes is important to copy on level 2 (pseudotopo
        centroids) and sometimes on level 1 if build take too long time
     */
+    ret = 0;
     if (Vect_level(In) >= 2) {
         /* -> copy features on level 2 */
-        if (topo == TOPO_POSTGIS)
+        if (topo == TOPO_POSTGIS) {
             /* PostGIS topology - copy also nodes */
             copy_nodes(In, Out);
+        }
         
         /* copy features */
-        ret = copy_lines_2(In, field, topo, Out);
+        ret += copy_lines_2(In, field, topo, Out);
         
         if (topo == TOPO_NONE) {
             /* copy areas - external formats and simple features access only */
-            copy_areas(In, field, Out);
+            ret += copy_areas(In, field, Out);
         }
     }
     else {
@@ -108,10 +123,10 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
             G_warning(_("Vector map <%s> not open on topological level. "
                         "Areas will be skipped!"), Vect_get_full_name(In));
         
-        ret = copy_lines_1(In, field, Out);
+        ret += copy_lines_1(In, field, Out);
     }
     
-    return ret;
+    return ret > 0 ? 1 : 0;
 }
 
 /*!
@@ -382,11 +397,8 @@ int is_isle(const struct Map_info *Map, int area)
 int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
 {
     int i, area, nareas, cat, isle, nisles, nparts_alloc;
-    int ogr;
     struct line_pnts **Points;
     struct line_cats *Cats;
-    
-    ogr = Vect_maptype(Out) == (GV_FORMAT_OGR || GV_FORMAT_OGR_DIRECT);
     
     /* allocate points & cats */
     Points    = (struct line_pnts **) G_malloc(sizeof(struct line_pnts *));
