@@ -116,7 +116,7 @@ int Vect_map_add_dblink(struct Map_info *Map, int number, const char *name,
   \brief Delete db connection from Map_info structure
   
   \param Map pointer to Map_info structure
-  \param field layer number
+  \param field layer number (-1 to delete all dblinks)
   
   \return 0 deleted
   \return -1 error
@@ -131,7 +131,7 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
 
     ret = -1;
     for (i = 0; i < links->n_fields; i++) {
-	if (links->field[i].number == field) {	/* field found */
+	if (field < 0 || links->field[i].number == field) {	/* field found */
 	    for (j = i; j < links->n_fields - 1; j++) {
 		links->field[j].number = links->field[j + 1].number;
 		links->field[j].name = links->field[j + 1].name;
