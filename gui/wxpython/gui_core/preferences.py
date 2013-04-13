@@ -1133,9 +1133,6 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         flexSizer.Add(label, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(separator, proportion = 0, flag = wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
-        if sys.platform == "win32":
-            label.Hide()
-            separator.Hide()
 
         # ask on delete record
         askOnDeleteRec = wx.CheckBox(parent = panel, id = wx.ID_ANY,
