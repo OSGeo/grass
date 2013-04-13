@@ -122,12 +122,7 @@ int read_lines(struct Map_info *Map)
 		}
 		else if (options.option == O_LENGTH && (type & GV_LINES)) {
 		    /* Calculate line length */
-		    if (!Vect_is_3d(Map)) {
-			len = length(Points->n_points, Points->x, Points->y);
-		    }
-		    else {
-			len = Vect_line_length(Points);
-		    }
+		    len = Vect_line_geodesic_length(Points);
 		    Values[idx].d1 += len;
 		}
 		else if (options.option == O_COOR && (type & GV_POINTS)) {
@@ -160,12 +155,7 @@ int read_lines(struct Map_info *Map)
 		}
 		else if (options.option == O_SLOPE && (type & GV_LINES)) {
 		    /* Calculate line slope */
-		    if (!Vect_is_3d(Map)) {
-			len = length(Points->n_points, Points->x, Points->y);
-		    }
-		    else {
-			len = Vect_line_length(Points);
-		    }
+		    len = length(Points->n_points, Points->x, Points->y);
 		    slope =
 			(Points->z[Points->n_points - 1] -
 			 Points->z[0]) / len;
@@ -173,24 +163,15 @@ int read_lines(struct Map_info *Map)
 		}
 		else if (options.option == O_SINUOUS && (type & GV_LINES)) {
 		    /* Calculate line length / distance between end points */
+		    Vect_reset_line(EndPoints);
 		    Vect_append_point(EndPoints, Points->x[0], Points->y[0],
 				      Points->z[0]);
 		    Vect_append_point(EndPoints,
 				      Points->x[Points->n_points - 1],
 				      Points->y[Points->n_points - 1],
 				      Points->z[Points->n_points - 1]);
-		    if (!Vect_is_3d(Map)) {
-			len = length(Points->n_points, Points->x, Points->y);
-			dist =
-			    length(EndPoints->n_points, EndPoints->x,
-				   EndPoints->y);
-		    }
-		    else {
-			len = Vect_line_length(Points);
-			dist = Vect_line_length(EndPoints);
-		    }
-		    Vect_destroy_line_struct(EndPoints);
-		    EndPoints = Vect_new_line_struct();
+		    len = Vect_line_geodesic_length(Points);
+		    dist = Vect_line_geodesic_length(EndPoints);
 		    Values[idx].d1 = len / dist;
 		}
 		else if (options.option == O_AZIMUTH && (type & GV_LINES)) {
@@ -198,10 +179,11 @@ int read_lines(struct Map_info *Map)
 			dx = (Points->x[Points->n_points - 1] - Points->x[0]);
 			dy = (Points->y[Points->n_points - 1] - Points->y[0]);
 			/* If line is closed... */
-			if (dx == 0.0 && dy == 0.0) azimuth = -1;
+			if (dx == 0.0 && dy == 0.0)
+			    azimuth = -1;
 			else {
-				azimuth = atan2(dx,dy);
-				if (azimuth < 0) azimuth = azimuth + 2*M_PI;
+			    azimuth = atan2(dx,dy);
+			    if (azimuth < 0) azimuth = azimuth + 2 * M_PI;
 			}
 			Values[idx].d1 = azimuth;
 		}
@@ -216,12 +198,7 @@ int read_lines(struct Map_info *Map)
 		Values[idx].count1++;
 	    }
 	    else if (options.option == O_LENGTH && (type & GV_LINES)) {
-		if (!Vect_is_3d(Map)) {
-		    len = length(Points->n_points, Points->x, Points->y);
-		}
-		else {
-		    len = Vect_line_length(Points);
-		}
+		len = Vect_line_geodesic_length(Points);
 		Values[idx].d1 += len;
 	    }
 	    else if (options.option == O_COOR && (type & GV_POINTS)) {
@@ -250,36 +227,35 @@ int read_lines(struct Map_info *Map)
 	    }
 	    else if (options.option == O_SLOPE && (type & GV_LINES)) {
 		/* Calculate line slope */
-		if (!Vect_is_3d(Map)) {
-		    len = length(Points->n_points, Points->x, Points->y);
-		}
-		else {
-		    len = Vect_line_length(Points);
-		}
+		len = length(Points->n_points, Points->x, Points->y);
 		slope =
 		    (Points->z[Points->n_points - 1] - Points->z[0]) / len;
 		Values[idx].d1 += slope;
 	    }
 	    else if (options.option == O_SINUOUS && (type & GV_LINES)) {
 		/* Calculate line length / distance between end points */
+		Vect_reset_line(EndPoints);
 		Vect_append_point(EndPoints, Points->x[0], Points->y[0],
 				  Points->z[0]);
 		Vect_append_point(EndPoints, Points->x[Points->n_points - 1],
 				  Points->y[Points->n_points - 1],
 				  Points->z[Points->n_points - 1]);
-		if (!Vect_is_3d(Map)) {
-		    len = length(Points->n_points, Points->x, Points->y);
-		    dist =
-			length(EndPoints->n_points, EndPoints->x,
-			       EndPoints->y);
-		}
-		else {
-		    len = Vect_line_length(Points);
-		    dist = Vect_line_length(EndPoints);
-		}
-		Vect_destroy_line_struct(EndPoints);
-		EndPoints = Vect_new_line_struct();
+		len = Vect_line_geodesic_length(Points);
+		dist = Vect_line_geodesic_length(EndPoints);
 		Values[idx].d1 = len / dist;
+	    }
+	    else if (options.option == O_AZIMUTH && (type & GV_LINES)) {
+		    /* Calculate azimuth between line start and end points in degrees */
+		    dx = (Points->x[Points->n_points - 1] - Points->x[0]);
+		    dy = (Points->y[Points->n_points - 1] - Points->y[0]);
+		    /* If line is closed... */
+		    if (dx == 0.0 && dy == 0.0)
+			azimuth = -1;
+		    else {
+			azimuth = atan2(dx,dy);
+			if (azimuth < 0) azimuth = azimuth + 2 * M_PI;
+		    }
+		    Values[idx].d1 = azimuth;
 	    }
 	}
 	G_percent(line_num, nlines, 2);
