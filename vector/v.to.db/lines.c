@@ -175,17 +175,17 @@ int read_lines(struct Map_info *Map)
 		    Values[idx].d1 = len / dist;
 		}
 		else if (options.option == O_AZIMUTH && (type & GV_LINES)) {
-			/* Calculate azimuth between line start and end points in degrees */
-			dx = (Points->x[Points->n_points - 1] - Points->x[0]);
-			dy = (Points->y[Points->n_points - 1] - Points->y[0]);
-			/* If line is closed... */
-			if (dx == 0.0 && dy == 0.0)
-			    azimuth = -1;
-			else {
-			    azimuth = atan2(dx,dy);
-			    if (azimuth < 0) azimuth = azimuth + 2 * M_PI;
-			}
-			Values[idx].d1 = azimuth;
+		    /* Calculate azimuth between line start and end points in degrees */
+		    dx = (Points->x[Points->n_points - 1] - Points->x[0]);
+		    dy = (Points->y[Points->n_points - 1] - Points->y[0]);
+		    /* If line is closed... */
+		    if (dx == 0.0 && dy == 0.0)
+			azimuth = -1;
+		    else {
+			azimuth = atan2(dx,dy);
+			if (azimuth < 0) azimuth = azimuth + 2 * M_PI;
+		    }
+		    Values[idx].d1 = azimuth;
 		}
 
 		found = 1;
@@ -245,17 +245,17 @@ int read_lines(struct Map_info *Map)
 		Values[idx].d1 = len / dist;
 	    }
 	    else if (options.option == O_AZIMUTH && (type & GV_LINES)) {
-		    /* Calculate azimuth between line start and end points in degrees */
-		    dx = (Points->x[Points->n_points - 1] - Points->x[0]);
-		    dy = (Points->y[Points->n_points - 1] - Points->y[0]);
-		    /* If line is closed... */
-		    if (dx == 0.0 && dy == 0.0)
-			azimuth = -1;
-		    else {
-			azimuth = atan2(dx,dy);
-			if (azimuth < 0) azimuth = azimuth + 2 * M_PI;
-		    }
-		    Values[idx].d1 = azimuth;
+		/* Calculate azimuth between line start and end points in degrees */
+		dx = (Points->x[Points->n_points - 1] - Points->x[0]);
+		dy = (Points->y[Points->n_points - 1] - Points->y[0]);
+		/* If line is closed... */
+		if (dx == 0.0 && dy == 0.0)
+		    azimuth = -1;
+		else {
+		    azimuth = atan2(dx,dy);
+		    if (azimuth < 0) azimuth = azimuth + 2 * M_PI;
+		}
+		Values[idx].d1 = azimuth;
 	    }
 	}
 	G_percent(line_num, nlines, 2);
