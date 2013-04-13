@@ -311,7 +311,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
                     struct line_cats *line_c, int line)
 {
 #ifdef HAVE_POSTGRES
-    int type, fid;
+    int fid;
     
     struct Format_info_pg *pg_info;
     struct P_line *Line;
@@ -335,14 +335,15 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     if (!line_p && !line_c)
         return Line->type;
 
-    if (line_p != NULL)
-        Vect_reset_line(line_p);
-    if (line_c != NULL)
+    if (line_c) {
         Vect_reset_cats(line_c);
-
-    if (line_c) 
         Vect_cat_set(line_c, 1, (int) Line->offset);
+    }
+
+    if (!line_p)
+        return Line->type;
     
+    Vect_reset_line(line_p);
     if (Line->type == GV_CENTROID && !pg_info->toposchema_name) {
         /* simple features access: get centroid from sidx */
         return get_centroid(Map, line, line_p);
@@ -353,25 +354,21 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         fid = Line->offset;
     else
         fid = pg_info->offset.array[Line->offset];
-    
+
+    /* read feature */
     get_feature(pg_info, fid, Line->type);
     
+    /* check sf type */
     if (pg_info->cache.sf_type == SF_NONE) {
         G_warning(_("Feature %d without geometry skipped"), line);
         return -1;
     }
+    if (0 > (int)pg_info->cache.sf_type) /* -1 || - 2 */
+        return -1;
     
-    type = (int)pg_info->cache.sf_type;
-    if (type < 0)           /* -1 || - 2 */
-        return type;
+    Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
     
-    if (Line->type == GV_BOUNDARY && type == GV_LINE)
-        type = GV_BOUNDARY; /* feature is read as GV_LINE (linestring), force GV_BOUNDARY */
-    
-    if (line_p)
-        Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
-    
-    return type;
+    return Line->type;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
