@@ -23,8 +23,6 @@
 
 #include "local_proto.h"
 
-static int cmp_cat(const void *pa, const void *pb);
-
 static void check_status(const struct Map_info *Map)
 {
     if (!Map->plus.cidx_up_to_date)
@@ -242,17 +240,35 @@ int Vect_cidx_get_cat_by_index(const struct Map_info *Map, int field_index,
     return 1;
 }
 
-/* Compare by cat */
-static int cmp_cat(const void *pa, const void *pb)
+/* search for first occurence of cat in cat index, starting at first */
+static int ci_search_cat(struct Cat_index *ci, int first, int cat)
 {
-    int *p1 = (int *)pa;
-    int *p2 = (int *)pb;
-
-    if (*p1 < p2[0])
+    int lo, hi, mid;
+    
+    lo = first;
+    if (lo < 0)
+	lo = 0;
+    if (ci->cat[lo][0] > cat)
 	return -1;
-    if (*p1 > p2[0])
-	return 1;
-    return 0;
+    if (ci->cat[lo][0] == cat)
+	return lo;
+
+    hi = ci->n_cats - 1;
+    if (first > hi)
+	return -1;
+    
+    /* deferred test for equality */
+    while (lo < hi) {
+	mid = (lo + hi) >> 1;
+	if (ci->cat[mid][0] < cat)
+	    lo = mid + 1;
+	else
+	    hi = mid;
+    }
+    if (ci->cat[lo][0] == cat)
+	return lo;
+
+    return -1;
 }
 
 /*!
@@ -272,7 +288,7 @@ static int cmp_cat(const void *pa, const void *pb)
 int Vect_cidx_find_next(const struct Map_info *Map, int field_index, int cat,
 			int type_mask, int start_index, int *type, int *id)
 {
-    int *catp, cat_index;
+    int cat_index;
     struct Cat_index *ci;
 
     G_debug(3,
@@ -285,36 +301,14 @@ int Vect_cidx_find_next(const struct Map_info *Map, int field_index, int cat,
     if (field_index >= Map->plus.n_cidx)
 	G_fatal_error(_("Layer index out of range"));
 
-    if (start_index < 0)
-	start_index = 0;
-    if (start_index >= Map->plus.cidx[field_index].n_cats)
-	return -1;		/* outside range */
-
-    /* pointer to beginning of searched part of category index */
+    /* pointer to category index */
     ci = &(Map->plus.cidx[field_index]);
 
-    /* calc with pointers is using sizeof(int) !!! */
-    catp = bsearch(&cat, (int *)ci->cat + start_index * 3,
-		   (size_t) ci->n_cats - start_index,
-		   3 * sizeof(int), cmp_cat);
+    cat_index = ci_search_cat(ci, start_index, cat);
+    G_debug(3, "cat_index = %d", cat_index);
 
-    G_debug(3, "catp = %p", catp);
-    if (!catp)
+    if (cat_index < 0)
 	return -1;
-
-    /* get index from pointer, the difference between pointers is using sizeof(int) !!! */
-    cat_index = (catp - (int *)ci->cat) / 3;
-
-    G_debug(4, "cat_index = %d", cat_index);
-
-    /* Go down to the first if multiple */
-    while (cat_index > start_index) {
-	if (ci->cat[cat_index - 1][0] != cat) {
-	    break;
-	}
-	cat_index--;
-    }
-    G_debug(4, "cat_index = %d", cat_index);
 
     do {
 	G_debug(3, "  cat_index = %d", cat_index);
@@ -332,7 +326,7 @@ int Vect_cidx_find_next(const struct Map_info *Map, int field_index, int cat,
 
 
 /*!
-  \brief Gind all line/area id's for given category
+  \brief Find all line/area id's for given category
   
   \param Map pointer to Map_info structure
   \param layer layer number
