@@ -93,14 +93,22 @@ int Vect_close(struct Map_info *Map)
             return 1;
         }
 
-        Vect_hist_command(&Out);
-            
-        /* TODO: how to determine field ? */
-        if (0 != Vect_copy_map_lines_field(Map, 1, &Out)) {
-            G_warning(_("Saving OGR data failed"));
+        /* copy metadata */
+        Vect_hist_copy(Map, &Out);
+        Vect_copy_head_data(Map, &Out);
+        /* copy dblinks (temporary map -> output map) to transfer
+           (input map -> output map) attributes */
+        Vect_copy_map_dblinks(Map, &Out, TRUE);
+        /* afterwords, dblinks must be removed from temporary map
+           otherwise when deleting temporary map also original
+           attribute tables would be deteled */
+        Vect_map_del_dblink(Map, -1); /* delete db links for all layers */
+        
+        if (0 != Vect_copy_map_lines_field(Map, 1, &Out)) { /* always layer = 1 for OGR/PG maps */
+            G_warning(_("Copying features failed"));
             return -1;
         }
-        
+
         Vect_build(&Out);
         
         Vect_close(&Out);
