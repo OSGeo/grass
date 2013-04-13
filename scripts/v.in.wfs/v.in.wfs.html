@@ -3,15 +3,16 @@
 <em>v.in.wfs</em> imports OGC WFS maps (Web Feature Service) from
 external servers.
 
-
 <h2>EXAMPLES</h2>
 
-Import of GRASS user map:
-<p><div class="code"><pre>
-# run in LatLong location:
-v.in.wfs url="http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?" output=grass_users
-
-v.db.select grass_users where="name ~ 'Markus'"
+Import of world cities with population &gt; 1 million:
+<p>
+<div class="code"><pre>
+# run in Latitude-Longitude location (EPGS code 4326):
+# download geonam_gt1M layer:
+v.in.wfs \
+  url="http://mapserver.flightgear.org/ms?Service=WFS&amp;request=GetFeature&amp;version=1.0.0" \
+  name=geonam_gt1M output=geonam_gt1M
 </pre></div>
 
 <p>
@@ -36,12 +37,10 @@ and that EPSG code 4326 (LatLong WGS84) is a supported SRS for this data layer.
 v.in.wfs url="$URL" output=linz_hydro_25_wrecks name="v:x633" srs="EPSG:4326" max=25
 </pre></div>
 
-
 <h2>REQUIREMENTS</h2>
 
 The OGR library on the system needs to be compiled with Xerces C++ XML
 Parser support (for GML).
-
 
 <h2>SEE ALSO</h2>
 
@@ -50,7 +49,6 @@ Parser support (for GML).
 <a href="r.in.wms.html">r.in.wms</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
-
 
 <h2>AUTHORS</h2>
 
