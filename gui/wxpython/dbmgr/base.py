@@ -174,7 +174,8 @@ class VirtualAttributeList(wx.ListCtrl,
         cmdParams = dict(quiet = True,
                          parent = self,
                          flags = 'c')
-        if sys.platform != "win32":
+        # pipe must not be given in the params for windows
+        if not (sys.platform == "win32" and fs == '|'):
             cmdParams.update(dict(sep = fs))
 
         if sql:
