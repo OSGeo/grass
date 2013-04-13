@@ -364,11 +364,12 @@ void Vect_cidx_find_all(const struct Map_info *Map, int layer, int type_mask,
     }
 
     do {
-	if (!(ci->cat[idx][1] & type_mask)
-	    || ci->cat[idx][0] != cat) {
+	if (ci->cat[idx][0] != cat) {
 	    break;
 	}
-	Vect_list_append(lines, ci->cat[idx][2]);
+	if (ci->cat[idx][1] & type_mask) {
+	    Vect_list_append(lines, ci->cat[idx][2]);
+	}
 	idx++;
     } while (idx < ci->n_cats);
     return;
