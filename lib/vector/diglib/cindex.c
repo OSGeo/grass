@@ -135,7 +135,7 @@ dig_cidx_add_cat(struct Plus_head *Plus, int field, int cat, int line,
     return 1;
 }
 
-/* Compare by cat */
+/* Compare by cat, resolve ties by type, resolve ties by id */
 static int cmp_cat(const void *pa, const void *pb)
 {
     int *p1 = (int *)pa;
@@ -144,6 +144,14 @@ static int cmp_cat(const void *pa, const void *pb)
     if (p1[0] < p2[0])
 	return -1;
     if (p1[0] > p2[0])
+	return 1;
+    if (p1[1] < p2[1])
+	return -1;
+    if (p1[1] > p2[1])
+	return 1;
+    if (p1[2] < p2[2])
+	return -1;
+    if (p1[2] > p2[2])
 	return 1;
     return 0;
 }
@@ -334,7 +342,7 @@ void dig_cidx_sort(struct Plus_head *Plus)
 
 	ci = &(Plus->cidx[f]);
 
-	/* Sort by category */
+	/* Sort by 1. category, 2. type, 3. line id */
 	qsort(ci->cat, ci->n_cats, 3 * sizeof(int), cmp_cat);
 
 	/* Calculate number of unique cats */
