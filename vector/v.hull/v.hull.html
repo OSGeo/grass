@@ -21,16 +21,23 @@ Fig: Convex hull polygon created with <em>v.hull</em>
 
 <h2>EXAMPLE</h2>
 
-Example of <em>v.hull</em> 3D output (using two random 3D point clouds):
+Example of <em>v.hull</em> 3D output (using two random 3D point 
+clouds, North Carolina sample data set):
 
 <div class="code"><pre>
 g.region rural_1m -p
-r.mapcalc zero=0
+r.mapcalc "zero = 0"
 v.random -z output=random3d_a n=10 zmin=0 zmax=200
 v.random -z output=random3d_b n=15 zmin=400 zmax=600
 v.hull input=random3d_a output=random3d_a_hull
 v.hull input=random3d_b output=random3d_b_hull
-nviz elevation=zero vect=random3d_a_hull,random3d_b_hull
+
+d.mon wx0
+d.vect random3d_a_hull
+d.vect random3d_a color=red
+
+d.vect random3d_b_hull
+d.vect random3d_b color=red
 </pre></div>
 
 <h2>REFERENCES</h2>
