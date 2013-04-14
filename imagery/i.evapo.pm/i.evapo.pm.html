@@ -14,47 +14,54 @@ and the appropriate soil heat flux is calculated.
 
 <p>The algorithm implements well known approaches: the hourly Penman-Monteith method as presented in Allen et al. (1998) for land surfaces and the Penman method (Penman, 1948) for water surfaces.<br>
 
-<p>Land and water surfaces are idenfyied by Vh:<br>
--	where Vh gt 0 vegetation is present and evapotranspiration is calculated;<br>
--	where Vh = 0 bare ground is present and evapotranspiration is calculated;<br>
--	where Vh lt 0 water surface is present and evaporation is calculated;<br>
+<p>Land and water surfaces are idenfyied by Vh:
+<ul>
+<li> where Vh gt 0 vegetation is present and evapotranspiration is calculated;
+<li> where Vh = 0 bare ground is present and evapotranspiration is calculated;
+<li> where Vh lt 0 water surface is present and evaporation is calculated.
+</ul>
 
 <p>For more details on the algorithms see [1,2,3].
 
 <h2>NOTES</h2>
 
 <p>Net solar radiation map in MJ/(m2*h) can be computed from the combination of the r.sun , 
-run in mode 1, and the r.mapcalc commands.
+run in mode 1, and the <em>r.mapcalc</em> commands.
 
 <p>The sum of the three radiation components outputted by r.sun (beam, diffuse, and reflected) 
 multiplied by the Wh to Mj conversion factor (0.0036) and optionally by a 
 clear sky factor [0-1] allows the generation of a map to be used as 
-an NSR input for the <em>i.evapo.PM</em> command.<br>
-example:<br>
-<br>r.sun -s elevin=dem aspin=aspect slopein=slope lin=2 albedo=alb_Mar incidout=out beam_rad=beam diff_rad=diffuse refl_rad=reflected day=73 time=13:00 dist=100;
-<br>r.mapcalc 'NSR=0.0036*(beam+diffuse+reflected)';
+an NSR input for the <em>i.evapo.PM</em> command.
+<p>
+Example:
+<div class="code"><pre>
+r.sun -s elevin=dem aspin=aspect slopein=slope lin=2 albedo=alb_Mar \
+      incidout=out beam_rad=beam diff_rad=diffuse refl_rad=reflected \
+      day=73 time=13:00 dist=100;
+r.mapcalc "NSR = 0.0036 * (beam + diffuse + reflected)"
+</pre></div>
 
 
 <h2>SEE ALSO</h2>
-<ul>
-  <li>The <a href="http://istgis.ist.supsi.ch:8001/geomatica/">HydroFOSS</a> 
-project at IST-SUPSI (Institute of Earth Sciences - University school of applied science for the Southern Switzerland)
-       
-  <li><a href=r.sun.html>r.sun</a>,
-      <a href=r.mapcalc.html>r.mapcalc</a>
-</ul>
 
-
+The <a href="http://istgis.ist.supsi.ch:8001/geomatica/">HydroFOSS</a> 
+project at IST-SUPSI (Institute of Earth Sciences - University school of 
+applied science for the Southern Switzerland)
+<br>
+<em>
+<a href=r.sun.html>r.sun</a>,
+<a href=r.mapcalc.html>r.mapcalc</a>
+</em>
 
 <h2>AUTHORS</h2>
   
-  <p>Original version of program: The <a href="http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1">HydroFOSS</a> project, 2006, IST-SUPSI. (http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1)
-  <i>
-   <br>Massimiliano Cannata, Scuola Universitaria Professionale della Svizzera Italiana - Istituto Scienze della Terra
-   <br>Maria A. Brovelli, Politecnico di Milano - Polo regionale di Como
-  </i>
+<p>Original version of program: The <a href="http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1">HydroFOSS</a> project, 2006, IST-SUPSI. (http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1)
+<i>
+<br>Massimiliano Cannata, Scuola Universitaria Professionale della Svizzera Italiana - Istituto Scienze della Terra
+<br>Maria A. Brovelli, Politecnico di Milano - Polo regionale di Como
+</i>
         
-  <p>Contact: <a href="mailto:massimiliano.cannata@supsi.ch"> Massimiliano Cannata</a>
+<p>Contact: <a href="mailto:massimiliano.cannata@supsi.ch">Massimiliano Cannata</a>
 
 
 <h2>REFERENCES</h2>
@@ -69,4 +76,5 @@ project at IST-SUPSI (Institute of Earth Sciences - University school of applied
   <p>[3] Penman, H. L. 1948. Natural evaporation from open water, 
   bare soil and grass. Proc. Roy. Soc. London, A193, pp. 120-146. 
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
