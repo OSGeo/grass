@@ -284,10 +284,21 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 	Vect_select_lines_by_box(Map, &ABox, type, List);
 	G_debug(3, "  %d lines selected by box", List->n_values);
 
-	for (j = 0; j < List->n_values; j++) {
+	for (j = -1; j < List->n_values; j++) {
 	    
 	    /* bline: line to break */
-	    bline = List->id[j];
+
+	    if (j == -1) {
+		if (aline <= nlines_org)
+		    bline = aline;
+		else
+		    continue;
+	    }
+	    else {
+		bline = List->id[j];
+		if (bline == aline)
+		    continue;
+	    }
 
 	    b_is_ref = 0;
 	    break_b = 1;
@@ -309,7 +320,10 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 		continue;
 
 	    /* check intersection of aline with bline only once */
-	    if (break_a && break_b && aline < bline && (!List_ref || b_is_ref)) {
+	    /* disable to debug the bug in Vect_line_intersection() */
+	    if (break_a && break_b &&
+	        aline > bline &&
+		(!List_ref || b_is_ref)) {
 		continue;
 	    }
 
@@ -408,6 +422,10 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 	    }
 	    nx = 0;		/* number of intersections to be written to Err */
 	    if (naxlines > 0) {	/* intersection -> write out */
+
+		G_debug(3, "  aline = %d,  bline = %d,  naxlines = %d",
+		        aline, bline, naxlines);
+
 		if (!check && break_a)
 		    Vect_delete_line(Map, aline);
 		for (k = 0; k < naxlines; k++) {
@@ -428,6 +446,8 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 			    }
 			}
 		    }
+		    else
+			G_debug(3, "axline %d has zero length", k);
 
 		    /* Write intersection points */
 		    if (Err) {
@@ -447,6 +467,10 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 
 	    if (nbxlines > 0) {
 		if (aline != bline) {	/* Self intersection, do not write twice, TODO: is it OK? */
+
+		    G_debug(3, "  aline = %d,  bline = %d,  nbxlines = %d",
+			    aline, bline, nbxlines);
+
 		    if (!check && break_b)
 			Vect_delete_line(Map, bline);
 		    for (k = 0; k < nbxlines; k++) {
@@ -467,6 +491,8 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 				}
 			    }
 			}
+			else
+			    G_debug(3, "bxline %d has zero length", k);
 
 			/* Write intersection points */
 			if (Err) {
