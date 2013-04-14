@@ -84,6 +84,9 @@ GUI
 
 Google Summer of Code awards:
  - Wolf Bergenheim: Mentor team lead
+ - Eric Momsen: i.segment; 2012
+ - Pietro Zambelli: PyGRASS; 2012
+ - Stepan Turek: wx.vnet; 2012
  - Anna Kratochvilova: wxNVIZ; 2011
  - Luca Delucchi: r.in.modis; 2011
  - Margherita Di Leo: r.stream GUI; 2011
@@ -95,7 +98,7 @@ Google Summer of Code awards:
  - Martin Pavlovsky: v.voronoi; 2008
  - Martin Landa: wxNVIZ; 2008, 2010
  - Daniel Bundala: v.generalize; 2007
- - Maximilian Maldacke:r v.net.visibility; 2007
+ - Maximilian Maldacke: v.net.visibility; 2007
 
 ALGORITHM OPTIMIZATION
  - Markus Metz <markus.metz.giswork googlemail com>
