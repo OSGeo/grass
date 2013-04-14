@@ -261,7 +261,7 @@ def main():
             # launch v.surf.rst
             tmp_rmaps.append(holename + '_dem')
             if grass.run_command('v.surf.rst', quiet = quiet, input = holename, elev = holename + '_dem',
-                                 zcol = 'value', tension = tension, smooth = smooth, 
+                                 tension = tension, smooth = smooth, 
                                  segmax = segmax, npmin = npmin) != 0:
                 # GTC Hole is NULL area in a raster map
                 grass.fatal(_("Failed to fill hole %s") % cat)
