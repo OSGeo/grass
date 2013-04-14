@@ -74,7 +74,7 @@ data. It cannot be run in a lat/lon location.
 
 <div class="code"><pre>
 # set the region accordingly
-g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p
+g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
 
 #now create the input raster maps for a confined aquifer
 r3.mapcalc expression="phead = if(row() == 1 && depth() == 4, 50, 40)"
