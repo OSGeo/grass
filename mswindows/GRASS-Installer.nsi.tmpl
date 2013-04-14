@@ -1,6 +1,6 @@
 ;----------------------------------------------------------------------------------------------------------------------------
 
-;GRASS Installer for Windows
+;GRASS GIS Installer for Windows
 ;Written by Marco Pasetti
 ;Updated for OSGeo4W by Colin Nielsen, Helmut Kudrnovsky, and Martin Landa
 ;Last Update: $Id$
@@ -511,7 +511,7 @@ Section "GRASS" SecGRASS
 	;Set the GIS_DATABASE directory
 	SetShellVarContext current
 	Var /GLOBAL GIS_DATABASE	
-	StrCpy $GIS_DATABASE "$DOCUMENTS\GIS DataBase"
+	StrCpy $GIS_DATABASE "$DOCUMENTS\grassdata"
 	
 	;Create the GIS_DATABASE directory
 	CreateDirectory "$GIS_DATABASE"
