@@ -71,9 +71,11 @@ typedef struct
 static int fpoint;
 
 /* Function called from RTreeSearch for point found */
-static void srch(int id, const struct RTree_Rect *rect, int *arg)
+static int srch(int id, const struct RTree_Rect *rect, int *arg)
 {
     fpoint = id;
+    
+    return 0;	/* stop searching */
 }
 
 /* function used by binary tree to compare items */
