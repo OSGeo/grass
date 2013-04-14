@@ -320,7 +320,6 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 		continue;
 
 	    /* check intersection of aline with bline only once */
-	    /* disable to debug the bug in Vect_line_intersection() */
 	    if (break_a && break_b &&
 	        aline > bline &&
 		(!List_ref || b_is_ref)) {
