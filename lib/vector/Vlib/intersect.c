@@ -163,12 +163,18 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	t = ay1;
 	ay1 = by1;
 	by1 = t;
+	t = az1;
+	az1 = bz1;
+	bz1 = t;
 	t = ax2;
 	ax2 = bx2;
 	bx2 = t;
 	t = ay2;
 	ay2 = by2;
 	by2 = t;
+	t = az2;
+	az2 = bz2;
+	bz2 = t;
     }
 
     d = D;
@@ -637,13 +643,27 @@ Vect_line_intersection(struct line_pnts *APoints,
     APnts = APoints;
     BPnts = BPoints;
 
+    /* BUG
+     *  sometimes aline is broken by bline in aline1,2
+     *  then aline1 is broken by aline2 in aline3,4, this should not happen
+     *  then aline3 or aline4 is broken by the same bline in aline5,6
+     *  then aline5 is broken by aline6 in aline7,8, this should not happen
+     *  then aline7 or aline8 is broken by the same bline in aline9,10
+     *  etc ad infinitum
+     *  this can be avoided by not breaking aline fragments again with bline
+     *  followed by Vect_clean_small_angles_at_nodes()
+     */
+
     /* RE (representation error).
      *  RE thresh above is nonsense of course, the RE threshold should be based on
      *  number of significant digits for double (IEEE-754) which is 15 or 16 and exponent. 
      *  The number above is in fact not required threshold, and will not work
      *  for example: equator length is 40.075,695 km (8 digits), units are m (+3) 
      *  and we want precision in mm (+ 3) = 14 -> minimum rethresh may be around 0.001
-     *  ?Maybe all nonsense? */
+     *  ?Maybe all nonsense? 
+     *  Use rounding error of the unit in the least place ? 
+     *  max of x, y
+     *  rethresh = pow(2, log2(max) - 53) */
 
     /* Warning: This function is also used to intersect the line by itself i.e. APoints and
      * BPoints are identical. I am not sure if it is clever, but it seems to work, but
@@ -728,53 +748,36 @@ Vect_line_intersection(struct line_pnts *APoints,
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
 	    rect.boundary[3] = BPoints->x[i + 1];
-
-	    box.W = BPoints->x[i];
-	    box.E = BPoints->x[i + 1];
 	}
 	else {
 	    rect.boundary[0] = BPoints->x[i + 1];
 	    rect.boundary[3] = BPoints->x[i];
-
-	    box.W = BPoints->x[i + 1];
-	    box.E = BPoints->x[i];
 	}
 
 	if (BPoints->y[i] <= BPoints->y[i + 1]) {
 	    rect.boundary[1] = BPoints->y[i];
 	    rect.boundary[4] = BPoints->y[i + 1];
-
-	    box.S = BPoints->y[i];
-	    box.N = BPoints->y[i + 1];
 	}
 	else {
 	    rect.boundary[1] = BPoints->y[i + 1];
 	    rect.boundary[4] = BPoints->y[i];
-
-	    box.S = BPoints->y[i + 1];
-	    box.N = BPoints->y[i];
 	}
 
 	if (BPoints->z[i] <= BPoints->z[i + 1]) {
 	    rect.boundary[2] = BPoints->z[i];
 	    rect.boundary[5] = BPoints->z[i + 1];
-
-	    box.B = BPoints->z[i];
-	    box.T = BPoints->z[i + 1];
 	}
 	else {
 	    rect.boundary[2] = BPoints->z[i + 1];
 	    rect.boundary[5] = BPoints->z[i];
-
-	    box.B = BPoints->z[i + 1];
-	    box.T = BPoints->z[i];
 	}
-	box.N += rethresh;
-	box.S -= rethresh;
-	box.E += rethresh;
-	box.W -= rethresh;
-	box.T += rethresh;
-	box.B -= rethresh;
+
+	box.W = rect.boundary[0] - rethresh;
+	box.S = rect.boundary[1] - rethresh;
+	box.B = rect.boundary[2] - rethresh;
+	box.E = rect.boundary[3] + rethresh;
+	box.N = rect.boundary[4] + rethresh;
+	box.T = rect.boundary[5] + rethresh;
 
 	if (Vect_box_overlap(&abbox, &box)) {
 	    RTreeInsertRect(&rect, i + 1, MyRTree);	/* B line segment numbers in rtree start from 1 */
@@ -808,8 +811,16 @@ Vect_line_intersection(struct line_pnts *APoints,
 	    rect.boundary[2] = APoints->z[i + 1];
 	    rect.boundary[5] = APoints->z[i];
 	}
+	box.W = rect.boundary[0] - rethresh;
+	box.S = rect.boundary[1] - rethresh;
+	box.B = rect.boundary[2] - rethresh;
+	box.E = rect.boundary[3] + rethresh;
+	box.N = rect.boundary[4] + rethresh;
+	box.T = rect.boundary[5] + rethresh;
 
-	j = RTreeSearch(MyRTree, &rect, (void *)cross_seg, &i);	/* A segment number from 0 */
+	if (Vect_box_overlap(&abbox, &box)) {
+	    j = RTreeSearch(MyRTree, &rect, (void *)cross_seg, &i);	/* A segment number from 0 */
+	}
     }
 
     /* Free RTree */
@@ -826,6 +837,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     /* Snap breaks to nearest vertices within RE threshold */
     /* Calculate distances along segments */
     for (i = 0; i < n_cross; i++) {
+
 	/* 1. of A seg */
 	seg = cross[i].segment[0];
 	curdist =
@@ -1030,7 +1042,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 	 *        break on vertex is always on first segment of this vertex (used below) 
 	 */
 	last = -1;
-	for (i = 1; i < n_cross; i++) {
+	for (i = 0; i < n_cross; i++) {
 	    if (use_cross[i] == 0)
 		continue;
 	    if (last == -1) {	/* set first alive */
@@ -1112,13 +1124,36 @@ Vect_line_intersection(struct line_pnts *APoints,
 			    Points->y[j]);
 		}
 
-		/* add current cross or end point */
-		Vect_append_point(XLines[k], cross[i].x, cross[i].y, 0.0);
-		G_debug(2, "   append cross / last point: %f %f", cross[i].x,
-			cross[i].y);
 		last_seg = seg;
 		last_x = cross[i].x;
-		last_y = cross[i].y, last_z = 0;
+		last_y = cross[i].y;
+		last_z = 0;
+		/* calculate last_z */
+		if (Points->z[last_seg] == Points->z[last_seg + 1]) {
+		    last_z = Points->z[last_seg + 1];
+		}
+		else if (last_x == Points->x[last_seg] &&
+		    last_y == Points->y[last_seg]) {
+		    last_z = Points->z[last_seg];
+		}
+		else if (last_x == Points->x[last_seg + 1] &&
+		    last_y == Points->y[last_seg + 1]) {
+		    last_z = Points->z[last_seg + 1];
+		}
+		else {
+		    dist = dist2(Points->x[last_seg],
+		                 Points->x[last_seg + 1],
+				 Points->y[last_seg],
+				 Points->y[last_seg + 1]);
+		    last_z = (Points->z[last_seg] * sqrt(cross[i].distance[current]) +
+			      Points->z[last_seg + 1] * (sqrt(dist) - sqrt(cross[i].distance[current]))) /
+			      sqrt(dist);
+		}
+
+		/* add current cross or end point */
+		Vect_append_point(XLines[k], cross[i].x, cross[i].y, last_z);
+		G_debug(2, "   append cross / last point: %f %f", cross[i].x,
+			cross[i].y);
 
 		/* Check if line is degenerate */
 		if (dig_line_degenerate(XLines[k]) > 0) {
