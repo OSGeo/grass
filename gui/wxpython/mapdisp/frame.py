@@ -925,14 +925,16 @@ class MapFrame(SingleMapFrame):
         
         if self.Map.projinfo['proj'] == 'xy' or 'degree' not in self.Map.projinfo['unit']:
             angle = int(math.degrees(math.atan2(north,east)) + 0.5)
-            angle = 180 - angle
+            # uncomment below (or flip order of atan2(y,x) above) to use
+            #   the mathematical theta convention (CCW from +x axis)
+            #angle = 90 - angle
             if angle < 0:
                 angle = 360 + angle
             
             mstring = '%s = %s %s\n%s = %s %s\n%s = %d %s\n%s' \
                 % (_('segment'), strdist, dunits,
                    _('total distance'), strtotdist, tdunits,
-                   _('bearing'), angle, _('deg'),
+                   _('bearing'), angle, _('degrees (clockwise from grid-north)'),
                    '-' * 60)
         else:
             mstring = '%s = %s %s\n%s = %s %s\n%s' \
