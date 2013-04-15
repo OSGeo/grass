@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2013-03-13 12:57+0100\n"
+"PO-Revision-Date: 2013-04-09 16:21+0100\n"
 "Last-Translator: anna\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Bookmarks: 1765,2474,415,1273,-1,-1,-1,-1,-1,-1\n"
+"X-Poedit-Bookmarks: 1765,2381,2449,2554,2623,3551,3587,-1,-1,6460\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1797,15 +1797,15 @@ msgstr "mappa raster 2D della superficie inferiore"
 
 #: ../raster3d/r3.out.vtk/parameters.c:71
 msgid "Create 3d elevation output with a top and a bottom surface, both raster maps are required."
-msgstr ""
+msgstr "Crea output 3d di elevazione con una superficie superiore e inferiore, entrambe le mappe raster sono richieste."
 
 #: ../raster3d/r3.out.vtk/parameters.c:82
 msgid "Three (R,G,B) 3D raster maps to create RGB values [redmap,greenmap,bluemap]"
-msgstr ""
+msgstr "Tre (R,G,B) mappe raster 3D per creare valori RGB [redmap, greenmap, bluemap]"
 
 #: ../raster3d/r3.out.vtk/parameters.c:92
 msgid "Three (x,y,z) 3D raster maps to create vector values [xmap,ymap,zmap]"
-msgstr ""
+msgstr "Tre (x,y,z) mappe raster 3D per creare valori vettore [xmap, ymap, zmap]"
 
 #: ../raster3d/r3.out.vtk/parameters.c:98 ../raster/r.out.vtk/parameters.c:88
 #: ../vector/v.out.vtk/main.c:73
@@ -1825,7 +1825,7 @@ msgstr "Utilizza una maschera G3D (se esiste) con le mappe di input"
 
 #: ../raster3d/r3.out.vtk/parameters.c:121
 msgid "Scale factor effects the origin"
-msgstr ""
+msgstr "Il fattore di scala condiziona l'origine"
 
 #: ../raster3d/r3.out.vtk/parameters.c:127
 #: ../raster/r.out.vtk/parameters.c:130 ../vector/v.out.vtk/main.c:86
@@ -1947,7 +1947,7 @@ msgstr "Valore invalido per theta"
 #: ../raster3d/r3.in.ascii/main.c:289
 #, c-format
 msgid "Data exists in input file after fully importing expected data.  [%.4f ...]"
-msgstr ""
+msgstr "Ci sono dati nel file di input dopo aver importato completamente i dati previsti. [%.4f...]"
 
 #: ../raster3d/r3.in.ascii/main.c:325
 #, fuzzy
@@ -3348,7 +3348,7 @@ msgstr "Inserisce est e nord nelle prime due colonne di un output a quattro colo
 
 #: ../raster/r.profile/main.c:93
 msgid "Output RRR:GGG:BBB color values for each profile point"
-msgstr ""
+msgstr "Valori RRR:GGG:BBB di colore di output per ogni punto del profilo"
 
 #: ../raster/r.profile/main.c:112
 #, c-format
@@ -4017,6 +4017,8 @@ msgid ""
 "\n"
 "Input value here [0-100]: "
 msgstr ""
+"\n"
+"Qui valore di input [0-100]: "
 
 #: ../raster/r.watershed/shed/com_line.c:379
 msgid ""
@@ -4193,7 +4195,7 @@ msgstr "impossibile aprire il file ARMSED"
 
 #: ../raster/r.watershed/shed/main.c:41
 msgid "Slow version of water analysis program starting now"
-msgstr ""
+msgstr "Inizia ora la versione lenta del programma di analisi dell'acqua"
 
 #: ../raster/r.watershed/shed/main.c:46 ../raster/r.watershed/shed/main.c:55
 #, c-format
@@ -12762,11 +12764,11 @@ msgstr ""
 
 #: ../raster/r.horizon/main.c:281
 msgid "Coordinate for which you want to calculate the horizon"
-msgstr ""
+msgstr "Coordinata per la quale vuoi calcolare l'orizzonte"
 
 #: ../raster/r.horizon/main.c:296
 msgid "Write output in degrees (default is radians)"
-msgstr ""
+msgstr "Scrive l'output in gradi (il default è radianti)"
 
 #: ../raster/r.horizon/main.c:344
 msgid "Can't read the coordinates from the \"coord\" option."
@@ -12774,19 +12776,19 @@ msgstr ""
 
 #: ../raster/r.horizon/main.c:362
 msgid "You didn't specify a direction value or step size. Aborting."
-msgstr ""
+msgstr "Non hai specificato il valore di direzione o la dimensione del passo. L'operazione verrà interrotta."
 
 #: ../raster/r.horizon/main.c:367
 msgid "You didn't specify a horizon raster name. Aborting."
-msgstr ""
+msgstr "Non hai specificato il nome di un raster di orizzonte. L'operazione verrà interrotta."
 
 #: ../raster/r.horizon/main.c:377
 msgid "You didn't specify an angle step size. Aborting."
-msgstr ""
+msgstr "Non hai specificato la misura del passo dell'angolo. L'operazione verrà interrotta."
 
 #: ../raster/r.horizon/main.c:390
 msgid "Could not read bufferzone size. Aborting."
-msgstr ""
+msgstr "Impossibile leggere la dimensione della zona di buffer. L'operazione verrà interrotta."
 
 #: ../raster/r.horizon/main.c:395 ../raster/r.horizon/main.c:401
 #: ../raster/r.horizon/main.c:408 ../raster/r.horizon/main.c:415
@@ -12816,7 +12818,7 @@ msgstr "nord=%f"
 
 #: ../raster/r.horizon/main.c:421
 msgid "Could not read maximum distance. Aborting."
-msgstr ""
+msgstr "Impossibile leggere la distanza massima. L'operazione verrà interrotta."
 
 #: ../raster/r.horizon/main.c:472
 msgid "Can't get projection info of current location: please set latitude via 'lat' or 'latin' option!"
@@ -13099,7 +13101,7 @@ msgstr ""
 
 #: ../raster/simwe/simlib/input.c:222
 msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
-msgstr ""
+msgstr "L'infiltrazione eccede l'intensità di precipitazione ovunque! Nessun flusso superficiale."
 
 #: ../raster/simwe/simlib/input.c:246
 #, c-format
@@ -13748,7 +13750,7 @@ msgstr ""
 
 #: ../raster/r.in.ascii/gethead.c:105
 msgid "error getting file position"
-msgstr ""
+msgstr "errore nell'ottenere la posizione del file"
 
 #: ../raster/r.in.ascii/gethead.c:164
 msgid "illegal type field: using type int"
@@ -13789,7 +13791,7 @@ msgstr "Nome di una mappa raster esistente da interrogare sui colori"
 
 #: ../raster/r.what.color/main.c:106
 msgid "Values to query colors for"
-msgstr ""
+msgstr "Valori per i quali interrogare i colori"
 
 #: ../raster/r.what.color/main.c:113
 msgid "Output format (printf-style)"
@@ -13838,7 +13840,7 @@ msgstr "Informazioni sul range non disponibile (esegui r.support)."
 #: ../raster/r.out.vrml/main.c:136
 #, c-format
 msgid "Opening %s for writing... "
-msgstr ""
+msgstr "Aprendo %s per scrivere..."
 
 #: ../raster/r.out.vrml/put_grid.c:38
 msgid "Writing vertices..."
@@ -13872,11 +13874,11 @@ msgstr "Numero di immagine intermediarie da produrre"
 #: ../raster/r.surf.fractal/main.c:79
 #, c-format
 msgid "Fractal dimension of %.2lf must be between 2 and 3."
-msgstr ""
+msgstr "La dimensione frattale di %.2lf deve essere tra 2 e 3."
 
 #: ../raster/r.surf.fractal/spec_syn.c:61
 msgid "Preliminary surface calculations..."
-msgstr ""
+msgstr "Calcoli superficiali preliminari..."
 
 #: ../raster/r.surf.fractal/spec_syn.c:120
 #, c-format
@@ -19654,19 +19656,19 @@ msgstr ""
 
 #: ../display/d.linegraph/main.c:126
 msgid "Name of data file for X axis of graph"
-msgstr ""
+msgstr "Nome del file di dati per l'asse X del grafico"
 
 #: ../display/d.linegraph/main.c:132
 msgid "Name of data file(s) for Y axis of graph"
-msgstr ""
+msgstr "Nome del(i) file di dati per l'asse Y del grafico"
 
 #: ../display/d.linegraph/main.c:139
 msgid "Path to file location"
-msgstr ""
+msgstr "Percorso per la location del file"
 
 #: ../display/d.linegraph/main.c:147
 msgid "Color for Y data"
-msgstr ""
+msgstr "Colore per i dati Y"
 
 #: ../display/d.linegraph/main.c:156
 msgid "Color for axis, tics, numbers, and title"
@@ -19686,17 +19688,17 @@ msgstr ""
 
 #: ../display/d.linegraph/main.c:226
 msgid "Maximum of 10 Y data files exceeded"
-msgstr ""
+msgstr "Oltrepassato il massimo di 10 file di dati in Y"
 
 #: ../display/d.linegraph/main.c:255
 #, c-format
 msgid "Only <%d> colors given for <%d> lines"
-msgstr ""
+msgstr "Solo <%d> colori dati per <%d> linee"
 
 #: ../display/d.linegraph/main.c:309
 #, c-format
 msgid "Y input file <%s> contains %s data points than the X input file"
-msgstr ""
+msgstr "Il file Y di input <%s> contiene %s punti rispetto al file X di input"
 
 #: ../display/d.linegraph/main.c:314
 #, c-format
@@ -19706,12 +19708,12 @@ msgstr "Gli ultimi %d punti saranno ignorati"
 #: ../display/d.linegraph/main.c:375
 #, c-format
 msgid "Problem reading X data file at line %d"
-msgstr ""
+msgstr "Problema nella lettura del file dati X alla linea %d"
 
 #: ../display/d.linegraph/main.c:385
 #, c-format
 msgid "Problem reading <%s> data file at line %d"
-msgstr ""
+msgstr "Problema nella lettura del file <%s> alla linea %d"
 
 #: ../display/d.profile/main.c:68
 #, fuzzy, c-format
@@ -19746,7 +19748,7 @@ msgstr "Stai cliccando fuori la mappa"
 
 #: ../display/d.what.rast/main.c:54
 msgid "Allows the user to interactively query the category contents of multiple raster map layers at user specified locations within the current geographic region."
-msgstr ""
+msgstr "Permette all'utente di interrogare interattivamente i contenuti dei layer di una mappa raster multipla in location specificate dall'utente all'interno della regione geografica corrente."
 
 #: ../display/d.what.rast/main.c:75
 msgid "Field separator (terse mode only)"
@@ -19754,7 +19756,7 @@ msgstr "Separatore di campo (solo in modalità concisa)"
 
 #: ../display/d.what.rast/main.c:89
 msgid "Print out col/row for the entire map in grid resolution of the region"
-msgstr ""
+msgstr "Stampa colonne/righe per l'intera mappa nella risoluzione di griglia della regione"
 
 #: ../display/d.info/main.c:33 ../display/d.erase/main.c:31
 #: ../display/d.mon/main.c:39
@@ -19774,23 +19776,23 @@ msgstr ""
 
 #: ../display/d.info/main.c:42
 msgid "Display screen rectangle (left, right, top, bottom)"
-msgstr ""
+msgstr "Mostra il rettangolo dello schermo (sinistra, destra, alto, basso)"
 
 #: ../display/d.info/main.c:46
 msgid "Display screen dimensions (width, height)"
-msgstr ""
+msgstr "Mostra le dimensioni dello schermo (larghezza, altezza)"
 
 #: ../display/d.info/main.c:50
 msgid "Display active frame rectangle"
-msgstr ""
+msgstr "Mostra il rettangolo di cornice attivo"
 
 #: ../display/d.info/main.c:54
 msgid "Display screen rectangle of current region"
-msgstr ""
+msgstr "Mostra il rettangolo dello schermo della regione corrente"
 
 #: ../display/d.info/main.c:59
 msgid "Display geographic coordinates and resolution of entire screen"
-msgstr ""
+msgstr "Mostra le coordinate geografiche e la risoluzione dell'intero schermo"
 
 #: ../display/d.info/main.c:66
 #, fuzzy
@@ -19799,7 +19801,7 @@ msgstr "Nessun nome di mappa assegnato"
 
 #: ../display/d.vect.chart/main.c:66
 msgid "Displays charts of vector data in the active frame on the graphics monitor."
-msgstr ""
+msgstr "Mostra grafici dei dati vettore nella cornice attiva sul monitor dei grafici."
 
 #: ../display/d.vect.chart/main.c:83
 msgid "Chart type"
@@ -19810,7 +19812,7 @@ msgstr "Tipo di grafico"
 #: ../display/d.vect.chart/main.c:121 ../display/d.vect.chart/main.c:130
 #: ../display/d.vect.chart/main.c:136
 msgid "Chart properties"
-msgstr ""
+msgstr "Proprietà del grafico"
 
 #: ../display/d.vect.chart/main.c:91
 msgid "Attribute columns containing data"
@@ -19818,7 +19820,7 @@ msgstr "Colonne degli attributi contenenti dati"
 
 #: ../display/d.vect.chart/main.c:97
 msgid "Column used for pie chart size"
-msgstr ""
+msgstr "Colonna usata per la dimensione del grafico a torta"
 
 #: ../display/d.vect.chart/main.c:105
 msgid "Size of chart (diameter for pie, total width for bar)"
@@ -19826,7 +19828,7 @@ msgstr "Dimensione del diagramma (diametro per quello a torta, larghezza totale 
 
 #: ../display/d.vect.chart/main.c:112
 msgid "Scale for size (to get size in pixels)"
-msgstr ""
+msgstr "Scala per la dimensione (ottenere la dimensione in pixel)"
 
 #: ../display/d.vect.chart/main.c:119
 msgid "Outline color"
@@ -19834,23 +19836,23 @@ msgstr "Colore del bordo"
 
 #: ../display/d.vect.chart/main.c:128
 msgid "Colors used to fill charts"
-msgstr ""
+msgstr "Colori usati per riempire il grafico"
 
 #: ../display/d.vect.chart/main.c:135
 msgid "Center the bar chart around a data point"
-msgstr ""
+msgstr "Centra la barra del grafico vicino a un punto dei dati"
 
 #: ../display/d.vect.chart/main.c:144
 msgid "Maximum value used for bar plot reference"
-msgstr ""
+msgstr "Valore massimo usato per riferimento nel plot della barra"
 
 #: ../display/d.vect.chart/main.c:149 ../display/d.thematic.area/main.c:163
 msgid "Create legend information and send to stdout"
-msgstr ""
+msgstr "Crea informazioni sulla leggenda e le manda a stdout"
 
 #: ../display/d.barscale/main.c:55
 msgid "Displays a barscale on the graphics monitor."
-msgstr ""
+msgstr "Mostra una barra di scala nel monitor dei grafici"
 
 #: ../display/d.barscale/main.c:59
 msgid "Use feet/miles instead of meters"
@@ -19858,11 +19860,11 @@ msgstr "Usa piedi/miglia al posto dei metri"
 
 #: ../display/d.barscale/main.c:63
 msgid "Draw a line scale instead of a bar scale"
-msgstr ""
+msgstr "Disegna "
 
 #: ../display/d.barscale/main.c:67
 msgid "Write text on top of the scale, not to the right"
-msgstr ""
+msgstr "Scrive un testo sulla sommità della scala, non sulla destra"
 
 #: ../display/d.barscale/main.c:71
 msgid "Draw a north arrow only"
@@ -19884,11 +19886,11 @@ msgstr " Grandezza icona"
 #: ../display/d.barscale/main.c:108
 #, c-format
 msgid "%s does not work with a latitude-longitude location"
-msgstr ""
+msgstr "%s non funziona con una location latitudine-longitudine"
 
 #: ../display/d.barscale/main.c:116
 msgid "Choose either -n or -s flag"
-msgstr ""
+msgstr "Scegli il flag -n o -s"
 
 #: ../display/d.erase/main.c:32
 #: ../locale/scriptstrings/d.redraw_to_translate.c:5
@@ -20588,7 +20590,7 @@ msgstr "'layer' dev'essere > 0"
 #: ../display/d.thematic.area/main.c:224
 #, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
-msgstr "I dati (%s) non sono numerici. La colonna dev'essere di tipo numerico"
+msgstr "I dati (%s) non sono numerici. La colonna dev'essere di tipo numerico."
 
 #: ../display/d.thematic.area/main.c:228
 #: ../display/d.thematic.area/plot1.c:134
@@ -32052,11 +32054,11 @@ msgstr "Non è possibile trovare il carattere '%s'\n"
 #: ../vector/v.label.sa/labels.c:90
 #, c-format
 msgid "Font '%s' is not a FreeType font\n"
-msgstr ""
+msgstr "Il tipo di carattere '%s' non è un tipo FreeType\n"
 
 #: ../vector/v.label.sa/labels.c:94
 msgid "Font file format is not supported by FreeType"
-msgstr ""
+msgstr "Il formato del file di carattere non è supportato da  FreeType"
 
 #: ../vector/v.label.sa/labels.c:96
 msgid "Font file can not be loaded"
@@ -32077,7 +32079,7 @@ msgstr ""
 
 #: ../vector/v.label.sa/main.c:41
 msgid "Create optimally placed labels for vector map(s)"
-msgstr ""
+msgstr "Crea etichette posizionate in maniera ottimale per il vettore(i)"
 
 #: ../vector/v.label.sa/main.c:71
 msgid "Name of TrueType font (as listed in the fontcap)"
@@ -32137,15 +32139,15 @@ msgstr "Rimuove la tabella degli attributi esistente di una mappa vettoriale."
 #: ../vector/v.in.db/main.c:141
 #, c-format
 msgid "Output vector map, table <%s> (driver: <%s>, database: <%s>) already exists"
-msgstr ""
+msgstr "Il vettoriale di output, tabella <%s> (driver: <%s>, database: <%s>) esiste già"
 
 #: ../vector/v.in.db/main.c:191
 msgid "Key column must be integer"
-msgstr ""
+msgstr "La colonna chieva deve essere di tipo intero"
 
 #: ../vector/v.in.db/main.c:199
 msgid "x/y/z column must be integer or double"
-msgstr ""
+msgstr "la colonna x/y/z deve essere di tipo intero o double"
 
 #: ../vector/v.in.db/main.c:237
 msgid "Unable to copy table"
@@ -32167,15 +32169,15 @@ msgstr "Nome della mappa raster da utilizzare per <%s>"
 
 #: ../vector/v.surf.idw/main.c:100 ../vector/v.surf.idw/main.c:124
 msgid "Values"
-msgstr ""
+msgstr "Valori"
 
 #: ../vector/v.surf.idw/main.c:115
 msgid "Don't index points by raster cell"
-msgstr ""
+msgstr "Non indicizza punti per cella di raster"
 
 #: ../vector/v.surf.idw/main.c:116
 msgid "Slower but uses less memory and includes points from outside region in the interpolation"
-msgstr ""
+msgstr "Più lento ma usa meno memoria e include punti dalla regione esterna nell'interpolazione"
 
 #: ../vector/v.surf.idw/main.c:123 ../vector/v.surf.bspline/main.c:110
 msgid "Use z coordinates for approximation (3D vector maps only)"
@@ -32188,7 +32190,7 @@ msgstr "Numero di punti per l'interpolazione"
 
 #: ../vector/v.surf.idw/main.c:135
 msgid "No attribute column specified"
-msgstr ""
+msgstr "Non è stata specificata nessuna colonna degli attributi"
 
 #: ../vector/v.surf.idw/main.c:251
 #, c-format
@@ -32284,7 +32286,7 @@ msgstr "Converte vettoriale a 3D utilizzando un raster dell'elevazione"
 
 #: ../vector/v.drape/main.c:158
 msgid "Elevation raster map for height extraction"
-msgstr ""
+msgstr "Raster di elevazione da cui estrarre la quota"
 
 #: ../vector/v.drape/main.c:172
 #, fuzzy
@@ -32303,23 +32305,23 @@ msgstr "Mostra il titolo del file raster"
 
 #: ../vector/v.drape/main.c:176
 msgid "Sampling method"
-msgstr ""
+msgstr "Metodo di campionamento"
 
 #: ../vector/v.drape/main.c:181
 msgid "Scale sampled raster values"
-msgstr ""
+msgstr "Valori raster campionati su una scala"
 
 #: ../vector/v.drape/main.c:189
 msgid "Vector Z value for unknown height"
-msgstr ""
+msgstr "Valori Z del vettore per altezza non nota"
 
 #: ../vector/v.drape/main.c:191
 msgid "Will set Z to this value, if value from raster map can not be read"
-msgstr ""
+msgstr "Imposterà Z su questo valore, se il valore non può essere letto dal raster"
 
 #: ../vector/v.drape/main.c:267
 msgid "No features match Your query"
-msgstr ""
+msgstr "Nessuna caratteristica soddisfa la tua richiesta"
 
 #: ../vector/v.drape/main.c:368 ../vector/v.drape/main.c:378
 msgid "Due to error attribute data to new map are not transferred"
@@ -32776,16 +32778,16 @@ msgstr "Nessun record selezionato"
 #: ../vector/v.to.rast/support.c:176
 #, c-format
 msgid "Error in color definition column (%s) with cat %d: colorstring [%s]"
-msgstr ""
+msgstr "Errore nella colonna di definizione del colore (%s) con cat %d: colorstring [%s]"
 
 #: ../vector/v.to.rast/support.c:179
 msgid "Color set to [200:200:200]"
-msgstr ""
+msgstr "Colore impostato su [200:200:200]"
 
 #: ../vector/v.to.rast/support.c:184
 #, c-format
 msgid "Error in color definition column (%s), with cat %d"
-msgstr ""
+msgstr "Errore nella colonna di definizione del colore (%s), con cat %d"
 
 #: ../vector/v.to.rast/support.c:273
 msgid "Label column was not specified, no labels will be written"
@@ -32813,7 +32815,7 @@ msgstr "Mappa vettoriale <%s> non è 3D"
 #: ../vector/v.to.rast/vect2rast.c:71
 #, c-format
 msgid "Column type (%s) not supported (did you mean 'labelcolumn'?)"
-msgstr ""
+msgstr "Il tipo (%s) della colonna non è supportato (volevi dire 'labelcolumn')"
 
 #: ../vector/v.to.rast/vect2rast.c:101
 #, c-format
@@ -32837,12 +32839,12 @@ msgstr "Passata %d di %d:"
 #: ../vector/v.to.rast/vect2rast.c:162
 #, c-format
 msgid "Problem processing areas from vector map <%s>, continuing..."
-msgstr ""
+msgstr "Problema nel processare aree dal vettoriale <%s>, proseguo..."
 
 #: ../vector/v.to.rast/vect2rast.c:174
 #, c-format
 msgid "Problem processing lines from vector map <%s>, continuing..."
-msgstr ""
+msgstr "Problema nel processare linee dal vettoriale <%s>, proseguo..."
 
 #: ../vector/v.to.rast/vect2rast.c:199
 msgid "Creating support files for raster map..."
@@ -32873,7 +32875,7 @@ msgstr "Converte una mappa vettoriale in una mappa raster (la rasterizza)."
 
 #: ../vector/v.to.rast/main.c:72
 msgid "Source of raster values"
-msgstr ""
+msgstr "Sorgente per i calori raster"
 
 #: ../vector/v.to.rast/main.c:76
 #, fuzzy
@@ -32906,7 +32908,7 @@ msgstr "Nome della colonna per il parametro 'attr' (il tipo di dato dev'essere n
 
 #: ../vector/v.to.rast/main.c:92
 msgid "Name of color definition column (with RRR:GGG:BBB entries)"
-msgstr ""
+msgstr "Nome per la colonna di definizione del colore (con valori di tipo RRR:GGG:BBB)"
 
 #: ../vector/v.to.rast/main.c:98
 msgid "Name of column used as raster category labels"
@@ -32944,7 +32946,7 @@ msgstr "Impossibile usare la colonna specificata"
 #: ../vector/v.to.rast/do_lines.c:133
 #, c-format
 msgid "%d lines with varying height were not written to raster"
-msgstr ""
+msgstr "le linee %d con altezza variabile non erano scritte sul raster"
 
 #: ../vector/v.to.rast/do_areas.c:50 ../vector/v.to.rast/do_areas.c:58
 #, c-format
@@ -34417,11 +34419,11 @@ msgstr "Tipo di visualizzazione tematica"
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:43
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:49
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:10
 msgid "Thematic divisions of data for display"
-msgstr ""
+msgstr "Divisioni tematiche dei dati per la visualizzazione"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:12
 msgid "Break points for custom breaks option"
@@ -34441,27 +34443,27 @@ msgstr "Dimensione dell'icona per dati puntiformi"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:18
 msgid "Minimum icon size/line width for graduated points/lines)"
-msgstr ""
+msgstr "Larghezza minima per la dimensione dell'icona/linea per punti/linee graduati"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:20
 msgid "Maximum icon size/line width for graduated points and lines"
-msgstr ""
+msgstr "Larghezza massima per la dimensione dell'icona/linea per punti/linee graduati"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:22
 msgid "Number of classes for interval theme (integer)"
-msgstr ""
+msgstr "Numero di classi per tema intervallo (intero)"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:24
 msgid "Color scheme for graduated color mapping"
-msgstr ""
+msgstr "Schema di colori per mappatura a colori graduati"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:25
 msgid "Select 'single_color' for graduated point/line display"
-msgstr ""
+msgstr "Seleziona 'single_color' per la visualizzazione graduata di punti/linee"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:27
 msgid "Color for graduated points map"
-msgstr ""
+msgstr "Colore per mappa di punti graduata"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:28
 msgid "GRASS named color or R:G:B triplet. Set color scheme to single color"
@@ -34473,11 +34475,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:31
 msgid "GRASS named color or R:G:B triplet. Set color scheme to single color."
-msgstr ""
+msgstr "Nome colore GRASS o tripletta R:G:B. Imposta lo schema colori su un colore singolo."
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:33
 msgid "Beginning color for custom color gradient"
-msgstr ""
+msgstr "Colore iniziale per il gradiente di colore personalizzato"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:34
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:37
@@ -34486,7 +34488,7 @@ msgstr "Dev'essere espresso come tripletta R:G:B"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:36
 msgid "Ending color for custom color gradient"
-msgstr ""
+msgstr "Colore finale per il gradiente di colore personalizzato"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:39
 msgid "Select WXGUI display monitor for legend"
@@ -34502,7 +34504,7 @@ msgstr "Varie"
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:46
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:48
 msgid "Files"
-msgstr ""
+msgstr "File"
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:42
 msgid "Save thematic map commands to group file for GIS Manager"
@@ -34538,7 +34540,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:58
 msgid "Use math notation brackets in legend"
-msgstr ""
+msgstr "Usa le parentesi con notazione matematica nella legenda"
 
 #: ../locale/scriptstrings/r.shaded.relief_to_translate.c:3
 #: ../locale/scriptstrings/r.plane_to_translate.c:3
@@ -34555,7 +34557,7 @@ msgstr "Nome della mappa raster dell'elevazione"
 
 #: ../locale/scriptstrings/r.shaded.relief_to_translate.c:8
 msgid "Scale factor for converting horizontal units to elevation units"
-msgstr ""
+msgstr "Fattore di scale per converire le unità orizzontale in unità verticali"
 
 #: ../locale/scriptstrings/r.shaded.relief_to_translate.c:9
 #: ../locale/scriptstrings/r.shaded.relief_to_translate.c:11
@@ -34565,7 +34567,7 @@ msgstr "File di input"
 
 #: ../locale/scriptstrings/r.shaded.relief_to_translate.c:10
 msgid "Set scaling factor (applies to lat./long. locations only, none: scale=1)"
-msgstr ""
+msgstr "Imposta il fattore di scala (si applica solo a location lat./long., se nessuno: scala=1)"
 
 #: ../locale/scriptstrings/v.db.droprow_to_translate.c:1
 #, fuzzy
@@ -34583,11 +34585,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.colors.stddev_to_translate.c:4
 msgid "Color using standard deviation bands"
-msgstr ""
+msgstr "Colora usando le bande di deviazione standard"
 
 #: ../locale/scriptstrings/r.colors.stddev_to_translate.c:5
 msgid "Force center at zero"
-msgstr ""
+msgstr "Forza il centro su zero"
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:1
 #, fuzzy
@@ -34801,11 +34803,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:1
 msgid "Allows to join a table to a vector map table."
-msgstr ""
+msgstr "Permette di unire una tabella ad una tabella di una mappa vettoriale."
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:5
 msgid "Vector map to which to join other table"
-msgstr ""
+msgstr "Mappa vettoriale alla quale unire un'altra tabella"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:6
 msgid "layer,column"
@@ -34813,7 +34815,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:7
 msgid "Layer where to join"
-msgstr ""
+msgstr "Layer sul quale unire"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:8
 #, fuzzy
@@ -34991,7 +34993,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:4
 msgid "Create a 3D line from 3 column data"
-msgstr ""
+msgstr "Crea una linea 3D da 3 colonne di dati"
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:5
 msgid "Name of input file (or \"-\" to read from stdin)"
@@ -35027,7 +35029,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:1
 msgid "Drops a column from the attribute table connected to a given vector map."
-msgstr ""
+msgstr "Elimina una colonna dalla tabella attributi connessa a una data mappa vettoriale."
 
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:5
 #, fuzzy
@@ -36099,11 +36101,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:6
 msgid "Name of region to use instead of current region for bounds and resolution"
-msgstr ""
+msgstr "Nome della regione da usare invece di quella corrente per bordi e risoluzione"
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:7
 msgid "Source projection"
-msgstr ""
+msgstr "Proiezione della sorgente"
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:8
 #: ../locale/scriptstrings/r.tileset_to_translate.c:10
@@ -36169,7 +36171,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:10
 msgid "Named region to request data for. Current region used if omitted"
-msgstr ""
+msgstr "Nome della regione da cui richiedere i dati. Se omesso, viene usata la regione corrente"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:12
 msgid "WMS standard"
@@ -36181,7 +36183,7 @@ msgstr "Formato dell'immagine da richiedere al server"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:16
 msgid "Reprojection method to use"
-msgstr ""
+msgstr "Metodo di riproiezione da usare"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:18
 msgid "Maximum columns to request at a time"
@@ -39989,7 +39991,7 @@ msgstr "Creazione dell'indice spaziale in corso..."
 #~ msgstr "La password è stata archiviata nel file"
 
 #~ msgid "Resizes active display monitor"
-#~ msgstr "Ridimensiona il monitor attivo visualizzato"
+#~ msgstr "Ridimensiona il monitor di visualizzazione attivo"
 
 #~ msgid "Display the HTML man pages of GRASS"
 #~ msgstr "Visualizza la pagina di supporto HTML di GRASS "
@@ -40007,7 +40009,7 @@ msgstr "Creazione dell'indice spaziale in corso..."
 #~ msgstr "Nuovo schema"
 
 #~ msgid "Saves active display monitor to PNG file in home directory"
-#~ msgstr "Salva il monitor attivo visualizzato in un file PNG nella directory home"
+#~ msgstr "Salva il monitor di visualizzazione  attivo in un file PNG nella directory home"
 
 #~ msgid "Name of PNG file"
 #~ msgstr "Nome del file PNG"
@@ -41390,3 +41392,168 @@ msgstr "Creazione dell'indice spaziale in corso..."
 
 #~ msgid "Error while reading input raster map."
 #~ msgstr "Errore durante la lettura del raster di input."
+
+#~ msgid "No 3D raster data, RGB or xyz-vector maps are provided. Will only write the geometry"
+#~ msgstr "Non sono stati forniti dati raster 3D, mappe vettoriali RGB o xyz. Verrà scritta solo la geometria"
+
+#~ msgid ""
+#~ "Sorry, if any of the following options are set:\n"
+#~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
+#~ "    you MUST provide a value for the basin threshold parameter."
+#~ msgstr ""
+#~ "Spiacente, se non è impostata nessuna delle opzioni seguenti:\n"
+#~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
+#~ "    allora DEVI fornire un valore per il parametro di soglia del bacino."
+
+#~ msgid "Could not read east bufferzone size. Aborting."
+#~ msgstr "Impossibile leggere la dimensione est della zona di buffer. L'operazione verrà interrotta."
+
+#~ msgid "Could not read west bufferzone size. Aborting."
+#~ msgstr "Impossibile leggere la dimensione ovest della zona di buffer. L'operazione verrà interrotta."
+
+#~ msgid "Could not read south bufferzone size. Aborting."
+#~ msgstr "Impossibile leggere la dimensione sud della zona di buffer. L'operazione verrà interrotta."
+
+#~ msgid "Could not read north bufferzone size. Aborting."
+#~ msgstr "Impossibile leggere la dimensione nord della zona di buffer. L'operazione verrà interrotta."
+
+#~ msgid "Calculating map %01d of %01d (angle %lf, raster map <%s>)"
+#~ msgstr "Calcolando la mappa %01d di %01d (angolo %lf, raster <%s>)"
+
+#~ msgid "Setting window header"
+#~ msgstr "Impostando l'intestazione della finestra"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Use mouse to choose action"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Usa il mouse per selezionare l'azione"
+
+#~ msgid "** no %s files found **\n"
+#~ msgstr "** file %s non trovati **\n"
+
+#~ msgid "Click here to CONTINUE\n"
+#~ msgstr "Clicca qui per CONTINUARE\n"
+
+#~ msgid "Display information about the active display monitor"
+#~ msgstr "Mostra informazioni riguardo il monitor di visualizzazione attivo"
+
+#~ msgid "Use mouse to interactively place scale"
+#~ msgstr "Usa il mouse per posizionare la scala in maniera interattiva"
+
+#~ msgid "The screen coordinates for top-left corner of label ([0,0] is top-left of frame)"
+#~ msgstr "Le coordinate di schermo per l'angolo in alto a sinistra dell'etichetta ([0,0] è il punto in alto a sinistra della cornice)"
+
+#~ msgid "Erase the contents of the active display frame with user defined color"
+#~ msgstr "Sostitisce i contenuti della cornice di display attiva con il colore definito dall'utente"
+
+#~ msgid "Color to erase with, either a standard GRASS color or R:G:B triplet (separated by colons)"
+#~ msgstr "Colore col il quale sostituire, o un colore standard GRASS o una tripletta R:G:B (separate da colonne)"
+
+#~ msgid "Converts a binary GRASS vector map (only points) layer into a 3D GRASS raster map layer."
+#~ msgstr "Converte un layer vettoriale GRASS binario (solo punti) in un GRASS layer raster 3D."
+
+#~ msgid "Column name (type must be numeric)"
+#~ msgstr "Nome della colonna (il tipo deve essere numerico)"
+
+#~ msgid "Cannot load overlap weights. Column %s is not of numeric type in table <%s>"
+#~ msgstr "Impossibile caricare i pesi per la sovrapposizione. La colonna %s nella tabella <%s> non è di tipo numerico"
+
+#~ msgid "Numeric column to give precedence in case of overlapping labels. The label with a smaller weight is hidden."
+#~ msgstr "Colonna numerica cui dare la precedenza in caso di etichette sovrapposte. L'etichetta con peso minore viene nascosta."
+
+#~ msgid "%s: Unable to read font definition file; use the default"
+#~ msgstr "%s: Impossibile leggere il file di definizione del tipo di carattere; usa il default"
+
+#~ msgid "%s: No font definition file"
+#~ msgstr "%s: Nessun file di definizione"
+
+#~ msgid "If set to 0, z coordinates are used (3D vector only)"
+#~ msgstr "Se impostato su 0, vengono usate le coordinate z (solo vettori 3D)"
+
+#~ msgid "Required if layer > 0"
+#~ msgstr "RIchiesto se layer > 0"
+
+#~ msgid "Power parameter; greater values assign greater influence to closer points"
+#~ msgstr "Parametro di potenza; valori maggiori assegnano maggiore influenza a punti più vicini"
+
+#~ msgid "No data points found"
+#~ msgstr "Non sono stati trovati punti di dati"
+
+#~ msgid "vector, raster, conversion"
+#~ msgstr "vettore, raster, conversione"
+
+#~ msgid "Select x11 display monitor for legend"
+#~ msgstr "Seleziona il monitor display x11 per la legenda"
+
+#~ msgid "Drops a column from selected attribute table"
+#~ msgstr "Elimina una colonna da una tabella attributi selezionata"
+
+#~ msgid "Table from which to drop attribute column"
+#~ msgstr "Tabella dalla quale eliminare la colonna atributi"
+
+#~ msgid "Redraws the current display frame in the GRASS monitor"
+#~ msgstr "Ridisegna la cornice di visualazzione corrente nel monitor GRASS"
+
+#~ msgid "Redraw all frames"
+#~ msgstr "Ridisegna tutte le cornici"
+
+#~ msgid "Join column in map table"
+#~ msgstr "Colonna di unione nella tabella della mappa"
+
+#~ msgid "Number of seconds to pause between slides"
+#~ msgstr "Numero di secondi di pausa tra slide"
+
+#~ msgid "Import ASCII x,y[,z] coordinates as a series of lines."
+#~ msgstr "Importa coordinate ASCII x,y[,z] come una serie di linee."
+
+#~ msgid "LANDSAT red channel"
+#~ msgstr "Canale LANDSAT rosso"
+
+#~ msgid "LANDSAT green channel"
+#~ msgstr "Canale LANDSAT verde"
+
+#~ msgid "LANDSAT blue channel"
+#~ msgstr "Canale LANDSAT blu"
+
+#~ msgid "Width in pixels of new display monitor"
+#~ msgstr "Larghezza in pixel del nuovo monitor di visualizzazione"
+
+#~ msgid "Height in pixels of new display monitor"
+#~ msgstr "Altezza in pixel del nuovo monitor di visualizzazione"
+
+#~ msgid "Table to drop"
+#~ msgstr "Tabella da eliminare"
+
+#~ msgid "Vector map for which to drop attribute column"
+#~ msgstr "Mappa vettoriale per la quale eliminare una colonna attributi"
+
+#~ msgid "Layer where to drop column"
+#~ msgstr "Layer in cui eliminare la colonna"
+
+#~ msgid "Layer from which to drop linked attribute table"
+#~ msgstr "Layer dal quale eliminare la tabella attributi collegata"
+
+#~ msgid "Split the display into subframes."
+#~ msgstr "Separa il display in sottocornici."
+
+#~ msgid "Number of subframes"
+#~ msgstr "Numero di sottocornici"
+
+#~ msgid "Split horizontally not vertically"
+#~ msgstr "Separa orizzontalmente non verticalmente"
+
+#~ msgid "Prints a graph of the correlation between data layers (in pairs)."
+#~ msgstr "Stampa un grafico della correlazione tra layer di dati (in coppie)"
+
+#~ msgid "calculates univariate statistics from a GRASS raster map"
+#~ msgstr "calcola statistica univariata da una mappa raster GRASS"
+
+#~ msgid "extended statistics (quartiles and percentile)"
+#~ msgstr "statistica estesa (quartili e percentile)"
+
+#~ msgid "Verbosity level"
+#~ msgstr "Livello di verbosità"
