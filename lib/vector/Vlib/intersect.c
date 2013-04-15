@@ -128,6 +128,19 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	first_3d = 0;
     }
 
+    /* Check identical segments */
+    if ((ax1 == bx1 && ay1 == by1 && ax2 == bx2 && ay2 == by2) ||
+	(ax1 == bx2 && ay1 == by2 && ax2 == bx1 && ay2 == by1)) {
+	G_debug(2, " -> identical segments");
+	*x1 = ax1;
+	*y1 = ay1;
+	*z1 = az1;
+	*x2 = ax2;
+	*y2 = ay2;
+	*z2 = az2;
+	return 5;
+    }
+
     /*  'Sort' lines by x, y */
     switched = 0;
     if (bx2 < bx1)
@@ -167,19 +180,6 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	t = az1;
 	az1 = az2;
 	az2 = t;
-    }
-
-    /* Check identical segments */
-    if ((ax1 == bx1 && ay1 == by1 && ax2 == bx2 && ay2 == by2) ||
-	(ax1 == bx2 && ay1 == by2 && ax2 == bx1 && ay2 == by1)) {
-	G_debug(2, " -> identical segments");
-	*x1 = ax1;
-	*y1 = ay1;
-	*z1 = az1;
-	*x2 = ax2;
-	*y2 = ay2;
-	*z2 = az2;
-	return 5;
     }
 
     /* Check distinct (non-touching) segments */
@@ -240,17 +240,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     /* original code assumed lines were not both vertical
      *  so there is a special case if they are */
     if (ax1 == ax2) {
-	if (bx1 != bx2)
-	    G_fatal_error("Vect_segment_intersection(): bx1 != bx2");
-	if (ax1 != bx1)
-	    G_fatal_error("Vect_segment_intersection(): ax1 != bx1");
-
 	G_debug(2, "  -> collinear vertical");
-	/* TODO: remove, already checked above */
-	if (ay1 > by2 || ay2 < by1) {
-	    G_debug(2, "   -> no intersection");
-	    return 0;
-	}
 
 	/* end points */
 	if (ay1 == by2) {
