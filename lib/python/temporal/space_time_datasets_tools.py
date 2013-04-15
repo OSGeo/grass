@@ -444,7 +444,7 @@ def dataset_factory(type, id):
 ###############################################################################
 
 
-def list_maps_of_stds(type, input, columns, order, where, separator, method, header):
+def list_maps_of_stds(type, input, columns, order, where, separator, method, header, gran=None):
     """! List the maps of a space time dataset using diffetent methods
 
         @param type: The type of the maps raster, raster3d or vector
@@ -467,6 +467,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
             - "gran": List map using the granularity of the space time dataset,
                       columns are identical to deltagaps
         @param header: Set True to print column names
+        @param gran The user defined granule to be used if method=gran is set, in case gran=None the 
+            granule of the space time dataset is used
     """
     mapset = core.gisenv()["MAPSET"]
 
@@ -475,12 +477,14 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
     else:
         id = input + "@" + mapset
 
+    dbif, connected = init_dbif(None)
+    
     sp = dataset_factory(type, id)
 
-    if not sp.is_in_db():
+    if not sp.is_in_db(dbif=dbif):
         core.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
-    sp.select()
+    sp.select(dbif=dbif)
 
     if separator is None or separator == "":
         separator = "\t"
@@ -492,11 +496,14 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         else:
             columns = "id,name,mapset,start_time,end_time"
         if method == "deltagaps":
-            maps = sp.get_registered_maps_as_objects_with_gaps(where, None)
+            maps = sp.get_registered_maps_as_objects_with_gaps(where=where, dbif=dbif)
         elif method == "delta":
-            maps = sp.get_registered_maps_as_objects(where, "start_time", None)
+            maps = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=dbif)
         elif method == "gran":
-            maps = sp.get_registered_maps_as_objects_by_granularity(None)
+            if gran is not None and gran != "":
+                maps = sp.get_registered_maps_as_objects_by_granularity(gran=gran, dbif=dbif)
+            else:
+                maps = sp.get_registered_maps_as_objects_by_granularity(dbif=dbif)
             
         if header:
             string = ""
@@ -561,7 +568,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         if method == "comma":
             columns = "id"
 
-        rows = sp.get_registered_maps(columns, where, order, None)
+        rows = sp.get_registered_maps(columns, where, order, dbif)
 
         if rows:
             if method == "comma":
@@ -602,7 +609,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                         count += 1
 
                     print output
-
+    if connected:
+        dbif.close()
 ###############################################################################
 
 

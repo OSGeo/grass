@@ -172,7 +172,8 @@ class AbstractDataset(object):
            Return True if success or False otherwise
         """
         # Check unit
-        units = ["years", "months", "days", "hours", "minutes", "seconds"]
+        units = ["year", "years", "month", "months", "day", "days", "hour", 
+                 "hours", "minute", "minutes", "second", "seconds"]
         if unit not in units:
             return False
         return True

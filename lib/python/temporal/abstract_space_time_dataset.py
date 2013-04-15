@@ -223,6 +223,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         temporal_type = self.get_temporal_type()
+        
+        check = check_granularity_string(granularity, temporal_type)
+        if not check:
+            core.fatal(_("Wrong granularity: \"%s\"") % str(granularity))
+        
 
         if temporal_type == "absolute":
             self.set_time_to_absolute()
@@ -680,26 +685,40 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case more map information are needed, use the select() 
            method for each listed object.
 
-           @param gran: The granularity to be used, if None the granularity of 
+           @param gran: The granularity string to be used, if None the granularity of 
                         the space time dataset is used.
+                        Absolute time has
+                        the format "number unit", relative time has the format "number". 
+                        The unit in case of absolute time can be one of "second, seconds,
+                        minute, minutes, hour, hours, day, days, week, weeks, month, months,
+                        year, years". The unit of the relative time granule is always the 
+                        space time dataset unit and can not be changed.
            @param dbif: The database interface to be used
 
            @return ordered object list, in case nothing found None is returned
         """
 
+        
         dbif, connect = init_dbif(dbif)
 
         obj_list = []
-
+        
         if gran is None:
             gran = self.get_granularity()
+        
+        check = check_granularity_string(gran, self.get_temporal_type())
+        if not check:
+            core.fatal(_("Wrong granularity: \"%s\"") % str(gran))
 
         start, end = self.get_valid_time()
+        
+        if start is None or end is None:
+            return None
         
         # Time instances and mixed time
         is_irregular = False
         
-        # We need to adjust the end time in case the the dataset ha no
+        # We need to adjust the end time in case the the dataset has no
         # interval time, so we can catch time instances at the end
         if self.get_map_time() != "interval":
             is_irregular = True
@@ -715,8 +734,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             else:
                 next = start + gran
 
-            where = "(start_time <= '%s' and end_time >= '%s')" % (start, next)
-
+            # First we search for intervals that are are equal the granule or contain it
+            where = create_temporal_relation_sql_where_statement(
+                    start=start, end=next, use_start=False, use_during=False,
+                    use_overlap=False, use_contain=True, use_equal=True,
+                    use_follows=False, use_precedes=False)
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
             found_gap = False
@@ -731,8 +753,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
                 maplist = []
                 for row in rows:
-                    # Take the first map
-                    map = self.get_new_map_instance(rows[0]["id"])
+                    
+                    map = self.get_new_map_instance(row["id"])
 
                     if self.is_time_absolute():
                         map.set_absolute_time(start, next)
@@ -744,32 +766,49 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
                 obj_list.append(copy.copy(maplist))
             else:
-                # We truely found a gap and maybe a time instance
+                # We may found a gap or a gap after a time instance
                 found_gap = True
                 
-                # Searching for time instances with start time in the current 
-                # granule
-                where = "(start_time = '%s')" % (start)
-    
-                rows = self.get_registered_maps("id", where, "start_time", dbif)
+                # Searching for time instances and intervals that are during the 
+                # current granule or overlapping it
+                where = create_temporal_relation_sql_where_statement(
+                        start=start, end=next, use_start=True, use_during=True,
+                        use_overlap=True, use_contain=False, use_equal=False,
+                        use_follows=False, use_precedes=False)
+                        
+                rows = self.get_registered_maps("id,start_time,end_time", where, "start_time", dbif)
     
                 if rows is not None and len(rows) != 0:
+                    # No gap if we found something in the granule with intervaltime
                     if len(rows) > 1:
                         core.warning(_("More than one map found in a granule. "
                                        "Temporal granularity seems to be invalid or"
                                        " the chosen granularity is not a greatest "
                                        "common divider of all time instances "
                                        "in the dataset."))
-    
+
                     maplist = []
+                    count = 0
                     for row in rows:
-                        # Take the first map
-                        map = self.get_new_map_instance(rows[0]["id"])
+                        if count == 0:
+                            if row["end_time"] is not None or row["start_time"] != start:
+                                found_gap = False
+                        count += 1
+                        
+                        map = self.get_new_map_instance(row["id"])
     
                         if self.is_time_absolute():
-                            map.set_absolute_time(start, None)
+                            if row["end_time"] is not None or row["start_time"] != start:
+                                map.set_absolute_time(start, next)
+                            else:
+                                map.set_absolute_time(start, None)
                         elif self.is_time_relative():
-                            map.set_relative_time(start, None, 
+                            
+                            if row["end_time"] is not None or row["start_time"] != start:
+                                map.set_relative_time(start, next, 
+                                                  self.get_relative_time_unit())
+                            else:
+                                map.set_relative_time(start, None, 
                                                   self.get_relative_time_unit())
     
                         maplist.append(copy.copy(map))
@@ -802,6 +841,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connect:
             dbif.close()
+            
 
         if obj_list:
             return obj_list

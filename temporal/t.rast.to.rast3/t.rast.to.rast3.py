@@ -84,37 +84,38 @@ def main():
 
     if sp.is_time_absolute():
         unit = granularity.split(" ")[1]
-        granularity = int(granularity.split(" ")[0])
+        granularity = float(granularity.split(" ")[0])
+        
+        print "Gran from stds %0.15f"%(granularity)
 
-        if unit == "years":
-            bottom = start.year - 1900
-            top = granularity * num_maps
-        elif unit == "months":
-            bottom = (start.year - 1900) * 12 + start.month
-            top = granularity * num_maps
+        if unit == "years" or unit == "year":
+            bottom = float(start.year - 1900)
+            top = float(granularity * num_maps)
+        elif unit == "months" or unit == "month":
+            bottom = float((start.year - 1900) * 12 + start.month)
+            top = float(granularity * num_maps)
         else:
-            bottom = tgis.time_delta_to_relative_time(start - reftime)
-            days = 0
-            hours = 0
-            minutes = 0
-            seconds = 0
-            if unit == "days":
-                days = granularity
-            if unit == "hours":
-                hours = granularity
-            if unit == "minutes":
-                minutes = granularity
-            if unit == "seconds":
-                seconds = granularity
+            bottom = float(tgis.time_delta_to_relative_time(start - reftime))
+            days = 0.0
+            hours = 0.0
+            minutes = 0.0
+            seconds = 0.0
+            if unit == "days" or unit == "day":
+                days = float(granularity)
+            if unit == "hours" or unit == "hour":
+                hours = float(granularity)
+            if unit == "minutes" or unit == "minute":
+                minutes = float(granularity)
+            if unit == "seconds" or unit == "second":
+                seconds = float(granularity)
 
-            granularity = days + hours / 24.0 + minutes / \
-                1440.0 + seconds / 86400.0
+            granularity = float(days + hours / 24.0 + minutes / \
+                1440.0 + seconds / 86400.0)
     else:
         unit = sp.get_relative_time_unit()
         bottom = start
 
-    top = bottom + granularity * num_maps
-
+    top = float(bottom + granularity * float(num_maps))
     ret = grass.run_command("g.region", t=top, b=bottom, tbres=granularity)
 
     if ret != 0:
