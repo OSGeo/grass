@@ -320,7 +320,7 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 		continue;
 
 	    /* check intersection of aline with bline only once */
-	    if (break_a && break_b &&
+	    if (0 && break_a && break_b &&
 	        aline > bline &&
 		(!List_ref || b_is_ref)) {
 		continue;
