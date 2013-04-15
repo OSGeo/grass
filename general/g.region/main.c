@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
 
     flag.savedefault = G_define_flag();
     flag.savedefault->key = 's';
-    flag.savedefault->description = _("Save as default region");
+    flag.savedefault->label = _("Save as default region");
+    flag.savedefault->description = _("Only possible from the PERMANENT mapset");
     flag.savedefault->guisection = _("Existing");
 
     flag.print = G_define_flag();
