@@ -1041,14 +1041,25 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
     plus = &(Map->plus);
     
     fprintf(out, "---------- TOPOLOGY DUMP ----------\n");
+    fprintf(out, "Map:             %s\n", Vect_get_full_name(Map));
+    fprintf(out, "Topology format: ");
     if (Map->format == GV_FORMAT_NATIVE)
-        fprintf(out, "-------------- NATIVE -------------\n");
+        fprintf(out, "native");
     else if (Map->format == GV_FORMAT_POSTGIS &&
-             Map->fInfo.pg.toposchema_name)
-        fprintf(out, "------------- POSTGIS -------------\n");
-    else
-        fprintf(out, "-------------- PSEUDO -------------\n");
+             Map->fInfo.pg.toposchema_name) {
+        fprintf(out, "PostGIS");
+    }
+    else {
+        fprintf(out, "pseudo (simple features)");
+        if (Map->format == GV_FORMAT_OGR)
+            fprintf(out, " @ OGR");
+        else
+            fprintf(out, " @ PostgreSQL");
+    }
+    fprintf(out, "\n");
     
+    fprintf(out, SEP);
+     
     /* box */
     Vect_box_copy(&box, &(plus->box));
     fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", box.N, box.S,
