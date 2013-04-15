@@ -132,19 +132,19 @@ def increment_datetime_by_string(mydate, increment, mult=1):
             if len(inc) < 2:
                 core.error(_("Wrong increment format: %s") % (increment))
                 return None
-            if inc[1].find("seconds") >= 0:
+            if inc[1].find("seconds") >= 0 or inc[1].find("second") >= 0:
                 seconds = mult * int(inc[0])
-            elif inc[1].find("minutes") >= 0:
+            elif inc[1].find("minutes") >= 0 or inc[1].find("minute") >= 0:
                 minutes = mult * int(inc[0])
-            elif inc[1].find("hours") >= 0:
+            elif inc[1].find("hours") >= 0 or inc[1].find("hour") >= 0:
                 hours = mult * int(inc[0])
-            elif inc[1].find("days") >= 0:
+            elif inc[1].find("days") >= 0 or inc[1].find("day") >= 0:
                 days = mult * int(inc[0])
-            elif inc[1].find("weeks") >= 0:
+            elif inc[1].find("weeks") >= 0 or inc[1].find("week") >= 0:
                 weeks = mult * int(inc[0])
-            elif inc[1].find("months") >= 0:
+            elif inc[1].find("months") >= 0 or inc[1].find("month") >= 0:
                 months = mult * int(inc[0])
-            elif inc[1].find("years") >= 0:
+            elif inc[1].find("years") >= 0 or inc[1].find("year") >= 0:
                 years = mult * int(inc[0])
             else:
                 core.error(_("Wrong increment format: %s") % (increment))
@@ -277,19 +277,19 @@ def adjust_datetime_to_granularity(mydate, granularity):
             granlist.append(granpart.strip().split(" "))
 
         for inc in granlist:
-            if inc[1].find("seconds") >= 0:
+            if inc[1].find("seconds") >= 0 or inc[1].find("second") >= 0:
                 has_seconds = True
-            elif inc[1].find("minutes") >= 0:
+            elif inc[1].find("minutes") >= 0 or inc[1].find("minute") >= 0:
                 has_minutes = True
-            elif inc[1].find("hours") >= 0:
+            elif inc[1].find("hours") >= 0 or inc[1].find("hour") >= 0:
                 has_hours = True
-            elif inc[1].find("days") >= 0:
+            elif inc[1].find("days") >= 0 or inc[1].find("day") >= 0:
                 has_days = True
-            elif inc[1].find("weeks") >= 0:
+            elif inc[1].find("weeks") >= 0 or inc[1].find("week") >= 0:
                 has_weeks = True
-            elif inc[1].find("months") >= 0:
+            elif inc[1].find("months") >= 0 or inc[1].find("month") >= 0:
                 has_months = True
-            elif inc[1].find("years") >= 0:
+            elif inc[1].find("years") >= 0 or inc[1].find("year") >= 0:
                 has_years = True
             else:
                 core.error(_("Wrong granularity format: %s") % (granularity))

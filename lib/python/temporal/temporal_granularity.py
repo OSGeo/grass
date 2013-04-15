@@ -24,7 +24,41 @@ from abstract_dataset import *
 from datetime_math import *
 
 ###############################################################################
+        
+def check_granularity_string(granularity, temporal_type):
+    """!Check if the granularity string is valid
+    
+        @param granularity The granularity string
+        @param temporal_type The temporal type of the granularity relative or absolute
+        @return True if valid, False if invalid
+    """
+    temporal_type
+    
+    if granularity is None:
+        return False
 
+    if temporal_type == "absolute":
+        num, unit = granularity.split(" ")
+        if unit not in ["second", "seconds", "minute", "minutes", "hour", 
+                        "hours", "day", "days", "week", "weeks", "month",
+                        "months", "year", "years"]:
+            return False
+            
+        try:
+            integer = int(num)
+        except:
+            return False
+    elif temporal_type == "relative":
+        try:
+            integer = int(granularity)
+        except:
+            return False
+    else:
+        return False
+        
+    return True
+
+###############################################################################
 
 def compute_relative_time_granularity(maps):
     """!Compute the relative time granularity
@@ -216,17 +250,35 @@ def compute_absolute_time_granularity(maps):
         granularity = ulist[0]
 
     if use_seconds:
-        return "%i seconds" % granularity
+        if granularity == 1:
+            return "%i second" % granularity
+        else:
+            return "%i seconds" % granularity
     elif use_minutes:
-        return "%i minutes" % granularity
+        if granularity == 1:
+            return "%i minute" % granularity
+        else:
+            return "%i minutes" % granularity
     elif use_hours:
-        return "%i hours" % granularity
+        if granularity == 1:
+            return "%i hour" % granularity
+        else:
+            return "%i hours" % granularity
     elif use_days:
-        return "%i days" % granularity
+        if granularity == 1:
+            return "%i day" % granularity
+        else:
+            return "%i days" % granularity
     elif use_months:
-        return "%i months" % granularity
+        if granularity == 1:
+            return "%i month" % granularity
+        else:
+            return "%i months" % granularity
     elif use_years:
-        return "%i years" % granularity
+        if granularity == 1:
+            return "%i year" % granularity
+        else:
+            return "%i years" % granularity
 
     return None
 

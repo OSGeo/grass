@@ -32,17 +32,17 @@ t.create --o type=strds temporaltype=absolute output=precip_abs3 title="A test w
 
 # The first @test
 mkdir /tmp/test1
-t.register -i type=rast input=precip_abs1 file="${n1}"
+t.register -i --o type=rast input=precip_abs1 file="${n1}"
 t.rast.out.vtk input=precip_abs1 expdir=/tmp/test1 
 ls -al /tmp/test1 
 
 mkdir /tmp/test2
-t.register -i type=rast input=precip_abs2 file="${n1}" 
+t.register -i --o type=rast input=precip_abs2 file="${n1}" 
 t.rast.out.vtk input=precip_abs2 expdir=/tmp/test2 elevation=elevation
 ls -al /tmp/test2 
 
 mkdir /tmp/test3
-t.register -i type=rast input=precip_abs3 file="${n1}"
+t.register -i --o type=rast input=precip_abs3 file="${n1}"
 t.rast.out.vtk -g input=precip_abs3 expdir=/tmp/test3 elevation=elevation
 ls -al /tmp/test3 
 

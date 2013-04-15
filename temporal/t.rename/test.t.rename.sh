@@ -12,16 +12,16 @@ r.mapcalc --o expr="prec_2 = rand(0, 450)"
 # We need to create three space time dataset
 t.create --v --o type=strds temporaltype=absolute output=precip_abs1 \
 	title="Test" descr="This is the 1 test strds" semantictype=sum
-t.register -i input=precip_abs1 maps=prec_1,prec_2 \
+t.register -i --o input=precip_abs1 maps=prec_1,prec_2 \
 	start="2001-01-01" increment="1 seconds"
 
 t.create --v --o type=strds temporaltype=absolute output=precip_abs2 \
 	title="Test" descr="This is the 2 test strds" semantictype=sum
-t.register input=precip_abs2 maps=prec_1,prec_2
+t.register --o input=precip_abs2 maps=prec_1,prec_2
 
 t.create --v --o type=strds temporaltype=absolute output=precip_abs3 \
 	title="Test" descr="This is the 3 test strds" semantictype=sum
-t.register input=precip_abs3 maps=prec_1,prec_2
+t.register --o input=precip_abs3 maps=prec_1,prec_2
 
 
 t.info precip_abs1

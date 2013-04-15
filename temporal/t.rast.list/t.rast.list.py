@@ -59,6 +59,14 @@
 #%end
 
 #%option
+#% key: granule
+#% type: string
+#% description: The granule to be used for listing. The granule must be specified as string eg.: absolute time "1 months" or relative time "1"
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: separator
 #% type: string
 #% description: Separator character between the columns, default is tabular "\t"
@@ -85,13 +93,14 @@ def main():
     where = options["where"]
     separator = options["separator"]
     method = options["method"]
+    granule = options["granule"]
     header = flags["h"]
 
     # Make sure the temporal database exists
     tgis.init()
 
     tgis.list_maps_of_stds(
-        "strds", input, columns, order, where, separator, method, header)
+        "strds", input, columns, order, where, separator, method, header, granule)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
