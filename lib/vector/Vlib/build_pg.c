@@ -5,11 +5,11 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   Line offset is
+   Line offset (simple features only) is
    - centroids   : FID
    - other types : index of the first record (which is FID) in offset array.
 
-   (C) 2012 by the GRASS Development Team
+   (C) 2012-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -161,7 +161,11 @@ int build_topo(struct Map_info *Map, int build)
     
     /* update faces from GRASS Topology */
     if (build >= GV_BUILD_AREAS) {
-        /* reset centroids to '0' (universal face) */
+        /* do clean up (1-3)
+           insert new faces (4)
+           update edges (5)
+        */
+        /* 1) reset centroids to '0' (universal face) */
         sprintf(stmt, "UPDATE \"%s\".node SET containing_face = 0 WHERE "
                 "containing_face IS NOT NULL", pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
@@ -170,7 +174,7 @@ int build_topo(struct Map_info *Map, int build)
             return 0;
         }
 
-        /* reset left|right edges */
+        /* 2) reset left|right edges */
         sprintf(stmt, "UPDATE \"%s\".edge_data SET left_face = 0, right_face = 0",
                 pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
@@ -179,7 +183,7 @@ int build_topo(struct Map_info *Map, int build)
             return 0;
         }
 
-        /* delete faces */        
+        /* 3) delete faces */        
         sprintf(stmt, "DELETE FROM \"%s\".face WHERE "
                 "face_id != 0", pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
@@ -188,7 +192,7 @@ int build_topo(struct Map_info *Map, int build)
             return 0;
         }
         
-        /* insert faces & update nodes (containing_face) based on
+        /* 4) insert faces & update nodes (containing_face) based on
          * GRASS topology */
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
@@ -200,7 +204,7 @@ int build_topo(struct Map_info *Map, int build)
             if (build < GV_BUILD_CENTROIDS)
                 continue;
             
-            /* update centroids */
+            /* update centroids (node -> containing_face) */
             Area = plus->Area[area];
             if (Area->centroid < 1) {
                 G_debug(3, "Area %d without centroid, skipped", area);
@@ -209,8 +213,8 @@ int build_topo(struct Map_info *Map, int build)
             
             Line = plus->Line[Area->centroid];
             sprintf(stmt, "UPDATE \"%s\".node SET "
-                    "containing_face = %d WHERE node_id = %lu",
-                    pg_info->toposchema_name, area, Line->offset);
+                    "containing_face = %d WHERE node_id = %d",
+                    pg_info->toposchema_name, area, (int)Line->offset);
             G_debug(2, "SQL: %s", stmt);
             
             if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -219,7 +223,7 @@ int build_topo(struct Map_info *Map, int build)
             }
         }
 
-        /* update edges (left and right face) */ 
+        /* 5) update edges (left and right face) */ 
         for (line = 1; line <= plus->n_lines; line++) {
             type = Vect_read_line(Map, NULL, NULL, line); 
             if (type != GV_BOUNDARY)
@@ -264,7 +268,7 @@ int build_topo(struct Map_info *Map, int build)
             Isle = plus->Isle[isle];
             Vect__insert_face_pg(Map, -isle);
         }
-    }
+    } /* build >= GV_BUILD_ISLES */
 
     if (pg_info->feature_type == SF_POLYGON) {
         int centroid;
@@ -276,6 +280,7 @@ int build_topo(struct Map_info *Map, int build)
             if (centroid < 1)
                 continue;
         
+            /* update topogeometry object: centroid -> face */
             if (build_topogeom_stmt(pg_info, GV_CENTROID, area, centroid, stmt) &&
                 Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
