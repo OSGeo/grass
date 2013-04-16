@@ -98,7 +98,7 @@ def register_maps_in_space_time_dataset(
         else:
             core.fatal(_("Unkown map type: %s") % (type))
 
-    dbif, connect = init_dbif(None)
+    dbif, connected = init_dbif(None)
 
     if name:
         # Read content from temporal database
@@ -326,7 +326,7 @@ def register_maps_in_space_time_dataset(
             ds.select(dbif)
             ds.update_from_registered_maps(dbif)
 
-    if connect == True:
+    if connected == True:
         dbif.close()
 
     core.percent(num_maps, num_maps, 1)
@@ -886,10 +886,10 @@ def create_space_time_dataset(name, type, temporaltype, title, descr, semantic,
 
     sp = dataset_factory(type, id)
 
-    dbif, connect = init_dbif(dbif)
+    dbif, connected = init_dbif(dbif)
 
     if sp.is_in_db(dbif) and overwrite == False:
-        if connect:
+        if connected:
             dbif.close()
         core.fatal(_("Space time %s dataset <%s> is already in the database. "
                       "Use the overwrite flag.") %
@@ -910,7 +910,7 @@ def create_space_time_dataset(name, type, temporaltype, title, descr, semantic,
                           title=title, description=descr)
     sp.insert(dbif)
 
-    if connect:
+    if connected:
         dbif.close()
         
     return sp

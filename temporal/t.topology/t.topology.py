@@ -119,9 +119,9 @@ def main():
 
     if dict_:
         for key in dict_.keys():
-            if key == "equivalent":
+            if key == "equal":
                 #      0123456789012345678901234567890
-                print " | Equivalent: ................ %s" % (dict_[key])
+                print " | Equal:...................... %s" % (dict_[key])
             if key == "during":
                 print " | During: .................... %s" % (dict_[key])
             if key == "contains":

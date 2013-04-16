@@ -465,15 +465,15 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         else:
             return False
 
-    def equivalent(self, extent):
-        """!Return True if this temporal extent (A) is equivalent to the provided 
+    def equal(self, extent):
+        """!Return True if this temporal extent (A) is equal to the provided 
            temporal extent (B)
            @verbatim
            A  |---------|
            B  |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is equivalent 
+           @param extent: The temporal extent object that is equal 
                           during this extent
            
            Usage:
@@ -482,9 +482,9 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            
            >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
            >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> A.equivalent(B)
+           >>> A.equal(B)
            True
-           >>> B.equivalent(A)
+           >>> B.equal(A)
            True
            
            @endcode
@@ -578,7 +578,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            
            The following temporal relationships are supported:
            
-               - equivalent
+               - equal
                - during
                - contains
                - overlaps
@@ -609,8 +609,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         if self.D["start_time"] is None or extent.D["start_time"] is None:
             return None
 
-        if self.equivalent(extent):
-            return "equivalent"
+        if self.equal(extent):
+            return "equal"
         if self.during(extent):
             return "during"
         if self.contains(extent):

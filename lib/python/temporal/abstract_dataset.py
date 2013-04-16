@@ -191,7 +191,7 @@ class AbstractDataset(object):
         """!Select temporal dataset entry from database and fill 
            up the internal structure"""
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         self.base.select(dbif)
         if self.is_time_absolute():
@@ -201,7 +201,7 @@ class AbstractDataset(object):
         self.spatial_extent.select(dbif)
         self.metadata.select(dbif)
 
-        if connect:
+        if connected:
             dbif.close()
 
     def is_in_db(self, dbif=None):
@@ -226,7 +226,7 @@ class AbstractDataset(object):
                            and must be executed by the caller.
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         # Build the INSERT SQL statement
         statement = self.base.get_insert_statement_mogrified(dbif)
@@ -241,11 +241,11 @@ class AbstractDataset(object):
         
         if execute:
             dbif.execute_transaction(statement)
-            if connect:
+            if connected:
                 dbif.close()
             return ""
 
-        if connect:
+        if connected:
             dbif.close()
         return statement
 
@@ -260,7 +260,7 @@ class AbstractDataset(object):
            @param ident: The identifier to be updated, useful for renaming
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         # Build the UPDATE SQL statement
         statement = self.base.get_update_statement_mogrified(dbif, ident)
@@ -276,11 +276,11 @@ class AbstractDataset(object):
 
         if execute:
             dbif.execute_transaction(statement)
-            if connect:
+            if connected:
                 dbif.close()
             return ""
 
-        if connect:
+        if connected:
             dbif.close()
         return statement
 
@@ -295,7 +295,7 @@ class AbstractDataset(object):
            @param ident: The identifier to be updated, useful for renaming
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         # Build the UPDATE SQL statement
         statement = self.base.get_update_all_statement_mogrified(dbif, ident)
@@ -311,11 +311,11 @@ class AbstractDataset(object):
 
         if execute:
             dbif.execute_transaction(statement)
-            if connect:
+            if connected:
                 dbif.close()
             return ""
 
-        if connect:
+        if connected:
             dbif.close()
         return statement
 

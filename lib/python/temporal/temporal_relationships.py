@@ -135,7 +135,7 @@ class TemporalTopologyBuilder(object):
 #                relation = maps[j].temporal_relation(maps[i])
 #
 #                # Build the next reference
-#                if relation != "equivalent" and relation != "started":
+#                if relation != "equal" and relation != "started":
 #                    maps[i].set_next(maps[j])
 #                    break
 
@@ -232,10 +232,16 @@ class TemporalTopologyBuilder(object):
                 # Get the temporal relationship
                 relation = mapsB[j].temporal_relation(mapsA[i])
                 
-                if relation == "equivalent":
-                    if mapsB[j].get_id() != mapsA[i].get_id():
-                        mapsB[j].append_equivalent(mapsA[i])
-                        mapsA[i].append_equivalent(mapsB[j])
+                if relation == "equal":
+                    if mapsB[j] != mapsA[i]:
+                        if not mapsB[j].get_equal() or \
+                        (mapsB[j].get_equal() and \
+                        mapsA[i] not in mapsB[j].get_equal()):
+                            mapsB[j].append_equal(mapsA[i])
+                        if not mapsA[i].get_equal() or \
+                        (mapsA[i].get_equal() and \
+                        mapsB[j] not in mapsA[i].get_equal()):
+                            mapsA[i].append_equal(mapsB[j])
                 elif relation == "follows":
                     if not mapsB[j].get_follows() or \
                        (mapsB[j].get_follows() and \

@@ -207,7 +207,7 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["PREV"]
 
-    def append_equivalent(self, map_):
+    def append_equal(self, map_):
         """!Append a map with equivalent temporal extent as this map
 
            @param map_: This object should be of type AbstractMapDataset 
@@ -217,7 +217,7 @@ class AbstractTemporalDataset(AbstractDataset):
             self._topology["EQUAL"] = []
         self._topology["EQUAL"].append(map_)
 
-    def get_equivalent(self):
+    def get_equal(self):
         """!Return a list of map objects with equivalent temporal extent as this map
 
            @return A list of map objects or None
@@ -436,8 +436,8 @@ class AbstractTemporalDataset(AbstractDataset):
         return string
     
     # Set the properties
-    equivalent = property(fget=get_equivalent, 
-                                       fset=append_equivalent)
+    equal = property(fget=get_equal, 
+                                       fset=append_equal)
     follows = property(fget=get_follows, 
                                     fset=append_follows)
     precedes = property(fget=get_precedes, 
@@ -463,7 +463,7 @@ class AbstractTemporalDataset(AbstractDataset):
         """!Print information about this class in human readable style"""
         _next = self.next()
         _prev = self.prev()
-        _equal = self.get_equivalent()
+        _equal = self.get_equal()
         _follows = self.get_follows()
         _precedes = self.get_precedes()
         _overlaps = self.get_overlaps()
@@ -482,7 +482,7 @@ class AbstractTemporalDataset(AbstractDataset):
         if _prev is not None:
             print " | Previous: .................. " + str(_prev.get_id())
         if _equal is not None:
-            print " | Equivalent: ................ " + \
+            print " | Equal:...................... " + \
                 self._generate_map_list_string(_equal)
         if _follows is not None:
             print " | Follows: ................... " + \
@@ -520,7 +520,7 @@ class AbstractTemporalDataset(AbstractDataset):
 
         _next = self.next()
         _prev = self.prev()
-        _equal = self.get_equivalent()
+        _equal = self.get_equal()
         _follows = self.get_follows()
         _precedes = self.get_precedes()
         _overlaps = self.get_overlaps()
@@ -537,7 +537,7 @@ class AbstractTemporalDataset(AbstractDataset):
         if _prev is not None:
             print "prev=" + _prev.get_id()
         if _equal is not None:
-            print "equivalent=" + self._generate_map_list_string(_equal, False)
+            print "equal=" + self._generate_map_list_string(_equal, False)
         if _follows is not None:
             print "follows=" + self._generate_map_list_string(_follows, False)
         if _precedes is not None:
