@@ -138,7 +138,6 @@ class AnimationController(wx.EvtHandler):
         win.DrawBitmap(bitmap, dataId)
         # self.frame.SetStatusText(dataId)
         self.slider.UpdateFrame(index)
-        self.UpdateReloadStatus()
 
     def SliderChanging(self, index):
         if self.runAfterReleasingSlider is None:
@@ -302,15 +301,12 @@ class AnimationController(wx.EvtHandler):
 
         self._updateSlider(timeLabels = timeLabels)
         self._updateAnimations(activeIndices = indices, mapNamesDict = mapNamesDict)
-        self._updateRegion()
         self._updateBitmapData()
         # if running:
         #     self.PauseAnimation(False)
         #     # self.StartAnimation()
         # else:
         self.EndAnimation()
-
-        self.UpdateReloadStatus()
 
     def _updateSlider(self, timeLabels = None):
         if self.temporalMode == TemporalMode.NONTEMPORAL:
@@ -433,34 +429,11 @@ class AnimationController(wx.EvtHandler):
     def Reload(self):
         self.EndAnimation()
 
-        self._updateRegion()
         activeIndices = [anim.windowIndex for anim in self.animationData]
         for index in activeIndices:
             self.bitmapProviders[index].Load(force = True)
 
         self.EndAnimation()
-
-        self.UpdateReloadStatus()
-
-    def UpdateReloadStatus(self):
-        activeIndices = [anim.windowIndex for anim in self.animationData]
-        for i, win in enumerate(self.mapwindows):
-            if i in activeIndices and win.IsRescaled():
-                self.frame.SetStatusText(_("Reload recommended"), 1)
-                return
-        self.frame.SetStatusText('', 1)
-
-    def _updateRegion(self):
-        grassRegion = grass.region()
-        for anim in self.animationData:
-            if anim.viewMode == '2d':
-                self.mapwindows[anim.windowIndex].SetRegion(grassRegion)
-            else:
-                loadSize = self.bitmapProviders[anim.windowIndex].GetLoadSize() or \
-                           self.mapwindows[anim.windowIndex].GetClientSize()
-                region = {}
-                region['cols'], region['rows'] = loadSize
-                self.mapwindows[anim.windowIndex].SetRegion(region)
 
     def Export(self):
         if not self.animationData:

@@ -229,6 +229,9 @@ class GStdout:
         """
         self.receiver = receiver
 
+    def flush(self):
+        pass
+
     def write(self, s):
         if len(s) == 0 or s == '\n':
             return

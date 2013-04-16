@@ -64,8 +64,9 @@ class AnimationFrame(wx.Frame):
                                               providers = self.providers,
                                               bitmapPool = bitmapPool)
         for win, provider in zip(self.windows, self.providers):
-            win.Bind(wx.EVT_SIZE, lambda event, prov = provider,
-                     sizeMethod = win.GetClientSize: prov.WindowSizeChanged(event, sizeMethod))
+            win.Bind(wx.EVT_SIZE, lambda event, provider=provider,
+                     sizeMethod=win.GetClientSize: self.FrameSizeChanged(event, provider, sizeMethod))
+            provider.mapsLoaded.connect(lambda: self.SetStatusText(''))
 
         self.InitStatusbar()
         self._mgr = wx.aui.AuiManager(self)
@@ -88,8 +89,7 @@ class AnimationFrame(wx.Frame):
 
     def InitStatusbar(self):
         """!Init statusbar."""
-        statusbar = self.CreateStatusBar(number = 2, style = 0)
-        statusbar.SetStatusWidths([-3, -2])
+        self.CreateStatusBar(number = 1, style = 0)
 
     def _addPanes(self):
         self._mgr.AddPane(self.animationPanel, wx.aui.AuiPaneInfo().CentrePane().
@@ -229,6 +229,13 @@ class AnimationFrame(wx.Frame):
     def OnExportAnimation(self, event):
         self.controller.Export()
 
+    def FrameSizeChanged(self, event, provider, sizeMethod):
+        provider.WindowSizeChanged(*sizeMethod())
+        if self.animationPanel.shown:
+            self.SetStatusText(_("Window size has changed, rerender maps if needed"))
+        event.Skip()
+                     
+                     
     def OnHelp(self, event):
         RunCommand('g.manual',
                    quiet = True,
