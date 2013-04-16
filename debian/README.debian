@@ -3,7 +3,7 @@
 # to construct the .deb files.
 
 # Make sure git and the debian build scripts are installed:
-  sudo apt-get install git-core devscripts subversion
+  sudo apt-get install git subversion devscripts
 
 
 # and download the latest svn copy of GRASS:
@@ -22,13 +22,20 @@
 
   sudo apt-get install flex bison libreadline-dev libncurses5-dev # ... etc.
 
-# You can take care of this pretty much automatically with:
+# You can take care of this pretty much automatically by running
+
+ dpkg-checkbuilddeps
+
+# in the main grass source directory, or with:
 
  sudo apt-get build-dep grass
 
+# (for that to work, make sure the 'deb-src' lines are active in
+# your /etc/apt/sources.list file)
 
-# In your favorite text editor open debian/changelog and adjust the
-# version number on the top line to reflect the GRASS SVN checkout number.
+# Once all of the build dependencies are installed, in your favorite text
+# editor open debian/changelog and adjust the version number on the top
+# line to reflect the GRASS SVN checkout number.
 # e.g. for r50539: grass (7.0+svn50539-0) unstable; urgency=low
 
   nano debian/changelog
@@ -41,6 +48,9 @@
   svn up
 
   debuild -i -uc -us -b
+
+#TODO: does 'debuild -i -uc -us -b -j4' work for parallel build??
+#      it works for debuild'ing qgis; need to test with grass
 
 # run from the main GRASS source directory. After the packages are
 # generated, you can install them with:
