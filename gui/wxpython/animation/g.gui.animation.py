@@ -3,7 +3,7 @@
 #
 # MODULE:    Animation
 # AUTHOR(S): Anna Kratochvilova
-# PURPOSE:   Tool for animating a series of GRASS raster maps
+# PURPOSE:   Tool for animating a series of GRASS raster and vector maps
 #            or a space time raster dataset
 # COPYRIGHT: (C) 2012 by Anna Kratochvilova, and the GRASS Development Team
 #
@@ -20,7 +20,7 @@
 ############################################################################
 
 #%module
-#% description: Tool for animating a series of raster maps or a space time raster dataset.
+#% description: Tool for animating a series of raster and vector maps or a space time raster ot vector dataset.
 #% keywords: general
 #% keywords: gui
 #% keywords: display
@@ -31,13 +31,24 @@
 #% required: no
 #% guisection: Input
 #%end
+#%option G_OPT_V_INPUTS
+#% key: vect
+#% label: Vector maps to animate
+#% required: no
+#% guisection: Input
+#%end
 #%option G_OPT_STRDS_INPUT
 #% key: strds
 #% description: Space time raster dataset to animate
 #% required: no
 #% guisection: Input
 #%end
-
+#%option G_OPT_STVDS_INPUT
+#% key: stvds
+#% description: Space time vector dataset to animate
+#% required: no
+#% guisection: Input
+#%end
 
 import os
 import sys
@@ -61,20 +72,38 @@ def main():
     options, flags = grass.parser()
 
     rast = options['rast']
+    vect = options['vect']
     strds = options['strds']
+    stvds = options['stvds']
+    
+    dataType=None
+    inputs=None
+    numInputs=0
+    
+    if rast:
+        numInputs += 1
+    if vect:
+        numInputs += 1
+    if strds:
+        numInputs += 1
+    if stvds:
+        numInputs += 1
 
-    if rast and strds:
-        grass.fatal(_("Options 'rast' and 'strds' are mutually exclusive."))
+    if  numInputs > 1:
+        grass.fatal(_("Options 'rast', 'vect', 'strds' and 'stvds' are mutually exclusive."))
 
     if rast:
-        rast = [rast.split(',')] + [None] * (MAX_COUNT - 1)
-    else:
-        rast = None
-
+        inputs = [rast.split(',')] + [None] * (MAX_COUNT - 1)
+        dataType='rast'
+    if vect:
+        inputs = [vect.split(',')] + [None] * (MAX_COUNT - 1)
+        dataType='vect'
     if strds:
-        strds = [strds] + [None] * (MAX_COUNT - 1)
-    else:
-        strds = None
+        inputs = [strds] + [None] * (MAX_COUNT - 1)
+        dataType='strds'
+    if stvds:
+        inputs = [stvds] + [None] * (MAX_COUNT - 1)
+        dataType='stvds'
 
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):
@@ -83,9 +112,8 @@ def main():
     frame = AnimationFrame(parent = None)
     frame.CentreOnScreen()
     frame.Show()
-    frame.SetAnimations(raster = rast, strds = strds)
+    frame.SetAnimations(inputs = inputs, dataType = dataType)
     app.MainLoop()
-
 
 if __name__ == '__main__':
     main()

@@ -416,10 +416,8 @@ class InputDialog(wx.Dialog):
 
     def _setMapTypes(self, view2d = True):
         index = 0
-        if view2d:
-            inputTypes = self.animationData.inputMapTypes[::2]
-        else:
-            inputTypes = self.animationData.inputMapTypes
+
+        inputTypes = self.animationData.inputMapTypes
         self.dataChoice.Clear()
         for i, (itype, itypeName) in enumerate(inputTypes):
             self.dataChoice.Append(itypeName, clientData = itype)
@@ -696,8 +694,11 @@ class AnimationData(object):
             if self.inputMapType == 'strds':
                 sp = tgis.SpaceTimeRasterDataset(ident = timeseries)
             elif self.inputMapType == 'stvds':
-                sp = tgis.SpaceTimeRasterDataset(ident = timeseries)
-            # else ?
+                sp = tgis.SpaceTimeVectorDataset(ident = timeseries)
+                
+            if sp.is_in_db() == False:
+                raise GException(_("Space time dataset <%s> not found.") % timeseries)
+        
             sp.select()
             rows = sp.get_registered_maps(columns = "id", where = None, order = "start_time", dbif = None)
             timeseriesMaps = []

@@ -252,28 +252,32 @@ class AnimationController(wx.EvtHandler):
         self.animationData.append(animData)
         self._setAnimations()
 
-    def SetAnimations(self, raster = None, strds = None):
+    def SetAnimations(self, inputs=None, dataType=None):
         """!Set animation data directly.
 
         @param raster list of lists of raster maps or None
         @param strds list of strds or None
+        @param inputs list of lists of raster maps or vector maps, 
+               or a space time raster or vector dataset
+        @param dataType The type of the input data must be one of 'rast', 'vect', 'strds' or 'strds'
         """
         try:
             animationData = []
             for i in range(len(self.animations)):
-                if raster is not None and type(raster[i]) == list and raster[i]:
-                    anim = AnimationData()
-                    anim.SetDefaultValues(i, i)
-                    anim.inputMapType = 'rast'
-                    anim.inputData = ','.join(raster[i])
-                    animationData.append(anim)
-
-                elif strds is not None and strds[i]:
-                    anim = AnimationData()
-                    anim.SetDefaultValues(i, i)
-                    anim.inputMapType = 'strds'
-                    anim.inputData = strds[i]
-                    animationData.append(anim)
+                if inputs is not None and inputs[i]:
+                    if dataType == 'rast' or dataType == 'vect':
+                        if type(inputs[i]) == list:
+                            anim = AnimationData()
+                            anim.SetDefaultValues(i, i)
+                            anim.inputMapType = dataType
+                            anim.inputData = ','.join(inputs[i])
+                            animationData.append(anim)
+                    elif dataType == 'strds' or dataType == 'stvds':
+                        anim = AnimationData()
+                        anim.SetDefaultValues(i, i)
+                        anim.inputMapType = dataType
+                        anim.inputData = inputs[i]
+                        animationData.append(anim)
 
         except (GException, ValueError, IOError) as e:
             GError(parent = self.frame, message = str(e),
@@ -301,6 +305,7 @@ class AnimationController(wx.EvtHandler):
 
         self._updateSlider(timeLabels = timeLabels)
         self._updateAnimations(activeIndices = indices, mapNamesDict = mapNamesDict)
+        wx.Yield()
         self._updateBitmapData()
         # if running:
         #     self.PauseAnimation(False)
@@ -371,7 +376,7 @@ class AnimationController(wx.EvtHandler):
 
     def _load2DData(self, animationData):
         prov = self.bitmapProviders[animationData.windowIndex]
-        prov.SetData(datasource = animationData.mapData)
+        prov.SetData(datasource = animationData.mapData, dataType=animationData.inputMapType)
 
         self.bitmapProviders[animationData.windowIndex].Load()
 
