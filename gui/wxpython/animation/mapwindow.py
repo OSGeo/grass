@@ -18,11 +18,13 @@ This program is free software under the GNU General Public License
 """
 import os
 import wx
-
+from multiprocessing import Process, Queue
+import tempfile
 import grass.script as grass
 from core.gcmd import RunCommand
 from core.debug import Debug
-from utils import ComputeScaledRect
+
+from grass.pydispatch.signal import Signal
 
 class BufferedWindow(wx.Window):
     """
@@ -106,11 +108,7 @@ class AnimationWindow(BufferedWindow):
         Debug.msg(2, "AnimationWindow.__init__()")
 
         self.bitmap = wx.EmptyBitmap(1, 1)
-        self.x = self.y = 0
         self.text = ''
-        self.size = wx.Size()
-        self.rescaleNeeded = False
-        self.region = None
         self.parent = parent
 
         BufferedWindow.__init__(self, parent = parent, id = id, style = style)
@@ -124,88 +122,46 @@ class AnimationWindow(BufferedWindow):
         Debug.msg(5, "AnimationWindow.Draw()")
 
         dc.Clear() # make sure you clear the bitmap!
-        dc.DrawBitmap(self.bitmap, x = self.x, y = self.y)
+        dc.DrawBitmap(self.bitmap, x=0, y=0)
         dc.DrawText(self.text, 0, 0)
 
     def OnSize(self, event):
         Debug.msg(5, "AnimationWindow.OnSize()")
-        self._computeBitmapCoordinates()
 
         self.DrawBitmap(self.bitmap, self.text)
         
         BufferedWindow.OnSize(self, event)
         if event:
             event.Skip()
-        
-    def IsRescaled(self):
-        return self.rescaleNeeded
 
-    def _rescaleIfNeeded(self, bitmap):
-        """!If the bitmap has different size than the window, rescale it."""
-        bW, bH = bitmap.GetSize()
-        wW, wH = self.size
-        if abs(bW - wW) > 5 and abs(bH - wH) > 5:
-            self.rescaleNeeded = True
-            im = wx.ImageFromBitmap(bitmap)
-            im.Rescale(*self.size)
-            bitmap = wx.BitmapFromImage(im)
-        else:
-            self.rescaleNeeded = False
-        return bitmap
-        
     def DrawBitmap(self, bitmap, text):
         """!Draws bitmap.
         Does not draw the bitmap if it is the same one as last time.
         """
-        bmp = self._rescaleIfNeeded(bitmap)
-        if self.bitmap == bmp:
+        if self.bitmap == bitmap:
             return
 
-        self.bitmap = bmp
+        self.bitmap = bitmap
         self.text = text
         self.UpdateDrawing()
 
-    def _computeBitmapCoordinates(self):
-        """!Computes where to place the bitmap
-        to be in the center of the window."""
-        if not self.region:
-            return
-
-        cols = self.region['cols']
-        rows = self.region['rows']
-        params = ComputeScaledRect((cols, rows), self.GetClientSize())
-        self.x = params['x']
-        self.y = params['y']
-        self.size = (params['width'], params['height'])
-
-    def SetRegion(self, region):
-        """!Sets region for size computations.
-        Region is set from outside to avoid calling g.region multiple times.
-        """
-        self.region = region
-        self._computeBitmapCoordinates()
-
-    def GetAdjustedSize(self):
-        return self.size
-
-    def GetAdjustedPosition(self):
-        return self.x, self.y
-
 class BitmapProvider(object):
     """!Class responsible for loading data and providing bitmaps"""
-    def __init__(self, frame, bitmapPool):
+    def __init__(self, frame, bitmapPool, imageWidth=640, imageHeight=480, nprocs=4):
 
         self.datasource = None
         self.dataNames = None
         self.dataType = None
-        self.region = None
         self.bitmapPool = bitmapPool
         self.frame = frame
-        self.size = wx.Size()
-        self.loadSize = wx.Size()
+        self.imageWidth = imageWidth # width of the image to render with d.rast or d.vect
+        self.imageHeight = imageHeight # height of the image to render with d.rast or d.vect
+        self.nprocs = nprocs # Number of procs to be used for rendering
 
         self.suffix = ''
         self.nvizRegion = None
+        
+        self.mapsLoaded = Signal('mapsLoaded')
 
     def GetDataNames(self):
         return self.dataNames
@@ -245,22 +201,17 @@ class BitmapProvider(object):
             bitmap = self.bitmapPool[None]
         return bitmap
 
-    def GetLoadSize(self):
-        return self.loadSize
-
-    def WindowSizeChanged(self, event, sizeMethod):
+    def WindowSizeChanged(self, width, height):
         """!Sets size when size of related window changes."""
-        # sizeMethod is GetClientSize, must be used instead of GetSize
-        self.size = sizeMethod()
-        event.Skip()
+        self.imageWidth, self.imageHeight = width, height
 
-    def _createNoDataBitmap(self, ncols, nrows):
+    def _createNoDataBitmap(self, width, height):
         """!Creates 'no data' bitmap.
 
         Used when requested bitmap is not available (loading data was not successful) or 
         we want to show 'no data' bitmap.
         """
-        bitmap = wx.EmptyBitmap(ncols, nrows)
+        bitmap = wx.EmptyBitmap(width, height)
         dc = wx.MemoryDC()
         dc.SelectObject(bitmap)
         dc.Clear()
@@ -268,7 +219,7 @@ class BitmapProvider(object):
         dc.SetFont(wx.Font(pointSize = 40, family = wx.FONTFAMILY_SCRIPT,
                            style = wx.FONTSTYLE_NORMAL, weight = wx.FONTWEIGHT_BOLD))
         tw, th = dc.GetTextExtent(text)
-        dc.DrawText(text, (ncols-tw)/2,  (nrows-th)/2)
+        dc.DrawText(text, (width-tw)/2,  (height-th)/2)
         dc.SelectObject(wx.NullBitmap)
         return bitmap
 
@@ -294,29 +245,21 @@ class BitmapProvider(object):
         else:
             updateFunction = None
 
-        if self.dataType == 'rast':
-            size, scale = self._computeScale()
-            # loading ...
-            self._loadRasters(rasters = self.datasource, names = self.dataNames,
-                             size = size, scale = scale, force = force, updateFunction = updateFunction)
+        if self.dataType == 'rast' or self.dataType == 'vect':
+            self._loadMaps(mapType=self.dataType, maps = self.datasource, names = self.dataNames,
+                             force = force, updateFunction = updateFunction)
         elif self.dataType == 'nviz':
             self._load3D(commands = self.datasource, region = self.nvizRegion, names = self.dataNames,
                          force = force, updateFunction = updateFunction)
         if progress:
             progress.Destroy()
 
+        self.mapsLoaded.emit()
+
     def Unload(self):
         self.datasource = None
         self.dataNames = None
         self.dataType = None
-
-    def _computeScale(self):
-        """!Computes parameters for creating bitmaps."""
-        region = grass.region()
-        ncols, nrows = region['cols'], region['rows']
-        params = ComputeScaledRect((ncols, nrows), self.size)
-
-        return ((params['width'], params['height']), params['scale'])
 
     def _dryLoad(self, rasters, names, force):
         """!Tries how many bitmaps will be loaded.
@@ -336,53 +279,74 @@ class BitmapProvider(object):
 
         return count, maxLength
 
-    def _loadRasters(self, rasters, names, size, scale, force, updateFunction):
-        """!Loads rasters (also rasters from temporal dataset).
+    
+    def _loadMaps(self, mapType, maps, names, force, updateFunction):
+        """!Loads rasters/vectors (also from temporal dataset).
 
-        Uses r.out.ppm.
+        Uses d.rast/d.vect and multiprocessing for parallel rendering
 
-        @param rasters raster maps to be loaded
+        @param mapType Must be "rast" or "vect"
+        @param maps raster or vector maps to be loaded
         @param names names used as keys for bitmaps
-        @param size size of new bitmaps
-        @param scale used for adjustment of region resolution for r.out.ppm
         @param force load everything even though it is already there
         @param updateFunction function called for updating progress dialog
         """
-        region = grass.region()
-        for key in ('rows', 'cols', 'cells'):
-            region.pop(key)
-        # sometimes it renderes nonsense - depends on resolution
-        # should we set the resolution of the raster?
-        region['nsres'] /= scale
-        region['ewres'] /= scale
-        os.environ['GRASS_REGION'] = grass.region_env(**region)
-        ncols, nrows = size
-        self.loadSize = size
+
         count = 0
+
+        # Variables for parallel rendering
+        proc_count = 0
+        proc_list = []
+        queue_list = []
+        name_list = []
+
+        mapNum = len(maps)
 
         # create no data bitmap
         if None not in self.bitmapPool or force:
-            self.bitmapPool[None] = self._createNoDataBitmap(ncols, nrows)
-        for raster, name in zip(rasters, names):
+            self.bitmapPool[None] = self._createNoDataBitmap(self.imageWidth, self.imageHeight)
+
+        for mapname, name in zip(maps, names):
+            count += 1
+
             if name in self.bitmapPool and force is False:
                 continue
-            count += 1
-            # RunCommand has problem with DecodeString
-            returncode, stdout, messages = read2_command('r.out.ppm', input = raster,
-                                                         flags = 'h', output = '-', quiet = True)
-            if returncode != 0:
-                self.bitmapPool[name] = wx.EmptyBitmap(ncols, nrows)
-                continue
-                
-            bitmap = wx.BitmapFromBuffer(ncols, nrows, stdout)
-            self.bitmapPool[name] = bitmap
+
+            # Queue object for interprocess communication
+            q = Queue()
+            # The separate render process
+            p = Process(target=mapRenderProcess, args=(mapType, mapname, self.imageWidth, self.imageHeight, q))
+            p.start()
+
+            queue_list.append(q)
+            proc_list.append(p)
+            name_list.append(name)
+
+            proc_count += 1
+
+            # Wait for all running processes and read/store the created images
+            if proc_count == self.nprocs or count == mapNum:
+                for i in range(len(name_list)):
+                    proc_list[i].join()
+                    filename = queue_list[i].get()
+
+                    # Unfortunately the png files must be read here, 
+                    # since the swig wx objects can not be serialized by the Queue object :(
+                    if filename == None:
+                        self.bitmapPool[name_list[i]] = wx.EmptyBitmap(self.imageWidth, self.imageHeight)
+                    else:
+                        self.bitmapPool[name_list[i]] = wx.BitmapFromImage(wx.Image(filename))
+                        os.remove(filename)
+
+                proc_count = 0
+                proc_list = []
+                queue_list = []
+                name_list = []
 
             if updateFunction:
-                keepGoing, skip = updateFunction(count, raster)
+                keepGoing, skip = updateFunction(count, mapname)
                 if not keepGoing:
                     break
-
-        os.environ.pop('GRASS_REGION')
 
     def _load3D(self, commands, region, names, force, updateFunction):
         """!Load 3D view images using m.nviz.image.
@@ -393,8 +357,7 @@ class BitmapProvider(object):
         @param force load everything even though it is already there
         @param updateFunction function called for updating progress dialog
         """
-        ncols, nrows = self.size
-        self.loadSize = ncols, nrows
+        ncols, nrows = self.imageWidth, self.imageHeight
         count = 0
         format = 'ppm'
         tempFile = grass.tempfile(False)
@@ -419,7 +382,6 @@ class BitmapProvider(object):
             if returncode != 0:
                 self.bitmapPool[name] = wx.EmptyBitmap(ncols, nrows)
                 continue
-                
 
             self.bitmapPool[name] = wx.Bitmap(tempFileFormat)
 
@@ -430,6 +392,43 @@ class BitmapProvider(object):
         grass.try_remove(tempFileFormat)
         os.environ.pop('GRASS_REGION')
 
+def mapRenderProcess(mapType, mapname, width, height, fileQueue):
+    """!Render raster or vector files as png image and write the 
+       resulting png filename in the provided file queue
+    
+        @param mapType Must be "rast" or "vect"
+        @param mapname raster or vector map name to be rendered
+        @param width Width of the resulting image
+        @param height Height of the resulting image
+        @param fileQueue The inter process communication queue storing the file name of the image
+    """
+    
+    # temporary file, we use python here to avoid calling g.tempfile for each render process
+    fileHandler, filename = tempfile.mkstemp(suffix=".png")
+    os.close(fileHandler)
+    
+    # Set the environment variables for this process
+    os.environ['GRASS_WIDTH'] = str(width) 
+    os.environ['GRASS_HEIGHT'] = str(height)
+    os.environ['GRASS_RENDER_IMMEDIATE'] = "png"
+    os.environ['GRASS_TRUECOLOR'] = "1" 
+    os.environ['GRASS_TRANSPARENT'] = "1"
+    os.environ['GRASS_PNGFILE'] = str(filename)
+    
+    if mapType == "rast":
+        Debug.msg(1, "Render raster image " + str(filename))
+        returncode, stdout, messages = read2_command('d.rast', map = mapname)
+    else:
+        Debug.msg(1, "Render vector image " + str(filename))
+        returncode, stdout, messages = read2_command('d.vect', map = mapname)
+
+    if returncode != 0:
+        fileQueue.put(None)
+        os.remove(filename)
+        return
+
+    fileQueue.put(filename)
+    
 class BitmapPool():
     """!Class storing bitmaps (emulates dictionary)"""
     def __init__(self):
