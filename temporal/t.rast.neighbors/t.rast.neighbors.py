@@ -142,7 +142,8 @@ def main():
     for row in rows:
         count += 1
 
-        grass.percent(count, num_rows, 1)
+        if count%10 == 0:
+            grass.percent(count, num_rows, 1)
 
         map_name = "%s_%i" % (base, count)
         map_id = dummy.build_id(map_name, mapset)
@@ -206,8 +207,8 @@ def main():
     count = 0
     for row in rows:
         count += 1
-    
-        grass.percent(count, num_rows, 1)
+        if count%10 == 0:
+            grass.percent(count, num_rows, 1)
         # Register the new maps
         if row["id"] in new_maps:
             new_map = new_maps[row["id"]]

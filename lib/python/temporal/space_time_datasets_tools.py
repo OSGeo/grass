@@ -182,7 +182,8 @@ def register_maps_in_space_time_dataset(
     core.message(_("Gathering map informations"))
 
     for count in range(len(maplist)):
-        core.percent(count, num_maps, 1)
+        if count%50 == 0:
+            core.percent(count, num_maps, 1)
 
         # Get a new instance of the map type
         map = dataset_factory(type, maplist[count]["id"])
@@ -303,7 +304,8 @@ def register_maps_in_space_time_dataset(
         num_maps = len(map_object_list)
         core.message(_("Register maps in the space time raster dataset"))
         for map in map_object_list:
-            core.percent(count, num_maps, 1)
+            if count%50 == 0:
+                core.percent(count, num_maps, 1)
             sp.register_map(map=map, dbif=dbif)
             count += 1
 
@@ -379,14 +381,15 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
                     start_time, increment, 1)
                 if end_time is None:
                     core.fatal(_("Error in increment computation"))
-        if map.get_layer():
-            core.verbose(_("Set absolute valid time for map <%(id)s> with "
-                           "layer %(layer)s to %(start)s - %(end)s") %
-                         {'id': map.get_map_id(), 'layer': map.get_layer(),
-                          'start': str(start_time), 'end': str(end_time)})
-        else:
-            core.verbose(_("Set absolute valid time for map <%s> to %s - %s") %
-                         (map.get_map_id(), str(start_time), str(end_time)))
+        # Commented because of performance issue calling g.message thousend times
+        #if map.get_layer():
+        #    core.verbose(_("Set absolute valid time for map <%(id)s> with "
+        #                   "layer %(layer)s to %(start)s - %(end)s") %
+        #                 {'id': map.get_map_id(), 'layer': map.get_layer(),
+        #                  'start': str(start_time), 'end': str(end_time)})
+        #else:
+        #    core.verbose(_("Set absolute valid time for map <%s> to %s - %s") %
+        #                 (map.get_map_id(), str(start_time), str(end_time)))
 
         map.set_absolute_time(start_time, end_time, None)
     else:
@@ -401,15 +404,16 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
             if interval:
                 end_time = start_time + int(increment)
 
-        if map.get_layer():
-            core.verbose(_("Set relative valid time for map <%s> with layer %s "
-                           "to %i - %s with unit %s") %
-                         (map.get_map_id(), map.get_layer(), start_time,
-                          str(end_time), unit))
-        else:
-            core.verbose(_("Set relative valid time for map <%s> to %i - %s "
-                           "with unit %s") % (map.get_map_id(), start_time,
-                                              str(end_time), unit))
+        # Commented because of performance issue calling g.message thousend times
+        #if map.get_layer():
+        #    core.verbose(_("Set relative valid time for map <%s> with layer %s "
+        #                   "to %i - %s with unit %s") %
+        #                 (map.get_map_id(), map.get_layer(), start_time,
+        #                  str(end_time), unit))
+        #else:
+        #    core.verbose(_("Set relative valid time for map <%s> to %i - %s "
+        #                   "with unit %s") % (map.get_map_id(), start_time,
+        #                                      str(end_time), unit))
 
         map.set_relative_time(start_time, end_time, unit)
 
@@ -893,13 +897,13 @@ def create_space_time_dataset(name, type, temporaltype, title, descr, semantic,
         return None
 
     if sp.is_in_db(dbif) and overwrite == True:
-        core.info(_("Overwrite space time %s dataset <%s> "
+        core.warning(_("Overwrite space time %s dataset <%s> "
                      "and unregister all maps.") %
                    (sp.get_new_map_instance(None).get_type(), name))
         sp.delete(dbif)
         sp = sp.get_new_instance(id)
 
-    core.verbose(_("Create space time %s dataset.") %
+    core.verbose(_("Create new space time %s dataset.") %
                   sp.get_new_map_instance(None).get_type())
 
     sp.set_initial_values(temporal_type=temporaltype, semantic_type=semantic,
