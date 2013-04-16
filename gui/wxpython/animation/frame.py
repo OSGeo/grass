@@ -143,8 +143,14 @@ class AnimationFrame(wx.Frame):
                               BestSize((self.toolbars['miscToolbar'].GetBestSize())))
             self.controller.SetAnimationToolbar(self.toolbars['miscToolbar'])
 
-    def SetAnimations(self, raster = None, strds = None):
-        self.controller.SetAnimations(raster, strds)
+    def SetAnimations(self, inputs=None, dataType=None):
+        """!Set animation data
+        
+        @param inputs list of lists of raster maps or vector maps,  
+               or a space time raster or vector dataset 
+  	  @param dataType The type of the input data must be one of 'rast', 'vect', 'strds' or 'strds' 
+        """ 
+        self.controller.SetAnimations(inputs, dataType) 
 
     def OnAddAnimation(self, event):
         self.controller.AddAnimation()
@@ -289,8 +295,6 @@ class AnimationsPanel(wx.Panel):
 
     def IsWindowShown(self, index):
         return self.mainSizer.IsShown(self.windows[index])
-
-
 
 
 class AnimationSliderBase(wx.Panel):
@@ -517,8 +521,8 @@ def test():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
 
-    frame = AnimationFrame(parent = None)
-    frame.SetAnimations(raster = None, strds = None)
+    frame = AnimationFrame(parent=None)
+    frame.SetAnimations(inputs=None, dataType=None)
 
     frame.Show()
     app.MainLoop()

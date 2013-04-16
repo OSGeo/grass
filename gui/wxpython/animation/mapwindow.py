@@ -23,6 +23,7 @@ import tempfile
 import grass.script as grass
 from core.gcmd import RunCommand
 from core.debug import Debug
+from core.settings import UserSettings
 
 from grass.pydispatch.signal import Signal
 
@@ -170,9 +171,9 @@ class BitmapProvider(object):
                 suffix = '', nvizRegion = None):
         """!Sets data.
 
-        @param datasource data to load (raster maps, m.nviz.image commands)
+        @param datasource data to load (raster maps, vector maps, m.nviz.image commands)
         @param dataNames data labels (keys)
-        @param dataType 'rast', 'nviz'
+        @param dataType 'rast', 'vect', 'nviz'
         @param nvizRegion region which must be set for m.nviz.image
         """
         self.datasource = datasource
@@ -223,17 +224,23 @@ class BitmapProvider(object):
         dc.SelectObject(wx.NullBitmap)
         return bitmap
 
-    def Load(self, force = False):
+    def Load(self, force = False, nprocs=4):
         """!Loads data.
 
         Shows progress dialog.
 
         @param force if True reload all data, otherwise only missing data
+        @param imageWidth width of the image to render with d.rast or d.vect
+        @param imageHeight height of the image to render with d.rast or d.vect
+        @param nprocs number of procs to be used for rendering
         """
+        if nprocs <= 0:
+            nprocs = 1
+
         count, maxLength = self._dryLoad(rasters = self.datasource,
                                          names = self.dataNames, force = force)
         progress = None
-        if self.dataType == 'rast' and count > 5 or \
+        if self.dataType in ('rast', 'vect', 'strds', 'stvds') and count > 5 or \
             self.dataType == 'nviz':
             progress = wx.ProgressDialog(title = "Loading data",
                                          message = " " * (maxLength + 20), # ?
@@ -245,9 +252,10 @@ class BitmapProvider(object):
         else:
             updateFunction = None
 
-        if self.dataType == 'rast' or self.dataType == 'vect':
+        if self.dataType in ('rast', 'vect', 'strds', 'stvds'):
             self._loadMaps(mapType=self.dataType, maps = self.datasource, names = self.dataNames,
-                             force = force, updateFunction = updateFunction)
+                           force = force, updateFunction = updateFunction,
+                           imageWidth=self.imageWidth, imageHeight=self.imageHeight, nprocs=nprocs)
         elif self.dataType == 'nviz':
             self._load3D(commands = self.datasource, region = self.nvizRegion, names = self.dataNames,
                          force = force, updateFunction = updateFunction)
@@ -280,7 +288,8 @@ class BitmapProvider(object):
         return count, maxLength
 
     
-    def _loadMaps(self, mapType, maps, names, force, updateFunction):
+    def _loadMaps(self, mapType, maps, names, force, updateFunction,
+                  imageWidth, imageHeight, nprocs):
         """!Loads rasters/vectors (also from temporal dataset).
 
         Uses d.rast/d.vect and multiprocessing for parallel rendering
@@ -290,6 +299,9 @@ class BitmapProvider(object):
         @param names names used as keys for bitmaps
         @param force load everything even though it is already there
         @param updateFunction function called for updating progress dialog
+        @param imageWidth width of the image to render with d.rast or d.vect
+        @param imageHeight height of the image to render with d.rast or d.vect
+        @param nprocs number of procs to be used for rendering
         """
 
         count = 0
@@ -304,7 +316,7 @@ class BitmapProvider(object):
 
         # create no data bitmap
         if None not in self.bitmapPool or force:
-            self.bitmapPool[None] = self._createNoDataBitmap(self.imageWidth, self.imageHeight)
+            self.bitmapPool[None] = self._createNoDataBitmap(imageWidth, imageHeight)
 
         for mapname, name in zip(maps, names):
             count += 1
@@ -315,7 +327,7 @@ class BitmapProvider(object):
             # Queue object for interprocess communication
             q = Queue()
             # The separate render process
-            p = Process(target=mapRenderProcess, args=(mapType, mapname, self.imageWidth, self.imageHeight, q))
+            p = Process(target=mapRenderProcess, args=(mapType, mapname, imageWidth, imageHeight, q))
             p.start()
 
             queue_list.append(q)
@@ -325,7 +337,7 @@ class BitmapProvider(object):
             proc_count += 1
 
             # Wait for all running processes and read/store the created images
-            if proc_count == self.nprocs or count == mapNum:
+            if proc_count == nprocs or count == mapNum:
                 for i in range(len(name_list)):
                     proc_list[i].join()
                     filename = queue_list[i].get()
@@ -333,7 +345,7 @@ class BitmapProvider(object):
                     # Unfortunately the png files must be read here, 
                     # since the swig wx objects can not be serialized by the Queue object :(
                     if filename == None:
-                        self.bitmapPool[name_list[i]] = wx.EmptyBitmap(self.imageWidth, self.imageHeight)
+                        self.bitmapPool[name_list[i]] = wx.EmptyBitmap(imageWidth, imageHeight)
                     else:
                         self.bitmapPool[name_list[i]] = wx.BitmapFromImage(wx.Image(filename))
                         os.remove(filename)
@@ -396,11 +408,11 @@ def mapRenderProcess(mapType, mapname, width, height, fileQueue):
     """!Render raster or vector files as png image and write the 
        resulting png filename in the provided file queue
     
-        @param mapType Must be "rast" or "vect"
-        @param mapname raster or vector map name to be rendered
-        @param width Width of the resulting image
-        @param height Height of the resulting image
-        @param fileQueue The inter process communication queue storing the file name of the image
+    @param mapType Must be "rast" or "vect"
+    @param mapname raster or vector map name to be rendered
+    @param width Width of the resulting image
+    @param height Height of the resulting image
+    @param fileQueue The inter process communication queue storing the file name of the image
     """
     
     # temporary file, we use python here to avoid calling g.tempfile for each render process
@@ -410,17 +422,21 @@ def mapRenderProcess(mapType, mapname, width, height, fileQueue):
     # Set the environment variables for this process
     os.environ['GRASS_WIDTH'] = str(width) 
     os.environ['GRASS_HEIGHT'] = str(height)
-    os.environ['GRASS_RENDER_IMMEDIATE'] = "png"
+    driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
+    os.environ['GRASS_RENDER_IMMEDIATE'] = driver
     os.environ['GRASS_TRUECOLOR'] = "1" 
     os.environ['GRASS_TRANSPARENT'] = "1"
     os.environ['GRASS_PNGFILE'] = str(filename)
-    
-    if mapType == "rast":
+
+    if mapType in ('rast', 'strds'):
         Debug.msg(1, "Render raster image " + str(filename))
         returncode, stdout, messages = read2_command('d.rast', map = mapname)
-    else:
+    elif mapType in ('vect', 'stvds'):
         Debug.msg(1, "Render vector image " + str(filename))
         returncode, stdout, messages = read2_command('d.vect', map = mapname)
+    else:
+        returncode = 1
+        return
 
     if returncode != 0:
         fileQueue.put(None)
@@ -444,7 +460,7 @@ class BitmapPool():
         return key in self.bitmaps
 
     def Clear(self, usedKeys):
-        """!Removes all bitmaps which are currentlu not used.
+        """!Removes all bitmaps which are currently not used.
 
         @param usedKeys keys which are currently used
         """

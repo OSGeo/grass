@@ -72,7 +72,6 @@ class TemporalManager(object):
         """
         self._gatherInformation(timeseries, etype, self.timeseriesList, self.timeseriesInfo)
 
-
     def EvaluateInputData(self):
         """!Checks if all timeseries are compatible (raises GException).
 
@@ -311,6 +310,7 @@ class TemporalManager(object):
         sp.select()
         # Get ordered map list
         maps = sp.get_registered_maps_as_objects()
+        
         if not sp.check_temporal_topology(maps):
             raise GException(_("Topology of Space time dataset %s is invalid." % id))
 
