@@ -448,10 +448,10 @@ class SQLDatabaseInterfaceConnection():
 
             @param statement The executable SQL statement or SQL script
         """
-        connect = False
+        connected = False
         if not self.connected:
             self.connect()
-            connect = True
+            connected = True
 
         sql_script = ""
         sql_script += "BEGIN TRANSACTION;\n"
@@ -465,13 +465,13 @@ class SQLDatabaseInterfaceConnection():
                 self.cursor.execute(statement)
             self.connection.commit()
         except:
-            if connect:
+            if connected:
                 self.close()
             core.error(_("Unable to execute transaction:\n %(sql)s" % \
                          {"sql":statement}))
             raise
 
-        if connect:
+        if connected:
             self.close()
 
 ###############################################################################

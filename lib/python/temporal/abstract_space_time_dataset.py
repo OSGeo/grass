@@ -383,7 +383,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            - follows    -> allowed
            - precedes   -> allowed
 
-           - equivalent -> not allowed
+           - equal      -> not allowed
            - during     -> not allowed
            - contains   -> not allowed
            - overlaps   -> not allowed
@@ -604,7 +604,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             use_follows = False
             use_precedes = False
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         obj_list = []
         sample_maps = stds.get_registered_maps_as_objects_with_gaps(
@@ -656,7 +656,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             obj_list.append(copy.copy(result))
 
-        if connect:
+        if connected:
             dbif.close()
 
         return obj_list
@@ -699,7 +699,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         obj_list = []
         
@@ -839,7 +839,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 	
             start = next
 
-        if connect:
+        if connected:
             dbif.close()
             
 
@@ -867,7 +867,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            @return ordered object list, in case nothing found None is returned
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         obj_list = []
 
@@ -897,7 +897,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                                   self.get_relative_time_unit())
                         obj_list.append(copy.copy(map))
 
-        if connect:
+        if connected:
             dbif.close()
 
         return obj_list
@@ -921,13 +921,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    In case nothing found None is returned
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
         obj_list = self.get_registered_maps_as_objects(where, order, dbif)
 
         tb = TemporalTopologyBuilder()
         tb.build(obj_list)
     
-        if connect:
+        if connected:
             dbif.close()
 
         return obj_list
@@ -951,7 +951,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    In case nothing found None is returned
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         obj_list = []
 
@@ -968,7 +968,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                           self.get_relative_time_unit())
                 obj_list.append(copy.copy(map))
 
-        if connect:
+        if connected:
             dbif.close()
 
         return obj_list
@@ -990,7 +990,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    In case nothing found None is returned
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         rows = None
 
@@ -1019,13 +1019,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 dbif.cursor.execute(sql)
                 rows = dbif.cursor.fetchall()
             except:
-                if connect:
+                if connected:
                     dbif.close()
                 core.error(_("Unable to get map ids from register table <%s>")
                            % (self.get_map_register()))
                 raise
 
-        if connect:
+        if connected:
             dbif.close()
 
         return rows
@@ -1040,7 +1040,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            @param dbif: The database interface to be used
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         # SELECT all needed information from the database
         self.select(dbif)
@@ -1078,7 +1078,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Execute the accumulated statements
         dbif.execute_transaction(statement)
         
-        if connect:
+        if connected:
             dbif.close()
     
     def delete(self, dbif=None, execute=True):
@@ -1098,13 +1098,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # First we need to check if maps are registered in this dataset and
         # unregister them
 
-        core.verbose(_("Delete space time %s  dataset <%s> from temporal "
-                       "database") % \
-                     (self.get_new_map_instance(ident=None).get_type(), 
-                      self.get_id()))
+        # Commented because of performance issue calling g.message thousend times
+        #core.verbose(_("Delete space time %s  dataset <%s> from temporal "
+        #               "database") % \
+        #             (self.get_new_map_instance(ident=None).get_type(), 
+        #              self.get_id()))
 
         statement = ""
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         # SELECT all needed information from the database
         self.metadata.select(dbif)
@@ -1132,7 +1133,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         self.reset(None)
 
-        if connect:
+        if connected:
             dbif.close()
 
         if execute:
@@ -1148,11 +1149,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             In case the map is already registered this function 
             will break with a warning and return False.
+            
+            This method raises a ScriptError in case of a fatal error
 
            @param map: The AbstractMapDataset object that should be registered
            @param dbif: The database interface to be used
         """
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         if map.is_in_db(dbif) == False:
             dbif.close()
@@ -1237,8 +1240,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                              "<%s> and map <%s> are different") % \
                            (self.get_id(), map.get_map_id()))
 
-        #print "STDS register table", stds_register_table
-
         if stds_mapset != map_mapset:
             dbif.close()
             core.fatal(_("Only maps from the same mapset can be registered"))
@@ -1255,12 +1256,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 dbif.cursor.execute(sql, (map_id,))
                 row = dbif.cursor.fetchone()
             except:
-                row = None
                 core.warning(_("Error in strds_register_table request"))
                 raise
 
             if row is not None and row[0] == map_id:
-                if connect == True:
+                if connected == True:
                     dbif.close()
 
                 if map.get_layer() is not None:
@@ -1270,7 +1270,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 else:
                     core.warning(_("Map <%s> is already registered.")
                         % (map.get_map_id()))
-                return ""
+                return False
 
         # Create tables
         sql_path = get_sql_template_path()
@@ -1378,11 +1378,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Now execute the insert transaction
         dbif.execute_transaction(statement)
 
-        if connect:
+        if connected:
             dbif.close()
 
         # increase the counter
         self.map_counter += 1
+        
+        return True
 
     def unregister_map(self, map, dbif=None, execute=True):
         """!Unregister a map from the space time dataset.
@@ -1403,7 +1405,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         statement = ""
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         # First select needed data from the database
         map.metadata.select(dbif)
@@ -1443,7 +1445,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     core.warning(_("Map <%s> is not registered in space "
                                    "time dataset <%s>") % (map.get_map_id(), 
                                                            self.base.get_id()))
-                if connect == True:
+                if connected == True:
                     dbif.close()
                 return ""
 
@@ -1470,7 +1472,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if execute:
             dbif.execute_transaction(statement)
 
-        if connect:
+        if connected:
             dbif.close()
 
         # decrease the counter
@@ -1504,7 +1506,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not self.get_map_register():
             return
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         map_time = None
 
@@ -1679,7 +1681,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 self.relative_time.set_granularity(None)
             self.relative_time.update_all(dbif)
 
-        if connect:
+        if connected:
             dbif.close()
 
 ###############################################################################

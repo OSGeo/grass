@@ -344,13 +344,13 @@ class AbstractMapDataset(AbstractTemporalDataset):
            @param end_time: a datetime object specifying the end time of the map
            @param timezone: Thee timezone of the map
         """
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         self.set_absolute_time(start_time, end_time, timezone)
         self.absolute_time.update_all(dbif)
         self.base.update(dbif)
 
-        if connect:
+        if connected:
             dbif.close()
 
         self.write_timestamp_to_grass()
@@ -418,13 +418,13 @@ class AbstractMapDataset(AbstractTemporalDataset):
            @param end_time: A double value
            @param dbif: The database interface to be used
         """
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         if self.set_relative_time(start_time, end_time, unit):
             self.relative_time.update_all(dbif)
             self.base.update(dbif)
 
-        if connect:
+        if connected:
             dbif.close()
 
         self.write_timestamp_to_grass()
@@ -490,7 +490,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
                    None in case of a failure
         """
 
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
         statement = ""
 
         if self.is_in_db(dbif):
@@ -522,7 +522,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
 
         self.reset(None)
 
-        if connect:
+        if connected:
             dbif.close()
 
         if execute:
@@ -558,7 +558,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
         #                 % {'type':self.get_type(), 'map':self.get_map_id()}))
 
         statement = ""
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         # Get all datasets in which this map is registered
         rows = self.get_registered_datasets(dbif)
@@ -579,7 +579,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
         if execute:
             dbif.execute_transaction(statement)
 
-        if connect:
+        if connected:
             dbif.close()
 
         if execute:
@@ -594,7 +594,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
 
            @param dbif: The database interface to be used
         """
-        dbif, connect = init_dbif(dbif)
+        dbif, connected = init_dbif(dbif)
 
         rows = None
 
@@ -608,7 +608,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
             core.error(_("Unable to select space time dataset register table "
                          "<%s>") % (self.get_stds_register()))
 
-        if connect:
+        if connected:
             dbif.close()
 
         return rows
