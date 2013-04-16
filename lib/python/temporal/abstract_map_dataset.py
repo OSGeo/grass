@@ -506,8 +506,9 @@ class AbstractMapDataset(AbstractTemporalDataset):
             if self.get_stds_register() is not None:
                 statement += "DROP TABLE " + self.get_stds_register() + ";\n"
 
-            core.verbose(_("Delete %s dataset <%s> from temporal database")
-                         % (self.get_type(), self.get_id()))
+            # Commented because of performance issue calling g.message thousend times
+            #core.verbose(_("Delete %s dataset <%s> from temporal database")
+            #             % (self.get_type(), self.get_id()))
 
             # Delete yourself from the database, trigger functions will 
             # take care of dependencies
@@ -545,15 +546,16 @@ class AbstractMapDataset(AbstractTemporalDataset):
            @return The SQL statements if execute == False, else an empty string
         """
 
-        if self.get_layer() is not None:
-            core.verbose(_("Unregister %(type)s map <%(map)s> with "
-                           "layer %(layer)s from space time datasets" % \
-                         {'type':self.get_type(), 'map':self.get_map_id(), 
-                          'layer':self.get_layer()}))
-        else:
-            core.verbose(_("Unregister %(type)s map <%(map)s> "
-                           "from space time datasets"
-                         % {'type':self.get_type(), 'map':self.get_map_id()}))
+        # Commented because of performance issue calling g.message thousend times
+        #if self.get_layer() is not None:
+        #    core.verbose(_("Unregister %(type)s map <%(map)s> with "
+        #                   "layer %(layer)s from space time datasets" % \
+        #                 {'type':self.get_type(), 'map':self.get_map_id(), 
+        #                  'layer':self.get_layer()}))
+        #else:
+        #    core.verbose(_("Unregister %(type)s map <%(map)s> "
+        #                   "from space time datasets"
+        #                 % {'type':self.get_type(), 'map':self.get_map_id()}))
 
         statement = ""
         dbif, connect = init_dbif(dbif)
@@ -563,11 +565,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
 
         # For each stds in which the map is registered
         if rows is not None:
-            count = 0
-            num_sps = len(rows)
             for row in rows:
-                core.percent(count, num_sps, 1)
-                count += 1
                 # Create a space time dataset object to remove the map
                 # from its register
                 stds = self.get_new_stds_instance(row["id"])
@@ -577,8 +575,6 @@ class AbstractMapDataset(AbstractTemporalDataset):
                 # the map has been unregistered
                 if update == True and execute == True:
                     stds.update_from_registered_maps(dbif)
-
-            core.percent(1, 1, 1)
 
         if execute:
             dbif.execute_transaction(statement)

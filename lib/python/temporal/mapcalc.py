@@ -235,7 +235,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         for i in range(num):
 
             count += 1
-            core.percent(count, num, 1)
+            if count%10 == 0:
+                core.percent(count, num, 1)
 
             # Create the r.mapcalc statement for the current time step
             map_name = "%s_%i" % (base, count)
@@ -289,9 +290,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
             map_list.append(new_map)
 
-            # Start the parallel r.mapcalc computation
-            core.verbose(_("Apply mapcalc expression: \"%s\"") % expr)
+            #core.verbose(_("Apply mapcalc expression: \"%s\"") % expr)
 
+            # Start the parallel r.mapcalc computation
             if type == "raster":
                 proc_list.append(Process(target=_run_mapcalc2d, args=(expr,)))
             else:
@@ -338,7 +339,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         for new_map in map_list:
 
             count += 1
-            core.percent(count, num, 1)
+            if count%10 == 0:
+                core.percent(count, num, 1)
 
             # Read the map data
             new_map.load()

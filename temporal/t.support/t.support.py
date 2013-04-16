@@ -69,7 +69,6 @@ import grass.script as grass
 
 ############################################################################
 
-
 def main():
 
     # Get the options
@@ -131,8 +130,9 @@ def main():
         # We collect the delete and update statements
         for map in maps:
 
-            grass.percent(count, len(maps), 1)
             count += 1
+            if count%10 == 0:
+                grass.percent(count, len(maps), 1)
 
             map.select(dbif=dbif)
 

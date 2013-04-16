@@ -130,7 +130,8 @@ def main():
     # Unregister already registered maps
     grass.message(_("Unregistered maps"))
     for mapid in maplist:
-        grass.percent(count, num_maps, 1)
+        if count%10 == 0:
+            grass.percent(count, num_maps, 1)
 
         map = tgis.dataset_factory(type, mapid)
 

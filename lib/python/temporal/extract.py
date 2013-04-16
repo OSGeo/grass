@@ -109,7 +109,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
             for row in rows:
                 count += 1
 
-                core.percent(count, num_rows, 1)
+                if count%10 == 0:
+                    core.percent(count, num_rows, 1)
 
                 map_name = "%s_%i" % (base, count)
 
@@ -141,18 +142,18 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
                 # Add process to the process list
                 if type == "raster":
-                    core.verbose(_("Apply r.mapcalc expression: \"%s\"")
-                                 % expr)
+                    #core.verbose(_("Apply r.mapcalc expression: \"%s\"")
+                    #             % expr)
                     proc_list.append(Process(target=run_mapcalc2d,
                                              args=(expr,)))
                 elif type == "raster3d":
-                    core.verbose(_("Apply r3.mapcalc expression: \"%s\"")
-                                 % expr)
+                    #core.verbose(_("Apply r3.mapcalc expression: \"%s\"")
+                    #             % expr)
                     proc_list.append(Process(target=run_mapcalc3d,
                                              args=(expr,)))
                 elif type == "vector":
-                    core.verbose(_("Apply v.extract where statement: \"%s\"")
-                                 % expression)
+                    #core.verbose(_("Apply v.extract where statement: \"%s\"")
+                    #             % expression)
                     if row["layer"]:
                         proc_list.append(Process(target=run_vector_extraction,
                                                  args=(row["name"] + "@" + \
@@ -208,8 +209,9 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         count = 0
         for row in rows:
             count += 1
-
-            core.percent(count, num_rows, 1)
+            
+            if count%10 == 0:
+                core.percent(count, num_rows, 1)
 
             old_map = sp.get_new_map_instance(row["id"])
             old_map.select(dbif)

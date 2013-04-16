@@ -1115,16 +1115,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             rows = self.get_registered_maps("id", None, None, dbif)
             # Unregister each registered map in the table
             if rows is not None:
-                num_maps = len(rows)
-                count = 0
                 for row in rows:
-                    core.percent(count, num_maps, 1)
                     # Unregister map
                     map = self.get_new_map_instance(row["id"])
                     statement += self.unregister_map(
                         map=map, dbif=dbif, execute=False)
-                    count += 1
-                core.percent(1, 1, 1)
 
             # Safe the DROP table statement
             statement += "DROP TABLE " + self.get_map_register() + ";\n"
@@ -1163,17 +1158,18 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             dbif.close()
             core.fatal(_("Only maps with absolute or relative valid time can "
                          "be registered"))
-        if map.get_layer():
-            core.verbose(_("Register %s map <%s> with layer %s in space "
-                           "time %s dataset <%s>") % (map.get_type(), 
-                                                      map.get_map_id(), 
-                                                      map.get_layer(), 
-                                                      map.get_type(), 
-                                                      self.get_id()))
-        else:
-            core.verbose(_("Register %s map <%s> in space time %s "
-                           "dataset <%s>") % (map.get_type(), map.get_map_id(),
-                                               map.get_type(), self.get_id()))
+        # Commented because of performance issue calling g.message thousend times
+        #if map.get_layer():
+        #    core.verbose(_("Register %s map <%s> with layer %s in space "
+        #                   "time %s dataset <%s>") % (map.get_type(), 
+        #                                              map.get_map_id(), 
+        #                                              map.get_layer(), 
+        #                                              map.get_type(), 
+        #                                              self.get_id()))
+        #else:
+        #    core.verbose(_("Register %s map <%s> in space time %s "
+        #                   "dataset <%s>") % (map.get_type(), map.get_map_id(),
+        #                                       map.get_type(), self.get_id()))
 
         # First select all data from the database
         map.select(dbif)
@@ -1223,9 +1219,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.set_relative_time_unit(map_rel_time_unit)
             statement += self.relative_time.get_update_all_statement_mogrified(
                 dbif)
-            core.verbose(_("Set temporal unit for space time %s dataset "
-                           "<%s> to %s") % (map.get_type(), self.get_id(), 
-                                            map_rel_time_unit))
+            # Commented because of performance issue calling g.message thousend times
+            #core.verbose(_("Set temporal unit for space time %s dataset "
+            #               "<%s> to %s") % (map.get_type(), self.get_id(), 
+            #                                map_rel_time_unit))
 
         stds_rel_time_unit = self.get_relative_time_unit()
 
@@ -1303,15 +1300,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             map.set_stds_register(map_register_table)
             statement += map.metadata.get_update_statement_mogrified(dbif)
 
-            if map.get_layer():
-                core.verbose(_("Created register table <%s> for "
-                               "%s map <%s> with layer %s") %
-                                (map_register_table, map.get_type(), 
-                                 map.get_map_id(), map.get_layer()))
-            else:
-                core.verbose(_("Created register table <%s> for %s map <%s>") %
-                                (map_register_table, map.get_type(), 
-                                 map.get_map_id()))
+            # Commented because of performance issue calling g.message thousend times
+            #if map.get_layer():
+            #    core.verbose(_("Created register table <%s> for "
+            #                   "%s map <%s> with layer %s") %
+            #                    (map_register_table, map.get_type(), 
+            #                     map.get_map_id(), map.get_layer()))
+            #else:
+            #    core.verbose(_("Created register table <%s> for %s map <%s>") %
+            #                    (map_register_table, map.get_type(), 
+            #                     map.get_map_id()))
 
         # We need to create the table and register it
         if stds_register_table is None:
@@ -1332,9 +1330,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.set_map_register(stds_register_table)
             statement += self.metadata.get_update_statement_mogrified(dbif)
 
-            core.verbose(_("Created register table <%s> for space "
-                           "time %s  dataset <%s>") %
-                          (stds_register_table, map.get_type(), self.get_id()))
+            # Commented because of performance issue calling g.message thousend times
+            #core.verbose(_("Created register table <%s> for space "
+            #               "time %s  dataset <%s>") %
+            #              (stds_register_table, map.get_type(), self.get_id()))
 
         # We need to execute the statement at this time
         if statement != "":
@@ -1413,12 +1412,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         map_register_table = map.get_stds_register()
         stds_register_table = self.get_map_register()
 
-        if map.get_layer() is not None:
-            core.verbose(_("Unregister %s map <%s> with layer %s") % \
-                         (map.get_type(), map.get_map_id(), map.get_layer()))
-        else:
-            core.verbose(_("Unregister %s map <%s>") % (
-                map.get_type(), map.get_map_id()))
+        # Commented because of performance issue calling g.message thousend times
+        #if map.get_layer() is not None:
+        #    core.verbose(_("Unregister %s map <%s> with layer %s") % \
+        #                 (map.get_type(), map.get_map_id(), map.get_layer()))
+        #else:
+        #    core.verbose(_("Unregister %s map <%s>") % (
+        #        map.get_type(), map.get_map_id()))
 
         # Check if the map is registered in the space time raster dataset
         if map_register_table is not None:
