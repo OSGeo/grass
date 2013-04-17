@@ -329,7 +329,10 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
 	    Vect_line_prune(BPoints);
 
-	    BBox = &List->box[j];
+	    if (j == -1)
+		BBox = &ABox;
+	    else
+		BBox = &List->box[j];
 
 	    /* Check if touch by end node only */
 	    if (!is3d) {
