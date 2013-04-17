@@ -58,6 +58,11 @@ int Vect_build_pg(struct Map_info *Map, int build)
     G_debug(1, "Vect_build_pg(): db='%s' table='%s', build=%d",
             pg_info->db_name, pg_info->table_name, build);
 
+    /* commit transaction block (update mode only) */
+    if (pg_info->inTransaction && Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
+        return 0;
+    pg_info->inTransaction = FALSE;
+    
     if (build == plus->built)
         return 1;            /* do nothing */
 
@@ -81,11 +86,6 @@ int Vect_build_pg(struct Map_info *Map, int build)
         return 0;
     }
 
-    /* commit transaction block (update mode only) */
-    if (pg_info->inTransaction && Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
-        return 0;
-    pg_info->inTransaction = FALSE;
-    
     if (build > GV_BUILD_NONE) {
         G_message(_("Using external data format '%s' (feature type '%s')"),
                   Vect_get_finfo_format_info(Map),
