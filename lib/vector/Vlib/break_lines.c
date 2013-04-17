@@ -320,9 +320,13 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 	    if (!break_a && !break_b)
 		continue;
 
-	    /* DO NOT check intersection of aline with bline only once
-	     * because it can happen that one line is broken, but not 
-	     * the other line, in which case some breaks are not detected */
+	    /* check intersection of aline with bline only once
+	     * if possible */
+	    if (break_a && break_b && 
+		aline > bline && 
+		(!List_ref || b_is_ref)) { 
+		continue; 
+	    } 
 
 	    G_debug(3, "  j = %d bline = %d", j, bline);
 
