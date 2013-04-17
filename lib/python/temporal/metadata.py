@@ -892,7 +892,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
          | Soils
          | Description:
          | Soils 1950 - 2010
-         | Command of creation:
+         | Commands of creation:
         >>> meta.print_shell_info()
         number_of_maps=None
         
@@ -983,7 +983,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
         print " | " + str(self.get_title())
         print " | Description:"
         print " | " + str(self.get_description())
-        print " | Command of creation:"
+        print " | Commands of creation:"
         command = self.get_command()
         if command:
             for token in command.split("\n"):
@@ -1032,7 +1032,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
          | Soils
          | Description:
          | Soils 1950 - 2010
-         | Command of creation:
+         | Commands of creation:
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1226,7 +1226,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
          | Soils
          | Description:
          | Soils 1950 - 2010
-         | Command of creation:
+         | Commands of creation:
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1331,7 +1331,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
          | Soils
          | Description:
          | Soils 1950 - 2010
-         | Command of creation:
+         | Commands of creation:
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1469,7 +1469,7 @@ class STVDSMetadata(STDSMetadataBase):
          | LIDARS
          | Description:
          | LIDARS 2008 - 2010
-         | Command of creation:
+         | Commands of creation:
          | Vector register table:...... None
          | Number of points ........... None
          | Number of lines ............ None

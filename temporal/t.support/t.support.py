@@ -163,6 +163,8 @@ def main():
 
     if map_update or update:
         stds.update_from_registered_maps(dbif=dbif)
+    
+    stds.update_command_string(dbif=dbif)
 
     dbif.close()
 
