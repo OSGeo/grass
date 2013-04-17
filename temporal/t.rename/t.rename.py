@@ -96,6 +96,7 @@ def main():
         
     stds.select(dbif=dbif)
     stds.rename(ident=new_id, dbif=dbif)
+    stds.update_command_string(dbif=dbif)
     
 if __name__ == "__main__":
     options, flags = grass.parser()

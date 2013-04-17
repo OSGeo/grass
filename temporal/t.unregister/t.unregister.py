@@ -171,6 +171,7 @@ def main():
     grass.message(_("Unregistered maps from space time dataset(s)"))
     if name:
         sp.update_from_registered_maps(dbif)
+        sp.update_command_string(dbif=dbif)
     elif len(update_dict) > 0:
         count = 0
         for key in update_dict.keys():

@@ -143,6 +143,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.set_title(title)
         self.metadata.set_description(description)
         self.metadata.set_command(self.create_command_string())
+
+    def update_command_string(self, dbif=None):
+        """!Append the current command string to any existing command string
+           in the metadata class and calls metadata update
+        """
+
+        self.metadata.select(dbif=dbif)
+        command = self.metadata.get_command()
+        if command is None:
+            command = ""
+        command += self.create_command_string()
+        self.metadata.set_command(command)
+        self.metadata.update(dbif=dbif)
         
     def create_command_string(self):
         """!Create the command string that was used to create this
@@ -166,10 +179,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # Check for sub strings
             if token.find("=") > 0:
                 first = token.split("=")[0]
-                second = token.split("=")[1]
+                second = ""
                 
-                if second.find(" ") >= 0:
-                    token = "%s=\"%s\""%(first, second)
+                for t in token.split("=")[1:]:
+                    second += t
+
+                token = "%s=\"%s\""%(first, second)
             
             if length + len(token) >= 76:
                 command += "\n    %s"%(token)
@@ -178,6 +193,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 command += " %s"%(token)
                 length += len(token) + 1
 
+        command += "\n"
         return command
 
     def get_semantic_type(self):

@@ -442,7 +442,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if self.ident is None:
             raise IOError("Missing identifer")
 
-        sql, args = self.get_update_statement(indent)
+        sql, args = self.get_update_statement(ident)
         #print sql
         #print args
 

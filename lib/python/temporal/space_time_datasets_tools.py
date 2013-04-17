@@ -314,6 +314,8 @@ def register_maps_in_space_time_dataset(
         core.message(_("Update space time raster dataset"))
         sp.update_from_registered_maps(dbif)
         
+    sp.update_command_string(dbif=dbif)
+    
     # Update affected datasets
     if datatsets_to_modify:
         for dataset in datatsets_to_modify:
