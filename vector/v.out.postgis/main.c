@@ -6,7 +6,7 @@
  *
  * PURPOSE:      Converts GRASS vector map layer to PostGIS
  *
- * COPYRIGHT:    (C) 2012 by Martin Landa, and the GRASS Development Team
+ * COPYRIGHT:    (C) 2012-2013 by Martin Landa, and the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -135,13 +135,7 @@ int main(int argc, char *argv[])
     if (!flags.table->answer)
         Vect_copy_map_dblinks(&In, &Out, TRUE);
 
-    /* create PostGIS layer */
-    create_table(&In, &Out);
-    
-    if (flags.topo->answer) 
-        Vect_build_partial(&Out, GV_BUILD_NONE); /* upgrade level to 2 */
-    
-    /* copy vector features */
+    /* copy vector features & create PostGIS table*/
     if (Vect_copy_map_lines_field(&In, field, &Out) != 0)
         G_fatal_error(_("Copying features failed"));
     
