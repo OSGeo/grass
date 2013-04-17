@@ -7,27 +7,6 @@
 
 static void file_handler(void *);
 
-void create_table(struct Map_info *In, struct Map_info *Out)
-{
-    int type;
-    struct Format_info_pg *pg_info;
-
-    pg_info = &(Out->fInfo.pg);
-    if (pg_info->feature_type != SF_UNKNOWN)
-        return;
-    
-    /* create PostGIS table if doesn't exist
-       determine feature type from the first feature */
-    Vect_rewind(In);
-    Vect_set_constraint_type(In, GV_POINT | GV_LINES);
-    type = Vect_read_next_line(In, NULL, NULL);
-    Vect_rewind(In);
-    
-    if (Vect_write_line(Out, type, NULL, NULL) < 0)
-        G_fatal_error(_("Unable to create PostGIS layer <%s>"),
-                      Vect_get_finfo_layer_name(Out));
-}
-
 char *create_pgfile(const char *dsn, const char *schema, const char *olink,
                     char **options, int topo,
 		    char **fid_column, char **geom_column)
