@@ -787,7 +787,10 @@ def check_shell():
         grass_env_file = os.path.join(grass_config_dir, 'cshrc')
     elif sh in ['bash', 'msh', 'cygwin']:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
-    
+    else:
+        grass_env_file = os.path.join(grass_config_dir, 'bashrc')
+        warning(_("Unsupported shell <%s>: %s") % (sh, grass_env_file))
+              
     # check for SHELL
     if not os.getenv('SHELL'):
         fatal(_("The SHELL variable is not set"))
