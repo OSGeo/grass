@@ -94,7 +94,8 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
         if (!(type & (GV_POINTS | GV_LINES)))
             G_fatal_error(_("Unsupported feature type %d"), type);
             
-         /* create feature table with given feature type */
+        /* create feature table with given feature type */
+        Vect_set_constraint_type(In, GV_POINT | GV_LINES);
         Vect_write_line(Out, type, NULL, NULL);
     }
   
