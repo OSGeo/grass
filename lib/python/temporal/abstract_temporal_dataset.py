@@ -61,10 +61,52 @@ class AbstractTemporalDataset(AbstractDataset):
         
         @code
         
-        >>> tmr = AbstractTemporalDataset()
+        >>> import grass.temporal as tgis
+        >>> tgis.init()
+        >>> map = tgis.RasterDataset("a@P")
+        >>> tmr = tgis.AbstractTemporalDataset()
+        >>> tmr.set_next(map)
+        >>> tmr.set_prev(map)
+        >>> tmr.append_equal(map)
+        >>> tmr.append_follows(map)
+        >>> tmr.append_precedes(map)
+        >>> tmr.append_overlapped(map)
+        >>> tmr.append_overlaps(map)
+        >>> tmr.append_during(map)
+        >>> tmr.append_contains(map)
+        >>> tmr.append_starts(map)
+        >>> tmr.append_started(map)
+        >>> tmr.append_finishes(map)
+        >>> tmr.append_finished(map)
         >>> tmr.print_topology_info()
          +-------------------- Temporal Topology -------------------------------------+
+         | Next: ...................... a@P
+         | Previous: .................. a@P
+         | Equal:...................... a@P
+         | Follows: ................... a@P
+         | Precedes: .................. a@P
+         | Overlaps: .................. a@P
+         | Overlapped: ................ a@P
+         | During: .................... a@P
+         | Contains: .................. a@P
+         | Starts:.. .................. a@P
+         | Started:. .................. a@P
+         | Finishes:................... a@P
+         | Finished:................... a@P
         >>> tmr.print_topology_shell_info()
+        next=a@P
+        prev=a@P
+        equal=a@P
+        follows=a@P
+        precedes=a@P
+        overlaps=a@P
+        overlapped=a@P
+        during=a@P
+        contains=a@P
+        starts=a@P
+        started=a@P
+        finishes=a@P
+        finished=a@P
         
         @endcode
     """

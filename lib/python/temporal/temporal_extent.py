@@ -10,6 +10,7 @@ Usage:
 
 >>> import grass.temporal as tgis
 >>> from datetime import datetime
+>>> tgis.init()
 >>> t = tgis.RasterRelativeTime()
 >>> t = tgis.RasterAbsoluteTime()
 
@@ -40,6 +41,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         
         @code
         
+        >>> init()
         >>> A = AbstractTemporalExtent(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=datetime(2001, 01, 01),
         ... end_time=datetime(2005,01,01) )
@@ -770,6 +772,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         
         @code
         
+        >>> init()
         >>> A = STDSAbsoluteTime(table="strds_absolute_time",
         ... ident="strds@PERMANENT", start_time=datetime(2001, 01, 01),
         ... end_time=datetime(2005,01,01), granularity="1 days",
@@ -895,6 +898,7 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
         
         @code
        
+        >>> init()
         >>> A = RelativeTemporalExtent(table="raster_relative_time",
         ... ident="soil@PERMANENT", start_time=0, end_time=1, unit="years")
         >>> A.id
@@ -1007,6 +1011,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
         
         @code
        
+        >>> init()
         >>> A = STDSRelativeTime(table="strds_relative_time",
         ... ident="strds@PERMANENT", start_time=0, end_time=1, unit="years",
         ... granularity=5, map_time="interval")

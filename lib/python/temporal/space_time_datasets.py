@@ -46,6 +46,7 @@ class RasterDataset(AbstractMapDataset):
         @code
         
         >>> import grass.script as grass
+        >>> init()
         >>> grass.use_temp_region()
         >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0, 
         ... t=1.0, b=0.0, res=10.0)

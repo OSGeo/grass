@@ -1683,9 +1683,3 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connected:
             dbif.close()
-
-###############################################################################
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
