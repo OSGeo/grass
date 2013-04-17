@@ -637,7 +637,6 @@ class VNETDialog(wx.Dialog):
             self.inputData['alayer'].SetValue("")
             self.inputData['nlayer'].SetValue("")
             for sel in ['afcolumn', 'abcolumn', 'ncolumn']:
-                self.inputData[sel].Clear()
                 self.inputData[sel].SetValue("")
             return
         elif itemsLen == 1:
@@ -719,7 +718,7 @@ class VNETDialog(wx.Dialog):
 
                 if not colVal:
                     continue
-                if colVal not in self.inputData[colInptF].GetItems():
+                if colVal != self.inputData[colInptF].GetValue():
                     errInput[col] = colVal
 
         return errInput
