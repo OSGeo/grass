@@ -96,7 +96,11 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
             G_fatal_error(_("Unsupported feature type %d"), type);
             
         /* create feature table with given feature type */
-        Vect_write_line(Out, type, NULL, NULL);
+        if (0 > Vect_write_line(Out, type, NULL, NULL)) {
+            G_warning(_("Unable to create PostGIS layer <%s>"),
+                      Vect_get_finfo_layer_name(Out));
+            return 1;
+        }
     }
   
     /* Note: sometimes is important to copy on level 2 (pseudotopo
@@ -112,7 +116,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
         
         /* copy features */
         ret += copy_lines_2(In, field, topo, Out);
-        
+
         if (topo == TOPO_NONE) {
             /* copy areas - external formats and simple features access only */
             ret += copy_areas(In, field, Out);
@@ -389,7 +393,7 @@ int is_isle(const struct Map_info *Map, int area)
   \brief Copy areas as polygons (OGR/PostGIS simple features access only)
 
   \param In input vector map
-  \param field layer number (> 0)
+  \param field layer number (-1 for all layers)
   \param Out output vector map
   
   \return 0 on success
@@ -414,16 +418,24 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
         G_debug(3, "area = %d", area);
         G_percent(area, nareas, 3);
 
-        /* get area category */
-        cat = Vect_get_area_cat(In, area, field);
-        if (cat < 0) {
-            /* no category - check if area forms an isle */
-	    /* this check does not make sense because the area
-	     * is also not exported if it is part of an isle
-	     * inside another area: the isle gets exported
-	     * as an inner ring */
+        /* get category */
+        Vect_reset_cats(Cats);
+        if (field > 0) {
+            cat = Vect_get_area_cat(In, area, field);
+            if (cat == -1)
+                continue; /* skip area without category in given layer */
+            
+            Vect_cat_set(Cats, field, cat);
+        }
+
+        /* skip isles */
+        if (Vect_get_area_centroid(In, area) == 0) {
+            /* no centroid - check if area forms an isle */
+	    /* this check does not make sense because the area is also
+	     * not exported if it is part of an isle inside another
+	     * area: the isle gets exported as an inner ring */
             if (!is_isle(In, area))
-                G_warning(_("No category defined for area %d. "
+                G_warning(_("No centroid defined for area %d. "
                             "Area not exported."),
                           area);
             continue;
@@ -432,10 +444,6 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
         /* get outer ring (area) */
         Vect_get_area_points(In, area, Points[0]);
 
-        /* get category */
-        Vect_reset_cats(Cats);
-        Vect_cat_set(Cats, field, cat);
-        
         /* get inner rings (isles) */
         nisles = Vect_get_area_num_isles(In, area);
         if (nisles + 1 > nparts_alloc) {

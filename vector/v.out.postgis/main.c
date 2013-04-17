@@ -138,12 +138,11 @@ int main(int argc, char *argv[])
     /* copy vector features & create PostGIS table*/
     if (Vect_copy_map_lines_field(&In, field, &Out) != 0)
         G_fatal_error(_("Copying features failed"));
-    
-    if (flags.topo->answer) 
-        Vect_build_partial(&Out, GV_BUILD_NONE); /* build from scratch */
-    
+
+    /* close input map */
     Vect_close(&In);
     
+    /* build topology for output map */
     if (Vect_build(&Out) != 1)
         G_fatal_error(_("Building %s topology failed"),
                       flags.topo->answer ? "PostGIS" : "pseudo");
@@ -151,6 +150,7 @@ int main(int argc, char *argv[])
     G_done_msg(_("Feature table <%s> created in database <%s>."),
                Vect_get_finfo_layer_name(&Out), Vect_get_finfo_dsn_name(&Out));
     
+    /* close output map */
     Vect_close(&Out);
 
     /* remove PG file */
