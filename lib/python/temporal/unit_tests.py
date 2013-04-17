@@ -563,112 +563,13 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-###############################################################################
-
-def test_compute_relative_time_granularity():
-
-    # First we test intervals
-    print "Test 1"
-    maps = []
-    fact = 5
-    start = 1
-    end = start * fact
-    for i in range(6):
-        end = start * fact
-        map = RasterDataset(None)
-        map.set_relative_time(start, end, "years")
-        maps.append(map)
-        start = end
-
-    fact = fact - 1
-    gran = round(compute_relative_time_granularity(maps))
-    if fact - gran != 0:
-        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
-
-    print "Test 2"
-    maps = []
-    fact = 3
-    start = 1.0 / 86400
-    end = start * fact
-    for i in range(10):
-        end = start * fact
-        map = RasterDataset(None)
-        map.set_relative_time(start, end, "years")
-        maps.append(map)
-        start = end
-
-    fact = fact - 1
-    gran = round(compute_relative_time_granularity(maps) * 86400)
-    if fact - gran != 0:
-        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
-
-    print "Test 3 with gaps"
-    maps = []
-    fact = 3
-    start = 1
-    end = start + fact
-    for i in range(10):
-        shift = i * 2 * fact
-        start = shift
-        end = start + fact
-
-        map = RasterDataset(None)
-        map.set_relative_time(start, end, "years")
-        maps.append(map)
-
-    gran = round(compute_relative_time_granularity(maps))
-    if fact - gran != 0:
-        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
-
-    # Second we test intervals and points mixed
-
-    print "Test 4 intervals and points"
-    maps = []
-    fact = 5
-    start = 1
-    end = start * fact
-    count = 0
-    for i in range(6):
-        end = start * fact
-        map = RasterDataset(None)
-        if count % 2 == 0:
-            map.set_relative_time(start, end, "years")
-        else:
-            map.set_relative_time(start, None)
-        maps.append(map)
-        start = end
-        count += 1
-
-    fact = fact - 1
-    gran = round(compute_relative_time_granularity(maps))
-    if fact - gran != 0:
-        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
-
-    # Second we test points only
-
-    print "Test 5 points only"
-    maps = []
-    fact = 3
-    start = 1.0 / 86400
-    for i in range(10):
-        point = (i + 1) * fact * start
-        map = RasterDataset(None)
-        map.set_relative_time(point, None, years)
-        maps.append(map)
-
-    gran = round(compute_relative_time_granularity(maps) * 86400)
-    if fact - gran != 0:
-        core.fatal("Wrong granularity reference %i != gran %i" % (fact, gran))
-
-###############################################################################
-
 def test_compute_absolute_time_granularity():
 
     # First we test intervals
     print "Test 1"
     maps = []
     a = datetime(2001, 1, 1)
-    increment = "1 years"
+    increment = "1 year"
     for i in range(10):
         start = increment_datetime_by_string(a, increment, i)
         end = increment_datetime_by_string(a, increment, i + 1)
@@ -700,7 +601,7 @@ def test_compute_absolute_time_granularity():
     print "Test 3"
     maps = []
     a = datetime(2001, 5, 1)
-    increment = "1 months"
+    increment = "1 month"
     for i in range(20):
         start = increment_datetime_by_string(a, increment, i)
         end = increment_datetime_by_string(a, increment, i + 1)
@@ -732,7 +633,7 @@ def test_compute_absolute_time_granularity():
     print "Test 3"
     maps = []
     a = datetime(2001, 1, 1)
-    increment = "1 days"
+    increment = "1 day"
     for i in range(6):
         start = increment_datetime_by_string(a, increment, i)
         end = increment_datetime_by_string(a, increment, i + 1)
@@ -764,7 +665,7 @@ def test_compute_absolute_time_granularity():
     print "Test 5"
     maps = []
     a = datetime(2001, 3, 1)
-    increment = "1 months, 4 days"
+    increment = "1 month, 4 days"
     for i in range(20):
         start = increment_datetime_by_string(a, increment, i)
         end = increment_datetime_by_string(a, increment, i + 1)
@@ -772,7 +673,7 @@ def test_compute_absolute_time_granularity():
         map.set_absolute_time(start, end)
         maps.append(map)
 
-    increment = "1 days"
+    increment = "1 day"
     gran = compute_absolute_time_granularity(maps)
     if increment != gran:
         core.fatal("Wrong granularity reference %s != gran %s" % (
@@ -885,6 +786,8 @@ def test_compute_absolute_time_granularity():
     for i in range(24):
         start = increment_datetime_by_string(a, increment, i)
         end = increment_datetime_by_string(a, increment, i + 1)
+        print start
+        print end
         map = RasterDataset(None)
         map.set_absolute_time(start, end)
         maps.append(map)
@@ -1489,13 +1392,13 @@ def test_temporal_topology_builder():
     _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 06, 01))
     map_listA.append(copy.copy(_map))
 
-    tb = temporal_topology_builder()
+    tb = TemporalTopologyBuilder()
     tb.build(map_listA)
 
     count = 0
     for _map in tb:
         print "[%s]" % (_map.get_name())
-        _map.print_temporal_topology_info()
+        _map.print_topology_info()
         if _map.get_id() != map_listA[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
                 (_map.get_id(), map_listA[count].get_id()))
@@ -1519,36 +1422,36 @@ def test_temporal_topology_builder():
     _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 05, 14))
     map_listB.append(copy.copy(_map))
 
-    tb = temporal_topology_builder()
+    tb = TemporalTopologyBuilder()
     tb.build(map_listB)
 
     # Probing some relations
-    if map_listB[0].get_temporal_overlapped()[0] != map_listB[1]:
+    if map_listB[0].get_overlapped()[0] != map_listB[1]:
         core.fatal("Error building temporal topology")
-    if map_listB[0].get_temporal_overlapped()[1] != map_listB[2]:
+    if map_listB[0].get_overlapped()[1] != map_listB[2]:
         core.fatal("Error building temporal topology")
-    if map_listB[2].get_temporal_contains()[0] != map_listB[3]:
+    if map_listB[2].get_contains()[0] != map_listB[3]:
         core.fatal("Error building temporal topology")
-    if map_listB[3].get_temporal_during()[0] != map_listB[2]:
+    if map_listB[3].get_during()[0] != map_listB[2]:
         core.fatal("Error building temporal topology")
 
     count = 0
     for _map in tb:
         print "[%s]" % (_map.get_map_id
         ())
-        _map.print_temporal_topology_shell_info()
+        _map.print_topology_shell_info()
         if _map.get_id() != map_listB[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
                 (_map.get_id(), map_listB[count].get_id()))
         count += 1
 
-    tb = temporal_topology_builder()
-    tb.build2(map_listA, map_listB)
+    tb = TemporalTopologyBuilder()
+    tb.build(map_listA, map_listB)
 
     count = 0
     for _map in tb:
         print "[%s]" % (_map.get_map_id())
-        _map.print_temporal_topology_shell_info()
+        _map.print_topology_shell_info()
         if _map.get_id() != map_listA[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
                 (_map.get_id(), map_listA[count].get_id()))
@@ -1557,21 +1460,21 @@ def test_temporal_topology_builder():
     count = 0
     for _map in map_listB:
         print "[%s]" % (_map.get_map_id())
-        _map.print_temporal_topology_shell_info()
+        _map.print_topology_shell_info()
 
     # Probing some relations
-    if map_listA[3].get_temporal_follows()[0] != map_listB[1]:
+    if map_listA[3].get_follows()[0] != map_listB[1]:
         core.fatal("Error building temporal topology")
-    if map_listA[3].get_temporal_precedes()[0] != map_listB[4]:
+    if map_listA[3].get_precedes()[0] != map_listB[4]:
         core.fatal("Error building temporal topology")
-    if map_listA[3].get_temporal_overlaps()[0] != map_listB[2]:
+    if map_listA[3].get_overlaps()[0] != map_listB[2]:
         core.fatal("Error building temporal topology")
-    if map_listA[3].get_temporal_contains()[0] != map_listB[3]:
+    if map_listA[3].get_contains()[0] != map_listB[3]:
         core.fatal("Error building temporal topology")
 
-    if map_listA[2].get_temporal_during()[0] != map_listB[1]:
+    if map_listA[2].get_during()[0] != map_listB[1]:
         core.fatal("Error building temporal topology")
-    if map_listA[2].get_temporal_during()[1] != map_listB[2]:
+    if map_listA[2].get_during()[1] != map_listB[2]:
         core.fatal("Error building temporal topology")
 
 ###############################################################################
@@ -1751,10 +1654,10 @@ def test_4d_rtree():
 ###############################################################################
 
 if __name__ == "__main__":
+    init()
     test_increment_datetime_by_string()
     test_adjust_datetime_to_granularity()
     test_spatial_extent_intersection()
-    test_compute_relative_time_granularity()
     test_compute_absolute_time_granularity()
     test_compute_datetime_delta()
     test_spatial_extent_intersection()

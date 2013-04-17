@@ -31,6 +31,43 @@ def check_granularity_string(granularity, temporal_type):
         @param granularity The granularity string
         @param temporal_type The temporal type of the granularity relative or absolute
         @return True if valid, False if invalid
+        
+        @code
+        
+        >>> check_granularity_string("1 year", "absolute")
+        True
+        >>> check_granularity_string("1 month", "absolute")
+        True
+        >>> check_granularity_string("1 day", "absolute")
+        True
+        >>> check_granularity_string("1 minute", "absolute")
+        True
+        >>> check_granularity_string("1 hour", "absolute")
+        True
+        >>> check_granularity_string("1 second", "absolute")
+        True
+        >>> check_granularity_string("5 months", "absolute")
+        True
+        >>> check_granularity_string("5 days", "absolute")
+        True
+        >>> check_granularity_string("5 minutes", "absolute")
+        True
+        >>> check_granularity_string("5 years", "absolute")
+        True
+        >>> check_granularity_string("5 hours", "absolute")
+        True
+        >>> check_granularity_string("2 seconds", "absolute")
+        True
+        >>> check_granularity_string("1 secondo", "absolute")
+        False
+        >>> check_granularity_string("bla second", "absolute")
+        False
+        >>> check_granularity_string(1, "relative")
+        True
+        >>> check_granularity_string("bla", "relative")
+        False
+        
+        @endcode
     """
     temporal_type
     
@@ -69,6 +106,94 @@ def compute_relative_time_granularity(maps):
 
         @param maps: a ordered by start_time list of map objects
         @return An integer
+        
+        
+        @code
+        
+        >>> import grass.temporal as tgis
+        >>> tgis.init()
+        >>> maps = []
+        >>> for i in range(5):
+        ...   map = tgis.RasterDataset("a%i@P"%i)
+        ...   check = map.set_relative_time(i,i + 1,"seconds")
+        ...   if check:
+        ...     maps.append(map)
+        >>> tgis.compute_relative_time_granularity(maps)
+        1
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((0,3), (3,6), (6,9))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_relative_time(t[0],t[1],"years")
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_relative_time_granularity(maps)
+        3
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((0,3), (4,6), (8,11))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_relative_time(t[0],t[1],"years")
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_relative_time_granularity(maps)
+        1
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((0,8), (2,6), (5,9))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_relative_time(t[0],t[1],"months")
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_relative_time_granularity(maps)
+        4
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((0,8), (8,12), (12,18))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_relative_time(t[0],t[1],"days")
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_relative_time_granularity(maps)
+        2
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((0,None), (8,None), (12,None), (24,None))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_relative_time(t[0],t[1],"minutes")
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_relative_time_granularity(maps)
+        4
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((0,None), (8,14), (18,None), (24,None))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_relative_time(t[0],t[1],"hours")
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_relative_time_granularity(maps)
+        2
+        
+        @endcode
     """
 
     # The interval time must be scaled to days resolution
@@ -125,6 +250,74 @@ def compute_absolute_time_granularity(maps):
 
         @param maps: a ordered by start_time list of map objects
         @return The temporal topology as string "integer unit"
+        
+        @code
+
+        >>> import grass.temporal as tgis
+        >>> import datetime
+        >>> dt = datetime.datetime
+        >>> tgis.init()
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((dt(2000,01,01),None), (dt(2000,02,01),None))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_absolute_time(t[0],t[1])
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_absolute_time_granularity(maps)
+        '1 month'
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((dt(2000,01,01),None), (dt(2000,01,02),None), (dt(2000,01,03),None))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_absolute_time(t[0],t[1])
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_absolute_time_granularity(maps)
+        '1 day'
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((dt(2000,01,01),None), (dt(2000,01,02),None), (dt(2000,05,04,0,5,30),None))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_absolute_time(t[0],t[1])
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_absolute_time_granularity(maps)
+        '30 seconds'
+        
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((dt(2000,01,01),dt(2000,05,02)), (dt(2000,05,04,2),None))
+        >>> for t in timelist:
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_absolute_time(t[0],t[1])
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_absolute_time_granularity(maps)
+        '2 hours'
+
+        >>> maps = []
+        >>> count = 0
+        >>> timelist = ((dt(2000,01,01),dt(2000,02,01)), (dt(2005,05,04,12),dt(2007,05,20,6)))
+        >>> for t in timelist:  
+        ...   map = tgis.RasterDataset("a%i@P"%count)
+        ...   check = map.set_absolute_time(t[0],t[1])
+        ...   if check:
+        ...     maps.append(map)
+        ...   count += 1
+        >>> tgis.compute_absolute_time_granularity(maps)
+        '6 hours'
+        
+        @endcode
     """
 
     has_seconds = False
@@ -166,42 +359,47 @@ def compute_absolute_time_granularity(maps):
                     delta.append(start2 - start1)
                     datetime_delta.append(compute_datetime_delta(
                         start1, start2))
-
     # Check what changed
     dlist = []
     for d in datetime_delta:
         if "second" in d and d["second"] > 0:
             has_seconds = True
+            #print "has second"
         if "minute" in d and d["minute"] > 0:
             has_minutes = True
+            #print "has minute"
         if "hour" in d and d["hour"] > 0:
             has_hours = True
+            #print "has hour"
         if "day" in d and d["day"] > 0:
             has_days = True
+            #print "has day"
         if "month" in d and d["month"] > 0:
             has_months = True
+            #print "has month"
         if "year" in d and d["year"] > 0:
             has_years = True
+            #print "has year"
 
     # Create a list with a single time unit only
     if has_seconds:
         for d in datetime_delta:
-            if "second" in d:
+            if "second" in d and d["second"] > 0:
                 dlist.append(d["second"])
-            elif "minute" in d:
+            elif "minute" in d and d["minute"] > 0:
                 dlist.append(d["minute"] * 60)
-            elif "hour" in d:
+            elif "hour" in d and d["hour"] > 0:
                 dlist.append(d["hour"] * 3600)
-            elif "day" in d:
+            elif "day" in d and d["day"] > 0:
                 dlist.append(d["day"] * 24 * 3600)
             else:
                 dlist.append(d["max_days"] * 24 * 3600)
         use_seconds = True
     elif has_minutes:
         for d in datetime_delta:
-            if "minute" in d:
+            if "minute" in d and d["minute"] > 0:
                 dlist.append(d["minute"])
-            elif "hour" in d:
+            elif "hour" in d and d["hour"] > 0:
                 dlist.append(d["hour"] * 60)
             elif "day" in d:
                 dlist.append(d["day"] * 24 * 60)
@@ -210,25 +408,25 @@ def compute_absolute_time_granularity(maps):
         use_minutes = True
     elif has_hours:
         for d in datetime_delta:
-            if "hour" in d:
+            if "hour" in d and d["hour"] > 0:
                 dlist.append(d["hour"])
-            elif "day" in d:
+            elif "day" in d and d["day"] > 0:
                 dlist.append(d["day"] * 24)
             else:
                 dlist.append(d["max_days"] * 24)
         use_hours = True
     elif has_days:
         for d in datetime_delta:
-            if "day" in d:
+            if "day" in d and d["day"] > 0:
                 dlist.append(d["day"])
             else:
                 dlist.append(d["max_days"])
         use_days = True
     elif has_months:
         for d in datetime_delta:
-            if "month" in d:
+            if "month" in d and d["month"] > 0:
                 dlist.append(d["month"])
-            elif "year" in d:
+            elif "year" in d and d["year"] > 0:
                 dlist.append(d["year"] * 12)
         use_months = True
     elif has_years:
@@ -309,3 +507,9 @@ def gcd_list(list):
     Returns: GCD of all numbers
     """
     return reduce(gcd, list)
+    
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

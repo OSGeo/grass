@@ -375,6 +375,7 @@ class SQLDatabaseInterfaceConnection():
            
            @code
            
+           >>> init()
            >>> dbif = SQLDatabaseInterfaceConnection()
            >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
            ... ["soil@PERMANENT",]])

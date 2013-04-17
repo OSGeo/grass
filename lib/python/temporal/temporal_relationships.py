@@ -633,3 +633,10 @@ def create_temporal_relation_sql_where_statement(
         where = None
 
     return where
+    
+
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

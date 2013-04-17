@@ -9,6 +9,7 @@ Usage:
 @code
 
 >>> import grass.temporal as tgis
+>>> tgis.init()
 >>> meta = tgis.RasterMetadata()
 >>> meta = tgis.Raster3DMetadata()
 >>> meta = tgis.VectorMetadata()
@@ -37,6 +38,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
         
         @code
         
+        >>> init()
         >>> meta = RasterMetadataBase(table="metadata", ident="soil@PERMANENT",
         ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
         ... ewres=0.1, min=0, max=100)
@@ -276,6 +278,7 @@ class RasterMetadata(RasterMetadataBase):
         
         @code
        
+        >>> init()
         >>> meta = RasterMetadata(ident="soil@PERMANENT",
         ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
         ... ewres=0.1, min=0, max=100)
@@ -375,6 +378,7 @@ class Raster3DMetadata(RasterMetadataBase):
         
         @code
        
+        >>> init()
         >>> meta = Raster3DMetadata(ident="soil@PERMANENT",
         ... datatype="FCELL", cols=100, rows=100, depths=100,
         ... number_of_cells=1000000, nsres=0.1, ewres=0.1, tbres=0.1,
@@ -518,6 +522,7 @@ class VectorMetadata(SQLDatabaseInterface):
         
         @code
        
+        >>> init()
         >>> meta = VectorMetadata(ident="lidar@PERMANENT", is_3d=True, 
         ... number_of_points=1, number_of_lines=2, number_of_boundaries=3,
         ... number_of_centroids=4, number_of_faces=5, number_of_kernels=6, 
@@ -871,6 +876,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
         
         @code
         
+        >>> init()
         >>> meta = STDSMetadataBase(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
@@ -886,6 +892,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
          | Soils
          | Description:
          | Soils 1950 - 2010
+         | Command of creation:
         >>> meta.print_shell_info()
         number_of_maps=None
         
@@ -1001,7 +1008,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         Usage:
         
         @code
-        
+        >>> init()
         >>> meta = STDSRasterMetadataBase(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
@@ -1025,6 +1032,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
          | Soils
          | Description:
          | Soils 1950 - 2010
+         | Command of creation:
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1192,6 +1200,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
         
         @code
         
+        >>> init()
         >>> meta = STRDSMetadata(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
@@ -1217,6 +1226,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
          | Soils
          | Description:
          | Soils 1950 - 2010
+         | Command of creation:
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1293,6 +1303,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         
         @code
         
+        >>> init()
         >>> meta = STR3DSMetadata(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
         >>> meta.id
@@ -1320,6 +1331,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
          | Soils
          | Description:
          | Soils 1950 - 2010
+         | Command of creation:
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1428,6 +1440,7 @@ class STVDSMetadata(STDSMetadataBase):
         
         @code
         
+        >>> init()
         >>> meta = STVDSMetadata(ident="lidars@PERMANENT",
         ... title="LIDARS", description="LIDARS 2008 - 2010")
         >>> meta.id
@@ -1456,6 +1469,7 @@ class STVDSMetadata(STDSMetadataBase):
          | LIDARS
          | Description:
          | LIDARS 2008 - 2010
+         | Command of creation:
          | Vector register table:...... None
          | Number of points ........... None
          | Number of lines ............ None

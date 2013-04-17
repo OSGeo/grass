@@ -332,6 +332,8 @@ class AbstractMapDataset(AbstractTemporalDataset):
         self.absolute_time.set_start_time(start_time)
         self.absolute_time.set_end_time(end_time)
         self.absolute_time.set_timezone(timezone)
+        
+        return True
 
     def update_absolute_time(self, start_time, end_time=None, 
                              timezone=None, dbif=None):
@@ -361,9 +363,9 @@ class AbstractMapDataset(AbstractTemporalDataset):
            @param start_time: A double value
            @param end_time: A double value
            @param unit: The unit of the relative time. Supported units: 
-                        years, months, days, hours, minutes, seconds
+                        year(s), month(s), day(s), hour(s), minute(s), second(s)
 
-           Return True for success and False otherwise
+           @return True for success and False otherwise
 
         """
 
@@ -612,9 +614,3 @@ class AbstractMapDataset(AbstractTemporalDataset):
             dbif.close()
 
         return rows
-
-###############################################################################
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

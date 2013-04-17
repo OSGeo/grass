@@ -9,6 +9,7 @@ Usage:
 @code
 
 >>> import grass.temporal as tgis
+>>> tgis.init()
 >>> extent = tgis.RasterSpatialExtent( 
 ... ident="raster@PERMANENT", north=90, south=90, east=180, west=180,
 ... top=100, bottom=-20)
@@ -50,6 +51,7 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @code
         
+        >>> init()
         >>> extent = SpatialExtent(table="raster_spatial_extent", 
         ... ident="soil@PERMANENT", north=90, south=90, east=180, west=180,
         ... top=100, bottom=-20)

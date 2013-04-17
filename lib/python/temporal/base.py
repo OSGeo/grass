@@ -14,6 +14,7 @@ Usage:
 @code
 
 >>> import grass.temporal as tgis
+>>> tgis.init()
 >>> rbase = tgis.RasterBase(ident="soil@PERMANENT")
 >>> vbase = tgis.VectorBase(ident="soil:1@PERMANENT")
 >>> r3base = tgis.Raster3DBase(ident="soil@PERMANENT")
@@ -50,7 +51,7 @@ class DictSQLSerializer(object):
             Usage:
             
             \code
-            
+            >>> init()
             >>> t = DictSQLSerializer()
             >>> t.D["id"] = "soil@PERMANENT"
             >>> t.D["name"] = "soil"
@@ -212,6 +213,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
        
        \code
        
+        >>> init()
         >>> t = SQLDatabaseInterface("raster", "soil@PERMANENT")
         >>> t.D["name"] = "soil"
         >>> t.D["mapset"] = "PERMANENT"
@@ -511,6 +513,7 @@ class DatasetBase(SQLDatabaseInterface):
         
         \code
 
+        >>> init()
         >>> t = DatasetBase("raster", "soil@PERMANENT", creator="soeren", ctime=datetime(2001,1,1), ttype="absolute")
         >>> t.id
         'soil@PERMANENT'
@@ -849,6 +852,7 @@ class STDSBase(DatasetBase):
 
     \code
     
+    >>> init()
     >>> t = STDSBase("stds", "soil@PERMANENT", semantic_type="average", creator="soeren", ctime=datetime(2001,1,1), ttype="absolute")
     >>> t.semantic_type
     'average'
