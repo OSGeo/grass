@@ -1624,9 +1624,10 @@ class CmdPanel(wx.Panel):
         
         # set wxId-bindings
         if pMap:
-            pMap['wxId-bind'] = copy.copy(pColumnIds)
+            pMap['wxId-bind'] = []
             if pLayer:
                 pMap['wxId-bind'] +=  pLayerIds
+            pMap['wxId-bind'] += copy.copy(pColumnIds)
         if pLayer:
             for p in pLayer:
                 p['wxId-bind'] = copy.copy(pColumnIds)
