@@ -57,28 +57,42 @@ class AbstractDataset(object):
     def reset(self, ident):
         """!Reset the internal structure and set the identifier
 
-           @param ident: The identifier of the dataset
+           @param ident The identifier of the dataset that  "name@mapset" or in case of vector maps "name:layer@mapset"
         """
         raise ImplementationError("This method must be implemented in the subclasses")
 
     def get_type(self):
-        """!Return the type of this class"""
+        """!Return the type of this class as string
+           
+           The type can be "vect", "rast", "rast3d", "stvds", "strds" or "str3ds" 
+           
+           @return "vect", "rast", "rast3d", "stvds", "strds" or "str3ds"
+        """
         raise ImplementationError("This method must be implemented in the subclasses")
 
     def get_new_instance(self, ident):
         """!Return a new instance with the type of this class
 
-           @param ident: The identifier of the dataset
+           @param ident The identifier of the new dataset instance
+           @return A new instance with the type of this object
         """
         raise ImplementationError("This method must be implemented in the subclasses")
 
     def spatial_overlapping(self, dataset):
-        """!Return True if the spatial extents are overlapping"""
+        """!Return True if the spatial extents overlap
+        
+           @param dataset The abstract dataset to check spatial overlapping
+           @return True if self and the provided dataset spatial overlap
+        """
 
         raise ImplementationError("This method must be implemented in the subclasses")
 
     def spatial_relation(self, dataset):
-        """Return the spatial relationship between self and dataset"""
+        """!Return the spatial relationship between self and dataset
+        
+           @param dataset The abstract dataset to compute the spatial relation with self
+           @return The spatial relationship as string
+        """
 
         raise ImplementationError("This method must be implemented in the subclasses")
 
@@ -104,22 +118,29 @@ class AbstractDataset(object):
         self.metadata.set_id(ident)
 
     def get_id(self):
-        """!Return the unique identifier of the dataset"""
+        """!Return the unique identifier of the dataset
+           @return The id of the dataset "name(:layer)@mapset" as string
+        """
         return self.base.get_id()
 
     def get_name(self):
-        """!Return the name"""
+        """!Return the name
+           @return The name of the dataset as string
+        """
         return self.base.get_name()
 
     def get_mapset(self):
-        """!Return the mapset"""
+        """!Return the mapset
+           @return The mapset in which the dataset was created as string
+        """
         return self.base.get_mapset()
 
     def get_valid_time(self):
         """!Returns a tuple of the valid start and end time
         
-           Start and end time can be either of type datetime or of type double
-           depending on the temporal type
+           Start and end time can be either of type datetime or of type integer,
+           depending on the temporal type.
+           
            @return A tuple of (start_time, end_time)
         """
 
@@ -136,8 +157,15 @@ class AbstractDataset(object):
         return (start, end)
 
     def get_absolute_time(self):
-        """!Returns a tuple of the start, the end 
-           valid time and the timezone of the map
+        """!Returns the start time, the end 
+           time and the timezone of the map as tuple
+           
+           @attention: The timezone is currently not used.
+           
+           The start time is of type datetime.
+           
+           The end time is of type datetime in case of interval time, 
+           or None on case of a time instance.
            
            @return A tuple of (start_time, end_time, timezone)
         """
@@ -149,8 +177,16 @@ class AbstractDataset(object):
         return (start, end, tz)
 
     def get_relative_time(self):
-        """!Returns the valid relative time interval (start_time, end_time, unit) 
-           or None if not present"""
+        """!Returns the start time, the end 
+           time and the temporal unit of the dataset as tuple
+           
+           The start time is of type integer.
+           
+           The end time is of type integer in case of interval time, 
+           or None on case of a time instance.
+           
+           @return A tuple of (start_time, end_time, unit)
+        """
 
         start = self.relative_time.get_start_time()
         end = self.relative_time.get_end_time()
@@ -159,17 +195,17 @@ class AbstractDataset(object):
         return (start, end, unit)
 
     def get_relative_time_unit(self):
-        """!Returns the relative time unit or None if not present"""
-
-        unit = self.relative_time.get_unit()
-
-        return unit
+        """!Returns the relative time unit
+           @return The relative time unit as string, None if not present
+        """
+        return self.relative_time.get_unit()
 
     def check_relative_time_unit(self, unit):
-        """!Check if unit is of type  years, months, days, hours, 
-           minutes or seconds
+        """!Check if unit is of type  year(s), month(s), day(s), hour(s), 
+           minute(s) or second(s)
 
-           Return True if success or False otherwise
+           @param unit The unit string
+           @return True if success, False otherwise
         """
         # Check unit
         units = ["year", "years", "month", "months", "day", "days", "hour", 
@@ -179,17 +215,33 @@ class AbstractDataset(object):
         return True
 
     def get_temporal_type(self):
-        """!Return the temporal type of this dataset"""
+        """!Return the temporal type of this dataset
+        
+           The temporal type can be absolute or relative
+           
+           @return The temporal type of the dataset as string
+        """
         return self.base.get_ttype()
 
     def get_spatial_extent(self):
-        """!Return a tuple of spatial extent 
-           (north, south, east, west, top, bottom) """
+        """!Return the spatial extent as tuple
+        
+           Top and bottom are set to 0 in case of a two dimensional spatial extent.
+           
+           @return A the spatial extent as tuple (north, south, east, west, top, bottom) 
+        """
         return self.spatial_extent.get_spatial_extent()
 
     def select(self, dbif=None):
         """!Select temporal dataset entry from database and fill 
-           up the internal structure"""
+           the internal structure
+           
+           The content of every dataset is stored in the temporal database.
+           This method must be used to fill this object with the content 
+           from the temporal database.
+           
+           @param dbif The database interface to be used
+        """
 
         dbif, connected = init_dbif(dbif)
 
@@ -205,25 +257,25 @@ class AbstractDataset(object):
             dbif.close()
 
     def is_in_db(self, dbif=None):
-        """!Check if the temporal dataset entry is in the database
+        """!Check if the dataset is registered in the database
 
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
+           @return True if the dataset is registered in the database
         """
         return self.base.is_in_db(dbif)
 
     def delete(self):
-        """!Delete temporal dataset entry from database if it exists"""
+        """!Delete dataset from database if it exists"""
         raise ImplementationError("This method must be implemented in the subclasses")
 
     def insert(self, dbif=None, execute=True):
-        """!Insert temporal dataset entry into 
-           database from the internal structure
+        """!Insert dataset into database
 
-
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL statements will be executed.
+           @param dbif The database interface to be used
+           @param execute If True the SQL statements will be executed.
                            If False the prepared SQL statements are returned 
                            and must be executed by the caller.
+            @return The SQL insert statement in case execute=False, or an empty string otherwise
         """
 
         dbif, connected = init_dbif(dbif)
@@ -250,14 +302,15 @@ class AbstractDataset(object):
         return statement
 
     def update(self, dbif=None, execute=True, ident=None):
-        """!Update temporal dataset entry of database from the internal structure
+        """!Update the dataset entry in the database from the internal structure
            excluding None variables
 
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL statements will be executed.
+           @param dbif The database interface to be used
+           @param execute If True the SQL statements will be executed.
                            If False the prepared SQL statements are returned 
                            and must be executed by the caller.
-           @param ident: The identifier to be updated, useful for renaming
+           @param ident The identifier to be updated, useful for renaming
+           @return The SQL update statement in case execute=False, or an empty string otherwise
         """
 
         dbif, connected = init_dbif(dbif)
@@ -285,14 +338,15 @@ class AbstractDataset(object):
         return statement
 
     def update_all(self, dbif=None, execute=True, ident=None):
-        """!Update temporal dataset entry of database from the internal structure
+        """!Update the dataset entry in the database from the internal structure
            and include None variables.
 
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL statements will be executed.
+           @param dbif The database interface to be used
+           @param execute If True the SQL statements will be executed.
                            If False the prepared SQL statements are returned 
                            and must be executed by the caller.
-           @param ident: The identifier to be updated, useful for renaming
+           @param ident The identifier to be updated, useful for renaming
+           @return The SQL update statement in case execute=False, or an empty string otherwise
         """
 
         dbif, connected = init_dbif(dbif)
@@ -330,7 +384,7 @@ class AbstractDataset(object):
     def is_time_absolute(self):
         """!Return True in case the temporal type is absolute
         
-        @return True if temporal type is absolute, False otherwise
+            @return True if temporal type is absolute, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "absolute"
@@ -340,7 +394,7 @@ class AbstractDataset(object):
     def is_time_relative(self):
         """!Return True in case the temporal type is relative
         
-        @return True if temporal type is relative, False otherwise
+            @return True if temporal type is relative, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "relative"
@@ -348,7 +402,10 @@ class AbstractDataset(object):
             return None
 
     def temporal_relation(self, map):
-        """!Return the temporal relation of this and the provided temporal map"""
+        """!Return the temporal relation of self and the provided dataset
+        
+            @return The temporal relation as string
+        """
         if self.is_time_absolute() and map.is_time_absolute():
             return self.absolute_time.temporal_relation(map.absolute_time)
         if self.is_time_relative() and map.is_time_relative():

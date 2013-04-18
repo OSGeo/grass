@@ -117,7 +117,7 @@ class SpatialExtent(SQLDatabaseInterface):
          
          @endcode
         
-        @param extent: The spatial extent to check overlapping with
+        @param extent The spatial extent to check overlapping with
         @return True or False
         """
 
@@ -178,7 +178,7 @@ class SpatialExtent(SQLDatabaseInterface):
          
          @endcode
          
-         @param extent: The spatial extent to check overlapping with
+         @param extent The spatial extent to check overlapping with
          @return True or False
         """
 
@@ -200,7 +200,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """!Return the two dimensional intersection as spatial_extent 
         object or None in case no intersection was found.
        
-        @param extent: The spatial extent to intersect with
+        @param extent The spatial extent to intersect with
          @return The intersection spatial extent
         """
 
@@ -315,7 +315,7 @@ class SpatialExtent(SQLDatabaseInterface):
          @endcode
          
          
-         @param extent: The spatial extent to intersect with
+         @param extent The spatial extent to intersect with
          @return The intersection spatial extent
         """
 
@@ -355,7 +355,7 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @endverbatim
         
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
         if self.get_projection() != extent.get_projection():
@@ -413,7 +413,7 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @endcode
         
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
         if not self.is_in_2d(extent):
@@ -449,7 +449,7 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @endcode
         
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
         return extent.is_in_2d(self)
@@ -473,7 +473,7 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @endcode
         
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
         return extent.is_in(self)
@@ -495,7 +495,7 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @endcode
         
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
         if self.get_projection() != extent.get_projection():
@@ -553,7 +553,7 @@ class SpatialExtent(SQLDatabaseInterface):
         
         @endcode
         
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -601,7 +601,7 @@ class SpatialExtent(SQLDatabaseInterface):
         - in
         - equivalent
 
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -673,7 +673,7 @@ class SpatialExtent(SQLDatabaseInterface):
         - in
         - equivalent
 
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
         if self.get_projection() != extent.get_projection():
@@ -763,7 +763,7 @@ class SpatialExtent(SQLDatabaseInterface):
         - in
         - equivalent
 
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -779,7 +779,7 @@ class SpatialExtent(SQLDatabaseInterface):
         - in
         - equivalent
 
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -807,7 +807,7 @@ class SpatialExtent(SQLDatabaseInterface):
         - covered
         - equivalent
            
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -867,7 +867,7 @@ class SpatialExtent(SQLDatabaseInterface):
         - covered
         - equivalent
            
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -953,7 +953,7 @@ class SpatialExtent(SQLDatabaseInterface):
              
          @endverbatim
            
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -1015,7 +1015,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """!Return True if this extent meets with the provided spatial
         extent in three dimensions.
            
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
         eN = extent.get_north()
@@ -1105,7 +1105,7 @@ class SpatialExtent(SQLDatabaseInterface):
                      
          @endverbatim
          
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 
@@ -1117,7 +1117,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """!Return True if this extent is disjoint with the provided spatial
         extent in three dimensions.
            
-        @param extent: The spatial extent
+        @param extent The spatial extent
         @return True or False
         """
 

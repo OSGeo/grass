@@ -321,7 +321,7 @@ class RasterDataset(AbstractMapDataset):
         # Get the data from an existing raster map
         global use_ctypes_map_access
 
-	if use_ctypes_map_access:
+        if use_ctypes_map_access:
             kvp = self.read_info()
         else:
             kvp = raster.raster_info(self.get_id())

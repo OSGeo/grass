@@ -21,24 +21,42 @@ from abstract_temporal_dataset import *
 from datetime_math import *
 
 class AbstractMapDataset(AbstractTemporalDataset):
-    """!This is the base class for all maps (raster, vector, raster3d)
-       providing additional function to set the valid time and the spatial extent.
+    """!This is the base class for all maps (raster, vector, raster3d).
+    
+        The temporal extent, the spatial extent and the metadata of maps
+        are stored in the temporal database. Maps can be registered in the temporal
+        database, updated and deleted. 
+        
+        This class provides all functionalities that are needed to manage maps
+        in the temporal database. That are:
+        - insert() to register the map and therefore its spatio-temporal extent and metadata in the temporal database
+        - update() to update the map spatio-temporal extent and metadata in the temporal database
+        - unregister() to unregister the map from each space time dataset in which this map is registered
+        - delete() to remove the map from the temporal database
+        - Methods to set relative and absolute time stamps
+        - Abstract methods that must be implemented in the map specific subclasses
     """
     def __init__(self):
         AbstractTemporalDataset.__init__(self)
 
     def get_new_stds_instance(self, ident):
-        """!Return a new space time dataset instance in which maps
-           are stored with the type of this class
+        """!Return a new space time dataset instance that store maps with the type of this map object (rast, rast3d or vect)
 
-           @param ident: The identifier of the dataset
+           @param ident The identifier of the space time dataset
+           @return The new space time dataset instance
         """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
 
     def get_stds_register(self):
-        """!Return the space time dataset register table name in which stds
-           are listed in which this map is registered"""
+        """!Return the space time dataset register table name
+        
+            Maps can be registered in several different space time datasets.
+            This method returns the name of the register table in the 
+            temporal database.
+            
+            @return The name of the stds register table
+        """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
 
@@ -48,7 +66,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
            This table stores all space time datasets in 
            which this map is registered.
 
-           @param ident: The name of the register table
+           @param ident The name of the register table
         """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
@@ -57,18 +75,21 @@ class AbstractMapDataset(AbstractTemporalDataset):
         """!Check if the raster or voxel resolution is 
            finer than the current resolution
            
-           * Return "finer" in case the raster/voxel resolution is finer 
+           - Return "finer" in case the raster/voxel resolution is finer 
              than the current region
-           * Return "coarser" in case the raster/voxel resolution is coarser 
+           - Return "coarser" in case the raster/voxel resolution is coarser 
              than the current region
 
-           Vector maps are alwyas finer than the current region
+           Vector maps have no resolution, since they store the coordinates directly.
+           
+           @return "finer" or "coarser"
         """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
 
     def has_grass_timestamp(self):
-        """!Check if a grass file bsased time stamp exists for this map.
+        """!Check if a grass file based time stamp exists for this map.
+            @return True is the grass file based time stamped exists for this map
         """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
@@ -112,7 +133,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
         """!Convert the valid time into a grass datetime library 
            compatible timestamp string
 
-            This methods works for reltaive and absolute time
+            This methods works for relative and absolute time
 
             @return the grass timestamp string
         """
@@ -134,7 +155,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
         return start
 
     def get_map_id(self):
-        """!Return the map id. The map id is the unique map identifier 
+        """!Return the map id. The map id is the unique identifier 
            in grass and must not be equal to the
            primary key identifier (id) of the map in the database. 
            Since vector maps may have layer information,
@@ -144,6 +165,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
            in the file system but not to identify
            map information in the temporal database.
 
+           @return The map id name@mapset
         """
         return self.base.get_map_id()
 
@@ -152,8 +174,12 @@ class AbstractMapDataset(AbstractTemporalDataset):
 
             Existing layer and mapset definitions in the name 
             string will be reused
+           
+           @param name The name of the map
+           @param The mapset in which the map is located
+           @layer The layer of the vector map, use None in case no layer exists
 
-           @param return the id of the vector map as name(:layer)@mapset 
+           @return the id of the map as name(:layer)@mapset 
                   while layer is optional
         """
 
@@ -171,11 +197,13 @@ class AbstractMapDataset(AbstractTemporalDataset):
             return "%s@%s" % (name, mapset)
 
     def get_layer(self):
-        """!Return the layer of the map or None in case no layer is defined"""
+        """!Return the layer of the map
+            @return the layer of the map or None in case no layer is defined
+        """
         return self.base.get_layer()
 
     def print_info(self):
-        """!Print information about this class in human readable style"""
+        """!Print information about this object in human readable style"""
 
         if self.get_type() == "raster":
             #                1         2         3         4         5         6         7
@@ -216,7 +244,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
         print " +----------------------------------------------------------------------------+"
 
     def print_shell_info(self):
-        """!Print information about this class in shell style"""
+        """!Print information about this object in shell style"""
         self.base.print_shell_info()
         if self.is_time_absolute():
             self.absolute_time.print_shell_info()
@@ -240,55 +268,63 @@ class AbstractMapDataset(AbstractTemporalDataset):
             self.print_topology_shell_info()
 
     def insert(self, dbif=None, execute=True):
-        """!Insert temporal dataset entry into database from the internal structure
+        """!Insert the map content into the database from the internal structure
 
-           This functions assures that the timetsamp is written to the 
-           grass file system based database
+           This functions assures that the timestamp is written to the 
+           grass file system based database in addition to the temporal database entry.
 
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL statements will be executed.
+           @param dbif The database interface to be used
+           @param execute If True the SQL statements will be executed.
                            If False the prepared SQL statements are 
                            returned and must be executed by the caller.
+            @return The SQL insert statement in case execute=False, or an empty string otherwise
         """
         self.write_timestamp_to_grass()
         return AbstractDataset.insert(self, dbif, execute)
 
     def update(self, dbif=None, execute=True):
-        """!Update temporal dataset entry of database from the internal structure
+        """!Update the map content in the database from the internal structure
            excluding None variables
 
-           This functions assures that the timetsamp is written to the 
-           grass file system based database
+           This functions assures that the timestamp is written to the 
+           grass file system based database in addition to the temporal database entry.
 
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL statements will be executed.
+           @param dbif The database interface to be used
+           @param execute If True the SQL statements will be executed.
                            If False the prepared SQL statements are 
                            returned and must be executed by the caller.
+            @return The SQL insert statement in case execute=False, or an empty string otherwise
         """
         self.write_timestamp_to_grass()
         return AbstractDataset.update(self, dbif, execute)
 
     def update_all(self, dbif=None, execute=True):
-        """!Update temporal dataset entry of database from the internal structure
-           and include None varuables.
+        """!Update the map content in the database from the internal structure
+           including None variables
 
-           This functions assures that the timetsamp is written to the 
-           grass file system based database
+           This functions assures that the timestamp is written to the 
+           grass file system based database in addition to the temporal database entry.
 
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL statements will be executed.
+           @param dbif The database interface to be used
+           @param execute If True the SQL statements will be executed.
                            If False the prepared SQL statements are 
                            returned and must be executed by the caller.
+            @return The SQL insert statement in case execute=False, or an empty string otherwise
         """
         self.write_timestamp_to_grass()
         return AbstractDataset.update_all(self, dbif, execute)
 
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
-        """!Set the absolute time interval with start time and end time
+        """!Set the absolute time with start time and end time
 
-           @param start_time: a datetime object specifying the start time of the map
-           @param end_time: a datetime object specifying the end time of the map
-           @param timezone: Thee timezone of the map
+            The end time is optional and must be set to None in case of time instance.
+        
+            This method only modifies this object and does not commit
+            the modifications to the temporal database.
+            
+           @param start_time a datetime object specifying the start time of the map
+           @param end_time a datetime object specifying the end time of the map, None in case or time instance
+           @param timezone Thee timezone of the map (not used)
         """
         if start_time and not isinstance(start_time, datetime):
             if self.get_layer() is not None:
@@ -339,12 +375,14 @@ class AbstractMapDataset(AbstractTemporalDataset):
                              timezone=None, dbif=None):
         """!Update the absolute time
 
-           This functions assures that the timetsamp is written to the 
-           grass file system based database
+            The end time is optional and must be set to None in case of time instance.
 
-           @param start_time: a datetime object specifying the start time of the map
-           @param end_time: a datetime object specifying the end time of the map
-           @param timezone: Thee timezone of the map
+           This functions assures that the timestamp is written to the 
+           grass file system based database in addition to the temporal database entry.
+           
+           @param start_time a datetime object specifying the start time of the map
+           @param end_time a datetime object specifying the end time of the map, None in case or time instance
+           @param timezone Thee timezone of the map (not used)
         """
         dbif, connected = init_dbif(dbif)
 
@@ -359,10 +397,15 @@ class AbstractMapDataset(AbstractTemporalDataset):
 
     def set_relative_time(self, start_time, end_time, unit):
         """!Set the relative time interval
+        
+            The end time is optional and must be set to None in case of time instance.
+            
+            This method only modifies this object and does not commit
+            the modifications to the temporal database.
 
-           @param start_time: A double value
-           @param end_time: A double value
-           @param unit: The unit of the relative time. Supported units: 
+           @param start_time An integer value
+           @param end_time An integer value, None in case or time instance
+           @param unit The unit of the relative time. Supported units: 
                         year(s), month(s), day(s), hour(s), minute(s), second(s)
 
            @return True for success and False otherwise
@@ -413,12 +456,14 @@ class AbstractMapDataset(AbstractTemporalDataset):
     def update_relative_time(self, start_time, end_time, unit, dbif=None):
         """!Update the relative time interval
 
-           This functions assures that the timetsamp is written to the 
-           grass file system based database
+            The end time is optional and must be set to None in case of time instance.
 
-           @param start_time: A double value
-           @param end_time: A double value
-           @param dbif: The database interface to be used
+           This functions assures that the timestamp is written to the 
+           grass file system based database in addition to the temporal database entry.
+
+           @param start_time An integer value
+           @param end_time An integer value, None in case or time instance
+           @param dbif The database interface to be used
         """
         dbif, connected = init_dbif(dbif)
 
@@ -434,12 +479,15 @@ class AbstractMapDataset(AbstractTemporalDataset):
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
         """!Set the spatial extent of the map
 
-           @param north: The northern edge
-           @param south: The southern edge
-           @param east: The eastern edge
-           @param west: The western edge
-           @param top: The top edge
-           @param bottom: The bottom edge
+            This method only modifies this object and does not commit
+            the modifications to the temporal database.
+            
+           @param north The northern edge
+           @param south The southern edge
+           @param east The eastern edge
+           @param west The western edge
+           @param top The top edge
+           @param bottom The bottom edge
         """
         self.spatial_extent.set_spatial_extent(
             north, south, east, west, top, bottom)
@@ -479,16 +527,16 @@ class AbstractMapDataset(AbstractTemporalDataset):
               is registered
             * Remove the space time dataset register table
 
-           @param dbif: The database interface to be used
-           @param update: Call for each unregister statement the update from 
+           @param dbif The database interface to be used
+           @param update Call for each unregister statement the update from 
                           registered maps of the space time dataset. 
                           This can slow down the un-registration process significantly.
-           @param execute: If True the SQL DELETE and DROP table statements will 
+           @param execute If True the SQL DELETE and DROP table statements will 
                            be executed.
                            If False the prepared SQL statements are 
                            returned and must be executed by the caller.
 
-           @return The SQL statements if execute == False, else an empty string, 
+           @return The SQL statements if execute=False, else an empty string, 
                    None in case of a failure
         """
 
@@ -536,16 +584,16 @@ class AbstractMapDataset(AbstractTemporalDataset):
         """! Remove the map entry in each space time dataset in which this map 
            is registered
 
-           @param dbif: The database interface to be used
-           @param update: Call for each unregister statement the update from 
+           @param dbif The database interface to be used
+           @param update Call for each unregister statement the update from 
                           registered maps of the space time dataset. This can 
                           slow down the un-registration process significantly.
-           @param execute: If True the SQL DELETE and DROP table statements 
+           @param execute If True the SQL DELETE and DROP table statements 
                            will be executed.
                            If False the prepared SQL statements are 
                            returned and must be executed by the caller.
 
-           @return The SQL statements if execute == False, else an empty string
+           @return The SQL statements if execute=False, else an empty string
         """
 
         # Commented because of performance issue calling g.message thousend times
@@ -594,7 +642,8 @@ class AbstractMapDataset(AbstractTemporalDataset):
            dictionary like rows with column "id" or None if this map is not 
            registered in any space time dataset.
 
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
+           @return The SQL rows with the ids of all space time datasets in which this map is registered
         """
         dbif, connected = init_dbif(dbif)
 

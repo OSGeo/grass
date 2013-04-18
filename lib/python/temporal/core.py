@@ -103,7 +103,7 @@ def set_use_ctypes_map_access(use_ctype = True):
 
        GUI developer should set this flag to False.
 
-       @param use_ctype: True use ctypes interface, False use grass.script interface
+       @param use_ctype True use ctypes interface, False use grass.script interface
     """
     global use_ctypes_map_access
     use_ctypes_map_access = use_ctypes
@@ -322,8 +322,8 @@ class SQLDatabaseInterfaceConnection():
     """!This class represents the database interface connection
 
        The following DBMS are supported:
-         * sqlite via the sqlite3 standard library
-         * postgresql via psycopg2
+         - sqlite via the sqlite3 standard library
+         - postgresql via psycopg2
 
     """
     def __init__(self):
@@ -366,7 +366,7 @@ class SQLDatabaseInterfaceConnection():
     def mogrify_sql_statement(self, content):
         """!Return the SQL statement and arguments as executable SQL string
         
-           @param content: The content as tuple with two entries, the first 
+           @param content The content as tuple with two entries, the first 
                            entry is the SQL statement with DBMI specific
                            place holder (?), the second entry is the argument
                            list that should substitue the place holder.

@@ -38,10 +38,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.map_counter = 0
 
     def get_new_map_instance(self, ident=None):
-        """!Return a new instance of a map dataset which is associated 
-           with the type of this class
+        """!Return a new instance of a map which is associated 
+           with the type of this object
 
-           @param ident: The unique identifier of the new object
+           @param ident The unique identifier of the new object
         """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
@@ -53,6 +53,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             
             ATTENTION: It must be assured that the base object has selected its 
             content from the database.
+            
+            @return The name of the map register table
         """
         
         return self.base.get_name() + "_" + \
@@ -60,7 +62,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 self.get_new_map_instance(None).get_type() + "_register"
 
     def get_map_register(self):
-        """!Return the name of the map register table"""
+        """!Return the name of the map register table
+           @return The map register table name
+        """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
 
@@ -70,7 +74,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            This table stores all map names which are registered
            in this space time dataset.
 
-           @param name: The name of the register table
+            This method only modifies this object and does not commit
+            the modifications to the temporal database.
+            
+           @param name The name of the register table
         """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
@@ -122,14 +129,22 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     def set_initial_values(self, temporal_type, semantic_type,
                            title=None, description=None):
-        """!Set the initial values of the space time dataset and
-            the command creation string
+        """!Set the initial values of the space time dataset
+        
+            In addition the command creation string is generated
+            an inerted into the metadata object.
+            
+            This method only modifies this object and does not commit
+            the modifications to the temporal database.
+            
+            The insert() function must be called to commit
+            this content into the temporal database.
 
-           @param temporal_type: The temporal type of this space 
+           @param temporal_type The temporal type of this space 
                                  time dataset (absolute or relative)
-           @param semantic_type: The semantic type of this dataset
-           @param title: The title
-           @param description: The description of this dataset
+           @param semantic_type The semantic type of this dataset
+           @param title The title
+           @param description The description of this dataset
         """
 
         if temporal_type == "absolute":
@@ -147,6 +162,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def update_command_string(self, dbif=None):
         """!Append the current command string to any existing command string
            in the metadata class and calls metadata update
+           @param dbif The database interface to be used
         """
 
         self.metadata.select(dbif=dbif)
@@ -163,10 +179,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            
            The command string should be set with self.metadata.set_command()
            
-           @return The command history string
+           @return The command string
            """
         # The grass module
-        command = os.path.basename(sys.argv[0])
+        
+        command = "- %s -\n"%(str(datetime.today().strftime("%Y-%m-%d %H:%M:%S")))
+        command += os.path.basename(sys.argv[0])
         
         # We will wrap the command line to fit into 80 character
         length = len(command)
@@ -197,7 +215,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         return command
 
     def get_semantic_type(self):
-        """!Return the semantic type of this dataset"""
+        """!Return the semantic type of this dataset
+           @return The semantic type
+        """
         return self.base.get_semantic_type()
 
     def get_initial_values(self):
@@ -218,6 +238,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case of absolute time a string containing an integer
            value and the time unit (years, months, days, hours, minuts, seconds).
            In case of relative time an integer value is expected.
+           
+           @return The granularity 
         """
 
         temporal_type = self.get_temporal_type()
@@ -232,10 +254,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def set_granularity(self, granularity):
         """!Set the granularity
         
+           The granularity is usually computed by the space time dataset at runtime.
+        
            Granularity can be of absolute time or relative time.
            In case of absolute time a string containing an integer
            value and the time unit (years, months, days, hours, minuts, seconds).
            In case of relative time an integer value is expected.
+           
+           This method only modifies this object and does not commit
+           the modifications to the temporal database.
+            
+           @param granularity The granularity of the dataset
         """
 
         temporal_type = self.get_temporal_type()
@@ -260,6 +289,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            All maps registered in a (relative time) 
            space time dataset must have the same unit
+           
+            This method only modifies this object and does not commit
+            the modifications to the temporal database.
+            
+           @param unit The relative time unit
         """
 
         temporal_type = self.get_temporal_type()
@@ -292,8 +326,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            - interval -> start and end time
            - invalid  -> No valid time point or interval found
 
-           @param maps: A sorted (start_time) list of AbstractDataset objects
-           @param dbif: The database interface to be used
+           @param maps A sorted (start_time) list of AbstractDataset objects
+           @param dbif The database interface to be used
         """
 
         if maps is None:
@@ -328,8 +362,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def count_gaps(self, maps=None, dbif=None):
         """!Count the number of gaps between temporal neighbors
 
-           @param maps: A sorted (start_time) list of AbstractDataset objects
-           @param dbif: The database interface to be used
+           @param maps A sorted (start_time) list of AbstractDataset objects
+           @param dbif The database interface to be used
            @return The numbers of gaps between temporal neighbors
         """
 
@@ -354,8 +388,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            The temporal relation matrix includes the temporal relations between
            all registered maps. The relations are strings stored in a list of lists.
 
-           @param maps: a ordered by start_time list of map objects
-           @param dbif: The database interface to be used
+           @param maps a ordered by start_time list of map objects
+           @param dbif The database interface to be used
         """
 
         if maps is None:
@@ -371,8 +405,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            Temporal relations are counted by analysing the sparse 
            upper right side temporal relationships matrix.
 
-           @param maps: A sorted (start_time) list of AbstractDataset objects
-           @param dbif: The database interface to be used
+           @param maps A sorted (start_time) list of AbstractDataset objects
+           @param dbif The database interface to be used
            @return A dictionary with counted temporal relationships
         """
 
@@ -410,8 +444,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            - finished   -> not allowed
            @endverbatim
 
-           @param maps: An optional list of AbstractDataset objects, in case of None all maps of the space time dataset are checked
-           @param dbif: The database interface to be used
+           @param maps An optional list of AbstractDataset objects, in case of None all maps of the space time dataset are checked
+           @param dbif The database interface to be used
            @return True if topology is correct
         """
         if maps is None:
@@ -493,8 +527,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case more map information are needed, use the select() 
            method for each listed object.
 
-           @param stds: The space time dataset to be used for temporal sampling
-           @param method: This option specifies what sample method should be used. 
+           @param stds The space time dataset to be used for temporal sampling
+           @param method This option specifies what sample method should be used. 
                   In case the registered maps are of temporal point type,
                   only the start time is used for sampling. In case of mixed 
                   of interval data the user can chose between:
@@ -560,13 +594,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                   All these methods can be combined. Method must be of 
                   type tuple including the identification strings.
                   
-           @param spatial: If set True additional the spatial overlapping 
+           @param spatial If set True additional the spatial overlapping 
                            is used for selection -> spatio-temporal relation.
                            The returned map objects will have temporal and 
                            spatial extents
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
 
-           In case nothing found None is returned
+           @return A list of lists of map objects or None in case nothing was found None
         """
 
         use_start = False
@@ -701,7 +735,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case more map information are needed, use the select() 
            method for each listed object.
 
-           @param gran: The granularity string to be used, if None the granularity of 
+           @param gran The granularity string to be used, if None the granularity of 
                         the space time dataset is used.
                         Absolute time has
                         the format "number unit", relative time has the format "number". 
@@ -709,9 +743,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         minute, minutes, hour, hours, day, days, week, weeks, month, months,
                         year, years". The unit of the relative time granule is always the 
                         space time dataset unit and can not be changed.
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
 
-           @return ordered object list, in case nothing found None is returned
+           @return ordered object list, or None in case nothing found
         """
 
         
@@ -876,9 +910,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case more map information are needed, use the select() 
            method for each listed object.
 
-           @param where: The SQL where statement to select a 
+           @param where The SQL where statement to select a 
                          subset of the registered maps without "WHERE"
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
 
            @return ordered object list, in case nothing found None is returned
         """
@@ -924,15 +958,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            temporal topological relationship informations.
 
            The objects are initialized with their id's' and the temporal extent 
-           (temporal type, start time, end time) and the temmporal topological information.
+           (temporal type, start time, end time) and the temporal topological information.
            In case more map information are needed, use the select() 
            method for each listed object.
 
-           @param where: The SQL where statement to select a subset of 
+           @param where The SQL where statement to select a subset of 
                          the registered maps without "WHERE"
-           @param order: The SQL order statement to be used to order the 
+           @param order The SQL order statement to be used to order the 
                          objects in the list without "ORDER BY"
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
            @return The ordered map object list, 
                    In case nothing found None is returned
         """
@@ -958,11 +992,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case more map information are needed, use the select() 
            method for each listed object.
 
-           @param where: The SQL where statement to select a subset of 
+           @param where The SQL where statement to select a subset of 
                          the registered maps without "WHERE"
-           @param order: The SQL order statement to be used to order the 
+           @param order The SQL order statement to be used to order the 
                          objects in the list without "ORDER BY"
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
            @return The ordered map object list, 
                    In case nothing found None is returned
         """
@@ -995,12 +1029,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            In case columns are not specified, each row includes all columns 
            specified in the datatype specific view.
 
-           @param columns: Columns to be selected as SQL compliant string
-           @param where: The SQL where statement to select a subset 
+           @param columns Columns to be selected as SQL compliant string
+           @param where The SQL where statement to select a subset 
                          of the registered maps without "WHERE"
-           @param order: The SQL order statement to be used to order the 
+           @param order The SQL order statement to be used to order the 
                          objects in the list without "ORDER BY"
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
 
            @return SQL rows of all registered maps, 
                    In case nothing found None is returned
@@ -1052,8 +1086,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            This method renames the space time dataset, the map register table
            and updates the entries in registered maps stds register.
 
-           @param ident: The new identifier name@mapset
-           @param dbif: The database interface to be used
+           @param ident The new identifier name@mapset
+           @param dbif The database interface to be used
         """
 
         dbif, connected = init_dbif(dbif)
@@ -1103,8 +1137,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            This method removes the space time dataset from the temporal 
            database and drops its map register table
 
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL DELETE and DROP table 
+           @param dbif The database interface to be used
+           @param execute If True the SQL DELETE and DROP table 
                            statements will be executed.
                            If False the prepared SQL statements are returned 
                            and must be executed by the caller.
@@ -1168,8 +1202,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             
             This method raises a ScriptError in case of a fatal error
 
-           @param map: The AbstractMapDataset object that should be registered
-           @param dbif: The database interface to be used
+           @param map The AbstractMapDataset object that should be registered
+           @param dbif The database interface to be used
+           @return True if success, False otherwise
         """
         dbif, connected = init_dbif(dbif)
 
@@ -1408,9 +1443,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            This method takes care of the un-registration of a map
            from a space time dataset.
 
-           @param map: The map object to unregister
-           @param dbif: The database interface to be used
-           @param execute: If True the SQL DELETE and DROP table 
+           @param map The map object to unregister
+           @param dbif The database interface to be used
+           @param execute If True the SQL DELETE and DROP table 
                            statements will be executed.
                            If False the prepared SQL statements are 
                            returned and must be executed by the caller.
@@ -1513,7 +1548,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            in the SQL files. But this will result in a huge performance issue
            in case many maps are registered (>1000).
 
-           @param dbif: The database interface to be used
+           @param dbif The database interface to be used
         """
         core.verbose(_("Update metadata, spatial and temporal extent from "
                        "all registered maps of <%s>") % (self.get_id()))

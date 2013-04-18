@@ -32,11 +32,11 @@ import grass.lib.gis as libgis
 def collect_map_names(sp, dbif, start, end, sampling):
     """!Gather all maps from dataset using a specific sample method
 
-       @param sp: The space time raster dataset to select aps from
-       @param dbif: The temporal database interface to use
-       @param start: The start time of the sample interval, may be relative or absolute
-       @param end: The end time of the sample interval, may be relative or absolute
-       @param sampling: The sampling methods to use
+       @param sp The space time raster dataset to select aps from
+       @param dbif The temporal database interface to use
+       @param start The start time of the sample interval, may be relative or absolute
+       @param end The end time of the sample interval, may be relative or absolute
+       @param sampling The sampling methods to use
     """
 
     use_start = False
@@ -104,14 +104,14 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
                           register_null, dbif):
     """!Aggregate a list of raster input maps with r.series
 
-       @param inputs: The names of the raster maps to be aggregated
-       @param base: The basename of the new created raster maps
-       @param start: The start time of the sample interval, may be relative or absolute
-       @param end: The end time of the sample interval, may be relative or absolute
-       @param count: The number to be attached to the basename of the new created raster map
-       @param method: The aggreation method to be used by r.series
-       @param register_null: If true null maps will be registered in the space time raster dataset, if false not
-       @param dbif: The temporal database interface to use
+       @param inputs The names of the raster maps to be aggregated
+       @param base The basename of the new created raster maps
+       @param start The start time of the sample interval, may be relative or absolute
+       @param end The end time of the sample interval, may be relative or absolute
+       @param count The number to be attached to the basename of the new created raster map
+       @param method The aggreation method to be used by r.series
+       @param register_null If true null maps will be registered in the space time raster dataset, if false not
+       @param dbif The temporal database interface to use
     """
 
     core.verbose(_("Aggregate %s raster maps") % (len(inputs)))

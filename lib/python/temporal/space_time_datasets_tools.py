@@ -39,26 +39,26 @@ def register_maps_in_space_time_dataset(
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       @param type: The type of the maps rast, rast3d or vect
-       @param name: The name of the space time dataset
-       @param maps: A comma separated list of map names
-       @param file: Input file one map with start and optional end time, 
+       @param type The type of the maps rast, rast3d or vect
+       @param name The name of the space time dataset
+       @param maps A comma separated list of map names
+       @param file Input file one map with start and optional end time, 
                     one per line
-       @param start: The start date and time of the first raster map
+       @param start The start date and time of the first raster map
                     (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                     format relative is integer 5)
-       @param end: The end date and time of the first raster map
+       @param end The end date and time of the first raster map
                    (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                    format relative is integer 5)
-       @param unit: The unit of the relative time: years, months, days,
+       @param unit The unit of the relative time: years, months, days,
                     hours, minutes, seconds
-       @param increment: Time increment between maps for time stamp creation
+       @param increment Time increment between maps for time stamp creation
                          (format absolute: NNN seconds, minutes, hours, days,
                          weeks, months, years; format relative: 1.0)
-       @param dbif: The database interface to be used
-       @param interval: If True, time intervals are created in case the start
+       @param dbif The database interface to be used
+       @param interval If True, time intervals are created in case the start
                         time and an increment is provided
-       @param fs: Field separator used in input file
+       @param fs Field separator used in input file
     """
 
     start_time_in_file = False
@@ -313,8 +313,7 @@ def register_maps_in_space_time_dataset(
     if name and map_object_list:
         core.message(_("Update space time raster dataset"))
         sp.update_from_registered_maps(dbif)
-        
-    sp.update_command_string(dbif=dbif)
+        sp.update_command_string(dbif=dbif)
     
     # Update affected datasets
     if datatsets_to_modify:
@@ -339,22 +338,22 @@ def register_maps_in_space_time_dataset(
 def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=1, interval=False):
     """!Assign the valid time to a map dataset
 
-       @param ttype: The temporal type which should be assigned
+       @param ttype The temporal type which should be assigned
                      and which the time format is of
-       @param map: A map dataset object derived from abstract_map_dataset
-       @param start: The start date and time of the first raster map
+       @param map A map dataset object derived from abstract_map_dataset
+       @param start The start date and time of the first raster map
                      (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                      format relative is integer 5)
-       @param end: The end date and time of the first raster map
+       @param end The end date and time of the first raster map
                    (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                    format relative is integer 5)
-       @param unit: The unit of the relative time: years, months,
+       @param unit The unit of the relative time: years, months,
                     days, hours, minutes, seconds
-       @param increment: Time increment between maps for time stamp creation
+       @param increment Time increment between maps for time stamp creation
                         (format absolute: NNN seconds, minutes, hours, days,
                         weeks, months, years; format relative is integer 1)
-       @param multi: A multiplier for the increment
-       @param interval: If True, time intervals are created in case the start
+       @param multi A multiplier for the increment
+       @param interval If True, time intervals are created in case the start
                         time and an increment is provided
     """
 
@@ -425,9 +424,9 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=
 def dataset_factory(type, id):
     """!A factory functions to create space time or map datasets
 
-       @param type: the dataset type: rast or raster, rast3d,
+       @param type the dataset type: rast or raster, rast3d,
                     vect or vector, strds, str3ds, stvds
-       @param id: The id of the dataset ("name@mapset")
+       @param id The id of the dataset ("name@mapset")
     """
     if type == "strds":
         sp = SpaceTimeRasterDataset(id)
@@ -453,26 +452,26 @@ def dataset_factory(type, id):
 def list_maps_of_stds(type, input, columns, order, where, separator, method, header, gran=None):
     """! List the maps of a space time dataset using diffetent methods
 
-        @param type: The type of the maps raster, raster3d or vector
-        @param input: Name of a space time raster dataset
-        @param columns: A comma separated list of columns to be printed to stdout
-        @param order: A comma separated list of columns to order the
+        @param type The type of the maps raster, raster3d or vector
+        @param input Name of a space time raster dataset
+        @param columns A comma separated list of columns to be printed to stdout
+        @param order A comma separated list of columns to order the
                       space time dataset by category
-        @param where: A where statement for selected listing without "WHERE"
+        @param where A where statement for selected listing without "WHERE"
                       e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
-        @param separator: The field separator character between the columns
-        @param method: String identifier to select a method out of cols,
+        @param separator The field separator character between the columns
+        @param method String identifier to select a method out of cols,
                        comma,delta or deltagaps
-            - "cols": Print preselected columns specified by columns
-            - "comma": Print the map ids (name@mapset) as comma separated string
-            - "delta": Print the map ids (name@mapset) with start time,
+            - "cols" Print preselected columns specified by columns
+            - "comma" Print the map ids (name@mapset) as comma separated string
+            - "delta" Print the map ids (name@mapset) with start time,
                        end time, relative length of intervals and the relative
                        distance to the begin
-            - "deltagaps": Same as "delta" with additional listing of gaps.
+            - "deltagaps" Same as "delta" with additional listing of gaps.
                            Gaps can be simply identified as the id is "None"
-            - "gran": List map using the granularity of the space time dataset,
+            - "gran" List map using the granularity of the space time dataset,
                       columns are identical to deltagaps
-        @param header: Set True to print column names
+        @param header Set True to print column names
         @param gran The user defined granule to be used if method=gran is set, in case gran=None the 
             granule of the space time dataset is used
     """
@@ -635,16 +634,16 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
 
         Attention: Do not use the comma as separator for printing
 
-        @param intype:  Type of the input space time dataset (strds, stvds or str3ds)
-        @param samtype: Type of the sample space time dataset (strds, stvds or str3ds)
-        @param inputs: Name or comma separated names of space time datasets
-        @param sampler: Name of a space time dataset used for temporal sampling
-        @param header: Set True to print column names
-        @param separator: The field separator character between the columns
-        @param method: The method to be used for temporal sampling 
+        @param intype  Type of the input space time dataset (strds, stvds or str3ds)
+        @param samtype Type of the sample space time dataset (strds, stvds or str3ds)
+        @param inputs Name or comma separated names of space time datasets
+        @param sampler Name of a space time dataset used for temporal sampling
+        @param header Set True to print column names
+        @param separator The field separator character between the columns
+        @param method The method to be used for temporal sampling 
                        (start,during,contain,overlap,equal)
-        @param spatial: Perform spatial overlapping check
-        @param print_only: If set True (default) then the result of the sampling will be 
+        @param spatial Perform spatial overlapping check
+        @param print_only If set True (default) then the result of the sampling will be 
                     printed to stdout, if set to False the resulting map matrix 
                     will be returned. 
                     
@@ -865,13 +864,13 @@ def create_space_time_dataset(name, type, temporaltype, title, descr, semantic,
        This function is sensitive to the settings in grass.core.overwrite to
        overwrute existing space time datasets.
     
-       @param name: The name of the new space time dataset
-       @param type: The type (strds, stvds, str3ds) of the new space time dataset
-       @param temporaltype: The temporal type (relative or absolute)
-       @param title: The title
-       @param descr: The dataset description
-       @param semantic: Semantical information
-       @param dbif: The temporal database interface to be used
+       @param name The name of the new space time dataset
+       @param type The type (strds, stvds, str3ds) of the new space time dataset
+       @param temporaltype The temporal type (relative or absolute)
+       @param title The title
+       @param descr The dataset description
+       @param semantic Semantical information
+       @param dbif The temporal database interface to be used
        
        @return The new created space time dataset
        

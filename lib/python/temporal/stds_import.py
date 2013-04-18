@@ -153,21 +153,21 @@ def import_stds(
         link=False, exp=False, overr=False, create=False, stds_type="strds"):
     """!Import space time datasets of type raster and vector
 
-        @param input: Name of the input archive file
-        @param output: The name of the output space time dataset
-        @param extrdir: The extraction directory
-        @param title: The title of the new created space time dataset
-        @param description: The description of the new created 
+        @param input Name of the input archive file
+        @param output The name of the output space time dataset
+        @param extrdir The extraction directory
+        @param title The title of the new created space time dataset
+        @param description The description of the new created 
                             space time dataset
-        @param location: The name of the location that should be created,
+        @param location The name of the location that should be created,
                         maps are imported into this location
-        @param link: Switch to link raster maps instead importing them
-        @param exp: Extend location extents based on new dataset
-        @param overr: Override projection (use location's projection)
-        @param create: Create the location specified by the "location" 
+        @param link Switch to link raster maps instead importing them
+        @param exp Extend location extents based on new dataset
+        @param overr Override projection (use location's projection)
+        @param create Create the location specified by the "location" 
                       parameter and exit.
                       Do not import the space time datasets.
-        @param stds_type: The type of the space time dataset that 
+        @param stds_type The type of the space time dataset that 
                           should be imported
     """
 
