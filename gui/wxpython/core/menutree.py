@@ -166,10 +166,10 @@ def printTree(node, fh, indent=0):
 
 def printStrings(node, fh):
     if node.label:
-        fh.write('     _(%r),\n' % str(node.label))
+        fh.write('    _(%r),\n' % str(node.label))
     if node.data:
         if 'description' in node.data and node.data['description']:
-            fh.write('     _(%r),\n' % str(node.data['description']))
+            fh.write('    _(%r),\n' % str(node.data['description']))
     for child in node.children:
         printStrings(node=child, fh=fh)
 
