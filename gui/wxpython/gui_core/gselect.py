@@ -851,12 +851,12 @@ class LayerSelect(wx.ComboBox):
 
         if len(layers) > 0:
             self.SetItems(layers)
-            self.SetValue(layers[0])
         else:
             self.Clear()
-            self.SetValue("")
 
-        if self.default:
+        self.SetValue("")
+
+        if self.default and self.default in layers:
             self.SetValue(self.default)
 
 class DriverSelect(wx.ComboBox):
