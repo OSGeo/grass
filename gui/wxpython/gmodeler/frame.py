@@ -27,6 +27,7 @@ import textwrap
 import tempfile
 import copy
 import re
+import random
 
 import wx
 from   wx.lib import ogl
@@ -71,6 +72,7 @@ class ModelFrame(wx.Frame):
         self.baseTitle = title
         self.modelFile = None    # loaded model
         self.modelChanged = False
+        self.randomness = 40 # random layout
         
         self.cursors = {
             "default" : wx.StockCursor(wx.CURSOR_ARROW),
@@ -160,6 +162,10 @@ class ModelFrame(wx.Frame):
         evthandler.SetShape(item)
         evthandler.SetPreviousHandler(item.GetEventHandler())
         item.SetEventHandler(evthandler)
+
+    def _randomShift(self):
+        """!Returns random value to shift layout"""
+        return random.randint(-self.randomness, self.randomness)
 
     def GetCanvas(self):
         """!Get canvas"""
@@ -638,7 +644,9 @@ class ModelFrame(wx.Frame):
         
         # add action to canvas
         x, y = self.canvas.GetNewShapePos()
-        action = ModelAction(self.model, cmd = cmd, x = x, y = y,
+        action = ModelAction(self.model, cmd = cmd,
+                             x = x + self._randomShift(),
+                             y = y + self._randomShift(),
                              id = self.model.GetNextId())
         overwrite = self.model.GetProperties().get('overwrite', None)
         if overwrite is not None:
@@ -674,7 +682,8 @@ class ModelFrame(wx.Frame):
         """
         # add action to canvas
         width, height = self.canvas.GetSize()
-        data = ModelData(self, x = width/2, y = height/2)
+        data = ModelData(self, x = width/2 + self._randomShift(),
+                         y = height/2 + self._randomShift())
        
         dlg = ModelDataDialog(parent = self, shape = data)
         data.SetPropDialog(dlg)
@@ -727,7 +736,8 @@ class ModelFrame(wx.Frame):
         """!Process action data"""
         if params: # add data items
             width, height = self.canvas.GetSize()
-            x = [width/2 + 200, width/2 - 200]
+            x = width/2 - 200 + self._randomShift()
+            y = height/2 + self._randomShift()
             for p in params['params']:
                 if p.get('prompt', '') in ('raster', 'vector', 'raster3d') and \
                         (p.get('value', None) or \
@@ -755,7 +765,7 @@ class ModelFrame(wx.Frame):
                     
                     data = ModelData(self, value = p.get('value', ''),
                                      prompt = p.get('prompt', ''),
-                                     x = x.pop(), y = height/2)
+                                     x = x, y = y)
                     self._addEvent(data)
                     self.canvas.diagram.AddShape(data)
                     data.Show(True)
@@ -989,7 +999,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.SetDiagram(self.diagram)
         self.diagram.SetCanvas(self)
         
-        self.SetScrollbars(20, 20, 1000/20, 1000/20)
+        self.SetScrollbars(20, 20, 2000/20, 2000/20)
         
         self.Bind(wx.EVT_CHAR,  self.OnChar)
         
@@ -1005,9 +1015,14 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.parent.ModelChanged()
         
         diagram = self.GetDiagram()
-        for shape in diagram.GetShapeList():
-            if not shape.Selected():
-                continue
+        shapes = [shape for shape in diagram.GetShapeList() if shape.Selected()]
+        self.RemoveShapes(shapes)
+
+    def RemoveShapes(self, shapes):
+        """!Removes shapes"""
+        self.parent.ModelChanged()
+        diagram = self.GetDiagram()
+        for shape in shapes:
             remList, upList = self.parent.GetModel().RemoveItem(shape)
             shape.Select(False)
             diagram.RemoveShape(shape)
@@ -1020,7 +1035,7 @@ class ModelCanvas(ogl.ShapeCanvas):
                 item.Update()
         
         self.Refresh()
-  
+        
     def GetNewShapePos(self):
         """!Determine optimal position for newly added object
 
@@ -1034,7 +1049,7 @@ class ModelCanvas(ogl.ShapeCanvas):
             yBox = shape.GetBoundingBoxMin()[1] / 2
             if yBox > 0 and y < yNew + yBox and y > yNew - yBox:
                 yNew += yBox * 3
-        
+
         return xNew, yNew
     
 class ModelEvtHandler(ogl.ShapeEvtHandler):
@@ -1266,7 +1281,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             
             for s in toUnselect:
                 s.Select(False, dc)
-        
+
         canvas.Refresh(False)
         
     def OnAddPoint(self, event):
@@ -1297,7 +1312,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
     def OnRemove(self, event):
         """!Remove shape
         """
-        self.frame.GetCanvas().RemoveSelected()
+        self.frame.GetCanvas().RemoveShapes([self.GetShape()])
         self.frame.itemPanel.Update()
        
 class VariablePanel(wx.Panel):
