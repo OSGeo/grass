@@ -131,7 +131,7 @@ int print_stats(univar_stat * stats)
 	stdev = sqrt(variance);
 	var_coef = (stdev / mean) * 100.;	/* perhaps stdev/fabs(mean) ? */
 
-	sprintf(sum_str, "%.10f", stats[z].sum);
+	sprintf(sum_str, "%.15g", stats[z].sum);
 	G_trim_decimal(sum_str);
 
 	if (zone_info.n_zones) {
@@ -397,11 +397,11 @@ int print_stats_table(univar_stat * stats)
 	/* coefficient of variance */
 	fprintf(stdout, "%.15g%s", var_coef, zone_info.sep);
 	/* sum */
-	sprintf(sum_str, "%.10f", stats[z].sum);
+	sprintf(sum_str, "%.15g", stats[z].sum);
 	G_trim_decimal(sum_str);
 	fprintf(stdout, "%s%s", sum_str, zone_info.sep);
 	/* absolute sum */
-	sprintf(sum_str, "%.10f", stats[z].sum_abs);
+	sprintf(sum_str, "%.15g", stats[z].sum_abs);
 	G_trim_decimal(sum_str);
 	fprintf(stdout, "%s", sum_str);
 
