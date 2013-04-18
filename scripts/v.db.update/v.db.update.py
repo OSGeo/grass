@@ -16,7 +16,7 @@
 #############################################################################
 
 #%module
-#% description: Allows to update a column in the attribute table connected to a vector map.
+#% description: Updates a column in the attribute table connected to a vector map.
 #% keywords: vector
 #% keywords: attribute table
 #% keywords: database
