@@ -27,7 +27,8 @@ $(ETCDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
 
 menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml $(ETCDIR)/xml/menudata_psmap.xml
-	$(call run_grass,$(PYTHON) $< > $@)
+	@echo "# This is a generated file.\n" > $@
+	$(call run_grass,$(PYTHON) $< >> $@)
 	$(call run_grass,$(PYTHON) $< "modeler" >> $@)
 	$(call run_grass,$(PYTHON) $< "psmap" >> $@)
 
