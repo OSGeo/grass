@@ -46,14 +46,13 @@ else:
     config_projshare = "@CONFIG_PROJSHARE@"
 
 # configuration directory
+grass_env_file = None # see check_shell()
 if sys.platform == 'win32':
     grass_config_dirname = "GRASS7"
     grass_config_dir = os.path.join(os.getenv('APPDATA'), grass_config_dirname)
-    grass_env_file = os.path.join(grass_config_dir, 'env.bat')
 else:
     grass_config_dirname = ".grass7"
     grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
-    grass_env_file = None # see check_shell()
 
 gisbase = os.path.normpath(gisbase)
 
@@ -782,6 +781,8 @@ def check_shell():
             shellname = "Bourne Shell"
         elif sh == "zsh":
             shellname = "Z Shell"
+        elif sh == "cmd.exe":
+            shellname = "Command Shell"
         else:
             shellname = "shell"
     
@@ -789,8 +790,10 @@ def check_shell():
         grass_env_file = os.path.join(grass_config_dir, 'cshrc')
     elif sh in ['bash', 'msh', 'cygwin']:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
-    elif sh in ['zsh']:
+    elif sh == 'zsh':
         grass_env_file = os.path.join(grass_config_dir, 'zshrc')
+    elif sh == 'cmd.exe':
+        grass_env_file = os.path.join(grass_config_dir, 'env.bat')
     else:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
         warning(_("Unsupported shell <%s>: %s") % (sh, grass_env_file))
