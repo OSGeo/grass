@@ -18,15 +18,17 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import re
 
 import wx
 import grass.script as grass
 
 if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'wxpython'))
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
+from core.giface      import StandaloneGrassInterface
 from gui_core.gselect import Select
 from gui_core.forms   import GUI
 from core.settings    import UserSettings
@@ -460,11 +462,15 @@ class MapCalcFrame(wx.Frame):
             pass
         
         newmcalcstr += what + ' ' + mcalcstr[position:]
-        position_offset += len(what)
         
         self.text_mcalc.SetValue(newmcalcstr)
-        if len(what) > 1 and what[-2:] == '()':
-            position_offset -= 1
+        if len(what) > 1:
+            match = re.search(pattern="\(.*\)", string=what)
+            if match:
+                position_offset += match.start() + 1
+            else:
+                position_offset += len(what)
+
         self.text_mcalc.SetInsertionPoint(position + position_offset)
         self.text_mcalc.Update()
         
@@ -591,6 +597,6 @@ if __name__ == "__main__":
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     app = wx.App(0)
-    frame = MapCalcFrame(parent = None, cmd = 'r.mapcalc')
+    frame = MapCalcFrame(parent = None, cmd = 'r.mapcalc', giface = StandaloneGrassInterface())
     frame.Show()
     app.MainLoop()
