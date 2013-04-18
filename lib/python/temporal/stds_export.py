@@ -217,25 +217,25 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
             of type raster and vector as tar archive that can be reimported 
             with the method import_stds().
 
-            @param input: The name of the space time dataset to export
-            @param output: The name of the archive file
-            @param compression: The compression of the archive file:
-              * "no"  no compression
-              * "gzip" GNU zip compression
-              * "bzip2" Bzip compression
-            @param workdir: The working directory used for extraction and packing
-            @param where: The temporal WHERE SQL statement to select a subset 
+            @param input The name of the space time dataset to export
+            @param output The name of the archive file
+            @param compression The compression of the archive file:
+              - "no"  no compression
+              - "gzip" GNU zip compression
+              - "bzip2" Bzip compression
+            @param workdir The working directory used for extraction and packing
+            @param where The temporal WHERE SQL statement to select a subset 
                           of maps from the space time dataset
-            @param format:_ The export format:
-              * "GTiff" Geotiff format, only for raster maps
-              * "pack" The GRASS raster, 3D raster or vector Pack format, 
+            @param format_ The export format:
+              - "GTiff" Geotiff format, only for raster maps
+              - "pack" The GRASS raster, 3D raster or vector Pack format, 
                        this is the default setting
-              * "GML" GML file export format, only for vector maps, 
+              - "GML" GML file export format, only for vector maps, 
                       v.out.ogr export option
-            @param type_: The space time dataset type
-              * "strds" Space time raster dataset
-              * "str3ds" Space time 3D raster dataset
-              * "stvds" Space time vector dataset
+            @param type_ The space time dataset type
+              - "strds" Space time raster dataset
+              - "str3ds" Space time 3D raster dataset
+              - "stvds" Space time vector dataset
     """
     mapset = core.gisenv()["MAPSET"]
 

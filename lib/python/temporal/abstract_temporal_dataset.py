@@ -31,17 +31,17 @@ class AbstractTemporalDataset(AbstractDataset):
        let the user walk temporally forward and backward in time.
 
        The following temporal relations with access methods are supported:
-       * equal
-       * follows
-       * precedes
-       * overlaps
-       * overlapped
-       * during (including starts, finishes)
-       * contains (including started, finished)
-       * starts
-       * started
-       * finishes
-       * finished
+       - equal
+       - follows
+       - precedes
+       - overlaps
+       - overlapped
+       - during (including starts, finishes)
+       - contains (including started, finished)
+       - starts
+       - started
+       - finishes
+       - finished
 
 
        @code:
@@ -125,17 +125,17 @@ class AbstractTemporalDataset(AbstractDataset):
         are the number of relations.
         
         The following relations are available:
-        * equal
-        * follows
-        * precedes
-        * overlaps
-        * overlapped
-        * during (including starts, finishes)
-        * contains (including started, finished)
-        * starts
-        * started
-        * finishes
-        * finished
+        - equal
+        - follows
+        - precedes
+        - overlaps
+        - overlapped
+        - during (including starts, finishes)
+        - contains (including started, finished)
+        - starts
+        - started
+        - finishes
+        - finished
         
         To access topological information the temporal topology must be build first
         using the TemporalTopologyBuilder.
@@ -205,29 +205,29 @@ class AbstractTemporalDataset(AbstractDataset):
         """!Check if the temporal topology was build"""
         return self._has_topology
 
-    def set_next(self, map_):
+    def set_next(self, map):
         """!Set the map that is temporally as closest located after this map.
 
            Temporally located means that the start time of the "next" map is
            temporally located AFTER the start time of this map, but temporally
            near than other maps of the same dataset.
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
-        self._topology["NEXT"] = map_
+        self._topology["NEXT"] = map
 
-    def set_prev(self, map_):
+    def set_prev(self, map):
         """!Set the map that is temporally as closest located before this map.
 
            Temporally located means that the start time of the "previous" map is
            temporally located BEFORE the start time of this map, but temporally
            near than other maps of the same dataset.
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
-        self._topology["PREV"] = map_
+        self._topology["PREV"] = map
 
     def next(self):
         """!Return the map with a start time temporally located after
@@ -249,15 +249,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["PREV"]
 
-    def append_equal(self, map_):
+    def append_equal(self, map):
         """!Append a map with equivalent temporal extent as this map
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "EQUAL" not in self._topology:
             self._topology["EQUAL"] = []
-        self._topology["EQUAL"].append(map_)
+        self._topology["EQUAL"].append(map)
 
     def get_equal(self):
         """!Return a list of map objects with equivalent temporal extent as this map
@@ -268,15 +268,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["EQUAL"]
 
-    def append_starts(self, map_):
+    def append_starts(self, map):
         """!Append a map that this map temporally starts with
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "STARTS" not in self._topology:
             self._topology["STARTS"] = []
-        self._topology["STARTS"].append(map_)
+        self._topology["STARTS"].append(map)
 
     def get_starts(self):
         """!Return a list of map objects that this map temporally starts with
@@ -287,15 +287,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["STARTS"]
 
-    def append_started(self, map_):
+    def append_started(self, map):
         """!Append a map that this map temporally started with
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "STARTED" not in self._topology:
             self._topology["STARTED"] = []
-        self._topology["STARTED"].append(map_)
+        self._topology["STARTED"].append(map)
 
     def get_started(self):
         """!Return a list of map objects that this map temporally started with
@@ -306,15 +306,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["STARTED"]
 
-    def append_finishes(self, map_):
+    def append_finishes(self, map):
         """!Append a map that this map temporally finishes with
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "FINISHES" not in self._topology:
             self._topology["FINISHES"] = []
-        self._topology["FINISHES"].append(map_)
+        self._topology["FINISHES"].append(map)
 
     def get_finishes(self):
         """!Return a list of map objects that this map temporally finishes with
@@ -325,15 +325,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["FINISHES"]
 
-    def append_finished(self, map_):
+    def append_finished(self, map):
         """!Append a map that this map temporally finished with
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "FINISHED" not in self._topology:
             self._topology["FINISHED"] = []
-        self._topology["FINISHED"].append(map_)
+        self._topology["FINISHED"].append(map)
 
     def get_finished(self):
         """!Return a list of map objects that this map temporally finished with
@@ -344,15 +344,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["FINISHED"]
 
-    def append_overlaps(self, map_):
+    def append_overlaps(self, map):
         """!Append a map that this map temporally overlaps
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "OVERLAPS" not in self._topology:
             self._topology["OVERLAPS"] = []
-        self._topology["OVERLAPS"].append(map_)
+        self._topology["OVERLAPS"].append(map)
 
     def get_overlaps(self):
         """!Return a list of map objects that this map temporally overlaps
@@ -363,15 +363,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["OVERLAPS"]
 
-    def append_overlapped(self, map_):
+    def append_overlapped(self, map):
         """!Append a map that this map temporally overlapped
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "OVERLAPPED" not in self._topology:
             self._topology["OVERLAPPED"] = []
-        self._topology["OVERLAPPED"].append(map_)
+        self._topology["OVERLAPPED"].append(map)
 
     def get_overlapped(self):
         """!Return a list of map objects that this map temporally overlapped
@@ -382,15 +382,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["OVERLAPPED"]
 
-    def append_follows(self, map_):
+    def append_follows(self, map):
         """!Append a map that this map temporally follows
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "FOLLOWS" not in self._topology:
             self._topology["FOLLOWS"] = []
-        self._topology["FOLLOWS"].append(map_)
+        self._topology["FOLLOWS"].append(map)
 
     def get_follows(self):
         """!Return a list of map objects that this map temporally follows
@@ -401,15 +401,15 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["FOLLOWS"]
 
-    def append_precedes(self, map_):
+    def append_precedes(self, map):
         """!Append a map that this map temporally precedes
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "PRECEDES" not in self._topology:
             self._topology["PRECEDES"] = []
-        self._topology["PRECEDES"].append(map_)
+        self._topology["PRECEDES"].append(map)
 
     def get_precedes(self):
         """!Return a list of map objects that this map temporally precedes
@@ -420,16 +420,16 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["PRECEDES"]
 
-    def append_during(self, map_):
+    def append_during(self, map):
         """!Append a map that this map is temporally located during
            This includes temporal relationships starts and finishes
 
-           @param map_: This object should be of type 
+           @param map This object should be of type 
                         AbstractMapDataset or derived classes
         """
         if "DURING" not in self._topology:
             self._topology["DURING"] = []
-        self._topology["DURING"].append(map_)
+        self._topology["DURING"].append(map)
 
     def get_during(self):
         """!Return a list of map objects that this map is temporally located during
@@ -441,16 +441,16 @@ class AbstractTemporalDataset(AbstractDataset):
             return None
         return self._topology["DURING"]
 
-    def append_contains(self, map_):
+    def append_contains(self, map):
         """!Append a map that this map temporally contains
            This includes temporal relationships started and finished
 
-           @param map_: This object should be of type AbstractMapDataset 
+           @param map This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "CONTAINS" not in self._topology:
             self._topology["CONTAINS"] = []
-        self._topology["CONTAINS"].append(map_)
+        self._topology["CONTAINS"].append(map)
 
     def get_contains(self):
         """!Return a list of map objects that this map temporally contains
@@ -503,111 +503,84 @@ class AbstractTemporalDataset(AbstractDataset):
 
     def print_topology_info(self):
         """!Print information about this class in human readable style"""
-        _next = self.next()
-        _prev = self.prev()
-        _equal = self.get_equal()
-        _follows = self.get_follows()
-        _precedes = self.get_precedes()
-        _overlaps = self.get_overlaps()
-        _overlapped = self.get_overlapped()
-        _during = self.get_during()
-        _contains = self.get_contains()
-        _starts = self.get_starts()
-        _started = self.get_started()
-        _finishes = self.get_finishes()
-        _finished = self.get_finished()
         
         print " +-------------------- Temporal Topology -------------------------------------+"
         #          0123456789012345678901234567890
-        if _next is not None:
-            print " | Next: ...................... " + str(_next.get_id())
-        if _prev is not None:
-            print " | Previous: .................. " + str(_prev.get_id())
-        if _equal is not None:
+        if self.next() is not None:
+            print " | Next: ...................... " + str(self.next().get_id())
+        if self.prev() is not None:
+            print " | Previous: .................. " + str(self.prev().get_id())
+        if self.equal is not None:
             print " | Equal:...................... " + \
-                self._generate_map_list_string(_equal)
-        if _follows is not None:
+                self._generate_map_list_string(self.equal)
+        if self.follows is not None:
             print " | Follows: ................... " + \
-                self._generate_map_list_string(_follows)
-        if _precedes is not None:
+                self._generate_map_list_string(self.follows)
+        if self.precedes is not None:
             print " | Precedes: .................. " + \
-                self._generate_map_list_string(_precedes)
-        if _overlaps is not None:
+                self._generate_map_list_string(self.precedes)
+        if self.overlaps is not None:
             print " | Overlaps: .................. " + \
-                self._generate_map_list_string(_overlaps)
-        if _overlapped is not None:
+                self._generate_map_list_string(self.overlaps)
+        if self.overlapped is not None:
             print " | Overlapped: ................ " + \
-                self._generate_map_list_string(_overlapped)
-        if _during is not None:
+                self._generate_map_list_string(self.overlapped)
+        if self.during is not None:
             print " | During: .................... " + \
-                self._generate_map_list_string(_during)
-        if _contains is not None:
+                self._generate_map_list_string(self.during)
+        if self.contains is not None:
             print " | Contains: .................. " + \
-                self._generate_map_list_string(_contains)
-        if _starts is not None:
+                self._generate_map_list_string(self.contains)
+        if self.starts is not None:
             print " | Starts:.. .................. " + \
-                self._generate_map_list_string(_starts)
-        if _started is not None:
+                self._generate_map_list_string(self.starts)
+        if self.started is not None:
             print " | Started:. .................. " + \
-                self._generate_map_list_string(_started)
-        if _finishes is not None:
+                self._generate_map_list_string(self.started)
+        if self.finishes is not None:
             print " | Finishes:................... " + \
-                self._generate_map_list_string(_finishes)
-        if _finished is not None:
+                self._generate_map_list_string(self.finishes)
+        if self.finished is not None:
             print " | Finished:................... " + \
-                self._generate_map_list_string(_finished)
+                self._generate_map_list_string(self.finished)
 
     def print_topology_shell_info(self):
         """!Print information about this class in shell style"""
-
-        _next = self.next()
-        _prev = self.prev()
-        _equal = self.get_equal()
-        _follows = self.get_follows()
-        _precedes = self.get_precedes()
-        _overlaps = self.get_overlaps()
-        _overlapped = self.get_overlapped()
-        _during = self.get_during()
-        _contains = self.get_contains()
-        _starts = self.get_starts()
-        _started = self.get_started()
-        _finishes = self.get_finishes()
-        _finished = self.get_finished()
         
-        if _next is not None:
-            print "next=" + _next.get_id()
-        if _prev is not None:
-            print "prev=" + _prev.get_id()
-        if _equal is not None:
-            print "equal=" + self._generate_map_list_string(_equal, False)
-        if _follows is not None:
-            print "follows=" + self._generate_map_list_string(_follows, False)
-        if _precedes is not None:
+        if self.next() is not None:
+            print "next=" + self.next().get_id()
+        if self.prev() is not None:
+            print "prev=" + self.prev().get_id()
+        if self.equal is not None:
+            print "equal=" + self._generate_map_list_string(self.equal, False)
+        if self.follows is not None:
+            print "follows=" + self._generate_map_list_string(self.follows, False)
+        if self.precedes is not None:
             print "precedes=" + self._generate_map_list_string(
-                _precedes, False)
-        if _overlaps is not None:
+                self.precedes, False)
+        if self.overlaps is not None:
             print "overlaps=" + self._generate_map_list_string(
-                _overlaps, False)
-        if _overlapped is not None:
+                self.overlaps, False)
+        if self.overlapped is not None:
             print "overlapped=" + \
-                self._generate_map_list_string(_overlapped, False)
-        if _during is not None:
-            print "during=" + self._generate_map_list_string(_during, False)
-        if _contains is not None:
+                self._generate_map_list_string(self.overlapped, False)
+        if self.during is not None:
+            print "during=" + self._generate_map_list_string(self.during, False)
+        if self.contains is not None:
             print "contains=" + self._generate_map_list_string(
-                _contains, False)
-        if _starts is not None:
+                self.contains, False)
+        if self.starts is not None:
             print "starts=" + \
-                self._generate_map_list_string(_starts)
-        if _started is not None:
+                self._generate_map_list_string(self.starts)
+        if self.started is not None:
             print "started=" + \
-                self._generate_map_list_string(_started)
-        if _finishes is not None:
+                self._generate_map_list_string(self.started)
+        if self.finishes is not None:
             print "finishes=" + \
-                self._generate_map_list_string(_finishes)
-        if _finished is not None:
+                self._generate_map_list_string(self.finishes)
+        if self.finished is not None:
             print "finished=" + \
-                self._generate_map_list_string(_finished)
+                self._generate_map_list_string(self.finished)
 
 ###############################################################################
 

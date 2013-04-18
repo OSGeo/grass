@@ -118,16 +118,16 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
                                            where, extended, header, fs):
     """!Print univariate statistics for a space time vector dataset
 
-       @param input: The name of the space time dataset
-       @param twhere: A temporal database where statement
-       @param layer: The layer number used in case no layer is present 
+       @param input The name of the space time dataset
+       @param twhere A temporal database where statement
+       @param layer The layer number used in case no layer is present 
               in the temporal dataset
-       @param type: options: point,line,boundary,centroid,area
-       @param column: The name of the attribute column
-       @param where: A temporal database where statement
-       @param extended: If True compute extended statistics
-       @param header:   If True print column names as header
-       @param fs: Field separator
+       @param type options: point,line,boundary,centroid,area
+       @param column The name of the attribute column
+       @param where A temporal database where statement
+       @param extended If True compute extended statistics
+       @param header   If True print column names as header
+       @param fs Field separator
     """
 
     # We need a database interface

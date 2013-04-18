@@ -558,7 +558,7 @@ def string_to_datetime(time_string):
         
         Time zones are not supported
         
-        @param time_string: The time string to convert
+        @param time_string The time string to convert
         @return datetime object or None in case of an error
     """
 

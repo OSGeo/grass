@@ -817,9 +817,9 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         """!Set the type of the map time
 
            Registered maps may have different types of time:
-           * Single point of time "point"
-           * Time intervals "interval"
-           * Single point and interval time "mixed"
+           - Single point of time "point"
+           - Time intervals "interval"
+           - Single point and interval time "mixed"
 
            This variable will be set automatically when maps are registered.
         """

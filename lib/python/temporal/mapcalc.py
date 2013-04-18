@@ -29,35 +29,35 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
        the r.mapcalc operators:
        
        Supported operators for relative and absolute time are:
-       * td() - the time delta of the current interval in days 
+       - td() - the time delta of the current interval in days 
          and fractions of days or the unit in case of relative time
-       * start_time() - The start time of the interval from the begin of the time 
+       - start_time() - The start time of the interval from the begin of the time 
          series in days and fractions of days or the unit in case of relative time
-       * end_time() - The end time of the current interval from the begin of the time 
+       - end_time() - The end time of the current interval from the begin of the time 
          series in days and fractions of days or the unit in case of relative time
          
        Supported operators for absolute time:
-       * start_doy() - Day of year (doy) from the start time [1 - 366]
-       * start_dow() - Day of week (dow) from the start time [1 - 7], 
+       - start_doy() - Day of year (doy) from the start time [1 - 366]
+       - start_dow() - Day of week (dow) from the start time [1 - 7], 
          the start of the week is monday == 1
-       * start_year() - The year of the start time [0 - 9999]
-       * start_month() - The month of the start time [1 - 12]
-       * start_week() - Week of year of the start time [1 - 54]
-       * start_day() - Day of month from the start time [1 - 31]
-       * start_hour() - The hour of the start time [0 - 23]
-       * start_minute() - The minute of the start time [0 - 59]
-       * start_second() - The second of the start time [0 - 59]
+       - start_year() - The year of the start time [0 - 9999]
+       - start_month() - The month of the start time [1 - 12]
+       - start_week() - Week of year of the start time [1 - 54]
+       - start_day() - Day of month from the start time [1 - 31]
+       - start_hour() - The hour of the start time [0 - 23]
+       - start_minute() - The minute of the start time [0 - 59]
+       - start_second() - The second of the start time [0 - 59]
 
-       * end_doy() - Day of year (doy) from the end time [1 - 366]
-       * end_dow() - Day of week (dow) from the end time [1 - 7], 
+       - end_doy() - Day of year (doy) from the end time [1 - 366]
+       - end_dow() - Day of week (dow) from the end time [1 - 7], 
          the start of the week is monday == 1
-       * end_year() - The year of the end time [0 - 9999]
-       * end_month() - The month of the end time [1 - 12]
-       * end_week() - Week of year of the end time [1 - 54]
-       * end_day() - Day of month from the end time [1 - 31]
-       * end_hour() - The hour of the end time [0 - 23]
-       * end_minute() - The minute of the end time [0 - 59]
-       * end_second() - The minute of the end time [0 - 59]
+       - end_year() - The year of the end time [0 - 9999]
+       - end_month() - The month of the end time [1 - 12]
+       - end_week() - Week of year of the end time [1 - 54]
+       - end_day() - Day of month from the end time [1 - 31]
+       - end_hour() - The hour of the end time [0 - 23]
+       - end_minute() - The minute of the end time [0 - 59]
+       - end_second() - The minute of the end time [0 - 59]
        
 
        @param input The name of the input space time raster/raster3d dataset
@@ -518,16 +518,16 @@ def _parse_start_operators(expr, is_time_absolute, current):
 def _parse_end_operators(expr, is_time_absolute, current):
     """
        Supported operators for absolute time:
-       * end_doy() - Day of year (doy) from the end time [1 - 366]
-       * end_dow() - Day of week (dow) from the end time [1 - 7], 
+       - end_doy() - Day of year (doy) from the end time [1 - 366]
+       - end_dow() - Day of week (dow) from the end time [1 - 7], 
          the start of the week is monday == 1
-       * end_year() - The year of the end time [0 - 9999]
-       * end_month() - The month of the end time [1 - 12]
-       * end_week() - Week of year of the end time [1 - 54]
-       * end_day() - Day of month from the end time [1 - 31]
-       * end_hour() - The hour of the end time [0 - 23]
-       * end_minute() - The minute of the end time [0 - 59]
-       * end_second() - The minute of the end time [0 - 59]
+       - end_year() - The year of the end time [0 - 9999]
+       - end_month() - The month of the end time [1 - 12]
+       - end_week() - Week of year of the end time [1 - 54]
+       - end_day() - Day of month from the end time [1 - 31]
+       - end_hour() - The hour of the end time [0 - 23]
+       - end_minute() - The minute of the end time [0 - 59]
+       - end_second() - The minute of the end time [0 - 59]
        
        In case of time instances the end_* expression will be replaced by null()
     """

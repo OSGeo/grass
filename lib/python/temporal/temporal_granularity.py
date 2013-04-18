@@ -104,7 +104,7 @@ def compute_relative_time_granularity(maps):
         is only correct in case of not overlapping intervals. 
         Hence a correct temporal topology is required for computation.
 
-        @param maps: a ordered by start_time list of map objects
+        @param maps a ordered by start_time list of map objects
         @return An integer
         
         
@@ -248,7 +248,7 @@ def compute_absolute_time_granularity(maps):
         The computed granularity is returned as number of seconds or minutes or hours
         or days or months or years. 
 
-        @param maps: a ordered by start_time list of map objects
+        @param maps a ordered by start_time list of map objects
         @return The temporal topology as string "integer unit"
         
         @code

@@ -4,7 +4,7 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 Python Temporal GIS package
 
-TODO: add some documentation
+TODO: add more detailed documentation
 
 List of modules:
 
@@ -29,6 +29,7 @@ of time stamped maps and space time datasets, such as temporal and spatial
 handling and representation. 
 
 - python::temporal::abstract_dataset
+- python::temporal::abstract_temporal_dataset
 - python::temporal::abstract_map_dataset
 - python::temporal::abstract_space_time_dataset
 

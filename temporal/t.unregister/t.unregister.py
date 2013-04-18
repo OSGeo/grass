@@ -51,7 +51,7 @@ def main():
 
     # Get the options
     file = options["file"]
-    name = options["input"]
+    input = options["input"]
     maps = options["maps"]
     type = options["type"]
 
@@ -71,12 +71,12 @@ def main():
     dbif.connect()
 
     # In case a space time dataset is specified
-    if name:
+    if input:
         # Check if the dataset name contains the mapset as well
-        if name.find("@") < 0:
-            id = name + "@" + mapset
+        if input.find("@") < 0:
+            id = input + "@" + mapset
         else:
-            id = name
+            id = input
 
         if type == "rast":
             sp = tgis.dataset_factory("strds", id)
@@ -128,7 +128,7 @@ def main():
     statement = ""
 
     # Unregister already registered maps
-    grass.message(_("Unregistered maps"))
+    grass.message(_("Unregister maps"))
     for mapid in maplist:
         if count%10 == 0:
             grass.percent(count, num_maps, 1)
@@ -138,7 +138,7 @@ def main():
         # Unregister map if in database
         if map.is_in_db(dbif) == True:
             # Unregister from a single dataset
-            if name:
+            if input:
                 sp.metadata.select(dbif)
                 # Collect SQL statements
                 statement += sp.unregister_map(
@@ -167,9 +167,9 @@ def main():
     grass.percent(num_maps, num_maps, 1)
 
     # Update space time datasets
-
-    grass.message(_("Unregistered maps from space time dataset(s)"))
-    if name:
+    grass.message(_("Unregister maps from space time dataset(s)"))
+    if input:
+        sp.metadata.select(dbif)
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
     elif len(update_dict) > 0:

@@ -42,7 +42,6 @@ class TemporalTopologyBuilder(object):
 
         # Now lets build the temporal topology of the maps in the list
         
-        identical = False
         tb = TemporalTopologyBuilder()
         
         tb.build(maps)
@@ -107,7 +106,7 @@ class TemporalTopologyBuilder(object):
            The maps will be added to the object, so they can be 
            accessed using the iterator of this class
 
-           @param maps: A sorted (by start_time)list of abstract_dataset 
+           @param maps A sorted (by start_time)list of abstract_dataset 
                         objects with initiated temporal extent
         """
         self._build_iteratable(maps)
@@ -125,7 +124,7 @@ class TemporalTopologyBuilder(object):
            Basically the "next" and "prev" relations will be set in 
            the temporal topology structure of each map.
 
-           @param maps: A sorted (by start_time)list of abstract_dataset 
+           @param maps A sorted (by start_time)list of abstract_dataset 
                         objects with initiated temporal extent
         """
 #        for i in xrange(len(maps)):
@@ -196,9 +195,9 @@ class TemporalTopologyBuilder(object):
            The implemented iterator assures
            the chronological iteration over the mapsA.
 
-           @param mapsA: A list of abstract_dataset 
+           @param mapsA A list of abstract_dataset 
                          objects with initiated temporal extent
-           @param mapsB: An optional list of abstract_dataset 
+           @param mapsB An optional list of abstract_dataset 
                          objects with initiated temporal extent
         """
 
@@ -362,11 +361,11 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     """!Print the temporal relationships of the 
        map lists maps1 and maps2 to stdout.
 
-        @param maps1: A list of abstract_dataset 
+        @param maps1 A list of abstract_dataset 
                       objects with initiated temporal extent
-        @param maps2: An optional list of abstract_dataset 
+        @param maps2 An optional list of abstract_dataset 
                       objects with initiated temporal extent
-        @param dbif: The database interface to be used
+        @param dbif The database interface to be used
     """
                     
     tb = TemporalTopologyBuilder()
@@ -390,11 +389,11 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     """!Count the temporal relations of a single list of maps or between two lists of maps
 
 
-        @param maps1: A list of abstract_dataset 
+        @param maps1 A list of abstract_dataset 
                       objects with initiated temporal extent
-        @param maps2: A list of abstract_dataset 
+        @param maps2 A list of abstract_dataset 
                       objects with initiated temporal extent
-        @param dbif: The database interface to be used
+        @param dbif The database interface to be used
         @return A dictionary with counted temporal relationships
     """
 
@@ -427,9 +426,9 @@ def create_temporal_relation_sql_where_statement(
                         use_follows=False, use_precedes=False):
     """!Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
 
-        @param start: The start time
-        @param end: The end time
-        @param use_start: Select maps of which the start time is located in the selection granule
+        @param start The start time
+        @param end The end time
+        @param use_start Select maps of which the start time is located in the selection granule
                          @verbatim
                          map    :        s
                          granule:  s-----------------e
@@ -441,13 +440,13 @@ def create_temporal_relation_sql_where_statement(
                          granule:  s-----------------e
                          @endverbatim
 
-        @param use_during: during: Select maps which are temporal during the selection granule
+        @param use_during Select maps which are temporal during the selection granule
                          @verbatim
                          map    :     s-----------e
                          granule:  s-----------------e
                          @endverbatim
 
-        @param use_overlap: Select maps which temporal overlap the selection granule
+        @param use_overlap Select maps which temporal overlap the selection granule
                          @verbatim
                          map    :     s-----------e
                          granule:        s-----------------e
@@ -456,25 +455,25 @@ def create_temporal_relation_sql_where_statement(
                          granule:  s----------e
                          @endverbatim
 
-        @param use_contain: Select maps which temporally contain the selection granule
+        @param use_contain Select maps which temporally contain the selection granule
                          @verbatim
                          map    :  s-----------------e
                          granule:     s-----------e
                          @endverbatim
 
-        @param use_equal: Select maps which temporally equal to the selection granule
+        @param use_equal Select maps which temporally equal to the selection granule
                          @verbatim
                          map    :  s-----------e
                          granule:  s-----------e
                          @endverbatim
 
-        @param use_follows: Select maps which temporally follow the selection granule
+        @param use_follows Select maps which temporally follow the selection granule
                          @verbatim
                          map    :              s-----------e
                          granule:  s-----------e
                          @endverbatim
 
-        @param use_precedes: Select maps which temporally precedes the selection granule
+        @param use_precedes Select maps which temporally precedes the selection granule
                          @verbatim
                          map    :  s-----------e
                          granule:              s-----------e
