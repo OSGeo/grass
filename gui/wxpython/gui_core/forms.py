@@ -211,7 +211,7 @@ class UpdateThread(Thread):
                         if not p:
                             continue
                         
-                        if p.get('element', '') == 'layer':
+                        if p.get('element', '') in ['layer', 'layer_all']:
                             layer = p.get('value', '')
                             if layer != '':
                                 layer = p.get('value', '')
@@ -219,7 +219,7 @@ class UpdateThread(Thread):
                                 layer = p.get('default', '')
                             break
                         
-                elif p.get('element', '') == 'layer': # -> layer
+                elif p.get('element', '') in ['layer', 'layer_all']: # -> layer
                     # get layer
                     layer = p.get('value', '')
                     if layer != '':
