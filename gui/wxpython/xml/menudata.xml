@@ -2151,8 +2151,8 @@
             <menuitem>
               <label>Manage color rules interactively</label>
               <help>Interactive management of vector color tables.</help>
-              <handler>OnVectorRules</handler>
               <keywords>vector,color table</keywords>
+              <handler>OnVectorRules</handler>
             </menuitem>
             <menuitem>
               <label>Export color table</label>
@@ -2317,7 +2317,7 @@
         </menuitem>
         <menu>
           <label>Network analysis</label>
-          <items>`
+          <items>
            <menuitem>
               <label>Vector network analysis tool</label>
               <help>Tool for interactive vector network analysis.</help>
