@@ -15,7 +15,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate user
 #               interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2012 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2013 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -780,6 +780,8 @@ def check_shell():
             shellname = "Bash Shell" 
         elif sh == "sh":
             shellname = "Bourne Shell"
+        elif sh == "zsh":
+            shellname = "Z Shell"
         else:
             shellname = "shell"
     
@@ -787,10 +789,12 @@ def check_shell():
         grass_env_file = os.path.join(grass_config_dir, 'cshrc')
     elif sh in ['bash', 'msh', 'cygwin']:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
+    elif sh in ['zsh']:
+        grass_env_file = os.path.join(grass_config_dir, 'zshrc')
     else:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
         warning(_("Unsupported shell <%s>: %s") % (sh, grass_env_file))
-              
+    
     # check for SHELL
     if not os.getenv('SHELL'):
         fatal(_("The SHELL variable is not set"))
