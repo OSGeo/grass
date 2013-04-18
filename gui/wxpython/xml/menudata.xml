@@ -773,8 +773,8 @@
         </menuitem>
         <separator />
         <menuitem>
-          <label>Exit GUI</label>
-          <help>Quit wxGUI session</help>
+          <label>Quit</label>
+          <help>Quit</help>
           <handler>OnCloseWindow</handler>
           <shortcut>Ctrl+Q</shortcut>
           <id>ID_EXIT</id>
