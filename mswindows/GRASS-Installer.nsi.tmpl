@@ -982,6 +982,90 @@ SectionEnd
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
+
+Function DownloadInstallMSRuntime
+
+	IntOp $ARCHIVE_SIZE_MB $ARCHIVE_SIZE_KB / 1024
+
+	StrCpy $DOWNLOAD_MESSAGE_ "The installer will download the $EXTENDED_ARCHIVE_NAME.$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_These system libraries from Microsoft are needed for programs"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ built with Microsoft's Visual C++ compiler, such as Python and"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ GDAL which ship with GRASS, since MS does not include them by"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ default. You might already have them installed by other software,"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ if so you don't need to install them again, but if not GRASS will"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ fail to start and you will see errors like 'Missing MSVCR71.dll"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ or MSVCP100.dll'.$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_MB MB and may take"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ several minutes to be downloaded.$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The $EXTENDED_ARCHIVE_NAME will be copyed to:$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$TEMP\$CUSTOM_UNTAR_FOLDER.$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_Press OK to continue and install the runtimes, or Cancel"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ to skip the download and complete the GRASS"
+	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ installation without the $EXTENDED_ARCHIVE_NAME.$\r$\n"
+
+	MessageBox MB_OKCANCEL "$DOWNLOAD_MESSAGE_" IDOK download IDCANCEL cancel_download
+	
+	download:	
+	SetShellVarContext current	
+	InitPluginsDir
+	NSISdl::download "$HTTP_PATH/$ARCHIVE_NAME" "$TEMP\$ARCHIVE_NAME"
+	Pop $0
+	StrCmp $0 "success" download_ok download_failed
+		
+	download_ok:	
+	InitPluginsDir
+	untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME"
+	Pop $0
+	StrCmp $0 "success" untar_ok untar_failed
+	
+	untar_ok:
+	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2005_x86.exe /q"
+	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe /q"	
+	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe /q"
+	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTDIR\extralib"
+	Delete "$TEMP\$ARCHIVE_NAME"
+	Delete "$TEMP\$ORIGINAL_UNTAR_FOLDER"
+	Goto end
+	
+	download_failed:
+	DetailPrint "$0" ;print error message to log
+	MessageBox MB_OK "Download Failed.$\r$\nGRASS will be installed without the $EXTENDED_ARCHIVE_NAME."
+	Goto end
+	
+	cancel_download:
+	MessageBox MB_OK "Download Cancelled.$\r$\nGRASS will be installed without the $EXTENDED_ARCHIVE_NAME."
+	Goto end
+	
+	untar_failed:
+	DetailPrint "$0" ;print error message to log
+	
+	end:
+
+FunctionEnd
+
+Section /O "Important Microsoft Runtime DLLs" SecMSRuntime
+
+	;Set the size (in KB)  of the archive file
+	StrCpy $ARCHIVE_SIZE_KB 12521
+	
+	;Set the size (in KB) of the unpacked archive file
+	AddSize 13500
+	
+	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/release/msvcrt/"
+	StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-7.tar.bz2"
+	StrCpy $EXTENDED_ARCHIVE_NAME "Microsoft Visual C++ Redistributable Packages"
+	StrCpy $ORIGINAL_UNTAR_FOLDER "install_msruntime"
+	
+	Call DownloadInstallMSRuntime
+
+SectionEnd
+
+;----------------------------------------------------------------------------------------------------------------------------
+
 ;Uninstaller Section
 
 Section "Uninstall"
@@ -1019,6 +1103,7 @@ SectionEnd
 ;Installer Section Descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecGRASS} "Install GRASS ${VERSION_NUMBER}"
+	!insertmacro MUI_DESCRIPTION_TEXT ${SecMSRuntime} "Some software included in this installer (e.g. GDAL, Python) may need Microsoft's Visual C++ redistributable system libraries.$\r$\nDownload and install the Redistributable Package"	
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecNorthCarolinaSDB} "Download and install the North Carolina (Wake County) sample data set"
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecSpearfishSDB} "Download and install the South Dakota (Spearfish County) sample data set"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
