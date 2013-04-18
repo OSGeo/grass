@@ -20,7 +20,7 @@
 ############################################################################
 
 #%module
-#% description: Allows to interactively compare two maps by swiping.
+#% description: Interactively compares two maps by swiping a visibility bar.
 #% keywords: general
 #% keywords: gui
 #% keywords: display

@@ -1832,7 +1832,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.frame.OnPointer(event = None)
         
     def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc = None, drawFunc = None):
-        """! Method allows to register graphics to draw.
+        """! This method registers graphics to draw.
         
         @param type (string) - graphics type: "point" or "line"
         @param setStatusFunc (function reference) - function called before drawing each item
@@ -1840,7 +1840,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     item - passes instance of GraphicsSetItem which will be drawn
                     itemOrderNum - number of item in drawing order (from O)
                                    Hidden items are also counted in drawing order.
-        @param drawFunc (function reference) - allows to define own function for drawing
+        @param drawFunc (function reference) - defines own function for drawing
                             If function is not defined DrawCross method is used for type "point"
                             or DrawLines method for type "line".
                             

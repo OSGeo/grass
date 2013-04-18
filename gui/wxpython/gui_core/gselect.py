@@ -131,7 +131,7 @@ class Select(wx.combo.ComboCtrl):
 class VectorSelect(Select):
     def __init__(self, parent, ftype, **kwargs):
         """!Custom to create a ComboBox with a tree control to display and
-        select vector maps. Control allows to filter vector maps. If you
+        select vector maps. You can filter the vector maps. If you
         don't need this feature use Select class instead
         
         @param ftype filter vector maps based on feature type

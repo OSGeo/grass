@@ -1,6 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.mapset</em> allows to change the current mapset 
+<em>g.mapset</em> changes the current working MAPSET, LOCATION, or GISDBASE.
+This is a fairly radical maneuver to run mid-session, take care when running
+the GUI at the same time.
+
 
 <h2>NOTES</h2>
 
@@ -9,17 +12,23 @@ you can switch the history to the new settings by commands:<br>
 <br>
 <div class="code"><pre>
    history -w
-   history -r /$GISDBASE/$LOCATION/$MAPSET/.bash_history
-   HISTFILE=/$GISDBASE/$LOCATION/$MAPSET/.bash_history
+   history -r /"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
+   HISTFILE=/"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
 </pre></div><br>
+
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.gisenv.html">g.gisenv</a></em><br>
-<em><a href="g.mapsets.html">g.mapsets</a></em><br>
+<em>
+<a href="g.gisenv.html">g.gisenv</a><br>
+<a href="g.mapsets.html">g.mapsets</a>
+</em>
+<br>
+
 
 <h2>AUTHOR</h2>
 
 Radim Blazek
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

@@ -1,14 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.update</em> allows to assign a new value to a column in the
+<em>v.db.update</em> assigns a new value to a column in the
 attribute table connected to a given map. Alternatively, values can be
 copied from another column in the table.
+
 
 <h2>NOTES</h2>
 
 <em>v.db.update</em> is just a front-end to <em>db.execute</em> to
 allow easier usage.
 <p>For complex SQL UPDATE statements, <em>db.execute</em> should be used.
+
 
 <h2>EXAMPLES</h2>
 
@@ -52,6 +54,7 @@ v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
             where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -70,4 +73,5 @@ v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
 
 Moritz Lennert (mlennert@club.worldonline.be)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

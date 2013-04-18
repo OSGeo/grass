@@ -8,10 +8,10 @@ ground and the sun rays. It can be obtained with <em>r.sun</em>
 (parameter incidout), and then calculating its cosine with float precision.
 
 <p>
-Using flag -i and given an elevation map as basemap (metric),
-<em>i.topo.corr</em> permits to obtain a simple illumination model from the formula:
+Using the <b>-i</b> flag and given an elevation basemap (metric),
+<em>i.topo.corr</em> creates a simple illumination model using the formula:
 <ul>
-	<li> cos_i = cos(s) * cos(z) + sin(s) * sin(z) * cos(a - o) </li>
+  <li> cos_i = cos(s) * cos(z) + sin(s) * sin(z) * cos(a - o) </li>
 </ul>
 where,
 <em>s</em> is the terrain slope angle, <em>z</em> is the solar zenith angle,
@@ -26,13 +26,13 @@ the original reflectance (ref_o) using one of the four offered methods
 <h3>Method: cosine</h3>
 
 <ul>
-<li> ref_c = ref_o * cos_z / cos_i </li>
+  <li> ref_c = ref_o * cos_z / cos_i </li>
 </ul>
 
 <h3>Method: minnaert</h3>
 
 <ul>
-<li>ref_c = ref_o * (cos_z / cos_i) ^k</li>
+  <li>ref_c = ref_o * (cos_z / cos_i) ^k</li>
 </ul>
 where,
 <em>k</em> is obtained by linear regression of<br>
@@ -41,7 +41,7 @@ ln(ref_o) = ln(ref_c) - k ln(cos_i/cos_z)
 <h3>Method: c-factor</h3>
 
 <ul>
-<li>ref_c = ref_o * (cos_z + c)/ (cos_i + c)</li>
+  <li>ref_c = ref_o * (cos_z + c)/ (cos_i + c)</li>
 </ul>
 where,
 <em>c</em> is a/m from ref_o = a + m * cos_i
@@ -54,8 +54,9 @@ then the transformation (cos_i + 1)/2 varied from 0
 (direct exhibition to the sun: no correction) and the corrected reflectance can
 be calculated as
 <ul>
-<li>ref_c = ref_o * 2 / (cos_i + 1)</li>
+  <li>ref_c = ref_o * 2 / (cos_i + 1)</li>
 </ul>
+
 
 <h2>NOTES</h2>
 
@@ -66,6 +67,7 @@ be calculated as
     null) and its resolution.</li>
 <li>The elevation map to calculate the illumination model should be metric.</li>
 </ol>
+
 
 <h2>EXAMPLES</h2>
 
@@ -80,6 +82,7 @@ i.topo.corr -i base=SRTM zenith=33.3631 azimuth=59.8897 out=SRTM.illumination
 i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 out=tcor \ 
   zenith=33.3631 method=c-factor
 </pre></div>
+
 
 <h2>REFERENCES</h2>
 
@@ -108,6 +111,7 @@ i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 out=tcor \
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.sun.html">r.sun</a>
 </em>
+
 
 <h2>AUTHOR</h2>
 
