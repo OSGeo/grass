@@ -33,7 +33,7 @@
 
 int main(int argc, char *argv[])
 {
-    int i, input, line, nlines, operator;
+    int i, j, input, line, nlines, operator;
     int type[2], field[2], ofield[3];
     double snap_thresh;
     struct GModule *module;
@@ -251,7 +251,22 @@ int main(int argc, char *argv[])
 	    }
 	    
 	    /* lines and boundaries must have at least 2 distinct vertices */
-	    Vect_line_prune(Points);
+	    /* Vect_line_prune(Points); */
+
+	    if (Points->n_points > 0) {
+		j = 1;
+		for (i = 1; i < Points->n_points; i++) {
+		    Points->z[i] = 0;	/* Tmp, Out are 2D */
+		    if (Points->x[i] != Points->x[j - 1] ||
+			Points->y[i] != Points->y[j - 1]) {
+			Points->x[j] = Points->x[i];
+			Points->y[j] = Points->y[i];
+			j++;
+		    }
+		}
+		Points->n_points = j;
+	    }
+
 	    if (Points->n_points < 2)
 		continue;
 
