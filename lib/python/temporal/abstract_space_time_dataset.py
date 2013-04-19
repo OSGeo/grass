@@ -1086,7 +1086,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            This method renames the space time dataset, the map register table
            and updates the entries in registered maps stds register.
 
-           @param ident The new identifier name@mapset
+           @param ident The new identifier "name@mapset"
            @param dbif The database interface to be used
         """
 

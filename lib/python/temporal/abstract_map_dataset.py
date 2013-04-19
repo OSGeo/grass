@@ -66,7 +66,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
            This table stores all space time datasets in 
            which this map is registered.
 
-           @param ident The name of the register table
+           @param name The name of the register table
         """
         raise ImplementationError(
             "This method must be implemented in the subclasses")
@@ -165,7 +165,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
            in the file system but not to identify
            map information in the temporal database.
 
-           @return The map id name@mapset
+           @return The map id "name@mapset"
         """
         return self.base.get_map_id()
 
@@ -176,10 +176,10 @@ class AbstractMapDataset(AbstractTemporalDataset):
             string will be reused
            
            @param name The name of the map
-           @param The mapset in which the map is located
-           @layer The layer of the vector map, use None in case no layer exists
+           @param mapset The mapset in which the map is located
+           @param layer The layer of the vector map, use None in case no layer exists
 
-           @return the id of the map as name(:layer)@mapset 
+           @return the id of the map as "name(:layer)@mapset" 
                   while layer is optional
         """
 
@@ -383,6 +383,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
            @param start_time a datetime object specifying the start time of the map
            @param end_time a datetime object specifying the end time of the map, None in case or time instance
            @param timezone Thee timezone of the map (not used)
+           @param dbif The database interface to be used
         """
         dbif, connected = init_dbif(dbif)
 
@@ -463,6 +464,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
 
            @param start_time An integer value
            @param end_time An integer value, None in case or time instance
+           @param unit The relative time unit
            @param dbif The database interface to be used
         """
         dbif, connected = init_dbif(dbif)

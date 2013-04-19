@@ -1,12 +1,29 @@
-/*! \page pythontemporallib GRASS Python Temporal Library
+/*! \page pythontemporallib GRASS GIS Temporal Framework
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-Python Temporal GIS package
+The GRASS GIS Temporal Framework
 
-TODO: add more detailed documentation
+\section PythonTGISIntro Introduction
 
-List of modules:
+The GRASS GIS Temporal Framework implements the temporal GIS functionality of GRASS GIS
+and provides an API to implement spatio-temporal processing modules. The framework 
+introduces space time datasets that represent time series of raster, 3D raster or vector maps.
+This framework provides the following functionalities: 
+- Assign time stamp to maps and register maps in the temporal database
+- Modification of time stamps
+- Creation, renaming and deletion of space time datasets
+- Registration and un-registration of maps in space time datasets
+- Query of maps that are registered in space time datasets using SQL where statements
+- Analysis of the spatio-temporal topology of space time datasets
+- Sampling of space time datasets
+- Computation of temporal and spatial relationships between registered maps
+- Higher level functions that are shared between modules
+
+Most of the functions described above are member functions of the maps and space time dataset classes.
+Maps and space time datasets are represented as objects in the temporal framework.
+
+\section PythonTGISPackages Library
 
 Core functionality such as the database interface connection to sqlite3 
 and postgresql as well as the creation of the temporal database are defined here:
@@ -15,18 +32,17 @@ and postgresql as well as the creation of the temporal database are defined here
 
 In these modules are the temporal database interfaces for raster maps, 
 3D raster maps, vector maps and space time datasets defined. 
-
-Additionally the temporal and spatial extent modules implement the topological 
-relationship computation that is needed for spatio-temporal topology computation.
+In addition the temporal and spatial extent modules implement the topological 
+relationship computation that is needed for spatio-temporal topology computation:
 
 - python::temporal::base
 - python::temporal::spatial_extent
 - python::temporal::temporal_extent
 - python::temporal::metadata
 
-Several "abstract" modules are defined that implement the shared functionality 
+Several "abstract" classes are defined that implement the shared functionality 
 of time stamped maps and space time datasets, such as temporal and spatial
-handling and representation. 
+handling and representation:
 
 - python::temporal::abstract_dataset
 - python::temporal::abstract_temporal_dataset
@@ -42,27 +58,155 @@ Helper functions to compute temporal granularity, handling of datetime objects
 and their conversion as well as topology computation are defined in these modules:
 
 - python::temporal::datetime_math
-- python::temporal::temporal_relationships
 - python::temporal::temporal_granularity
+- python::temporal::temporal_relationships
 
 Functionality that is shared between different temporal GRASS modules, such as
-map listing, map registration and unregistration, aggregation, extraction,
-map calculation, statistics as well as import and export of 
+map listing, space time dataset creation, map registration and unregistration, 
+aggregation, extraction, map calculation, statistics as well as import and export of 
 space time datasets are defined here:
 
-- python::temporal::space_time_datasets_tools
 - python::temporal::aggregation
+- python::temporal::create
 - python::temporal::extract
+- python::temporal::factory
+- python::temporal::list
 - python::temporal::mapcalc
+- python::temporal::register
+- python::temporal::sampling
 - python::temporal::stds_export
 - python::temporal::stds_import
 - python::temporal::univar_statistics
+
+Two helper functions to support the listing of space time datasets in the automatically generated GUI:
+
+- python::temporal::gui_support
 
 Lots of unit tests:
 
 - python::temporal::unit_tests
 
-\section pythonTempAuthors Authors
+\section PythonTGISExamples Examples
+
+\subsection PythonTGISExamplesSimple Simple example
+
+This simple example shows how to open a space time raster dataset
+to access its registered maps.
+
+\code
+# Lets import the temporal framework and
+# the script framework
+import grass.temporal as tgis
+import grass.script as grass
+
+# Make sure the temporal database exists
+# and set the temporal GIS environment
+tgis.init()
+
+# We create the temporal database interface for fast processing
+dbif = tgis.SQLDatabaseInterfaceConnection()
+dbif.connect()
+
+# The id of a space time raster dataset is build from its name and its mapset
+id = "test@PERMANENT"
+
+# We create a space time raster dataset object 
+strds = tgis.SpaceTimeRasterDataset(id)
+
+# Check if the space time raster dataset is in the temporal database
+if strds.is_in_db(dbif=dbif) == False:
+    dbif.close()
+    grass.fatal(_("Space time %s dataset <%s> not found") % (
+        strds.get_new_map_instance(None).get_type(), id))
+
+# Fill the object with the content from the temporal database
+strds.select(dbif=dbif)
+
+# Print informations about the space time raster dataset to stdout
+strds.print_info()
+
+# Get all maps that are registered in the strds and print
+# informations about the maps to stdout
+maps = strds.get_registered_maps_as_objects(dbif=dbif)
+
+# We iterate over the temporal sorted map list
+for map in maps:
+    # We fill the map object with the content 
+    # from the temporal database. We use the existing
+    # database connection, otherwise a new connection 
+    # will be established for each map object 
+    # which slows the processing down
+    map.select(dbif=dbif)
+    map.print_info()
+
+# Close the database connection
+dbif.close()
+\endcode
+
+
+\subsection PythonTGISExamplesSTDSCreation Creation of a space time dataset
+
+This example shows howto create a space time dataset. The code is generic and works
+for different space time datasets (raster, 3D raster and vector): 
+
+\code
+# Lets import the temporal framework and
+# the script framework
+import grass.temporal as tgis
+import grass.script as grass
+
+# The id of the new space time dataset
+id="test@PERMANENT"
+# The title of the new space time dataset
+title="This is a test dataset" 
+# The description of the space time dataset
+description="The description"
+# The type of the space time dataset (strds, str3ds or stvds)
+type="strds"
+# The temporal type of the space time dataset (absolute or relative)
+temporal_type="absolute"
+
+# Make sure the temporal database exists
+# and set the temporal GIS environment
+tgis.init()
+
+# We use the dataset factory to create an new space time dataset instance of a specific type
+stds = tgis.dataset_factory(type, id)
+
+# We need a dtabase connection to insert the content of the space time dataset
+dbif = tgis.SQLDatabaseInterfaceConnection()
+dbif.connect()
+
+# First we check if the dataset is already in the database
+if stds.is_in_db(dbif=dbif) and overwrite == False:
+    dbif.close()
+    grass.fatal(_("Space time %s dataset <%s> is already in the database. "
+                    "Use the overwrite flag.") %
+                (stds.get_new_map_instance(None).get_type(), name))
+
+# We delete the exiting dataset and create a new one in case we are allowed to overwrite it
+if stds.is_in_db(dbif=dbif) and overwrite == True:
+    grass.warning(_("Overwrite space time %s dataset <%s> "
+                    "and unregister all maps.") %
+                (stds.get_new_map_instance(None).get_type(), name))
+    stds.delete(dbif=dbif)
+    stds = stds.get_new_instance(id)
+
+# We set the initial values. This function also created the command history.
+stds.set_initial_values(temporal_type=temporaltype, semantic_type="mean",
+                        title=title, description=description)
+                        
+# Now we can insert the new space time dataset in the database
+stds.insert(dbif=dbif)
+
+# Close the database connection
+dbif.close()
+    
+\endcode
+
+\section PythonTGISAuthors Authors
 
 Soeren Gebbert
+
+TODO: add more documentation
 */

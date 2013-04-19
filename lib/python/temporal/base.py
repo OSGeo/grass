@@ -68,9 +68,9 @@ class DictSQLSerializer(object):
             >>> t.serialize(type="UPDATE ALL", table="raster_base")
             ('UPDATE raster_base SET  name = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ?  ,mapset = ?  ,id = ? ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
             
-            @type must be SELECT. INSERT, UPDATE
-            @table The name of the table to select, insert or update
-            @where The optional where statement
+            @param type must be SELECT. INSERT, UPDATE
+            @param table The name of the table to select, insert or update
+            @param where The optional where statement
             @return a tuple containing the SQL string and the arguments
             
             \endcode
@@ -571,7 +571,7 @@ class DatasetBase(SQLDatabaseInterface):
                           that should be used to store the values
             @param ident The unique identifier must be a combination of 
                           the dataset name, layer name and the mapset 
-                          name@mapset or name:1@mapset
+                          "name@mapset" or "name:layer@mapset"
                           used as as primary key in the temporal database
             @param name The name of the map or dataset
             @param mapset The name of the mapset 
@@ -604,7 +604,7 @@ class DatasetBase(SQLDatabaseInterface):
 
            @param ident The unique identifier must be a combination 
                          of the dataset name, layer name and the mapset 
-                         name@mapset or name:1@mapset
+                         "name@mapset" or "name:layer@mapset"
         """
         self.ident = ident
         self.D["id"] = ident
@@ -632,7 +632,7 @@ class DatasetBase(SQLDatabaseInterface):
     def set_mapset(self, mapset):
         """!Set the mapset of the dataset
 
-           @param mapsets The name of the mapset in which this dataset is stored
+           @param mapset The name of the mapset in which this dataset is stored
         """
         self.D["mapset"] = mapset
 
@@ -699,7 +699,7 @@ class DatasetBase(SQLDatabaseInterface):
         """!Convenient method to get the unique map identifier 
            without layer information
 
-           @return the name of the vector map as name@mapset
+           @return the name of the vector map as "name@mapset"
                   or None in case the id was not set
         """
         if self.id:
