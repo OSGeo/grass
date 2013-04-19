@@ -101,10 +101,10 @@ care of following rules:
 
     Do not use print command unless you know what are you doing.
 
-    Use named parameters in functions, e.g.
+    Use named parameters in functions (without space around '='), e.g.
 
     dlg = wx.FileDialog(parent=self, message=_("Choose file to save current workspace"),
-                        wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"), style = wx.FD_SAVE)
+                        wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"), style=wx.FD_SAVE)
 
     instead of
 
