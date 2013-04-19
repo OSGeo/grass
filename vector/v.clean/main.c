@@ -347,18 +347,18 @@ int main(int argc, char *argv[])
 
 	switch (tools[i]) {
 	case TOOL_BREAK:
-	    if (flag.combine->answer && (otype & GV_BOUNDARY)) {
-		G_message(_("Tool: Split boundaries"));
-		split_lines(&Out, GV_BOUNDARY, pErr);
+	    if (flag.combine->answer && (otype & GV_LINES)) {
+		G_message(_("Tool: Split lines"));
+		split_lines(&Out, otype, pErr);
 	    }
 	    G_message(_("Tool: Break lines at intersections"));
 	    Vect_break_lines(&Out, otype, pErr);
 	    if (flag.combine->answer) {
 		G_message(_("Tool: Remove duplicates"));
 		Vect_remove_duplicates(&Out, otype, pErr);
-		if (otype & GV_BOUNDARY) {
-		    G_message(_("Tool: Merge boundaries"));
-		    Vect_merge_lines(&Out, GV_BOUNDARY, NULL, pErr);
+		if (otype & GV_LINES) {
+		    G_message(_("Tool: Merge lines"));
+		    Vect_merge_lines(&Out, otype, NULL, pErr);
 		}
 	    }
 	    break;
@@ -392,9 +392,9 @@ int main(int argc, char *argv[])
 	    if (flag.combine->answer) {
 		int nmod;
 
-		if (otype & GV_BOUNDARY) {
-		    G_message(_("Tool: Split boundaries"));
-		    split_lines(&Out, GV_BOUNDARY, pErr);
+		if (otype & GV_LINES) {
+		    G_message(_("Tool: Split lines"));
+		    split_lines(&Out, otype, pErr);
 		}
 		do {
 		    G_message(_("Tool: Break lines at intersections"));
@@ -405,9 +405,9 @@ int main(int argc, char *argv[])
 		    nmod =
 			Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
 		} while (nmod > 0);
-		if (otype & GV_BOUNDARY) {
-		    G_message(_("Tool: Merge boundaries"));
-		    Vect_merge_lines(&Out, GV_BOUNDARY, NULL, pErr);
+		if (otype & GV_LINES) {
+		    G_message(_("Tool: Merge lines"));
+		    Vect_merge_lines(&Out, otype, NULL, pErr);
 		}
 	    }
 	    break;
@@ -427,6 +427,10 @@ int main(int argc, char *argv[])
 	    G_message(_("Tool: Remove small areas"));
 	    count =
 		Vect_remove_small_areas(&Out, threshs[i], pErr, &size);
+	    if (flag.combine->answer && count > 0) {
+		G_message(_("Tool: Merge boundaries"));
+		Vect_merge_lines(&Out, GV_BOUNDARY, NULL, pErr);
+	    }
 	    break;
 	case TOOL_RMSA:
 	    G_message(_("Tool: Remove small angles at nodes"));
@@ -437,9 +441,9 @@ int main(int argc, char *argv[])
 	    else {
 		int nmod;
 
-		if (otype & GV_BOUNDARY) {
-		    G_message(_("Tool: Split boundaries"));
-		    split_lines(&Out, GV_BOUNDARY, pErr);
+		if (otype & GV_LINES) {
+		    G_message(_("Tool: Split lines"));
+		    split_lines(&Out, otype, pErr);
 		}
 		while ((nmod =
 		          Vect_clean_small_angles_at_nodes(&Out, otype, pErr)) > 0) {
@@ -450,9 +454,9 @@ int main(int argc, char *argv[])
 		    Vect_remove_duplicates(&Out, otype, pErr);
 		    G_message(_("Tool: Remove small angles at nodes"));
 		}
-		if (otype & GV_BOUNDARY) {
-		    G_message(_("Tool: Merge boundaries"));
-		    Vect_merge_lines(&Out, GV_BOUNDARY, NULL, pErr);
+		if (otype & GV_LINES) {
+		    G_message(_("Tool: Merge lines"));
+		    Vect_merge_lines(&Out, otype, NULL, pErr);
 		}
 	    }
 	    break;
