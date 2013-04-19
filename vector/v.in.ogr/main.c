@@ -109,6 +109,8 @@ int main(int argc, char *argv[])
     int overwrite;
     double area_size;
     int use_tmp_vect;
+    int ncentr, n_overlaps;
+    struct bound_box box;
 
     xmin = ymin = xmax = ymax = 0.0;
     loc_proj_info = loc_proj_units = NULL;
@@ -815,6 +817,8 @@ int main(int argc, char *argv[])
 
     Vect_hist_command(&Map);
 
+    ncentr = n_overlaps = n_polygons = 0;
+
     /* Points and lines are written immediately with categories. Boundaries of polygons are
      * written to the vector then cleaned and centroids are calculated for all areas in cleaan vector.
      * Then second pass through finds all centroids in each polygon feature and adds its category
@@ -1102,11 +1106,10 @@ int main(int argc, char *argv[])
 
     if (use_tmp_vect && !flag.no_clean->answer &&
 	Vect_get_num_primitives(Out, GV_BOUNDARY) > 0) {
-	int ret, centr, ncentr, otype, n_overlaps, n_nocat;
+	int ret, centr, otype, n_nocat;
 	CENTR *Centr;
 	struct spatial_index si;
 	double x, y, total_area, overlap_area, nocat_area;
-	struct bound_box box;
 	struct line_pnts *Points;
 	int nmodif;
 
@@ -1341,6 +1344,46 @@ int main(int argc, char *argv[])
     Vect_build(&Map);
     if (0 && flag.no_clean->answer)
 	Vect_topo_check(&Map, NULL);
+
+    if (n_polygons) {
+	ncentr = Vect_get_num_primitives(&Map, GV_CENTROID);
+	/* this test is not perfect:
+	 * small gaps (areas without centroid) are not detected
+	 * because they may be true gaps */
+	if (ncentr != n_polygons || n_overlaps) {
+	    double new_snap;
+
+	    Vect_get_map_box(&Map, &box);
+	    
+	    if (abs(box.E) > abs(box.W))
+		xmax = abs(box.E);
+	    else
+		xmax = abs(box.W);
+	    if (abs(box.N) > abs(box.S))
+		xmax = abs(box.N);
+	    else
+		xmax = abs(box.S);
+
+	    if (xmax < ymax)
+		xmax = ymax;
+
+	    new_snap = log2(xmax) - 52;
+	    new_snap = pow(2, new_snap);
+	    new_snap = log10(new_snap);
+	    if (new_snap < 0)
+		new_snap = (int)new_snap;
+	    else
+		new_snap = (int)new_snap + 1;
+	    new_snap = pow(10, new_snap);
+
+	    if (snap < new_snap) {
+		G_important_message("%s", separator);
+		G_warning(_("Errors were encountered during the import"));
+		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), new_snap, new_snap);
+	    }
+	}
+    }
+
     Vect_close(&Map);
 
     /* -------------------------------------------------------------------- */
