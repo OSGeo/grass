@@ -15,16 +15,17 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 
 import wx
 import wx.lib.scrolledpanel as scrolled
 
-from grass.script import core as grass
+if __name__ == '__main__':
+    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.gcmd        import RunCommand, GError
 from core             import globalvar
 from gui_core.gselect import Select
-from core.debug       import Debug
 from core.settings    import UserSettings
 
 
@@ -551,3 +552,9 @@ class VectorCleaningFrame(wx.Frame):
 
         self.inmap = self.selectionInput.GetValue()
         self.outmap = self.selectionOutput.GetValue()
+
+if __name__ == '__main__':
+    app = wx.App()
+    frame = VectorCleaningFrame(parent=None)
+    frame.Show()
+    app.MainLoop()
