@@ -1,0 +1,16 @@
+all = [
+    'debug',
+    'gcmd',
+    'treemodel',
+    'ws',
+    'menutree',
+    'gconsole',
+    'events',
+    'render',
+    'units',
+    'settings',
+    'workspace',
+    'utils',
+    'globalvar',
+    'giface',
+    ]

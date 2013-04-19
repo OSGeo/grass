@@ -1,0 +1,5 @@
+all = [
+    'manager',
+    'mapdisplay',
+    'toolbars',
+    ]

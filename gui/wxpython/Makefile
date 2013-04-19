@@ -34,7 +34,6 @@ menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menuda
 
 $(PYDSTDIRS): %: | $(ETCDIR)
 	$(MKDIR) $@
-	$(call run_grass,$(PYTHON) create__init__.py $@)
 
 $(DSTDIRS): %: | $(ETCDIR)
 	$(MKDIR) $@
