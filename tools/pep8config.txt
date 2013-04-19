@@ -1,0 +1,26 @@
+# This is a configuration file for pep8.
+
+# (C) 2011-2013 by the GRASS Development Team
+
+# This program is free software under the GNU General Public License
+# (>=v2). Read the file COPYING that comes with GRASS for details.
+
+# author: Vaclav Petras <wenzeslaus gmail.com>
+
+# This configuration should work for all Python library, Python scripts and
+# wxPython GUI.
+# Example for gui/wxpython:
+#   pep8 --config=../../tools/pep8config.txt lmgr/
+
+# A lot of errors need to be ignored now to avoid a large number of messages.
+# Files need to be fixed one by one (without this configuration).
+
+
+[pep8]
+
+# skip errors and warnings (e.g. E4,W)
+ignore=E121,E122,E123,E124,E125,E126,E127,E128,E201,E202,E203,E211,E221,E222,E225,E231,E241,E251,E261,E271,E272,E302,E303,E502,W191,W291,W293
+
+# set maximum allowed line length (default: 79)
+max-line-length=150
+
