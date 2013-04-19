@@ -1,0 +1,5 @@
+all = [
+    'wizard',
+    'base',
+    'dialogs',
+    ]
