@@ -60,13 +60,13 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
        - end_second() - The minute of the end time [0 - 59]
        
 
-       @param input The name of the input space time raster/raster3d dataset
+       @param inputs The names of the input space time raster/raster3d datasets
        @param output The name of the extracted new space time raster(3d) dataset
        @param type The type of the dataset: "raster" or "raster3d"
-       @param method The method to be used for temporal sampling
        @param expression The r(3).mapcalc expression
        @param base The base name of the new created maps in case a 
               mapclac expression is provided
+       @param method The method to be used for temporal sampling
        @param nprocs The number of parallel processes to be used for 
               mapcalc processing
        @param register_null Set this number True to register empty maps

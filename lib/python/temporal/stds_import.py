@@ -157,7 +157,7 @@ def import_stds(
         @param output The name of the output space time dataset
         @param extrdir The extraction directory
         @param title The title of the new created space time dataset
-        @param description The description of the new created 
+        @param descr The description of the new created 
                             space time dataset
         @param location The name of the location that should be created,
                         maps are imported into this location
