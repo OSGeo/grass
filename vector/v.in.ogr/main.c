@@ -1346,12 +1346,13 @@ int main(int argc, char *argv[])
 	Vect_topo_check(&Map, NULL);
 
     if (n_polygons) {
-	ncentr = Vect_get_num_primitives(&Map, GV_CENTROID);
+	/* test for topological errors */
 	/* this test is not perfect:
 	 * small gaps (areas without centroid) are not detected
-	 * because they may be true gaps */
+	 * small gaps may also be true gaps */
+	ncentr = Vect_get_num_primitives(&Map, GV_CENTROID);
 	if (ncentr != n_polygons || n_overlaps) {
-	    double new_snap;
+	    double min_snap, max_snap;
 
 	    Vect_get_map_box(&Map, &box);
 	    
@@ -1367,20 +1368,39 @@ int main(int argc, char *argv[])
 	    if (xmax < ymax)
 		xmax = ymax;
 
-	    new_snap = log2(xmax) - 52;
-	    new_snap = pow(2, new_snap);
-	    new_snap = log10(new_snap);
-	    if (new_snap < 0)
-		new_snap = (int)new_snap;
+	    /* double precision ULP */
+	    min_snap = log2(xmax) - 52;
+	    min_snap = pow(2, min_snap);
+	    /* human readable */
+	    min_snap = log10(min_snap);
+	    if (min_snap < 0)
+		min_snap = (int)min_snap;
 	    else
-		new_snap = (int)new_snap + 1;
-	    new_snap = pow(10, new_snap);
+		min_snap = (int)min_snap + 1;
+	    min_snap = pow(10, min_snap);
 
-	    if (snap < new_snap) {
-		G_important_message("%s", separator);
-		G_warning(_("Errors were encountered during the import"));
-		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), new_snap, new_snap);
+	    /* single precision ULP */
+	    max_snap = log2(xmax) - 23;
+	    max_snap = pow(2, max_snap);
+	    /* human readable */
+	    max_snap = log10(max_snap);
+	    if (max_snap < 0)
+		max_snap = (int)max_snap;
+	    else
+		max_snap = (int)max_snap + 1;
+	    max_snap = pow(10, max_snap);
+
+	    G_important_message("%s", separator);
+	    G_warning(_("Errors were encountered during the import"));
+
+	    if (snap < min_snap) {
+		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
 	    }
+	    else if (snap < max_snap) {
+		min_snap = snap * 10;
+		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
+	    }
+	    /* else assume manual cleaning is required */
 	}
     }
 

@@ -21,9 +21,16 @@ The <b>-r</b> current region flag is identical, but uses the current
 region settings as the spatial bounds
 (see <em><a href="g.region.html">g.region</a></em>).
 
-<p>
+<h3>Topology cleaning</h3>
 Topology cleaning on areas is automatically performed, but may fail in
-special cases (then use <em><a href="v.clean.html">v.clean</a></em>).
+special cases. In these cases, a <b>snap</b> threshold value is 
+estimated from the imported vector data and printed out at the end. The 
+vector data can then be imported again with the suggested <b>snap</b> 
+threshold value which is incremented by powers of 10 until either an 
+estimated upper limit for the threshold value is reached or the topology 
+cleaning on areas was successful. In some cases, manual cleaning might 
+be required or areas are truly overlapping, e.g. buffers created with 
+non-topological software.
 
 <p>
 The <b>min_area</b> threshold value is being specified as area size in
