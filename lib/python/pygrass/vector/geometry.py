@@ -163,7 +163,7 @@ class Attrs(object):
                                                          tname=self.table.name,
                                                          condition=self.cond))
         results = cur.fetchone()
-        return results[0]
+        return results[0] if len(results) == 1 else results
 
     def __setitem__(self, key, value):
         """Set value of a given column of a table attribute. ::
@@ -395,15 +395,15 @@ class Point(Geo):
 
             >>> pnt = Point(10, 100)
             >>> pnt.get_wkt()
-            'POINT(10.000000, 100.000000)'
+            'POINT(10.000000 100.000000)'
 
         .. warning::
 
             Only ``POINT`` (2/3D) are supported, ``POINTM`` and ``POINT`` with:
             ``XYZM`` are not supported yet.
         """
-        return "POINT(%s)" % ', '.join(['%f' % coord
-                                        for coord in self.coords()])
+        return "POINT(%s)" % ' '.join(['%f' % coord
+                                      for coord in self.coords()])
 
     def get_wkb(self):
         """Return a "well know binary" (WKB) geometry buffer
