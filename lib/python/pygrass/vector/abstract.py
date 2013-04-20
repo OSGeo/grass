@@ -12,7 +12,7 @@ from vector_type import MAPTYPE
 from grass.pygrass import functions
 from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from table import DBlinks, Link
-from find import Finder
+from find import PointFinder, BboxFinder, PolygonFinder
 
 
 def is_open(c_mapinfo):
@@ -362,7 +362,12 @@ class Info(object):
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
         self.writable = self.mapset == functions.getenv("MAPSET")
-        self.find = Finder(self.c_mapinfo, self.table, self.writable)
+        self.find = {'by_point': PointFinder(self.c_mapinfo, self.table,
+                                             self.writable),
+                     'by_box': BboxFinder(self.c_mapinfo, self.table,
+                                          self.writable),
+                     'by_polygon': PolygonFinder(self.c_mapinfo, self.table,
+                                                 self.writable), }
 
     def close(self):
         """Method to close the Vector"""
@@ -380,7 +385,7 @@ class Info(object):
         """Remove vector map"""
         if self.is_open():
             self.close()
-        functions.remove(self.name,'vect')
+        functions.remove(self.name, 'vect')
 
     def build(self):
         """Close the vector map and build vector Topology"""
