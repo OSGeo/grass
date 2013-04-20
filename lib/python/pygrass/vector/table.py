@@ -8,6 +8,7 @@ Created on Wed Aug  8 15:29:21 2012
 
 """
 import ctypes
+import numpy as np
 
 try:
     from collections import OrderedDict
@@ -142,7 +143,7 @@ class Columns(object):
     For a postgreSQL table: ::
 
         >>> import psycopg2 as pg                              #doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg', 
+        >>> cols_pg = Columns('boundary_municp_pg',
         ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
         >>> cols_pg.tname #doctest: +SKIP
         'boundary_municp_pg'                                   #doctest: +SKIP
@@ -467,7 +468,7 @@ class Columns(object):
             >>> 'CHILD' in cols_pg # doctest: +SKIP
             False
             >>> remove('mycensus','vect')
-            
+
             ..
         """
         cur = self.conn.cursor()
@@ -626,6 +627,12 @@ class Link(object):
         """
         if self.driver == 'sqlite':
             import sqlite3
+            # Numpy is using some custom integer data types to efficiently
+            # pack data into memory. Since these types aren't familiar to
+            # sqlite, you'll have to tell it about how to handle them.
+            for t in (np.int8, np.int16, np.int32, np.int64, np.uint8,
+                      np.uint16, np.uint32, np.uint64):
+                sqlite3.register_adapter(t, long)
             return sqlite3.connect(get_path(self.database))
         elif self.driver == 'pg':
             try:
@@ -664,7 +671,7 @@ class Link(object):
             ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
             ...             'sqlite')
             >>> link.info()
-            layer:    1
+            layer:     1
             name:      link0
             table:     census
             key:       cat
@@ -673,7 +680,7 @@ class Link(object):
 
         ..
         """
-        print "layer:   ", self.layer
+        print "layer:    ", self.layer
         print "name:     ", self.name
         print "table:    ", self.table_name
         print "key:      ", self.key
@@ -874,7 +881,7 @@ class Table(object):
 
     def n_rows(self):
         """Return the number of rows
-        
+
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
         >>> tab_sqlite = Table(name='census',
