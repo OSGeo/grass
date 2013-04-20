@@ -104,8 +104,24 @@ class Vector(Info):
             raise GrassError("Vect_rewind raise an error.")
 
     @must_be_open
-    def write(self, geo_obj, attrs=None):
-        """Write geometry features and attributes
+    def write(self, geo_obj, attrs=None, set_cats=True):
+        """Write geometry features and attributes.
+
+        Parameters
+        ----------
+
+        geo_obj : geometry GRASS object
+            A geometry grass object define in grass.pygrass.vector.geometry.
+        attrs: list, optional
+            A list with the values that will be insert in the attribute table.
+        set_cats, bool, optional
+            If True, the category of the geometry feature is set using the
+            default layer of the vector map and a progressive category value
+            (default), otherwise the c_cats attribute of the geometry object
+            will be used.
+
+        Examples
+        --------
 
         Open a new vector map ::
 
@@ -123,6 +139,7 @@ class Vector(Info):
             >>> new.open('w', tab_name='newvect', tab_cols=cols)
 
         import a geometry feature ::
+
             >>> from grass.pygrass.vector.geometry import Point
 
         create two points ::
@@ -132,8 +149,8 @@ class Vector(Info):
 
         then write the two points on the map, with ::
 
-            >>> new.write2(point0, ('pub', ))
-            >>> new.write2(point1, ('resturnat', ))
+            >>> new.write(point0, ('pub', ))
+            >>> new.write(point1, ('resturnat', ))
 
         close the vector map ::
 
@@ -165,7 +182,8 @@ class Vector(Info):
             cur.execute(self.table.columns.insert_str, attr)
             cur.close()
 
-        libvect.Vect_cat_set(geo_obj.c_cats, self.layer, self.n_lines)
+        if set_cats:
+            libvect.Vect_cat_set(geo_obj.c_cats, self.layer, self.n_lines)
         result = libvect.Vect_write_line(self.c_mapinfo, geo_obj.gtype,
                                          geo_obj.c_points, geo_obj.c_cats)
         if result == -1:
