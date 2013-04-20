@@ -12,6 +12,7 @@ from grass.script.setup import write_gisrc
 
 from grass.pygrass.gis import Mapset, Location, make_mapset
 from grass.pygrass.modules import Module
+from grass.pygrass.functions import get_mapset_raster
 
 from split import split_region_tiles
 from patch import patch_map
@@ -90,7 +91,7 @@ class GridModule(object):
         >>> grd.run()
     """
     def __init__(self, cmd, width=None, height=None, overlap=0, processes=None,
-                 split=False, *args, **kargs):
+                 split=False, debug=False, *args, **kargs):
         kargs['run_'] = False
         self.mset = Mapset()
         self.module = Module(cmd, *args, **kargs)
@@ -104,6 +105,7 @@ class GridModule(object):
         self.inlist = None
         if split:
             self.split()
+        self.debug = debug
 
     def clean_location(self):
         """Remove all created mapsets."""
@@ -146,14 +148,27 @@ class GridModule(object):
                 works.append((bbox, inms, self.msetstr % (row, col), cmd))
         return works
 
+    def define_mapset_inputs(self):
+        for inmap in self.module.inputs:
+            inm = self.module.inputs[inmap]
+            if inm.type == 'raster' and inm.value:
+                if '@' not in inm.value:
+                    mset = get_mapset_raster(inm.value)
+                    inm.value = inm.value + '@%s' % mset
+
     def run(self, patch=True, clean=True):
         """Run the GRASS command."""
         self.module.flags.overwrite = True
-        pool = mltp.Pool(processes=self.processes)
-        result = pool.map_async(cmd_exe, self.get_works())
-        result.wait()
-        if not result.successful():
-            raise RuntimeError
+        self.define_mapset_inputs()
+        if self.debug:
+            for wrk in self.get_works():
+                cmd_exe(wrk)
+        else:
+            pool = mltp.Pool(processes=self.processes)
+            result = pool.map_async(cmd_exe, self.get_works())
+            result.wait()
+            if not result.successful():
+                raise RuntimeError
 
         if patch:
             self.patch()
