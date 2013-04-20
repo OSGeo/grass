@@ -8,11 +8,30 @@ import grass.lib.vector as libvect
 
 from grass.pygrass.errors import must_be_open
 
-from basic import Ilist
-from geometry import read_line, Isle, Area
+from basic import Ilist, BoxList
+from geometry import read_line, Isle, Area, Point
 
 
-class Finder(object):
+class AbstractFinder(object):
+    def __init__(self, c_mapinfo, table=None, writable=False):
+        """Find geometry feature around a point.
+        """
+        self.c_mapinfo = c_mapinfo
+        self.table = table
+        self.writable = writable
+        self.vtype = {'point':    libvect.GV_POINT,  # 1
+                      'line':     libvect.GV_LINE,   # 2
+                      'boundary': libvect.GV_BOUNDARY,  # 3
+                      'centroid': libvect.GV_CENTROID,  # 4
+                      'all': -1}
+
+    def is_open(self):
+        """Check if the vector map is open or not"""
+        import abstract
+        return abstract.is_open(self.c_mapinfo)
+
+
+class PointFinder(AbstractFinder):
     """Find the geomtry features of a vector map that are close to a point. ::
 
         >>> from grass.pygrass.vector import VectorTopo
@@ -49,14 +68,7 @@ class Finder(object):
     def __init__(self, c_mapinfo, table=None, writable=False):
         """Find geometry feature around a point.
         """
-        self.c_mapinfo = c_mapinfo
-        self.table = table
-        self.writable = writable
-        self.vtype = {'point':    libvect.GV_POINT,  # 1
-                      'line':     libvect.GV_LINE,   # 2
-                      'boundary': libvect.GV_BOUNDARY,  # 3
-                      'centroid': libvect.GV_CENTROID,  # 4
-                      'all': -1}  # -1
+        super(PointFinder, self).__init__(c_mapinfo, table, writable)
 
 # TODO: add the Node class and enable this method
 #    def node(self, point, maxdist):
@@ -81,12 +93,12 @@ class Finder(object):
                              self.table, self.writable)
 
     @must_be_open
-    def geos(self, point, maxdist, type='all', exclude=[]):
+    def geos(self, point, maxdist, type='all', exclude=None):
         """Find the nearest line. Vect_find_line_list
 
         Valid type are all the keys in find.vtype dictionary
         """
-        excl = Ilist(exclude)
+        excl = Ilist(exclude) if exclude else Ilist([])
         found = Ilist()
         if libvect.Vect_find_line_list(self.c_mapinfo,
                                        point.x, point.y,
@@ -115,7 +127,72 @@ class Finder(object):
             return Isle(v_id=isle_id, c_mapinfo=self.c_mapinfo,
                         table=self.table, writable=self.writable)
 
-    def is_open(self):
-        """Check if the vector map is open or not"""
-        import abstract
-        return abstract.is_open(self.c_mapinfo)
+
+class BboxFinder(AbstractFinder):
+    def __init__(self, c_mapinfo, table=None, writable=False):
+        super(BboxFinder, self).__init__(c_mapinfo, table, writable)
+
+    @must_be_open
+    def geos(self, bbox, type='all', bbox_list=False):
+        """Find the geometry features contained in the bbox.
+        Vect_select_lines_by_box
+
+        Valid type are all the keys in find.vtype dictionary
+        """
+        found = BoxList()
+        if libvect.Vect_select_lines_by_box(self.c_mapinfo, bbox.c_bbox,
+                                            self.vtype[type], found.c_boxlist):
+            if bbox_list:
+                return found
+            else:
+                return (read_line(f_id, self.c_mapinfo, self.table,
+                                  self.writable) for f_id in found.ids)
+
+    @must_be_open
+    def nodes(self, bbox):
+        """Find the nearest area. Vect_find_area"""
+        found = Ilist()
+        if libvect.Vect_select_nodes_by_box(self.c_mapinfo, bbox.c_bbox,
+                                            found.c_ilist):
+            for n_id in found:
+                yield Point(v_id=n_id, c_mapinfo=self.c_mapinfo,
+                            table=self.table, writable=self.writable)
+
+    @must_be_open
+    def areas(self, bbox, bbox_list=False):
+        """Find the nearest area. Vect_find_area"""
+        found = BoxList()
+        if libvect.Vect_select_areas_by_box(self.c_mapinfo, bbox.c_bbox,
+                                            found.c_boxlist):
+            if bbox_list:
+                return found
+            else:
+                return (Area(v_id=a_id, c_mapinfo=self.c_mapinfo,
+                             table=self.table, writable=self.writable)
+                        for a_id in found.ids)
+        return []
+
+    @must_be_open
+    def islands(self, bbox, bbox_list=False):
+        """Find the nearest island. Vect_find_island"""
+        found = BoxList()
+        if libvect.Vect_select_isles_by_box(self.c_mapinfo, bbox.c_bbox,
+                                            found.c_boxlist):
+            if bbox_list:
+                return found
+            else:
+                return (Isle(v_id=i_id, c_mapinfo=self.c_mapinfo,
+                             table=self.table, writable=self.writable)
+                        for i_id in found.ids)
+        return []
+
+
+class PolygonFinder(AbstractFinder):
+    def __init__(self, c_mapinfo, table=None, writable=False):
+        super(PolygonFinder, self).__init__(c_mapinfo, table, writable)
+
+    def lines(self, polygon, isles=None):
+        pass
+
+    def areas(self, polygon, isles=None):
+        pass
