@@ -140,6 +140,17 @@ class BoxList(object):
             for box in boxlist:
                 self.append(box)
 
+    @property
+    def ids(self):
+        return [self.c_boxlist.contents.id[i] for i in range(self.n_values)]
+
+    @property
+    def n_values(self):
+        return self.c_boxlist.contents.n_values
+
+    def have_boxes(self):
+        return bool(self.c_boxlist.contents.have_boxes)
+
     def __len__(self):
         return self.c_boxlist.contents.n_values
 
