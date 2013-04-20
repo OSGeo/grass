@@ -401,17 +401,31 @@ class AbstractDataset(object):
         else:
             return None
 
-    def temporal_relation(self, map):
+    def temporal_relation(self, dataset):
         """!Return the temporal relation of self and the provided dataset
         
             @return The temporal relation as string
         """
-        if self.is_time_absolute() and map.is_time_absolute():
-            return self.absolute_time.temporal_relation(map.absolute_time)
-        if self.is_time_relative() and map.is_time_relative():
-            return self.relative_time.temporal_relation(map.relative_time)
+        if self.is_time_absolute() and dataset.is_time_absolute():
+            return self.absolute_time.temporal_relation(dataset.absolute_time)
+        if self.is_time_relative() and dataset.is_time_relative():
+            return self.relative_time.temporal_relation(dataset.relative_time)
         return None
 
+    def temporal_intersection(self, dataset):
+        """!Intersect self with the provided datasetand
+           return a new temporal extent with the new start and end time
+           
+           @param dataset The abstract dataset to temporal intersect with
+           @return The new temporal extent with start and end time, 
+                   or None in case of no intersection
+        """
+        if self.is_time_absolute() and dataset.is_time_absolute():
+            return self.absolute_time.intersect(dataset.absolute_time)
+        if self.is_time_relative() and dataset.is_time_relative():
+            return self.relative_time.intersect(dataset.relative_time)
+        return None
+        
 ###############################################################################
 
 class AbstractDatasetComparisonKeyStartTime(object):

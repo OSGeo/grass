@@ -5,7 +5,7 @@
 # MODULE:	t.topology
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	List and modify temporal topology of a space time dataset
+# PURPOSE:	List temporal topology of a space time dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Lists and modifies temporal topology of a space time dataset.
+#% description: Lists temporal topology of a space time dataset.
 #% keywords: temporal
 #% keywords: topology
 #%end
@@ -33,7 +33,7 @@
 
 #%flag
 #% key: m
-#% description: Print temporal relation matrix and exit
+#% description: Print temporal relationships and exit
 #%end
 
 import grass.script as grass

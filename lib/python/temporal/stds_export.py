@@ -32,7 +32,9 @@ import shutil
 import os
 import tarfile
 import tempfile
-from space_time_datasets_tools import *
+
+from space_time_datasets import *
+from factory import *
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"

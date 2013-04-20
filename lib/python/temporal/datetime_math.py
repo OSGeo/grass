@@ -186,7 +186,12 @@ def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
         if residual_months == 0:
             residual_months = 1
 
-        dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
+        try:
+            dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
+        except:
+            core.fatal(_("Unable to increment the datetime %s. "\
+                         "Please check that the yearly or monthly increment does not result in wrong number of days."%(mydate)))
+
         tdelta_months = dt1 - mydate
 
     if years > 0:
