@@ -14,6 +14,7 @@ for details.
 """
 
 from space_time_datasets import *
+from factory import *
 
 ###############################################################################
 

@@ -39,8 +39,12 @@ import tarfile
 import tempfile
 import time
 import filecmp
-import space_time_datasets_tools
-from space_time_datasets_tools import *
+
+import core
+from space_time_datasets import *
+from register import *
+import factory
+from factory import *
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"
@@ -249,7 +253,7 @@ def import_stds(
 
     try:
         # Make sure the temporal database exists
-        space_time_datasets_tools.init()
+        factory.init()
 
         fs = "|"
         maplist = []

@@ -204,6 +204,37 @@ dbif.close()
     
 \endcode
 
+\subsevtion PythonTGISExamplesShifting Temporal shifting
+
+\code
+
+import grass.script as grass
+import grass.temporal as tgis
+
+id="test@PERMANENT"
+type="strds"
+
+# Make sure the temporal database exists
+tgis.init()
+
+dbif = tgis.SQLDatabaseInterfaceConnection()
+dbif.connect()
+
+stds = tgis.dataset_factory(type, id)
+
+if stds.is_in_db(dbif) == False:
+    dbif.close()
+    grass.fatal(_("Space time dataset <%s> not found in temporal database") % (id))
+
+stds.select(dbif=dbif)
+
+stds.snap(dbif=dbif)
+
+stds.update_command_string(dbif=dbif)
+dbif.close()
+
+\endcode
+
 \section PythonTGISAuthors Authors
 
 Soeren Gebbert

@@ -83,6 +83,119 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         self.set_start_time(start_time)
         self.set_end_time(end_time)
 
+    def intersect(self, extent):
+        """!Intersect this temporal extent with the provided temporal extent and
+           return a new temporal extent with the new start and end time
+           
+           @param extent The temporal extent to intersect with
+           @return The new temporal extent with start and end time, 
+                   or None in case of no intersection
+           
+           Usage:
+           
+           @code
+
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> inter = A.intersect(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+            
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> inter = A.intersect(B)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+           >>> inter = B.intersect(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+             
+           >>> A = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> inter = A.intersect(B)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+           >>> inter = B.intersect(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+             
+           >>> A = AbstractTemporalExtent(start_time=3, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> inter = A.intersect(B)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+           >>> inter = B.intersect(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+            
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> inter = A.intersect(B)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+           >>> inter = B.intersect(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> inter = A.intersect(B)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... None
+           >>> inter = B.intersect(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... None
+            
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=4 )
+           >>> inter = A.intersect(B)
+           >>> print inter
+           None
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> inter = A.intersect(B)
+           >>> print inter
+           None
+           
+           @endcode
+        """
+        relation = self.temporal_relation(extent)
+        
+        if relation == "after" or relation == "before":
+            return None
+        
+        if self.D["end_time"] is None:
+            return AbstractTemporalExtent(start_time=self.D["start_time"])
+            
+        if extent.D["end_time"] is None:
+            return AbstractTemporalExtent(start_time=extent.D["start_time"])
+        
+        start = None
+        end = None
+        
+        if self.D["start_time"] > extent.D["start_time"]:
+            start = self.D["start_time"]
+        else:
+            start = extent.D["start_time"]
+            
+        if self.D["end_time"] > extent.D["end_time"]:
+            end = extent.D["end_time"]
+        else:
+            end = self.D["end_time"]
+        
+        return AbstractTemporalExtent(start_time=start, end_time=end)
+        
     def starts(self, extent):
         """!Return True if this temporal extent (A) starts at the start of the 
            provided temporal extent (B) and finishes within it
@@ -91,7 +204,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |---------|
            @endverbatim
            
-           @param extent: The temporal extent object with which this extent starts
+           @param extent The temporal extent object with which this extent starts
            
            Usage:
            
@@ -123,7 +236,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |-----|
            @endverbatim
            
-           @param extent: The temporal extent object with which this extent started
+           @param extent The temporal extent object with which this extent started
            
            Usage:
            
@@ -155,7 +268,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |---------|
            @endverbatim
            
-           @param extent: The temporal extent object with which this extent finishes
+           @param extent The temporal extent object with which this extent finishes
            
            Usage:
            
@@ -187,7 +300,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B      |-----|
            @endverbatim
            
-           @param extent: The temporal extent object with which this extent finishes
+           @param extent The temporal extent object with which this extent finishes
            
            Usage:
            
@@ -219,7 +332,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is located before this extent
+           @param extent The temporal extent object that is located before this extent
            
            Usage:
            
@@ -253,7 +366,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B             |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is located after this extent
+           @param extent The temporal extent object that is located after this extent
            
            Usage:
            
@@ -289,7 +402,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B            |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is a meeting neighbor
+           @param extent The temporal extent object that is a meeting neighbor
                           of this extent
            
            Usage:
@@ -328,7 +441,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is the predecessor
+           @param extent The temporal extent object that is the predecessor
                           of this extent
            
            Usage:
@@ -360,7 +473,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B            |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is the successor
+           @param extent The temporal extent object that is the successor
                           of this extent
            
            Usage:
@@ -392,7 +505,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |---------|
            @endverbatim
                       
-           @param extent: The temporal extent object that contains this extent
+           @param extent The temporal extent object that contains this extent
            
            Usage:
            
@@ -433,7 +546,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B   |-------|
            @endverbatim
            
-           @param extent: The temporal extent object that is located 
+           @param extent The temporal extent object that is located 
                           during this extent
            
            Usage:
@@ -475,7 +588,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is equal 
+           @param extent The temporal extent object that is equal 
                           during this extent
            
            Usage:
@@ -513,7 +626,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            A  |---------|
            B    |---------|
            @endverbatim
-           @param extent: The temporal extent object that is overlaps 
+           @param extent The temporal extent object that is overlaps 
                           this extent
            
            Usage:
@@ -547,7 +660,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            B  |---------|
            @endverbatim
            
-           @param extent: The temporal extent object that is overlapped 
+           @param extent The temporal extent object that is overlapped 
                           this extent
            
            Usage:
@@ -594,7 +707,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
                - follows
                - precedes
            
-           @param extent: The temporal extent 
+           @param extent The temporal extent 
            @return The name of the temporal relation or None if no relation found
         """
 

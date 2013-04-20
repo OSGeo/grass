@@ -1,0 +1,176 @@
+<h2>DESCRIPTION</h2>
+
+<em>t.snap</em> is designed to convert time instances of maps into time intervals or to 
+create valid temporal topologies for space time datasets. Raster, 3D raster and vector space time datasets are supported
+with absolute and relative time.
+<p>
+This module "snaps" the end time of each registered map of a space time dataset to the start time
+of the map that is the temporal nearest neighbour in the future. Maps with equal time stamps
+are not modified and must be removed or modified to create a valid temporal topology.
+In case the last map in the space time dataset is a time instance, the granularity of the space time
+dataset will be used to create the time interval.
+
+<h2>EXAMPLE</h2>
+
+We create 6 raster maps and register them using absolute time 
+in a space time raster dataset using an increment of one month.
+Then we snap the created time instances resulting in time intervals.
+
+<div class="code"><pre>
+
+r.mapcalc expr="prec_1 = rand(0, 550)"
+r.mapcalc expr="prec_2 = rand(0, 450)"
+r.mapcalc expr="prec_3 = rand(0, 320)"
+r.mapcalc expr="prec_4 = rand(0, 510)"
+r.mapcalc expr="prec_5 = rand(0, 300)"
+r.mapcalc expr="prec_6 = rand(0, 650)"
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register type=rast input=precipitation_daily \
+           maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
+           start=2012-01-01 increment="1 day"
+
+t.info type=strds input=precipitation_daily
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily@soeren
+ | Name: ...................... precipitation_daily
+ | Mapset: .................... soeren
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-04-20 14:39:07.136253
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-01-01 00:00:00
+ | End time:................... 2012-01-06 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... point
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Number of registered maps:.. 6
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Commands of creation:
+ | - 2013-04-20 14:39:07 -
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | - 2013-04-20 14:39:07 -
+ | t.register type="rast" input="precipitation_daily"
+ |     maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6" start="2012-01-01"
+ |     increment="1 day"
+ | 
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
+ | Minimum value min:.......... 0.0
+ | Minimum value max:.......... 0.0
+ | Maximum value min:.......... 296.0
+ | Maximum value max:.......... 648.0
+ | Raster register table:...... precipitation_daily_soeren_raster_register
+ +----------------------------------------------------------------------------+
+ 
+t.rast.list input=precipitation_daily
+
+prec_1  soeren  2012-01-01 00:00:00 None
+prec_2  soeren  2012-01-02 00:00:00 None
+prec_3  soeren  2012-01-03 00:00:00 None
+prec_4  soeren  2012-01-04 00:00:00 None
+prec_5  soeren  2012-01-05 00:00:00 None
+prec_6  soeren  2012-01-06 00:00:00 None
+
+t.snap type=strds input=precipitation_daily
+
+t.info type=strds input=precipitation_daily
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily@soeren
+ | Name: ...................... precipitation_daily
+ | Mapset: .................... soeren
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-04-20 14:39:07.136253
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-01-01 00:00:00
+ | End time:................... 2012-01-07 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Number of registered maps:.. 6
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Commands of creation:
+ | - 2013-04-20 14:39:07 -
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | - 2013-04-20 14:39:07 -
+ | t.register type="rast" input="precipitation_daily"
+ |     maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6" start="2012-01-01"
+ |     increment="1 day"
+ | - 2013-04-20 14:39:54 -
+ | t.snap type="strds" input="precipitation_daily"
+ | 
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
+ | Minimum value min:.......... 0.0
+ | Minimum value max:.......... 0.0
+ | Maximum value min:.......... 296.0
+ | Maximum value max:.......... 648.0
+ | Raster register table:...... precipitation_daily_soeren_raster_register
+ +----------------------------------------------------------------------------+
+
+t.rast.list input=precipitation_daily
+
+prec_1  soeren  2012-01-01 00:00:00 2012-01-02 00:00:00
+prec_2  soeren  2012-01-02 00:00:00 2012-01-03 00:00:00
+prec_3  soeren  2012-01-03 00:00:00 2012-01-04 00:00:00
+prec_4  soeren  2012-01-04 00:00:00 2012-01-05 00:00:00
+prec_5  soeren  2012-01-05 00:00:00 2012-01-06 00:00:00
+prec_6  soeren  2012-01-06 00:00:00 2012-01-07 00:00:00
+
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="t.shift.html">t.shift</a>,
+<a href="t.create.html">t.create</a>,
+<a href="t.register.html">t.register</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert
+
+<p><i>Last changed: $Date: 2013-01-22 14:44:08 +0100 (Di, 22. Jan 2013) $</i>
+

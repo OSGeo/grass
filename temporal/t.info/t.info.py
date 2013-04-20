@@ -64,7 +64,7 @@ def main():
     tgis.init()
     
     dbif = tgis.SQLDatabaseInterfaceConnection()
-
+    
     if system and not shellstyle:
         #      0123456789012345678901234567890
         print " +------------------- Temporal DBMI backend information ----------------------+"
@@ -80,7 +80,7 @@ def main():
         print "dbmi_init_string=" + str(tgis.get_temporal_dbmi_init_string())
         print "sql_template_path=" + str(tgis.get_sql_template_path())
         return
-
+        
     if not system and not name:
         grass.fatal(_("Please specify %s=") % ("name"))
 

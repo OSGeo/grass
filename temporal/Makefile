@@ -29,6 +29,8 @@ SUBDIRS = \
 	t.rast3d.mapcalc \
 	t.rast3d.univar \
 	t.rename \
+	t.snap \
+	t.shift \
 	t.vect.list \
 	t.vect.db.select \
 	t.vect.export \

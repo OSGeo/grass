@@ -19,7 +19,6 @@ from temporal_relationships import *
 
 ###############################################################################
 
-
 class AbstractSpaceTimeDataset(AbstractDataset):
     """!Abstract space time dataset class
 
@@ -1079,7 +1078,142 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             dbif.close()
 
         return rows
-
+        
+    def shift(self, gran, dbif=None):
+        """!Temporally shift each registered map with the provided granularity
+        
+           @param gran The granularity to be used for shifting
+           @param dbif The database interface to be used
+           @return True something to shift, False nothing to shift or wrong granularity
+        
+        """
+        if not check_granularity_string(gran, self.get_temporal_type()):
+            self.error(_("Wrong granularity format: %s"%(gran)))
+            return False
+            
+        dbif, connected = init_dbif(dbif)
+        
+        maps = self.get_registered_maps_as_objects(dbif=dbif)
+        
+        if maps is None:
+            return False
+            
+        date_list = []
+        
+        # We need to make a dry run to avoid a break 
+        # in the middle of the update process when the increment
+        # results in wrong number of days in a month
+        for map in maps:
+            start, end = map.get_valid_time()
+            
+            if self.is_time_absolute():
+                start = increment_datetime_by_string(start, gran)
+                if end is not None:
+                    end = increment_datetime_by_string(end, gran)
+            elif self.is_time_relative():
+                start = start + int(gran)
+                if end is not None:
+                    end = end + int(gran)
+                    
+            date_list.append((start, end))
+            
+        self. _update_map_timestamps(maps, date_list, dbif)
+            
+        if connected:
+            dbif.close()
+            
+        return True
+        
+    def snap(self, dbif=None):
+        """!For each registered map snap the end time to the start time of its 
+           temporal nearest neighbor in the future
+           
+           Maps with equal time stamps are not snapped
+        
+           @param dbif The database interface to be used
+        
+        """
+        dbif, connected = init_dbif(dbif)
+        
+        maps = self.get_registered_maps_as_objects(dbif=dbif)
+        
+        if maps is None:
+            return
+            
+        date_list = []
+        
+        for i in range(len(maps) - 1):
+            start, end = maps[i].get_valid_time()
+            start_next, end = maps[i + 1].get_valid_time()
+            
+            # Maps with equal time stamps can not be snapped
+            if start != start_next:
+                date_list.append((start, start_next))
+            else:
+                # Keep the original time stamps
+                date_list.append((start, end))
+        
+        # Last map
+        start, end = maps[-1].get_valid_time()
+        # We increment the start time with the dataset 
+        # granularity if the end time is None
+        if end is None:
+            if self.is_time_absolute():
+                end =  increment_datetime_by_string(start, self.get_granularity())
+            elif self.is_time_relative():
+                end = start + self.get_granularity()
+        
+        date_list.append((start, end))
+        
+        self. _update_map_timestamps(maps, date_list, dbif)
+        
+        if connected:
+            dbif.close()
+            
+    def _update_map_timestamps(self, maps, date_list, dbif):
+        """!Update the timestamps of maps with the start and end time
+           stored in the date_list.
+           
+           The number of dates in the list must be equal to the number
+           of maps.
+           
+           @param maps A list of map objects
+           @param date_list A list with date tuples (start_time, end_time)
+           @param dbif The database interface to be used
+        """
+    
+        datatsets_to_modify = {}
+        # Now update the maps
+        count = 0
+        for map in maps:
+            start = date_list[count][0]
+            end   = date_list[count][1]
+            map.select(dbif)
+            count += 1
+            
+            if self.is_time_absolute():
+                map.update_absolute_time(start_time=start, end_time=end, dbif=dbif)
+            elif self.is_time_relative():
+                map.update_relative_time(start_time=start, end_time=end,
+                                         unit=self.get_relative_time_unit(), dbif=dbif)
+                
+            # Save the datasets that must be updated
+            datasets = map.get_registered_datasets(dbif)
+            if datasets:
+                for dataset in datasets:
+                    datatsets_to_modify[dataset["id"]] = dataset["id"]
+        
+        self.update_from_registered_maps(dbif)
+        
+        # Update affected datasets
+        if datatsets_to_modify:
+            for dataset in datatsets_to_modify:
+                if dataset != self.get_id():
+                    ds = self.get_new_instance(ident=dataset)
+                    ds.select(dbif)
+                    ds.update_from_registered_maps(dbif)
+            
+        
     def rename(self, ident, dbif=None):
         """!Rename the space time dataset
 
