@@ -15,7 +15,7 @@ from grass.pygrass.errors import GrassError, must_be_open
 from geometry import GEOOBJ as _GEOOBJ
 from geometry import read_line, read_next_line
 from abstract import Info
-from basic import Bbox
+from basic import Bbox, Cats
 
 
 _NUMOF = {"areas": libvect.Vect_get_num_areas,
@@ -183,7 +183,9 @@ class Vector(Info):
             cur.close()
 
         if set_cats:
-            libvect.Vect_cat_set(geo_obj.c_cats, self.layer, self.n_lines)
+            cats = Cats(geo_obj.c_cats)
+            cats.reset()
+            cats.set(self.n_lines, self.layer)
         result = libvect.Vect_write_line(self.c_mapinfo, geo_obj.gtype,
                                          geo_obj.c_points, geo_obj.c_cats)
         if result == -1:
