@@ -58,6 +58,7 @@ from gui_core.widgets  import ManageSettingsWidget
 from core.gcmd     import RunCommand, GError, GMessage
 from core.utils    import GetListOfLocations, GetListOfMapsets, GetFormats
 from core.utils    import GetSettingsPath, GetValidLayerName, ListSortLower
+from core.utils    import GetVectorNumberOfLayers
 from core.settings import UserSettings
 from core.debug    import Debug
 
@@ -815,24 +816,7 @@ class LayerSelect(wx.ComboBox):
             layers.append('-1')
 
         if vector:
-            ret = RunCommand('v.category',
-                             read = True,
-                             quiet = True,
-                             option = 'report',
-                             flags = 'g',
-                             input = vector)
-            if ret:
-                for line in ret.splitlines():
-                    if 'all' not in line:
-                        continue
-                    try:
-                        layer = line.split(' ')[0]
-                    except IndexError:
-                        continue
-                    # use this to get layer names
-                    # but only when all modules use Vect_get_field2()
-                    # which is not the case right now
-                    layers.append(layer)
+	    layers = GetVectorNumberOfLayers(vector)
 
         elif dsn:
             ret = RunCommand('v.in.ogr',
