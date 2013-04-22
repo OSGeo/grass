@@ -90,6 +90,13 @@ class Info(object):
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
         self.layer = layer
 
+    def __enter__(self):
+        self.open('r')
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
     def _get_name(self):
         """Private method to obtain the Vector name"""
         if self.exist() and self.is_open():
