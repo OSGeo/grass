@@ -11,7 +11,7 @@
 #                 is measured along the geodesic.
 #               Demonstrates GRASS Python Ctypes interface
 #
-# COPYRIGHT:    (c) 2008, 2011 Hamish Bowman, and the GRASS Development Team
+# COPYRIGHT:    (c) 2008-2011 Hamish Bowman, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -21,7 +21,6 @@
 #
 # Requires GRASS Python Ctypes interface
 # Requires Numeric module (NumPy) from  http://numpy.scipy.org/
-# Requires NumPrt module from  http://geosci.uchicago.edu/csc/numptr/
 #
 
 #%module
