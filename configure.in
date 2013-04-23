@@ -1765,7 +1765,12 @@ if test -n "$USE_OPENCL"; then
 # With OpenCL includes directory
 
 LOC_CHECK_INC_PATH(opencl,OpenCL,OCLINCPATH)
-LOC_CHECK_INCLUDES(CL/cl.h,OpenCL,$OCLINCPATH)
+
+if test -n "$MACOSX_APP" ; then
+    LOC_CHECK_INCLUDES(OpenCL/opencl.h,OpenCL,$OCLINCPATH)
+else
+    LOC_CHECK_INCLUDES(CL/cl.h,OpenCL,$OCLINCPATH)
+fi
 
 # With OpenCL library directory
 

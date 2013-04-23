@@ -34,7 +34,11 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk Thomas.Huld@jrc.
 #include <stdlib.h>
 #include <math.h>
 #ifdef USE_OPENCL
-#include <CL/cl.h>
+  #ifdef __APPLE__
+    #include <OpenCL/opencl.h>
+  #else
+    #include <CL/cl.h>
+  #endif
 #endif
 
 #include <grass/gis.h>
