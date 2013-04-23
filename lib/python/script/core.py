@@ -46,10 +46,10 @@ class Popen(subprocess.Popen):
                  cwd = None, env = None, universal_newlines = False,
                  startupinfo = None, creationflags = 0):
 
-	if shell == None:
-	    shell = (sys.platform == "win32")
+        if shell == None:
+            shell = (sys.platform == "win32")
 
-	subprocess.Popen.__init__(self, args, bufsize, executable,
+        subprocess.Popen.__init__(self, args, bufsize, executable,
                                   stdin, stdout, stderr,
                                   preexec_fn, close_fds, shell,
                                   cwd, env, universal_newlines,
@@ -73,8 +73,8 @@ def call(*args, **kwargs):
 # GRASS-oriented interface to subprocess module
 
 _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
-	       "preexec_fn", "close_fds", "cwd", "env",
-	       "universal_newlines", "startupinfo", "creationflags"]
+               "preexec_fn", "close_fds", "cwd", "env",
+               "universal_newlines", "startupinfo", "creationflags"]
 
 def decode(string):
     enc = locale.getdefaultlocale()[1]
@@ -86,11 +86,11 @@ def decode(string):
 def _make_val(val):
     if isinstance(val, types.StringType) or \
             isinstance(val, types.UnicodeType):
-	return val
+        return val
     if isinstance(val, types.ListType):
-	return ",".join(map(_make_val, val))
+        return ",".join(map(_make_val, val))
     if isinstance(val, types.TupleType):
-	return _make_val(list(val))
+        return _make_val(list(val))
     return str(val)
 
 def get_commands():
@@ -157,20 +157,20 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     """
     args = [prog]
     if overwrite:
-	args.append("--o")
+        args.append("--o")
     if quiet:
-	args.append("--q")
+        args.append("--q")
     if verbose:
-	args.append("--v")
+        args.append("--v")
     if flags:
         if '-' in flags:
             raise ScriptError("'-' is not a valid flag")
-	args.append("-%s" % flags)
+        args.append("-%s" % flags)
     for opt, val in options.iteritems():
-	if val != None:
-	    if opt[0] == '_':
-		opt = opt[1:]
-	    args.append("%s=%s" % (opt, _make_val(val)))
+        if val != None:
+            if opt[0] == '_':
+                opt = opt[1:]
+            args.append("%s=%s" % (opt, _make_val(val)))
     return args
 
 def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **kwargs):
@@ -203,10 +203,10 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     options = {}
     popts = {}
     for opt, val in kwargs.iteritems():
-	if opt in _popen_args:
-	    popts[opt] = val
-	else:
-	    options[opt] = val
+        if opt in _popen_args:
+            popts[opt] = val
+        else:
+            options[opt] = val
 
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
 
@@ -348,7 +348,7 @@ def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     """
     args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     if env == None:
-	env = os.environ
+        env = os.environ
     os.execvpe(prog, args, env)
 
 # interface to g.message
@@ -447,22 +447,22 @@ def _parse_opts(lines):
     options = {}
     flags = {}
     for line in lines:
-	line = line.rstrip('\r\n')
-	if not line:
-	    break
-	try:
-	    [var, val] = line.split('=', 1)
-	except:
-	    raise SyntaxError("invalid output from g.parser: %s" % line)
+        line = line.rstrip('\r\n')
+        if not line:
+            break
+        try:
+            [var, val] = line.split('=', 1)
+        except:
+            raise SyntaxError("invalid output from g.parser: %s" % line)
 
-	if var.startswith('flag_'):
-	    flags[var[5:]] = bool(int(val))
-	elif var.startswith('opt_'):
-	    options[var[4:]] = val
-	elif var in ['GRASS_OVERWRITE', 'GRASS_VERBOSE']:
-	    os.environ[var] = val
-	else:
-	    raise SyntaxError("invalid output from g.parser: %s" % line)
+        if var.startswith('flag_'):
+            flags[var[5:]] = bool(int(val))
+        elif var.startswith('opt_'):
+            options[var[4:]] = val
+        elif var in ['GRASS_OVERWRITE', 'GRASS_VERBOSE']:
+            os.environ[var] = val
+        else:
+            raise SyntaxError("invalid output from g.parser: %s" % line)
 
     return (options, flags)
 
@@ -470,9 +470,9 @@ def parser():
     """!Interface to g.parser, intended to be run from the top-level, e.g.:
 
     @code
-	if __name__ == "__main__":
-	    options, flags = grass.parser()
-	    main()
+        if __name__ == "__main__":
+            options, flags = grass.parser()
+            main()
     @endcode
 
     Thereafter, the global variables "options" and "flags" will be
@@ -491,10 +491,10 @@ def parser():
     argv = sys.argv[:]
     name = argv[0]
     if not os.path.isabs(name):
-	if os.sep in name or (os.altsep and os.altsep in name):
-	    argv[0] = os.path.abspath(name)
-	else:
-	    argv[0] = os.path.join(sys.path[0], name)
+        if os.sep in name or (os.altsep and os.altsep in name):
+            argv[0] = os.path.abspath(name)
+        else:
+            argv[0] = os.path.join(sys.path[0], name)
 
     p = Popen(['g.parser', '-s'] + argv, stdout = PIPE)
     s = p.communicate()[0]
@@ -579,12 +579,12 @@ def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
         lines = s.splitlines()
 
     for line in lines:
-	kv = line.split(sep, 1)
-	k = kv[0].strip()
-	if len(kv) > 1:
-	    v = kv[1].strip()
-	else:
-	    v = dflt
+        kv = line.split(sep, 1)
+        k = kv[0].strip()
+        if len(kv) > 1:
+            v = kv[1].strip()
+        else:
+            v = dflt
 
         if val_type:
             result[k] = val_type(v)
@@ -660,7 +660,7 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
 def compare_key_value_text_files(filename_a, filename_b, sep=":",
                                  val_sep=",", precision=0.000001):
     """
-    !Compare two key-value text two files 
+    !Compare two key-value text two files
 
     This method will print a warning in case keys that are present in the first file
     are not present in the second one.
@@ -674,7 +674,7 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
     c: 1,2,3,4,5
     d : hello,8,0.1
     \endcode
-    
+
     @param filename_a name of the first key-value text file
     @param filenmae_b name of the second key-value text file
     @param sep character that separates the keys and values, default is ":"
@@ -685,7 +685,7 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
     """
     dict_a = _text_to_key_value_dict(filename_a, sep)
     dict_b = _text_to_key_value_dict(filename_b, sep)
-    
+
     missing_keys = 0
 
     # We compare matching keys
@@ -743,9 +743,9 @@ def locn_is_latlong():
     s = read_command("g.region", flags='p')
     kv = parse_key_val(s, ':')
     if kv['projection'].split(' ')[1] == '3':
-	return True
+        return True
     else:
-	return False
+        return False
 
 def region(region3d = False, complete = False):
     """!Returns the output from running "g.region -g", as a
@@ -775,7 +775,7 @@ def region(region3d = False, complete = False):
               'rows3', 'cols3', 'cells3', 'depths']:
         if k not in reg:
             continue
-	reg[k] = int(reg[k])
+        reg[k] = int(reg[k])
 
     return reg
 
@@ -867,10 +867,10 @@ def use_temp_region():
 def del_temp_region():
     """!Unsets WIND_OVERRIDE and removes any region named by it."""
     try:
-	name = os.environ.pop('WIND_OVERRIDE')
-	run_command("g.remove", quiet = True, region = name)
+        name = os.environ.pop('WIND_OVERRIDE')
+        run_command("g.remove", quiet = True, region = name)
     except:
-	pass
+        pass
 
 # interface to g.findfile
 
@@ -929,16 +929,16 @@ def list_grouped(type, check_search_path = True):
 
     mapset = None
     for line in read_command("g.list", type = type).splitlines():
-	if line == "":
-	    continue
-	if dashes_re.match(line):
-	    continue
-	m = mapset_re.search(line)
-	if m:
-	    mapset = m.group(1)
+        if line == "":
+            continue
+        if dashes_re.match(line):
+            continue
+        m = mapset_re.search(line)
+        if m:
+            mapset = m.group(1)
             if mapset not in result.keys():
                 result[mapset] = []
-	    continue
+            continue
         if mapset:
             result[mapset].extend(line.split())
 
@@ -947,7 +947,7 @@ def list_grouped(type, check_search_path = True):
 def _concat(xs):
     result = []
     for x in xs:
-	result.extend(x)
+        result.extend(x)
     return result
 
 def list_pairs(type):
@@ -966,7 +966,7 @@ def list_pairs(type):
     @return list of tuples (map, mapset)
     """
     return _concat([[(map, mapset) for map in maps]
-		    for mapset, maps in list_grouped(type).iteritems()])
+                    for mapset, maps in list_grouped(type).iteritems()])
 
 def list_strings(type):
     """!List of elements as strings.
@@ -1132,9 +1132,9 @@ def verbosity():
     """!Return the verbosity level selected by GRASS_VERBOSE"""
     vbstr = os.getenv('GRASS_VERBOSE')
     if vbstr:
-	return int(vbstr)
+        return int(vbstr)
     else:
-	return 2
+        return 2
 
 ## various utilities, not specific to GRASS
 
@@ -1149,10 +1149,10 @@ def basename(path, ext = None):
     """
     name = os.path.basename(path)
     if not ext:
-	return name
+        return name
     fs = name.rsplit('.', 1)
     if len(fs) > 1 and fs[1].lower() == ext:
-	name = fs[0]
+        name = fs[0]
     return name
 
 # find a program (replacement for "which")
@@ -1168,13 +1168,13 @@ def find_program(pgm, args = []):
     """
     nuldev = file(os.devnull, 'w+')
     try:
-	ret = call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
+        ret = call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
         if ret == 0:
             found = True
         else:
             found = False
     except:
-	found = False
+        found = False
     nuldev.close()
 
     return found
@@ -1188,9 +1188,9 @@ def try_remove(path):
     @param path path to file to remove
     """
     try:
-	os.remove(path)
+        os.remove(path)
     except:
-	pass
+        pass
 
 # try to remove a directory, without complaints
 
@@ -1201,9 +1201,9 @@ def try_rmdir(path):
     @param path path to directory to remove
     """
     try:
-	os.rmdir(path)
+        os.rmdir(path)
     except:
-	shutil.rmtree(path, ignore_errors = True)
+        shutil.rmtree(path, ignore_errors = True)
 
 def float_or_dms(s):
     """!Convert DMS to float.
