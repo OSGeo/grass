@@ -34,8 +34,6 @@ from raster_type import TYPE as RTYPE, RTYPE_STR
 from buffer import Buffer
 from segment import Segment
 from rowio import RowIO
-from category import Category
-from history import History
 
 
 class RasterRow(RasterAbstractBase):
@@ -101,6 +99,17 @@ class RasterRow(RasterAbstractBase):
          ('bare ground path', 10, None),
          ('grass', 11, None)]
 
+    Open a raster map using the *with statement*: ::
+
+        >>> with RasterRow('elevation') as elev:
+        ...     for row in elev[:3]:
+        ...         print row[:4]
+        ...
+        [ 141.99613953  141.27848816  141.37904358  142.29821777]
+        [ 142.90461731  142.39450073  142.68611145  143.59086609]
+        [ 143.81854248  143.54707336  143.83972168  144.59527588]
+        >>> elev.is_open()
+        False
 
     """
     def __init__(self, name, mapset='', *args, **kargs):

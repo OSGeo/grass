@@ -4,19 +4,12 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
-
-
 import ctypes
-
-from numpy import isnan
 
 #
 # import GRASS modules
 #
-from grass.script import fatal, warning, gisenv
-from grass.script import core as grasscore
-#from grass.script import core
-#import grass.lib as grasslib
+from grass.script import fatal, gisenv
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 
@@ -26,7 +19,7 @@ import grass.lib.raster as libraster
 from grass.pygrass import functions
 from grass.pygrass.gis.region import Region
 from grass.pygrass.errors import must_be_open
-from grass.pygrass.gis import Mapset
+
 #
 # import raster classes
 #
@@ -194,6 +187,12 @@ class RasterAbstractBase(object):
         if self.exist():
             self.info = Info(self.name, self.mapset)
 
+    def __enter__(self):
+        self.open('r')
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
 
     def _get_mtype(self):
         """Private method to get the Raster type"""
