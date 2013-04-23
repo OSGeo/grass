@@ -918,7 +918,7 @@ def list_grouped(type, check_search_path = True):
     @return directory of mapsets/elements
     """
     if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % element)
+        verbose(_('Element type should be "rast" and not "%s"') % type)
         type = 'rast'
     dashes_re = re.compile("^----+$")
     mapset_re = re.compile("<(.*)>")
@@ -1001,7 +1001,7 @@ def mlist_strings(type, pattern = None, mapset = None, flag = ''):
     @return list of elements
     """
     if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % element)
+        verbose(_('Element type should be "rast" and not "%s"') % type)
         type = 'rast'
     result = list()
     for line in read_command("g.mlist",
@@ -1049,7 +1049,7 @@ def mlist_grouped(type, pattern = None, check_search_path = True, flag = ''):
     @return directory of mapsets/elements
     """
     if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % element)
+        verbose(_('Element type should be "rast" and not "%s"') % type)
         type = 'rast'
     result = {}
     if check_search_path:
