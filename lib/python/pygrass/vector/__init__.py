@@ -203,6 +203,21 @@ class Vector(Info):
 #=============================================
 
 class VectorTopo(Vector):
+    """Vector class with the support of the GRASS topology.
+
+    Open a vector map using the *with statement*: ::
+
+        >>> with VectorTopo('schools') as schools:
+        ...     for school in schools[:3]:
+        ...         print school.attrs['NAMESHORT']
+        ...
+        SWIFT CREEK
+        BRIARCLIFF
+        FARMINGTON WOODS
+        >>> schools.is_open()
+        False
+
+    """
     def __init__(self, name, mapset=''):
         super(VectorTopo, self).__init__(name, mapset)
         self._topo_level = 2
