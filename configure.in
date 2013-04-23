@@ -265,6 +265,7 @@ LOC_ARG_WITH(opendwg, openDWG, no)
 LOC_ARG_WITH(regex, regex)
 LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
+LOC_ARG_WITH(opencl, OpenCL, no)
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -365,6 +366,9 @@ LOC_ARG_WITH_LIB(pthread, POSIX threads)
 
 LOC_ARG_WITH_INC(openmp, OpenMP)
 LOC_ARG_WITH_LIB(openmp, OpenMP)
+
+LOC_ARG_WITH_INC(opencl, OpenCL)
+LOC_ARG_WITH_LIB(opencl, OpenCL)
 
 # Put this early on so CPPFLAGS and LDFLAGS have any additional dirs
 
@@ -1748,6 +1752,41 @@ AC_SUBST(USE_OPENMP)
 
 # Done checking OpenMP
 
+# Enable OpenCL option
+
+LOC_CHECK_USE(opencl,OpenCL,USE_OPENCL)
+
+OCLINCPATH=
+OCLLIBPATH=
+OCLLIB=
+
+if test -n "$USE_OPENCL"; then
+
+# With OpenCL includes directory
+
+LOC_CHECK_INC_PATH(opencl,OpenCL,OCLINCPATH)
+LOC_CHECK_INCLUDES(CL/cl.h,OpenCL,$OCLINCPATH)
+
+# With OpenCL library directory
+
+LOC_CHECK_LIB_PATH(OpenCL,OpenCL,OCLLIBPATH)
+# FIXME: -L${OCLLIBPATH} is not being added to the gcc conftest.c command. why not? (trac #1943?)
+LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCLfunctions,$OCLLIBPATH,OCLLIB,,,)
+
+# expanded symbol check: yes? no?
+#LOC_CHECK_FUNC(clGetPlatformInfo,OpenCL functions,OCLLIB,,,,,[
+#LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
+#])
+
+fi # $USE_OPENCL
+
+AC_SUBST(OCLINCPATH)
+AC_SUBST(OCLLIBPATH)
+AC_SUBST(OCLLIB)
+AC_SUBST(USE_OPENCL)
+
+# Done checking OpenCL
+
 # Enable LFS (from cdr-tools)
 dnl Check for large file support
 dnl Do this last to make sure that no large file definition
@@ -1910,6 +1949,7 @@ LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NLS support,USE_NLS)
 LOC_MSG_USE(ODBC support,USE_ODBC)
 LOC_MSG_USE(OGR support,USE_OGR)
+LOC_MSG_USE(OpenCL support,USE_OPENCL)
 LOC_MSG_USE(OpenGL support,USE_OPENGL)
 LOC_MSG_USE(OpenMP support,USE_OPENMP)
 LOC_MSG_USE(PNG support,USE_PNG)
