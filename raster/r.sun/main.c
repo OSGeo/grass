@@ -33,6 +33,10 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk Thomas.Huld@jrc.
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#ifdef USE_OPENCL
+#include <CL/cl.h>
+#endif
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/gprojects.h>
