@@ -13139,7 +13139,7 @@ else
 
 LDFLAGS=${ac_save_ldflags}
 
-    { echo "configure: error: *** Unable to locate OpenCLfunctions library." 1>&2; exit 1; }
+    { echo "configure: error: *** Unable to locate OpenCL library." 1>&2; exit 1; }
 
 
 fi
