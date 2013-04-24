@@ -167,7 +167,7 @@ int read_colortable(void)
 	    continue;
 	}
 
-	error(key, data, _("illegal colortabe sub-request"));
+	error(key, data, _("illegal colortable sub-request"));
     }
 
     ct.x = x;
