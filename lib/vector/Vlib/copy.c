@@ -567,7 +567,7 @@ int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out,
    \param field_in input layer number
    \param field_out output layer number
    \param field_name layer name
-   \param type feature type
+   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE
 
    \return 0 on success
    \return -1 on error
@@ -588,7 +588,7 @@ int Vect_copy_table(const struct Map_info *In, struct Map_info *Out, int field_i
    \param field_in input layer number
    \param field_out output layer number
    \param field_name layer name
-   \param type feature type
+   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE
    \param cats pointer to array of cats or NULL
    \param ncats number of cats in 'cats'
 
