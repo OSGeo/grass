@@ -182,7 +182,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
 def GetValidLayerName(name):
     """!Make layer name SQL compliant, based on G_str_to_sql()
     
-    @todo: Better use directly GRASS Python SWIG...
+    @todo: Better use directly Ctypes to reuse venerable libgis C fns...
     """
     retName = str(name).strip()
     
