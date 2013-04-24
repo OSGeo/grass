@@ -1714,7 +1714,7 @@ LOC_CHECK_INCLUDES(omp.h,OpenMP,$OMPINCPATH)
 # AIX xlc: -lxlsmp
 # SGI IRIX 6.5 MIPSpro C/C++: -lmp
 
-LOC_CHECK_LIB_PATH(gomp,OpenMP,OMPLIBPATH)
+LOC_CHECK_LIB_PATH(openmp,OpenMP,OMPLIBPATH)
 
 LOC_CHECK_FUNC(GOMP_parallel_start,OpenMP functions,OMPLIB,,,,,[
 LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OMPLIBPATH,OMPLIB,,,)
@@ -1775,9 +1775,8 @@ fi
 # With OpenCL library directory
 
 LOC_CHECK_LIB_PATH(opencl,OpenCL,OCLLIBPATH)
-# FIXME: -L${OCLLIBPATH} is not being added to the gcc conftest.c command. why not? (trac #1943?)
-LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
 
+LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
 # expanded symbol check: yes? no?
 #LOC_CHECK_FUNC(clGetPlatformInfo,OpenCL functions,OCLLIB,,,,,[
 #LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
