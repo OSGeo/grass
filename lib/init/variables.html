@@ -170,7 +170,8 @@ PERMANENT
     raster's <tt>compressed</tt> value, not the environment variable.</dd>
   
   <dt>GRASS_MESSAGE_FORMAT</dt>
-  <dd>[various modules, wxGUI]<br> maybe set to either
+  <dd>[various modules, wxGUI]<br>
+    it may be set to either
     <ul>
       <li><tt>standard</tt> - sets percentage output and message
 	formatting style to standard formatting,</li>
@@ -194,7 +195,7 @@ PERMANENT
   
   <dt>GRASS_PAGER</dt>
   <dd>[various modules]<br>
-    maybe set to either <tt>less</tt> or <tt>more</tt>.</dd>
+    it may be set to either <tt>less</tt>, <tt>more</tt>, or <tt>cat</tt>.</dd>
   
   <dt>GRASS_PERL</dt>
   <dd>[used during install process for generating man pages]<br>
@@ -204,17 +205,11 @@ PERMANENT
   <dd>set random seed
     for <em><a href="r.mapcalc.html">r.mapcalc</a></em> rand()
     function.</dd>
-  
-  <!-- HB Sept 2005: I don't think this exists anymore:
-       <p>GRASS_STDERR
-	 <br>&nbsp; set to any value to prevent user mail on error
-  -->
 
   <dt>GRASS_SKIP_MAPSET_OWNER_CHECK</dt>
   <dd>By default it is not possible to work with MAPSETs that are
     not owned by current user. Setting this variable to any non-empty value
     allows the check to be skipped.</dd>
-
 
   <dt>GRASS_SH</dt>
   <dd>[shell scripts on Windows]<br>
@@ -229,7 +224,8 @@ PERMANENT
   <dt>GRASS_PYTHON</dt>
   <dd>[wxGUI, Python Ctypes]<br>
     set to override Python executable.<br>
-    On Mac OS X this should be the pythonw executable for the wxGUI to work.</dd>
+    On Mac OS X this should be the <tt>pythonw</tt> executable for the
+    wxGUI to work.</dd>
   
   <dt>GRASS_VECTOR_LOWMEM</dt>
   <dd>[vectorlib]<br>
