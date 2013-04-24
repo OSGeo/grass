@@ -4967,3 +4967,55 @@ class RectangleDialog(PsmapDialog):
         """!Update text coordinates, after moving"""
         pass
 
+
+class LabelsDialog(PsmapDialog):
+    def __init__(self, parent, id, settings):
+        PsmapDialog.__init__(self, parent = parent, id = id, title = _("Vector labels"),
+                             settings=settings)
+        self.objectType = ('labels',)
+        if self.id is not None:
+            self.labels = self.instruction[self.id]
+        else:
+            self.id = wx.NewId()
+            self.labels = Labels(self.id)
+        self.labelsDict = self.labels.GetInstruction()
+        self.panel = self._labelPanel()
+
+        self._layout(self.panel)
+
+    def _labelPanel(self):
+        panel = wx.Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+
+        border = wx.BoxSizer(wx.VERTICAL)
+
+        box   = wx.StaticBox(parent=panel, id=wx.ID_ANY,
+                             label=" %s " % _("Vector label files created beforehand by v.label module"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+
+        self.select = Select(parent=panel, multiple=True, type='labels', fullyQualified=False)
+        self.select.SetValue(','.join(self.labelsDict['labels']))
+        self.select.SetFocus()
+        sizer.Add(item=self.select, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        helpText = wx.StaticText(panel, id=wx.ID_ANY, label=_("You can select multiple label files."))
+        helpText.SetForegroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        sizer.Add(item=helpText, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+
+        border.Add(sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        panel.SetSizer(border)
+
+        return panel
+
+    def update(self):
+        value = self.select.GetValue()
+        if not value:
+            self.labelsDict['labels'] = []
+        else:
+            self.labelsDict['labels'] = value.split(',')
+        if self.id not in self.instruction:
+            labels = Labels(self.id)
+            self.instruction.AddInstruction(labels)
+
+        self.instruction[self.id].SetInstruction(self.labelsDict)
+
+        return True

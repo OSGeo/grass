@@ -37,7 +37,7 @@ class PsMapToolbar(BaseToolbar):
         # custom button for graphics mode selection
         # TODO: could this be somehow generalized?
         self.arrowButton = self.CreateSelectionButton()
-        self.arrowButtonId = self.InsertControl(17, self.arrowButton)
+        self.arrowButtonId = self.InsertControl(18, self.arrowButton)
         self.arrowButton.Bind(wx.EVT_BUTTON, self.OnDrawGraphicsMenu)
 
         self.drawGraphicsAction = None
@@ -99,6 +99,10 @@ class PsMapToolbar(BaseToolbar):
                                      label = _('Line')),
             'rectangleAdd': MetaIcon(img = 'rectangle-add',
                                      label = _('Rectangle')),
+            'overlaysAdd': MetaIcon(img = 'layer-more',
+                                    label = _("Add overlays")),
+            'labelsAdd': MetaIcon(img = 'layer-label-add',
+                                    label = _("Add labels"))
             }
         self.icons = icons
         
@@ -127,6 +131,8 @@ class PsMapToolbar(BaseToolbar):
                                       self.parent.OnAddRaster),
                                      ('addVector', BaseIcons['addVect'],
                                       self.parent.OnAddVect),
+                                     ('overlaysAdd', icons['overlaysAdd'],
+                                      self.OnAddOverlays), 
                                      ("delete", icons["deleteObj"],
                                       self.parent.OnDelete),
                                      ("dec", BaseIcons["overlay"],
@@ -156,6 +162,9 @@ class PsMapToolbar(BaseToolbar):
                       (self.icons["addText"],       self.parent.OnAddText),
                       (self.icons["addImage"],      self.parent.OnAddImage),
                       (self.icons["addNorthArrow"], self.parent.OnAddNorthArrow)))
+
+    def OnAddOverlays(self, event):
+        self._onMenu(((self.icons['labelsAdd'], self.parent.OnAddLabels), ))
 
     def OnDrawGraphics(self, event):
         """!Graphics tool activated."""

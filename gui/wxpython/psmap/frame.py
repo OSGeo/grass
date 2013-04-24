@@ -744,6 +744,17 @@ class PsMapFrame(wx.Frame):
             dlg.OnApply(event = None)
         dlg.Show()
 
+    def OnAddLabels(self, event, id = None):
+        """!Show dialog for labels"""
+        if self.instruction.FindInstructionByType('labels'):
+            id = self.instruction.FindInstructionByType('labels').id
+        else: id = None
+        
+        if 'labels' not in self.openDialogs:
+            dlg = LabelsDialog(self, id = id, settings = self.instruction)
+            self.openDialogs['labels'] = dlg
+        self.openDialogs['labels'].Show()
+
     def getModifiedTextBounds(self, x, y, textExtent, rotation):
         """!computes bounding box of rotated text, not very precisely"""
         w, h = textExtent
@@ -948,7 +959,7 @@ class PsMapFrame(wx.Frame):
                                         coords = coords, bounds = bounds)
                 self.canvas.RedrawSelectBox(id)
                 
-            if itype in ('map', 'vector', 'raster'):
+            if itype in ('map', 'vector', 'raster', 'labels'):
                 
                 if itype == 'raster':#set resolution
                     info = grass.raster_info(self.instruction[id]['raster'])
@@ -1086,13 +1097,13 @@ class PsMapBufferedWindow(wx.Window):
         
         
         #labels
-        self.itemLabelsDict = { 'map': 'MAP FRAME',
-                                'rasterLegend': 'RASTER LEGEND',
-                                'vectorLegend': 'VECTOR LEGEND',
-                                'mapinfo': 'MAP INFO',
-                                'scalebar': 'SCALE BAR',
-                                'image': 'IMAGE',
-                                'northArrow': 'NORTH ARROW'}
+        self.itemLabelsDict = { 'map': _("MAP FRAME"),
+                                'rasterLegend': _("RASTER LEGEND"),
+                                'vectorLegend': _("VECTOR LEGEND"),
+                                'mapinfo': _("MAP INFO"),
+                                'scalebar': _("SCALE BAR"),
+                                'image': _("IMAGE"),
+                                'northArrow': _("NORTH ARROW")}
         self.itemLabels = {}
         
         # define PseudoDC
@@ -1810,10 +1821,12 @@ class PsMapBufferedWindow(wx.Window):
             
             #redraw objects
             for id in self.objectId:
+                type = self.instruction[id].type
+                if type == 'labels':  # why it's here? it should not
+                    continue
                 oRect = self.CanvasPaperCoordinates(
                     rect = self.instruction[id]['rect'], canvasToPaper = False)
                 
-                type = self.instruction[id].type
                 if type == 'text':
                     coords = self.instruction[id]['coords']# recalculate coordinates, they are not equal to BB
                     self.instruction[id]['coords'] = coords = [(int(coord) - view[i]) * zoomFactor
@@ -2144,6 +2157,14 @@ class PsMapBufferedWindow(wx.Window):
         if vectorId: 
             for map in self.instruction[vectorId]['list']:
                 self.itemLabels[mapId].append('vector: ' + map[0].split('@')[0])
+                
+        labels = self.instruction.FindInstructionByType('labels')
+        if labels:
+            labelFiles = self.instruction[labels.id]['labels']
+            if not labelFiles:
+                return
+            labelFiles = [lFile.split('@')[0] for lFile in labelFiles]
+            self.itemLabels[mapId].append(_("labels: ") + ', '.join(labelFiles))
             
     def UpdateLabel(self, itype, id):
         self.itemLabels[id] = []
