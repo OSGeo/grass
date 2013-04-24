@@ -190,6 +190,9 @@ class Settings:
                 'scrollDirection' : {
                     'selection' : 0,
                     },
+                'nvizDepthBuffer' : {
+                    'value' : 16,
+                    },
                 },
             #
             # projection

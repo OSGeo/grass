@@ -30,6 +30,7 @@ from threading import Thread
 import wx
 from   wx.lib.newevent import NewEvent
 from   wx              import glcanvas
+from wx.glcanvas       import WX_GL_DEPTH_SIZE
 
 import grass.script as grass
 
@@ -40,6 +41,7 @@ from core.settings      import UserSettings
 from nviz.workspace     import NvizSettings
 from nviz.animation     import Animation
 from nviz               import wxnviz
+from core.globalvar     import CheckWxVersion
 
 wxUpdateProperties, EVT_UPDATE_PROP  = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW  = NewEvent()
@@ -72,8 +74,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.parent = parent # MapFrame
         self.tree = tree
         self.lmgr = lmgr
-
-        glcanvas.GLCanvas.__init__(self, parent, id)
+        
+        # for wxGTK we need to set WX_GL_DEPTH_SIZE to draw vectors correctly
+        # but we don't know the right value
+        # in wxpython 2.9, there is IsDisplaySupported
+        if CheckWxVersion(version=[2, 8, 11]) and \
+           sys.platform not in ('win32', 'darwin'):
+            depthBuffer = int(UserSettings.Get(group='display', key='nvizDepthBuffer', subkey='value'))
+            attribs=[WX_GL_DEPTH_SIZE, depthBuffer, 0]
+            glcanvas.GLCanvas.__init__(self, parent, id, attribList=attribs)
+        else:
+            glcanvas.GLCanvas.__init__(self, parent, id)
+        
+            
         MapWindow.__init__(self, parent = parent, giface = giface, frame = frame,
                            Map = Map)
         self.Hide()
@@ -179,8 +192,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
+        if CheckWxVersion(version=[2, 8, 11]) and \
+           sys.platform not in ('win32', 'darwin'):
+               wx.CallLater(3000, self._warningDepthBuffer)
+        
         # cplanes cannot be initialized now
         wx.CallAfter(self.InitCPlanes)
+
+    def _warningDepthBuffer(self):
+        if not self.initView:
+            message=_("Opening 3D view was not successful. "
+                      "Please try to change the value of depth buffer "
+                      "in GUI Settings dialog > tab Map Display > Advanced "
+                      "and restart GUI.")
+            GMessage(message)
 
     def InitFly(self):
         """!Initialize fly through dictionary"""
