@@ -13126,15 +13126,15 @@ fi
 
 echo $ac_n "checking for location of OpenCL library""... $ac_c" 1>&6
 echo "configure:13129: checking for location of OpenCL library" >&5
-case "$with_OpenCL_libs" in
+case "$with_opencl_libs" in
 y | ye | yes | n | no)
-	{ echo "configure: error: *** You must supply a directory to --with-OpenCL-libs." 1>&2; exit 1; }
+	{ echo "configure: error: *** You must supply a directory to --with-opencl-libs." 1>&2; exit 1; }
 	;;
 esac
-echo "$ac_t""$with_OpenCL_libs" 1>&6
+echo "$ac_t""$with_opencl_libs" 1>&6
 
-if test -n "$with_OpenCL_libs"; then
-    for dir in $with_OpenCL_libs; do
+if test -n "$with_opencl_libs"; then
+    for dir in $with_opencl_libs; do
         if test -d "$dir"; then
             OCLLIBPATH="$OCLLIBPATH -L$dir"
         else

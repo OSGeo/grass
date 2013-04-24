@@ -1774,7 +1774,7 @@ fi
 
 # With OpenCL library directory
 
-LOC_CHECK_LIB_PATH(OpenCL,OpenCL,OCLLIBPATH)
+LOC_CHECK_LIB_PATH(opencl,OpenCL,OCLLIBPATH)
 # FIXME: -L${OCLLIBPATH} is not being added to the gcc conftest.c command. why not? (trac #1943?)
 LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
 
