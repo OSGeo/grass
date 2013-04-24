@@ -25,9 +25,8 @@
 #% required: yes
 #%end
 
-#%option G_OPT_F_INPUT
+#%option G_OPT_F_OUTPUT
 #% key: dsn
-#% gisprompt: old,bin,file
 #% description: Table file to be exported or DB connection string
 #% required : yes
 #%end
