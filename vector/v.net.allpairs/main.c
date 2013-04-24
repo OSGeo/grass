@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     }
     /* copy node table */
     if (Vect_get_field(&In, nfield))
-	Vect_copy_table(&In, &Out, nfield, nfield, NULL, GV_POINT);
+	Vect_copy_table(&In, &Out, nfield, nfield, NULL, GV_MTABLE);
 
     G_message(_("Collecting shortest paths..."));
     G_percent_reset();
