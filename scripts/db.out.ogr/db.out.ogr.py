@@ -20,7 +20,7 @@
 #% keywords: attribute table
 #%end
 
-#%option G_OPT_DB_TABLE
+#%option G_OPT_V_INPUT
 #% key: input
 #% required: yes
 #%end
@@ -77,12 +77,12 @@ def main():
 	grass.fatal(_("File <%s> already exists") % dbffile)
 
     if olayer:
-	if grass.run_command('v.out.ogr', flags = 'c', quiet = True, input = input, layer = layer,
+	if grass.run_command('v.out.ogr', quiet = True, input = input, layer = layer,
 			     dsn = dsn,
 			     format = format, type = 'point,line,area', olayer = olayer) != 0:
 	    sys.exit(1)
     else:
-	if grass.run_command('v.out.ogr', flags = 'c', quiet = True, input = input, layer = layer,
+	if grass.run_command('v.out.ogr', quiet = True, input = input, layer = layer,
 			     dsn = dsn, format = format, type = 'point,line,area') != 0:
 	    sys.exit(1)
 
