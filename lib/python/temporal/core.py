@@ -106,7 +106,7 @@ def set_use_ctypes_map_access(use_ctype = True):
        @param use_ctype True use ctypes interface, False use grass.script interface
     """
     global use_ctypes_map_access
-    use_ctypes_map_access = use_ctypes
+    use_ctypes_map_access = use_ctype
 
 ###############################################################################
 
