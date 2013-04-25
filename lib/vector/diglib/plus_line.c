@@ -268,15 +268,15 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
     }
     Node->n_lines--;
 
+    if (plus->uplist.do_uplist) {
+        dig_node_add_updated(plus, Node->n_lines > 0 ? N1 : -N1);
+    }
     if (Node->n_lines == 0) {
 	G_debug(3, "    node %d has 0 lines -> delete", N1);
 	dig_spidx_del_node(plus, N1);
 	/* free structures */
 	dig_free_node(Node);
 	plus->Node[N1] = NULL;
-    }
-    if (plus->uplist.do_uplist) {
-        dig_node_add_updated(plus, Node->n_lines > 0 ? N1 : -N1);
     }
     
     if (Line->type == GV_LINE) {
@@ -304,15 +304,15 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
     }
     Node->n_lines--;
 
+    if (plus->uplist.do_uplist) {
+        dig_node_add_updated(plus, Node->n_lines > 0 ? N2 : -N2);
+    }
     if (Node->n_lines == 0) {
 	G_debug(3, "    node %d has 0 lines -> delete", N2);
 	dig_spidx_del_node(plus, N2);
 	/* free structures */
 	dig_free_node(Node);
 	plus->Node[N2] = NULL;
-    }
-    if (plus->uplist.do_uplist) {
-        dig_node_add_updated(plus, Node->n_lines > 0 ? N2 : -N2);
     }
 
     /* Delete line */
