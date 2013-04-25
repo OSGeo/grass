@@ -3,14 +3,15 @@ from base import *
 from temporal_extent import *
 from spatial_extent import *
 from metadata import *
+from temporal_topology_dataset_connector import *
+from spatial_topology_dataset_connector import *
 from abstract_dataset import *
-from abstract_temporal_dataset import *
 from abstract_map_dataset import *
 from abstract_space_time_dataset import *
 from space_time_datasets import *
 from datetime_math import *
 from temporal_granularity import *
-from temporal_relationships import *
+from spatio_temporal_relationships import *
 from create import *
 from factory import *
 from gui_support import *

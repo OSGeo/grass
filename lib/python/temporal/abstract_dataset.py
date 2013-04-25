@@ -35,6 +35,8 @@ import copy
 from temporal_extent import *
 from spatial_extent import *
 from metadata import *
+from temporal_topology_dataset_connector import *
+from spatial_topology_dataset_connector import *
 
 
 class ImplementationError(Exception):
@@ -48,12 +50,96 @@ class ImplementationError(Exception):
     
 ###############################################################################
 
-class AbstractDataset(object):
+class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetConnector):
     """!This is the base class for all datasets 
        (raster, vector, raster3d, strds, stvds, str3ds)"""
     def __init__(self):
-        pass
+        SpatialTopologyDatasetConnector.__init__(self)
+        TemporalTopologyDatasetConnector.__init__(self)
+        
+    def reset_topology(self):
+        """!Reset any information about temporal topology"""
+        self.reset_spatial_topology()
+        self.reset_temporal_topology()
+        
+    def get_number_of_relations(self):      
+        """! Return a dictionary in which the keys are the relation names and the value
+        are the number of relations.
+        
+        The following relations are available:
+        
+        Spatial relations
+        - equivalent
+        - overlap
+        - in
+        - contain
+        - meet
+        - cover
+        - covered
+        
+        Temporal relations
+        - equal
+        - follows
+        - precedes
+        - overlaps
+        - overlapped
+        - during (including starts, finishes)
+        - contains (including started, finished)
+        - starts
+        - started
+        - finishes
+        - finished
+       
+        To access topological information the spatial, temporal or booth topologies must be build first
+        using the SpatialTopologyBuilder, TemporalTopologyBuilder or SpatioTemporalTopologyBuilder.
+        
+        @return the dictionary with relations as keys and number as values or None in case the topology  wasn't build
+        """
+        if self.is_temporal_topology_build() and not self.is_spatial_topology_build():
+            return self.get_number_of_temporal_relations()
+        elif self.is_spatial_topology_build() and not self.is_temporal_topology_build():
+            self.get_number_of_spatial_relations()
+        else:
+            return  self.get_number_of_temporal_relations() + \
+                    self.get_number_of_spatial_relations()
+            
+        return None
 
+    def set_topology_build_true(self):
+        """!Use this method when the spatio-temporal topology was build"""
+        self.set_spatial_topology_build_true()
+        self.set_temporal_topology_build_true()
+        
+
+    def set_topology_build_false(self):
+        """!Use this method when the spatio-temporal topology was not build"""
+        self.set_spatial_topology_build_false()
+        self.set_temporal_topology_build_false()
+
+    def is_topology_build(self):
+        """!Check if the spatial and temporal topology was build
+        
+           @return A dictionary with "spatial" and "temporal" as keys that have boolen values
+        """
+        d = {}
+        d["spatial"] = self.is_spatial_topology_build()
+        d["temporal"] = self.is_temporal_topology_build()
+        
+        return d
+        
+
+    def print_topology_info(self):
+        if self.is_temporal_topology_build():
+            self.print_temporal_topology_info()
+        if self.is_spatial_topology_build():
+            self.print_spatial_topology_info()
+            
+    def print_topology_shell_info(self):
+        if self.is_temporal_topology_build():
+            self.print_temporal_topology_shell_info()
+        if self.is_spatial_topology_build():
+            self.print_spatial_topology_shell_info()
+            
     def reset(self, ident):
         """!Reset the internal structure and set the identifier
 

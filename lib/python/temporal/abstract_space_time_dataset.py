@@ -15,7 +15,7 @@ for details.
 import sys
 from abstract_dataset import *
 from temporal_granularity import *
-from temporal_relationships import *
+from spatio_temporal_relationships import *
 
 ###############################################################################
 
@@ -973,7 +973,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         dbif, connected = init_dbif(dbif)
         obj_list = self.get_registered_maps_as_objects(where, order, dbif)
 
-        tb = TemporalTopologyBuilder()
+        tb = SpatioTemporalTopologyBuilder()
         tb.build(obj_list)
     
         if connected:
