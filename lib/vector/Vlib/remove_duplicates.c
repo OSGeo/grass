@@ -17,6 +17,41 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+static int cmp_int(const void *a, const void *b)
+{
+    return (*(int *)a - *(int *)b);
+}
+
+static int boxlist_add_sorted(struct boxlist *list, int id)
+{
+    int i;
+
+    if (list->n_values > 0) {
+	if (bsearch(&id, list->id, list->n_values, sizeof(int), cmp_int))
+	    return 0;
+    }
+
+    if (list->n_values == list->alloc_values) {
+	size_t size = (list->n_values + 100) * sizeof(int);
+
+	list->id = (int *)G_realloc((void *)list->id, size);
+	list->alloc_values = list->n_values + 100;
+    }
+    
+    i = 0;
+    if (list->n_values > 0) {
+	for (i = list->n_values; i > 0; i--) {
+	    if (list->id[i - 1] < id)
+		break;
+	    list->id[i] = list->id[i - 1];
+	}
+    }
+    list->id[i] = id;
+    list->n_values++;
+    
+    return 1;
+}
+
 /*!
    \brief Remove duplicate features from vector map.
 
@@ -37,6 +72,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
     struct line_cats *ACats, *BCats;
     int i, c, atype, btype, aline, bline;
     int nlines, nacats_orig, npoints;
+    int na1, na2, nb1, nb2, nodelines, nline;
     struct bound_box ABox;
     struct boxlist *List;
     int ndupl, is_dupl;
@@ -73,17 +109,38 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	Vect_line_prune(APoints);
 	
 	if (npoints != APoints->n_points) {
+	    G_debug(3, "Line %d pruned, %d vertices removed", aline, npoints - APoints->n_points);
 	    Vect_rewrite_line(Map, aline, atype, APoints, ACats);
 	    nlines = Vect_get_num_lines(Map);
 	    continue;
 	}
 
-	/* select potential duplicates */
-	ABox.E = ABox.W = APoints->x[0];
-	ABox.N = ABox.S = APoints->y[0];
-	ABox.T = ABox.B = APoints->z[0];
-	Vect_select_lines_by_box(Map, &ABox, type, List);
-	G_debug(3, "  %d lines selected by box", List->n_values);
+	na1 = na2 = -1;
+	if (atype & GV_LINES) {
+	    /* faster than Vect_select_lines_by_box() */
+	    Vect_reset_boxlist(List);
+	    Vect_get_line_nodes(Map, aline, &na1, &na2);
+	    nodelines = Vect_get_node_n_lines(Map, na1);
+
+	    for (i = 0; i < nodelines; i++) {
+		nline = abs(Vect_get_node_line(Map, na1, i));
+		
+		if (nline == aline)
+		    continue;
+		if (Vect_get_line_type(Map, nline) != atype)
+		    continue;
+		
+		boxlist_add_sorted(List, nline);
+	    }
+	}
+	else {
+	    /* select potential duplicates */
+	    ABox.E = ABox.W = APoints->x[0];
+	    ABox.N = ABox.S = APoints->y[0];
+	    ABox.T = ABox.B = APoints->z[0];
+	    Vect_select_lines_by_box(Map, &ABox, atype, List);
+	    G_debug(3, "  %d lines selected by box", List->n_values);
+	}
 	
 	is_dupl = 0;
 
@@ -94,6 +151,15 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	    /* compare aline and bline only once */
 	    if (aline <= bline)
 		continue;
+
+	    nb1 = nb2 = -1;
+
+	    if (atype & GV_LINES) {
+		Vect_get_line_nodes(Map, bline, &nb1, &nb2);
+		if ((na1 == nb1 && na2 != nb2) ||
+		    (na1 == nb2 && na2 != nb1))
+		    continue;
+	    }
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
 	    Vect_line_prune(BPoints);
