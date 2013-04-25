@@ -26,10 +26,7 @@ import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.vector as libvector
 import grass.lib.raster3d as libraster3d
-import grass.script.array as garray
-import grass.script.raster as raster
-import grass.script.vector as vector
-import grass.script.raster3d as raster3d
+import grass.script as grass
 
 from abstract_space_time_dataset import *
 
@@ -319,12 +316,11 @@ class RasterDataset(AbstractMapDataset):
         self.base.set_creator(str(getpass.getuser()))
 
         # Get the data from an existing raster map
-        global use_ctypes_map_access
 
-        if use_ctypes_map_access:
+        if get_use_ctypes_map_access() == True:
             kvp = self.read_info()
         else:
-            kvp = raster.raster_info(self.get_id())
+            kvp = grass.raster_info(self.get_id())
 
         # Fill spatial extent
 
@@ -563,12 +559,11 @@ class Raster3DDataset(AbstractMapDataset):
         # Fill spatial extent
 
         # Get the data from an existing 3D raster map
-        global use_ctypes_map_access
 
-        if use_ctypes_map_access:
+        if get_use_ctypes_map_access() == True:
             kvp = self.read_info()
         else:
-            kvp = raster3d.raster3d_info(self.get_id())
+            kvp = grass.raster3d_info(self.get_id())
 
         self.set_spatial_extent(north=kvp["north"], south=kvp["south"],
                                 east=kvp["east"], west=kvp["west"],
@@ -741,6 +736,9 @@ class VectorDataset(AbstractMapDataset):
                 core.fatal(_("Unable to open vector map <%s>" % 
                              (libvector.Vect_get_full_name(byref(Map)))))
 
+        # Release the vector spatial index memory when closed
+        libvector.Vect_set_release_support(byref(Map))
+                             
         # Read the extent information
         bbox = libvector.bound_box()
         libvector.Vect_get_map_box(byref(Map), byref(bbox))
@@ -808,12 +806,11 @@ class VectorDataset(AbstractMapDataset):
         self.base.set_creator(str(getpass.getuser()))
 
         # Get the data from an existing vector map
-        global use_ctypes_map_access
 
-	if use_ctypes_map_access:
+        if get_use_ctypes_map_access() == True:
             kvp = self.read_info()
         else:
-            kvp = vector.vector_info(self.get_map_id())
+            kvp = grass.vector_info(self.get_map_id())
 
         # Fill spatial extent
         self.set_spatial_extent(north=kvp["north"], south=kvp["south"],

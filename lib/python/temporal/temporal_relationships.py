@@ -171,7 +171,7 @@ class TemporalTopologyBuilder(object):
     def _build_1d_rtree(self, maps):
         """Build and return the one dimensional R*-Tree"""
 
-        tree = vector.RTreeCreateTree(-1, 0, 4)
+        tree = vector.RTreeCreateTree(-1, 0, 1)
 
         for i in xrange(len(maps)):
             
@@ -231,108 +231,9 @@ class TemporalTopologyBuilder(object):
                 # Get the temporal relationship
                 relation = mapsB[j].temporal_relation(mapsA[i])
                 
-                if relation == "equal":
-                    if mapsB[j] != mapsA[i]:
-                        if not mapsB[j].get_equal() or \
-                        (mapsB[j].get_equal() and \
-                        mapsA[i] not in mapsB[j].get_equal()):
-                            mapsB[j].append_equal(mapsA[i])
-                        if not mapsA[i].get_equal() or \
-                        (mapsA[i].get_equal() and \
-                        mapsB[j] not in mapsA[i].get_equal()):
-                            mapsA[i].append_equal(mapsB[j])
-                elif relation == "follows":
-                    if not mapsB[j].get_follows() or \
-                       (mapsB[j].get_follows() and \
-                       mapsA[i] not in mapsB[j].get_follows()):
-                        mapsB[j].append_follows(mapsA[i])
-                    if not mapsA[i].get_precedes() or \
-                       (mapsA[i].get_precedes() and
-                       mapsB[j] not in mapsA[i].get_precedes()):
-                        mapsA[i].append_precedes(mapsB[j])
-                elif relation == "precedes":
-                    if not mapsB[j].get_precedes() or \
-                       (mapsB[j].get_precedes() and \
-                       mapsA[i] not in mapsB[j].get_precedes()):
-                        mapsB[j].append_precedes(mapsA[i])
-                    if not mapsA[i].get_follows() or \
-                       (mapsA[i].get_follows() and \
-                       mapsB[j] not in mapsA[i].get_follows()):
-                        mapsA[i].append_follows(mapsB[j])
-                elif relation == "during" or relation == "starts" or \
-                     relation == "finishes":
-                    if not mapsB[j].get_during() or \
-                       (mapsB[j].get_during() and \
-                       mapsA[i] not in mapsB[j].get_during()):
-                        mapsB[j].append_during(mapsA[i])
-                    if not mapsA[i].get_contains() or \
-                       (mapsA[i].get_contains() and \
-                       mapsB[j] not in mapsA[i].get_contains()):
-                        mapsA[i].append_contains(mapsB[j])
-                    if relation == "starts":
-                        if not mapsB[j].get_starts() or \
-                        (mapsB[j].get_starts() and \
-                        mapsA[i] not in mapsB[j].get_starts()):
-                            mapsB[j].append_starts(mapsA[i])
-                        if not mapsA[i].get_started() or \
-                        (mapsA[i].get_started() and \
-                        mapsB[j] not in mapsA[i].get_started()):
-                            mapsA[i].append_started(mapsB[j])
-                    if relation == "finishes":
-                        if not mapsB[j].get_finishes() or \
-                        (mapsB[j].get_finishes() and \
-                        mapsA[i] not in mapsB[j].get_finishes()):
-                            mapsB[j].append_finishes(mapsA[i])
-                        if not mapsA[i].get_finished() or \
-                        (mapsA[i].get_finished() and \
-                        mapsB[j] not in mapsA[i].get_finished()):
-                            mapsA[i].append_finished(mapsB[j])
-                elif relation == "contains" or relation == "started" or \
-                     relation == "finished":
-                    if not mapsB[j].get_contains() or \
-                       (mapsB[j].get_contains() and \
-                       mapsA[i] not in mapsB[j].get_contains()):
-                        mapsB[j].append_contains(mapsA[i])
-                    if not mapsA[i].get_during() or \
-                       (mapsA[i].get_during() and \
-                       mapsB[j] not in mapsA[i].get_during()):
-                        mapsA[i].append_during(mapsB[j])
-                    if relation == "started":
-                        if not mapsB[j].get_started() or \
-                        (mapsB[j].get_started() and \
-                        mapsA[i] not in mapsB[j].get_started()):
-                            mapsB[j].append_started(mapsA[i])
-                        if not mapsA[i].get_starts() or \
-                        (mapsA[i].get_starts() and \
-                        mapsB[j] not in mapsA[i].get_starts()):
-                            mapsA[i].append_starts(mapsB[j])
-                    if relation == "finished":
-                        if not mapsB[j].get_finished() or \
-                        (mapsB[j].get_finished() and \
-                        mapsA[i] not in mapsB[j].get_finished()):
-                            mapsB[j].append_finished(mapsA[i])
-                        if not mapsA[i].get_finishes() or \
-                        (mapsA[i].get_finishes() and \
-                        mapsB[j] not in mapsA[i].get_finishes()):
-                            mapsA[i].append_finishes(mapsB[j])
-                elif relation == "overlaps":
-                    if not mapsB[j].get_overlaps() or \
-                       (mapsB[j].get_overlaps() and \
-                       mapsA[i] not in mapsB[j].get_overlaps()):
-                        mapsB[j].append_overlaps(mapsA[i])
-                    if not mapsA[i].get_overlapped() or \
-                       (mapsA[i].get_overlapped() and \
-                       mapsB[j] not in mapsA[i].get_overlapped()):
-                        mapsA[i].append_overlapped(mapsB[j])
-                elif relation == "overlapped":
-                    if not mapsB[j].get_overlapped() or \
-                       (mapsB[j].get_overlapped() and \
-                       mapsA[i] not in mapsB[j].get_overlapped()):
-                        mapsB[j].append_overlapped(mapsA[i])
-                    if not mapsA[i].get_overlaps() or \
-                       (mapsA[i].get_overlaps() and \
-                       mapsB[j] not in mapsA[i].get_overlaps()):
-                        mapsA[i].append_overlaps(mapsB[j])
+                A = mapsA[i]
+                B = mapsB[j]
+                set_temoral_relationship(A, B, relation)
 
         self._build_internal_iteratable(mapsA)
         if not identical and mapsB != None:
@@ -354,6 +255,113 @@ class TemporalTopologyBuilder(object):
 
     def __contains__(self, _map):
         return _map in self._store.values()
+
+###############################################################################
+
+
+def set_temoral_relationship(A, B, relation):
+    if relation == "equal":
+        if B != A:
+            if not B.get_equal() or \
+            (B.get_equal() and \
+            A not in B.get_equal()):
+                B.append_equal(A)
+            if not A.get_equal() or \
+            (A.get_equal() and \
+            B not in A.get_equal()):
+                A.append_equal(B)
+    elif relation == "follows":
+        if not B.get_follows() or \
+            (B.get_follows() and \
+            A not in B.get_follows()):
+            B.append_follows(A)
+        if not A.get_precedes() or \
+            (A.get_precedes() and
+            B not in A.get_precedes()):
+            A.append_precedes(B)
+    elif relation == "precedes":
+        if not B.get_precedes() or \
+            (B.get_precedes() and \
+            A not in B.get_precedes()):
+            B.append_precedes(A)
+        if not A.get_follows() or \
+            (A.get_follows() and \
+            B not in A.get_follows()):
+            A.append_follows(B)
+    elif relation == "during" or relation == "starts" or \
+            relation == "finishes":
+        if not B.get_during() or \
+            (B.get_during() and \
+            A not in B.get_during()):
+            B.append_during(A)
+        if not A.get_contains() or \
+            (A.get_contains() and \
+            B not in A.get_contains()):
+            A.append_contains(B)
+        if relation == "starts":
+            if not B.get_starts() or \
+            (B.get_starts() and \
+            A not in B.get_starts()):
+                B.append_starts(A)
+            if not A.get_started() or \
+            (A.get_started() and \
+            B not in A.get_started()):
+                A.append_started(B)
+        if relation == "finishes":
+            if not B.get_finishes() or \
+            (B.get_finishes() and \
+            A not in B.get_finishes()):
+                B.append_finishes(A)
+            if not A.get_finished() or \
+            (A.get_finished() and \
+            B not in A.get_finished()):
+                A.append_finished(B)
+    elif relation == "contains" or relation == "started" or \
+            relation == "finished":
+        if not B.get_contains() or \
+            (B.get_contains() and \
+            A not in B.get_contains()):
+            B.append_contains(A)
+        if not A.get_during() or \
+            (A.get_during() and \
+            B not in A.get_during()):
+            A.append_during(B)
+        if relation == "started":
+            if not B.get_started() or \
+            (B.get_started() and \
+            A not in B.get_started()):
+                B.append_started(A)
+            if not A.get_starts() or \
+            (A.get_starts() and \
+            B not in A.get_starts()):
+                A.append_starts(B)
+        if relation == "finished":
+            if not B.get_finished() or \
+            (B.get_finished() and \
+            A not in B.get_finished()):
+                B.append_finished(A)
+            if not A.get_finishes() or \
+            (A.get_finishes() and \
+            B not in A.get_finishes()):
+                A.append_finishes(B)
+    elif relation == "overlaps":
+        if not B.get_overlaps() or \
+            (B.get_overlaps() and \
+            A not in B.get_overlaps()):
+            B.append_overlaps(A)
+        if not A.get_overlapped() or \
+            (A.get_overlapped() and \
+            B not in A.get_overlapped()):
+            A.append_overlapped(B)
+    elif relation == "overlapped":
+        if not B.get_overlapped() or \
+            (B.get_overlapped() and \
+            A not in B.get_overlapped()):
+            B.append_overlapped(A)
+        if not A.get_overlaps() or \
+            (A.get_overlaps() and \
+            B not in A.get_overlaps()):
+            A.append_overlaps(B)
 
 ###############################################################################
 

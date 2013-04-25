@@ -204,7 +204,7 @@ dbif.close()
     
 \endcode
 
-\subsevtion PythonTGISExamplesShifting Temporal shifting
+\subsection PythonTGISExamplesShifting Temporal shifting
 
 \code
 
