@@ -47,31 +47,26 @@ goto EOF
 if NOT EXIST "%WD%msys-1.0.dll" set WD=%~dps0bin\
 rem echo %WD%
 
-rem if installed in a directory containing spaces prepare for a world of pain
-for /F %%i IN ('echo %WD%') DO @set PART1=%%i
-if NOT "%PART1%" == "%WD%" (
-   echo Path names containing spaces are not supported -- aborting.
-   pause
-   exit 1
-)
-
 rem ember Set up option to use rxvt based on value of %1
 set MSYSCON=unknown
 if "x%1" == "x-norxvt" set MSYSCON=sh.exe
 if "x%1" == "x--norxvt" set MSYSCON=sh.exe
 if "x%1" == "x-rxvt" set MSYSCON=rxvt.exe
 if "x%1" == "x--rxvt" set MSYSCON=rxvt.exe
+if "x%1" == "x-mintty" set MSYSCON=mintty.exe
+if "x%1" == "x--mintty" set MSYSCON=mintty.exe
 if NOT "x%MSYSCON%" == "xunknown" shift
 
 if "x%MSYSCON%" == "xunknown" set MSYSCON=sh.exe
 
 rem the default is a MSYS (user), not a MINGW (developer) console
-if "x%MSYSTEM%" == "x" set MSYSTEM=MINGW32
+if "x%MSYSTEM%" == "x" set MSYSTEM=MSYS
 if "%1" == "MINGW32" set MSYSTEM=MINGW32
 if "%1" == "MSYS" set MSYSTEM=MSYS
 
 if NOT "x%DISPLAY%" == "x" set DISPLAY=
 
+if "x%MSYSCON%" == "xmintty.exe" goto startmintty
 if "x%MSYSCON%" == "xrxvt.exe" goto startrxvt
 if "x%MSYSCON%" == "xsh.exe" goto startsh
 
@@ -84,6 +79,11 @@ exit 1
 echo Cannot find the rxvt.exe or sh.exe binary -- aborting.
 pause
 exit 1
+
+:startmintty
+if NOT EXIST "%WD%mintty.exe" goto startsh
+start "%WD%mintty" /bin/bash -l
+exit
 
 rem If you don't want to use rxvt then rename the file rxvt.exe to something
 rem else.  Then sh.exe will be used instead.
@@ -200,4 +200,8 @@ rem
 rem 2005.12.08  Tuomo Latto  mailto:nonperson@users.sf.net
 rem     * Keith's modified patch fails on x64; start did funny things.
 rem     Reworked, for correct behaviour on both platforms.
+rem
+rem 2009.03.17  Keith Marshall  mailto:keithmarshall@users.sf.net
+rem     * Add -rxvt or --rxvt switch; start in --norxvt mode by default.
+rem     Make it deterministic; (do not inherit MSYSCON from parent).
 rem
