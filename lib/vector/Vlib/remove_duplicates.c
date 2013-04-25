@@ -203,7 +203,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
    \brief Check for duplicate lines
    
    Note that lines must be pruned with Vect_line_prune() before passed 
-   to Vect_line_check_duplicate()
+   to Vect_line_check_duplicate(), as done by Vect_remove_duplicates()
 
    \param APoints first line geometry
    \param BPoints second line geometry
