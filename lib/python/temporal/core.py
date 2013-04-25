@@ -183,18 +183,18 @@ def init():
             name = cursor.fetchone()[0]
             if name == "raster_base":
                 db_exists = True
-            
+                
                 # Try to add the command column to the space time dataset metadata tables
                 try:
-                    c.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
+                    cursor.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
                 except:
                     pass
                 try:
-                    c.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
+                    cursor.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
                 except:
                     pass
                 try:
-                    c.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
+                    cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
                 except:
                     pass
                 
@@ -213,15 +213,15 @@ def init():
         if db_exists:
             # Try to add the command column to the space time dataset metadata tables
             try:
-                c.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
+                cursor.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
             except:
                 pass
             try:
-                c.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
+                cursor.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
             except:
                 pass
             try:
-                c.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
+                cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
             except:
                 pass
         
