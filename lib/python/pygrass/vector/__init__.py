@@ -468,3 +468,10 @@ class VectorTopo(Vector):
         if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
             raise GrassError("I can not find the Bbox.")
         return bbox
+
+    def close(self, release=True):
+        """Close the VectorTopo map, if release is True, the memory
+        occupied by spatial index is released"""
+        if release:
+            libvect.Vect_set_release_support(self.c_mapinfo)
+        super(VectorTopo, self).close()
