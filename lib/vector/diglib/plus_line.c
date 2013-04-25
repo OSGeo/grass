@@ -262,7 +262,7 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 	    Node->angles[i - 1] = Node->angles[i];
 	}
 	else {
-	    if (abs(Node->lines[i]) == line)
+	    if (Node->lines[i] == line)
 		mv = 1;
 	}
     }
@@ -298,11 +298,12 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 	    Node->angles[i - 1] = Node->angles[i];
 	}
 	else {
-	    if (abs(Node->lines[i]) == line)
+	    if (Node->lines[i] == -line)
 		mv = 1;
 	}
     }
     Node->n_lines--;
+
     if (Node->n_lines == 0) {
 	G_debug(3, "    node %d has 0 lines -> delete", N2);
 	dig_spidx_del_node(plus, N2);
