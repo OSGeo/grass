@@ -28,6 +28,7 @@ import grass.lib.vector as libvector
 import grass.lib.raster3d as libraster3d
 import grass.script as grass
 
+from abstract_map_dataset import *
 from abstract_space_time_dataset import *
 
 ###############################################################################
@@ -57,6 +58,7 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap = RasterDataset(identifier)
         >>> rmap.set_absolute_time(start_time=datetime(2001,1,1), 
         ...                        end_time=datetime(2012,1,1))
+        True
         >>> rmap.map_exists()
         True
         >>> rmap.load()

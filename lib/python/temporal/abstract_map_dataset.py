@@ -17,10 +17,10 @@ for details.
 
 @author Soeren Gebbert
 """
-from abstract_temporal_dataset import *
+from abstract_dataset import *
 from datetime_math import *
 
-class AbstractMapDataset(AbstractTemporalDataset):
+class AbstractMapDataset(AbstractDataset):
     """!This is the base class for all maps (raster, vector, raster3d).
     
         The temporal extent, the spatial extent and the metadata of maps
@@ -37,7 +37,7 @@ class AbstractMapDataset(AbstractTemporalDataset):
         - Abstract methods that must be implemented in the map specific subclasses
     """
     def __init__(self):
-        AbstractTemporalDataset.__init__(self)
+        AbstractDataset.__init__(self)
 
     def get_new_stds_instance(self, ident):
         """!Return a new space time dataset instance that store maps with the type of this map object (rast, rast3d or vect)

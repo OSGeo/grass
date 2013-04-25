@@ -1392,7 +1392,7 @@ def test_temporal_topology_builder():
     _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 06, 01))
     map_listA.append(copy.copy(_map))
 
-    tb = TemporalTopologyBuilder()
+    tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listA)
 
     count = 0
@@ -1422,7 +1422,7 @@ def test_temporal_topology_builder():
     _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 05, 14))
     map_listB.append(copy.copy(_map))
 
-    tb = TemporalTopologyBuilder()
+    tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listB)
 
     # Probing some relations
@@ -1445,7 +1445,7 @@ def test_temporal_topology_builder():
                 (_map.get_id(), map_listB[count].get_id()))
         count += 1
 
-    tb = TemporalTopologyBuilder()
+    tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listA, map_listB)
 
     count = 0
