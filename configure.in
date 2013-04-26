@@ -369,6 +369,7 @@ LOC_ARG_WITH_LIB(openmp, OpenMP)
 
 LOC_ARG_WITH_INC(opencl, OpenCL)
 LOC_ARG_WITH_LIB(opencl, OpenCL)
+#LOC_ARG_WITH_FRAMEWORK(opencl, OpenCL)
 
 # Put this early on so CPPFLAGS and LDFLAGS have any additional dirs
 
@@ -1768,19 +1769,23 @@ LOC_CHECK_INC_PATH(opencl,OpenCL,OCLINCPATH)
 
 if test -n "$MACOSX_APP" ; then
     LOC_CHECK_INCLUDES(OpenCL/opencl.h,OpenCL,$OCLINCPATH)
+
+    # With OpenCL library directory
+    ### FIXME: ###
+    #LOC_CHECK_FRAMEWORK_PATH(opencl,OpenCL,OPENCLPATH)
+    # last term in following would become ',$OPENCLPATH)' if above is uncommented
+    LOC_CHECK_FUNC(clGetPlatformInfo,OpenCL library,OCLLIB,-framework OpenCL,)
 else
     LOC_CHECK_INCLUDES(CL/cl.h,OpenCL,$OCLINCPATH)
+
+    # With OpenCL library directory
+    LOC_CHECK_LIB_PATH(opencl,OpenCL,OCLLIBPATH)
+    LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
+    # expanded symbol check: yes? no?
+    #LOC_CHECK_FUNC(clGetPlatformInfo,OpenCL functions,OCLLIB,,,,,[
+    #LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
+    #])
 fi
-
-# With OpenCL library directory
-
-LOC_CHECK_LIB_PATH(opencl,OpenCL,OCLLIBPATH)
-
-LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
-# expanded symbol check: yes? no?
-#LOC_CHECK_FUNC(clGetPlatformInfo,OpenCL functions,OCLLIB,,,,,[
-#LOC_CHECK_LIBS(OpenCL,clGetPlatformInfo,OpenCL,$OCLLIBPATH,OCLLIB,,,)
-#])
 
 fi # $USE_OPENCL
 
