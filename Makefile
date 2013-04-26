@@ -95,7 +95,6 @@ LIBDIRS = \
 	lib/gis \
 	lib/linkm \
 	lib/db \
-	lib/form \
 	lib/vector \
 	db/drivers
 
