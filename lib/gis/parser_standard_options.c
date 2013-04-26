@@ -202,7 +202,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->multiple = NO;
-	Opt->description = _("Name of key column");
+	Opt->label = _("Name of key column");
 	Opt->description = _("Must refer to an integer column");
 	/* Opt->gisprompt = "old,dbcolumn,dbcolumn"; */
 	Opt->answer = GV_KEY_COLUMN;
