@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     field_opt->gisprompt = "new,layer,layer";
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
-    sep_opt->description = _("Field separator for shell script style output");
+    sep_opt->label = _("Field separator for shell script style output");
     sep_opt->guisection = _("Print");
 
     print = G_define_flag();
