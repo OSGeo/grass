@@ -224,11 +224,11 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             fmapset = G_find_vector2(Map->name, Map->mapset);
             if (fmapset == NULL) {
                 if (mapset && strcmp(mapset, G_mapset()) == 0)
-                    G_warning(_("Vector map <%s> not found in current mapset"),
-                              Vect_get_name(Map));
+                    G_fatal_error(_("Vector map <%s> not found in current mapset"),
+                                  Vect_get_name(Map));
                 else
-                    G_warning(_("Vector map <%s> not found"),
-                              Vect_get_full_name(Map));
+                    G_fatal_error(_("Vector map <%s> not found"),
+                                  Vect_get_full_name(Map));
                 return -1;
             }
             Map->mapset = G_store(fmapset);
