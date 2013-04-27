@@ -634,13 +634,13 @@ class SpatialExtent(SQLDatabaseInterface):
                 eW -= 360.0
 
         # Edges of extent located outside of self are not allowed
-        if E < eW:
+        if E <= eW:
             return False
-        if W > eE:
+        if W >= eE:
             return False
-        if N < eS:
+        if N <= eS:
             return False
-        if S > eN:
+        if S >= eN:
             return False
 
         # First we check that at least one edge of extent meets an edge of self
@@ -1094,23 +1094,42 @@ class SpatialExtent(SQLDatabaseInterface):
     def disjoint_2d(self, extent):
         """!Return True if this extent (A) is disjoint with the provided spatial
         extent (B) in three dimensions.
-        
+
         @verbatim
-          _____ 
+          _____
          |  A  |
-         |_____|       
-         _______ 
+         |_____|
+         _______
         |   B   |
         |_______|
-                     
+
          @endverbatim
-         
+
         @param extent The spatial extent
         @return True or False
         """
 
-        if self.overlapping_2d(extent) or self.meet_2d(extent):
+        if self.is_in_2d(extent):
             return False
+
+        if self.contain_2d(extent):
+            return False
+
+        if self.cover_2d(extent):
+            return False
+
+        if self.covered_2d(extent):
+            return False
+
+        if self.equivalent_2d(extent):
+            return False
+
+        if self.overlapping_2d(extent):
+            return False
+
+        if  self.meet_2d(extent):
+            return False
+
         return True
 
     def disjoint(self, extent):
@@ -1121,8 +1140,27 @@ class SpatialExtent(SQLDatabaseInterface):
         @return True or False
         """
 
-        if self.overlapping(extent) or self.meet(extent):
+        if self.is_in(extent):
             return False
+
+        if self.contain(extent):
+            return False
+
+        if self.cover(extent):
+            return False
+
+        if self.covered(extent):
+            return False
+
+        if self.equivalent(extent):
+            return False
+
+        if self.overlapping(extent):
+            return False
+
+        if  self.meet(extent):
+            return False
+            
         return True
 
     def spatial_relation_2d(self, extent):
@@ -1329,6 +1367,14 @@ class SpatialExtent(SQLDatabaseInterface):
         'meet'
         >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
         >>> B = SpatialExtent(north=70, south=30, east=50, west=10, bottom=0, top=50)
+        >>> A.spatial_relation(B)
+        'meet'
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=90, south=81, east=60, west=10, bottom=-50, top=50)
+        >>> A.spatial_relation(B)
+        'disjoint'
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+        >>> B = SpatialExtent(north=90, south=80, east=60, west=10, bottom=-50, top=50)
         >>> A.spatial_relation(B)
         'meet'
         

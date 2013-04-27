@@ -44,8 +44,9 @@ Several "abstract" classes are defined that implement the shared functionality
 of time stamped maps and space time datasets, such as temporal and spatial
 handling and representation:
 
+- python::temporal::spatial_topology_dataset_connector
+- python::temporal::temporal_topology_dataset_connector
 - python::temporal::abstract_dataset
-- python::temporal::abstract_temporal_dataset
 - python::temporal::abstract_map_dataset
 - python::temporal::abstract_space_time_dataset
 
@@ -54,12 +55,12 @@ here:
 
 - python::temporal::space_time_datasets
 
-Helper functions to compute temporal granularity, handling of datetime objects
-and their conversion as well as topology computation are defined in these modules:
+Functions to compute temporal granularity, handling of datetime objects
+and their conversion as well as spatio-temporal topology computation are defined in these modules:
 
 - python::temporal::datetime_math
+- python::temporal::spatio_temporal_relationships
 - python::temporal::temporal_granularity
-- python::temporal::temporal_relationships
 
 Functionality that is shared between different temporal GRASS modules, such as
 map listing, space time dataset creation, map registration and unregistration, 

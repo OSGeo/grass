@@ -12,9 +12,14 @@ r.mapcalc --o expr="prec_3 = rand(0, 320)"
 r.mapcalc --o expr="prec_4 = rand(0, 510)"
 r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
+
+# Different spatial extents
 r.mapcalc --o expr="A = 1"
+g.region s=20 n=70 w=10 e=110 b=10 t=40 res=10 res3=10 -p3 # in A, covered by C
 r.mapcalc --o expr="B = 2"
+g.region s=20 n=80 w=10 e=130 b=10 t=50 res=10 res3=10 -p3 # cover B
 r.mapcalc --o expr="C = 3"
+g.region s=70 n=90 w=10 e=130 b=10 t=50 res=10 res3=10 -p3 # overlap B
 r.mapcalc --o expr="D = 3"
 
 n1=`g.tempfile pid=1 -d` 
@@ -111,7 +116,7 @@ t.topology -m input=precip_abs
 t.register --o type=rast -i input=maps file="${n6}"
 cat "${n6}"
 t.topology    input=maps
-t.topology -m input=maps
+t.topology -ms input=maps
 
 t.remove type=strds input=precip_abs,maps
 t.unregister type=rast file="${n1}"

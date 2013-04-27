@@ -381,13 +381,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return gaps
 
-    def print_temporal_relationships(self, maps=None, dbif=None):
+    def print_spatio_temporal_relationships(self, maps=None, spatial=None, dbif=None):
         """!Print the temporal relation matrix of all registered maps to stdout
 
            The temporal relation matrix includes the temporal relations between
            all registered maps. The relations are strings stored in a list of lists.
 
            @param maps a ordered by start_time list of map objects
+           @param spatial This indicates if the spatial topology is created as well:
+                          spatial can be None (no spatial topology), "2D" using west, east, 
+                          south, north or "3D" using west, east, south, north, bottom, top
            @param dbif The database interface to be used
         """
 
@@ -395,7 +398,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             maps = self.get_registered_maps_as_objects(
                 where=None, order="start_time", dbif=dbif)
 
-        print_temporal_topology_relationships(maps)
+        print_spatio_temporal_topology_relationships(maps1=maps, maps2=maps, 
+                                              spatial=spatial, dbif=dbif)
 
     def count_temporal_relations(self, maps=None, dbif=None):
         """!Count the temporal relations between the registered maps.
@@ -521,8 +525,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            Gaps between maps are identified as unregistered maps with id==None.
 
-           The map objects are initialized with the id and the temporal 
-           extent of the granule (temporal type, start time, end time).
+           The objects are initialized with their id's' and the spatio-temporal extent 
+           (temporal type, start time, end time, west, east, south, north, bottom and top).
            In case more map information are needed, use the select() 
            method for each listed object.
 
@@ -712,7 +716,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
         """!Return all registered maps as ordered (by start_time) object list with
-           "gap" map objects (id==None) for temporal topological operations 
+           "gap" map objects (id==None) for spatio-temporal topological operations 
            that require the temporal extent only.
            
            Each list entry is a list of map objects
@@ -729,8 +733,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            Gaps between maps are identified as unregistered maps with id==None.
 
-           The objects are initialized with the id and the temporal 
-           extent (temporal type, start time, end time).
+           The objects are initialized with their id's' and the spatio-temporal extent 
+           (temporal type, start time, end time, west, east, south, north, bottom and top).
            In case more map information are needed, use the select() 
            method for each listed object.
 
@@ -899,13 +903,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
         """!Return all or a subset of the registered maps as 
            ordered (by start_time) object list with
-           "gap" map objects (id==None) for temporal topological operations 
-           that require the temporal extent only.
+           "gap" map objects (id==None) for spatio-temporal topological operations 
+           that require the spatio-temporal extent only.
 
            Gaps between maps are identified as maps with id==None
 
-           The objects are initialized with the id and the 
-           temporal extent (temporal type, start time, end time).
+           The objects are initialized with their id's' and the spatio-temporal extent 
+           (temporal type, start time, end time, west, east, south, north, bottom and top).
            In case more map information are needed, use the select() 
            method for each listed object.
 
@@ -954,10 +958,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def get_registered_maps_as_objects_with_temporal_topology(self, where=None, order="start_time", 
                                        dbif=None):
         """!Return all or a subset of the registered maps as ordered object list with 
-           temporal topological relationship informations.
+           spatio-temporal topological relationship informations.
 
-           The objects are initialized with their id's' and the temporal extent 
-           (temporal type, start time, end time) and the temporal topological information.
+           The objects are initialized with their id's' and the spatio-temporal extent 
+           (temporal type, start time, end time, west, east, south, north, bottom and top).
            In case more map information are needed, use the select() 
            method for each listed object.
 
@@ -984,10 +988,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def get_registered_maps_as_objects(self, where=None, order="start_time", 
                                        dbif=None):
         """!Return all or a subset of the registered maps as ordered object list for 
-           temporal topological operations that require the temporal extent only
+           spatio-temporal topological operations that require the spatio-temporal extent only
 
-           The objects are initialized with their id's' and the temporal extent 
-           (temporal type, start time, end time).
+           The objects are initialized with their id's' and the spatio-temporal extent 
+           (temporal type, start time, end time, west, east, south, north, bottom and top).
            In case more map information are needed, use the select() 
            method for each listed object.
 
@@ -1004,8 +1008,24 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         obj_list = []
 
-        rows = self.get_registered_maps(
-            "id,start_time,end_time", where, order, dbif)
+        # Older temporal databases have no bottom and top columns
+        # in their views so we need a work around to set the full
+        # spatial extent as well
+        has_bt_columns = True
+        try:
+            rows = self.get_registered_maps(
+                "id,start_time,end_time, west,east,south,north,bottom,top", 
+                where, order, dbif)
+        except:
+            try:
+                rows = self.get_registered_maps(
+                    "id,start_time,end_time", 
+                    where, order, dbif)
+                has_bt_columns = False
+                core.warning(_("Old temporal database format. The top and bottom column"\
+                               " is missing in the views, using a work around."))
+            except:
+                raise
 
         if rows is not None:
             for row in rows:
@@ -1015,6 +1035,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 elif self.is_time_relative():
                     map.set_relative_time(row["start_time"], row["end_time"],
                                           self.get_relative_time_unit())
+                # The fast way
+                if has_bt_columns:
+                    map.set_spatial_extent(west=row["west"], east=row["east"],
+                    south=row["south"],north=row["north"], bottom=row["bottom"],
+                    top=row["top"])
+                # The slow work around
+                else:
+                    map.spatial_extent.select(dbif)
+                    
                 obj_list.append(copy.copy(map))
 
         if connected:

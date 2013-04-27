@@ -31,7 +31,7 @@ from ctypes import *
 class SpatioTemporalTopologyBuilder(object):
     """!This class is designed to build the spatio-temporal topology 
        of spatio-temporally related abstract dataset objects.
-       
+
        The abstract dataset objects must be provided as a single list, or in two lists.
 
         Example:
@@ -41,13 +41,13 @@ class SpatioTemporalTopologyBuilder(object):
         maps = strds.get_registered_maps_as_objects()
 
         # Now lets build the temporal topology of the maps in the list
-        
+
         tb = SpatioTemporalTopologyBuilder()
-        
+
         tb.build(maps)
 
         dbif, connected = init_dbif(None)
-            
+
         for _map in tb:
             _map.select(dbif)
             _map.print_info()
@@ -97,7 +97,7 @@ class SpatioTemporalTopologyBuilder(object):
         """
         return self._first
 
-    def _build_internal_iteratable(self, maps):
+    def _build_internal_iteratable(self, maps, spatial):
         """!Build an iteratable temporal topology structure for all maps in 
            the list and store the maps internally
 
@@ -109,7 +109,7 @@ class SpatioTemporalTopologyBuilder(object):
            @param maps A sorted (by start_time)list of abstract_dataset 
                         objects with initiated temporal extent
         """
-        self._build_iteratable(maps)
+        self._build_iteratable(maps, spatial)
 
         for _map in maps:
             self._insert(_map)
@@ -117,7 +117,7 @@ class SpatioTemporalTopologyBuilder(object):
         # Detect the first map
         self._detect_first()
 
-    def _build_iteratable(self, maps):
+    def _build_iteratable(self, maps, spatial):
         """!Build an iteratable temporal topology structure for 
            all maps in the list
 
@@ -141,7 +141,7 @@ class SpatioTemporalTopologyBuilder(object):
         # First we need to order the map list chronologically 
         sorted_maps = sorted(
             maps, key=AbstractDatasetComparisonKeyStartTime)
-            
+
         for i in xrange(len(sorted_maps) - 1):
             sorted_maps[i].set_next(sorted_maps[i + 1])
 
@@ -150,26 +150,27 @@ class SpatioTemporalTopologyBuilder(object):
             if next_:
                 next_.set_prev(map_)
             map_.set_temporal_topology_build_true()
-        
+            if spatial is not None:
+                map_.set_spatial_topology_build_true()
+
     def _map_to_rect(self, tree, map_, spatial=None):
         """Use the temporal extent of a map to create and return a RTree rectange
-        
-        
+
            @param spatial This indicates if the spatial topology is created as well:
                           spatial can be None (no spatial topology), "2D" using west, east, 
                           #south, north or "3D" using west, east, south, north, bottom, top
         """
         rect = vector.RTreeAllocRect(tree)
-        
+
         start, end = map_.get_valid_time()
-        
+
         if not end:
             end = start
-        
+
         if map_.is_time_absolute():
             start = time_delta_to_relative_time(start - self._timeref)
             end = time_delta_to_relative_time(end - self._timeref)
-        
+
         if spatial is None:
             vector.RTreeSetRect1D(rect, tree, float(start), float(end))
         elif spatial == "2D":
@@ -180,13 +181,13 @@ class SpatioTemporalTopologyBuilder(object):
             north, south, east, west, top, bottom = map_.get_spatial_extent()
             vector.RTreeSetRect4D(rect, tree, west, east, south, north, 
                                   bottom, top, float(start), float(end))
-        
+
         return rect
-        
+
     def _build_rtree(self, maps, spatial=None):
         """Build and return the 1-4 dimensional R*-Tree
-        
-        
+
+
            @param spatial This indicates if the spatial topology is created as well:
                           spatial can be None (no spatial topology), "2D" using west, east, 
                           south, north or "3D" using west, east, south, north, bottom, top
@@ -196,13 +197,14 @@ class SpatioTemporalTopologyBuilder(object):
             dim = 3
         if spatial == "3D":
             dim = 4
+
         tree = vector.RTreeCreateTree(-1, 0, dim)
 
         for i in xrange(len(maps)):
-            
+
             rect = self._map_to_rect(tree, maps[i], spatial)
             vector.RTreeInsertRect(rect, i + 1, tree)
-            
+
         return tree
 
     def build(self, mapsA, mapsB=None, spatial=None):
@@ -220,42 +222,33 @@ class SpatioTemporalTopologyBuilder(object):
            the chronological iteration over the mapsA.
 
            @param mapsA A list of abstract_dataset 
-                         objects with initiated temporal extent
+                         objects with initiated spatio-temporal extent
            @param mapsB An optional list of abstract_dataset 
-                         objects with initiated temporal extent
+                         objects with initiated spatio-temporal extent
            @param spatial This indicates if the spatial topology is created as well:
                           spatial can be None (no spatial topology), "2D" using west, east, 
                           south, north or "3D" using west, east, south, north, bottom, top
         """
-        
-        if spatial is not None:
-            dbif, connected = init_dbif(None)
 
         identical = False
         if mapsA == mapsB:
             identical = True
-            
+
         if mapsB == None:
             mapsB = mapsA
             idetnical = True
 
         for map_ in mapsA:
             map_.reset_topology()
-            # Spatial extent from the database
-            if spatial is not None:
-                map_.select(dbif)
 
         if not identical:
             for map_ in mapsB:
                 map_.reset_topology()
-                # Spatial extent from the database
-                if spatial is not None:
-                    map_.select(dbif)
 
         tree = self. _build_rtree(mapsA, spatial)
-            
-        for j in xrange(len(mapsB)):            
-        
+
+        for j in xrange(len(mapsB)):
+
             list_ = gis.ilist()
             rect = self._map_to_rect(tree, mapsB[j], spatial)
             num = vector.RTreeSearch2(tree, rect, byref(list_))
@@ -266,24 +259,20 @@ class SpatioTemporalTopologyBuilder(object):
 
                 # Get the temporal relationship
                 relation = mapsB[j].temporal_relation(mapsA[i])
-                
+
                 A = mapsA[i]
                 B = mapsB[j]
                 set_temoral_relationship(A, B, relation)
-                
+
                 if spatial is not None:
                     relation = mapsB[j].spatial_relation(mapsA[i])
                     set_spatial_relationship(A, B, relation)
 
-        self._build_internal_iteratable(mapsA)
+        self._build_internal_iteratable(mapsA, spatial)
         if not identical and mapsB != None:
-            self._build_iteratable(mapsB)
-        
+            self._build_iteratable(mapsB, spatial)
+
         vector.RTreeDestroyTree(tree)
-        
-        if spatial is not None:
-            if connected:
-                dbif.close()
 
     def __iter__(self):
         start_ = self._first
@@ -407,8 +396,9 @@ def set_temoral_relationship(A, B, relation):
             A.append_overlaps(B)
 
 ###############################################################################
-       
+
 def set_spatial_relationship(A, B, relation):
+
     if relation == "equivalent":
         if B != A:
             if not B.get_equivalent() or \
@@ -486,20 +476,50 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
                       objects with initiated temporal extent
         @param dbif The database interface to be used
     """
-                    
+
     tb = SpatioTemporalTopologyBuilder()
 
     tb.build(maps1, maps2)
 
     dbif, connected = init_dbif(dbif)
-        
+
     for _map in tb:
         _map.select(dbif)
         _map.print_info()
-        
+
     if connected:
         dbif.close()
-        
+
+    return
+
+###############################################################################
+
+def print_spatio_temporal_topology_relationships(maps1, maps2=None, spatial="2D", dbif=None):
+    """!Print the temporal relationships of the 
+       map lists maps1 and maps2 to stdout.
+
+        @param maps1 A list of abstract_dataset 
+                      objects with initiated temporal extent
+        @param maps2 An optional list of abstract_dataset 
+                      objects with initiated temporal extent
+        @param spatial The dimension of the spatial extent to be used: "2D" using west, east, 
+                        south, north or "3D" using west, east, south, north, bottom, top
+        @param dbif The database interface to be used
+    """
+
+    tb = SpatioTemporalTopologyBuilder()
+
+    tb.build(maps1, maps2, spatial)
+
+    dbif, connected = init_dbif(dbif)
+
+    for _map in tb:
+        _map.select(dbif)
+        _map.print_info()
+
+    if connected:
+        dbif.close()
+
     return
 
 ###############################################################################
@@ -516,14 +536,14 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
         @return A dictionary with counted temporal relationships
     """
 
-    
+
     tb = SpatioTemporalTopologyBuilder()
     tb.build(maps1, maps2)
 
     dbif, connected = init_dbif(dbif)
-    
+
     relations = None
-        
+
     for _map in tb:
         if relations != None:
             r = _map.get_number_of_relations()
@@ -534,7 +554,7 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
     if connected:
         dbif.close()
-        
+
     return relations
 
 ###############################################################################
@@ -599,9 +619,9 @@ def create_temporal_relation_sql_where_statement(
                          @endverbatim
 
         Usage:
-        
+
         @code
-        
+
         >>> # Relative time
         >>> start = 1
         >>> end = 2
@@ -667,7 +687,7 @@ def create_temporal_relation_sql_where_statement(
         ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
         ... use_equal=True, use_follows=True, use_precedes=True)
         "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
-        
+
         @endcode
         """
 
@@ -682,7 +702,7 @@ def create_temporal_relation_sql_where_statement(
     if use_during:
         if use_start:
             where += " OR "
-            
+
         if isinstance(start, datetime):
             where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
             where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
@@ -751,7 +771,6 @@ def create_temporal_relation_sql_where_statement(
         where = None
 
     return where
-    
 
 ###############################################################################
 

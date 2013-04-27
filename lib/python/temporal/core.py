@@ -39,7 +39,7 @@ import copy
 import sys
 import grass.script.core as core
 # Import all supported database backends
-# Ignore import errors sicne they are checked later
+# Ignore import errors since they are checked later
 try:
     import sqlite3
 except ImportError:
@@ -56,15 +56,19 @@ except:
 # It can either be "sqlite" or "pg"
 tgis_backed = None
 
+# The version of the temporal framework
+tgis_version="1.0"
 
-# This variable specifies if the ctypes interface to the grass 
-# libraries should be used to read map specific data. If set to False
-# the grass scripting library will be used to get map informations.
-# The advantage of the ctypes inteface is speed, the disadvantage is that
-# the GRASS C functions may call G_fatal_error() which exits the process.
-# That is not catchable in Python.
-use_ctypes_map_access = True
-        
+###############################################################################
+
+def get_tgis_version():
+    """!Get the verion number of the temporal framework
+       @return The version number of the temporal framework as string
+    """
+    global tgis_version
+    return tgis_version
+
+
 ###############################################################################
 
 def get_temporal_dbmi_init_string():
@@ -92,6 +96,14 @@ def get_temporal_dbmi_init_string():
                      "and the database string"))
 
 ###############################################################################
+
+# This variable specifies if the ctypes interface to the grass 
+# libraries should be used to read map specific data. If set to False
+# the grass scripting library will be used to get map informations.
+# The advantage of the ctypes inteface is speed, the disadvantage is that
+# the GRASS C functions may call G_fatal_error() which exits the process.
+# That is not catchable in Python.
+use_ctypes_map_access = True
 
 def set_use_ctypes_map_access(use_ctype = True):
     """!Define the map access method for the temporal GIS library
@@ -242,6 +254,13 @@ def init():
         ), "raster3d_metadata_table.sql"), 'r').read()
     vector_metadata_sql = open(os.path.join(
         get_sql_template_path(), "vector_metadata_table.sql"), 'r').read()
+    raster_views_sql = open(os.path.join(
+        get_sql_template_path(), "raster_views.sql"), 'r').read()
+    raster3d_views_sql = open(os.path.join(get_sql_template_path(
+        ), "raster3d_views.sql"), 'r').read()
+    vector_views_sql = open(os.path.join(
+        get_sql_template_path(), "vector_views.sql"), 'r').read()
+
     stds_tables_template_sql = open(os.path.join(
         get_sql_template_path(), "stds_tables_template.sql"), 'r').read()
     strds_metadata_sql = open(os.path.join(
@@ -250,6 +269,12 @@ def init():
         get_sql_template_path(), "str3ds_metadata_table.sql"), 'r').read()
     stvds_metadata_sql = open(os.path.join(
         get_sql_template_path(), "stvds_metadata_table.sql"), 'r').read()
+    strds_views_sql = open(os.path.join(
+        get_sql_template_path(), "strds_views.sql"), 'r').read()
+    str3ds_views_sql = open(os.path.join(
+        get_sql_template_path(), "str3ds_views.sql"), 'r').read()
+    stvds_views_sql = open(os.path.join(
+        get_sql_template_path(), "stvds_views.sql"), 'r').read()
 
     # Create the raster, raster3d and vector tables
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
@@ -281,17 +306,23 @@ def init():
         # Create the global tables for the native grass datatypes
         cursor.executescript(raster_tables_sql)
         cursor.executescript(raster_metadata_sql)
+        cursor.executescript(raster_views_sql)
         cursor.executescript(vector_tables_sql)
         cursor.executescript(vector_metadata_sql)
+        cursor.executescript(vector_views_sql)
         cursor.executescript(raster3d_tables_sql)
         cursor.executescript(raster3d_metadata_sql)
+        cursor.executescript(raster3d_views_sql)
         # Create the tables for the new space-time datatypes
         cursor.executescript(strds_tables_sql)
         cursor.executescript(strds_metadata_sql)
+        cursor.executescript(strds_views_sql)
         cursor.executescript(stvds_tables_sql)
         cursor.executescript(stvds_metadata_sql)
+        cursor.executescript(stvds_views_sql)
         cursor.executescript(str3ds_tables_sql)
         cursor.executescript(str3ds_metadata_sql)
+        cursor.executescript(str3ds_views_sql)
         cursor.executescript(sqlite3_delete_trigger_sql)
     elif tgis_backed == "pg":
         # Connect to database
@@ -301,17 +332,23 @@ def init():
         # Create the global tables for the native grass datatypes
         cursor.execute(raster_tables_sql)
         cursor.execute(raster_metadata_sql)
+        cursor.execute(raster_views_sql)
         cursor.execute(vector_tables_sql)
         cursor.execute(vector_metadata_sql)
+        cursor.execute(vector_views_sql)
         cursor.execute(raster3d_tables_sql)
         cursor.execute(raster3d_metadata_sql)
+        cursor.execute(raster3d_views_sql)
         # Create the tables for the new space-time datatypes
         cursor.execute(strds_tables_sql)
         cursor.execute(strds_metadata_sql)
+        cursor.execute(strds_views_sql)
         cursor.execute(stvds_tables_sql)
         cursor.execute(stvds_metadata_sql)
+        cursor.execute(stvds_views_sql)
         cursor.execute(str3ds_tables_sql)
         cursor.execute(str3ds_metadata_sql)
+        cursor.execute(str3ds_views_sql)
 
     connection.commit()
     cursor.close()

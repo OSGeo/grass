@@ -91,7 +91,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         - finished
        
         To access topological information the spatial, temporal or booth topologies must be build first
-        using the SpatialTopologyBuilder, TemporalTopologyBuilder or SpatioTemporalTopologyBuilder.
+        using the SpatioTemporalTopologyBuilder.
         
         @return the dictionary with relations as keys and number as values or None in case the topology  wasn't build
         """
