@@ -1,11 +1,46 @@
-﻿Discont
+Discont
 Jean-Pierre Grimmeau – Université Libre de Bruxelles <grimmeau@ulb.ac.be>
 
-The discont algorithm systematically searches discontinuities in the slope of the cumulated frequencies curve, by approximating this curve through straight line segments whose vertices define the class breaks. This algorithm is inspired by techniques of automatic line generalization used in cartography [1]. The first approximation is a straight line which links the two end nodes of the curve. This line is then replaced by a two-segmented polyline whose central node is the point on the curve which is farthest from the preceding straight line. The point on the curve furthest from this new polyline is then chosen as a new node to create break up one of the two preceding segments, and so forth. The problem of the difference in terms of units between the two axes is solved by rescaling both amplitudes to an interval between 0 and 1. In the original algorithm, the process is stopped when the difference between the slopes of the two new segments is no longer significant. As the slope is the ratio between the frequency and the amplitude of the corresponding interval, i.e. its density, this effectively tests whether the frequencies of the two newly proposed classes are different from those obtained by simply distributing the sum of their frequencies amongst them in proportion to the class amplitudes. 
+The discont algorithm systematically searches discontinuities in the slope
+of the cumulated frequencies curve, by approximating this curve through
+straight line segments whose vertices define the class breaks. This
+algorithm is inspired by techniques of automatic line generalization used
+in cartography [1]. The first approximation is a straight line which links
+the two end nodes of the curve. This line is then replaced by a
+two-segmented polyline whose central node is the point on the curve which
+is farthest from the preceding straight line. The point on the curve
+furthest from this new polyline is then chosen as a new node to create
+break up one of the two preceding segments, and so forth. The problem of
+the difference in terms of units between the two axes is solved by
+rescaling both amplitudes to an interval between 0 and 1. In the original
+algorithm, the process is stopped when the difference between the slopes
+of the two new segments is no longer significant. As the slope is the
+ratio between the frequency and the amplitude of the corresponding
+interval, i.e. its density, this effectively tests whether the frequencies
+of the two newly proposed classes are different from those obtained by
+simply distributing the sum of their frequencies amongst them in
+proportion to the class amplitudes. 
 
-The algorithm described above creates class breaks which each are identical to a specific observation. It is thus necessary to decide to which class these observations should be attributed. It seems logical to prefer the densest, i.e. the one with the strongest slope. The automatisation of this method allows to distinguish classes with high frequencies from those with low frequencies, but also to introduce subtleties and to delimit transition classes.
+The algorithm described above creates class breaks which each are
+identical to a specific observation. It is thus necessary to decide to
+which class these observations should be attributed. It seems logical to
+prefer the densest, i.e. the one with the strongest slope. The
+automatisation of this method allows to distinguish classes with high
+frequencies from those with low frequencies, but also to introduce
+subtleties and to delimit transition classes.
 
-This method, inspired by Jenks' algorithm [2], provides a good analysis of the distribution, but not necessarily cartographically satisfying class breaks. It is thus up to the cartographer to judge whether all the identified breaks are cartographically useful (or whether some should be combined) and whether any of the class amplitudes is too large. In the latter case, the class should be subdivided into equal intervals (arithmetic progression) as by definition, the classes resulting from the discont algorithm have a homogeneous interior distribution. If the general distribution of the data is close to the normal distribution, it is also possible to combine equiprobable class breaks [3] , with their advantage of regularity, with discont class breaks for the extremes which often have large amplitudes when using equiprobable class breaks.
+This method, inspired by Jenks' algorithm [2], provides a good analysis of
+the distribution, but not necessarily cartographically satisfying class
+breaks. It is thus up to the cartographer to judge whether all the
+identified breaks are cartographically useful (or whether some should be
+combined) and whether any of the class amplitudes is too large. In the
+latter case, the class should be subdivided into equal intervals
+(arithmetic progression) as by definition, the classes resulting from the
+discont algorithm have a homogeneous interior distribution. If the general
+distribution of the data is close to the normal distribution, it is also
+possible to combine equiprobable class breaks [3] , with their advantage
+of regularity, with discont class breaks for the extremes which often have
+large amplitudes when using equiprobable class breaks.
 
 [1] Douglas, D.H. & Peucker, T.K. (1973) Algorithms for the reduction of the number of points required to represent a digitized line or its caricature, The Canadian Cartographer, 10, pp. 112-122.
 
