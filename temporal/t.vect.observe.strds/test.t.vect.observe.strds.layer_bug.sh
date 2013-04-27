@@ -12,7 +12,7 @@ MAP_LIST="map_list.txt"
 rm ${MAP_LIST}
 
 count=1
-while [ $count -lt 500 ]; do
+while [ $count -lt 270 ]; do
     name="test_prec_${count}"
     r.mapcalc --o expr="${name} = ${count}"
     echo ${name} >> ${MAP_LIST}
@@ -36,5 +36,5 @@ t.unregister type=rast file=${MAP_LIST}
 t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 
-g.remove vect=prec_observer
+#g.remove vect=prec_observer
 g.mremove -f rast=test_prec_*

@@ -36,6 +36,11 @@
 #% description: Print temporal relationships and exit
 #%end
 
+#%flag
+#% key: s
+#% description: Print spatio-temporal relationships and exit
+#%end
+
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -48,7 +53,8 @@ def main():
     name = options["input"]
     type = options["type"]
     where = options["where"]
-    tmatrix = flags['m']
+    temporal_relations = flags['m']
+    spatio_temporal_relations = flags['s']
 
     # Make sure the temporal database exists
     tgis.init()
@@ -72,9 +78,17 @@ def main():
     # Get ordered map list
     maps = sp.get_registered_maps_as_objects(
         where=where, order="start_time", dbif=None)
+    
+    spatial = None
+    
+    if spatio_temporal_relations:
+        if sp.get_type() == "strds":
+            spatial = "2D"
+        else:
+            spatial = "3D"
 
-    if tmatrix:
-        sp.print_temporal_relationships(maps)
+    if temporal_relations or spatio_temporal_relations:
+        sp.print_spatio_temporal_relationships(maps=maps, spatial=spatial)
         return
 
     sp.base.print_info()
