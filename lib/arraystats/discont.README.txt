@@ -1,5 +1,5 @@
 Discont
-Jean-Pierre Grimmeau â€“ UniversitÃ© Libre de Bruxelles <grimmeau@ulb.ac.be>
+Jean-Pierre Grimmeau - Université Libre de Bruxelles <grimmeau@ulb.ac.be>
 
 The discont algorithm systematically searches discontinuities in the slope
 of the cumulated frequencies curve, by approximating this curve through
@@ -46,4 +46,4 @@ large amplitudes when using equiprobable class breaks.
 
 [2] Jenks, G.F. (1963) Generalisation in statistical mapping, Annals of the Association of American Geographers, 53, pp.15-26.
 
-[3] Grimmeau, J.P. (1977) Cartographie par plages et discontinuitÃ©s spatiales, Paris, Espace gÃ©ographique, VI, pp.49â€‘58.
+[3] Grimmeau, J.P. (1977) Cartographie par plages et discontinuités spatiales, Paris, Espace géographique, VI, pp.49-58.
