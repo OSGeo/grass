@@ -300,11 +300,15 @@ class PsMapFrame(wx.Frame):
                 if ret > 0:
                     GMessage(parent = self,
                              message = _("ps2pdf exited with return code %s") % ret)
-
+                else:
+                    self.SetStatusText(_('PDF generated'), 0)
             except OSError, e:
                 GError(parent = self,
                        message = _("Program ps2pdf is not available. Please install it to create PDF.\n\n %s") % e)
-                
+
+        elif not event.userData['temp']:
+            self.SetStatusText(_('PostScript file generated'), 0)
+
         # show preview only when user doesn't want to create ps or pdf 
         if havePILImage and event.userData['temp'] and not event.userData['pdfname']:
             RunCommand('g.region', cols = event.userData['regionOld']['cols'], rows = event.userData['regionOld']['rows'])
