@@ -382,12 +382,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         return gaps
 
     def print_spatio_temporal_relationships(self, maps=None, spatial=None, dbif=None):
-        """!Print the temporal relation matrix of all registered maps to stdout
+        """!Print the spatio-temporal relationships for each map of the space time dataset
+           or for each map of the optional list of maps
 
-           The temporal relation matrix includes the temporal relations between
-           all registered maps. The relations are strings stored in a list of lists.
-
-           @param maps a ordered by start_time list of map objects
+           @param maps a ordered by start_time list of map objects, if None the registred
+                       maps of the space time dataset are used
            @param spatial This indicates if the spatial topology is created as well:
                           spatial can be None (no spatial topology), "2D" using west, east, 
                           south, north or "3D" using west, east, south, north, bottom, top
