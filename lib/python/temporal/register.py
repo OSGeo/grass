@@ -300,7 +300,6 @@ def register_maps_in_space_time_dataset(
 
     # Finally Register the maps in the space time dataset
     if name and map_object_list:
-        statement = ""
         count = 0
         num_maps = len(map_object_list)
         core.message(_("Register maps in the space time raster dataset"))

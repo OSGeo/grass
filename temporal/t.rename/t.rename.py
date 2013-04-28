@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:       t.support
+# MODULE:       t.rename
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Renames a space time dataset

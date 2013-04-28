@@ -6,6 +6,7 @@ SUBDIRS = \
 	t.topology \
 	t.list \
 	t.info \
+	t.merge \
 	t.remove \
 	t.sample \
 	t.register \
