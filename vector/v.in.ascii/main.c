@@ -543,9 +543,11 @@ int main(int argc, char *argv[])
 
     else {			/* FORMAT_ALL (standard mode) */
 	if (!noheader_flag->answer)
-	    Vect_read_ascii_head(ascii, &Map);
+            if (Vect_read_ascii_head(ascii, &Map) == -1)
+                G_fatal_error(_("Import failed"));
 
-	Vect_read_ascii(ascii, &Map);
+	if (Vect_read_ascii(ascii, &Map) == -1)
+            G_fatal_error(_("Import failed"));
     }
 
     if (ascii != stdin)
