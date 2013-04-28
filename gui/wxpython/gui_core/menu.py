@@ -49,7 +49,9 @@ class Menu(wx.MenuBar):
                 subMenu = self._createMenu(child)
                 menu.AppendMenu(wx.ID_ANY, label, subMenu)
             else:
-                self._createMenuItem(menu, **child.data)
+                data = child.data.copy()
+                data.pop('label')
+                self._createMenuItem(menu, label=child.label, **data)
         
         self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
         
