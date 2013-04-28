@@ -1,4 +1,19 @@
 TODO list
+=========
+
+GRASS 7
+-------
+
+ * r.li.daemon: Uses UNIX sockets, replace or figure out how
+   to use them on Windows
+ * r.li.setup: Shell scripts, Tcl/Tk, Xmonitors to be replaced
+   by Python + wxPython equivalents.
+   See Luca D's prototype in  trunk/gui/wxpython/rlisetup
+   and  http://grass.osgeo.org/grass70/manuals/g.gui.rlisetup.html
+
+
+GRASS 6
+-------
 
 A few remaining things should be done soon:
 - add relevant references
