@@ -47,7 +47,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
     double *zarray;
     double *x, *y, *z;
     int i, n_points, n_coors, n_cats, n_lines;
-    int type;
+    int type, with_z, skip_feat, nskipped_3d;
     int alloc_points;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -63,11 +63,13 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
     yarray = (double *)G_calloc(alloc_points, sizeof(double));
     zarray = (double *)G_calloc(alloc_points, sizeof(double));
 
-    n_lines = 0;
+    n_lines = nskipped_3d = 0;
 
+    with_z = Vect_is_3d(Map);
 
     while (G_getl2(buff, BUFFSIZE - 1, ascii) != 0) {
 	n_cats = 0;
+        skip_feat = FALSE;
 	if (buff[0] == '\0') {
 	    G_debug(3, "a2b: skipping blank line");
 	    continue;
@@ -79,8 +81,9 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 		G_debug(2, "a2b: skipping commented line");
 		continue;
 	    }
-	    G_fatal_error(_("Error reading ASCII file: (bad type) [%s]"),
-			  buff);
+	    G_warning(_("Error reading ASCII file: (bad type) [%s]"),
+                      buff);
+            return -1;
 	}
 	if (ctype == '#') {
 	    G_debug(2, "a2b: Skipping commented line");
@@ -116,12 +119,19 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 	case 'p':
 	    type = 0;		/* dead -> ignore */
 	    break;
-	default:
-	    G_fatal_error(_("Error reading ASCII file: (unknown type) [%s]"),
-			  buff);
+	default: {
+	    G_warning(_("Error reading ASCII file: (unknown type) [%s]"),
+                      buff);
+            return -1;
+        }
 	}
 	G_debug(5, "feature type = %d", type);
-
+        
+        if ((type & (GV_FACE | GV_KERNEL)) && !with_z) {
+            skip_feat = TRUE;
+            nskipped_3d++;
+        }
+        
 	n_points = 0;
 	x = xarray;
 	y = yarray;
@@ -129,9 +139,10 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 
 	/* Collect the points */
 	for (i = 0; i < n_coors; i++) {
-	    if (G_getl2(buff, BUFFSIZE - 1, ascii) == 0)
-		G_fatal_error(_("End of ASCII file reached before end of coordinates"));
-
+	    if (G_getl2(buff, BUFFSIZE - 1, ascii) == 0) {
+		G_warning(_("End of ASCII file reached before end of coordinates"));
+                return -1;
+            }
 	    if (buff[0] == '\0') {
 		G_debug(3, "a2b: skipping blank line while reading vertices");
 		i--;
@@ -141,15 +152,20 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 	    *z = 0;
 	    if (sscanf(buff, "%lf%lf%lf", x, y, z) < 2) {
 		if (sscanf(buff, " %s %s %lf", east_str, north_str, z) < 2) {
-		    G_fatal_error(_("Error reading ASCII file: (bad point) [%s]"),
-				  buff);
+		    G_warning(_("Error reading ASCII file: (bad point) [%s]"),
+                              buff);
+                    return -1;
 		} else {
-		    if( ! G_scan_easting(east_str, x, G_projection()) )
-			G_fatal_error(_("Unparsable longitude value: [%s]"),
-				      east_str);
-		    if( ! G_scan_northing(north_str, y, G_projection()) )
-			G_fatal_error(_("Unparsable latitude value: [%s]"),
-				      north_str);
+		    if (!G_scan_easting(east_str, x, G_projection())) {
+			G_warning(_("Unparsable longitude value: [%s]"),
+                                  east_str);
+                        return -1;
+                    }
+		    if (!G_scan_northing(north_str, y, G_projection())) {
+			G_warning(_("Unparsable latitude value: [%s]"),
+                                  north_str);
+                        return -1;
+                    }
 		}
 	    }
 
@@ -179,10 +195,12 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 	}
 
 	/* Collect the cats */
+	Vect_reset_cats(Cats);
 	for (i = 0; i < n_cats; i++) {
-	    if (G_getl2(buff, BUFFSIZE - 1, ascii) == 0)
-		G_fatal_error(_("End of ASCII file reached before end of categories"));
-
+	    if (G_getl2(buff, BUFFSIZE - 1, ascii) == 0) {
+		G_warning(_("End of ASCII file reached before end of categories"));
+                return -1;
+            }
 	    if (buff[0] == '\0') {
 		G_debug(3,
 			"a2b: skipping blank line while reading category info");
@@ -190,28 +208,36 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 		continue;
 	    }
 
-	    if (sscanf(buff, "%u%u", &catn, &cat) != 2)
-		G_fatal_error(_("Error reading categories: [%s]"), buff);
+	    if (sscanf(buff, "%u%u", &catn, &cat) != 2) {
+		G_warning(_("Error reading categories: [%s]"), buff);
+                return -1;
+            }
 
 	    Vect_cat_set(Cats, catn, cat);
 	}
 
+        if (skip_feat)
+            continue;
+        
 	/* Allocation is handled for line_pnts */
 	if (0 >
-	    Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points))
-	    G_fatal_error(_("Out of memory"));
+	    Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points)) {
+	    G_warning(_("Unable to copy points"));
+            return -1;
+        }
 
 	if (type > 0) {
 	    if (-1 == Vect_write_line(Map, type, Points, Cats)) {
-		G_warning(_("Unable to write new feature"));
 		return -1;
 	    }
 	    n_lines++;
 	}
-	
-	Vect_reset_cats(Cats);
     }
 
+    if (nskipped_3d > 0)
+        G_warning(_("Vector map <%s> is 2D. %d 3D features (faces or kernels) skipped."),
+                  Vect_get_name(Map), nskipped_3d);
+    
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
@@ -240,8 +266,10 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 	if (strncmp(buff, "VERTI:", 6) == 0)
 	    return (0);
 
-	if (!(ptr = strchr(buff, ':')))
-	    G_fatal_error(_("Unexpected data in vector head:\n[%s]"), buff);
+	if (!(ptr = strchr(buff, ':'))) {
+	    G_warning(_("Unexpected data in vector header:\n[%s]"), buff);
+            return -1;
+        }
 
 	ptr++;			/* Search for the start of text */
 	while (*ptr == ' ')
