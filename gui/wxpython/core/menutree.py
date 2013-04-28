@@ -82,7 +82,7 @@ class MenuTreeModelBuilder:
                         command='', keywords='', shortcut='', wxId='')
             self.model.AppendNode(parent=node, label='', data=data)
         elif item.tag == 'menuitem':
-            label    = _(item.find('label').text)
+            origLabel = _(item.find('label').text)
             desc     = _(item.find('help').text)
             handler  = item.find('handler').text
             gcmd     = item.find('command')  # optional
@@ -105,12 +105,13 @@ class MenuTreeModelBuilder:
                 wxId = eval('wx.' + wxId.text)
             else:
                 wxId = wx.ID_ANY
+            label = origLabel
             if gcmd:
                 if self.menustyle == 1:
                     label += '   [' + gcmd + ']'
                 elif self.menustyle == 2:
                     label = '      [' + gcmd + ']'
-            data = dict(label=label, description=desc, handler=handler,
+            data = dict(label=origLabel, description=desc, handler=handler,
                         command=gcmd, keywords=keywords, shortcut=shortcut, wxId=wxId)
             self.model.AppendNode(parent=node, label=label, data=data)
         elif item.tag == 'menu':
@@ -165,9 +166,13 @@ def printTree(node, fh, indent=0):
         printTree(node=child, fh=fh, indent=indent + 2)
 
 def printStrings(node, fh):
-    if node.label:
+    # node.label  - with module in brackets
+    # node.data['label'] - without module in brackets
+    if node.label and not node.data:
         fh.write('    _(%r),\n' % str(node.label))
     if node.data:
+        if 'label' in node.data and node.data['label']:
+            fh.write('    _(%r),\n' % str(node.data['label']))
         if 'description' in node.data and node.data['description']:
             fh.write('    _(%r),\n' % str(node.data['description']))
     for child in node.children:
