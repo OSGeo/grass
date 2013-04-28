@@ -88,7 +88,8 @@ void Nviz_destroy_render_window(struct render_window *rwin)
    \param width window width
    \param height window height
 
-   \return 1
+   \return 0 on success
+   \return -1 on error
  */
 int Nviz_create_render_window(struct render_window *rwin, void *display,
 			      int width, int height)
@@ -107,11 +108,16 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 
     v = glXChooseVisual(rwin->displayId,
 			DefaultScreen(rwin->displayId), attributeList);
-
+    if (!v) {
+        G_warning(_("Unable to get visual info"));
+        return -1;
+    }
+        
     rwin->contextId = glXCreateContext(rwin->displayId, v, NULL, GL_FALSE);
 
     if (!rwin->contextId) {
-	G_fatal_error(_("Unable to create rendering context"));
+	G_warning(_("Unable to create rendering context"));
+        return -1;
     }
 
     /* create win pixmap to render to (same depth as RootWindow) */
@@ -122,9 +128,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     /* create an off-screen GLX rendering area */
     rwin->windowId = glXCreateGLXPixmap(rwin->displayId, v, rwin->pixmap);
 
-    if (v) {
-	XFree(v);
-    }
+    XFree(v);
 #elif defined(OPENGL_AQUA)
     int attributeList[] = { AGL_RGBA, AGL_RED_SIZE, 1,
 	AGL_GREEN_SIZE, 1, AGL_BLUE_SIZE, 1,
@@ -170,7 +174,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     rwin->contextId = wglCreateContext(rwin->displayId);
     /* TODO */
 #endif
-    return 1;
+    return 0;
 }
 
 /*!
