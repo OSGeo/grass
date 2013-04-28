@@ -78,7 +78,8 @@ int main(int argc, char *argv[])
     /* define render window */
     offscreen = Nviz_new_render_window();
     Nviz_init_render_window(offscreen);
-    Nviz_create_render_window(offscreen, NULL, width, height);	/* offscreen display */
+    if (Nviz_create_render_window(offscreen, NULL, width, height) == -1)
+        G_fatal_error(_("Unable to render data"));
     Nviz_make_current_render_window(offscreen);
 
     /* initialize nviz data */
