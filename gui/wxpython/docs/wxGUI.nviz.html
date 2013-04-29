@@ -361,9 +361,19 @@ parameters, or to set the background color of the Map Display Window
   <li>...</li>
 </ul>
 
+
+<h2>NOTE</h2>
+wxNviz is under active development and
+distributed as &quot;Experimental Prototype&quot;.
+
 <p>
-<b>Please note that wxNviz is under active development and
-distributed as &quot;Experimental Prototype&quot;.</b>
+Please note that with wxGTK port of wxPython (Linux systems),
+a problem might appear during wxNviz initialization (nothing is rendered at all)
+or when rendering vectors (bad order of rendering surfaces and vectors).
+If you encounter such problems, try to change a depth buffer number
+in GUI Settings &gt; Map Display  &gt; Advanced (possible numbers are 0, 16, 24, 32).
+It is currently not possible to automatically find out the right number which is working for your computer.
+</p>
 
 <h2>SEE ALSO</h2>
 
