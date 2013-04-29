@@ -156,6 +156,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
     int SEGS = 100;
     char text[128];
     float border_off = 4.5;
+    float extra_y_off;
     float grid_off = 3.;
     double row_dist, colm_dist;
     float font_angle;
@@ -236,6 +237,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
     n1 = north;
     for (j = 0; g > west; j++, g -= size) {
 	start_coord = -9999.;
+	extra_y_off = 0.0;
 	if (g == east || g == west)
 	    continue;
 
@@ -263,9 +265,16 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    e2 = lon;
 	    n2 = lat;
 
-	    if (start_coord == -9999.) {
+	    if ((start_coord == -9999.) && (D_u_to_a_row(n1) > 0)) {
 		font_angle = get_heading((e1 - e2), (n1 - n2));
 		start_coord = e1;
+
+		/* font rotates by bottom-left corner, try to keep top-left cnr on screen */
+		if(font_angle - 270 > 0) {
+		    extra_y_off = sin((font_angle - 270) * M_PI/180) * fontsize;
+		    if(D_u_to_a_row(n1) < extra_y_off)
+			start_coord = -9999.;  /* wait until the next point south */
+		}
 	    }
 
 	    if (line_width)
@@ -284,7 +293,8 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    D_text_rotation(font_angle);
 	    D_text_size(fontsize, fontsize);
 	    D_pos_abs(start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5),
-		      D_get_u_north() + D_get_d_to_u_yconv() * border_off);
+		      D_get_u_north() + D_get_d_to_u_yconv() *
+		      (border_off + extra_y_off));
 	    D_text(text);
 	}
     }
