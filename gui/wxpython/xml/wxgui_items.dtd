@@ -1,0 +1,14 @@
+<!ELEMENT wxgui-items (wxgui-item*)>
+
+<!ELEMENT wxgui-item (label, ((handler, related-module?) | command), description, keywords?, shortcut?, wx-id?)>
+<!ATTLIST wxgui-item name NMTOKEN #REQUIRED>
+
+<!ELEMENT label (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT handler (#PCDATA)>
+<!ELEMENT command (#PCDATA)>
+<!ELEMENT related-module (#PCDATA)>
+<!ELEMENT keywords (#PCDATA)>
+<!ELEMENT shortcut (#PCDATA)>
+<!ELEMENT wx-id (#PCDATA)>
+

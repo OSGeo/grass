@@ -17,12 +17,20 @@ This program is free software under the GNU General Public License
 
 import os
 
-from core.globalvar import ETCWXDIR
 from core.menutree  import MenuTreeModelBuilder
+from core.toolboxes import getMenuFile
+from core.globalvar import ETCWXDIR
+from core.gcmd import GError
+
 
 class LayerManagerMenuData(MenuTreeModelBuilder):
-    def __init__(self, filename = None):
+    def __init__(self, filename=None):
         if not filename:
-            filename = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
-        
-        MenuTreeModelBuilder.__init__(self, filename)
+            filename = getMenuFile()
+        try:
+            MenuTreeModelBuilder.__init__(self, filename)
+        except (ValueError, AttributeError, TypeError):
+            GError(_("Unable to parse user toolboxes XML files. "
+                     "Default toolboxes will be loaded."))
+            fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
+            MenuTreeModelBuilder.__init__(self, fallback)
