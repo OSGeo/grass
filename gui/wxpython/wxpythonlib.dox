@@ -19,28 +19,12 @@ integrates basic tools for zooming, panning, data querying,
 decorations (north arrows, barscale, etc.). Additional tools like
 vector digitizer or georectification tool are also available.
 
-<b>Table of content</b>
 
-- \ref background
-- \ref classes
- - \ref core
- - \ref gui_core
- - \ref lmgr
- - \ref mapdisp
- - \ref wscreen
- - \ref dbmgr
- - \ref gpc
- - \ref gmodeler
- - \ref vdigit
- - \ref wxnviz
- - \ref psmap
- - \ref locWizard
- - \ref plot
- - \ref mapswipe
- - \ref other
-- \ref devel
-- \ref seeAlso
-- \ref refs
+\tableofcontents
+
+\par Related pages
+\subpage wxguitoolboxes
+
 
 \section background Background
 

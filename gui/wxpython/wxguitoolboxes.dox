@@ -1,0 +1,347 @@
+/*! \page wxguitoolboxes WxGUI Toolboxes
+
+\tableofcontents
+
+\section introduction Introduction
+
+wxGUI toolboxes enables GUI customization and organization of menu (and other
+views) according to user needs.
+
+XML files are used for code generation and in case of toolboxes enables
+wxGUI (menu) customization.
+
+Currently, all the files described here are related to the menus which are
+generated from these files. The most of the files described here are
+the part of implementation of toolboxes in wxGUI.
+
+Each XML file has a DTD file which can by used for validation. XSD files are
+not provided (but this can change in the future). Some file types can occur
+multiple times, some occur only once.
+
+Note that in XML context, the term <i>tag</i> partially overlaps with the term
+<i>element</i>. Element emphasizes the XML structure, XML object model and
+content of these objects. Tag emphasizes the markup and the name of the element.
+
+
+\section filesOverview Files overview
+
+\subsection toolboxesFiles Files related to toolboxes
+
+GRASS source code contains these XML files:
+<ul>
+<li>\c gui/wxpython/xml/main_menu.xml</li>
+<li>\c gui/wxpython/xml/toolboxes.xml</li>
+<li>\c gui/wxpython/xml/wxgui_items.xml</li>
+</ul>
+
+GRASS distribution contains these XML files:
+<ul>
+<li>\c etc/gui/wxpython/xml/main_menu.xml</li>
+<li>\c etc/gui/wxpython/xml/toolboxes.xml</li>
+<li>\c etc/gui/wxpython/xml/wxgui_items.xml</li>
+<li>\c etc/gui/wxpython/xml/module_items.xml (generated during compilation)</li>
+<li>\c etc/gui/wxpython/xml/menudata.xml (generated during compilation)</li>
+</ul>
+
+GRASS directory (\c ".grass7") in user home directory (i.e., \c "$HOME" on Unix)
+contains these XML files:
+<ul>
+<li>\c toolboxes/main_menu.xml (created by user)</li>
+<li>\c toolboxes/toolboxes.xml (created by user)</li>
+<li>\c toolboxes/menudata.xml (generated on wxGUI startup)</li>
+</ul>
+
+\dot
+digraph toolboxes {
+graph [rankdir="LR"];
+node [shape="record", style="rounded"];
+
+menudata [label="menudata.xml in distribution", shape="note", URL="\ref menudataFile"];
+umenudata [label="menudata.xml in user home", shape="note", URL="\ref menudataFile"];
+toolboxes [label="toolboxes.xml in distribution", shape="note", URL="\ref toolboxesFile"];
+utoolboxes [label="toolboxes.xml in user home", shape="note", URL="\ref toolboxesFile"];
+main_menu [label="main_menu.xml in distribution", shape="note", URL="\ref main_menuFile"];
+umain_menu [label="main_menu.xml in user home", shape="note", URL="\ref main_menuFile"];
+
+wxgui_items [label="wxgui_items.xml in distribution", shape="note", URL="\ref wxgui_itemsFile"];
+module_items [label="module_items.xml in distribution", shape="note", URL="\ref module_itemsFile"];
+
+menustrings [label="menustrings.py\n(used for translations)", shape="note"];
+
+module_items -> menudata;
+wxgui_items -> menudata;
+main_menu -> menudata;
+toolboxes -> menudata;
+
+module_items -> umenudata;
+wxgui_items -> umenudata;
+toolboxes -> umenudata;
+main_menu -> umenudata;
+umain_menu -> umenudata;
+utoolboxes -> umenudata;
+
+menudata -> menustrings;
+
+// guimenu [label="Main menu in wxGUI", shape="box3d"];
+// menustrings -> guimenu;
+// menudata -> guimenu;
+// umenudata -> guimenu;
+}
+\enddot
+
+
+\subsection otherFiles Other files
+
+GRASS source code contains these XML files:
+<ul>
+<li>\c gui/wxpython/xml/menudata_gmodeler.xml</li>
+<li>\c gui/wxpython/xml/menudata_psmap.xml</li>
+</ul>
+In GRASS distribution these XML files are in the \c etc/gui/wxpython/xml
+directory.
+
+
+\section toolboxesFile Toolboxes file
+
+This file contains definition of toolboxes. A toolbox contains references
+(links) to other items, namely \c "<module-items>", \c "<wxgui-items>"
+and other toolboxes using tag \c "<subtoolbox>". Tag \c "<separator>" is
+used when the view supports some kind of visual separators to group parts
+of the toolbox (or menu).
+
+Items are referenced using \c name attribute. In case of \c "<module-items>",
+\c "<wxgui-items>" also subelements can be added to create new items or to
+replace subelements values from item definition.
+
+\dot
+graph toolboxes {
+graph [rankdir="LR"];
+node [shape="record", style="rounded"];
+
+// ∞ causes Doxygen warning but it's harmless for dot and html output
+
+toolboxes -- toolbox [label="1..∞"];
+
+toolbox -- label;
+toolbox -- items [label="1..∞"];
+
+items -- "module-item" [label="0..1"];
+items -- "wxgui-item" [label="0..1"];
+items -- subtoolbox [label="0..1"];
+items -- separator [label="0..1"];
+
+milabel [label="label"];
+
+"module-item" -- milabel;
+"module-item" -- module [label="0..1"];
+"module-item" -- description [label="0..1"];
+"module-item" -- keywords [label="0..1"];
+
+wilabel [label="label"];
+widescription [label="description"];
+wikeywords [label="keywords"];
+
+"wxgui-item" -- wilabel [label="0..1"];
+"wxgui-item" -- handler [label="0..1"];
+"wxgui-item" -- "related-module" [label="0..1"];
+"wxgui-item" -- command [label="0..1"];
+"wxgui-item" -- widescription [label="0..1"];
+"wxgui-item" -- wikeywords [label="0..1"];
+"wxgui-item" -- shortcut [label="0..1"];
+"wxgui-item" -- "wx-id" [label="0..1"];
+}
+\enddot
+
+
+\section main_menuFile Main menu file
+
+File has a layout similar to the \ref toolboxesFile but contains only one
+<tt>toolbox</tt> which can contain only <tt>subtoolbox</tt>es and one special
+item <tt>user-toolboxes-list</tt> which will be replaced by a menu with the list
+of toolboxes in the user toolbox file.
+
+
+\section module_itemsFile Modules items file
+
+The file contains information obtained from modules' interface descriptions.
+The structure of one \c "module-item" is the same as in the \ref toolboxesFile
+but some subelements are mandatory.
+
+File contained in distribution is generated during compilation from available
+modules using the script \c gui/wxpython/tools/build_modules_xml.py.
+
+Element \c "<module>" is the name of the executable, e.g. "r.info".
+
+Element \c "<label>" is currently not present. It represents the short label in
+menu and it is added in toolboxes.
+
+Element \c "<description>" is created from module's module->description (or if
+it exists, module->label concatenated with module->description).
+
+Element \c "<keywords>" is created from module's module->keywords.
+
+
+\section wxgui_itemsFile wxGUI items file
+
+The file contains definitions of wxGUI actions which can be accessed for
+example, from menu.
+The structure of one \c "wxgui-item" is the same as in \ref toolboxesFile
+but some subelements are mandatory.
+
+
+\section menudataFile Menudata file
+
+Historically, menudata.xml file was in the source codes and was partially
+maintained by the script \c gui/wxpython/tools/update_menudata.py
+which updated the description and keywords (based on module's
+module->label or module->description, module->keywords).
+Other items (menu structure, menu item labels and non-module only items) were
+edited in the menudata.xml file directly.
+
+Currently, the file is generated during compilation or at startup. It serves
+as an intermediate layer between all toolboxes XMLs and GUI menu tree
+generation.
+
+
+\section howtotoolbox How to write a custom toolbox
+
+To create a new toolbox use \c "<toolbox>" tag:
+\verbatim
+<toolbox name="MyRaster">
+  <label>My &amp;raster</label>
+  <items>
+    ...
+  </items>
+</toolbox>
+\endverbatim
+
+To create a new item which represents a module use \c "<module-item>" tag:
+\verbatim
+<module-item name="r.buffer">
+  <label>Buffer rasters</label>
+</module-item>
+\endverbatim
+This works for modules contained in distribution. For modules from addons or
+some your modules which are on path use \c "<module-item>" tag together with
+\c "<module>" tag:
+\verbatim
+<module-item name="r.agent">
+  <label>Buffer rasters</label>
+  <module>r.agent</module>
+</module-item>
+\endverbatim
+The name of a module is duplicated in the XML but anyway, try to keep \c name
+attribute and \c module element in sync.
+
+To create a new item which triggers some wxGUI action defined in distribution
+use \c "<wxgui-item>" tag:
+\verbatim
+<wxgui-item name="RasterMapCalculator"/>
+\endverbatim
+Note that now it is not possible to create custom wxGUI items.
+
+To include an existing toolbox use \c "<subtoolbox>" tag:
+\verbatim
+<subtoolbox name="NeighborhoodAnalysis"/>
+\endverbatim
+To create a submenu in your new menu (toolbox), you need to create a new toolbox
+and include this toolbox.
+
+To create your custom main menu create a file main_menu.xml in your user home
+directory, in \c .grass7/toolboxes subdirectory. Directory \c .grass7 may be
+hidden directory on your system. The XML file should contain the definition of
+only one toolbox. The name attribute and label element are not used but should
+be filled for documentation purposes and future compatibility.
+
+If you want to base your toolbox or main menu on existing toolbox or main menu
+copy the part of existing XML file from GRASS GIS distribution (installation)
+directory or GRASS GIS source code. If you want to include some existing
+toolboxes or wxGUI items defined in GRASS GIS you need to look to these files
+too and find the proper \c name attributes.
+
+
+\subsection howtotoolboxExample Example
+
+Files should be placed in user home directory in \c .grass7/toolboxes
+subdirectory, e.g. \c /home/john/.grass7/toolboxes.
+
+\par toolboxes.xml
+
+\verbatim
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolboxes SYSTEM "toolboxes.dtd">
+<toolboxes>
+  <toolbox name="MyRaster">
+    <label>My &amp;raster</label>
+    <items>
+      <module-item name="r.buffer">
+        <label>Buffer rasters</label>
+      </module-item>
+      <module-item name="r.mask">
+        <label>Mask</label>
+      </module-item>
+      <separator/>
+      <wxgui-item name="RasterMapCalculator"/>
+      <subtoolbox name="NeighborhoodAnalysis"/>
+      <subtoolbox name="ReportAndStatistics"/>
+    </items>
+  </toolbox>
+</toolboxes>
+\endverbatim
+
+\par main_menu.xml
+
+\verbatim
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbox SYSTEM "main_menu.dtd">
+<toolbox name="MyCustomMainMenu">
+  <label>MyCustomMainMenu</label>
+  <items>
+    <subtoolbox name="File"/>
+    <subtoolbox name="Settings"/>
+    <subtoolbox name="MyRaster"/>
+    <subtoolbox name="Imagery"/>
+    <subtoolbox name="Help"/>
+  </items>
+</toolbox>
+\endverbatim
+
+
+
+\subsection howtotoolboxValidation Validation
+
+You should validate your XML before running wxGUI, e.g. using \c xmllint
+(no output means that document is valid):
+\verbatim
+xmllint --noout --dtdvalid toolboxes.dtd toolboxes.xml
+\endverbatim
+
+You can find \c toolboxes.dtd and \c main_menu.dtd in your GRASS GIS directory,
+in \c etc/gui/wxpython/xml subdirectory.
+
+If you will provide an invalid, not well formed or empty file loading of
+toolboxes will obviously fail.
+
+
+\subsection howtotoolboxLabels Labels
+
+The label shortly describes the toolbox or the action which will happen after
+running an item. The label can be a command such as <i>"Create table"</i>
+or the general name such as <i>"Table management"</i>.
+You should add label to each toolbox you create and to each item you create.
+However, if you are just using (and thus referencing) existing items
+(or toolboxes), you don't need to include labels (so you can use just empty
+tags only with the name attribute).
+
+Important items in menu usually have a automatically assigned shortcut which
+depends on their label. This shortcut is assigned to <tt>Alt+Letter</tt>
+(On most platforms) where letter is a letter after an ampersand (\c &) in the
+item label and  in the user interface the letter is underlined.
+Note that in XML you cannot write \c "&" but you have to write \c "&amp;".
+This concept is not related to the standard shortcut assigned to the item
+according to the shortcut in the XML file.
+
+Don't be confused with the label which is set for the module in the source code.
+
+*/
+
