@@ -83,8 +83,8 @@ class MenuTreeModelBuilder:
             self.model.AppendNode(parent=node, label='', data=data)
         elif item.tag == 'menuitem':
             origLabel = _(item.find('label').text)
-            desc     = _(item.find('help').text)
             handler  = item.find('handler').text
+            desc     = item.find('help')  # optional
             gcmd     = item.find('command')  # optional
             keywords = item.find('keywords') # optional
             shortcut = item.find('shortcut') # optional
@@ -93,6 +93,10 @@ class MenuTreeModelBuilder:
                 gcmd = gcmd.text
             else:
                 gcmd = ""
+            if desc.text:
+                desc = _(desc.text)
+            else:
+                desc = ""
             if keywords != None:
                 keywords = keywords.text
             else:
@@ -117,7 +121,7 @@ class MenuTreeModelBuilder:
         elif item.tag == 'menu':
             self._createMenu(item, node)
         else:
-            raise Exception(_("Unknow tag %s") % item.tag)
+            raise ValueError(_("Unknow tag %s") % item.tag)
 
     def GetModel(self, separators=False):
         """Returns copy of model with or without separators
@@ -215,10 +219,12 @@ if __name__ == "__main__":
 
     sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython"))
 
-
+    # FIXME: cross-dependencies
     if menu == 'manager':
         from lmgr.menudata     import LayerManagerMenuData
-        menudata = LayerManagerMenuData()
+        from core.globalvar    import ETCWXDIR
+        filename = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
+        menudata = LayerManagerMenuData(filename)
     elif menu == 'modeler':
         from gmodeler.menudata import ModelerMenuData
         menudata = ModelerMenuData()

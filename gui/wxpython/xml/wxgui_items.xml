@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE wxgui_items SYSTEM "wxgui_items.dtd">
+<wxgui-items>
+  <wxgui-item name="Georectify">
+    <label>Georectify</label>
+    <handler>OnGCPManager</handler>
+    <description>Manage Ground Control Points for Georectification</description>
+  </wxgui-item>
+  <wxgui-item name="GraphicalModeler">
+    <label>Graphical modeler</label>
+    <handler>OnGModeler</handler>
+    <related-module>g.gui.gmodeler</related-module>
+    <description>Launch Graphical modeler</description>
+    <keywords>general,gui,graphical modeler,workflow</keywords>
+  </wxgui-item>
+  <wxgui-item name="RunModel">
+    <label>Run model</label>
+    <handler>OnRunModel</handler>
+    <description>Run model prepared by Graphical modeler</description>
+  </wxgui-item>
+  <wxgui-item name="AnimationTool">
+    <label>Animation tool</label>
+    <handler>OnAnimationTool</handler>
+    <related-module>g.gui.animation</related-module>
+    <description>Launch animation tool.</description>
+    <keywords>general,gui,display</keywords>
+  </wxgui-item>
+  <wxgui-item name="CartographicComposer">
+    <label>Cartographic Composer</label>
+    <handler>OnPsMap</handler>
+    <related-module>g.gui.psmap</related-module>
+    <description>Launch Cartographic Composer</description>
+    <keywords>postscript,printing</keywords>
+  </wxgui-item>
+  <wxgui-item name="MapSwipe">
+    <label>Map Swipe</label>
+    <handler>OnMapSwipe</handler>
+    <related-module>g.gui.mapswipe</related-module>
+    <description>Launch Map Swipe</description>
+    <keywords>general,gui,display</keywords>
+  </wxgui-item>
+  <wxgui-item name="LaunchScript">
+    <label>Launch script</label>
+    <handler>OnRunScript</handler>
+    <description>Launches script file.</description>
+  </wxgui-item>
+  <wxgui-item name="Quit">
+    <label>Quit</label>
+    <handler>OnCloseWindow</handler>
+    <description>Quit</description>
+    <shortcut>Ctrl+Q</shortcut>
+    <wx-id>ID_EXIT</wx-id>
+  </wxgui-item>
+  <wxgui-item name="Preferences">
+    <label>Preferences</label>
+    <handler>OnPreferences</handler>
+    <description>User GUI preferences (display font, commands, digitizer, etc.)</description>
+    <wx-id>ID_PREFERENCES</wx-id>
+  </wxgui-item>
+  <wxgui-item name="RasterMapCalculator">
+    <label>Raster map calculator</label>
+    <handler>OnMapCalculator</handler>
+    <related-module>r.mapcalc</related-module>
+    <description>Raster map calculator.</description>
+    <keywords>raster,algebra</keywords>
+  </wxgui-item>
+  <wxgui-item name="Histogram">
+    <label>Histogram</label>
+    <handler>OnHistogram</handler>
+    <description>Generate histogram of image</description>
+  </wxgui-item>
+  <wxgui-item name="VolumeCalculator">
+    <label>Volume calculator</label>
+    <handler>OnMapCalculator</handler>
+    <related-module>r3.mapcalc</related-module>
+    <description>3D raster map calculator.</description>
+    <keywords>raster,algebra</keywords>
+  </wxgui-item>
+  <wxgui-item name="GRASSHelp">
+    <label>GRASS help</label>
+    <command>g.manual -i</command>
+    <description>Display the HTML man pages of GRASS GIS</description>
+    <keywords>general,manual,help</keywords>
+    <wx-id>ID_HELP</wx-id>
+  </wxgui-item>
+  <wxgui-item name="GUIHelp">
+    <label>GUI help</label>
+    <command>g.manual entry=wxGUI</command>
+    <description>Display the HTML man pages of GRASS GIS</description>
+    <keywords>general,manual,help</keywords>
+  </wxgui-item>
+  <wxgui-item name="AboutSystem">
+    <label>About system</label>
+    <handler>OnSystemInfo</handler>
+    <description>Prints system information</description>
+  </wxgui-item>
+  <wxgui-item name="AboutGRASSGIS">
+    <label>About GRASS GIS</label>
+    <handler>OnAboutGRASS</handler>
+    <description>About GRASS GIS</description>
+    <wx-id>ID_ABOUT</wx-id>
+  </wxgui-item>
+  <wxgui-item name="New">
+    <label>New</label>
+    <handler>OnWorkspaceNew</handler>
+    <description>Create new workspace</description>
+    <shortcut>Ctrl+N</shortcut>
+    <wx-id>ID_NEW</wx-id>
+  </wxgui-item>
+  <wxgui-item name="Open">
+    <label>Open</label>
+    <handler>OnWorkspaceOpen</handler>
+    <description>Load workspace from file</description>
+    <shortcut>Ctrl+O</shortcut>
+    <wx-id>ID_OPEN</wx-id>
+  </wxgui-item>
+  <wxgui-item name="Save">
+    <label>Save</label>
+    <handler>OnWorkspaceSave</handler>
+    <description>Save workspace</description>
+    <shortcut>Ctrl+S</shortcut>
+    <wx-id>ID_SAVE</wx-id>
+  </wxgui-item>
+  <wxgui-item name="SaveAs">
+    <label>Save as</label>
+    <handler>OnWorkspaceSaveAs</handler>
+    <description>Save workspace to file</description>
+    <wx-id>ID_SAVEAS</wx-id>
+  </wxgui-item>
+  <wxgui-item name="Close">
+    <label>Close</label>
+    <handler>OnWorkspaceClose</handler>
+    <description>Close workspace file</description>
+    <wx-id>ID_CLOSE</wx-id>
+  </wxgui-item>
+  <wxgui-item name="LoadGRCFileTclTkGUI">
+    <label>Load GRC file (Tcl/Tk GUI)</label>
+    <handler>OnWorkspaceLoadGrcFile</handler>
+    <description>Load map layers from GRC file to layer tree</description>
+  </wxgui-item>
+  <wxgui-item name="AddRaster">
+    <label>Add raster</label>
+    <handler>OnAddRaster</handler>
+    <description>Add raster map layer to current display</description>
+    <shortcut>Ctrl+Shift+R</shortcut>
+  </wxgui-item>
+  <wxgui-item name="AddVector">
+    <label>Add vector</label>
+    <handler>OnAddVector</handler>
+    <description>Add vector map layer to current display</description>
+    <shortcut>Ctrl+Shift+V</shortcut>
+  </wxgui-item>
+  <wxgui-item name="AddMultipleRastersOrVectors">
+    <label>Add multiple rasters or vectors</label>
+    <handler>OnAddMaps</handler>
+    <description>Add multiple raster or vector map layers to current display</description>
+    <shortcut>Ctrl+Shift+L</shortcut>
+  </wxgui-item>
+  <wxgui-item name="NewMapDisplayWindow">
+    <label>New map display window</label>
+    <handler>OnNewDisplay</handler>
+    <description>Open new map display window</description>
+  </wxgui-item>
+  <wxgui-item name="CloseCurrentMapDisplayWindow">
+    <label>Close current map display window</label>
+    <handler>OnDisplayClose</handler>
+    <description>Close current map display window</description>
+    <shortcut>Ctrl+W</shortcut>
+  </wxgui-item>
+  <wxgui-item name="CloseAllOpenMapDisplayWindows">
+    <label>Close all open map display windows</label>
+    <handler>OnDisplayCloseAll</handler>
+    <description>Close all open map display windows</description>
+  </wxgui-item>
+  <wxgui-item name="CommonFormatsImport">
+    <label>Common formats import</label>
+    <handler>OnImportGdalLayers</handler>
+    <related-module>r.in.gdal</related-module>
+    <description>Import raster data into a GRASS map layer using GDAL.</description>
+    <keywords>raster,import</keywords>
+  </wxgui-item>
+  <wxgui-item name="CommonImportFormats">
+    <label>Common import formats</label>
+    <handler>OnImportOgrLayers</handler>
+    <related-module>v.in.ogr</related-module>
+    <description>Converts vector layers into a GRASS vector map using OGR.</description>
+    <keywords>vector,import</keywords>
+  </wxgui-item>
+  <wxgui-item name="DXFImport">
+    <label>DXF import</label>
+    <handler>OnImportDxfFile</handler>
+    <related-module>v.in.dxf</related-module>
+    <description>Converts files in DXF format to GRASS vector map format.</description>
+    <keywords>vector,import,dxf</keywords>
+  </wxgui-item>
+  <wxgui-item name="LinkExternalRasterData">
+    <label>Link external raster data</label>
+    <handler>OnLinkGdalLayers</handler>
+    <related-module>r.external</related-module>
+    <description>Link GDAL supported raster data as a pseudo GRASS raster map layer.</description>
+    <keywords>raster,import,input,external</keywords>
+  </wxgui-item>
+  <wxgui-item name="LinkExternalVectorData">
+    <label>Link external vector data</label>
+    <handler>OnLinkOgrLayers</handler>
+    <related-module>v.external</related-module>
+    <description>Creates a new pseudo-vector map as a link to an OGR-supported layer.</description>
+    <keywords>vector,import,input,external,OGR,PostGIS</keywords>
+  </wxgui-item>
+  <wxgui-item name="OutputFormatForVectorData">
+    <label>Output format for vector data</label>
+    <handler>OnVectorOutputFormat</handler>
+    <related-module>v.external.out</related-module>
+    <description>Defines vector output format utilizing OGR library.</description>
+    <keywords>vector,export,output,external,OGR,PostGIS</keywords>
+  </wxgui-item>
+  <wxgui-item name="DisplayRegion">
+    <label>Display region</label>
+    <command>g.region -p</command>
+    <description>Manages the boundary definitions for the geographic region.</description>
+    <keywords>general,settings</keywords>
+  </wxgui-item>
+  <wxgui-item name="MapsetAccess">
+    <label>Mapset access</label>
+    <handler>OnMapsets</handler>
+    <related-module>g.mapsets</related-module>
+    <description>Set/unset access to other mapsets in current location</description>
+    <keywords>general,settings,search path</keywords>
+  </wxgui-item>
+  <wxgui-item name="ChangeLocationAndMapset">
+    <label>Change location and mapset</label>
+    <handler>OnChangeLocation</handler>
+    <description>Change current location and mapset.</description>
+    <keywords>general,location,current</keywords>
+  </wxgui-item>
+  <wxgui-item name="ChangeMapset">
+    <label>Change mapset</label>
+    <handler>OnChangeMapset</handler>
+    <description>Change current mapset.</description>
+    <keywords>general,mapset,current</keywords>
+  </wxgui-item>
+  <wxgui-item name="ChangeWorkingDirectory">
+    <label>Change working directory</label>
+    <handler>OnChangeCWD</handler>
+    <description>Change working directory</description>
+  </wxgui-item>
+  <wxgui-item name="ShowSettings">
+    <label>Show settings</label>
+    <command>g.gisenv -n</command>
+    <description>Outputs and modifies the user's current GRASS variable settings.</description>
+    <keywords>general,settings,variables</keywords>
+  </wxgui-item>
+  <wxgui-item name="CreateNewLocation">
+    <label>Create new location</label>
+    <handler>OnLocationWizard</handler>
+    <description>Launches location wizard to create new GRASS location.</description>
+    <keywords>general,location,wizard</keywords>
+  </wxgui-item>
+  <wxgui-item name="CreateNewMapset">
+    <label>Create new mapset</label>
+    <handler>OnCreateMapset</handler>
+    <description>Creates new mapset in the current location, changes current mapset.</description>
+    <keywords>general,mapset,create</keywords>
+  </wxgui-item>
+  <wxgui-item name="VersionAndCopyright">
+    <label>Version and copyright</label>
+    <command>g.version -c</command>
+    <description>Displays version and copyright information.</description>
+    <keywords>general,version</keywords>
+  </wxgui-item>
+  <wxgui-item name="DisplayMapProjection">
+    <label>Display map projection</label>
+    <command>g.proj -p</command>
+    <description>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</description>
+    <keywords>general,projection,create location</keywords>
+  </wxgui-item>
+  <wxgui-item name="InstallExtensionFromAddons">
+    <label>Install extension from addons</label>
+    <handler>OnInstallExtension</handler>
+    <related-module>g.extension</related-module>
+    <description>Installs new extension from GRASS AddOns SVN repository.</description>
+    <keywords>general,installation,extensions</keywords>
+  </wxgui-item>
+  <wxgui-item name="UninstallExtension">
+    <label>Uninstall extension</label>
+    <handler>OnUninstallExtension</handler>
+    <related-module>g.extension</related-module>
+    <description>Removes installed GRASS AddOns extension.</description>
+    <keywords>general,installation,extensions</keywords>
+  </wxgui-item>
+  <wxgui-item name="ManageColorRulesInteractively">
+    <label>Manage color rules interactively</label>
+    <handler>OnRasterRules</handler>
+    <description>Interactive management of raster color tables.</description>
+    <keywords>raster,color table</keywords>
+  </wxgui-item>
+  <wxgui-item name="SetUpSamplingAndAnalysisFramework">
+    <label>Set up sampling and analysis framework</label>
+    <handler>OnRLiSetup</handler>
+    <description>Configuration editor for r.li.'index'</description>
+    <keywords>raster,landscape structure analysis</keywords>
+  </wxgui-item>
+  <wxgui-item name="OrdinaryOrBlockKriging">
+    <label>Ordinary or block kriging</label>
+    <command>v.krige</command>
+    <description>Performs ordinary or block kriging.</description>
+    <keywords>vector,raster,interpolation,kriging</keywords>
+  </wxgui-item>
+  <wxgui-item name="CreateNewVectorMap">
+    <label>Create new vector map</label>
+    <handler>OnNewVector</handler>
+    <description>Create new empty vector map</description>
+  </wxgui-item>
+  <wxgui-item name="CleanVectorMap">
+    <label>Clean vector map</label>
+    <handler>OnVectorCleaning</handler>
+    <related-module>v.clean</related-module>
+    <description>Toolset for cleaning topology of vector map.</description>
+    <keywords>vector,topology,geometry</keywords>
+  </wxgui-item>
+  <wxgui-item name="ManageColorRulesInteractively">
+    <label>Manage color rules interactively</label>
+    <handler>OnVectorRules</handler>
+    <description>Interactive management of vector color tables.</description>
+    <keywords>vector,color table</keywords>
+  </wxgui-item>
+  <wxgui-item name="VectorNetworkAnalysisTool">
+    <label>Vector network analysis tool</label>
+    <handler>OnVNet</handler>
+    <description>Tool for interactive vector network analysis.</description>
+    <keywords>gui,vector,network</keywords>
+  </wxgui-item>
+  <wxgui-item name="CreateOrEditGroup">
+    <label>Create/edit group</label>
+    <handler>OnEditImageryGroups</handler>
+    <related-module>i.group</related-module>
+    <description>Creates, edits, and lists groups of imagery files.</description>
+    <keywords>imagery,map management</keywords>
+  </wxgui-item>
+  <wxgui-item name="InteractiveInputForSupervisedClassification">
+    <label>Interactive input for supervised classification</label>
+    <handler>OnIClass</handler>
+    <related-module>g.gui.iclass</related-module>
+    <description>Generates spectral signatures by allowing the user to outline training areas.</description>
+    <keywords>general,gui,imagery,classification,signatures</keywords>
+  </wxgui-item>
+</wxgui-items>
+

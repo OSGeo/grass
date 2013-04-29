@@ -1,0 +1,1736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolboxes SYSTEM "toolboxes.dtd">
+<toolboxes>
+  <toolbox name="File">
+    <label>&amp;File</label>
+    <items>
+      <subtoolbox name="Workspace"/>
+      <subtoolbox name="MapDisplay"/>
+      <separator/>
+      <subtoolbox name="ImportRasterData"/>
+      <subtoolbox name="ImportVectorData"/>
+      <subtoolbox name="Import3DRasterData"/>
+      <subtoolbox name="ImportDatabaseTable"/>
+      <separator/>
+      <subtoolbox name="ExportRasterMap"/>
+      <subtoolbox name="ExportVectorMap"/>
+      <subtoolbox name="Export3DRasterMaps"/>
+      <subtoolbox name="ExportDatabaseTable"/>
+      <separator/>
+      <subtoolbox name="LinkExternalFormats"/>
+      <separator/>
+      <subtoolbox name="ManageMapsAndVolumes"/>
+      <subtoolbox name="MapTypeConversions"/>
+      <separator/>
+      <wxgui-item name="Georectify"/>
+      <separator/>
+      <wxgui-item name="GraphicalModeler"/>
+      <wxgui-item name="RunModel"/>
+      <separator/>
+      <module-item name="m.nviz.image">
+        <label>3D image rendering</label>
+      </module-item>
+      <wxgui-item name="AnimationTool"/>
+      <separator/>
+      <module-item name="m.cogo">
+        <label>Bearing/distance to coordinates</label>
+      </module-item>
+      <separator/>
+      <wxgui-item name="CartographicComposer"/>
+      <wxgui-item name="MapSwipe"/>
+      <separator/>
+      <wxgui-item name="LaunchScript"/>
+      <separator/>
+      <wxgui-item name="Quit"/>
+    </items>
+  </toolbox>
+  <toolbox name="Settings">
+    <label>&amp;Settings</label>
+    <items>
+      <subtoolbox name="Region"/>
+      <subtoolbox name="GRASSWorkingEnvironment"/>
+      <subtoolbox name="MapProjections"/>
+      <separator/>
+      <subtoolbox name="AddonsExtensions"/>
+      <separator/>
+      <wxgui-item name="Preferences"/>
+    </items>
+  </toolbox>
+  <toolbox name="Raster">
+    <label>&amp;Raster</label>
+    <items>
+      <subtoolbox name="DevelopRasterMap"/>
+      <subtoolbox name="ManageColors"/>
+      <subtoolbox name="QueryRasterMaps"/>
+      <subtoolbox name="MapTypeConversions"/>
+      <separator/>
+      <module-item name="r.buffer">
+        <label>Buffer rasters</label>
+      </module-item>
+      <module-item name="r.circle">
+        <label>Concentric circles</label>
+      </module-item>
+      <module-item name="r.distance">
+        <label>Closest points</label>
+      </module-item>
+      <module-item name="r.mask">
+        <label>Mask</label>
+      </module-item>
+      <wxgui-item name="RasterMapCalculator"/>
+      <subtoolbox name="NeighborhoodAnalysis"/>
+      <subtoolbox name="OverlayRasters"/>
+      <subtoolbox name="SolarRadianceAndShadows"/>
+      <subtoolbox name="TerrainAnalysis"/>
+      <subtoolbox name="TransformFeatures"/>
+      <separator/>
+      <subtoolbox name="HydrologicModeling"/>
+      <subtoolbox name="GroundwaterModeling"/>
+      <subtoolbox name="LandscapeStructureModeling"/>
+      <subtoolbox name="LandscapePatchAnalysis"/>
+      <subtoolbox name="WildfireModeling"/>
+      <separator/>
+      <subtoolbox name="ChangeCategoryValuesAndLabels"/>
+      <separator/>
+      <subtoolbox name="GenerateRandomCells"/>
+      <subtoolbox name="GenerateSurfaces"/>
+      <subtoolbox name="InterpolateSurfaces"/>
+      <separator/>
+      <subtoolbox name="ReportAndStatistics"/>
+    </items>
+  </toolbox>
+  <toolbox name="Vector">
+    <label>&amp;Vector</label>
+    <items>
+      <subtoolbox name="DevelopVectorMap"/>
+      <subtoolbox name="TopologyMaintenance"/>
+      <subtoolbox name="ManageColors"/>
+      <subtoolbox name="QueryVectorMap"/>
+      <subtoolbox name="FeatureSelection"/>
+      <subtoolbox name="MapTypeConversions"/>
+      <separator/>
+      <module-item name="v.buffer">
+        <label>Buffer vectors</label>
+      </module-item>
+      <subtoolbox name="LidarAnalysis"/>
+      <subtoolbox name="LinearReferencing"/>
+      <module-item name="v.distance">
+        <label>Nearest features</label>
+      </module-item>
+      <subtoolbox name="NetworkAnalysis"/>
+      <subtoolbox name="OverlayVectorMaps"/>
+      <separator/>
+      <subtoolbox name="ManageCategories"/>
+      <subtoolbox name="UpdateAttributes"/>
+      <separator/>
+      <module-item name="v.in.region">
+        <label>Generate area for current region</label>
+      </module-item>
+      <subtoolbox name="GenerateAreasFromPoints"/>
+      <module-item name="v.mkgrid">
+        <label>Generate grid</label>
+      </module-item>
+      <subtoolbox name="GeneratePoints"/>
+      <separator/>
+      <subtoolbox name="ReportsAndStatistics"/>
+    </items>
+  </toolbox>
+  <toolbox name="Imagery">
+    <label>&amp;Imagery</label>
+    <items>
+      <subtoolbox name="DevelopImagesAndGroups"/>
+      <subtoolbox name="ManageImageColors"/>
+      <separator/>
+      <module-item name="i.rectify">
+        <label>Rectify image or raster</label>
+      </module-item>
+      <wxgui-item name="Histogram"/>
+      <module-item name="i.spectral">
+        <label>Spectral response</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.pansharpen">
+        <label>Pan sharpening</label>
+      </module-item>
+      <subtoolbox name="ClassifyImage"/>
+      <subtoolbox name="FilterImage"/>
+      <subtoolbox name="TransformImage"/>
+      <separator/>
+      <subtoolbox name="SatelliteImagesTools"/>
+      <subtoolbox name="SatelliteImagesProducts"/>
+      <subtoolbox name="EvapotranspirationCalculation"/>
+      <separator/>
+      <subtoolbox name="ReportAndStatistics"/>
+    </items>
+  </toolbox>
+  <toolbox name="Volumes">
+    <label>V&amp;olumes</label>
+    <items>
+      <subtoolbox name="DevelopVolumes"/>
+      <subtoolbox name="MapTypeConversions"/>
+      <separator/>
+      <module-item name="r3.colors">
+        <label>3D color tables</label>
+      </module-item>
+      <module-item name="r3.colors.out">
+        <label>Export 3D color table</label>
+      </module-item>
+      <separator/>
+      <module-item name="r3.mask">
+        <label>3D Mask</label>
+      </module-item>
+      <wxgui-item name="VolumeCalculator"/>
+      <module-item name="r3.cross.rast">
+        <label>Cross section</label>
+      </module-item>
+      <module-item name="r3.gwflow">
+        <label>Groundwater modeling</label>
+      </module-item>
+      <module-item name="v.vol.rst">
+        <label>Interpolate volume from points</label>
+      </module-item>
+      <separator/>
+      <subtoolbox name="ReportAndStatistics"/>
+    </items>
+  </toolbox>
+  <toolbox name="Database">
+    <label>&amp;Database</label>
+    <items>
+      <subtoolbox name="DatabaseInformation"/>
+      <separator/>
+      <subtoolbox name="ManageDatabases"/>
+      <subtoolbox name="Query"/>
+      <separator/>
+      <subtoolbox name="VectorDatabaseConnections"/>
+    </items>
+  </toolbox>
+  <toolbox name="Help">
+    <label>&amp;Help</label>
+    <items>
+      <wxgui-item name="GRASSHelp"/>
+      <wxgui-item name="GUIHelp"/>
+      <separator/>
+      <wxgui-item name="AboutSystem"/>
+      <wxgui-item name="AboutGRASSGIS"/>
+    </items>
+  </toolbox>
+  <toolbox name="Workspace">
+    <label>Workspace</label>
+    <items>
+      <wxgui-item name="New"/>
+      <wxgui-item name="Open"/>
+      <wxgui-item name="Save"/>
+      <wxgui-item name="SaveAs"/>
+      <wxgui-item name="Close"/>
+      <separator/>
+      <wxgui-item name="LoadGRCFileTclTkGUI"/>
+    </items>
+  </toolbox>
+  <toolbox name="MapDisplay">
+    <label>Map display</label>
+    <items>
+      <wxgui-item name="AddRaster"/>
+      <wxgui-item name="AddVector"/>
+      <wxgui-item name="AddMultipleRastersOrVectors"/>
+      <separator/>
+      <wxgui-item name="NewMapDisplayWindow"/>
+      <wxgui-item name="CloseCurrentMapDisplayWindow"/>
+      <wxgui-item name="CloseAllOpenMapDisplayWindows"/>
+    </items>
+  </toolbox>
+  <toolbox name="ImportRasterData">
+    <label>Import raster data</label>
+    <items>
+      <wxgui-item name="CommonFormatsImport"/>
+      <separator/>
+      <module-item name="r.in.xyz">
+        <label>ASCII x,y,z point import and gridding</label>
+      </module-item>
+      <module-item name="r.in.ascii">
+        <label>ASCII grid import</label>
+      </module-item>
+      <module-item name="r.in.poly">
+        <label>ASCII polygons, lines, and point import</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.in.bin">
+        <label>Raw binary array import</label>
+      </module-item>
+      <module-item name="r.in.arc">
+        <label>ESRI ASCII grid import</label>
+      </module-item>
+      <module-item name="r.in.gridatb">
+        <label>GRIDATB.FOR import</label>
+      </module-item>
+      <module-item name="r.in.mat">
+        <label>Matlab 2D array import</label>
+      </module-item>
+      <module-item name="r.in.png">
+        <label>PNG import</label>
+      </module-item>
+      <module-item name="i.in.spotvgt">
+        <label>SPOT NDVI import</label>
+      </module-item>
+      <module-item name="r.in.srtm">
+        <label>SRTM HGT import</label>
+      </module-item>
+      <module-item name="r.in.aster">
+        <label>Terra ASTER HDF import</label>
+      </module-item>
+      <module-item name="r.in.lidar">
+        <label>LAS LiDAR points import</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.unpack">
+        <label>Unpack raster map</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ImportVectorData">
+    <label>Import vector data</label>
+    <items>
+      <wxgui-item name="CommonImportFormats"/>
+      <separator/>
+      <module-item name="v.in.ascii">
+        <label>ASCII points or GRASS ASCII format</label>
+      </module-item>
+      <module-item name="v.in.lines">
+        <label>ASCII points as a vector lines</label>
+      </module-item>
+      <module-item name="v.convert">
+        <label>Historical GRASS vector import</label>
+      </module-item>
+      <module-item name="v.convert.all">
+        <label>Historical GRASS vector import (all maps)</label>
+      </module-item>
+      <separator/>
+      <wxgui-item name="DXFImport"/>
+      <separator/>
+      <module-item name="v.in.wfs">
+        <label>WFS</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.in.e00">
+        <label>ESRI e00 import</label>
+      </module-item>
+      <module-item name="v.in.gps">
+        <label>GPS data import</label>
+      </module-item>
+      <module-item name="v.in.geonames">
+        <label>Geonames import</label>
+      </module-item>
+      <module-item name="v.in.gns">
+        <label>GEOnet import</label>
+      </module-item>
+      <module-item name="v.in.mapgen">
+        <label>Matlab array or Mapgen format import</label>
+      </module-item>
+      <module-item name="v.in.lidar">
+        <label>LAS LiDAR points import</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="Import3DRasterData">
+    <label>Import 3D raster data</label>
+    <items>
+      <module-item name="r3.in.ascii">
+        <label>ASCII 3D import</label>
+      </module-item>
+      <module-item name="r3.in.bin">
+        <label>Raw binary array 3D import</label>
+      </module-item>
+      <module-item name="r3.in.v5d">
+        <label>Vis5D import</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ImportDatabaseTable">
+    <label>Import database table</label>
+    <items>
+      <module-item name="db.in.ogr">
+        <label>Multiple import formats using OGR</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ExportRasterMap">
+    <label>Export raster map</label>
+    <items>
+      <module-item name="r.out.gdal">
+        <label>Common export formats</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.out.ascii">
+        <label>ASCII grid export</label>
+      </module-item>
+      <module-item name="r.out.xyz">
+        <label>ASCII x,y,z points export</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.out.arc">
+        <label>ESRI ASCII grid export</label>
+      </module-item>
+      <module-item name="r.out.gridatb">
+        <label>GRIDATB.FOR export</label>
+      </module-item>
+      <module-item name="r.out.mat">
+        <label>Matlab 2D array export</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.out.bin">
+        <label>Raw binary array export</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.out.mpeg">
+        <label>MPEG-1 export</label>
+      </module-item>
+      <module-item name="r.out.png">
+        <label>PNG export</label>
+      </module-item>
+      <module-item name="r.out.ppm">
+        <label>PPM export</label>
+      </module-item>
+      <module-item name="r.out.ppm3">
+        <label>PPM from RGB export</label>
+      </module-item>
+      <module-item name="r.out.pov">
+        <label>POV-Ray export</label>
+      </module-item>
+      <module-item name="r.out.tiff">
+        <label>TIFF export</label>
+      </module-item>
+      <module-item name="r.out.vrml">
+        <label>VRML export</label>
+      </module-item>
+      <module-item name="r.out.vtk">
+        <label>VTK export</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.pack">
+        <label>Pack raster map</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ExportVectorMap">
+    <label>Export vector map</label>
+    <items>
+      <module-item name="v.out.ogr">
+        <label>Common export formats</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.out.ascii">
+        <label>ASCII points or GRASS ASCII vector export</label>
+      </module-item>
+      <module-item name="v.out.dxf">
+        <label>DXF export</label>
+      </module-item>
+      <module-item name="v.out.gps">
+        <label>Multiple GPS export formats using GPSBabel</label>
+      </module-item>
+      <module-item name="v.out.postgis">
+        <label>PostGIS export</label>
+      </module-item>
+      <module-item name="v.out.pov">
+        <label>POV-Ray export</label>
+      </module-item>
+      <module-item name="v.out.svg">
+        <label>SVG export</label>
+      </module-item>
+      <module-item name="v.out.vtk">
+        <label>VTK export</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="Export3DRasterMaps">
+    <label>Export 3D raster maps</label>
+    <items>
+      <module-item name="r3.out.ascii">
+        <label>ASCII 3D export</label>
+      </module-item>
+      <module-item name="r3.out.bin">
+        <label>Raw binary array 3D export</label>
+      </module-item>
+      <module-item name="r3.out.v5d">
+        <label>Vis5D export</label>
+      </module-item>
+      <module-item name="r3.out.vtk">
+        <label>VTK export</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ExportDatabaseTable">
+    <label>Export database table</label>
+    <items>
+      <module-item name="db.out.ogr">
+        <label>Common export formats using OGR</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="LinkExternalFormats">
+    <label>Link external formats</label>
+    <items>
+      <wxgui-item name="LinkExternalRasterData"/>
+      <wxgui-item name="LinkExternalVectorData"/>
+      <separator/>
+      <module-item name="r.external.out">
+        <label>Output format for raster data</label>
+      </module-item>
+      <wxgui-item name="OutputFormatForVectorData"/>
+    </items>
+  </toolbox>
+  <toolbox name="ManageMapsAndVolumes">
+    <label>Manage maps and volumes</label>
+    <items>
+      <module-item name="g.copy">
+        <label>Copy</label>
+      </module-item>
+      <separator/>
+      <module-item name="g.list">
+        <label>List</label>
+      </module-item>
+      <module-item name="g.mlist">
+        <label>List filtered</label>
+      </module-item>
+      <separator/>
+      <module-item name="g.rename">
+        <label>Rename</label>
+      </module-item>
+      <separator/>
+      <module-item name="g.remove">
+        <label>Delete</label>
+      </module-item>
+      <module-item name="g.mremove">
+        <label>Delete filtered</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="MapTypeConversions">
+    <label>Map type conversions</label>
+    <items>
+      <module-item name="r.to.vect">
+        <label>Raster to vector</label>
+      </module-item>
+      <module-item name="r.to.rast3">
+        <label>Raster series to volume</label>
+      </module-item>
+      <module-item name="r.to.rast3elev">
+        <label>Raster 2.5D to volume</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.to.rast">
+        <label>Vector to raster</label>
+      </module-item>
+      <module-item name="v.to.rast3">
+        <label>Vector to volume</label>
+      </module-item>
+      <module-item name="v.to.3d">
+        <label>2D vector to 3D vector</label>
+      </module-item>
+      <module-item name="v.in.sites">
+        <label>Sites to vector</label>
+      </module-item>
+      <separator/>
+      <module-item name="r3.to.rast">
+        <label>Volume to raster series</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="Region">
+    <label>Region</label>
+    <items>
+      <wxgui-item name="DisplayRegion"/>
+      <module-item name="g.region">
+        <label>Set region</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="GRASSWorkingEnvironment">
+    <label>GRASS working environment</label>
+    <items>
+      <wxgui-item name="MapsetAccess"/>
+      <module-item name="g.access">
+        <label>User access</label>
+      </module-item>
+      <separator/>
+      <module-item name="g.mapset">
+        <label>Change working environment</label>
+      </module-item>
+      <wxgui-item name="ChangeLocationAndMapset"/>
+      <wxgui-item name="ChangeMapset"/>
+      <wxgui-item name="ChangeWorkingDirectory"/>
+      <separator/>
+      <wxgui-item name="ShowSettings"/>
+      <module-item name="g.gisenv">
+        <label>Change settings</label>
+      </module-item>
+      <separator/>
+      <wxgui-item name="CreateNewLocation"/>
+      <wxgui-item name="CreateNewMapset"/>
+      <separator/>
+      <wxgui-item name="VersionAndCopyright"/>
+    </items>
+  </toolbox>
+  <toolbox name="MapProjections">
+    <label>Map projections</label>
+    <items>
+      <wxgui-item name="DisplayMapProjection"/>
+      <module-item name="g.proj">
+        <label>Manage projections</label>
+      </module-item>
+      <separator/>
+      <module-item name="m.proj">
+        <label>Convert coordinates</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="AddonsExtensions">
+    <label>Addons extensions</label>
+    <items>
+      <wxgui-item name="InstallExtensionFromAddons"/>
+      <module-item name="g.extension.rebuild.all">
+        <label>Update installed extensions</label>
+      </module-item>
+      <wxgui-item name="UninstallExtension"/>
+    </items>
+  </toolbox>
+  <toolbox name="DevelopRasterMap">
+    <label>Develop raster map</label>
+    <items>
+      <module-item name="r.compress">
+        <label>Compress/decompress</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.region">
+        <label>Region boundaries</label>
+      </module-item>
+      <module-item name="r.null">
+        <label>Manage NULL values</label>
+      </module-item>
+      <module-item name="r.quant">
+        <label>Quantization</label>
+      </module-item>
+      <module-item name="r.timestamp">
+        <label>Timestamp</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.resamp.stats">
+        <label>Resample using aggregate statistics</label>
+      </module-item>
+      <module-item name="r.resamp.interp">
+        <label>Resample using multiple methods</label>
+      </module-item>
+      <module-item name="r.resample">
+        <label>Resample using nearest neighbor</label>
+      </module-item>
+      <module-item name="r.resamp.rst">
+        <label>Resample using spline tension</label>
+      </module-item>
+      <module-item name="r.resamp.bspline">
+        <label>Resample using bspline</label>
+      </module-item>
+      <module-item name="r.resamp.filter">
+        <label>Resample using analytic kernel</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.support">
+        <label>Support file maintenance</label>
+      </module-item>
+      <module-item name="r.support.stats">
+        <label>Update map statistics</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.proj">
+        <label>Reproject raster map</label>
+      </module-item>
+      <module-item name="r.tileset">
+        <label>Tiling</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ManageColors">
+    <label>Manage colors</label>
+    <items>
+      <module-item name="r.colors">
+        <label>Color tables</label>
+      </module-item>
+      <module-item name="r.colors.stddev">
+        <label>Color tables (stddev)</label>
+      </module-item>
+      <wxgui-item name="ManageColorRulesInteractively"/>
+      <module-item name="r.colors.out">
+        <label>Export color table</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.blend">
+        <label>Blend 2 color rasters</label>
+      </module-item>
+      <module-item name="r.composite">
+        <label>Create RGB</label>
+      </module-item>
+      <module-item name="r.his">
+        <label>RGB to HIS</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="QueryRasterMaps">
+    <label>Query raster maps</label>
+    <items>
+      <module-item name="r.what">
+        <label>Query values by coordinates</label>
+      </module-item>
+      <module-item name="r.what.color">
+        <label>Query colors by value</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="MapTypeConversions">
+    <label>Map type conversions</label>
+    <items>
+      <module-item name="r.to.vect">
+        <label>Raster to vector</label>
+      </module-item>
+      <module-item name="r.to.rast3">
+        <label>Raster series to volume</label>
+      </module-item>
+      <module-item name="r.to.rast3elev">
+        <label>Raster 2.5D to volume</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="NeighborhoodAnalysis">
+    <label>Neighborhood analysis</label>
+    <items>
+      <module-item name="r.neighbors">
+        <label>Moving window</label>
+      </module-item>
+      <module-item name="v.neighbors">
+        <label>Neighborhood points</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="OverlayRasters">
+    <label>Overlay rasters</label>
+    <items>
+      <module-item name="r.cross">
+        <label>Cross product</label>
+      </module-item>
+      <module-item name="r.series">
+        <label>Raster series</label>
+      </module-item>
+      <module-item name="r.patch">
+        <label>Patch raster maps</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.statistics2">
+        <label>Statistical overlay</label>
+      </module-item>
+      <module-item name="r.statistics3">
+        <label>Quantiles overlay</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="SolarRadianceAndShadows">
+    <label>Solar radiance and shadows</label>
+    <items>
+      <module-item name="r.sun">
+        <label>Solar irradiance and irradiation</label>
+      </module-item>
+      <module-item name="r.sunmask">
+        <label>Shadows map</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TerrainAnalysis">
+    <label>Terrain analysis</label>
+    <items>
+      <module-item name="r.contour">
+        <label>Generate contour lines</label>
+      </module-item>
+      <module-item name="r.cost">
+        <label>Cost surface</label>
+      </module-item>
+      <module-item name="r.walk">
+        <label>Cumulative movement costs</label>
+      </module-item>
+      <module-item name="r.drain">
+        <label>Least cost route or flow</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.shaded.relief2">
+        <label>Shaded relief</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.slope.aspect">
+        <label>Slope and aspect</label>
+      </module-item>
+      <module-item name="r.param.scale">
+        <label>Terrain parameters</label>
+      </module-item>
+      <module-item name="r.texture">
+        <label>Textural features</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.viewshed">
+        <label>Visibility</label>
+      </module-item>
+      <module-item name="r.los">
+        <label>Visibility [DEPRECATED]</label>
+      </module-item>
+      <module-item name="r.grow.distance">
+        <label>Distance to features</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.horizon">
+        <label>Horizon angle</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TransformFeatures">
+    <label>Transform features</label>
+    <items>
+      <module-item name="r.clump">
+        <label>Clump</label>
+      </module-item>
+      <module-item name="r.grow">
+        <label>Grow</label>
+      </module-item>
+      <module-item name="r.thin">
+        <label>Thin</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="HydrologicModeling">
+    <label>Hydrologic modeling</label>
+    <items>
+      <module-item name="r.carve">
+        <label>Carve stream channels</label>
+      </module-item>
+      <module-item name="r.lake">
+        <label>Fill lake</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.fill.dir">
+        <label>Depressionless map and flowlines</label>
+      </module-item>
+      <module-item name="r.terraflow">
+        <label>Flow accumulation</label>
+      </module-item>
+      <module-item name="r.flow">
+        <label>Flow lines</label>
+      </module-item>
+      <module-item name="r.watershed">
+        <label>Watershed analysis</label>
+      </module-item>
+      <module-item name="r.basins.fill">
+        <label>Watershed subbasins</label>
+      </module-item>
+      <module-item name="r.water.outlet">
+        <label>Watershed basin creation</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.sim.water">
+        <label>SIMWE Overland flow modeling</label>
+      </module-item>
+      <module-item name="r.sim.sediment">
+        <label>SIMWE Sediment flux modeling</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.topidx">
+        <label>Topographic index map</label>
+      </module-item>
+      <module-item name="r.topmodel">
+        <label>TOPMODEL simulation</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.uslek">
+        <label>USLE K-factor</label>
+      </module-item>
+      <module-item name="r.usler">
+        <label>USLE R-factor</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="GroundwaterModeling">
+    <label>Groundwater modeling</label>
+    <items>
+      <module-item name="r.gwflow">
+        <label>Groundwater flow</label>
+      </module-item>
+      <module-item name="r.solute.transport">
+        <label>Groundwater solute transport</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="LandscapeStructureModeling">
+    <label>Landscape structure modeling</label>
+    <items>
+      <module-item name="r.le.pixel">
+        <label>Analyze landscape</label>
+      </module-item>
+      <module-item name="r.le.patch">
+        <label>Analyze patches</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="LandscapePatchAnalysis">
+    <label>Landscape patch analysis</label>
+    <items>
+      <wxgui-item name="SetUpSamplingAndAnalysisFramework"/>
+      <separator/>
+      <module-item name="r.li.edgedensity">
+        <label>Edge density</label>
+      </module-item>
+      <module-item name="r.li.cwed">
+        <label>Contrast weighted edge density</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.li.mps">
+        <label>Patch area mean</label>
+      </module-item>
+      <module-item name="r.li.padrange">
+        <label>Patch area range</label>
+      </module-item>
+      <module-item name="r.li.padsd">
+        <label>Patch area Std Dev</label>
+      </module-item>
+      <module-item name="r.li.padcv">
+        <label>Patch area Coeff Var</label>
+      </module-item>
+      <module-item name="r.li.patchdensity">
+        <label>Patch density</label>
+      </module-item>
+      <module-item name="r.li.patchnum">
+        <label>Patch number</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.li.dominance">
+        <label>Dominance's diversity</label>
+      </module-item>
+      <module-item name="r.li.shannon">
+        <label>Shannon's diversity</label>
+      </module-item>
+      <module-item name="r.li.simpson">
+        <label>Simpson's diversity</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.li.richness">
+        <label>Richness</label>
+      </module-item>
+      <module-item name="r.li.shape">
+        <label>Shape index</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="WildfireModeling">
+    <label>Wildfire modeling</label>
+    <items>
+      <module-item name="r.ros">
+        <label>Rate of spread</label>
+      </module-item>
+      <module-item name="r.spreadpath">
+        <label>Least-cost spread paths</label>
+      </module-item>
+      <module-item name="r.spread">
+        <label>Anisotropic spread simulation</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ChangeCategoryValuesAndLabels">
+    <label>Change category values and labels</label>
+    <items>
+      <module-item name="d.rast.edit">
+        <label>Interactively edit category values</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.reclass.area">
+        <label>Reclassify by size</label>
+      </module-item>
+      <module-item name="r.reclass">
+        <label>Reclassify</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.recode">
+        <label>Recode</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.rescale">
+        <label>Rescale</label>
+      </module-item>
+      <module-item name="r.rescale.eq">
+        <label>Rescale with histogram</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="GenerateRandomCells">
+    <label>Generate random cells</label>
+    <items>
+      <module-item name="r.random.cells">
+        <label>Random cells</label>
+      </module-item>
+      <module-item name="r.random">
+        <label>Random cells and vector points</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="GenerateSurfaces">
+    <label>Generate surfaces</label>
+    <items>
+      <module-item name="r.surf.fractal">
+        <label>Fractal surface</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.kernel">
+        <label>Gaussian kernel density surface</label>
+      </module-item>
+      <module-item name="r.surf.gauss">
+        <label>Gaussian deviates surface</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.plane">
+        <label>Plane</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.surf.random">
+        <label>Random deviates surface</label>
+      </module-item>
+      <module-item name="r.random.surface">
+        <label>Random surface with spatial dependence</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="InterpolateSurfaces">
+    <label>Interpolate surfaces</label>
+    <items>
+      <module-item name="v.surf.bspline">
+        <label>Bilinear and bicubic from vector points</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.surf.idw">
+        <label>IDW from raster points</label>
+      </module-item>
+      <module-item name="r.surf.idw2">
+        <label>IDW from raster points (alternate method for sparse points)</label>
+      </module-item>
+      <module-item name="v.surf.idw">
+        <label>IDW from vector points</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.surf.contour">
+        <label>Raster contours</label>
+      </module-item>
+      <module-item name="v.surf.rst">
+        <label>Regularized spline tension</label>
+      </module-item>
+      <separator/>
+      <wxgui-item name="OrdinaryOrBlockKriging"/>
+      <separator/>
+      <module-item name="r.fillnulls">
+        <label>Fill NULL cells</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ReportAndStatistics">
+    <label>Report and statistics</label>
+    <items>
+      <module-item name="r.info">
+        <label>Basic raster metadata</label>
+      </module-item>
+      <module-item name="r.category">
+        <label>Manage category information</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.stats">
+        <label>General statistics</label>
+      </module-item>
+      <module-item name="r.quantile">
+        <label>Quantiles for large data sets</label>
+      </module-item>
+      <module-item name="r.describe">
+        <label>Range of category values</label>
+      </module-item>
+      <module-item name="r.report">
+        <label>Sum area by raster map and category</label>
+      </module-item>
+      <module-item name="r.volume">
+        <label>Statistics for clumped cells</label>
+      </module-item>
+      <module-item name="r.surf.area">
+        <label>Total corrected area</label>
+      </module-item>
+      <module-item name="r.univar">
+        <label>Univariate raster statistics</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.profile">
+        <label>Sample transects</label>
+      </module-item>
+      <module-item name="r.transect">
+        <label>Sample transects (bearing/distance)</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.covar">
+        <label>Covariance/correlation</label>
+      </module-item>
+      <module-item name="r.regression.line">
+        <label>Linear regression</label>
+      </module-item>
+      <module-item name="r.coin">
+        <label>Mutual category occurrences</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="DevelopVectorMap">
+    <label>Develop vector map</label>
+    <items>
+      <wxgui-item name="CreateNewVectorMap"/>
+      <module-item name="v.edit">
+        <label>Edit vector map (non-interactively)</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.type">
+        <label>Convert object types</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.parallel">
+        <label>Parallel lines</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.dissolve">
+        <label>Dissolve boundaries</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.drape">
+        <label>Create 3D vector over raster</label>
+      </module-item>
+      <module-item name="v.extrude">
+        <label>Extrude 3D vector map</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.label">
+        <label>Create labels</label>
+      </module-item>
+      <module-item name="v.label.sa">
+        <label>Create optimally placed labels</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.transform">
+        <label>Reposition vector map</label>
+      </module-item>
+      <module-item name="v.rectify">
+        <label>Rectify vector map</label>
+      </module-item>
+      <module-item name="v.proj">
+        <label>Reproject vector map</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.support">
+        <label>Support file maintenance</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TopologyMaintenance">
+    <label>Topology maintenance</label>
+    <items>
+      <module-item name="v.build">
+        <label>Create or rebuild topology</label>
+      </module-item>
+      <module-item name="v.build.all">
+        <label>Rebuild topology on all vector maps</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.build.polylines">
+        <label>Build polylines</label>
+      </module-item>
+      <module-item name="v.split">
+        <label>Split lines</label>
+      </module-item>
+      <module-item name="v.segment">
+        <label>Split polylines</label>
+      </module-item>
+      <separator/>
+      <wxgui-item name="CleanVectorMap"/>
+      <module-item name="v.generalize">
+        <label>Smooth or simplify</label>
+      </module-item>
+      <module-item name="v.centroids">
+        <label>Add centroids</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ManageColors">
+    <label>Manage colors</label>
+    <items>
+      <module-item name="v.colors">
+        <label>Color tables</label>
+      </module-item>
+      <wxgui-item name="ManageColorRulesInteractively"/>
+      <module-item name="v.colors.out">
+        <label>Export color table</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="QueryVectorMap">
+    <label>Query vector map</label>
+    <items>
+      <module-item name="v.what">
+        <label>Query with coordinate(s)</label>
+      </module-item>
+      <module-item name="v.db.select">
+        <label>Query vector attribute data</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="FeatureSelection">
+    <label>Feature selection</label>
+    <items>
+      <module-item name="v.extract">
+        <label>Select by attributes</label>
+      </module-item>
+      <module-item name="v.select">
+        <label>Select by another map</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="MapTypeConversions">
+    <label>Map type conversions</label>
+    <items>
+      <module-item name="v.to.rast">
+        <label>Vector to raster</label>
+      </module-item>
+      <module-item name="v.to.rast3">
+        <label>Vector to volume</label>
+      </module-item>
+      <module-item name="v.to.3d">
+        <label>2D vector to 3D vector</label>
+      </module-item>
+      <module-item name="v.in.sites">
+        <label>Sites to vector</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="LidarAnalysis">
+    <label>Lidar analysis</label>
+    <items>
+      <module-item name="v.outlier">
+        <label>Identify and remove outliers</label>
+      </module-item>
+      <module-item name="v.lidar.edgedetection">
+        <label>Detect edges</label>
+      </module-item>
+      <module-item name="v.lidar.growing">
+        <label>Detect interiors</label>
+      </module-item>
+      <module-item name="v.lidar.correction">
+        <label>Correct and reclassify objects</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="LinearReferencing">
+    <label>Linear referencing</label>
+    <items>
+      <module-item name="v.lrs.create">
+        <label>Create LRS</label>
+      </module-item>
+      <module-item name="v.lrs.label">
+        <label>Create stationing</label>
+      </module-item>
+      <module-item name="v.lrs.segment">
+        <label>Create points/segments</label>
+      </module-item>
+      <module-item name="v.lrs.where">
+        <label>Find line id and offset</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="NetworkAnalysis">
+    <label>Network analysis</label>
+    <items>
+      <wxgui-item name="VectorNetworkAnalysisTool"/>
+      <separator/>
+      <module-item name="v.net">
+        <label>Network preparation</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.net.alloc">
+        <label>Allocate subnets</label>
+      </module-item>
+      <module-item name="v.net.iso">
+        <label>Split net</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.net.path">
+        <label>Shortest path</label>
+      </module-item>
+      <module-item name="v.net.distance">
+        <label>Shortest path for sets of features</label>
+      </module-item>
+      <module-item name="v.net.timetable">
+        <label>Shortest path using timetables</label>
+      </module-item>
+      <module-item name="v.net.allpairs">
+        <label>Shortest path for all pairs</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.net.visibility">
+        <label>Visibility network</label>
+      </module-item>
+      <module-item name="v.net.bridge">
+        <label>Bridges and articulation points</label>
+      </module-item>
+      <module-item name="v.net.flow">
+        <label>Maximum flow</label>
+      </module-item>
+      <module-item name="v.net.connectivity">
+        <label>Vertex connectivity</label>
+      </module-item>
+      <module-item name="v.net.components">
+        <label>Components</label>
+      </module-item>
+      <module-item name="v.net.centrality">
+        <label>Centrality</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.net.steiner">
+        <label>Steiner tree</label>
+      </module-item>
+      <module-item name="v.net.spanningtree">
+        <label>Minimum spanning tree</label>
+      </module-item>
+      <module-item name="v.net.salesman">
+        <label>Traveling salesman analysis</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="OverlayVectorMaps">
+    <label>Overlay vector maps</label>
+    <items>
+      <module-item name="v.overlay">
+        <label>Overlay vector maps</label>
+      </module-item>
+      <module-item name="v.patch">
+        <label>Patch vector maps</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ManageCategories">
+    <label>Manage categories</label>
+    <items>
+      <module-item name="v.category">
+        <label>Change or report categories</label>
+      </module-item>
+      <module-item name="v.reclass">
+        <label>Reclassify</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="UpdateAttributes">
+    <label>Update attributes</label>
+    <items>
+      <module-item name="v.rast.stats">
+        <label>Update area attributes from raster</label>
+      </module-item>
+      <module-item name="v.vect.stats">
+        <label>Update area attributes from vector</label>
+      </module-item>
+      <module-item name="v.what.vect">
+        <label>Update point attributes from areas</label>
+      </module-item>
+      <module-item name="v.to.db">
+        <label>Update database values from vector</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.what.rast">
+        <label>Sample raster maps at point locations</label>
+      </module-item>
+      <module-item name="v.sample">
+        <label>Sample raster neighborhood around points</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="GenerateAreasFromPoints">
+    <label>Generate areas from points</label>
+    <items>
+      <module-item name="v.hull">
+        <label>Convex hull</label>
+      </module-item>
+      <module-item name="v.delaunay">
+        <label>Delaunay triangles</label>
+      </module-item>
+      <module-item name="v.voronoi">
+        <label>Voronoi diagram/Thiessen polygons</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="GeneratePoints">
+    <label>Generate points</label>
+    <items>
+      <module-item name="v.in.db">
+        <label>Generate from database</label>
+      </module-item>
+      <module-item name="v.to.points">
+        <label>Generate points along lines</label>
+      </module-item>
+      <module-item name="v.random">
+        <label>Generate random points</label>
+      </module-item>
+      <module-item name="v.perturb">
+        <label>Perturb points</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.outlier">
+        <label>Remove outliers in point sets</label>
+      </module-item>
+      <module-item name="v.kcv">
+        <label>Test/training point sets</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ReportsAndStatistics">
+    <label>Reports and statistics</label>
+    <items>
+      <module-item name="v.info">
+        <label>Basic vector metadata</label>
+      </module-item>
+      <module-item name="v.class">
+        <label>Classify attribute data</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.report">
+        <label>Report topology by category</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.univar">
+        <label>Univariate attribute statistics for points</label>
+      </module-item>
+      <module-item name="v.db.univar">
+        <label>Univariate statistics for attribute columns</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.qcount">
+        <label>Quadrat indices</label>
+      </module-item>
+      <module-item name="v.normal">
+        <label>Test normality</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="DevelopImagesAndGroups">
+    <label>Develop images and groups</label>
+    <items>
+      <wxgui-item name="CreateOrEditGroup"/>
+      <module-item name="i.target">
+        <label>Target group</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.image.mosaic">
+        <label>Mosaic images</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ManageImageColors">
+    <label>Manage image colors</label>
+    <items>
+      <module-item name="i.landsat.rgb">
+        <label>Color balance for RGB</label>
+      </module-item>
+      <module-item name="i.his.rgb">
+        <label>HIS to RGB</label>
+      </module-item>
+      <module-item name="i.rgb.his">
+        <label>RGB to HIS</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ClassifyImage">
+    <label>Classify image</label>
+    <items>
+      <module-item name="i.cluster">
+        <label>Clustering input for unsupervised classification</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.gensig">
+        <label>Input for supervised MLC</label>
+      </module-item>
+      <module-item name="i.maxlik">
+        <label>Maximum likelihood classification (MLC)</label>
+      </module-item>
+      <separator/>
+      <wxgui-item name="InteractiveInputForSupervisedClassification"/>
+      <separator/>
+      <module-item name="i.gensigset">
+        <label>Input for supervised SMAP</label>
+      </module-item>
+      <module-item name="i.smap">
+        <label>Sequential maximum a posteriori classification (SMAP)</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.segment">
+        <label>Object segmentation</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="FilterImage">
+    <label>Filter image</label>
+    <items>
+      <module-item name="i.zc">
+        <label>Edge detection</label>
+      </module-item>
+      <module-item name="r.mfilter">
+        <label>Matrix/convolving filter</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TransformImage">
+    <label>Transform image</label>
+    <items>
+      <module-item name="i.cca">
+        <label>Canonical correlation</label>
+      </module-item>
+      <module-item name="i.pca">
+        <label>Principal components</label>
+      </module-item>
+      <module-item name="i.fft">
+        <label>Fast Fourier</label>
+      </module-item>
+      <module-item name="i.ifft">
+        <label>Inverse Fast Fourier</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="SatelliteImagesTools">
+    <label>Satellite images tools</label>
+    <items>
+      <module-item name="i.aster.toar">
+        <label>Aster DN to radiance/reflectance</label>
+      </module-item>
+      <module-item name="i.landsat.toar">
+        <label>Landsat DN to radiance/reflectance</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.landsat.acca">
+        <label>Landsat cloud cover assessment</label>
+      </module-item>
+      <module-item name="i.modis.qc">
+        <label>Modis quality control</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.atcorr">
+        <label>Atmospheric correction</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.latlong">
+        <label>LatLong map</label>
+      </module-item>
+      <module-item name="i.sunhours">
+        <label>Sunshine hours</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="SatelliteImagesProducts">
+    <label>Satellite images products</label>
+    <items>
+      <module-item name="i.vi">
+        <label>Vegetation indices</label>
+      </module-item>
+      <module-item name="i.tasscap">
+        <label>Tasseled cap vegetation index</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.albedo">
+        <label>Albedo</label>
+      </module-item>
+      <module-item name="i.emissivity">
+        <label>Emissivity</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.biomass">
+        <label>Biomass growth</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="EvapotranspirationCalculation">
+    <label>Evapotranspiration calculation</label>
+    <items>
+      <module-item name="i.eb.netrad">
+        <label>Instantaneaous Net Radiation</label>
+      </module-item>
+      <module-item name="i.eb.soilheatflux">
+        <label>Soil heat flux</label>
+      </module-item>
+      <module-item name="i.eb.h_sebal01">
+        <label>Sensible heat flux</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.eb.evapfr">
+        <label>Evaporative fraction</label>
+      </module-item>
+      <module-item name="i.eb.eta">
+        <label>Actual Evapotranspiration</label>
+      </module-item>
+      <module-item name="i.evapo.time">
+        <label>Temporal integration of ETa</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.evapo.mh">
+        <label>Hargreaves methods Evapotranspiration</label>
+      </module-item>
+      <module-item name="i.evapo.pm">
+        <label>Penman-Monteith Evapotranspiration</label>
+      </module-item>
+      <module-item name="i.evapo.pt">
+        <label>Priestley-Taylor Evapotranspiration</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ReportAndStatistics">
+    <label>Report and statistics</label>
+    <items>
+      <module-item name="r.bitpattern">
+        <label>Bit pattern comparison </label>
+      </module-item>
+      <module-item name="r.kappa">
+        <label>Kappa analysis</label>
+      </module-item>
+      <module-item name="i.oif">
+        <label>OIF for LandSat TM</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="DevelopVolumes">
+    <label>Develop volumes</label>
+    <items>
+      <module-item name="r3.null">
+        <label>Manage 3D NULL values</label>
+      </module-item>
+      <module-item name="r3.timestamp">
+        <label>Manage timestamp</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="MapTypeConversions">
+    <label>Map type conversions</label>
+    <items>
+      <module-item name="r3.to.rast">
+        <label>Volume to raster series</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ReportAndStatistics">
+    <label>Report and Statistics</label>
+    <items>
+      <module-item name="r3.info">
+        <label>Basic volume metadata</label>
+      </module-item>
+      <module-item name="r3.stats">
+        <label>Voxel statistics</label>
+      </module-item>
+      <module-item name="r3.univar">
+        <label>Univariate statistics for volumes</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="DatabaseInformation">
+    <label>Database information</label>
+    <items>
+      <module-item name="db.databases">
+        <label>List databases</label>
+      </module-item>
+      <module-item name="db.drivers">
+        <label>List drivers</label>
+      </module-item>
+      <module-item name="db.tables">
+        <label>List tables</label>
+      </module-item>
+      <module-item name="db.describe">
+        <label>Describe table</label>
+      </module-item>
+      <module-item name="db.columns">
+        <label>List columns</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="ManageDatabases">
+    <label>Manage databases</label>
+    <items>
+      <module-item name="db.connect">
+        <label>Connect</label>
+      </module-item>
+      <module-item name="db.login">
+        <label>Login</label>
+      </module-item>
+      <separator/>
+      <module-item name="db.createdb">
+        <label>Create database</label>
+      </module-item>
+      <module-item name="db.dropdb">
+        <label>Drop database</label>
+      </module-item>
+      <separator/>
+      <module-item name="db.droptable">
+        <label>Drop table</label>
+      </module-item>
+      <module-item name="db.copy">
+        <label>Copy table</label>
+      </module-item>
+      <separator/>
+      <module-item name="db.dropcolumn">
+        <label>Drop column</label>
+      </module-item>
+      <separator/>
+      <module-item name="db.test">
+        <label>Test</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="Query">
+    <label>Query</label>
+    <items>
+      <module-item name="db.select">
+        <label>Query any table</label>
+      </module-item>
+      <module-item name="v.db.select">
+        <label>Query vector attribute data</label>
+      </module-item>
+      <module-item name="db.execute">
+        <label>SQL statement</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="VectorDatabaseConnections">
+    <label>Vector database connections</label>
+    <items>
+      <module-item name="v.db.addtable">
+        <label>New table</label>
+      </module-item>
+      <module-item name="v.db.droptable">
+        <label>Remove table</label>
+      </module-item>
+      <module-item name="v.db.join">
+        <label>Join table</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.db.addcolumn">
+        <label>Add columns</label>
+      </module-item>
+      <module-item name="v.db.dropcolumn">
+        <label>Drop column</label>
+      </module-item>
+      <module-item name="v.db.renamecolumn">
+        <label>Rename column</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.db.update">
+        <label>Change values</label>
+      </module-item>
+      <module-item name="v.db.droprow">
+        <label>Drop row</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.db.reconnect.all">
+        <label>Reconnect vectors to database</label>
+      </module-item>
+      <module-item name="v.db.connect">
+        <label>Set vector map - database connection</label>
+      </module-item>
+    </items>
+  </toolbox>
+</toolboxes>
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbox SYSTEM "main_menu.dtd">
+<toolbox name="DefaultMainMenu">
+  <label>Default GRASS GIS main menu bar</label>
+  <items>
+    <subtoolbox name="File"/>
+    <subtoolbox name="Settings"/>
+    <subtoolbox name="Raster"/>
+    <subtoolbox name="Vector"/>
+    <subtoolbox name="Imagery"/>
+    <subtoolbox name="Volumes"/>
+    <subtoolbox name="Database"/>
+    <user-toolboxes-list />
+    <subtoolbox name="Help"/>
+  </items>
+</toolbox>
+

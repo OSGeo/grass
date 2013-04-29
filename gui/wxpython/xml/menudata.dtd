@@ -2,7 +2,8 @@
 <!ELEMENT menubar (menu*)>
 <!ELEMENT menu (label, items)>
 <!ELEMENT items ((separator | menuitem | menu)*)>
-<!ELEMENT menuitem (label, help, keywords?, handler, command?, shortcut?, id?)>
+<!ELEMENT menuitem (label, ((help, keywords?, handler, command?, shortcut?, id?) | (command, help, keywords, id?, handler) |
+                            (handler, help, shortcut?, id?)))>
 <!ELEMENT separator EMPTY>
 <!ELEMENT label (#PCDATA)>
 <!ELEMENT help (#PCDATA)>

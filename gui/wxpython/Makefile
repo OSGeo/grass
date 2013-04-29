@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
 SUBDIRS = docs animation mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass
-EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc
+EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
@@ -20,11 +20,17 @@ PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,animation core dbmgr gcp gmodeler gui_core
 DSTDIRS := $(patsubst %,$(ETCDIR)/%,icons scripts xml)
 
 default: $(DSTFILES)
+	-$(MAKE) $(ETCDIR)/xml/module_items.xml
+	-$(MAKE) xml/menudata.xml
 	-$(MAKE) menustrings.py
 	$(MAKE) parsubdirs
 
+
 $(ETCDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
+
+xml/menudata.xml: core/toolboxes.py
+	$(call run_grass,$(PYTHON) $< > $@)
 
 menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml $(ETCDIR)/xml/menudata_psmap.xml
 	@echo "# This is a generated file.\n" > $@
@@ -32,6 +38,10 @@ menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menuda
 	$(call run_grass,$(PYTHON) $< "modeler" >> $@)
 	$(call run_grass,$(PYTHON) $< "psmap" >> $@)
 
+$(ETCDIR)/xml/module_items.xml: tools/build_modules_xml.py
+	@echo "Generating interface description for all modules..."
+	$(call run_grass,$(PYTHON) $< > $@)
+	
 $(PYDSTDIRS): %: | $(ETCDIR)
 	$(MKDIR) $@
 
