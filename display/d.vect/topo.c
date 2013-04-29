@@ -5,9 +5,10 @@
 #include "local_proto.h"
 #include "plot.h"
 
-int display_topo(struct Map_info *Map, int type, LATTR *lattr)
+int display_topo(struct Map_info *Map, int type, LATTR *lattr, double dsize)
 {
     int ltype, num, el;
+    double msize;
     struct line_pnts *Points;
     struct line_cats *Cats;
     char text[50];
@@ -19,6 +20,8 @@ int display_topo(struct Map_info *Map, int type, LATTR *lattr)
 		    "v.build or v.build.all."));
 	return 1;
     }
+    
+    msize = dsize * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0));	/* do it better */
     
     lattr2.xref = lattr->xref == LRIGHT ? LLEFT : LRIGHT;
 
@@ -72,7 +75,7 @@ int display_topo(struct Map_info *Map, int type, LATTR *lattr)
 
 	show_label(&X, &Y, &lattr2, text);
 
-	D_plot_icon(X, Y, G_ICON_BOX, 0, 10);
+	D_plot_icon(X, Y, G_ICON_BOX, 0, msize);
     }
 
     Vect_destroy_line_struct(Points);

@@ -32,7 +32,10 @@ int display_dir(struct Map_info *Map, int type, struct cat_list *Clist,
 	    return 0;
 	}
 
-	if (!(type & ltype & GV_LINES))
+        if (!(ltype & type))
+          continue;
+
+	if (!(ltype & (GV_LINES | GV_FACE)))
 	    continue;
 
 	if (chcat) {

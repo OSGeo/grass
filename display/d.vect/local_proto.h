@@ -57,7 +57,7 @@ int option_to_color(struct color_rgb *, const char *);
 void option_to_where(struct Map_info *, struct cat_list *, const char *);
 
 /* topo.c */
-int display_topo(struct Map_info *, int, LATTR *);
+int display_topo(struct Map_info *, int, LATTR *, double);
 
 /* zcoor.c */
 int display_zcoor(struct Map_info *, int, LATTR *);

@@ -474,7 +474,7 @@ int main(int argc, char **argv)
 	    stat += display_zcoor(&Map, type, &lattr);
 
 	if (display & DISP_TOPO)
-	    stat += display_topo(&Map, type, &lattr);
+            stat += display_topo(&Map, type, &lattr, size);
     }
 
     D_save_command(G_recreate_command());
