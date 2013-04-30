@@ -268,39 +268,35 @@ int main(int argc, char *argv[])
         
 	/* check column numbers */
 	if (xcol >= minncols) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("x column number > minimum last column number\n(incorrect field separator?)"));
+	    G_fatal_error(_("'%s' column number > minimum last column number "
+                            "(incorrect field separator or format?)"), "x");
 	}
 	if (ycol >= minncols) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("y column number > minimum last column number\n(incorrect field separator?)"));
+	    G_fatal_error(_("'%s' column number > minimum last column number "
+                            "(incorrect field separator or format?)"), "y");
+
 	}
 	if (zcol >= minncols) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("z column number > minimum last column number "
-			    "(incorrect field separator?)"));
+	    G_fatal_error(_("'%s' column number > minimum last column number "
+                            "(incorrect field separator or format?)"), "z");
+
 	}
 	if (catcol >= minncols) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("cat column number > minimum last column number "
-			    "(incorrect field separator?)"));
+	    G_fatal_error(_("'%s' column number > minimum last column number "
+                            "(incorrect field separator or format?)"), "cat");
 	}
 
 	if (coltype[xcol] == DB_C_TYPE_STRING) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("x column is not of number type"));
+	    G_fatal_error(_("'%s' column is not of number type"), "x");
 	}
 	if (coltype[ycol] == DB_C_TYPE_STRING) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("y column is not of number type"));
+	    G_fatal_error(_("'%s' column is not of number type"), "y");
 	}
 	if (zcol >= 0 && coltype[zcol] == DB_C_TYPE_STRING) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("z column is not of number type"));
+	    G_fatal_error(_("'%s' column is not of number type"), "z");
 	}
 	if (catcol >= 0 && coltype[catcol] == DB_C_TYPE_STRING) {
-	    Vect_delete(new->answer);
-	    G_fatal_error(_("cat column is not of number type"));
+	    G_fatal_error(_("'%s' column is not of number type"), "cat");
 	}
 
 	/* Create table */
@@ -322,7 +318,6 @@ int main(int argc, char *argv[])
 					      Vect_subst_var(Fi->database,
 							     &Map));
 	    if (driver == NULL) {
-		Vect_delete(new->answer);
 		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      Vect_subst_var(Fi->database, &Map), Fi->driver);
 	    }
@@ -341,7 +336,6 @@ int main(int argc, char *argv[])
 		    db_append_string(&sql, ", ");
 		}
 		if (catcol == i && coltype[i] != DB_C_TYPE_INT) {
-		    Vect_delete(new->answer);
 		    G_fatal_error(_("Category column is not of integer type"));
 		}
 
@@ -391,7 +385,6 @@ int main(int argc, char *argv[])
 	    /* Create table */
 	    G_debug(3, db_get_string(&sql));
 	    if (db_execute_immediate(driver, &sql) != DB_OK) {
-		Vect_delete(new->answer);
 		G_fatal_error(_("Unable to create table: %s"),
 			      db_get_string(&sql));
 	    }
@@ -400,7 +393,6 @@ int main(int argc, char *argv[])
 	    if (db_grant_on_table
 		(driver, Fi->table, DB_PRIV_SELECT,
 		 DB_GROUP | DB_PUBLIC) != DB_OK) {
-		Vect_delete(new->answer);
 		G_fatal_error(_("Unable to grant privileges on table <%s>"),
 			      Fi->table);
 	    }
@@ -413,7 +405,6 @@ int main(int argc, char *argv[])
 
 		db_set_string(&sql, Fi->table);
 		if (db_describe_table(driver, &sql, &table) != DB_OK) {
-		    Vect_delete(new->answer);
 		    G_fatal_error(_("Unable to describe table <%s>"),
 				  Fi->table);
 		}
@@ -422,7 +413,6 @@ int main(int argc, char *argv[])
 
 		if ((catcol >= 0 && nc != ncols) ||
 		    (catcol < 0 && (nc - 1) != ncols)) {
-		    Vect_delete(new->answer);
 		    G_fatal_error(_("Number of columns defined (%d) does not match number "
 				   "of columns (%d) in input"),
 				  catcol < 0 ? nc - 1 : nc, ncols);
@@ -463,7 +453,6 @@ int main(int argc, char *argv[])
 			break;
 		    case DB_C_TYPE_DOUBLE:
 			if (ctype == DB_C_TYPE_INT) {
-			    Vect_delete(new->answer);
 			    G_fatal_error(_("Column number %d <%s> defined as integer "
 					   "has double values"), i + 1,
 					  db_get_column_name(column));
@@ -476,19 +465,16 @@ int main(int argc, char *argv[])
 			break;
 		    case DB_C_TYPE_STRING:
 			if (ctype == DB_C_TYPE_INT) {
-			    Vect_delete(new->answer);
 			    G_fatal_error(_("Column number %d <%s> defined as integer "
 					   "has string values"), i + 1,
 					  db_get_column_name(column));
 			}
 			else if (ctype == DB_C_TYPE_DOUBLE) {
-			    Vect_delete(new->answer);
 			    G_fatal_error(_("Column number %d <%s> defined as double "
 					   "has string values"), i + 1,
 					  db_get_column_name(column));
 			}
 			if (length < collen[i]) {
-			    Vect_delete(new->answer);
 			    G_fatal_error(_("Length of column %d <%s> (%d) is less than "
 					   "maximum value " "length (%d)"),
 					  i + 1, db_get_column_name(column),
