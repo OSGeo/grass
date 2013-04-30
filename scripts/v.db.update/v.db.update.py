@@ -33,12 +33,12 @@
 #%option
 #% key: value
 #% type: string
-#% description: Value to update the column with, can be (combination of) other column(s)
+#% description: Literal value to update the column with
 #% required: no
 #%end
 #%option G_OPT_DB_COLUMN
 #% key: qcolumn
-#% description: Name of attribute column to query
+#% description: Name of other attribute column to query, can be combination of columns (e.g. co1+col2)
 #%end
 #%option G_OPT_DB_WHERE
 #%end
