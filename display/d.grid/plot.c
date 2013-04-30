@@ -270,9 +270,9 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 		start_coord = e1;
 
 		/* font rotates by bottom-left corner, try to keep top-left cnr on screen */
-		if(font_angle - 270 > 0) {
+		if (font_angle - 270 > 0) {
 		    extra_y_off = sin((font_angle - 270) * M_PI/180) * fontsize;
-		    if(D_u_to_a_row(n1) < extra_y_off)
+		    if (D_u_to_d_row(n1) - D_get_d_north() < extra_y_off + grid_off)
 			start_coord = -9999.;  /* wait until the next point south */
 		}
 	    }
