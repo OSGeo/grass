@@ -4880,7 +4880,7 @@ msgstr "Nombre de contours : %d"
 #: ../lib/vector/Vlib/build.c:859
 #, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr "Construction de la topologie pour la crate vectorielle <%s>..."
+msgstr "Construction de la topologie pour la carte vectorielle <%s>..."
 
 #: ../lib/vector/Vlib/build.c:877
 msgid "Topology was built"
