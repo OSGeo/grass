@@ -12,15 +12,14 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2013-02-03 16:42+0100\n"
+"PO-Revision-Date: 2013-04-29 20:11+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: French\n"
-"X-Poedit-Country: FRANCE\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../gui/wxpython/vnet/widgets.py:84 ../gui/wxpython/gcp/manager.py:1926
 #: ../gui/wxpython/gcp/manager.py:1943
@@ -6867,7 +6866,7 @@ msgstr "Gérer les projections"
 
 #: ../gui/wxpython/menustrings.py:249
 msgid "Prints and manipulates GRASS projection information files (in various co-ordinate system descriptions)."
-msgstr ""
+msgstr "Affiche et modifie les fichiers de projection de GRASS (dans divers systèmes de coordonnées)."
 
 #: ../gui/wxpython/menustrings.py:250
 msgid "Convert coordinates"
@@ -9450,7 +9449,7 @@ msgstr "Définir les connexions entre carte vecteur et base de données."
 
 #: ../gui/wxpython/menustrings.py:913
 msgid "Prints/sets DB connection for a vector map to attribute table."
-msgstr "Afficher/définir les connexions base de données pour la table d'attributs de la crate vecteur."
+msgstr "Afficher/définir les connexions base de données pour la table d'attributs de la carte vecteur."
 
 #: ../gui/wxpython/menustrings.py:914 ../gui/wxpython/menustrings.py:966
 msgid "&Help"
@@ -17242,7 +17241,7 @@ msgstr "Remplit le lac depuis un point d'origine jusqu'à un niveau donné."
 #~ msgstr "Calcul numérique des flux d'eaux souterraines transitoire et confinées, en trois dimensions."
 
 #~ msgid "Prints/sets general DB connection for current mapset and exits."
-#~ msgstr "Afficher/définir les connexions base de données pour le jeux de crate actuel puis quitter."
+#~ msgstr "Afficher/définir les connexions base de données pour le jeux de carte actuel puis quitter."
 
 #~ msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Color rules cannot be edited."
 #~ msgstr "La carte sélectionnée <%(map)s> n'est pas dans le jeux de cartes courant <%(mapset)s>. Les règles de couleur ne peuvent pas être modifiées."
@@ -17371,3 +17370,18 @@ msgstr "Remplit le lac depuis un point d'origine jusqu'à un niveau donné."
 
 #~ msgid "Professional (module names only)"
 #~ msgstr "Professionnel (noms de modules seuls)"
+
+#~ msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
+#~ msgstr "le nom <%(name)s> n'ets pas un nom valide pour un secteur ou un jeu de cartes. Merci de n'utiliser que des caractères ASCII sans %(chars)s ni espaces."
+
+#, fuzzy
+#~ msgid "Invalid name"
+#~ msgstr "Entrée non valide"
+
+#, fuzzy
+#~ msgid "Preview not available"
+#~ msgstr "Vue 3D non disponible"
+
+#, fuzzy
+#~ msgid "Invalid location name"
+#~ msgstr "Secteur sélectionné non valide."

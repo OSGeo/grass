@@ -39545,6 +39545,18 @@ msgid "Unknown column type '%s' values lost"
 msgstr "Type de colonne inconnu"
 
 #, fuzzy
+msgid "Name of real-sky beam radiation coefficient input raster map [-]"
+msgstr "Couche raster du coefficient de rayonnement en plein ciel [-]"
+
+#, fuzzy
+msgid "Name of real-sky diffuse radiation coefficient input raster map [-]"
+msgstr "Couche raster du coefficient de rayonnement diffus en plein ciel [-]"
+
+#, fuzzy
+msgid "Solar elevation in degrees"
+msgstr "Fichier raster d'altitude"
+
+#, fuzzy
 #~ msgid "Input_maps"
 #~ msgstr "couche source"
 
@@ -40133,14 +40145,6 @@ msgstr "Type de colonne inconnu"
 #~ "Right:  Finish profile and exit\n"
 #~ "\n"
 #~ msgstr "Droit : finir le profil et sortir\n"
-
-#, fuzzy
-#~ msgid "Name of real-sky beam radiation coefficient input raster map [-]"
-#~ msgstr "Couche raster du coefficient de rayonnement en plein ciel [-]"
-
-#, fuzzy
-#~ msgid "Name of real-sky diffuse radiation coefficient input raster map [-]"
-#~ msgstr "Couche raster du coefficient de rayonnement diffus en plein ciel [-]"
 
 #~ msgid "This does nothing. It is retained for backwards compatibility"
 #~ msgstr "Ceci ne fait rien. C'est maintenu pour la rétrocompatibilité "
@@ -45766,10 +45770,6 @@ msgstr "Type de colonne inconnu"
 #~ msgid "Name for raster map holding reject threshold results"
 #~ msgstr "couche raster où écrire les résultats rejetés du seuillage"
 
-#, fuzzy
-#~ msgid "Solar elevation in degrees"
-#~ msgstr "Fichier raster d'altitude"
-
 #~ msgid "Remove selected files from specified group"
 #~ msgstr "Supprime les fichiers sélectionnés du groupe spécifié"
 
@@ -46003,3 +46003,11 @@ msgstr "Type de colonne inconnu"
 
 #~ msgid "Addition query options for server"
 #~ msgstr "Options de requêtes additionnelles pour le serveur"
+
+#, fuzzy
+#~ msgid "Joins a database table to a vector map table."
+#~ msgstr "nom de la table attributaire existante (par défaut : nom de la couche vecteur)"
+
+#, fuzzy
+#~ msgid "Updates a column in the attribute table connected to a vector map."
+#~ msgstr "permet d'affecter une nouvelle valeur à la colonne de la table attributaire connectée à la table"
