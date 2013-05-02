@@ -1216,6 +1216,42 @@ struct Plus_head
     } uplist;
 };
 
+/*!
+  \brief Graph-related section (see \ref dblib)
+*/
+struct Graph_info {
+    /*!
+      \brief Line type used to build the graph
+    */
+    int line_type;
+    /*!
+      \brief Graph structure
+    */
+    dglGraph_s graph_s;
+    /*!
+      \brief Shortest path cache
+    */
+    dglSPCache_s spCache;
+    /*!
+      \brief Forward costs used for graph
+      
+      dglGetEdge() is not supported for _DGL_V1)
+    */
+    double *edge_fcosts;
+    /*!
+      \brief backward costs used for graph
+    */
+    double *edge_bcosts;
+    /*!
+      \brief Node costs used for graph
+    */
+    double *node_costs;
+    /*!
+      \brief Edge and node costs multiplicator
+    */
+    int cost_multip;
+};
+
 /*! \brief
   Vector map info
 
@@ -1250,37 +1286,6 @@ struct Map_info
       \brief Topology info
     */
     struct Plus_head plus;
-
-    /*!
-      \brief Graph-related section - line type used to build the graph
-     */
-    int graph_line_type;
-    /*!
-      \brief Graph-related section - graph structure
-    */
-    dglGraph_s graph;
-    /*!
-      \brief Graph-related section - shortest path cache
-    */
-    dglSPCache_s spCache;
-    /*!
-      \brief Graph-related section - forward costs used for graph
-
-      dglGetEdge() is not supported for _DGL_V1)
-    */
-    double *edge_fcosts;
-    /*!
-      \brief Graph-related section - backward costs used for graph
-    */
-    double *edge_bcosts;
-    /*!
-      \brief Graph-related section - node costs used for graph
-    */
-    double *node_costs;
-    /*!
-      \brief Graph-related section - edge and node costs multiplicator
-    */
-    int cost_multip;
 
     /*!
       \brief Open indicator
@@ -1389,6 +1394,11 @@ struct Map_info
     */
     FILE *hist_fp;
 
+    /*!
+      \brief Graph info (built for network analysis)
+    */
+    struct Graph_info dgraph;
+    
     /*** format specific ***/
 
     /*!

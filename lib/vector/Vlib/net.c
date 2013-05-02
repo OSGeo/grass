@@ -115,7 +115,7 @@ Vect_net_build_graph(struct Map_info *Map,
 
     G_message(_("Building graph..."));
 
-    Map->graph_line_type = ltype;
+    Map->dgraph.line_type = ltype;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -125,26 +125,26 @@ Vect_net_build_graph(struct Map_info *Map,
 	ll = 1;			/* LL */
 
     if (afcol == NULL && ll && !geo)
-	Map->cost_multip = 1000000;
+	Map->dgraph.cost_multip = 1000000;
     else
-	Map->cost_multip = 1000;
+	Map->dgraph.cost_multip = 1000;
 
     nlines = Vect_get_num_lines(Map);
     nnodes = Vect_get_num_nodes(Map);
 
-    gr = &(Map->graph);
+    gr = &(Map->dgraph.graph_s);
 
     /* Allocate space for costs, later replace by functions reading costs from graph */
-    Map->edge_fcosts = (double *)G_malloc((nlines + 1) * sizeof(double));
-    Map->edge_bcosts = (double *)G_malloc((nlines + 1) * sizeof(double));
-    Map->node_costs = (double *)G_malloc((nnodes + 1) * sizeof(double));
+    Map->dgraph.edge_fcosts = (double *)G_malloc((nlines + 1) * sizeof(double));
+    Map->dgraph.edge_bcosts = (double *)G_malloc((nlines + 1) * sizeof(double));
+    Map->dgraph.node_costs = (double *)G_malloc((nnodes + 1) * sizeof(double));
     /* Set to -1 initially */
     for (i = 1; i <= nlines; i++) {
-	Map->edge_fcosts[i] = -1;	/* forward */
-	Map->edge_bcosts[i] = -1;	/* backward */
+	Map->dgraph.edge_fcosts[i] = -1;	/* forward */
+	Map->dgraph.edge_bcosts[i] = -1;	/* backward */
     }
     for (i = 1; i <= nnodes; i++) {
-	Map->node_costs[i] = 0;
+	Map->dgraph.node_costs[i] = 0;
     }
 
     if (ncol != NULL)
@@ -293,27 +293,27 @@ Vect_net_build_graph(struct Map_info *Map,
 	    bdcost = dcost;
 	}
 	if (dofw && dcost != -1) {
-	    cost = (dglInt32_t) Map->cost_multip * dcost;
+	    cost = (dglInt32_t) Map->dgraph.cost_multip * dcost;
 	    G_debug(5, "Add arc %d from %d to %d cost = %d", i, from, to,
 		    cost);
 	    ret =
 		dglAddEdge(gr, (dglInt32_t) from, (dglInt32_t) to,
 			   (dglInt32_t) cost, (dglInt32_t) i);
-	    Map->edge_fcosts[i] = dcost;
+	    Map->dgraph.edge_fcosts[i] = dcost;
 	    if (ret < 0)
 		G_fatal_error("Cannot add network arc");
 	}
 
 	G_debug(5, "bdcost = %f edge_bcosts = %f", bdcost,
-		Map->edge_bcosts[i]);
+		Map->dgraph.edge_bcosts[i]);
 	if (dobw && bdcost != -1) {
-	    bcost = (dglInt32_t) Map->cost_multip * bdcost;
+	    bcost = (dglInt32_t) Map->dgraph.cost_multip * bdcost;
 	    G_debug(5, "Add arc %d from %d to %d bcost = %d", -i, to, from,
 		    bcost);
 	    ret =
 		dglAddEdge(gr, (dglInt32_t) to, (dglInt32_t) from,
 			   (dglInt32_t) bcost, (dglInt32_t) - i);
-	    Map->edge_bcosts[i] = bdcost;
+	    Map->dgraph.edge_bcosts[i] = bdcost;
 	    if (ret < 0)
 		G_fatal_error(_("Cannot add network arc"));
 	}
@@ -424,12 +424,12 @@ Vect_net_build_graph(struct Map_info *Map,
 		cost = -1;
 	    }
 	    else {
-		cost = (dglInt32_t) Map->cost_multip * dcost;
+		cost = (dglInt32_t) Map->dgraph.cost_multip * dcost;
 	    }
 	    G_debug(3, "Set node's cost to %d", cost);
 	    dglNodeSet_Attr(gr, dglGetNode(gr, (dglInt32_t) i),
 			    (dglInt32_t *) (dglInt32_t) & cost);
-	    Map->node_costs[i] = dcost;
+	    Map->dgraph.node_costs[i] = dcost;
 	}
 	db_close_database_shutdown_driver(driver);
 	db_CatValArray_free(&fvarr);
@@ -444,7 +444,7 @@ Vect_net_build_graph(struct Map_info *Map,
 
     /* init SP cache */
     /* disable to debug dglib cache */
-    dglInitializeSPCache(gr, &(Map->spCache));
+    dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
 
@@ -500,24 +500,24 @@ Vect_net_shortest_path(struct Map_info *Map, int from, int to,
     if (List != NULL) {
 	if (use_cache) {
 	    nRet =
-		dglShortestPath(&(Map->graph), &pSPReport, (dglInt32_t) from,
-				(dglInt32_t) to, clipper, pclip, &(Map->spCache));
+		dglShortestPath(&(Map->dgraph.graph_s), &pSPReport, (dglInt32_t) from,
+				(dglInt32_t) to, clipper, pclip, &(Map->dgraph.spCache));
 	}
 	else {
 	    nRet =
-		dglShortestPath(&(Map->graph), &pSPReport, (dglInt32_t) from,
+		dglShortestPath(&(Map->dgraph.graph_s), &pSPReport, (dglInt32_t) from,
 				(dglInt32_t) to, clipper, pclip, NULL);
 	}
     }
     else {
 	if (use_cache) {
 	    nRet =
-		dglShortestDistance(&(Map->graph), &nDistance, (dglInt32_t) from,
-				    (dglInt32_t) to, clipper, pclip, &(Map->spCache));
+		dglShortestDistance(&(Map->dgraph.graph_s), &nDistance, (dglInt32_t) from,
+				    (dglInt32_t) to, clipper, pclip, &(Map->dgraph.spCache));
 	}
 	else {
 	    nRet =
-		dglShortestDistance(&(Map->graph), &nDistance, (dglInt32_t) from,
+		dglShortestDistance(&(Map->dgraph.graph_s), &nDistance, (dglInt32_t) from,
 				    (dglInt32_t) to, clipper, pclip, NULL);
 	}
     }
@@ -529,14 +529,14 @@ Vect_net_shortest_path(struct Map_info *Map, int from, int to,
 	return -1;
     }
     else if (nRet < 0) {
-	G_warning(_("dglShortestPath error: %s"), dglStrerror(&(Map->graph)));
+	G_warning(_("dglShortestPath error: %s"), dglStrerror(&(Map->dgraph.graph_s)));
 	return -1;
     }
 
     if (List != NULL) {
 	for (i = 0; i < pSPReport->cArc; i++) {
-	    line = dglEdgeGet_Id(&(Map->graph), pSPReport->pArc[i].pnEdge);
-	    G_debug(2, "From %ld to %ld - cost %ld user %d distance %ld", pSPReport->pArc[i].nFrom, pSPReport->pArc[i].nTo, dglEdgeGet_Cost(&(Map->graph), pSPReport->pArc[i].pnEdge) / Map->cost_multip,	/* this is the cost from clip() */
+	    line = dglEdgeGet_Id(&(Map->dgraph.graph_s), pSPReport->pArc[i].pnEdge);
+	    G_debug(2, "From %ld to %ld - cost %ld user %d distance %ld", pSPReport->pArc[i].nFrom, pSPReport->pArc[i].nTo, dglEdgeGet_Cost(&(Map->dgraph.graph_s), pSPReport->pArc[i].pnEdge) / Map->dgraph.cost_multip,	/* this is the cost from clip() */
 		    line, pSPReport->pArc[i].nDistance);
 	    Vect_list_append(List, line);
 	}
@@ -544,19 +544,35 @@ Vect_net_shortest_path(struct Map_info *Map, int from, int to,
 
     if (cost != NULL) {
 	if (List != NULL)
-	    *cost = (double)pSPReport->nDistance / Map->cost_multip;
+	    *cost = (double)pSPReport->nDistance / Map->dgraph.cost_multip;
 	else
-	    *cost = (double)nDistance / Map->cost_multip;
+	    *cost = (double)nDistance / Map->dgraph.cost_multip;
     }
 
     if (List != NULL) {
 	cArc = pSPReport->cArc;
-	dglFreeSPReport(&(Map->graph), pSPReport);
+	dglFreeSPReport(&(Map->dgraph.graph_s), pSPReport);
     }
     else
 	cArc = 0;
 
     return (cArc);
+}
+
+/*!
+  \brief Get graph structure
+  
+  Graph is built by Vect_net_build_graph().
+  
+  Returns NULL when graph is not built.
+  
+  \param Map pointer to Map_info struct
+
+  \return pointer to dglGraph_s struct or NULL
+*/
+dglGraph_s *Vect_net_get_graph(const struct Map_info *Map)
+{
+    return &(Map->dgraph.graph_s);
 }
 
 /*! 
@@ -584,33 +600,33 @@ Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
     if (direction == GV_FORWARD) {
 	/* V1 has no index by line-id -> array used */
 	/*
-	   pEdge = dglGetEdge(&(Map->graph), line);
+	   pEdge = dglGetEdge(&(Map->dgraph.graph_s), line);
 	   if (pEdge == NULL)
 		return 0;
-	   *cost = (double) dglEdgeGet_Cost(&(Map->graph), pEdge);
+	   *cost = (double) dglEdgeGet_Cost(&(Map->dgraph.graph_s), pEdge);
 	 */
-	if (Map->edge_fcosts[line] == -1) {
+	if (Map->dgraph.edge_fcosts[line] == -1) {
 	    *cost = -1;
 	    return 0;
 	}
 	else
-	    *cost = Map->edge_fcosts[line];
+            *cost = Map->dgraph.edge_fcosts[line];
     }
     else if (direction == GV_BACKWARD) {
 	/*
-	   pEdge = dglGetEdge(&(Map->graph), -line);
+	   pEdge = dglGetEdge(&(Map->dgraph.graph_s), -line);
 	   if (pEdge == NULL) 
 	    	return 0;
-	   *cost = (double) dglEdgeGet_Cost(&(Map->graph), pEdge);
+	   *cost = (double) dglEdgeGet_Cost(&(Map->dgraph.graph_s), pEdge);
 	 */
-	if (Map->edge_bcosts[line] == -1) {
+	if (Map->dgraph.edge_bcosts[line] == -1) {
 	    *cost = -1;
 	    return 0;
 	}
 	else
-	    *cost = Map->edge_bcosts[line];
+	    *cost = Map->dgraph.edge_bcosts[line];
 	G_debug(5, "Vect_net_get_line_cost(): edge_bcosts = %f",
-		Map->edge_bcosts[line]);
+		Map->dgraph.edge_bcosts[line]);
     }
     else {
 	G_fatal_error(_("Wrong line direction in Vect_net_get_line_cost()"));
@@ -632,7 +648,7 @@ int Vect_net_get_node_cost(const struct Map_info *Map, int node, double *cost)
 {
     G_debug(3, "Vect_net_get_node_cost(): node = %d", node);
 
-    *cost = Map->node_costs[node];
+    *cost = Map->dgraph.node_costs[node];
 
     G_debug(3, "  -> cost = %f", *cost);
 
@@ -697,7 +713,7 @@ int Vect_net_nearest_nodes(struct Map_info *Map,
 	Points = Vect_new_line_struct();
 
     /* Find nearest line */
-    line = Vect_find_line(Map, x, y, z, Map->graph_line_type, maxdist, 0, 0);
+    line = Vect_find_line(Map, x, y, z, Map->dgraph.line_type, maxdist, 0, 0);
 
     if (line < 1)
 	return 0;
