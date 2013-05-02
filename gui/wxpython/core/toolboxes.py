@@ -42,6 +42,7 @@ import grass.script.task as gtask
 from grass.script.core import ScriptError
 
 
+# this could be placed to functions
 mainMenuFile = os.path.join(ETCWXDIR, 'xml', 'main_menu.xml')
 toolboxesFile = os.path.join(ETCWXDIR, 'xml', 'toolboxes.xml')
 wxguiItemsFile = os.path.join(ETCWXDIR, 'xml', 'wxgui_items.xml')
@@ -200,6 +201,55 @@ def _expandToolboxes(node, toolboxes):
 
     @param node tree node where to look for subtoolboxes to be expanded
     @param toolboxes tree of toolboxes to be used for expansion
+    
+    >>> menu = etree.fromstring('''
+    ... <toolbox name="Raster">
+    ...   <label>&amp;Raster</label>
+    ...   <items>
+    ...     <module-item name="r.mask"/>
+    ...     <wxgui-item name="RasterMapCalculator"/>
+    ...     <subtoolbox name="NeighborhoodAnalysis"/>
+    ...     <subtoolbox name="OverlayRasters"/>
+    ...   </items>
+    ... </toolbox>''')
+    >>> toolboxes = etree.fromstring('''
+    ... <toolboxes>
+    ...   <toolbox name="NeighborhoodAnalysis">
+    ...     <label>Neighborhood analysis</label>
+    ...     <items>
+    ...       <module-item name="r.neighbors"/>
+    ...       <module-item name="v.neighbors"/>
+    ...     </items>
+    ...   </toolbox>
+    ...   <toolbox name="OverlayRasters">
+    ...     <label>Overlay rasters</label>
+    ...     <items>
+    ...       <module-item name="r.cross"/>
+    ...     </items>
+    ...   </toolbox>
+    ... </toolboxes>''')
+    >>> _expandToolboxes(menu, toolboxes)
+    >>> print etree.tostring(menu)
+    <toolbox name="Raster">
+      <label>&amp;Raster</label>
+      <items>
+        <module-item name="r.mask" />
+        <wxgui-item name="RasterMapCalculator" />
+        <toolbox name="NeighborhoodAnalysis">
+        <label>Neighborhood analysis</label>
+        <items>
+          <module-item name="r.neighbors" />
+          <module-item name="v.neighbors" />
+        </items>
+      </toolbox>
+      <toolbox name="OverlayRasters">
+        <label>Overlay rasters</label>
+        <items>
+          <module-item name="r.cross" />
+        </items>
+      </toolbox>
+    </items>
+    </toolbox>
     """
     nodes = node.findall('.//toolbox')
     if node.tag == 'toolbox':  # root
@@ -233,30 +283,50 @@ def _expandUserToolboxesItem(node, toolboxes):
     """!Expand tag 'user-toolboxes-list'.
 
     Include all user toolboxes.
+
+    >>> tree = etree.fromstring('<toolbox><items><user-toolboxes-list/></items></toolbox>')
+    >>> toolboxes = etree.fromstring('<toolboxes><toolbox name="UserToolbox"><items><module-item name="g.region"/></items></toolbox></toolboxes>')
+    >>> _expandUserToolboxesItem(tree, toolboxes)
+    >>> etree.tostring(tree)
+    '<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
     """
     tboxes = toolboxes.findall('.//toolbox')
 
     for n in node.findall('./items/user-toolboxes-list'):
         items = node.find('./items')
         idx = items.getchildren().index(n)
-        el = etree.Element('toolbox', attrib={'name': 'dummy'})
+        el = etree.Element('toolbox', attrib={'name': 'GeneratedUserToolboxesList'})
         items.insert(idx, el)
         label = etree.SubElement(el, tag='label')
         label.text = _("Toolboxes")
         it = etree.SubElement(el, tag='items')
         for toolbox in tboxes:
             it.append(copy.deepcopy(toolbox))
+        items.remove(n)
 
 
 def _removeUserToolboxesItem(root):
-    """!Removes tag 'user-toolboxes-list' if there are no user toolboxes."""
+    """!Removes tag 'user-toolboxes-list' if there are no user toolboxes.
+
+    >>> tree = etree.fromstring('<toolbox><items><user-toolboxes-list/></items></toolbox>')
+    >>> _removeUserToolboxesItem(tree)
+    >>> etree.tostring(tree)
+    '<toolbox><items /></toolbox>'
+    """
     for n in root.findall('./items/user-toolboxes-list'):
         items = root.find('./items')
         items.remove(n)
 
 
 def _expandItems(node, items, itemTag):
-    """!Expand items from file"""
+    """!Expand items from file
+
+    >>> tree = etree.fromstring('<items><module-item name="g.region"></module-item></items>')
+    >>> items = etree.fromstring('<module-items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></module-items>')
+    >>> _expandItems(tree, items, 'module-item')
+    >>> etree.tostring(tree)
+    '<items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></items>'
+    """
     for moduleItem in node.findall('.//' + itemTag):
         itemName = moduleItem.get('name')
         if has_xpath:
@@ -280,7 +350,15 @@ def _expandItems(node, items, itemTag):
 
 def _expandRuntimeModules(node):
     """!Add information to modules (desc, keywords)
-    by running them with --interface-description."""
+    by running them with --interface-description.
+
+    >>> tree = etree.fromstring('<items>'
+    ...                         '<module-item name="g.region"></module-item>'
+    ...                         '</items>')
+    >>> _expandRuntimeModules(tree)
+    >>> etree.tostring(tree)
+    '<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings</keywords></module-item></items>'
+    """
     modules = node.findall('.//module-item')
     for module in modules:
         name = module.get('name')
@@ -299,7 +377,11 @@ def _expandRuntimeModules(node):
 def _escapeXML(text):
     """!Helper function for correct escaping characters for XML.
 
-    Duplicate function in core/toolboxes.
+    Duplicate function in core/toolboxes and probably also in man compilation
+    and some existing Python package.
+
+    >>> _escapeXML('<>&')
+    '&amp;lt;&gt;&amp;'
     """
     return text.replace('<', '&lt;').replace("&", '&amp;').replace(">", '&gt;')
 
@@ -334,20 +416,40 @@ def _addHandlers(node):
 
 
 def _convertTag(node, old, new):
-    """!Converts tag name."""
+    """!Converts tag name.
+    
+    >>> tree = etree.fromstring('<toolboxes><toolbox><items><module-item/></items></toolbox></toolboxes>')
+    >>> _convertTag(tree, 'toolbox', 'menu')
+    >>> _convertTag(tree, 'module-item', 'menuitem')
+    >>> etree.tostring(tree)
+    '<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
+    """
     for n in node.findall('.//%s' % old):
         n.tag = new
 
 
 def _convertTagAndRemoveAttrib(node, old, new):
-    "Converts tag name and removes attributes."
+    """Converts tag name and removes attributes.
+
+    >>> tree = etree.fromstring('<toolboxes><toolbox name="Raster"><items><module-item name="g.region"/></items></toolbox></toolboxes>')
+    >>> _convertTagAndRemoveAttrib(tree, 'toolbox', 'menu')
+    >>> _convertTagAndRemoveAttrib(tree, 'module-item', 'menuitem')
+    >>> etree.tostring(tree)
+    '<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
+    """
     for n in node.findall('.//%s' % old):
         n.tag = new
         n.attrib = {}
 
 
 def _convertTree(root):
-    """!Converts tree to be the form readable by core/menutree.py."""
+    """!Converts tree to be the form readable by core/menutree.py.
+
+    >>> tree = etree.fromstring('<toolbox name="MainMenu"><label>Main menu</label><items><toolbox><label>Raster</label><items><module-item name="g.region"><module>g.region</module></module-item></items></toolbox></items></toolbox>')
+    >>> _convertTree(tree)
+    >>> etree.tostring(tree)
+    '<menudata><menubar><menu><label>Raster</label><items><menuitem><command>g.region</command></menuitem></items></menu></menubar></menudata>'
+    """
     root.attrib = {}
     label = root.find('label')
     root.remove(label)
@@ -365,7 +467,10 @@ def _convertTree(root):
 
 
 def _getXMLString(root):
-    """!Adds comment (about aotogenerated file) to XML.
+    """!Converts XML tree to string
+
+    Since it is usually requier, this function adds a comment (about
+    autogenerated file) to XML file.
 
     @return XML as string
     """
@@ -375,7 +480,49 @@ def _getXMLString(root):
                        "<!--This is an auto-generated file-->\n")
 
 
+def do_doctest_gettext_workaround():
+    """Setups environment for doing a doctest with gettext usage.
+
+    When using gettext with dynamically defined underscore function
+    (`_("For translation")`), doctest does not work properly. One option is to
+    use `import as` instead of dynamically defined underscore function but this
+    would require change all modules which are used by tested module. This
+    should be considered for the future. The second option is to define dummy
+    underscore function and one other function which creates the right
+    environment to satisfy all. This is done by this function.
+    """
+    def new_displayhook(string):
+        """A replacement for default `sys.displayhook`"""
+        if string is not None:
+            sys.stdout.write("%r\n" % (string,))
+
+    def new_translator(string):
+        """A fake gettext underscore function."""
+        return string
+
+    sys.displayhook = new_displayhook
+
+    import __builtin__
+    __builtin__._ = new_translator
+
+
+def test():
+    """Tests the module using doctest
+
+    @return a number of failed tests
+    """
+    import doctest
+
+    do_doctest_gettext_workaround()
+
+    return doctest.testmod().failed
+
+
 def main():
+    """Converts the toolboxes files on standard paths to the menudata file
+
+    File is written to the standard output.
+    """
     tree = toolboxes2menudata(userDefined=False)
     root = tree.getroot()
     sys.stdout.write(_getXMLString(root))
@@ -384,4 +531,7 @@ def main():
 
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'doctest':
+            sys.exit(test())
     sys.exit(main())

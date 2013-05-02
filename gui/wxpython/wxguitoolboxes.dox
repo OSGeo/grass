@@ -23,7 +23,7 @@ Note that in XML context, the term <i>tag</i> partially overlaps with the term
 content of these objects. Tag emphasizes the markup and the name of the element.
 
 
-\section filesOverview Files overview
+\section toolboxesFilesOverview Files overview
 
 \subsection toolboxesFiles Files related to toolboxes
 
@@ -90,7 +90,7 @@ menudata -> menustrings;
 \enddot
 
 
-\subsection otherFiles Other files
+\subsection toolboxesOtherFiles Other files
 
 GRASS source code contains these XML files:
 <ul>
@@ -99,6 +99,36 @@ GRASS source code contains these XML files:
 </ul>
 In GRASS distribution these XML files are in the \c etc/gui/wxpython/xml
 directory.
+
+
+\section toolboxesGeneration Generation of files and menu
+
+As noted in the section \ref toolboxesFilesOverview, there are files in the
+GRASS distribution and in the user home directory (particularly in
+\c ".grass7/tooboxes" subdirectory).
+
+When user doesn't have any \c toolboxes.xml or \c main_menu.xml files in the
+home directory, file \c menudata.xml included in the distribution is used to
+build a menu.
+
+When \c toolboxes.xml or \c main_menu.xml file (in user home directory) is newer
+than \c menudata.xml in user home directory or \c menudata.xml does not exists
+in user home directory, the \c menudata.xml is generated when GUI starts.
+
+When \c menudata.xml in user home directory is fresh enough,
+it is used to create a menu.
+
+When \c toolboxes.xml or \c main_menu.xml file is not in user home directory
+but \c menudata.xml is, the file is re-generated (each time the GUI starts).
+So, if you just have your own \c main_menu.xml, it is better to create also
+a \c toolboxes.xml file with no toolboxes (you may want to remove
+\c "<user-toolboxes-list>" tag from your \c main_menu.xml file because it will
+be no longer ignored). Similarly, if you have only the \c toolboxes.xml file it
+is better to copy the \c main_menu.xml file from distribution into your home
+directory.
+
+When reading the main_menu file, user toolboxes are expanded first and then
+toolboxes from distribution are expanded.
 
 
 \section toolboxesFile Toolboxes file
