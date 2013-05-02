@@ -45,7 +45,7 @@ void Rast_init_cell_stats(struct Cell_stats *s)
 }
 
 /*!
- * \brief Sdd data to cell stats
+ * \brief Add data to cell stats
  *
  * The <i>n</i> CELL values in the <i>data</i> array are inserted (and
  * counted) in the Cell_stats structure.

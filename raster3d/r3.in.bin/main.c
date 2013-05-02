@@ -1,13 +1,19 @@
-/*
- *   r3.in.bin
+/****************************************************************************
  *
- *   Copyright (C) 2000, 2012 by the GRASS Development Team
- *   Author: Bob Covill <bcovill tekmap.ns.ca>
+ * MODULE:       r3.in.bin
  *
- *   This program is free software under the GPL (>=v2)
- *   Read the file COPYING coming with GRASS for details.
+ * AUTHOR(S):   Soeren Gebbert
+ *   			Based on r.in.bin from: Bob Covill
  *
- */
+ * PURPOSE:     Imports a binary raster file into a GRASS 3D raster map.
+ *
+ * COPYRIGHT:   (C) 2012 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *   	    	License (>=v2). Read the file COPYING that comes with GRASS
+ *   	    	for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>

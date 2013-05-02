@@ -354,6 +354,7 @@ int main(int argc, char *argv[])
 
     /* write input name to map history */
     Rast3d_read_history(output, G_mapset(), &history);
+    Rast_command_history(&history);
     Rast_set_history(&history, HIST_DATSRC_1, input);
     Rast3d_write_history(output, &history);
 

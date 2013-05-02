@@ -9,7 +9,7 @@
  *
  * PURPOSE:      Converts a 3D raster map layer into an ASCII text file  
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005 - 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	License (>=v2). Read the file COPYING that comes with GRASS

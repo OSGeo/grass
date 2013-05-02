@@ -3,7 +3,8 @@
 GRASS GIS is one of the few GIS software packages with volume data support.
 Here data are stored as a 3D raster with a unit volume called a voxel
 (volume pixel). Voxels are designed to support representations of
-trivariate continuous fields.
+trivariate continuous fields. The vertical dimension supports spatial and temporal units.
+Hence space time voxel cubes with different temporal resolutions can be created and processed.
 <p>
 
 GRASS GIS 3D raster maps use the same coordinate system as
@@ -21,8 +22,9 @@ with <a href="r3.in.ascii.html">r3.in.ascii</a> or the data can be retiled using
 
 <h3>3D Raster (voxel) import</h3>
 
-The module <a href="r3.in.ascii.html">r3.in.ascii</a> supports
-generic x,y,z import. Alternatively, volumes can be generated
+The modules <a href="r3.in.ascii.html">r3.in.ascii</a> and
+ <a href="r3.in.bin.html">r3.in.bin</a> supports
+generic x,y,z ASCII and binary array import. Alternatively, volumes can be generated
 from 3D point vector data (<a href="v.to.rast3.html">v.to.rast3</a>). 
 Always the full map is imported.
 Volumes can also be created based on 2D elevation map(s) and value raster map(s)
@@ -69,6 +71,15 @@ or 2D raster maps can be also extracted.
 
 <h3>3D raster export</h3>
 
+The modules <a href="r3.out.ascii.html">r3.out.ascii</a> and
+ <a href="r3.out.bin.html">r3.out.bin</a> support the export of
+ 3D raster maps as ASCII or binary files. The output of these modules
+ can be imported with the coresponding import modules noted above.
+<p>
+NetCDF export of 3D raster maps can be performed using the module 
+<a href="r3.out.netcdf.html">r3.out.netcdf</a>. It supports 3D raster maps
+with spatial and temporal vertical dimension (Space time voxel cubes).
+<p>
 GRASS 3D raster maps can be exported to VTK (<a href="r3.out.vtk.html">r3.out.vtk</a>).
 VTK files can be visualized with the 
 <em><a href="http://www.vtk.org">VTK Toolkit</a></em>, 
@@ -80,8 +91,6 @@ GRASS vector maps can be exported to VTK with <a href="v.out.vtk.html">v.out.vtk
 Alternatively, GRASS 3D raster maps can be imported and exported from/to Vis5D
 (<a href="r3.in.v5d.html">r3.in.v5d</a>, <a href="r3.out.v5d.html">r3.out.v5d</a>).
 Note that Vis5D is limited in the number of supported volumes.
-<p>
-Finally, export to 3D ASCII is also available (<a href="r3.out.ascii.html">r3.out.ascii</a>).
 
 <h3>See also</h3>
 
