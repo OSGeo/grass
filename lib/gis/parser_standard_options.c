@@ -370,7 +370,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = NO;
         Opt->multiple = NO;
         Opt->answer = "default";
-        Opt->options = "default,rle,none";
+        Opt->options = "default,zip,none";
         Opt->description =
             _("The compression method used in the output raster3d map");
 	break;
