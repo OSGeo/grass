@@ -220,14 +220,15 @@ class PsMapFrame(wx.Frame):
 
     def OnPDFFile(self, event):
         """!Generate PDF from PS with ps2pdf if available"""
-        try:
-            p = grass.Popen(["ps2pdf"], stderr = grass.PIPE)
-            p.stderr.close()
-        
-        except OSError:
-            GMessage(parent = self,
-                     message = _("Program ps2pdf is not available. Please install it first to create PDF."))
-            return
+        if not sys.platform == 'win32':
+            try:
+                p = grass.Popen(["ps2pdf"], stderr = grass.PIPE)
+                p.stderr.close()
+            
+            except OSError:
+                GMessage(parent = self,
+                         message = _("Program ps2pdf is not available. Please install it first to create PDF."))
+                return
         
         filename = self.getFile(wildcard = "PDF (*.pdf)|*.pdf")
         if filename:  
@@ -292,14 +293,30 @@ class PsMapFrame(wx.Frame):
             return
         
         if event.userData['pdfname']:
+            if sys.platform == 'win32':
+                command = ['gswin32c',
+                           '-P-', '-dSAFER',
+                           '-dCompatibilityLevel=1.4',
+                           '-q', '-P-',
+                           '-dNOPAUSE', '-dBATCH',
+                           '-sDEVICE=pdfwrite',
+                           '-dPDFSETTINGS=/prepress', '-r1200',
+                           '-sstdout=%stderr',
+                           '-sOutputFile=%s' % event.userData['pdfname'],
+                           '-P-', '-dSAFER',
+                           '-dCompatibilityLevel=1.4',
+                           '-c', '.setpdfwrite', '-f',
+                            event.userData['filename']]
+            else:
+                command = ['ps2pdf', '-dPDFSETTINGS=/prepress', '-r1200', 
+                           event.userData['filename'], event.userData['pdfname']]
             try:
-                proc = grass.Popen(['ps2pdf', '-dPDFSETTINGS=/prepress', '-r1200', 
-                                    event.userData['filename'], event.userData['pdfname']])
-                
+                proc = grass.Popen(command)
                 ret = proc.wait()                        
                 if ret > 0:
                     GMessage(parent = self,
-                             message = _("ps2pdf exited with return code %s") % ret)
+                             message = _("%(prg)s exited with return code %(code)s") % {'prg': command[0],
+                                                                                        'code': ret})
                 else:
                     self.SetStatusText(_('PDF generated'), 0)
             except OSError, e:
