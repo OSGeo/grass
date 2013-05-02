@@ -365,6 +365,8 @@ class PsMapFrame(wx.Frame):
         grass.try_remove(event.userData['instrFile'])
         if event.userData['temp']:
             grass.try_remove(event.userData['filename'])
+            
+        wx.CallLater(4000, lambda: self.SetStatusText("", 0))
 
     def getFile(self, wildcard):
         suffix = []
@@ -1143,6 +1145,7 @@ class PsMapBufferedWindow(wx.Window):
         self.idLinePointsTmp = (wx.NewId(), wx.NewId()) # ids of marks for moving line vertices
 
         self.resizeBoxSize = wx.Size(8, 8)
+        self.showResizeHelp = False # helper for correctly working statusbar
         
         
 
@@ -1372,9 +1375,12 @@ class PsMapBufferedWindow(wx.Window):
             if foundResize and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp:
                 self.SetCursor(self.cursors["sizenwse"])
                 self.parent.SetStatusText(_('Click and drag to resize object'), 0)
+                self.showResizeHelp = True
             else:
-                self.parent.SetStatusText('', 0)
-                self.SetCursor(self.cursors["default"])
+                if self.showResizeHelp:
+                    self.parent.SetStatusText('', 0)
+                    self.SetCursor(self.cursors["default"])
+                    self.showResizeHelp = False
                 
     def OnLeftDown(self, event):
         """!Left mouse button pressed.
