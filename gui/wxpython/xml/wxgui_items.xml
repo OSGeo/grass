@@ -45,9 +45,9 @@
     <description>Launches script file.</description>
   </wxgui-item>
   <wxgui-item name="Quit">
-    <label>Quit</label>
+    <label>Exit GUI</label>
     <handler>OnCloseWindow</handler>
-    <description>Quit</description>
+    <description>Quit the GRASS wxGUI session.</description>
     <shortcut>Ctrl+Q</shortcut>
     <wx-id>ID_EXIT</wx-id>
   </wxgui-item>
