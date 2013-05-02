@@ -38,11 +38,11 @@ t.info precip_abs4
 t.rast.list precip_abs4
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3 input=precip_abs4
-t.merge inputs=precip_abs1,precip_abs2,precip_abs3 output=precip_abs4
+t.merge --o inputs=precip_abs1,precip_abs2,precip_abs3 output=precip_abs4
 t.info precip_abs4
 t.rast.list precip_abs4
 
-t.merge inputs=precip_abs1,precip_abs2,precip_abs3,precip_abs4 output=precip_abs4
+t.merge --o inputs=precip_abs1,precip_abs2,precip_abs3,precip_abs4 output=precip_abs4
 t.info precip_abs4
 t.rast.list precip_abs4
 
