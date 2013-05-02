@@ -1224,9 +1224,10 @@ struct Plus_head
 */
 struct Map_info
 {
-    /* common info for all formats */
+    /*** common info for all formats ***/
+
     /*!
-      \brief Format (native, ogr)
+      \brief Map format (native, ogr, postgis)
       
       - GV_FORMAT_NATIVE
       - GV_FORMAT_OGR
@@ -1234,13 +1235,14 @@ struct Map_info
       - GV_FORMAT_POSTGIS
     */
     int format;
+    
     /*!
-      \brief Temporary file flag, not yet used
+      \brief Temporary map flag
     */
     int temporary;
 
     /*!
-      \brief DB links
+      \brief Array of DB links
     */
     struct dblinks *dblnk;
 
@@ -1249,7 +1251,6 @@ struct Map_info
     */
     struct Plus_head plus;
 
-    /* graph-related section */
     /*!
       \brief Graph-related section - line type used to build the graph
      */
@@ -1286,35 +1287,42 @@ struct Map_info
 
       Should be 0x5522AA22 (VECT_OPEN_CODE) if opened correctly
       or        0x22AA2255 (VECT_CLOSED_CODE) if closed
-      anything else implies that structure has
-      never been initialized
+
+      Anything else implies that structure has never been initialized
     */
     int open;
+
     /* Open mode
+
        - read (GV_MODE_READ),
        - write (GV_MODE_WRITE),
        - rw (GV_MODE_RW)
     */
     int mode;
+
     /*!
       \brief Topology level
+      
       - 1 (without topo)
-      - 2 (with topo)
-      - 3 (with 3D topo) - not yet implemented
+      - 2 (with 2D topology)
+      - 3 (with 3D topology) - not yet implemented
     */
     int level;
+
     /*!
       \brief Open only header
 
       Non-zero code to open only header of vector map
     */
     int head_only;
+
     /*!
       \brief Support files were updated
 
       Non-zero code to indicate that supoort file were updated
     */
     int support_updated;
+
     /*!
       \brief Sequential read (level 1) - see Vect_read_next_line()
 
@@ -1330,17 +1338,16 @@ struct Map_info
       \brief Mapset name
     */
     char *mapset;
-    /* location and gisdbase is useful if changed (v.proj or external apps) */
     /*!
       \brief Location name
+
+      Note: location and gisdbase is useful if changed (v.proj or external apps)
     */
     char *location;
     /*!
       \brief GISDBASE path
     */
     char *gisdbase;
-
-    /* constraints for reading in lines  (not polys yet) */
 
     /*!
       \brief Constraints for sequential feature access
@@ -1377,7 +1384,12 @@ struct Map_info
     */
     int proj;
 
-    /* format specific */
+    /*!
+      \brief History file
+    */
+    FILE *hist_fp;
+
+    /*** format specific ***/
 
     /*!
       \brief GV file pointer (native format only)
@@ -1388,16 +1400,10 @@ struct Map_info
     */
     struct dig_head head;
 
-    /* non native */
     /*!
       \brief Format info for non-native formats
     */
     struct Format_info fInfo;
-
-    /*!
-      \brief History file
-    */
-    FILE *hist_fp;
 
     /* temporary solution for sites - to be removed ?*/
 
