@@ -1732,5 +1732,187 @@
       </module-item>
     </items>
   </toolbox>
+  <toolbox name="Temporal">
+    <label>Temporal</label>
+    <items>
+      <subtoolbox name="TemporalManageDatasets"/>
+      <subtoolbox name="TemporalManageMapsInDatasets"/>
+      <separator/>
+      <subtoolbox name="TemporalImport"/>
+      <subtoolbox name="TemporalExport"/>
+      <module-item name="t.rast.to.rast3">
+        <label>Convert raster dataset to volume</label>
+      </module-item>
+      <separator/>
+      <subtoolbox name="TemporalExtraction"/>
+      <module-item name="t.vect.db.select">
+        <label>Query vector dataset attribute data</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.rast.colors">
+        <label>Raster dataset color table</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.rast.mapcalc">
+        <label>Raster calculations</label>
+      </module-item>
+      <module-item name="t.rast3d.mapcalc">
+        <label>Raster3D calculations</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.rast.gapfill">
+        <label>Interpolate gaps in raster datasets</label>
+      </module-item>
+      <subtoolbox name="TemporalAggregation"/>
+      <subtoolbox name="TemporalSampling"/>
+      <subtoolbox name="TemporalReportAndStatistics"/>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalManageDatasets">
+    <label>Manage datasets</label>
+    <items>
+      <module-item name="t.create">
+        <label>Create</label>
+      </module-item>
+      <module-item name="t.rename">
+        <label>Rename</label>
+      </module-item>
+      <module-item name="t.remove">
+        <label>Remove</label>
+      </module-item>
+      <module-item name="t.support">
+        <label>Update metadata</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.merge">
+        <label>Merge</label>
+      </module-item>
+      <module-item name="t.shift">
+        <label>Temporally shift</label>
+      </module-item>
+      <module-item name="t.snap">
+        <label>Snap maps of dataset</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.list">
+        <label>List</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalManageMapsInDatasets">
+    <label>Manage maps in datasets</label>
+    <items>
+      <module-item name="t.register">
+        <label>Register maps in datasets</label>
+      </module-item>
+      <module-item name="t.unregister">
+        <label>Unregister maps from datasets</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.rast.list">
+        <label>List raster dataset maps</label>
+      </module-item>
+      <module-item name="t.vect.list">
+        <label>List vector dataset maps</label>
+      </module-item>
+      <module-item name="t.rast3d.list">
+        <label>List raster3D dataset maps</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalReportAndStatistics">
+    <label>Report and statistics</label>
+    <items>
+      <module-item name="t.info">
+        <label>Space time datasets metadata</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.rast.univar">
+        <label>Univariate raster dataset statistics</label>
+      </module-item>
+      <module-item name="t.vect.univar">
+        <label>Univariate vector dataset statistics</label>
+      </module-item>
+      <module-item name="t.rast3d.univar">
+        <label>Univariate raster3D dataset statistics</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.topology">
+        <label>Report temporal topology</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalImport">
+    <label>Import</label>
+    <items>
+      <module-item name="t.rast.import">
+        <label>Import raster dataset</label>
+      </module-item>
+      <module-item name="t.vect.import">
+        <label>Import vector dataset</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalExport">
+    <label>Export</label>
+    <items>
+      <module-item name="t.rast.export">
+        <label>Export raster dataset</label>
+      </module-item>
+      <module-item name="t.rast.out.vtk">
+        <label>Export raster dataset as VTK time series</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.vect.export">
+        <label>Export vector dataset</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalExtraction">
+    <label>Extraction</label>
+    <items>
+      <module-item name="t.rast.extract">
+        <label>Extract subset of raster dataset</label>
+      </module-item>
+      <module-item name="t.vect.extract">
+        <label>Extract subset of vector dataset</label>
+      </module-item>
+      <module-item name="t.rast3d.extract">
+        <label>Extract subset of raster3D dataset</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalAggregation">
+    <label>Aggregation</label>
+    <items>
+      <module-item name="t.rast.neighbors">
+        <label>Neighborhood analysis in raster dataset</label>
+      </module-item>
+      <module-item name="t.rast.series">
+        <label>Aggregation in raster datasets</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.rast.aggregate">
+        <label>Temporal aggregation</label>
+      </module-item>
+      <module-item name="t.rast.aggregate.ds">
+        <label>Temporal aggregation by dataset</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalSampling">
+    <label>Sampling</label>
+    <items>
+      <module-item name="t.sample">
+        <label>Temporal sampling</label>
+      </module-item>
+      <module-item name="t.vect.what.strds">
+        <label>Query raster dataset by vector points dataset</label>
+      </module-item>
+      <module-item name="t.vect.observe.strds">
+        <label>Observe specific locations in raster dataset</label>
+      </module-item>
+    </items>
+  </toolbox>
 </toolboxes>
 
