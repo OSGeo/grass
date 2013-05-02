@@ -1343,25 +1343,32 @@ struct Map_info
     /* constraints for reading in lines  (not polys yet) */
 
     /*!
-      \brief Constraints (region, type, field)
-
-      Note: Non-zero flag to enable given constraint.
+      \brief Constraints for sequential feature access
     */
     struct {
 	/*!
-	  \brief Region constraint
+	  \brief Non-zero value to enable region constraint
 	*/
 	int region_flag;
+        /*!
+          \brief Region (bbox) constraint
+        */
 	struct bound_box box;
 	/*!
-	  \brief Type constraint
+	  \brief Non-zero value to enable feature type constraint
 	*/
 	int type_flag;
+        /*!
+          \brief Feature type constraint
+        */
 	int type;
 	/*!
-	  \brief Field constraint
+	  \brief Non-zero value to enable field constraint
 	*/
 	int field_flag;
+        /*!
+          \brief Field number constraint (see line_cats structure)
+        */
 	int field;
     } constraint;
     
