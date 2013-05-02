@@ -228,7 +228,7 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
 int main(int argc, char *argv[])
 {
     static struct line_pnts *Points, *Cur, *Prev;
-    struct line_cats *Counter_Cats, *Cats;
+    struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *tfield_opt,		  /* Input map: layer with existing timetable */
@@ -341,7 +341,6 @@ int main(int argc, char *argv[])
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    Counter_Cats = Vect_new_cats_struct();
     Cur = Vect_new_line_struct();
     Prev = Vect_new_line_struct();
 
@@ -401,9 +400,11 @@ int main(int argc, char *argv[])
 	for (i = 0; i < timetable.routes; i++)
 	    lines[i] = Vect_new_list();
 
-	Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-			     abcol->answer, ncol->answer, 0, 0);
-	graph = &(In.graph);
+	if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                      abcol->answer, ncol->answer, 0, 0))
+            G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
+        
+	graph = Vect_net_get_graph(&In);
     }
 
 

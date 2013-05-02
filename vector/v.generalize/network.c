@@ -85,9 +85,11 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
     double *betw, *betweeness;
     struct ilist **prev;
 
-    Vect_net_build_graph(In, mask_type, 0, 0, NULL, NULL, NULL, 0,
-			 0);
-    gr = &(In->graph);
+    if (0 != Vect_net_build_graph(In, mask_type, 0, 0, NULL, NULL, NULL, 0, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(In));
+    
+    gr = Vect_net_get_graph(In);
+    
     /* build own graph by edge<->vertex */
     /* each vertex represents undirected edge */
     if (!graph_init(&g, dglGet_EdgeCount(gr) / 2 + 1)) {

@@ -229,14 +229,15 @@ int main(int argc, char *argv[])
 
     nodest = Vect_new_list();
     NetA_varray_to_nodes(&In, varrayt, nodest, nodes_to_features);
-
+    
     if (nodest->n_values == 0)
 	G_fatal_error(_("No 'to' features"));
+    
+    if (0 != Vect_net_build_graph(&In, atype, afield, nfield, afcol->answer, abcol->answer,
+                                   ncol->answer, geo, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
 
-    Vect_net_build_graph(&In, atype, afield, nfield, afcol->answer, abcol->answer,
-			 ncol->answer, geo, 0);
-
-    graph = &(In.graph);
+    graph = Vect_net_get_graph(&In);
     NetA_distance_from_points(graph, nodest, dst, prev);
 
     /* Create table */
@@ -298,7 +299,7 @@ int main(int argc, char *argv[])
 		from_nr++;
  		continue;
 	    }
-	    cost = dst[node] / (double)In.cost_multip;
+	    cost = dst[node] / (double)In.dgraph.cost_multip;
 	    vertex = dglGetNode(graph, node);
 	    vertex_id = node;
 	    while (prev[vertex_id] != NULL) {
