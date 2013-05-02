@@ -28,7 +28,6 @@
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
-    static struct line_pnts *Points;
     struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
@@ -39,7 +38,7 @@ int main(int argc, char *argv[])
     int afield, nfield, mask_type;
     struct varray *varray_set1, *varray_set2;
     dglGraph_s *graph;
-    int i, nnodes, nlines, *flow, total_flow, nedges;
+    int i, nnodes, *flow, total_flow, nedges;
     struct ilist *set1_list, *set2_list, *cut;
     int *node_costs;
 
@@ -120,7 +119,6 @@ int main(int argc, char *argv[])
     /* TODO: make an option for this */
     mask_type = GV_LINE | GV_BOUNDARY;
 
-    Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
@@ -163,7 +161,6 @@ int main(int argc, char *argv[])
     NetA_varray_to_nodes(&In, varray_set1, set1_list, NULL);
     NetA_varray_to_nodes(&In, varray_set2, set2_list, NULL);
 
-    nlines = Vect_get_num_lines(&In);
     nnodes = Vect_get_num_nodes(&In);
 
     if (set1_list->n_values == 0)
@@ -176,10 +173,11 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                         abcol->answer, ncol->answer, 0, 0);
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, 0, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
 
-    graph = &(In.graph);
+    graph = Vect_net_get_graph(&In);
 
     /*build new graph */
     if (ncol->answer) {

@@ -279,9 +279,11 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-			 abcol->answer, ncol->answer, geo, 0);
-    graph = &(In.graph);
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, geo, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
+    
+    graph = Vect_net_get_graph(&In);
     nnodes = dglGet_NodeCount(graph);
 
     deg = closeness = betw = eigen = NULL;
@@ -324,7 +326,7 @@ int main(int argc, char *argv[])
 	NetA_betweenness_closeness(graph, betw, closeness);
 	if (closeness)
 	    for (i = 1; i <= nnodes; i++)
-		closeness[i] /= (double)In.cost_multip;
+		closeness[i] /= (double)In.dgraph.cost_multip;
     }
     if (eigen_opt->answer) {
 	G_message(_("Computing eigenvector centrality measure"));

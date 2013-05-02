@@ -220,10 +220,11 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer, abcol->answer,
-			 ncol->answer, 0, 0);
-
-    graph = &(In.graph);
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer, abcol->answer,
+                                  ncol->answer, 0, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
+    
+    graph = Vect_net_get_graph(&In);
     nlines = Vect_get_num_lines(&In);
     flow = (int *)G_calloc(nlines + 1, sizeof(int));
     if (!flow)
@@ -251,7 +252,7 @@ int main(int argc, char *argv[])
 	    if (cat == -1)
 		continue;	/*TODO: warning? */
 	    sprintf(buf, "insert into %s values (%d, %f)", Fi->table, cat,
-		    flow[i] / (double)In.cost_multip);
+		    flow[i] / (double)In.dgraph.cost_multip);
 	    db_set_string(&sql, buf);
 	    G_debug(3, db_get_string(&sql));
 

@@ -129,9 +129,11 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                         abcol->answer, ncol->answer, 0, 0);
-    graph = &(In.graph);
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, 0, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
+    
+    graph = Vect_net_get_graph(&In);
 
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);

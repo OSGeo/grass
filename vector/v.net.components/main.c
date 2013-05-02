@@ -157,10 +157,11 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                         abcol->answer, ncol->answer, 0, 0);
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, 0, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
 
-    graph = &(In.graph);
+    graph = Vect_net_get_graph(&In);
     nnodes = Vect_get_num_nodes(&In);
     component = (int *)G_calloc(nnodes + 1, sizeof(int));
     covered = (char *)G_calloc(nnodes + 1, sizeof(char));
