@@ -720,15 +720,15 @@ struct Cat_index
     off_t offset;
 };
 
-/*! Backward compatibility version info */
+/*! \brief Backward compatibility version info */
 struct Version_info {
-    /*! Current version (major) */
+    /*! \brief Current version (major) */
     int major;
-    /*! Current version (minor) */
+    /*! \brief Current version (minor) */
     int minor;
-    /*! Earliest version that can use this data format (major) */
+    /*! \brief Earliest version that can use this data format (major) */
     int back_major;
-    /*! Earliest version that can use this data format (minor) */
+    /*! \brief Earliest version that can use this data format (minor) */
     int back_minor;
 };
 
@@ -739,15 +739,15 @@ struct Version_info {
 */
 struct Plus_head
 {
-    /*! Backward compatibility version info */
+    /*! \brief Backward compatibility version info */
     struct {
-        /*! Version info for coor file */
+        /*! \brief Version info for coor file */
         struct Version_info coor;
-        /*! Version info for topology file */
+        /*! \brief Version info for topology file */
         struct Version_info topo;
-        /*! Version info for spatial index file */
+        /*! \brief Version info for spatial index file */
         struct Version_info spidx;
-        /*! Version info for category index file */
+        /*! \brief Version info for category index file */
         struct Version_info cidx;
     } version;
 
