@@ -30,10 +30,10 @@ int dig__write_head(struct Map_info *Map)
     dig_fseek(&(Map->dig_fp), 0L, 0);
 
     /* bytes 1 - 5 */
-    buf[0] = Map->head.Version_Major;
-    buf[1] = Map->head.Version_Minor;
-    buf[2] = Map->head.Back_Major;
-    buf[3] = Map->head.Back_Minor;
+    buf[0] = Map->plus.version.coor.major;
+    buf[1] = Map->plus.version.coor.minor;
+    buf[2] = Map->plus.version.coor.back_major;
+    buf[3] = Map->plus.version.coor.back_minor;
 
     buf[4] = Map->head.port.byte_order;
     if (0 >= dig__fwrite_port_C((char *)buf, 5, &(Map->dig_fp)))
@@ -89,38 +89,38 @@ int dig__read_head(struct Map_info *Map)
     /* bytes 1 - 5 */
     if (0 >= dig__fread_port_C((char *)buf, 5, &(Map->dig_fp)))
 	return (0);
-    Map->head.Version_Major = buf[0];
-    Map->head.Version_Minor = buf[1];
-    Map->head.Back_Major = buf[2];
-    Map->head.Back_Minor = buf[3];
+    Map->plus.version.coor.major = buf[0];
+    Map->plus.version.coor.minor = buf[1];
+    Map->plus.version.coor.back_major = buf[2];
+    Map->plus.version.coor.back_minor = buf[3];
     Map->head.port.byte_order = buf[4];
 
     G_debug(2,
 	    "Coor header: file version %d.%d , supported from GRASS version %d.%d",
-	    Map->head.Version_Major, Map->head.Version_Minor,
-	    Map->head.Back_Major, Map->head.Back_Minor);
+	    Map->plus.version.coor.major, Map->plus.version.coor.minor,
+	    Map->plus.version.coor.back_major, Map->plus.version.coor.back_minor);
 
     G_debug(2, "  byte order %d", Map->head.port.byte_order);
 
     /* check version numbers */
-    if (Map->head.Version_Major > GV_COOR_VER_MAJOR ||
-	Map->head.Version_Minor > GV_COOR_VER_MINOR) {
+    if (Map->plus.version.coor.major > GV_COOR_VER_MAJOR ||
+	Map->plus.version.coor.minor > GV_COOR_VER_MINOR) {
 	/* The file was created by GRASS library with higher version than this one */
 
-	if (Map->head.Back_Major > GV_COOR_VER_MAJOR ||
-	    Map->head.Back_Minor > GV_COOR_VER_MINOR) {
+	if (Map->plus.version.coor.back_major > GV_COOR_VER_MAJOR ||
+	    Map->plus.version.coor.back_minor > GV_COOR_VER_MINOR) {
 	    /* This version of GRASS lib is lower than the oldest which can read this format */
 	    G_fatal_error
 		("Vector 'coor' format version %d.%d is not supported by this version of GRASS. "
-		 "Update your GRASS.", Map->head.Version_Major,
-		 Map->head.Version_Minor);
+		 "Update your GRASS.", Map->plus.version.coor.major,
+		 Map->plus.version.coor.minor);
 	    return (-1);
 	}
 
 	G_warning
 	    ("Your GRASS version does not fully support vector format %d.%d."
-	     " Consider to upgrade GRASS.", Map->head.Version_Major,
-	     Map->head.Version_Minor);
+	     " Consider to upgrade GRASS.", Map->plus.version.coor.major,
+	     Map->plus.version.coor.minor);
     }
 
     dig_init_portable(&port, Map->head.port.byte_order);

@@ -274,30 +274,30 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* bytes 1 - 6 */
     if (0 >= dig__fread_port_C((char *)buf, 6, fp))
 	return (-1);
-    ptr->spidx_Version_Major = buf[0];
-    ptr->spidx_Version_Minor = buf[1];
-    ptr->spidx_Back_Major = buf[2];
-    ptr->spidx_Back_Minor = buf[3];
+    ptr->version.spidx.major = buf[0];
+    ptr->version.spidx.minor = buf[1];
+    ptr->version.spidx.back_major = buf[2];
+    ptr->version.spidx.back_minor = buf[3];
     byte_order = buf[4];
     ptr->spidx_port.off_t_size = buf[5];
 
     G_debug(2,
 	    "Spidx header: file version %d.%d , supported from GRASS version %d.%d",
-	    ptr->spidx_Version_Major, ptr->spidx_Version_Minor,
-	    ptr->spidx_Back_Major, ptr->spidx_Back_Minor);
+	    ptr->version.spidx.major, ptr->version.spidx.minor,
+	    ptr->version.spidx.back_major, ptr->version.spidx.back_minor);
 
     G_debug(2, "  byte order %d", byte_order);
 
     /* check version numbers */
-    if (ptr->spidx_Version_Major > GV_SIDX_VER_MAJOR ||
-	ptr->spidx_Version_Minor > GV_SIDX_VER_MINOR) {
+    if (ptr->version.spidx.major > GV_SIDX_VER_MAJOR ||
+	ptr->version.spidx.minor > GV_SIDX_VER_MINOR) {
 	/* The file was created by GRASS library with higher version than this one */
 
-	if (ptr->spidx_Back_Major > GV_SIDX_VER_MAJOR ||
-	    ptr->spidx_Back_Minor > GV_SIDX_VER_MINOR) {
+	if (ptr->version.spidx.back_major > GV_SIDX_VER_MAJOR ||
+	    ptr->version.spidx.back_minor > GV_SIDX_VER_MINOR) {
 	    /* This version of GRASS lib is lower than the oldest which can read this format */
 	    G_debug(1, "Spatial index format version %d.%d",
-		    ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
+		    ptr->version.spidx.major, ptr->version.spidx.minor);
 	    G_fatal_error
 		(_("This version of GRASS (%d.%d) is too old to read this spatial index format."
 		 " Try to rebuild topology or upgrade GRASS to at least version %d."),
@@ -308,16 +308,16 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 	G_warning(_("Your GRASS version does not fully support "
 		    "spatial index format %d.%d of the vector."
 		    " Consider to rebuild topology or upgrade GRASS."),
-		  ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
+		  ptr->version.spidx.major, ptr->version.spidx.minor);
     }
-    if (ptr->spidx_Version_Major < GV_SIDX_VER_MAJOR ||
-	(ptr->spidx_Version_Major == GV_SIDX_VER_MAJOR &&
-	ptr->spidx_Version_Minor < GV_SIDX_VER_MINOR)) {
+    if (ptr->version.spidx.major < GV_SIDX_VER_MAJOR ||
+	(ptr->version.spidx.major == GV_SIDX_VER_MAJOR &&
+	ptr->version.spidx.minor < GV_SIDX_VER_MINOR)) {
 	/* The file was created by GRASS library with lower version than this one */
 	    G_fatal_error(_("Spatial index format version %d.%d is not "
 			    "supported by this release."
 			    " Please rebuild topology."),
-			  ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
+			  ptr->version.spidx.major, ptr->version.spidx.minor);
 	    return (-1);
     }
 

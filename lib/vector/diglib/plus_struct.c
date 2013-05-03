@@ -496,29 +496,29 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
     /* bytes 1 - 5 */
     if (0 >= dig__fread_port_C((char *)buf, 5, fp))
 	return (-1);
-    ptr->Version_Major = buf[0];
-    ptr->Version_Minor = buf[1];
-    ptr->Back_Major = buf[2];
-    ptr->Back_Minor = buf[3];
+    ptr->version.topo.major = buf[0];
+    ptr->version.topo.minor = buf[1];
+    ptr->version.topo.back_major = buf[2];
+    ptr->version.topo.back_minor = buf[3];
     byte_order = buf[4];
 
     G_debug(2,
 	    "Topo header: file version %d.%d , supported from GRASS version %d.%d",
-	    ptr->Version_Major, ptr->Version_Minor, ptr->Back_Major,
-	    ptr->Back_Minor);
+	    ptr->version.topo.major, ptr->version.topo.minor, ptr->version.topo.back_major,
+	    ptr->version.topo.back_minor);
 
     G_debug(2, "  byte order %d", byte_order);
 
     /* check version numbers */
-    if (ptr->Version_Major > GV_TOPO_VER_MAJOR ||
-	ptr->Version_Minor > GV_TOPO_VER_MINOR) {
+    if (ptr->version.topo.major > GV_TOPO_VER_MAJOR ||
+	ptr->version.topo.minor > GV_TOPO_VER_MINOR) {
 	/* The file was created by GRASS library with higher version than this one */
 
-	if (ptr->Back_Major > GV_TOPO_VER_MAJOR ||
-	    ptr->Back_Minor > GV_TOPO_VER_MINOR) {
+	if (ptr->version.topo.back_major > GV_TOPO_VER_MAJOR ||
+	    ptr->version.topo.back_minor > GV_TOPO_VER_MINOR) {
 	    /* This version of GRASS lib is lower than the oldest which can read this format */
 	    G_debug(1, "Topology format version %d.%d",
-		    ptr->Version_Major, ptr->Version_Minor);
+		    ptr->version.topo.major, ptr->version.topo.minor);
 	    G_fatal_error
 		(_("This version of GRASS (%d.%d) is too old to read this topology format."
 		 " Try to rebuild topology or upgrade GRASS to at least version %d."),
@@ -528,17 +528,17 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 
 	G_warning(_("Your GRASS version does not fully support topology format %d.%d of the vector."
 		    " Consider to rebuild topology or upgrade GRASS."),
-		  ptr->Version_Major, ptr->Version_Minor);
+		  ptr->version.topo.major, ptr->version.topo.minor);
     }
-    if (ptr->Version_Major < GV_TOPO_VER_MAJOR ||
-	(ptr->Version_Major == GV_TOPO_VER_MAJOR &&
-	 ptr->Version_Minor < GV_TOPO_VER_MINOR)) {
+    if (ptr->version.topo.major < GV_TOPO_VER_MAJOR ||
+	(ptr->version.topo.major == GV_TOPO_VER_MAJOR &&
+	 ptr->version.topo.minor < GV_TOPO_VER_MINOR)) {
 	/* The file was created by GRASS library with lower version than this one */
 
 	/* This version of GRASS lib can not read this old format */
 	G_warning(_("Old topology format version %d.%d is not supported by this release."
 		    " Try to rebuild topology."),
-		  ptr->Version_Major, ptr->Version_Minor);
+		  ptr->version.topo.major, ptr->version.topo.minor);
 	return (-1);
     }
 

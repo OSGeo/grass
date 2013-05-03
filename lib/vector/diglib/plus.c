@@ -33,64 +33,9 @@ int dig_init_plus(struct Plus_head *Plus)
     
     G_debug(3, "dig_init_plus()");
 
-    Plus->Version_Major = 0;
-    Plus->Version_Minor = 0;
-    Plus->Back_Major = 0;
-    Plus->Back_Minor = 0;
-
-    Plus->off_t_size = 0;
-
-    Plus->box.N = 0;
-    Plus->box.S = 0;
-    Plus->box.E = 0;
-    Plus->box.W = 0;
-    Plus->box.T = 0;
-    Plus->box.B = 0;
+    G_zero(Plus, sizeof(struct Plus_head));
 
     Plus->built = GV_BUILD_NONE;
-
-    Plus->Node = NULL;
-    Plus->Line = NULL;
-    Plus->Area = NULL;
-    Plus->Isle = NULL;
-
-    Plus->n_nodes = 0;
-    Plus->n_edges = 0;
-    Plus->n_lines = 0;
-    Plus->n_areas = 0;
-    Plus->n_isles = 0;
-    Plus->n_volumes = 0;
-    Plus->n_holes = 0;
-
-    Plus->alloc_nodes = 0;
-    Plus->alloc_edges = 0;
-    Plus->alloc_lines = 0;
-    Plus->alloc_areas = 0;
-    Plus->alloc_isles = 0;
-    Plus->alloc_volumes = 0;
-    Plus->alloc_holes = 0;
-
-    Plus->n_plines = 0;
-    Plus->n_llines = 0;
-    Plus->n_blines = 0;
-    Plus->n_clines = 0;
-    Plus->n_flines = 0;
-    Plus->n_klines = 0;
-
-    Plus->Node_offset = 0L;
-    Plus->Line_offset = 0L;
-    Plus->Area_offset = 0L;
-    Plus->Isle_offset = 0L;
-    Plus->Volume_offset = 0L;
-    Plus->Hole_offset = 0L;
-
-    Plus->Node_spidx_offset = 0L;
-    Plus->Line_spidx_offset = 0L;
-    Plus->Area_spidx_offset = 0L;
-    Plus->Isle_spidx_offset = 0L;
-    Plus->Face_spidx_offset = 0L;
-    Plus->Volume_spidx_offset = 0L;
-    Plus->Hole_spidx_offset = 0L;
 
     dig_spidx_init(Plus);
     dig_cidx_init(Plus);
