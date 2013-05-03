@@ -129,29 +129,29 @@ int dig_read_cidx_head(struct gvfile * fp, struct Plus_head *plus)
     /* bytes 1 - 5 */
     if (0 >= dig__fread_port_C((char *)buf, 5, fp))
 	return (-1);
-    plus->cidx_Version_Major = buf[0];
-    plus->cidx_Version_Minor = buf[1];
-    plus->cidx_Back_Major = buf[2];
-    plus->cidx_Back_Minor = buf[3];
+    plus->version.cidx.major = buf[0];
+    plus->version.cidx.minor = buf[1];
+    plus->version.cidx.back_major = buf[2];
+    plus->version.cidx.back_minor = buf[3];
     byte_order = buf[4];
 
     G_debug(3,
 	    "Cidx header: file version %d.%d , supported from GRASS version %d.%d",
-	    plus->cidx_Version_Major, plus->cidx_Version_Minor,
-	    plus->cidx_Back_Major, plus->cidx_Back_Minor);
+	    plus->version.cidx.major, plus->version.cidx.minor,
+	    plus->version.cidx.back_major, plus->version.cidx.back_minor);
 
     G_debug(3, "  byte order %d", byte_order);
 
     /* check version numbers */
-    if (plus->cidx_Version_Major > GV_CIDX_VER_MAJOR ||
-	plus->cidx_Version_Minor > GV_CIDX_VER_MINOR) {
+    if (plus->version.cidx.major > GV_CIDX_VER_MAJOR ||
+	plus->version.cidx.minor > GV_CIDX_VER_MINOR) {
 	/* The file was created by GRASS library with higher version than this one */
 
-	if (plus->cidx_Back_Major > GV_CIDX_VER_MAJOR ||
-	    plus->cidx_Back_Minor > GV_CIDX_VER_MINOR) {
+	if (plus->version.cidx.back_major > GV_CIDX_VER_MAJOR ||
+	    plus->version.cidx.back_minor > GV_CIDX_VER_MINOR) {
 	    /* This version of GRASS lib is lower than the oldest which can read this format */
 	    G_debug(1, "Category index format version %d.%d",
-		    plus->cidx_Version_Major, plus->cidx_Version_Minor);
+		    plus->version.cidx.major, plus->version.cidx.minor);
 	    G_fatal_error
 		(_("This version of GRASS (%d.%d) is too old to read this category index format."
 		 " Try to rebuild topology or upgrade GRASS to at least version %d."),
@@ -162,7 +162,7 @@ int dig_read_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 	G_warning
 	    ("Your GRASS version does not fully support category index format %d.%d of the vector."
 	     " Consider to rebuild topology or upgrade GRASS.",
-	     plus->cidx_Version_Major, plus->cidx_Version_Minor);
+	     plus->version.cidx.major, plus->version.cidx.minor);
     }
 
     dig_init_portable(&(plus->cidx_port), byte_order);

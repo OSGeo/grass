@@ -99,10 +99,10 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     path = Vect__get_path(Map);
 
     /* Set the 'coor' file version */
-    Map->head.Version_Major = GV_COOR_VER_MAJOR;
-    Map->head.Version_Minor = GV_COOR_VER_MINOR;
-    Map->head.Back_Major    = GV_COOR_EARLIEST_MAJOR;
-    Map->head.Back_Minor    = GV_COOR_EARLIEST_MINOR;
+    Map->plus.version.coor.major = GV_COOR_VER_MAJOR;
+    Map->plus.version.coor.minor = GV_COOR_VER_MINOR;
+    Map->plus.version.coor.back_major    = GV_COOR_EARLIEST_MAJOR;
+    Map->plus.version.coor.back_minor    = GV_COOR_EARLIEST_MINOR;
 
     /* TODO: open better */
     dig_file_init(&(Map->dig_fp));

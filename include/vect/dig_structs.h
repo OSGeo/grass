@@ -37,11 +37,10 @@
 /*!
   \brief plus_t size
 
-  3.10 changes plus_t to int. This assumes that any reasonable
-  machine will use 4 bytes to store an int. The diglib code is not
-  guaranteed to work if plus_t is changed to a type that is larger
-  than an int.
-*/
+  3.10 changes plus_t to int. This assumes that any reasonable machine
+  will use 4 bytes to store an int. The diglib code is not guaranteed
+  to work if plus_t is changed to a type that is larger than an int.
+  */
 typedef int plus_t;
 
 /*!
@@ -327,23 +326,6 @@ struct dig_head
     /* Programmers should NOT touch any thing below here */
     /* Library takes care of everything for you          */
 
-    /* coor elements */
-    /*!
-      \brief Backward compatibility info - major version
-    */
-    int Version_Major;
-    /*!
-      \brief Backward compatibility info - minor version
-    */
-    int Version_Minor;
-    /*!
-      \brief Backward compatibility info - back major version
-    */
-    int Back_Major;
-    /*!
-      \brief Backward compatibility info - back minor version
-    */
-    int Back_Minor;
     /*!
       \brief 2D/3D vector data
 
@@ -738,6 +720,18 @@ struct Cat_index
     off_t offset;
 };
 
+/*! Backward compatibility version info */
+struct Version_info {
+    /*! Current version (major) */
+    int major;
+    /*! Current version (minor) */
+    int minor;
+    /*! Earliest version that can use this data format (major) */
+    int back_major;
+    /*! Earliest version that can use this data format (minor) */
+    int back_minor;
+};
+
 /*!
   \brief Basic topology-related info
 
@@ -745,55 +739,17 @@ struct Cat_index
 */
 struct Plus_head
 {
-    /*!
-      \brief Version info (major)
-    */
-    int Version_Major;
-    /*!
-      \brief Version info (minor)
-    */
-    int Version_Minor;
-    /*!
-      \brief Earliest version that can use this data format (major)
-    */
-    int Back_Major;		 
-    /*!
-      \brief Earliest version that can use this data format (minor)
-    */
-    int Back_Minor;
-    /*!
-      \brief Version codes for spatial index (major)
-    */
-    int spidx_Version_Major;
-    /*!
-      \brief Version codes for spatial index (minor)
-    */
-    int spidx_Version_Minor;
-    /*!
-      \brief Earliest version that can use this data format (major)
-    */
-    int spidx_Back_Major;
-     /*!
-       \brief Earliest version that can use this data format (minor)
-    */
-    int spidx_Back_Minor;
-
-    /*!
-      \brief Version codes for category index (major)
-    */
-    int cidx_Version_Major;
-    /*!
-      \brief Version codes for category index (minor)
-    */
-    int cidx_Version_Minor;
-    /*!
-      \brief Earliest version that can use this data format (major)
-    */
-    int cidx_Back_Major;
-    /*!
-      \brief Earliest version that can use this data format (minor)
-    */
-    int cidx_Back_Minor;
+    /*! Backward compatibility version info */
+    struct {
+        /*! Version info for coor file */
+        struct Version_info coor;
+        /*! Version info for topology file */
+        struct Version_info topo;
+        /*! Version info for spatial index file */
+        struct Version_info spidx;
+        /*! Version info for category index file */
+        struct Version_info cidx;
+    } version;
 
     /*!
       \brief 2D/3D vector data
@@ -1283,7 +1239,7 @@ struct Map_info
     struct dblinks *dblnk;
 
     /*!
-      \brief Topology info
+      \brief Plus info (topology, version, ...)
     */
     struct Plus_head plus;
 
@@ -1329,13 +1285,6 @@ struct Map_info
     int support_updated;
 
     /*!
-      \brief Sequential read (level 1) - see Vect_read_next_line()
-
-      Note: Line id starts with 1
-    */
-    plus_t next_line;
-
-    /*!
       \brief Map name (for 4.0)
     */
     char *name;
@@ -1353,6 +1302,13 @@ struct Map_info
       \brief GISDBASE path
     */
     char *gisdbase;
+
+    /*!
+      \brief Feature id for sequential access 
+
+      Note: Line id starts with 1 - see Vect_read_next_line()
+    */
+    plus_t next_line;
 
     /*!
       \brief Constraints for sequential feature access
@@ -1398,6 +1354,11 @@ struct Map_info
       \brief Graph info (built for network analysis)
     */
     struct Graph_info dgraph;
+
+    /*!
+      \brief Header info
+    */
+    struct dig_head head;
     
     /*** format specific ***/
 
@@ -1405,10 +1366,6 @@ struct Map_info
       \brief GV file pointer (native format only)
     */
     struct gvfile dig_fp;
-    /*!
-      \brief Coor file header info (native format only)
-    */
-    struct dig_head head;
 
     /*!
       \brief Format info for non-native formats

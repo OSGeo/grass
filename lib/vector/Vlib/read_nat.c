@@ -286,7 +286,7 @@ int read_line_nat(struct Map_info *Map,
 	c->n_cats = 0;
 
     if (do_cats) {
-	if (Map->head.Version_Minor == 1) {	/* coor format 5.1 */
+	if (Map->plus.version.coor.minor == 1) {	/* coor format 5.1 */
 	    if (0 >= dig__fread_port_I(&n_cats, 1, &(Map->dig_fp)))
 		return (-2);
 	}
@@ -303,7 +303,7 @@ int read_line_nat(struct Map_info *Map,
 		if (0 > dig_alloc_cats(c, (int)n_cats + 1))
 		    return -1;
 
-		if (Map->head.Version_Minor == 1) {	/* coor format 5.1 */
+		if (Map->plus.version.coor.minor == 1) {	/* coor format 5.1 */
 		    if (0 >=
 			dig__fread_port_I(c->field, n_cats, &(Map->dig_fp)))
 			return (-2);
@@ -321,7 +321,7 @@ int read_line_nat(struct Map_info *Map,
 	    }
 	}
 	else {
-	    if (Map->head.Version_Minor == 1) {	/* coor format 5.1 */
+	    if (Map->plus.version.coor.minor == 1) {	/* coor format 5.1 */
 		size = (off_t) (2 * PORT_INT) * n_cats;
 	    }
 	    else {		/* coor format 5.0 */
